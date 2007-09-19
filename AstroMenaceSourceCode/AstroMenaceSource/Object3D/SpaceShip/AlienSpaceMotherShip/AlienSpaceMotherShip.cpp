@@ -1,0 +1,896 @@
+/******************************************************************************
+
+	This source file is part of AstroMenace game
+	(Hardcore 3D space shooter with spaceship upgrade possibilities.)
+	For the latest info, see http://www.viewizard.com/
+
+	File name: AlienSpaceMotherShip.cpp
+
+	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	All Rights Reserved.
+
+	File Version: 1.2
+
+******************************************************************************
+
+	AstroMenace game source code available under "dual licensing" model.
+	The licensing options available are:
+
+	* Commercial Licensing. This is the appropriate option if you are
+	  creating proprietary applications and you are not prepared to
+	  distribute and share the source code of your application.
+	  Contact us for pricing at viewizard@viewizard.com
+
+	* Open Source Licensing. This is the appropriate option if you want
+	  to share the source code of your application with everyone you
+	  distribute it to, and you also want to give them the right to share
+	  who uses it. You should have received a copy of the GNU General Public
+	  License version 3 with this source codes.
+	  If not, see <http://www.gnu.org/licenses/>.
+
+******************************************************************************/
+
+
+/// подключаем нужные файлы
+#include "AlienSpaceMotherShip.h"
+
+
+
+struct AlienSpaceMotherShipData
+{
+
+	int		WeaponQuantity;
+	int		BossWeaponQuantity;
+	int		EngineQuantity;
+	float	Strength;
+	float	ShieldStrength;
+	const	char *Name;
+	const	char *Texture;
+	const	char *TextureIllum;
+};
+
+const int	PresetAlienSpaceMotherShipDataCount = 8;
+AlienSpaceMotherShipData PresetAlienSpaceMotherShipData[PresetAlienSpaceMotherShipDataCount] =
+{
+	{14,1,	10,	3000, 1500,	"DATA/MODELS/ALIENMOTHERSHIP/alm-01.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text04.jpg", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum04.tga"},
+	{8,	8,	10,	4000, 3000,	"DATA/MODELS/ALIENMOTHERSHIP/alm-02.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text04.jpg", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum04.tga"},
+	{8,	1,	10,	5000, 3300,	"DATA/MODELS/ALIENMOTHERSHIP/alm-03.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text02.jpg", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum02.tga"},
+	{8,	8,	13,	6000, 3500,	"DATA/MODELS/ALIENMOTHERSHIP/alm-04.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text02.jpg", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum02.tga"},
+	{8,	6,	20,	7000, 3800,	"DATA/MODELS/ALIENMOTHERSHIP/alm-05.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text08.jpg", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum08.tga"},
+	{12,6,	16,	8000, 4000,	"DATA/MODELS/ALIENMOTHERSHIP/alm-06.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text08.jpg", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum08.tga"},
+	{5,	2,	6,	9000, 4300,	"DATA/MODELS/ALIENMOTHERSHIP/alm-07.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text03.jpg", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum03.tga"},
+	{4,	6,	10,	10000,4500,	"DATA/MODELS/ALIENMOTHERSHIP/alm-08.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text03.jpg", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum03.tga"}
+};
+
+
+
+
+//-----------------------------------------------------------------------------
+// Конструктор, инициализация всех переменных
+//-----------------------------------------------------------------------------
+void CAlienSpaceMotherShip::Create(int	SpaceShipNum)
+{
+	ObjectStatus = 1; // чужой
+	ObjectType = 3;
+	ObjectCreationType = SpaceShipNum;
+	PromptDrawDist2 = 20000.0f;
+
+	ResistanceHull = 1.0f;
+	ResistanceSystems = 1.0f;
+	MaxSpeed = 20.0f;
+	MaxAcceler = 20.0f;
+	MaxSpeedRotate = 80.0f;
+	//EngineSoundNum = 0;
+	EngineLeftQuantity = 0;
+	EngineRightQuantity = 0;
+	Strength = StrengthStart = PresetAlienSpaceMotherShipData[SpaceShipNum-1].Strength/GameNPCArmorPenalty;
+	ShieldStrength = ShieldStrengthStart = PresetAlienSpaceMotherShipData[SpaceShipNum-1].ShieldStrength/GameNPCArmorPenalty;
+	ShieldRecharge = ShieldStrengthStart/15.0f;
+
+	WeaponQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum-1].WeaponQuantity;
+	BossWeaponQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum-1].BossWeaponQuantity;
+	EngineQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum-1].EngineQuantity;
+
+
+	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Name, this, 0);
+
+	// всегда только эти текстуры
+	for (int i=0; i<DrawObjectQuantity; i++)
+	{
+		Texture[i] =vw_FindTextureByName(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Texture);
+		TextureIllum[i] =vw_FindTextureByName(PresetAlienSpaceMotherShipData[SpaceShipNum-1].TextureIllum);
+	}
+
+
+
+	// начальные установки для оружия
+	WeaponSetFire = new bool[WeaponQuantity];
+	WeaponLocation = new VECTOR3D[WeaponQuantity];
+	WeaponType = new int[WeaponQuantity];
+	Weapon = new CWeapon*[WeaponQuantity];
+	for (int i=0; i<WeaponQuantity; i++)
+	{
+		WeaponSetFire[i] = false;
+		WeaponType[i] = 1;
+		Weapon[i] = 0;
+	}
+
+	BossWeaponSetFire = new bool[BossWeaponQuantity];
+	BossWeaponLocation = new VECTOR3D[BossWeaponQuantity];
+	BossWeaponType = new int[BossWeaponQuantity];
+	BossWeapon = new CWeapon*[BossWeaponQuantity];
+	for (int i=0; i<BossWeaponQuantity; i++)
+	{
+		BossWeaponSetFire[i] = false;
+		BossWeaponType[i] = 1;
+		BossWeapon[i] = 0;
+	}
+
+	// начальные установки для двигателей
+	EngineLocation = new VECTOR3D[EngineQuantity];
+	Engine = new eParticleSystem*[EngineQuantity];
+	for (int i=0; i<EngineQuantity; i++) Engine[i] = 0;
+
+
+
+
+
+
+
+
+
+
+	// перебираем и ставим нужные данные
+	switch (SpaceShipNum)
+	{
+		case 1:
+			// оружие
+			WeaponLocation[0] = VECTOR3D(-1.6f, 1.0f, 19.0f);
+			Weapon[0] = new CWeapon;
+			Weapon[0]->Create(102);
+			WeaponLocation[1] = VECTOR3D(1.6f, 1.0f, 19.0f);
+			Weapon[1] = new CWeapon;
+			Weapon[1]->Create(102);
+			WeaponLocation[2] = VECTOR3D(-1.6f, -1.0f, 19.0f);
+			Weapon[2] = new CWeapon;
+			Weapon[2]->Create(102);
+			WeaponLocation[3] = VECTOR3D(1.6f, -1.0f, 19.0f);
+			Weapon[3] = new CWeapon;
+			Weapon[3]->Create(102);
+
+			WeaponLocation[4] = VECTOR3D(-1.6f, 1.5f, 18.0f);
+			Weapon[4] = new CWeapon;
+			Weapon[4]->Create(103);
+			WeaponLocation[5] = VECTOR3D(1.6f, 1.5f, 18.0f);
+			Weapon[5] = new CWeapon;
+			Weapon[5]->Create(103);
+			WeaponLocation[6] = VECTOR3D(-1.6f, -1.5f, 18.0f);
+			Weapon[6] = new CWeapon;
+			Weapon[6]->Create(103);
+			WeaponLocation[7] = VECTOR3D(1.6f, -1.5f, 18.0f);
+			Weapon[7] = new CWeapon;
+			Weapon[7]->Create(103);
+
+			WeaponLocation[8] = VECTOR3D(-1.6f, 1.0f, 19.0f);
+			Weapon[8] = new CWeapon;
+			Weapon[8]->Create(104);
+			WeaponLocation[9] = VECTOR3D(1.6f, 1.0f, 19.0f);
+			Weapon[9] = new CWeapon;
+			Weapon[9]->Create(104);
+			WeaponLocation[10] = VECTOR3D(-1.6f, -1.0f, 19.0f);
+			Weapon[10] = new CWeapon;
+			Weapon[10]->Create(104);
+			WeaponLocation[11] = VECTOR3D(1.6f, -1.0f, 19.0f);
+			Weapon[11] = new CWeapon;
+			Weapon[11]->Create(104);
+
+			WeaponLocation[12] = VECTOR3D(0.0f, -8.0f, 0.0f);
+			Weapon[12] = new CWeapon;
+			Weapon[12]->Create(104);
+			WeaponLocation[13] = VECTOR3D(0.0f, -8.0f, 0.0f);
+			Weapon[13] = new CWeapon;
+			Weapon[13]->Create(104);
+
+			BossWeaponLocation[0] = VECTOR3D(0.0f, 0.0f, 0.0f);
+
+			// двигатели
+			Engine[0] = new eParticleSystem;
+			EngineLocation[0] = VECTOR3D(8.4f, 5.2f, -24.0f);
+			SetAlienSpaceMotherShipEngine(Engine[0], 1);
+			Engine[1] = new eParticleSystem;
+			EngineLocation[1] = VECTOR3D(-8.4f, 5.2f, -24.0f);
+			SetAlienSpaceMotherShipEngine(Engine[1], 1);
+			Engine[2] = new eParticleSystem;
+			EngineLocation[2] = VECTOR3D(8.4f, -5.6f, -24.0f);
+			SetAlienSpaceMotherShipEngine(Engine[2], 1);
+			Engine[3] = new eParticleSystem;
+			EngineLocation[3] = VECTOR3D(-8.4f, -5.6f, -24.0f);
+			SetAlienSpaceMotherShipEngine(Engine[3], 1);
+			Engine[4] = new eParticleSystem;
+			EngineLocation[4] = VECTOR3D(0.0f, 8.2f, -15.0f);
+			SetAlienSpaceMotherShipEngine(Engine[4], 2);
+			Engine[5] = new eParticleSystem;
+			EngineLocation[5] = VECTOR3D(0.0f, -8.2f, -15.0f);
+			SetAlienSpaceMotherShipEngine(Engine[5], 2);
+			Engine[6] = new eParticleSystem;
+			EngineLocation[6] = VECTOR3D(0.0f, 0.0f, -8.0f);
+			SetAlienSpaceMotherShipEngine(Engine[6], 3);
+			Engine[7] = new eParticleSystem;
+			EngineLocation[7] = VECTOR3D(0.0f, 0.0f, -8.0f);
+			SetAlienSpaceMotherShipEngine(Engine[7], 4);
+			Engine[8] = new eParticleSystem;
+			EngineLocation[8] = VECTOR3D(0.0f, 0.0f, 15.0f);
+			SetAlienSpaceMotherShipEngine(Engine[8], 5);
+			Engine[9] = new eParticleSystem;
+			EngineLocation[9] = VECTOR3D(0.0f, 0.0f, 15.0f);
+			SetAlienSpaceMotherShipEngine(Engine[9], 6);
+			break;
+		case 2:
+			// оружие
+			WeaponLocation[0] = VECTOR3D(-10.7f, 0.0f, -18.5f);
+			Weapon[0] = new CWeapon;
+			Weapon[0]->Create(103);
+			Weapon[0]->NextFireTime = Weapon[0]->NextFireTime/2.0f;
+			WeaponLocation[1] = VECTOR3D(10.7f, 0.0f, -18.5f);
+			Weapon[1] = new CWeapon;
+			Weapon[1]->Create(103);
+			Weapon[1]->NextFireTime = Weapon[1]->NextFireTime/2.0f;
+			WeaponLocation[2] = VECTOR3D(-10.7f, 0.0f, -18.5f);
+			Weapon[2] = new CWeapon;
+			Weapon[2]->Create(103);
+			Weapon[2]->NextFireTime = Weapon[2]->NextFireTime/2.0f;
+			WeaponLocation[3] = VECTOR3D(10.7f, 0.0f, -18.5f);
+			Weapon[3] = new CWeapon;
+			Weapon[3]->Create(103);
+			Weapon[3]->NextFireTime = Weapon[3]->NextFireTime/2.0f;
+
+			WeaponLocation[4] = VECTOR3D(-10.7f, 0.0f, -18.5f);
+			Weapon[4] = new CWeapon;
+			Weapon[4]->Create(106);
+			Weapon[4]->NextFireTime = Weapon[4]->NextFireTime/2.0f;
+			WeaponLocation[5] = VECTOR3D(10.7f, 0.0f, -18.5f);
+			Weapon[5] = new CWeapon;
+			Weapon[5]->Create(106);
+			Weapon[5]->NextFireTime = Weapon[5]->NextFireTime/2.0f;
+			WeaponLocation[6] = VECTOR3D(-4.0f, 0.0f, 24.0f);
+			Weapon[6] = new CWeapon;
+			Weapon[6]->Create(106);
+			Weapon[6]->NextFireTime = Weapon[6]->NextFireTime/2.0f;
+			WeaponLocation[7] = VECTOR3D(4.0f, 0.0f, 24.0f);
+			Weapon[7] = new CWeapon;
+			Weapon[7]->Create(106);
+			Weapon[7]->NextFireTime = Weapon[7]->NextFireTime/2.0f;
+
+
+			BossWeaponLocation[0] = VECTOR3D(-1.5f, 1.5f, 25.0f);
+			BossWeapon[0] = new CWeapon;
+			BossWeapon[0]->Create(102);
+			BossWeaponLocation[1] = VECTOR3D(1.5f, 1.5f, 25.0f);
+			BossWeapon[1] = new CWeapon;
+			BossWeapon[1]->Create(102);
+			BossWeaponLocation[2] = VECTOR3D(-1.5f, -1.5f, 25.0f);
+			BossWeapon[2] = new CWeapon;
+			BossWeapon[2]->Create(102);
+			BossWeaponLocation[3] = VECTOR3D(1.5f, -1.5f, 25.0f);
+			BossWeapon[3] = new CWeapon;
+			BossWeapon[3]->Create(102);
+
+
+			BossWeaponLocation[4] = VECTOR3D(-4.0f, 2.0f, 24.0f);
+			BossWeapon[4] = new CWeapon;
+			BossWeapon[4]->Create(102);
+			BossWeaponLocation[5] = VECTOR3D(4.0f, 2.0f, 24.0f);
+			BossWeapon[5] = new CWeapon;
+			BossWeapon[5]->Create(102);
+			BossWeaponLocation[6] = VECTOR3D(-4.0f, -2.0f, 24.0f);
+			BossWeapon[6] = new CWeapon;
+			BossWeapon[6]->Create(102);
+			BossWeaponLocation[7] = VECTOR3D(4.0f, -2.0f, 24.0f);
+			BossWeapon[7] = new CWeapon;
+			BossWeapon[7]->Create(102);
+
+
+			// двигатели
+			Engine[0] = new eParticleSystem;
+			EngineLocation[0] = VECTOR3D(5.6f, 7.0f, -27.6f);
+			SetAlienSpaceMotherShipEngine(Engine[0], 1);
+			Engine[1] = new eParticleSystem;
+			EngineLocation[1] = VECTOR3D(-5.6f, 7.0f, -27.6f);
+			SetAlienSpaceMotherShipEngine(Engine[1], 1);
+			Engine[2] = new eParticleSystem;
+			EngineLocation[2] = VECTOR3D(5.6f, -7.0f, -27.6f);
+			SetAlienSpaceMotherShipEngine(Engine[2], 1);
+			Engine[3] = new eParticleSystem;
+			EngineLocation[3] = VECTOR3D(-5.6f, -7.0f, -27.6f);
+			SetAlienSpaceMotherShipEngine(Engine[3], 1);
+			Engine[4] = new eParticleSystem;
+			EngineLocation[4] = VECTOR3D(10.7f, 0.0f, -21.5f);
+			SetAlienSpaceMotherShipEngine(Engine[4], 2);
+			Engine[5] = new eParticleSystem;
+			EngineLocation[5] = VECTOR3D(-10.7f, 0.0f, -21.5f);
+			SetAlienSpaceMotherShipEngine(Engine[5], 2);
+			Engine[6] = new eParticleSystem;
+			EngineLocation[6] = VECTOR3D(0.0f, 0.0f, -14.0f);
+			SetAlienSpaceMotherShipEngine(Engine[6], 3);
+			Engine[7] = new eParticleSystem;
+			EngineLocation[7] = VECTOR3D(0.0f, 0.0f, -14.0f);
+			SetAlienSpaceMotherShipEngine(Engine[7], 4);
+			Engine[8] = new eParticleSystem;
+			EngineLocation[8] = VECTOR3D(0.0f, 0.0f, 15.0f);
+			SetAlienSpaceMotherShipEngine(Engine[8], 5);
+			Engine[9] = new eParticleSystem;
+			EngineLocation[9] = VECTOR3D(0.0f, 0.0f, 15.0f);
+			SetAlienSpaceMotherShipEngine(Engine[9], 6);
+			break;
+		case 3:
+			// оружие
+			WeaponLocation[0] = VECTOR3D(3.0f, -2.0f, 13.0f);
+			Weapon[0] = new CWeapon;
+			Weapon[0]->Create(104);
+			WeaponLocation[1] = VECTOR3D(-3.0f, -2.0f, 13.0f);
+			Weapon[1] = new CWeapon;
+			Weapon[1]->Create(104);
+			WeaponLocation[2] = VECTOR3D(2.0f, -1.0f, 13.0f);
+			Weapon[2] = new CWeapon;
+			Weapon[2]->Create(104);
+			WeaponLocation[3] = VECTOR3D(-2.0f, -1.0f, 13.0f);
+			Weapon[3] = new CWeapon;
+			Weapon[3]->Create(104);
+			WeaponLocation[4] = VECTOR3D(2.0f, -3.0f, 13.0f);
+			Weapon[4] = new CWeapon;
+			Weapon[4]->Create(104);
+			WeaponLocation[5] = VECTOR3D(-2.0f, -3.0f, 13.0f);
+			Weapon[5] = new CWeapon;
+			Weapon[5]->Create(104);
+
+			WeaponLocation[6] = VECTOR3D(7.0f, -2.0f, 13.0f);
+			Weapon[6] = new CWeapon;
+			Weapon[6]->Create(109);
+			WeaponLocation[7] = VECTOR3D(-7.0f, -2.0f, 13.0f);
+			Weapon[7] = new CWeapon;
+			Weapon[7]->Create(109);
+
+
+			BossWeaponLocation[0] = VECTOR3D(0.0f, -2.0f, 27.0f);
+			BossWeapon[0] = new CWeapon;
+			BossWeapon[0]->Create(110);
+
+			// двигатели
+			Engine[0] = new eParticleSystem;
+			EngineLocation[0] = VECTOR3D(5.5f, 8.1f, -26.1f);
+			SetAlienSpaceMotherShipEngine(Engine[0], 1);
+			Engine[1] = new eParticleSystem;
+			EngineLocation[1] = VECTOR3D(-5.5f, 8.1f, -26.1f);
+			SetAlienSpaceMotherShipEngine(Engine[1], 1);
+			Engine[2] = new eParticleSystem;
+			EngineLocation[2] = VECTOR3D(5.6f, -7.2f, -28.6f);
+			SetAlienSpaceMotherShipEngine(Engine[2], 1);
+			Engine[3] = new eParticleSystem;
+			EngineLocation[3] = VECTOR3D(-5.6f, -7.2f, -28.6f);
+			SetAlienSpaceMotherShipEngine(Engine[3], 1);
+			Engine[4] = new eParticleSystem;
+			EngineLocation[4] = VECTOR3D(11.9f, -1.0f, -14.8f);
+			SetAlienSpaceMotherShipEngine(Engine[4], 1);
+			Engine[5] = new eParticleSystem;
+			EngineLocation[5] = VECTOR3D(-11.9f, -1.0f, -14.8f);
+			SetAlienSpaceMotherShipEngine(Engine[5], 1);
+			Engine[6] = new eParticleSystem;
+			EngineLocation[6] = VECTOR3D(0.0f, -2.0f, 2.0f);
+			SetAlienSpaceMotherShipEngine(Engine[6], 7);
+			Engine[7] = new eParticleSystem;
+			EngineLocation[7] = VECTOR3D(0.0f, -2.0f, 27.0f);
+			SetAlienSpaceMotherShipEngine(Engine[7], 8);
+			Engine[8] = new eParticleSystem;
+			EngineLocation[8] = VECTOR3D(0.0f, -1.0f, -10.0f);
+			SetAlienSpaceMotherShipEngine(Engine[8], 3);
+			Engine[9] = new eParticleSystem;
+			EngineLocation[9] = VECTOR3D(0.0f, -1.0f, -10.0f);
+			SetAlienSpaceMotherShipEngine(Engine[9], 4);
+			break;
+		case 4:
+			// оружие
+			WeaponLocation[0] = VECTOR3D(1.0f, -1.0f, 23.0f);
+			Weapon[0] = new CWeapon;
+			Weapon[0]->Create(104);
+			WeaponLocation[1] = VECTOR3D(-1.0f, -1.0f, 23.0f);
+			Weapon[1] = new CWeapon;
+			Weapon[1]->Create(104);
+			WeaponLocation[2] = VECTOR3D(1.0f, 0.0f, 23.0f);
+			Weapon[2] = new CWeapon;
+			Weapon[2]->Create(104);
+			WeaponLocation[3] = VECTOR3D(-1.0f, 0.0f, 23.0f);
+			Weapon[3] = new CWeapon;
+			Weapon[3]->Create(104);
+			WeaponLocation[4] = VECTOR3D(1.0f, -2.0f, 23.0f);
+			Weapon[4] = new CWeapon;
+			Weapon[4]->Create(104);
+			WeaponLocation[5] = VECTOR3D(-1.0f, -2.0f, 23.0f);
+			Weapon[5] = new CWeapon;
+			Weapon[5]->Create(104);
+			WeaponLocation[6] = VECTOR3D(0.0f, -1.0f, 23.0f);
+			Weapon[6] = new CWeapon;
+			Weapon[6]->Create(109);
+			WeaponLocation[7] = VECTOR3D(0.0f, -1.0f, 23.0f);
+			Weapon[7] = new CWeapon;
+			Weapon[7]->Create(109);
+
+			BossWeaponLocation[0] = VECTOR3D(8.9f, -0.6f, 18.0f);
+			BossWeapon[0] = new CWeapon;
+			BossWeapon[0]->Create(108);
+			BossWeapon[0]->SetRotation(VECTOR3D(0.0f, -15.0f, 0.0f));
+			BossWeaponLocation[1] = VECTOR3D(-8.9f, -0.6f, 18.0f);
+			BossWeapon[1] = new CWeapon;
+			BossWeapon[1]->Create(108);
+			BossWeapon[1]->SetRotation(VECTOR3D(0.0f, 15.0f, 0.0f));
+			BossWeaponLocation[2] = VECTOR3D(10.0f, -5.6f, 18.0f);
+			BossWeapon[2] = new CWeapon;
+			BossWeapon[2]->Create(108);
+			BossWeaponLocation[3] = VECTOR3D(-10.0f, -5.6f, 18.0f);
+			BossWeapon[3] = new CWeapon;
+			BossWeapon[3]->Create(108);
+			BossWeaponLocation[4] = VECTOR3D(8.9f, -0.6f, 18.0f);
+			BossWeapon[4] = new CWeapon;
+			BossWeapon[4]->Create(108);
+			BossWeapon[4]->SetRotation(VECTOR3D(0.0f, -5.0f, 0.0f));
+			BossWeaponLocation[5] = VECTOR3D(-8.9f, -0.6f, 18.0f);
+			BossWeapon[5] = new CWeapon;
+			BossWeapon[5]->Create(108);
+			BossWeapon[5]->SetRotation(VECTOR3D(0.0f, 5.0f, 0.0f));
+			BossWeaponLocation[6] = VECTOR3D(10.0f, -5.6f, 18.0f);
+			BossWeapon[6] = new CWeapon;
+			BossWeapon[6]->Create(108);
+			BossWeapon[6]->SetRotation(VECTOR3D(0.0f, -10.0f, 0.0f));
+			BossWeaponLocation[7] = VECTOR3D(-10.0f, -5.6f, 18.0f);
+			BossWeapon[7] = new CWeapon;
+			BossWeapon[7]->Create(108);
+			BossWeapon[7]->SetRotation(VECTOR3D(0.0f, 10.0f, 0.0f));
+
+
+			// двигатели
+			Engine[0] = new eParticleSystem;
+			EngineLocation[0] = VECTOR3D(1.9f, 5.9f, -24.6f);
+			SetAlienSpaceMotherShipEngine(Engine[0], 2);
+			Engine[1] = new eParticleSystem;
+			EngineLocation[1] = VECTOR3D(-1.9f, 5.9f, -24.6f);
+			SetAlienSpaceMotherShipEngine(Engine[1], 2);
+			Engine[2] = new eParticleSystem;
+			EngineLocation[2] = VECTOR3D(1.9f, -2.9f, -24.6f);
+			SetAlienSpaceMotherShipEngine(Engine[2], 2);
+			Engine[3] = new eParticleSystem;
+			EngineLocation[3] = VECTOR3D(-1.9f, -2.9f, -24.6f);
+			SetAlienSpaceMotherShipEngine(Engine[3], 2);
+			Engine[4] = new eParticleSystem;
+			EngineLocation[4] = VECTOR3D(2.9f, 1.6f, -24.6f);
+			SetAlienSpaceMotherShipEngine(Engine[4], 1);
+			Engine[5] = new eParticleSystem;
+			EngineLocation[5] = VECTOR3D(-2.9f, 1.6f, -24.6f);
+			SetAlienSpaceMotherShipEngine(Engine[5], 1);
+			Engine[6] = new eParticleSystem;
+			EngineLocation[6] = VECTOR3D(8.9f, -0.6f, -12.6f);
+			SetAlienSpaceMotherShipEngine(Engine[6], 1);
+			Engine[7] = new eParticleSystem;
+			EngineLocation[7] = VECTOR3D(-8.9f, -0.6f, -12.6f);
+			SetAlienSpaceMotherShipEngine(Engine[7], 1);
+			Engine[8] = new eParticleSystem;
+			EngineLocation[8] = VECTOR3D(10.0f, -5.6f, -5.2f);
+			SetAlienSpaceMotherShipEngine(Engine[8], 1);
+			Engine[9] = new eParticleSystem;
+			EngineLocation[9] = VECTOR3D(-10.0f, -5.6f, -5.2f);
+			SetAlienSpaceMotherShipEngine(Engine[9], 1);
+			Engine[10] = new eParticleSystem;
+			EngineLocation[10] = VECTOR3D(0.0f, -1.0f, 23.0f);
+			SetAlienSpaceMotherShipEngine(Engine[10], 8);
+			Engine[11] = new eParticleSystem;
+			EngineLocation[11] = VECTOR3D(0.0f, -6.0f, 10.0f);
+			SetAlienSpaceMotherShipEngine(Engine[11], 5);
+			Engine[11]->CreationSize = VECTOR3D(6.0f,6.0f,2.0f);
+			Engine[11]->DeadZone = 5.9f;
+			Engine[12] = new eParticleSystem;
+			EngineLocation[12] = VECTOR3D(0.0f, -6.0f, 10.0f);
+			SetAlienSpaceMotherShipEngine(Engine[12], 6);
+			Engine[12]->CreationSize = VECTOR3D(6.0f,6.0f,2.0f);
+			Engine[12]->DeadZone = 5.9f;
+			break;
+		case 5:
+			// оружие
+			WeaponLocation[0] = VECTOR3D(0.0f, -2.4f, 20.0f);
+			Weapon[0] = new CWeapon;
+			Weapon[0]->Create(109);
+			WeaponLocation[1] = VECTOR3D(0.0f, -2.4f, 20.0f);
+			Weapon[1] = new CWeapon;
+			Weapon[1]->Create(109);
+			Weapon[1]->SetRotation(VECTOR3D(0.0f, 3.0f, 0.0f));
+			WeaponLocation[2] = VECTOR3D(0.0f, -2.4f, 20.0f);
+			Weapon[2] = new CWeapon;
+			Weapon[2]->Create(109);
+			Weapon[2]->SetRotation(VECTOR3D(0.0f, -3.0f, 0.0f));
+			WeaponLocation[3] = VECTOR3D(0.0f, -2.4f, 20.0f);
+			Weapon[3] = new CWeapon;
+			Weapon[3]->Create(109);
+			Weapon[3]->SetRotation(VECTOR3D(0.0f, 6.0f, 0.0f));
+			WeaponLocation[4] = VECTOR3D(0.0f, -2.4f, 20.0f);
+			Weapon[4] = new CWeapon;
+			Weapon[4]->Create(109);
+			WeaponLocation[5] = VECTOR3D(0.0f, -2.4f, 20.0f);
+			Weapon[5] = new CWeapon;
+			Weapon[5]->Create(109);
+			Weapon[5]->SetRotation(VECTOR3D(0.0f, -6.0f, 0.0f));
+			WeaponLocation[6] = VECTOR3D(0.0f, -2.4f, 20.0f);
+			Weapon[6] = new CWeapon;
+			Weapon[6]->Create(109);
+			Weapon[6]->SetRotation(VECTOR3D(0.0f, 9.0f, 0.0f));
+			WeaponLocation[7] = VECTOR3D(0.0f, -2.4f, 20.0f);
+			Weapon[7] = new CWeapon;
+			Weapon[7]->Create(109);
+			Weapon[7]->SetRotation(VECTOR3D(0.0f, -9.0f, 0.0f));
+
+			BossWeaponLocation[0] = VECTOR3D(35.7f, -3.0f, -13.0f);
+			BossWeapon[0] = new CWeapon;
+			BossWeapon[0]->Create(106);
+			BossWeaponLocation[1] = VECTOR3D(-35.7f, -3.0f, -13.0f);
+			BossWeapon[1] = new CWeapon;
+			BossWeapon[1]->Create(106);
+			BossWeaponLocation[2] = VECTOR3D(0.0f, -2.4f, 20.0f);
+			BossWeapon[2] = new CWeapon;
+			BossWeapon[2]->Create(106);
+			BossWeaponLocation[3] = VECTOR3D(0.0f, -2.4f, 20.0f);
+			BossWeapon[3] = new CWeapon;
+			BossWeapon[3]->Create(106);
+			BossWeaponLocation[4] = VECTOR3D(8.85f, 5.65f, -10.2f);
+			BossWeapon[4] = new CWeapon;
+			BossWeapon[4]->Create(104);
+			BossWeaponLocation[5] = VECTOR3D(-8.85f, 5.65f, -10.2f);
+			BossWeapon[5] = new CWeapon;
+			BossWeapon[5]->Create(104);
+
+			// двигатели
+			Engine[0] = new eParticleSystem;
+			EngineLocation[0] = VECTOR3D(25.1f, 0.65f, -18.8f);
+			SetAlienSpaceMotherShipEngine(Engine[0], 9);
+			Engine[1] = new eParticleSystem;
+			EngineLocation[1] = VECTOR3D(-25.1f, 0.65f, -18.8f);
+			SetAlienSpaceMotherShipEngine(Engine[1], 9);
+			Engine[2] = new eParticleSystem;
+			EngineLocation[2] = VECTOR3D(20.6f, 0.65f, -18.8f);
+			SetAlienSpaceMotherShipEngine(Engine[2], 9);
+			Engine[3] = new eParticleSystem;
+			EngineLocation[3] = VECTOR3D(-20.6f, 0.65f, -18.8f);
+			SetAlienSpaceMotherShipEngine(Engine[3], 9);
+			Engine[4] = new eParticleSystem;
+			EngineLocation[4] = VECTOR3D(22.9f, 0.65f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[4], 10);
+			Engine[5] = new eParticleSystem;
+			EngineLocation[5] = VECTOR3D(-22.9f, 0.65f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[5], 10);
+			Engine[6] = new eParticleSystem;
+			EngineLocation[6] = VECTOR3D(22.9f, -5.1f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[6], 10);
+			Engine[7] = new eParticleSystem;
+			EngineLocation[7] = VECTOR3D(-22.9f, -5.1f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[7], 10);
+			Engine[8] = new eParticleSystem;
+			EngineLocation[8] = VECTOR3D(8.85f, 5.65f, -15.2f);
+			SetAlienSpaceMotherShipEngine(Engine[8], 10);
+			Engine[9] = new eParticleSystem;
+			EngineLocation[9] = VECTOR3D(-8.85f, 5.65f, -15.2f);
+			SetAlienSpaceMotherShipEngine(Engine[9], 10);
+			Engine[10] = new eParticleSystem;
+			EngineLocation[10] = VECTOR3D(4.0f, 7.0f, -21.2f);
+			SetAlienSpaceMotherShipEngine(Engine[10], 11);
+			Engine[11] = new eParticleSystem;
+			EngineLocation[11] = VECTOR3D(-4.0f, 7.0f, -21.2f);
+			SetAlienSpaceMotherShipEngine(Engine[11], 11);
+			Engine[12] = new eParticleSystem;
+			EngineLocation[12] = VECTOR3D(20.4f, -2.4f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[12], 11);
+			Engine[13] = new eParticleSystem;
+			EngineLocation[13] = VECTOR3D(-20.4f, -2.4f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[13], 11);
+			Engine[14] = new eParticleSystem;
+			EngineLocation[14] = VECTOR3D(25.2f, -2.4f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[14], 11);
+			Engine[15] = new eParticleSystem;
+			EngineLocation[15] = VECTOR3D(-25.2f, -2.4f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[15], 11);
+			Engine[16] = new eParticleSystem;
+			EngineLocation[16] = VECTOR3D(35.7f, -3.0f, -13.0f);
+			SetAlienSpaceMotherShipEngine(Engine[16], 12);
+			Engine[16]->Direction = VECTOR3D(0.4f, 0.0f, -0.8f);
+			Engine[17] = new eParticleSystem;
+			EngineLocation[17] = VECTOR3D(-35.7f, -3.0f, -13.0f);
+			SetAlienSpaceMotherShipEngine(Engine[17], 12);
+			Engine[17]->Direction = VECTOR3D(-0.4f, 0.0f, -0.8f);
+			Engine[18] = new eParticleSystem;
+			EngineLocation[18] = VECTOR3D(0.0f, -2.4f, -23.0f);
+			SetAlienSpaceMotherShipEngine(Engine[18], 13);
+			Engine[19] = new eParticleSystem;
+			EngineLocation[19] = VECTOR3D(0.0f, -2.4f, 20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[19], 14);
+			break;
+
+
+		case 6:
+			// оружие
+			WeaponLocation[0] = VECTOR3D(0.0f, -4.4f, 18.0f);
+			Weapon[0] = new CWeapon;
+			Weapon[0]->Create(103);
+			Weapon[0]->NextFireTime = Weapon[0]->NextFireTime/2.0f;
+			WeaponLocation[1] = VECTOR3D(0.0f, -4.4f, 18.0f);
+			Weapon[1] = new CWeapon;
+			Weapon[1]->Create(103);
+			Weapon[1]->SetRotation(VECTOR3D(0.0f, 3.0f, 0.0f));
+			Weapon[1]->NextFireTime = Weapon[1]->NextFireTime/2.0f;
+			WeaponLocation[2] = VECTOR3D(0.0f, -4.4f, 18.0f);
+			Weapon[2] = new CWeapon;
+			Weapon[2]->Create(103);
+			Weapon[2]->SetRotation(VECTOR3D(0.0f, -3.0f, 0.0f));
+			Weapon[2]->NextFireTime = Weapon[2]->NextFireTime/2.0f;
+			WeaponLocation[3] = VECTOR3D(0.0f, -4.4f, 18.0f);
+			Weapon[3] = new CWeapon;
+			Weapon[3]->Create(103);
+			Weapon[3]->SetRotation(VECTOR3D(0.0f, 6.0f, 0.0f));
+			Weapon[3]->NextFireTime = Weapon[3]->NextFireTime/2.0f;
+			WeaponLocation[4] = VECTOR3D(0.0f, -4.4f, 18.0f);
+			Weapon[4] = new CWeapon;
+			Weapon[4]->Create(103);
+			Weapon[4]->NextFireTime = Weapon[4]->NextFireTime/2.0f;
+			WeaponLocation[5] = VECTOR3D(0.0f, -4.4f, 18.0f);
+			Weapon[5] = new CWeapon;
+			Weapon[5]->Create(103);
+			Weapon[5]->SetRotation(VECTOR3D(0.0f, -6.0f, 0.0f));
+			Weapon[5]->NextFireTime = Weapon[5]->NextFireTime/2.0f;
+
+			WeaponLocation[6] = VECTOR3D(7.0f, -4.4f, 13.0f);
+			Weapon[6] = new CWeapon;
+			Weapon[6]->Create(104);
+			Weapon[6]->NextFireTime = Weapon[6]->NextFireTime/2.0f;
+			WeaponLocation[7] = VECTOR3D(-7.0f, -4.4f, 13.0f);
+			Weapon[7] = new CWeapon;
+			Weapon[7]->Create(104);
+			Weapon[7]->NextFireTime = Weapon[7]->NextFireTime/2.0f;
+			WeaponLocation[8] = VECTOR3D(12.0f, -4.4f, 10.0f);
+			Weapon[8] = new CWeapon;
+			Weapon[8]->Create(104);
+			Weapon[8]->NextFireTime = Weapon[8]->NextFireTime/2.0f;
+			WeaponLocation[9] = VECTOR3D(-12.0f, -4.4f, 10.0f);
+			Weapon[9] = new CWeapon;
+			Weapon[9]->Create(104);
+			Weapon[9]->NextFireTime = Weapon[9]->NextFireTime/2.0f;
+			WeaponLocation[10] = VECTOR3D(17.0f, -4.4f, 8.0f);
+			Weapon[10] = new CWeapon;
+			Weapon[10]->Create(104);
+			Weapon[10]->NextFireTime = Weapon[10]->NextFireTime/2.0f;
+			WeaponLocation[11] = VECTOR3D(-17.0f, -4.4f, 8.0f);
+			Weapon[11] = new CWeapon;
+			Weapon[11]->Create(104);
+			Weapon[11]->NextFireTime = Weapon[11]->NextFireTime/2.0f;
+
+			BossWeaponLocation[0] = VECTOR3D(10.0f, -6.4f, 10.0f);
+			BossWeapon[0] = new CWeapon;
+			BossWeapon[0]->Create(106);
+			BossWeaponLocation[1] = VECTOR3D(-10.0f, -6.4f, 10.0f);
+			BossWeapon[1] = new CWeapon;
+			BossWeapon[1]->Create(106);
+			BossWeaponLocation[2] = VECTOR3D(15.0f, -6.4f, 8.0f);
+			BossWeapon[2] = new CWeapon;
+			BossWeapon[2]->Create(106);
+			BossWeaponLocation[3] = VECTOR3D(-15.0f, -6.4f, 8.0f);
+			BossWeapon[3] = new CWeapon;
+			BossWeapon[3]->Create(106);
+			BossWeaponLocation[4] = VECTOR3D(20.0f, -6.4f, 5.0f);
+			BossWeapon[4] = new CWeapon;
+			BossWeapon[4]->Create(106);
+			BossWeaponLocation[5] = VECTOR3D(-20.0f, -6.4f, 5.0f);
+			BossWeapon[5] = new CWeapon;
+			BossWeapon[5]->Create(106);
+
+			// двигатели
+			Engine[0] = new eParticleSystem;
+			EngineLocation[0] = VECTOR3D(0.0f, -7.0f, -23.0f);
+			SetAlienSpaceMotherShipEngine(Engine[0], 13);
+			Engine[1] = new eParticleSystem;
+			EngineLocation[1] = VECTOR3D(0.0f, -4.4f, 18.0f);
+			SetAlienSpaceMotherShipEngine(Engine[1], 14);
+			Engine[1]->CreationSize = VECTOR3D(5.0f,5.0f,5.0f);
+			Engine[1]->DeadZone = 4.9f;
+			Engine[1]->ParticlesPerSec = 100;
+			Engine[2] = new eParticleSystem;
+			EngineLocation[2] = VECTOR3D(20.6f, -4.0f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[2], 11);
+			Engine[3] = new eParticleSystem;
+			EngineLocation[3] = VECTOR3D(-20.6f, -4.0f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[3], 11);
+			Engine[4] = new eParticleSystem;
+			EngineLocation[4] = VECTOR3D(23.4f, -1.0f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[4], 10);
+			Engine[5] = new eParticleSystem;
+			EngineLocation[5] = VECTOR3D(-23.4f, -1.0f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[5], 10);
+			Engine[6] = new eParticleSystem;
+			EngineLocation[6] = VECTOR3D(23.4f, -7.0f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[6], 10);
+			Engine[7] = new eParticleSystem;
+			EngineLocation[7] = VECTOR3D(-23.4f, -7.0f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[7], 10);
+			Engine[8] = new eParticleSystem;
+			EngineLocation[8] = VECTOR3D(5.3f, 4.7f, -22.9f);
+			SetAlienSpaceMotherShipEngine(Engine[8], 10);
+			Engine[9] = new eParticleSystem;
+			EngineLocation[9] = VECTOR3D(-5.3f, 4.7f, -22.9f);
+			SetAlienSpaceMotherShipEngine(Engine[9], 10);
+			Engine[10] = new eParticleSystem;
+			EngineLocation[10] = VECTOR3D(2.6f, 6.6f, -21.5f);
+			SetAlienSpaceMotherShipEngine(Engine[10], 11);
+			Engine[11] = new eParticleSystem;
+			EngineLocation[11] = VECTOR3D(-2.6f, 6.6f, -21.5f);
+			SetAlienSpaceMotherShipEngine(Engine[11], 11);
+			Engine[12] = new eParticleSystem;
+			EngineLocation[12] = VECTOR3D(2.6f, 2.0f, -21.5f);
+			SetAlienSpaceMotherShipEngine(Engine[12], 11);
+			Engine[13] = new eParticleSystem;
+			EngineLocation[13] = VECTOR3D(-2.6f, 2.0f, -21.5f);
+			SetAlienSpaceMotherShipEngine(Engine[13], 11);
+			Engine[14] = new eParticleSystem;
+			EngineLocation[14] = VECTOR3D(25.4f, -4.0f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[14], 11);
+			Engine[15] = new eParticleSystem;
+			EngineLocation[15] = VECTOR3D(-25.4f, -4.0f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[15], 11);
+			break;
+
+		case 7:
+			// оружие
+			WeaponLocation[0] = VECTOR3D(0.0f, -1.4f, 15.0f);
+			Weapon[0] = new CWeapon;
+			Weapon[0]->Create(108);
+			Weapon[0]->NextFireTime = Weapon[0]->NextFireTime/2.0f;
+			WeaponLocation[1] = VECTOR3D(2.0f, -1.4f, 15.0f);
+			Weapon[1] = new CWeapon;
+			Weapon[1]->Create(108);
+			Weapon[1]->SetRotation(VECTOR3D(0.0f, 3.0f, 0.0f));
+			Weapon[1]->NextFireTime = Weapon[1]->NextFireTime/2.0f;
+			WeaponLocation[2] = VECTOR3D(-2.0f, -1.4f, 15.0f);
+			Weapon[2] = new CWeapon;
+			Weapon[2]->Create(108);
+			Weapon[2]->SetRotation(VECTOR3D(0.0f, -3.0f, 0.0f));
+			Weapon[2]->NextFireTime = Weapon[2]->NextFireTime/2.0f;
+			WeaponLocation[3] = VECTOR3D(4.0f, -1.4f, 15.0f);
+			Weapon[3] = new CWeapon;
+			Weapon[3]->Create(108);
+			Weapon[3]->SetRotation(VECTOR3D(0.0f, 6.0f, 0.0f));
+			Weapon[3]->NextFireTime = Weapon[3]->NextFireTime/2.0f;
+			WeaponLocation[4] = VECTOR3D(-4.0f, -1.4f, 15.0f);
+			Weapon[4] = new CWeapon;
+			Weapon[4]->Create(108);
+			Weapon[4]->SetRotation(VECTOR3D(0.0f, -6.0f, 0.0f));
+			Weapon[4]->NextFireTime = Weapon[4]->NextFireTime/2.0f;
+
+			BossWeaponLocation[0] = VECTOR3D(12.5f, 1.6f, -15.3f);
+			BossWeapon[0] = new CWeapon;
+			BossWeapon[0]->Create(110);
+			BossWeaponLocation[1] = VECTOR3D(-12.5f, 1.6f, -15.3f);
+			BossWeapon[1] = new CWeapon;
+			BossWeapon[1]->Create(110);
+
+			// двигатели
+			Engine[0] = new eParticleSystem;
+			EngineLocation[0] = VECTOR3D(0.0f, 2.3f, -25.0f);
+			SetAlienSpaceMotherShipEngine(Engine[0], 15);
+			Engine[1] = new eParticleSystem;
+			EngineLocation[1] = VECTOR3D(12.5f, 1.6f, -20.3f);
+			SetAlienSpaceMotherShipEngine(Engine[1], 16);
+			Engine[2] = new eParticleSystem;
+			EngineLocation[2] = VECTOR3D(-12.5f, 1.6f, -20.3f);
+			SetAlienSpaceMotherShipEngine(Engine[2], 16);
+			Engine[3] = new eParticleSystem;
+			EngineLocation[3] = VECTOR3D(0.0f, -8.0f, 0.0f);
+			SetAlienSpaceMotherShipEngine(Engine[3], 17);
+			Engine[4] = new eParticleSystem;
+			EngineLocation[4] = VECTOR3D(0.0f, -8.0f, 0.0f);
+			SetAlienSpaceMotherShipEngine(Engine[4], 18);
+			Engine[5] = new eParticleSystem;
+			EngineLocation[5] = VECTOR3D(0.0f, -8.0f, 0.0f);
+			SetAlienSpaceMotherShipEngine(Engine[5], 19);
+			break;
+
+
+
+
+		case 8:
+			// оружие
+			WeaponLocation[0] = VECTOR3D(2.0f, -2.4f, 15.0f);
+			Weapon[0] = new CWeapon;
+			Weapon[0]->Create(104);
+			Weapon[0]->NextFireTime = Weapon[0]->NextFireTime/2.0f;
+			WeaponLocation[1] = VECTOR3D(-2.0f, -2.4f, 15.0f);
+			Weapon[1] = new CWeapon;
+			Weapon[1]->Create(104);
+			Weapon[1]->NextFireTime = Weapon[1]->NextFireTime/2.0f;
+			WeaponLocation[2] = VECTOR3D(2.0f, -4.4f, 15.0f);
+			Weapon[2] = new CWeapon;
+			Weapon[2]->Create(104);
+			Weapon[2]->NextFireTime = Weapon[2]->NextFireTime/2.0f;
+			WeaponLocation[3] = VECTOR3D(-2.0f, -4.4f, 15.0f);
+			Weapon[3] = new CWeapon;
+			Weapon[3]->Create(104);
+			Weapon[3]->NextFireTime = Weapon[3]->NextFireTime/2.0f;
+
+			BossWeaponLocation[0] = VECTOR3D(8.0f, -1.0f, 15.0f);
+			BossWeapon[0] = new CWeapon;
+			BossWeapon[0]->Create(110);
+			BossWeaponLocation[1] = VECTOR3D(-8.0f, -1.0f, 15.0f);
+			BossWeapon[1] = new CWeapon;
+			BossWeapon[1]->Create(110);
+			BossWeaponLocation[2] = VECTOR3D(10.0f, -6.4f, 8.0f);
+			BossWeapon[2] = new CWeapon;
+			BossWeapon[2]->Create(107);
+			BossWeaponLocation[3] = VECTOR3D(-10.0f, -6.4f, 8.0f);
+			BossWeapon[3] = new CWeapon;
+			BossWeapon[3]->Create(107);
+			BossWeaponLocation[4] = VECTOR3D(15.0f, -6.4f, 5.0f);
+			BossWeapon[4] = new CWeapon;
+			BossWeapon[4]->Create(107);
+			BossWeaponLocation[5] = VECTOR3D(-15.0f, -6.4f, 5.0f);
+			BossWeapon[5] = new CWeapon;
+			BossWeapon[5]->Create(107);
+
+			// двигатели
+			Engine[0] = new eParticleSystem;
+			EngineLocation[0] = VECTOR3D(15.0f, 4.4f, -29.0f);
+			SetAlienSpaceMotherShipEngine(Engine[0], 15);
+			Engine[0]->CreationSize = VECTOR3D(4.0f,6.0f,3.0f);
+			Engine[1] = new eParticleSystem;
+			EngineLocation[1] = VECTOR3D(-15.0f, 4.4f, -29.0f);
+			SetAlienSpaceMotherShipEngine(Engine[1], 15);
+			Engine[1]->CreationSize = VECTOR3D(4.0f,6.0f,3.0f);
+			Engine[2] = new eParticleSystem;
+			EngineLocation[2] = VECTOR3D(5.2f, 5.4f, -20.6f);
+			SetAlienSpaceMotherShipEngine(Engine[2], 20);
+			Engine[3] = new eParticleSystem;
+			EngineLocation[3] = VECTOR3D(-5.2f, 5.4f, -20.6f);
+			SetAlienSpaceMotherShipEngine(Engine[3], 20);
+			Engine[4] = new eParticleSystem;
+			EngineLocation[4] = VECTOR3D(5.2f, -8.8f, -22.6f);
+			SetAlienSpaceMotherShipEngine(Engine[4], 20);
+			Engine[5] = new eParticleSystem;
+			EngineLocation[5] = VECTOR3D(-5.2f, -8.8f, -22.6f);
+			SetAlienSpaceMotherShipEngine(Engine[5], 20);
+			Engine[6] = new eParticleSystem;
+			EngineLocation[6] = VECTOR3D(11.2f, -2.8f, -10.0f);
+			SetAlienSpaceMotherShipEngine(Engine[6], 20);
+			Engine[7] = new eParticleSystem;
+			EngineLocation[7] = VECTOR3D(-11.2f, -2.8f, -10.0f);
+			SetAlienSpaceMotherShipEngine(Engine[7], 20);
+			Engine[8] = new eParticleSystem;
+			EngineLocation[8] = VECTOR3D(0.0f, -10.0f, -3.0f);
+			SetAlienSpaceMotherShipEngine(Engine[8], 17);
+			Engine[8]->CreationSize = VECTOR3D(17.0f,1.0f,17.0f);
+			Engine[8]->DeadZone = 16.9f;
+			Engine[9] = new eParticleSystem;
+			EngineLocation[9] = VECTOR3D(0.0f, -10.0f, -3.0f);
+			SetAlienSpaceMotherShipEngine(Engine[9], 18);
+			Engine[9]->CreationSize = VECTOR3D(17.0f,1.0f,17.0f);
+			Engine[9]->DeadZone = 16.9f;
+			break;
+
+
+
+		default:
+			fprintf(stderr, "Wrong SpaceShipNum!");
+			return;
+	}
+
+	for (int i=0; i< EngineQuantity; i++)
+	{
+		Engine[i]->SetStartLocation(EngineLocation[i]);
+		// находим кол-во внутренних источников света
+		if (Engine[i]->Light != 0) InternalLights++;
+	}
+
+
+
+
+	// находим все данные по геометрии
+	::CObject3D::InitByDrawObjectList();
+}
+
