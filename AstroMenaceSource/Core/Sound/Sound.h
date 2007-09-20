@@ -58,8 +58,8 @@ class eSound
 {
 public:
 
-	eSound::eSound(){FileName=0;};
-	eSound::~eSound(){if (FileName != 0){delete [] FileName; FileName=0;}};
+	eSound(){FileName=0;};
+	~eSound(){if (FileName != 0){delete [] FileName; FileName=0;}};
 
 	// проигрывание звука
 	// нельзя разделять пока на отдельную загрузку и проигрывание... т.к. удаляем по остановке!!!
