@@ -1,30 +1,29 @@
-# New ports collection makefile for: pro-search
+# New ports collection makefile for: openastromenace
 # Date created:		23 Sep 2007
 # Whom:			Oleg Alexeenkov
 #
-# $FreeBSD:$
+# $FreeBSD$
 #
 
 PORTNAME=	openastromenace
-PORTDIRNAME=	openastromenace
+#PORTDIRNAME=	openastromenace
 PORTVERSION=	1.2.0
 CATEGORIES=	games
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE}
 MASTER_SITE_SUBDIR=    ${PORTNAME}
 
 MAINTAINER=	proler@gmail.com
-COMMENT=	Hardcore 3D space shooter with spaceship upgrade possibilities.
+COMMENT=	Hardcore 3D space shooter with spaceship upgrade possibilities
 
 USE_BZIP2=	on
 WANT_SDL=       yes
 USE_SDL=        sdl
 
-CMAKE_ARGS=     -DCMAKE_BUILD_TYPE:STRING=Release \
-                -DCMAKE_C_COMPILER:STRING='${CC}' \
-                -DCMAKE_CXX_COMPILER:STRING=${CXX} \
-                -DCMAKE_CXX_FLAGS:STRING="${CXXFLAGS}" \
-                -DCMAKE_INSTALL_PREFIX=${PREFIX}
-
+CMAKE_ARGS=	-DCMAKE_BUILD_TYPE:STRING=Release \
+		-DCMAKE_C_COMPILER:STRING='${CC}' \
+		-DCMAKE_CXX_COMPILER:STRING=${CXX} \
+		-DCMAKE_CXX_FLAGS:STRING="${CXXFLAGS}" \
+		-DCMAKE_INSTALL_PREFIX=${PREFIX}
 
 BUILD_DEPENDS+=\
     ${LOCALBASE}/bin/sdl-config:${PORTSDIR}/devel/sdl12	\
@@ -32,8 +31,7 @@ BUILD_DEPENDS+=\
     ${LOCALBASE}/bin/cmake:${PORTSDIR}/devel/cmake	\
 
 LIB_DEPENDS+=   vorbisfile.5:${PORTSDIR}/audio/libvorbis	\
-		jpeg.9:${PORTSDIR}/graphics/jpeg 
-
+		jpeg.9:${PORTSDIR}/graphics/jpeg
 
 OPTIONS=        \
 		SRC        	"src"	on	\
@@ -42,35 +40,32 @@ OPTIONS=        \
 		DE        	" de lang "	off	\
 		RU        	" ru lang "	off	\
 
-
 .include <bsd.port.pre.mk>
 
 .undef DISTFILES
 .	if defined(WITH_SRC)
-        DISTFILES+=oamenace-src-${PORTVERSION}.tar.bz2
+DISTFILES+=oamenace-src-${PORTVERSION}.tar.bz2
 .	endif
 .	if defined(WITH_DATA)
-        DISTFILES+=oamenace-data-${PORTVERSION}.tar.bz2
+DISTFILES+=oamenace-data-${PORTVERSION}.tar.bz2
 .	endif
 .	if defined(WITH_EN)
-        DISTFILES+=oamenace-lang-en-${PORTVERSION}.tar.bz2
+DISTFILES+=oamenace-lang-en-${PORTVERSION}.tar.bz2
 .	endif
 .	if defined(WITH_DE)
-        DISTFILES+=oamenace-lang-de-${PORTVERSION}.tar.bz2
+DISTFILES+=oamenace-lang-de-${PORTVERSION}.tar.bz2
 .	endif
 .	if defined(WITH_RU)
-        DISTFILES+=oamenace-lang-ru-${PORTVERSION}.tar.bz2
+DISTFILES+=oamenace-lang-ru-${PORTVERSION}.tar.bz2
 .	endif
-
 
 do-configure:
 	@(cd ${WRKSRC}; \
 	${LOCALBASE}/bin/cmake ${CMAKE_ARGS} ${PATCH_WRKSRC})
 
-
 do-install:
 	${INSTALL_PROGRAM} ${WRKSRC}/AstroMenace ${PREFIX}/bin
-	mkdir -p ${DATADIR}
+	${MKDIR} ${DATADIR}
 .if defined(WITH_DATA)
 	${INSTALL_DATA} ${WRKDIR}/gamedata.vfs ${DATADIR}/
 .endif
@@ -83,6 +78,5 @@ do-install:
 .if defined(WITH_RU)
 	${INSTALL_DATA} ${WRKDIR}/gamelang_ru.vfs ${DATADIR}/
 .endif
-
 
 .include <bsd.port.post.mk>
