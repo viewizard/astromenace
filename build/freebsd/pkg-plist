@@ -1,0 +1,6 @@
+bin/AstroMenace
+%%DATADIR%%/gamedata.vfs
+%%DATADIR%%/gamelang_en.vfs
+%%DATADIR%%/gamelang_de.vfs
+%%DATADIR%%/gamelang_ru.vfs
+@dirrm %%DATADIR%%
