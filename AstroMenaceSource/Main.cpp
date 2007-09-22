@@ -88,6 +88,7 @@ bool LoadedTypes[1000];
 char ProgrammDir[MAX_PATH];
 char VFSFileNamePath[MAX_PATH];
 char VFSLangFileNamePath[MAX_PATH];
+char VFSLangFileNamePathEn[MAX_PATH];
 // полное имя для файла с данными о игре
 char DatFileName[MAX_PATH];
 // для сохранения скриншотов
@@ -234,6 +235,7 @@ int main( int argc, char **argv )
 	ZeroMemory(DatFileName, sizeof(DatFileName));
 	ZeroMemory(VFSFileNamePath, sizeof(VFSFileNamePath));
 	ZeroMemory(VFSLangFileNamePath, sizeof(VFSLangFileNamePath));
+	ZeroMemory(VFSLangFileNamePathEn, sizeof(VFSLangFileNamePathEn));
 	ZeroMemory(ScreenshotDir, sizeof(ScreenshotDir));
 
 	// Получаем данные, где папка пользователя
@@ -300,6 +302,9 @@ int main( int argc, char **argv )
 	strcpy(VFSLangFileNamePath, ProgrammDir);
 	strcat(VFSLangFileNamePath, "gamelang.vfs");
 
+	strcpy(VFSLangFileNamePathEn, ProgrammDir);
+	strcat(VFSLangFileNamePathEn, "gamelang_en.vfs");
+
 #elif __unix
 	// иним пути для юникса-линукса
 	// если передали параметр-путь
@@ -345,6 +350,9 @@ int main( int argc, char **argv )
 
 	strcpy(VFSLangFileNamePath, ProgrammDir);
 	strcat(VFSLangFileNamePath, "gamelang.vfs");
+
+	strcpy(VFSLangFileNamePathEn, ProgrammDir);
+	strcat(VFSLangFileNamePathEn, "gamelang_en.vfs");
 
 	// укладываем в нужном месте (где 100% дають создавать) файл с настройками
 	strcpy(DatFileName, homeval);
@@ -522,9 +530,12 @@ int main( int argc, char **argv )
 	}
 	if (vw_OpenVFS(VFSLangFileNamePath) != 0)
 	{
-		fprintf(stderr, "gamelang.vfs file not found or corrupted.\n");
-		ReleaseGameOneCopy();
-		return 0;
+		if (vw_OpenVFS(VFSLangFileNamePathEn) != 0)
+		{
+			fprintf(stderr, "gamelang.vfs or gamelang_en.vfs files not found or corrupted.\n");
+			ReleaseGameOneCopy();
+			return 0;
+		}
 	}
 	printf("\n");
 
