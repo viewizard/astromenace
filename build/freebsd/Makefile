@@ -11,10 +11,9 @@ PORTVERSION=	1.2.0
 CATEGORIES=	games
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE}
 MASTER_SITE_SUBDIR=    ${PORTNAME}
-#DIST_SUBDIR=    search
 
 MAINTAINER=	proler@gmail.com
-COMMENT=	Game.
+COMMENT=	Hardcore 3D space shooter with spaceship upgrade possibilities.
 
 USE_BZIP2=	on
 WANT_SDL=       yes
@@ -36,13 +35,9 @@ LIB_DEPENDS+=   vorbisfile.5:${PORTSDIR}/audio/libvorbis	\
 		jpeg.9:${PORTSDIR}/graphics/jpeg 
 
 
-#CONFIGURE_SCRIPT=	cmake
-#CONFIGURE_ARGS=	.
-
-
 OPTIONS=        \
-		SRC        	"src (!not ready)"	off	\
-		DATA        	"data file "	on	\
+		SRC        	"src"	on	\
+		DATA        	"data file"	on	\
 		EN        	" en lang"	on	\
 		DE        	" de lang "	off	\
 		RU        	" ru lang "	off	\
@@ -68,13 +63,6 @@ OPTIONS=        \
 .	endif
 
 
-#RUN_DEPENDS=	${BUILD_DEPENDS}
-
-#WRKSRC=         ${WRKDIR}/${DIST_SUBDIR}
-
-#do-install:
-
-
 do-configure:
 	@(cd ${WRKSRC}; \
 	${LOCALBASE}/bin/cmake ${CMAKE_ARGS} ${PATCH_WRKSRC})
@@ -82,7 +70,6 @@ do-configure:
 
 do-install:
 	${INSTALL_PROGRAM} ${WRKSRC}/AstroMenace ${PREFIX}/bin
-#post-install:
 	mkdir -p ${DATADIR}
 .if defined(WITH_DATA)
 	${INSTALL_DATA} ${WRKDIR}/gamedata.vfs ${DATADIR}/
@@ -99,4 +86,3 @@ do-install:
 
 
 .include <bsd.port.post.mk>
-#.include <bsd.port.mk>

@@ -1,0 +1,9 @@
+
+ build for freebsd:
+ svn co https://openastromenace.svn.sourceforge.net/svnroot/openastromenace/build/freebsd openastromenaceport
+ cd openastromenaceport
+ make install
+
+ run:
+
+ AstroMenase --dir=/usr/local/share/openastromenace
