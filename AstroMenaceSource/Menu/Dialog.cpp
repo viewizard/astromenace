@@ -982,13 +982,17 @@ void DrawDialogBox()
 						DrawFont(X1+Size2, Y1, 0, 0, 4, DialogContentTransp, GetText("4_SpaceShip_Weight"));
 						Y1 += Offset;
 						DrawFont(X1+Size2, Y1, 0, 0, 4, DialogContentTransp, GetText("4_Power_Source"));
-						Y1 += Offset;
-						Y1 += Offset;
-						SizeI = (W-FontSize(GetText("4_ArcadeModeLine1")))/2-45;
-						DrawFont(X1+SizeI, Y1, 0, 0, 2, DialogContentTransp, GetText("4_ArcadeModeLine1"));
-						Y1 += Offset;
-						SizeI = (W-FontSize(GetText("4_ArcadeModeLine2")))/2-45;
-						DrawFont(X1+SizeI, Y1, 0, 0, 2, DialogContentTransp, GetText("4_ArcadeModeLine2"));
+
+						if (Setup.Profile[CurrentProfile].SpaceShipControlMode == 1)
+						{
+							Y1 += Offset;
+							Y1 += Offset;
+							SizeI = (W-FontSize(GetText("4_ArcadeModeLine1")))/2-45;
+							DrawFont(X1+SizeI, Y1, 0, 0, 2, DialogContentTransp, GetText("4_ArcadeModeLine1"));
+							Y1 += Offset;
+							SizeI = (W-FontSize(GetText("4_ArcadeModeLine2")))/2-45;
+							DrawFont(X1+SizeI, Y1, 0, 0, 2, DialogContentTransp, GetText("4_ArcadeModeLine2"));
+						}
 
 						break;
 
@@ -1119,13 +1123,16 @@ void DrawDialogBox()
 						Y1 += Offset;
 						DrawFont(X1+Size2, Y1, 0, 0, 3, DialogContentTransp, GetText("4_Weapon_Orientation"));
 
-						Y1 += Offset;
-						Y1 += Offset;
-						SizeI = (W-FontSize(GetText("4_ArcadeModeLine1")))/2-45;
-						DrawFont(X1+SizeI, Y1, 0, 0, 2, DialogContentTransp, GetText("4_ArcadeModeLine1"));
-						Y1 += Offset;
-						SizeI = (W-FontSize(GetText("4_ArcadeModeLine3")))/2-45;
-						DrawFont(X1+SizeI, Y1, 0, 0, 2, DialogContentTransp, GetText("4_ArcadeModeLine3"));
+						if (Setup.Profile[CurrentProfile].WeaponTargetingMode == 1)
+						{
+							Y1 += Offset;
+							Y1 += Offset;
+							SizeI = (W-FontSize(GetText("4_ArcadeModeLine1")))/2-45;
+							DrawFont(X1+SizeI, Y1, 0, 0, 2, DialogContentTransp, GetText("4_ArcadeModeLine1"));
+							Y1 += Offset;
+							SizeI = (W-FontSize(GetText("4_ArcadeModeLine3")))/2-45;
+							DrawFont(X1+SizeI, Y1, 0, 0, 2, DialogContentTransp, GetText("4_ArcadeModeLine3"));
+						}
 
 						break;
 
