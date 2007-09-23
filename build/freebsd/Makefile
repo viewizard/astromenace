@@ -15,7 +15,8 @@ MASTER_SITE_SUBDIR=	${PORTNAME}
 MAINTAINER=	proler@gmail.com
 COMMENT=	Hardcore 3D space shooter with spaceship upgrade possibilities
 
-USE_BZIP2=	on
+USE_BZIP2=	yes
+USE_GL=		yes
 WANT_SDL=	yes
 USE_SDL=	sdl
 
@@ -75,6 +76,8 @@ do-install:
 	${MKDIR} ${DATADIR}
 .if defined(WITH_DATA)
 	${INSTALL_DATA} ${WRKDIR}/gamedata.vfs ${DATADIR}/
+	${MKDIR} ${DATADIR}/DATA/SCRIPT
+	${INSTALL_DATA} ${WRKDIR}/DATA/SCRIPT/* ${DATADIR}/DATA/SCRIPT
 .endif
 .if defined(WITH_EN)
 	${INSTALL_DATA} ${WRKDIR}/gamelang_en.vfs ${DATADIR}/
