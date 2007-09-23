@@ -1716,7 +1716,7 @@ void LoadGameData(int LoadType)
 			if (FileName == 0)
 			{
 				fprintf(stderr, "Critical error. Can't find this mission script file or mission list file.\n");
-				fprintf(stderr, "Please, check your DATA/SCRIP/ folder for xml files (aimode, list, missions).\n");
+				fprintf(stderr, "Please, check your DATA/SCRIPT/ folder for xml files (aimode, list, missions).\n");
 				exit(0);
 			}
 
