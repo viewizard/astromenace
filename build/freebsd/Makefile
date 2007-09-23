@@ -6,7 +6,7 @@
 #
 
 PORTNAME=	openastromenace
-#PORTDIRNAME=	openastromenace
+PORTDIRNAME=	openastromenace
 PORTVERSION=	1.2.0
 CATEGORIES=	games
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE}
@@ -78,12 +78,15 @@ do-install:
 .endif
 .if defined(WITH_EN)
 	${INSTALL_DATA} ${WRKDIR}/gamelang_en.vfs ${DATADIR}/
+	${LN} -sf ${DATADIR}/gamelang_en.vfs ${DATADIR}/gamelang.vfs
 .endif
 .if defined(WITH_DE)
 	${INSTALL_DATA} ${WRKDIR}/gamelang_de.vfs ${DATADIR}/
+	${LN} -sf ${DATADIR}/gamelang_de.vfs ${DATADIR}/gamelang.vfs
 .endif
 .if defined(WITH_RU)
 	${INSTALL_DATA} ${WRKDIR}/gamelang_ru.vfs ${DATADIR}/
+	${LN} -sf ${DATADIR}/gamelang_ru.vfs ${DATADIR}/gamelang.vfs
 .endif
 
 .include <bsd.port.post.mk>
