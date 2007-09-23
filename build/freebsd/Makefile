@@ -35,8 +35,8 @@ LIB_DEPENDS+=	\
 		alut.1:${PORTSDIR}/audio/freealut	\
 
 OPTIONS=	\
-		SRC        	"src"	on	\
-		DATA        	"data file"	on	\
+		SRC        	"build src"	on	\
+		DATA        	"install data file"	on	\
 		EN        	" en lang"	on	\
 		DE        	" de lang "	off	\
 		RU        	" ru lang "	off	\
