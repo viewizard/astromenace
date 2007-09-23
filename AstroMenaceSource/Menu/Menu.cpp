@@ -456,8 +456,6 @@ void DrawMenu()
 				if (CurrentWorkshop == 3)
 					if (Setup.NeedShowHint[3]) SetCurrentDialogBox(12);
 			}
-
-#ifdef __unix
 			if (GameStatus == MISSION)
 			{
 				// проверяем, если в одном из профайлов уже открыли 3 миссии - выводим хинт с пожертвованием
@@ -471,7 +469,6 @@ void DrawMenu()
 				if (NeedShowDonate)
 					if (Setup.NeedShowHint[6]) SetCurrentDialogBox(15);
 			}
-#endif	//__unix
 
 		}
 	}

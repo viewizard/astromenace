@@ -99,12 +99,7 @@ void CreditsMenu()
 	SizeI = (Setup.iAspectRatioWidth-FontSize(GetText("10_Max_Shelekhov")))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-#ifndef BUILD_OBERON_MEDIA
 	DrawFont(SizeI, Y2, 0, 0, 0, ttt*MenuContentTransp, GetText("10_Max_Shelekhov"));
-#else
-	SizeI = (Setup.iAspectRatioWidth-FontSize("Max Shelekhov"))/2;
-	DrawFont(SizeI, Y2, 0, 0, 0, ttt*MenuContentTransp, "Max Shelekhov");
-#endif
 
 	Y1 += Offset1;
 	Y2 += Offset1;
@@ -204,12 +199,8 @@ void CreditsMenu()
 	SizeI = (Setup.iAspectRatioWidth-FontSize(GetText("10_Bernd_Dau_(de)")))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-#ifndef BUILD_OBERON_MEDIA
 	DrawFont(SizeI, Y2, 0, 0, 0, ttt*MenuContentTransp, GetText("10_Bernd_Dau_(de)"));
-#else
-	SizeI = (Setup.iAspectRatioWidth-FontSize("Bernd Dau (de)"))/2;
-	DrawFont(SizeI, Y2, 0, 0, 0, ttt*MenuContentTransp, "Bernd Dau (de)");
-#endif
+
 	Y1 += Offset1;
 	Y2 += Offset1;
 	SizeI = (Setup.iAspectRatioWidth-FontSize(GetText("10_Michael_Kurinnoy_(en,_ru)")))/2;
@@ -291,7 +282,7 @@ void CreditsMenu()
 	SizeI = (Setup.iAspectRatioWidth-FontSize(GetText("10_SPECIAL_THANKS_TO")))/2;
 	if (Y1 > 300) {ttt = (650 - Y1) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y1 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-    DrawFont(SizeI, Y1, 0, 0, 1, ttt*MenuContentTransp, GetText("10_SPECIAL_THANKS_TO"));
+	DrawFont(SizeI, Y1, 0, 0, 1, ttt*MenuContentTransp, GetText("10_SPECIAL_THANKS_TO"));
 	// система частиц + хорошие объяснения позволили быстро сделать свою
 	SizeI = (Setup.iAspectRatioWidth-FontSize(GetText("10_Richard_Benson")))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
@@ -326,7 +317,7 @@ void CreditsMenu()
 	SizeI = (Setup.iAspectRatioWidth-FontSize(GetText("10_POWERED_BY")))/2;
 	if (Y1 > 300) {ttt = (650 - Y1) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y1 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-    DrawFont(SizeI, Y1, 0, 0, 1, ttt*MenuContentTransp, GetText("10_POWERED_BY"));
+	DrawFont(SizeI, Y1, 0, 0, 1, ttt*MenuContentTransp, GetText("10_POWERED_BY"));
 
 	int LogoX = Setup.iAspectRatioWidth/2 - 222;
 	int LogoTextX = Setup.iAspectRatioWidth/2 - 72;
@@ -347,9 +338,8 @@ void CreditsMenu()
 	Y2 += Offset1;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-#ifndef BUILD_OBERON_MEDIA
 	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "http://www.libsdl.org");
-#endif
+
 
 	// OpenGL
 	Y1 += Offset1+20;
@@ -367,9 +357,8 @@ void CreditsMenu()
 	Y2 += Offset1;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-#ifndef BUILD_OBERON_MEDIA
 	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "http://www.opengl.org");
-#endif
+
 
 	// OpenAL
 	Y1 += Offset1+20;
@@ -387,9 +376,8 @@ void CreditsMenu()
 	Y2 += Offset1;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-#ifndef BUILD_OBERON_MEDIA
 	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "http://www.openal.org");
-#endif
+
 
 	// TinyXML
 	Y1 += Offset1+20;
@@ -407,9 +395,8 @@ void CreditsMenu()
 	Y2 += Offset1;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-#ifndef BUILD_OBERON_MEDIA
 	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "http://tinyxml.sourceforge.net");
-#endif
+
 
 
 
@@ -436,9 +423,8 @@ void CreditsMenu()
 	Y2 += Offset1;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-#ifndef BUILD_OBERON_MEDIA
 	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "http://www.codeblocks.org");
-#endif
+
 
 	// gcc
 	Y1 += Offset1+20;
@@ -456,9 +442,8 @@ void CreditsMenu()
 	Y2 += Offset1;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-#ifndef BUILD_OBERON_MEDIA
 	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "http://gcc.gnu.org");
-#endif
+
 
 	// cvs
 	Y1 += Offset1+20;
@@ -476,9 +461,8 @@ void CreditsMenu()
 	Y2 += Offset1;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-#ifndef BUILD_OBERON_MEDIA
 	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "http://www.cvshome.org");
-#endif
+
 
 	// ubuntu
 	Y1 += Offset1+20;
@@ -496,9 +480,7 @@ void CreditsMenu()
 	Y2 += Offset1;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-#ifndef BUILD_OBERON_MEDIA
 	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "http://www.ubuntu.com");
-#endif
 
 
 
@@ -514,35 +496,12 @@ void CreditsMenu()
 	SizeI = (Setup.iAspectRatioWidth-FontSize("http://www.viewizard.com"))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-#ifndef BUILD_OBERON_MEDIA
 	DrawFont(SizeI, Y2, 0, 0, 0, ttt*MenuContentTransp, "http://www.viewizard.com");
-#endif
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-// если винда - просто кнопка в главное меню
-// если линукс - кнопка в меню + пожертвование
-#ifdef WIN32
-
-	int X = (Setup.iAspectRatioWidth - 384)/2;
-	int Y = 165+100*5;
-
-	if (DrawButton384(X,Y, GetText("1_MAIN_MENU"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) ComBuffer = MAIN_MENU;
-
-#elif __unix
 
 	int	X = Setup.iAspectRatioWidth/2 - 256 - 38;
 	int Y = 165+100*5;
@@ -569,7 +528,5 @@ void CreditsMenu()
 
 		ComBuffer = MAIN_MENU;
 	}
-
-#endif
 
 }
