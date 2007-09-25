@@ -30,10 +30,10 @@ BUILD_DEPENDS+=	\
     ${LOCALBASE}/bin/cmake:${PORTSDIR}/devel/cmake	\
 
 LIB_DEPENDS+=	\
-		vorbisfile.5:${PORTSDIR}/audio/libvorbis	\
-		jpeg.9:${PORTSDIR}/graphics/jpeg	\
-		openal.0:${PORTSDIR}/audio/openal	\
-		alut.1:${PORTSDIR}/audio/freealut	\
+		vorbisfile:${PORTSDIR}/audio/libvorbis	\
+		jpeg:${PORTSDIR}/graphics/jpeg	\
+		openal:${PORTSDIR}/audio/openal	\
+		alut:${PORTSDIR}/audio/freealut	\
 
 OPTIONS=	\
 		SRC        	"build src"	on	\
