@@ -26,6 +26,8 @@ CMAKE_ARGS=	-DCMAKE_BUILD_TYPE:STRING=Release \
 		-DCMAKE_CXX_FLAGS:STRING="${CXXFLAGS}" \
 		-DCMAKE_INSTALL_PREFIX=${PREFIX}
 
+SUB_FILES=      pkg-message
+
 BUILD_DEPENDS+=	\
     ${LOCALBASE}/bin/cmake:${PORTSDIR}/devel/cmake	\
 
@@ -91,5 +93,8 @@ do-install:
 	${INSTALL_DATA} ${WRKDIR}/gamelang_ru.vfs ${DATADIR}/
 	${LN} -sf ${DATADIR}/gamelang_ru.vfs ${DATADIR}/gamelang.vfs
 .endif
+
+post-install:
+	@${CAT} ${PKGMESSAGE}
 
 .include <bsd.port.post.mk>
