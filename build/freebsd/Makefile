@@ -6,7 +6,6 @@
 #
 
 PORTNAME=	openastromenace
-PORTDIRNAME=	openastromenace
 PORTVERSION=	1.2.0
 CATEGORIES=	games
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE}
