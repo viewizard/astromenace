@@ -36,9 +36,13 @@
 
 
 // язык интерфейса
+#if !defined(EN) && !defined(DE) && !defined(RU)
+
 #define EN
 //#define DE
 //#define RU
+
+#endif
 
 
 // ставим, если демо версия! только в виндовсе!!!
