@@ -8,8 +8,9 @@
 # make
 #
 # Of course you need cmake installed on your system. After the build
-# is complete, copy gamedata.vfs from game binary distribution archive
-# into current directory and run ./AstroMenace
+# is complete, copy gamedata.vfs, gamelang.vfs and DATA directory from
+# game binary distribution archive into current directory and run
+# ./AstroMenace
 #
 
 # project name
@@ -25,6 +26,11 @@ ELSE(OPENGL_FOUND)
 	MESSAGE(FATAL "OpenGL not found")
 ENDIF(OPENGL_FOUND)
 
+#
+# XXX: There is no FIND_PACKAGE for alut and libvorbis.
+# We just link required libraries, and hope that include/library
+# dir paths from other detected packages are enough
+#
 FIND_PACKAGE(GLU REQUIRED)
 FIND_PACKAGE(OpenAL REQUIRED)
 FIND_PACKAGE(SDL REQUIRED)
@@ -37,9 +43,3 @@ FILE(GLOB_RECURSE astromenace_SRCS AstroMenaceSource/*.cpp)
 ADD_DEFINITIONS(`${SDL_CONFIG} --cflags` -g -Wall)
 ADD_EXECUTABLE(AstroMenace ${astromenace_SRCS})
 TARGET_LINK_LIBRARIES(AstroMenace `${SDL_CONFIG} --libs` ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY} ${JPEG_LIBRARY} ${GLU_LIBRARY} -lalut -lvorbis -lvorbisfile)
-IF(CYGWIN)
-	TARGET_LINK_LIBRARIES(AstroMenace -lGL.dll  -lGLU.dll -lglfw -lX11.dll)
-#	ADD_DEFINITIONS(-mno-cygwin)
-#	TARGET_LINK_LIBRARIES(AstroMenace  -mwin32 -mno-cygwin)
-#	TARGET_LINK_LIBRARIES(AstroMenace  -lws2_32 -lwinmm -lgdi32 -ldxguid -lole32 )
-ENDIF(CYGWIN)
