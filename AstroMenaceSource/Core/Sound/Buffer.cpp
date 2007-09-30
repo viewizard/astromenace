@@ -58,10 +58,6 @@ int VorbisSeekSFX(void *datasource, ogg_int64_t offset, int whence)
 	eFILE* vorbisData = (eFILE*)datasource;
 	return vorbisData->fseek(offset, whence);
 }
-int VorbisCloseSFX(void *datasource)
-{
-	return 1;
-}
 long VorbisTellSFX(void *datasource)
 {
 	eFILE*	vorbisData = (eFILE*)datasource;
@@ -126,7 +122,7 @@ ALuint vw_CreateSoundBufferFromOGG(const char *Name)
 	// OggVorbis specific structures
 	ov_callbacks	cb;
 	// Fill cb struct
-	cb.close_func	= VorbisCloseSFX;
+	cb.close_func	= NULL;
 	cb.read_func	= VorbisReadSFX;
 	cb.seek_func	= VorbisSeekSFX;
 	cb.tell_func	= VorbisTellSFX;

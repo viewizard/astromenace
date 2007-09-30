@@ -50,21 +50,11 @@ size_t VorbisRead(void *ptr, size_t byteSize, size_t sizeToRead, void *datasourc
 	eFILE* vorbisData = (eFILE*)datasource;
 	return vorbisData->fread(ptr, byteSize, sizeToRead);
 }
-
-
 int VorbisSeek(void *datasource, ogg_int64_t offset, int whence)
 {
 	eFILE* vorbisData = (eFILE*)datasource;
 	return vorbisData->fseek(offset, whence);
 }
-
-
-int VorbisClose(void *datasource)
-{
-	return 1;
-}
-
-
 long VorbisTell(void *datasource)
 {
 	eFILE*	vorbisData = (eFILE*)datasource;
@@ -174,7 +164,7 @@ bool eMusic::Play(const char * Name, float fVol, float fMainVol, bool Loop, cons
 	// OggVorbis specific structures
 	ov_callbacks	cb;
 	// Fill cb struct
-	cb.close_func	= VorbisClose;
+	cb.close_func	= NULL;
 	cb.read_func	= VorbisRead;
 	cb.seek_func	= VorbisSeek;
 	cb.tell_func	= VorbisTell;
@@ -270,7 +260,7 @@ bool eMusic::Update()
 					// OggVorbis specific structures
 					ov_callbacks	cb;
 					// Fill cb struct
-					cb.close_func	= VorbisClose;
+					cb.close_func	= NULL;
 					cb.read_func	= VorbisRead;
 					cb.seek_func	= VorbisSeek;
 					cb.tell_func	= VorbisTell;
