@@ -180,8 +180,8 @@ void vw_SetTextureV(DWORD Stage, eTexture *Texture)
 //------------------------------------------------------------------------------------
 void vw_SetTextureBlendMode(DWORD stage, int pname, int param)
 {
-	GLenum  cmd;
-	GLenum  arg;
+	GLenum  cmd = GL_COMBINE_RGB;
+	GLenum  arg = GL_REPLACE;
 
 	switch (pname)
 	{

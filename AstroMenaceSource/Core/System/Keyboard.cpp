@@ -80,6 +80,7 @@ char * vw_VirtualCodeName(int KeyboardLayout, int Num)
 		case 2: return vw_VirtualCodeNameDE(Num);
 		case 3: return vw_VirtualCodeNameRU(Num);
 	}
+	return 0;
 }
 
 

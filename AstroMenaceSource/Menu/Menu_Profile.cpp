@@ -139,7 +139,6 @@ void NewRecord()
 
 
 	// подготавливаем, для новой записи
-	float Time = vw_GetTime();
 	Pos = 0;
 	for(int i=0; i<128; i++)
 		NewProfileName[i] = 0;

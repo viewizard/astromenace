@@ -475,7 +475,7 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool Nee
 
 	if (tmp_image == 0)
 	{
-		fprintf(stderr, "Unable to load %s\n", nName, SDL_GetError());
+		fprintf(stderr, "Unable to load %s\n", nName);
 		return 0;
 	}
 

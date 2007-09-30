@@ -48,8 +48,10 @@ class CGroundExplosion : public CExplosion
 {
 public:
 
+	virtual ~CGroundExplosion(){};
+
 	// Создание взрыва из частей объекта
-	virtual void	Create(CGroundObject *Object, int ExplType, VECTOR3D ExplLocation, float Speed, int ObjectPieceNum, bool NeedExplosionSFX=true);
+	virtual void	Create(CGroundObject *Object, int ExplType, VECTOR3D ExplLocation, int ObjectPieceNum, bool NeedExplosionSFX=true);
 
 };
 

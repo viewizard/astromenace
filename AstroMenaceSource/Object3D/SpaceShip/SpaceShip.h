@@ -50,7 +50,7 @@ public:
 
 	// базовые конструктор и деструктор объекта
 	CSpaceShip();
-	~CSpaceShip();
+	virtual ~CSpaceShip();
 
 
 	// Обновление данных объектa
@@ -60,8 +60,6 @@ public:
 	virtual void	SetLocationArcadePlayer(VECTOR3D NewLocation);
 	// Установка углов поворота объекта
 	virtual void	SetRotation(VECTOR3D NewRotation, bool NeedWeaponRotate = true);
-	// Создание нужного объекта
-	virtual void	Create(int	SpaceShipNum){};
 
 
 	// текущей вектор движения корабля

@@ -57,44 +57,44 @@ char * vw_VirtualCodeNameRU(int Num)
 		case SDLK_EQUALS: return "Equals";
 		case SDLK_BACKSPACE: return "BackSpace";
 		case SDLK_TAB: return "Tab";
-		case SDLK_q: RusChar[0] = 0xD0; RusChar[1] = 0x99; return RusChar; //'Й'
-		case SDLK_w: RusChar[0] = 0xD0; RusChar[1] = 0xA6; return RusChar; //'Ц'
-		case SDLK_e: RusChar[0] = 0xD0; RusChar[1] = 0xA3; return RusChar;//'У'
-		case SDLK_r: RusChar[0] = 0xD0; RusChar[1] = 0x9A; return RusChar;//'К'
-		case SDLK_t: RusChar[0] = 0xD0; RusChar[1] = 0x95; return RusChar;//'Е'
-		case SDLK_y: RusChar[0] = 0xD0; RusChar[1] = 0x9D; return RusChar;//'Н'
-		case SDLK_u: RusChar[0] = 0xD0; RusChar[1] = 0x93; return RusChar;//'Г'
-		case SDLK_i: RusChar[0] = 0xD0; RusChar[1] = 0xA8; return RusChar;//'Ш'
-		case SDLK_o: RusChar[0] = 0xD0; RusChar[1] = 0xA9; return RusChar;//'Щ'
-		case SDLK_p: RusChar[0] = 0xD0; RusChar[1] = 0x97; return RusChar;//'З'
-		case SDLK_LEFTBRACKET: RusChar[0] = 0xD0; RusChar[1] = 0xA5; return RusChar;//'Х'
-		case SDLK_RIGHTBRACKET: RusChar[0] = 0xD0; RusChar[1] = 0xAA; return RusChar;//'Ъ'
+		case SDLK_q: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x99; return RusChar; //'Й'
+		case SDLK_w: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xA6; return RusChar; //'Ц'
+		case SDLK_e: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xA3; return RusChar;//'У'
+		case SDLK_r: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x9A; return RusChar;//'К'
+		case SDLK_t: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x95; return RusChar;//'Е'
+		case SDLK_y: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x9D; return RusChar;//'Н'
+		case SDLK_u: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x93; return RusChar;//'Г'
+		case SDLK_i: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xA8; return RusChar;//'Ш'
+		case SDLK_o: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xA9; return RusChar;//'Щ'
+		case SDLK_p: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x97; return RusChar;//'З'
+		case SDLK_LEFTBRACKET: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xA5; return RusChar;//'Х'
+		case SDLK_RIGHTBRACKET: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xAA; return RusChar;//'Ъ'
 		case SDLK_RETURN: return "Enter";
 		case SDLK_LCTRL: return "LeftCtrl";
-		case SDLK_a: RusChar[0] = 0xD0; RusChar[1] = 0xA4; return RusChar;//'Ф'
-		case SDLK_s: RusChar[0] = 0xD0; RusChar[1] = 0xAB; return RusChar;//'Ы'
-		case SDLK_d: RusChar[0] = 0xD0; RusChar[1] = 0x92; return RusChar;//'В'
-		case SDLK_f: RusChar[0] = 0xD0; RusChar[1] = 0x90; return RusChar;//'А'
-		case SDLK_g: RusChar[0] = 0xD0; RusChar[1] = 0x9F; return RusChar;//'П'
-		case SDLK_h: RusChar[0] = 0xD0; RusChar[1] = 0xA0; return RusChar;//'Р'
-		case SDLK_j: RusChar[0] = 0xD0; RusChar[1] = 0x9E; return RusChar;//'О'
-		case SDLK_k: RusChar[0] = 0xD0; RusChar[1] = 0x9B; return RusChar;//'Л'
-		case SDLK_l: RusChar[0] = 0xD0; RusChar[1] = 0x94; return RusChar;//'Д'
-		case SDLK_SEMICOLON: RusChar[0] = 0xD0; RusChar[1] = 0x96; return RusChar;//'Ж'
-		case SDLK_QUOTE: RusChar[0] = 0xD0; RusChar[1] = 0xAD; return RusChar;//'Э'
+		case SDLK_a: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xA4; return RusChar;//'Ф'
+		case SDLK_s: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xAB; return RusChar;//'Ы'
+		case SDLK_d: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x92; return RusChar;//'В'
+		case SDLK_f: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x90; return RusChar;//'А'
+		case SDLK_g: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x9F; return RusChar;//'П'
+		case SDLK_h: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xA0; return RusChar;//'Р'
+		case SDLK_j: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x9E; return RusChar;//'О'
+		case SDLK_k: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x9B; return RusChar;//'Л'
+		case SDLK_l: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x94; return RusChar;//'Д'
+		case SDLK_SEMICOLON: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x96; return RusChar;//'Ж'
+		case SDLK_QUOTE: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xAD; return RusChar;//'Э'
 		case SDLK_QUOTEDBL: return "Quotedbl";
-		case SDLK_BACKQUOTE: RusChar[0] = 0xD0; RusChar[1] = 0x81; return RusChar;//'Ё'
+		case SDLK_BACKQUOTE: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x81; return RusChar;//'Ё'
 		case SDLK_LSHIFT: return "LeftShift";
 		case SDLK_BACKSLASH: return "BackSlash";
-		case SDLK_z: RusChar[0] = 0xD0; RusChar[1] = 0xAF; return RusChar;//'Я'
-		case SDLK_x: RusChar[0] = 0xD0; RusChar[1] = 0xA7; return RusChar;//'Ч'
-		case SDLK_c: RusChar[0] = 0xD0; RusChar[1] = 0xA1; return RusChar;//'С'
-		case SDLK_v: RusChar[0] = 0xD0; RusChar[1] = 0x9C; return RusChar;//'М'
-		case SDLK_b: RusChar[0] = 0xD0; RusChar[1] = 0x98; return RusChar;//'И'
-		case SDLK_n: RusChar[0] = 0xD0; RusChar[1] = 0xA2; return RusChar;//'Т'
-		case SDLK_m: RusChar[0] = 0xD0; RusChar[1] = 0xAC; return RusChar;//'Ь'
-		case SDLK_COMMA: RusChar[0] = 0xD0; RusChar[1] = 0x91; return RusChar;//'Б';
-		case SDLK_PERIOD: RusChar[0] = 0xD0; RusChar[1] = 0xAE; return RusChar;//'Ю';
+		case SDLK_z: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xAF; return RusChar;//'Я'
+		case SDLK_x: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xA7; return RusChar;//'Ч'
+		case SDLK_c: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xA1; return RusChar;//'С'
+		case SDLK_v: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x9C; return RusChar;//'М'
+		case SDLK_b: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x98; return RusChar;//'И'
+		case SDLK_n: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xA2; return RusChar;//'Т'
+		case SDLK_m: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xAC; return RusChar;//'Ь'
+		case SDLK_COMMA: RusChar[0] = (char)0xD0; RusChar[1] = (char)0x91; return RusChar;//'Б';
+		case SDLK_PERIOD: RusChar[0] = (char)0xD0; RusChar[1] = (char)0xAE; return RusChar;//'Ю';
 		case SDLK_SLASH: return "Slash";
 		case SDLK_RSHIFT: return "RightShift";
 		case SDLK_ASTERISK: return "Asterisk";
@@ -164,7 +164,7 @@ int VirtualCodeCharRU1(int Num)
 
 	switch (Num)
 	{
-		case SDLK_BACKQUOTE: return 0xD081;//'Ё'
+		case SDLK_BACKQUOTE: return (char)0xD081;//'Ё'
 		case SDLK_1: return '!';
 		case SDLK_2: return '"';
 		case SDLK_3: return 'N';

@@ -282,7 +282,7 @@ bool InitAudio()
 		MusicList[i] = -1;
 
 	return true;
-};
+}
 
 
 
@@ -380,7 +380,7 @@ void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime)
 
 	// повторно ставим (могли изменить, если отдельно интро и луп части)
 	CurrentPlayingMusic = StartMusic;
-};
+}
 
 
 
@@ -428,14 +428,14 @@ int Audio_PlayMenuSound(int SoundID, float fVol, bool Loop)
 	vw_AttachSound(Sound);
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
-	if (!Sound->Play(MenuSoundNames[SoundID].FileName, fVol, Setup.SoundSw/10.0f, 1.0f, 0.0f, 0.0f, 0.0f, true, Loop, MenuSoundNames[SoundID].NeedRelease, 1))
+	if (!Sound->Play(MenuSoundNames[SoundID].FileName, fVol, Setup.SoundSw/10.0f, 0.0f, 0.0f, 0.0f, true, Loop, MenuSoundNames[SoundID].NeedRelease, 1))
 	{
 		vw_ReleaseSound(Sound); Sound = 0;
 		return 0;
 	}
 
 	return Sound->Num;
-};
+}
 
 
 
@@ -444,7 +444,7 @@ int Audio_PlayMenuSound(int SoundID, float fVol, bool Loop)
 //------------------------------------------------------------------------------------
 // Проигрываем 3д звуки
 //------------------------------------------------------------------------------------
-int Audio_PlaySound(int SoundID, float fVol, float Pitch, VECTOR3D Location, bool Loop, int AtType)
+int Audio_PlaySound(int SoundID, float fVol, VECTOR3D Location, bool Loop, int AtType)
 {
 	if (!Setup.Sound_check) return 0;
 	if (!Setup.SoundSw) return 0;
@@ -464,7 +464,7 @@ int Audio_PlaySound(int SoundID, float fVol, float Pitch, VECTOR3D Location, boo
 	Sound = new eSound;
 	if (Sound == 0) return 0;
 	vw_AttachSound(Sound);
-	if (!Sound->Play(GameSoundList[SoundID].FileName, fVol, Setup.SoundSw/10.0f, Pitch, Location.x, Location.y, Location.z, false, Loop, true, AtType))
+	if (!Sound->Play(GameSoundList[SoundID].FileName, fVol, Setup.SoundSw/10.0f, Location.x, Location.y, Location.z, false, Loop, true, AtType))
 	{
 		vw_ReleaseSound(Sound); Sound = 0;
 		return 0;
@@ -562,6 +562,6 @@ void Audio_LoopProc()
 	}
 
 
-};
+}
 
 

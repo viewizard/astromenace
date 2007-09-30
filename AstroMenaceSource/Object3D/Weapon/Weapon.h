@@ -48,7 +48,7 @@ class CWeapon : public CObject3D
 public:
 
 	CWeapon();
-	~CWeapon();
+	virtual ~CWeapon();
 
 
 	// Обновление данных объектa

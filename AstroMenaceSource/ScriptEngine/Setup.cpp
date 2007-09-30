@@ -205,7 +205,6 @@ void fAddLine(TiXmlElement * root, TiXmlElement * Element, const char *Name, con
 }
 void bAddLine(TiXmlElement * root, TiXmlElement * Element, const char *Name, const char *Attrib, bool Data)
 {
-	char buffer[1024];
 	Element = root->FirstChildElement(Name);
 	if (Element == 0)
 	{
@@ -238,8 +237,8 @@ void AddComment(TiXmlElement * root, const char *Comment, bool JustCreated)
 void SaveXMLSetupFile()
 {
 	TiXmlDocument doc;
-	TiXmlElement * root;
-	TiXmlElement *setting;
+	TiXmlElement * root = 0;
+	TiXmlElement * setting = 0;
 
 	// читаем уже существующий файл
 	bool JustCreated = false;
@@ -550,8 +549,8 @@ void sGetLine(TiXmlElement * root, TiXmlElement * Element, const char *Name, con
 bool LoadXMLSetupFile(bool NeedSafeMode)
 {
 	TiXmlDocument doc;
-	TiXmlElement * root;
-	TiXmlElement *setting;
+	TiXmlElement * root = 0;
+	TiXmlElement * setting = 0;
 
 	// устанавливаем базовые настройки
 	InitSetup();

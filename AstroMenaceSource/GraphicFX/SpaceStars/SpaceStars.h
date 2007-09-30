@@ -47,9 +47,9 @@ public:
 	~CSpaceStars();
 
 	// обновить все частицы в этой системе, по времени
-	virtual		bool Update(float Time);
+	bool Update(float Time);
 	// прорисовка всех частиц
-	virtual		void Draw();
+	void Draw();
 	// базовая текстура частиц
 	eTexture	*Texture;
 

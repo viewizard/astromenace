@@ -116,7 +116,6 @@ int vw_OpenVFS(const char *Name)
 	XORCount = 0;
 	int POS = 0; // указатель позиции в буфере.
 	BYTE *buff = 0;
-	int DataStartOffsetVFS = 0;
 	int HeaderOffsetVFS;
 	int HeaderLengthVFS;
 

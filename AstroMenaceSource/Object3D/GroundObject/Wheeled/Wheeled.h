@@ -46,7 +46,7 @@ class CWheeled : public CGroundObject
 {
 public:
 
-	// не должно быть своего диструктора!, т.к. вызываем только c ~CGroundObject
+	virtual ~CWheeled(){};
 
 	// Создание нужного объекта
 	virtual void	Create(int	WheeledNum);

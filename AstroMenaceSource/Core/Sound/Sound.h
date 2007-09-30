@@ -63,7 +63,7 @@ public:
 
 	// проигрывание звука
 	// нельзя разделять пока на отдельную загрузку и проигрывание... т.к. удаляем по остановке!!!
-	bool Play(const char *Name, float fVol, float fMainVol, float Pitch, float x, float y, float z, bool Relative, bool Loop, bool NeedReleaseStatus, int AtType);
+	bool Play(const char *Name, float fVol, float fMainVol, float x, float y, float z, bool Relative, bool Loop, bool NeedReleaseStatus, int AtType);
 	// перезапуск воспроизведения
 	void Replay();
 	// остановка звука (0.0f - остановить сразу)

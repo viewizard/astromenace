@@ -119,7 +119,7 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 				{
 					// у игрока есть щит, просто проверяем, если снаряд приблизился
 					// на расстояние =< радиуса - уничтожаем его
-					if (vw_SphereSphereCollision(Object->Radius, Object->Location, Object->PrevLocation,
+					if (vw_SphereSphereCollision(Object->Radius, Object->Location,
 								Projectile->Radius, Projectile->Location, Projectile->PrevLocation))
 					{
 						// если отражатель, разворачиваем пулю...
@@ -187,7 +187,7 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 				}
 				else
 				{
-					if (vw_SphereSphereCollision(Object->Radius, Object->Location, Object->PrevLocation,
+					if (vw_SphereSphereCollision(Object->Radius, Object->Location,
 								Projectile->Radius, Projectile->Location, Projectile->PrevLocation))
 					if (vw_SphereAABBCollision(Object->AABB, Object->Location,
 								Projectile->Radius, Projectile->Location, Projectile->PrevLocation))
@@ -224,7 +224,7 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 				{
 					// у игрока есть щит, просто проверяем, если снаряд приблизился
 					// на расстояние =< радиуса - уничтожаем его
-					if (vw_SphereSphereCollision(Object->Radius, Object->Location, Object->PrevLocation,
+					if (vw_SphereSphereCollision(Object->Radius, Object->Location,
 								Projectile->Radius, Projectile->Location, Projectile->PrevLocation))
 					{
 					    *IntercPoint = Projectile->Location;
@@ -253,7 +253,7 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 				else
 				{
 					// это ракета, просто проверяем, что она близко - и взрываем
-					if (vw_SphereSphereCollision(Object->Radius, Object->Location, Object->PrevLocation,
+					if (vw_SphereSphereCollision(Object->Radius, Object->Location,
 								Projectile->Radius, Projectile->Location, Projectile->PrevLocation))
 					if (vw_SphereAABBCollision(Object->AABB, Object->Location,
 								Projectile->Radius, Projectile->Location, Projectile->PrevLocation))
@@ -341,7 +341,7 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 
 
 // единая процедура для проигрывания эффекта разлета всех снарядов
-void DestroyProjectileWithExplosion(CProjectile *Projectile, float ObjectSpeed, VECTOR3D IntercPoint)
+void DestroyProjectileWithExplosion(CProjectile *Projectile, VECTOR3D IntercPoint)
 {
 	if (Projectile == 0) return;
 
@@ -508,7 +508,6 @@ void DetectCollisionAllObject3D()
 			// проверка на попадание в корпус корабля
 			sDamagesData DamagesData;
 			int ObjectPieceNum;
-			float ObjectSpeed = tmpShip->Speed;
 			if(DetectProjectileCollision(tmpShip, &ObjectPieceNum, tmpProjectile, &IntercPoint, &DamagesData, tmpShip->Speed))
 			{
 				tmpShip2 = tmpShip->Next; // обязательно!!! если попали торпедой или бомбой!!!
@@ -618,7 +617,7 @@ void DetectCollisionAllObject3D()
 				// удаляем только те, которые разбились
 				if (tmpProjectile->ProjectileType != 2)
 				{
-					DestroyProjectileWithExplosion(tmpProjectile, ObjectSpeed, IntercPoint);
+					DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
 				    delete tmpProjectile; tmpProjectile = 0;
 				}
 
@@ -641,7 +640,6 @@ void DetectCollisionAllObject3D()
 					// делаем проверку
 					sDamagesData DamagesData;
 					int ObjectPieceNum;
-					float ObjectSpeed = tmpShip->Speed;
 					if(DetectProjectileCollision(tmpShip->Weapon[i], &ObjectPieceNum, tmpProjectile, &IntercPoint, &DamagesData, tmpShip->Speed))
 					{
 						tmpShip2 = tmpShip->Next; // обязательно!!! если попали торпедой или бомбой!!!
@@ -665,7 +663,7 @@ void DetectCollisionAllObject3D()
                         // удаляем только те, которые разбились
                         if (tmpProjectile->ProjectileType != 2)
                         {
-                        	DestroyProjectileWithExplosion(tmpProjectile, ObjectSpeed, IntercPoint);
+                        	DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
                             delete tmpProjectile; tmpProjectile = 0;
                         }
 					}
@@ -686,7 +684,7 @@ void DetectCollisionAllObject3D()
 			CSpaceObject *tmpSpace2 = tmpS->Next;
 
 			int ObjectPieceNum;
-			if (vw_SphereSphereCollision(tmpShip->Radius, tmpShip->Location, tmpShip->PrevLocation,
+			if (vw_SphereSphereCollision(tmpShip->Radius, tmpShip->Location,
 								tmpS->Radius, tmpS->Location, tmpS->PrevLocation))
 			if (vw_SphereAABBCollision(tmpShip->AABB, tmpShip->Location,
 								tmpS->Radius, tmpS->Location, tmpS->PrevLocation))
@@ -800,7 +798,7 @@ exitN1:
 
 			int ObjectPieceNum1;
 			int ObjectPieceNum2;
-			if (vw_SphereSphereCollision(tmpShip->Radius, tmpShip->Location, tmpShip->PrevLocation,
+			if (vw_SphereSphereCollision(tmpShip->Radius, tmpShip->Location,
 								tmpG->Radius, tmpG->Location, tmpG->PrevLocation))
 			if (vw_SphereAABBCollision(tmpShip->AABB, tmpShip->Location,
 								tmpG->Radius, tmpG->Location, tmpG->PrevLocation))
@@ -856,8 +854,8 @@ exitN1:
 
 					switch (tmpG->ObjectType)
 					{
-						case 6: TMPExplosion->Create(tmpG, 1, tmpG->Location, tmpG->Speed, ObjectPieceNum2); break;
-						case 5: TMPExplosion->Create(tmpG, 2, tmpG->Location, tmpG->Speed, ObjectPieceNum2); break;
+						case 6: TMPExplosion->Create(tmpG, 1, tmpG->Location, ObjectPieceNum2); break;
+						case 5: TMPExplosion->Create(tmpG, 2, tmpG->Location, ObjectPieceNum2); break;
 						default: delete TMPExplosion; TMPExplosion = 0; break;
 					}
 					delete tmpG; tmpG=0;
@@ -919,7 +917,7 @@ exitN2:
 
 			int ObjectPieceNum1;
 			int ObjectPieceNum2;
-			if (vw_SphereSphereCollision(tmpShip->Radius, tmpShip->Location, tmpShip->PrevLocation,
+			if (vw_SphereSphereCollision(tmpShip->Radius, tmpShip->Location,
 								tmpCollisionShip1->Radius, tmpCollisionShip1->Location, tmpCollisionShip1->PrevLocation))
 			if (vw_AABBAABBCollision(tmpShip->AABB, tmpShip->Location, tmpCollisionShip1->AABB, tmpCollisionShip1->Location))
 			if (vw_OBBOBBCollision(tmpShip->OBB, tmpShip->OBBLocation, tmpShip->Location, tmpShip->CurrentRotationMat,
@@ -1052,7 +1050,6 @@ exitN2:
 			int ObjectPieceNum;
 
 
-			float ObjectSpeed = tmpG->Speed;
 			if(DetectProjectileCollision(tmpG, &ObjectPieceNum, tmpProjectile, &IntercPoint, &DamagesData, tmpG->Speed))
 			{
 				tmpGround2 = tmpG->Next; // обязательно!!! если попали торпедой или бомбой!!!
@@ -1072,8 +1069,8 @@ exitN2:
 
 						switch (tmpG->ObjectType)
 						{
-							case 6: TMPExplosion->Create(tmpG, 1, IntercPoint, tmpG->Speed, ObjectPieceNum); break;
-							case 5: TMPExplosion->Create(tmpG, 2, IntercPoint, tmpG->Speed, ObjectPieceNum); break;
+							case 6: TMPExplosion->Create(tmpG, 1, IntercPoint, ObjectPieceNum); break;
+							case 5: TMPExplosion->Create(tmpG, 2, IntercPoint, ObjectPieceNum); break;
 							default: delete TMPExplosion; TMPExplosion = 0; break;
 						}
 						delete tmpG; tmpG = 0;
@@ -1086,7 +1083,7 @@ exitN2:
 				// удаляем только те, которые разбились
 				if (tmpProjectile->ProjectileType != 2)
 				{
-					DestroyProjectileWithExplosion(tmpProjectile, ObjectSpeed, IntercPoint);
+					DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
 					delete tmpProjectile; tmpProjectile = 0;
 				}
 			}
@@ -1110,7 +1107,7 @@ exitN2:
 			if (tmpS->ObjectType != 13)
 			// не проверяем если оба не можем уничтожить
 			if (NeedCheckCollision(tmpG) || NeedCheckCollision(tmpS))
-			if (vw_SphereSphereCollision(tmpG->Radius, tmpG->Location, tmpG->PrevLocation,
+			if (vw_SphereSphereCollision(tmpG->Radius, tmpG->Location,
 								tmpS->Radius, tmpS->Location, tmpS->PrevLocation))
 			if (vw_SphereAABBCollision(tmpG->AABB, tmpG->Location,
 								tmpS->Radius, tmpS->Location, tmpS->PrevLocation))
@@ -1159,8 +1156,8 @@ exitN2:
 
 					switch (tmpG->ObjectType)
 					{
-						case 6: TMPExplosion->Create(tmpG, 1, tmpG->Location, tmpG->Speed, ObjectPieceNum); break;
-						case 5: TMPExplosion->Create(tmpG, 2, tmpG->Location, tmpG->Speed, ObjectPieceNum); break;
+						case 6: TMPExplosion->Create(tmpG, 1, tmpG->Location, ObjectPieceNum); break;
+						case 5: TMPExplosion->Create(tmpG, 2, tmpG->Location, ObjectPieceNum); break;
 						default: delete TMPExplosion; TMPExplosion = 0; break;
 					}
 					delete tmpG; tmpG = 0;
@@ -1198,7 +1195,6 @@ exitN2:
 			sDamagesData DamagesData;
 			int ObjectPieceNum;
 
-			float ObjectSpeed = tmpS->Speed;
 			if(DetectProjectileCollision(tmpS, &ObjectPieceNum, tmpProjectile, &IntercPoint, &DamagesData, tmpS->Speed))
 			{
 				tmpSpace2 = tmpS->Next; // обязательно!!! если попали торпедой или бомбой!!!
@@ -1230,7 +1226,7 @@ exitN2:
 				// удаляем только те, которые разбились
 				if (tmpProjectile->ProjectileType != 2)
 				{
-					DestroyProjectileWithExplosion(tmpProjectile, ObjectSpeed, IntercPoint);
+					DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
 					delete tmpProjectile; tmpProjectile = 0;
 				}
 			}
@@ -1251,7 +1247,7 @@ exitN2:
 
 			// если хоть один из них уничтожаемый
 			if (NeedCheckCollision(tmpCollisionSpace1) || NeedCheckCollision(tmpS))
-			if (vw_SphereSphereCollision(tmpS->Radius, tmpS->Location, tmpS->PrevLocation,
+			if (vw_SphereSphereCollision(tmpS->Radius, tmpS->Location,
 								tmpCollisionSpace1->Radius, tmpCollisionSpace1->Location, tmpCollisionSpace1->PrevLocation))
 			if (vw_OBBOBBCollision(tmpS->OBB, tmpS->OBBLocation, tmpS->Location, tmpS->CurrentRotationMat,
 								tmpCollisionSpace1->OBB, tmpCollisionSpace1->OBBLocation, tmpCollisionSpace1->Location, tmpCollisionSpace1->CurrentRotationMat))
@@ -1378,7 +1374,7 @@ exitN4:
 				if (tmpProjectile->ProjectileType == 1)
 				{
 					// проверка на попадание
-					if (vw_SphereSphereCollision(tmpProjectile->Radius, tmpProjectile->Location, tmpProjectile->PrevLocation,
+					if (vw_SphereSphereCollision(tmpProjectile->Radius, tmpProjectile->Location,
 								tmpProject1->Radius, tmpProject1->Location, tmpProject1->PrevLocation))
 					if (vw_SphereAABBCollision(tmpProjectile->AABB, tmpProjectile->Location,
 								tmpProject1->Radius, tmpProject1->Location, tmpProject1->PrevLocation))
@@ -1438,7 +1434,7 @@ exitN4:
 				if (tmpProject1->ProjectileType == 1)
 				{
 					// проверка на попадание
-					if (vw_SphereSphereCollision(tmpProject1->Radius, tmpProject1->Location, tmpProject1->PrevLocation,
+					if (vw_SphereSphereCollision(tmpProject1->Radius, tmpProject1->Location,
 								tmpProjectile->Radius, tmpProjectile->Location, tmpProjectile->PrevLocation))
 					if (vw_SphereAABBCollision(tmpProject1->AABB, tmpProject1->Location,
 								tmpProjectile->Radius, tmpProjectile->Location, tmpProjectile->PrevLocation))
@@ -1716,8 +1712,8 @@ NexttmpS:
 
 					switch (tmpG->ObjectType)
 					{
-						case 6: TMPExplosion->Create(tmpG, 1, tmpG->Location, tmpG->Speed, -1); break;
-						case 5: TMPExplosion->Create(tmpG, 2, tmpG->Location, tmpG->Speed, -1); break;
+						case 6: TMPExplosion->Create(tmpG, 1, tmpG->Location, -1); break;
+						case 5: TMPExplosion->Create(tmpG, 2, tmpG->Location, -1); break;
 						default: delete TMPExplosion; TMPExplosion = 0; break;
 					}
 

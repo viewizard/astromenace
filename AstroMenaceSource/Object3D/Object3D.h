@@ -54,7 +54,7 @@ extern int GameTargetingMechanicSystem;
 
 
 
-int Audio_PlaySound(int SoundID, float fVol, float Pitch, VECTOR3D Location, bool Loop, int AtType=1);
+int Audio_PlaySound(int SoundID, float fVol, VECTOR3D Location, bool Loop, int AtType=1);
 
 
 
@@ -118,7 +118,7 @@ public:
 
 	// базовые конструктор и деструктор объекта
 	CObject3D();
-	~CObject3D();
+	virtual ~CObject3D();
 
 	// Установка AABB, OBB и габаритов по геометрии объекта
 	virtual void	InitByDrawObjectList();
@@ -335,10 +335,10 @@ void GetShipOnTargetOrientateion(int ObjectStatus, VECTOR3D Location, VECTOR3D C
 		bool NeedByWeaponOrientation, VECTOR3D WeponLocation, int WeaponType);
 // Получение угла поворота оружия на врага для противника
 void GetEnemyShipOnTargetOrientateion(int ObjectStatus, VECTOR3D Location, VECTOR3D CurrentObjectRotation,
-		float RotationMatrix[9], VECTOR3D *NeedAngle, int WeaponType, VECTOR3D	FirePos);
+		float RotationMatrix[9], VECTOR3D *NeedAngle, int WeaponType);
 // Получение угла поворота турели на врага
 bool GetTurretOnTargetOrientateion(int ObjectStatus, VECTOR3D Location, VECTOR3D CurrentObjectRotation,
-		float RotationMatrix[9], VECTOR3D *NeedAngle, int WeaponType, VECTOR3D	FirePos);
+		float RotationMatrix[9], VECTOR3D *NeedAngle, int WeaponType);
 // Получение положения ближайшего врага, для мин
 CObject3D *GetCloserTargetPosition(int ObjectStatus, VECTOR3D Location);
 

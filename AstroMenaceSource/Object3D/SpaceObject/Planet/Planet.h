@@ -47,6 +47,8 @@ class CPlanet : public CSpaceObject
 {
 public:
 
+	virtual ~CPlanet(){};
+
 	// Создание нужного объекта
 	virtual void	Create(int PlanetNum);
 

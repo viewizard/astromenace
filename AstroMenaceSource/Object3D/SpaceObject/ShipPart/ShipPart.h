@@ -47,6 +47,8 @@ class CShipPart : public CSpaceObject
 {
 public:
 
+	virtual ~CShipPart(){};
+
 	// Создание нужного объекта
 	virtual void	Create(int ShipPartNum);
 

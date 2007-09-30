@@ -383,7 +383,6 @@ void MissionMenu()
 
 	int X1 = Setup.iAspectRatioWidth/2 - 372;
 	int Y1 = 215;
-	int Prir1 = 24;
 
 
 	// подложка

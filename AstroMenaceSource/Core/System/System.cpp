@@ -152,7 +152,6 @@ void free_path(char **tokenized_path) {
 }
 
 int executable_exists_in_path(char **tokenized_path, const char *app_name) {
-	DIR *dir;
 	unsigned int a;
 	int found = 0;
 

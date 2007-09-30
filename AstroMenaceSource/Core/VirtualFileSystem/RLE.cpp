@@ -199,7 +199,6 @@ int vw_DATAtoRLE(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS)
 	}
 	else
 	{
-		int Sr=0;// начельный адрес последовательности...
 		int dl;  // длина полседовательности...
 		dl = ssizeVFS - 0;
         // пишем с разбиением на части по FF ...если последовательность не идентична

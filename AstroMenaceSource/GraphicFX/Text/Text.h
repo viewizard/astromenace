@@ -57,9 +57,9 @@ public:
 	~CText();
 
 	// обновить
-	virtual		bool Update(float Time);
+	bool Update(float Time);
 	// прорисовка
-	virtual		void Draw();
+	void Draw();
 
 	// собственно сам текст
 	char *DrawText;

@@ -47,6 +47,8 @@ class CAsteroid : public CSpaceObject
 {
 public:
 
+	virtual ~CAsteroid(){};
+
 	// Создание нужного объекта
 	virtual void	Create(int AsteroidNum);
 

@@ -48,7 +48,7 @@ int	CurrentWorkshopNewWeapon = 1;
 
 VECTOR3D WorkShopPointCamera;
 void WorkshopDrawShip(CEarthSpaceFighter *WorkshopFighter, int Mode);
-void WorkshopDrawWeapon(CWeapon *Weapon, int Mode);
+void WorkshopDrawWeapon(CWeapon *Weapon);
 int CurrentWorkshop = 3;
 
 
@@ -587,7 +587,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 }
 
 
-void WorkshopDrawWeapon(CWeapon *Weapon, int Mode)
+void WorkshopDrawWeapon(CWeapon *Weapon)
 {
 	if (!CanDrawWorkshop) return;
 	if (Weapon == 0) return;

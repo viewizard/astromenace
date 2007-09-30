@@ -47,6 +47,8 @@ class CSpaceExplosion : public CExplosion
 {
 public:
 
+	virtual ~CSpaceExplosion(){};
+
 	// Создание взрыва из частей объекта
 	virtual void	Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocation, float Speed, int ObjectPieceNum, bool NeedExplosionSFX = true);
 
