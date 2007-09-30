@@ -50,11 +50,21 @@ size_t VorbisRead(void *ptr, size_t byteSize, size_t sizeToRead, void *datasourc
 	eFILE* vorbisData = (eFILE*)datasource;
 	return vorbisData->fread(ptr, byteSize, sizeToRead);
 }
+
+
 int VorbisSeek(void *datasource, ogg_int64_t offset, int whence)
 {
 	eFILE* vorbisData = (eFILE*)datasource;
 	return vorbisData->fseek(offset, whence);
 }
+
+
+int VorbisClose(void *datasource)
+{// похоже без этой функции у линукс версии OpenAL проблемы, хотя по документации...
+	return 1;
+}
+
+
 long VorbisTell(void *datasource)
 {
 	eFILE*	vorbisData = (eFILE*)datasource;
@@ -71,8 +81,9 @@ long VorbisTell(void *datasource)
 bool eMusic::ReadOggBlock(ALuint BufID, size_t Size)
 {
 	// vars
+	char		eof = 0;
 	int			current_section;
-	long		TotalRet = 0, ret = 0;
+	long		TotalRet = 0, ret;
 	char		*PCM;
 
 	if (Size < 1) return false;
@@ -164,7 +175,7 @@ bool eMusic::Play(const char * Name, float fVol, float fMainVol, bool Loop, cons
 	// OggVorbis specific structures
 	ov_callbacks	cb;
 	// Fill cb struct
-	cb.close_func	= NULL;
+	cb.close_func	= VorbisClose;
 	cb.read_func	= VorbisRead;
 	cb.seek_func	= VorbisSeek;
 	cb.tell_func	= VorbisTell;
@@ -260,7 +271,7 @@ bool eMusic::Update()
 					// OggVorbis specific structures
 					ov_callbacks	cb;
 					// Fill cb struct
-					cb.close_func	= NULL;
+					cb.close_func	= VorbisClose;
 					cb.read_func	= VorbisRead;
 					cb.seek_func	= VorbisSeek;
 					cb.tell_func	= VorbisTell;
