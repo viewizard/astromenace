@@ -217,6 +217,7 @@ int GetWeaponHullDamage(int Num)
 	{
 		return (int)PresetPirateProjectileData[Num-201].DamageHull;
 	}
+	return 0;
 }
 int GetWeaponSystemsDamage(int Num)
 {
@@ -236,6 +237,7 @@ int GetWeaponSystemsDamage(int Num)
 	{
 		return (int)PresetPirateProjectileData[Num-201].DamageSystems;
 	}
+	return 0;
 }
 float GetProjectileSpeed(int Num)
 {
@@ -253,6 +255,7 @@ float GetProjectileSpeed(int Num)
 	{
 		return PresetPirateProjectileData[Num-201].Speed;
 	}
+	return 0.0f;
 }
 
 

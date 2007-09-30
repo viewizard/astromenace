@@ -49,7 +49,7 @@ public:
 
 	// базовые конструктор и деструктор объекта
 	CGroundObject();
-	~CGroundObject();
+	virtual ~CGroundObject();
 
 
 	// Обновление данных объектa
@@ -58,8 +58,6 @@ public:
 	virtual void	SetLocation(VECTOR3D NewLocation);
 	// Установка углов поворота объекта
 	virtual void	SetRotation(VECTOR3D NewRotation);
-	// Создание нужного объекта
-	virtual void	Create(int	GroundObjectNum){};
 
 
 	// колеса, для транспорта

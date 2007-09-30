@@ -46,7 +46,7 @@ class CEarthSpaceFighter : public CSpaceShip
 {
 public:
 
-	// не должно быть своего диструктора!, т.к. вызываем только c ~CSpaceShip
+	virtual ~CEarthSpaceFighter(){};
 
 	// Создание нужного объекта
 	virtual void	Create(int	SpaceShipNum);

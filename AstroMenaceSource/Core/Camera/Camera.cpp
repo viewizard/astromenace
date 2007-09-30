@@ -121,7 +121,7 @@ void vw_SetCameraMoveAroundPoint(VECTOR3D Point, float ChangeDistance, VECTOR3D 
 
 
 	// установка углов, чтобы поворот был на нужную точку
-	VECTOR3D exV;
+	VECTOR3D exV(0.0f,0.0f,0.0f);
 	VECTOR3D V = Point-CameraLocation;
 	V.Normalize();
 	if (V.x*V.x+V.y*V.y+V.z*V.z !=0) exV = V;

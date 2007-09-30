@@ -69,7 +69,7 @@ public:
 
 	// базовые конструктор и деструктор объекта
 	CExplosion();
-	~CExplosion();
+	virtual ~CExplosion();
 
 	// Обновление данных объектa
 	virtual bool	Update(float Time);

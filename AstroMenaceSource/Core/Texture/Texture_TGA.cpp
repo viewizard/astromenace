@@ -89,7 +89,7 @@ int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
 			stride = channels * (*DWidth);
 			*DIB = 0;
 			*DIB = new BYTE[stride * (*DHeight)];
-			if (*DIB == 0) 0;
+			if (*DIB == 0) return 0;
 
 			// Load in all the pixel data line by line
 			for(int y = 0; y < (*DHeight); y++)
@@ -113,7 +113,7 @@ int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
 			stride = channels * (*DWidth);
 			*DIB = 0;
 			*DIB = new BYTE[stride * (*DHeight)];
-			if (*DIB == 0) 0;
+			if (*DIB == 0) return 0;
 
 			// Load in all the pixel data pixel by pixel
 			for(int i = 0; i < (*DWidth)*(*DHeight); i++)
@@ -154,10 +154,10 @@ int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
 		// depending on the channel count, to read in for each pixel.
 		*DIB = 0;
 		*DIB = new BYTE[stride * (*DHeight)];
-		if (*DIB == 0) 0;
+		if (*DIB == 0) return 0;
 		BYTE *pColors = 0;
 		pColors = new BYTE[channels];
-		if (pColors == 0) 0;
+		if (pColors == 0) return 0;
 
 
 		// Load in all the pixel data

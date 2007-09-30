@@ -78,9 +78,8 @@ bool ReadOggBlockSFX(ALuint BufID, size_t Size, OggVorbis_File *mVF, ALsizei Rat
 	if (mVF == 0) return false;
 
 	// vars
-	char		eof = 0;
 	int			current_section;
-	long		TotalRet = 0, ret;
+	long		TotalRet = 0, ret = 0;
 	char		*PCM;
 
 	if (Size < 1) return false;

@@ -834,7 +834,6 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 	// звуковые спец эффекты
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	float fVol = 1.0f;
-	float Pitch = 1.0f - 0.1f*vw_Randf0;
 
 	if (NeedExplosionSFX)
 	switch (ExplType)
@@ -842,28 +841,28 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 	    // малый взрыв
         case 1:
             // астероид
-            Audio_PlaySound(33, fVol, Pitch, ExplLocation, false, 2);
+            Audio_PlaySound(33, fVol, ExplLocation, false, 2);
 			break;
 
         // взрыв
         case 2:
             // пришельцы
-            Audio_PlaySound(7, fVol, Pitch, ExplLocation, false, 2);
+            Audio_PlaySound(7, fVol, ExplLocation, false, 2);
 			break;
         case 3:
             // земляне, пираты
-            Audio_PlaySound(8, fVol, Pitch, ExplLocation, false, 2);
+            Audio_PlaySound(8, fVol, ExplLocation, false, 2);
 			break;
        // case 31:
 		case 32:
             // внутренняя часть (пираты, земляне)
             //fVol = fVol/2; // ум. т.к. их там очень много
-            Audio_PlaySound(8, fVol, Pitch, ExplLocation, false, 2);
+            Audio_PlaySound(8, fVol, ExplLocation, false, 2);
 			break;
 		//case 33:
 		case 34:
             // внутренняя часть (босс пришельцев)
-            Audio_PlaySound(7, fVol, Pitch, ExplLocation, false, 2);
+            Audio_PlaySound(7, fVol, ExplLocation, false, 2);
 			break;
 
 	}

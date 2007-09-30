@@ -295,7 +295,7 @@ bool CGroundObject::Update(float Time)
 		}
 		VECTOR3D NeedAngle(TargetVertObjectNeedAngle,TargetHorizObjectNeedAngle,0);
 		if (GetTurretOnTargetOrientateion(ObjectStatus, Location+FirePos, Rotation,
-				CurrentRotationMat,	&NeedAngle, WeapNum, FirePos))
+				CurrentRotationMat,	&NeedAngle, WeapNum))
 		{
 			// наводим на цель
 			TargetHorizObjectNeedAngle = NeedAngle.y;

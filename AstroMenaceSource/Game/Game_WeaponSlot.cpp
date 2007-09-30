@@ -54,19 +54,17 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 
 	RECT SrcRest, DstRest;
 
-	int Xpos, Ypos;
+	int Xpos = 0;
+	int Ypos = 150;
 	switch (DrawLevelPos)
 	{
 		case 1:
-			Xpos = 0;
 			Ypos = 80;
 			break;
 		case 2:
-			Xpos = 0;
 			Ypos = 150;
 			break;
 		case 3:
-			Xpos = 0;
 			Ypos = 220;
 			break;
 	}
@@ -267,19 +265,17 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 
 	RECT SrcRest, DstRest;
 
-	int Xpos, Ypos;
+	int Xpos = Setup.iAspectRatioWidth-152;
+	int Ypos = 80;
 	switch (DrawLevelPos)
 	{
 		case 1:
-			Xpos = Setup.iAspectRatioWidth-152;
 			Ypos = 80;
 			break;
 		case 2:
-			Xpos = Setup.iAspectRatioWidth-152;
 			Ypos = 150;
 			break;
 		case 3:
-			Xpos = Setup.iAspectRatioWidth-152;
 			Ypos = 220;
 			break;
 	}

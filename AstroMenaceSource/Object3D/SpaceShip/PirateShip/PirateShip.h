@@ -46,7 +46,7 @@ class CPirateShip : public CSpaceShip
 {
 public:
 
-	// не должно быть своего диструктора!, т.к. вызываем только c ~CSpaceShip
+	virtual ~CPirateShip(){};
 
 	// Создание нужного объекта
 	virtual void	Create(int	PirateShipNum);

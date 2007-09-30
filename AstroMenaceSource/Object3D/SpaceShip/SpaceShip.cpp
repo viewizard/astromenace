@@ -1297,9 +1297,6 @@ bool CSpaceShip::Update(float Time)
 		int tmpID = ID;
 		ID = 111111;
 
-		// ставим скорость наведения оружия
-		float TargetingSpeed = 4.0f/GameNPCTargetingSpeedPenalty;
-
 		// находим среднюю точку положение оружия
 		VECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
 		int UsedWeaponQunt = 0;
@@ -1343,7 +1340,7 @@ bool CSpaceShip::Update(float Time)
 		}
 
 		GetEnemyShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
-				CurrentRotationMat, &NeedAngle,	WeapNum, FirePos);
+				CurrentRotationMat, &NeedAngle,	WeapNum);
 
 		// всему оружию ставим нужную ориентацию
 		if (Weapon != 0)
@@ -1369,9 +1366,6 @@ bool CSpaceShip::Update(float Time)
 		// используем ID как маркер, чтобы не обрабатывать этот объект в процедуре
 		int tmpID = ID;
 		ID = 111111;
-
-		// ставим скорость наведения оружия
-		float TargetingSpeed = 4.0f/GameNPCTargetingSpeedPenalty;
 
 		// находим среднюю точку положение оружия
 		VECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
@@ -1415,7 +1409,7 @@ bool CSpaceShip::Update(float Time)
 		}
 
 		GetEnemyShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
-				CurrentRotationMat, &NeedAngle,	WeapNum, FirePos);
+				CurrentRotationMat, &NeedAngle,	WeapNum);
 
 		// всему оружию ставим нужную ориентацию
 		if (BossWeapon != 0)

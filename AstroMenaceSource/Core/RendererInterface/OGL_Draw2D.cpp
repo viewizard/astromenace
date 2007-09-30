@@ -116,7 +116,6 @@ void vw_Draw(int X, int Y, RECT *SrcRest, eTexture *Tex, bool Alpha, float Rotat
 
 	int W, H;
 	vw_GetViewport(0, 0, &W, &H);
-	float AWw = W*1.0f;
 	float AHw = H*1.0f;
 
 	// Установка текстуры и ее свойств...
@@ -207,7 +206,6 @@ void vw_DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, bool Alpha,
 
 	int W, H;
 	vw_GetViewport(0, 0, &W, &H);
-	float AWw = W*1.0f;
 	float AHw = H*1.0f;
 
 	int X = DstRest->left;

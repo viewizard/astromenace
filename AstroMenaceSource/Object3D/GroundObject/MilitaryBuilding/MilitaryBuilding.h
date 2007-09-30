@@ -46,7 +46,7 @@ class CMilitaryBuilding : public CGroundObject
 {
 public:
 
-	// не должно быть своего диструктора!, т.к. вызываем только c ~CGroundObject
+	virtual ~CMilitaryBuilding(){};
 
 	// Создание нужного объекта
 	virtual void	Create(int	MilitaryBuildingNum);

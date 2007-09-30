@@ -40,7 +40,7 @@
 //-----------------------------------------------------------------------------
 // Создание взрыва из частей объекта
 //-----------------------------------------------------------------------------
-void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D ExplLocation, float Speed, int ObjectPieceNum, bool NeedExplosionSFX)
+void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D ExplLocation, int ObjectPieceNum, bool NeedExplosionSFX)
 {
 	TimeLastUpdate = Object->TimeLastUpdate;
 	ExplosionTypeByClass = 3;
@@ -233,7 +233,6 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 	// звуковые спец эффекты
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	float fVol = 1.0f;
-	float Pitch = 1.0f - 0.1f*vw_Randf0;
 
 	if (NeedExplosionSFX)
 	switch (ExplType)
@@ -243,7 +242,7 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
         case 1:
         case 2:
 			// постройки, транспорт
-            Audio_PlaySound(8, fVol, Pitch, ExplLocation, false, 2);
+            Audio_PlaySound(8, fVol, ExplLocation, false, 2);
 			break;
 
 	}

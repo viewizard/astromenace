@@ -45,7 +45,7 @@ ALboolean CheckALUTError();
 //------------------------------------------------------------------------------------
 // Проигрывание звука
 //------------------------------------------------------------------------------------
-bool eSound::Play(const char *Name, float fVol, float fMainVol, float Pitch, float x, float y, float z, bool Relative, bool Loop, bool NeedReleaseStatus, int AtType)
+bool eSound::Play(const char *Name, float fVol, float fMainVol, float x, float y, float z, bool Relative, bool Loop, bool NeedReleaseStatus, int AtType)
 {
 	Source = 0;
 	Age = 0.0f;
@@ -96,13 +96,6 @@ bool eSound::Play(const char *Name, float fVol, float fMainVol, float Pitch, flo
 	if(!CheckALError())return AL_FALSE;
 
 	alSourcei (Source, AL_BUFFER,   Buffer   );
-
-#ifdef WIN32
-	// 1) could crash game in the linux... 64-bit
-	// 2) в хидерах есть ограничение [0.5 - 2.0]
-	Clamp(Pitch, 0.5f, 2.0f);
-	alSourcef (Source, AL_PITCH,    Pitch    );
-#endif
 
 	alSourcef (Source, AL_GAIN,     fVol*fMainVol	 ); // фактически громкость
 	alSourcefv(Source, AL_POSITION, SourcePos);

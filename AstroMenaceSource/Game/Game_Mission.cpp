@@ -70,6 +70,7 @@ void GameSetMissionTitleData(float ShowTime, int Num)
 int CheckMissionTitleNum(char *Num)
 {
 	RECT SrcRest;
+	SetRect(&SrcRest,0,0,0,0);
 	int XSum = 0;
 
 	// считаем

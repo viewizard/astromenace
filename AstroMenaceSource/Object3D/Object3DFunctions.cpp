@@ -217,7 +217,7 @@ void GetShipOnTargetOrientateion(
 
 	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
 	VECTOR3D TargetLocation = Location;
-	VECTOR3D TargetAngle;
+	VECTOR3D TargetAngle(0.0f,0.0f,0.0f);
 	//float TargetAngleYMin = 180.0f;
 	float Tdist = 1000.0f*1000.0f;
 
@@ -823,8 +823,7 @@ void GetEnemyShipOnTargetOrientateion(
 		VECTOR3D	CurrentObjectRotation, // текущие углы объекта
 		float		RotationMatrix[9], // матрица вращения объекта
 		VECTOR3D	*NeedAngle, // нужные углы, чтобы получить нужное направление
-		int			WeaponType, // номер оружия
-		VECTOR3D	FirePos) // положение оружия
+		int			WeaponType) // номер оружия
 {
 
 
@@ -1024,8 +1023,7 @@ bool GetTurretOnTargetOrientateion(
 		VECTOR3D	CurrentObjectRotation, // текущие углы объекта
 		float		RotationMatrix[9], // матрица вращения объекта
 		VECTOR3D	*NeedAngle, // нужные углы, чтобы получить нужное направление
-		int			WeaponType, // номер оружия
-		VECTOR3D	FirePos) // положение оружия
+		int			WeaponType) // номер оружия
 {
 
 
@@ -1265,7 +1263,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 	int TType = 0;
 	bool TargetLocked = false;
 
-	float tmp1, tmp2,tmp3,tmp4,tmp5,tmp6,tmp7,tmp8;
+	float tmp1;
 
 	float MinDistance = 0.0f;
 

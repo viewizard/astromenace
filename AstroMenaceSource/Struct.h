@@ -103,7 +103,7 @@ enum eGameStatus
 	WORKSHOP,
 
 	// меню демо версии, просим зарегистрироваться
-	DEMO,
+	DEMO
 };
 
 

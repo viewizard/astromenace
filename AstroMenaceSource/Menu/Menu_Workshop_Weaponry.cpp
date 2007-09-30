@@ -45,7 +45,7 @@ extern float CurrentAlert3;
 
 void WorkshopCreateNewWeapon();
 void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode);
-void WorkshopDrawWeapon(CWeapon *Weapon, int Mode);
+void WorkshopDrawWeapon(CWeapon *Weapon);
 
 char *GetWeaponGroupTitle(int Num);
 int GetWeaponHullDamage(int Num);
@@ -1076,7 +1076,7 @@ void Workshop_Weaponry()
 
 	vw_End2DMode();
 	WorkshopDrawShip(WorkshopFighterGame, 4);
-	WorkshopDrawWeapon(WorkshopNewWeapon, 1);
+	WorkshopDrawWeapon(WorkshopNewWeapon);
 	vw_Start2DMode(-1,1);
 
 

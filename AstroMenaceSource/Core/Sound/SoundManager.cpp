@@ -189,7 +189,7 @@ bool vw_InitSound()
 	alcGetError(Device);
 
 	return true;
-};
+}
 
 
 
@@ -238,7 +238,7 @@ void vw_ShutdownSound()
 
 	alutExit();
 	CheckALUTError();
-};
+}
 
 
 //------------------------------------------------------------------------------------

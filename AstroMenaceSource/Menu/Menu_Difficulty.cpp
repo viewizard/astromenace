@@ -51,9 +51,6 @@ void DifficultyMenu()
 	SetRect(&DstRest,Setup.iAspectRatioWidth/2-427,175-15,Setup.iAspectRatioWidth/2-427+863-4,175-15+484-4);
 	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
 
-
-	int CurrentPos = 0;
-
 	int X1 = Setup.iAspectRatioWidth/2 - 372;
 	int Y1 = 217;
 	int Prir1 = 50;

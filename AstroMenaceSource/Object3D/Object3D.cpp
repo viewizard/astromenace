@@ -913,7 +913,7 @@ void CObject3D::Draw()
 
 		int LightType1, LightType2;
 		// включаем источники света, максимальное кол-во 4
-		int LightsCount = vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
+		vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
 
 		if (Setup.UseGLSL && ShaderType >= 0)
 		{
@@ -1075,7 +1075,7 @@ void CObject3D::Draw()
 						CurrentGLSL = 0;
 					}
 
-					CurrentGLSL == CurrentObject3DGLSL;
+					CurrentGLSL = CurrentObject3DGLSL;
 
 					if (CurrentObject3DGLSL != 0) vw_UseShaderProgram(CurrentObject3DGLSL);
 				}

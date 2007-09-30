@@ -68,7 +68,7 @@ char * vw_VirtualCodeNameDE(int Num)
 		case SDLK_i: return "I";
 		case SDLK_o: return "O";
 		case SDLK_p: return "P";
-		case SDLK_LEFTBRACKET: Umlauts[0] = 0xC3; Umlauts[1] = 0x9C; return Umlauts; //'Ü'
+		case SDLK_LEFTBRACKET: Umlauts[0] = (char)0xC3; Umlauts[1] = (char)0x9C; return Umlauts; //'Ü'
 		case SDLK_RIGHTBRACKET: return "+";
 		case SDLK_RETURN: return "Enter";
 		case SDLK_LCTRL: return "LeftCtrl";
@@ -81,8 +81,8 @@ char * vw_VirtualCodeNameDE(int Num)
 		case SDLK_j: return "J";
 		case SDLK_k: return "K";
 		case SDLK_l: return "L";
-		case SDLK_SEMICOLON: Umlauts[0] = 0xC3; Umlauts[1] = 0x96; return Umlauts; // Ö
-		case SDLK_QUOTE: Umlauts[0] = 0xC3; Umlauts[1] = 0x84; return Umlauts; // 'Ä'
+		case SDLK_SEMICOLON: Umlauts[0] = (char)0xC3; Umlauts[1] = (char)0x96; return Umlauts; // Ö
+		case SDLK_QUOTE: Umlauts[0] = (char)0xC3; Umlauts[1] = (char)0x84; return Umlauts; // 'Ä'
 		case SDLK_QUOTEDBL: return "Quotedbl";
 		case SDLK_BACKQUOTE: return "BackQuote";
 		case SDLK_LSHIFT: return "LeftShift";

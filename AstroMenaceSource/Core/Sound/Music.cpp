@@ -81,9 +81,8 @@ long VorbisTell(void *datasource)
 bool eMusic::ReadOggBlock(ALuint BufID, size_t Size)
 {
 	// vars
-	char		eof = 0;
 	int			current_section;
-	long		TotalRet = 0, ret;
+	long		TotalRet = 0, ret = 0;
 	char		*PCM;
 
 	if (Size < 1) return false;

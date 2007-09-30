@@ -48,7 +48,7 @@ public:
 
 	// базовые конструктор и деструктор объекта
 	CSpaceObject();
-	~CSpaceObject();
+	virtual ~CSpaceObject();
 
 	// Обновление данных объектa
 	virtual bool	Update(float Time);
@@ -56,8 +56,6 @@ public:
 	virtual void	SetLocation(VECTOR3D NewLocation);
 	// Установка углов поворота объекта
 	virtual void	SetRotation(VECTOR3D NewRotation);
-	// Создание нужного объекта
-	virtual void	Create(int	SpaceObjectNum){};
 
 	// скорость
 	float	Speed;

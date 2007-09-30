@@ -151,7 +151,7 @@ extern bool GameDeathMusicSet;
 extern char GameDeathMusic[MAX_PATH];
 
 int Audio_PlayMenuSound(int SoundID, float fVol, bool Loop = false);
-int Audio_PlaySound(int SoundID, float fVol, float Pitch, VECTOR3D Location, bool Loop, int AtType);
+int Audio_PlaySound(int SoundID, float fVol, VECTOR3D Location, bool Loop, int AtType);
 void Audio_LoopProc();
 bool InitAudio();
 void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime);

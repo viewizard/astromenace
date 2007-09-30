@@ -222,7 +222,6 @@ void DrawGameExpMoney(int Exp, int Money)
 
 	int W, H;
 	vw_GetViewport(0, 0, &W, &H);
-	float AWw = W*1.0f;
 	float AHw = H*1.0f;
 
 	// Установка текстуры и ее свойств...
@@ -1606,7 +1605,6 @@ void DrawGame()
 
 			int W, H;
 			vw_GetViewport(0, 0, &W, &H);
-			float AWw = W*1.0f;
 			float AHw = H*1.0f;
 
 			// Установка текстуры и ее свойств...

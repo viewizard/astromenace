@@ -121,7 +121,7 @@ void InitMenu()
 	float AHw = H*1.0f;
 	float ARWidth;
 	float ARHeight;
-	bool ARFLAG = vw_GetAspectWH(&ARWidth, &ARHeight);
+	vw_GetAspectWH(&ARWidth, &ARHeight);
 	// установка мышки, чтобы не учитывать перемещения в меню
 	SDL_WarpMouse((int)((512.0f+256.0f)/(ARWidth/AWw)), (int)(384.0f/(ARHeight/AHw)));
 
@@ -338,6 +338,9 @@ void SetMenu(eGameStatus Menu)
 			LastDemoShowTime = vw_GetTime();
 			break;
 
+		default:
+			break;
+
 	}
 
 	NextMenu = Menu;
@@ -360,6 +363,8 @@ void SetMenu2(eGameStatus Menu)
 	{
 		case INFORMATION:
 			CreateInfoObject();
+			break;
+		default:
 			break;
 	}
 
@@ -384,6 +389,8 @@ void SetMenu2(eGameStatus Menu)
 				StartMission += 5;
 				EndMission += 5;
 			}
+			break;
+		default:
 			break;
 	}
 
@@ -887,24 +894,29 @@ void DrawMenu()
 		case MISSION:		MissionMenu(); break;
 		case DEMO:		    DemoMenu(); break;
 		case WORKSHOP:
-			// включаем другие источники света
-			eLight *tmp = StartLight;
-			while (tmp!=0)
 			{
-				eLight *tmp2 = tmp->Next;
-				if (tmp->LightType == 0) tmp->On = !tmp->On;
-				tmp = tmp2;
-			}
+				// включаем другие источники света
+				eLight *tmp = StartLight;
+				while (tmp!=0)
+				{
+					eLight *tmp2 = tmp->Next;
+					if (tmp->LightType == 0) tmp->On = !tmp->On;
+					tmp = tmp2;
+				}
 
-			WorkshopMenu();
+				WorkshopMenu();
 
-			tmp = StartLight;
-			while (tmp!=0)
-			{
-				eLight *tmp2 = tmp->Next;
-				if (tmp->LightType == 0) tmp->On = !tmp->On;
-				tmp = tmp2;
+				tmp = StartLight;
+				while (tmp!=0)
+				{
+					eLight *tmp2 = tmp->Next;
+					if (tmp->LightType == 0) tmp->On = !tmp->On;
+					tmp = tmp2;
+				}
 			}
+			break;
+
+		default:
 			break;
 	}
 
@@ -949,24 +961,29 @@ void DrawMenu()
 		case CREDITS:		break;
 
 		case INFORMATION:
-			// включаем другие источники света
-			eLight *tmp = StartLight;
-			while (tmp!=0)
 			{
-				eLight *tmp2 = tmp->Next;
-				if (tmp->LightType == 0) tmp->On = !tmp->On;
-				tmp = tmp2;
-			}
+				// включаем другие источники света
+				eLight *tmp = StartLight;
+				while (tmp!=0)
+				{
+					eLight *tmp2 = tmp->Next;
+					if (tmp->LightType == 0) tmp->On = !tmp->On;
+					tmp = tmp2;
+				}
 
-			InformationDrawObject();
+				InformationDrawObject();
 
-			tmp = StartLight;
-			while (tmp!=0)
-			{
-				eLight *tmp2 = tmp->Next;
-				if (tmp->LightType == 0) tmp->On = !tmp->On;
-				tmp = tmp2;
+				tmp = StartLight;
+				while (tmp!=0)
+				{
+					eLight *tmp2 = tmp->Next;
+					if (tmp->LightType == 0) tmp->On = !tmp->On;
+					tmp = tmp2;
+				}
 			}
+			break;
+
+		default:
 			break;
 	}
 

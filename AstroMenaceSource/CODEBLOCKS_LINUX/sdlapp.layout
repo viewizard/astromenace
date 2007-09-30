@@ -10,8 +10,8 @@
 	<File name="../Camera/GameCamera.cpp" open="0" top="0" tabpos="10">
 		<Cursor position="327" topLine="8" />
 	</File>
-	<File name="../Core/Base.h" open="0" top="0" tabpos="11">
-		<Cursor position="1447" topLine="27" />
+	<File name="../Core/Base.h" open="1" top="1" tabpos="6">
+		<Cursor position="1937" topLine="42" />
 	</File>
 	<File name="../Core/Camera/Camera.cpp" open="0" top="0" tabpos="12">
 		<Cursor position="261" topLine="7" />
@@ -217,7 +217,7 @@
 	<File name="../Core/VirtualFileSystem/VFS.h" open="0" top="0" tabpos="75">
 		<Cursor position="256" topLine="7" />
 	</File>
-	<File name="../Defines.h" open="1" top="1" tabpos="2">
+	<File name="../Defines.h" open="1" top="0" tabpos="2">
 		<Cursor position="2030" topLine="32" />
 	</File>
 	<File name="../Game.h" open="0" top="0" tabpos="76">

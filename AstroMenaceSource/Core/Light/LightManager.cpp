@@ -128,7 +128,7 @@ int	vw_CheckAllPointLights(VECTOR3D Location, float Radius2)
 				{
 					// достаточно близко, надо учесть линейную составляющую
 					float Dist = vw_sqrtf(Dist2);
-					tmpAttenuation += tmp->LinearAttenuation*Dist2;
+					tmpAttenuation += tmp->LinearAttenuation*Dist;
 
 					if (tmpAttenuation > AttLimit)
 					{
@@ -225,7 +225,7 @@ int vw_CheckAndActivateAllLights(int *Type1, int *Type2, VECTOR3D Location, floa
 					{
 						// достаточно близко, надо учесть линейную составляющую
 						float Dist = vw_sqrtf(Dist2);
-						tmp->tmpAttenuation += tmp->LinearAttenuation*Dist2;
+						tmp->tmpAttenuation += tmp->LinearAttenuation*Dist;
 
 						if (tmp->tmpAttenuation > AttLimit)
 						{

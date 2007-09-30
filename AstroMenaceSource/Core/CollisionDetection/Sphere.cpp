@@ -40,7 +40,7 @@
 //-----------------------------------------------------------------------------
 // Проверка столкновения Sphere-Sphere
 //-----------------------------------------------------------------------------
-bool vw_SphereSphereCollision(float Object1Radius, VECTOR3D Object1Location, VECTOR3D Object1PrevLocation,
+bool vw_SphereSphereCollision(float Object1Radius, VECTOR3D Object1Location,
 								float Object2Radius, VECTOR3D Object2Location, VECTOR3D Object2PrevLocation)
 {
 	bool Result = false;

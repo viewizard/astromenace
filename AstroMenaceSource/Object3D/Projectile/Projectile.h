@@ -48,7 +48,7 @@ class CProjectile : public CObject3D
 public:
 
 	CProjectile();
-	~CProjectile();
+	virtual ~CProjectile();
 
 	// Обновление данных объектa
 	virtual bool	Update(float Time);
