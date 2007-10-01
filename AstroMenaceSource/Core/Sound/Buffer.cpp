@@ -59,7 +59,7 @@ int VorbisSeekSFX(void *datasource, ogg_int64_t offset, int whence)
 	return vorbisData->fseek(offset, whence);
 }
 int VorbisCloseSFX(void *datasource)
-{
+{// похоже без этой функции у линукс версии vorbis проблемы, хотя по документации...
 	return 1;
 }
 long VorbisTellSFX(void *datasource)
@@ -77,10 +77,10 @@ bool ReadOggBlockSFX(ALuint BufID, size_t Size, OggVorbis_File *mVF, ALsizei Rat
 {
 	if (mVF == 0) return false;
 
-	// vars
-	char		eof = 0;
+	// var
 	int			current_section;
-	long		TotalRet = 0, ret;
+	unsigned int TotalRet = 0;
+	long		ret = 0;
 	char		*PCM;
 
 	if (Size < 1) return false;
