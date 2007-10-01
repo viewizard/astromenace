@@ -60,7 +60,7 @@ int VorbisSeek(void *datasource, ogg_int64_t offset, int whence)
 
 
 int VorbisClose(void *datasource)
-{// похоже без этой функции у линукс версии OpenAL проблемы, хотя по документации...
+{// похоже без этой функции у линукс версии vorbis проблемы, хотя по документации...
 	return 1;
 }
 
@@ -81,9 +81,9 @@ long VorbisTell(void *datasource)
 bool eMusic::ReadOggBlock(ALuint BufID, size_t Size)
 {
 	// vars
-	char		eof = 0;
 	int			current_section;
-	long		TotalRet = 0, ret;
+	unsigned int TotalRet = 0;
+	long		ret = 0;
 	char		*PCM;
 
 	if (Size < 1) return false;
