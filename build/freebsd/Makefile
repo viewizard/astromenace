@@ -2,14 +2,13 @@
 # Date created:		23 Sep 2007
 # Whom:			Oleg Alexeenkov
 #
-# $FreeBSD$
+# $FreeBSD: ports/games/openastromenace/Makefile,v 1.1 2007/10/09 07:25:19 miwi Exp $
 #
 
 PORTNAME=	openastromenace
 PORTVERSION=	1.2.0
 CATEGORIES=	games
-MASTER_SITES=	${MASTER_SITE_SOURCEFORGE}
-MASTER_SITE_SUBDIR=	${PORTNAME}
+MASTER_SITES=	SF
 
 MAINTAINER=	proler@gmail.com
 COMMENT=	Hardcore 3D space shooter with spaceship upgrade possibilities
@@ -25,23 +24,20 @@ CMAKE_ARGS=	-DCMAKE_BUILD_TYPE:STRING=Release \
 		-DCMAKE_CXX_FLAGS:STRING="${CXXFLAGS}" \
 		-DCMAKE_INSTALL_PREFIX=${PREFIX}
 
-SUB_FILES=      pkg-message
+SUB_FILES=	pkg-message
 
-BUILD_DEPENDS+=	\
-    ${LOCALBASE}/bin/cmake:${PORTSDIR}/devel/cmake	\
+BUILD_DEPENDS+=	${LOCALBASE}/bin/cmake:${PORTSDIR}/devel/cmake	\
 
-LIB_DEPENDS+=	\
-		vorbisfile:${PORTSDIR}/audio/libvorbis	\
+LIB_DEPENDS+=	vorbisfile:${PORTSDIR}/audio/libvorbis	\
 		jpeg:${PORTSDIR}/graphics/jpeg	\
 		openal:${PORTSDIR}/audio/openal	\
 		alut:${PORTSDIR}/audio/freealut	\
 
-OPTIONS=	\
-		SRC        	"build src"	on	\
+OPTIONS=	SRC        	"build src"	on	\
 		DATA        	"install data file"	on	\
 		EN        	" en lang"	on	\
-		DE        	" de lang "	off	\
-		RU        	" ru lang "	off	\
+		DE        	" de lang "	on	\
+		RU        	" ru lang "	on	\
 
 .include <bsd.port.pre.mk>
 
