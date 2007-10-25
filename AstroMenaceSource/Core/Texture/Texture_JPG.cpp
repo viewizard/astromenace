@@ -35,7 +35,9 @@
 
 
 
-#include "jpeglib.h"
+extern "C" {
+ #include "jpeglib.h"
+}
 #include "setjmp.h"
 #include "jmorecfg.h"
 
