@@ -1398,12 +1398,9 @@ missile:
 						SetLocation(Location+VelocityUp);
 					}
 				}
-				else
-				{
-					// если некуда целиться, ставим правильные данные для гфх
-					if (GraphicFXQuantity >= 1)
-					if (GraphicFX[0] != 0) GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
-				}
+
+				if (GraphicFXQuantity >= 1)
+				if (GraphicFX[0] != 0) GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
 			}
 			break;
 
@@ -1475,12 +1472,9 @@ missile:
 						SetLocation(Location+VelocityUp);
 					}
 				}
-				else
-				{
-					// если некуда целиться, ставим правильные данные для гфх
-					if (GraphicFXQuantity >= 1)
-					if (GraphicFX[0] != 0) GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
-				}
+
+				if (GraphicFXQuantity >= 1)
+				if (GraphicFX[0] != 0) GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
 
 				// сбрасываем установку, чтобы не было голосового предупреждения
 				Target = 0;
