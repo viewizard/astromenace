@@ -83,6 +83,7 @@ float	AsteroidsKillBonus;
 
 // статус завершена игра или нет
 bool GameMissionCompleteStatus = false;
+bool GameMissionCompleteStatusShowDialog = false;
 
 // собственно сам файтер
 CEarthSpaceFighter *PlayerFighter = 0;
@@ -892,7 +893,7 @@ void InitGame()
 	GameStatus = GAME;
 
 	GameMissionCompleteStatus = false;
-
+	GameMissionCompleteStatusShowDialog = false;
 
 	SoundShowHideMenu = 0;
 	CurrentGameSpeedShowTime = 2.0f;
@@ -1038,6 +1039,7 @@ void SetGameMissionComplete()
 	// если убили, не устанавливаем!
 	if (PlayerFighter == 0) return;
 	GameMissionCompleteStatus = true;
+	GameMissionCompleteStatusShowDialog = true;
 }
 
 
@@ -1836,8 +1838,8 @@ void DrawGame()
 	// делаем плавное появление меню
 	if (NeedShowGameMenu)
 	{
-		if (GameContentTransp < 1.0f) GameContentTransp += 2.0f*(vw_GetTime()-LastGameUpdateTime);
-		if (GameContentTransp > 1.0f)
+		GameContentTransp += 2.0f*(vw_GetTime()-LastGameUpdateTime);
+		if (GameContentTransp >= 1.0f)
 		{
 			GameContentTransp = 1.0f;
 			NeedShowGameMenu = false;
@@ -1855,8 +1857,8 @@ void DrawGame()
 	// делаем полавное угасание меню
 	if (NeedHideGameMenu)
 	{
-		if (GameContentTransp > 0.0f) GameContentTransp -= 1.0f*(vw_GetTime() - LastGameUpdateTime);
-		if (GameContentTransp < 0.0f)
+		GameContentTransp -= 1.0f*(vw_GetTime() - LastGameUpdateTime);
+		if (GameContentTransp <= 0.0f)
 		{
 			GameContentTransp = 0.0f;
 			NeedHideGameMenu = false;
@@ -2044,11 +2046,11 @@ void DrawGame()
 	if (!isDialogBoxDrawing())
 	if (PlayerFighter != 0) // если не убили
 	{
-		if (vw_GetKeys(SDLK_ESCAPE) || GameMissionCompleteStatus)
+		if (vw_GetKeys(SDLK_ESCAPE) || GameMissionCompleteStatusShowDialog)
 		{
 			bool NeedPlaySfx = true;
 			// если нужно показать конец игры, все равно его показываем
-			if (GameMissionCompleteStatus)
+			if (GameMissionCompleteStatusShowDialog)
 			{
 				// чтобы постоянно не проигрывать звук
 				if (GameMenu) NeedPlaySfx = false;
@@ -2081,7 +2083,7 @@ void DrawGame()
 				DrawGameCursor = false;
 			}
 
-
+			GameMissionCompleteStatusShowDialog = false;
 			vw_SetKeys(SDLK_ESCAPE, false);
 		}
 	}
