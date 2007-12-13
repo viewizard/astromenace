@@ -1836,8 +1836,8 @@ void DrawGame()
 	// делаем плавное появление меню
 	if (NeedShowGameMenu)
 	{
-		GameContentTransp += 2.0f*(vw_GetTime()-LastGameUpdateTime);
-		if (GameContentTransp >= 1.0f)
+		if (GameContentTransp < 1.0f) GameContentTransp += 2.0f*(vw_GetTime()-LastGameUpdateTime);
+		if (GameContentTransp > 1.0f)
 		{
 			GameContentTransp = 1.0f;
 			NeedShowGameMenu = false;
@@ -1855,8 +1855,8 @@ void DrawGame()
 	// делаем полавное угасание меню
 	if (NeedHideGameMenu)
 	{
-		GameContentTransp -= 1.0f*(vw_GetTime() - LastGameUpdateTime);
-		if (GameContentTransp <= 0.0f)
+		if (GameContentTransp > 0.0f) GameContentTransp -= 1.0f*(vw_GetTime() - LastGameUpdateTime);
+		if (GameContentTransp < 0.0f)
 		{
 			GameContentTransp = 0.0f;
 			NeedHideGameMenu = false;
