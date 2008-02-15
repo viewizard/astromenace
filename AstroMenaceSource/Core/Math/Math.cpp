@@ -207,29 +207,33 @@ int vw_strcmp(const char *a, const char *b)
 //------------------------------------------------------------------------------------
 // Fast root (without sqrtf)
 //------------------------------------------------------------------------------------
-#define ONE_AS_INTEGER ((DWORD)(0x3F800000))
 #ifdef WIN32 // для MSVC используем
-float __fastcall ulrsqrt(float x)
+float __fastcall InvSqrt(const float x)
 #else
-float ulrsqrt(const float & x)
+float InvSqrt(const float x)
 #endif
 {
-	DWORD   tmp = ((ONE_AS_INTEGER << 1) + ONE_AS_INTEGER - *(DWORD*)&x) >> 1;
-	float y = *((float*)&tmp);
+	union
+	{
+		float f;
+		int i;
+	} t;
+	float y;
 
-	// первый способ
-	y = (3.0f - x * (y * y)) * y * 0.5f;
-	return y;
-	// второй способ
-	// return (y * (1.47f - 0.47f * x * y * y));
+	t.f = x;
+	t.i = 0x5f3759df - (t.i >> 1);
+	y = t.f;
+	y = y * (1.5F - (0.5F * x * y * y));
+
+ 	return y;
 }
 float vw_sqrtf(float x)
 {
-	return x*ulrsqrt(x);
-	// второй способ, с делением, более точный
-	// return 1.0f/ulrsqrt(x);
-	// самый-самый точный способ :)
-	//return sqrtf(x);
+	return x*InvSqrt(x);
+	// второй способ
+	// return 1.0f/InvSqrt(x);
+	// самый-самый точный способ
+	// return sqrtf(x);
 }
 
 
@@ -282,19 +286,6 @@ int vw_iRandNum(int Max)
 //------------------------------------------------------------------------------------
 // Fast normalization...
 //------------------------------------------------------------------------------------
-
-#define ONE_AS_INTEGER ((DWORD)(0x3F800000))
-
-#ifdef WIN32 // для MSVC используем __fastcall
-float __fastcall InvSqrt(const float & x)
-#else
-float InvSqrt(const float & x)
-#endif
-{
-	DWORD   tmp = ((ONE_AS_INTEGER << 1) + ONE_AS_INTEGER - *(DWORD*)&x) >> 1;
-	float y = *(float*)&tmp;
-	return y * (1.47f - 0.47f * x * y * y);
-}
 void Normalise(VECTOR3D *v)
 {
 	float L_squared, one_over_L;
