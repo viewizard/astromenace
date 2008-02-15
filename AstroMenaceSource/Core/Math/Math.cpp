@@ -227,13 +227,10 @@ float InvSqrt(const float x)
 
  	return y;
 }
+
 float vw_sqrtf(float x)
 {
 	return x*InvSqrt(x);
-	// второй способ
-	// return 1.0f/InvSqrt(x);
-	// самый-самый точный способ
-	// return sqrtf(x);
 }
 
 
