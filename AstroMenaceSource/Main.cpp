@@ -334,11 +334,15 @@ int main( int argc, char **argv )
 	}
 	if (!dirpresent)
 	{
-		strcpy(ProgrammDir, argv[0]);
-		char* s = strrchr(ProgrammDir,'/');
-		if (s) s[0]=0x0;
-		const char *Fi = "/";
-		strcat( ProgrammDir, Fi );
+#ifdef DATADIR
+		strcpy(ProgrammDir, DATADIR "/");
+#else
+ 		strcpy(ProgrammDir, argv[0]);
+ 		char* s = strrchr(ProgrammDir,'/');
+ 		if (s) s[0]=0x0;
+ 		const char *Fi = "/";
+ 		strcat( ProgrammDir, Fi );
+#endif
 	}
 
 
