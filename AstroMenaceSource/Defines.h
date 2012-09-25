@@ -44,28 +44,10 @@
 
 #endif
 
-
-// ставим, если демо версия! только в виндовсе!!!
-// защита на всякий случай, чтобы в линуксе не включить
-#ifdef WIN32
-
-//#define DEMO_VERSION
-// если нужно демо версию на базе дата файла полной версии
-//#define DEMO_VERSION_FULL_VFS
-
-#endif
-
-
-
 #define GAME_VERSION_ID	 	1.3f
 #define GAME_VERSION_BUILD 	120925
-#define GAME_VERSION_BUILD_Y 	2012
-#define GAME_VERSION_BUILD_M 	9
-#define GAME_VERSION_BUILD_D 	25
+#define GAME_COPYRIGHT		"Copyright 2007-2012, Viewizard"
 
-
-extern char GAME_VERSION[100];
-extern char GAME_TITLE[100];
 
 
 // для разных видов билдов.
@@ -73,8 +55,6 @@ extern char GAME_TITLE[100];
 // Если билд мульти потоковый (под многоядерный процессоры, или многопроцессорные машины)
 // - отдельный поток музыки при загрузке
 #define MULTI_THREAD_VERSION
-
-
 
 
 
@@ -89,16 +69,6 @@ extern char GAME_TITLE[100];
 typedef BOOL (WINAPI *SHGETSPECIALFOLDERPATH)(HWND hwndOwner, LPTSTR lpszPath, int nFolder, BOOL fCreate);
 extern SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath;
 #endif // WIN32
-
-
-
-
-
-
-// кол-во оружия/слотов на кораблях землян
-#define EarthShipsMaxWeapon	6
-
-
 
 
 

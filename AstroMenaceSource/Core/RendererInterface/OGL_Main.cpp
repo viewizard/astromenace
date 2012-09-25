@@ -228,7 +228,7 @@ bool ExtensionSupported( const char *Extension)
 //------------------------------------------------------------------------------------
 // инициализация Open_GL
 //------------------------------------------------------------------------------------
-int vw_InitRenderer(char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int *FSAA)
+int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int *FSAA)
 {
 	// самым первым делом - запоминаем все
 	UserDisplayRampStatus = SDL_GetGammaRamp(UserDisplayRamp, UserDisplayRamp+256, UserDisplayRamp+512);

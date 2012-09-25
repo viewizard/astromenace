@@ -555,14 +555,9 @@ void DrawDialogBox()
 			// кнопки
 			if (DrawDialogButton128(X+94, Y+ButtonOffset, GetText("1_YES"), DialogContentTransp))
 			{
-#if defined(DEMO_VERSION) || defined(DEMO_VERSION_FULL_VFS)
-				ComBuffer = DEMO;
-				CloseDialog();
-#else
 				CanQuit = true;
 				Quit = true;
 				CloseDialog();
-#endif
 			}
 			if (DrawDialogButton128(X+256+34, Y+ButtonOffset, GetText("1_NO"), DialogContentTransp)) CloseDialog();
 			break;
@@ -698,14 +693,9 @@ void DrawDialogBox()
 			// кнопки
 			if (DrawDialogButton128(X+94, Y+ButtonOffset, GetText("1_YES"), DialogContentTransp))
 			{
-#if defined(DEMO_VERSION) || defined(DEMO_VERSION_FULL_VFS)
-				ComBuffer = DEMO;
-				CloseDialog();
-#else
 				CanQuit = true;
 				Quit = true;
 				CloseDialog();
-#endif
 			}
 			if (DrawDialogButton128(X+256+34, Y+ButtonOffset, GetText("1_NO"), DialogContentTransp)) CloseDialog();
 			break;

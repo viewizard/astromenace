@@ -90,7 +90,7 @@ void NewRecord()
 	Setup.Profile[ProfileNum].ShipHullCurrentStrength = 30;
 
 	// сброс настроек оружия
-	for (int i=0; i<EarthShipsMaxWeapon; i++)
+	for (int i=0; i<6; i++)
 	{
 		Setup.Profile[ProfileNum].Weapon[i] = 0;
 		Setup.Profile[ProfileNum].WeaponAmmo[i] = 0;
@@ -198,7 +198,7 @@ void DuplicateRecord()
 	Setup.Profile[ProfileNum].ShipHullCurrentStrength = Setup.Profile[BaseProfileNum].ShipHullCurrentStrength;
 
 	// сброс настроек оружия
-	for (int i=0; i<EarthShipsMaxWeapon; i++)
+	for (int i=0; i<6; i++)
 	{
 		Setup.Profile[ProfileNum].Weapon[i] = Setup.Profile[BaseProfileNum].Weapon[i];
 		Setup.Profile[ProfileNum].WeaponAmmo[i] = Setup.Profile[BaseProfileNum].WeaponAmmo[i];

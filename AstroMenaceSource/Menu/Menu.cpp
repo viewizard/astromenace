@@ -88,10 +88,6 @@ extern eLight * StartLight;
 extern eLight * EndLight;
 
 
-extern float CurrentDemoShowTime;
-extern float LastDemoShowTime;
-
-
 // для прорисовки подложки с тайловой анимацией
 extern float StarsTile;
 extern float StarsTileUpdateTime;
@@ -171,8 +167,6 @@ void InitMenu()
 	if (Script != 0){delete Script; Script = 0;}
 	Script = new ScriptEngine;
 
-
-#ifndef DEMO_VERSION
 	// делаем случайный выбор, какой скрипт прокручивать
 	switch (vw_iRandNum(2))
 	{
@@ -182,10 +176,6 @@ void InitMenu()
 		// на всякий случай
 		default: Script->RunScript("DATA/SCRIPT/menu1.xml", vw_GetTime()); break;
 	}
-#else
-	Script->RunScript("DATA/SCRIPT/menu1.xml", vw_GetTime());
-#endif // DEMO_VERSION
-
 
 	// немного прокручиваем скрипт
 	float Time1 = vw_GetTime();
@@ -296,7 +286,6 @@ void SetMenu(eGameStatus Menu)
 			if (Setup.JoystickSecondary == -1) Setup.JoystickSecondary = 1;
 			break;
 
-
 		case TOP_SCORES:
 			// копируем исходные данные
 			for (int i=0; i<10; i++)
@@ -313,7 +302,6 @@ void SetMenu(eGameStatus Menu)
 			}
 			break;
 
-
 		case MISSION:
 			// ставим нужный лист миссий
 			StartMission = 0;
@@ -329,13 +317,6 @@ void SetMenu(eGameStatus Menu)
 		case CREDITS:
 			CreditsCurrentPos = 0.0f;
 			LastCreditsCurrentPosUpdateTime = vw_GetTime();
-			break;
-
-
-
-		case DEMO:
-			CurrentDemoShowTime = 6.0f;
-			LastDemoShowTime = vw_GetTime();
 			break;
 
 		default:
@@ -892,7 +873,6 @@ void DrawMenu()
 		case PROFILE:		ProfileMenu(); break;
 		case DIFFICULTY:	DifficultyMenu(); break;
 		case MISSION:		MissionMenu(); break;
-		case DEMO:		    DemoMenu(); break;
 		case WORKSHOP:
 			{
 				// включаем другие источники света
@@ -932,16 +912,12 @@ void DrawMenu()
 	// последнее - вывод версии и копирайта
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	// версия
-	DrawFont(6, 740, 0, 0, 0, 0.99f, GAME_VERSION);
+	// Version
+	DrawFont(6, 740, 0, 0, 0, 0.99f, "Version %1.1f build %i", GAME_VERSION_ID, GAME_VERSION_BUILD);
 
-
-	// "2007, Viewizard"
-	char CopKey[] = "$%^%12364#$%@";
-	char CopText[] = {22, 21, 110, 18, 17, 100, 90, 83, 67, 74, 94, 68, 50, 64, '\0'};
-	CodeXOR(CopText, CopKey, 15);
-	int CSize = FontSize("%s %s", GetText("11_Copyright"), CopText);
-	DrawFont(Setup.iAspectRatioWidth-7-CSize, 740, 0, 0, 0, 0.99f, "%s %s", GetText("11_Copyright"), CopText);
+	// Copyright
+	int CSize = FontSize(GAME_COPYRIGHT);
+	DrawFont(Setup.iAspectRatioWidth-7-CSize, 740, 0, 0, 0, 0.99f, GAME_COPYRIGHT);
 
 
 

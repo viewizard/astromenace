@@ -304,7 +304,6 @@ void DestroyInfoObject()
 //------------------------------------------------------------------------------------
 void CreateInfoObject()
 {
-#ifndef DEMO_VERSION
 
 	DestroyInfoObject();
 
@@ -596,8 +595,6 @@ void CreateInfoObject()
 	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
 
 	LastRotateInfoObject = vw_GetTime();
-
-#endif // #ifndef DEMO_VERSION
 }
 
 
@@ -607,7 +604,6 @@ void CreateInfoObject()
 
 void InformationObject3DText(int ObjectNum)
 {
-#ifndef DEMO_VERSION
 
 	int X1 = Setup.iAspectRatioWidth/2 + 68;
 	int Y1 = 50;
@@ -1537,9 +1533,6 @@ void InformationObject3DText(int ObjectNum)
 
 	}
 
-
-
-#endif // #ifndef DEMO_VERSION
 }
 
 
@@ -1562,97 +1555,6 @@ void InformationMenu()
 	SetRect(&SrcRest,0,0,2,2);
 	SetRect(&DstRest,0,0,Setup.iAspectRatioWidth,768);
 	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
-
-#ifdef DEMO_VERSION
-
-	int Y1 = 50;
-
-	int SizeI = (Setup.iAspectRatioWidth-FontSize(GetText("3_GAME_OBJECTS_INFORMATION")))/2;
-	DrawFont(SizeI, Y1-14, 0, 0, 0, MenuContentTransp, GetText("3_GAME_OBJECTS_INFORMATION"));
-
-	Y1 += 20;
-	SizeI = (Setup.iAspectRatioWidth-FontSize(GetText("7_Not_Available_in_Demo_Version")))/2;
-	DrawFont(SizeI, Y1, 0, 0, 4, MenuContentTransp, GetText("7_Not_Available_in_Demo_Version"));
-
-
-
-
-
-	int Start = Setup.iAspectRatioWidth/2-436;
-	SetRect(&SrcRest,0,0,256,205);
-	SetRect(&DstRest,Start,110,Start+256,110+205);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/DEMO/i_image1.tga"), false, MenuContentTransp);
-
-	Start += 256 + 26*2;
-	SetRect(&SrcRest,0,0,256,205);
-	SetRect(&DstRest,Start,110,Start+256,110+205);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/DEMO/i_image2.tga"), false, MenuContentTransp);
-
-	Start += 256 + 26*2;
-	SetRect(&SrcRest,0,0,256,205);
-	SetRect(&DstRest,Start,110,Start+256,110+205);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/DEMO/i_image3.tga"), false, MenuContentTransp);
-
-
-	Start = Setup.iAspectRatioWidth/2-436;
-	SetRect(&SrcRest,0,0,256,205);
-	SetRect(&DstRest,Start,340,Start+256,340+205);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/DEMO/i_image4.tga"), false, MenuContentTransp);
-
-	Start += 256 + 26*2;
-	SetRect(&SrcRest,0,0,256,205);
-	SetRect(&DstRest,Start,340,Start+256,340+205);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/DEMO/i_image5.tga"), false, MenuContentTransp);
-
-	Start += 256 + 26*2;
-	SetRect(&SrcRest,0,0,256,205);
-	SetRect(&DstRest,Start,340,Start+256,340+205);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/DEMO/i_image6.tga"), false, MenuContentTransp);
-
-
-
-
-	Y1 = 570;
-	SizeI = (Setup.iAspectRatioWidth-FontSize(GetText("7_Not_Available_in_Demo_Version")))/2;
-	DrawFont(SizeI, Y1, 0, 0, 4, MenuContentTransp, GetText("7_Not_Available_in_Demo_Version"));
-
-
-	Y1 += 35;
-	int Size = FontSize(GetText("8_Line11"))/2;
-	DrawFont(Setup.iAspectRatioWidth/2-Size, Y1, 0, 0, 2, MenuContentTransp, GetText("8_Line11"));
-
-
-
-
-	int	X = Setup.iAspectRatioWidth/2-284;
-	int Y = 165+100*5;
-
-	if (DrawButton256(X,Y, GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
-	{
-		ComBuffer = MAIN_MENU;
-	}
-	X = Setup.iAspectRatioWidth/2+28;
-	if (DrawButton256(X,Y, GetText("1_ORDER_NOW"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime))
-	{
-		// нужно свернуть игру, запустить броузер и выйти в основное меню
-		SDL_WM_IconifyWindow();
-
-#ifdef EN
-		vw_OpenBrouser("http://www.viewizard.com/buynow.php?forceos=windows&forcegame=astromenace");
-#endif // EN
-#ifdef DE
-		vw_OpenBrouser("http://www.viewizard.com/de/buynow.php?forceos=windows&forcegame=astromenace");
-#endif // DE
-#ifdef RU
-		vw_OpenBrouser("http://www.viewizard.com/ru/buynow.php?forceos=windows&forcegame=astromenace");
-#endif // RU
-	}
-
-
-
-
-#else
-
 
 
 	SetRect(&SrcRest,2,2,464-2,353-2);
@@ -1729,7 +1631,6 @@ void InformationMenu()
 	}
 
 
-
 	X = (Setup.iAspectRatioWidth - 384)/2;
 	Y = Y+Prir;
 	if (DrawButton384(X,Y, GetText("1_MAIN_MENU"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime))
@@ -1737,8 +1638,6 @@ void InformationMenu()
 		DestroyInfoObject();
 		ComBuffer = MAIN_MENU;
 	}
-
-#endif // DEMO_VERSION
 
 }
 
@@ -1759,7 +1658,6 @@ void InformationMenu()
 //------------------------------------------------------------------------------------
 void InformationDrawObject()
 {
-#ifndef DEMO_VERSION
 
 	int x, y, width, height;
 	float znear, zfar;
@@ -2020,7 +1918,6 @@ void InformationDrawObject()
 	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/panel444_333_border.tga"), true, 1.0f*MenuContentTransp);
 	vw_End2DMode();
 
-#endif // #ifndef DEMO_VERSION
 }
 
 

@@ -145,7 +145,6 @@ void Loop_Proc()
 		case DIFFICULTY:
 		case MISSION:
 		case WORKSHOP:
-		case DEMO:
 			DrawMenu();
 			break;
 
@@ -241,7 +240,6 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// выход по нажатию на Esc
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    if (GameStatus != DEMO)
 	if (vw_GetKeys(SDLK_ESCAPE))
 	{
 		SetCurrentDialogBox(0);
@@ -279,7 +277,6 @@ void Loop_Proc()
 			case DIFFICULTY:			SetMenu(DIFFICULTY); break;
 			case MISSION:				SetMenu(MISSION); break;
 			case WORKSHOP:				SetMenu(WORKSHOP); break;
-			case DEMO:				   	SetMenu(DEMO); break;
 
 
 			// переходим на игру
