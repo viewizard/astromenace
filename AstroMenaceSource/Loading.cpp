@@ -154,15 +154,7 @@ GLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 #define TEXTURE_NO_MIPMAP	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE
 
 // сколько нужно загружать в листе меню
-#ifdef DEMO_VERSION
-const int	MenuLoadStartListCount = 169;// + 79;
-#else
-#ifdef DEMO_VERSION_FULL_VFS
-const int	MenuLoadStartListCount = 191;// + 167;
-#else
 const int	MenuLoadStartListCount = 181;// + 167;
-#endif
-#endif
 // лист загрузки меню
 LoadList	MenuLoadStartList[MenuLoadStartListCount] =
 {
@@ -191,19 +183,6 @@ LoadList	MenuLoadStartList[MenuLoadStartListCount] =
 {"DATA/CREDITS/gnugcc.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/CREDITS/ubuntu.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/CREDITS/tinyxml.tga",			0, 32, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-#if defined(DEMO_VERSION) || defined(DEMO_VERSION_FULL_VFS)
-// для демо части
-{"DATA/DEMO/image1.tga",				0, 144, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/image2.tga",				0, 144, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/image3.tga",				0, 144, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/image4.tga",				0, 144, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/i_image1.tga",				0, 153, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/i_image2.tga",				0, 153, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/i_image3.tga",				0, 153, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/i_image4.tga",				0, 153, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/i_image5.tga",				0, 153, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/i_image6.tga",				0, 153, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-#endif
 // панельки и кнопки вывода информации в меню модернизации корабля
 {"DATA/MENU/workshop_panel1.tga",		0, 270, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/MENU/workshop_panel1+.tga",		0, 270, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
@@ -348,7 +327,7 @@ LoadList	MenuLoadStartList[MenuLoadStartListCount] =
 // большие астероиды
 {"DATA/MODELS/SPACE/bigasteroid.jpg",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
 
-#ifndef DEMO_VERSION
+
 // текстура больших кораблей пришельцев
 {"DATA/MODELS/ALIENMOTHERSHIP/alm-text02.jpg",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
 {"DATA/MODELS/ALIENMOTHERSHIP/alm-text03.jpg",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
@@ -376,7 +355,6 @@ LoadList	MenuLoadStartList[MenuLoadStartListCount] =
 {"DATA/MODELS/MINE/mine3i.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
 {"DATA/MODELS/MINE/mine4.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
 {"DATA/MODELS/MINE/mine4i.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-#endif
 
 // скайбокс - космос, загружаем только те, что нужно - экономим видео память
 {"DATA/SKYBOX/1/skybox_DN.jpg",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
@@ -476,7 +454,6 @@ LoadList	MenuLoadStartList[MenuLoadStartListCount] =
 {"DATA/MODELS/TURRET/turret-01.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/TURRET/turret-02.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
 
-#ifndef DEMO_VERSION
 {"DATA/MODELS/ALIENFIGHTER/al-06.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/ALIENFIGHTER/al-07.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/ALIENFIGHTER/al-08.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
@@ -572,7 +549,6 @@ LoadList	MenuLoadStartList[MenuLoadStartListCount] =
 {"DATA/MODELS/MINE/mine-02.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/MINE/mine-03.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/MINE/mine-04.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-#endif // #ifndef DEMO_VERSION
 */
 };
 
@@ -588,15 +564,7 @@ LoadList	MenuLoadStartList[MenuLoadStartListCount] =
 
 
 // сколько нужно загружать в листе меню
-#ifdef DEMO_VERSION
-const int	MenuLoadListCount = 169;
-#else
-#ifdef DEMO_VERSION_FULL_VFS
-const int	MenuLoadListCount = 191;
-#else
 const int	MenuLoadListCount = 181;
-#endif
-#endif
 // лист загрузки меню
 LoadList	MenuLoadList[MenuLoadListCount] =
 {
@@ -625,19 +593,6 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/CREDITS/gnugcc.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/CREDITS/ubuntu.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/CREDITS/tinyxml.tga",			0, 32, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-#if defined(DEMO_VERSION) || defined(DEMO_VERSION_FULL_VFS)
-// для демо части
-{"DATA/DEMO/image1.tga",				0, 144, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/image2.tga",				0, 144, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/image3.tga",				0, 144, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/image4.tga",				0, 144, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/i_image1.tga",				0, 153, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/i_image2.tga",				0, 153, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/i_image3.tga",				0, 153, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/i_image4.tga",				0, 153, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/i_image5.tga",				0, 153, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/DEMO/i_image6.tga",				0, 153, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-#endif
 // панельки и кнопки вывода информации в меню модернизации корабля
 {"DATA/MENU/workshop_panel1.tga",		0, 270, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/MENU/workshop_panel1+.tga",		0, 270, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
@@ -782,7 +737,6 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 // большие астероиды
 {"DATA/MODELS/SPACE/bigasteroid.jpg",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
 
-#ifndef DEMO_VERSION
 // текстура больших кораблей пришельцев
 {"DATA/MODELS/ALIENMOTHERSHIP/alm-text02.jpg",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
 {"DATA/MODELS/ALIENMOTHERSHIP/alm-text03.jpg",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
@@ -810,7 +764,6 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/MODELS/MINE/mine3i.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
 {"DATA/MODELS/MINE/mine4.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
 {"DATA/MODELS/MINE/mine4i.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-#endif
 
 // скайбокс - космос, загружаем только те, что нужно - экономим видео память
 {"DATA/SKYBOX/1/skybox_DN.jpg",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
@@ -840,14 +793,7 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 
 
 
-
-
-
-#if defined(DEMO_VERSION) || defined(DEMO_VERSION_FULL_VFS)
-const int	GameLevelsLoadListCount = 70+41+31;
-#else
 const int	GameLevelsLoadListCount = 78+41+35;
-#endif
 LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {
 // 2д часть
@@ -925,49 +871,6 @@ LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {"DATA/MODELS/EARTHFIGHTER/lnch34.jpg",			1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
 {"DATA/MODELS/EARTHFIGHTER/rockets.jpg",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
 // звуки игры (только игры), грузим тут, иначе плохо, когда подгружает во время игры
-#if defined(DEMO_VERSION) || defined(BUILD_OBERON_MEDIA)
-{"DATA/SFX/weapon1probl.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weapon2probl.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weapon3probl.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weapon4probl.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weapon5probl.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/explosion1.ogg",						4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/explosion2.ogg",						4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/explosion3.ogg",						4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/explosion4.ogg",						4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire1.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire2.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire3.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire4.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire5.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire6.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire7.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire8.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire9.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire10.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire11.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire12.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire13.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire14.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire15.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire16.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire17.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire18.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/weaponfire19.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/kinetichit.ogg",						4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/ionhit.ogg",							4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/plasmahit.ogg",						4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/antimaterhit.ogg",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/gausshit.ogg",						4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/SFX/lowlife.ogg",						4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/VOICE/MissileDetected.ogg",				4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/VOICE/PowerSupplyReestablished.ogg",		4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/VOICE/PrepareForAction.ogg",				4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/VOICE/Warning.ogg",						4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/VOICE/WeaponDamaged.ogg",				4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/VOICE/WeaponDestroyed.ogg",				4, 20, false, 0,0,0, 0, 0, 0, true, true},
-{"DATA/VOICE/WeaponMalfunction.ogg",			4, 20, false, 0,0,0, 0, 0, 0, true, true},
-#else
 {"DATA/SFX/weapon1probl.wav",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
 {"DATA/SFX/weapon2probl.wav",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
 {"DATA/SFX/weapon3probl.wav",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
@@ -1009,8 +912,6 @@ LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {"DATA/VOICE/WeaponDamaged.wav",				4, 20, false, 0,0,0, 0, 0, 0, true, true},
 {"DATA/VOICE/WeaponDestroyed.wav",				4, 20, false, 0,0,0, 0, 0, 0, true, true},
 {"DATA/VOICE/WeaponMalfunction.wav",			4, 20, false, 0,0,0, 0, 0, 0, true, true},
-#endif
-#if !defined(DEMO_VERSION) && !defined(DEMO_VERSION_FULL_VFS)
 // мины
 {"DATA/MODELS/MINE/mine1.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
 {"DATA/MODELS/MINE/mine1i.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
@@ -1025,7 +926,6 @@ LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {"DATA/MODELS/MINE/mine-02.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/MINE/mine-03.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/MINE/mine-04.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false},
-#endif
 // корабли землян + их оружие
 {"DATA/MODELS/EARTHFIGHTER/sf-01.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/EARTHFIGHTER/sf-02.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false},
@@ -1062,11 +962,7 @@ LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 
 
 
-#if defined(DEMO_VERSION) || defined(DEMO_VERSION_FULL_VFS)
-const int	AlienFighterLoadListCount = 2+5;
-#else
-const int	AlienFighterLoadListCount = 2+17;
-#endif
+const int	AlienFighterLoadListCount = 19;
 LoadList	AlienFighterLoadList[AlienFighterLoadListCount] =
 {
 // AlienFighter – load alien fighters textures.
@@ -1078,7 +974,6 @@ LoadList	AlienFighterLoadList[AlienFighterLoadListCount] =
 {"DATA/MODELS/ALIENFIGHTER/al-03.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/ALIENFIGHTER/al-04.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/ALIENFIGHTER/al-05.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false},
-#if !defined(DEMO_VERSION) && !defined(DEMO_VERSION_FULL_VFS)
 {"DATA/MODELS/ALIENFIGHTER/al-06.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/ALIENFIGHTER/al-07.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/ALIENFIGHTER/al-08.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false},
@@ -1091,16 +986,12 @@ LoadList	AlienFighterLoadList[AlienFighterLoadListCount] =
 {"DATA/MODELS/ALIENFIGHTER/al-15.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/ALIENFIGHTER/al-16.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/ALIENFIGHTER/al-17.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false},
-#endif
 };
 
 
 
-#if defined(DEMO_VERSION) || defined(DEMO_VERSION_FULL_VFS)
-const int	PirateLoadListCount = 9+12;
-#else
-const int	PirateLoadListCount = 9+42;
-#endif
+
+const int	PirateLoadListCount = 51;
 LoadList	PirateLoadList[PirateLoadListCount] =
 {
 // Pirate – load all pirate data (vehicles, military buildings, ships...) testures.
@@ -1127,7 +1018,6 @@ LoadList	PirateLoadList[PirateLoadListCount] =
 // турелей
 {"DATA/MODELS/TURRET/turret-01.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/TURRET/turret-02.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false},
-#if !defined(DEMO_VERSION) && !defined(DEMO_VERSION_FULL_VFS)
 // гусенечный транспорт
 {"DATA/MODELS/TRACKED/engineering-01.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/TRACKED/apc-aa-02.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false},
@@ -1160,23 +1050,17 @@ LoadList	PirateLoadList[PirateLoadListCount] =
 {"DATA/MODELS/MILITARYBUILDING/aa-gun-03.VW3D",		2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/MILITARYBUILDING/aa-gun-02.VW3D",		2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/MILITARYBUILDING/aa-gun-01.VW3D",		2, 20, true,  0,0,0, 0, 0, 0, true, false},
-#endif
 };
 
 
 
-#if defined(DEMO_VERSION) || defined(DEMO_VERSION_FULL_VFS)
-const int	BasePartLoadListCount = 3;
-#else
-const int	BasePartLoadListCount = 3+24;
-#endif
+const int	BasePartLoadListCount = 27;
 LoadList	BasePartLoadList[BasePartLoadListCount] =
 {
 // BasePart – load pirate base textures.
 {"DATA/MODELS/SPACEBASE/aster.jpg",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
 {"DATA/MODELS/SPACEBASE/allalpha.tga",		1, 768, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
 {"DATA/MODELS/SPACEBASE/metal.jpg",			1, 1024, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false},
-#if !defined(DEMO_VERSION) && !defined(DEMO_VERSION_FULL_VFS)
 // геометрия базы пиратов
 {"DATA/MODELS/SPACEBASE/1/1.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/SPACEBASE/1/2.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false},
@@ -1202,7 +1086,6 @@ LoadList	BasePartLoadList[BasePartLoadListCount] =
 {"DATA/MODELS/SPACEBASE/8/3.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/SPACEBASE/8/4.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false},
 {"DATA/MODELS/SPACEBASE/8/5.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false},
-#endif
 };
 
 
@@ -1976,7 +1859,6 @@ void LoadGameData(int LoadType)
 	vw_SetTextureProp(RI_TEXTURE_BILINEAR, RI_CLAMP, false, TX_ALPHA_GREYSC, false);
 
 	LoadImageTexture = 0;
-#ifndef DEMO_VERSION
 
 	switch (1+vw_iRandNum(3))
 	{
@@ -1997,12 +1879,6 @@ void LoadGameData(int LoadType)
 			LoadImageTexture = vw_LoadTexture("DATA/LOADING/loading01.jpg", NULL, false);
 			break;
 	}
-#else
-
-	LoadImageTexture = vw_LoadTexture("DATA/LOADING/loading02.jpg", NULL, false);
-
-#endif // DEMO_VERSION
-
 
 
 	// фонты для вывода информации

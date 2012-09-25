@@ -76,21 +76,6 @@ char *GetMissionFileName()
 	else
 		return 0;
 
-// проверка для демо версии чтобы убрать возможность подмены дат файлов игры
-#if defined(DEMO_VERSION) || defined(DEMO_VERSION_FULL_VFS)
-
-	if (CurrentMission > 3) return 0;
-
-	// если оба файла в vfs, все нормально... иначе - удаляем данные
-	// в итоге, только не видим миссии, а только то, что проинилось в самом начале по RunScript
-	if (FileDetect(MissionFileName) != VFS_FILE_VFS)
-	{
-		return 0;
-	}
-
-#endif // DEMO_VERSION
-
-
 	return MissionFileName;
 }
 
@@ -117,11 +102,7 @@ void MissionsListInit()
 	TiXmlElement	*xmlElem = 0;
 	TiXmlElement	*xmlAstroMenaceScript = 0;
 
-#if defined(DEMO_VERSION) || defined(DEMO_VERSION_FULL_VFS)
-	xmlDoc = new TiXmlDocument("DATA/SCRIPT/list_demo.xml");
-#else
 	xmlDoc = new TiXmlDocument("DATA/SCRIPT/list.xml");
-#endif // DEMO_VERSION
 
 	if (!xmlDoc->LoadFile())
 	{
@@ -291,13 +272,8 @@ void MissionsListInit()
 	delete xmlDoc; xmlDoc = 0;
 
 
-
-#if defined(DEMO_VERSION) || defined(DEMO_VERSION_FULL_VFS)
-	MissionLimitation = 3; // в демо версии только 4 миссии
-#else
 	// на одну меньше, т.к. это номер миссии, а не кол-во
 	MissionLimitation = AllMission-1;
-#endif
 
 }
 
@@ -424,84 +400,40 @@ void MissionMenu()
 		{
 			SetRect(&SrcRest,0,0,64,64);
 			SetRect(&DstRest,X1+2,Y1+2,X1+62,Y1+62);
-#if defined(DEMO_VERSION) || defined(DEMO_VERSION_FULL_VFS)
-			if (i>MissionLimitation)
+
+			if (MissionIcon[i] != 0)
+				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(MissionIcon[i]), true, 0.3f*MenuContentTransp);
+
+			int SizeI = FontSize(GetText(MissionTitle[i]));
+			if (SizeI < 750-30-64)
 			{
-				if (MissionIcon[i] != 0)
-					vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(MissionIcon[i]), true, 0.2f*MenuContentTransp);
-
-				int SizeI = FontSize(GetText(MissionTitle[i]));
-				if (SizeI < 750-30-64)
-				{
-					if (MissionTitleType[i] == 1)
-						DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], 0.2f*MenuContentTransp, GetText(MissionTitle[i]));
-					else
-						DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], 0.2f*MenuContentTransp, MissionTitle[i]);
-				}
+				if (MissionTitleType[i] == 1)
+					DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], 0.3f*MenuContentTransp, GetText(MissionTitle[i]));
 				else
-				{
-					if (MissionTitleType[i] == 1)
-						DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], 0.2f*MenuContentTransp, GetText(MissionTitle[i]));
-					else
-						DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], 0.2f*MenuContentTransp, MissionTitle[i]);
-				}
-
-				SizeI = FontSize(GetText(MissionDescr[i]));
-				if (SizeI < 750-30-64)
-				{
-					if (MissionDescrType[i] == 1)
-						DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], 0.2f*MenuContentTransp, GetText(MissionDescr[i]));
-					else
-						DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], 0.2f*MenuContentTransp, MissionDescr[i]);
-
-				}
-				else
-				{
-					if (MissionDescrType[i] == 1)
-						DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], 0.2f*MenuContentTransp, GetText(MissionDescr[i]));
-					else
-						DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], 0.2f*MenuContentTransp, MissionDescr[i]);
-				}
-
+					DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], 0.3f*MenuContentTransp, MissionTitle[i]);
 			}
 			else
-#endif
 			{
-				if (MissionIcon[i] != 0)
-					vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(MissionIcon[i]), true, 0.3f*MenuContentTransp);
-
-				int SizeI = FontSize(GetText(MissionTitle[i]));
-				if (SizeI < 750-30-64)
-				{
-					if (MissionTitleType[i] == 1)
-						DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], 0.3f*MenuContentTransp, GetText(MissionTitle[i]));
-					else
-						DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], 0.3f*MenuContentTransp, MissionTitle[i]);
-				}
+				if (MissionTitleType[i] == 1)
+					DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], 0.3f*MenuContentTransp, GetText(MissionTitle[i]));
 				else
-				{
-					if (MissionTitleType[i] == 1)
-						DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], 0.3f*MenuContentTransp, GetText(MissionTitle[i]));
-					else
-						DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], 0.3f*MenuContentTransp, MissionTitle[i]);
-				}
+					DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], 0.3f*MenuContentTransp, MissionTitle[i]);
+			}
 
-				SizeI = FontSize(GetText(MissionDescr[i]));
-				if (SizeI < 750-30-64)
-				{
-					if (MissionDescrType[i] == 1)
-						DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], 0.3f*MenuContentTransp, GetText(MissionDescr[i]));
-					else
-						DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], 0.3f*MenuContentTransp, MissionDescr[i]);
-
-				}
+			SizeI = FontSize(GetText(MissionDescr[i]));
+			if (SizeI < 750-30-64)
+			{
+				if (MissionDescrType[i] == 1)
+					DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], 0.3f*MenuContentTransp, GetText(MissionDescr[i]));
 				else
-				{
-					if (MissionDescrType[i] == 1)
-						DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], 0.3f*MenuContentTransp, GetText(MissionDescr[i]));
-					else
-						DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], 0.3f*MenuContentTransp, MissionDescr[i]);
-				}
+					DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], 0.3f*MenuContentTransp, MissionDescr[i]);
+			}
+			else
+			{
+				if (MissionDescrType[i] == 1)
+					DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], 0.3f*MenuContentTransp, GetText(MissionDescr[i]));
+				else
+					DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], 0.3f*MenuContentTransp, MissionDescr[i]);
 			}
 		}
 
@@ -641,17 +573,6 @@ void MissionMenu()
 					DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], 0.8f*MenuContentTransp, MissionDescr[i]);
 			}
 		}
-
-
-#if defined(DEMO_VERSION) || defined(DEMO_VERSION_FULL_VFS)
-		if (i>MissionLimitation)
-		{
-			// для демо версии, если миссия 4-я или дальше - пишем что не доступно
-			int SizeI = (748-FontSizeX2(GetText("7_Not_Available_in_Demo_Version")))/2;
-			DrawFontX2(X1+SizeI, Y1+20, 0, 0, 2, 0.9f*MenuContentTransp, GetText("7_Not_Available_in_Demo_Version"));
-		}
-#endif
-
 
 
 		Y1 += 64;

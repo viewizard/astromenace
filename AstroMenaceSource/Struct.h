@@ -101,11 +101,7 @@ enum eGameStatus
 	MISSION,
 	// мастерская покупка-усовершенствование корабля
 	WORKSHOP,
-
-	// меню демо версии, просим зарегистрироваться
-	DEMO
 };
-
 
 
 
@@ -159,16 +155,16 @@ struct GameProfile
 	BYTE	ShipHullUpgrade;
 	float	ShipHullCurrentStrength;
 
-	BYTE	Weapon[EarthShipsMaxWeapon];
-	int		WeaponAmmo[EarthShipsMaxWeapon];
+	BYTE	Weapon[6];
+	int		WeaponAmmo[6];
 	// для каждого
 	// 1-только примари, 2 только секондари, 3 оба
-	BYTE	WeaponControl[EarthShipsMaxWeapon];
+	BYTE	WeaponControl[6];
 	// доп. управление, 0-нет, 1-клава,2-мышка,3-джойст
-	BYTE	WeaponAltControl[EarthShipsMaxWeapon];
-	BYTE	WeaponAltControlData[EarthShipsMaxWeapon];
+	BYTE	WeaponAltControl[6];
+	BYTE	WeaponAltControlData[6];
 	// для каждого слота - текущее положение оружия
-	float	WeaponSlotYAngle[EarthShipsMaxWeapon];
+	float	WeaponSlotYAngle[6];
 
 
 

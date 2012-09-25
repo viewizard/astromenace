@@ -64,47 +64,6 @@ const int	GameSoundQuantity = 33;
 GameSoundData GameSoundList[GameSoundQuantity] =
 {
 
-#if defined(DEMO_VERSION) || defined(BUILD_OBERON_MEDIA)
-{"DATA/SFX/weapon1probl.ogg", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, механическое оружие (Kinetic)
-{"DATA/SFX/weapon2probl.ogg", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, "слабое" энергетическое оружие (Ion, Plasma)
-{"DATA/SFX/weapon3probl.ogg", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, "лучевое/среднее" энергетическое оружие (Maser, Laser)
-{"DATA/SFX/weapon4probl.ogg", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, "мощьное" энергетическое оружие (Antimatter, Gauss)
-{"DATA/SFX/weapon5probl.ogg", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, пусковые установки (ракеты, торпеды, бомбы)
-
-{"DATA/SFX/explosion1.ogg", 1.0f, 2, 6, 1, 4, 1},		// малый взрыв: ракеты
-{"DATA/SFX/explosion2.ogg", 1.0f, 2, 6, 1, 4, 1},		// взрыв (обычный): торпеды, истребители землян и пиратов
-{"DATA/SFX/explosion3.ogg", 1.0f, 2, 6, 1, 4, 1},		// взрыв (энергетический): ядерные бомбы, корабли пришельцев
-
-{"DATA/SFX/weaponfire1.ogg", 0.7f, 1, 8, 2, 4, 4},	// выстрел, Kinetic 1
-{"DATA/SFX/weaponfire2.ogg", 0.65f, 1, 8, 2, 4, 4},	// выстрел, Kinetic 2
-{"DATA/SFX/weaponfire3.ogg", 0.7f, 1, 8, 2, 4, 4},	// выстрел, Kinetic 3
-{"DATA/SFX/weaponfire4.ogg", 1.0f, 1, 8, 2, 4, 4},	// выстрел, Kinetic 4
-{"DATA/SFX/weaponfire5.ogg", 1.0f, 1, 8, 2, 4, 4},	// выстрел, Ion 1
-{"DATA/SFX/weaponfire6.ogg", 1.0f, 1, 8, 2, 4, 4},	// выстрел, Ion 2
-{"DATA/SFX/weaponfire7.ogg", 0.7f, 1, 8, 2, 4, 4},	// выстрел, Ion 3
-{"DATA/SFX/weaponfire8.ogg", 0.85f, 1, 8, 2, 4, 4},	// выстрел, Plasma 1
-{"DATA/SFX/weaponfire9.ogg", 0.95f, 1, 8, 2, 4, 4},	// выстрел, Plasma 2
-{"DATA/SFX/weaponfire10.ogg", 0.9f, 1, 8, 2, 4, 4},	// выстрел, Plasma 3
-{"DATA/SFX/weaponfire11.ogg", 0.6f, 1, 8, 2, 4, 1},	// выстрел, Maser 1 - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
-{"DATA/SFX/weaponfire12.ogg", 0.55f, 1, 8, 2, 4, 1},	// выстрел, Maser 2 - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
-{"DATA/SFX/weaponfire13.ogg", 0.9f, 1, 8, 2, 4, 4},	// выстрел, Antimatter
-{"DATA/SFX/weaponfire14.ogg", 0.8f, 1, 8, 2, 4, 1},	// выстрел, Laser - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
-{"DATA/SFX/weaponfire15.ogg", 0.8f, 1, 8, 2, 4, 4},	// выстрел, Gauss
-{"DATA/SFX/weaponfire16.ogg", 1.0f, 1, 8, 3, 2, 2},	// выстрел, одиночная ракета; приоритет выше, не красиво если снимаем "хвост" эффекта
-{"DATA/SFX/weaponfire17.ogg", 1.0f, 1, 8, 3, 2, 3},	// выстрел, одна ракета из группы; приоритет выше, не красиво если снимаем "хвост" эффекта
-{"DATA/SFX/weaponfire18.ogg", 1.0f, 1, 8, 3, 2, 2},	// выстрел, торпеда; приоритет выше, не красиво если снимаем "хвост" эффекта
-{"DATA/SFX/weaponfire19.ogg", 1.0f, 1, 8, 3, 2, 2},	// выстрел, бомба; приоритет выше, не красиво если снимаем "хвост" эффекта
-
-{"DATA/SFX/kinetichit.ogg", 1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Kinetic снарядов
-{"DATA/SFX/ionhit.ogg",		1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Ion снарядов
-{"DATA/SFX/plasmahit.ogg",	1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Plasma снарядов
-{"DATA/SFX/antimaterhit.ogg",1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Antimatter снарядов
-{"DATA/SFX/gausshit.ogg",	1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Gauss снарядов
-
-{"DATA/SFX/explosion4.ogg", 1.0f, 2, 6, 1, 4, 1},		// малый взрыв: астероиды
-
-#else
-
 {"DATA/SFX/weapon1probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, механическое оружие (Kinetic)
 {"DATA/SFX/weapon2probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, "слабое" энергетическое оружие (Ion, Plasma)
 {"DATA/SFX/weapon3probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, "лучевое/среднее" энергетическое оружие (Maser, Laser)
@@ -143,7 +102,7 @@ GameSoundData GameSoundList[GameSoundQuantity] =
 {"DATA/SFX/gausshit.wav",	1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Gauss снарядов
 
 {"DATA/SFX/explosion4.wav", 1.0f, 2, 6, 1, 4, 1},		// малый взрыв: астероиды
-#endif
+
 };
 
 
@@ -168,37 +127,6 @@ const int	MenuSoundQuantity = 25;
 // перечень имен файлов звуков для меню
 Sound2dData MenuSoundNames[MenuSoundQuantity] =
 {
-#if defined(DEMO_VERSION) || defined(BUILD_OBERON_MEDIA)
-{"DATA/SFX/menu_onbutton.ogg", 0.4f, false},	// навели на кнопку
-{"DATA/SFX/menu_click.ogg", 0.6f, false},		// нажали на кнопку
-{"DATA/SFX/menu_new.ogg", 1.0f, true},		// меняем меню
-{"DATA/SFX/menu_taping.ogg", 0.80f, true},		// набор текста-названия профайла
-{"DATA/SFX/menu_online.ogg", 0.75f, true},		// стоим над профайлом-миссией
-{"DATA/SFX/menu_selectline.ogg", 1.0f, true},	// выбрали профайл-миссию
-{"DATA/SFX/menu_nclick.ogg", 1.0f, false},		// не можем нажать на кнопку, но жмем
-{"DATA/SFX/drag_error.ogg", 1.0f, true},		// не можем установить в слот
-{"DATA/SFX/drag_offslot.ogg", 0.65f, true},	// снимаем со слота оружие
-{"DATA/SFX/drag_onslot.ogg", 0.82f, true},		// устанавливаем в слот оружие
-{"DATA/SFX/drag_release.ogg", 0.6f, true},	// освобождаем курсор от оружия, если тянули
-{"DATA/SFX/game_showmenu.ogg", 1.0f, false},	// проказываем меню в игре (звук во время его появления)
-{"DATA/SFX/game_hidemenu.ogg", 1.0f, false},	// скрываем меню в игре (звук во время его исчезновения)
-{"DATA/SFX/lowlife.ogg", 1.0f, true},			// сирена или что-то подобное, когда менее 10% жизни остается (зацикленный небольшой фрагмент)
-
-{"DATA/VOICE/Attention.ogg", 1.0f, true},
-{"DATA/VOICE/EngineMalfunction.ogg", 1.0f, true},
-{"DATA/VOICE/MissileDetected.ogg", 1.0f, true},//++
-{"DATA/VOICE/PowerSupplyReestablished.ogg", 1.0f, true},
-{"DATA/VOICE/PrepareForAction.ogg", 1.0f, true},//++
-{"DATA/VOICE/ReactorMalfunction.ogg", 1.0f, true},//++
-{"DATA/VOICE/Warning.ogg", 1.0f, true},//++
-{"DATA/VOICE/WeaponDamaged.ogg", 1.0f, true},//++
-{"DATA/VOICE/WeaponDestroyed.ogg", 1.0f, true},//++
-{"DATA/VOICE/WeaponMalfunction.ogg", 1.0f, true},//++
-
-{"DATA/SFX/menu_onbutton2.ogg", 0.15f, false},	// навели на малую кнопку
-
-#else
-
 {"DATA/SFX/menu_onbutton.wav", 0.4f, false},	// навели на кнопку
 {"DATA/SFX/menu_click.wav", 0.6f, false},		// нажали на кнопку
 {"DATA/SFX/menu_new.wav", 1.0f, true},		// меняем меню
@@ -226,9 +154,7 @@ Sound2dData MenuSoundNames[MenuSoundQuantity] =
 {"DATA/VOICE/WeaponMalfunction.wav", 1.0f, true},//++
 
 {"DATA/SFX/menu_onbutton2.wav", 0.15f, false},	// навели на малую кнопку
-#endif
 };
-// CeaseFire.wav
 
 
 

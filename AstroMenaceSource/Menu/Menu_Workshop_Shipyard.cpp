@@ -55,13 +55,6 @@ extern CSpaceShip *DialogSpaceShip;
 
 
 
-#if defined(DEMO_VERSION) || defined(DEMO_VERSION_FULL_VFS)
-int AvailableShipsToBuy = 5;
-#else
-int AvailableShipsToBuy = 22;
-#endif
-
-
 
 
 //------------------------------------------------------------------------------------
@@ -581,14 +574,6 @@ void Workshop_Shipyard()
 		CurrentWorkshopNewFighter ++;
 		if (CurrentWorkshopNewFighter > 22) CurrentWorkshopNewFighter = 1;
 		WorkshopCreateNewShip();
-	}
-
-
-	// если демо версия, можем покупать только по AvailableShipsToBuy корабль
-	if (AvailableShipsToBuy < CurrentWorkshopNewFighter)
-	{
-		DrawFont(Setup.iAspectRatioWidth/2-438, 400, 0, 0, 2, MenuContentTransp, GetText("7_Not_Available_in_Demo_Version"));
-		CanBuy = false;
 	}
 	if (DrawButton200_2(Setup.iAspectRatioWidth/2-357,533, GetText("1_Buy_Ship"), MenuContentTransp, !CanBuy))
 	{

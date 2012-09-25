@@ -36,18 +36,6 @@
 
 
 
-
-
-
-
-//------------------------------------------------------------------------------------
-// глобальные переменные переменные
-//------------------------------------------------------------------------------------
-// тайтл и версия игры
-char GAME_VERSION[100];
-char GAME_TITLE[100];
-
-
 //------------------------------------------------------------------------------------
 // настройки
 //------------------------------------------------------------------------------------
@@ -183,28 +171,6 @@ void ReleaseGameOneCopy()
 #endif
 
 }
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// кодируем-декодируем
-//------------------------------------------------------------------------------------
-void CodeXOR(char *Text, char *Key, int Count)
-{
-	int k=0;
-	for (int i=0; i < Count; i++)
-	{
-		if (Text[i] != '\0')
-			Text[i] = Text[i]^Key[k];
-		k++;
-		// чтобы не было переполнения
-		if (k >= strlen(Key)) k=0;
-	}
-}
-
 
 
 
@@ -561,27 +527,6 @@ int main( int argc, char **argv )
 
 
 
-	// "AstroMenace"
-	char AMKey[] = "$%^%12364#$%@";
-	char AMText[] = {101, 86, 42, 87, 94, 127, 86, 88, 85, 64, 65, '\0'};
-	CodeXOR(AMText, AMKey, 12);
-
-	// собираем тайтл
-	strcpy(GAME_TITLE, AMText);
-
-
-	// собираем версию
-#if defined(DEMO_VERSION) || defined(DEMO_VERSION_FULL_VFS)
-	sprintf(GAME_VERSION, "%s %1.1f %s %i", GetText("11_DEMO"), GAME_VERSION_ID, GetText("11_build"), GAME_VERSION_BUILD);
-#else
-	sprintf(GAME_VERSION, "%s %1.1f %s %i", GetText("11_Version"), GAME_VERSION_ID, GetText("11_build"), GAME_VERSION_BUILD);
-#endif // DEMO_VERSION
-
-
-
-
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// установка звука, всегда до LoadGameData
@@ -632,31 +577,8 @@ ReCreate:
 	CurrentVideoMode.BPP = SDL_GetVideoInfo()->vfmt->BitsPerPixel;
 	if (CurrentVideoMode.BPP <= 16) CurrentVideoMode.BPP = 16;
 	if (CurrentVideoMode.BPP > 16) CurrentVideoMode.BPP = 32;
-#ifdef WIN32 // 1.2.10
 	CurrentVideoMode.W = SDL_GetVideoInfo()->current_w;
 	CurrentVideoMode.H = SDL_GetVideoInfo()->current_h;
-#endif // WIN32
-#ifdef __unix // 1.2.7
-	SDL_SysWMinfo info;
-	SDL_VERSION(&info.version);
-	if ( SDL_GetWMInfo(&info) > 0 )
-	{
-		if ( info.subsystem == SDL_SYSWM_X11 )
-		{
-			info.info.x11.lock_func();
-
-			CurrentVideoMode.W = DisplayWidth(info.info.x11.display,
-					DefaultScreen(info.info.x11.display));
-			CurrentVideoMode.H = DisplayHeight(info.info.x11.display,
-					DefaultScreen(info.info.x11.display));
-
-			info.info.x11.unlock_func();
-		}
-	}
-#endif // __unix
-
-
-
 
 
 
@@ -870,7 +792,7 @@ ReCreate:
 #endif // WIN32
 
 
-	int InitStatus = vw_InitRenderer(GAME_TITLE, Setup.Width, Setup.Height, &Setup.BPP, FullScreen, &Setup.MultiSampleType);
+	int InitStatus = vw_InitRenderer("AstroMenace", Setup.Width, Setup.Height, &Setup.BPP, FullScreen, &Setup.MultiSampleType);
 
 	// ошибка окна (размеры)
 	if (InitStatus == 1)
@@ -883,12 +805,12 @@ ReCreate:
 			Setup.Width = CurrentVideoMode.W;
 			Setup.Height = CurrentVideoMode.H;
 			Setup.BPP = CurrentVideoMode.BPP;
-	        Setup.MultiSampleType = 0;
-            SaveXMLSetupFile();
-            goto ReCreate;
+			Setup.MultiSampleType = 0;
+			SaveXMLSetupFile();
+			goto ReCreate;
 		}
 
-        fprintf(stderr, "Wrong resolution. Fatal error.\n");
+		fprintf(stderr, "Wrong resolution. Fatal error.\n");
 #ifdef WIN32
 		MessageBox(NULL,"Wrong resolution. Please, install the newest video drivers from your video card vendor.", "Render system - Fatal Error",MB_OK|MB_APPLMODAL|MB_ICONERROR);
 #endif // WIN32
