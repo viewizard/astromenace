@@ -273,7 +273,8 @@ void vw_SetTextureBlendMode(DWORD stage, int pname, int param);
 // тип работы с координатами текстуры
 #define RI_SEPARATE_TEX_COORD				0x0000000
 #define RI_DUBLICATE_TEX_COORD				0x1000000
-
+//
+#define PFNGLCLIENTACTIVETEXTUREPROC PFNGLACTIVETEXTUREPROC
 
 
 // Send (draw) vertices
