@@ -118,8 +118,6 @@ struct sVideoModes
 	int H;
 	// битность палитры
 	int BPP;
-	// название режима
-	char Title[32];
 };
 
 

@@ -174,6 +174,11 @@ void CenterWindow()
                                  DefaultScreen(info.info.x11.display));
                 int h = DisplayHeight(info.info.x11.display,
                                  DefaultScreen(info.info.x11.display));
+
+				// пока нет возможности определить screens Xineramа-TwinView нормально через SDL, используем
+				// костыль, который будет работать только если мониторы связаны в ширину (наиболее распространенный случай)
+				if ( (float)w / (float)h >= 2.0f) w = w/2;
+
                 int x = (w - GameScreen->w)/2;
                 int y = (h - GameScreen->h)/2;
                 XMoveWindow(info.info.x11.display, info.info.x11.wmwindow, x, y);
@@ -287,7 +292,7 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 
 
 	// центровка
-	CenterWindow();
+	if (!FullScreenFlag) CenterWindow();
 	// ставим название класса окна
 	SDL_WM_SetCaption(Title, 0);
 
