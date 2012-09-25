@@ -37,7 +37,7 @@
 
 
 // название типа оружия землян
-char *GetWeaponGroupTitle(int Num)
+const char *GetWeaponGroupTitle(int Num)
 {
 	switch (Num)
 	{
@@ -89,9 +89,9 @@ struct WeaponData
 	int		ObjectNum;
 	VECTOR3D	FireLocation;
 	VECTOR3D	DestrFireLocation;
-	char	*NameVW3D;
-	char	*TextureName;
-	char	*TextureIllumName;
+	const char	*NameVW3D;
+	const char	*TextureName;
+	const char	*TextureIllumName;
 };
 
 

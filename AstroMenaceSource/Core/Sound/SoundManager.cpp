@@ -67,7 +67,7 @@ ALboolean CheckALCError(ALCdevice *Device)
 	{
 		strcat(Err, alcGetString(Device, ErrCode));
 		strcat(Err, "\n");
-		fprintf(stderr, Err);
+		fprintf(stderr, "%s", Err);
 		return AL_FALSE;
 	}
 	return AL_TRUE;
@@ -82,7 +82,7 @@ ALboolean CheckALError()
 	{
 		strcat(Err, alGetString(ErrCode));
 		strcat(Err, "\n");
-		fprintf(stderr, Err);
+		fprintf(stderr, "%s", Err);
 		return AL_FALSE;
 	}
 	return AL_TRUE;
@@ -97,7 +97,7 @@ ALboolean CheckALUTError()
 	{
 		strcat(Err, alutGetErrorString(ErrCode));
 		strcat(Err, "\n");
-		fprintf(stderr, Err);
+		fprintf(stderr, "%s", Err);
 		return AL_FALSE;
 	}
 	return AL_TRUE;

@@ -37,7 +37,7 @@
 
 
 // название кнопок
-char * vw_VirtualCodeNameEN(int Num)
+const char * vw_VirtualCodeNameEN(int Num)
 {
 	switch (Num)
 	{

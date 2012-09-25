@@ -37,7 +37,7 @@
 
 
 #ifdef EN
-char * MouseCodeName(char Num)
+const char * MouseCodeName(char Num)
 {
 	switch (Num)
 	{
@@ -56,7 +56,7 @@ char * MouseCodeName(char Num)
 }
 #endif
 #ifdef DE
-char * MouseCodeName(char Num)
+const char * MouseCodeName(char Num)
 {
 	switch (Num)
 	{
@@ -75,7 +75,7 @@ char * MouseCodeName(char Num)
 }
 #endif
 #ifdef RU
-char * MouseCodeName(char Num)
+const char * MouseCodeName(char Num)
 {
 	switch (Num)
 	{
@@ -97,7 +97,7 @@ char * MouseCodeName(char Num)
 
 
 char JoystickCodeNameText[12];/*"JoystickXXX"*/
-char * JoystickCodeName(char Num)
+const char * JoystickCodeName(char Num)
 {
 	// кнопки еще нет
 	if (Num == -1) return "?";

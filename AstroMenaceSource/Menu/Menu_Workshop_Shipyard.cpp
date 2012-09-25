@@ -67,7 +67,7 @@ int AvailableShipsToBuy = 22;
 //------------------------------------------------------------------------------------
 // название корабля
 //------------------------------------------------------------------------------------
-char *GetWorkshopShipName(int Num)
+const char *GetWorkshopShipName(int Num)
 {
 	switch (Num)
 	{
@@ -104,7 +104,7 @@ char *GetWorkshopShipName(int Num)
 //------------------------------------------------------------------------------------
 // тип корабля
 //------------------------------------------------------------------------------------
-char *GetShipGroupTitle(int Num)
+const char *GetShipGroupTitle(int Num)
 {
 	switch (Num)
 	{

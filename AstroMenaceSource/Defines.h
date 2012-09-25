@@ -6,10 +6,10 @@
 
 	File name: Defines.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -57,11 +57,11 @@
 
 
 
-#define GAME_VERSION_ID	 	1.2f
-#define GAME_VERSION_BUILD 	70914
-#define GAME_VERSION_BUILD_Y 	2007
+#define GAME_VERSION_ID	 	1.3f
+#define GAME_VERSION_BUILD 	120925
+#define GAME_VERSION_BUILD_Y 	2012
 #define GAME_VERSION_BUILD_M 	9
-#define GAME_VERSION_BUILD_D 	14
+#define GAME_VERSION_BUILD_D 	25
 
 
 extern char GAME_VERSION[100];

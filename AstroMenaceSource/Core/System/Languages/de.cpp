@@ -36,7 +36,7 @@
 
 
 char Umlauts[3];
-char * vw_VirtualCodeNameDE(int Num)
+const char * vw_VirtualCodeNameDE(int Num)
 {
 	Umlauts[0] = 0;
 	Umlauts[1] = 0;

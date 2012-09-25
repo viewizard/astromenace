@@ -131,7 +131,7 @@ float		InfoObjectRange = 0;
 
 
 
-char *InfoGroupNames[10] =
+const char *InfoGroupNames[10] =
 {"4_Earth_Spaceships",
 "4_Weapons",
 "4_Space_Mines",

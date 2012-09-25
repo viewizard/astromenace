@@ -236,7 +236,7 @@ Sound2dData MenuSoundNames[MenuSoundQuantity] =
 // кол-во музыкальных тем
 const int	MusicQuantity = 6;
 // перечень имен файлов музыки
-char *GameMusicNames[MusicQuantity] =
+const char *GameMusicNames[MusicQuantity] =
 {
 "DATA/MUSIC/menu.ogg",			// музыка в меню
 "DATA/MUSIC/intro.ogg",			// музыка в заставках перед миссиями
@@ -305,8 +305,8 @@ void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime)
 	// в начале проигрывания, а потом вызывать луп часть
 
 	bool MusicLoop = true;
-	char *LoopFileName = 0;
-	char *CurrentPlayingMusicName = GameMusicNames[CurrentPlayingMusic];
+	const char *LoopFileName = 0;
+	const char *CurrentPlayingMusicName = GameMusicNames[CurrentPlayingMusic];
 	float MusicCorrection = 1.0f;
 
 

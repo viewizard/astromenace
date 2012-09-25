@@ -42,7 +42,7 @@
 
 // прорисовка хинтов во время загрузки
 bool NeedShowHint = false;
-char *LoadingHints[6] =
+const char *LoadingHints[6] =
 {"9_16Line1",
 "9_16Line2",
 "9_16Line3",

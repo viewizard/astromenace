@@ -35,7 +35,7 @@
 
 // название кнопок
 char RusChar[3];
-char * vw_VirtualCodeNameRU(int Num)
+const char * vw_VirtualCodeNameRU(int Num)
 {
 	RusChar[0] = 0;
 	RusChar[1] = 0;
