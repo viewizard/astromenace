@@ -116,7 +116,7 @@ int vw_DATAtoRLE(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS);
 Описание структуры VFS v1.3
 
   4б - 'VFS_'
-  4б - 'v1.1'
+  4б - 'v1.3'
   4б - смещение таблицы файлов
   4б - длина таблицы файлов
   ?б - данные(тела файлов один за другим)

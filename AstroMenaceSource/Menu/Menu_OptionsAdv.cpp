@@ -41,30 +41,30 @@ int Options_MultiSampleType;
 
 extern CSpaceStars *psSpaceStatic;
 
-char *ButtonQuality[3] =
+const char *ButtonQuality[3] =
 {"3_High",
 "3_Medium",
 "3_Low"};
 
 
-char *ButtonTile[4] =
+const char *ButtonTile[4] =
 {"3_Disabled",
 "3_1_Layer",
 "3_2_Layers",
 "3_3_Layers"};
 
 
-char *ButtonCompression[2] =
+const char *ButtonCompression[2] =
 {"1_Off",
 "1_On"};
 
 
-char *ButtonGLSL[2] =
+const char *ButtonGLSL[2] =
 {"1_Off",
 "1_On"};
 
 
-char *ButtonPointLights[7] =
+const char *ButtonPointLights[7] =
 {"3_Disabled",
 "3_1_Light",
 "3_2_Lights",

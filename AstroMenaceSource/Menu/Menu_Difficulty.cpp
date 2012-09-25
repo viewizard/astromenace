@@ -34,12 +34,12 @@
 #include "../Game.h"
 
 
-char *OnOff[2] =
+const char *OnOff[2] =
 {"1_On",
 "1_Off"};
 
 
-char *ArcadeSim[2] =
+const char *ArcadeSim[2] =
 {"1_Sim",
 "1_Arcade"};
 

@@ -108,7 +108,7 @@ int GetPrevSystemStockGroup()
 
 
 
-char *GetSystemName(int Num)
+const char *GetSystemName(int Num)
 {
 	switch (Num)
 	{

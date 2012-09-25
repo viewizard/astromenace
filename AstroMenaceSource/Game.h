@@ -338,8 +338,8 @@ extern int ButQuant;
 extern float But[10];
 
 void ConfControlMenu();
-char * MouseCodeName(char Num);
-char * JoystickCodeName(char Num);
+const char * MouseCodeName(char Num);
+const char * JoystickCodeName(char Num);
 void CheckMouseKeybJState();
 
 
@@ -473,15 +473,15 @@ void MissionsListInit();
 // Menu_Workshop.cpp
 //------------------------------------------------------------------------------------
 extern int CurrentWorkshop;
-extern int	NewWeaponControlType;
-extern int	NewWeaponControlTypeData;
+extern int NewWeaponControlType;
+extern int NewWeaponControlTypeData;
 extern int VoiceNeedMoreEnergy;
 extern int VoiceAmmoOut;
 
 void WorkshopMenu();
 void WorkshopCreate();
 void WorkshopDestroyData();
-char *GetWeaponIconName(int Num);
+const char *GetWeaponIconName(int Num);
 
 
 

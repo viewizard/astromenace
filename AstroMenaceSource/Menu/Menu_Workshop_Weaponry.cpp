@@ -183,7 +183,7 @@ int GetWeaponReloadCost(int Num, int Ammo, int AmmoStart)
 
 
 
-char *GetWeaponName(int Num)
+const char *GetWeaponName(int Num)
 {
 	switch (Num)
 	{
@@ -222,7 +222,7 @@ char *GetWeaponName(int Num)
 
 
 
-char *GetWeaponIconName(int Num)
+const char *GetWeaponIconName(int Num)
 {
 	switch (Num)
 	{
@@ -248,7 +248,7 @@ char *GetWeaponIconName(int Num)
 	}
 	return 0;
 }
-char *GetSlotIconName(int Num)
+const char *GetSlotIconName(int Num)
 {
 	switch (Num)
 	{
@@ -629,7 +629,7 @@ void ShipSlotSetupWeapon(int Slot)
 
 		Ypos += 40;
 
-		char *TextTmp = "?";
+		const char *TextTmp = "?";
 		// установка надписи на кнопке
 		if (NeedCheck != 100)
 		{

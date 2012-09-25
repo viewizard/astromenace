@@ -37,10 +37,10 @@
 
 
 // проверка расширения файла (нужен для детекта wav-ogg, tga-jpg...)
-bool 	vw_TestFileExtension(const char *name, char *extension);
+bool 	vw_TestFileExtension(const char *name, const char *extension);
 
 // открываем браузер
-bool	vw_OpenBrouser(char *url);
+bool	vw_OpenBrouser(const char *url);
 
 
 
@@ -59,9 +59,9 @@ float 	vw_GetTimeThreadSpeed(int TimeThread=0);
 bool	vw_GetKeys(int Num);
 void	vw_SetKeys(int Num, bool NewKeyStatus);
 int 	GetMaxKeys();
-char* 	vw_VirtualCodeName(int KeyboardLayout, int Num);
+const char* 	vw_VirtualCodeName(int KeyboardLayout, int Num);
 int 	vw_VirtualCodeChar(int KeyboardLayout, int Num);
-char* 	vw_KeyboardCodeName(int Num);
+const char* 	vw_KeyboardCodeName(int Num);
 int 	vw_KeyboardNameCode(const char * Name);
 
 

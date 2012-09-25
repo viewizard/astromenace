@@ -40,7 +40,7 @@
 //------------------------------------------------------------------------------------
 // проверка расширения файла
 //------------------------------------------------------------------------------------
-bool vw_TestFileExtension(const char *name, char *extension)
+bool vw_TestFileExtension(const char *name, const char *extension)
 {
 	if(name==0||extension==0) return false;
 	size_t LengthName=strlen(name), LengthString=strlen(extension);
@@ -309,7 +309,7 @@ void free_browsers(char **browsers) {
 
 
 // открываем браузер
-bool vw_OpenBrouser(char *url)
+bool vw_OpenBrouser(const char *url)
 {
 #ifdef WIN32
 

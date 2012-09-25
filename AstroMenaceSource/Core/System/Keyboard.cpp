@@ -67,12 +67,12 @@ int GetMaxKeys()
 
 
 // название кнопок
-char * vw_VirtualCodeNameEN(int Num);
-char * vw_VirtualCodeNameDE(int Num);
-char * vw_VirtualCodeNameRU(int Num);
+const char * vw_VirtualCodeNameEN(int Num);
+const char * vw_VirtualCodeNameDE(int Num);
+const char * vw_VirtualCodeNameRU(int Num);
 
 
-char * vw_VirtualCodeName(int KeyboardLayout, int Num)
+const char * vw_VirtualCodeName(int KeyboardLayout, int Num)
 {
 	switch (KeyboardLayout)
 	{
@@ -332,7 +332,7 @@ sKeyboardCodeName KeyboardCodeNameData[KeyboardCodeNameDataCount] =
 
 
 // название кнопок
-char * vw_KeyboardCodeName(int Num)
+const char * vw_KeyboardCodeName(int Num)
 {
 	for (int i=0; i<KeyboardCodeNameDataCount; i++)
 		if (KeyboardCodeNameData[i].Code == Num) return KeyboardCodeNameData[i].Name;

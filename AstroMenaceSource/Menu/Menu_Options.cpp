@@ -43,20 +43,20 @@ int Options_TexturesQuality;
 int Options_iAspectRatioWidth;
 
 
-char *ButtonFullScreen[2] =
+const char *ButtonFullScreen[2] =
 {"1_On",
 "1_Off"};
 
 
-char *ButtonScreenModeTitle[2] =
+const char *ButtonScreenModeTitle[2] =
 {"3_Screen_Mode",
 "3_Window_Size"};
 
-char *ButtonTextFiltr[2] =
+const char *ButtonTextFiltr[2] =
 {"3_Bilinear",
 "3_Trilinear"};
 
-char *ButtonTexturesQuality[3] =
+const char *ButtonTexturesQuality[3] =
 {"3_Low",
 "3_Medium",
 "3_High"};
