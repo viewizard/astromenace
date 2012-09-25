@@ -204,6 +204,35 @@ void OptionsMenu()
 	DrawFont(X1, Y1, 0, 0, 0, MenuContentTransp, GetText(ButtonScreenModeTitle[CurrentPos]));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, false))
 	{
+		CurrentListNum--;
+
+		// ставим правильный
+		bool check_next = true;
+		while (check_next)
+		{
+			// вышли за предел
+			if (CurrentListNum < 0) CurrentListNum = VideoModesNum-1;
+
+			if ((VideoModes[CurrentListNum].BPP > 0 && Options_BPP > 0) ||
+				(VideoModes[CurrentListNum].BPP == 0 && Options_BPP == 0))
+			{
+					check_next = false;
+			}
+			else
+			{
+				CurrentListNum--;
+			}
+		}
+		Options_Width = VideoModes[CurrentListNum].W;
+		Options_Height = VideoModes[CurrentListNum].H;
+		Options_BPP = VideoModes[CurrentListNum].BPP;
+		if ((Options_Width*1.0f)/(Options_Height*1.0f) < 1.4f)
+			Options_iAspectRatioWidth = 1024;
+		else
+			Options_iAspectRatioWidth = 1228;
+	}
+	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, false))
+	{
 		CurrentListNum++;
 
 		// ставим правильный
@@ -232,41 +261,16 @@ void OptionsMenu()
 		else
 			Options_iAspectRatioWidth = 1228;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, false))
-	{
-		CurrentListNum--;
 
-		// ставим правильный
-		bool check_next = true;
-		while (check_next)
-		{
-			// вышли за предел
-			if (CurrentListNum < 0) CurrentListNum = VideoModesNum-1;
+	char VideoModeTitle[32];
+	if (VideoModes[CurrentListNum].BPP != 0)
+		sprintf(VideoModeTitle, "%ix%i %ibit", VideoModes[CurrentListNum].W, VideoModes[CurrentListNum].H, VideoModes[CurrentListNum].BPP);
+	else
+		sprintf(VideoModeTitle, "%ix%i", VideoModes[CurrentListNum].W, VideoModes[CurrentListNum].H);
 
-			if ((VideoModes[CurrentListNum].BPP > 0 && Options_BPP > 0) ||
-				(VideoModes[CurrentListNum].BPP == 0 && Options_BPP == 0))
-			{
-					check_next = false;
-			}
-			else
-			{
-				CurrentListNum--;
-			}
-		}
-		Options_Width = VideoModes[CurrentListNum].W;
-		Options_Height = VideoModes[CurrentListNum].H;
-		Options_BPP = VideoModes[CurrentListNum].BPP;
-		if ((Options_Width*1.0f)/(Options_Height*1.0f) < 1.4f)
-			Options_iAspectRatioWidth = 1024;
-		else
-			Options_iAspectRatioWidth = 1228;
-	}
-	int Size = FontSize(VideoModes[CurrentListNum].Title);
+	int Size = FontSize(VideoModeTitle);
 	int SizeI = (170-Size)/2;
-	DrawFont(X1+438+SizeI, Y1, 0, 0, 0, MenuContentTransp, VideoModes[CurrentListNum].Title);
-
-
-
+	DrawFont(X1+438+SizeI, Y1, 0, 0, 0, MenuContentTransp, VideoModeTitle);
 
 
 

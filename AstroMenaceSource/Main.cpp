@@ -65,7 +65,7 @@ sVideoModes CurrentVideoMode;
 #ifdef WIN32
 SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = 0;
 #endif // WIN32
-// статус загрузки, должно быть ОбщееКол-воМиссий+1(для меню)
+// статус загрузки, должно быть ОбщееКол-во Миссий+1(для меню)
 bool LoadedTypes[1000];
 
 
@@ -353,11 +353,6 @@ int main( int argc, char **argv )
 	bool NeedCheckAA = true;
 	// флаг нужно ли сбрасывать настройки игры при старте
 	bool NeedSafeMode = false;
-	// флаг проверки принудительной установки разрешения
-	sVideoModes ForceResolution;
-	ForceResolution.W = -1;
-	ForceResolution.H = -1;
-	ForceResolution.BPP = -1;
 
 	for (int i=1; i<argc; i++)
 	{
@@ -370,27 +365,6 @@ int main( int argc, char **argv )
 			printf("--mouse - launch the game without system cursor hiding.\n");
 			printf("--noAA - disable AA antialiasing test at the game start.\n");
 			printf("--mode=N - set game windows mode and resolution (forced)\n");
-			printf("  where N is number from 0 till 17:\n");
-			printf("    Fullscreen modes\n");
-			printf("    0: 640x480x16\n");
-			printf("    1: 640x480x32\n");
-			printf("    2: 800x600x16\n");
-			printf("    3: 800x600x32\n");
-			printf("    4: 1024x768x16\n");
-			printf("    5: 1024x768x32\n");
-			printf("    6: 1280x1024x16\n");
-			printf("    7: 1280x1024x32\n");
-			printf("    8: 1400x1050x16\n");
-			printf("    9: 1400x1050x32\n");
-			printf("    10: 1600x1200x16\n");
-			printf("    11: 1600x1200x32\n");
-			printf("    Windowed modes\n");
-			printf("    12: 640x480\n");
-			printf("    13: 800x600\n");
-			printf("    14: 1024x768\n");
-			printf("    15: 1280x1024\n");
-			printf("    16: 1400x1050\n");
-			printf("    17: 1600x1200\n");
 			printf("--safe-mode - reset all settings not connected to Pilots Profiles at the game launch.\n");
 			printf("--help - info about all game launch options.\n");
 
@@ -417,38 +391,6 @@ int main( int argc, char **argv )
 			NeedSafeMode = true;
 		}
 
-		// проверка ключа "--mode"
-		if (!strncmp(argv[i], "--mode", strlen("--mode")))
-		{
-			sVideoModes WindowsMode[18] =
-			{
-				{640, 480, 16, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{640, 480, 32, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{800, 600, 16, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{800, 600, 32, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{1024, 768, 16, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{1024, 768, 32, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{1280, 1024, 16, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{1280, 1024, 32, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{1400, 1050, 16, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{1400, 1050, 32, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{1600, 1200, 16, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{1600, 1200, 32, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{640, 480, 0, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{800, 600, 0, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{1024, 768, 0, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{1280, 1024, 0, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{1400, 1050, 0, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-				{1600, 1200, 0, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-			};
-
-			char* s = strrchr(argv[i],'=');
-			int Mode;
-			Mode = atoi(s+1);// берем со 2-го значения, т.к. первое это символ "="
-			ForceResolution.W = WindowsMode[Mode].W;
-			ForceResolution.H = WindowsMode[Mode].H;
-			ForceResolution.BPP = WindowsMode[Mode].BPP;
-		}
 	}
 
 
@@ -539,20 +481,20 @@ int main( int argc, char **argv )
 ReCreate:
 
 
+	// для TwinView и Xinerama выбираем нулевой всегда (не работаем на 2-х экранах)
+	setenv("SDL_VIDEO_FULLSCREEN_DISPLAY","0",1);
+
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// иним SDL
 	// это нужно сделать сразу, чтобы правильно поставить разрешение
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
-	if ( SDL_WasInit(SDL_INIT_VIDEO) == 0 )
+	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	if (SDL_Init(SDL_INIT_VIDEO) == -1)
 	{
 		fprintf(stderr, "Couldn't init SDL: %s\n", SDL_GetError());
 		ReleaseGameOneCopy();
 		return 1;
 	}
-
-
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -582,130 +524,133 @@ ReCreate:
 
 
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// список поддерживаемых разрешений, если нужно
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ForceResolution.W != -1 && ForceResolution.H != -1)
+	// от SDL внятно получить перечень разрешений под Xinerama-TwinView невозможно в версии 1.2,
+	// детектим и составляем перечень всех возможных разрешений самостоятельно
+	int AllSupportedModesCount = 65;
+	sVideoModes AllSupportedModes[65] =
 	{
-		if (VideoModes == 0)
+		{640, 480, -1},
+		{768, 480, -1},
+		{800, 480, -1},
+		{800, 600, -1},
+		{832, 624, -1},
+		{854, 480, -1},
+		{960, 540, -1},
+		{960, 544, -1},
+		{960, 640, -1},
+		{960, 720, -1},
+		{1024, 576, -1},
+		{1024, 600, -1},
+		{1024, 640, -1},
+		{1024, 768, -1},
+		{1024, 800, -1},
+		{1120, 832, -1},
+		{1152, 720, -1},
+		{1152, 768, -1},
+		{1152, 864, -1},
+		{1152, 900, -1},
+		{1280, 720, -1},
+		{1280, 768, -1},
+		{1280, 800, -1},
+		{1280, 854, -1},
+		{1280, 960, -1},
+		{1280, 1024, -1},
+		{1366, 768, -1},
+		{1400, 1050, -1},
+		{1440, 900, -1},
+		{1440, 960, -1},
+		{1440, 1024, -1},
+		{1440, 1080, -1},
+		{1600, 900, -1},
+		{1600, 1024, -1},
+		{1600, 1200, -1},
+		{1680, 1050, -1},
+		{1792, 1344, -1},
+		{1856, 1392, -1},
+		{1800, 1440, -1},
+		{1920, 1080, -1},
+		{1920, 1200, -1},
+		{1920, 1400, -1},
+		{1920, 1440, -1},
+		{2048, 1280, -1},
+		{2048, 1536, -1},
+		{2304, 1440, -1},
+		{2304, 1728, -1},
+		{2560, 1440, -1},
+		{2560, 1600, -1},
+		{2560, 1920, -1},
+		{2560, 2048, -1},
+		{2800, 2100, -1},
+		{2880, 1800, -1},
+		{3200, 2048, -1},
+		{3200, 2400, -1},
+		{3840, 2160, -1},
+		{3840, 2400, -1},
+		{4096, 2304, -1},
+		{4096, 3072, -1},
+		{5120, 3200, -1},
+		{5120, 4096, -1},
+		{6400, 4096, -1},
+		{6400, 4800, -1},
+		{7680, 4320, -1},
+		{7680, 4800, -1},
+	};
+
+	// если списка еще нет - создаем его
+	if (VideoModes == 0)
+	{
+		VideoModesNum = 0;
+
+		for(int i=0; i<AllSupportedModesCount; i++)
+		if ((AllSupportedModes[i].W <= CurrentVideoMode.W) & (AllSupportedModes[i].H <= CurrentVideoMode.H))
 		{
-			// т.к. у нас 3 вида режимов (0-оконный, 16 и 24/32 полноэкранный)
-			VideoModesNum = 3;
-
-			VideoModes = new sVideoModes[VideoModesNum];
-
-			int k=0;
-
-			// 16 и 32 битный
-			VideoModes[k].W = ForceResolution.W;
-			VideoModes[k].H = ForceResolution.H;
-			VideoModes[k].BPP = 32;
-			sprintf(VideoModes[k].Title, "%ix%i %ibit", VideoModes[k].W, VideoModes[k].H, VideoModes[k].BPP);
-			k++;
-
-			VideoModes[k].W = ForceResolution.W;
-			VideoModes[k].H = ForceResolution.H;
-			VideoModes[k].BPP = 16;
-			sprintf(VideoModes[k].Title, "%ix%i %ibit", VideoModes[k].W, VideoModes[k].H, VideoModes[k].BPP);
-			k++;
-
-			// оконный режим
-			VideoModes[k].W = ForceResolution.W;
-			VideoModes[k].H = ForceResolution.H;
-			VideoModes[k].BPP = 0;
-			sprintf(VideoModes[k].Title, "%ix%i", VideoModes[k].W, VideoModes[k].H);
-			k++;
+			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 16, SDL_FULLSCREEN | SDL_HWSURFACE) != 0) VideoModesNum++;
+			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 32, SDL_FULLSCREEN | SDL_HWSURFACE) != 0) VideoModesNum++;
+			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, CurrentVideoMode.BPP, SDL_ANYFORMAT | SDL_HWSURFACE) != 0) VideoModesNum++;
 		}
-	}
-	else
-	{
-		if (VideoModes == 0)
+
+
+		VideoModes = new sVideoModes[VideoModesNum];
+
+		int k=0;
+		for(int i=0; i<AllSupportedModesCount; i++)
+		if ((AllSupportedModes[i].W <= CurrentVideoMode.W) & (AllSupportedModes[i].H <= CurrentVideoMode.H))
 		{
-			SDL_Rect **modes = 0;
-			modes=SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
-
-			if(modes == (SDL_Rect **)0 || modes == 0)
+			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 16, SDL_FULLSCREEN | SDL_HWSURFACE) != 0)
 			{
-				// если список получить не можем, берем только текущее разрешение
-
-				// т.к. у нас 3 вида режимов (0-оконный, 16 и 24/32 полноэкранный)
-				VideoModesNum = 3;
-
-				VideoModes = new sVideoModes[VideoModesNum];
-
-				int k=0;
-
-				// 16 и 32 битный
-				VideoModes[k].W = CurrentVideoMode.W;
-				VideoModes[k].H = CurrentVideoMode.H;
-				VideoModes[k].BPP = 32;
-				sprintf(VideoModes[k].Title, "%ix%i %ibit", VideoModes[k].W, VideoModes[k].H, VideoModes[k].BPP);
-				k++;
-
-				VideoModes[k].W = CurrentVideoMode.W;
-				VideoModes[k].H = CurrentVideoMode.H;
+				VideoModes[k].W = AllSupportedModes[i].W;
+				VideoModes[k].H = AllSupportedModes[i].H;
 				VideoModes[k].BPP = 16;
-				sprintf(VideoModes[k].Title, "%ix%i %ibit", VideoModes[k].W, VideoModes[k].H, VideoModes[k].BPP);
 				k++;
+			}
 
-				// оконный режим
-				VideoModes[k].W = CurrentVideoMode.W;
-				VideoModes[k].H = CurrentVideoMode.H;
+			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 32, SDL_FULLSCREEN | SDL_HWSURFACE) != 0)
+			{
+				VideoModes[k].W = AllSupportedModes[i].W;
+				VideoModes[k].H = AllSupportedModes[i].H;
+				VideoModes[k].BPP = 32;
+				k++;
+			}
+
+			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, CurrentVideoMode.BPP, SDL_ANYFORMAT | SDL_HWSURFACE) != 0)
+			{
+				VideoModes[k].W = AllSupportedModes[i].W;
+				VideoModes[k].H = AllSupportedModes[i].H;
 				VideoModes[k].BPP = 0;
-				sprintf(VideoModes[k].Title, "%ix%i", VideoModes[k].W, VideoModes[k].H);
 				k++;
 			}
-			else
-			{
-				VideoModesNum = 0;
-				for(int i=0; modes[i]; ++i)
-					if (modes[i]->w >=640 && modes[i]->h >= 480) VideoModesNum ++;
-
-				// т.к. у нас 3 вида режимов (0-оконный, 16 и 24/32 полноэкранный)
-				VideoModesNum = VideoModesNum*3;
-
-				VideoModes = new sVideoModes[VideoModesNum];
-
-				int k=0;
-
-				// 16 и 32 битный
-				for(int i=0; modes[i]; ++i)
-				if (modes[i]->w >=640 && modes[i]->h >= 480)
-				{
-					VideoModes[k].W = modes[i]->w;
-					VideoModes[k].H = modes[i]->h;
-					VideoModes[k].BPP = 32;
-					sprintf(VideoModes[k].Title, "%ix%i %ibit", VideoModes[k].W, VideoModes[k].H, VideoModes[k].BPP);
-					k++;
-
-					VideoModes[k].W = modes[i]->w;
-					VideoModes[k].H = modes[i]->h;
-					VideoModes[k].BPP = 16;
-					sprintf(VideoModes[k].Title, "%ix%i %ibit", VideoModes[k].W, VideoModes[k].H, VideoModes[k].BPP);
-					k++;
-				}
-				// оконный режим
-				for(int i=0; modes[i]; ++i)
-				if (modes[i]->w >=640 && modes[i]->h >= 480)
-				{
-					VideoModes[k].W = modes[i]->w;
-					VideoModes[k].H = modes[i]->h;
-					VideoModes[k].BPP = 0;
-					sprintf(VideoModes[k].Title, "%ix%i", VideoModes[k].W, VideoModes[k].H);
-					k++;
-				}
-			}
-
-
-			// выводим список поддерживаемых разрешений
-			printf("\n");
-			printf("Supported resolutions list:\n");
-			for(int i=0; i<VideoModesNum; i++)
-			{
-				 printf("%s \n", VideoModes[i].Title);
-			}
-			printf("\n");
 		}
+
+
+		// выводим список поддерживаемых разрешений
+		printf("\n");
+		printf("Supported resolutions list:\n");
+		for(int i=0; i<VideoModesNum; i++)
+		{
+			 printf("%ix%i %ibit \n", VideoModes[i].W, VideoModes[i].H, VideoModes[i].BPP);
+		}
+		printf("\n");
+
 	}
 
 
@@ -717,14 +662,13 @@ ReCreate:
 	// если первый запуск (нет файла настроек), тянем переменную
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	bool FirstStart = LoadXMLSetupFile(NeedSafeMode);
-	// ставим принудительно разрешение, если нужно
-	if (ForceResolution.W != -1 && ForceResolution.H != -1)
+	// если загруженные параметры, больше чем максимальные, ставим максимальные (если Xinerama)
+	if ((VideoModes[VideoModesNum-1].W <= Setup.Width) & (VideoModes[VideoModesNum-1].H <= Setup.Height))
 	{
-		Setup.Width = ForceResolution.W;
-		Setup.Height = ForceResolution.H;
-		Setup.BPP = ForceResolution.BPP;
+		Setup.Width = VideoModes[VideoModesNum-1].W;
+		Setup.Height = VideoModes[VideoModesNum-1].H;
+		Setup.BPP = CurrentVideoMode.BPP;
 	}
-
 
 
 
@@ -733,7 +677,8 @@ ReCreate:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверяем и иним джойстик
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if(SDL_NumJoysticks()>0)
+	if (SDL_InitSubSystem(SDL_INIT_JOYSTICK) == 0)
+	if (SDL_NumJoysticks()>0)
 	{
 		printf("Found Joystick(s):\n");
 		for (int i=0; i<SDL_NumJoysticks(); i++)
