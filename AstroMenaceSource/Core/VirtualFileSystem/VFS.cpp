@@ -5,10 +5,10 @@
 
 	File name: VFS.cpp
 
-	Copyright (c) 2001-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2001-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -53,8 +53,9 @@ eVFS *EndVFS = 0;
 // Список файлов, доступных в подключенных (открытых) VFS
 struct eVFS_Entry
 {
+	BOOL	Link;		// флаг что это не реальная запись а линк на существующую в VFS
 	DWORD	NameLen;	// Кол-во байт в имени...
-	char	*Name;		// Имя записи (имя файла)
+	char	*Name;		// Имя записи (имя файла) (может быть "линком")
 	int		Offset;		// Смещение начала файла относительно начала файловой системы
 	int		Length;		// Длина файла в системе
 	int		RealLength;	// Длина файла после распаковки
@@ -261,6 +262,7 @@ int vw_OpenVFS(const char *Name)
 		Temp->Name[Temp->NameLen] = 0;// последний символ всегда ноль - конец строки
 		SDL_RWread(TempVFS->File, Temp->Name, Temp->NameLen, 1);
 		VFSCodeXOR(Temp->Name, Temp->NameLen);
+		Temp->Link = false;
 		Temp->Offset = SDL_ReadLE32(TempVFS->File);
 		Temp->Length = SDL_ReadLE32(TempVFS->File);
 		Temp->RealLength = SDL_ReadLE32(TempVFS->File);
@@ -316,6 +318,7 @@ void vw_CloseVFS(void)
 		if (Tmp->Prev != 0) Tmp->Prev->Next = Tmp->Next;
 			else if (Tmp->Next != 0) Tmp->Next->Prev = 0;
 
+		delete Tmp;
 		Tmp = Tmp1;
 	}
 
@@ -406,8 +409,170 @@ void vw_ShutdownVFS(void)
 
 
 
+//------------------------------------------------------------------------------------
+// создаем "симлинк" внутри VFS
+//------------------------------------------------------------------------------------
+bool vw_CreateEntryLinkVFS(const char *FileName, const char *FileNameLink)
+{
+	// проверяем, если уже есть такой файл или линк - выходим
+	eVFS_Entry *Tmp = StarVFSArray;
+	while (Tmp != 0)
+	{
+		eVFS_Entry *Tmp1 = Tmp->Next;
+		if (vw_strcmp(Tmp->Name, FileNameLink) == 0)
+		{
+			// нашли, такой файл или симлинк уже есть в системе
+			printf("VFS link creation error, file or link already present: %s\n", FileNameLink);
+			return false;
+		}
+		Tmp = Tmp1;
+	}
 
 
+	// находим запись с соотв. RealName и меняем Name
+	eVFS_Entry *OutputEntry = 0;
+	Tmp = StarVFSArray;
+	while (Tmp != 0 && OutputEntry == 0)
+	{
+		eVFS_Entry *Tmp1 = Tmp->Next;
+		if (vw_strcmp(Tmp->Name, FileName) == 0)
+		{
+			OutputEntry = Tmp;
+
+			// добавляем новую eVFS_Entry запись в конец списка
+			eVFS_Entry *NewTemp = 0;
+			NewTemp = new eVFS_Entry;
+
+			NewTemp->Link = true;
+
+			NewTemp->NameLen = strlen(FileNameLink)+1;
+			NewTemp->Name = new char[NewTemp->NameLen];
+			strcpy(NewTemp->Name, FileNameLink);
+
+			NewTemp->Offset = OutputEntry->Offset;
+			NewTemp->Length = OutputEntry->Length;
+			NewTemp->RealLength = OutputEntry->RealLength;
+			NewTemp->Parent = OutputEntry->Parent;
+
+			NewTemp->ArhKeyLen = OutputEntry->ArhKeyLen;
+			NewTemp->ArhKey = new char[NewTemp->ArhKeyLen];
+			strcpy(NewTemp->ArhKey, OutputEntry->ArhKey);
+
+			// добавляем запись в конец списка
+			NewTemp->Prev = EndVFSArray;
+			NewTemp->Next = 0;
+			EndVFSArray->Next = NewTemp;
+			EndVFSArray = NewTemp;
+
+
+			printf("VFS link created: %s > %s\n", FileName, FileNameLink);
+			return true;
+		}
+		Tmp = Tmp1;
+	}
+
+
+	// не нашли ничего
+	printf("VFS link creation error, file not found: %s\n", FileName);
+	return false;
+}
+
+
+
+
+//------------------------------------------------------------------------------------
+// удаляем "симлинк" внутри VFS
+//------------------------------------------------------------------------------------
+bool vw_DeleteEntryLinkVFS(const char *FileNameLink)
+{
+
+	// проверяем, если уже есть такой файл или линк - выходим
+	eVFS_Entry *Tmp = StarVFSArray;
+	while (Tmp != 0)
+	{
+		eVFS_Entry *Tmp1 = Tmp->Next;
+		if (vw_strcmp(Tmp->Name, FileNameLink) == 0)
+		{
+			if (Tmp->Link)
+			{
+
+				if (Tmp->Name != 0) {delete [] Tmp->Name; Tmp->Name = 0;}
+				if (Tmp->ArhKey != 0) {delete [] Tmp->ArhKey; Tmp->ArhKey = 0;}
+
+				// переустанавливаем указатели...
+				if (StarVFSArray == Tmp) StarVFSArray = Tmp->Next;
+				if (EndVFSArray == Tmp) EndVFSArray = Tmp->Prev;
+
+				if (Tmp->Next != 0) Tmp->Next->Prev = Tmp->Prev;
+					else if (Tmp->Prev != 0) Tmp->Prev->Next = 0;
+				if (Tmp->Prev != 0) Tmp->Prev->Next = Tmp->Next;
+					else if (Tmp->Next != 0) Tmp->Next->Prev = 0;
+
+				delete Tmp;
+
+				printf("VFS link deleted: %s\n", FileNameLink);
+				return true;
+
+			}
+			else
+			{
+				printf("VFS link deletion error, can not delete file: %s\n", FileNameLink);
+				return false;
+			}
+		}
+
+
+		Tmp = Tmp1;
+	}
+
+
+	// не нашли ничего
+	printf("VFS link deletion error, link not found: %s\n", FileNameLink);
+	return false;
+}
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// удаляем все "симлинки" из VFS
+//------------------------------------------------------------------------------------
+bool vw_DeleteAllLinksVFS()
+{
+
+	// проверяем, если уже есть такой файл или линк - выходим
+	eVFS_Entry *Tmp = StarVFSArray;
+	while (Tmp != 0)
+	{
+		eVFS_Entry *Tmp1 = Tmp->Next;
+
+		if (Tmp->Link)
+		{
+			if (Tmp->Name != 0) printf("VFS link deleted: %s\n", Tmp->Name);
+
+			if (Tmp->Name != 0) {delete [] Tmp->Name; Tmp->Name = 0;}
+			if (Tmp->ArhKey != 0) {delete [] Tmp->ArhKey; Tmp->ArhKey = 0;}
+
+			// переустанавливаем указатели...
+			if (StarVFSArray == Tmp) StarVFSArray = Tmp->Next;
+			if (EndVFSArray == Tmp) EndVFSArray = Tmp->Prev;
+
+			if (Tmp->Next != 0) Tmp->Next->Prev = Tmp->Prev;
+				else if (Tmp->Prev != 0) Tmp->Prev->Next = 0;
+			if (Tmp->Prev != 0) Tmp->Prev->Next = Tmp->Next;
+				else if (Tmp->Next != 0) Tmp->Next->Prev = 0;
+
+			delete Tmp;
+		}
+
+		Tmp = Tmp1;
+	}
+
+
+	return true;
+}
 
 
 
