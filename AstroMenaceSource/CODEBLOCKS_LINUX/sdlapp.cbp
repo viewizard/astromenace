@@ -144,6 +144,7 @@
 		<Unit filename="../Menu/Menu_Credits.cpp" />
 		<Unit filename="../Menu/Menu_Difficulty.cpp" />
 		<Unit filename="../Menu/Menu_Information.cpp" />
+		<Unit filename="../Menu/Menu_Interface.cpp" />
 		<Unit filename="../Menu/Menu_Mission.cpp" />
 		<Unit filename="../Menu/Menu_Options.cpp" />
 		<Unit filename="../Menu/Menu_OptionsAdv.cpp" />
