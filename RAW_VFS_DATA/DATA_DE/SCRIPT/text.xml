@@ -1,0 +1,936 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AstroMenaceText name="AstroMenace text">
+
+	
+<!-- Main Menu buttons, Dialogs buttons, Dialogs titles -->
+<itemlist id="1">
+
+<item id="1_START_GAME">SPIEL STARTEN</item>
+<item id="1_TOP_SCORES">BESTENLISTE</item>
+<item id="1_OPTIONS">OPTIONEN</item>
+<item id="1_INFORMATION">INFORMATION</item>
+<item id="1_CREDITS">DANKSAGUNGEN</item>
+<item id="1_QUIT">ENDE</item>  
+<item id="1_YES">JA</item>
+<item id="1_NO">NEIN</item>
+<item id="1_ERROR">FEHLER</item>
+<item id="1_CLOSE">SCHLIESSEN</item>
+<item id="1_DELETE">LÖSCHEN</item>
+<item id="1_REPAIR">REPARIEREN</item>
+<item id="1_OK">OK</item>
+<item id="1_On">An</item>
+<item id="1_Off">Aus</item>
+<item id="1_Decrease">Verringern</item>
+<item id="1_Increase">Erhöhen</item>
+<item id="1_Video_%s_Audio">Video %s Audio</item>
+<item id="1_Config_Controls">Tastenbelegung</item>
+<item id="1_Interface">Ausblick</item>
+<item id="1_Advanced">Erweitert</item>
+<item id="1_MAIN_MENU">HAUPTMENÜ</item>
+<item id="1_DONATE">SPENDEN</item>
+<item id="1_ORDER_NOW">JETZT BESTELLEN</item>
+<item id="1_Arcade">Spielhalle</item>
+<item id="1_Sim">Simulation</item><!--Simulative-->
+<item id="1_BACK">ZURÜCK</item>
+<item id="1_Prev">Vorheriges</item><!--HE: VORHERIGER SHE: VORHERIGE IT: VORHERIGES-->
+<item id="1_Next">Weiter</item><!--HE: NÄCHSTER SHE: NÄCHSTE IT: NÄCHSTES-->
+<item id="1_APPLY">ANWENDEN</item>
+<item id="1_Create">Anlegen</item>
+<item id="1_Difficulty">Schwierigkeit</item>
+<item id="1_Delete">Löschen</item>
+<item id="1_NEXT">WEITER</item>
+<item id="1_Shipyard">Schiffwerft</item>
+<item id="1_Workshop">Werkstatt</item>
+<item id="1_Weaponry">Bewaffnung</item>
+<item id="1_START">START</item>
+<item id="1_Info">Info</item><!--Information-->
+<item id="1_Buy_Ship">Schiff Kaufen</item>
+<item id="1_Repair_Hull">Hülle Reparieren</item>
+<item id="1_Upgrade_Hull">Hülle Aufwerten</item><!--OR: Hülle aufwerten-->
+<item id="1_Reload">Laden</item>
+<item id="1_Close">Schliessen</item>
+<item id="1_Buy">Kaufen</item>
+<item id="1_Sell">Verkaufen</item>
+<item id="1_RESTART">NEUSTART</item>
+<item id="1_RESUME">FORTFAHREN</item>
+<item id="1_GAME_MENU">SPIEL MENÜ</item>
+<item id="1_Unimplemented">Nicht verwendet</item><!--OR: nicht verfügbar-->
+<item id="1_Left">Links</item>
+<item id="1_Right">Rechts</item>
+<item id="1_Mission_Complete">Mission Beendet</item>
+<item id="1_Page_Up">Seite Rauf</item>
+<item id="1_Page_Down">Seite Runter</item>
+<item id="1_Duplicate">Duplikat</item>
+
+</itemlist>
+
+
+
+
+
+
+<!-- Dialogs texts -->
+<itemlist id="2">
+
+<item id="2_quit_line1">Wollen Sie wirklich aufhören?</item>
+<item id="2_quit_line2">ACHTUNG: Spieldaten werden gesichert.</item>
+<item id="2_quit_line3">ACHTUNG: Spieldaten gehen verloren.</item>
+
+<item id="2_ccprof_line1">Pilot Profil kann nicht angelegt werden.</item>
+<item id="2_ccprof_line2">Tipp: Lösche zuerst einen anderen.</item>
+
+<item id="2_delprof_line1">Sind Sie sicher, das Sie das Profil löschen wollen?</item>
+<item id="2_delprof_line2">Hinweis: Alle Daten des Piloten werden gelöscht.</item>
+
+<item id="2_cnrepair_line1">Zuwenig Geld für komplette Instandsetzung.</item>
+<item id="2_cnrepair_line2">Hinweis:Hülle wurde nur teilw. repariert.</item>
+
+<item id="2_restart_line1">Wollen Sie das Spiel wirklich neu starten?</item>
+<item id="2_restart_line2">Hinweis: Der aktuelle Spielstand geht verloren.</item>
+
+</itemlist>
+
+
+
+
+
+
+<!-- Menu's texts, options titles -->
+<itemlist id="3">
+
+<item id="3_Mouse_Control">Maus Steuerung</item>
+<item id="3_Control_Sensitivity">Empfindlichkeitskontrolle</item>
+<item id="3_MOUSE">MAUS</item>
+<item id="3_KEYBOARD">TASTATUR</item>
+<item id="3_JOYSTICK">JOYSTICK</item>
+<item id="3_Primary_Attack">Primärer Angriff</item>
+<item id="3_Secondary_Attack">Sekundärer Angriff</item>
+<item id="3_Move_Forward">Vorwärts Bewegen</item>
+<item id="3_Move_Backward">Rückwärts Bewegen</item>
+<item id="3_Move_Left">Links Bewegen</item>
+<item id="3_Move_Right">Rechts Bewegen</item>
+<item id="3_Enemy_Weapon_Penalty">Feindlicher Waffenabzug</item>
+<item id="3_None">Nichts</item>
+<item id="3_Enemy_Armor_Penalty">Feindlicher Panzerungsabzug</item>
+<item id="3_Enemy_Targeting_Penalty">Feindlicher Zielvermögen Abzug</item>
+<item id="3_Limited_Ammo">Begrenzte Munition</item>
+<item id="3_Destroyable_Weapon">Zerstörbare Waffen</item>
+<item id="3_SpaceShip_Control_Mode">Raumschiff Steuerungsmodus</item>
+<item id="3_Weapon_Targeting_Mode">Waffen Zielmodus</item>
+<item id="3_Not_implemented">Nicht verfügbar</item>
+<item id="3_Screen_Mode">Bildschirm Modus</item>
+<item id="3_Window_Size">Fenstergröße</item>
+<item id="3_Bilinear">Bilinear</item>
+<item id="3_Trilinear">Trilinear</item>
+<item id="3_Low">Gering</item>
+<item id="3_Medium">Mittel</item>
+<item id="3_High">Hoch</item>
+<item id="3_Disabled">Ausgeschaltet</item>
+<item id="3_1_Layer">1 Layer</item>
+<item id="3_2_Layers">2 Layer</item>
+<item id="3_3_Layers">3 Layer</item>
+
+<item id="3_Menu_Language">Menü-Sprache</item>
+<item id="3_Keyboard_Layout">Tastatur Layout</item>
+<item id="3_Voice_Language">Stimme Sprache</item>
+
+<item id="3_Music_Volume">Musiklautstärke</item>
+<item id="3_Not_available">Nicht verfügbar</item>
+<item id="3_Sound_Effects_Volume">Soundeffektlautstärke</item>
+<item id="3_Full_Screen">Ganzer Bildschirm</item>
+<item id="3_Refresh_Rate">Refresh Rate</item>
+<item id="3_Default">Default</item>
+<item id="3_Gamma">Gamma</item>
+<item id="3_Texture_Filtering_Mode">Texture Filter Modus</item>
+<item id="3_Textures_Quality">Texture Qualität</item>
+<item id="3_Multisample_Antialiasing">Multisample Antialiasing</item>
+<item id="3_Particles_GFX_Quality">Partikel GFX Qualität</item>
+<item id="3_Explosions_GFX_Quality">Explosionen GFX Qualität</item>
+<item id="3_Stars_Quantity">Sternenanzahl</item>
+<item id="3_NAME">NAME</item>
+<item id="3_SCORE">Punkte</item>
+<item id="3_GAME_OBJECTS_INFORMATION">Informationen zum Spielziel</item>
+<item id="3_Page_%i_of_%i">Seite %i von %i</item>
+<item id="3_New_Pilot_Profile">Neues Piloten Profile</item>
+<item id="3_Pilots_Profiles">Piloten Profile</item>
+<item id="3_Money">Geld</item>
+<item id="3_Experience">Erfahrung</item>
+<item id="3_Difficulty">Schwierigkeit</item>
+<item id="3_empty">Leer</item>
+<item id="3_Current_Profile_Difficulty">Profilschwierigkeit</item>
+<item id="3_Weapon_Fire_Control:">Waffenfeuerkontrolle:</item>
+<item id="3_Alternative_Fire_Control:">Alternative Feuerkontrolle:</item>
+<item id="3_Weapon_Angle:_%2.1f">Waffenwinkel: %2.1f</item>
+<item id="3_Type">Typ</item>
+<item id="3_Killed">Vernichtet</item>
+<item id="3_Bonus">Bonus</item>
+<item id="3_Total">Total</item>
+<item id="3_Background_Tile_Animation">Hintergrundkacheln Animation</item>
+<item id="3_Textures_Compression">Texturen Kompression</item>
+<item id="3_Mipmap_LOD_Management">Mipmap LOD Verwaltung</item>
+<item id="3_OpenGL_Shading_Language">OpenGL  Schattierungssprache</item>
+<item id="3_Point_Lights_per_Object">Anzahl Lichter pro  Objekt</item>
+<item id="3_1_Light">1 Licht</item>
+<item id="3_2_Lights">2 Lichter</item>
+<item id="3_3_Lights">3 Lichter</item>
+<item id="3_4_Lights">4 Lichter</item>
+<item id="3_5_Lights">5 Lichter</item>
+<item id="3_6_Lights">6 Lichter</item>
+<item id="3_Anisotropy_Level">Anisotropie Level</item>
+
+<!-- + -->
+<item id="3_Aspect_Ration">Aspekt Ratio</item>
+<item id="3_Standard">Standard</item>
+<item id="3_Widescreen">Widescreen</item>
+<!-- + -->
+
+</itemlist>
+
+
+
+
+
+
+<!-- Menu's texts (information menu) -->
+<itemlist id="4">
+
+<item id="4_Earth_Spaceships">Erdraumschiffe</item>
+<item id="4_Space_Mines">Raumminen</item>
+<item id="4_Space_Mine">Raummine</item>
+<item id="4_Auto_Cannon:">Autokannone:</item>
+<item id="4_Auto_Launcher:">Autoraketenwerfer:</item>
+<item id="4_Weapon">Waffe</item>
+<item id="4_Weapons">Waffen</item>
+<item id="4_Weapons_Slots:">Waffenschächte:</item>
+<item id="4_Alien_Spaceships">Alienraumschiffe</item> <!-- or Außerirdische Raumschiffe -->
+<item id="4_Alien_Motherships">Alien Mutterschiffe</item>
+<item id="4_Pirate_Spaceships">Piratenraumschiffe</item>
+<item id="4_Pirate_Vehicles">Piratenfahrzeuge</item>
+<item id="4_Pirate_Buildings">Piratenbauten</item>
+<item id="4_Asteroids">Asteroiden</item>
+<item id="4_Civilian_Buildings">Zivile Bauten</item>
+<item id="4_Military_Buildings">Militärbauten</item> <!-- or Militärische Bauten  -->
+<item id="4_Wheeled_Vehicles">RadFahrzeuge</item>
+<item id="4_Tracked_Vehicles">Kettenfahrzeuge</item>
+<item id="4_Wheeled_Vehicle">RadFahrzeuge</item>
+<item id="4_Tracked_Vehicle">Kettenfahrzeuge</item>
+<item id="4_Object_Class:">Objektklasse:</item>
+<item id="4_Space_Ship">Raumschiff</item>
+<item id="4_Ship_Type:">Schiffstyp:</item>
+<item id="4_Developer:">Entwickler:</item>
+<item id="4_Earth_Federation">Erdförderation</item>
+<item id="4_Status:">Status:</item>
+<item id="4_Armor:">Panzerung:</item>
+<item id="4_Indestructible">Unzerstörbar</item>
+<item id="4_Upgrade_Mk2:">Stufe Mk2:</item>
+<item id="4_Upgrade_Mk3:">Stufe Mk3:</item>
+<item id="4_Upgrade_Mk4:">Stufe Mk4:</item>
+<item id="4_Slots_Levels:">Schachtlevel:</item>
+<item id="4_Codename:">Codename:</item>
+<item id="4_Width:">Breite:</item>
+<item id="4_Length:">Länge:</item>
+<item id="4_Height:">Höhe:</item>
+<item id="4_Engines:">Antriebe:</item>
+<item id="4_Ally">Allierte</item>
+<item id="4_Fighter">Jäger</item>
+<item id="4_Interceptor">Abfangjäger</item>
+<item id="4_Bomber">Bomber</item>
+<item id="4_Scout">Aufklärer</item>
+<item id="4_Attack_Ship">Angriffsschiff</item>
+<item id="4_Weapon,_Cannon">Waffe, Kanone</item>
+<item id="4_Weapon,_Launcher">Waffe, Raketenwerfer</item>
+<item id="4_Type:">Typ:</item>
+<item id="4_Damage,_Hull:">Hüllenschaden:</item> <!-- Schaden, Hülle sounds ugly -->
+<item id="4_Damage,_Systems:">Systemschaden:</item><!-- Schaden, System sounds ugly -->
+<item id="4_Energy_Use:">Energieverbrauch:</item>
+<item id="4_Ammo:">Munition:</item>
+<item id="4_Reload:">Auffüllen:</item>
+<item id="4_Range:">Reichweite:</item>
+<item id="4_Kinetic">Kinetisch</item>
+<item id="4_Ion">Ionen</item>
+<item id="4_Plasma">Plasma</item>
+<item id="4_Maser">Maser</item>
+<item id="4_Antimatter">Antimaterie</item>
+<item id="4_Laser">Laser</item>
+<item id="4_Gauss">Gauss</item>
+<item id="4_Propelled">Angetrieben</item>
+<item id="4_Unknown">Unbekannt</item>
+<item id="4_Enemy">Feind</item>
+<item id="4_Damage:">Schaden:</item>
+<item id="4_MotherShip">Mutterschiff</item>
+<item id="4_Pirate_Ship">Piratenschiff</item>
+<item id="4_Pirates">Piraten</item>
+<item id="4_Marauder">Plünderer</item> 
+<item id="4_Warder">Wächter</item> <!-- or Wärter or Wächter -->
+<item id="4_Raider">Gangster</item> <!-- Angreifer  I'am not happy with this.-->
+<item id="4_Carrier">Träger</item> 
+<item id="4_Missile_Carrier">Lenkwaffenträger</item> 
+<item id="4_Freighter">Frachter</item>
+<item id="4_Battle_Freighter">Schlachtfrachter</item>
+<item id="4_Civilian_Building">Zivilgebäude</item>
+<item id="4_Old_Republic">Alte Repuplik</item>
+<item id="4_Military_Building">Militärgebäude</item>
+<item id="4_Cannon">Kanone</item>
+<item id="4_MachineGun">Maschinengewehr</item>
+<item id="4_Turbo_Cannon">Turbo Kanone</item>
+<item id="4_Missile_Launcher">Lenkwaffenträger</item>
+<item id="4_Cannon_Turret">Kanonenturm</item>
+<item id="4_Armored_Jeep">Gepanzerter Jeep</item>
+<item id="4_Jeep">Jeep</item>
+<item id="4_APC">BAT</item> 
+<item id="4_Tank">Panzer</item>
+<item id="4_Engineer">Ingenieur</item>
+<item id="4_Not_combatant">Kein Gegner</item><!-- tghis depends on context, I mus see this -->
+<item id="4_System">System</item>
+<item id="4_Spaceship_Engine">Raumschiffantrieb</item>
+<item id="4_Ion_Resistance:">Ionenresistenz:</item>
+<item id="4_Engine_Power:">Antriebsenergie:</item>  <!-- or Antriebskraft -->
+<item id="4_Acceleration:">Beschleunigung:</item>
+<item id="4_Relations/Dependences:">Beziehungen/Abhängigkeiten:</item>
+<item id="4_SpaceShip_Weight">Raumschiffgewicht</item>
+<item id="4_Power_Source">Energiequelle</item>
+<item id="4_ArcadeModeLine1">Nutzlos im Arcade Modus</item>
+<item id="4_ArcadeModeLine2">Raumschiffkontrollmodus.</item><!--Useless with Arcade SpaceShip Control Mode.-->
+<item id="4_ArcadeModeLine3">Waffenzielmodus.</item><!--Useless with Arcade Weapon Targeting Mode.-->
+<item id="4_Energy_Capacity:">Energie Kapazität:</item>
+<item id="4_Recharge_Rate:">Aufladungsrate:</item>
+<item id="4_Weapon_Recharge_Rate">Waffenaufladungsrate</item>
+<item id="4_Optical_Computer">Optischer Computer</item>
+<item id="4_Targeting_System">Zielsystem</item>
+<item id="4_Advanced_System">hochentwickeltes System</item> <!-- or fortgeschrittenes System -->
+<item id="4_Target_Tracing:">Zielverfolgung:</item>
+<item id="4_Auto_Adjustment:">Auto Anpassung:</item>
+<item id="4_No">Nein</item>
+<item id="4_Yes">Ja</item>
+<item id="4_Weapon_Fire_Range">Waffenreichweite</item>
+<item id="4_Weapon_Orientation">Waffenrichtung</item>
+<item id="4_Orientation_Speed:">Ausrichtungsgeschwindigkeit:</item>
+<item id="4_Hull_Repair_Rate:">Hüllenreparaturrate:</item> <!-- otherwise it is ugly -->
+<item id="4_Resistance,_Hull:">Hüllenresistenz:</item>
+<item id="4_Resistance,_System:">Systemresistenz:</item> <!-- Widerstandsfestigkeit or shorter Widerstand, System: -->
+<item id="4_Shield_Power:">Schild Power:</item>
+<item id="4_Hull_Resistance">Hüllenresistenz</item><!-- or Hüllenpanzerung -->
+<item id="4_Systems_Resistance">Systemresistenz</item>
+<item id="4_SpaceShip_Vitality">Raumschiffdynamik</item><!--or for "Raumschiff" can always be set "Schiff" its the same, but shorter -->
+<item id="4_units">Einheiten</item>
+<item id="4_units_per_shot">Einheiten/Schuss</item>
+<item id="4_seconds">Sekunden</item>
+<item id="4_units_per_sec">Einheiten/sek</item>
+<item id="4_object(s)">Objekte(e)</item>
+<item id="4_deg_per_sec">Grad pro Sek</item>
+<item id="4_per_sec">pro sek</item>
+<item id="4_units/shot">Einheiten/Schuss</item>
+<item id="4_units/sec">Einheiten/Sek</item>
+<item id="4_Game_Speed:">Spielgeschwindigkeit:</item>
+<item id="4_Missile_Detected">Rakete erkannt</item>
+
+</itemlist>
+
+
+
+
+
+
+<!-- Menu's texts (objects description in the information menu) -->
+<itemlist id="5">
+
+<item id="5_FighterLine1">Der Jäger ist ein Raumschiff, welches in erster Linie zum Angriff auf andere</item>
+<item id="5_FighterLine2">Raumschiffe konstruiert wurde. Jäger sind vergleichsweise schnell, beweglich und</item>
+<item id="5_FighterLine3">mit Primär- und Sekundärwaffen ausgestattet, um andere Raumschiffe anzugreifen.</item>
+
+<item id="5_InterceptorLine1">Der Abfangjäger wurde konstruiert um feindliche Raumschiffe</item>
+<item id="5_InterceptorLine2">abzufangen und zu zerstören. Abfangjäger sind sehr schnell und</item>
+<item id="5_InterceptorLine3">beweglich und haben nur Primärwaffen an Bord, um die Feinde zu zerstören.</item>
+
+<item id="5_BomberLine1">Der Bomber wurde konstruiert um Bomben, Torpedos und Raketen zu transportieren.</item>
+<item id="5_BomberLine2">Bomber sind ziemlich langsam und haben einige wenige Primärwaffensysteme</item>
+<item id="5_BomberLine3">zur Selbstverteidigung an Bord um die Angriffe von Raumschiffen abzuwehren.</item>
+
+<item id="5_AttackShipLine1">Das Angriffsschiff ist ein Bombertyp, der speziell für weit reichende</item>
+<item id="5_AttackShipLine2">Raubzüge in kleinen Gruppen entwickelt wurde, im Gegenteil zu den Bombern,</item>
+<item id="5_AttackShipLine3">die Luftschutz durch Jäger benötigen.</item>
+
+<item id="5_ScoutLine1">Der Aufklärer ist ein speziell entwickeltes Raumschiff zum sammeln von</item>
+<item id="5_ScoutLine2">Informationen über den Feind oder die feindlichen Objekte. Aufklärer sind </item>
+<item id="5_ScoutLine3">sehr klein, schnell und hoch manöverierfähig.</item>
+
+<item id="5_KineticLine1">Kinetische Waffen schiessen Projektile auf das Ziel. Diese Projektile haben</item>
+<item id="5_KineticLine2">keinen Antrieb. Sie bestehen meistens aus einer verdichteten Metalllegierung.</item>
+<item id="5_KineticLine3">Im Gegensatz zu den Raketen, enthalten die Projektile keine Sprengkörper.</item>
+
+<item id="5_IonLine1">Ionenwaffen sind Strahlwaffen, bestehen aus zwei Partikelströmen. Der innere</item>
+<item id="5_IonLine2">Teil, oder Kern, besteht aus positiv geladenen Ionen - gewöhnlich Eisennukleide,</item>
+<item id="5_IonLine3">während sich der äussere Teil aus neutralen Partikeln zusammen setzt.</item>
+
+<item id="5_PlasmaLine1">Plasmawaffen schleudern enorm hoch ionisierte Materie, die entweder durch</item>->
+<item id="5_PlasmaLine2">die Erhitzung von irgendeinem Material auf extrem hohe Temperaturen, oder durch</item>
+<item id="5_PlasmaLine3">Bombardierung mit einem starken Strom an Hochenergiephotonen, gewonnen wird.</item>
+
+<item id="5_MaserLine1">Maserwaffen, erzeugen kohärente elektromagnetische Wellen im Mikrowellenbereich.</item>
+<item id="5_MaserLine2">Die Mikrowellen werden mit enormer Energie gerichtet abgestrahlt.</item>
+<item id="5_MaserLine3">Beim Auftreffen werden damit verherende Wirkungen erzielt.</item>
+
+<item id="5_AntimatterLine1">Antimateriewaffen senden wie alle Partikelwaffen Teilchenströme aus. Diese</item>
+<item id="5_AntimatterLine2">Antipartikel sind aber anders herum geladen, dadurch haben die Protonen und</item>
+<item id="5_AntimatterLine3">Elektronen eine extrem verherende Wirkung beim Auftreffen auf normale Materie.</item>
+
+<item id="5_LaserLine1">Laserwaffen funktionieren durch Lichtverstärkung durch stimulierte Emission.</item>
+<item id="5_LaserLine2">Eine Hochenergie Lichtquelle ist der Ausgangspunkt um beliebige Materialien</item>
+<item id="5_LaserLine3">mit militärischen Umfeld zu zerschneiden bzw. zu verdampfen zu lassen.</item>
+
+<item id="5_GaussLine1">Gauss ist ein Waffensystem, welches subatomare Projektile mit extrem hoher</item>
+<item id="5_GaussLine2">Geschwindigkeit auf das Ziel feuert. Dort kommt es zur sofortigen</item>
+<item id="5_GaussLine3">Desintegration der Moleküle.</item>
+                                                                                    
+<item id="5_MissileLine1">Raketen haben einen Antrieb beruhend auf dem Rückstoßprinzip. Der</item>
+<item id="5_MissileLine2">Brennstoff erzeugt riesige Mengen an Gasen die mit sehr hoher</item>
+<item id="5_MissileLine3">Geschwindigkeit ausgestossen werden und dadurch das Geschoss antreiben.</item>
+
+<item id="5_TorpedoLine1">Torpedos sind angetriebene Projektile, die nach dem Abschuss automatisch</item>
+<item id="5_TorpedoLine2">gesteuert werden. Sie tragen eine große Menge an Explosivstoffen, die bei</item>
+<item id="5_TorpedoLine3">Kontakt, oder Annäherung automatisch im Ziel explodieren.</item>
+
+<item id="5_NukeBombLine1">Atombomben sind angetriebene Nuklearprojektile, die mittels </item>
+<item id="5_NukeBombLine2">Wasserstofffusion eine heftige Kettenreaktion auslösen. Diese Bombe</item>
+<item id="5_NukeBombLine3">ist konstruiert, um bei Kontakt oder Annäherung ans Ziel zu explodieren.</item>
+
+<item id="5_MineLine1">Raummine werden üblicherweise in einem Behälter angefüllt mit Sprengstoff </item>
+<item id="5_MineLine2">geliefert, die nach dem aussetzen scharfgeschaltet werden und üblicherweise </item>
+<item id="5_MineLine3">auf Radarimpulse oder bei Kontakt explodieren.</item>
+
+<item id="5_UnknownLine1">Hierüber liegen keine weiteren Informationen vor. Wir haben nicht</item>
+<item id="5_UnknownLine2">genügend Hinweise über den Zweck oder die Arbeitsweise.</item>
+<item id="5_UnknownLine3"></item>
+
+<item id="5_MarauderLine1">Plünderer wurden konstruiert, um andere Raumschiffe anzugreifen.</item>
+<item id="5_MarauderLine2">Die Plünderer sind sehr schnell, manöverierbar und mit Primär-</item>
+<item id="5_MarauderLine3">und Sekundärwaffensystemen ausgestattet um andere Raumschiffe zu attackieren.</item>
+
+<item id="5_WarderLine1">Wächter wurden speziell als Teil des Basisverteidigungsystems konstruiert.</item>
+<item id="5_WarderLine2">Wächter sind sehr gut bewaffnet und jederzeit bereit</item>
+<item id="5_WarderLine3">einen schnellen Gegenangriff zu starten.</item>
+
+<item id="5_RaiderLine1">Gangster wurden speziell für weiträumige Angriffe konstruiert. Häufig in</item>
+<item id="5_RaiderLine2">kleinen Gruppen unterwegs, oder als Hauptangriffsmacht auch in grösseren Gruppen.</item>
+<item id="5_RaiderLine3">Im Gegensatz zu den Wächtern operieren die Gangster unter Plündererschutz.</item>
+
+<item id="5_MissileCarrierLine1">Raketenträger sind speziell konstruiert für weiträumige Angriffe</item>
+<item id="5_MissileCarrierLine2">in großen Gruppen. Anders als die Gangster, können die Raketenträger</item>
+<item id="5_MissileCarrierLine3">Sklaven und Beutegut transportieren.</item>
+
+<item id="5_BattleFreighterLine1">Der Schlachtenfrachter wird von den Piraten in weiträumigen Angriffen</item>
+<item id="5_BattleFreighterLine2">in großen Gruppen verwendet. Die Schlachtenfrachter können nur</item>
+<item id="5_BattleFreighterLine3">mit angetriebenen Waffensystemen bestückt werden.</item>
+
+<item id="5_CivilianBuildingLine1">Das Zivilgebäude schützt mit einem Dach oder Wände die darunter</item>
+<item id="5_CivilianBuildingLine2">liegenden Häuser und Unterkünfte bzw. die darin wohnenden Personen,</item>
+<item id="5_CivilianBuildingLine3">Tiere oder Mobiliar.</item>
+
+<item id="5_WeaponturretLine1">Der Geschützturm  ist unabhängiges Waffensystem mit einer Kanone,</item>
+<item id="5_WeaponturretLine2">oder Raketensystem. Geschütztürme sind stark gepanzert</item>
+<item id="5_WeaponturretLine3">und können sich drehen.</item>
+
+<item id="5_ArmoredJeepLine1">Der gepanzerte Jeep besitzt eine Hülle, die ihn für den Nahkampf</item>
+<item id="5_ArmoredJeepLine2">prädistiniert. Gepanzerte Jeeps sind vergleichsweise schnell, manöverierfähig</item>
+<item id="5_ArmoredJeepLine3">und mit einem starken Waffensystem für den Angriff ausgestattet.</item>
+
+<item id="5_JeepLine1">Der Jeep ist ein militärisches Allradfahrzeug, gut geeignet für den rauhen </item>
+<item id="5_JeepLine2">Geländeeinsatz. Jeeps sind sehr schnell, manöverierfähig und mit</item>
+<item id="5_JeepLine3">Waffen für den Angriff ausgestattet.</item>
+
+<item id="5_TankLine1">Der Panzer ist mit Kettenantrieb ausgestattet und in der Lage den Feind</item>
+<item id="5_TankLine2">im Direktangriff zu zerstören. Ein Panzer zeichnet sich durch seine hohe</item>
+<item id="5_TankLine3">Feuerkraft und seine stärkere Panzerung als die übrigen Mitlitärfahrzeuge aus.</item>
+
+<item id="5_APCLine1">Der Bewaffnete Armeetransporter ist mit Antriebsketten ausgestattet.</item>
+<item id="5_APCLine2">Er ist mit Waffensystemen bestückt und wird benutzt,</item>
+<item id="5_APCLine3">um Infantrie zu transportieren.</item>
+
+<item id="5_MissileLauncherLine1">Der Raketenwerfer ist ein gepanzertes Militärfahzeug, das</item>
+<item id="5_MissileLauncherLine2">Raketen, Torpedos oder Bomben gegen den Gegner schiessen kann.</item>
+<item id="5_MissileLauncherLine3"></item>
+
+<item id="5_EngineerLine1">Der Konstrukteur kann in der Hauptsache Offensiv-, und Defensivstrukturen</item>
+<item id="5_EngineerLine2">entwerfen und bauen. Er kann auch Wartungsarbeiten durchführen und wird</item>
+<item id="5_EngineerLine3">zum abbauen von Minenfeldern eingesetzt.</item>
+
+</itemlist>
+
+
+
+
+
+<!-- Missions descriptions -->
+<itemlist id="6">
+
+<item id="6_Mission1Title">Mission 1 - Erster Kontakt mit dem Feind</item>
+<item id="6_Mission2Title">Mission 2 - Angreifen und nicht entkommen lassen</item>
+<item id="6_Mission3Title">Mission 3 - Gegenangriff ist die beste Verteidigung</item>
+<item id="6_Mission4Title">Mission 4 - Greife die Piratenflotte an!</item>
+<item id="6_Mission5Title">Mission 5 - Überraschung...wieder Feinde!</item>
+<item id="6_Mission6Title">Mission 6 - Stoppe das Alien Mutterschiff sofort!</item>
+<item id="6_Mission7Title">Mission 7 - Greife die kleine Piratenbasis an</item>
+<item id="6_Mission8Title">Mission 8 - Bleib in der Nähe, Sie kommen</item>
+<item id="6_Mission9Title">Mission 9 - Eine weitere Piratenbasis</item>
+<item id="6_Mission10Title">Mission 10 - Eigenartige Flaute! Pass auf!</item>
+<item id="6_Mission11Title">Mission 11 - Lass Sie nicht unsere Basis zerstören!</item>
+<item id="6_Mission12Title">Mission 12 - Geheime Piratenbasis</item>
+<item id="6_Mission13Title">Mission 13 - Alien Umschlaghafen</item>
+<item id="6_Mission14Title">Mission 14 - Die letzte Piratenenklave</item>
+<item id="6_Mission15Title">Mission 15 - Flucht unter den Alienangriffen!</item>
+
+
+<item id="6_Mission1Descr">Sie kommen! Sie sind überall!!</item>
+<item id="6_Mission2Descr">Verdammte Gangster hier! Keine Gnade! Töte Sie Alle!</item>
+<item id="6_Mission3Descr">Unsere Basis liegt unter Beschuss! Stoppe den Alienangriff jetzt!</item>
+<item id="6_Mission4Descr">Finde eine Piraten Basis in diesem Sektor!</item>
+<item id="6_Mission5Descr">Gib den Piraten keine Gelegenheit sich neu zu formieren!</item>
+<item id="6_Mission6Descr">Sie sind viel zu dicht! Du solltest etwas tun!!</item>
+<item id="6_Mission7Descr">Wir haben ihre Basis gefunden! Endlich! Rotten wir sie aus!</item>
+<item id="6_Mission8Descr">Scheint, als erhielten die ALiens Verstärkung!</item>
+<item id="6_Mission9Descr">Das sollte ein Spaziergang sein! Mach schnell!</item>
+<item id="6_Mission10Descr">Unsere Spionage konnte nichts herausfinden. Eine Falle?</item>
+<item id="6_Mission11Descr">Keine Panik! Wir haben Verstärkung! Neu formieren und Angriff!</item>
+<item id="6_Mission12Descr">Sie sind nun zu schlau, und viel zu gefährlich!</item>
+<item id="6_Mission13Descr">Wir fanden ihren Hyper Port! Wir müssen ihn sofort zerstören!</item>
+<item id="6_Mission14Descr">Dieser Sektor muss sauber und sicher für immer sein!</item>
+<item id="6_Mission15Descr">Wir haben die Schlacht verloren. Versuche zu fliehen!</item>
+
+</itemlist>
+
+
+
+
+
+
+<!-- Workshop texts -->
+<itemlist id="7">
+
+<!-- EarthFighters types -->
+<item id="7_ship1">Cobra</item>
+<item id="7_ship2">SpaceEagle</item>
+<item id="7_ship3">FireStorm</item>
+<item id="7_ship4">Hedgehog</item>
+<item id="7_ship5">Thunder</item>
+<item id="7_ship6">Excalibur</item>
+<item id="7_ship7">DarkStar</item>
+<item id="7_ship8">Scorpion</item>
+<item id="7_ship9">Runner</item>
+<item id="7_ship10">Kronos</item>
+<item id="7_ship11">Chameleon</item>
+<item id="7_ship12">Falcon</item>
+<item id="7_ship13">DeathRipple</item>
+<item id="7_ship14">AstroSword</item>
+<item id="7_ship15">Pulser</item>
+<item id="7_ship16">ClumsyMace</item>
+<item id="7_ship17">Raptor</item>
+<item id="7_ship18">Destroyer</item>
+<item id="7_ship19">AstroSpear</item>
+<item id="7_ship20">Mite</item>
+<item id="7_ship21">Viper</item>
+<item id="7_ship22">BlackIce</item>
+<item id="7_shipfullname">%s Mk%i</item>
+
+<!-- Weapon types -->
+<item id="7_weapon1">FireFox</item>
+<item id="7_weapon2">FireBird</item>
+<item id="7_weapon3">Meteor</item>
+<item id="7_weapon4">Hasher</item>
+<item id="7_weapon5">Trammel</item>
+<item id="7_weapon6">IonStorm</item>
+<item id="7_weapon7">IonRipple</item>
+<item id="7_weapon8">Quasher</item>
+<item id="7_weapon9">Destabilizer</item>
+<item id="7_weapon10">Anihilator</item>
+<item id="7_weapon11">Devastator</item>
+<item id="7_weapon12">DeathFlow</item>
+<item id="7_weapon13">Vaporizer</item>
+<item id="7_weapon14">Rapier</item>
+<item id="7_weapon15">Pandora</item>
+<item id="7_weapon16">Stinger</item>
+<item id="7_weapon17">Swarm</item>
+<item id="7_weapon18">Vengeance</item>
+<item id="7_weapon19">BabyDoll</item>
+
+<!-- System types -->
+<!-- Engines -->
+<item id="7_system1">Jet Engine</item>
+<item id="7_system2">Photon Jet</item>
+<item id="7_system3">Plasma Jet</item>
+<item id="7_system4">Antimatter</item>
+<!-- Power systems -->
+<item id="7_system5">Ion Battery</item>
+<item id="7_system6">Nuclear</item>
+<item id="7_system7">Plasma</item>
+<item id="7_system8">Antimatter</item>
+<!-- Optical computers -->
+<item id="7_system9">Base O.T.C.</item>
+<item id="7_system10">Hamerik O.T.C.</item>
+<item id="7_system11">Neo M.O.T.C.</item>
+<item id="7_system12">Supra M.O.T.C.</item>
+<!-- Targeting systems -->
+<item id="7_system13">Mechanical</item>
+<item id="7_system14">Hydraulic</item>
+<item id="7_system15">Magnetic</item>
+<item id="7_system16">Vacuum</item>
+<!-- Advanced systems -->
+<item id="7_system17">Repair NaRs</item>
+<item id="7_system18">Layer</item>
+<item id="7_system19">Energy Shield</item>
+<item id="7_system20">Deflector</item>
+
+
+<!-- common workshop texts -->
+<item id="7_Ships_Stock">Schifflager</item>
+<item id="7_Ship_Hull_Cost">Schiff Hüllenkosten</item>
+<item id="7_Not_Available_in_Demo_Version">In der Demo Version nicht verfügbar</item>
+<item id="7_Player_Ship">Spielerschiff</item>
+<item id="7_Upgrade_Hull_Cost">Verbessern Hülle Kosten</item>
+<item id="7_Repair_Hull_Cost">Reparieren Hülle Kosten</item>
+<item id="7_Ship_Cost">Schiff Kosten</item>
+<item id="7_Weapon_Ammo:">Waffen Schuss:</item>
+<item id="7_Weapon_Reload_Cost:">Waffen Nachladen Kosten:</item>
+<item id="7_Weapon_Type">Waffen Typ</item>
+<item id="7_Weapon_Level">Waffen Level</item>
+<item id="7_Weapon_Cost">Waffen Kosten</item>
+<item id="7_Weapon_Stock">Waffen Bestand</item>
+<item id="7_Installed_Weapons">Installierte Waffen</item>
+<item id="7_System_Stock">System Bestand</item>
+<item id="7_Installed_Systems">Installierte Systeme</item>
+<item id="7_Installed_System">Installiertes System</item>
+<item id="7_Selected_System">Gewähltes System</item>
+<item id="7_Cost">Kosten</item>
+
+
+</itemlist>
+
+
+
+
+<!-- Demo notes, for windows game version -->
+<itemlist id="8">
+
+<item id="8_Line1">ASTROMENACE FULL VERSION FEATURES</item>
+<item id="8_Line2">- 5 Piloten Profile auf Knopfdruck.</item>
+<item id="8_Line3">- Simulatition- und Spielhallen- Schiff Kontrolle.</item>
+<item id="8_Line4">- Vielfältige Einstellmöglichkeiten des Schwierigkeitsgrades.</item>
+<item id="8_Line5">- 22 spielbare Schiffe, mit individuellen Characteristiken.</item>
+<item id="8_Line6">- 19 unterschiedliche Waffen mit einfachen drag-and-drop austauschbar.</item>
+<item id="8_Line7">- 5 erweitertbare Schiffsysteme, die jeweils in 4 Punkten modifiziert werden können.</item>
+<item id="8_Line8">- Unbegrenztes Spiel ohne Grenzen.</item>
+<item id="8_Line9">- 15 Missionen mit > 100 unterschiedlichen Feinden und > 40 Raumobjekten.</item>
+<item id="8_Line10">- Mehr als 150 Minuten spielen.</item>
+<item id="8_Line11">Die Vollversion kostet 15,50 EUR. KAUFE JETZT, um diese Funktionen zu erhalten!</item>
+
+
+</itemlist>
+
+
+
+
+
+
+
+
+
+<!-- hints texts -->
+<itemlist id="9">
+
+<item id="9_Tipsandhints">Tipps und Tricks</item>
+<item id="9_notshowtip">Diesen Tipp nicht wieder anzeigen.</item>
+
+<item id="9_9Line1">Es können fünf Pilotenprofile angelegt werden. Jedes Profil</item>
+<item id="9_9Line2">kann unterschiedliche Spielstände und Schwierigkeitsgrade enthalten.</item>
+<item id="9_9Line3">Um Platz für ein neues Profil zu schaffen, ein Profil löschen.</item>
+<item id="9_9Line4"></item>
+<item id="9_9Line5">Beachte, das der Schwierigkeitsgrad in Prozent pro einzelnes Pro-</item>
+<item id="9_9Line6">fil angegeben ist. Dieser Wert beeinflusst direkt die Erfahrungs-</item>
+<item id="9_9Line7">punktvergabe. Zum Beispiel, wenn du ein Feindschiff zerstörst, bringt</item>
+<item id="9_9Line8">das 100 Einheiten Geld und nur 65 Erfahrungspunkte, wenn der</item>
+<item id="9_9Line9">Schwierigkeitsgrad auf 65 Prozent für dieses Profil steht.</item>
+<item id="9_9Line10">Hinweis: Du kannst vor dem start jeder Mission</item>
+<item id="9_9Line11">den Schwierkeitsgrad verändern.</item>
+
+<item id="9_10Line1">Es gibt mehr als 20 Raumschiffe, jedes mit besonderen Eigenschaften</item>
+<item id="9_10Line2">im Spiel. Auf der rechten Seite dieses Bildschirms ist dein Raumschiff</item>
+<item id="9_10Line3">mit seinen Eigenschaften und Kosten dargestellt. Hier können auch</item>
+<item id="9_10Line4">grundlegende Dinge wie Reparatur und Schiffshüllenverstärkung</item>
+<item id="9_10Line5">durchgeführt werden. Die linke Seite enthält die Liste aller ver-</item>
+<item id="9_10Line6">fügbaren Schiffe mit ihren Eigenschaften. Vergiß nicht, das neben</item>
+<item id="9_10Line7">der Größe der Schiffe, die Anzahl der Waffenschächte und Art der</item>
+<item id="9_10Line8">Waffenschächte angegeben ist, was noch wichtiger ist.</item>
+<item id="9_10Line9">Das grundlegende Schiffsbaukonzept ist wie folgt:</item>
+<item id="9_10Line10">Aufklärer - Leicht, schnell, wendig mit schwachen Waffen.</item>
+<item id="9_10Line11">Abfangjäger - Schnelle Schiffe mit leichten Waffen.</item>
+<item id="9_10Line12">Jäger - Haupttyp der Schiffe mit leichten und mittleren Waffen.</item>
+<item id="9_10Line13">Bomber - Schwere Zerstörer mit hauptsächlich schweren Waffen.</item>
+<item id="9_10Line14">Angriffsschiff - schwer, groß und schwer bewaffnet.</item>
+
+<item id="9_11Line1">Etliche von Systeme sind auf deinem Schiff installiert. Alle</item>
+<item id="9_11Line2">Systeme sind miteinander und mit den Waffensystemen und anderen</item>
+<item id="9_11Line3">Funktionen verbunden und spielen eine Rolle im Spiel.</item>
+<item id="9_11Line4">Achte auf die spezifischen Eigenheiten jedes einzelnen Systems und</item>
+<item id="9_11Line5">stimme die Systeme aufeinander ab, um ein gut ausgewogenes</item>
+<item id="9_11Line6">Schiff zu haben, mit dem du im Kampf bestehen kannst.</item>
+<item id="9_11Line7">Antrieb - Schiffsantrieb. Achte auf die Energieaufnahme</item>
+<item id="9_11Line8">Andernfalls könntest du ein bewegungsloses Schiff haben.</item>
+<item id="9_11Line9">Energie - Schiffsenergiequelle. Achte auf die zwei wichtigen </item>
+<item id="9_11Line10">Eigenschaften dieses Systems - Aufladungsrate und Kapazität.</item>
+<item id="9_11Line11">O.T.C. - Optischer Ziel Computer, dieses System ist für die</item>
+<item id="9_11Line12">optische Zielverfolgung zuständig.</item>
+<item id="9_11Line13">Zielerfassung - Waffem Zielsystem. Von diesem System hängt es ab,</item>
+<item id="9_11Line14">wie lange die Waffe zum Zielerfassen benötigt und wie genau</item>
+<item id="9_11Line15">der Schuss ist. Fortgeschritten - Die am höchsten entwickelten</item>
+<item id="9_11Line16">Systeme, allerdings ungetestet, für höhere Ansprüche.</item> 
+
+<item id="9_12Line1">In dieser Abteilung kannst du Waffen für dein Schiff kaufen und</item>
+<item id="9_12Line2">verkaufen. Um eine Waffe zu kaufen, ziehe das Abbild der Waffe</item>
+<item id="9_12Line3">über einen Waffenschacht. Beachte, das eine Waffe nur in einen</item>
+<item id="9_12Line4">Schacht passt, wenn der Level kleiner oder genauso groß wie der </item>
+<item id="9_12Line5">Schachtlevel ist (Level 1-5). Um eine Waffe zu verkaufen, ziehe</item>
+<item id="9_12Line6">die Waffe einfach aus den Schacht heraus auf die linke Seite.</item>
+<item id="9_12Line7">Die Waffe wird konfiguriert und aufgeladen über den Einstellknopf</item> <!-- noch anpassen -->
+<item id="9_12Line8">im rechten Teil der Waffenschachttafel.</item>
+<item id="9_12Line9">Die Haupttypen der Waffen nach Projektilen:</item>
+<item id="9_12Line10">Projektile - kleine Geschosse basierend auf Kugeln oder Energiestrahlen.</item>
+<item id="9_12Line11">Das ist die am meisten verbreitete Waffe im Spiel.</item>
+<item id="9_12Line12">Angetriebene Projektile - Raketen, Torpedos und Atombomben.</item>
+<item id="9_12Line13">Der Nachteil dieser Waffengattung ist die geringe Fluggeschwindigkeit</item>
+<item id="9_12Line14">der Projektile und die Möglichkeit sie abzuschiessen.</item>
+<item id="9_12Line15">Strahl - Laser und Maser. Kurzstrecke und Hohe Energie-</item>
+<item id="9_12Line16">verbrauchende Waffen.</item>
+
+
+<item id="9_13Line1">SPIEL FUNKTIONSTASTENBELEGUNG</item>
+<item id="9_13Line2">F2 - FPS Zähler An/Aus.</item>
+<item id="9_13Line4">Hinweis: Reduziert die Optischen Effekte. Benutze das, wenn nur alte</item>
+<item id="9_13Line5">Hardware vorhanden ist,um die FPS zu erhöhen.</item>
+<item id="9_13Line6">F5 - Verringere Spielgeschwindigkeit. </item>
+<item id="9_13Line7">F6 - Normalisiere Spielgeschwindigkeit.</item>
+<item id="9_13Line8">F7 - Erhöhe Spielgeschwindigkeit.</item>
+<item id="9_13Line9">Hinweis: Wenn FPS zu gering, erhöhe nicht die Spielgeschwindigkeit.</item>
+<item id="9_13Line10">F8 - Die Ansicht der Waffentafeln verändern.</item>
+<item id="9_13Line11">F9 - Feuermodus der Primärwaffen wechseln.</item>
+<item id="9_13Line12">F10 - Feuermodus der Sekundärwaffen wechseln.</item>
+<item id="9_13Line13">F12 - Bildschirmfoto. (Das File liegt auf deinem Desktop.)</item>
+<item id="9_13Line14">Esc - Spielmenü. (Pause.)</item>
+<item id="9_13Line15">Hinweis: Alle Änderungen werden gespeichert.</item>
+
+<item id="9_14Line1">Warnung! Geringe Energie Wiederaufladungsrate!</item>
+<item id="9_14Line2">Das könnte Probleme mit den</item>
+<item id="9_14Line3">Systemfunktionen oder der Waffenfeuerrate geben!</item>
+
+
+
+<item id="9_15Line1">Du hast diese Mission bereits geschafft. Dein bisheriges</item>
+<item id="9_15Line2">bestes Resultat ist  %i Erfahrungspunkte.</item>
+<item id="9_15Line3">Du kannst diese Mission so oft wiederholen, wie du magst,</item>
+<item id="9_15Line4">aber du solltest bedenken, das nur das beste Resultat von</item>
+<item id="9_15Line5">dir in die Messung der Gesamterfahrungspunkte eingeht.</item>
+<item id="9_15Line6"> </item>
+<item id="9_15Line7">Beachte, das jedes Mal, wenn du diese Mission erneut erfolgreich</item>
+<item id="9_15Line8">beendet hast, die Geldmenge, die du für das abschiessen der Feinde</item>
+<item id="9_15Line9">erhälst, um die Hälfte reduziert wird.</item> 
+
+<item id="9_16Line1">Shortcut: F2 - FPS Zähler An/Aus.</item>
+<item id="9_16Line2">Shortcuts: F5 / F6 / F7 - verringere / normalisiere / erhöhe Spielgeschwindigkeit.</item>
+<item id="9_16Line3">Shortcut: F8 - Ansicht der Waffentafeln verändern.</item>
+<item id="9_16Line4">Shortcuts: F9 / F10 - Feuermodus der Primär /Sekundär Waffen verändern.</item>
+<item id="9_16Line5">Shortcut: F12 - Bildschirmfoto. (Foto landet auf dem Desktop.)</item>
+<item id="9_16Line6">Shortcut: Esc - Spielmenü An/Aus. (Pause.)</item>
+
+
+<item id="9_17Line1">Waffenwinkel ist nur mit</item>
+<item id="9_17Line2">optischem Computersystem</item>
+<item id="9_17Line3">Neo oder Supra nutzbar.</item>
+
+
+<item id="9_18Line1">AstroMenace Geldspende</item>
+<item id="9_18Line2">AstroMenace für Linux ist Freeware, aber Sie können durch eine</item>
+<item id="9_18Line3">Geldspende die Entwicklung unterstützen.</item>
+<item id="9_18Line4">Verfügbare Spendenmethoden: Kreditkarte (Visa, MasterCard,</item>
+<item id="9_18Line5">EuroCard, American Express, Discover/Novus, Diners Club, JCB),</item>
+<item id="9_18Line6">PayPal, US$ Schecks, Euroschecks, oder Geldüberweisung.</item>
+<item id="9_18Line7">Vielen Dank an Alle für die Unterstützung und</item>
+<item id="9_18Line8">Förderung von AstroMenace!</item>
+
+</itemlist>
+
+
+
+
+
+
+
+
+<!-- credits and copyright -->
+<itemlist id="10">
+
+<item id="10_PROJECT_LEADER">PROJECT LEADER, PROGRAMMING</item>
+<item id="10_Michael_Kurinnoy">Michael Kurinnoy</item>
+
+<item id="10_2D_ARTWORK">2D ARTWORK</item>
+<item id="10_Tatiana_Savitskaya">Tatiana Savitskaya</item>
+
+<item id="10_3D_MODELING">3D MODELING</item>
+<item id="10_Max_Shelekhov">Max Shelekhov, 3drt.com</item>
+<item id="10_Oleg_Linkov">Oleg Linkov</item>
+<item id="10_Egor_Kurteanu">Egor Kurteanu</item>
+
+<item id="10_MUSIC">MUSIC</item>
+<item id="10_Alexander_Matchugovsky">Alexander Matchugovsky, the SandS</item>
+
+<item id="10_SOUND_EFFECTS">SOUND EFFECTS</item>
+<item id="10_Michael_Sirotkin">Michael Sirotkin, the SandS</item>
+<item id="10_Alexander_Vassilyevsky">Alexander Vassilyevsky, the SandS</item>
+
+<item id="10_VOICE">VOICE</item>
+<item id="10_Elena_Zavalishina_(en,_ru)">Elena Zavalishina (en, ru)</item>
+<item id="10_Petra_Schulten_(de)">Petra Schulten (de)</item>
+
+<item id="10_WEB_PROGRAMMING">WEB PROGRAMMING</item>
+<item id="10_Pavel_Voylov">Pavel Voylov</item>
+
+<item id="10_TRANSLATOR">TRANSLATORS</item>
+<item id="10_Bernd_Dau_(de)">Bernd Dau (de), www.zockertown.de</item>
+<item id="10_Michael_Kurinnoy_(en,_ru)">Michael Kurinnoy (en, ru)</item>
+
+<item id="10_TESTERS">TESTERS</item>
+<item id="10_Dmitriy_Schigolev">Dmitriy Schigolev</item>
+<item id="10_Ivan_Bobrov">Ivan Bobrov</item>
+<item id="10_Vadim_Sosenko">Vadim Sosenko</item>
+<item id="10_Dmitriy_Tatarinov">Dmitriy Tatarinov</item>
+<item id="10_Alexey_Mosesov">Alexey Mosesov</item>
+<item id="10_Bernd_Dau">Bernd Dau</item>
+<item id="10_Ryan_Foster">Ryan Foster</item>
+<item id="10_Jason_Crowell">Jason Crowell</item>
+
+<item id="10_SPECIAL_THANKS_TO">SPECIAL THANKS TO</item>
+<item id="10_Richard_Benson">Richard Benson</item>
+<item id="10_Alexey_Madalinskiy">Alexey Madalinskiy</item>
+<item id="10_Olga_Zhuravleva">Olga Zhuravleva</item>
+<item id="10_Nick_OConnell">Nick O`Connell</item>
+
+<item id="10_POWERED_BY">POWERED BY</item>
+
+<item id="10_DEVELOPING_WITH">DEVELOPING WITH</item>
+
+
+
+
+
+</itemlist>
+
+
+
+
+
+
+
+
+
+<!-- interface text -->
+<itemlist id="11">
+
+<item id="11_DEMO">DEMO</item>
+<item id="11_build">build</item>
+<item id="11_fps">fps</item>
+<item id="11_triangles">triangles</item>
+<item id="11_Copyright">Copyright</item>
+<item id="11_Version">Version</item>
+
+</itemlist>
+
+
+
+
+
+
+
+<!-- text for 2d artwork and voice, didn't used in the game directly !!! -->
+<itemlist id="1000">
+
+<!-- artwork elements -->
+<item id="Loading">Lade</item>
+<item id="Mission">Mission</item><!-- showed in the mission start, for example "Mission 1" -->
+<item id="Mission Failed">Mission Verfehlt</item>
+<item id="Pause">Pause</item>
+<item id="Setup">Setup</item><!-- setup button in the weapon slot panel (should be short, 4-6 symbols)-->
+<item id="Empty">Leer</item><!-- for empty system icon -->
+<item id="Engine">Antrieb</item><!-- system -->
+<item id="Targeting">Ziel Sys</item><!-- system -->
+<item id="Power">Energie</item><!-- system -->
+<item id="Advanced">Führend</item><!-- system -->
+<item id="Computer">Computer</item><!-- system -->
+<item id="Empty level">Leer Schacht</item><!-- for empty weapon panel -->
+<item id="Empty weapon slot">Waffe leerer Schacht</item><!-- for empty weapon panel -->
+
+
+<!-- keys title -->
+<item id="Minus">Minus</item>
+<item id="Equals">Gleich</item>
+<item id="BackSpace">BackSpace</item>
+<item id="Tab">Tab</item>
+<item id="Enter">Enter</item>
+<item id="LeftCtrl">LeftCtrl</item>
+<item id="Semicolon">Semikolon</item>
+<item id="Quote">Quote</item>
+<item id="Quotedbl">Quotedbl</item>
+<item id="BackQuote">BackQuote</item>
+<item id="LeftShift">LeftShift</item>
+<item id="BackSlash">BackSlash</item>
+<item id="Comma">Comma</item>
+<item id="Period">Period</item>
+<item id="Slash">Slash</item>
+<item id="RightShift">RightShift</item>
+<item id="Asterisk">Asterisk</item>
+<item id="LeftAlt">LeftAlt</item>
+<item id="Space">Space</item>
+<item id="CapsLock">CapsLock</item>
+<item id="NumLock">NumLock</item>
+<item id="Scroll">Scroll</item>
+<item id="NumPad">NumPad</item>
+<item id="Multiply">Multiply</item>
+<item id="Plus">Plus</item>
+<item id="RightCtrl">RightCtrl</item>
+<item id="Divide">Divide</item>
+<item id="RightAlt">RightAlt</item>
+<item id="Pause">Pause</item>
+<item id="Home">Home</item>
+<item id="PgUp">PgUp</item>
+<item id="PgDn">PgDn</item>
+<item id="Up">Up</item>
+<item id="Left">Left</item>
+<item id="Right">Right</item>
+<item id="End">End</item>
+<item id="Insert">Insert</item>
+<item id="Delete">Delete</item>
+<item id="LeftWin">LeftWin</item>
+<item id="RightWin">RightWin</item>
+
+
+
+<!-- voice, should be like "speech" -->
+<item id="Attention">Achtung</item>
+<item id="Engine Malfunction">Antrieb Fehlfunktion</item>
+<item id="Missile Detected">Rakete erkannt</item>
+<item id="Power Supply Reestablished">Energieversorgung wiederhergestellt!</item>
+<item id="Prepare For Action">Bereite dich vor</item>
+<item id="Reactor Malfunction">Reaktor Fehlfunktion</item>
+<item id="Warning">Warnung</item>
+<item id="Weapon Damaged">Waffe beschädigt</item>
+<item id="Weapon Destroyed">Waffe zerstört</item>
+<item id="Weapon Malfunction">Waffe Fehlfunktion</item>
+<item id="Cease Fire! Cease Fire!">Feuer einstellen! Feuer einstellen!</item>
+
+
+</itemlist>
+
+
+
+
+
+
+
+
+</AstroMenaceText>

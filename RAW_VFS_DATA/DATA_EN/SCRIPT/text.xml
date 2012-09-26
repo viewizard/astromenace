@@ -1,0 +1,945 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AstroMenaceText name="AstroMenace text">
+
+	
+<!-- Main Menu buttons, Dialogs buttons, Dialogs titles -->
+<itemlist id="1">
+
+<item id="1_START_GAME">START GAME</item>
+<item id="1_TOP_SCORES">TOP SCORES</item>
+<item id="1_OPTIONS">OPTIONS</item>
+<item id="1_INFORMATION">INFORMATION</item>
+<item id="1_CREDITS">CREDITS</item>
+<item id="1_QUIT">QUIT</item>
+<item id="1_YES">YES</item>
+<item id="1_NO">NO</item>
+<item id="1_ERROR">ERROR</item>
+<item id="1_CLOSE">CLOSE</item>
+<item id="1_DELETE">DELETE</item>
+<item id="1_REPAIR">REPAIR</item>
+<item id="1_OK">OK</item>
+<item id="1_On">On</item>
+<item id="1_Off">Off</item>
+<item id="1_Decrease">Decrease</item>
+<item id="1_Increase">Increase</item>
+<item id="1_Video_%s_Audio">Video %s Audio</item>
+<item id="1_Config_Controls">Config Controls</item>
+<item id="1_Interface">Interface</item>
+<item id="1_Advanced">Advanced</item>
+<item id="1_MAIN_MENU">MAIN MENU</item>
+<item id="1_DONATE">DONATE</item>
+<item id="1_ORDER_NOW">ORDER NOW</item>
+<item id="1_Arcade">Arcade</item>
+<item id="1_Sim">Sim</item><!--Simulative-->
+<item id="1_BACK">BACK</item>
+<item id="1_Prev">Prev</item><!--Previous-->
+<item id="1_Next">Next</item>
+<item id="1_APPLY">APPLY</item>
+<item id="1_Create">Create</item>
+<item id="1_Difficulty">Difficulty</item>
+<item id="1_Delete">Delete</item>
+<item id="1_NEXT">NEXT</item>
+<item id="1_Shipyard">Shipyard</item>
+<item id="1_Workshop">Workshop</item>
+<item id="1_Weaponry">Weaponry</item>
+<item id="1_START">START</item>
+<item id="1_Info">Info</item><!--Information-->
+<item id="1_Buy_Ship">Buy Ship</item>
+<item id="1_Repair_Hull">Repair Hull</item>
+<item id="1_Upgrade_Hull">Upgrade Hull</item>
+<item id="1_Reload">Reload</item>
+<item id="1_Close">Close</item>
+<item id="1_Buy">Buy</item>
+<item id="1_Sell">Sell</item>
+<item id="1_RESTART">RESTART</item>
+<item id="1_RESUME">RESUME</item>
+<item id="1_GAME_MENU">GAME MENU</item>
+<item id="1_Unimplemented">Unimplemented</item>
+<item id="1_Left">Left</item>
+<item id="1_Right">Right</item>
+<item id="1_Mission_Complete">Mission Complete</item>
+<item id="1_Page_Up">Page Up</item>
+<item id="1_Page_Down">Page Down</item>
+<item id="1_Duplicate">Duplicate</item>
+
+</itemlist>
+
+
+
+
+
+
+<!-- Dialogs texts -->
+<itemlist id="2">
+
+<item id="2_quit_line1">Are you sure you want to quit?</item>
+<item id="2_quit_line2">Note: all game data will be saved.</item>
+<item id="2_quit_line3">Note: the current game data will be lost.</item>
+
+<item id="2_ccprof_line1">Cannot create a Pilot Profile.</item>
+<item id="2_ccprof_line2">Tip: you should clear one line first.</item>
+
+<item id="2_delprof_line1">Are you sure you want to delete the Profile?</item>
+<item id="2_delprof_line2">Note: all Pilot Profile data will be lost.</item>
+
+<item id="2_cnrepair_line1">Not enough money for the full hull repair.</item>
+<item id="2_cnrepair_line2">Note: Repair has been limited by money.</item>
+
+<item id="2_restart_line1">Are you sure you want to restart the game?</item>
+<item id="2_restart_line2">Note: the current game data will be lost.</item>
+
+</itemlist>
+
+
+
+
+
+
+<!-- Menu's texts, options titles -->
+<itemlist id="3">
+
+<item id="3_Mouse_Control">Mouse Control</item>
+<item id="3_Control_Sensitivity">Control Sensitivity</item>
+<item id="3_MOUSE">MOUSE</item>
+<item id="3_KEYBOARD">KEYBOARD</item>
+<item id="3_JOYSTICK">JOYSTICK</item>
+<item id="3_Primary_Attack">Primary Attack</item>
+<item id="3_Secondary_Attack">Secondary Attack</item>
+<item id="3_Move_Forward">Move Forward</item>
+<item id="3_Move_Backward">Move Backward</item>
+<item id="3_Move_Left">Move Left</item>
+<item id="3_Move_Right">Move Right</item>
+<item id="3_Enemy_Weapon_Penalty">Enemy Weapon Penalty</item>
+<item id="3_None">None</item>
+<item id="3_Enemy_Armor_Penalty">Enemy Armor Penalty</item>
+<item id="3_Enemy_Targeting_Penalty">Enemy Targeting Penalty</item>
+<item id="3_Limited_Ammo">Limited Ammo</item>
+<item id="3_Destroyable_Weapon">Destroyable Weapon</item>
+<item id="3_SpaceShip_Control_Mode">SpaceShip Control Mode</item>
+<item id="3_Weapon_Targeting_Mode">Weapon Targeting Mode</item>
+<item id="3_Not_implemented">Not implemented</item>
+<item id="3_Screen_Mode">Screen Mode</item>
+<item id="3_Window_Size">Window Size</item>
+<item id="3_Bilinear">Bilinear</item>
+<item id="3_Trilinear">Trilinear</item>
+<item id="3_Low">Low</item>
+<item id="3_Medium">Medium</item>
+<item id="3_High">High</item>
+<item id="3_Disabled">Disabled</item>
+<item id="3_1_Layer">1 Layer</item>
+<item id="3_2_Layers">2 Layers</item>
+<item id="3_3_Layers">3 Layers</item>
+
+<item id="3_Menu_Language">Menu Language</item>
+<item id="3_Keyboard_Layout">Keyboard Layout</item>
+<item id="3_Voice_Language">Voice Language</item>
+
+<item id="3_Music_Volume">Music Volume</item>
+<item id="3_Not_available">Not available</item>
+<item id="3_Sound_Effects_Volume">Sound Effects Volume</item>
+<item id="3_Full_Screen">Full Screen</item>
+<item id="3_Refresh_Rate">Refresh Rate</item>
+<item id="3_Default">Default</item>
+<item id="3_Gamma">Gamma</item>
+<item id="3_Texture_Filtering_Mode">Texture Filtering Mode</item>
+<item id="3_Textures_Quality">Textures Quality</item>
+<item id="3_Multisample_Antialiasing">Multisample Antialiasing</item>
+<item id="3_Particles_GFX_Quality">Particles GFX Quality</item>
+<item id="3_Explosions_GFX_Quality">Explosions GFX Quality</item>
+<item id="3_Stars_Quantity">Stars Quantity</item>
+<item id="3_NAME">NAME</item>
+<item id="3_SCORE">SCORE</item>
+<item id="3_GAME_OBJECTS_INFORMATION">GAME OBJECTS INFORMATION</item>
+<item id="3_Page_%i_of_%i">Page %i of %i</item>
+<item id="3_New_Pilot_Profile">New Pilot Profile</item>
+<item id="3_Pilots_Profiles">Pilots Profiles</item>
+<item id="3_Money">Money</item>
+<item id="3_Experience">Experience</item>
+<item id="3_Difficulty">Difficulty</item>
+<item id="3_empty">empty</item>
+<item id="3_Current_Profile_Difficulty">Current Profile Difficulty</item>
+<item id="3_Weapon_Fire_Control:">Weapon Fire Control:</item>
+<item id="3_Alternative_Fire_Control:">Alternative Fire Control:</item>
+<item id="3_Weapon_Angle:_%2.1f">Weapon Angle: %2.1f</item>
+<item id="3_Type">Type</item>
+<item id="3_Killed">Killed</item>
+<item id="3_Bonus">Bonus</item>
+<item id="3_Total">Total</item>
+<item id="3_Background_Tile_Animation">Background Tile Animation</item>
+<item id="3_Textures_Compression">Textures Compression</item>
+<item id="3_Mipmap_LOD_Management">Mipmap LOD Management</item>
+<item id="3_OpenGL_Shading_Language">OpenGL Shading Language</item>
+<item id="3_Point_Lights_per_Object">Point Lights per Object</item>
+<item id="3_1_Light">1 Light</item>
+<item id="3_2_Lights">2 Lights</item>
+<item id="3_3_Lights">3 Lights</item>
+<item id="3_4_Lights">4 Lights</item>
+<item id="3_5_Lights">5 Lights</item>
+<item id="3_6_Lights">6 Lights</item>
+<item id="3_Anisotropy_Level">Anisotropy Level</item>
+
+<!-- + -->
+<item id="3_Aspect_Ration">Aspect Ratio</item>
+<item id="3_Standard">Standard</item>
+<item id="3_Widescreen">Widescreen</item>
+<!-- + -->
+
+
+</itemlist>
+
+
+
+
+
+
+<!-- Menu's texts (information menu) -->
+<itemlist id="4">
+
+<item id="4_Earth_Spaceships">Earth Spaceships</item>
+<item id="4_Space_Mines">Space Mines</item>
+<item id="4_Space_Mine">Space Mine</item>
+<item id="4_Auto_Cannon:">Auto Cannon:</item>
+<item id="4_Auto_Launcher:">Auto Launcher:</item>
+<item id="4_Weapon">Weapon</item>
+<item id="4_Weapons">Weapons</item>
+<item id="4_Weapons_Slots:">Weapons Slots:</item>
+<item id="4_Alien_Spaceships">Alien Spaceships</item>
+<item id="4_Alien_Motherships">Alien Motherships</item>
+<item id="4_Pirate_Spaceships">Pirate Spaceships</item>
+<item id="4_Pirate_Vehicles">Pirate Vehicles</item>
+<item id="4_Pirate_Buildings">Pirate Buildings</item>
+<item id="4_Asteroids">Asteroids</item>
+<item id="4_Civilian_Buildings">Civilian Buildings</item>
+<item id="4_Military_Buildings">Military Buildings</item>
+<item id="4_Wheeled_Vehicles">Wheeled Vehicles</item>
+<item id="4_Tracked_Vehicles">Tracked Vehicles</item>
+<item id="4_Wheeled_Vehicle">Wheeled Vehicle</item>
+<item id="4_Tracked_Vehicle">Tracked Vehicle</item>
+<item id="4_Object_Class:">Object Class:</item>
+<item id="4_Space_Ship">Space Ship</item>
+<item id="4_Ship_Type:">Ship Type:</item>
+<item id="4_Developer:">Developer:</item>
+<item id="4_Earth_Federation">Earth Federation</item>
+<item id="4_Status:">Status:</item>
+<item id="4_Armor:">Armor:</item>
+<item id="4_Indestructible">Indestructible</item>
+<item id="4_Upgrade_Mk2:">Upgrade Mk2:</item>
+<item id="4_Upgrade_Mk3:">Upgrade Mk3:</item>
+<item id="4_Upgrade_Mk4:">Upgrade Mk4:</item>
+<item id="4_Slots_Levels:">Slots Levels:</item>
+<item id="4_Codename:">Codename:</item>
+<item id="4_Width:">Width:</item>
+<item id="4_Length:">Length:</item>
+<item id="4_Height:">Height:</item>
+<item id="4_Engines:">Engines:</item>
+<item id="4_Ally">Ally</item>
+<item id="4_Fighter">Fighter</item>
+<item id="4_Interceptor">Interceptor</item>
+<item id="4_Bomber">Bomber</item>
+<item id="4_Scout">Scout</item>
+<item id="4_Attack_Ship">Attack Ship</item>
+<item id="4_Weapon,_Cannon">Weapon, Cannon</item>
+<item id="4_Weapon,_Launcher">Weapon, Launcher</item>
+<item id="4_Type:">Type:</item>
+<item id="4_Damage,_Hull:">Damage, Hull:</item>
+<item id="4_Damage,_Systems:">Damage, Systems:</item>
+<item id="4_Energy_Use:">Energy Use:</item>
+<item id="4_Ammo:">Ammo:</item>
+<item id="4_Reload:">Reload:</item>
+<item id="4_Range:">Range:</item>
+<item id="4_Kinetic">Kinetic</item>
+<item id="4_Ion">Ion</item>
+<item id="4_Plasma">Plasma</item>
+<item id="4_Maser">Maser</item>
+<item id="4_Antimatter">Antimatter</item>
+<item id="4_Laser">Laser</item>
+<item id="4_Gauss">Gauss</item>
+<item id="4_Propelled">Propelled</item>
+<item id="4_Unknown">Unknown</item>
+<item id="4_Enemy">Enemy</item>
+<item id="4_Damage:">Damage:</item>
+<item id="4_MotherShip">MotherShip</item>
+<item id="4_Pirate_Ship">Pirate Ship</item>
+<item id="4_Pirates">Pirates</item>
+<item id="4_Marauder">Marauder</item>
+<item id="4_Warder">Warder</item>
+<item id="4_Raider">Raider</item>
+<item id="4_Carrier">Carrier</item>
+<item id="4_Missile_Carrier">Missile Carrier</item>
+<item id="4_Freighter">Freighter</item>
+<item id="4_Battle_Freighter">Battle Freighter</item>
+<item id="4_Civilian_Building">Civilian Building</item>
+<item id="4_Old_Republic">Old Republic</item>
+<item id="4_Military_Building">Military Building</item>
+<item id="4_Cannon">Cannon</item>
+<item id="4_MachineGun">MachineGun</item>
+<item id="4_Turbo_Cannon">Turbo Cannon</item>
+<item id="4_Missile_Launcher">Missile Launcher</item>
+<item id="4_Cannon_Turret">Cannon Turret</item>
+<item id="4_Armored_Jeep">Armored Jeep</item>
+<item id="4_Jeep">Jeep</item>
+<item id="4_APC">APC</item>
+<item id="4_Tank">Tank</item>
+<item id="4_Engineer">Engineer</item>
+<item id="4_Not_combatant">Not combatant</item>
+<item id="4_System">System</item>
+<item id="4_Spaceship_Engine">Spaceship Engine</item>
+<item id="4_Ion_Resistance:">Ion Resistance:</item>
+<item id="4_Engine_Power:">Engine Power:</item>
+<item id="4_Acceleration:">Acceleration:</item>
+<item id="4_Relations/Dependences:">Relations/Dependences:</item>
+<item id="4_SpaceShip_Weight">SpaceShip Weight</item>
+<item id="4_Power_Source">Power Source</item>
+<item id="4_ArcadeModeLine1">Useless with Arcade</item>
+<item id="4_ArcadeModeLine2">SpaceShip Control Mode.</item><!--Useless with Arcade SpaceShip Control Mode.-->
+<item id="4_ArcadeModeLine3">Weapon Targeting Mode.</item><!--Useless with Arcade Weapon Targeting Mode.-->
+<item id="4_Energy_Capacity:">Energy Capacity:</item>
+<item id="4_Recharge_Rate:">Recharge Rate:</item>
+<item id="4_Weapon_Recharge_Rate">Weapon Recharge Rate</item>
+<item id="4_Optical_Computer">Optical Computer</item>
+<item id="4_Targeting_System">Targeting System</item>
+<item id="4_Advanced_System">Advanced System</item>
+<item id="4_Target_Tracing:">Target Tracing:</item>
+<item id="4_Auto_Adjustment:">Auto Adjustment:</item>
+<item id="4_No">No</item>
+<item id="4_Yes">Yes</item>
+<item id="4_Weapon_Fire_Range">Weapon Fire Range</item>
+<item id="4_Weapon_Orientation">Weapon Orientation</item>
+<item id="4_Orientation_Speed:">Orientation Speed:</item>
+<item id="4_Hull_Repair_Rate:">Hull Repair Rate:</item>
+<item id="4_Resistance,_Hull:">Resistance, Hull:</item>
+<item id="4_Resistance,_System:">Resistance, System:</item>
+<item id="4_Shield_Power:">Shield Power:</item>
+<item id="4_Hull_Resistance">Hull Resistance</item>
+<item id="4_Systems_Resistance">Systems Resistance</item>
+<item id="4_SpaceShip_Vitality">SpaceShip Vitality</item>
+<item id="4_units">units</item>
+<item id="4_units_per_shot">units per shot</item>
+<item id="4_seconds">seconds</item>
+<item id="4_units_per_sec">units per sec</item>
+<item id="4_object(s)">object(s)</item>
+<item id="4_deg_per_sec">deg per sec</item>
+<item id="4_per_sec">per sec</item>
+<item id="4_units/shot">units/shot</item>
+<item id="4_units/sec">units/sec</item>
+<item id="4_Game_Speed:">Game Speed:</item>
+<item id="4_Missile_Detected">Missile Detected</item>
+
+</itemlist>
+
+
+
+
+
+
+<!-- Menu's texts (objects description in the information menu) -->
+<itemlist id="5">
+
+<item id="5_FighterLine1">Fighter is a military spaceship primarily designed to attack other spaceships.</item>
+<item id="5_FighterLine2">Fighters are comparatively fast, maneuverable and equipped with primary and</item>
+<item id="5_FighterLine3">secondary weapon systems to attack other spaceships.</item>
+
+<item id="5_InterceptorLine1">Interceptor is a type of fighter specifically designed to intercept and</item>
+<item id="5_InterceptorLine2">destroy enemy spaceships. Interceptors are very fast, maneuverable and</item>
+<item id="5_InterceptorLine3">equipped only with primary weapon systems to attack other spaceships.</item>
+
+<item id="5_BomberLine1">Bomber is a military spaceship specifically designed to carry bombs, torpedoes</item>
+<item id="5_BomberLine2">and missiles. Bombers are comparatively slow and also equipped with some</item>
+<item id="5_BomberLine3">primary weapon systems to defend themselves from enemy spaceships.</item>
+
+<item id="5_AttackShipLine1">Attack Ship is a type of bomber specifically designed for long-range</item>
+<item id="5_AttackShipLine2">raids in small groups, as opposed to a bomber designed to attack</item>
+<item id="5_AttackShipLine3">under air cover provided by fighters.</item>
+
+<item id="5_ScoutLine1">Scout is a spaceship specifically designed to actively gather information</item>
+<item id="5_ScoutLine2">about the enemy or other objects by means of physical observation. Scouts</item>
+<item id="5_ScoutLine3">are very small, fast, and highly maneuverable.</item>
+
+<item id="5_KineticLine1">Kinetic is a weapon that forcibly throws projectiles at a target. These projectiles</item>
+<item id="5_KineticLine2">are not self-propelled. A projectile is an object usually made of a metal alloy.</item>
+<item id="5_KineticLine3">In contrast to a missile, a projectile does not contain explosives.</item>
+
+<item id="5_IonLine1">Ion is a particle-beam weapon employing a dual-particle beam array.</item>
+<item id="5_IonLine2">The inner part, or core, is composed of positively charged ions - normally</item>
+<item id="5_IonLine3">iron nuclei, while the outer part is composed of neutral particles.</item>
+
+<item id="5_PlasmaLine1">Plasma is a weapon that forcibly throws highly ionized matter obtained</item>
+<item id="5_PlasmaLine2">either by heating some material to very high temperatures or by bombarding</item>
+<item id="5_PlasmaLine3">it with a strong flux of high-energy photons.</item>
+
+<item id="5_MaserLine1">Microwave Amplification by Stimulated Emission of Radiation is a weapon that</item>
+<item id="5_MaserLine2">forcibly throws projectile amplifier that produces coherent microwaves</item>
+<item id="5_MaserLine3">as the result of stimulated emission.</item>
+
+<item id="5_AntimatterLine1">Antimatter is a weapon that forcibly throws matter consisting of</item>
+<item id="5_AntimatterLine2">antiparticles, elementary particles of ordinary matter, such as protons and</item>
+<item id="5_AntimatterLine3">electrons, but having an opposite electrical charge.</item>
+
+<item id="5_LaserLine1">Light Amplification by Stimulated Emission of Radiation. A high-energy light source</item>
+<item id="5_LaserLine2">that uses light emitted by the natural vibrations of atoms (in gas or</item>
+<item id="5_LaserLine3">solid material) to cut, burn or dissolve materials for various military purposes.</item>
+
+<item id="5_GaussLine1">Gauss is a weapon that forcibly throws projectiles that operate on</item>
+<item id="5_GaussLine2">the subatomic level of any matter they are used against by disintegrating</item>
+<item id="5_GaussLine3">the molecules of the target.</item>
+
+<item id="5_MissileLine1">Missile is a self-propelled explosive projectile moving due to the ejection</item>
+<item id="5_MissileLine2">of matter, especially the high-velocity ejection of gaseous combustion</item>
+<item id="5_MissileLine3">products produced by the internal ignition of solid or liquid fuel.</item>
+
+<item id="5_TorpedoLine1">Torpedo is a self-propelled explosive projectile that (after being launched)</item>
+<item id="5_TorpedoLine2">operates automatically and is designed to detonate on contact or in proximity</item>
+<item id="5_TorpedoLine3">to the target.</item>
+
+<item id="5_NukeBombLine1">Nuke Bomb is a self-propelled explosive nuclear projectile that uses</item>
+<item id="5_NukeBombLine2">nuclear fusion to release energy stored in the nuclei of hydrogen isotopes.</item>
+<item id="5_NukeBombLine3">This bomb is designed to detonate on contact or in proximity to the target.</item>
+
+<item id="5_MineLine1">Space Mine is an explosive device, usually some kind of container filled with</item>
+<item id="5_MineLine2">explosive material, designed to cause destruction when set off. The explosion</item>
+<item id="5_MineLine3">of the mine has to be triggered, usually by radar, or contact.</item>
+
+<item id="5_UnknownLine1">No information about this object. There is a lack of</item>
+<item id="5_UnknownLine2">knowledge to research this object or obtain any information</item>
+<item id="5_UnknownLine3">about its work.</item>
+
+<item id="5_MarauderLine1">Marauder is a pirate spaceship primarily designed to attack other</item>
+<item id="5_MarauderLine2">spaceships. Marauders are very fast, maneuverable and equipped with</item>
+<item id="5_MarauderLine3">primary and secondary weapon systems to attack other spaceships.</item>
+
+<item id="5_WarderLine1">Warder is a pirate spaceship specifically designed to be part</item>
+<item id="5_WarderLine2">of the pirate base defense system. Warders are highly armored and well</item>
+<item id="5_WarderLine3">equipped spaceships always ready for a rapid counterattack.</item>
+
+<item id="5_RaiderLine1">Raider is a pirate attack ship specifically designed for long-range</item>
+<item id="5_RaiderLine2">raids in small groups or as the main attack ship in large groups.</item>
+<item id="5_RaiderLine3">Unlike Warders, Raiders are designed to attack under Marauder cover.</item>
+
+<item id="5_MissileCarrierLine1">Missile Carrier is a pirate attack ship specifically designed for</item>
+<item id="5_MissileCarrierLine2">long-range raids in large groups. Unlike Raiders, Missile Carriers</item>
+<item id="5_MissileCarrierLine3">can be used as regular carriers for slaves and goods.</item>
+
+<item id="5_BattleFreighterLine1">Battle Freighter is a pirate freighter that is used for long-range raids</item>
+<item id="5_BattleFreighterLine2">in large groups. Unlike Missile Carriers, Battle Freighters are</item>
+<item id="5_BattleFreighterLine3">civilian ships equipped with propelled weapon systems only.</item>
+
+<item id="5_CivilianBuildingLine1">Civilian Building is a structure having a roof supported by columns, piers,</item>
+<item id="5_CivilianBuildingLine2">or walls and intended to shelter, house or enclose persons,</item>
+<item id="5_CivilianBuildingLine3">animals or chattels.</item>
+
+<item id="5_WeaponturretLine1">Weapon turret is a self-contained armored weapon platform housing</item>
+<item id="5_WeaponturretLine2">cannon or missile launcher system. Weapon turrets are strongly armored</item>
+<item id="5_WeaponturretLine3">and can rotate.</item>
+
+<item id="5_ArmoredJeepLine1">Armored Jeep is a type of jeep with special armored hull designed for close</item>
+<item id="5_ArmoredJeepLine2">combat. Armored Jeeps are comparatively fast, maneuverable and equipped</item>
+<item id="5_ArmoredJeepLine3">with heavy weapon systems to attack enemy.</item>
+
+<item id="5_JeepLine1">Jeep is a military wheeled vehicle suitable for traveling over rough terrain.</item>
+<item id="5_JeepLine2">Jeeps are highly maneuverable, and equipped with weapon systems to attack</item>
+<item id="5_JeepLine3">enemy with direct fire.</item>
+
+<item id="5_TankLine1">Tank is a tracked, armored combat vehicle primarily designed to destroy</item>
+<item id="5_TankLine2">enemy forces with direct fire. A battle tank is distinguished by its high</item>
+<item id="5_TankLine3">level of firepower and stronger armor as compared to other vehicles.</item>
+
+<item id="5_APCLine1">Armored Personnel Carrier is a military armored vehicle usually</item>
+<item id="5_APCLine2">equipped with treads, weapon systems to attack enemy</item>
+<item id="5_APCLine3">and used to transport infantry.</item>
+
+<item id="5_MissileLauncherLine1">Missile Launcher is a military armored vehicle equipped with</item>
+<item id="5_MissileLauncherLine2">a device that can launch missiles, torpedoes or bombs to attack</item>
+<item id="5_MissileLauncherLine3">enemy.</item>
+
+<item id="5_EngineerLine1">Engineer is a military vehicle primarily responsible for the design and</item>
+<item id="5_EngineerLine2">construction of offensive, defensive, logistical structures for warfare,</item>
+<item id="5_EngineerLine3">maintenance and dismantling of defensive minefields.</item>
+
+</itemlist>
+
+
+
+
+
+<!-- Missions descriptions -->
+<itemlist id="6">
+
+<item id="6_Mission1Title">Mission 1 - First Contact with Unknown Enemy</item>
+<item id="6_Mission2Title">Mission 2 - Attack, Do Not Let Them Go</item>
+<item id="6_Mission3Title">Mission 3 - Counterattack Is The Best Defense</item>
+<item id="6_Mission4Title">Mission 4 - Attack on Fleet of Pirate Raiders</item>
+<item id="6_Mission5Title">Mission 5 - Surprise, Surprise... Aliens Again</item>
+<item id="6_Mission6Title">Mission 6 - Stop Alien MotherShip Now!</item>
+<item id="6_Mission7Title">Mission 7 - Attack on Small Pirate Raiders Base</item>
+<item id="6_Mission8Title">Mission 8 - Stay Close, They Are Coming</item>
+<item id="6_Mission9Title">Mission 9 - One More Pirate Raiders Base</item>
+<item id="6_Mission10Title">Mission 10 - Strange Slackness... Be Ready!</item>
+<item id="6_Mission11Title">Mission 11 - Do Not Let Them Destroy Our Base!</item>
+<item id="6_Mission12Title">Mission 12 - Secret Pirate Base</item>
+<item id="6_Mission13Title">Mission 13 - Alien Transportation Port</item>
+<item id="6_Mission14Title">Mission 14 - Last Pirate Enclave</item>
+<item id="6_Mission15Title">Mission 15 - Escape Under Aliens` Attack</item>
+
+
+<item id="6_Mission1Descr">They are coming! They are everywhere!</item>
+<item id="6_Mission2Descr">Damned raiders here! No Mercy! Kill them all!</item>
+<item id="6_Mission3Descr">Our base is under attack! Stop the aliens` attack now!</item>
+<item id="6_Mission4Descr">Find a pirate raider base in this sector!</item>
+<item id="6_Mission5Descr">Do not let them regroup for a counterattack!</item>
+<item id="6_Mission6Descr">They are too close! You should do something!</item>
+<item id="6_Mission7Descr">We found their base! Finally! Lets smash them!</item>
+<item id="6_Mission8Descr">Looks like the aliens got reinforcement!</item>
+<item id="6_Mission9Descr">This should be piece of cake for you, do it quickly!</item>
+<item id="6_Mission10Descr">Our intelligence failed to find anything. It can be a trap!</item>
+<item id="6_Mission11Descr">Do not panic! We got reinforcement! Regroup and attack!</item>
+<item id="6_Mission12Descr">They are too smart now, and much more dangerous.</item>
+<item id="6_Mission13Descr">We found their hyper port! We must destroy it right now!</item>
+<item id="6_Mission14Descr">This sector must be clear and safe for ever!</item>
+<item id="6_Mission15Descr">We lost this sector, this battle is lost. Try to escape!</item>
+
+</itemlist>
+
+
+
+
+
+
+<!-- Workshop texts -->
+<itemlist id="7">
+
+<!-- EarthFighters types -->
+<item id="7_ship1">Cobra</item>
+<item id="7_ship2">SpaceEagle</item>
+<item id="7_ship3">FireStorm</item>
+<item id="7_ship4">Hedgehog</item>
+<item id="7_ship5">Thunder</item>
+<item id="7_ship6">Excalibur</item>
+<item id="7_ship7">DarkStar</item>
+<item id="7_ship8">Scorpion</item>
+<item id="7_ship9">Runner</item>
+<item id="7_ship10">Kronos</item>
+<item id="7_ship11">Chameleon</item>
+<item id="7_ship12">Falcon</item>
+<item id="7_ship13">DeathRipple</item>
+<item id="7_ship14">AstroSword</item>
+<item id="7_ship15">Pulser</item>
+<item id="7_ship16">ClumsyMace</item>
+<item id="7_ship17">Raptor</item>
+<item id="7_ship18">Destroyer</item>
+<item id="7_ship19">AstroSpear</item>
+<item id="7_ship20">Mite</item>
+<item id="7_ship21">Viper</item>
+<item id="7_ship22">BlackIce</item>
+<item id="7_shipfullname">%s Mk%i</item>
+
+<!-- Weapon types -->
+<item id="7_weapon1">FireFox</item>
+<item id="7_weapon2">FireBird</item>
+<item id="7_weapon3">Meteor</item>
+<item id="7_weapon4">Hasher</item>
+<item id="7_weapon5">Trammel</item>
+<item id="7_weapon6">IonStorm</item>
+<item id="7_weapon7">IonRipple</item>
+<item id="7_weapon8">Quasher</item>
+<item id="7_weapon9">Destabilizer</item>
+<item id="7_weapon10">Anihilator</item>
+<item id="7_weapon11">Devastator</item>
+<item id="7_weapon12">DeathFlow</item>
+<item id="7_weapon13">Vaporizer</item>
+<item id="7_weapon14">Rapier</item>
+<item id="7_weapon15">Pandora</item>
+<item id="7_weapon16">Stinger</item>
+<item id="7_weapon17">Swarm</item>
+<item id="7_weapon18">Vengeance</item>
+<item id="7_weapon19">BabyDoll</item>
+
+<!-- System types -->
+<!-- Engines -->
+<item id="7_system1">Jet Engine</item>
+<item id="7_system2">Photon Jet</item>
+<item id="7_system3">Plasma Jet</item>
+<item id="7_system4">Antimatter</item>
+<!-- Power systems -->
+<item id="7_system5">Ion Battery</item>
+<item id="7_system6">Nuclear</item>
+<item id="7_system7">Plasma</item>
+<item id="7_system8">Antimatter</item>
+<!-- Optical computers -->
+<item id="7_system9">Base O.T.C.</item>
+<item id="7_system10">Hamerik O.T.C.</item>
+<item id="7_system11">Neo M.O.T.C.</item>
+<item id="7_system12">Supra M.O.T.C.</item>
+<!-- Targeting systems -->
+<item id="7_system13">Mechanical</item>
+<item id="7_system14">Hydraulic</item>
+<item id="7_system15">Magnetic</item>
+<item id="7_system16">Vacuum</item>
+<!-- Advanced systems -->
+<item id="7_system17">Repair NaRs</item>
+<item id="7_system18">Layer</item>
+<item id="7_system19">Energy Shield</item>
+<item id="7_system20">Deflector</item>
+
+
+<!-- common workshop texts -->
+<item id="7_Ships_Stock">Ship Stock</item>
+<item id="7_Ship_Hull_Cost">Ship Hull Cost</item>
+<item id="7_Not_Available_in_Demo_Version">Not Available in Demo Version</item>
+<item id="7_Player_Ship">Player Ship</item>
+<item id="7_Upgrade_Hull_Cost">Upgrade Hull Cost</item>
+<item id="7_Repair_Hull_Cost">Repair Hull Cost</item>
+<item id="7_Ship_Cost">Ship Cost</item>
+<item id="7_Weapon_Ammo:">Weapon Ammo:</item>
+<item id="7_Weapon_Reload_Cost:">Weapon Reload Cost:</item>
+<item id="7_Weapon_Type">Weapon Type</item>
+<item id="7_Weapon_Level">Weapon Level</item>
+<item id="7_Weapon_Cost">Weapon Cost</item>
+<item id="7_Weapon_Stock">Weapon Stock</item>
+<item id="7_Installed_Weapons">Installed Weapons</item>
+<item id="7_System_Stock">System Stock</item>
+<item id="7_Installed_Systems">Installed Systems</item>
+<item id="7_Installed_System">Installed System</item>
+<item id="7_Selected_System">Selected System</item>
+<item id="7_Cost">Cost</item>
+
+
+</itemlist>
+
+
+
+
+<!-- Demo notes, for windows game version -->
+<itemlist id="8">
+
+<item id="8_Line1">ASTROMENACE FULL VERSION FEATURES</item>
+<item id="8_Line2">- 5 Pilots Profiles with one touch access.</item>
+<item id="8_Line3">- Simulative and arcade ship control mode.</item>
+<item id="8_Line4">- Flexible difficulty control.</item>
+<item id="8_Line5">- 22 playable ships with unique characteristics.</item>
+<item id="8_Line6">- 19 unique weapons with the easy drag-and-drop weapon mount mode.</item>
+<item id="8_Line7">- 5 upgradeable systems with 4 modifications each.</item>
+<item id="8_Line8">- Unlimited gameplay without any limitations.</item>
+<item id="8_Line9">- 15 missions with 100+ unique enemies and 40+ space objects.</item>
+<item id="8_Line10">- More than 150 minutes of play.</item>
+<item id="8_Line11">The full version cost $19.95, BUY NOW to get this features!</item>
+
+
+</itemlist>
+
+
+
+
+
+
+
+
+
+<!-- hints texts -->
+<itemlist id="9">
+
+<item id="9_Tipsandhints">Tips and hints</item>
+<item id="9_notshowtip">Do not show this tip again.</item>
+
+<item id="9_9Line1">It is possible to create five Pilot Profiles in the game in order</item>
+<item id="9_9Line2">to store personal data. You can set an individual difficulty level</item>
+<item id="9_9Line3">for each profile or delete the current profile to free space for</item>
+<item id="9_9Line4">a new profile.</item>
+<item id="9_9Line5">Note that the current difficulty level is displayed in percent</item>
+<item id="9_9Line6">for each profile. This value influences the increase of experience.</item>
+<item id="9_9Line7">For instance, if you bring down an enemy ship, you will get 100</item>
+<item id="9_9Line8">money units and only 65 experience units if the difficulty percent</item>
+<item id="9_9Line9">is set to 65 for you.</item>
+<item id="9_9Line10">Note: you can change your difficulty level before each</item>
+<item id="9_9Line11">new mission.</item>
+
+<item id="9_10Line1">There are more than 20 spaceships with unique characteristics available</item>
+<item id="9_10Line2">in the game. You can use the right part of the screen to see your</item>
+<item id="9_10Line3">current spaceship, its characteristics and cost and also to perform</item>
+<item id="9_10Line4">basic operations, such as repair and ship hull armor enhancement.</item>
+<item id="9_10Line5">The left part of the screen contains Ship Stock where you can see</item>
+<item id="9_10Line6">all available spaceships and their characteristics. Do not forget that</item>
+<item id="9_10Line7">each ship has its dimensions and, which is more important,</item>
+<item id="9_10Line8">different weapon mounts.</item>
+<item id="9_10Line9">The basic shipbuilding concept is as follows:</item>
+<item id="9_10Line10">Scout - light, small and maneuverable ships with weak weapons.</item>
+<item id="9_10Line11">Interceptor - fast ships with light weapons.</item>
+<item id="9_10Line12">Fighter - main type of ships with light and semi-heavy weapons.</item>
+<item id="9_10Line13">Bomber - heavy destroyers with mostly heavy attack weapons.</item>
+<item id="9_10Line14">Attack Ship - heavy, large and heavily armed ships.</item>
+
+<item id="9_11Line1">A set of systems is installed on the ship you operate. All systems</item>
+<item id="9_11Line2">are connected with each other and with ship weapons in one way or</item>
+<item id="9_11Line3">another and play important role in the game.</item>
+<item id="9_11Line4">You should carefully take into account the peculiarities of each</item>
+<item id="9_11Line5">system and match their characteristics to each other to get</item>
+<item id="9_11Line6">a well balanced warship that can complete combat tasks.</item>
+<item id="9_11Line7">Engine - ship engine system. Pay attention to how this system consumes</item>
+<item id="9_11Line8">energy. Otherwise you run the risk of being unable to move.</item>
+<item id="9_11Line9">Power - ship energy source. Pay attention to the main two characteristics</item>
+<item id="9_11Line10">of this system - Recharge Rate and Energy Capacity.</item>
+<item id="9_11Line11">O.T.C. - Optical Target Computer. As you can see from its name,</item>
+<item id="9_11Line12">this system is responsible for optical targeting.</item>
+<item id="9_11Line13">Targeting - Weapon targeting system. It depends on this system how</item>
+<item id="9_11Line14">fast a weapon will aim and how accurate the shot will be.</item>
+<item id="9_11Line15">Advanced - The most advanced, but yet untested systems for</item>
+<item id="9_11Line16">enhancing ship invulnerability.</item>
+
+<item id="9_12Line1">You can use this section to buy, sell and set up the weapons on</item>
+<item id="9_12Line2">your ship. To buy a weapon, just drag its icon from Weapon Stock</item>
+<item id="9_12Line3">to a weapon slot on your ship. Note that each weapon has its</item>
+<item id="9_12Line4">own level (from 1 to 5), you should see that the slot level is</item>
+<item id="9_12Line5">not less than the weapon level. To sell a weapon, perform</item>
+<item id="9_12Line6">the reverse operation.</item>
+<item id="9_12Line7">The weapon is set up and recharged with the Setup button</item>
+<item id="9_12Line8">in the right part of the weapon slot panel.</item>
+<item id="9_12Line9">Main types of weapons by their projectiles:</item>
+<item id="9_12Line10">Projectile - small projectiles based on billets or energy beams.</item>
+<item id="9_12Line11">It is the main and most widespread weapon in the game.</item>
+<item id="9_12Line12">Self-propelled projectile - missiles, torpedoes and nuclear bombs.</item>
+<item id="9_12Line13">The disadvantages of these weapons include the low speed</item>
+<item id="9_12Line14">of the projectile and the possibility of bring it down.</item>
+<item id="9_12Line15">Beam - Lasers and Masers. Short-range highly energy-</item>
+<item id="9_12Line16">consuming weapons.</item>
+
+
+<item id="9_13Line1">GAME KEYBOARD SHORTCUTS</item>
+<item id="9_13Line2">F2 - toggle show/hide game FPS counter.</item>
+<item id="9_13Line4">Note: it will reduce visual effects. Use it, if you have old hardware</item>
+<item id="9_13Line5">to increase game FPS.</item>
+<item id="9_13Line6">F5 - decrease game speed.</item>
+<item id="9_13Line7">F6 - reset game speed to normal.</item>
+<item id="9_13Line8">F7 - increase game speed.</item>
+<item id="9_13Line9">Note: do not increase game speed, if you have low FPS.</item>
+<item id="9_13Line10">F8 - change weapon panels view.</item>
+<item id="9_13Line11">F9 - change Primary weapon group fire mode.</item>
+<item id="9_13Line12">F10 - change Secondary weapon group fire mode.</item>
+<item id="9_13Line13">F12 - capture screenshot. (File will be saved on your Desktop.)</item>
+<item id="9_13Line14">Esc - show/hide game menu. (Pause.)</item>
+<item id="9_13Line15">Note: all changes will be saved in the game configuration file.</item>
+
+
+<item id="9_14Line1">Warning! Low energy recharge rate!</item>
+<item id="9_14Line2">Could be problems with</item>
+<item id="9_14Line3">systems function and/or weapons recharge!</item>
+
+
+<item id="9_15Line1">You have already completed this mission. Your previous best</item>
+<item id="9_15Line2">result is %i points of experience.</item>
+<item id="9_15Line3">You can replay this mission as many times as you like, but you</item>
+<item id="9_15Line4">should take into account that only the best result you</item>
+<item id="9_15Line5">achieve in this mission will be used to calculate the total</item>
+<item id="9_15Line6">number of experience points.</item>
+<item id="9_15Line7">Note that each time you complete the mission again,</item>
+<item id="9_15Line8">the amount of money you get when you destroy the enemy</item>
+<item id="9_15Line9">in this mission is reduced two times.</item>
+
+
+<item id="9_16Line1">Shortcut: F2 - toggle show/hide game FPS counter.</item>
+<item id="9_16Line2">Shortcuts: F5 / F6 / F7 - decrease / reset / increase game speed.</item>
+<item id="9_16Line3">Shortcut: F8 - change weapon panels view.</item>
+<item id="9_16Line4">Shortcuts: F9 / F10 - change Primary / Secondary weapon group fire mode.</item>
+<item id="9_16Line5">Shortcut: F12 - capture screenshot. (File will be saved on your Desktop.)</item>
+<item id="9_16Line6">Shortcut: Esc - show/hide game menu. (Pause.)</item>
+
+<item id="9_17Line1">Custom Weapon Angle is</item>
+<item id="9_17Line2">useful with optical computer</item>
+<item id="9_17Line3">system Neo or Supra only.</item>
+
+
+
+<item id="9_18Line1">AstroMenace Donation</item>
+<item id="9_18Line2">AstroMenace for Linux is Freeware, but you can support this game</item>
+<item id="9_18Line3">by donation.</item>
+<item id="9_18Line4">Available donation methods: Credit Card (Visa, MasterCard,</item>
+<item id="9_18Line5">EuroCard, American Express, Discover/Novus, Diners Club, JCB),</item>
+<item id="9_18Line6">PayPal, US$ Checks, Eurochecks, Wire Transfers.</item>
+<item id="9_18Line7">Thank you everybody for showing your support</item>
+<item id="9_18Line8">and furthering AstroMenace!</item>
+
+
+</itemlist>
+
+
+
+
+
+
+
+
+
+
+<!-- credits and copyright -->
+<itemlist id="10">
+
+<item id="10_PROJECT_LEADER">PROJECT LEADER, PROGRAMMING</item>
+<item id="10_Michael_Kurinnoy">Michael Kurinnoy</item>
+
+<item id="10_2D_ARTWORK">2D ARTWORK</item>
+<item id="10_Tatiana_Savitskaya">Tatiana Savitskaya</item>
+
+<item id="10_3D_MODELING">3D MODELING</item>
+<item id="10_Max_Shelekhov">Max Shelekhov, 3drt.com</item>
+<item id="10_Oleg_Linkov">Oleg Linkov</item>
+<item id="10_Egor_Kurteanu">Egor Kurteanu</item>
+
+<item id="10_MUSIC">MUSIC</item>
+<item id="10_Alexander_Matchugovsky">Alexander Matchugovsky, the SandS</item>
+
+<item id="10_SOUND_EFFECTS">SOUND EFFECTS</item>
+<item id="10_Michael_Sirotkin">Michael Sirotkin, the SandS</item>
+<item id="10_Alexander_Vassilyevsky">Alexander Vassilyevsky, the SandS</item>
+
+<item id="10_VOICE">VOICE</item>
+<item id="10_Elena_Zavalishina_(en,_ru)">Elena Zavalishina (en, ru)</item>
+<item id="10_Petra_Schulten_(de)">Petra Schulten (de)</item>
+
+<item id="10_WEB_PROGRAMMING">WEB PROGRAMMING</item>
+<item id="10_Pavel_Voylov">Pavel Voylov</item>
+
+<item id="10_TRANSLATOR">TRANSLATORS</item>
+<item id="10_Bernd_Dau_(de)">Bernd Dau (de), www.zockertown.de</item>
+<item id="10_Michael_Kurinnoy_(en,_ru)">Michael Kurinnoy (en, ru)</item>
+
+<item id="10_TESTERS">TESTERS</item>
+<item id="10_Dmitriy_Schigolev">Dmitriy Schigolev</item>
+<item id="10_Ivan_Bobrov">Ivan Bobrov</item>
+<item id="10_Vadim_Sosenko">Vadim Sosenko</item>
+<item id="10_Dmitriy_Tatarinov">Dmitriy Tatarinov</item>
+<item id="10_Alexey_Mosesov">Alexey Mosesov</item>
+<item id="10_Bernd_Dau">Bernd Dau</item>
+<item id="10_Ryan_Foster">Ryan Foster</item>
+<item id="10_Jason_Crowell">Jason Crowell</item>
+
+<item id="10_SPECIAL_THANKS_TO">SPECIAL THANKS TO</item>
+<item id="10_Richard_Benson">Richard Benson</item>
+<item id="10_Alexey_Madalinskiy">Alexey Madalinskiy</item>
+<item id="10_Olga_Zhuravleva">Olga Zhuravleva</item>
+<item id="10_Nick_OConnell">Nick O`Connell</item>
+
+<item id="10_POWERED_BY">POWERED BY</item>
+
+<item id="10_DEVELOPING_WITH">DEVELOPING WITH</item>
+
+
+
+
+
+</itemlist>
+
+
+
+
+
+
+
+
+
+
+<!-- interface text -->
+<itemlist id="11">
+
+<item id="11_DEMO">DEMO</item>
+<item id="11_build">build</item>
+<item id="11_fps">fps</item>
+<item id="11_triangles">triangles</item>
+<item id="11_Copyright">Copyright</item>
+<item id="11_Version">Version</item>
+
+</itemlist>
+
+
+
+
+
+
+
+
+
+
+
+<!-- text for 2d artwork and voice, didn't used in the game directly -->
+<itemlist id="1000">
+
+<!-- artwork elements -->
+<item id="Loading">Loading</item>
+<item id="Mission">Mission</item><!-- showed in the mission start, for example "Mission 1" -->
+<item id="Mission Failed">Mission Failed</item>
+<item id="Pause">Pause</item>
+<item id="Setup">Setup</item><!-- setup button in the weapon slot panel (should be short, 4-6 symbols)-->
+<item id="Empty">Empty</item><!-- for empty system icon -->
+<item id="Engine">Engine</item><!-- system -->
+<item id="Targeting">Targeting</item><!-- system -->
+<item id="Power">Power</item><!-- system -->
+<item id="Advanced">Advanced</item><!-- system -->
+<item id="Computer">Computer</item><!-- system -->
+<item id="Empty level">Empty level</item><!-- for empty weapon panel -->
+<item id="Empty weapon slot">Empty weapon slot</item><!-- for empty weapon panel -->
+
+
+<!-- keys title -->
+<item id="Minus">Minus</item>
+<item id="Equals">Equals</item>
+<item id="BackSpace">BackSpace</item>
+<item id="Tab">Tab</item>
+<item id="Enter">Enter</item>
+<item id="LeftCtrl">LeftCtrl</item>
+<item id="Semicolon">Semicolon</item>
+<item id="Quote">Quote</item>
+<item id="Quotedbl">Quotedbl</item>
+<item id="BackQuote">BackQuote</item>
+<item id="LeftShift">LeftShift</item>
+<item id="BackSlash">BackSlash</item>
+<item id="Comma">Comma</item>
+<item id="Period">Period</item>
+<item id="Slash">Slash</item>
+<item id="RightShift">RightShift</item>
+<item id="Asterisk">Asterisk</item>
+<item id="LeftAlt">LeftAlt</item>
+<item id="Space">Space</item>
+<item id="CapsLock">CapsLock</item>
+<item id="NumLock">NumLock</item>
+<item id="Scroll">Scroll</item>
+<item id="NumPad">NumPad</item>
+<item id="Multiply">Multiply</item>
+<item id="Plus">Plus</item>
+<item id="RightCtrl">RightCtrl</item>
+<item id="Divide">Divide</item>
+<item id="RightAlt">RightAlt</item>
+<item id="Pause">Pause</item>
+<item id="Home">Home</item>
+<item id="PgUp">PgUp</item>
+<item id="PgDn">PgDn</item>
+<item id="Up">Up</item>
+<item id="Left">Left</item>
+<item id="Right">Right</item>
+<item id="End">End</item>
+<item id="Insert">Insert</item>
+<item id="Delete">Delete</item>
+<item id="LeftWin">LeftWin</item>
+<item id="RightWin">RightWin</item>
+
+
+<!-- voice, should be like "speech" -->
+<item id="Attention">Attention</item>
+<item id="Engine Malfunction">Engine Malfunction</item>
+<item id="Missile Detected">Missile Detected</item>
+<item id="Power Supply Reestablished">Power Supply Reestablished</item>
+<item id="Prepare For Action">Prepare For Action</item>
+<item id="Reactor Malfunction">Reactor Malfunction</item>
+<item id="Warning">Warning</item>
+<item id="Weapon Damaged">Weapon Damaged</item>
+<item id="Weapon Destroyed">Weapon Destroyed</item>
+<item id="Weapon Malfunction">Weapon Malfunction</item>
+<item id="Cease Fire! Cease Fire!">Cease Fire! Cease Fire!</item>
+
+
+</itemlist>
+
+
+
+
+
+
+
+
+</AstroMenaceText>

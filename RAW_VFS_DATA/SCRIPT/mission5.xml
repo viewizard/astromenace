@@ -1,0 +1,690 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AstroMenaceScript name="AstroMenace mission script">
+<Load>
+
+	<StarSystem1/><!-- StarSystem 1 SkyBox -->
+	<AlienFighter/><!-- Aliens fighters -->
+	<Asteroid/><!-- Asteroids -->
+	<Planet/><!-- Planets -->
+
+	<!-- Load aimode file -->
+	<AIFile>DATA/SCRIPT/aimode.xml</AIFile>
+
+</Load>
+<Action>
+
+	<!-- Debug setup -->
+	<Debug showline="0" undead="0" showbb="0"/>
+	
+	<!-- Environment setup-->
+
+	<!-- Star system -->
+	<StarSystem system="1" angley="-150" anglez="135"/>
+	<!-- Planets -->
+	<CreatePlanet type="2" speed="1.0" posax="-300" posay="-300" posaz="1000"/>
+	<CreatePlanet type="4" speed="1.3" posax="-100" posay="-600" posaz="500" anglax="90"/>
+	<CreatePlanet type="4" speed="1.3" posax="300" posay="-400" posaz="1600" anglax="90"/>
+	<!-- Lights -->
+	<Light dirx="0.75" diry="-0.5" dirz="-0.75" diffr="0.6" diffg="0.6" diffb="1.0" specr="0.6" specg="0.6" specb="1.0" ambir="1" ambig="1" ambib="1"/>
+	<!-- Asteroids field generation, switch to on -->
+	<AsteroidField status="1" posy="-2" h="4" w="220" persec="8" slow="15" />
+
+
+	<!--Goto label="end"/-->
+
+
+
+
+	<!--at the mission start /-->
+	<TimeLine>
+
+		<!--2 ally cover ships (should show, that we can't destroy big asteroids) /-->
+		<EarthFighter type="3" speed="15" weapon1="18" weapon2="1" weapon3="1" posx="-40" posy="-10" posz="60">
+			<TimeSheet time="6" speed="15"/>
+			<TimeSheet time="-1" aimode="1005"/>
+		</EarthFighter>
+		<EarthFighter type="3" speed="15" weapon1="18" weapon2="1" weapon3="1" posx="40" posy="-10" posz="50">
+			<TimeSheet time="5" speed="15"/>
+			<TimeSheet time="-1" aimode="1006"/>
+		</EarthFighter>
+
+
+		<!--big asteroids with low speed movement (background) /-->
+		<CreateBigAsteroid type="13" speed="4" posx="10" posy="-150" posz="730"/>
+		<CreateBigAsteroid type="11" speed="4" posx="160" posy="-120" posz="500"/>
+		<CreateBigAsteroid type="14" speed="4" posx="-260" posy="-160" posz="670"/>
+
+		<CreateBigAsteroid type="12" speed="4" posx="80" posy="-110" posz="1040"/>
+		<CreateBigAsteroid type="15" speed="4" posx="-140" posy="-150" posz="1200"/>
+
+		<CreateBigAsteroid type="14" speed="4" posx="-20" posy="-90" posz="1480"/>
+		<CreateBigAsteroid type="11" speed="4" posx="260" posy="-150" posz="1700"/>
+		<CreateBigAsteroid type="12" speed="4" posx="-180" posy="-100" posz="1910"/>
+
+		<CreateBigAsteroid type="13" speed="4" posx="140" posy="-150" posz="2140"/>
+		<CreateBigAsteroid type="12" speed="4" posx="-100" posy="-110" posz="2300"/>
+
+	</TimeLine>
+
+
+
+
+
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="1">
+		<CreateBigAsteroid type="21" speed="10" posx="50" posy="-10" posz="300"/>
+	</TimeLine>
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="5">
+		<CreateBigAsteroid type="22" speed="10" posx="-40" posy="-10" posz="300"/>
+	</TimeLine>
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="5">
+		<CreateBigAsteroid type="23" speed="10" posx="10" posy="-5" posz="300"/>
+	</TimeLine>
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="7">
+		<CreateBigAsteroid type="24" speed="10" posx="-60" posy="-5" posz="300"/>
+	</TimeLine>
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="8">
+		<CreateBigAsteroid type="25" speed="10" posx="30" posy="-5" posz="300"/>
+	</TimeLine>
+
+	<!--move asteroid field down /-->
+	<AsteroidField status="1" posy="-7"/>
+
+
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="9">
+		<CreateBigAsteroid type="21" speed="10" posx="40" posy="-5" posz="300"/>
+	</TimeLine>
+
+
+
+	<!--2 aliens /-->
+	<TimeLine value="1">
+		<AlienFighter type="4" aimode="12" posx="-40" posy="2" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="4" aimode="12" posx="-30" posy="2" posz="280" angly="180"/>
+	</TimeLine>
+
+	<!--2 aliens /-->
+	<TimeLine value="2">
+		<AlienFighter type="4" aimode="12" posx="-10" posy="2" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="2">
+		<AlienFighter type="4" aimode="12" posx="-20" posy="2" posz="280" angly="180"/>
+	</TimeLine>
+
+
+
+	<!-- big alien with cover ships /-->
+	<TimeLine value="1">
+		<AlienFighter type="3" aimode="10" posx="-35" posy="2" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="2">
+		<AlienFighter type="3" aimode="10" posx="-50" posy="2" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.2">
+		<AlienFighter type="4" aimode="12" posx="10" posy="2" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="2">
+		<AlienFighter type="3" aimode="10" posx="-40" posy="2" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.2">
+		<AlienFighter type="4" aimode="12" posx="0" posy="2" posz="280" angly="180"/>
+	</TimeLine>
+
+
+
+	<!--2 aliens /-->
+	<TimeLine value="2">
+		<AlienFighter type="4" aimode="12" posx="-10" posy="2" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="2">
+		<AlienFighter type="4" aimode="12" posx="-20" posy="2" posz="280" angly="180"/>
+	</TimeLine>
+
+
+
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="6">
+		<CreateBigAsteroid type="21" speed="10" posx="50" posy="-5" posz="300"/>
+	</TimeLine>
+
+
+	<!-- aliens + fire (type 5) /-->
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="-160" posy="0" posz="260" anglx="-90" angly="180" anglz="270">
+			<TimeSheet time="10" speed="15"/>
+			<TimeSheet time="2" speed="5" rotz="90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="-160" posy="0" posz="260" anglx="-90" angly="180" anglz="270">
+			<TimeSheet time="9" speed="15"/>
+			<TimeSheet time="2.3" speed="5" rotz="90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="-160" posy="0" posz="260" anglx="-90" angly="180" anglz="270">
+			<TimeSheet time="8" speed="15"/>
+			<TimeSheet time="2.6" speed="5" rotz="90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="-160" posy="0" posz="260" anglx="-90" angly="180" anglz="270">
+			<TimeSheet time="7" speed="15"/>
+			<TimeSheet time="2.9" speed="5" rotz="90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="-160" posy="0" posz="260" anglx="-90" angly="180" anglz="270">
+			<TimeSheet time="6" speed="15"/>
+			<TimeSheet time="3.1" speed="5" rotz="90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+
+
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="1">
+		<CreateBigAsteroid type="22" speed="10" posx="-10" posy="-5" posz="300"/>
+	</TimeLine>
+
+
+
+	<!-- aliens + fire (type 5) /-->
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="-160" posy="0" posz="260" anglx="-90" angly="180" anglz="270">
+			<TimeSheet time="10" speed="15"/>
+			<TimeSheet time="2" speed="5" rotz="90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="-160" posy="0" posz="260" anglx="-90" angly="180" anglz="270">
+			<TimeSheet time="9" speed="15"/>
+			<TimeSheet time="2.3" speed="5" rotz="90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="-160" posy="0" posz="260" anglx="-90" angly="180" anglz="270">
+			<TimeSheet time="8" speed="15"/>
+			<TimeSheet time="2.6" speed="5" rotz="90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="-160" posy="0" posz="260" anglx="-90" angly="180" anglz="270">
+			<TimeSheet time="7" speed="15"/>
+			<TimeSheet time="2.9" speed="5" rotz="90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="-160" posy="0" posz="260" anglx="-90" angly="180" anglz="270">
+			<TimeSheet time="6" speed="15"/>
+			<TimeSheet time="3.1" speed="5" rotz="90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+
+
+	<!--move asteroid field up /-->
+	<AsteroidField status="1" posy="-2"/>
+
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="3">
+		<CreateBigAsteroid type="23" speed="10" posx="-70" posy="-5" posz="300"/>
+	</TimeLine>
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="4">
+		<CreateBigAsteroid type="24" speed="10" posx="60" posy="-5" posz="300"/>
+	</TimeLine>
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="3">
+		<CreateBigAsteroid type="25" speed="10" posx="20" posy="-5" posz="300"/>
+	</TimeLine>
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="3">
+		<CreateBigAsteroid type="21" speed="10" posx="-20" posy="-5" posz="300"/>
+	</TimeLine>
+
+
+	<TimeLine value="10"/>
+
+
+	<!--move asteroid field down /-->
+	<AsteroidField status="1" posy="-7"/>
+
+
+
+
+
+
+	<!-- aliens + fire (type 5) /-->
+	<TimeLine value="3">
+		<AlienFighter type="5" speed="15" posx="160" posy="-4" posz="260" anglx="90" angly="180" anglz="270">
+			<TimeSheet time="10" speed="15"/>
+			<TimeSheet time="2" speed="5" rotz="90" rotacz="0.1"  rotx="-90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="160" posy="-4" posz="260" anglx="90" angly="180" anglz="270">
+			<TimeSheet time="9" speed="15"/>
+			<TimeSheet time="2.3" speed="5" rotz="90" rotacz="0.1"  rotx="-90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="160" posy="-4" posz="260" anglx="90" angly="180" anglz="270">
+			<TimeSheet time="8" speed="15"/>
+			<TimeSheet time="2.6" speed="5" rotz="90" rotacz="0.1"  rotx="-90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="160" posy="-4" posz="260" anglx="90" angly="180" anglz="270">
+			<TimeSheet time="7" speed="15"/>
+			<TimeSheet time="2.9" speed="5" rotz="90" rotacz="0.1"  rotx="-90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="160" posy="-4" posz="260" anglx="90" angly="180" anglz="270">
+			<TimeSheet time="6" speed="15"/>
+			<TimeSheet time="3.1" speed="5" rotz="90" rotacz="0.1"  rotx="-90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+
+
+
+
+	<!-- aliens group+ fire (missiles) /-->
+	<TimeLine value="5">
+		<AlienFighter type="6" aimode="12" posx="-30" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="6" aimode="12" posx="-10" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="6" aimode="12" posx="10" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="6" aimode="12" posx="30" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+
+
+
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="3">
+		<CreateBigAsteroid type="24" speed="10" posx="60" posy="-5" posz="300"/>
+		<CreateBigAsteroid type="25" speed="10" posx="40" posy="-5" posz="360"/>
+		<CreateBigAsteroid type="21" speed="10" posx="-20" posy="-5" posz="380"/>
+	</TimeLine>
+
+
+	<!-- switch on second ("boss" or danger) music theme /-->	
+	<Music theme="2"/>
+
+
+	<!-- aliens + fire (type 5) /-->
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="-160" posy="-2" posz="260" anglx="-90" angly="180" anglz="270">
+			<TimeSheet time="10" speed="15"/>
+			<TimeSheet time="2" speed="5" rotz="90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="-160" posy="-2" posz="260" anglx="-90" angly="180" anglz="270">
+			<TimeSheet time="9" speed="15"/>
+			<TimeSheet time="2.3" speed="5" rotz="90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="-160" posy="-2" posz="260" anglx="-90" angly="180" anglz="270">
+			<TimeSheet time="8" speed="15"/>
+			<TimeSheet time="2.6" speed="5" rotz="90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="-160" posy="-2" posz="260" anglx="-90" angly="180" anglz="270">
+			<TimeSheet time="7" speed="15"/>
+			<TimeSheet time="2.9" speed="5" rotz="90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="5" speed="15" posx="-160" posy="-2" posz="260" anglx="-90" angly="180" anglz="270">
+			<TimeSheet time="6" speed="15"/>
+			<TimeSheet time="3.1" speed="5" rotz="90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
+			<TimeSheet time="-1" aimode="16"/>
+		</AlienFighter>
+	</TimeLine>
+
+
+
+
+
+
+	<!-- aliens group+ fire (missiles) /-->
+	<TimeLine value="24">
+		<AlienFighter type="6" aimode="12" posx="20" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.4">
+		<AlienFighter type="6" aimode="12" posx="-20" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="2">
+		<AlienFighter type="6" aimode="12" posx="50" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.4">
+		<AlienFighter type="6" aimode="12" posx="-50" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+
+
+
+
+
+	<!-- group with acceleration /-->
+	<TimeLine value="6">
+		<AlienFighter type="2" speed="5" aimode="6" posx="0" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="2">
+		<AlienFighter type="2" speed="5" aimode="6" posx="-45" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="5" aimode="6" posx="35" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" speed="5" aimode="6" posx="-75" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="5" aimode="6" posx="85" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" speed="5" aimode="6" posx="-35" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="5" aimode="6" posx="15" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" speed="5" aimode="6" posx="-65" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="5" aimode="6" posx="75" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<!-- group with acceleration /-->
+	<TimeLine value="2">
+		<AlienFighter type="2" speed="10" aimode="6" posx="0" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="2">
+		<AlienFighter type="2" speed="10" aimode="6" posx="-35" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="10" aimode="6" posx="35" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" speed="10" aimode="6" posx="-65" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="10" aimode="6" posx="75" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" speed="10" aimode="6" posx="-25" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="10" aimode="6" posx="5" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" speed="10" aimode="6" posx="-55" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="10" aimode="6" posx="65" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<!-- group with acceleration /-->
+	<TimeLine value="2">
+		<AlienFighter type="2" speed="15" aimode="6" posx="0" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="2">
+		<AlienFighter type="2" speed="15" aimode="6" posx="-40" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="15" aimode="6" posx="30" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" speed="15" aimode="6" posx="-70" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="15" aimode="6" posx="80" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" speed="15" aimode="6" posx="-30" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="15" aimode="6" posx="10" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" speed="15" aimode="6" posx="-60" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="15" aimode="6" posx="70" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<!-- group with acceleration /-->
+	<TimeLine value="2">
+		<AlienFighter type="2" speed="10" aimode="6" posx="0" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="2">
+		<AlienFighter type="2" speed="10" aimode="6" posx="-40" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="10" aimode="6" posx="30" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" speed="10" aimode="6" posx="-70" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="10" aimode="6" posx="80" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" speed="10" aimode="6" posx="-30" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="10" aimode="6" posx="10" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" speed="10" aimode="6" posx="-60" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="10" aimode="6" posx="70" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<!-- group with acceleration /-->
+	<TimeLine value="5">
+		<AlienFighter type="2" speed="5" aimode="6" posx="0" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="2">
+		<AlienFighter type="2" speed="5" aimode="6" posx="-45" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="5" aimode="6" posx="35" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" speed="5" aimode="6" posx="-75" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="5" aimode="6" posx="85" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" speed="5" aimode="6" posx="-35" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="5" aimode="6" posx="15" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" speed="5" aimode="6" posx="-65" posy="0" posz="280" angly="180"/>
+		<AlienFighter type="2" speed="5" aimode="6" posx="75" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<!-- group with acceleration + fire /-->
+	<TimeLine value="2">
+		<AlienFighter type="2" aimode="8" posx="0" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="2">
+		<AlienFighter type="2" aimode="8" posx="-40" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.4">
+		<AlienFighter type="2" aimode="8" posx="30" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" aimode="8" posx="-70" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.2">
+		<AlienFighter type="2" aimode="8" posx="80" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" aimode="8" posx="-30" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.3">
+		<AlienFighter type="2" aimode="8" posx="10" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" aimode="8" posx="-60" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.2">
+		<AlienFighter type="2" aimode="8" posx="70" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<!-- group with acceleration + fire /-->
+	<TimeLine value="2">
+		<AlienFighter type="2" aimode="8" posx="0" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="2">
+		<AlienFighter type="2" aimode="8" posx="-40" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.2">
+		<AlienFighter type="2" aimode="8" posx="30" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" aimode="8" posx="-70" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.4">
+		<AlienFighter type="2" aimode="8" posx="80" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" aimode="8" posx="-30" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.3">
+		<AlienFighter type="2" aimode="8" posx="10" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" aimode="8" posx="-60" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.2">
+		<AlienFighter type="2" aimode="8" posx="70" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<!-- group with acceleration + fire /-->
+	<TimeLine value="2">
+		<AlienFighter type="2" aimode="9" posx="0" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="2">
+		<AlienFighter type="2" aimode="9" posx="-40" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.2">
+		<AlienFighter type="2" aimode="9" posx="30" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" aimode="9" posx="-70" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.2">
+		<AlienFighter type="2" aimode="9" posx="80" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" aimode="9" posx="-30" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.4">
+		<AlienFighter type="2" aimode="9" posx="10" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="2" aimode="9" posx="-60" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.3">
+		<AlienFighter type="2" aimode="9" posx="70" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+
+
+
+
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="5">
+		<CreateBigAsteroid type="25" speed="10" posx="60" posy="-5" posz="330"/>
+	</TimeLine>
+
+
+
+	<!-- big alien with cover ships /-->
+	<TimeLine value="0">
+		<AlienFighter type="6" aimode="12" posx="0" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="4" aimode="12" posx="-50" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.3">
+		<AlienFighter type="4" aimode="12" posx="50" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="4" aimode="12" posx="-40" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.3">
+		<AlienFighter type="4" aimode="12" posx="40" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="4" aimode="12" posx="-30" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.3">
+		<AlienFighter type="4" aimode="12" posx="30" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="4" aimode="12" posx="-20" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.3">
+		<AlienFighter type="4" aimode="12" posx="20" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="1">
+		<AlienFighter type="4" aimode="12" posx="-10" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+	<TimeLine value="0.3">
+		<AlienFighter type="4" aimode="12" posx="10" posy="0" posz="280" angly="180"/>
+	</TimeLine>
+
+
+
+
+	<!-- undestroyable big asteroid /-->
+	<TimeLine>
+		<CreateBigAsteroid type="24" speed="10" posx="-50" posy="-5" posz="300"/>
+	</TimeLine>
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="5">
+		<CreateBigAsteroid type="23" speed="10" posx="10" posy="-5" posz="300"/>
+	</TimeLine>
+
+
+
+
+
+
+
+	<!--move asteroid field up /-->
+	<AsteroidField status="1" posy="-2"/>
+
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="5">
+		<CreateBigAsteroid type="22" speed="10" posx="-60" posy="-5" posz="300"/>
+	</TimeLine>
+	<!-- undestroyable big asteroid /-->
+	<TimeLine value="5">
+		<CreateBigAsteroid type="21" speed="10" posx="30" posy="-5" posz="300"/>
+	</TimeLine>
+
+
+
+
+
+<!--Label name="end"/-->
+
+
+	<!-- all is ok now, switch to "normal" game music theme /-->	
+	<Music theme="1"/>
+
+
+
+	<TimeLine value="23"/>
+
+
+	<!-- switch asteroid generation off -->
+	<AsteroidField status="0"/>
+
+
+	<TimeLine value="13"/>
+
+
+	<!-- end -->
+	<MissionComplete />
+
+
+
+	
+</Action>
+</AstroMenaceScript>
