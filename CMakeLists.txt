@@ -13,14 +13,14 @@ ELSE(OPENGL_FOUND)
 	MESSAGE(FATAL "OpenGL not found")
 ENDIF(OPENGL_FOUND)
 
-#
-# There is no FIND_PACKAGE for GLU, Xinerama, alut, libvorbis and lvorbisfile.
-# We just link required libraries, and hope that include/library
-# dir paths from other detected packages are enough
-#
 FIND_PACKAGE(OpenAL REQUIRED)
 FIND_PACKAGE(SDL REQUIRED)
 FIND_PACKAGE(JPEG REQUIRED)
+FIND_LIBRARY(XINERAMA_LIBRARY Xinerama)
+FIND_LIBRARY(GLU_LIBRARY GLU)
+FIND_LIBRARY(ALUT_LIBRARY alut)
+FIND_LIBRARY(VORBIS_LIBRARY vorbis)
+FIND_LIBRARY(VORBISFILE_LIBRARY vorbisfile)
 
 # sources
 FILE(GLOB_RECURSE astromenace_SRCS AstroMenaceSource/*.cpp)
@@ -34,7 +34,7 @@ EXEC_PROGRAM(${SDL_CONFIG} ARGS "--libs" OUTPUT_VARIABLE SDL_LIBS)
 
 ADD_DEFINITIONS(${SDL_CFLAGS})
 ADD_EXECUTABLE(AstroMenace ${astromenace_SRCS})
-TARGET_LINK_LIBRARIES(AstroMenace ${SDL_LIBS} ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY} ${JPEG_LIBRARY} -lGLU -lalut -lvorbis -lvorbisfile -lXinerama)
+TARGET_LINK_LIBRARIES(AstroMenace ${SDL_LIBS} ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY} ${JPEG_LIBRARY} ${XINERAMA_LIBRARY} ${GLU_LIBRARY} ${ALUT_LIBRARY} ${VORBIS_LIBRARY} ${VORBISFILE_LIBRARY})
 
 IF(CYGWIN)
 	TARGET_LINK_LIBRARIES(AstroMenace -lGL.dll  -lGLU.dll -lglfw -lX11.dll)
