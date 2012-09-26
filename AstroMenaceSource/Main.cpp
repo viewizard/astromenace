@@ -33,7 +33,9 @@
 
 #include "Game.h"
 
-
+#ifdef xinerama
+	#include <X11/extensions/Xinerama.h>
+#endif
 
 
 //------------------------------------------------------------------------------------
@@ -481,8 +483,8 @@ int main( int argc, char **argv )
 ReCreate:
 
 
-	// для TwinView и Xinerama выбираем нулевой всегда (не работаем на 2-х экранах)
-	setenv("SDL_VIDEO_FULLSCREEN_DISPLAY","0",1);
+	// для TwinView и Xinerama выбираем нулевой, но не меняем если передали
+	setenv("SDL_VIDEO_FULLSCREEN_DISPLAY","0",0);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -507,11 +509,12 @@ ReCreate:
 
 
 
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// получаем текущее разрешение экрана
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// предварительно ставим по умолчанию
+	int CurrentVideoModeX = 0;
+	int CurrentVideoModeY = 0;
 	CurrentVideoMode.W = 1024;
 	CurrentVideoMode.H = 768;
 	CurrentVideoMode.BPP = 16;
@@ -524,7 +527,48 @@ ReCreate:
 
 
 
-	// от SDL внятно получить перечень разрешений под Xinerama-TwinView невозможно в версии 1.2,
+#ifdef xinerama
+	// определяем есть ли xinerama и какое разрешение экранов
+
+	printf("\n");
+    Display* display = XOpenDisplay(NULL);
+    if (!display)
+	{
+        fprintf(stderr, "XOpenDisplay() fails.\n");
+        return 1;
+    }
+    int xineramaScreenCount;
+    if (XineramaIsActive(display))
+	{
+        XineramaScreenInfo* xineramaScreenInfo = XineramaQueryScreens(display, &xineramaScreenCount);
+		printf("Xinerama is active\n");
+        printf("Screen count: %d\n", xineramaScreenCount);
+        for (int i = 0; i < xineramaScreenCount; i++)
+		{
+            printf("Screen #%d: (%d, %d) x (%d, %d)\n", i, xineramaScreenInfo[i].x_org, xineramaScreenInfo[i].y_org, xineramaScreenInfo[i].width, xineramaScreenInfo[i].height);
+
+		}
+
+		// смотрим, если передали параметр SDL_VIDEO_FULLSCREEN_DISPLAY, берем параметры нужного дисплея
+
+		char * pScreen;
+		int iScreen = 0;
+		pScreen = getenv("SDL_VIDEO_FULLSCREEN_DISPLAY");
+		if (pScreen != NULL) iScreen = atoi(pScreen);
+		if (iScreen > xineramaScreenCount - 1) iScreen = 0;
+
+		CurrentVideoModeX = xineramaScreenInfo[iScreen].x_org;
+		CurrentVideoModeY = xineramaScreenInfo[iScreen].y_org;
+		CurrentVideoMode.W = xineramaScreenInfo[iScreen].width;
+		CurrentVideoMode.H = xineramaScreenInfo[iScreen].height;
+
+        XFree(xineramaScreenInfo);
+    }
+#endif
+
+
+
+
 	// детектим и составляем перечень всех возможных разрешений самостоятельно
 	int AllSupportedModesCount = 65;
 	sVideoModes AllSupportedModes[65] =
@@ -737,7 +781,7 @@ ReCreate:
 #endif // WIN32
 
 
-	int InitStatus = vw_InitRenderer("AstroMenace", Setup.Width, Setup.Height, &Setup.BPP, FullScreen, &Setup.MultiSampleType);
+	int InitStatus = vw_InitRenderer("AstroMenace", Setup.Width, Setup.Height, &Setup.BPP, FullScreen, &Setup.MultiSampleType, CurrentVideoModeX, CurrentVideoModeY, CurrentVideoMode.W, CurrentVideoMode.H);
 
 	// ошибка окна (размеры)
 	if (InitStatus == 1)
@@ -825,10 +869,8 @@ ReCreate:
 
 	// анализ системы только если это первый запуск
 	if (FirstStart)
-	// если ноль - получить не удалось, ставим больше 100мегабайт а не 128 ровно
 	// если шейдерная модель 3-я или выше, можно смело ставить
-	if ((CAPS->VidMemTotal != 0 && CAPS->VidMemTotal > 102400) ||
-		CAPS->ShaderModel >= 3.0f)
+	if (CAPS->ShaderModel >= 3.0f)
 	{
 		// памяти достаточно, включаем другой режим загрузки
 		Setup.EqualOrMore128MBVideoRAM = true;

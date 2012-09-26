@@ -35,6 +35,9 @@
 #define DEFINES_H
 
 
+#define xinerama
+
+
 // язык интерфейса
 #if !defined(EN) && !defined(DE) && !defined(RU)
 
