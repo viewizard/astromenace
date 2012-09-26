@@ -258,6 +258,12 @@ void SetMenu(eGameStatus Menu)
 
 	switch (Menu)
 	{
+		case INTERFACE:
+			Options_MenuLanguage = Setup.MenuLanguage;
+			Options_VoiceLanguage = Setup.VoiceLanguage;
+			break;
+
+
 		case OPTIONS:
 			Options_Width = Setup.Width;
 			Options_Height = Setup.Height;
@@ -496,6 +502,7 @@ void DrawMenu()
 
 	if (GameStatus != WORKSHOP &&
 		GameStatus != INFORMATION &&
+		GameStatus != INTERFACE &&
 		GameStatus != OPTIONS &&
 		GameStatus != CONFCONTROL &&
 		GameStatus != OPTIONS_ADVANCED)
@@ -865,6 +872,7 @@ void DrawMenu()
 	{
 		case MAIN_MENU:		MainMenu(); break;
 		case TOP_SCORES:	TopScoresMenu(); break;
+		case INTERFACE:		InterfaceMenu(); break;
 		case OPTIONS:		OptionsMenu(); break;
 		case OPTIONS_ADVANCED: OptionsAdvMenu(); break;
 		case INFORMATION:	InformationMenu(); break;
@@ -913,11 +921,11 @@ void DrawMenu()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// Version
-	DrawFont(6, 740, 0, 0, 0, 0.99f, "Version %1.1f build %i", GAME_VERSION_ID, GAME_VERSION_BUILD);
+	DrawFont(6, 740, 0, 0, 0, 0.99f, "%s %1.1f %s %i", GetText("11_Version"), GAME_VERSION_ID, GetText("11_build"), GAME_VERSION_BUILD);
 
 	// Copyright
-	int CSize = FontSize(GAME_COPYRIGHT);
-	DrawFont(Setup.iAspectRatioWidth-7-CSize, 740, 0, 0, 0, 0.99f, GAME_COPYRIGHT);
+	int CSize = FontSize("%s 2007-2012, Viewizard", GetText("11_Copyright"));
+	DrawFont(Setup.iAspectRatioWidth-7-CSize, 740, 0, 0, 0, 0.99f, "%s 2007-2012, Viewizard", GetText("11_Copyright"));
 
 
 
@@ -1047,7 +1055,7 @@ void MainMenu()
 	if (DrawButton384(X,Y, GetText("1_TOP_SCORES"), MenuContentTransp, &Button2Transp, &LastButton2UpdateTime)) ComBuffer = TOP_SCORES;
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, GetText("1_OPTIONS"), MenuContentTransp, &Button3Transp, &LastButton3UpdateTime)) ComBuffer = OPTIONS;
+	if (DrawButton384(X,Y, GetText("1_OPTIONS"), MenuContentTransp, &Button3Transp, &LastButton3UpdateTime)) ComBuffer = INTERFACE;
 
 	Y = Y+Prir;
 	if (DrawButton384(X,Y, GetText("1_INFORMATION"), MenuContentTransp, &Button4Transp, &LastButton4UpdateTime)) ComBuffer = INFORMATION;

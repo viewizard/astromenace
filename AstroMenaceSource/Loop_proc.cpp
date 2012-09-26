@@ -136,6 +136,7 @@ void Loop_Proc()
 	{
 		case MAIN_MENU:
 		case TOP_SCORES:
+		case INTERFACE:
 		case OPTIONS:
 		case INFORMATION:
 		case CREDITS:
@@ -268,6 +269,7 @@ void Loop_Proc()
 		{
 			case MAIN_MENU:				SetMenu(MAIN_MENU); break;
 			case TOP_SCORES:			SetMenu(TOP_SCORES); break;
+			case INTERFACE:				SetMenu(INTERFACE); break;
 			case OPTIONS:				SetMenu(OPTIONS); break;
 			case OPTIONS_ADVANCED:		SetMenu(OPTIONS_ADVANCED); break;
 			case INFORMATION:			SetMenu(INFORMATION); break;

@@ -547,6 +547,8 @@ void GamePlayerShip()
 
 		}
 
+
+#ifdef joystick
 		// джойстик
 		if (Joystick != NULL && !NeedSkip)
 		{
@@ -571,6 +573,7 @@ void GamePlayerShip()
 				if (X > 3000) {MoveLR += 2.0f*(Setup.ControlSensivity/10.0f)*AccMoveLR*PlayerFighter->TimeDelta;NeedSkip = true;}
 			}
 		}
+#endif
 
 		// клавиатура
 		if (!NeedSkip)
@@ -856,6 +859,8 @@ void GamePlayerShip()
 						PlayerFighter->WeaponSetFire[i] = true;
 			}
 
+
+#ifdef joystick
 			// джойстик
 			if (Joystick != NULL)
 			{
@@ -908,7 +913,7 @@ void GamePlayerShip()
 					if (SDL_JoystickGetButton(Joystick, Setup.Profile[CurrentProfile].WeaponAltControlData[i]) == 1)
 						PlayerFighter->WeaponSetFire[i] = true;
 			}
-
+#endif
 
 			// клавиатура
 

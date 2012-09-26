@@ -6,10 +6,10 @@
 
 	File name: Loading.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -154,416 +154,6 @@ GLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 #define TEXTURE_NO_MIPMAP	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE
 
 // сколько нужно загружать в листе меню
-const int	MenuLoadStartListCount = 181;// + 167;
-// лист загрузки меню
-LoadList	MenuLoadStartList[MenuLoadStartListCount] =
-{
-// текстуры меню... кнопки, диалоги, название игры
-{"DATA/MENU/astromenace.tga",			0, 512, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/button384_back.tga",		0, 192, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/button384_in.tga",			0, 96, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/button384_out.tga",			0, 96, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/button256_back.tga",		0, 192, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/button256_in.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/button256_out.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/button256_off.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/blackpoint.tga",			0, 0, true,  255,255,255, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/whitepoint.tga",			0, 0, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/line.tga",					0, 4, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/perc.tga",					0, 2, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/perc_none.tga",				0, 2, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/checkbox_main.tga",			0, 5, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/checkbox_in.tga",			0, 5, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-// иконки для отображения в меню credits
-{"DATA/CREDITS/sdl.tga",				0, 32, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/CREDITS/cvs.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/CREDITS/opengl.tga",				0, 32, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/CREDITS/openal.tga",				0, 32, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/CREDITS/codeblocks.tga",			0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/CREDITS/gnugcc.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/CREDITS/ubuntu.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/CREDITS/tinyxml.tga",			0, 32, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-// панельки и кнопки вывода информации в меню модернизации корабля
-{"DATA/MENU/workshop_panel1.tga",		0, 270, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/workshop_panel1+.tga",		0, 270, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/workshop_panel2.tga",		0, 492, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/workshop_panel2+.tga",		0, 492, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/workshop_panel3.tga",		0, 110, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/workshop_panel4.tga",		0, 54, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/workshop_panel5.tga",		0, 899, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/ammo.tga",					0, 8, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/button_weaponry_out.tga",	0, 6, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/button_weaponry_in.tga",	0, 6, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/back_spot.tga",				0, 256, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/back_spot2.tga",			0, 256, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-// диалоги
-{"DATA/MENU/dialog512_256.tga",			0, 706, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/dialog512_512.tga",			0, 1242, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/dialog768_600.tga",			0, 2131, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-// панельки
-{"DATA/MENU/panel444_333_back.tga",		0, 639, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/panel444_333_border.tga",	0, 705, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/panel800_444_back.tga",		0, 1631, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-// малые кнопки для диалогов и панелек
-{"DATA/MENU/button_dialog200_out.tga",	0, 57, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/button_dialog200_in.tga",	0, 57, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/button_dialog200_off.tga",	0, 57, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/button_dialog128_out.tga",	0, 39, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/button_dialog128_in.tga",	0, 39, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/button_dialog128_off.tga",	0, 39, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/arrows_on.tga",				0, 69, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/MENU/arrows_off.tga",			0, 69, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-// иконки отображения в меню выбора миссий
-{"DATA/SCRIPT/mission1_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/SCRIPT/mission2_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/SCRIPT/mission3_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/SCRIPT/mission4_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/SCRIPT/mission5_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/SCRIPT/mission6_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/SCRIPT/mission7_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/SCRIPT/mission8_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/SCRIPT/mission9_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/SCRIPT/mission10_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/SCRIPT/mission11_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/SCRIPT/mission12_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/SCRIPT/mission13_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/SCRIPT/mission14_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/SCRIPT/mission15_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-// иконки систем корабля
-{"DATA/MENU/system_engine1.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_engine2.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_engine3.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_engine4.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_mechan1.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_mechan2.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_mechan3.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_mechan4.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_power1.tga",				0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_power2.tga",				0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_power3.tga",				0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_power4.tga",				0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_protect1.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_protect2.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_protect3.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_protect4.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_target1.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_target2.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_target3.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_target4.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_engine_empty.tga",		0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_mechan_empty.tga",		0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_power_empty.tga",		0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_protect_empty.tga",		0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_target_empty.tga",		0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_onoff.tga",				0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-// иконки оружия для передаскивания-отображения в слотах оружия
-{"DATA/MENU/weapon1_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon2_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon3_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon4_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon5_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon6_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon7_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon8_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon9_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon10_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon11_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon12_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon13_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon14_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon15_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon16_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon17_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon18_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon19_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon_empty1_icon.tga",	0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon_empty2_icon.tga",	0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon_empty3_icon.tga",	0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon_empty4_icon.tga",	0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon_empty5_icon.tga",	0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon_on_icon.tga",		0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon_empty_icon.tga",		0, 256, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-// курсор
-{"DATA/cursor.tga",						0, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/cursor_shadow.tga",				0, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
-// текстура брони для кораблей землян
-{"DATA/MODELS/EARTHFIGHTER/sf-text00.jpg",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/EARTHFIGHTER/sf-text05.jpg",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/EARTHFIGHTER/sf-text06.jpg",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/EARTHFIGHTER/sf-text07.jpg",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/EARTHFIGHTER/sf-text08.jpg",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/EARTHFIGHTER/sf-text09.jpg",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/EARTHFIGHTER/sf-text04.jpg",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/EARTHFIGHTER/sf-text10.jpg",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/EARTHFIGHTER/sf-illum01.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/EARTHFIGHTER/sf-illum02.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/EARTHFIGHTER/sf-illum03.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/EARTHFIGHTER/sf-illum04.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/EARTHFIGHTER/lnch12.jpg",			1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/EARTHFIGHTER/lnch34.jpg",			1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/EARTHFIGHTER/rockets.jpg",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-// текстура истребителей пришельцев
-{"DATA/MODELS/ALIENFIGHTER/al-text04.jpg",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/ALIENFIGHTER/al-illum04.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-// текстура космических объектов
-{"DATA/MODELS/SPACE/asteroid-01.jpg",			1, 96, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-// планеты
-{"DATA/MODELS/PLANET/asteroid.tga",				1, 512, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/PLANET/clouds.tga",				1, 1024, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false},
-{"DATA/MODELS/PLANET/moon.tga",					1, 192, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/PLANET/p5base.jpg",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/PLANET/p5i.tga",					1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false},
-{"DATA/MODELS/PLANET/planet1.jpg",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/PLANET/planet3.jpg",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-// текстура наземной техники-сооружений
-{"DATA/MODELS/gr-01.jpg",						1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/gr-02.jpg",						1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/gr-03.jpg",						1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/gr-04.jpg",						1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/gr-05.jpg",						1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/gr-06.jpg",						1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/gr-07.jpg",						1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/track.jpg",						1, 48, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-// большие астероиды
-{"DATA/MODELS/SPACE/bigasteroid.jpg",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-
-
-// текстура больших кораблей пришельцев
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-text02.jpg",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-text03.jpg",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-text04.jpg",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-text08.jpg",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum02.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum03.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum04.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum08.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-// турели пиратов
-{"DATA/MODELS/TURRET/turrets.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-// текстура зданий
-{"DATA/MODELS/BUILDING/bld.jpg",				1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/BUILDING/bld_illum.tga",			1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-// космическая база
-{"DATA/MODELS/SPACEBASE/allalpha.tga",		1, 1024, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/SPACEBASE/metal.jpg",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false},
-{"DATA/MODELS/SPACEBASE/aster.jpg",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-// мины
-{"DATA/MODELS/MINE/mine1.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/MINE/mine1i.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/MINE/mine2.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/MINE/mine2i.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/MINE/mine3.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/MINE/mine3i.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/MINE/mine4.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-{"DATA/MODELS/MINE/mine4i.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true},
-
-// скайбокс - космос, загружаем только те, что нужно - экономим видео память
-{"DATA/SKYBOX/1/skybox_DN.jpg",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/SKYBOX/1/skybox_FR.jpg",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/SKYBOX/tile_14.jpg",						1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_BILINEAR, true, true},
-// спец эффекты
-{"DATA/GFX/flare.tga",							1, 16, true,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP, RI_TEXTURE_BILINEAR, true, false},
-{"DATA/GFX/flare1.tga",							1, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, RI_TEXTURE_BILINEAR, true, false},
-{"DATA/GFX/flare2.tga",							1, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, RI_TEXTURE_BILINEAR, true, false},
-{"DATA/GFX/flare3.tga",							1, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, RI_TEXTURE_BILINEAR, true, false},
-/*
-// 3д модели - загружаем в меню при старте игры и больше не выгружаем
-// корабли землян + их оружие
-{"DATA/MODELS/EARTHFIGHTER/sf-01.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-02.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-03.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-04.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-05.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-06.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-07.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-08.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-09.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-10.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-11.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-12.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-13.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-14.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-15.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-16.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-17.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-18.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-19.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-20.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-21.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-22.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/weapons.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/lnch1.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/lnch2.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/lnch3.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/lnch4.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/missile.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/swarm.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/torpedo.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/EARTHFIGHTER/nuke.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-// корабли пиратов
-{"DATA/MODELS/PIRATESHIP/gunship-01.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/PIRATESHIP/bomber-07.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/PIRATESHIP/gunship-03.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/PIRATESHIP/gunship-04.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/PIRATESHIP/gunship-02.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/PIRATESHIP/bomber-03.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/PIRATESHIP/bomber-02.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/PIRATESHIP/bomber-04.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/PIRATESHIP/bomber-05.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/PIRATESHIP/bomber-06.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-// планет
-{"DATA/MODELS/PLANET/aplanet.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/PLANET/dplanet.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/PLANET/gplanet.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/PLANET/moon.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/PLANET/planet5.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/PLANET/planet6.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-// астероиды
-{"DATA/MODELS/SPACE/asteroid-010.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-011.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-012.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-013.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-014.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-015.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-016.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-017.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-018.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-019.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-0110.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-0111.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-0112.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-0113.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-0114.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-0115.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-0116.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-0117.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-0118.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/asteroid-0119.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-// малые корабли пришельцев
-{"DATA/MODELS/ALIENFIGHTER/al-01.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENFIGHTER/al-02.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENFIGHTER/al-03.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENFIGHTER/al-04.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENFIGHTER/al-05.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-// геометрия больших астероидов
-{"DATA/MODELS/SPACE/bigasteroid-01.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/bigasteroid-02.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/bigasteroid-03.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/bigasteroid-04.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACE/bigasteroid-05.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-// турелей
-{"DATA/MODELS/TURRET/turret-01.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/TURRET/turret-02.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-
-{"DATA/MODELS/ALIENFIGHTER/al-06.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENFIGHTER/al-07.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENFIGHTER/al-08.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENFIGHTER/al-09.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENFIGHTER/al-10.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENFIGHTER/al-11.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENFIGHTER/al-12.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENFIGHTER/al-13.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENFIGHTER/al-14.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENFIGHTER/al-15.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENFIGHTER/al-16.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENFIGHTER/al-17.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-// большие корабли пришельцев
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-01.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-02.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-03.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-04.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-05.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-06.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-07.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-08.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-// постройки (мирные)
-{"DATA/MODELS/BUILDING/bld-01.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/BUILDING/bld-02.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/BUILDING/bld-03.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/BUILDING/bld-04.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/BUILDING/bld-05.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/BUILDING/bld-06.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/BUILDING/bld-07.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/BUILDING/bld-08.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/BUILDING/bld-09.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/BUILDING/bld-10.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/BUILDING/bld-11.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-// гусенечный транспорт
-{"DATA/MODELS/TRACKED/engineering-01.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/TRACKED/apc-aa-02.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/TRACKED/apc-aa-01.VW3D",				2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/TRACKED/apc-03.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/TRACKED/apc-01.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/TRACKED/tank-11.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/TRACKED/tank-10.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/TRACKED/tank-09.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/TRACKED/tank-08.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/TRACKED/tank-07.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/TRACKED/tank-06.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/TRACKED/tank-05.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/TRACKED/tank-03.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/TRACKED/tank-01.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-// колесный транспорт
-{"DATA/MODELS/WHEELED/r-launcher-01.VW3D",			2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/WHEELED/apc-04.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/WHEELED/apc-02.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/WHEELED/jeep-05.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/WHEELED/jeep-04.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/WHEELED/jeep-03.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/WHEELED/jeep-02.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/WHEELED/jeep-01.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-// военные сооружения
-{"DATA/MODELS/MILITARYBUILDING/artiler-gun-02.VW3D",	2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/MILITARYBUILDING/artiler-gun-01.VW3D",	2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/MILITARYBUILDING/aa-gun-05.VW3D",		2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/MILITARYBUILDING/aa-gun-04.VW3D",		2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/MILITARYBUILDING/aa-gun-03.VW3D",		2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/MILITARYBUILDING/aa-gun-02.VW3D",		2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/MILITARYBUILDING/aa-gun-01.VW3D",		2, true,  0,0,0, 0, 0, 0, true, false},
-// геометрия базы пиратов
-{"DATA/MODELS/SPACEBASE/1/1.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/1/2.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/1/3.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/1/4.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/1/5.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/2/1.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/2/2.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/2/3.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/2/4.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/2/5.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/3/1.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/4/1.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/5/1.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/6/1.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/6/2.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/6/3.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/6/4.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/6/5.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/7/1.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/8/1.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/8/2.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/8/3.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/8/4.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/SPACEBASE/8/5.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-// мин
-{"DATA/MODELS/MINE/mine-01.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/MINE/mine-02.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/MINE/mine-03.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-{"DATA/MODELS/MINE/mine-04.VW3D",					2, true,  0,0,0, 0, 0, 0, true, false},
-*/
-};
-
-
-
-
-
-
-
-
-
-
-
-
-// сколько нужно загружать в листе меню
 const int	MenuLoadListCount = 181;
 // лист загрузки меню
 LoadList	MenuLoadList[MenuLoadListCount] =
@@ -586,12 +176,12 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/MENU/checkbox_in.tga",			0, 5, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
 // иконки для отображения в меню credits
 {"DATA/CREDITS/sdl.tga",				0, 32, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/CREDITS/cvs.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
+{"DATA/CREDITS/svn.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/CREDITS/opengl.tga",				0, 32, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/CREDITS/openal.tga",				0, 32, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/CREDITS/codeblocks.tga",			0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/CREDITS/gnugcc.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
-{"DATA/CREDITS/ubuntu.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
+{"DATA/CREDITS/gentoo.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/CREDITS/tinyxml.tga",			0, 32, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 // панельки и кнопки вывода информации в меню модернизации корабля
 {"DATA/MENU/workshop_panel1.tga",		0, 270, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
@@ -1323,7 +913,7 @@ void DrawViewizardLogo(eTexture *ViewizardLogoTexture)
 
 		SDL_Delay(2);
 
-#ifndef MULTI_THREAD_VERSION
+#ifndef multithread
 		// ставим и сюда, иначе не сможем играть во время загрузки
 		Audio_LoopProc();
 #endif
@@ -1399,7 +989,7 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, eTexture 
 		}
 	}
 
-#ifndef MULTI_THREAD_VERSION
+#ifndef multithread
 	// ставим и сюда, иначе не сможем играть во время загрузки
 	Audio_LoopProc();
 #endif
@@ -1490,7 +1080,7 @@ bool ReleaseGameData(int LoadType)
 
 
 // отдельный поток для проигывания музыки при загрузке
-#ifdef MULTI_THREAD_VERSION
+#ifdef multithread
 
 //------------------------------------------------------------------------------------
 // Процедура звука
@@ -1509,7 +1099,7 @@ int LoadSoundThread(void *data)
 	return 0;
 }
 
-#endif //MULTI_THREAD_VERSION
+#endif //multithread
 
 
 
@@ -1565,8 +1155,8 @@ void LoadGameData(int LoadType)
 	{
 		// меню, загрузка в самом начале
 		case -1:
-			CurrentList = MenuLoadStartList;
-			CurrentListCount = MenuLoadStartListCount;
+			CurrentList = MenuLoadList;
+			CurrentListCount = MenuLoadListCount;
 			NeedShowHint = false;
 			break;
 		// переход игра-меню
@@ -1824,10 +1414,10 @@ void LoadGameData(int LoadType)
 
 
 
-#ifdef MULTI_THREAD_VERSION
+#ifdef multithread
 	// поток проигрывания звука
 	SoundThread = SDL_CreateThread(LoadSoundThread, 0);
-#endif //MULTI_THREAD_VERSION
+#endif //multithread
 
 
 
@@ -2038,11 +1628,11 @@ void LoadGameData(int LoadType)
 
 
 
-#ifdef MULTI_THREAD_VERSION
+#ifdef multithread
 	//ждем завершение звука
 	LoadSoundThreadNeedOff = true;
 	if (SoundThread != 0) SDL_WaitThread(SoundThread, NULL);
-#endif //MULTI_THREAD_VERSION
+#endif //multithread
 
 
 

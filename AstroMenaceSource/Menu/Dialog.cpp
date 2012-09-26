@@ -1456,15 +1456,18 @@ void DrawDialogBox()
 				// нужно свернуть игру, запустить броузер и выйти в основное меню
 				SDL_WM_IconifyWindow();
 
-#ifdef EN
-				vw_OpenBrouser("http://www.viewizard.com/astromenace/donors.php");
-#endif
-#ifdef DE
-				vw_OpenBrouser("http://www.viewizard.com/de/astromenace/donors.php");
-#endif
-#ifdef RU
-				vw_OpenBrouser("http://www.viewizard.com/ru/astromenace/donors.php");
-#endif
+				switch (Setup.MenuLanguage)
+				{
+					case 1: //en
+						vw_OpenBrouser("http://www.viewizard.com/astromenace/donors.php");
+						break;
+					case 2: //de
+						vw_OpenBrouser("http://www.viewizard.com/de/astromenace/donors.php");
+						break;
+					case 3: //ru
+						vw_OpenBrouser("http://www.viewizard.com/ru/astromenace/donors.php");
+						break;
+				}
 			}
 
 

@@ -6,10 +6,10 @@
 
 	File name: Menu_ConfControl.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -36,63 +36,58 @@
 
 
 
-#ifdef EN
 const char * MouseCodeName(char Num)
 {
-	switch (Num)
+	switch (Setup.MenuLanguage)
 	{
-		case 1: return "Mouse1";
-		case 2: return "Mouse3";
-		case 3: return "Mouse2";
-		case 4: return "Mouse4";
-		case 5: return "Mouse5";
-		case 6: return "Mouse6";
-		case 7: return "Mouse7";
-		case 8: return "Mouse8";
-		// забой... чтобы не показывать, пока ищем
-		case 0: return "?";
+		case 1: //en
+			switch (Num)
+			{
+				case 1: return "Mouse1";
+				case 2: return "Mouse3";
+				case 3: return "Mouse2";
+				case 4: return "Mouse4";
+				case 5: return "Mouse5";
+				case 6: return "Mouse6";
+				case 7: return "Mouse7";
+				case 8: return "Mouse8";
+				case 0: return "?";
+			}
+			break;
+
+		case 2: //de
+			switch (Num)
+			{
+				case 1: return "Maus1";
+				case 2: return "Maus3";
+				case 3: return "Maus2";
+				case 4: return "Maus4";
+				case 5: return "Maus5";
+				case 6: return "Maus6";
+				case 7: return "Maus7";
+				case 8: return "Maus8";
+				case 0: return "?";
+			}
+			break;
+
+		case 3: //ru
+			switch (Num)
+			{
+				case 1: return "Mouse1";
+				case 2: return "Mouse3";
+				case 3: return "Mouse2";
+				case 4: return "Mouse4";
+				case 5: return "Mouse5";
+				case 6: return "Mouse6";
+				case 7: return "Mouse7";
+				case 8: return "Mouse8";
+				case 0: return "?";
+			}
+			break;
 	}
 	return 0;
 }
-#endif
-#ifdef DE
-const char * MouseCodeName(char Num)
-{
-	switch (Num)
-	{
-		case 1: return "Maus1";
-		case 2: return "Maus3";
-		case 3: return "Maus2";
-		case 4: return "Maus4";
-		case 5: return "Maus5";
-		case 6: return "Maus6";
-		case 7: return "Maus7";
-		case 8: return "Maus8";
-		// забой... чтобы не показывать, пока ищем
-		case 0: return "?";
-	}
-	return 0;
-}
-#endif
-#ifdef RU
-const char * MouseCodeName(char Num)
-{
-	switch (Num)
-	{
-		case 1: return "Mouse1";
-		case 2: return "Mouse3";
-		case 3: return "Mouse2";
-		case 4: return "Mouse4";
-		case 5: return "Mouse5";
-		case 6: return "Mouse6";
-		case 7: return "Mouse7";
-		case 8: return "Mouse8";
-		// забой... чтобы не показывать, пока ищем
-		case 0: return "?";
-	}
-	return 0;
-}
-#endif
+
 
 
 
@@ -174,6 +169,7 @@ void CheckMouseKeybJState()
 		}
 
 
+#ifdef joystick
 		// джойстик
 		if (Joystick != NULL)
 		if ((NeedCheck >= 9 && NeedCheck <= 10) || NeedCheck == 100)
@@ -195,7 +191,7 @@ void CheckMouseKeybJState()
 					vw_GetWindowLBMouse(true);
 				}
 		}
-
+#endif
 	}
 
 	// мерцание кнопок, ставим сюда, чтобы не тягать его везде
@@ -316,7 +312,7 @@ void ConfControlMenu()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 9) {Transp = But[8]; Off = true;};
-	if (DrawButton128_2((int)X1+616, (int)Y1-6, JoystickCodeName(Setup.JoystickPrimary), Transp*MenuContentTransp, !(SDL_NumJoysticks()>0) || Off))
+	if (DrawButton128_2((int)X1+616, (int)Y1-6, JoystickCodeName(Setup.JoystickPrimary), Transp*MenuContentTransp, !(Joystick != NULL) || Off))
 	if (NeedCheck == 0)
 	{
 		Setup.JoystickPrimary = -1;
@@ -351,7 +347,7 @@ void ConfControlMenu()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 10) {Transp = But[9]; Off = true;};
-	if (DrawButton128_2((int)X1+616, (int)Y1-6, JoystickCodeName(Setup.JoystickSecondary), Transp*MenuContentTransp, !(SDL_NumJoysticks()>0) || Off))
+	if (DrawButton128_2((int)X1+616, (int)Y1-6, JoystickCodeName(Setup.JoystickSecondary), Transp*MenuContentTransp, !(Joystick != NULL) || Off))
 	if (NeedCheck == 0)
 	{
 		Setup.JoystickSecondary = -1;
@@ -416,18 +412,6 @@ void ConfControlMenu()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 	int Prir = 100;
 	int X;
 	int Y = 165+Prir*4;
@@ -474,17 +458,22 @@ void ConfControlMenu()
 
 
 	X = Setup.iAspectRatioWidth/2 + 166;
-	DrawButton200_2(X,Y+28, GetText("1_Config_Controls"), MenuContentTransp, true);
-
-
-
-
-
-
-
-
-
-
+	if (DrawButton200_2(X,Y+28, GetText("1_Interface"), MenuContentTransp, false))
+	{
+		ComBuffer = INTERFACE;
+		if (Setup.KeyBoardUp == 0) Setup.KeyBoardUp = SDLK_UP;
+		if (Setup.KeyBoardDown == 0) Setup.KeyBoardDown = SDLK_DOWN;
+		if (Setup.KeyBoardLeft == 0) Setup.KeyBoardLeft = SDLK_LEFT;
+		if (Setup.KeyBoardRight == 0) Setup.KeyBoardRight = SDLK_RIGHT;
+		if (Setup.KeyBoardPrimary == 0) Setup.KeyBoardPrimary = SDLK_LCTRL;
+		if (Setup.KeyBoardSecondary == 0) Setup.KeyBoardSecondary = SDLK_SPACE;
+		if (Setup.MousePrimary == 0) Setup.MousePrimary = SDL_BUTTON_LEFT;
+		if (Setup.MouseSecondary == 0) Setup.MouseSecondary = SDL_BUTTON_RIGHT;
+		if (Setup.JoystickPrimary == -1) Setup.JoystickPrimary = 0;
+		if (Setup.JoystickSecondary == -1) Setup.JoystickSecondary = 1;
+		NeedCheck = 0;
+		for (int i=0; i<ButQuant; i++) But[i] = 1.0f;
+	}
 
 
 
