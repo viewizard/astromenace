@@ -6,10 +6,10 @@
 
 	File name: Menu_Options.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -479,9 +479,10 @@ void OptionsMenu()
 
 
 	X = Setup.iAspectRatioWidth/2 - 100;
-	char Text[1024];
-	sprintf(Text,GetText("1_Video_%s_Audio"),"&");
-	DrawButton200_2(X,Y+28, Text, MenuContentTransp, true);
+	if (DrawButton200_2(X,Y+28, GetText("1_Interface"), MenuContentTransp, false))
+	{
+		ComBuffer = INTERFACE;
+	}
 
 
 	X = Setup.iAspectRatioWidth/2 + 166;

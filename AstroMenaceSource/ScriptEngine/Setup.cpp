@@ -47,6 +47,8 @@ void InitSetup()
 	// устанавливаем номер билда
 	Setup.BuildVersion = GAME_VERSION_BUILD;
 
+	Setup.MenuLanguage = 1; // en by default
+	Setup.VoiceLanguage = 1; // en by default
 
 	Setup.Width = CurrentVideoMode.W;
 	Setup.Height = CurrentVideoMode.H;
@@ -90,15 +92,7 @@ void InitSetup()
 	Setup.LoadingHint = 0;
 
 
-#ifdef EN
-	Setup.KeyboardLayout = 1;
-#endif // EN
-#ifdef DE
-	Setup.KeyboardLayout = 2;
-#endif // DE
-#ifdef RU
-	Setup.KeyboardLayout = 3;
-#endif // RU
+	Setup.KeyboardLayout = 1; // en by default
 	Setup.KeyboardDecreaseGameSpeed = SDLK_F5;
 	Setup.KeyboardResetGameSpeed = SDLK_F6;
 	Setup.KeyboardIncreaseGameSpeed = SDLK_F7;
@@ -265,6 +259,18 @@ void SaveXMLSetupFile()
 
 	iAddLine(root, setting, "GAME_VERSION_BUILD", "value", GAME_VERSION_BUILD);
 
+	switch (Setup.MenuLanguage)
+	{
+		case 1: sAddLine(root, setting, "MenuLanguage", "value", "en"); break;
+		case 2: sAddLine(root, setting, "MenuLanguage", "value", "de"); break;
+		case 3: sAddLine(root, setting, "MenuLanguage", "value", "ru"); break;
+	}
+	switch (Setup.VoiceLanguage)
+	{
+		case 1: sAddLine(root, setting, "VoiceLanguage", "value", "en"); break;
+		case 2: sAddLine(root, setting, "VoiceLanguage", "value", "de"); break;
+		case 3: sAddLine(root, setting, "VoiceLanguage", "value", "ru"); break;
+	}
 
 	iAddLine(root, setting, "Width", "value", Setup.Width);
 	iAddLine(root, setting, "Height", "value", Setup.Height);
@@ -571,7 +577,17 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (NeedSafeMode) goto LoadProfiles;
 
 
+	char MenuLanguageBuffer[16];
+	sGetLine(root, setting, "MenuLanguage", "value", MenuLanguageBuffer);
+	if (!strcmp(MenuLanguageBuffer, "en")) Setup.MenuLanguage = 1;
+	if (!strcmp(MenuLanguageBuffer, "de")) Setup.MenuLanguage = 2;
+	if (!strcmp(MenuLanguageBuffer, "ru")) Setup.MenuLanguage = 3;
 
+	char VoiceLanguageBuffer[16];
+	sGetLine(root, setting, "VoiceLanguage", "value", VoiceLanguageBuffer);
+	if (!strcmp(VoiceLanguageBuffer, "en")) Setup.VoiceLanguage = 1;
+	if (!strcmp(VoiceLanguageBuffer, "de")) Setup.VoiceLanguage = 2;
+	if (!strcmp(VoiceLanguageBuffer, "ru")) Setup.VoiceLanguage = 3;
 
 	iGetLine(root, setting, "Width", "value", &(Setup.Width));
 	iGetLine(root, setting, "Height", "value", &Setup.Height);

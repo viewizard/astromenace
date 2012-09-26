@@ -323,10 +323,9 @@ int Audio_PlayMenuSound(int SoundID, float fVol, bool Loop)
 	if (!Setup.Sound_check) return 0;
 	if (!Setup.SoundSw) return 0;
 
-#ifdef RU
 	// русский голос делаем немного тише
+	if (Setup.VoiceLanguage==3)
 	if (SoundID > 14 && SoundID < 25) MenuSoundNames[SoundID-1].VolumeCorrection = 0.6f;
-#endif
 
 	fVol = fVol*MenuSoundNames[SoundID-1].VolumeCorrection;
 

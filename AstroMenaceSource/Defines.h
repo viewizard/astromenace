@@ -35,44 +35,17 @@
 #define DEFINES_H
 
 
+// required libXinerama
 #define xinerama
+// required SDL compilled with "joystick" flag
+#define joystick
+// separate thread for music during data loading (based on SDL multithread implementation)
+#define multithread
 
 
-// язык интерфейса
-#if !defined(EN) && !defined(DE) && !defined(RU)
-
-#define EN
-//#define DE
-//#define RU
-
-#endif
 
 #define GAME_VERSION_ID	 	1.3f
-#define GAME_VERSION_BUILD 	120925
-#define GAME_COPYRIGHT		"Copyright 2007-2012, Viewizard"
-
-
-
-// для разных видов билдов.
-// без определений - нормальный, однопоточный билд
-// Если билд мульти потоковый (под многоядерный процессоры, или многопроцессорные машины)
-// - отдельный поток музыки при загрузке
-#define MULTI_THREAD_VERSION
-
-
-
-
-
-// данные для определения папки пользователя
-#ifdef WIN32
-#include <windows.h>
-
-#define SD_APPDATA                   0x001a
-#define SD_DESKTOPDIRECTORY          0x0010        // <user name>\Desktop
-typedef BOOL (WINAPI *SHGETSPECIALFOLDERPATH)(HWND hwndOwner, LPTSTR lpszPath, int nFolder, BOOL fCreate);
-extern SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath;
-#endif // WIN32
-
+#define GAME_VERSION_BUILD 	120926
 
 
 #endif // DEFINES_H

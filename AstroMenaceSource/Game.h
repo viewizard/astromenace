@@ -361,7 +361,21 @@ void GameOptions();
 
 
 //------------------------------------------------------------------------------------
-// OptionsAdvMenu.cpp
+// Menu_Interface.cpp
+//------------------------------------------------------------------------------------
+extern int Options_MenuLanguage;
+extern int Options_VoiceLanguage;
+
+void InterfaceMenu();
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Menu_OptionsAdvMenu.cpp
 //------------------------------------------------------------------------------------
 extern int Options_TexturesCompression;
 extern int Options_UseGLSL;

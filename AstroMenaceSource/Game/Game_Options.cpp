@@ -206,7 +206,7 @@ void GameOptions()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 9) {Transp = But[8]; Off = true;};
-	if (DrawButton128_2((int)X1+616, (int)Y1-6, JoystickCodeName(Setup.JoystickPrimary), Transp*GameContentTransp, !(SDL_NumJoysticks()>0) || Off))
+	if (DrawButton128_2((int)X1+616, (int)Y1-6, JoystickCodeName(Setup.JoystickPrimary), Transp*GameContentTransp, !(Joystick != NULL) || Off))
 	if (NeedCheck == 0)
 	{
 		Setup.JoystickPrimary = -1;
@@ -241,7 +241,7 @@ void GameOptions()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 10) {Transp = But[9]; Off = true;};
-	if (DrawButton128_2((int)X1+616, (int)Y1-6, JoystickCodeName(Setup.JoystickSecondary), Transp*GameContentTransp, !(SDL_NumJoysticks()>0) || Off))
+	if (DrawButton128_2((int)X1+616, (int)Y1-6, JoystickCodeName(Setup.JoystickSecondary), Transp*GameContentTransp, !(Joystick != NULL) || Off))
 	if (NeedCheck == 0)
 	{
 		Setup.JoystickSecondary = -1;

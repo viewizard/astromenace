@@ -6,10 +6,10 @@
 
 	File name: Menu_Credits.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -209,20 +209,6 @@ void CreditsMenu()
 	DrawFont(SizeI, Y2, 0, 0, 0, ttt*MenuContentTransp, GetText("10_Michael_Kurinnoy_(en,_ru)"));
 
 
-
-
-//	Y1 += Offset2;
-//	Y2 += Offset2;
-//	SizeI = (Setup.iAspectRatioWidth-FontSize("LEVEL DESIGN"))/2;
-//	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
-//	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-//	DrawFont(SizeI, Y1, 0, 0, 1, ttt*MenuContentTransp, "LEVEL DESIGN");
-//	SizeI = (Setup.iAspectRatioWidth-FontSize("unknown"))/2;
-//	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
-//	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-//	DrawFont(SizeI, Y2, 0, 0, 0, ttt*MenuContentTransp, "unknown");
-
-
 	Y1 += Offset2;
 	Y2 += Offset2;
 	SizeI = (Setup.iAspectRatioWidth-FontSize(GetText("10_TESTERS")))/2;
@@ -402,10 +388,10 @@ void CreditsMenu()
 
 	Y1 += Offset2+10;
 	Y2 += Offset2+10;
-	SizeI = (Setup.iAspectRatioWidth-FontSize(GetText("10_DEVELOPED_WITH")))/2;
+	SizeI = (Setup.iAspectRatioWidth-FontSize(GetText("10_DEVELOPING_WITH")))/2;
 	if (Y1 > 300) {ttt = (650 - Y1) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y1 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	DrawFont(SizeI, Y1, 0, 0, 1, ttt*MenuContentTransp, GetText("10_DEVELOPED_WITH"));
+	DrawFont(SizeI, Y1, 0, 0, 1, ttt*MenuContentTransp, GetText("10_DEVELOPING_WITH"));
 
 	// Code::Blocks
 	Y1 += Offset1-20;
@@ -424,7 +410,6 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "http://www.codeblocks.org");
-
 
 	// gcc
 	Y1 += Offset1+20;
@@ -445,52 +430,53 @@ void CreditsMenu()
 	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "http://gcc.gnu.org");
 
 
-	// cvs
+	// svn
 	Y1 += Offset1+20;
 	Y2 += Offset1+20;
 	SetRect(&SrcRest,0,0,64,64);
 	SetRect(&DstRest,LogoX+32,Y2,LogoX+32+64,Y2+64);
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/CREDITS/cvs.tga"), true, ttt*MenuContentTransp);
+	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/CREDITS/svn.tga"), true, ttt*MenuContentTransp);
 
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "Concurrent Versions System");
+	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "Subversion");
 	Y1 += Offset1;
 	Y2 += Offset1;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "http://www.cvshome.org");
+	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "http://subversion.apache.org");
 
 
-	// ubuntu
+	// gentoo
 	Y1 += Offset1+20;
 	Y2 += Offset1+20;
 	SetRect(&SrcRest,0,0,64,64);
 	SetRect(&DstRest,LogoX+32,Y2,LogoX+32+64,Y2+64);
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/CREDITS/ubuntu.tga"), true, ttt*MenuContentTransp);
+	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/CREDITS/gentoo.tga"), true, ttt*MenuContentTransp);
 
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "Ubuntu GNU/Linux OS");
+	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "Gentoo Linux");
 	Y1 += Offset1;
 	Y2 += Offset1;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "http://www.ubuntu.com");
+	DrawFont(LogoTextX, Y2+5, 0, 0, 0, ttt*MenuContentTransp, "http://www.gentoo.org");
+
 
 
 
 	// логотип и копирайт
 	Y1 += Offset2+30;
 	Y2 += Offset2+30;
-	SizeI = (Setup.iAspectRatioWidth-FontSize("Copyright 2007, Viewizard"))/2;
+	SizeI = (Setup.iAspectRatioWidth-FontSize("Copyright 2007-2012, Viewizard"))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	DrawFont(SizeI, Y2, 0, 0, 0, ttt*MenuContentTransp, "Copyright 2007, Viewizard");
+	DrawFont(SizeI, Y2, 0, 0, 0, ttt*MenuContentTransp, "Copyright 2007-2012, Viewizard");
 	Y1 += Offset1;
 	Y2 += Offset1;
 	SizeI = (Setup.iAspectRatioWidth-FontSize("http://www.viewizard.com"))/2;
@@ -516,15 +502,18 @@ void CreditsMenu()
 		// нужно свернуть игру, запустить броузер и выйти в основное меню
 		SDL_WM_IconifyWindow();
 
-#ifdef EN
-		vw_OpenBrouser("http://www.viewizard.com/astromenace/donors.php");
-#endif
-#ifdef DE
-		vw_OpenBrouser("http://www.viewizard.com/de/astromenace/donors.php");
-#endif
-#ifdef RU
-		vw_OpenBrouser("http://www.viewizard.com/ru/astromenace/donors.php");
-#endif
+		switch (Setup.MenuLanguage)
+		{
+			case 1: //en
+				vw_OpenBrouser("http://www.viewizard.com/astromenace/donors.php");
+				break;
+			case 2: //de
+				vw_OpenBrouser("http://www.viewizard.com/de/astromenace/donors.php");
+				break;
+			case 3: //ru
+				vw_OpenBrouser("http://www.viewizard.com/ru/astromenace/donors.php");
+				break;
+		}
 
 		ComBuffer = MAIN_MENU;
 	}

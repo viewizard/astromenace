@@ -83,6 +83,8 @@ enum eGameStatus
 
 	// лучшие результаты
 	TOP_SCORES,
+	// настройка интерфейса
+	INTERFACE,
 	// настройка
 	OPTIONS,
 	// настройка управления
@@ -223,6 +225,10 @@ struct GameSetup
 	// номер билда, в котором был создан файл
 	int BuildVersion;
 
+	// язык меню
+	int		MenuLanguage; // 1-en, 2-de, 3-ru
+	// язык голосовых сообщений
+	int		VoiceLanguage; // 1-en, 2-de, 3-ru
 
 	// вкл/откл музыки
 	int		MusicSw;

@@ -47,6 +47,11 @@ GameSetup Setup;
 eDevCaps *CAPS=0;
 
 
+
+
+
+
+
 //------------------------------------------------------------------------------------
 // общие состояния и статусы
 //------------------------------------------------------------------------------------
@@ -64,11 +69,18 @@ sVideoModes *VideoModes = 0;
 int VideoModesNum = 0;
 // текущие параметры десктопа
 sVideoModes CurrentVideoMode;
-#ifdef WIN32
-SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = 0;
-#endif // WIN32
 // статус загрузки, должно быть ОбщееКол-во Миссий+1(для меню)
 bool LoadedTypes[1000];
+// данные для определения папки пользователя
+#ifdef WIN32
+#include <windows.h>
+
+#define SD_APPDATA                   0x001a
+#define SD_DESKTOPDIRECTORY          0x0010        // <user name>\Desktop
+typedef BOOL (WINAPI *SHGETSPECIALFOLDERPATH)(HWND hwndOwner, LPTSTR lpszPath, int nFolder, BOOL fCreate);
+SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = 0;
+#endif // WIN32
+
 
 
 //------------------------------------------------------------------------------------
@@ -432,6 +444,17 @@ int main( int argc, char **argv )
 
 
 
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// установка звука, всегда до LoadGameData
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	bool SoundInitSuccess = InitAudio();
+	if (!SoundInitSuccess) fprintf(stderr, "Unable to open audio!\n");
+	printf("\n");
+
+
+
+
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// подключаем VFS
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -442,41 +465,7 @@ int main( int argc, char **argv )
 		ReleaseGameOneCopy();
 		return 0;
 	}
-	if (vw_OpenVFS(VFSLangFileNamePath) != 0)
-	{
-		if (vw_OpenVFS(VFSLangFileNamePathEn) != 0)
-		{
-			fprintf(stderr, "gamelang.vfs or gamelang_en.vfs files not found or corrupted.\n");
-			ReleaseGameOneCopy();
-			return 0;
-		}
-	}
 	printf("\n");
-
-
-
-
-
-	// загружаем все текстовые данные
-#ifdef EN
-	InitGameText("DATA/SCRIPT/text.xml");
-#endif // EN
-#ifdef DE
-	InitGameText("DATA/SCRIPT/text_de.xml");
-#endif // DE
-#ifdef RU
-	InitGameText("DATA/SCRIPT/text_ru.xml");
-#endif // RU
-
-
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// установка звука, всегда до LoadGameData
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	bool SoundInitSuccess = InitAudio();
-	if (!SoundInitSuccess) fprintf(stderr, "Unable to open audio!\n");
 
 
 
@@ -718,9 +707,198 @@ ReCreate:
 
 
 
+
+
+
+
+
+	// делаем правильные симлинки на языковые ресурсы, автоматизации нет, просто линкуем нужные файлы
+
+	switch (Setup.MenuLanguage)
+	{
+		case 1: //en
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/GAME/mission.tga", "DATA/GAME/mission.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/GAME/missionfailed.tga", "DATA/GAME/missionfailed.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/GAME/pause.tga", "DATA/GAME/pause.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/LOADING/loading_back.tga", "DATA/LOADING/loading_back.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/SCRIPT/text.xml", "DATA/SCRIPT/text.xml");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/button_weaponry_in.tga", "DATA/MENU/button_weaponry_in.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/button_weaponry_out.tga", "DATA/MENU/button_weaponry_out.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_engine1.tga", "DATA/MENU/system_engine1.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_engine2.tga", "DATA/MENU/system_engine2.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_engine3.tga", "DATA/MENU/system_engine3.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_engine4.tga", "DATA/MENU/system_engine4.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_engine_empty.tga", "DATA/MENU/system_engine_empty.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_mechan1.tga", "DATA/MENU/system_mechan1.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_mechan2.tga", "DATA/MENU/system_mechan2.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_mechan3.tga", "DATA/MENU/system_mechan3.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_mechan4.tga", "DATA/MENU/system_mechan4.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_mechan_empty.tga", "DATA/MENU/system_mechan_empty.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_power1.tga", "DATA/MENU/system_power1.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_power2.tga", "DATA/MENU/system_power2.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_power3.tga", "DATA/MENU/system_power3.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_power4.tga", "DATA/MENU/system_power4.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_power_empty.tga", "DATA/MENU/system_power_empty.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_protect1.tga", "DATA/MENU/system_protect1.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_protect2.tga", "DATA/MENU/system_protect2.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_protect3.tga", "DATA/MENU/system_protect3.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_protect4.tga", "DATA/MENU/system_protect4.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_protect_empty.tga", "DATA/MENU/system_protect_empty.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_target1.tga", "DATA/MENU/system_target1.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_target2.tga", "DATA/MENU/system_target2.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_target3.tga", "DATA/MENU/system_target3.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_target4.tga", "DATA/MENU/system_target4.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/system_target_empty.tga", "DATA/MENU/system_target_empty.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/weapon_empty1_icon.tga", "DATA/MENU/weapon_empty1_icon.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/weapon_empty2_icon.tga", "DATA/MENU/weapon_empty2_icon.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/weapon_empty3_icon.tga", "DATA/MENU/weapon_empty3_icon.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/weapon_empty4_icon.tga", "DATA/MENU/weapon_empty4_icon.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/weapon_empty5_icon.tga", "DATA/MENU/weapon_empty5_icon.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/weapon_empty_icon.tga", "DATA/MENU/weapon_empty_icon.tga");
+			break;
+
+		case 2: //de
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/GAME/mission.tga", "DATA/GAME/mission.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/GAME/missionfailed.tga", "DATA/GAME/missionfailed.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/GAME/pause.tga", "DATA/GAME/pause.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/LOADING/loading_back.tga", "DATA/LOADING/loading_back.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/SCRIPT/text.xml", "DATA/SCRIPT/text.xml");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/button_weaponry_in.tga", "DATA/MENU/button_weaponry_in.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/button_weaponry_out.tga", "DATA/MENU/button_weaponry_out.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_engine1.tga", "DATA/MENU/system_engine1.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_engine2.tga", "DATA/MENU/system_engine2.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_engine3.tga", "DATA/MENU/system_engine3.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_engine4.tga", "DATA/MENU/system_engine4.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_engine_empty.tga", "DATA/MENU/system_engine_empty.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_mechan1.tga", "DATA/MENU/system_mechan1.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_mechan2.tga", "DATA/MENU/system_mechan2.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_mechan3.tga", "DATA/MENU/system_mechan3.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_mechan4.tga", "DATA/MENU/system_mechan4.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_mechan_empty.tga", "DATA/MENU/system_mechan_empty.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_power1.tga", "DATA/MENU/system_power1.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_power2.tga", "DATA/MENU/system_power2.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_power3.tga", "DATA/MENU/system_power3.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_power4.tga", "DATA/MENU/system_power4.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_power_empty.tga", "DATA/MENU/system_power_empty.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_protect1.tga", "DATA/MENU/system_protect1.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_protect2.tga", "DATA/MENU/system_protect2.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_protect3.tga", "DATA/MENU/system_protect3.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_protect4.tga", "DATA/MENU/system_protect4.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_protect_empty.tga", "DATA/MENU/system_protect_empty.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_target1.tga", "DATA/MENU/system_target1.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_target2.tga", "DATA/MENU/system_target2.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_target3.tga", "DATA/MENU/system_target3.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_target4.tga", "DATA/MENU/system_target4.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/system_target_empty.tga", "DATA/MENU/system_target_empty.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/weapon_empty1_icon.tga", "DATA/MENU/weapon_empty1_icon.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/weapon_empty2_icon.tga", "DATA/MENU/weapon_empty2_icon.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/weapon_empty3_icon.tga", "DATA/MENU/weapon_empty3_icon.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/weapon_empty4_icon.tga", "DATA/MENU/weapon_empty4_icon.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/weapon_empty5_icon.tga", "DATA/MENU/weapon_empty5_icon.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/weapon_empty_icon.tga", "DATA/MENU/weapon_empty_icon.tga");
+			break;
+
+		case 3: //ru
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/GAME/mission.tga", "DATA/GAME/mission.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/GAME/missionfailed.tga", "DATA/GAME/missionfailed.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/GAME/pause.tga", "DATA/GAME/pause.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/LOADING/loading_back.tga", "DATA/LOADING/loading_back.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/SCRIPT/text.xml", "DATA/SCRIPT/text.xml");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/button_weaponry_in.tga", "DATA/MENU/button_weaponry_in.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/button_weaponry_out.tga", "DATA/MENU/button_weaponry_out.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_engine1.tga", "DATA/MENU/system_engine1.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_engine2.tga", "DATA/MENU/system_engine2.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_engine3.tga", "DATA/MENU/system_engine3.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_engine4.tga", "DATA/MENU/system_engine4.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_engine_empty.tga", "DATA/MENU/system_engine_empty.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_mechan1.tga", "DATA/MENU/system_mechan1.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_mechan2.tga", "DATA/MENU/system_mechan2.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_mechan3.tga", "DATA/MENU/system_mechan3.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_mechan4.tga", "DATA/MENU/system_mechan4.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_mechan_empty.tga", "DATA/MENU/system_mechan_empty.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_power1.tga", "DATA/MENU/system_power1.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_power2.tga", "DATA/MENU/system_power2.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_power3.tga", "DATA/MENU/system_power3.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_power4.tga", "DATA/MENU/system_power4.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_power_empty.tga", "DATA/MENU/system_power_empty.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_protect1.tga", "DATA/MENU/system_protect1.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_protect2.tga", "DATA/MENU/system_protect2.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_protect3.tga", "DATA/MENU/system_protect3.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_protect4.tga", "DATA/MENU/system_protect4.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_protect_empty.tga", "DATA/MENU/system_protect_empty.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_target1.tga", "DATA/MENU/system_target1.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_target2.tga", "DATA/MENU/system_target2.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_target3.tga", "DATA/MENU/system_target3.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_target4.tga", "DATA/MENU/system_target4.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/system_target_empty.tga", "DATA/MENU/system_target_empty.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/weapon_empty1_icon.tga", "DATA/MENU/weapon_empty1_icon.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/weapon_empty2_icon.tga", "DATA/MENU/weapon_empty2_icon.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/weapon_empty3_icon.tga", "DATA/MENU/weapon_empty3_icon.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/weapon_empty4_icon.tga", "DATA/MENU/weapon_empty4_icon.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/weapon_empty5_icon.tga", "DATA/MENU/weapon_empty5_icon.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/weapon_empty_icon.tga", "DATA/MENU/weapon_empty_icon.tga");
+			break;
+	}
+
+	switch (Setup.VoiceLanguage)
+	{
+		case 1: //en
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/Attention.wav", "DATA/VOICE/Attention.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/CeaseFire.wav", "DATA/VOICE/CeaseFire.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/EngineMalfunction.wav", "DATA/VOICE/EngineMalfunction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/MissileDetected.wav", "DATA/VOICE/MissileDetected.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/PowerSupplyReestablished.wav", "DATA/VOICE/PowerSupplyReestablished.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/PrepareForAction.wav", "DATA/VOICE/PrepareForAction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/ReactorMalfunction.wav", "DATA/VOICE/ReactorMalfunction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/Warning.wav", "DATA/VOICE/Warning.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/WeaponDamaged.wav", "DATA/VOICE/WeaponDamaged.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/WeaponDestroyed.wav", "DATA/VOICE/WeaponDestroyed.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/WeaponMalfunction.wav", "DATA/VOICE/WeaponMalfunction.wav");
+			break;
+
+		case 2: //de
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/Attention.wav", "DATA/VOICE/Attention.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/CeaseFire.wav", "DATA/VOICE/CeaseFire.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/EngineMalfunction.wav", "DATA/VOICE/EngineMalfunction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/MissileDetected.wav", "DATA/VOICE/MissileDetected.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/PowerSupplyReestablished.wav", "DATA/VOICE/PowerSupplyReestablished.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/PrepareForAction.wav", "DATA/VOICE/PrepareForAction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/ReactorMalfunction.wav", "DATA/VOICE/ReactorMalfunction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/Warning.wav", "DATA/VOICE/Warning.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/WeaponDamaged.wav", "DATA/VOICE/WeaponDamaged.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/WeaponDestroyed.wav", "DATA/VOICE/WeaponDestroyed.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/WeaponMalfunction.wav", "DATA/VOICE/WeaponMalfunction.wav");
+			break;
+
+		case 3: //ru
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/Attention.wav", "DATA/VOICE/Attention.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/CeaseFire.wav", "DATA/VOICE/CeaseFire.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/EngineMalfunction.wav", "DATA/VOICE/EngineMalfunction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/MissileDetected.wav", "DATA/VOICE/MissileDetected.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/PowerSupplyReestablished.wav", "DATA/VOICE/PowerSupplyReestablished.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/PrepareForAction.wav", "DATA/VOICE/PrepareForAction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/ReactorMalfunction.wav", "DATA/VOICE/ReactorMalfunction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/Warning.wav", "DATA/VOICE/Warning.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/WeaponDamaged.wav", "DATA/VOICE/WeaponDamaged.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/WeaponDestroyed.wav", "DATA/VOICE/WeaponDestroyed.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/WeaponMalfunction.wav", "DATA/VOICE/WeaponMalfunction.wav");
+			break;
+	}
+
+	// загружаем все текстовые данные
+	InitGameText("DATA/SCRIPT/text.xml");
+
+
+
+
+
+
+
+
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверяем и иним джойстик
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#ifdef joystick
 	if (SDL_InitSubSystem(SDL_INIT_JOYSTICK) == 0)
 	if (SDL_NumJoysticks()>0)
 	{
@@ -741,7 +919,7 @@ ReCreate:
 		else
 			fprintf(stderr, "Couldn't open Joystick 0\n\n");
 	}
-
+#endif
 
 
 
@@ -951,6 +1129,7 @@ loop:
 	JoystickAxisY = 0;
 	float JoystickCurentTime = vw_GetTime();
 	float JoystickTimeDelta = 0.0f;
+#ifdef joystick
 	if (Joystick != NULL)
 	{
 		JoystickAxisX = SDL_JoystickGetAxis(Joystick, 0);
@@ -958,7 +1137,7 @@ loop:
 
 		for (int i=0; i<100; i++) JoysticButtons[i] = false;
 	}
-
+#endif
 
 
 	while(!Quit)
@@ -1044,6 +1223,7 @@ loop:
 		if (NeedLoop)
 		{
 
+#ifdef joystick
 			// управление джойстиком
 			if (Joystick != NULL)
 			{
@@ -1061,7 +1241,7 @@ loop:
 					vw_SetMousePosRel(Xsm, Ysm);
 				}
 			}
-
+#endif
 
 			// всегда включаем счет времени
 			vw_StartTime();
@@ -1128,12 +1308,13 @@ GotoQuit:
 	vw_ReleaseAllTextures();
 	vw_ShutdownRenderer();
 
+#ifdef joystick
 	// закрываем джойстик, если он был
 	if(SDL_NumJoysticks()>0)
 		if(SDL_JoystickOpened(Setup.JoystickNum))
 			if (Joystick != NULL)
 				SDL_JoystickClose(Joystick);
-
+#endif
 
 
 
@@ -1141,6 +1322,9 @@ GotoQuit:
 	SDL_Quit();
 
 	SaveXMLSetupFile();
+
+	ReleaseGameText();
+
 
 	if (NeedReCreate)
 	{
@@ -1175,6 +1359,11 @@ GotoQuit:
 		return 0;
 #endif
 
+		// убираем все голосовые файлы и звуки (для изменения языка голоса)
+		vw_ReleaseAllBuffers();
+		// убираем все линки (для изменения языка меню)
+		vw_DeleteAllLinksVFS();
+
 		// для линукса - просто пересоздаем окно
 	    goto ReCreate;
 	}
@@ -1192,12 +1381,8 @@ GotoQuit:
 	}
 
 
-	ReleaseGameText();
-
 	// закрываем файловую систему
 	vw_ShutdownVFS();
-
-
 
 
 

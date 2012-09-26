@@ -6,10 +6,10 @@
 
 	File name: Menu_OptionsAdv.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -359,7 +359,10 @@ void OptionsAdvMenu()
 	int Y = 165+Prir*4;
 
 	X = Setup.iAspectRatioWidth/2 - 366;
-	DrawButton200_2(X,Y+28, GetText("1_Advanced"), MenuContentTransp, true);
+	if (DrawButton200_2(X,Y+28, GetText("1_Interface"), MenuContentTransp, false))
+	{
+		ComBuffer = INTERFACE;
+	}
 
 	X = Setup.iAspectRatioWidth/2 - 100;
 	char Text[1024];
