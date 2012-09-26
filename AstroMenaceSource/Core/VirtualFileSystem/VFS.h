@@ -5,10 +5,10 @@
 
 	File name: VFS.h
 
-	Copyright (c) 2001-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2001-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -92,9 +92,14 @@ int		vw_OpenVFS(const char *Name);
 void	vw_CloseVFS(void);
 // Shutdown VFS (all eFILE files will be closed)
 void	vw_ShutdownVFS(void);
-// проверка принадлежности файла к vfs или fs
+// Get file location status (FS or VFS)
 int 	FileDetect(const char *FileName);
-
+// Create file "symlink"
+bool	vw_CreateEntryLinkVFS(const char *FileName, const char *FileNameLink);
+// Delete file "symlink"
+bool	vw_DeleteEntryLinkVFS(const char *FileNameLink);
+// Delete all "symlinks" in VFS
+bool	vw_DeleteAllLinksVFS();
 
 // eFILE functions
 
@@ -113,25 +118,24 @@ int vw_DATAtoRLE(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS);
 
 
 /*
-Описание структуры VFS v1.3
+VFS v1.3
 
-  4б - 'VFS_'
-  4б - 'v1.3'
-  4б - смещение таблицы файлов
-  4б - длина таблицы файлов
-  ?б - данные(тела файлов один за другим)
+  4b - 'VFS_'
+  4b - 'v1.3'
+  4b - file table offset
+  4b - file table size
+  ?b - data (file data one by one)
 
-   Далее таблица файлов...
-  --структура записи таблицы файлов
-  1б - 00, если не передается последовательность раскодирования
-    или
-  1б - кол-во байт последовательности раскодирования
-  Nб - собственно последовательность
-  2б - кол-во символов в имени файла
-  Nб - имя файла
-  4б - смещение начала файла в системе
-  4б - длина файла
-  4б - длина файла в распакованном виде
+  - File table structure
+  1b - 00, if no encoding key
+	or
+  1b - encoding key size in byte
+  ?b - encoding key
+  2b - file name size
+  ?b - file name
+  4b - file position offset in VFS file
+  4b - file size in VFS file
+  4b - original file size
 */
 
 

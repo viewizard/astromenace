@@ -5,10 +5,10 @@
 
 	File name: Haff.cpp
 
-	Copyright (c) 2001-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2001-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
