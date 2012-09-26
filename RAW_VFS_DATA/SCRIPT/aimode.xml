@@ -1,0 +1,705 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AstroMenaceAI name="AstroMenace AI script">
+
+	<!-- Note: AI num not connected to the concrete ship type, information in the brackets show what ship types use this AI -->
+
+
+	<!-- 1 - 99 reserved for AlienFighters-->
+
+
+
+	<!-- Zig-zag movement for AlienFighter (type 1, 11) -->
+	<AI num="1">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9"/>
+		<TimeSheet time="4" speed="15" roty="-180" rotacy="0.9"/>
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9"/>
+	</AI>
+
+	<!-- Movement with wiggle for AlienFighter (type 1)-->
+	<AI num="2">
+		<TimeSheet time="0.8" speed="15" rotz="90" rotacz="1.0"/>
+		<TimeSheet time="1.6" speed="15" rotz="-180" rotacz="1.0"/>
+		<TimeSheet time="0.8" speed="15" rotz="90" rotacz="1.0"/>
+	</AI>
+
+	<!-- Movement with up-down for AlienFighter (type 1, 7)-->
+	<AI num="3">
+		<TimeSheet time="0.8" speed="15" rotx="15" rotacx="0.45"/>
+		<TimeSheet time="1.6" speed="15" rotx="-30" rotacx="0.45"/>
+		<TimeSheet time="0.8" speed="15" rotx="15" rotacx="0.45"/>
+	</AI>
+
+	<!-- Movement with up-down + fire for AlienFighter (type 1)-->
+	<AI num="4">
+		<TimeSheet time="0.8" speed="10" rotx="15" rotacx="0.45" fire="1"/>
+		<TimeSheet time="1.6" speed="10" rotx="-30" rotacx="0.45" fire="0"/>
+		<TimeSheet time="0.8" speed="10" rotx="15" rotacx="0.45" fire="0"/>
+	</AI>
+
+	<!-- Movement with wiggle + fire for AlienFighter (type 1)-->
+	<AI num="5">
+		<TimeSheet time="0.8" speed="10" rotz="90" rotacz="1.0" fire="0"/>
+		<TimeSheet time="1.6" speed="10" rotz="-180" rotacz="1.0" fire="0"/>
+		<TimeSheet time="0.8" speed="10" rotz="90" rotacz="1.0" fire="1"/>
+	</AI>
+
+	<!-- Movement with acceleration for AlienFighter (type 2, 7)-->
+	<AI num="6">
+		<TimeSheet time="1" speed="40" acceler="0.2"/>
+	</AI>
+
+	<!-- Movement with acceleration+breacking+acceleration for AlienFighter (type 2,7)-->
+	<AI num="7">
+		<TimeSheet time="4.5" speed="40" acceler="0.3"/>
+		<TimeSheet time="2" speed="-20" acceler="1.0"/>
+		<TimeSheet time="5" speed="40" acceler="0.6"/>
+	</AI>
+
+	<!-- Movement with acceleration+breacking and fire+acceleration for AlienFighter (type 2,7)-->
+	<AI num="8">
+		<TimeSheet time="4.5" speed="40" acceler="0.3" fire="0"/>
+		<TimeSheet time="2" speed="-20" acceler="1.0" fire="1"/>
+		<TimeSheet time="5" speed="40" acceler="0.6" fire="0"/>
+	</AI>
+
+	<!-- Movement with acceleration+breacking and fire+acceleration for AlienFighter (type 2)-->
+	<AI num="9">
+		<TimeSheet time="5" speed="40" acceler="0.3" fire="0"/>
+		<TimeSheet time="3" speed="-20" acceler="1.0" fire="1"/>
+		<TimeSheet time="5" speed="40" acceler="0.6" fire="0"/>
+	</AI>
+
+
+
+	<!-- Movement +fire for AlienFighter (type 3)-->
+	<AI num="10">
+		<TimeSheet time="5" speed="8" acceler="1.0" fire="1"/>
+	</AI>
+
+
+
+	<!-- Movement for AlienFighter (type 1,4,6,7,10)-->
+	<AI num="11">
+		<TimeSheet time="1" speed="10" roty="10" rotacy="0.1" acceler="1.0"/>
+		<TimeSheet time="2" speed="10" roty="-20" rotacy="0.1" acceler="1.0"/>
+		<TimeSheet time="1" speed="10" roty="10" rotacy="0.1" acceler="1.0"/>
+	</AI>
+
+
+	<!-- Movement + fire for AlienFighter (type 3,4,6)-->
+	<AI num="12">
+		<TimeSheet time="1" speed="10" acceler="1.0" fire="0"/>
+		<TimeSheet time="1" speed="10" roty="10" rotacy="0.1" acceler="1.0" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="-20" rotacy="0.1" acceler="1.0" fire="0"/>
+		<TimeSheet time="1" speed="10" roty="10" rotacy="0.1" acceler="1.0" fire="0"/>
+	</AI>
+
+
+
+	<!-- Movement for AlienFighter (type 5)-->
+	<AI num="13">
+		<TimeSheet time="1" speed="15" roty="5" rotacy="0.05" acceler="1.0"/>
+		<TimeSheet time="2" speed="15" roty="-10" rotacy="0.05" acceler="1.0"/>
+		<TimeSheet time="1" speed="15" roty="5" rotacy="0.05" acceler="1.0"/>
+	</AI>
+
+
+
+	<!-- Zig-zag movement + fire for AlienFighter (type 1) -->
+	<AI num="14">
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.9" fire="0"/>
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.9" fire="0"/>
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.9" fire="0"/>
+	</AI>
+
+
+
+
+
+
+	<!-- Movement + fire (with rotation) for AlienFighter (type 5) -->
+	<AI num="15">
+		<TimeSheet time="3" speed="10" acceler="1.0" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.25" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.65" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.95" fire="1"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.85" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.75" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.65" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.55" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+	</AI>
+	<!-- Movement + fire (with rotation) for AlienFighter (type 5) -->
+	<AI num="16">
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.25" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.65" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.95" fire="1"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.85" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.75" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.65" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.55" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="5" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+	</AI>
+
+
+
+	<!-- Zig-zag movement for AlienFighter (type 1, 11) -->
+	<AI num="17">
+		<TimeSheet time="2" speed="15" roty="-90" rotacy="0.9"/>
+		<TimeSheet time="4" speed="15" roty="180" rotacy="0.9"/>
+		<TimeSheet time="2" speed="15" roty="-90" rotacy="0.9"/>
+	</AI>
+
+
+
+	<!-- Movement + fire (with rotation) for AlienFighter (type 5) -->
+	<AI num="18">
+		<TimeSheet time="3" speed="10" acceler="1.0" fire="0"/>
+		<TimeSheet time="1" speed="10" acceler="0.1" rotz="720" rotacz="0.25" fire="0"/>
+		<TimeSheet time="1" speed="10" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="10" acceler="0.1" rotz="720" rotacz="0.65" fire="0"/>
+		<TimeSheet time="1" speed="10" acceler="0.1" rotz="720" rotacz="0.95" fire="1"/>
+		<TimeSheet time="1" speed="10" acceler="0.1" rotz="720" rotacz="0.85" fire="0"/>
+		<TimeSheet time="1" speed="10" acceler="0.1" rotz="720" rotacz="0.75" fire="0"/>
+		<TimeSheet time="1" speed="10" acceler="0.1" rotz="720" rotacz="0.65" fire="0"/>
+		<TimeSheet time="1" speed="10" acceler="0.1" rotz="720" rotacz="0.55" fire="0"/>
+		<TimeSheet time="1" speed="10" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="10" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="10" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="10" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="10" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="10" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+		<TimeSheet time="1" speed="10" acceler="0.1" rotz="720" rotacz="0.45" fire="0"/>
+	</AI>
+
+
+
+
+
+	<!-- Movement for AlienFighter (type 7)-->
+	<AI num="19">
+		<TimeSheet time="1" speed="40" roty="45" rotacy="0.4" acceler="1.0"/>
+		<TimeSheet time="2" speed="40" roty="-90" rotacy="0.4" acceler="1.0"/>
+		<TimeSheet time="1" speed="40" roty="45" rotacy="0.4" acceler="1.0"/>
+	</AI>
+
+	<!-- Movement with acceleration for AlienFighter (type 7)-->
+	<AI num="20">
+		<TimeSheet time="1" speed="40" acceler="1.0"/>
+	</AI>
+
+	<!-- Movement with acceleration for AlienFighter (type 7)-->
+	<AI num="21">
+		<TimeSheet time="1" speed="40" acceler="0.5"/>
+	</AI>
+
+
+	<!-- Movement with fire for AlienFighter (type 1)-->
+	<AI num="22">
+		<TimeSheet time="1" speed="10" roty="10" rotacy="0.1" acceler="1.0" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="-20" rotacy="0.1" acceler="1.0" fire="1"/>
+		<TimeSheet time="1" speed="10" roty="10" rotacy="0.1" acceler="1.0" fire="1"/>
+	</AI>
+
+
+	<!-- Zig-zag movement + double fire for AlienFighter (type 1) -->
+	<AI num="23">
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.9" fire="0"/>
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.9" fire="0"/>
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.9" fire="0"/>
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.9" fire="0"/>
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.9" fire="1"/>
+	</AI>
+	<!-- Zig-zag movement + double fire for AlienFighter (type 1) -->
+	<AI num="24">
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.9" fire="0"/>
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.9" fire="0"/>
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.9" fire="0"/>
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.9" fire="0"/>
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.9" fire="1"/>
+	</AI>
+
+
+
+
+	<!-- Zig-zag movement + fire for AlienFighter (type 5) -->
+	<AI num="25">
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.07"/>
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.07"/>
+		<TimeSheet time="2" speed="10" roty="-90" rotacy="0.07"/>
+		<TimeSheet time="2" speed="10" roty="90" rotacy="0.07"/>
+	</AI>
+
+
+	<!-- Movement + fire for AlienFighter (type 4, 10)-->
+	<AI num="26">
+		<TimeSheet time="1.1" speed="10" roty="10" rotacy="0.1" acceler="1.0" fire="1"/>
+		<TimeSheet time="2.2" speed="10" roty="-20" rotacy="0.1" acceler="1.0" fire="0"/>
+		<TimeSheet time="1.1" speed="10" roty="10" rotacy="0.1" acceler="1.0" fire="1"/>
+	</AI>
+
+
+
+
+
+
+
+	<!-- Zig-zag movement + fire for AlienFighter (type 1) -->
+	<AI num="27">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="4" speed="15" roty="-180" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9" fire="1"/>
+	</AI>
+	<!-- Zig-zag movement + fire for AlienFighter (type 1) -->
+	<AI num="28">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="4" speed="15" roty="-180" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="15" roty="50" rotacy="0.9" fire="1"/>
+		<TimeSheet time="20" speed="15"  fire="1"/>
+	</AI>
+	<!-- Zig-zag movement + fire for AlienFighter (type 1) -->
+	<AI num="29">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="4" speed="15" roty="-180" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="15" roty="-70" rotacy="0.9" fire="1"/>
+		<TimeSheet time="20" speed="15"  fire="1"/>
+	</AI>
+	<!-- Zig-zag movement + fire for AlienFighter (type 1) -->
+	<AI num="30">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="15" roty="-50" rotacy="0.9" fire="1"/>
+		<TimeSheet time="20" speed="15" fire="1"/>
+	</AI>
+	<!-- Zig-zag movement + fire for AlienFighter (type 1) -->
+	<AI num="31">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9"  fire="1"/>
+		<TimeSheet time="4" speed="15" roty="-180" rotacy="0.9"  fire="1"/>
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9"  fire="1"/>
+		<TimeSheet time="1" speed="15" roty="90" rotacy="0.9"  fire="1"/>
+		<TimeSheet time="1" speed="15" roty="-90" rotacy="0.9"  fire="1"/>
+		<TimeSheet time="20" speed="15"  fire="1"/>
+	</AI>
+
+
+	<!-- Movement + fire for AlienFighter (type 7)-->
+	<AI num="32">
+		<TimeSheet time="1" speed="40" roty="45" rotacy="0.4" acceler="1.0" fire="1"/>
+		<TimeSheet time="2" speed="40" roty="-90" rotacy="0.4" acceler="1.0" fire="1"/>
+		<TimeSheet time="1" speed="40" roty="45" rotacy="0.4" acceler="1.0" fire="1"/>
+	</AI>
+
+
+
+
+
+	<!-- 100 - 199 reserved for Pirates Ships-->
+
+
+
+
+
+
+
+
+
+
+	<!-- Movement  for Pirate Ships (type 6,7,8,9,10) -->
+	<AI num="101">
+		<TimeSheet time="70.0" speed="5"/>
+		<TimeSheet time="50.0" speed="12" acceler="0.01"/>
+		<TimeSheet time="270.0" speed="7" acceler="0.01"/>
+	</AI>
+
+
+	<!-- Movement with rotation for Pirate Ship (type 1) -->
+	<AI num="111">
+		<TimeSheet time="5" speed="10" rotz="180" rotacz="0.9"  rotx="180" rotacx="0.9"/>
+		<TimeSheet time="-1" aimode="142"/>
+	</AI>
+
+	<!-- Movement with rotation for Pirate Ship (type 1) -->
+	<AI num="112">
+		<TimeSheet time="5" speed="10" rotz="-180" rotacz="0.9"  rotx="180" rotacx="0.9"/>
+		<TimeSheet time="-1" aimode="142"/>
+	</AI>
+
+	<!-- Zig-zag movement for Pirate Ship (type 1) -->
+	<AI num="113">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9"/>
+		<TimeSheet time="4" speed="15" roty="-180" rotacy="0.9"/>
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9"/>
+	</AI>
+
+	<!-- Zig-zag movement for Pirate Ship (type 1) -->
+	<AI num="114">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9"/>
+		<TimeSheet time="4" speed="15" roty="-180" rotacy="0.9"/>
+		<TimeSheet time="2" speed="15" roty="50" rotacy="0.9"/>
+		<TimeSheet time="20" speed="15"/>
+	</AI>
+
+	<!-- Zig-zag movement for Pirate Ship (type 1) -->
+	<AI num="115">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9"/>
+		<TimeSheet time="4" speed="15" roty="-180" rotacy="0.9"/>
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9"/>
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9"/>
+		<TimeSheet time="2" speed="15" roty="-70" rotacy="0.9"/>
+		<TimeSheet time="20" speed="15"/>
+	</AI>
+
+	<!-- Zig-zag movement for Pirate Ship (type 1) -->
+	<AI num="116">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9"/>
+		<TimeSheet time="2" speed="15" roty="-50" rotacy="0.9"/>
+		<TimeSheet time="20" speed="15"/>
+	</AI>
+
+
+	<!-- Zig-zag movement for Pirate Ship (type 1) -->
+	<AI num="117">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9"/>
+		<TimeSheet time="4" speed="15" roty="-180" rotacy="0.9"/>
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9"/>
+		<TimeSheet time="1" speed="15" roty="90" rotacy="0.9"/>
+		<TimeSheet time="1" speed="15" roty="-90" rotacy="0.9"/>
+		<TimeSheet time="20" speed="15"/>
+	</AI>
+
+
+	<!-- Movement + fire for Pirate Ship (type 1) -->
+	<AI num="118">
+		<TimeSheet time="2" speed="10" fire="1"/>
+		<TimeSheet time="20" speed="10" fire="1"/>
+	</AI>
+
+	<!-- Zig-zag movement for Pirate Ship (type 1) -->
+	<AI num="119">
+		<TimeSheet time="2" speed="15" roty="-90" rotacy="0.9"/>
+		<TimeSheet time="4" speed="15" roty="180" rotacy="0.9"/>
+		<TimeSheet time="2" speed="15" roty="-90" rotacy="0.9"/>
+	</AI>
+
+
+
+	<!-- Zig-zag movement + fire for Pirate Ship (type 1) -->
+	<AI num="123">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="4" speed="15" roty="-180" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9" fire="1"/>
+	</AI>
+	<!-- Zig-zag movement + fire for Pirate Ship (type 1) -->
+	<AI num="124">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="4" speed="15" roty="-180" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="15" roty="50" rotacy="0.9" fire="1"/>
+		<TimeSheet time="20" speed="15"  fire="1"/>
+	</AI>
+	<!-- Zig-zag movement + fire for Pirate Ship (type 1) -->
+	<AI num="125">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="4" speed="15" roty="-180" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="15" roty="-70" rotacy="0.9" fire="1"/>
+		<TimeSheet time="20" speed="15"  fire="1"/>
+	</AI>
+	<!-- Zig-zag movement + fire for Pirate Ship (type 1) -->
+	<AI num="126">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9" fire="1"/>
+		<TimeSheet time="2" speed="15" roty="-50" rotacy="0.9" fire="1"/>
+		<TimeSheet time="20" speed="15" fire="1"/>
+	</AI>
+	<!-- Zig-zag movement + fire for Pirate Ship (type 1) -->
+	<AI num="127">
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9"  fire="1"/>
+		<TimeSheet time="4" speed="15" roty="-180" rotacy="0.9"  fire="1"/>
+		<TimeSheet time="2" speed="15" roty="90" rotacy="0.9"  fire="1"/>
+		<TimeSheet time="1" speed="15" roty="90" rotacy="0.9"  fire="1"/>
+		<TimeSheet time="1" speed="15" roty="-90" rotacy="0.9"  fire="1"/>
+		<TimeSheet time="20" speed="15"  fire="1"/>
+	</AI>
+
+
+	<!-- Movement with wiggle for Pirate Ship (type 1)-->
+	<AI num="131">
+		<TimeSheet time="0.8" speed="15" rotz="10" rotacz="0.1"/>
+		<TimeSheet time="1.6" speed="15" rotz="-20" rotacz="0.1"/>
+		<TimeSheet time="0.8" speed="15" rotz="10" rotacz="0.1"/>
+	</AI>
+
+	<!-- Movement + fire for Pirate Ship (type 1)-->
+	<AI num="132">
+		<TimeSheet time="200" speed="15" fire="1"/>
+	</AI>
+
+	<!-- Movement with wiggle + fire for Pirate Ship (type 1)-->
+	<AI num="133">
+		<TimeSheet time="0.8" speed="15" rotz="10" rotacz="0.1" fire="1"/>
+		<TimeSheet time="1.6" speed="15" rotz="-20" rotacz="0.1" fire="1"/>
+		<TimeSheet time="0.8" speed="15" rotz="10" rotacz="0.1" fire="1"/>
+	</AI>
+
+
+
+	<!-- Movement with wiggle for Pirate Ship (type 2)-->
+	<AI num="141">
+		<TimeSheet time="0.8" speed="15" rotz="10" rotacz="0.1" fire="1"/>
+		<TimeSheet time="1.6" speed="15" rotz="-20" rotacz="0.1" fire="1"/>
+		<TimeSheet time="0.8" speed="15" rotz="10" rotacz="0.1" fire="1"/>
+	</AI>
+
+
+
+	<!-- Movement + fire for Pirate Ship (type 1) -->
+	<AI num="142">
+		<TimeSheet time="2" speed="10" fire="1"/>
+		<TimeSheet time="2" speed="10" fire="0"/>
+	</AI>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!-- 1000 - 1099 reserved for EarthFighters-->
+
+
+
+
+
+
+
+	<!-- Cover ships for player -->
+
+	<AI num="1001">
+		<TimeSheet time="1.0" speed="8" fire="1" roty="25" rotacy="0.4"/>
+		<TimeSheet time="2.0" speed="8" fire="0" roty="-50" rotacy="0.4"/>
+		<TimeSheet time="1.0" speed="8" fire="1" roty="25" rotacy="0.4"/>
+	</AI>
+
+	<AI num="1002">
+		<TimeSheet time="1.0" speed="10.5" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="2.0" speed="10.5" fire="0" roty="-10" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="10.5" fire="1" roty="5" rotacy="0.1"/>
+	</AI>
+
+	<AI num="1003">
+		<TimeSheet time="1.0" speed="9.5" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="2.0" speed="9.5" fire="0" roty="-10" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9.5" fire="1" roty="5" rotacy="0.1"/>
+	</AI>
+
+	<AI num="1004">
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="2.0" speed="9" fire="0" roty="-10" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+	</AI>
+
+	<AI num="1005">
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="2.0" speed="9" fire="0" roty="-10" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="2.0" speed="9" fire="0" roty="-10" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="2.0" speed="9" fire="0" roty="-10" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="2.0" speed="9" fire="0" roty="-10" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="2.0" speed="9" fire="0" roty="-10" rotacy="0.1"/>
+
+		<TimeSheet time="3.0" speed="9" rotx="190"  rotacx="0.15"/>
+		<TimeSheet time="10.0" speed="9" roty="5" rotacy="0.1"/>
+	</AI>
+
+	<AI num="1006">
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="2.0" speed="9" fire="0" roty="-10" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="2.0" speed="9" fire="0" roty="-10" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="2.0" speed="9" fire="0" roty="-10" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="1" roty="5" rotacy="0.1"/>
+		<TimeSheet time="2.0" speed="9" fire="0" roty="-10" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="0" roty="5" rotacy="0.1"/>
+		<TimeSheet time="1.0" speed="9" fire="0" roty="5" rotacy="0.1"/>
+
+		<TimeSheet time="2.0" speed="9" fire="0" rotz="-90" rotacz="0.2" />
+		<TimeSheet time="10.0" speed="9" fire="0" roty="5" rotacy="0.1"/>
+	</AI>
+
+
+
+
+
+
+
+
+
+	<!-- 1100 - 1199 reserved for AlienMotherShip-->
+
+
+
+	<!-- Movement for AlienMotherShip (type 1)-->
+	<AI num="1101">
+		<TimeSheet time="2" speed="-10" roty="45" rotacy="0.6" acceler="1.0" fire="1"/>
+		<TimeSheet time="6" speed="-10" roty="-90" rotacy="0.6" acceler="1.0" fire="1"/>
+		<TimeSheet time="4" speed="-10" roty="90" rotacy="0.6" acceler="1.0" fire="1"/>
+		<TimeSheet time="2" speed="-10" roty="-45" rotacy="0.6" acceler="1.0" fire="1"/>
+
+		<TimeSheet time="0.1" speed="-10" acceler="1.0" fire="1"/>
+		<TimeSheet time="2.5" speed="-20" acceler="1.0" fire="0"/>
+		<TimeSheet time="0.1" speed="-10" acceler="1.0" fire="1"/>
+
+		<TimeSheet time="2" speed="-10" roty="-45" rotacy="0.6" acceler="1.0" fire="1"/>
+		<TimeSheet time="6" speed="-10" roty="90" rotacy="0.6" acceler="1.0" fire="1"/>
+		<TimeSheet time="4" speed="-10" roty="-90" rotacy="0.6" acceler="1.0" fire="1"/>
+		<TimeSheet time="2" speed="-10" roty="45" rotacy="0.6" acceler="1.0" fire="1"/>
+
+		<TimeSheet time="0.1" speed="-10" acceler="1.0" fire="1"/>
+		<TimeSheet time="2.5" speed="-20" acceler="1.0" fire="0"/>
+		<TimeSheet time="0.1" speed="-10" acceler="1.0" fire="1"/>
+	</AI>
+
+
+	<!-- Movement for AlienMotherShip (type 2)-->
+	<AI num="1102">
+		<TimeSheet time="1" speedlr="0.0001" fire="0"  bossfire="0"/>
+		<TimeSheet time="2" speedlr="0.0001" fire="1" bossfire="0"/>
+
+		<TimeSheet time="6" speedlr="10" accelerlr="0.2" fire="1" bossfire="0"/>
+		<TimeSheet time="1" speedlr="0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+		<TimeSheet time="11.0" speedlr="-10" accelerlr="0.2" fire="1" bossfire="0"/>
+		<TimeSheet time="1" speedlr="-0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+		<TimeSheet time="6" speedlr="10" accelerlr="0.2" fire="1" bossfire="0"/>
+		<TimeSheet time="1" speedlr="0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+
+		<TimeSheet time="6" speedlr="10" accelerlr="0.2" fire="1" bossfire="0"/>
+		<TimeSheet time="1" speedlr="0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+		<TimeSheet time="11.0" speedlr="-10" accelerlr="0.2" fire="1" bossfire="0"/>
+		<TimeSheet time="1" speedlr="-0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+		<TimeSheet time="6" speedlr="10" accelerlr="0.2" fire="1" bossfire="0"/>
+		<TimeSheet time="1" speedlr="0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+
+		<TimeSheet time="1" speedlr="0.0001" fire="0"  bossfire="1"/>
+		<TimeSheet time="2" speedlr="0.0001" fire="1" bossfire="1"/>
+
+		<TimeSheet time="6" speedlr="10" accelerlr="0.2" fire="1" bossfire="0"/>
+		<TimeSheet time="1" speedlr="0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+		<TimeSheet time="11.0" speedlr="-10" accelerlr="0.2" fire="1" bossfire="0"/>
+		<TimeSheet time="1" speedlr="-0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+		<TimeSheet time="6" speedlr="10" accelerlr="0.2" fire="1" bossfire="0"/>
+		<TimeSheet time="1" speedlr="0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+	</AI>
+
+
+
+	<!-- Movement for AlienMotherShip (type 3)-->
+	<AI num="1103">
+		<TimeSheet time="1" speedlr="0.0001" fire="0"  bossfire="0"/>
+		<TimeSheet time="2" speedlr="0.0001" fire="1" bossfire="0"/>
+
+		<TimeSheet time="6" speedlr="10" accelerlr="0.2" fire="1" bossfire="0"/>
+		<TimeSheet time="1" speedlr="0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+		<TimeSheet time="11.0" speedlr="-10" accelerlr="0.2" fire="1" bossfire="0"/>
+		<TimeSheet time="1" speedlr="-0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+		<TimeSheet time="6" speedlr="10" accelerlr="0.2" fire="1" bossfire="1"/>
+		<TimeSheet time="1" speedlr="0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+
+		<TimeSheet time="6" speedlr="10" accelerlr="0.2" fire="1" bossfire="0"/>
+		<TimeSheet time="1" speedlr="0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+		<TimeSheet time="6.0" speedlr="-10" accelerlr="0.2" fire="1" bossfire="1"/>
+		<TimeSheet time="5.0" speedlr="-10" accelerlr="0.2" fire="1" bossfire="0"/>
+		<TimeSheet time="1" speedlr="-0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+		<TimeSheet time="6" speedlr="10" accelerlr="0.2" fire="1" bossfire="1"/>
+		<TimeSheet time="1" speedlr="0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+
+		<TimeSheet time="1" speedlr="0.0001" fire="0"  bossfire="1"/>
+		<TimeSheet time="2" speedlr="0.0001" fire="1" bossfire="1"/>
+
+		<TimeSheet time="6" speedlr="10" accelerlr="0.2" fire="1" bossfire="0"/>
+		<TimeSheet time="1" speedlr="0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+		<TimeSheet time="11.0" speedlr="-10" accelerlr="0.2" fire="1" bossfire="0"/>
+		<TimeSheet time="1" speedlr="-0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+		<TimeSheet time="6" speedlr="10" accelerlr="0.2" fire="1" bossfire="1"/>
+		<TimeSheet time="1" speedlr="0.001" accelerlr="1.0" fire="1" bossfire="0"/>
+	</AI>
+
+
+
+
+
+
+
+
+
+
+
+
+	<!-- 2000 - 2099 reserved for Military Buildings-->
+
+
+	<!-- targeting + fire -->	
+	<AI num="2001">
+		<TimeSheet time="-1.0" fire="1" targeting="1"/>
+	</AI>
+
+
+
+</AstroMenaceAI>
