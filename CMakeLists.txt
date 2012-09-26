@@ -14,7 +14,7 @@ ELSE(OPENGL_FOUND)
 ENDIF(OPENGL_FOUND)
 
 #
-# There is no FIND_PACKAGE for GLU, alut, libvorbis and lvorbisfile.
+# There is no FIND_PACKAGE for GLU, Xinerama, alut, libvorbis and lvorbisfile.
 # We just link required libraries, and hope that include/library
 # dir paths from other detected packages are enough
 #
@@ -34,7 +34,7 @@ EXEC_PROGRAM(${SDL_CONFIG} ARGS "--libs" OUTPUT_VARIABLE SDL_LIBS)
 
 ADD_DEFINITIONS(${SDL_CFLAGS})
 ADD_EXECUTABLE(AstroMenace ${astromenace_SRCS})
-TARGET_LINK_LIBRARIES(AstroMenace ${SDL_LIBS} ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY} ${JPEG_LIBRARY} -lGLU -lalut -lvorbis -lvorbisfile)
+TARGET_LINK_LIBRARIES(AstroMenace ${SDL_LIBS} ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY} ${JPEG_LIBRARY} -lGLU -lalut -lvorbis -lvorbisfile -lXinerama)
 
 IF(CYGWIN)
 	TARGET_LINK_LIBRARIES(AstroMenace -lGL.dll  -lGLU.dll -lglfw -lX11.dll)

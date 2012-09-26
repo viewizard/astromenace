@@ -34,6 +34,7 @@
 					<Add library="vorbis" />
 					<Add library="vorbisfile" />
 					<Add library="jpeg" />
+					<Add library="Xinerama" />
 					<Add directory="../../../libs/SDL_1.2.9_linux/lib" />
 				</Linker>
 			</Target>
@@ -141,7 +142,6 @@
 		<Unit filename="../Menu/Menu.cpp" />
 		<Unit filename="../Menu/Menu_ConfControl.cpp" />
 		<Unit filename="../Menu/Menu_Credits.cpp" />
-		<Unit filename="../Menu/Menu_Demo.cpp" />
 		<Unit filename="../Menu/Menu_Difficulty.cpp" />
 		<Unit filename="../Menu/Menu_Information.cpp" />
 		<Unit filename="../Menu/Menu_Mission.cpp" />
@@ -229,6 +229,7 @@
 		<Extensions>
 			<envvars />
 			<code_completion />
+			<debugger />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

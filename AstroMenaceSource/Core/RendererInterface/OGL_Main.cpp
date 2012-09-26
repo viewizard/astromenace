@@ -158,7 +158,7 @@ void vw_TestAAModes(int Width, int Height)
 //------------------------------------------------------------------------------------
 // установка окна на середину
 //------------------------------------------------------------------------------------
-void CenterWindow()
+void CenterWindow(int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideoModeW, int CurrentVideoModeH)
 {
     SDL_Surface *GameScreen = SDL_GetVideoSurface();
     SDL_SysWMinfo info;
@@ -170,17 +170,8 @@ void CenterWindow()
             if ( info.subsystem == SDL_SYSWM_X11 )
 			{
                 info.info.x11.lock_func();
-                int w = DisplayWidth(info.info.x11.display,
-                                 DefaultScreen(info.info.x11.display));
-                int h = DisplayHeight(info.info.x11.display,
-                                 DefaultScreen(info.info.x11.display));
-
-				// пока нет возможности определить screens Xineramа-TwinView нормально через SDL, используем
-				// костыль, который будет работать только если мониторы связаны в ширину (наиболее распространенный случай)
-				if ( (float)w / (float)h >= 2.0f) w = w/2;
-
-                int x = (w - GameScreen->w)/2;
-                int y = (h - GameScreen->h)/2;
+                int x = (CurrentVideoModeW - GameScreen->w)/2 + CurrentVideoModeX;
+                int y = (CurrentVideoModeH - GameScreen->h)/2 + CurrentVideoModeY;
                 XMoveWindow(info.info.x11.display, info.info.x11.wmwindow, x, y);
                 info.info.x11.unlock_func();
             }
@@ -189,11 +180,9 @@ void CenterWindow()
             {
 				RECT rc;
 				HWND hwnd = info.window;
-				int w=GetSystemMetrics(SM_CXSCREEN);
-				int h=GetSystemMetrics(SM_CYSCREEN);
 				GetWindowRect(hwnd, &rc);
-				int x = (w - (rc.right-rc.left))/2;
-				int y = (h - (rc.bottom-rc.top))/2;
+				int x = (CurrentVideoModeW - (rc.right-rc.left))/2 + CurrentVideoModeX;
+				int y = (CurrentVideoModeH - (rc.bottom-rc.top))/2 + CurrentVideoModeY;
 				SetWindowPos(hwnd, NULL, x, y, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
             }
         #endif // WIN32
@@ -233,7 +222,7 @@ bool ExtensionSupported( const char *Extension)
 //------------------------------------------------------------------------------------
 // инициализация Open_GL
 //------------------------------------------------------------------------------------
-int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int *FSAA)
+int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int *FSAA, int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideoModeW, int CurrentVideoModeH)
 {
 	// самым первым делом - запоминаем все
 	UserDisplayRampStatus = SDL_GetGammaRamp(UserDisplayRamp, UserDisplayRamp+256, UserDisplayRamp+512);
@@ -292,7 +281,7 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 
 
 	// центровка
-	if (!FullScreenFlag) CenterWindow();
+	if (!FullScreenFlag) CenterWindow(CurrentVideoModeX, CurrentVideoModeY, CurrentVideoModeW, CurrentVideoModeH);
 	// ставим название класса окна
 	SDL_WM_SetCaption(Title, 0);
 
