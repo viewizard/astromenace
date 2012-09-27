@@ -440,82 +440,90 @@ void MissionMenu()
 
 		SetRect(&DstRest,X1,Y1+1,X1+750,Y1+64);
 		if (i <= Setup.Profile[CurrentProfile].OpenLevelNum)
-		if (vw_OnRect(&DstRest) && !isDialogBoxDrawing())
 		{
-			TMPSoundOnMissionID = i;
-			CurrentCursorStatus = 1;
-			// если только встали - нужно звуком это показать
-			if (SoundOnMissionID != i)
+			if (vw_OnRect(&DstRest) && !isDialogBoxDrawing())
 			{
-				SoundOnMissionID = i;
-				Audio_PlayMenuSound(5,1.0f);
-			}
-
-			// если стоим над ним...
-			SetRect(&SrcRest,0,0,64,64);
-			SetRect(&DstRest,X1,Y1,X1+64,Y1+64);
-			if (MissionIcon != 0)
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(MissionIcon[i]), true, MenuContentTransp);
-
-
-			int SizeI = FontSize(GetText(MissionTitle[i]));
-			if (SizeI < 750-30-64)
-			{
-				if (MissionTitleType[i] == 1)
-					DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], MenuContentTransp, GetText(MissionTitle[i]));
-				else
-					DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], MenuContentTransp, MissionTitle[i]);
-			}
-			else
-			{
-				if (MissionTitleType[i] == 1)
-					DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], MenuContentTransp, GetText(MissionTitle[i]));
-				else
-					DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], MenuContentTransp, MissionTitle[i]);
-			}
-			SizeI = FontSize(GetText(MissionDescr[i]));
-			if (SizeI < 750-30-64)
-			{
-				if (MissionDescrType[i] == 1)
-					DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], MenuContentTransp, GetText(MissionDescr[i]));
-				else
-					DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], MenuContentTransp, MissionDescr[i]);
-
-			}
-			else
-			{
-				if (MissionDescrType[i] == 1)
-					DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], MenuContentTransp, GetText(MissionDescr[i]));
-				else
-					DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], MenuContentTransp, MissionDescr[i]);
-			}
-
-
-
-			if (CurrentMission != i)
-			{
-				SetRect(&SrcRest,0,0,2,2);
-				SetRect(&DstRest,X1+64,Y1+1,X1+749,Y1+63);
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/whitepoint.tga"), true, 0.1f*MenuContentTransp);
-			}
-			if (vw_GetWindowLBMouse(true))
-			{
-
-				CurrentMission = i;
-				Setup.Profile[CurrentProfile].LastMission = CurrentMission;
-				Audio_PlayMenuSound(6,1.0f);
-			}
-
-			if (vw_GetWindowLBDoubleMouse(true))
-			{
-				CurrentMission = i;
-				Setup.Profile[CurrentProfile].LastMission = CurrentMission;
-				// если уже играли в эту миссию
-				if (Setup.Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0)
+				TMPSoundOnMissionID = i;
+				CurrentCursorStatus = 1;
+				// если только встали - нужно звуком это показать
+				if (SoundOnMissionID != i)
 				{
-					if (Setup.NeedShowHint[5])
+					SoundOnMissionID = i;
+					Audio_PlayMenuSound(5,1.0f);
+				}
+
+				// если стоим над ним...
+				SetRect(&SrcRest,0,0,64,64);
+				SetRect(&DstRest,X1,Y1,X1+64,Y1+64);
+				if (MissionIcon != 0)
+					vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(MissionIcon[i]), true, MenuContentTransp);
+
+
+				int SizeI = FontSize(GetText(MissionTitle[i]));
+				if (SizeI < 750-30-64)
+				{
+					if (MissionTitleType[i] == 1)
+						DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], MenuContentTransp, GetText(MissionTitle[i]));
+					else
+						DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], MenuContentTransp, MissionTitle[i]);
+				}
+				else
+				{
+					if (MissionTitleType[i] == 1)
+						DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], MenuContentTransp, GetText(MissionTitle[i]));
+					else
+						DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], MenuContentTransp, MissionTitle[i]);
+				}
+				SizeI = FontSize(GetText(MissionDescr[i]));
+				if (SizeI < 750-30-64)
+				{
+					if (MissionDescrType[i] == 1)
+						DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], MenuContentTransp, GetText(MissionDescr[i]));
+					else
+						DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], MenuContentTransp, MissionDescr[i]);
+
+				}
+				else
+				{
+					if (MissionDescrType[i] == 1)
+						DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], MenuContentTransp, GetText(MissionDescr[i]));
+					else
+						DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], MenuContentTransp, MissionDescr[i]);
+				}
+
+
+
+				if (CurrentMission != i)
+				{
+					SetRect(&SrcRest,0,0,2,2);
+					SetRect(&DstRest,X1+64,Y1+1,X1+749,Y1+63);
+					vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+				}
+				if (vw_GetWindowLBMouse(true))
+				{
+
+					CurrentMission = i;
+					Setup.Profile[CurrentProfile].LastMission = CurrentMission;
+					Audio_PlayMenuSound(6,1.0f);
+				}
+
+				if (vw_GetWindowLBDoubleMouse(true))
+				{
+					CurrentMission = i;
+					Setup.Profile[CurrentProfile].LastMission = CurrentMission;
+					// если уже играли в эту миссию
+					if (Setup.Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0)
 					{
-						SetCurrentDialogBox(14);
+						if (Setup.NeedShowHint[5])
+						{
+							SetCurrentDialogBox(14);
+						}
+						else
+						{
+							ComBuffer = WORKSHOP;
+							CurrentWorkshop = 3;
+							WorkshopCreate();
+						}
 					}
 					else
 					{
@@ -524,56 +532,49 @@ void MissionMenu()
 						WorkshopCreate();
 					}
 				}
+			}
+			else
+			{
+				// если не стоим над ним, но можем выбирать
+				SetRect(&SrcRest,0,0,64,64);
+				SetRect(&DstRest,X1+2,Y1+2,X1+62,Y1+62);
+				if (MissionIcon != 0)
+					vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(MissionIcon[i]), true, 0.8f*MenuContentTransp);
+
+				int SizeI = FontSize(GetText(MissionTitle[i]));
+				if (SizeI < 750-30-64)
+				{
+					if (MissionTitleType[i] == 1)
+						DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], 0.8f*MenuContentTransp, GetText(MissionTitle[i]));
+					else
+						DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], 0.8f*MenuContentTransp, MissionTitle[i]);
+				}
 				else
 				{
-					ComBuffer = WORKSHOP;
-					CurrentWorkshop = 3;
-					WorkshopCreate();
+					if (MissionTitleType[i] == 1)
+						DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], 0.8f*MenuContentTransp, GetText(MissionTitle[i]));
+					else
+						DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], 0.8f*MenuContentTransp, MissionTitle[i]);
+				}
+
+				SizeI = FontSize(GetText(MissionDescr[i]));
+				if (SizeI < 750-30-64)
+				{
+					if (MissionDescrType[i] == 1)
+						DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], 0.8f*MenuContentTransp, GetText(MissionDescr[i]));
+					else
+						DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], 0.8f*MenuContentTransp, MissionDescr[i]);
+
+				}
+				else
+				{
+					if (MissionDescrType[i] == 1)
+						DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], 0.8f*MenuContentTransp, GetText(MissionDescr[i]));
+					else
+						DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], 0.8f*MenuContentTransp, MissionDescr[i]);
 				}
 			}
 		}
-		else
-		{
-			// если не стоим над ним, но можем выбирать
-			SetRect(&SrcRest,0,0,64,64);
-			SetRect(&DstRest,X1+2,Y1+2,X1+62,Y1+62);
-			if (MissionIcon != 0)
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(MissionIcon[i]), true, 0.8f*MenuContentTransp);
-
-			int SizeI = FontSize(GetText(MissionTitle[i]));
-			if (SizeI < 750-30-64)
-			{
-				if (MissionTitleType[i] == 1)
-					DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], 0.8f*MenuContentTransp, GetText(MissionTitle[i]));
-				else
-					DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], 0.8f*MenuContentTransp, MissionTitle[i]);
-			}
-			else
-			{
-				if (MissionTitleType[i] == 1)
-					DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], 0.8f*MenuContentTransp, GetText(MissionTitle[i]));
-				else
-					DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], 0.8f*MenuContentTransp, MissionTitle[i]);
-			}
-
-			SizeI = FontSize(GetText(MissionDescr[i]));
-			if (SizeI < 750-30-64)
-			{
-				if (MissionDescrType[i] == 1)
-					DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], 0.8f*MenuContentTransp, GetText(MissionDescr[i]));
-				else
-					DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], 0.8f*MenuContentTransp, MissionDescr[i]);
-
-			}
-			else
-			{
-				if (MissionDescrType[i] == 1)
-					DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], 0.8f*MenuContentTransp, GetText(MissionDescr[i]));
-				else
-					DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], 0.8f*MenuContentTransp, MissionDescr[i]);
-			}
-		}
-
 
 		Y1 += 64;
 	}

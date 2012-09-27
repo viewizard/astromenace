@@ -2044,61 +2044,62 @@ void DrawGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// если в игре - меню, если в меню - выход
 	if (!isDialogBoxDrawing())
-	if (PlayerFighter != 0) // если не убили
 	{
-		if (vw_GetKeys(SDLK_ESCAPE) || GameMissionCompleteStatusShowDialog)
+		if (PlayerFighter != 0) // если не убили
 		{
-			bool NeedPlaySfx = true;
-			// если нужно показать конец игры, все равно его показываем
-			if (GameMissionCompleteStatusShowDialog)
+			if (vw_GetKeys(SDLK_ESCAPE) || GameMissionCompleteStatusShowDialog)
 			{
-				// чтобы постоянно не проигрывать звук
-				if (GameMenu) NeedPlaySfx = false;
-				else GameMenu = true;
-			}
-			else GameMenu = !GameMenu;
+				bool NeedPlaySfx = true;
+				// если нужно показать конец игры, все равно его показываем
+				if (GameMissionCompleteStatusShowDialog)
+				{
+					// чтобы постоянно не проигрывать звук
+					if (GameMenu) NeedPlaySfx = false;
+					else GameMenu = true;
+				}
+				else GameMenu = !GameMenu;
 
-			if (GameMenu)
+				if (GameMenu)
+				{
+					NeedShowGameMenu = true;
+					NeedHideGameMenu = false;
+					if (NeedPlaySfx && SoundShowHideMenu != 0)
+						if (vw_FindSoundByNum(SoundShowHideMenu) != 0)
+							vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
+					if (NeedPlaySfx) SoundShowHideMenu = Audio_PlayMenuSound(12, 1.0f);
+					// сброс кнопки мышки, чтобы случайно не нажали
+					vw_GetWindowLBMouse(true);
+				}
+				else
+				{
+					NeedShowGameMenu = false;
+					NeedHideGameMenu = true;
+					// установка в последюю точку указателя
+					SDL_WarpMouse(LastMouseXR, LastMouseYR);
+
+					if (NeedPlaySfx && SoundShowHideMenu != 0)
+						if (vw_FindSoundByNum(SoundShowHideMenu) != 0)
+							vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
+					if (NeedPlaySfx) SoundShowHideMenu = Audio_PlayMenuSound(13, 1.0f);
+					DrawGameCursor = false;
+				}
+
+				GameMissionCompleteStatusShowDialog = false;
+				vw_SetKeys(SDLK_ESCAPE, false);
+			}
+		}
+		else
+		{
+			if (vw_GetKeys(SDLK_ESCAPE))
 			{
-				NeedShowGameMenu = true;
-				NeedHideGameMenu = false;
-				if (NeedPlaySfx && SoundShowHideMenu != 0)
-					if (vw_FindSoundByNum(SoundShowHideMenu) != 0)
-						vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
-				if (NeedPlaySfx) SoundShowHideMenu = Audio_PlayMenuSound(12, 1.0f);
-				// сброс кнопки мышки, чтобы случайно не нажали
-				vw_GetWindowLBMouse(true);
-			}
-			else
-			{
-				NeedShowGameMenu = false;
-				NeedHideGameMenu = true;
-				// установка в последюю точку указателя
-				SDL_WarpMouse(LastMouseXR, LastMouseYR);
+				ComBuffer = 101;
+				ExitGame();
 
-				if (NeedPlaySfx && SoundShowHideMenu != 0)
-					if (vw_FindSoundByNum(SoundShowHideMenu) != 0)
-						vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
-				if (NeedPlaySfx) SoundShowHideMenu = Audio_PlayMenuSound(13, 1.0f);
-				DrawGameCursor = false;
+				vw_SetKeys(SDLK_ESCAPE, false);
 			}
 
-			GameMissionCompleteStatusShowDialog = false;
-			vw_SetKeys(SDLK_ESCAPE, false);
 		}
 	}
-	else
-	{
-		if (vw_GetKeys(SDLK_ESCAPE))
-		{
-			ComBuffer = 101;
-			ExitGame();
-
-			vw_SetKeys(SDLK_ESCAPE, false);
-		}
-
-	}
-
 
 
 

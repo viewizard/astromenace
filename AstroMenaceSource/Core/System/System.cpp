@@ -47,8 +47,10 @@ bool vw_TestFileExtension(const char *name, const char *extension)
 	if(LengthName<LengthString) return false;
 	for(int i=LengthName-1;i>=0;i--)
 		if(name[i]=='.')
+		{
 			if(!strcmp(&name[i+1],extension)) return true;
 			else return false;
+		}
 	return false;
 }
 
