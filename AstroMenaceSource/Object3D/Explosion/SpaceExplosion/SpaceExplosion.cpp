@@ -115,7 +115,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 
 			Projectile->SetRotation(VECTOR3D(360.0f*vw_Randf0, 360.0f*vw_Randf0, 360.0f*vw_Randf0));
 			VECTOR3D TM1 = Object->Orientation^Speed;
-			Projectile->Orientation = TM1 + Projectile->Orientation^(Object->Radius*6.0f);
+			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius*6.0f));
 			Projectile->Orientation.Normalize();
 
 			for (int i=0; i<Projectile->GraphicFXQuantity; i++)

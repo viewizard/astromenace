@@ -313,7 +313,7 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 
 					ProjectileTMP->SetRotation(VECTOR3D(360.0f*vw_Randf0, 360.0f*vw_Randf0, 360.0f*vw_Randf0));
 					VECTOR3D TM1 = Projectile->Orientation^Projectile->Speed;
-					ProjectileTMP->Orientation = TM1 + ProjectileTMP->Orientation^(Projectile->Radius*6.0f);
+					ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*6.0f));
 					ProjectileTMP->Orientation.Normalize();
 
 					for (int i=0; i<ProjectileTMP->GraphicFXQuantity; i++)
@@ -528,7 +528,7 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 
 					ProjectileTMP->SetRotation(VECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
 					VECTOR3D TM1 = Projectile->Orientation;
-					ProjectileTMP->Orientation = TM1 + ProjectileTMP->Orientation^(Projectile->Radius*2.0f);
+					ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 					ProjectileTMP->Orientation.Normalize();
 
 					for (int i=0; i<ProjectileTMP->GraphicFXQuantity; i++)
@@ -584,7 +584,7 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 
 					ProjectileTMP->SetRotation(VECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
 					VECTOR3D TM1 = Projectile->Orientation;//^Speed;
-					ProjectileTMP->Orientation = TM1 + ProjectileTMP->Orientation^(Projectile->Radius*2.0f);
+					ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 					ProjectileTMP->Orientation.Normalize();
 
 					for (int i=0; i<ProjectileTMP->GraphicFXQuantity; i++)
@@ -641,7 +641,7 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 
 					ProjectileTMP->SetRotation(VECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
 					VECTOR3D TM1 = Projectile->Orientation;//^Speed;
-					ProjectileTMP->Orientation = TM1 + ProjectileTMP->Orientation^(Projectile->Radius*2.0f);
+					ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 					ProjectileTMP->Orientation.Normalize();
 
 					for (int i=0; i<ProjectileTMP->GraphicFXQuantity; i++)
@@ -702,7 +702,7 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 
 					ProjectileTMP->SetRotation(VECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
 					VECTOR3D TM1 = Projectile->Orientation;
-					ProjectileTMP->Orientation = TM1 + ProjectileTMP->Orientation^(Projectile->Radius*4.0f);
+					ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*4.0f));
 					ProjectileTMP->Orientation.Normalize();
 
 					for (int i=0; i<ProjectileTMP->GraphicFXQuantity; i++)

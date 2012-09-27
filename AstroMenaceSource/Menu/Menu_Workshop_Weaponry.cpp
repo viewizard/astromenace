@@ -346,83 +346,84 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 		// если отпустили тут
 		if (!vw_GetWindowLBMouse(false) && DragWeapon)
-		// есть уровень слота соотв. уровню оружия
-		if ((WorkshopFighterGame->WeaponType[SlotNum] >= DragWeaponLevel) &&
-		// если стоимость меньше чем есть денег + стоимость оружия
-			(Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart)))
 		{
-			// звук устанавливаемого оружия
-			Audio_PlayMenuSound(10,1.0f);
-
-			// если тут было оружие - сначало продаем его
-			if (WorkshopFighterGame->Weapon[SlotNum] != 0)
+			// есть уровень слота соотв. уровню оружия
+			if ((WorkshopFighterGame->WeaponType[SlotNum] >= DragWeaponLevel) &&
+			// если стоимость меньше чем есть денег + стоимость оружия
+				(Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart)))
 			{
-				Setup.Profile[CurrentProfile].Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType,
-									WorkshopFighterGame->Weapon[SlotNum]->Ammo,
-									WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
-				delete WorkshopFighterGame->Weapon[SlotNum]; WorkshopFighterGame->Weapon[SlotNum] = 0;
-				Setup.Profile[CurrentProfile].Weapon[SlotNum] = 0;
-				Setup.Profile[CurrentProfile].WeaponAmmo[SlotNum] = 0;
-			}
+				// звук устанавливаемого оружия
+				Audio_PlayMenuSound(10,1.0f);
 
-			// покупаем оружие
-			Setup.Profile[CurrentProfile].Money -= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart);
+				// если тут было оружие - сначало продаем его
+				if (WorkshopFighterGame->Weapon[SlotNum] != 0)
+				{
+					Setup.Profile[CurrentProfile].Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType,
+										WorkshopFighterGame->Weapon[SlotNum]->Ammo,
+										WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
+					delete WorkshopFighterGame->Weapon[SlotNum]; WorkshopFighterGame->Weapon[SlotNum] = 0;
+					Setup.Profile[CurrentProfile].Weapon[SlotNum] = 0;
+					Setup.Profile[CurrentProfile].WeaponAmmo[SlotNum] = 0;
+				}
 
-			// все проверки сделали до этого, можем просто вызвать функцию, там 100% будет оружие
-			SetEarthSpaceFighterWeapon(WorkshopFighterGame, SlotNum+1, DragWeaponNum);
-			// убираем источник света
-			if (WorkshopFighterGame->Weapon[SlotNum]->Fire != 0)
-			if (WorkshopFighterGame->Weapon[SlotNum]->Fire->Light != 0){vw_ReleaseLight(WorkshopFighterGame->Weapon[SlotNum]->Fire->Light); WorkshopFighterGame->Weapon[SlotNum]->Fire->Light = 0;}
+				// покупаем оружие
+				Setup.Profile[CurrentProfile].Money -= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart);
 
-			Setup.Profile[CurrentProfile].Weapon[SlotNum] = DragWeaponNum;
-			Setup.Profile[CurrentProfile].WeaponAmmo[SlotNum] = DragWeaponAmmo;
-			Setup.Profile[CurrentProfile].WeaponControl[SlotNum] = DragWeaponControl;
-			Setup.Profile[CurrentProfile].WeaponAltControl[SlotNum] = DragWeaponAltControl;
-			Setup.Profile[CurrentProfile].WeaponAltControlData[SlotNum] = DragWeaponAltControlData;
-			WorkshopFighterGame->Weapon[SlotNum]->Ammo = DragWeaponAmmo;
-			WorkshopFighterGame->Weapon[SlotNum]->AmmoStart = DragWeaponAmmoStart;
+				// все проверки сделали до этого, можем просто вызвать функцию, там 100% будет оружие
+				SetEarthSpaceFighterWeapon(WorkshopFighterGame, SlotNum+1, DragWeaponNum);
+				// убираем источник света
+				if (WorkshopFighterGame->Weapon[SlotNum]->Fire != 0)
+				if (WorkshopFighterGame->Weapon[SlotNum]->Fire->Light != 0){vw_ReleaseLight(WorkshopFighterGame->Weapon[SlotNum]->Fire->Light); WorkshopFighterGame->Weapon[SlotNum]->Fire->Light = 0;}
 
-			// если не ракетная установка
-			if (DragWeaponNum < 16)
-			{
-				WorkshopFighterGame->WeaponYAngle[SlotNum] = Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
-				WorkshopFighterGame->Weapon[SlotNum]->SetRotation(WorkshopFighterGame->Weapon[SlotNum]->Rotation^(-1));
-				VECTOR3D NeedAngle = WorkshopFighterGame->Weapon[SlotNum]->Rotation;
-				NeedAngle.y += Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
-				WorkshopFighterGame->Weapon[SlotNum]->SetRotation(NeedAngle);
+				Setup.Profile[CurrentProfile].Weapon[SlotNum] = DragWeaponNum;
+				Setup.Profile[CurrentProfile].WeaponAmmo[SlotNum] = DragWeaponAmmo;
+				Setup.Profile[CurrentProfile].WeaponControl[SlotNum] = DragWeaponControl;
+				Setup.Profile[CurrentProfile].WeaponAltControl[SlotNum] = DragWeaponAltControl;
+				Setup.Profile[CurrentProfile].WeaponAltControlData[SlotNum] = DragWeaponAltControlData;
+				WorkshopFighterGame->Weapon[SlotNum]->Ammo = DragWeaponAmmo;
+				WorkshopFighterGame->Weapon[SlotNum]->AmmoStart = DragWeaponAmmoStart;
+
+				// если не ракетная установка
+				if (DragWeaponNum < 16)
+				{
+					WorkshopFighterGame->WeaponYAngle[SlotNum] = Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
+					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(WorkshopFighterGame->Weapon[SlotNum]->Rotation^(-1));
+					VECTOR3D NeedAngle = WorkshopFighterGame->Weapon[SlotNum]->Rotation;
+					NeedAngle.y += Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
+					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(NeedAngle);
+				}
+				else
+					Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] = 0.0f;
+
+				// чтобы оружие заняло свое место...
+				WorkshopFighterGame->Update(vw_GetTime());
+
+				// сброс
+				DragWeapon = false;
+				DragWeaponNum = 0;
+				DragWeaponLevel = 0;
+				DragWeaponAmmo = 0;
+				DragWeaponAmmoStart = 0;
+				DragWeaponControl = 0;
+				DragWeaponAltControl = 0;
+				DragWeaponAltControlData = 0;
 			}
 			else
-				Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] = 0.0f;
+			{
+				// особый случай - есть не соответствие, нужно проиграть звук неудачной установки
+				Audio_PlayMenuSound(8, 1.0f);
 
-			// чтобы оружие заняло свое место...
-			WorkshopFighterGame->Update(vw_GetTime());
-
-			// сброс
-			DragWeapon = false;
-			DragWeaponNum = 0;
-			DragWeaponLevel = 0;
-			DragWeaponAmmo = 0;
-			DragWeaponAmmoStart = 0;
-			DragWeaponControl = 0;
-			DragWeaponAltControl = 0;
-			DragWeaponAltControlData = 0;
+				// сброс
+				DragWeapon = false;
+				DragWeaponNum = 0;
+				DragWeaponLevel = 0;
+				DragWeaponAmmo = 0;
+				DragWeaponAmmoStart = 0;
+				DragWeaponControl = 0;
+				DragWeaponAltControl = 0;
+				DragWeaponAltControlData = 0;
+			}
 		}
-		else
-		{
-			// особый случай - есть не соответствие, нужно проиграть звук неудачной установки
-			Audio_PlayMenuSound(8, 1.0f);
-
-			// сброс
-			DragWeapon = false;
-			DragWeaponNum = 0;
-			DragWeaponLevel = 0;
-			DragWeaponAmmo = 0;
-			DragWeaponAmmoStart = 0;
-			DragWeaponControl = 0;
-			DragWeaponAltControl = 0;
-			DragWeaponAltControlData = 0;
-		}
-
 
 
 		// взяли оружие из слота, чтобы тащить - фактически продали его
@@ -734,81 +735,83 @@ void ShipSlotSetupWeapon(int Slot)
 
 		// если отпустили тут
 		if (!vw_GetWindowLBMouse(false) && DragWeapon)
-		// есть уровень слота соотв. уровню оружия
-		if ((WorkshopFighterGame->WeaponType[SlotNum] >= DragWeaponLevel) &&
-		// если стоимость меньше чем есть денег + стоимость оружия
-			(Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart)))
 		{
-			// звук устанавливаемого оружия
-			Audio_PlayMenuSound(10,1.0f);
-
-			// если тут было оружие - сначало продаем его
-			if (WorkshopFighterGame->Weapon[SlotNum] != 0)
+			// есть уровень слота соотв. уровню оружия
+			if ((WorkshopFighterGame->WeaponType[SlotNum] >= DragWeaponLevel) &&
+			// если стоимость меньше чем есть денег + стоимость оружия
+				(Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart)))
 			{
-				Setup.Profile[CurrentProfile].Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType,
-									WorkshopFighterGame->Weapon[SlotNum]->Ammo,
-									WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
-				delete WorkshopFighterGame->Weapon[SlotNum]; WorkshopFighterGame->Weapon[SlotNum] = 0;
-				Setup.Profile[CurrentProfile].Weapon[SlotNum] = 0;
-				Setup.Profile[CurrentProfile].WeaponAmmo[SlotNum] = 0;
-			}
+				// звук устанавливаемого оружия
+				Audio_PlayMenuSound(10,1.0f);
 
-			// покупаем оружие
-			Setup.Profile[CurrentProfile].Money -= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart);
+				// если тут было оружие - сначало продаем его
+				if (WorkshopFighterGame->Weapon[SlotNum] != 0)
+				{
+					Setup.Profile[CurrentProfile].Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType,
+										WorkshopFighterGame->Weapon[SlotNum]->Ammo,
+										WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
+					delete WorkshopFighterGame->Weapon[SlotNum]; WorkshopFighterGame->Weapon[SlotNum] = 0;
+					Setup.Profile[CurrentProfile].Weapon[SlotNum] = 0;
+					Setup.Profile[CurrentProfile].WeaponAmmo[SlotNum] = 0;
+				}
 
-			// все проверки сделали до этого, можем просто вызвать функцию, там 100% будет оружие
-			SetEarthSpaceFighterWeapon(WorkshopFighterGame, SlotNum+1, DragWeaponNum);
-			// убираем источник света
-			if (WorkshopFighterGame->Weapon[SlotNum]->Fire != 0)
-			if (WorkshopFighterGame->Weapon[SlotNum]->Fire->Light != 0){vw_ReleaseLight(WorkshopFighterGame->Weapon[SlotNum]->Fire->Light); WorkshopFighterGame->Weapon[SlotNum]->Fire->Light = 0;}
+				// покупаем оружие
+				Setup.Profile[CurrentProfile].Money -= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart);
 
-			Setup.Profile[CurrentProfile].Weapon[SlotNum] = DragWeaponNum;
-			Setup.Profile[CurrentProfile].WeaponAmmo[SlotNum] = DragWeaponAmmo;
-			Setup.Profile[CurrentProfile].WeaponControl[SlotNum] = DragWeaponControl;
-			Setup.Profile[CurrentProfile].WeaponAltControl[SlotNum] = DragWeaponAltControl;
-			Setup.Profile[CurrentProfile].WeaponAltControlData[SlotNum] = DragWeaponAltControlData;
-			WorkshopFighterGame->Weapon[SlotNum]->Ammo = DragWeaponAmmo;
-			WorkshopFighterGame->Weapon[SlotNum]->AmmoStart = DragWeaponAmmoStart;
+				// все проверки сделали до этого, можем просто вызвать функцию, там 100% будет оружие
+				SetEarthSpaceFighterWeapon(WorkshopFighterGame, SlotNum+1, DragWeaponNum);
+				// убираем источник света
+				if (WorkshopFighterGame->Weapon[SlotNum]->Fire != 0)
+				if (WorkshopFighterGame->Weapon[SlotNum]->Fire->Light != 0){vw_ReleaseLight(WorkshopFighterGame->Weapon[SlotNum]->Fire->Light); WorkshopFighterGame->Weapon[SlotNum]->Fire->Light = 0;}
 
-			// если не ракетная установка
-			if (DragWeaponNum < 16)
-			{
-				WorkshopFighterGame->WeaponYAngle[SlotNum] = Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
-				WorkshopFighterGame->Weapon[SlotNum]->SetRotation(WorkshopFighterGame->Weapon[SlotNum]->Rotation^(-1));
-				VECTOR3D NeedAngle = WorkshopFighterGame->Weapon[SlotNum]->Rotation;
-				NeedAngle.y += Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
-				WorkshopFighterGame->Weapon[SlotNum]->SetRotation(NeedAngle);
+				Setup.Profile[CurrentProfile].Weapon[SlotNum] = DragWeaponNum;
+				Setup.Profile[CurrentProfile].WeaponAmmo[SlotNum] = DragWeaponAmmo;
+				Setup.Profile[CurrentProfile].WeaponControl[SlotNum] = DragWeaponControl;
+				Setup.Profile[CurrentProfile].WeaponAltControl[SlotNum] = DragWeaponAltControl;
+				Setup.Profile[CurrentProfile].WeaponAltControlData[SlotNum] = DragWeaponAltControlData;
+				WorkshopFighterGame->Weapon[SlotNum]->Ammo = DragWeaponAmmo;
+				WorkshopFighterGame->Weapon[SlotNum]->AmmoStart = DragWeaponAmmoStart;
+
+				// если не ракетная установка
+				if (DragWeaponNum < 16)
+				{
+					WorkshopFighterGame->WeaponYAngle[SlotNum] = Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
+					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(WorkshopFighterGame->Weapon[SlotNum]->Rotation^(-1));
+					VECTOR3D NeedAngle = WorkshopFighterGame->Weapon[SlotNum]->Rotation;
+					NeedAngle.y += Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
+					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(NeedAngle);
+				}
+				else
+					Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] = 0.0f;
+
+				// чтобы оружие заняло свое место...
+				WorkshopFighterGame->Update(vw_GetTime());
+
+				// сброс
+				DragWeapon = false;
+				DragWeaponNum = 0;
+				DragWeaponLevel = 0;
+				DragWeaponAmmo = 0;
+				DragWeaponAmmoStart = 0;
+				DragWeaponControl = 0;
+				DragWeaponAltControl = 0;
+				DragWeaponAltControlData = 0;
 			}
 			else
-				Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] = 0.0f;
+			{
+				// особый случай - есть не соответствие, нужно проиграть звук неудачной установки
+				Audio_PlayMenuSound(8, 1.0f);
 
-			// чтобы оружие заняло свое место...
-			WorkshopFighterGame->Update(vw_GetTime());
-
-			// сброс
-			DragWeapon = false;
-			DragWeaponNum = 0;
-			DragWeaponLevel = 0;
-			DragWeaponAmmo = 0;
-			DragWeaponAmmoStart = 0;
-			DragWeaponControl = 0;
-			DragWeaponAltControl = 0;
-			DragWeaponAltControlData = 0;
-		}
-		else
-		{
-			// особый случай - есть не соответствие, нужно проиграть звук неудачной установки
-			Audio_PlayMenuSound(8, 1.0f);
-
-			// сброс
-			DragWeapon = false;
-			DragWeaponNum = 0;
-			DragWeaponLevel = 0;
-			DragWeaponAmmo = 0;
-			DragWeaponAmmoStart = 0;
-			DragWeaponControl = 0;
-			DragWeaponAltControl = 0;
-			DragWeaponAltControlData = 0;
+				// сброс
+				DragWeapon = false;
+				DragWeaponNum = 0;
+				DragWeaponLevel = 0;
+				DragWeaponAmmo = 0;
+				DragWeaponAmmoStart = 0;
+				DragWeaponControl = 0;
+				DragWeaponAltControl = 0;
+				DragWeaponAltControlData = 0;
+			}
 		}
 
 	}
@@ -998,9 +1001,9 @@ void Workshop_Weaponry()
 	if (GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType) > 0.0f)
 	{
 		DrawFont(Setup.iAspectRatioWidth/2-438, 130, 0, 0, 0, MenuContentTransp, GetText("4_Damage,_Hull:"));
-		if (WorkshopNewWeapon->ObjectCreationType == 11 |
-			WorkshopNewWeapon->ObjectCreationType == 12 |
-			WorkshopNewWeapon->ObjectCreationType == 14)
+		if ((WorkshopNewWeapon->ObjectCreationType == 11) |
+			(WorkshopNewWeapon->ObjectCreationType == 12) |
+			(WorkshopNewWeapon->ObjectCreationType == 14))
 			DrawFont(Setup.iAspectRatioWidth/2-438+175, 130, 0, 0, 0, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType), GetText("4_units/sec"));
 		else
 			DrawFont(Setup.iAspectRatioWidth/2-438+175, 130, 0, 0, 0, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType), GetText("4_units/shot"));
@@ -1010,9 +1013,9 @@ void Workshop_Weaponry()
 	if (GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType) > 0.0f)
 	{
 		DrawFont(Setup.iAspectRatioWidth/2-438, 130+k2, 0, 0, 0, MenuContentTransp, GetText("4_Damage,_Systems:"));
-		if (WorkshopNewWeapon->ObjectCreationType == 11 |
-			WorkshopNewWeapon->ObjectCreationType == 12 |
-			WorkshopNewWeapon->ObjectCreationType == 14)
+		if ((WorkshopNewWeapon->ObjectCreationType == 11) |
+			(WorkshopNewWeapon->ObjectCreationType == 12) |
+			(WorkshopNewWeapon->ObjectCreationType == 14))
 			DrawFont(Setup.iAspectRatioWidth/2-438+210, 130+k2, 0, 0, 0, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType), GetText("4_units/sec"));
 		else
 			DrawFont(Setup.iAspectRatioWidth/2-438+210, 130+k2, 0, 0, 0, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType), GetText("4_units/shot"));

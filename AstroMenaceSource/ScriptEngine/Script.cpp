@@ -277,7 +277,7 @@ bool ScriptEngine::Update(float Time)
 
 
 	// если нужно, смотрим когда заканчивать миссию
-	if (EndDelayMissionComplete>0.0f | NeedCheckSpaceShip | NeedCheckGroundObject)
+	if ((EndDelayMissionComplete>0.0f) | NeedCheckSpaceShip | NeedCheckGroundObject)
 	{
 		if (LastTimeMissionComplete == -1.0) LastTimeMissionComplete = Time;
 		float TimeDeltaMissionComplete = Time - LastTimeMissionComplete;
@@ -296,7 +296,7 @@ bool ScriptEngine::Update(float Time)
 			while (Tmp1 != 0)
 			{
 				// если это враг, и мы его показали (иначе он где-то там летает)
-				if (Tmp1->ObjectStatus == 1 & Tmp1->ShowDeleteOnHide != 0) count++;
+				if ((Tmp1->ObjectStatus == 1) & (Tmp1->ShowDeleteOnHide != 0)) count++;
 				Tmp1 = Tmp1->Next;
 			}
 			if (count > 0) NeedDecrease = false;
@@ -310,7 +310,7 @@ bool ScriptEngine::Update(float Time)
 			while (Tmp1 != 0)
 			{
 				// если это враг, и мы его показали
-				if (NeedCheckCollision(Tmp1) & Tmp1->ShowDeleteOnHide != 0) count++;
+				if (NeedCheckCollision(Tmp1) & (Tmp1->ShowDeleteOnHide != 0)) count++;
 				Tmp1 = Tmp1->Next;
 			}
 			if (count > 0) NeedDecrease = false;

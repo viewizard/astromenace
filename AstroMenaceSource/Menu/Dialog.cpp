@@ -888,18 +888,18 @@ void DrawDialogBox()
 				Y1 += Offset;
 				DrawFont(X1, Y1, 0, 0, 1, DialogContentTransp, GetText("4_Damage,_Hull:"));
 
-				if (DialogWeapon->ObjectCreationType == 11 |
-					DialogWeapon->ObjectCreationType == 12 |
-					DialogWeapon->ObjectCreationType == 14)
+				if ((DialogWeapon->ObjectCreationType == 11) |
+					(DialogWeapon->ObjectCreationType == 12) |
+					(DialogWeapon->ObjectCreationType == 14))
 					DrawFont(X1+Size, Y1, 0, 0, 0, DialogContentTransp, "%i %s", GetWeaponHullDamage(DialogWeapon->ObjectCreationType), GetText("4_units/sec"));
 				else
 					DrawFont(X1+Size, Y1, 0, 0, 0, DialogContentTransp, "%i %s", GetWeaponHullDamage(DialogWeapon->ObjectCreationType), GetText("4_units/shot"));
 
 				Y1 += Offset;
 				DrawFont(X1, Y1, 0, 0, 1, DialogContentTransp, GetText("4_Damage,_Systems:"));
-				if (DialogWeapon->ObjectCreationType == 11 |
-					DialogWeapon->ObjectCreationType == 12 |
-					DialogWeapon->ObjectCreationType == 14)
+				if ((DialogWeapon->ObjectCreationType == 11) |
+					(DialogWeapon->ObjectCreationType == 12) |
+					(DialogWeapon->ObjectCreationType == 14))
 					DrawFont(X1+Size, Y1, 0, 0, 0, DialogContentTransp, "%i %s", GetWeaponSystemsDamage(DialogWeapon->ObjectCreationType), GetText("4_units/sec"));
 				else
 					DrawFont(X1+Size, Y1, 0, 0, 0, DialogContentTransp, "%i %s", GetWeaponSystemsDamage(DialogWeapon->ObjectCreationType), GetText("4_units/shot"));

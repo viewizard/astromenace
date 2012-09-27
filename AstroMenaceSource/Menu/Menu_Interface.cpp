@@ -46,9 +46,6 @@ void InterfaceMenu()
 	SetRect(&DstRest,0,0,Setup.iAspectRatioWidth,768);
 	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
 
-
-	int CurrentPos = 0;
-
 	int X1 = Setup.iAspectRatioWidth/2 - 375;
 	int Y1 = 65;
 	int Prir1 = 55;

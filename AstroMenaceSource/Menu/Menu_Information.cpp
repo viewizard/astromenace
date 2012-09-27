@@ -676,18 +676,18 @@ void InformationObject3DText(int ObjectNum)
 		DrawFont(X1+Size, Y1, 0, 0, 0, MenuContentTransp, "%i %s", (int)InfoObjectStrength, GetText("4_units"));
 		Y1 += Offset;
 		DrawFont(X1, Y1, 0, 0, 1, MenuContentTransp, GetText("4_Damage,_Hull:"));
-		if (CreateNum-InfoWeaponStart+1 == 11 |
-			CreateNum-InfoWeaponStart+1 == 12 |
-			CreateNum-InfoWeaponStart+1 == 14)
+		if ((CreateNum-InfoWeaponStart+1 == 11) |
+			(CreateNum-InfoWeaponStart+1 == 12) |
+			(CreateNum-InfoWeaponStart+1 == 14))
 			DrawFont(X1+Size+40, Y1, 0, 0, 0, MenuContentTransp, "%i %s", GetWeaponHullDamage(CreateNum-InfoWeaponStart+1), GetText("4_units/sec"));
 		else
 			DrawFont(X1+Size+40, Y1, 0, 0, 0, MenuContentTransp, "%i %s", GetWeaponHullDamage(CreateNum-InfoWeaponStart+1), GetText("4_units/shot"));
 
 		Y1 += Offset;
 		DrawFont(X1, Y1, 0, 0, 1, MenuContentTransp, GetText("4_Damage,_Systems:"));
-		if (CreateNum-InfoWeaponStart+1 == 11 |
-			CreateNum-InfoWeaponStart+1 == 12 |
-			CreateNum-InfoWeaponStart+1 == 14)
+		if ((CreateNum-InfoWeaponStart+1 == 11) |
+			(CreateNum-InfoWeaponStart+1 == 12) |
+			(CreateNum-InfoWeaponStart+1 == 14))
 			DrawFont(X1+Size+40, Y1, 0, 0, 0, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(CreateNum-InfoWeaponStart+1), GetText("4_units/sec"));
 		else
 			DrawFont(X1+Size+40, Y1, 0, 0, 0, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(CreateNum-InfoWeaponStart+1), GetText("4_units/shot"));

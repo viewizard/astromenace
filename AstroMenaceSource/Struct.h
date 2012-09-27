@@ -102,7 +102,7 @@ enum eGameStatus
 	// выбор миссии
 	MISSION,
 	// мастерская покупка-усовершенствование корабля
-	WORKSHOP,
+	WORKSHOP
 };
 
 
