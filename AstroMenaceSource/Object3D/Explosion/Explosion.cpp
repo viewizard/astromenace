@@ -137,12 +137,12 @@ bool CExplosion::Update(float Time)
 			|| ExplosionType == 18 || ExplosionType == 19
 			|| ExplosionType == 205 || ExplosionType == 206 || ExplosionType == 209 || ExplosionType == 210
 			|| ExplosionType == 214 || ExplosionType == 215 || ExplosionType == 216
-			|| ExplosionType == 217)||
+			|| ExplosionType == 217)) ||
         (ExplosionTypeByClass == 2 && (ExplosionType == -16 || ExplosionType == -17
 			|| ExplosionType == -18 || ExplosionType == -19
 			|| ExplosionType == -205 || ExplosionType == -206 || ExplosionType == -209 || ExplosionType == -210
 			|| ExplosionType == -214 || ExplosionType == -215 || ExplosionType == -216
-			|| ExplosionType == -217)))
+			|| ExplosionType == -217))
         )
 	{
         if (GraphicFX != 0)
