@@ -1,11 +1,12 @@
 AstroMenace
 
 Runtime dependencies:
-libSDL (ver 1.2.10+), libopenal (ver 1.0+), libalut (ver 1.0+), libogg (ver 1.1+), libvorbis (ver 1.1+), libvorbisfile (ver 1.1+), libjpeg, libXinerama (optional).
+libSDL (ver 1.2.10+), GLU, libopenal (ver 1.0+), libalut (ver 1.0+), libogg (ver 1.1+), 
+libvorbis (ver 1.1+), libjpeg (libjpeg-turbo prefered), libXinerama (optional).
 
 Requirements:
-CPU 1+ GHz, 128 MB RAM, 3D acceleration video card with OpenGL and 32+ MB on-board, mouse.
-Recommended: sound card.
+CPU 1+ GHz, 128 MB RAM, 3D acceleration video card with OpenGL and 32+ MB on-board,
+mouse. Recommended: sound card.
 
 Game launch options:
    /game/bin/folder/AstroMenace [optional parameters]
@@ -19,7 +20,9 @@ Game launch options:
     --help - info about all launch options.
 Note: game settings file stored in the "$HOME/.astromenace" folder.
 
-For Xinerama/TwinView, use SDL_VIDEO_FULLSCREEN_DISPLAY environment variable. The SDL_VIDEO_FULLSCREEN_DISPLAY environment variable set to 0 to place fullscreen/windowed SDL windows on the first Xinerama screen by default.
+For Xinerama/TwinView, use SDL_VIDEO_FULLSCREEN_DISPLAY environment variable. 
+The SDL_VIDEO_FULLSCREEN_DISPLAY environment variable set to 0 to place 
+fullscreen/windowed SDL windows on the first Xinerama screen by default.
 
 
 
