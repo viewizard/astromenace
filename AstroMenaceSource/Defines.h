@@ -45,7 +45,7 @@
 
 
 #define GAME_VERSION_ID	 	1.3f
-#define GAME_VERSION_BUILD 	120926
+#define GAME_VERSION_BUILD 	120927
 
 
 #endif // DEFINES_H

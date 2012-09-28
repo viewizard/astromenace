@@ -220,10 +220,10 @@
 	<File name="../Core/VirtualFileSystem/VFS.h" open="0" top="0" tabpos="75">
 		<Cursor position="2901" topLine="100" />
 	</File>
-	<File name="../Defines.h" open="1" top="0" tabpos="2">
-		<Cursor position="1087" topLine="22" />
+	<File name="../Defines.h" open="1" top="1" tabpos="2">
+		<Cursor position="1274" topLine="22" />
 	</File>
-	<File name="../Game.h" open="1" top="1" tabpos="8">
+	<File name="../Game.h" open="1" top="0" tabpos="8">
 		<Cursor position="10645" topLine="357" />
 	</File>
 	<File name="../Game/Game.cpp" open="0" top="0" tabpos="4">
