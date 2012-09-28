@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="All" />
-	<File name="../BackGround/SkyBox.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="3660" topLine="114" />
+	<File name="../BackGround/SkyBox.cpp" open="0" top="0" tabpos="7">
+		<Cursor position="270" topLine="0" />
 	</File>
 	<File name="../BackGround/StarSystem.cpp" open="0" top="0" tabpos="9">
 		<Cursor position="2485" topLine="51" />
@@ -11,7 +11,7 @@
 		<Cursor position="327" topLine="8" />
 	</File>
 	<File name="../Core/Base.h" open="0" top="0" tabpos="6">
-		<Cursor position="1225" topLine="24" />
+		<Cursor position="1225" topLine="69" />
 	</File>
 	<File name="../Core/Camera/Camera.cpp" open="0" top="0" tabpos="12">
 		<Cursor position="261" topLine="7" />
@@ -38,7 +38,7 @@
 		<Cursor position="261" topLine="7" />
 	</File>
 	<File name="../Core/Core.h" open="0" top="0" tabpos="20">
-		<Cursor position="257" topLine="26" />
+		<Cursor position="257" topLine="19" />
 	</File>
 	<File name="../Core/Light/Light.cpp" open="0" top="0" tabpos="21">
 		<Cursor position="260" topLine="7" />
@@ -50,10 +50,10 @@
 		<Cursor position="267" topLine="7" />
 	</File>
 	<File name="../Core/Math/Math.cpp" open="0" top="0" tabpos="24">
-		<Cursor position="259" topLine="7" />
+		<Cursor position="9383" topLine="175" />
 	</File>
-	<File name="../Core/Math/Math.h" open="0" top="0" tabpos="25">
-		<Cursor position="257" topLine="7" />
+	<File name="../Core/Math/Math.h" open="1" top="0" tabpos="6">
+		<Cursor position="1470" topLine="36" />
 	</File>
 	<File name="../Core/Math/Matrix33.cpp" open="0" top="0" tabpos="26">
 		<Cursor position="263" topLine="7" />
@@ -193,8 +193,8 @@
 	<File name="../Core/System/Timer.cpp" open="0" top="0" tabpos="65">
 		<Cursor position="260" topLine="0" />
 	</File>
-	<File name="../Core/Texture/Texture.cpp" open="0" top="0" tabpos="66">
-		<Cursor position="262" topLine="7" />
+	<File name="../Core/Texture/Texture.cpp" open="0" top="0" tabpos="8">
+		<Cursor position="13065" topLine="422" />
 	</File>
 	<File name="../Core/Texture/Texture.h" open="0" top="0" tabpos="3">
 		<Cursor position="2742" topLine="64" />
@@ -209,22 +209,22 @@
 		<Cursor position="2057" topLine="36" />
 	</File>
 	<File name="../Core/VirtualFileSystem/Haff.cpp" open="0" top="0" tabpos="72">
-		<Cursor position="231" topLine="21" />
+		<Cursor position="1623" topLine="33" />
 	</File>
 	<File name="../Core/VirtualFileSystem/RLE.cpp" open="0" top="0" tabpos="73">
 		<Cursor position="230" topLine="0" />
 	</File>
-	<File name="../Core/VirtualFileSystem/VFS.cpp" open="0" top="0" tabpos="74">
-		<Cursor position="30350" topLine="1037" />
+	<File name="../Core/VirtualFileSystem/VFS.cpp" open="1" top="1" tabpos="5">
+		<Cursor position="17699" topLine="616" />
 	</File>
-	<File name="../Core/VirtualFileSystem/VFS.h" open="0" top="0" tabpos="75">
-		<Cursor position="2901" topLine="100" />
+	<File name="../Core/VirtualFileSystem/VFS.h" open="1" top="0" tabpos="4">
+		<Cursor position="1460" topLine="35" />
 	</File>
-	<File name="../Defines.h" open="1" top="1" tabpos="2">
-		<Cursor position="1274" topLine="22" />
+	<File name="../Defines.h" open="1" top="0" tabpos="2">
+		<Cursor position="1669" topLine="32" />
 	</File>
-	<File name="../Game.h" open="1" top="0" tabpos="8">
-		<Cursor position="10645" topLine="357" />
+	<File name="../Game.h" open="0" top="0" tabpos="8">
+		<Cursor position="3667" topLine="109" />
 	</File>
 	<File name="../Game/Game.cpp" open="0" top="0" tabpos="4">
 		<Cursor position="65085" topLine="2033" />
@@ -262,8 +262,8 @@
 	<File name="../GraphicFX/Text/TextManager.cpp" open="0" top="0" tabpos="87">
 		<Cursor position="328" topLine="0" />
 	</File>
-	<File name="../Loading.cpp" open="0" top="0" tabpos="4">
-		<Cursor position="73075" topLine="1079" />
+	<File name="../Loading.cpp" open="0" top="0" tabpos="6">
+		<Cursor position="76981" topLine="1215" />
 	</File>
 	<File name="../Loop_audio.cpp" open="0" top="0" tabpos="6">
 		<Cursor position="15381" topLine="312" />
@@ -272,7 +272,10 @@
 		<Cursor position="8799" topLine="263" />
 	</File>
 	<File name="../Main.cpp" open="1" top="0" tabpos="1">
-		<Cursor position="50960" topLine="1349" />
+		<Cursor position="14244" topLine="476" />
+	</File>
+	<File name="../MainFS2VFS.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="20609" topLine="654" />
 	</File>
 	<File name="../Menu/Button.cpp" open="0" top="0" tabpos="90">
 		<Cursor position="323" topLine="102" />
@@ -286,10 +289,10 @@
 	<File name="../Menu/Font3D.cpp" open="0" top="0" tabpos="93">
 		<Cursor position="323" topLine="0" />
 	</File>
-	<File name="../Menu/Menu.cpp" open="1" top="0" tabpos="7">
+	<File name="../Menu/Menu.cpp" open="0" top="0" tabpos="7">
 		<Cursor position="7870" topLine="251" />
 	</File>
-	<File name="../Menu/Menu_ConfControl.cpp" open="1" top="0" tabpos="6">
+	<File name="../Menu/Menu_ConfControl.cpp" open="0" top="0" tabpos="6">
 		<Cursor position="2574" topLine="96" />
 	</File>
 	<File name="../Menu/Menu_Credits.cpp" open="0" top="0" tabpos="3">
@@ -301,17 +304,17 @@
 	<File name="../Menu/Menu_Information.cpp" open="0" top="0" tabpos="7">
 		<Cursor position="22978" topLine="665" />
 	</File>
-	<File name="../Menu/Menu_Interface.cpp" open="1" top="0" tabpos="4">
+	<File name="../Menu/Menu_Interface.cpp" open="0" top="0" tabpos="4">
 		<Cursor position="1589" topLine="34" />
 	</File>
 	<File name="../Menu/Menu_Mission.cpp" open="0" top="0" tabpos="6">
 		<Cursor position="12642" topLine="526" />
 	</File>
-	<File name="../Menu/Menu_Options.cpp" open="1" top="0" tabpos="3">
+	<File name="../Menu/Menu_Options.cpp" open="0" top="0" tabpos="3">
 		<Cursor position="3759" topLine="138" />
 	</File>
-	<File name="../Menu/Menu_OptionsAdv.cpp" open="1" top="0" tabpos="5">
-		<Cursor position="11946" topLine="402" />
+	<File name="../Menu/Menu_OptionsAdv.cpp" open="0" top="0" tabpos="5">
+		<Cursor position="12402" topLine="402" />
 	</File>
 	<File name="../Menu/Menu_Profile.cpp" open="0" top="0" tabpos="103">
 		<Cursor position="2232" topLine="57" />

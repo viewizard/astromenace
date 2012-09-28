@@ -37,15 +37,25 @@
 
 // required libXinerama
 #define xinerama
+
 // required SDL compilled with "joystick" flag
 #define joystick
+
 // separate thread for music during data loading (based on SDL multithread implementation)
 #define multithread
+
+// enable compression during gamedata.vfs creation, game will take more time for loading in exchange of size reducing (about 30 MB)
+// #define compression
+
+// define DATADIR with gamedata.vfs file location if you don't put it together in the same directory with binary file
+// #define DATADIR "/usr/share/AstroMenace"
+
+
 
 
 
 #define GAME_VERSION_ID	 	1.3f
-#define GAME_VERSION_BUILD 	120927
+#define GAME_VERSION_BUILD 	120928
 
 
 #endif // DEFINES_H

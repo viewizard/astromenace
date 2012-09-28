@@ -136,6 +136,7 @@
 		<Unit filename="../Loop_audio.cpp" />
 		<Unit filename="../Loop_proc.cpp" />
 		<Unit filename="../Main.cpp" />
+		<Unit filename="../MainFS2VFS.cpp" />
 		<Unit filename="../Menu/Button.cpp" />
 		<Unit filename="../Menu/Dialog.cpp" />
 		<Unit filename="../Menu/Font.cpp" />
