@@ -1617,7 +1617,7 @@
 1348686308 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/BackGround/SkyBox.cpp
 	"../Game.h"
 
-1348686310 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Game.h
+1348825529 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Game.h
 	"Core/Core.h"
 	"Defines.h"
 	"Struct.h"
@@ -1685,8 +1685,9 @@
 	"../Base.h"
 	"../VirtualFileSystem/VFS.h"
 
-1348741761 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/VirtualFileSystem/VFS.h
+1348836408 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/VirtualFileSystem/VFS.h
 	"../Base.h"
+	"../../Defines.h"
 
 1348686309 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/Light/Light.h
 	"../Base.h"
@@ -1761,7 +1762,7 @@
 	<assert.h>
 	<string.h>
 
-1348746192 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Defines.h
+1348834069 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Defines.h
 
 1348743307 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Struct.h
 	"Defines.h"
@@ -2052,7 +2053,7 @@
 1348686309 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/VirtualFileSystem/RLE.cpp
 	"VFS.h"
 
-1348741767 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/VirtualFileSystem/VFS.cpp
+1348836750 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/VirtualFileSystem/VFS.cpp
 	"VFS.h"
 	"../Math/Math.h"
 
@@ -2096,7 +2097,7 @@
 	"Game.h"
 	"Defines.h"
 
-1348686310 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Main.cpp
+1348826694 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Main.cpp
 	"Game.h"
 	<X11/extensions/Xinerama.h>
 	<windows.h>
@@ -2339,4 +2340,7 @@
 
 1348742598 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_Interface.cpp
 	"../Game.h"
+
+1348834466 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/MainFS2VFS.cpp
+	"Game.h"
 

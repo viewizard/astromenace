@@ -93,7 +93,6 @@ extern char DatFileName[MAX_PATH];
 extern char ProgrammDir[MAX_PATH];
 extern char ScreenshotDir[MAX_PATH];
 extern char VFSFileNamePath[MAX_PATH];
-extern char VFSLangFileNamePath[MAX_PATH];
 extern char UserPath[MAX_PATH];
 extern bool Quit;
 extern bool CanQuit;
@@ -106,6 +105,16 @@ extern bool JoysticButtons[100];
 void SaveGameData();
 void CodeXOR(char *Text, char *Key, int Count);
 
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// MainFS2VFS.cpp
+//------------------------------------------------------------------------------------
+void ConvertFS2VFS(char RawDataDir[MAX_PATH]);
 
 
 

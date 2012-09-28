@@ -35,7 +35,7 @@
 
 
 #include "../Base.h"
-
+#include "../../Defines.h"
 
 
 
@@ -49,7 +49,7 @@
 
 
 // Current VFS version
-#define VFS_VER									"v1.3"
+#define VFS_VER									"v1.4"
 // Data compression
 #define VFS_DATA_ARH_NONE						'0'
 #define VFS_DATA_ARH_RLE						'1'
@@ -86,6 +86,10 @@ struct eFILE
 
 // VFS functions
 
+// Create VFS file
+int		vw_CreateVFS(const char *Name);
+// Write data from memory into VFS file
+int		vw_WriteIntoVFSfromMemory(const char *Name, const BYTE * buffer, int size);
 // Open VFS file
 int		vw_OpenVFS(const char *Name);
 // Close VFS file
@@ -118,10 +122,10 @@ int vw_DATAtoRLE(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS);
 
 
 /*
-VFS v1.3
+VFS v1.4
 
   4b - 'VFS_'
-  4b - 'v1.3'
+  4b - 'v1.4'
   4b - file table offset
   4b - file table size
   ?b - data (file data one by one)

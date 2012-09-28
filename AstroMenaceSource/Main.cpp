@@ -6,10 +6,10 @@
 
 	File name: Main.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -89,9 +89,7 @@ SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = 0;
 // полное путь к программе
 char ProgrammDir[MAX_PATH];
 char VFSFileNamePath[MAX_PATH];
-char VFSLangFileNamePath[MAX_PATH];
-char VFSLangFileNamePathEn[MAX_PATH];
-// полное имя для файла с данными о игре
+// полное имя для файла с данными игры
 char DatFileName[MAX_PATH];
 // для сохранения скриншотов
 char ScreenshotDir[MAX_PATH];
@@ -214,8 +212,6 @@ int main( int argc, char **argv )
 
 	ZeroMemory(DatFileName, sizeof(DatFileName));
 	ZeroMemory(VFSFileNamePath, sizeof(VFSFileNamePath));
-	ZeroMemory(VFSLangFileNamePath, sizeof(VFSLangFileNamePath));
-	ZeroMemory(VFSLangFileNamePathEn, sizeof(VFSLangFileNamePathEn));
 	ZeroMemory(ScreenshotDir, sizeof(ScreenshotDir));
 
 	// Получаем данные, где папка пользователя
@@ -278,13 +274,6 @@ int main( int argc, char **argv )
 
 	strcpy(VFSFileNamePath, ProgrammDir);
 	strcat(VFSFileNamePath, "gamedata.vfs");
-
-	strcpy(VFSLangFileNamePath, ProgrammDir);
-	strcat(VFSLangFileNamePath, "gamelang.vfs");
-
-	strcpy(VFSLangFileNamePathEn, ProgrammDir);
-	strcat(VFSLangFileNamePathEn, "gamelang_en.vfs");
-
 #elif __unix
 	// иним пути для юникса-линукса
 	// если передали параметр-путь
@@ -332,12 +321,6 @@ int main( int argc, char **argv )
 	strcpy(VFSFileNamePath, ProgrammDir);
 	strcat(VFSFileNamePath, "gamedata.vfs");
 
-	strcpy(VFSLangFileNamePath, ProgrammDir);
-	strcat(VFSLangFileNamePath, "gamelang.vfs");
-
-	strcpy(VFSLangFileNamePathEn, ProgrammDir);
-	strcat(VFSLangFileNamePathEn, "gamelang_en.vfs");
-
 	// укладываем в нужном месте (где 100% дають создавать) файл с настройками
 	strcpy(DatFileName, homeval);
 	strcat(DatFileName, "/.astromenace");
@@ -367,6 +350,8 @@ int main( int argc, char **argv )
 	bool NeedCheckAA = true;
 	// флаг нужно ли сбрасывать настройки игры при старте
 	bool NeedSafeMode = false;
+	// флаг перевода игры в режим упаковки gamedata.vfs файла
+	bool NeedPack = false;
 
 	for (int i=1; i<argc; i++)
 	{
@@ -378,8 +363,9 @@ int main( int argc, char **argv )
 			printf("--dir=/game/data/folder/ - folder with gamedata.vfs file\n");
 			printf("--mouse - launch the game without system cursor hiding.\n");
 			printf("--noAA - disable AA antialiasing test at the game start.\n");
-			printf("--mode=N - set game windows mode and resolution (forced)\n");
 			printf("--safe-mode - reset all settings not connected to Pilots Profiles at the game launch.\n");
+			printf("--pack - pack data to gamedata.vfs file\n");
+			printf("--rawdata=/game/rawdata/folder/ - folder with game raw data for gamedata.vfs.\n");
 			printf("--help - info about all game launch options.\n");
 
 			// выходим, только показываем, игру не запускаем
@@ -405,16 +391,69 @@ int main( int argc, char **argv )
 			NeedSafeMode = true;
 		}
 
+		// проверка ключа "--safe-mode"
+		if (!strcmp(argv[i], "--pack"))
+		{
+			NeedPack = true;
+		}
 	}
-
-
-
-
 
 
 
 	// версия
 	printf("AstroMenace %1.1f %i\n\n", GAME_VERSION_ID, GAME_VERSION_BUILD);
+
+
+
+
+
+
+
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// переводим в режим генерации gamedata.vfs файла
+	// генерируем файл данный gamedata.vfs учитывая текущее его расположение
+	// !!! всегда делаем только с одним открытым на запись VFS
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	if (NeedPack)
+	{
+		char RawDataDir[MAX_PATH];
+		// по умолчанию, считаем что рав данные прямо с нами лежат
+		strcpy(RawDataDir, ProgrammDir);
+		strcat(RawDataDir, "RAW_VFS_DATA/");
+
+
+		// ищем, если передали ключем его расположение
+		for (int i=1; i<argc; i++)
+		{
+			if (!strncmp(argv[i], "--rawdata=", sizeof("--rawdata")))
+			{
+				dirpresent = true;
+				// если передали относительный путь в папку пользователя с тильдой
+				if (argv[i][6] != '~')
+					strncpy(RawDataDir, argv[i]+strlen("--rawdata="), strlen(argv[i])-strlen("--rawdata=")+1);
+				else
+				{
+					strcpy(RawDataDir, homeval);// -1, это тильда... а в кол-ве нет, т.к. /0 там должен остаться
+					strncat(RawDataDir, argv[i]+strlen("--rawdata=")+1, strlen(argv[i])-strlen("--rawdata="));
+				}
+				// если в конце нет слеша - ставим его
+				if (RawDataDir[strlen(RawDataDir)-1] != '/')
+					strncat(RawDataDir, "/", strlen("/"));
+
+			}
+		}
+
+
+
+		ConvertFS2VFS(RawDataDir);
+
+		return 0;
+	}
+
+
+
 
 
 

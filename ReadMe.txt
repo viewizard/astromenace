@@ -17,6 +17,8 @@ Game launch options:
     --mouse - launch the game without system cursor hiding.
     --noAA - disable AA antialiasing test at the game start.
     --safe-mode - reset all settings not connected to Pilots Profiles at the game launch.
+    --pack - pack data to gamedata.vfs file.
+    --rawdata=/game/rawdata/folder/ - folder with game raw data for gamedata.vfs.
     --help - info about all launch options.
 Note: game settings file stored in the "$HOME/.astromenace" folder.
 

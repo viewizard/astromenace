@@ -40,6 +40,13 @@ struct eVFS
 	char *FileName;		// Имя файла VFS
 	SDL_RWops *File;	// Указатель на файл виртуальной системы
 
+	// данные для записи в создаваемую VFS
+	int NumberOfFilesVFS;
+	int HeaderLengthVFS;
+	int HeaderOffsetVFS;
+	int DataStartOffsetVFS;
+
+
 	eVFS*	Prev;
 	eVFS*	Next;
 };
@@ -86,6 +93,7 @@ bool fileIObusy = false;
 bool VFSfileIObusy = false;
 
 
+
 //------------------------------------------------------------------------------------
 // кодируем-декодируем
 //------------------------------------------------------------------------------------
@@ -104,7 +112,410 @@ void VFSCodeXOR(char *Text, int Size)
 
 
 
+//------------------------------------------------------------------------------------
+// тест сжатия
+//------------------------------------------------------------------------------------
+int CheckCompression(int tmpLength, const BYTE *buffer, char *ArhKeyVFS)
+{
+	BYTE *tmp = 0;
+	tmp = new BYTE[tmpLength];
+	memcpy(tmp, buffer, tmpLength);
 
+	// устанавливаем данные
+	BYTE *dstVFS = 0;
+	BYTE *srcVFS = tmp;
+	srcVFS = new BYTE[tmpLength];
+	memcpy(srcVFS, buffer, tmpLength);
+
+	int dsizeVFS = tmpLength;
+	int ssizeVFS = tmpLength;
+
+
+
+	// цикл по кол-ву примененных методов сжатия в ArhKeyVFS
+	for (unsigned int i=0; i<strlen(ArhKeyVFS);i++)
+	{
+		// находим, какой текущий метод сжатия
+		char S = ArhKeyVFS[strlen(ArhKeyVFS)-i-1];
+
+		// если RLE
+		if (S == VFS_DATA_ARH_RLE)
+		{
+			vw_DATAtoRLE(&dstVFS, srcVFS, &dsizeVFS, ssizeVFS);
+			delete [] srcVFS; srcVFS = 0;
+			srcVFS = dstVFS;
+			ssizeVFS = dsizeVFS;
+			dstVFS = 0;
+		}
+		// если HAFF
+		if (S == VFS_DATA_ARH_HAFF)
+		{
+			vw_DATAtoHAFF(&dstVFS, srcVFS, &dsizeVFS, ssizeVFS);
+			delete [] srcVFS; srcVFS = 0;
+			srcVFS = dstVFS;
+			ssizeVFS = dsizeVFS;
+			dstVFS = 0;
+		}
+	}
+
+	delete [] srcVFS; srcVFS = 0;
+
+	return dsizeVFS;
+}
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Создание VFS
+//------------------------------------------------------------------------------------
+int vw_CreateVFS(const char *Name)
+{
+	// Начальная подготовка структуры списка...
+	eVFS *TempVFS = 0;
+	TempVFS = new eVFS; if (TempVFS == 0) return -1;
+
+	TempVFS->NumberOfFilesVFS = 0;
+	TempVFS->HeaderLengthVFS = 0;
+	TempVFS->HeaderOffsetVFS = 0;
+	TempVFS->DataStartOffsetVFS = 0;
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// открываем файл VFS
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	TempVFS->File = 0;
+	TempVFS->File = SDL_RWFromFile(Name, "wb");
+    if (TempVFS->File == NULL)
+    {
+        printf("Can't open VFS file for write %s\n", Name);
+        return -1; // ERROR
+    }
+
+
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// выделяем память для имени
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	TempVFS->FileName = 0;
+	TempVFS->FileName = new char[strlen(Name)+1]; if (TempVFS->FileName == 0) return -1;
+	strcpy(TempVFS->FileName, Name);
+
+
+	// первый в списке...
+	if (EndVFS == 0)
+	{
+		TempVFS->Prev = 0;
+		TempVFS->Next = 0;
+		StarVFS = TempVFS;
+		EndVFS = TempVFS;
+	}
+	else // продолжаем заполнение...
+	{
+		TempVFS->Prev = EndVFS;
+		TempVFS->Next = 0;
+		EndVFS->Next = TempVFS;
+		EndVFS = TempVFS;
+	}
+
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// пишем VFS_ (4б) + версию (4б)
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	char tmp1[5] = "VFS_";
+	SDL_RWwrite(TempVFS->File, tmp1, 4, 1);
+	SDL_RWwrite(TempVFS->File, VFS_VER, 4, 1);
+
+
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// пишем смещение начала таблицы
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	TempVFS->HeaderOffsetVFS = 4+4+4+4;//VFS ver offset lenght
+	TempVFS->DataStartOffsetVFS = 4+4;
+
+	SDL_RWwrite(TempVFS->File, &TempVFS->HeaderOffsetVFS, 4, 1);
+	SDL_RWwrite(TempVFS->File, &TempVFS->HeaderLengthVFS, 4, 1);
+
+	printf("VFS file was created %s\n", Name);
+	return 0;
+}
+
+
+
+
+//------------------------------------------------------------------------------------
+// запись данных в VFS
+//------------------------------------------------------------------------------------
+int	vw_WriteIntoVFSfromMemory(const char *Name, const BYTE * buffer, int size)
+{
+
+	// (!) пока работаем только с одной открытой VFS в системе, собственно больше и не нужно
+
+	eVFS *WritebleVFS = StarVFS;
+
+	if (WritebleVFS == 0)
+	{
+		fprintf(stderr, "Can't find VFS opened for write\n");
+		return -1;
+	}
+
+
+
+	// Начальная подготовка структуры списка для новых данных
+	eVFS_Entry *NewVFS_Entry = 0;
+	NewVFS_Entry = new eVFS_Entry; if (NewVFS_Entry == 0) return -1;
+
+	// первый в списке...
+	if (EndVFSArray == 0)
+	{
+		NewVFS_Entry->Prev = 0;
+		NewVFS_Entry->Next = 0;
+		StarVFSArray = NewVFS_Entry;
+		EndVFSArray = NewVFS_Entry;
+	}
+	else // продолжаем заполнение...
+	{
+		NewVFS_Entry->Prev = EndVFSArray;
+		NewVFS_Entry->Next = 0;
+		EndVFSArray->Next = NewVFS_Entry;
+		EndVFSArray = NewVFS_Entry;
+	}
+
+	NewVFS_Entry->Parent = WritebleVFS;
+
+	NewVFS_Entry->ArhKeyLen = 0;
+	NewVFS_Entry->ArhKey = 0;
+	NewVFS_Entry->NameLen = (DWORD)strlen(Name);
+
+	NewVFS_Entry->Name = 0;
+	NewVFS_Entry->Name = new char[NewVFS_Entry->NameLen+1];
+	strcpy(NewVFS_Entry->Name, Name);
+
+	NewVFS_Entry->Link = false;
+	NewVFS_Entry->Offset = WritebleVFS->HeaderOffsetVFS; // т.к. это будет последний файл в структуре...
+	NewVFS_Entry->Length = size;
+	NewVFS_Entry->RealLength = size;
+
+
+
+
+
+
+
+
+	// надо составлять свою ArhKeyVFS
+	// 0 - 0
+	int BestMode = 0;
+	int BestSize = NewVFS_Entry->Length;
+	int TmpSize = 0;
+
+#ifdef compression
+
+	// 1 - 1
+	NewVFS_Entry->ArhKey = new char[1+1];
+	NewVFS_Entry->ArhKey[0] = '1';
+	NewVFS_Entry->ArhKey[1] = 0;
+	TmpSize = CheckCompression(NewVFS_Entry->Length, buffer, NewVFS_Entry->ArhKey);
+	if (TmpSize<BestSize)
+	{
+		BestMode = 1;
+		BestSize = TmpSize;
+	}
+
+	// 2 - 2
+	if (NewVFS_Entry->ArhKey != 0){delete [] NewVFS_Entry->ArhKey; NewVFS_Entry->ArhKey = 0;}
+	NewVFS_Entry->ArhKey = new char[1+1];
+	NewVFS_Entry->ArhKey[0] = '2';
+	NewVFS_Entry->ArhKey[1] = 0;
+	TmpSize = CheckCompression(NewVFS_Entry->Length, buffer, NewVFS_Entry->ArhKey);
+	if (TmpSize<BestSize)
+	{
+		BestMode = 2;
+		BestSize = TmpSize;
+	}
+
+	// 3 - 12
+	if (NewVFS_Entry->ArhKey != 0){delete [] NewVFS_Entry->ArhKey; NewVFS_Entry->ArhKey = 0;}
+	NewVFS_Entry->ArhKey = new char[2+1];
+	NewVFS_Entry->ArhKey[0] = '1';
+	NewVFS_Entry->ArhKey[0] = '2';
+	NewVFS_Entry->ArhKey[1] = 0;
+	TmpSize = CheckCompression(NewVFS_Entry->Length, buffer, NewVFS_Entry->ArhKey);
+	if (TmpSize<BestSize)
+	{
+		BestMode = 3;
+		BestSize = TmpSize;
+	}
+
+	// 4 - 21
+	if (NewVFS_Entry->ArhKey != 0){delete [] NewVFS_Entry->ArhKey; NewVFS_Entry->ArhKey = 0;}
+	NewVFS_Entry->ArhKey = new char[2+1];
+	NewVFS_Entry->ArhKey[0] = '2';
+	NewVFS_Entry->ArhKey[0] = '1';
+	NewVFS_Entry->ArhKey[1] = 0;
+	TmpSize = CheckCompression(NewVFS_Entry->Length, buffer, NewVFS_Entry->ArhKey);
+	if (TmpSize<BestSize)
+	{
+		BestMode = 4;
+		BestSize = TmpSize;
+	}
+
+#endif // compression
+
+	if (NewVFS_Entry->ArhKey != 0){delete [] NewVFS_Entry->ArhKey; NewVFS_Entry->ArhKey = 0;}
+
+	switch (BestMode)
+	{
+		case 0:
+			NewVFS_Entry->ArhKeyLen = 2;
+			NewVFS_Entry->ArhKey = new char[NewVFS_Entry->ArhKeyLen];
+			NewVFS_Entry->ArhKey[0] = '0';
+			NewVFS_Entry->ArhKey[1] = 0;
+			break;
+		case 1:
+			NewVFS_Entry->ArhKeyLen = 2;
+			NewVFS_Entry->ArhKey = new char[NewVFS_Entry->ArhKeyLen];
+			NewVFS_Entry->ArhKey[0] = '1';
+			NewVFS_Entry->ArhKey[1] = 0;
+			break;
+		case 2:
+			NewVFS_Entry->ArhKeyLen = 2;
+			NewVFS_Entry->ArhKey = new char[NewVFS_Entry->ArhKeyLen];
+			NewVFS_Entry->ArhKey[0] = '2';
+			NewVFS_Entry->ArhKey[1] = 0;
+			break;
+		case 3:
+			NewVFS_Entry->ArhKeyLen = 3;
+			NewVFS_Entry->ArhKey = new char[NewVFS_Entry->ArhKeyLen];
+			NewVFS_Entry->ArhKey[0] = '1';
+			NewVFS_Entry->ArhKey[1] = '2';
+			NewVFS_Entry->ArhKey[2] = 0;
+			break;
+		case 4:
+			NewVFS_Entry->ArhKeyLen = 3;
+			NewVFS_Entry->ArhKey = new char[NewVFS_Entry->ArhKeyLen];
+			NewVFS_Entry->ArhKey[0] = '2';
+			NewVFS_Entry->ArhKey[1] = '1';
+			NewVFS_Entry->ArhKey[2] = 0;
+			break;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// если используется сжатие - запаковываем данные
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	// устанавливаем данные
+	BYTE *dstVFS = 0;
+	BYTE *srcVFS = 0;
+	srcVFS = new BYTE[NewVFS_Entry->Length];
+	memcpy(srcVFS, buffer, NewVFS_Entry->Length);
+	int ssizeVFS = NewVFS_Entry->Length;
+
+	if (!((NewVFS_Entry->ArhKey[0]=='0')&(strlen(NewVFS_Entry->ArhKey)==1)))
+	{
+		// цикл по кол-ву примененных методов сжатия в ArhKeyVFS
+		for (unsigned int i=0; i<strlen(NewVFS_Entry->ArhKey);i++)
+		{
+			// находим, какой текущий метод сжатия
+			char S = NewVFS_Entry->ArhKey[strlen(NewVFS_Entry->ArhKey)-i-1];
+
+			// если RLE
+			if (S == VFS_DATA_ARH_RLE)
+			{
+				vw_DATAtoRLE(&dstVFS, srcVFS, &NewVFS_Entry->Length, ssizeVFS);
+				delete [] srcVFS; srcVFS = 0;
+				srcVFS = dstVFS;
+				ssizeVFS = NewVFS_Entry->Length;
+				dstVFS = 0;
+
+			}
+			// если HAFF
+			if (S == VFS_DATA_ARH_HAFF)
+			{
+				vw_DATAtoHAFF(&dstVFS, srcVFS, &NewVFS_Entry->Length, ssizeVFS);
+				delete [] srcVFS; srcVFS = 0;
+				srcVFS = dstVFS;
+				ssizeVFS = NewVFS_Entry->Length;
+				dstVFS = 0;
+			}
+		}
+	}
+
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// пишем данные в VFS
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	SDL_RWseek(WritebleVFS->File, WritebleVFS->HeaderOffsetVFS, SEEK_SET);
+	SDL_RWwrite(WritebleVFS->File, srcVFS, NewVFS_Entry->Length, 1);
+	delete [] srcVFS; srcVFS = 0;
+
+
+
+
+	// переписывать все ентри, принадлежащие этому вфс файлу, в конец
+	eVFS_Entry *Tmp = StarVFSArray;
+	while (Tmp != 0)
+	{
+		eVFS_Entry *Tmp1 = Tmp->Next;
+
+		// пишем только файлы (не линки)
+		if ((!Tmp->Link) & (NewVFS_Entry->Parent == WritebleVFS))
+		{
+			SDL_RWwrite(WritebleVFS->File, &Tmp->ArhKeyLen, 1, 1);
+			if (Tmp->ArhKeyLen > 0)
+				SDL_RWwrite(WritebleVFS->File, Tmp->ArhKey, Tmp->ArhKeyLen, 1);
+			SDL_RWwrite(WritebleVFS->File, &Tmp->NameLen, 2, 1);
+			SDL_RWwrite(WritebleVFS->File, Tmp->Name, Tmp->NameLen, 1);
+			SDL_RWwrite(WritebleVFS->File, &Tmp->Offset, 4, 1);
+			SDL_RWwrite(WritebleVFS->File, &Tmp->Length, 4, 1);
+			SDL_RWwrite(WritebleVFS->File, &Tmp->RealLength, 4, 1);
+		}
+
+		Tmp = Tmp1;
+	}
+
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// меняем данные
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	WritebleVFS->HeaderOffsetVFS += NewVFS_Entry->Length;
+	WritebleVFS->HeaderLengthVFS += 1+NewVFS_Entry->ArhKeyLen+2+NewVFS_Entry->NameLen+4+4+4;
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// переписываем смещение начала таблицы
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	SDL_RWseek(WritebleVFS->File, WritebleVFS->DataStartOffsetVFS, SEEK_SET);
+	SDL_RWwrite(WritebleVFS->File, &WritebleVFS->HeaderOffsetVFS, 4, 1);
+	SDL_RWwrite(WritebleVFS->File, &WritebleVFS->HeaderLengthVFS, 4, 1);
+
+
+	printf("%s file added to VFS.\n", Name);
+
+	return 0;
+}
 
 
 
@@ -115,6 +526,7 @@ void VFSCodeXOR(char *Text, int Size)
 int vw_OpenVFS(const char *Name)
 {
 	XORCount = 0;
+	int VFSversion = 0;
 	int POS = 0; // указатель позиции в буфере.
 	BYTE *buff = 0;
 	int HeaderOffsetVFS;
@@ -193,7 +605,20 @@ int vw_OpenVFS(const char *Name)
 		printf("VFS file has wrong version or corrupted %s\n", Name);
 		goto vw_OpenVFS_Error;
 	}
-	if (strncmp(Version, VFS_VER, 4) != 0)
+	if (strncmp(Version, "v1.1", 4) == 0)
+	{
+		printf("VFS file has wrong version, version 1.1 not supported %s\n", Name);
+		goto vw_OpenVFS_Error;
+	}
+	if (strncmp(Version, "v1.2", 4) == 0)
+	{
+		printf("VFS file has wrong version, version 1.2 not supported %s\n", Name);
+		goto vw_OpenVFS_Error;
+	}
+	if (strncmp(Version, "v1.3", 4) == 0) VFSversion = 3;
+	if (strncmp(Version, "v1.4", 4) == 0) VFSversion = 4;
+	// если по версии не нашли - значит она или больше чем нужно или ее вообще нет
+	if (VFSversion == 0)
 	{
 		printf("VFS file has wrong version %s\n", Name);
 		goto vw_OpenVFS_Error;
@@ -261,7 +686,8 @@ int vw_OpenVFS(const char *Name)
 		Temp->Name = new char[Temp->NameLen+1]; if (Temp->Name == 0) return -1;
 		Temp->Name[Temp->NameLen] = 0;// последний символ всегда ноль - конец строки
 		SDL_RWread(TempVFS->File, Temp->Name, Temp->NameLen, 1);
-		VFSCodeXOR(Temp->Name, Temp->NameLen);
+		// для поддержки 3-й версии дополнительно делае XOR на имени
+		if (VFSversion == 3) VFSCodeXOR(Temp->Name, Temp->NameLen);
 		Temp->Link = false;
 		Temp->Offset = SDL_ReadLE32(TempVFS->File);
 		Temp->Length = SDL_ReadLE32(TempVFS->File);
