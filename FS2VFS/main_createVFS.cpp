@@ -12,7 +12,7 @@
 
 
 //------------------------------------------------------------------------------------
-// include и lib...
+// include Рё lib...
 //------------------------------------------------------------------------------------
 #include "vfs_var.h"
 #include <io.h>
@@ -24,21 +24,21 @@
 
 
 //------------------------------------------------------------------------------------
-// рекурсивная функция проверки подкаталогов
-// CurrentSubDirName - текущий подкадалог чтения-поиска
-// ReadPath - начальный путь чтения-поиска (не включая CurrentSubDirName)
-// WritePath - начальный путь записи в VFS (не включая CurrentSubDirName)
+// СЂРµРєСѓСЂСЃРёРІРЅР°СЏ С„СѓРЅРєС†РёСЏ РїСЂРѕРІРµСЂРєРё РїРѕРґРєР°С‚Р°Р»РѕРіРѕРІ
+// CurrentSubDirName - С‚РµРєСѓС‰РёР№ РїРѕРґРєР°РґР°Р»РѕРі С‡С‚РµРЅРёСЏ-РїРѕРёСЃРєР°
+// ReadPath - РЅР°С‡Р°Р»СЊРЅС‹Р№ РїСѓС‚СЊ С‡С‚РµРЅРёСЏ-РїРѕРёСЃРєР° (РЅРµ РІРєР»СЋС‡Р°СЏ CurrentSubDirName)
+// WritePath - РЅР°С‡Р°Р»СЊРЅС‹Р№ РїСѓС‚СЊ Р·Р°РїРёСЃРё РІ VFS (РЅРµ РІРєР»СЋС‡Р°СЏ CurrentSubDirName)
 //------------------------------------------------------------------------------------
 void CheckSubDir(char * CurrentSubDirName, char *ReadPath, char *WritePath)
 {
-	// путь записи файлов в VFS
+	// РїСѓС‚СЊ Р·Р°РїРёСЃРё С„Р°Р№Р»РѕРІ РІ VFS
 	char pszWritePath[MAX_PATH];
 	ZeroMemory(pszWritePath, MAX_PATH); 
 	strcpy_s(pszWritePath, MAX_PATH, WritePath);
 	strcat_s(pszWritePath, MAX_PATH, CurrentSubDirName);
 	strcat_s(pszWritePath, MAX_PATH, "/");
 
-	// путь чтения-поиска файлов
+	// РїСѓС‚СЊ С‡С‚РµРЅРёСЏ-РїРѕРёСЃРєР° С„Р°Р№Р»РѕРІ
 	char pszReadPath[MAX_PATH];
 	ZeroMemory(pszReadPath, MAX_PATH); 
 	strcpy_s(pszReadPath, MAX_PATH, ReadPath);
@@ -97,13 +97,13 @@ void CheckSubDir(char * CurrentSubDirName, char *ReadPath, char *WritePath)
 
 
 //------------------------------------------------------------------------------------
-// собственно процедура генерации VFS файла
+// СЃРѕР±СЃС‚РІРµРЅРЅРѕ РїСЂРѕС†РµРґСѓСЂР° РіРµРЅРµСЂР°С†РёРё VFS С„Р°Р№Р»Р°
 //------------------------------------------------------------------------------------
 void CreateVFS(char *ReadPath, char *WritePath, char *VFSfile, char *ArhKey, int Ver)
 {
 	vw_CreateVFS(VFSfile, ArhKey, false, Ver);
 
-	// текущий подкоталог, полный путь чтения, путь записи
+	// С‚РµРєСѓС‰РёР№ РїРѕРґРєРѕС‚Р°Р»РѕРі, РїРѕР»РЅС‹Р№ РїСѓС‚СЊ С‡С‚РµРЅРёСЏ, РїСѓС‚СЊ Р·Р°РїРёСЃРё
 	CheckSubDir("", ReadPath, WritePath);
 
 	vw_CloseVFS();
