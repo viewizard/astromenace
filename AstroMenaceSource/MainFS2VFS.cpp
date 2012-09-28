@@ -634,7 +634,7 @@ const char *ConvertList[ConvertListCount] =
 //------------------------------------------------------------------------------------
 // конвертирование данных в VFS файл
 //------------------------------------------------------------------------------------
-void ConvertFS2VFS(char RawDataDir[MAX_PATH])
+int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 {
 	// создаем новый файл VFS
 	vw_CreateVFS(VFSFileNamePath);
@@ -668,7 +668,7 @@ void ConvertFS2VFS(char RawDataDir[MAX_PATH])
     	{
 			fprintf(stderr, "Can't find file %s !!!\n", SrcFileName);
 			fprintf(stderr, "VFS compilation process aborted!\n");
-        	return;
+        	return -1;
     	}
 
 		// получаем размер файла
@@ -687,7 +687,9 @@ void ConvertFS2VFS(char RawDataDir[MAX_PATH])
 		{
 			// какая-то ошибка, не можем записать в VFS
 			delete [] tmp; tmp = 0;
-			return;
+			fprintf(stderr, "Can't write into VFS from memory %s !!!\n", DstFileName);
+			fprintf(stderr, "VFS compilation process aborted!\n");
+			return -1;
 		}
 
 		// Освобождаем память
@@ -697,6 +699,8 @@ void ConvertFS2VFS(char RawDataDir[MAX_PATH])
 
 	// закрываем VFS файл
 	vw_CloseVFS();
+
+	return 0;
 }
 
 

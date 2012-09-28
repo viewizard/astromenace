@@ -114,7 +114,7 @@ void CodeXOR(char *Text, char *Key, int Count);
 //------------------------------------------------------------------------------------
 // MainFS2VFS.cpp
 //------------------------------------------------------------------------------------
-void ConvertFS2VFS(char RawDataDir[MAX_PATH]);
+int ConvertFS2VFS(char RawDataDir[MAX_PATH]);
 
 
 

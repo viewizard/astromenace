@@ -445,11 +445,7 @@ int main( int argc, char **argv )
 			}
 		}
 
-
-
-		ConvertFS2VFS(RawDataDir);
-
-		return 0;
+		return ConvertFS2VFS(RawDataDir);
 	}
 
 
