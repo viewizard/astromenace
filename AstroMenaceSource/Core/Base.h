@@ -33,6 +33,8 @@
 #ifndef Base_H
 #define Base_H
 
+#include "../Defines.h"
+
 
 
 #ifdef WIN32

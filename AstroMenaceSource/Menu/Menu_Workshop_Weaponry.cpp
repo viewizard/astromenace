@@ -32,7 +32,6 @@
 
 
 #include "../Game.h"
-#include "../Defines.h"
 
 
 extern CEarthSpaceFighter *WorkshopFighterGame;

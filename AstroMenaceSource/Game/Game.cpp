@@ -32,7 +32,6 @@
 
 
 #include "../Game.h"
-#include "../Defines.h"
 
 
 ScriptEngine *Script = 0;
