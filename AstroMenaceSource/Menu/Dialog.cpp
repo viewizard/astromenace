@@ -447,6 +447,9 @@ void DrawDialogBox()
 			DialogType = 3;
 			break;
 
+		case 16:
+			DialogType = 1;
+			break;
 	}
 
 
@@ -1477,23 +1480,6 @@ void DrawDialogBox()
 			SizeI = (768 - FontSize(GetText("9_18Line8")))/2;
 			DrawFont(X+SizeI, Y+80+k*12, 0, 0, 3, DialogContentTransp, GetText("9_18Line8"));
 
-
-
-
-/*
-			DrawFont(X+25, Y+80+k*0, 716, 0, 0, DialogContentTransp, GetText("9_15Line1"));
-			DrawFont(X+25, Y+80+k*1, 0, 0, 0, DialogContentTransp, GetText("9_15Line2"), Setup.Profile[CurrentProfile].ByMissionExperience[CurrentMission]);
-
-			DrawFont(X+25, Y+100+k*2, 716, 0, 0, DialogContentTransp, GetText("9_15Line3"));
-			DrawFont(X+25, Y+100+k*3, 716, 0, 0, DialogContentTransp, GetText("9_15Line4"));
-			DrawFont(X+25, Y+100+k*4, 716, 0, 0, DialogContentTransp, GetText("9_15Line5"));
-			DrawFont(X+25, Y+100+k*5, 0, 0, 0, DialogContentTransp, GetText("9_15Line6"));
-
-			DrawFont(X+25, Y+120+k*6, 716, 0, 0, DialogContentTransp, GetText("9_15Line7"));
-			DrawFont(X+25, Y+120+k*7, 716, 0, 0, DialogContentTransp, GetText("9_15Line8"));
-			DrawFont(X+25, Y+120+k*8, 0, 0, 0, DialogContentTransp, GetText("9_15Line9"));
-*/
-
 			// чекбокс
 			bool ttt = !Setup.NeedShowHint[6];
 			DrawCheckBox_2(X+36, Y+ButtonOffset, &ttt, GetText("9_notshowtip"), DialogContentTransp);
@@ -1503,6 +1489,62 @@ void DrawDialogBox()
 			break;
 		}
 
+		// спрашиваем какой язык при первом старте игры
+		case 16:
+		{
+			// название диалога
+			SizeI = 17 + (WTitle-FontSize(GetText("3_Language")))/2;
+			DrawFont(X+SizeI, Y+TitleOffset, 0, 0, 0, 0.7f*DialogContentTransp, GetText("3_Language"));
+			// текст диалога
+			int Y1 = Y+80;
+			int Offset = 31;
+			int Size = 230;
+			int X1 = X+45;
+
+			if (DrawDialogButton200(X+128+64-72/2,Y+ButtonOffset-106, "English", DialogContentTransp))
+			{
+				CloseDialog();
+				if (Setup.MenuLanguage != 1)
+				{
+					CanQuit = false;
+					Quit = true;
+					NeedReCreate = true;
+					Setup.MenuLanguage = 1;
+					Setup.VoiceLanguage = 1;
+					Setup.KeyboardLayout = 1;
+				}
+			}
+			if (DrawDialogButton200(X+128+64-72/2,Y+ButtonOffset-53, "Deutsch", DialogContentTransp))
+			{
+				CloseDialog();
+				if (Setup.MenuLanguage != 2)
+				{
+					CanQuit = false;
+					Quit = true;
+					NeedReCreate = true;
+					Setup.MenuLanguage = 2;
+					Setup.VoiceLanguage = 2;
+					Setup.KeyboardLayout = 2;
+				}
+			}
+			if (DrawDialogButton200(X+128+64-72/2,Y+ButtonOffset, "Русский", DialogContentTransp))
+			{
+				CloseDialog();
+				if (Setup.MenuLanguage != 3)
+				{
+					CanQuit = false;
+					Quit = true;
+					NeedReCreate = true;
+					Setup.MenuLanguage = 3;
+					Setup.VoiceLanguage = 3;
+					Setup.KeyboardLayout = 3;
+				}
+			}
+
+			break;
+		}
+
+			break;
 
 	}
 
