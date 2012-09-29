@@ -35,6 +35,11 @@
 #define DEFINES_H
 
 
+// VBO OpenGL extention support switcher (if defined - game will detect vbo support in hardware during initialization)
+// Game could crash in FreeBSD under VirtualBox if vbo are used. Added just in case, if hardware capabilities detection fail.
+// Looks like only virtualized systems could have this issue.
+#define vbo
+
 // required libXinerama
 #define xinerama
 
@@ -55,7 +60,7 @@
 
 
 #define GAME_VERSION_ID	 	1.3f
-#define GAME_VERSION_BUILD 	120928
+#define GAME_VERSION_BUILD 	120929
 
 
 #endif // DEFINES_H

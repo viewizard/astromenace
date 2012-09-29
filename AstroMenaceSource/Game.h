@@ -37,8 +37,6 @@
 
 // ядро
 #include "Core/Core.h"
-// определения
-#include "Defines.h"
 // структуры
 #include "Struct.h"
 

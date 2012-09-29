@@ -381,10 +381,13 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 
 	// проверем поддержку VBO
 	OpenGL_DevCaps.VBOSupported = false;
+#ifdef vbo
 	if (ExtensionSupported("GL_ARB_vertex_buffer_object"))
 	{
 		OpenGL_DevCaps.VBOSupported = vw_Internal_InitializationVBO();
+		printf("Vertex Buffer support enabled.\n");
 	}
+#endif
 
 	// проверем поддержку non_power_of_two генерацию текстур
 	OpenGL_DevCaps.TextureNPOTSupported = false;
