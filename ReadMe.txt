@@ -21,6 +21,10 @@ For OpenSuse:
 $ sudo zypper install gcc-c++ cmake subversion libSDL-devel libvorbis-devel
   openal-soft-devel libjpeg-devel libXinerama-devel freealut-devel libogg-devel
 
+For FreeBSD:
+$ sudo pkg_add -r -v gcc cmake subversion sdl libogg libvorbis openal
+  jpeg libXinerama freealut 
+
 2) Checkout svn with latest source files
 $ cd ~/
 $ svn checkout http://svn.code.sf.net/p/openastromenace/code/ AstroMenace
