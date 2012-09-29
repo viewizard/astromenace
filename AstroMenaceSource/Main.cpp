@@ -1151,6 +1151,11 @@ ReCreate:
 
 
 
+	// если первый запуск игры - предлогаем выбор языка
+	if (FirstStart) SetCurrentDialogBox(16);
+
+
+
 loop:
 
 

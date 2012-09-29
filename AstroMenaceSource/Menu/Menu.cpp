@@ -1055,7 +1055,7 @@ void MainMenu()
 	if (DrawButton384(X,Y, GetText("1_TOP_SCORES"), MenuContentTransp, &Button2Transp, &LastButton2UpdateTime)) ComBuffer = TOP_SCORES;
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, GetText("1_OPTIONS"), MenuContentTransp, &Button3Transp, &LastButton3UpdateTime)) ComBuffer = INTERFACE;
+	if (DrawButton384(X,Y, GetText("1_OPTIONS"), MenuContentTransp, &Button3Transp, &LastButton3UpdateTime)) ComBuffer = OPTIONS;
 
 	Y = Y+Prir;
 	if (DrawButton384(X,Y, GetText("1_INFORMATION"), MenuContentTransp, &Button4Transp, &LastButton4UpdateTime)) ComBuffer = INFORMATION;
