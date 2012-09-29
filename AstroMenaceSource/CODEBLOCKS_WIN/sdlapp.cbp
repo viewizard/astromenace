@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
-	<FileVersion major="1" minor="4" />
+	<FileVersion major="1" minor="6" />
 	<Project>
 		<Option title="SDL Application" />
 		<Option pch_mode="0" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="MinGw">
-				<Option output="..\..\..\bin\AstroMenace.exe" />
-				<Option working_dir="..\..\..\bin\" />
+				<Option output="..\..\..\bin_win32\AstroMenace.exe" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="..\..\..\bin_win32\" />
 				<Option object_output="..\..\..\build\objs2_win" />
 				<Option deps_output="..\build\deps" />
 				<Option type="0" />
 				<Option compiler="gcc" />
-				<Option includeInTargetAll="1" />
 				<Option projectResourceIncludeDirsRelation="1" />
 				<Compiler>
 					<Add option="-fexpensive-optimizations" />
@@ -24,6 +23,10 @@
 					<Add option="-O" />
 					<Add option="-D__GNUWIN32__" />
 					<Add option="-DWIN32" />
+					<Add directory="..\..\..\AllLibraries\OpenAL\include" />
+					<Add directory="..\..\..\AllLibraries\OGG\include" />
+					<Add directory="..\..\..\AllLibraries\jpeg-6b\include" />
+					<Add directory="..\..\..\AllLibraries\SDL-1.2.15\include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -38,844 +41,204 @@
 					<Add library="vorbis" />
 					<Add library="vorbisfile" />
 					<Add library="jpeg" />
+					<Add directory="..\..\..\AllLibraries\jpeg-6b\lib" />
+					<Add directory="..\..\..\AllLibraries\OpenAL\libs" />
+					<Add directory="..\..\..\AllLibraries\OGG\lib" />
+					<Add directory="..\..\..\AllLibraries\SDL-1.2.15\lib" />
 				</Linker>
 			</Target>
 		</Build>
-		<Unit filename="..\BackGround\SkyBox.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\BackGround\StarSystem.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Camera\GameCamera.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Camera\Camera.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Camera\Camera.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Camera\CameraMath.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\CollisionDetection\AABB.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\CollisionDetection\CollisionDetection.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\CollisionDetection\CommonMath.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\CollisionDetection\OBB.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\CollisionDetection\Sphere.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Core.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Light\Light.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Light\Light.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Light\LightManager.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Math\Math.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Math\Math.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Math\Matrix33.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Math\Matrix44.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Math\MersenneTwister.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Model3D\Model3D.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Model3D\Model3D.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Model3D\Model3DManager.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Model3D\VW3D.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Parser\TinyXML\tinystr.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Parser\TinyXML\tinystr.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Parser\TinyXML\tinyxml.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Parser\TinyXML\tinyxml.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Parser\TinyXML\tinyxmlerror.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Parser\TinyXML\tinyxmlparser.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\ParticleSystem2D\Particle2D.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\ParticleSystem2D\Particle2D.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\ParticleSystem2D\ParticleSystem2D.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\ParticleSystem2D\ParticleSystem2D.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\ParticleSystem\Particle.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\ParticleSystem\Particle.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\ParticleSystem\ParticleSystem.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\ParticleSystem\ParticleSystem.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\ParticleSystem\ParticleSystemManager.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\RendererInterface\GLext.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\RendererInterface\OGL_Draw2D.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\RendererInterface\OGL_Draw3D.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\RendererInterface\OGL_GLSL.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\RendererInterface\OGL_Light.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\RendererInterface\OGL_Main.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\RendererInterface\OGL_Matrix.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\RendererInterface\OGL_OcclusionQuery.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\RendererInterface\OGL_Texture.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\RendererInterface\OGL_VBO.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\RendererInterface\RI_Int.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\RendererInterface\RendererInterface.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Sound\Buffer.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Sound\Buffer.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Sound\Music.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Sound\Sound.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Sound\Sound.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Sound\SoundManager.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\System\Keyboard.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\System\Languages\de.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\System\Languages\en.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\System\Languages\ru.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\System\Mouse.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\System\System.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\System\System.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\System\Timer.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Texture\Texture.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Texture\Texture.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Texture\TextureManager.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Texture\Texture_JPG.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\Texture\Texture_TGA.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\VirtualFileSystem\Haff.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\VirtualFileSystem\RLE.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\VirtualFileSystem\VFS.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Core\VirtualFileSystem\VFS.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Defines.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Game.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Game\Game.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Game\Game_Mission.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Game\Game_Options.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Game\Game_PlayerShip.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Game\Game_WeaponSlot.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\GraphicFX\SpaceStars\SpaceStars.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\GraphicFX\SpaceStars\SpaceStars.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\GraphicFX\SpaceStars\Star.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\GraphicFX\SpaceStars\Star.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\GraphicFX\Text\Text.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\GraphicFX\Text\Text.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\GraphicFX\Text\TextManager.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Loading.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Loop_audio.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Loop_proc.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Main.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Button.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Dialog.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Font.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Font3D.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Menu.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Menu_ConfControl.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Menu_Credits.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Menu_Demo.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Menu_Difficulty.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Menu_Information.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Menu_Mission.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Menu_Options.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Menu_OptionsAdv.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Menu_Profile.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Menu_TopScores.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Menu_Workshop.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Menu_Workshop_Shipyard.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Menu_Workshop_Weaponry.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Menu\Menu_Workshop_Workshop.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\AI.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Explosion\BulletExplosion\BulletExplosion.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Explosion\BulletExplosion\BulletExplosion.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Explosion\Explosion.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Explosion\Explosion.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Explosion\ExplosionGFX.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Explosion\ExplosionManager.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Explosion\GroundExplosion\GroundExplosion.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Explosion\GroundExplosion\GroundExplosion.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Explosion\SpaceExplosion\SpaceExplosion.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Explosion\SpaceExplosion\SpaceExplosion.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\GroundObject\Building\Building.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\GroundObject\Building\Building.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\GroundObject\GroundObject.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\GroundObject\GroundObject.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\GroundObject\GroundObjectManager.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\GroundObject\MilitaryBuilding\MilitaryBuilding.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\GroundObject\MilitaryBuilding\MilitaryBuilding.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\GroundObject\Tracked\Tracked.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\GroundObject\Tracked\Tracked.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\GroundObject\Wheeled\Wheeled.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\GroundObject\Wheeled\Wheeled.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Object3D.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Object3D.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Object3DCollision.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Object3DCollisionMath.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Object3DFunctions.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Object3DManager.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Projectile\Projectile.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Projectile\Projectile.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Projectile\ProjectileGFX.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Projectile\ProjectileManager.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceObject\Asteroid\Asteroid.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceObject\Asteroid\Asteroid.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceObject\BasePart\BasePart.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceObject\BasePart\BasePart.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceObject\BigAsteroid\BigAsteroid.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceObject\BigAsteroid\BigAsteroid.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceObject\Planet\Planet.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceObject\Planet\Planet.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceObject\ShipPart\ShipPart.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceObject\ShipPart\ShipPart.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceObject\SpaceObject.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceObject\SpaceObject.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceObject\SpaceObjectGFX.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceObject\SpaceObjectManager.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\AlienSpaceFighter\AlienSpaceFighter.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\AlienSpaceFighter\AlienSpaceFighter.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\AlienSpaceFighter\AlienSpaceFighterEngine.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\AlienSpaceMotherShip\AlienSpaceMotherShip.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\AlienSpaceMotherShip\AlienSpaceMotherShip.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\AlienSpaceMotherShip\AlienSpaceMotherShipEngine.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\EarthSpaceFighter\EarthSpaceFighter.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\EarthSpaceFighter\EarthSpaceFighter.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\EarthSpaceFighter\EarthSpaceFighterArmour.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\EarthSpaceFighter\EarthSpaceFighterEngine.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\EarthSpaceFighter\EarthSpaceFighterWeapon.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\PirateShip\PirateShip.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\PirateShip\PirateShip.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\PirateShip\PirateShipEngine.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\SpaceShip.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\SpaceShip.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\SpaceShip\SpaceShipManager.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Weapon\Weapon.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Weapon\Weapon.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Weapon\WeaponFunctions.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Object3D\Weapon\WeaponManager.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\ScriptEngine\Script.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\ScriptEngine\Script.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\ScriptEngine\ScriptFunction.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\ScriptEngine\Setup.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\ScriptEngine\Text.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="MinGw" />
-		</Unit>
-		<Unit filename="..\Struct.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="MinGw" />
-		</Unit>
+		<VirtualTargets>
+			<Add alias="All" targets="MinGw;" />
+		</VirtualTargets>
+		<Unit filename="..\BackGround\SkyBox.cpp" />
+		<Unit filename="..\BackGround\StarSystem.cpp" />
+		<Unit filename="..\Camera\GameCamera.cpp" />
+		<Unit filename="..\Core\Camera\Camera.cpp" />
+		<Unit filename="..\Core\Camera\Camera.h" />
+		<Unit filename="..\Core\Camera\CameraMath.cpp" />
+		<Unit filename="..\Core\CollisionDetection\AABB.cpp" />
+		<Unit filename="..\Core\CollisionDetection\CollisionDetection.h" />
+		<Unit filename="..\Core\CollisionDetection\CommonMath.cpp" />
+		<Unit filename="..\Core\CollisionDetection\OBB.cpp" />
+		<Unit filename="..\Core\CollisionDetection\Sphere.cpp" />
+		<Unit filename="..\Core\Core.h" />
+		<Unit filename="..\Core\Light\Light.cpp" />
+		<Unit filename="..\Core\Light\Light.h" />
+		<Unit filename="..\Core\Light\LightManager.cpp" />
+		<Unit filename="..\Core\Math\Math.cpp" />
+		<Unit filename="..\Core\Math\Math.h" />
+		<Unit filename="..\Core\Math\Matrix33.cpp" />
+		<Unit filename="..\Core\Math\Matrix44.cpp" />
+		<Unit filename="..\Core\Math\MersenneTwister.h" />
+		<Unit filename="..\Core\Model3D\Model3D.cpp" />
+		<Unit filename="..\Core\Model3D\Model3D.h" />
+		<Unit filename="..\Core\Model3D\Model3DManager.cpp" />
+		<Unit filename="..\Core\Model3D\VW3D.cpp" />
+		<Unit filename="..\Core\Parser\TinyXML\tinystr.cpp" />
+		<Unit filename="..\Core\Parser\TinyXML\tinystr.h" />
+		<Unit filename="..\Core\Parser\TinyXML\tinyxml.cpp" />
+		<Unit filename="..\Core\Parser\TinyXML\tinyxml.h" />
+		<Unit filename="..\Core\Parser\TinyXML\tinyxmlerror.cpp" />
+		<Unit filename="..\Core\Parser\TinyXML\tinyxmlparser.cpp" />
+		<Unit filename="..\Core\ParticleSystem2D\Particle2D.cpp" />
+		<Unit filename="..\Core\ParticleSystem2D\Particle2D.h" />
+		<Unit filename="..\Core\ParticleSystem2D\ParticleSystem2D.cpp" />
+		<Unit filename="..\Core\ParticleSystem2D\ParticleSystem2D.h" />
+		<Unit filename="..\Core\ParticleSystem\Particle.cpp" />
+		<Unit filename="..\Core\ParticleSystem\Particle.h" />
+		<Unit filename="..\Core\ParticleSystem\ParticleSystem.cpp" />
+		<Unit filename="..\Core\ParticleSystem\ParticleSystem.h" />
+		<Unit filename="..\Core\ParticleSystem\ParticleSystemManager.cpp" />
+		<Unit filename="..\Core\RendererInterface\GLext.h" />
+		<Unit filename="..\Core\RendererInterface\OGL_Draw2D.cpp" />
+		<Unit filename="..\Core\RendererInterface\OGL_Draw3D.cpp" />
+		<Unit filename="..\Core\RendererInterface\OGL_GLSL.cpp" />
+		<Unit filename="..\Core\RendererInterface\OGL_Light.cpp" />
+		<Unit filename="..\Core\RendererInterface\OGL_Main.cpp" />
+		<Unit filename="..\Core\RendererInterface\OGL_Matrix.cpp" />
+		<Unit filename="..\Core\RendererInterface\OGL_OcclusionQuery.cpp" />
+		<Unit filename="..\Core\RendererInterface\OGL_Texture.cpp" />
+		<Unit filename="..\Core\RendererInterface\OGL_VBO.cpp" />
+		<Unit filename="..\Core\RendererInterface\RI_Int.cpp" />
+		<Unit filename="..\Core\RendererInterface\RendererInterface.h" />
+		<Unit filename="..\Core\Sound\Buffer.cpp" />
+		<Unit filename="..\Core\Sound\Buffer.h" />
+		<Unit filename="..\Core\Sound\Music.cpp" />
+		<Unit filename="..\Core\Sound\Sound.cpp" />
+		<Unit filename="..\Core\Sound\Sound.h" />
+		<Unit filename="..\Core\Sound\SoundManager.cpp" />
+		<Unit filename="..\Core\System\Keyboard.cpp" />
+		<Unit filename="..\Core\System\Languages\de.cpp" />
+		<Unit filename="..\Core\System\Languages\en.cpp" />
+		<Unit filename="..\Core\System\Languages\ru.cpp" />
+		<Unit filename="..\Core\System\Mouse.cpp" />
+		<Unit filename="..\Core\System\System.cpp" />
+		<Unit filename="..\Core\System\System.h" />
+		<Unit filename="..\Core\System\Timer.cpp" />
+		<Unit filename="..\Core\Texture\Texture.cpp" />
+		<Unit filename="..\Core\Texture\Texture.h" />
+		<Unit filename="..\Core\Texture\TextureManager.cpp" />
+		<Unit filename="..\Core\Texture\Texture_JPG.cpp" />
+		<Unit filename="..\Core\Texture\Texture_TGA.cpp" />
+		<Unit filename="..\Core\VirtualFileSystem\Haff.cpp" />
+		<Unit filename="..\Core\VirtualFileSystem\RLE.cpp" />
+		<Unit filename="..\Core\VirtualFileSystem\VFS.cpp" />
+		<Unit filename="..\Core\VirtualFileSystem\VFS.h" />
+		<Unit filename="..\Defines.h" />
+		<Unit filename="..\Game.h" />
+		<Unit filename="..\Game\Game.cpp" />
+		<Unit filename="..\Game\Game_Mission.cpp" />
+		<Unit filename="..\Game\Game_Options.cpp" />
+		<Unit filename="..\Game\Game_PlayerShip.cpp" />
+		<Unit filename="..\Game\Game_WeaponSlot.cpp" />
+		<Unit filename="..\GraphicFX\SpaceStars\SpaceStars.cpp" />
+		<Unit filename="..\GraphicFX\SpaceStars\SpaceStars.h" />
+		<Unit filename="..\GraphicFX\SpaceStars\Star.cpp" />
+		<Unit filename="..\GraphicFX\SpaceStars\Star.h" />
+		<Unit filename="..\GraphicFX\Text\Text.cpp" />
+		<Unit filename="..\GraphicFX\Text\Text.h" />
+		<Unit filename="..\GraphicFX\Text\TextManager.cpp" />
+		<Unit filename="..\Loading.cpp" />
+		<Unit filename="..\Loop_audio.cpp" />
+		<Unit filename="..\Loop_proc.cpp" />
+		<Unit filename="..\Main.cpp" />
+		<Unit filename="..\MainFS2VFS.cpp" />
+		<Unit filename="..\Menu\Button.cpp" />
+		<Unit filename="..\Menu\Dialog.cpp" />
+		<Unit filename="..\Menu\Font.cpp" />
+		<Unit filename="..\Menu\Font3D.cpp" />
+		<Unit filename="..\Menu\Menu.cpp" />
+		<Unit filename="..\Menu\Menu_ConfControl.cpp" />
+		<Unit filename="..\Menu\Menu_Credits.cpp" />
+		<Unit filename="..\Menu\Menu_Difficulty.cpp" />
+		<Unit filename="..\Menu\Menu_Information.cpp" />
+		<Unit filename="..\Menu\Menu_Interface.cpp" />
+		<Unit filename="..\Menu\Menu_Mission.cpp" />
+		<Unit filename="..\Menu\Menu_Options.cpp" />
+		<Unit filename="..\Menu\Menu_OptionsAdv.cpp" />
+		<Unit filename="..\Menu\Menu_Profile.cpp" />
+		<Unit filename="..\Menu\Menu_TopScores.cpp" />
+		<Unit filename="..\Menu\Menu_Workshop.cpp" />
+		<Unit filename="..\Menu\Menu_Workshop_Shipyard.cpp" />
+		<Unit filename="..\Menu\Menu_Workshop_Weaponry.cpp" />
+		<Unit filename="..\Menu\Menu_Workshop_Workshop.cpp" />
+		<Unit filename="..\Object3D\AI.cpp" />
+		<Unit filename="..\Object3D\Explosion\BulletExplosion\BulletExplosion.cpp" />
+		<Unit filename="..\Object3D\Explosion\BulletExplosion\BulletExplosion.h" />
+		<Unit filename="..\Object3D\Explosion\Explosion.cpp" />
+		<Unit filename="..\Object3D\Explosion\Explosion.h" />
+		<Unit filename="..\Object3D\Explosion\ExplosionGFX.cpp" />
+		<Unit filename="..\Object3D\Explosion\ExplosionManager.cpp" />
+		<Unit filename="..\Object3D\Explosion\GroundExplosion\GroundExplosion.cpp" />
+		<Unit filename="..\Object3D\Explosion\GroundExplosion\GroundExplosion.h" />
+		<Unit filename="..\Object3D\Explosion\SpaceExplosion\SpaceExplosion.cpp" />
+		<Unit filename="..\Object3D\Explosion\SpaceExplosion\SpaceExplosion.h" />
+		<Unit filename="..\Object3D\GroundObject\Building\Building.cpp" />
+		<Unit filename="..\Object3D\GroundObject\Building\Building.h" />
+		<Unit filename="..\Object3D\GroundObject\GroundObject.cpp" />
+		<Unit filename="..\Object3D\GroundObject\GroundObject.h" />
+		<Unit filename="..\Object3D\GroundObject\GroundObjectManager.cpp" />
+		<Unit filename="..\Object3D\GroundObject\MilitaryBuilding\MilitaryBuilding.cpp" />
+		<Unit filename="..\Object3D\GroundObject\MilitaryBuilding\MilitaryBuilding.h" />
+		<Unit filename="..\Object3D\GroundObject\Tracked\Tracked.cpp" />
+		<Unit filename="..\Object3D\GroundObject\Tracked\Tracked.h" />
+		<Unit filename="..\Object3D\GroundObject\Wheeled\Wheeled.cpp" />
+		<Unit filename="..\Object3D\GroundObject\Wheeled\Wheeled.h" />
+		<Unit filename="..\Object3D\Object3D.cpp" />
+		<Unit filename="..\Object3D\Object3D.h" />
+		<Unit filename="..\Object3D\Object3DCollision.cpp" />
+		<Unit filename="..\Object3D\Object3DCollisionMath.cpp" />
+		<Unit filename="..\Object3D\Object3DFunctions.cpp" />
+		<Unit filename="..\Object3D\Object3DManager.cpp" />
+		<Unit filename="..\Object3D\Projectile\Projectile.cpp" />
+		<Unit filename="..\Object3D\Projectile\Projectile.h" />
+		<Unit filename="..\Object3D\Projectile\ProjectileGFX.cpp" />
+		<Unit filename="..\Object3D\Projectile\ProjectileManager.cpp" />
+		<Unit filename="..\Object3D\SpaceObject\Asteroid\Asteroid.cpp" />
+		<Unit filename="..\Object3D\SpaceObject\Asteroid\Asteroid.h" />
+		<Unit filename="..\Object3D\SpaceObject\BasePart\BasePart.cpp" />
+		<Unit filename="..\Object3D\SpaceObject\BasePart\BasePart.h" />
+		<Unit filename="..\Object3D\SpaceObject\BigAsteroid\BigAsteroid.cpp" />
+		<Unit filename="..\Object3D\SpaceObject\BigAsteroid\BigAsteroid.h" />
+		<Unit filename="..\Object3D\SpaceObject\Planet\Planet.cpp" />
+		<Unit filename="..\Object3D\SpaceObject\Planet\Planet.h" />
+		<Unit filename="..\Object3D\SpaceObject\ShipPart\ShipPart.cpp" />
+		<Unit filename="..\Object3D\SpaceObject\ShipPart\ShipPart.h" />
+		<Unit filename="..\Object3D\SpaceObject\SpaceObject.cpp" />
+		<Unit filename="..\Object3D\SpaceObject\SpaceObject.h" />
+		<Unit filename="..\Object3D\SpaceObject\SpaceObjectGFX.cpp" />
+		<Unit filename="..\Object3D\SpaceObject\SpaceObjectManager.cpp" />
+		<Unit filename="..\Object3D\SpaceShip\AlienSpaceFighter\AlienSpaceFighter.cpp" />
+		<Unit filename="..\Object3D\SpaceShip\AlienSpaceFighter\AlienSpaceFighter.h" />
+		<Unit filename="..\Object3D\SpaceShip\AlienSpaceFighter\AlienSpaceFighterEngine.cpp" />
+		<Unit filename="..\Object3D\SpaceShip\AlienSpaceMotherShip\AlienSpaceMotherShip.cpp" />
+		<Unit filename="..\Object3D\SpaceShip\AlienSpaceMotherShip\AlienSpaceMotherShip.h" />
+		<Unit filename="..\Object3D\SpaceShip\AlienSpaceMotherShip\AlienSpaceMotherShipEngine.cpp" />
+		<Unit filename="..\Object3D\SpaceShip\EarthSpaceFighter\EarthSpaceFighter.cpp" />
+		<Unit filename="..\Object3D\SpaceShip\EarthSpaceFighter\EarthSpaceFighter.h" />
+		<Unit filename="..\Object3D\SpaceShip\EarthSpaceFighter\EarthSpaceFighterArmour.cpp" />
+		<Unit filename="..\Object3D\SpaceShip\EarthSpaceFighter\EarthSpaceFighterEngine.cpp" />
+		<Unit filename="..\Object3D\SpaceShip\EarthSpaceFighter\EarthSpaceFighterWeapon.cpp" />
+		<Unit filename="..\Object3D\SpaceShip\PirateShip\PirateShip.cpp" />
+		<Unit filename="..\Object3D\SpaceShip\PirateShip\PirateShip.h" />
+		<Unit filename="..\Object3D\SpaceShip\PirateShip\PirateShipEngine.cpp" />
+		<Unit filename="..\Object3D\SpaceShip\SpaceShip.cpp" />
+		<Unit filename="..\Object3D\SpaceShip\SpaceShip.h" />
+		<Unit filename="..\Object3D\SpaceShip\SpaceShipManager.cpp" />
+		<Unit filename="..\Object3D\Weapon\Weapon.cpp" />
+		<Unit filename="..\Object3D\Weapon\Weapon.h" />
+		<Unit filename="..\Object3D\Weapon\WeaponFunctions.cpp" />
+		<Unit filename="..\Object3D\Weapon\WeaponManager.cpp" />
+		<Unit filename="..\ScriptEngine\Script.cpp" />
+		<Unit filename="..\ScriptEngine\Script.h" />
+		<Unit filename="..\ScriptEngine\ScriptFunction.cpp" />
+		<Unit filename="..\ScriptEngine\Setup.cpp" />
+		<Unit filename="..\ScriptEngine\Text.cpp" />
+		<Unit filename="..\Struct.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

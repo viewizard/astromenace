@@ -22,7 +22,6 @@
 					<Add option="-O2" />
 					<Add option="-O1" />
 					<Add option="-O" />
-					<Add directory="../../../libs/SDL_1.2.9_linux/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -36,7 +35,6 @@
 					<Add library="vorbisfile" />
 					<Add library="jpeg" />
 					<Add library="Xinerama" />
-					<Add directory="../../../libs/SDL_1.2.9_linux/lib" />
 				</Linker>
 			</Target>
 		</Build>
