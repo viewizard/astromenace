@@ -33,9 +33,12 @@
 
 #include "Game.h"
 
+
+#ifdef __unix
 #ifdef xinerama
 	#include <X11/extensions/Xinerama.h>
-#endif
+#endif // xinerama
+#endif // unix
 
 
 //------------------------------------------------------------------------------------
@@ -73,7 +76,13 @@ sVideoModes CurrentVideoMode;
 bool LoadedTypes[1000];
 // данные для определения папки пользователя
 #ifdef WIN32
+#define _WIN32_WINNT 0x0501 // оверрайдим версию до Windows XP, нужно для получение доступа к функциям
 #include <windows.h>
+
+#define EDD_GET_DEVICE_INTERFACE_NAME 0x00000001
+#define DISPLAY_DEVICE_ACTIVE              0x00000001
+#define DISPLAY_DEVICE_MIRRORING_DRIVER    0x00000008
+#define DISPLAY_DEVICE_PRIMARY_DEVICE      0x00000004
 
 #define SD_APPDATA                   0x001a
 #define SD_DESKTOPDIRECTORY          0x0010        // <user name>\Desktop
@@ -288,7 +297,7 @@ int main( int argc, char **argv )
 		{
 			dirpresent = true;
 			// если передали относительный путь в папку пользователя с тильдой
-			if (argv[i][6] != '~')
+			if (argv[i][sizeof("--dir")] != '~')
 				strncpy(ProgrammDir, argv[i]+strlen("--dir="), strlen(argv[i])-strlen("--dir=")+1);
 			else
 			{
@@ -311,7 +320,7 @@ int main( int argc, char **argv )
  		if (s) s[0]=0x0;
  		const char *Fi = "/";
  		strcat( ProgrammDir, Fi );
-#endif
+#endif // DATADIR
 	}
 
 
@@ -429,15 +438,16 @@ int main( int argc, char **argv )
 		{
 			if (!strncmp(argv[i], "--rawdata=", sizeof("--rawdata")))
 			{
-				dirpresent = true;
+#ifdef __unix
 				// если передали относительный путь в папку пользователя с тильдой
-				if (argv[i][6] != '~')
+				if (argv[i][sizeof("--rawdata")] != '~')
 					strncpy(RawDataDir, argv[i]+strlen("--rawdata="), strlen(argv[i])-strlen("--rawdata=")+1);
 				else
 				{
 					strcpy(RawDataDir, homeval);// -1, это тильда... а в кол-ве нет, т.к. /0 там должен остаться
 					strncat(RawDataDir, argv[i]+strlen("--rawdata=")+1, strlen(argv[i])-strlen("--rawdata="));
 				}
+#endif // unix
 				// если в конце нет слеша - ставим его
 				if (RawDataDir[strlen(RawDataDir)-1] != '/')
 					strncat(RawDataDir, "/", strlen("/"));
@@ -506,10 +516,10 @@ int main( int argc, char **argv )
 
 ReCreate:
 
-
+#ifdef __unix
 	// для TwinView и Xinerama выбираем нулевой, но не меняем если передали
 	setenv("SDL_VIDEO_FULLSCREEN_DISPLAY","0",0);
-
+#endif //unix
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// иним SDL
@@ -550,7 +560,7 @@ ReCreate:
 	CurrentVideoMode.H = SDL_GetVideoInfo()->current_h;
 
 
-
+#ifdef __unix
 #ifdef xinerama
 	// определяем есть ли xinerama и какое разрешение экранов
 
@@ -588,7 +598,40 @@ ReCreate:
 
         XFree(xineramaScreenInfo);
     }
-#endif
+#endif // xinerama
+#endif // unix
+
+#ifdef WIN32
+	// пытаемся определить в Windows основной экран и его разрешение
+
+	DWORD i = 0;
+	DISPLAY_DEVICE dc;
+	dc.cb = sizeof(dc);
+
+	// перебираем все мониторы
+	while(EnumDisplayDevices(NULL, i, &dc, EDD_GET_DEVICE_INTERFACE_NAME) != 0)
+	{
+		if ((dc.StateFlags & DISPLAY_DEVICE_ACTIVE) && !(dc.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER))
+		{
+			DEVMODE dm;
+			if (EnumDisplaySettings(dc.DeviceName, 0, &dm) != 0)
+			{
+				printf("Screen #%d: %d x %d\n", i, dm.dmPelsWidth, dm.dmPelsHeight);
+
+				// ищем активный, не псевдо, основной
+				if (dc.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE)
+				{
+					CurrentVideoMode.W = dm.dmPelsWidth;
+					CurrentVideoMode.H = dm.dmPelsHeight;
+				}
+			}
+		}
+
+		++i;
+	}
+
+#endif // WIN32
+
 
 
 

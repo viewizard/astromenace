@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
-	<ActiveTarget index="-1" />
+	<ActiveTarget name="All" />
 	<File name="..\Core\Core.h" open="0" top="0" tabpos="0">
 		<Cursor position="1123" topLine="12" />
 	</File>
@@ -19,8 +19,8 @@
 	<File name="..\Core\RendererInterface\OGL_Draw3D.cpp" open="0" top="0" tabpos="7">
 		<Cursor position="7163" topLine="303" />
 	</File>
-	<File name="..\Core\RendererInterface\OGL_Main.cpp" open="0" top="0" tabpos="7">
-		<Cursor position="11449" topLine="341" />
+	<File name="..\Core\RendererInterface\OGL_Main.cpp" open="1" top="1" tabpos="7">
+		<Cursor position="5445" topLine="184" />
 	</File>
 	<File name="..\Core\RendererInterface\RendererInterface.h" open="0" top="0" tabpos="0">
 		<Cursor position="11576" topLine="345" />
@@ -41,10 +41,10 @@
 		<Cursor position="14871" topLine="485" />
 	</File>
 	<File name="..\Defines.h" open="1" top="0" tabpos="1">
-		<Cursor position="1735" topLine="30" />
+		<Cursor position="1735" topLine="6" />
 	</File>
 	<File name="..\Game.h" open="1" top="0" tabpos="5">
-		<Cursor position="15052" topLine="546" />
+		<Cursor position="15052" topLine="534" />
 	</File>
 	<File name="..\Game\Game.cpp" open="0" top="0" tabpos="5">
 		<Cursor position="42009" topLine="1385" />
@@ -52,8 +52,8 @@
 	<File name="..\GraphicFX\SpaceStars\SpaceStars.cpp" open="0" top="0" tabpos="8">
 		<Cursor position="7270" topLine="234" />
 	</File>
-	<File name="..\Loading.cpp" open="1" top="1" tabpos="2">
-		<Cursor position="110912" topLine="1328" />
+	<File name="..\Loading.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="81584" topLine="1328" />
 	</File>
 	<File name="..\Loop_audio.cpp" open="1" top="0" tabpos="3">
 		<Cursor position="12677" topLine="151" />
@@ -62,7 +62,7 @@
 		<Cursor position="7363" topLine="215" />
 	</File>
 	<File name="..\Main.cpp" open="1" top="0" tabpos="6">
-		<Cursor position="10340" topLine="360" />
+		<Cursor position="14851" topLine="556" />
 	</File>
 	<File name="..\Menu\Font.cpp" open="0" top="0" tabpos="9">
 		<Cursor position="23564" topLine="501" />
@@ -71,7 +71,7 @@
 		<Cursor position="26574" topLine="1025" />
 	</File>
 	<File name="..\Menu\Menu_Credits.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="21685" topLine="473" />
+		<Cursor position="21685" topLine="460" />
 	</File>
 	<File name="..\Menu\Menu_Difficulty.cpp" open="0" top="0" tabpos="8">
 		<Cursor position="8145" topLine="189" />

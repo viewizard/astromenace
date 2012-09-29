@@ -11,7 +11,7 @@
 		<Cursor position="327" topLine="8" />
 	</File>
 	<File name="../Core/Base.h" open="1" top="0" tabpos="4">
-		<Cursor position="1900" topLine="43" />
+		<Cursor position="1900" topLine="25" />
 	</File>
 	<File name="../Core/Camera/Camera.cpp" open="0" top="0" tabpos="12">
 		<Cursor position="261" topLine="7" />
@@ -130,8 +130,8 @@
 	<File name="../Core/RendererInterface/OGL_Light.cpp" open="0" top="0" tabpos="45">
 		<Cursor position="264" topLine="7" />
 	</File>
-	<File name="../Core/RendererInterface/OGL_Main.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="17362" topLine="473" />
+	<File name="../Core/RendererInterface/OGL_Main.cpp" open="1" top="0" tabpos="5">
+		<Cursor position="4860" topLine="160" />
 	</File>
 	<File name="../Core/RendererInterface/OGL_Matrix.cpp" open="0" top="0" tabpos="47">
 		<Cursor position="265" topLine="7" />
@@ -271,8 +271,8 @@
 	<File name="../Loop_proc.cpp" open="1" top="0" tabpos="3">
 		<Cursor position="4515" topLine="92" />
 	</File>
-	<File name="../Main.cpp" open="1" top="0" tabpos="1">
-		<Cursor position="45150" topLine="1138" />
+	<File name="../Main.cpp" open="1" top="1" tabpos="1">
+		<Cursor position="18896" topLine="600" />
 	</File>
 	<File name="../MainFS2VFS.cpp" open="0" top="0" tabpos="3">
 		<Cursor position="21738" topLine="676" />
@@ -280,8 +280,8 @@
 	<File name="../Menu/Button.cpp" open="0" top="0" tabpos="90">
 		<Cursor position="323" topLine="102" />
 	</File>
-	<File name="../Menu/Dialog.cpp" open="1" top="1" tabpos="2">
-		<Cursor position="56048" topLine="1483" />
+	<File name="../Menu/Dialog.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="56048" topLine="1465" />
 	</File>
 	<File name="../Menu/Font.cpp" open="0" top="0" tabpos="92">
 		<Cursor position="321" topLine="0" />
@@ -550,7 +550,7 @@
 	<File name="../ScriptEngine/Text.cpp" open="0" top="0" tabpos="180">
 		<Cursor position="1665" topLine="42" />
 	</File>
-	<File name="../Struct.h" open="1" top="0" tabpos="5">
+	<File name="../Struct.h" open="0" top="0" tabpos="5">
 		<Cursor position="2637" topLine="74" />
 	</File>
 </CodeBlocks_layout_file>
