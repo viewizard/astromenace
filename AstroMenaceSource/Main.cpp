@@ -410,7 +410,7 @@ int main( int argc, char **argv )
 
 
 	// версия
-	printf("AstroMenace %1.1f %i\n\n", GAME_VERSION_ID, GAME_VERSION_BUILD);
+	printf("AstroMenace %1.1f %i\n\n", GAME_VERSION_VERSION, GAME_VERSION_BUILD);
 
 
 

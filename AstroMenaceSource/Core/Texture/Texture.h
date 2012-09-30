@@ -5,10 +5,10 @@
 
 	File name: Texture.h
 
-	Copyright (c) 2001-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2001-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -44,6 +44,7 @@
 #define BMP_FILE			1	// BMP file
 #define TGA_FILE			2	// TGA file
 #define JPG_FILE			4	// JPG file
+#define PNG_FILE			8	// JPG file
 
 // Create alpha channel by image greyscale color
 #define TX_ALPHA_GREYSC		0x0021

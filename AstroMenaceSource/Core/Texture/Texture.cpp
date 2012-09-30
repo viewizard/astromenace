@@ -5,10 +5,10 @@
 
 	File name: Texture.cpp
 
-	Copyright (c) 2001-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2001-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -54,6 +54,8 @@ void DetachTexture(eTexture* Texture);
 
 int ReadJPG(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
 int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
+int ReadPNG(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
+int ReadBMP(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
 
 
 //------------------------------------------------------------------------------------
@@ -451,7 +453,21 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool Nee
 		else
 		{
 			if( vw_TestFileExtension( nName, "jpg" ) || vw_TestFileExtension( nName, "JPG" ))
+			{
 				LoadAs = JPG_FILE;
+			}
+			else
+			{
+				if( vw_TestFileExtension( nName, "png" ) || vw_TestFileExtension( nName, "PNG" ))
+				{
+					LoadAs = PNG_FILE;
+				}
+				else
+				{
+					if( vw_TestFileExtension( nName, "bmp" ) || vw_TestFileExtension( nName, "BMP" ))
+						LoadAs = BMP_FILE;
+				}
+			}
 		}
 	}
 
@@ -466,6 +482,14 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool Nee
 
 		case JPG_FILE:
 			ReadJPG(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
+			break;
+
+		case PNG_FILE:
+			ReadPNG(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
+			break;
+
+		case BMP_FILE:
+			ReadBMP(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
 			break;
 
 		default:

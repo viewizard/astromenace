@@ -110,7 +110,9 @@
 		<Unit filename="../Core/Texture/Texture.cpp" />
 		<Unit filename="../Core/Texture/Texture.h" />
 		<Unit filename="../Core/Texture/TextureManager.cpp" />
+		<Unit filename="../Core/Texture/Texture_BMP.cpp" />
 		<Unit filename="../Core/Texture/Texture_JPG.cpp" />
+		<Unit filename="../Core/Texture/Texture_PNG.cpp" />
 		<Unit filename="../Core/Texture/Texture_TGA.cpp" />
 		<Unit filename="../Core/VirtualFileSystem/Haff.cpp" />
 		<Unit filename="../Core/VirtualFileSystem/RLE.cpp" />
