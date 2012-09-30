@@ -19,7 +19,7 @@
 	<File name="..\Core\RendererInterface\OGL_Draw3D.cpp" open="0" top="0" tabpos="7">
 		<Cursor position="7163" topLine="303" />
 	</File>
-	<File name="..\Core\RendererInterface\OGL_Main.cpp" open="1" top="1" tabpos="7">
+	<File name="..\Core\RendererInterface\OGL_Main.cpp" open="0" top="0" tabpos="7">
 		<Cursor position="5445" topLine="184" />
 	</File>
 	<File name="..\Core\RendererInterface\RendererInterface.h" open="0" top="0" tabpos="0">
@@ -40,10 +40,10 @@
 	<File name="..\Core\VirtualFileSystem\VFS.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="14871" topLine="485" />
 	</File>
-	<File name="..\Defines.h" open="1" top="0" tabpos="1">
-		<Cursor position="1735" topLine="6" />
+	<File name="..\Defines.h" open="1" top="1" tabpos="2">
+		<Cursor position="1293" topLine="26" />
 	</File>
-	<File name="..\Game.h" open="1" top="0" tabpos="5">
+	<File name="..\Game.h" open="0" top="0" tabpos="5">
 		<Cursor position="15052" topLine="534" />
 	</File>
 	<File name="..\Game\Game.cpp" open="0" top="0" tabpos="5">
@@ -52,17 +52,17 @@
 	<File name="..\GraphicFX\SpaceStars\SpaceStars.cpp" open="0" top="0" tabpos="8">
 		<Cursor position="7270" topLine="234" />
 	</File>
-	<File name="..\Loading.cpp" open="1" top="0" tabpos="2">
+	<File name="..\Loading.cpp" open="0" top="0" tabpos="2">
 		<Cursor position="81584" topLine="1328" />
 	</File>
-	<File name="..\Loop_audio.cpp" open="1" top="0" tabpos="3">
+	<File name="..\Loop_audio.cpp" open="0" top="0" tabpos="3">
 		<Cursor position="12677" topLine="151" />
 	</File>
 	<File name="..\Loop_proc.cpp" open="0" top="0" tabpos="4">
 		<Cursor position="7363" topLine="215" />
 	</File>
-	<File name="..\Main.cpp" open="1" top="0" tabpos="6">
-		<Cursor position="14851" topLine="556" />
+	<File name="..\Main.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="17675" topLine="556" />
 	</File>
 	<File name="..\Menu\Font.cpp" open="0" top="0" tabpos="9">
 		<Cursor position="23564" topLine="501" />
@@ -70,7 +70,7 @@
 	<File name="..\Menu\Menu.cpp" open="0" top="0" tabpos="5">
 		<Cursor position="26574" topLine="1025" />
 	</File>
-	<File name="..\Menu\Menu_Credits.cpp" open="1" top="0" tabpos="4">
+	<File name="..\Menu\Menu_Credits.cpp" open="0" top="0" tabpos="4">
 		<Cursor position="21685" topLine="460" />
 	</File>
 	<File name="..\Menu\Menu_Difficulty.cpp" open="0" top="0" tabpos="8">

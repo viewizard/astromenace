@@ -23,10 +23,12 @@
 					<Add option="-O" />
 					<Add option="-D__GNUWIN32__" />
 					<Add option="-DWIN32" />
-					<Add directory="..\..\..\AllLibraries\OpenAL\include" />
-					<Add directory="..\..\..\AllLibraries\OGG\include" />
-					<Add directory="..\..\..\AllLibraries\jpeg-6b\include" />
 					<Add directory="..\..\..\AllLibraries\SDL-1.2.15\include" />
+					<Add directory="..\..\..\AllLibraries\libjpeg-turbo-1.2.1\include" />
+					<Add directory="..\..\..\AllLibraries\libogg-1.3.0\include" />
+					<Add directory="..\..\..\AllLibraries\libvorbis-1.3.3\include" />
+					<Add directory="..\..\..\AllLibraries\freealut-1.1.0\include" />
+					<Add directory="..\..\..\AllLibraries\openal-soft-1.14\include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -35,16 +37,18 @@
 					<Add library="SDL" />
 					<Add library="opengl32" />
 					<Add library="glu32" />
-					<Add library="OpenAL32" />
 					<Add library="alut" />
 					<Add library="ogg" />
 					<Add library="vorbis" />
 					<Add library="vorbisfile" />
 					<Add library="jpeg" />
-					<Add directory="..\..\..\AllLibraries\jpeg-6b\lib" />
-					<Add directory="..\..\..\AllLibraries\OpenAL\libs" />
-					<Add directory="..\..\..\AllLibraries\OGG\lib" />
+					<Add library="OpenAL32" />
 					<Add directory="..\..\..\AllLibraries\SDL-1.2.15\lib" />
+					<Add directory="..\..\..\AllLibraries\libjpeg-turbo-1.2.1\lib" />
+					<Add directory="..\..\..\AllLibraries\libogg-1.3.0\lib" />
+					<Add directory="..\..\..\AllLibraries\libvorbis-1.3.3\lib" />
+					<Add directory="..\..\..\AllLibraries\freealut-1.1.0\lib" />
+					<Add directory="..\..\..\AllLibraries\openal-soft-1.14\lib" />
 				</Linker>
 			</Target>
 		</Build>
