@@ -37,10 +37,13 @@
 	<File name="..\Core\Texture\TextureManager.cpp" open="0" top="0" tabpos="4">
 		<Cursor position="3812" topLine="93" />
 	</File>
+	<File name="..\Core\Texture\Texture_BMP.cpp" open="1" top="1" tabpos="3">
+		<Cursor position="1259" topLine="0" />
+	</File>
 	<File name="..\Core\VirtualFileSystem\VFS.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="14871" topLine="485" />
 	</File>
-	<File name="..\Defines.h" open="1" top="1" tabpos="2">
+	<File name="..\Defines.h" open="1" top="0" tabpos="2">
 		<Cursor position="1293" topLine="26" />
 	</File>
 	<File name="..\Game.h" open="0" top="0" tabpos="5">

@@ -34,22 +34,25 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+#define GAME_VERSION_VERSION	 	1.3
+#define GAME_VERSION_BUILD			120930
+
 
 // VBO OpenGL extention support switcher (if defined - game will detect vbo support in hardware during initialization)
 // Game could crash in FreeBSD under VirtualBox if vbo are used. Added just in case, if hardware capabilities detection fail.
 // Looks like only virtualized systems could have this issue.
 #define vbo
 
-// required libXinerama
+// xinerama support, required libXinerama
 #define xinerama
 
-// required SDL compilled with "joystick" flag
+// joystick support, required SDL compilled with "joystick" flag
 #define joystick
 
 // separate thread for music during data loading (based on SDL multithread implementation)
 #define multithread
 
-// enable compression during gamedata.vfs creation, game will take more time for loading in exchange of size reducing (about 30 MB)
+// compression during gamedata.vfs creation, game will take more time for loading in exchange of size reducing (about 30 MB)
 // #define compression
 
 // define DATADIR with gamedata.vfs file location if you don't put it together in the same directory with binary file
@@ -58,9 +61,7 @@
 
 
 
-
-#define GAME_VERSION_ID	 	1.3f
-#define GAME_VERSION_BUILD 	120929
-
+// PNG image format support via libpng. Don't use png images right now, disabled atm
+// #define png
 
 #endif // DEFINES_H

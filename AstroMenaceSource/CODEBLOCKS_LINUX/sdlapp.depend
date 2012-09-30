@@ -1681,7 +1681,7 @@
 1348686309 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/Math/Math.h
 	"../Base.h"
 
-1348686309 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/Texture/Texture.h
+1349011437 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/Texture/Texture.h
 	"../Base.h"
 	"../VirtualFileSystem/VFS.h"
 
@@ -1761,7 +1761,7 @@
 	<assert.h>
 	<string.h>
 
-1348929835 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Defines.h
+1349010574 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Defines.h
 
 1348743307 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Struct.h
 	"Defines.h"
@@ -2027,7 +2027,7 @@
 1348686309 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/System/Timer.cpp
 	"System.h"
 
-1348686309 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/Texture/Texture.cpp
+1349011427 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/Texture/Texture.cpp
 	"Texture.h"
 	"../System/System.h"
 	"../RendererInterface/RendererInterface.h"
@@ -2093,7 +2093,7 @@
 1348927563 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Loop_proc.cpp
 	"Game.h"
 
-1348958735 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Main.cpp
+1349010380 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Main.cpp
 	"Game.h"
 	<X11/extensions/Xinerama.h>
 	<windows.h>
@@ -2110,7 +2110,7 @@
 1348686310 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Font3D.cpp
 	"../Game.h"
 
-1348927563 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu.cpp
+1349010352 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu.cpp
 	"../Game.h"
 
 1348927563 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_ConfControl.cpp
@@ -2328,4 +2328,11 @@
 
 1348857009 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/MainFS2VFS.cpp
 	"Game.h"
+
+1349009804 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/Texture/Texture_PNG.cpp
+	"Texture.h"
+	<png.h>
+
+1349011252 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/Texture/Texture_BMP.cpp
+	"Texture.h"
 
