@@ -3753,7 +3753,7 @@
 	<sys/stat.h>
 	<sys/types.h>
 
-1348929835 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\defines.h
+1348987301 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\defines.h
 
 1348686309 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\glext.h
 	<windows.h>
@@ -4407,7 +4407,7 @@
 1348927563 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\loop_proc.cpp
 	"Game.h"
 
-1348959258 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\main.cpp
+1348959450 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\main.cpp
 	"Game.h"
 	<X11/extensions/Xinerama.h>
 	<windows.h>
@@ -4845,4 +4845,48 @@
 	<sys/neutrino.h>
 	<Ph.h>
 	"close_code.h"
+
+1341013928 z:\home\viewizard\desktop\astromenace\alllibraries\libjpeg-turbo-1.2.1\include\jpeglib.h
+	"jconfig.h"
+	"jmorecfg.h"
+	"jpegint.h"
+	"jerror.h"
+
+1341014338 z:\home\viewizard\desktop\astromenace\alllibraries\libjpeg-turbo-1.2.1\include\jconfig.h
+
+1341013928 z:\home\viewizard\desktop\astromenace\alllibraries\libjpeg-turbo-1.2.1\include\jmorecfg.h
+
+1341013928 z:\home\viewizard\desktop\astromenace\alllibraries\libjpeg-turbo-1.2.1\include\jerror.h
+
+1272512916 z:\home\viewizard\desktop\astromenace\alllibraries\libvorbis-1.3.3\include\vorbis\vorbisfile.h
+	<stdio.h>
+	"codec.h"
+
+1269498539 z:\home\viewizard\desktop\astromenace\alllibraries\libvorbis-1.3.3\include\vorbis\codec.h
+	<ogg/ogg.h>
+
+1312477661 z:\home\viewizard\desktop\astromenace\alllibraries\libogg-1.3.0\include\ogg\ogg.h
+	<stddef.h>
+	<ogg/os_types.h>
+
+1312477661 z:\home\viewizard\desktop\astromenace\alllibraries\libogg-1.3.0\include\ogg\os_types.h
+	<stdint.h>
+	<sys/types.h>
+	<sys/types.h>
+	<inttypes.h>
+	<sys/types.h>
+	<inttypes.h>
+	<ogg/config_types.h>
+
+1332951981 z:\home\viewizard\desktop\astromenace\alllibraries\openal-soft-1.14\include\al\al.h
+
+1332951981 z:\home\viewizard\desktop\astromenace\alllibraries\openal-soft-1.14\include\al\alc.h
+
+1147433356 z:\home\viewizard\desktop\astromenace\alllibraries\freealut-1.1.0\include\al\alut.h
+	<alc.h>
+	<al.h>
+	<OpenAL/alc.h>
+	<OpenAL/al.h>
+	<AL/al.h>
+	<AL/alc.h>
 
