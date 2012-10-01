@@ -376,35 +376,10 @@ void DeleteAlpha(BYTE **DIBRESULT, eTexture *Texture)
 
 
 //------------------------------------------------------------------------------------
-// загрузка текстуры их файла и подключение к менеджеру текстур
+// загрузка текстуры из файла и подключение к менеджеру текстур
 //------------------------------------------------------------------------------------
-eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool NeedCompression, int LoadAs, int NeedResizeX, int NeedResizeY)
+eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool NeedCompression, int LoadAs, int NeedResizeW, int NeedResizeH)
 {
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Cоздаем объект
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	eTexture *Texture = 0;
-	Texture = new eTexture; if (Texture == 0) return 0;
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Начальные установки текстуры
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	Texture->ARed = ARedTexMan;
-	Texture->AGreen = AGreenTexMan;
-	Texture->ABlue = ABlueTexMan;
-	Texture->Prev = 0;
-	Texture->Next = 0;
-	Texture->Num = 0;
-	Texture->Name = 0;
-	Texture->TextureID = 0;
-	Texture->Filtering = FilteringTexMan;
-	Texture->Address_Mode = Address_ModeTexMan;
-	Texture->Width = 0;
-	Texture->Height = 0;
-	Texture->TexturePrior = 0;
-	Texture->MipMap = MipMap;
-
 	// временно, файл текстуры
 	eFILE *pFile = 0;
 
@@ -412,23 +387,6 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool Nee
 	int DHeight = 0;
 	int DChanels = 0;
 	BYTE *tmp_image = 0;
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Сохраняем имя текстуры
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (RememberAsName == NULL)
-	{
-		Texture->Name = new char[strlen(nName)+1]; if (Texture->Name == 0) return 0;
-		strcpy(Texture->Name, nName);
-	}
-	else // иначе, есть имя под которым надо запомнить
-	{
-		Texture->Name = new char[strlen(RememberAsName)+1]; if (Texture->Name == 0) return 0;
-		strcpy(Texture->Name, RememberAsName);
-	}
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Открываем файл
@@ -503,15 +461,81 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool Nee
 		return 0;
 	}
 
+	// все, файл нам больше не нужен
+	vw_fclose(pFile);
 
-	// вот теперь все готово, идем дальше
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// Сохраняем имя текстуры
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	eTexture *Result = 0;
+
+	if (RememberAsName == NULL)
+	{
+		Result = vw_CreateTextureFromMemory(nName, tmp_image, DWidth, DHeight, DChanels, NeedCompression, NeedResizeW, NeedResizeH);
+	}
+	else // иначе, есть имя под которым надо запомнить
+	{
+		Result = vw_CreateTextureFromMemory(RememberAsName, tmp_image, DWidth, DHeight, DChanels, NeedCompression, NeedResizeW, NeedResizeH);
+	}
+
+
+	// освобождаем память
+	if (tmp_image != 0){delete [] tmp_image; tmp_image = 0;}
+
+
+	return Result;
+}
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// создание текстуры из памяти
+//------------------------------------------------------------------------------------
+eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DWidth, int DHeight, int DChanels, bool NeedCompression, int NeedResizeW, int NeedResizeH)
+{
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// Cоздаем объект
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	eTexture *Texture = 0;
+	Texture = new eTexture; if (Texture == 0) return 0;
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// Начальные установки текстуры
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	Texture->ARed = ARedTexMan;
+	Texture->AGreen = AGreenTexMan;
+	Texture->ABlue = ABlueTexMan;
+	Texture->Prev = 0;
+	Texture->Next = 0;
+	Texture->Num = 0;
+	Texture->Name = 0;
+	Texture->TextureID = 0;
+	Texture->Filtering = FilteringTexMan;
+	Texture->Address_Mode = Address_ModeTexMan;
 	Texture->Width = DWidth;
 	Texture->Height = DHeight;
 	Texture->Bytes = DChanels;
+	Texture->TexturePrior = 0;
+	Texture->MipMap = MipMap;
 
-	// все, файлы нам больше не нужны
-	vw_fclose(pFile);
+	// временный массив данных
+	BYTE *tmp_image = 0;
+	tmp_image = new BYTE[DWidth*DHeight*DChanels];
+	memcpy(tmp_image, DIB, DWidth*DHeight*DChanels);
 
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// Сохраняем имя текстуры
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	Texture->Name = new char[strlen(TextureName)+1]; if (Texture->Name == 0) return 0;
+	strcpy(Texture->Name, TextureName);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -533,8 +557,8 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool Nee
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Растягиваем, если есть запрос
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (NeedResizeX!=0 && NeedResizeY!=0)
-		ResizeImage(NeedResizeX, NeedResizeY, &tmp_image, Texture);
+	if (NeedResizeW!=0 && NeedResizeH!=0)
+		ResizeImage(NeedResizeW, NeedResizeH, &tmp_image, Texture);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -556,18 +580,14 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool Nee
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	Texture->TextureID = vw_CreateTexture(tmp_image, Texture->Width, Texture->Height, MipMap, Texture->Bytes, NeedCompression);
 
-
-
 	// освобождаем память
 	if (tmp_image != 0){delete [] tmp_image; tmp_image = 0;}
 
 	// присоединяем текстуру к менеджеру текстур
 	AttachTexture(Texture);
-	printf("Ok ... %s\n", nName);
+	printf("Ok ... %s\n", TextureName);
 	return Texture;
 }
-
-
 
 
 
