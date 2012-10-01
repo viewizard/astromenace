@@ -3717,11 +3717,12 @@
 	"Object3D/SpaceObject/ShipPart/ShipPart.h"
 	"Object3D/SpaceObject/Planet/Planet.h"
 
-1348927642 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\core.h
+1349070822 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\core.h
 	"Base.h"
 	"Math/Math.h"
 	"Texture/Texture.h"
 	"Light/Light.h"
+	"Font/Font.h"
 	"ParticleSystem/ParticleSystem.h"
 	"ParticleSystem2D/ParticleSystem2D.h"
 	"System/System.h"
@@ -3753,7 +3754,7 @@
 	<sys/stat.h>
 	<sys/types.h>
 
-1349010574 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\defines.h
+1349087130 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\defines.h
 
 1348686309 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\glext.h
 	<windows.h>
@@ -3951,10 +3952,10 @@
 	<Ph.h>
 	"close_code.h"
 
-1348686309 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\math\math.h
+1349084129 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\math\math.h
 	"../Base.h"
 
-1349009197 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\texture\texture.h
+1349089016 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\texture\texture.h
 	"../Base.h"
 	"../VirtualFileSystem/VFS.h"
 
@@ -3990,12 +3991,12 @@
 	"../Math/Math.h"
 	"../Model3D/Model3D.h"
 
-1348686309 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\model3d\model3d.h
+1349095110 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\model3d\model3d.h
 	"../Base.h"
 	"../Math/Math.h"
 	"../VirtualFileSystem/VFS.h"
 
-1348686309 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\rendererinterface.h
+1349096207 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\rendererinterface.h
 	"../Base.h"
 	"../Math/Math.h"
 	"../Texture/Texture.h"
@@ -4077,7 +4078,7 @@
 	"../../Core/Core.h"
 	"../../Struct.h"
 
-1348686310 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\graphicfx\text\text.h
+1349096077 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\graphicfx\text\text.h
 	"../../Core/Core.h"
 
 1348686310 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\object3d\object3d.h
@@ -4183,7 +4184,7 @@
 	"Light.h"
 	"../RendererInterface/RendererInterface.h"
 
-1348686309 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\math\math.cpp
+1349084114 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\math\math.cpp
 	"Math.h"
 	"MersenneTwister.h"
 
@@ -4328,12 +4329,12 @@
 1348686309 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\system\timer.cpp
 	"System.h"
 
-1349010818 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\texture\texture.cpp
+1349086751 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\texture\texture.cpp
 	"Texture.h"
 	"../System/System.h"
 	"../RendererInterface/RendererInterface.h"
 
-1348686309 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\texture\texturemanager.cpp
+1349011449 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\texture\texturemanager.cpp
 	"Texture.h"
 	"../RendererInterface/RendererInterface.h"
 
@@ -4398,7 +4399,7 @@
 1348686310 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\graphicfx\text\textmanager.cpp
 	"Text.h"
 
-1348686310 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\loading.cpp
+1349085541 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\loading.cpp
 	"Game.h"
 
 1348686310 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\loop_audio.cpp
@@ -4407,7 +4408,7 @@
 1348927563 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\loop_proc.cpp
 	"Game.h"
 
-1349010380 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\main.cpp
+1349081509 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\main.cpp
 	"Game.h"
 	<X11/extensions/Xinerama.h>
 	<windows.h>
@@ -4418,10 +4419,10 @@
 1348927563 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\dialog.cpp
 	"../Game.h"
 
-1348927563 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\font.cpp
+1349025041 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\font.cpp
 	"../Core/Core.h"
 
-1348686310 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\font3d.cpp
+1349025907 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\font3d.cpp
 	"../Game.h"
 
 1349010352 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\menu.cpp
@@ -4448,7 +4449,7 @@
 1348686310 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\menu_optionsadv.cpp
 	"../Game.h"
 
-1348927563 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\menu_profile.cpp
+1349070319 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\menu_profile.cpp
 	"../Game.h"
 
 1348686310 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\menu_topscores.cpp
@@ -4476,7 +4477,7 @@
 1348686310 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\object3d\explosion\bulletexplosion\bulletexplosion.h
 	"../Explosion.h"
 
-1348857009 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\mainfs2vfs.cpp
+1349074442 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\mainfs2vfs.cpp
 	"Game.h"
 
 1348742598 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\menu_interface.cpp
@@ -4643,7 +4644,7 @@
 1348927563 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\scriptengine\text.cpp
 	"../Game.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl.h
 	"SDL_main.h"
 	"SDL_stdinc.h"
 	"SDL_audio.h"
@@ -4662,14 +4663,14 @@
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_main.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_main.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_stdinc.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_stdinc.h
 	"SDL_config.h"
 	<sys/types.h>
 	<stdio.h>
@@ -4695,7 +4696,7 @@
 	<stdlib.h>
 	"close_code.h"
 
-1326110987 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_config.h
+1326954630 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_config.h
 	"SDL_platform.h"
 	"SDL_config_dreamcast.h"
 	"SDL_config_macos.h"
@@ -4705,16 +4706,16 @@
 	"SDL_config_os2.h"
 	"SDL_config_minimal.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_platform.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_platform.h
 
-1326110994 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_config_win32.h
+1349031835 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_config_win32.h
 	"SDL_platform.h"
 
-1326111000 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\begin_code.h
+1326954606 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\begin_code.h
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\close_code.h
+1326954606 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\close_code.h
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_audio.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_audio.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_endian.h"
@@ -4724,24 +4725,24 @@
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_error.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_error.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_endian.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_endian.h
 	"SDL_stdinc.h"
 	<endian.h>
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_mutex.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_mutex.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_thread.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_thread.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_mutex.h"
@@ -4749,24 +4750,24 @@
 	<process.h>
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_rwops.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_rwops.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_cdrom.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_cdrom.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_cpuinfo.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_cpuinfo.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_events.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_events.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_active.h"
@@ -4777,63 +4778,63 @@
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_active.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_active.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_keyboard.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_keyboard.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_keysym.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_keysym.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_keysym.h
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_mouse.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_mouse.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_video.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_video.h
+1326954606 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_video.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_rwops.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_joystick.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_joystick.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_quit.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_quit.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_loadso.h
-	"SDL_stdinc.h"
-	"SDL_error.h"
-	"begin_code.h"
-	"close_code.h"
-
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_timer.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_loadso.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_version.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_version.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738639 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_syswm.h
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_syswm.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_version.h"
@@ -4890,7 +4891,7 @@
 	<AL/al.h>
 	<AL/alc.h>
 
-1349009804 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\texture\texture_png.cpp
+1349011461 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\texture\texture_png.cpp
 	"Texture.h"
 	<png.h>
 
@@ -4908,4 +4909,45 @@
 	<string.h>
 	<stdio.h>
 	<dos.h>
+
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_config_dreamcast.h
+	"SDL_platform.h"
+
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_config_macos.h
+	"SDL_platform.h"
+	<MacTypes.h>
+
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_config_macosx.h
+	"SDL_platform.h"
+	<AvailabilityMacros.h>
+
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_config_symbian.h
+	"SDL_platform.h"
+	<stdarg.h>
+	<stddef.h>
+
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_config_os2.h
+	"SDL_platform.h"
+
+1326954605 z:\home\viewizard\desktop\astromenace\alllibraries\sdl-1.2.15\include\sdl\sdl_config_minimal.h
+	"SDL_platform.h"
+	<stdarg.h>
+
+1349011461 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\texture\texture_bmp.cpp
+	"Texture.h"
+
+1349102087 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\font\font.h
+	"../Core.h"
+	<ft2build.h>
+
+1237038326 z:\home\viewizard\desktop\astromenace\alllibraries\freetype-2.4.10\include\ft2build.h
+	<freetype/config/ftheader.h>
+
+1339652158 z:\home\viewizard\desktop\astromenace\alllibraries\freetype-2.4.10\include\freetype\config\ftheader.h
+
+1349081434 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\font\font.cpp
+	"Font.h"
+
+1349087053 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\font\fontmanager.cpp
+	"Font.h"
 

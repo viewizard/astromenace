@@ -22,6 +22,7 @@
 					<Add option="-O2" />
 					<Add option="-O1" />
 					<Add option="-O" />
+					<Add directory="/usr/include/freetype2/" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -35,6 +36,7 @@
 					<Add library="vorbisfile" />
 					<Add library="jpeg" />
 					<Add library="Xinerama" />
+					<Add library="freetype" />
 				</Linker>
 			</Target>
 		</Build>
@@ -54,6 +56,9 @@
 		<Unit filename="../Core/CollisionDetection/OBB.cpp" />
 		<Unit filename="../Core/CollisionDetection/Sphere.cpp" />
 		<Unit filename="../Core/Core.h" />
+		<Unit filename="../Core/Font/Font.cpp" />
+		<Unit filename="../Core/Font/Font.h" />
+		<Unit filename="../Core/Font/FontManager.cpp" />
 		<Unit filename="../Core/Light/Light.cpp" />
 		<Unit filename="../Core/Light/Light.h" />
 		<Unit filename="../Core/Light/LightManager.cpp" />

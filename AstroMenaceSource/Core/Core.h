@@ -39,6 +39,7 @@
 #include "Math/Math.h"
 #include "Texture/Texture.h"
 #include "Light/Light.h"
+#include "Font/Font.h"
 #include "ParticleSystem/ParticleSystem.h"
 #include "ParticleSystem2D/ParticleSystem2D.h"
 #include "System/System.h"

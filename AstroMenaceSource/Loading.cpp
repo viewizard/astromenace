@@ -1122,6 +1122,14 @@ void LoadGameData(int LoadType)
 	// 1...10 - загрузка 1...10 уровня
 
 
+	// в самом начале, до логотипа - генерируем все возможные символы для меню (чтобы в процессе прорисовки меньше подгружать)
+	if (LoadType == -1)
+	{
+		vw_SetTextureProp(TEXTURE_NO_MIPMAP, RI_CLAMP, true, TX_ALPHA_GREYSC, false);
+		vw_GenerateFontChars(" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®");
+	}
+
+
 	eTexture *LoadImageTexture = 0;
 	int RealLoadedTextures = 0;
 	bool NeedLoadShaders = false;

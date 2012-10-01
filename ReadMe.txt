@@ -2,7 +2,8 @@ AstroMenace
 
 Runtime dependencies:
 libSDL (ver 1.2.10+), GLU, libopenal (ver 1.0+), libalut (ver 1.0+), libogg (ver 1.1+), 
-libvorbis (ver 1.1+), libjpeg (libjpeg-turbo prefered), libXinerama (optional).
+libvorbis (ver 1.1+), libjpeg (libjpeg-turbo prefered), freetype (ver 2.1.6+)
+libXinerama (optional).
 
 
 The easy way to get up to date AstroMenace on your computer:
@@ -14,16 +15,18 @@ The easy way to get up to date AstroMenace on your computer:
    jpeg (libjpeg-turbo prefered), alut (freealut), libXinerama, GLU
 
 For Ubuntu/Debian:
-$ sudo apt-get install g++ cmake subversion libsdl1.2-dev libogg-dev
-  libvorbis-dev libopenal-dev libjpeg-dev libXinerama-dev libalut-dev
+$ sudo apt-get install g++ cmake subversion libsdl1.2-dev
+  libogg-dev libvorbis-dev libopenal-dev libjpeg-dev libXinerama-dev
+  libalut-dev libfreetype6-dev
 
 For OpenSuse:
 $ sudo zypper install gcc-c++ cmake subversion libSDL-devel libvorbis-devel
-  openal-soft-devel libjpeg-devel libXinerama-devel freealut-devel libogg-devel
+  openal-soft-devel libjpeg-devel libXinerama-devel freealut-devel
+  ylibogg-devel freetype2-devel
 
 For FreeBSD:
 $ sudo pkg_add -r -v gcc cmake subversion sdl libogg libvorbis openal
-  jpeg libXinerama freealut 
+  jpeg libXinerama freealut freetype2
 
 2) Checkout svn with latest source files
 $ cd ~/

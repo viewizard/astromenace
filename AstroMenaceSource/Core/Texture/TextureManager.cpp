@@ -147,7 +147,7 @@ void vw_ReleaseAllTextures()
 //------------------------------------------------------------------------------------
 // подключение текстуры к менеджеру текстур
 //------------------------------------------------------------------------------------
-void AttachTexture(eTexture* Texture)
+void vw_AttachTexture(eTexture* Texture)
 {
 	if (Texture == 0) return;
 
@@ -187,7 +187,7 @@ void AttachTexture(eTexture* Texture)
 //------------------------------------------------------------------------------------
 // отключение текстуры от менеджера текстур
 //------------------------------------------------------------------------------------
-void DetachTexture(eTexture* Texture)
+void vw_DetachTexture(eTexture* Texture)
 {
 	if (Texture == 0) return;
 

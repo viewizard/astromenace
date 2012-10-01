@@ -29,6 +29,7 @@
 					<Add directory="..\..\..\AllLibraries\libvorbis-1.3.3\include" />
 					<Add directory="..\..\..\AllLibraries\freealut-1.1.0\include" />
 					<Add directory="..\..\..\AllLibraries\openal-soft-1.14\include" />
+					<Add directory="..\..\..\AllLibraries\freetype-2.4.10\include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -43,12 +44,14 @@
 					<Add library="vorbisfile" />
 					<Add library="jpeg" />
 					<Add library="OpenAL32" />
+					<Add library="freetype" />
 					<Add directory="..\..\..\AllLibraries\SDL-1.2.15\lib" />
 					<Add directory="..\..\..\AllLibraries\libjpeg-turbo-1.2.1\lib" />
 					<Add directory="..\..\..\AllLibraries\libogg-1.3.0\lib" />
 					<Add directory="..\..\..\AllLibraries\libvorbis-1.3.3\lib" />
 					<Add directory="..\..\..\AllLibraries\freealut-1.1.0\lib" />
 					<Add directory="..\..\..\AllLibraries\openal-soft-1.14\lib" />
+					<Add directory="..\..\..\AllLibraries\freetype-2.4.10\bin" />
 				</Linker>
 			</Target>
 		</Build>
@@ -67,6 +70,9 @@
 		<Unit filename="..\Core\CollisionDetection\OBB.cpp" />
 		<Unit filename="..\Core\CollisionDetection\Sphere.cpp" />
 		<Unit filename="..\Core\Core.h" />
+		<Unit filename="..\Core\Font\Font.cpp" />
+		<Unit filename="..\Core\Font\Font.h" />
+		<Unit filename="..\Core\Font\FontManager.cpp" />
 		<Unit filename="..\Core\Light\Light.cpp" />
 		<Unit filename="..\Core\Light\Light.h" />
 		<Unit filename="..\Core\Light\LightManager.cpp" />

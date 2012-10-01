@@ -330,7 +330,7 @@ void ProfileInputText()
 				{
 
 					int NewChar = vw_VirtualCodeChar(Setup.KeyboardLayout, i);
-					if (NewChar > 0xFF) // 2 байта
+					if (NewChar & 0x80) // 2 байта
 					{
 						Uint16 Temp16 = (Uint16)NewChar;
 						Uint8 *Temp8 = (Uint8 *)(&Temp16);

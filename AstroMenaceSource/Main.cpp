@@ -514,6 +514,7 @@ int main( int argc, char **argv )
 
 
 
+
 ReCreate:
 
 #ifdef __unix
@@ -531,6 +532,8 @@ ReCreate:
 		ReleaseGameOneCopy();
 		return 1;
 	}
+	// сразу задаем режим работы с юникодом, чтобы SDL давал нам юникод при нажатии на клавишу
+	SDL_EnableUNICODE(1);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1149,10 +1152,6 @@ ReCreate:
 
 
 
-
-
-
-
 	// настройка менеджера систем частиц
 	vw_SetParticleSystemStates(Setup.UseGLSL, Setup.ParticlesPerSecQuality*1.0f);
 
@@ -1165,6 +1164,9 @@ ReCreate:
 	if (!NeedShowSystemCursor)
 		SDL_ShowCursor(SDL_DISABLE);
 
+
+	// иним фонт
+	vw_InitFont("DATA/FONT/LiberationMono-Bold.ttf", 16);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1388,6 +1390,7 @@ GotoQuit:
 	vw_ReleaseAllLights();
 	ReleaseAllText();
 
+	vw_ReleaseFont();
 	vw_ReleaseAllTextures();
 	vw_ShutdownRenderer();
 

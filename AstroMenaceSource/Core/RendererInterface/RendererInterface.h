@@ -5,10 +5,10 @@
 
 	File name: RendererInterface.р
 
-	Copyright (c) 2003-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2003-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -411,8 +411,8 @@ struct eGLSL
 };
 
 void vw_ReleaseAllShaders();
-void AttachShader(eGLSL* GLSL);
-void DetachShader(eGLSL* GLSL);
+void vw_AttachShader(eGLSL* GLSL);
+void vw_DetachShader(eGLSL* GLSL);
 eGLSL* vw_FindShaderByNum(int Num);
 eGLSL* vw_FindShaderByName(const char *Name);
 

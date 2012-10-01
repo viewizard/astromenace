@@ -224,7 +224,7 @@ void vw_DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, bool Alpha,
 	// Вычисление поправки по У в зависимости от DrawCorner
 	// - расположения угла начала координат
 	float tmpPosY = 0;
-	// изменяем только в случае OBJ2D_DRW_UL_CORNER
+	// изменяем только в случае RI_UL_CORNER
 	if (DrawCorner == RI_UL_CORNER)
 	{
 		if (ASpresent) tmpPosY = (AH - Y - Y - (DstRest->bottom - DstRest->top));

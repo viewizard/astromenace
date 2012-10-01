@@ -291,13 +291,6 @@ void GetFontData(int Char, RECT *SrcRest, int *X, int *Y)
 
 
 
-
-
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // прорисовка фонта
 //------------------------------------------------------------------------------------
@@ -353,7 +346,7 @@ void DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, int CharSet, flo
 		{
 			int CurrentChar = text[i];
 			// если 2-х байтовое, юникод
-			if (text[i]<0)
+			if (text[i] & 0x80)
 			{
 				Uint8 Temp8[2];
 				Temp8[0] = text[i+1];
@@ -451,7 +444,7 @@ void DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, int CharSet, flo
 	{
 		int CurrentChar = text[i];
 		// если 2-х байтовое, юникод
-		if (text[i]<0)
+		if (text[i] & 0x80)
 		{
 			Uint8 Temp8[2];
 			Temp8[0] = text[i+1];
@@ -542,7 +535,6 @@ DrawLine:
 
 
 }
-
 
 
 
