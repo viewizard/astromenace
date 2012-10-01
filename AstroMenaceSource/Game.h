@@ -223,16 +223,14 @@ void StarSystemRelease();
 //------------------------------------------------------------------------------------
 void DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, int CharSet, float Transp, const char *Text, ...);
 int FontSize(const char *Text, ...);
-void DrawFont2(int X, int Y, float FlattenWidth, float MaxWidth, int CharSet, float Transp, const char *Text);
-int FontSize2(const char *Text);
 void DrawFontX2(int X, int Y, float FlattenWidth, float MaxWidth, int CharSet, float Transp, const char *Text, ...);
 int FontSizeX2(const char *Text, ...);
 void DrawFontX15(int X, int Y, float FlattenWidth, float MaxWidth, int CharSet, float Transp, const char *Text, ...);
 int FontSizeX15(const char *Text, ...);
 void GetFontData(int Char, RECT *SrcRest, int *X, int *Y);
 
-
-
+void DrawFontFreeType(int X, int Y, float FlattenWidth, float MaxWidth, int CharSet, float Transp, const char *Text, ...);
+int FontSizeFreeType(const char *Text, ...);
 
 
 

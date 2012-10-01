@@ -63,7 +63,9 @@ const char* 	vw_VirtualCodeName(int KeyboardLayout, int Num);
 int 	vw_VirtualCodeChar(int KeyboardLayout, int Num);
 const char* 	vw_KeyboardCodeName(int Num);
 int 	vw_KeyboardNameCode(const char * Name);
-
+// установка-получение юникода текущей нажатой клавиши
+void 	vw_SetCurrentKeyUnicod(Uint16 NewKeyUnicod);
+Uint16 	vw_GetCurrentKeyUnicod();
 
 // работа с мышкой
 int		vw_GetMousePos(int *X, int *Y);

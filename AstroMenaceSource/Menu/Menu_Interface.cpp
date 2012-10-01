@@ -88,40 +88,6 @@ void InterfaceMenu()
 
 
 
-	Y1 += Prir1;
-	DrawFont(X1, Y1, 0, 0, 0, MenuContentTransp, GetText("3_Keyboard_Layout"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, false))
-	{
-		Setup.KeyboardLayout--;
-		if (Setup.KeyboardLayout < 1) Setup.KeyboardLayout = 3;
-	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, false))
-	{
-		Setup.KeyboardLayout++;
-		if (Setup.KeyboardLayout>3) Setup.KeyboardLayout = 1;
-	}
-
-	switch (Setup.KeyboardLayout)
-	{
-		case 1:
-			Size = FontSize("English");
-			SizeI = (170-Size)/2;
-			DrawFont(X1+438+SizeI, Y1, 0, 0, 0, MenuContentTransp, "English");
-			break;
-		case 2:
-			Size = FontSize("Deutsch");
-			SizeI = (170-Size)/2;
-			DrawFont(X1+438+SizeI, Y1, 0, 0, 0, MenuContentTransp, "Deutsch");
-			break;
-		case 3:
-			Size = FontSize("Русская");
-			SizeI = (170-Size)/2;
-			DrawFont(X1+438+SizeI, Y1, 0, 0, 0, MenuContentTransp, "Русская");
-			break;
-	}
-
-
-
 
 	Y1 += Prir1;
 	DrawFont(X1, Y1, 0, 0, 0, MenuContentTransp, GetText("3_Voice_Language"));

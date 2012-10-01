@@ -532,8 +532,7 @@ ReCreate:
 		ReleaseGameOneCopy();
 		return 1;
 	}
-	// сразу задаем режим работы с юникодом, чтобы SDL давал нам юникод при нажатии на клавишу
-	SDL_EnableUNICODE(1);
+
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1224,6 +1223,8 @@ loop:
 	}
 #endif
 
+	// сразу задаем режим работы с юникодом, чтобы SDL давал нам юникод при нажатии на клавишу
+	SDL_EnableUNICODE(1);
 
 	while(!Quit)
 	{
@@ -1290,6 +1291,27 @@ loop:
 						// input focus was gained
 						if( event.active.gain == 1 )  NeedLoop = true;
 					}
+					break;
+
+				case SDL_KEYDOWN:
+					// устанавливаем текущий юникод нажатоу клавиши
+					if (!((event.key.keysym.mod & KMOD_LCTRL) |	(event.key.keysym.mod & KMOD_RCTRL)))
+						vw_SetCurrentKeyUnicod(event.key.keysym.unicode);
+					printf("Keydown, Unicode: " );
+					if ( event.key.keysym.unicode < 0x80 && event.key.keysym.unicode > 0 )
+					{
+						printf( "%c (0x%04X)\n", (char)event.key.keysym.unicode,
+								event.key.keysym.unicode );
+					}
+					else
+					{
+						printf( "? (0x%04X)\n", event.key.keysym.unicode );
+					}
+					break;
+
+				case SDL_KEYUP:
+					// сбрасываем юникод
+					vw_SetCurrentKeyUnicod(0);
 					break;
 
 				default:

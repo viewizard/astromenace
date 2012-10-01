@@ -6,10 +6,10 @@
 
 	File name: Menu_Profile.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -45,7 +45,6 @@ float CurrentProfileNameTransp = 0.9f;
 int	SoundOnProfileID = -1;
 
 int SoundTaping = 0;
-
 
 
 
@@ -325,27 +324,38 @@ void ProfileInputText()
 	{
 		// пишем букву, если можем
 		if (Pos < 127)
-			if (FontSize2(NewProfileName)< 540)
-				if (vw_VirtualCodeChar(Setup.KeyboardLayout, i) != 0)
+			if (FontSizeFreeType(NewProfileName)< 540)
+				if (vw_VirtualCodeChar(Setup.KeyboardLayout, i) != 0) // пока не убирать, надо переработать чтоб не реагировало на эскейп и прочее..
+				if (vw_GetCurrentKeyUnicod())
 				{
 
-					int NewChar = vw_VirtualCodeChar(Setup.KeyboardLayout, i);
-					if (NewChar & 0x80) // 2 байта
+					Uint16 NewChar = vw_GetCurrentKeyUnicod();
+					vw_SetCurrentKeyUnicod(0); // сразу сбрасываем данные
+					char* str = NewProfileName + Pos;
+					if (NewChar <= 0x7F)
 					{
-						Uint16 Temp16 = (Uint16)NewChar;
-						Uint8 *Temp8 = (Uint8 *)(&Temp16);
-						NewProfileName[Pos] = Temp8[1];
+						*str = (char)NewChar;
 						Pos++;
-						NewProfileName[Pos] = Temp8[0];
 					}
-					else
-						NewProfileName[Pos] = (char)NewChar;
+					else if (NewChar <= 0x7FF)
+					{
+						*str++ = (char)(0xC0 | (NewChar >> 6));
+						*str = (char)(0x80 | (NewChar & 0x3F));
+						Pos+=2;
+					}
+					else if (NewChar <= 0xFFFF)
+					{
+						*str++ = (char)(0xE0 | (NewChar >> 12));
+						*str++ = (char)(0x80 | ((NewChar >> 6) & 0x3F));
+						*str = (char)(0x80 | (NewChar & 0x3F));
+						Pos+=3;
+					}
+
 
 					if (vw_FindSoundByNum(SoundTaping) != 0)
 						vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
 					SoundTaping = Audio_PlayMenuSound(4,1.0f);
 
-					Pos++;
 					vw_SetKeys(i, false);
 				}
 
@@ -354,8 +364,8 @@ void ProfileInputText()
 		if (i == SDLK_BACKSPACE)
 		if (Pos>0)
 		{
+
 			Pos--;
-			// если отрицательное - 2 байта
 			if (NewProfileName[Pos] < 0)
 			{
 				NewProfileName[Pos] = 0;
@@ -385,7 +395,7 @@ void ProfileInputText()
 
 
 	// находим положения ввода
-	int Size = FontSize2(NewProfileName);
+	int Size = FontSizeFreeType(NewProfileName);
 	RECT SrcRest, DstRest;
 	SetRect(&SrcRest,0,0,2,2);
 	SetRect(&DstRest,X1+Size+2,Y1-2,X1+26+Size,Y1+24);
@@ -454,7 +464,8 @@ void ProfileMenu()
 	if (!isDialogBoxDrawing())
 	if (MenuContentTransp == 1.0f) ProfileInputText();
 
-	DrawFont2(X1, Y1, 0, 0, 0, MenuContentTransp, NewProfileName);
+	//DrawFont2(X1, Y1, 0, 0, 0, MenuContentTransp, NewProfileName);
+	DrawFontFreeType(X1, Y1, 0, 0, 0, MenuContentTransp, NewProfileName);
 
 	Y1 += Prir1;
 
@@ -493,9 +504,9 @@ void ProfileMenu()
 		{
 			DrawFont(X1+10, TmpY, 0, 0, 0, MenuContentTransp, "%i.",i+1);
 
-			if (FontSize2(Setup.Profile[i].Name) > 300)
+			if (FontSizeFreeType(Setup.Profile[i].Name) > 300)
 			{
-				DrawFont2(X1+50, TmpY, 0, 300, 0, MenuContentTransp, Setup.Profile[i].Name);
+				DrawFontFreeType(X1+50, TmpY, 0, 300, 0, MenuContentTransp, Setup.Profile[i].Name);
 				char TMP[128];
 				for (int t=0; t<128; t++) TMP[t]=0;
 				int j = 0;
@@ -507,7 +518,7 @@ void ProfileMenu()
 				DrawFont(X1+50+FontSize(TMP), TmpY, 0, 0, 0, MenuContentTransp, "...");
 			}
 			else
-				DrawFont2(X1+50, TmpY, 0, 0, 0, MenuContentTransp, Setup.Profile[i].Name);
+				DrawFontFreeType(X1+50, TmpY, 0, 0, 0, MenuContentTransp, Setup.Profile[i].Name);
 
 
 			int Size = FontSize("%i", Setup.Profile[i].Money);
