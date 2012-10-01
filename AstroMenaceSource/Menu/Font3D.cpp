@@ -98,7 +98,7 @@ void DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 	{
 		int CurrentChar = text[i];
 		// если 2-х байтовое, юникод
-		if (text[i]<0)
+		if (text[i] & 0x80)
 		{
 			Uint8 Temp8[2];
 			Temp8[0] = text[i+1];

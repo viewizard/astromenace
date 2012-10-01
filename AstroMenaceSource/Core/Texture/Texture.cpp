@@ -48,8 +48,8 @@ extern BYTE ABlueTexMan;
 extern bool MipMap;
 extern int  AFlagTexMan;
 extern bool AlphaTexMan;
-void AttachTexture(eTexture* Texture);
-void DetachTexture(eTexture* Texture);
+void vw_AttachTexture(eTexture* Texture);
+void vw_DetachTexture(eTexture* Texture);
 
 
 int ReadJPG(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
@@ -67,7 +67,7 @@ void vw_ReleaseTexture(eTexture* Texture)
 	if (Texture == 0) return;
 
 	// отключаем текстуру от менерджера текстур
-	DetachTexture(Texture);
+	vw_DetachTexture(Texture);
 
 	// освобождаем память
 	vw_DeleteTexture(Texture->TextureID);
@@ -584,7 +584,7 @@ eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DW
 	if (tmp_image != 0){delete [] tmp_image; tmp_image = 0;}
 
 	// присоединяем текстуру к менеджеру текстур
-	AttachTexture(Texture);
+	vw_AttachTexture(Texture);
 	printf("Ok ... %s\n", TextureName);
 	return Texture;
 }

@@ -5,7 +5,7 @@
 
 	File name: Model3D.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
 	File Version: 3.0
@@ -78,7 +78,7 @@ struct eObjectBlock
 
 
 //-----------------------------------------------------------------------------
-// Класс CModel3D
+// Класс eModel3D
 //-----------------------------------------------------------------------------
 class eModel3D
 {

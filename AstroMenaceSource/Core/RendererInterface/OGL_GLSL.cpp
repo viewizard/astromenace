@@ -5,10 +5,10 @@
 
 	File name: OGL_GLSL.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -323,7 +323,7 @@ void vw_ReleaseShader(eGLSL *GLSL)
 	if (glDetachObjectARB == NULL) return;
 	if (glDeleteObjectARB == NULL) return;
 
-	DetachShader(GLSL);
+	vw_DetachShader(GLSL);
 
 	// открепляем хидеры шейдеров
 	if (GLSL->VertexShaderUse) glDetachObjectARB(GLSL->Program, GLSL->VertexShader);
@@ -374,7 +374,7 @@ void vw_ReleaseAllShaders()
 //------------------------------------------------------------------------------------
 // подключение к менеджеру
 //------------------------------------------------------------------------------------
-void AttachShader(eGLSL* GLSL)
+void vw_AttachShader(eGLSL* GLSL)
 {
 	if (GLSL == 0) return;
 
@@ -406,7 +406,7 @@ void AttachShader(eGLSL* GLSL)
 //------------------------------------------------------------------------------------
 // отключение от менеджера
 //------------------------------------------------------------------------------------
-void DetachShader(eGLSL* GLSL)
+void vw_DetachShader(eGLSL* GLSL)
 {
 	if (GLSL == 0) return;
 
@@ -597,7 +597,7 @@ eGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 		strcpy(GLSLtmp->Name, VertexShaderFileName);
 	}
 
-	AttachShader(GLSLtmp);
+	vw_AttachShader(GLSLtmp);
 
 	return GLSLtmp;
 }
