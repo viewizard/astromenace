@@ -51,6 +51,9 @@ float	vw_sqrtf(float x);
 int		vw_strcmp(const char *a, const char *b);
 
 
+// преобразуем утф8 в утф32, как результат возвращаем указатель на след утф8 символ
+const char* utf8_to_utf32(const char* utf8, unsigned* utf32);
+
 
 // rand
 float	vw_Rand();
