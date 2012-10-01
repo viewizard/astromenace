@@ -203,6 +203,48 @@ int vw_strcmp(const char *a, const char *b)
 
 
 
+//------------------------------------------------------------------------------------
+// преобразуем утф8 в утф32, как результат возвращаем указатель на след утф8 символ
+//------------------------------------------------------------------------------------
+const char* utf8_to_utf32(const char* utf8, unsigned* utf32)
+{
+	unsigned char* u_utf8 = (unsigned char*) utf8;
+
+	unsigned char b = *u_utf8++;
+
+	if (!(b & 0x80))
+	{
+		if (utf32)
+			*utf32 = b;
+		return utf8 + 1;
+	}
+
+	unsigned len = 0;
+	while (b & 0x80)
+	{
+		b <<= 1;
+		++len;
+	}
+
+	unsigned c = b;
+	unsigned shift = 6 - len;
+
+	while (--len)
+	{
+		c <<= shift;
+		c |= (*u_utf8++) & 0x3f;
+		shift = 6;
+	}
+
+	if (utf32)
+		*utf32 = c;
+
+	return (char*) u_utf8;
+}
+
+
+
+
 
 //------------------------------------------------------------------------------------
 // Fast root (without sqrtf)
