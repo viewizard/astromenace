@@ -349,3 +349,21 @@ int vw_KeyboardNameCode(const char * Name)
 
 
 
+
+// текущий юникод нажатой клавиши
+Uint16 CurrentKeyUnicod = 0;
+// установка
+void vw_SetCurrentKeyUnicod(Uint16 NewKeyUnicod)
+{
+	CurrentKeyUnicod = NewKeyUnicod;
+}
+// получение
+Uint16 vw_GetCurrentKeyUnicod()
+{
+	return CurrentKeyUnicod;
+}
+
+
+
+
+
