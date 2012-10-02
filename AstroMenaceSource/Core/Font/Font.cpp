@@ -176,7 +176,8 @@ void vw_GenerateFontChars(const char * CharsList)
 		if (CurrentDIBX + NewChar->Width > FontTextureWidth)
 		{
 			fprintf(stderr, "!!! Can't generate font chars. Too many chars or too small texture size!\n");
-			return;
+			delete NewChar;
+			break;
 		}
 
 		// "вклеиваем" новый символ в массив

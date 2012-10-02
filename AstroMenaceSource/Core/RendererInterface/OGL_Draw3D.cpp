@@ -97,7 +97,7 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 	BYTE *TMP = (BYTE *)Data;
 
 	// чтобы знать сколько отступать, кол-во ед. элементов, в нашем случае float
-	int AddStride = 0;
+	intptr_t AddStride = 0;
 	// кол-во текстур
 	int TextQ = DataFormat & 0x000000F;
 	// длина блока
@@ -125,7 +125,7 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
 		if (NeedVBO)
-			glVertexPointer(3, GL_FLOAT, Stride, (BYTE *)(AddStride));
+			glVertexPointer(3, GL_FLOAT, Stride, (intptr_t *)(AddStride));
 		else
 			glVertexPointer(3, GL_FLOAT, Stride, TMP + AddStride);
 		AddStride += 3*sizeof(GLfloat);
