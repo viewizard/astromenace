@@ -6,10 +6,10 @@
 
 	File name: Menu.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -920,11 +920,11 @@ void DrawMenu()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// Version
-	DrawFont(6, 740, 0, 0, 0, 0.99f, "%s %1.1f %s %i", GetText("11_Version"), GAME_VERSION_VERSION, GetText("11_build"), GAME_VERSION_BUILD);
+	vw_DrawFont(6, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %1.1f %s %i", GetText("11_Version"), GAME_VERSION_VERSION, GetText("11_build"), GAME_VERSION_BUILD);
 
 	// Copyright
-	int CSize = FontSize("%s © 2007-2012, Viewizard", GetText("11_Copyright"));
-	DrawFont(Setup.iAspectRatioWidth-7-CSize, 740, 0, 0, 0, 0.99f, "%s © 2007-2012, Viewizard", GetText("11_Copyright"));
+	int CSize = vw_FontSize("%s © 2007-2012, Viewizard", GetText("11_Copyright"));
+	vw_DrawFont(Setup.iAspectRatioWidth-7-CSize, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s © 2007-2012, Viewizard", GetText("11_Copyright"));
 
 
 

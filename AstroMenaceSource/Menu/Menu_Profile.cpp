@@ -324,7 +324,7 @@ void ProfileInputText()
 	{
 		// пишем букву, если можем
 		if (Pos < 127)
-			if (FontSizeFreeType(NewProfileName)< 540)
+			if (vw_FontSize(NewProfileName)< 540)
 				if (vw_VirtualCodeChar(Setup.KeyboardLayout, i) != 0) // пока не убирать, надо переработать чтоб не реагировало на эскейп и прочее..
 				if (vw_GetCurrentKeyUnicod())
 				{
@@ -396,7 +396,7 @@ void ProfileInputText()
 
 
 	// находим положения ввода
-	int Size = FontSizeFreeType(NewProfileName);
+	int Size = vw_FontSize(NewProfileName);
 	RECT SrcRest, DstRest;
 	SetRect(&SrcRest,0,0,2,2);
 	SetRect(&DstRest,X1+Size+2,Y1-2,X1+26+Size,Y1+24);
@@ -444,7 +444,7 @@ void ProfileMenu()
 	int Prir1 = 24;
 
 	// надпись
-	DrawFont(X1, Y1, 0, 0, 4, MenuContentTransp, GetText("3_New_Pilot_Profile"));
+	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_New_Pilot_Profile"));
 
 
 	Y1 += 30;
@@ -465,8 +465,7 @@ void ProfileMenu()
 	if (!isDialogBoxDrawing())
 	if (MenuContentTransp == 1.0f) ProfileInputText();
 
-	//DrawFont2(X1, Y1, 0, 0, 0, MenuContentTransp, NewProfileName);
-	DrawFontFreeType(X1, Y1, 0, 0, 0, MenuContentTransp, NewProfileName);
+	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, NewProfileName);
 
 	Y1 += Prir1;
 
@@ -478,13 +477,13 @@ void ProfileMenu()
 
 	// список для выбора записи
 	Y1 += Prir1;
-	DrawFont(X1, Y1, 0, 0, 4, MenuContentTransp, GetText("3_Pilots_Profiles"));
-	int SizeI = Setup.iAspectRatioWidth/2+2 + (130 - FontSize(GetText("3_Money")))/2;
-	DrawFont(SizeI, Y1, 0, 0, 4, MenuContentTransp, GetText("3_Money"));
-	SizeI = Setup.iAspectRatioWidth/2+132 + (130 - FontSize(GetText("3_Experience")))/2;
-	DrawFont(SizeI, Y1, 0, 0, 4, MenuContentTransp, GetText("3_Experience"));
-	SizeI = Setup.iAspectRatioWidth/2+262 + (130 - FontSize(GetText("3_Difficulty")))/2;
-	DrawFont(SizeI, Y1, 0, 0, 4, MenuContentTransp, GetText("3_Difficulty"));
+	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Pilots_Profiles"));
+	int SizeI = Setup.iAspectRatioWidth/2+2 + (130 - vw_FontSize(GetText("3_Money")))/2;
+	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Money"));
+	SizeI = Setup.iAspectRatioWidth/2+132 + (130 - vw_FontSize(GetText("3_Experience")))/2;
+	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Experience"));
+	SizeI = Setup.iAspectRatioWidth/2+262 + (130 - vw_FontSize(GetText("3_Difficulty")))/2;
+	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Difficulty"));
 
 
 	Y1 += 30;
@@ -503,26 +502,26 @@ void ProfileMenu()
 	{
 		if (Setup.Profile[i].Used)
 		{
-			DrawFont(X1+10, TmpY, 0, 0, 0, MenuContentTransp, "%i.",i+1);
+			vw_DrawFont(X1+10, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i.",i+1);
 
-			if (FontSizeFreeType(Setup.Profile[i].Name) > 300)
+			if (vw_FontSize(Setup.Profile[i].Name) > 300)
 			{
-				DrawFontFreeType(X1+50, TmpY, 0, 300, 0, MenuContentTransp, Setup.Profile[i].Name);
-				DrawFont(X1+50+310, TmpY, 0, 0, 0, MenuContentTransp, "...");
+				vw_DrawFont(X1+50, TmpY, 0, 300, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.Profile[i].Name);
+				vw_DrawFont(X1+50+310, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "...");
 			}
 			else
-				DrawFontFreeType(X1+50, TmpY, 0, 0, 0, MenuContentTransp, Setup.Profile[i].Name);
+				vw_DrawFont(X1+50, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.Profile[i].Name);
 
 
-			int Size = FontSize("%i", Setup.Profile[i].Money);
+			int Size = vw_FontSize("%i", Setup.Profile[i].Money);
 			int SizeI = Setup.iAspectRatioWidth/2+2 + (130 - Size)/2;
-			DrawFont(SizeI, TmpY, 0, 0, 0, MenuContentTransp, "%i", Setup.Profile[i].Money);
-			Size = FontSize("%i", Setup.Profile[i].Experience);
+			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", Setup.Profile[i].Money);
+			Size = vw_FontSize("%i", Setup.Profile[i].Experience);
 			SizeI = Setup.iAspectRatioWidth/2+132 + (130 - Size)/2;
-			DrawFont(SizeI, TmpY, 0, 0, 0, MenuContentTransp, "%i", Setup.Profile[i].Experience);
-			Size = FontSize("%i%%", Setup.Profile[i].Difficulty);
+			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", Setup.Profile[i].Experience);
+			Size = vw_FontSize("%i%%", Setup.Profile[i].Difficulty);
 			SizeI = Setup.iAspectRatioWidth/2+262 + (130 - Size)/2;
-			DrawFont(SizeI, TmpY, 0, 0, 0, MenuContentTransp, "%i%%", Setup.Profile[i].Difficulty);
+			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i%%", Setup.Profile[i].Difficulty);
 
 
 
@@ -582,8 +581,8 @@ void ProfileMenu()
 		else
 		{
 			float transp = 0.3f;
-			DrawFont(X1+10, TmpY, 0, 0, 0, transp*MenuContentTransp, "%i.",i+1);
-			DrawFont(X1+50, TmpY, 0, 0, 0, transp*MenuContentTransp, GetText("3_empty"));
+			vw_DrawFont(X1+10, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, transp*MenuContentTransp, "%i.",i+1);
+			vw_DrawFont(X1+50, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, transp*MenuContentTransp, GetText("3_empty"));
 		}
 
 		TmpY += 46;

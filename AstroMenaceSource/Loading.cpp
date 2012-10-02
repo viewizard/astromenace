@@ -967,8 +967,8 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, eTexture 
 	// выводим хинт при загрузке
 	if (NeedShowHint)
 	{
-		int	Size = (Setup.iAspectRatioWidth-FontSize(GetText(LoadingHints[Setup.LoadingHint])))/2;
-		DrawFont(Size, 740, 0, 0, 0, 0.99f, GetText(LoadingHints[Setup.LoadingHint]));
+		int	Size = (Setup.iAspectRatioWidth-vw_FontSize(GetText(LoadingHints[Setup.LoadingHint])))/2;
+		vw_DrawFont(Size, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, GetText(LoadingHints[Setup.LoadingHint]));
 	}
 
 	vw_End2DMode();
@@ -1483,12 +1483,6 @@ void LoadGameData(int LoadType)
 			LoadImageTexture = vw_LoadTexture("DATA/LOADING/loading01.jpg", NULL, false);
 			break;
 	}
-
-
-	// фонты для вывода информации
-	vw_SetTextureProp(TEXTURE_NO_MIPMAP, RI_CLAMP, true, TX_ALPHA_GREYSC, false);
-	vw_LoadTexture("DATA/FONT/font_white.tga", NULL, false);
-
 
 
 	for (int i=0; i<CurrentListCount; i++)

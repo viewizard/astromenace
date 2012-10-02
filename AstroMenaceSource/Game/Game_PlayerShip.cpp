@@ -440,10 +440,8 @@ void GamePlayerShip()
 			}
 
 			// визуальный вывод - выводим постоянно
-			SetCurrentFontScale(1.5f);
-			int TmpFontSize = (Setup.iAspectRatioWidth-FontSize(GetText("4_Missile_Detected")))/2;
-			DrawFont(TmpFontSize, 720, 0, 0, 4, CurrentAlert3, GetText("4_Missile_Detected"));
-			SetCurrentFontScale(1.0f);
+			int TmpFontSize = (Setup.iAspectRatioWidth-vw_FontSize(GetText("4_Missile_Detected"))*1.5f)/2;
+			vw_DrawFont(TmpFontSize, 720, 0, 0, 1.5f, 1.0f,0.5f,0.0f, CurrentAlert3, GetText("4_Missile_Detected"));
 		}
 		else
 		{
@@ -455,10 +453,8 @@ void GamePlayerShip()
 			if (VoiceMissileDetectedStatus)
 			{
 				// визуальный вывод - выводим постоянно
-				SetCurrentFontScale(1.5f);
-				int TmpFontSize = (Setup.iAspectRatioWidth-FontSize(GetText("4_Missile_Detected")))/2;
-				DrawFont(TmpFontSize, 720, 0, 0, 4, CurrentAlert3, GetText("4_Missile_Detected"));
-				SetCurrentFontScale(1.0f);
+				int TmpFontSize = (Setup.iAspectRatioWidth-vw_FontSize(GetText("4_Missile_Detected"))*1.5f)/2;
+				vw_DrawFont(TmpFontSize, 720, 0, 0, 1.5f, 1.0f,0.5f,0.0f, CurrentAlert3, GetText("4_Missile_Detected"));
 			}
 		}
 

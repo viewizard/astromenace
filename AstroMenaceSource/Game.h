@@ -218,17 +218,6 @@ void StarSystemRelease();
 
 
 
-//------------------------------------------------------------------------------------
-// Font.cpp
-//------------------------------------------------------------------------------------
-void DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, int CharSet, float Transp, const char *Text, ...);
-int FontSize(const char *Text, ...);
-void SetCurrentFontScale(float NewFontScale);
-
-void DrawFontFreeType(int X, int Y, float FlattenWidth, float MaxWidth, int CharSet, float Transp, const char *Text, ...);
-int FontSizeFreeType(const char *Text, ...);
-
-
 
 //------------------------------------------------------------------------------------
 // Button.cpp

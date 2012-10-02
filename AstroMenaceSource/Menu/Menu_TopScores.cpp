@@ -114,9 +114,9 @@ void TopScoresMenu()
 	int Y1 = 165;
 	int Prir1 = 42;
 
-	DrawFont(X1, Y1, 0, 0, 1, MenuContentTransp, "#");
-	DrawFont(X1+45, Y1, 0, 0, 1, MenuContentTransp, GetText("3_NAME"));
-	DrawFont(X1+650, Y1, 0, 0, 1, MenuContentTransp, GetText("3_SCORE"));
+	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "#");
+	vw_DrawFont(X1+45, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, GetText("3_NAME"));
+	vw_DrawFont(X1+650, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, GetText("3_SCORE"));
 
 	Y1 += 10;
 
@@ -124,9 +124,9 @@ void TopScoresMenu()
 	{
 		Y1 += Prir1;
 
-		DrawFont(X1, Y1, 0, 0, 0, 0.6f*MenuContentTransp, "%i", i+1);
-		DrawFontFreeType(X1+45, Y1, 0, 530, 0, MenuContentTransp, GameName[i]);
-		DrawFont(X1+650, Y1, 0, 0, 0, MenuContentTransp, "%i", GameScore[i]);
+		vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.6f*MenuContentTransp, "%i", i+1);
+		vw_DrawFont(X1+45, Y1, 0, 530, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GameName[i]);
+		vw_DrawFont(X1+650, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", GameScore[i]);
 	}
 
 

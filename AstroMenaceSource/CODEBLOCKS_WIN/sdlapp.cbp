@@ -158,8 +158,6 @@
 		<Unit filename="..\MainFS2VFS.cpp" />
 		<Unit filename="..\Menu\Button.cpp" />
 		<Unit filename="..\Menu\Dialog.cpp" />
-		<Unit filename="..\Menu\Font.cpp" />
-		<Unit filename="..\Menu\Font3D.cpp" />
 		<Unit filename="..\Menu\Menu.cpp" />
 		<Unit filename="..\Menu\Menu_ConfControl.cpp" />
 		<Unit filename="..\Menu\Menu_Credits.cpp" />

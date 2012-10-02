@@ -495,9 +495,7 @@ void Workshop_Workshop()
 		vw_DrawTransparent(&DstRest, &SrcRest, GetSystemIcon(GetNextSystemStockNum()), true, 0.35f*MenuContentTransp);
 	}
 
-	SetCurrentFontScale(1.5f);
-	DrawFont(32, 630, 0, 0, 0, MenuContentTransp, GetText("7_System_Stock"));
-	SetCurrentFontScale(1.0f);
+	vw_DrawFont(Setup.iAspectRatioWidth/2-475, 630, 0, 0, 1.5f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("7_System_Stock"));
 
 
 
@@ -556,14 +554,14 @@ void Workshop_Workshop()
 		}
 
 		// вывод текста
-		int SizeI = (Setup.iAspectRatioWidth-FontSize(GetText("9_14Line1")))/2;
-		DrawFont(SizeI, 60, 0, 0, 2, CurrentAlert3*MenuContentTransp, GetText("9_14Line1"));
+		int SizeI = (Setup.iAspectRatioWidth-vw_FontSize(GetText("9_14Line1")))/2;
+		vw_DrawFont(SizeI, 60, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, GetText("9_14Line1"));
 
-		SizeI = (Setup.iAspectRatioWidth-FontSize(GetText("9_14Line2")))/2;
-		DrawFont(SizeI, 80, 0, 0, 2, CurrentAlert3*MenuContentTransp, GetText("9_14Line2"));
+		SizeI = (Setup.iAspectRatioWidth-vw_FontSize(GetText("9_14Line2")))/2;
+		vw_DrawFont(SizeI, 80, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, GetText("9_14Line2"));
 
-		SizeI = (Setup.iAspectRatioWidth-FontSize(GetText("9_14Line3")))/2;
-		DrawFont(SizeI, 100, 0, 0, 2, CurrentAlert3*MenuContentTransp, GetText("9_14Line3"));
+		SizeI = (Setup.iAspectRatioWidth-vw_FontSize(GetText("9_14Line3")))/2;
+		vw_DrawFont(SizeI, 100, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, GetText("9_14Line3"));
 	}
 
 
@@ -953,20 +951,18 @@ void Workshop_Workshop()
 		vw_DrawTransparent(&DstRest, &SrcRest, GetSystemIcon(Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16), true, Current*MenuContentTransp);
 
 
-	SetCurrentFontScale(1.5f);
-	DrawFont(Setup.iAspectRatioWidth-32-FontSize(GetText("7_Installed_Systems")), 630, 0, 0, 0, MenuContentTransp, GetText("7_Installed_Systems"));
-	SetCurrentFontScale(1.0f);
+	vw_DrawFont(Setup.iAspectRatioWidth/2+475-vw_FontSize(GetText("7_Installed_Systems"))*1.5f, 630, 0, 0, 1.5f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("7_Installed_Systems"));
 
 	// текущая система
-	DrawFont(Setup.iAspectRatioWidth/2-250, 430, 0, 0, 1, MenuContentTransp, GetText("7_Selected_System"));
-	DrawFont(Setup.iAspectRatioWidth/2+250-FontSize(GetText("7_Installed_System")), 430, 0, 0, 1, MenuContentTransp, GetText("7_Installed_System"));
+	vw_DrawFont(Setup.iAspectRatioWidth/2-250, 430, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, GetText("7_Selected_System"));
+	vw_DrawFont(Setup.iAspectRatioWidth/2+250-vw_FontSize(GetText("7_Installed_System")), 430, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, GetText("7_Installed_System"));
 
 	if (CanBuy)
-		DrawFont(Setup.iAspectRatioWidth/2-250, 485, 0, 0, 0, MenuContentTransp, "%s: %i", GetText("7_Cost"), GetSystemCost(CurrentSystemStockNum));
+		vw_DrawFont(Setup.iAspectRatioWidth/2-250, 485, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s: %i", GetText("7_Cost"), GetSystemCost(CurrentSystemStockNum));
 	else
-		DrawFont(Setup.iAspectRatioWidth/2-250, 485, 0, 0, 4, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("7_Cost"), GetSystemCost(CurrentSystemStockNum));
+		vw_DrawFont(Setup.iAspectRatioWidth/2-250, 485, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("7_Cost"), GetSystemCost(CurrentSystemStockNum));
 
-	DrawFont(Setup.iAspectRatioWidth/2+250-FontSize("%s: %i", GetText("7_Cost"), Cost), 485, 0, 0, 0, MenuContentTransp, "%s: %i", GetText("7_Cost"), Cost);
+	vw_DrawFont(Setup.iAspectRatioWidth/2+250-vw_FontSize("%s: %i", GetText("7_Cost"), Cost), 485, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s: %i", GetText("7_Cost"), Cost);
 
 
 	if (DrawButton128_2(Setup.iAspectRatioWidth/2-250,580-55, GetText("1_Info"), MenuContentTransp, false))
@@ -1013,13 +1009,11 @@ void Workshop_Workshop()
 
 
 	// вывод информации
-	SetCurrentFontScale(1.25f);
-	int SizeI = (Setup.iAspectRatioWidth-FontSize("%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money))/2;
+	int SizeI = (Setup.iAspectRatioWidth-vw_FontSize("%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money)*1.25f)/2;
 	if (CanBuy)
-		DrawFont(SizeI, 630, 0, 0, 1, MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
+		vw_DrawFont(SizeI, 630, 0, 0, 1.25f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
 	else
-		DrawFont(SizeI, 630, 0, 0, 4, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
-	SetCurrentFontScale(1.0f);
+		vw_DrawFont(SizeI, 630, 0, 0, 1.25f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
 
 }
 

@@ -51,6 +51,12 @@ struct eFontChar
 	// указатель на сгенерированную текстуру
 	eTexture* 	CharTexture;
 
+	// указатели точек границ символа, на использовании общей текстуры
+	int			TexturePositionLeft;
+	int			TexturePositionRight;
+	int			TexturePositionTop;
+	int			TexturePositionBottom;
+
 	// метрика растра символа
 	int 		Width;
 	int 		Height;
@@ -73,12 +79,15 @@ void vw_GenerateFontChars(const char * CharsList);
 eFontChar* vw_LoadFontChar(unsigned UTF32);
 // Нахождение символа по его UTF32
 eFontChar* vw_FindFontCharByUTF32(unsigned UTF32);
-// Получаем текущий размер фонта при генерации
-int vw_GetFontSize();
 // освобождаем память
 void vw_ReleaseFont();
 
-
+// получаем размер строки
+int vw_FontSize(const char *Text, ...);
+// вывод строки в 2д
+void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontScale, float R, float G, float B, float Transp, const char *Text, ...);
+// вывод строки в 3д
+void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...);
 
 
 
