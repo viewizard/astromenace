@@ -1297,6 +1297,7 @@ loop:
 					// устанавливаем текущий юникод нажатоу клавиши
 					if (!(event.key.keysym.mod & KMOD_CTRL))
 						vw_SetCurrentKeyUnicod(event.key.keysym.unicode);
+#ifdef gamedebug
 					printf("Keydown, Unicode: " );
 					if ( event.key.keysym.unicode < 0x80 && event.key.keysym.unicode > 0 )
 					{
@@ -1307,6 +1308,7 @@ loop:
 					{
 						printf( "? (0x%04X)\n", event.key.keysym.unicode );
 					}
+#endif // gamedebug
 					break;
 
 				case SDL_KEYUP:

@@ -6,10 +6,10 @@
 
 	File name: Font.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -34,6 +34,12 @@
 #include "../Core/Core.h"
 
 
+// делаем установку скалирования шрифта
+float CurrentFontScale = 1.0f;
+void SetCurrentFontScale(float NewFontScale)
+{
+	CurrentFontScale = NewFontScale;
+}
 
 
 
@@ -141,19 +147,19 @@ void DrawFontFreeType(int X, int Y, float FlattenWidth, float MaxWidth, int Char
 		if (UTF32 != 0x020)
 		{
 			SetRect(&SrcRest, 0, 0, DrawChar->Width, DrawChar->Height);
-			SetRect(&DstRest, 	Xstart + DrawChar->Left,
-								Y + 2 + FontSize - DrawChar->Top,
-								Xstart + DrawChar->Width + DrawChar->Left,
-								Y + 2 + FontSize - DrawChar->Top + DrawChar->Height);
+			SetRect(&DstRest, 	Xstart + DrawChar->Left*CurrentFontScale,
+								Y + 2 + (FontSize - DrawChar->Top)*CurrentFontScale,
+								Xstart + (DrawChar->Width + DrawChar->Left)*CurrentFontScale,
+								Y + 2 + (FontSize - DrawChar->Top + DrawChar->Height)*CurrentFontScale);
 			vw_DrawTransparent(&DstRest, &SrcRest, DrawChar->CharTexture, false, Transp, 0.0f, RI_UL_CORNER, R, G, B);
 
-			Xstart += DrawChar->Width + DrawChar->Left;
-			LineWidth += DrawChar->Width + DrawChar->Left;
+			Xstart += (DrawChar->Width + DrawChar->Left)*CurrentFontScale;
+			LineWidth += (DrawChar->Width + DrawChar->Left)*CurrentFontScale;
 		}
 		else
 		{
-			Xstart += SpaceWidth;
-			LineWidth += SpaceWidth;
+			Xstart += SpaceWidth*CurrentFontScale;
+			LineWidth += SpaceWidth*CurrentFontScale;
 		}
 
 		// если нужно прорисовывать с ограничением по длине
@@ -196,16 +202,14 @@ int FontSizeFreeType(const char *Text, ...)
 
 		// считаем кол-во пробелов
 		if (UTF32 == 0x020)
-			LineWidth += SpaceWidth;
+			LineWidth += SpaceWidth*CurrentFontScale;
 		else
-			LineWidth += DrawChar->Width + DrawChar->Left;
+			LineWidth += (DrawChar->Width + DrawChar->Left)*CurrentFontScale;
 	}
 
 
 	return LineWidth;
 }
-
-
 
 
 
@@ -442,7 +446,6 @@ void GetFontData(int Char, RECT *SrcRest, int *X, int *Y)
 
 
 	default: SetRect(SrcRest,0,0,0,0); XlenDecr=0; Ysm = 0;
-//fprintf(stderr, "%i\n", Char);
 }
 
 
@@ -525,12 +528,10 @@ void DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, int CharSet, flo
 				i++;
 			}
 
-
-
 			GetFontData(CurrentChar, &SrcRest, &XlenDecr, &Ysm);
 
 			if (CurrentChar != ' ')
-				XsmDop+=(SrcRest.right+XlenDecr) - SrcRest.left-1.0f;
+				XsmDop+=((SrcRest.right+XlenDecr) - SrcRest.left-1.0f)*CurrentFontScale;
 			else
 			{
 				SetRect(&SrcRest,0,0,0,0); Ysm = 0; XsmDopCount++;
@@ -635,10 +636,8 @@ void DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, int CharSet, flo
 		{
 			SymbolCount++;
 
-			SetRect(&DestRest, (int)Xstart,	Ystart+Ysm,
-				(int)Xstart+SrcRest.right-SrcRest.left, Ystart+Ysm+SrcRest.bottom-SrcRest.top);
-
-
+			SetRect(&DestRest, (int)Xstart,	(int)(Ystart+Ysm*CurrentFontScale),
+				(int)(Xstart+(SrcRest.right-SrcRest.left)*CurrentFontScale), (int)(Ystart+Ysm*CurrentFontScale+(SrcRest.bottom-SrcRest.top)*CurrentFontScale));
 
 			if (ASpresent) tmpPosY = (AH - DestRest.top - DestRest.top - (DestRest.bottom - DestRest.top));
 			else tmpPosY = (AHw - DestRest.top - DestRest.top - (DestRest.bottom - DestRest.top));
@@ -690,7 +689,7 @@ void DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, int CharSet, flo
 			Xstart += (DestRest.right+XlenDecr) - DestRest.left-1;
 		}
 		else
-			Xstart += Space;
+			Xstart += Space*CurrentFontScale;
 	}
 
 DrawLine:
@@ -704,523 +703,6 @@ DrawLine:
 
 
 }
-
-
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// прорисовка фонта x2
-//------------------------------------------------------------------------------------
-void DrawFontX2(int X, int Y, float FlattenWidth, float MaxWidth, int CharSet, float Transp, const char *Text, ...)
-{
-	if (Text == 0) return;
-
-// FlattenWidth - выравнивать по ширине
-// MaxWidth - рисовать до ширины
-// CharSet - 0-белый 1-желтый
-
-
-	// смотрим значения параметров в строке
-	char	text[1024];
-	va_list		ap;
-
-	va_start(ap, Text);
-	vsprintf(text, Text, ap);
-	va_end(ap);
-	// в text уже полная строка
-	if (strlen(text) == 0) return;
-
-
-
-	RECT DestRest, SrcRest;
-	SetRect(&SrcRest, 0, 0, 0, 0);
-	int Ystart = Y;
-	float Xstart = X*1.0f;
-	int Ysm = 0;
-	int XlenDecr = 0;
-
-
-	// размер пробела в пикселях
-	float Space = 13.0f;
-
-
-	// находим абсолютное значения ограничения по MaxWidth
-	float MaxWidthLimit = (Xstart+MaxWidth);
-
-
-
-
-
-
-	// если нужно выравнивать, считаем данные пробелов
-	if (FlattenWidth !=0)
-	{
-		float XsmDop = 0.0f;
-		int XsmDopCount = 0;
-
-		for (unsigned int i=0; i<strlen(text); i++)
-		{
-			int CurrentChar = text[i];
-			// если 2-х байтовое, юникод
-			if (text[i]<0)
-			{
-				Uint8 Temp8[2];
-				Temp8[0] = text[i+1];
-				Temp8[1] = text[i];
-				Uint16 *Temp16 = (Uint16 *)(Temp8);
-				CurrentChar = (int)(Temp16[0]);
-				i++;
-			}
-
-			GetFontData(CurrentChar, &SrcRest, &XlenDecr, &Ysm);
-			// делаем искуственно ув. на 2 ширины фонта... для просчета
-			SrcRest.right += (int)((SrcRest.right - SrcRest.left)*0.5);
-
-			if (CurrentChar != ' ')
-				XsmDop+=(SrcRest.right+XlenDecr) - SrcRest.left-3.0f;
-			else
-			{
-				SetRect(&SrcRest,0,0,0,0); Ysm = 0; XsmDopCount++;
-			}
-		}
-
-		if (XsmDopCount!=0) Space = (FlattenWidth - XsmDop)/XsmDopCount;
-	}
-
-
-
-
-
-	// прорисовка текста
-
-	float R=1.0f;
-	float G=1.0f;
-	float B=1.0f;
-	if (Transp >= 1.0f) Transp = 1.0f;
-
-	switch (CharSet)
-	{
-		case 0: // белый
-			R=1.0f;G=1.0f;B=1.0f;
-			break;
-		case 1: // желтый
-			R=1.0f;G=1.0f;B=0.0f;
-			break;
-		case 2: // красный
-			R=1.0f;G=0.0f;B=0.0f;
-			break;
-		case 3: // зеленый
-			R=0.0f;G=1.0f;B=0.0f;
-			break;
-		case 4: // оранжевый
-			R=1.0f;G=0.5f;B=0.0f;
-			break;
-		case 5: // серый
-			R=0.5f;G=0.5f;B=0.5f;
-			break;
-	}
-
-	eTexture *Tex = vw_FindTextureByName("DATA/FONT/font_white.tga");
-	if (Tex == 0) return;
-
-	float AW;
-	float AH;
-	bool ASpresent=false;
-	ASpresent = vw_GetAspectWH(&AW, &AH);
-
-	int W, H;
-	vw_GetViewport(0, 0, &W, &H);
-	float AHw = H*1.0f;
-
-	// Установка текстуры и ее свойств...
-	vw_SetTextureV(0, Tex);
-	vw_SetTexAlpha(true, 0.01f);
-	vw_SetTexAddressMode(0, RI_CLAMP);
-	vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
-
-    // не можем ставить другое! если нет мипмапа
-    vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
-
-	float ImageHeight = Tex->Height*1.0f;
-	float ImageWidth = Tex->Width*1.0f;
-
-	float tmpPosY = 0;
-
-	// выделяем память
-	// буфер для последовательности RI_TRIANGLE_STRIP
-	// войдет RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR
-	float *tmp = 0;
-	tmp = new float[(2+2+4)*4*strlen(text)]; if (tmp == 0) return;
-	int k=0;
-	int SymbolCount = 0;
-
-
-
-
-
-	// прорисовка текста
-	for (unsigned int i=0; i<strlen(text); i++)
-	{
-		int CurrentChar = text[i];
-		// если 2-х байтовое, юникод
-		if (text[i]<0)
-		{
-			Uint8 Temp8[2];
-			Temp8[0] = text[i+1];
-			Temp8[1] = text[i];
-			Uint16 *Temp16 = (Uint16 *)(Temp8);
-			CurrentChar = (int)(Temp16[0]);
-			i++;
-		}
-
-
-		GetFontData(CurrentChar, &SrcRest, &XlenDecr, &Ysm);
-
-		// достигли предельной ширины
-		if (MaxWidth != 0)
-			if (Xstart >= MaxWidthLimit) goto DrawLine;
-
-
-		if (CurrentChar != ' ')
-		{
-			SymbolCount++;
-
-			SetRect(&DestRest, (int)Xstart,	(int)(Ystart+Ysm*1.5),
-				(int)(Xstart+(SrcRest.right-SrcRest.left)*1.5), (int)(Ystart+Ysm*1.5+(SrcRest.bottom-SrcRest.top)*1.5));
-
-
-
-			if (ASpresent) tmpPosY = (AH - DestRest.top - DestRest.top - (DestRest.bottom - DestRest.top));
-			else tmpPosY = (AHw - DestRest.top - DestRest.top - (DestRest.bottom - DestRest.top));
-
-			float FrameHeight = (SrcRest.bottom*1.0f )/ImageHeight;
-			float FrameWidth = (SrcRest.right*1.0f )/ImageWidth;
-
-			float Yst = (SrcRest.top*1.0f)/ImageHeight;
-			float Xst = (SrcRest.left*1.0f)/ImageWidth;
-
-				tmp[k++] = DestRest.left;	// X
-				tmp[k++] = DestRest.top +tmpPosY +(DestRest.bottom - DestRest.top);	// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = Xst;
-				tmp[k++] = 1.0f-Yst;
-
-				tmp[k++] = DestRest.left;	// X
-				tmp[k++] = DestRest.top +tmpPosY;	// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = Xst;
-				tmp[k++] = 1.0f-FrameHeight;
-
-				tmp[k++] = DestRest.left + (DestRest.right - DestRest.left);	// X
-				tmp[k++] = DestRest.top +tmpPosY;	// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = FrameWidth;
-				tmp[k++] = 1.0f-FrameHeight;
-
-				tmp[k++] = DestRest.left + (DestRest.right - DestRest.left);	// X
-				tmp[k++] = DestRest.top +tmpPosY +(DestRest.bottom - DestRest.top);	// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = FrameWidth;
-				tmp[k++] = 1.0f-Yst;
-
-
-
-			Xstart += (DestRest.right+XlenDecr) - DestRest.left-3;
-		}
-		else
-			Xstart += Space;
-	}
-
-DrawLine:
-
-	vw_SendVertices(RI_QUADS, 4*SymbolCount, RI_2f_XYZ | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
-
-	if (tmp != 0){delete [] tmp; tmp = 0;}
-	vw_SetTexAlpha(false, 0.5f);
-    vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-	vw_SetTextureDef(0);
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// прорисовка фонта x1.5
-//------------------------------------------------------------------------------------
-void DrawFontX15(int X, int Y, float FlattenWidth, float MaxWidth, int CharSet, float Transp, const char *Text, ...)
-{
-	if (Text == 0) return;
-
-// FlattenWidth - выравнивать по ширине
-// MaxWidth - рисовать до ширины
-// CharSet - 0-белый 1-желтый
-
-
-	// смотрим значения параметров в строке
-	char	text[1024];
-	va_list		ap;
-
-	va_start(ap, Text);
-	vsprintf(text, Text, ap);
-	va_end(ap);
-	// в text уже полная строка
-	if (strlen(text) == 0) return;
-
-
-
-	RECT DestRest, SrcRest;
-	SetRect(&SrcRest, 0, 0, 0, 0);
-	int Ystart = Y;
-	float Xstart = X*1.0f;
-	int Ysm = 0;
-	int XlenDecr = 0;
-
-
-	// размер пробела в пикселях
-	float Space = 13.0f;
-
-
-	// находим абсолютное значения ограничения по MaxWidth
-	float MaxWidthLimit = (Xstart+MaxWidth);
-
-
-
-
-
-
-	// если нужно выравнивать, считаем данные пробелов
-	if (FlattenWidth !=0)
-	{
-		float XsmDop = 0.0f;
-		int XsmDopCount = 0;
-
-		for (unsigned int i=0; i<strlen(text); i++)
-		{
-			int CurrentChar = text[i];
-			// если 2-х байтовое, юникод
-			if (text[i]<0)
-			{
-				Uint8 Temp8[2];
-				Temp8[0] = text[i+1];
-				Temp8[1] = text[i];
-				Uint16 *Temp16 = (Uint16 *)(Temp8);
-				CurrentChar = (int)(Temp16[0]);
-				i++;
-			}
-
-			GetFontData(CurrentChar, &SrcRest, &XlenDecr, &Ysm);
-			// делаем искуственно ув. на 2 ширины фонта... для просчета
-			SrcRest.right += (int)((SrcRest.right - SrcRest.left)*0.25);
-
-			if (CurrentChar != ' ')
-				XsmDop+=(SrcRest.right+XlenDecr) - SrcRest.left-2.0f;
-			else
-			{
-				SetRect(&SrcRest,0,0,0,0); Ysm = 0; XsmDopCount++;
-			}
-		}
-
-		if (XsmDopCount!=0) Space = (FlattenWidth - XsmDop)/XsmDopCount;
-	}
-
-
-
-
-
-
-	// прорисовка текста
-
-	float R=1.0f;
-	float G=1.0f;
-	float B=1.0f;
-	if (Transp >= 1.0f) Transp = 1.0f;
-
-	switch (CharSet)
-	{
-		case 0: // белый
-			R=1.0f;G=1.0f;B=1.0f;
-			break;
-		case 1: // желтый
-			R=1.0f;G=1.0f;B=0.0f;
-			break;
-		case 2: // красный
-			R=1.0f;G=0.0f;B=0.0f;
-			break;
-		case 3: // зеленый
-			R=0.0f;G=1.0f;B=0.0f;
-			break;
-		case 4: // оранжевый
-			R=1.0f;G=0.5f;B=0.0f;
-			break;
-		case 5: // серый
-			R=0.5f;G=0.5f;B=0.5f;
-			break;
-	}
-
-	eTexture *Tex = vw_FindTextureByName("DATA/FONT/font_white.tga");
-	if (Tex == 0) return;
-
-	float AW;
-	float AH;
-	bool ASpresent=false;
-	ASpresent = vw_GetAspectWH(&AW, &AH);
-
-	int W, H;
-	vw_GetViewport(0, 0, &W, &H);
-	float AHw = H*1.0f;
-
-	// Установка текстуры и ее свойств...
-	vw_SetTextureV(0, Tex);
-	vw_SetTexAlpha(true, 0.01f);
-	vw_SetTexAddressMode(0, RI_CLAMP);
-	vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
-
-    // не можем ставить другое! если нет мипмапа
-    vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
-
-	float ImageHeight = Tex->Height*1.0f;
-	float ImageWidth = Tex->Width*1.0f;
-
-	float tmpPosY = 0;
-
-	// выделяем память
-	// буфер для последовательности RI_TRIANGLE_STRIP
-	// войдет RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR
-	float *tmp = 0;
-	tmp = new float[(2+2+4)*4*strlen(text)]; if (tmp == 0) return;
-	int k=0;
-	int SymbolCount = 0;
-
-
-
-
-
-	// прорисовка текста
-	for (unsigned int i=0; i<strlen(text); i++)
-	{
-		int CurrentChar = text[i];
-		// если 2-х байтовое, юникод
-		if (text[i]<0)
-		{
-			Uint8 Temp8[2];
-			Temp8[0] = text[i+1];
-			Temp8[1] = text[i];
-			Uint16 *Temp16 = (Uint16 *)(Temp8);
-			CurrentChar = (int)(Temp16[0]);
-			i++;
-		}
-
-
-		GetFontData(CurrentChar, &SrcRest, &XlenDecr, &Ysm);
-
-		// достигли предельной ширины
-		if (MaxWidth != 0)
-			if (Xstart >= MaxWidthLimit) goto DrawLine;
-
-
-		if (CurrentChar != ' ')
-		{
-			SymbolCount++;
-
-			SetRect(&DestRest, (int)Xstart,	(int)(Ystart+Ysm*1.25),
-				(int)(Xstart+(SrcRest.right-SrcRest.left)*1.25), (int)(Ystart+Ysm*1.25+(SrcRest.bottom-SrcRest.top)*1.25));
-
-
-
-			if (ASpresent) tmpPosY = (AH - DestRest.top - DestRest.top - (DestRest.bottom - DestRest.top));
-			else tmpPosY = (AHw - DestRest.top - DestRest.top - (DestRest.bottom - DestRest.top));
-
-			float FrameHeight = (SrcRest.bottom*1.0f )/ImageHeight;
-			float FrameWidth = (SrcRest.right*1.0f )/ImageWidth;
-
-			float Yst = (SrcRest.top*1.0f)/ImageHeight;
-			float Xst = (SrcRest.left*1.0f)/ImageWidth;
-
-				tmp[k++] = DestRest.left;	// X
-				tmp[k++] = DestRest.top +tmpPosY +(DestRest.bottom - DestRest.top);	// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = Xst;
-				tmp[k++] = 1.0f-Yst;
-
-				tmp[k++] = DestRest.left;	// X
-				tmp[k++] = DestRest.top +tmpPosY;	// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = Xst;
-				tmp[k++] = 1.0f-FrameHeight;
-
-				tmp[k++] = DestRest.left + (DestRest.right - DestRest.left);	// X
-				tmp[k++] = DestRest.top +tmpPosY;	// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = FrameWidth;
-				tmp[k++] = 1.0f-FrameHeight;
-
-				tmp[k++] = DestRest.left + (DestRest.right - DestRest.left);	// X
-				tmp[k++] = DestRest.top +tmpPosY +(DestRest.bottom - DestRest.top);	// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = FrameWidth;
-				tmp[k++] = 1.0f-Yst;
-
-
-
-			Xstart += (DestRest.right+XlenDecr) - DestRest.left-2;
-		}
-		else
-			Xstart += Space;
-	}
-
-DrawLine:
-
-	vw_SendVertices(RI_QUADS, 4*SymbolCount, RI_2f_XYZ | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
-
-	if (tmp != 0){delete [] tmp; tmp = 0;}
-	vw_SetTexAlpha(false, 0.5f);
-    vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-	vw_SetTextureDef(0);
-
-
-}
-
-
-
-
 
 
 
@@ -1243,7 +725,7 @@ int FontSize(const char *Text, ...)
 	if (strlen(text) == 0) return 0;
 
 
-	RECT SrcRest;
+	RECT DestRest, SrcRest;
 	SetRect(&SrcRest, 0, 0, 0, 0);
 	int Ysm = 0;
 	int XlenDecr = 0;
@@ -1268,138 +750,14 @@ int FontSize(const char *Text, ...)
 
 		GetFontData(CurrentChar, &SrcRest, &XlenDecr, &Ysm);
 
-		if (CurrentChar != ' ')
-			Size += (SrcRest.right+XlenDecr) - SrcRest.left-1;
-		else
-			Size += 13;
-	}
+		SetRect(&DestRest, 0,	(int)(Ysm*CurrentFontScale),
+				(int)((SrcRest.right-SrcRest.left)*CurrentFontScale), (int)(Ysm*CurrentFontScale+(SrcRest.bottom-SrcRest.top)*CurrentFontScale));
 
-
-	// для последней буквы не делаем...
-	Size -= XlenDecr;
-
-
-	return Size;
-}
-
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// получение ширины фонта
-//------------------------------------------------------------------------------------
-int FontSizeX2(const char *Text, ...)
-{
-	if (Text == 0) return 0;
-
-	// смотрим значения параметров в строке
-	char	text[1024];
-	va_list		ap;
-
-	va_start(ap, Text);
-	vsprintf(text, Text, ap);
-	va_end(ap);
-	// в text уже полная строка
-	if (strlen(text) == 0) return 0;
-
-
-	RECT SrcRest;
-	SetRect(&SrcRest, 0, 0, 0, 0);
-	int Ysm = 0;
-	int XlenDecr = 0;
-
-	int Size = 0;
-
-
-	for (unsigned int i=0; i<strlen(text); i++)
-	{
-		int CurrentChar = text[i];
-		// если 2-х байтовое, юникод
-		if (text[i]<0)
-		{
-			Uint8 Temp8[2];
-			Temp8[0] = text[i+1];
-			Temp8[1] = text[i];
-			Uint16 *Temp16 = (Uint16 *)(Temp8);
-			CurrentChar = (int)(Temp16[0]);
-			i++;
-		}
-
-		GetFontData(CurrentChar, &SrcRest, &XlenDecr, &Ysm);
-		// делаем искуственно ув. на 2 ширины фонта... для просчета
-		SrcRest.right += (int)((SrcRest.right - SrcRest.left)*0.5);
 
 		if (CurrentChar != ' ')
-			Size += (SrcRest.right+XlenDecr) - SrcRest.left-3;
+			Size += (DestRest.right+XlenDecr) - DestRest.left-1;
 		else
-			Size += 13;
-	}
-
-
-	// для последней буквы не делаем...
-	Size -= XlenDecr;
-
-
-	return Size;
-}
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// получение ширины фонта
-//------------------------------------------------------------------------------------
-int FontSizeX15(const char *Text, ...)
-{
-	if (Text == 0) return 0;
-
-	// смотрим значения параметров в строке
-	char	text[1024];
-	va_list		ap;
-
-	va_start(ap, Text);
-	vsprintf(text, Text, ap);
-	va_end(ap);
-	// в text уже полная строка
-	if (strlen(text) == 0) return 0;
-
-
-	RECT SrcRest;
-	SetRect(&SrcRest, 0, 0, 0, 0);
-	int Ysm = 0;
-	int XlenDecr = 0;
-
-	int Size = 0;
-
-
-	for (unsigned int i=0; i<strlen(text); i++)
-	{
-		int CurrentChar = text[i];
-		// если 2-х байтовое, юникод
-		if (text[i]<0)
-		{
-			Uint8 Temp8[2];
-			Temp8[0] = text[i+1];
-			Temp8[1] = text[i];
-			Uint16 *Temp16 = (Uint16 *)(Temp8);
-			CurrentChar = (int)(Temp16[0]);
-			i++;
-		}
-
-		GetFontData(CurrentChar, &SrcRest, &XlenDecr, &Ysm);
-		// делаем искуственно ув. на 2 ширины фонта... для просчета
-		SrcRest.right += (int)((SrcRest.right - SrcRest.left)*0.25);
-
-		if (CurrentChar != ' ')
-			Size += (SrcRest.right+XlenDecr) - SrcRest.left-2;
-		else
-			Size += 13;
+			Size += 13*CurrentFontScale;
 	}
 
 

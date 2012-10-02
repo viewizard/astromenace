@@ -138,3 +138,61 @@ const char *GetText(const char *ItemID)
 
 
 
+//-----------------------------------------------------------------------------
+// проверяем, есть ли символ в фонте
+//-----------------------------------------------------------------------------
+int CheckFontCharsInText()
+{
+	if (xmlTextDoc == 0) return -1;
+	if (xmlAstroMenaceText == 0) return -1;
+
+
+	TiXmlElement *xmlTextElem = xmlAstroMenaceText->FirstChildElement("itemlist");
+
+
+	printf("Font characters detection start.\n");
+
+	while (xmlTextElem)
+	{
+
+		TiXmlElement *xmlTextElem2 = xmlTextElem->FirstChildElement("item");
+		while (xmlTextElem2)
+		{
+				const char *CharsList = xmlTextElem2->GetText();
+				if (CharsList!=0)
+				{
+					// перебираем всю строку
+					while (strlen(CharsList) > 0)
+					{
+						unsigned CurrentChar;
+						// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
+						CharsList = utf8_to_utf32(CharsList, &CurrentChar);
+						// загружаем символ и все необходимые данные для него
+						if (!vw_FindFontCharByUTF32(CurrentChar))
+						{
+							printf("!!! FontChar was not created, Unicode: " );
+							if ( CurrentChar < 0x80 && CurrentChar > 0 )
+							{
+								printf( "%c (0x%04X)\n", (char)CurrentChar,
+										CurrentChar );
+							}
+							else
+							{
+								printf( "? (0x%04X)\n", CurrentChar );
+							}
+						}
+					}
+				}
+
+
+			xmlTextElem2 = xmlTextElem2->NextSiblingElement("item");
+		}
+
+
+		xmlTextElem = xmlTextElem->NextSiblingElement("itemlist");
+	}
+
+	printf("Font characters detection end.\n\n");
+
+	return 0;
+}

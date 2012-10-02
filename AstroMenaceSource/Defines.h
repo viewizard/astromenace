@@ -60,6 +60,8 @@
 
 
 
+// more actions and text outputs with debug information for bug hunting
+#define gamedebug
 
 // PNG image format support via libpng. Don't use png images right now, disabled atm
 // #define png

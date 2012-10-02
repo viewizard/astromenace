@@ -1127,6 +1127,12 @@ void LoadGameData(int LoadType)
 	{
 		vw_SetTextureProp(TEXTURE_NO_MIPMAP, RI_CLAMP, true, TX_ALPHA_GREYSC, false);
 		vw_GenerateFontChars(" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
+#ifdef gamedebug
+		// проверяем все ли символы из текущего языкового файла вошли в прегенерацию, иначе не сможем потом рисовать меню через одну текстуру
+		// смысла гонять постоянно такую проверку нет, один раз сводим все символы языка и не замедляем загрузку поиском
+		// + есть часть символов прописанных в коде, так что убирать англ и часть символов нельзя (!)
+		CheckFontCharsInText();
+#endif // gamedebug
 	}
 
 

@@ -6,10 +6,10 @@
 
 	File name: Menu_Workshop_Shipyard.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -521,7 +521,9 @@ void Workshop_Shipyard()
 
 
 	// на новом корабле
-	DrawFontX2(Setup.iAspectRatioWidth/2-448, 600, 0, 0, 0, MenuContentTransp, GetText("7_Ships_Stock"));
+	SetCurrentFontScale(1.5f);
+	DrawFont(64, 600, 0, 0, 0, MenuContentTransp, GetText("7_Ships_Stock"));
+	SetCurrentFontScale(1.0f);
 
 
 	// вывод названия корабля
@@ -587,7 +589,9 @@ void Workshop_Shipyard()
 
 
 	// на корабле игрока
-	DrawFontX2(Setup.iAspectRatioWidth/2+448-FontSizeX2(GetText("7_Player_Ship")), 600, 0, 0, 0, MenuContentTransp, GetText("7_Player_Ship"));
+	SetCurrentFontScale(1.5f);
+	DrawFont(Setup.iAspectRatioWidth-64-FontSize(GetText("7_Player_Ship")), 600, 0, 0, 0, MenuContentTransp, GetText("7_Player_Ship"));
+	SetCurrentFontScale(1.0f);
 
 	// вывод названия корабля
 	DrawFont(Setup.iAspectRatioWidth/2+64, 56, 0, 0, 1, MenuContentTransp, GetText("7_shipfullname"), GetText(GetWorkshopShipName(Setup.Profile[CurrentProfile].Ship)), Setup.Profile[CurrentProfile].ShipHullUpgrade);
@@ -678,12 +682,13 @@ void Workshop_Shipyard()
 
 
 	// вывод информации
-	SizeI = (Setup.iAspectRatioWidth-FontSizeX15("%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money))/2;
+	SetCurrentFontScale(1.25f);
+	SizeI = (Setup.iAspectRatioWidth-FontSize("%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money))/2;
 	if (CanBuy)
-		DrawFontX15(SizeI, 630, 0, 0, 1, MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
+		DrawFont(SizeI, 630, 0, 0, 1, MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
 	else
-		DrawFontX15(SizeI, 630, 0, 0, 4, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
-
+		DrawFont(SizeI, 630, 0, 0, 4, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
+	SetCurrentFontScale(1.0f);
 }
 
 

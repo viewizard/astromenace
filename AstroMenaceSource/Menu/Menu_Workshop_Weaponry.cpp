@@ -6,10 +6,10 @@
 
 	File name: Menu_Workshop_Weaponry.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -1075,26 +1075,27 @@ void Workshop_Weaponry()
 		WorkshopCreateNewWeapon();
 	}
 
-
-	DrawFontX2(Setup.iAspectRatioWidth/2-448, 600, 0, 0, 0, MenuContentTransp, GetText("7_Weapon_Stock"));
-
+	SetCurrentFontScale(1.5f);
+	DrawFont(64, 600, 0, 0, 0, MenuContentTransp, GetText("7_Weapon_Stock"));
+	SetCurrentFontScale(1.0f);
 
 
 	DrawShipWeaponsInSlots();
 
 
 
-
-	DrawFontX2(Setup.iAspectRatioWidth/2+448-FontSizeX2(GetText("7_Installed_Weapons"))-4, 600, 0, 0, 0, MenuContentTransp, GetText("7_Installed_Weapons"));
-
+	SetCurrentFontScale(1.5f);
+	DrawFont(Setup.iAspectRatioWidth-64-FontSize(GetText("7_Installed_Weapons")), 600, 0, 0, 0, MenuContentTransp, GetText("7_Installed_Weapons"));
+	SetCurrentFontScale(1.0f);
 
 	// вывод информации
-	int SizeI = (Setup.iAspectRatioWidth-FontSizeX15("%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money))/2;
+	SetCurrentFontScale(1.25f);
+	int SizeI = (Setup.iAspectRatioWidth-FontSize("%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money))/2;
 	if (Setup.Profile[CurrentProfile].Money >= GetWeaponBaseCost(CurrentWorkshopNewWeapon))
-		DrawFontX15(SizeI, 630, 0, 0, 1, MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
+		DrawFont(SizeI, 630, 0, 0, 1, MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
 	else
-		DrawFontX15(SizeI, 630, 0, 0, 2, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
-
+		DrawFont(SizeI, 630, 0, 0, 2, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
+	SetCurrentFontScale(1.0f);
 
 
 

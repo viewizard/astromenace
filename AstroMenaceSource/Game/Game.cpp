@@ -1791,8 +1791,12 @@ void DrawGame()
 	{
 		float GameSpeedShowTransp = CurrentGameSpeedShowTime;
 		if (GameSpeedShowTransp>1.0f) GameSpeedShowTransp = 1.0f;
-		int FontSize = (Setup.iAspectRatioWidth-FontSizeX15("%s x%1.1f", GetText("4_Game_Speed:"), CurrentGameSpeed))/2;
-		DrawFontX15(FontSize, 80, 0, 0, 0, 1.0f*GameSpeedShowTransp, "%s x%1.1f", GetText("4_Game_Speed:"), CurrentGameSpeed);
+
+		SetCurrentFontScale(1.25f);
+		int TmpFontSize = (Setup.iAspectRatioWidth-FontSize("%s x%1.1f", GetText("4_Game_Speed:"), CurrentGameSpeed))/2;
+		DrawFont(TmpFontSize, 80, 0, 0, 0, 1.0f*GameSpeedShowTransp, "%s x%1.1f", GetText("4_Game_Speed:"), CurrentGameSpeed);
+		SetCurrentFontScale(1.0f);
+
 		CurrentGameSpeedShowTime -= TimeDelta;
 		if (CurrentGameSpeedShowTime < 0.0f) CurrentGameSpeedShowTime = 0.0f;
 	}
