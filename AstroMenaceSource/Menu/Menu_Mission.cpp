@@ -6,10 +6,10 @@
 
 	File name: Menu_Mission.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -49,8 +49,12 @@ int MissionLimitation;
 // списки с данными для каждой миссии
 char **MissionTitle = 0;
 char **MissionDescr = 0;
-int *MissionTitleColor = 0;
-int *MissionDescrColor = 0;
+float *MissionTitleColorR = 0;
+float *MissionTitleColorG = 0;
+float *MissionTitleColorB = 0;
+float *MissionDescrColorR = 0;
+float *MissionDescrColorG = 0;
+float *MissionDescrColorB = 0;
 char **MissionIcon = 0;
 int *MissionTitleType = 0;
 int *MissionDescrType = 0;
@@ -141,8 +145,12 @@ void MissionsListInit()
 	MissionDescr = new char*[AllMission];
 	MissionIcon = new char*[AllMission];
 	MissionFile = new char*[AllMission];
-	MissionTitleColor = new int[AllMission];
-	MissionDescrColor = new int[AllMission];
+	MissionTitleColorR = new float[AllMission];
+	MissionTitleColorG = new float[AllMission];
+	MissionTitleColorB = new float[AllMission];
+	MissionDescrColorR = new float[AllMission];
+	MissionDescrColorG = new float[AllMission];
+	MissionDescrColorB = new float[AllMission];
 	MissionTitleType = new int[AllMission];
 	MissionDescrType = new int[AllMission];
 	// зануляем данные, на всякий случай
@@ -156,8 +164,8 @@ void MissionsListInit()
 		MissionTitleType[i] = 0;
 		MissionDescrType[i] = 0;
 		// установка цвета
-		MissionTitleColor[i] = 4;
-		MissionDescrColor[i] = 0;
+		MissionTitleColorR[i] = 1.0f;MissionTitleColorG[i] = 0.5f;MissionTitleColorB[i] = 0.0f;
+		MissionDescrColorR[i] = 1.0f;MissionDescrColorG[i] = 1.0f;MissionDescrColorB[i] = 1.0f;
 	}
 
 
@@ -222,7 +230,30 @@ void MissionsListInit()
 				// тайтл миссии
 				if (!strcmp(TMission->Value(), "Title"))
 				{
-					if (TMission->Attribute("color")) MissionTitleColor[i] = atoi(TMission->Attribute("color"));
+					if (TMission->Attribute("color"))
+					{
+						switch (atoi(TMission->Attribute("color")))
+						{
+							case 0: // белый
+								MissionTitleColorR[i]=1.0f;MissionTitleColorG[i]=1.0f;MissionTitleColorB[i]=1.0f;
+								break;
+							case 1: // желтый
+								MissionTitleColorR[i]=1.0f;MissionTitleColorG[i]=1.0f;MissionTitleColorB[i]=0.0f;
+								break;
+							case 2: // красный
+								MissionTitleColorR[i]=1.0f;MissionTitleColorG[i]=0.0f;MissionTitleColorB[i]=0.0f;
+								break;
+							case 3: // зеленый
+								MissionTitleColorR[i]=0.0f;MissionTitleColorG[i]=1.0f;MissionTitleColorB[i]=0.0f;
+								break;
+							case 4: // оранжевый
+								MissionTitleColorR[i]=1.0f;MissionTitleColorG[i]=0.5f;MissionTitleColorB[i]=0.0f;
+								break;
+							case 5: // серый,
+								MissionTitleColorR[i]=0.5f;MissionTitleColorG[i]=0.5f;MissionTitleColorB[i]=0.5f;
+								break;
+						}
+					}
 					if (TMission->Attribute("type")) MissionTitleType[i] = atoi(TMission->Attribute("type"));
 
 					MissionTitle[i] = new char[strlen(TMission->GetText())+1];
@@ -232,7 +263,30 @@ void MissionsListInit()
 				// описание миссии
 				if (!strcmp(TMission->Value(), "Descr"))
 				{
-					if (TMission->Attribute("color")) MissionDescrColor[i] = atoi(TMission->Attribute("color"));
+					if (TMission->Attribute("color"))
+					{
+						switch (atoi(TMission->Attribute("color")))
+						{
+							case 0: // белый
+								MissionDescrColorR[i]=1.0f;MissionDescrColorG[i]=1.0f;MissionDescrColorB[i]=1.0f;
+								break;
+							case 1: // желтый
+								MissionDescrColorR[i]=1.0f;MissionDescrColorG[i]=1.0f;MissionDescrColorB[i]=0.0f;
+								break;
+							case 2: // красный
+								MissionDescrColorR[i]=1.0f;MissionDescrColorG[i]=0.0f;MissionDescrColorB[i]=0.0f;
+								break;
+							case 3: // зеленый
+								MissionDescrColorR[i]=0.0f;MissionDescrColorG[i]=1.0f;MissionDescrColorB[i]=0.0f;
+								break;
+							case 4: // оранжевый
+								MissionDescrColorR[i]=1.0f;MissionDescrColorG[i]=0.5f;MissionDescrColorB[i]=0.0f;
+								break;
+							case 5: // серый,
+								MissionDescrColorR[i]=0.5f;MissionDescrColorG[i]=0.5f;MissionDescrColorB[i]=0.5f;
+								break;
+						}
+					}
 					if (TMission->Attribute("type")) MissionDescrType[i] = atoi(TMission->Attribute("type"));
 
 					MissionDescr[i] = new char[strlen(TMission->GetText())+1];
@@ -320,8 +374,12 @@ void MissionsListRelease()
 		delete [] MissionIcon; MissionIcon = 0;
 	}
 
-	if (MissionTitleColor != 0){delete [] MissionTitleColor; MissionTitleColor = 0;}
-	if (MissionDescrColor != 0){delete [] MissionDescrColor; MissionDescrColor = 0;}
+	if (MissionTitleColorR != 0){delete [] MissionTitleColorR; MissionTitleColorR = 0;}
+	if (MissionTitleColorG != 0){delete [] MissionTitleColorG; MissionTitleColorG = 0;}
+	if (MissionTitleColorB != 0){delete [] MissionTitleColorB; MissionTitleColorB = 0;}
+	if (MissionDescrColorR != 0){delete [] MissionDescrColorR; MissionDescrColorR = 0;}
+	if (MissionDescrColorG != 0){delete [] MissionDescrColorG; MissionDescrColorG = 0;}
+	if (MissionDescrColorB != 0){delete [] MissionDescrColorB; MissionDescrColorB = 0;}
 	if (MissionTitleType != 0){delete [] MissionTitleType; MissionTitleType = 0;}
 	if (MissionDescrType != 0){delete [] MissionDescrType; MissionDescrType = 0;}
 }
@@ -403,36 +461,36 @@ void MissionMenu()
 			if (MissionIcon[i] != 0)
 				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(MissionIcon[i]), true, 0.3f*MenuContentTransp);
 
-			int SizeI = FontSize(GetText(MissionTitle[i]));
+			int SizeI = vw_FontSize(GetText(MissionTitle[i]));
 			if (SizeI < 750-30-64)
 			{
 				if (MissionTitleType[i] == 1)
-					DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], 0.3f*MenuContentTransp, GetText(MissionTitle[i]));
+					vw_DrawFont(X1+20+64, Y1+9, 0, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, GetText(MissionTitle[i]));
 				else
-					DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], 0.3f*MenuContentTransp, MissionTitle[i]);
+					vw_DrawFont(X1+20+64, Y1+9, 0, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, MissionTitle[i]);
 			}
 			else
 			{
 				if (MissionTitleType[i] == 1)
-					DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], 0.3f*MenuContentTransp, GetText(MissionTitle[i]));
+					vw_DrawFont(X1+20+64, Y1+9, 750-30-64, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, GetText(MissionTitle[i]));
 				else
-					DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], 0.3f*MenuContentTransp, MissionTitle[i]);
+					vw_DrawFont(X1+20+64, Y1+9, 750-30-64, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, MissionTitle[i]);
 			}
 
-			SizeI = FontSize(GetText(MissionDescr[i]));
+			SizeI = vw_FontSize(GetText(MissionDescr[i]));
 			if (SizeI < 750-30-64)
 			{
 				if (MissionDescrType[i] == 1)
-					DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], 0.3f*MenuContentTransp, GetText(MissionDescr[i]));
+					vw_DrawFont(X1+20+64, Y1+33, 0, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, GetText(MissionDescr[i]));
 				else
-					DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], 0.3f*MenuContentTransp, MissionDescr[i]);
+					vw_DrawFont(X1+20+64, Y1+33, 0, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, MissionDescr[i]);
 			}
 			else
 			{
 				if (MissionDescrType[i] == 1)
-					DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], 0.3f*MenuContentTransp, GetText(MissionDescr[i]));
+					vw_DrawFont(X1+20+64, Y1+33, 750-30-64, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, GetText(MissionDescr[i]));
 				else
-					DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], 0.3f*MenuContentTransp, MissionDescr[i]);
+					vw_DrawFont(X1+20+64, Y1+33, 750-30-64, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, MissionDescr[i]);
 			}
 		}
 
@@ -458,36 +516,36 @@ void MissionMenu()
 					vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(MissionIcon[i]), true, MenuContentTransp);
 
 
-				int SizeI = FontSize(GetText(MissionTitle[i]));
+				int SizeI = vw_FontSize(GetText(MissionTitle[i]));
 				if (SizeI < 750-30-64)
 				{
 					if (MissionTitleType[i] == 1)
-						DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], MenuContentTransp, GetText(MissionTitle[i]));
+						vw_DrawFont(X1+20+64, Y1+9, 0, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, GetText(MissionTitle[i]));
 					else
-						DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], MenuContentTransp, MissionTitle[i]);
+						vw_DrawFont(X1+20+64, Y1+9, 0, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, MissionTitle[i]);
 				}
 				else
 				{
 					if (MissionTitleType[i] == 1)
-						DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], MenuContentTransp, GetText(MissionTitle[i]));
+						vw_DrawFont(X1+20+64, Y1+9, 750-30-64, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, GetText(MissionTitle[i]));
 					else
-						DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], MenuContentTransp, MissionTitle[i]);
+						vw_DrawFont(X1+20+64, Y1+9, 750-30-64, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, MissionTitle[i]);
 				}
-				SizeI = FontSize(GetText(MissionDescr[i]));
+				SizeI = vw_FontSize(GetText(MissionDescr[i]));
 				if (SizeI < 750-30-64)
 				{
 					if (MissionDescrType[i] == 1)
-						DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], MenuContentTransp, GetText(MissionDescr[i]));
+						vw_DrawFont(X1+20+64, Y1+33, 0, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, GetText(MissionDescr[i]));
 					else
-						DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], MenuContentTransp, MissionDescr[i]);
+						vw_DrawFont(X1+20+64, Y1+33, 0, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, MissionDescr[i]);
 
 				}
 				else
 				{
 					if (MissionDescrType[i] == 1)
-						DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], MenuContentTransp, GetText(MissionDescr[i]));
+						vw_DrawFont(X1+20+64, Y1+33, 750-30-64, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, GetText(MissionDescr[i]));
 					else
-						DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], MenuContentTransp, MissionDescr[i]);
+						vw_DrawFont(X1+20+64, Y1+33, 750-30-64, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, MissionDescr[i]);
 				}
 
 
@@ -540,37 +598,37 @@ void MissionMenu()
 				if (MissionIcon != 0)
 					vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(MissionIcon[i]), true, 0.8f*MenuContentTransp);
 
-				int SizeI = FontSize(GetText(MissionTitle[i]));
+				int SizeI = vw_FontSize(GetText(MissionTitle[i]));
 				if (SizeI < 750-30-64)
 				{
 					if (MissionTitleType[i] == 1)
-						DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], 0.8f*MenuContentTransp, GetText(MissionTitle[i]));
+						vw_DrawFont(X1+20+64, Y1+9, 0, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, GetText(MissionTitle[i]));
 					else
-						DrawFont(X1+20+64, Y1+9, 0, 0, MissionTitleColor[i], 0.8f*MenuContentTransp, MissionTitle[i]);
+						vw_DrawFont(X1+20+64, Y1+9, 0, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, MissionTitle[i]);
 				}
 				else
 				{
 					if (MissionTitleType[i] == 1)
-						DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], 0.8f*MenuContentTransp, GetText(MissionTitle[i]));
+						vw_DrawFont(X1+20+64, Y1+9, 750-30-64, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, GetText(MissionTitle[i]));
 					else
-						DrawFont(X1+20+64, Y1+9, 750-30-64, 0, MissionTitleColor[i], 0.8f*MenuContentTransp, MissionTitle[i]);
+						vw_DrawFont(X1+20+64, Y1+9, 750-30-64, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, MissionTitle[i]);
 				}
 
-				SizeI = FontSize(GetText(MissionDescr[i]));
+				SizeI = vw_FontSize(GetText(MissionDescr[i]));
 				if (SizeI < 750-30-64)
 				{
 					if (MissionDescrType[i] == 1)
-						DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], 0.8f*MenuContentTransp, GetText(MissionDescr[i]));
+						vw_DrawFont(X1+20+64, Y1+33, 0, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, GetText(MissionDescr[i]));
 					else
-						DrawFont(X1+20+64, Y1+33, 0, 0, MissionDescrColor[i], 0.8f*MenuContentTransp, MissionDescr[i]);
+						vw_DrawFont(X1+20+64, Y1+33, 0, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, MissionDescr[i]);
 
 				}
 				else
 				{
 					if (MissionDescrType[i] == 1)
-						DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], 0.8f*MenuContentTransp, GetText(MissionDescr[i]));
+						vw_DrawFont(X1+20+64, Y1+33, 750-30-64, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, GetText(MissionDescr[i]));
 					else
-						DrawFont(X1+20+64, Y1+33, 750-30-64, 0, MissionDescrColor[i], 0.8f*MenuContentTransp, MissionDescr[i]);
+						vw_DrawFont(X1+20+64, Y1+33, 750-30-64, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, MissionDescr[i]);
 				}
 			}
 		}
@@ -599,7 +657,7 @@ void MissionMenu()
 	if (AllMission/5 < (AllMission*1.0f)/5.0f) AllPagesQuant++;
 
 	int AllCurPage = StartMission/5 + 1;
-	DrawFont(X1, Y1, 0, 0, 0, 0.5f*MenuContentTransp, GetText("3_Page_%i_of_%i"), AllCurPage, AllPagesQuant);
+	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, GetText("3_Page_%i_of_%i"), AllCurPage, AllPagesQuant);
 
 
 

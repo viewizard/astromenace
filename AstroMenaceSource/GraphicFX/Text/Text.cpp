@@ -33,7 +33,6 @@
 
 #include "Text.h"
 
-void DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, int CharSet, float Transp, const char *Text, ...);
 
 
 //-----------------------------------------------------------------------------
@@ -104,7 +103,35 @@ bool CText::Update(float Time)
 void CText::Draw()
 {
 	if (DrawText != 0)
-		DrawFont(PosX, PosY, 0, 0, Color, 1.0f, DrawText);
+	{
+		float R=1.0f;
+		float G=1.0f;
+		float B=1.0f;
+
+		switch (Color)
+		{
+			case 0: // белый
+				R=1.0f;G=1.0f;B=1.0f;
+				break;
+			case 1: // желтый
+				R=1.0f;G=1.0f;B=0.0f;
+				break;
+			case 2: // красный
+				R=1.0f;G=0.0f;B=0.0f;
+				break;
+			case 3: // зеленый
+				R=0.0f;G=1.0f;B=0.0f;
+				break;
+			case 4: // оранжевый
+				R=1.0f;G=0.5f;B=0.0f;
+				break;
+			case 5: // серый
+				R=0.5f;G=0.5f;B=0.5f;
+				break;
+		}
+
+		vw_DrawFont(PosX, PosY, 0, 0, 1.0f, R,G,B, 1.0f, DrawText);
+	}
 }
 
 

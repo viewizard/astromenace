@@ -53,7 +53,7 @@ void InterfaceMenu()
 
 
 
-	DrawFont(X1, Y1, 0, 0, 0, MenuContentTransp, GetText("3_Menu_Language"));
+	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Menu_Language"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, false))
 	{
 		Options_MenuLanguage--;
@@ -69,19 +69,19 @@ void InterfaceMenu()
 	switch (Options_MenuLanguage)
 	{
 		case 1:
-			Size = FontSize("English");
+			Size = vw_FontSize("English");
 			SizeI = (170-Size)/2;
-			DrawFont(X1+438+SizeI, Y1, 0, 0, 0, MenuContentTransp, "English");
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "English");
 			break;
 		case 2:
-			Size = FontSize("Deutsch");
+			Size = vw_FontSize("Deutsch");
 			SizeI = (170-Size)/2;
-			DrawFont(X1+438+SizeI, Y1, 0, 0, 0, MenuContentTransp, "Deutsch");
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Deutsch");
 			break;
 		case 3:
-			Size = FontSize("Русский");
+			Size = vw_FontSize("Русский");
 			SizeI = (170-Size)/2;
-			DrawFont(X1+438+SizeI, Y1, 0, 0, 0, MenuContentTransp, "Русский");
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Русский");
 			break;
 	}
 
@@ -90,7 +90,7 @@ void InterfaceMenu()
 
 
 	Y1 += Prir1;
-	DrawFont(X1, Y1, 0, 0, 0, MenuContentTransp, GetText("3_Voice_Language"));
+	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Voice_Language"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, false))
 	{
 		Options_VoiceLanguage--;
@@ -105,19 +105,19 @@ void InterfaceMenu()
 	switch (Options_VoiceLanguage)
 	{
 		case 1:
-			Size = FontSize("English");
+			Size = vw_FontSize("English");
 			SizeI = (170-Size)/2;
-			DrawFont(X1+438+SizeI, Y1, 0, 0, 0, MenuContentTransp, "English");
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "English");
 			break;
 		case 2:
-			Size = FontSize("Deutsch");
+			Size = vw_FontSize("Deutsch");
 			SizeI = (170-Size)/2;
-			DrawFont(X1+438+SizeI, Y1, 0, 0, 0, MenuContentTransp, "Deutsch");
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Deutsch");
 			break;
 		case 3:
-			Size = FontSize("Русский");
+			Size = vw_FontSize("Русский");
 			SizeI = (170-Size)/2;
-			DrawFont(X1+438+SizeI, Y1, 0, 0, 0, MenuContentTransp, "Русский");
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Русский");
 			break;
 	}
 

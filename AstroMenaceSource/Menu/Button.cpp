@@ -6,10 +6,10 @@
 
 	File name: Button.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -125,14 +125,14 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 	// получаем длину текста
-	int Size = FontSize(Text);
+	int Size = vw_FontSize(Text);
 	// находим смещение текста
 	int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
 	// рисуем текст
 	if (!ON)
-		DrawFont(SizeI, Y+21, 0, 0, 0, (0.7f*Transp)/2.0f, Text);
+		vw_DrawFont(SizeI, Y+21, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 	else
-		DrawFont(SizeI, Y+21, 0, 0, 0, Transp, Text);
+		vw_DrawFont(SizeI, Y+21, 0, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
 		if (vw_GetWindowLBMouse(true))
@@ -177,9 +177,9 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button256_off.tga"), true, Transp);
 
 
-		int Size = FontSize(Text);
+		int Size = vw_FontSize(Text);
 		int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
-		DrawFont(SizeI, Y+21, 0, 0, 0, (0.7f*Transp)/2.0f, Text);
+		vw_DrawFont(SizeI, Y+21, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 
 		SetRect(&DstRest,X+2,Y+1,X+256,Y+63);
 		if  (((DstRest.right  >= MouseX)&
@@ -265,14 +265,14 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button256_in.tga"), true, Transp);
 
 	// получаем длину текста
-	int Size = FontSize(Text);
+	int Size = vw_FontSize(Text);
 	// находим смещение текста
 	int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
 	// рисуем текст
 	if (!ON)
-		DrawFont(SizeI, Y+21, 0, 0, 0, (0.7f*Transp)/2.0f, Text);
+		vw_DrawFont(SizeI, Y+21, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 	else
-		DrawFont(SizeI, Y+21, 0, 0, 0, Transp, Text);
+		vw_DrawFont(SizeI, Y+21, 0, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
 		if (vw_GetWindowLBMouse(true))
@@ -306,9 +306,9 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button_dialog200_off.tga"), true, Transp);
 
 
-		int Size = FontSize(Text);
+		int Size = vw_FontSize(Text);
 		int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
-		DrawFont(SizeI, Y+6, 0, 0, 0, (0.7f*Transp)/2.0f, Text);
+		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 
 		SetRect(&DstRest,X,Y,X+204,Y+35);
 		if  (((DstRest.right  >= MouseX)&
@@ -375,14 +375,14 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 
 
 	// получаем длину текста
-	int Size = FontSize(Text);
+	int Size = vw_FontSize(Text);
 	// находим смещение текста
 	int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
 	// рисуем текст
 	if (!ON)
-		DrawFont(SizeI, Y+6, 0, 0, 0, (0.7f*Transp)/2.0f, Text);
+		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 	else
-		DrawFont(SizeI, Y+6, 0, 0, 0, Transp, Text);
+		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
 		if (vw_GetWindowLBMouse(true))
@@ -412,9 +412,9 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off)
 		SetRect(&DstRest,X-14+2,Y-14+2,X+158-14-2,Y+64-14-2);
 		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button_dialog128_off.tga"), true, Transp);
 
-		int Size = FontSize(Text);
+		int Size = vw_FontSize(Text);
 		int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
-		DrawFont(SizeI, Y+6, 0, 0, 0, (0.7f*Transp)/2.0f, Text);
+		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 
 		SetRect(&DstRest,X,Y,X+132,Y+35);
 		if  (((DstRest.right  >= MouseX)&
@@ -480,14 +480,14 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off)
 
 
 	// получаем длину текста
-	int Size = FontSize(Text);
+	int Size = vw_FontSize(Text);
 	// находим смещение текста
 	int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
 	// рисуем текст
 	if (!ON)
-		DrawFont(SizeI, Y+6, 0, 0, 0, (0.7f*Transp)/2.0f, Text);
+		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 	else
-		DrawFont(SizeI, Y+6, 0, 0, 0, Transp, Text);
+		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
 		if (vw_GetWindowLBMouse(true))
@@ -520,7 +520,7 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 
 
 	// получаем длину текста
-	int Size = FontSize(Text);
+	int Size = vw_FontSize(Text);
 
 	bool ON = false;
 	bool CanClick = false;
@@ -547,9 +547,9 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 	SetRect(&SrcRest,0,0,40,38);
 	SetRect(&DstRest,X,Y,X+40,Y+38);
 	if (!ON || DragWeapon)
-		DrawFont(X+40+20, Y+8, 0, 0, 0, Transp, Text);
+		vw_DrawFont(X+40+20, Y+8, 0, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 	else
-		DrawFont(X+40+20, Y+8, 0, 0, 4, Transp, Text);
+		vw_DrawFont(X+40+20, Y+8, 0, 0, 1.0f, 1.0f,0.5f,0.0f, Transp, Text);
 
 	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/checkbox_main.tga"), true, Transp);
 	if (*CheckBoxStatus)

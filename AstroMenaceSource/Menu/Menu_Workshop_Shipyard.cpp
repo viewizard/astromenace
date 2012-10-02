@@ -496,8 +496,6 @@ void Workshop_Shipyard()
 	RECT SrcRest, DstRest;
 
 
-
-
 	// затемнение
 	SetRect(&SrcRest,0,0,256,256 );
 	SetRect(&DstRest,Setup.iAspectRatioWidth/2-480,100-32,Setup.iAspectRatioWidth/2-32,450+32);
@@ -521,13 +519,11 @@ void Workshop_Shipyard()
 
 
 	// на новом корабле
-	SetCurrentFontScale(1.5f);
-	DrawFont(64, 600, 0, 0, 0, MenuContentTransp, GetText("7_Ships_Stock"));
-	SetCurrentFontScale(1.0f);
+	vw_DrawFont(Setup.iAspectRatioWidth/2-445, 600, 0, 0, 1.5f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("7_Ships_Stock"));
 
 
 	// вывод названия корабля
-	DrawFont(Setup.iAspectRatioWidth/2-448, 50+6, 0, 0, 1, MenuContentTransp, GetText("7_shipfullname"), GetText(GetWorkshopShipName(CurrentWorkshopNewFighter)), 1);
+	vw_DrawFont(Setup.iAspectRatioWidth/2-448, 50+6, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, GetText("7_shipfullname"), GetText(GetWorkshopShipName(CurrentWorkshopNewFighter)), 1);
 	if (DrawButton128_2(Setup.iAspectRatioWidth/2-197,50, GetText("1_Info"), MenuContentTransp, false))
 	{
 		SetCurrentDialogBox(6);
@@ -536,21 +532,21 @@ void Workshop_Shipyard()
 
 
 	// находим смещение, чтобы было красиво
-	int SmSizeI = FontSize(GetText("4_Armor:"));
-	int SmSizeI2 = FontSize(GetText("4_Weapons"));
+	int SmSizeI = vw_FontSize(GetText("4_Armor:"));
+	int SmSizeI2 = vw_FontSize(GetText("4_Weapons"));
 	if (SmSizeI < SmSizeI2) SmSizeI = SmSizeI2;
 
-	DrawFont(Setup.iAspectRatioWidth/2-78-40-SmSizeI, 110, 0, 0, 0, 0.5f*MenuContentTransp, GetText("4_Armor:"));
-	DrawFont(Setup.iAspectRatioWidth/2-78-FontSize("%i", (int)WorkshopNewFighter->StrengthStart), 110, 0, 0, 0, 0.5f*MenuContentTransp, "%i", (int)WorkshopNewFighter->StrengthStart);
+	vw_DrawFont(Setup.iAspectRatioWidth/2-78-40-SmSizeI, 110, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, GetText("4_Armor:"));
+	vw_DrawFont(Setup.iAspectRatioWidth/2-78-vw_FontSize("%i", (int)WorkshopNewFighter->StrengthStart), 110, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, "%i", (int)WorkshopNewFighter->StrengthStart);
 
-	DrawFont(Setup.iAspectRatioWidth/2-78-40-SmSizeI, 130, 0, 0, 0, 0.5f*MenuContentTransp, "%s:", GetText("4_Weapons"));
-	DrawFont(Setup.iAspectRatioWidth/2-78-FontSize("%i", WorkshopNewFighter->WeaponQuantity), 130, 0, 0, 0, 0.5f*MenuContentTransp, "%i", WorkshopNewFighter->WeaponQuantity);
+	vw_DrawFont(Setup.iAspectRatioWidth/2-78-40-SmSizeI, 130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, "%s:", GetText("4_Weapons"));
+	vw_DrawFont(Setup.iAspectRatioWidth/2-78-vw_FontSize("%i", WorkshopNewFighter->WeaponQuantity), 130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, "%i", WorkshopNewFighter->WeaponQuantity);
 
 	// вывод стоимости корабля
 	if (CanBuy)
-		DrawFont(Setup.iAspectRatioWidth/2-438, 420, 0, 0, 0, MenuContentTransp, "%s: %i", GetText("7_Ship_Hull_Cost"), GetWorkshopShipCost(CurrentWorkshopNewFighter));
+		vw_DrawFont(Setup.iAspectRatioWidth/2-438, 420, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s: %i", GetText("7_Ship_Hull_Cost"), GetWorkshopShipCost(CurrentWorkshopNewFighter));
 	else
-		DrawFont(Setup.iAspectRatioWidth/2-438, 420, 0, 0, 4, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("7_Ship_Hull_Cost"), GetWorkshopShipCost(CurrentWorkshopNewFighter));
+		vw_DrawFont(Setup.iAspectRatioWidth/2-438, 420, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("7_Ship_Hull_Cost"), GetWorkshopShipCost(CurrentWorkshopNewFighter));
 
 
 
@@ -589,12 +585,10 @@ void Workshop_Shipyard()
 
 
 	// на корабле игрока
-	SetCurrentFontScale(1.5f);
-	DrawFont(Setup.iAspectRatioWidth-64-FontSize(GetText("7_Player_Ship")), 600, 0, 0, 0, MenuContentTransp, GetText("7_Player_Ship"));
-	SetCurrentFontScale(1.0f);
+	vw_DrawFont(Setup.iAspectRatioWidth/2+445-vw_FontSize(GetText("7_Player_Ship"))*1.5f, 600, 0, 0, 1.5f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("7_Player_Ship"));
 
 	// вывод названия корабля
-	DrawFont(Setup.iAspectRatioWidth/2+64, 56, 0, 0, 1, MenuContentTransp, GetText("7_shipfullname"), GetText(GetWorkshopShipName(Setup.Profile[CurrentProfile].Ship)), Setup.Profile[CurrentProfile].ShipHullUpgrade);
+	vw_DrawFont(Setup.iAspectRatioWidth/2+64, 56, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, GetText("7_shipfullname"), GetText(GetWorkshopShipName(Setup.Profile[CurrentProfile].Ship)), Setup.Profile[CurrentProfile].ShipHullUpgrade);
 
 	if (DrawButton128_2(Setup.iAspectRatioWidth/2+315, 50, GetText("1_Info"), MenuContentTransp, false))
 	{
@@ -617,9 +611,9 @@ void Workshop_Shipyard()
 	{
 		if (Setup.Profile[CurrentProfile].Money < GetWorkshopShipCost(Setup.Profile[CurrentProfile].Ship)) CanUpgrade = false;
 		if (CanUpgrade)
-			DrawFont(Setup.iAspectRatioWidth/2+438-FontSize("%s: %i", GetText("7_Upgrade_Hull_Cost"), GetWorkshopShipCost(Setup.Profile[CurrentProfile].Ship)), LinePos, 0, 0, 0, MenuContentTransp, "%s: %i", GetText("7_Upgrade_Hull_Cost"), GetWorkshopShipCost(Setup.Profile[CurrentProfile].Ship));
+			vw_DrawFont(Setup.iAspectRatioWidth/2+438-vw_FontSize("%s: %i", GetText("7_Upgrade_Hull_Cost"), GetWorkshopShipCost(Setup.Profile[CurrentProfile].Ship)), LinePos, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s: %i", GetText("7_Upgrade_Hull_Cost"), GetWorkshopShipCost(Setup.Profile[CurrentProfile].Ship));
 		else
-			DrawFont(Setup.iAspectRatioWidth/2+438-FontSize("%s: %i", GetText("7_Upgrade_Hull_Cost"), GetWorkshopShipCost(Setup.Profile[CurrentProfile].Ship)), LinePos, 0, 0, 4, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("7_Upgrade_Hull_Cost"), GetWorkshopShipCost(Setup.Profile[CurrentProfile].Ship));
+			vw_DrawFont(Setup.iAspectRatioWidth/2+438-vw_FontSize("%s: %i", GetText("7_Upgrade_Hull_Cost"), GetWorkshopShipCost(Setup.Profile[CurrentProfile].Ship)), LinePos, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("7_Upgrade_Hull_Cost"), GetWorkshopShipCost(Setup.Profile[CurrentProfile].Ship));
 
 		LinePos -= 20;
 	}
@@ -629,33 +623,33 @@ void Workshop_Shipyard()
 	bool NeedRepair = false;
 	if (GetWorkshopShipRepairCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame) > 0)
 	{
-		SizeI = FontSize("%s: %i", GetText("7_Repair_Hull_Cost"), GetWorkshopShipRepairCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame));
-		DrawFont(Setup.iAspectRatioWidth/2+438-SizeI, LinePos, 0, 0, 2, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("7_Repair_Hull_Cost"), GetWorkshopShipRepairCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame));
+		SizeI = vw_FontSize("%s: %i", GetText("7_Repair_Hull_Cost"), GetWorkshopShipRepairCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame));
+		vw_DrawFont(Setup.iAspectRatioWidth/2+438-SizeI, LinePos, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("7_Repair_Hull_Cost"), GetWorkshopShipRepairCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame));
 		LinePos -= 20;
 		NeedRepair = true;
 
 		// надпись Armor, красная
-		DrawFont(Setup.iAspectRatioWidth/2+74, 110, 0, 0, 0, 0.5f*MenuContentTransp, GetText("4_Armor:"));
-		SizeI = FontSize("%i/%i", (int)WorkshopFighterGame->Strength, (int)WorkshopFighterGame->StrengthStart);
-		DrawFont(Setup.iAspectRatioWidth/2+74+14+SmSizeI, 110, 0, 0, 2, CurrentAlert3*MenuContentTransp, "%i/%i", (int)WorkshopFighterGame->Strength, (int)WorkshopFighterGame->StrengthStart);
+		vw_DrawFont(Setup.iAspectRatioWidth/2+74, 110, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, GetText("4_Armor:"));
+		SizeI = vw_FontSize("%i/%i", (int)WorkshopFighterGame->Strength, (int)WorkshopFighterGame->StrengthStart);
+		vw_DrawFont(Setup.iAspectRatioWidth/2+74+14+SmSizeI, 110, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, "%i/%i", (int)WorkshopFighterGame->Strength, (int)WorkshopFighterGame->StrengthStart);
 	}
 	else
 	{	// надпись Armor, нормальная
-		DrawFont(Setup.iAspectRatioWidth/2+74, 110, 0, 0, 0, 0.5f*MenuContentTransp, GetText("4_Armor:"));
-		SizeI = FontSize("%i/%i", (int)WorkshopFighterGame->Strength, (int)WorkshopFighterGame->StrengthStart);
-		DrawFont(Setup.iAspectRatioWidth/2+74+14+SmSizeI, 110, 0, 0, 0, 0.5f*MenuContentTransp, "%i/%i", (int)WorkshopFighterGame->Strength, (int)WorkshopFighterGame->StrengthStart);
+		vw_DrawFont(Setup.iAspectRatioWidth/2+74, 110, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, GetText("4_Armor:"));
+		SizeI = vw_FontSize("%i/%i", (int)WorkshopFighterGame->Strength, (int)WorkshopFighterGame->StrengthStart);
+		vw_DrawFont(Setup.iAspectRatioWidth/2+74+14+SmSizeI, 110, 0, 0,1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, "%i/%i", (int)WorkshopFighterGame->Strength, (int)WorkshopFighterGame->StrengthStart);
 	}
 
-	SizeI = SizeI - FontSize("%i", WorkshopFighterGame->WeaponQuantity);
-	DrawFont(Setup.iAspectRatioWidth/2+74, 130, 0, 0, 0, 0.5f*MenuContentTransp, "%s:", GetText("4_Weapons"));
-	DrawFont(Setup.iAspectRatioWidth/2+74+14+SmSizeI+SizeI, 130, 0, 0, 0, 0.5f*MenuContentTransp, "%i", WorkshopFighterGame->WeaponQuantity);
+	SizeI = SizeI - vw_FontSize("%i", WorkshopFighterGame->WeaponQuantity);
+	vw_DrawFont(Setup.iAspectRatioWidth/2+74, 130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, "%s:", GetText("4_Weapons"));
+	vw_DrawFont(Setup.iAspectRatioWidth/2+74+14+SmSizeI+SizeI, 130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, "%i", WorkshopFighterGame->WeaponQuantity);
 
 
 
 
 	// вывод стоимости корабля (со всеми системами)
-	SizeI = FontSize("%s: %i", GetText("7_Ship_Cost"), GetWorkshopShipFullCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame));
-	DrawFont(Setup.iAspectRatioWidth/2+438-SizeI, LinePos, 0, 0, 0, MenuContentTransp, "%s: %i", GetText("7_Ship_Cost"), GetWorkshopShipFullCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame));
+	SizeI = vw_FontSize("%s: %i", GetText("7_Ship_Cost"), GetWorkshopShipFullCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame));
+	vw_DrawFont(Setup.iAspectRatioWidth/2+438-SizeI, LinePos, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s: %i", GetText("7_Ship_Cost"), GetWorkshopShipFullCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame));
 
 
 	// рамки
@@ -682,13 +676,11 @@ void Workshop_Shipyard()
 
 
 	// вывод информации
-	SetCurrentFontScale(1.25f);
-	SizeI = (Setup.iAspectRatioWidth-FontSize("%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money))/2;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money)*1.25f)/2;
 	if (CanBuy)
-		DrawFont(SizeI, 630, 0, 0, 1, MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
+		vw_DrawFont(SizeI, 630, 0, 0, 1.25f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
 	else
-		DrawFont(SizeI, 630, 0, 0, 4, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
-	SetCurrentFontScale(1.0f);
+		vw_DrawFont(SizeI, 630, 0, 0, 1.25f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
 }
 
 

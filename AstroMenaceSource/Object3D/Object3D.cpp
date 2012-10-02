@@ -36,7 +36,6 @@
 
 extern GameSetup Setup;
 extern eDevCaps CAPS;
-void DrawFont3D(float X, float Y, float Z, const char *Text, ...);
 
 // флаг, показывать боксы или нет (1>AABB, 2>OBB, 3>HitBB)
 int NeedShowBB = 0;
@@ -1144,7 +1143,7 @@ void CObject3D::Draw()
 	// вывод отладочной информации, если она есть
 	if (DebugInfo != 0)
 	{
-		DrawFont3D(Location.x, Location.y+AABB[0].y, Location.z, DebugInfo);
+		vw_DrawFont3D(Location.x, Location.y+AABB[0].y, Location.z, DebugInfo);
 	}
 
 

@@ -6,10 +6,10 @@
 
 	File name: Loop_proc.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -221,9 +221,9 @@ void Loop_Proc()
 	if (Setup.ShowFPS)
 	{
 		// фпс
-		DrawFont(6,5, 0, 0, 0, 0.99f, "%s %.1f", GetText("11_fps"), eFPS);
+		vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f", GetText("11_fps"), eFPS);
 		// кол-во прорисовываемых триугольников
-		DrawFont(6,25, 0, 0, 0, 0.99f, "%s %i", GetText("11_triangles"), vw_GetPrimCount());
+		vw_DrawFont(6,25, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %i", GetText("11_triangles"), vw_GetPrimCount());
 	}
 
 

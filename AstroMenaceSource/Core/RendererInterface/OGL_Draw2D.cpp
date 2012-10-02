@@ -5,10 +5,10 @@
 
 	File name: OGL_Draw2D.cpp
 
-	Copyright (c) 2003-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2003-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -198,6 +198,8 @@ void vw_DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, bool Alpha,
 {
 
 	if (Tex == 0) return;
+	if (Transp <= 0.0f) return;
+	if (Transp > 1.0f) Transp = 1.0f;
 
 	float AW;
 	float AH;
@@ -250,20 +252,6 @@ void vw_DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, bool Alpha,
 	float *tmp = 0;
 	tmp = new float[(2+2)*4]; if (tmp == 0) return;
 	int k=0;
-	if (Transp > 1.0f) Transp = 1.0f;
-	if (Transp <= 0)
-	{
-		if (Tex != 0)
-		{
-			vw_SetTexAlpha(false, 0.5f);
-			vw_SetTextureDef(0);
-		}
-		if (tmp != 0){delete [] tmp; tmp = 0;}
-		return;
-	}
-
-	vw_SetColor(R, G, B, Transp);
-
 
 	tmp[k++] = X;
 	tmp[k++] = Y +tmpPosY + (DstRest->bottom - DstRest->top);
