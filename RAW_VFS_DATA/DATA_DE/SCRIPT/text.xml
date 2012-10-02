@@ -20,8 +20,8 @@
 <item id="1_OK">OK</item>
 <item id="1_On">An</item>
 <item id="1_Off">Aus</item>
-<item id="1_Decrease">Verringern</item>
-<item id="1_Increase">Erhöhen</item>
+<item id="1_Decrease">-</item><!--Verringern-->
+<item id="1_Increase">+</item><!--Erhöhen-->
 <item id="1_Video_%s_Audio">Video %s Audio</item>
 <item id="1_Config_Controls">Tastenbelegung</item>
 <item id="1_Interface">Ausblick</item>
@@ -32,8 +32,8 @@
 <item id="1_Arcade">Spielhalle</item>
 <item id="1_Sim">Simulation</item><!--Simulative-->
 <item id="1_BACK">ZURÜCK</item>
-<item id="1_Prev">Vorheriges</item><!--HE: VORHERIGER SHE: VORHERIGE IT: VORHERIGES-->
-<item id="1_Next">Weiter</item><!--HE: NÄCHSTER SHE: NÄCHSTE IT: NÄCHSTES-->
+<item id="1_Prev">Vorh</item><!--HE: VORHERIGER SHE: VORHERIGE IT: VORHERIGES-->
+<item id="1_Next">Näch</item><!--HE: NÄCHSTER SHE: NÄCHSTE IT: NÄCHSTES-->
 <item id="1_APPLY">ANWENDEN</item>
 <item id="1_Create">Anlegen</item>
 <item id="1_Difficulty">Schwierigkeit</item>
@@ -166,7 +166,7 @@
 <item id="3_Killed">Vernichtet</item>
 <item id="3_Bonus">Bonus</item>
 <item id="3_Total">Total</item>
-<item id="3_Background_Tile_Animation">Hintergrundkacheln Animation</item>
+<item id="3_Background_Tile_Animation">Hintergrundkacheln</item>
 <item id="3_Textures_Compression">Texturen Kompression</item>
 <item id="3_Mipmap_LOD_Management">Mipmap LOD Verwaltung</item>
 <item id="3_OpenGL_Shading_Language">OpenGL  Schattierungssprache</item>
@@ -203,9 +203,9 @@
 <item id="4_Weapon">Waffe</item>
 <item id="4_Weapons">Waffen</item>
 <item id="4_Weapons_Slots:">Waffenschächte:</item>
-<item id="4_Alien_Spaceships">Alienraumschiffe</item> <!-- or Außerirdische Raumschiffe -->
-<item id="4_Alien_Motherships">Alien Mutterschiffe</item>
-<item id="4_Pirate_Spaceships">Piratenraumschiffe</item>
+<item id="4_Alien_Spaceships">Außerirdische</item> <!-- or Außerirdische Raumschiffe -->
+<item id="4_Alien_Motherships">Mutterschiffe</item>
+<item id="4_Pirate_Spaceships">Piraten</item>
 <item id="4_Pirate_Vehicles">Piratenfahrzeuge</item>
 <item id="4_Pirate_Buildings">Piratenbauten</item>
 <item id="4_Asteroids">Asteroiden</item>
@@ -259,7 +259,7 @@
 <item id="4_Enemy">Feind</item>
 <item id="4_Damage:">Schaden:</item>
 <item id="4_MotherShip">Mutterschiff</item>
-<item id="4_Pirate_Ship">Piratenschiff</item>
+<item id="4_Pirate_Ship">Piraten</item>
 <item id="4_Pirates">Piraten</item>
 <item id="4_Marauder">Plünderer</item> 
 <item id="4_Warder">Wächter</item> <!-- or Wärter or Wächter -->
@@ -335,9 +335,9 @@
 <!-- Menu's texts (objects description in the information menu) -->
 <itemlist id="5">
 
-<item id="5_FighterLine1">Der Jäger ist ein Raumschiff, welches in erster Linie zum Angriff auf andere</item>
-<item id="5_FighterLine2">Raumschiffe konstruiert wurde. Jäger sind vergleichsweise schnell, beweglich und</item>
-<item id="5_FighterLine3">mit Primär- und Sekundärwaffen ausgestattet, um andere Raumschiffe anzugreifen.</item>
+<item id="5_FighterLine1">Der Jäger ist ein Raumschiff, welches in erster Linie zum Angriff auf</item>
+<item id="5_FighterLine2">andere Raumschiffe konstruiert wurde. Jäger sind beweglich und mit</item>
+<item id="5_FighterLine3">Primär- und Sekundärwaffen ausgestattet, um andere Raumschiffe anzugreifen.</item>
 
 <item id="5_InterceptorLine1">Der Abfangjäger wurde konstruiert um feindliche Raumschiffe</item>
 <item id="5_InterceptorLine2">abzufangen und zu zerstören. Abfangjäger sind sehr schnell und</item>
@@ -367,9 +367,9 @@
 <item id="5_PlasmaLine2">die Erhitzung von irgendeinem Material auf extrem hohe Temperaturen, oder durch</item>
 <item id="5_PlasmaLine3">Bombardierung mit einem starken Strom an Hochenergiephotonen, gewonnen wird.</item>
 
-<item id="5_MaserLine1">Maserwaffen, erzeugen kohärente elektromagnetische Wellen im Mikrowellenbereich.</item>
-<item id="5_MaserLine2">Die Mikrowellen werden mit enormer Energie gerichtet abgestrahlt.</item>
-<item id="5_MaserLine3">Beim Auftreffen werden damit verherende Wirkungen erzielt.</item>
+<item id="5_MaserLine1">Maserwaffen, erzeugen kohärente elektromagnetische Wellen im Mikrowellen-</item>
+<item id="5_MaserLine2">bereich. Die Mikrowellen werden mit enormer Energie gerichtet</item>
+<item id="5_MaserLine3">abgestrahlt. Beim Auftreffen werden damit verherende Wirkungen erzielt.</item>
 
 <item id="5_AntimatterLine1">Antimateriewaffen senden wie alle Partikelwaffen Teilchenströme aus. Diese</item>
 <item id="5_AntimatterLine2">Antipartikel sind aber anders herum geladen, dadurch haben die Protonen und</item>
@@ -403,17 +403,17 @@
 <item id="5_UnknownLine2">genügend Hinweise über den Zweck oder die Arbeitsweise.</item>
 <item id="5_UnknownLine3"></item>
 
-<item id="5_MarauderLine1">Plünderer wurden konstruiert, um andere Raumschiffe anzugreifen.</item>
-<item id="5_MarauderLine2">Die Plünderer sind sehr schnell, manöverierbar und mit Primär-</item>
-<item id="5_MarauderLine3">und Sekundärwaffensystemen ausgestattet um andere Raumschiffe zu attackieren.</item>
+<item id="5_MarauderLine1">Plünderer wurden konstruiert, um andere Raumschiffe anzugreifen. Die </item>
+<item id="5_MarauderLine2">Plünderer sind sehr schnell, manöverierbar und mit Primär- und</item>
+<item id="5_MarauderLine3">Sekundärwaffensystemen ausgestattet um andere Raumschiffe zu attackieren.</item>
 
-<item id="5_WarderLine1">Wächter wurden speziell als Teil des Basisverteidigungsystems konstruiert.</item>
-<item id="5_WarderLine2">Wächter sind sehr gut bewaffnet und jederzeit bereit</item>
+<item id="5_WarderLine1">Wächter wurden speziell als Teil des Basisverteidigungsystems</item>
+<item id="5_WarderLine2">konstruiert. Wächter sind sehr gut bewaffnet und jederzeit bereit</item>
 <item id="5_WarderLine3">einen schnellen Gegenangriff zu starten.</item>
 
 <item id="5_RaiderLine1">Gangster wurden speziell für weiträumige Angriffe konstruiert. Häufig in</item>
-<item id="5_RaiderLine2">kleinen Gruppen unterwegs, oder als Hauptangriffsmacht auch in grösseren Gruppen.</item>
-<item id="5_RaiderLine3">Im Gegensatz zu den Wächtern operieren die Gangster unter Plündererschutz.</item>
+<item id="5_RaiderLine2">kleinen Gruppen unterwegs, oder als Hauptangriffsmacht auch in grösseren</item>
+<item id="5_RaiderLine3">Gruppen. Operieren die Gangster unter Plündererschutz.</item>
 
 <item id="5_MissileCarrierLine1">Raketenträger sind speziell konstruiert für weiträumige Angriffe</item>
 <item id="5_MissileCarrierLine2">in großen Gruppen. Anders als die Gangster, können die Raketenträger</item>
@@ -432,8 +432,8 @@
 <item id="5_WeaponturretLine3">und können sich drehen.</item>
 
 <item id="5_ArmoredJeepLine1">Der gepanzerte Jeep besitzt eine Hülle, die ihn für den Nahkampf</item>
-<item id="5_ArmoredJeepLine2">prädistiniert. Gepanzerte Jeeps sind vergleichsweise schnell, manöverierfähig</item>
-<item id="5_ArmoredJeepLine3">und mit einem starken Waffensystem für den Angriff ausgestattet.</item>
+<item id="5_ArmoredJeepLine2">prädistiniert. Gepanzerte Jeeps sind vergleichsweise schnell, manöverier-</item>
+<item id="5_ArmoredJeepLine3">fähig und mit einem starken Waffensystem für den Angriff ausgestattet.</item>
 
 <item id="5_JeepLine1">Der Jeep ist ein militärisches Allradfahrzeug, gut geeignet für den rauhen </item>
 <item id="5_JeepLine2">Geländeeinsatz. Jeeps sind sehr schnell, manöverierfähig und mit</item>
@@ -483,7 +483,7 @@
 
 <item id="6_Mission1Descr">Sie kommen! Sie sind überall!!</item>
 <item id="6_Mission2Descr">Verdammte Gangster hier! Keine Gnade! Töte Sie Alle!</item>
-<item id="6_Mission3Descr">Unsere Basis liegt unter Beschuss! Stoppe den Alienangriff jetzt!</item>
+<item id="6_Mission3Descr">Unsere Basis liegt unter Beschuss!</item>
 <item id="6_Mission4Descr">Finde eine Piraten Basis in diesem Sektor!</item>
 <item id="6_Mission5Descr">Gib den Piraten keine Gelegenheit sich neu zu formieren!</item>
 <item id="6_Mission6Descr">Sie sind viel zu dicht! Du solltest etwas tun!!</item>
@@ -491,7 +491,7 @@
 <item id="6_Mission8Descr">Scheint, als erhielten die ALiens Verstärkung!</item>
 <item id="6_Mission9Descr">Das sollte ein Spaziergang sein! Mach schnell!</item>
 <item id="6_Mission10Descr">Unsere Spionage konnte nichts herausfinden. Eine Falle?</item>
-<item id="6_Mission11Descr">Keine Panik! Wir haben Verstärkung! Neu formieren und Angriff!</item>
+<item id="6_Mission11Descr">Keine Panik! Wir haben Verstärkung!</item>
 <item id="6_Mission12Descr">Sie sind nun zu schlau, und viel zu gefährlich!</item>
 <item id="6_Mission13Descr">Wir fanden ihren Hyper Port! Wir müssen ihn sofort zerstören!</item>
 <item id="6_Mission14Descr">Dieser Sektor muss sauber und sicher für immer sein!</item>
@@ -608,28 +608,6 @@
 
 
 
-<!-- Demo notes, for windows game version -->
-<itemlist id="8">
-
-<item id="8_Line1">ASTROMENACE FULL VERSION FEATURES</item>
-<item id="8_Line2">- 5 Piloten Profile auf Knopfdruck.</item>
-<item id="8_Line3">- Simulatition- und Spielhallen- Schiff Kontrolle.</item>
-<item id="8_Line4">- Vielfältige Einstellmöglichkeiten des Schwierigkeitsgrades.</item>
-<item id="8_Line5">- 22 spielbare Schiffe, mit individuellen Characteristiken.</item>
-<item id="8_Line6">- 19 unterschiedliche Waffen mit einfachen drag-and-drop austauschbar.</item>
-<item id="8_Line7">- 5 erweitertbare Schiffsysteme, die jeweils in 4 Punkten modifiziert werden können.</item>
-<item id="8_Line8">- Unbegrenztes Spiel ohne Grenzen.</item>
-<item id="8_Line9">- 15 Missionen mit > 100 unterschiedlichen Feinden und > 40 Raumobjekten.</item>
-<item id="8_Line10">- Mehr als 150 Minuten spielen.</item>
-<item id="8_Line11">Die Vollversion kostet 15,50 EUR. KAUFE JETZT, um diese Funktionen zu erhalten!</item>
-
-
-</itemlist>
-
-
-
-
-
 
 
 
@@ -641,25 +619,25 @@
 <item id="9_notshowtip">Diesen Tipp nicht wieder anzeigen.</item>
 
 <item id="9_9Line1">Es können fünf Pilotenprofile angelegt werden. Jedes Profil</item>
-<item id="9_9Line2">kann unterschiedliche Spielstände und Schwierigkeitsgrade enthalten.</item>
-<item id="9_9Line3">Um Platz für ein neues Profil zu schaffen, ein Profil löschen.</item>
-<item id="9_9Line4"></item>
-<item id="9_9Line5">Beachte, das der Schwierigkeitsgrad in Prozent pro einzelnes Pro-</item>
-<item id="9_9Line6">fil angegeben ist. Dieser Wert beeinflusst direkt die Erfahrungs-</item>
-<item id="9_9Line7">punktvergabe. Zum Beispiel, wenn du ein Feindschiff zerstörst, bringt</item>
-<item id="9_9Line8">das 100 Einheiten Geld und nur 65 Erfahrungspunkte, wenn der</item>
-<item id="9_9Line9">Schwierigkeitsgrad auf 65 Prozent für dieses Profil steht.</item>
+<item id="9_9Line2">kann unterschiedliche Spielstände und Schwierigkeitsgrade</item>
+<item id="9_9Line3">enthalten. Um Platz für ein neues Profil zu schaffen, ein</item>
+<item id="9_9Line4">Profil löschen. Beachte, das der Schwierigkeitsgrad in Prozent</item>
+<item id="9_9Line5">pro einzelnes Profil angegeben ist. Dieser Wert beeinflusst</item>
+<item id="9_9Line6">direkt die Erfahrungspunktvergabe. Zum Beispiel, wenn du</item>
+<item id="9_9Line7">ein Feindschiff zerstörst, bringt das 100 Einheiten Geld</item>
+<item id="9_9Line8">und nur 65 Erfahrungspunkte, wenn der Schwierigkeitsgrad</item>
+<item id="9_9Line9">auf 65 Prozent für dieses Profil steht.</item>
 <item id="9_9Line10">Hinweis: Du kannst vor dem start jeder Mission</item>
 <item id="9_9Line11">den Schwierkeitsgrad verändern.</item>
 
-<item id="9_10Line1">Es gibt mehr als 20 Raumschiffe, jedes mit besonderen Eigenschaften</item>
-<item id="9_10Line2">im Spiel. Auf der rechten Seite dieses Bildschirms ist dein Raumschiff</item>
+<item id="9_10Line1">Es gibt mehr als 20 Raumschiffe, jedes mit besonderen Eigensch-</item>
+<item id="9_10Line2">aften. Auf der rechten Seite dieses Bildschirms ist dein Raumschiff</item>
 <item id="9_10Line3">mit seinen Eigenschaften und Kosten dargestellt. Hier können auch</item>
 <item id="9_10Line4">grundlegende Dinge wie Reparatur und Schiffshüllenverstärkung</item>
-<item id="9_10Line5">durchgeführt werden. Die linke Seite enthält die Liste aller ver-</item>
-<item id="9_10Line6">fügbaren Schiffe mit ihren Eigenschaften. Vergiß nicht, das neben</item>
-<item id="9_10Line7">der Größe der Schiffe, die Anzahl der Waffenschächte und Art der</item>
-<item id="9_10Line8">Waffenschächte angegeben ist, was noch wichtiger ist.</item>
+<item id="9_10Line5">durchgeführt werden. Die linke Seite enthält die Liste aller</item>
+<item id="9_10Line6">verfügbaren Schiffe mit ihren Eigenschaften. Vergiß nicht, das</item>
+<item id="9_10Line7">neben der Größe der Schiffe, die Anzahl der Waffenschächte und</item>
+<item id="9_10Line8">Art der Waffenschächte angegeben ist, was noch wichtiger ist.</item>
 <item id="9_10Line9">Das grundlegende Schiffsbaukonzept ist wie folgt:</item>
 <item id="9_10Line10">Aufklärer - Leicht, schnell, wendig mit schwachen Waffen.</item>
 <item id="9_10Line11">Abfangjäger - Schnelle Schiffe mit leichten Waffen.</item>
@@ -670,9 +648,9 @@
 <item id="9_11Line1">Etliche von Systeme sind auf deinem Schiff installiert. Alle</item>
 <item id="9_11Line2">Systeme sind miteinander und mit den Waffensystemen und anderen</item>
 <item id="9_11Line3">Funktionen verbunden und spielen eine Rolle im Spiel.</item>
-<item id="9_11Line4">Achte auf die spezifischen Eigenheiten jedes einzelnen Systems und</item>
-<item id="9_11Line5">stimme die Systeme aufeinander ab, um ein gut ausgewogenes</item>
-<item id="9_11Line6">Schiff zu haben, mit dem du im Kampf bestehen kannst.</item>
+<item id="9_11Line4">Achte auf die spezifischen Eigenheiten jedes einzelnen Systems</item>
+<item id="9_11Line5">und stimme die Systeme aufeinander ab, um ein gut ausgewo-</item>
+<item id="9_11Line6">genes Schiff zu haben, mit dem du im Kampf bestehen kannst.</item>
 <item id="9_11Line7">Antrieb - Schiffsantrieb. Achte auf die Energieaufnahme</item>
 <item id="9_11Line8">Andernfalls könntest du ein bewegungsloses Schiff haben.</item>
 <item id="9_11Line9">Energie - Schiffsenergiequelle. Achte auf die zwei wichtigen </item>
@@ -690,14 +668,14 @@
 <item id="9_12Line4">Schacht passt, wenn der Level kleiner oder genauso groß wie der </item>
 <item id="9_12Line5">Schachtlevel ist (Level 1-5). Um eine Waffe zu verkaufen, ziehe</item>
 <item id="9_12Line6">die Waffe einfach aus den Schacht heraus auf die linke Seite.</item>
-<item id="9_12Line7">Die Waffe wird konfiguriert und aufgeladen über den Einstellknopf</item> <!-- noch anpassen -->
-<item id="9_12Line8">im rechten Teil der Waffenschachttafel.</item>
+<item id="9_12Line7">Die Waffe wird konfiguriert und aufgeladen über den</item> <!-- noch anpassen -->
+<item id="9_12Line8">Einstellknopf im rechten Teil der Waffenschachttafel.</item>
 <item id="9_12Line9">Die Haupttypen der Waffen nach Projektilen:</item>
-<item id="9_12Line10">Projektile - kleine Geschosse basierend auf Kugeln oder Energiestrahlen.</item>
-<item id="9_12Line11">Das ist die am meisten verbreitete Waffe im Spiel.</item>
+<item id="9_12Line10">Projektile - kleine Geschosse basierend auf Kugeln oder Ener-</item>
+<item id="9_12Line11">giestrahlen. Das ist die am meisten verbreitete Waffe.</item>
 <item id="9_12Line12">Angetriebene Projektile - Raketen, Torpedos und Atombomben.</item>
-<item id="9_12Line13">Der Nachteil dieser Waffengattung ist die geringe Fluggeschwindigkeit</item>
-<item id="9_12Line14">der Projektile und die Möglichkeit sie abzuschiessen.</item>
+<item id="9_12Line13">Der Nachteil dieser Waffengattung ist die geringe Fluggesch-</item>
+<item id="9_12Line14">windigkeit der Projektile.</item>
 <item id="9_12Line15">Strahl - Laser und Maser. Kurzstrecke und Hohe Energie-</item>
 <item id="9_12Line16">verbrauchende Waffen.</item>
 
@@ -774,16 +752,16 @@
 <item id="10_Tatiana_Savitskaya">Tatiana Savitskaya</item>
 
 <item id="10_3D_MODELING">3D MODELING</item>
-<item id="10_Max_Shelekhov">Max Shelekhov, 3drt.com</item>
+<item id="10_Max_Shelekhov">Max Shelekhov</item>
 <item id="10_Oleg_Linkov">Oleg Linkov</item>
 <item id="10_Egor_Kurteanu">Egor Kurteanu</item>
 
 <item id="10_MUSIC">MUSIC</item>
-<item id="10_Alexander_Matchugovsky">Alexander Matchugovsky, the SandS</item>
+<item id="10_Alexander_Matchugovsky">Alexander Matchugovsky</item>
 
 <item id="10_SOUND_EFFECTS">SOUND EFFECTS</item>
-<item id="10_Michael_Sirotkin">Michael Sirotkin, the SandS</item>
-<item id="10_Alexander_Vassilyevsky">Alexander Vassilyevsky, the SandS</item>
+<item id="10_Michael_Sirotkin">Michael Sirotkin</item>
+<item id="10_Alexander_Vassilyevsky">Alexander Vassilyevsky</item>
 
 <item id="10_VOICE">VOICE</item>
 <item id="10_Elena_Zavalishina_(en,_ru)">Elena Zavalishina (en, ru)</item>
@@ -793,7 +771,7 @@
 <item id="10_Pavel_Voylov">Pavel Voylov</item>
 
 <item id="10_TRANSLATOR">TRANSLATORS</item>
-<item id="10_Bernd_Dau_(de)">Bernd Dau (de), www.zockertown.de</item>
+<item id="10_Bernd_Dau_(de)">Bernd Dau (de)</item>
 <item id="10_Michael_Kurinnoy_(en,_ru)">Michael Kurinnoy (en, ru)</item>
 
 <item id="10_TESTERS">TESTERS</item>
@@ -833,7 +811,6 @@
 <!-- interface text -->
 <itemlist id="11">
 
-<item id="11_DEMO">DEMO</item>
 <item id="11_build">build</item>
 <item id="11_fps">fps</item>
 <item id="11_triangles">triangles</item>

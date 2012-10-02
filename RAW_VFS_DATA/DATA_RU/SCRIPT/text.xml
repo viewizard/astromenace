@@ -608,28 +608,6 @@
 
 
 
-<!-- Demo notes, for windows game version -->
-<itemlist id="8">
-
-<item id="8_Line1">ОСОБЕННОСТИ ПОЛНОЙ ВЕРСИИ ИГРЫ</item>
-<item id="8_Line2">- 5 Профилей Пилотов с легким доступом в одно нажатие.</item>
-<item id="8_Line3">- Симулятивное и аркадное управление кораблем.</item>
-<item id="8_Line4">- Действительно гибкая настройка сложности игры.</item>
-<item id="8_Line5">- 22 управляемых корабля с уникальными характеристиками.</item>
-<item id="8_Line6">- 19 уникальных оружия с простой установкой перетягиванием.</item>
-<item id="8_Line7">- 5 модернизируемых системы с 4 модификациями каждая.</item>
-<item id="8_Line8">- Отсутствие ограничений по времени и функционалу.</item>
-<item id="8_Line9">- 15 миссий с 100+ уникальных врагов и 40+ космических объектов.</item>
-<item id="8_Line10">- Более 150 минут развлечения.</item>
-<item id="8_Line11">Доступные способы оплаты: SMSкой(3$), WebMoney(75р) и другие(100р)</item>
-
-</itemlist>
-
-
-
-
-
-
 
 
 
@@ -773,16 +751,16 @@
 <item id="10_Tatiana_Savitskaya">Татьяна Савицкая</item>
 
 <item id="10_3D_MODELING">3Д МОДЕЛИ</item>
-<item id="10_Max_Shelekhov">Макс Шелехов, 3drt.com</item>
+<item id="10_Max_Shelekhov">Макс Шелехов</item>
 <item id="10_Oleg_Linkov">Олег Линьков</item>
 <item id="10_Egor_Kurteanu">Egor Kurteanu</item>
 
 <item id="10_MUSIC">МУЗЫКА</item>
-<item id="10_Alexander_Matchugovsky">Александр Мачуговский, the SandS</item>
+<item id="10_Alexander_Matchugovsky">Александр Мачуговский</item>
 
 <item id="10_SOUND_EFFECTS">ЗВУКОВЫЕ ЭФФЕКТЫ</item>
-<item id="10_Michael_Sirotkin">Михаил Сироткин, the SandS</item>
-<item id="10_Alexander_Vassilyevsky">Александр Васильевский, the SandS</item>
+<item id="10_Michael_Sirotkin">Михаил Сироткин</item>
+<item id="10_Alexander_Vassilyevsky">Александр Васильевский</item>
 
 <item id="10_VOICE">ГОЛОС</item>
 <item id="10_Elena_Zavalishina_(en,_ru)">Елена Завалишина (en, ru)</item>
@@ -792,7 +770,7 @@
 <item id="10_Pavel_Voylov">Павел Войлов</item>
 
 <item id="10_TRANSLATOR">ПЕРЕВОД</item>
-<item id="10_Bernd_Dau_(de)">Bernd Dau (de), www.zockertown.de</item>
+<item id="10_Bernd_Dau_(de)">Bernd Dau (de)</item>
 <item id="10_Michael_Kurinnoy_(en,_ru)">Михаил Куринной (en, ru)</item>
 
 <item id="10_TESTERS">ТЕСТЕРЫ</item>
@@ -830,7 +808,6 @@
 <!-- interface text -->
 <itemlist id="11">
 
-<item id="11_DEMO">ДЕМО</item>
 <item id="11_build">сборка</item>
 <item id="11_fps">fps</item>
 <item id="11_triangles">треугольников</item>

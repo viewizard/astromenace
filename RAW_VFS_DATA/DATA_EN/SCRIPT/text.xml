@@ -155,7 +155,7 @@
 <item id="3_New_Pilot_Profile">New Pilot Profile</item>
 <item id="3_Pilots_Profiles">Pilots Profiles</item>
 <item id="3_Money">Money</item>
-<item id="3_Experience">Experience</item>
+<item id="3_Experience">Exp</item>
 <item id="3_Difficulty">Difficulty</item>
 <item id="3_empty">empty</item>
 <item id="3_Current_Profile_Difficulty">Current Profile Difficulty</item>
@@ -336,9 +336,9 @@
 <!-- Menu's texts (objects description in the information menu) -->
 <itemlist id="5">
 
-<item id="5_FighterLine1">Fighter is a military spaceship primarily designed to attack other spaceships.</item>
-<item id="5_FighterLine2">Fighters are comparatively fast, maneuverable and equipped with primary and</item>
-<item id="5_FighterLine3">secondary weapon systems to attack other spaceships.</item>
+<item id="5_FighterLine1">Fighter is a military spaceship primarily designed to attack other space-</item>
+<item id="5_FighterLine2">ships. Fighters are comparatively fast, maneuverable and equipped with</item>
+<item id="5_FighterLine3">primary and secondary weapon systems to attack other spaceships.</item>
 
 <item id="5_InterceptorLine1">Interceptor is a type of fighter specifically designed to intercept and</item>
 <item id="5_InterceptorLine2">destroy enemy spaceships. Interceptors are very fast, maneuverable and</item>
@@ -356,9 +356,9 @@
 <item id="5_ScoutLine2">about the enemy or other objects by means of physical observation. Scouts</item>
 <item id="5_ScoutLine3">are very small, fast, and highly maneuverable.</item>
 
-<item id="5_KineticLine1">Kinetic is a weapon that forcibly throws projectiles at a target. These projectiles</item>
-<item id="5_KineticLine2">are not self-propelled. A projectile is an object usually made of a metal alloy.</item>
-<item id="5_KineticLine3">In contrast to a missile, a projectile does not contain explosives.</item>
+<item id="5_KineticLine1">Kinetic is a weapon that forcibly throws projectiles at a target. These projec-</item>
+<item id="5_KineticLine2">tiles are not self-propelled. A projectile is an object usually made of a metal</item>
+<item id="5_KineticLine3">alloy. In contrast to a missile, a projectile does not contain explosives.</item>
 
 <item id="5_IonLine1">Ion is a particle-beam weapon employing a dual-particle beam array.</item>
 <item id="5_IonLine2">The inner part, or core, is composed of positively charged ions - normally</item>
@@ -368,17 +368,17 @@
 <item id="5_PlasmaLine2">either by heating some material to very high temperatures or by bombarding</item>
 <item id="5_PlasmaLine3">it with a strong flux of high-energy photons.</item>
 
-<item id="5_MaserLine1">Microwave Amplification by Stimulated Emission of Radiation is a weapon that</item>
-<item id="5_MaserLine2">forcibly throws projectile amplifier that produces coherent microwaves</item>
-<item id="5_MaserLine3">as the result of stimulated emission.</item>
+<item id="5_MaserLine1">Microwave Amplification by Stimulated Emission of Radiation is a weapon</item>
+<item id="5_MaserLine2">that forcibly throws projectile amplifier that produces coherent</item>
+<item id="5_MaserLine3">microwaves as the result of stimulated emission.</item>
 
 <item id="5_AntimatterLine1">Antimatter is a weapon that forcibly throws matter consisting of</item>
 <item id="5_AntimatterLine2">antiparticles, elementary particles of ordinary matter, such as protons and</item>
 <item id="5_AntimatterLine3">electrons, but having an opposite electrical charge.</item>
 
-<item id="5_LaserLine1">Light Amplification by Stimulated Emission of Radiation. A high-energy light source</item>
-<item id="5_LaserLine2">that uses light emitted by the natural vibrations of atoms (in gas or</item>
-<item id="5_LaserLine3">solid material) to cut, burn or dissolve materials for various military purposes.</item>
+<item id="5_LaserLine1">Light Amplification by Stimulated Emission of Radiation. A high-energy light</item>
+<item id="5_LaserLine2">source that uses light emitted by the natural vibrations of atoms (in gas</item>
+<item id="5_LaserLine3">or solid material) to cut, burn or dissolve materials for various purposes.</item>
 
 <item id="5_GaussLine1">Gauss is a weapon that forcibly throws projectiles that operate on</item>
 <item id="5_GaussLine2">the subatomic level of any matter they are used against by disintegrating</item>
@@ -609,27 +609,6 @@
 
 
 
-<!-- Demo notes, for windows game version -->
-<itemlist id="8">
-
-<item id="8_Line1">ASTROMENACE FULL VERSION FEATURES</item>
-<item id="8_Line2">- 5 Pilots Profiles with one touch access.</item>
-<item id="8_Line3">- Simulative and arcade ship control mode.</item>
-<item id="8_Line4">- Flexible difficulty control.</item>
-<item id="8_Line5">- 22 playable ships with unique characteristics.</item>
-<item id="8_Line6">- 19 unique weapons with the easy drag-and-drop weapon mount mode.</item>
-<item id="8_Line7">- 5 upgradeable systems with 4 modifications each.</item>
-<item id="8_Line8">- Unlimited gameplay without any limitations.</item>
-<item id="8_Line9">- 15 missions with 100+ unique enemies and 40+ space objects.</item>
-<item id="8_Line10">- More than 150 minutes of play.</item>
-<item id="8_Line11">The full version cost $19.95, BUY NOW to get this features!</item>
-
-
-</itemlist>
-
-
-
-
 
 
 
@@ -641,26 +620,26 @@
 <item id="9_Tipsandhints">Tips and hints</item>
 <item id="9_notshowtip">Do not show this tip again.</item>
 
-<item id="9_9Line1">It is possible to create five Pilot Profiles in the game in order</item>
-<item id="9_9Line2">to store personal data. You can set an individual difficulty level</item>
-<item id="9_9Line3">for each profile or delete the current profile to free space for</item>
-<item id="9_9Line4">a new profile.</item>
+<item id="9_9Line1">It is possible to create five Pilot Profiles in the game in</item>
+<item id="9_9Line2">order to store personal data. You can set an individual</item>
+<item id="9_9Line3">difficulty level for each profile or delete the current</item>
+<item id="9_9Line4">profile to free space for a new profile.</item>
 <item id="9_9Line5">Note that the current difficulty level is displayed in percent</item>
-<item id="9_9Line6">for each profile. This value influences the increase of experience.</item>
-<item id="9_9Line7">For instance, if you bring down an enemy ship, you will get 100</item>
-<item id="9_9Line8">money units and only 65 experience units if the difficulty percent</item>
-<item id="9_9Line9">is set to 65 for you.</item>
+<item id="9_9Line6">for each profile. This value influences the increase of</item>
+<item id="9_9Line7">experience. For instance, if you bring down an enemy ship, you</item>
+<item id="9_9Line8">will get 100 money units and only 65 experience units if the</item>
+<item id="9_9Line9">difficulty percent is set to 65 for you.</item>
 <item id="9_9Line10">Note: you can change your difficulty level before each</item>
 <item id="9_9Line11">new mission.</item>
 
-<item id="9_10Line1">There are more than 20 spaceships with unique characteristics available</item>
-<item id="9_10Line2">in the game. You can use the right part of the screen to see your</item>
-<item id="9_10Line3">current spaceship, its characteristics and cost and also to perform</item>
-<item id="9_10Line4">basic operations, such as repair and ship hull armor enhancement.</item>
+<item id="9_10Line1">There are more than 20 spaceships with unique characteristics</item>
+<item id="9_10Line2">available in the game. You can use the right part of the screen</item>
+<item id="9_10Line3">to see your current spaceship, its characteristics and cost and</item>
+<item id="9_10Line4">also to perform basic operations, such as repair.</item>
 <item id="9_10Line5">The left part of the screen contains Ship Stock where you can see</item>
-<item id="9_10Line6">all available spaceships and their characteristics. Do not forget that</item>
-<item id="9_10Line7">each ship has its dimensions and, which is more important,</item>
-<item id="9_10Line8">different weapon mounts.</item>
+<item id="9_10Line6">all available spaceships and their characteristics. Do not</item>
+<item id="9_10Line7">forget that each ship has its dimensions and, which is more</item>
+<item id="9_10Line8">important, different weapon mounts.</item>
 <item id="9_10Line9">The basic shipbuilding concept is as follows:</item>
 <item id="9_10Line10">Scout - light, small and maneuverable ships with weak weapons.</item>
 <item id="9_10Line11">Interceptor - fast ships with light weapons.</item>
@@ -676,8 +655,8 @@
 <item id="9_11Line6">a well balanced warship that can complete combat tasks.</item>
 <item id="9_11Line7">Engine - ship engine system. Pay attention to how this system consumes</item>
 <item id="9_11Line8">energy. Otherwise you run the risk of being unable to move.</item>
-<item id="9_11Line9">Power - ship energy source. Pay attention to the main two characteristics</item>
-<item id="9_11Line10">of this system - Recharge Rate and Energy Capacity.</item>
+<item id="9_11Line9">Power - ship energy source. Pay attention to the main two characte-</item>
+<item id="9_11Line10">ristics of this system - Recharge Rate and Capacity.</item>
 <item id="9_11Line11">O.T.C. - Optical Target Computer. As you can see from its name,</item>
 <item id="9_11Line12">this system is responsible for optical targeting.</item>
 <item id="9_11Line13">Targeting - Weapon targeting system. It depends on this system how</item>
@@ -742,8 +721,8 @@
 <item id="9_16Line5">Shortcut: F12 - capture screenshot. (File will be saved on your Desktop.)</item>
 <item id="9_16Line6">Shortcut: Esc - show/hide game menu. (Pause.)</item>
 
-<item id="9_17Line1">Custom Weapon Angle is</item>
-<item id="9_17Line2">useful with optical computer</item>
+<item id="9_17Line1">Custom Weapon Angle is use-</item>
+<item id="9_17Line2">ful with optical computer</item>
 <item id="9_17Line3">system Neo or Supra only.</item>
 
 
@@ -779,16 +758,16 @@
 <item id="10_Tatiana_Savitskaya">Tatiana Savitskaya</item>
 
 <item id="10_3D_MODELING">3D MODELING</item>
-<item id="10_Max_Shelekhov">Max Shelekhov, 3drt.com</item>
+<item id="10_Max_Shelekhov">Max Shelekhov</item>
 <item id="10_Oleg_Linkov">Oleg Linkov</item>
 <item id="10_Egor_Kurteanu">Egor Kurteanu</item>
 
 <item id="10_MUSIC">MUSIC</item>
-<item id="10_Alexander_Matchugovsky">Alexander Matchugovsky, the SandS</item>
+<item id="10_Alexander_Matchugovsky">Alexander Matchugovsky</item>
 
 <item id="10_SOUND_EFFECTS">SOUND EFFECTS</item>
-<item id="10_Michael_Sirotkin">Michael Sirotkin, the SandS</item>
-<item id="10_Alexander_Vassilyevsky">Alexander Vassilyevsky, the SandS</item>
+<item id="10_Michael_Sirotkin">Michael Sirotkin</item>
+<item id="10_Alexander_Vassilyevsky">Alexander Vassilyevsky</item>
 
 <item id="10_VOICE">VOICE</item>
 <item id="10_Elena_Zavalishina_(en,_ru)">Elena Zavalishina (en, ru)</item>
@@ -798,7 +777,7 @@
 <item id="10_Pavel_Voylov">Pavel Voylov</item>
 
 <item id="10_TRANSLATOR">TRANSLATORS</item>
-<item id="10_Bernd_Dau_(de)">Bernd Dau (de), www.zockertown.de</item>
+<item id="10_Bernd_Dau_(de)">Bernd Dau (de)</item>
 <item id="10_Michael_Kurinnoy_(en,_ru)">Michael Kurinnoy (en, ru)</item>
 
 <item id="10_TESTERS">TESTERS</item>
@@ -839,7 +818,6 @@
 <!-- interface text -->
 <itemlist id="11">
 
-<item id="11_DEMO">DEMO</item>
 <item id="11_build">build</item>
 <item id="11_fps">fps</item>
 <item id="11_triangles">triangles</item>
