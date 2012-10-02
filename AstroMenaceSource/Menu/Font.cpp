@@ -140,7 +140,7 @@ void DrawFontFreeType(int X, int Y, float FlattenWidth, float MaxWidth, int Char
 		// если не пробел - рисуем
 		if (UTF32 != 0x020)
 		{
-			SetRect(&SrcRest, 0, DrawChar->Height, DrawChar->Width, 0);
+			SetRect(&SrcRest, 0, 0, DrawChar->Width, DrawChar->Height);
 			SetRect(&DstRest, 	Xstart + DrawChar->Left,
 								Y + 2 + FontSize - DrawChar->Top,
 								Xstart + DrawChar->Width + DrawChar->Left,

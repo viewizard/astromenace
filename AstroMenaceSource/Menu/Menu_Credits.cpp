@@ -472,10 +472,10 @@ void CreditsMenu()
 	// логотип и копирайт
 	Y1 += Offset2+30;
 	Y2 += Offset2+30;
-	SizeI = (Setup.iAspectRatioWidth-FontSize("Copyright 2007-2012, Viewizard"))/2;
+	SizeI = (Setup.iAspectRatioWidth-FontSize("Copyright © 2007-2012, Viewizard"))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	DrawFont(SizeI, Y2, 0, 0, 0, ttt*MenuContentTransp, "Copyright 2007-2012, Viewizard");
+	DrawFont(SizeI, Y2, 0, 0, 0, ttt*MenuContentTransp, "Copyright © 2007-2012, Viewizard");
 	Y1 += Offset1;
 	Y2 += Offset1;
 	SizeI = (Setup.iAspectRatioWidth-FontSize("http://www.viewizard.com"))/2;

@@ -331,6 +331,7 @@ void ProfileInputText()
 
 					Uint16 NewChar = vw_GetCurrentKeyUnicod();
 					vw_SetCurrentKeyUnicod(0); // сразу сбрасываем данные
+					// делаем простое преобразование, без учета суррогатной пары
 					char* str = NewProfileName + Pos;
 					if (NewChar <= 0x7F)
 					{
@@ -507,15 +508,7 @@ void ProfileMenu()
 			if (FontSizeFreeType(Setup.Profile[i].Name) > 300)
 			{
 				DrawFontFreeType(X1+50, TmpY, 0, 300, 0, MenuContentTransp, Setup.Profile[i].Name);
-				char TMP[128];
-				for (int t=0; t<128; t++) TMP[t]=0;
-				int j = 0;
-				while(FontSize(TMP)<=300)
-				{
-					TMP[j] = Setup.Profile[i].Name[j];
-					j++;
-				}
-				DrawFont(X1+50+FontSize(TMP), TmpY, 0, 0, 0, MenuContentTransp, "...");
+				DrawFont(X1+50+310, TmpY, 0, 0, 0, MenuContentTransp, "...");
 			}
 			else
 				DrawFontFreeType(X1+50, TmpY, 0, 0, 0, MenuContentTransp, Setup.Profile[i].Name);

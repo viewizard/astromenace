@@ -76,17 +76,15 @@ eFontChar* vw_LoadFontChar(unsigned UTF32)
 
 	// битмап идет в 1 канале градаций серого, делаем 32бита rgba
 	int k=0;
+	BYTE ColorRGB[3]={255,255,255};
 	for (int j=0; j<NewChar->Height; j++)
 	{
 		for (int i=0; i<NewChar->Width; i++)
 		{
-			memcpy(pixels + k, face->glyph->bitmap.buffer+j*NewChar->Width+i, 1);
-			k++;
-			memcpy(pixels + k, face->glyph->bitmap.buffer+j*NewChar->Width+i, 1);
-			k++;
-			memcpy(pixels + k, face->glyph->bitmap.buffer+j*NewChar->Width+i, 1);
-			k++;
-			memcpy(pixels + k, face->glyph->bitmap.buffer+j*NewChar->Width+i, 1);
+			// RGB составляющую заполняем белым
+			memcpy(pixels + k, ColorRGB, 3);
+			k+=3;
+			memcpy(pixels + k, face->glyph->bitmap.buffer+(NewChar->Height-j-1)*NewChar->Width+i, 1);
 			k++;
 		}
 		// должен быть приведен к DWORD построчно
