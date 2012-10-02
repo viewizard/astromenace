@@ -6,10 +6,10 @@
 
 	File name: Menu_Workshop_Workshop.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -495,8 +495,9 @@ void Workshop_Workshop()
 		vw_DrawTransparent(&DstRest, &SrcRest, GetSystemIcon(GetNextSystemStockNum()), true, 0.35f*MenuContentTransp);
 	}
 
-	DrawFontX2(Setup.iAspectRatioWidth/2-482, 630, 0, 0, 0, MenuContentTransp, GetText("7_System_Stock"));
-
+	SetCurrentFontScale(1.5f);
+	DrawFont(32, 630, 0, 0, 0, MenuContentTransp, GetText("7_System_Stock"));
+	SetCurrentFontScale(1.0f);
 
 
 
@@ -952,9 +953,9 @@ void Workshop_Workshop()
 		vw_DrawTransparent(&DstRest, &SrcRest, GetSystemIcon(Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16), true, Current*MenuContentTransp);
 
 
-
-	DrawFontX2((Setup.iAspectRatioWidth/2+512)-30-FontSizeX2(GetText("7_Installed_Systems")), 630, 0, 0, 0, MenuContentTransp, GetText("7_Installed_Systems"));
-
+	SetCurrentFontScale(1.5f);
+	DrawFont(Setup.iAspectRatioWidth-32-FontSize(GetText("7_Installed_Systems")), 630, 0, 0, 0, MenuContentTransp, GetText("7_Installed_Systems"));
+	SetCurrentFontScale(1.0f);
 
 	// текущая система
 	DrawFont(Setup.iAspectRatioWidth/2-250, 430, 0, 0, 1, MenuContentTransp, GetText("7_Selected_System"));
@@ -1012,14 +1013,13 @@ void Workshop_Workshop()
 
 
 	// вывод информации
-	int SizeI = (Setup.iAspectRatioWidth-FontSizeX15("%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money))/2;
+	SetCurrentFontScale(1.25f);
+	int SizeI = (Setup.iAspectRatioWidth-FontSize("%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money))/2;
 	if (CanBuy)
-		DrawFontX15(SizeI, 630, 0, 0, 1, MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
+		DrawFont(SizeI, 630, 0, 0, 1, MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
 	else
-		DrawFontX15(SizeI, 630, 0, 0, 4, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
-
-
-
+		DrawFont(SizeI, 630, 0, 0, 4, CurrentAlert3*MenuContentTransp, "%s: %i", GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
+	SetCurrentFontScale(1.0f);
 
 }
 

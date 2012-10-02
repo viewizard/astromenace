@@ -6,10 +6,10 @@
 
 	File name: Game_PlayerShip.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -440,8 +440,10 @@ void GamePlayerShip()
 			}
 
 			// визуальный вывод - выводим постоянно
-			int FontSize = (Setup.iAspectRatioWidth-FontSizeX2(GetText("4_Missile_Detected")))/2;
-			DrawFontX2(FontSize, 720, 0, 0, 4, CurrentAlert3, GetText("4_Missile_Detected"));
+			SetCurrentFontScale(1.5f);
+			int TmpFontSize = (Setup.iAspectRatioWidth-FontSize(GetText("4_Missile_Detected")))/2;
+			DrawFont(TmpFontSize, 720, 0, 0, 4, CurrentAlert3, GetText("4_Missile_Detected"));
+			SetCurrentFontScale(1.0f);
 		}
 		else
 		{
@@ -453,8 +455,10 @@ void GamePlayerShip()
 			if (VoiceMissileDetectedStatus)
 			{
 				// визуальный вывод - выводим постоянно
-				int FontSize = (Setup.iAspectRatioWidth-FontSizeX2(GetText("4_Missile_Detected")))/2;
-				DrawFontX2(FontSize, 720, 0, 0, 4, CurrentAlert3, GetText("4_Missile_Detected"));
+				SetCurrentFontScale(1.5f);
+				int TmpFontSize = (Setup.iAspectRatioWidth-FontSize(GetText("4_Missile_Detected")))/2;
+				DrawFont(TmpFontSize, 720, 0, 0, 4, CurrentAlert3, GetText("4_Missile_Detected"));
+				SetCurrentFontScale(1.0f);
 			}
 		}
 
