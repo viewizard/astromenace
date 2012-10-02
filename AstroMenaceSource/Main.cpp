@@ -1295,7 +1295,7 @@ loop:
 
 				case SDL_KEYDOWN:
 					// устанавливаем текущий юникод нажатоу клавиши
-					if (!((event.key.keysym.mod & KMOD_LCTRL) |	(event.key.keysym.mod & KMOD_RCTRL)))
+					if (!(event.key.keysym.mod & KMOD_CTRL))
 						vw_SetCurrentKeyUnicod(event.key.keysym.unicode);
 					printf("Keydown, Unicode: " );
 					if ( event.key.keysym.unicode < 0x80 && event.key.keysym.unicode > 0 )

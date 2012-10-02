@@ -923,8 +923,8 @@ void DrawMenu()
 	DrawFont(6, 740, 0, 0, 0, 0.99f, "%s %1.1f %s %i", GetText("11_Version"), GAME_VERSION_VERSION, GetText("11_build"), GAME_VERSION_BUILD);
 
 	// Copyright
-	int CSize = FontSize("%s 2007-2012, Viewizard", GetText("11_Copyright"));
-	DrawFont(Setup.iAspectRatioWidth-7-CSize, 740, 0, 0, 0, 0.99f, "%s 2007-2012, Viewizard", GetText("11_Copyright"));
+	int CSize = FontSize("%s © 2007-2012, Viewizard", GetText("11_Copyright"));
+	DrawFont(Setup.iAspectRatioWidth-7-CSize, 740, 0, 0, 0, 0.99f, "%s © 2007-2012, Viewizard", GetText("11_Copyright"));
 
 
 
