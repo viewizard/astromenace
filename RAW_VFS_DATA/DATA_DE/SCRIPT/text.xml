@@ -20,8 +20,8 @@
 <item id="1_OK">OK</item>
 <item id="1_On">An</item>
 <item id="1_Off">Aus</item>
-<item id="1_Decrease">-</item><!--Verringern-->
-<item id="1_Increase">+</item><!--Erhöhen-->
+<item id="1_Decrease">Verringern</item>
+<item id="1_Increase">Erhöhen</item>
 <item id="1_Video_%s_Audio">Video %s Audio</item>
 <item id="1_Config_Controls">Tastenbelegung</item>
 <item id="1_Interface">Ausblick</item>
@@ -298,7 +298,7 @@
 <item id="4_Weapon_Recharge_Rate">Waffenaufladungsrate</item>
 <item id="4_Optical_Computer">Optischer Computer</item>
 <item id="4_Targeting_System">Zielsystem</item>
-<item id="4_Advanced_System">hochentwickeltes System</item> <!-- or fortgeschrittenes System -->
+<item id="4_Advanced_System">Hochentwickeltes System</item> <!-- or fortgeschrittenes System -->
 <item id="4_Target_Tracing:">Zielverfolgung:</item>
 <item id="4_Auto_Adjustment:">Auto Anpassung:</item>
 <item id="4_No">Nein</item>
