@@ -59,7 +59,7 @@ void DifficultyMenu()
 
 
 
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Enemy_Weapon_Penalty"));
+	vw_DrawFont(X1, Y1, -340, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Enemy_Weapon_Penalty"));
 	bool ButOff = false;
 	if (Setup.Profile[CurrentProfile].NPCWeaponPenalty == 1) ButOff = true;
 	if (DrawButton128_2(X1+360, Y1-6, GetText("1_Decrease"), MenuContentTransp, ButOff))
@@ -91,7 +91,7 @@ void DifficultyMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Enemy_Armor_Penalty"));
+	vw_DrawFont(X1, Y1, -340, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Enemy_Armor_Penalty"));
 	ButOff = false;
 	if (Setup.Profile[CurrentProfile].NPCArmorPenalty == 1) ButOff = true;
 	if (DrawButton128_2(X1+360, Y1-6, GetText("1_Decrease"), MenuContentTransp, ButOff))
@@ -123,7 +123,7 @@ void DifficultyMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Enemy_Targeting_Penalty"));
+	vw_DrawFont(X1, Y1, -340, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Enemy_Targeting_Penalty"));
 	ButOff = false;
 	if (Setup.Profile[CurrentProfile].NPCTargetingSpeedPenalty == 1) ButOff = true;
 	if (DrawButton128_2(X1+360, Y1-6, GetText("1_Decrease"), MenuContentTransp, ButOff))
@@ -155,7 +155,7 @@ void DifficultyMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Limited_Ammo"));
+	vw_DrawFont(X1, Y1, -340, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Limited_Ammo"));
 	if (DrawButton128_2(X1+360+128, Y1-6, GetText(OnOff[Setup.Profile[CurrentProfile].LimitedAmmo]), MenuContentTransp, false))
 	{
 		Setup.Profile[CurrentProfile].LimitedAmmo++;
@@ -166,7 +166,7 @@ void DifficultyMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Destroyable_Weapon"));
+	vw_DrawFont(X1, Y1, -340, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Destroyable_Weapon"));
 	if (DrawButton128_2(X1+360+128, Y1-6, GetText(OnOff[Setup.Profile[CurrentProfile].DestroyableWeapon]), MenuContentTransp, false))
 	{
 		Setup.Profile[CurrentProfile].DestroyableWeapon++;
@@ -178,7 +178,7 @@ void DifficultyMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Weapon_Targeting_Mode"));
+	vw_DrawFont(X1, Y1, -340, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Weapon_Targeting_Mode"));
 	if (DrawButton128_2(X1+360+128, Y1-6, GetText(ArcadeSim[Setup.Profile[CurrentProfile].WeaponTargetingMode]), MenuContentTransp, false))
 	{
 		Setup.Profile[CurrentProfile].WeaponTargetingMode++;
@@ -189,7 +189,7 @@ void DifficultyMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_SpaceShip_Control_Mode"));
+	vw_DrawFont(X1, Y1, -340, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_SpaceShip_Control_Mode"));
 	if (DrawButton128_2(X1+360+128, Y1-6, GetText(ArcadeSim[Setup.Profile[CurrentProfile].SpaceShipControlMode]), MenuContentTransp, false))
 	{
 		Setup.Profile[CurrentProfile].SpaceShipControlMode++;

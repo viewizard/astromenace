@@ -103,10 +103,6 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 
-
-
-
-
 	// размер задней тени
 	SetRect(&SrcRest,2,2,512-2,96-2 );
 	// рисуем тень
@@ -126,13 +122,25 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 	// получаем длину текста
 	int Size = vw_FontSize(Text);
+
+	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
+	float WScale = 0;
+	if (Size > 310)
+	{
+		Size = 310;
+		WScale = -310;
+	}
+
 	// находим смещение текста
-	int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
+	int SizeI = X + (SrcRest.right-SrcRest.left-Size)/2;
+
 	// рисуем текст
 	if (!ON)
-		vw_DrawFont(SizeI, Y+21, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
+		vw_DrawFont(SizeI, Y+21, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawFont(SizeI, Y+21, 0, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
+		vw_DrawFont(SizeI, Y+21, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
+
+
 
 	if (CanClick)
 		if (vw_GetWindowLBMouse(true))
@@ -264,15 +272,25 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 	else
 		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button256_in.tga"), true, Transp);
 
+
 	// получаем длину текста
 	int Size = vw_FontSize(Text);
+
+	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
+	float WScale = 0;
+	if (Size > 190)
+	{
+		Size = 190;
+		WScale = -190;
+	}
+
 	// находим смещение текста
 	int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
 	// рисуем текст
 	if (!ON)
-		vw_DrawFont(SizeI, Y+21, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
+		vw_DrawFont(SizeI, Y+21, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawFont(SizeI, Y+21, 0, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
+		vw_DrawFont(SizeI, Y+21, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
 		if (vw_GetWindowLBMouse(true))
@@ -293,7 +311,23 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 //------------------------------------------------------------------------------------
 bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 {
-	RECT SrcRest, DstRest;
+	RECT SrcRest, DstRest, MouseRest;
+	SetRect(&SrcRest,2,2,230-2,64-2);
+	SetRect(&DstRest,X-14+2,Y-14+2,X+230-14-2,Y+64-14-2);
+	SetRect(&MouseRest,X,Y,X+204,Y+35);
+
+	// получаем длину текста
+	int Size = vw_FontSize(Text);
+
+	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
+	float WScale = 0;
+	if (Size > 176)
+	{
+		Size = 176;
+		WScale = -176;
+	}
+	int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
+
 	// все проверки
 	int MouseX, MouseY;
 	vw_GetMousePos(&MouseX, &MouseY);
@@ -301,14 +335,9 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 
 	if (Off || DragWeapon)
 	{
-		SetRect(&SrcRest,2,2,230-2,64-2);
-		SetRect(&DstRest,X-14+2,Y-14+2,X+230-14-2,Y+64-14-2);
 		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button_dialog200_off.tga"), true, Transp);
 
-
-		int Size = vw_FontSize(Text);
-		int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
-		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
+		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 
 		SetRect(&DstRest,X,Y,X+204,Y+35);
 		if  (((DstRest.right  >= MouseX)&
@@ -328,17 +357,14 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 	}
 
 
-
-
 	bool ON = false;
 	bool CanClick = false;
 
 
-	SetRect(&DstRest,X,Y,X+204,Y+35);
-	if  (((DstRest.right  >= MouseX)&
-		(DstRest.left<= MouseX)&
-		(DstRest.bottom >= MouseY)&
-		(DstRest.top<= MouseY))  && !isDialogBoxDrawing() && DrawGameCursor)
+	if  (((MouseRest.right  >= MouseX)&
+		(MouseRest.left<= MouseX)&
+		(MouseRest.bottom >= MouseY)&
+		(MouseRest.top<= MouseY))  && !isDialogBoxDrawing() && DrawGameCursor)
 	{
 		// если тухнем или появляемся - не жать
 		ON = true;
@@ -365,24 +391,16 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 	}
 
 
-	SetRect(&SrcRest,2,2,230-2,64-2);
-	// рисуем кнопку
-	SetRect(&DstRest,X-14+2,Y-14+2,X+230-14-2,Y+64-14-2);
 	if (!ON)
 		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button_dialog200_out.tga"), true, Transp);
 	else
 		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button_dialog200_in.tga"), true, Transp);
 
-
-	// получаем длину текста
-	int Size = vw_FontSize(Text);
-	// находим смещение текста
-	int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
 	// рисуем текст
 	if (!ON)
-		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
+		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
+		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
 		if (vw_GetWindowLBMouse(true))
@@ -400,21 +418,35 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 //------------------------------------------------------------------------------------
 bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off)
 {
-	RECT SrcRest, DstRest;
+	RECT SrcRest, DstRest, MouseRest;
+	SetRect(&SrcRest,2,2,158-2,64-2);
+	SetRect(&DstRest,X-14+2,Y-14+2,X+158-14-2,Y+64-14-2);
+	SetRect(&MouseRest,X,Y,X+132,Y+35);
+
 	// все проверки
 	int MouseX, MouseY;
 	vw_GetMousePos(&MouseX, &MouseY);
 
+	// получаем длину текста
+	int Size = vw_FontSize(Text);
+
+	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
+	float WScale = 0;
+	if (Size > 108)
+	{
+		Size = 108;
+		WScale = -108;
+	}
+
+	// находим смещение текста
+	int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
+
 
 	if (Off || DragWeapon)
 	{
-		SetRect(&SrcRest,2,2,158-2,64-2);
-		SetRect(&DstRest,X-14+2,Y-14+2,X+158-14-2,Y+64-14-2);
 		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button_dialog128_off.tga"), true, Transp);
 
-		int Size = vw_FontSize(Text);
-		int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
-		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
+		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 
 		SetRect(&DstRest,X,Y,X+132,Y+35);
 		if  (((DstRest.right  >= MouseX)&
@@ -438,12 +470,10 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off)
 	bool ON = false;
 	bool CanClick = false;
 
-
-	SetRect(&DstRest,X,Y,X+132,Y+35);
-	if  (((DstRest.right  >= MouseX)&
-		(DstRest.left<= MouseX)&
-		(DstRest.bottom >= MouseY)&
-		(DstRest.top<= MouseY))  && !isDialogBoxDrawing() && DrawGameCursor)
+	if  (((MouseRest.right  >= MouseX)&
+		(MouseRest.left<= MouseX)&
+		(MouseRest.bottom >= MouseY)&
+		(MouseRest.top<= MouseY))  && !isDialogBoxDrawing() && DrawGameCursor)
 	{
 		// если тухнем или появляемся - не жать
 		ON = true;
@@ -470,24 +500,16 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off)
 	}
 
 
-	SetRect(&SrcRest,2,2,158-2,64-2);
-	// рисуем кнопку
-	SetRect(&DstRest,X-14+2,Y-14+2,X+158-14-2,Y+64-14-2);
 	if (!ON)
 		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button_dialog128_out.tga"), true, Transp);
 	else
 		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button_dialog128_in.tga"), true, Transp);
 
-
-	// получаем длину текста
-	int Size = vw_FontSize(Text);
-	// находим смещение текста
-	int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
 	// рисуем текст
 	if (!ON)
-		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
+		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
+		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
 		if (vw_GetWindowLBMouse(true))

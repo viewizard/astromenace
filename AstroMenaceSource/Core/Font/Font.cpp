@@ -268,6 +268,7 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 
 
 // FlattenWidth - выравнивать по ширине
+// если FlattenWidth отрицателен, выравниваем по значению, "сжимая" буквы, если нужно
 // MaxWidth - рисовать до ширины
 // CharSet - 0-белый 1-желтый
 
@@ -280,30 +281,28 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 	va_end(ap);
 	// в text уже полная строка
 	if (strlen(text) == 0) return;
-	// прорисовка текста
-	const char *textdraw = text;
 
-
-	RECT SrcRest, DstRest;
-	int Xstart = X;
+	float Xstart = X;
 	// делаем пробел в 2/3 от размера фонта
-	int SpaceWidth = InternalFontSize * 2 / 3;
-
+	float SpaceWidth = InternalFontSize * 2 / 3;
+	// коэф. изменения букв по ширине
+	float FontWidthScale = 1.0f;
 
 	if (Transp >= 1.0f) Transp = 1.0f;
 
 
 	// если нужно выравнивать, считаем данные пробелов
-	if (FlattenWidth !=0)
+	if (FlattenWidth > 0)
 	{
-		int LineWidth = 0;
+		float LineWidth = 0;
 		int SpaceCount = 0;
 
-		while (strlen(textdraw) > 0)
+		const char *CountCheck = text;
+		while (strlen(CountCheck) > 0)
 		{
 			unsigned UTF32;
 			// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
-			textdraw = utf8_to_utf32(textdraw, &UTF32);
+			CountCheck = utf8_to_utf32(CountCheck, &UTF32);
 			// находим наш текущий символ
 			eFontChar* DrawChar = vw_FindFontCharByUTF32(UTF32);
 			if (DrawChar == 0) DrawChar = vw_LoadFontChar(UTF32);
@@ -318,10 +317,33 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 		if (FlattenWidth > LineWidth)
 			if (SpaceCount!=0) SpaceWidth = (FlattenWidth - LineWidth)/SpaceCount;
 	}
+	// если нужно сжать, считаем коэф. сжатия букв
+	if (FlattenWidth < 0)
+	{
+		float LineWidth = 0;
+
+		const char *CountCheck = text;
+		while (strlen(CountCheck) > 0)
+		{
+			unsigned UTF32;
+			// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
+			CountCheck = utf8_to_utf32(CountCheck, &UTF32);
+			// находим наш текущий символ
+			eFontChar* DrawChar = vw_FindFontCharByUTF32(UTF32);
+			if (DrawChar == 0) DrawChar = vw_LoadFontChar(UTF32);
+
+			// считаем длину символов с пробелами
+			if (UTF32 != 0x020)
+				LineWidth += DrawChar->Width + DrawChar->Left;
+			else
+				LineWidth += SpaceWidth;
+		}
+
+		if (FlattenWidth*(-1.0f) < LineWidth) FontWidthScale = FlattenWidth/LineWidth*(-1.0f);
+	}
 
 
-	textdraw = text;
-	int LineWidth = 0;
+	float LineWidth = 0;
 
 	// установка свойств текстуры
 	vw_SetTexAlpha(false, 0.01f);
@@ -345,9 +367,14 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 	// буфер для последовательности RI_QUADS
 	// войдет RI_2f_XYZ | RI_2f_TEX
 	float *tmp = 0;
-	tmp = new float[(2+2)*4*strlen(textdraw)]; if (tmp == 0) return;
+	tmp = new float[(2+2)*4*strlen(text)]; if (tmp == 0) return;
+
+	// чтобы меньше делать операций умножения, включаем коэф. один в другой сразу для ширины символов
+	FontWidthScale = FontScale*FontWidthScale;
 
 
+	// прорисовка текста
+	const char *textdraw = text;
 	// прорисовываем все символы
 	while (strlen(textdraw) > 0)
 	{
@@ -383,65 +410,57 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 			k=0;
 		}
 
-
 		// если не пробел - рисуем
 		if (UTF32 != 0x020)
 		{
-			SetRect(&SrcRest, DrawChar->TexturePositionLeft, DrawChar->TexturePositionTop,
-								DrawChar->TexturePositionRight, DrawChar->TexturePositionBottom);
-			SetRect(&DstRest, 	Xstart + DrawChar->Left*FontScale,
-								Y + 2 + (InternalFontSize - DrawChar->Top)*FontScale,
-								Xstart + (DrawChar->Width + DrawChar->Left)*FontScale,
-								Y + 2 + (InternalFontSize - DrawChar->Top + DrawChar->Height)*FontScale);
 
-
-			int X = DstRest.left;
-			int Y = DstRest.top;
+			float DrawX = Xstart + DrawChar->Left*FontWidthScale;
+			float DrawY = Y + 2 + (InternalFontSize - DrawChar->Top)*FontScale; // 2 доп смещение ("привет" от старого фонта)
 
 			// Вычисление поправки по У в зависимости от DrawCorner
 			// - расположения угла начала координат
 			float tmpPosY = 0;
 			// изменяем только в случае RI_UL_CORNER
-			if (ASpresent) tmpPosY = (AH - Y - Y - (DstRest.bottom - DstRest.top));
-			else tmpPosY = (AHw - Y - Y - (DstRest.bottom - DstRest.top));
+			if (ASpresent) tmpPosY = (AH - DrawY - DrawY - DrawChar->Height*FontScale);
+			else tmpPosY = (AHw - DrawY - DrawY - DrawChar->Height*FontScale);
 
 			float ImageHeight = DrawChar->CharTexture->Height*1.0f;
 			float ImageWidth = DrawChar->CharTexture->Width*1.0f;
 
-			float FrameHeight = (SrcRest.bottom*1.0f )/ImageHeight;
-			float FrameWidth = (SrcRest.right*1.0f )/ImageWidth;
+			float FrameHeight = (DrawChar->TexturePositionBottom*1.0f )/ImageHeight;
+			float FrameWidth = (DrawChar->TexturePositionRight*1.0f )/ImageWidth;
 
-			float Yst = (SrcRest.top*1.0f)/ImageHeight;
-			float Xst = (SrcRest.left*1.0f)/ImageWidth;
+			float Yst = (DrawChar->TexturePositionTop*1.0f)/ImageHeight;
+			float Xst = (DrawChar->TexturePositionLeft*1.0f)/ImageWidth;
 
-			tmp[k++] = X;
-			tmp[k++] = Y +tmpPosY + (DstRest.bottom - DstRest.top);
+			tmp[k++] = DrawX;
+			tmp[k++] = DrawY +tmpPosY + DrawChar->Height*FontScale;
 			tmp[k++] = Xst;
 			tmp[k++] = 1.0f-Yst;
 
-			tmp[k++] = X;
-			tmp[k++] = Y +tmpPosY;
+			tmp[k++] = DrawX;
+			tmp[k++] = DrawY +tmpPosY;
 			tmp[k++] = Xst;
 			tmp[k++] = 1.0f-FrameHeight;
 
-			tmp[k++] = X + (DstRest.right - DstRest.left);
-			tmp[k++] = Y +tmpPosY;
+			tmp[k++] = DrawX + DrawChar->Width*FontWidthScale;
+			tmp[k++] = DrawY +tmpPosY;
 			tmp[k++] = FrameWidth;
 			tmp[k++] = 1.0f-FrameHeight;
 
-			tmp[k++] = X + (DstRest.right - DstRest.left);
-			tmp[k++] = Y +tmpPosY + (DstRest.bottom - DstRest.top);
+			tmp[k++] = DrawX + DrawChar->Width*FontWidthScale;
+			tmp[k++] = DrawY +tmpPosY + DrawChar->Height*FontScale;
 			tmp[k++] = FrameWidth;
 			tmp[k++] = 1.0f-Yst;
 
 
-			Xstart += (DrawChar->Width + DrawChar->Left)*FontScale;
-			LineWidth += (DrawChar->Width + DrawChar->Left)*FontScale;
+			Xstart += (DrawChar->Width + DrawChar->Left)*FontWidthScale;
+			LineWidth += (DrawChar->Width + DrawChar->Left)*FontWidthScale;
 		}
 		else
 		{
-			Xstart += SpaceWidth*FontScale;
-			LineWidth += SpaceWidth*FontScale;
+			Xstart += SpaceWidth*FontWidthScale;
+			LineWidth += SpaceWidth*FontWidthScale;
 		}
 
 		// если нужно прорисовывать с ограничением по длине
@@ -491,8 +510,8 @@ int vw_FontSize(const char *Text, ...)
 
 	const char *textdraw = text;
 	// делаем пробел в 2/3 от размера фонта
-	int SpaceWidth = InternalFontSize * 2 / 3;
-	int LineWidth = 0;
+	float SpaceWidth = InternalFontSize * 2 / 3;
+	float LineWidth = 0;
 
 	while (strlen(textdraw) > 0)
 	{
@@ -511,7 +530,7 @@ int vw_FontSize(const char *Text, ...)
 	}
 
 
-	return LineWidth;
+	return (int)LineWidth;
 }
 
 
@@ -538,10 +557,9 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 	const char *textdraw = text;
 
 
-	RECT SrcRest, DstRest;
-	int Xstart = X;
+	float Xstart = X;
 	// делаем пробел в 2/3 от размера фонта
-	int SpaceWidth = InternalFontSize * 2 / 3;
+	float SpaceWidth = InternalFontSize * 2 / 3;
 
 	textdraw = text;
 
@@ -620,50 +638,42 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 		// если не пробел - рисуем
 		if (UTF32 != 0x020)
 		{
-			SetRect(&SrcRest, DrawChar->TexturePositionLeft, DrawChar->TexturePositionTop,
-								DrawChar->TexturePositionRight, DrawChar->TexturePositionBottom);
-			SetRect(&DstRest, 	Xstart + DrawChar->Left,
-								Y + 2 + (InternalFontSize - DrawChar->Top),
-								Xstart + (DrawChar->Width + DrawChar->Left),
-								Y + 2 + (InternalFontSize - DrawChar->Top + DrawChar->Height));
-
-
-			int X = DstRest.left;
-			int Y = DstRest.top;
+			float DrawX = Xstart + DrawChar->Left;
+			float DrawY = Y + 2 + (InternalFontSize - DrawChar->Top);
 
 			// Вычисление поправки по У в зависимости от DrawCorner
 			// - расположения угла начала координат
 			float tmpPosY = 0;
 			// изменяем только в случае RI_UL_CORNER
-			if (ASpresent) tmpPosY = (AH - Y - Y - (DstRest.bottom - DstRest.top));
-			else tmpPosY = (AHw - Y - Y - (DstRest.bottom - DstRest.top));
+			if (ASpresent) tmpPosY = (AH - DrawY - DrawY - DrawChar->Height);
+			else tmpPosY = (AHw - DrawY - DrawY - DrawChar->Height);
 
 			float ImageHeight = DrawChar->CharTexture->Height*1.0f;
 			float ImageWidth = DrawChar->CharTexture->Width*1.0f;
 
-			float FrameHeight = (SrcRest.bottom*1.0f )/ImageHeight;
-			float FrameWidth = (SrcRest.right*1.0f )/ImageWidth;
+			float FrameHeight = (DrawChar->TexturePositionBottom*1.0f )/ImageHeight;
+			float FrameWidth = (DrawChar->TexturePositionRight*1.0f )/ImageWidth;
 
-			float Yst = (SrcRest.top*1.0f)/ImageHeight;
-			float Xst = (SrcRest.left*1.0f)/ImageWidth;
+			float Yst = (DrawChar->TexturePositionTop*1.0f)/ImageHeight;
+			float Xst = (DrawChar->TexturePositionLeft*1.0f)/ImageWidth;
 
-			tmp[k++] = X;
-			tmp[k++] = Y +tmpPosY + (DstRest.bottom - DstRest.top);
+			tmp[k++] = DrawX;
+			tmp[k++] = DrawY +tmpPosY + DrawChar->Height;
 			tmp[k++] = Xst;
 			tmp[k++] = 1.0f-Yst;
 
-			tmp[k++] = X;
-			tmp[k++] = Y +tmpPosY;
+			tmp[k++] = DrawX;
+			tmp[k++] = DrawY +tmpPosY;
 			tmp[k++] = Xst;
 			tmp[k++] = 1.0f-FrameHeight;
 
-			tmp[k++] = X + (DstRest.right - DstRest.left);
-			tmp[k++] = Y +tmpPosY;
+			tmp[k++] = DrawX + DrawChar->Width;
+			tmp[k++] = DrawY +tmpPosY;
 			tmp[k++] = FrameWidth;
 			tmp[k++] = 1.0f-FrameHeight;
 
-			tmp[k++] = X + (DstRest.right - DstRest.left);
-			tmp[k++] = Y +tmpPosY + (DstRest.bottom - DstRest.top);
+			tmp[k++] = DrawX + DrawChar->Width;
+			tmp[k++] = DrawY +tmpPosY + DrawChar->Height;
 			tmp[k++] = FrameWidth;
 			tmp[k++] = 1.0f-Yst;
 

@@ -234,7 +234,7 @@ void ConfControlMenu()
 
 
 
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Mouse_Control"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Mouse_Control"));
 	if (DrawButton128_2((int)X1+458, (int)Y1-6, Setup.MouseControl ? GetText("1_On") : GetText("1_Off"), MenuContentTransp, false))
 	if (NeedCheck == 0)
 	{
@@ -243,7 +243,7 @@ void ConfControlMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Control_Sensitivity"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Control_Sensitivity"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), MenuContentTransp, Setup.ControlSensivity == 1))
 	{
 		Setup.ControlSensivity --;
@@ -286,7 +286,7 @@ void ConfControlMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Primary_Attack"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Primary_Attack"));
 	float Transp = 1.0f;
 	bool Off = false;
 	if (NeedCheck == 7) {Transp = But[6]; Off = true;};
@@ -322,7 +322,7 @@ void ConfControlMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Secondary_Attack"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Secondary_Attack"));
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 8) {Transp = But[7]; Off = true;};
@@ -358,7 +358,7 @@ void ConfControlMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Move_Forward"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Move_Forward"));
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 1) {Transp = But[0]; Off = true;};
@@ -370,7 +370,7 @@ void ConfControlMenu()
 	}
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Move_Backward"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Move_Backward"));
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 2) {Transp = But[1]; Off = true;};
@@ -382,7 +382,7 @@ void ConfControlMenu()
 	}
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Move_Left"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Move_Left"));
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 3) {Transp = But[2]; Off = true;};
@@ -394,7 +394,7 @@ void ConfControlMenu()
 	}
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0,1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Move_Right"));
+	vw_DrawFont(X1, Y1, -280, 0,1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Move_Right"));
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 4) {Transp = But[3]; Off = true;};

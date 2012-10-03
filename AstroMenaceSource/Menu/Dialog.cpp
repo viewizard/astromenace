@@ -154,13 +154,20 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 
 	// получаем длину текста
 	int Size = vw_FontSize(Text);
+	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
+	float WScale = 0;
+	if (Size > 176)
+	{
+		Size = 176;
+		WScale = -176;
+	}
 	// находим смещение текста
 	int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
 	// рисуем текст
 	if (!ON)
-		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
+		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
+		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
 		if (vw_GetWindowLBMouse(true))
@@ -237,13 +244,20 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 
 	// получаем длину текста
 	int Size = vw_FontSize(Text);
+	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
+	float WScale = 0;
+	if (Size > 108)
+	{
+		Size = 108;
+		WScale = -108;
+	}
 	// находим смещение текста
 	int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
 	// рисуем текст
 	if (!ON)
-		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
+		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawFont(SizeI, Y+6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
+		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
 		if (vw_GetWindowLBMouse(true))
@@ -534,22 +548,20 @@ void DrawDialogBox()
 			// текст диалога
 			SizeI1 = vw_FontSize(GetText("2_quit_line1"));
 			SizeI = (W-SizeI1)/2;
-			if (SizeI1 > 476)
+			if (SizeI1 > 470)
 			{
-				SizeI = 476/2;
-				SizeI = W/2 - SizeI-2;
-				vw_DrawFont(X+SizeI, Y+100, 476, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_quit_line1"));
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+100, -470, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_quit_line1"));
 			}
 			else
 				vw_DrawFont(X+SizeI, Y+100, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_quit_line1"));
 
 			SizeI1 = vw_FontSize(GetText("2_quit_line2"));
 			SizeI = (W-SizeI1)/2;
-			if (SizeI1 > 476)
+			if (SizeI1 > 470)
 			{
-				SizeI = 476/2;
-				SizeI = W/2 - SizeI-2;
-				vw_DrawFont(X+SizeI, Y+130, 476, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_quit_line2"));
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+130, -470, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_quit_line2"));
 			}
 			else
 				vw_DrawFont(X+SizeI, Y+130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_quit_line2"));
@@ -571,22 +583,20 @@ void DrawDialogBox()
 			// текст диалога
 			SizeI1 = vw_FontSize(GetText("2_ccprof_line1"));
 			SizeI = (W-SizeI1)/2;
-			if (SizeI1 > 476)
+			if (SizeI1 > 470)
 			{
-				SizeI = 476/2;
-				SizeI = W/2 - SizeI-2;
-				vw_DrawFont(X+SizeI, Y+100, 476, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_ccprof_line1"));
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+100, -470, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_ccprof_line1"));
 			}
 			else
 				vw_DrawFont(X+SizeI, Y+100, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_ccprof_line1"));
 
 			SizeI1 = vw_FontSize(GetText("2_ccprof_line2"));
 			SizeI = (W-SizeI1)/2;
-			if (SizeI1 > 476)
+			if (SizeI1 > 470)
 			{
-				SizeI = 476/2;
-				SizeI = W/2 - SizeI-2;
-				vw_DrawFont(X+SizeI, Y+130, 476, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_ccprof_line2"));
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+130, -470, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_ccprof_line2"));
 			}
 			else
 				vw_DrawFont(X+SizeI, Y+130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_ccprof_line2"));
@@ -602,22 +612,20 @@ void DrawDialogBox()
 			// текст диалога
 			SizeI1 = vw_FontSize(GetText("2_delprof_line1"));
 			SizeI = (W-SizeI1)/2;
-			if (SizeI1 > 476)
+			if (SizeI1 > 470)
 			{
-				SizeI = 476/2;
-				SizeI = W/2 - SizeI-2;
-				vw_DrawFont(X+SizeI, Y+100, 476, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_delprof_line1"));
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+100, -470, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_delprof_line1"));
 			}
 			else
 				vw_DrawFont(X+SizeI, Y+100, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_delprof_line1"));
 
 			SizeI1 = vw_FontSize(GetText("2_delprof_line2"));
 			SizeI = (W-SizeI1)/2;
-			if (SizeI1 > 476)
+			if (SizeI1 > 470)
 			{
-				SizeI = 476/2;
-				SizeI = W/2 - SizeI-2;
-				vw_DrawFont(X+SizeI, Y+130, 476, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_delprof_line2"));
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+130, -470, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_delprof_line2"));
 			}
 			else
 				vw_DrawFont(X+SizeI, Y+130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_delprof_line2"));
@@ -640,22 +648,20 @@ void DrawDialogBox()
 			// текст диалога
 			SizeI1 = vw_FontSize(GetText("2_cnrepair_line1"));
 			SizeI = (W-SizeI1)/2;
-			if (SizeI1 > 476)
+			if (SizeI1 > 470)
 			{
-				SizeI = 476/2;
-				SizeI = W/2 - SizeI-2;
-				vw_DrawFont(X+SizeI, Y+100, 476, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_cnrepair_line1"));
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+100, -470, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_cnrepair_line1"));
 			}
 			else
 				vw_DrawFont(X+SizeI, Y+100, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_cnrepair_line1"));
 
 			SizeI1 = vw_FontSize(GetText("2_cnrepair_line2"));
 			SizeI = (W-SizeI1)/2;
-			if (SizeI1 > 476)
+			if (SizeI1 > 470)
 			{
-				SizeI = 476/2;
-				SizeI = W/2 - SizeI-2;
-				vw_DrawFont(X+SizeI, Y+130, 476, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_cnrepair_line2"));
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+130, -470, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_cnrepair_line2"));
 			}
 			else
 				vw_DrawFont(X+SizeI, Y+130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_cnrepair_line2"));
@@ -672,22 +678,20 @@ void DrawDialogBox()
 			// текст диалога
 			SizeI1 = vw_FontSize(GetText("2_quit_line1"));
 			SizeI = (W-SizeI1)/2;
-			if (SizeI1 > 476)
+			if (SizeI1 > 470)
 			{
-				SizeI = 476/2;
-				SizeI = W/2 - SizeI-2;
-				vw_DrawFont(X+SizeI, Y+100, 476, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_quit_line1"));
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+100, -470, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_quit_line1"));
 			}
 			else
 				vw_DrawFont(X+SizeI, Y+100, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_quit_line1"));
 
 			SizeI1 = vw_FontSize(GetText("2_quit_line3"));
 			SizeI = (W-SizeI1)/2;
-			if (SizeI1 > 476)
+			if (SizeI1 > 470)
 			{
-				SizeI = 476/2;
-				SizeI = W/2 - SizeI-2;
-				vw_DrawFont(X+SizeI, Y+130, 476, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_quit_line3"));
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+130, -470, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_quit_line3"));
 			}
 			else
 				vw_DrawFont(X+SizeI, Y+130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_quit_line3"));
@@ -709,11 +713,10 @@ void DrawDialogBox()
 			// текст диалога
 			SizeI1 = vw_FontSize(GetText("2_quit_line1"));
 			SizeI = (W-SizeI1)/2;
-			if (SizeI1 > 476)
+			if (SizeI1 > 470)
 			{
-				SizeI = 476/2;
-				SizeI = W/2 - SizeI-2;
-				vw_DrawFont(X+SizeI, Y+100, 476, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_quit_line1"));
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+100, -470, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_quit_line1"));
 			}
 			else
 
@@ -721,11 +724,10 @@ void DrawDialogBox()
 
 			SizeI1 = vw_FontSize(GetText("2_quit_line3"));
 			SizeI = (W-SizeI1)/2;
-			if (SizeI1 > 476)
+			if (SizeI1 > 470)
 			{
-				SizeI = 476/2;
-				SizeI = W/2 - SizeI-2;
-				vw_DrawFont(X+SizeI, Y+130, 476, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_quit_line3"));
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+130, -470, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_quit_line3"));
 			}
 			else
 				vw_DrawFont(X+SizeI, Y+130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_quit_line3"));
@@ -747,22 +749,20 @@ void DrawDialogBox()
 			// текст диалога
 			SizeI1 = vw_FontSize(GetText("2_restart_line1"));
 			SizeI = (W-SizeI1)/2;
-			if (SizeI1 > 476)
+			if (SizeI1 > 470)
 			{
-				SizeI = 476/2;
-				SizeI = W/2 - SizeI-2;
-				vw_DrawFont(X+SizeI, Y+100, 476, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_restart_line1"));
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+100, -470, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_restart_line1"));
 			}
 			else
 				vw_DrawFont(X+SizeI, Y+100, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("2_restart_line1"));
 
 			SizeI1 = vw_FontSize(GetText("2_restart_line2"));
 			SizeI = (W-SizeI1)/2;
-			if (SizeI1 > 476)
+			if (SizeI1 > 470)
 			{
-				SizeI = 476/2;
-				SizeI = W/2 - SizeI-2;
-				vw_DrawFont(X+SizeI, Y+130, 476, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_restart_line2"));
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+130, -470, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_restart_line2"));
 			}
 			else
 				vw_DrawFont(X+SizeI, Y+130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("2_restart_line2"));
@@ -790,57 +790,58 @@ void DrawDialogBox()
 				int Y1 = Y+80;
 				int Offset = 31;
 				int Size = 240;
+				float WScale = -200;
 				int X1 = X+45;
 
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Object_Class:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Space_Ship"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Object_Class:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Space_Ship"));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Ship_Type:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText(GetShipGroupTitle(DialogSpaceShip->ObjectCreationType)));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Ship_Type:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText(GetShipGroupTitle(DialogSpaceShip->ObjectCreationType)));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Developer:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Earth_Federation"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Developer:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Earth_Federation"));
 
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Width:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogSpaceShip->Width, GetText("4_units"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Width:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogSpaceShip->Width, GetText("4_units"));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Length:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogSpaceShip->Length, GetText("4_units"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Length:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogSpaceShip->Length, GetText("4_units"));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Height:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogSpaceShip->Height, GetText("4_units"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Height:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogSpaceShip->Height, GetText("4_units"));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Engines:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", DialogSpaceShip->EngineQuantity, GetText("4_units"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Engines:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", DialogSpaceShip->EngineQuantity, GetText("4_units"));
 
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Armor:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)GetShipArmor(DialogSpaceShip->ObjectCreationType), GetText("4_units"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Armor:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)GetShipArmor(DialogSpaceShip->ObjectCreationType), GetText("4_units"));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk2:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*2), GetText("4_units"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk2:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*2), GetText("4_units"));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk3:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*3), GetText("4_units"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk3:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*3), GetText("4_units"));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk4:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*4), GetText("4_units"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk4:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*4), GetText("4_units"));
 
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Weapons_Slots:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", DialogSpaceShip->WeaponQuantity, GetText("4_units"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Weapons_Slots:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", DialogSpaceShip->WeaponQuantity, GetText("4_units"));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Slots_Levels:"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Slots_Levels:"));
 				int SSS = 0;
 				if (DialogSpaceShip->WeaponQuantity>0)
 				{
-					vw_DrawFont(X1+Size+SSS, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i", DialogSpaceShip->WeaponType[0]);
+					vw_DrawFont(X1+Size+SSS, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i", DialogSpaceShip->WeaponType[0]);
 					SSS += vw_FontSize("%i", DialogSpaceShip->WeaponType[0]);
 				}
 				for (int i=1; i<DialogSpaceShip->WeaponQuantity; i++)
 				{
-					vw_DrawFont(X1+Size+SSS, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "/%i", DialogSpaceShip->WeaponType[i]);
+					vw_DrawFont(X1+Size+SSS, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "/%i", DialogSpaceShip->WeaponType[i]);
 					SSS += vw_FontSize("/%i", DialogSpaceShip->WeaponType[i]);
 				}
 
@@ -859,33 +860,34 @@ void DrawDialogBox()
 				int Y1 = Y+80;
 				int Offset = 31;
 				int Size = 230;
+				float WScale = -200;
 				int X1 = X+45;
 
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Object_Class:"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Object_Class:"));
 				if (DialogWeapon->ObjectCreationType<16)
-					vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Weapon,_Cannon"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Weapon,_Cannon"));
 				else
-					vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Weapon,_Launcher"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Weapon,_Launcher"));
 
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Type:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText(GetWeaponGroupTitle(DialogWeapon->ObjectCreationType)));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Type:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText(GetWeaponGroupTitle(DialogWeapon->ObjectCreationType)));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Developer:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Earth_Federation"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Developer:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Earth_Federation"));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Armor:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)DialogWeapon->StrengthStart, GetText("4_units"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Armor:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)DialogWeapon->StrengthStart, GetText("4_units"));
 
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Width:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp,  "%2.1f %s", DialogWeapon->Width, GetText("4_units"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Width:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp,  "%2.1f %s", DialogWeapon->Width, GetText("4_units"));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Length:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogWeapon->Length, GetText("4_units"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Length:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogWeapon->Length, GetText("4_units"));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Height:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogWeapon->Height, GetText("4_units"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Height:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogWeapon->Height, GetText("4_units"));
 
 				Y1 += Offset;
 				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Damage,_Hull:"));
@@ -893,31 +895,31 @@ void DrawDialogBox()
 				if ((DialogWeapon->ObjectCreationType == 11) |
 					(DialogWeapon->ObjectCreationType == 12) |
 					(DialogWeapon->ObjectCreationType == 14))
-					vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", GetWeaponHullDamage(DialogWeapon->ObjectCreationType), GetText("4_units/sec"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", GetWeaponHullDamage(DialogWeapon->ObjectCreationType), GetText("4_units/sec"));
 				else
-					vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", GetWeaponHullDamage(DialogWeapon->ObjectCreationType), GetText("4_units/shot"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", GetWeaponHullDamage(DialogWeapon->ObjectCreationType), GetText("4_units/shot"));
 
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Damage,_Systems:"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Damage,_Systems:"));
 				if ((DialogWeapon->ObjectCreationType == 11) |
 					(DialogWeapon->ObjectCreationType == 12) |
 					(DialogWeapon->ObjectCreationType == 14))
-					vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", GetWeaponSystemsDamage(DialogWeapon->ObjectCreationType), GetText("4_units/sec"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", GetWeaponSystemsDamage(DialogWeapon->ObjectCreationType), GetText("4_units/sec"));
 				else
-					vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", GetWeaponSystemsDamage(DialogWeapon->ObjectCreationType), GetText("4_units/shot"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", GetWeaponSystemsDamage(DialogWeapon->ObjectCreationType), GetText("4_units/shot"));
 
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Energy_Use:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", DialogWeapon->EnergyUse, GetText("4_units_per_shot"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Energy_Use:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", DialogWeapon->EnergyUse, GetText("4_units_per_shot"));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Ammo:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", DialogWeapon->AmmoStart, GetText("4_units"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Ammo:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", DialogWeapon->AmmoStart, GetText("4_units"));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Reload:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", DialogWeapon->NextFireTime, GetText("4_seconds"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Reload:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", DialogWeapon->NextFireTime, GetText("4_seconds"));
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Range:"));
-				vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetProjectileRange(DialogWeapon->ObjectCreationType), GetText("4_units"));
+				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Range:"));
+				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetProjectileRange(DialogWeapon->ObjectCreationType), GetText("4_units"));
 
 				// закрываем...
 				if (vw_GetWindowLBMouse(true) || vw_GetWindowRBMouse(true)) CloseDialog();
@@ -934,6 +936,7 @@ void DrawDialogBox()
 				int Y1 = Y+80;
 				int Offset = 31;
 				int Size = 230;
+				float WScale = -200;
 				int Size2 = 130;
 				int X1 = X+45;
 
@@ -944,29 +947,29 @@ void DrawDialogBox()
 					case 3:
 					case 4:
 
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Object_Class:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_System"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Object_Class:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_System"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Type:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Spaceship_Engine"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Type:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Spaceship_Engine"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Developer:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Earth_Federation"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Developer:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Earth_Federation"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Ion_Resistance:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", 0.0f, GetText("4_units"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Ion_Resistance:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", 0.0f, GetText("4_units"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Energy_Use:"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Energy_Use:"));
 						if (NeedMoreEnergyDialog && Setup.Profile[CurrentProfile].SpaceShipControlMode != 1)
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*DialogContentTransp, "%3.1f %s", GetShipEngineSystemEnergyUse(DialogSystem), GetText("4_units_per_sec"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*DialogContentTransp, "%3.1f %s", GetShipEngineSystemEnergyUse(DialogSystem), GetText("4_units_per_sec"));
 						else
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipEngineSystemEnergyUse(DialogSystem), GetText("4_units_per_sec"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipEngineSystemEnergyUse(DialogSystem), GetText("4_units_per_sec"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Engine_Power:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetEnginePower(DialogSystem), GetText("4_units"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Engine_Power:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetEnginePower(DialogSystem), GetText("4_units"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Acceleration:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetEngineAcceleration(DialogSystem), GetText("4_units"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Acceleration:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetEngineAcceleration(DialogSystem), GetText("4_units"));
 
 						Y1 += Offset;
 						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Relations/Dependences:"));
@@ -993,26 +996,26 @@ void DrawDialogBox()
 					case 7:
 					case 8:
 
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Object_Class:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_System"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Object_Class:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_System"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Type:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Power_Source"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Type:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Power_Source"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Developer:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Earth_Federation"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Developer:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Earth_Federation"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Ion_Resistance:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", 0.0f, GetText("4_units"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Ion_Resistance:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", 0.0f, GetText("4_units"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Energy_Capacity:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipMaxEnergy(DialogSystem-4), GetText("4_units"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Energy_Capacity:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipMaxEnergy(DialogSystem-4), GetText("4_units"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Recharge_Rate:"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Recharge_Rate:"));
 						if (NeedMoreEnergyDialog)
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*DialogContentTransp, "%3.1f %s", GetShipRechargeEnergy(DialogSystem-4), GetText("4_units_per_sec"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*DialogContentTransp, "%3.1f %s", GetShipRechargeEnergy(DialogSystem-4), GetText("4_units_per_sec"));
 						else
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipRechargeEnergy(DialogSystem-4), GetText("4_units_per_sec"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipRechargeEnergy(DialogSystem-4), GetText("4_units_per_sec"));
 						Y1 += Offset;
 						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Relations/Dependences:"));
 						Y1 += Offset;
@@ -1033,42 +1036,42 @@ void DrawDialogBox()
 					case 11:
 					case 12:
 
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Object_Class:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_System"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Object_Class:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_System"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Type:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Optical_Computer"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Type:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Optical_Computer"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Developer:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Earth_Federation"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Developer:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Earth_Federation"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Ion_Resistance:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", 0.0f, GetText("4_units"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Ion_Resistance:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", 0.0f, GetText("4_units"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Energy_Use:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 0.1f, GetText("4_units_per_sec"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Energy_Use:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 0.1f, GetText("4_units_per_sec"));
 
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Target_Tracing:"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Target_Tracing:"));
 						if (DialogSystem == 9)
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", 1, GetText("4_object(s)"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", 1, GetText("4_object(s)"));
 						if (DialogSystem == 10)
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", 1, GetText("4_object(s)"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", 1, GetText("4_object(s)"));
 						if (DialogSystem == 11)
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", 6, GetText("4_object(s)"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", 6, GetText("4_object(s)"));
 						if (DialogSystem == 12)
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", 6, GetText("4_object(s)"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", 6, GetText("4_object(s)"));
 
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Auto_Adjustment:"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Auto_Adjustment:"));
 						if (DialogSystem == 9)
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_No"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_No"));
 						if (DialogSystem == 10)
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Yes"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Yes"));
 						if (DialogSystem == 11)
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_No"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_No"));
 						if (DialogSystem == 12)
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Yes"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Yes"));
 
 						Y1 += Offset;
 						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Relations/Dependences:"));
@@ -1088,23 +1091,23 @@ void DrawDialogBox()
 					case 15:
 					case 16:
 
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Object_Class:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_System"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Object_Class:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_System"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Type:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Targeting_System"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Type:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Targeting_System"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Developer:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Earth_Federation"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Developer:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Earth_Federation"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Ion_Resistance:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", 0.0f, GetText("4_units"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Ion_Resistance:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", 0.0f, GetText("4_units"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Energy_Use:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 0.1f, GetText("4_units_per_sec"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Energy_Use:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 0.1f, GetText("4_units_per_sec"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Orientation_Speed:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 40.0f*(DialogSystem-12), GetText("4_deg_per_sec"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Orientation_Speed:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 40.0f*(DialogSystem-12), GetText("4_deg_per_sec"));
 
 						Y1 += Offset;
 						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Relations/Dependences:"));
@@ -1133,56 +1136,56 @@ void DrawDialogBox()
 					case 19:
 					case 20:
 
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Object_Class:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_System"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Object_Class:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_System"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Type:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Advanced_System"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Type:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Advanced_System"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Developer:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Earth_Federation"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Developer:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Earth_Federation"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Ion_Resistance:"));
-						vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", 0.0f, GetText("4_units"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Ion_Resistance:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", 0.0f, GetText("4_units"));
 						Y1 += Offset;
-						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Energy_Use:"));
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Energy_Use:"));
 						if (NeedMoreEnergyDialog)
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*DialogContentTransp, "%3.1f %s", GetShipProtectionSystemEnergyUse(DialogSystem-16), GetText("4_units_per_sec"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*DialogContentTransp, "%3.1f %s", GetShipProtectionSystemEnergyUse(DialogSystem-16), GetText("4_units_per_sec"));
 						else
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipProtectionSystemEnergyUse(DialogSystem-16), GetText("4_units_per_sec"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipProtectionSystemEnergyUse(DialogSystem-16), GetText("4_units_per_sec"));
 
 						if (DialogSystem == 17)
 						{
 							Y1 += Offset;
-							vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Hull_Repair_Rate:"));
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%0.1f%% %s", 0.5f, GetText("4_per_sec"));
+							vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Hull_Repair_Rate:"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%0.1f%% %s", 0.5f, GetText("4_per_sec"));
 						}
 						if (DialogSystem == 18)
 						{
 							Y1 += Offset;
-							vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Resistance,_Hull:"));
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i", 4);
+							vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Resistance,_Hull:"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i", 4);
 							Y1 += Offset;
-							vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Resistance,_System:"));
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i", 5);
+							vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Resistance,_System:"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i", 5);
 						}
 						if (DialogSystem == 19)
 						{
 							Y1 += Offset;
-							vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Shield_Power:"));
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 100.0f, GetText("4_units"));
+							vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Shield_Power:"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 100.0f, GetText("4_units"));
 							Y1 += Offset;
-							vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Recharge_Rate:"));
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i%% %s", 2, GetText("4_per_sec"));
+							vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Recharge_Rate:"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i%% %s", 2, GetText("4_per_sec"));
 						}
 						if (DialogSystem == 20)
 						{
 							Y1 += Offset;
-							vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Shield_Power:"));
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 150.0f, GetText("4_units"));
+							vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Shield_Power:"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 150.0f, GetText("4_units"));
 							Y1 += Offset;
-							vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Recharge_Rate:"));
-							vw_DrawFont(X1+Size, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i%% %s", 3, GetText("4_per_sec"));
+							vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Recharge_Rate:"));
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i%% %s", 3, GetText("4_per_sec"));
 						}
 
 						Y1 += Offset;
@@ -1216,16 +1219,16 @@ void DrawDialogBox()
 			vw_DrawFont(X+25, Y+ 80, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_9Line1"));
 			vw_DrawFont(X+25, Y+115, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_9Line2"));
 			vw_DrawFont(X+25, Y+150, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_9Line3"));
-			vw_DrawFont(X+25, Y+185, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_9Line4"));
+			vw_DrawFont(X+25, Y+185, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_9Line4"));
 
 			vw_DrawFont(X+25, Y+240, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_9Line5"));
 			vw_DrawFont(X+25, Y+275, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_9Line6"));
 			vw_DrawFont(X+25, Y+310, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_9Line7"));
 			vw_DrawFont(X+25, Y+345, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_9Line8"));
-			vw_DrawFont(X+25, Y+380, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_9Line9"));
+			vw_DrawFont(X+25, Y+380, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_9Line9"));
 
 			vw_DrawFont(X+25, Y+435, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_9Line10"));
-			vw_DrawFont(X+25, Y+470, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_9Line11"));
+			vw_DrawFont(X+25, Y+470, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_9Line11"));
 
 			// чекбокс
 			bool ttt = !Setup.NeedShowHint[0];
@@ -1246,19 +1249,19 @@ void DrawDialogBox()
 			vw_DrawFont(X+25, Y+80+k*0, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_10Line1"));
 			vw_DrawFont(X+25, Y+80+k*1, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_10Line2"));
 			vw_DrawFont(X+25, Y+80+k*2, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_10Line3"));
-			vw_DrawFont(X+25, Y+80+k*3, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_10Line4"));
+			vw_DrawFont(X+25, Y+80+k*3, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_10Line4"));
 
 			vw_DrawFont(X+25, Y+100+k*4, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_10Line5"));
 			vw_DrawFont(X+25, Y+100+k*5, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_10Line6"));
 			vw_DrawFont(X+25, Y+100+k*6, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_10Line7"));
-			vw_DrawFont(X+25, Y+100+k*7, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_10Line8"));
+			vw_DrawFont(X+25, Y+100+k*7, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_10Line8"));
 
-			vw_DrawFont(X+25, Y+120+k*8, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_10Line9"));
-			vw_DrawFont(X+25, Y+120+k*9, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_10Line10"));
-			vw_DrawFont(X+25, Y+120+k*10, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_10Line11"));
-			vw_DrawFont(X+25, Y+120+k*11, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_10Line12"));
-			vw_DrawFont(X+25, Y+120+k*12, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_10Line13"));
-			vw_DrawFont(X+25, Y+120+k*13, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_10Line14"));
+			vw_DrawFont(X+25, Y+120+k*8, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_10Line9"));
+			vw_DrawFont(X+25, Y+120+k*9, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_10Line10"));
+			vw_DrawFont(X+25, Y+120+k*10, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_10Line11"));
+			vw_DrawFont(X+25, Y+120+k*11, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_10Line12"));
+			vw_DrawFont(X+25, Y+120+k*12, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_10Line13"));
+			vw_DrawFont(X+25, Y+120+k*13, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_10Line14"));
 
 			// чекбокс
 			bool ttt = !Setup.NeedShowHint[1];
@@ -1278,22 +1281,22 @@ void DrawDialogBox()
 			int k=25;
 			vw_DrawFont(X+25, Y+80+k*0, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_11Line1"));
 			vw_DrawFont(X+25, Y+80+k*1, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_11Line2"));
-			vw_DrawFont(X+25, Y+80+k*2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_11Line3"));
+			vw_DrawFont(X+25, Y+80+k*2, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_11Line3"));
 
 			vw_DrawFont(X+25, Y+100+k*3, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_11Line4"));
 			vw_DrawFont(X+25, Y+100+k*4, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_11Line5"));
-			vw_DrawFont(X+25, Y+100+k*5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_11Line6"));
+			vw_DrawFont(X+25, Y+100+k*5, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_11Line6"));
 
 			vw_DrawFont(X+25, Y+120+k*6, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_11Line7"));
-			vw_DrawFont(X+40, Y+120+k*7, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_11Line8"));
+			vw_DrawFont(X+40, Y+120+k*7, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_11Line8"));
 			vw_DrawFont(X+25, Y+120+k*8, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_11Line9"));
-			vw_DrawFont(X+40, Y+120+k*9, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_11Line10"));
+			vw_DrawFont(X+40, Y+120+k*9, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_11Line10"));
 			vw_DrawFont(X+25, Y+120+k*10, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_11Line11"));
-			vw_DrawFont(X+40, Y+120+k*11, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_11Line12"));
+			vw_DrawFont(X+40, Y+120+k*11, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_11Line12"));
 			vw_DrawFont(X+25, Y+120+k*12, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_11Line13"));
-			vw_DrawFont(X+40, Y+120+k*13, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_11Line14"));
+			vw_DrawFont(X+40, Y+120+k*13, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_11Line14"));
 			vw_DrawFont(X+25, Y+120+k*14, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_11Line15"));
-			vw_DrawFont(X+40, Y+120+k*15, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_11Line16"));
+			vw_DrawFont(X+40, Y+120+k*15, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_11Line16"));
 
 			// чекбокс
 			bool ttt = !Setup.NeedShowHint[2];
@@ -1316,19 +1319,19 @@ void DrawDialogBox()
 			vw_DrawFont(X+25, Y+80+k*2, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_12Line3"));
 			vw_DrawFont(X+25, Y+80+k*3, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_12Line4"));
 			vw_DrawFont(X+25, Y+80+k*4, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_12Line5"));
-			vw_DrawFont(X+25, Y+80+k*5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_12Line6"));
+			vw_DrawFont(X+25, Y+80+k*5, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_12Line6"));
 
 			vw_DrawFont(X+25, Y+100+k*6, 716, 0,1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_12Line7"));
-			vw_DrawFont(X+25, Y+100+k*7, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_12Line8"));
+			vw_DrawFont(X+25, Y+100+k*7, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_12Line8"));
 
-			vw_DrawFont(X+25, Y+120+k*8, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_12Line9"));
+			vw_DrawFont(X+25, Y+120+k*8, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_12Line9"));
 			vw_DrawFont(X+25, Y+120+k*9, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_12Line10"));
-			vw_DrawFont(X+40, Y+120+k*10, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_12Line11"));
+			vw_DrawFont(X+40, Y+120+k*10, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_12Line11"));
 			vw_DrawFont(X+25, Y+120+k*11, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_12Line12"));
 			vw_DrawFont(X+40, Y+120+k*12, 716-15, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_12Line13"));
-			vw_DrawFont(X+40, Y+120+k*13, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_12Line14"));
+			vw_DrawFont(X+40, Y+120+k*13, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_12Line14"));
 			vw_DrawFont(X+25, Y+120+k*14, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_12Line15"));
-			vw_DrawFont(X+40, Y+120+k*15, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_12Line16"));
+			vw_DrawFont(X+40, Y+120+k*15, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_12Line16"));
 
 
 
@@ -1351,23 +1354,23 @@ void DrawDialogBox()
 			int k=23;
 
 			SizeI = (W-vw_FontSize(GetText("9_13Line1")))/2;
-			vw_DrawFont(X+SizeI, Y+80+k*0, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line1"));
+			vw_DrawFont(X+SizeI, Y+80+k*0, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line1"));
 
-			vw_DrawFont(X+25, Y+100+k*1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line2"));
+			vw_DrawFont(X+25, Y+100+k*1, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line2"));
 
-			vw_DrawFont(X+25, Y+120+k*2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line6"));
-			vw_DrawFont(X+25, Y+120+k*3, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line7"));
-			vw_DrawFont(X+25, Y+120+k*4, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line8"));
-			vw_DrawFont(X+25, Y+120+k*5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_13Line9"));
+			vw_DrawFont(X+25, Y+120+k*2, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line6"));
+			vw_DrawFont(X+25, Y+120+k*3, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line7"));
+			vw_DrawFont(X+25, Y+120+k*4, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line8"));
+			vw_DrawFont(X+25, Y+120+k*5, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_13Line9"));
 
-			vw_DrawFont(X+25, Y+140+k*6, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line10"));
-			vw_DrawFont(X+25, Y+140+k*7, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line11"));
-			vw_DrawFont(X+25, Y+140+k*8, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line12"));
+			vw_DrawFont(X+25, Y+140+k*6, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line10"));
+			vw_DrawFont(X+25, Y+140+k*7, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line11"));
+			vw_DrawFont(X+25, Y+140+k*8, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line12"));
 
-			vw_DrawFont(X+25, Y+160+k*9, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line13"));
+			vw_DrawFont(X+25, Y+160+k*9, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line13"));
 
-			vw_DrawFont(X+25, Y+180+k*10, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line14"));
-			vw_DrawFont(X+25, Y+180+k*11, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_13Line15"));
+			vw_DrawFont(X+25, Y+180+k*10, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_13Line14"));
+			vw_DrawFont(X+25, Y+180+k*11, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, GetText("9_13Line15"));
 
 
 
@@ -1402,16 +1405,16 @@ void DrawDialogBox()
 			int k=30;
 
 			vw_DrawFont(X+25, Y+80+k*0, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_15Line1"));
-			vw_DrawFont(X+25, Y+80+k*1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_15Line2"), Setup.Profile[CurrentProfile].ByMissionExperience[CurrentMission]);
+			vw_DrawFont(X+25, Y+80+k*1, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_15Line2"), Setup.Profile[CurrentProfile].ByMissionExperience[CurrentMission]);
 
 			vw_DrawFont(X+25, Y+100+k*2, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_15Line3"));
 			vw_DrawFont(X+25, Y+100+k*3, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_15Line4"));
 			vw_DrawFont(X+25, Y+100+k*4, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_15Line5"));
-			vw_DrawFont(X+25, Y+100+k*5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_15Line6"));
+			vw_DrawFont(X+25, Y+100+k*5, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_15Line6"));
 
 			vw_DrawFont(X+25, Y+120+k*6, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_15Line7"));
 			vw_DrawFont(X+25, Y+120+k*7, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_15Line8"));
-			vw_DrawFont(X+25, Y+120+k*8, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_15Line9"));
+			vw_DrawFont(X+25, Y+120+k*8, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_15Line9"));
 
 
 			// чекбокс
@@ -1443,14 +1446,14 @@ void DrawDialogBox()
 			int k=33;
 
 			SizeI = (768 - vw_FontSize(GetText("9_18Line1")))/2;
-			vw_DrawFont(X+SizeI, Y+80+k*0, 0, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, GetText("9_18Line1"));
+			vw_DrawFont(X+SizeI, Y+80+k*0, -716, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, GetText("9_18Line1"));
 
 			vw_DrawFont(X+25, Y+80+k*2, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_18Line2"));
-			vw_DrawFont(X+25, Y+80+k*3, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_18Line3"));
+			vw_DrawFont(X+25, Y+80+k*3, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_18Line3"));
 
 			vw_DrawFont(X+25, Y+80+k*5, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_18Line4"));
 			vw_DrawFont(X+25, Y+80+k*6, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_18Line5"));
-			vw_DrawFont(X+25, Y+80+k*7, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_18Line6"));
+			vw_DrawFont(X+25, Y+80+k*7, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("9_18Line6"));
 
 			if (DrawDialogButton200(X+284, Y+80+k*9, GetText("1_DONATE"), DialogContentTransp))
 			{
