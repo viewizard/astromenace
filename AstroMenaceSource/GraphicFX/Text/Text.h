@@ -6,10 +6,10 @@
 
 	File name: Text.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -40,11 +40,11 @@
 
 
 
-class CText
+class CGameLvlText
 {
 public:
-	CText();
-	~CText();
+	CGameLvlText();
+	~CGameLvlText();
 
 	// обновить
 	bool Update(float Time);
@@ -68,8 +68,8 @@ public:
 
 
 
-	CText *Next;
-	CText *Prev;
+	CGameLvlText *Next;
+	CGameLvlText *Prev;
 
 
 };
@@ -85,15 +85,15 @@ public:
 //-----------------------------------------------------------------------------
 
 // Включаем в список
-void	AttachText(CText * NewText);
+void	AttachGameLvlText(CGameLvlText * NewText);
 // Исключаем из списка
-void	DetachText(CText * OldText);
+void	DetachGameLvlText(CGameLvlText * OldText);
 // Удаляем все объекты в списке
-void	ReleaseAllText();
+void	ReleaseAllGameLvlText();
 // Прорисовываем все объекты
-void	DrawAllText();
+void	DrawAllGameLvlText();
 //	Проверяем все объекты, обновляем данные
-void	UpdateAllText(float Time);
+void	UpdateAllGameLvlText(float Time);
 
 
 

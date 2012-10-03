@@ -311,10 +311,12 @@ int	vw_WriteIntoVFSfromMemory(const char *Name, const BYTE * buffer, int size)
 	// надо составлять свою ArhKeyVFS
 	// 0 - 0
 	int BestMode = 0;
+
+#ifdef compression
+
 	int BestSize = NewVFS_Entry->Length;
 	int TmpSize = 0;
 
-#ifdef compression
 
 	// 1 - 1
 	NewVFS_Entry->ArhKey = new char[1+1];

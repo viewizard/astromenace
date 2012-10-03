@@ -326,7 +326,6 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 	printf("Vendor     : %s\n", glGetString(GL_VENDOR));
 	printf("Renderer   : %s\n", glGetString(GL_RENDERER));
 	printf("Version    : %s\n", glGetString(GL_VERSION));
-	printf("Video RAM  : %i\n", OpenGL_DevCaps.VidMemTotal);
 	printf("\n");
 	OpenGL_DevCaps.MaxTextureHeight = 256;
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &OpenGL_DevCaps.MaxTextureHeight);
@@ -477,7 +476,6 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 
 	// получаем и выводим все поддерживаемые расширения
 	char *extensions_tmp;
-	int i;
 	size_t len;
 	extensions_tmp = (char *)glGetString(GL_EXTENSIONS);
 	if (extensions_tmp != 0)
@@ -488,7 +486,7 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 		if (extensions != 0)
 		{
 			strcpy(extensions, extensions_tmp);
-			for (i=0; i<len; i++) // меняем разделитель
+			for (unsigned int i=0; i<len; i++) // меняем разделитель
 				if (extensions[i]==' ') extensions[i]='\n';
 
 			printf("Supported OpenGL extensions:\n%s\n", extensions);

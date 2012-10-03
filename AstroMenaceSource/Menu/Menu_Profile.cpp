@@ -314,86 +314,87 @@ exit:
 //------------------------------------------------------------------------------------
 void ProfileInputText()
 {
-	int X1 = Setup.iAspectRatioWidth/2 - 372;
-	int Y1 = 230;
 
-
-
-	for (int i=0; i<GetMaxKeys(); i++)
-	if (vw_GetKeys(i))
+	// пишем букву, если можем
+	if (Pos < 127)
+	if (vw_FontSize(NewProfileName)< 540)
+	if (vw_GetCurrentKeyUnicod()) // если тут не ноль, а юникод - значит нажали
 	{
-		// пишем букву, если можем
-		if (Pos < 127)
-			if (vw_FontSize(NewProfileName)< 540)
-				if ((i != SDLK_BACKSPACE) & (vw_VirtualCodeName(Setup.MenuLanguage, i) != 0)) // пока не убирать, надо переработать чтоб не реагировало на эскейп и прочее..
-				if (vw_GetCurrentKeyUnicod())
-				{
-
-					Uint16 NewChar = vw_GetCurrentKeyUnicod();
-					vw_SetCurrentKeyUnicod(0); // сразу сбрасываем данные
-					// делаем простое преобразование, без учета суррогатной пары
-					char* str = NewProfileName + Pos;
-					if (NewChar <= 0x7F)
-					{
-						*str = (char)NewChar;
-						Pos++;
-					}
-					else if (NewChar <= 0x7FF)
-					{
-						*str++ = (char)(0xC0 | (NewChar >> 6));
-						*str = (char)(0x80 | (NewChar & 0x3F));
-						Pos+=2;
-					}
-					else if (NewChar <= 0xFFFF)
-					{
-						*str++ = (char)(0xE0 | (NewChar >> 12));
-						*str++ = (char)(0x80 | ((NewChar >> 6) & 0x3F));
-						*str = (char)(0x80 | (NewChar & 0x3F));
-						Pos+=3;
-					}
-
-
-					if (vw_FindSoundByNum(SoundTaping) != 0)
-						vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
-					SoundTaping = Audio_PlayMenuSound(4,1.0f);
-
-					vw_SetKeys(i, false);
-				}
-
-
-		// проверяем, может спец-код
-		if (i == SDLK_BACKSPACE)
-		if (Pos>0)
+		Uint16 NewChar = vw_GetCurrentKeyUnicod();
+		vw_SetCurrentKeyUnicod(0); // сразу сбрасываем данные
+		// делаем простое преобразование, без учета суррогатной пары
+		char* str = NewProfileName + Pos;
+		if (NewChar <= 0x7F)
 		{
-
-			Pos--;
-			if (NewProfileName[Pos] < 0)
-			{
-				NewProfileName[Pos] = 0;
-				Pos--;
-			}
-			NewProfileName[Pos] = 0;
-
-
-			if (vw_FindSoundByNum(SoundTaping) != 0)
-				vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
-			SoundTaping = Audio_PlayMenuSound(4,1.0f);
-
-			vw_SetKeys(i, false);
+			*str = (char)NewChar;
+			Pos++;
+		}
+		else if (NewChar <= 0x7FF)
+		{
+			*str++ = (char)(0xC0 | (NewChar >> 6));
+			*str = (char)(0x80 | (NewChar & 0x3F));
+			Pos+=2;
+		}
+		else if (NewChar <= 0xFFFF)
+		{
+			*str++ = (char)(0xE0 | (NewChar >> 12));
+			*str++ = (char)(0x80 | ((NewChar >> 6) & 0x3F));
+			*str = (char)(0x80 | (NewChar & 0x3F));
+			Pos+=3;
 		}
 
-		// ввод названия
-		if (i == SDLK_KP_ENTER || i == SDLK_RETURN)
-		if (Pos>0)
-		{
-			NewRecord();
-			//Audio_PlayMenuSound(4,1.0f);
-			vw_SetKeys(i, false);
-		}
+		if (vw_FindSoundByNum(SoundTaping) != 0)
+			vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
 
+		SoundTaping = Audio_PlayMenuSound(4,1.0f);
+
+		vw_SetCurrentKeyUnicod(0);
 	}
 
 
+
+	// проверяем, может спец-код
+	if (vw_GetKeys(SDLK_BACKSPACE))
+	if (Pos>0)
+	{
+		// кривое решение на "пока", перебираем в поисках предпоследнего символа
+		const char *ReversePoint = NewProfileName;
+		const char *ReversePointPrevious = 0;
+		while (strlen(ReversePoint) > 0)
+		{
+			unsigned CurrentChar;
+			ReversePointPrevious = ReversePoint;
+			ReversePoint = utf8_to_utf32(ReversePoint, &CurrentChar);
+		}
+		while (ReversePointPrevious != ReversePoint)
+		{
+			NewProfileName[Pos] = 0;
+			Pos--;
+			ReversePointPrevious++;
+		}
+		NewProfileName[Pos] = 0;
+
+		if (vw_FindSoundByNum(SoundTaping) != 0)
+			vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
+		SoundTaping = Audio_PlayMenuSound(4,1.0f);
+
+		vw_SetKeys(SDLK_BACKSPACE, false);
+	}
+
+	// ввод названия
+	if (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN))
+	if (Pos>0)
+	{
+		NewRecord();
+		//Audio_PlayMenuSound(4,1.0f);
+		vw_SetKeys(SDLK_KP_ENTER, false);
+		vw_SetKeys(SDLK_RETURN, false);
+	}
+
+
+
+	int X1 = Setup.iAspectRatioWidth/2 - 372;
+	int Y1 = 230;
 
 	// находим положения ввода
 	int Size = vw_FontSize(NewProfileName);
@@ -402,7 +403,6 @@ void ProfileInputText()
 	SetRect(&DstRest,X1+Size+2,Y1-2,X1+26+Size,Y1+24);
 	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/whitepoint.tga"),
 		true, CurrentProfileNameTransp*MenuContentTransp);
-
 
 	float DeltaTime = vw_GetTime() - LastProfileNameTime;
 	LastProfileNameTime = vw_GetTime();

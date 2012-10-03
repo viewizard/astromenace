@@ -6,10 +6,10 @@
 
 	File name: Text.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -38,7 +38,7 @@
 //-----------------------------------------------------------------------------
 // инициализация класса
 //-----------------------------------------------------------------------------
-CText::CText()
+CGameLvlText::CGameLvlText()
 {
 	TimeLastUpdate = -1.0f;
 	Lifetime = -1.0f;
@@ -47,7 +47,7 @@ CText::CText()
 
 	PosX = PosY = 0;
 
-	AttachText(this);
+	AttachGameLvlText(this);
 
 }
 
@@ -55,17 +55,17 @@ CText::CText()
 //-----------------------------------------------------------------------------
 //	При разрушении класса
 //-----------------------------------------------------------------------------
-CText::~CText()
+CGameLvlText::~CGameLvlText()
 {
 	if (DrawText != 0){delete [] DrawText; DrawText = 0;}
-	DetachText(this);
+	DetachGameLvlText(this);
 }
 
 
 //-----------------------------------------------------------------------------
 // обновление
 //-----------------------------------------------------------------------------
-bool CText::Update(float Time)
+bool CGameLvlText::Update(float Time)
 {
 	// первый раз... просто берем время
 	if (TimeLastUpdate == -1.0f) {TimeLastUpdate = Time;return true;}
@@ -100,7 +100,7 @@ bool CText::Update(float Time)
 //-----------------------------------------------------------------------------
 // прорисовка
 //-----------------------------------------------------------------------------
-void CText::Draw()
+void CGameLvlText::Draw()
 {
 	if (DrawText != 0)
 	{

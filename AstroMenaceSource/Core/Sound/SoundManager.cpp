@@ -163,7 +163,6 @@ bool vw_InitSound()
 
 	// получаем и выводим все поддерживаемые расширения
 	char *extensions_tmp;
-	int i;
 	size_t len;
 	extensions_tmp = (char *)alGetString(AL_EXTENSIONS);
 	if (extensions_tmp != 0)
@@ -174,7 +173,7 @@ bool vw_InitSound()
 		if (extensions != 0)
 		{
 			strcpy(extensions, extensions_tmp);
-			for (i=0; i<len; i++) // меняем разделитель
+			for (unsigned int i=0; i<len; i++) // меняем разделитель
 				if (extensions[i]==' ') extensions[i]='\n';
 
 			printf("Supported OpenAL extensions:\n%s\n", extensions);
