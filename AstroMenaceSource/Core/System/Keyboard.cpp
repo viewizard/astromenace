@@ -5,10 +5,10 @@
 
 	File name: Keyboard.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -71,9 +71,9 @@ const char * vw_VirtualCodeNameDE(int Num);
 const char * vw_VirtualCodeNameRU(int Num);
 
 
-const char * vw_VirtualCodeName(int KeyboardLayout, int Num)
+const char * vw_VirtualCodeName(int Language, int Num)
 {
-	switch (KeyboardLayout)
+	switch (Language)
 	{
 		case 1: return vw_VirtualCodeNameEN(Num);
 		case 2: return vw_VirtualCodeNameDE(Num);
@@ -81,135 +81,6 @@ const char * vw_VirtualCodeName(int KeyboardLayout, int Num)
 	}
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-// значения кнопок клавиатуры
-int VirtualCodeChar1(int Num);
-int VirtualCodeChar2(int Num);
-int VirtualCodeChar3(int Num);
-int VirtualCodeChar4(int Num);
-
-// значения кнопок клавиатуры
-int VirtualCodeCharDE1(int Num);
-int VirtualCodeCharDE2(int Num);
-int VirtualCodeCharDE3(int Num);
-int VirtualCodeCharDE4(int Num);
-
-// значения кнопок клавиатуры
-int VirtualCodeCharRU1(int Num);
-int VirtualCodeCharRU2(int Num);
-int VirtualCodeCharRU3(int Num);
-int VirtualCodeCharRU4(int Num);
-
-
-
-
-
-
-
-
-
-int vw_VirtualCodeChar(int KeyboardLayout, int Num)
-{
-	// нажат CapsLock
-	bool CapsLockOn = false;
-	// делаем немного "сложно", чтобы избежать перфоменс варнинга на MSVC
-	if((SDL_GetModState() & KMOD_CAPS) > 0) CapsLockOn = true;
-
-
-	switch (KeyboardLayout)
-	{
-		case 1:
-		{
-			// нажат LeftShift или LeftShift
-			if (SDL_GetModState() & KMOD_SHIFT)
-			{
-				if (VirtualCodeChar1(Num) != 0)
-				{
-					if (!CapsLockOn)
-						return VirtualCodeChar1(Num);
-					else
-						return VirtualCodeChar4(Num);
-				}
-			}
-			else
-			{
-				if (VirtualCodeChar2(Num) != 0)
-				{
-					if (!CapsLockOn)
-						return VirtualCodeChar2(Num);
-					else
-						return VirtualCodeChar3(Num);
-				}
-			}
-		}
-		break;
-		case 2:
-		{
-			// нажат LeftShift или LeftShift
-			if (SDL_GetModState() & KMOD_SHIFT)
-			{
-				if (VirtualCodeCharDE1(Num) != 0)
-				{
-					if (!CapsLockOn)
-						return VirtualCodeCharDE1(Num);
-					else
-						return VirtualCodeCharDE4(Num);
-				}
-			}
-			else
-			{
-				if (VirtualCodeCharDE2(Num) != 0)
-				{
-					if (!CapsLockOn)
-						return VirtualCodeCharDE2(Num);
-					else
-						return VirtualCodeCharDE3(Num);
-				}
-			}
-		}
-		break;
-		case 3:
-		{
-			// нажат LeftShift или LeftShift
-			if (SDL_GetModState() & KMOD_SHIFT)
-			{
-				if (VirtualCodeCharRU1(Num) != 0)
-				{
-					if (!CapsLockOn)
-						return VirtualCodeCharRU1(Num);
-					else
-						return VirtualCodeCharRU4(Num);
-				}
-			}
-			else
-			{
-				if (VirtualCodeCharRU2(Num) != 0)
-				{
-					if (!CapsLockOn)
-						return VirtualCodeCharRU2(Num);
-					else
-						return VirtualCodeCharRU3(Num);
-				}
-			}
-		}
-		break;
-	}
-
-	return 0;
-}
-
-
-
-
 
 
 
@@ -362,8 +233,4 @@ Uint16 vw_GetCurrentKeyUnicod()
 {
 	return CurrentKeyUnicod;
 }
-
-
-
-
 

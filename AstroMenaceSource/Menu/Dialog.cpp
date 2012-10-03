@@ -1513,7 +1513,6 @@ void DrawDialogBox()
 					NeedReCreate = true;
 					Setup.MenuLanguage = 1;
 					Setup.VoiceLanguage = 1;
-					Setup.KeyboardLayout = 1;
 				}
 			}
 			if (DrawDialogButton200(X+128+64-72/2,Y+ButtonOffset-53, "Deutsch", DialogContentTransp))
@@ -1526,7 +1525,6 @@ void DrawDialogBox()
 					NeedReCreate = true;
 					Setup.MenuLanguage = 2;
 					Setup.VoiceLanguage = 2;
-					Setup.KeyboardLayout = 2;
 				}
 			}
 			if (DrawDialogButton200(X+128+64-72/2,Y+ButtonOffset, "Русский", DialogContentTransp))
@@ -1539,7 +1537,6 @@ void DrawDialogBox()
 					NeedReCreate = true;
 					Setup.MenuLanguage = 3;
 					Setup.VoiceLanguage = 3;
-					Setup.KeyboardLayout = 3;
 				}
 			}
 

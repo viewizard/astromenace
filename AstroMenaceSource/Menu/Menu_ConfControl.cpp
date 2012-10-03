@@ -126,7 +126,7 @@ void CheckMouseKeybJState()
 		for (int i=0; i<GetMaxKeys(); i++)
 		{
 			if (vw_GetKeys(i))
-			if (vw_VirtualCodeName(Setup.KeyboardLayout, i) != 0) // если мы играем с этой кнопкой
+			if (vw_VirtualCodeName(Setup.MenuLanguage, i) != 0) // если мы играем с этой кнопкой
 			{
 				switch(NeedCheck)
 				{
@@ -301,7 +301,7 @@ void ConfControlMenu()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 5) {Transp = But[4]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.KeyboardLayout, Setup.KeyBoardPrimary), Transp*MenuContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardPrimary), Transp*MenuContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardPrimary = 0;
@@ -336,7 +336,7 @@ void ConfControlMenu()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 6) {Transp = But[5]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.KeyboardLayout, Setup.KeyBoardSecondary), Transp*MenuContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardSecondary), Transp*MenuContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardSecondary = 0;
@@ -362,7 +362,7 @@ void ConfControlMenu()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 1) {Transp = But[0]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.KeyboardLayout, Setup.KeyBoardUp), Transp*MenuContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardUp), Transp*MenuContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardUp = 0;
@@ -374,7 +374,7 @@ void ConfControlMenu()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 2) {Transp = But[1]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.KeyboardLayout, Setup.KeyBoardDown), Transp*MenuContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardDown), Transp*MenuContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardDown = 0;
@@ -386,7 +386,7 @@ void ConfControlMenu()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 3) {Transp = But[2]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.KeyboardLayout, Setup.KeyBoardLeft), Transp*MenuContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardLeft), Transp*MenuContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardLeft = 0;
@@ -398,7 +398,7 @@ void ConfControlMenu()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 4) {Transp = But[3]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.KeyboardLayout, Setup.KeyBoardRight), Transp*MenuContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardRight), Transp*MenuContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardRight = 0;

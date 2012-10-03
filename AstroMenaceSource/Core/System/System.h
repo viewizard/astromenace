@@ -5,10 +5,10 @@
 
 	File name: System.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -59,8 +59,7 @@ float 	vw_GetTimeThreadSpeed(int TimeThread=0);
 bool	vw_GetKeys(int Num);
 void	vw_SetKeys(int Num, bool NewKeyStatus);
 int 	GetMaxKeys();
-const char* 	vw_VirtualCodeName(int KeyboardLayout, int Num);
-int 	vw_VirtualCodeChar(int KeyboardLayout, int Num);
+const char* 	vw_VirtualCodeName(int Language, int Num);
 const char* 	vw_KeyboardCodeName(int Num);
 int 	vw_KeyboardNameCode(const char * Name);
 // установка-получение юникода текущей нажатой клавиши

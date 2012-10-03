@@ -6,10 +6,10 @@
 
 	File name: Struct.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -285,7 +285,6 @@ struct GameSetup
 
 
 
-	int		KeyboardLayout; // 1-en, 2-de, 3-ru
 	int		KeyboardDecreaseGameSpeed;
 	int		KeyboardResetGameSpeed;
 	int		KeyboardIncreaseGameSpeed;

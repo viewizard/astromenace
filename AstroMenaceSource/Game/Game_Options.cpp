@@ -196,7 +196,7 @@ void GameOptions()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 5) {Transp = But[4]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.KeyboardLayout, Setup.KeyBoardPrimary), Transp*GameContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardPrimary), Transp*GameContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardPrimary = 0;
@@ -231,7 +231,7 @@ void GameOptions()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 6) {Transp = But[5]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.KeyboardLayout, Setup.KeyBoardSecondary), Transp*GameContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardSecondary), Transp*GameContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardSecondary = 0;
@@ -257,7 +257,7 @@ void GameOptions()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 1) {Transp = But[0]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.KeyboardLayout, Setup.KeyBoardUp), Transp*GameContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardUp), Transp*GameContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardUp = 0;
@@ -269,7 +269,7 @@ void GameOptions()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 2) {Transp = But[1]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.KeyboardLayout, Setup.KeyBoardDown), Transp*GameContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardDown), Transp*GameContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardDown = 0;
@@ -281,7 +281,7 @@ void GameOptions()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 3) {Transp = But[2]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.KeyboardLayout, Setup.KeyBoardLeft), Transp*GameContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardLeft), Transp*GameContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardLeft = 0;
@@ -293,7 +293,7 @@ void GameOptions()
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 4) {Transp = But[3]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.KeyboardLayout, Setup.KeyBoardRight), Transp*GameContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardRight), Transp*GameContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardRight = 0;

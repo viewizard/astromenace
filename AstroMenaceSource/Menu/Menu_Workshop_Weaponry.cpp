@@ -645,7 +645,7 @@ void ShipSlotSetupWeapon(int Slot)
 			if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] != 0)
 			{
 				if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] == 1)
-					TextTmp = vw_VirtualCodeName(Setup.KeyboardLayout, Setup.Profile[CurrentProfile].WeaponAltControlData[Slot]);
+					TextTmp = vw_VirtualCodeName(Setup.MenuLanguage, Setup.Profile[CurrentProfile].WeaponAltControlData[Slot]);
 				if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] == 2)
 					TextTmp = MouseCodeName(Setup.Profile[CurrentProfile].WeaponAltControlData[Slot]);
 				if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] == 3)
