@@ -1020,7 +1020,7 @@ bool ReleaseGameData(int LoadType)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	ReleaseAllObject3D();
 	vw_ReleaseAllParticleSystems();
-	ReleaseAllText();
+	ReleaseAllGameLvlText();
 	vw_ReleaseAllLights();
 	StarSystemRelease();
 

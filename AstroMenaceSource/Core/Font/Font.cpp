@@ -270,7 +270,6 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 // FlattenWidth - выравнивать по ширине
 // если FlattenWidth отрицателен, выравниваем по значению, "сжимая" буквы, если нужно
 // MaxWidth - рисовать до ширины
-// CharSet - 0-белый 1-желтый
 
 
 	// смотрим значения параметров в строке

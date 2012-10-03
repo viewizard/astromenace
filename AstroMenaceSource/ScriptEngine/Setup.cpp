@@ -782,7 +782,7 @@ LoadProfiles:
 
 		// первый цикл, восстанавливаем правильную последовательность, убираем все лишние элементы
 		int k=0;
-		for (int i=0; i<strlen(ResultString); i++)
+		for (unsigned int i=0; i<strlen(ResultString); i++)
 		{
 			// берем только нужные символы
 			if (ResultString[i] >= 97 && ResultString[i] <= 97+26)

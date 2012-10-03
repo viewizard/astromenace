@@ -1497,11 +1497,6 @@ void DrawDialogBox()
 			// название диалога
 			SizeI = 17 + (WTitle-vw_FontSize(GetText("3_Language")))/2;
 			vw_DrawFont(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, GetText("3_Language"));
-			// текст диалога
-			int Y1 = Y+80;
-			int Offset = 31;
-			int Size = 230;
-			int X1 = X+45;
 
 			if (DrawDialogButton200(X+128+64-72/2,Y+ButtonOffset-106, "English", DialogContentTransp))
 			{

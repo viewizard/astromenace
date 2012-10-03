@@ -6,10 +6,10 @@
 
 	File name: TextManager.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -36,8 +36,8 @@
 
 
 
-CText * StartText = 0;
-CText * EndText = 0;
+CGameLvlText * StartText = 0;
+CGameLvlText * EndText = 0;
 
 
 
@@ -45,7 +45,7 @@ CText * EndText = 0;
 //-----------------------------------------------------------------------------
 //	Присоеденяем Text к списку
 //-----------------------------------------------------------------------------
-void AttachText(CText * NewText)
+void AttachGameLvlText(CGameLvlText * NewText)
 {
 	if (NewText == 0) return;
 
@@ -73,7 +73,7 @@ void AttachText(CText * NewText)
 //-----------------------------------------------------------------------------
 //	Удаляем Text из списка
 //-----------------------------------------------------------------------------
-void DetachText(CText * OldText)
+void DetachGameLvlText(CGameLvlText * OldText)
 {
 	if (OldText == 0) return;
 
@@ -94,13 +94,13 @@ void DetachText(CText * OldText)
 //-----------------------------------------------------------------------------
 //	Удаляем все Text в списке
 //-----------------------------------------------------------------------------
-void ReleaseAllText()
+void ReleaseAllGameLvlText()
 {
 	// для всех Text
-	CText *tmp = StartText;
+	CGameLvlText *tmp = StartText;
 	while (tmp!=0)
 	{
-		CText *tmp2 = tmp->Next;
+		CGameLvlText *tmp2 = tmp->Next;
 		// удаляем и очищаем всю память, в релизе стоит DetachShip
 		delete tmp; tmp = 0;
 		tmp = tmp2;
@@ -123,13 +123,13 @@ void ReleaseAllText()
 //-----------------------------------------------------------------------------
 //	Прорисовываем все Text
 //-----------------------------------------------------------------------------
-void DrawAllText()
+void DrawAllGameLvlText()
 {
 	// для всех
-	CText *tmp = StartText;
+	CGameLvlText *tmp = StartText;
 	while (tmp!=0)
 	{
-		CText *tmp2 = tmp->Next;
+		CGameLvlText *tmp2 = tmp->Next;
 		tmp->Draw();
 		tmp = tmp2;
 	}
@@ -142,13 +142,13 @@ void DrawAllText()
 //-----------------------------------------------------------------------------
 //	Апдейтим все Text
 //-----------------------------------------------------------------------------
-void UpdateAllText(float Time)
+void UpdateAllGameLvlText(float Time)
 {
 	// для всех
-	CText *tmp = StartText;
+	CGameLvlText *tmp = StartText;
 	while (tmp!=0)
 	{
-		CText *tmp2 = tmp->Next;
+		CGameLvlText *tmp2 = tmp->Next;
 		if (!tmp->Update(Time))
 			delete tmp; tmp = 0;
 		tmp = tmp2;

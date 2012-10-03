@@ -206,10 +206,6 @@ int main( int argc, char **argv )
 	// проверка, что запустили 1 копию
 	if (!CreateGameOneCopy()) return 0;
 
-
-
-
-
 #ifdef WIN32
 	// иним пути для винды
 	ZeroMemory(ProgrammDir, sizeof(ProgrammDir));
@@ -602,37 +598,6 @@ ReCreate:
     }
 #endif // xinerama
 #endif // unix
-
-#ifdef WIN32
-	// пытаемся определить в Windows основной экран и его разрешение
-
-	DWORD i = 0;
-	DISPLAY_DEVICE dc;
-	dc.cb = sizeof(dc);
-
-	// перебираем все мониторы
-	while(EnumDisplayDevices(NULL, i, &dc, EDD_GET_DEVICE_INTERFACE_NAME) != 0)
-	{
-		if ((dc.StateFlags & DISPLAY_DEVICE_ACTIVE) && !(dc.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER))
-		{
-			DEVMODE dm;
-			if (EnumDisplaySettings(dc.DeviceName, 0, &dm) != 0)
-			{
-				printf("Screen #%d: %d x %d\n", i, dm.dmPelsWidth, dm.dmPelsHeight);
-
-				// ищем активный, не псевдо, основной
-				if (dc.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE)
-				{
-					CurrentVideoMode.W = dm.dmPelsWidth;
-					CurrentVideoMode.H = dm.dmPelsHeight;
-				}
-			}
-		}
-
-		++i;
-	}
-
-#endif // WIN32
 
 
 
@@ -1295,7 +1260,9 @@ loop:
 
 				case SDL_KEYDOWN:
 					// устанавливаем текущий юникод нажатоу клавиши
-					if (!(event.key.keysym.mod & KMOD_CTRL))
+					if (event.key.keysym.unicode > 0x001F) // пропускаем С0 Сontrol Characters (ентер, бэкспейс и прочие...)
+					if (!((event.key.keysym.unicode >= 0x007F) & (event.key.keysym.unicode <= 0x009F))) // пропускаем С1 Сontrol Characters
+					if (event.key.keysym.unicode != 0x0025) // !!! потом разобраться, на символе % безбожно глючит
 						vw_SetCurrentKeyUnicod(event.key.keysym.unicode);
 #ifdef gamedebug
 					printf("Keydown, Unicode: " );
@@ -1395,7 +1362,7 @@ GotoQuit:
 		SDL_ShowCursor(SDL_ENABLE);
 
 
-	// заверщение, и освобождение памяти...
+	// завершение, и освобождение памяти...
 	if (Script != 0){delete Script; Script = 0;}
 
 	RealExitGame();// удаляем объекты, они могут быть...
@@ -1406,13 +1373,11 @@ GotoQuit:
 
 	if (psSpaceStatic!=0){delete psSpaceStatic; psSpaceStatic = 0;}
 
-
-
 	ReleaseAllObject3D();
 	vw_ReleaseAllModel3D();
 	vw_ReleaseAllParticleSystems();
 	vw_ReleaseAllLights();
-	ReleaseAllText();
+	ReleaseAllGameLvlText();
 
 	vw_ReleaseFont();
 	vw_ReleaseAllTextures();
@@ -1426,55 +1391,24 @@ GotoQuit:
 				SDL_JoystickClose(Joystick);
 #endif
 
-
-
-
+	// полностью выходим из SDL
 	SDL_Quit();
-
+	// сохраняем настройки игры
 	SaveXMLSetupFile();
-
+	// освобождаем весь подготовленный текст из языкового xml файла
 	ReleaseGameText();
 
-
+	// если нужно перезагрузить игру с новыми параметрами
 	if (NeedReCreate)
 	{
-
-#ifdef WIN32
-		// проблема в SDL
-		// если пересоздаем окно с полноэкранного режима, или пересоздаем окно меньшего размера
-		// titlebar перестает работать - его считает активной областью окна...
-		// пока вот такое кривое решение - перезапускать игру
-
-		// полностью выходим из игры
-		if (VideoModes != 0) {delete [] VideoModes; VideoModes = 0;}
-		if (!Setup.Music_check || !Setup.Sound_check)
-		{
-			vw_ShutdownSound();
-		}
-		ReleaseGameText();
-		// закрываем файловую систему
-		vw_ShutdownVFS();
-		// уходим из программы...
-		ReleaseGameOneCopy();
-
-		// запускаем новую копию игры
-		char FileName[MAX_PATH];
-		ZeroMemory(FileName, sizeof(FileName));
-		GetModuleFileName(NULL, FileName, MAX_PATH);
-		// сначало пытаемся запустить через ShellExecute, если не получается - WinExec
-		HINSTANCE result = ShellExecute(NULL, "open", FileName, NULL,NULL, SW_SHOWNORMAL);
-		if ((UINT)result <= HINSTANCE_ERROR) WinExec(FileName,SW_SHOWNORMAL);
-
-		// завершаем процесс этой копии игры
-		return 0;
-#endif
-
 		// убираем все голосовые файлы и звуки (для изменения языка голоса)
+		// при vw_ShutdownSound освободим все, сейчас только речевые, музыка должна играть
 		vw_ReleaseAllBuffers();
 		// убираем все линки (для изменения языка меню)
+		// при vw_ShutdownVFS вообще все освободим, сейчас убираем только языковые линки на файлы
 		vw_DeleteAllLinksVFS();
 
-		// для линукса - просто пересоздаем окно
+		// пересоздаем окно
 	    goto ReCreate;
 	}
 
@@ -1483,7 +1417,7 @@ GotoQuit:
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// заверщение, освобождение памяти...
+	// завершение, освобождение памяти...
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!Setup.Music_check || !Setup.Sound_check)
 	{
