@@ -478,12 +478,35 @@ void ProfileMenu()
 	// список для выбора записи
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Pilots_Profiles"));
-	int SizeI = Setup.iAspectRatioWidth/2+2 + (130 - vw_FontSize(GetText("3_Money")))/2;
-	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Money"));
-	SizeI = Setup.iAspectRatioWidth/2+132 + (130 - vw_FontSize(GetText("3_Experience")))/2;
-	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Experience"));
-	SizeI = Setup.iAspectRatioWidth/2+262 + (130 - vw_FontSize(GetText("3_Difficulty")))/2;
-	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Difficulty"));
+	int Size = vw_FontSize(GetText("3_Money"));
+	float WScale = 0;
+	if (Size > 70)
+	{
+		Size = 70;
+		WScale = -70;
+	}
+	int SizeI = Setup.iAspectRatioWidth/2+2 + (130 - Size)/2;
+	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Money"));
+
+	Size = vw_FontSize(GetText("3_Experience"));
+	WScale = 0;
+	if (Size > 100)
+	{
+		Size = 100;
+		WScale = -100;
+	}
+	SizeI = Setup.iAspectRatioWidth/2+132 + (130 - Size)/2;
+	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Experience"));
+
+	Size = vw_FontSize(GetText("3_Difficulty"));
+	WScale = 0;
+	if (Size > 100)
+	{
+		Size = 100;
+		WScale = -100;
+	}
+	SizeI = Setup.iAspectRatioWidth/2+262 + (130 - Size)/2;
+	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Difficulty"));
 
 
 	Y1 += 30;

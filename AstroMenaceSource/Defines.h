@@ -35,7 +35,7 @@
 #define DEFINES_H
 
 #define GAME_VERSION_VERSION	 	1.3
-#define GAME_VERSION_BUILD			121002
+#define GAME_VERSION_BUILD			121003
 
 
 // VBO OpenGL extention support switcher (if defined - game will detect vbo support in hardware during initialization)

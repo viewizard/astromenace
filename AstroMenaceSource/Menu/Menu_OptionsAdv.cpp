@@ -101,7 +101,7 @@ void OptionsAdvMenu()
 
 
 	// качество испускание частиц... во сколько уменьшаем
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Particles_GFX_Quality"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Particles_GFX_Quality"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Setup.ParticlesPerSecQuality==3))
 	{
 		Setup.ParticlesPerSecQuality++;
@@ -125,7 +125,7 @@ void OptionsAdvMenu()
 
 	// качество взрывов
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Explosions_GFX_Quality"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Explosions_GFX_Quality"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Setup.PartsExplosionQuality==2))
 	{
 		Setup.PartsExplosionQuality++;
@@ -146,7 +146,7 @@ void OptionsAdvMenu()
 
 	// качество прорисовки звезд на заднем плане
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Stars_Quantity"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Stars_Quantity"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), MenuContentTransp, Setup.BackgroundStarsQuality==0))
 	{
 		Setup.BackgroundStarsQuality--;
@@ -180,7 +180,7 @@ void OptionsAdvMenu()
 
 	// Тайловая анимация, слои
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Background_Tile_Animation"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Background_Tile_Animation"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Setup.BackgroundTileAnimation==0))
 	{
 		Setup.BackgroundTileAnimation--;
@@ -202,7 +202,7 @@ void OptionsAdvMenu()
 
 	// Максимальное кол-во источников света на 1 объекта
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Point_Lights_per_Object"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Point_Lights_per_Object"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Setup.MaxPointLights==0))
 	{
 		Setup.MaxPointLights--;
@@ -226,7 +226,7 @@ void OptionsAdvMenu()
 
 	// анизотропия
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Anisotropy_Level"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Anisotropy_Level"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Setup.AnisotropyLevel==1))
 	{
 		Setup.AnisotropyLevel = (int)(Setup.AnisotropyLevel/2);
@@ -264,7 +264,7 @@ void OptionsAdvMenu()
 
 	//Options_MultiSampleType
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Multisample_Antialiasing"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Multisample_Antialiasing"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, CAPS->MaxMultiSampleType==0 || Options_MultiSampleType==0))
 	{
 		if (Options_MultiSampleType == 0) Options_MultiSampleType = CAPS->MaxMultiSampleType;
@@ -318,7 +318,7 @@ void OptionsAdvMenu()
 
 	// вкл-выкл компрессии текстур
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Textures_Compression"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Textures_Compression"));
 	if (DrawButton128_2(X1+458, Y1-6, GetText(ButtonCompression[Options_TexturesCompression]), MenuContentTransp, !CAPS->TexturesCompression))
 	{
 		Options_TexturesCompression++;
@@ -331,7 +331,7 @@ void OptionsAdvMenu()
 
 	// вкл-выкл шейдеров, если они поддерживаются
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.0f,0.0f, MenuContentTransp, GetText("3_OpenGL_Shading_Language"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.0f,0.0f, MenuContentTransp, GetText("3_OpenGL_Shading_Language"));
 	int tmp = 0;
 	if (Options_UseGLSL) tmp = 1;
 	if (DrawButton128_2(X1+458, Y1-6, GetText(ButtonGLSL[tmp]), MenuContentTransp, !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0))

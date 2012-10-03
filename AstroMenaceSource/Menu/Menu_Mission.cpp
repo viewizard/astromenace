@@ -465,32 +465,32 @@ void MissionMenu()
 			if (SizeI < 750-30-64)
 			{
 				if (MissionTitleType[i] == 1)
-					vw_DrawFont(X1+20+64, Y1+9, 0, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, GetText(MissionTitle[i]));
+					vw_DrawFont(X1+20+64, Y1+9, -650, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, GetText(MissionTitle[i]));
 				else
-					vw_DrawFont(X1+20+64, Y1+9, 0, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, MissionTitle[i]);
+					vw_DrawFont(X1+20+64, Y1+9, -650, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, MissionTitle[i]);
 			}
 			else
 			{
 				if (MissionTitleType[i] == 1)
-					vw_DrawFont(X1+20+64, Y1+9, 750-30-64, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, GetText(MissionTitle[i]));
+					vw_DrawFont(X1+20+64, Y1+9, -650, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, GetText(MissionTitle[i]));
 				else
-					vw_DrawFont(X1+20+64, Y1+9, 750-30-64, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, MissionTitle[i]);
+					vw_DrawFont(X1+20+64, Y1+9, -650, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, MissionTitle[i]);
 			}
 
 			SizeI = vw_FontSize(GetText(MissionDescr[i]));
 			if (SizeI < 750-30-64)
 			{
 				if (MissionDescrType[i] == 1)
-					vw_DrawFont(X1+20+64, Y1+33, 0, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, GetText(MissionDescr[i]));
+					vw_DrawFont(X1+20+64, Y1+33, -650, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, GetText(MissionDescr[i]));
 				else
-					vw_DrawFont(X1+20+64, Y1+33, 0, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, MissionDescr[i]);
+					vw_DrawFont(X1+20+64, Y1+33, -650, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, MissionDescr[i]);
 			}
 			else
 			{
 				if (MissionDescrType[i] == 1)
-					vw_DrawFont(X1+20+64, Y1+33, 750-30-64, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, GetText(MissionDescr[i]));
+					vw_DrawFont(X1+20+64, Y1+33, -650, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, GetText(MissionDescr[i]));
 				else
-					vw_DrawFont(X1+20+64, Y1+33, 750-30-64, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, MissionDescr[i]);
+					vw_DrawFont(X1+20+64, Y1+33, -650, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, MissionDescr[i]);
 			}
 		}
 
@@ -520,32 +520,32 @@ void MissionMenu()
 				if (SizeI < 750-30-64)
 				{
 					if (MissionTitleType[i] == 1)
-						vw_DrawFont(X1+20+64, Y1+9, 0, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, GetText(MissionTitle[i]));
+						vw_DrawFont(X1+20+64, Y1+9, -650, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, GetText(MissionTitle[i]));
 					else
-						vw_DrawFont(X1+20+64, Y1+9, 0, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, MissionTitle[i]);
+						vw_DrawFont(X1+20+64, Y1+9, -650, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, MissionTitle[i]);
 				}
 				else
 				{
 					if (MissionTitleType[i] == 1)
-						vw_DrawFont(X1+20+64, Y1+9, 750-30-64, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, GetText(MissionTitle[i]));
+						vw_DrawFont(X1+20+64, Y1+9, -650, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, GetText(MissionTitle[i]));
 					else
-						vw_DrawFont(X1+20+64, Y1+9, 750-30-64, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, MissionTitle[i]);
+						vw_DrawFont(X1+20+64, Y1+9, -650, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, MissionTitle[i]);
 				}
 				SizeI = vw_FontSize(GetText(MissionDescr[i]));
 				if (SizeI < 750-30-64)
 				{
 					if (MissionDescrType[i] == 1)
-						vw_DrawFont(X1+20+64, Y1+33, 0, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, GetText(MissionDescr[i]));
+						vw_DrawFont(X1+20+64, Y1+33, -650, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, GetText(MissionDescr[i]));
 					else
-						vw_DrawFont(X1+20+64, Y1+33, 0, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, MissionDescr[i]);
+						vw_DrawFont(X1+20+64, Y1+33, -650, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, MissionDescr[i]);
 
 				}
 				else
 				{
 					if (MissionDescrType[i] == 1)
-						vw_DrawFont(X1+20+64, Y1+33, 750-30-64, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, GetText(MissionDescr[i]));
+						vw_DrawFont(X1+20+64, Y1+33, -650, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, GetText(MissionDescr[i]));
 					else
-						vw_DrawFont(X1+20+64, Y1+33, 750-30-64, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, MissionDescr[i]);
+						vw_DrawFont(X1+20+64, Y1+33, -650, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, MissionDescr[i]);
 				}
 
 
@@ -602,33 +602,33 @@ void MissionMenu()
 				if (SizeI < 750-30-64)
 				{
 					if (MissionTitleType[i] == 1)
-						vw_DrawFont(X1+20+64, Y1+9, 0, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, GetText(MissionTitle[i]));
+						vw_DrawFont(X1+20+64, Y1+9, -650, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, GetText(MissionTitle[i]));
 					else
-						vw_DrawFont(X1+20+64, Y1+9, 0, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, MissionTitle[i]);
+						vw_DrawFont(X1+20+64, Y1+9, -650, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, MissionTitle[i]);
 				}
 				else
 				{
 					if (MissionTitleType[i] == 1)
-						vw_DrawFont(X1+20+64, Y1+9, 750-30-64, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, GetText(MissionTitle[i]));
+						vw_DrawFont(X1+20+64, Y1+9, -650, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, GetText(MissionTitle[i]));
 					else
-						vw_DrawFont(X1+20+64, Y1+9, 750-30-64, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, MissionTitle[i]);
+						vw_DrawFont(X1+20+64, Y1+9, -650, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, MissionTitle[i]);
 				}
 
 				SizeI = vw_FontSize(GetText(MissionDescr[i]));
 				if (SizeI < 750-30-64)
 				{
 					if (MissionDescrType[i] == 1)
-						vw_DrawFont(X1+20+64, Y1+33, 0, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, GetText(MissionDescr[i]));
+						vw_DrawFont(X1+20+64, Y1+33, -650, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, GetText(MissionDescr[i]));
 					else
-						vw_DrawFont(X1+20+64, Y1+33, 0, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, MissionDescr[i]);
+						vw_DrawFont(X1+20+64, Y1+33, -650, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, MissionDescr[i]);
 
 				}
 				else
 				{
 					if (MissionDescrType[i] == 1)
-						vw_DrawFont(X1+20+64, Y1+33, 750-30-64, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, GetText(MissionDescr[i]));
+						vw_DrawFont(X1+20+64, Y1+33, -650, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, GetText(MissionDescr[i]));
 					else
-						vw_DrawFont(X1+20+64, Y1+33, 750-30-64, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, MissionDescr[i]);
+						vw_DrawFont(X1+20+64, Y1+33, -650, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, MissionDescr[i]);
 				}
 			}
 		}

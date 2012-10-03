@@ -95,7 +95,7 @@ void OptionsMenu()
 	int Prir1 = 55;
 
 
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Music_Volume"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Music_Volume"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), MenuContentTransp, !Setup.Music_check || Setup.MusicSw==0))
 	{
 		Setup.MusicSw--;
@@ -131,7 +131,7 @@ void OptionsMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Sound_Effects_Volume"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Sound_Effects_Volume"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), MenuContentTransp, !Setup.Sound_check || Setup.SoundSw==0))
 	{
 		Setup.SoundSw--;
@@ -167,7 +167,7 @@ void OptionsMenu()
 	Y1 += Prir1;
 	if (Options_BPP != 0) CurrentPos = 0;
 	else CurrentPos = 1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Full_Screen"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Full_Screen"));
 	if (DrawButton128_2(X1+458, Y1-6, GetText(ButtonFullScreen[CurrentPos]), MenuContentTransp, false))
 	{
 		if (Options_BPP != 0)
@@ -201,7 +201,7 @@ void OptionsMenu()
 	Y1 += Prir1;
 	if (Options_BPP != 0) CurrentPos = 0;
 	else CurrentPos = 1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(ButtonScreenModeTitle[CurrentPos]));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(ButtonScreenModeTitle[CurrentPos]));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, false))
 	{
 		CurrentListNum--;
@@ -275,7 +275,7 @@ void OptionsMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Aspect_Ration"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Aspect_Ration"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, false))
 	{
 		if (Options_iAspectRatioWidth == 1228) Options_iAspectRatioWidth = 1024;
@@ -306,7 +306,7 @@ void OptionsMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Refresh_Rate"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Refresh_Rate"));
 #ifdef WIN32
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Options_BPP==0))
 	{
@@ -391,7 +391,7 @@ void OptionsMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Gamma"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Gamma"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), MenuContentTransp, Setup.BPP == 0 || Setup.Gamma==0))
 	{
 		Setup.Gamma -= 1;
@@ -423,7 +423,7 @@ void OptionsMenu()
 
 	// тип фильтрации текстуры
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Texture_Filtering_Mode"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Texture_Filtering_Mode"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Setup.TextureFilteringMode==1))
 	{
 		Setup.TextureFilteringMode--;
@@ -444,7 +444,7 @@ void OptionsMenu()
 
 	// качество текстур
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Textures_Quality"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Textures_Quality"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Options_TexturesQuality==1))
 	{
 		Options_TexturesQuality--;

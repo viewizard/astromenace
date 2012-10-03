@@ -560,7 +560,7 @@ void ShipSlotSetupWeapon(int Slot)
 		Ypos += 33;
 		// выводим боекомплект   текущий/полный
 		Xpos = Setup.iAspectRatioWidth/2+55 + 50;
-		vw_DrawFont(Xpos, Ypos, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("7_Weapon_Ammo:"));
+		vw_DrawFont(Xpos, Ypos, -170, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("7_Weapon_Ammo:"));
 		Xpos = (Setup.iAspectRatioWidth/2+512)-55 - 50 - vw_FontSize("%i/%i", WorkshopFighterGame->Weapon[Slot]->Ammo, WorkshopFighterGame->Weapon[Slot]->AmmoStart);
 
 
@@ -574,7 +574,7 @@ void ShipSlotSetupWeapon(int Slot)
 		// стоимость перезарядки
 		Xpos = Setup.iAspectRatioWidth/2+55 + 50;
 		Ypos += 30;
-		vw_DrawFont(Xpos, Ypos, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("7_Weapon_Reload_Cost:"));
+		vw_DrawFont(Xpos, Ypos, -230, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("7_Weapon_Reload_Cost:"));
 		// находим стоимость перезарядки
 		int ReloadCost = GetWeaponReloadCost(WorkshopFighterGame->Weapon[Slot]->ObjectCreationType,
 			WorkshopFighterGame->Weapon[Slot]->Ammo,
@@ -604,7 +604,7 @@ void ShipSlotSetupWeapon(int Slot)
 
 		Xpos = Setup.iAspectRatioWidth/2+55+34 + 16;
 		Ypos += 60;
-		vw_DrawFont(Xpos, Ypos, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Weapon_Fire_Control:"));
+		vw_DrawFont(Xpos, Ypos, -300, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Weapon_Fire_Control:"));
 		// вкл-выкл первичного управления
 		if (Setup.Profile[CurrentProfile].WeaponControl[Slot] == 1 ||
 		Setup.Profile[CurrentProfile].WeaponControl[Slot] ==3) Status1 = true;
@@ -625,7 +625,7 @@ void ShipSlotSetupWeapon(int Slot)
 		// получение альтернативного управления
 		Xpos = Setup.iAspectRatioWidth/2+55+34 + 16;
 		Ypos += 40;
-		vw_DrawFont(Xpos, Ypos, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Alternative_Fire_Control:"));
+		vw_DrawFont(Xpos, Ypos, -300, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Alternative_Fire_Control:"));
 
 		Ypos += 40;
 
@@ -674,7 +674,7 @@ void ShipSlotSetupWeapon(int Slot)
 			// выводим угол поворота ствола
 			Xpos = Setup.iAspectRatioWidth/2+55+34 + 16;
 			Ypos += 60;
-			vw_DrawFont(Xpos, Ypos, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Weapon_Angle:_%2.1f"), Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot]);
+			vw_DrawFont(Xpos, Ypos, -300, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Weapon_Angle:_%2.1f"), Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot]);
 			Ypos += 40;
 
 			float Min = 0.0f;
@@ -994,30 +994,32 @@ void Workshop_Weaponry()
 	}
 
 	// поставить GameNPCWeaponPenalty=1!!!
-	vw_DrawFont(Setup.iAspectRatioWidth/2-438, 110, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s: %s", GetText("7_Weapon_Type"), GetText(GetWeaponGroupTitle(CurrentWorkshopNewWeapon)));
+	vw_DrawFont(Setup.iAspectRatioWidth/2-438, 110, -170, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s:", GetText("7_Weapon_Type"));
+	vw_DrawFont(Setup.iAspectRatioWidth/2-438+175, 110, -184, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(GetWeaponGroupTitle(CurrentWorkshopNewWeapon)));
+
 
 	int k2 = 0;
 	if (GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType) > 0.0f)
 	{
-		vw_DrawFont(Setup.iAspectRatioWidth/2-438, 130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("4_Damage,_Hull:"));
+		vw_DrawFont(Setup.iAspectRatioWidth/2-438, 130, -170, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("4_Damage,_Hull:"));
 		if ((WorkshopNewWeapon->ObjectCreationType == 11) |
 			(WorkshopNewWeapon->ObjectCreationType == 12) |
 			(WorkshopNewWeapon->ObjectCreationType == 14))
-			vw_DrawFont(Setup.iAspectRatioWidth/2-438+175, 130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType), GetText("4_units/sec"));
+			vw_DrawFont(Setup.iAspectRatioWidth/2-438+175, 130, -184, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType), GetText("4_units/sec"));
 		else
-			vw_DrawFont(Setup.iAspectRatioWidth/2-438+175, 130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType), GetText("4_units/shot"));
+			vw_DrawFont(Setup.iAspectRatioWidth/2-438+175, 130, -184, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType), GetText("4_units/shot"));
 
 		k2=20;
 	}
 	if (GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType) > 0.0f)
 	{
-		vw_DrawFont(Setup.iAspectRatioWidth/2-438, 130+k2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("4_Damage,_Systems:"));
+		vw_DrawFont(Setup.iAspectRatioWidth/2-438, 130+k2, -170, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("4_Damage,_Systems:"));
 		if ((WorkshopNewWeapon->ObjectCreationType == 11) |
 			(WorkshopNewWeapon->ObjectCreationType == 12) |
 			(WorkshopNewWeapon->ObjectCreationType == 14))
-			vw_DrawFont(Setup.iAspectRatioWidth/2-438+210, 130+k2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType), GetText("4_units/sec"));
+			vw_DrawFont(Setup.iAspectRatioWidth/2-438+175, 130+k2, -184, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType), GetText("4_units/sec"));
 		else
-			vw_DrawFont(Setup.iAspectRatioWidth/2-438+210, 130+k2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType), GetText("4_units/shot"));
+			vw_DrawFont(Setup.iAspectRatioWidth/2-438+175, 130+k2, -184, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType), GetText("4_units/shot"));
 
 	}
 
