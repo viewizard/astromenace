@@ -173,9 +173,9 @@ void vw_GenerateFontChars(const char * CharsList)
 			MaxHeightInCurrentLine = 0;
 		}
 		// если в текущую строку не влазит уже по высоте - значит это фейл... кричим чтоб дали больше текстуру
-		if (CurrentDIBX + NewChar->Width > FontTextureWidth)
+		if (CurrentDIBY + NewChar->Height > FontTextureHeight)
 		{
-			fprintf(stderr, "!!! Can't generate font chars. Too many chars or too small texture size!\n");
+			fprintf(stderr, "!!! Can't generate all font chars in one texture. Too many chars or too small texture size!\n");
 			delete NewChar;
 			break;
 		}
@@ -247,7 +247,7 @@ void vw_GenerateFontChars(const char * CharsList)
 		CharsList2 = utf8_to_utf32(CharsList2, &CurrentChar);
 		// ставим нашу общую текстуру
 		eFontChar* TMPChar = vw_FindFontCharByUTF32(CurrentChar);
-		TMPChar->CharTexture = FontTexture;
+		if (TMPChar != 0) TMPChar->CharTexture = FontTexture;
 	}
 
 
