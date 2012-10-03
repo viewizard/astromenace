@@ -92,7 +92,6 @@ void InitSetup()
 	Setup.LoadingHint = 0;
 
 
-	Setup.KeyboardLayout = 1; // en by default
 	Setup.KeyboardDecreaseGameSpeed = SDLK_F5;
 	Setup.KeyboardResetGameSpeed = SDLK_F6;
 	Setup.KeyboardIncreaseGameSpeed = SDLK_F7;
@@ -318,12 +317,6 @@ void SaveXMLSetupFile()
 
 
 	AddComment(root, " Control settings ", JustCreated);
-	switch (Setup.KeyboardLayout)
-	{
-		case 1: sAddLine(root, setting, "KeyboardLayout", "value", "en"); break;
-		case 2: sAddLine(root, setting, "KeyboardLayout", "value", "de"); break;
-		case 3: sAddLine(root, setting, "KeyboardLayout", "value", "ru"); break;
-	}
 	sAddLine(root, setting, "KeyboardDecreaseGameSpeed", "value", vw_KeyboardCodeName(Setup.KeyboardDecreaseGameSpeed));
 	sAddLine(root, setting, "KeyboardResetGameSpeed", "value", vw_KeyboardCodeName(Setup.KeyboardResetGameSpeed));
 	sAddLine(root, setting, "KeyboardResetGameSpeed", "value", vw_KeyboardCodeName(Setup.KeyboardResetGameSpeed));
@@ -655,13 +648,6 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	iGetLine(root, setting, "LoadingHint", "value", &Setup.LoadingHint);
 
 
-
-
-	char KeyboardLayoutBuffer[16];
-	sGetLine(root, setting, "KeyboardLayout", "value", KeyboardLayoutBuffer);
-	if (!strcmp(KeyboardLayoutBuffer, "en")) Setup.KeyboardLayout = 1;
-	if (!strcmp(KeyboardLayoutBuffer, "de")) Setup.KeyboardLayout = 2;
-	if (!strcmp(KeyboardLayoutBuffer, "ru")) Setup.KeyboardLayout = 3;
 
 
 	char KeyName[64];

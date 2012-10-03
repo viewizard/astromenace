@@ -325,7 +325,7 @@ void ProfileInputText()
 		// пишем букву, если можем
 		if (Pos < 127)
 			if (vw_FontSize(NewProfileName)< 540)
-				if (vw_VirtualCodeChar(Setup.KeyboardLayout, i) != 0) // пока не убирать, надо переработать чтоб не реагировало на эскейп и прочее..
+				if ((i != SDLK_BACKSPACE) & (vw_VirtualCodeName(Setup.MenuLanguage, i) != 0)) // пока не убирать, надо переработать чтоб не реагировало на эскейп и прочее..
 				if (vw_GetCurrentKeyUnicod())
 				{
 
