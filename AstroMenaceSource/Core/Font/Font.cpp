@@ -109,14 +109,13 @@ eFontChar* vw_LoadFontChar(unsigned UTF32)
 //-----------------------------------------------------------------------------
 // делаем генерацию нужных символов по списку генерируя одну текстуру
 //-----------------------------------------------------------------------------
-void vw_GenerateFontChars(const char * CharsList)
+void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const char * CharsList)
 {
 
 	printf("Font characters generation start.\n");
 
-	// задаем размеры текстуры (всегда степерь 2 ставим, чтобы не было мороки при прорисовке, если железо не держит текстуры не степени два)
-	int FontTextureWidth = 256;
-	int FontTextureHeight = 256;
+	// будем использовать последовательность как имя текстуры
+	const char *TextureName = CharsList;
 	// временный массив
 	BYTE * DIB;
 	DIB = new BYTE[FontTextureWidth*FontTextureHeight*4]; // всегда делаем rgba
@@ -229,7 +228,7 @@ void vw_GenerateFontChars(const char * CharsList)
 
 
 	// создаем текстуру
-	eTexture* FontTexture = vw_CreateTextureFromMemory("GeneratedFontChars", DIB, FontTextureWidth, FontTextureHeight, 4, false);
+	eTexture* FontTexture = vw_CreateTextureFromMemory(TextureName, DIB, FontTextureWidth, FontTextureHeight, 4, false);
 	// освобождаем память
 	delete [] DIB;
 	if (FontTexture == 0)

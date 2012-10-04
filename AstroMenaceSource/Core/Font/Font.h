@@ -74,7 +74,7 @@ struct eFontChar
 // инициализация фонта
 int vw_InitFont(const char *FontName, int FontSize);
 // делаем генерацию нужных символов по списку
-void vw_GenerateFontChars(const char * CharsList);
+void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const char * CharsList);
 // загрузка символа с генерацией всех необходимых данных
 eFontChar* vw_LoadFontChar(unsigned UTF32);
 // Нахождение символа по его UTF32

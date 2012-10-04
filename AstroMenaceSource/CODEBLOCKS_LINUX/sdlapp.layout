@@ -10,8 +10,8 @@
 	<File name="../Camera/GameCamera.cpp" open="0" top="0" tabpos="10">
 		<Cursor position="1667" topLine="29" />
 	</File>
-	<File name="../Core/Base.h" open="1" top="1" tabpos="2">
-		<Cursor position="2199" topLine="42" />
+	<File name="../Core/Base.h" open="0" top="0" tabpos="2">
+		<Cursor position="489" topLine="18" />
 	</File>
 	<File name="../Core/Camera/Camera.cpp" open="0" top="0" tabpos="12">
 		<Cursor position="261" topLine="7" />
@@ -41,10 +41,10 @@
 		<Cursor position="1294" topLine="20" />
 	</File>
 	<File name="../Core/Font/Font.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="5025" topLine="117" />
+		<Cursor position="4080" topLine="101" />
 	</File>
 	<File name="../Core/Font/Font.h" open="0" top="0" tabpos="2">
-		<Cursor position="2564" topLine="65" />
+		<Cursor position="2329" topLine="65" />
 	</File>
 	<File name="../Core/Font/FontManager.cpp" open="0" top="0" tabpos="4">
 		<Cursor position="2929" topLine="87" />
@@ -128,10 +128,10 @@
 		<Cursor position="148467" topLine="3388" />
 	</File>
 	<File name="../Core/RendererInterface/OGL_Draw2D.cpp" open="0" top="0" tabpos="42">
-		<Cursor position="6192" topLine="131" />
+		<Cursor position="4546" topLine="25" />
 	</File>
 	<File name="../Core/RendererInterface/OGL_Draw3D.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="7612" topLine="232" />
+		<Cursor position="7762" topLine="226" />
 	</File>
 	<File name="../Core/RendererInterface/OGL_GLSL.cpp" open="0" top="0" tabpos="44">
 		<Cursor position="18158" topLine="513" />
@@ -167,7 +167,7 @@
 		<Cursor position="1250" topLine="32" />
 	</File>
 	<File name="../Core/Sound/Music.cpp" open="0" top="0" tabpos="54">
-		<Cursor position="2228" topLine="61" />
+		<Cursor position="1925" topLine="45" />
 	</File>
 	<File name="../Core/Sound/Sound.cpp" open="0" top="0" tabpos="55">
 		<Cursor position="5706" topLine="23" />
@@ -206,7 +206,7 @@
 		<Cursor position="1542" topLine="34" />
 	</File>
 	<File name="../Core/Texture/Texture.h" open="0" top="0" tabpos="3">
-		<Cursor position="3310" topLine="88" />
+		<Cursor position="3310" topLine="58" />
 	</File>
 	<File name="../Core/Texture/TextureManager.cpp" open="0" top="0" tabpos="68">
 		<Cursor position="6538" topLine="208" />
@@ -218,7 +218,7 @@
 		<Cursor position="5716" topLine="0" />
 	</File>
 	<File name="../Core/Texture/Texture_PNG.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="308" topLine="0" />
+		<Cursor position="1487" topLine="23" />
 	</File>
 	<File name="../Core/Texture/Texture_TGA.cpp" open="0" top="0" tabpos="71">
 		<Cursor position="1778" topLine="39" />
@@ -275,7 +275,7 @@
 		<Cursor position="3473" topLine="126" />
 	</File>
 	<File name="../Loading.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="71322" topLine="1003" />
+		<Cursor position="74605" topLine="1113" />
 	</File>
 	<File name="../Loop_audio.cpp" open="0" top="0" tabpos="6">
 		<Cursor position="15381" topLine="312" />
@@ -284,7 +284,7 @@
 		<Cursor position="368" topLine="0" />
 	</File>
 	<File name="../Main.cpp" open="1" top="0" tabpos="1">
-		<Cursor position="12062" topLine="390" />
+		<Cursor position="49685" topLine="1259" />
 	</File>
 	<File name="../MainFS2VFS.cpp" open="0" top="0" tabpos="3">
 		<Cursor position="1255" topLine="23" />
@@ -322,8 +322,8 @@
 	<File name="../Menu/Menu_OptionsAdv.cpp" open="0" top="0" tabpos="5">
 		<Cursor position="10930" topLine="357" />
 	</File>
-	<File name="../Menu/Menu_Profile.cpp" open="0" top="0" tabpos="12">
-		<Cursor position="12116" topLine="321" />
+	<File name="../Menu/Menu_Profile.cpp" open="1" top="1" tabpos="2">
+		<Cursor position="11788" topLine="339" />
 	</File>
 	<File name="../Menu/Menu_TopScores.cpp" open="0" top="0" tabpos="104">
 		<Cursor position="3780" topLine="0" />

@@ -240,7 +240,7 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 	if (DataIndexVBO == 0 && DataIndex == 0)
 	{
 		// собираем если нужно массив индексов
-		if (VertexIndexCount < (unsigned int)(NumVertices+RangeStart))
+		if ((unsigned int)VertexIndexCount < (unsigned int)(NumVertices+RangeStart))
 		{
 			if (VertexIndex != 0){delete [] VertexIndex; VertexIndex = 0;}
 			VertexIndexCount = 0;

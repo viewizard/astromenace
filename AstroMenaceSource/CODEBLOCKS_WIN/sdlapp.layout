@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="All" />
+	<File name="..\Core\Base.h" open="1" top="1" tabpos="3">
+		<Cursor position="1417" topLine="24" />
+	</File>
 	<File name="..\Core\Core.h" open="0" top="0" tabpos="0">
 		<Cursor position="1123" topLine="12" />
 	</File>
@@ -16,8 +19,8 @@
 	<File name="..\Core\RendererInterface\GLext.h" open="0" top="0" tabpos="8">
 		<Cursor position="122746" topLine="3096" />
 	</File>
-	<File name="..\Core\RendererInterface\OGL_Draw3D.cpp" open="0" top="0" tabpos="7">
-		<Cursor position="7724" topLine="228" />
+	<File name="..\Core\RendererInterface\OGL_Draw3D.cpp" open="1" top="0" tabpos="4">
+		<Cursor position="7707" topLine="202" />
 	</File>
 	<File name="..\Core\RendererInterface\OGL_Main.cpp" open="0" top="0" tabpos="7">
 		<Cursor position="4545" topLine="151" />
@@ -62,7 +65,7 @@
 		<Cursor position="7363" topLine="215" />
 	</File>
 	<File name="..\Main.cpp" open="1" top="0" tabpos="1">
-		<Cursor position="5900" topLine="138" />
+		<Cursor position="2845" topLine="69" />
 	</File>
 	<File name="..\Menu\Menu.cpp" open="0" top="0" tabpos="5">
 		<Cursor position="26574" topLine="1025" />
@@ -76,8 +79,8 @@
 	<File name="..\Menu\Menu_Mission.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="21638" topLine="692" />
 	</File>
-	<File name="..\Menu\Menu_Options.cpp" open="1" top="1" tabpos="2">
-		<Cursor position="9446" topLine="299" />
+	<File name="..\Menu\Menu_Options.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="1435" topLine="29" />
 	</File>
 	<File name="..\Menu\Menu_Profile.cpp" open="0" top="0" tabpos="9">
 		<Cursor position="19787" topLine="606" />

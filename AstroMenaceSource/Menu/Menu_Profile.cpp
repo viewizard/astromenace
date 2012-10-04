@@ -335,7 +335,7 @@ void ProfileInputText()
 			*str = (char)(0x80 | (NewChar & 0x3F));
 			Pos+=2;
 		}
-		else if (NewChar <= 0xFFFF)
+		else
 		{
 			*str++ = (char)(0xE0 | (NewChar >> 12));
 			*str++ = (char)(0x80 | ((NewChar >> 6) & 0x3F));
