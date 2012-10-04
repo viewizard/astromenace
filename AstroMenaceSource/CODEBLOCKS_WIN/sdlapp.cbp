@@ -15,12 +15,14 @@
 				<Option compiler="gcc" />
 				<Option projectResourceIncludeDirsRelation="1" />
 				<Compiler>
+					<Add option="-fomit-frame-pointer" />
 					<Add option="-fexpensive-optimizations" />
 					<Add option="-Os" />
 					<Add option="-O3" />
 					<Add option="-O2" />
 					<Add option="-O1" />
 					<Add option="-O" />
+					<Add option="-Wall" />
 					<Add option="-D__GNUWIN32__" />
 					<Add option="-DWIN32" />
 					<Add directory="..\..\..\AllLibraries\SDL-1.2.15\include" />
@@ -137,7 +139,6 @@
 		<Unit filename="..\Core\VirtualFileSystem\RLE.cpp" />
 		<Unit filename="..\Core\VirtualFileSystem\VFS.cpp" />
 		<Unit filename="..\Core\VirtualFileSystem\VFS.h" />
-		<Unit filename="..\Defines.h" />
 		<Unit filename="..\Game.h" />
 		<Unit filename="..\Game\Game.cpp" />
 		<Unit filename="..\Game\Game_Mission.cpp" />
@@ -246,6 +247,7 @@
 		<Unit filename="..\ScriptEngine\Setup.cpp" />
 		<Unit filename="..\ScriptEngine\Text.cpp" />
 		<Unit filename="..\Struct.h" />
+		<Unit filename="..\config.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

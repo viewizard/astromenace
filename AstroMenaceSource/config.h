@@ -4,7 +4,7 @@
 	(Hardcore 3D space shooter with spaceship upgrade possibilities.)
 	For the latest info, see http://www.viewizard.com/
 
-	File name: Defines.h
+	File name: config.h
 
 	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
@@ -31,11 +31,11 @@
 ******************************************************************************/
 
 
-#ifndef DEFINES_H
-#define DEFINES_H
+#ifndef CONFIG_H
+#define CONFIG_H
 
-#define GAME_VERSION_VERSION	 	1.3
-#define GAME_VERSION_BUILD			121003
+#define GAME_VERSION	 	1.3
+#define GAME_BUILD			121004
 
 
 // VBO OpenGL extention support switcher (if defined - game will detect vbo support in hardware during initialization)
@@ -66,4 +66,4 @@
 // PNG image format support via libpng. Don't use png images right now, disabled atm
 // #define png
 
-#endif // DEFINES_H
+#endif // CONFIG_H

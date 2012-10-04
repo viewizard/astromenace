@@ -45,7 +45,7 @@ void InitSetup()
 	// всегда устанавливаем текущее разрешение рабочего стола
 
 	// устанавливаем номер билда
-	Setup.BuildVersion = GAME_VERSION_BUILD;
+	Setup.BuildVersion = GAME_BUILD;
 
 	Setup.MenuLanguage = 1; // en by default
 	Setup.VoiceLanguage = 1; // en by default
@@ -256,7 +256,7 @@ void SaveXMLSetupFile()
 
 
 
-	iAddLine(root, setting, "GAME_VERSION_BUILD", "value", GAME_VERSION_BUILD);
+	iAddLine(root, setting, "GAME_BUILD", "value", GAME_BUILD);
 
 	switch (Setup.MenuLanguage)
 	{
