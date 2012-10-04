@@ -164,11 +164,24 @@ void OptionsMenu()
 
 
 
+	// проверяем, есть ли вообще полноэкранные разрешения
+	bool CanSwitchToFullScreen = false;
+	for(int i=0; i<VideoModesNum; i++)
+	{
+		if ((VideoModes[i].BPP == 16) |
+			(VideoModes[i].BPP == 24))
+		{
+			CanSwitchToFullScreen = true;
+			break;
+		}
+	}
+
+
 	Y1 += Prir1;
 	if (Options_BPP != 0) CurrentPos = 0;
 	else CurrentPos = 1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Full_Screen"));
-	if (DrawButton128_2(X1+458, Y1-6, GetText(ButtonFullScreen[CurrentPos]), MenuContentTransp, false))
+	if (DrawButton128_2(X1+458, Y1-6, GetText(ButtonFullScreen[CurrentPos]), MenuContentTransp, !CanSwitchToFullScreen))
 	{
 		if (Options_BPP != 0)
 		{
@@ -178,6 +191,34 @@ void OptionsMenu()
 		else
 		{
 			Options_BPP = CurrentVideoMode.BPP;
+
+			// пробуем просто переключить BPP, проверяем есть ли такое разрешение
+			bool NeedDetectResolution = true;
+			for(int i=0; i<VideoModesNum; i++)
+			{
+				if ((VideoModes[i].W == Options_Width) &
+					(VideoModes[i].H == Options_Height) &
+					(VideoModes[i].BPP == Options_BPP))
+				{
+					NeedDetectResolution = false;
+					break;
+				}
+			}
+
+			// находим первый полноэкранный режим в списке
+			if (NeedDetectResolution)
+			for(int i=0; i<VideoModesNum; i++)
+			{
+				if ((VideoModes[i].BPP == 16) |
+					(VideoModes[i].BPP == 24))
+				{
+					Options_Width = VideoModes[i].W;
+					Options_Height = VideoModes[i].H;
+					Options_BPP = VideoModes[i].BPP;
+					break;
+				}
+			}
+
 			Options_Frequency = Setup.ScreenFrequency;
 		}
 	}
@@ -318,7 +359,6 @@ void OptionsMenu()
 		// чтобы был переход на максимальный
 		if (Options_Frequency == 0) Options_Frequency = 1000;
 		int CurrentFR = 0;
-		bool Res = true;
 
 		// пока можем вытягивать
 		while (EnumDisplaySettings(NULL, Mode, &dmScreenSettings))
@@ -344,7 +384,6 @@ void OptionsMenu()
 		dmScreenSettings.dmSize	= sizeof (DEVMODE);
 		int Mode = 0;
 		int CurrentFR = 1000;
-		bool Res = true;
 
 		// пока можем вытягивать
 		while (EnumDisplaySettings(NULL, Mode, &dmScreenSettings))

@@ -33,7 +33,7 @@
 #ifndef Base_H
 #define Base_H
 
-#include "../Defines.h"
+#include "../config.h"
 
 
 
@@ -67,18 +67,10 @@
 
 
 
-inline void itoa10(int val, char* res)
-{
-    // http://www.cplusplus.com/ref/cstdio/sprintf.html
-    // если нужны не 10-ки
-    sprintf(res,"%i",val);
-}
-
-
 
 #ifdef __unix
 
-// декларируем типы данных, которых можен не быть
+// декларируем типы данных, которых может не быть
 #ifndef BYTE
 	#define BYTE Uint8
 #endif

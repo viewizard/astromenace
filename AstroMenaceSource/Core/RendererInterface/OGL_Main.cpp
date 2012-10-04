@@ -160,15 +160,15 @@ void vw_TestAAModes(int Width, int Height)
 //------------------------------------------------------------------------------------
 void CenterWindow(int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideoModeW, int CurrentVideoModeH)
 {
-    SDL_Surface *GameScreen = SDL_GetVideoSurface();
-    SDL_SysWMinfo info;
+	SDL_SysWMinfo info;
 
-    SDL_VERSION(&info.version);
-    if ( SDL_GetWMInfo(&info) > 0 )
+	SDL_VERSION(&info.version);
+	if ( SDL_GetWMInfo(&info) > 0 )
 	{
 		#ifdef __unix
             if ( info.subsystem == SDL_SYSWM_X11 )
 			{
+				SDL_Surface *GameScreen = SDL_GetVideoSurface();
                 info.info.x11.lock_func();
                 int x = (CurrentVideoModeW - GameScreen->w)/2 + CurrentVideoModeX;
                 int y = (CurrentVideoModeH - GameScreen->h)/2 + CurrentVideoModeY;
@@ -237,13 +237,6 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 	// устанавливаем режим и делаем окно
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	Uint32 Flags = SDL_OPENGL;
-
-
-	// пока только для виндовса, только там у нас версия выше 1.2.10
-#ifdef WIN32
-	// требуем чтобы 100% было все в акселерации, иначе на шейдерах может перейти в софтовый режим
-	Flags |= SDL_GL_ACCELERATED_VISUAL;
-#endif
 
 	// если иним в первый раз, тут ноль и нужно взять что-то подходящее
 	if (*Bits == 0) *Bits = SDL_GetVideoInfo()->vfmt->BitsPerPixel;

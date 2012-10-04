@@ -34,7 +34,6 @@
 #ifndef STRUCT_H
 #define STRUCT_H
 
-#include "Defines.h"
 
 
 

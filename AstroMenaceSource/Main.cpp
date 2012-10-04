@@ -168,12 +168,10 @@ bool CreateGameOneCopy()
 		return true;
 	}*/
 
-#elif __unix
+#endif
 
 
 return true;
-
-#endif
 
 
 }
@@ -294,11 +292,11 @@ int main( int argc, char **argv )
 			dirpresent = true;
 			// если передали относительный путь в папку пользователя с тильдой
 			if (argv[i][sizeof("--dir")] != '~')
-				strncpy(ProgrammDir, argv[i]+strlen("--dir="), strlen(argv[i])-strlen("--dir=")+1);
+				strcpy(ProgrammDir, argv[i]+strlen("--dir="));
 			else
 			{
 				strcpy(ProgrammDir, homeval);// -1, это тильда... а в кол-ве нет, т.к. /0 там должен остаться
-				strncat(ProgrammDir, argv[i]+strlen("--dir=")+1, strlen(argv[i])-strlen("--dir="));
+				strcat(ProgrammDir, argv[i]+strlen("--dir=")+1);
 			}
 			// если в конце нет слеша - ставим его
 			if (ProgrammDir[strlen(ProgrammDir)-1] != '/')
@@ -365,7 +363,7 @@ int main( int argc, char **argv )
 		{
 			printf("AstroMenace launch options:\n\n");
 
-			printf("--dir=/game/data/folder/ - folder with gamedata.vfs file\n");
+			printf("--dir=/game/data/folder/ - folder with gamedata.vfs file (Linux only)\n");
 			printf("--mouse - launch the game without system cursor hiding.\n");
 			printf("--noAA - disable AA antialiasing test at the game start.\n");
 			printf("--safe-mode - reset all settings not connected to Pilots Profiles at the game launch.\n");
@@ -406,7 +404,7 @@ int main( int argc, char **argv )
 
 
 	// версия
-	printf("AstroMenace %1.1f %i\n\n", GAME_VERSION_VERSION, GAME_VERSION_BUILD);
+	printf("AstroMenace %1.1f %i\n\n", GAME_VERSION, GAME_BUILD);
 
 
 
@@ -437,20 +435,31 @@ int main( int argc, char **argv )
 #ifdef __unix
 				// если передали относительный путь в папку пользователя с тильдой
 				if (argv[i][sizeof("--rawdata")] != '~')
-					strncpy(RawDataDir, argv[i]+strlen("--rawdata="), strlen(argv[i])-strlen("--rawdata=")+1);
+					strcpy(RawDataDir, argv[i]+strlen("--rawdata="));
 				else
 				{
 					strcpy(RawDataDir, homeval);// -1, это тильда... а в кол-ве нет, т.к. /0 там должен остаться
-					strncat(RawDataDir, argv[i]+strlen("--rawdata=")+1, strlen(argv[i])-strlen("--rawdata="));
+					strcat(RawDataDir, argv[i]+strlen("--rawdata=")+1);
 				}
-#endif // unix
+#elif WIN32 // __unix
+				// если есть двоеточия после второго символа - это полный путь с указанием девайса
+				if (argv[i][sizeof("--rawdata=")] == ':')
+				{
+					strcpy(RawDataDir, argv[i]+strlen("--rawdata="));
+				}
+				else
+				{
+					strcpy(RawDataDir, ProgrammDir);
+					strcat(RawDataDir, argv[i]+strlen("--rawdata="));
+				}
+#endif // WIN32
 				// если в конце нет слеша - ставим его
 				if (RawDataDir[strlen(RawDataDir)-1] != '/')
 					strncat(RawDataDir, "/", strlen("/"));
-
 			}
 		}
 
+		printf("Source Raw Folder: %s\n", RawDataDir);
 		return ConvertFS2VFS(RawDataDir);
 	}
 
@@ -556,7 +565,7 @@ ReCreate:
 	if (CurrentVideoMode.BPP > 16) CurrentVideoMode.BPP = 32;
 	CurrentVideoMode.W = SDL_GetVideoInfo()->current_w;
 	CurrentVideoMode.H = SDL_GetVideoInfo()->current_h;
-
+	printf("Current Video Mode: %ix%i %ibit \n", CurrentVideoMode.W, CurrentVideoMode.H, CurrentVideoMode.BPP);
 
 #ifdef __unix
 #ifdef xinerama
@@ -573,7 +582,7 @@ ReCreate:
     if (XineramaIsActive(display))
 	{
         XineramaScreenInfo* xineramaScreenInfo = XineramaQueryScreens(display, &xineramaScreenCount);
-		printf("Xinerama is active\n");
+		printf("Xinerama/TwinView detected.\n");
         printf("Screen count: %d\n", xineramaScreenCount);
         for (int i = 0; i < xineramaScreenCount; i++)
 		{
@@ -725,7 +734,7 @@ ReCreate:
 		printf("Supported resolutions list:\n");
 		for(int i=0; i<VideoModesNum; i++)
 		{
-			 printf("%ix%i %ibit \n", VideoModes[i].W, VideoModes[i].H, VideoModes[i].BPP);
+			printf("%ix%i %ibit \n", VideoModes[i].W, VideoModes[i].H, VideoModes[i].BPP);
 		}
 		printf("\n");
 
@@ -740,12 +749,26 @@ ReCreate:
 	// если первый запуск (нет файла настроек), тянем переменную
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	bool FirstStart = LoadXMLSetupFile(NeedSafeMode);
-	// если загруженные параметры, больше чем максимальные, ставим максимальные (если Xinerama)
-	if ((VideoModes[VideoModesNum-1].W <= Setup.Width) & (VideoModes[VideoModesNum-1].H <= Setup.Height))
+	// если загруженные параметры, больше чем максимальные, ставим максимальные (если Xinerama, например)
+	if ((VideoModes[VideoModesNum-1].W < Setup.Width) & (VideoModes[VideoModesNum-1].H < Setup.Height))
 	{
 		Setup.Width = VideoModes[VideoModesNum-1].W;
 		Setup.Height = VideoModes[VideoModesNum-1].H;
 		Setup.BPP = CurrentVideoMode.BPP;
+
+		// делаем проверку по листу разрешений экрана, если входит - все ок, если нет - ставим оконный режим принудительно
+		bool NeedResetToWindowedMode = true;
+		for(int i=0; i<VideoModesNum; i++)
+		{
+			if ((VideoModes[i].W == Setup.Width) &
+				(VideoModes[i].H == Setup.Height) &
+				(VideoModes[i].BPP == Setup.BPP))
+			{
+				NeedResetToWindowedMode = false;
+				break;
+			}
+		}
+		if (NeedResetToWindowedMode) Setup.BPP = 0;
 	}
 
 
@@ -1033,7 +1056,7 @@ ReCreate:
 	// не поддерживаем что-то
 	if (InitStatus == 2)
 	{
-        fprintf(stderr, "Some features are not supported.\n");
+        fprintf(stderr, "Some OpenGL features are not supported.\n");
 #ifdef WIN32
 		MessageBox(NULL,"OpenGL 1.3 required. Please, install the newest video drivers from your video card vendor.", "Render system - Fatal Error",MB_OK|MB_APPLMODAL|MB_ICONERROR);
 #endif // WIN32

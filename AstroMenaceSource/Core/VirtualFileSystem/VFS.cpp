@@ -1477,7 +1477,7 @@ int eFILE::fread(void *buffer, size_t size, size_t count)
 	for (size_t i=0; i<count; i++)
 	{
 		// если можем прочитать следующий блок size размера - читаем
-		if (size <= RealLength - Pos)
+		if (size <= (unsigned int)(RealLength - Pos))
 		{
 			// считываем байты
 			memcpy((BYTE*)buffer + SecCount*size, Data + Pos, size);

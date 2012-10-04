@@ -38,6 +38,14 @@
 
 
 
+inline void itoa10(int val, char* res)
+{
+    // http://www.cplusplus.com/ref/cstdio/sprintf.html
+    // если нужны не 10-ки
+    sprintf(res,"%i",val);
+}
+
+
 // Get cosine
 double	vw_dcos(int Angle);
 // Get sine
