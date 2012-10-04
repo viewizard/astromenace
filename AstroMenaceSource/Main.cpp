@@ -510,6 +510,9 @@ int main( int argc, char **argv )
 	printf("\n");
 
 
+	// иним фонт
+	vw_InitFont("DATA/FONT/LiberationMono-Bold.ttf", 16);
+
 
 
 ReCreate:
@@ -1144,9 +1147,6 @@ ReCreate:
 		SDL_ShowCursor(SDL_DISABLE);
 
 
-	// иним фонт
-	vw_InitFont("DATA/FONT/LiberationMono-Bold.ttf", 16);
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// загрузка текстур согласно моделе загрузки
@@ -1394,7 +1394,7 @@ GotoQuit:
 	vw_ReleaseAllLights();
 	ReleaseAllGameLvlText();
 
-	vw_ReleaseFont();
+	vw_ReleaseAllFontChar();
 	vw_ReleaseAllTextures();
 	vw_ShutdownRenderer();
 
@@ -1440,6 +1440,7 @@ GotoQuit:
 	}
 
 
+	vw_ShutdownFont();
 	// закрываем файловую систему
 	vw_ShutdownVFS();
 

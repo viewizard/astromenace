@@ -79,8 +79,10 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 eFontChar* vw_LoadFontChar(unsigned UTF32);
 // Нахождение символа по его UTF32
 eFontChar* vw_FindFontCharByUTF32(unsigned UTF32);
-// освобождаем память
-void vw_ReleaseFont();
+// освобождаем память от сгенерированных символов
+void vw_ReleaseAllFontChar();
+// освобождаем память, завершаем работу с фонтом
+void vw_ShutdownFont();
 
 // получаем размер строки
 int vw_FontSize(const char *Text, ...);
