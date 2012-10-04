@@ -23,6 +23,7 @@
 					<Add option="-O2" />
 					<Add option="-O1" />
 					<Add option="-O" />
+					<Add option="-Wextra" />
 					<Add option="-Wall" />
 					<Add directory="/usr/include/freetype2/" />
 				</Compiler>

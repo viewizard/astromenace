@@ -25,6 +25,7 @@
 					<Add option="-Wall" />
 					<Add option="-D__GNUWIN32__" />
 					<Add option="-DWIN32" />
+					<Add option="-DOV_EXCLUDE_STATIC_CALLBACKS" />
 					<Add directory="..\..\..\AllLibraries\SDL-1.2.15\include" />
 					<Add directory="..\..\..\AllLibraries\libjpeg-turbo-1.2.1\include" />
 					<Add directory="..\..\..\AllLibraries\libogg-1.3.0\include" />
@@ -63,6 +64,7 @@
 		<Unit filename="..\BackGround\SkyBox.cpp" />
 		<Unit filename="..\BackGround\StarSystem.cpp" />
 		<Unit filename="..\Camera\GameCamera.cpp" />
+		<Unit filename="..\Core\Base.h" />
 		<Unit filename="..\Core\Camera\Camera.cpp" />
 		<Unit filename="..\Core\Camera\Camera.h" />
 		<Unit filename="..\Core\Camera\CameraMath.cpp" />

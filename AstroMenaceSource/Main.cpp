@@ -76,14 +76,6 @@ sVideoModes CurrentVideoMode;
 bool LoadedTypes[1000];
 // данные для определения папки пользователя
 #ifdef WIN32
-#define _WIN32_WINNT 0x0501 // оверрайдим версию до Windows XP, нужно для получение доступа к функциям
-#include <windows.h>
-
-#define EDD_GET_DEVICE_INTERFACE_NAME 0x00000001
-#define DISPLAY_DEVICE_ACTIVE              0x00000001
-#define DISPLAY_DEVICE_MIRRORING_DRIVER    0x00000008
-#define DISPLAY_DEVICE_PRIMARY_DEVICE      0x00000004
-
 #define SD_APPDATA                   0x001a
 #define SD_DESKTOPDIRECTORY          0x0010        // <user name>\Desktop
 typedef BOOL (WINAPI *SHGETSPECIALFOLDERPATH)(HWND hwndOwner, LPTSTR lpszPath, int nFolder, BOOL fCreate);

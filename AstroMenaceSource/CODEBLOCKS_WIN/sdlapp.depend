@@ -3734,7 +3734,7 @@
 	"Model3D/Model3D.h"
 	"Parser/TinyXML/tinyxml.h"
 
-1349340682 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\base.h
+1349352781 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\base.h
 	"../config.h"
 	<windows.h>
 	<shellapi.h>
@@ -3952,7 +3952,7 @@
 	<Ph.h>
 	"close_code.h"
 
-1349084129 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\math\math.h
+1349341175 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\math\math.h
 	"../Base.h"
 
 1349089016 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\texture\texture.h
@@ -4253,7 +4253,7 @@
 1349186700 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\ogl_draw2d.cpp
 	"RendererInterface.h"
 
-1349299627 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\ogl_draw3d.cpp
+1349352486 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\ogl_draw3d.cpp
 	"RendererInterface.h"
 
 1349096197 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\ogl_glsl.cpp
@@ -4398,7 +4398,7 @@
 1349282887 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\graphicfx\text\textmanager.cpp
 	"Text.h"
 
-1349282892 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\loading.cpp
+1349351624 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\loading.cpp
 	"Game.h"
 
 1348686310 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\loop_audio.cpp
@@ -4407,10 +4407,9 @@
 1349194459 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\loop_proc.cpp
 	"Game.h"
 
-1349340822 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\main.cpp
+1349352095 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\main.cpp
 	"Game.h"
 	<X11/extensions/Xinerama.h>
-	<windows.h>
 
 1349258919 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\button.cpp
 	"../Game.h"
@@ -4935,7 +4934,7 @@
 1349011461 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\texture\texture_bmp.cpp
 	"Texture.h"
 
-1349206876 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\font\font.h
+1349351523 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\font\font.h
 	"../Core.h"
 	<ft2build.h>
 
@@ -4944,7 +4943,7 @@
 
 1339652158 z:\home\viewizard\desktop\astromenace\alllibraries\freetype-2.4.10\include\freetype\config\ftheader.h
 
-1349283022 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\font\font.cpp
+1349351512 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\font\font.cpp
 	"Font.h"
 
 1349206876 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\font\fontmanager.cpp
