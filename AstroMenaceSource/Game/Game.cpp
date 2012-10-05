@@ -507,7 +507,7 @@ void DrawGameExpMoney(int Exp, int Money)
 	}
 
 
-	vw_SendVertices(RI_QUADS, 4*16, RI_2f_XYZ | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
+	vw_SendVertices(RI_QUADS, 4*16, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
 
 	if (tmp != 0){delete [] tmp; tmp = 0;}
 	vw_SetTexAlpha(false, 0.5f);
@@ -1436,6 +1436,62 @@ void DrawGame()
 
 
 
+	// эмуляция гаммы
+	if( Setup.Gamma != 5 )
+	{
+		float *buff = 0;
+		// RI_2f_XY | RI_1_TEX
+		buff = new float[4*4]; if (buff == 0) return;
+
+		int k=0;
+
+		buff[k++] = 0.0f;
+		buff[k++] = 0.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = 0.0f;
+
+		buff[k++] = 0.0f;
+		buff[k++] = Setup.fAspectRatioHeight;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+
+		buff[k++] = Setup.fAspectRatioWidth;
+		buff[k++] = 0.0f;
+		buff[k++] = 0.0f;
+		buff[k++] = 0.0f;
+
+		buff[k++] = Setup.fAspectRatioWidth;
+		buff[k++] = Setup.fAspectRatioHeight;
+		buff[k++] = 0.0f;
+		buff[k++] = 1.0f;
+
+
+		eTexture *TileTexture = vw_FindTextureByName("DATA/MENU/whitepoint.tga");
+		vw_SetTextureT(0, TileTexture, 1);
+		vw_SetTexAlpha(false, 0.01f);
+		vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
+
+		float GammaF = 1.0f + (Setup.Gamma - 5)/5.0f;
+
+		if( GammaF > 1.0f )
+		{
+			vw_SetTexBlend(RI_BLEND_DESTCOLOR, RI_BLEND_ONE);
+			vw_SetColor(GammaF-1.0f, GammaF-1.0f, GammaF-1.0f, 1.0f);
+		}
+		else
+		{
+			vw_SetTexBlend(RI_BLEND_ZERO, RI_BLEND_SRCCOLOR);
+			vw_SetColor(GammaF, GammaF, GammaF, 1.0f);
+		}
+
+		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, buff, 4*sizeof(float));
+
+		vw_SetTextureDef(0);
+		if (buff != 0){delete [] buff; buff = 0;}
+	}
+
+
+
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Обработка состояния корабля игрока
@@ -1757,7 +1813,7 @@ void DrawGame()
 
 
 
-			vw_SendVertices(RI_QUADS, 4*(DrawLifeNum+DrawEnergNum), RI_2f_XYZ | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
+			vw_SendVertices(RI_QUADS, 4*(DrawLifeNum+DrawEnergNum), RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
 
 			if (tmp != 0){delete [] tmp; tmp = 0;}
 			vw_SetTexAlpha(false, 0.5f);

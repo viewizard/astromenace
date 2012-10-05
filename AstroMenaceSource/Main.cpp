@@ -1005,23 +1005,6 @@ ReCreate:
 	if (Setup.BPP != 0) FullScreen = true;
 
 
-#ifdef WIN32
-	// если надо, меняем режим экрана и ставим правильную частоту обновления
-	if (Setup.ScreenFrequency != 0)
-	{
-		DEVMODE dmScreenSettings;
-		ZeroMemory (&dmScreenSettings, sizeof (DEVMODE));
-		dmScreenSettings.dmSize	= sizeof (DEVMODE);
-		dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT | DM_DISPLAYFREQUENCY;
-		dmScreenSettings.dmPelsWidth		= Setup.Width;
-		dmScreenSettings.dmPelsHeight		= Setup.Height;
-		dmScreenSettings.dmBitsPerPel		= Setup.BPP;
-		dmScreenSettings.dmDisplayFrequency	= Setup.ScreenFrequency;
-		ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
-	}
-#endif // WIN32
-
-
 	int InitStatus = vw_InitRenderer("AstroMenace", Setup.Width, Setup.Height, &Setup.BPP, FullScreen, &Setup.MultiSampleType, CurrentVideoModeX, CurrentVideoModeY, CurrentVideoMode.W, CurrentVideoMode.H);
 
 	// ошибка окна (размеры)

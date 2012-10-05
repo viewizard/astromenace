@@ -178,7 +178,7 @@ void vw_Draw(int X, int Y, RECT *SrcRest, eTexture *Tex, bool Alpha, float Rotat
 	glPushMatrix();
 	glRotatef(RotateAngle, 0, 0, 1);
 
-	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XYZ | RI_1_TEX, tmp, 4*sizeof(float));
+	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(float));
 	glPopMatrix();
 
 
@@ -277,7 +277,7 @@ void vw_DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, bool Alpha,
 	glPushMatrix();
 	glRotatef(RotateAngle, 0, 0, 1);
 
-	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XYZ | RI_1_TEX, tmp, 4*sizeof(float));
+	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(float));
 
 	glPopMatrix();
 

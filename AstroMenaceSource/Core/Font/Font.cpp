@@ -398,7 +398,7 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 				// не можем ставить другое! если нет мипмапа
 				vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
 				// отрисовываем все что есть в буфере
-				vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XYZ | RI_1_TEX, tmp, 4*sizeof(float));
+				vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(float));
 			}
 
 
@@ -476,7 +476,7 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 		// не можем ставить другое! если нет мипмапа
 		vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
 		// отрисовываем все что есть в буфере
-		vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XYZ | RI_1_TEX, tmp, 4*sizeof(float));
+		vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(float));
 	}
 
 
@@ -622,7 +622,7 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 				// не можем ставить другое! если нет мипмапа
 				vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
 				// отрисовываем все что есть в буфере
-				vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XYZ | RI_1_TEX, tmp, 4*sizeof(float));
+				vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(float));
 			}
 
 
@@ -695,7 +695,7 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 		// не можем ставить другое! если нет мипмапа
 		vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
 		// отрисовываем все что есть в буфере
-		vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XYZ | RI_1_TEX, tmp, 4*sizeof(float));
+		vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(float));
 	}
 
 
