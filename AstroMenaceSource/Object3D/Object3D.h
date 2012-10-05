@@ -6,10 +6,10 @@
 
 	File name: Object3D.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -54,7 +54,7 @@ extern int GameTargetingMechanicSystem;
 
 
 
-int Audio_PlaySound(int SoundID, float fVol, VECTOR3D Location, bool Loop, int AtType=1);
+int Audio_PlaySound3D(int SoundID, float fVol, VECTOR3D Location, bool Loop, int AtType=1);
 
 
 

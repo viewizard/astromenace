@@ -6,10 +6,10 @@
 
 	File name: Weapon.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -701,7 +701,7 @@ bool CWeapon::Update(float Time)
 		if (SoundNum != 0)
 		{
 			float fVol = 1.0f;
-			Audio_PlaySound(SoundNum, fVol, Projectile->Location, false);
+			Audio_PlaySound3D(SoundNum, fVol, Projectile->Location, false);
 		}
 
 
@@ -758,7 +758,7 @@ bool CWeapon::Update(float Time)
 		if (SoundNum != 0)
 		{
 			float fVol = 1.0f;
-			Audio_PlaySound(SoundNum, fVol, Projectile->Location, false);
+			Audio_PlaySound3D(SoundNum, fVol, Projectile->Location, false);
 		}
 
 		SwampNum--;
@@ -1154,7 +1154,7 @@ bool CWeapon::WeaponFire(float Time)
 				case 2:
 				case 3:
 				case 4:
-					Audio_PlaySound(1, fVol, Location, false);
+					Audio_PlaySound3D(1, fVol, Location, false);
 					break;
 
 				// Ion
@@ -1165,7 +1165,7 @@ bool CWeapon::WeaponFire(float Time)
 				case 8:
 				case 9:
 				case 10:
-					Audio_PlaySound(2, fVol, Location, false);
+					Audio_PlaySound3D(2, fVol, Location, false);
 					break;
 
 				// Maser
@@ -1173,14 +1173,14 @@ bool CWeapon::WeaponFire(float Time)
 				case 12:
 				// Laser
 				case 14:
-					Audio_PlaySound(3, fVol, Location, false);
+					Audio_PlaySound3D(3, fVol, Location, false);
 
 					break;
 				// Antimatter
 				case 13:
 				// Gauss
 				case 15:
-					Audio_PlaySound(4, fVol, Location, false);
+					Audio_PlaySound3D(4, fVol, Location, false);
 					break;
 
 				// ракета
@@ -1191,7 +1191,7 @@ bool CWeapon::WeaponFire(float Time)
 				case 18:
 				// бомба
 				case 19:
-					Audio_PlaySound(5, fVol, Location, false);
+					Audio_PlaySound3D(5, fVol, Location, false);
 					break;
 			}
 
@@ -1362,7 +1362,7 @@ bool CWeapon::WeaponFire(float Time)
 		float fVol = 1.0f;
 		if (LaserMaser != 0) LaserMaserSoundNum = LaserMaserSoundNum;
 
-		LaserMaserSoundNum = Audio_PlaySound(SoundNum, fVol, Location+FireLocation, false);
+		LaserMaserSoundNum = Audio_PlaySound3D(SoundNum, fVol, Location+FireLocation, false);
 		// если не надо сохранять
 		if (LaserMaser == 0) LaserMaserSoundNum = 0;
 	}

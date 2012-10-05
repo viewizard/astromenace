@@ -173,7 +173,7 @@ end:
 
 	// почему-то не можем поставить MSAA больше 4 в линуксе (?)... по какой-то причине libSDL ни за какие плюшки не хочет
 	// ставить большее сглаживание, просто не создает окно и все, в виндовс на той же версии libSDL все работает...
-#ifdef __unix
+#ifdef forced4xmsaa
 	if (OpenGL_DevCaps.MaxMultiSampleType > 4) OpenGL_DevCaps.MaxMultiSampleType = 4;
 	printf("Max Samples forced limited to 4, due to libSDL issue.\n");
 #endif

@@ -6,10 +6,10 @@
 
 	File name: Loop_audio.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -119,29 +119,39 @@ struct Sound2dData
 	// корректировка громкости
 	float	VolumeCorrection;
 	// нужно релизить при загрузке
-	bool NeedRelease;
+	bool	NeedRelease;
 };
 
 // кол-во звуков для меню + голоса
-const int	MenuSoundQuantity = 25;
+const int	MenuSoundQuantity = 15;
 // перечень имен файлов звуков для меню
 Sound2dData MenuSoundNames[MenuSoundQuantity] =
 {
 {"DATA/SFX/menu_onbutton.wav", 0.4f, false},	// навели на кнопку
 {"DATA/SFX/menu_click.wav", 0.6f, false},		// нажали на кнопку
-{"DATA/SFX/menu_new.wav", 1.0f, true},		// меняем меню
+{"DATA/SFX/menu_new.wav", 1.0f, true},			// меняем меню
 {"DATA/SFX/menu_taping.wav", 0.8f, true},		// набор текста-названия профайла
 {"DATA/SFX/menu_online.wav", 0.75f, true},		// стоим над профайлом-миссией
 {"DATA/SFX/menu_selectline.wav", 1.0f, true},	// выбрали профайл-миссию
 {"DATA/SFX/menu_nclick.wav", 1.0f, false},		// не можем нажать на кнопку, но жмем
 {"DATA/SFX/drag_error.wav", 1.0f, true},		// не можем установить в слот
-{"DATA/SFX/drag_offslot.wav", 0.65f, true},	// снимаем со слота оружие
+{"DATA/SFX/drag_offslot.wav", 0.65f, true},		// снимаем со слота оружие
 {"DATA/SFX/drag_onslot.wav", 0.82f, true},		// устанавливаем в слот оружие
-{"DATA/SFX/drag_release.wav", 0.6f, true},	// освобождаем курсор от оружия, если тянули
+{"DATA/SFX/drag_release.wav", 0.6f, true},		// освобождаем курсор от оружия, если тянули
 {"DATA/SFX/game_showmenu.wav", 1.0f, false},	// проказываем меню в игре (звук во время его появления)
 {"DATA/SFX/game_hidemenu.wav", 1.0f, false},	// скрываем меню в игре (звук во время его исчезновения)
 {"DATA/SFX/lowlife.wav", 1.0f, true},			// сирена или что-то подобное, когда менее 10% жизни остается (зацикленный небольшой фрагмент)
+{"DATA/SFX/menu_onbutton2.wav", 0.15f, false},	// навели на малую кнопку
+};
 
+
+
+
+// кол-во звуков для меню + голоса
+const int	VoiceQuantity = 10;
+// перечень имен файлов звуков для меню
+Sound2dData VoiceNames[VoiceQuantity] =
+{
 {"DATA/VOICE/Attention.wav", 1.0f, true},
 {"DATA/VOICE/EngineMalfunction.wav", 1.0f, true},
 {"DATA/VOICE/MissileDetected.wav", 1.0f, true},//++
@@ -152,9 +162,9 @@ Sound2dData MenuSoundNames[MenuSoundQuantity] =
 {"DATA/VOICE/WeaponDamaged.wav", 1.0f, true},//++
 {"DATA/VOICE/WeaponDestroyed.wav", 1.0f, true},//++
 {"DATA/VOICE/WeaponMalfunction.wav", 1.0f, true},//++
-
-{"DATA/SFX/menu_onbutton2.wav", 0.15f, false},	// навели на малую кнопку
 };
+
+
 
 
 
@@ -311,6 +321,24 @@ void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime)
 
 
 
+// установка громкости на все 2д звуки
+void Audio_SetSound2DMainVolume(float NewMainVolume)
+{
+	for (int i=0; i<MenuSoundQuantity; i++)
+	{
+		eSound* Tmp = vw_FindSoundByName(MenuSoundNames[i].FileName);
+		if (Tmp != 0) Tmp->SetMainVolume(NewMainVolume);
+	}
+}
+// установка громкости на все голосовые звуки
+void Audio_SetVoiceMainVolume(float NewMainVolume)
+{
+	for (int i=0; i<VoiceQuantity; i++)
+	{
+		eSound* Tmp = vw_FindSoundByName(VoiceNames[i].FileName);
+		if (Tmp != 0) Tmp->SetMainVolume(NewMainVolume);
+	}
+}
 
 
 
@@ -318,31 +346,23 @@ void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime)
 //------------------------------------------------------------------------------------
 // Проигрываем звук в меню, или другие 2д звуки
 //------------------------------------------------------------------------------------
-int Audio_PlayMenuSound(int SoundID, float fVol, bool Loop)
+int Audio_PlaySound2D(int SoundID, float fVol, bool Loop)
 {
 	if (!Setup.Sound_check) return 0;
 	if (!Setup.SoundSw) return 0;
-
-	// русский голос делаем немного тише
-	if (Setup.VoiceLanguage==3)
-	if (SoundID > 14 && SoundID < 25) MenuSoundNames[SoundID-1].VolumeCorrection = 0.6f;
-
-	fVol = fVol*MenuSoundNames[SoundID-1].VolumeCorrection;
-
+	if (SoundID > MenuSoundQuantity) return 0;
 
 	// т.к. у нас со смещением же в 1 идет
 	SoundID --;
 
+	fVol = fVol*MenuSoundNames[SoundID].VolumeCorrection;
 
-	// если это звук меню и мы его играем, его надо перезапустить
-	if (SoundID < 14)
+	// если это звук меню и мы его игрываем, его надо перезапустить
+	eSound* Tmp = vw_FindSoundByName(MenuSoundNames[SoundID].FileName);
+	if (Tmp != 0)
 	{
-		eSound* Tmp = vw_FindSoundByName(MenuSoundNames[SoundID].FileName);
-		if (Tmp != 0)
-		{
-			Tmp->Replay();
-			return Tmp->Num;
-		}
+		Tmp->Replay();
+		return Tmp->Num;
 	}
 
 
@@ -366,10 +386,47 @@ int Audio_PlayMenuSound(int SoundID, float fVol, bool Loop)
 
 
 
+
+//------------------------------------------------------------------------------------
+// Проигрываем голос
+//------------------------------------------------------------------------------------
+int Audio_PlayVoice(int VoiceID, float fVol, bool Loop)
+{
+	if (!Setup.Sound_check) return 0;
+	if (!Setup.SoundSw) return 0;
+	if (VoiceID > VoiceQuantity) return 0;
+
+	// т.к. у нас со смещением же в 1 идет
+	VoiceID --;
+
+	// русский голос делаем немного тише
+	if (Setup.VoiceLanguage==3) VoiceNames[VoiceID].VolumeCorrection = 0.6f;
+
+	fVol = fVol*VoiceNames[VoiceID].VolumeCorrection;
+
+	// создаем новый источник и проигрываем его
+	eSound *Sound = 0;
+	Sound = new eSound;
+	if (Sound == 0) return 0;
+	vw_AttachSound(Sound);
+
+	// чтобы не было искажения по каналам, делаем установку относительно камеры...
+	if (!Sound->Play(VoiceNames[VoiceID].FileName, fVol, Setup.VoiceSw/10.0f, 0.0f, 0.0f, 0.0f, true, Loop, VoiceNames[VoiceID].NeedRelease, 1))
+	{
+		vw_ReleaseSound(Sound); Sound = 0;
+		return 0;
+	}
+
+	return Sound->Num;
+}
+
+
+
+
 //------------------------------------------------------------------------------------
 // Проигрываем 3д звуки
 //------------------------------------------------------------------------------------
-int Audio_PlaySound(int SoundID, float fVol, VECTOR3D Location, bool Loop, int AtType)
+int Audio_PlaySound3D(int SoundID, float fVol, VECTOR3D Location, bool Loop, int AtType)
 {
 	if (!Setup.Sound_check) return 0;
 	if (!Setup.SoundSw) return 0;

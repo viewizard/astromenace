@@ -303,7 +303,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		if (vw_FindSoundByNum(VoiceAmmoOut) == 0)
 		{
 			// уже не играем, нужно запустить опять
-			VoiceAmmoOut = Audio_PlayMenuSound(24, 1.0f);
+			VoiceAmmoOut = Audio_PlayVoice(10, 1.0f);
 		}
 	}
 
@@ -323,7 +323,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		CurrentCursorStatus = 1;
 		if (vw_GetWindowLBMouse(true))
 		{
-			Audio_PlayMenuSound(2,1.0f);
+			Audio_PlaySound2D(2,1.0f);
 			WeaponSetupSlot = SlotNum;
 		}
 	}
@@ -352,7 +352,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 				(Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart)))
 			{
 				// звук устанавливаемого оружия
-				Audio_PlayMenuSound(10,1.0f);
+				Audio_PlaySound2D(10,1.0f);
 
 				// если тут было оружие - сначало продаем его
 				if (WorkshopFighterGame->Weapon[SlotNum] != 0)
@@ -410,7 +410,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 			else
 			{
 				// особый случай - есть не соответствие, нужно проиграть звук неудачной установки
-				Audio_PlayMenuSound(8, 1.0f);
+				Audio_PlaySound2D(8, 1.0f);
 
 				// сброс
 				DragWeapon = false;
@@ -430,7 +430,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		if (vw_GetWindowLBMouse(false) && !DragWeapon)
 		{
 			// звук снятия оружия из слота
-			Audio_PlayMenuSound(9, 1.0f);
+			Audio_PlaySound2D(9, 1.0f);
 
 			DragWeapon = true;
 			DragWeaponNum = WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType;
@@ -741,7 +741,7 @@ void ShipSlotSetupWeapon(int Slot)
 				(Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart)))
 			{
 				// звук устанавливаемого оружия
-				Audio_PlayMenuSound(10,1.0f);
+				Audio_PlaySound2D(10,1.0f);
 
 				// если тут было оружие - сначало продаем его
 				if (WorkshopFighterGame->Weapon[SlotNum] != 0)
@@ -799,7 +799,7 @@ void ShipSlotSetupWeapon(int Slot)
 			else
 			{
 				// особый случай - есть не соответствие, нужно проиграть звук неудачной установки
-				Audio_PlayMenuSound(8, 1.0f);
+				Audio_PlaySound2D(8, 1.0f);
 
 				// сброс
 				DragWeapon = false;
@@ -953,7 +953,7 @@ void Workshop_Weaponry()
 		if (vw_GetWindowLBMouse(false))
 		{
 			// звук взяли оружие
-			Audio_PlayMenuSound(9,1.0f);
+			Audio_PlaySound2D(9,1.0f);
 
 			// установка
 			DragWeapon = true;
@@ -1099,7 +1099,7 @@ void Workshop_Weaponry()
 	if (!vw_GetWindowLBMouse(false) && DragWeapon)
 	{
 		// звук пропадающего оружия
-		Audio_PlayMenuSound(11,1.0f);
+		Audio_PlaySound2D(11,1.0f);
 
 		// сброс
 		DragWeapon = false;

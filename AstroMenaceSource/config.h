@@ -38,8 +38,8 @@
 #define GAME_BUILD			121005
 
 
-// VBO OpenGL extention support switcher (if defined - game will detect vbo support in hardware during initialization)
-// Game could crash in FreeBSD under VirtualBox if vbo are used. Added just in case, if hardware capabilities detection fail.
+// VBO OpenGL extention support switcher (if defined - game will detect and use vbo) Game could crash
+// in FreeBSD under VirtualBox if vbo are used. Added just in case, if hardware capabilities detection fail.
 // Looks like only virtualized systems could have this issue.
 #define vbo
 
@@ -62,6 +62,11 @@
 
 // more actions and text outputs with debug information for bug hunting
 #define gamedebug
+
+// linux libSDL issue (at least <1.2.15), can't create game window if more than 4x MSAA
+#ifdef __unix
+#define forced4xmsaa
+#endif
 
 // PNG image format support via libpng. Don't use png images right now, disabled atm
 // #define png

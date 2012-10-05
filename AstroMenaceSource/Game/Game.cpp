@@ -1999,7 +1999,7 @@ void DrawGame()
 					if (SoundShowHideMenu != 0)
 						if (vw_FindSoundByNum(SoundShowHideMenu) != 0)
 							vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
-					SoundShowHideMenu = Audio_PlayMenuSound(13, 1.0f);
+					SoundShowHideMenu = Audio_PlaySound2D(13, 1.0f);
 				}
 
 				// выход в настройки
@@ -2089,7 +2089,7 @@ void DrawGame()
 					if (NeedPlaySfx && SoundShowHideMenu != 0)
 						if (vw_FindSoundByNum(SoundShowHideMenu) != 0)
 							vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
-					if (NeedPlaySfx) SoundShowHideMenu = Audio_PlayMenuSound(12, 1.0f);
+					if (NeedPlaySfx) SoundShowHideMenu = Audio_PlaySound2D(12, 1.0f);
 					// сброс кнопки мышки, чтобы случайно не нажали
 					vw_GetWindowLBMouse(true);
 				}
@@ -2103,7 +2103,7 @@ void DrawGame()
 					if (NeedPlaySfx && SoundShowHideMenu != 0)
 						if (vw_FindSoundByNum(SoundShowHideMenu) != 0)
 							vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
-					if (NeedPlaySfx) SoundShowHideMenu = Audio_PlayMenuSound(13, 1.0f);
+					if (NeedPlaySfx) SoundShowHideMenu = Audio_PlaySound2D(13, 1.0f);
 					DrawGameCursor = false;
 				}
 

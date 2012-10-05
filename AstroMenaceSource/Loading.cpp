@@ -383,7 +383,7 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 
 
 
-const int	GameLevelsLoadListCount = 78+41+35;
+const int	GameLevelsLoadListCount = 81+41+35;
 LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {
 // 2д часть
@@ -495,9 +495,12 @@ LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {"DATA/SFX/antimaterhit.wav",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
 {"DATA/SFX/gausshit.wav",						4, 20, false, 0,0,0, 0, 0, 0, true, true},
 {"DATA/SFX/lowlife.wav",						4, 20, false, 0,0,0, 0, 0, 0, true, true},
+{"DATA/VOICE/Attention.wav",					4, 20, false, 0,0,0, 0, 0, 0, true, true},
+{"DATA/VOICE/EngineMalfunction.wav",			4, 20, false, 0,0,0, 0, 0, 0, true, true},
 {"DATA/VOICE/MissileDetected.wav",				4, 20, false, 0,0,0, 0, 0, 0, true, true},
 {"DATA/VOICE/PowerSupplyReestablished.wav",		4, 20, false, 0,0,0, 0, 0, 0, true, true},
 {"DATA/VOICE/PrepareForAction.wav",				4, 20, false, 0,0,0, 0, 0, 0, true, true},
+{"DATA/VOICE/ReactorMalfunction.wav",			4, 20, false, 0,0,0, 0, 0, 0, true, true},
 {"DATA/VOICE/Warning.wav",						4, 20, false, 0,0,0, 0, 0, 0, true, true},
 {"DATA/VOICE/WeaponDamaged.wav",				4, 20, false, 0,0,0, 0, 0, 0, true, true},
 {"DATA/VOICE/WeaponDestroyed.wav",				4, 20, false, 0,0,0, 0, 0, 0, true, true},
@@ -1685,7 +1688,7 @@ AllDataLoaded:
 			InitGame();
 			StartMusicWithFade(2, 2.0f, 2.0f);
 			// приготовиться к действию (речь)
-			Audio_PlayMenuSound(19, 1.0f);
+			Audio_PlayVoice(5, 1.0f);
 			Setup.LoadingHint++;
 			if (Setup.LoadingHint >= 6) Setup.LoadingHint = 0;
 			break;

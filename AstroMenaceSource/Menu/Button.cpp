@@ -78,7 +78,7 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 		if (*ButTransp == 1.0f)
 		{
-			Audio_PlayMenuSound(1,1.0f);
+			Audio_PlaySound2D(1,1.0f);
 			*Update = vw_GetTime();
 			*ButTransp = 0.99f;
 		}
@@ -145,7 +145,7 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 	if (CanClick)
 		if (vw_GetWindowLBMouse(true))
 		{
-			Audio_PlayMenuSound(2,1.0f);
+			Audio_PlaySound2D(2,1.0f);
 			return true;
 		}
 
@@ -199,7 +199,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 			{
 				CurrentCursorStatus = 2;
 				if (vw_GetWindowLBMouse(true))
-					Audio_PlayMenuSound(7,1.0f);
+					Audio_PlaySound2D(7,1.0f);
 			}
 		}
 
@@ -228,7 +228,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 		if (*ButTransp == 1.0f)
 		{
-			Audio_PlayMenuSound(1,1.0f);
+			Audio_PlaySound2D(1,1.0f);
 			*Update = vw_GetTime();
 			*ButTransp = 0.98f;
 		}
@@ -295,7 +295,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 	if (CanClick)
 		if (vw_GetWindowLBMouse(true))
 		{
-			Audio_PlayMenuSound(2,1.0f);
+			Audio_PlaySound2D(2,1.0f);
 			return true;
 		}
 
@@ -349,7 +349,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 			{
 				CurrentCursorStatus = 2;
 				if (vw_GetWindowLBMouse(true))
-					Audio_PlayMenuSound(7,1.0f);
+					Audio_PlaySound2D(7,1.0f);
 			}
 		}
 
@@ -376,7 +376,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 
 		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y)
 		{
-			Audio_PlayMenuSound(25,1.0f);
+			Audio_PlaySound2D(15,1.0f);
 			NeedPlayOnButtonSoundX = X;
 			NeedPlayOnButtonSoundY = Y;
 		}
@@ -405,7 +405,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 	if (CanClick)
 		if (vw_GetWindowLBMouse(true))
 		{
-			Audio_PlayMenuSound(2,1.0f);
+			Audio_PlaySound2D(2,1.0f);
 			return true;
 		}
 
@@ -458,7 +458,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off)
 			{
 				CurrentCursorStatus = 2;
 				if (vw_GetWindowLBMouse(true))
-					Audio_PlayMenuSound(7,1.0f);
+					Audio_PlaySound2D(7,1.0f);
 			}
 		}
 
@@ -485,7 +485,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off)
 
 		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y)
 		{
-			Audio_PlayMenuSound(25,1.0f);
+			Audio_PlaySound2D(15,1.0f);
 			NeedPlayOnButtonSoundX = X;
 			NeedPlayOnButtonSoundY = Y;
 		}
@@ -514,7 +514,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off)
 	if (CanClick)
 		if (vw_GetWindowLBMouse(true))
 		{
-			Audio_PlayMenuSound(2,1.0f);
+			Audio_PlaySound2D(2,1.0f);
 			return true;
 		}
 
@@ -582,6 +582,6 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 		if (vw_GetWindowLBMouse(true))
 		{
 			*CheckBoxStatus = !(*CheckBoxStatus);
-			Audio_PlayMenuSound(2,1.0f);
+			Audio_PlaySound2D(2,1.0f);
 		}
 }
