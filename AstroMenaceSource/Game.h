@@ -225,7 +225,7 @@ void StarSystemRelease();
 //------------------------------------------------------------------------------------
 bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTransp, float *Update);
 bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTransp, float *Update, bool Off=false);
-bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off);
+bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, bool SoundClick = true);
 bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off);
 void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Transp);
 

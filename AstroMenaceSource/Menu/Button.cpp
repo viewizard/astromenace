@@ -416,7 +416,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 //------------------------------------------------------------------------------------
 // прорисовка кнопки - 128
 //------------------------------------------------------------------------------------
-bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off)
+bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, bool SoundClick)
 {
 	RECT SrcRest, DstRest, MouseRest;
 	SetRect(&SrcRest,2,2,158-2,64-2);
@@ -514,7 +514,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off)
 	if (CanClick)
 		if (vw_GetWindowLBMouse(true))
 		{
-			Audio_PlaySound2D(2,1.0f);
+			if (SoundClick) Audio_PlaySound2D(2,1.0f);
 			return true;
 		}
 
