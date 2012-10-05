@@ -1102,12 +1102,10 @@ ReCreate:
 	CAPS->ForceTexturesPriorManager = Setup.ForceTexturesPriorManager;
 
 	// управление генерации мипмеп уровней- можем только выключить, нельзя включить если его нет
-	if (CAPS->HardwareMipMapGeneration && !Setup.HardwareMipMapGeneration)
+	if (!Setup.HardwareMipMapGeneration)
 	{
 		CAPS->HardwareMipMapGeneration = false;
 	}
-	else // если нет возможности, сбрасываем флаг
-		if (!CAPS->HardwareMipMapGeneration) Setup.HardwareMipMapGeneration = false;
 
 
 	// анализ системы только если это первый запуск
