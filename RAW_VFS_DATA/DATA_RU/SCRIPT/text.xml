@@ -144,7 +144,7 @@
 <item id="3_Gamma">Гамма</item>
 <item id="3_Texture_Filtering_Mode">Режим Вывода Текстуры</item>
 <item id="3_Textures_Quality">Качество Текстур</item>
-<item id="3_Multisample_Antialiasing">Антиалиасинг</item>
+<item id="3_Multisample_Antialiasing">Сглаживание</item>
 <item id="3_Particles_GFX_Quality">Качество Эффектов</item>
 <item id="3_Explosions_GFX_Quality">Качество Взрывов</item>
 <item id="3_Stars_Quantity">Количество Звезд</item>
