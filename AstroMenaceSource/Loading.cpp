@@ -881,7 +881,7 @@ void DrawViewizardLogo(eTexture *ViewizardLogoTexture)
 
 
 		// рисуем
-		vw_BeginRendering();
+		vw_BeginRendering(RI_COLOR_BUFFER | RI_DEPTH_BUFFER);
 		vw_Start2DMode(-1,1);
 
 		vw_DrawTransparent(&DstRest, &SrcRest, ViewizardLogoTexture, true, Transp, 0.0f, RI_UL_CORNER, GreyColor, GreyColor, GreyColor);
@@ -942,7 +942,7 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, eTexture 
 	if (Current != AllDrawLoading) // последний (полный) рисуем всегда
 		if ((*LastDrawTime) + 0.035 >= vw_GetTime()) return;
 
-	vw_BeginRendering();
+	vw_BeginRendering(RI_COLOR_BUFFER | RI_DEPTH_BUFFER);
 	vw_Start2DMode(-1,1);
 
 	RECT SrcRest, DstRest;

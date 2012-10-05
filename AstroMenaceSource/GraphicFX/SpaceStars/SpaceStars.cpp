@@ -592,7 +592,7 @@ void CSpaceStars::Draw()
 
 		vw_PopMatrix();
 
-		vw_DepthTest(true, 4);
+		vw_DepthTest(true, RI_LESSEQUAL);
 	}
 
 

@@ -65,8 +65,6 @@ int PrimCountGL=0;
 PFNGLACTIVETEXTUREPROC			glActiveTexture13	= NULL;
 PFNGLCLIENTACTIVETEXTUREPROC	glClientActiveTexture13 = NULL;
 
-
-
 float CurrentGammaGL = 1.0f;
 float CurrentContrastGL = 1.0f;
 float CurrentBrightnessGL = 1.0f;
@@ -92,6 +90,21 @@ void vw_Internal_ReleaseIndexBufferData();
 
 
 
+//------------------------------------------------------------------------------------
+// получение поддерживаемых устройством расширений
+//------------------------------------------------------------------------------------
+bool ExtensionSupported( const char *Extension)
+{
+	char *extensions;
+	extensions=(char *) glGetString(GL_EXTENSIONS);
+	// если можем получить указатель, значит это расширение есть
+	if (strstr(extensions, Extension) != NULL) return true;
+	return false;
+}
+
+
+
+
 
 
 
@@ -101,49 +114,59 @@ void vw_Internal_ReleaseIndexBufferData();
 //------------------------------------------------------------------------------------
 void vw_TestAAModes(int Width, int Height)
 {
+	OpenGL_DevCaps.MaxMultiSampleType = 0;
 
-		int AA[4] = {2, 4, 8, 16};
-		int AAcount = 4;//sizeof (AA)/ sizeof (int);
+	// иним сдл и создаем окно, чтобы протестировать опенжл
+	SDL_Init(SDL_INIT_VIDEO);
+	if (SDL_SetVideoMode(Width, Height, 0, SDL_OPENGL) == NULL) {SDL_Quit(); return;}
 
-		for (int i=AAcount-1; i!=0; i--)
+	// если не поддерживаем вообще мультисемпл - уходим
+	if (!ExtensionSupported("GL_EXT_framebuffer_blit") | !ExtensionSupported("GL_EXT_framebuffer_multisample")) {SDL_Quit(); return;}
+
+	int maxSamples=0;
+	int coverageSampleConfigs = 0;
+	int *coverageConfigs = 0;
+	glGetIntegerv(GL_MAX_SAMPLES_EXT, &maxSamples);
+	printf("Max Samples: %i\n", maxSamples);
+	OpenGL_DevCaps.MaxMultiSampleType = maxSamples;
+	// почему-то не можем поставить мсаа больше 4 в линуксе (?)... по какой-то причине libSDL ни за какие плюшки не хочет
+	// ставить большее сглаживание, просто не создает окно и все, в виндовс на той же версии libSDL все работает...
+#ifdef __unix
+	if (OpenGL_DevCaps.MaxMultiSampleType > 4) OpenGL_DevCaps.MaxMultiSampleType = 4;
+	printf("Max Samples forced limited to 4, due to libSDL issue.\n");
+#endif
+
+	// если не держит CSAA - дальше ловить нечего
+	if (!ExtensionSupported("GL_NV_framebuffer_multisample_coverage")) {SDL_Quit(); return;}
+
+
+	glGetIntegerv( GL_MAX_MULTISAMPLE_COVERAGE_MODES_NV, &coverageSampleConfigs);
+	printf("Max Multisample coverage modes: %i\n", coverageSampleConfigs);
+
+	coverageConfigs = new int[coverageSampleConfigs * 2 + 4];
+	glGetIntegerv( GL_MULTISAMPLE_COVERAGE_MODES_NV, coverageConfigs);
+
+
+	for (int kk = 0; kk < coverageSampleConfigs; kk++)
+	{
+		int depthSamples = coverageConfigs[kk*2+1];
+		int coverageSamples = coverageConfigs[kk*2];
+
+		if ( coverageSamples == depthSamples )
 		{
-			SDL_Init(SDL_INIT_VIDEO);
-			SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-			SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, AA[i]);
-			if (SDL_SetVideoMode(Width, Height, 0, SDL_OPENGL) != NULL)
-			{
-				int Buffers=0;
-				int Samples=0;
-				glGetIntegerv(GL_SAMPLE_BUFFERS_ARB, & Buffers);
-				glGetIntegerv(GL_SAMPLES_ARB, & Samples);
-
-				SDL_Surface *GameScreen = SDL_GetVideoSurface();
-				if (GameScreen != NULL)
-					SDL_FreeSurface(GameScreen);
-
-				SDL_Quit();
-				if (!Buffers || !Samples)
-				{
-
-				}
-				else
-				{
-					OpenGL_DevCaps.MaxMultiSampleType = Samples;
-					return;
-				}
-			}
-			else
-			{
-				SDL_Surface *GameScreen = SDL_GetVideoSurface();
-				if (GameScreen != NULL)
-					SDL_FreeSurface(GameScreen);
-
-				SDL_Quit();
-			}
+			// если ковередж и глубина/цвет одинаковые - это обычный MSAA
+			printf( " - %d MSAA\n", depthSamples);
 		}
+		else
+		{
+			// CSAA
+			printf( " - %d/%d CSAA\n", coverageSamples, depthSamples);
+		}
+	}
 
+	delete [] coverageConfigs;
 
-
+	SDL_Quit();
 }
 
 
@@ -195,20 +218,6 @@ void CenterWindow(int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideo
 
 
 
-//------------------------------------------------------------------------------------
-// получение поддерживаемых устройством расширений
-//------------------------------------------------------------------------------------
-bool ExtensionSupported( const char *Extension)
-{
-	char *extensions;
-	extensions=(char *) glGetString(GL_EXTENSIONS);
-	// если можем получить указатель, значит это расширение есть
-	if (strstr(extensions, Extension) != NULL) return true;
-	return false;
-}
-
-
-
 
 
 
@@ -253,6 +262,8 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 		Flags |= SDL_ANYFORMAT; // чтобы для оконного взял лучший режим сам
 	}
 
+	// ставим двойную буферизацию (теоретически, и так ее должно брать)
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	// пытаемся поставить FSAA, тут все равно что сейчас ставим... потом разберемся
 	if (*FSAA > 0)
@@ -262,15 +273,20 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 	}
 
 
-
-
-	// создаем окно
+	// задаем стенсил буфер
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
+	// создаем окно, если не поддерживаем стенсил - надо переинициализировать без него
 	if (SDL_SetVideoMode(Width, Height, WBits, Flags)  == NULL)
 	{
-		fprintf(stderr, "Can't set video mode %i x %i x %i\n", Width, Height, WBits);
-		return 1;
+		// убираем стенсил
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
+		// создаем окно
+		if (SDL_SetVideoMode(Width, Height, WBits, Flags)  == NULL)
+		{
+			fprintf(stderr, "Can't set video mode %i x %i x %i\n", Width, Height, WBits);
+			return 1;
+		}
 	}
-
 
 
 	// центровка
@@ -329,8 +345,8 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 	glGetIntegerv(GL_MAX_LIGHTS, &OpenGL_DevCaps.MaxActiveLights);
 	printf("Max lights: %i \n", OpenGL_DevCaps.MaxActiveLights);
 	printf("Set FSAA: %i \n", *FSAA);
-
-
+	SDL_GL_GetAttribute(SDL_GL_STENCIL_SIZE, &OpenGL_DevCaps.StencilBufferSize);
+	printf("Stencil Buffer Size: %i bit\n", OpenGL_DevCaps.StencilBufferSize);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -352,9 +368,6 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 	printf("Max multitexture supported: %i textures.\n", OpenGL_DevCaps.MaxMultTextures);
 
 
-
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// смотрим остальные поддерживаемые функции
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -373,13 +386,11 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 
 	// проверем поддержку VBO
 	OpenGL_DevCaps.VBOSupported = false;
-#ifdef vbo
 	if (ExtensionSupported("GL_ARB_vertex_buffer_object"))
 	{
 		OpenGL_DevCaps.VBOSupported = vw_Internal_InitializationVBO();
 		printf("Vertex Buffer support enabled.\n");
 	}
-#endif
 
 	// проверем поддержку non_power_of_two генерацию текстур
 	OpenGL_DevCaps.TextureNPOTSupported = false;
@@ -463,10 +474,6 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 
 
 
-
-
-
-
 	// получаем и выводим все поддерживаемые расширения
 	char *extensions_tmp;
 	size_t len;
@@ -494,8 +501,7 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 
 
 
-	// выключаем вертикальную синхронизацию в винде, она тут не нужна, а нам нужно как можно
-	// больше фпс
+	// выключаем вертикальную синхронизацию в винде, она тут не нужна, а нам нужно как можно больше фпс
 #ifdef WIN32
 	typedef void (APIENTRY * WGLSWAPINTERVALEXT) (int);
 	WGLSWAPINTERVALEXT wglSwapIntervalEXT = (WGLSWAPINTERVALEXT)
@@ -628,9 +634,16 @@ void vw_ChangeSize(int nWidth, int nHeight)
 //------------------------------------------------------------------------------------
 // начало прорисовки
 //------------------------------------------------------------------------------------
-void vw_BeginRendering()
+void vw_BeginRendering(int mask)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	GLbitfield  glmask = 0;
+
+	if (mask & 0x1000) glmask = glmask | GL_COLOR_BUFFER_BIT;
+	if (mask & 0x0100) glmask = glmask | GL_DEPTH_BUFFER_BIT;
+	if (mask & 0x0010) glmask = glmask | GL_ACCUM_BUFFER_BIT;
+	if (mask & 0x0001) glmask = glmask | GL_STENCIL_BUFFER_BIT;
+
+	glClear(glmask);
 
 	glMatrixMode(GL_MODELVIEW);		//Select the modelview matrix
 	glLoadIdentity();				//Reset The modelview matrix

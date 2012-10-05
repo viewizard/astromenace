@@ -82,7 +82,7 @@ void DrawAllExplosion();
 void DrawAllObject3D()
 {
 	// ставим всегда меньше или равно!
-	vw_DepthTest(true, 4);
+	vw_DepthTest(true, RI_LESSEQUAL);
 
 
 	// корабли

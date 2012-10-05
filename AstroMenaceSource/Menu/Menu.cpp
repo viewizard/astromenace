@@ -623,7 +623,7 @@ void DrawMenu()
 
 		vw_PopMatrix();
 
-		vw_DepthTest(true, 4);
+		vw_DepthTest(true, RI_LESSEQUAL);
 
 		vw_SetTextureDef(0);
 		if (buff != 0){delete [] buff; buff = 0;}
@@ -734,7 +734,7 @@ void DrawMenu()
 
 		vw_PopMatrix();
 
-		vw_DepthTest(true, 4);
+		vw_DepthTest(true, RI_LESSEQUAL);
 
 		vw_SetTextureDef(0);
 		if (buff != 0){delete [] buff; buff = 0;}
@@ -827,7 +827,7 @@ void DrawMenu()
 
 		vw_PopMatrix();
 
-		vw_DepthTest(true, 4);
+		vw_DepthTest(true, RI_LESSEQUAL);
 
 		vw_SetTextureDef(0);
 		if (buff != 0){delete [] buff; buff = 0;}

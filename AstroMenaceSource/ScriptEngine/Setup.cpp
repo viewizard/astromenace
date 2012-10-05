@@ -146,8 +146,8 @@ void InitSetup()
 		Setup.NeedShowHint[i] = true;
 
 
-	// все в авто
-	Setup.VBOCoreMode = -1;
+	// всегда включен по умолчанию, если что железо само поймет что ему надо
+	Setup.VBOCoreMode = 1;
 	// выключен в виндовсе (в висте очень плохо, большое падение фпс), включать надо если VRAM не хватает
 	Setup.ForceTexturesPriorManager = false;
 	// по умолчанию всегда меньше 128 метров

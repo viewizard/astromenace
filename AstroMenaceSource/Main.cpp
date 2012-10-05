@@ -471,7 +471,7 @@ int main( int argc, char **argv )
 		printf("Antialiasing test START\n");
 		printf("Use '--noAA' launch option in order to avoid Antialiasing test.\n");
 		vw_TestAAModes(640, 480);
-		printf("Antialiasing test END\n");
+		printf("Antialiasing test END\n\n");
 	}
 
 
@@ -1085,12 +1085,14 @@ ReCreate:
 	}
 
 	// если нужно, устанавливаем перерытие значений внутри движка, може только выключить - включить то чего нет нельзя
-	if (Setup.VBOCoreMode == 0 && CAPS->VBOSupported)
+#ifndef vbo // принудительно отключаем вообще работу с vbo
+	CAPS->VBOSupported = false;
+	printf("Vertex Buffer support forced disabled.\n");
+#endif
+	if (Setup.VBOCoreMode == 0)
 	{
 		CAPS->VBOSupported = false;
 	}
-	else // если нет возможности, сбрасываем флаг
-		if (!CAPS->VBOSupported) Setup.VBOCoreMode = 0;
 
 	// проверка поддержки шейдеров (нужна 100% поддержка GLSL 1.0)
 	if (Setup.UseGLSL)
@@ -1110,17 +1112,26 @@ ReCreate:
 
 	// анализ системы только если это первый запуск
 	if (FirstStart)
-	// если шейдерная модель 3-я или выше, можно смело ставить
-	if (CAPS->ShaderModel >= 3.0f)
 	{
-		// памяти достаточно, включаем другой режим загрузки
-		Setup.EqualOrMore128MBVideoRAM = true;
-
-		// если шейдерная модель 3.0 или выше, значит GLSL 1.0 работает на 100%
-		// в линуксе у карты нвидия 6600 почему-то шейдерная модель 3.0, а не 2.0 - не включать шейдеры вообще, пусть человек включает
-		// if (CAPS->ShaderModel >= 3.0f) Setup.UseGLSL = true;
+		// если шейдерная модель 3-я или выше
+		if (CAPS->ShaderModel >= 3.0f)
+		{
+			// памяти достаточно, включаем другой режим загрузки
+			Setup.EqualOrMore128MBVideoRAM = true;
+		}
+		// если шейдерная модель 4-я или выше
+		if (CAPS->ShaderModel >= 4.0f)
+		{
+			// 100% держит наши шейдеры
+			Setup.UseGLSL = true;
+			// 100% больше чем нужно памяти и не надо сжимать текстуры (ув. качество и скорость загрузки)
+			Setup.TexturesCompression = 0;
+			// немного больше ставим другие опции
+			Setup.MultiSampleType = 2;
+			if (Setup.MultiSampleType > CAPS->MaxMultiSampleType) Setup.MultiSampleType = 0;
+			Setup.AnisotropyLevel = CAPS->MaxAnisotropyLevel;
+		}
 	}
-
 
 
 

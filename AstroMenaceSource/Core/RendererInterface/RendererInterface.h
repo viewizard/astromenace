@@ -72,6 +72,8 @@ struct eDevCaps
 	bool ForceTexturesPriorManager;
 	// поддержка генерации мипмеп в железе
 	bool HardwareMipMapGeneration;
+	// битность stencil буфера (0 - соотв нет его)
+	int StencilBufferSize;
 };
 
 
@@ -117,7 +119,11 @@ void vw_OnChangeSize(int nWidth, int nHeight);
 // Basic rendering functions
 
 // Begin rendering
-void vw_BeginRendering(void);
+#define RI_COLOR_BUFFER		0x1000
+#define RI_DEPTH_BUFFER		0x0100
+#define RI_ACCUM_BUFFER		0x0010
+#define RI_STENCIL_BUFFER	0x0001
+void vw_BeginRendering(int  mask);
 // End rendering
 void vw_EndRendering(void);
 // Start 2D rendering mode
@@ -299,15 +305,14 @@ void vw_PolygonMode(int mode);
 void vw_CullFace(int face);
 
 // Set depth buffer status
- /* NEVER                = 1,
-    LESS                 = 2,
-    EQUAL                = 3,
-    LESSEQUAL            = 4,
-    GREATER              = 5,
-    NOTEQUAL             = 6,
-    GREATEREQUAL         = 7,
-    ALWAYS               = 8,
-*/
+#define RI_NEVER          		1
+#define RI_LESS                 2
+#define RI_EQUAL                3
+#define RI_LESSEQUAL            4
+#define RI_GREATER              5
+#define RI_NOTEQUAL             6
+#define RI_GREATEREQUAL         7
+#define RI_ALWAYS               8
 void vw_DepthTest(bool mode, int funct);
 
 // Loads identity in the current matrix
