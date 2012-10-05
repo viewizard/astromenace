@@ -116,28 +116,24 @@ void vw_TestAAModes(int Width, int Height)
 {
 	OpenGL_DevCaps.MaxMultiSampleType = 0;
 
-	// иним сдл и создаем окно, чтобы протестировать опенжл
-	SDL_Init(SDL_INIT_VIDEO);
-	if (SDL_SetVideoMode(Width, Height, 0, SDL_OPENGL) == NULL) {SDL_Quit(); return;}
-
-	// если не поддерживаем вообще мультисемпл - уходим
-	if (!ExtensionSupported("GL_EXT_framebuffer_blit") | !ExtensionSupported("GL_EXT_framebuffer_multisample")) {SDL_Quit(); return;}
-
+	int MaxMultiSampleTypeTest2 = -1;
 	int maxSamples=0;
 	int coverageSampleConfigs = 0;
 	int *coverageConfigs = 0;
+
+	// иним сдл и создаем окно, чтобы протестировать опенжл
+	SDL_Init(SDL_INIT_VIDEO);
+	if (SDL_SetVideoMode(Width, Height, 0, SDL_OPENGL) == NULL) goto end;
+
+	// если не поддерживаем вообще мультисемпл - уходим
+	if (!ExtensionSupported("GL_EXT_framebuffer_blit") | !ExtensionSupported("GL_EXT_framebuffer_multisample")) goto end;
+
 	glGetIntegerv(GL_MAX_SAMPLES_EXT, &maxSamples);
 	printf("Max Samples: %i\n", maxSamples);
 	OpenGL_DevCaps.MaxMultiSampleType = maxSamples;
-	// почему-то не можем поставить мсаа больше 4 в линуксе (?)... по какой-то причине libSDL ни за какие плюшки не хочет
-	// ставить большее сглаживание, просто не создает окно и все, в виндовс на той же версии libSDL все работает...
-#ifdef __unix
-	if (OpenGL_DevCaps.MaxMultiSampleType > 4) OpenGL_DevCaps.MaxMultiSampleType = 4;
-	printf("Max Samples forced limited to 4, due to libSDL issue.\n");
-#endif
 
 	// если не держит CSAA - дальше ловить нечего
-	if (!ExtensionSupported("GL_NV_framebuffer_multisample_coverage")) {SDL_Quit(); return;}
+	if (!ExtensionSupported("GL_NV_framebuffer_multisample_coverage")) goto end;
 
 
 	glGetIntegerv( GL_MAX_MULTISAMPLE_COVERAGE_MODES_NV, &coverageSampleConfigs);
@@ -146,7 +142,7 @@ void vw_TestAAModes(int Width, int Height)
 	coverageConfigs = new int[coverageSampleConfigs * 2 + 4];
 	glGetIntegerv( GL_MULTISAMPLE_COVERAGE_MODES_NV, coverageConfigs);
 
-
+	// просматриваем все конфиги, печатаем их и делаем второй тест на MSAA
 	for (int kk = 0; kk < coverageSampleConfigs; kk++)
 	{
 		int depthSamples = coverageConfigs[kk*2+1];
@@ -156,6 +152,7 @@ void vw_TestAAModes(int Width, int Height)
 		{
 			// если ковередж и глубина/цвет одинаковые - это обычный MSAA
 			printf( " - %d MSAA\n", depthSamples);
+			if (MaxMultiSampleTypeTest2 < depthSamples) MaxMultiSampleTypeTest2 = depthSamples;
 		}
 		else
 		{
@@ -165,6 +162,21 @@ void vw_TestAAModes(int Width, int Height)
 	}
 
 	delete [] coverageConfigs;
+
+
+end:
+
+	// GL_MAX_SAMPLES_EXT может нести в себе общий макс. семпл, а не MSAA
+	// смотрим если была доп проверка, и если в доп проверке значение меньше - берем его, оно более корректное
+	if (MaxMultiSampleTypeTest2 != -1)
+		if (OpenGL_DevCaps.MaxMultiSampleType > MaxMultiSampleTypeTest2) OpenGL_DevCaps.MaxMultiSampleType = MaxMultiSampleTypeTest2;
+
+	// почему-то не можем поставить MSAA больше 4 в линуксе (?)... по какой-то причине libSDL ни за какие плюшки не хочет
+	// ставить большее сглаживание, просто не создает окно и все, в виндовс на той же версии libSDL все работает...
+#ifdef __unix
+	if (OpenGL_DevCaps.MaxMultiSampleType > 4) OpenGL_DevCaps.MaxMultiSampleType = 4;
+	printf("Max Samples forced limited to 4, due to libSDL issue.\n");
+#endif
 
 	SDL_Quit();
 }
