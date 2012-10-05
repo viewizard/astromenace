@@ -132,14 +132,14 @@ void OptionsMenu()
 
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Voice_Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), MenuContentTransp, !Setup.Sound_check || Setup.VoiceSw==0))
+	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), MenuContentTransp, !Setup.Sound_check || Setup.VoiceSw==0, false))
 	{
 		Setup.VoiceSw--;
 		if (Setup.VoiceSw<0) Setup.VoiceSw = 0;
 		Audio_SetVoiceMainVolume(Setup.VoiceSw/10.0f);
 		Audio_PlayVoice(1, 1.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Increase"), MenuContentTransp, !Setup.Sound_check || Setup.VoiceSw==10))
+	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Increase"), MenuContentTransp, !Setup.Sound_check || Setup.VoiceSw==10, false))
 	{
 		Setup.VoiceSw++;
 		if (Setup.VoiceSw>10) Setup.VoiceSw = 10;
