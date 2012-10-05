@@ -1207,7 +1207,7 @@ void DrawGame()
 
 		vw_DepthTest(false, -1);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(float));
-		vw_DepthTest(true, 4);
+		vw_DepthTest(true, RI_LESSEQUAL);
 
 		vw_SetTextureDef(0);
 		if (buff != 0){delete [] buff; buff = 0;}
@@ -1308,7 +1308,7 @@ void DrawGame()
 
 		vw_DepthTest(false, -1);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(float));
-		vw_DepthTest(true, 4);
+		vw_DepthTest(true, RI_LESSEQUAL);
 
 		vw_SetTextureDef(0);
 		if (buff != 0){delete [] buff; buff = 0;}
@@ -1390,7 +1390,7 @@ void DrawGame()
 
 		vw_DepthTest(false, -1);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(float));
-		vw_DepthTest(true, 4);
+		vw_DepthTest(true, RI_LESSEQUAL);
 
 		vw_SetTextureDef(0);
 		if (buff != 0){delete [] buff; buff = 0;}

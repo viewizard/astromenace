@@ -1809,7 +1809,7 @@ void InformationDrawObject()
 			vw_PopMatrix();
 
 	}
-	vw_DepthTest(true, 4);
+	vw_DepthTest(true, RI_LESSEQUAL);
 	if (tmpDATA != 0) {delete [] tmpDATA; tmpDATA = 0;}
 	vw_SetTextureDef(0);
 

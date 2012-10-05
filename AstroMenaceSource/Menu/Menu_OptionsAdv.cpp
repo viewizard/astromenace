@@ -308,9 +308,9 @@ void OptionsAdvMenu()
 	}
 	else
 	{
-		Size = vw_FontSize("%ix",Options_MultiSampleType);
+		Size = vw_FontSize("%ix MSAA",Options_MultiSampleType);
 		SizeI = (170-Size)/2;//Off, 2x, 4x ...
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%ix", Options_MultiSampleType);
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%ix MSAA", Options_MultiSampleType);
 	}
 
 
