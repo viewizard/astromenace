@@ -253,7 +253,7 @@ void InitMenu()
 //------------------------------------------------------------------------------------
 void SetMenu(eGameStatus Menu)
 {
-	Audio_PlayMenuSound(3,1.0f);
+	Audio_PlaySound2D(3,1.0f);
 
 	switch (Menu)
 	{
@@ -267,7 +267,6 @@ void SetMenu(eGameStatus Menu)
 			Options_Width = Setup.Width;
 			Options_Height = Setup.Height;
 			Options_BPP = Setup.BPP;
-			Options_Frequency = Setup.ScreenFrequency;
 			Options_TexturesQuality = Setup.TexturesQuality;
 			Options_iAspectRatioWidth = Setup.iAspectRatioWidth;
 			break;

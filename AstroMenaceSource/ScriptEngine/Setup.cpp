@@ -6,10 +6,10 @@
 
 	File name: Setup.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -68,7 +68,6 @@ void InitSetup()
 		Setup.iAspectRatioHeight = 768;
 	}
 	Setup.CameraModeWithStandardAspectRatio = 0;
-	Setup.ScreenFrequency = 0;
 
 	Setup.TextureFilteringMode = 2;
 	Setup.TexturesQuality = 3;
@@ -84,6 +83,7 @@ void InitSetup()
 	Setup.MusicSw = 8;
 	Setup.Music_check = true;
 	Setup.SoundSw = 10;
+	Setup.VoiceSw = 10;
 	Setup.Sound_check = true;
 	Setup.Gamma = 2;
 	Setup.ShowFPS = false;
@@ -281,8 +281,6 @@ void SaveXMLSetupFile()
 	else
 		sAddLine(root, setting, "AspectRatio", "value", "16:10");
 	iAddLine(root, setting, "CameraModeWithStandardAspectRatio", "value", Setup.CameraModeWithStandardAspectRatio);
-	AddComment(root, " Set to 0 for default ", JustCreated);
-	iAddLine(root, setting, "ScreenFrequency", "value", Setup.ScreenFrequency);
 
 
 	AddComment(root, " Don't change this setting unless you know what you are doing ", JustCreated);
@@ -309,6 +307,7 @@ void SaveXMLSetupFile()
 	iAddLine(root, setting, "MaxPointLights", "value", Setup.MaxPointLights);
 	iAddLine(root, setting, "MusicSw", "value", Setup.MusicSw);
 	iAddLine(root, setting, "SoundSw", "value", Setup.SoundSw);
+	iAddLine(root, setting, "VoiceSw", "value", Setup.VoiceSw);
 	iAddLine(root, setting, "Gamma", "value", Setup.Gamma);
 	bAddLine(root, setting, "ShowFPS", "value", Setup.ShowFPS);
 	iAddLine(root, setting, "GameWeaponInfoType", "value", Setup.GameWeaponInfoType);
@@ -620,7 +619,6 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	}
 
 	iGetLine(root, setting, "CameraModeWithStandardAspectRatio", "value", &Setup.CameraModeWithStandardAspectRatio);
-	iGetLine(root, setting, "ScreenFrequency", "value", &Setup.ScreenFrequency);
 
 
 	iGetLine(root, setting, "VBOCoreMode", "value", &Setup.VBOCoreMode);
@@ -641,6 +639,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	iGetLine(root, setting, "MaxPointLights", "value", &Setup.MaxPointLights);
 	iGetLine(root, setting, "MusicSw", "value", &Setup.MusicSw);
 	iGetLine(root, setting, "SoundSw", "value", &Setup.SoundSw);
+	iGetLine(root, setting, "VoiceSw", "value", &Setup.VoiceSw);
 	iGetLine(root, setting, "Gamma", "value", &Setup.Gamma);
 	bGetLine(root, setting, "ShowFPS", "value", &Setup.ShowFPS);
 	iGetLine(root, setting, "GameWeaponInfoType", "value", &Setup.GameWeaponInfoType);

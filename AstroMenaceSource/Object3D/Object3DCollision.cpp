@@ -6,10 +6,10 @@
 
 	File name: Object3DCollision.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -41,7 +41,7 @@
 #include "Explosion/GroundExplosion/GroundExplosion.h"
 #include "Explosion/SpaceExplosion/SpaceExplosion.h"
 
-int Audio_PlayMenuSound(int SoundID, float fVol, bool Loop = false);
+int Audio_PlayVoice(int SoundID, float fVol, bool Loop = false);
 float GetProjectileSpeed(int Num);
 void PlayBulletExplosion(VECTOR3D Location, bool NeedExplosionSFX, int ExplType);
 
@@ -650,14 +650,14 @@ void DetectCollisionAllObject3D()
 						{
 							tmpShip->Weapon[i]->Strength = 0.0f;
 							// оружие уничтожено (речь)
-							Audio_PlayMenuSound(23, 1.0f);
+							Audio_PlayVoice(9, 1.0f);
 							// убираем звук попадания-разбивания снаряда
 							tmpProjectile->NeedDeadSound = false;
 						}
 						else
 						{
 							// оружие повреждено (речь)
-							Audio_PlayMenuSound(22, 1.0f);
+							Audio_PlayVoice(8, 1.0f);
 						}
 
                         // удаляем только те, которые разбились
@@ -716,7 +716,7 @@ void DetectCollisionAllObject3D()
 						if (vw_FindSoundByNum(VoiceWarningCollisionDetected) == 0)
 						{
 							// уже не играем, нужно запустить опять
-							VoiceWarningCollisionDetected = Audio_PlayMenuSound(21, 1.0f);
+							VoiceWarningCollisionDetected = Audio_PlayVoice(7, 1.0f);
 						}
 					}
 				}
@@ -830,7 +830,7 @@ exitN1:
 						if (vw_FindSoundByNum(VoiceWarningCollisionDetected) == 0)
 						{
 							// уже не играем, нужно запустить опять
-							VoiceWarningCollisionDetected = Audio_PlayMenuSound(21, 1.0f);
+							VoiceWarningCollisionDetected = Audio_PlayVoice(7, 1.0f);
 						}
 					}
 				}

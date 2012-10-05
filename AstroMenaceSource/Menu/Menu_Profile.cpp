@@ -346,7 +346,7 @@ void ProfileInputText()
 		if (vw_FindSoundByNum(SoundTaping) != 0)
 			vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
 
-		SoundTaping = Audio_PlayMenuSound(4,1.0f);
+		SoundTaping = Audio_PlaySound2D(4,1.0f);
 
 		vw_SetCurrentKeyUnicod(0);
 	}
@@ -376,7 +376,7 @@ void ProfileInputText()
 
 		if (vw_FindSoundByNum(SoundTaping) != 0)
 			vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
-		SoundTaping = Audio_PlayMenuSound(4,1.0f);
+		SoundTaping = Audio_PlaySound2D(4,1.0f);
 
 		vw_SetKeys(SDLK_BACKSPACE, false);
 	}
@@ -560,7 +560,7 @@ void ProfileMenu()
 				if (SoundOnProfileID != i)
 				{
 					SoundOnProfileID = i;
-					Audio_PlayMenuSound(5,1.0f);
+					Audio_PlaySound2D(5,1.0f);
 				}
 
 				if (vw_GetWindowLBMouse(true))
@@ -570,7 +570,7 @@ void ProfileMenu()
 					CurrentProfile = i;
 					Setup.LastProfile = CurrentProfile;
 					// играем звук выбора
-					Audio_PlayMenuSound(6,1.0f);
+					Audio_PlaySound2D(6,1.0f);
 				}
 
 				if (CurrentProfile != i)

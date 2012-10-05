@@ -360,7 +360,7 @@ void Workshop_Workshop()
 	{
 		if (NeedPlayWorkshopOnButtonSoundX != DstRest.left || NeedPlayWorkshopOnButtonSoundY != DstRest.top)
 		{
-			Audio_PlayMenuSound(1,1.0f);
+			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRest.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRest.top;
 		}
@@ -368,7 +368,7 @@ void Workshop_Workshop()
 		CurrentCursorStatus = 1;
 		if (vw_GetWindowLBMouse(true))
 		{
-			Audio_PlayMenuSound(2,1.0f);
+			Audio_PlaySound2D(2,1.0f);
 			CurrentSystemStockNum = GetPrevSystemStockNum();
 		}
 
@@ -394,7 +394,7 @@ void Workshop_Workshop()
 	{
 		if (NeedPlayWorkshopOnButtonSoundX != DstRest.left || NeedPlayWorkshopOnButtonSoundY != DstRest.top)
 		{
-			Audio_PlayMenuSound(1,1.0f);
+			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRest.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRest.top;
 		}
@@ -402,7 +402,7 @@ void Workshop_Workshop()
 		CurrentCursorStatus = 1;
 		if (vw_GetWindowLBMouse(true))
 		{
-			Audio_PlayMenuSound(2,1.0f);
+			Audio_PlaySound2D(2,1.0f);
 			CurrentSystemStockNum = GetNextSystemStockNum();
 		}
 
@@ -431,7 +431,7 @@ void Workshop_Workshop()
 	{
 		if (NeedPlayWorkshopOnButtonSoundX != DstRest.left || NeedPlayWorkshopOnButtonSoundY != DstRest.top)
 		{
-			Audio_PlayMenuSound(1,1.0f);
+			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRest.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRest.top;
 		}
@@ -440,7 +440,7 @@ void Workshop_Workshop()
 		if (vw_GetWindowLBMouse(true))
 		{
 			CurrentSystemStockNum = GetPrevSystemStockNum();
-			Audio_PlayMenuSound(2,1.0f);
+			Audio_PlaySound2D(2,1.0f);
 		}
 		vw_DrawTransparent(&DstRest, &SrcRest, GetSystemIcon(GetPrevSystemStockNum()), true, MenuContentTransp);
 	}
@@ -471,7 +471,7 @@ void Workshop_Workshop()
 	{
 		if (NeedPlayWorkshopOnButtonSoundX != DstRest.left || NeedPlayWorkshopOnButtonSoundY != DstRest.top)
 		{
-			Audio_PlayMenuSound(1,1.0f);
+			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRest.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRest.top;
 		}
@@ -479,7 +479,7 @@ void Workshop_Workshop()
 		CurrentCursorStatus = 1;
 		if (vw_GetWindowLBMouse(true))
 		{
-			Audio_PlayMenuSound(2,1.0f);
+			Audio_PlaySound2D(2,1.0f);
 			CurrentSystemStockNum = GetNextSystemStockNum();
 		}
 		vw_DrawTransparent(&DstRest, &SrcRest, GetSystemIcon(GetNextSystemStockNum()), true, MenuContentTransp);
@@ -550,7 +550,7 @@ void Workshop_Workshop()
 		if (vw_FindSoundByNum(VoiceNeedMoreEnergy) == 0)
 		{
 			// уже не играем, нужно запустить опять
-			VoiceNeedMoreEnergy = Audio_PlayMenuSound(20, 1.0f);
+			VoiceNeedMoreEnergy = Audio_PlayVoice(6, 1.0f);
 		}
 
 		// вывод текста
@@ -707,7 +707,7 @@ void Workshop_Workshop()
 	{
 		if (NeedPlayWorkshopOnButtonSoundX != DstRest.left || NeedPlayWorkshopOnButtonSoundY != DstRest.top)
 		{
-			Audio_PlayMenuSound(1,1.0f);
+			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRest.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRest.top;
 		}
@@ -717,7 +717,7 @@ void Workshop_Workshop()
 		if (vw_GetWindowLBMouse(true))
 		{
 			CurrentSystemStockNum = 1;
-			Audio_PlayMenuSound(2,1.0f);
+			Audio_PlaySound2D(2,1.0f);
 		}
 	}
 	else
@@ -766,7 +766,7 @@ void Workshop_Workshop()
 	{
 		if (NeedPlayWorkshopOnButtonSoundX != DstRest.left || NeedPlayWorkshopOnButtonSoundY != DstRest.top)
 		{
-			Audio_PlayMenuSound(1,1.0f);
+			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRest.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRest.top;
 		}
@@ -776,7 +776,7 @@ void Workshop_Workshop()
 		if (vw_GetWindowLBMouse(true))
 		{
 			CurrentSystemStockNum = 5;
-			Audio_PlayMenuSound(2,1.0f);
+			Audio_PlaySound2D(2,1.0f);
 		}
 	}
 	else
@@ -816,7 +816,7 @@ void Workshop_Workshop()
 	{
 		if (NeedPlayWorkshopOnButtonSoundX != DstRest.left || NeedPlayWorkshopOnButtonSoundY != DstRest.top)
 		{
-			Audio_PlayMenuSound(1,1.0f);
+			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRest.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRest.top;
 		}
@@ -826,7 +826,7 @@ void Workshop_Workshop()
 		if (vw_GetWindowLBMouse(true))
 		{
 			CurrentSystemStockNum = 9;
-			Audio_PlayMenuSound(2,1.0f);
+			Audio_PlaySound2D(2,1.0f);
 		}
 	}
 	else
@@ -865,7 +865,7 @@ void Workshop_Workshop()
 	{
 		if (NeedPlayWorkshopOnButtonSoundX != DstRest.left || NeedPlayWorkshopOnButtonSoundY != DstRest.top)
 		{
-			Audio_PlayMenuSound(1,1.0f);
+			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRest.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRest.top;
 		}
@@ -874,7 +874,7 @@ void Workshop_Workshop()
 		CurrentCursorStatus = 1;
 		if (vw_GetWindowLBMouse(true))
 		{
-			Audio_PlayMenuSound(2,1.0f);
+			Audio_PlaySound2D(2,1.0f);
 			CurrentSystemStockNum = 13;
 		}
 	}
@@ -923,7 +923,7 @@ void Workshop_Workshop()
 	{
 		if (NeedPlayWorkshopOnButtonSoundX != DstRest.left || NeedPlayWorkshopOnButtonSoundY != DstRest.top)
 		{
-			Audio_PlayMenuSound(1,1.0f);
+			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRest.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRest.top;
 		}
@@ -932,7 +932,7 @@ void Workshop_Workshop()
 		CurrentCursorStatus = 1;
 		if (vw_GetWindowLBMouse(true))
 		{
-			Audio_PlayMenuSound(2,1.0f);
+			Audio_PlaySound2D(2,1.0f);
 			CurrentSystemStockNum = 17;
 		}
 	}

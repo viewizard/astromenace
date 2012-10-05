@@ -506,7 +506,7 @@ void MissionMenu()
 				if (SoundOnMissionID != i)
 				{
 					SoundOnMissionID = i;
-					Audio_PlayMenuSound(5,1.0f);
+					Audio_PlaySound2D(5,1.0f);
 				}
 
 				// если стоим над ним...
@@ -561,7 +561,7 @@ void MissionMenu()
 
 					CurrentMission = i;
 					Setup.Profile[CurrentProfile].LastMission = CurrentMission;
-					Audio_PlayMenuSound(6,1.0f);
+					Audio_PlaySound2D(6,1.0f);
 				}
 
 				if (vw_GetWindowLBDoubleMouse(true))

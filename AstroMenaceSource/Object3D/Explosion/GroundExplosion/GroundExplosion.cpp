@@ -6,10 +6,10 @@
 
 	File name: GroundExplosion.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -242,7 +242,7 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
         case 1:
         case 2:
 			// постройки, транспорт
-            Audio_PlaySound(8, fVol, ExplLocation, false, 2);
+            Audio_PlaySound3D(8, fVol, ExplLocation, false, 2);
 			break;
 
 	}

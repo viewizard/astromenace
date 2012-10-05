@@ -38,7 +38,6 @@
 int Options_Width;
 int Options_Height;
 int Options_BPP;
-int Options_Frequency;
 int Options_TexturesQuality;
 int Options_iAspectRatioWidth;
 
@@ -130,19 +129,58 @@ void OptionsMenu()
 
 
 
+
+	Y1 += Prir1;
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Voice_Volume"));
+	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), MenuContentTransp, !Setup.Sound_check || Setup.VoiceSw==0))
+	{
+		Setup.VoiceSw--;
+		if (Setup.VoiceSw<0) Setup.VoiceSw = 0;
+		Audio_SetVoiceMainVolume(Setup.VoiceSw/10.0f);
+		Audio_PlayVoice(1, 1.0f);
+	}
+	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Increase"), MenuContentTransp, !Setup.Sound_check || Setup.VoiceSw==10))
+	{
+		Setup.VoiceSw++;
+		if (Setup.VoiceSw>10) Setup.VoiceSw = 10;
+		Audio_SetVoiceMainVolume(Setup.VoiceSw/10.0f);
+		Audio_PlayVoice(1, 1.0f);
+	}
+	if (!Setup.Sound_check)
+	{
+		int SizeI = (170-vw_FontSize(GetText("3_Not_available")))/2;
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Not_available"));
+	}
+	else
+	{
+		for (int i=0; i<10; i++)
+		{
+			SetRect(&SrcRest,0,0,16,32);
+			SetRect(&DstRest,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
+			if (Setup.VoiceSw>i)
+				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc.tga"), true, MenuContentTransp);
+			else
+				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, MenuContentTransp);
+		}
+	}
+
+
+
+
+
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Sound_Effects_Volume"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), MenuContentTransp, !Setup.Sound_check || Setup.SoundSw==0))
 	{
 		Setup.SoundSw--;
 		if (Setup.SoundSw<0) Setup.SoundSw = 0;
-		vw_SetSoundMainVolume(Setup.SoundSw/10.0f);
+		Audio_SetSound2DMainVolume(Setup.SoundSw/10.0f);
 	}
 	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Increase"), MenuContentTransp, !Setup.Sound_check || Setup.SoundSw==10))
 	{
 		Setup.SoundSw++;
 		if (Setup.SoundSw>10) Setup.SoundSw = 10;
-		vw_SetSoundMainVolume(Setup.SoundSw/10.0f);
+		Audio_SetSound2DMainVolume(Setup.SoundSw/10.0f);
 	}
 	if (!Setup.Sound_check)
 	{
@@ -186,7 +224,6 @@ void OptionsMenu()
 		if (Options_BPP != 0)
 		{
 			Options_BPP = 0;
-			Options_Frequency = 0;
 		}
 		else
 		{
@@ -218,8 +255,6 @@ void OptionsMenu()
 					break;
 				}
 			}
-
-			Options_Frequency = Setup.ScreenFrequency;
 		}
 	}
 
@@ -347,89 +382,6 @@ void OptionsMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Refresh_Rate"));
-#ifdef WIN32
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Options_BPP==0))
-	{
-		// ищем предыдущий параметр для установленного разрешения
-		DEVMODE dmScreenSettings;
-		ZeroMemory (&dmScreenSettings, sizeof (DEVMODE));
-		dmScreenSettings.dmSize	= sizeof (DEVMODE);
-		int Mode = 0;
-		// чтобы был переход на максимальный
-		if (Options_Frequency == 0) Options_Frequency = 1000;
-		int CurrentFR = 0;
-
-		// пока можем вытягивать
-		while (EnumDisplaySettings(NULL, Mode, &dmScreenSettings))
-		{
-			Mode++;
-			// находим нужное разрешение
-			if (dmScreenSettings.dmPelsWidth == Options_Width)
-			if (dmScreenSettings.dmPelsHeight == Options_Height)
-			if (dmScreenSettings.dmBitsPerPel == Options_BPP)
-			{
-				if ((int)dmScreenSettings.dmDisplayFrequency < Options_Frequency &&
-					(int)dmScreenSettings.dmDisplayFrequency > CurrentFR)
-						CurrentFR = dmScreenSettings.dmDisplayFrequency;
-			}
-		}
-		Options_Frequency = CurrentFR;
-	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Options_BPP==0))
-	{
-		// ищем следующий параметр для установленного разрешения
-		DEVMODE dmScreenSettings;
-		ZeroMemory (&dmScreenSettings, sizeof (DEVMODE));
-		dmScreenSettings.dmSize	= sizeof (DEVMODE);
-		int Mode = 0;
-		int CurrentFR = 1000;
-
-		// пока можем вытягивать
-		while (EnumDisplaySettings(NULL, Mode, &dmScreenSettings))
-		{
-			Mode++;
-			// находим нужное разрешение
-			if (dmScreenSettings.dmPelsWidth == Options_Width)
-			if (dmScreenSettings.dmPelsHeight == Options_Height)
-			if (dmScreenSettings.dmBitsPerPel == Options_BPP)
-			{
-				if ((int)dmScreenSettings.dmDisplayFrequency > Options_Frequency &&
-					(int)dmScreenSettings.dmDisplayFrequency < CurrentFR)
-						CurrentFR = dmScreenSettings.dmDisplayFrequency;
-			}
-		}
-		// если тут, и все еще 1000... значит больше уже нет
-		if (CurrentFR == 1000) Options_Frequency = 0;
-		else Options_Frequency = CurrentFR;
-	}
-	if (Options_Frequency == 0)
-	{
-		Size = vw_FontSize(GetText("3_Default"));
-		SizeI = (170-Size)/2;
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Default"));
-	}
-	else
-	{
-		Size = vw_FontSize("%i", Options_Frequency);
-		SizeI = (170-Size)/2;
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", Options_Frequency);
-	}
-#else
-
-	DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, true);
-	DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, true);
-
-	Size = vw_FontSize(GetText("3_Default"));
-	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Default"));
-
-#endif // WIN32
-
-
-
-
-	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Gamma"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), MenuContentTransp, Setup.BPP == 0 || Setup.Gamma==0))
 	{
@@ -539,7 +491,6 @@ void OptionsMenu()
 	if ((Options_Width == Setup.Width &&
 		Options_Height == Setup.Height &&
 		Options_BPP == Setup.BPP &&
-		Options_Frequency == Setup.ScreenFrequency &&
 		Options_TexturesQuality == Setup.TexturesQuality &&
 		Options_iAspectRatioWidth == Setup.iAspectRatioWidth))
 	{
@@ -565,7 +516,6 @@ void OptionsMenu()
 			if (Options_Width != Setup.Width ||
 				Options_Height != Setup.Height ||
 				Options_BPP != Setup.BPP ||
-				Options_Frequency != Setup.ScreenFrequency ||
 				Options_TexturesQuality != Setup.TexturesQuality ||
 				Options_iAspectRatioWidth != Setup.iAspectRatioWidth)
 			{
@@ -594,7 +544,6 @@ void OptionsMenu()
 			}
 
 			Setup.BPP = Options_BPP;
-			Setup.ScreenFrequency = Options_Frequency;
 			Setup.TexturesQuality = Options_TexturesQuality;
 		}
 	}

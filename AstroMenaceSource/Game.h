@@ -157,13 +157,14 @@ extern char GameBossMusic[MAX_PATH];
 extern bool GameDeathMusicSet;
 extern char GameDeathMusic[MAX_PATH];
 
-int Audio_PlayMenuSound(int SoundID, float fVol, bool Loop = false);
-int Audio_PlaySound(int SoundID, float fVol, VECTOR3D Location, bool Loop, int AtType);
+int Audio_PlaySound2D(int SoundID, float fVol, bool Loop = false);
+int Audio_PlayVoice(int VoiceID, float fVol, bool Loop = false);
+int Audio_PlaySound3D(int SoundID, float fVol, VECTOR3D Location, bool Loop, int AtType);
 void Audio_LoopProc();
 bool InitAudio();
 void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime);
-
-
+void Audio_SetSound2DMainVolume(float NewMainVolume);
+void Audio_SetVoiceMainVolume(float NewMainVolume);
 
 
 
@@ -306,7 +307,6 @@ void CreditsMenu();
 extern int Options_Width;
 extern int Options_Height;
 extern int Options_BPP;
-extern int Options_Frequency;
 extern int Options_TexturesQuality;
 extern int Options_iAspectRatioWidth;
 

@@ -435,7 +435,7 @@ void GamePlayerShip()
 			if (vw_FindSoundByNum(VoiceMissileDetected) == 0 && !VoiceMissileDetectedStatus)
 			{
 				// уже не играем, нужно запустить опять
-				VoiceMissileDetected = Audio_PlayMenuSound(17, 1.0f);
+				VoiceMissileDetected = Audio_PlayVoice(3, 1.0f);
 				VoiceMissileDetectedStatus = true;
 			}
 
@@ -479,7 +479,7 @@ void GamePlayerShip()
 				if (vw_FindSoundByNum(VoiceWeaponMalfunction) == 0)
 				{
 					// уже не играем, нужно запустить опять
-					VoiceWeaponMalfunction = Audio_PlayMenuSound(24, 1.0f);
+					VoiceWeaponMalfunction = Audio_PlayVoice(10, 1.0f);
 				}
 			}
 
@@ -494,7 +494,7 @@ void GamePlayerShip()
 		{
 			// если не играем, запускаем звук сирены
 			if (vw_FindSoundByNum(SoundLowLife) == 0)
-				SoundLowLife = Audio_PlayMenuSound(14, 1.0f);
+				SoundLowLife = Audio_PlaySound2D(14, 1.0f);
 		}
 	}
 

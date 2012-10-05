@@ -97,13 +97,13 @@ void GameOptions()
 	{
 		Setup.SoundSw--;
 		if (Setup.SoundSw<0) Setup.SoundSw = 0;
-		vw_SetSoundMainVolume(Setup.SoundSw/10.0f);
+		Audio_SetSound2DMainVolume(Setup.SoundSw/10.0f);
 	}
 	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Increase"), GameContentTransp, !Setup.Sound_check || Setup.SoundSw==10))
 	{
 		Setup.SoundSw++;
 		if (Setup.SoundSw>10) Setup.SoundSw = 10;
-		vw_SetSoundMainVolume(Setup.SoundSw/10.0f);
+		Audio_SetSound2DMainVolume(Setup.SoundSw/10.0f);
 	}
 	if (!Setup.Sound_check)
 	{

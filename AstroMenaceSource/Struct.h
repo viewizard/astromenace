@@ -234,6 +234,7 @@ struct GameSetup
 	bool	Music_check; // вообще можем-не можем играть музыку
 	// вкл/откл SFX
 	int		SoundSw;
+	int		VoiceSw;
 	bool	Sound_check; // вообще можем-не можем играть sfx
 	// режим отображения игры
 	int		Width;
@@ -246,8 +247,6 @@ struct GameSetup
 	// поведение камеры при стандартном отношении (перемещать-не перемешать)
 	int 	CameraModeWithStandardAspectRatio;
 
-	// частота обновления экрана
-	int		ScreenFrequency;
 	// гамма
 	int		Gamma;
 	// режим фильтра текстур
