@@ -383,19 +383,15 @@ void OptionsMenu()
 
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Gamma"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), MenuContentTransp, Setup.BPP == 0 || Setup.Gamma==0))
+	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), MenuContentTransp, Setup.Gamma<=1))
 	{
 		Setup.Gamma -= 1;
-		if (Setup.Gamma < 0) Setup.Gamma = 0;
-		if (Setup.BPP != 0)
-			vw_SetGammaRamp(1.0f + ((Setup.Gamma-2)/10.0f), 1.0f, 1.0f);
+		if (Setup.Gamma <= 1) Setup.Gamma = 1;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Increase"), MenuContentTransp, Setup.BPP == 0 || Setup.Gamma==10))
+	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Increase"), MenuContentTransp, Setup.Gamma>=10))
 	{
 		Setup.Gamma += 1;
-		if (Setup.Gamma > 10) Setup.Gamma = 10;
-		if (Setup.BPP != 0)
-			vw_SetGammaRamp(1.0f + ((Setup.Gamma-2)/10.0f), 1.0f, 1.0f);
+		if (Setup.Gamma >= 10) Setup.Gamma = 10;
 	}
 	for (int i=0; i<10; i++)
 	{

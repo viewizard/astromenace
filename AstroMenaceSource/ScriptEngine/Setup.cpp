@@ -85,7 +85,7 @@ void InitSetup()
 	Setup.SoundSw = 10;
 	Setup.VoiceSw = 10;
 	Setup.Sound_check = true;
-	Setup.Gamma = 2;
+	Setup.Gamma = 5;
 	Setup.ShowFPS = false;
 	Setup.GameWeaponInfoType = 1;
 	Setup.GameSpeed = 1.5f;

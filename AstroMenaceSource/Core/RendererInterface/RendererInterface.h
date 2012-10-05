@@ -251,9 +251,9 @@ void vw_SetTextureBlendMode(DWORD stage, int pname, int param);
 #define RI_QUADS							0x1025
 // Data format
 #define RI_3f_XYZ							0x0001000
-#define RI_2f_XYZ							0x0002000
+#define RI_2f_XY							0x0002000
 #define RI_3s_XYZ							0x0003000
-#define RI_2s_XYZ							0x0004000
+#define RI_2s_XY							0x0004000
 #define RI_3i_XYZ							0x0005000
 #define RI_3f_NORMAL						0x0000100
 #define RI_4f_COLOR							0x0000010

@@ -5,10 +5,10 @@
 
 	File name: OGL_Draw3D.cpp
 
-	Copyright (c) 2003-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2003-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -149,7 +149,7 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 		AddStride += 3*sizeof(GLshort);
 	}
 
-	if ((DataFormat & 0x000F000) == RI_2f_XYZ)
+	if ((DataFormat & 0x000F000) == RI_2f_XY)
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
 		if (NeedVBO)
@@ -158,7 +158,7 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 			glVertexPointer(2, GL_FLOAT, Stride, TMP + AddStride);
 		AddStride += 2*sizeof(GLfloat);
 	}
-	if ((DataFormat & 0x000F000) == RI_2s_XYZ)
+	if ((DataFormat & 0x000F000) == RI_2s_XY)
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
 		if (NeedVBO)

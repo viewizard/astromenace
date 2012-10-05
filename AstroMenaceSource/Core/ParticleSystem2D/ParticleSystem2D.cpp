@@ -5,10 +5,10 @@
 
 	File name: ParticleSystem2D.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -550,7 +550,7 @@ void eParticleSystem2D::Draw()
 	}
 
 
-	vw_SendVertices(RI_QUADS, 4*CurrentCount, RI_2f_XYZ | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
+	vw_SendVertices(RI_QUADS, 4*CurrentCount, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
 
 	if (tmp != 0){delete [] tmp; tmp = 0;}
 	vw_SetTexAlpha(false, 0.5f);
