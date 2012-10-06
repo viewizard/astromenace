@@ -154,7 +154,7 @@ GLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 #define TEXTURE_NO_MIPMAP	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE
 
 // сколько нужно загружать в листе меню
-const int	MenuLoadListCount = 181;
+const int	MenuLoadListCount = 183;
 // лист загрузки меню
 LoadList	MenuLoadList[MenuLoadListCount] =
 {
@@ -183,6 +183,8 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/CREDITS/gnugcc.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/CREDITS/gentoo.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/CREDITS/tinyxml.tga",			0, 32, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
+{"DATA/CREDITS/freetype.tga",			0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
+{"DATA/CREDITS/oggvorbis.tga",			0, 32, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 // панельки и кнопки вывода информации в меню модернизации корабля
 {"DATA/MENU/workshop_panel1.tga",		0, 270, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/MENU/workshop_panel1+.tga",		0, 270, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},

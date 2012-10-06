@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="All" />
-	<File name="..\Core\Base.h" open="1" top="1" tabpos="3">
-		<Cursor position="1417" topLine="24" />
+	<File name="..\Core\Base.h" open="1" top="0" tabpos="3">
+		<Cursor position="1921" topLine="36" />
 	</File>
 	<File name="..\Core\Core.h" open="0" top="0" tabpos="0">
 		<Cursor position="1123" topLine="12" />
+	</File>
+	<File name="..\Core\Font\Font.cpp" open="1" top="1" tabpos="5">
+		<Cursor position="14703" topLine="364" />
 	</File>
 	<File name="..\Core\Math\MersenneTwister.h" open="0" top="0" tabpos="11">
 		<Cursor position="3019" topLine="50" />
@@ -65,7 +68,7 @@
 		<Cursor position="7363" topLine="215" />
 	</File>
 	<File name="..\Main.cpp" open="1" top="0" tabpos="1">
-		<Cursor position="2845" topLine="69" />
+		<Cursor position="36233" topLine="902" />
 	</File>
 	<File name="..\Menu\Menu.cpp" open="0" top="0" tabpos="5">
 		<Cursor position="26574" topLine="1025" />
@@ -80,7 +83,7 @@
 		<Cursor position="21638" topLine="692" />
 	</File>
 	<File name="..\Menu\Menu_Options.cpp" open="1" top="0" tabpos="2">
-		<Cursor position="1435" topLine="29" />
+		<Cursor position="1732" topLine="29" />
 	</File>
 	<File name="..\Menu\Menu_Profile.cpp" open="0" top="0" tabpos="9">
 		<Cursor position="19787" topLine="606" />
