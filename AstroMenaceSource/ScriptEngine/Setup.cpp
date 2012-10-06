@@ -480,6 +480,7 @@ void SaveXMLSetupFile()
 
 	// сохраняем что получилось
 	TiXmlPrinter printer;
+	printer.SetLineBreak("\r\n"); // ставим перевод строки, чтобы в виндовсе было нормальное форматирование
 	doc.Accept( &printer );
 
 	SDL_RWops *TempRWops = SDL_RWFromFile(DatFileName, "w");
