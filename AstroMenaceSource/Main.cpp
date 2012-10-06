@@ -514,7 +514,6 @@ int main( int argc, char **argv )
 			Setup.TexturesCompression = 0;
 			// немного больше ставим другие опции
 			Setup.MultiSampleType = 2;
-			if (Setup.MultiSampleType > CAPS->MaxMultiSampleType) Setup.MultiSampleType = 0;
 			Setup.AnisotropyLevel = CAPS->MaxAnisotropyLevel;
 
 			Setup.BackgroundStarsQuality = 7;
@@ -525,7 +524,6 @@ int main( int argc, char **argv )
 		{
 			// немного больше ставим другие опции
 			Setup.MultiSampleType = 4;
-			if (Setup.MultiSampleType > CAPS->MaxMultiSampleType) Setup.MultiSampleType = CAPS->MaxMultiSampleType;
 
 			Setup.ParticlesPerSecQuality = 1;
 			Setup.PartsExplosionQuality = 0;
@@ -535,6 +533,7 @@ int main( int argc, char **argv )
 		}
 	}
 
+	if (Setup.MultiSampleType > CAPS->MaxMultiSampleType) Setup.MultiSampleType = CAPS->MaxMultiSampleType;
 
 
 
@@ -1026,25 +1025,28 @@ ReCreate:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #ifdef joystick
 	if (SDL_InitSubSystem(SDL_INIT_JOYSTICK) == 0)
-	if (SDL_NumJoysticks()>0)
 	{
-		printf("Found Joystick(s):\n");
-		for (int i=0; i<SDL_NumJoysticks(); i++)
-			printf("Joystick Name %i: %s\n", i, SDL_JoystickName(i));
-
-		Joystick = SDL_JoystickOpen(Setup.JoystickNum);
-
-		if(Joystick)
+		if (SDL_NumJoysticks()>0)
 		{
-			printf("Opened Joystick %i\n", Setup.JoystickNum);
-			printf("Joystick Name: %s\n", SDL_JoystickName(Setup.JoystickNum));
-			printf("Joystick Number of Axes: %d\n", SDL_JoystickNumAxes(Joystick));
-			printf("Joystick Number of Buttons: %d\n", SDL_JoystickNumButtons(Joystick));
-			printf("Joystick Number of Balls: %d\n\n", SDL_JoystickNumBalls(Joystick));
+			printf("Found Joystick(s):\n");
+			for (int i=0; i<SDL_NumJoysticks(); i++)
+				printf("Joystick Name %i: %s\n", i, SDL_JoystickName(i));
+
+			Joystick = SDL_JoystickOpen(Setup.JoystickNum);
+
+			if(Joystick)
+			{
+				printf("Opened Joystick %i\n", Setup.JoystickNum);
+				printf("Joystick Name: %s\n", SDL_JoystickName(Setup.JoystickNum));
+				printf("Joystick Number of Axes: %d\n", SDL_JoystickNumAxes(Joystick));
+				printf("Joystick Number of Buttons: %d\n", SDL_JoystickNumButtons(Joystick));
+				printf("Joystick Number of Balls: %d\n\n", SDL_JoystickNumBalls(Joystick));
+			}
+			else
+				fprintf(stderr, "Couldn't open Joystick 0\n\n");
 		}
-		else
-			fprintf(stderr, "Couldn't open Joystick 0\n\n");
 	}
+	else fprintf(stderr, "Can't init Joystick, SDL Error: %s\n", SDL_GetError());
 #endif
 
 

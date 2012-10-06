@@ -146,6 +146,7 @@ eDevCaps * vw_HardwareTest(int Width, int Height)
 		// создаем окно
 		if (SDL_SetVideoMode(Width, Height, 0, SDL_OPENGL)  == NULL)
 		{
+			fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
 			SDL_Quit();
 			return &OpenGL_DevCaps;
 		}
@@ -478,6 +479,7 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 	// создаем окно
 	if (SDL_SetVideoMode(Width, Height, WBits, Flags)  == NULL)
 	{
+		fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
 		fprintf(stderr, "Can't set video mode %i x %i x %i\n\n", Width, Height, WBits);
 		return 1;
 	}
