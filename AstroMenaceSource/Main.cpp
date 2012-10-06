@@ -516,6 +516,22 @@ int main( int argc, char **argv )
 			Setup.MultiSampleType = 2;
 			if (Setup.MultiSampleType > CAPS->MaxMultiSampleType) Setup.MultiSampleType = 0;
 			Setup.AnisotropyLevel = CAPS->MaxAnisotropyLevel;
+
+			Setup.BackgroundStarsQuality = 7;
+			Setup.MaxPointLights = 4;
+		}
+		// если шейдерная модель 4.1-я или выше
+		if (CAPS->ShaderModel >= 4.1f)
+		{
+			// немного больше ставим другие опции
+			Setup.MultiSampleType = 4;
+			if (Setup.MultiSampleType > CAPS->MaxMultiSampleType) Setup.MultiSampleType = CAPS->MaxMultiSampleType;
+
+			Setup.ParticlesPerSecQuality = 1;
+			Setup.PartsExplosionQuality = 0;
+			Setup.BackgroundStarsQuality = 10;
+			Setup.BackgroundTileAnimation = 3;
+			Setup.MaxPointLights = 6;
 		}
 	}
 

@@ -161,6 +161,11 @@ eDevCaps * vw_HardwareTest(int Width, int Height)
 		printf("Vendor     : %s\n", glGetString(GL_VENDOR));
 		printf("Renderer   : %s\n", glGetString(GL_RENDERER));
 		printf("Version    : %s\n", glGetString(GL_VERSION));
+		int OpenGLmajor, OpenGLminor;
+		glGetIntegerv(GL_MAJOR_VERSION, &OpenGLmajor);
+		glGetIntegerv(GL_MINOR_VERSION, &OpenGLminor);
+		float OpenGLVersion = OpenGLmajor + OpenGLminor/10.0f;
+		printf("OpenGL Version    : %1.1f\n", OpenGLVersion);
 		printf("\n");
 		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &OpenGL_DevCaps.MaxTextureHeight);
 		printf("Max texture height: %i \n", OpenGL_DevCaps.MaxTextureHeight);
@@ -269,6 +274,12 @@ eDevCaps * vw_HardwareTest(int Width, int Height)
 		{
 			OpenGL_DevCaps.ShaderModel = 4.0f;
 		}
+
+		// проверяем, если версия опенжл выше 3.3, версия шейдеров им соответствует
+		// (если мы не нашли более высокую через расширения ранее, ставим по версии опенжл)
+		if (OpenGL_DevCaps.ShaderModel > 3.3f)
+			if (OpenGL_DevCaps.ShaderModel < OpenGLVersion) OpenGL_DevCaps.ShaderModel = OpenGLVersion;
+
 		// выводим эти данные
 		if (OpenGL_DevCaps.ShaderModel == 0.0f) printf("Shaders unsupported.\n");
 		else printf("Shader Model: %.1f\n", OpenGL_DevCaps.ShaderModel);
