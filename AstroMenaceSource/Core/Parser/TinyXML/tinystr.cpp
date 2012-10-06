@@ -20,7 +20,8 @@ must not be misrepresented as being the original software.
 3. This notice may not be removed or altered from any source
 distribution.
 */
-
+#include "../../../config.h"
+#ifdef buildin_tynixml
 
 #ifndef TIXML_USE_STL
 
@@ -109,3 +110,5 @@ TiXmlString operator + (const char* a, const TiXmlString & b)
 
 
 #endif	// TIXML_USE_STL
+
+#endif // buildin_tynixml

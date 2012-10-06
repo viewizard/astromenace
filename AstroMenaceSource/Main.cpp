@@ -341,8 +341,6 @@ int main( int argc, char **argv )
 
 	// флаг отображать ли системный курсор
 	bool NeedShowSystemCursor = false;
-	// флаг проверять ли режимы антиалиасинга при старте
-	bool NeedCheckAA = true;
 	// флаг нужно ли сбрасывать настройки игры при старте
 	bool NeedSafeMode = false;
 	// флаг перевода игры в режим упаковки gamedata.vfs файла
@@ -357,7 +355,6 @@ int main( int argc, char **argv )
 
 			printf("--dir=/game/data/folder/ - folder with gamedata.vfs file (Linux only)\n");
 			printf("--mouse - launch the game without system cursor hiding.\n");
-			printf("--noAA - disable AA antialiasing test at the game start.\n");
 			printf("--safe-mode - reset all settings not connected to Pilots Profiles at the game launch.\n");
 			printf("--pack - pack data to gamedata.vfs file\n");
 			printf("--rawdata=/game/rawdata/folder/ - folder with game raw data for gamedata.vfs.\n");
@@ -372,12 +369,6 @@ int main( int argc, char **argv )
 		if (!strcmp(argv[i], "--mouse"))
 		{
 			NeedShowSystemCursor = true;
-		}
-
-		// проверка ключа "--noAA"
-		if (!strcmp(argv[i], "--noAA"))
-		{
-			NeedCheckAA = false;
 		}
 
 		// проверка ключа "--safe-mode"
@@ -461,20 +452,72 @@ int main( int argc, char **argv )
 
 
 
+	// работа с файлом данных... передаем базовый режим окна
+	bool FirstStart = LoadXMLSetupFile(NeedSafeMode);
+
+
+
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// если нужно, проверяем какие поддерживает режимы аа
+	// проверяем возможности железа
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (NeedCheckAA)
+	CAPS = vw_HardwareTest(640, 480);
+
+
+	// если не поддерживаем как минимум 2 мультитекстуры, железо очень слабое - не запустимся
+	if (CAPS->MaxMultTextures < 2)
 	{
-		printf("Antialiasing test START\n");
-		printf("Use '--noAA' launch option in order to avoid Antialiasing test.\n");
-		vw_TestAAModes(640, 480);
-		printf("Antialiasing test END\n\n");
+		fprintf(stderr, "The Multi Textures feature unsupported by hardware. Fatal error.\n");
+		ReleaseGameOneCopy();
+		return -1;
 	}
 
+	// если нужно, устанавливаем перерытие значений внутри движка, може только выключить - включить то чего нет нельзя
+#ifndef vbo // принудительно отключаем вообще работу с vbo
+	CAPS->VBOSupported = false;
+	printf("Vertex Buffer support forced disabled.\n");
+#endif
+	if (Setup.VBOCoreMode == 0)
+	{
+		CAPS->VBOSupported = false;
+	}
 
+	// проверка поддержки шейдеров (нужна 100% поддержка GLSL 1.0)
+	if (Setup.UseGLSL)
+		if (!CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0f) Setup.UseGLSL = false;
+
+	// установка режима работы менеджера приоритетов
+	CAPS->ForceTexturesPriorManager = Setup.ForceTexturesPriorManager;
+
+	// управление генерации мипмеп уровней- можем только выключить, нельзя включить если его нет
+	if (!Setup.HardwareMipMapGeneration)
+	{
+		CAPS->HardwareMipMapGeneration = false;
+	}
+
+	// анализ системы только если это первый запуск
+	if (FirstStart)
+	{
+		// если шейдерная модель 3-я или выше
+		if (CAPS->ShaderModel >= 3.0f)
+		{
+			// памяти достаточно, включаем другой режим загрузки
+			Setup.EqualOrMore128MBVideoRAM = true;
+		}
+		// если шейдерная модель 4-я или выше
+		if (CAPS->ShaderModel >= 4.0f)
+		{
+			// 100% держит наши шейдеры
+			Setup.UseGLSL = true;
+			// 100% больше чем нужно памяти и не надо сжимать текстуры (ув. качество и скорость загрузки)
+			Setup.TexturesCompression = 0;
+			// немного больше ставим другие опции
+			Setup.MultiSampleType = 2;
+			if (Setup.MultiSampleType > CAPS->MaxMultiSampleType) Setup.MultiSampleType = 0;
+			Setup.AnisotropyLevel = CAPS->MaxAnisotropyLevel;
+		}
+	}
 
 
 
@@ -485,14 +528,16 @@ int main( int argc, char **argv )
 
 
 
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// установка звука, всегда до LoadGameData
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	bool SoundInitSuccess = InitAudio();
-	if (!SoundInitSuccess) fprintf(stderr, "Unable to open audio!\n");
-	printf("\n");
+	if (!InitAudio())
+	{
+		Setup.Music_check = false;
+		Setup.Sound_check = false;
+		fprintf(stderr, "Unable to open audio!\n");
+		printf("\n");
+	}
 
 
 
@@ -500,7 +545,6 @@ int main( int argc, char **argv )
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// подключаем VFS
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 	if (vw_OpenVFS(VFSFileNamePath) != 0)
 	{
 		fprintf(stderr, "gamedata.vfs file not found or corrupted.\n");
@@ -740,33 +784,34 @@ ReCreate:
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// работа с файлом данных...
-	// если первый запуск (нет файла настроек), тянем переменную
+	// устанавливаем и корректируем текущие настройки окна
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	bool FirstStart = LoadXMLSetupFile(NeedSafeMode);
+	if (FirstStart)
+	{
+		Setup.Width = CurrentVideoMode.W;
+		Setup.Height = CurrentVideoMode.H;
+		Setup.BPP = CurrentVideoMode.BPP;
+	}
 	// если загруженные параметры, больше чем максимальные, ставим максимальные (если Xinerama, например)
-	if ((VideoModes[VideoModesNum-1].W < Setup.Width) & (VideoModes[VideoModesNum-1].H < Setup.Height))
+	if ((VideoModes[VideoModesNum-1].W < Setup.Width) | (VideoModes[VideoModesNum-1].H < Setup.Height))
 	{
 		Setup.Width = VideoModes[VideoModesNum-1].W;
 		Setup.Height = VideoModes[VideoModesNum-1].H;
 		Setup.BPP = CurrentVideoMode.BPP;
-
-		// делаем проверку по листу разрешений экрана, если входит - все ок, если нет - ставим оконный режим принудительно
-		bool NeedResetToWindowedMode = true;
-		for(int i=0; i<VideoModesNum; i++)
-		{
-			if ((VideoModes[i].W == Setup.Width) &
-				(VideoModes[i].H == Setup.Height) &
-				(VideoModes[i].BPP == Setup.BPP))
-			{
-				NeedResetToWindowedMode = false;
-				break;
-			}
-		}
-		if (NeedResetToWindowedMode) Setup.BPP = 0;
 	}
-
-
+	// делаем проверку по листу разрешений экрана, если входит - все ок, если нет - ставим оконный режим принудительно
+	bool NeedResetToWindowedMode = true;
+	for(int i=0; i<VideoModesNum; i++)
+	{
+		if ((VideoModes[i].W == Setup.Width) &
+			(VideoModes[i].H == Setup.Height) &
+			(VideoModes[i].BPP == Setup.BPP))
+		{
+			NeedResetToWindowedMode = false;
+			break;
+		}
+	}
+	if (NeedResetToWindowedMode) Setup.BPP = 0;
 
 
 
@@ -947,6 +992,8 @@ ReCreate:
 			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/WeaponMalfunction.wav", "DATA/VOICE/WeaponMalfunction.wav");
 			break;
 	}
+	printf("\n");
+
 
 	// загружаем все текстовые данные
 	InitGameText("DATA/SCRIPT/text.xml");
@@ -986,26 +1033,13 @@ ReCreate:
 
 
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// установка параметров звука
-	// фактически, нам не нужно хранить эти данные
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (!SoundInitSuccess)
-	{
-		Setup.Music_check = false;
-		Setup.Sound_check = false;
-	}
-
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// делаем окно
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	bool FullScreen = false;
-	if (Setup.BPP != 0) FullScreen = true;
-
-
-	int InitStatus = vw_InitRenderer("AstroMenace", Setup.Width, Setup.Height, &Setup.BPP, FullScreen, &Setup.MultiSampleType, CurrentVideoModeX, CurrentVideoModeY, CurrentVideoMode.W, CurrentVideoMode.H);
+	bool Fullscreen = (Setup.BPP != 0);
+	int InitStatus = vw_InitRenderer("AstroMenace", Setup.Width, Setup.Height, &Setup.BPP, Fullscreen, &Setup.MultiSampleType, CurrentVideoModeX, CurrentVideoModeY, CurrentVideoMode.W, CurrentVideoMode.H);
 
 	// ошибка окна (размеры)
 	if (InitStatus == 1)
@@ -1046,83 +1080,14 @@ ReCreate:
 	// даже если 24, все равно тянем как 32 бита, а если меньше 16, то ставим 16
 	if (Setup.BPP <= 16) Setup.BPP = 16;
 	if (Setup.BPP > 16) Setup.BPP = 32;
-	// иначе сбрасывает в текущий, а нам надо тянуть именно ноль
-	if (!FullScreen) Setup.BPP = 0;
+	if (!Fullscreen) Setup.BPP = 0;
 
 
-
-
-
-	// получаем возможности железа
-	CAPS = vw_GetDevCaps();
-
-
-	// если не поддерживаем как минимум 2 мультитекстуры, железо очень слабое - не запустимся
-	if (CAPS->MaxMultTextures < 2)
-	{
-		fprintf(stderr, "The Multi Textures feature unsupported by hardware. Fatal error.\n");
-		vw_ShutdownRenderer();
-		SDL_Quit();
-		ReleaseGameOneCopy();
-		return 0;
-	}
-
-	// если нужно, устанавливаем перерытие значений внутри движка, може только выключить - включить то чего нет нельзя
-#ifndef vbo // принудительно отключаем вообще работу с vbo
-	CAPS->VBOSupported = false;
-	printf("Vertex Buffer support forced disabled.\n");
-#endif
-	if (Setup.VBOCoreMode == 0)
-	{
-		CAPS->VBOSupported = false;
-	}
-
-	// проверка поддержки шейдеров (нужна 100% поддержка GLSL 1.0)
-	if (Setup.UseGLSL)
-		if (!CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0f) Setup.UseGLSL = false;
-
-	// установка режима работы менеджера приоритетов
-	CAPS->ForceTexturesPriorManager = Setup.ForceTexturesPriorManager;
-
-	// управление генерации мипмеп уровней- можем только выключить, нельзя включить если его нет
-	if (!Setup.HardwareMipMapGeneration)
-	{
-		CAPS->HardwareMipMapGeneration = false;
-	}
-
-
-	// анализ системы только если это первый запуск
-	if (FirstStart)
-	{
-		// если шейдерная модель 3-я или выше
-		if (CAPS->ShaderModel >= 3.0f)
-		{
-			// памяти достаточно, включаем другой режим загрузки
-			Setup.EqualOrMore128MBVideoRAM = true;
-		}
-		// если шейдерная модель 4-я или выше
-		if (CAPS->ShaderModel >= 4.0f)
-		{
-			// 100% держит наши шейдеры
-			Setup.UseGLSL = true;
-			// 100% больше чем нужно памяти и не надо сжимать текстуры (ув. качество и скорость загрузки)
-			Setup.TexturesCompression = 0;
-			// немного больше ставим другие опции
-			Setup.MultiSampleType = 2;
-			if (Setup.MultiSampleType > CAPS->MaxMultiSampleType) Setup.MultiSampleType = 0;
-			Setup.AnisotropyLevel = CAPS->MaxAnisotropyLevel;
-		}
-	}
 
 
 
 	// ставим данные к которым приводить, плюс они же являются соотношением сторон
 	vw_SetAspectRatio(Setup.fAspectRatioWidth, Setup.fAspectRatioHeight, true);
-
-
-	// установка яркости, если полный экран
-	if (Setup.BPP != 0)
-		vw_SetGammaRamp(1.0f + ((Setup.Gamma-2)/10.0f), 1.0f, 1.0f);
 
 
 
@@ -1408,6 +1373,8 @@ GotoQuit:
 	// если нужно перезагрузить игру с новыми параметрами
 	if (NeedReCreate)
 	{
+		FirstStart = false;
+
 		// убираем все голосовые файлы и звуки (для изменения языка голоса)
 		// при vw_ShutdownSound освободим все, сейчас только речевые, музыка должна играть
 		vw_ReleaseAllBuffers();

@@ -6,10 +6,10 @@
 
 	File name: Script.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -65,7 +65,9 @@ public:
 	float	TimeOpLag;
 
 	// основной документ
-	TiXmlDocument	*xmlDoc;
+	TiXmlDocument	xmlDoc;
+	// буфер с текстом нашего хмл
+	char 			*xmlDocBuffer;
 	// основной элемент
 	TiXmlElement	*xmlAstroMenaceScript;
 	// текущий элемент
