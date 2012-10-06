@@ -101,22 +101,32 @@ char *GetMissionFileName()
 void MissionsListInit()
 {
 	// по скрипту, смотрим что загружать + считаем сколько позиций
-	TiXmlDocument	*xmlDoc = 0;
+	TiXmlDocument	xmlDoc;
 	TiXmlElement	*xmlElem = 0;
 	TiXmlElement	*xmlAstroMenaceScript = 0;
 
-	xmlDoc = new TiXmlDocument("DATA/SCRIPT/list.xml");
+	// читаем данные
+	eFILE *TempF = vw_fopen("DATA/SCRIPT/list.xml");
+	char * buffer = 0;
 
-	if (!xmlDoc->LoadFile())
+	if (TempF == NULL)
 	{
-		xmlDoc->Clear();
-		delete xmlDoc; xmlDoc = 0;
 		fprintf(stderr, "Can't find script file: %s\n", "DATA/SCRIPT/list.xml");
+		xmlDoc.Clear();
 		return;
 	}
 
+	TempF->fseek(0, SEEK_END);
+	int DataLength = TempF->ftell();
+	TempF->fseek(0, SEEK_SET);
+	buffer = new char[DataLength];
+	TempF->fread(buffer, DataLength, 1);
+	vw_fclose(TempF);
+	xmlDoc.Parse((const char*)buffer, 0, TIXML_ENCODING_UTF8);
+
+
 	// берем первый элемент в скрипте
-	xmlAstroMenaceScript = xmlDoc->FirstChildElement("AstroMenaceMissionsList");
+	xmlAstroMenaceScript = xmlDoc.FirstChildElement("AstroMenaceMissionsList");
 	if (xmlAstroMenaceScript != 0)
 	{
 		xmlElem = xmlAstroMenaceScript->FirstChildElement();
@@ -124,7 +134,8 @@ void MissionsListInit()
 	else
 	{
 		fprintf(stderr, "Can't find AstroMenaceMissionsList element in the: %s\n", "DATA/SCRIPT/list.xml");
-		delete xmlDoc; xmlDoc = 0;
+		xmlDoc.Clear();
+		delete [] buffer; buffer = 0;
 		return;
 	}
 
@@ -321,8 +332,8 @@ void MissionsListInit()
 
 
 	// чистим память, со скриптом работать больше не надо
-	xmlDoc->Clear();
-	delete xmlDoc; xmlDoc = 0;
+	xmlDoc.Clear();
+	delete [] buffer;
 
 
 	// на одну меньше, т.к. это номер миссии, а не кол-во

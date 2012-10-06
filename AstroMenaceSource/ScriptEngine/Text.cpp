@@ -6,10 +6,10 @@
 
 	File name: Text.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -35,21 +35,19 @@
 
 
 // основной документ
-TiXmlDocument	*xmlTextDoc = 0;
+TiXmlDocument	xmlTextDoc;
 // основной элемент
 TiXmlElement	*xmlAstroMenaceText = 0;
-
+// буфер с текстом нашего хмл
+char 			*TextDocBuffer = 0;
 
 //-----------------------------------------------------------------------------
 // освобождаем данные
 //-----------------------------------------------------------------------------
 void ReleaseGameText()
 {
-	if (xmlTextDoc != 0)
-	{
-		xmlTextDoc->Clear();
-		delete xmlTextDoc; xmlTextDoc = 0;
-	}
+	xmlTextDoc.Clear();
+	if (TextDocBuffer != 0) {delete [] TextDocBuffer; TextDocBuffer = 0;}
 }
 
 
@@ -58,18 +56,26 @@ void ReleaseGameText()
 //-----------------------------------------------------------------------------
 void InitGameText(const char *FileName)
 {
-	// иним скрипт
-	xmlTextDoc = new TiXmlDocument(FileName);
+	// читаем данные
+	eFILE *TempF = vw_fopen(FileName);
+	if (TextDocBuffer != 0) {delete [] TextDocBuffer; TextDocBuffer = 0;}
 
-	// обязательно правильно задавать кодировку в самом файле!
-	if (!xmlTextDoc->LoadFile())
+	if (TempF == NULL)
 	{
 		ReleaseGameText();
 		return;
 	}
 
+	TempF->fseek(0, SEEK_END);
+	int DataLength = TempF->ftell();
+	TempF->fseek(0, SEEK_SET);
+	TextDocBuffer = new char[DataLength];
+	TempF->fread(TextDocBuffer, DataLength, 1);
+	vw_fclose(TempF);
+	xmlTextDoc.Parse((const char*)TextDocBuffer, 0, TIXML_ENCODING_UTF8);
+
 	// берем первый элемент в скрипте
-	xmlAstroMenaceText = xmlTextDoc->FirstChildElement("AstroMenaceText");
+	xmlAstroMenaceText = xmlTextDoc.FirstChildElement("AstroMenaceText");
 }
 
 
@@ -99,7 +105,7 @@ int strcmpNum(const char *a, const char *b)
 const char NoText[] = " ";
 const char *GetText(const char *ItemID)
 {
-	if (xmlTextDoc == 0) return NoText;
+	if (TextDocBuffer == 0) return NoText;
 	if (xmlAstroMenaceText == 0) return NoText;
 
 
@@ -143,7 +149,7 @@ const char *GetText(const char *ItemID)
 //-----------------------------------------------------------------------------
 int CheckFontCharsInText()
 {
-	if (xmlTextDoc == 0) return -1;
+	if (TextDocBuffer == 0) return -1;
 	if (xmlAstroMenaceText == 0) return -1;
 
 

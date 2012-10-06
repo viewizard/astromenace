@@ -5,10 +5,10 @@
 
 	File name: SoundManager.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -160,7 +160,7 @@ bool vw_InitSound()
 	printf("Version    : %s\n", alGetString(AL_VERSION));
 	printf("ALut ver   : %i.%i\n", alutGetMajorVersion(), alutGetMinorVersion());
 
-
+/*
 	// получаем и выводим все поддерживаемые расширения
 	char *extensions_tmp;
 	size_t len;
@@ -180,7 +180,8 @@ bool vw_InitSound()
 			delete [] extensions;
 		}
 	}
-
+*/
+	printf("\n");
 
 	// сброс ошибок
 

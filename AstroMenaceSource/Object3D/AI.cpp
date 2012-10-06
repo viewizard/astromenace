@@ -6,10 +6,10 @@
 
 	File name: AI.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -38,20 +38,23 @@
 
 
 // основной документ
-TiXmlDocument	*xmlAI = 0;
+TiXmlDocument	xmlAI;
 // основной элемент
 TiXmlElement	*xmlAIText = 0;
+// буфер с текстом нашего хмл
+char 			*xmlAIBuffer = 0;
+
 
 //-----------------------------------------------------------------------------
 // освобождаем данные
 //-----------------------------------------------------------------------------
 void ReleaseGameAI()
 {
-	if (xmlAI != 0)
+	if (xmlAIBuffer != 0)
 	{
-		xmlAI->Clear();
-		delete xmlAI; xmlAI = 0;
+		delete xmlAIBuffer; xmlAIBuffer = 0;
 	}
+	xmlAI.Clear();
 }
 
 
@@ -61,15 +64,25 @@ void ReleaseGameAI()
 void InitGameAI(const char *FileName)
 {
 	// иним скрипт
-	xmlAI = new TiXmlDocument(FileName);
-	if (!xmlAI->LoadFile())
+	eFILE *TempF = vw_fopen(FileName);
+	if (xmlAIBuffer != 0) {delete [] xmlAIBuffer; xmlAIBuffer = 0;}
+
+	if (TempF == NULL)
 	{
 		ReleaseGameAI();
 		return;
 	}
 
+	TempF->fseek(0, SEEK_END);
+	int DataLength = TempF->ftell();
+	TempF->fseek(0, SEEK_SET);
+	xmlAIBuffer = new char[DataLength];
+	TempF->fread(xmlAIBuffer, DataLength, 1);
+	vw_fclose(TempF);
+	xmlAI.Parse((const char*)xmlAIBuffer, 0, TIXML_ENCODING_UTF8);
+
 	// берем первый элемент в скрипте
-	xmlAIText = xmlAI->FirstChildElement("AstroMenaceAI");
+	xmlAIText = xmlAI.FirstChildElement("AstroMenaceAI");
 }
 
 
@@ -113,7 +126,7 @@ void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
 
 	// если вечный скрипт, в конец добавить тот же, с -1
 
-	if (xmlAI == 0) return;
+	if (xmlAIBuffer == 0) return;
 	if (xmlAIText == 0) return;
 
 
@@ -291,21 +304,6 @@ void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
 				TimeSheet->BossFire = false;
 			}
 
-/*
-fprintf(stderr, "+++++\n");
-CTimeSheet * TTT = Object->StartTimeSheet;
-while (TTT != 0)
-{
-	CTimeSheet * TTT2 = TTT->Next;
-
-	fprintf(stderr, "%i %f %f %f %f\n", TTT->AI_Mode, TTT->Rotation.x,TTT->Rotation.y,TTT->Rotation.z, TTT->Time);
-
-
-	TTT = TTT2;
-}
-fprintf(stderr, "------\n");
-*/
-
 			return;
 		}
 
@@ -313,10 +311,4 @@ fprintf(stderr, "------\n");
 	}
 
 }
-
-
-
-
-
-
 

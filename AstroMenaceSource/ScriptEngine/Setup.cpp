@@ -50,9 +50,9 @@ void InitSetup()
 	Setup.MenuLanguage = 1; // en by default
 	Setup.VoiceLanguage = 1; // en by default
 
-	Setup.Width = CurrentVideoMode.W;
-	Setup.Height = CurrentVideoMode.H;
-	Setup.BPP = CurrentVideoMode.BPP;
+	Setup.Width = 1228;
+	Setup.Height = 768;
+	Setup.BPP = 0;
 	if ((Setup.Width*1.0f)/(Setup.Height*1.0f) < 1.4f)
 	{
 		Setup.fAspectRatioWidth = 1024.0f;
@@ -219,10 +219,8 @@ void sAddLine(TiXmlElement * root, TiXmlElement * Element, const char *Name, con
 	}
 	Element->SetAttribute(Attrib, Data);
 }
-void AddComment(TiXmlElement * root, const char *Comment, bool JustCreated)
+void AddComment(TiXmlElement * root, const char *Comment)
 {
-	if (!JustCreated) return;
-
 	TiXmlComment *comment = new TiXmlComment();
 	comment->SetValue(Comment);
 	root->LinkEndChild(comment);
@@ -233,26 +231,16 @@ void SaveXMLSetupFile()
 	TiXmlElement * root = 0;
 	TiXmlElement * setting = 0;
 
-	// читаем уже существующий файл
-	bool JustCreated = false;
-	if (!doc.LoadFile(DatFileName))
-	{
-		JustCreated = true;
 
-		// если открыть не получилось, надо создать
-		TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
-		doc.LinkEndChild( decl );
 
-		root = new TiXmlElement("AstroMenaceSettings");
-		doc.LinkEndChild( root );
+	TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
+	doc.LinkEndChild( decl );
 
-		AddComment(root, " AstroMenace game Settings", JustCreated);
-	}
-	else
-	{
-		// берем первый элемент в скрипте
-		root = doc.FirstChildElement("AstroMenaceSettings");
-	}
+	root = new TiXmlElement("AstroMenaceSettings");
+	doc.LinkEndChild( root );
+
+	AddComment(root, " AstroMenace game Settings");
+
 
 
 
@@ -273,9 +261,9 @@ void SaveXMLSetupFile()
 
 	iAddLine(root, setting, "Width", "value", Setup.Width);
 	iAddLine(root, setting, "Height", "value", Setup.Height);
-	AddComment(root, " Windows (BPP = 0) or Full Screen (BPP = 16 or 32) ", JustCreated);
+	AddComment(root, " Windows (BPP = 0) or Full Screen (BPP = 16 or 32) ");
 	iAddLine(root, setting, "BPP", "value", Setup.BPP);
-	AddComment(root, " Aspect Ratio must be 4:3 or 16:10 ", JustCreated);
+	AddComment(root, " Aspect Ratio must be 4:3 or 16:10 ");
 	if (Setup.iAspectRatioWidth == 1024)
 		sAddLine(root, setting, "AspectRatio", "value", "4:3");
 	else
@@ -283,17 +271,17 @@ void SaveXMLSetupFile()
 	iAddLine(root, setting, "CameraModeWithStandardAspectRatio", "value", Setup.CameraModeWithStandardAspectRatio);
 
 
-	AddComment(root, " Don't change this setting unless you know what you are doing ", JustCreated);
+	AddComment(root, " Don't change this setting unless you know what you are doing ");
 	iAddLine(root, setting, "VBOCoreMode", "value", Setup.VBOCoreMode);
-	AddComment(root, " If your video card driver don't have this feature, and your VRAM less than 64 MB - turn it on ", JustCreated);
+	AddComment(root, " If your video card driver don't have this feature, and your VRAM less than 64 MB - turn it on ");
 	bAddLine(root, setting, "ForceTexturesPriorManager", "value", Setup.ForceTexturesPriorManager);
-	AddComment(root, " If your video card have 128+ MB VRAM on board - turn it on ", JustCreated);
+	AddComment(root, " If your video card have 128+ MB VRAM on board - turn it on ");
 	bAddLine(root, setting, "EqualOrMore128MBVideoRAM", "value", Setup.EqualOrMore128MBVideoRAM);
-	AddComment(root, " Don't change this setting unless you know what you are doing ", JustCreated);
+	AddComment(root, " Don't change this setting unless you know what you are doing ");
 	bAddLine(root, setting, "HardwareMipMapGeneration", "value", Setup.HardwareMipMapGeneration);
 
 
-	AddComment(root, " Common settings ", JustCreated);
+	AddComment(root, " Common settings ");
 	iAddLine(root, setting, "TextureFilteringMode", "value", Setup.TextureFilteringMode);
 	iAddLine(root, setting, "TexturesQuality", "value", Setup.TexturesQuality);
 	iAddLine(root, setting, "MultiSampleType", "value", Setup.MultiSampleType);
@@ -315,7 +303,7 @@ void SaveXMLSetupFile()
 	iAddLine(root, setting, "LoadingHint", "value", Setup.LoadingHint);
 
 
-	AddComment(root, " Control settings ", JustCreated);
+	AddComment(root, " Control settings ");
 	sAddLine(root, setting, "KeyboardDecreaseGameSpeed", "value", vw_KeyboardCodeName(Setup.KeyboardDecreaseGameSpeed));
 	sAddLine(root, setting, "KeyboardResetGameSpeed", "value", vw_KeyboardCodeName(Setup.KeyboardResetGameSpeed));
 	sAddLine(root, setting, "KeyboardResetGameSpeed", "value", vw_KeyboardCodeName(Setup.KeyboardResetGameSpeed));
@@ -491,8 +479,22 @@ void SaveXMLSetupFile()
 
 
 	// сохраняем что получилось
-	doc.SaveFile(DatFileName);
+	TiXmlPrinter printer;
+	doc.Accept( &printer );
+
+	SDL_RWops *TempRWops = SDL_RWFromFile(DatFileName, "w");
+
+	if (TempRWops == NULL)
+	{
+		fprintf(stderr, "Can't save file %s\n", DatFileName);
+	}
+	else
+	{
+		SDL_RWwrite(TempRWops, printer.CStr(), strlen(printer.CStr()), 1);
+	}
+
 	doc.Clear();
+	SDL_RWclose(TempRWops);
 }
 
 
@@ -554,13 +556,27 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	InitSetup();
 
 
-	// если файла нет - выходим
-	if (!doc.LoadFile(DatFileName))
+	// читаем данные
+	SDL_RWops *TempRWops = SDL_RWFromFile(DatFileName, "r");
+	char * buffer = 0;
+
+	if (TempRWops == NULL)
 	{
-		// сохраняем базовые настройки, если что-то случиться можно будет корректировать файл настроек
 		SaveXMLSetupFile();
 		return true;
 	}
+	else
+	{
+		SDL_RWseek(TempRWops, 0, SEEK_END);
+		int DataLength = SDL_RWtell(TempRWops);
+		SDL_RWseek(TempRWops, 0, SEEK_SET);
+		buffer = new char[DataLength];
+		SDL_RWread(TempRWops, buffer, DataLength, 1);
+		SDL_RWclose(TempRWops);
+
+		doc.Parse((const char*)buffer, 0, TIXML_ENCODING_UTF8);
+	}
+
 
 	// берем первый элемент в скрипте
 	root = doc.FirstChildElement("AstroMenaceSettings");
@@ -584,21 +600,6 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	iGetLine(root, setting, "Width", "value", &(Setup.Width));
 	iGetLine(root, setting, "Height", "value", &Setup.Height);
 	iGetLine(root, setting, "BPP", "value", &Setup.BPP);
-	// проверяем, если установленного разрешения нет в списке, берем текущее рабочего стола
-	{
-		bool ResolutionNeedReset = true;
-		for(int i=0; i<VideoModesNum; i++)
-		{
-			if (VideoModes[i].W == Setup.Width && VideoModes[i].H == Setup.Height && VideoModes[i].BPP == Setup.BPP)
-				ResolutionNeedReset = false;
-		}
-		if (ResolutionNeedReset)
-		{
-			Setup.Width = CurrentVideoMode.W;
-			Setup.Height = CurrentVideoMode.H;
-			Setup.BPP = CurrentVideoMode.BPP;
-		}
-	}
 
 
 	char AspectRatioBuffer[16];
@@ -846,6 +847,9 @@ LoadProfiles:
 
 	CurrentProfile = Setup.LastProfile;
 	if (CurrentProfile != -1) CurrentMission = Setup.Profile[Setup.LastProfile].LastMission;
+
+	doc.Clear();
+	if (buffer != 0) delete [] buffer;
 
 	return false;
 }

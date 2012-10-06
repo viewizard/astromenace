@@ -90,7 +90,7 @@ struct eDevCaps
 // Common functions
 
 // проверка аа
-void vw_TestAAModes(int Width, int Height);
+eDevCaps *vw_HardwareTest(int Width, int Height);
 // Initialization renderer
 int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int *FSAA, int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideoModeW, int CurrentVideoModeH);
 // Shutdown renderer dll

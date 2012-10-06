@@ -20,7 +20,8 @@ must not be misrepresented as being the original software.
 3. This notice may not be removed or altered from any source
 distribution.
 */
-
+#include "../../../config.h"
+#ifdef buildin_tynixml
 
 #ifndef TIXML_USE_STL
 
@@ -224,7 +225,7 @@ class TiXmlString
 			// to the normal allocation, although use an 'int' for systems
 			// that are overly picky about structure alignment.
 			const size_type bytesNeeded = sizeof(Rep) + cap;
-			const size_type intsNeeded = ( bytesNeeded + sizeof(int) - 1 ) / sizeof( int ); 
+			const size_type intsNeeded = ( bytesNeeded + sizeof(int) - 1 ) / sizeof( int );
 			rep_ = reinterpret_cast<Rep*>( new int[ intsNeeded ] );
 
 			rep_->str[ rep_->size = sz ] = '\0';
@@ -303,3 +304,5 @@ public :
 
 #endif	// TIXML_STRING_INCLUDED
 #endif	// TIXML_USE_STL
+
+#endif // buildin_tynixml

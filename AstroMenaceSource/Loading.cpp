@@ -1197,21 +1197,33 @@ void LoadGameData(int LoadType)
 				exit(0);
 			}
 
-			TiXmlDocument	*xmlDoc = 0;
+			TiXmlDocument	xmlDoc;
 			TiXmlElement	*xmlElem = 0;
 			TiXmlElement	*xmlAstroMenaceScript = 0;
 
-			xmlDoc = new TiXmlDocument(FileName);
-			if (!xmlDoc->LoadFile())
+
+			// читаем данные
+			eFILE *TempF = vw_fopen(FileName);
+			char * buffer = 0;
+
+			if (TempF == NULL)
 			{
-				xmlDoc->Clear();
-				delete xmlDoc; xmlDoc = 0;
 				fprintf(stderr, "Can't find script file or file corrupted: %s\n", FileName);
+				xmlDoc.Clear();
 				exit(0);
 			}
 
+			TempF->fseek(0, SEEK_END);
+			int DataLength = TempF->ftell();
+			TempF->fseek(0, SEEK_SET);
+			buffer = new char[DataLength];
+			TempF->fread(buffer, DataLength, 1);
+			vw_fclose(TempF);
+			xmlDoc.Parse((const char*)buffer, 0, TIXML_ENCODING_UTF8);
+
+
 			// берем первый элемент в скрипте
-			xmlAstroMenaceScript = xmlDoc->FirstChildElement("AstroMenaceScript");
+			xmlAstroMenaceScript = xmlDoc.FirstChildElement("AstroMenaceScript");
 			if (xmlAstroMenaceScript != 0)
 			{
 				xmlElem = xmlAstroMenaceScript->FirstChildElement();
@@ -1219,7 +1231,8 @@ void LoadGameData(int LoadType)
 			else
 			{
 				fprintf(stderr, "Can't find AstroMenaceScript element in the: %s\n", FileName);
-				delete xmlDoc; xmlDoc = 0;
+				xmlDoc.Clear();
+				if (buffer != 0) delete [] buffer;
 				exit(0);
 			}
 
@@ -1232,7 +1245,8 @@ void LoadGameData(int LoadType)
 			else
 			{
 				fprintf(stderr, "Can't find Load element in the: %s\n", FileName);
-				delete xmlDoc; xmlDoc = 0;
+				xmlDoc.Clear();
+				if (buffer != 0) delete [] buffer;
 				exit(0);
 			}
 
@@ -1281,8 +1295,8 @@ void LoadGameData(int LoadType)
 			}
 
 			// чистим память, со скриптом работать больше не надо
-			xmlDoc->Clear();
-			delete xmlDoc; xmlDoc = 0;
+			xmlDoc.Clear();
+			if (buffer != 0) delete [] buffer;
 
 
 			// считаем сколько там элементов

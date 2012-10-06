@@ -75,7 +75,7 @@ ScriptEngine::ScriptEngine()
 	TimeLastOp = 0;
 	TimeOpLag = 0;
 	StartTime = 0;
-	xmlDoc = 0;
+	xmlDocBuffer = 0;
 	xmlElem = 0;
 	xmlAstroMenaceScript = 0;
 
@@ -115,10 +115,10 @@ ScriptEngine::ScriptEngine()
 //-----------------------------------------------------------------------------
 ScriptEngine::~ScriptEngine()
 {
-	if (xmlDoc != 0)
+	xmlDoc.Clear();
+	if (xmlDocBuffer != 0)
 	{
-		xmlDoc->Clear();
-		delete xmlDoc; xmlDoc = 0;
+		delete [] xmlDocBuffer; xmlDocBuffer = 0;
 	}
 }
 
@@ -136,7 +136,6 @@ bool ScriptEngine::RunScript(const char *FileName, float InitTime)
 	StartTime = TimeLastOp = InitTime;
 
 	TimeOpLag = 0;
-	xmlDoc = 0;
 	xmlElem = 0;
 	xmlAstroMenaceScript = 0;
 
@@ -166,20 +165,28 @@ bool ScriptEngine::RunScript(const char *FileName, float InitTime)
 	UndeadDebugMode = false;
 	ShowGameTime = false;
 
-
 	// иним скрипт
-	xmlDoc = new TiXmlDocument(FileName);
-	if (!xmlDoc->LoadFile())
+	eFILE *TempF = vw_fopen(FileName);
+	if (xmlDocBuffer != 0) {delete [] xmlDocBuffer; xmlDocBuffer = 0;}
+
+	if (TempF == NULL)
 	{
 		fprintf(stderr, "Can't find script file or file corrupted: %s\n", FileName);
-		xmlDoc->Clear();
-		delete xmlDoc; xmlDoc = 0;
+		xmlDoc.Clear();
 		return false;
 	}
 
+	TempF->fseek(0, SEEK_END);
+	int DataLength = TempF->ftell();
+	TempF->fseek(0, SEEK_SET);
+	xmlDocBuffer = new char[DataLength];
+	TempF->fread(xmlDocBuffer, DataLength, 1);
+	vw_fclose(TempF);
+	xmlDoc.Parse((const char*)xmlDocBuffer, 0, TIXML_ENCODING_UTF8);
+
 
 	// берем первый элемент в скрипте
-	xmlAstroMenaceScript = xmlDoc->FirstChildElement("AstroMenaceScript");
+	xmlAstroMenaceScript = xmlDoc.FirstChildElement("AstroMenaceScript");
 	if (xmlAstroMenaceScript != 0)
 	{
 		xmlElem = xmlAstroMenaceScript->FirstChildElement();
@@ -187,7 +194,8 @@ bool ScriptEngine::RunScript(const char *FileName, float InitTime)
 	else
 	{
 		fprintf(stderr, "Can't find AstroMenaceScript element in the: %s\n", FileName);
-		delete xmlDoc; xmlDoc = 0;
+		xmlDoc.Clear();
+		if (xmlDocBuffer != 0) {delete [] xmlDocBuffer; xmlDocBuffer = 0;}
 		return false;
 	}
 
@@ -201,7 +209,8 @@ bool ScriptEngine::RunScript(const char *FileName, float InitTime)
 	else
 	{
 		fprintf(stderr, "Can't find Action element in the: %s\n", FileName);
-		delete xmlDoc; xmlDoc = 0;
+		xmlDoc.Clear();
+		if (xmlDocBuffer != 0) {delete [] xmlDocBuffer; xmlDocBuffer = 0;}
 		return false;
 	}
 
@@ -225,7 +234,7 @@ bool ScriptEngine::RunScript(const char *FileName, float InitTime)
 bool ScriptEngine::Update(float Time)
 {
 	// скрипт не загружен
-	if (xmlDoc == 0) return false;
+	if (xmlDocBuffer == 0) return false;
 	if (xmlAstroMenaceScript == 0) return false;
 
 	// находим дельту времени
