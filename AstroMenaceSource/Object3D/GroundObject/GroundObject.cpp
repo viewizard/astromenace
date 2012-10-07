@@ -56,8 +56,6 @@ CGroundObject::CGroundObject(void)
 
 	TargetHorizObjectQuantity = 0;
 	TargetHorizObject = 0;
-	TargetHorizObjectMaxAngle = 180.0f;
-	TargetHorizObjectMinAngle = -180.0f;
 	TargetHorizObjectCurrentAngle = 0.0f;
 	TargetHorizObjectNeedAngle = 0.0f;
 	TargetVertObjectQuantity = 0;
@@ -324,14 +322,10 @@ bool CGroundObject::Update(float Time)
 		if (TargetHorizObject != 0)
 		if (TargetHorizObjectNeedAngle != TargetHorizObjectCurrentAngle)
 		{
-			// если круговая система, проверяем углы
-			if (TargetHorizObjectMaxAngle == -TargetHorizObjectMinAngle)
+			if (fabsf(TargetHorizObjectNeedAngle-TargetHorizObjectCurrentAngle) > 180.0f)
 			{
-				if (fabsf(TargetHorizObjectNeedAngle-TargetHorizObjectCurrentAngle) > 180.0f)
-				{
-					if (TargetHorizObjectCurrentAngle - TargetHorizObjectNeedAngle > 180.0f) TargetHorizObjectCurrentAngle -= 360.0f;
-					if (TargetHorizObjectNeedAngle - TargetHorizObjectCurrentAngle > 180.0f) TargetHorizObjectCurrentAngle += 360.0f;
-				}
+				if (TargetHorizObjectCurrentAngle - TargetHorizObjectNeedAngle > 180.0f) TargetHorizObjectCurrentAngle -= 360.0f;
+				if (TargetHorizObjectNeedAngle - TargetHorizObjectCurrentAngle > 180.0f) TargetHorizObjectCurrentAngle += 360.0f;
 			}
 
 			// находим угол, на который нужно повернуть
@@ -340,20 +334,12 @@ bool CGroundObject::Update(float Time)
 			if (TargetHorizObjectNeedAngle>TargetHorizObjectCurrentAngle)
 			{
 				NeedRotate += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (TargetHorizObjectMaxAngle != -TargetHorizObjectMinAngle)
-				{
-					if (NeedRotate > TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
-					if (NeedRotate > TargetHorizObjectMaxAngle) NeedRotate = TargetHorizObjectMaxAngle;
-				}
+				if (NeedRotate > TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
 			}
 			else
 			{
 				NeedRotate -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (TargetHorizObjectMaxAngle != -TargetHorizObjectMinAngle)
-				{
-					if (NeedRotate < TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
-					if (NeedRotate < TargetHorizObjectMinAngle) NeedRotate = TargetHorizObjectMinAngle;
-				}
+				if (NeedRotate < TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
 			}
 
 			// устанавливаем текущий поворот
@@ -376,7 +362,6 @@ bool CGroundObject::Update(float Time)
 				SetObjectLocation(tmp+DrawObjectList[TargetHorizObject[0]].Location, TargetHorizObject[i]);
 			}
 		}
-
 
 
 
@@ -424,9 +409,6 @@ bool CGroundObject::Update(float Time)
 				SetObjectLocation(tmp+DrawObjectList[TargetVertObject[0]].Location, TargetVertObject[i]);
 			}
 		}
-
-
-
 	}
 
 
@@ -708,20 +690,13 @@ bool CGroundObject::Update(float Time)
 
 			if (DrawObjectList[WheelObjectsNum[i]].Rotation.x>360.0f)
 			{
-				if (DrawObjectList[WheelObjectsNum[i]].Rotation.x>720.0f)
-					DrawObjectList[WheelObjectsNum[i]].Rotation.x = 0.0f;
-				else
-					DrawObjectList[WheelObjectsNum[i]].Rotation.x -= 360.0f;
-
+				DrawObjectList[WheelObjectsNum[i]].Rotation.x -= 360.0f;
 			}
 			else
-			if (DrawObjectList[WheelObjectsNum[i]].Rotation.x<-360.0f)
-			{
-				if (DrawObjectList[WheelObjectsNum[i]].Rotation.x<-720.0f)
-					DrawObjectList[WheelObjectsNum[i]].Rotation.x = 0.0f;
-				else
+				if (DrawObjectList[WheelObjectsNum[i]].Rotation.x<-360.0f)
+				{
 					DrawObjectList[WheelObjectsNum[i]].Rotation.x += 360.0f;
-			}
+				}
 		}
 
 	}

@@ -144,8 +144,6 @@ public:
 	// набор указателей на номера объектов, которыми нацеливаемся по горизонтале
 	int		TargetHorizObjectQuantity;
 	int		*TargetHorizObject;
-	float	TargetHorizObjectMaxAngle;
-	float	TargetHorizObjectMinAngle;
 	float	TargetHorizObjectCurrentAngle;
 	float	TargetHorizObjectNeedAngle;
 	// набор указателей на номера объектов, которыми нацеливаемся по вертикали

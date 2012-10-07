@@ -114,8 +114,6 @@ void CMilitaryBuilding::Create(int	MilitaryBuildingNum)
 			TargetHorizObject[1] = 2;
 			TargetHorizObject[2] = 3;
 			TargetHorizObject[3] = 4;
-			TargetHorizObjectMaxAngle = 30.0f;
-			TargetHorizObjectMinAngle = -30.0f;
 
 			TargetVertObjectQuantity = 3;
 			TargetVertObject = new int[TargetVertObjectQuantity];
@@ -138,8 +136,6 @@ void CMilitaryBuilding::Create(int	MilitaryBuildingNum)
 			TargetHorizObject[1] = 2;
 			TargetHorizObject[2] = 3;
 			TargetHorizObject[3] = 4;
-			TargetHorizObjectMaxAngle = 30.0f;
-			TargetHorizObjectMinAngle = -30.0f;
 
 			TargetVertObjectQuantity = 3;
 			TargetVertObject = new int[TargetVertObjectQuantity];

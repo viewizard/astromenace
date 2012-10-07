@@ -187,8 +187,6 @@ void CWheeled::Create(int WheeledNum)
 			TargetHorizObject = new int[TargetHorizObjectQuantity];
 			TargetHorizObject[0] = 3;
 			TargetHorizObject[1] = 6;
-			TargetHorizObjectMaxAngle = 40.0f;
-			TargetHorizObjectMinAngle = -40.0f;
 
 			TargetVertObjectQuantity = 1;
 			TargetVertObject = new int[TargetVertObjectQuantity];

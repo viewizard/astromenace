@@ -50,9 +50,9 @@ eObjectBlock::eObjectBlock(void)
 	VertexBufferDestrType = 0;
 	VertexBuffer = 0;
 	VertexBufferVBO = 0;
-
 	IndexBuffer = 0;
 	IndexBufferVBO = 0;
+	VAO = 0;
 }
 //-----------------------------------------------------------------------------
 // Деструктор
