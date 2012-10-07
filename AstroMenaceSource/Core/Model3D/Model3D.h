@@ -8,7 +8,7 @@
 	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -72,6 +72,9 @@ struct eObjectBlock
 	// индексный буфер
 	unsigned int *IndexBuffer;	// указатель на структуру данных
 	unsigned int *IndexBufferVBO; // указатель на номер VBO массива
+
+	// VAO
+	unsigned int *VAO;
 };
 
 
@@ -100,6 +103,7 @@ public:
 	unsigned int *GlobalVertexBufferVBO;
 	unsigned int *GlobalIndexBuffer;
 	unsigned int *GlobalIndexBufferVBO;
+	unsigned int *GlobalVAO;
 
 	// указатели на цепь моделей
 	eModel3D *Next;

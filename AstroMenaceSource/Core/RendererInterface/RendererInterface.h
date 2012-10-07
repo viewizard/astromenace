@@ -60,6 +60,8 @@ struct eDevCaps
 	bool TexturesCompression;
 	// поддержка VBO
 	bool VBOSupported;
+	// поддержка VAO
+	bool VAOSupported;
 	// поддержка загрузки текстур со сторонами не кратные степени двойки
 	bool TextureNPOTSupported;
 	// поддержка шейдеров GLSL 1.00
@@ -285,7 +287,7 @@ void vw_SetTextureBlendMode(DWORD stage, int pname, int param);
 
 // Send (draw) vertices
 void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO=0,
-						unsigned int RangeStart=0,	unsigned int *DataIndex=0, unsigned int *DataIndexVBO=0);
+						unsigned int RangeStart=0,	unsigned int *DataIndex=0, unsigned int *DataIndexVBO=0, unsigned int *VAO=0);
 
 // Set color
 void vw_SetColor(float nRed, float nGreen, float nBlue, float nAlpha);
@@ -391,6 +393,14 @@ void vw_BuindVBO(int target, unsigned int VBO);
 // удаляем буфер
 void vw_DeleteVBO(unsigned int VBO);
 
+
+
+
+// VAO
+bool vw_BuildVAO(unsigned int *VAO, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO,
+						unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO);
+void vw_BuindVAO(unsigned int VAO);
+void vw_DeleteVAO(unsigned int VAO);
 
 
 

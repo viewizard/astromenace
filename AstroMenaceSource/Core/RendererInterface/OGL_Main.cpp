@@ -83,6 +83,8 @@ bool vw_Internal_InitializationGLSL();
 bool vw_Internal_InitializationOcclusionQueries();
 // инициализация VBO
 bool vw_Internal_InitializationVBO();
+// инициализация VAO
+bool vw_Internal_InitializationVAO();
 // инициализация индекс буфера
 bool vw_Internal_InitializationIndexBufferData();
 // чистка данных индекс буфера
@@ -123,6 +125,7 @@ eDevCaps * vw_HardwareTest(int Width, int Height)
 	OpenGL_DevCaps.MaxMultiSampleType = 0;
 	OpenGL_DevCaps.TexturesCompression = false;
 	OpenGL_DevCaps.VBOSupported = false;
+	OpenGL_DevCaps.VAOSupported = false;
 	OpenGL_DevCaps.TextureNPOTSupported = false;
 	OpenGL_DevCaps.GLSL100Supported = false;
 	OpenGL_DevCaps.ShaderModel = 0;
@@ -166,7 +169,7 @@ eDevCaps * vw_HardwareTest(int Width, int Height)
 		glGetIntegerv(GL_MAJOR_VERSION, &OpenGLmajor);
 		glGetIntegerv(GL_MINOR_VERSION, &OpenGLminor);
 		float OpenGLVersion = OpenGLmajor + OpenGLminor/10.0f;
-		printf("OpenGL Version    : %1.1f\n", OpenGLVersion);
+		printf("OpenGL Version    : %.1f\n", OpenGLVersion);
 		printf("\n");
 		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &OpenGL_DevCaps.MaxTextureHeight);
 		printf("Max texture height: %i \n", OpenGL_DevCaps.MaxTextureHeight);
@@ -207,6 +210,13 @@ eDevCaps * vw_HardwareTest(int Width, int Height)
 		{
 			OpenGL_DevCaps.VBOSupported = true;
 			printf("Vertex Buffer support enabled.\n");
+		}
+
+		// проверем поддержку VAO
+		if (ExtensionSupported("GL_ARB_vertex_array_object"))
+		{
+			OpenGL_DevCaps.VAOSupported = true;
+			printf("Vertex Array support enabled.\n");
 		}
 
 		// проверем поддержку non_power_of_two генерацию текстур
@@ -278,7 +288,7 @@ eDevCaps * vw_HardwareTest(int Width, int Height)
 
 		// проверяем, если версия опенжл выше 3.3, версия шейдеров им соответствует
 		// (если мы не нашли более высокую через расширения ранее, ставим по версии опенжл)
-		if (OpenGL_DevCaps.ShaderModel > 3.3f)
+		if ((OpenGL_DevCaps.ShaderModel >= 3.0f) & (OpenGLVersion >= 3.3))
 			if (OpenGL_DevCaps.ShaderModel < OpenGLVersion) OpenGL_DevCaps.ShaderModel = OpenGLVersion;
 
 		// выводим эти данные
@@ -535,11 +545,13 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 	// инициализация индекс буфера
 	vw_Internal_InitializationIndexBufferData();
 	// иним шейдеры
-	if (OpenGL_DevCaps.GLSL100Supported) vw_Internal_InitializationGLSL();
+	if (OpenGL_DevCaps.GLSL100Supported) OpenGL_DevCaps.GLSL100Supported = vw_Internal_InitializationGLSL();
 	// иним оклюжен
-	if (OpenGL_DevCaps.OcclusionQuerySupported) vw_Internal_InitializationOcclusionQueries();
+	if (OpenGL_DevCaps.OcclusionQuerySupported) OpenGL_DevCaps.OcclusionQuerySupported = vw_Internal_InitializationOcclusionQueries();
 	// иним вбо
-	if (OpenGL_DevCaps.VBOSupported) vw_Internal_InitializationVBO();
+	if (OpenGL_DevCaps.VBOSupported) OpenGL_DevCaps.VBOSupported = vw_Internal_InitializationVBO();
+	// иним вaо
+	if (OpenGL_DevCaps.VAOSupported) OpenGL_DevCaps.VAOSupported = vw_Internal_InitializationVAO();
 
 
 	// выключаем вертикальную синхронизацию в винде, она тут не нужна, а нам нужно как можно больше фпс

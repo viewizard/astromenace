@@ -61,7 +61,7 @@
 	<sys/stat.h>
 	<sys/types.h>
 
-1349520117 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\config.h
+1349598185 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\config.h
 
 1349428733 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\glext.h
 	<windows.h>
@@ -347,12 +347,12 @@
 	"../Math/Math.h"
 	"../Model3D/Model3D.h"
 
-1349095110 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\model3d\model3d.h
+1349603876 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\model3d\model3d.h
 	"../Base.h"
 	"../Math/Math.h"
 	"../VirtualFileSystem/VFS.h"
 
-1349513474 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\rendererinterface.h
+1349601617 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\rendererinterface.h
 	"../Base.h"
 	"../Math/Math.h"
 	"../Texture/Texture.h"
@@ -424,7 +424,7 @@
 	<assert.h>
 	<string.h>
 
-1349466237 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\struct.h
+1349605691 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\struct.h
 
 1349518818 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\scriptengine\script.h
 	"../Game.h"
@@ -439,7 +439,7 @@
 1349282846 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\graphicfx\text\text.h
 	"../../Core/Core.h"
 
-1349459749 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\object3d\object3d.h
+1349600505 z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\object3d\object3d.h
 	"../Core/Core.h"
 	"../Struct.h"
 
@@ -565,7 +565,7 @@
 1348686309 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\math\matrix44.cpp
 	"Math.h"
 
-1348686309 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\model3d\model3d.cpp
+1349604112 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\model3d\model3d.cpp
 	"Model3D.h"
 	"../RendererInterface/RendererInterface.h"
 
@@ -573,7 +573,7 @@
 	"Model3D.h"
 	"../System/System.h"
 
-1348741701 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\model3d\vw3d.cpp
+1349605973 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\model3d\vw3d.cpp
 	"Model3D.h"
 	"../RendererInterface/RendererInterface.h"
 
@@ -622,7 +622,7 @@
 1349463399 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\ogl_draw2d.cpp
 	"RendererInterface.h"
 
-1349463480 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\ogl_draw3d.cpp
+1349602375 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\ogl_draw3d.cpp
 	"RendererInterface.h"
 
 1349096197 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\ogl_glsl.cpp
@@ -640,7 +640,7 @@
 1348686309 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\ogl_texture.cpp
 	"RendererInterface.h"
 
-1348686309 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\ogl_vbo.cpp
+1349596400 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\ogl_vbo.cpp
 	"RendererInterface.h"
 
 1348686309 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\ri_int.cpp
@@ -770,16 +770,16 @@
 1349282887 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\graphicfx\text\textmanager.cpp
 	"Text.h"
 
-1349518844 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\loading.cpp
+1349522627 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\loading.cpp
 	"Game.h"
 
 1349459567 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\loop_audio.cpp
 	"Game.h"
 
-1349467632 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\loop_proc.cpp
+1349603085 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\loop_proc.cpp
 	"Game.h"
 
-1349194720 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\mainfs2vfs.cpp
+1349522628 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\mainfs2vfs.cpp
 	"Game.h"
 
 1349460446 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\button.cpp
@@ -794,7 +794,7 @@
 1349268611 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\menu_confcontrol.cpp
 	"../Game.h"
 
-1349191596 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\menu_credits.cpp
+1349523278 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\menu_credits.cpp
 	"../Game.h"
 
 1349257712 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\menu\menu_difficulty.cpp
@@ -883,7 +883,7 @@
 1348686310 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\object3d\groundobject\wheeled\wheeled.cpp
 	"Wheeled.h"
 
-1349376774 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\object3d\object3d.cpp
+1349605542 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\object3d\object3d.cpp
 	"Object3D.h"
 
 1349459749 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\object3d\object3dcollision.cpp
@@ -900,7 +900,7 @@
 1348686310 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\object3d\object3dcollisionmath.cpp
 	"Object3D.h"
 
-1348686310 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\object3d\object3dfunctions.cpp
+1349601161 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\object3d\object3dfunctions.cpp
 	"Object3D.h"
 	"SpaceShip/SpaceShip.h"
 	"GroundObject/GroundObject.h"
@@ -998,16 +998,19 @@
 1349518746 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\scriptengine\scriptfunction.cpp
 	"../Game.h"
 
-1349518883 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\scriptengine\setup.cpp
+1349605689 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\scriptengine\setup.cpp
 	"../Game.h"
 
-1349518863 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\scriptengine\text.cpp
+1349595104 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\scriptengine\text.cpp
 	"../Game.h"
 
-1349517052 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\ogl_main.cpp
+1349596448 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\ogl_main.cpp
 	"RendererInterface.h"
 
-1349517085 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\main.cpp
+1349605691 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\main.cpp
 	"Game.h"
 	<X11/extensions/Xinerama.h>
+
+1349603007 source:z:\home\viewizard\desktop\astromenace\openastromenace\astromenacesource\core\rendererinterface\ogl_vao.cpp
+	"RendererInterface.h"
 

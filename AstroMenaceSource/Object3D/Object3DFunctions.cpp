@@ -116,6 +116,11 @@ void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum)
 	{
 		// берем то, что нужно
 		Object3D->DrawObjectQuantity = Model->DrawObjectCount;
+		Object3D->GlobalVertexBuffer = Model->GlobalVertexBuffer ;
+		Object3D->GlobalVertexBufferVBO = Model->GlobalVertexBufferVBO;
+		Object3D->GlobalIndexBuffer = Model->GlobalIndexBuffer;
+		Object3D->GlobalIndexBufferVBO = Model->GlobalIndexBufferVBO;
+		Object3D->GlobalVAO = Model->GlobalVAO;
 		Object3D->DrawObjectList = new eObjectBlock[Object3D->DrawObjectQuantity];
 		// копируем все данные
 		memcpy(Object3D->DrawObjectList, Model->DrawObjectList, sizeof(eObjectBlock)*Object3D->DrawObjectQuantity);
@@ -126,6 +131,11 @@ void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum)
 
 		// берем то, что нужно
 		Object3D->DrawObjectQuantity = 1;
+		Object3D->GlobalVertexBuffer = Model->DrawObjectList[ObjectNum-1].VertexBuffer ;
+		Object3D->GlobalVertexBufferVBO = Model->DrawObjectList[ObjectNum-1].VertexBufferVBO;
+		Object3D->GlobalIndexBuffer = Model->DrawObjectList[ObjectNum-1].IndexBuffer;
+		Object3D->GlobalIndexBufferVBO = Model->DrawObjectList[ObjectNum-1].IndexBufferVBO;
+		Object3D->GlobalVAO = Model->DrawObjectList[ObjectNum-1].VAO;
 		Object3D->DrawObjectList = new eObjectBlock[Object3D->DrawObjectQuantity];
 		// копируем данные нужного объекта
 		memcpy(Object3D->DrawObjectList, &(Model->DrawObjectList[ObjectNum-1]), sizeof(eObjectBlock));

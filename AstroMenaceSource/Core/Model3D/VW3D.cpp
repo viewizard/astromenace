@@ -120,6 +120,14 @@ void eModel3D::ReadVW3D(const char *nName)
 		delete GlobalIndexBufferVBO; GlobalIndexBufferVBO=0;
 	}
 
+	GlobalVAO = new unsigned int;
+	if (!vw_BuildVAO(GlobalVAO, GlobalRangeStart, DrawObjectList[0].FVF_Format, GlobalVertexBuffer,
+						DrawObjectList[0].Stride*sizeof(float), GlobalVertexBufferVBO, 0,
+						GlobalIndexBuffer, GlobalIndexBufferVBO))
+	{
+		delete GlobalVAO; GlobalVAO=0;
+	}
+
 
 	// устанавливаем правильные указатели на массивы
 	for (int i=0; i<DrawObjectCount; i++)
@@ -128,6 +136,20 @@ void eModel3D::ReadVW3D(const char *nName)
 		DrawObjectList[i].VertexBufferVBO = GlobalVertexBufferVBO;
 		DrawObjectList[i].IndexBuffer = GlobalIndexBuffer;
 		DrawObjectList[i].IndexBufferVBO = GlobalIndexBufferVBO;
+		DrawObjectList[i].VAO = 0;
+
+		// не ставим генерацию vao тут! т.к. иначе не сможем работать с изменением геометрии и текстурных координат "на лету" - гусеницы, колеса, пушки и т.п.
+		// если надо будет - найти изменения геометрии и делать VAO уже после изменений, с правильным vbo
+/*		DrawObjectList[i].VAO = new unsigned int;
+		if (!vw_BuildVAO(DrawObjectList[i].VAO, DrawObjectList[i].VertexCount, DrawObjectList[i].FVF_Format, DrawObjectList[i].VertexBuffer,
+							DrawObjectList[i].Stride*sizeof(float), DrawObjectList[i].VertexBufferVBO,
+							DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IndexBufferVBO))
+		{
+			delete GlobalVAO; GlobalVAO=0;
+		}*/
+
+
+
 	}
 
 

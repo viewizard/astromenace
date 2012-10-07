@@ -6,10 +6,10 @@
 
 	File name: Object3D.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -70,6 +70,11 @@ CObject3D::CObject3D(void)
 	DrawObjectList = 0;
 	PromptDrawDist2 = -1.0f;
 	InternalLights = 0;
+	GlobalVertexBuffer= 0;
+	GlobalVertexBufferVBO = 0;
+	GlobalIndexBuffer = 0;
+	GlobalIndexBufferVBO = 0;
+	GlobalVAO = 0;
 
 	// начальныя установка коробок
 	AABB[0]=AABB[1]=AABB[2]=AABB[3]=AABB[4]=AABB[5]=AABB[6]=AABB[7]= VECTOR3D(0.0f, 0.0f, 0.0f);
@@ -836,7 +841,8 @@ void CObject3D::Draw()
 
 
 	// если есть установка, нужно получить квадрат расстояния до камеры
-	bool NeedPromptDraw = false;
+	// прорисовка модели "полностью", "одним куском" (только то что без "составных" частей - колес, стволов и т.п.)
+	bool NeedOnePieceDraw = false;
 	if (PromptDrawDist2 >= 0.0f)
 	{
 		VECTOR3D CurrentCameraLocation;
@@ -850,16 +856,16 @@ void CObject3D::Draw()
 		if (PromptDrawRealDist2 > PromptDrawDist2)
 		{
 			// если больше заданного кол-ва
-			if (LightsCount <= Setup.MaxPointLights) NeedPromptDraw = true;
-			else NeedPromptDraw = false;
+			if (LightsCount <= Setup.MaxPointLights) NeedOnePieceDraw = true;
+			else NeedOnePieceDraw = false;
 
 			// если это двигатели - не надо переходить
-			if (InternalLights >= LightsCount) NeedPromptDraw = true;
+			if (InternalLights >= LightsCount) NeedOnePieceDraw = true;
 		}
 		else
 		{
 			// находимся близко, но нужно посмотреть, если кол-во источников ниже макс, надо перейти в упращенный режим
-			if (LightsCount <= Setup.MaxPointLights) NeedPromptDraw = true;
+			if (LightsCount <= Setup.MaxPointLights) NeedOnePieceDraw = true;
 		}
 	}
 
@@ -873,7 +879,7 @@ void CObject3D::Draw()
 
 
 	// если надо рисовать
-	if (NeedPromptDraw)
+	if (NeedOnePieceDraw)
 	{
 		vw_SetTextureDef(0);
 		// если у нас есть 2-я, нужно скинуть установки
@@ -943,9 +949,10 @@ void CObject3D::Draw()
 			GlobalVertexCount += DrawObjectList[i].VertexCount;
 		}
 
-		vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, DrawObjectList[0].FVF_Format, DrawObjectList[0].VertexBuffer,
-						DrawObjectList[0].Stride*sizeof(float), DrawObjectList[0].VertexBufferVBO, 0,
-						DrawObjectList[0].IndexBuffer, DrawObjectList[0].IndexBufferVBO);
+		// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
+		vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, DrawObjectList[0].FVF_Format, GlobalVertexBuffer,
+						DrawObjectList[0].Stride*sizeof(float), GlobalVertexBufferVBO, 0,
+						GlobalIndexBuffer, GlobalIndexBufferVBO, GlobalVAO);
 
 		vw_DeActivateAllLights();
 	}
@@ -1103,7 +1110,7 @@ void CObject3D::Draw()
 
 			vw_SendVertices(RI_TRIANGLES, DrawObjectList[i].VertexCount, DrawObjectList[i].FVF_Format, DrawObjectList[i].VertexBuffer,
 							DrawObjectList[i].Stride*sizeof(float), DrawObjectList[i].VertexBufferVBO,
-							DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IndexBufferVBO);
+							DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IndexBufferVBO, DrawObjectList[i].VAO);
 
 
 
