@@ -35,7 +35,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION	 	1.3
-#define GAME_BUILD			121006
+#define GAME_BUILD			121007
 
 
 // VBO OpenGL extention support switcher (if defined - game will detect and use vbo) Game could crash

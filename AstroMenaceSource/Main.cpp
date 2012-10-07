@@ -483,6 +483,13 @@ int main( int argc, char **argv )
 		CAPS->VBOSupported = false;
 	}
 
+	// если нужно, выключаем vao
+	if (Setup.VAOCoreMode == 0)
+	{
+		CAPS->VAOSupported = false;
+	}
+
+
 	// проверка поддержки шейдеров (нужна 100% поддержка GLSL 1.0)
 	if (Setup.UseGLSL)
 		if (!CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0f) Setup.UseGLSL = false;

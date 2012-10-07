@@ -36,7 +36,7 @@
 
 extern	int tmpPrimCountGL;
 extern	PFNGLCLIENTACTIVETEXTUREPROC	glClientActiveTexture13;
-
+extern	eDevCaps OpenGL_DevCaps;
 
 
 
@@ -73,24 +73,20 @@ void vw_Internal_ReleaseIndexBufferData()
 
 
 
-
-
-
 //------------------------------------------------------------------------------------
-// Процедура передачи последовательности вертексов для прорисовки
+// устанавливаем указатели, готовимся к прорисовке
 //------------------------------------------------------------------------------------
-void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO, unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO)
+GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO, unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO)
 {
 	// если ничего не передали
-	if (Data == 0 && VBO == 0) return;
+	if (Data == 0 && VBO == 0) return 0;
 
 	// флаг нужно ли с вбо делать
-	eDevCaps *OpenGL_DevCaps = vw_GetDevCaps();
-	bool NeedVBO = OpenGL_DevCaps->VBOSupported;
+	bool NeedVBO = OpenGL_DevCaps.VBOSupported;
 	if (VBO == 0) NeedVBO = false;
 
 	// еще одна проверка, есть ли что рисовать
-	if (Data == 0 && !NeedVBO) return;
+	if (Data == 0 && !NeedVBO) return 0;
 
 
 	// обязательно в байты, т.к. делаем смещение в байтах!
@@ -115,7 +111,6 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 		case 0x0700000: TextSize = 3; TextCoordType = 2;	break;
 		case 0x0800000: TextSize = 4; TextCoordType = 2;	break;
 	}
-
 
 	if (NeedVBO) vw_BuindVBO(RI_ARRAY_BUFFER, *VBO);
 
@@ -233,7 +228,6 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 
 
 
-
 	// указатель на смещение (в случае вбо) или на массив индексов
 	GLuint *VertexIndexPointer = 0;
 	// если нет своего, ставим общей массив индексов
@@ -245,13 +239,13 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 			if (VertexIndex != 0){delete [] VertexIndex; VertexIndex = 0;}
 			VertexIndexCount = 0;
 
-			VertexIndex = new GLuint[NumVertices+RangeStart]; if (VertexIndex == 0) return;
+			VertexIndex = new GLuint[NumVertices+RangeStart]; if (VertexIndex == 0) return 0;
 
 			VertexIndexCount = NumVertices+RangeStart;
 			for (unsigned int i=0; i<NumVertices+RangeStart; i++) VertexIndex[i] = i;
 
 			// если держим VBO, все это один раз сразу запихиваем в видео память
-			if (OpenGL_DevCaps->VBOSupported)
+			if (OpenGL_DevCaps.VBOSupported)
 			{
 				// прежде всего удаляем старый буфер, если он был
 				if (IndexVBO != 0){vw_DeleteVBO(*IndexVBO); delete IndexVBO; IndexVBO=0;}
@@ -267,7 +261,7 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 		VertexIndexPointer = VertexIndex+RangeStart;
 
 		// собственно включаем индекс-вбо
-		if (OpenGL_DevCaps->VBOSupported)
+		if (OpenGL_DevCaps.VBOSupported)
 		if (IndexVBO != 0)
 		{
 			vw_BuindVBO(RI_ELEMENT_ARRAY_BUFFER, *IndexVBO);
@@ -280,7 +274,7 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 		VertexIndexPointer = DataIndex+RangeStart;
 
 		// собственно включаем индекс-вбо
-		if (OpenGL_DevCaps->VBOSupported)
+		if (OpenGL_DevCaps.VBOSupported)
 		if (DataIndexVBO != 0)
 		{
 			vw_BuindVBO(RI_ELEMENT_ARRAY_BUFFER, *DataIndexVBO);
@@ -289,8 +283,85 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 		}
 	}
 
+	// возвращаем индексы основной программе
+	return VertexIndexPointer;
+}
 
 
+
+
+
+//------------------------------------------------------------------------------------
+// выключаем все после прорисовки
+//------------------------------------------------------------------------------------
+void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int *VBO, unsigned int *VAO)
+{
+	// флаг нужно ли с вaо делать
+	bool NeedVAO = OpenGL_DevCaps.VAOSupported;
+	if (VAO == 0) NeedVAO = false;
+
+	if (NeedVAO)
+	{
+		vw_BuindVAO(0);
+	}
+	else
+	{
+		// флаг нужно ли с вбо делать
+		bool NeedVBO = OpenGL_DevCaps.VBOSupported;
+		if (VBO == 0) NeedVBO = false;
+
+
+		if ((DataFormat & 0x0000F00) != 0) glDisableClientState(GL_NORMAL_ARRAY);
+		if ((DataFormat & 0x00000F0) != 0) glDisableClientState(GL_COLOR_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+
+		// кол-во текстур
+		int TextQ = DataFormat & 0x000000F;
+		for (int i=TextQ-1; i>=0; i--)
+		{
+			glClientActiveTexture13(GL_TEXTURE0+i);
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		}
+
+
+		// сбрасываем индексный и вертексный буфера, если они были установлены
+		if (IndexVBO != 0) vw_BuindVBO(RI_ELEMENT_ARRAY_BUFFER, 0);
+		if (NeedVBO) vw_BuindVBO(RI_ARRAY_BUFFER, 0);
+	}
+}
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Процедура передачи последовательности вертексов для прорисовки
+//------------------------------------------------------------------------------------
+void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO, unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO, unsigned int *VAO)
+{
+	// если ничего не передали
+	if (Data == 0 && VBO == 0) return;
+	// флаг нужно ли с вбо делать
+	bool NeedVBO = OpenGL_DevCaps.VBOSupported;
+	if (VBO == 0) NeedVBO = false;
+	// еще одна проверка, есть ли что рисовать
+	if (Data == 0 && !NeedVBO) return;
+	// флаг нужно ли с вaо делать
+	bool NeedVAO = OpenGL_DevCaps.VAOSupported;
+	if (VAO == 0) NeedVAO = false;
+
+
+	// устанавливаем все необходимые указатели для прорисовки и получаем индексы
+	GLuint *VertexIndexPointer = 0;
+	if (NeedVAO)
+	{
+		vw_BuindVAO(*VAO);
+	}
+	else
+	{
+		VertexIndexPointer = vw_SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, Data, Stride, VBO, RangeStart, DataIndex, DataIndexVBO);
+	}
 
 // 1) Нельзя использовать short индексы (глючит в линуксе на картах нвидия, проверял на 97.55 драйвере)
 // 2) Нельзя рисовать через glBegin-glEnd и glDrawArray - проблемы в линуксе у ati драйверов (на glDrawArray вообще сегфолтит)
@@ -332,22 +403,7 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 	}
 
 
-
-
-	if ((DataFormat & 0x0000F00) != 0) glDisableClientState(GL_NORMAL_ARRAY);
-	if ((DataFormat & 0x00000F0) != 0) glDisableClientState(GL_COLOR_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-
-	for (int i=TextQ-1; i>=0; i--)
-	{
-		glClientActiveTexture13(GL_TEXTURE0+i);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	}
-
-
-	// сбрасываем индексный и вертексный буфера, если они были установлены
-	if (IndexVBO != 0) vw_BuindVBO(RI_ELEMENT_ARRAY_BUFFER, 0);
-	if (NeedVBO) vw_BuindVBO(RI_ARRAY_BUFFER, 0);
+	// выключаем все что включали
+	vw_SendVertices_DisableStatesAndPointers(DataFormat, VBO, VAO);
 
 }

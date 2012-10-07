@@ -5,10 +5,10 @@
 
 	File name: Model3D.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -91,6 +91,7 @@ eModel3D::eModel3D(void)
 	GlobalVertexBufferVBO = 0;
 	GlobalIndexBuffer = 0;
 	GlobalIndexBufferVBO = 0;
+	GlobalVAO = 0;
 	Next = 0;
 	Prev = 0;
 	vw_AttachModel3D(this);
@@ -106,6 +107,13 @@ eModel3D::~eModel3D(void)
 
 	if (DrawObjectList != 0)
 	{
+		// в отличии от остального, VAO может быть собственный у части объекта... его надо удалить отдельно
+		for (int i=0; i<DrawObjectCount; i++)
+		if (DrawObjectList[i].VAO != 0)
+		{
+			vw_DeleteVAO(*DrawObjectList[i].VAO);
+			delete DrawObjectList[i].VAO; DrawObjectList[i].VAO = 0;
+		}
 		delete [] DrawObjectList; DrawObjectList = 0;
 	}
 	if (GlobalVertexBuffer != 0)
@@ -123,6 +131,10 @@ eModel3D::~eModel3D(void)
 	if (GlobalIndexBufferVBO != 0)
 	{
 		vw_DeleteVBO(*GlobalIndexBufferVBO); delete GlobalIndexBufferVBO; GlobalIndexBufferVBO=0;
+	}
+	if (GlobalVAO != 0)
+	{
+		vw_DeleteVAO(*GlobalVAO); delete GlobalVAO; GlobalVAO=0;
 	}
 
 	DrawObjectCount = 0;

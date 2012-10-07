@@ -113,6 +113,7 @@
 		<Unit filename="..\Core\RendererInterface\OGL_Matrix.cpp" />
 		<Unit filename="..\Core\RendererInterface\OGL_OcclusionQuery.cpp" />
 		<Unit filename="..\Core\RendererInterface\OGL_Texture.cpp" />
+		<Unit filename="..\Core\RendererInterface\OGL_VAO.cpp" />
 		<Unit filename="..\Core\RendererInterface\OGL_VBO.cpp" />
 		<Unit filename="..\Core\RendererInterface\RI_Int.cpp" />
 		<Unit filename="..\Core\RendererInterface\RendererInterface.h" />
