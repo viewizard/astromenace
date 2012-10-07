@@ -964,7 +964,7 @@ void CObject3D::Draw()
 		{
 
 			// небольшая проверка для конкретной части
-			if (HitBB != 0 && HitBBLocation != 0)
+/*			if (HitBB != 0 && HitBBLocation != 0)
 			{
 				VECTOR3D Min, Max;
 				Min.x = Max.x = HitBB[i][0].x + HitBBLocation[i].x;
@@ -985,7 +985,7 @@ void CObject3D::Draw()
 				{
 					continue;
 				}
-			}
+			}*/
 
 
 			// работа с текстурами

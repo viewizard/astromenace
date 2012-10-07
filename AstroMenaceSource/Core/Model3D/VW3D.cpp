@@ -140,12 +140,13 @@ void eModel3D::ReadVW3D(const char *nName)
 
 		// не ставим генерацию vao тут! т.к. иначе не сможем работать с изменением геометрии и текстурных координат "на лету" - гусеницы, колеса, пушки и т.п.
 		// если надо будет - найти изменения геометрии и делать VAO уже после изменений, с правильным vbo
+		// + надо генерировать отдельные vbo для каждой части, с RangeStart не работает
 /*		DrawObjectList[i].VAO = new unsigned int;
 		if (!vw_BuildVAO(DrawObjectList[i].VAO, DrawObjectList[i].VertexCount, DrawObjectList[i].FVF_Format, DrawObjectList[i].VertexBuffer,
 							DrawObjectList[i].Stride*sizeof(float), DrawObjectList[i].VertexBufferVBO,
 							DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IndexBufferVBO))
 		{
-			delete GlobalVAO; GlobalVAO=0;
+			delete DrawObjectList[i].VAO; DrawObjectList[i].VAO=0;
 		}*/
 
 

@@ -275,8 +275,6 @@ CWeapon::CWeapon(void)
 
 	WeaponTurret = false;
 	TargetHorizObject = -1;
-	TargetHorizObjectMaxAngle = 180.0f;
-	TargetHorizObjectMinAngle = -180.0f;
 	TargetHorizObjectCurrentAngle = 0.0f;
 	TargetHorizObjectNeedAngle = 0.0f;
 	TargetVertObject = -1;
@@ -811,14 +809,10 @@ bool CWeapon::Update(float Time)
 		if (TargetHorizObject != -1)
 		if (TargetHorizObjectNeedAngle != TargetHorizObjectCurrentAngle)
 		{
-			// если круговая система, проверяем углы
-			if (TargetHorizObjectMaxAngle == -TargetHorizObjectMinAngle)
+			if (fabsf(TargetHorizObjectNeedAngle-TargetHorizObjectCurrentAngle) > 180.0f)
 			{
-				if (fabsf(TargetHorizObjectNeedAngle-TargetHorizObjectCurrentAngle) > 180.0f)
-				{
-					if (TargetHorizObjectCurrentAngle - TargetHorizObjectNeedAngle > 180.0f) TargetHorizObjectCurrentAngle -= 360.0f;
-					if (TargetHorizObjectNeedAngle - TargetHorizObjectCurrentAngle > 180.0f) TargetHorizObjectCurrentAngle += 360.0f;
-				}
+				if (TargetHorizObjectCurrentAngle - TargetHorizObjectNeedAngle > 180.0f) TargetHorizObjectCurrentAngle -= 360.0f;
+				if (TargetHorizObjectNeedAngle - TargetHorizObjectCurrentAngle > 180.0f) TargetHorizObjectCurrentAngle += 360.0f;
 			}
 
 			// находим угол, на который нужно повернуть
@@ -827,20 +821,12 @@ bool CWeapon::Update(float Time)
 			if (TargetHorizObjectNeedAngle>TargetHorizObjectCurrentAngle)
 			{
 				NeedRotate += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (TargetHorizObjectMaxAngle != -TargetHorizObjectMinAngle)
-				{
-					if (NeedRotate > TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
-					if (NeedRotate > TargetHorizObjectMaxAngle) NeedRotate = TargetHorizObjectMaxAngle;
-				}
+				if (NeedRotate > TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
 			}
 			else
 			{
 				NeedRotate -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (TargetHorizObjectMaxAngle != -TargetHorizObjectMinAngle)
-				{
-					if (NeedRotate < TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
-					if (NeedRotate < TargetHorizObjectMinAngle) NeedRotate = TargetHorizObjectMinAngle;
-				}
+				if (NeedRotate < TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
 			}
 
 			// устанавливаем текущий поворот
