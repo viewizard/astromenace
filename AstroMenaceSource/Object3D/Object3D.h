@@ -58,8 +58,9 @@ int Audio_PlaySound3D(int SoundID, float fVol, VECTOR3D Location, bool Loop, int
 
 
 
-
-
+extern eGLSL 	*GLSLShaderType1[2][7];
+extern eGLSL 	*GLSLShaderType2[2][7];
+extern eGLSL 	*GLSLShaderType3[2][7];
 
 
 
@@ -219,10 +220,6 @@ public:
 	// текстура для объектов геометрии
 	eTexture		**Texture;
 	eTexture		**TextureIllum;
-	// шейдер
-	eGLSL 			*Object3DGLSL[2][7];
-	int				ShaderType;
-	float			ShaderData[5];
 
 	// список с геометрией модели, объекты для прорисовки
 	eObjectBlock	*DrawObjectList;

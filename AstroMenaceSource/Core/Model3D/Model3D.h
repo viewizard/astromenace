@@ -59,6 +59,11 @@ struct eObjectBlock
 	unsigned int RangeStart;
 
 
+	// шейдер (зарезервированные переменные для работы внешнего блока кода)
+	int				ShaderType;
+	float			ShaderData[9];
+
+
 	// положение локальной системы координат
 	VECTOR3D Location;
 	// поворот модели в локальной системе координат

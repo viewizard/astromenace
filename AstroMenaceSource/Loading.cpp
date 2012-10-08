@@ -99,14 +99,14 @@ int CurrentListCount = 0;
 //------------------------------------------------------------------------------------
 // данные загрузки шейдеров
 //------------------------------------------------------------------------------------
-struct GLSLLoadList
+struct sGLSLLoadList
 {
 	char Name[MAX_PATH];
 	char VertexShaderFileName[MAX_PATH];
 	char FragmentShaderFileName[MAX_PATH];
 };
-const int GLSLLoadListCount = 30;
-GLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
+const int GLSLLoadListCount = 44;
+sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 {
 {"ParticleSystem", "DATA/GLSL/particle.vert", "DATA/GLSL/particle.frag"},
 {"SpaceStars", "DATA/GLSL/particle_stars.vert", "DATA/GLSL/particle.frag"},
@@ -138,6 +138,20 @@ GLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 {"Explosion24", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light24.frag"},
 {"Explosion25", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light25.frag"},
 {"Explosion26", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light26.frag"},
+{"Track10", "DATA/GLSL/light_track.vert", "DATA/GLSL/light10.frag"},
+{"Track11", "DATA/GLSL/light_track.vert", "DATA/GLSL/light11.frag"},
+{"Track12", "DATA/GLSL/light_track.vert", "DATA/GLSL/light12.frag"},
+{"Track13", "DATA/GLSL/light_track.vert", "DATA/GLSL/light13.frag"},
+{"Track14", "DATA/GLSL/light_track.vert", "DATA/GLSL/light14.frag"},
+{"Track15", "DATA/GLSL/light_track.vert", "DATA/GLSL/light15.frag"},
+{"Track16", "DATA/GLSL/light_track.vert", "DATA/GLSL/light16.frag"},
+{"Track20", "DATA/GLSL/light_track.vert", "DATA/GLSL/light20.frag"},
+{"Track21", "DATA/GLSL/light_track.vert", "DATA/GLSL/light21.frag"},
+{"Track22", "DATA/GLSL/light_track.vert", "DATA/GLSL/light22.frag"},
+{"Track23", "DATA/GLSL/light_track.vert", "DATA/GLSL/light23.frag"},
+{"Track24", "DATA/GLSL/light_track.vert", "DATA/GLSL/light24.frag"},
+{"Track25", "DATA/GLSL/light_track.vert", "DATA/GLSL/light25.frag"},
+{"Track26", "DATA/GLSL/light_track.vert", "DATA/GLSL/light26.frag"},
 };
 
 
@@ -1510,6 +1524,37 @@ void LoadGameData(int LoadType)
 	}
 
 
+
+	//	если нужно, загрузка всех шейдеров (грузим их _ДО_ загрузки 3д моделей, чтобы сделать установку моделей правильно)
+	if (NeedLoadShaders)
+	if (CAPS->GLSL100Supported)
+	{
+		for (int i=0; i<GLSLLoadListCount; i++)
+		if (Setup.UseGLSL)
+		{
+
+			eGLSL *Program = 0;
+			Program = vw_CreateShader(GLSLLoadList[i].Name, GLSLLoadList[i].VertexShaderFileName, GLSLLoadList[i].FragmentShaderFileName);
+
+			if (Program != 0)
+			{
+				// получаем сразу состояние, смогли прилинковать или нет
+				if (!vw_LinkShaderProgram(Program)) Setup.UseGLSL = false;
+			}
+			else
+				Setup.UseGLSL = false;
+
+			RealLoadedTextures += 1000;
+			// рисуем текущее состояние загрузки, если не рисуем логотип
+			DrawLoading(RealLoadedTextures, AllDrawLoading, &LastDrawTime, LoadImageTexture);
+		}
+	}
+
+
+
+
+
+
 	for (int i=0; i<CurrentListCount; i++)
 	{
 		switch (CurrentList[i].FileType)
@@ -1626,33 +1671,6 @@ void LoadGameData(int LoadType)
 
 		// рисуем текущее состояние загрузки, если не рисуем логотип
 		DrawLoading(RealLoadedTextures, AllDrawLoading, &LastDrawTime, LoadImageTexture);
-
-	}
-
-
-	//	если нужно, загрузка всех шейдеров
-	if (NeedLoadShaders)
-	if (CAPS->GLSL100Supported)
-	{
-		for (int i=0; i<GLSLLoadListCount; i++)
-		if (Setup.UseGLSL)
-		{
-
-			eGLSL *Program = 0;
-			Program = vw_CreateShader(GLSLLoadList[i].Name, GLSLLoadList[i].VertexShaderFileName, GLSLLoadList[i].FragmentShaderFileName);
-
-			if (Program != 0)
-			{
-				// получаем сразу состояние, смогли прилинковать или нет
-				if (!vw_LinkShaderProgram(Program)) Setup.UseGLSL = false;
-			}
-			else
-				Setup.UseGLSL = false;
-
-			RealLoadedTextures += 1000;
-			// рисуем текущее состояние загрузки, если не рисуем логотип
-			DrawLoading(RealLoadedTextures, AllDrawLoading, &LastDrawTime, LoadImageTexture);
-		}
 
 	}
 

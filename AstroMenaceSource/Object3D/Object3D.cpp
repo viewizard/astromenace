@@ -98,22 +98,6 @@ CObject3D::CObject3D(void)
 	Texture = 0;
 	TextureIllum = 0;
 
-	Object3DGLSL[0][0] = vw_FindShaderByName("ObjectLight10");
-	Object3DGLSL[0][1] = vw_FindShaderByName("ObjectLight11");
-	Object3DGLSL[0][2] = vw_FindShaderByName("ObjectLight12");
-	Object3DGLSL[0][3] = vw_FindShaderByName("ObjectLight13");
-	Object3DGLSL[0][4] = vw_FindShaderByName("ObjectLight14");
-	Object3DGLSL[0][5] = vw_FindShaderByName("ObjectLight15");
-	Object3DGLSL[0][6] = vw_FindShaderByName("ObjectLight16");
-	Object3DGLSL[1][0] = vw_FindShaderByName("ObjectLight20");
-	Object3DGLSL[1][1] = vw_FindShaderByName("ObjectLight21");
-	Object3DGLSL[1][2] = vw_FindShaderByName("ObjectLight22");
-	Object3DGLSL[1][3] = vw_FindShaderByName("ObjectLight23");
-	Object3DGLSL[1][4] = vw_FindShaderByName("ObjectLight24");
-	Object3DGLSL[1][5] = vw_FindShaderByName("ObjectLight25");
-	Object3DGLSL[1][6] = vw_FindShaderByName("ObjectLight26");
-	ShaderType = 0;
-
 	// мы не знаем как ориентирован объект и где он находится
 	Location = PrevLocation = Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
 	Orientation = VECTOR3D(0.0f, 0.0f, 1.0f);
@@ -877,7 +861,6 @@ void CObject3D::Draw()
 	vw_MaterialV(RI_SHININESS, Power);
 
 
-
 	// если надо рисовать
 	if (NeedOnePieceDraw)
 	{
@@ -920,12 +903,17 @@ void CObject3D::Draw()
 		// включаем источники света, максимальное кол-во 4
 		vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
 
-		if (Setup.UseGLSL && ShaderType >= 0)
+		if (Setup.UseGLSL && DrawObjectList[0].ShaderType >= 0)
 		{
 			eGLSL *CurrentObject3DGLSL = 0;
 			// ставим нужный шейдер
 			// LightType1 1-2; LightType2 0-6
-			CurrentObject3DGLSL = Object3DGLSL[LightType1-1][LightType2];
+			switch (DrawObjectList[0].ShaderType)
+			{
+				case 1: CurrentObject3DGLSL = GLSLShaderType1[LightType1-1][LightType2]; break;
+				case 2: CurrentObject3DGLSL = GLSLShaderType2[LightType1-1][LightType2]; break;
+				case 3: CurrentObject3DGLSL = GLSLShaderType3[LightType1-1][LightType2]; break;
+			}
 
 			if (CurrentObject3DGLSL != 0)
 			{
@@ -1065,21 +1053,22 @@ void CObject3D::Draw()
 
 
 
-			if (Setup.UseGLSL && ShaderType >= 0)
+			if (Setup.UseGLSL && DrawObjectList[i].ShaderType >= 0)
 			{
 				eGLSL *CurrentObject3DGLSL = 0;
 				// ставим нужный шейдер
 				// LightType1 1-2; LightType2 0-6
-				CurrentObject3DGLSL = Object3DGLSL[LightType1-1][LightType2];
+				switch (DrawObjectList[i].ShaderType)
+				{
+					case 1: CurrentObject3DGLSL = GLSLShaderType1[LightType1-1][LightType2]; break;
+					case 2: CurrentObject3DGLSL = GLSLShaderType2[LightType1-1][LightType2]; break;
+					case 3: CurrentObject3DGLSL = GLSLShaderType3[LightType1-1][LightType2]; break;
+				}
 
 
 				if (CurrentGLSL != CurrentObject3DGLSL)
 				{
-					if (CurrentGLSL != 0)
-					{
-						vw_StopShaderProgram();
-						CurrentGLSL = 0;
-					}
+					if (CurrentGLSL != 0) vw_StopShaderProgram();
 
 					CurrentGLSL = CurrentObject3DGLSL;
 
@@ -1098,11 +1087,18 @@ void CObject3D::Draw()
 					else vw_Uniform1i(CurrentObject3DGLSL, "NeedMultitexture", 0);
 
 					// шейдеры взрывов
-					if (ShaderType == 2)
+					if (DrawObjectList[i].ShaderType == 2)
 					{
-						vw_Uniform1f(CurrentObject3DGLSL, "SpeedData1", ShaderData[0]);
-						vw_Uniform1f(CurrentObject3DGLSL, "SpeedData2", ShaderData[1]);
+						vw_Uniform1f(CurrentObject3DGLSL, "SpeedData1", DrawObjectList[i].ShaderData[0]);
+						vw_Uniform1f(CurrentObject3DGLSL, "SpeedData2", DrawObjectList[i].ShaderData[1]);
 					}
+
+					// шейдеры тайловой анимации траков
+					if (DrawObjectList[i].ShaderType == 3)
+					{
+						vw_Uniform1f(CurrentObject3DGLSL, "TrackSpeed", DrawObjectList[i].ShaderData[0]);
+					}
+
 				}
 
 			}

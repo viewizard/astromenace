@@ -55,13 +55,6 @@ void CBasePart::Create(int BasePartNum)
 	}
 	ObjectCreationType = BasePartNum;
 
-
-
-	// это слишком большие объекты + практически не освещаются и плоские, т.е. попиксельное освещение не нужно
-	ShaderType = -1;
-
-
-
 	// перебираем и ставим нужные данные
 	switch (BasePartNum)
 	{
@@ -243,6 +236,13 @@ case8next:
 
 	// находим все данные по геометрии
 	::CObject3D::InitByDrawObjectList();
+
+
+	for (int j=0; j<DrawObjectQuantity; j++)
+	{
+		// это слишком большие объекты + практически не освещаются и плоские, т.е. попиксельное освещение не нужно
+		DrawObjectList[j].ShaderType = -1;
+	}
 }
 
 

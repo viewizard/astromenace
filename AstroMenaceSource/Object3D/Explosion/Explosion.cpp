@@ -192,8 +192,7 @@ bool CExplosion::Update(float Time)
 
 
 
-	// если не считаем в шейдере, нужно это делать сдесь
-	// работаем без индекс буфера, сдесь последовательность именно вертексов, индекс нулевой
+	// если не считаем в шейдере, нужно перебрать геометрию и собрать новые буферы
 	if (!Setup.UseGLSL)
 	{
 		// первый раз - просто запоминаем время
@@ -322,11 +321,13 @@ bool CExplosion::Update(float Time)
 	else
 	{
 		// меняем данные глобальные для шейдера, тут делаем столько столько позволяет, а не 30 раз как с изменением геометрии
-
-		// общий коэф. расстояния
-		ShaderData[1] += ShaderData[0]*TimeDelta;
-		// дельта скорости
-		ShaderData[0] -= ShaderData[0]*TimeDelta;
+		for (int j=0; j<DrawObjectQuantity; j++)
+		{
+			// общий коэф. расстояния
+			DrawObjectList[j].ShaderData[1] += DrawObjectList[j].ShaderData[0]*TimeDelta;
+			// дельта скорости
+			DrawObjectList[j].ShaderData[0] -= DrawObjectList[j].ShaderData[0]*TimeDelta;
+		}
 	}
 
 

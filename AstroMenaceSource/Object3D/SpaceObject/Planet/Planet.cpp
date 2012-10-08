@@ -48,6 +48,8 @@ void CPlanet::Create(int PlanetNum)
 
 	ObjectCreationType = PlanetNum;
 
+	// устанавливаем кому надо шейдеры, а кому нет
+	int ShaderType = 1;
 
 
 	// перебираем и ставим нужные данные
@@ -117,6 +119,13 @@ void CPlanet::Create(int PlanetNum)
 	// находим все данные по геометрии
 	::CObject3D::InitByDrawObjectList();
 
+
+	if (ShaderType == -1)
+		for (int j=0; j<DrawObjectQuantity; j++)
+		{
+			// это слишком большие объекты + практически не освещаются и плоские, т.е. попиксельное освещение не нужно
+			DrawObjectList[j].ShaderType = -1;
+		}
 }
 
 
