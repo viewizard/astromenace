@@ -115,6 +115,8 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 				ShipPart->DrawObjectList = new eObjectBlock[ShipPart->DrawObjectQuantity];
 				// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
 				memcpy(&(ShipPart->DrawObjectList[0]), &(Object->DrawObjectList[i]), sizeof(eObjectBlock));
+				// берем стандартные шейдеры
+				ShipPart->DrawObjectList[0].ShaderType = 1;
 				// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
 				if (Object->DrawObjectList[i].NeedDestroyDataInObjectBlock)
 				{

@@ -768,6 +768,20 @@ bool vw_Uniform4fv(eGLSL *GLSL, const char *name, int count, float *data)
 
 	return true;
 }
+bool vw_UniformMatrix3fv(eGLSL *GLSL, const char *name, bool transpose, int count, float *data)
+{
+	if (GLSL == 0) return false;
+	if (name == 0) return false;
+	if (glUniformMatrix3fvARB == NULL) return false;
 
+	GLint Loc = internal_vw_GetUniformLocation(GLSL, name);
+	if (Loc == -1) return false;
+
+	glUniformMatrix3fvARB(Loc, count, transpose, data);
+
+	CheckOGLError();  // Check for OpenGL errors
+
+	return true;
+}
 
 

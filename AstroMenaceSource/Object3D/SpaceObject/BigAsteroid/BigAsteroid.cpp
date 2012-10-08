@@ -45,6 +45,9 @@ void CBigAsteroid::Create(int AsteroidNum)
 	ObjectStatus = 1; // чужой
 	ObjectType = 15;
 
+	// устанавливаем кому надо шейдеры, а кому нет
+	int ShaderType = 1;
+
 	// задали первичный, нужно случайным образом найти
 	if (AsteroidNum == 1 || AsteroidNum == 2)
 	{
@@ -119,6 +122,14 @@ case10next:
 
 	// находим все данные по геометрии
 	::CObject3D::InitByDrawObjectList();
+
+
+	if (ShaderType == -1)
+		for (int j=0; j<DrawObjectQuantity; j++)
+		{
+			// это слишком большие объекты + практически не освещаются и плоские, т.е. попиксельное освещение не нужно
+			DrawObjectList[j].ShaderType = -1;
+		}
 }
 
 

@@ -1,3 +1,5 @@
+#version 110
+
 //  directional & point light per pixel + multitexture
 
 // глобальные данные взрыва

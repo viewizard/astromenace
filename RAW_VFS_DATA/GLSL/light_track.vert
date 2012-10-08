@@ -2,6 +2,9 @@
 
 //  directional & point light per pixel + multitexture
 
+// глобальные данные тайловой анимации траков
+uniform float TrackSpeed;
+
 // передаем вертекс в фрагметный (уже нормализованную)
 varying vec3 Normal;
 // передаем вертекс в фрагметный
@@ -13,5 +16,6 @@ void main()
 	Vertex = vec3(gl_ModelViewMatrix * gl_Vertex);
 	
 	gl_Position = ftransform();
-	gl_TexCoord[0]  = gl_MultiTexCoord0;
+	gl_TexCoord[0].x  = gl_MultiTexCoord0.x + TrackSpeed;
+	gl_TexCoord[0].y  = gl_MultiTexCoord0.y;
 } 

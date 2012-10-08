@@ -53,6 +53,17 @@ eObjectBlock::eObjectBlock(void)
 	IndexBuffer = 0;
 	IndexBufferVBO = 0;
 	VAO = 0;
+
+	ShaderType = 1;
+	ShaderData[0] = 0;
+	ShaderData[1] = 0;
+	ShaderData[2] = 0;
+	ShaderData[3] = 0;
+	ShaderData[4] = 0;
+	ShaderData[5] = 0;
+	ShaderData[6] = 0;
+	ShaderData[7] = 0;
+	ShaderData[8] = 0;
 }
 //-----------------------------------------------------------------------------
 // Деструктор

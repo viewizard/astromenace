@@ -988,29 +988,14 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 		// тк был квадрат, теперь вытягиваем нормальное значение
 		AABBSpeed = sqrtf(AABBSpeed);
 
-		// если нужно, создаем vbo
+		// установка шейдера
 		if (Setup.UseGLSL)
 		{
-			ShaderType = 2;
+			DrawObjectList[0].ShaderType = 2;
 			// дельта скорости
-			ShaderData[0] = 1.0f;
+			DrawObjectList[0].ShaderData[0] = 1.0f;
 			// общий коэф расстояния
-			ShaderData[1] = 0.0f;
-			// установка нужных шейдеров
-			Object3DGLSL[0][0] = vw_FindShaderByName("Explosion10");
-			Object3DGLSL[0][1] = vw_FindShaderByName("Explosion11");
-			Object3DGLSL[0][2] = vw_FindShaderByName("Explosion12");
-			Object3DGLSL[0][3] = vw_FindShaderByName("Explosion13");
-			Object3DGLSL[0][4] = vw_FindShaderByName("Explosion14");
-			Object3DGLSL[0][5] = vw_FindShaderByName("Explosion15");
-			Object3DGLSL[0][6] = vw_FindShaderByName("Explosion16");
-			Object3DGLSL[1][0] = vw_FindShaderByName("Explosion20");
-			Object3DGLSL[1][1] = vw_FindShaderByName("Explosion21");
-			Object3DGLSL[1][2] = vw_FindShaderByName("Explosion22");
-			Object3DGLSL[1][3] = vw_FindShaderByName("Explosion23");
-			Object3DGLSL[1][4] = vw_FindShaderByName("Explosion24");
-			Object3DGLSL[1][5] = vw_FindShaderByName("Explosion25");
-			Object3DGLSL[1][6] = vw_FindShaderByName("Explosion26");
+			DrawObjectList[0].ShaderData[1] = 0.0f;
 		}
 
 
