@@ -881,7 +881,8 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 			DrawObjectList[i].VertexBuffer = 0;
 			DrawObjectList[i].IndexBufferVBO = 0;
 			DrawObjectList[i].IndexBuffer = 0;
-			DrawObjectList[i].VertexBufferDestrType = 1; // удалять в объекте
+			DrawObjectList[i].VAO = 0;
+			DrawObjectList[i].NeedDestroyDataInObjectBlock = true; // удалять в объекте
 			DrawObjectList[i].RangeStart = 0;
 
 			// если у нас включены и работают шейдеры, надо приготовить место для данных + изменить FVF_Format и шаг
@@ -944,7 +945,7 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 
 			float VelocityTMP = vw_Randf0*tRadius2;
 
-			// записываем центр треугольника, оно же базовое ускорение + цент UV
+			// записываем центр треугольника, оно же базовое ускорение + цент UV, нужно для шейдера
 			if (Setup.UseGLSL)
 			{
 				// Velocity/центр треугольника
@@ -984,12 +985,6 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 		// если нужно, создаем vbo
 		if (Setup.UseGLSL)
 		{
-			DrawObjectList[0].VertexBufferVBO = new unsigned int;
-			if (!vw_BuildVBO(DrawObjectList[0].VertexCount, DrawObjectList[0].VertexBuffer, DrawObjectList[0].Stride, DrawObjectList[0].VertexBufferVBO))
-			{
-				delete DrawObjectList[0].VertexBufferVBO; DrawObjectList[0].VertexBufferVBO=0;
-			}
-
 			ShaderType = 2;
 			// дельта скорости
 			ShaderData[0] = 1.0f;
