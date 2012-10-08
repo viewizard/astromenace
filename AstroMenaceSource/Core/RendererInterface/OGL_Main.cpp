@@ -945,11 +945,11 @@ void vw_DepthTest(bool mode, int funct)
 {
 	if (mode)
 	{
-		if (!glIsEnabled(GL_DEPTH_TEST)) glEnable(GL_DEPTH_TEST);
+		glEnable(GL_DEPTH_TEST);
 	}
 	else
 	{
-		if (glIsEnabled(GL_DEPTH_TEST)) glDisable(GL_DEPTH_TEST);
+		glDisable(GL_DEPTH_TEST);
 		// и сразу выходим, там тут делать нечего
 		return;
 	}

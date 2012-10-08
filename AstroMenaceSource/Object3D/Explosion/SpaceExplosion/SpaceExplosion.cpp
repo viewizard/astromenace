@@ -682,6 +682,12 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			}
 
 
+			// создаем индексный буфер блока
+			DrawObjectList[i].IndexBuffer = new unsigned int[DrawObjectList[i].VertexCount];
+			for (int j=0; j<DrawObjectList[i].VertexCount; j++) DrawObjectList[i].IndexBuffer[j] = j;
+
+
+
 			DrawObjectList[i].Location = VECTOR3D(0.0f,0.0f,0.0f);
 			DrawObjectList[i].Rotation = VECTOR3D(0.0f,0.0f,0.0f);
 
@@ -771,6 +777,47 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 				if (tmpSpeed > AABBSpeed) AABBSpeed = tmpSpeed;
 
 				Count++;
+			}
+
+
+
+			// пересоздаем буферы vbo и vao
+			// удаляем старые буферы, если они есть, создаем новые
+			// ! индексный буфер не трогаем, его не надо пересоздавать вообще
+
+			if (DrawObjectList[j].VertexBufferVBO != 0)
+			{
+				vw_DeleteVBO(*DrawObjectList[j].VertexBufferVBO); delete DrawObjectList[j].VertexBufferVBO; DrawObjectList[j].VertexBufferVBO = 0;
+			}
+			if (DrawObjectList[j].VAO != 0)
+			{
+				vw_DeleteVAO(*DrawObjectList[j].VAO); delete DrawObjectList[j].VAO; DrawObjectList[j].VAO = 0;
+			}
+
+			// делаем VBO
+			DrawObjectList[j].VertexBufferVBO = new unsigned int;
+			if (!vw_BuildVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].Stride, DrawObjectList[j].VertexBufferVBO))
+			{
+				delete DrawObjectList[j].VertexBufferVBO; DrawObjectList[j].VertexBufferVBO=0;
+			}
+
+			// делаем индекс VBO, создаем его один раз, если его нет
+			if (DrawObjectList[j].IndexBufferVBO == 0)
+			{
+				DrawObjectList[j].IndexBufferVBO = new unsigned int;
+				if (!vw_BuildIndexVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IndexBufferVBO))
+				{
+					delete DrawObjectList[j].IndexBufferVBO; DrawObjectList[j].IndexBufferVBO=0;
+				}
+			}
+
+			// делаем VAO
+			DrawObjectList[j].VAO = new unsigned int;
+			if (!vw_BuildVAO(DrawObjectList[j].VAO, DrawObjectList[j].VertexCount, DrawObjectList[j].FVF_Format, DrawObjectList[j].VertexBuffer,
+								DrawObjectList[j].Stride*sizeof(float), DrawObjectList[j].VertexBufferVBO,
+								DrawObjectList[j].RangeStart, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IndexBufferVBO))
+			{
+				delete DrawObjectList[j].VAO; DrawObjectList[j].VAO=0;
 			}
 
 		}

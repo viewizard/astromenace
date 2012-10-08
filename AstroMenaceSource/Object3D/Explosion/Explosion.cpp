@@ -51,6 +51,8 @@ CExplosion::CExplosion(void)
 
 	ExplosionPieceData = 0;
 
+	ExplosionGeometryMoveLastTime = -1;
+
 	// нет взрыва, сразу уничтожаем
 	Lifetime = 0.0f;
 
@@ -194,76 +196,132 @@ bool CExplosion::Update(float Time)
 	// работаем без индекс буфера, сдесь последовательность именно вертексов, индекс нулевой
 	if (!Setup.UseGLSL)
 	{
-		// расчет физики для каждой частицы
-		VECTOR3D TMP;
-		int Count = 0;
-		if (DrawObjectList != 0)
-		for (int j=0; j<DrawObjectQuantity; j++)
-		for (int i=0; i<DrawObjectList[j].VertexCount; i+=3)
+		// первый раз - просто запоминаем время
+		if (ExplosionGeometryMoveLastTime == -1) ExplosionGeometryMoveLastTime = Time;
+
+		// если время подошло - делаем анимацию, иначе - пропускаем этот цикл
+		if (ExplosionGeometryMoveLastTime + 0.035f < Time)
 		{
-			if (ExplosionPieceData[Count].Life > 0.0f)
+			// поворачиваем все объекты
+			float ExplosionGeometryMove = Time-ExplosionGeometryMoveLastTime;
+			ExplosionGeometryMoveLastTime = Time;
+
+
+
+			// расчет физики для каждой частицы
+			VECTOR3D TMP;
+			int Count = 0;
+			if (DrawObjectList != 0)
+			for (int j=0; j<DrawObjectQuantity; j++)
 			{
-				// получаем текущий вектор движения данного треугольника
-				TMP = ExplosionPieceData[Count].Velocity^TimeDelta;
-				ExplosionPieceData[Count].Velocity -= TMP;
-
-				// вычисляем время жизни
-				ExplosionPieceData[Count].Life -= TimeDelta;
-
-
-				if (ExplosionPieceData[Count].Life<=0.001f)
+				for (int i=0; i<DrawObjectList[j].VertexCount; i+=3)
 				{
-					ExplosionPieceData[Count].Life = 0.0f;
-
-					DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride];
-					DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride+1] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+1];
-					DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride+2] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+2];
-
-					DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride];
-					DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride+1] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+1];
-					DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride+2] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+2];
-				}
-				else
-				{
-					// уменьшаем частицу, перебираем размер и текстурные координаты
+					if (ExplosionPieceData[Count].Life > 0.0f)
 					{
-						float tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)] -DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i];
-						DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)] -= (tmp/ExplosionPieceData[Count].Life)*TimeDelta;
-						tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)+1] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i+1];
-						DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)+1] -= (tmp/ExplosionPieceData[Count].Life)*TimeDelta;
-						tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)+2] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i+2];
-						DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)+2] -= (tmp/ExplosionPieceData[Count].Life)*TimeDelta;
+						// получаем текущий вектор движения данного треугольника
+						TMP = ExplosionPieceData[Count].Velocity^ExplosionGeometryMove;
+						ExplosionPieceData[Count].Velocity -= TMP;
 
-						tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i];
-						DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)] -= (tmp/ExplosionPieceData[Count].Life)*TimeDelta;
-						tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)+1] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i+1];
-						DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)+1] -= (tmp/ExplosionPieceData[Count].Life)*TimeDelta;
-						tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)+2] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i+2];
-						DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)+2] -= (tmp/ExplosionPieceData[Count].Life)*TimeDelta;
+						// вычисляем время жизни
+						ExplosionPieceData[Count].Life -= ExplosionGeometryMove;
+
+
+						if (ExplosionPieceData[Count].Life<=0.001f)
+						{
+							ExplosionPieceData[Count].Life = 0.0f;
+
+							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride];
+							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride+1] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+1];
+							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride+2] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+2];
+
+							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride];
+							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride+1] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+1];
+							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride+2] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+2];
+						}
+						else
+						{
+							// уменьшаем частицу, перебираем размер и текстурные координаты
+							{
+								float tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)] -DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i];
+								DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+								tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)+1] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i+1];
+								DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)+1] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+								tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)+2] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i+2];
+								DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)+2] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+
+								tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i];
+								DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+								tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)+1] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i+1];
+								DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)+1] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+								tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)+2] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i+2];
+								DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)+2] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+							}
+
+							DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride] += TMP.x;
+							DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+1] += TMP.y;
+							DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+2] += TMP.z;
+
+							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride] += TMP.x;
+							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride+1] += TMP.y;
+							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride+2] += TMP.z;
+
+							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride] += TMP.x;
+							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride+1] += TMP.y;
+							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride+2] += TMP.z;
+						}
+
 					}
 
-					DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride] += TMP.x;
-					DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+1] += TMP.y;
-					DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+2] += TMP.z;
-
-					DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride] += TMP.x;
-					DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride+1] += TMP.y;
-					DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride+2] += TMP.z;
-
-					DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride] += TMP.x;
-					DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride+1] += TMP.y;
-					DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride+2] += TMP.z;
+					Count++;
 				}
 
 
-			}
+				// пересоздаем буферы vbo и vao
+				// удаляем старые буферы, если они есть, создаем новые
+				// ! индексный буфер не трогаем, его не надо пересоздавать вообще
 
-			Count++;
+				if (DrawObjectList[j].VertexBufferVBO != 0)
+				{
+					vw_DeleteVBO(*DrawObjectList[j].VertexBufferVBO); delete DrawObjectList[j].VertexBufferVBO; DrawObjectList[j].VertexBufferVBO = 0;
+				}
+				if (DrawObjectList[j].VAO != 0)
+				{
+					vw_DeleteVAO(*DrawObjectList[j].VAO); delete DrawObjectList[j].VAO; DrawObjectList[j].VAO = 0;
+				}
+
+
+				// делаем VBO
+				DrawObjectList[j].VertexBufferVBO = new unsigned int;
+				if (!vw_BuildVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].Stride, DrawObjectList[j].VertexBufferVBO))
+				{
+					delete DrawObjectList[j].VertexBufferVBO; DrawObjectList[j].VertexBufferVBO=0;
+				}
+
+				// делаем индекс VBO, создаем его один раз, если его нет
+				if (DrawObjectList[j].IndexBufferVBO == 0)
+				{
+					DrawObjectList[j].IndexBufferVBO = new unsigned int;
+					if (!vw_BuildIndexVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IndexBufferVBO))
+					{
+						delete DrawObjectList[j].IndexBufferVBO; DrawObjectList[j].IndexBufferVBO=0;
+					}
+				}
+
+				// делаем VAO
+				DrawObjectList[j].VAO = new unsigned int;
+				if (!vw_BuildVAO(DrawObjectList[j].VAO, DrawObjectList[j].VertexCount, DrawObjectList[j].FVF_Format, DrawObjectList[j].VertexBuffer,
+									DrawObjectList[j].Stride*sizeof(float), DrawObjectList[j].VertexBufferVBO,
+									DrawObjectList[j].RangeStart, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IndexBufferVBO))
+				{
+					delete DrawObjectList[j].VAO; DrawObjectList[j].VAO=0;
+				}
+
+			}
 		}
 	}
 	else
 	{
-		// меняем данные глобальные для шейдера
+		// меняем данные глобальные для шейдера, тут делаем столько столько позволяет, а не 30 раз как с изменением геометрии
 
 		// общий коэф. расстояния
 		ShaderData[1] += ShaderData[0]*TimeDelta;

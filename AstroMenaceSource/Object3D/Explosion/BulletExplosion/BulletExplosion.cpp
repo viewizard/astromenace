@@ -930,11 +930,17 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 
 
 			DrawObjectList[i].Location = VECTOR3D(0.0f,0.0f,0.0f);
+
+
+			// копируем индексный буфер блока
+			DrawObjectList[i].IndexBuffer = new unsigned int[DrawObjectList[i].VertexCount];
+			memcpy(DrawObjectList[i].IndexBuffer, Projectile->DrawObjectList[i].IndexBuffer,
+					DrawObjectList[i].VertexCount*sizeof(unsigned int));
 		}
 
 		float tRadius2 = Projectile->Radius/1.5f;
 
-		// для каждого треугольника - свои данные
+		// для каждого треугольника - свои данные (фактически, у нас 1 объект, с ним и работаем)
 		int Count = 0;
 		ExplosionPieceData = new CExplosionPiece[DrawObjectList[0].VertexCount/3];
 		for (int i=0; i<DrawObjectList[0].VertexCount; i+=3)
@@ -1005,6 +1011,46 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 			Object3DGLSL[1][4] = vw_FindShaderByName("Explosion24");
 			Object3DGLSL[1][5] = vw_FindShaderByName("Explosion25");
 			Object3DGLSL[1][6] = vw_FindShaderByName("Explosion26");
+		}
+
+
+
+		// удаляем старые буферы, если они есть, создаем новые
+		// ! индексный буфер не трогаем, его не надо пересоздавать вообще
+
+		if (DrawObjectList[0].VertexBufferVBO != 0)
+		{
+			vw_DeleteVBO(*DrawObjectList[0].VertexBufferVBO); delete DrawObjectList[0].VertexBufferVBO; DrawObjectList[0].VertexBufferVBO = 0;
+		}
+		if (DrawObjectList[0].VAO != 0)
+		{
+			vw_DeleteVAO(*DrawObjectList[0].VAO); delete DrawObjectList[0].VAO; DrawObjectList[0].VAO = 0;
+		}
+
+		// делаем VBO
+		DrawObjectList[0].VertexBufferVBO = new unsigned int;
+		if (!vw_BuildVBO(DrawObjectList[0].VertexCount, DrawObjectList[0].VertexBuffer, DrawObjectList[0].Stride, DrawObjectList[0].VertexBufferVBO))
+		{
+			delete DrawObjectList[0].VertexBufferVBO; DrawObjectList[0].VertexBufferVBO=0;
+		}
+
+		// делаем индекс VBO, создаем его один раз, если его нет
+		if (DrawObjectList[0].IndexBufferVBO == 0)
+		{
+			DrawObjectList[0].IndexBufferVBO = new unsigned int;
+			if (!vw_BuildIndexVBO(DrawObjectList[0].VertexCount, DrawObjectList[0].IndexBuffer, DrawObjectList[0].IndexBufferVBO))
+			{
+				delete DrawObjectList[0].IndexBufferVBO; DrawObjectList[0].IndexBufferVBO=0;
+			}
+		}
+
+		// делаем VAO
+		DrawObjectList[0].VAO = new unsigned int;
+		if (!vw_BuildVAO(DrawObjectList[0].VAO, DrawObjectList[0].VertexCount, DrawObjectList[0].FVF_Format, DrawObjectList[0].VertexBuffer,
+							DrawObjectList[0].Stride*sizeof(float), DrawObjectList[0].VertexBufferVBO,
+							DrawObjectList[0].RangeStart, DrawObjectList[0].IndexBuffer, DrawObjectList[0].IndexBufferVBO))
+		{
+			delete DrawObjectList[0].VAO; DrawObjectList[0].VAO=0;
 		}
 	}
 
