@@ -82,6 +82,9 @@ public:
 	CExplosionPiece	*ExplosionPieceData;
 
 
+	float	ExplosionGeometryMoveLastTime;// последнее время изменения геометрии, нет смысла постоянно менять геометрию, делаем это 30 раз в секунду только
+
+
 
 	VECTOR3D	VelocityOrientation;
 	float		OldSpeed;

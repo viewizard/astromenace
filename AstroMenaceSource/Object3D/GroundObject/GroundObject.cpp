@@ -53,6 +53,7 @@ CGroundObject::CGroundObject(void)
 	MaxWheelRotateAngle = 20.0f;
 	TrackObjectNum = -1;
 	TrackRotationDirectionl = 1;
+	TrackRotationLastTime = -1;
 
 	TargetHorizObjectQuantity = 0;
 	TargetHorizObject = 0;
@@ -67,6 +68,7 @@ CGroundObject::CGroundObject(void)
 
 	BarrelObjectQuantity = 0;
 	BarrelObject = 0;
+	BarrelRotationLastTime = -1;
 
 
 	// и никуда не нужно поворачивать
@@ -602,62 +604,111 @@ bool CGroundObject::Update(float Time)
 	if (BarrelObjectQuantity != 0)
 	if (BarrelObject != 0)
 	{
-		// поворачиваем все объекты
-		float BarrelObjectAngle = 500.0f*TimeDelta;
+		// первый раз - просто запоминаем время
+		if (BarrelRotationLastTime == -1) BarrelRotationLastTime = Time;
 
-		for (int i=0; i<BarrelObjectQuantity; i++)
+		// если время подошло - делаем анимацию, иначе - пропускаем этот цикл
+		if (BarrelRotationLastTime + 0.035f < Time)
 		{
+			// поворачиваем все объекты
+			float BarrelObjectAngle = 500.0f*(Time-BarrelRotationLastTime);
+			BarrelRotationLastTime = Time;
 
-			// нельзя вращать общие данные, надо сделать свой объект
-			if (!DrawObjectList[BarrelObject[i]].NeedDestroyDataInObjectBlock)
+
+			for (int i=0; i<BarrelObjectQuantity; i++)
 			{
-				float *TMP;
-				int SizeT = DrawObjectList[BarrelObject[i]].Stride;
-				TMP = new float[SizeT*DrawObjectList[BarrelObject[i]].VertexCount];
 
-				for (int j=0; j<DrawObjectList[BarrelObject[i]].VertexCount; j++)
+				// нельзя вращать общие данные, надо сделать свой объект
+				if (!DrawObjectList[BarrelObject[i]].NeedDestroyDataInObjectBlock)
 				{
-					int j2;
-					if (DrawObjectList[BarrelObject[i]].IndexBuffer != 0)
-						j2 = DrawObjectList[BarrelObject[i]].IndexBuffer[DrawObjectList[BarrelObject[i]].RangeStart+j]*DrawObjectList[BarrelObject[i]].Stride;
-					else
-						j2 = (DrawObjectList[BarrelObject[i]].RangeStart+j)*DrawObjectList[BarrelObject[i]].Stride;
+					// просто копируем данные части к себе (они уже выстроены в частях объекта при загрузке)
+					float *TMP;
+					TMP = new float[DrawObjectList[BarrelObject[i]].VertexCount*DrawObjectList[BarrelObject[i]].Stride];
+					memcpy(TMP, DrawObjectList[BarrelObject[i]].VertexBuffer,
+							DrawObjectList[BarrelObject[i]].VertexCount*DrawObjectList[BarrelObject[i]].Stride*sizeof(float));
 
-					memcpy(TMP+SizeT*j, DrawObjectList[BarrelObject[i]].VertexBuffer+j2, SizeT*sizeof(float));
+					// копируем индексный буфер блока
+					unsigned int *TMPindex;
+					TMPindex = new unsigned int[DrawObjectList[BarrelObject[i]].VertexCount];
+					memcpy(TMPindex, DrawObjectList[BarrelObject[i]].IndexBuffer,
+							DrawObjectList[BarrelObject[i]].VertexCount*sizeof(unsigned int));
+
+
+					// теперь у нас подключен свой объект, можем с ним делать все что угодно
+					DrawObjectList[BarrelObject[i]].VertexBuffer = TMP;
+					DrawObjectList[BarrelObject[i]].RangeStart = 0;
+					DrawObjectList[BarrelObject[i]].NeedDestroyDataInObjectBlock = true;
+					DrawObjectList[BarrelObject[i]].VertexBufferVBO = 0;
+					DrawObjectList[BarrelObject[i]].IndexBufferVBO = 0;
+					DrawObjectList[BarrelObject[i]].IndexBuffer = TMPindex;
+					DrawObjectList[BarrelObject[i]].VAO = 0;
 				}
 
-				// теперь у нас подключен свой объект, можем с ним делать все что угодно
-				DrawObjectList[BarrelObject[i]].VertexBuffer = TMP;
-				DrawObjectList[BarrelObject[i]].RangeStart = 0;
-				DrawObjectList[BarrelObject[i]].NeedDestroyDataInObjectBlock = true;
-				DrawObjectList[BarrelObject[i]].VertexBufferVBO = 0;
-				DrawObjectList[BarrelObject[i]].IndexBufferVBO = 0;
-				DrawObjectList[BarrelObject[i]].IndexBuffer = 0;
-				DrawObjectList[BarrelObject[i]].VAO = 0;
-			}
+
+				// работаем с геометрией
+				float TransfM[16];
+				Matrix44CreateRotate(TransfM, VECTOR3D(0.0f,0.0f,BarrelObjectAngle));
+
+				for(int k=0; k<DrawObjectList[BarrelObject[i]].VertexCount; k++)
+				{
+					VECTOR3D tmpVect(DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k],
+						DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+1],
+						DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+2]);
+					Matrix44CalcPoint(&tmpVect, TransfM);
+					DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k] = tmpVect.x;
+					DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+1] = tmpVect.y;
+					DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+2] = tmpVect.z;
+
+					// нормаль
+					tmpVect.x = DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+3];
+					tmpVect.y = DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+4];
+					tmpVect.z = DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+5];
+					Matrix44CalcPoint(&tmpVect, TransfM);
+					DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+3] = tmpVect.x;
+					DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+4] = tmpVect.y;
+					DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+5] = tmpVect.z;
+
+				}
 
 
-			float TransfM[16];
-			Matrix44CreateRotate(TransfM, VECTOR3D(0.0f,0.0f,BarrelObjectAngle));
+				// удаляем старые буферы, если они есть, создаем новые
+				// ! индексный буфер не трогаем, его не надо пересоздавать вообще
 
-			for(int k=0; k<DrawObjectList[BarrelObject[i]].VertexCount; k++)
-			{
-				VECTOR3D tmpVect(DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k],
-					DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+1],
-					DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+2]);
-				Matrix44CalcPoint(&tmpVect, TransfM);
-				DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k] = tmpVect.x;
-				DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+1] = tmpVect.y;
-				DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+2] = tmpVect.z;
+				if (DrawObjectList[BarrelObject[i]].VertexBufferVBO != 0)
+				{
+					vw_DeleteVBO(*DrawObjectList[BarrelObject[i]].VertexBufferVBO); delete DrawObjectList[BarrelObject[i]].VertexBufferVBO; DrawObjectList[BarrelObject[i]].VertexBufferVBO = 0;
+				}
+				if (DrawObjectList[BarrelObject[i]].VAO != 0)
+				{
+					vw_DeleteVAO(*DrawObjectList[BarrelObject[i]].VAO); delete DrawObjectList[BarrelObject[i]].VAO; DrawObjectList[BarrelObject[i]].VAO = 0;
+				}
 
-				// нормаль
-				tmpVect.x = DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+3];
-				tmpVect.y = DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+4];
-				tmpVect.z = DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+5];
-				Matrix44CalcPoint(&tmpVect, TransfM);
-				DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+3] = tmpVect.x;
-				DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+4] = tmpVect.y;
-				DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+5] = tmpVect.z;
+
+				// делаем VBO
+				DrawObjectList[BarrelObject[i]].VertexBufferVBO = new unsigned int;
+				if (!vw_BuildVBO(DrawObjectList[BarrelObject[i]].VertexCount, DrawObjectList[BarrelObject[i]].VertexBuffer, DrawObjectList[BarrelObject[i]].Stride, DrawObjectList[BarrelObject[i]].VertexBufferVBO))
+				{
+					delete DrawObjectList[BarrelObject[i]].VertexBufferVBO; DrawObjectList[BarrelObject[i]].VertexBufferVBO=0;
+				}
+
+				// делаем индекс VBO, создаем его один раз, если его нет
+				if (DrawObjectList[BarrelObject[i]].IndexBufferVBO == 0)
+				{
+					DrawObjectList[BarrelObject[i]].IndexBufferVBO = new unsigned int;
+					if (!vw_BuildIndexVBO(DrawObjectList[BarrelObject[i]].VertexCount, DrawObjectList[BarrelObject[i]].IndexBuffer, DrawObjectList[BarrelObject[i]].IndexBufferVBO))
+					{
+						delete DrawObjectList[BarrelObject[i]].IndexBufferVBO; DrawObjectList[BarrelObject[i]].IndexBufferVBO=0;
+					}
+				}
+
+				// делаем VAO
+				DrawObjectList[BarrelObject[i]].VAO = new unsigned int;
+				if (!vw_BuildVAO(DrawObjectList[BarrelObject[i]].VAO, DrawObjectList[BarrelObject[i]].VertexCount, DrawObjectList[BarrelObject[i]].FVF_Format, DrawObjectList[BarrelObject[i]].VertexBuffer,
+									DrawObjectList[BarrelObject[i]].Stride*sizeof(float), DrawObjectList[BarrelObject[i]].VertexBufferVBO,
+									DrawObjectList[BarrelObject[i]].RangeStart, DrawObjectList[BarrelObject[i]].IndexBuffer, DrawObjectList[BarrelObject[i]].IndexBufferVBO))
+				{
+					delete DrawObjectList[BarrelObject[i]].VAO; DrawObjectList[BarrelObject[i]].VAO=0;
+				}
 
 			}
 		}
@@ -708,38 +759,89 @@ bool CGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (TrackObjectNum != -1 && WheelTrackSpeed != 0.0f)
 	{
-		// нельзя вращать общие данные, надо сделать свой объект
-		if (!DrawObjectList[TrackObjectNum].NeedDestroyDataInObjectBlock)
+		// первый раз - просто запоминаем время
+		if (TrackRotationLastTime == -1) TrackRotationLastTime = Time;
+
+		// если время подошло - делаем анимацию, иначе - пропускаем этот цикл
+		if (TrackRotationLastTime + 0.035f < Time)
 		{
-			float *TMP;
-			int SizeT = DrawObjectList[TrackObjectNum].Stride;
-			TMP = new float[SizeT*DrawObjectList[TrackObjectNum].VertexCount];
 
-			for (int j=0; j<DrawObjectList[TrackObjectNum].VertexCount; j++)
+			float TrackDelta = (WheelTrackSpeed/500.0f)*(Time - TrackRotationLastTime);
+			TrackRotationLastTime = Time;
+
+
+			// нельзя вращать общие данные, надо сделать свой объект
+			if (!DrawObjectList[TrackObjectNum].NeedDestroyDataInObjectBlock)
 			{
-				int j2;
-				if (DrawObjectList[TrackObjectNum].IndexBuffer != 0)
-					j2 = DrawObjectList[TrackObjectNum].IndexBuffer[DrawObjectList[TrackObjectNum].RangeStart+j]*DrawObjectList[TrackObjectNum].Stride;
-				else
-					j2 = (DrawObjectList[TrackObjectNum].RangeStart+j)*DrawObjectList[TrackObjectNum].Stride;
+				// просто копируем данные части к себе (они уже выстроены в частях объекта при загрузке)
+				float *TMP;
+				TMP = new float[DrawObjectList[TrackObjectNum].VertexCount*DrawObjectList[TrackObjectNum].Stride];
+				memcpy(TMP, DrawObjectList[TrackObjectNum].VertexBuffer,
+						DrawObjectList[TrackObjectNum].VertexCount*DrawObjectList[TrackObjectNum].Stride*sizeof(float));
 
-				memcpy(TMP+SizeT*j, DrawObjectList[TrackObjectNum].VertexBuffer+j2, SizeT*sizeof(float));
+				// копируем индексный буфер блока
+				unsigned int *TMPindex;
+				TMPindex = new unsigned int[DrawObjectList[TrackObjectNum].VertexCount];
+				memcpy(TMPindex, DrawObjectList[TrackObjectNum].IndexBuffer,
+						DrawObjectList[TrackObjectNum].VertexCount*sizeof(unsigned int));
+
+
+				// теперь у нас подключен свой объект, можем с ним делать все что угодно
+				DrawObjectList[TrackObjectNum].VertexBuffer = TMP;
+				DrawObjectList[TrackObjectNum].RangeStart = 0;
+				DrawObjectList[TrackObjectNum].NeedDestroyDataInObjectBlock = true;
+				DrawObjectList[TrackObjectNum].VertexBufferVBO = 0;
+				DrawObjectList[TrackObjectNum].IndexBufferVBO = 0;
+				DrawObjectList[TrackObjectNum].IndexBuffer = TMPindex;
+				DrawObjectList[TrackObjectNum].VAO = 0;
 			}
 
-			// теперь у нас подключен свой объект, можем с ним делать все что угодно
-			DrawObjectList[TrackObjectNum].VertexBuffer = TMP;
-			DrawObjectList[TrackObjectNum].RangeStart = 0;
-			DrawObjectList[TrackObjectNum].NeedDestroyDataInObjectBlock = true;
-			DrawObjectList[TrackObjectNum].VertexBufferVBO = 0;
-			DrawObjectList[TrackObjectNum].IndexBufferVBO = 0;
-			DrawObjectList[TrackObjectNum].IndexBuffer = 0;
-			DrawObjectList[TrackObjectNum].VAO = 0;
-		}
+			// перебираем все и смещаем положение координат
+			for (int i=0; i<DrawObjectList[TrackObjectNum].VertexCount; i++)
+			{
+				DrawObjectList[TrackObjectNum].VertexBuffer[DrawObjectList[TrackObjectNum].Stride*i+6] += TrackDelta*TrackRotationDirectionl;
+			}
 
-		// перебираем все и смещаем положение координат
-		for (int i=0; i<DrawObjectList[TrackObjectNum].VertexCount; i++)
-		{
-			DrawObjectList[TrackObjectNum].VertexBuffer[DrawObjectList[TrackObjectNum].Stride*i+6] += (WheelTrackSpeed/500.0f)*TimeDelta*TrackRotationDirectionl;
+
+			// удаляем старые буферы, если они есть, создаем новые
+			// ! индексный буфер не трогаем, его не надо пересоздавать вообще
+
+			if (DrawObjectList[TrackObjectNum].VertexBufferVBO != 0)
+			{
+				vw_DeleteVBO(*DrawObjectList[TrackObjectNum].VertexBufferVBO); delete DrawObjectList[TrackObjectNum].VertexBufferVBO; DrawObjectList[TrackObjectNum].VertexBufferVBO = 0;
+			}
+			if (DrawObjectList[TrackObjectNum].VAO != 0)
+			{
+				vw_DeleteVAO(*DrawObjectList[TrackObjectNum].VAO); delete DrawObjectList[TrackObjectNum].VAO; DrawObjectList[TrackObjectNum].VAO = 0;
+			}
+
+
+			// делаем VBO
+			DrawObjectList[TrackObjectNum].VertexBufferVBO = new unsigned int;
+			if (!vw_BuildVBO(DrawObjectList[TrackObjectNum].VertexCount, DrawObjectList[TrackObjectNum].VertexBuffer, DrawObjectList[TrackObjectNum].Stride, DrawObjectList[TrackObjectNum].VertexBufferVBO))
+			{
+				delete DrawObjectList[TrackObjectNum].VertexBufferVBO; DrawObjectList[TrackObjectNum].VertexBufferVBO=0;
+			}
+
+			// делаем индекс VBO, создаем его один раз, если его нет
+			if (DrawObjectList[TrackObjectNum].IndexBufferVBO == 0)
+			{
+				DrawObjectList[TrackObjectNum].IndexBufferVBO = new unsigned int;
+				if (!vw_BuildIndexVBO(DrawObjectList[TrackObjectNum].VertexCount, DrawObjectList[TrackObjectNum].IndexBuffer, DrawObjectList[TrackObjectNum].IndexBufferVBO))
+				{
+					delete DrawObjectList[TrackObjectNum].IndexBufferVBO; DrawObjectList[TrackObjectNum].IndexBufferVBO=0;
+				}
+			}
+
+			// делаем VAO
+			DrawObjectList[TrackObjectNum].VAO = new unsigned int;
+			if (!vw_BuildVAO(DrawObjectList[TrackObjectNum].VAO, DrawObjectList[TrackObjectNum].VertexCount, DrawObjectList[TrackObjectNum].FVF_Format, DrawObjectList[TrackObjectNum].VertexBuffer,
+								DrawObjectList[TrackObjectNum].Stride*sizeof(float), DrawObjectList[TrackObjectNum].VertexBufferVBO,
+								DrawObjectList[TrackObjectNum].RangeStart, DrawObjectList[TrackObjectNum].IndexBuffer, DrawObjectList[TrackObjectNum].IndexBufferVBO))
+			{
+				delete DrawObjectList[TrackObjectNum].VAO; DrawObjectList[TrackObjectNum].VAO=0;
+			}
+
 		}
 	}
 
