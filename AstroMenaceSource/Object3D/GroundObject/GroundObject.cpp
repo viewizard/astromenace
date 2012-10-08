@@ -609,7 +609,7 @@ bool CGroundObject::Update(float Time)
 		{
 
 			// нельзя вращать общие данные, надо сделать свой объект
-			if (DrawObjectList[BarrelObject[i]].VertexBufferDestrType != 1)
+			if (!DrawObjectList[BarrelObject[i]].NeedDestroyDataInObjectBlock)
 			{
 				float *TMP;
 				int SizeT = DrawObjectList[BarrelObject[i]].Stride;
@@ -629,10 +629,11 @@ bool CGroundObject::Update(float Time)
 				// теперь у нас подключен свой объект, можем с ним делать все что угодно
 				DrawObjectList[BarrelObject[i]].VertexBuffer = TMP;
 				DrawObjectList[BarrelObject[i]].RangeStart = 0;
-				DrawObjectList[BarrelObject[i]].VertexBufferDestrType = 1;
+				DrawObjectList[BarrelObject[i]].NeedDestroyDataInObjectBlock = true;
 				DrawObjectList[BarrelObject[i]].VertexBufferVBO = 0;
 				DrawObjectList[BarrelObject[i]].IndexBufferVBO = 0;
 				DrawObjectList[BarrelObject[i]].IndexBuffer = 0;
+				DrawObjectList[BarrelObject[i]].VAO = 0;
 			}
 
 
@@ -708,7 +709,7 @@ bool CGroundObject::Update(float Time)
 	if (TrackObjectNum != -1 && WheelTrackSpeed != 0.0f)
 	{
 		// нельзя вращать общие данные, надо сделать свой объект
-		if (DrawObjectList[TrackObjectNum].VertexBufferDestrType != 1)
+		if (!DrawObjectList[TrackObjectNum].NeedDestroyDataInObjectBlock)
 		{
 			float *TMP;
 			int SizeT = DrawObjectList[TrackObjectNum].Stride;
@@ -728,10 +729,11 @@ bool CGroundObject::Update(float Time)
 			// теперь у нас подключен свой объект, можем с ним делать все что угодно
 			DrawObjectList[TrackObjectNum].VertexBuffer = TMP;
 			DrawObjectList[TrackObjectNum].RangeStart = 0;
-			DrawObjectList[TrackObjectNum].VertexBufferDestrType = 1;
+			DrawObjectList[TrackObjectNum].NeedDestroyDataInObjectBlock = true;
 			DrawObjectList[TrackObjectNum].VertexBufferVBO = 0;
 			DrawObjectList[TrackObjectNum].IndexBufferVBO = 0;
 			DrawObjectList[TrackObjectNum].IndexBuffer = 0;
+			DrawObjectList[TrackObjectNum].VAO = 0;
 		}
 
 		// перебираем все и смещаем положение координат

@@ -116,7 +116,11 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 				// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
 				memcpy(&(ShipPart->DrawObjectList[0]), &(Object->DrawObjectList[i]), sizeof(eObjectBlock));
 				// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
-				Object->DrawObjectList[i].VertexBufferDestrType = 0;
+				if (Object->DrawObjectList[i].NeedDestroyDataInObjectBlock)
+				{
+					Object->DrawObjectList[i].NeedDestroyDataInObjectBlock = false;
+					ShipPart->DrawObjectList[0].NeedDestroyDataInObjectBlock = true;
+				}
 
 				// резервируем память для HitBB
 				ShipPart->HitBBLocation = new VECTOR3D[ShipPart->DrawObjectQuantity];

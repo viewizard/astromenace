@@ -85,12 +85,14 @@ void eModel3D::ReadVW3D(const char *nName)
 		DrawObjectList[i].DrawType = 0;
 
 		// вертексный буфер
-		DrawObjectList[i].VertexBufferDestrType = 0;
+		DrawObjectList[i].NeedDestroyDataInObjectBlock = false;
 		DrawObjectList[i].VertexBuffer = 0;
 		DrawObjectList[i].VertexBufferVBO = 0;
 		// индексный буфер
 		DrawObjectList[i].IndexBuffer = 0;
 		DrawObjectList[i].IndexBufferVBO = 0;
+		// vao
+		DrawObjectList[i].VAO = 0;
 	}
 
 	// получаем сколько всего вертексов
@@ -132,24 +134,46 @@ void eModel3D::ReadVW3D(const char *nName)
 	// устанавливаем правильные указатели на массивы
 	for (int i=0; i<DrawObjectCount; i++)
 	{
-		DrawObjectList[i].VertexBuffer = GlobalVertexBuffer;
-		DrawObjectList[i].VertexBufferVBO = GlobalVertexBufferVBO;
-		DrawObjectList[i].IndexBuffer = GlobalIndexBuffer;
-		DrawObjectList[i].IndexBufferVBO = GlobalIndexBufferVBO;
-		DrawObjectList[i].VAO = 0;
+		// создаем вертексный буфер блока
+		DrawObjectList[i].VertexBuffer = new float[DrawObjectList[i].Stride*DrawObjectList[i].VertexCount];
 
-		// не ставим генерацию vao тут! т.к. иначе не сможем работать с изменением геометрии и текстурных координат "на лету" - гусеницы, колеса, пушки и т.п.
-		// если надо будет - найти изменения геометрии и делать VAO уже после изменений, с правильным vbo
-		// + надо генерировать отдельные vbo для каждой части, с RangeStart не работает
-/*		DrawObjectList[i].VAO = new unsigned int;
+		for (int j=0; j<DrawObjectList[i].VertexCount; j++)
+		{
+			memcpy(DrawObjectList[i].VertexBuffer+DrawObjectList[i].Stride*j,
+					GlobalVertexBuffer+GlobalIndexBuffer[DrawObjectList[i].RangeStart+j]*DrawObjectList[i].Stride,
+					DrawObjectList[i].Stride*sizeof(float));
+		}
+
+		// создаем индексный буфер блока
+		DrawObjectList[i].IndexBuffer = new unsigned int[DrawObjectList[i].VertexCount];
+		for (int j=0; j<DrawObjectList[i].VertexCount; j++) DrawObjectList[i].IndexBuffer[j] = j;
+
+		// т.к. у нас отдельные буферы, то начало идет с нуля теперь
+		DrawObjectList[i].RangeStart = 0;
+
+
+		// делаем VBO
+		DrawObjectList[i].VertexBufferVBO = new unsigned int;
+		if (!vw_BuildVBO(DrawObjectList[i].VertexCount, DrawObjectList[i].VertexBuffer, DrawObjectList[i].Stride, DrawObjectList[i].VertexBufferVBO))
+		{
+			delete DrawObjectList[i].VertexBufferVBO; DrawObjectList[i].VertexBufferVBO=0;
+		}
+
+		// делаем индекс VBO
+		DrawObjectList[i].IndexBufferVBO = new unsigned int;
+		if (!vw_BuildIndexVBO(DrawObjectList[i].VertexCount, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IndexBufferVBO))
+		{
+			delete DrawObjectList[i].IndexBufferVBO; DrawObjectList[i].IndexBufferVBO=0;
+		}
+
+		// делаем VAO
+		DrawObjectList[i].VAO = new unsigned int;
 		if (!vw_BuildVAO(DrawObjectList[i].VAO, DrawObjectList[i].VertexCount, DrawObjectList[i].FVF_Format, DrawObjectList[i].VertexBuffer,
 							DrawObjectList[i].Stride*sizeof(float), DrawObjectList[i].VertexBufferVBO,
 							DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IndexBufferVBO))
 		{
 			delete DrawObjectList[i].VAO; DrawObjectList[i].VAO=0;
-		}*/
-
-
+		}
 
 	}
 

@@ -85,9 +85,6 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 	bool NeedVBO = OpenGL_DevCaps.VBOSupported;
 	if (VBO == 0) NeedVBO = false;
 
-	// еще одна проверка, есть ли что рисовать
-	if (Data == 0 && !NeedVBO) return 0;
-
 
 	// обязательно в байты, т.к. делаем смещение в байтах!
 	BYTE *TMP = (BYTE *)Data;
@@ -341,12 +338,10 @@ void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int *VBO,
 void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO, unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO, unsigned int *VAO)
 {
 	// если ничего не передали
-	if (Data == 0 && VBO == 0) return;
+	if (Data == 0 && VBO == 0 && VAO == 0) return;
 	// флаг нужно ли с вбо делать
 	bool NeedVBO = OpenGL_DevCaps.VBOSupported;
 	if (VBO == 0) NeedVBO = false;
-	// еще одна проверка, есть ли что рисовать
-	if (Data == 0 && !NeedVBO) return;
 	// флаг нужно ли с вaо делать
 	bool NeedVAO = OpenGL_DevCaps.VAOSupported;
 	if (VAO == 0) NeedVAO = false;

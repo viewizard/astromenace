@@ -64,15 +64,14 @@ struct eObjectBlock
 	// поворот модели в локальной системе координат
 	VECTOR3D Rotation;
 
+
+	bool			NeedDestroyDataInObjectBlock; // если данные были не общие, а созданные для этого ObjectBlock, нужно их удалить в деструкторе
 	// вертексный буфер
-	int VertexBufferDestrType; // тип уничтожения, если 0 - не уничтожать в конечном объекте, если 1 - уничтожать
-	float *VertexBuffer;	// указатель на структуру данных
-	unsigned int *VertexBufferVBO; // указатель на номер VBO массива
-
+	float 			*VertexBuffer;	// указатель на структуру данных
+	unsigned int 	*VertexBufferVBO; // указатель на номер VBO массива
 	// индексный буфер
-	unsigned int *IndexBuffer;	// указатель на структуру данных
-	unsigned int *IndexBufferVBO; // указатель на номер VBO массива
-
+	unsigned int 	*IndexBuffer;	// указатель на структуру данных
+	unsigned int 	*IndexBufferVBO; // указатель на номер VBO массива
 	// VAO
 	unsigned int *VAO;
 };

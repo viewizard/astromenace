@@ -35,13 +35,17 @@
 #define CONFIG_H
 
 #define GAME_VERSION	 	1.3
-#define GAME_BUILD			121007
+#define GAME_BUILD			121008
 
 
-// VBO OpenGL extention support switcher (if defined - game will detect and use vbo) Game could crash
+// VBO OpenGL extention support switcher (if defined - game will detect and use VBO) Game could crash
 // in FreeBSD under VirtualBox if vbo are used. Added just in case, if hardware capabilities detection fail.
 // Looks like only virtualized systems could have this issue.
 #define vbo
+
+// VAO OpenGL extention support switcher (if defined - game will detect and use VAO), VAO will not work without VBO
+// Intel video cards might have a problem with VAO (index buffer issue in intel video drivers)
+#define vao
 
 // xinerama support, required libXinerama
 #define xinerama

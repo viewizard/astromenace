@@ -47,7 +47,7 @@ eObjectBlock::eObjectBlock(void)
 	RangeStart = 0;
 	Location = Rotation = VECTOR3D(0.0f,0.0f,0.0f);
 
-	VertexBufferDestrType = 0;
+	NeedDestroyDataInObjectBlock = false;
 	VertexBuffer = 0;
 	VertexBufferVBO = 0;
 	IndexBuffer = 0;
@@ -60,7 +60,7 @@ eObjectBlock::eObjectBlock(void)
 eObjectBlock::~eObjectBlock(void)
 {
 	// если нужно, удаляем с блоком
-	if (VertexBufferDestrType == 1)
+	if (NeedDestroyDataInObjectBlock)
 	{
 		if (VertexBuffer != 0)
 		{
@@ -69,6 +69,18 @@ eObjectBlock::~eObjectBlock(void)
 		if (VertexBufferVBO != 0)
 		{
 			vw_DeleteVBO(*VertexBufferVBO); delete VertexBufferVBO; VertexBufferVBO = 0;
+		}
+		if (IndexBuffer != 0)
+		{
+			delete [] IndexBuffer; IndexBuffer = 0;
+		}
+		if (VertexBufferVBO != 0)
+		{
+			vw_DeleteVBO(*IndexBufferVBO); delete IndexBufferVBO; IndexBufferVBO = 0;
+		}
+		if (VAO != 0)
+		{
+			vw_DeleteVAO(*VAO); delete VAO; VAO = 0;
 		}
 	}
 }
@@ -107,12 +119,33 @@ eModel3D::~eModel3D(void)
 
 	if (DrawObjectList != 0)
 	{
-		// в отличии от остального, VAO может быть собственный у части объекта... его надо удалить отдельно
 		for (int i=0; i<DrawObjectCount; i++)
-		if (DrawObjectList[i].VAO != 0)
 		{
-			vw_DeleteVAO(*DrawObjectList[i].VAO);
-			delete DrawObjectList[i].VAO; DrawObjectList[i].VAO = 0;
+			if (DrawObjectList[i].VertexBuffer != 0)
+			{
+				delete [] DrawObjectList[i].VertexBuffer;
+				DrawObjectList[i].VertexBuffer = 0;
+			}
+			if (DrawObjectList[i].IndexBuffer != 0)
+			{
+				delete [] DrawObjectList[i].IndexBuffer;
+				DrawObjectList[i].IndexBuffer = 0;
+			}
+			if (DrawObjectList[i].VertexBufferVBO != 0)
+			{
+				vw_DeleteVBO(*DrawObjectList[i].VertexBufferVBO);
+				delete DrawObjectList[i].VertexBufferVBO; DrawObjectList[i].VertexBufferVBO = 0;
+			}
+			if (DrawObjectList[i].IndexBufferVBO != 0)
+			{
+				vw_DeleteVBO(*DrawObjectList[i].IndexBufferVBO);
+				delete DrawObjectList[i].IndexBufferVBO; DrawObjectList[i].IndexBufferVBO = 0;
+			}
+			if (DrawObjectList[i].VAO != 0)
+			{
+				vw_DeleteVAO(*DrawObjectList[i].VAO);
+				delete DrawObjectList[i].VAO; DrawObjectList[i].VAO = 0;
+			}
 		}
 		delete [] DrawObjectList; DrawObjectList = 0;
 	}

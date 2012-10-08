@@ -463,7 +463,11 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
 			memcpy(&(ShipPart->DrawObjectList[0]), &(Object->DrawObjectList[i]), sizeof(eObjectBlock));
 			// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
-			Object->DrawObjectList[i].VertexBufferDestrType = 0;
+			if (Object->DrawObjectList[i].NeedDestroyDataInObjectBlock)
+			{
+				Object->DrawObjectList[i].NeedDestroyDataInObjectBlock = false;
+				ShipPart->DrawObjectList[0].NeedDestroyDataInObjectBlock = true;
+			}
 
 			// резервируем память для HitBB
 			ShipPart->HitBBLocation = new VECTOR3D[ShipPart->DrawObjectQuantity];
@@ -578,7 +582,8 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			DrawObjectList[i].VertexBuffer = 0;
 			DrawObjectList[i].IndexBufferVBO = 0;
 			DrawObjectList[i].IndexBuffer = 0;
-			DrawObjectList[i].VertexBufferDestrType = 1; // удалять в объекте
+			DrawObjectList[i].VAO = 0;
+			DrawObjectList[i].NeedDestroyDataInObjectBlock = true; // удалять в объекте
 			DrawObjectList[i].RangeStart = 0;
 
 			// делаем поворот геометрии объекта чтобы правильно сделать разлет частиц
@@ -719,7 +724,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 				if (Acc < (-1.0f*MeshAcc)) Acc = (-1.0f*MeshAcc)-vw_Randf0;
 
 
-				// записываем центр треугольника, оно же базовое ускорение + цент UV
+				// записываем центр треугольника, оно же базовое ускорение + цент UV, для передачи шейдеру
 				if (Setup.UseGLSL)
 				{
 					// Velocity/центр треугольника
@@ -766,17 +771,6 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 				if (tmpSpeed > AABBSpeed) AABBSpeed = tmpSpeed;
 
 				Count++;
-			}
-
-
-			// если нужно, создаем vbo
-			if (Setup.UseGLSL)
-			{
-				DrawObjectList[j].VertexBufferVBO = new unsigned int;
-				if (!vw_BuildVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].Stride, DrawObjectList[j].VertexBufferVBO))
-				{
-					delete DrawObjectList[j].VertexBufferVBO; DrawObjectList[j].VertexBufferVBO=0;
-				}
 			}
 
 		}
