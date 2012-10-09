@@ -83,9 +83,6 @@ float LastButton13UpdateTime = 0.0f;
 float Button14Transp = 1.0f;
 float LastButton14UpdateTime = 0.0f;
 
-extern eLight * StartLight;
-extern eLight * EndLight;
-
 
 // для прорисовки подложки с тайловой анимацией
 extern float StarsTile;
@@ -935,28 +932,7 @@ void DrawMenu()
 		case PROFILE:		ProfileMenu(); break;
 		case DIFFICULTY:	DifficultyMenu(); break;
 		case MISSION:		MissionMenu(); break;
-		case WORKSHOP:
-			{
-				// включаем другие источники света
-				eLight *tmp = StartLight;
-				while (tmp!=0)
-				{
-					eLight *tmp2 = tmp->Next;
-					if (tmp->LightType == 0) tmp->On = !tmp->On;
-					tmp = tmp2;
-				}
-
-				WorkshopMenu();
-
-				tmp = StartLight;
-				while (tmp!=0)
-				{
-					eLight *tmp2 = tmp->Next;
-					if (tmp->LightType == 0) tmp->On = !tmp->On;
-					tmp = tmp2;
-				}
-			}
-			break;
+		case WORKSHOP:		WorkshopMenu(); break;
 
 		default:
 			break;
@@ -998,28 +974,7 @@ void DrawMenu()
 		case OPTIONS:		break;
 		case CREDITS:		break;
 
-		case INFORMATION:
-			{
-				// включаем другие источники света
-				eLight *tmp = StartLight;
-				while (tmp!=0)
-				{
-					eLight *tmp2 = tmp->Next;
-					if (tmp->LightType == 0) tmp->On = !tmp->On;
-					tmp = tmp2;
-				}
-
-				InformationDrawObject();
-
-				tmp = StartLight;
-				while (tmp!=0)
-				{
-					eLight *tmp2 = tmp->Next;
-					if (tmp->LightType == 0) tmp->On = !tmp->On;
-					tmp = tmp2;
-				}
-			}
-			break;
+		case INFORMATION:	InformationDrawObject(); break;
 
 		default:
 			break;

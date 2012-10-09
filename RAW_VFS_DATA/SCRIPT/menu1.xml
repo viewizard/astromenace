@@ -19,8 +19,7 @@
 	<!-- Установка источников света -->
 	<Light dirx="0.5" diry="0" dirz="1" diffr="1" diffg="1" diffb="1" specr="1" specg="1" specb="1" ambir="1" ambig="1" ambib="1"/>
 	<Light dirx="1" diry="0" dirz="0.5" diffr="0.1" diffg="0.1" diffb="0.8" specr="0.1" specg="0.1" specb="0.1"/>
-	<Light dirx="0.5" diry="0" dirz="1" diffr="0.7" diffg="0.7" diffb="0.7" specr="0.7" specg="0.7" specb="0.7" ambir="0.7" ambig="0.7" ambib="0.7" status="0"/>
-	<Light dirx="1" diry="-0.8" dirz="0" diffr="0.7" diffg="0.7" diffb="0.7" specr="0.7" specg="0.7" specb="0.7" status="0"/>
+
 	
 	<!-- Метка в скрипте -->
 	<Label name="Label1"/>

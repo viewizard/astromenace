@@ -169,7 +169,7 @@ int vw_CheckAndActivateAllLights(int *Type1, int *Type2, VECTOR3D Location, floa
 
 	eDevCaps *CAPS = vw_GetDevCaps();
 
-	// всегда первыми ставим источники типа солнца
+	// всегда первыми ставим источники типа солнца (направленный свет)
 	eLight *tmp = StartLight;
 	while (tmp!=0)
 	{
@@ -181,7 +181,7 @@ int vw_CheckAndActivateAllLights(int *Type1, int *Type2, VECTOR3D Location, floa
 				CurrentLight++;
 				*Type1+=1;
 				if (CurrentLight >= CAPS->MaxActiveLights) goto onlight;
-				if (*Type1 > DirLimit) goto onlight;
+				if (*Type1 > DirLimit) break;
 			}
 		}
 
@@ -190,6 +190,7 @@ int vw_CheckAndActivateAllLights(int *Type1, int *Type2, VECTOR3D Location, floa
 
 		tmp = tmp2;
 	}
+
 
 
 	// остальные источники

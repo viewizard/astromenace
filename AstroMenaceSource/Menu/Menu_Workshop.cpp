@@ -139,7 +139,7 @@ void WorkshopCreateShip(int Num)
 	if (Num == 2)
 		WorkshopFighterGame->SetRotation(VECTOR3D(0.0f,-170.0f,0.0f));
 	if (Num == 3)
-		WorkshopFighterGame->SetRotation(VECTOR3D(0.0f,0.0f,0.0f));
+		WorkshopFighterGame->SetRotation(VECTOR3D(45.0f,0.0f,0.0f));
 }
 
 
@@ -452,8 +452,6 @@ void WorkshopMenu()
 
 
 
-extern eLight *MenuLight3;
-extern eLight *MenuLight4;
 
 //------------------------------------------------------------------------------------
 // Прорисовка 3д части
@@ -511,13 +509,13 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 
 	if (Mode == 4)
 	{
-		WorkShopPointCamera = VECTOR3D(0.0f, 40.0f, -4.6f);
-		SpaceFighter->SetRotation(VECTOR3D(0.0f, 0.0f, CurentDeviation*2.0f));
+		WorkShopPointCamera = VECTOR3D(0.0f, -4.0f, -44.6f);
+		SpaceFighter->SetRotation(VECTOR3D(0.0f, 0.0f, CurentDeviation/2.0f));
 		vw_SetViewport((int)((Setup.iAspectRatioWidth/2)/(AW/AWw)), 0, (int)(512/(AW/AWw)), (int)(768/(AH/AHw)), 0.0f, 0.3f, RI_UL_CORNER);
 		vw_ResizeScene(45.0f, 512.0f/768.0f, 1.0f, 10000.0f);
 		vw_LoadIdentity();
 		vw_SetCameraLocation(VECTOR3D(1000+WorkShopPointCamera.x,-1000+WorkShopPointCamera.y,WorkShopPointCamera.z));
-		vw_SetCameraMoveAroundPoint(VECTOR3D(1000,-1000, -2.6f), 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
+		vw_SetCameraMoveAroundPoint(VECTOR3D(1000,-1004, 0.0f), 0.0f, VECTOR3D(-45.0f, 10.0f, 0.0f));
 		vw_CameraLookAt();
 
 
