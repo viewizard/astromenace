@@ -579,9 +579,9 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 	eTexture* CurrentTexture = 0;
 	int k=0;
 	// буфер для последовательности RI_QUADS
-	// войдет RI_2f_XYZ | RI_2f_TEX
+	// войдет RI_3f_XYZ | RI_2f_TEX
 	float *tmp = 0;
-	tmp = new float[(2+2)*4*strlen(textdraw)]; if (tmp == 0) return;
+	tmp = new float[(3+2)*4*strlen(textdraw)]; if (tmp == 0) return;
 
 
 
@@ -622,7 +622,7 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 				// не можем ставить другое! если нет мипмапа
 				vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
 				// отрисовываем все что есть в буфере
-				vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(float));
+				vw_SendVertices(RI_QUADS, 4*(k/20), RI_3f_XYZ | RI_1_TEX, tmp, 5*sizeof(float));
 			}
 
 
@@ -657,21 +657,25 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 
 			tmp[k++] = DrawX;
 			tmp[k++] = DrawY +tmpPosY + DrawChar->Height;
+			tmp[k++] = 0.0f;
 			tmp[k++] = Xst;
 			tmp[k++] = 1.0f-Yst;
 
 			tmp[k++] = DrawX;
 			tmp[k++] = DrawY +tmpPosY;
+			tmp[k++] = 0.0f;
 			tmp[k++] = Xst;
 			tmp[k++] = 1.0f-FrameHeight;
 
 			tmp[k++] = DrawX + DrawChar->Width;
 			tmp[k++] = DrawY +tmpPosY;
+			tmp[k++] = 0.0f;
 			tmp[k++] = FrameWidth;
 			tmp[k++] = 1.0f-FrameHeight;
 
 			tmp[k++] = DrawX + DrawChar->Width;
 			tmp[k++] = DrawY +tmpPosY + DrawChar->Height;
+			tmp[k++] = 0.0f;
 			tmp[k++] = FrameWidth;
 			tmp[k++] = 1.0f-Yst;
 
@@ -695,7 +699,7 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 		// не можем ставить другое! если нет мипмапа
 		vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
 		// отрисовываем все что есть в буфере
-		vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(float));
+		vw_SendVertices(RI_QUADS, 4*(k/20), RI_3f_XYZ | RI_1_TEX, tmp, 5*sizeof(float));
 	}
 
 
