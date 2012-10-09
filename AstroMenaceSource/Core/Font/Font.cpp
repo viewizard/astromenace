@@ -555,35 +555,24 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 	const char *textdraw = text;
 
 
-	float Xstart = X;
+	float Xstart = 0.0f;
 	// делаем пробел в 2/3 от размера фонта
 	float SpaceWidth = InternalFontSize * 2 / 3;
 
 	textdraw = text;
 
-	// установка свойств текстуры
-	vw_SetTexAlpha(false, 0.01f);
-	vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
-
-	// учитываем аспект рейшен
-	float AW;
-	float AH;
-	bool ASpresent=false;
-	ASpresent = vw_GetAspectWH(&AW, &AH);
-	// получаем данные текущего вьюпорта
-	int W, H;
-	vw_GetViewport(0, 0, &W, &H);
-	float AHw = H*1.0f;
 
 	// для отрисовки
 	eTexture* CurrentTexture = 0;
 	int k=0;
 	// буфер для последовательности RI_QUADS
-	// войдет RI_3f_XYZ | RI_2f_TEX
+	// войдет RI_2f_XY | RI_2f_TEX
 	float *tmp = 0;
-	tmp = new float[(3+2)*4*strlen(textdraw)]; if (tmp == 0) return;
+	tmp = new float[(2+2)*4*strlen(textdraw)]; if (tmp == 0) return;
 
-
+	// установка свойств текстуры
+	vw_SetTexAlpha(false, 0.01f);
+	vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
 	vw_PushMatrix();
 
@@ -622,7 +611,7 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 				// не можем ставить другое! если нет мипмапа
 				vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
 				// отрисовываем все что есть в буфере
-				vw_SendVertices(RI_QUADS, 4*(k/20), RI_3f_XYZ | RI_1_TEX, tmp, 5*sizeof(float));
+				vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(float));
 			}
 
 
@@ -637,14 +626,8 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 		if (UTF32 != 0x020)
 		{
 			float DrawX = Xstart + DrawChar->Left;
-			float DrawY = Y + 2 + (InternalFontSize - DrawChar->Top);
+			float DrawY = InternalFontSize - DrawChar->Top;
 
-			// Вычисление поправки по У в зависимости от DrawCorner
-			// - расположения угла начала координат
-			float tmpPosY = 0;
-			// изменяем только в случае RI_UL_CORNER
-			if (ASpresent) tmpPosY = (AH - DrawY - DrawY - DrawChar->Height);
-			else tmpPosY = (AHw - DrawY - DrawY - DrawChar->Height);
 
 			float ImageHeight = DrawChar->CharTexture->Height*1.0f;
 			float ImageWidth = DrawChar->CharTexture->Width*1.0f;
@@ -655,27 +638,23 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 			float Yst = (DrawChar->TexturePositionTop*1.0f)/ImageHeight;
 			float Xst = (DrawChar->TexturePositionLeft*1.0f)/ImageWidth;
 
-			tmp[k++] = DrawX;
-			tmp[k++] = DrawY +tmpPosY + DrawChar->Height;
-			tmp[k++] = 0.0f;
+			tmp[k++] = DrawX/10.0f;
+			tmp[k++] = (DrawY + DrawChar->Height)/10.0f;
 			tmp[k++] = Xst;
 			tmp[k++] = 1.0f-Yst;
 
-			tmp[k++] = DrawX;
-			tmp[k++] = DrawY +tmpPosY;
-			tmp[k++] = 0.0f;
+			tmp[k++] = DrawX/10.0f;
+			tmp[k++] = DrawY/10.0f;
 			tmp[k++] = Xst;
 			tmp[k++] = 1.0f-FrameHeight;
 
-			tmp[k++] = DrawX + DrawChar->Width;
-			tmp[k++] = DrawY +tmpPosY;
-			tmp[k++] = 0.0f;
+			tmp[k++] = (DrawX + DrawChar->Width)/10.0f;
+			tmp[k++] = DrawY/10.0f;
 			tmp[k++] = FrameWidth;
 			tmp[k++] = 1.0f-FrameHeight;
 
-			tmp[k++] = DrawX + DrawChar->Width;
-			tmp[k++] = DrawY +tmpPosY + DrawChar->Height;
-			tmp[k++] = 0.0f;
+			tmp[k++] = (DrawX + DrawChar->Width)/10.0f;
+			tmp[k++] = (DrawY + DrawChar->Height)/10.0f;
 			tmp[k++] = FrameWidth;
 			tmp[k++] = 1.0f-Yst;
 
@@ -699,7 +678,7 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 		// не можем ставить другое! если нет мипмапа
 		vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
 		// отрисовываем все что есть в буфере
-		vw_SendVertices(RI_QUADS, 4*(k/20), RI_3f_XYZ | RI_1_TEX, tmp, 5*sizeof(float));
+		vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(float));
 	}
 
 
@@ -707,10 +686,9 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 
 
 
-	if (tmp != 0){delete [] tmp; tmp = 0;}
+	if (tmp != 0){delete [] tmp; tmp = 0;};
 	vw_SetTexAlpha(false, 0.5f);
 	vw_SetTextureDef(0);
 
 }
-
 
