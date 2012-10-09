@@ -443,7 +443,7 @@ bool vw_Uniform1fv(eGLSL *GLSL, const char *name, int count, float *data);
 bool vw_Uniform1f(eGLSL *GLSL, const char *name, float data);
 bool vw_Uniform3f(eGLSL *GLSL, const char *name, float data1, float data2, float data3);
 bool vw_Uniform4fv(eGLSL *GLSL, const char *name, int count, float *data);
-bool vw_UniformMatrix3fv(eGLSL *GLSL, const char *name, bool transpose, int count, float *data);
+bool vw_UniformMatrix4fv(eGLSL *GLSL, const char *name, bool transpose, int count, float *data);
 
 
 

@@ -1,6 +1,7 @@
 #version 110
 
 //  directional & point light per pixel + multitexture
+//  + tank tracks tile amination
 
 // глобальные данные тайловой анимации траков
 uniform float TrackSpeed;

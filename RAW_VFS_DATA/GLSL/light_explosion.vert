@@ -1,12 +1,13 @@
 #version 110
 
 //  directional & point light per pixel + multitexture
+//  + explosion geometry modification
 
 // глобальные данные взрыва
 uniform float SpeedData1;
 uniform float SpeedData2;
 
-// передаем вертекс в фрагметный (уже нормализованную)
+// передаем нормаль в фрагметный (уже нормализованную)
 varying vec3 Normal;
 // передаем вертекс в фрагметный
 varying vec3 Vertex;

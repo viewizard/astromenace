@@ -58,9 +58,9 @@ int Audio_PlaySound3D(int SoundID, float fVol, VECTOR3D Location, bool Loop, int
 
 
 
-extern eGLSL 	*GLSLShaderType1[2][7];
-extern eGLSL 	*GLSLShaderType2[2][7];
-extern eGLSL 	*GLSLShaderType3[2][7];
+extern eGLSL 	*GLSLShaderType1;
+extern eGLSL 	*GLSLShaderType2;
+extern eGLSL 	*GLSLShaderType3;
 
 
 

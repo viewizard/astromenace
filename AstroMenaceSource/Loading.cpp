@@ -105,53 +105,14 @@ struct sGLSLLoadList
 	char VertexShaderFileName[MAX_PATH];
 	char FragmentShaderFileName[MAX_PATH];
 };
-const int GLSLLoadListCount = 44;
+const int GLSLLoadListCount = 5;
 sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 {
 {"ParticleSystem", "DATA/GLSL/particle.vert", "DATA/GLSL/particle.frag"},
 {"SpaceStars", "DATA/GLSL/particle_stars.vert", "DATA/GLSL/particle.frag"},
-{"ObjectLight10", "DATA/GLSL/light.vert", "DATA/GLSL/light10.frag"},
-{"ObjectLight11", "DATA/GLSL/light.vert", "DATA/GLSL/light11.frag"},
-{"ObjectLight12", "DATA/GLSL/light.vert", "DATA/GLSL/light12.frag"},
-{"ObjectLight13", "DATA/GLSL/light.vert", "DATA/GLSL/light13.frag"},
-{"ObjectLight14", "DATA/GLSL/light.vert", "DATA/GLSL/light14.frag"},
-{"ObjectLight15", "DATA/GLSL/light.vert", "DATA/GLSL/light15.frag"},
-{"ObjectLight16", "DATA/GLSL/light.vert", "DATA/GLSL/light16.frag"},
-{"ObjectLight20", "DATA/GLSL/light.vert", "DATA/GLSL/light20.frag"},
-{"ObjectLight21", "DATA/GLSL/light.vert", "DATA/GLSL/light21.frag"},
-{"ObjectLight22", "DATA/GLSL/light.vert", "DATA/GLSL/light22.frag"},
-{"ObjectLight23", "DATA/GLSL/light.vert", "DATA/GLSL/light23.frag"},
-{"ObjectLight24", "DATA/GLSL/light.vert", "DATA/GLSL/light24.frag"},
-{"ObjectLight25", "DATA/GLSL/light.vert", "DATA/GLSL/light25.frag"},
-{"ObjectLight26", "DATA/GLSL/light.vert", "DATA/GLSL/light26.frag"},
-{"Explosion10", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light10.frag"},
-{"Explosion11", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light11.frag"},
-{"Explosion12", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light12.frag"},
-{"Explosion13", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light13.frag"},
-{"Explosion14", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light14.frag"},
-{"Explosion15", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light15.frag"},
-{"Explosion16", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light16.frag"},
-{"Explosion20", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light20.frag"},
-{"Explosion21", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light21.frag"},
-{"Explosion22", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light22.frag"},
-{"Explosion23", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light23.frag"},
-{"Explosion24", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light24.frag"},
-{"Explosion25", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light25.frag"},
-{"Explosion26", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light26.frag"},
-{"Track10", "DATA/GLSL/light_track.vert", "DATA/GLSL/light10.frag"},
-{"Track11", "DATA/GLSL/light_track.vert", "DATA/GLSL/light11.frag"},
-{"Track12", "DATA/GLSL/light_track.vert", "DATA/GLSL/light12.frag"},
-{"Track13", "DATA/GLSL/light_track.vert", "DATA/GLSL/light13.frag"},
-{"Track14", "DATA/GLSL/light_track.vert", "DATA/GLSL/light14.frag"},
-{"Track15", "DATA/GLSL/light_track.vert", "DATA/GLSL/light15.frag"},
-{"Track16", "DATA/GLSL/light_track.vert", "DATA/GLSL/light16.frag"},
-{"Track20", "DATA/GLSL/light_track.vert", "DATA/GLSL/light20.frag"},
-{"Track21", "DATA/GLSL/light_track.vert", "DATA/GLSL/light21.frag"},
-{"Track22", "DATA/GLSL/light_track.vert", "DATA/GLSL/light22.frag"},
-{"Track23", "DATA/GLSL/light_track.vert", "DATA/GLSL/light23.frag"},
-{"Track24", "DATA/GLSL/light_track.vert", "DATA/GLSL/light24.frag"},
-{"Track25", "DATA/GLSL/light_track.vert", "DATA/GLSL/light25.frag"},
-{"Track26", "DATA/GLSL/light_track.vert", "DATA/GLSL/light26.frag"},
+{"PerPixelLight", "DATA/GLSL/light.vert", "DATA/GLSL/light.frag"},
+{"PerPixelLight_Explosion", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light.frag"},
+{"PerPixelLight_Track", "DATA/GLSL/light_track.vert", "DATA/GLSL/light.frag"},
 };
 
 
@@ -1437,7 +1398,7 @@ void LoadGameData(int LoadType)
 		// там нет ни одного
 		if (vw_FindShaderByNum(1) == 0)
 		{
-			AllDrawLoading += GLSLLoadListCount*1000;
+			AllDrawLoading += GLSLLoadListCount*100;
 			NeedLoadShaders = true;
 		}
 	}

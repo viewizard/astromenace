@@ -36,7 +36,7 @@
 // для генерации используем (или как удобно)
 // find ./ -type f | grep -v ".svn" > list.txt
 
-const int	ConvertListCount = 592;
+const int	ConvertListCount = 579;
 const char *ConvertList[ConvertListCount] =
 {"DATA_RU/VOICE/EngineMalfunction.wav",
 "DATA_RU/VOICE/WeaponDamaged.wav",
@@ -88,25 +88,12 @@ const char *ConvertList[ConvertListCount] =
 "DATA_RU/LOADING/loading_back.tga",
 "DATA_RU/SCRIPT/text.xml",
 "GLSL/light.vert",
+"GLSL/light.frag",
 "GLSL/light_track.vert",
-"GLSL/light12.frag",
-"GLSL/light20.frag",
-"GLSL/light21.frag",
-"GLSL/light14.frag",
-"GLSL/light16.frag",
 "GLSL/particle.frag",
-"GLSL/light11.frag",
-"GLSL/light10.frag",
-"GLSL/light23.frag",
 "GLSL/particle_stars.vert",
-"GLSL/light24.frag",
 "GLSL/light_explosion.vert",
 "GLSL/particle.vert",
-"GLSL/light15.frag",
-"GLSL/light22.frag",
-"GLSL/light13.frag",
-"GLSL/light25.frag",
-"GLSL/light26.frag",
 "CREDITS/gentoo.tga",
 "CREDITS/sdl.tga",
 "CREDITS/opengl.tga",
