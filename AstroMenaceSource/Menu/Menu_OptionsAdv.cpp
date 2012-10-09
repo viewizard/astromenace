@@ -54,14 +54,6 @@ const char *ButtonTile[4] =
 "3_3_Layers"};
 
 
-const char *ButtonCompression[2] =
-{"1_Off",
-"1_On"};
-
-
-const char *ButtonGLSL[2] =
-{"1_Off",
-"1_On"};
 
 
 const char *ButtonPointLights[7] =
@@ -319,12 +311,14 @@ void OptionsAdvMenu()
 	// вкл-выкл компрессии текстур
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Textures_Compression"));
-	if (DrawButton128_2(X1+458, Y1-6, GetText(ButtonCompression[Options_TexturesCompression]), MenuContentTransp, !CAPS->TexturesCompression))
+	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, !CAPS->TexturesCompression) | DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, !CAPS->TexturesCompression))
 	{
 		Options_TexturesCompression++;
 		if (Options_TexturesCompression > 1) Options_TexturesCompression = 0;
 	}
-
+	Size = vw_FontSize(Options_TexturesCompression ? GetText("1_On") : GetText("1_Off"));
+	SizeI = (170-Size)/2;
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Options_TexturesCompression ? GetText("1_On") : GetText("1_Off"));
 
 
 
@@ -332,13 +326,13 @@ void OptionsAdvMenu()
 	// вкл-выкл шейдеров, если они поддерживаются
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.0f,0.0f, MenuContentTransp, GetText("3_OpenGL_Shading_Language"));
-	int tmp = 0;
-	if (Options_UseGLSL) tmp = 1;
-	if (DrawButton128_2(X1+458, Y1-6, GetText(ButtonGLSL[tmp]), MenuContentTransp, !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0))
+	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0) | DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0))
 	{
 		Options_UseGLSL = !Options_UseGLSL;
 	}
-
+	Size = vw_FontSize(Options_UseGLSL ? GetText("1_On") : GetText("1_Off"));
+	SizeI = (170-Size)/2;
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Options_UseGLSL ? GetText("1_On") : GetText("1_Off"));
 
 
 

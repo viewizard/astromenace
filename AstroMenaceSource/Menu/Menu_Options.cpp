@@ -42,11 +42,6 @@ int Options_TexturesQuality;
 int Options_iAspectRatioWidth;
 
 
-const char *ButtonFullScreen[2] =
-{"1_On",
-"1_Off"};
-
-
 const char *ButtonScreenModeTitle[2] =
 {"3_Screen_Mode",
 "3_Window_Size"};
@@ -219,7 +214,7 @@ void OptionsMenu()
 	if (Options_BPP != 0) CurrentPos = 0;
 	else CurrentPos = 1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Full_Screen"));
-	if (DrawButton128_2(X1+458, Y1-6, GetText(ButtonFullScreen[CurrentPos]), MenuContentTransp, !CanSwitchToFullScreen))
+	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, false) | DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, false))
 	{
 		if (Options_BPP != 0)
 		{
@@ -257,6 +252,10 @@ void OptionsMenu()
 			}
 		}
 	}
+	int Size = vw_FontSize(Options_BPP ? GetText("1_On") : GetText("1_Off"));
+	int SizeI = (170-Size)/2;
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Options_BPP ? GetText("1_On") : GetText("1_Off"));
+
 
 
 
@@ -344,8 +343,8 @@ void OptionsMenu()
 	else
 		sprintf(VideoModeTitle, "%ix%i", VideoModes[CurrentListNum].W, VideoModes[CurrentListNum].H);
 
-	int Size = vw_FontSize(VideoModeTitle);
-	int SizeI = (170-Size)/2;
+	Size = vw_FontSize(VideoModeTitle);
+	SizeI = (170-Size)/2;
 	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, VideoModeTitle);
 
 

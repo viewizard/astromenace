@@ -129,12 +129,15 @@ void GameOptions()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, GetText("3_Mouse_Control"));
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, Setup.MouseControl ? GetText("1_On") : GetText("1_Off"), GameContentTransp, false))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Mouse_Control"));
+	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, false) | DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, false))
 	if (NeedCheck == 0)
 	{
 		Setup.MouseControl = !Setup.MouseControl;
 	}
+	int Size = vw_FontSize(Setup.MouseControl ? GetText("1_On") : GetText("1_Off"));
+	int SizeI = (170-Size)/2;
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.MouseControl ? GetText("1_On") : GetText("1_Off"));
 
 
 	Y1 += Prir1;
@@ -173,7 +176,7 @@ void GameOptions()
 
 
 	Y1 += Prir1;
-	int SizeI = (100-vw_FontSize(GetText("3_MOUSE")))/2;
+	SizeI = (100-vw_FontSize(GetText("3_MOUSE")))/2;
 	vw_DrawFont(X1+315+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_MOUSE"));
 	SizeI = (150-vw_FontSize(GetText("3_KEYBOARD")))/2;
 	vw_DrawFont(X1+446+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_KEYBOARD"));
