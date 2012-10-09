@@ -910,17 +910,19 @@ void CObject3D::Draw()
 			// LightType1 1-2; LightType2 0-6
 			switch (DrawObjectList[0].ShaderType)
 			{
-				case 1: CurrentObject3DGLSL = GLSLShaderType1[LightType1-1][LightType2]; break;
-				case 2: CurrentObject3DGLSL = GLSLShaderType2[LightType1-1][LightType2]; break;
-				case 3: CurrentObject3DGLSL = GLSLShaderType3[LightType1-1][LightType2]; break;
+				case 1: CurrentObject3DGLSL = GLSLShaderType1; break;
+				case 2: CurrentObject3DGLSL = GLSLShaderType2; break;
+				case 3: CurrentObject3DGLSL = GLSLShaderType3; break;
 			}
 
 			if (CurrentObject3DGLSL != 0)
 			{
 				vw_UseShaderProgram(CurrentObject3DGLSL);
 
-				vw_Uniform1i(CurrentObject3DGLSL, "tex1", 0);
-				vw_Uniform1i(CurrentObject3DGLSL, "tex2", 1);
+				vw_Uniform1i(CurrentObject3DGLSL, "Texture1", 0);
+				vw_Uniform1i(CurrentObject3DGLSL, "Texture2", 1);
+				vw_Uniform1i(CurrentObject3DGLSL, "DirectLightCount", LightType1);
+				vw_Uniform1i(CurrentObject3DGLSL, "PointLightCount", LightType2);
 				if (TextureIllum != 0)
 				{
 					if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, "NeedMultitexture", 1);
@@ -1060,9 +1062,9 @@ void CObject3D::Draw()
 				// LightType1 1-2; LightType2 0-6
 				switch (DrawObjectList[i].ShaderType)
 				{
-					case 1: CurrentObject3DGLSL = GLSLShaderType1[LightType1-1][LightType2]; break;
-					case 2: CurrentObject3DGLSL = GLSLShaderType2[LightType1-1][LightType2]; break;
-					case 3: CurrentObject3DGLSL = GLSLShaderType3[LightType1-1][LightType2]; break;
+					case 1: CurrentObject3DGLSL = GLSLShaderType1; break;
+					case 2: CurrentObject3DGLSL = GLSLShaderType2; break;
+					case 3: CurrentObject3DGLSL = GLSLShaderType3; break;
 				}
 
 
@@ -1077,8 +1079,10 @@ void CObject3D::Draw()
 				// данные ставим каждый раз, т.к. может что-то поменяться
 				if (CurrentObject3DGLSL != 0)
 				{
-					vw_Uniform1i(CurrentObject3DGLSL, "tex1", 0);
-					vw_Uniform1i(CurrentObject3DGLSL, "tex2", 1);
+					vw_Uniform1i(CurrentObject3DGLSL, "Texture1", 0);
+					vw_Uniform1i(CurrentObject3DGLSL, "Texture2", 1);
+					vw_Uniform1i(CurrentObject3DGLSL, "DirectLightCount", LightType1);
+					vw_Uniform1i(CurrentObject3DGLSL, "PointLightCount", LightType2);
 					if (TextureIllum != 0)
 					{
 						if (TextureIllum[i] != 0) vw_Uniform1i(CurrentObject3DGLSL, "NeedMultitexture", 1);

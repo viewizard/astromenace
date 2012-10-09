@@ -50,13 +50,13 @@
 		<Cursor position="5605" topLine="137" />
 	</File>
 	<File name="../Core/Light/Light.cpp" open="0" top="0" tabpos="21">
-		<Cursor position="1978" topLine="51" />
+		<Cursor position="3153" topLine="101" />
 	</File>
 	<File name="../Core/Light/Light.h" open="0" top="0" tabpos="22">
 		<Cursor position="3715" topLine="103" />
 	</File>
 	<File name="../Core/Light/LightManager.cpp" open="0" top="0" tabpos="23">
-		<Cursor position="4798" topLine="153" />
+		<Cursor position="8221" topLine="266" />
 	</File>
 	<File name="../Core/Math/Math.cpp" open="0" top="0" tabpos="9">
 		<Cursor position="15027" topLine="441" />
@@ -74,10 +74,10 @@
 		<Cursor position="10883" topLine="309" />
 	</File>
 	<File name="../Core/Model3D/Model3D.cpp" open="0" top="0" tabpos="4">
-		<Cursor position="1944" topLine="41" />
+		<Cursor position="1816" topLine="41" />
 	</File>
-	<File name="../Core/Model3D/Model3D.h" open="0" top="0" tabpos="2">
-		<Cursor position="2294" topLine="51" />
+	<File name="../Core/Model3D/Model3D.h" open="0" top="0" tabpos="3">
+		<Cursor position="2282" topLine="51" />
 	</File>
 	<File name="../Core/Model3D/Model3DManager.cpp" open="0" top="0" tabpos="30">
 		<Cursor position="1316" topLine="31" />
@@ -140,13 +140,13 @@
 		<Cursor position="5316" topLine="141" />
 	</File>
 	<File name="../Core/RendererInterface/OGL_GLSL.cpp" open="0" top="0" tabpos="44">
-		<Cursor position="24937" topLine="754" />
+		<Cursor position="9703" topLine="180" />
 	</File>
-	<File name="../Core/RendererInterface/OGL_Light.cpp" open="0" top="0" tabpos="45">
-		<Cursor position="264" topLine="7" />
+	<File name="../Core/RendererInterface/OGL_Light.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="3681" topLine="111" />
 	</File>
 	<File name="../Core/RendererInterface/OGL_Main.cpp" open="0" top="0" tabpos="5">
-		<Cursor position="31917" topLine="939" />
+		<Cursor position="29935" topLine="852" />
 	</File>
 	<File name="../Core/RendererInterface/OGL_Matrix.cpp" open="0" top="0" tabpos="47">
 		<Cursor position="265" topLine="7" />
@@ -155,7 +155,7 @@
 		<Cursor position="1310" topLine="17" />
 	</File>
 	<File name="../Core/RendererInterface/OGL_Texture.cpp" open="0" top="0" tabpos="4">
-		<Cursor position="2631" topLine="83" />
+		<Cursor position="2631" topLine="166" />
 	</File>
 	<File name="../Core/RendererInterface/OGL_VAO.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="3740" topLine="72" />
@@ -167,7 +167,7 @@
 		<Cursor position="1903" topLine="39" />
 	</File>
 	<File name="../Core/RendererInterface/RendererInterface.h" open="0" top="0" tabpos="4">
-		<Cursor position="14204" topLine="427" />
+		<Cursor position="14589" topLine="424" />
 	</File>
 	<File name="../Core/Sound/Buffer.cpp" open="0" top="0" tabpos="52">
 		<Cursor position="6574" topLine="265" />
@@ -283,8 +283,8 @@
 	<File name="../GraphicFX/Text/TextManager.cpp" open="0" top="0" tabpos="87">
 		<Cursor position="3473" topLine="126" />
 	</File>
-	<File name="../Loading.cpp" open="0" top="0" tabpos="5">
-		<Cursor position="3599" topLine="90" />
+	<File name="../Loading.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="3970" topLine="98" />
 	</File>
 	<File name="../Loop_audio.cpp" open="0" top="0" tabpos="6">
 		<Cursor position="19512" topLine="453" />
@@ -293,10 +293,10 @@
 		<Cursor position="6686" topLine="100" />
 	</File>
 	<File name="../Main.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="14156" topLine="468" />
+		<Cursor position="15824" topLine="503" />
 	</File>
 	<File name="../MainFS2VFS.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="1435" topLine="11" />
+		<Cursor position="1435" topLine="68" />
 	</File>
 	<File name="../Menu/Button.cpp" open="0" top="0" tabpos="90">
 		<Cursor position="12362" topLine="444" />
@@ -388,11 +388,11 @@
 	<File name="../Object3D/GroundObject/Building/Building.h" open="0" top="0" tabpos="120">
 		<Cursor position="323" topLine="0" />
 	</File>
-	<File name="../Object3D/GroundObject/GroundObject.cpp" open="1" top="0" tabpos="2">
-		<Cursor position="18710" topLine="689" />
+	<File name="../Object3D/GroundObject/GroundObject.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="18832" topLine="692" />
 	</File>
 	<File name="../Object3D/GroundObject/GroundObject.h" open="0" top="0" tabpos="122">
-		<Cursor position="3177" topLine="58" />
+		<Cursor position="6426" topLine="140" />
 	</File>
 	<File name="../Object3D/GroundObject/GroundObjectManager.cpp" open="0" top="0" tabpos="123">
 		<Cursor position="336" topLine="0" />
@@ -415,11 +415,11 @@
 	<File name="../Object3D/GroundObject/Wheeled/Wheeled.h" open="0" top="0" tabpos="129">
 		<Cursor position="322" topLine="0" />
 	</File>
-	<File name="../Object3D/Object3D.cpp" open="1" top="1" tabpos="1">
-		<Cursor position="38942" topLine="1072" />
+	<File name="../Object3D/Object3D.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="31957" topLine="889" />
 	</File>
 	<File name="../Object3D/Object3D.h" open="0" top="0" tabpos="2">
-		<Cursor position="1856" topLine="50" />
+		<Cursor position="1952" topLine="50" />
 	</File>
 	<File name="../Object3D/Object3DCollision.cpp" open="0" top="0" tabpos="132">
 		<Cursor position="13275" topLine="280" />
@@ -428,10 +428,10 @@
 		<Cursor position="2878" topLine="58" />
 	</File>
 	<File name="../Object3D/Object3DFunctions.cpp" open="0" top="0" tabpos="134">
-		<Cursor position="3287" topLine="285" />
+		<Cursor position="3287" topLine="78" />
 	</File>
-	<File name="../Object3D/Object3DManager.cpp" open="0" top="0" tabpos="135">
-		<Cursor position="5174" topLine="108" />
+	<File name="../Object3D/Object3DManager.cpp" open="1" top="1" tabpos="3">
+		<Cursor position="3108" topLine="79" />
 	</File>
 	<File name="../Object3D/Projectile/Projectile.cpp" open="0" top="0" tabpos="136">
 		<Cursor position="327" topLine="0" />
@@ -569,6 +569,6 @@
 		<Cursor position="9590" topLine="284" />
 	</File>
 	<File name="../config.h" open="0" top="0" tabpos="0">
-		<Cursor position="1845" topLine="32" />
+		<Cursor position="1345" topLine="32" />
 	</File>
 </CodeBlocks_layout_file>

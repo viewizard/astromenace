@@ -61,7 +61,7 @@ struct eObjectBlock
 
 	// шейдер (зарезервированные переменные для работы внешнего блока кода)
 	int				ShaderType;
-	float			ShaderData[9];
+	float			ShaderData[16];
 
 
 	// положение локальной системы координат

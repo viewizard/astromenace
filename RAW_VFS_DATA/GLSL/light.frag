@@ -2,9 +2,11 @@
 
 //  directional & point light per pixel + multitexture
 
-// кол-во используемых источников (используем с 1 по N, вот это N сюда и передаем, не знаю как узнать - кто работает, а кто нет в шейдере...)
-uniform sampler2D tex1, tex2;
+uniform sampler2D Texture1, Texture2;
 uniform int NeedMultitexture;
+
+uniform int DirectLightCount;
+uniform int PointLightCount;
 
 // тянем нормаль (уже нормализованную)
 varying vec3 Normal;
@@ -23,12 +25,9 @@ void main()
 
 	// обрабатываем все источники света
 	// делаем directional & point light per pixel (а не directional & point light per vertex)
-	// ограничиваем 3-мя источниками 1-2 на directional и 1-2 на point...
-
-
 
 	// делаем directional light per pixel
-	for (int i=0; i<2; i++)
+	for (int i=0; i<DirectLightCount; i++)
 	{
 		// учитываем ambient
 		color += gl_FrontMaterial.ambient * gl_LightSource[i].ambient;
@@ -44,10 +43,8 @@ void main()
 		}
 	}
 
-
-
 	// делаем point light per pixel
-	for (int i=2; i<=6; i++)
+	for (int i=DirectLightCount; i<DirectLightCount+PointLightCount; i++)
 	{
 		vec3 Direction = vec3(gl_LightSource[i].position.xyz-Vertex);
 
@@ -70,10 +67,9 @@ void main()
 	}
 
 
-
-	// смотрим, если на tex2 
+	// смотрим, если надо Texture2 
 	if (NeedMultitexture == 0)
-		gl_FragColor = clamp(color,0.0,1.0)*texture2D(tex1,gl_TexCoord[0].st);
+		gl_FragColor = clamp(color,0.0,1.0)*texture2D(Texture1,gl_TexCoord[0].st);
 	else
-		gl_FragColor = clamp(clamp(color,0.0,1.0)*texture2D(tex1,gl_TexCoord[0].st)+texture2D(tex2,gl_TexCoord[0].st), 0.0, 1.0);
+		gl_FragColor = clamp(clamp(color,0.0,1.0)*texture2D(Texture1,gl_TexCoord[0].st)+texture2D(Texture2,gl_TexCoord[0].st), 0.0, 1.0);
 }

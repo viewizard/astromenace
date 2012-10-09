@@ -55,15 +55,8 @@ eObjectBlock::eObjectBlock(void)
 	VAO = 0;
 
 	ShaderType = 1;
-	ShaderData[0] = 0;
-	ShaderData[1] = 0;
-	ShaderData[2] = 0;
-	ShaderData[3] = 0;
-	ShaderData[4] = 0;
-	ShaderData[5] = 0;
-	ShaderData[6] = 0;
-	ShaderData[7] = 0;
-	ShaderData[8] = 0;
+	for (int i=0; i<16; i++) ShaderData[i] = 0;
+
 }
 //-----------------------------------------------------------------------------
 // Деструктор

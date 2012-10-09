@@ -37,9 +37,9 @@ extern GameSetup Setup;
 extern eDevCaps CAPS;
 
 bool NeedShaderSetup = true;
-eGLSL 	*GLSLShaderType1[2][7];
-eGLSL 	*GLSLShaderType2[2][7];
-eGLSL 	*GLSLShaderType3[2][7];
+eGLSL 	*GLSLShaderType1;
+eGLSL 	*GLSLShaderType2;
+eGLSL 	*GLSLShaderType3;
 
 
 //-----------------------------------------------------------------------------
@@ -93,50 +93,9 @@ void DrawAllObject3D()
 	{
 		NeedShaderSetup = false;
 
-		GLSLShaderType1[0][0] = vw_FindShaderByName("ObjectLight10");
-		GLSLShaderType1[0][1] = vw_FindShaderByName("ObjectLight11");
-		GLSLShaderType1[0][2] = vw_FindShaderByName("ObjectLight12");
-		GLSLShaderType1[0][3] = vw_FindShaderByName("ObjectLight13");
-		GLSLShaderType1[0][4] = vw_FindShaderByName("ObjectLight14");
-		GLSLShaderType1[0][5] = vw_FindShaderByName("ObjectLight15");
-		GLSLShaderType1[0][6] = vw_FindShaderByName("ObjectLight16");
-		GLSLShaderType1[1][0] = vw_FindShaderByName("ObjectLight20");
-		GLSLShaderType1[1][1] = vw_FindShaderByName("ObjectLight21");
-		GLSLShaderType1[1][2] = vw_FindShaderByName("ObjectLight22");
-		GLSLShaderType1[1][3] = vw_FindShaderByName("ObjectLight23");
-		GLSLShaderType1[1][4] = vw_FindShaderByName("ObjectLight24");
-		GLSLShaderType1[1][5] = vw_FindShaderByName("ObjectLight25");
-		GLSLShaderType1[1][6] = vw_FindShaderByName("ObjectLight26");
-
-		GLSLShaderType2[0][0] = vw_FindShaderByName("Explosion10");
-		GLSLShaderType2[0][1] = vw_FindShaderByName("Explosion11");
-		GLSLShaderType2[0][2] = vw_FindShaderByName("Explosion12");
-		GLSLShaderType2[0][3] = vw_FindShaderByName("Explosion13");
-		GLSLShaderType2[0][4] = vw_FindShaderByName("Explosion14");
-		GLSLShaderType2[0][5] = vw_FindShaderByName("Explosion15");
-		GLSLShaderType2[0][6] = vw_FindShaderByName("Explosion16");
-		GLSLShaderType2[1][0] = vw_FindShaderByName("Explosion20");
-		GLSLShaderType2[1][1] = vw_FindShaderByName("Explosion21");
-		GLSLShaderType2[1][2] = vw_FindShaderByName("Explosion22");
-		GLSLShaderType2[1][3] = vw_FindShaderByName("Explosion23");
-		GLSLShaderType2[1][4] = vw_FindShaderByName("Explosion24");
-		GLSLShaderType2[1][5] = vw_FindShaderByName("Explosion25");
-		GLSLShaderType2[1][6] = vw_FindShaderByName("Explosion26");
-
-		GLSLShaderType3[0][0] = vw_FindShaderByName("Track10");
-		GLSLShaderType3[0][1] = vw_FindShaderByName("Track11");
-		GLSLShaderType3[0][2] = vw_FindShaderByName("Track12");
-		GLSLShaderType3[0][3] = vw_FindShaderByName("Track13");
-		GLSLShaderType3[0][4] = vw_FindShaderByName("Track14");
-		GLSLShaderType3[0][5] = vw_FindShaderByName("Track15");
-		GLSLShaderType3[0][6] = vw_FindShaderByName("Track16");
-		GLSLShaderType3[1][0] = vw_FindShaderByName("Track20");
-		GLSLShaderType3[1][1] = vw_FindShaderByName("Track21");
-		GLSLShaderType3[1][2] = vw_FindShaderByName("Track22");
-		GLSLShaderType3[1][3] = vw_FindShaderByName("Track23");
-		GLSLShaderType3[1][4] = vw_FindShaderByName("Track24");
-		GLSLShaderType3[1][5] = vw_FindShaderByName("Track25");
-		GLSLShaderType3[1][6] = vw_FindShaderByName("Track26");
+		GLSLShaderType1 = vw_FindShaderByName("PerPixelLight");
+		GLSLShaderType2 = vw_FindShaderByName("PerPixelLight_Explosion");
+		GLSLShaderType3 = vw_FindShaderByName("PerPixelLight_Track");
 	}
 
 
