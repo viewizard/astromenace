@@ -257,6 +257,7 @@ void SetMenu(eGameStatus Menu)
 		case INTERFACE:
 			Options_MenuLanguage = Setup.MenuLanguage;
 			Options_VoiceLanguage = Setup.VoiceLanguage;
+			Options_FontNumber = Setup.FontNumber;
 			break;
 
 

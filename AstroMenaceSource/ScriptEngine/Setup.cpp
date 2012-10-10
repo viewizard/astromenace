@@ -49,6 +49,7 @@ void InitSetup()
 
 	Setup.MenuLanguage = 1; // en by default
 	Setup.VoiceLanguage = 1; // en by default
+	Setup.FontNumber = 0;
 
 	Setup.Width = 1228;
 	Setup.Height = 768;
@@ -259,6 +260,7 @@ void SaveXMLSetupFile()
 		case 2: sAddLine(root, setting, "VoiceLanguage", "value", "de"); break;
 		case 3: sAddLine(root, setting, "VoiceLanguage", "value", "ru"); break;
 	}
+	iAddLine(root, setting, "FontNumber", "value", Setup.FontNumber);
 
 	iAddLine(root, setting, "Width", "value", Setup.Width);
 	iAddLine(root, setting, "Height", "value", Setup.Height);
@@ -599,6 +601,8 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (!strcmp(VoiceLanguageBuffer, "en")) Setup.VoiceLanguage = 1;
 	if (!strcmp(VoiceLanguageBuffer, "de")) Setup.VoiceLanguage = 2;
 	if (!strcmp(VoiceLanguageBuffer, "ru")) Setup.VoiceLanguage = 3;
+
+	iGetLine(root, setting, "FontNumber", "value", &(Setup.FontNumber));
 
 	iGetLine(root, setting, "Width", "value", &(Setup.Width));
 	iGetLine(root, setting, "Height", "value", &Setup.Height);

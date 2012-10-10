@@ -50,9 +50,16 @@ GameSetup Setup;
 eDevCaps *CAPS=0;
 
 
-
-
-
+sFontList FontList[FontQuantity] =
+{
+{"Ubuntu Family", "DATA/FONT/Ubuntu-B.ttf"},
+{"Liberation Mono", "DATA/FONT/LiberationMono-Bold.ttf"},
+{"Liberation Sans", "DATA/FONT/LiberationSans-Bold.ttf"},
+{"Liberation Serif", "DATA/FONT/LiberationSerif-Bold.ttf"},
+{"FreeFont Mono", "DATA/FONT/FreeMonoBold.ttf"},
+{"FreeFont Sans", "DATA/FONT/FreeSansBold.ttf"},
+{"FreeFont Serif", "DATA/FONT/FreeSerifBold.ttf"},
+};
 
 
 //------------------------------------------------------------------------------------
@@ -584,12 +591,12 @@ int main( int argc, char **argv )
 	printf("\n");
 
 
-	// иним фонт
-	vw_InitFont("DATA/FONT/LiberationMono-Bold.ttf", 16);
-
-
 
 ReCreate:
+
+	// иним фонт
+	vw_InitFont(FontList[Setup.FontNumber].FontFileName, 16);
+
 
 #ifdef __unix
 	// для TwinView и Xinerama выбираем нулевой, но не меняем если передали
@@ -1384,7 +1391,7 @@ GotoQuit:
 	vw_ReleaseAllLights();
 	ReleaseAllGameLvlText();
 
-	vw_ReleaseAllFontChar();
+	vw_ShutdownFont();
 	vw_ReleaseAllTextures();
 	vw_ShutdownRenderer();
 
