@@ -333,6 +333,7 @@
 <item id="4_units/sec">юнит/сек</item>
 <item id="4_Game_Speed:">Скорость Игры:</item>
 <item id="4_Missile_Detected">Обнаружена ракета</item>
+<item id="4_Collision_Course_Detected">Высокая Вероятность Столкновения</item>
 
 </itemlist>
 

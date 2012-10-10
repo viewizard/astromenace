@@ -334,6 +334,7 @@
 <item id="4_units/sec">units/sec</item>
 <item id="4_Game_Speed:">Game Speed:</item>
 <item id="4_Missile_Detected">Missile Detected</item>
+<item id="4_Collision_Course_Detected">Collision Course Detected</item>
 
 </itemlist>
 
