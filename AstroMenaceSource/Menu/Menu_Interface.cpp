@@ -38,6 +38,14 @@ int Options_VoiceLanguage;
 int Options_FontNumber;
 
 
+const char *ButtonGameWeaponInfoType[4] =
+{"3_Full",
+"3_Flat",
+"3_Slim",
+"1_Off"};
+
+
+
 void InterfaceMenu()
 {
 
@@ -52,7 +60,7 @@ void InterfaceMenu()
 
 
 
-
+	// выбор языка меню
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Menu_Language"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, false))
 	{
@@ -88,7 +96,7 @@ void InterfaceMenu()
 
 
 
-
+	// выбор языка голосовых сообщений
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Voice_Language"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, false))
@@ -123,7 +131,7 @@ void InterfaceMenu()
 
 
 
-
+	// выбор шрифта
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Menu_Font"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Options_FontNumber <= 0))
@@ -147,6 +155,62 @@ void InterfaceMenu()
 	}
 	SizeI = (170-Size)/2;
 	vw_DrawFont(X1+438+SizeI, Y1, Scale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, FontList[Options_FontNumber].FontName);
+
+
+
+
+	// сброс подсказок
+	Y1 += Prir1;
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Tipsandhints_Status"));
+	// узнаем есть ли вообще что ресетить
+	bool NeedReset = false;
+	for (int i=0; i<10; i++)
+		if (!Setup.NeedShowHint[i]) NeedReset = true;
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, GetText("3_Reset"), MenuContentTransp, !NeedReset))
+	if (NeedCheck == 0)
+	{
+		for (int i=0; i<10; i++) Setup.NeedShowHint[i] = true;
+	}
+
+
+
+
+	// вкл-выкл отображения счетчика фпс
+	Y1 += Prir1;
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_FPS_Сounter"));
+	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, false) | DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, false))
+	{
+		Setup.ShowFPS = !Setup.ShowFPS;
+	}
+	Size = vw_FontSize(Setup.ShowFPS ? GetText("1_On") : GetText("1_Off"));
+	SizeI = (170-Size)/2;
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.ShowFPS ? GetText("1_On") : GetText("1_Off"));
+
+
+
+
+	// вид панелей с оружием в игре
+	Y1 += Prir1;
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Weapon_Panels_View"));
+	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Setup.GameWeaponInfoType==1))
+	{
+		Setup.GameWeaponInfoType--;
+		if (Setup.GameWeaponInfoType < 1) Setup.GameWeaponInfoType = 1;
+	}
+	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Setup.GameWeaponInfoType==4))
+	{
+		Setup.GameWeaponInfoType++;
+		if (Setup.GameWeaponInfoType > 4) Options_TexturesQuality = 4;
+	}
+	Size = vw_FontSize(GetText(ButtonGameWeaponInfoType[Setup.GameWeaponInfoType-1]));
+	SizeI = (170-Size)/2;
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(ButtonGameWeaponInfoType[Setup.GameWeaponInfoType-1]));
+
+
+
+
+
+
 
 
 

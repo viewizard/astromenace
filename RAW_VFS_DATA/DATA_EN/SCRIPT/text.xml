@@ -135,6 +135,13 @@
 <item id="3_Voice_Language">Voice Language</item>
 <item id="3_Language">Language</item>
 <item id="3_Menu_Font">Menu Font</item>
+<item id="3_Tipsandhints_Status">'Tips and hints' Status</item>
+<item id="3_Reset">Reset</item>
+<item id="3_FPS_Сounter">FPS Сounter</item>
+<item id="3_Weapon_Panels_View">Weapon Panels View</item>
+<item id="3_Full">Full</item>
+<item id="3_Flat">Flat</item>
+<item id="3_Slim">Slim</item>
 
 <item id="3_Music_Volume">Music Volume</item>
 <item id="3_Not_available">Not available</item>
