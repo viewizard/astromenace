@@ -1706,6 +1706,28 @@ void InformationDrawObject()
 	float RotateInfoObjectX = 0;
 	LastRotateInfoObject = vw_GetTime();
 
+	RECT DstRestLeft, DstRestRight, DstRestUp, DstRestDown;
+	float fLeft, fRight, fUp, fDown;
+	fLeft = fRight = fUp = fDown = 0.15f;
+
+
+	SetRect(&DstRestLeft,(Setup.iAspectRatioWidth/2-432)+10,
+					80+(333-32)/2,
+					(Setup.iAspectRatioWidth/2-432)+32+10,
+					80+(333+32)/2);
+	SetRect(&DstRestRight,(Setup.iAspectRatioWidth/2-432)+444-32-10,
+					80+(333-32)/2,
+					(Setup.iAspectRatioWidth/2-432)+444-10,
+					80+(333+32)/2);
+	SetRect(&DstRestUp,(Setup.iAspectRatioWidth/2-432)+(444-32)/2,
+					80+333-32-10,
+					(Setup.iAspectRatioWidth/2-432)+(444+32)/2,
+					80+333-10);
+	SetRect(&DstRestDown,(Setup.iAspectRatioWidth/2-432)+(444-32)/2,
+					80+10,
+					(Setup.iAspectRatioWidth/2-432)+(444+32)/2,
+					80+32+10);
+
 	// для вращения объекта, только если мышка стоит над выводом 3д модели
 	RECT DstRest;
 	SetRect(&DstRest,(Setup.iAspectRatioWidth/2-432),
@@ -1717,34 +1739,53 @@ void InformationDrawObject()
 			(DstRest.bottom >= MouseY)&
 			(DstRest.top<= MouseY)) & !isDialogBoxDrawing())
 	{
-		// вращаем в зависимости от того, в какой части вывода 3д модели стоим
+		fLeft = fRight = fUp = fDown = 0.35f;
 
-		if ((DstRest.bottom >= MouseY)&
-			(DstRest.top + 2*333/3<= MouseY))
-			RotateInfoObjectX = -tmpRotateInfoObjectX;
+		if  (((DstRestLeft.right  >= MouseX)&
+				(DstRestLeft.left<= MouseX)&
+				(DstRestLeft.bottom >= MouseY)&
+				(DstRestLeft.top<= MouseY)) & !isDialogBoxDrawing())
+		{
+			fLeft = 0.8f;
+			RotateInfoObjectY = -RotateInfoObjectY*3;
+		}
 		else
-		if ((DstRest.bottom - 2*333/3 >= MouseY)&
-			(DstRest.top <= MouseY))
-			RotateInfoObjectX = tmpRotateInfoObjectX;
-
-
-		if ((DstRest.right  >= MouseX)&
-			(DstRest.left + 2*444/3 <= MouseX))
-			RotateInfoObjectY = -RotateInfoObjectY;
+		if  (((DstRestRight.right  >= MouseX)&
+				(DstRestRight.left<= MouseX)&
+				(DstRestRight.bottom >= MouseY)&
+				(DstRestRight.top<= MouseY)) & !isDialogBoxDrawing())
+		{
+			fRight = 0.8f;
+			RotateInfoObjectY = RotateInfoObjectY*3;
+		}
 		else
-		if ((DstRest.right - 2*444/3 >= MouseX)&
-			(DstRest.left <= MouseX))
-			;
+		if  (((DstRestUp.right  >= MouseX)&
+				(DstRestUp.left<= MouseX)&
+				(DstRestUp.bottom >= MouseY)&
+				(DstRestUp.top<= MouseY)) & !isDialogBoxDrawing())
+		{
+			fUp = 0.8f;
+			RotateInfoObjectX = tmpRotateInfoObjectX*3;
+		}
+		else
+		if  (((DstRestDown.right  >= MouseX)&
+				(DstRestDown.left<= MouseX)&
+				(DstRestDown.bottom >= MouseY)&
+				(DstRestDown.top<= MouseY)) & !isDialogBoxDrawing())
+		{
+			fDown = 0.8f;
+			RotateInfoObjectX = -tmpRotateInfoObjectX*3;
+		}
 		else
 			RotateInfoObjectY = 0;
 
-
 		if (vw_GetWindowLBMouse(true))
 		{
-			RotateInfoObjectY = -RotationSumY+120; // 120 -базовый угол разварота при создании
+			RotateInfoObjectY = -RotationSumY+120; // 120 -базовый угол разворота при создании
 			RotateInfoObjectX = -RotationSumX;
 		}
 	}
+
 
 	RotationSumY += RotateInfoObjectY;
 	if (RotationSumY >= 360.0f) RotationSumY -= 360.0f;
@@ -1961,6 +2002,17 @@ void InformationDrawObject()
 	SetRect(&SrcRest,2,2,482,371);
 	SetRect(&DstRest,Setup.iAspectRatioWidth/2-450,80-18,Setup.iAspectRatioWidth/2+30,80+351);
 	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/panel444_333_border.tga"), true, 1.0f*MenuContentTransp);
+
+	// отрисовка стрелок
+	SetRect(&SrcRest,32,0,64,32);
+	vw_DrawTransparent(&DstRestLeft, &SrcRest, vw_FindTextureByName("DATA/MENU/arrows_blue.tga"), true, fLeft*MenuContentTransp);
+	SetRect(&SrcRest,96,0,128,32);
+	vw_DrawTransparent(&DstRestRight, &SrcRest, vw_FindTextureByName("DATA/MENU/arrows_blue.tga"), true, fRight*MenuContentTransp);
+	SetRect(&SrcRest,0,0,32,32);
+	vw_DrawTransparent(&DstRestUp, &SrcRest, vw_FindTextureByName("DATA/MENU/arrows_blue.tga"), true, fUp*MenuContentTransp);
+	SetRect(&SrcRest,64,0,96,32);
+	vw_DrawTransparent(&DstRestDown, &SrcRest, vw_FindTextureByName("DATA/MENU/arrows_blue.tga"), true, fDown*MenuContentTransp);
+
 	vw_End2DMode();
 
 }
