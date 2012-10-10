@@ -45,7 +45,6 @@
 CEarthSpaceFighter *InfoFighter = 0;
 CWeapon *InfoWeapon = 0;
 CProjectile *InfoMine = 0;
-VECTOR3D	InfoWeaponPoint;
 CAlienSpaceFighter *InfoAlien = 0;
 CAlienSpaceMotherShip *InfoAlienMotherShip = 0;
 CPirateShip *InfoPirateShip = 0;
@@ -69,8 +68,10 @@ float GetProjectileRange(int Num);
 float		LastRotateInfoObject = 0.0f;
 VECTOR3D	PointCamera;
 VECTOR3D	Point(1000,-1000,0);
+VECTOR3D	ObjectBaseLocation(0,0,0);
 int			CreateNum = 1;
-float		RotationSum =0.0f;
+float		RotationSumY =0.0f;
+float		RotationSumX =0.0f;
 float		InfoObjectWidth = 0.0f;
 float		InfoObjectLength = 0.0f;
 float		InfoObjectHeight = 0.0f;
@@ -309,7 +310,8 @@ void CreateInfoObject()
 	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
 	GameNPCArmorPenalty = 1;
 
-
+	RotationSumY = 120;
+	RotationSumX = 0;
 
 	Point = VECTOR3D(1000,-1000,0);
 
@@ -321,6 +323,7 @@ void CreateInfoObject()
 		InfoFighter->ID = 1000;
 		InfoFighter->EngineDestroyType = true;
 		InfoFighter->SetLocation(VECTOR3D(1000,-1000-InfoFighter->AABB[6].y, 0));
+		ObjectBaseLocation = InfoFighter->Location - VECTOR3D(1000,-1000,0);
 
 		Point = VECTOR3D(1000,-1000+InfoFighter->Height/3.0f,0);
 
@@ -342,7 +345,7 @@ void CreateInfoObject()
 		if (InfoFighter->Engine[i] != 0)
 			InfoFighter->Engine[i]->SpeedOnCreation = -1.0f;
 
-		InfoFighter->SetRotation(VECTOR3D(0.0f,RotationSum,0.0f));
+		InfoFighter->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant)
 	{
@@ -350,7 +353,7 @@ void CreateInfoObject()
 		InfoWeapon = new CWeapon;
 		InfoWeapon->Create(tmpCreateNum);
 		InfoWeapon->ID = 1000;
-		InfoWeaponPoint = VECTOR3D(0.0f,-InfoWeapon->AABB[6].y, -(InfoWeapon->Length/2.0f + InfoWeapon->AABB[6].z));
+		ObjectBaseLocation = VECTOR3D(0.0f,-InfoWeapon->AABB[6].y, -(InfoWeapon->Length/2.0f + InfoWeapon->AABB[6].z));
 
 		Point = VECTOR3D(1000,-1000+InfoWeapon->Height/3.0f,0);
 
@@ -365,9 +368,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoWeapon->Height;
 		InfoObjectStrength = InfoWeapon->StrengthStart;
 
-		InfoWeapon->SetRotation(VECTOR3D(0.0f,RotationSum,0.0f));
-		RotatePoint(&InfoWeaponPoint, VECTOR3D(0.0f, RotationSum, 0.0f));
-		InfoWeapon->SetLocation(VECTOR3D(1000+InfoWeaponPoint.x, -1000+InfoWeaponPoint.y, InfoWeaponPoint.z));
+		InfoWeapon->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 
 		InfoObjectEnergyUse = InfoWeapon->EnergyUse;
 		InfoObjectAmmo = InfoWeapon->AmmoStart;
@@ -387,6 +388,7 @@ void CreateInfoObject()
 		InfoMine->SpeedStart = InfoMine->SpeedEnd = InfoMine->Speed = 0.0f;
 		InfoMine->GraphicFXDestroyType = true;
 		InfoMine->SetLocation(VECTOR3D(1000,-1000-InfoMine->AABB[6].y, 0));
+		ObjectBaseLocation = InfoMine->Location - VECTOR3D(1000,-1000,0);
 
 		Point = VECTOR3D(1000,-1000+InfoMine->Height/2.0f,0);
 
@@ -402,8 +404,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoMine->Height;
 		InfoObjectStrength = InfoMine->StrengthStart;
 
-		InfoMine->SetRotation(VECTOR3D(0.0f,RotationSum,0.0f));
-
+		InfoMine->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant)
 	{
@@ -413,6 +414,7 @@ void CreateInfoObject()
 		InfoAlien->ID = 1000;
 		InfoAlien->EngineDestroyType = true;
 		InfoAlien->SetLocation(VECTOR3D(1000,-1000-InfoAlien->AABB[6].y, 0));
+		ObjectBaseLocation = InfoAlien->Location - VECTOR3D(1000,-1000,0);
 
 		Point = VECTOR3D(1000,-1000+InfoAlien->Height/3.0f,0);
 
@@ -433,7 +435,7 @@ void CreateInfoObject()
 		if (InfoAlien->Engine[i] != 0)
 			InfoAlien->Engine[i]->SpeedOnCreation = -1.0f;
 
-		InfoAlien->SetRotation(VECTOR3D(0.0f,RotationSum,0.0f));
+		InfoAlien->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant)
 	{
@@ -443,6 +445,7 @@ void CreateInfoObject()
 		InfoAlienMotherShip->ID = 1000;
 		InfoAlienMotherShip->EngineDestroyType = true;
 		InfoAlienMotherShip->SetLocation(VECTOR3D(1000,-1000-InfoAlienMotherShip->AABB[6].y, 0));
+		ObjectBaseLocation = InfoAlienMotherShip->Location - VECTOR3D(1000,-1000,0);
 
 		Point = VECTOR3D(1000,-1000+InfoAlienMotherShip->Height/3.0f,0);
 
@@ -462,7 +465,7 @@ void CreateInfoObject()
 		if (InfoAlienMotherShip->Engine[i] != 0)
 			InfoAlienMotherShip->Engine[i]->SpeedOnCreation = -1.0f;
 
-		InfoAlienMotherShip->SetRotation(VECTOR3D(0.0f,RotationSum,0.0f));
+		InfoAlienMotherShip->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant)
 	{
@@ -472,6 +475,7 @@ void CreateInfoObject()
 		InfoPirateShip->ID = 1000;
 		InfoPirateShip->EngineDestroyType = true;
 		InfoPirateShip->SetLocation(VECTOR3D(1000,-1000-InfoPirateShip->AABB[6].y, 0));
+		ObjectBaseLocation = InfoPirateShip->Location - VECTOR3D(1000,-1000,0);
 
 		Point = VECTOR3D(1000,-1000+InfoPirateShip->Height/3.0f,0);
 
@@ -491,7 +495,7 @@ void CreateInfoObject()
 		if (InfoPirateShip->Engine[i] != 0)
 			InfoPirateShip->Engine[i]->SpeedOnCreation = -1.0f;
 
-		InfoPirateShip->SetRotation(VECTOR3D(0.0f,RotationSum,0.0f));
+		InfoPirateShip->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant)
 	{
@@ -500,7 +504,7 @@ void CreateInfoObject()
 		InfoBuilding->Create(tmpCreateNum);
 		InfoBuilding->ID = 1000;
 		InfoBuilding->SetLocation(VECTOR3D(1000,-1000-InfoBuilding->AABB[6].y, 0));
-
+		ObjectBaseLocation = InfoBuilding->Location - VECTOR3D(1000,-1000,0);
 
 		Point = VECTOR3D(1000,-1000+InfoBuilding->Height/3.0f,0);
 
@@ -515,7 +519,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoBuilding->Height;
 		InfoObjectStrength = InfoBuilding->StrengthStart;
 
-		InfoBuilding->SetRotation(VECTOR3D(0.0f,RotationSum,0.0f));
+		InfoBuilding->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant)
 	{
@@ -524,6 +528,7 @@ void CreateInfoObject()
 		InfoMilitaryBuilding->Create(tmpCreateNum);
 		InfoMilitaryBuilding->ID = 1000;
 		InfoMilitaryBuilding->SetLocation(VECTOR3D(1000,-1000-InfoMilitaryBuilding->AABB[6].y, 0));
+		ObjectBaseLocation = InfoMilitaryBuilding->Location - VECTOR3D(1000,-1000,0);
 
 		Point = VECTOR3D(1000,-1000+InfoMilitaryBuilding->Height/3.0f,0);
 
@@ -538,7 +543,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoMilitaryBuilding->Height;
 		InfoObjectStrength = InfoMilitaryBuilding->StrengthStart;
 
-		InfoMilitaryBuilding->SetRotation(VECTOR3D(0.0f,RotationSum,0.0f));
+		InfoMilitaryBuilding->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoWheeledStart && CreateNum<InfoWheeledStart+InfoWheeledQuant)
 	{
@@ -548,6 +553,7 @@ void CreateInfoObject()
 		InfoWheeled->DeviationOn = true;
 		InfoWheeled->ID = 1000;
 		InfoWheeled->SetLocation(VECTOR3D(1000,-1000-InfoWheeled->AABB[6].y, 0));
+		ObjectBaseLocation = InfoWheeled->Location - VECTOR3D(1000,-1000,0);
 		InfoWheeled->WheelTrackSpeed = 350.0f;
 
 		Point = VECTOR3D(1000,-1000+InfoWheeled->Height/3.0f,0);
@@ -563,7 +569,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoWheeled->Height;
 		InfoObjectStrength = InfoWheeled->StrengthStart;
 
-		InfoWheeled->SetRotation(VECTOR3D(0.0f,RotationSum,0.0f));
+		InfoWheeled->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoTrackedStart && CreateNum<InfoTrackedStart+InfoTrackedQuant)
 	{
@@ -573,6 +579,7 @@ void CreateInfoObject()
 		InfoTracked->DeviationOn = true;
 		InfoTracked->ID = 1000;
 		InfoTracked->SetLocation(VECTOR3D(1000,-1000-InfoTracked->AABB[6].y, 0));
+		ObjectBaseLocation = InfoTracked->Location - VECTOR3D(1000,-1000,0);
 		InfoTracked->WheelTrackSpeed = 350.0f;
 
 		Point = VECTOR3D(1000,-1000+InfoTracked->Height/3.0f,0);
@@ -588,7 +595,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoTracked->Height;
 		InfoObjectStrength = InfoTracked->StrengthStart;
 
-		InfoTracked->SetRotation(VECTOR3D(0.0f,RotationSum,0.0f));
+		InfoTracked->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 
 	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
@@ -1659,6 +1666,9 @@ void InformationMenu()
 void InformationDrawObject()
 {
 
+	int MouseX, MouseY;
+	vw_GetMousePos(&MouseX, &MouseY);
+
 	int x, y, width, height;
 	float znear, zfar;
 	vw_GetViewport(&x, &y, &width, &height, &znear, &zfar);
@@ -1686,134 +1696,170 @@ void InformationDrawObject()
 
 
 
+
+
+
+	// вращение объекта
+
+	float RotateInfoObjectY = 15.0f*(vw_GetTime() - LastRotateInfoObject);
+	float tmpRotateInfoObjectX = 15.0f*(vw_GetTime() - LastRotateInfoObject);
+	float RotateInfoObjectX = 0;
+	LastRotateInfoObject = vw_GetTime();
+
+	// для вращения объекта, только если мышка стоит над выводом 3д модели
+	RECT DstRest;
+	SetRect(&DstRest,(Setup.iAspectRatioWidth/2-432),
+					80,
+					(Setup.iAspectRatioWidth/2-432)+444,
+					80+333);
+	if  (((DstRest.right  >= MouseX)&
+			(DstRest.left<= MouseX)&
+			(DstRest.bottom >= MouseY)&
+			(DstRest.top<= MouseY)) & !isDialogBoxDrawing())
+	{
+		// вращаем в зависимости от того, в какой части вывода 3д модели стоим
+
+		if ((DstRest.bottom >= MouseY)&
+			(DstRest.top + 2*333/3<= MouseY))
+			RotateInfoObjectX = -tmpRotateInfoObjectX;
+		else
+		if ((DstRest.bottom - 2*333/3 >= MouseY)&
+			(DstRest.top <= MouseY))
+			RotateInfoObjectX = tmpRotateInfoObjectX;
+
+
+		if ((DstRest.right  >= MouseX)&
+			(DstRest.left + 2*444/3 <= MouseX))
+			RotateInfoObjectY = -RotateInfoObjectY;
+		else
+		if ((DstRest.right - 2*444/3 >= MouseX)&
+			(DstRest.left <= MouseX))
+			;
+		else
+			RotateInfoObjectY = 0;
+
+
+		if (vw_GetWindowLBMouse(true))
+		{
+			RotateInfoObjectY = -RotationSumY+120; // 120 -базовый угол разварота при создании
+			RotateInfoObjectX = -RotationSumX;
+		}
+	}
+
+	RotationSumY += RotateInfoObjectY;
+	if (RotationSumY >= 360.0f) RotationSumY -= 360.0f;
+	else if (RotationSumY <= -360.0f) RotationSumY += 360.0f;
+	RotationSumX += RotateInfoObjectX;
+	if (RotationSumX >= 360.0f) RotationSumX -= 360.0f;
+	else if (RotationSumX <= -360.0f) RotationSumX += 360.0f;
+
+
+	// корректируем положение (у нас объекты стоят не в нулевой точке, а со смещением
+	VECTOR3D TMPLocation = ObjectBaseLocation;
+	float tmp_matrix[33];
+	Matrix33CreateRotate(tmp_matrix, VECTOR3D(RotationSumX,RotationSumY,0));
+	Matrix33CalcPoint(&TMPLocation, tmp_matrix);
+	TMPLocation += VECTOR3D(1000,-1000,0);
+
+
+
+
+
+
+
 	// рисуем линии
 
-	// буфер для последовательности RI_LINES
+	// делаем массив для всех элементов RI_3f_XYZ | RI_2f_TEX
 	float *tmpDATA = 0;
-	// делаем массив для всех элементов RI_3f_XYZ | RI_4f_COLOR | RI_2f_TEX
-	tmpDATA = new float[4*(3+4+2)];
+	tmpDATA = new float[4*(3+2)];
 
 
 	int SizeCell = (int)(vw_sqrtf((InfoObjectLength*InfoObjectLength/4.0f+
 	InfoObjectWidth*InfoObjectWidth/4.0f+
 	InfoObjectHeight*InfoObjectHeight/4.0f)));
-	float Alpha = 0.3f*MenuContentTransp;
 
 	float LineSize = 0.004f * vw_sqrtf(PointCamera.x*PointCamera.x+PointCamera.y*PointCamera.y+
 		PointCamera.z*PointCamera.z);
 
 	if (SizeCell<2) SizeCell = 2;
 
-	// особенные для ракетных систем
-	if (CreateNum == InfoWeaponStart+17) SizeCell = 3;
-	if (CreateNum == InfoWeaponStart+18) SizeCell = 3;
 
+	vw_PushMatrix();
+	vw_CullFace(RI_NONE);
 
+	vw_Translate(VECTOR3D(1000.0f, -1000.0f, 0.0f));
+	vw_Rotate(0, -RotationSumY, 0);
+	vw_Rotate(-RotationSumX, 0, 0);
+
+	vw_SetColor(0.7f, 0.7f, 1.0f, 0.3f*MenuContentTransp);
 	vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 	vw_SetTextureT(0, vw_FindTextureByName("DATA/MENU/line.tga"), 1);
-	vw_DepthTest(false, -1);
 	for (int i=-SizeCell; i<SizeCell+2; i+=2)
 	{
 		// номер float'а в последовательности
 		int k=0;
 
-			tmpDATA[k++] = 1000.0f + i*1.0f+LineSize;
-			tmpDATA[k++] = -1000.0f;
-			tmpDATA[k++] = SizeCell*1.0f;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 1.0f;
-			tmpDATA[k++] = Alpha;
-			tmpDATA[k++] = 1.0f;
-			tmpDATA[k++] = 1.0f;
+		tmpDATA[k++] = i*1.0f+LineSize;
+		tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = SizeCell*1.0f;
+		tmpDATA[k++] = 1.0f;
+		tmpDATA[k++] = 1.0f;
 
-			tmpDATA[k++] = 1000.0f + i*1.0f+LineSize;
-			tmpDATA[k++] = -1000.0f;
-			tmpDATA[k++] = -SizeCell*1.0f;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 1.0f;
-			tmpDATA[k++] = Alpha;
-			tmpDATA[k++] = 1.0f;
-			tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = i*1.0f+LineSize;
+		tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = -SizeCell*1.0f;
+		tmpDATA[k++] = 1.0f;
+		tmpDATA[k++] = 0.0f;
 
-			tmpDATA[k++] = 1000.0f + i*1.0f-LineSize;
-			tmpDATA[k++] = -1000.0f;
-			tmpDATA[k++] = SizeCell*1.0f;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 1.0f;
-			tmpDATA[k++] = Alpha;
-			tmpDATA[k++] = 0.0f;
-			tmpDATA[k++] = 1.0f;
+		tmpDATA[k++] = i*1.0f-LineSize;
+		tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = SizeCell*1.0f;
+		tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = 1.0f;
 
-			tmpDATA[k++] = 1000.0f + i*1.0f-LineSize;
-			tmpDATA[k++] = -1000.0f;
-			tmpDATA[k++] = -SizeCell*1.0f;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 1.0f;
-			tmpDATA[k++] = Alpha;
-			tmpDATA[k++] = 0.0f;
-			tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = i*1.0f-LineSize;
+		tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = -SizeCell*1.0f;
+		tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = 0.0f;
 
-			vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX, tmpDATA, 9*sizeof(float));
+		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_1_TEX, tmpDATA, 5*sizeof(float));
 
 
-			k = 0;
+		k = 0;
 
-			tmpDATA[k++] = SizeCell*1.0f;
-			tmpDATA[k++] = 0.0f;
-			tmpDATA[k++] = LineSize;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 1.0f;
-			tmpDATA[k++] = Alpha;
-			tmpDATA[k++] = 0.0f;
-			tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = SizeCell*1.0f;
+		tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = i*1.0f+LineSize;
+		tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = 0.0f;
 
-			tmpDATA[k++] = SizeCell*1.0f;
-			tmpDATA[k++] = 0.0f;
-			tmpDATA[k++] = -LineSize;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 1.0f;
-			tmpDATA[k++] = Alpha;
-			tmpDATA[k++] = 1.0f;
-			tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = SizeCell*1.0f;
+		tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = i*1.0f-LineSize;
+		tmpDATA[k++] = 1.0f;
+		tmpDATA[k++] = 0.0f;
 
-			tmpDATA[k++] = - SizeCell*1.0f;
-			tmpDATA[k++] = 0.0f;
-			tmpDATA[k++] = LineSize;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 1.0f;
-			tmpDATA[k++] = Alpha;
-			tmpDATA[k++] = 0.0f;
-			tmpDATA[k++] = 1.0f;
+		tmpDATA[k++] = - SizeCell*1.0f;
+		tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = i*1.0f + LineSize;
+		tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = 1.0f;
 
-			tmpDATA[k++] = - SizeCell*1.0f;
-			tmpDATA[k++] = 0.0f;
-			tmpDATA[k++] = -LineSize;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 0.7f;
-			tmpDATA[k++] = 1.0f;
-			tmpDATA[k++] = Alpha;
-			tmpDATA[k++] = 1.0f;
-			tmpDATA[k++] = 1.0f;
+		tmpDATA[k++] = - SizeCell*1.0f;
+		tmpDATA[k++] = 0.0f;
+		tmpDATA[k++] = i*1.0f - LineSize;
+		tmpDATA[k++] = 1.0f;
+		tmpDATA[k++] = 1.0f;
 
-			vw_PushMatrix();
-			vw_Translate(VECTOR3D(1000.0f, -1000.0f, i*1.0f));
-			vw_Rotate(-70.0f,0.0f,0.0f);
-			vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX, tmpDATA, 9*sizeof(float));
-			vw_PopMatrix();
-
+		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_1_TEX, tmpDATA, 5*sizeof(float));
 	}
-	vw_DepthTest(true, RI_LESSEQUAL);
 	if (tmpDATA != 0) {delete [] tmpDATA; tmpDATA = 0;}
 	vw_SetTextureDef(0);
+	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-
+	vw_CullFace(RI_BACK);
+	vw_PopMatrix();
 
 
 
@@ -1828,46 +1874,41 @@ void InformationDrawObject()
 	vw_SetCameraMoveAroundPoint(Point, 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
 	vw_CameraLookAt();
 
-	float RotateInfoObject = 15.0f*(vw_GetTime() - LastRotateInfoObject);
-	LastRotateInfoObject = vw_GetTime();
-	RotationSum += RotateInfoObject;
-
-
-
-
 
 	if (InfoFighter != 0)
 	{
-		InfoFighter->SetRotation(VECTOR3D(0.0f,RotateInfoObject,0.0f));
+		InfoFighter->SetLocation(TMPLocation);
+		InfoFighter->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoFighter->Draw();
 	}
 	if (InfoWeapon != 0)
 	{
-		RotatePointInv(&InfoWeaponPoint, VECTOR3D(0.0f, -(RotationSum-RotateInfoObject), 0.0f));
-		RotatePoint(&InfoWeaponPoint, VECTOR3D(0.0f, RotationSum, 0.0f));
-	//	InfoWeapon->SetLocation(InfoWeaponPoint);
-		InfoWeapon->SetLocation(VECTOR3D(1000+InfoWeaponPoint.x, -1000+InfoWeaponPoint.y, InfoWeaponPoint.z));
-		InfoWeapon->SetRotation(VECTOR3D(0.0f,RotateInfoObject,0.0f));
+		InfoWeapon->SetLocation(TMPLocation);
+		InfoWeapon->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoWeapon->Draw();
 	}
 	if (InfoMine != 0)
 	{
-		InfoMine->SetRotation(VECTOR3D(0.0f,RotateInfoObject,0.0f));
+		InfoMine->SetLocation(TMPLocation);
+		InfoMine->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoMine->Draw();
 	}
 	if (InfoAlien != 0)
 	{
-		InfoAlien->SetRotation(VECTOR3D(0.0f,RotateInfoObject,0.0f));
+		InfoAlien->SetLocation(TMPLocation);
+		InfoAlien->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoAlien->Draw();
 	}
 	if (InfoAlienMotherShip != 0)
 	{
-		InfoAlienMotherShip->SetRotation(VECTOR3D(0.0f,RotateInfoObject,0.0f));
+		InfoAlienMotherShip->SetLocation(TMPLocation);
+		InfoAlienMotherShip->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoAlienMotherShip->Draw();
 	}
 	if (InfoPirateShip != 0)
 	{
-		InfoPirateShip->SetRotation(VECTOR3D(0.0f,RotateInfoObject,0.0f));
+		InfoPirateShip->SetLocation(TMPLocation);
+		InfoPirateShip->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoPirateShip->Draw();
 		// рисуем оружие
 		if (InfoPirateShip->Weapon != 0)
@@ -1879,22 +1920,26 @@ void InformationDrawObject()
 	}
 	if (InfoBuilding != 0)
 	{
-		InfoBuilding->SetRotation(VECTOR3D(0.0f,RotateInfoObject,0.0f));
+		InfoBuilding->SetLocation(TMPLocation);
+		InfoBuilding->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoBuilding->Draw();
 	}
 	if (InfoMilitaryBuilding != 0)
 	{
-		InfoMilitaryBuilding->SetRotation(VECTOR3D(0.0f,RotateInfoObject,0.0f));
+		InfoMilitaryBuilding->SetLocation(TMPLocation);
+		InfoMilitaryBuilding->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoMilitaryBuilding->Draw();
 	}
 	if (InfoWheeled != 0)
 	{
-		InfoWheeled->SetRotation(VECTOR3D(0.0f,RotateInfoObject,0.0f));
+		InfoWheeled->SetLocation(TMPLocation);
+		InfoWheeled->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoWheeled->Draw();
 	}
 	if (InfoTracked != 0)
 	{
-		InfoTracked->SetRotation(VECTOR3D(0.0f,RotateInfoObject,0.0f));
+		InfoTracked->SetLocation(TMPLocation);
+		InfoTracked->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoTracked->Draw();
 	}
 
@@ -1912,9 +1957,9 @@ void InformationDrawObject()
 
 	// бордюр с тенью
 	vw_Start2DMode(-1,1);
-	RECT SrcRest, DstRest;
-	SetRect(&SrcRest,2,2,484-2,373-2);
-	SetRect(&DstRest,(Setup.iAspectRatioWidth/2-432)+2-20,80+2-20,(Setup.iAspectRatioWidth/2-432)-2+484-20,80-2+373-20);
+	RECT SrcRest;
+	SetRect(&SrcRest,2,2,482,371);
+	SetRect(&DstRest,Setup.iAspectRatioWidth/2-450,80-18,Setup.iAspectRatioWidth/2+30,80+351);
 	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/panel444_333_border.tga"), true, 1.0f*MenuContentTransp);
 	vw_End2DMode();
 
