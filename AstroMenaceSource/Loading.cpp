@@ -129,7 +129,7 @@ sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 #define TEXTURE_NO_MIPMAP	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE
 
 // сколько нужно загружать в листе меню
-const int	MenuLoadListCount = 183;
+const int	MenuLoadListCount = 184;
 // лист загрузки меню
 LoadList	MenuLoadList[MenuLoadListCount] =
 {
@@ -190,6 +190,7 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/MENU/button_dialog128_off.tga",	0, 39, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/MENU/arrows_on.tga",				0, 69, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 {"DATA/MENU/arrows_off.tga",			0, 69, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
+{"DATA/MENU/arrows_blue.tga",			0, 69, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, true},
 // иконки отображения в меню выбора миссий
 {"DATA/SCRIPT/mission1_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},
 {"DATA/SCRIPT/mission2_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP, TEXTURE_NO_MIPMAP, false, false},

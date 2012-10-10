@@ -36,7 +36,7 @@
 // для генерации используем (или как удобно)
 // find ./ -type f | grep -v ".svn" > list.txt
 
-const int	ConvertListCount = 585;
+const int	ConvertListCount = 586;
 const char *ConvertList[ConvertListCount] =
 {"DATA_RU/VOICE/EngineMalfunction.wav",
 "DATA_RU/VOICE/WeaponDamaged.wav",
@@ -438,6 +438,7 @@ const char *ConvertList[ConvertListCount] =
 "MENU/button_dialog128_in.tga",
 "MENU/weapon6_icon.tga",
 "MENU/arrows_off.tga",
+"MENU/arrows_blue.tga",
 "MENU/workshop_panel5.tga",
 "MENU/workshop_panel3.tga",
 "MENU/dialog768_600.tga",
