@@ -135,6 +135,13 @@
 <item id="3_Voice_Language">Голос в Игре</item>
 <item id="3_Language">Язык</item>
 <item id="3_Menu_Font">Шрифт Меню</item>
+<item id="3_Tipsandhints_Status">Окна 'Советы и подсказки'</item>
+<item id="3_Reset">Сброс</item>
+<item id="3_FPS_Сounter">FPS Счетчик</item>
+<item id="3_Weapon_Panels_View">Вид Панелей Оружия</item>
+<item id="3_Full">Полный</item>
+<item id="3_Flat">Плоский</item>
+<item id="3_Slim">Тонкий</item>
 
 <item id="3_Music_Volume">Громкость Музыки</item>
 <item id="3_Not_available">Не доступно</item>
