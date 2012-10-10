@@ -35,7 +35,7 @@
 
 int Options_MenuLanguage;
 int Options_VoiceLanguage;
-
+int Options_FontNumber;
 
 
 void InterfaceMenu()
@@ -124,8 +124,29 @@ void InterfaceMenu()
 
 
 
+	Y1 += Prir1;
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Menu_Font"));
+	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Options_FontNumber <= 0))
+	{
+		Options_FontNumber --;
+		if (Options_FontNumber < 0) Options_FontNumber = 0;
 
+	}
+	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Options_FontNumber >= FontQuantity-1))
+	{
+		Options_FontNumber ++;
+		if (Options_FontNumber > FontQuantity-1) Options_FontNumber = FontQuantity-1;
 
+	}
+	int Scale = 0;
+	Size = vw_FontSize(FontList[Options_FontNumber].FontName);
+	if (Size > 170)
+	{
+		Scale = -170;
+		Size = 170;
+	}
+	SizeI = (170-Size)/2;
+	vw_DrawFont(X1+438+SizeI, Y1, Scale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, FontList[Options_FontNumber].FontName);
 
 
 
@@ -166,7 +187,8 @@ void InterfaceMenu()
 
 
 	if (Options_MenuLanguage == Setup.MenuLanguage &&
-		Options_VoiceLanguage == Setup.VoiceLanguage)
+		Options_VoiceLanguage == Setup.VoiceLanguage &&
+		Options_FontNumber == Setup.FontNumber)
 	{
 		X = (Setup.iAspectRatioWidth - 384)/2;
 		Y = Y+Prir;
@@ -188,13 +210,15 @@ void InterfaceMenu()
 		{
 			// проверяем, нужно перегружать или нет
 			if (Options_MenuLanguage != Setup.MenuLanguage ||
-				Options_VoiceLanguage != Setup.VoiceLanguage)
+				Options_VoiceLanguage != Setup.VoiceLanguage ||
+				Options_FontNumber != Setup.FontNumber)
 			{
 				CanQuit = false;
 				Quit = true;
 				NeedReCreate = true;
 			}
 
+			Setup.FontNumber = Options_FontNumber;
 			Setup.MenuLanguage = Options_MenuLanguage;
 			Setup.VoiceLanguage = Options_VoiceLanguage;
 		}

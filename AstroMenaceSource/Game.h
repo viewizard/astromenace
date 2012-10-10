@@ -103,7 +103,8 @@ extern bool JoysticButtons[100];
 void SaveGameData();
 void CodeXOR(char *Text, char *Key, int Count);
 
-
+const int FontQuantity=7;
+extern sFontList FontList[FontQuantity];
 
 
 
@@ -355,6 +356,7 @@ void GameOptions();
 //------------------------------------------------------------------------------------
 extern int Options_MenuLanguage;
 extern int Options_VoiceLanguage;
+extern int Options_FontNumber;
 
 void InterfaceMenu();
 
