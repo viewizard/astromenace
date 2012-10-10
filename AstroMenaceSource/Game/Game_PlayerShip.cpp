@@ -37,6 +37,8 @@
 
 extern CProjectile *StartProjectile;
 extern CProjectile *EndProjectile;
+extern CSpaceObject *StartSpaceObject;
+extern CGroundObject *StartGroundObject;
 
 float GetEnginePower(int EngineType);
 float GetEngineAcceleration(int EngineType);
@@ -70,6 +72,9 @@ eParticleSystem *Shild2 = 0;
 float ShildRadius;
 float ShildEnergyStatus;
 float ShildStartHitStatus;
+
+// голос с ворнингом, если столкнулись с несбиваемой частью
+int VoiceWarningCollisionDetected = 0;
 
 // Номер, для проигрывания голосового сообщения об обнаружении ракеты
 int VoiceMissileDetected = 0;
@@ -408,6 +413,8 @@ void GamePlayerShip()
 	// и если не закончился уровень
 	if (GameContentTransp < 0.99f && !GameMissionCompleteStatus)
 	{
+		int WarningMessagesCount = 0;
+
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// Вывод голосового предупреждения, если навелась ракета
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -441,7 +448,8 @@ void GamePlayerShip()
 
 			// визуальный вывод - выводим постоянно
 			int TmpFontSize = (Setup.iAspectRatioWidth-vw_FontSize(GetText("4_Missile_Detected"))*1.5f)/2;
-			vw_DrawFont(TmpFontSize, 720, 0, 0, 1.5f, 1.0f,0.5f,0.0f, CurrentAlert3, GetText("4_Missile_Detected"));
+			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.5f, 1.0f,0.5f,0.0f, CurrentAlert3, GetText("4_Missile_Detected"));
+			WarningMessagesCount++;
 		}
 		else
 		{
@@ -454,11 +462,70 @@ void GamePlayerShip()
 			{
 				// визуальный вывод - выводим постоянно
 				int TmpFontSize = (Setup.iAspectRatioWidth-vw_FontSize(GetText("4_Missile_Detected"))*1.5f)/2;
-				vw_DrawFont(TmpFontSize, 720, 0, 0, 1.5f, 1.0f,0.5f,0.0f, CurrentAlert3, GetText("4_Missile_Detected"));
+				vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.5f, 1.0f,0.5f,0.0f, CurrentAlert3, GetText("4_Missile_Detected"));
+				WarningMessagesCount++;
 			}
 		}
 
 
+
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		// Вывод голосового предупреждения если возможно столкновение
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		bool CollisionDetected = false;
+		CSpaceObject *tmpS = StartSpaceObject;
+		while (tmpS != 0 && PlayerFighter != 0)
+		{
+			CSpaceObject *tmpSpace2 = tmpS->Next;
+
+			// проверка на возможное столкновение с неразрушаемым объектом, вывод голосового предупреждения
+			// если объект ближе чем радиус, кричим
+			if (tmpS->ObjectType == 15) // только с большими астероидами
+			if (vw_SphereSphereCollision(PlayerFighter->Radius, PlayerFighter->Location,
+								tmpS->Radius, tmpS->Location, tmpS->PrevLocation))
+			if (vw_SphereAABBCollision(tmpS->AABB, tmpS->Location,
+								PlayerFighter->Radius, PlayerFighter->Location, PlayerFighter->PrevLocation))
+			{
+				CollisionDetected = true;
+			}
+
+			tmpS = tmpSpace2;
+		}
+		CGroundObject *tmpG = StartGroundObject;
+		while (tmpG!=0 && PlayerFighter != 0)
+		{
+			CGroundObject *tmpGround2 = tmpG->Next;
+
+			// проверка на возможное столкновение с неразрушаемым объектом, вывод голосового предупреждения
+			// если объект ближе чем радиус, кричим
+			if (tmpG->ObjectType == 12) // только со зданиями (чтобы не цепляло блоки конструкций баз)
+			if (vw_SphereSphereCollision(PlayerFighter->Radius, PlayerFighter->Location,
+								tmpG->Radius, tmpG->Location, tmpG->PrevLocation))
+			if (vw_SphereAABBCollision(tmpG->AABB, tmpG->Location,
+								PlayerFighter->Radius, PlayerFighter->Location, PlayerFighter->PrevLocation))
+			if (vw_SphereOBBCollision(tmpG->OBB, tmpG->OBBLocation, tmpG->Location, tmpG->CurrentRotationMat,
+								PlayerFighter->Radius, PlayerFighter->Location, PlayerFighter->PrevLocation))
+			{
+				CollisionDetected = true;
+			}
+
+			tmpG = tmpGround2;
+		}
+		if (CollisionDetected)
+		{
+			// голос, ворнинг, можем столкнуться с объектом
+			// проверяем, действительно еще играем
+			if (vw_FindSoundByNum(VoiceWarningCollisionDetected) == 0)
+			{
+				// уже не играем, нужно запустить опять
+				VoiceWarningCollisionDetected = Audio_PlayVoice(7, 1.0f);
+			}
+
+			// визуальный вывод - выводим постоянно
+			int TmpFontSize = (Setup.iAspectRatioWidth-vw_FontSize(GetText("4_Collision_Course_Detected"))*1.5f)/2;
+			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.5f, 1.0f,0.0f,0.0f, CurrentAlert3, GetText("4_Collision_Course_Detected"));
+			WarningMessagesCount++;
+		}
 
 
 
@@ -497,7 +564,6 @@ void GamePlayerShip()
 				SoundLowLife = Audio_PlaySound2D(14, 1.0f);
 		}
 	}
-
 
 
 

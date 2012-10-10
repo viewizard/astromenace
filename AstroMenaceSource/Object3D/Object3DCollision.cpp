@@ -72,9 +72,6 @@ extern float ShildStartHitStatus;
 // что взорвалось у игрока
 extern int PlayerDeadObjectPieceNum;
 
-// голос с ворнингом, если столкнулись с несбиваемой частью
-int VoiceWarningCollisionDetected = 0;
-
 
 
 //-----------------------------------------------------------------------------
@@ -708,17 +705,7 @@ void DetectCollisionAllObject3D()
 					if (tmpShip->ObjectStatus != 3)
 						tmpShip->Strength -= (tmpShip->StrengthStart/0.5f)*tmpShip->TimeDelta;
 					else
-					{
 						tmpShip->Strength -= (tmpShip->StrengthStart/2.0f)*tmpShip->TimeDelta;
-
-						// голос, ворнинг, столкнулись с объектом
-						// проверяем, действительно еще играем
-						if (vw_FindSoundByNum(VoiceWarningCollisionDetected) == 0)
-						{
-							// уже не играем, нужно запустить опять
-							VoiceWarningCollisionDetected = Audio_PlayVoice(7, 1.0f);
-						}
-					}
 				}
 				else
 				{
@@ -822,17 +809,7 @@ exitN1:
 					if (tmpShip->ObjectStatus != 3)
 						tmpShip->Strength -= (tmpShip->StrengthStart/0.5f)*tmpShip->TimeDelta;
 					else
-					{
 						tmpShip->Strength -= (tmpShip->StrengthStart/2.0f)*tmpShip->TimeDelta;
-
-						// голос, ворнинг, столкнулись с объектом
-						// проверяем, действительно еще играем
-						if (vw_FindSoundByNum(VoiceWarningCollisionDetected) == 0)
-						{
-							// уже не играем, нужно запустить опять
-							VoiceWarningCollisionDetected = Audio_PlayVoice(7, 1.0f);
-						}
-					}
 				}
 				else
 				{
