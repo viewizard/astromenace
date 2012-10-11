@@ -34,8 +34,8 @@
 
 
 extern	PFNGLACTIVETEXTUREPROC glActiveTexture13;
-
-
+extern	PFNGLGENERATEMIPMAPPROC glGenerateMipmapEXT;
+extern	PFNGLTEXSTORAGE2DPROC glTexStorage2DEXT;
 
 
 
@@ -54,10 +54,14 @@ GLuint vw_CreateTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int By
 
 	glGenTextures(1, &TextureID);
     glBindTexture(GL_TEXTURE_2D, TextureID);
-
+	// ... It has been reported that on some ATI drivers, glGenerateMipmap(GL_TEXTURE_2D)
+	// has no effect unless you precede it with a call to glEnable(GL_TEXTURE_2D) ...
+	// "перестраховываемся" и включаем его постоянно при генерации текстур
+	glEnable(GL_TEXTURE_2D);
 
 	int Mode;
 	int Color;
+	int InternalFormat;
 	eDevCaps *OpenGL_DevCaps = vw_GetDevCaps();
 
 
@@ -67,11 +71,13 @@ GLuint vw_CreateTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int By
 		{	// компрессия 4 к 1
 			Mode = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
 			Color = GL_RGBA;
+			InternalFormat = GL_RGBA8;
 		}
 		else
 		{	// компрессия 6 к 1, считаем 4 слоя
 			Mode = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
 			Color = GL_RGB;
+			InternalFormat = GL_RGB8;
 		}
 	}
 	else
@@ -80,37 +86,65 @@ GLuint vw_CreateTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int By
 		{
 			Mode = GL_RGBA;
 			Color = GL_RGBA;
+			InternalFormat = GL_RGBA8;
 		}
 		else
 		{	// считаем 4 слоя (фактически их задействуем)
 			Mode = GL_RGB;
 			Color = GL_RGB;
+			InternalFormat = GL_RGB8;
 		}
 	}
 
 
 	if (MipMap)
-	{
+	{	// используем по порядку наиболее новые решения при генерации мипмепов
+		if ((glGenerateMipmapEXT != NULL) & (glTexStorage2DEXT != NULL))
+		{
+			// считаем сколько нужно создавать мипмапов
+			int NeedMipMapLvl = 1;
+			int MaxSize = Width;
+			if (MaxSize < Height) MaxSize = Height;
+			while (MaxSize > 2) {MaxSize = MaxSize/2; NeedMipMapLvl++;};
+			// со стореджем уже не используем компрессию
+			glTexStorage2DEXT(GL_TEXTURE_2D, NeedMipMapLvl, InternalFormat, Width, Height);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Color, GL_UNSIGNED_BYTE, ustDIB);
+			glGenerateMipmapEXT(GL_TEXTURE_2D);
+		}
+		else
+		if (glGenerateMipmapEXT != NULL)
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, Mode, Width, Height,	0, Color, GL_UNSIGNED_BYTE, ustDIB);
+			glGenerateMipmapEXT(GL_TEXTURE_2D);
+		}
+		else
 		if (OpenGL_DevCaps->HardwareMipMapGeneration)
 		{
-			// делаем генерацию в железе
 			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
-			glTexImage2D(GL_TEXTURE_2D, 0, Mode, Width, Height,
-						0, Color, GL_UNSIGNED_BYTE, ustDIB);
+			glTexImage2D(GL_TEXTURE_2D, 0, Mode, Width, Height,	0, Color, GL_UNSIGNED_BYTE, ustDIB);
 		}
 		else
 		{
-			// делаем через glu
-			gluBuild2DMipmaps(GL_TEXTURE_2D, Mode, Width, Height,
-					Color, GL_UNSIGNED_BYTE, ustDIB);
+			// делаем через glu...
+			gluBuild2DMipmaps(GL_TEXTURE_2D, Mode, Width, Height, Color, GL_UNSIGNED_BYTE, ustDIB);
 		}
 	}
-	else
+	else // без мипмепов
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, Mode, Width, Height,
-					 0, Color, GL_UNSIGNED_BYTE, ustDIB);
+		if (glTexStorage2DEXT != NULL)
+		{
+			// со стореджем уже не используем компрессию
+			glTexStorage2DEXT(GL_TEXTURE_2D, 1, InternalFormat, Width, Height);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Color, GL_UNSIGNED_BYTE, ustDIB);
+		}
+		else
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, Mode, Width, Height, 0, Color, GL_UNSIGNED_BYTE, ustDIB);
+		}
 	}
 
+
+	glDisable(GL_TEXTURE_2D);
 
 	return TextureID;
 }

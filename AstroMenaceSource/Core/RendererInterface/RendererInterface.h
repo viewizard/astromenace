@@ -42,6 +42,9 @@
 
 struct eDevCaps
 {
+	// версия OpenGL
+	int OpenGLmajorVersion;
+	int OpenGLminorVersion;
 	// Max multtextures
 	int MaxMultTextures;
 	// Max texture width
@@ -58,6 +61,10 @@ struct eDevCaps
 	int MaxMultiSampleType;
 	// есть ли возможность включить сжатие текстур
 	bool TexturesCompression;
+	// GL_ARB_texture_storage
+	bool TextureStorage;
+	// поддержка FBO
+	bool FramebufferObject;
 	// поддержка VBO
 	bool VBOSupported;
 	// поддержка VAO

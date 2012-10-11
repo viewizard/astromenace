@@ -64,6 +64,13 @@ int PrimCountGL=0;
 // multitexture (OpenGL 1.3)
 PFNGLACTIVETEXTUREPROC			glActiveTexture13	= NULL;
 PFNGLCLIENTACTIVETEXTUREPROC	glClientActiveTexture13 = NULL;
+// glGenerateMipmap (OpenGL 3.0)
+PFNGLGENERATEMIPMAPPROC glGenerateMipmapEXT = NULL;
+// glTexStorage2D (OpenGL 4.2)
+PFNGLTEXSTORAGE2DPROC glTexStorage2DEXT = NULL;
+
+
+
 
 float CurrentGammaGL = 1.0f;
 float CurrentContrastGL = 1.0f;
@@ -116,6 +123,8 @@ bool ExtensionSupported( const char *Extension)
 //------------------------------------------------------------------------------------
 eDevCaps * vw_HardwareTest(int Width, int Height)
 {
+	OpenGL_DevCaps.OpenGLmajorVersion = 1;
+	OpenGL_DevCaps.OpenGLminorVersion = 0;
 	OpenGL_DevCaps.MaxMultTextures = 0;
 	OpenGL_DevCaps.MaxTextureWidth = 0;
 	OpenGL_DevCaps.MaxTextureHeight = 0;
@@ -133,6 +142,8 @@ eDevCaps * vw_HardwareTest(int Width, int Height)
 	OpenGL_DevCaps.ForceTexturesPriorManager = false;
 	OpenGL_DevCaps.HardwareMipMapGeneration = false;
 	OpenGL_DevCaps.StencilBufferSize = 0;
+	OpenGL_DevCaps.TextureStorage = false;
+	OpenGL_DevCaps.FramebufferObject = false;
 
 
 	// иним сдл и создаем окно, чтобы протестировать опенжл
@@ -165,11 +176,9 @@ eDevCaps * vw_HardwareTest(int Width, int Height)
 		printf("Vendor     : %s\n", glGetString(GL_VENDOR));
 		printf("Renderer   : %s\n", glGetString(GL_RENDERER));
 		printf("Version    : %s\n", glGetString(GL_VERSION));
-		int OpenGLmajor, OpenGLminor;
-		glGetIntegerv(GL_MAJOR_VERSION, &OpenGLmajor);
-		glGetIntegerv(GL_MINOR_VERSION, &OpenGLminor);
-		float OpenGLVersion = OpenGLmajor + OpenGLminor/10.0f;
-		printf("OpenGL Version    : %.1f\n", OpenGLVersion);
+		glGetIntegerv(GL_MAJOR_VERSION, &OpenGL_DevCaps.OpenGLmajorVersion);
+		glGetIntegerv(GL_MINOR_VERSION, &OpenGL_DevCaps.OpenGLminorVersion);
+		printf("OpenGL Version    : %i.%i\n", OpenGL_DevCaps.OpenGLmajorVersion, OpenGL_DevCaps.OpenGLminorVersion);
 		printf("\n");
 		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &OpenGL_DevCaps.MaxTextureHeight);
 		printf("Max texture height: %i \n", OpenGL_DevCaps.MaxTextureHeight);
@@ -188,6 +197,7 @@ eDevCaps * vw_HardwareTest(int Width, int Height)
 		// проверяем поддержку мультитекстуры
 		glGetIntegerv(GL_MAX_TEXTURE_UNITS, &OpenGL_DevCaps.MaxMultTextures);
 		printf("Max multitexture supported: %i textures.\n", OpenGL_DevCaps.MaxMultTextures);
+		// shader-based GL 2.0 and above programs should use GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS only
 
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -239,6 +249,17 @@ eDevCaps * vw_HardwareTest(int Width, int Height)
 			OpenGL_DevCaps.HardwareMipMapGeneration = true;
 		}
 
+		// проверяем, есть ли поддержка GL_EXT_framebuffer_object
+		if (ExtensionSupported("GL_EXT_framebuffer_object"))
+		{
+			OpenGL_DevCaps.FramebufferObject = true;
+		}
+
+		// проверяем, есть ли поддержка GL_ARB_texture_storage или GL_EXT_texture_storage
+		if (ExtensionSupported("GL_ARB_texture_storage") | ExtensionSupported("GL_EXT_texture_storage"))
+		{
+			OpenGL_DevCaps.TextureStorage = true;
+		}
 
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -288,6 +309,7 @@ eDevCaps * vw_HardwareTest(int Width, int Height)
 
 		// проверяем, если версия опенжл выше 3.3, версия шейдеров им соответствует
 		// (если мы не нашли более высокую через расширения ранее, ставим по версии опенжл)
+		float OpenGLVersion = OpenGL_DevCaps.OpenGLmajorVersion + OpenGL_DevCaps.OpenGLminorVersion/10.0f;
 		if ((OpenGL_DevCaps.ShaderModel >= 3.0f) & (OpenGLVersion >= 3.3))
 			if (OpenGL_DevCaps.ShaderModel < OpenGLVersion) OpenGL_DevCaps.ShaderModel = OpenGLVersion;
 
@@ -538,9 +560,28 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 	glClientActiveTexture13 = (PFNGLCLIENTACTIVETEXTUREPROC) SDL_GL_GetProcAddress("glClientActiveTexture");
 	if (glActiveTexture13 == NULL || glClientActiveTexture13 == NULL)
 	{
-		fprintf(stderr, "Can't get proc address for glActiveTexture or glClientActiveTexture.\n");
+		fprintf(stderr, "Can't get proc address for glActiveTexture or glClientActiveTexture.\n\n");
 	}
 
+	if (OpenGL_DevCaps.FramebufferObject)
+	{
+		glGenerateMipmapEXT = (PFNGLGENERATEMIPMAPPROC) SDL_GL_GetProcAddress("glGenerateMipmapEXT");
+		if (glGenerateMipmapEXT == NULL)
+		{
+			fprintf(stderr, "Can't get proc address for glGenerateMipmapEXT.\n\n");
+		}
+	}
+
+	if (OpenGL_DevCaps.TextureStorage)
+	{
+		glTexStorage2DEXT = (PFNGLTEXSTORAGE2DPROC) SDL_GL_GetProcAddress("glTexStorage2D");
+		if (glTexStorage2DEXT == NULL) glTexStorage2DEXT = (PFNGLTEXSTORAGE2DPROC) SDL_GL_GetProcAddress("glTexStorage2DEXT");
+		if (glTexStorage2DEXT == NULL)
+		{
+			OpenGL_DevCaps.TextureStorage = false;
+			fprintf(stderr, "Can't get proc address for glTexStorage2DEXT.\n\n");
+		}
+	}
 
 	// инициализация индекс буфера
 	vw_Internal_InitializationIndexBufferData();
