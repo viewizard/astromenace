@@ -54,6 +54,7 @@ float StartHideTransp = 1.0f;
 
 // что рисовать в диалоге 6,7,8
 CSpaceShip *DialogSpaceShip = 0;
+extern CEarthSpaceFighter *WorkshopFighterGame; // корабль игрока в меню шипярд
 char *GetShipGroupTitle(int Num);
 char *GetWorkshopShipName(int Num);
 float GetShipArmor(int SpaceShipNum);
@@ -803,30 +804,102 @@ void DrawDialogBox()
 				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, GetText("4_Earth_Federation"));
 
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Width:"));
-				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogSpaceShip->Width, GetText("4_units"));
+				if (WorkshopFighterGame == DialogSpaceShip)
+				{
+					vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Width:"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogSpaceShip->Width, GetText("4_units"));
+				}
+				else
+				{
+					vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Width:"));
+					if (DialogSpaceShip->Width > WorkshopFighterGame->Width)
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%2.1f (%2.1f) %s", DialogSpaceShip->Width, WorkshopFighterGame->Width, GetText("4_units"));
+					else
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%2.1f (%2.1f) %s", DialogSpaceShip->Width, WorkshopFighterGame->Width, GetText("4_units"));
+				}
+
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Length:"));
-				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogSpaceShip->Length, GetText("4_units"));
+				if (WorkshopFighterGame == DialogSpaceShip)
+				{
+					vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Length:"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogSpaceShip->Length, GetText("4_units"));
+				}
+				else
+				{
+					vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Length:"));
+					if (DialogSpaceShip->Length > WorkshopFighterGame->Length)
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%2.1f (%2.1f) %s", DialogSpaceShip->Length, WorkshopFighterGame->Length, GetText("4_units"));
+					else
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%2.1f (%2.1f) %s", DialogSpaceShip->Length, WorkshopFighterGame->Length, GetText("4_units"));
+				}
+
+
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Height:"));
-				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogSpaceShip->Height, GetText("4_units"));
+				if (WorkshopFighterGame == DialogSpaceShip)
+				{
+					vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Height:"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", DialogSpaceShip->Height, GetText("4_units"));
+				}
+				else
+				{
+					vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Height:"));
+					if (DialogSpaceShip->Height > WorkshopFighterGame->Height)
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%2.1f (%2.1f) %s", DialogSpaceShip->Height, WorkshopFighterGame->Height, GetText("4_units"));
+					else
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%2.1f (%2.1f) %s", DialogSpaceShip->Height, WorkshopFighterGame->Height, GetText("4_units"));
+				}
+
 				Y1 += Offset;
 				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Engines:"));
 				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", DialogSpaceShip->EngineQuantity, GetText("4_units"));
 
 				Y1 += Offset;
-				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Armor:"));
-				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)GetShipArmor(DialogSpaceShip->ObjectCreationType), GetText("4_units"));
-				Y1 += Offset;
-				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk2:"));
-				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*2), GetText("4_units"));
-				Y1 += Offset;
-				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk3:"));
-				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*3), GetText("4_units"));
-				Y1 += Offset;
-				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk4:"));
-				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*4), GetText("4_units"));
+				if (WorkshopFighterGame == DialogSpaceShip)
+				{
+					vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Armor:"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)GetShipArmor(DialogSpaceShip->ObjectCreationType), GetText("4_units"));
+					Y1 += Offset;
+					vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk2:"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*2), GetText("4_units"));
+					Y1 += Offset;
+					vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk3:"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*3), GetText("4_units"));
+					Y1 += Offset;
+					vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk4:"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*4), GetText("4_units"));
+
+				}
+				else
+				{
+					vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Armor:"));
+					if (GetShipArmor(DialogSpaceShip->ObjectCreationType) < GetShipArmor(WorkshopFighterGame->ObjectCreationType))
+					{
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%i (%i) %s", (int)GetShipArmor(DialogSpaceShip->ObjectCreationType), (int)GetShipArmor(WorkshopFighterGame->ObjectCreationType), GetText("4_units"));
+						Y1 += Offset;
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk2:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*2), (int)(GetShipArmor(WorkshopFighterGame->ObjectCreationType)*2), GetText("4_units"));
+						Y1 += Offset;
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk3:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*3), (int)(GetShipArmor(WorkshopFighterGame->ObjectCreationType)*3), GetText("4_units"));
+						Y1 += Offset;
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk4:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*4), (int)(GetShipArmor(WorkshopFighterGame->ObjectCreationType)*4), GetText("4_units"));
+					}
+					else
+					{
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%i (%i) %s", (int)GetShipArmor(DialogSpaceShip->ObjectCreationType), (int)GetShipArmor(WorkshopFighterGame->ObjectCreationType), GetText("4_units"));
+						Y1 += Offset;
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk2:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*2), (int)(GetShipArmor(WorkshopFighterGame->ObjectCreationType)*2), GetText("4_units"));
+						Y1 += Offset;
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk3:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*3), (int)(GetShipArmor(WorkshopFighterGame->ObjectCreationType)*3), GetText("4_units"));
+						Y1 += Offset;
+						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Upgrade_Mk4:"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*4), (int)(GetShipArmor(WorkshopFighterGame->ObjectCreationType)*4), GetText("4_units"));
+					}
+				}
+
 
 				Y1 += Offset;
 				vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Weapons_Slots:"));
@@ -963,13 +1036,56 @@ void DrawDialogBox()
 						if (NeedMoreEnergyDialog && Setup.Profile[CurrentProfile].SpaceShipControlMode != 1)
 							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*DialogContentTransp, "%3.1f %s", GetShipEngineSystemEnergyUse(DialogSystem), GetText("4_units_per_sec"));
 						else
-							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipEngineSystemEnergyUse(DialogSystem), GetText("4_units_per_sec"));
+						{
+							if (Setup.Profile[CurrentProfile].EngineSystem == DialogSystem)
+							{
+								vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipEngineSystemEnergyUse(DialogSystem), GetText("4_units_per_sec"));
+							}
+							else
+							if (Setup.Profile[CurrentProfile].EngineSystem == 0)
+								vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipEngineSystemEnergyUse(DialogSystem), GetText("4_units_per_sec"));
+							else
+							{
+								if (GetShipEngineSystemEnergyUse(DialogSystem) < GetShipEngineSystemEnergyUse(Setup.Profile[CurrentProfile].EngineSystem))
+									vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipEngineSystemEnergyUse(DialogSystem), GetShipEngineSystemEnergyUse(Setup.Profile[CurrentProfile].EngineSystem), GetText("4_units_per_sec"));
+								else
+									vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipEngineSystemEnergyUse(DialogSystem), GetShipEngineSystemEnergyUse(Setup.Profile[CurrentProfile].EngineSystem), GetText("4_units_per_sec"));
+							}
+						}
+
 						Y1 += Offset;
 						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Engine_Power:"));
-						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetEnginePower(DialogSystem), GetText("4_units"));
+						if (Setup.Profile[CurrentProfile].EngineSystem == DialogSystem)
+						{
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetEnginePower(DialogSystem), GetText("4_units"));
+						}
+						else
+						if (Setup.Profile[CurrentProfile].EngineSystem == 0)
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetEnginePower(DialogSystem), GetText("4_units"));
+						else
+						{
+							if (GetEnginePower(DialogSystem) > GetEnginePower(Setup.Profile[CurrentProfile].EngineSystem))
+								vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetEnginePower(DialogSystem), GetEnginePower(Setup.Profile[CurrentProfile].EngineSystem), GetText("4_units"));
+							else
+								vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetEnginePower(DialogSystem), GetEnginePower(Setup.Profile[CurrentProfile].EngineSystem), GetText("4_units"));
+						}
+
 						Y1 += Offset;
 						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Acceleration:"));
-						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetEngineAcceleration(DialogSystem), GetText("4_units"));
+						if (Setup.Profile[CurrentProfile].EngineSystem == DialogSystem)
+						{
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetEngineAcceleration(DialogSystem), GetText("4_units"));
+						}
+						else
+						if (Setup.Profile[CurrentProfile].EngineSystem == 0)
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetEngineAcceleration(DialogSystem), GetText("4_units"));
+						else
+						{
+							if (GetEngineAcceleration(DialogSystem) > GetEngineAcceleration(Setup.Profile[CurrentProfile].EngineSystem))
+								vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetEngineAcceleration(DialogSystem), GetEngineAcceleration(Setup.Profile[CurrentProfile].EngineSystem), GetText("4_units"));
+							else
+								vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetEngineAcceleration(DialogSystem), GetEngineAcceleration(Setup.Profile[CurrentProfile].EngineSystem), GetText("4_units"));
+						}
 
 						Y1 += Offset;
 						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Relations/Dependences:"));
@@ -1009,13 +1125,44 @@ void DrawDialogBox()
 						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", 0.0f, GetText("4_units"));
 						Y1 += Offset;
 						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Energy_Capacity:"));
-						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipMaxEnergy(DialogSystem-4), GetText("4_units"));
+
+						if (Setup.Profile[CurrentProfile].PowerSystem == DialogSystem-4)
+						{
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipMaxEnergy(DialogSystem-4), GetText("4_units"));
+						}
+						else
+						if (Setup.Profile[CurrentProfile].PowerSystem == 0)
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipMaxEnergy(DialogSystem-4), GetText("4_units"));
+						else
+						{
+							if (GetShipMaxEnergy(DialogSystem-4) > GetShipMaxEnergy(Setup.Profile[CurrentProfile].PowerSystem))
+								vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipMaxEnergy(DialogSystem-4), GetShipMaxEnergy(Setup.Profile[CurrentProfile].PowerSystem), GetText("4_units"));
+							else
+								vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipMaxEnergy(DialogSystem-4), GetShipMaxEnergy(Setup.Profile[CurrentProfile].PowerSystem), GetText("4_units"));
+						}
+
 						Y1 += Offset;
 						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Recharge_Rate:"));
 						if (NeedMoreEnergyDialog)
 							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*DialogContentTransp, "%3.1f %s", GetShipRechargeEnergy(DialogSystem-4), GetText("4_units_per_sec"));
 						else
-							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipRechargeEnergy(DialogSystem-4), GetText("4_units_per_sec"));
+						{
+							if (Setup.Profile[CurrentProfile].PowerSystem == DialogSystem-4)
+							{
+								vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipRechargeEnergy(DialogSystem-4), GetText("4_units_per_sec"));
+							}
+							else
+							if (Setup.Profile[CurrentProfile].PowerSystem == 0)
+								vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipRechargeEnergy(DialogSystem-4), GetText("4_units_per_sec"));
+							else
+							{
+								if (GetShipRechargeEnergy(DialogSystem-4) > GetShipRechargeEnergy(Setup.Profile[CurrentProfile].PowerSystem))
+									vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipRechargeEnergy(DialogSystem-4), GetShipRechargeEnergy(Setup.Profile[CurrentProfile].PowerSystem), GetText("4_units_per_sec"));
+								else
+									vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipRechargeEnergy(DialogSystem-4), GetShipRechargeEnergy(Setup.Profile[CurrentProfile].PowerSystem), GetText("4_units_per_sec"));
+							}
+						}
+
 						Y1 += Offset;
 						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Relations/Dependences:"));
 						Y1 += Offset;
@@ -1107,7 +1254,20 @@ void DrawDialogBox()
 						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 0.1f, GetText("4_units_per_sec"));
 						Y1 += Offset;
 						vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Orientation_Speed:"));
-						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 40.0f*(DialogSystem-12), GetText("4_deg_per_sec"));
+						if (Setup.Profile[CurrentProfile].TargetingMechanicSystem == DialogSystem-12)
+						{
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 40.0f*(DialogSystem-12), GetText("4_deg_per_sec"));
+						}
+						else
+						if (Setup.Profile[CurrentProfile].TargetingMechanicSystem == 0)
+							vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 40.0f*(DialogSystem-12), GetText("4_deg_per_sec"));
+						else
+						{
+							if (DialogSystem-12 > Setup.Profile[CurrentProfile].TargetingMechanicSystem)
+								vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", 40.0f*(DialogSystem-12), 40.0f*Setup.Profile[CurrentProfile].TargetingMechanicSystem, GetText("4_deg_per_sec"));
+							else
+								vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", 40.0f*(DialogSystem-12), 40.0f*Setup.Profile[CurrentProfile].TargetingMechanicSystem, GetText("4_deg_per_sec"));
+						}
 
 						Y1 += Offset;
 						vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, GetText("4_Relations/Dependences:"));
