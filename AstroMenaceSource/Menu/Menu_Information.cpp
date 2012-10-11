@@ -495,6 +495,14 @@ void CreateInfoObject()
 		if (InfoPirateShip->Engine[i] != 0)
 			InfoPirateShip->Engine[i]->SpeedOnCreation = -1.0f;
 
+		// убираем поворот турелей
+		if (InfoPirateShip->Weapon != 0)
+		for (int i=0; i<InfoPirateShip->WeaponQuantity; i++)
+		if (InfoPirateShip->Weapon[i] != 0)
+		{
+			InfoPirateShip->Weapon[i]->SetRotation(VECTOR3D(-InfoPirateShip->Weapon[i]->Rotation.x,-InfoPirateShip->Weapon[i]->Rotation.y,-InfoPirateShip->Weapon[i]->Rotation.z));
+		}
+
 		InfoPirateShip->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant)
