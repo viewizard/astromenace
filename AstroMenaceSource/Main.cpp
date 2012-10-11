@@ -533,7 +533,7 @@ int main( int argc, char **argv )
 			// 100% держит наши шейдеры
 			Setup.UseGLSL = true;
 			// 100% больше чем нужно памяти и не надо сжимать текстуры (ув. качество и скорость загрузки)
-			Setup.TexturesCompression = 0;
+			Setup.TexturesCompression = false;
 			// немного больше ставим другие опции
 			Setup.MultiSampleType = 2;
 			Setup.AnisotropyLevel = CAPS->MaxAnisotropyLevel;
@@ -1121,6 +1121,16 @@ ReCreate:
 	if (Setup.BPP <= 16) Setup.BPP = 16;
 	if (Setup.BPP > 16) Setup.BPP = 32;
 	if (!Fullscreen) Setup.BPP = 0;
+
+
+
+
+
+	// вторичная работа с настройками
+	// в процессе инициализации opengl контекста мы подключаем указатели на функции, и данные могут измениться
+
+	// если поддерживает сторедж - вырубаем вообще поддержку сжатия (все равно работаем без него)
+	if (CAPS->TextureStorage) CAPS->TexturesCompression = false;
 
 
 
