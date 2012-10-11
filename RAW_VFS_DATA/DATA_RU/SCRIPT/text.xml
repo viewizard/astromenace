@@ -303,7 +303,7 @@
 <item id="4_ArcadeModeLine2">Режиме Управления Кораблем.</item><!--Useless with Arcade SpaceShip Control Mode.-->
 <item id="4_ArcadeModeLine3">Режиме Наведения Оружия.</item><!--Useless with Arcade Weapon Targeting Mode.-->
 <item id="4_Energy_Capacity:">Емкость:</item>
-<item id="4_Recharge_Rate:">Перезарядки:</item>
+<item id="4_Recharge_Rate:">Перезарядка:</item>
 <item id="4_Weapon_Recharge_Rate">Скорость Перезарядки</item>
 <item id="4_Optical_Computer">Компьютер</item>
 <item id="4_Targeting_System">Наведение</item>
