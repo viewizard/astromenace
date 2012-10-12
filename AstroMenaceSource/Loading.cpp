@@ -99,6 +99,10 @@ int CurrentListCount = 0;
 //------------------------------------------------------------------------------------
 // данные загрузки шейдеров
 //------------------------------------------------------------------------------------
+eGLSL 	*GLSLShaderType1 = 0;
+eGLSL 	*GLSLShaderType2 = 0;
+eGLSL 	*GLSLShaderType3 = 0;
+
 struct sGLSLLoadList
 {
 	char Name[MAX_PATH];
@@ -1487,7 +1491,7 @@ void LoadGameData(int LoadType)
 
 
 
-	//	если нужно, загрузка всех шейдеров (грузим их _ДО_ загрузки 3д моделей, чтобы сделать установку моделей правильно)
+	//	если нужно, загрузка всех шейдеров
 	if (NeedLoadShaders)
 	if (CAPS->GLSL100Supported)
 	{
@@ -1510,6 +1514,11 @@ void LoadGameData(int LoadType)
 			// рисуем текущее состояние загрузки, если не рисуем логотип
 			DrawLoading(RealLoadedTextures, AllDrawLoading, &LastDrawTime, LoadImageTexture);
 		}
+
+		// сразу находим базовые типы шейдеров для прорисовки 3д моделей
+		GLSLShaderType1 = vw_FindShaderByName("PerPixelLight");
+		GLSLShaderType2 = vw_FindShaderByName("PerPixelLight_Explosion");
+		GLSLShaderType3 = vw_FindShaderByName("PerPixelLight_Track");
 	}
 
 

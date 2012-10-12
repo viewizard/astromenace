@@ -41,6 +41,10 @@ extern eDevCaps CAPS;
 int NeedShowBB = 0;
 
 
+extern eGLSL 	*GLSLShaderType1;
+extern eGLSL 	*GLSLShaderType2;
+extern eGLSL 	*GLSLShaderType3;
+
 
 
 //-----------------------------------------------------------------------------

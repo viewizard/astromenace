@@ -36,11 +36,6 @@
 extern GameSetup Setup;
 extern eDevCaps CAPS;
 
-bool NeedShaderSetup = true;
-eGLSL 	*GLSLShaderType1;
-eGLSL 	*GLSLShaderType2;
-eGLSL 	*GLSLShaderType3;
-
 
 //-----------------------------------------------------------------------------
 // Удаляем все объекты в списке
@@ -66,9 +61,6 @@ void ReleaseAllObject3D()
 	ReleaseAllSpaceObject();
 	// взрывы
 	ReleaseAllExplosion();
-
-	// сбрасываем флаг, чтобы оптом опять установить правильные указатели
-	NeedShaderSetup = true;
 }
 
 
@@ -88,17 +80,6 @@ void DrawAllExplosion();
 
 void DrawAllObject3D()
 {
-	// перед первой прорисовкой обязательно найти и задать шейдеры
-	if (NeedShaderSetup)
-	{
-		NeedShaderSetup = false;
-
-		GLSLShaderType1 = vw_FindShaderByName("PerPixelLight");
-		GLSLShaderType2 = vw_FindShaderByName("PerPixelLight_Explosion");
-		GLSLShaderType3 = vw_FindShaderByName("PerPixelLight_Track");
-	}
-
-
 	// ставим всегда меньше или равно!
 	vw_DepthTest(true, RI_LESSEQUAL);
 
