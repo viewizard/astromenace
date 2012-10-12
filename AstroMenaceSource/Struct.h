@@ -267,8 +267,8 @@ struct GameSetup
 	// режим качества прорисовки текстур
 	int		TexturesQuality;
 	// мультисэмпл антиалиасинг
-	int		MultiSampleType;
-
+	int		MSAA;
+	int		CSAA;
 
 
 	// испускание частиц, во сколько раз уменьшить... // 1-3

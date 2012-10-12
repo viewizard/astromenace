@@ -37,7 +37,8 @@
 // временные данные для изменения и восстановления
 int Options_TexturesCompression;
 int Options_UseGLSL;
-int Options_MultiSampleType;
+int Options_MSAA;
+int Options_CSAA;
 
 extern CSpaceStars *psSpaceStatic;
 
@@ -257,35 +258,78 @@ void OptionsAdvMenu()
 	//Options_MultiSampleType
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Multisample_Antialiasing"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, CAPS->MaxMultiSampleType==0 || Options_MultiSampleType==0))
+	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, (Options_MSAA == 0) | (CAPS->MaxSamples == 0)))
 	{
-		if (Options_MultiSampleType == 0) Options_MultiSampleType = CAPS->MaxMultiSampleType;
+		// находим текущий режим
+		int CurrentMode = 0;
+		if (Options_MSAA == 0) CurrentMode = -1;
 		else
-			if (Options_MultiSampleType == 2) Options_MultiSampleType = 0;
-			else
-				if (Options_MultiSampleType == 4) Options_MultiSampleType = 2;
-				else
-					if (Options_MultiSampleType == 8) Options_MultiSampleType = 4;
-					else
-						if (Options_MultiSampleType == 16) Options_MultiSampleType = 8;
-	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, CAPS->MaxMultiSampleType==0 || Options_MultiSampleType==CAPS->MaxMultiSampleType))
-	{
-		if (Options_MultiSampleType == 8) Options_MultiSampleType = 16;
-		else
-			if (Options_MultiSampleType == 4) Options_MultiSampleType = 8;
-			else
-				if (Options_MultiSampleType == 2) Options_MultiSampleType = 4;
-				else
-					if (Options_MultiSampleType == 0) Options_MultiSampleType = 2;
-					else
-						if (Options_MultiSampleType == 16) Options_MultiSampleType = 0;
+		{
+			for (int i=0;i<CAPS->MaxMultisampleCoverageModes; i++)
+			{
+				if ((CAPS->MultisampleCoverageModes[i].ColorSamples == Options_MSAA) &
+					(CAPS->MultisampleCoverageModes[i].CoverageSamples == Options_CSAA))
+					{
+						CurrentMode = i;
+						break;
+					}
+			}
+		}
 
-		if (Options_MultiSampleType < 0) Options_MultiSampleType = CAPS->MaxMultiSampleType;
+		CurrentMode --;
+		if (CurrentMode < -1) CurrentMode = CAPS->MaxMultisampleCoverageModes-1;
+
+		// -1 - делаем "выключение" антиалиасинга
+		if (CurrentMode == -1)
+		{
+			Options_MSAA = 0;
+			Options_CSAA = 0;
+		}
+		else
+		{
+			Options_MSAA = CAPS->MultisampleCoverageModes[CurrentMode].ColorSamples;
+			Options_CSAA = CAPS->MultisampleCoverageModes[CurrentMode].CoverageSamples;
+		}
 	}
-	if (Options_MultiSampleType == 0)
+	bool TestStateButton = false;
+	if (CAPS->MaxMultisampleCoverageModes > 0) TestStateButton = (CAPS->MultisampleCoverageModes[CAPS->MaxMultisampleCoverageModes-1].ColorSamples == Options_MSAA) &
+												(CAPS->MultisampleCoverageModes[CAPS->MaxMultisampleCoverageModes-1].CoverageSamples == Options_CSAA);
+	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, TestStateButton | (CAPS->MaxSamples == 0)))
 	{
-		if (CAPS->MaxMultiSampleType == 0)
+		// находим текущий режим
+		int CurrentMode = 0;
+		if (Options_MSAA == 0) CurrentMode = -1;
+		else
+		{
+			for (int i=0;i<CAPS->MaxMultisampleCoverageModes; i++)
+			{
+				if ((CAPS->MultisampleCoverageModes[i].ColorSamples == Options_MSAA) &
+					(CAPS->MultisampleCoverageModes[i].CoverageSamples == Options_CSAA))
+					{
+						CurrentMode = i;
+						break;
+					}
+			}
+		}
+
+		CurrentMode ++;
+		if (CurrentMode > CAPS->MaxMultisampleCoverageModes-1) CurrentMode = -1;
+
+		// -1 - делаем "выключение" антиалиасинга
+		if (CurrentMode == -1)
+		{
+			Options_MSAA = 0;
+			Options_CSAA = 0;
+		}
+		else
+		{
+			Options_MSAA = CAPS->MultisampleCoverageModes[CurrentMode].ColorSamples;
+			Options_CSAA = CAPS->MultisampleCoverageModes[CurrentMode].CoverageSamples;
+		}
+	}
+	if (Options_MSAA == 0)
+	{
+		if (CAPS->MaxSamples == 0)
 		{
 			Size = vw_FontSize(GetText("3_Not_available"));
 			SizeI = (170-Size)/2;
@@ -299,10 +343,18 @@ void OptionsAdvMenu()
 		}
 	}
 	else
-	{
-		Size = vw_FontSize("%ix MSAA",Options_MultiSampleType);
-		SizeI = (170-Size)/2;//Off, 2x, 4x ...
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%ix MSAA", Options_MultiSampleType);
+	{	if ((Options_MSAA == Options_CSAA) | (Options_CSAA == 0))
+		{
+			Size = vw_FontSize("%ix MS",Options_MSAA);
+			SizeI = (170-Size)/2;//Off, 2x, 4x ...
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%ix MS", Options_MSAA);
+		}
+		else
+		{
+			Size = vw_FontSize("%ix CS/%ix MS",Options_CSAA,Options_MSAA);
+			SizeI = (170-Size)/2;//Off, 2x, 4x ...
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%ix CS/%ix MS",Options_CSAA,Options_MSAA);
+		}
 	}
 
 
@@ -380,7 +432,8 @@ void OptionsAdvMenu()
 
 
 	if (Options_TexturesCompression == Setup.TexturesCompression &&
-		Options_MultiSampleType == Setup.MultiSampleType &&
+		Options_MSAA == Setup.MSAA &&
+		Options_CSAA == Setup.CSAA &&
 		Options_UseGLSL == Setup.UseGLSL)
 	{
 		X = (Setup.iAspectRatioWidth - 384)/2;
@@ -403,7 +456,8 @@ void OptionsAdvMenu()
 		{
 			// проверяем, нужно перегружать или нет
 			if (Options_TexturesCompression != Setup.TexturesCompression ||
-				Options_MultiSampleType != Setup.MultiSampleType ||
+				Options_MSAA != Setup.MSAA ||
+				Options_CSAA != Setup.CSAA ||
 				Options_UseGLSL != Setup.UseGLSL)
 			{
 				CanQuit = false;
@@ -413,7 +467,8 @@ void OptionsAdvMenu()
 
 			Setup.UseGLSL = Options_UseGLSL;
 			Setup.TexturesCompression = Options_TexturesCompression;
-			Setup.MultiSampleType = Options_MultiSampleType;
+			Setup.MSAA = Options_MSAA;
+			Setup.CSAA = Options_CSAA;
 		}
 	}
 }
