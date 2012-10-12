@@ -390,7 +390,8 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 
 	// проверяем, если версия опенжл выше 3.3, версия шейдеров им соответствует
 	// (если мы не нашли более высокую через расширения ранее, ставим по версии опенжл)
-	float OpenGLVersion = OpenGL_DevCaps.OpenGLmajorVersion + OpenGL_DevCaps.OpenGLminorVersion/10.0f;
+	float OpenGLVersion = OpenGL_DevCaps.OpenGLmajorVersion;
+	if (OpenGL_DevCaps.OpenGLminorVersion != 0) OpenGLVersion += OpenGL_DevCaps.OpenGLminorVersion/10.0f;
 	if ((OpenGL_DevCaps.ShaderModel >= 3.0f) & (OpenGLVersion >= 3.3))
 		if (OpenGL_DevCaps.ShaderModel < OpenGLVersion) OpenGL_DevCaps.ShaderModel = OpenGLVersion;
 
