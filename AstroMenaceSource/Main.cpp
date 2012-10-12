@@ -465,100 +465,6 @@ int main( int argc, char **argv )
 
 
 
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверяем возможности железа
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	CAPS = vw_HardwareTest(640, 480);
-
-
-	// если не поддерживаем как минимум 2 мультитекстуры, железо очень слабое - не запустимся
-	if (CAPS->MaxMultTextures < 2)
-	{
-		fprintf(stderr, "The Multi Textures feature unsupported by hardware. Fatal error.\n");
-		ReleaseGameOneCopy();
-		return -1;
-	}
-
-	// выключаем создание стенсил буфера
-	CAPS->StencilBufferSize = 0;
-
-	// если нужно, устанавливаем перерытие значений внутри движка, може только выключить - включить то чего нет нельзя
-#ifndef vbo // принудительно отключаем вообще работу с vbo
-	CAPS->VBOSupported = false;
-	printf("Vertex Buffer support forced disabled.\n");
-#endif
-	if (Setup.VBOCoreMode == 0)
-	{
-		CAPS->VBOSupported = false;
-	}
-
-	// если нужно, выключаем vao
-#ifndef vao // принудительно отключаем вообще работу с vao
-	CAPS->VAOSupported = false;
-	printf("Vertex Array Object support forced disabled.\n");
-#endif
-	// работаем только если есть VBO
-	if ((Setup.VAOCoreMode == 0) | (Setup.VBOCoreMode == 0) | (!CAPS->VBOSupported))
-	{
-		CAPS->VAOSupported = false;
-	}
-
-
-	// проверка поддержки шейдеров (нужна 100% поддержка GLSL 1.0)
-	if (Setup.UseGLSL)
-		if (!CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0f) Setup.UseGLSL = false;
-
-	// установка режима работы менеджера приоритетов
-	CAPS->ForceTexturesPriorManager = Setup.ForceTexturesPriorManager;
-
-	// управление генерации мипмеп уровней- можем только выключить, нельзя включить если его нет
-	if (!Setup.HardwareMipMapGeneration)
-	{
-		CAPS->HardwareMipMapGeneration = false;
-	}
-
-	// анализ системы только если это первый запуск
-	if (FirstStart)
-	{
-		// если шейдерная модель 3-я или выше
-		if (CAPS->ShaderModel >= 3.0f)
-		{
-			// памяти достаточно, включаем другой режим загрузки
-			Setup.EqualOrMore128MBVideoRAM = true;
-		}
-		// если шейдерная модель 4-я или выше
-		if (CAPS->ShaderModel >= 4.0f)
-		{
-			// 100% держит наши шейдеры
-			Setup.UseGLSL = true;
-			// 100% больше чем нужно памяти и не надо сжимать текстуры (ув. качество и скорость загрузки)
-			Setup.TexturesCompression = false;
-			// немного больше ставим другие опции
-			Setup.MultiSampleType = 2;
-			Setup.AnisotropyLevel = CAPS->MaxAnisotropyLevel;
-
-			Setup.BackgroundStarsQuality = 7;
-			Setup.MaxPointLights = 4;
-		}
-		// если шейдерная модель 4.1-я или выше
-		if (CAPS->ShaderModel >= 4.1f)
-		{
-			// немного больше ставим другие опции
-			Setup.MultiSampleType = 4;
-
-			Setup.ParticlesPerSecQuality = 1;
-			Setup.PartsExplosionQuality = 0;
-			Setup.BackgroundStarsQuality = 10;
-			Setup.BackgroundTileAnimation = 3;
-			Setup.MaxPointLights = 6;
-		}
-	}
-
-	if (Setup.MultiSampleType > CAPS->MaxMultiSampleType) Setup.MultiSampleType = CAPS->MaxMultiSampleType;
-
-
-
 	// инициализация счета времени
 	vw_InitTime();
 
@@ -1076,10 +982,10 @@ ReCreate:
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// делаем окно
+	// создаем окно и базовые опенжл контекст
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	bool Fullscreen = (Setup.BPP != 0);
-	int InitStatus = vw_InitRenderer("AstroMenace", Setup.Width, Setup.Height, &Setup.BPP, Fullscreen, &Setup.MultiSampleType, CurrentVideoModeX, CurrentVideoModeY, CurrentVideoMode.W, CurrentVideoMode.H);
+	int InitStatus = vw_InitWindow("AstroMenace", Setup.Width, Setup.Height, &Setup.BPP, Fullscreen, CurrentVideoModeX, CurrentVideoModeY, CurrentVideoMode.W, CurrentVideoMode.H);
 
 	// ошибка окна (размеры)
 	if (InitStatus == 1)
@@ -1105,18 +1011,6 @@ ReCreate:
 		ReleaseGameOneCopy();
 		return 0;									// Quit If Window Was Not Created
 	}
-	// не поддерживаем что-то
-	if (InitStatus == 2)
-	{
-        fprintf(stderr, "Some OpenGL features are not supported.\n");
-#ifdef WIN32
-		MessageBox(NULL,"OpenGL 1.3 required. Please, install the newest video drivers from your video card vendor.", "Render system - Fatal Error",MB_OK|MB_APPLMODAL|MB_ICONERROR);
-#endif // WIN32
-		SDL_Quit();
-		ReleaseGameOneCopy();
-		return 0;									// Quit If Window Was Not Created
-	}
-
 	// даже если 24, все равно тянем как 32 бита, а если меньше 16, то ставим 16
 	if (Setup.BPP <= 16) Setup.BPP = 16;
 	if (Setup.BPP > 16) Setup.BPP = 32;
@@ -1126,11 +1020,117 @@ ReCreate:
 
 
 
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// проверяем возможности железа
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	CAPS = vw_GetDevCaps();
+
+	// если нужно, устанавливаем перерытие значений внутри движка, може только выключить - включить то чего нет нельзя
+#ifndef vbo // принудительно отключаем вообще работу с vbo
+	CAPS->VBOSupported = false;
+	printf("Vertex Buffer support forced disabled.\n");
+#endif
+	if (Setup.VBOCoreMode == 0)
+	{
+		CAPS->VBOSupported = false;
+	}
+
+	// если нужно, выключаем vao
+#ifndef vao // принудительно отключаем вообще работу с vao
+	CAPS->VAOSupported = false;
+	printf("Vertex Array Object support forced disabled.\n");
+#endif
+	// работаем только если есть VBO
+	if ((Setup.VAOCoreMode == 0) | (Setup.VBOCoreMode == 0) | (!CAPS->VBOSupported))
+	{
+		CAPS->VAOSupported = false;
+	}
+
+	// проверка поддержки шейдеров (нужна 100% поддержка GLSL 1.0)
+	if (Setup.UseGLSL)
+		if (!CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0f) Setup.UseGLSL = false;
+
+	// установка режима работы менеджера приоритетов
+	CAPS->ForceTexturesPriorManager = Setup.ForceTexturesPriorManager;
+
+	// управление генерации мипмеп уровней- можем только выключить, нельзя включить если его нет
+	if (!Setup.HardwareMipMapGeneration)
+	{
+		CAPS->HardwareMipMapGeneration = false;
+	}
+
+	// анализ системы только если это первый запуск
+	if (FirstStart)
+	{
+		// если шейдерная модель 3-я или выше
+		if (CAPS->ShaderModel >= 3.0f)
+		{
+			// памяти достаточно, включаем другой режим загрузки
+			Setup.EqualOrMore128MBVideoRAM = true;
+		}
+		// если шейдерная модель 4-я или выше
+		if (CAPS->ShaderModel >= 4.0f)
+		{
+			// 100% держит наши шейдеры
+			Setup.UseGLSL = true;
+			// 100% больше чем нужно памяти и не надо сжимать текстуры (ув. качество и скорость загрузки)
+			Setup.TexturesCompression = false;
+			// немного больше ставим другие опции
+			Setup.MultiSampleType = 2;
+			Setup.AnisotropyLevel = CAPS->MaxAnisotropyLevel;
+
+			Setup.BackgroundStarsQuality = 7;
+			Setup.MaxPointLights = 4;
+		}
+		// если шейдерная модель 4.1-я или выше
+		if (CAPS->ShaderModel >= 4.1f)
+		{
+			// немного больше ставим другие опции
+			Setup.MultiSampleType = 4;
+
+			Setup.ParticlesPerSecQuality = 1;
+			Setup.PartsExplosionQuality = 0;
+			Setup.BackgroundStarsQuality = 10;
+			Setup.BackgroundTileAnimation = 3;
+			Setup.MaxPointLights = 6;
+		}
+	}
+
+	if (Setup.MultiSampleType > CAPS->MaxMultiSampleType) Setup.MultiSampleType = CAPS->MaxMultiSampleType;
+
+
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// завершаем инициализацию
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	vw_InitOpenGL(Setup.Width, Setup.Height, &Setup.MultiSampleType);
+
+
 	// вторичная работа с настройками
 	// в процессе инициализации opengl контекста мы подключаем указатели на функции, и данные могут измениться
 
+
+	// если не поддерживаем как минимум 2 текстуры, железо очень слабое - не запустимся
+	if (CAPS->MaxMultTextures < 2)
+	{
+		SDL_Quit();
+		ReleaseGameOneCopy();
+        fprintf(stderr, "The Multi Textures feature unsupported by hardware. Fatal error.\n");
+#ifdef WIN32
+		MessageBox(NULL,"OpenGL 1.3 required. Please, install the newest video drivers from your video card vendor.", "Render system - Fatal Error",MB_OK|MB_APPLMODAL|MB_ICONERROR);
+#endif // WIN32
+		return 0;
+	}
+
 	// если поддерживает сторедж - вырубаем вообще поддержку сжатия (все равно работаем без него)
 	if (CAPS->TextureStorage) CAPS->TexturesCompression = false;
+
+
+
+
+
 
 
 
