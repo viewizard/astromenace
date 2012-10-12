@@ -51,8 +51,6 @@ struct eDevCaps
 	int MaxTextureWidth;
 	// Max texture height
 	int MaxTextureHeight;
-	// Total video memory
-	int VidMemTotal;
 	// макс. кол-во одновременно обрабатываемых источников света
 	int MaxActiveLights;
 	// максимальный уровень анизотропии
@@ -81,8 +79,6 @@ struct eDevCaps
 	bool ForceTexturesPriorManager;
 	// поддержка генерации мипмеп в железе
 	bool HardwareMipMapGeneration;
-	// битность stencil буфера (0 - соотв нет его)
-	int StencilBufferSize;
 };
 
 
@@ -99,9 +95,10 @@ struct eDevCaps
 // Common functions
 
 // проверка аа
-eDevCaps *vw_HardwareTest(int Width, int Height);
+//eDevCaps *vw_HardwareTest(int Width, int Height);
 // Initialization renderer
-int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int *FSAA, int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideoModeW, int CurrentVideoModeH);
+int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideoModeW, int CurrentVideoModeH);
+void vw_InitOpenGL(int Width, int Height, int *MSAA);
 // Shutdown renderer dll
 void vw_ShutdownRenderer(void);
 // Get device capability

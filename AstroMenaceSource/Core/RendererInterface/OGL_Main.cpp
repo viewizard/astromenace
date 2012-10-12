@@ -62,12 +62,10 @@ int PrimCountGL=0;
 
 
 // multitexture (OpenGL 1.3)
-PFNGLACTIVETEXTUREPROC			glActiveTexture13	= NULL;
+PFNGLACTIVETEXTUREPROC			glActiveTexture13 = NULL;
 PFNGLCLIENTACTIVETEXTUREPROC	glClientActiveTexture13 = NULL;
-// glGenerateMipmap (OpenGL 3.0)
-PFNGLGENERATEMIPMAPPROC glGenerateMipmapEXT = NULL;
-// glTexStorage2D (OpenGL 4.2)
-PFNGLTEXSTORAGE2DPROC glTexStorage2DEXT = NULL;
+// GL_ARB_texture_storage (OpenGL 4.2)
+PFNGLTEXSTORAGE2DPROC 			glTexStorage2DEXT = NULL;
 
 
 
@@ -92,10 +90,16 @@ bool vw_Internal_InitializationOcclusionQueries();
 bool vw_Internal_InitializationVBO();
 // инициализация VAO
 bool vw_Internal_InitializationVAO();
-// инициализация индекс буфера
+// индекс буфера
 bool vw_Internal_InitializationIndexBufferData();
-// чистка данных индекс буфера
 void vw_Internal_ReleaseIndexBufferData();
+// FBO
+bool vw_Internal_InitializationFBO();
+bool vw_Internal_MSAA_FBO_Create(int Width, int Height, int MSAA);
+void vw_Internal_MSAA_FBO_BeginRendering(float fClearRed, float fClearGreen, float fClearBlue, float fClearAlpha);
+void vw_Internal_MSAA_FBO_EndRendering();
+void vw_Internal_ReleaseFBO();
+
 
 
 
@@ -110,300 +114,6 @@ bool ExtensionSupported( const char *Extension)
 	if (strstr(extensions, Extension) != NULL) return true;
 	return false;
 }
-
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// проверка режимов антиалиасинга
-//------------------------------------------------------------------------------------
-eDevCaps * vw_HardwareTest(int Width, int Height)
-{
-	OpenGL_DevCaps.OpenGLmajorVersion = 1;
-	OpenGL_DevCaps.OpenGLminorVersion = 0;
-	OpenGL_DevCaps.MaxMultTextures = 0;
-	OpenGL_DevCaps.MaxTextureWidth = 0;
-	OpenGL_DevCaps.MaxTextureHeight = 0;
-	OpenGL_DevCaps.VidMemTotal = 0;
-	OpenGL_DevCaps.MaxActiveLights = 0;
-	OpenGL_DevCaps.MaxAnisotropyLevel = 0;
-	OpenGL_DevCaps.MaxMultiSampleType = 0;
-	OpenGL_DevCaps.TexturesCompression = false;
-	OpenGL_DevCaps.VBOSupported = false;
-	OpenGL_DevCaps.VAOSupported = false;
-	OpenGL_DevCaps.TextureNPOTSupported = false;
-	OpenGL_DevCaps.GLSL100Supported = false;
-	OpenGL_DevCaps.ShaderModel = 0;
-	OpenGL_DevCaps.OcclusionQuerySupported = false;
-	OpenGL_DevCaps.ForceTexturesPriorManager = false;
-	OpenGL_DevCaps.HardwareMipMapGeneration = false;
-	OpenGL_DevCaps.StencilBufferSize = 0;
-	OpenGL_DevCaps.TextureStorage = false;
-	OpenGL_DevCaps.FramebufferObject = false;
-
-
-	// иним сдл и создаем окно, чтобы протестировать опенжл
-	SDL_Init(SDL_INIT_VIDEO);
-
-
-	// задаем стенсил буфер
-	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
-	// создаем окно, если не поддерживаем стенсил - надо переинициализировать без него
-	if (SDL_SetVideoMode(Width, Height, 0, SDL_OPENGL)  == NULL)
-	{
-		// убираем стенсил
-		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
-		// создаем окно
-		if (SDL_SetVideoMode(Width, Height, 0, SDL_OPENGL)  == NULL)
-		{
-			fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
-			SDL_Quit();
-			return &OpenGL_DevCaps;
-		}
-	}
-
-		printf("Video card hardware test.\n");
-
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// получаем возможности железа
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		OpenGL_DevCaps.VidMemTotal = SDL_GetVideoInfo()->video_mem;
-		printf("\n");
-		printf("Vendor     : %s\n", glGetString(GL_VENDOR));
-		printf("Renderer   : %s\n", glGetString(GL_RENDERER));
-		printf("Version    : %s\n", glGetString(GL_VERSION));
-		glGetIntegerv(GL_MAJOR_VERSION, &OpenGL_DevCaps.OpenGLmajorVersion);
-		glGetIntegerv(GL_MINOR_VERSION, &OpenGL_DevCaps.OpenGLminorVersion);
-		printf("OpenGL Version    : %i.%i\n", OpenGL_DevCaps.OpenGLmajorVersion, OpenGL_DevCaps.OpenGLminorVersion);
-		printf("\n");
-		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &OpenGL_DevCaps.MaxTextureHeight);
-		printf("Max texture height: %i \n", OpenGL_DevCaps.MaxTextureHeight);
-		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &OpenGL_DevCaps.MaxTextureWidth);
-		printf("Max texture width: %i \n", OpenGL_DevCaps.MaxTextureWidth);
-		glGetIntegerv(GL_MAX_LIGHTS, &OpenGL_DevCaps.MaxActiveLights);
-		printf("Max lights: %i \n", OpenGL_DevCaps.MaxActiveLights);
-		SDL_GL_GetAttribute(SDL_GL_STENCIL_SIZE, &OpenGL_DevCaps.StencilBufferSize);
-		printf("Stencil Buffer Size: %i bit\n", OpenGL_DevCaps.StencilBufferSize);
-
-
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// дальше проверяем обязательные части, то, без чего вообще работать не будем
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-		// проверяем поддержку мультитекстуры
-		glGetIntegerv(GL_MAX_TEXTURE_UNITS, &OpenGL_DevCaps.MaxMultTextures);
-		printf("Max multitexture supported: %i textures.\n", OpenGL_DevCaps.MaxMultTextures);
-		// shader-based GL 2.0 and above programs should use GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS only
-
-
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// смотрим остальные поддерживаемые функции
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-		// по умолчанию, внутренний менеджер выключен
-		OpenGL_DevCaps.ForceTexturesPriorManager = false;
-
-		// проверем поддержку анизотропной фильтрации
-		if (ExtensionSupported("GL_EXT_texture_filter_anisotropic"))
-		{
-			// получим максимально доступный угол анизотропии...
-			glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT,&OpenGL_DevCaps.MaxAnisotropyLevel);
-			printf("Max anisotropy: %i\n", OpenGL_DevCaps.MaxAnisotropyLevel);
-		}
-
-		// проверем поддержку VBO
-		if (ExtensionSupported("GL_ARB_vertex_buffer_object"))
-		{
-			OpenGL_DevCaps.VBOSupported = true;
-			printf("Vertex Buffer support enabled.\n");
-		}
-
-		// проверем поддержку VAO
-		if (ExtensionSupported("GL_ARB_vertex_array_object"))
-		{
-			OpenGL_DevCaps.VAOSupported = true;
-			printf("Vertex Array support enabled.\n");
-		}
-
-		// проверем поддержку non_power_of_two генерацию текстур
-		if (ExtensionSupported("GL_ARB_texture_non_power_of_two"))
-			OpenGL_DevCaps.TextureNPOTSupported = true;
-
-		// проверяем, есть ли поддержка компрессии текстур
-		if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_EXT_texture_compression_s3tc"))
-			OpenGL_DevCaps.TexturesCompression = true;
-
-		// проверяем, есть ли поддержка OcclusionQuery
-		if (ExtensionSupported("GL_ARB_occlusion_query"))
-		{
-			OpenGL_DevCaps.OcclusionQuerySupported = true;
-		}
-
-		// проверяем, есть ли поддержка SGIS_generate_mipmap (хардварная генерация мипмеп уровней)
-		if (ExtensionSupported("SGIS_generate_mipmap"))
-		{
-			OpenGL_DevCaps.HardwareMipMapGeneration = true;
-		}
-
-		// проверяем, есть ли поддержка GL_EXT_framebuffer_object
-		if (ExtensionSupported("GL_EXT_framebuffer_object"))
-		{
-			OpenGL_DevCaps.FramebufferObject = true;
-		}
-
-		// проверяем, есть ли поддержка GL_ARB_texture_storage или GL_EXT_texture_storage
-		if (ExtensionSupported("GL_ARB_texture_storage") | ExtensionSupported("GL_EXT_texture_storage"))
-		{
-			OpenGL_DevCaps.TextureStorage = true;
-		}
-
-
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// шейдеры
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-		// проверяем, есть ли поддержка шейдеров GLSL версии 1.00
-		if (ExtensionSupported("GL_ARB_shader_objects") &&
-			ExtensionSupported("GL_ARB_vertex_shader") &&
-			ExtensionSupported("GL_ARB_fragment_shader") &&
-			ExtensionSupported("GL_ARB_shading_language_100"))
-		{
-			OpenGL_DevCaps.GLSL100Supported = true;
-		}
-
-		// определяем какую версию шейдеров поддерживаем в железе.
-		// т.к. это может пригодиться для определения как работает GLSL,
-		// ведь может работать даже с шейдерной моделью 2.0 (в обрезанном режиме), полному GLSL 1.0 нужна модель 3.0 или выше
-		OpenGL_DevCaps.ShaderModel = 0.0f;
-		// If a card supports GL_ARB_vertex_program and/or GL_ARB_vertex_shader, it supports vertex shader 1.1.
-		// If a card supports GL_NV_texture_shader and GL_NV_register_combiners, it supports pixel shader 1.1.
-		if ((ExtensionSupported("GL_ARB_vertex_program") || ExtensionSupported("GL_ARB_vertex_shader")) &&
-				ExtensionSupported("GL_NV_texture_shader") && ExtensionSupported("GL_NV_register_combiners"))
-		{
-			OpenGL_DevCaps.ShaderModel = 1.1f;
-		}
-		// If a card supports GL_ATI_fragment_shader or GL_ATI_text_fragment_shader it supports pixel shader 1.4.
-		if (ExtensionSupported("GL_ATI_fragment_shader") || ExtensionSupported("GL_ATI_text_fragment_shader"))
-		{
-			OpenGL_DevCaps.ShaderModel = 1.4f;
-		}
-		// If a card supports GL_ARB_fragment_program and/or GL_ARB_fragment_shader it supports Shader Model 2.0.
-		if (ExtensionSupported("GL_ARB_fragment_program") || ExtensionSupported("GL_ARB_fragment_shader"))
-		{
-			OpenGL_DevCaps.ShaderModel = 2.0f;
-		}
-		// If a card supports GL_NV_vertex_program3 or GL_ATI_shader_texture_lod it it supports Shader Model 3.0.
-		if (ExtensionSupported("GL_NV_vertex_program3") || ExtensionSupported("GL_ATI_shader_texture_lod"))
-		{
-			OpenGL_DevCaps.ShaderModel = 3.0f;
-		}
-		// If a card supports GL_EXT_gpu_shader4 it is a Shader Model 4.0 card. (Geometry shaders are implemented in GL_EXT_geometry_shader4)
-		if (ExtensionSupported("GL_EXT_gpu_shader4"))
-		{
-			OpenGL_DevCaps.ShaderModel = 4.0f;
-		}
-
-		// проверяем, если версия опенжл выше 3.3, версия шейдеров им соответствует
-		// (если мы не нашли более высокую через расширения ранее, ставим по версии опенжл)
-		float OpenGLVersion = OpenGL_DevCaps.OpenGLmajorVersion + OpenGL_DevCaps.OpenGLminorVersion/10.0f;
-		if ((OpenGL_DevCaps.ShaderModel >= 3.0f) & (OpenGLVersion >= 3.3))
-			if (OpenGL_DevCaps.ShaderModel < OpenGLVersion) OpenGL_DevCaps.ShaderModel = OpenGLVersion;
-
-		// выводим эти данные
-		if (OpenGL_DevCaps.ShaderModel == 0.0f) printf("Shaders unsupported.\n");
-		else printf("Shader Model: %.1f\n", OpenGL_DevCaps.ShaderModel);
-
-
-		// проверяем, поддерживаем или нет мультисемпл
-		if (ExtensionSupported("GL_EXT_framebuffer_blit") & ExtensionSupported("GL_EXT_framebuffer_multisample"))
-		{
-
-			int maxSamples=0;
-			glGetIntegerv(GL_MAX_SAMPLES_EXT, &maxSamples);
-			printf("Max Samples: %i\n", maxSamples);
-			OpenGL_DevCaps.MaxMultiSampleType = maxSamples;
-
-			// если не держит CSAA - дальше ловить нечего
-			if (ExtensionSupported("GL_NV_framebuffer_multisample_coverage"))
-			{
-				int coverageSampleConfigs = 0;
-				glGetIntegerv( GL_MAX_MULTISAMPLE_COVERAGE_MODES_NV, &coverageSampleConfigs);
-				printf("Max Multisample coverage modes: %i\n", coverageSampleConfigs);
-				int *coverageConfigs = 0;
-				coverageConfigs = new int[coverageSampleConfigs * 2 + 4];
-				glGetIntegerv( GL_MULTISAMPLE_COVERAGE_MODES_NV, coverageConfigs);
-
-				// просматриваем все конфиги, печатаем их и делаем второй тест на MSAA
-				int MaxMultiSampleTypeTest2 = -1;
-				for (int kk = 0; kk < coverageSampleConfigs; kk++)
-				{
-					int depthSamples = coverageConfigs[kk*2+1];
-					int coverageSamples = coverageConfigs[kk*2];
-
-					if ( coverageSamples == depthSamples )
-					{
-						// если ковередж и глубина/цвет одинаковые - это обычный MSAA
-						printf( " - %d MSAA\n", depthSamples);
-						if (MaxMultiSampleTypeTest2 < depthSamples) MaxMultiSampleTypeTest2 = depthSamples;
-					}
-					else
-					{
-						// CSAA
-						printf( " - %d/%d CSAA\n", coverageSamples, depthSamples);
-					}
-				}
-				// GL_MAX_SAMPLES_EXT может нести в себе общий макс. семпл, а не MSAA
-				// смотрим если была доп проверка, и если в доп проверке значение меньше - берем его, оно более корректное
-				if (OpenGL_DevCaps.MaxMultiSampleType > MaxMultiSampleTypeTest2) OpenGL_DevCaps.MaxMultiSampleType = MaxMultiSampleTypeTest2;
-
-				delete [] coverageConfigs;
-			}
-			// почему-то не можем поставить MSAA больше 4 в линуксе (?)... по какой-то причине libSDL ни за какие плюшки не хочет
-			// ставить большее сглаживание, просто не создает окно и все, в виндовс на той же версии libSDL все работает...
-#ifdef forced4xmsaa
-			if (OpenGL_DevCaps.MaxMultiSampleType > 4) OpenGL_DevCaps.MaxMultiSampleType = 4;
-			printf("Max Samples forced limited to 4, due to libSDL issue.\n");
-#endif
-		}
-
-
-
-/*
-		// получаем и выводим все поддерживаемые расширения
-		char *extensions_tmp;
-		size_t len;
-		extensions_tmp = (char *)glGetString(GL_EXTENSIONS);
-		if (extensions_tmp != 0)
-		{
-			char *extensions = 0;
-			len = strlen(extensions_tmp);
-			extensions = new char[len+1];
-			if (extensions != 0)
-			{
-				strcpy(extensions, extensions_tmp);
-				for (unsigned int i=0; i<len; i++) // меняем разделитель
-					if (extensions[i]==' ') extensions[i]='\n';
-
-				printf("Supported OpenGL extensions:\n%s\n", extensions);
-				delete [] extensions;
-			}
-		}
-*/
-		printf("\n");
-
-
-
-	SDL_Quit();
-	return &OpenGL_DevCaps;
-}
-
-
-
-
 
 
 
@@ -461,15 +171,12 @@ void CenterWindow(int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideo
 
 
 //------------------------------------------------------------------------------------
-// инициализация Open_GL
+// инициализация окна приложения и получение возможностей железа
 //------------------------------------------------------------------------------------
-int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int *FSAA, int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideoModeW, int CurrentVideoModeH)
+int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideoModeW, int CurrentVideoModeH)
 {
 	// самым первым делом - запоминаем все
 	UserDisplayRampStatus = SDL_GetGammaRamp(UserDisplayRamp, UserDisplayRamp+256, UserDisplayRamp+512);
-
-	if (*FSAA > OpenGL_DevCaps.MaxMultiSampleType) *FSAA = OpenGL_DevCaps.MaxMultiSampleType;
-
 
 	fScreenWidthGL = Width*1.0f;
 	fScreenHeightGL = Height*1.0f;
@@ -497,16 +204,6 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 	// ставим двойную буферизацию (теоретически, и так ее должно брать)
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-	// пытаемся поставить FSAA, тут все равно что сейчас ставим... потом разберемся
-	if (*FSAA > 0)
-	{
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, *FSAA);
-	}
-
-	// задаем стенсил буфер
-	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, OpenGL_DevCaps.StencilBufferSize);
-
 
 	// создаем окно
 	if (SDL_SetVideoMode(Width, Height, WBits, Flags)  == NULL)
@@ -530,11 +227,264 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 	printf("Set video mode: %i x %i x %i\n\n", Width, Height, *Bits);
 
 
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// проверяем данные по возможностям железа
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	OpenGL_DevCaps.OpenGLmajorVersion = 1;
+	OpenGL_DevCaps.OpenGLminorVersion = 0;
+	OpenGL_DevCaps.MaxMultTextures = 0;
+	OpenGL_DevCaps.MaxTextureWidth = 0;
+	OpenGL_DevCaps.MaxTextureHeight = 0;
+	OpenGL_DevCaps.MaxActiveLights = 0;
+	OpenGL_DevCaps.MaxAnisotropyLevel = 0;
+	OpenGL_DevCaps.MaxMultiSampleType = 0;
+	OpenGL_DevCaps.TexturesCompression = false;
+	OpenGL_DevCaps.VBOSupported = false;
+	OpenGL_DevCaps.VAOSupported = false;
+	OpenGL_DevCaps.TextureNPOTSupported = false;
+	OpenGL_DevCaps.GLSL100Supported = false;
+	OpenGL_DevCaps.ShaderModel = 0;
+	OpenGL_DevCaps.OcclusionQuerySupported = false;
+	OpenGL_DevCaps.ForceTexturesPriorManager = false;
+	OpenGL_DevCaps.HardwareMipMapGeneration = false;
+	OpenGL_DevCaps.TextureStorage = false;
+	OpenGL_DevCaps.FramebufferObject = false;
 
+
+	printf("Video card hardware test.\n\n");
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// получаем возможности железа
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	printf("Vendor     : %s\n", glGetString(GL_VENDOR));
+	printf("Renderer   : %s\n", glGetString(GL_RENDERER));
+	printf("Version    : %s\n", glGetString(GL_VERSION));
+	glGetIntegerv(GL_MAJOR_VERSION, &OpenGL_DevCaps.OpenGLmajorVersion);
+	glGetIntegerv(GL_MINOR_VERSION, &OpenGL_DevCaps.OpenGLminorVersion);
+	printf("OpenGL Version    : %i.%i\n", OpenGL_DevCaps.OpenGLmajorVersion, OpenGL_DevCaps.OpenGLminorVersion);
+	printf("\n");
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &OpenGL_DevCaps.MaxTextureHeight);
+	printf("Max texture height: %i \n", OpenGL_DevCaps.MaxTextureHeight);
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &OpenGL_DevCaps.MaxTextureWidth);
+	printf("Max texture width: %i \n", OpenGL_DevCaps.MaxTextureWidth);
+	glGetIntegerv(GL_MAX_LIGHTS, &OpenGL_DevCaps.MaxActiveLights);
+	printf("Max lights: %i \n", OpenGL_DevCaps.MaxActiveLights);
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// дальше проверяем обязательные части, то, без чего вообще работать не будем
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	// проверяем поддержку мультитекстуры
+	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &OpenGL_DevCaps.MaxMultTextures);
+	printf("Max multitexture supported: %i textures.\n", OpenGL_DevCaps.MaxMultTextures);
+	// shader-based GL 2.0 and above programs should use GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS only
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// смотрим остальные поддерживаемые функции
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	// по умолчанию, внутренний менеджер текстур выключен
+	OpenGL_DevCaps.ForceTexturesPriorManager = false;
+
+	// проверем поддержку анизотропной фильтрации
+	if (ExtensionSupported("GL_EXT_texture_filter_anisotropic"))
+	{
+		// получим максимально доступный угол анизотропии...
+		glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT,&OpenGL_DevCaps.MaxAnisotropyLevel);
+		printf("Max anisotropy: %i\n", OpenGL_DevCaps.MaxAnisotropyLevel);
+	}
+
+	// проверем поддержку VBO
+	if (ExtensionSupported("GL_ARB_vertex_buffer_object"))
+	{
+		OpenGL_DevCaps.VBOSupported = true;
+		printf("Vertex Buffer support enabled.\n");
+	}
+
+	// проверем поддержку VAO
+	if (ExtensionSupported("GL_ARB_vertex_array_object"))
+	{
+		OpenGL_DevCaps.VAOSupported = true;
+		printf("Vertex Array support enabled.\n");
+	}
+
+	// проверем поддержку non_power_of_two генерацию текстур
+	if (ExtensionSupported("GL_ARB_texture_non_power_of_two"))
+		OpenGL_DevCaps.TextureNPOTSupported = true;
+
+	// проверяем, есть ли поддержка компрессии текстур
+	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_EXT_texture_compression_s3tc"))
+		OpenGL_DevCaps.TexturesCompression = true;
+
+	// проверяем, есть ли поддержка OcclusionQuery
+	if (ExtensionSupported("GL_ARB_occlusion_query"))
+	{
+		OpenGL_DevCaps.OcclusionQuerySupported = true;
+	}
+
+	// проверяем, есть ли поддержка SGIS_generate_mipmap (хардварная генерация мипмеп уровней)
+	if (ExtensionSupported("SGIS_generate_mipmap"))
+	{
+		OpenGL_DevCaps.HardwareMipMapGeneration = true;
+	}
+
+	// проверяем, есть ли поддержка GL_EXT_framebuffer_object-GL_EXT_framebuffer_multisample-GL_EXT_framebuffer_blit
+	if (ExtensionSupported("GL_EXT_framebuffer_blit") & ExtensionSupported("GL_EXT_framebuffer_multisample") & ExtensionSupported("GL_EXT_framebuffer_object"))
+	{
+		OpenGL_DevCaps.FramebufferObject = true;
+	}
+
+	// проверяем, есть ли поддержка GL_ARB_texture_storage или GL_EXT_texture_storage
+	if (ExtensionSupported("GL_ARB_texture_storage") | ExtensionSupported("GL_EXT_texture_storage"))
+	{
+		OpenGL_DevCaps.TextureStorage = true;
+	}
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// шейдеры
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	// проверяем, есть ли поддержка шейдеров GLSL версии 1.00
+	if (ExtensionSupported("GL_ARB_shader_objects") &&
+		ExtensionSupported("GL_ARB_vertex_shader") &&
+		ExtensionSupported("GL_ARB_fragment_shader") &&
+		ExtensionSupported("GL_ARB_shading_language_100"))
+	{
+		OpenGL_DevCaps.GLSL100Supported = true;
+	}
+
+	// определяем какую версию шейдеров поддерживаем в железе.
+	// т.к. это может пригодиться для определения как работает GLSL,
+	// ведь может работать даже с шейдерной моделью 2.0 (в обрезанном режиме), полному GLSL 1.0 нужна модель 3.0 или выше
+	OpenGL_DevCaps.ShaderModel = 0.0f;
+	// If a card supports GL_ARB_vertex_program and/or GL_ARB_vertex_shader, it supports vertex shader 1.1.
+	// If a card supports GL_NV_texture_shader and GL_NV_register_combiners, it supports pixel shader 1.1.
+	if ((ExtensionSupported("GL_ARB_vertex_program") || ExtensionSupported("GL_ARB_vertex_shader")) &&
+			ExtensionSupported("GL_NV_texture_shader") && ExtensionSupported("GL_NV_register_combiners"))
+	{
+		OpenGL_DevCaps.ShaderModel = 1.1f;
+	}
+	// If a card supports GL_ATI_fragment_shader or GL_ATI_text_fragment_shader it supports pixel shader 1.4.
+	if (ExtensionSupported("GL_ATI_fragment_shader") || ExtensionSupported("GL_ATI_text_fragment_shader"))
+	{
+		OpenGL_DevCaps.ShaderModel = 1.4f;
+	}
+	// If a card supports GL_ARB_fragment_program and/or GL_ARB_fragment_shader it supports Shader Model 2.0.
+	if (ExtensionSupported("GL_ARB_fragment_program") || ExtensionSupported("GL_ARB_fragment_shader"))
+	{
+		OpenGL_DevCaps.ShaderModel = 2.0f;
+	}
+	// If a card supports GL_NV_vertex_program3 or GL_ATI_shader_texture_lod it it supports Shader Model 3.0.
+	if (ExtensionSupported("GL_NV_vertex_program3") || ExtensionSupported("GL_ATI_shader_texture_lod"))
+	{
+		OpenGL_DevCaps.ShaderModel = 3.0f;
+	}
+	// If a card supports GL_EXT_gpu_shader4 it is a Shader Model 4.0 card. (Geometry shaders are implemented in GL_EXT_geometry_shader4)
+	if (ExtensionSupported("GL_EXT_gpu_shader4"))
+	{
+		OpenGL_DevCaps.ShaderModel = 4.0f;
+	}
+
+	// проверяем, если версия опенжл выше 3.3, версия шейдеров им соответствует
+	// (если мы не нашли более высокую через расширения ранее, ставим по версии опенжл)
+	float OpenGLVersion = OpenGL_DevCaps.OpenGLmajorVersion + OpenGL_DevCaps.OpenGLminorVersion/10.0f;
+	if ((OpenGL_DevCaps.ShaderModel >= 3.0f) & (OpenGLVersion >= 3.3))
+		if (OpenGL_DevCaps.ShaderModel < OpenGLVersion) OpenGL_DevCaps.ShaderModel = OpenGLVersion;
+
+	// выводим эти данные
+	if (OpenGL_DevCaps.ShaderModel == 0.0f) printf("Shaders unsupported.\n");
+	else printf("Shader Model: %.1f\n", OpenGL_DevCaps.ShaderModel);
+
+
+	// проверяем, поддерживаем или нет мультисемпл + для реализации нам нужна поддержка GL_EXT_framebuffer_object и GL_EXT_framebuffer_blit
+	if (ExtensionSupported("GL_EXT_framebuffer_blit") & ExtensionSupported("GL_EXT_framebuffer_multisample") & ExtensionSupported("GL_EXT_framebuffer_object"))
+	{
+
+		int maxSamples=0;
+		glGetIntegerv(GL_MAX_SAMPLES_EXT, &maxSamples);
+		printf("Max Samples: %i\n", maxSamples);
+		OpenGL_DevCaps.MaxMultiSampleType = maxSamples;
+
+		// если не держит CSAA - дальше ловить нечего
+		if (ExtensionSupported("GL_NV_framebuffer_multisample_coverage"))
+		{
+			int coverageSampleConfigs = 0;
+			glGetIntegerv( GL_MAX_MULTISAMPLE_COVERAGE_MODES_NV, &coverageSampleConfigs);
+			printf("Max Multisample coverage modes: %i\n", coverageSampleConfigs);
+			int *coverageConfigs = 0;
+			coverageConfigs = new int[coverageSampleConfigs * 2 + 4];
+			glGetIntegerv( GL_MULTISAMPLE_COVERAGE_MODES_NV, coverageConfigs);
+
+			// просматриваем все конфиги, печатаем их и делаем второй тест на MSAA
+			int MaxMultiSampleTypeTest2 = -1;
+			for (int kk = 0; kk < coverageSampleConfigs; kk++)
+			{
+				int depthSamples = coverageConfigs[kk*2+1];
+				int coverageSamples = coverageConfigs[kk*2];
+
+				if ( coverageSamples == depthSamples )
+				{
+					// если ковередж и глубина/цвет одинаковые - это обычный MSAA
+					printf( " - %d MSAA\n", depthSamples);
+					if (MaxMultiSampleTypeTest2 < depthSamples) MaxMultiSampleTypeTest2 = depthSamples;
+				}
+				else
+				{
+					// CSAA
+					printf( " - %d/%d CSAA\n", coverageSamples, depthSamples);
+				}
+			}
+			// GL_MAX_SAMPLES_EXT может нести в себе общий макс. семпл, а не MSAA, если есть поддержка CSAA
+			// смотрим если была доп проверка, и если в доп проверке значение меньше - берем его, оно более корректное
+			if (OpenGL_DevCaps.MaxMultiSampleType > MaxMultiSampleTypeTest2) OpenGL_DevCaps.MaxMultiSampleType = MaxMultiSampleTypeTest2;
+
+			delete [] coverageConfigs;
+		}
+	}
+
+
+
+/*
+	// получаем и выводим все поддерживаемые расширения
+	char *extensions_tmp;
+	size_t len;
+	extensions_tmp = (char *)glGetString(GL_EXTENSIONS);
+	if (extensions_tmp != 0)
+	{
+		char *extensions = 0;
+		len = strlen(extensions_tmp);
+		extensions = new char[len+1];
+		if (extensions != 0)
+		{
+			strcpy(extensions, extensions_tmp);
+			for (unsigned int i=0; i<len; i++) // меняем разделитель
+				if (extensions[i]==' ') extensions[i]='\n';
+
+			printf("Supported OpenGL extensions:\n%s\n", extensions);
+			delete [] extensions;
+		}
+	}
+*/
+	printf("\n");
+
+	return 0;
+}
+
+
+
+
+
+
+void vw_InitOpenGL(int Width, int Height, int *MSAA)
+{
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// установка параметров прорисовки
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (OpenGL_DevCaps.MaxMultiSampleType > 0) glEnable(GL_MULTISAMPLE);
+	vw_ResizeScene(fAngleGL, (Width*1.0f)/(Height*1.0f), fNearClipGL, fFarClipGL);
+
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -553,22 +503,19 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
 
-	vw_ResizeScene(fAngleGL, (Width*1.0f)/(Height*1.0f), fNearClipGL, fFarClipGL);
 
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// подключаем расширения
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	glActiveTexture13 = (PFNGLACTIVETEXTUREPROC) SDL_GL_GetProcAddress("glActiveTexture");
-	glClientActiveTexture13 = (PFNGLCLIENTACTIVETEXTUREPROC) SDL_GL_GetProcAddress("glClientActiveTexture");
-	if (glActiveTexture13 == NULL || glClientActiveTexture13 == NULL)
+	if (OpenGL_DevCaps.MaxMultTextures > 1)
 	{
-		fprintf(stderr, "Can't get proc address for glActiveTexture or glClientActiveTexture.\n\n");
-	}
-
-	if (OpenGL_DevCaps.FramebufferObject)
-	{
-		glGenerateMipmapEXT = (PFNGLGENERATEMIPMAPPROC) SDL_GL_GetProcAddress("glGenerateMipmapEXT");
-		if (glGenerateMipmapEXT == NULL)
+		glActiveTexture13 = (PFNGLACTIVETEXTUREPROC) SDL_GL_GetProcAddress("glActiveTexture");
+		glClientActiveTexture13 = (PFNGLCLIENTACTIVETEXTUREPROC) SDL_GL_GetProcAddress("glClientActiveTexture");
+		if (glActiveTexture13 == NULL || glClientActiveTexture13 == NULL)
 		{
-			fprintf(stderr, "Can't get proc address for glGenerateMipmapEXT.\n\n");
+			OpenGL_DevCaps.MaxMultTextures = 1;
+			fprintf(stderr, "Can't get proc address for glActiveTexture or glClientActiveTexture.\n\n");
 		}
 	}
 
@@ -593,6 +540,23 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 	if (OpenGL_DevCaps.VBOSupported) OpenGL_DevCaps.VBOSupported = vw_Internal_InitializationVBO();
 	// иним вaо
 	if (OpenGL_DevCaps.VAOSupported) OpenGL_DevCaps.VAOSupported = vw_Internal_InitializationVAO();
+	// инициализируем FBO
+	if (OpenGL_DevCaps.FramebufferObject) OpenGL_DevCaps.FramebufferObject = vw_Internal_InitializationFBO();
+
+
+	// если нужно работать с мультисемплами (MSAA) - создаем буфер
+	if (OpenGL_DevCaps.FramebufferObject & (*MSAA > 0))
+	{
+		if (!vw_Internal_MSAA_FBO_Create(Width, Height, *MSAA))
+		{
+			vw_Internal_ReleaseFBO();
+			*MSAA = 0;
+		}
+	}
+	else
+		if (!OpenGL_DevCaps.FramebufferObject) *MSAA = 0;
+
+
 
 
 	// выключаем вертикальную синхронизацию в винде, она тут не нужна, а нам нужно как можно больше фпс
@@ -605,7 +569,6 @@ int vw_InitRenderer(const char* Title, int Width, int Height, int *Bits, BOOL Fu
 #endif // WIN32
 
 
-	return 0;
 }
 
 
@@ -661,6 +624,7 @@ void vw_ShutdownRenderer()
 
 
 	vw_Internal_ReleaseIndexBufferData();
+	vw_Internal_ReleaseFBO();
 }
 
 
@@ -730,6 +694,10 @@ void vw_ChangeSize(int nWidth, int nHeight)
 //------------------------------------------------------------------------------------
 void vw_BeginRendering(int mask)
 {
+	// если нужно, переключаемся на FBO с мультисемплами
+	vw_Internal_MSAA_FBO_BeginRendering(fClearRedGL, fClearGreenGL, fClearBlueGL, fClearAlphaGL);
+
+
 	GLbitfield  glmask = 0;
 
 	if (mask & 0x1000) glmask = glmask | GL_COLOR_BUFFER_BIT;
@@ -756,6 +724,9 @@ void vw_BeginRendering(int mask)
 //------------------------------------------------------------------------------------
 void vw_EndRendering()
 {
+	// завершаем прорисовку, и переключаемся на основной буфер
+	vw_Internal_MSAA_FBO_EndRendering();
+
 	SDL_GL_SwapBuffers();
 
 	PrimCountGL = tmpPrimCountGL;

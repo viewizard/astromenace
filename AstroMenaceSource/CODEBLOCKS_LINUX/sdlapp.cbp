@@ -92,6 +92,7 @@
 		<Unit filename="../Core/RendererInterface/GLext.h" />
 		<Unit filename="../Core/RendererInterface/OGL_Draw2D.cpp" />
 		<Unit filename="../Core/RendererInterface/OGL_Draw3D.cpp" />
+		<Unit filename="../Core/RendererInterface/OGL_FBO.cpp" />
 		<Unit filename="../Core/RendererInterface/OGL_GLSL.cpp" />
 		<Unit filename="../Core/RendererInterface/OGL_Light.cpp" />
 		<Unit filename="../Core/RendererInterface/OGL_Main.cpp" />
