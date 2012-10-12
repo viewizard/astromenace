@@ -371,7 +371,8 @@ void InterfaceMenu();
 //------------------------------------------------------------------------------------
 extern int Options_TexturesCompression;
 extern int Options_UseGLSL;
-extern int Options_MultiSampleType;
+extern int Options_MSAA;
+extern int Options_CSAA;
 
 void OptionsAdvMenu();
 

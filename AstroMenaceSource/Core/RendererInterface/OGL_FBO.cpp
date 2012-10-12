@@ -56,7 +56,8 @@ PFNGLDELETEFRAMEBUFFERSEXTPROC				glDeleteFramebuffersEXT = NULL;
 PFNGLBLITFRAMEBUFFEREXTPROC					glBlitFramebufferEXT = NULL;
 PFNGLISFRAMEBUFFEREXTPROC					glIsFramebufferEXT = NULL;
 PFNGLGENERATEMIPMAPPROC 					glGenerateMipmapEXT = NULL;
-
+// GL_NV_framebuffer_multisample_coverage, не обязательный
+PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC	glRenderbufferStorageMultisampleCoverageNV = NULL;
 
 
 
@@ -107,6 +108,10 @@ bool vw_Internal_InitializationFBO()
 		return false;
 	}
 
+	// инициализируем GL_NV_framebuffer_multisample_coverage, как не обязательный
+	glRenderbufferStorageMultisampleCoverageNV = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC) SDL_GL_GetProcAddress("glRenderbufferStorageMultisampleCoverageNV");
+
+
 	return true;
 }
 
@@ -118,7 +123,7 @@ bool vw_Internal_InitializationFBO()
 //------------------------------------------------------------------------------------
 // Инициализация буферов
 //------------------------------------------------------------------------------------
-bool vw_Internal_MSAA_FBO_Create(int Width, int Height, int MSAA)
+bool vw_Internal_MSAA_FBO_Create(int Width, int Height, int MSAA, int *CSAA)
 {
 	if (glGenRenderbuffersEXT == NULL) return false;
 	if (glBindRenderbufferEXT == NULL) return false;
@@ -127,7 +132,8 @@ bool vw_Internal_MSAA_FBO_Create(int Width, int Height, int MSAA)
 	if (glBindFramebufferEXT == NULL) return false;
 	if (glFramebufferRenderbufferEXT == NULL) return false;
 	if (glCheckFramebufferStatusEXT == NULL) return false;
-
+	// если не поддерживаем ковередж - просто ставим MSAA
+	if (glRenderbufferStorageMultisampleCoverageNV == NULL) *CSAA = MSAA;
 
 	FBO_Width = Width;
 	FBO_Height = Height;
@@ -136,11 +142,17 @@ bool vw_Internal_MSAA_FBO_Create(int Width, int Height, int MSAA)
 	// создаем наш буфер с мультисемплами (цвет+глубина)
 	glGenRenderbuffersEXT(1, &ColorRenderbufferName);
 	glBindRenderbufferEXT(GL_RENDERBUFFER, ColorRenderbufferName);
-	glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, MSAA, GL_RGBA, FBO_Width, FBO_Height);
+	if ((*CSAA == MSAA) | (CSAA == 0))
+		glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, MSAA, GL_RGBA, FBO_Width, FBO_Height);
+	else
+		glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, *CSAA, MSAA, GL_RGBA, FBO_Width, FBO_Height);
 
 	glGenRenderbuffersEXT(1, &DepthRenderbufferName);
   	glBindRenderbufferEXT(GL_RENDERBUFFER, DepthRenderbufferName);
-  	glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, MSAA, GL_DEPTH_COMPONENT24, FBO_Width, FBO_Height);
+	if ((*CSAA == MSAA) | (CSAA == 0))
+  		glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, MSAA, GL_DEPTH_COMPONENT24, FBO_Width, FBO_Height);
+	else
+		glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER_EXT, *CSAA, MSAA, GL_DEPTH_COMPONENT24, FBO_Width, FBO_Height);
 
 	glGenFramebuffersEXT(1, &FramebufferRenderName);
 	glBindFramebufferEXT(GL_FRAMEBUFFER, FramebufferRenderName);

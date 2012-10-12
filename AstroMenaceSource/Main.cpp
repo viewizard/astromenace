@@ -998,7 +998,8 @@ ReCreate:
 			Setup.Width = CurrentVideoMode.W;
 			Setup.Height = CurrentVideoMode.H;
 			Setup.BPP = CurrentVideoMode.BPP;
-			Setup.MultiSampleType = 0;
+			Setup.MSAA = 0;
+			Setup.CSAA = 0;
 			SaveXMLSetupFile();
 			goto ReCreate;
 		}
@@ -1077,7 +1078,8 @@ ReCreate:
 			// 100% больше чем нужно памяти и не надо сжимать текстуры (ув. качество и скорость загрузки)
 			Setup.TexturesCompression = false;
 			// немного больше ставим другие опции
-			Setup.MultiSampleType = 2;
+			Setup.MSAA = 2;
+			Setup.CSAA = 2;
 			Setup.AnisotropyLevel = CAPS->MaxAnisotropyLevel;
 
 			Setup.BackgroundStarsQuality = 7;
@@ -1087,8 +1089,8 @@ ReCreate:
 		if (CAPS->ShaderModel >= 4.1f)
 		{
 			// немного больше ставим другие опции
-			Setup.MultiSampleType = 4;
-
+			Setup.MSAA = 4;
+			Setup.CSAA = 4;
 			Setup.ParticlesPerSecQuality = 1;
 			Setup.PartsExplosionQuality = 0;
 			Setup.BackgroundStarsQuality = 10;
@@ -1097,7 +1099,25 @@ ReCreate:
 		}
 	}
 
-	if (Setup.MultiSampleType > CAPS->MaxMultiSampleType) Setup.MultiSampleType = CAPS->MaxMultiSampleType;
+	if (Setup.MSAA > CAPS->MaxSamples) Setup.MSAA = Setup.CSAA = CAPS->MaxSamples;
+	// на всякий случай проверяем, входит ли текущее сглаживание в список доступных
+	int CurrentAAMode = -1;
+	if (Setup.MSAA != 0)
+	{
+		for (int i=0;i<CAPS->MaxMultisampleCoverageModes; i++)
+		{
+			if ((CAPS->MultisampleCoverageModes[i].ColorSamples == Setup.MSAA) &
+				(CAPS->MultisampleCoverageModes[i].CoverageSamples == Setup.CSAA))
+				{
+					CurrentAAMode = i;
+					break;
+				}
+		}
+	}
+	// если ничего не нашли, сбрасываем в нули
+	if (CurrentAAMode == -1) Setup.MSAA = Setup.CSAA = 0;
+
+
 
 
 
@@ -1105,7 +1125,7 @@ ReCreate:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// завершаем инициализацию
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	vw_InitOpenGL(Setup.Width, Setup.Height, &Setup.MultiSampleType);
+	vw_InitOpenGL(Setup.Width, Setup.Height, &Setup.MSAA, &Setup.CSAA);
 
 
 	// вторичная работа с настройками

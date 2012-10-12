@@ -40,6 +40,13 @@
 
 
 
+struct eCoverageModes
+{
+	int ColorSamples;
+	int CoverageSamples;
+};
+
+
 struct eDevCaps
 {
 	// версия OpenGL
@@ -56,7 +63,9 @@ struct eDevCaps
 	// максимальный уровень анизотропии
 	int MaxAnisotropyLevel;
 	// макс. уровень антиалиасинга, 0-нет, 2+ - есть
-	int MaxMultiSampleType;
+	int MaxSamples; // MSAA
+	int MaxMultisampleCoverageModes; // кол-во профайлов антиалиасинга с CSAA+MSAA
+	eCoverageModes MultisampleCoverageModes[32]; // собственно сам список режимов CSAA+MSAA, ставим просто 32 штуки, чтобы не заморачиваться с освобождением памяти
 	// есть ли возможность включить сжатие текстур
 	bool TexturesCompression;
 	// GL_ARB_texture_storage
@@ -98,7 +107,7 @@ struct eDevCaps
 //eDevCaps *vw_HardwareTest(int Width, int Height);
 // Initialization renderer
 int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideoModeW, int CurrentVideoModeH);
-void vw_InitOpenGL(int Width, int Height, int *MSAA);
+void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA);
 // Shutdown renderer dll
 void vw_ShutdownRenderer(void);
 // Get device capability

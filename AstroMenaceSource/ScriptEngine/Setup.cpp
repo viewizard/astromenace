@@ -72,7 +72,8 @@ void InitSetup()
 
 	Setup.TextureFilteringMode = 2;
 	Setup.TexturesQuality = 3;
-	Setup.MultiSampleType = 0;
+	Setup.MSAA = 0;
+	Setup.CSAA = 0;
 	Setup.ParticlesPerSecQuality = 2;
 	Setup.PartsExplosionQuality = 1;
 	Setup.BackgroundStarsQuality = 5;
@@ -288,7 +289,8 @@ void SaveXMLSetupFile()
 	AddComment(root, " Common settings ");
 	iAddLine(root, setting, "TextureFilteringMode", "value", Setup.TextureFilteringMode);
 	iAddLine(root, setting, "TexturesQuality", "value", Setup.TexturesQuality);
-	iAddLine(root, setting, "MultiSampleType", "value", Setup.MultiSampleType);
+	iAddLine(root, setting, "MSAA", "value", Setup.MSAA);
+	iAddLine(root, setting, "CSAA", "value", Setup.CSAA);
 	iAddLine(root, setting, "ParticlesPerSecQuality", "value", Setup.ParticlesPerSecQuality);
 	iAddLine(root, setting, "PartsExplosionQuality", "value", Setup.PartsExplosionQuality);
 	iAddLine(root, setting, "BackgroundStarsQuality", "value", Setup.BackgroundStarsQuality);
@@ -637,7 +639,8 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 
 	iGetLine(root, setting, "TextureFilteringMode", "value", &Setup.TextureFilteringMode);
 	iGetLine(root, setting, "TexturesQuality", "value", &Setup.TexturesQuality);
-	iGetLine(root, setting, "MultiSampleType", "value", &Setup.MultiSampleType);
+	iGetLine(root, setting, "MSAA", "value", &Setup.MSAA);
+	iGetLine(root, setting, "CSAA", "value", &Setup.CSAA);
 	iGetLine(root, setting, "ParticlesPerSecQuality", "value", &Setup.ParticlesPerSecQuality);
 	iGetLine(root, setting, "PartsExplosionQuality", "value", &Setup.PartsExplosionQuality);
 	iGetLine(root, setting, "BackgroundStarsQuality", "value", &Setup.BackgroundStarsQuality);

@@ -272,7 +272,8 @@ void SetMenu(eGameStatus Menu)
 		case OPTIONS_ADVANCED:
 			Options_TexturesCompression = Setup.TexturesCompression;
 			Options_UseGLSL = Setup.UseGLSL;
-			Options_MultiSampleType = Setup.MultiSampleType;
+			Options_MSAA = Setup.MSAA;
+			Options_CSAA = Setup.CSAA;
 			break;
 
 		case CONFCONTROL:
