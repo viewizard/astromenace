@@ -265,6 +265,26 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 {
 	if (Text == 0) return;
 
+	// учитываем аспект рейшен
+	float AW;
+	float AH;
+	bool ASpresent=false;
+	ASpresent = vw_GetAspectWH(&AW, &AH);
+	// получаем данные текущего вьюпорта
+	int W, H;
+	vw_GetViewport(0, 0, &W, &H);
+	float AHw = H*1.0f;
+
+	float RealTextYPos = AHw - 2*Y + 4 + InternalFontSize*FontScale;
+	if (ASpresent) RealTextYPos = AH - 2*Y + 4 + InternalFontSize*FontScale;
+
+
+	// если текст ниже чем ширина нашего окна - не рисуем
+	if (ASpresent){ if (Y > AH) return;}
+	else {if (Y > H) return;}
+	// если текст выше чем ноль - тоже рисовать его смысла нет
+	if (Y+InternalFontSize*FontScale < 0) return;
+
 
 // FlattenWidth - выравнивать по ширине
 // если FlattenWidth отрицателен, выравниваем по значению, "сжимая" буквы, если нужно
@@ -348,16 +368,6 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 	vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 	// ставим цвет
 	vw_SetColor(R, G, B, Transp);
-
-	// учитываем аспект рейшен
-	float AW;
-	float AH;
-	bool ASpresent=false;
-	ASpresent = vw_GetAspectWH(&AW, &AH);
-	// получаем данные текущего вьюпорта
-	int W, H;
-	vw_GetViewport(0, 0, &W, &H);
-	float AHw = H*1.0f;
 
 	// для отрисовки
 	eTexture* CurrentTexture = 0;
