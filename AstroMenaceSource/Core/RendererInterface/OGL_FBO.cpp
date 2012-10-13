@@ -33,7 +33,10 @@
 #include "RendererInterface.h"
 
 
+// текущий работающий буфер, если 0 - фрейм буфер
+eFBO *CurrentFBO = 0;
 
+/*
 // данные для буферов, чтобы сделать MSAA
 GLuint ColorRenderbufferName = 0;
 GLuint DepthRenderbufferName = 0;
@@ -41,7 +44,7 @@ GLuint ColorTextureName = 0;
 GLuint FramebufferRenderName = 0;
 GLuint FramebufferResolveName = 0;
 GLuint FBO_Width, FBO_Height;
-
+*/
 // указатели на функии
 PFNGLGENRENDERBUFFERSEXTPROC				glGenRenderbuffersEXT = NULL;
 PFNGLBINDRENDERBUFFEREXTPROC				glBindRenderbufferEXT = NULL;
@@ -67,20 +70,45 @@ PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC	glRenderbufferStorageMultisamp
 //------------------------------------------------------------------------------------
 bool vw_Internal_InitializationFBO()
 {
-	// Get Pointers To The GL Functions
-	glGenRenderbuffersEXT = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenRenderbuffersEXT");
-	glBindRenderbufferEXT = (PFNGLBINDRENDERBUFFEREXTPROC) SDL_GL_GetProcAddress("glBindRenderbufferEXT");
-	glRenderbufferStorageMultisampleEXT = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC) SDL_GL_GetProcAddress("glRenderbufferStorageMultisampleEXT");
-	glGenFramebuffersEXT = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenFramebuffersEXT");
-	glBindFramebufferEXT = (PFNGLBINDFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBindFramebufferEXT");
-	glFramebufferRenderbufferEXT = (PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC) SDL_GL_GetProcAddress("glFramebufferRenderbufferEXT");
-	glCheckFramebufferStatusEXT = (PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC) SDL_GL_GetProcAddress("glCheckFramebufferStatusEXT");
-	glFramebufferTexture2DEXT = (PFNGLFRAMEBUFFERTEXTURE2DEXTPROC) SDL_GL_GetProcAddress("glFramebufferTexture2DEXT");
-	glDeleteRenderbuffersEXT = (PFNGLDELETERENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glDeleteRenderbuffersEXT");
-	glDeleteFramebuffersEXT = (PFNGLDELETEFRAMEBUFFERSEXTPROC) SDL_GL_GetProcAddress("glDeleteFramebuffersEXT");
-	glBlitFramebufferEXT = (PFNGLBLITFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBlitFramebufferEXT");
-	glIsFramebufferEXT = (PFNGLISFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glIsFramebufferEXT");
-	glGenerateMipmapEXT = (PFNGLGENERATEMIPMAPPROC) SDL_GL_GetProcAddress("glGenerateMipmapEXT");
+	// GL_ARB_framebuffer_object
+	glGenRenderbuffersEXT = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenRenderbuffers");
+	glBindRenderbufferEXT = (PFNGLBINDRENDERBUFFEREXTPROC) SDL_GL_GetProcAddress("glBindRenderbuffer");
+	glRenderbufferStorageMultisampleEXT = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC) SDL_GL_GetProcAddress("glRenderbufferStorageMultisample");
+	glGenFramebuffersEXT = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenFramebuffers");
+	glBindFramebufferEXT = (PFNGLBINDFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBindFramebuffer");
+	glFramebufferRenderbufferEXT = (PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC) SDL_GL_GetProcAddress("glFramebufferRenderbuffer");
+	glCheckFramebufferStatusEXT = (PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC) SDL_GL_GetProcAddress("glCheckFramebufferStatus");
+	glFramebufferTexture2DEXT = (PFNGLFRAMEBUFFERTEXTURE2DEXTPROC) SDL_GL_GetProcAddress("glFramebufferTexture2D");
+	glDeleteRenderbuffersEXT = (PFNGLDELETERENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glDeleteRenderbuffers");
+	glDeleteFramebuffersEXT = (PFNGLDELETEFRAMEBUFFERSEXTPROC) SDL_GL_GetProcAddress("glDeleteFramebuffers");
+	glBlitFramebufferEXT = (PFNGLBLITFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBlitFramebuffer");
+	glIsFramebufferEXT = (PFNGLISFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glIsFramebuffer");
+	glGenerateMipmapEXT = (PFNGLGENERATEMIPMAPPROC) SDL_GL_GetProcAddress("glGenerateMipmap");
+
+
+	if (glGenRenderbuffersEXT == NULL || glBindRenderbufferEXT == NULL ||
+		glRenderbufferStorageMultisampleEXT == NULL || glGenFramebuffersEXT == NULL ||
+		glBindFramebufferEXT == NULL || glFramebufferRenderbufferEXT == NULL ||
+		glCheckFramebufferStatusEXT == NULL || glFramebufferTexture2DEXT == NULL ||
+		glDeleteRenderbuffersEXT == NULL || glDeleteFramebuffersEXT == NULL ||
+		glBlitFramebufferEXT == NULL || glIsFramebufferEXT == NULL ||
+		glGenerateMipmapEXT == NULL)
+	{
+		// GL_EXT_framebuffer_object+GL_EXT_framebuffer_multisample+GL_EXT_framebuffer_blit
+		glGenRenderbuffersEXT = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenRenderbuffersEXT");
+		glBindRenderbufferEXT = (PFNGLBINDRENDERBUFFEREXTPROC) SDL_GL_GetProcAddress("glBindRenderbufferEXT");
+		glRenderbufferStorageMultisampleEXT = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC) SDL_GL_GetProcAddress("glRenderbufferStorageMultisampleEXT");
+		glGenFramebuffersEXT = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenFramebuffersEXT");
+		glBindFramebufferEXT = (PFNGLBINDFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBindFramebufferEXT");
+		glFramebufferRenderbufferEXT = (PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC) SDL_GL_GetProcAddress("glFramebufferRenderbufferEXT");
+		glCheckFramebufferStatusEXT = (PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC) SDL_GL_GetProcAddress("glCheckFramebufferStatusEXT");
+		glFramebufferTexture2DEXT = (PFNGLFRAMEBUFFERTEXTURE2DEXTPROC) SDL_GL_GetProcAddress("glFramebufferTexture2DEXT");
+		glDeleteRenderbuffersEXT = (PFNGLDELETERENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glDeleteRenderbuffersEXT");
+		glDeleteFramebuffersEXT = (PFNGLDELETEFRAMEBUFFERSEXTPROC) SDL_GL_GetProcAddress("glDeleteFramebuffersEXT");
+		glBlitFramebufferEXT = (PFNGLBLITFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBlitFramebufferEXT");
+		glIsFramebufferEXT = (PFNGLISFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glIsFramebufferEXT");
+		glGenerateMipmapEXT = (PFNGLGENERATEMIPMAPPROC) SDL_GL_GetProcAddress("glGenerateMipmapEXT");
+	}
 
 
 	if (glGenRenderbuffersEXT == NULL || glBindRenderbufferEXT == NULL ||
@@ -120,11 +148,14 @@ bool vw_Internal_InitializationFBO()
 
 
 
+
+
 //------------------------------------------------------------------------------------
-// Инициализация буферов
+// Создаем FBO с заданными параметрами (FBO - уже заранее подготовленный объект, в функции память не выделяем)
 //------------------------------------------------------------------------------------
-bool vw_Internal_MSAA_FBO_Create(int Width, int Height, int MSAA, int *CSAA)
+bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDepth, int MSAA, int *CSAA)
 {
+	if (FBO == 0) return false;
 	if (glGenRenderbuffersEXT == NULL) return false;
 	if (glBindRenderbufferEXT == NULL) return false;
 	if (glRenderbufferStorageMultisampleEXT == NULL) return false;
@@ -135,52 +166,88 @@ bool vw_Internal_MSAA_FBO_Create(int Width, int Height, int MSAA, int *CSAA)
 	// если не поддерживаем ковередж - просто ставим MSAA
 	if (glRenderbufferStorageMultisampleCoverageNV == NULL) *CSAA = MSAA;
 
-	FBO_Width = Width;
-	FBO_Height = Height;
+	FBO->Width = Width;
+	FBO->Height = Height;
+	FBO->ColorBuffer = 0;
+	FBO->DepthBuffer = 0;
+	FBO->ColorTexture = 0;
+	FBO->DepthTexture = 0;
+	FBO->FrameBufferObject = 0;
 
 
-	// создаем наш буфер с мультисемплами (цвет+глубина)
-	glGenRenderbuffersEXT(1, &ColorRenderbufferName);
-	glBindRenderbufferEXT(GL_RENDERBUFFER, ColorRenderbufferName);
-	if ((*CSAA == MSAA) | (CSAA == 0))
-		glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, MSAA, GL_RGBA, FBO_Width, FBO_Height);
-	else
-		glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, *CSAA, MSAA, GL_RGBA, FBO_Width, FBO_Height);
+	glGenFramebuffersEXT(1, &FBO->FrameBufferObject);
+	glBindFramebufferEXT(GL_FRAMEBUFFER, FBO->FrameBufferObject);
 
-	glGenRenderbuffersEXT(1, &DepthRenderbufferName);
-  	glBindRenderbufferEXT(GL_RENDERBUFFER, DepthRenderbufferName);
-	if ((*CSAA == MSAA) | (CSAA == 0))
-  		glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, MSAA, GL_DEPTH_COMPONENT24, FBO_Width, FBO_Height);
-	else
-		glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER_EXT, *CSAA, MSAA, GL_DEPTH_COMPONENT24, FBO_Width, FBO_Height);
 
-	glGenFramebuffersEXT(1, &FramebufferRenderName);
-	glBindFramebufferEXT(GL_FRAMEBUFFER, FramebufferRenderName);
-	glFramebufferRenderbufferEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, ColorRenderbufferName);
-	glFramebufferRenderbufferEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, DepthRenderbufferName);
-	if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	if (NeedColor)
 	{
-		fprintf(stderr, "Can't create Render FRAMEBUFFER.\n\n");
-		return false;
+		// если есть мультисемплы - делаем буфером, если нет - текстурой
+		if (MSAA >= 2)
+		{
+			glGenRenderbuffersEXT(1, &FBO->ColorBuffer);
+			glBindRenderbufferEXT(GL_RENDERBUFFER, FBO->ColorBuffer);
+			if ((*CSAA == MSAA) | (CSAA == 0))
+				glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, MSAA, GL_RGBA, FBO->Width, FBO->Height);
+			else
+				glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, *CSAA, MSAA, GL_RGBA, FBO->Width, FBO->Height);
+			glFramebufferRenderbufferEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, FBO->ColorBuffer);
+			if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			{
+				fprintf(stderr, "Can't create FRAMEBUFFER.\n\n");
+				return false;
+			}
+		}
+		else
+		{
+			glGenTextures(1, &FBO->ColorTexture);
+			glBindTexture(GL_TEXTURE_2D, FBO->ColorTexture);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, FBO->Width, FBO->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+			glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, FBO->ColorTexture, 0);
+			if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			{
+				fprintf(stderr, "Can't create FRAMEBUFFER.\n\n");
+				return false;
+			}
+		}
 	}
-	glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
 
 
-	// создаем обычный буфер без мультисемплов, чтобы в него потом вывести (только цвет делаем)
-    glGenTextures(1, &ColorTextureName);
-	glBindTexture(GL_TEXTURE_2D, ColorTextureName);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, FBO_Width, FBO_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-
-	glGenFramebuffersEXT(1, &FramebufferResolveName);
-	glBindFramebufferEXT(GL_FRAMEBUFFER, FramebufferResolveName);
-	glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ColorTextureName, 0);
-	if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	if (NeedDepth)
 	{
-		fprintf(stderr, "Can't create Resolve FRAMEBUFFER.\n\n");
-		return false;
+		// если есть мультисемплы - делаем буфером, если нет - текстурой
+		if (MSAA >= 2)
+		{
+			glGenRenderbuffersEXT(1, &FBO->DepthBuffer);
+			glBindRenderbufferEXT(GL_RENDERBUFFER, FBO->DepthBuffer);
+			if ((*CSAA == MSAA) | (CSAA == 0))
+				glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, MSAA, GL_DEPTH_COMPONENT24, FBO->Width, FBO->Height);
+			else
+				glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, *CSAA, MSAA, GL_DEPTH_COMPONENT24, FBO->Width, FBO->Height);
+			glFramebufferRenderbufferEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, FBO->DepthBuffer);
+			if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			{
+				fprintf(stderr, "Can't create FRAMEBUFFER.\n\n");
+				return false;
+			}
+		}
+		else
+		{
+			glGenTextures(1, &FBO->DepthTexture);
+			glBindTexture(GL_TEXTURE_2D, FBO->DepthTexture);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, FBO->Width, FBO->Height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
+			glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FBO->DepthTexture, 0);
+			if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			{
+				fprintf(stderr, "Can't create FRAMEBUFFER.\n\n");
+				return false;
+			}
+		}
 	}
+
 	glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
 
 	return true;
@@ -193,21 +260,44 @@ bool vw_Internal_MSAA_FBO_Create(int Width, int Height, int MSAA, int *CSAA)
 
 
 //------------------------------------------------------------------------------------
-// Переключаемся на нужный буфер
+// Установка FBO
 //------------------------------------------------------------------------------------
-void vw_Internal_MSAA_FBO_BeginRendering(float fClearRed, float fClearGreen, float fClearBlue, float fClearAlpha)
+void vw_BindFBO(eFBO *FBO)
 {
 	if (glBindFramebufferEXT == NULL) return;
-	if (FramebufferRenderName == 0) return;
+	if (FBO != 0)
+		if (FBO->FrameBufferObject == 0) return;
 
-	// Clear the framebuffer
-	glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
-	glClearColor(fClearRed, fClearGreen, fClearBlue, fClearAlpha);
+	// проверяем текущий
+	if (CurrentFBO != 0)// если текущий был с мультисемплами - надо их выключить
+		if ((CurrentFBO->ColorBuffer != 0) | (CurrentFBO->DepthBuffer != 0)) glDisable(GL_MULTISAMPLE);
 
-	glEnable(GL_MULTISAMPLE);
-	glBindFramebufferEXT(GL_FRAMEBUFFER, FramebufferRenderName);
-	glViewport(0, 0, FBO_Width, FBO_Height);
-	glClearColor(fClearRed, fClearGreen, fClearBlue, fClearAlpha);
+	if (FBO != 0)
+	{
+		if ((FBO->ColorBuffer != 0) | (FBO->DepthBuffer != 0)) glEnable(GL_MULTISAMPLE);
+		glBindFramebufferEXT(GL_FRAMEBUFFER, FBO->FrameBufferObject);
+	}
+	else
+	{
+		// ставим основной фрейм буфер
+		glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
+	}
+
+	CurrentFBO = FBO;
+}
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// получаем текущий установленный FBO, 0 - если фрейм буфер
+//------------------------------------------------------------------------------------
+eFBO *vw_GetCurrentFBO()
+{
+	return CurrentFBO;
 }
 
 
@@ -218,27 +308,45 @@ void vw_Internal_MSAA_FBO_BeginRendering(float fClearRed, float fClearGreen, flo
 
 
 //------------------------------------------------------------------------------------
-// Завершаем прорисовку и рисуем в основной буфер
+// Блит FBO
 //------------------------------------------------------------------------------------
-void vw_Internal_MSAA_FBO_EndRendering()
+void vw_BlitFBO(eFBO *SourceFBO, eFBO *TargetFBO)
 {
 	if (glBindFramebufferEXT == NULL) return;
 	if (glBlitFramebufferEXT == NULL) return;
-	if (FramebufferRenderName == 0) return;
-	if (FramebufferResolveName == 0) return;
+	if (SourceFBO == 0) return;
+	if (SourceFBO->FrameBufferObject == 0) return;
+	if (TargetFBO == 0) return;
+	if (TargetFBO->FrameBufferObject == 0) return;
 
-
-	glDisable(GL_MULTISAMPLE);
-
-	// Resolved multisampling
-	glBindFramebufferEXT(GL_READ_FRAMEBUFFER, FramebufferRenderName);
-	glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER, FramebufferResolveName);
+	glBindFramebufferEXT(GL_READ_FRAMEBUFFER, SourceFBO->FrameBufferObject);
+	glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER, TargetFBO->FrameBufferObject);
 	glBlitFramebufferEXT(
-		0, 0, FBO_Width, FBO_Height,
-		0, 0, FBO_Width, FBO_Height,
+		0, 0, SourceFBO->Width, SourceFBO->Height,
+		0, 0, TargetFBO->Width, TargetFBO->Height,
 		GL_COLOR_BUFFER_BIT, GL_LINEAR);
-	glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, FBO_Width, FBO_Height);
+}
+
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Рисуем FBO в указанный FBO
+//------------------------------------------------------------------------------------
+void vw_DrawColorFBO(eFBO *SourceFBO, eFBO *TargetFBO)
+{
+	if (SourceFBO == 0) return;
+	if (SourceFBO->ColorTexture == 0) return;
+
+
+	vw_BindFBO(TargetFBO);
+	glViewport(0, 0, SourceFBO->Width, SourceFBO->Height);
 
 
 	// рисуем текстуру на весь экран
@@ -253,7 +361,7 @@ void vw_Internal_MSAA_FBO_EndRendering()
 	glPushMatrix();												//store the projection matrix
 	glLoadIdentity();											//reset the projection matrix
 
-	glOrtho(0, FBO_Width, 0, FBO_Height, -1, 1);
+	glOrtho(0, SourceFBO->Width, 0, SourceFBO->Height, -1, 1);
 
 	glMatrixMode(GL_MODELVIEW);				//select the modelview matrix
 	glPushMatrix();
@@ -272,23 +380,23 @@ void vw_Internal_MSAA_FBO_EndRendering()
 		buff[k++] = 0.0f;
 
 		buff[k++] = 0.0f;
-		buff[k++] = FBO_Height;
+		buff[k++] = SourceFBO->Height;
 		buff[k++] = 0.0f;
 		buff[k++] = 1.0f;
 
-		buff[k++] = FBO_Width;
+		buff[k++] = SourceFBO->Width;
 		buff[k++] = 0.0f;
 		buff[k++] = 1.0f;
 		buff[k++] = 0.0f;
 
-		buff[k++] = FBO_Width;
-		buff[k++] = FBO_Height;
+		buff[k++] = SourceFBO->Width;
+		buff[k++] = SourceFBO->Height;
 		buff[k++] = 1.0f;
 		buff[k++] = 1.0f;
 
 
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, ColorTextureName);
+		glBindTexture(GL_TEXTURE_2D, SourceFBO->ColorTexture);
 
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, buff, 4*sizeof(float));
 
@@ -306,6 +414,7 @@ void vw_Internal_MSAA_FBO_EndRendering()
 
     // восстанавливаем флаги
 	glPopAttrib();
+
 }
 
 
@@ -317,18 +426,23 @@ void vw_Internal_MSAA_FBO_EndRendering()
 
 
 
+
 //------------------------------------------------------------------------------------
-// Освобождаем память
+// Удаление данных FBO
 //------------------------------------------------------------------------------------
-void vw_Internal_ReleaseFBO()
+void vw_DeleteFBO(eFBO *FBO)
 {
+	if (FBO == 0) return;
 	if (glDeleteRenderbuffersEXT == NULL) return;
 	if (glDeleteFramebuffersEXT == NULL) return;
 
-	if (ColorTextureName != 0) {glDeleteTextures(1, &ColorTextureName); ColorTextureName=0;};
-	if (ColorRenderbufferName != 0) {glDeleteRenderbuffersEXT(1, &ColorRenderbufferName); ColorRenderbufferName=0;};
-	if (DepthRenderbufferName != 0) {glDeleteRenderbuffersEXT(1, &DepthRenderbufferName); DepthRenderbufferName=0;};
-	if (FramebufferRenderName != 0) {glDeleteFramebuffersEXT(1, &FramebufferRenderName); FramebufferRenderName=0;};
-	if (FramebufferResolveName != 0) {glDeleteFramebuffersEXT(1, &FramebufferResolveName); FramebufferResolveName=0;};
+
+	if (FBO->ColorTexture != 0) {glDeleteTextures(1, &FBO->ColorTexture); FBO->ColorTexture=0;};
+	if (FBO->DepthTexture != 0) {glDeleteTextures(1, &FBO->DepthTexture); FBO->DepthTexture=0;};
+
+	if (FBO->ColorBuffer != 0) {glDeleteRenderbuffersEXT(1, &FBO->ColorBuffer); FBO->ColorBuffer=0;};
+	if (FBO->DepthBuffer != 0) {glDeleteRenderbuffersEXT(1, &FBO->DepthBuffer); FBO->DepthBuffer=0;};
+
+	if (FBO->FrameBufferObject != 0) {glDeleteFramebuffersEXT(1, &FBO->FrameBufferObject); FBO->FrameBufferObject=0;};
 }
 

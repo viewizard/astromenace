@@ -85,12 +85,12 @@ bool vw_BuildVAO(unsigned int *VAO, int NumVertices, int DataFormat, void *Data,
 
 	glGenVertexArraysARB(1, VAO);
 
-	vw_BuindVAO(*VAO);
+	vw_BindVAO(*VAO);
 
 	vw_SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, Data, Stride, VBO,
 						RangeStart, DataIndex, DataIndexVBO);
 
-	vw_BuindVAO(0);
+	vw_BindVAO(0);
 
 	vw_SendVertices_DisableStatesAndPointers(DataFormat, VBO, 0);
 
@@ -105,7 +105,7 @@ bool vw_BuildVAO(unsigned int *VAO, int NumVertices, int DataFormat, void *Data,
 //------------------------------------------------------------------------------------
 // Установка текущего буфера
 //------------------------------------------------------------------------------------
-void vw_BuindVAO(unsigned int VAO)
+void vw_BindVAO(unsigned int VAO)
 {
 	if (glBindVertexArrayARB == NULL) return;
 

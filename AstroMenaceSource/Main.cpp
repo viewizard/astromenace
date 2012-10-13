@@ -1048,6 +1048,16 @@ ReCreate:
 		CAPS->VAOSupported = false;
 	}
 
+	// если нужно, выключаем fbo
+#ifndef fbo // принудительно отключаем вообще работу с fbo
+	CAPS->FramebufferObject = false;
+	printf("Frame Buffer Object support forced disabled.\n");
+#endif
+	if (Setup.FBOCoreMode == 0)
+	{
+		CAPS->FramebufferObject = false;
+	}
+
 	// проверка поддержки шейдеров (нужна 100% поддержка GLSL 1.0)
 	if (Setup.UseGLSL)
 		if (!CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0f) Setup.UseGLSL = false;
