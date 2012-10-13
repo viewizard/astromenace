@@ -402,18 +402,60 @@ void vw_GetMaterialV(int pname, float *param);
 bool vw_BuildVBO(int NumVertices, void *Data, int Stride, unsigned int *VBO);
 bool vw_BuildIndexVBO(int NumIndex, void *Data, unsigned int *VBO);
 // устанавливаем буфер
-void vw_BuindVBO(int target, unsigned int VBO);
+void vw_BindVBO(int target, unsigned int VBO);
 // удаляем буфер
 void vw_DeleteVBO(unsigned int VBO);
 
 
 
 
+
+
+
 // VAO
+
+// создаем
 bool vw_BuildVAO(unsigned int *VAO, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO,
 						unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO);
-void vw_BuindVAO(unsigned int VAO);
+// устанавливаем
+void vw_BindVAO(unsigned int VAO);
+// удаляем
 void vw_DeleteVAO(unsigned int VAO);
+
+
+
+
+
+
+
+// FBO
+
+// структура FBO
+struct eFBO
+{
+	unsigned int 	ColorBuffer;
+	unsigned int 	DepthBuffer;
+	unsigned int 	ColorTexture;
+	unsigned int 	DepthTexture;
+	unsigned int 	FrameBufferObject;
+	unsigned int 	Width;
+	unsigned int 	Height;
+};
+
+// создаем (FBO - уже заранее подготовленный объект, в функции память не выделяем)
+bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDepth, int MSAA, int *CSAA);
+// устанавливаем
+void vw_BindFBO(eFBO *FBO);
+// получаем текущий установленный FBO, 0 - если фрейм буфер
+eFBO *vw_GetCurrentFBO();
+// блит цветовой составляющей фбо источника в фбо приемник (нужно для вывода фбо с мультисемплами)
+void vw_BlitFBO(eFBO *SourceFBO, eFBO *TargetFBO);
+// рисуем цветовую текстуру источника, на весь приемник, если 0 - во фрейм буфер
+void vw_DrawColorFBO(eFBO *SourceFBO, eFBO *TargetFBO);
+// удаление данных в структуре
+void vw_DeleteFBO(eFBO *FBO);
+
+
 
 
 

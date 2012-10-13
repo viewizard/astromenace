@@ -128,7 +128,7 @@ bool vw_BuildIndexVBO(int NumIndex, void *Data, unsigned int *VBO)
 //------------------------------------------------------------------------------------
 // Установка текущего буфера
 //------------------------------------------------------------------------------------
-void vw_BuindVBO(int target, unsigned int VBO)
+void vw_BindVBO(int target, unsigned int VBO)
 {
 	if (glBindBufferARB == NULL) return;
 

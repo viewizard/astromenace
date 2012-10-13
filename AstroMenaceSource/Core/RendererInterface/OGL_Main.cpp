@@ -95,10 +95,8 @@ bool vw_Internal_InitializationIndexBufferData();
 void vw_Internal_ReleaseIndexBufferData();
 // FBO
 bool vw_Internal_InitializationFBO();
-bool vw_Internal_MSAA_FBO_Create(int Width, int Height, int MSAA, int *CSAA);
-void vw_Internal_MSAA_FBO_BeginRendering(float fClearRed, float fClearGreen, float fClearBlue, float fClearAlpha);
-void vw_Internal_MSAA_FBO_EndRendering();
-void vw_Internal_ReleaseFBO();
+eFBO MainFBO; // основной FBO, для прорисовки со сглаживанием
+eFBO ResolveFBO; // FBO для вывода основного
 
 
 
@@ -331,8 +329,9 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 		OpenGL_DevCaps.HardwareMipMapGeneration = true;
 	}
 
-	// проверяем, есть ли поддержка GL_EXT_framebuffer_object-GL_EXT_framebuffer_multisample-GL_EXT_framebuffer_blit
-	if (ExtensionSupported("GL_EXT_framebuffer_blit") & ExtensionSupported("GL_EXT_framebuffer_multisample") & ExtensionSupported("GL_EXT_framebuffer_object"))
+	// проверяем, есть ли поддержка GL_ARB_framebuffer_object (GL_EXT_framebuffer_object+GL_EXT_framebuffer_multisample+GL_EXT_framebuffer_blit)
+	if (ExtensionSupported("GL_ARB_framebuffer_object") |
+		(ExtensionSupported("GL_EXT_framebuffer_blit") & ExtensionSupported("GL_EXT_framebuffer_multisample") & ExtensionSupported("GL_EXT_framebuffer_object")))
 	{
 		OpenGL_DevCaps.FramebufferObject = true;
 	}
@@ -401,8 +400,8 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	else printf("Shader Model: %.1f\n", OpenGL_DevCaps.ShaderModel);
 
 
-	// проверяем, поддерживаем или нет мультисемпл + для реализации нам нужна поддержка GL_EXT_framebuffer_object и GL_EXT_framebuffer_blit
-	if (ExtensionSupported("GL_EXT_framebuffer_blit") & ExtensionSupported("GL_EXT_framebuffer_multisample") & ExtensionSupported("GL_EXT_framebuffer_object"))
+	// если есть полная поддержка FBO, значит можем работать с семплами
+	if (OpenGL_DevCaps.FramebufferObject)
 	{
 		glGetIntegerv(GL_MAX_SAMPLES_EXT, &OpenGL_DevCaps.MaxSamples);
 		printf("Max Samples: %i\n", OpenGL_DevCaps.MaxSamples);
@@ -550,20 +549,43 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	// иним вaо
 	if (OpenGL_DevCaps.VAOSupported) OpenGL_DevCaps.VAOSupported = vw_Internal_InitializationVAO();
 	// инициализируем FBO
-	if (OpenGL_DevCaps.FramebufferObject) OpenGL_DevCaps.FramebufferObject = vw_Internal_InitializationFBO();
-
-
-	// если нужно работать с мультисемплами (MSAA) - создаем буфер
-	if (OpenGL_DevCaps.FramebufferObject & (*MSAA > 0))
+	if (OpenGL_DevCaps.FramebufferObject)
 	{
-		if (!vw_Internal_MSAA_FBO_Create(Width, Height, *MSAA, CSAA))
+		OpenGL_DevCaps.FramebufferObject = vw_Internal_InitializationFBO();
+
+		// инициализируем буферы, если поддерживаем работу с ними - через них всегда рисуем
+		if (OpenGL_DevCaps.FramebufferObject)
 		{
-			vw_Internal_ReleaseFBO();
-			*MSAA = 0;
+			int CSAAforResolveFBO = 0;
+			if (!vw_BuildFBO(&MainFBO, Width, Height, true, true, *MSAA, CSAA) &
+				!vw_BuildFBO(&ResolveFBO, Width, Height, true, false, 0, &CSAAforResolveFBO))
+			{
+				vw_DeleteFBO(&MainFBO);
+				vw_DeleteFBO(&ResolveFBO);
+				OpenGL_DevCaps.FramebufferObject = false;
+			}
 		}
 	}
-	else
-		if (!OpenGL_DevCaps.FramebufferObject) *MSAA = 0;
+
+
+	// если с FBO работать не получилось
+	if (!OpenGL_DevCaps.FramebufferObject)
+	{
+		//выключаем антиалиасинг
+		*MSAA = OpenGL_DevCaps.MaxSamples = 0;
+
+		// сбрасываем в нули структуры буферов (на всякий случай, т.к. не было инициализаций)
+		MainFBO.ColorBuffer = 0;
+		MainFBO.DepthBuffer = 0;
+		MainFBO.ColorTexture = 0;
+		MainFBO.DepthTexture = 0;
+		MainFBO.FrameBufferObject = 0;
+		ResolveFBO.ColorBuffer = 0;
+		ResolveFBO.DepthBuffer = 0;
+		ResolveFBO.ColorTexture = 0;
+		ResolveFBO.DepthTexture = 0;
+		ResolveFBO.FrameBufferObject = 0;
+	}
 
 
 
@@ -633,7 +655,8 @@ void vw_ShutdownRenderer()
 
 
 	vw_Internal_ReleaseIndexBufferData();
-	vw_Internal_ReleaseFBO();
+	vw_DeleteFBO(&MainFBO);
+	vw_DeleteFBO(&ResolveFBO);
 }
 
 
@@ -703,8 +726,9 @@ void vw_ChangeSize(int nWidth, int nHeight)
 //------------------------------------------------------------------------------------
 void vw_BeginRendering(int mask)
 {
-	// если нужно, переключаемся на FBO с мультисемплами
-	vw_Internal_MSAA_FBO_BeginRendering(fClearRedGL, fClearGreenGL, fClearBlueGL, fClearAlphaGL);
+	// если нужно, переключаемся на FBO
+	vw_BindFBO(&MainFBO);
+
 
 
 	GLbitfield  glmask = 0;
@@ -733,8 +757,18 @@ void vw_BeginRendering(int mask)
 //------------------------------------------------------------------------------------
 void vw_EndRendering()
 {
-	// завершаем прорисовку, и переключаемся на основной буфер
-	vw_Internal_MSAA_FBO_EndRendering();
+	// завершаем прорисовку, и переключаемся на основной буфер, если работали с FBO
+	if (MainFBO.ColorTexture != 0)
+	{
+		// если у нас буфер простой - достаточно просто прорисовать его текстуру
+		vw_DrawColorFBO(&MainFBO, 0);
+	}
+	else
+	{
+		// если буфер с мультисемплами, надо сначало сделать блит в простой буфер
+		vw_BlitFBO(&MainFBO, &ResolveFBO);
+		vw_DrawColorFBO(&ResolveFBO, 0);
+	}
 
 	SDL_GL_SwapBuffers();
 

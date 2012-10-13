@@ -109,7 +109,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 		case 0x0800000: TextSize = 4; TextCoordType = 2;	break;
 	}
 
-	if (NeedVBO) vw_BuindVBO(RI_ARRAY_BUFFER, *VBO);
+	if (NeedVBO) vw_BindVBO(RI_ARRAY_BUFFER, *VBO);
 
 
 	// делаем установку поинтеров + ставим смещения для прорисовки
@@ -261,7 +261,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 		if (OpenGL_DevCaps.VBOSupported)
 		if (IndexVBO != 0)
 		{
-			vw_BuindVBO(RI_ELEMENT_ARRAY_BUFFER, *IndexVBO);
+			vw_BindVBO(RI_ELEMENT_ARRAY_BUFFER, *IndexVBO);
 			VertexIndexPointer = NULL;
 			VertexIndexPointer = VertexIndexPointer+RangeStart;
 		}
@@ -274,7 +274,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 		if (OpenGL_DevCaps.VBOSupported)
 		if (DataIndexVBO != 0)
 		{
-			vw_BuindVBO(RI_ELEMENT_ARRAY_BUFFER, *DataIndexVBO);
+			vw_BindVBO(RI_ELEMENT_ARRAY_BUFFER, *DataIndexVBO);
 			VertexIndexPointer = NULL;
 			VertexIndexPointer = VertexIndexPointer+RangeStart;
 		}
@@ -299,7 +299,7 @@ void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int *VBO,
 
 	if (NeedVAO)
 	{
-		vw_BuindVAO(0);
+		vw_BindVAO(0);
 	}
 	else
 	{
@@ -322,8 +322,8 @@ void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int *VBO,
 
 
 		// сбрасываем индексный и вертексный буфера, если они были установлены
-		if (IndexVBO != 0) vw_BuindVBO(RI_ELEMENT_ARRAY_BUFFER, 0);
-		if (NeedVBO) vw_BuindVBO(RI_ARRAY_BUFFER, 0);
+		if (IndexVBO != 0) vw_BindVBO(RI_ELEMENT_ARRAY_BUFFER, 0);
+		if (NeedVBO) vw_BindVBO(RI_ARRAY_BUFFER, 0);
 	}
 }
 
@@ -351,7 +351,7 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 	GLuint *VertexIndexPointer = 0;
 	if (NeedVAO)
 	{
-		vw_BuindVAO(*VAO);
+		vw_BindVAO(*VAO);
 	}
 	else
 	{

@@ -35,7 +35,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION	 	1.3
-#define GAME_BUILD			121012
+#define GAME_BUILD			121013
 
 
 // VBO OpenGL extention support switcher (if defined - game will detect and use VBO) Game could crash
@@ -46,6 +46,10 @@
 // VAO OpenGL extention support switcher (if defined - game will detect and use VAO), VAO will not work without VBO
 // Intel video cards might have a problem with VAO (index buffer issue in intel video drivers)
 #define vao
+
+// FBO OpenGL extention support switcher (if defined - game will detect and use FBO)
+// Note, this will also take affect on anti aliasing support.
+#define fbo
 
 // xinerama support, required libXinerama
 #define xinerama
