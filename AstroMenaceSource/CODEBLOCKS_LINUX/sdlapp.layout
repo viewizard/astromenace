@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="default" />
-	<File name="../BackGround/SkyBox.cpp" open="0" top="0" tabpos="7">
-		<Cursor position="8373" topLine="258" />
-	</File>
-	<File name="../BackGround/StarSystem.cpp" open="0" top="0" tabpos="9">
-		<Cursor position="4567" topLine="112" />
-	</File>
-	<File name="../Camera/GameCamera.cpp" open="0" top="0" tabpos="10">
-		<Cursor position="7550" topLine="213" />
-	</File>
 	<File name="../Core/Base.h" open="0" top="0" tabpos="2">
 		<Cursor position="1221" topLine="58" />
 	</File>
-	<File name="../Core/Camera/Camera.cpp" open="0" top="0" tabpos="12">
-		<Cursor position="5296" topLine="16" />
+	<File name="../Core/Camera/Camera.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="4122" topLine="54" />
 	</File>
 	<File name="../Core/Camera/Camera.h" open="0" top="0" tabpos="13">
 		<Cursor position="2721" topLine="48" />
@@ -41,7 +32,7 @@
 		<Cursor position="1762" topLine="27" />
 	</File>
 	<File name="../Core/Font/Font.cpp" open="0" top="0" tabpos="4">
-		<Cursor position="9798" topLine="258" />
+		<Cursor position="10301" topLine="263" />
 	</File>
 	<File name="../Core/Font/Font.h" open="0" top="0" tabpos="2">
 		<Cursor position="2604" topLine="67" />
@@ -131,16 +122,16 @@
 		<Cursor position="269" topLine="0" />
 	</File>
 	<File name="../Core/RendererInterface/GLext.h" open="0" top="0" tabpos="4">
-		<Cursor position="369035" topLine="7872" />
+		<Cursor position="580161" topLine="11068" />
 	</File>
 	<File name="../Core/RendererInterface/OGL_Draw2D.cpp" open="0" top="0" tabpos="42">
 		<Cursor position="1670" topLine="44" />
 	</File>
 	<File name="../Core/RendererInterface/OGL_Draw3D.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="1320" topLine="21" />
+		<Cursor position="9782" topLine="315" />
 	</File>
-	<File name="../Core/RendererInterface/OGL_FBO.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="5755" topLine="128" />
+	<File name="../Core/RendererInterface/OGL_FBO.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="13902" topLine="301" />
 	</File>
 	<File name="../Core/RendererInterface/OGL_GLSL.cpp" open="0" top="0" tabpos="44">
 		<Cursor position="22392" topLine="654" />
@@ -148,8 +139,8 @@
 	<File name="../Core/RendererInterface/OGL_Light.cpp" open="0" top="0" tabpos="3">
 		<Cursor position="3681" topLine="111" />
 	</File>
-	<File name="../Core/RendererInterface/OGL_Main.cpp" open="1" top="1" tabpos="3">
-		<Cursor position="22378" topLine="532" />
+	<File name="../Core/RendererInterface/OGL_Main.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="24110" topLine="536" />
 	</File>
 	<File name="../Core/RendererInterface/OGL_Matrix.cpp" open="0" top="0" tabpos="47">
 		<Cursor position="265" topLine="7" />
@@ -161,16 +152,16 @@
 		<Cursor position="5296" topLine="169" />
 	</File>
 	<File name="../Core/RendererInterface/OGL_VAO.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="3740" topLine="72" />
+		<Cursor position="3616" topLine="76" />
 	</File>
 	<File name="../Core/RendererInterface/OGL_VBO.cpp" open="0" top="0" tabpos="5">
-		<Cursor position="2666" topLine="71" />
+		<Cursor position="4780" topLine="123" />
 	</File>
 	<File name="../Core/RendererInterface/RI_Int.cpp" open="0" top="0" tabpos="50">
 		<Cursor position="1903" topLine="39" />
 	</File>
-	<File name="../Core/RendererInterface/RendererInterface.h" open="0" top="0" tabpos="4">
-		<Cursor position="1570" topLine="38" />
+	<File name="../Core/RendererInterface/RendererInterface.h" open="0" top="0" tabpos="5">
+		<Cursor position="9111" topLine="254" />
 	</File>
 	<File name="../Core/Sound/Buffer.cpp" open="0" top="0" tabpos="52">
 		<Cursor position="6574" topLine="265" />
@@ -248,10 +239,10 @@
 		<Cursor position="1602" topLine="50" />
 	</File>
 	<File name="../Game.h" open="0" top="0" tabpos="2">
-		<Cursor position="4405" topLine="145" />
+		<Cursor position="10506" topLine="357" />
 	</File>
-	<File name="../Game/Game.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="6684" topLine="201" />
+	<File name="../Game/Game.cpp" open="1" top="1" tabpos="4">
+		<Cursor position="69658" topLine="2201" />
 	</File>
 	<File name="../Game/Game_Mission.cpp" open="0" top="0" tabpos="77">
 		<Cursor position="1262" topLine="23" />
@@ -287,7 +278,7 @@
 		<Cursor position="3473" topLine="126" />
 	</File>
 	<File name="../Loading.cpp" open="0" top="0" tabpos="6">
-		<Cursor position="86138" topLine="1492" />
+		<Cursor position="71874" topLine="1058" />
 	</File>
 	<File name="../Loop_audio.cpp" open="0" top="0" tabpos="6">
 		<Cursor position="19512" topLine="453" />
@@ -296,31 +287,31 @@
 		<Cursor position="3608" topLine="99" />
 	</File>
 	<File name="../Main.cpp" open="1" top="0" tabpos="1">
-		<Cursor position="44929" topLine="1030" />
+		<Cursor position="41548" topLine="1028" />
 	</File>
 	<File name="../MainFS2VFS.cpp" open="0" top="0" tabpos="5">
 		<Cursor position="14274" topLine="423" />
 	</File>
 	<File name="../Menu/Button.cpp" open="0" top="0" tabpos="90">
-		<Cursor position="10724" topLine="387" />
+		<Cursor position="10724" topLine="414" />
 	</File>
 	<File name="../Menu/Dialog.cpp" open="0" top="0" tabpos="3">
 		<Cursor position="53551" topLine="1237" />
 	</File>
-	<File name="../Menu/Menu.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="14636" topLine="508" />
+	<File name="../Menu/Menu.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="13389" topLine="470" />
 	</File>
 	<File name="../Menu/Menu_ConfControl.cpp" open="0" top="0" tabpos="11">
 		<Cursor position="5416" topLine="225" />
 	</File>
 	<File name="../Menu/Menu_Credits.cpp" open="0" top="0" tabpos="4">
-		<Cursor position="1615" topLine="49" />
+		<Cursor position="1811" topLine="50" />
 	</File>
 	<File name="../Menu/Menu_Difficulty.cpp" open="0" top="0" tabpos="98">
 		<Cursor position="7043" topLine="203" />
 	</File>
 	<File name="../Menu/Menu_Information.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="15475" topLine="486" />
+		<Cursor position="83217" topLine="1944" />
 	</File>
 	<File name="../Menu/Menu_Interface.cpp" open="0" top="0" tabpos="1">
 		<Cursor position="1362" topLine="257" />
@@ -329,10 +320,10 @@
 		<Cursor position="13180" topLine="431" />
 	</File>
 	<File name="../Menu/Menu_Options.cpp" open="0" top="0" tabpos="4">
-		<Cursor position="7305" topLine="338" />
+		<Cursor position="7797" topLine="247" />
 	</File>
 	<File name="../Menu/Menu_OptionsAdv.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="11504" topLine="315" />
+		<Cursor position="9456" topLine="281" />
 	</File>
 	<File name="../Menu/Menu_Profile.cpp" open="0" top="0" tabpos="2">
 		<Cursor position="12766" topLine="383" />
@@ -341,7 +332,7 @@
 		<Cursor position="3780" topLine="0" />
 	</File>
 	<File name="../Menu/Menu_Workshop.cpp" open="0" top="0" tabpos="105">
-		<Cursor position="13457" topLine="438" />
+		<Cursor position="19299" topLine="598" />
 	</File>
 	<File name="../Menu/Menu_Workshop_Shipyard.cpp" open="0" top="0" tabpos="5">
 		<Cursor position="1467" topLine="279" />
@@ -365,13 +356,13 @@
 		<Cursor position="1259" topLine="28" />
 	</File>
 	<File name="../Object3D/Explosion/Explosion.h" open="0" top="0" tabpos="112">
-		<Cursor position="2430" topLine="63" />
+		<Cursor position="3597" topLine="106" />
 	</File>
 	<File name="../Object3D/Explosion/ExplosionGFX.cpp" open="0" top="0" tabpos="113">
 		<Cursor position="329" topLine="0" />
 	</File>
 	<File name="../Object3D/Explosion/ExplosionManager.cpp" open="0" top="0" tabpos="114">
-		<Cursor position="333" topLine="0" />
+		<Cursor position="3690" topLine="111" />
 	</File>
 	<File name="../Object3D/Explosion/GroundExplosion/GroundExplosion.cpp" open="0" top="0" tabpos="115">
 		<Cursor position="4083" topLine="98" />
@@ -395,10 +386,10 @@
 		<Cursor position="9058" topLine="317" />
 	</File>
 	<File name="../Object3D/GroundObject/GroundObject.h" open="0" top="0" tabpos="122">
-		<Cursor position="6426" topLine="140" />
+		<Cursor position="7107" topLine="158" />
 	</File>
 	<File name="../Object3D/GroundObject/GroundObjectManager.cpp" open="0" top="0" tabpos="123">
-		<Cursor position="336" topLine="0" />
+		<Cursor position="3863" topLine="112" />
 	</File>
 	<File name="../Object3D/GroundObject/MilitaryBuilding/MilitaryBuilding.cpp" open="0" top="0" tabpos="124">
 		<Cursor position="3969" topLine="214" />
@@ -419,10 +410,10 @@
 		<Cursor position="322" topLine="0" />
 	</File>
 	<File name="../Object3D/Object3D.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="27094" topLine="756" />
+		<Cursor position="29225" topLine="809" />
 	</File>
 	<File name="../Object3D/Object3D.h" open="0" top="0" tabpos="2">
-		<Cursor position="1855" topLine="44" />
+		<Cursor position="10108" topLine="289" />
 	</File>
 	<File name="../Object3D/Object3DCollision.cpp" open="0" top="0" tabpos="132">
 		<Cursor position="27425" topLine="784" />
@@ -431,10 +422,10 @@
 		<Cursor position="2878" topLine="58" />
 	</File>
 	<File name="../Object3D/Object3DFunctions.cpp" open="0" top="0" tabpos="134">
-		<Cursor position="3287" topLine="78" />
+		<Cursor position="38377" topLine="860" />
 	</File>
 	<File name="../Object3D/Object3DManager.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="2098" topLine="92" />
+		<Cursor position="2428" topLine="61" />
 	</File>
 	<File name="../Object3D/Projectile/Projectile.cpp" open="0" top="0" tabpos="136">
 		<Cursor position="327" topLine="0" />
@@ -446,7 +437,7 @@
 		<Cursor position="330" topLine="0" />
 	</File>
 	<File name="../Object3D/Projectile/ProjectileManager.cpp" open="0" top="0" tabpos="139">
-		<Cursor position="334" topLine="0" />
+		<Cursor position="3764" topLine="114" />
 	</File>
 	<File name="../Object3D/SpaceObject/Asteroid/Asteroid.cpp" open="0" top="0" tabpos="140">
 		<Cursor position="1818" topLine="50" />
@@ -482,13 +473,13 @@
 		<Cursor position="328" topLine="63" />
 	</File>
 	<File name="../Object3D/SpaceObject/SpaceObject.h" open="0" top="0" tabpos="151">
-		<Cursor position="326" topLine="0" />
+		<Cursor position="3359" topLine="78" />
 	</File>
 	<File name="../Object3D/SpaceObject/SpaceObjectGFX.cpp" open="0" top="0" tabpos="152">
 		<Cursor position="331" topLine="0" />
 	</File>
 	<File name="../Object3D/SpaceObject/SpaceObjectManager.cpp" open="0" top="0" tabpos="153">
-		<Cursor position="335" topLine="0" />
+		<Cursor position="3815" topLine="115" />
 	</File>
 	<File name="../Object3D/SpaceShip/AlienSpaceFighter/AlienSpaceFighter.cpp" open="0" top="0" tabpos="154">
 		<Cursor position="2910" topLine="36" />
@@ -536,22 +527,22 @@
 		<Cursor position="10741" topLine="343" />
 	</File>
 	<File name="../Object3D/SpaceShip/SpaceShip.h" open="0" top="0" tabpos="169">
-		<Cursor position="1359" topLine="93" />
+		<Cursor position="8865" topLine="231" />
 	</File>
 	<File name="../Object3D/SpaceShip/SpaceShipManager.cpp" open="0" top="0" tabpos="170">
-		<Cursor position="4080" topLine="127" />
+		<Cursor position="4224" topLine="110" />
 	</File>
 	<File name="../Object3D/Weapon/Weapon.cpp" open="0" top="0" tabpos="171">
 		<Cursor position="16489" topLine="947" />
 	</File>
 	<File name="../Object3D/Weapon/Weapon.h" open="0" top="0" tabpos="172">
-		<Cursor position="3544" topLine="93" />
+		<Cursor position="5307" topLine="144" />
 	</File>
 	<File name="../Object3D/Weapon/WeaponFunctions.cpp" open="0" top="0" tabpos="173">
 		<Cursor position="332" topLine="0" />
 	</File>
 	<File name="../Object3D/Weapon/WeaponManager.cpp" open="0" top="0" tabpos="174">
-		<Cursor position="330" topLine="0" />
+		<Cursor position="3539" topLine="114" />
 	</File>
 	<File name="../ScriptEngine/Script.cpp" open="0" top="0" tabpos="176">
 		<Cursor position="1336" topLine="22" />
@@ -560,18 +551,18 @@
 		<Cursor position="2253" topLine="34" />
 	</File>
 	<File name="../ScriptEngine/ScriptFunction.cpp" open="0" top="0" tabpos="178">
-		<Cursor position="8637" topLine="213" />
+		<Cursor position="2838" topLine="70" />
 	</File>
 	<File name="../ScriptEngine/Setup.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="2015" topLine="44" />
+		<Cursor position="2575" topLine="49" />
 	</File>
 	<File name="../ScriptEngine/Text.cpp" open="0" top="0" tabpos="8">
 		<Cursor position="3192" topLine="106" />
 	</File>
 	<File name="../Struct.h" open="0" top="0" tabpos="2">
-		<Cursor position="9717" topLine="320" />
+		<Cursor position="9781" topLine="337" />
 	</File>
 	<File name="../config.h" open="1" top="0" tabpos="2">
-		<Cursor position="2425" topLine="43" />
+		<Cursor position="2271" topLine="31" />
 	</File>
 </CodeBlocks_layout_file>

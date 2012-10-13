@@ -61,9 +61,6 @@
 		<VirtualTargets>
 			<Add alias="All" targets="MinGw;" />
 		</VirtualTargets>
-		<Unit filename="..\BackGround\SkyBox.cpp" />
-		<Unit filename="..\BackGround\StarSystem.cpp" />
-		<Unit filename="..\Camera\GameCamera.cpp" />
 		<Unit filename="..\Core\Base.h" />
 		<Unit filename="..\Core\Camera\Camera.cpp" />
 		<Unit filename="..\Core\Camera\Camera.h" />
@@ -145,14 +142,17 @@
 		<Unit filename="..\Core\VirtualFileSystem\VFS.h" />
 		<Unit filename="..\Game.h" />
 		<Unit filename="..\Game\Game.cpp" />
+		<Unit filename="..\Game\Game_Camera.cpp" />
 		<Unit filename="..\Game\Game_Mission.cpp" />
 		<Unit filename="..\Game\Game_Options.cpp" />
 		<Unit filename="..\Game\Game_PlayerShip.cpp" />
 		<Unit filename="..\Game\Game_WeaponSlot.cpp" />
+		<Unit filename="..\GraphicFX\SkyBox.cpp" />
 		<Unit filename="..\GraphicFX\SpaceStars\SpaceStars.cpp" />
 		<Unit filename="..\GraphicFX\SpaceStars\SpaceStars.h" />
 		<Unit filename="..\GraphicFX\SpaceStars\Star.cpp" />
 		<Unit filename="..\GraphicFX\SpaceStars\Star.h" />
+		<Unit filename="..\GraphicFX\StarSystem.cpp" />
 		<Unit filename="..\GraphicFX\Text\Text.cpp" />
 		<Unit filename="..\GraphicFX\Text\Text.h" />
 		<Unit filename="..\GraphicFX\Text\TextManager.cpp" />
