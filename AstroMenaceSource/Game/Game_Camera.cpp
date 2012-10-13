@@ -4,7 +4,7 @@
 	(Hardcore 3D space shooter with spaceship upgrade possibilities.)
 	For the latest info, see http://www.viewizard.com/
 
-	File name: GameCamera.cpp
+	File name: Game_Camera.cpp
 
 	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
