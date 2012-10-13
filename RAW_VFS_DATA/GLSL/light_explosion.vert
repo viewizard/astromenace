@@ -1,4 +1,4 @@
-#version 110
+#version 120
 
 //  directional & point light per pixel + multitexture
 //  + explosion geometry modification
