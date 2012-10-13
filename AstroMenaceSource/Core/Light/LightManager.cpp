@@ -5,10 +5,10 @@
 
 	File name: LightManager.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -380,5 +380,31 @@ eLight *vw_CreatPointLight(VECTOR3D Location, float R, float G, float B, float L
 	Light->Location = Location;
 
 	return Light;
+}
+
+
+
+
+//-----------------------------------------------------------------------------
+// Создаем точечный источник света
+//-----------------------------------------------------------------------------
+eLight 	*vw_GetMainDirectLight()
+{
+	// перебираем все по порядку
+	eLight *tmp = StartLight;
+	while (tmp!=0)
+	{
+		eLight *tmp2 = tmp->Next;
+		if (tmp->LightType == 0)
+		{
+			// первый в списке всегда "основной"
+			return tmp;
+		}
+
+		tmp = tmp2;
+	}
+
+	// нет вообще направленного источника
+	return 0;
 }
 

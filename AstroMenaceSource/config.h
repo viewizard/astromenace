@@ -64,7 +64,7 @@
 // #define compression
 
 // define DATADIR with gamedata.vfs file location if you don't put it together in the same directory with binary file
-// #define DATADIR "/usr/share/AstroMenace"
+// #define DATADIR "/usr/share/astromenace"
 
 
 
