@@ -5,10 +5,10 @@
 
 	File name: Light.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -131,6 +131,9 @@ eLight 	*vw_CreatPointLight(VECTOR3D Location, float R, float G, float B, float 
 // Удаляем источник света
 void 	vw_ReleaseLight(eLight *Light);
 
+
+// находим первый (основной) источник направленного света
+eLight 	*vw_GetMainDirectLight();
 
 
 #endif // LIGHT_H
