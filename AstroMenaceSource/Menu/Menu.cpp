@@ -523,7 +523,7 @@ void DrawMenu()
 		// если это планета или большой астероид летящий на заднем фоне
 		if (tmp->ObjectType == 14 || (tmp->ObjectType == 15 && (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
 		{
-			tmp->Draw();
+			tmp->Draw(false);
 		}
 
 		tmp = tmp2;
@@ -637,7 +637,7 @@ void DrawMenu()
 
 
 	// рисуем все 3д объекты
-	DrawAllObject3D();
+	DrawAllObject3D(false);
 	// эффекты - самые последние в прорисовке!
 	vw_DrawAllParticleSystems();
 

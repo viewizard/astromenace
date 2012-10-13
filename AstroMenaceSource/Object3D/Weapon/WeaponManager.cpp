@@ -121,14 +121,14 @@ void UpdateAllWeapon(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllWeapon()
+void DrawAllWeapon(bool VertexOnlyPass)
 {
 
 	CWeapon *tmp = StartWeapon;
 	while (tmp!=0)
 	{
 		CWeapon *tmp2 = tmp->Next;
-		tmp->Draw();
+		tmp->Draw(VertexOnlyPass);
 		tmp = tmp2;
 	}
 

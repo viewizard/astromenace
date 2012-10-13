@@ -121,14 +121,14 @@ void UpdateAllProjectile(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllProjectile()
+void DrawAllProjectile(bool VertexOnlyPass)
 {
 
 	CProjectile *tmp = StartProjectile;
 	while (tmp!=0)
 	{
 		CProjectile *tmp2 = tmp->Next;
-		tmp->Draw();
+		tmp->Draw(VertexOnlyPass);
 		tmp = tmp2;
 	}
 

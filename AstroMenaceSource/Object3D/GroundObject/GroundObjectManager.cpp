@@ -119,14 +119,14 @@ void UpdateAllGroundObject(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllGroundObject()
+void DrawAllGroundObject(bool VertexOnlyPass)
 {
 
 	CGroundObject *tmp = StartGroundObject;
 	while (tmp!=0)
 	{
 		CGroundObject *tmp2 = tmp->Next;
-		tmp->Draw();
+		tmp->Draw(VertexOnlyPass);
 		tmp = tmp2;
 	}
 

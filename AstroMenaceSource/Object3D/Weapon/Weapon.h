@@ -167,7 +167,7 @@ void	DetachWeapon(CWeapon* Weapon);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllWeapon(float Time);
 // Прорисовываем все объекты
-void	DrawAllWeapon();
+void	DrawAllWeapon(bool VertexOnlyPass);
 // Удаляем все объекты в списке
 void	ReleaseAllWeapon();
 

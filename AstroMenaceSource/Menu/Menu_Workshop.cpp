@@ -490,12 +490,12 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		vw_CameraLookAt();
 
 
-		SpaceFighter->Draw();
+		SpaceFighter->Draw(false);
 		if (SpaceFighter->Weapon != 0)
 		for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
 		{
 			if (SpaceFighter->Weapon[i] != 0)
-				SpaceFighter->Weapon[i]->Draw();
+				SpaceFighter->Weapon[i]->Draw(false);
 		}
 		vw_DrawAllParticleSystems();
 
@@ -519,12 +519,12 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		vw_CameraLookAt();
 
 
-		SpaceFighter->Draw();
+		SpaceFighter->Draw(false);
 		if (SpaceFighter->Weapon != 0)
 		for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
 		{
 			if (SpaceFighter->Weapon[i] != 0)
-				SpaceFighter->Weapon[i]->Draw();
+				SpaceFighter->Weapon[i]->Draw(false);
 		}
 
 		vw_DrawAllParticleSystems();
@@ -565,14 +565,14 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 	}
 	vw_CameraLookAt();
 
-	SpaceFighter->Draw();
+	SpaceFighter->Draw(false);
 
 
 	if (SpaceFighter->Weapon != 0)
 	for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
 	{
 		if (SpaceFighter->Weapon[i] != 0)
-			SpaceFighter->Weapon[i]->Draw();
+			SpaceFighter->Weapon[i]->Draw(false);
 	}
 
 
@@ -622,7 +622,7 @@ void WorkshopDrawWeapon(CWeapon *Weapon)
 	vw_SetCameraMoveAroundPoint(VECTOR3D(3000,-3000,0), 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
 	vw_CameraLookAt();
 
-	Weapon->Draw();
+	Weapon->Draw(false);
 
 	vw_SetCameraLocation(VECTOR3D(-50,30,-50));
 	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 10000.0f);

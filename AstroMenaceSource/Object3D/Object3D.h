@@ -119,7 +119,7 @@ public:
 	// Установка AABB, OBB и габаритов по геометрии объекта
 	virtual void	InitByDrawObjectList();
 	// Прорисовка объектa Object3D
-	virtual void	Draw();
+	virtual void	Draw(bool VertexOnlyPass);
 	bool			NeedCullFaces; // нужно резать бэк фейсы
 	// Обновление данных объектa Object3D
 	virtual bool	Update(float Time);
@@ -303,7 +303,7 @@ void InitGameAI(const char *FileName);
 // Удаляем все объекты в списке
 void	ReleaseAllObject3D();
 // Прорисовываем все объекты
-void	DrawAllObject3D();
+void	DrawAllObject3D(bool VertexOnlyPass);
 // Проверяем все объекты на столкновение
 void	DetectCollisionAllObject3D();
 //	Проверяем все объекты, обновляем данные

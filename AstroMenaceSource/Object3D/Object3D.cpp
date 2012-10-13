@@ -770,7 +770,7 @@ void DrawBoxLines(VECTOR3D Point[8], VECTOR3D LocalLocation, float ColorR, float
 //-----------------------------------------------------------------------------
 // Прорисовка объектa Object3D
 //-----------------------------------------------------------------------------
-void CObject3D::Draw()
+void CObject3D::Draw(bool VertexOnlyPass)
 {
 	// если нечего рисовать - выходим
 	if (DrawObjectList == 0) return;
@@ -782,9 +782,104 @@ void CObject3D::Draw()
 		// если показали а сейчас нет - установка флага
 		if (ShowDeleteOnHide == 1) ShowDeleteOnHide = 2;
 
-
 		return;
 	}
+
+	// если есть установка, нужно получить квадрат расстояния до камеры
+	// прорисовка модели "полностью", "одним куском" (только то что без "составных" частей - колес, стволов и т.п.)
+	bool NeedOnePieceDraw = false;
+	if (PromptDrawDist2 >= 0.0f)
+	{
+		VECTOR3D CurrentCameraLocation;
+		vw_GetCameraLocation(&CurrentCameraLocation);
+		float PromptDrawRealDist2 = (Location.x-CurrentCameraLocation.x)*(Location.x-CurrentCameraLocation.x)+(Location.y-CurrentCameraLocation.y)*(Location.y-CurrentCameraLocation.y)+(Location.z-CurrentCameraLocation.z)*(Location.z-CurrentCameraLocation.z);
+
+		// получаем кол-во точечных источников, воздействующих на объект
+		int LightsCount = vw_CheckAllPointLights(Location, Radius*Radius);
+
+		// если дальше - смотрим сколько воздействует источников света
+		if (PromptDrawRealDist2 > PromptDrawDist2)
+		{
+			// если больше заданного кол-ва
+			if (LightsCount <= Setup.MaxPointLights) NeedOnePieceDraw = true;
+			else NeedOnePieceDraw = false;
+
+			// если это двигатели - не надо переходить
+			if (InternalLights >= LightsCount) NeedOnePieceDraw = true;
+		}
+		else
+		{
+			// находимся близко, но нужно посмотреть, если кол-во источников ниже макс, надо перейти в упращенный режим
+			if (LightsCount <= Setup.MaxPointLights) NeedOnePieceDraw = true;
+		}
+	}
+
+
+
+
+
+
+	// быстрая прорисовка только вертексов, без установки текстур, шейдеров и прочего
+	if (VertexOnlyPass)
+	{
+		vw_PushMatrix();
+		// переносим и двигаем уже по данным всей модели
+		vw_Translate(Location);
+		vw_Rotate(0.0f, 0.0f, -Rotation.z);
+		vw_Rotate(0.0f, -Rotation.y, 0.0f);
+		vw_Rotate(-Rotation.x, 0.0f, 0.0f);
+
+
+		if (NeedOnePieceDraw)
+		{
+
+			int GlobalVertexCount = 0;
+			for (int i=0; i<DrawObjectQuantity; i++)
+			{
+				GlobalVertexCount += DrawObjectList[i].VertexCount;
+			}
+
+			// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
+			vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, RI_3f_XYZ, GlobalVertexBuffer,
+							DrawObjectList[0].Stride*sizeof(float), GlobalVertexBufferVBO, 0,
+							GlobalIndexBuffer, GlobalIndexBufferVBO, GlobalVAO);
+
+			vw_DeActivateAllLights();
+		}
+		else
+		{
+
+			// установка текстур и подхотовка к прорисовке
+			for (int i=0; i<DrawObjectQuantity; i++)
+			{
+
+				vw_PushMatrix();
+
+				// сдвигаем его в нужное место
+				vw_Translate(DrawObjectList[i].Location);
+				// поворачиваем объект
+				vw_Rotate(0.0f, 0.0f, -DrawObjectList[i].Rotation.z);
+				vw_Rotate(0.0f, -DrawObjectList[i].Rotation.y, 0.0f);
+				vw_Rotate(-DrawObjectList[i].Rotation.x, 0.0f, 0.0f);
+
+
+				vw_SendVertices(RI_TRIANGLES, DrawObjectList[i].VertexCount, RI_3f_XYZ, DrawObjectList[i].VertexBuffer,
+								DrawObjectList[i].Stride*sizeof(float), DrawObjectList[i].VertexBufferVBO,
+								DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IndexBufferVBO, DrawObjectList[i].VAO);
+
+				vw_PopMatrix();
+			}
+		}
+
+
+
+		vw_PopMatrix();
+		// уходим вообще из прорисовки
+		return;
+	}
+
+
+
 
 
 
@@ -824,40 +919,6 @@ void CObject3D::Draw()
 	}
 
 
-
-
-
-
-	// если есть установка, нужно получить квадрат расстояния до камеры
-	// прорисовка модели "полностью", "одним куском" (только то что без "составных" частей - колес, стволов и т.п.)
-	bool NeedOnePieceDraw = false;
-	if (PromptDrawDist2 >= 0.0f)
-	{
-		VECTOR3D CurrentCameraLocation;
-		vw_GetCameraLocation(&CurrentCameraLocation);
-		float PromptDrawRealDist2 = (Location.x-CurrentCameraLocation.x)*(Location.x-CurrentCameraLocation.x)+(Location.y-CurrentCameraLocation.y)*(Location.y-CurrentCameraLocation.y)+(Location.z-CurrentCameraLocation.z)*(Location.z-CurrentCameraLocation.z);
-
-		// получаем кол-во точечных источников, воздействующих на объект
-		int LightsCount = vw_CheckAllPointLights(Location, Radius*Radius);
-
-		// если дальше - смотрим сколько воздействует источников света
-		if (PromptDrawRealDist2 > PromptDrawDist2)
-		{
-			// если больше заданного кол-ва
-			if (LightsCount <= Setup.MaxPointLights) NeedOnePieceDraw = true;
-			else NeedOnePieceDraw = false;
-
-			// если это двигатели - не надо переходить
-			if (InternalLights >= LightsCount) NeedOnePieceDraw = true;
-		}
-		else
-		{
-			// находимся близко, но нужно посмотреть, если кол-во источников ниже макс, надо перейти в упращенный режим
-			if (LightsCount <= Setup.MaxPointLights) NeedOnePieceDraw = true;
-		}
-	}
-
-
 	// Устанавливаем данные для поверхности объекта
 	vw_MaterialV(RI_DIFFUSE, Diffuse);
 	vw_MaterialV(RI_AMBIENT, Ambient);
@@ -865,7 +926,7 @@ void CObject3D::Draw()
 	vw_MaterialV(RI_SHININESS, Power);
 
 
-	// если надо рисовать
+	// если надо рисовать одним проходом
 	if (NeedOnePieceDraw)
 	{
 		vw_SetTextureDef(0);

@@ -180,7 +180,7 @@ void	DetachGroundObject(CGroundObject* GroundObject);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllGroundObject(float Time);
 // Прорисовываем все объекты
-void	DrawAllGroundObject();
+void	DrawAllGroundObject(bool VertexOnlyPass);
 // Удаляем все объекты в списке
 void	ReleaseAllGroundObject();
 

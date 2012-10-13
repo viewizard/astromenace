@@ -119,7 +119,7 @@ void UpdateAllSpaceObject(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllSpaceObject()
+void DrawAllSpaceObject(bool VertexOnlyPass)
 {
 
 	CSpaceObject *tmp = StartSpaceObject;
@@ -129,7 +129,7 @@ void DrawAllSpaceObject()
 		// планеты и астероиды рисуем до тайловой анимации в игре!!!
 		if (tmp->ObjectType != 14 &&
 			!(tmp->ObjectType == 15 && (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
-			tmp->Draw();
+			tmp->Draw(VertexOnlyPass);
 		tmp = tmp2;
 	}
 
