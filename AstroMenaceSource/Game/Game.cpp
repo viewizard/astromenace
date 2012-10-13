@@ -1108,7 +1108,7 @@ void DrawGame()
 		vw_PushMatrix();
 		vw_Translate(VECTOR3D(CurrentCameraLocation.x*0.90f, 0.0f,0.0f));
 		// если это планета на заднем фоне
-		if (tmp1->ObjectType == 14)	tmp1->Draw();
+		if (tmp1->ObjectType == 14)	tmp1->Draw(false);
 		vw_PopMatrix();
 
 		tmp1 = tmp2;
@@ -1121,7 +1121,7 @@ void DrawGame()
 		vw_PushMatrix();
 		vw_Translate(VECTOR3D(CurrentCameraLocation.x*0.70f, 0.0f,0.0f));
 		// если это планета или большой астероид летящий на заднем фоне
-		if (tmp1->ObjectType == 15 && (tmp1->ObjectCreationType>10 && tmp1->ObjectCreationType<20)) tmp1->Draw();
+		if (tmp1->ObjectType == 15 && (tmp1->ObjectCreationType>10 && tmp1->ObjectCreationType<20)) tmp1->Draw(false);
 		vw_PopMatrix();
 
 		tmp1 = tmp2;
@@ -1216,7 +1216,7 @@ void DrawGame()
 
 
 	// рисуем все 3д объекты
-	DrawAllObject3D();
+	DrawAllObject3D(false);
 
 	// динамический космос
 	VECTOR3D TMPpsSpace;

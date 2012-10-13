@@ -123,7 +123,7 @@ void	DetachExplosion(CExplosion* Explosion);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllExplosion(float Time);
 // Прорисовываем все объекты
-void	DrawAllExplosion();
+void	DrawAllExplosion(bool VertexOnlyPass);
 // Удаляем все объекты в списке
 void	ReleaseAllExplosion();
 

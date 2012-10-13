@@ -141,14 +141,14 @@ void UpdateAllSpaceShip(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllSpaceShip()
+void DrawAllSpaceShip(bool VertexOnlyPass)
 {
 
 	CSpaceShip *tmp = StartSpaceShip;
 	while (tmp!=0)
 	{
 		CSpaceShip *tmp2 = tmp->Next;
-		tmp->Draw();
+		tmp->Draw(VertexOnlyPass);
 		tmp = tmp2;
 	}
 

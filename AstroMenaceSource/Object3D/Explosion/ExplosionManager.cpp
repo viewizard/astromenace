@@ -118,14 +118,14 @@ void UpdateAllExplosion(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllExplosion()
+void DrawAllExplosion(bool VertexOnlyPass)
 {
 
 	CExplosion *tmp = StartExplosion;
 	while (tmp!=0)
 	{
 		CExplosion *tmp2 = tmp->Next;
-		tmp->Draw();
+		tmp->Draw(VertexOnlyPass);
 		tmp = tmp2;
 	}
 

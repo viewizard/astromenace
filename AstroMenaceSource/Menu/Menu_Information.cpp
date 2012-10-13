@@ -1928,68 +1928,68 @@ void InformationDrawObject()
 	{
 		InfoFighter->SetLocation(TMPLocation);
 		InfoFighter->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoFighter->Draw();
+		InfoFighter->Draw(false);
 	}
 	if (InfoWeapon != 0)
 	{
 		InfoWeapon->SetLocation(TMPLocation);
 		InfoWeapon->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoWeapon->Draw();
+		InfoWeapon->Draw(false);
 	}
 	if (InfoMine != 0)
 	{
 		InfoMine->SetLocation(TMPLocation);
 		InfoMine->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoMine->Draw();
+		InfoMine->Draw(false);
 	}
 	if (InfoAlien != 0)
 	{
 		InfoAlien->SetLocation(TMPLocation);
 		InfoAlien->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoAlien->Draw();
+		InfoAlien->Draw(false);
 	}
 	if (InfoAlienMotherShip != 0)
 	{
 		InfoAlienMotherShip->SetLocation(TMPLocation);
 		InfoAlienMotherShip->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoAlienMotherShip->Draw();
+		InfoAlienMotherShip->Draw(false);
 	}
 	if (InfoPirateShip != 0)
 	{
 		InfoPirateShip->SetLocation(TMPLocation);
 		InfoPirateShip->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoPirateShip->Draw();
+		InfoPirateShip->Draw(false);
 		// рисуем оружие
 		if (InfoPirateShip->Weapon != 0)
 		for (int i=0; i<InfoPirateShip->WeaponQuantity; i++)
 		if (InfoPirateShip->Weapon[i] != 0)
 		{
-			InfoPirateShip->Weapon[i]->Draw();
+			InfoPirateShip->Weapon[i]->Draw(false);
 		}
 	}
 	if (InfoBuilding != 0)
 	{
 		InfoBuilding->SetLocation(TMPLocation);
 		InfoBuilding->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoBuilding->Draw();
+		InfoBuilding->Draw(false);
 	}
 	if (InfoMilitaryBuilding != 0)
 	{
 		InfoMilitaryBuilding->SetLocation(TMPLocation);
 		InfoMilitaryBuilding->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoMilitaryBuilding->Draw();
+		InfoMilitaryBuilding->Draw(false);
 	}
 	if (InfoWheeled != 0)
 	{
 		InfoWheeled->SetLocation(TMPLocation);
 		InfoWheeled->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoWheeled->Draw();
+		InfoWheeled->Draw(false);
 	}
 	if (InfoTracked != 0)
 	{
 		InfoTracked->SetLocation(TMPLocation);
 		InfoTracked->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoTracked->Draw();
+		InfoTracked->Draw(false);
 	}
 
 

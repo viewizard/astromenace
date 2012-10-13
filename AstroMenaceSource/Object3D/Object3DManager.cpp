@@ -71,31 +71,31 @@ void ReleaseAllObject3D()
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllSpaceShip();
-void DrawAllWeapon();
-void DrawAllGroundObject();
-void DrawAllProjectile();
-void DrawAllSpaceObject();
-void DrawAllExplosion();
+void DrawAllSpaceShip(bool VertexOnlyPass);
+void DrawAllWeapon(bool VertexOnlyPass);
+void DrawAllGroundObject(bool VertexOnlyPass);
+void DrawAllProjectile(bool VertexOnlyPass);
+void DrawAllSpaceObject(bool VertexOnlyPass);
+void DrawAllExplosion(bool VertexOnlyPass);
 
-void DrawAllObject3D()
+void DrawAllObject3D(bool VertexOnlyPass)
 {
 	// ставим всегда меньше или равно!
 	vw_DepthTest(true, RI_LESSEQUAL);
 
 
 	// корабли
-	DrawAllSpaceShip();
+	DrawAllSpaceShip(VertexOnlyPass);
 	// оружие
-	DrawAllWeapon();
+	DrawAllWeapon(VertexOnlyPass);
 	// наземные объекты
-	DrawAllGroundObject();
+	DrawAllGroundObject(VertexOnlyPass);
 	// снаряды
-	DrawAllProjectile();
+	DrawAllProjectile(VertexOnlyPass);
 	// космические объекты
-	DrawAllSpaceObject();
+	DrawAllSpaceObject(VertexOnlyPass);
 	// взрывы
-	DrawAllExplosion();
+	DrawAllExplosion(VertexOnlyPass);
 }
 
 
