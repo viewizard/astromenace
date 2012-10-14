@@ -1841,8 +1841,8 @@ void InformationDrawObject()
 	vw_Rotate(-RotationSumX, 0, 0);
 
 	vw_SetColor(0.7f, 0.7f, 1.0f, 0.3f*MenuContentTransp);
-	vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-	vw_SetTextureT(0, vw_FindTextureByName("DATA/MENU/line.tga"), 1);
+	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+	vw_SetTexture(0, vw_FindTextureByName("DATA/MENU/line.tga"));
 	for (int i=-SizeCell; i<SizeCell+2; i+=2)
 	{
 		// номер float'а в последовательности
@@ -1904,7 +1904,8 @@ void InformationDrawObject()
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_1_TEX, tmpDATA, 5*sizeof(float));
 	}
 	if (tmpDATA != 0) {delete [] tmpDATA; tmpDATA = 0;}
-	vw_SetTextureDef(0);
+	vw_SetTextureBlend(false, 0, 0);
+	vw_BindTexture(0, 0);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 	vw_CullFace(RI_BACK);

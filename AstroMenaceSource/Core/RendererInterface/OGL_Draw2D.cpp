@@ -119,13 +119,9 @@ void vw_Draw(int X, int Y, RECT *SrcRest, eTexture *Tex, bool Alpha, float Rotat
 	float AHw = H*1.0f;
 
 	// Установка текстуры и ее свойств...
-	vw_SetTextureV(0, Tex);
-	vw_SetTexAlpha(Alpha, 0.01f);
-	vw_SetTexAddressMode(0, RI_CLAMP);
-	vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
-
-    // не можем ставить другое! если нет мипмапа
-    vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
+	vw_SetTexture(0, Tex);
+	vw_SetTextureAlphaTest(Alpha, 0.01f);
+	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
 
 	// Вычисление поправки по У в зависимости от DrawCorner
@@ -183,8 +179,9 @@ void vw_Draw(int X, int Y, RECT *SrcRest, eTexture *Tex, bool Alpha, float Rotat
 
 
 	if (tmp != 0){delete [] tmp; tmp = 0;}
-    vw_SetTexAlpha(false, 0.5f);
-	vw_SetTextureDef(0);
+    vw_SetTextureAlphaTest(false, 0.5f);
+	vw_SetTextureBlend(false, 0, 0);
+	vw_BindTexture(0, 0);
 }
 
 
@@ -214,14 +211,9 @@ void vw_DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, bool Alpha,
 	int Y = DstRest->top;
 
 	// Установка текстуры и ее свойств...
-	vw_SetTextureV(0, Tex);
-	vw_SetTexAlpha(Alpha, 0.01f);
-	vw_SetTexAddressMode(0, RI_CLAMP);
-	vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
-
-    // не можем ставить другое! если нет мипмапа
-    vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
-
+	vw_SetTexture(0, Tex);
+	vw_SetTextureAlphaTest(Alpha, 0.01f);
+	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
 	// Вычисление поправки по У в зависимости от DrawCorner
 	// - расположения угла начала координат
@@ -285,8 +277,9 @@ void vw_DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, bool Alpha,
 
 	if (tmp != 0){delete [] tmp; tmp = 0;}
 
-	vw_SetTexAlpha(false, 0.5f);
+	vw_SetTextureAlphaTest(false, 0.5f);
+	vw_SetTextureBlend(false, 0, 0);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-	vw_SetTextureDef(0);
+	vw_BindTexture(0, 0);
 
 }

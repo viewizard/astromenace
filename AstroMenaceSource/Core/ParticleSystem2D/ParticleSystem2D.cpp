@@ -465,13 +465,10 @@ void eParticleSystem2D::Draw()
 	float AHw = H*1.0f;
 
 	// Установка текстуры и ее свойств...
-	vw_SetTextureV(0, Texture);
-	vw_SetTexAlpha(true, 0.01f);
-	vw_SetTexAddressMode(0, RI_CLAMP);
-	vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+	vw_SetTexture(0, Texture);
+	vw_SetTextureAlphaTest(true, 0.01f);
+	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
-    // не можем ставить другое! если нет мипмапа
-    vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
 
 	float ImageHeight = Texture->Height*1.0f;
 	float ImageWidth = Texture->Width*1.0f;
@@ -553,9 +550,10 @@ void eParticleSystem2D::Draw()
 	vw_SendVertices(RI_QUADS, 4*CurrentCount, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
 
 	if (tmp != 0){delete [] tmp; tmp = 0;}
-	vw_SetTexAlpha(false, 0.5f);
+	vw_SetTextureAlphaTest(false, 0.5f);
+	vw_SetTextureBlend(false, 0, 0);
     vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-	vw_SetTextureDef(0);
+	vw_BindTexture(0, 0);
 
 }
 

@@ -6,10 +6,10 @@
 
 	File name: SpaceStars.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -551,8 +551,8 @@ void CSpaceStars::Draw()
 
 	if (PrimitCount > 0)
 	{
-		vw_SetTextureT(0, Texture, 1);
-		vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+		vw_SetTexture(0, Texture);
+		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 		// выключаем проверку глубины
 		vw_DepthTest(false, -1);
 
@@ -592,6 +592,7 @@ void CSpaceStars::Draw()
 
 		vw_PopMatrix();
 
+		vw_SetTextureBlend(false, 0, 0);
 		vw_DepthTest(true, RI_LESSEQUAL);
 	}
 
@@ -599,6 +600,6 @@ void CSpaceStars::Draw()
 
 
 
-	vw_SetTextureDef(0);
+	vw_BindTexture(0, 0);
 }
 
