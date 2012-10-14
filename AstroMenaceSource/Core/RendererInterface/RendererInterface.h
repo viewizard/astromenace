@@ -220,8 +220,6 @@ struct eDevCaps
 // тип работы с координатами текстуры
 #define RI_SEPARATE_TEX_COORD				0x0000000
 #define RI_DUBLICATE_TEX_COORD				0x1000000
-//
-#define PFNGLCLIENTACTIVETEXTUREPROC PFNGLACTIVETEXTUREPROC
 
 // Polygon Mode
 #define RI_POINT							0x10B1
