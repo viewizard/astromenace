@@ -929,37 +929,25 @@ void CObject3D::Draw(bool VertexOnlyPass)
 	// если надо рисовать одним проходом
 	if (NeedOnePieceDraw)
 	{
-		vw_SetTextureDef(0);
-		// если у нас есть 2-я, нужно скинуть установки
-		if (TextureIllum!=0)
-			if (TextureIllum[0]!=0)
-				vw_SetTextureDef(1);
-
-		vw_SetTextureT(0, Texture[0], Setup.AnisotropyLevel);
+		vw_SetTexture(0, Texture[0]);
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 
 		// включаем вторую текстуру
 		if (TextureIllum!=0)
 		if (TextureIllum[0]!=0)
 		{
 			// свечение
-			vw_SetTextureT(1, TextureIllum[0], Setup.AnisotropyLevel);
-			vw_SetTextureBlendMode(1, RI_TBLEND_COLOROP, RI_TBLEND_ADD);
-			vw_SetTextureBlendMode(1, RI_TBLEND_COLORARG1,  RI_TBLEND_CURRENT);
-			vw_SetTextureBlendMode(1, RI_TBLEND_COLORARG2,  RI_TBLEND_TEXTURE);
+			vw_SetTexture(1, TextureIllum[0]);
+			vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+			// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+			if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
+			// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
+			vw_SetTextureBlendMode(RI_TBLEND_COLOROP, RI_TBLEND_ADD);
+			vw_SetTextureBlendMode(RI_TBLEND_COLORARG1,  RI_TBLEND_CURRENT);
+			vw_SetTextureBlendMode(RI_TBLEND_COLORARG2,  RI_TBLEND_TEXTURE);
 		}
-
-		// по умолчанию всегда трилинейная фильтрация
-
-		// нужно ставить билинейную
-		if (Setup.TextureFilteringMode == 1)
-		{
-			if (Texture[0] != 0)
-				vw_SetTexFiltering(0, RI_TEXTURE_BILINEAR, Setup.AnisotropyLevel);
-			if (TextureIllum != 0)
-				if (TextureIllum[0] != 0)
-					vw_SetTexFiltering(1, RI_TEXTURE_BILINEAR, Setup.AnisotropyLevel);
-		}
-
 
 		if (!NeedCullFaces) vw_CullFace(RI_NONE);
 
@@ -1014,6 +1002,9 @@ void CObject3D::Draw(bool VertexOnlyPass)
 	else
 	{
 
+		// для частей базы надо включить прозрачность через альфатест
+		if (ObjectType == 13) vw_SetTextureAlphaTest(true, 0.4f);
+
 		// установка текстур и подхотовка к прорисовке
 		for (int i=0; i<DrawObjectQuantity; i++)
 		{
@@ -1046,34 +1037,24 @@ void CObject3D::Draw(bool VertexOnlyPass)
 			// работа с текстурами
 			if (CurrentText != Texture[i])
 			{
-				vw_SetTextureDef(0);
-				// если у нас есть 2-я, нужно скинуть установки
-				if (TextureIllum!=0)
-					if (TextureIllum[i]!=0)
-						vw_SetTextureDef(1);
-
-				vw_SetTextureT(0, Texture[i], Setup.AnisotropyLevel);
+				vw_SetTexture(0, Texture[i]);
+				vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+				// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+				if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 
 				// включаем вторую текстуру
 				if (TextureIllum!=0)
 				if (TextureIllum[i]!=0)
 				{
 					// свечение
-					vw_SetTextureT(1, TextureIllum[i], Setup.AnisotropyLevel);
-					vw_SetTextureBlendMode(1, RI_TBLEND_COLOROP, RI_TBLEND_ADD);
-					vw_SetTextureBlendMode(1, RI_TBLEND_COLORARG1,  RI_TBLEND_CURRENT);
-					vw_SetTextureBlendMode(1, RI_TBLEND_COLORARG2,  RI_TBLEND_TEXTURE);
-				}
-				// по умолчанию всегда трилинейная фильтрация
-
-				// нужно ставить билинейную
-				if (Setup.TextureFilteringMode == 1)
-				{
-					if (Texture[i] != 0)
-						vw_SetTexFiltering(0, RI_TEXTURE_BILINEAR, Setup.AnisotropyLevel);
-					if (TextureIllum != 0)
-						if (TextureIllum[i] != 0)
-							vw_SetTexFiltering(1, RI_TEXTURE_BILINEAR, Setup.AnisotropyLevel);
+					vw_SetTexture(1, TextureIllum[i]);
+					vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+					// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+					if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
+					// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
+					vw_SetTextureBlendMode(RI_TBLEND_COLOROP, RI_TBLEND_ADD);
+					vw_SetTextureBlendMode(RI_TBLEND_COLORARG1,  RI_TBLEND_CURRENT);
+					vw_SetTextureBlendMode(RI_TBLEND_COLORARG2,  RI_TBLEND_TEXTURE);
 				}
 
 				CurrentText = Texture[i];
@@ -1112,13 +1093,11 @@ void CObject3D::Draw(bool VertexOnlyPass)
 			}
 			if (DrawObjectList[i].DrawType == 1)
 			{
-				vw_SetTexAlpha(true, 0.01f);
-				vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+				vw_SetTextureAlphaTest(true, 0.01f);
+				vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 				glEnable(GL_POLYGON_OFFSET_FILL);
 				glPolygonOffset(1.0f, 1.0f);
 			}
-
-
 
 			if (Setup.UseGLSL && DrawObjectList[i].ShaderType >= 0)
 			{
@@ -1181,16 +1160,18 @@ void CObject3D::Draw(bool VertexOnlyPass)
 
 			if (DrawObjectList[i].DrawType == 1)
 			{
+				vw_SetTextureAlphaTest(false, 0.01f);
+				vw_SetTextureBlend(false, 0, 0);
 				glDisable(GL_POLYGON_OFFSET_FILL);
 				// как было ставим
 				glPolygonOffset(1.0f, 2.0f);
 			}
 
-
 			vw_DeActivateAllLights();
 
 			vw_PopMatrix();
 		}
+		if (ObjectType == 13) vw_SetTextureAlphaTest(false, 0.01f);
 	}
 
 
@@ -1201,8 +1182,8 @@ void CObject3D::Draw(bool VertexOnlyPass)
 		CurrentGLSL = 0;
 	}
 	// установка параметров текстур в исходное состояние
-	vw_SetTextureDef(1);
-	vw_SetTextureDef(0);
+	vw_BindTexture(1, 0);
+	vw_BindTexture(0, 0);
 	if (!NeedCullFaces) vw_CullFace(RI_BACK);
 	vw_PopMatrix();
 
@@ -1484,7 +1465,7 @@ void CObject3D::Draw(bool VertexOnlyPass)
 
 
 
-	vw_SetTextureDef(0);
+	vw_BindTexture(0, 0);
 }
 
 

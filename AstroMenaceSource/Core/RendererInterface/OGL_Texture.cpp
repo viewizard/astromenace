@@ -43,9 +43,9 @@ extern	PFNGLTEXSTORAGE2DPROC glTexStorage2DEXT;
 
 
 //------------------------------------------------------------------------------------
-// Генерация текстуры
+// Создание текстуры
 //------------------------------------------------------------------------------------
-GLuint vw_CreateTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Bytes, bool NeedCompression)
+GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Bytes, bool NeedCompression)
 {
 	// ничего не передали
 	if (ustDIB == 0) return 0;
@@ -53,11 +53,7 @@ GLuint vw_CreateTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int By
 	GLuint TextureID = 0;
 
 	glGenTextures(1, &TextureID);
-    glBindTexture(GL_TEXTURE_2D, TextureID);
-	// ... It has been reported that on some ATI drivers, glGenerateMipmap(GL_TEXTURE_2D)
-	// has no effect unless you precede it with a call to glEnable(GL_TEXTURE_2D) ...
-	// "перестраховываемся" и включаем его постоянно при генерации текстур
-	glEnable(GL_TEXTURE_2D);
+    vw_BindTexture(0, TextureID);
 
 	int Mode;
 	int Color;
@@ -144,19 +140,43 @@ GLuint vw_CreateTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int By
 	}
 
 
-	glDisable(GL_TEXTURE_2D);
-
 	return TextureID;
 }
 
 
 
+
+
+
 //------------------------------------------------------------------------------------
-//
+// Bind
+//------------------------------------------------------------------------------------
+void vw_BindTexture(DWORD Stage, GLuint TextureID)
+{
+	glActiveTexture13(GL_TEXTURE0 + Stage);
+
+	if (TextureID != 0)
+	{
+		glBindTexture(GL_TEXTURE_2D, TextureID);
+		glEnable(GL_TEXTURE_2D);
+	}
+	else
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glDisable(GL_TEXTURE_2D);
+	}
+}
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Delete
 //------------------------------------------------------------------------------------
 void vw_DeleteTexture(GLuint TextureID)
 {
-	glDeleteTextures(1, &TextureID);
+	if (TextureID != 0) glDeleteTextures(1, &TextureID);
 }
 
 
@@ -166,16 +186,15 @@ void vw_DeleteTexture(GLuint TextureID)
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_SetTextureV(DWORD Stage, eTexture *Texture)
+void vw_SetTexture(DWORD Stage, eTexture *Texture)
 {
 	if (Texture == 0) return;
 
 	Texture->TexturePrior = 1.0f;
 
+	vw_BindTexture(Stage, Texture->TextureID);
 
-	glActiveTexture13(GL_TEXTURE0 + Stage);
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, Texture->TextureID);
+	// устанавливаем базовое смешивания, для прорисовки без шейдеров
 
 	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_EXT);
 
@@ -212,7 +231,7 @@ void vw_SetTextureV(DWORD Stage, eTexture *Texture)
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_SetTextureBlendMode(DWORD stage, int pname, int param)
+void vw_SetTextureBlendMode(int pname, int param)
 {
 	GLenum  cmd = GL_COMBINE_RGB;
 	GLenum  arg = GL_REPLACE;
@@ -301,7 +320,6 @@ void vw_SetTextureBlendMode(DWORD stage, int pname, int param)
 	}
 
 
-	glActiveTexture13(GL_TEXTURE0 + stage);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_EXT);
 
 	// работаем с MODULATE
@@ -331,10 +349,8 @@ void vw_SetTextureBlendMode(DWORD stage, int pname, int param)
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_SetTexFiltering(DWORD Stage, int nFiltering, int AnisotropyLevel)
+void vw_SetTextureFiltering(int nFiltering)
 {
-	glActiveTexture13(GL_TEXTURE0 + Stage);
-
 	// перебираем по мип-меп фильтру
 	switch (nFiltering & 0x00000F)
 	{
@@ -364,10 +380,15 @@ void vw_SetTexFiltering(DWORD Stage, int nFiltering, int AnisotropyLevel)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	if ((nFiltering & 0x103F00) == RI_MAGFILTER_LINEAR)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
 
 
 
-
+//------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------
+void vw_SetTextureAnisotropy(int AnisotropyLevel)
+{
 	// ставим ANISOTROPY
 	if (AnisotropyLevel > 1)
 	{
@@ -386,10 +407,8 @@ void vw_SetTexFiltering(DWORD Stage, int nFiltering, int AnisotropyLevel)
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_SetTexAddressMode(DWORD Stage, int nAddressMode)
+void vw_SetTextureAddressMode(int nAddressMode)
 {
-	glActiveTexture13(GL_TEXTURE0 + Stage);
-
 	if ((nAddressMode & 0x10410) == RI_WRAP_U)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	else
@@ -404,9 +423,9 @@ void vw_SetTexAddressMode(DWORD Stage, int nAddressMode)
 
 
 //------------------------------------------------------------------------------------
-//
+// Ставим-убираем альфа тест
 //------------------------------------------------------------------------------------
-void vw_SetTexAlpha(bool Flag, float Value)
+void vw_SetTextureAlphaTest(bool Flag, float Value)
 {
 	if (Flag)
 	{
@@ -423,10 +442,16 @@ void vw_SetTexAlpha(bool Flag, float Value)
 
 
 //------------------------------------------------------------------------------------
-//
+// Режим прозрачности
 //------------------------------------------------------------------------------------
-void vw_SetTexBlend(int Src, int Dst)
+void vw_SetTextureBlend(bool Flag, int Src, int Dst)
 {
+	if (!Flag)
+	{
+		glDisable(GL_BLEND);
+		glBlendFunc(GL_ONE, GL_ZERO);
+	}
+
 	int tmpSRC,tmpDST;
 
 	switch(Src)
@@ -510,50 +535,8 @@ void vw_SetTexBlend(int Src, int Dst)
 
 	glEnable(GL_BLEND);
 	glBlendFunc(tmpSRC, tmpDST);
-
 }
 
-
-
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
-void vw_SetTextureDef(DWORD Stage)
-{
-	eDevCaps *OpenGL_DevCaps = vw_GetDevCaps();
-
-    vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-
-
-	glActiveTexture13(GL_TEXTURE0 + Stage);
-
-	if (OpenGL_DevCaps->MaxAnisotropyLevel > 1)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
-
-	glTexEnvf (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_EXT);
-	// данные для смешение цвета - заменяем...
-	glTexEnvf (GL_TEXTURE_ENV, GL_COMBINE_RGB_EXT, GL_REPLACE);
-
-	if (Stage > 0)
-	{
-		// данные для смешение цвета - добавляем к существ.
-		glTexEnvf (GL_TEXTURE_ENV, GL_COMBINE_RGB_EXT, GL_ADD);
-		// данные для смешение альфы - всегда 1-й слой...
-		glTexEnvf (GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_ADD);
-	}
-
-	glTexEnvf (GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_MODULATE);
-	glTexEnvf (GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_EXT, GL_TEXTURE);
-	glTexEnvf (GL_TEXTURE_ENV, GL_OPERAND0_ALPHA_EXT, GL_SRC_ALPHA);
-	glTexEnvf (GL_TEXTURE_ENV, GL_SOURCE1_ALPHA_EXT, GL_PREVIOUS_EXT);
-	glTexEnvf (GL_TEXTURE_ENV, GL_OPERAND1_ALPHA_EXT, GL_SRC_ALPHA);
-
-	glDisable(GL_BLEND);
-	glBlendFunc(GL_ONE, GL_ZERO);
-	glDisable(GL_ALPHA_TEST);
-	glDisable(GL_TEXTURE_2D);
-	glActiveTexture13(GL_TEXTURE0);
-}
 
 
 
@@ -568,8 +551,8 @@ void vw_GetTextureImage(eTexture *Texture, void *bits, int BPP)
 {
 	if (Texture == 0) return;
 
+	vw_BindTexture(0, Texture->TextureID);
 
-	glBindTexture(GL_TEXTURE_2D, Texture->TextureID);
 	if (BPP == 4)
 		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, bits);
 	else
@@ -593,8 +576,9 @@ void vw_SetPrioritizeTextures(GLuint TextureID, float Prior)
 //------------------------------------------------------------------------------------
 void vw_GetPrioritizeTextures(GLuint TextureID, float *Prior)
 {
-	glBindTexture(GL_TEXTURE_2D, TextureID);
+	vw_BindTexture(0, TextureID);
 	glGetTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, Prior);
+	vw_BindTexture(0, 0);
 }
 
 

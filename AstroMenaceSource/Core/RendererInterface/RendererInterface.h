@@ -94,74 +94,21 @@ struct eDevCaps
 
 
 
+
+
+
+
+
 // Point 0-0 in the upper left corner
 #define RI_UL_CORNER						0x1011
 // Point 0-0 in the bottom left corner
 #define RI_BL_CORNER						0x1012
 
-
-
-// Common functions
-
-// проверка аа
-//eDevCaps *vw_HardwareTest(int Width, int Height);
-// Initialization renderer
-int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideoModeW, int CurrentVideoModeH);
-void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA);
-// Shutdown renderer dll
-void vw_ShutdownRenderer(void);
-// Get device capability
-eDevCaps *vw_GetDevCaps();
-
-void vw_SetAspectRatio(float nWidth, float nHeight, bool Value);
-bool vw_GetAspectWH(float *ARWidth, float *ARHeight);
-
-
-
-
-
-// Set viewport data
-void vw_SetViewport(int x, int y, int width, int height, float znear, float zfar, int Corner = RI_UL_CORNER);
-// Get viewport data
-void vw_GetViewport(int *x=0, int *y=0, int *width=0, int *height=0, float *znear=0, float *zfar=0);
-// Resize scene
-void vw_ResizeScene(float nfAngle, float AR, float nfNearClip, float nfFarClip);
-// Function for window WM_SIZE message only
-void vw_OnChangeSize(int nWidth, int nHeight);
-
-
-
-// Basic rendering functions
-
-// Begin rendering
+// Buffer clear bit
 #define RI_COLOR_BUFFER		0x1000
 #define RI_DEPTH_BUFFER		0x0100
 #define RI_ACCUM_BUFFER		0x0010
 #define RI_STENCIL_BUFFER	0x0001
-void vw_BeginRendering(int  mask);
-// End rendering
-void vw_EndRendering(void);
-// Start 2D rendering mode
-void vw_Start2DMode(float nZ1, float nZ2);
-// End 2D rendering mode
-void vw_End2DMode(void);
-// Set scene clear color
-void vw_SetClearColor(float nRed, float nGreen, float nBlue, float nAlpha);
-
-
-
-
-
-// Texture functions
-
-// Set texture by void pointer
-void vw_SetTextureV(DWORD Stage, eTexture *Texture);
-// Create texture
-GLuint vw_CreateTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Bytes, bool NeedCompression);
-// Delete texture
-void vw_DeleteTexture(GLuint TextureID);
-// Get texture image bitmap (RGBA) by void pointer
-void vw_GetTextureImage(eTexture *Texture, void *bits, int BPP);
 
 // Texture filtering modes
 #define RI_MAGFILTER_POINT					0x103000
@@ -175,18 +122,11 @@ void vw_GetTextureImage(eTexture *Texture, void *bits, int BPP);
 #define RI_TEXTURE_NONE			RI_MAGFILTER_POINT | RI_MINFILTER_POINT | RI_MIPFILTER_NONE
 #define RI_TEXTURE_BILINEAR		RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_POINT
 #define RI_TEXTURE_TRILINEAR	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_LINEAR
-// Set texture filtering mode
-void vw_SetTexFiltering(DWORD Stage, int nFiltering, int AnisotropyLevel);
 
 // Texture address modes
 #define RI_WRAP_U							0x10410
 #define RI_WRAP_V							0x10401
-#define RI_CLAMP							0x10400
-// Set texture address mode
-void vw_SetTexAddressMode(DWORD Stage, int nAddressMode);
-
-// Set texture Alpha value that specifies a reference alpha value against which pixels are tested
-void vw_SetTexAlpha(bool Flag, float Value);
+#define RI_CLAMP_TO_EDGE					0x10400
 
 // Texture blending factors
 // Blend factor is (0, 0, 0, 0).
@@ -211,15 +151,6 @@ void vw_SetTexAlpha(bool Flag, float Value);
 #define RI_BLEND_INVDESTCOLOR				0x1079
 // Blend factor is (f, f, f, 1); f = min(As, 1–Ad).
 #define RI_BLEND_SRCALPHASAT				0x107A
-// Set texture blending factor
-void vw_SetTexBlend(int Src, int Dst);
-
-// Reset texture blending and alpha
-void vw_SetTextureDef(DWORD Stage);
-// Set texture priority
-void vw_SetPrioritizeTextures(GLuint TextureID, float Prior);
-// Get texture priority
-void vw_GetPrioritizeTextures(GLuint TextureID, float *Prior);
 
 // Texture blending modes
 // Parametre name
@@ -250,12 +181,7 @@ void vw_GetPrioritizeTextures(GLuint TextureID, float *Prior);
 #define RI_TBLEND_CONSTANT					0x103082
 #define RI_TBLEND_DIFFUSE					0x103083
 #define RI_TBLEND_SPECULAR					0x103084
-// Set texture blending mode
-void vw_SetTextureBlendMode(DWORD stage, int pname, int param);
 
-
-
-// 3D rendering functions
 
 // Primitives types
 #define RI_POINTS							0x1020
@@ -297,27 +223,15 @@ void vw_SetTextureBlendMode(DWORD stage, int pname, int param);
 //
 #define PFNGLCLIENTACTIVETEXTUREPROC PFNGLACTIVETEXTUREPROC
 
-
-// Send (draw) vertices
-void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO=0,
-						unsigned int RangeStart=0,	unsigned int *DataIndex=0, unsigned int *DataIndexVBO=0, unsigned int *VAO=0);
-
-// Set color
-void vw_SetColor(float nRed, float nGreen, float nBlue, float nAlpha);
-
 // Polygon Mode
 #define RI_POINT							0x10B1
 #define RI_LINE								0x10B2
 #define RI_FILL								0x10B3
-// Set polygon rasterization mode
-void vw_PolygonMode(int mode);
 
 // Cull Face
 #define RI_NONE								0x10C1
 #define RI_BACK								0x10C2
 #define RI_FRONT							0x10C3
-// Set what facets can be culled
-void vw_CullFace(int face);
 
 // Set depth buffer status
 #define RI_NEVER          		1
@@ -328,37 +242,10 @@ void vw_CullFace(int face);
 #define RI_NOTEQUAL             6
 #define RI_GREATEREQUAL         7
 #define RI_ALWAYS               8
-void vw_DepthTest(bool mode, int funct);
-
-// Loads identity in the current matrix
-void vw_LoadIdentity(void);
-// Determines the product of the current matrix and the computed translation matrix determined by the given factors
-void vw_Translate(VECTOR3D Location);
-// Determines the product of the current matrix and the computed rotation matrix
-void vw_Rotate(float fX, float fY, float fZ);
-// Determines the product of the current matrix and the computed scale matrix composed from the given point
-void vw_Scale(float fX, float fY, float fZ);
-// Adds a matrix to the stack
-void vw_PushMatrix(void);
-// Removes the current matrix from the top of the stack
-void vw_PopMatrix(void);
 
 // Matrix types
 #define RI_PROJECTION_MATRIX				0x1080
 #define RI_MODELVIEW_MATRIX					0x1081
-// Get matrix
-void vw_GetMatrix(int pname, float *params);
-void vw_SetMatrix(int pname, float *params);
-
-
-// Set lighting status
-void vw_Lighting(bool param);
-// Get lighting status
-bool vw_GetLighting(void);
-// Enable light
-void vw_LightEnable(int light, bool param);
-// Get light status
-bool vw_GetLightEnable(int light);
 
 // Light parametres
 #define RI_SPOT_EXPONENT					0x1090
@@ -374,7 +261,151 @@ bool vw_GetLightEnable(int light);
 #define RI_EMISSION							0x109A
 #define RI_SHININESS						0x109B
 
+// VBO
+#define RI_ARRAY_BUFFER						1
+#define RI_ELEMENT_ARRAY_BUFFER				2
 
+
+
+
+
+
+
+
+
+
+// Common functions
+
+// Initialization renderer
+int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideoModeW, int CurrentVideoModeH);
+void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA);
+// Shutdown renderer dll
+void vw_ShutdownRenderer(void);
+// Get device capability
+eDevCaps *vw_GetDevCaps();
+
+void vw_SetAspectRatio(float nWidth, float nHeight, bool Value);
+bool vw_GetAspectWH(float *ARWidth, float *ARHeight);
+
+
+
+
+
+// Set viewport data
+void vw_SetViewport(int x, int y, int width, int height, float znear, float zfar, int Corner = RI_UL_CORNER);
+// Get viewport data
+void vw_GetViewport(int *x=0, int *y=0, int *width=0, int *height=0, float *znear=0, float *zfar=0);
+// Resize scene
+void vw_ResizeScene(float nfAngle, float AR, float nfNearClip, float nfFarClip);
+// Function for window WM_SIZE message only
+void vw_OnChangeSize(int nWidth, int nHeight);
+
+
+
+
+
+// Basic rendering functions
+
+// Begin rendering
+void vw_BeginRendering(int  mask);
+// End rendering
+void vw_EndRendering(void);
+// Start 2D rendering mode
+void vw_Start2DMode(float nZ1, float nZ2);
+// End 2D rendering mode
+void vw_End2DMode(void);
+// Set scene clear color
+void vw_SetClearColor(float nRed, float nGreen, float nBlue, float nAlpha);
+
+
+
+
+
+
+
+// Texture functions
+
+// Create texture
+GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Bytes, bool NeedCompression);
+// Bind texture
+void vw_BindTexture(DWORD Stage, GLuint TextureID);
+// Delete texture
+void vw_DeleteTexture(GLuint TextureID);
+// Set texture filtering mode
+void vw_SetTextureFiltering(int nFiltering);
+// Set texture Anisotropy Level
+void vw_SetTextureAnisotropy(int AnisotropyLevel);
+// Set texture address mode
+void vw_SetTextureAddressMode(int nAddressMode);
+// Set texture Alpha Test value that specifies a reference alpha value against which pixels are tested
+void vw_SetTextureAlphaTest(bool Flag, float Value);
+// Set texture blending factor
+void vw_SetTextureBlend(bool Flag, int Src, int Dst);
+// Set texture blending mode
+void vw_SetTextureBlendMode(int pname, int param);
+// Set texture by pointer
+void vw_SetTexture(DWORD Stage, eTexture *Texture);
+// Get texture image bitmap (RGBA) by void pointer
+void vw_GetTextureImage(eTexture *Texture, void *bits, int BPP);
+// Set texture priority
+void vw_SetPrioritizeTextures(GLuint TextureID, float Prior);
+// Get texture priority
+void vw_GetPrioritizeTextures(GLuint TextureID, float *Prior);
+
+
+
+
+
+
+
+
+
+// 3D rendering functions
+
+// Send (draw) vertices
+void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO=0,
+						unsigned int RangeStart=0,	unsigned int *DataIndex=0, unsigned int *DataIndexVBO=0, unsigned int *VAO=0);
+// Set color
+void vw_SetColor(float nRed, float nGreen, float nBlue, float nAlpha);
+// Set polygon rasterization mode
+void vw_PolygonMode(int mode);
+// Set what facets can be culled
+void vw_CullFace(int face);
+// Set depth buffer
+void vw_DepthTest(bool mode, int funct);
+
+// Loads identity in the current matrix
+void vw_LoadIdentity(void);
+// Determines the product of the current matrix and the computed translation matrix determined by the given factors
+void vw_Translate(VECTOR3D Location);
+// Determines the product of the current matrix and the computed rotation matrix
+void vw_Rotate(float fX, float fY, float fZ);
+// Determines the product of the current matrix and the computed scale matrix composed from the given point
+void vw_Scale(float fX, float fY, float fZ);
+// Adds a matrix to the stack
+void vw_PushMatrix(void);
+// Removes the current matrix from the top of the stack
+void vw_PopMatrix(void);
+// Get matrix
+void vw_GetMatrix(int pname, float *params);
+void vw_SetMatrix(int pname, float *params);
+
+
+
+
+
+
+
+// Light
+
+// Set lighting status
+void vw_Lighting(bool param);
+// Get lighting status
+bool vw_GetLighting(void);
+// Enable light
+void vw_LightEnable(int light, bool param);
+// Get light status
+bool vw_GetLightEnable(int light);
 // Set light parametre by float
 void vw_SetLight(int light, int pname, float param);
 // Set light parametre by vector
@@ -393,10 +424,6 @@ void vw_GetMaterialV(int pname, float *param);
 
 
 // VBO
-
-#define RI_ARRAY_BUFFER						1
-#define RI_ELEMENT_ARRAY_BUFFER				2
-
 
 // создаем буфер
 bool vw_BuildVBO(int NumVertices, void *Data, int Stride, unsigned int *VBO);

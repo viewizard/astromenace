@@ -5,10 +5,10 @@
 
 	File name: ParticleSystemManager.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -149,7 +149,7 @@ void vw_DrawAllParticleSystems()
 	// делаем все предустановки для прорисовки частиц, чтобы не менять каждый раз
 
 
-	vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 	// включаем шейдер, если есть возможность
 	if (ParticleSystemUseGLSL)
 	{
@@ -178,7 +178,7 @@ void vw_DrawAllParticleSystems()
 
 		if (CurrentTexture != tmp->Texture)
 		{
-			vw_SetTextureT(0, tmp->Texture, 1);
+			vw_SetTexture(0, tmp->Texture);
 			CurrentTexture = tmp->Texture;
 		}
 		tmp->Draw();
@@ -195,8 +195,10 @@ void vw_DrawAllParticleSystems()
 	{
 		vw_StopShaderProgram();
 	}
-	// сбрасываем все установки текстуры
-	vw_SetTextureDef(0);
+
+	vw_SetTextureBlend(false, 0, 0);
+	// анбиндим текстуру
+	vw_BindTexture(0, 0);
 }
 
 

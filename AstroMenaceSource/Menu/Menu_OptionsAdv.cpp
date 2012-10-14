@@ -382,9 +382,18 @@ void OptionsAdvMenu()
 	{
 		Options_UseGLSL = !Options_UseGLSL;
 	}
-	Size = vw_FontSize(Options_UseGLSL ? GetText("1_On") : GetText("1_Off"));
-	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Options_UseGLSL ? GetText("1_On") : GetText("1_Off"));
+	if (CAPS->GLSL100Supported & (CAPS->ShaderModel >= 3.0))
+	{
+		Size = vw_FontSize(Options_UseGLSL ? GetText("1_On") : GetText("1_Off"));
+		SizeI = (170-Size)/2;
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Options_UseGLSL ? GetText("1_On") : GetText("1_Off"));
+	}
+	else
+	{
+		Size = vw_FontSize(GetText("3_Not_available"));
+		SizeI = (170-Size)/2;
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Not_available"));
+	}
 
 
 

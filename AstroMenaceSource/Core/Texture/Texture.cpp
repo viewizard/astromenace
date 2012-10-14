@@ -518,13 +518,10 @@ eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DW
 	Texture->Num = 0;
 	Texture->Name = 0;
 	Texture->TextureID = 0;
-	Texture->Filtering = FilteringTexMan;
-	Texture->Address_Mode = Address_ModeTexMan;
 	Texture->Width = DWidth;
 	Texture->Height = DHeight;
 	Texture->Bytes = DChanels;
 	Texture->TexturePrior = 0;
-	Texture->MipMap = MipMap;
 
 	// временный массив данных
 	BYTE *tmp_image = 0;
@@ -578,7 +575,12 @@ eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DW
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Создаем текстуру
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	Texture->TextureID = vw_CreateTexture(tmp_image, Texture->Width, Texture->Height, MipMap, Texture->Bytes, NeedCompression);
+	Texture->TextureID = vw_BuildTexture(tmp_image, Texture->Width, Texture->Height, MipMap, Texture->Bytes, NeedCompression);
+	// устанавливаем параметры
+	vw_SetTextureFiltering(FilteringTexMan);
+	vw_SetTextureAddressMode(Address_ModeTexMan);
+	// анбиндим
+	vw_BindTexture(0, 0);
 
 	// освобождаем память
 	if (tmp_image != 0){delete [] tmp_image; tmp_image = 0;}
@@ -589,19 +591,3 @@ eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DW
 	return Texture;
 }
 
-
-
-
-
-//------------------------------------------------------------------------------------
-// быстрая установка текстуры и ее параметров
-//------------------------------------------------------------------------------------
-void vw_SetTextureT(DWORD Stage, eTexture *Tex, int AnisotropyLevel)
-{
-	if (Tex == 0) return;
-
-	vw_SetTextureV(Stage, Tex);
-	vw_SetTexFiltering(Stage, Tex->Filtering, AnisotropyLevel);
-	vw_SetTexAddressMode(Stage, Tex->Address_Mode);
-	vw_SetTexAlpha(true, 0.1f);
-}

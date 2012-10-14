@@ -96,6 +96,7 @@ eFontChar* vw_LoadFontChar(unsigned UTF32)
 	char texturefilename[MAX_PATH];
 	sprintf(texturefilename, "%i", UTF32);
 
+	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
 	NewChar->CharTexture = vw_CreateTextureFromMemory(texturefilename, pixels, NewChar->Width, NewChar->Height, 4, false);
 	// очищаем память
 	delete [] pixels;
@@ -228,6 +229,7 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 
 
 	// создаем текстуру
+	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
 	eTexture* FontTexture = vw_CreateTextureFromMemory(TextureName, DIB, FontTextureWidth, FontTextureHeight, 4, false);
 	// освобождаем память
 	delete [] DIB;
@@ -364,8 +366,7 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 	float LineWidth = 0;
 
 	// установка свойств текстуры
-	vw_SetTexAlpha(false, 0.01f);
-	vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 	// ставим цвет
 	vw_SetColor(R, G, B, Transp);
 
@@ -402,11 +403,8 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 			// если что-то было в буфере - выводим
 			if (k > 0)
 			{
-				// Установка текстуры и ее свойств...
-				vw_SetTextureV(0, CurrentTexture);
-				vw_SetTexAddressMode(0, RI_CLAMP);
-				// не можем ставить другое! если нет мипмапа
-				vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
+				// Установка текстуры
+				vw_SetTexture(0, CurrentTexture);
 				// отрисовываем все что есть в буфере
 				vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(float));
 			}
@@ -480,11 +478,8 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 	// если что-то было в буфере - выводим
 	if (k > 0)
 	{
-		// Установка текстуры и ее свойств...
-		vw_SetTextureV(0, CurrentTexture);
-		vw_SetTexAddressMode(0, RI_CLAMP);
-		// не можем ставить другое! если нет мипмапа
-		vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
+		// Установка текстуры
+		vw_SetTexture(0, CurrentTexture);
 		// отрисовываем все что есть в буфере
 		vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(float));
 	}
@@ -492,9 +487,9 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 
 
 	if (tmp != 0){delete [] tmp; tmp = 0;}
-	vw_SetTexAlpha(false, 0.5f);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-	vw_SetTextureDef(0);
+	vw_SetTextureBlend(false, 0, 0);
+	vw_BindTexture(0, 0);
 }
 
 
@@ -581,8 +576,7 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 	tmp = new float[(2+2)*4*strlen(textdraw)]; if (tmp == 0) return;
 
 	// установка свойств текстуры
-	vw_SetTexAlpha(false, 0.01f);
-	vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
 	vw_PushMatrix();
 
@@ -615,11 +609,8 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 			// если что-то было в буфере - выводим
 			if (k > 0)
 			{
-				// Установка текстуры и ее свойств...
-				vw_SetTextureV(0, CurrentTexture);
-				vw_SetTexAddressMode(0, RI_CLAMP);
-				// не можем ставить другое! если нет мипмапа
-				vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
+				// Установка текстуры
+				vw_SetTexture(0, CurrentTexture);
 				// отрисовываем все что есть в буфере
 				vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(float));
 			}
@@ -682,11 +673,8 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 	// если что-то было в буфере - выводим
 	if (k > 0)
 	{
-		// Установка текстуры и ее свойств...
-		vw_SetTextureV(0, CurrentTexture);
-		vw_SetTexAddressMode(0, RI_CLAMP);
-		// не можем ставить другое! если нет мипмапа
-		vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
+		// Установка текстуры
+		vw_SetTexture(0, CurrentTexture);
 		// отрисовываем все что есть в буфере
 		vw_SendVertices(RI_QUADS, 4*(k/16), RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(float));
 	}
@@ -697,8 +685,8 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 
 
 	if (tmp != 0){delete [] tmp; tmp = 0;};
-	vw_SetTexAlpha(false, 0.5f);
-	vw_SetTextureDef(0);
+	vw_SetTextureBlend(false, 0, 0);
+	vw_BindTexture(0, 0);
 
 }
 

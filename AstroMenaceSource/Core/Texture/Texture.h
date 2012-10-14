@@ -63,10 +63,6 @@ struct eTexture
 {
 	char*	Name;			// File name
 
-	int		Filtering;		// Texture filtering mode (near, linear, ... )
-	int		Address_Mode;	// Texture address mode (wrap, clamp)
-	bool	MipMap;
-
 	BYTE	ARed;			// Alpha channel red color
 	BYTE	AGreen;			// Alpha channel green color
 	BYTE	ABlue;			// Alpha channel blue color
@@ -112,9 +108,6 @@ void		vw_SetTextureAlpha(BYTE nARed, BYTE nAGreen, BYTE nABlue);
 eTexture*	vw_FindTextureByName(const char *Name);
 // Find texture by ID
 eTexture*	vw_FindTextureByNum(int Num);
-
-// Set texture by eTexture pointer
-void		vw_SetTextureT(DWORD Stage, eTexture *Tex, int AnisotropyLevel);
 
 // проверка и установка правильного приоритета текстур
 void 		vw_CheckTexturesPrior();

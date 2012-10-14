@@ -597,15 +597,12 @@ void DrawMenu()
 
 
 		eTexture *TileTexture = vw_FindTextureByName("DATA/SKYBOX/tile_14.jpg");
-		vw_SetTextureT(0, TileTexture, 1);
+		vw_SetTexture(0, TileTexture);
 		// нужно ставить трилинейную
-		if (Setup.TextureFilteringMode == 2)
-		{
-			vw_SetTexFiltering(0, RI_TEXTURE_TRILINEAR, 1);
-		}
+		if (Setup.TextureFilteringMode == 2) vw_SetTextureFiltering(RI_TEXTURE_TRILINEAR);
 
-		vw_SetTexAlpha(true, 0.01f);
-		vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+		vw_SetTextureAlphaTest(true, 0.01f);
+		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 
 		vw_DepthTest(false, -1);
 
@@ -623,7 +620,9 @@ void DrawMenu()
 
 		vw_DepthTest(true, RI_LESSEQUAL);
 
-		vw_SetTextureDef(0);
+		vw_SetTextureAlphaTest(false, 0.01f);
+		vw_SetTextureBlend(false, 0, 0);
+		vw_BindTexture(0, 0);
 		if (buff != 0){delete [] buff; buff = 0;}
 	}
 
@@ -709,16 +708,13 @@ void DrawMenu()
 
 
 		eTexture *TileTexture = vw_FindTextureByName("DATA/SKYBOX/tile_14.jpg");
-		vw_SetTextureT(0, TileTexture, 1);
+		vw_SetTexture(0, TileTexture);
 		// нужно ставить трилинейную
-		if (Setup.TextureFilteringMode == 2)
-		{
-			vw_SetTexFiltering(0, RI_TEXTURE_TRILINEAR, 1);
-		}
+		if (Setup.TextureFilteringMode == 2) vw_SetTextureFiltering(RI_TEXTURE_TRILINEAR);
 
 
-		vw_SetTexAlpha(true, 0.01f);
-		vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+		vw_SetTextureAlphaTest(true, 0.01f);
+		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 
 		vw_DepthTest(false, -1);
 
@@ -733,8 +729,9 @@ void DrawMenu()
 		vw_PopMatrix();
 
 		vw_DepthTest(true, RI_LESSEQUAL);
-
-		vw_SetTextureDef(0);
+		vw_SetTextureAlphaTest(false, 0.01f);
+		vw_SetTextureBlend(false, 0, 0);
+		vw_BindTexture(0, 0);
 		if (buff != 0){delete [] buff; buff = 0;}
 	}
 
@@ -802,16 +799,13 @@ void DrawMenu()
 
 
 		eTexture *TileTexture = vw_FindTextureByName("DATA/SKYBOX/tile_14.jpg");
-		vw_SetTextureT(0, TileTexture, Setup.AnisotropyLevel);
+		vw_SetTexture(0, TileTexture);
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		// нужно ставить трилинейную
-		if (Setup.TextureFilteringMode == 2)
-		{
-			vw_SetTexFiltering(0, RI_TEXTURE_TRILINEAR, Setup.AnisotropyLevel);
-		}
+		if (Setup.TextureFilteringMode == 2) vw_SetTextureFiltering(RI_TEXTURE_TRILINEAR);
 
-
-		vw_SetTexAlpha(true, 0.7f);
-		vw_SetTexBlend(RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+		vw_SetTextureAlphaTest(true, 0.7f);
+		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 
 		vw_DepthTest(false, -1);
 
@@ -826,8 +820,9 @@ void DrawMenu()
 		vw_PopMatrix();
 
 		vw_DepthTest(true, RI_LESSEQUAL);
-
-		vw_SetTextureDef(0);
+		vw_SetTextureAlphaTest(false, 0.01f);
+		vw_SetTextureBlend(false, 0, 0);
+		vw_BindTexture(0, 0);
 		if (buff != 0){delete [] buff; buff = 0;}
 	}
 
@@ -895,26 +890,25 @@ void DrawMenu()
 
 
 		eTexture *TileTexture = vw_FindTextureByName("DATA/MENU/whitepoint.tga");
-		vw_SetTextureT(0, TileTexture, 1);
-		vw_SetTexAlpha(false, 0.01f);
-		vw_SetTexFiltering(0, RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, 1);
+		vw_SetTexture(0, TileTexture);
 
 		float GammaF = 1.0f + (Setup.Gamma - 5)/5.0f;
 
 		if( GammaF > 1.0f )
 		{
-			vw_SetTexBlend(RI_BLEND_DESTCOLOR, RI_BLEND_ONE);
+			vw_SetTextureBlend(true, RI_BLEND_DESTCOLOR, RI_BLEND_ONE);
 			vw_SetColor(GammaF-1.0f, GammaF-1.0f, GammaF-1.0f, 1.0f);
 		}
 		else
 		{
-			vw_SetTexBlend(RI_BLEND_ZERO, RI_BLEND_SRCCOLOR);
+			vw_SetTextureBlend(true, RI_BLEND_ZERO, RI_BLEND_SRCCOLOR);
 			vw_SetColor(GammaF, GammaF, GammaF, 1.0f);
 		}
 
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, buff, 4*sizeof(float));
 
-		vw_SetTextureDef(0);
+		vw_SetTextureBlend(false, 0, 0);
+		vw_BindTexture(0, 0);
 		if (buff != 0){delete [] buff; buff = 0;}
 	}
 

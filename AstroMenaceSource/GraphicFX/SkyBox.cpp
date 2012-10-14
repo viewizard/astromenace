@@ -6,10 +6,10 @@
 
 	File name: SkyBox.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -93,7 +93,7 @@ void SkyBoxDraw(void)
 
 	if (SkyBox_Texture[BACK] != 0)
 	{
-		vw_SetTextureT(0, SkyBox_Texture[BACK], 1);
+		vw_SetTexture(0, SkyBox_Texture[BACK]);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
 
@@ -125,7 +125,7 @@ void SkyBoxDraw(void)
 
 	if (SkyBox_Texture[FRONT] != 0)
 	{
-		vw_SetTextureT(0, SkyBox_Texture[FRONT], 1);
+		vw_SetTexture(0, SkyBox_Texture[FRONT]);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
 
@@ -157,7 +157,7 @@ void SkyBoxDraw(void)
 
 	if (SkyBox_Texture[BOTTOM] != 0)
 	{
-		vw_SetTextureT(0, SkyBox_Texture[BOTTOM], 1);
+		vw_SetTexture(0, SkyBox_Texture[BOTTOM]);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
 
@@ -189,7 +189,7 @@ void SkyBoxDraw(void)
 
 	if (SkyBox_Texture[TOP] != 0)
 	{
-		vw_SetTextureT(0, SkyBox_Texture[TOP], 1);
+		vw_SetTexture(0, SkyBox_Texture[TOP]);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
 
@@ -221,7 +221,7 @@ void SkyBoxDraw(void)
 
 	if (SkyBox_Texture[LEFT] != 0)
 	{
-		vw_SetTextureT(0, SkyBox_Texture[LEFT], 1);
+		vw_SetTexture(0, SkyBox_Texture[LEFT]);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
 
@@ -253,12 +253,12 @@ void SkyBoxDraw(void)
 
 	if (SkyBox_Texture[RIGHT] != 0)
 	{
-		vw_SetTextureT(0, SkyBox_Texture[RIGHT], 1);
+		vw_SetTexture(0, SkyBox_Texture[RIGHT]);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
 
 
-	vw_SetTextureDef(0);
+	vw_BindTexture(0, 0);
 	if (buff != 0){delete [] buff; buff = 0;}
 }
 
