@@ -386,8 +386,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 				if (DragWeaponNum < 16)
 				{
 					WorkshopFighterGame->WeaponYAngle[SlotNum] = Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
-					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(WorkshopFighterGame->Weapon[SlotNum]->Rotation^(-1));
-					VECTOR3D NeedAngle = WorkshopFighterGame->Weapon[SlotNum]->Rotation;
+					VECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
 					NeedAngle.y += Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
 					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(NeedAngle);
 				}
@@ -696,7 +695,7 @@ void ShipSlotSetupWeapon(int Slot)
 					WorkshopFighterGame->WeaponYAngle[Slot] = Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot];
 
 					WorkshopFighterGame->Weapon[Slot]->SetRotation(WorkshopFighterGame->Weapon[Slot]->Rotation^(-1));
-					VECTOR3D NeedAngle = WorkshopFighterGame->Weapon[Slot]->Rotation;
+					VECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
 					NeedAngle.y += Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot];
 					WorkshopFighterGame->Weapon[Slot]->SetRotation(NeedAngle);
 				}
@@ -706,7 +705,7 @@ void ShipSlotSetupWeapon(int Slot)
 					WorkshopFighterGame->WeaponYAngle[Slot] = Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot];
 
 					WorkshopFighterGame->Weapon[Slot]->SetRotation(WorkshopFighterGame->Weapon[Slot]->Rotation^(-1));
-					VECTOR3D NeedAngle = WorkshopFighterGame->Weapon[Slot]->Rotation;
+					VECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
 					NeedAngle.y += Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot];
 					WorkshopFighterGame->Weapon[Slot]->SetRotation(NeedAngle);
 				}
@@ -775,8 +774,7 @@ void ShipSlotSetupWeapon(int Slot)
 				if (DragWeaponNum < 16)
 				{
 					WorkshopFighterGame->WeaponYAngle[SlotNum] = Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
-					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(WorkshopFighterGame->Weapon[SlotNum]->Rotation^(-1));
-					VECTOR3D NeedAngle = WorkshopFighterGame->Weapon[SlotNum]->Rotation;
+					VECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
 					NeedAngle.y += Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
 					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(NeedAngle);
 				}
@@ -853,128 +851,128 @@ void DrawShipWeaponsInSlots()
 	switch (Setup.Profile[CurrentProfile].Ship)
 	{
 		case 1:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 100);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 100);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 300);
+			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 130);
+			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
+			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 330);
 			break;
 		case 2:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 100);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 100);
+			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 130);
+			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
 			break;
 		case 3:
-			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 100);
-			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
+			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 130);
+			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
 			break;
 		case 4:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 300);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 300);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 100);
+			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 330);
+			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
+			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 130);
 			break;
 		case 5:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 300);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 300);
+			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 330);
+			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
 			break;
 		case 6:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 300);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 300);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 100);
+			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 330);
+			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
+			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 130);
 			break;
 		case 7:
-			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 100);
-			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 300);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 300);
-			ShipSlotWeapon(3, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
+			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 130);
+			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 330);
+			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
+			ShipSlotWeapon(3, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
 			break;
 		case 8:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 300);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 300);
+			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 330);
+			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
 			break;
 		case 9:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 300);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 300);
+			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 330);
+			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
 			break;
 		case 10:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 300);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 300);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 100);
+			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 330);
+			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
+			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 130);
 			break;
 		case 11:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+256)-64, 100);
+			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+256)-64, 130);
 			break;
 		case 12:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+256)-64, 100);
+			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+256)-64, 130);
 			break;
 		case 13:
-			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 500);
-			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 300);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 300);
-			ShipSlotWeapon(3, Setup.iAspectRatioWidth/2+50, 100);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+512)-128-50, 100);
+			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 530);
+			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 330);
+			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
+			ShipSlotWeapon(3, Setup.iAspectRatioWidth/2+50, 130);
+			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
 			break;
 		case 14:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 100);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 100);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 300);
+			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 130);
+			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
+			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 330);
 			break;
 		case 15:
-			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 100);
-			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
+			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 130);
+			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
 			break;
 		case 16:
-			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 100);
-			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
+			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 130);
+			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
 			break;
 		case 17:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 300);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 300);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 100);
+			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 330);
+			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
+			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 130);
 			break;
 		case 18:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 100);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 100);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
+			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 130);
+			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
+			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
 			break;
 		case 19:
-			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 100);
-			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
+			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 130);
+			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
 			break;
 		case 20:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 100);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 100);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
+			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 130);
+			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
+			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
 			break;
 		case 21:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 500);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 500);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+256)-64, 100);
+			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+256)-64, 130);
 			break;
 		case 22:
-			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 300);
+			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 330);
 			break;
 	}
 
@@ -1178,6 +1176,32 @@ void Workshop_Weaponry()
 	DrawShipWeaponsInSlots();
 
 
+	// кнопка "перезарядить все" оружие
+	if (WeaponSetupSlot == -1)
+	{
+		int ReloadCost = 0;
+		// находим стоимость перезарядки
+		for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++)
+		if (WorkshopFighterGame->Weapon[i] != 0)
+		{
+			ReloadCost += GetWeaponReloadCost(WorkshopFighterGame->Weapon[i]->ObjectCreationType,
+												WorkshopFighterGame->Weapon[i]->Ammo,
+												WorkshopFighterGame->Weapon[i]->AmmoStart);
+		}
+		char ButtonName[1024];
+		sprintf(ButtonName, "%s: %i", GetText("1_Reload_All"), ReloadCost);
+
+		if (DrawButton200_2(Setup.iAspectRatioWidth/2+153, 50, ButtonName, MenuContentTransp, ReloadCost==0 || Setup.Profile[CurrentProfile].Money<ReloadCost))
+		{
+			for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++)
+			if (WorkshopFighterGame->Weapon[i] != 0)
+			{
+				WorkshopFighterGame->Weapon[i]->Ammo = WorkshopFighterGame->Weapon[i]->AmmoStart;
+				Setup.Profile[CurrentProfile].WeaponAmmo[i] = WorkshopFighterGame->Weapon[i]->Ammo;
+			}
+			Setup.Profile[CurrentProfile].Money -= ReloadCost;
+		}
+	}
 
 	vw_DrawFont(Setup.iAspectRatioWidth/2+445-vw_FontSize(GetText("7_Installed_Weapons"))*1.5f, 600, 0, 0, 1.5f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("7_Installed_Weapons"));
 
