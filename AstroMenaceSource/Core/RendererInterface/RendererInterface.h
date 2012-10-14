@@ -244,6 +244,7 @@ struct eDevCaps
 // Matrix types
 #define RI_PROJECTION_MATRIX				0x1080
 #define RI_MODELVIEW_MATRIX					0x1081
+#define RI_TEXTURE_MATRIX					0x1082
 
 // Light parametres
 #define RI_SPOT_EXPONENT					0x1090
@@ -387,8 +388,10 @@ void vw_PopMatrix(void);
 // Get matrix
 void vw_GetMatrix(int pname, float *params);
 void vw_SetMatrix(int pname, float *params);
-
-
+// Set Matrix Mode
+void vw_MatrixMode(int pname);
+// Mult matrix
+void vw_MultMatrix(int pname, float *params);
 
 
 

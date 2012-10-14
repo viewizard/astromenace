@@ -91,20 +91,51 @@ void vw_GetMatrix(int pname, float *params)
 	{
 		case RI_PROJECTION_MATRIX: glGetFloatv(GL_PROJECTION_MATRIX, params); break;
 		case RI_MODELVIEW_MATRIX: glGetFloatv(GL_MODELVIEW_MATRIX, params); break;
+		case RI_TEXTURE_MATRIX: glGetFloatv(GL_TEXTURE, params); break;
 	}
 }
 void vw_SetMatrix(int pname, float *params)
 {
 	int MatrixMode;
 	glGetIntegerv(GL_MATRIX_MODE, &MatrixMode);
+	vw_MatrixMode(pname);
+	glLoadMatrixf(params);
+	glMatrixMode(MatrixMode);
+}
+
+
+
+
+
+//------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------
+void vw_MatrixMode(int pname)
+{
 	switch (pname)
 	{
 		case RI_PROJECTION_MATRIX: glMatrixMode(GL_PROJECTION); break;
 		case RI_MODELVIEW_MATRIX: glMatrixMode(GL_MODELVIEW); break;
+		case RI_TEXTURE_MATRIX: glMatrixMode(GL_TEXTURE); break;
 	}
-	glLoadMatrixf(params);
+}
+
+
+
+
+//------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------
+void vw_MultMatrix(int pname, float *params)
+{
+	int MatrixMode;
+	glGetIntegerv(GL_MATRIX_MODE, &MatrixMode);
+	vw_MatrixMode(pname);
+	glMultMatrixf(params);
 	glMatrixMode(MatrixMode);
 }
+
+
 
 
 
