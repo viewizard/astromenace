@@ -44,6 +44,7 @@ int NeedShowBB = 0;
 extern eGLSL 	*GLSLShaderType1;
 extern eGLSL 	*GLSLShaderType2;
 extern eGLSL 	*GLSLShaderType3;
+extern eGLSL 	*GLSLShaderType4;
 
 
 
@@ -958,31 +959,19 @@ void CObject3D::Draw(bool VertexOnlyPass)
 
 		if (Setup.UseGLSL && DrawObjectList[0].ShaderType >= 0)
 		{
-			eGLSL *CurrentObject3DGLSL = 0;
-			// ставим нужный шейдер
-			// LightType1 1-2; LightType2 0-6
-			switch (DrawObjectList[0].ShaderType)
-			{
-				case 1: CurrentObject3DGLSL = GLSLShaderType1; break;
-				case 2: CurrentObject3DGLSL = GLSLShaderType2; break;
-				case 3: CurrentObject3DGLSL = GLSLShaderType3; break;
-			}
+			// в этом случае, может быть только 1 тип - просто попиксельное освещение всей модели
+			vw_UseShaderProgram(GLSLShaderType1);
 
-			if (CurrentObject3DGLSL != 0)
+			vw_Uniform1i(GLSLShaderType1, "Texture1", 0);
+			vw_Uniform1i(GLSLShaderType1, "Texture2", 1);
+			vw_Uniform1i(GLSLShaderType1, "DirectLightCount", LightType1);
+			vw_Uniform1i(GLSLShaderType1, "PointLightCount", LightType2);
+			if (TextureIllum != 0)
 			{
-				vw_UseShaderProgram(CurrentObject3DGLSL);
-
-				vw_Uniform1i(CurrentObject3DGLSL, "Texture1", 0);
-				vw_Uniform1i(CurrentObject3DGLSL, "Texture2", 1);
-				vw_Uniform1i(CurrentObject3DGLSL, "DirectLightCount", LightType1);
-				vw_Uniform1i(CurrentObject3DGLSL, "PointLightCount", LightType2);
-				if (TextureIllum != 0)
-				{
-					if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, "NeedMultitexture", 1);
-					else vw_Uniform1i(CurrentObject3DGLSL, "NeedMultitexture", 0);
-				}
-				else vw_Uniform1i(CurrentObject3DGLSL, "NeedMultitexture", 0);
+				if (TextureIllum[0] != 0) vw_Uniform1i(GLSLShaderType1, "NeedMultitexture", 1);
+				else vw_Uniform1i(GLSLShaderType1, "NeedMultitexture", 0);
 			}
+			else vw_Uniform1i(GLSLShaderType1, "NeedMultitexture", 0);
 		}
 
 
@@ -1103,12 +1092,12 @@ void CObject3D::Draw(bool VertexOnlyPass)
 			{
 				eGLSL *CurrentObject3DGLSL = 0;
 				// ставим нужный шейдер
-				// LightType1 1-2; LightType2 0-6
 				switch (DrawObjectList[i].ShaderType)
 				{
 					case 1: CurrentObject3DGLSL = GLSLShaderType1; break;
 					case 2: CurrentObject3DGLSL = GLSLShaderType2; break;
 					case 3: CurrentObject3DGLSL = GLSLShaderType3; break;
+					case 4: CurrentObject3DGLSL = GLSLShaderType4; break;
 				}
 
 
@@ -1147,6 +1136,11 @@ void CObject3D::Draw(bool VertexOnlyPass)
 						vw_Uniform1f(CurrentObject3DGLSL, "TrackSpeed", DrawObjectList[i].ShaderData[0]);
 					}
 
+					// анимация вращения ствола пушек
+					if (DrawObjectList[i].ShaderType == 4)
+					{
+						vw_UniformMatrix4fv(CurrentObject3DGLSL, "TurrenRotationMat4", false, 1, DrawObjectList[i].ShaderData);
+					}
 				}
 
 			}
