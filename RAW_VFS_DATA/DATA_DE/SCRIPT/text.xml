@@ -48,6 +48,7 @@
 <item id="1_Repair_Hull">Hülle Reparieren</item>
 <item id="1_Upgrade_Hull">Hülle Aufwerten</item><!--OR: Hülle aufwerten-->
 <item id="1_Reload">Laden</item>
+<item id="1_Reload_All">Laden Alle</item>
 <item id="1_Close">Schliessen</item>
 <item id="1_Buy">Kaufen</item>
 <item id="1_Sell">Verkaufen</item>
