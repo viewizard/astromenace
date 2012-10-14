@@ -102,6 +102,7 @@ int CurrentListCount = 0;
 eGLSL 	*GLSLShaderType1 = 0;
 eGLSL 	*GLSLShaderType2 = 0;
 eGLSL 	*GLSLShaderType3 = 0;
+eGLSL 	*GLSLShaderType4 = 0;
 
 struct sGLSLLoadList
 {
@@ -109,7 +110,7 @@ struct sGLSLLoadList
 	char VertexShaderFileName[MAX_PATH];
 	char FragmentShaderFileName[MAX_PATH];
 };
-const int GLSLLoadListCount = 5;
+const int GLSLLoadListCount = 6;
 sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 {
 {"ParticleSystem", "DATA/GLSL/particle.vert", "DATA/GLSL/particle.frag"},
@@ -117,6 +118,7 @@ sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 {"PerPixelLight", "DATA/GLSL/light.vert", "DATA/GLSL/light.frag"},
 {"PerPixelLight_Explosion", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light.frag"},
 {"PerPixelLight_Track", "DATA/GLSL/light_track.vert", "DATA/GLSL/light.frag"},
+{"PerPixelLight_Turret", "DATA/GLSL/light_turret.vert", "DATA/GLSL/light.frag"},
 };
 
 
@@ -1518,6 +1520,7 @@ void LoadGameData(int LoadType)
 		GLSLShaderType1 = vw_FindShaderByName("PerPixelLight");
 		GLSLShaderType2 = vw_FindShaderByName("PerPixelLight_Explosion");
 		GLSLShaderType3 = vw_FindShaderByName("PerPixelLight_Track");
+		GLSLShaderType4 = vw_FindShaderByName("PerPixelLight_Turret");
 	}
 
 

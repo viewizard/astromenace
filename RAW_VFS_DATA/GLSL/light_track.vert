@@ -16,7 +16,7 @@ void main()
 	Normal = normalize(gl_NormalMatrix * gl_Normal);
 	Vertex = vec3(gl_ModelViewMatrix * gl_Vertex);
 	
-	gl_Position = ftransform();
+	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
 	gl_TexCoord[0].x  = gl_MultiTexCoord0.x + TrackSpeed;
 	gl_TexCoord[0].y  = gl_MultiTexCoord0.y;
 } 
