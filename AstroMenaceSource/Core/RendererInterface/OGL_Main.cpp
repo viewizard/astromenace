@@ -62,8 +62,8 @@ int PrimCountGL=0;
 
 
 // multitexture (OpenGL 1.3)
-PFNGLACTIVETEXTUREPROC			glActiveTexture13 = NULL;
-PFNGLCLIENTACTIVETEXTUREPROC	glClientActiveTexture13 = NULL;
+PFNGLACTIVETEXTUREARBPROC		glActiveTexture_ARB = NULL;
+PFNGLCLIENTACTIVETEXTUREARBPROC	glClientActiveTexture_ARB = NULL;
 // GL_ARB_texture_storage (OpenGL 4.2)
 PFNGLTEXSTORAGE2DPROC 			glTexStorage2DEXT = NULL;
 
@@ -518,9 +518,9 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 
 	if (OpenGL_DevCaps.MaxMultTextures > 1)
 	{
-		glActiveTexture13 = (PFNGLACTIVETEXTUREPROC) SDL_GL_GetProcAddress("glActiveTexture");
-		glClientActiveTexture13 = (PFNGLCLIENTACTIVETEXTUREPROC) SDL_GL_GetProcAddress("glClientActiveTexture");
-		if (glActiveTexture13 == NULL || glClientActiveTexture13 == NULL)
+		glActiveTexture_ARB = (PFNGLACTIVETEXTUREARBPROC) SDL_GL_GetProcAddress("glActiveTexture");
+		glClientActiveTexture_ARB = (PFNGLCLIENTACTIVETEXTUREARBPROC) SDL_GL_GetProcAddress("glClientActiveTexture");
+		if (glActiveTexture_ARB == NULL || glClientActiveTexture_ARB == NULL)
 		{
 			OpenGL_DevCaps.MaxMultTextures = 1;
 			fprintf(stderr, "Can't get proc address for glActiveTexture or glClientActiveTexture.\n\n");

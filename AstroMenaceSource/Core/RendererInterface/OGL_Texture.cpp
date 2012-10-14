@@ -33,7 +33,7 @@
 #include "RendererInterface.h"
 
 
-extern	PFNGLACTIVETEXTUREPROC glActiveTexture13;
+extern	PFNGLACTIVETEXTUREARBPROC glActiveTexture_ARB;
 extern	PFNGLGENERATEMIPMAPPROC glGenerateMipmapEXT;
 extern	PFNGLTEXSTORAGE2DPROC glTexStorage2DEXT;
 
@@ -153,7 +153,7 @@ GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Byt
 //------------------------------------------------------------------------------------
 void vw_BindTexture(DWORD Stage, GLuint TextureID)
 {
-	glActiveTexture13(GL_TEXTURE0 + Stage);
+	glActiveTexture_ARB(GL_TEXTURE0 + Stage);
 
 	if (TextureID != 0)
 	{
