@@ -152,8 +152,6 @@ void InitSetup()
 	Setup.VBOCoreMode = 1;
 	Setup.VAOCoreMode = 1;
 	Setup.FBOCoreMode = 1;
-	// выключен в виндовсе (в висте очень плохо, большое падение фпс), включать надо если VRAM не хватает
-	Setup.ForceTexturesPriorManager = false;
 	// по умолчанию всегда меньше 128 метров
 	Setup.EqualOrMore128MBVideoRAM = false;
 	// по умолчанию генерируем в видео карте (после иниц. окна поставим правильное), по крайней мере в виндовс немного быстрее
@@ -280,8 +278,6 @@ void SaveXMLSetupFile()
 	iAddLine(root, setting, "VBOCoreMode", "value", Setup.VBOCoreMode);
 	iAddLine(root, setting, "VAOCoreMode", "value", Setup.VAOCoreMode);
 	iAddLine(root, setting, "FBOCoreMode", "value", Setup.FBOCoreMode);
-	AddComment(root, " If your video card driver don't have this feature, and your VRAM less than 64 MB - turn it on ");
-	bAddLine(root, setting, "ForceTexturesPriorManager", "value", Setup.ForceTexturesPriorManager);
 	AddComment(root, " If your video card have 128+ MB VRAM on board - turn it on ");
 	bAddLine(root, setting, "EqualOrMore128MBVideoRAM", "value", Setup.EqualOrMore128MBVideoRAM);
 	AddComment(root, " Don't change this setting unless you know what you are doing ");
@@ -636,7 +632,6 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	iGetLine(root, setting, "VBOCoreMode", "value", &Setup.VBOCoreMode);
 	iGetLine(root, setting, "VAOCoreMode", "value", &Setup.VAOCoreMode);
 	iGetLine(root, setting, "FBOCoreMode", "value", &Setup.FBOCoreMode);
-	bGetLine(root, setting, "ForceTexturesPriorManager", "value", &Setup.ForceTexturesPriorManager);
 	bGetLine(root, setting, "EqualOrMore128MBVideoRAM", "value", &Setup.EqualOrMore128MBVideoRAM);
 	bGetLine(root, setting, "HardwareMipMapGeneration", "value", &Setup.HardwareMipMapGeneration);
 

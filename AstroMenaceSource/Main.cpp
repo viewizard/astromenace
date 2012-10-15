@@ -966,9 +966,6 @@ ReCreate:
 	if (Setup.UseGLSL)
 		if (!CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0f) Setup.UseGLSL = false;
 
-	// установка режима работы менеджера приоритетов
-	CAPS->ForceTexturesPriorManager = Setup.ForceTexturesPriorManager;
-
 	// управление генерации мипмеп уровней- можем только выключить, нельзя включить если его нет
 	if (!Setup.HardwareMipMapGeneration)
 	{

@@ -74,10 +74,6 @@ struct eTexture
 
 	int		Bytes;			// Bytes Per Pixel
 
-	// приоритет
-	float	TexturePrior;
-
-
     GLuint	TextureID;		// Номер текстуры
 
 	eTexture*	Prev;		// Pointer to the previous loaded Texture in the memory
@@ -108,9 +104,6 @@ void		vw_SetTextureAlpha(BYTE nARed, BYTE nAGreen, BYTE nABlue);
 eTexture*	vw_FindTextureByName(const char *Name);
 // Find texture by ID
 eTexture*	vw_FindTextureByNum(int Num);
-
-// проверка и установка правильного приоритета текстур
-void 		vw_CheckTexturesPrior();
 
 
 #endif // Texture_H

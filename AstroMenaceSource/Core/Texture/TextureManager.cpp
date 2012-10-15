@@ -66,51 +66,6 @@ bool texturebusy = false;
 
 
 
-//------------------------------------------------------------------------------------
-// проверка приоритета текстур
-//------------------------------------------------------------------------------------
-void vw_CheckTexturesPrior()
-{
-	eTexture *Tmp = StartTexMan;
-
-	// находим эквивалент еденице
-	float MaxCount = 0.0f;
-	while (Tmp != 0)
-	{
-		eTexture *Tmp1 = Tmp->Next;
-		if (Tmp->TexturePrior > 0.0f)
-		if (Tmp->Width*Tmp->Height > MaxCount) MaxCount = Tmp->Width*Tmp->Height*1.0f;
-		Tmp = Tmp1;
-	}
-
-
-	// устанавливаем правильный приоритет
-	Tmp = StartTexMan;
-	while (Tmp != 0)
-	{
-		eTexture *Tmp1 = Tmp->Next;
-		float CurrPr = 0.0f;
-		vw_GetPrioritizeTextures(Tmp->TextureID, &CurrPr);
-
-		// если не вызывали текстуру, у нее приоритет нулевой
-		float NeedPr = 0.0f;
-		if (Tmp->TexturePrior > 0.0f)
-		{
-			NeedPr = (Tmp->Width*Tmp->Height*1.0f)/MaxCount;
-		}
-		if (NeedPr != CurrPr)
-			vw_SetPrioritizeTextures(Tmp->TextureID, NeedPr);
-
-		Tmp->TexturePrior = 0.0f;
-
-		Tmp = Tmp1;
-	}
-
-}
-
-
-
-
 
 
 

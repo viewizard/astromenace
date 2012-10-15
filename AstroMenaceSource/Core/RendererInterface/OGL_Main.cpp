@@ -244,7 +244,6 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	OpenGL_DevCaps.GLSL100Supported = false;
 	OpenGL_DevCaps.ShaderModel = 0;
 	OpenGL_DevCaps.OcclusionQuerySupported = false;
-	OpenGL_DevCaps.ForceTexturesPriorManager = false;
 	OpenGL_DevCaps.HardwareMipMapGeneration = false;
 	OpenGL_DevCaps.TextureStorage = false;
 	OpenGL_DevCaps.FramebufferObject = false;
@@ -283,9 +282,6 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// смотрим остальные поддерживаемые функции
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	// по умолчанию, внутренний менеджер текстур выключен
-	OpenGL_DevCaps.ForceTexturesPriorManager = false;
 
 	// проверем поддержку анизотропной фильтрации
 	if (ExtensionSupported("GL_EXT_texture_filter_anisotropic"))
@@ -773,11 +769,6 @@ void vw_EndRendering()
 	SDL_GL_SwapBuffers();
 
 	PrimCountGL = tmpPrimCountGL;
-
-	// проверка приоритета, включаем если нужно, обычно это уже есть в драйверах
-	// в висте очень сильно снижает быстродействие
-	// видимо конфликтует с менеджером приоритетов текстур в драйверах
-	if (OpenGL_DevCaps.ForceTexturesPriorManager) vw_CheckTexturesPrior();
 }
 
 

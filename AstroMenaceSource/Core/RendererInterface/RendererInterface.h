@@ -84,8 +84,6 @@ struct eDevCaps
 	float ShaderModel;
 	// поддержка Occlusion Query (попадает в видимую область прорисовки)
 	bool OcclusionQuerySupported;
-	// состояние-управление менеджером приоритетов текстур
-	bool ForceTexturesPriorManager;
 	// поддержка генерации мипмеп в железе
 	bool HardwareMipMapGeneration;
 };
