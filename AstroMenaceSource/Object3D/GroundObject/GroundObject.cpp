@@ -52,8 +52,7 @@ CGroundObject::CGroundObject(void)
 	WheelRotateSpeed = 0.0f;
 	MaxWheelRotateAngle = 20.0f;
 	TrackObjectNum = -1;
-	TrackRotationDirectionl = 1;
-	TrackRotationLastTime = -1;
+	TrackRotationDirection = 1;
 
 	TargetHorizObjectQuantity = 0;
 	TargetHorizObject = 0;
@@ -68,7 +67,6 @@ CGroundObject::CGroundObject(void)
 
 	BarrelObjectQuantity = 0;
 	BarrelObject = 0;
-	BarrelRotationLastTime = -1;
 
 
 	// и никуда не нужно поворачивать
@@ -599,150 +597,18 @@ bool CGroundObject::Update(float Time)
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// вращение стволов пулемета - ставим ...
+	// вращение стволов пулемета
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (BarrelObjectQuantity != 0)
 	if (BarrelObject != 0)
 	{
-		// если есть возможность - крутим все шейдерами
-		if (Setup.UseGLSL)
+		for (int i=0; i<BarrelObjectQuantity; i++)
 		{
-			for (int i=0; i<BarrelObjectQuantity; i++)
-			{
-				// если еще не установили 4-й шейдер для работы - значит надо инициализировать матрицу
-				if (DrawObjectList[BarrelObject[i]].ShaderType != 4)
-				{
-					Matrix44Identity(DrawObjectList[BarrelObject[i]].ShaderData);
-				}
-				else
-				{
-					float tmpMat4[16];
-					Matrix44CreateRotate(tmpMat4, VECTOR3D(0.0f,0.0f,500.0f*TimeDelta));
-					Matrix44Mult(DrawObjectList[BarrelObject[i]].ShaderData, tmpMat4);
-				}
-
-				DrawObjectList[BarrelObject[i]].ShaderType = 4;
-			}
-		}
-		else // если шейдеров нет - крутим геометрию
-		{
-			// первый раз - просто запоминаем время
-			if (BarrelRotationLastTime == -1) BarrelRotationLastTime = Time;
-
-			// если время подошло - делаем анимацию, иначе - пропускаем этот цикл
-			if (BarrelRotationLastTime + 0.035f < Time)
-			{
-				// поворачиваем все объекты
-				float BarrelObjectAngle = 500.0f*(Time-BarrelRotationLastTime);
-				BarrelRotationLastTime = Time;
-
-				// работаем с геометрией
-				float TransfM[9];
-				Matrix33CreateRotate(TransfM, VECTOR3D(0.0f,0.0f,BarrelObjectAngle));
-
-				for (int i=0; i<BarrelObjectQuantity; i++)
-				{
-
-					// нельзя вращать общие данные, надо сделать свой объект
-					if (!DrawObjectList[BarrelObject[i]].NeedDestroyDataInObjectBlock)
-					{
-						// просто копируем данные части к себе (они уже выстроены в частях объекта при загрузке)
-						float *TMP;
-						TMP = new float[DrawObjectList[BarrelObject[i]].VertexCount*DrawObjectList[BarrelObject[i]].Stride];
-						memcpy(TMP, DrawObjectList[BarrelObject[i]].VertexBuffer,
-								DrawObjectList[BarrelObject[i]].VertexCount*DrawObjectList[BarrelObject[i]].Stride*sizeof(float));
-
-						// копируем индексный буфер блока
-						unsigned int *TMPindex;
-						TMPindex = new unsigned int[DrawObjectList[BarrelObject[i]].VertexCount];
-						memcpy(TMPindex, DrawObjectList[BarrelObject[i]].IndexBuffer,
-								DrawObjectList[BarrelObject[i]].VertexCount*sizeof(unsigned int));
-
-
-						// теперь у нас подключен свой объект, можем с ним делать все что угодно
-						DrawObjectList[BarrelObject[i]].VertexBuffer = TMP;
-						DrawObjectList[BarrelObject[i]].RangeStart = 0;
-						DrawObjectList[BarrelObject[i]].NeedDestroyDataInObjectBlock = true;
-						DrawObjectList[BarrelObject[i]].VertexBufferVBO = 0;
-						DrawObjectList[BarrelObject[i]].IndexBufferVBO = 0;
-						DrawObjectList[BarrelObject[i]].IndexBuffer = TMPindex;
-						DrawObjectList[BarrelObject[i]].VAO = 0;
-					}
-
-
-					for(int k=0; k<DrawObjectList[BarrelObject[i]].VertexCount; k++)
-					{
-						VECTOR3D tmpVect(DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k],
-							DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+1],
-							DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+2]);
-						Matrix33CalcPoint(&tmpVect, TransfM);
-						DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k] = tmpVect.x;
-						DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+1] = tmpVect.y;
-						DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+2] = tmpVect.z;
-
-						// нормаль
-						tmpVect.x = DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+3];
-						tmpVect.y = DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+4];
-						tmpVect.z = DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+5];
-						Matrix33CalcPoint(&tmpVect, TransfM);
-						DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+3] = tmpVect.x;
-						DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+4] = tmpVect.y;
-						DrawObjectList[BarrelObject[i]].VertexBuffer[DrawObjectList[BarrelObject[i]].Stride*k+5] = tmpVect.z;
-
-					}
-
-
-					// удаляем старые буферы, если они есть, создаем новые
-					// ! индексный буфер не трогаем, его не надо пересоздавать вообще
-
-					if (DrawObjectList[BarrelObject[i]].VertexBufferVBO != 0)
-					{
-						vw_DeleteVBO(*DrawObjectList[BarrelObject[i]].VertexBufferVBO); delete DrawObjectList[BarrelObject[i]].VertexBufferVBO; DrawObjectList[BarrelObject[i]].VertexBufferVBO = 0;
-					}
-					if (DrawObjectList[BarrelObject[i]].VAO != 0)
-					{
-						vw_DeleteVAO(*DrawObjectList[BarrelObject[i]].VAO); delete DrawObjectList[BarrelObject[i]].VAO; DrawObjectList[BarrelObject[i]].VAO = 0;
-					}
-
-
-					// делаем VBO
-					DrawObjectList[BarrelObject[i]].VertexBufferVBO = new unsigned int;
-					if (!vw_BuildVBO(DrawObjectList[BarrelObject[i]].VertexCount, DrawObjectList[BarrelObject[i]].VertexBuffer, DrawObjectList[BarrelObject[i]].Stride, DrawObjectList[BarrelObject[i]].VertexBufferVBO))
-					{
-						delete DrawObjectList[BarrelObject[i]].VertexBufferVBO; DrawObjectList[BarrelObject[i]].VertexBufferVBO=0;
-					}
-
-					// делаем индекс VBO, создаем его один раз, если его нет
-					if (DrawObjectList[BarrelObject[i]].IndexBufferVBO == 0)
-					{
-						DrawObjectList[BarrelObject[i]].IndexBufferVBO = new unsigned int;
-						if (!vw_BuildIndexVBO(DrawObjectList[BarrelObject[i]].VertexCount, DrawObjectList[BarrelObject[i]].IndexBuffer, DrawObjectList[BarrelObject[i]].IndexBufferVBO))
-						{
-							delete DrawObjectList[BarrelObject[i]].IndexBufferVBO; DrawObjectList[BarrelObject[i]].IndexBufferVBO=0;
-						}
-					}
-
-					// делаем VAO
-					DrawObjectList[BarrelObject[i]].VAO = new unsigned int;
-					if (!vw_BuildVAO(DrawObjectList[BarrelObject[i]].VAO, DrawObjectList[BarrelObject[i]].VertexCount, DrawObjectList[BarrelObject[i]].FVF_Format, DrawObjectList[BarrelObject[i]].VertexBuffer,
-										DrawObjectList[BarrelObject[i]].Stride*sizeof(float), DrawObjectList[BarrelObject[i]].VertexBufferVBO,
-										DrawObjectList[BarrelObject[i]].RangeStart, DrawObjectList[BarrelObject[i]].IndexBuffer, DrawObjectList[BarrelObject[i]].IndexBufferVBO))
-					{
-						delete DrawObjectList[BarrelObject[i]].VAO; DrawObjectList[BarrelObject[i]].VAO=0;
-					}
-
-				}
-			}
+			DrawObjectList[BarrelObject[i]].NeedGeometryAnimation = true;
+			DrawObjectList[BarrelObject[i]].GeometryAnimation += VECTOR3D(0.0f,0.0f,500.0f*TimeDelta);
+			if (DrawObjectList[BarrelObject[i]].GeometryAnimation.z > 360.0f) DrawObjectList[BarrelObject[i]].GeometryAnimation.z -= 360.0f;
 		}
 	}
-
-
-
-
-
-
-
-
 
 
 
@@ -781,104 +647,10 @@ bool CGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (TrackObjectNum != -1 && WheelTrackSpeed != 0.0f)
 	{
-		// если не считаем в шейдере, нужно перебрать геометрию и собрать новые буферы
-		if (!Setup.UseGLSL)
-		{
-			// первый раз - просто запоминаем время
-			if (TrackRotationLastTime == -1) TrackRotationLastTime = Time;
-
-			// если время подошло - делаем анимацию, иначе - пропускаем этот цикл
-			if (TrackRotationLastTime + 0.035f < Time)
-			{
-
-				float TrackDelta = (WheelTrackSpeed/500.0f)*(Time - TrackRotationLastTime);
-				TrackRotationLastTime = Time;
-
-
-				// нельзя вращать общие данные, надо сделать свой объект
-				if (!DrawObjectList[TrackObjectNum].NeedDestroyDataInObjectBlock)
-				{
-					// просто копируем данные части к себе (они уже выстроены в частях объекта при загрузке)
-					float *TMP;
-					TMP = new float[DrawObjectList[TrackObjectNum].VertexCount*DrawObjectList[TrackObjectNum].Stride];
-					memcpy(TMP, DrawObjectList[TrackObjectNum].VertexBuffer,
-							DrawObjectList[TrackObjectNum].VertexCount*DrawObjectList[TrackObjectNum].Stride*sizeof(float));
-
-					// копируем индексный буфер блока
-					unsigned int *TMPindex;
-					TMPindex = new unsigned int[DrawObjectList[TrackObjectNum].VertexCount];
-					memcpy(TMPindex, DrawObjectList[TrackObjectNum].IndexBuffer,
-							DrawObjectList[TrackObjectNum].VertexCount*sizeof(unsigned int));
-
-
-					// теперь у нас подключен свой объект, можем с ним делать все что угодно
-					DrawObjectList[TrackObjectNum].VertexBuffer = TMP;
-					DrawObjectList[TrackObjectNum].RangeStart = 0;
-					DrawObjectList[TrackObjectNum].NeedDestroyDataInObjectBlock = true;
-					DrawObjectList[TrackObjectNum].VertexBufferVBO = 0;
-					DrawObjectList[TrackObjectNum].IndexBufferVBO = 0;
-					DrawObjectList[TrackObjectNum].IndexBuffer = TMPindex;
-					DrawObjectList[TrackObjectNum].VAO = 0;
-				}
-
-				// перебираем все и смещаем положение координат
-				for (int i=0; i<DrawObjectList[TrackObjectNum].VertexCount; i++)
-				{
-					DrawObjectList[TrackObjectNum].VertexBuffer[DrawObjectList[TrackObjectNum].Stride*i+6] += TrackDelta*TrackRotationDirectionl;
-				}
-
-
-				// удаляем старые буферы, если они есть, создаем новые
-				// ! индексный буфер не трогаем, его не надо пересоздавать вообще
-
-				if (DrawObjectList[TrackObjectNum].VertexBufferVBO != 0)
-				{
-					vw_DeleteVBO(*DrawObjectList[TrackObjectNum].VertexBufferVBO); delete DrawObjectList[TrackObjectNum].VertexBufferVBO; DrawObjectList[TrackObjectNum].VertexBufferVBO = 0;
-				}
-				if (DrawObjectList[TrackObjectNum].VAO != 0)
-				{
-					vw_DeleteVAO(*DrawObjectList[TrackObjectNum].VAO); delete DrawObjectList[TrackObjectNum].VAO; DrawObjectList[TrackObjectNum].VAO = 0;
-				}
-
-
-				// делаем VBO
-				DrawObjectList[TrackObjectNum].VertexBufferVBO = new unsigned int;
-				if (!vw_BuildVBO(DrawObjectList[TrackObjectNum].VertexCount, DrawObjectList[TrackObjectNum].VertexBuffer, DrawObjectList[TrackObjectNum].Stride, DrawObjectList[TrackObjectNum].VertexBufferVBO))
-				{
-					delete DrawObjectList[TrackObjectNum].VertexBufferVBO; DrawObjectList[TrackObjectNum].VertexBufferVBO=0;
-				}
-
-				// делаем индекс VBO, создаем его один раз, если его нет
-				if (DrawObjectList[TrackObjectNum].IndexBufferVBO == 0)
-				{
-					DrawObjectList[TrackObjectNum].IndexBufferVBO = new unsigned int;
-					if (!vw_BuildIndexVBO(DrawObjectList[TrackObjectNum].VertexCount, DrawObjectList[TrackObjectNum].IndexBuffer, DrawObjectList[TrackObjectNum].IndexBufferVBO))
-					{
-						delete DrawObjectList[TrackObjectNum].IndexBufferVBO; DrawObjectList[TrackObjectNum].IndexBufferVBO=0;
-					}
-				}
-
-				// делаем VAO
-				DrawObjectList[TrackObjectNum].VAO = new unsigned int;
-				if (!vw_BuildVAO(DrawObjectList[TrackObjectNum].VAO, DrawObjectList[TrackObjectNum].VertexCount, DrawObjectList[TrackObjectNum].FVF_Format, DrawObjectList[TrackObjectNum].VertexBuffer,
-									DrawObjectList[TrackObjectNum].Stride*sizeof(float), DrawObjectList[TrackObjectNum].VertexBufferVBO,
-									DrawObjectList[TrackObjectNum].RangeStart, DrawObjectList[TrackObjectNum].IndexBuffer, DrawObjectList[TrackObjectNum].IndexBufferVBO))
-				{
-					delete DrawObjectList[TrackObjectNum].VAO; DrawObjectList[TrackObjectNum].VAO=0;
-				}
-
-			}
-
-		}
-		else
-		{
-			// меняем данные глобальные для шейдера, тут делаем столько столько позволяет, а не 30 раз как с изменением геометрии
-			DrawObjectList[TrackObjectNum].ShaderType = 3;
-			// общий коэф. перемещения текстуры трака для тайловой анимации
-			DrawObjectList[TrackObjectNum].ShaderData[0] += (WheelTrackSpeed/500.0f)*TimeDelta*TrackRotationDirectionl;
-			if (DrawObjectList[TrackObjectNum].ShaderData[0] > 1.0f) DrawObjectList[TrackObjectNum].ShaderData[0] -= 1.0f;
-		}
-
+		DrawObjectList[TrackObjectNum].NeedTextureAnimation = true;
+		DrawObjectList[TrackObjectNum].TextureAnimation.x += (WheelTrackSpeed/500.0f)*TimeDelta*TrackRotationDirection;
+		if (DrawObjectList[TrackObjectNum].TextureAnimation.x > 1.0f) DrawObjectList[TrackObjectNum].TextureAnimation.x -= 1.0f;
+		if (DrawObjectList[TrackObjectNum].TextureAnimation.x < -1.0f) DrawObjectList[TrackObjectNum].TextureAnimation.x += 1.0f;
 	}
 
 

@@ -47,6 +47,9 @@ eObjectBlock::eObjectBlock(void)
 	RangeStart = 0;
 	Location = Rotation = VECTOR3D(0.0f,0.0f,0.0f);
 
+	NeedGeometryAnimation = NeedTextureAnimation = false;
+	GeometryAnimation = TextureAnimation = VECTOR3D(0.0f,0.0f,0.0f);
+
 	NeedDestroyDataInObjectBlock = false;
 	VertexBuffer = 0;
 	VertexBufferVBO = 0;

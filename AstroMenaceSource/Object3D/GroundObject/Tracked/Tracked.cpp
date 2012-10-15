@@ -643,7 +643,7 @@ void CTracked::Create(int TrackedNum)
 
 			TrackObjectNum = 10;
 			Texture[10] = vw_FindTextureByName("DATA/MODELS/track.jpg");
-			TrackRotationDirectionl = -1;
+			TrackRotationDirection = -1;
 			break;
 
 	}

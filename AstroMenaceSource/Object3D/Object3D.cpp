@@ -43,8 +43,6 @@ int NeedShowBB = 0;
 
 extern eGLSL 	*GLSLShaderType1;
 extern eGLSL 	*GLSLShaderType2;
-extern eGLSL 	*GLSLShaderType3;
-extern eGLSL 	*GLSLShaderType4;
 
 
 
@@ -862,6 +860,13 @@ void CObject3D::Draw(bool VertexOnlyPass)
 				vw_Rotate(0.0f, 0.0f, -DrawObjectList[i].Rotation.z);
 				vw_Rotate(0.0f, -DrawObjectList[i].Rotation.y, 0.0f);
 				vw_Rotate(-DrawObjectList[i].Rotation.x, 0.0f, 0.0f);
+				// если нужна дополнительная анимация геометрией
+				if (DrawObjectList[i].NeedGeometryAnimation)
+				{
+					vw_Rotate(0.0f, 0.0f, DrawObjectList[i].GeometryAnimation.z);
+					vw_Rotate(0.0f, DrawObjectList[i].GeometryAnimation.y, 0.0f);
+					vw_Rotate(DrawObjectList[i].GeometryAnimation.x, 0.0f, 0.0f);
+				}
 
 
 				vw_SendVertices(RI_TRIANGLES, DrawObjectList[i].VertexCount, RI_3f_XYZ, DrawObjectList[i].VertexBuffer,
@@ -871,8 +876,6 @@ void CObject3D::Draw(bool VertexOnlyPass)
 				vw_PopMatrix();
 			}
 		}
-
-
 
 		vw_PopMatrix();
 		// уходим вообще из прорисовки
@@ -1049,6 +1052,15 @@ void CObject3D::Draw(bool VertexOnlyPass)
 				CurrentText = Texture[i];
 			}
 
+			// если есть тайловая анимация - работаем с текстурной матрицей
+			// ! исходим из того что активен всегда 0-вой стейдж текстуры т.к. у танков на траках нет илюминейшен текстуры
+			if (DrawObjectList[i].NeedTextureAnimation)
+			{
+				vw_MatrixMode(RI_TEXTURE_MATRIX);
+				vw_LoadIdentity();
+				vw_Translate(DrawObjectList[i].TextureAnimation);
+				vw_MatrixMode(RI_MODELVIEW_MATRIX);
+			}
 
 
 			vw_PushMatrix();
@@ -1059,6 +1071,15 @@ void CObject3D::Draw(bool VertexOnlyPass)
 			vw_Rotate(0.0f, 0.0f, -DrawObjectList[i].Rotation.z);
 			vw_Rotate(0.0f, -DrawObjectList[i].Rotation.y, 0.0f);
 			vw_Rotate(-DrawObjectList[i].Rotation.x, 0.0f, 0.0f);
+
+
+			// если нужна дополнительная анимация геометрией
+			if (DrawObjectList[i].NeedGeometryAnimation)
+			{
+				vw_Rotate(0.0f, 0.0f, DrawObjectList[i].GeometryAnimation.z);
+				vw_Rotate(0.0f, DrawObjectList[i].GeometryAnimation.y, 0.0f);
+				vw_Rotate(DrawObjectList[i].GeometryAnimation.x, 0.0f, 0.0f);
+			}
 
 
 			if (!NeedCullFaces) vw_CullFace(RI_NONE);
@@ -1096,8 +1117,6 @@ void CObject3D::Draw(bool VertexOnlyPass)
 				{
 					case 1: CurrentObject3DGLSL = GLSLShaderType1; break;
 					case 2: CurrentObject3DGLSL = GLSLShaderType2; break;
-					case 3: CurrentObject3DGLSL = GLSLShaderType3; break;
-					case 4: CurrentObject3DGLSL = GLSLShaderType4; break;
 				}
 
 
@@ -1129,18 +1148,6 @@ void CObject3D::Draw(bool VertexOnlyPass)
 						vw_Uniform1f(CurrentObject3DGLSL, "SpeedData1", DrawObjectList[i].ShaderData[0]);
 						vw_Uniform1f(CurrentObject3DGLSL, "SpeedData2", DrawObjectList[i].ShaderData[1]);
 					}
-
-					// шейдеры тайловой анимации траков
-					if (DrawObjectList[i].ShaderType == 3)
-					{
-						vw_Uniform1f(CurrentObject3DGLSL, "TrackSpeed", DrawObjectList[i].ShaderData[0]);
-					}
-
-					// анимация вращения ствола пушек
-					if (DrawObjectList[i].ShaderType == 4)
-					{
-						vw_UniformMatrix4fv(CurrentObject3DGLSL, "TurrenRotationMat4", false, 1, DrawObjectList[i].ShaderData);
-					}
 				}
 
 			}
@@ -1162,6 +1169,14 @@ void CObject3D::Draw(bool VertexOnlyPass)
 			}
 
 			vw_DeActivateAllLights();
+
+			// если меняли текстурную матрицу - обязательно восстанавливаем
+			if (DrawObjectList[i].NeedTextureAnimation)
+			{
+				vw_MatrixMode(RI_TEXTURE_MATRIX);
+				vw_LoadIdentity();
+				vw_MatrixMode(RI_MODELVIEW_MATRIX);
+			}
 
 			vw_PopMatrix();
 		}
