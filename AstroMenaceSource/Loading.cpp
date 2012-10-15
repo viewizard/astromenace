@@ -939,11 +939,13 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, eTexture 
 	SetRect(&DstRest, 0, 64+32,Setup.iAspectRatioWidth,64+32+512);
 	vw_DrawTransparent(&DstRest, &SrcRest, LoadImageTexture, false, 1.0f, 0.0f);
 
+	// пишем "загрузка"
+	vw_DrawFont(Setup.iAspectRatioWidth/2-vw_FontSize(GetText("11_Loading"))/2, 768-128, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f, GetText("11_Loading"));
 
 	// выводим подложку линии загрузки
-	SetRect(&SrcRest, 0,0,256,64);
+	SetRect(&SrcRest, 0,0,256,32);
 	int StartX = (Setup.iAspectRatioWidth-256)/2;
-	vw_Draw(StartX, 768-64-32-8 -32, &SrcRest, vw_FindTextureByName("DATA/LOADING/loading_back.tga"), true);
+	vw_Draw(StartX, 768-64-8 -32, &SrcRest, vw_FindTextureByName("DATA/LOADING/loading_back.tga"), true);
 
 	// выводим линию загрузки
 	int loaded = (int)(256.0f*Current/AllDrawLoading);
