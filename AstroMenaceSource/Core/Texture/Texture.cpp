@@ -521,7 +521,6 @@ eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DW
 	Texture->Width = DWidth;
 	Texture->Height = DHeight;
 	Texture->Bytes = DChanels;
-	Texture->TexturePrior = 0;
 
 	// временный массив данных
 	BYTE *tmp_image = 0;

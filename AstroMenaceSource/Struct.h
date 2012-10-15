@@ -356,8 +356,6 @@ struct GameSetup
 	int		VBOCoreMode;
 	int		VAOCoreMode;
 	int		FBOCoreMode;
-	// управление менеджером приоритетов текстур
-	bool	ForceTexturesPriorManager;
 	// тип работы с видео памятью, больше или нет 128 мегабайт
 	bool	EqualOrMore128MBVideoRAM;
 	// работа с хардварной генерацией мипмеп уровней

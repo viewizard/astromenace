@@ -190,8 +190,6 @@ void vw_SetTexture(DWORD Stage, eTexture *Texture)
 {
 	if (Texture == 0) return;
 
-	Texture->TexturePrior = 1.0f;
-
 	vw_BindTexture(Stage, Texture->TextureID);
 
 	// устанавливаем базовое смешивания, для прорисовки без шейдеров
