@@ -143,6 +143,9 @@
 <item id="3_Full">Voll</item>
 <item id="3_Flat">Flach</item>
 <item id="3_Slim">Gering</item>
+<item id="3_Empty_Weapon_Slot">Waffe Leerer Schacht</item>
+<item id="3_EMPTY">LEER</item>
+<item id="3_Level">schacht</item>
 
 <item id="3_Music_Volume">Musiklautstärke</item>
 <item id="3_Not_available">Nicht verfügbar</item>
@@ -852,7 +855,7 @@
 <item id="Power">Energie</item><!-- system -->
 <item id="Advanced">Führend</item><!-- system -->
 <item id="Computer">Computer</item><!-- system -->
-<item id="Empty level">Leer Schacht</item><!-- for empty weapon panel -->
+<item id="Empty level">Leer Stufe</item><!-- for empty weapon panel -->
 <item id="Empty weapon slot">Waffe leerer Schacht</item><!-- for empty weapon panel -->
 
 

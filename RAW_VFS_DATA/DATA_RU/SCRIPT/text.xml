@@ -143,6 +143,9 @@
 <item id="3_Full">Полный</item>
 <item id="3_Flat">Плоский</item>
 <item id="3_Slim">Тонкий</item>
+<item id="3_Empty_Weapon_Slot">Пустой Oружейный Cлот</item>
+<item id="3_EMPTY">ПУСТОЙ</item>
+<item id="3_Level">уровень</item>
 
 <item id="3_Music_Volume">Громкость Музыки</item>
 <item id="3_Not_available">Не доступно</item>
