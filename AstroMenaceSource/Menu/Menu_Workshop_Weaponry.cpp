@@ -247,18 +247,6 @@ const char *GetWeaponIconName(int Num)
 	}
 	return 0;
 }
-const char *GetSlotIconName(int Num)
-{
-	switch (Num)
-	{
-		case 1:		return "DATA/MENU/weapon_empty1_icon.tga";
-		case 2:		return "DATA/MENU/weapon_empty2_icon.tga";
-		case 3:		return "DATA/MENU/weapon_empty3_icon.tga";
-		case 4:		return "DATA/MENU/weapon_empty4_icon.tga";
-		case 5:		return "DATA/MENU/weapon_empty5_icon.tga";
-	}
-	return 0;
-}
 
 
 
@@ -508,9 +496,26 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	{
 		// пустой слот, рисуем его
 
-		SetRect(&SrcRest,0,0,128,64);
 		SetRect(&DstRest,X,Y,X+128,Y+64);
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(GetSlotIconName(WorkshopFighterGame->WeaponType[SlotNum])), true, MenuContentTransp);
+
+		int Size = vw_FontSize(GetText("3_EMPTY"));
+		float WScale = 0;
+		if (Size > 88)
+		{
+			Size = 88;
+			WScale = -88;
+		}
+		vw_DrawFont(DstRest.left+(DstRest.right-DstRest.left-Size)/2, DstRest.bottom-53, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7*MenuContentTransp, GetText("3_EMPTY"));
+
+		Size = vw_FontSize("%s %i",GetText("3_Level"),WorkshopFighterGame->WeaponType[SlotNum]);
+		WScale = 0;
+		if (Size > 88)
+		{
+			Size = 88;
+			WScale = -88;
+		}
+		vw_DrawFont(DstRest.left+(DstRest.right-DstRest.left-Size)/2, DstRest.bottom-32, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7*MenuContentTransp, "%s %i",GetText("3_Level"),WorkshopFighterGame->WeaponType[SlotNum]);
+
 
 		return;
 	}
@@ -552,6 +557,15 @@ void ShipSlotSetupWeapon(int Slot)
 		SetRect(&SrcRest,0,0,256,256);
 		SetRect(&DstRest,Xpos,Ypos,Xpos+256,Ypos+256);
 		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/weapon_empty_icon.tga"), true, MenuContentTransp);
+
+		int Size = vw_FontSize(GetText("3_Empty_Weapon_Slot"));
+		float WScale = 0;
+		if (Size > 228)
+		{
+			Size = 228;
+			WScale = -228;
+		}
+		vw_DrawFont(DstRest.left+(DstRest.right-DstRest.left-Size)/2, DstRest.bottom-40, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Empty_Weapon_Slot"));
 	}
 	else
 	{

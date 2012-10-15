@@ -135,7 +135,7 @@ sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 #define TEXTURE_NO_MIPMAP	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE
 
 // сколько нужно загружать в листе меню
-const int	MenuLoadListCount = 184;
+const int	MenuLoadListCount = 174;
 // лист загрузки меню
 LoadList	MenuLoadList[MenuLoadListCount] =
 {
@@ -234,12 +234,7 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/MENU/system_target2.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
 {"DATA/MENU/system_target3.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
 {"DATA/MENU/system_target4.tga",			0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_engine_empty.tga",		0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_mechan_empty.tga",		0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_power_empty.tga",		0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_protect_empty.tga",		0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_target_empty.tga",		0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/system_onoff.tga",				0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
+{"DATA/MENU/system_empty.tga",				0, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
 // иконки оружия для передаскивания-отображения в слотах оружия
 {"DATA/MENU/weapon1_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
 {"DATA/MENU/weapon2_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
@@ -260,11 +255,6 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/MENU/weapon17_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
 {"DATA/MENU/weapon18_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
 {"DATA/MENU/weapon19_icon.tga",			0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon_empty1_icon.tga",	0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon_empty2_icon.tga",	0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon_empty3_icon.tga",	0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon_empty4_icon.tga",	0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
-{"DATA/MENU/weapon_empty5_icon.tga",	0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
 {"DATA/MENU/weapon_on_icon.tga",		0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
 {"DATA/MENU/weapon_empty_icon.tga",		0, 256, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false},
 // курсор

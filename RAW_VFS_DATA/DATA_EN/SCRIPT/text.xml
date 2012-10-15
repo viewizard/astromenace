@@ -143,6 +143,9 @@
 <item id="3_Full">Full</item>
 <item id="3_Flat">Flat</item>
 <item id="3_Slim">Slim</item>
+<item id="3_Empty_Weapon_Slot">Empty Weapon Slot</item>
+<item id="3_EMPTY">EMPTY</item>
+<item id="3_Level">level</item>
 
 <item id="3_Music_Volume">Music Volume</item>
 <item id="3_Not_available">Not available</item>
