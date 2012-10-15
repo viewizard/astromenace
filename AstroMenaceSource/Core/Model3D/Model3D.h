@@ -69,6 +69,12 @@ struct eObjectBlock
 	// поворот модели в локальной системе координат
 	VECTOR3D Rotation;
 
+	// анимация геометрией (вращение)
+	bool NeedGeometryAnimation;
+	VECTOR3D GeometryAnimation;
+	// анимация текстуры (тайловая анимация)
+	bool NeedTextureAnimation;
+	VECTOR3D TextureAnimation;
 
 	bool			NeedDestroyDataInObjectBlock; // если данные были не общие, а созданные для этого ObjectBlock, нужно их удалить в деструкторе
 	// вертексный буфер
