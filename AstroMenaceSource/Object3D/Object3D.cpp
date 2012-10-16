@@ -843,8 +843,6 @@ void CObject3D::Draw(bool VertexOnlyPass)
 			vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, RI_3f_XYZ, GlobalVertexBuffer,
 							DrawObjectList[0].Stride*sizeof(float), GlobalVertexBufferVBO, 0,
 							GlobalIndexBuffer, GlobalIndexBufferVBO, GlobalVAO);
-
-			vw_DeActivateAllLights();
 		}
 		else
 		{
