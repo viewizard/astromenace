@@ -98,7 +98,7 @@ bool eLight::Activate(int CurrentLightNum, float Matrix[16])
 
 	vw_PushMatrix();
 	vw_LoadIdentity();
-	vw_SetMatrix(RI_MODELVIEW_MATRIX, Matrix);
+	vw_SetMatrix(Matrix);
 
 	if (LightType == 0)
 	{

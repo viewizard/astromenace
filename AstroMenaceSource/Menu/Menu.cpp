@@ -607,9 +607,9 @@ void DrawMenu()
 
 
 		vw_PushMatrix();
-		vw_Rotate(0.0f, 0.0f, -20.0f);
-		vw_Rotate(0.0f, -45.0f, 0.0f);
-		vw_Rotate(30.0f, 0.0f, 0.0f);
+		vw_Rotate(-20.0f, 0.0f, 0.0f, 1.0f);
+		vw_Rotate(-45.0f, 0.0f, 1.0f, 0.0f);
+		vw_Rotate(30.0f, 1.0f, 0.0f, 0.0f);
 
 
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(float));
@@ -716,9 +716,9 @@ void DrawMenu()
 		vw_DepthTest(false, -1);
 
 		vw_PushMatrix();
-		vw_Rotate(0.0f, 0.0f, -20.0f);
-		vw_Rotate(0.0f, -45.0f, 0.0f);
-		vw_Rotate(30.0f, 0.0f, 0.0f);
+		vw_Rotate(-20.0f, 0.0f, 0.0f, 1.0f);
+		vw_Rotate(-45.0f, 0.0f, 1.0f, 0.0f);
+		vw_Rotate(30.0f, 1.0f, 0.0f, 0.0f);
 
 
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(float));
@@ -806,10 +806,9 @@ void DrawMenu()
 		vw_DepthTest(false, -1);
 
 		vw_PushMatrix();
-		vw_Rotate(0.0f, 0.0f, -30.0f);
-		vw_Rotate(0.0f, -70.0f, 0.0f);
-		vw_Rotate(35.0f, 0.0f, 0.0f);
-
+		vw_Rotate(-30.0f, 0.0f, 0.0f, 1.0f);
+		vw_Rotate(-70.0f, 0.0f, 1.0f, 0.0f);
+		vw_Rotate(35.0f, 1.0f, 0.0f, 0.0f);
 
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(float));
 

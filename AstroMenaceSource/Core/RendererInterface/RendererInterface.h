@@ -376,7 +376,7 @@ void vw_LoadIdentity(void);
 // Determines the product of the current matrix and the computed translation matrix determined by the given factors
 void vw_Translate(VECTOR3D Location);
 // Determines the product of the current matrix and the computed rotation matrix
-void vw_Rotate(float fX, float fY, float fZ);
+void vw_Rotate(float fAngle, float fX, float fY, float fZ);
 // Determines the product of the current matrix and the computed scale matrix composed from the given point
 void vw_Scale(float fX, float fY, float fZ);
 // Adds a matrix to the stack
@@ -385,11 +385,11 @@ void vw_PushMatrix(void);
 void vw_PopMatrix(void);
 // Get matrix
 void vw_GetMatrix(int pname, float *params);
-void vw_SetMatrix(int pname, float *params);
+void vw_SetMatrix(float *params);
 // Set Matrix Mode
 void vw_MatrixMode(int pname);
 // Mult matrix
-void vw_MultMatrix(int pname, float *params);
+void vw_MultMatrix(float *params);
 
 
 
