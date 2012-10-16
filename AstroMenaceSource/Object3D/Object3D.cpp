@@ -67,6 +67,7 @@ CObject3D::CObject3D(void)
 	// по умолчанию - рисуем с оптимизацией
 	NeedCullFaces = true;
 
+	NeedAlphaTest = false;
 
 	// лист пуст, и никуда не указывает
 	DrawObjectQuantity = 0;
@@ -824,9 +825,9 @@ void CObject3D::Draw(bool VertexOnlyPass)
 		vw_PushMatrix();
 		// переносим и двигаем уже по данным всей модели
 		vw_Translate(Location);
-		vw_Rotate(0.0f, 0.0f, -Rotation.z);
-		vw_Rotate(0.0f, -Rotation.y, 0.0f);
-		vw_Rotate(-Rotation.x, 0.0f, 0.0f);
+		vw_Rotate(0.0f, 0.0f, Rotation.z);
+		vw_Rotate(0.0f, Rotation.y, 0.0f);
+		vw_Rotate(Rotation.x, 0.0f, 0.0f);
 
 
 		if (NeedOnePieceDraw)
@@ -857,9 +858,9 @@ void CObject3D::Draw(bool VertexOnlyPass)
 				// сдвигаем его в нужное место
 				vw_Translate(DrawObjectList[i].Location);
 				// поворачиваем объект
-				vw_Rotate(0.0f, 0.0f, -DrawObjectList[i].Rotation.z);
-				vw_Rotate(0.0f, -DrawObjectList[i].Rotation.y, 0.0f);
-				vw_Rotate(-DrawObjectList[i].Rotation.x, 0.0f, 0.0f);
+				vw_Rotate(0.0f, 0.0f, DrawObjectList[i].Rotation.z);
+				vw_Rotate(0.0f, DrawObjectList[i].Rotation.y, 0.0f);
+				vw_Rotate(DrawObjectList[i].Rotation.x, 0.0f, 0.0f);
 				// если нужна дополнительная анимация геометрией
 				if (DrawObjectList[i].NeedGeometryAnimation)
 				{
@@ -910,9 +911,9 @@ void CObject3D::Draw(bool VertexOnlyPass)
 
 	// переносим и двигаем уже по данным всей модели
 	vw_Translate(Location);
-	vw_Rotate(0.0f, 0.0f, -Rotation.z);
-	vw_Rotate(0.0f, -Rotation.y, 0.0f);
-	vw_Rotate(-Rotation.x, 0.0f, 0.0f);
+	vw_Rotate(0.0f, 0.0f, Rotation.z);
+	vw_Rotate(0.0f, Rotation.y, 0.0f);
+	vw_Rotate(Rotation.x, 0.0f, 0.0f);
 
 
 	// для корректной прорисовки на всех видеокартах атмосферы планеты ...
@@ -929,6 +930,10 @@ void CObject3D::Draw(bool VertexOnlyPass)
 	vw_MaterialV(RI_SPECULAR, Specular);
 	vw_MaterialV(RI_SHININESS, Power);
 
+
+	if (!NeedCullFaces) vw_CullFace(RI_NONE);
+	// для частей базы надо включить прозрачность через альфатест
+	if (NeedAlphaTest) vw_SetTextureAlphaTest(true, 0.4f);
 
 	// если надо рисовать одним проходом
 	if (NeedOnePieceDraw)
@@ -952,9 +957,6 @@ void CObject3D::Draw(bool VertexOnlyPass)
 			vw_SetTextureBlendMode(RI_TBLEND_COLORARG1,  RI_TBLEND_CURRENT);
 			vw_SetTextureBlendMode(RI_TBLEND_COLORARG2,  RI_TBLEND_TEXTURE);
 		}
-
-		if (!NeedCullFaces) vw_CullFace(RI_NONE);
-
 
 		int LightType1, LightType2;
 		// включаем источники света
@@ -993,10 +995,6 @@ void CObject3D::Draw(bool VertexOnlyPass)
 	}
 	else
 	{
-
-		// для частей базы надо включить прозрачность через альфатест
-		if (ObjectType == 13) vw_SetTextureAlphaTest(true, 0.4f);
-
 		// установка текстур и подхотовка к прорисовке
 		for (int i=0; i<DrawObjectQuantity; i++)
 		{
@@ -1068,9 +1066,9 @@ void CObject3D::Draw(bool VertexOnlyPass)
 			// сдвигаем его в нужное место
 			vw_Translate(DrawObjectList[i].Location);
 			// поворачиваем объект
-			vw_Rotate(0.0f, 0.0f, -DrawObjectList[i].Rotation.z);
-			vw_Rotate(0.0f, -DrawObjectList[i].Rotation.y, 0.0f);
-			vw_Rotate(-DrawObjectList[i].Rotation.x, 0.0f, 0.0f);
+			vw_Rotate(0.0f, 0.0f, DrawObjectList[i].Rotation.z);
+			vw_Rotate(0.0f, DrawObjectList[i].Rotation.y, 0.0f);
+			vw_Rotate(DrawObjectList[i].Rotation.x, 0.0f, 0.0f);
 
 
 			// если нужна дополнительная анимация геометрией
@@ -1080,9 +1078,6 @@ void CObject3D::Draw(bool VertexOnlyPass)
 				vw_Rotate(0.0f, DrawObjectList[i].GeometryAnimation.y, 0.0f);
 				vw_Rotate(DrawObjectList[i].GeometryAnimation.x, 0.0f, 0.0f);
 			}
-
-
-			if (!NeedCullFaces) vw_CullFace(RI_NONE);
 
 
 			int LightType1, LightType2;
@@ -1180,7 +1175,6 @@ void CObject3D::Draw(bool VertexOnlyPass)
 
 			vw_PopMatrix();
 		}
-		if (ObjectType == 13) vw_SetTextureAlphaTest(false, 0.01f);
 	}
 
 
@@ -1193,6 +1187,7 @@ void CObject3D::Draw(bool VertexOnlyPass)
 	// установка параметров текстур в исходное состояние
 	vw_BindTexture(1, 0);
 	vw_BindTexture(0, 0);
+	if (NeedAlphaTest) vw_SetTextureAlphaTest(false, 0.01f);
 	if (!NeedCullFaces) vw_CullFace(RI_BACK);
 	vw_PopMatrix();
 

@@ -6,10 +6,10 @@
 
 	File name: GroundObject.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -354,7 +354,7 @@ bool CGroundObject::Update(float Time)
 				RotatePointInv(&tmp, DrawObjectList[TargetHorizObject[i]].Rotation^(-1.0f));
 
 				SetObjectRotation(VECTOR3D(DrawObjectList[TargetHorizObject[i]].Rotation.x,
-					NeedRotate,
+					-NeedRotate,
 					DrawObjectList[TargetHorizObject[i]].Rotation.z), TargetHorizObject[i]);
 
 				RotatePoint(&tmp, DrawObjectList[TargetHorizObject[i]].Rotation);
@@ -400,7 +400,7 @@ bool CGroundObject::Update(float Time)
 
 				RotatePointInv(&tmp, DrawObjectList[TargetVertObject[i]].Rotation^(-1.0f));
 
-				SetObjectRotation(VECTOR3D(NeedRotate,
+				SetObjectRotation(VECTOR3D(-NeedRotate,
 					DrawObjectList[TargetVertObject[i]].Rotation.y,
 					DrawObjectList[TargetVertObject[i]].Rotation.z), TargetVertObject[i]);
 
@@ -626,7 +626,7 @@ bool CGroundObject::Update(float Time)
 			float Decr = WheelTrackSpeed*TimeDelta;
 			if (Decr > 360.0f || Decr < -360.0f) Decr = 0.0f;
 
-			DrawObjectList[WheelObjectsNum[i]].Rotation.x -= Decr;
+			DrawObjectList[WheelObjectsNum[i]].Rotation.x += Decr;
 
 			if (DrawObjectList[WheelObjectsNum[i]].Rotation.x>360.0f)
 			{

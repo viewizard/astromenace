@@ -839,7 +839,7 @@ bool CWeapon::Update(float Time)
 
 				RotatePointInv(&tmp, DrawObjectList[i].Rotation^(-1.0f));
 
-				DrawObjectList[i].Rotation.y = NeedRotate;
+				DrawObjectList[i].Rotation.y = -NeedRotate;
 
 				RotatePoint(&tmp, DrawObjectList[i].Rotation);
 
@@ -882,7 +882,7 @@ bool CWeapon::Update(float Time)
 
 			RotatePointInv(&tmp, DrawObjectList[TargetVertObject].Rotation^(-1.0f));
 
-			DrawObjectList[TargetVertObject].Rotation.x = NeedRotate;
+			DrawObjectList[TargetVertObject].Rotation.x = -NeedRotate;
 
 			RotatePoint(&tmp, DrawObjectList[TargetVertObject].Rotation);
 

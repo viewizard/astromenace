@@ -120,8 +120,7 @@ void vw_Draw(int X, int Y, RECT *SrcRest, eTexture *Tex, bool Alpha, float Rotat
 
 	// Установка текстуры и ее свойств...
 	vw_SetTexture(0, Tex);
-	vw_SetTextureAlphaTest(Alpha, 0.01f);
-	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+	vw_SetTextureBlend(Alpha, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
 
 	// Вычисление поправки по У в зависимости от DrawCorner
@@ -179,7 +178,6 @@ void vw_Draw(int X, int Y, RECT *SrcRest, eTexture *Tex, bool Alpha, float Rotat
 
 
 	if (tmp != 0){delete [] tmp; tmp = 0;}
-    vw_SetTextureAlphaTest(false, 0.5f);
 	vw_SetTextureBlend(false, 0, 0);
 	vw_BindTexture(0, 0);
 }
@@ -212,8 +210,7 @@ void vw_DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, bool Alpha,
 
 	// Установка текстуры и ее свойств...
 	vw_SetTexture(0, Tex);
-	vw_SetTextureAlphaTest(Alpha, 0.01f);
-	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+	vw_SetTextureBlend(Alpha, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
 	// Вычисление поправки по У в зависимости от DrawCorner
 	// - расположения угла начала координат
@@ -277,7 +274,6 @@ void vw_DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, bool Alpha,
 
 	if (tmp != 0){delete [] tmp; tmp = 0;}
 
-	vw_SetTextureAlphaTest(false, 0.5f);
 	vw_SetTextureBlend(false, 0, 0);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 	vw_BindTexture(0, 0);

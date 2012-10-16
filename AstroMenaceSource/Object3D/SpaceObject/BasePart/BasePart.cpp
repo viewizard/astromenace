@@ -6,10 +6,10 @@
 
 	File name: BasePart.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -44,6 +44,7 @@ void CBasePart::Create(int BasePartNum)
 {
 	ObjectType = 13;
 	ObjectStatus = 1; // чужой
+	NeedAlphaTest = true;
 
 	// задали первичный, нужно случайным образом найти
 	if (BasePartNum == 1 || BasePartNum == 2 || BasePartNum == 6 || BasePartNum == 8)

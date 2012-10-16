@@ -6,10 +6,10 @@
 
 	File name: Planet.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -60,6 +60,7 @@ void CPlanet::Create(int PlanetNum)
 		case 1:
 			ShaderType = -1;
 			NeedCullFaces = false;
+			NeedAlphaTest = true;
 			LoadObjectData("DATA/MODELS/PLANET/aplanet.VW3D", this, 0);
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/PLANET/planet3.jpg");
 			TextureIllum[0] = 0;

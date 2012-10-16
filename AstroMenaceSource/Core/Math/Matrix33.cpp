@@ -5,10 +5,10 @@
 
 	File name: Matrix33.cpp
 
-	Copyright (c) 2001-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2001-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -97,7 +97,7 @@ void Matrix33CreateRotate(float Matrix33[9], VECTOR3D Angle)
 	// если угол только один - сюда идем
 	if (Angle.z != 0.0f && Angle.x == 0.0f && Angle.y == 0.0f)
 	{
-		float a = Angle.z*p180;
+		float a = -Angle.z*p180;
 		float c = cosf(a);
 		float s = sinf(a);
 		// ставим в нужные элементы
@@ -114,7 +114,7 @@ void Matrix33CreateRotate(float Matrix33[9], VECTOR3D Angle)
 
 	if (Angle.y != 0.0f && Angle.x == 0.0f && Angle.z == 0.0f)
 	{
-		float a = Angle.y*p180;
+		float a = -Angle.y*p180;
 		float c = cosf(a);
 		float s = sinf(a);
 		// ставим в нужные элементы
@@ -131,7 +131,7 @@ void Matrix33CreateRotate(float Matrix33[9], VECTOR3D Angle)
 
 	if (Angle.x != 0.0f && Angle.y == 0.0f && Angle.z == 0.0f)
 	{
-		float a = Angle.x*p180;
+		float a = -Angle.x*p180;
 		float c = cosf(a);
 		float s = sinf(a);
 		// ставим в нужные элементы
@@ -149,13 +149,13 @@ void Matrix33CreateRotate(float Matrix33[9], VECTOR3D Angle)
 
 	// если 2 или более углов
 
-	float a = Angle.x*p180;
+	float a = -Angle.x*p180;
 	float A = cosf(a);
 	float B = sinf(a);
-	a = Angle.y*p180;
+	a = -Angle.y*p180;
 	float C = cosf(a);
 	float D = sinf(a);
-	a = Angle.z*p180;
+	a = -Angle.z*p180;
 	float E = cosf(a);
 	float F = sinf(a);
 	float AD = A * D;

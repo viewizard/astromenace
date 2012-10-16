@@ -6,10 +6,10 @@
 
 	File name: Object3DFunctions.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -336,24 +336,6 @@ void GetShipOnTargetOrientateion(
 						}
 
 						// поправки к существующим углам поворота оружия
-/*
-						if (vw_sqrtf(m*m+n*n+p*p) != 0 && vw_sqrtf(A3*A3+B3*B3+C3*C3) != 0)
-							TargetAngleTMP.x = CurrentObjectRotation.x + asinf((A3*m+B3*n+C3*p)/(vw_sqrtf(m*m+n*n+p*p) * vw_sqrtf(A3*A3+B3*B3+C3*C3))) * 57.32f;
-						else
-							TargetAngleTMP.x = CurrentObjectRotation.x;
-
-						// если нужно наведение в цетнр врага...
-						if (!NeedCenterOrientation)
-							TargetAngleTMP.y = CurrentObjectRotation.y;
-						else
-							if (vw_sqrtf(m*m+n*n+p*p) != 0 && vw_sqrtf(A*A+B*B+C*C) != 0)
-								TargetAngleTMP.y = CurrentObjectRotation.y + asinf((A*m+B*n+C*p)/(vw_sqrtf(m*m+n*n+p*p) * vw_sqrtf(A*A+B*B+C*C))) * 57.32f;
-							else
-								TargetAngleTMP.y = CurrentObjectRotation.y;
-						TargetAngleTMP.z = CurrentObjectRotation.z;
-*/
-
-						// поправки к существующим углам поворота оружия
                         float sss1 = vw_sqrtf(m*m+n*n+p*p);
                         float sss2 = vw_sqrtf(A3*A3+B3*B3+C3*C3);
                         TargetAngleTMP.x = CurrentObjectRotation.x;
@@ -361,7 +343,7 @@ void GetShipOnTargetOrientateion(
 						{
 						    float sss3 = (A3*m+B3*n+C3*p)/(sss1 * sss2);
 						    if (sss3 >= -1.0f && sss3 <= 1.0f)
-                                TargetAngleTMP.x = CurrentObjectRotation.x + asinf(sss3) * 57.32f;
+                                TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
 						}
 
 						float sss4 = vw_sqrtf(A*A+B*B+C*C);
@@ -371,38 +353,19 @@ void GetShipOnTargetOrientateion(
 						{
 						    float sss5 = (A*m+B*n+C*p)/(sss1 * sss4);
 						    if (sss5 >= -1.0f && sss5 <= 1.0f)
-                                TargetAngleTMP.y = CurrentObjectRotation.y + asinf(sss5) * 57.32f;
+                                TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
 						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
 
-
-					/*	if (!TargetLocked)
+						if (Tdist > m*m+n*n*5+p*p && fabsf(TargetAngleTMP.x)<45.0f)
 						{
 							TargetAngle = TargetAngleTMP;
+							Tdist = m*m+n*n*5+p*p;
 							TargetLocked = true;
+							TType = 1;
 						}
-						else
-						{
-							VECTOR3D TMP1 = TargetAngleTMP - CurrentObjectRotation;
-							VECTOR3D TMP2 = TargetAngle - CurrentObjectRotation;
-							if (TMP1.Length() < TargetAngle.Length())*/
-	/// !!!! ставим по высоте в 5 раза!!!
-							//if (TargetAngleYMin > fabsf(TargetAngleTMP.y - NeedAngle->y) || TargetAngleYMin == 180.0f)
-							{
-								if (Tdist > m*m+n*n*5+p*p && fabsf(TargetAngleTMP.x)<45.0f)
-								{
 
-									//TargetAngleYMin = fabsf(TargetAngleTMP.y - NeedAngle->y);
-
-									TargetAngle = TargetAngleTMP;
-									Tdist = m*m+n*n*5+p*p;
-									TargetLocked = true;
-									TType = 1;
-								}
-
-							}
-					//	}
 					}
 				}
 			}
@@ -515,26 +478,6 @@ void GetShipOnTargetOrientateion(
 						}
 
 						// поправки к существующим углам поворота оружия
-/*
-						if (vw_sqrtf(m*m+n*n+p*p) != 0 && vw_sqrtf(A3*A3+B3*B3+C3*C3) != 0)
-							TargetAngleTMP.x = CurrentObjectRotation.x + asinf((A3*m+B3*n+C3*p)/(vw_sqrtf(m*m+n*n+p*p) * vw_sqrtf(A3*A3+B3*B3+C3*C3))) * 57.32f;
-						else
-							TargetAngleTMP.x = CurrentObjectRotation.x;
-
-						// если нужно наведение в цетнр врага...
-						if (!NeedCenterOrientation)
-							TargetAngleTMP.y = CurrentObjectRotation.y;
-						else
-							if (vw_sqrtf(m*m+n*n+p*p) != 0 && vw_sqrtf(A*A+B*B+C*C) != 0)
-								TargetAngleTMP.y = CurrentObjectRotation.y + asinf((A*m+B*n+C*p)/(vw_sqrtf(m*m+n*n+p*p) * vw_sqrtf(A*A+B*B+C*C))) * 57.32f;
-							else
-								TargetAngleTMP.y = CurrentObjectRotation.y;
-
-						TargetAngleTMP.z = CurrentObjectRotation.z;
-*/
-
-
-						// поправки к существующим углам поворота оружия
                         float sss1 = vw_sqrtf(m*m+n*n+p*p);
                         float sss2 = vw_sqrtf(A3*A3+B3*B3+C3*C3);
                         TargetAngleTMP.x = CurrentObjectRotation.x;
@@ -542,7 +485,7 @@ void GetShipOnTargetOrientateion(
 						{
 						    float sss3 = (A3*m+B3*n+C3*p)/(sss1 * sss2);
 						    if (sss3 >= -1.0f && sss3 <= 1.0f)
-                                TargetAngleTMP.x = CurrentObjectRotation.x + asinf(sss3) * 57.32f;
+                                TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
 						}
 
 						float sss4 = vw_sqrtf(A*A+B*B+C*C);
@@ -552,54 +495,33 @@ void GetShipOnTargetOrientateion(
 						{
 						    float sss5 = (A*m+B*n+C*p)/(sss1 * sss4);
 						    if (sss5 >= -1.0f && sss5 <= 1.0f)
-                                TargetAngleTMP.y = CurrentObjectRotation.y + asinf(sss5) * 57.32f;
+                                TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
 						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
 
-
-
-					/*	if (!TargetLocked)
+						if (TType < 2 && TargetLocked)
 						{
-							TargetAngle = TargetAngleTMP;
-							TargetLocked = true;
+							// только если в 5 раза ближе
+							if (Tdist > m*m+n*n*5+p*p && fabsf(TargetAngleTMP.x)<45.0f)
+							{
+								TargetAngle = TargetAngleTMP;
+								Tdist = m*m+n*n+p*p;
+								TargetLocked = true;
+								TType = 2;
+							}
 						}
 						else
 						{
-							VECTOR3D TMP1 = TargetAngleTMP - CurrentObjectRotation;
-							VECTOR3D TMP2 = TargetAngle - CurrentObjectRotation;
-							if (TMP1.Length() < TargetAngle.Length())*/
-							if (TType < 2 && TargetLocked)
+							if (Tdist > m*m+n*n+p*p && fabsf(TargetAngleTMP.x)<45.0f)
 							{
-								//if (TargetAngleYMin > fabsf(TargetAngleTMP.y - NeedAngle->y) || TargetAngleYMin == 180.0f)
-								{
-									// только если в 5 раза ближе
-									if (Tdist > m*m+n*n*5+p*p && fabsf(TargetAngleTMP.x)<45.0f)
-									{
-									//	TargetAngleYMin = fabsf(TargetAngleTMP.y - NeedAngle->y);
-
-										TargetAngle = TargetAngleTMP;
-										Tdist = m*m+n*n+p*p;
-										TargetLocked = true;
-										TType = 2;
-									}
-                                }
+								TargetAngle = TargetAngleTMP;
+								Tdist = m*m+n*n+p*p;
+								TargetLocked = true;
+								TType = 2;
 							}
-							else
-								//if (TargetAngleYMin > fabsf(TargetAngleTMP.y - NeedAngle->y) || TargetAngleYMin == 180.0f)
-								{
-									if (Tdist > m*m+n*n+p*p && fabsf(TargetAngleTMP.x)<45.0f)
-									{
+						}
 
-									//	TargetAngleYMin = fabsf(TargetAngleTMP.y - NeedAngle->y);
-
-										TargetAngle = TargetAngleTMP;
-										Tdist = m*m+n*n+p*p;
-										TargetLocked = true;
-										TType = 2;
-									}
-                                }
-						//}
 					}
 				}
 			}
@@ -708,26 +630,6 @@ void GetShipOnTargetOrientateion(
 						}
 
 						// поправки к существующим углам поворота оружия
-/*
-						if (vw_sqrtf(m*m+n*n+p*p) != 0 && vw_sqrtf(A3*A3+B3*B3+C3*C3) != 0)
-							TargetAngleTMP.x = CurrentObjectRotation.x + asinf((A3*m+B3*n+C3*p)/(vw_sqrtf(m*m+n*n+p*p) * vw_sqrtf(A3*A3+B3*B3+C3*C3))) * 57.32f;
-						else
-							TargetAngleTMP.x = CurrentObjectRotation.x;
-
-						// если нужно наведение в цетнр врага...
-						if (!NeedCenterOrientation)
-							TargetAngleTMP.y = CurrentObjectRotation.y;
-						else
-							if (vw_sqrtf(m*m+n*n+p*p) != 0 && vw_sqrtf(A*A+B*B+C*C) != 0)
-								TargetAngleTMP.y = CurrentObjectRotation.y + asinf((A*m+B*n+C*p)/(vw_sqrtf(m*m+n*n+p*p) * vw_sqrtf(A*A+B*B+C*C))) * 57.32f;
-							else
-								TargetAngleTMP.y = CurrentObjectRotation.y;
-
-						TargetAngleTMP.z = CurrentObjectRotation.z;
-*/
-
-
-						// поправки к существующим углам поворота оружия
                         float sss1 = vw_sqrtf(m*m+n*n+p*p);
                         float sss2 = vw_sqrtf(A3*A3+B3*B3+C3*C3);
                         TargetAngleTMP.x = CurrentObjectRotation.x;
@@ -735,7 +637,7 @@ void GetShipOnTargetOrientateion(
 						{
 						    float sss3 = (A3*m+B3*n+C3*p)/(sss1 * sss2);
 						    if (sss3 >= -1.0f && sss3 <= 1.0f)
-                                TargetAngleTMP.x = CurrentObjectRotation.x + asinf(sss3) * 57.32f;
+                                TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
 						}
 
 						float sss4 = vw_sqrtf(A*A+B*B+C*C);
@@ -745,54 +647,32 @@ void GetShipOnTargetOrientateion(
 						{
 						    float sss5 = (A*m+B*n+C*p)/(sss1 * sss4);
 						    if (sss5 >= -1.0f && sss5 <= 1.0f)
-                                TargetAngleTMP.y = CurrentObjectRotation.y + asinf(sss5) * 57.32f;
+                                TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
 						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
 
-
-
-					/*	if (!TargetLocked)
+						if (TType < 3 && TargetLocked)
 						{
-							TargetAngle = TargetAngleTMP;
-							TargetLocked = true;
+							// только если в 10 раза ближе
+							if (Tdist/10.0f > m*m+n*n+p*p && fabsf(TargetAngleTMP.x)<45.0f)
+							{
+								TargetAngle = TargetAngleTMP;
+								Tdist = m*m+n*n+p*p;
+								TargetLocked = true;
+								TType = 3;
+							}
 						}
 						else
 						{
-							VECTOR3D TMP1 = TargetAngleTMP - CurrentObjectRotation;
-							VECTOR3D TMP2 = TargetAngle - CurrentObjectRotation;
-							if (TMP1.Length() < TargetAngle.Length())*/
-							if (TType < 3 && TargetLocked)
+							if (Tdist > m*m+n*n+p*p && fabsf(TargetAngleTMP.x)<45.0f)
 							{
-								//if (TargetAngleYMin > fabsf(TargetAngleTMP.y - NeedAngle->y) || TargetAngleYMin == 180.0f)
-								{
-									// только если в 10 раза ближе
-									if (Tdist/10.0f > m*m+n*n+p*p && fabsf(TargetAngleTMP.x)<45.0f)
-									{
-									//	TargetAngleYMin = fabsf(TargetAngleTMP.y - NeedAngle->y);
-
-										TargetAngle = TargetAngleTMP;
-										Tdist = m*m+n*n+p*p;
-										TargetLocked = true;
-										TType = 3;
-									}
-                                }
+								TargetAngle = TargetAngleTMP;
+								Tdist = m*m+n*n+p*p;
+								TargetLocked = true;
+								TType = 3;
 							}
-							else
-								//if (TargetAngleYMin > fabsf(TargetAngleTMP.y - NeedAngle->y) || TargetAngleYMin == 180.0f)
-								{
-									if (Tdist > m*m+n*n+p*p && fabsf(TargetAngleTMP.x)<45.0f)
-									{
-
-									//	TargetAngleYMin = fabsf(TargetAngleTMP.y - NeedAngle->y);
-
-										TargetAngle = TargetAngleTMP;
-										Tdist = m*m+n*n+p*p;
-										TargetLocked = true;
-										TType = 3;
-									}
-                                }
-						//}
+						}
 					}
 				}
 			}
@@ -809,7 +689,6 @@ void GetShipOnTargetOrientateion(
 	{
 		(*NeedAngle) = TargetAngle;
 	}
-
 
 }
 
@@ -949,7 +828,7 @@ void GetEnemyShipOnTargetOrientateion(
 		{
 			float ttt = (A*m+B*n+C*p)/(vw_sqrtf(sss1) * vw_sqrtf(sss2));
 			if (ttt >= -1.0f && ttt <= 1.0f)
-				(*NeedAngle).x = CurrentObjectRotation.x + asinf(ttt) * 57.32f;
+				(*NeedAngle).x = CurrentObjectRotation.x - asinf(ttt) * 57.32f;
 		}
 
 		(*NeedAngle).z = CurrentObjectRotation.z;
@@ -977,11 +856,10 @@ void GetEnemyShipOnTargetOrientateion(
 
 			// смотрим в какой полуплоскости
 			float tmp1_1 = A2 * TargetLocation.x + B2 * TargetLocation.y + C2 * TargetLocation.z + D2;
+			GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+Orientation, Location+PointUp);
 
 			if (tmp1_1 >= 0.0f)
 			{
-				GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+Orientation, Location+PointUp);
-
 				// находим угол поворота
 				sss1 = vw_sqrtf(m*m+n*n+p*p);
 				float sss3 = vw_sqrtf(A2*A2+B2*B2+C2*C2);
@@ -989,13 +867,11 @@ void GetEnemyShipOnTargetOrientateion(
 				{
 					float ttt = (A2*m+B2*n+C2*p)/(sss1 * sss3);
 					if (ttt >= -1.0f && ttt <= 1.0f)
-						(*NeedAngle).y = 180.0f-asinf(ttt) * 57.32f;
+						(*NeedAngle).y = 180.0f - asinf(ttt) * 57.32f;
 				}
 			}
 			else
 			{
-				GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+(Orientation^(-1.0f)), Location+PointUp);
-
 				// находим угол поворота
 				sss1 = vw_sqrtf(m*m+n*n+p*p);
 				float sss3 = vw_sqrtf(A2*A2+B2*B2+C2*C2);
@@ -1004,7 +880,7 @@ void GetEnemyShipOnTargetOrientateion(
 					float ttt = (A2*m+B2*n+C2*p)/(sss1 * sss3);
 					if (ttt >= -1.0f && ttt <= 1.0f)
 					{
-						(*NeedAngle).y = -asinf(ttt) * 57.32f;
+						(*NeedAngle).y = asinf(ttt) * 57.32f;
 						if ((*NeedAngle).y < 0.0f) (*NeedAngle).y +=360.0f;
 					}
 				}
@@ -1190,11 +1066,10 @@ bool GetTurretOnTargetOrientateion(
 
 			// смотрим в какой полуплоскости
 			float tmp1_1 = A2 * TargetLocation.x + B2 * TargetLocation.y + C2 * TargetLocation.z + D2;
+			GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+Orientation, Location+PointUp);
 
 			if (tmp1_1 >= 0.0f)
 			{
-				GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+Orientation, Location+PointUp);
-
 				// находим угол поворота
 				sss1 = vw_sqrtf(m*m+n*n+p*p);
 				float sss3 = vw_sqrtf(A2*A2+B2*B2+C2*C2);
@@ -1202,13 +1077,11 @@ bool GetTurretOnTargetOrientateion(
 				{
 					float ttt = (A2*m+B2*n+C2*p)/(sss1 * sss3);
 					if (ttt >= -1.0f && ttt <= 1.0f)
-						(*NeedAngle).y = 180.0f-asinf(ttt) * 57.32f;
+						(*NeedAngle).y = 180.0f - asinf(ttt) * 57.32f;
 				}
 			}
 			else
 			{
-				GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+(Orientation^(-1.0f)), Location+PointUp);
-
 				// находим угол поворота
 				sss1 = vw_sqrtf(m*m+n*n+p*p);
 				float sss3 = vw_sqrtf(A2*A2+B2*B2+C2*C2);
@@ -1217,7 +1090,7 @@ bool GetTurretOnTargetOrientateion(
 					float ttt = (A2*m+B2*n+C2*p)/(sss1 * sss3);
 					if (ttt >= -1.0f && ttt <= 1.0f)
 					{
-						(*NeedAngle).y = -asinf(ttt) * 57.32f;
+						(*NeedAngle).y = asinf(ttt) * 57.32f;
 						if ((*NeedAngle).y < 0.0f) (*NeedAngle).y +=360.0f;
 					}
 				}
@@ -1333,7 +1206,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 						{
 						    float sss3 = (A3*m+B3*n+C3*p)/(sss1 * sss2);
 						    if (sss3 >= -1.0f && sss3 <= 1.0f)
-                                TargetAngleTMP.x = CurrentObjectRotation.x + asinf(sss3) * 57.32f;
+                                TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
 						}
 
 						float sss4 = vw_sqrtf(A*A+B*B+C*C);
@@ -1342,7 +1215,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 						{
 						    float sss5 = (A*m+B*n+C*p)/(sss1 * sss4);
 						    if (sss5 >= -1.0f && sss5 <= 1.0f)
-                                TargetAngleTMP.y = CurrentObjectRotation.y + asinf(sss5) * 57.32f;
+                                TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
 						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
@@ -1425,7 +1298,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 						{
 						    float sss3 = (A3*m+B3*n+C3*p)/(sss1 * sss2);
 						    if (sss3 >= -1.0f && sss3 <= 1.0f)
-                                TargetAngleTMP.x = CurrentObjectRotation.x + asinf(sss3) * 57.32f;
+                                TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
 						}
 
 						float sss4 = vw_sqrtf(A*A+B*B+C*C);
@@ -1434,7 +1307,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 						{
 						    float sss5 = (A*m+B*n+C*p)/(sss1 * sss4);
 						    if (sss5 >= -1.0f && sss5 <= 1.0f)
-                                TargetAngleTMP.y = CurrentObjectRotation.y + asinf(sss5) * 57.32f;
+                                TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
 						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
@@ -1517,7 +1390,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 						{
 						    float sss3 = (A3*m+B3*n+C3*p)/(sss1 * sss2);
 						    if (sss3 >= -1.0f && sss3 <= 1.0f)
-                                TargetAngleTMP.x = CurrentObjectRotation.x + asinf(sss3) * 57.32f;
+                                TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
 						}
 
 						float sss4 = vw_sqrtf(A*A+B*B+C*C);
@@ -1526,7 +1399,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 						{
 						    float sss5 = (A*m+B*n+C*p)/(sss1 * sss4);
 						    if (sss5 >= -1.0f && sss5 <= 1.0f)
-                                TargetAngleTMP.y = CurrentObjectRotation.y + asinf(sss5) * 57.32f;
+                                TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
 						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
@@ -1610,7 +1483,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 						{
 						    float sss3 = (A3*m+B3*n+C3*p)/(sss1 * sss2);
 						    if (sss3 >= -1.0f && sss3 <= 1.0f)
-                                TargetAngleTMP.x = CurrentObjectRotation.x + asinf(sss3) * 57.32f;
+                                TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
 						}
 
 						float sss4 = vw_sqrtf(A*A+B*B+C*C);
@@ -1619,7 +1492,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 						{
 						    float sss5 = (A*m+B*n+C*p)/(sss1 * sss4);
 						    if (sss5 >= -1.0f && sss5 <= 1.0f)
-                                TargetAngleTMP.y = CurrentObjectRotation.y + asinf(sss5) * 57.32f;
+                                TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
 						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;

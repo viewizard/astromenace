@@ -381,7 +381,7 @@ void WorkshopCreateBuyShip()
 	// чтобы оружие заняло свое место...
 	WorkshopFighterGame->Update(vw_GetTime());
 
-	WorkshopFighterGame->SetRotation(VECTOR3D(0.0f,-150.0f,0.0f));
+	WorkshopFighterGame->SetRotation(VECTOR3D(0.0f,150.0f,0.0f));
 }
 
 

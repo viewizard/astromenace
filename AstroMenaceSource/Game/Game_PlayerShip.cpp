@@ -226,7 +226,7 @@ void InitGamePlayerShip()
 			if (SetEarthSpaceFighterWeapon(PlayerFighter, i+1, Setup.Profile[CurrentProfile].Weapon[i]))
 			{
 				PlayerFighter->Weapon[i]->Ammo = Setup.Profile[CurrentProfile].WeaponAmmo[i];
-				PlayerFighter->WeaponYAngle[i] = Setup.Profile[CurrentProfile].WeaponSlotYAngle[i];
+				PlayerFighter->WeaponYAngle[i] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[i];
 			}
 		}
 	}
