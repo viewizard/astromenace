@@ -5,10 +5,10 @@
 
 	File name: Math.cpp
 
-	Copyright (c) 2001-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2001-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -464,7 +464,7 @@ void RotatePoint(VECTOR3D *Point, VECTOR3D Angle)
 		// X
 		if (Angle.x != 0)
 		{
-			float a = Angle.x*p180;
+			float a = -Angle.x*p180;
 			float c = cosf(a);
 			float s = sinf(a);
 			Point->y = yTMP*c + zTMP*s;
@@ -477,7 +477,7 @@ void RotatePoint(VECTOR3D *Point, VECTOR3D Angle)
 		// Y
 		if (Angle.y != 0)
 		{
-			float a = -Angle.y*p180;
+			float a = Angle.y*p180;
 			float c = cosf(a);
 			float s = sinf(a);
 			Point->x = xTMP*c + zTMP*s;
@@ -490,7 +490,7 @@ void RotatePoint(VECTOR3D *Point, VECTOR3D Angle)
 		// Z
 		if (Angle.z != 0)
 		{
-			float a = Angle.z*p180;
+			float a = -Angle.z*p180;
 			float c = cosf(a);
 			float s = sinf(a);
 			Point->x = xTMP*c + yTMP*s;
@@ -511,7 +511,7 @@ void RotatePointInv(VECTOR3D *Point, VECTOR3D Angle)
 		// Z
 		if (Angle.z != 0)
 		{
-			float a = Angle.z*p180;
+			float a = -Angle.z*p180;
 			float c = cosf(a);
 			float s = sinf(a);
 			Point->x = xTMP*c + yTMP*s;
@@ -524,7 +524,7 @@ void RotatePointInv(VECTOR3D *Point, VECTOR3D Angle)
 		// Y
 		if (Angle.y != 0)
 		{
-			float a = -Angle.y*p180;
+			float a = Angle.y*p180;
 			float c = cosf(a);
 			float s = sinf(a);
 			Point->x = xTMP*c + zTMP*s;
@@ -537,7 +537,7 @@ void RotatePointInv(VECTOR3D *Point, VECTOR3D Angle)
 		// X
 		if (Angle.x != 0)
 		{
-			float a = Angle.x*p180;
+			float a = -Angle.x*p180;
 			float c = cosf(a);
 			float s = sinf(a);
 			Point->y = yTMP*c + zTMP*s;

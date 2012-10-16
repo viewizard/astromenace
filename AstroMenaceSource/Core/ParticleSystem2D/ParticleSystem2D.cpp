@@ -466,7 +466,6 @@ void eParticleSystem2D::Draw()
 
 	// Установка текстуры и ее свойств...
 	vw_SetTexture(0, Texture);
-	vw_SetTextureAlphaTest(true, 0.01f);
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
 
@@ -550,7 +549,6 @@ void eParticleSystem2D::Draw()
 	vw_SendVertices(RI_QUADS, 4*CurrentCount, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
 
 	if (tmp != 0){delete [] tmp; tmp = 0;}
-	vw_SetTextureAlphaTest(false, 0.5f);
 	vw_SetTextureBlend(false, 0, 0);
     vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 	vw_BindTexture(0, 0);

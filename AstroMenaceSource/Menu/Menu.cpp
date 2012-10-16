@@ -601,7 +601,6 @@ void DrawMenu()
 		// нужно ставить трилинейную
 		if (Setup.TextureFilteringMode == 2) vw_SetTextureFiltering(RI_TEXTURE_TRILINEAR);
 
-		vw_SetTextureAlphaTest(true, 0.01f);
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 
 		vw_DepthTest(false, -1);
@@ -620,7 +619,6 @@ void DrawMenu()
 
 		vw_DepthTest(true, RI_LESSEQUAL);
 
-		vw_SetTextureAlphaTest(false, 0.01f);
 		vw_SetTextureBlend(false, 0, 0);
 		vw_BindTexture(0, 0);
 		if (buff != 0){delete [] buff; buff = 0;}
@@ -713,7 +711,6 @@ void DrawMenu()
 		if (Setup.TextureFilteringMode == 2) vw_SetTextureFiltering(RI_TEXTURE_TRILINEAR);
 
 
-		vw_SetTextureAlphaTest(true, 0.01f);
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 
 		vw_DepthTest(false, -1);
@@ -729,7 +726,6 @@ void DrawMenu()
 		vw_PopMatrix();
 
 		vw_DepthTest(true, RI_LESSEQUAL);
-		vw_SetTextureAlphaTest(false, 0.01f);
 		vw_SetTextureBlend(false, 0, 0);
 		vw_BindTexture(0, 0);
 		if (buff != 0){delete [] buff; buff = 0;}
@@ -744,7 +740,7 @@ void DrawMenu()
 		buff = new float[5*9]; if (buff == 0) return;
 
 		float heigh_2, length_2;
-		length_2 = 155.0f;
+		length_2 = 165.0f;
 		heigh_2 = 100.0f;
 		float x,y,z;
 		x = GamePoint.x+GameCameraGetDeviation();
@@ -804,7 +800,7 @@ void DrawMenu()
 		// нужно ставить трилинейную
 		if (Setup.TextureFilteringMode == 2) vw_SetTextureFiltering(RI_TEXTURE_TRILINEAR);
 
-		vw_SetTextureAlphaTest(true, 0.7f);
+		vw_SetTextureAlphaTest(true, 0.6f);
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 
 		vw_DepthTest(false, -1);

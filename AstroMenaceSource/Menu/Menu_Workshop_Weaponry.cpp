@@ -373,9 +373,9 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 				// если не ракетная установка
 				if (DragWeaponNum < 16)
 				{
-					WorkshopFighterGame->WeaponYAngle[SlotNum] = Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
+					WorkshopFighterGame->WeaponYAngle[SlotNum] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
 					VECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
-					NeedAngle.y += Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
+					NeedAngle.y += WorkshopFighterGame->WeaponYAngle[SlotNum];
 					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(NeedAngle);
 				}
 				else
@@ -706,21 +706,21 @@ void ShipSlotSetupWeapon(int Slot)
 				if (DrawButton128_2(Setup.iAspectRatioWidth/2+118, Ypos, GetText("1_Left"), MenuContentTransp, Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot] <= Min))
 				{
 					Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot] -= 5.0f;
-					WorkshopFighterGame->WeaponYAngle[Slot] = Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot];
+					WorkshopFighterGame->WeaponYAngle[Slot] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot];
 
 					WorkshopFighterGame->Weapon[Slot]->SetRotation(WorkshopFighterGame->Weapon[Slot]->Rotation^(-1));
 					VECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
-					NeedAngle.y += Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot];
+					NeedAngle.y += WorkshopFighterGame->WeaponYAngle[Slot];
 					WorkshopFighterGame->Weapon[Slot]->SetRotation(NeedAngle);
 				}
 				if (DrawButton128_2(Setup.iAspectRatioWidth/2+266, Ypos, GetText("1_Right"), MenuContentTransp, Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot] >= Max))
 				{
 					Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot] += 5.0f;
-					WorkshopFighterGame->WeaponYAngle[Slot] = Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot];
+					WorkshopFighterGame->WeaponYAngle[Slot] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot];
 
 					WorkshopFighterGame->Weapon[Slot]->SetRotation(WorkshopFighterGame->Weapon[Slot]->Rotation^(-1));
 					VECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
-					NeedAngle.y += Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot];
+					NeedAngle.y += WorkshopFighterGame->WeaponYAngle[Slot];
 					WorkshopFighterGame->Weapon[Slot]->SetRotation(NeedAngle);
 				}
 			}
@@ -787,9 +787,9 @@ void ShipSlotSetupWeapon(int Slot)
 				// если не ракетная установка
 				if (DragWeaponNum < 16)
 				{
-					WorkshopFighterGame->WeaponYAngle[SlotNum] = Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
+					WorkshopFighterGame->WeaponYAngle[SlotNum] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
 					VECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
-					NeedAngle.y += Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
+					NeedAngle.y += WorkshopFighterGame->WeaponYAngle[SlotNum];
 					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(NeedAngle);
 				}
 				else

@@ -121,6 +121,7 @@ public:
 	// Прорисовка объектa Object3D
 	virtual void	Draw(bool VertexOnlyPass);
 	bool			NeedCullFaces; // нужно резать бэк фейсы
+	bool			NeedAlphaTest; // нужно включить альфа тест
 	// Обновление данных объектa Object3D
 	virtual bool	Update(float Time);
 

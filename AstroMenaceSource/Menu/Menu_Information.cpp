@@ -310,7 +310,7 @@ void CreateInfoObject()
 	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
 	GameNPCArmorPenalty = 1;
 
-	RotationSumY = 120;
+	RotationSumY = 140;
 	RotationSumX = 0;
 
 	Point = VECTOR3D(1000,-1000,0);
@@ -1755,7 +1755,7 @@ void InformationDrawObject()
 				(DstRestLeft.top<= MouseY)) & !isDialogBoxDrawing())
 		{
 			fLeft = 0.8f;
-			RotateInfoObjectY = -RotateInfoObjectY*3;
+			RotateInfoObjectY = RotateInfoObjectY*3;
 		}
 		else
 		if  (((DstRestRight.right  >= MouseX)&
@@ -1764,7 +1764,7 @@ void InformationDrawObject()
 				(DstRestRight.top<= MouseY)) & !isDialogBoxDrawing())
 		{
 			fRight = 0.8f;
-			RotateInfoObjectY = RotateInfoObjectY*3;
+			RotateInfoObjectY = -RotateInfoObjectY*3;
 		}
 		else
 		if  (((DstRestUp.right  >= MouseX)&
@@ -1773,7 +1773,7 @@ void InformationDrawObject()
 				(DstRestUp.top<= MouseY)) & !isDialogBoxDrawing())
 		{
 			fUp = 0.8f;
-			RotateInfoObjectX = tmpRotateInfoObjectX*3;
+			RotateInfoObjectX = -tmpRotateInfoObjectX*3;
 		}
 		else
 		if  (((DstRestDown.right  >= MouseX)&
@@ -1782,14 +1782,14 @@ void InformationDrawObject()
 				(DstRestDown.top<= MouseY)) & !isDialogBoxDrawing())
 		{
 			fDown = 0.8f;
-			RotateInfoObjectX = -tmpRotateInfoObjectX*3;
+			RotateInfoObjectX = tmpRotateInfoObjectX*3;
 		}
 		else
 			RotateInfoObjectY = 0;
 
 		if (vw_GetWindowLBMouse(true))
 		{
-			RotateInfoObjectY = -RotationSumY+120; // 120 -базовый угол разворота при создании
+			RotateInfoObjectY = -RotationSumY+140; // 140 -базовый угол разворота при создании
 			RotateInfoObjectX = -RotationSumX;
 		}
 	}
@@ -1837,8 +1837,8 @@ void InformationDrawObject()
 	vw_CullFace(RI_NONE);
 
 	vw_Translate(VECTOR3D(1000.0f, -1000.0f, 0.0f));
-	vw_Rotate(0, -RotationSumY, 0);
-	vw_Rotate(-RotationSumX, 0, 0);
+	vw_Rotate(0, RotationSumY, 0);
+	vw_Rotate(RotationSumX, 0, 0);
 
 	vw_SetColor(0.7f, 0.7f, 1.0f, 0.3f*MenuContentTransp);
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);

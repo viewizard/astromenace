@@ -6,10 +6,10 @@
 
 	File name: SpaceShip.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -1638,21 +1638,21 @@ bool CSpaceShip::Update(float Time)
 				float Min = 0.0f;
 				float Max = 0.0f;
 				GetShipWeaponSlotAngle(Setup.Profile[CurrentProfile].Ship, i, &Min, &Max);
-				if (Weapon[i]->Rotation.y < NeedAngle.y)
+				if (Weapon[i]->Rotation.y > NeedAngle.y)
 				{
 					float NeedAngle_y = Weapon[i]->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
 					if (NeedAngle_y > NeedAngle.y) NeedAngle_y = NeedAngle.y;
 					NeedAngle.y = NeedAngle_y;
 					// проверка на достижение предела поворота
-					if (NeedAngle.y > Max+Rotation2.y) NeedAngle.y = Max+Rotation2.y;
+					if (NeedAngle.y > Max+Weapon[i]->Rotation.y) NeedAngle.y = Max+Weapon[i]->Rotation.y;
 				}
-				if (Weapon[i]->Rotation.y > NeedAngle.y)
+				if (Weapon[i]->Rotation.y < NeedAngle.y)
 				{
 					float NeedAngle_y = Weapon[i]->Rotation.y-40.0f*TargetingSpeed*TimeDelta;
 					if (NeedAngle_y < NeedAngle.y) NeedAngle_y = NeedAngle.y;
 					NeedAngle.y = NeedAngle_y;
 					// проверка на достижение предела поворота
-					if (NeedAngle.y < Min+Rotation2.y) NeedAngle.y = Min+Rotation2.y;
+					if (NeedAngle.y < Min+Weapon[i]->Rotation.y) NeedAngle.y = Min+Weapon[i]->Rotation.y;
 				}
 
 

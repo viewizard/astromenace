@@ -84,7 +84,7 @@ void CreateCursor()
 	CursorParticleSystem2D->Life       = 0.40f;
 	CursorParticleSystem2D->LifeVar       = 0.05f;
 	CursorParticleSystem2D->ParticlesPerSec = 50;
-	CursorParticleSystem2D->Direction = VECTOR3D(1.0f, 0.0f, 0.0f);
+	CursorParticleSystem2D->Direction = VECTOR3D(0.0f, 1.0f, 0.0f);
 	CursorParticleSystem2D->SetRotation(VECTOR3D(0.0f, 0.0f, -45.0f));
 	CursorParticleSystem2D->Texture = vw_FindTextureByName("DATA/GFX/flare1.tga");
 

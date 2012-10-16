@@ -11,7 +11,7 @@
 	<StarSystem system="1" anglex="-262" angley="40" anglez="154"/>
 	<!-- Создаем планеты -->
 	<CreatePlanet type="4" posax="800" posay="-250" posaz="1500"/>
-	<CreatePlanet type="2" posax="600" posay="-250" posaz="500" anglay="180"/>
+	<CreatePlanet type="2" posax="600" posay="-250" posaz="500" anglay="-180"/>
 
 	
 	<!-- Установка источников света -->
@@ -25,41 +25,41 @@
 	<!-- Создаем базу и все неподвижные объекты -->
 	<TimeLine>
 		<CreateBasePart type="12" posax="360" posay="-40" posaz="130"/>
-		<CreateMBuilding type="5" posax="360" posay="-40" posaz="130" anglay="45"/>
+		<CreateMBuilding type="5" posax="360" posay="-40" posaz="130" anglay="-45"/>
 
 		<CreateBasePart type="1" posax="60" posay="-40" posaz="240"/>
-		<CreateMBuilding type="5" posax="60" posay="-40" posaz="240" anglay="45"/>
+		<CreateMBuilding type="5" posax="60" posay="-40" posaz="240" anglay="-45"/>
 
 		<CreateBasePart type="12" posax="24" posay="-10" posaz="-20"/>
-		<CreateMBuilding type="3" posax="24" posay="-10" posaz="-13" anglay="90"/>
-		<CreateBasePart type="4" posax="-19" posay="-10" posaz="-20" anglay="90"/>
-		<CreateBasePart type="4" posax="67" posay="-10" posaz="-20" anglay="90"/>
-		<CreateBasePart type="4" posax="125" posay="-10" posaz="-20" anglay="90"/>
+		<CreateMBuilding type="3" posax="24" posay="-10" posaz="-13" anglay="-90"/>
+		<CreateBasePart type="4" posax="-19" posay="-10" posaz="-20" anglay="-90"/>
+		<CreateBasePart type="4" posax="67" posay="-10" posaz="-20" anglay="-90"/>
+		<CreateBasePart type="4" posax="125" posay="-10" posaz="-20" anglay="-90"/>
 
 
-		<CreateBasePart type="7" posax="-60" posay="-80" posaz="100" anglay="90"/>
-		<CreateBasePart type="7" posax="0" posay="-80" posaz="100" anglay="90"/>
-		<CreateBasePart type="7" posax="60" posay="-80" posaz="100" anglay="90"/>
-		<CreateBasePart type="7" posax="60" posay="-80" posaz="160" anglay="90"/>
-		<CreateBasePart type="7" posax="120" posay="-80" posaz="160" anglay="90"/>
+		<CreateBasePart type="7" posax="-60" posay="-80" posaz="100" anglay="-90"/>
+		<CreateBasePart type="7" posax="0" posay="-80" posaz="100" anglay="-90"/>
+		<CreateBasePart type="7" posax="60" posay="-80" posaz="100" anglay="-90"/>
+		<CreateBasePart type="7" posax="60" posay="-80" posaz="160" anglay="-90"/>
+		<CreateBasePart type="7" posax="120" posay="-80" posaz="160" anglay="-90"/>
 
-		<CreateBasePart type="5" posax="2" posay="-80" posaz="191" anglay="90"/>
-		<CreateBasePart type="5" posax="158" posay="-80" posaz="190" anglay="90"/>
-		<CreateBasePart type="5" posax="98" posay="-80" posaz="70" anglay="90"/>
-		<CreateBasePart type="5" posax="158" posay="-80" posaz="130" anglay="90"/>
-		<CreateBasePart type="5" posax="32" posay="-80" posaz="221" anglay="0"/>
-		<CreateBasePart type="5" posax="92" posay="-80" posaz="221" anglay="0"/>
-
-
-		<CreateBuilding type="6" posax="40" posay="-80" posaz="110" anglay="0"/>
-		<CreateBuilding type="6" posax="10" posay="-80" posaz="110" anglay="0"/>
-		<CreateBuilding type="6" posax="-20" posay="-80" posaz="110" anglay="0"/>
-		<CreateBuilding type="9" posax="100" posay="-80" posaz="150" anglay="-90"/>
+		<CreateBasePart type="5" posax="2" posay="-80" posaz="191" anglay="-90"/>
+		<CreateBasePart type="5" posax="158" posay="-80" posaz="190" anglay="-90"/>
+		<CreateBasePart type="5" posax="98" posay="-80" posaz="70" anglay="-90"/>
+		<CreateBasePart type="5" posax="158" posay="-80" posaz="130" anglay="-90"/>
+		<CreateBasePart type="5" posax="32" posay="-80" posaz="221" anglay="-0"/>
+		<CreateBasePart type="5" posax="92" posay="-80" posaz="221" anglay="-0"/>
 
 
+		<CreateBuilding type="6" posax="40" posay="-80" posaz="110" anglay="-0"/>
+		<CreateBuilding type="6" posax="10" posay="-80" posaz="110" anglay="-0"/>
+		<CreateBuilding type="6" posax="-20" posay="-80" posaz="110" anglay="-0"/>
+		<CreateBuilding type="9" posax="100" posay="-80" posaz="150" anglay="90"/>
 
-		<CreateTracked type="14" posax="50" posay="-80" posaz="180" anglay="30"/>
-		<CreateTracked type="14" posax="40" posay="-80" posaz="150" anglay="70"/>	
+
+
+		<CreateTracked type="14" posax="50" posay="-80" posaz="180" anglay="-30"/>
+		<CreateTracked type="14" posax="40" posay="-80" posaz="150" anglay="-70"/>	
 
 
 		<CreateMine type="3" posax="20" posay="-20" posaz="100" status="1"/>	
@@ -78,37 +78,37 @@
 
 
 	<TimeLine value="0">
-		<PirateShip type="2" speed="40" posx="550" posy="-2" posz="70" angly="90"/>
-		<PirateShip type="2" speed="36" posx="562" posy="-2" posz="80" angly="90"/>
+		<PirateShip type="2" speed="40" posx="550" posy="-2" posz="70" angly="-90"/>
+		<PirateShip type="2" speed="36" posx="562" posy="-2" posz="80" angly="-90"/>
 	</TimeLine>
 
 	<TimeLine value="1">
-		<CreateTracked type="12" speed="6" posax="140" posay="-10" posaz="-24" anglay="90"/>	
-		<PirateShip type="2" speed="40" posx="300" posy="-2" posz="-10" angly="90"/>
-		<PirateShip type="2" speed="36" posx="320" posy="-2" posz="0" angly="90"/>
+		<CreateTracked type="12" speed="6" posax="140" posay="-10" posaz="-24" anglay="-90"/>	
+		<PirateShip type="2" speed="40" posx="300" posy="-2" posz="-10" angly="-90"/>
+		<PirateShip type="2" speed="36" posx="320" posy="-2" posz="0" angly="-90"/>
 	</TimeLine>
 	
 
 	<TimeLine value="4">
-		<PirateShip type="10" speed="12" posx="440" posy="-2" posz="40" angly="90"/>
+		<PirateShip type="10" speed="12" posx="440" posy="-2" posz="40" angly="-90"/>
 	</TimeLine>	
 	
 	<TimeLine value="3">
-		<PirateShip type="2" speed="25" posx="440" posy="-20" posz="40" angly="90"/>
-		<PirateShip type="2" speed="22" posx="460" posy="-20" posz="50" angly="90"/>
+		<PirateShip type="2" speed="25" posx="440" posy="-20" posz="40" angly="-90"/>
+		<PirateShip type="2" speed="22" posx="460" posy="-20" posz="50" angly="-90"/>
 	</TimeLine>
 
 	<TimeLine value="3">
-		<PirateShip type="6" speed="20" posx="440" posy="-20" posz="45" angly="90"/>
+		<PirateShip type="6" speed="20" posx="440" posy="-20" posz="45" angly="-90"/>
 	</TimeLine>
 
 	<TimeLine value="8">
-		<CreateWheeled type="4" speed="12" posax="200" posay="-10" posaz="-24" anglay="90"/>	
+		<CreateWheeled type="4" speed="12" posax="200" posay="-10" posaz="-24" anglay="-90"/>	
 	</TimeLine>
 
 	<TimeLine value="6">
-		<PirateShip type="2" speed="40" posx="300" posy="-2" posz="-10" angly="90"/>
-		<PirateShip type="2" speed="36" posx="320" posy="-2" posz="0" angly="90"/>
+		<PirateShip type="2" speed="40" posx="300" posy="-2" posz="-10" angly="-90"/>
+		<PirateShip type="2" speed="36" posx="320" posy="-2" posz="0" angly="-90"/>
 	</TimeLine>
 
 	<TimeLine value="5"/>
@@ -118,46 +118,46 @@
 
 
 	<TimeLine value="0">
-		<PirateShip type="2" speed="40" posx="550" posy="-2" posz="70" angly="90"/>
-		<PirateShip type="2" speed="36" posx="562" posy="-2" posz="80" angly="90"/>
+		<PirateShip type="2" speed="40" posx="550" posy="-2" posz="70" angly="-90"/>
+		<PirateShip type="2" speed="36" posx="562" posy="-2" posz="80" angly="-90"/>
 	</TimeLine>
 
 	<TimeLine value="1">
-		<CreateWheeled type="6" speed="6" posax="140" posay="-10" posaz="-24" anglay="90"/>	
-		<PirateShip type="2" speed="40" posx="300" posy="-2" posz="-10" angly="90"/>
-		<PirateShip type="2" speed="36" posx="320" posy="-2" posz="0" angly="90"/>
+		<CreateWheeled type="6" speed="6" posax="140" posay="-10" posaz="-24" anglay="-90"/>	
+		<PirateShip type="2" speed="40" posx="300" posy="-2" posz="-10" angly="-90"/>
+		<PirateShip type="2" speed="36" posx="320" posy="-2" posz="0" angly="-90"/>
 	</TimeLine>
 	
 	<TimeLine value="4">
-		<PirateShip type="9" speed="12" posx="440" posy="-2" posz="40" angly="90"/>
+		<PirateShip type="9" speed="12" posx="440" posy="-2" posz="40" angly="-90"/>
 	</TimeLine>	
 	
 	<TimeLine value="3">
-		<PirateShip type="1" speed="23" posx="440" posy="-20" posz="40" angly="90"/>
-		<PirateShip type="1" speed="22" posx="460" posy="-20" posz="50" angly="90"/>
+		<PirateShip type="1" speed="23" posx="440" posy="-20" posz="40" angly="-90"/>
+		<PirateShip type="1" speed="22" posx="460" posy="-20" posz="50" angly="-90"/>
 	</TimeLine>
 
 	<TimeLine value="3">
-		<PirateShip type="7" speed="20" posx="440" posy="-20" posz="45" angly="90"/>
+		<PirateShip type="7" speed="20" posx="440" posy="-20" posz="45" angly="-90"/>
 	</TimeLine>
 
 
 
 
 	<TimeLine value="8">
-		<CreateWheeled type="5" speed="15" posax="-190" posay="-10" posaz="-14" anglay="-90">
+		<CreateWheeled type="5" speed="15" posax="-190" posay="-10" posaz="-14" anglay="90">
 			<TimeSheet time="12.1" speed="15"/>
-			<TimeSheet time="1.7" speed="10" roty="-45" rotacy="1" />
-			<TimeSheet time="1.7" speed="10" roty="45" rotacy="1" />			
-			<TimeSheet time="1.7" speed="10" roty="45" rotacy="1" />	
-			<TimeSheet time="1.7" speed="10" roty="-45" rotacy="1" />
+			<TimeSheet time="1.7" speed="10" roty="45" rotacy="1" />
+			<TimeSheet time="1.7" speed="10" roty="-45" rotacy="1" />			
+			<TimeSheet time="1.7" speed="10" roty="-45" rotacy="1" />	
+			<TimeSheet time="1.7" speed="10" roty="45" rotacy="1" />
 			<TimeSheet time="10" speed="15" />
 		</CreateWheeled>
 	</TimeLine>
 
 	<TimeLine value="6">
-		<PirateShip type="2" speed="40" posx="300" posy="-2" posz="-10" angly="90"/>
-		<PirateShip type="2" speed="36" posx="320" posy="-2" posz="0" angly="90"/>
+		<PirateShip type="2" speed="40" posx="300" posy="-2" posz="-10" angly="-90"/>
+		<PirateShip type="2" speed="36" posx="320" posy="-2" posz="0" angly="-90"/>
 	</TimeLine>
 
 	<TimeLine value="5"/>
@@ -168,32 +168,32 @@
 
 
 	<TimeLine value="0">
-		<PirateShip type="2" speed="40" posx="550" posy="-2" posz="70" angly="90"/>
-		<PirateShip type="2" speed="36" posx="562" posy="-2" posz="80" angly="90"/>
+		<PirateShip type="2" speed="40" posx="550" posy="-2" posz="70" angly="-90"/>
+		<PirateShip type="2" speed="36" posx="562" posy="-2" posz="80" angly="-90"/>
 	</TimeLine>
 
 	<TimeLine value="1">
-		<CreateTracked type="9" speed="8" posax="160" posay="-10" posaz="-24" anglay="90"/>
-		<PirateShip type="2" speed="40" posx="300" posy="-2" posz="-10" angly="90"/>
-		<PirateShip type="2" speed="36" posx="320" posy="-2" posz="0" angly="90"/>
+		<CreateTracked type="9" speed="8" posax="160" posay="-10" posaz="-24" anglay="-90"/>
+		<PirateShip type="2" speed="40" posx="300" posy="-2" posz="-10" angly="-90"/>
+		<PirateShip type="2" speed="36" posx="320" posy="-2" posz="0" angly="-90"/>
 	</TimeLine>
 	
 	<TimeLine value="4">
-		<PirateShip type="8" speed="12" posx="440" posy="-2" posz="40" angly="90"/>
+		<PirateShip type="8" speed="12" posx="440" posy="-2" posz="40" angly="-90"/>
 	</TimeLine>	
 	
 	<TimeLine value="3">
-		<PirateShip type="5" speed="22" posx="440" posy="-40" posz="40" angly="90"/>
+		<PirateShip type="5" speed="22" posx="440" posy="-40" posz="40" angly="-90"/>
 	</TimeLine>
 
 
 	<TimeLine value="11">
-		<CreateWheeled type="8" speed="10" posax="180" posay="-10" posaz="-24" anglay="90"/>	
+		<CreateWheeled type="8" speed="10" posax="180" posay="-10" posaz="-24" anglay="-90"/>	
 	</TimeLine>
 
 	<TimeLine value="6">
-		<PirateShip type="2" speed="40" posx="300" posy="-2" posz="-10" angly="90"/>
-		<PirateShip type="2" speed="36" posx="320" posy="-2" posz="0" angly="90"/>
+		<PirateShip type="2" speed="40" posx="300" posy="-2" posz="-10" angly="-90"/>
+		<PirateShip type="2" speed="36" posx="320" posy="-2" posz="0" angly="-90"/>
 	</TimeLine>
 
 	<TimeLine value="5"/>
