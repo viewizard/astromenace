@@ -174,7 +174,10 @@ void vw_SetCameraDeviation(VECTOR3D NewCameraDeviation)
 void vw_CameraLookAt(void)
 {
 	// установка камеры
-	vw_Rotate(-CameraRotation.x, -CameraRotation.y, -CameraRotation.z);
+	vw_Rotate(-CameraRotation.x, 1.0f, 0.0f, 0.0f);
+	vw_Rotate(-CameraRotation.y, 0.0f, 1.0f, 0.0f);
+	vw_Rotate(-CameraRotation.z, 0.0f, 0.0f, 1.0f);
+
 	vw_Translate((CameraLocation^(-1.0f))-CameraDeviation);
 
 	// получаем фруструм

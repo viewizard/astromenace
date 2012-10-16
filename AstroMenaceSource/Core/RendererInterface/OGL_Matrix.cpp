@@ -62,11 +62,9 @@ void vw_Translate(VECTOR3D Location)
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_Rotate(float fX, float fY, float fZ)
+void vw_Rotate(float fAngle, float fX, float fY, float fZ)
 {
-	if (fX != 0.0f) glRotatef(fX, 1.0f, 0.0f, 0.0f);
-	if (fY != 0.0f) glRotatef(fY, 0.0f, 1.0f, 0.0f);
-	if (fZ != 0.0f) glRotatef(fZ, 0.0f, 0.0f, 1.0f);
+	glRotatef(fAngle, fX, fY, fZ);
 }
 
 
@@ -94,13 +92,9 @@ void vw_GetMatrix(int pname, float *params)
 		case RI_TEXTURE_MATRIX: glGetFloatv(GL_TEXTURE, params); break;
 	}
 }
-void vw_SetMatrix(int pname, float *params)
+void vw_SetMatrix(float *params)
 {
-	int MatrixMode;
-	glGetIntegerv(GL_MATRIX_MODE, &MatrixMode);
-	vw_MatrixMode(pname);
 	glLoadMatrixf(params);
-	glMatrixMode(MatrixMode);
 }
 
 
@@ -126,13 +120,9 @@ void vw_MatrixMode(int pname)
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_MultMatrix(int pname, float *params)
+void vw_MultMatrix(float *params)
 {
-	int MatrixMode;
-	glGetIntegerv(GL_MATRIX_MODE, &MatrixMode);
-	vw_MatrixMode(pname);
 	glMultMatrixf(params);
-	glMatrixMode(MatrixMode);
 }
 
 

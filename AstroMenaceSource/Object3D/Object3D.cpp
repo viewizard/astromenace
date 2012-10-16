@@ -825,9 +825,9 @@ void CObject3D::Draw(bool VertexOnlyPass)
 		vw_PushMatrix();
 		// переносим и двигаем уже по данным всей модели
 		vw_Translate(Location);
-		vw_Rotate(0.0f, 0.0f, Rotation.z);
-		vw_Rotate(0.0f, Rotation.y, 0.0f);
-		vw_Rotate(Rotation.x, 0.0f, 0.0f);
+		vw_Rotate(Rotation.z, 0.0f, 0.0f, 1.0f);
+		vw_Rotate(Rotation.y, 0.0f, 1.0f, 0.0f);
+		vw_Rotate(Rotation.x, 1.0f, 0.0f, 0.0f);
 
 
 		if (NeedOnePieceDraw)
@@ -858,15 +858,15 @@ void CObject3D::Draw(bool VertexOnlyPass)
 				// сдвигаем его в нужное место
 				vw_Translate(DrawObjectList[i].Location);
 				// поворачиваем объект
-				vw_Rotate(0.0f, 0.0f, DrawObjectList[i].Rotation.z);
-				vw_Rotate(0.0f, DrawObjectList[i].Rotation.y, 0.0f);
-				vw_Rotate(DrawObjectList[i].Rotation.x, 0.0f, 0.0f);
+				vw_Rotate(DrawObjectList[i].Rotation.z, 0.0f, 0.0f, 1.0f);
+				vw_Rotate(DrawObjectList[i].Rotation.y, 0.0f, 1.0f, 0.0f);
+				vw_Rotate(DrawObjectList[i].Rotation.x, 1.0f, 0.0f, 0.0f);
 				// если нужна дополнительная анимация геометрией
 				if (DrawObjectList[i].NeedGeometryAnimation)
 				{
-					vw_Rotate(0.0f, 0.0f, DrawObjectList[i].GeometryAnimation.z);
-					vw_Rotate(0.0f, DrawObjectList[i].GeometryAnimation.y, 0.0f);
-					vw_Rotate(DrawObjectList[i].GeometryAnimation.x, 0.0f, 0.0f);
+					vw_Rotate(DrawObjectList[i].GeometryAnimation.z, 0.0f, 0.0f, 1.0f);
+					vw_Rotate(DrawObjectList[i].GeometryAnimation.y, 0.0f, 1.0f, 0.0f);
+					vw_Rotate(DrawObjectList[i].GeometryAnimation.x, 1.0f, 0.0f, 0.0f);
 				}
 
 
@@ -911,9 +911,9 @@ void CObject3D::Draw(bool VertexOnlyPass)
 
 	// переносим и двигаем уже по данным всей модели
 	vw_Translate(Location);
-	vw_Rotate(0.0f, 0.0f, Rotation.z);
-	vw_Rotate(0.0f, Rotation.y, 0.0f);
-	vw_Rotate(Rotation.x, 0.0f, 0.0f);
+	vw_Rotate(Rotation.z, 0.0f, 0.0f, 1.0f);
+	vw_Rotate(Rotation.y, 0.0f, 1.0f, 0.0f);
+	vw_Rotate(Rotation.x, 1.0f, 0.0f, 0.0f);
 
 
 	// для корректной прорисовки на всех видеокартах атмосферы планеты ...
@@ -1066,17 +1066,17 @@ void CObject3D::Draw(bool VertexOnlyPass)
 			// сдвигаем его в нужное место
 			vw_Translate(DrawObjectList[i].Location);
 			// поворачиваем объект
-			vw_Rotate(0.0f, 0.0f, DrawObjectList[i].Rotation.z);
-			vw_Rotate(0.0f, DrawObjectList[i].Rotation.y, 0.0f);
-			vw_Rotate(DrawObjectList[i].Rotation.x, 0.0f, 0.0f);
+			vw_Rotate(DrawObjectList[i].Rotation.z, 0.0f, 0.0f, 1.0f);
+			vw_Rotate(DrawObjectList[i].Rotation.y, 0.0f, 1.0f, 0.0f);
+			vw_Rotate(DrawObjectList[i].Rotation.x, 1.0f, 0.0f, 0.0f);
 
 
 			// если нужна дополнительная анимация геометрией
 			if (DrawObjectList[i].NeedGeometryAnimation)
 			{
-				vw_Rotate(0.0f, 0.0f, DrawObjectList[i].GeometryAnimation.z);
-				vw_Rotate(0.0f, DrawObjectList[i].GeometryAnimation.y, 0.0f);
-				vw_Rotate(DrawObjectList[i].GeometryAnimation.x, 0.0f, 0.0f);
+				vw_Rotate(DrawObjectList[i].GeometryAnimation.z, 0.0f, 0.0f, 1.0f);
+				vw_Rotate(DrawObjectList[i].GeometryAnimation.y, 0.0f, 1.0f, 0.0f);
+				vw_Rotate(DrawObjectList[i].GeometryAnimation.x, 1.0f, 0.0f, 0.0f);
 			}
 
 
@@ -1299,8 +1299,8 @@ void CObject3D::Draw(bool VertexOnlyPass)
 	// поднимаем
 	vw_Translate(VECTOR3D(Location.x, Location.y+AABB[0].y+SizeY*2.0f, Location.z));
 	// поворачиваем к камере
-	vw_Rotate(0, -180+CurrentCameraRotation.y, 0);
-	vw_Rotate(-CurrentCameraRotation.x, 0, 0);
+	vw_Rotate(-180+CurrentCameraRotation.y, 0.0f, 1.0f, 0.0f);
+	vw_Rotate(-CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
 
 
 
@@ -1408,9 +1408,8 @@ void CObject3D::Draw(bool VertexOnlyPass)
 		// поднимаем
 		vw_Translate(VECTOR3D(Location.x, Location.y+AABB[0].y+SizeY*5.0f, Location.z));
 		// поворачиваем к камере
-		vw_Rotate(0, -180+CurrentCameraRotation.y, 0);
-		vw_Rotate(-CurrentCameraRotation.x, 0, 0);
-
+		vw_Rotate(-180+CurrentCameraRotation.y, 0.0f, 1.0f, 0.0f);
+		vw_Rotate(-CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
 
 
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(float));

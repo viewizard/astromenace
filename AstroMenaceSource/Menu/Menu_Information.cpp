@@ -1837,8 +1837,8 @@ void InformationDrawObject()
 	vw_CullFace(RI_NONE);
 
 	vw_Translate(VECTOR3D(1000.0f, -1000.0f, 0.0f));
-	vw_Rotate(0, RotationSumY, 0);
-	vw_Rotate(RotationSumX, 0, 0);
+	vw_Rotate(RotationSumY, 0.0f, 1.0f, 0.0f);
+	vw_Rotate(RotationSumX, 1.0f, 0.0f, 0.0f);
 
 	vw_SetColor(0.7f, 0.7f, 1.0f, 0.3f*MenuContentTransp);
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);

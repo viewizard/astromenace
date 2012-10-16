@@ -140,7 +140,9 @@ void StarSystemDraw()
 		// SkyBox
 		vw_PushMatrix();
 		vw_Translate(CurrentCameraLocation);
-		vw_Rotate(StarSystem_BaseRotation.x, StarSystem_BaseRotation.y, StarSystem_BaseRotation.z);
+		vw_Rotate(StarSystem_BaseRotation.x, 1.0f, 0.0f, 0.0f);
+		vw_Rotate(StarSystem_BaseRotation.y, 0.0f, 1.0f, 0.0f);
+		vw_Rotate(StarSystem_BaseRotation.z, 0.0f, 0.0f, 1.0f);
 		SkyBoxDraw();
 		vw_PopMatrix();
 	}

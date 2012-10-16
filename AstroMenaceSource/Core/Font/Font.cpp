@@ -585,9 +585,8 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 	vw_GetCameraRotation(&CurrentCameraRotation);
 
 	// поворачиваем к камере
-	vw_Rotate(0, CurrentCameraRotation.y, 0);
-	vw_Rotate(CurrentCameraRotation.x, 0, 0);
-
+	vw_Rotate(CurrentCameraRotation.y, 0.0f, 1.0f, 0.0f);
+	vw_Rotate(CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
 
 
 	// прорисовываем все символы

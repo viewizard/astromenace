@@ -1602,19 +1602,25 @@ bool CSpaceShip::Update(float Time)
 				// добавляем базовый угол, чтобы по умолчанию устанавливало его
 				NeedAngle.y += WeaponYAngle[i];
 
-				if (GameTargetingSystem == 1)
-					GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation2,
-						Length, RotationMat2,	&NeedAngle, Width, false, true, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->ObjectCreationType);
-				if (GameTargetingSystem == 2)
-					GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation2,
-						Length, RotationMat2,	&NeedAngle, Width, true, true, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->ObjectCreationType);
-				if (GameTargetingSystem == 3)
+				switch (GameTargetingSystem)
+				{
+				 	case 1:
+						GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation2,
+							Length, RotationMat2, &NeedAngle, Width, false, true, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->ObjectCreationType);
+						break;
+				 	case 2:
+						GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation2,
+							Length, RotationMat2, &NeedAngle, Width, true, true, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->ObjectCreationType);
+						break;
+				 	case 3:
 						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->Rotation,
 							Length,	Weapon[i]->CurrentRotationMat, &NeedAngle, Weapon[i]->Width, false, true, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->ObjectCreationType);
-				if (GameTargetingSystem == 4)
+						break;
+				 	case 4:
 						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation, VECTOR3D(Weapon[i]->Rotation.x,0,Weapon[i]->Rotation.z)+VECTOR3D(0,WeaponYAngle[i],0),
-							Length,	Weapon[i]->CurrentRotationMat, &NeedAngle, Width, true, true, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->ObjectCreationType);
-
+							Length,	Weapon[i]->CurrentRotationMat, &NeedAngle, Width, false, true, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->ObjectCreationType);
+						break;
+				}
 
 
 				VECTOR3D NeedAngleTmp = NeedAngle;
