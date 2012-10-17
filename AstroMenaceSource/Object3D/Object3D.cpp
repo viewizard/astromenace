@@ -362,7 +362,20 @@ void CObject3D::SetObjectLocation(VECTOR3D NewLocation, int ObjectNum)
 	// пересчет HitBB
 	if (HitBB != 0)
 	{
-		HitBBLocation[ObjectNum] -= DrawObjectList[ObjectNum].Location - NewLocation;
+		// делаем временную обратную матрицу модели
+		float OldInvRotationMatTmp[9];
+		memcpy(OldInvRotationMatTmp, CurrentRotationMat, 9*sizeof(float));
+		Matrix33InverseRotate(OldInvRotationMatTmp);
+
+	//	Matrix33CalcPoint(&HitBBLocation[ObjectNum], OldInvRotationMatTmp);
+	//	HitBBLocation[ObjectNum] -= DrawObjectList[ObjectNum].Location - NewLocation;
+	//	Matrix33CalcPoint(&HitBBLocation[ObjectNum], CurrentRotationMat);
+		for (int j=0; j<8; j++)
+		{
+			Matrix33CalcPoint(&HitBB[ObjectNum][j], OldInvRotationMatTmp);
+			HitBB[ObjectNum][j] -= DrawObjectList[ObjectNum].Location - NewLocation;
+			Matrix33CalcPoint(&HitBB[ObjectNum][j], CurrentRotationMat);
+		}
 
 		// нужно подкорректировать OBB и ABB
 
@@ -372,11 +385,6 @@ void CObject3D::SetObjectLocation(VECTOR3D NewLocation, int ObjectNum)
 		float MaxY = -10000.0f;
 		float MinZ = 10000.0f;
 		float MaxZ = -10000.0f;
-
-		// делаем временную обратную матрицу модели
-		float OldInvRotationMatTmp[9];
-		memcpy(OldInvRotationMatTmp, CurrentRotationMat, 9*sizeof(float));
-		Matrix33InverseRotate(OldInvRotationMatTmp);
 
 		// проверяем данные
 		for (int i=0; i<DrawObjectQuantity; i++)
@@ -489,16 +497,19 @@ void CObject3D::SetObjectRotation(VECTOR3D NewRotation, int ObjectNum)
 
 		// собственно меняем данные в геометрии
 		Matrix33CalcPoint(&HitBBLocation[ObjectNum], OldInvRotationMatTmp);
-		HitBBLocation[ObjectNum] -= DrawObjectList[ObjectNum].Location;
+	//	HitBBLocation[ObjectNum] -= DrawObjectList[ObjectNum].Location;
 		Matrix33CalcPoint(&HitBBLocation[ObjectNum], OldInvRotationMatTmp2);
 		Matrix33CalcPoint(&HitBBLocation[ObjectNum], CurrentRotationMatTmp2);
-		HitBBLocation[ObjectNum] += DrawObjectList[ObjectNum].Location;
+	//	HitBBLocation[ObjectNum] += DrawObjectList[ObjectNum].Location;
 		Matrix33CalcPoint(&HitBBLocation[ObjectNum], CurrentRotationMat);
 		for (int j=0; j<8; j++)
 		{
 			Matrix33CalcPoint(&HitBB[ObjectNum][j], OldInvRotationMatTmp);
+			HitBB[ObjectNum][j] -= DrawObjectList[ObjectNum].Location;
 			Matrix33CalcPoint(&HitBB[ObjectNum][j], OldInvRotationMatTmp2);
+
 			Matrix33CalcPoint(&HitBB[ObjectNum][j], CurrentRotationMatTmp2);
+			HitBB[ObjectNum][j] += DrawObjectList[ObjectNum].Location;
 			Matrix33CalcPoint(&HitBB[ObjectNum][j], CurrentRotationMat);
 		}
 
@@ -998,7 +1009,7 @@ void CObject3D::Draw(bool VertexOnlyPass)
 		{
 
 			// небольшая проверка для конкретной части
-/*			if (HitBB != 0 && HitBBLocation != 0)
+			if (HitBB != 0 && HitBBLocation != 0)
 			{
 				VECTOR3D Min, Max;
 				Min.x = Max.x = HitBB[i][0].x + HitBBLocation[i].x;
@@ -1019,7 +1030,7 @@ void CObject3D::Draw(bool VertexOnlyPass)
 				{
 					continue;
 				}
-			}*/
+			}
 
 
 			// работа с текстурами

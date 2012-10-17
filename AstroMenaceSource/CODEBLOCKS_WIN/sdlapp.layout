@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="All" />
-	<File name="..\Core\Base.h" open="1" top="1" tabpos="3">
-		<Cursor position="1578" topLine="36" />
+	<File name="..\Core\Base.h" open="0" top="0" tabpos="3">
+		<Cursor position="2158" topLine="36" />
 	</File>
 	<File name="..\Core\Core.h" open="0" top="0" tabpos="0">
 		<Cursor position="1123" topLine="12" />
@@ -58,6 +58,9 @@
 	<File name="..\GraphicFX\SpaceStars\SpaceStars.cpp" open="0" top="0" tabpos="8">
 		<Cursor position="7270" topLine="234" />
 	</File>
+	<File name="..\GraphicFX\Text\Text.h" open="0" top="0" tabpos="0">
+		<Cursor position="0" topLine="65" />
+	</File>
 	<File name="..\Loading.cpp" open="0" top="0" tabpos="2">
 		<Cursor position="81584" topLine="1328" />
 	</File>
@@ -67,8 +70,8 @@
 	<File name="..\Loop_proc.cpp" open="0" top="0" tabpos="4">
 		<Cursor position="7363" topLine="215" />
 	</File>
-	<File name="..\Main.cpp" open="1" top="0" tabpos="1">
-		<Cursor position="36233" topLine="875" />
+	<File name="..\Main.cpp" open="1" top="1" tabpos="0">
+		<Cursor position="29999" topLine="875" />
 	</File>
 	<File name="..\Menu\Menu.cpp" open="0" top="0" tabpos="5">
 		<Cursor position="26574" topLine="1025" />
@@ -82,7 +85,7 @@
 	<File name="..\Menu\Menu_Mission.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="21638" topLine="692" />
 	</File>
-	<File name="..\Menu\Menu_Options.cpp" open="1" top="0" tabpos="2">
+	<File name="..\Menu\Menu_Options.cpp" open="0" top="0" tabpos="2">
 		<Cursor position="1732" topLine="29" />
 	</File>
 	<File name="..\Menu\Menu_Profile.cpp" open="0" top="0" tabpos="9">
@@ -123,6 +126,9 @@
 	</File>
 	<File name="..\ScriptEngine\Setup.cpp" open="0" top="0" tabpos="9">
 		<Cursor position="25132" topLine="657" />
+	</File>
+	<File name="..\ScriptEngine\Text.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="0" topLine="164" />
 	</File>
 	<File name="..\Struct.h" open="0" top="0" tabpos="10">
 		<Cursor position="6889" topLine="222" />
