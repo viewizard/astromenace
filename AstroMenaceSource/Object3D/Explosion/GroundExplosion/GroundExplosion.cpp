@@ -138,19 +138,16 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 				// находим точку локального положения объекта в моделе
 				VECTOR3D LocalLocation = Object->DrawObjectList[i].Location;
 				Matrix33CalcPoint(&LocalLocation, Object->CurrentRotationMat);
-				LocalLocation += Object->HitBBLocation[i];
-
-				VECTOR3D LocalLocationTmp = Object->HitBBLocation[i];
-				Matrix33CalcPoint(&LocalLocationTmp, InvRotationMat);
+				LocalLocation = Object->HitBBLocation[i]-LocalLocation;
+				Matrix33CalcPoint(&LocalLocation, InvRotationMat);
 				// и меняем внутрее положение
-				ShipPart->DrawObjectList[0].Location = LocalLocationTmp^(-1.0f);
-
+				ShipPart->DrawObjectList[0].Location = LocalLocation^(-1.0f);
 
 				// находим все данные по геометрии
 				ShipPart->InitByDrawObjectList();
 
 				// установка текущего положения и поворота
-				ShipPart->SetLocation(Object->Location+LocalLocation);
+				ShipPart->SetLocation(Object->Location+Object->HitBBLocation[i]);
 				ShipPart->SetRotation(Object->Rotation);
 
 

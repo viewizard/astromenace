@@ -53,12 +53,9 @@ bool CheckMeshSphereCollisionDetection(CObject3D *Object1, CObject3D *Object2, V
 
 		if (Object1->HitBB != 0)
 		{
-			// находим расстояние между HitBB-ми
-			VECTOR3D TmpLocation(Object1->DrawObjectList[j].Location);
-			Matrix33CalcPoint(&TmpLocation, Object1->CurrentRotationMat);
-			float Distance2 = (Object1->Location.x + TmpLocation.x + Object1->HitBBLocation[j].x - Object2->Location.x)*(Object1->Location.x + TmpLocation.x + Object1->HitBBLocation[j].x - Object2->Location.x) +
-							  (Object1->Location.y + TmpLocation.y + Object1->HitBBLocation[j].y - Object2->Location.y)*(Object1->Location.y + TmpLocation.y + Object1->HitBBLocation[j].y - Object2->Location.y) +
-							  (Object1->Location.z + TmpLocation.z + Object1->HitBBLocation[j].z - Object2->Location.z)*(Object1->Location.z + TmpLocation.z + Object1->HitBBLocation[j].z - Object2->Location.z);
+			float Distance2 = (Object1->Location.x + Object1->HitBBLocation[j].x - Object2->Location.x)*(Object1->Location.x + Object1->HitBBLocation[j].x - Object2->Location.x) +
+							  (Object1->Location.y + Object1->HitBBLocation[j].y - Object2->Location.y)*(Object1->Location.y + Object1->HitBBLocation[j].y - Object2->Location.y) +
+							  (Object1->Location.z + Object1->HitBBLocation[j].z - Object2->Location.z)*(Object1->Location.z + Object1->HitBBLocation[j].z - Object2->Location.z);
 
 			// если очень далеко - берем следующий HitBB
 			// но сначала делаем еще одну проверку
@@ -72,7 +69,7 @@ bool CheckMeshSphereCollisionDetection(CObject3D *Object1, CObject3D *Object2, V
 				float hl = dir.Length()/2.0f;
 				dir.Normalize();
 
-				VECTOR3D T = Object1->Location + TmpLocation + Object1->HitBBLocation[j] - mid;
+				VECTOR3D T = Object1->Location + Object1->HitBBLocation[j] - mid;
 				float r;
 
 				// проверяем, является ли одна из осей X,Y,Z разделяющей
@@ -138,16 +135,12 @@ bool CheckHitBBHitBBCollisionDetection(CObject3D *Object1, CObject3D *Object2, i
 		{
 
 			// находим расстояние между HitBB-ми
-			VECTOR3D TmpLocation1(Object1->DrawObjectList[i].Location);
-			Matrix33CalcPoint(&TmpLocation1, Object1->CurrentRotationMat);
-			VECTOR3D TmpLocation2(Object2->DrawObjectList[j].Location);
-			Matrix33CalcPoint(&TmpLocation2, Object2->CurrentRotationMat);
-			float Distance2 = (Object1->Location.x + TmpLocation1.x + Object1->HitBBLocation[i].x - Object2->Location.x - TmpLocation2.x - Object2->HitBBLocation[j].x)*
-							  (Object1->Location.x + TmpLocation1.x + Object1->HitBBLocation[i].x - Object2->Location.x - TmpLocation2.x - Object2->HitBBLocation[j].x) +
-							  (Object1->Location.y + TmpLocation1.y + Object1->HitBBLocation[i].y - Object2->Location.y - TmpLocation2.y - Object2->HitBBLocation[j].y)*
-							  (Object1->Location.y + TmpLocation1.y + Object1->HitBBLocation[i].y - Object2->Location.y - TmpLocation2.y - Object2->HitBBLocation[j].y) +
-							  (Object1->Location.z + TmpLocation1.z + Object1->HitBBLocation[i].z - Object2->Location.z - TmpLocation2.z - Object2->HitBBLocation[j].z)*
-							  (Object1->Location.z + TmpLocation1.z + Object1->HitBBLocation[i].z - Object2->Location.z - TmpLocation2.z - Object2->HitBBLocation[j].z);
+			float Distance2 = (Object1->Location.x + Object1->HitBBLocation[i].x - Object2->Location.x - Object2->HitBBLocation[j].x)*
+							  (Object1->Location.x + Object1->HitBBLocation[i].x - Object2->Location.x - Object2->HitBBLocation[j].x) +
+							  (Object1->Location.y + Object1->HitBBLocation[i].y - Object2->Location.y - Object2->HitBBLocation[j].y)*
+							  (Object1->Location.y + Object1->HitBBLocation[i].y - Object2->Location.y - Object2->HitBBLocation[j].y) +
+							  (Object1->Location.z + Object1->HitBBLocation[i].z - Object2->Location.z - Object2->HitBBLocation[j].z)*
+							  (Object1->Location.z + Object1->HitBBLocation[i].z - Object2->Location.z - Object2->HitBBLocation[j].z);
 
 
 			// если очень далеко - берем следующий HitBB
@@ -167,8 +160,8 @@ bool CheckHitBBHitBBCollisionDetection(CObject3D *Object1, CObject3D *Object2, i
 
 
 
-			VECTOR3D vPosB = (Object2->Location + TmpLocation2 + Object2->HitBBLocation[j])
-							 - (Object1->Location + TmpLocation1 + Object1->HitBBLocation[i]);
+			VECTOR3D vPosB = (Object2->Location + Object2->HitBBLocation[j])
+							 - (Object1->Location + Object1->HitBBLocation[i]);
 			Matrix33CalcPoint(&vPosB, TMPOldInvRotationMat);
 
 
@@ -298,9 +291,7 @@ bool CheckHitBBOBBCollisionDetection(CObject3D *Object1, CObject3D *Object2, int
 		Matrix33Mult(matB, TMPOldInvRotationMat);
 
 
-		VECTOR3D TmpLocation(Object1->DrawObjectList[i].Location);
-		Matrix33CalcPoint(&TmpLocation, Object1->CurrentRotationMat);
-		VECTOR3D vPosB = (Object1->Location + TmpLocation + Object1->HitBBLocation[i])-(Object2->Location + Object2->OBBLocation);
+		VECTOR3D vPosB = (Object1->Location + Object1->HitBBLocation[i])-(Object2->Location + Object2->OBBLocation);
 		Matrix33CalcPoint(&vPosB, TMPOldInvRotationMat);
 
 
@@ -457,9 +448,7 @@ bool CheckHitBBMeshCollisionDetection(CObject3D *Object1, CObject3D *Object2, in
 		Matrix33CalcPoint(&TMPMin, TMPOldInvRotationMat);
 
 
-		VECTOR3D TmpLocation1(Object1->DrawObjectList[i].Location);
-		Matrix33CalcPoint(&TmpLocation1, Object1->CurrentRotationMat);
-		VECTOR3D Center = TmpLocation1 + Object1->HitBBLocation[i] + Object1->Location;
+		VECTOR3D Center = Object1->HitBBLocation[i] + Object1->Location;
 		Matrix33CalcPoint(&Center, TMPOldInvRotationMat);
 
 

@@ -262,14 +262,14 @@ void CObject3D::InitByDrawObjectList()
 		}
 
 		// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-		HitBB[i][0] = VECTOR3D(MaxX, MaxY, MaxZ) + DrawObjectList[i].Location;
-		HitBB[i][1] = VECTOR3D(MinX, MaxY, MaxZ) + DrawObjectList[i].Location;
-		HitBB[i][2] = VECTOR3D(MinX, MaxY, MinZ) + DrawObjectList[i].Location;
-		HitBB[i][3] = VECTOR3D(MaxX, MaxY, MinZ) + DrawObjectList[i].Location;
-		HitBB[i][4] = VECTOR3D(MaxX, MinY, MaxZ) + DrawObjectList[i].Location;
-		HitBB[i][5] = VECTOR3D(MinX, MinY, MaxZ) + DrawObjectList[i].Location;
-		HitBB[i][6] = VECTOR3D(MinX, MinY, MinZ) + DrawObjectList[i].Location;
-		HitBB[i][7] = VECTOR3D(MaxX, MinY, MinZ) + DrawObjectList[i].Location;
+		HitBB[i][0] = VECTOR3D(MaxX, MaxY, MaxZ);
+		HitBB[i][1] = VECTOR3D(MinX, MaxY, MaxZ);
+		HitBB[i][2] = VECTOR3D(MinX, MaxY, MinZ);
+		HitBB[i][3] = VECTOR3D(MaxX, MaxY, MinZ);
+		HitBB[i][4] = VECTOR3D(MaxX, MinY, MaxZ);
+		HitBB[i][5] = VECTOR3D(MinX, MinY, MaxZ);
+		HitBB[i][6] = VECTOR3D(MinX, MinY, MinZ);
+		HitBB[i][7] = VECTOR3D(MaxX, MinY, MinZ);
 
 		// находим координаты центра HitBB относительно координат модели
 		HitBBLocation[i].x = (MaxX + MinX)/2.0f;
@@ -286,9 +286,12 @@ void CObject3D::InitByDrawObjectList()
 				(HitBBSize[i].y/2.0f) * (HitBBSize[i].y/2.0f) +
 				(HitBBSize[i].z/2.0f) * (HitBBSize[i].z/2.0f);
 
-		// переносим данные HitBB чтобы центр стал центром
+		// переносим данные HitBB чтобы центр стал геометрическим центром
 		for (int k=0; k<8; k++)
 			HitBB[i][k] -= HitBBLocation[i];
+
+		// учитываем положение самого объекта в моделе
+		HitBBLocation[i] += DrawObjectList[i].Location;
 	}
 
 
@@ -367,15 +370,9 @@ void CObject3D::SetObjectLocation(VECTOR3D NewLocation, int ObjectNum)
 		memcpy(OldInvRotationMatTmp, CurrentRotationMat, 9*sizeof(float));
 		Matrix33InverseRotate(OldInvRotationMatTmp);
 
-	//	Matrix33CalcPoint(&HitBBLocation[ObjectNum], OldInvRotationMatTmp);
-	//	HitBBLocation[ObjectNum] -= DrawObjectList[ObjectNum].Location - NewLocation;
-	//	Matrix33CalcPoint(&HitBBLocation[ObjectNum], CurrentRotationMat);
-		for (int j=0; j<8; j++)
-		{
-			Matrix33CalcPoint(&HitBB[ObjectNum][j], OldInvRotationMatTmp);
-			HitBB[ObjectNum][j] -= DrawObjectList[ObjectNum].Location - NewLocation;
-			Matrix33CalcPoint(&HitBB[ObjectNum][j], CurrentRotationMat);
-		}
+		Matrix33CalcPoint(&HitBBLocation[ObjectNum], OldInvRotationMatTmp);
+		HitBBLocation[ObjectNum] -= DrawObjectList[ObjectNum].Location - NewLocation;
+		Matrix33CalcPoint(&HitBBLocation[ObjectNum], CurrentRotationMat);
 
 		// нужно подкорректировать OBB и ABB
 
@@ -497,19 +494,16 @@ void CObject3D::SetObjectRotation(VECTOR3D NewRotation, int ObjectNum)
 
 		// собственно меняем данные в геометрии
 		Matrix33CalcPoint(&HitBBLocation[ObjectNum], OldInvRotationMatTmp);
-	//	HitBBLocation[ObjectNum] -= DrawObjectList[ObjectNum].Location;
+		HitBBLocation[ObjectNum] -= DrawObjectList[ObjectNum].Location;
 		Matrix33CalcPoint(&HitBBLocation[ObjectNum], OldInvRotationMatTmp2);
 		Matrix33CalcPoint(&HitBBLocation[ObjectNum], CurrentRotationMatTmp2);
-	//	HitBBLocation[ObjectNum] += DrawObjectList[ObjectNum].Location;
+		HitBBLocation[ObjectNum] += DrawObjectList[ObjectNum].Location;
 		Matrix33CalcPoint(&HitBBLocation[ObjectNum], CurrentRotationMat);
 		for (int j=0; j<8; j++)
 		{
 			Matrix33CalcPoint(&HitBB[ObjectNum][j], OldInvRotationMatTmp);
-			HitBB[ObjectNum][j] -= DrawObjectList[ObjectNum].Location;
 			Matrix33CalcPoint(&HitBB[ObjectNum][j], OldInvRotationMatTmp2);
-
 			Matrix33CalcPoint(&HitBB[ObjectNum][j], CurrentRotationMatTmp2);
-			HitBB[ObjectNum][j] += DrawObjectList[ObjectNum].Location;
 			Matrix33CalcPoint(&HitBB[ObjectNum][j], CurrentRotationMat);
 		}
 
