@@ -146,9 +146,11 @@
 <item id="3_Empty_Weapon_Slot">Пустой Oружейный Cлот</item>
 <item id="3_EMPTY">ПУСТОЙ</item>
 <item id="3_Level">уровень</item>
+<item id="3_Visual_Effects_Quality">Качество Визуальных Эффектов</item>
+<item id="3_Shadow_Quality">Качество Теней</item>
 
 <item id="3_Music_Volume">Громкость Музыки</item>
-<item id="3_Not_available">Не доступно</item>
+<item id="3_Not_available">Недоступно</item>
 <item id="3_Sound_Effects_Volume">Громкость Эффектов</item>
 <item id="3_Voice_Volume">Громкость Голоса</item>
 <item id="3_Full_Screen">Полный Экран</item>
@@ -158,8 +160,6 @@
 <item id="3_Texture_Filtering_Mode">Режим Вывода Текстуры</item>
 <item id="3_Textures_Quality">Качество Текстур</item>
 <item id="3_Multisample_Antialiasing">Сглаживание</item>
-<item id="3_Particles_GFX_Quality">Качество Эффектов</item>
-<item id="3_Explosions_GFX_Quality">Качество Взрывов</item>
 <item id="3_Stars_Quantity">Количество Звезд</item>
 <item id="3_NAME">ИМЯ</item>
 <item id="3_SCORE">СЧЕТ</item>
@@ -179,7 +179,6 @@
 <item id="3_Killed">Убито</item>
 <item id="3_Bonus">Бонус</item>
 <item id="3_Total">Всего</item>
-<item id="3_Background_Tile_Animation">Анимация Подложки</item>
 <item id="3_Textures_Compression">Компрессия Текстур</item>
 <item id="3_Mipmap_LOD_Management">Управление Мипмеп ЛОД</item>
 <item id="3_OpenGL_Shading_Language">OpenGL шейдеры (GLSL)</item>

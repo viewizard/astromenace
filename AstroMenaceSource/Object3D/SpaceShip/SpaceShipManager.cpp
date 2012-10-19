@@ -6,10 +6,10 @@
 
 	File name: SpaceShipManager.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -141,14 +141,23 @@ void UpdateAllSpaceShip(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllSpaceShip(bool VertexOnlyPass)
+void DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap, int DrawOnlyType)
 {
 
 	CSpaceShip *tmp = StartSpaceShip;
 	while (tmp!=0)
 	{
 		CSpaceShip *tmp2 = tmp->Next;
-		tmp->Draw(VertexOnlyPass);
+
+		if (DrawOnlyType != -1)
+		{
+			// если нужно прорисовать только определенный тип
+			if (tmp->ObjectType == DrawOnlyType)
+				tmp->Draw(VertexOnlyPass, ShadowMap);
+		}
+		else
+			tmp->Draw(VertexOnlyPass, ShadowMap);
+
 		tmp = tmp2;
 	}
 

@@ -6,10 +6,10 @@
 
 	File name: GroundObject.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -178,7 +178,7 @@ void	DetachGroundObject(CGroundObject* GroundObject);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllGroundObject(float Time);
 // Прорисовываем все объекты
-void	DrawAllGroundObject(bool VertexOnlyPass);
+void	DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllGroundObject();
 

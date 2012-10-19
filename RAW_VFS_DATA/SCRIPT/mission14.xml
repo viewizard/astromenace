@@ -29,7 +29,7 @@
 	<CreatePlanet type="4" speed="1.0" posax="170" posay="-450" posaz="1600" anglax="45"/>
 	<CreatePlanet type="3" speed="0.5" posax="-250" posay="-450" posaz="1100"/>
 	<!-- Lights -->
-	<Light dirx="0.5" diry="-0.5" dirz="1.0" diffr="1.0" diffg="1.0" diffb="1.0" specr="1.0" specg="1.0" specb="1.0" ambir="1" ambig="1" ambib="1"/>	
+	<Light dirx="-1.0" diry="-0.5" dirz="0.0" diffr="1.0" diffg="0.9" diffb="0.9" specr="1.0" specg="0.9" specb="0.9" ambir="1" ambig="1" ambib="1"/>	
 
 
 	<!--Goto label="end"/-->

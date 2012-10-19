@@ -146,6 +146,8 @@
 <item id="3_Empty_Weapon_Slot">Empty Weapon Slot</item>
 <item id="3_EMPTY">EMPTY</item>
 <item id="3_Level">level</item>
+<item id="3_Visual_Effects_Quality">Visual Effects Quality</item>
+<item id="3_Shadow_Quality">Shadow Quality</item>
 
 <item id="3_Music_Volume">Music Volume</item>
 <item id="3_Not_available">Not available</item>
@@ -158,8 +160,6 @@
 <item id="3_Texture_Filtering_Mode">Texture Filtering Mode</item>
 <item id="3_Textures_Quality">Textures Quality</item>
 <item id="3_Multisample_Antialiasing">Multisample Antialiasing</item>
-<item id="3_Particles_GFX_Quality">Particles GFX Quality</item>
-<item id="3_Explosions_GFX_Quality">Explosions GFX Quality</item>
 <item id="3_Stars_Quantity">Stars Quantity</item>
 <item id="3_NAME">NAME</item>
 <item id="3_SCORE">SCORE</item>
@@ -179,7 +179,6 @@
 <item id="3_Killed">Killed</item>
 <item id="3_Bonus">Bonus</item>
 <item id="3_Total">Total</item>
-<item id="3_Background_Tile_Animation">Background Tile Animation</item>
 <item id="3_Textures_Compression">Textures Compression</item>
 <item id="3_Mipmap_LOD_Management">Mipmap LOD Management</item>
 <item id="3_OpenGL_Shading_Language">OpenGL Shading Language</item>

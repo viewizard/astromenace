@@ -6,10 +6,10 @@
 
 	File name: Weapon.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -167,7 +167,7 @@ void	DetachWeapon(CWeapon* Weapon);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllWeapon(float Time);
 // Прорисовываем все объекты
-void	DrawAllWeapon(bool VertexOnlyPass);
+void	DrawAllWeapon(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllWeapon();
 

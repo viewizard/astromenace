@@ -2,7 +2,7 @@
 1348686308 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/BackGround/SkyBox.cpp
 	"../Game.h"
 
-1350065886 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Game.h
+1350670262 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Game.h
 	"Core/Core.h"
 	"Struct.h"
 	"ScriptEngine/Script.h"
@@ -61,7 +61,7 @@
 	<sys/stat.h>
 	<sys/types.h>
 
-1350458052 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/config.h
+1350639361 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/config.h
 
 1349428733 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/RendererInterface/GLext.h
 	<windows.h>
@@ -121,7 +121,7 @@
 	"../Math/Math.h"
 	"../VirtualFileSystem/VFS.h"
 
-1350394296 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/RendererInterface/RendererInterface.h
+1350492433 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/RendererInterface/RendererInterface.h
 	"../Base.h"
 	"../Math/Math.h"
 	"../Texture/Texture.h"
@@ -140,7 +140,7 @@
 1348686309 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/Sound/Buffer.h
 	"Sound.h"
 
-1348686309 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/Camera/Camera.h
+1350669849 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/Camera/Camera.h
 	"../Base.h"
 	"../Math/Math.h"
 
@@ -161,7 +161,7 @@
 	<assert.h>
 	<string.h>
 
-1350321872 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Struct.h
+1350664305 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Struct.h
 
 1349518818 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/ScriptEngine/Script.h
 	"../Game.h"
@@ -176,22 +176,22 @@
 1349282846 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/GraphicFX/Text/Text.h
 	"../../Core/Core.h"
 
-1350461394 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Object3D.h
+1350580362 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Object3D.h
 	"../Core/Core.h"
 	"../Struct.h"
 
 1348686310 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceShip/EarthSpaceFighter/EarthSpaceFighter.h
 	"../SpaceShip.h"
 
-1350137221 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceShip/SpaceShip.h
+1350669867 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceShip/SpaceShip.h
 	"../Object3D.h"
 	"../Weapon/Weapon.h"
 
-1350137243 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Weapon/Weapon.h
+1350670118 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Weapon/Weapon.h
 	"../Object3D.h"
 	"../Projectile/Projectile.h"
 
-1348686310 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Projectile/Projectile.h
+1350669914 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Projectile/Projectile.h
 	"../Object3D.h"
 
 1348686310 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceShip/AlienSpaceFighter/AlienSpaceFighter.h
@@ -206,7 +206,7 @@
 1348686310 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/GroundObject/Building/Building.h
 	"../GroundObject.h"
 
-1350316069 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/GroundObject/GroundObject.h
+1350670103 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/GroundObject/GroundObject.h
 	"../Object3D.h"
 	"../Weapon/Weapon.h"
 
@@ -222,7 +222,7 @@
 1348686310 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceObject/Asteroid/Asteroid.h
 	"../SpaceObject.h"
 
-1350137221 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceObject/SpaceObject.h
+1350669988 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceObject/SpaceObject.h
 	"../Object3D.h"
 	"../Explosion/SpaceExplosion/SpaceExplosion.h"
 
@@ -251,7 +251,7 @@
 1348686308 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Camera/GameCamera.cpp
 	"../Game.h"
 
-1350393383 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/Camera/Camera.cpp
+1350580617 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/Camera/Camera.cpp
 	"Camera.h"
 	"../RendererInterface/RendererInterface.h"
 
@@ -368,7 +368,7 @@
 1348686309 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/RendererInterface/OGL_Light.cpp
 	"RendererInterface.h"
 
-1350321872 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/RendererInterface/OGL_Main.cpp
+1350563658 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/RendererInterface/OGL_Main.cpp
 	"RendererInterface.h"
 
 1350394296 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/RendererInterface/OGL_Matrix.cpp
@@ -469,7 +469,7 @@
 	"VFS.h"
 	"../Math/Math.h"
 
-1350387446 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Game/Game.cpp
+1350665130 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Game/Game.cpp
 	"../Game.h"
 
 1348741737 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Game/Game_Mission.cpp
@@ -478,14 +478,14 @@
 1349873383 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Game/Game_Options.cpp
 	"../Game.h"
 
-1350390040 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Game/Game_PlayerShip.cpp
+1350652085 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Game/Game_PlayerShip.cpp
 	"../Game.h"
 	"../Object3D/Explosion/SpaceExplosion/SpaceExplosion.h"
 
 1348686310 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Game/Game_WeaponSlot.cpp
 	"../Game.h"
 
-1350214268 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/GraphicFX/SpaceStars/SpaceStars.cpp
+1350638424 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/GraphicFX/SpaceStars/SpaceStars.cpp
 	"SpaceStars.h"
 	"../../Game.h"
 
@@ -498,20 +498,20 @@
 1349282887 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/GraphicFX/Text/TextManager.cpp
 	"Text.h"
 
-1350315229 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Loading.cpp
+1350662891 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Loading.cpp
 	"Game.h"
 
 1349459567 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Loop_audio.cpp
 	"Game.h"
 
-1350392805 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Loop_proc.cpp
+1350648879 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Loop_proc.cpp
 	"Game.h"
 
-1350321872 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Main.cpp
+1350664671 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Main.cpp
 	"Game.h"
 	<X11/extensions/Xinerama.h>
 
-1350315241 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/MainFS2VFS.cpp
+1350488797 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/MainFS2VFS.cpp
 	"Game.h"
 
 1350391204 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Button.cpp
@@ -520,7 +520,7 @@
 1349968820 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Dialog.cpp
 	"../Game.h"
 
-1350393565 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu.cpp
+1350666518 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu.cpp
 	"../Game.h"
 
 1349794518 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_ConfControl.cpp
@@ -532,19 +532,19 @@
 1349257712 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_Difficulty.cpp
 	"../Game.h"
 
-1350393590 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_Information.cpp
+1350638829 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_Information.cpp
 	"../Game.h"
 
 1349864159 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_Interface.cpp
 	"../Game.h"
 
-1349633852 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_Mission.cpp
+1350585455 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_Mission.cpp
 	"../Game.h"
 
 1350391302 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_Options.cpp
 	"../Game.h"
 
-1350209852 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_OptionsAdv.cpp
+1350669025 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_OptionsAdv.cpp
 	"../Game.h"
 
 1349456485 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_Profile.cpp
@@ -553,7 +553,7 @@
 1349193101 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_TopScores.cpp
 	"../Game.h"
 
-1350379027 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_Workshop.cpp
+1350668938 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_Workshop.cpp
 	"../Game.h"
 
 1350339305 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Menu/Menu_Workshop_Shipyard.cpp
@@ -585,7 +585,7 @@
 1350137012 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Explosion/ExplosionManager.cpp
 	"Explosion.h"
 
-1350466238 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Explosion/GroundExplosion/GroundExplosion.cpp
+1350471409 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Explosion/GroundExplosion/GroundExplosion.cpp
 	"GroundExplosion.h"
 	"../../../Game.h"
 
@@ -593,18 +593,18 @@
 	"../Explosion.h"
 	"../../GroundObject/GroundObject.h"
 
-1350461381 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Explosion/SpaceExplosion/SpaceExplosion.cpp
+1350664607 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Explosion/SpaceExplosion/SpaceExplosion.cpp
 	"SpaceExplosion.h"
 	"../../../Game.h"
 
 1348686310 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/GroundObject/Building/Building.cpp
 	"Building.h"
 
-1350467842 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/GroundObject/GroundObject.cpp
+1350469123 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/GroundObject/GroundObject.cpp
 	"GroundObject.h"
 	"../../Game.h"
 
-1350137070 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/GroundObject/GroundObjectManager.cpp
+1350502586 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/GroundObject/GroundObjectManager.cpp
 	"GroundObject.h"
 
 1349632223 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/GroundObject/MilitaryBuilding/MilitaryBuilding.cpp
@@ -616,8 +616,9 @@
 1349632229 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/GroundObject/Wheeled/Wheeled.cpp
 	"Wheeled.h"
 
-1350467803 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Object3D.cpp
+1350650155 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Object3D.cpp
 	"Object3D.h"
+	"../Game.h"
 
 1349877497 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Object3DCollision.cpp
 	"Object3D.h"
@@ -630,7 +631,7 @@
 	"Explosion/GroundExplosion/GroundExplosion.h"
 	"Explosion/SpaceExplosion/SpaceExplosion.h"
 
-1349634308 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Object3DCollisionMath.cpp
+1350471881 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Object3DCollisionMath.cpp
 	"Object3D.h"
 
 1350461385 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Object3DFunctions.cpp
@@ -640,8 +641,9 @@
 	"Projectile/Projectile.h"
 	"SpaceObject/SpaceObject.h"
 
-1350137178 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Object3DManager.cpp
+1350668665 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Object3DManager.cpp
 	"Object3D.h"
+	"../Game.h"
 
 1348686310 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Projectile/Projectile.cpp
 	"Projectile.h"
@@ -650,16 +652,16 @@
 1348686310 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Projectile/ProjectileGFX.cpp
 	"Projectile.h"
 
-1350137104 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Projectile/ProjectileManager.cpp
+1350502605 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Projectile/ProjectileManager.cpp
 	"Projectile.h"
 
 1348741741 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceObject/Asteroid/Asteroid.cpp
 	"Asteroid.h"
 
-1350392452 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceObject/BasePart/BasePart.cpp
+1350572274 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceObject/BasePart/BasePart.cpp
 	"BasePart.h"
 
-1349707703 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceObject/BigAsteroid/BigAsteroid.cpp
+1350572364 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceObject/BigAsteroid/BigAsteroid.cpp
 	"BigAsteroid.h"
 
 1350392468 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceObject/Planet/Planet.cpp
@@ -675,7 +677,7 @@
 1348686310 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceObject/SpaceObjectGFX.cpp
 	"../../Core/Core.h"
 
-1350137221 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceObject/SpaceObjectManager.cpp
+1350668270 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceObject/SpaceObjectManager.cpp
 	"SpaceObject.h"
 	"../../Game.h"
 
@@ -713,7 +715,7 @@
 	"SpaceShip.h"
 	"../../Game.h"
 
-1350137221 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceShip/SpaceShipManager.cpp
+1350651079 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/SpaceShip/SpaceShipManager.cpp
 	"SpaceShip.h"
 
 1350373938 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Weapon/Weapon.cpp
@@ -722,7 +724,7 @@
 1348686310 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Weapon/WeaponFunctions.cpp
 	"Weapon.h"
 
-1350137243 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Weapon/WeaponManager.cpp
+1350502649 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Object3D/Weapon/WeaponManager.cpp
 	"Weapon.h"
 
 1350381135 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/ScriptEngine/Script.cpp
@@ -734,7 +736,7 @@
 1349595104 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/ScriptEngine/Text.cpp
 	"../Game.h"
 
-1350321872 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/ScriptEngine/Setup.cpp
+1350664885 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/ScriptEngine/Setup.cpp
 	"../Game.h"
 
 1349517464 /home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/Parser/TinyXML/tinyxml2.h
@@ -762,15 +764,18 @@
 1350119779 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/RendererInterface/OGL_VAO.cpp
 	"RendererInterface.h"
 
-1350202861 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/RendererInterface/OGL_FBO.cpp
+1350637848 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Core/RendererInterface/OGL_FBO.cpp
 	"RendererInterface.h"
 
-1350151358 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Game/Game_Camera.cpp
+1350642193 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/Game/Game_Camera.cpp
 	"../Game.h"
 
-1350214263 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/GraphicFX/SkyBox.cpp
+1350638231 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/GraphicFX/SkyBox.cpp
 	"../Game.h"
 
-1350393484 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/GraphicFX/StarSystem.cpp
+1350641317 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/GraphicFX/StarSystem.cpp
+	"../Game.h"
+
+1350654343 source:/home/viewizard/Desktop/AstroMenace/OpenAstroMenace/AstroMenaceSource/GraphicFX/ShadowMap.cpp
 	"../Game.h"
 

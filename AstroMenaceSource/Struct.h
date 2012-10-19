@@ -271,20 +271,18 @@ struct GameSetup
 	int		CSAA;
 
 
-	// испускание частиц, во сколько раз уменьшить... // 1-3
-	int		ParticlesPerSecQuality;
-	// осколки, сколько пропускать (0-рисовать как в исходном меше) // 0-2
-	int		PartsExplosionQuality;
+	// качество визуальных эффектов (тайловая подложка, взрывы, системы частиц)  //0-2
+	int		VisualEffectsQuality;
 	// коэф уменьшения отображения звезд //1-3
 	int		BackgroundStarsQuality;
-	// прорисовка слоев с тайловой анимацией // 0-2
-	int		BackgroundTileAnimation;
 	// уровень анизотропии при фильтрации текстур
 	int 	AnisotropyLevel;
 	// компрессия текстур 0-выкл, 1-вкл
 	int		TexturesCompression;
 	// использование шейдеров
 	bool	UseGLSL;
+	// использование шадовмеп
+	int		ShadowMap;
 	// кол-во точечных источников света на 1 объект
 	int		MaxPointLights;
 

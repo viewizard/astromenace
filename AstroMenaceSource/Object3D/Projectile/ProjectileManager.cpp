@@ -6,10 +6,10 @@
 
 	File name: ProjectileManager.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -121,14 +121,14 @@ void UpdateAllProjectile(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllProjectile(bool VertexOnlyPass)
+void DrawAllProjectile(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 
 	CProjectile *tmp = StartProjectile;
 	while (tmp!=0)
 	{
 		CProjectile *tmp2 = tmp->Next;
-		tmp->Draw(VertexOnlyPass);
+		tmp->Draw(VertexOnlyPass, ShadowMap);
 		tmp = tmp2;
 	}
 

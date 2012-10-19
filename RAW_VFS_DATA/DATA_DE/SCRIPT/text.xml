@@ -146,6 +146,8 @@
 <item id="3_Empty_Weapon_Slot">Waffe Leerer Schacht</item>
 <item id="3_EMPTY">LEER</item>
 <item id="3_Level">schacht</item>
+<item id="3_Visual_Effects_Quality">Visuelle Effekte Qualität</item>
+<item id="3_Shadow_Quality">Schatten Qualität</item>
 
 <item id="3_Music_Volume">Musiklautstärke</item>
 <item id="3_Not_available">Nicht verfügbar</item>
@@ -158,8 +160,6 @@
 <item id="3_Texture_Filtering_Mode">Texture Filter Modus</item>
 <item id="3_Textures_Quality">Texture Qualität</item>
 <item id="3_Multisample_Antialiasing">Multisample Antialiasing</item>
-<item id="3_Particles_GFX_Quality">Partikel GFX Qualität</item>
-<item id="3_Explosions_GFX_Quality">Explosionen GFX Qualität</item>
 <item id="3_Stars_Quantity">Sternenanzahl</item>
 <item id="3_NAME">NAME</item>
 <item id="3_SCORE">Punkte</item>
@@ -179,7 +179,6 @@
 <item id="3_Killed">Vernichtet</item>
 <item id="3_Bonus">Bonus</item>
 <item id="3_Total">Total</item>
-<item id="3_Background_Tile_Animation">Hintergrundkacheln</item>
 <item id="3_Textures_Compression">Texturen Kompression</item>
 <item id="3_Mipmap_LOD_Management">Mipmap LOD Verwaltung</item>
 <item id="3_OpenGL_Shading_Language">OpenGL  Schattierungssprache</item>

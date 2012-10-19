@@ -6,10 +6,10 @@
 
 	File name: SpaceObjectManager.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -119,22 +119,60 @@ void UpdateAllSpaceObject(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllSpaceObject(bool VertexOnlyPass)
+void DrawAllSpaceObject(bool VertexOnlyPass, unsigned int ShadowMap, int DrawOnlyType)
 {
 
 	CSpaceObject *tmp = StartSpaceObject;
 	while (tmp!=0)
 	{
 		CSpaceObject *tmp2 = tmp->Next;
-		// планеты и астероиды рисуем до тайловой анимации в игре!!!
-		if (tmp->ObjectType != 14 &&
-			!(tmp->ObjectType == 15 && (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
-			tmp->Draw(VertexOnlyPass);
+
+		if (DrawOnlyType != -1)
+		{
+			// если нужно прорисовать только определенный тип
+			if (tmp->ObjectType == DrawOnlyType)
+			if (tmp->ObjectType != 14 && !(tmp->ObjectType == 15 && (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
+				tmp->Draw(VertexOnlyPass, ShadowMap);
+		}
+		else
+		{
+			// планеты и астероиды рисуем до тайловой анимации в игре!!!
+			if (tmp->ObjectType != 14 && !(tmp->ObjectType == 15 && (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
+				tmp->Draw(VertexOnlyPass, ShadowMap);
+		}
+
 		tmp = tmp2;
 	}
 
 }
+int DrawAllSpaceObjectCount(int DrawOnlyType)
+{
+	int Count = 0;
 
+	CSpaceObject *tmp = StartSpaceObject;
+	while (tmp!=0)
+	{
+		CSpaceObject *tmp2 = tmp->Next;
+
+		if (DrawOnlyType != -1)
+		{
+			// если нужно прорисовать только определенный тип
+			if (tmp->ObjectType == DrawOnlyType)
+			if (tmp->ObjectType != 14 && !(tmp->ObjectType == 15 && (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
+				Count++;
+		}
+		else
+		{
+			// планеты и астероиды рисуем до тайловой анимации в игре!!!
+			if (tmp->ObjectType != 14 && !(tmp->ObjectType == 15 && (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
+				Count++;
+		}
+
+		tmp = tmp2;
+	}
+
+	return Count;
+}
 
 
 

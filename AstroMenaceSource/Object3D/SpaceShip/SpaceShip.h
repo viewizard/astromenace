@@ -6,10 +6,10 @@
 
 	File name: SpaceShip.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -253,7 +253,7 @@ CSpaceShip *FindSpaceShipByID(int ID);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllSpaceShip(float Time);
 // Прорисовываем все объекты
-void	DrawAllSpaceShip(bool VertexOnlyPass);
+void	DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap, int DrawOnlyType=-1);
 // Удаляем все объекты в списке
 void	ReleaseAllSpaceShip();
 

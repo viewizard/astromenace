@@ -154,7 +154,7 @@ void InitMenu()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// иним камеру, всегда до работы со скриптом (!!!)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 10000.0f);
+	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 	InitGameCamera();
 	vw_SetCameraLocation(VECTOR3D(-50,30,-50));
 	vw_SetCameraMoveAroundPoint(VECTOR3D(0,0,0), 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
@@ -198,16 +198,16 @@ void InitMenu()
 	psSpace->ColorEnd.b = 1.00f;
 	psSpace->AlphaStart = 1.00f;
 	psSpace->AlphaEnd   = 0.00f;
-	psSpace->SizeStart = 0.25f;
+	psSpace->SizeStart = 0.15f;
 	psSpace->SizeEnd = 0.50f;
-	psSpace->Speed      = 15.00f;
+	psSpace->Speed      = 7.00f;
 	psSpace->SpeedVar   = 5.00f;
 	psSpace->Theta      = 0.00f;
-	psSpace->Life       = 15.00f;
+	psSpace->Life       = 12.00f;
 	psSpace->LifeVar    = 0.00f;
 	psSpace->CreationType = 1;
 	psSpace->CreationSize = VECTOR3D(2.0f,50.0f,30.0f);
-	psSpace->ParticlesPerSec = 60;
+	psSpace->ParticlesPerSec = 100;
 	psSpace->Texture = vw_FindTextureByName("DATA/GFX/flare3.tga");
 	psSpace->Direction = VECTOR3D(1.0f, 0.0f, 0.0f);
 	psSpace->Resize = 0.1f;
@@ -274,6 +274,7 @@ void SetMenu(eGameStatus Menu)
 			Options_UseGLSL = Setup.UseGLSL;
 			Options_MSAA = Setup.MSAA;
 			Options_CSAA = Setup.CSAA;
+			Options_ShadowMap = Setup.ShadowMap;
 			break;
 
 		case CONFCONTROL:
@@ -534,7 +535,7 @@ void DrawMenu()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Прорисовка подложки с тайловой анимацией
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Setup.BackgroundTileAnimation > 0)
+	if (Setup.VisualEffectsQuality <= 1)
 	{
 		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
 
@@ -634,7 +635,7 @@ void DrawMenu()
 
 
 	// рисуем все 3д объекты
-	DrawAllObject3D(false);
+	DrawAllObject3D(1);
 	// эффекты - самые последние в прорисовке!
 	vw_DrawAllParticleSystems();
 
@@ -643,7 +644,7 @@ void DrawMenu()
 
 
 
-	if (Setup.BackgroundTileAnimation >= 2)
+	if (Setup.VisualEffectsQuality == 0)
 	{
 		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
 
@@ -700,7 +701,7 @@ void DrawMenu()
 		buff[k++] = 0.2f;
 		buff[k++] = 3.0f+StarsTile2;
 
-		StarsTile2 -= 0.02f*(vw_GetTime() - StarsTileUpdateTime2);
+		StarsTile2 -= 0.03f*(vw_GetTime() - StarsTileUpdateTime2);
 		StarsTileUpdateTime2 = vw_GetTime();
 		if (StarsTile2 < -3.0f) StarsTile2 += 3.0f;
 
@@ -726,96 +727,6 @@ void DrawMenu()
 		vw_PopMatrix();
 
 		vw_DepthTest(true, RI_LESSEQUAL);
-		vw_SetTextureBlend(false, 0, 0);
-		vw_BindTexture(0, 0);
-		if (buff != 0){delete [] buff; buff = 0;}
-	}
-
-	// быстрые частицы, дополнение путем тайловой анимации...
-	if (Setup.BackgroundTileAnimation >= 3)
-	{
-		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
-
-		float *buff;
-		buff = new float[5*9]; if (buff == 0) return;
-
-		float heigh_2, length_2;
-		length_2 = 165.0f;
-		heigh_2 = 100.0f;
-		float x,y,z;
-		x = GamePoint.x+GameCameraGetDeviation();
-		y = GamePoint.y-GameCameraGetDeviation()/2.0f;
-		z = GamePoint.z;
-
-		int k=0;
-
-		buff[k++] = x;
-		buff[k++] = y + heigh_2;
-		buff[k++] = z + length_2+length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 0.9f;
-		buff[k++] = 3.5f;
-		buff[k++] = 0.0f+StarsTile3;
-
-		buff[k++] = x;
-		buff[k++] = y + heigh_2;
-		buff[k++] = z - length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 0.9f;
-		buff[k++] = 3.5f;
-		buff[k++] = 4.0f+StarsTile3;
-
-		buff[k++] = x;
-		buff[k++] = y - heigh_2;
-		buff[k++] = z + length_2+length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 0.9f;
-		buff[k++] = 0.5f;
-		buff[k++] = 0.0f+StarsTile3;
-
-		buff[k++] = x;
-		buff[k++] = y - heigh_2;
-		buff[k++] = z - length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 0.9f;
-		buff[k++] = 0.5f;
-		buff[k++] = 4.0f+StarsTile3;
-
-		StarsTile3 -= 0.15f*(vw_GetTime() - StarsTileUpdateTime3);
-		StarsTileUpdateTime3 = vw_GetTime();
-		if (StarsTile2 < -4.0f) StarsTile3 += 4.0f;
-
-
-		eTexture *TileTexture = vw_FindTextureByName("DATA/SKYBOX/tile_14.jpg");
-		vw_SetTexture(0, TileTexture);
-		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-		// нужно ставить трилинейную
-		if (Setup.TextureFilteringMode == 2) vw_SetTextureFiltering(RI_TEXTURE_TRILINEAR);
-
-		vw_SetTextureAlphaTest(true, 0.6f);
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-
-		vw_DepthTest(false, -1);
-
-		vw_PushMatrix();
-		vw_Rotate(-30.0f, 0.0f, 0.0f, 1.0f);
-		vw_Rotate(-70.0f, 0.0f, 1.0f, 0.0f);
-		vw_Rotate(35.0f, 1.0f, 0.0f, 0.0f);
-
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(float));
-
-		vw_PopMatrix();
-
-		vw_DepthTest(true, RI_LESSEQUAL);
-		vw_SetTextureAlphaTest(false, 0.01f);
 		vw_SetTextureBlend(false, 0, 0);
 		vw_BindTexture(0, 0);
 		if (buff != 0){delete [] buff; buff = 0;}

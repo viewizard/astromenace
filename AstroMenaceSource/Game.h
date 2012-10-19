@@ -6,10 +6,10 @@
 
 	File name: Game.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -218,6 +218,18 @@ void StarSystemRelease();
 
 
 
+//------------------------------------------------------------------------------------
+// ShadowMap.cpp
+//------------------------------------------------------------------------------------
+bool ShadowMap_Init(int Width, int Height);
+void ShadowMap_Release();
+void ShadowMap_StartRenderToFBO(VECTOR3D FocusPointCorrection, float Distance, float fFarClip);
+void ShadowMap_EndRenderToFBO(float AR);
+void ShadowMap_StartFinalRender(unsigned int TextureStage);
+void ShadowMap_EndFinalRender(unsigned int TextureStage);
+float ShadowMap_Get_xPixelOffset();
+float ShadowMap_Get_yPixelOffset();
+
 
 
 
@@ -373,6 +385,7 @@ extern int Options_TexturesCompression;
 extern int Options_UseGLSL;
 extern int Options_MSAA;
 extern int Options_CSAA;
+extern int Options_ShadowMap;
 
 void OptionsAdvMenu();
 

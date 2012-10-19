@@ -33,9 +33,8 @@
 
 /// подключаем нужные файлы
 #include "Object3D.h"
+#include "../Game.h"
 
-extern GameSetup Setup;
-extern eDevCaps CAPS;
 
 // флаг, показывать боксы или нет (1>AABB, 2>OBB, 3>HitBB)
 int NeedShowBB = 0;
@@ -43,6 +42,7 @@ int NeedShowBB = 0;
 
 extern eGLSL 	*GLSLShaderType1;
 extern eGLSL 	*GLSLShaderType2;
+extern eGLSL 	*GLSLShaderType3;
 
 
 
@@ -775,20 +775,11 @@ void DrawBoxLines(VECTOR3D Point[8], VECTOR3D LocalLocation, float ColorR, float
 //-----------------------------------------------------------------------------
 // Прорисовка объектa Object3D
 //-----------------------------------------------------------------------------
-void CObject3D::Draw(bool VertexOnlyPass)
+void CObject3D::Draw(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 	// если нечего рисовать - выходим
 	if (DrawObjectList == 0) return;
 
-
-	// оптимизация, если не в фруструме - соотв. и не видем его
-	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0]))
-	{
-		// если показали а сейчас нет - установка флага
-		if (ShowDeleteOnHide == 1) ShowDeleteOnHide = 2;
-
-		return;
-	}
 
 	// если есть установка, нужно получить квадрат расстояния до камеры
 	// прорисовка модели "полностью", "одним куском" (только то что без "составных" частей - колес, стволов и т.п.)
@@ -818,9 +809,6 @@ void CObject3D::Draw(bool VertexOnlyPass)
 			if (LightsCount <= Setup.MaxPointLights) NeedOnePieceDraw = true;
 		}
 	}
-
-
-
 
 
 
@@ -888,7 +876,14 @@ void CObject3D::Draw(bool VertexOnlyPass)
 
 
 
+	// оптимизация, если не в фруструме - соотв. и не видем его
+	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0]))
+	{
+		// если показали а сейчас нет - установка флага
+		if (ShowDeleteOnHide == 1) ShowDeleteOnHide = 2;
 
+		return;
+	}
 
 
 	// показываем - нужно установить флаг
@@ -967,21 +962,62 @@ void CObject3D::Draw(bool VertexOnlyPass)
 
 		if (Setup.UseGLSL && DrawObjectList[0].ShaderType >= 0)
 		{
-			// в этом случае, может быть только 1 тип - просто попиксельное освещение всей модели
-			vw_UseShaderProgram(GLSLShaderType1);
+			eGLSL *CurrentObject3DGLSL = 0;
 
-			vw_Uniform1i(GLSLShaderType1, "Texture1", 0);
-			vw_Uniform1i(GLSLShaderType1, "Texture2", 1);
-			vw_Uniform1i(GLSLShaderType1, "DirectLightCount", LightType1);
-			vw_Uniform1i(GLSLShaderType1, "PointLightCount", LightType2);
-			if (TextureIllum != 0)
+			// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
+			if ((DrawObjectList[0].ShaderType == 1) & (ShadowMap > 0)) DrawObjectList[0].ShaderType = 3;
+			// и на оборот, если стоит 3-й, но шадовмепа нет - ставим 1-й, просто попиксельное освещение
+			if ((DrawObjectList[0].ShaderType == 3) & (ShadowMap == 0)) DrawObjectList[0].ShaderType = 1;
+
+			// ставим нужный шейдер
+			switch (DrawObjectList[0].ShaderType)
 			{
-				if (TextureIllum[0] != 0) vw_Uniform1i(GLSLShaderType1, "NeedMultitexture", 1);
-				else vw_Uniform1i(GLSLShaderType1, "NeedMultitexture", 0);
+				case 1: CurrentObject3DGLSL = GLSLShaderType1; break;
+				case 2: CurrentObject3DGLSL = GLSLShaderType2; break;
+				case 3: CurrentObject3DGLSL = GLSLShaderType3; break;
 			}
-			else vw_Uniform1i(GLSLShaderType1, "NeedMultitexture", 0);
-		}
 
+
+			if (CurrentGLSL != CurrentObject3DGLSL)
+			{
+				if (CurrentGLSL != 0) vw_StopShaderProgram();
+
+				CurrentGLSL = CurrentObject3DGLSL;
+
+				if (CurrentObject3DGLSL != 0) vw_UseShaderProgram(CurrentObject3DGLSL);
+			}
+
+			// данные ставим каждый раз, т.к. может что-то поменяться
+			if (CurrentObject3DGLSL != 0)
+			{
+				vw_Uniform1i(CurrentObject3DGLSL, "Texture1", 0);
+				vw_Uniform1i(CurrentObject3DGLSL, "Texture2", 1);
+				vw_Uniform1i(CurrentObject3DGLSL, "DirectLightCount", LightType1);
+				vw_Uniform1i(CurrentObject3DGLSL, "PointLightCount", LightType2);
+				if (TextureIllum != 0)
+				{
+					if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, "NeedMultitexture", 1);
+					else vw_Uniform1i(CurrentObject3DGLSL, "NeedMultitexture", 0);
+				}
+				else vw_Uniform1i(CurrentObject3DGLSL, "NeedMultitexture", 0);
+
+				// шейдеры взрывов
+				if (DrawObjectList[0].ShaderType == 2)
+				{
+					vw_Uniform1f(CurrentObject3DGLSL, "SpeedData1", DrawObjectList[0].ShaderData[0]);
+					vw_Uniform1f(CurrentObject3DGLSL, "SpeedData2", DrawObjectList[0].ShaderData[1]);
+				}
+
+				// шадов меп
+				if (DrawObjectList[0].ShaderType == 3)
+				{
+					vw_Uniform1i(CurrentObject3DGLSL, "ShadowMapStage", ShadowMap);
+					vw_Uniform1i(CurrentObject3DGLSL, "ShadowMap", ShadowMap);
+					vw_Uniform1f(CurrentObject3DGLSL, "xPixelOffset", ShadowMap_Get_xPixelOffset());
+					vw_Uniform1f(CurrentObject3DGLSL, "yPixelOffset", ShadowMap_Get_xPixelOffset());
+				}
+			}
+		}
 
 		int GlobalVertexCount = 0;
 		for (int i=0; i<DrawObjectQuantity; i++)
@@ -1084,7 +1120,7 @@ void CObject3D::Draw(bool VertexOnlyPass)
 
 
 			int LightType1, LightType2;
-			// включаем источники света, максимальное кол-во 4
+			// включаем источники света
 			int LightsCount;
 			if (HitBB != 0)
 				LightsCount = vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location + HitBBLocation[i], HitBBRadius2[i], 2, Setup.MaxPointLights, Matrix);
@@ -1110,11 +1146,18 @@ void CObject3D::Draw(bool VertexOnlyPass)
 			if (Setup.UseGLSL && DrawObjectList[i].ShaderType >= 0)
 			{
 				eGLSL *CurrentObject3DGLSL = 0;
+
+				// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
+				if ((DrawObjectList[i].ShaderType == 1) & (ShadowMap > 0)) DrawObjectList[i].ShaderType = 3;
+				// и на оборот, если стоит 3-й, но шадовмепа нет - ставим 1-й, просто попиксельное освещение
+				if ((DrawObjectList[i].ShaderType == 3) & (ShadowMap == 0)) DrawObjectList[i].ShaderType = 1;
+
 				// ставим нужный шейдер
 				switch (DrawObjectList[i].ShaderType)
 				{
 					case 1: CurrentObject3DGLSL = GLSLShaderType1; break;
 					case 2: CurrentObject3DGLSL = GLSLShaderType2; break;
+					case 3: CurrentObject3DGLSL = GLSLShaderType3; break;
 				}
 
 
@@ -1126,6 +1169,7 @@ void CObject3D::Draw(bool VertexOnlyPass)
 
 					if (CurrentObject3DGLSL != 0) vw_UseShaderProgram(CurrentObject3DGLSL);
 				}
+
 				// данные ставим каждый раз, т.к. может что-то поменяться
 				if (CurrentObject3DGLSL != 0)
 				{
@@ -1146,8 +1190,16 @@ void CObject3D::Draw(bool VertexOnlyPass)
 						vw_Uniform1f(CurrentObject3DGLSL, "SpeedData1", DrawObjectList[i].ShaderData[0]);
 						vw_Uniform1f(CurrentObject3DGLSL, "SpeedData2", DrawObjectList[i].ShaderData[1]);
 					}
-				}
 
+					// шадов меп
+					if (DrawObjectList[i].ShaderType == 3)
+					{
+						vw_Uniform1i(CurrentObject3DGLSL, "ShadowMapStage", ShadowMap);
+						vw_Uniform1i(CurrentObject3DGLSL, "ShadowMap", ShadowMap);
+						vw_Uniform1f(CurrentObject3DGLSL, "xPixelOffset", ShadowMap_Get_xPixelOffset());
+						vw_Uniform1f(CurrentObject3DGLSL, "yPixelOffset", ShadowMap_Get_xPixelOffset());
+					}
+				}
 			}
 
 
