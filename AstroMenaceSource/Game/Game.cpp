@@ -697,7 +697,7 @@ void InitGame()
 	psSpace->ColorEnd.r = 0.70f;
 	psSpace->ColorEnd.g = 0.70f;
 	psSpace->ColorEnd.b = 1.00f;
-	psSpace->AlphaStart = 1.00f;
+	psSpace->AlphaStart = 0.50f;
 	psSpace->AlphaEnd   = 1.00f;
 	psSpace->SizeStart = 0.40f;
 	psSpace->SizeEnd = 0.15f;
@@ -708,7 +708,7 @@ void InitGame()
 	psSpace->LifeVar    = 0.00f;
 	psSpace->CreationType = 1;
 	psSpace->CreationSize = VECTOR3D(200.0f,30.0f,10.0f);
-	psSpace->ParticlesPerSec = 60;
+	psSpace->ParticlesPerSec = 100;
 	psSpace->Texture = vw_FindTextureByName("DATA/GFX/flare3.tga");
 	psSpace->Direction = VECTOR3D(0.0f, 0.0f, -1.0f);
 	psSpace->SetStartLocation(VECTOR3D(0,10,250));//поправь ниже, на переносе если изменил!!!
@@ -718,7 +718,7 @@ void InitGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// немного "прокручиваем", чтобы сразу по появлению было заполнено
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 10000.0f);
+	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 	vw_SetCameraLocation(VECTOR3D(0,65,-100+10));
 	vw_SetCameraMoveAroundPoint(VECTOR3D(0,0,10), 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
 
@@ -1127,7 +1127,7 @@ void DrawGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Прорисовка подложки с тайловой анимацией
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Setup.BackgroundTileAnimation > 0)
+	if (Setup.VisualEffectsQuality <= 1)
 	{
 		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
 
@@ -1184,7 +1184,7 @@ void DrawGame()
 		buff[k++] = 0.0f;
 		buff[k++] = 3.0f+StarsTile;
 
-		StarsTile -= 0.03f*(vw_GetTime(1) - StarsTileUpdateTime);
+		StarsTile -= 0.035f*(vw_GetTime(1) - StarsTileUpdateTime);
 		StarsTileUpdateTime = vw_GetTime(1);
 		if (StarsTile < -3.0f) StarsTile += 3.0f;
 
@@ -1208,7 +1208,7 @@ void DrawGame()
 
 
 	// рисуем все 3д объекты
-	DrawAllObject3D(false);
+	DrawAllObject3D(2);
 
 	// динамический космос
 	VECTOR3D TMPpsSpace;
@@ -1223,7 +1223,7 @@ void DrawGame()
 
 
 	// второй слой тайловой анимации
-	if (Setup.BackgroundTileAnimation >= 2)
+	if (Setup.VisualEffectsQuality == 0)
 	{
 		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
 
@@ -1303,87 +1303,6 @@ void DrawGame()
 		if (buff != 0){delete [] buff; buff = 0;}
 	}
 
-
-
-	// 3 слой тайловой анимации
-	if (Setup.BackgroundTileAnimation >= 3)
-	{
-		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
-
-		float *buff = 0;
-		buff = new float[5*9]; if (buff == 0) return;
-
-		float width_2, length_2;
-		width_2 = length_2 = 175.0f;
-		float x,y,z;
-		x = GamePoint.x+GameCameraGetDeviation();
-		y = GamePoint.y-GameCameraGetDeviation()/2.0f;
-		z = GamePoint.z+25.0f;
-
-		int k=0;
-		buff[k++] = x + width_2;
-		buff[k++] = y;
-		buff[k++] = z + length_2+length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 0.9f;
-		buff[k++] = 2.4f;
-		buff[k++] = 0.0f+StarsTile3;
-
-		buff[k++] = x + width_2;
-		buff[k++] = y;
-		buff[k++] = z - length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 0.9f;
-		buff[k++] = 2.4f;
-		buff[k++] = 2.0f+StarsTile3;
-
-		buff[k++] = x - width_2;
-		buff[k++] = y;
-		buff[k++] = z + length_2+length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 0.9f;
-		buff[k++] = 0.4f;
-		buff[k++] = 0.0f+StarsTile3;
-
-		buff[k++] = x - width_2;
-		buff[k++] = y;
-		buff[k++] = z - length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 0.9f;//StarsTileEndTransparentLayer2;
-		buff[k++] = 0.4f;
-		buff[k++] = 2.0f+StarsTile3;
-
-		StarsTile3 -= 0.20f*(vw_GetTime(1) - StarsTileUpdateTime3);
-		StarsTileUpdateTime3 = vw_GetTime(1);
-		if (StarsTile2 < -2.0f) StarsTile3 += 2.0f;
-
-
-		eTexture *TileTexture = vw_FindTextureByName("DATA/SKYBOX/tile_14.jpg");
-		vw_SetTexture(0, TileTexture);
-		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-		// нужно ставить трилинейную
-		if (Setup.TextureFilteringMode == 2) vw_SetTextureFiltering(RI_TEXTURE_TRILINEAR);
-
-		vw_SetTextureAlphaTest(true, 0.7f);
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-
-		vw_DepthTest(false, -1);
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(float));
-		vw_DepthTest(true, RI_LESSEQUAL);
-
-		vw_SetTextureAlphaTest(false, 0.7f);
-		vw_SetTextureBlend(false, 0, 0);
-		vw_BindTexture(0, 0);
-		if (buff != 0){delete [] buff; buff = 0;}
-	}
 
 
 

@@ -147,6 +147,7 @@
 		<Unit filename="..\Game\Game_Options.cpp" />
 		<Unit filename="..\Game\Game_PlayerShip.cpp" />
 		<Unit filename="..\Game\Game_WeaponSlot.cpp" />
+		<Unit filename="..\GraphicFX\ShadowMap.cpp" />
 		<Unit filename="..\GraphicFX\SkyBox.cpp" />
 		<Unit filename="..\GraphicFX\SpaceStars\SpaceStars.cpp" />
 		<Unit filename="..\GraphicFX\SpaceStars\SpaceStars.h" />

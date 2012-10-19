@@ -6,10 +6,10 @@
 
 	File name: Game_Camera.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -117,7 +117,7 @@ void GameCameraSetExplosion(VECTOR3D Location, float Power)
 	if (Power>1.0f) // очень большой взрыв
 		GameCameraDeviationAge = GameCameraDeviationTime = GameCameraDeviationTime*3.0f;
 
-	GameCameraDeviationPower = Power*(10000.0f- dist2)/10000.0f;
+	GameCameraDeviationPower = Power*(10000.0f- dist2)/25000.0f;
 
 
 	GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower*vw_Randf0;

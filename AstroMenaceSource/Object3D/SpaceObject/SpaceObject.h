@@ -6,10 +6,10 @@
 
 	File name: SpaceObject.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -100,7 +100,8 @@ void	DetachSpaceObject(CSpaceObject* SpaceObject);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllSpaceObject(float Time);
 // Прорисовываем все объекты
-void	DrawAllSpaceObject(bool VertexOnlyPass);
+void	DrawAllSpaceObject(bool VertexOnlyPass, unsigned int ShadowMap, int DrawOnlyType=-1);
+int 	DrawAllSpaceObjectCount(int DrawOnlyType);
 // Удаляем все объекты в списке
 void	ReleaseAllSpaceObject();
 

@@ -1693,7 +1693,7 @@ void InformationDrawObject()
 
 
 	vw_SetViewport((int)((Setup.iAspectRatioWidth/2-432)/(AW/AWw)), (int)(80/(AH/AHw)), (int)(444/(AW/AWw)), (int)(333/(AH/AHw)), 0.0f, 0.3f, RI_UL_CORNER);
-	vw_ResizeScene(45.0f, 444.0f/333.0f, 1.0f, 10000.0f);
+	vw_ResizeScene(45.0f, 444.0f/333.0f, 1.0f, 2000.0f);
 
 
 
@@ -1916,82 +1916,155 @@ void InformationDrawObject()
 
 
 
+	unsigned int ShadowMapStage = 0;
 
-	vw_LoadIdentity();
-	VECTOR3D PointCameraTMP = PointCamera;
-	RotatePoint(&PointCameraTMP, VECTOR3D(0.0f, 0.0f, 0.0f));
-	vw_SetCameraLocation(VECTOR3D(1000+PointCameraTMP.x,-1000+PointCameraTMP.y,PointCameraTMP.z));
-	vw_SetCameraMoveAroundPoint(Point, 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
-	vw_CameraLookAt();
+	if (Setup.ShadowMap > 0)
+	{
+		float EffectiveDistance = PointCamera.Length();
+		ShadowMap_StartRenderToFBO(VECTOR3D(0,0,0), EffectiveDistance, EffectiveDistance*2);
+
+
+		if (InfoFighter != 0)
+		{
+			InfoFighter->SetLocation(TMPLocation);
+			InfoFighter->Draw(true);
+		}
+		if (InfoWeapon != 0)
+		{
+			InfoWeapon->SetLocation(TMPLocation);
+			InfoWeapon->Draw(true);
+		}
+		if (InfoMine != 0)
+		{
+			InfoMine->SetLocation(TMPLocation);
+			InfoMine->Draw(true);
+		}
+		if (InfoAlien != 0)
+		{
+			InfoAlien->SetLocation(TMPLocation);
+			InfoAlien->Draw(true);
+		}
+		if (InfoAlienMotherShip != 0)
+		{
+			InfoAlienMotherShip->SetLocation(TMPLocation);
+			InfoAlienMotherShip->Draw(true);
+		}
+		if (InfoPirateShip != 0)
+		{
+			InfoPirateShip->SetLocation(TMPLocation);
+			InfoPirateShip->Draw(true);
+			// рисуем оружие
+			if (InfoPirateShip->Weapon != 0)
+			for (int i=0; i<InfoPirateShip->WeaponQuantity; i++)
+			if (InfoPirateShip->Weapon[i] != 0)
+			{
+				InfoPirateShip->Weapon[i]->Draw(true);
+			}
+		}
+		if (InfoBuilding != 0)
+		{
+			InfoBuilding->SetLocation(TMPLocation);
+			InfoBuilding->Draw(true);
+		}
+		if (InfoMilitaryBuilding != 0)
+		{
+			InfoMilitaryBuilding->SetLocation(TMPLocation);
+			InfoMilitaryBuilding->Draw(true);
+		}
+		if (InfoWheeled != 0)
+		{
+			InfoWheeled->SetLocation(TMPLocation);
+			InfoWheeled->Draw(true);
+		}
+		if (InfoTracked != 0)
+		{
+			InfoTracked->SetLocation(TMPLocation);
+			InfoTracked->Draw(true);
+		}
+
+
+		ShadowMap_EndRenderToFBO(444.0f/333.0f);
+
+		ShadowMapStage = 2;
+		ShadowMap_StartFinalRender(ShadowMapStage);
+	}
 
 
 	if (InfoFighter != 0)
 	{
 		InfoFighter->SetLocation(TMPLocation);
 		InfoFighter->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoFighter->Draw(false);
+		InfoFighter->Draw(false, ShadowMapStage);
 	}
 	if (InfoWeapon != 0)
 	{
 		InfoWeapon->SetLocation(TMPLocation);
 		InfoWeapon->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoWeapon->Draw(false);
+		InfoWeapon->Draw(false, ShadowMapStage);
 	}
 	if (InfoMine != 0)
 	{
 		InfoMine->SetLocation(TMPLocation);
 		InfoMine->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoMine->Draw(false);
+		InfoMine->Draw(false, ShadowMapStage);
 	}
 	if (InfoAlien != 0)
 	{
 		InfoAlien->SetLocation(TMPLocation);
 		InfoAlien->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoAlien->Draw(false);
+		InfoAlien->Draw(false, ShadowMapStage);
 	}
 	if (InfoAlienMotherShip != 0)
 	{
 		InfoAlienMotherShip->SetLocation(TMPLocation);
 		InfoAlienMotherShip->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoAlienMotherShip->Draw(false);
+		InfoAlienMotherShip->Draw(false, ShadowMapStage);
 	}
 	if (InfoPirateShip != 0)
 	{
 		InfoPirateShip->SetLocation(TMPLocation);
 		InfoPirateShip->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoPirateShip->Draw(false);
+		InfoPirateShip->Draw(false, ShadowMapStage);
 		// рисуем оружие
 		if (InfoPirateShip->Weapon != 0)
 		for (int i=0; i<InfoPirateShip->WeaponQuantity; i++)
 		if (InfoPirateShip->Weapon[i] != 0)
 		{
-			InfoPirateShip->Weapon[i]->Draw(false);
+			InfoPirateShip->Weapon[i]->Draw(false, ShadowMapStage);
 		}
 	}
 	if (InfoBuilding != 0)
 	{
 		InfoBuilding->SetLocation(TMPLocation);
 		InfoBuilding->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoBuilding->Draw(false);
+		InfoBuilding->Draw(false, ShadowMapStage);
 	}
 	if (InfoMilitaryBuilding != 0)
 	{
 		InfoMilitaryBuilding->SetLocation(TMPLocation);
 		InfoMilitaryBuilding->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoMilitaryBuilding->Draw(false);
+		InfoMilitaryBuilding->Draw(false, ShadowMapStage);
 	}
 	if (InfoWheeled != 0)
 	{
 		InfoWheeled->SetLocation(TMPLocation);
 		InfoWheeled->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoWheeled->Draw(false);
+		InfoWheeled->Draw(false, ShadowMapStage);
 	}
 	if (InfoTracked != 0)
 	{
 		InfoTracked->SetLocation(TMPLocation);
 		InfoTracked->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoTracked->Draw(false);
+		InfoTracked->Draw(false, ShadowMapStage);
 	}
+
+
+	if (Setup.ShadowMap > 0)
+	{
+		ShadowMap_EndFinalRender(ShadowMapStage);
+	}
+
+
 
 
 
@@ -2002,7 +2075,7 @@ void InformationDrawObject()
 
 	vw_SetCameraLocation(VECTOR3D(-50,30,-50));
 	vw_SetViewport(x, y, width, height, znear, zfar);
-	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 10000.0f);
+	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 
 
 	// бордюр с тенью

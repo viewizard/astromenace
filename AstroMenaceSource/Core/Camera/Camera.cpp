@@ -5,10 +5,10 @@
 
 	File name: Camera.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -47,8 +47,8 @@ VECTOR3D	CameraLocation(0.0f, 0.0f, 0.0f);
 VECTOR3D	CameraRotation(0.0f, 0.0f, 0.0f);
 // девиация камеры
 VECTOR3D	CameraDeviation(0.0f, 0.0f, 0.0f);
-
-
+// точка на которую смотрим
+VECTOR3D	CameraFocusPoint(0.0f, 0.0f, 0.0f);
 
 
 
@@ -63,22 +63,28 @@ void vw_SetCameraLocation(VECTOR3D NewLocation)
 void vw_IncCameraLocation(VECTOR3D IncLocation)
 {
 	CameraLocation += IncLocation;
+	CameraFocusPoint += IncLocation;
 	CameraUpdated = true;
 }
-void vw_GetCameraLocation(VECTOR3D *CurrentLocation)
+VECTOR3D vw_GetCameraLocation(VECTOR3D *CurrentLocation)
 {
 	*CurrentLocation = CameraLocation;
+	return CameraLocation;
 }
 void vw_SetCameraRotation(VECTOR3D NewRotation)
 {
 	CameraRotation = NewRotation;
 	CameraUpdated = true;
 }
-void vw_GetCameraRotation(VECTOR3D *CurrentRotation)
+VECTOR3D vw_GetCameraRotation(VECTOR3D *CurrentRotation)
 {
 	*CurrentRotation = CameraRotation;
+	return CameraRotation;
 }
-
+VECTOR3D vw_GetCameraFocusPoint()
+{
+	return CameraFocusPoint;
+}
 
 
 
@@ -116,6 +122,8 @@ void vw_SetCameraMove(VECTOR3D NewRotation, float ChangeDistance, VECTOR3D Point
 //-----------------------------------------------------------------------------
 void vw_SetCameraMoveAroundPoint(VECTOR3D Point, float ChangeDistance, VECTOR3D ChangeRotation)
 {
+	CameraFocusPoint = Point;
+
 	// двигаем и перемещаем как нужно
 	vw_SetCameraMove(ChangeRotation, ChangeDistance, Point);
 

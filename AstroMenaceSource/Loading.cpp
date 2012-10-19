@@ -101,6 +101,7 @@ int CurrentListCount = 0;
 //------------------------------------------------------------------------------------
 eGLSL 	*GLSLShaderType1 = 0;
 eGLSL 	*GLSLShaderType2 = 0;
+eGLSL 	*GLSLShaderType3 = 0;
 
 struct sGLSLLoadList
 {
@@ -108,12 +109,13 @@ struct sGLSLLoadList
 	char VertexShaderFileName[MAX_PATH];
 	char FragmentShaderFileName[MAX_PATH];
 };
-const int GLSLLoadListCount = 4;
+const int GLSLLoadListCount = 5;
 sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 {
 {"ParticleSystem", "DATA/GLSL/particle.vert", "DATA/GLSL/particle.frag"},
 {"SpaceStars", "DATA/GLSL/particle_stars.vert", "DATA/GLSL/particle.frag"},
 {"PerPixelLight", "DATA/GLSL/light.vert", "DATA/GLSL/light.frag"},
+{"PerPixelLight_ShadowMap", "DATA/GLSL/light_shadowmap.vert", "DATA/GLSL/light_shadowmap.frag"},
 {"PerPixelLight_Explosion", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light.frag"},
 };
 
@@ -1507,9 +1509,11 @@ void LoadGameData(int LoadType)
 		// сразу находим базовые типы шейдеров для прорисовки 3д моделей
 		GLSLShaderType1 = vw_FindShaderByName("PerPixelLight");
 		GLSLShaderType2 = vw_FindShaderByName("PerPixelLight_Explosion");
+		GLSLShaderType3 = vw_FindShaderByName("PerPixelLight_ShadowMap");
 	}
-
-
+	// еще одна проверка перед тем как будем использовать шадовмеп
+	// если не смогли загрузить шейдеры, то делать с шадовмеп нечего
+	if (!Setup.UseGLSL) Setup.ShadowMap = 0;
 
 
 
@@ -1658,6 +1662,36 @@ void LoadGameData(int LoadType)
 
 
 AllDataLoaded:
+
+
+	// инициализируем шадов меп
+	if (Setup.ShadowMap > 0)
+	{
+		int ShadowMapSize = 1024;
+		switch(Setup.ShadowMap)
+		{
+			case 1: ShadowMapSize = CAPS->MaxTextureWidth/4; break;
+			case 2: ShadowMapSize = CAPS->MaxTextureWidth/2; break;
+			case 3: ShadowMapSize = CAPS->MaxTextureWidth; break;
+		}
+
+		switch(LoadType)
+		{
+			case -1:  // меню (только запустили)
+				if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize/2)) Setup.ShadowMap = 0;
+				break;
+			case 0:   // меню (выходим из игры)
+				ShadowMap_Release();
+				if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize/2)) Setup.ShadowMap = 0;
+				break;
+
+			case 1: // переход на уровни игры
+				ShadowMap_Release();
+				if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize)) Setup.ShadowMap = 0;
+				break;
+		}
+	}
+
 
 	// переходим в нужное место...
 	switch(LoadType)

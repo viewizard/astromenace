@@ -307,6 +307,8 @@ void vw_OnChangeSize(int nWidth, int nHeight);
 void vw_BeginRendering(int  mask);
 // End rendering
 void vw_EndRendering(void);
+// Clear buffer
+void vw_Clear(int mask);
 // Start 2D rendering mode
 void vw_Start2DMode(float nZ1, float nZ2);
 // End 2D rendering mode

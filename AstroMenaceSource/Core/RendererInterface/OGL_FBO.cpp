@@ -36,15 +36,6 @@
 // текущий работающий буфер, если 0 - фрейм буфер
 eFBO *CurrentFBO = 0;
 
-/*
-// данные для буферов, чтобы сделать MSAA
-GLuint ColorRenderbufferName = 0;
-GLuint DepthRenderbufferName = 0;
-GLuint ColorTextureName = 0;
-GLuint FramebufferRenderName = 0;
-GLuint FramebufferResolveName = 0;
-GLuint FBO_Width, FBO_Height;
-*/
 // указатели на функии
 PFNGLGENRENDERBUFFERSEXTPROC				glGenRenderbuffersEXT = NULL;
 PFNGLBINDRENDERBUFFEREXTPROC				glBindRenderbufferEXT = NULL;

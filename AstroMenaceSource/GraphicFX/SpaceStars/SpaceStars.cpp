@@ -553,8 +553,6 @@ void CSpaceStars::Draw()
 	{
 		vw_SetTexture(0, Texture);
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-		// выключаем проверку глубины
-		vw_DepthTest(false, -1);
 
 
 		// получаем текущее положение камеры
@@ -593,7 +591,6 @@ void CSpaceStars::Draw()
 		vw_PopMatrix();
 
 		vw_SetTextureBlend(false, 0, 0);
-		vw_DepthTest(true, RI_LESSEQUAL);
 	}
 
 

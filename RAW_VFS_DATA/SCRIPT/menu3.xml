@@ -15,9 +15,8 @@
 
 	
 	<!-- Установка источников света -->
-	<Light dirx="0.5" diry="0" dirz="1" diffr="1" diffg="1" diffb="1" specr="1" specg="1" specb="1" ambir="1" ambig="1" ambib="1"/>
-	<Light dirx="1" diry="0" dirz="0.5" diffr="0.1" diffg="0.1" diffb="0.8" specr="0.1" specg="0.1" specb="0.1"/>
-	
+	<Light dirx="0.5" diry="-0.2" dirz="1" diffr="1" diffg="1" diffb="1" specr="1" specg="1" specb="1" ambir="1" ambig="1" ambib="1"/>
+
 
 	<!--Light type="1" diffr="1.0" diffg="0.0" diffb="0.0" specr="1.0" specg="0.0" specb="0.0" posx="24" posy="-8" posz="-13" status="1"/-->
 

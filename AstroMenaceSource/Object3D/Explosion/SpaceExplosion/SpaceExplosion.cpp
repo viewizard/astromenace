@@ -566,7 +566,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 		DrawObjectList = new eObjectBlock[DrawObjectQuantity];
 
 		// смотрим по настройкам сколько пропускать
-		int NeedIn = Setup.PartsExplosionQuality;
+		int NeedIn = Setup.VisualEffectsQuality;
 
 		// составляем данные для взрыва
 		for (int i=0; i<DrawObjectQuantity; i++)

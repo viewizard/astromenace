@@ -713,6 +713,21 @@ void vw_ChangeSize(int nWidth, int nHeight)
 
 
 
+//------------------------------------------------------------------------------------
+// очистка буфера
+//------------------------------------------------------------------------------------
+void vw_Clear(int mask)
+{
+	GLbitfield  glmask = 0;
+
+	if (mask & 0x1000) glmask = glmask | GL_COLOR_BUFFER_BIT;
+	if (mask & 0x0100) glmask = glmask | GL_DEPTH_BUFFER_BIT;
+	if (mask & 0x0010) glmask = glmask | GL_ACCUM_BUFFER_BIT;
+	if (mask & 0x0001) glmask = glmask | GL_STENCIL_BUFFER_BIT;
+
+	glClear(glmask);
+}
+
 
 
 
@@ -725,16 +740,7 @@ void vw_BeginRendering(int mask)
 	// если нужно, переключаемся на FBO
 	vw_BindFBO(&MainFBO);
 
-
-
-	GLbitfield  glmask = 0;
-
-	if (mask & 0x1000) glmask = glmask | GL_COLOR_BUFFER_BIT;
-	if (mask & 0x0100) glmask = glmask | GL_DEPTH_BUFFER_BIT;
-	if (mask & 0x0010) glmask = glmask | GL_ACCUM_BUFFER_BIT;
-	if (mask & 0x0001) glmask = glmask | GL_STENCIL_BUFFER_BIT;
-
-	glClear(glmask);
+	vw_Clear(mask);
 
 	glMatrixMode(GL_MODELVIEW);		//Select the modelview matrix
 	glLoadIdentity();				//Reset The modelview matrix

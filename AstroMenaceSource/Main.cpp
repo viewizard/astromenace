@@ -986,6 +986,7 @@ ReCreate:
 		{
 			// 100% держит наши шейдеры
 			Setup.UseGLSL = true;
+			Setup.ShadowMap = 1;
 			// 100% больше чем нужно памяти и не надо сжимать текстуры (ув. качество и скорость загрузки)
 			Setup.TexturesCompression = false;
 			// немного больше ставим другие опции
@@ -1000,15 +1001,16 @@ ReCreate:
 		if (CAPS->ShaderModel >= 4.1f)
 		{
 			// немного больше ставим другие опции
+			Setup.ShadowMap = 2;
 			Setup.MSAA = 4;
 			Setup.CSAA = 4;
-			Setup.ParticlesPerSecQuality = 1;
-			Setup.PartsExplosionQuality = 0;
 			Setup.BackgroundStarsQuality = 10;
-			Setup.BackgroundTileAnimation = 3;
 			Setup.MaxPointLights = 6;
 		}
 	}
+
+	// если не поддерживает железо фбо или шейдеры, выключаем шадовмеп
+	if (!CAPS->FramebufferObject | !CAPS->GLSL100Supported | (CAPS->ShaderModel < 3.0f)) Setup.ShadowMap = 0;
 
 	if (Setup.MSAA > CAPS->MaxSamples) Setup.MSAA = Setup.CSAA = CAPS->MaxSamples;
 	// на всякий случай проверяем, входит ли текущее сглаживание в список доступных
@@ -1073,7 +1075,7 @@ ReCreate:
 
 
 	// настройка менеджера систем частиц
-	vw_SetParticleSystemStates(Setup.UseGLSL, Setup.ParticlesPerSecQuality*1.0f);
+	vw_SetParticleSystemStates(Setup.UseGLSL, Setup.VisualEffectsQuality+1.0f);
 
 
 
@@ -1334,6 +1336,7 @@ GotoQuit:
 
 	vw_ShutdownFont();
 	vw_ReleaseAllTextures();
+	ShadowMap_Release();
 	vw_ShutdownRenderer();
 
 #ifdef joystick

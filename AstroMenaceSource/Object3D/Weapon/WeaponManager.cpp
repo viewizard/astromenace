@@ -6,10 +6,10 @@
 
 	File name: WeaponManager.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -121,14 +121,14 @@ void UpdateAllWeapon(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllWeapon(bool VertexOnlyPass)
+void DrawAllWeapon(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 
 	CWeapon *tmp = StartWeapon;
 	while (tmp!=0)
 	{
 		CWeapon *tmp2 = tmp->Next;
-		tmp->Draw(VertexOnlyPass);
+		tmp->Draw(VertexOnlyPass, ShadowMap);
 		tmp = tmp2;
 	}
 

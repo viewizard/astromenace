@@ -6,10 +6,10 @@
 
 	File name: StarSystem.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -59,7 +59,7 @@ void StarSystemInit(int Num, VECTOR3D SetBaseRotation)
 	switch (Num)
 	{
 		case 1:
-			SkyBoxCreate(0.0f, 0.0f, 0.0f, 7000.0f, 7000.0f, 7000.0f);
+			SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
 			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/1/skybox_BK.jpg"), 4);
 			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/1/skybox_DN.jpg"), 2);
 			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/1/skybox_FR.jpg"), 5);
@@ -69,7 +69,7 @@ void StarSystemInit(int Num, VECTOR3D SetBaseRotation)
 			StarSystem_Inited = true;
 			break;
 		case 2:
-			SkyBoxCreate(0.0f, 0.0f, 0.0f, 7000.0f, 7000.0f, 7000.0f);
+			SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
 			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_BK.jpg"), 4);
 			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_DN.jpg"), 2);
 			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_FR.jpg"), 5);
@@ -79,7 +79,7 @@ void StarSystemInit(int Num, VECTOR3D SetBaseRotation)
 			StarSystem_Inited = true;
 			break;
 		case 3:
-			SkyBoxCreate(0.0f, 0.0f, 0.0f, 7000.0f, 7000.0f, 7000.0f);
+			SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
 			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/3/skybox_BK.jpg"), 4);
 			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/3/skybox_DN.jpg"), 2);
 			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/3/skybox_FR.jpg"), 5);
@@ -134,6 +134,7 @@ void StarSystemDraw()
 	VECTOR3D CurrentCameraLocation;
 	vw_GetCameraLocation(&CurrentCameraLocation);
 
+	vw_DepthTest(false, -1);
 
 	if (StarSystem_Inited)
 	{
@@ -149,6 +150,8 @@ void StarSystemDraw()
 
 	// static space stars
 	if (psSpaceStatic!=0) psSpaceStatic->Draw();
+
+	vw_DepthTest(true, RI_LESSEQUAL);
 }
 
 

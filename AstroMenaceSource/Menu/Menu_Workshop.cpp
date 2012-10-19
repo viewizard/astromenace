@@ -6,10 +6,10 @@
 
 	File name: Menu_Workshop.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -481,7 +481,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		SpaceFighter->SetRotation(VECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
 
 		vw_SetViewport((int)((Setup.iAspectRatioWidth/2-512)/(AW/AWw)), 0, (int)(1024/(AW/AWw)), (int)(768/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
-		vw_ResizeScene(45.0f, 1024.0f/768.0f, 1.0f, 10000.0f);
+		vw_ResizeScene(45.0f, 1024.0f/768.0f, 1.0f, 2000.0f);
 
 		vw_LoadIdentity();
 		vw_SetCameraLocation(VECTOR3D(1000+WorkShopPointCamera.x,-1000+WorkShopPointCamera.y,WorkShopPointCamera.z));
@@ -489,18 +489,44 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		vw_CameraLookAt();
 
 
-		SpaceFighter->Draw(false);
+		unsigned int ShadowMapStage = 0;
+
+		if (Setup.ShadowMap > 0)
+		{
+			float EffectiveDistance = 20.0f;
+			ShadowMap_StartRenderToFBO(VECTOR3D(0,5,0), EffectiveDistance, EffectiveDistance*2);
+
+			SpaceFighter->Draw(true);
+			if (SpaceFighter->Weapon != 0)
+			for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
+			{
+				if (SpaceFighter->Weapon[i] != 0)
+					SpaceFighter->Weapon[i]->Draw(true);
+			}
+
+			ShadowMap_EndRenderToFBO(1024.0f/768.0f);
+			ShadowMapStage = 2;
+			ShadowMap_StartFinalRender(ShadowMapStage);
+		}
+
+		SpaceFighter->Draw(false, ShadowMapStage);
 		if (SpaceFighter->Weapon != 0)
 		for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
 		{
 			if (SpaceFighter->Weapon[i] != 0)
-				SpaceFighter->Weapon[i]->Draw(false);
+				SpaceFighter->Weapon[i]->Draw(false, ShadowMapStage);
 		}
+
+		if (Setup.ShadowMap > 0)
+		{
+			ShadowMap_EndFinalRender(ShadowMapStage);
+		}
+
 		vw_DrawAllParticleSystems();
 
 		vw_SetCameraLocation(VECTOR3D(-50,30,-50));
 		vw_SetViewport(x, y, width, height, znear, zfar);
-		vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 10000.0f);
+		vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 		return;
 	}
 
@@ -511,27 +537,51 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		WorkShopPointCamera = VECTOR3D(26.0f, 0.0f, -29.6f);
 		SpaceFighter->SetRotation(VECTOR3D(0.0f, 0.0f, CurentDeviation/2.0f));
 		vw_SetViewport((int)((Setup.iAspectRatioWidth/2)/(AW/AWw)), 30, (int)(512/(AW/AWw)), (int)(638/(AH/AHw)), 0.0f, 0.3f, RI_UL_CORNER);
-		vw_ResizeScene(45.0f, 512.0f/608.0f, 1.0f, 10000.0f);
+		vw_ResizeScene(45.0f, 512.0f/608.0f, 1.0f, 2000.0f);
 		vw_LoadIdentity();
 		vw_SetCameraLocation(VECTOR3D(1000+WorkShopPointCamera.x,-1000+WorkShopPointCamera.y,WorkShopPointCamera.z));
 		vw_SetCameraMoveAroundPoint(VECTOR3D(1000,-1000, 0.0f), 0.0f, VECTOR3D(-90.0f, -9.0f, 0.0f));
 		vw_CameraLookAt();
 
 
-		SpaceFighter->Draw(false);
+		unsigned int ShadowMapStage = 0;
+
+		if (Setup.ShadowMap > 0)
+		{
+			float EffectiveDistance = 20.0f;
+			ShadowMap_StartRenderToFBO(VECTOR3D(0,0,0), EffectiveDistance, EffectiveDistance*2);
+
+			SpaceFighter->Draw(true);
+			if (SpaceFighter->Weapon != 0)
+			for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
+			{
+				if (SpaceFighter->Weapon[i] != 0)
+					SpaceFighter->Weapon[i]->Draw(true);
+			}
+
+			ShadowMap_EndRenderToFBO(512.0f/608.0f);
+			ShadowMapStage = 2;
+			ShadowMap_StartFinalRender(ShadowMapStage);
+		}
+
+		SpaceFighter->Draw(false, ShadowMapStage);
 		if (SpaceFighter->Weapon != 0)
 		for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
 		{
 			if (SpaceFighter->Weapon[i] != 0)
-				SpaceFighter->Weapon[i]->Draw(false);
+				SpaceFighter->Weapon[i]->Draw(false, ShadowMapStage);
+		}
+
+		if (Setup.ShadowMap > 0)
+		{
+			ShadowMap_EndFinalRender(ShadowMapStage);
 		}
 
 		vw_DrawAllParticleSystems();
 
-
 		vw_SetCameraLocation(VECTOR3D(-50,30,-50));
 		vw_SetViewport(x, y, width, height, znear, zfar);
-		vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 10000.0f);
+		vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 		return;
 	}
 
@@ -545,7 +595,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		WorkShopPointCamera = VECTOR3D(0.0f, 10.0f, -34.0f);
 		SpaceFighter->SetRotation(VECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
 		vw_SetViewport((int)((Setup.iAspectRatioWidth/2)/(AW/AWw)), (int)(0/(AH/AHw)), (int)(512/(AW/AWw)), (int)(512/(AH/AHw)), 0.0f, 0.3f, RI_UL_CORNER);
-		vw_ResizeScene(45.0f, 512.0f/512.0f, 1.0f, 10000.0f);
+		vw_ResizeScene(45.0f, 512.0f/512.0f, 1.0f, 2000.0f);
 		vw_LoadIdentity();
 		vw_SetCameraLocation(VECTOR3D(1000+WorkShopPointCamera.x/1.2f,-1000+WorkShopPointCamera.y/1.2f,WorkShopPointCamera.z/1.2f));
 		vw_SetCameraMoveAroundPoint(VECTOR3D(1000,-1000-SpaceFighter->AABB[6].y-SpaceFighter->Height/3,0), 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
@@ -557,29 +607,53 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		RotatePoint(&PointCameraTMP, VECTOR3D(0.0f, -90.0f, 0.0f));
 		SpaceFighter->SetRotation(VECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
 		vw_SetViewport((int)((Setup.iAspectRatioWidth/2-512)/(AW/AWw)), (int)(0/(AH/AHw)), (int)(512/(AW/AWw)), (int)(512/(AH/AHw)), 0.0f, 0.3f, RI_UL_CORNER);
-		vw_ResizeScene(45.0f, 512.0f/512.0f, 1.0f, 10000.0f);
+		vw_ResizeScene(45.0f, 512.0f/512.0f, 1.0f, 2000.0f);
 		vw_LoadIdentity();
 		vw_SetCameraLocation(VECTOR3D(2000+PointCameraTMP.x/1.2f,-2000+PointCameraTMP.y/1.2f,PointCameraTMP.z/1.2f));
 		vw_SetCameraMoveAroundPoint(VECTOR3D(2000,-2000-SpaceFighter->AABB[6].y-SpaceFighter->Height/3,0), 0.0f, VECTOR3D(0.0f, 170.0f, 0.0f));
 	}
 	vw_CameraLookAt();
 
-	SpaceFighter->Draw(false);
 
+	unsigned int ShadowMapStage = 0;
+
+	if (Setup.ShadowMap > 0)
+	{
+		float EffectiveDistance = 20.0f;
+		ShadowMap_StartRenderToFBO(VECTOR3D(0,-2,0), EffectiveDistance, EffectiveDistance*2);
+
+		SpaceFighter->Draw(true);
+		if (SpaceFighter->Weapon != 0)
+		for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
+		{
+			if (SpaceFighter->Weapon[i] != 0)
+				SpaceFighter->Weapon[i]->Draw(true);
+		}
+
+		ShadowMap_EndRenderToFBO(512.0f/512.0f);
+		ShadowMapStage = 2;
+		ShadowMap_StartFinalRender(ShadowMapStage);
+	}
+
+	SpaceFighter->Draw(false, ShadowMapStage);
 
 	if (SpaceFighter->Weapon != 0)
 	for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
 	{
 		if (SpaceFighter->Weapon[i] != 0)
-			SpaceFighter->Weapon[i]->Draw(false);
+			SpaceFighter->Weapon[i]->Draw(false, ShadowMapStage);
 	}
 
+	if (Setup.ShadowMap > 0)
+	{
+		ShadowMap_EndFinalRender(ShadowMapStage);
+	}
 
 	vw_DrawAllParticleSystems();
 
 	vw_SetCameraLocation(VECTOR3D(-50,30,-50));
 	vw_SetViewport(x, y, width, height, znear, zfar);
-	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 10000.0f);
+	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 
 }
 
@@ -615,7 +689,7 @@ void WorkshopDrawWeapon(CWeapon *Weapon)
 
 	Weapon->SetRotation(VECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
 	vw_SetViewport((int)((Setup.iAspectRatioWidth/2-448)/(AW/AWw)), (int)(105/(AH/AHw)), (int)(384/(AW/AWw)), (int)(350/(AH/AHw)), 0.0f, 0.3f, RI_UL_CORNER);
-	vw_ResizeScene(45.0f, 384.0f/350.0f, 1.0f, 10000.0f);
+	vw_ResizeScene(45.0f, 384.0f/350.0f, 1.0f, 2000.0f);
 	vw_LoadIdentity();
 	vw_SetCameraLocation(VECTOR3D(3000+PointCameraTMP.x,-3000+PointCameraTMP.y,PointCameraTMP.z));
 	vw_SetCameraMoveAroundPoint(VECTOR3D(3000,-3000,0), 0.0f, VECTOR3D(0.0f, 170.0f, 0.0f));
@@ -624,7 +698,7 @@ void WorkshopDrawWeapon(CWeapon *Weapon)
 	Weapon->Draw(false);
 
 	vw_SetCameraLocation(VECTOR3D(-50,30,-50));
-	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 10000.0f);
+	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 	vw_SetViewport(x, y, width, height, znear, zfar);
 }
 

@@ -6,10 +6,10 @@
 
 	File name: BigAsteroid.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -124,12 +124,11 @@ case10next:
 	::CObject3D::InitByDrawObjectList();
 
 
-	if (ShaderType == -1)
-		for (int j=0; j<DrawObjectQuantity; j++)
-		{
-			// это слишком большие объекты + практически не освещаются и плоские, т.е. попиксельное освещение не нужно
-			DrawObjectList[j].ShaderType = -1;
-		}
+	if (ShaderType == -1) // для дальних астероидов заднего плана шейдеры не нужны
+	for (int j=0; j<DrawObjectQuantity; j++)
+	{
+		DrawObjectList[j].ShaderType = -1;
+	}
 }
 
 

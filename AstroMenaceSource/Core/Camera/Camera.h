@@ -5,10 +5,10 @@
 
 	File name: Camera.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -41,10 +41,11 @@
 // работа с положением камеры
 void vw_SetCameraLocation(VECTOR3D NewLocation);
 void vw_IncCameraLocation(VECTOR3D IncLocation);
-void vw_GetCameraLocation(VECTOR3D *CurrentLocation);
+VECTOR3D vw_GetCameraLocation(VECTOR3D *CurrentLocation);
+VECTOR3D vw_GetCameraFocusPoint();
 // работа с поворотом камеры
 void vw_SetCameraRotation(VECTOR3D NewRotation);
-void vw_GetCameraRotation(VECTOR3D *CurrentRotation);
+VECTOR3D vw_GetCameraRotation(VECTOR3D *CurrentRotation);
 // перемещение камеры
 void vw_SetCameraMove(VECTOR3D NewRotation, float ChangeDistance, VECTOR3D Point);
 // перемещение относительно точки

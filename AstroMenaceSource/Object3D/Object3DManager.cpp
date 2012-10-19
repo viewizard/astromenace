@@ -6,10 +6,10 @@
 
 	File name: Object3DManager.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -33,20 +33,13 @@
 
 /// подключаем нужные файлы
 #include "Object3D.h"
-extern GameSetup Setup;
-extern eDevCaps CAPS;
+#include "../Game.h"
+
 
 
 //-----------------------------------------------------------------------------
 // Удаляем все объекты в списке
 //-----------------------------------------------------------------------------
-void ReleaseAllSpaceShip();
-void ReleaseAllWeapon();
-void ReleaseAllGroundObject();
-void ReleaseAllProjectile();
-void ReleaseAllSpaceObject();
-void ReleaseAllExplosion();
-
 void ReleaseAllObject3D()
 {
 	// корабли
@@ -71,31 +64,75 @@ void ReleaseAllObject3D()
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllSpaceShip(bool VertexOnlyPass);
-void DrawAllWeapon(bool VertexOnlyPass);
-void DrawAllGroundObject(bool VertexOnlyPass);
-void DrawAllProjectile(bool VertexOnlyPass);
-void DrawAllSpaceObject(bool VertexOnlyPass);
-void DrawAllExplosion(bool VertexOnlyPass);
-
-void DrawAllObject3D(bool VertexOnlyPass)
+void DrawAllObject3D(int ShadowMapInitType)
 {
 	// ставим всегда меньше или равно!
 	vw_DepthTest(true, RI_LESSEQUAL);
 
+	// т.к. мы в игре не на все объекты отбрасываем тени, смотрим, есть ли вообще эти объекты, надо ли вообще работать с шадовмепом
+	int ObjectsWithShadow = 1;
+	if (Setup.ShadowMap > 0)
+		if (ShadowMapInitType == 2)
+			ObjectsWithShadow = DrawAllSpaceObjectCount(13) + DrawAllSpaceObjectCount(15);
 
-	// корабли
-	DrawAllSpaceShip(VertexOnlyPass);
-	// оружие
-	DrawAllWeapon(VertexOnlyPass);
-	// наземные объекты
-	DrawAllGroundObject(VertexOnlyPass);
-	// снаряды
-	DrawAllProjectile(VertexOnlyPass);
+
+	unsigned int ShadowMapStage = 0;
+
+	if ((Setup.ShadowMap > 0) & (ObjectsWithShadow > 0))
+	{
+		switch (ShadowMapInitType)
+		{
+			// меню
+			case 1: ShadowMap_StartRenderToFBO(VECTOR3D(50,-5,-120), 120.0f, 500.0f); break;
+			// игра
+			case 2: ShadowMap_StartRenderToFBO(VECTOR3D(0,0,160), 600.0f, 800.0f); break;
+		}
+
+		DrawAllSpaceShip(true, 0);
+		DrawAllWeapon(true, 0);
+		DrawAllGroundObject(true, 0);
+		DrawAllProjectile(true, 0);
+		// от больших объектов в т.ч. частей баз, только в меню отбрасываем тень, в игре проблемы с точностью z буфера
+		if (ShadowMapInitType == 1) DrawAllSpaceObject(true, 0);
+		else DrawAllSpaceObject(true, 0, 8); // делаем тень только от частей взорванных объектов
+
+		ShadowMap_EndRenderToFBO(Setup.fAspectRatioWidth/Setup.fAspectRatioHeight);
+
+		// работаем с 3-м стейджем текстур (первые два у нас заняты)
+		ShadowMapStage = 2;
+		ShadowMap_StartFinalRender(ShadowMapStage);
+	}
+
+
 	// космические объекты
-	DrawAllSpaceObject(VertexOnlyPass);
+	DrawAllSpaceObject(false, ShadowMapStage, 13); // части базы
+	DrawAllSpaceObject(false, ShadowMapStage, 15); // большие астероиды
+
+
+	// если в игре - то не рисуем тени на мелкие объекты, чтобы избежать z-файтинга
+	if (ShadowMapInitType == 2) ShadowMapStage = 0;
+
+
+	// космические объекты
+	DrawAllSpaceObject(false, ShadowMapStage, 7); // мелкие астероиды
+	DrawAllSpaceObject(false, ShadowMapStage, 8); // части разруженных моделей
+	// корабли
+	DrawAllSpaceShip(false, ShadowMapStage);
+	// оружие
+	DrawAllWeapon(false, ShadowMapStage);
+	// наземные объекты
+	DrawAllGroundObject(false, ShadowMapStage);
+	// снаряды
+	DrawAllProjectile(false, ShadowMapStage);
+
+
+	if ((Setup.ShadowMap > 0) & (ObjectsWithShadow > 0))
+	{
+		ShadowMap_EndFinalRender(ShadowMapStage);
+	}
+
 	// взрывы
-	DrawAllExplosion(VertexOnlyPass);
+	DrawAllExplosion(false);
 }
 
 
@@ -109,13 +146,6 @@ void DrawAllObject3D(bool VertexOnlyPass)
 //-----------------------------------------------------------------------------
 // Проверяем все объекты, обновляем данные
 //-----------------------------------------------------------------------------
-void UpdateAllSpaceShip(float Time);
-void UpdateAllWeapon(float Time);
-void UpdateAllGroundObject(float Time);
-void UpdateAllProjectile(float Time);
-void UpdateAllSpaceObject(float Time);
-void UpdateAllExplosion(float Time);
-
 void UpdateAllObject3D(float Time)
 {
 	// проверяем корабли
