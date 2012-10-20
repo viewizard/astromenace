@@ -75,7 +75,6 @@ void InitSetup()
 	Setup.MSAA = 0;
 	Setup.CSAA = 0;
 	Setup.VisualEffectsQuality = 0;
-	Setup.BackgroundStarsQuality = 5;
 	Setup.AnisotropyLevel = 1;
 	Setup.TexturesCompression = 1;
 	Setup.UseGLSL = false;
@@ -289,7 +288,6 @@ void SaveXMLSetupFile()
 	iAddLine(root, setting, "MSAA", "value", Setup.MSAA);
 	iAddLine(root, setting, "CSAA", "value", Setup.CSAA);
 	iAddLine(root, setting, "VisualEffectsQuality", "value", Setup.VisualEffectsQuality);
-	iAddLine(root, setting, "BackgroundStarsQuality", "value", Setup.BackgroundStarsQuality);
 	iAddLine(root, setting, "AnisotropyLevel", "value", Setup.AnisotropyLevel);
 	iAddLine(root, setting, "TexturesCompression", "value", Setup.TexturesCompression);
 	bAddLine(root, setting, "UseGLSL", "value", Setup.UseGLSL);
@@ -638,7 +636,6 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	iGetLine(root, setting, "MSAA", "value", &Setup.MSAA);
 	iGetLine(root, setting, "CSAA", "value", &Setup.CSAA);
 	iGetLine(root, setting, "VisualEffectsQuality", "value", &Setup.VisualEffectsQuality);
-	iGetLine(root, setting, "BackgroundStarsQuality", "value", &Setup.BackgroundStarsQuality);
 	iGetLine(root, setting, "AnisotropyLevel", "value", &Setup.AnisotropyLevel);
 	iGetLine(root, setting, "TexturesCompression", "value", &Setup.TexturesCompression);
 	bGetLine(root, setting, "UseGLSL", "value", &Setup.UseGLSL);

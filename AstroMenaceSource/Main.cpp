@@ -993,8 +993,6 @@ ReCreate:
 			Setup.MSAA = 2;
 			Setup.CSAA = 2;
 			Setup.AnisotropyLevel = CAPS->MaxAnisotropyLevel;
-
-			Setup.BackgroundStarsQuality = 7;
 			Setup.MaxPointLights = 4;
 		}
 		// если шейдерная модель 4.1-я или выше
@@ -1004,7 +1002,6 @@ ReCreate:
 			Setup.ShadowMap = 2;
 			Setup.MSAA = 4;
 			Setup.CSAA = 4;
-			Setup.BackgroundStarsQuality = 10;
 			Setup.MaxPointLights = 6;
 		}
 	}
