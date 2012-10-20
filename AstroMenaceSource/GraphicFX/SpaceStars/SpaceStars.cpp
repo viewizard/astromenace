@@ -73,7 +73,7 @@ CSpaceStars::CSpaceStars()
 	End = 0;
 
 
-	unsigned int ParticlesCreated = 1500*Setup.BackgroundStarsQuality;
+	unsigned int ParticlesCreated = 10000 - 4000*Setup.VisualEffectsQuality;
 
 	// пока не создадим все необходимые частицы
 	while (ParticlesCreated > 0)

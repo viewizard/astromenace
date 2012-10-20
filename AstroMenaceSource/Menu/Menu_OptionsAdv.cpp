@@ -105,48 +105,23 @@ void OptionsAdvMenu()
 	{
 		Setup.VisualEffectsQuality++;
 		if (Setup.VisualEffectsQuality > 2) Setup.VisualEffectsQuality = 0;
+
+		if (psSpaceStatic!=0){delete psSpaceStatic; psSpaceStatic = 0;}
+		psSpaceStatic = new CSpaceStars;
 	}
 	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Setup.VisualEffectsQuality==0))
 	{
 		Setup.VisualEffectsQuality--;
 		if (Setup.VisualEffectsQuality < 0) Setup.VisualEffectsQuality = 2;
+
+		if (psSpaceStatic!=0){delete psSpaceStatic; psSpaceStatic = 0;}
+		psSpaceStatic = new CSpaceStars;
 	}
 	int Size = vw_FontSize(GetText(ButtonQuality[Setup.VisualEffectsQuality]));
 	int SizeI = (170-Size)/2;//High, Medium, Low
 	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(ButtonQuality[Setup.VisualEffectsQuality]));
 
 
-
-
-
-	// качество прорисовки звезд на заднем плане
-	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Stars_Quantity"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), MenuContentTransp, Setup.BackgroundStarsQuality==0))
-	{
-		Setup.BackgroundStarsQuality--;
-		if (Setup.BackgroundStarsQuality<0) Setup.BackgroundStarsQuality = 0;
-
-		if (psSpaceStatic!=0){delete psSpaceStatic; psSpaceStatic = 0;}
-		psSpaceStatic = new CSpaceStars;
-	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Increase"), MenuContentTransp, Setup.BackgroundStarsQuality==10))
-	{
-		Setup.BackgroundStarsQuality++;
-		if (Setup.BackgroundStarsQuality>10) Setup.BackgroundStarsQuality = 10;
-
-		if (psSpaceStatic!=0){delete psSpaceStatic; psSpaceStatic = 0;}
-		psSpaceStatic = new CSpaceStars;
-	}
-	for (int i=0; i<10; i++)
-	{
-		SetRect(&SrcRest,0,0,16,32);
-		SetRect(&DstRest,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
-		if (Setup.BackgroundStarsQuality>i)
-			vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc.tga"), true, MenuContentTransp);
-		else
-			vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, MenuContentTransp);
-	}
 
 
 

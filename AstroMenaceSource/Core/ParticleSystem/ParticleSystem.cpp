@@ -212,8 +212,8 @@ bool eParticleSystem::Update(float Time)
 
 	// Time - это абсолютное время, вычисляем дельту
 	float TimeDelta = Time - TimeLastUpdate;
-	// быстро вызвали, нет смысла делать анимацию быстрее чем 60 кадров в секунду
-	if (TimeDelta < 0.015f) return true;
+	// быстро вызвали
+	if (TimeDelta == 0.0f) return true;
 
 	TimeLastUpdate = Time;
 
