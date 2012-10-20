@@ -41,15 +41,24 @@ eParticleSystem * EndParticleSystem = 0;
 bool ParticleSystemUseGLSL = false;
 float ParticleSystemQuality = 1.0f;
 eGLSL *ParticleSystemGLSL = 0;
+int ParticleSystemUniformLocations[10];
 
 
 //-----------------------------------------------------------------------------
 //	Установка общих состояний
 //-----------------------------------------------------------------------------
-void vw_SetParticleSystemStates(bool UseGLSL, float Quality)
+void vw_InitParticleSystems(bool UseGLSL, float Quality)
 {
 	ParticleSystemUseGLSL = UseGLSL;
 	ParticleSystemQuality = Quality;
+
+	// при первом присоединении устанавливаем шейдер
+	if (ParticleSystemUseGLSL)
+	{
+		ParticleSystemGLSL = vw_FindShaderByName("ParticleSystem");
+		ParticleSystemUniformLocations[0] = vw_GetUniformLocation(ParticleSystemGLSL, "ParticleTexture");
+		ParticleSystemUniformLocations[1] = vw_GetUniformLocation(ParticleSystemGLSL, "CameraPoint");
+	}
 }
 
 
@@ -77,10 +86,6 @@ void vw_AttachParticleSystem(eParticleSystem * NewParticleSystem)
 		EndParticleSystem->Next = NewParticleSystem;
 		EndParticleSystem = NewParticleSystem;
 	}
-
-	// при первом присоединении устанавливаем шейдер
-	if (ParticleSystemUseGLSL)
-		if (ParticleSystemGLSL == 0) ParticleSystemGLSL = vw_FindShaderByName("ParticleSystem");
 }
 
 
@@ -160,8 +165,8 @@ void vw_DrawAllParticleSystems()
 			vw_GetCameraLocation(&CurrentCameraLocation);
 
 			vw_UseShaderProgram(ParticleSystemGLSL);
-			vw_Uniform1i(ParticleSystemGLSL, "ParticleTexture", 0);
-			vw_Uniform3f(ParticleSystemGLSL, "CameraPoint", CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z);
+			vw_Uniform1i(ParticleSystemGLSL, ParticleSystemUniformLocations[0], 0);
+			vw_Uniform3f(ParticleSystemGLSL, ParticleSystemUniformLocations[1], CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z);
 		}
 	}
 	// выключаем изменение буфера глубины

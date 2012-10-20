@@ -671,11 +671,11 @@ bool vw_StopShaderProgram()
 //------------------------------------------------------------------------------------
 // Get the location of a uniform variable
 //------------------------------------------------------------------------------------
-GLint internal_vw_GetUniformLocation(eGLSL *GLSL, const char *name)
+int vw_GetUniformLocation(eGLSL *GLSL, const char *name)
 {
 	if (glGetUniformLocationARB == NULL) return -1;
 
-    GLint loc;
+    int loc;
 
     loc = glGetUniformLocationARB(GLSL->Program, name);
 
@@ -692,17 +692,35 @@ GLint internal_vw_GetUniformLocation(eGLSL *GLSL, const char *name)
 //------------------------------------------------------------------------------------
 // установка значения параметра
 //------------------------------------------------------------------------------------
+bool vw_Uniform1i(eGLSL *GLSL, int UniformLocation, int data)
+{
+	if (GLSL == 0) return false;
+	if (glUniform1iARB == NULL) return false;
+
+	glUniform1iARB(UniformLocation, data);
+
+	CheckOGLError();  // Check for OpenGL errors
+
+	return true;
+}
 bool vw_Uniform1i(eGLSL *GLSL, const char *name, int data)
 {
 	if (GLSL == 0) return false;
 	if (name == 0) return false;
-	if (glUniform1iARB == NULL) return false;
 
-	GLint Loc = internal_vw_GetUniformLocation(GLSL, name);
+	int Loc = vw_GetUniformLocation(GLSL, name);
 	if (Loc == -1) return false;
 
-	glUniform1iARB(Loc, data);
+	return vw_Uniform1i(GLSL, Loc, data);
+}
 
+
+bool vw_Uniform1f(eGLSL *GLSL, int UniformLocation, float data)
+{
+	if (GLSL == 0) return false;
+	if (glUniform3fARB == NULL) return false;
+
+	glUniform1fARB(UniformLocation, data);
 
 	CheckOGLError();  // Check for OpenGL errors
 
@@ -712,12 +730,20 @@ bool vw_Uniform1f(eGLSL *GLSL, const char *name, float data)
 {
 	if (GLSL == 0) return false;
 	if (name == 0) return false;
-	if (glUniform3fARB == NULL) return false;
 
-	GLint Loc = internal_vw_GetUniformLocation(GLSL, name);
+	int Loc = vw_GetUniformLocation(GLSL, name);
 	if (Loc == -1) return false;
 
-	glUniform1fARB(Loc, data);
+	return vw_Uniform1f(GLSL, Loc, data);
+}
+
+
+bool vw_Uniform3f(eGLSL *GLSL, int UniformLocation, float data1, float data2, float data3)
+{
+	if (GLSL == 0) return false;
+	if (glUniform3fARB == NULL) return false;
+
+	glUniform3fARB(UniformLocation, data1, data2, data3);
 
 	CheckOGLError();  // Check for OpenGL errors
 
@@ -727,12 +753,20 @@ bool vw_Uniform3f(eGLSL *GLSL, const char *name, float data1, float data2, float
 {
 	if (GLSL == 0) return false;
 	if (name == 0) return false;
-	if (glUniform3fARB == NULL) return false;
 
-	GLint Loc = internal_vw_GetUniformLocation(GLSL, name);
+	int Loc = vw_GetUniformLocation(GLSL, name);
 	if (Loc == -1) return false;
 
-	glUniform3fARB(Loc, data1, data2, data3);
+	return vw_Uniform3f(GLSL, Loc, data1, data2, data3);
+}
+
+
+bool vw_Uniform1fv(eGLSL *GLSL, int UniformLocation, int count, float *data)
+{
+	if (GLSL == 0) return false;
+	if (glUniform1fvARB == NULL) return false;
+
+	glUniform1fvARB(UniformLocation, count, data);
 
 	CheckOGLError();  // Check for OpenGL errors
 
@@ -742,12 +776,20 @@ bool vw_Uniform1fv(eGLSL *GLSL, const char *name, int count, float *data)
 {
 	if (GLSL == 0) return false;
 	if (name == 0) return false;
-	if (glUniform1fvARB == NULL) return false;
 
-	GLint Loc = internal_vw_GetUniformLocation(GLSL, name);
+	int Loc = vw_GetUniformLocation(GLSL, name);
 	if (Loc == -1) return false;
 
-	glUniform1fvARB(Loc, count, data);
+	return vw_Uniform1fv(GLSL, Loc, count, data);
+}
+
+
+bool vw_Uniform4fv(eGLSL *GLSL, int UniformLocation, int count, float *data)
+{
+	if (GLSL == 0) return false;
+	if (glUniform4fvARB == NULL) return false;
+
+	glUniform4fvARB(UniformLocation, count, data);
 
 	CheckOGLError();  // Check for OpenGL errors
 
@@ -757,12 +799,20 @@ bool vw_Uniform4fv(eGLSL *GLSL, const char *name, int count, float *data)
 {
 	if (GLSL == 0) return false;
 	if (name == 0) return false;
-	if (glUniform4fvARB == NULL) return false;
 
-	GLint Loc = internal_vw_GetUniformLocation(GLSL, name);
+	int Loc = vw_GetUniformLocation(GLSL, name);
 	if (Loc == -1) return false;
 
-	glUniform4fvARB(Loc, count, data);
+	return vw_Uniform4fv(GLSL, Loc, count, data);
+}
+
+
+bool vw_UniformMatrix4fv(eGLSL *GLSL, int UniformLocation, bool transpose, int count, float *data)
+{
+	if (GLSL == 0) return false;
+	if (glUniformMatrix4fvARB == NULL) return false;
+
+	glUniformMatrix4fvARB(UniformLocation, count, transpose, data);
 
 	CheckOGLError();  // Check for OpenGL errors
 
@@ -772,16 +822,10 @@ bool vw_UniformMatrix4fv(eGLSL *GLSL, const char *name, bool transpose, int coun
 {
 	if (GLSL == 0) return false;
 	if (name == 0) return false;
-	if (glUniformMatrix4fvARB == NULL) return false;
 
-	GLint Loc = internal_vw_GetUniformLocation(GLSL, name);
+	int Loc = vw_GetUniformLocation(GLSL, name);
 	if (Loc == -1) return false;
 
-	glUniformMatrix4fvARB(Loc, count, transpose, data);
-
-	CheckOGLError();  // Check for OpenGL errors
-
-	return true;
+	return vw_UniformMatrix4fv(GLSL, Loc, transpose, count, data);
 }
-
 

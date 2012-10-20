@@ -1074,10 +1074,6 @@ ReCreate:
 
 
 
-	// настройка менеджера систем частиц
-	vw_SetParticleSystemStates(Setup.UseGLSL, Setup.VisualEffectsQuality+1.0f);
-
-
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -102,6 +102,7 @@ int CurrentListCount = 0;
 eGLSL 	*GLSLShaderType1 = 0;
 eGLSL 	*GLSLShaderType2 = 0;
 eGLSL 	*GLSLShaderType3 = 0;
+int 	UniformLocations[100];
 
 struct sGLSLLoadList
 {
@@ -1510,10 +1511,39 @@ void LoadGameData(int LoadType)
 		GLSLShaderType1 = vw_FindShaderByName("PerPixelLight");
 		GLSLShaderType2 = vw_FindShaderByName("PerPixelLight_Explosion");
 		GLSLShaderType3 = vw_FindShaderByName("PerPixelLight_ShadowMap");
+
+		// находим все юниформы GLSLShaderType1
+		UniformLocations[0] = vw_GetUniformLocation(GLSLShaderType1, "Texture1");
+		UniformLocations[1] = vw_GetUniformLocation(GLSLShaderType1, "Texture2");
+		UniformLocations[2] = vw_GetUniformLocation(GLSLShaderType1, "DirectLightCount");
+		UniformLocations[3] = vw_GetUniformLocation(GLSLShaderType1, "PointLightCount");
+		UniformLocations[4] = vw_GetUniformLocation(GLSLShaderType1, "NeedMultitexture");
+		// находим все юниформы GLSLShaderType2
+		UniformLocations[10] = vw_GetUniformLocation(GLSLShaderType2, "Texture1");
+		UniformLocations[11] = vw_GetUniformLocation(GLSLShaderType2, "Texture2");
+		UniformLocations[12] = vw_GetUniformLocation(GLSLShaderType2, "DirectLightCount");
+		UniformLocations[13] = vw_GetUniformLocation(GLSLShaderType2, "PointLightCount");
+		UniformLocations[14] = vw_GetUniformLocation(GLSLShaderType2, "NeedMultitexture");
+		UniformLocations[15] = vw_GetUniformLocation(GLSLShaderType2, "SpeedData1");
+		UniformLocations[16] = vw_GetUniformLocation(GLSLShaderType2, "SpeedData2");
+		// находим все юниформы GLSLShaderType3
+		UniformLocations[20] = vw_GetUniformLocation(GLSLShaderType3, "Texture1");
+		UniformLocations[21] = vw_GetUniformLocation(GLSLShaderType3, "Texture2");
+		UniformLocations[22] = vw_GetUniformLocation(GLSLShaderType3, "DirectLightCount");
+		UniformLocations[23] = vw_GetUniformLocation(GLSLShaderType3, "PointLightCount");
+		UniformLocations[24] = vw_GetUniformLocation(GLSLShaderType3, "NeedMultitexture");
+		UniformLocations[25] = vw_GetUniformLocation(GLSLShaderType3, "ShadowMapStage");
+		UniformLocations[26] = vw_GetUniformLocation(GLSLShaderType3, "ShadowMap");
+		UniformLocations[27] = vw_GetUniformLocation(GLSLShaderType3, "xPixelOffset");
+		UniformLocations[28] = vw_GetUniformLocation(GLSLShaderType3, "yPixelOffset");
 	}
 	// еще одна проверка перед тем как будем использовать шадовмеп
 	// если не смогли загрузить шейдеры, то делать с шадовмеп нечего
 	if (!Setup.UseGLSL) Setup.ShadowMap = 0;
+
+
+	// инициализация менеджера частиц (обязательно после загрузки шейдеров)
+	vw_InitParticleSystems(Setup.UseGLSL, Setup.VisualEffectsQuality+1.0f);
 
 
 
