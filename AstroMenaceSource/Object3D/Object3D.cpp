@@ -43,7 +43,7 @@ int NeedShowBB = 0;
 extern eGLSL 	*GLSLShaderType1;
 extern eGLSL 	*GLSLShaderType2;
 extern eGLSL 	*GLSLShaderType3;
-
+extern int 		UniformLocations[100];
 
 
 //-----------------------------------------------------------------------------
@@ -990,31 +990,60 @@ void CObject3D::Draw(bool VertexOnlyPass, unsigned int ShadowMap)
 			// данные ставим каждый раз, т.к. может что-то поменяться
 			if (CurrentObject3DGLSL != 0)
 			{
-				vw_Uniform1i(CurrentObject3DGLSL, "Texture1", 0);
-				vw_Uniform1i(CurrentObject3DGLSL, "Texture2", 1);
-				vw_Uniform1i(CurrentObject3DGLSL, "DirectLightCount", LightType1);
-				vw_Uniform1i(CurrentObject3DGLSL, "PointLightCount", LightType2);
-				if (TextureIllum != 0)
+				switch (DrawObjectList[0].ShaderType)
 				{
-					if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, "NeedMultitexture", 1);
-					else vw_Uniform1i(CurrentObject3DGLSL, "NeedMultitexture", 0);
-				}
-				else vw_Uniform1i(CurrentObject3DGLSL, "NeedMultitexture", 0);
+					case 1: // только попиксельное освещение
 
-				// шейдеры взрывов
-				if (DrawObjectList[0].ShaderType == 2)
-				{
-					vw_Uniform1f(CurrentObject3DGLSL, "SpeedData1", DrawObjectList[0].ShaderData[0]);
-					vw_Uniform1f(CurrentObject3DGLSL, "SpeedData2", DrawObjectList[0].ShaderData[1]);
-				}
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[0], 0);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[1], 1);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[2], LightType1);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[3], LightType2);
+						if (TextureIllum != 0)
+						{
+							if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 1);
+							else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
+						}
+						else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
 
-				// шадов меп
-				if (DrawObjectList[0].ShaderType == 3)
-				{
-					vw_Uniform1i(CurrentObject3DGLSL, "ShadowMapStage", ShadowMap);
-					vw_Uniform1i(CurrentObject3DGLSL, "ShadowMap", ShadowMap);
-					vw_Uniform1f(CurrentObject3DGLSL, "xPixelOffset", ShadowMap_Get_xPixelOffset());
-					vw_Uniform1f(CurrentObject3DGLSL, "yPixelOffset", ShadowMap_Get_xPixelOffset());
+						break;
+
+					case 2: // шейдеры взрывов
+
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[10], 0);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[11], 1);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[12], LightType1);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[13], LightType2);
+						if (TextureIllum != 0)
+						{
+							if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[14], 1);
+							else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[14], 0);
+						}
+						else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[14], 0);
+
+						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[15], DrawObjectList[0].ShaderData[0]);
+						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[16], DrawObjectList[0].ShaderData[1]);
+
+						break;
+
+					case 3: // шадов меп
+
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[20], 0);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[21], 1);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[22], LightType1);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[23], LightType2);
+						if (TextureIllum != 0)
+						{
+							if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 1);
+							else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
+						}
+						else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
+
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[25], ShadowMap);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[26], ShadowMap);
+						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[27], ShadowMap_Get_xPixelOffset());
+						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[28], ShadowMap_Get_xPixelOffset());
+
+						break;
 				}
 			}
 		}
@@ -1173,31 +1202,60 @@ void CObject3D::Draw(bool VertexOnlyPass, unsigned int ShadowMap)
 				// данные ставим каждый раз, т.к. может что-то поменяться
 				if (CurrentObject3DGLSL != 0)
 				{
-					vw_Uniform1i(CurrentObject3DGLSL, "Texture1", 0);
-					vw_Uniform1i(CurrentObject3DGLSL, "Texture2", 1);
-					vw_Uniform1i(CurrentObject3DGLSL, "DirectLightCount", LightType1);
-					vw_Uniform1i(CurrentObject3DGLSL, "PointLightCount", LightType2);
-					if (TextureIllum != 0)
+					switch (DrawObjectList[i].ShaderType)
 					{
-						if (TextureIllum[i] != 0) vw_Uniform1i(CurrentObject3DGLSL, "NeedMultitexture", 1);
-						else vw_Uniform1i(CurrentObject3DGLSL, "NeedMultitexture", 0);
-					}
-					else vw_Uniform1i(CurrentObject3DGLSL, "NeedMultitexture", 0);
+						case 1: // только попиксельное освещение
 
-					// шейдеры взрывов
-					if (DrawObjectList[i].ShaderType == 2)
-					{
-						vw_Uniform1f(CurrentObject3DGLSL, "SpeedData1", DrawObjectList[i].ShaderData[0]);
-						vw_Uniform1f(CurrentObject3DGLSL, "SpeedData2", DrawObjectList[i].ShaderData[1]);
-					}
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[0], 0);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[1], 1);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[2], LightType1);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[3], LightType2);
+							if (TextureIllum != 0)
+							{
+								if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 1);
+								else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
+							}
+							else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
 
-					// шадов меп
-					if (DrawObjectList[i].ShaderType == 3)
-					{
-						vw_Uniform1i(CurrentObject3DGLSL, "ShadowMapStage", ShadowMap);
-						vw_Uniform1i(CurrentObject3DGLSL, "ShadowMap", ShadowMap);
-						vw_Uniform1f(CurrentObject3DGLSL, "xPixelOffset", ShadowMap_Get_xPixelOffset());
-						vw_Uniform1f(CurrentObject3DGLSL, "yPixelOffset", ShadowMap_Get_xPixelOffset());
+							break;
+
+						case 2: // шейдеры взрывов
+
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[10], 0);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[11], 1);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[12], LightType1);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[13], LightType2);
+							if (TextureIllum != 0)
+							{
+								if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[14], 1);
+								else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[14], 0);
+							}
+							else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[14], 0);
+
+							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[15], DrawObjectList[0].ShaderData[0]);
+							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[16], DrawObjectList[0].ShaderData[1]);
+
+							break;
+
+						case 3: // шадов меп
+
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[20], 0);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[21], 1);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[22], LightType1);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[23], LightType2);
+							if (TextureIllum != 0)
+							{
+								if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 1);
+								else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
+							}
+							else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
+
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[25], ShadowMap);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[26], ShadowMap);
+							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[27], ShadowMap_Get_xPixelOffset());
+							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[28], ShadowMap_Get_xPixelOffset());
+
+							break;
 					}
 				}
 			}

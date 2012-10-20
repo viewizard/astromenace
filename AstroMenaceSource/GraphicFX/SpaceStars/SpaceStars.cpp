@@ -54,6 +54,16 @@ CSpaceStars::CSpaceStars()
 	DeadZone = 5.2f;
 
 
+
+	if (Setup.UseGLSL)
+	{
+		GLSL = vw_FindShaderByName("SpaceStars");
+		UniformLocations[0] = vw_GetUniformLocation(GLSL, "ParticleTexture");
+		UniformLocations[1] = vw_GetUniformLocation(GLSL, "ParticleAge");
+	}
+
+
+
 	// начальные установки для мартиц поворотов
 	Matrix33Identity(CurrentRotationMat);
 	Matrix33Identity(OldInvRotationMat);
@@ -574,17 +584,16 @@ void CSpaceStars::Draw()
 		}
 		else
 		{
-			eGLSL *StarSystemGLSL = vw_FindShaderByName("SpaceStars");
-			if (StarSystemGLSL != 0)
+			if (GLSL != 0)
 			{
-				vw_UseShaderProgram(StarSystemGLSL);
-				vw_Uniform1i(StarSystemGLSL, "ParticleTexture", 0);
-				vw_Uniform1f(StarSystemGLSL, "ParticleAge", Age);
+				vw_UseShaderProgram(GLSL);
+				vw_Uniform1i(GLSL, UniformLocations[0], 0);
+				vw_Uniform1f(GLSL, UniformLocations[1], Age);
 			}
 
 			vw_SendVertices(RI_QUADS, 4*PrimitCount, RI_3f_XYZ | RI_1_TEX | RI_3f_NORMAL, tmpDATA, 8*sizeof(float), VBO);
 
-			vw_StopShaderProgram();
+			if (GLSL != 0) vw_StopShaderProgram();
 		}
 
 

@@ -50,6 +50,7 @@ PFNGLDELETEFRAMEBUFFERSEXTPROC				glDeleteFramebuffersEXT = NULL;
 PFNGLBLITFRAMEBUFFEREXTPROC					glBlitFramebufferEXT = NULL;
 PFNGLISFRAMEBUFFEREXTPROC					glIsFramebufferEXT = NULL;
 PFNGLGENERATEMIPMAPPROC 					glGenerateMipmapEXT = NULL;
+PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC		glGetFramebufferAttachmentParameterivEXT = NULL;
 // GL_NV_framebuffer_multisample_coverage, не обязательный
 PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC	glRenderbufferStorageMultisampleCoverageNV = NULL;
 
@@ -75,6 +76,7 @@ bool vw_Internal_InitializationFBO()
 	glBlitFramebufferEXT = (PFNGLBLITFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBlitFramebuffer");
 	glIsFramebufferEXT = (PFNGLISFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glIsFramebuffer");
 	glGenerateMipmapEXT = (PFNGLGENERATEMIPMAPPROC) SDL_GL_GetProcAddress("glGenerateMipmap");
+	glGetFramebufferAttachmentParameterivEXT = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC) SDL_GL_GetProcAddress("glGetFramebufferAttachmentParameteriv");
 
 
 	if (glGenRenderbuffersEXT == NULL || glBindRenderbufferEXT == NULL ||
@@ -83,7 +85,7 @@ bool vw_Internal_InitializationFBO()
 		glCheckFramebufferStatusEXT == NULL || glFramebufferTexture2DEXT == NULL ||
 		glDeleteRenderbuffersEXT == NULL || glDeleteFramebuffersEXT == NULL ||
 		glBlitFramebufferEXT == NULL || glIsFramebufferEXT == NULL ||
-		glGenerateMipmapEXT == NULL)
+		glGenerateMipmapEXT == NULL || glGetFramebufferAttachmentParameterivEXT == NULL)
 	{
 		// GL_EXT_framebuffer_object+GL_EXT_framebuffer_multisample+GL_EXT_framebuffer_blit
 		glGenRenderbuffersEXT = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenRenderbuffersEXT");
@@ -99,6 +101,7 @@ bool vw_Internal_InitializationFBO()
 		glBlitFramebufferEXT = (PFNGLBLITFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBlitFramebufferEXT");
 		glIsFramebufferEXT = (PFNGLISFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glIsFramebufferEXT");
 		glGenerateMipmapEXT = (PFNGLGENERATEMIPMAPPROC) SDL_GL_GetProcAddress("glGenerateMipmapEXT");
+		glGetFramebufferAttachmentParameterivEXT = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC) SDL_GL_GetProcAddress("glGetFramebufferAttachmentParameterivEXT");
 	}
 
 
@@ -108,7 +111,7 @@ bool vw_Internal_InitializationFBO()
 		glCheckFramebufferStatusEXT == NULL || glFramebufferTexture2DEXT == NULL ||
 		glDeleteRenderbuffersEXT == NULL || glDeleteFramebuffersEXT == NULL ||
 		glBlitFramebufferEXT == NULL || glIsFramebufferEXT == NULL ||
-		glGenerateMipmapEXT == NULL)
+		glGenerateMipmapEXT == NULL || glGetFramebufferAttachmentParameterivEXT == NULL)
 	{
 		glGenRenderbuffersEXT = NULL;
 		glBindRenderbufferEXT = NULL;
@@ -123,6 +126,7 @@ bool vw_Internal_InitializationFBO()
 		glBlitFramebufferEXT = NULL;
 		glIsFramebufferEXT = NULL;
 		glGenerateMipmapEXT = NULL;
+		glGetFramebufferAttachmentParameterivEXT = NULL;
 
 		return false;
 	}
@@ -154,8 +158,15 @@ bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 	if (glBindFramebufferEXT == NULL) return false;
 	if (glFramebufferRenderbufferEXT == NULL) return false;
 	if (glCheckFramebufferStatusEXT == NULL) return false;
+
 	// если не поддерживаем ковередж - просто ставим MSAA
-	if (glRenderbufferStorageMultisampleCoverageNV == NULL) *CSAA = MSAA;
+	if (glRenderbufferStorageMultisampleCoverageNV == NULL)
+		if (CSAA != 0)
+			*CSAA = MSAA;
+
+	int InternalCSAA = MSAA;
+	if (CSAA != 0) InternalCSAA = *CSAA;
+
 
 	FBO->Width = Width;
 	FBO->Height = Height;
@@ -164,7 +175,9 @@ bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 	FBO->ColorTexture = 0;
 	FBO->DepthTexture = 0;
 	FBO->FrameBufferObject = 0;
+	FBO->DepthSize = 0;
 
+	printf("Frame Buffer Object creation start with parameters %i %i %i %i %i %i\n", Width, Height, NeedColor, NeedDepth, MSAA, InternalCSAA);
 
 	glGenFramebuffersEXT(1, &FBO->FrameBufferObject);
 	glBindFramebufferEXT(GL_FRAMEBUFFER, FBO->FrameBufferObject);
@@ -177,10 +190,10 @@ bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 		{
 			glGenRenderbuffersEXT(1, &FBO->ColorBuffer);
 			glBindRenderbufferEXT(GL_RENDERBUFFER, FBO->ColorBuffer);
-			if ((*CSAA == MSAA) | (CSAA == 0))
+			if ((InternalCSAA == MSAA) | (InternalCSAA == 0))
 				glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, MSAA, GL_RGBA, FBO->Width, FBO->Height);
 			else
-				glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, *CSAA, MSAA, GL_RGBA, FBO->Width, FBO->Height);
+				glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, InternalCSAA, MSAA, GL_RGBA, FBO->Width, FBO->Height);
 			glFramebufferRenderbufferEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, FBO->ColorBuffer);
 			if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 			{
@@ -214,13 +227,15 @@ bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 		{
 			glGenRenderbuffersEXT(1, &FBO->DepthBuffer);
 			glBindRenderbufferEXT(GL_RENDERBUFFER, FBO->DepthBuffer);
-			if ((*CSAA == MSAA) | (CSAA == 0))
+			if ((InternalCSAA == MSAA) | (InternalCSAA == 0))
 				// Ставим "GL_DEPTH_COMPONENT" (No need to force GL_DEPTH_COMPONENT24, drivers usually give you the max precision if available ...)
 				glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, MSAA, GL_DEPTH_COMPONENT, FBO->Width, FBO->Height);
 			else
 				// Ставим "GL_DEPTH_COMPONENT" (No need to force GL_DEPTH_COMPONENT24, drivers usually give you the max precision if available ...)
-				glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, *CSAA, MSAA, GL_DEPTH_COMPONENT, FBO->Width, FBO->Height);
+				glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, InternalCSAA, MSAA, GL_DEPTH_COMPONENT, FBO->Width, FBO->Height);
 			glFramebufferRenderbufferEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, FBO->DepthBuffer);
+			// получаем назначенную драйвером глубину depth буфера
+			glGetFramebufferAttachmentParameterivEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &FBO->DepthSize);
 			if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 			{
 				fprintf(stderr, "Can't create FRAMEBUFFER.\n\n");
@@ -238,6 +253,8 @@ bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 			// Ставим "GL_DEPTH_COMPONENT" (No need to force GL_DEPTH_COMPONENT24, drivers usually give you the max precision if available ...)
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, FBO->Width, FBO->Height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
 			glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FBO->DepthTexture, 0);
+			// получаем назначенную драйвером глубину depth буфера
+			glGetFramebufferAttachmentParameterivEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &FBO->DepthSize);
 			if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 			{
 				fprintf(stderr, "Can't create FRAMEBUFFER.\n\n");
@@ -246,7 +263,10 @@ bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 		}
 	}
 
+
 	glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
+
+	printf("Frame Buffer Object created. Depth Size: %i\n", FBO->DepthSize);
 
 	return true;
 }

@@ -57,6 +57,9 @@ public:
 	// базовая текстура частиц
 	eTexture	*Texture;
 
+	float *tmpDATA;
+	int PrimitCount;
+	VECTOR3D LastCameraLocation;
 
 	// начальный установки, или установки где пред. и текушее положения равны
 	void		SetStartLocation(VECTOR3D NewLocation);
@@ -201,6 +204,8 @@ private:
 // Менеджер CParticleSystem
 //-----------------------------------------------------------------------------
 
+// Инициализация менеджера частиц
+void	vw_InitParticleSystems(bool UseGLSL, float Quality);
 // Включаем в список
 void	vw_AttachParticleSystem(eParticleSystem * NewParticleSystem);
 // Исключаем из списка
@@ -211,8 +216,6 @@ void	vw_ReleaseAllParticleSystems();
 void	vw_DrawAllParticleSystems();
 // Проверяем все объекты, обновляем данные
 void	vw_UpdateAllParticleSystems(float Time);
-// Установка общих состояний
-void 	vw_SetParticleSystemStates(bool UseGLSL, float Quality);
 
 
 

@@ -465,13 +465,14 @@ struct eFBO
 	unsigned int 	DepthBuffer;
 	unsigned int 	ColorTexture;
 	unsigned int 	DepthTexture;
+	int				DepthSize;
 	unsigned int 	FrameBufferObject;
 	unsigned int 	Width;
 	unsigned int 	Height;
 };
 
 // создаем (FBO - уже заранее подготовленный объект, в функции память не выделяем)
-bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDepth, int MSAA, int *CSAA);
+bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDepth, int MSAA=0, int *CSAA=0);
 // устанавливаем
 void vw_BindFBO(eFBO *FBO);
 // получаем текущий установленный FBO, 0 - если фрейм буфер
@@ -521,11 +522,19 @@ bool vw_LinkShaderProgram(eGLSL *GLSL);
 bool vw_UseShaderProgram(eGLSL *GLSL);
 bool vw_StopShaderProgram();
 
+int vw_GetUniformLocation(eGLSL *GLSL, const char *name);
+
+bool vw_Uniform1i(eGLSL *GLSL, int UniformLocation, int data);
 bool vw_Uniform1i(eGLSL *GLSL, const char *name, int data);
+bool vw_Uniform1fv(eGLSL *GLSL, int UniformLocation, int count, float *data);
 bool vw_Uniform1fv(eGLSL *GLSL, const char *name, int count, float *data);
+bool vw_Uniform1f(eGLSL *GLSL, int UniformLocation, float data);
 bool vw_Uniform1f(eGLSL *GLSL, const char *name, float data);
+bool vw_Uniform3f(eGLSL *GLSL, int UniformLocation, float data1, float data2, float data3);
 bool vw_Uniform3f(eGLSL *GLSL, const char *name, float data1, float data2, float data3);
+bool vw_Uniform4fv(eGLSL *GLSL, int UniformLocation, int count, float *data);
 bool vw_Uniform4fv(eGLSL *GLSL, const char *name, int count, float *data);
+bool vw_UniformMatrix4fv(eGLSL *GLSL, int UniformLocation, bool transpose, int count, float *data);
 bool vw_UniformMatrix4fv(eGLSL *GLSL, const char *name, bool transpose, int count, float *data);
 
 

@@ -53,6 +53,10 @@ public:
 	// базовая текстура частиц
 	eTexture	*Texture;
 
+	// работа с шейдерами
+	eGLSL 	*GLSL;
+	int		UniformLocations[10];
+
 	// текущее положение частиц в пространстве
 	VECTOR3D		Location;
 
