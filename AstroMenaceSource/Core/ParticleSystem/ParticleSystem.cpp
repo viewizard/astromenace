@@ -5,10 +5,10 @@
 
 	File name: ParticleSystem.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -113,8 +113,6 @@ eParticleSystem::eParticleSystem()
 	LightDeviationSpeed = 3.5f+3.5f*vw_Randf1;
 
 	tmpDATA = 0;
-	PrimitCount = 0;
-	LastCameraLocation = VECTOR3D( 0.0f, 0.0f, 0.0f);
 
 	// настройка массива
 	Start = 0;
@@ -636,44 +634,63 @@ bool eParticleSystem::Update(float Time)
 
 
 
+	// проверка, если уже ничего нет и нужно выйти - выходим
+	if (DestroyIfNoParticles)
+		if (ParticlesAlive == 0)
+		{
+			NeedDestroy = true;
+			return false;
+		}
+
+    return true;
+}
 
 
-	// находим реальное кол-во частиц на прорисовку
+
+
+
+
+//-----------------------------------------------------------------------------
+// прорисовка системы
+//-----------------------------------------------------------------------------
+void eParticleSystem::Draw()
+{
+	// загрузка текстуры, уже должна быть подключена
+	if (Texture == 0) return;
+
+	// если не входит в фуструм - рисовать не нужно
+	if (!vw_BoxInFrustum(AABB[6], AABB[0])) return;
+
+
+	// если есть живые - рисуем их
 	if (ParticlesAlive > 0)
 	{
 		if (tmpDATA != 0){delete [] tmpDATA; tmpDATA = 0;}
 
-		// буфер для последовательности RI_TRIANGLES
 		GLubyte *tmpDATAub = 0;
-		// точное кол-во пар треугольников, с учетом оптимизации
-		PrimitCount = 0;
 		// номер float'а в последовательности
 		int k=0;
 
 
 		// делаем массив для всех элементов
-		// войдет RI_3f_XYZ | RI_2f_TEX | RI_4ub_COLOR
+		// RI_3f_XYZ | RI_2f_TEX | RI_4ub_COLOR
 		tmpDATA = new float[4*(3+2+1)*ParticlesAlive];
 		tmpDATAub = (GLubyte *)tmpDATA;
 
 
 		GLubyte R,G,B,A;
 
-		// шейдеры не поддерживаются, рисуем по старинке
+		// шейдеры не поддерживаются - рисуем по старинке
 		if (!ParticleSystemUseGLSL)
 		{
 			// получаем текущее положение камеры
 			VECTOR3D CurrentCameraLocation;
 			vw_GetCameraLocation(&CurrentCameraLocation);
-			LastCameraLocation = CurrentCameraLocation;
 
-			tmp = Start;
+			eParticle *tmp = Start;
 			while (tmp!=0)
 			{
 				eParticle *tmp2 = tmp->Next;
-
-				// ув. счетчик пар треугольников
-				PrimitCount++;
 
 				// находим вектор камера-точка
 				VECTOR3D nnTmp;
@@ -756,15 +773,12 @@ bool eParticleSystem::Update(float Time)
 				tmp = tmp2;
 			}
 		}
-		else // иначе работаем с шейдерами
+		else // иначе работаем с шейдерами, в них правильно развернем билборд
 		{
-			tmp = Start;
+			eParticle *tmp = Start;
 			while (tmp!=0)
 			{
 				eParticle *tmp2 = tmp->Next;
-
-				// ув. счетчик пар треугольников
-				PrimitCount++;
 
 				// собираем квадраты
 				R = (GLubyte)(tmp->Color.r*255);
@@ -822,153 +836,9 @@ bool eParticleSystem::Update(float Time)
 	}
 
 
-	// проверка, если уже ничего нет и нужно выйти - выходим
-	if (DestroyIfNoParticles)
-		if (ParticlesAlive == 0)
-		{
-			NeedDestroy = true;
-			return false;
-		}
-
-    return true;
-}
-
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// прорисовка системы
-//-----------------------------------------------------------------------------
-void eParticleSystem::Draw()
-{
-	// загрузка текстуры, уже должна быть подключена
-	if (Texture == 0) return;
-
-	// если не входит - рисовать не нужно
-	if (!vw_BoxInFrustum(AABB[6], AABB[0])) return;
-
-
-	// особый случай, если положение камеры не соотв. и не используем шейдеры (в шейдерах камеру учитываем)
-	// надо пересчитать геометрию... иначе билборды не развернутся корректно
-	if (!ParticleSystemUseGLSL)
+	if (ParticlesAlive > 0)
 	{
-		// получаем текущее положение камеры
-		VECTOR3D CurrentCameraLocation;
-		vw_GetCameraLocation(&CurrentCameraLocation);
-
-		if (LastCameraLocation != CurrentCameraLocation)
-		if (PrimitCount > 0)
-		{
-			LastCameraLocation = CurrentCameraLocation;
-
-			if (tmpDATA != 0){delete [] tmpDATA; tmpDATA = 0;}
-
-			// делаем массив для всех элементов
-			// войдет RI_3f_XYZ | RI_2f_TEX | RI_4ub_COLOR
-			tmpDATA = new float[4*(3+2+1)*PrimitCount];
-
-			GLubyte *tmpDATAub = (GLubyte *)tmpDATA;
-			PrimitCount = 0;
-			int k=0;
-
-			GLubyte R,G,B,A;
-
-			eParticle *tmp = Start;
-			while (tmp!=0)
-			{
-				eParticle *tmp2 = tmp->Next;
-
-				// ув. счетчик пар треугольников
-				PrimitCount++;
-
-				// находим вектор камера-точка
-				VECTOR3D nnTmp;
-				nnTmp = CurrentCameraLocation - tmp->Location;
-				//nnTmp.Normalize();// - это тут не нужно, нам нужны только пропорции
-
-				// находим перпендикуляр к вектору nnTmp
-				VECTOR3D nnTmp2;
-				nnTmp2.x = 1.0f;
-				nnTmp2.y = 1.0f;
-				nnTmp2.z = -(nnTmp.x + nnTmp.y)/nnTmp.z;
-				nnTmp2.Normalize();
-
-				// находим перпендикуляр к векторам nnTmp и nnTmp2
-				// файтически - a x b = ( aybz - byaz , azbx - bzax , axby - bxay );
-				VECTOR3D nnTmp3;
-				nnTmp3.x = nnTmp.y*nnTmp2.z - nnTmp2.y*nnTmp.z;
-				nnTmp3.y = nnTmp.z*nnTmp2.x - nnTmp2.z*nnTmp.x;
-				nnTmp3.z = nnTmp.x*nnTmp2.y - nnTmp2.x*nnTmp.y;
-				nnTmp3.Normalize();
-
-				// находим
-				VECTOR3D tmpAngle1,tmpAngle2,tmpAngle3,tmpAngle4;
-
-				tmpAngle1 = nnTmp3^(tmp->Size*1.5f);
-				tmpAngle3 = nnTmp3^(-tmp->Size*1.5f);
-				tmpAngle2 = nnTmp2^(tmp->Size*1.5f);
-				tmpAngle4 = nnTmp2^(-tmp->Size*1.5f);
-
-				// собираем квадраты
-				R = (GLubyte)(tmp->Color.r*255);
-				G = (GLubyte)(tmp->Color.g*255);
-				B = (GLubyte)(tmp->Color.b*255);
-				A = (GLubyte)(tmp->Alpha*255);
-
-				tmpDATA[k++] = tmp->Location.x+tmpAngle3.x;
-				tmpDATA[k++] = tmp->Location.y+tmpAngle3.y;
-				tmpDATA[k++] = tmp->Location.z+tmpAngle3.z;
-				tmpDATAub[k*sizeof(float)] = R;
-				tmpDATAub[k*sizeof(float)+1] = G;
-				tmpDATAub[k*sizeof(float)+2] = B;
-				tmpDATAub[k*sizeof(float)+3] = A;
-				k++;
-				tmpDATA[k++] = 0.0f;
-				tmpDATA[k++] = 1.0f;
-
-				tmpDATA[k++] = tmp->Location.x+tmpAngle2.x;
-				tmpDATA[k++] = tmp->Location.y+tmpAngle2.y;
-				tmpDATA[k++] = tmp->Location.z+tmpAngle2.z;
-				tmpDATAub[k*sizeof(float)] = R;
-				tmpDATAub[k*sizeof(float)+1] = G;
-				tmpDATAub[k*sizeof(float)+2] = B;
-				tmpDATAub[k*sizeof(float)+3] = A;
-				k++;
-				tmpDATA[k++] = 0.0f;
-				tmpDATA[k++] = 0.0f;
-
-				tmpDATA[k++] = tmp->Location.x+tmpAngle1.x;
-				tmpDATA[k++] = tmp->Location.y+tmpAngle1.y;
-				tmpDATA[k++] = tmp->Location.z+tmpAngle1.z;
-				tmpDATAub[k*sizeof(float)] = R;
-				tmpDATAub[k*sizeof(float)+1] = G;
-				tmpDATAub[k*sizeof(float)+2] = B;
-				tmpDATAub[k*sizeof(float)+3] = A;
-				k++;
-				tmpDATA[k++] = 1.0f;
-				tmpDATA[k++] = 0.0f;
-
-				tmpDATA[k++] = tmp->Location.x+tmpAngle4.x;
-				tmpDATA[k++] = tmp->Location.y+tmpAngle4.y;
-				tmpDATA[k++] = tmp->Location.z+tmpAngle4.z;
-				tmpDATAub[k*sizeof(float)] = R;
-				tmpDATAub[k*sizeof(float)+1] = G;
-				tmpDATAub[k*sizeof(float)+2] = B;
-				tmpDATAub[k*sizeof(float)+3] = A;
-				k++;
-				tmpDATA[k++] = 1.0f;
-				tmpDATA[k++] = 1.0f;
-
-				tmp = tmp2;
-			}
-		}
-	}
-
-	if (PrimitCount > 0)
-	{
-		vw_SendVertices(RI_QUADS, 4*PrimitCount, RI_3f_XYZ | RI_4ub_COLOR | RI_1_TEX, tmpDATA, 6*sizeof(float));
+		vw_SendVertices(RI_QUADS, 4*ParticlesAlive, RI_3f_XYZ | RI_4ub_COLOR | RI_1_TEX, tmpDATA, 6*sizeof(float));
 	}
 }
 

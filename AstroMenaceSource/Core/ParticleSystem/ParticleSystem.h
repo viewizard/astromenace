@@ -5,10 +5,10 @@
 
 	File name: ParticleSystem.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -56,10 +56,8 @@ public:
 	void Draw();
 	// базовая текстура частиц
 	eTexture	*Texture;
-
+	// последовательность прорисовки
 	float *tmpDATA;
-	int PrimitCount;
-	VECTOR3D LastCameraLocation;
 
 	// начальный установки, или установки где пред. и текушее положения равны
 	void		SetStartLocation(VECTOR3D NewLocation);
