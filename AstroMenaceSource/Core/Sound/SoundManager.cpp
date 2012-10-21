@@ -160,7 +160,7 @@ bool vw_InitSound()
 	printf("Version    : %s\n", alGetString(AL_VERSION));
 	printf("ALut ver   : %i.%i\n", alutGetMajorVersion(), alutGetMinorVersion());
 
-/*
+#ifdef gamedebug
 	// получаем и выводим все поддерживаемые расширения
 	char *extensions_tmp;
 	size_t len;
@@ -180,7 +180,8 @@ bool vw_InitSound()
 			delete [] extensions;
 		}
 	}
-*/
+#endif // gamedebug
+
 	printf("\n");
 
 	// сброс ошибок

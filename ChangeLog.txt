@@ -1,0 +1,106 @@
+Version 1.3.0
+
+
+Overall changes:
+
+- Added Xinerama/TwinView support.
+- Added multilingual support (en/de/ru), all language data files merged with main VFS data file.
+- Added VFS game data file creation feature.
+- Added FreeType2 support for all font rendering, 7 ttf fonts added to game data file.
+- Added current OS keyboard layout support for Profile name input.
+- Added soft shadows (Shadow Mapping with PCF).
+
+
+Overall code changes:
+
+- Fixed compilation error connected to "PFNGLCLIENTACTIVETEXTUREPROC" and new mesa version.
+- Fixed compilation warnings "deprecated conversion from string constant to ‘char*’" with new gcc version.
+- Fixed several code issues for Windows game version compilation.
+- Fixed minor memory leak during game data file close.
+- Fixed bug with explosion initialization.
+- Fixed turrets rotation bug.
+- Fixed minor memory leaks during explosion initialization.
+- Fixed bug with point lights in lights manager.
+- Fixed voice warning time for collision course.
+- Fixed bug with weapon orientation in Weaponry (new weapon mount and weapon custom angle change).
+- Fixed bug with weapon targeting with custom weapon angles.
+- Fixed bug with Hit Box collision detection.
+- Fixed bug in particle system manager work with shaders.
+- Updated Windows Code::Blocks project for new version libsdl, libjpeg-turbo, libogg, libvorbis, libopenal-soft.
+- Updated glext.h file.
+- Updated TintXML code to version 2.6.2
+- Added PNG (via libpng) and BMP image formats support.
+- Added shader model detection for GLSL version more then 4.0.
+- Added GL_ARB_texture_storage OpenGL extension support.
+- Added GL_ARB_vertex_array_object OpenGL extension support
+- Added GL_ARB_framebuffer_object OpenGL extension support.
+- Added Multisample Coverage anti aliasing support via GL_NV_framebuffer_multisample_coverage OpenGL extension.
+- Added text warning about collision course detection.
+- Improved turrets barrel rotation and tile tracks animation.
+- Improved "Gamma" connected code. Now work in both - fullscreen and windowed game mode.
+- Improved game initialization code.
+- Improved XML parser connected code.
+- Improved all textures connected code.
+- Improved collision detection code.
+- Improved shaders connected code.
+- Revised all shaders code.
+- Revised direct lights in Workshop and Information menu.
+- Revised all code connected to objects rotation, changed to right-handed coordinate system. All scripts revised.
+- Removed all Windows demo version related code.
+
+
+Menu changes:
+
+- Added box with Language selection on first game start.
+- Added "Ogg Vorbis" and "FreeType2" to credits list.
+- Added comparison details with current system/ship in "Workshop" menu info dialogs.
+- Added model rotation buttons in "Information" menu.
+- Added "Reload All" button in "Weaponry" menu.
+- Added "Voice volume" option in "Options" menu.
+- Added "Interface" sub-menu in "Options" menu. 
+- Added "Menu Language" option in "Interface" menu.
+- Added "Voice Language" option in "Interface" menu.
+- Added "Menu Font" option in "Interface" menu.
+- Added "Tips and hints" status reset option in "Interface" menu.
+- Added "FPS Сounter" option in "Interface" menu.
+- Added "Weapon Panels View" option in "Interface" menu.
+- Added "Shadow Quality" option in "Advanced" menu.
+- Added "Visual Effects Quality" option in "Advanced" menu.
+- Removed "Refresh Rate" option from "Options" menu.
+- Removed "Particles GFX Quality" option in "Advanced" menu.
+- Removed "Explosions GFX Quality" option in "Advanced" menu.
+- Removed "Background Tile Animation" option in "Advanced" menu.
+- Removed "Stars Quantity" option in "Advanced" menu.
+
+
+Launch options changes:
+
+- Added libSDL "SDL_VIDEO_FULLSCREEN_DISPLAY" environment variable support for Xinerama/TwinView.
+- Added "--pack" parameter to switch AstroMenace in VFS creation mode (terminal output only).
+- Added "--rawdata" parameter (used with "--pack" only), to define raw data folder location (./RAW_VFS_DATA by default).
+- Removed "--noAA" parameter.
+
+
+Compilation flags changes (config.h):
+
+- Removed EN, DE and RU.
+- Added "joystick". Required libSDL compilled with "joystick" flag.
+- Added "compression". Compression during gamedata.vfs creation, game will take more time for loading in exchange of game data file size reducing (about 30 MB).
+- Added "vbo". VBO OpenGL extension support switcher (if defined - game will detect vbo support in hardware during initialization).
+- Added "png". Required libpng.
+- Added "gamedebug". More console output with debug info.
+- Added "buildin_tynixml". Compile with build-in tynixml lib (version 2.6.2) if defined.
+- Added "vao". VAO OpenGL extension support switcher (if defined - game will detect vao support in hardware during initialization).
+- Added "fbo". FBO OpenGL extension support switcher (if defined - game will detect fbo support in hardware during initialization).
+
+
+
+
+
+
+
+
+
+Version 1.2.0
+
+Initial release.
