@@ -610,7 +610,7 @@
 	</TimeLine>
 
 	<TimeLine value="1">
-		<CreateWheeled type="5" speed="15" posx="265" posy="-29.5" posz="344" anglay="-90">
+		<CreateWheeled type="5" speed="15" posx="265" posy="-29.5" posz="334" anglay="-90">
 			<TimeSheet time="-1.0" speed="15"/>
 		</CreateWheeled>
 	</TimeLine>

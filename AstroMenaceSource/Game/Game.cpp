@@ -1101,7 +1101,7 @@ void DrawGame()
 		CSpaceObject *tmp2 = tmp1->Next;
 
 		vw_PushMatrix();
-		vw_Translate(VECTOR3D(CurrentCameraLocation.x*0.90f, 0.0f,0.0f));
+		vw_Translate(VECTOR3D(CurrentCameraLocation.x*0.90f-GameCameraGetDeviation()*4.0f, GameCameraGetDeviation()*2.0f,0.0f));
 		// если это планета на заднем фоне
 		if (tmp1->ObjectType == 14)	tmp1->Draw(false);
 		vw_PopMatrix();
@@ -1114,7 +1114,7 @@ void DrawGame()
 		CSpaceObject *tmp2 = tmp1->Next;
 
 		vw_PushMatrix();
-		vw_Translate(VECTOR3D(CurrentCameraLocation.x*0.70f, 0.0f,0.0f));
+		vw_Translate(VECTOR3D(CurrentCameraLocation.x*0.70f-GameCameraGetDeviation()*4.0f, GameCameraGetDeviation()*2.0f,0.0f));
 		// если это планета или большой астероид летящий на заднем фоне
 		if (tmp1->ObjectType == 15 && (tmp1->ObjectCreationType>10 && tmp1->ObjectCreationType<20)) tmp1->Draw(false);
 		vw_PopMatrix();
@@ -1140,7 +1140,7 @@ void DrawGame()
 		float x,y,z;
 		// чем ниже слой, тем меньше его двигаем при перемещении камеры (при стандартном аспект рейшен)
 		x = GamePoint.x+GameCameraGetDeviation() + CurrentCameraLocation.x*0.8f;
-		y = GamePoint.y-GameCameraGetDeviation()/2.0f;
+		y = GamePoint.y-GameCameraGetDeviation()*0.5f;
 		z = GamePoint.z+25.0f;
 
 		int k=0;
@@ -1236,8 +1236,8 @@ void DrawGame()
 		vw_GetCameraLocation(&CurrentCameraLocation);
 		float x,y,z;
 		// чем ниже слой, тем меньше его двигаем при перемещении камеры (при стандартном аспект рейшен)
-		x = GamePoint.x+GameCameraGetDeviation() + CurrentCameraLocation.x*0.5f;
-		y = GamePoint.y-GameCameraGetDeviation()/2.0f;
+		x = GamePoint.x+GameCameraGetDeviation()*2.0f + CurrentCameraLocation.x*0.5f;
+		y = GamePoint.y-GameCameraGetDeviation();
 		z = GamePoint.z+25.0f;
 
 		int k=0;

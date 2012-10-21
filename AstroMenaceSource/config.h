@@ -35,7 +35,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION	 	1.3
-#define GAME_BUILD			121020
+#define GAME_BUILD			121021
 
 
 // VBO OpenGL extention support switcher (if defined - game will detect and use VBO) Game could crash
@@ -69,7 +69,7 @@
 
 
 // more actions and text outputs with debug information for bug hunting
-#define gamedebug
+// #define gamedebug
 
 // compile with build-in tynixml lib (version 2.6.2)
 #define buildin_tynixml
