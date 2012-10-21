@@ -568,9 +568,7 @@ void CSpaceStars::Draw()
 		// получаем текущее положение камеры
 		VECTOR3D CurrentCameraLocation;
 		vw_GetCameraLocation(&CurrentCameraLocation);
-		CurrentCameraLocation.x = CurrentCameraLocation.x + GameCameraGetDeviation();
-		CurrentCameraLocation.y = CurrentCameraLocation.y - GameCameraGetDeviation()/2.0f;
-
+		CurrentCameraLocation += VECTOR3D(GameCameraGetDeviation()*0.9,-GameCameraGetDeviation()*0.5f,0.0f);
 
 
 		vw_PushMatrix();

@@ -623,22 +623,11 @@ bool CGroundObject::Update(float Time)
 		// перебираем все и ув. их угол вращения
 		for (int i=0; i<WheelQuantity; i++)
 		{
-			float Decr = WheelTrackSpeed*TimeDelta;
-			if (Decr > 360.0f || Decr < -360.0f) Decr = 0.0f;
+			DrawObjectList[WheelObjectsNum[i]].Rotation.x += WheelTrackSpeed*TimeDelta;
 
-			DrawObjectList[WheelObjectsNum[i]].Rotation.x += Decr;
-
-			if (DrawObjectList[WheelObjectsNum[i]].Rotation.x>360.0f)
-			{
-				DrawObjectList[WheelObjectsNum[i]].Rotation.x -= 360.0f;
-			}
-			else
-				if (DrawObjectList[WheelObjectsNum[i]].Rotation.x<-360.0f)
-				{
-					DrawObjectList[WheelObjectsNum[i]].Rotation.x += 360.0f;
-				}
+			if (DrawObjectList[WheelObjectsNum[i]].Rotation.x > 360.0f) DrawObjectList[WheelObjectsNum[i]].Rotation.x -= 360.0f;
+			if (DrawObjectList[WheelObjectsNum[i]].Rotation.x < -360.0f) DrawObjectList[WheelObjectsNum[i]].Rotation.x += 360.0f;
 		}
-
 	}
 
 

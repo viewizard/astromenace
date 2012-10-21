@@ -577,6 +577,8 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 
 	// установка свойств текстуры
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+	// всегда стаим белый цвет
+	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 	vw_PushMatrix();
 

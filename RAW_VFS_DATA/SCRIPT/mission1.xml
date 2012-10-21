@@ -507,7 +507,7 @@
 	<!-- all is ok now, switch to "normal" game music theme /-->	
 	<Music theme="1"/>
 
-	<TimeLine value="3"/>
+	<TimeLine value="4"/>
 
 	<!-- end -->
 	<MissionComplete/>

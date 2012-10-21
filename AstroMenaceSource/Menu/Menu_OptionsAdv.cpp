@@ -106,6 +106,8 @@ void OptionsAdvMenu()
 		Setup.VisualEffectsQuality++;
 		if (Setup.VisualEffectsQuality > 2) Setup.VisualEffectsQuality = 0;
 
+		vw_InitParticleSystems(Setup.UseGLSL, Setup.VisualEffectsQuality+1.0f);
+
 		if (psSpaceStatic!=0){delete psSpaceStatic; psSpaceStatic = 0;}
 		psSpaceStatic = new CSpaceStars;
 	}
@@ -113,6 +115,8 @@ void OptionsAdvMenu()
 	{
 		Setup.VisualEffectsQuality--;
 		if (Setup.VisualEffectsQuality < 0) Setup.VisualEffectsQuality = 2;
+
+		vw_InitParticleSystems(Setup.UseGLSL, Setup.VisualEffectsQuality+1.0f);
 
 		if (psSpaceStatic!=0){delete psSpaceStatic; psSpaceStatic = 0;}
 		psSpaceStatic = new CSpaceStars;

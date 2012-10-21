@@ -430,6 +430,7 @@ void WorkshopMenu()
 		if (Setup.NeedShowHint[4]) SetCurrentDialogBox(13);
 		else
 		{
+			MenuContentTransp = 0.98f; // небольшая "защелка" от быстрых двойных нажатий на кнопку
 		//	WorkshopDestroyData();
 		//	CanDrawWorkshop = false;
 			// ничего не тянем... только включили меню
