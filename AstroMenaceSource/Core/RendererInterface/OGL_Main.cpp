@@ -451,7 +451,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 
 
 
-/*
+#ifdef gamedebug
 	// получаем и выводим все поддерживаемые расширения
 	char *extensions_tmp;
 	size_t len;
@@ -471,7 +471,8 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 			delete [] extensions;
 		}
 	}
-*/
+#endif // gamedebug
+
 	printf("\n");
 
 	return 0;
