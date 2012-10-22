@@ -557,7 +557,7 @@ LoadList	AlienFighterLoadList[AlienFighterLoadListCount] =
 
 
 
-const int	PirateLoadListCount = 51;
+const int	PirateLoadListCount = 50;
 LoadList	PirateLoadList[PirateLoadListCount] =
 {
 // Pirate – load all pirate data (vehicles, military buildings, ships...) testures.
