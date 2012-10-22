@@ -317,6 +317,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	if (ExtensionSupported("GL_ARB_occlusion_query"))
 	{
 		OpenGL_DevCaps.OcclusionQuerySupported = true;
+		printf("Occlusion Query support enabled.\n");
 	}
 
 	// проверяем, есть ли поддержка SGIS_generate_mipmap (хардварная генерация мипмеп уровней)
@@ -330,12 +331,14 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 		(ExtensionSupported("GL_EXT_framebuffer_blit") & ExtensionSupported("GL_EXT_framebuffer_multisample") & ExtensionSupported("GL_EXT_framebuffer_object")))
 	{
 		OpenGL_DevCaps.FramebufferObject = true;
+		printf("Frame Buffer Object support enabled.\n");
 	}
 
 	// проверяем, есть ли поддержка GL_ARB_texture_storage или GL_EXT_texture_storage
 	if (ExtensionSupported("GL_ARB_texture_storage") | ExtensionSupported("GL_EXT_texture_storage"))
 	{
 		OpenGL_DevCaps.TextureStorage = true;
+		printf("Texture Storage support enabled.\n");
 	}
 
 
