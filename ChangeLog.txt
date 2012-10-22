@@ -32,7 +32,7 @@ Overall code changes:
 - Added PNG (via libpng) and BMP image formats support.
 - Added shader model detection for GLSL version more then 4.0.
 - Added GL_ARB_texture_storage OpenGL extension support.
-- Added GL_ARB_vertex_array_object OpenGL extension support
+- Added GL_ARB_vertex_array_object OpenGL extension support.
 - Added GL_ARB_framebuffer_object OpenGL extension support.
 - Added Multisample Coverage anti aliasing support via GL_NV_framebuffer_multisample_coverage OpenGL extension.
 - Added text warning about collision course detection.

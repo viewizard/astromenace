@@ -2,7 +2,7 @@ AstroMenace
 
 Runtime dependencies:
 libSDL (ver 1.2.10+), GLU, libopenal (ver 1.0+), libalut (ver 1.0+), libogg (ver 1.1+), 
-libvorbis (ver 1.1+), libjpeg (libjpeg-turbo prefered), freetype (ver 2.1.6+)
+libvorbis (ver 1.1+), libjpeg (libjpeg-turbo prefered), freetype (ver 2.1.6+),
 libXinerama (optional).
 
 
