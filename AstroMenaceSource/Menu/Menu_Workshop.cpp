@@ -505,7 +505,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 					SpaceFighter->Weapon[i]->Draw(true);
 			}
 
-			ShadowMap_EndRenderToFBO(1024.0f/768.0f);
+			ShadowMap_EndRenderToFBO();
 			ShadowMapStage = 2;
 			ShadowMap_StartFinalRender(ShadowMapStage);
 		}
@@ -560,7 +560,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 					SpaceFighter->Weapon[i]->Draw(true);
 			}
 
-			ShadowMap_EndRenderToFBO(512.0f/608.0f);
+			ShadowMap_EndRenderToFBO();
 			ShadowMapStage = 2;
 			ShadowMap_StartFinalRender(ShadowMapStage);
 		}
@@ -631,7 +631,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 				SpaceFighter->Weapon[i]->Draw(true);
 		}
 
-		ShadowMap_EndRenderToFBO(512.0f/512.0f);
+		ShadowMap_EndRenderToFBO();
 		ShadowMapStage = 2;
 		ShadowMap_StartFinalRender(ShadowMapStage);
 	}

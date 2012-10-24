@@ -71,7 +71,7 @@ bool ShadowMap_Init(int Width, int Height)
 	ShadowMapFBO = new eFBO;
 
 	// для нормальной работы нам нужно 24 бита или больше, проверяем это
-	//if (vw_BuildFBO(ShadowMapFBO, Width, Height, true, true))
+	//if (vw_BuildFBO(ShadowMapFBO, Width, Height, true, true)) // тест, для вывода цветовой составляющей на экран
 	if (vw_BuildFBO(ShadowMapFBO, Width, Height, false, true))
 		if (ShadowMapFBO->DepthSize >= 24)
 			return true;
@@ -114,7 +114,7 @@ void ShadowMap_StartRenderToFBO(VECTOR3D FocusPointCorrection, float Distance, f
 
 	// сохраняем данные вьюпорта
 	vw_GetViewport(&ShadowMapViewPort_x, &ShadowMapViewPort_y, &ShadowMapViewPort_width, &ShadowMapViewPort_height, &ShadowMapViewPort_znear, &ShadowMapViewPort_zfar);
-
+	// устанавливаем вьюпорт согласно нашему фбо для шадовмепинга
 	vw_SetViewport(0, 0, ShadowMapFBO->Width, ShadowMapFBO->Height, 0.045f, fFarClip, RI_BL_CORNER);
 
 	// сохраняем данные текущего фбо или фб
@@ -125,7 +125,12 @@ void ShadowMap_StartRenderToFBO(VECTOR3D FocusPointCorrection, float Distance, f
 
 	vw_Clear(RI_DEPTH_BUFFER);
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-	//vw_Clear(RI_COLOR_BUFFER | RI_DEPTH_BUFFER);
+	//vw_Clear(RI_COLOR_BUFFER | RI_DEPTH_BUFFER); // тест, для вывода цветовой составляющей на экран
+
+	// сохраняем матрицу проекции
+	vw_MatrixMode(RI_PROJECTION_MATRIX);
+	vw_PushMatrix();
+	vw_MatrixMode(RI_MODELVIEW_MATRIX);
 
 	vw_ResizeScene(45.0f, (ShadowMapFBO->Width*1.0f)/(ShadowMapFBO->Height*1.0f), 0.045f, fFarClip);
 	vw_GetMatrix(RI_PROJECTION_MATRIX, ShadowMap_LightProjectionMatrix);
@@ -149,14 +154,13 @@ void ShadowMap_StartRenderToFBO(VECTOR3D FocusPointCorrection, float Distance, f
 	vw_GetMatrix(RI_MODELVIEW_MATRIX, ShadowMap_LightModelViewMatrix);
 
 	vw_CullFace(RI_FRONT);
-	//vw_CullFace(RI_NONE);
 }
 
 
 //-----------------------------------------------------------------------------
 // завершение рендеринга в шадовмеп фбо
 //-----------------------------------------------------------------------------
-void ShadowMap_EndRenderToFBO(float AR)
+void ShadowMap_EndRenderToFBO()
 {
 	if (ShadowMapFBO == 0) return;
 	if (ShadowMapFBO->DepthTexture == 0) return;
@@ -172,7 +176,10 @@ void ShadowMap_EndRenderToFBO(float AR)
 
 	// устанавливаем первоначальный вьюпорт
 	vw_SetViewport(ShadowMapViewPort_x, ShadowMapViewPort_y, ShadowMapViewPort_width, ShadowMapViewPort_height, ShadowMapViewPort_znear, ShadowMapViewPort_zfar, RI_BL_CORNER);
-	vw_ResizeScene(45.0f, AR, 1.0f, 2000.0f);
+	// восстанавливаем матрицу проекции
+	vw_MatrixMode(RI_PROJECTION_MATRIX);
+	vw_PopMatrix();
+	vw_MatrixMode(RI_MODELVIEW_MATRIX);
 
 	// восстанавливаем модельвью матрицу
 	vw_PopMatrix();
@@ -191,7 +198,7 @@ void ShadowMap_StartFinalRender(unsigned int TextureStage)
 	if (ShadowMapFBO->DepthTexture == 0) return;
 
 	vw_BindTexture(TextureStage, ShadowMapFBO->DepthTexture);
-	// т.е. будем использовать shadow2DProj
+	// т.к. будем использовать shadow2DProj, ставим правильный режим работы
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 	glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);

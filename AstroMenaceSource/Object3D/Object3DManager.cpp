@@ -96,7 +96,7 @@ void DrawAllObject3D(int ShadowMapInitType)
 		if (ShadowMapInitType == 1) DrawAllSpaceObject(true, 0);
 		else DrawAllSpaceObject(true, 0, 8); // делаем тень только от частей взорванных объектов
 
-		ShadowMap_EndRenderToFBO(Setup.fAspectRatioWidth/Setup.fAspectRatioHeight);
+		ShadowMap_EndRenderToFBO();
 
 		// работаем с 3-м стейджем текстур (первые два у нас заняты)
 		ShadowMapStage = 2;

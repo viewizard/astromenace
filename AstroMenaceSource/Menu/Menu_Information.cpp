@@ -1983,7 +1983,7 @@ void InformationDrawObject()
 		}
 
 
-		ShadowMap_EndRenderToFBO(444.0f/333.0f);
+		ShadowMap_EndRenderToFBO();
 
 		ShadowMapStage = 2;
 		ShadowMap_StartFinalRender(ShadowMapStage);
