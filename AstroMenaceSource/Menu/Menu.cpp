@@ -853,7 +853,7 @@ void DrawMenu()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// Version
-	vw_DrawFont(6, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %1.1f %s %i", GetText("11_Version"), GAME_VERSION, GetText("11_build"), GAME_BUILD);
+	vw_DrawFont(6, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %s %s %i", GetText("11_Version"), GAME_VERSION, GetText("11_build"), GAME_BUILD);
 
 	// Copyright
 	int CSize = vw_FontSize("%s © 2007-2012, Viewizard", GetText("11_Copyright"));

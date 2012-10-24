@@ -34,7 +34,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define GAME_VERSION	 	1.3
+#define GAME_VERSION	 	"1.3.1 svn"
 #define GAME_BUILD			121024
 
 

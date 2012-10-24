@@ -51,9 +51,8 @@ void eModel3D::ReadVW3D(const char *nName)
 	Name = new char[SizeB];
 	strcpy(Name, nName);
 
-	// пропускаем заголовок
+	// "пропускаем" заголовок "VW3D"
 	file->fread(&DrawObjectCount, 4, 1);
-
 
 	// читаем, сколько объектов
 	file->fread(&DrawObjectCount, sizeof(int), 1);
@@ -96,10 +95,10 @@ void eModel3D::ReadVW3D(const char *nName)
 	}
 
 	// получаем сколько всего вертексов
-	int VCount = 0;
-	file->fread(&VCount,sizeof(int),1);
+	unsigned int VCount = 0;
+	file->fread(&VCount,sizeof(unsigned int),1);
 
-	// собственно данные
+	// собственно данные (берем смещение нулевого объекта, т.к. смещение одинаковое на весь объект)
 	GlobalVertexBuffer = new float[VCount*DrawObjectList[0].Stride];
 	file->fread(GlobalVertexBuffer,	VCount*DrawObjectList[0].Stride*sizeof(float),1);
 
@@ -179,4 +178,83 @@ void eModel3D::ReadVW3D(const char *nName)
 
 
 	vw_fclose(file);
+}
+
+
+
+
+
+
+//-----------------------------------------------------------------------------
+// запись "родного" формата на диск
+//-----------------------------------------------------------------------------
+void eModel3D::WriteVW3D(const char *FileName)
+{
+	// небольшие проверки
+	if ((GlobalVertexBuffer == 0) | (GlobalIndexBuffer == 0) | (DrawObjectList == 0))
+	{
+        fprintf(stderr, "Can't create %s file for empty Model3D.\n", FileName);
+        return;
+	}
+
+
+	SDL_RWops *FileVW3D;
+	FileVW3D = SDL_RWFromFile(FileName, "wb");
+	// если не можем создать файл на запись - уходим
+    if (FileVW3D == NULL)
+    {
+        fprintf(stderr, "Can't create %s file on disk.\n", FileName);
+        return;
+    }
+
+	// маркер файла 4 байта
+	char tmp1[5] = "VW3D";
+	SDL_RWwrite(FileVW3D, tmp1, 4, 1);
+
+	// общее кол-во объектов в моделе - 4 байта (int)
+	SDL_RWwrite(FileVW3D, &DrawObjectCount, sizeof(int), 1);
+
+	unsigned int RealVertexCount = 0;
+	unsigned int RealIndexCount = 0;
+
+	// для каждого объекта в моделе
+	for (int i=0; i<DrawObjectCount; i++)
+	{
+		// FVF_Format
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].FVF_Format, sizeof(int), 1);
+		// Stride
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].Stride, sizeof(int), 1);
+		// VertexCount
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].VertexCount, sizeof(int), 1);
+
+		// Location
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].Location, sizeof(float)*3, 1);
+		// Rotation
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].Rotation, sizeof(float)*3, 1);
+
+		// вычисляем кол-во вертексов в моделе (один вертекс может использоваться несколько раз в индекс буфере)
+		// т.е. нам надо просмотреть индекс буфер и найти максимальный номер вертекса.
+		for (int j=0; j<DrawObjectList[i].VertexCount; j++)
+		{
+			if (RealVertexCount < GlobalIndexBuffer[RealIndexCount+j]) RealVertexCount = GlobalIndexBuffer[RealIndexCount+j];
+		}
+		// считаем сколько у нас всего вертексов на прорисовке, чтобы знать размер индексного буфера
+		RealIndexCount += DrawObjectList[i].VertexCount;
+	}
+
+	// надо прибавить 1, мы ведь считали вертексы с нуля
+	RealVertexCount++;
+	// записываем реальное кол-во вертексов в общем вертекс буфере, мы их посчитали заранее
+	SDL_RWwrite(FileVW3D, &RealVertexCount, sizeof(unsigned int), 1);
+
+	// данные, вертексы (берем смещение нулевого объекта, т.к. смещение одинаковое на весь объект)
+	SDL_RWwrite(FileVW3D, GlobalVertexBuffer, DrawObjectList[0].Stride*RealVertexCount*sizeof(float), 1);
+
+	// данные, индексный буфер
+	SDL_RWwrite(FileVW3D, GlobalIndexBuffer, RealIndexCount*sizeof(unsigned int), 1);
+
+	// закрываем файл
+	SDL_RWclose(FileVW3D);
+
+	printf("VW3D Write: %s\n", FileName);
 }

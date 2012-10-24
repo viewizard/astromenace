@@ -394,7 +394,7 @@ int main( int argc, char **argv )
 
 
 	// версия
-	printf("AstroMenace %1.1f %i\n\n", GAME_VERSION, GAME_BUILD);
+	printf("AstroMenace %s %i\n\n", GAME_VERSION, GAME_BUILD);
 
 
 

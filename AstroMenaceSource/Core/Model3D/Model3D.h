@@ -108,6 +108,8 @@ public:
 	int DrawObjectCount;
 
 	void ReadVW3D(const char *nName);
+	void WriteVW3D(const char *FileName);
+
 
 	float *GlobalVertexBuffer;
 	unsigned int *GlobalVertexBufferVBO;
