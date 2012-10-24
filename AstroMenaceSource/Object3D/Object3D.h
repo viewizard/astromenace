@@ -219,11 +219,11 @@ public:
 
 	// список с геометрией модели, объекты для прорисовки
 	eObjectBlock	*DrawObjectList;
-	float *GlobalVertexBuffer;
-	unsigned int *GlobalVertexBufferVBO;
-	unsigned int *GlobalIndexBuffer;
-	unsigned int *GlobalIndexBufferVBO;
-	unsigned int *GlobalVAO;
+	float			*GlobalVertexBuffer;
+	unsigned int	*GlobalVBO;
+	unsigned int	*GlobalIndexBuffer;
+	unsigned int	*GlobalIBO;
+	unsigned int	*GlobalVAO;
 	// кол-во объектов в списке
 	int				DrawObjectQuantity;
 	// минимальное расстояние (квадрат) с которого надо рисовать пообъектно, если -1 всегда рисовать только пообъектно

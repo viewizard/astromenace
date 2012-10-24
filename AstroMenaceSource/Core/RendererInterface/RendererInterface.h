@@ -424,11 +424,11 @@ void vw_GetMaterialV(int pname, float *param);
 
 
 
-// VBO
+// VBO+IBO
 
 // создаем буфер
 bool vw_BuildVBO(int NumVertices, void *Data, int Stride, unsigned int *VBO);
-bool vw_BuildIndexVBO(int NumIndex, void *Data, unsigned int *VBO);
+bool vw_BuildIBO(int NumIndex, void *Data, unsigned int *IBO);
 // устанавливаем буфер
 void vw_BindVBO(int target, unsigned int VBO);
 // удаляем буфер

@@ -248,7 +248,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 				if (IndexVBO != 0){vw_DeleteVBO(*IndexVBO); delete IndexVBO; IndexVBO=0;}
 				// создаем новый
 				IndexVBO = new GLuint;
-				if (!vw_BuildIndexVBO(VertexIndexCount, VertexIndex, IndexVBO))
+				if (!vw_BuildIBO(VertexIndexCount, VertexIndex, IndexVBO))
 				{
 					delete IndexVBO; IndexVBO=0;
 				}

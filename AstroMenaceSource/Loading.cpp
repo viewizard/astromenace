@@ -1694,7 +1694,7 @@ void LoadGameData(int LoadType)
 AllDataLoaded:
 
 
-	// инициализируем шадов меп
+	// инициализируем шадов меп, делаем это постоянно т.к. у нас разные размеры карт для меню и игры
 	if (Setup.ShadowMap > 0)
 	{
 		int ShadowMapSize = 1024;

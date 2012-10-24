@@ -575,9 +575,9 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			// копируем данные
 			memcpy(&(DrawObjectList[i]), &(Object->DrawObjectList[i]), sizeof(eObjectBlock));
 			// делаем изменения
-			DrawObjectList[i].VertexBufferVBO = 0;
+			DrawObjectList[i].VBO = 0;
 			DrawObjectList[i].VertexBuffer = 0;
-			DrawObjectList[i].IndexBufferVBO = 0;
+			DrawObjectList[i].IBO = 0;
 			DrawObjectList[i].IndexBuffer = 0;
 			DrawObjectList[i].VAO = 0;
 			DrawObjectList[i].NeedDestroyDataInObjectBlock = true; // удалять в объекте
@@ -782,9 +782,9 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			// удаляем старые буферы, если они есть, создаем новые
 			// ! индексный буфер не трогаем, его не надо пересоздавать вообще
 
-			if (DrawObjectList[j].VertexBufferVBO != 0)
+			if (DrawObjectList[j].VBO != 0)
 			{
-				vw_DeleteVBO(*DrawObjectList[j].VertexBufferVBO); delete DrawObjectList[j].VertexBufferVBO; DrawObjectList[j].VertexBufferVBO = 0;
+				vw_DeleteVBO(*DrawObjectList[j].VBO); delete DrawObjectList[j].VBO; DrawObjectList[j].VBO = 0;
 			}
 			if (DrawObjectList[j].VAO != 0)
 			{
@@ -792,27 +792,27 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			}
 
 			// делаем VBO
-			DrawObjectList[j].VertexBufferVBO = new unsigned int;
-			if (!vw_BuildVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].Stride, DrawObjectList[j].VertexBufferVBO))
+			DrawObjectList[j].VBO = new unsigned int;
+			if (!vw_BuildVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].Stride, DrawObjectList[j].VBO))
 			{
-				delete DrawObjectList[j].VertexBufferVBO; DrawObjectList[j].VertexBufferVBO=0;
+				delete DrawObjectList[j].VBO; DrawObjectList[j].VBO=0;
 			}
 
-			// делаем индекс VBO, создаем его один раз, если его нет
-			if (DrawObjectList[j].IndexBufferVBO == 0)
+			// делаем IBO, создаем его один раз, если его нет
+			if (DrawObjectList[j].IBO == 0)
 			{
-				DrawObjectList[j].IndexBufferVBO = new unsigned int;
-				if (!vw_BuildIndexVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IndexBufferVBO))
+				DrawObjectList[j].IBO = new unsigned int;
+				if (!vw_BuildIBO(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO))
 				{
-					delete DrawObjectList[j].IndexBufferVBO; DrawObjectList[j].IndexBufferVBO=0;
+					delete DrawObjectList[j].IBO; DrawObjectList[j].IBO=0;
 				}
 			}
 
 			// делаем VAO
 			DrawObjectList[j].VAO = new unsigned int;
 			if (!vw_BuildVAO(DrawObjectList[j].VAO, DrawObjectList[j].VertexCount, DrawObjectList[j].FVF_Format, DrawObjectList[j].VertexBuffer,
-								DrawObjectList[j].Stride*sizeof(float), DrawObjectList[j].VertexBufferVBO,
-								DrawObjectList[j].RangeStart, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IndexBufferVBO))
+								DrawObjectList[j].Stride*sizeof(float), DrawObjectList[j].VBO,
+								DrawObjectList[j].RangeStart, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO))
 			{
 				delete DrawObjectList[j].VAO; DrawObjectList[j].VAO=0;
 			}
