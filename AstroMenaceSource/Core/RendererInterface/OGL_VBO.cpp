@@ -103,23 +103,23 @@ bool vw_BuildVBO(int NumVertices, void *Data, int Stride, unsigned int *VBO)
 //------------------------------------------------------------------------------------
 // Процедура генерации индекс буферов
 //------------------------------------------------------------------------------------
-bool vw_BuildIndexVBO(int NumIndex, void *Data, unsigned int *VBO)
+bool vw_BuildIBO(int NumIndex, void *Data, unsigned int *IBO)
 {
 	if (Data == 0) return false;
-	if (VBO == 0) return false;
+	if (IBO == 0) return false;
 	if (glGenBuffersARB == NULL) return false;
 	if (glBindBufferARB == NULL) return false;
 	if (glBufferDataARB == NULL) return false;
 	if (glIsBufferARB == NULL) return false;
 
-	glGenBuffersARB( 1, VBO );								// Get A Valid Name
-	glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER_ARB, *VBO );	// Bind The Buffer
+	glGenBuffersARB( 1, IBO );								// Get A Valid Name
+	glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER_ARB, *IBO );	// Bind The Buffer
 	// Load The Data
 	glBufferDataARB( GL_ELEMENT_ARRAY_BUFFER_ARB, NumIndex*sizeof(unsigned int), Data, GL_STATIC_DRAW_ARB );
 	// убираем буфер
 	glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER_ARB, 0 );
 
-	if (!glIsBufferARB(*VBO)) return false;
+	if (!glIsBufferARB(*IBO)) return false;
 
 	return true;
 }

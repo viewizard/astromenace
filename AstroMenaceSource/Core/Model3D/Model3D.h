@@ -52,10 +52,11 @@ struct eObjectBlock
 
 	int	FVF_Format;	// формат вертексов данных
 	int	Stride;		// отступ в (байтах*4, т.е. во float или DWORD) до начала данных следующей точки
-	int VertexCount;// кол-во вертексов.
+	int VertexCount;// кол-во прорисовываемых вертексов (кол-во обрабатываемых индексов)
 	BYTE DrawType;	// тип прорисовки, 0- нормальный, 1-blend т.е. с прозрачностью
 
-	// индексы, если индексов нет - указатель на номер вертекса
+	// начальный номер индекса в буфере (в случае использования глобальных буферов)
+	// если индексных данных нет - номер вертекса
 	unsigned int RangeStart;
 
 
@@ -78,13 +79,13 @@ struct eObjectBlock
 
 	bool			NeedDestroyDataInObjectBlock; // если данные были не общие, а созданные для этого ObjectBlock, нужно их удалить в деструкторе
 	// вертексный буфер
-	float 			*VertexBuffer;	// указатель на структуру данных
-	unsigned int 	*VertexBufferVBO; // указатель на номер VBO массива
+	float 			*VertexBuffer;		// указатель на структуру данных
+	unsigned int 	*VBO;				// номер VBO
 	// индексный буфер
-	unsigned int 	*IndexBuffer;	// указатель на структуру данных
-	unsigned int 	*IndexBufferVBO; // указатель на номер VBO массива
+	unsigned int 	*IndexBuffer;		// указатель на структуру данных
+	unsigned int 	*IBO;				// номер IBO
 	// VAO
-	unsigned int *VAO;
+	unsigned int	*VAO;				// номер VAO
 };
 
 
@@ -101,21 +102,32 @@ public:
 	virtual ~eModel3D(void);
 
 	// имя объекта (путь к файлу)
-	char	*Name;
+	char			*Name;
 
 	// лист объектов, из которых состоит модель
-	eObjectBlock *DrawObjectList;
-	int DrawObjectCount;
+	eObjectBlock	*DrawObjectList;
+	int				DrawObjectCount;
+	unsigned int	GlobalVertexCount;	// фактическое кол-во вертексов в буфере
+	unsigned int	GlobalIndexCount;	// фактическое кол-во индексов в буфере
 
-	void ReadVW3D(const char *nName);
-	void WriteVW3D(const char *FileName);
+
+	// читаем-пишем форматы 3д моделей
+	bool ReadVW3D(const char *FileName);
+	bool WriteVW3D(const char *FileName);
 
 
-	float *GlobalVertexBuffer;
-	unsigned int *GlobalVertexBufferVBO;
-	unsigned int *GlobalIndexBuffer;
-	unsigned int *GlobalIndexBufferVBO;
-	unsigned int *GlobalVAO;
+	// создание вертекс и индекс буферов для каждого блока модели
+	void CreateObjectsBuffers();
+	// создание всех поддерживаемых буферов (VAO, VBO, IBO)
+	void CreateHardwareBuffers();
+
+
+	// буферы
+	float 			*GlobalVertexBuffer;
+	unsigned int	*GlobalVBO;
+	unsigned int	*GlobalIndexBuffer;
+	unsigned int	*GlobalIBO;
+	unsigned int	*GlobalVAO;
 
 	// указатели на цепь моделей
 	eModel3D *Next;
@@ -132,7 +144,7 @@ public:
 //-----------------------------------------------------------------------------
 
 // Предварительная загрузка геометрии модели
-eModel3D *vw_LoadModel3D(const char *nName);
+eModel3D *vw_LoadModel3D(const char *FileName);
 // Присоеденяем Model3D к списку
 void vw_AttachModel3D(eModel3D * NewModel3D);
 // Удаляем Model3D из списка

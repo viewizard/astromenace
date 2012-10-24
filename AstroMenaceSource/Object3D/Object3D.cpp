@@ -75,9 +75,9 @@ CObject3D::CObject3D(void)
 	PromptDrawDist2 = -1.0f;
 	InternalLights = 0;
 	GlobalVertexBuffer= 0;
-	GlobalVertexBufferVBO = 0;
+	GlobalVBO = 0;
 	GlobalIndexBuffer = 0;
-	GlobalIndexBufferVBO = 0;
+	GlobalIBO = 0;
 	GlobalVAO = 0;
 
 	// начальныя установка коробок
@@ -834,8 +834,8 @@ void CObject3D::Draw(bool VertexOnlyPass, unsigned int ShadowMap)
 
 			// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
 			vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, RI_3f_XYZ, GlobalVertexBuffer,
-							DrawObjectList[0].Stride*sizeof(float), GlobalVertexBufferVBO, 0,
-							GlobalIndexBuffer, GlobalIndexBufferVBO, GlobalVAO);
+							DrawObjectList[0].Stride*sizeof(float), GlobalVBO, 0,
+							GlobalIndexBuffer, GlobalIBO, GlobalVAO);
 		}
 		else
 		{
@@ -862,8 +862,8 @@ void CObject3D::Draw(bool VertexOnlyPass, unsigned int ShadowMap)
 
 
 				vw_SendVertices(RI_TRIANGLES, DrawObjectList[i].VertexCount, RI_3f_XYZ, DrawObjectList[i].VertexBuffer,
-								DrawObjectList[i].Stride*sizeof(float), DrawObjectList[i].VertexBufferVBO,
-								DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IndexBufferVBO, DrawObjectList[i].VAO);
+								DrawObjectList[i].Stride*sizeof(float), DrawObjectList[i].VBO,
+								DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IBO, DrawObjectList[i].VAO);
 
 				vw_PopMatrix();
 			}
@@ -1056,8 +1056,8 @@ void CObject3D::Draw(bool VertexOnlyPass, unsigned int ShadowMap)
 
 		// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
 		vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, DrawObjectList[0].FVF_Format, GlobalVertexBuffer,
-						DrawObjectList[0].Stride*sizeof(float), GlobalVertexBufferVBO, 0,
-						GlobalIndexBuffer, GlobalIndexBufferVBO, GlobalVAO);
+						DrawObjectList[0].Stride*sizeof(float), GlobalVBO, 0,
+						GlobalIndexBuffer, GlobalIBO, GlobalVAO);
 
 		vw_DeActivateAllLights();
 	}
@@ -1262,8 +1262,8 @@ void CObject3D::Draw(bool VertexOnlyPass, unsigned int ShadowMap)
 
 
 			vw_SendVertices(RI_TRIANGLES, DrawObjectList[i].VertexCount, DrawObjectList[i].FVF_Format, DrawObjectList[i].VertexBuffer,
-							DrawObjectList[i].Stride*sizeof(float), DrawObjectList[i].VertexBufferVBO,
-							DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IndexBufferVBO, DrawObjectList[i].VAO);
+							DrawObjectList[i].Stride*sizeof(float), DrawObjectList[i].VBO,
+							DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IBO, DrawObjectList[i].VAO);
 
 
 

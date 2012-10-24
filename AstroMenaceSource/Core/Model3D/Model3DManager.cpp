@@ -47,14 +47,14 @@ eModel3D *EndModel3D = 0;
 //-----------------------------------------------------------------------------
 // Нахождение геометрии, или ее загрузка
 //-----------------------------------------------------------------------------
-eModel3D *vw_LoadModel3D(const char *nName)
+eModel3D *vw_LoadModel3D(const char *FileName)
 {
 	// сначала пытаемся найти уже сущ.
 	eModel3D *tmp = StartModel3D;
 	while (tmp != 0)
 	{
 		eModel3D *tmp2 = tmp->Next;
-		if(!strcmp(tmp->Name, nName)) return tmp;
+		if(!strcmp(tmp->Name, FileName)) return tmp;
 		tmp = tmp2;
 	}
 
@@ -63,9 +63,42 @@ eModel3D *vw_LoadModel3D(const char *nName)
 	Model = new eModel3D;
 	if (Model == 0) return 0;
 
-	Model->ReadVW3D(nName);
 
-	printf("Loaded ... %s\n", nName);
+
+	// определяем по расширению что загружать
+	if( vw_TestFileExtension( FileName, "vw3d" ) || vw_TestFileExtension( FileName, "VW3D" ))
+	{
+		if (!Model->ReadVW3D(FileName))
+		{
+			printf("Can't load file ... %s\n", FileName);
+			delete Model;
+			return 0;
+		}
+	}
+/*	else
+	if( vw_TestFileExtension( FileName, "obj" ) || vw_TestFileExtension( FileName, "OBJ" ))
+	{
+		Model->ReadOBJ(FileName);
+	}
+	else
+	if( vw_TestFileExtension( FileName, "3ds" ) || vw_TestFileExtension( FileName, "3DS" ))
+	{
+		Model->Read3DS(FileName);
+	}*/
+	else
+	{
+		printf("Format not supported ... %s\n", FileName);
+		delete Model;
+		return 0;
+	}
+
+	// создаем вертексные и индексные буферы для каждого блока
+	Model->CreateObjectsBuffers();
+	// создаем все поддерживаемые буферы (VAO, VBO, IBO)
+	Model->CreateHardwareBuffers();
+
+
+	printf("Loaded ... %s\n", FileName);
 
 	return Model;
 }
