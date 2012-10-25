@@ -150,10 +150,7 @@ void vw_DrawAllParticleSystems()
 	// текущая текстура
 	eTexture *CurrentTexture = 0;
 
-
 	// делаем все предустановки для прорисовки частиц, чтобы не менять каждый раз
-
-
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 	// включаем шейдер, если есть возможность
 	if (ParticleSystemUseGLSL)
@@ -171,7 +168,6 @@ void vw_DrawAllParticleSystems()
 	}
 	// выключаем изменение буфера глубины
 	glDepthMask(GL_FALSE);
-
 
 
 
@@ -212,13 +208,16 @@ void vw_DrawAllParticleSystems()
 
 
 //-----------------------------------------------------------------------------
-//	Прорисовываем конкретный ParticleSystem
+//	Прорисовываем блок ParticleSystems
 //-----------------------------------------------------------------------------
-void vw_DrawParticleSystem(eParticleSystem *DrawParticleSystem)
+void vw_DrawParticleSystems(eParticleSystem **DrawParticleSystem, int Quantity)
 {
 	if (DrawParticleSystem == 0) return;
 
-	// делаем все предустановки для прорисовки частиц
+	// текущая текстура
+	eTexture *CurrentTexture = 0;
+
+	// делаем все предустановки для прорисовки частиц, чтобы не менять каждый раз
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 	// включаем шейдер, если есть возможность
 	if (ParticleSystemUseGLSL)
@@ -237,9 +236,19 @@ void vw_DrawParticleSystem(eParticleSystem *DrawParticleSystem)
 	// выключаем изменение буфера глубины
 	glDepthMask(GL_FALSE);
 
-	// рисуем
-	vw_SetTexture(0, DrawParticleSystem->Texture);
-	DrawParticleSystem->Draw();
+
+
+	for (int i=0; i<Quantity; i++)
+	if (DrawParticleSystem[i] != 0)
+	{
+		if (CurrentTexture != DrawParticleSystem[i]->Texture)
+		{
+			vw_SetTexture(0, DrawParticleSystem[i]->Texture);
+			CurrentTexture = DrawParticleSystem[i]->Texture;
+		}
+		DrawParticleSystem[i]->Draw();
+	}
+
 
 	// включаем запись в буфер глубины
 	glDepthMask(GL_TRUE);

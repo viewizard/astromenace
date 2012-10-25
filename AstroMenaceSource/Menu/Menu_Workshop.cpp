@@ -524,7 +524,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		}
 
 		// рисуем эффекты двигателей только для этой модели
-		for (int i=0; i<SpaceFighter->EngineQuantity; i++) vw_DrawParticleSystem(SpaceFighter->Engine[i]);
+		vw_DrawParticleSystems(SpaceFighter->Engine, SpaceFighter->EngineQuantity);
 
 		vw_SetCameraLocation(VECTOR3D(-50,30,-50));
 		vw_SetViewport(x, y, width, height, znear, zfar);
@@ -580,7 +580,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		}
 
 		// рисуем эффекты двигателей только для этой модели
-		for (int i=0; i<SpaceFighter->EngineQuantity; i++) vw_DrawParticleSystem(SpaceFighter->Engine[i]);
+		vw_DrawParticleSystems(SpaceFighter->Engine, SpaceFighter->EngineQuantity);
 
 		vw_SetCameraLocation(VECTOR3D(-50,30,-50));
 		vw_SetViewport(x, y, width, height, znear, zfar);
@@ -653,7 +653,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 	}
 
 	// рисуем эффекты двигателей только для этой модели
-	for (int i=0; i<SpaceFighter->EngineQuantity; i++) vw_DrawParticleSystem(SpaceFighter->Engine[i]);
+	vw_DrawParticleSystems(SpaceFighter->Engine, SpaceFighter->EngineQuantity);
 
 	vw_SetCameraLocation(VECTOR3D(-50,30,-50));
 	vw_SetViewport(x, y, width, height, znear, zfar);

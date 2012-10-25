@@ -212,8 +212,8 @@ void	vw_DetachParticleSystem(eParticleSystem * OldParticleSystem);
 void	vw_ReleaseAllParticleSystems();
 // Прорисовываем все системы
 void	vw_DrawAllParticleSystems();
-//	Прорисовываем конкретный ParticleSystem
-void	vw_DrawParticleSystem(eParticleSystem *DrawParticleSystem);
+//	Прорисовываем блок ParticleSystems
+void	vw_DrawParticleSystems(eParticleSystem **DrawParticleSystem, int Quantity);
 // Проверяем все объекты, обновляем данные
 void	vw_UpdateAllParticleSystems(float Time);
 
