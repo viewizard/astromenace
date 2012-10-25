@@ -64,7 +64,7 @@ void ReleaseAllObject3D()
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllObject3D(int ShadowMapInitType)
+void DrawAllObject3D(int DrawType)
 {
 	// ставим всегда меньше или равно!
 	vw_DepthTest(true, RI_LESSEQUAL);
@@ -72,7 +72,7 @@ void DrawAllObject3D(int ShadowMapInitType)
 	// т.к. мы в игре не на все объекты отбрасываем тени, смотрим, есть ли вообще эти объекты, надо ли вообще работать с шадовмепом
 	int ObjectsWithShadow = 1;
 	if (Setup.ShadowMap > 0)
-		if (ShadowMapInitType == 2)
+		if (DrawType == 2)
 			ObjectsWithShadow = DrawAllSpaceObjectCount(13) + DrawAllSpaceObjectCount(15);
 
 
@@ -80,7 +80,7 @@ void DrawAllObject3D(int ShadowMapInitType)
 
 	if ((Setup.ShadowMap > 0) & (ObjectsWithShadow > 0))
 	{
-		switch (ShadowMapInitType)
+		switch (DrawType)
 		{
 			// меню
 			case 1: ShadowMap_StartRenderToFBO(VECTOR3D(50,-5,-120), 120.0f, 500.0f); break;
@@ -93,7 +93,7 @@ void DrawAllObject3D(int ShadowMapInitType)
 		DrawAllGroundObject(true, 0);
 		DrawAllProjectile(true, 0);
 		// от больших объектов в т.ч. частей баз, только в меню отбрасываем тень, в игре проблемы с точностью z буфера
-		if (ShadowMapInitType == 1) DrawAllSpaceObject(true, 0);
+		if (DrawType == 1) DrawAllSpaceObject(true, 0);
 		else DrawAllSpaceObject(true, 0, 8); // делаем тень только от частей взорванных объектов
 
 		ShadowMap_EndRenderToFBO();
@@ -110,7 +110,7 @@ void DrawAllObject3D(int ShadowMapInitType)
 
 
 	// если в игре - то не рисуем тени на мелкие объекты, чтобы избежать z-файтинга
-	if (ShadowMapInitType == 2) ShadowMapStage = 0;
+	if (DrawType == 2) ShadowMapStage = 0;
 
 
 	// космические объекты
@@ -133,6 +133,75 @@ void DrawAllObject3D(int ShadowMapInitType)
 
 	// взрывы
 	DrawAllExplosion(false);
+
+
+	// эффекты - самые последние в прорисовке!
+	vw_DrawAllParticleSystems();
+
+
+
+
+
+
+
+	// второй слой тайловой анимации "пыли"
+	StarSystemDrawSecondLayer(DrawType);
+
+	// эмуляция гаммы, фактически это простой пост эффект, всегда самый последний в прорисовке
+	if( Setup.Gamma != 5 )
+	{
+
+		float *buff = 0;
+		// RI_2f_XY | RI_1_TEX
+		buff = new float[4*4]; if (buff == 0) return;
+
+		int k=0;
+
+		buff[k++] = 0.0f;
+		buff[k++] = 0.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = 0.0f;
+
+		buff[k++] = 0.0f;
+		buff[k++] = Setup.fAspectRatioHeight;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+
+		buff[k++] = Setup.fAspectRatioWidth;
+		buff[k++] = 0.0f;
+		buff[k++] = 0.0f;
+		buff[k++] = 0.0f;
+
+		buff[k++] = Setup.fAspectRatioWidth;
+		buff[k++] = Setup.fAspectRatioHeight;
+		buff[k++] = 0.0f;
+		buff[k++] = 1.0f;
+
+
+		eTexture *TileTexture = vw_FindTextureByName("DATA/MENU/whitepoint.tga");
+		vw_SetTexture(0, TileTexture);
+
+		float GammaF = 1.0f + (Setup.Gamma - 5)/5.0f;
+
+		if( GammaF > 1.0f )
+		{
+			vw_SetTextureBlend(true, RI_BLEND_DESTCOLOR, RI_BLEND_ONE);
+			vw_SetColor(GammaF-1.0f, GammaF-1.0f, GammaF-1.0f, 1.0f);
+		}
+		else
+		{
+			vw_SetTextureBlend(true, RI_BLEND_ZERO, RI_BLEND_SRCCOLOR);
+			vw_SetColor(GammaF, GammaF, GammaF, 1.0f);
+		}
+
+		vw_Start2DMode(-1,1);
+		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, buff, 4*sizeof(float));
+		vw_End2DMode();
+
+		vw_SetTextureBlend(false, 0, 0);
+		vw_BindTexture(0, 0);
+		if (buff != 0){delete [] buff; buff = 0;}
+	}
 }
 
 

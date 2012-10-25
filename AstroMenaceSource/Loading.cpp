@@ -1065,7 +1065,7 @@ bool ReleaseGameData(int LoadType)
 // Процедура звука
 //------------------------------------------------------------------------------------
 bool LoadSoundThreadNeedOff = false;
-int LoadSoundThread(void *data)
+int LoadSoundThread(void *UNUSED(data))
 {
 	LoadSoundThreadNeedOff = false;
 

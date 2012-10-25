@@ -142,18 +142,8 @@ extern eParticleSystem *Shild2;
 int SoundShowHideMenu = 0;
 
 // для прорисовки подложки с тайловой анимацией
-float StarsTile=0.0f;
-float StarsTileUpdateTime = 0.0f;
-float StarsTile2=0.0f;
-float StarsTileUpdateTime2 = 0.0f;
-float StarsTile3=0.0f;
-float StarsTileUpdateTime3 = 0.0f;
-float StarsTileStartTransparentLayer1 = 0.0f;
-float StarsTileEndTransparentLayer1 = 0.0f;
-float StarsTileStartTransparentLayer2 = 0.0f;
-float StarsTileEndTransparentLayer2 = 0.0f;
-
-extern CSpaceObject *StartSpaceObject;
+extern float StarsTileUpdateTime;
+extern float StarsTileUpdateTime2;
 
 // для отображения скорости
 float CurrentGameSpeed = 0.0f;
@@ -1039,11 +1029,7 @@ void SetGameMissionComplete()
 
 
 
-/*
-float rendtime;
-float calctime;
-float mrendtime=0.0f;
-float mcalctime=0.0f;*/
+
 
 //------------------------------------------------------------------------------------
 // прорисовка игровой части
@@ -1080,236 +1066,15 @@ void DrawGame()
 
 
 	// всегда первым рисуем скайбокс и "далекое" окружение
-	// в т.ч. космос и солнце, у них сделать свой Draw метод, без сортировки
 	StarSystemUpdate();
-	StarSystemDraw();
-
-
-
-	// при стандартном аспек рейшене, нужно смотреть на перемещение камеры и двигать объекты
-	VECTOR3D CurrentCameraLocation;
-	vw_GetCameraLocation(&CurrentCameraLocation);
-
-
-
-
-	// космические объекты
-	// рисуем планеты и большие астероиды _до_ тайловой анимации
-	CSpaceObject *tmp1 = StartSpaceObject;
-	while (tmp1!=0)
-	{
-		CSpaceObject *tmp2 = tmp1->Next;
-
-		vw_PushMatrix();
-		vw_Translate(VECTOR3D(CurrentCameraLocation.x*0.90f-GameCameraGetDeviation()*4.0f, GameCameraGetDeviation()*2.0f,0.0f));
-		// если это планета на заднем фоне
-		if (tmp1->ObjectType == 14)	tmp1->Draw(false);
-		vw_PopMatrix();
-
-		tmp1 = tmp2;
-	}
-	tmp1 = StartSpaceObject;
-	while (tmp1!=0)
-	{
-		CSpaceObject *tmp2 = tmp1->Next;
-
-		vw_PushMatrix();
-		vw_Translate(VECTOR3D(CurrentCameraLocation.x*0.70f-GameCameraGetDeviation()*4.0f, GameCameraGetDeviation()*2.0f,0.0f));
-		// если это планета или большой астероид летящий на заднем фоне
-		if (tmp1->ObjectType == 15 && (tmp1->ObjectCreationType>10 && tmp1->ObjectCreationType<20)) tmp1->Draw(false);
-		vw_PopMatrix();
-
-		tmp1 = tmp2;
-	}
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Прорисовка подложки с тайловой анимацией
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Setup.VisualEffectsQuality <= 1)
-	{
-		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
-
-		float *buff = 0;
-		buff = new float[5*9]; if (buff == 0) return;
-
-		float width_2, length_2;
-		width_2 = length_2 = 175.0f;
-
-		float x,y,z;
-		// чем ниже слой, тем меньше его двигаем при перемещении камеры (при стандартном аспект рейшен)
-		x = GamePoint.x+GameCameraGetDeviation() + CurrentCameraLocation.x*0.8f;
-		y = GamePoint.y-GameCameraGetDeviation()*0.5f;
-		z = GamePoint.z+25.0f;
-
-		int k=0;
-		buff[k++] = x + width_2;
-		buff[k++] = y;
-		buff[k++] = z + length_2+length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = StarsTileStartTransparentLayer1;
-		buff[k++] = 3.0f;
-		buff[k++] = 0.0f+StarsTile;
-
-		buff[k++] = x + width_2;
-		buff[k++] = y;
-		buff[k++] = z - length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = StarsTileEndTransparentLayer1;
-		buff[k++] = 3.0f;
-		buff[k++] = 3.0f+StarsTile;
-
-		buff[k++] = x - width_2;
-		buff[k++] = y;
-		buff[k++] = z + length_2+length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = StarsTileStartTransparentLayer1;
-		buff[k++] = 0.0f;
-		buff[k++] = 0.0f+StarsTile;
-
-		buff[k++] = x - width_2;
-		buff[k++] = y;
-		buff[k++] = z - length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = StarsTileEndTransparentLayer1;
-		buff[k++] = 0.0f;
-		buff[k++] = 3.0f+StarsTile;
-
-		StarsTile -= 0.035f*(vw_GetTime(1) - StarsTileUpdateTime);
-		StarsTileUpdateTime = vw_GetTime(1);
-		if (StarsTile < -3.0f) StarsTile += 3.0f;
-
-
-		eTexture *TileTexture = vw_FindTextureByName("DATA/SKYBOX/tile_14.jpg");
-		vw_SetTexture(0, TileTexture);
-		// нужно ставить трилинейную
-		if (Setup.TextureFilteringMode == 2) vw_SetTextureFiltering(RI_TEXTURE_TRILINEAR);
-
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-
-		vw_DepthTest(false, -1);
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(float));
-		vw_DepthTest(true, RI_LESSEQUAL);
-
-		vw_SetTextureBlend(false, 0, 0);
-		vw_BindTexture(0, 0);
-		if (buff != 0){delete [] buff; buff = 0;}
-	}
-
+	StarSystemDraw(2);
 
 
 	// рисуем все 3д объекты
 	DrawAllObject3D(2);
 
-	// динамический космос
-	VECTOR3D TMPpsSpace;
-	psSpace->GetLocation(&TMPpsSpace);
-	psSpace->SetStartLocation(TMPpsSpace);
-	psSpace->MoveSystemLocation(VECTOR3D(0,10,250)+GamePoint);
 
-	// эффекты - самые последние в прорисовке!
-	vw_DrawAllParticleSystems();
-
-
-
-
-	// второй слой тайловой анимации
-	if (Setup.VisualEffectsQuality == 0)
-	{
-		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
-
-		float *buff = 0;
-		buff = new float[5*9]; if (buff == 0) return;
-
-		float width_2, length_2;
-		width_2 = length_2 = 175.0f;
-		VECTOR3D CurrentCameraLocation;
-		vw_GetCameraLocation(&CurrentCameraLocation);
-		float x,y,z;
-		// чем ниже слой, тем меньше его двигаем при перемещении камеры (при стандартном аспект рейшен)
-		x = GamePoint.x+GameCameraGetDeviation()*2.0f + CurrentCameraLocation.x*0.5f;
-		y = GamePoint.y-GameCameraGetDeviation();
-		z = GamePoint.z+25.0f;
-
-		int k=0;
-		buff[k++] = x + width_2;
-		buff[k++] = y;
-		buff[k++] = z + length_2+length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = StarsTileStartTransparentLayer2;
-		buff[k++] = 3.1f;
-		buff[k++] = 0.0f+StarsTile2;
-
-		buff[k++] = x + width_2;
-		buff[k++] = y;
-		buff[k++] = z - length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = StarsTileEndTransparentLayer2;
-		buff[k++] = 3.1f;
-		buff[k++] = 3.0f+StarsTile2;
-
-		buff[k++] = x - width_2;
-		buff[k++] = y;
-		buff[k++] = z + length_2+length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = StarsTileStartTransparentLayer2;
-		buff[k++] = 0.1f;
-		buff[k++] = 0.0f+StarsTile2;
-
-		buff[k++] = x - width_2;
-		buff[k++] = y;
-		buff[k++] = z - length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = StarsTileEndTransparentLayer2;
-		buff[k++] = 0.1f;
-		buff[k++] = 3.0f+StarsTile2;
-
-		StarsTile2 -= 0.12f*(vw_GetTime(1) - StarsTileUpdateTime2);
-		StarsTileUpdateTime2 = vw_GetTime(1);
-		if (StarsTile2 < -3.0f) StarsTile2 += 3.0f;
-
-
-		eTexture *TileTexture = vw_FindTextureByName("DATA/SKYBOX/tile_14.jpg");
-		vw_SetTexture(0, TileTexture);
-		// нужно ставить трилинейную
-		if (Setup.TextureFilteringMode == 2) vw_SetTextureFiltering(RI_TEXTURE_TRILINEAR);
-
-
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-
-		vw_DepthTest(false, -1);
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(float));
-		vw_DepthTest(true, RI_LESSEQUAL);
-
-		vw_SetTextureBlend(false, 0, 0);
-		vw_BindTexture(0, 0);
-		if (buff != 0){delete [] buff; buff = 0;}
-	}
-
-
-
-
-
-
-	// после полной прорисовки делаем
-	// обновление данных
+	// после полной прорисовки делаем обновление данных
 	UpdateAllObject3D(vw_GetTime(1));
 	vw_UpdateAllParticleSystems(vw_GetTime(1));
 	UpdateAllGameLvlText(vw_GetTime(1));
@@ -1340,62 +1105,6 @@ void DrawGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_Start2DMode(-1,1);
 	RECT SrcRest, DstRest;
-
-
-
-
-	// эмуляция гаммы
-	if( Setup.Gamma != 5 )
-	{
-		float *buff = 0;
-		// RI_2f_XY | RI_1_TEX
-		buff = new float[4*4]; if (buff == 0) return;
-
-		int k=0;
-
-		buff[k++] = 0.0f;
-		buff[k++] = 0.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 0.0f;
-
-		buff[k++] = 0.0f;
-		buff[k++] = Setup.fAspectRatioHeight;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-
-		buff[k++] = Setup.fAspectRatioWidth;
-		buff[k++] = 0.0f;
-		buff[k++] = 0.0f;
-		buff[k++] = 0.0f;
-
-		buff[k++] = Setup.fAspectRatioWidth;
-		buff[k++] = Setup.fAspectRatioHeight;
-		buff[k++] = 0.0f;
-		buff[k++] = 1.0f;
-
-
-		eTexture *TileTexture = vw_FindTextureByName("DATA/MENU/whitepoint.tga");
-		vw_SetTexture(0, TileTexture);
-
-		float GammaF = 1.0f + (Setup.Gamma - 5)/5.0f;
-
-		if( GammaF > 1.0f )
-		{
-			vw_SetTextureBlend(true, RI_BLEND_DESTCOLOR, RI_BLEND_ONE);
-			vw_SetColor(GammaF-1.0f, GammaF-1.0f, GammaF-1.0f, 1.0f);
-		}
-		else
-		{
-			vw_SetTextureBlend(true, RI_BLEND_ZERO, RI_BLEND_SRCCOLOR);
-			vw_SetColor(GammaF, GammaF, GammaF, 1.0f);
-		}
-
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, buff, 4*sizeof(float));
-
-		vw_SetTextureBlend(false, 0, 0);
-		vw_BindTexture(0, 0);
-		if (buff != 0){delete [] buff; buff = 0;}
-	}
 
 
 

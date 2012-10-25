@@ -210,7 +210,8 @@ void SkyBoxDraw(void);
 // StarSystem.cpp
 //------------------------------------------------------------------------------------
 void StarSystemInit(int Num, VECTOR3D SetBaseRotation);
-void StarSystemDraw();
+void StarSystemDraw(int DrawType); // 1- меню, 2- игра
+void StarSystemDrawSecondLayer(int DrawType);
 void StarSystemUpdate();
 void StarSystemRelease();
 
