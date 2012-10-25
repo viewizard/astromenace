@@ -344,17 +344,17 @@ void OptionsAdvMenu()
 	// качество теней
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.0f,0.0f, MenuContentTransp, GetText("3_Shadow_Quality"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Options_ShadowMap==0 || !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0 || !CAPS->FramebufferObject || !Options_UseGLSL))
+	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Options_ShadowMap==0 || !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0 || !CAPS->FramebufferObject || !Options_UseGLSL || (CAPS->FramebufferObjectDepthSize < 24)))
 	{
 		Options_ShadowMap--;
 		if (Options_ShadowMap < 0) Options_ShadowMap = 0;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Options_ShadowMap==3 || !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0 || !CAPS->FramebufferObject || !Options_UseGLSL))
+	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Options_ShadowMap==3 || !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0 || !CAPS->FramebufferObject || !Options_UseGLSL || (CAPS->FramebufferObjectDepthSize < 24)))
 	{
 		Options_ShadowMap++;
 		if (Options_ShadowMap > 3) Options_ShadowMap = 3;
 	}
-	if (CAPS->GLSL100Supported & (CAPS->ShaderModel >= 3.0) & CAPS->FramebufferObject & Options_UseGLSL)
+	if (CAPS->GLSL100Supported & (CAPS->ShaderModel >= 3.0) & CAPS->FramebufferObject & Options_UseGLSL & (CAPS->FramebufferObjectDepthSize >= 24))
 	{
 		Size = vw_FontSize(GetText(ShadowButtonQuality[Options_ShadowMap]));
 		SizeI = (170-Size)/2;//High, Medium, Low

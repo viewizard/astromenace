@@ -1996,7 +1996,7 @@ void InformationDrawObject()
 		InfoFighter->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoFighter->Draw(false, ShadowMapStage);
 		// рисуем эффекты двигателей только для этой модели
-		for (int i=0; i<InfoFighter->EngineQuantity; i++) vw_DrawParticleSystem(InfoFighter->Engine[i]);
+		vw_DrawParticleSystems(InfoFighter->Engine, InfoFighter->EngineQuantity);
 	}
 	if (InfoWeapon != 0)
 	{
@@ -2010,7 +2010,7 @@ void InformationDrawObject()
 		InfoMine->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoMine->Draw(false, ShadowMapStage);
 		// рисуем эффекты двигателей только для этой модели
-		for (int i=0; i<InfoMine->GraphicFXQuantity; i++) vw_DrawParticleSystem(InfoMine->GraphicFX[i]);
+		vw_DrawParticleSystems(InfoMine->GraphicFX, InfoMine->GraphicFXQuantity);
 	}
 	if (InfoAlien != 0)
 	{
@@ -2018,7 +2018,7 @@ void InformationDrawObject()
 		InfoAlien->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoAlien->Draw(false, ShadowMapStage);
 		// рисуем эффекты двигателей только для этой модели
-		for (int i=0; i<InfoAlien->EngineQuantity; i++) vw_DrawParticleSystem(InfoAlien->Engine[i]);
+		vw_DrawParticleSystems(InfoAlien->Engine, InfoAlien->EngineQuantity);
 	}
 	if (InfoAlienMotherShip != 0)
 	{
@@ -2026,7 +2026,7 @@ void InformationDrawObject()
 		InfoAlienMotherShip->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoAlienMotherShip->Draw(false, ShadowMapStage);
 		// рисуем эффекты двигателей только для этой модели
-		for (int i=0; i<InfoAlienMotherShip->EngineQuantity; i++) vw_DrawParticleSystem(InfoAlienMotherShip->Engine[i]);
+		vw_DrawParticleSystems(InfoAlienMotherShip->Engine, InfoAlienMotherShip->EngineQuantity);
 	}
 	if (InfoPirateShip != 0)
 	{
@@ -2041,7 +2041,7 @@ void InformationDrawObject()
 			InfoPirateShip->Weapon[i]->Draw(false, ShadowMapStage);
 		}
 		// рисуем эффекты двигателей только для этой модели
-		for (int i=0; i<InfoPirateShip->EngineQuantity; i++) vw_DrawParticleSystem(InfoPirateShip->Engine[i]);
+		vw_DrawParticleSystems(InfoPirateShip->Engine, InfoPirateShip->EngineQuantity);
 	}
 	if (InfoBuilding != 0)
 	{

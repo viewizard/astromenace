@@ -247,6 +247,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	OpenGL_DevCaps.HardwareMipMapGeneration = false;
 	OpenGL_DevCaps.TextureStorage = false;
 	OpenGL_DevCaps.FramebufferObject = false;
+	OpenGL_DevCaps.FramebufferObjectDepthSize = 0;
 
 
 	printf("Video card hardware test.\n\n");

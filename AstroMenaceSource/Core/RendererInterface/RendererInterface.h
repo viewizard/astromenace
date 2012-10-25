@@ -72,6 +72,9 @@ struct eDevCaps
 	bool TextureStorage;
 	// поддержка FBO
 	bool FramebufferObject;
+	// глубина depth буфера в битах, получаем ее при первой генерации fbo с буфером глубины, по умолчанию 0
+	// если работаем с fbo, то еще на этапе инициализации основного fbo прорисовки будут получены данные максимально поддерживаемой глубины
+	int FramebufferObjectDepthSize;
 	// поддержка VBO
 	bool VBOSupported;
 	// поддержка VAO
