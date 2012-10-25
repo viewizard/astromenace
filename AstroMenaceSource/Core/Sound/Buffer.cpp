@@ -5,10 +5,10 @@
 
 	File name: Buffer.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -58,8 +58,8 @@ int VorbisSeekSFX(void *datasource, ogg_int64_t offset, int whence)
 	eFILE* vorbisData = (eFILE*)datasource;
 	return vorbisData->fseek(offset, whence);
 }
-int VorbisCloseSFX(void *datasource)
-{// похоже без этой функции у линукс версии vorbis проблемы, хотя по документации...
+int VorbisCloseSFX(void *UNUSED(datasource))
+{// похоже, без этой функции у линукс версии vorbis проблемы, хотя по документации...
 	return 1;
 }
 long VorbisTellSFX(void *datasource)

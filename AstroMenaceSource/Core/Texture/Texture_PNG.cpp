@@ -37,7 +37,7 @@
 //------------------------------------------------------------------------------------
 // загрузка данных из PNG файла в DIB массив
 //------------------------------------------------------------------------------------
-int ReadPNG(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
+int ReadPNG(BYTE **UNUSED(DIB), eFILE *UNUSED(pFile), int *UNUSED(DWidth), int *UNUSED(DHeight), int *UNUSED(DChanels))
 {
 	// просто сообщаем что не поддерживаем, так скомпилирован код
 	fprintf(stderr, "Game compiled without PNG format support.\n");

@@ -304,7 +304,7 @@ void InitGameAI(const char *FileName);
 // Удаляем все объекты в списке
 void	ReleaseAllObject3D();
 // Прорисовываем все объекты
-void	DrawAllObject3D(int ShadowMapInitType);
+void	DrawAllObject3D(int DrawType); // 1- меню, 2- игра
 // Проверяем все объекты на столкновение
 void	DetectCollisionAllObject3D();
 //	Проверяем все объекты, обновляем данные

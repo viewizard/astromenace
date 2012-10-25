@@ -5,10 +5,10 @@
 
 	File name: Base.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -45,12 +45,12 @@
 #endif
 
 #if defined(__APPLE__) && defined(__MACH__)
-	#include <OpenGL/gl.h>	// Header File For The OpenGL32 Library
-	#include <OpenGL/glu.h>	// Header File For The GLu32 Library
+	#include <OpenGL/gl.h>	// Header File For The OpenGL Library
+	#include <OpenGL/glu.h>	// Header File For The GLu Library
 #else
 	#define __glext_h_  // Don't let gl.h include glext.h
-	#include <GL/gl.h>	// Header File For The OpenGL32 Library
-	#include <GL/glu.h>	// Header File For The GLu32 Library
+	#include <GL/gl.h>	// Header File For The OpenGL Library
+	#include <GL/glu.h>	// Header File For The GLu Library
 	#undef __glext_h_
 #endif
 
@@ -65,6 +65,13 @@
 #include "SDL/SDL_endian.h" // для VFS, чтобы правильно считывать таблицу файлов + хранение данных игры
 
 
+
+// если не используем переменные, и их нельзя убрать (используем прототип функции, к примеру)
+#ifdef __GNUC__
+#  define UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
+#else
+#  define UNUSED(x) UNUSED_ ## x
+#endif
 
 
 

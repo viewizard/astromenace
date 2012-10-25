@@ -5,10 +5,10 @@
 
 	File name: Texture_JPG.cpp
 
-	Copyright (c) 2001-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2001-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -132,7 +132,7 @@ void JPEGSkipInputData(j_decompress_ptr cinfo, long num_bytes)
 
 // убить ресурс. вызывается функцией jpeg_finish_decompress когда все данные будут
 // прочтены. у нас ничего сносить не надо.
-void JPEGTermSource(j_decompress_ptr cinfo) { }
+void JPEGTermSource(j_decompress_ptr UNUSED(cinfo)) { }
 
 
 

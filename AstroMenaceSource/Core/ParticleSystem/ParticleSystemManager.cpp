@@ -210,6 +210,56 @@ void vw_DrawAllParticleSystems()
 
 
 
+
+//-----------------------------------------------------------------------------
+//	Прорисовываем конкретный ParticleSystem
+//-----------------------------------------------------------------------------
+void vw_DrawParticleSystem(eParticleSystem *DrawParticleSystem)
+{
+	if (DrawParticleSystem == 0) return;
+
+	// делаем все предустановки для прорисовки частиц
+	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+	// включаем шейдер, если есть возможность
+	if (ParticleSystemUseGLSL)
+	{
+		if (ParticleSystemGLSL != 0)
+		{
+			// получаем текущее положение камеры
+			VECTOR3D CurrentCameraLocation;
+			vw_GetCameraLocation(&CurrentCameraLocation);
+
+			vw_UseShaderProgram(ParticleSystemGLSL);
+			vw_Uniform1i(ParticleSystemGLSL, ParticleSystemUniformLocations[0], 0);
+			vw_Uniform3f(ParticleSystemGLSL, ParticleSystemUniformLocations[1], CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z);
+		}
+	}
+	// выключаем изменение буфера глубины
+	glDepthMask(GL_FALSE);
+
+	// рисуем
+	vw_SetTexture(0, DrawParticleSystem->Texture);
+	DrawParticleSystem->Draw();
+
+	// включаем запись в буфер глубины
+	glDepthMask(GL_TRUE);
+	// выключаем шейдер
+	if (ParticleSystemUseGLSL)
+	{
+		vw_StopShaderProgram();
+	}
+
+	vw_SetTextureBlend(false, 0, 0);
+	// анбиндим текстуру
+	vw_BindTexture(0, 0);
+}
+
+
+
+
+
+
+
 //-----------------------------------------------------------------------------
 //	Апдейтим все ParticleSystems
 //-----------------------------------------------------------------------------
