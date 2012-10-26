@@ -60,19 +60,19 @@ void CBasePart::Create(int BasePartNum)
 	switch (BasePartNum)
 	{
 		case 11:
-			LoadObjectData("DATA/MODELS/SPACEBASE/1/1.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/1/1.VW3D", this, 0, -1.0f);
 			goto case1next;
 		case 12:
-			LoadObjectData("DATA/MODELS/SPACEBASE/1/2.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/1/2.VW3D", this, 0, -1.0f);
 			goto case1next;
 		case 13:
-			LoadObjectData("DATA/MODELS/SPACEBASE/1/3.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/1/3.VW3D", this, 0, -1.0f);
 			goto case1next;
 		case 14:
-			LoadObjectData("DATA/MODELS/SPACEBASE/1/4.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/1/4.VW3D", this, 0, -1.0f);
 			goto case1next;
 		case 15:
-			LoadObjectData("DATA/MODELS/SPACEBASE/1/5.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/1/5.VW3D", this, 0, -1.0f);
 
 case1next:
 
@@ -116,19 +116,19 @@ case1next:
 			break;
 
 		case 21:
-			LoadObjectData("DATA/MODELS/SPACEBASE/2/1.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/2/1.VW3D", this, 0, -1.0f);
 			goto case2next;
 		case 22:
-			LoadObjectData("DATA/MODELS/SPACEBASE/2/2.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/2/2.VW3D", this, 0, -1.0f);
 			goto case2next;
 		case 23:
-			LoadObjectData("DATA/MODELS/SPACEBASE/2/3.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/2/3.VW3D", this, 0, -1.0f);
 			goto case2next;
 		case 24:
-			LoadObjectData("DATA/MODELS/SPACEBASE/2/4.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/2/4.VW3D", this, 0, -1.0f);
 			goto case2next;
 		case 25:
-			LoadObjectData("DATA/MODELS/SPACEBASE/2/5.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/2/5.VW3D", this, 0, -1.0f);
 
 case2next:
 
@@ -142,7 +142,7 @@ case2next:
 
 		case 3:
 			// геометрия
-			LoadObjectData("DATA/MODELS/SPACEBASE/3/1.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/3/1.VW3D", this, 0, -1.0f);
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/metal.jpg");
 			TextureIllum[0] = 0;
 			Texture[1] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/allalpha.tga");
@@ -164,32 +164,32 @@ case2next:
 
 		case 4:
 			// геометрия
-			LoadObjectData("DATA/MODELS/SPACEBASE/4/1.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/4/1.VW3D", this, 0, -1.0f);
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/allalpha.tga");
 			TextureIllum[0] = 0;
 			break;
 
 		case 5:
 			// геометрия
-			LoadObjectData("DATA/MODELS/SPACEBASE/5/1.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/5/1.VW3D", this, 0, -1.0f);
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/allalpha.tga");
 			TextureIllum[0] = 0;
 			break;
 
 		case 61:
-			LoadObjectData("DATA/MODELS/SPACEBASE/6/1.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/6/1.VW3D", this, 0, -1.0f);
 			goto case6next;
 		case 62:
-			LoadObjectData("DATA/MODELS/SPACEBASE/6/2.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/6/2.VW3D", this, 0, -1.0f);
 			goto case6next;
 		case 63:
-			LoadObjectData("DATA/MODELS/SPACEBASE/6/3.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/6/3.VW3D", this, 0, -1.0f);
 			goto case6next;
 		case 64:
-			LoadObjectData("DATA/MODELS/SPACEBASE/6/4.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/6/4.VW3D", this, 0, -1.0f);
 			goto case6next;
 		case 65:
-			LoadObjectData("DATA/MODELS/SPACEBASE/6/5.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/6/5.VW3D", this, 0, -1.0f);
 
 case6next:
 
@@ -201,25 +201,25 @@ case6next:
 
 		case 7:
 			// геометрия
-			LoadObjectData("DATA/MODELS/SPACEBASE/7/1.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/7/1.VW3D", this, 0, -1.0f);
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/allalpha.tga");
 			TextureIllum[0] = 0;
 			break;
 
 		case 81:
-			LoadObjectData("DATA/MODELS/SPACEBASE/8/1.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/8/1.VW3D", this, 0, -1.0f);
 			goto case8next;
 		case 82:
-			LoadObjectData("DATA/MODELS/SPACEBASE/8/2.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/8/2.VW3D", this, 0, -1.0f);
 			goto case8next;
 		case 83:
-			LoadObjectData("DATA/MODELS/SPACEBASE/8/3.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/8/3.VW3D", this, 0, -1.0f);
 			goto case8next;
 		case 84:
-			LoadObjectData("DATA/MODELS/SPACEBASE/8/4.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/8/4.VW3D", this, 0, -1.0f);
 			goto case8next;
 		case 85:
-			LoadObjectData("DATA/MODELS/SPACEBASE/8/5.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACEBASE/8/5.VW3D", this, 0, -1.0f);
 
 case8next:
 

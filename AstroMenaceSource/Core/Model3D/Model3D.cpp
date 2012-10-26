@@ -57,6 +57,9 @@ eObjectBlock::eObjectBlock(void)
 	IBO = 0;
 	VAO = 0;
 
+	VertexBufferLimitedBySizeTriangles = 0;
+	VertexBufferLimitedBySizeTrianglesCount = 0;
+
 	ShaderType = 1;
 	for (int i=0; i<16; i++) ShaderData[i] = 0;
 
@@ -89,6 +92,9 @@ eObjectBlock::~eObjectBlock(void)
 		{
 			vw_DeleteVAO(*VAO); delete VAO; VAO = 0;
 		}
+
+		// память для VertexBufferLimitedBySizeTriangles никогда не должена быть выделена в конкретном объекте,
+		// только в моделе его удаляем только в деструкторе eModel3D, т.к. он там создается
 	}
 }
 
@@ -128,6 +134,12 @@ eModel3D::~eModel3D(void)
 	{
 		for (int i=0; i<DrawObjectCount; i++)
 		{
+			// удаляем только если это не ссылка на вертекс буфер блока
+			if ((DrawObjectList[i].VertexBufferLimitedBySizeTriangles != 0) & (DrawObjectList[i].VertexBufferLimitedBySizeTriangles != DrawObjectList[i].VertexBuffer))
+			{
+				delete [] DrawObjectList[i].VertexBufferLimitedBySizeTriangles;
+				DrawObjectList[i].VertexBufferLimitedBySizeTriangles = 0;
+			}
 			if ((DrawObjectList[i].VertexBuffer != 0) & (DrawObjectList[i].VertexBuffer != GlobalVertexBuffer))
 			{
 				delete [] DrawObjectList[i].VertexBuffer;
@@ -268,4 +280,187 @@ void eModel3D::CreateHardwareBuffers()
 		}
 	}
 
+}
+
+
+
+
+
+//-----------------------------------------------------------------------------
+// рекурсивно создаем VertexBufferLimitedBySizeTriangles
+//-----------------------------------------------------------------------------
+int RecursiveBufferLimitedBySizeTriangles(float Point1[8], float Point2[8], float Point3[8], int Stride, float *VertexBuffer, int *CurrentPosition, float TriangleSizeLimit)
+{
+	// подсчитываем длину сторон, если они меньше чем необходимый минимум - выходим с 1
+	float Dist1 = sqrtf((Point1[0]-Point2[0])*(Point1[0]-Point2[0]) + (Point1[1]-Point2[1])*(Point1[1]-Point2[1]) + (Point1[2]-Point2[2])*(Point1[2]-Point2[2]));
+	float Dist2 = sqrtf((Point2[0]-Point3[0])*(Point2[0]-Point3[0]) + (Point2[1]-Point3[1])*(Point2[1]-Point3[1]) + (Point2[2]-Point3[2])*(Point2[2]-Point3[2]));
+	float Dist3 = sqrtf((Point3[0]-Point1[0])*(Point3[0]-Point1[0]) + (Point3[1]-Point1[1])*(Point3[1]-Point1[1]) + (Point3[2]-Point1[2])*(Point3[2]-Point1[2]));
+
+	if ((Dist1<=TriangleSizeLimit) & (Dist2<=TriangleSizeLimit) & (Dist3<=TriangleSizeLimit))
+	{
+		// добавляем в новую последовательность треугольник
+		if ((VertexBuffer != 0) & (CurrentPosition != 0))
+		{
+			memcpy(VertexBuffer+(*CurrentPosition), Point1, sizeof(float)*8);
+			*CurrentPosition += Stride;
+			memcpy(VertexBuffer+(*CurrentPosition), Point2, sizeof(float)*8);
+			*CurrentPosition += Stride;
+			memcpy(VertexBuffer+(*CurrentPosition), Point3, sizeof(float)*8);
+			*CurrentPosition += Stride;
+		}
+
+		return 1;
+	}
+
+	// одна из сторон больше, ищем наибольшую, делим ее пополам и идем дальше в рекурсию
+
+	if ((Dist1 > Dist2) & (Dist1 > Dist3))
+	{
+		float Point_A[8]={(Point1[0]+Point2[0])/2.0f,
+							(Point1[1]+Point2[1])/2.0f,
+							(Point1[2]+Point2[2])/2.0f,
+							(Point1[3]+Point2[3])/2.0f,
+							(Point1[4]+Point2[4])/2.0f,
+							(Point1[5]+Point2[5])/2.0f,
+							(Point1[6]+Point2[6])/2.0f,
+							(Point1[7]+Point2[7])/2.0f};
+
+		return RecursiveBufferLimitedBySizeTriangles(Point1, Point_A, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit)
+				+ RecursiveBufferLimitedBySizeTriangles(Point_A, Point2, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
+	}
+	else
+	if ((Dist2 > Dist1) & (Dist2 > Dist3))
+	{
+		float Point_A[8]={(Point2[0]+Point3[0])/2.0f,
+							(Point2[1]+Point3[1])/2.0f,
+							(Point2[2]+Point3[2])/2.0f,
+							(Point2[3]+Point3[3])/2.0f,
+							(Point2[4]+Point3[4])/2.0f,
+							(Point2[5]+Point3[5])/2.0f,
+							(Point2[6]+Point3[6])/2.0f,
+							(Point2[7]+Point3[7])/2.0f};
+
+		return RecursiveBufferLimitedBySizeTriangles(Point1, Point2, Point_A, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit)
+				+ RecursiveBufferLimitedBySizeTriangles(Point1, Point_A, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
+	}
+	else
+	{
+		float Point_A[8]={(Point3[0]+Point1[0])/2.0f,
+							(Point3[1]+Point1[1])/2.0f,
+							(Point3[2]+Point1[2])/2.0f,
+							(Point3[3]+Point1[3])/2.0f,
+							(Point3[4]+Point1[4])/2.0f,
+							(Point3[5]+Point1[5])/2.0f,
+							(Point3[6]+Point1[6])/2.0f,
+							(Point3[7]+Point1[7])/2.0f};
+
+		return RecursiveBufferLimitedBySizeTriangles(Point1, Point2, Point_A, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit)
+				+ RecursiveBufferLimitedBySizeTriangles(Point_A, Point2, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
+	}
+}
+void eModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
+{
+	// если преобразования делать не требуется - устанавливаем ссылку на обуфер блока и выходим
+	if (TriangleSizeLimit <= 0.0f)
+	{
+		for (int i=0; i<DrawObjectCount; i++)
+		{
+			DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount = DrawObjectList[i].VertexCount;
+			DrawObjectList[i].VertexBufferLimitedBySizeTriangles = DrawObjectList[i].VertexBuffer;
+		}
+
+		return;
+	}
+
+	// первый вызов - считаем кол-во точек, для выделения памяти на новый буфер
+	for (int i=0; i<DrawObjectCount; i++)
+	{
+		DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount = 0;
+
+		// перебираем по треугольникам (3 точки)
+		for (int j=0; j<DrawObjectList[i].VertexCount; j+=3)
+		{
+			float Point1[8] ={DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+1],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+2],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+3],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+4],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+5],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+6],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+7]};
+
+			float Point2[8] ={DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)+1],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)+2],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)+3],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)+4],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)+5],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)+6],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)+7]};
+
+			float Point3[8] ={DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)+1],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)+2],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)+3],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)+4],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)+5],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)+6],
+							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)+7]};
+
+			// идем на рекурсивную функцию считать кол-во треугольников
+			DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount += RecursiveBufferLimitedBySizeTriangles(Point1, Point2, Point3, 0, 0, 0, TriangleSizeLimit)*3;
+		}
+	}
+
+
+	// второй проход
+	for (int i=0; i<DrawObjectCount; i++)
+	{
+		// если кол-во получилось как в текущем вертекс буфере - корректировок не требуется, просто копируем данные
+		if (DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount == DrawObjectList[i].VertexCount)
+		{
+			DrawObjectList[i].VertexBufferLimitedBySizeTriangles = DrawObjectList[i].VertexBuffer;
+		}
+		else
+		{
+			// выделяем память
+			DrawObjectList[i].VertexBufferLimitedBySizeTriangles = new float[DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount*DrawObjectList[i].Stride];
+			int CurrentPosition = 0;
+			int FakeCalculation = 0;
+
+			// перебираем по треугольникам (3 точки)
+			for (int j=0; j<DrawObjectList[i].VertexCount; j+=3)
+			{
+				float Point1[8] ={DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+1],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+2],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+3],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+4],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+5],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+6],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+7]};
+
+				float Point2[8] ={DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)+1],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)+2],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)+3],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)+4],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)+5],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)+6],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+1)+7]};
+
+				float Point3[8] ={DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)+1],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)+2],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)+3],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)+4],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)+5],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)+6],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*(j+2)+7]};
+
+				// идем на рекурсивную функцию
+				FakeCalculation = RecursiveBufferLimitedBySizeTriangles(Point1, Point2, Point3, DrawObjectList[i].Stride, DrawObjectList[i].VertexBufferLimitedBySizeTriangles, &CurrentPosition, TriangleSizeLimit)*3;
+			}
+		}
+	}
 }

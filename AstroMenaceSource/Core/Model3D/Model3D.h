@@ -86,6 +86,10 @@ struct eObjectBlock
 	unsigned int 	*IBO;				// номер IBO
 	// VAO
 	unsigned int	*VAO;				// номер VAO
+	// указатель на буфер, с мешем приведенным к опеределнному размеру треугольников (для взрывов)
+	// для него никогда не делаем VBO, буфер исключительно для работы внутри программы
+	float 			*VertexBufferLimitedBySizeTriangles;
+	int 			VertexBufferLimitedBySizeTrianglesCount; // кол-во вертексов в нем
 };
 
 
@@ -120,6 +124,8 @@ public:
 	void CreateObjectsBuffers();
 	// создание всех поддерживаемых буферов (VAO, VBO, IBO)
 	void CreateHardwareBuffers();
+	// создаем буфер для разрушаемых объектов с ограничением по размеру треугольников
+	void CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit);
 
 
 	// буферы
@@ -143,8 +149,9 @@ public:
 // Менеджер eObject3D
 //-----------------------------------------------------------------------------
 
-// Предварительная загрузка геометрии модели
-eModel3D *vw_LoadModel3D(const char *FileName);
+// Предварительная загрузка геометрии модели, если нужно создания доп. буфера с треугольниками не более TriangleSizeLimit
+// если не нужно, передаем отрицательное значение
+eModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit);
 // Присоеденяем Model3D к списку
 void vw_AttachModel3D(eModel3D * NewModel3D);
 // Удаляем Model3D из списка

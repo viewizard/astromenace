@@ -61,7 +61,7 @@ void CPlanet::Create(int PlanetNum)
 			ShaderType = -1;
 			NeedCullFaces = false;
 			NeedAlphaTest = true;
-			LoadObjectData("DATA/MODELS/PLANET/aplanet.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/PLANET/aplanet.VW3D", this, 0, -1.0f);
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/PLANET/planet3.jpg");
 			TextureIllum[0] = 0;
 			Texture[1] = vw_FindTextureByName("DATA/MODELS/PLANET/asteroid.tga");
@@ -75,7 +75,7 @@ void CPlanet::Create(int PlanetNum)
 		case 2:
 			ShaderType = -1;
 			PromptDrawDist2 = 100.0f; // только для этой планеты ставим такое !!!
-			LoadObjectData("DATA/MODELS/PLANET/dplanet.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/PLANET/dplanet.VW3D", this, 0, -1.0f);
 			for (int i=0; i<DrawObjectQuantity; i++)
 			{
 				Texture[i] = vw_FindTextureByName("DATA/MODELS/PLANET/planet3.jpg");
@@ -86,7 +86,7 @@ void CPlanet::Create(int PlanetNum)
 		case 3:
 			ShaderType = -1;
 			NeedCullFaces = false;
-			LoadObjectData("DATA/MODELS/PLANET/gplanet.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/PLANET/gplanet.VW3D", this, 0, -1.0f);
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/PLANET/planet1.jpg");
 			TextureIllum[0] = 0;
 
@@ -97,20 +97,20 @@ void CPlanet::Create(int PlanetNum)
 		// луна
 		case 4:
 			ShaderType = -1;
-			LoadObjectData("DATA/MODELS/PLANET/moon.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/PLANET/moon.VW3D", this, 0, -1.0f);
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/PLANET/moon.tga");
 			TextureIllum[0] = 0;
 			break;
 		// планета пришельцев, с подсветкой
 		case 5:
-			LoadObjectData("DATA/MODELS/PLANET/planet5.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/PLANET/planet5.VW3D", this, 0, -1.0f);
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/PLANET/p5base.jpg");
 			TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/PLANET/p5i.tga");
 			break;
 		// планета пришельцев, _без_ подсветки
 		case 6:
 			ShaderType = -1;
-			LoadObjectData("DATA/MODELS/PLANET/planet6.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/PLANET/planet6.VW3D", this, 0, -1.0f);
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/PLANET/planet3.jpg");
 			TextureIllum[0] = 0;
 			break;

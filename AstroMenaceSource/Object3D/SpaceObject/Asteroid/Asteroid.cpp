@@ -6,10 +6,10 @@
 
 	File name: Asteroid.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -62,7 +62,7 @@ void CAsteroid::Create(int SpaceObjectNum)
 	strcat(NameTMP, ".VW3D");
 
 
-	LoadObjectData(NameTMP, this, 0);
+	LoadObjectData(NameTMP, this, 0, -1.0f);
 	// находим все данные по геометрии
 	::CObject3D::InitByDrawObjectList();
 
