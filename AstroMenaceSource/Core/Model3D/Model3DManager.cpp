@@ -5,10 +5,10 @@
 
 	File name: Model3DManager.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -47,7 +47,7 @@ eModel3D *EndModel3D = 0;
 //-----------------------------------------------------------------------------
 // Нахождение геометрии, или ее загрузка
 //-----------------------------------------------------------------------------
-eModel3D *vw_LoadModel3D(const char *FileName)
+eModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit)
 {
 	// сначала пытаемся найти уже сущ.
 	eModel3D *tmp = StartModel3D;
@@ -97,6 +97,10 @@ eModel3D *vw_LoadModel3D(const char *FileName)
 	// создаем все поддерживаемые буферы (VAO, VBO, IBO)
 	Model->CreateHardwareBuffers();
 
+	// делаем спец буфер для разрушаемых объектов
+	// (!) используем фиксированную последовательность RI_3f_XYZ | RI_3f_NORMAL | RI_2f_TEX
+	// с которой работают взрывы в игре, не делаем универсальную (нет необходимости)
+	Model->CreateVertexBufferLimitedBySizeTriangles(TriangleSizeLimit);
 
 	printf("Loaded ... %s\n", FileName);
 
@@ -169,6 +173,4 @@ void vw_ReleaseAllModel3D()
 	StartModel3D = 0;
 	EndModel3D = 0;
 }
-
-
 

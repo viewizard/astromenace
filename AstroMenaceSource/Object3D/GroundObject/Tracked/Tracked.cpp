@@ -6,10 +6,10 @@
 
 	File name: Tracked.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -81,7 +81,7 @@ void CTracked::Create(int TrackedNum)
 	// ставим без оптимизации, иначе не увидим гусениц
 	NeedCullFaces = false;
 
-	LoadObjectData(PresetTrackedData[TrackedNum-1].Name, this, 0);
+	LoadObjectData(PresetTrackedData[TrackedNum-1].Name, this, 0, 2.0f);
 
 	for (int i=0; i<DrawObjectQuantity; i++)
 	{

@@ -326,7 +326,7 @@ void	UpdateAllObject3D(float Time);
 // Проверяем, нужно ли для данного объекта проверка коллизии и наведение на него
 bool NeedCheckCollision(CObject3D* Object3D);
 // Загрузка в модель нужной геометрии
-void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum);
+void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum, float TriangleSizeLimit);
 // Получение угла поворота оружия на врага
 void GetShipOnTargetOrientateion(int ObjectStatus, VECTOR3D Location, VECTOR3D CurrentObjectRotation,
 		float MinDistance, float RotationMatrix[9], VECTOR3D *NeedAngle, float ObjectWidth, bool NeedCenterOrientation,

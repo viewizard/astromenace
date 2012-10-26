@@ -63,19 +63,19 @@ void CBigAsteroid::Create(int AsteroidNum)
 	switch (AsteroidNum)
 	{
 		case 11:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-01.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-01.VW3D", this, 0, -1.0f);
 			goto case9next;
 		case 12:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-02.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-02.VW3D", this, 0, -1.0f);
 			goto case9next;
 		case 13:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-03.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-03.VW3D", this, 0, -1.0f);
 			goto case9next;
 		case 14:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-04.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-04.VW3D", this, 0, -1.0f);
 			goto case9next;
 		case 15:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-05.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-05.VW3D", this, 0, -1.0f);
 
 case9next:
 
@@ -93,19 +93,19 @@ case9next:
 
 		// те же астероиды, но они летят сверху...
 		case 21:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-01.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-01.VW3D", this, 0, -1.0f);
 			goto case10next;
 		case 22:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-02.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-02.VW3D", this, 0, -1.0f);
 			goto case10next;
 		case 23:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-03.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-03.VW3D", this, 0, -1.0f);
 			goto case10next;
 		case 24:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-04.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-04.VW3D", this, 0, -1.0f);
 			goto case10next;
 		case 25:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-05.VW3D", this, 0);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-05.VW3D", this, 0, -1.0f);
 
 case10next:
 

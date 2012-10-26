@@ -104,11 +104,11 @@ bool NeedCheckCollision(CObject3D* Object3D)
 //-----------------------------------------------------------------------------
 // Загрузка в модель нужной геометрии
 //-----------------------------------------------------------------------------
-void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum)
+void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum, float TriangleSizeLimit)
 {
 	// получение геометрии модели
 	eModel3D  *Model;
-	Model = vw_LoadModel3D(Name);
+	Model = vw_LoadModel3D(Name, TriangleSizeLimit);
 
 
 	// т.е. нужны все объекты

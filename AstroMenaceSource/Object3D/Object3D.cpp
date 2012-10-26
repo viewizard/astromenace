@@ -861,6 +861,23 @@ void CObject3D::Draw(bool VertexOnlyPass, unsigned int ShadowMap)
 				}
 
 
+				// работаем только с шейдером взрывов, т.к. он меняет положение и размеры треугольников
+				if (DrawObjectList[i].ShaderType == 2)
+				if (GLSLShaderType2 != 0)
+				{
+					vw_UseShaderProgram(GLSLShaderType2);
+
+					vw_Uniform1i(GLSLShaderType2, UniformLocations[10], 0);
+					vw_Uniform1i(GLSLShaderType2, UniformLocations[11], 0);
+					vw_Uniform1i(GLSLShaderType2, UniformLocations[12], 0);
+					vw_Uniform1i(GLSLShaderType2, UniformLocations[13], 0);
+					vw_Uniform1i(GLSLShaderType2, UniformLocations[14], 0);
+
+					vw_Uniform1f(GLSLShaderType2, UniformLocations[15], DrawObjectList[0].ShaderData[0]);
+					vw_Uniform1f(GLSLShaderType2, UniformLocations[16], DrawObjectList[0].ShaderData[1]);
+				}
+
+
 				vw_SendVertices(RI_TRIANGLES, DrawObjectList[i].VertexCount, RI_3f_XYZ, DrawObjectList[i].VertexBuffer,
 								DrawObjectList[i].Stride*sizeof(float), DrawObjectList[i].VBO,
 								DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IBO, DrawObjectList[i].VAO);

@@ -582,6 +582,8 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			DrawObjectList[i].VAO = 0;
 			DrawObjectList[i].NeedDestroyDataInObjectBlock = true; // удалять в объекте
 			DrawObjectList[i].RangeStart = 0;
+			DrawObjectList[i].VertexBufferLimitedBySizeTriangles = 0;
+			DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount = 0;
 
 			// делаем поворот геометрии объекта чтобы правильно сделать разлет частиц
 			DrawObjectList[i].VertexCount = 0;
@@ -610,7 +612,8 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			}
 
 			// выделяем память для данных
-			DrawObjectList[i].VertexBuffer = new float[DrawObjectList[i].Stride*Object->DrawObjectList[i].VertexCount];
+			// в отличии от снарядов - тут работаем с VertexBufferLimitedBySizeTriangles, чтобы сделать более красивый взрыв из мелких треугольников
+			DrawObjectList[i].VertexBuffer = new float[DrawObjectList[i].Stride*Object->DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount];
 
 
 
@@ -632,20 +635,16 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 
 
 			VECTOR3D TMP;
-			for (int j=0; j<Object->DrawObjectList[i].VertexCount; j++)
+			for (int j=0; j<Object->DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount; j++)
 			{
 				if (NeedInCur <= 0)
 				{
 					int j1 = k*DrawObjectList[i].Stride;
-					int j2;
-					if (Object->DrawObjectList[i].IndexBuffer != 0)
-						j2 = Object->DrawObjectList[i].IndexBuffer[Object->DrawObjectList[i].RangeStart+j]*Object->DrawObjectList[i].Stride;
-					else
-						j2 = (Object->DrawObjectList[i].RangeStart+j)*Object->DrawObjectList[i].Stride;
+					int j2 = j*Object->DrawObjectList[i].Stride;
 
-					TMP.x = Object->DrawObjectList[i].VertexBuffer[j2];
-					TMP.y = Object->DrawObjectList[i].VertexBuffer[j2+1];
-					TMP.z = Object->DrawObjectList[i].VertexBuffer[j2+2];
+					TMP.x = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2];
+					TMP.y = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+1];
+					TMP.z = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+2];
 					Matrix44CalcPoint(&TMP, TransMatTMP);
 					Matrix33CalcPoint(&TMP, Object->CurrentRotationMat);
 					// координаты
@@ -653,16 +652,16 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 					DrawObjectList[i].VertexBuffer[j1+1] = TMP.y;
 					DrawObjectList[i].VertexBuffer[j1+2] = TMP.z;
 					// нормали
-					TMP.x = Object->DrawObjectList[i].VertexBuffer[j2+3];
-					TMP.y = Object->DrawObjectList[i].VertexBuffer[j2+4];
-					TMP.z = Object->DrawObjectList[i].VertexBuffer[j2+5];
+					TMP.x = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+3];
+					TMP.y = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+4];
+					TMP.z = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+5];
 					Matrix33CalcPoint(&TMP, TransMatTMPNorm);
 					DrawObjectList[i].VertexBuffer[j1+3] = TMP.x;
 					DrawObjectList[i].VertexBuffer[j1+4] = TMP.y;
 					DrawObjectList[i].VertexBuffer[j1+5] = TMP.z;
 					// текстура
-					DrawObjectList[i].VertexBuffer[j1+6] = Object->DrawObjectList[i].VertexBuffer[j2+6];
-					DrawObjectList[i].VertexBuffer[j1+7] = Object->DrawObjectList[i].VertexBuffer[j2+7];
+					DrawObjectList[i].VertexBuffer[j1+6] = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+6];
+					DrawObjectList[i].VertexBuffer[j1+7] = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+7];
 
 					DrawObjectList[i].VertexCount ++;
 					k++;

@@ -6,10 +6,10 @@
 
 	File name: PirateShip.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -96,7 +96,7 @@ void CPirateShip::Create(int PirateShipNum)
 	EngineQuantity = PresetPirateShipData[PirateShipNum-1].EngineQuantity;
 
 
-	LoadObjectData(PresetPirateShipData[PirateShipNum-1].Name, this, 0);
+	LoadObjectData(PresetPirateShipData[PirateShipNum-1].Name, this, 0, 2.0f);
 
 	// всегда только эти текстуры
 	for (int i=0; i<DrawObjectQuantity; i++)
