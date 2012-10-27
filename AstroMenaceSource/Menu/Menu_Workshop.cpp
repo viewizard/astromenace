@@ -490,7 +490,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		vw_CameraLookAt();
 
 
-		unsigned int ShadowMapStage = 0;
+		bool ShadowMap = false;
 
 		if (Setup.ShadowMap > 0)
 		{
@@ -506,21 +506,21 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 			}
 
 			ShadowMap_EndRenderToFBO();
-			ShadowMapStage = 2;
-			ShadowMap_StartFinalRender(ShadowMapStage);
+			ShadowMap = true;
+			ShadowMap_StartFinalRender();
 		}
 
-		SpaceFighter->Draw(false, ShadowMapStage);
+		SpaceFighter->Draw(false, ShadowMap);
 		if (SpaceFighter->Weapon != 0)
 		for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
 		{
 			if (SpaceFighter->Weapon[i] != 0)
-				SpaceFighter->Weapon[i]->Draw(false, ShadowMapStage);
+				SpaceFighter->Weapon[i]->Draw(false, ShadowMap);
 		}
 
 		if (Setup.ShadowMap > 0)
 		{
-			ShadowMap_EndFinalRender(ShadowMapStage);
+			ShadowMap_EndFinalRender();
 		}
 
 		// рисуем эффекты двигателей только для этой модели
@@ -546,7 +546,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		vw_CameraLookAt();
 
 
-		unsigned int ShadowMapStage = 0;
+		bool ShadowMap = false;
 
 		if (Setup.ShadowMap > 0)
 		{
@@ -562,21 +562,21 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 			}
 
 			ShadowMap_EndRenderToFBO();
-			ShadowMapStage = 2;
-			ShadowMap_StartFinalRender(ShadowMapStage);
+			ShadowMap = true;
+			ShadowMap_StartFinalRender();
 		}
 
-		SpaceFighter->Draw(false, ShadowMapStage);
+		SpaceFighter->Draw(false, ShadowMap);
 		if (SpaceFighter->Weapon != 0)
 		for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
 		{
 			if (SpaceFighter->Weapon[i] != 0)
-				SpaceFighter->Weapon[i]->Draw(false, ShadowMapStage);
+				SpaceFighter->Weapon[i]->Draw(false, ShadowMap);
 		}
 
 		if (Setup.ShadowMap > 0)
 		{
-			ShadowMap_EndFinalRender(ShadowMapStage);
+			ShadowMap_EndFinalRender();
 		}
 
 		// рисуем эффекты двигателей только для этой модели
@@ -618,7 +618,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 	vw_CameraLookAt();
 
 
-	unsigned int ShadowMapStage = 0;
+	bool ShadowMap = false;
 
 	if (Setup.ShadowMap > 0)
 	{
@@ -634,22 +634,22 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		}
 
 		ShadowMap_EndRenderToFBO();
-		ShadowMapStage = 2;
-		ShadowMap_StartFinalRender(ShadowMapStage);
+		ShadowMap = true;
+		ShadowMap_StartFinalRender();
 	}
 
-	SpaceFighter->Draw(false, ShadowMapStage);
+	SpaceFighter->Draw(false, ShadowMap);
 
 	if (SpaceFighter->Weapon != 0)
 	for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
 	{
 		if (SpaceFighter->Weapon[i] != 0)
-			SpaceFighter->Weapon[i]->Draw(false, ShadowMapStage);
+			SpaceFighter->Weapon[i]->Draw(false, ShadowMap);
 	}
 
 	if (Setup.ShadowMap > 0)
 	{
-		ShadowMap_EndFinalRender(ShadowMapStage);
+		ShadowMap_EndFinalRender();
 	}
 
 	// рисуем эффекты двигателей только для этой модели

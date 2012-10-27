@@ -5,10 +5,10 @@
 
 	File name: System.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -93,6 +93,16 @@ static LONG GetRegistryKey(HKEY key, LPCTSTR subkey, LPTSTR retdata)
 }
 #endif // WIN32
 
+
+
+
+
+#if defined(__APPLE__) && defined(__MACH__)
+
+#include <CoreFoundation/CFBundle.h>
+#include <ApplicationServices/ApplicationServices.h>
+
+#endif // __APPLE__
 
 
 
@@ -349,6 +359,18 @@ bool vw_OpenBrouser(const char *url)
 		return false;
 
 #endif // WIN32
+#if defined(__APPLE__) && defined(__MACH__)
+
+	CFURLRef openurl = CFURLCreateWithBytes (
+				NULL,						// allocator
+				(BYTE*)url,					// URLBytes
+				strlen(url),				// length
+				kCFStringEncodingASCII,		// encoding
+				NULL);						// baseURL
+	LSOpenCFURLRef(openurl,0);
+	CFRelease(openurl);
+
+#endif // __APPLE__
 #ifdef __unix
 
 	char **browsers = get_browsers();

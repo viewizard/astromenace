@@ -45,8 +45,10 @@
 #endif
 
 #if defined(__APPLE__) && defined(__MACH__)
+	#define __glext_h_  // Don't let gl.h include glext.h
 	#include <OpenGL/gl.h>	// Header File For The OpenGL Library
 	#include <OpenGL/glu.h>	// Header File For The GLu Library
+	#undef __glext_h_
 #else
 	#define __glext_h_  // Don't let gl.h include glext.h
 	#include <GL/gl.h>	// Header File For The OpenGL Library
@@ -75,7 +77,7 @@
 
 
 
-#ifdef __unix
+#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 
 // декларируем типы данных, которых может не быть
 #ifndef BYTE

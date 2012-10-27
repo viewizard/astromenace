@@ -34,7 +34,7 @@
 #include "Game.h"
 
 
-#ifdef __unix
+#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 #ifdef xinerama
 	#include <X11/extensions/Xinerama.h>
 #endif // xinerama
@@ -146,62 +146,11 @@ CSpaceStars *psSpaceStatic = 0;
 
 
 
-
-#ifdef WIN32
-//HANDLE Mutex;
-#endif
-
-// инициализация механизма запуска 1 копии игры
-bool CreateGameOneCopy()
-{
-
-#ifdef WIN32
-
-/*	Mutex = CreateMutex(NULL, false, "AstroMenaceGameMutex");
-	if (GetLastError() == ERROR_ALREADY_EXISTS)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}*/
-
-#endif
-
-
-return true;
-
-
-}
-
-// удаление механизма запуска 1 копии игры
-void ReleaseGameOneCopy()
-{
-
-#ifdef WIN32
-
-//	ReleaseMutex(Mutex);
-
-#elif __unix
-
-
-#endif
-
-}
-
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // основная процедура...
 //------------------------------------------------------------------------------------
 int main( int argc, char **argv )
 {
-	// проверка, что запустили 1 копию
-	if (!CreateGameOneCopy()) return 0;
 
 #ifdef WIN32
 	// иним пути для винды
@@ -276,7 +225,7 @@ int main( int argc, char **argv )
 
 	strcpy(VFSFileNamePath, ProgrammDir);
 	strcat(VFSFileNamePath, "gamedata.vfs");
-#elif __unix
+#elif defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 	// иним пути для юникса-линукса
 	// если передали параметр-путь
 
@@ -367,8 +316,6 @@ int main( int argc, char **argv )
 			printf("--rawdata=/game/rawdata/folder/ - folder with game raw data for gamedata.vfs.\n");
 			printf("--help - info about all game launch options.\n");
 
-			// выходим, только показываем, игру не запускаем
-			ReleaseGameOneCopy();
 			return 0;
 		}
 
@@ -422,7 +369,7 @@ int main( int argc, char **argv )
 		{
 			if (!strncmp(argv[i], "--rawdata=", sizeof("--rawdata")))
 			{
-#ifdef __unix
+#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 				// если передали относительный путь в папку пользователя с тильдой
 				if (argv[i][sizeof("--rawdata")] != '~')
 					strcpy(RawDataDir, argv[i]+strlen("--rawdata="));
@@ -431,7 +378,7 @@ int main( int argc, char **argv )
 					strcpy(RawDataDir, homeval);// -1, это тильда... а в кол-ве нет, т.к. /0 там должен остаться
 					strcat(RawDataDir, argv[i]+strlen("--rawdata=")+1);
 				}
-#elif WIN32 // __unix
+#elif defined(WIN32)
 				// если есть двоеточия после второго символа - это полный путь с указанием девайса
 				if (argv[i][sizeof("--rawdata=")] == ':')
 				{
@@ -491,7 +438,6 @@ int main( int argc, char **argv )
 	if (vw_OpenVFS(VFSFileNamePath) != 0)
 	{
 		fprintf(stderr, "gamedata.vfs file not found or corrupted.\n");
-		ReleaseGameOneCopy();
 		return 0;
 	}
 	printf("\n");
@@ -504,7 +450,7 @@ ReCreate:
 	vw_InitFont(FontList[Setup.FontNumber].FontFileName, 16);
 
 
-#ifdef __unix
+#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 	// для TwinView и Xinerama выбираем нулевой, но не меняем если передали
 	setenv("SDL_VIDEO_FULLSCREEN_DISPLAY","0",0);
 #endif //unix
@@ -516,7 +462,6 @@ ReCreate:
 	if (SDL_Init(SDL_INIT_VIDEO) == -1)
 	{
 		fprintf(stderr, "Couldn't init SDL: %s\n", SDL_GetError());
-		ReleaseGameOneCopy();
 		return 1;
 	}
 
@@ -549,7 +494,7 @@ ReCreate:
 	CurrentVideoMode.H = SDL_GetVideoInfo()->current_h;
 	printf("Current Video Mode: %ix%i %ibit \n", CurrentVideoMode.W, CurrentVideoMode.H, CurrentVideoMode.BPP);
 
-#ifdef __unix
+#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 #ifdef xinerama
 	// определяем есть ли xinerama и какое разрешение экранов
 
@@ -913,7 +858,6 @@ ReCreate:
 		MessageBox(NULL,"Wrong resolution. Please, install the newest video drivers from your video card vendor.", "Render system - Fatal Error",MB_OK|MB_APPLMODAL|MB_ICONERROR);
 #endif // WIN32
 		SDL_Quit();
-		ReleaseGameOneCopy();
 		return 0;									// Quit If Window Was Not Created
 	}
 	// даже если 24, все равно тянем как 32 бита, а если меньше 16, то ставим 16
@@ -1004,6 +948,14 @@ ReCreate:
 			Setup.CSAA = 4;
 			Setup.MaxPointLights = 6;
 		}
+
+#if defined(__APPLE__) && defined(__MACH__)
+		// для маков по умолчанию выключаем сглаживание, тени и шейдеры, т.к. там может все софтово эмулироваться и жутко тормозить
+		Setup.MSAA = 0;
+		Setup.CSAA = 0;
+		Setup.UseGLSL = false;
+		Setup.ShadowMap = 0;
+#endif
 	}
 
 	// если не поддерживает железо фбо или шейдеры, выключаем шадовмеп
@@ -1046,7 +998,6 @@ ReCreate:
 	if (CAPS->MaxMultTextures < 2)
 	{
 		SDL_Quit();
-		ReleaseGameOneCopy();
         fprintf(stderr, "The Multi Textures feature unsupported by hardware. Fatal error.\n");
 #ifdef WIN32
 		MessageBox(NULL,"OpenGL 1.3 required. Please, install the newest video drivers from your video card vendor.", "Render system - Fatal Error",MB_OK|MB_APPLMODAL|MB_ICONERROR);
@@ -1383,7 +1334,6 @@ GotoQuit:
 
 
 	// уходим из программы...
-	ReleaseGameOneCopy();
 	return 0;
 
 }

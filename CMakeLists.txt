@@ -189,6 +189,6 @@ IF(DEFINED DATADIR)
 ENDIF(DEFINED DATADIR)
 
 # we need all speed optimization flags, this could add up to 40% FPS in game
-ADD_DEFINITIONS(${SDL_CFLAGS} "-s -O -O1 -O2 -O3 -Os -fomit-frame-pointer")
+ADD_DEFINITIONS(${SDL_CFLAGS} "-O -O1 -O2 -O3 -Os -fomit-frame-pointer")
 ADD_EXECUTABLE(AstroMenace ${astromenace_SRCS})
 TARGET_LINK_LIBRARIES(AstroMenace ${ALL_LIBRARIES})

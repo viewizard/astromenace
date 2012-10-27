@@ -6,7 +6,6 @@ uniform sampler2D Texture1, Texture2;
 uniform int NeedMultitexture;
 
 uniform sampler2DShadow ShadowMap;
-uniform int ShadowMapStage;
 
 uniform int DirectLightCount;
 uniform int PointLightCount;
@@ -23,7 +22,7 @@ varying vec3 Vertex;
 float lookup( vec2 offSet)
 {
 	// Values are multiplied by ShadowCoord.w because shadow2DProj does a W division for us.
-	return shadow2DProj(ShadowMap, gl_TexCoord[ShadowMapStage] + vec4(offSet.x * xPixelOffset * gl_TexCoord[ShadowMapStage].w, offSet.y * yPixelOffset * gl_TexCoord[ShadowMapStage].w, 0.0005, 0.0) ).w;
+	return shadow2DProj(ShadowMap, gl_TexCoord[2] + vec4(offSet.x * xPixelOffset * gl_TexCoord[2].w, offSet.y * yPixelOffset * gl_TexCoord[2].w, 0.0005, 0.0) ).w;
 }
 
 void main()
@@ -34,7 +33,7 @@ void main()
 	float Shadow = 1.0f;
 
 	// Avoid counter shadow
-	if (gl_TexCoord[ShadowMapStage].w > 1.0)
+	if (gl_TexCoord[2].w > 1.0)
 	{
 /*
 		// Simple lookup, no PCF
