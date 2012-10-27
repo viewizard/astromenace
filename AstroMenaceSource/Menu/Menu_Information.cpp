@@ -1916,7 +1916,7 @@ void InformationDrawObject()
 
 
 
-	unsigned int ShadowMapStage = 0;
+	bool ShadowMap = false;
 
 	if (Setup.ShadowMap > 0)
 	{
@@ -1985,8 +1985,8 @@ void InformationDrawObject()
 
 		ShadowMap_EndRenderToFBO();
 
-		ShadowMapStage = 2;
-		ShadowMap_StartFinalRender(ShadowMapStage);
+		ShadowMap = true;
+		ShadowMap_StartFinalRender();
 	}
 
 
@@ -1994,7 +1994,7 @@ void InformationDrawObject()
 	{
 		InfoFighter->SetLocation(TMPLocation);
 		InfoFighter->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoFighter->Draw(false, ShadowMapStage);
+		InfoFighter->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoFighter->Engine, InfoFighter->EngineQuantity);
 	}
@@ -2002,13 +2002,13 @@ void InformationDrawObject()
 	{
 		InfoWeapon->SetLocation(TMPLocation);
 		InfoWeapon->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoWeapon->Draw(false, ShadowMapStage);
+		InfoWeapon->Draw(false, ShadowMap);
 	}
 	if (InfoMine != 0)
 	{
 		InfoMine->SetLocation(TMPLocation);
 		InfoMine->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoMine->Draw(false, ShadowMapStage);
+		InfoMine->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoMine->GraphicFX, InfoMine->GraphicFXQuantity);
 	}
@@ -2016,7 +2016,7 @@ void InformationDrawObject()
 	{
 		InfoAlien->SetLocation(TMPLocation);
 		InfoAlien->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoAlien->Draw(false, ShadowMapStage);
+		InfoAlien->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoAlien->Engine, InfoAlien->EngineQuantity);
 	}
@@ -2024,7 +2024,7 @@ void InformationDrawObject()
 	{
 		InfoAlienMotherShip->SetLocation(TMPLocation);
 		InfoAlienMotherShip->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoAlienMotherShip->Draw(false, ShadowMapStage);
+		InfoAlienMotherShip->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoAlienMotherShip->Engine, InfoAlienMotherShip->EngineQuantity);
 	}
@@ -2032,13 +2032,13 @@ void InformationDrawObject()
 	{
 		InfoPirateShip->SetLocation(TMPLocation);
 		InfoPirateShip->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoPirateShip->Draw(false, ShadowMapStage);
+		InfoPirateShip->Draw(false, ShadowMap);
 		// рисуем оружие
 		if (InfoPirateShip->Weapon != 0)
 		for (int i=0; i<InfoPirateShip->WeaponQuantity; i++)
 		if (InfoPirateShip->Weapon[i] != 0)
 		{
-			InfoPirateShip->Weapon[i]->Draw(false, ShadowMapStage);
+			InfoPirateShip->Weapon[i]->Draw(false, ShadowMap);
 		}
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoPirateShip->Engine, InfoPirateShip->EngineQuantity);
@@ -2047,31 +2047,31 @@ void InformationDrawObject()
 	{
 		InfoBuilding->SetLocation(TMPLocation);
 		InfoBuilding->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoBuilding->Draw(false, ShadowMapStage);
+		InfoBuilding->Draw(false, ShadowMap);
 	}
 	if (InfoMilitaryBuilding != 0)
 	{
 		InfoMilitaryBuilding->SetLocation(TMPLocation);
 		InfoMilitaryBuilding->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoMilitaryBuilding->Draw(false, ShadowMapStage);
+		InfoMilitaryBuilding->Draw(false, ShadowMap);
 	}
 	if (InfoWheeled != 0)
 	{
 		InfoWheeled->SetLocation(TMPLocation);
 		InfoWheeled->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoWheeled->Draw(false, ShadowMapStage);
+		InfoWheeled->Draw(false, ShadowMap);
 	}
 	if (InfoTracked != 0)
 	{
 		InfoTracked->SetLocation(TMPLocation);
 		InfoTracked->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
-		InfoTracked->Draw(false, ShadowMapStage);
+		InfoTracked->Draw(false, ShadowMap);
 	}
 
 
 	if (Setup.ShadowMap > 0)
 	{
-		ShadowMap_EndFinalRender(ShadowMapStage);
+		ShadowMap_EndFinalRender();
 	}
 
 

@@ -119,7 +119,7 @@ public:
 	// Установка AABB, OBB и габаритов по геометрии объекта
 	virtual void	InitByDrawObjectList();
 	// Прорисовка объектa Object3D
-	virtual void	Draw(bool VertexOnlyPass, unsigned int ShadowMap=0);
+	virtual void	Draw(bool VertexOnlyPass, bool ShadowMap=false);
 	bool			NeedCullFaces; // нужно резать бэк фейсы
 	bool			NeedAlphaTest; // нужно включить альфа тест
 	// Обновление данных объектa Object3D

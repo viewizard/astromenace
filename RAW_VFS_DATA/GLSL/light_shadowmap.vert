@@ -2,8 +2,6 @@
 
 //  directional & point light per pixel  + shadow map with PCF + multitexture
 
-uniform int ShadowMapStage;
-
 // передаем вертекс в фрагметный (уже нормализованную)
 varying vec3 Normal;
 // передаем вертекс в фрагметный
@@ -18,5 +16,5 @@ void main()
 	gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;
 
 	// делаем установку из текстурной матрицы шадовмепа
-	gl_TexCoord[ShadowMapStage] = gl_TextureMatrix[ShadowMapStage] * gl_ModelViewMatrix * gl_Vertex;
+	gl_TexCoord[2] = gl_TextureMatrix[2] * gl_ModelViewMatrix * gl_Vertex;
 } 

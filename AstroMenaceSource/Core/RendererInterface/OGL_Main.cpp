@@ -128,7 +128,7 @@ void CenterWindow(int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideo
 	SDL_VERSION(&info.version);
 	if ( SDL_GetWMInfo(&info) > 0 )
 	{
-		#ifdef __unix
+		#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
             if ( info.subsystem == SDL_SYSWM_X11 )
 			{
 				SDL_Surface *GameScreen = SDL_GetVideoSurface();

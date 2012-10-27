@@ -192,12 +192,12 @@ void ShadowMap_EndRenderToFBO()
 //-----------------------------------------------------------------------------
 // начало рендеринга моделей с тенями
 //-----------------------------------------------------------------------------
-void ShadowMap_StartFinalRender(unsigned int TextureStage)
+void ShadowMap_StartFinalRender()
 {
 	if (ShadowMapFBO == 0) return;
 	if (ShadowMapFBO->DepthTexture == 0) return;
 
-	vw_BindTexture(TextureStage, ShadowMapFBO->DepthTexture);
+	vw_BindTexture(2, ShadowMapFBO->DepthTexture);
 	// т.к. будем использовать shadow2DProj, ставим правильный режим работы
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
@@ -229,11 +229,11 @@ void ShadowMap_StartFinalRender(unsigned int TextureStage)
 //-----------------------------------------------------------------------------
 // завершение рендеринга моделей с тенями
 //-----------------------------------------------------------------------------
-void ShadowMap_EndFinalRender(unsigned int TextureStage)
+void ShadowMap_EndFinalRender()
 {
 	if (ShadowMapFBO == 0) return;
 	if (ShadowMapFBO->DepthTexture == 0) return;
 
-	vw_BindTexture(TextureStage, 0);
+	vw_BindTexture(2, 0);
 }
 

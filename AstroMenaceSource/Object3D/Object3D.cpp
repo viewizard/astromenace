@@ -775,7 +775,7 @@ void DrawBoxLines(VECTOR3D Point[8], VECTOR3D LocalLocation, float ColorR, float
 //-----------------------------------------------------------------------------
 // Прорисовка объектa Object3D
 //-----------------------------------------------------------------------------
-void CObject3D::Draw(bool VertexOnlyPass, unsigned int ShadowMap)
+void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 {
 	// если нечего рисовать - выходим
 	if (DrawObjectList == 0) return;
@@ -982,9 +982,9 @@ void CObject3D::Draw(bool VertexOnlyPass, unsigned int ShadowMap)
 			eGLSL *CurrentObject3DGLSL = 0;
 
 			// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
-			if ((DrawObjectList[0].ShaderType == 1) & (ShadowMap > 0)) DrawObjectList[0].ShaderType = 3;
+			if ((DrawObjectList[0].ShaderType == 1) & ShadowMap) DrawObjectList[0].ShaderType = 3;
 			// и на оборот, если стоит 3-й, но шадовмепа нет - ставим 1-й, просто попиксельное освещение
-			if ((DrawObjectList[0].ShaderType == 3) & (ShadowMap == 0)) DrawObjectList[0].ShaderType = 1;
+			if ((DrawObjectList[0].ShaderType == 3) & !ShadowMap) DrawObjectList[0].ShaderType = 1;
 
 			// ставим нужный шейдер
 			switch (DrawObjectList[0].ShaderType)
@@ -1055,10 +1055,9 @@ void CObject3D::Draw(bool VertexOnlyPass, unsigned int ShadowMap)
 						}
 						else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
 
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[25], ShadowMap);
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[26], ShadowMap);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[25], 2);
+						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[26], ShadowMap_Get_xPixelOffset());
 						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[27], ShadowMap_Get_xPixelOffset());
-						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[28], ShadowMap_Get_xPixelOffset());
 
 						break;
 				}
@@ -1194,9 +1193,9 @@ void CObject3D::Draw(bool VertexOnlyPass, unsigned int ShadowMap)
 				eGLSL *CurrentObject3DGLSL = 0;
 
 				// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
-				if ((DrawObjectList[i].ShaderType == 1) & (ShadowMap > 0)) DrawObjectList[i].ShaderType = 3;
+				if ((DrawObjectList[i].ShaderType == 1) & ShadowMap) DrawObjectList[i].ShaderType = 3;
 				// и на оборот, если стоит 3-й, но шадовмепа нет - ставим 1-й, просто попиксельное освещение
-				if ((DrawObjectList[i].ShaderType == 3) & (ShadowMap == 0)) DrawObjectList[i].ShaderType = 1;
+				if ((DrawObjectList[i].ShaderType == 3) & !ShadowMap) DrawObjectList[i].ShaderType = 1;
 
 				// ставим нужный шейдер
 				switch (DrawObjectList[i].ShaderType)
@@ -1267,10 +1266,9 @@ void CObject3D::Draw(bool VertexOnlyPass, unsigned int ShadowMap)
 							}
 							else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
 
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[25], ShadowMap);
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[26], ShadowMap);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[25], 2);
+							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[26], ShadowMap_Get_xPixelOffset());
 							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[27], ShadowMap_Get_xPixelOffset());
-							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[28], ShadowMap_Get_xPixelOffset());
 
 							break;
 					}

@@ -38,8 +38,13 @@
 #include "../VirtualFileSystem/VFS.h"
 
 
-#include "AL/al.h"
-#include "AL/alc.h"
+#if defined(__APPLE__) && defined(__MACH__)
+	#include "OpenAL/al.h"
+	#include "OpenAL/alc.h"
+#else // defined(__APPLE__) && defined(__MACH__)
+	#include "AL/al.h"
+	#include "AL/alc.h"
+#endif // defined(__APPLE__) && defined(__MACH__)
 #include "AL/alut.h"
 
 #include "vorbis/vorbisfile.h"

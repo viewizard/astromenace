@@ -1534,10 +1534,9 @@ void LoadGameData(int LoadType)
 		UniformLocations[22] = vw_GetUniformLocation(GLSLShaderType3, "DirectLightCount");
 		UniformLocations[23] = vw_GetUniformLocation(GLSLShaderType3, "PointLightCount");
 		UniformLocations[24] = vw_GetUniformLocation(GLSLShaderType3, "NeedMultitexture");
-		UniformLocations[25] = vw_GetUniformLocation(GLSLShaderType3, "ShadowMapStage");
-		UniformLocations[26] = vw_GetUniformLocation(GLSLShaderType3, "ShadowMap");
-		UniformLocations[27] = vw_GetUniformLocation(GLSLShaderType3, "xPixelOffset");
-		UniformLocations[28] = vw_GetUniformLocation(GLSLShaderType3, "yPixelOffset");
+		UniformLocations[25] = vw_GetUniformLocation(GLSLShaderType3, "ShadowMap");
+		UniformLocations[26] = vw_GetUniformLocation(GLSLShaderType3, "xPixelOffset");
+		UniformLocations[27] = vw_GetUniformLocation(GLSLShaderType3, "yPixelOffset");
 	}
 	// еще одна проверка перед тем как будем использовать шадовмеп
 	// если не смогли загрузить шейдеры, то делать с шадовмеп нечего

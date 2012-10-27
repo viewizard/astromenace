@@ -76,7 +76,7 @@ void DrawAllObject3D(int DrawType)
 			ObjectsWithShadow = DrawAllSpaceObjectCount(13) + DrawAllSpaceObjectCount(15);
 
 
-	unsigned int ShadowMapStage = 0;
+	bool ShadowMap = false;
 
 	if ((Setup.ShadowMap > 0) & (ObjectsWithShadow > 0))
 	{
@@ -100,36 +100,36 @@ void DrawAllObject3D(int DrawType)
 		ShadowMap_EndRenderToFBO();
 
 		// работаем с 3-м стейджем текстур (первые два у нас заняты)
-		ShadowMapStage = 2;
-		ShadowMap_StartFinalRender(ShadowMapStage);
+		ShadowMap = true;
+		ShadowMap_StartFinalRender();
 	}
 
 
 	// космические объекты
-	DrawAllSpaceObject(false, ShadowMapStage, 13); // части базы
-	DrawAllSpaceObject(false, ShadowMapStage, 15); // большие астероиды
+	DrawAllSpaceObject(false, ShadowMap, 13); // части базы
+	DrawAllSpaceObject(false, ShadowMap, 15); // большие астероиды
 
 
 	// если в игре - то не рисуем тени на мелкие объекты, чтобы избежать z-файтинга
-	if (DrawType == 2) ShadowMapStage = 0;
+	if (DrawType == 2) ShadowMap = false;
 
 
 	// космические объекты
-	DrawAllSpaceObject(false, ShadowMapStage, 7); // мелкие астероиды
-	DrawAllSpaceObject(false, ShadowMapStage, 8); // части разруженных моделей
+	DrawAllSpaceObject(false, ShadowMap, 7); // мелкие астероиды
+	DrawAllSpaceObject(false, ShadowMap, 8); // части разруженных моделей
 	// корабли
-	DrawAllSpaceShip(false, ShadowMapStage);
+	DrawAllSpaceShip(false, ShadowMap);
 	// оружие
-	DrawAllWeapon(false, ShadowMapStage);
+	DrawAllWeapon(false, ShadowMap);
 	// наземные объекты
-	DrawAllGroundObject(false, ShadowMapStage);
+	DrawAllGroundObject(false, ShadowMap);
 	// снаряды
-	DrawAllProjectile(false, ShadowMapStage);
+	DrawAllProjectile(false, ShadowMap);
 
 
 	if ((Setup.ShadowMap > 0) & (ObjectsWithShadow > 0))
 	{
-		ShadowMap_EndFinalRender(ShadowMapStage);
+		ShadowMap_EndFinalRender();
 	}
 
 	// взрывы
