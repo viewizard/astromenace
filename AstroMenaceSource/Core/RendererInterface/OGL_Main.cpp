@@ -128,27 +128,27 @@ void CenterWindow(int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideo
 	SDL_VERSION(&info.version);
 	if ( SDL_GetWMInfo(&info) > 0 )
 	{
-		#ifdef __unix
-            if ( info.subsystem == SDL_SYSWM_X11 )
-			{
-				SDL_Surface *GameScreen = SDL_GetVideoSurface();
-                info.info.x11.lock_func();
-                int x = (CurrentVideoModeW - GameScreen->w)/2 + CurrentVideoModeX;
-                int y = (CurrentVideoModeH - GameScreen->h)/2 + CurrentVideoModeY;
-                XMoveWindow(info.info.x11.display, info.info.x11.wmwindow, x, y);
-                info.info.x11.unlock_func();
-            }
-        #endif // unix
-        #ifdef WIN32
-            {
-				RECT rc;
-				HWND hwnd = info.window;
-				GetWindowRect(hwnd, &rc);
-				int x = (CurrentVideoModeW - (rc.right-rc.left))/2 + CurrentVideoModeX;
-				int y = (CurrentVideoModeH - (rc.bottom-rc.top))/2 + CurrentVideoModeY;
-				SetWindowPos(hwnd, NULL, x, y, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
-            }
-        #endif // WIN32
+#ifdef __unix
+#ifdef SDL_VIDEO_DRIVER_X11
+		if ( info.subsystem == SDL_SYSWM_X11 )
+		{
+			SDL_Surface *GameScreen = SDL_GetVideoSurface();
+			info.info.x11.lock_func();
+			int x = (CurrentVideoModeW - GameScreen->w)/2 + CurrentVideoModeX;
+			int y = (CurrentVideoModeH - GameScreen->h)/2 + CurrentVideoModeY;
+			XMoveWindow(info.info.x11.display, info.info.x11.wmwindow, x, y);
+			info.info.x11.unlock_func();
+		}
+#endif // SDL_VIDEO_DRIVER_X11
+#endif // unix
+#ifdef WIN32
+		RECT rc;
+		HWND hwnd = info.window;
+		GetWindowRect(hwnd, &rc);
+		int x = (CurrentVideoModeW - (rc.right-rc.left))/2 + CurrentVideoModeX;
+		int y = (CurrentVideoModeH - (rc.bottom-rc.top))/2 + CurrentVideoModeY;
+		SetWindowPos(hwnd, NULL, x, y, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
+#endif // WIN32
     }
 
 	printf("SDL version: %i.%i.%i\n", info.version.major, info.version.minor, info.version.patch);

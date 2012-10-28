@@ -36,7 +36,7 @@
 
 void vw_AttachFontChar(eFontChar* FontChar);
 void vw_DetachFontChar(eFontChar* FontChar);
-extern FT_Face face;
+extern FT_Face InternalFace;
 extern int InternalFontSize;
 
 
@@ -50,7 +50,7 @@ eFontChar* vw_LoadFontChar(unsigned UTF32)
 
 
 	// загрузка глифа нужного нам символа
-	if (FT_Load_Char( face, UTF32, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT))
+	if (FT_Load_Char( InternalFace, UTF32, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT))
 	{
 		fprintf(stderr, "Can't load Char: %u\n", UTF32);
 		return 0;
@@ -64,13 +64,13 @@ eFontChar* vw_LoadFontChar(unsigned UTF32)
 	NewChar->UTF32 = UTF32;
 	NewChar->CharTexture = 0;
 	NewChar->TexturePositionLeft = 0;
-	NewChar->TexturePositionRight = face->glyph->bitmap.width; // в случае одной текстуры совпадают с шириной
+	NewChar->TexturePositionRight = InternalFace->glyph->bitmap.width; // в случае одной текстуры совпадают с шириной
 	NewChar->TexturePositionTop = 0;
-	NewChar->TexturePositionBottom = face->glyph->bitmap.rows; // в случае одной текстуры совпадают с высотой
-	NewChar->Width = face->glyph->bitmap.width;
-	NewChar->Height = face->glyph->bitmap.rows;
-	NewChar->Left = face->glyph->bitmap_left;
-	NewChar->Top = face->glyph->bitmap_top;
+	NewChar->TexturePositionBottom = InternalFace->glyph->bitmap.rows; // в случае одной текстуры совпадают с высотой
+	NewChar->Width = InternalFace->glyph->bitmap.width;
+	NewChar->Height = InternalFace->glyph->bitmap.rows;
+	NewChar->Left = InternalFace->glyph->bitmap_left;
+	NewChar->Top = InternalFace->glyph->bitmap_top;
 	NewChar->Prev = 0;
 	NewChar->Next = 0;
 
@@ -87,7 +87,7 @@ eFontChar* vw_LoadFontChar(unsigned UTF32)
 			// RGB составляющую заполняем белым
 			memcpy(pixels + k, ColorRGB, 3);
 			k+=3;
-			memcpy(pixels + k, face->glyph->bitmap.buffer+(NewChar->Height-j-1)*NewChar->Width+i, 1);
+			memcpy(pixels + k, InternalFace->glyph->bitmap.buffer+(NewChar->Height-j-1)*NewChar->Width+i, 1);
 			k++;
 		}
 	}
@@ -140,7 +140,7 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 
 
 		// загрузка глифа нужного нам символа
-		if (FT_Load_Char( face, CurrentChar, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT))
+		if (FT_Load_Char( InternalFace, CurrentChar, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT))
 		{
 			fprintf(stderr, "Can't load Char: %u\n", CurrentChar);
 			return;
@@ -156,10 +156,10 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 		NewChar->TexturePositionRight = 0;
 		NewChar->TexturePositionTop = 0;
 		NewChar->TexturePositionBottom = 0;
-		NewChar->Width = face->glyph->bitmap.width;
-		NewChar->Height = face->glyph->bitmap.rows;
-		NewChar->Left = face->glyph->bitmap_left;
-		NewChar->Top = face->glyph->bitmap_top;
+		NewChar->Width = InternalFace->glyph->bitmap.width;
+		NewChar->Height = InternalFace->glyph->bitmap.rows;
+		NewChar->Left = InternalFace->glyph->bitmap_left;
+		NewChar->Top = InternalFace->glyph->bitmap_top;
 		NewChar->Prev = 0;
 		NewChar->Next = 0;
 
@@ -189,7 +189,7 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 					ColorRGB,
 					3);
 			memcpy(DIB + (FontTextureHeight-CurrentDIBY-j-1)*FontTextureWidth*4 + (CurrentDIBX+i)*4 + 3,
-					face->glyph->bitmap.buffer+j*NewChar->Width+i,
+					InternalFace->glyph->bitmap.buffer+j*NewChar->Width+i,
 					1);
 		}
 
