@@ -84,6 +84,9 @@ void vw_ReleaseAllFontChar();
 // освобождаем память, завершаем работу с фонтом
 void vw_ShutdownFont();
 
+// создаем текстуру с текстом который передали
+int vw_TextureFromText(const char *FontName, int FontSize, const char * Text);
+
 // получаем размер строки
 int vw_FontSize(const char *Text, ...);
 // вывод строки в 2д

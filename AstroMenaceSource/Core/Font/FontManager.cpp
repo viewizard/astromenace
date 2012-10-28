@@ -34,13 +34,13 @@
 
 
 // интерфейс библиотеки
-FT_Library  library;
+FT_Library  InternalLibrary;
 // интерфейс объекта шрифта
-FT_Face     face;
+FT_Face     InternalFace;
 // буфер фонта
-BYTE *FontBuffer = 0;
+BYTE 		*InternalFontBuffer = 0;
 // размер фонта при генерации
-int InternalFontSize;
+int 		InternalFontSize;
 
 eFontChar *StartFontChar = 0;
 eFontChar *EndFontChar = 0;
@@ -53,14 +53,14 @@ eFontChar *EndFontChar = 0;
 int vw_InitFont(const char *FontName, int FontSize)
 {
 	// иним библиотеку
-	if (FT_Init_FreeType( &library ))
+	if (FT_Init_FreeType( &InternalLibrary ))
 	{
 		fprintf(stderr, "Can't initialize library, font: %s\n", FontName);
 		return -1;
 	}
 
 	// подготавливаем данные для загрузки шрифта из памяти
-	if (FontBuffer != 0){delete [] FontBuffer; FontBuffer =0;}
+	if (InternalFontBuffer != 0){delete [] InternalFontBuffer; InternalFontBuffer =0;}
 	int FontBufferSize = 0;
 	eFILE* FontFile = vw_fopen(FontName);
 
@@ -74,14 +74,14 @@ int vw_InitFont(const char *FontName, int FontSize)
 	FontBufferSize = FontFile->ftell();
 	FontFile->fseek( 0, SEEK_SET );
 
-	FontBuffer = new BYTE[FontBufferSize];
-	FontFile->fread( FontBuffer, FontBufferSize, 1 );
+	InternalFontBuffer = new BYTE[FontBufferSize];
+	FontFile->fread( InternalFontBuffer, FontBufferSize, 1 );
 
 	vw_fclose(FontFile);
 
 
 	// создаем фейс
-	if (FT_New_Memory_Face( library, FontBuffer, FontBufferSize, 0, &face ))
+	if (FT_New_Memory_Face( InternalLibrary, InternalFontBuffer, FontBufferSize, 0, &InternalFace ))
 	{
 		fprintf(stderr, "Can't create font face from memory, font: %s\n", FontName);
 		return -1;
@@ -89,7 +89,7 @@ int vw_InitFont(const char *FontName, int FontSize)
 
 
 	// устанавливаем размеры
-	if (FT_Set_Char_Size( face, FontSize <<6, FontSize <<6, 96, 96 ))
+	if (FT_Set_Char_Size( InternalFace, FontSize <<6, FontSize <<6, 96, 96 ))
 	{
 		fprintf(stderr, "Can't set char size, font: %s\n", FontName);
 		return -1;
@@ -200,10 +200,161 @@ void vw_ShutdownFont()
 	vw_ReleaseAllFontChar();
 
 	// освобождаем буфер фонта
-	if (FontBuffer != 0)
+	if (InternalFontBuffer != 0)
 	{
-		delete [] FontBuffer; FontBuffer =0;
+		delete [] InternalFontBuffer; InternalFontBuffer =0;
 	}
 
 }
 
+
+
+
+//------------------------------------------------------------------------------------
+// создаем текстуру с текстом который передали
+//------------------------------------------------------------------------------------
+int vw_TextureFromText(const char *FontName, int FontSize, const char * Text)
+{
+	if (Text == 0) return -1;
+	if (FontName == 0) return -1;
+	if (FontSize <= 0) return -1;
+
+	// интерфейс библиотеки
+	FT_Library  TextureLibrary;
+	// интерфейс объекта шрифта
+	FT_Face     TextureFace;
+	// буфер фонта
+	BYTE *TextureFontBuffer = 0;
+
+	// иним библиотеку
+	if (FT_Init_FreeType( &TextureLibrary ))
+	{
+		fprintf(stderr, "Can't initialize library, font: %s\n", FontName);
+		return -1;
+	}
+
+	eFILE* FontFile = vw_fopen(FontName);
+
+	if (!FontFile)
+	{
+		fprintf(stderr, "Can't open font file: %s\n", FontName);
+		return -1;
+	}
+
+	FontFile->fseek( 0, SEEK_END );
+	int FontBufferSize = 0;
+	FontBufferSize = FontFile->ftell();
+	FontFile->fseek( 0, SEEK_SET );
+
+	TextureFontBuffer = new BYTE[FontBufferSize];
+	FontFile->fread( TextureFontBuffer, FontBufferSize, 1 );
+
+	vw_fclose(FontFile);
+
+	// создаем фейс
+	if (FT_New_Memory_Face( TextureLibrary, TextureFontBuffer, FontBufferSize, 0, &TextureFace ))
+	{
+		fprintf(stderr, "Can't create font face from memory, font: %s\n", FontName);
+		return -1;
+	}
+
+	// устанавливаем размеры
+	if (FT_Set_Char_Size( TextureFace, FontSize <<6, FontSize <<6, 96, 96 ))
+	{
+		fprintf(stderr, "Can't set char size, font: %s\n", FontName);
+		return -1;
+	}
+
+
+
+	// считаем размер текстуры
+	int NeedTextureWidth = 0;
+	int NeedTextureHeight = 0;
+	const char *Text1 = Text;
+	while (strlen(Text1) > 0)
+	{
+		unsigned CurrentChar;
+		// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
+		Text1 = utf8_to_utf32(Text1, &CurrentChar);
+
+		// загрузка глифа нужного нам символа
+		if (FT_Load_Char( TextureFace, CurrentChar, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT))
+		{
+			fprintf(stderr, "Can't load Char: %u\n", CurrentChar);
+			return -1;
+		}
+
+		// учитываем размер каждого символа
+		NeedTextureWidth += TextureFace->glyph->bitmap.width+TextureFace->glyph->bitmap_left;
+		if (CurrentChar == 0x020) NeedTextureWidth += FontSize * 2 / 3; // пробел
+
+		int CurrentGlyphHeight = FontSize+TextureFace->glyph->bitmap.rows-TextureFace->glyph->bitmap_top;
+		if (NeedTextureHeight < CurrentGlyphHeight) NeedTextureHeight = CurrentGlyphHeight;
+
+	}
+
+
+
+	// создаем массив
+	BYTE * DIB;
+	DIB = new BYTE[NeedTextureWidth*NeedTextureHeight*4]; // всегда делаем rgba
+	// устанавливаем 0 везде, чтобы потом не краcить rgb, а только формировать альфу
+	memset(DIB, 0, NeedTextureWidth*NeedTextureHeight*4);
+
+	// данные для работы с вклеиванием в текстуру
+	int CurrentDIBX = 0;
+
+	const char *Text2 = Text;
+	while (strlen(Text2) > 0)
+	{
+		unsigned CurrentChar;
+		// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
+		Text2 = utf8_to_utf32(Text2, &CurrentChar);
+
+
+		// загрузка глифа нужного нам символа
+		if (FT_Load_Char( TextureFace, CurrentChar, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT))
+		{
+			fprintf(stderr, "Can't load Char: %u\n", CurrentChar);
+			return -1;
+		}
+
+
+		// "вклеиваем" новый символ в массив
+		BYTE ColorRGB[3]={255,255,255};
+		int PosYcorrection = FontSize-TextureFace->glyph->bitmap_top;
+		if (CurrentChar != 0x020)
+		for (int j=PosYcorrection; j<TextureFace->glyph->bitmap.rows+PosYcorrection; j++)
+		for (int i=0; i<TextureFace->glyph->bitmap.width; i++)
+		{
+			memcpy(DIB + (NeedTextureHeight-j-1)*NeedTextureWidth*4 + (CurrentDIBX+i)*4,
+					ColorRGB,
+					3);
+			memcpy(DIB + (NeedTextureHeight-j-1)*NeedTextureWidth*4 + (CurrentDIBX+i)*4 + 3,
+					TextureFace->glyph->bitmap.buffer+(j-PosYcorrection)*TextureFace->glyph->bitmap.width+i,
+					1);
+		}
+
+		// учитываем размер каждого символа
+		CurrentDIBX += TextureFace->glyph->bitmap.width + TextureFace->glyph->bitmap_left;
+		if (CurrentChar == 0x020) CurrentDIBX += 16 * 2 / 3; // пробел
+	}
+
+
+	// создаем текстуру
+	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
+	eTexture* FontTexture = vw_CreateTextureFromMemory(Text, DIB, NeedTextureWidth, NeedTextureHeight, 4, false);
+
+
+	// освобождаем память
+	delete [] DIB;
+	delete [] TextureFontBuffer;
+
+	if (FontTexture == 0)
+	{
+		fprintf(stderr, "Can't create font texture.\n");
+		return -1;
+	}
+
+	return 0;
+}
