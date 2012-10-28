@@ -28,6 +28,11 @@ For FreeBSD:
 $ sudo pkg_add -r -v gcc cmake subversion sdl libogg libvorbis openal
   jpeg libXinerama freealut freetype2
 
+For MacOSX 10.5+:
+  Download and install "Xcode" with "Command Line Tools" from App Store.
+  Install HomeBrew package manager (see http://mxcl.github.com/homebrew/ page).
+$ brew install cmake sdl jpeg subversion libogg libvorbis freealut freetype
+
 2) Checkout svn with latest source files
 $ cd ~/
 $ svn checkout http://svn.code.sf.net/p/openastromenace/code/ AstroMenace
