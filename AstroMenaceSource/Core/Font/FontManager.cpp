@@ -319,6 +319,8 @@ int vw_TextureFromText(const char *FontName, int FontSize, const char * Text)
 			return -1;
 		}
 
+		CurrentDIBX += TextureFace->glyph->bitmap_left;
+		if (CurrentDIBX < 0) CurrentDIBX = 0;
 
 		// "вклеиваем" новый символ в массив
 		BYTE ColorRGB[3]={255,255,255};
@@ -336,7 +338,7 @@ int vw_TextureFromText(const char *FontName, int FontSize, const char * Text)
 		}
 
 		// учитываем размер каждого символа
-		CurrentDIBX += TextureFace->glyph->bitmap.width + TextureFace->glyph->bitmap_left;
+		CurrentDIBX += TextureFace->glyph->bitmap.width;
 		if (CurrentChar == 0x020) CurrentDIBX += 16 * 2 / 3; // пробел
 	}
 
