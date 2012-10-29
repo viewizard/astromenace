@@ -34,7 +34,7 @@
 #include "Game.h"
 
 
-#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
+#ifdef __unix
 #ifdef xinerama
 	#include <X11/extensions/Xinerama.h>
 #endif // xinerama
@@ -450,7 +450,7 @@ ReCreate:
 	vw_InitFont(FontList[Setup.FontNumber].FontFileName, 16);
 
 
-#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
+#ifdef __unix
 	// для TwinView и Xinerama выбираем нулевой, но не меняем если передали
 	setenv("SDL_VIDEO_FULLSCREEN_DISPLAY","0",0);
 #endif //unix
@@ -494,7 +494,7 @@ ReCreate:
 	CurrentVideoMode.H = SDL_GetVideoInfo()->current_h;
 	printf("Current Video Mode: %ix%i %ibit \n", CurrentVideoMode.W, CurrentVideoMode.H, CurrentVideoMode.BPP);
 
-#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
+#ifdef __unix
 #ifdef xinerama
 	// определяем есть ли xinerama и какое разрешение экранов
 
