@@ -54,20 +54,11 @@ void InitSetup()
 	Setup.Width = 1228;
 	Setup.Height = 768;
 	Setup.BPP = 0;
-	if ((Setup.Width*1.0f)/(Setup.Height*1.0f) < 1.4f)
-	{
-		Setup.fAspectRatioWidth = 1024.0f;
-		Setup.fAspectRatioHeight = 768.0f;
-		Setup.iAspectRatioWidth = 1024;
-		Setup.iAspectRatioHeight = 768;
-	}
-	else
-	{
-		Setup.fAspectRatioWidth = 1228.0f;
-		Setup.fAspectRatioHeight = 768.0f;
-		Setup.iAspectRatioWidth = 1228;
-		Setup.iAspectRatioHeight = 768;
-	}
+	Setup.fAspectRatioWidth = 1228.0f;
+	Setup.fAspectRatioHeight = 768.0f;
+	Setup.iAspectRatioWidth = 1228;
+	Setup.iAspectRatioHeight = 768;
+
 	Setup.CameraModeWithStandardAspectRatio = 0;
 
 	Setup.TextureFilteringMode = 2;
@@ -614,7 +605,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		Setup.iAspectRatioWidth = 1228;
 		Setup.iAspectRatioHeight = 768;
 	}
-	if (!strcmp(AspectRatioBuffer, "4:3"))
+	else
 	{
 		Setup.fAspectRatioWidth = 1024.0f;
 		Setup.fAspectRatioHeight = 768.0f;

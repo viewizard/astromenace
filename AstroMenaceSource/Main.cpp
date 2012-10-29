@@ -956,6 +956,22 @@ ReCreate:
 		Setup.UseGLSL = false;
 		Setup.ShadowMap = 0;
 #endif
+
+		// устанавливаем соотношение сторон по установленному разрешению экрана
+		if ((Setup.Width*1.0f)/(Setup.Height*1.0f) < 1.4f)
+		{
+			Setup.fAspectRatioWidth = 1024.0f;
+			Setup.fAspectRatioHeight = 768.0f;
+			Setup.iAspectRatioWidth = 1024;
+			Setup.iAspectRatioHeight = 768;
+		}
+		else
+		{
+			Setup.fAspectRatioWidth = 1228.0f;
+			Setup.fAspectRatioHeight = 768.0f;
+			Setup.iAspectRatioWidth = 1228;
+			Setup.iAspectRatioHeight = 768;
+		}
 	}
 
 	// если не поддерживает железо фбо или шейдеры, выключаем шадовмеп
