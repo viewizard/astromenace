@@ -618,9 +618,9 @@ ReCreate:
 		for(int i=0; i<AllSupportedModesCount; i++)
 		if ((AllSupportedModes[i].W <= CurrentVideoMode.W) & (AllSupportedModes[i].H <= CurrentVideoMode.H))
 		{
-			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 16, SDL_FULLSCREEN | SDL_HWSURFACE) != 0) VideoModesNum++;
-			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 32, SDL_FULLSCREEN | SDL_HWSURFACE) != 0) VideoModesNum++;
-			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, CurrentVideoMode.BPP, SDL_ANYFORMAT | SDL_HWSURFACE) != 0) VideoModesNum++;
+			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 16, SDL_FULLSCREEN | SDL_OPENGL) != 0) VideoModesNum++;
+			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 32, SDL_FULLSCREEN | SDL_OPENGL) != 0) VideoModesNum++;
+			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, CurrentVideoMode.BPP, SDL_ANYFORMAT | SDL_OPENGL) != 0) VideoModesNum++;
 		}
 
 
@@ -630,7 +630,7 @@ ReCreate:
 		for(int i=0; i<AllSupportedModesCount; i++)
 		if ((AllSupportedModes[i].W <= CurrentVideoMode.W) & (AllSupportedModes[i].H <= CurrentVideoMode.H))
 		{
-			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 16, SDL_FULLSCREEN | SDL_HWSURFACE) != 0)
+			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 16, SDL_FULLSCREEN | SDL_OPENGL) != 0)
 			{
 				VideoModes[k].W = AllSupportedModes[i].W;
 				VideoModes[k].H = AllSupportedModes[i].H;
@@ -638,7 +638,7 @@ ReCreate:
 				k++;
 			}
 
-			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 32, SDL_FULLSCREEN | SDL_HWSURFACE) != 0)
+			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 32, SDL_FULLSCREEN | SDL_OPENGL) != 0)
 			{
 				VideoModes[k].W = AllSupportedModes[i].W;
 				VideoModes[k].H = AllSupportedModes[i].H;
@@ -646,7 +646,7 @@ ReCreate:
 				k++;
 			}
 
-			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, CurrentVideoMode.BPP, SDL_ANYFORMAT | SDL_HWSURFACE) != 0)
+			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, CurrentVideoMode.BPP, SDL_ANYFORMAT | SDL_OPENGL) != 0)
 			{
 				VideoModes[k].W = AllSupportedModes[i].W;
 				VideoModes[k].H = AllSupportedModes[i].H;
@@ -839,17 +839,23 @@ ReCreate:
 	// ошибка окна (размеры)
 	if (InitStatus == 1)
 	{
-		// не можем создать окна, ставим текущее разрешение рабочего стола
-		if (CurrentVideoMode.W != Setup.Width ||
-			CurrentVideoMode.H != Setup.Height ||
-			CurrentVideoMode.BPP != Setup.BPP)
+		// не можем создать окно или включить полноэкранный режим - ставим минимальный оконный режим
+		if (640 != Setup.Width ||
+			480 != Setup.Height ||
+			0 != Setup.BPP)
 		{
-			Setup.Width = CurrentVideoMode.W;
-			Setup.Height = CurrentVideoMode.H;
-			Setup.BPP = CurrentVideoMode.BPP;
+			Setup.Width = 640;
+			Setup.Height = 480;
+			Setup.BPP = 0;
+			Setup.fAspectRatioWidth = 1024.0f;
+			Setup.fAspectRatioHeight = 768.0f;
+			Setup.iAspectRatioWidth = 1024;
+			Setup.iAspectRatioHeight = 768;
 			Setup.MSAA = 0;
 			Setup.CSAA = 0;
 			SaveXMLSetupFile();
+			SDL_Quit();
+			FirstStart = false;
 			goto ReCreate;
 		}
 
