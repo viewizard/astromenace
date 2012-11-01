@@ -50,7 +50,7 @@ void CreditsMenu()
 	LastCreditsCurrentPosUpdateTime = vw_GetTime();
 
 	// зацикливание
-	if (CreditsCurrentPos <= -3070) CreditsCurrentPos = 0.0f;
+	if (CreditsCurrentPos <= -3095) CreditsCurrentPos = 0.0f;
 
 
 
@@ -293,6 +293,13 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, GetText("10_Nick_OConnell"));
+	Y1 += Offset1;
+	Y2 += Offset1;
+	// помог с mac os x версией
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(GetText("10_Mikhail_Storcheous")))/2;
+	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, GetText("10_Mikhail_Storcheous"));
 
 
 
