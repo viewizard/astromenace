@@ -573,6 +573,24 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	// берем первый элемент в скрипте
 	root = doc.FirstChildElement("AstroMenaceSettings");
 
+
+	// дополнительная проверка на содержимое конфигурационного файла
+	if (root == 0)
+	{
+		fprintf(stderr, "Game configuration file corrupted: %s\n", DatFileName);
+
+		// файл поврежден, надо завершить работу с ним
+		doc.Clear();
+		if (buffer != 0) delete [] buffer;
+		// сохранить дефолтные настройки, перезаписав файл
+		SaveXMLSetupFile();
+		// и сказать игре что это "первый запуск"
+		return true;
+	}
+
+
+
+
 	// если установлен NeedSafeMode, не грузим часть данных
 	if (NeedSafeMode) goto LoadProfiles;
 
