@@ -357,8 +357,8 @@ void StarSystemDrawSecondLayer(int DrawType)
 		x = GamePoint.x;
 		y = GamePoint.y;
 		z = GamePoint.z;
-		float StartTransparentLayer2 = 0.4f;
-		float EndTransparentLayer2 = 0.4f;
+		float StartTransparentLayer2 = 0.9f;
+		float EndTransparentLayer2 = 0.7f;
 
 		if (DrawType == 2)
 		{
@@ -432,7 +432,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 		if (StarsTile2 < -3.0f) StarsTile2 += 3.0f;
 
 
-		eTexture *TileTexture = vw_FindTextureByName("DATA/SKYBOX/tile_14.jpg");
+		eTexture *TileTexture = vw_FindTextureByName("DATA/SKYBOX/tile_23.jpg");
 		vw_SetTexture(0, TileTexture);
 		// нужно ставить трилинейную
 		if (Setup.TextureFilteringMode == 2) vw_SetTextureFiltering(RI_TEXTURE_TRILINEAR);
