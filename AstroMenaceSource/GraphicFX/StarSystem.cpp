@@ -296,8 +296,9 @@ void StarSystemDraw(int DrawType)
 
 		eTexture *TileTexture = vw_FindTextureByName("DATA/SKYBOX/tile_14.jpg");
 		vw_SetTexture(0, TileTexture);
-		// нужно ставить трилинейную
-		if (Setup.TextureFilteringMode == 2) vw_SetTextureFiltering(RI_TEXTURE_TRILINEAR);
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 
@@ -434,8 +435,9 @@ void StarSystemDrawSecondLayer(int DrawType)
 
 		eTexture *TileTexture = vw_FindTextureByName("DATA/SKYBOX/tile_23.jpg");
 		vw_SetTexture(0, TileTexture);
-		// нужно ставить трилинейную
-		if (Setup.TextureFilteringMode == 2) vw_SetTextureFiltering(RI_TEXTURE_TRILINEAR);
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 
 
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);

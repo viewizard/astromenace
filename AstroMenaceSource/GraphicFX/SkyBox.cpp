@@ -94,6 +94,7 @@ void SkyBoxDraw(void)
 	if (SkyBox_Texture[BACK] != 0)
 	{
 		vw_SetTexture(0, SkyBox_Texture[BACK]);
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
 	k=0;
@@ -122,6 +123,9 @@ void SkyBoxDraw(void)
 	{
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_23.jpg"));
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 		vw_SetTextureBlend(false, 0, 0);
 	}
@@ -155,6 +159,7 @@ void SkyBoxDraw(void)
 	if (SkyBox_Texture[FRONT] != 0)
 	{
 		vw_SetTexture(0, SkyBox_Texture[FRONT]);
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
 
@@ -184,6 +189,9 @@ void SkyBoxDraw(void)
 	{
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_23.jpg"));
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 		vw_SetTextureBlend(false, 0, 0);
 	}
@@ -216,6 +224,7 @@ void SkyBoxDraw(void)
 	if (SkyBox_Texture[BOTTOM] != 0)
 	{
 		vw_SetTexture(0, SkyBox_Texture[BOTTOM]);
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
 
@@ -245,6 +254,9 @@ void SkyBoxDraw(void)
 	{
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_23.jpg"));
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 		vw_SetTextureBlend(false, 0, 0);
 	}
@@ -278,6 +290,7 @@ void SkyBoxDraw(void)
 	if (SkyBox_Texture[TOP] != 0)
 	{
 		vw_SetTexture(0, SkyBox_Texture[TOP]);
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
 
@@ -307,6 +320,9 @@ void SkyBoxDraw(void)
 	{
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_23.jpg"));
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 		vw_SetTextureBlend(false, 0, 0);
 	}
@@ -340,6 +356,7 @@ void SkyBoxDraw(void)
 	if (SkyBox_Texture[LEFT] != 0)
 	{
 		vw_SetTexture(0, SkyBox_Texture[LEFT]);
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
 
@@ -369,6 +386,9 @@ void SkyBoxDraw(void)
 	{
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_23.jpg"));
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 		vw_SetTextureBlend(false, 0, 0);
 	}
@@ -402,6 +422,7 @@ void SkyBoxDraw(void)
 	if (SkyBox_Texture[RIGHT] != 0)
 	{
 		vw_SetTexture(0, SkyBox_Texture[RIGHT]);
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
 
@@ -431,6 +452,9 @@ void SkyBoxDraw(void)
 	{
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_23.jpg"));
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 		vw_SetTextureBlend(false, 0, 0);
 	}
