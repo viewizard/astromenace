@@ -96,6 +96,35 @@ void SkyBoxDraw(void)
 		vw_SetTexture(0, SkyBox_Texture[BACK]);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
+	k=0;
+	buff[k++] = SkyBox_x + SkyBox_width_2;
+	buff[k++] = SkyBox_y - SkyBox_height_2;
+	buff[k++] = SkyBox_z - SkyBox_length_2;
+	buff[k++] = 2.0f;
+	buff[k++] = 0.0f;
+	buff[k++] = SkyBox_x + SkyBox_width_2;
+	buff[k++] = SkyBox_y + SkyBox_height_2;
+	buff[k++] = SkyBox_z - SkyBox_length_2;
+	buff[k++] = 2.0f;
+	buff[k++] = 2.0f;
+	buff[k++] = SkyBox_x - SkyBox_width_2;
+	buff[k++] = SkyBox_y - SkyBox_height_2;
+	buff[k++] = SkyBox_z - SkyBox_length_2;
+	buff[k++] = 0.0f;
+	buff[k++] = 0.0f;
+	buff[k++] = SkyBox_x - SkyBox_width_2;
+	buff[k++] = SkyBox_y + SkyBox_height_2;
+	buff[k++] = SkyBox_z - SkyBox_length_2;
+	buff[k++] = 0.0f;
+	buff[k++] = 2.0f;
+
+	if (SkyBox_Texture[BACK] != 0)
+	{
+		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_23.jpg"));
+		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
+		vw_SetTextureBlend(false, 0, 0);
+	}
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -129,6 +158,35 @@ void SkyBoxDraw(void)
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
 
+	k=0;
+	buff[k++] = SkyBox_x - SkyBox_width_2;
+	buff[k++] = SkyBox_y - SkyBox_height_2;
+	buff[k++] = SkyBox_z + SkyBox_length_2;
+	buff[k++] = 2.0f;
+	buff[k++] = 0.0f;
+	buff[k++] = SkyBox_x - SkyBox_width_2;
+	buff[k++] = SkyBox_y + SkyBox_height_2;
+	buff[k++] = SkyBox_z + SkyBox_length_2;
+	buff[k++] = 2.0f;
+	buff[k++] = 2.0f;
+	buff[k++] = SkyBox_x + SkyBox_width_2;
+	buff[k++] = SkyBox_y - SkyBox_height_2;
+	buff[k++] = SkyBox_z + SkyBox_length_2;
+	buff[k++] = 0.0f;
+	buff[k++] = 0.0f;
+	buff[k++] = SkyBox_x + SkyBox_width_2;
+	buff[k++] = SkyBox_y + SkyBox_height_2;
+	buff[k++] = SkyBox_z + SkyBox_length_2;
+	buff[k++] = 0.0f;
+	buff[k++] = 2.0f;
+
+	if (SkyBox_Texture[FRONT] != 0)
+	{
+		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_23.jpg"));
+		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
+		vw_SetTextureBlend(false, 0, 0);
+	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The BOTTOM side
@@ -159,6 +217,36 @@ void SkyBoxDraw(void)
 	{
 		vw_SetTexture(0, SkyBox_Texture[BOTTOM]);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
+	}
+
+	k=0;
+	buff[k++] = SkyBox_x - SkyBox_width_2;
+	buff[k++] = SkyBox_y - SkyBox_height_2;
+	buff[k++] = SkyBox_z - SkyBox_length_2;
+	buff[k++] = 0.0f;
+	buff[k++] = 2.0f;
+	buff[k++] = SkyBox_x - SkyBox_width_2;
+	buff[k++] = SkyBox_y - SkyBox_height_2;
+	buff[k++] = SkyBox_z + SkyBox_length_2;
+	buff[k++] = 0.0f;
+	buff[k++] = 0.0f;
+	buff[k++] = SkyBox_x + SkyBox_width_2;
+	buff[k++] = SkyBox_y - SkyBox_height_2;
+	buff[k++] = SkyBox_z - SkyBox_length_2;
+	buff[k++] = 2.0f;
+	buff[k++] = 2.0f;
+	buff[k++] = SkyBox_x + SkyBox_width_2;
+	buff[k++] = SkyBox_y - SkyBox_height_2;
+	buff[k++] = SkyBox_z + SkyBox_length_2;
+	buff[k++] = 2.0f;
+	buff[k++] = 0.0f;
+
+	if (SkyBox_Texture[BOTTOM] != 0)
+	{
+		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_23.jpg"));
+		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
+		vw_SetTextureBlend(false, 0, 0);
 	}
 
 
@@ -193,6 +281,36 @@ void SkyBoxDraw(void)
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
 
+	k=0;
+	buff[k++] = SkyBox_x + SkyBox_width_2;
+	buff[k++] = SkyBox_y + SkyBox_height_2;
+	buff[k++] = SkyBox_z - SkyBox_length_2;
+	buff[k++] = 2.0f;
+	buff[k++] = 0.0f;
+	buff[k++] = SkyBox_x + SkyBox_width_2;
+	buff[k++] = SkyBox_y + SkyBox_height_2;
+	buff[k++] = SkyBox_z + SkyBox_length_2;
+	buff[k++] = 2.0f;
+	buff[k++] = 2.0f;
+	buff[k++] = SkyBox_x - SkyBox_width_2;
+	buff[k++] = SkyBox_y + SkyBox_height_2;
+	buff[k++] = SkyBox_z - SkyBox_length_2;
+	buff[k++] = 0.0f;
+	buff[k++] = 0.0f;
+	buff[k++] = SkyBox_x - SkyBox_width_2;
+	buff[k++] = SkyBox_y + SkyBox_height_2;
+	buff[k++] = SkyBox_z + SkyBox_length_2;
+	buff[k++] = 0.0f;
+	buff[k++] = 2.0f;
+
+	if (SkyBox_Texture[TOP] != 0)
+	{
+		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_23.jpg"));
+		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
+		vw_SetTextureBlend(false, 0, 0);
+	}
+
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The LEFT side
@@ -223,6 +341,36 @@ void SkyBoxDraw(void)
 	{
 		vw_SetTexture(0, SkyBox_Texture[LEFT]);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
+	}
+
+	k=0;
+	buff[k++] = SkyBox_x - SkyBox_width_2;
+	buff[k++] = SkyBox_y + SkyBox_height_2;
+	buff[k++] = SkyBox_z - SkyBox_length_2;
+	buff[k++] = 2.0f;
+	buff[k++] = 2.0f;
+	buff[k++] = SkyBox_x - SkyBox_width_2;
+	buff[k++] = SkyBox_y + SkyBox_height_2;
+	buff[k++] = SkyBox_z + SkyBox_length_2;
+	buff[k++] = 0.0f;
+	buff[k++] = 2.0f;
+	buff[k++] = SkyBox_x - SkyBox_width_2;
+	buff[k++] = SkyBox_y - SkyBox_height_2;
+	buff[k++] = SkyBox_z - SkyBox_length_2;
+	buff[k++] = 2.0f;
+	buff[k++] = 0.0f;
+	buff[k++] = SkyBox_x - SkyBox_width_2;
+	buff[k++] = SkyBox_y - SkyBox_height_2;
+	buff[k++] = SkyBox_z + SkyBox_length_2;
+	buff[k++] = 0.0f;
+	buff[k++] = 0.0f;
+
+	if (SkyBox_Texture[LEFT] != 0)
+	{
+		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_23.jpg"));
+		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
+		vw_SetTextureBlend(false, 0, 0);
 	}
 
 
@@ -256,6 +404,37 @@ void SkyBoxDraw(void)
 		vw_SetTexture(0, SkyBox_Texture[RIGHT]);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
+
+	k=0;
+	buff[k++] = SkyBox_x + SkyBox_width_2;
+	buff[k++] = SkyBox_y - SkyBox_height_2;
+	buff[k++] = SkyBox_z - SkyBox_length_2;
+	buff[k++] = 0.0f;
+	buff[k++] = 0.0f;
+	buff[k++] = SkyBox_x + SkyBox_width_2;
+	buff[k++] = SkyBox_y - SkyBox_height_2;
+	buff[k++] = SkyBox_z + SkyBox_length_2;
+	buff[k++] = 2.0f;
+	buff[k++] = 0.0f;
+	buff[k++] = SkyBox_x + SkyBox_width_2;
+	buff[k++] = SkyBox_y + SkyBox_height_2;
+	buff[k++] = SkyBox_z - SkyBox_length_2;
+	buff[k++] = 0.0f;
+	buff[k++] = 2.0f;
+	buff[k++] = SkyBox_x + SkyBox_width_2;
+	buff[k++] = SkyBox_y + SkyBox_height_2;
+	buff[k++] = SkyBox_z + SkyBox_length_2;
+	buff[k++] = 2.0f;
+	buff[k++] = 2.0f;
+
+	if (SkyBox_Texture[RIGHT] != 0)
+	{
+		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_23.jpg"));
+		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
+		vw_SetTextureBlend(false, 0, 0);
+	}
+
 
 
 	vw_BindTexture(0, 0);
