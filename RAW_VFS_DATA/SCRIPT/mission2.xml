@@ -10,7 +10,7 @@
 	<AIFile>DATA/SCRIPT/aimode.xml</AIFile>
 
 	<!-- Setup stars tile layer transparency for this mission -->
-	<LayersTransp FirstStart="0.4" SecondStart="0.3"/>
+	<LayersTransp FirstStart="0.4"/>
 
 </Load>
 <Action>

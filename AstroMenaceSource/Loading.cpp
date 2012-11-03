@@ -136,7 +136,7 @@ sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 #define TEXTURE_NO_MIPMAP	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE
 
 // сколько нужно загружать в листе меню
-const int	MenuLoadListCount = 174;
+const int	MenuLoadListCount = 175;
 // лист загрузки меню
 LoadList	MenuLoadList[MenuLoadListCount] =
 {
@@ -334,6 +334,7 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/SKYBOX/1/skybox_DN.jpg",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f},
 {"DATA/SKYBOX/1/skybox_FR.jpg",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f},
 {"DATA/SKYBOX/tile_14.jpg",						1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_BILINEAR, true, true, -1.0f},
+{"DATA/SKYBOX/tile_23.jpg",						1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_BILINEAR, true, true, -1.0f},
 // спец эффекты
 {"DATA/GFX/flare.tga",							1, 16, true,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
 {"DATA/GFX/flare1.tga",							1, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
@@ -358,7 +359,7 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 
 
 
-const int	GameLevelsLoadListCount = 81+41+35;
+const int	GameLevelsLoadListCount = 82+41+35;
 LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {
 // 2д часть
@@ -394,6 +395,7 @@ LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {"DATA/MENU/weapon_on_icon.tga",				0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f},
 {"DATA/GAME/missionfailed.tga",					0, 168, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f},
 {"DATA/SKYBOX/tile_14.jpg",						1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_BILINEAR, true, true, -1.0f},
+{"DATA/SKYBOX/tile_23.jpg",						1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_BILINEAR, true, true, -1.0f},
 // спец эффекты
 {"DATA/GFX/flare.tga",							1, 16, true,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
 {"DATA/GFX/flare1.tga",							1, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
@@ -1253,8 +1255,8 @@ void LoadGameData(int LoadType)
 				// установка прозрачности слоев
 				StarsTileStartTransparentLayer1 = 0.2f;
 				StarsTileEndTransparentLayer1 = 0.7f;
-				StarsTileStartTransparentLayer2 = 0.1f;
-				StarsTileEndTransparentLayer2 = 0.4f;
+				StarsTileStartTransparentLayer2 = 0.9f;
+				StarsTileEndTransparentLayer2 = 0.7f;
 				if (!strcmp(xmlElem->Value(), "LayersTransp"))
 				{
 					if (xmlElem->Attribute("FirstStart"))
