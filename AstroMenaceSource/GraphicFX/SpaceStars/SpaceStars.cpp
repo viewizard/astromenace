@@ -48,9 +48,9 @@ CSpaceStars::CSpaceStars()
 	// положение системы
 	Location = VECTOR3D( 0.0f, 0.0f, 0.0f);
 
-	Size = 0.015f;
+	Size = 0.003f;
 	CreationSize = VECTOR3D(5.21f,5.21f,5.21f);
-	Texture = vw_FindTextureByName("DATA/GFX/flare.tga");
+	Texture = vw_FindTextureByName("DATA/GFX/flare1.tga");
 	DeadZone = 5.2f;
 
 
@@ -84,11 +84,11 @@ CSpaceStars::CSpaceStars()
 
 
 		// считаем значение альфы
-		NewParticle->Alpha = 0.3f + 0.7f * vw_Randf1;
+		NewParticle->Alpha = 0.5f + 0.5f * vw_Randf1;
 		// убираем переполнение
 		Clamp( NewParticle->Alpha, 0.0f, 1.0f );
 		// считаем дельту альфы
-		NewParticle->AlphaDelta = (1.5f + 1.5f * vw_Randf1) / 4.0f;
+		NewParticle->AlphaDelta = (1.5f + 1.5f * vw_Randf1) / 3.0f;
 
 
 
