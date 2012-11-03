@@ -191,7 +191,7 @@ void InitMenu()
 	psSpace->ColorEnd.b = 1.00f;
 	psSpace->AlphaStart = 1.00f;
 	psSpace->AlphaEnd   = 0.00f;
-	psSpace->SizeStart = 0.15f;
+	psSpace->SizeStart = 0.10f;
 	psSpace->SizeEnd = 0.50f;
 	psSpace->Speed      = 7.00f;
 	psSpace->SpeedVar   = 5.00f;

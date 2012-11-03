@@ -48,7 +48,7 @@ CSpaceStars::CSpaceStars()
 	// положение системы
 	Location = VECTOR3D( 0.0f, 0.0f, 0.0f);
 
-	Size = 0.027f;
+	Size = 0.015f;
 	CreationSize = VECTOR3D(5.21f,5.21f,5.21f);
 	Texture = vw_FindTextureByName("DATA/GFX/flare.tga");
 	DeadZone = 5.2f;
