@@ -103,7 +103,7 @@ CObject3D::CObject3D(void)
 	TextureIllum = 0;
 
 	// мы не знаем как ориентирован объект и где он находится
-	Location = PrevLocation = Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
+	Location = GeometryCenterLocation = PrevLocation = Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
 	Orientation = VECTOR3D(0.0f, 0.0f, 1.0f);
 
 	Radius = 0.0f;
@@ -349,6 +349,18 @@ void CObject3D::InitByDrawObjectList()
 	// находим радиус
 	Radius = vw_sqrtf(Width2*Width2+Length2*Length2+Height2*Height2);
 
+
+	// находим "центр массы", в базовом режиме считаем всю геометрию
+	int AllVertexCounted = 0;
+	for (int i=0; i<DrawObjectQuantity; i++)
+	for (int j=0; j<DrawObjectList[i].VertexCount; j++)
+	{
+		AllVertexCounted++;
+		GeometryCenterLocation += DrawObjectList[i].Location + VECTOR3D(DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+1],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+2]);
+	}
+	if (AllVertexCounted > 0) GeometryCenterLocation = GeometryCenterLocation/AllVertexCounted;
 }
 
 

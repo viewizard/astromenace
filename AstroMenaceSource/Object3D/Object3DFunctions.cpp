@@ -254,7 +254,9 @@ void GetShipOnTargetOrientateion(
 
 		{
 		    // находим настоящую точку попадания с учетом скорости объекта и пули... если надо
-		    VECTOR3D RealLocation = tmp->Location + (tmp->AABB[0]+tmp->AABB[6])/2.0f;
+			VECTOR3D tmpLocation = tmp->GeometryCenterLocation;
+			Matrix33CalcPoint(&tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
+		    VECTOR3D RealLocation = tmp->Location + tmpLocation;
 
 		    if (tmp->Speed != 0.0f)
 		    if (WeaponType != 0 &&
@@ -395,11 +397,9 @@ void GetShipOnTargetOrientateion(
 			(ObjectStatus > 1 && tmpG->ObjectStatus==1))
 		{
 
-		    // из-за длинного ствола, точка может быть вынесена далеко, и тогда ракета промажет
-			// если делать через (tmpG->AABB[0]+tmpG->AABB[6])/2.0f;
-			VECTOR3D tmp(0.0f, tmpG->Height/2.0f, 0.0f);
-			Matrix33CalcPoint(&tmp, tmpG->CurrentRotationMat); // поворачиваем в плоскость объекта
-			VECTOR3D RealLocation = tmpG->Location+tmp;
+			VECTOR3D tmpLocation = tmpG->GeometryCenterLocation;
+			Matrix33CalcPoint(&tmpLocation, tmpG->CurrentRotationMat); // поворачиваем в плоскость объекта
+		    VECTOR3D RealLocation = tmpG->Location + tmpLocation;
 
 		    if (tmpG->Speed != 0.0f)
 		    if (WeaponType != 0 &&
@@ -547,9 +547,9 @@ void GetShipOnTargetOrientateion(
 			(ObjectStatus > 1 && tmpS->ObjectStatus==1))
 		{
 
-
-		    // находим настоящую точку попадания с учетом скорости объекта и пули... если надо
-		    VECTOR3D RealLocation = tmpS->Location + (tmpS->AABB[0]+tmpS->AABB[6])/2.0f;
+			VECTOR3D tmpLocation = tmpS->GeometryCenterLocation;
+			Matrix33CalcPoint(&tmpLocation, tmpS->CurrentRotationMat); // поворачиваем в плоскость объекта
+		    VECTOR3D RealLocation = tmpS->Location + tmpLocation;
 
 		    // если нужно проверить
 		    if (tmpS->Speed != 0.0f)
@@ -748,8 +748,9 @@ void GetEnemyShipOnTargetOrientateion(
 			(ObjectStatus > 1 && tmp->ObjectStatus==1))
 		{
 
-			// находим настоящую точку попадания с учетом скорости объекта и пули... если надо
-		    VECTOR3D RealLocation = tmp->Location + (tmp->AABB[0]+tmp->AABB[6])/2.0f;
+			VECTOR3D tmpLocation = tmp->GeometryCenterLocation;
+			Matrix33CalcPoint(&tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
+		    VECTOR3D RealLocation = tmp->Location + tmpLocation;
 
 			// учитываем, если лазер - наводить не надо
 			if (WeaponType != 110)
@@ -772,10 +773,7 @@ void GetEnemyShipOnTargetOrientateion(
 
                 TTT = Location - PossibleRealLocation;
                 float PossibleDist = TTT.Length();
-		        float PossibleObjTime = PossibleDist/ProjectileSpeed;
-
-				float PoprTime = PossibleObjTime;
-
+		        float PoprTime = PossibleDist/ProjectileSpeed;
 
 				FutureLocation = tmp->Orientation^(tmp->Speed*PoprTime);
                 // учитываем камеру...
@@ -945,41 +943,38 @@ bool GetTurretOnTargetOrientateion(
 			(ObjectStatus > 1 && tmp->ObjectStatus==1))
 		{
 
-			// находим настоящую точку попадания с учетом скорости объекта и пули... если надо
-		    VECTOR3D RealLocation = tmp->Location + (tmp->AABB[0]+tmp->AABB[6])/2.0f;
+
+			VECTOR3D tmpLocation = tmp->GeometryCenterLocation;
+			Matrix33CalcPoint(&tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
+			VECTOR3D RealLocation = tmp->Location + tmpLocation;
 
 
-                // находим, за какое время снаряд долетит до объекта сейчас
-				VECTOR3D TTT = Location - RealLocation;
-		        float ProjectileSpeed = GetProjectileSpeed(WeaponType);
-				if (ObjectStatus!=3) ProjectileSpeed = ProjectileSpeed/GameNPCWeaponPenalty;
-		        float CurrentDist = TTT.Length();
-		        float ObjCurrentTime = CurrentDist/ProjectileSpeed;
+			// находим, за какое время снаряд долетит до объекта сейчас
+			VECTOR3D TTT = Location - RealLocation;
+			float ProjectileSpeed = GetProjectileSpeed(WeaponType);
+			if (ObjectStatus!=3) ProjectileSpeed = ProjectileSpeed/GameNPCWeaponPenalty;
+			float CurrentDist = TTT.Length();
+			float ObjCurrentTime = CurrentDist/ProjectileSpeed;
 
-                // находим где будет объект, когда пройдет это время (+ сразу половину считаем!)
-                VECTOR3D FutureLocation = tmp->Orientation^(tmp->Speed*ObjCurrentTime);
-                // учитываем камеру...
-                VECTOR3D CamPosTTT(0.0f,0.0f,0.0f);
-                if (tmp->ObjectStatus==3) CamPosTTT = GameCameraMovement^(GameCameraGetSpeed()*ObjCurrentTime);
+			// находим где будет объект, когда пройдет это время (+ сразу половину считаем!)
+			VECTOR3D FutureLocation = tmp->Orientation^(tmp->Speed*ObjCurrentTime);
+			// учитываем камеру...
+			VECTOR3D CamPosTTT(0.0f,0.0f,0.0f);
+			if (tmp->ObjectStatus==3) CamPosTTT = GameCameraMovement^(GameCameraGetSpeed()*ObjCurrentTime);
 
-                // находи точку по середине... это нам и надо... туда целимся...
-                VECTOR3D PossibleRealLocation = RealLocation + FutureLocation + CamPosTTT;
+			// находи точку по середине... это нам и надо... туда целимся...
+			VECTOR3D PossibleRealLocation = RealLocation + FutureLocation + CamPosTTT;
 
-                TTT = Location - PossibleRealLocation;
-                float PossibleDist = TTT.Length();
-		        float PossibleObjTime = PossibleDist/ProjectileSpeed;
+			TTT = Location - PossibleRealLocation;
+			float PossibleDist = TTT.Length();
+			float PoprTime = PossibleDist/ProjectileSpeed;
 
-				float PoprTime = PossibleObjTime;
+			FutureLocation = tmp->Orientation^(tmp->Speed*PoprTime);
+			// учитываем камеру...
+			CamPosTTT = VECTOR3D(0.0f,0.0f,0.0f);
+			if (tmp->ObjectStatus==3) CamPosTTT = GameCameraMovement^(GameCameraGetSpeed()*PoprTime);
 
-
-				FutureLocation = tmp->Orientation^(tmp->Speed*PoprTime);
-                // учитываем камеру...
-				CamPosTTT = VECTOR3D(0.0f,0.0f,0.0f);
-				if (tmp->ObjectStatus==3) CamPosTTT = GameCameraMovement^(GameCameraGetSpeed()*PoprTime);
-
-				RealLocation = RealLocation + FutureLocation + CamPosTTT;
-
-
+			RealLocation = RealLocation + FutureLocation + CamPosTTT;
 
 
 
@@ -1253,11 +1248,9 @@ CObject3D *GetMissileOnTargetOrientateion(
 		if ((ObjectStatus == 1 && tmpG->ObjectStatus>1) ||
 			(ObjectStatus > 1 && tmpG->ObjectStatus==1))
 		{
-				// из-за длинного ствола, точка может быть вынесена далеко, и тогда ракета промажет
-				// если делать через (tmpG->AABB[0]+tmpG->AABB[6])/2.0f;
-				VECTOR3D tmp(0.0f, tmpG->Height/2.0f, 0.0f);
-				Matrix33CalcPoint(&tmp, tmpG->CurrentRotationMat); // поворачиваем в плоскость объекта
-				TargetLocation = tmpG->Location+tmp;
+			VECTOR3D tmpLocation = tmpG->GeometryCenterLocation;
+			Matrix33CalcPoint(&tmpLocation, tmpG->CurrentRotationMat); // поворачиваем в плоскость объекта
+		    TargetLocation = tmpG->Location + tmpLocation;
 
 				// проверяем, спереди или сзади стоит противник
 				tmp1 = A2 * (TargetLocation.x)  + B2 * (TargetLocation.y)  + C2 * (TargetLocation.z)  + D2;
@@ -1573,7 +1566,10 @@ bool GetMissileOnTargetOrientateion(
 	float tmp1 = A2 * (TargetObject->Location.x)  + B2 * (TargetObject->Location.y)  + C2 * (TargetObject->Location.z)  + D2;
 	if (tmp1>0.0f)
 	{
-		TargetLocation = TargetObject->Location+(TargetObject->AABB[0]+TargetObject->AABB[6])/2.0f;
+
+		VECTOR3D tmpLocation = TargetObject->GeometryCenterLocation;
+		Matrix33CalcPoint(&tmpLocation, TargetObject->CurrentRotationMat); // поворачиваем в плоскость объекта
+		TargetLocation = TargetObject->Location + tmpLocation;
 
 		// находим угол между плоскостью и прямой
 		float A3, B3, C3, D3;
