@@ -37,7 +37,9 @@
 
 CObject3D *GetMissileOnTargetOrientateion(int	ObjectStatus, VECTOR3D Location,
 		VECTOR3D CurrentObjectRotation, float RotationMatrix[9], VECTOR3D *NeedAngle);
-
+bool GetMissileOnTargetOrientateion(VECTOR3D Location, VECTOR3D CurrentObjectRotation,
+		float RotationMatrix[9], CObject3D *TargetObject, VECTOR3D *NeedAngle);
+bool GetMissileTargetLiveStatus(CObject3D *TargetObject);
 
 
 
@@ -1317,9 +1319,27 @@ bool CProjectile::Update(float Time)
 			{
 missile:
 				VECTOR3D NeedAngle = Rotation;
-				// устанавливаем в Target на что наведен этот снаряд
-				Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
-					CurrentRotationMat, &NeedAngle);
+				// устанавливаем в Target на что наведен этот снаряд, если еще ничего не выбрано
+				if (Target == 0)
+				{
+					Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle);
+				}
+				else // если уже что-то выбрали
+				{
+					// 1. надо проверить, есть ли еще вообще этот объект, если он есть - летим к нему
+					if (GetMissileTargetLiveStatus(Target))
+					{
+						// получаем углы, возвращает false - значит цель уже проскочили, и надо навестись на новую
+						if (!GetMissileOnTargetOrientateion(Location, Rotation, CurrentRotationMat, Target, &NeedAngle))
+							Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle);
+					}
+					// 2. если объекта нет (уже взорвали), надо наводить на другой
+					else
+					{
+						Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle);
+					}
+				}
+
 
 
 				// учитываем скорость поворота по вертикали

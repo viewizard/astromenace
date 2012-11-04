@@ -1221,23 +1221,14 @@ CObject3D *GetMissileOnTargetOrientateion(
 						TargetAngleTMP.z = CurrentObjectRotation.z;
 
 
-					/*	if (!TargetLocked)
+						if (Tdist > m*m+n*n+p*p)
 						{
 							TargetAngle = TargetAngleTMP;
-							TargetLocked = true;
 							Tdist = m*m+n*n+p*p;
+							TargetLocked = true;
+							TType = 1;
+							Target = tmpProjectile;
 						}
-						else
-						{*/
-							if (Tdist > m*m+n*n+p*p)
-							{
-								TargetAngle = TargetAngleTMP;
-								Tdist = m*m+n*n+p*p;
-								TargetLocked = true;
-								TType = 1;
-								Target = tmpProjectile;
-							}
-					//	}
 					}
 				}
 
@@ -1314,26 +1305,28 @@ CObject3D *GetMissileOnTargetOrientateion(
 
 
 
-							if (TType < 2 && TargetLocked)
+						if (TType < 2 && TargetLocked)
+						{
+							if (Tdist/3.0f > m*m+n*n+p*p && fabsf(TargetAngleTMP.x-CurrentObjectRotation.x)<45.0f)
 							{
-                                if (Tdist/3.0f > m*m+n*n+p*p && fabsf(TargetAngleTMP.x-CurrentObjectRotation.x)<45.0f)
-                                {
-                                    TargetAngle = TargetAngleTMP;
-                                    Tdist = m*m+n*n+p*p;
-                                    TargetLocked = true;
-                                    TType = 2;
-                                    Target = tmpG;
-                                }
+								TargetAngle = TargetAngleTMP;
+								Tdist = m*m+n*n+p*p;
+								TargetLocked = true;
+								TType = 2;
+								Target = tmpG;
 							}
-							else
-                                if (Tdist > m*m+n*n+p*p && fabsf(TargetAngleTMP.x-CurrentObjectRotation.x)<45.0f)
-                                {
-                                    TargetAngle = TargetAngleTMP;
-                                    Tdist = m*m+n*n+p*p;
-                                    TargetLocked = true;
-                                    TType = 2;
-                                    Target = tmpG;
-                                }
+						}
+						else
+						{
+							if (Tdist > m*m+n*n+p*p && fabsf(TargetAngleTMP.x-CurrentObjectRotation.x)<45.0f)
+ 							{
+								TargetAngle = TargetAngleTMP;
+								Tdist = m*m+n*n+p*p;
+								TargetLocked = true;
+								TType = 2;
+								Target = tmpG;
+							}
+						}
 					}
 				}
 
@@ -1497,36 +1490,30 @@ CObject3D *GetMissileOnTargetOrientateion(
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
 
-				/*		if (!TargetLocked)
+
+						if (TType < 4 && TargetLocked)
 						{
-							TargetAngle = TargetAngleTMP;
-							TargetLocked = true;
-							Tdist = m*m+n*n+p*p;
+							// только если в 10 раза ближе
+							if (Tdist/10.0f > m*m+n*n+p*p && fabsf(TargetAngleTMP.x-CurrentObjectRotation.x)<45.0f)
+							{
+								TargetAngle = TargetAngleTMP;
+								Tdist = m*m+n*n+p*p;
+								TargetLocked = true;
+								TType = 4;
+								Target = tmpS;
+							}
 						}
 						else
-						{*/
-							if (TType < 4 && TargetLocked)
+						{
+							if (Tdist > m*m+n*n+p*p && fabsf(TargetAngleTMP.x-CurrentObjectRotation.x)<45.0f)
 							{
-							    // только если в 10 раза ближе
-                                if (Tdist/10.0f > m*m+n*n+p*p && fabsf(TargetAngleTMP.x-CurrentObjectRotation.x)<45.0f)
-                                {
-                                    TargetAngle = TargetAngleTMP;
-                                    Tdist = m*m+n*n+p*p;
-                                    TargetLocked = true;
-                                    TType = 4;
-                                    Target = tmpS;
-                                }
+								TargetAngle = TargetAngleTMP;
+								Tdist = m*m+n*n+p*p;
+								TargetLocked = true;
+								TType = 4;
+								Target = tmpS;
 							}
-							else
-                                if (Tdist > m*m+n*n+p*p && fabsf(TargetAngleTMP.x-CurrentObjectRotation.x)<45.0f)
-                                {
-                                    TargetAngle = TargetAngleTMP;
-                                    Tdist = m*m+n*n+p*p;
-                                    TargetLocked = true;
-                                    TType = 4;
-                                    Target = tmpS;
-                                }
-						//}
+						}
 					}
 				}
 
@@ -1546,6 +1533,125 @@ CObject3D *GetMissileOnTargetOrientateion(
 	return Target;
 }
 
+
+
+
+
+//-----------------------------------------------------------------------------
+// Получаем углы поворота для ракеты наведенной на цель
+//-----------------------------------------------------------------------------
+bool GetMissileOnTargetOrientateion(
+		VECTOR3D	Location, // положение точки относительно которой будем наводить
+		VECTOR3D	CurrentObjectRotation, // текущие углы объекта
+		float		RotationMatrix[9], // матрица вращения объекта
+		CObject3D	*TargetObject, // объект на который прицеливаемся
+		VECTOR3D	*NeedAngle)// нужные углы, чтобы получить нужное направление
+{
+	// получаем точки для создания плоскости
+	VECTOR3D Orientation(0.0f, 0.0f, 1.0f);
+	Matrix33CalcPoint(&Orientation, RotationMatrix);
+	VECTOR3D PointUp(0.0f, 1.0f, 0.0f);
+	Matrix33CalcPoint(&PointUp, RotationMatrix);
+	VECTOR3D PointRight = VECTOR3D(1.0f, 0.0f, 0.0f);
+	Matrix33CalcPoint(&PointRight, RotationMatrix);
+
+	// находим плоскость, вертикальную
+	float A, B, C, D;
+	GetPlaneABCD(&A, &B, &C, &D, Location, Location+Orientation, Location+PointUp);
+
+
+	// получаем вертикальную плоскость 2 (отсечения перед-зад)
+	float A2, B2, C2, D2;
+	GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+PointRight, Location+PointUp);
+
+	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
+	VECTOR3D TargetLocation = Location;
+	*NeedAngle = CurrentObjectRotation;
+
+
+	// проверяем, спереди или сзади стоит противник
+	float tmp1 = A2 * (TargetObject->Location.x)  + B2 * (TargetObject->Location.y)  + C2 * (TargetObject->Location.z)  + D2;
+	if (tmp1>0.0f)
+	{
+		TargetLocation = TargetObject->Location+(TargetObject->AABB[0]+TargetObject->AABB[6])/2.0f;
+
+		// находим угол между плоскостью и прямой
+		float A3, B3, C3, D3;
+		GetPlaneABCD(&A3, &B3, &C3, &D3, Location, Location+Orientation, Location+PointRight);
+
+		float m = TargetLocation.x-Location.x;
+		float n = TargetLocation.y-Location.y;
+		float p = TargetLocation.z-Location.z;
+
+		// поправки к существующим углам поворота оружия
+		float sss1 = vw_sqrtf(m*m+n*n+p*p);
+		float sss2 = vw_sqrtf(A3*A3+B3*B3+C3*C3);
+		(*NeedAngle).x = CurrentObjectRotation.x;
+		if (sss1 != 0 && sss2 != 0)
+		{
+			float sss3 = (A3*m+B3*n+C3*p)/(sss1 * sss2);
+			if (sss3 >= -1.0f && sss3 <= 1.0f)
+				(*NeedAngle).x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
+		}
+
+		float sss4 = vw_sqrtf(A*A+B*B+C*C);
+		(*NeedAngle).y = CurrentObjectRotation.y;
+		if (sss1 != 0 && sss4 != 0)
+		{
+			float sss5 = (A*m+B*n+C*p)/(sss1 * sss4);
+			if (sss5 >= -1.0f && sss5 <= 1.0f)
+				(*NeedAngle).y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
+		}
+
+		return true;
+	}
+	else
+		return false;
+}
+
+
+
+
+
+//-----------------------------------------------------------------------------
+// Проверяем статус цели для ракет, жива она еще или нет
+//-----------------------------------------------------------------------------
+bool GetMissileTargetLiveStatus(CObject3D *TargetObject)
+{
+	CProjectile *tmpProjectile = StartProjectile;
+	while (tmpProjectile!=0)
+	{
+		CProjectile *tmpProjectile2 = tmpProjectile->Next;
+		if (tmpProjectile == TargetObject) return true;
+		tmpProjectile = tmpProjectile2;
+	}
+
+	CGroundObject *tmpG = StartGroundObject;
+	while (tmpG!=0)
+	{
+		CGroundObject *tmpGround2 = tmpG->Next;
+		if (tmpG == TargetObject) return true;
+		tmpG = tmpGround2;
+	}
+
+	CSpaceShip *tmp = StartSpaceShip;
+	while (tmp!=0)
+	{
+		CSpaceShip *tmpShip2 = tmp->Next;
+		if (tmp == TargetObject) return true;
+		tmp = tmpShip2;
+	}
+
+	CSpaceObject *tmpS = StartSpaceObject;
+	while (tmpS!=0)
+	{
+		CSpaceObject *tmpSpace2 = tmpS->Next;
+		if (tmpS == TargetObject) return true;
+		tmpS = tmpSpace2;
+	}
+
+	return false;
+}
 
 
 

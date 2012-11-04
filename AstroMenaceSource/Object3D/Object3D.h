@@ -337,6 +337,11 @@ void GetEnemyShipOnTargetOrientateion(int ObjectStatus, VECTOR3D Location, VECTO
 // Получение угла поворота турели на врага
 bool GetTurretOnTargetOrientateion(int ObjectStatus, VECTOR3D Location, VECTOR3D CurrentObjectRotation,
 		float RotationMatrix[9], VECTOR3D *NeedAngle, int WeaponType);
+// Получение данных для наведение ракет
+CObject3D *GetMissileOnTargetOrientateion(int	ObjectStatus, VECTOR3D Location,
+		VECTOR3D CurrentObjectRotation, float RotationMatrix[9], VECTOR3D *NeedAngle);
+bool GetMissileOnTargetOrientateion(VECTOR3D Location, VECTOR3D CurrentObjectRotation, float RotationMatrix[9], CObject3D *TargetObject, VECTOR3D *NeedAngle);
+bool GetMissileTargetLiveStatus(CObject3D *TargetObject);
 // Получение положения ближайшего врага, для мин
 CObject3D *GetCloserTargetPosition(int ObjectStatus, VECTOR3D Location);
 
