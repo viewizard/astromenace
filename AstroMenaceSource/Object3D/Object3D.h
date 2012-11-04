@@ -177,6 +177,7 @@ public:
 	VECTOR3D		OldRotationInv;
 	// положение объекта
 	VECTOR3D		Location;
+	VECTOR3D		GeometryCenterLocation; // точка "центра геометрии" внутри модели
 	// предыдущее положение объекта
 	VECTOR3D		PrevLocation;
 
