@@ -61,6 +61,9 @@ const char *ButtonTile[3] =
 "3_2_Layers"};
 
 
+const char *ButtonTextFiltr[2] =
+{"3_Bilinear",
+"3_Trilinear"};
 
 
 const char *ButtonPointLights[7] =
@@ -148,6 +151,29 @@ void OptionsAdvMenu()
 	SizeI = (170-Size)/2;
 	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(ButtonPointLights[Setup.MaxPointLights]));
 
+
+
+
+
+
+
+
+	// тип фильтрации текстуры
+	Y1 += Prir1;
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Texture_Filtering_Mode"));
+	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Setup.TextureFilteringMode==1))
+	{
+		Setup.TextureFilteringMode--;
+		if (Setup.TextureFilteringMode < 1) Setup.TextureFilteringMode = 2;
+	}
+	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Setup.TextureFilteringMode==2))
+	{
+		Setup.TextureFilteringMode++;
+		if (Setup.TextureFilteringMode > 2) Setup.TextureFilteringMode = 1;
+	}
+	Size = vw_FontSize(GetText(ButtonTextFiltr[Setup.TextureFilteringMode-1]));
+	SizeI = (170-Size)/2;//Bilinear, Trilinear
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(ButtonTextFiltr[Setup.TextureFilteringMode-1]));
 
 
 

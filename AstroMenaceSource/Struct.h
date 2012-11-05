@@ -260,6 +260,8 @@ struct GameSetup
 	// поведение камеры при стандартном отношении (перемещать-не перемешать)
 	int 	CameraModeWithStandardAspectRatio;
 
+	// синхронизация
+	int		VSync;
 	// гамма
 	int		Gamma;
 	// режим фильтра текстур

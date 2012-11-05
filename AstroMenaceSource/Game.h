@@ -321,6 +321,7 @@ void CreditsMenu();
 extern int Options_Width;
 extern int Options_Height;
 extern int Options_BPP;
+extern int Options_VSync;
 extern int Options_TexturesQuality;
 extern int Options_iAspectRatioWidth;
 
