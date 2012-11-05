@@ -218,7 +218,7 @@ void InterfaceMenu()
 	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Setup.GameWeaponInfoType==4))
 	{
 		Setup.GameWeaponInfoType++;
-		if (Setup.GameWeaponInfoType > 4) Options_TexturesQuality = 4;
+		if (Setup.GameWeaponInfoType > 4) Setup.GameWeaponInfoType = 4;
 	}
 	Size = vw_FontSize(GetText(ButtonGameWeaponInfoType[Setup.GameWeaponInfoType-1]));
 	SizeI = (170-Size)/2;

@@ -39,19 +39,12 @@ int Options_Width;
 int Options_Height;
 int Options_BPP;
 int Options_VSync;
-int Options_TexturesQuality;
 int Options_iAspectRatioWidth;
 
 
 const char *ButtonScreenModeTitle[2] =
 {"3_Screen_Mode",
 "3_Window_Size"};
-
-const char *ButtonTexturesQuality[3] =
-{"3_Low",
-"3_Medium",
-"3_High"};
-
 
 
 
@@ -428,24 +421,6 @@ void OptionsMenu()
 
 
 
-	// качество текстур
-	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Textures_Quality"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Options_TexturesQuality==1))
-	{
-		Options_TexturesQuality--;
-		if (Options_TexturesQuality < 1) Options_TexturesQuality = 3;
-	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Options_TexturesQuality==3))
-	{
-		Options_TexturesQuality++;
-		if (Options_TexturesQuality > 3) Options_TexturesQuality = 1;
-	}
-	Size = vw_FontSize(GetText(ButtonTexturesQuality[Options_TexturesQuality-1]));
-	SizeI = (170-Size)/2;//High, Medium, Low
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(ButtonTexturesQuality[Options_TexturesQuality-1]));
-
-
 
 
 
@@ -487,7 +462,6 @@ void OptionsMenu()
 		Options_Height == Setup.Height &&
 		Options_BPP == Setup.BPP &&
 		Options_VSync == Setup.VSync &&
-		Options_TexturesQuality == Setup.TexturesQuality &&
 		Options_iAspectRatioWidth == Setup.iAspectRatioWidth))
 	{
 		X = (Setup.iAspectRatioWidth - 384)/2;
@@ -513,7 +487,6 @@ void OptionsMenu()
 				Options_Height != Setup.Height ||
 				Options_BPP != Setup.BPP ||
 				Options_VSync != Setup.VSync ||
-				Options_TexturesQuality != Setup.TexturesQuality ||
 				Options_iAspectRatioWidth != Setup.iAspectRatioWidth)
 			{
 				CanQuit = false;
@@ -542,7 +515,6 @@ void OptionsMenu()
 
 			Setup.BPP = Options_BPP;
 			Setup.VSync = Options_VSync;
-			Setup.TexturesQuality = Options_TexturesQuality;
 		}
 	}
 
