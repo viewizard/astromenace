@@ -148,7 +148,7 @@
 <item id="3_Level">уровень</item>
 <item id="3_Visual_Effects_Quality">Качество Визуальных Эффектов</item>
 <item id="3_Shadow_Quality">Качество Теней</item>
-<item id="3_Sync_to_VBlank">Синхронизировать с VBlank</item>
+<item id="3_VSync">Вертикальная Синхронизация</item>
 
 
 <item id="3_Music_Volume">Громкость Музыки</item>

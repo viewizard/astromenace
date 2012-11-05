@@ -222,7 +222,7 @@ void Loop_Proc()
 	{
 		// фпс
 		if (Setup.VSync == 0) vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f", GetText("11_fps"), eFPS);
-		else vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f (%s - %s)", GetText("11_fps"), eFPS, GetText("3_Sync_to_VBlank"), GetText("1_On"));
+		else vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f (VSync - %s)", GetText("11_fps"), eFPS, GetText("1_On"));
 		// кол-во прорисовываемых триугольников
 		vw_DrawFont(6,25, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %i", GetText("11_triangles"), vw_GetPrimCount());
 	}

@@ -148,7 +148,7 @@
 <item id="3_Level">level</item>
 <item id="3_Visual_Effects_Quality">Visual Effects Quality</item>
 <item id="3_Shadow_Quality">Shadow Quality</item>
-<item id="3_Sync_to_VBlank">Sync to VBlank</item>
+<item id="3_VSync">Sync to VBlank</item>
 
 
 <item id="3_Music_Volume">Music Volume</item>

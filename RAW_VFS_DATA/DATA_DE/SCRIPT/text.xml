@@ -148,7 +148,7 @@
 <item id="3_Level">schacht</item>
 <item id="3_Visual_Effects_Quality">Visuelle Effekte Qualität</item>
 <item id="3_Shadow_Quality">Schatten Qualität</item>
-<item id="3_Sync_to_VBlank">Synchronisierung auf VBlank</item>
+<item id="3_VSync">Synchronisierung auf VBlank</item>
 
 
 <item id="3_Music_Volume">Musiklautstärke</item>
