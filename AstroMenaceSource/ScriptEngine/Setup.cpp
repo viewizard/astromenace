@@ -76,6 +76,7 @@ void InitSetup()
 	Setup.SoundSw = 10;
 	Setup.VoiceSw = 10;
 	Setup.Sound_check = true;
+	Setup.VSync = 1;
 	Setup.Gamma = 5;
 	Setup.ShowFPS = false;
 	Setup.GameWeaponInfoType = 1;
@@ -287,6 +288,7 @@ void SaveXMLSetupFile()
 	iAddLine(root, setting, "MusicSw", "value", Setup.MusicSw);
 	iAddLine(root, setting, "SoundSw", "value", Setup.SoundSw);
 	iAddLine(root, setting, "VoiceSw", "value", Setup.VoiceSw);
+	iAddLine(root, setting, "VSync", "value", Setup.VSync);
 	iAddLine(root, setting, "Gamma", "value", Setup.Gamma);
 	bAddLine(root, setting, "ShowFPS", "value", Setup.ShowFPS);
 	iAddLine(root, setting, "GameWeaponInfoType", "value", Setup.GameWeaponInfoType);
@@ -653,6 +655,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	iGetLine(root, setting, "MusicSw", "value", &Setup.MusicSw);
 	iGetLine(root, setting, "SoundSw", "value", &Setup.SoundSw);
 	iGetLine(root, setting, "VoiceSw", "value", &Setup.VoiceSw);
+	iGetLine(root, setting, "VSync", "value", &Setup.VSync);
 	iGetLine(root, setting, "Gamma", "value", &Setup.Gamma);
 	bGetLine(root, setting, "ShowFPS", "value", &Setup.ShowFPS);
 	iGetLine(root, setting, "GameWeaponInfoType", "value", &Setup.GameWeaponInfoType);

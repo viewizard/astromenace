@@ -38,6 +38,7 @@
 int Options_Width;
 int Options_Height;
 int Options_BPP;
+int Options_VSync;
 int Options_TexturesQuality;
 int Options_iAspectRatioWidth;
 
@@ -45,10 +46,6 @@ int Options_iAspectRatioWidth;
 const char *ButtonScreenModeTitle[2] =
 {"3_Screen_Mode",
 "3_Window_Size"};
-
-const char *ButtonTextFiltr[2] =
-{"3_Bilinear",
-"3_Trilinear"};
 
 const char *ButtonTexturesQuality[3] =
 {"3_Low",
@@ -380,6 +377,23 @@ void OptionsMenu()
 
 
 
+	Y1 += Prir1;
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Sync_to_VBlank"));
+	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, false) | DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, false))
+	if (NeedCheck == 0)
+	{
+		if (Options_VSync == 1) Options_VSync = 0;
+		else Options_VSync = 1;
+	}
+	Size = vw_FontSize(Options_VSync ? GetText("1_On") : GetText("1_Off"));
+	SizeI = (170-Size)/2;
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Options_VSync ? GetText("1_On") : GetText("1_Off"));
+
+
+
+
+
+
 
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Gamma"));
@@ -408,22 +422,7 @@ void OptionsMenu()
 
 
 
-	// тип фильтрации текстуры
-	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Texture_Filtering_Mode"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Setup.TextureFilteringMode==1))
-	{
-		Setup.TextureFilteringMode--;
-		if (Setup.TextureFilteringMode < 1) Setup.TextureFilteringMode = 2;
-	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Setup.TextureFilteringMode==2))
-	{
-		Setup.TextureFilteringMode++;
-		if (Setup.TextureFilteringMode > 2) Setup.TextureFilteringMode = 1;
-	}
-	Size = vw_FontSize(GetText(ButtonTextFiltr[Setup.TextureFilteringMode-1]));
-	SizeI = (170-Size)/2;//Bilinear, Trilinear
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(ButtonTextFiltr[Setup.TextureFilteringMode-1]));
+
 
 
 
@@ -487,6 +486,7 @@ void OptionsMenu()
 	if ((Options_Width == Setup.Width &&
 		Options_Height == Setup.Height &&
 		Options_BPP == Setup.BPP &&
+		Options_VSync == Setup.VSync &&
 		Options_TexturesQuality == Setup.TexturesQuality &&
 		Options_iAspectRatioWidth == Setup.iAspectRatioWidth))
 	{
@@ -512,6 +512,7 @@ void OptionsMenu()
 			if (Options_Width != Setup.Width ||
 				Options_Height != Setup.Height ||
 				Options_BPP != Setup.BPP ||
+				Options_VSync != Setup.VSync ||
 				Options_TexturesQuality != Setup.TexturesQuality ||
 				Options_iAspectRatioWidth != Setup.iAspectRatioWidth)
 			{
@@ -540,6 +541,7 @@ void OptionsMenu()
 			}
 
 			Setup.BPP = Options_BPP;
+			Setup.VSync = Options_VSync;
 			Setup.TexturesQuality = Options_TexturesQuality;
 		}
 	}

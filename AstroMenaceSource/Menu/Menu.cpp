@@ -258,6 +258,7 @@ void SetMenu(eGameStatus Menu)
 			Options_Width = Setup.Width;
 			Options_Height = Setup.Height;
 			Options_BPP = Setup.BPP;
+			Options_VSync = Setup.VSync;
 			Options_TexturesQuality = Setup.TexturesQuality;
 			Options_iAspectRatioWidth = Setup.iAspectRatioWidth;
 			break;

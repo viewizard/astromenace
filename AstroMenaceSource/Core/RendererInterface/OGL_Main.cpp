@@ -171,7 +171,7 @@ void CenterWindow(int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideo
 //------------------------------------------------------------------------------------
 // инициализация окна приложения и получение возможностей железа
 //------------------------------------------------------------------------------------
-int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideoModeW, int CurrentVideoModeH)
+int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideoModeW, int CurrentVideoModeH, int VSync)
 {
 	// самым первым делом - запоминаем все
 	UserDisplayRampStatus = SDL_GetGammaRamp(UserDisplayRamp, UserDisplayRamp+256, UserDisplayRamp+512);
@@ -202,6 +202,9 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	// ставим двойную буферизацию (теоретически, и так ее должно брать)
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
+	// синхронизация для линукс и мак ос (для виндовс может не сработать, по какой-то причине не работает в wine)
+	SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, VSync);
+
 
 	// создаем окно
 	if (SDL_SetVideoMode(Width, Height, WBits, Flags)  == NULL)
@@ -210,6 +213,16 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 		fprintf(stderr, "Can't set video mode %i x %i x %i\n\n", Width, Height, WBits);
 		return 1;
 	}
+
+
+	// работаем с синхронизацией в виндовс через расширение
+#ifdef WIN32
+	typedef void (APIENTRY * WGLSWAPINTERVALEXT) (int);
+	WGLSWAPINTERVALEXT wglSwapIntervalEXT = (WGLSWAPINTERVALEXT)
+	wglGetProcAddress("wglSwapIntervalEXT");
+	if (wglSwapIntervalEXT)
+	   wglSwapIntervalEXT(VSync);
+#endif // WIN32
 
 
 
@@ -586,19 +599,6 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 		ResolveFBO.DepthTexture = 0;
 		ResolveFBO.FrameBufferObject = 0;
 	}
-
-
-
-
-	// выключаем вертикальную синхронизацию в винде, она тут не нужна, а нам нужно как можно больше фпс
-#ifdef WIN32
-	typedef void (APIENTRY * WGLSWAPINTERVALEXT) (int);
-	WGLSWAPINTERVALEXT wglSwapIntervalEXT = (WGLSWAPINTERVALEXT)
-	wglGetProcAddress("wglSwapIntervalEXT");
-	if (wglSwapIntervalEXT)
-	   wglSwapIntervalEXT(0); // disable vertical synchronisation
-#endif // WIN32
-
 
 }
 
