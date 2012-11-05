@@ -371,7 +371,7 @@ void OptionsMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("3_Sync_to_VBlank"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "VSync (%s)", GetText("3_VSync"));
 	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, false) | DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, false))
 	if (NeedCheck == 0)
 	{
