@@ -259,7 +259,6 @@ void SetMenu(eGameStatus Menu)
 			Options_Height = Setup.Height;
 			Options_BPP = Setup.BPP;
 			Options_VSync = Setup.VSync;
-			Options_TexturesQuality = Setup.TexturesQuality;
 			Options_iAspectRatioWidth = Setup.iAspectRatioWidth;
 			break;
 
@@ -268,6 +267,7 @@ void SetMenu(eGameStatus Menu)
 			Options_UseGLSL = Setup.UseGLSL;
 			Options_MSAA = Setup.MSAA;
 			Options_CSAA = Setup.CSAA;
+			Options_TexturesQuality = Setup.TexturesQuality;
 			Options_ShadowMap = Setup.ShadowMap;
 			break;
 

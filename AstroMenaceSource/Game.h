@@ -322,7 +322,6 @@ extern int Options_Width;
 extern int Options_Height;
 extern int Options_BPP;
 extern int Options_VSync;
-extern int Options_TexturesQuality;
 extern int Options_iAspectRatioWidth;
 
 void OptionsMenu();
@@ -388,6 +387,7 @@ extern int Options_UseGLSL;
 extern int Options_MSAA;
 extern int Options_CSAA;
 extern int Options_ShadowMap;
+extern int Options_TexturesQuality;
 
 void OptionsAdvMenu();
 

@@ -40,6 +40,7 @@ int Options_UseGLSL;
 int Options_MSAA;
 int Options_CSAA;
 int Options_ShadowMap;
+int Options_TexturesQuality;
 
 extern CSpaceStars *psSpaceStatic;
 
@@ -74,6 +75,12 @@ const char *ButtonPointLights[7] =
 "3_4_Lights",
 "3_5_Lights",
 "3_6_Lights"};
+
+
+const char *ButtonTexturesQuality[3] =
+{"3_Low",
+"3_Medium",
+"3_High"};
 
 
 
@@ -151,6 +158,28 @@ void OptionsAdvMenu()
 	SizeI = (170-Size)/2;
 	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(ButtonPointLights[Setup.MaxPointLights]));
 
+
+
+
+
+
+
+	// качество текстур
+	Y1 += Prir1;
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Textures_Quality"));
+	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Options_TexturesQuality==1))
+	{
+		Options_TexturesQuality--;
+		if (Options_TexturesQuality < 1) Options_TexturesQuality = 3;
+	}
+	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Options_TexturesQuality==3))
+	{
+		Options_TexturesQuality++;
+		if (Options_TexturesQuality > 3) Options_TexturesQuality = 1;
+	}
+	Size = vw_FontSize(GetText(ButtonTexturesQuality[Options_TexturesQuality-1]));
+	SizeI = (170-Size)/2;//High, Medium, Low
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(ButtonTexturesQuality[Options_TexturesQuality-1]));
 
 
 
@@ -436,6 +465,7 @@ void OptionsAdvMenu()
 		Options_MSAA == Setup.MSAA &&
 		Options_CSAA == Setup.CSAA &&
 		Options_UseGLSL == Setup.UseGLSL &&
+		Options_TexturesQuality == Setup.TexturesQuality &&
 		Options_ShadowMap == Setup.ShadowMap)
 	{
 		X = (Setup.iAspectRatioWidth - 384)/2;
@@ -461,6 +491,7 @@ void OptionsAdvMenu()
 				Options_MSAA != Setup.MSAA ||
 				Options_CSAA != Setup.CSAA ||
 				Options_UseGLSL != Setup.UseGLSL ||
+				Options_TexturesQuality != Setup.TexturesQuality ||
 				Options_ShadowMap != Setup.ShadowMap)
 			{
 				CanQuit = false;
@@ -473,6 +504,7 @@ void OptionsAdvMenu()
 			Setup.MSAA = Options_MSAA;
 			Setup.CSAA = Options_CSAA;
 			Setup.ShadowMap = Options_ShadowMap;
+			Setup.TexturesQuality = Options_TexturesQuality;
 		}
 	}
 }
