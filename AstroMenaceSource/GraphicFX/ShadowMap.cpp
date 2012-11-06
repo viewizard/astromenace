@@ -51,7 +51,6 @@ float ShadowMap_Get_yPixelOffset(){return yPixelOffset;}
 
 eFBO *CurrentSystemFBO = 0;
 int ShadowMapViewPort_x, ShadowMapViewPort_y, ShadowMapViewPort_width, ShadowMapViewPort_height;
-float ShadowMapViewPort_znear, ShadowMapViewPort_zfar;
 
 
 
@@ -112,10 +111,10 @@ void ShadowMap_StartRenderToFBO(VECTOR3D FocusPointCorrection, float Distance, f
 	// сохраняем модельвью матрицу
 	vw_PushMatrix();
 
-	// сохраняем данные вьюпорта
-	vw_GetViewport(&ShadowMapViewPort_x, &ShadowMapViewPort_y, &ShadowMapViewPort_width, &ShadowMapViewPort_height, &ShadowMapViewPort_znear, &ShadowMapViewPort_zfar);
+	// сохраняем данные вьюпорта (параметры буфера глубины не получаем, всегда используем его полностью, 0-1)
+	vw_GetViewport(&ShadowMapViewPort_x, &ShadowMapViewPort_y, &ShadowMapViewPort_width, &ShadowMapViewPort_height);
 	// устанавливаем вьюпорт согласно нашему фбо для шадовмепинга
-	vw_SetViewport(0, 0, ShadowMapFBO->Width, ShadowMapFBO->Height, 0.045f, fFarClip, RI_BL_CORNER);
+	vw_SetViewport(0, 0, ShadowMapFBO->Width, ShadowMapFBO->Height, 0.01f, 1.0f, RI_BL_CORNER);
 
 	// сохраняем данные текущего фбо или фб
 	CurrentSystemFBO = vw_GetCurrentFBO();
@@ -132,7 +131,7 @@ void ShadowMap_StartRenderToFBO(VECTOR3D FocusPointCorrection, float Distance, f
 	vw_PushMatrix();
 	vw_MatrixMode(RI_MODELVIEW_MATRIX);
 
-	vw_ResizeScene(45.0f, (ShadowMapFBO->Width*1.0f)/(ShadowMapFBO->Height*1.0f), 0.045f, fFarClip);
+	vw_ResizeScene(45.0f, (ShadowMapFBO->Width*1.0f)/(ShadowMapFBO->Height*1.0f), 1.0f, fFarClip);
 	vw_GetMatrix(RI_PROJECTION_MATRIX, ShadowMap_LightProjectionMatrix);
 
 
@@ -175,7 +174,7 @@ void ShadowMap_EndRenderToFBO()
 //	vw_DrawColorFBO(ShadowMapFBO, CurrentSystemFBO);
 
 	// устанавливаем первоначальный вьюпорт
-	vw_SetViewport(ShadowMapViewPort_x, ShadowMapViewPort_y, ShadowMapViewPort_width, ShadowMapViewPort_height, ShadowMapViewPort_znear, ShadowMapViewPort_zfar, RI_BL_CORNER);
+	vw_SetViewport(ShadowMapViewPort_x, ShadowMapViewPort_y, ShadowMapViewPort_width, ShadowMapViewPort_height, 0.0f, 1.0f, RI_BL_CORNER);
 	// восстанавливаем матрицу проекции
 	vw_MatrixMode(RI_PROJECTION_MATRIX);
 	vw_PopMatrix();

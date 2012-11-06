@@ -450,7 +450,7 @@ bool CGroundObject::Update(float Time)
 		if (TargetHorizObject == 0 && TargetVertObject == 0)
 		if (!DoNotCalculateRotation) // и если нужно считать...
 		{
-			RotationWeapon = VECTOR3D(TargetVertObjectNeedAngle, TargetHorizObjectNeedAngle, 0.0f)+Rotation;
+			RotationWeapon = Rotation - VECTOR3D(TargetVertObjectNeedAngle, TargetHorizObjectNeedAngle, 0.0f);
 		}
 
 

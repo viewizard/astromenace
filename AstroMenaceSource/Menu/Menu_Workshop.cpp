@@ -462,13 +462,10 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 	if (SpaceFighter == 0) return;
 
 	int x, y, width, height;
-	float znear, zfar;
-	vw_GetViewport(&x, &y, &width, &height, &znear, &zfar);
+	vw_GetViewport(&x, &y, &width, &height);
 
-	int W, H;
-	vw_GetViewport(0, 0, &W, &H);
-	float AWw = W*1.0f;
-	float AHw = H*1.0f;
+	float AWw = width*1.0f;
+	float AHw = height*1.0f;
 	float AW;
 	float AH;
 	bool ASpresent = false;
@@ -483,6 +480,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 
 		vw_SetViewport((int)((Setup.iAspectRatioWidth/2-512)/(AW/AWw)), 0, (int)(1024/(AW/AWw)), (int)(768/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
 		vw_ResizeScene(45.0f, 1024.0f/768.0f, 1.0f, 2000.0f);
+		vw_Clear(RI_DEPTH_BUFFER);
 
 		vw_LoadIdentity();
 		vw_SetCameraLocation(VECTOR3D(1000+WorkShopPointCamera.x,-1000+WorkShopPointCamera.y,WorkShopPointCamera.z));
@@ -527,7 +525,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		vw_DrawParticleSystems(SpaceFighter->Engine, SpaceFighter->EngineQuantity);
 
 		vw_SetCameraLocation(VECTOR3D(-50,30,-50));
-		vw_SetViewport(x, y, width, height, znear, zfar);
+		vw_SetViewport(x, y, width, height, 0.0f, 1.0f);
 		vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 		return;
 	}
@@ -538,8 +536,9 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 	{
 		WorkShopPointCamera = VECTOR3D(0.0f, 35.0f, -0.01f);
 		SpaceFighter->SetRotation(VECTOR3D(0.0f, 0.0f, CurentDeviation));
-		vw_SetViewport((int)((Setup.iAspectRatioWidth/2)/(AW/AWw)), 30, (int)(512/(AW/AWw)), (int)(638/(AH/AHw)), 0.0f, 0.3f, RI_UL_CORNER);
+		vw_SetViewport((int)((Setup.iAspectRatioWidth/2)/(AW/AWw)), 30, (int)(512/(AW/AWw)), (int)(638/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
 		vw_ResizeScene(45.0f, 512.0f/608.0f, 1.0f, 2000.0f);
+		vw_Clear(RI_DEPTH_BUFFER);
 		vw_LoadIdentity();
 		vw_SetCameraLocation(VECTOR3D(1000+WorkShopPointCamera.x,-1000+WorkShopPointCamera.y,WorkShopPointCamera.z));
 		vw_SetCameraMoveAroundPoint(VECTOR3D(1000,-1000, 0.0f), 0.0f, VECTOR3D(0.0f, 180.0f, 0.0f));
@@ -583,7 +582,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		vw_DrawParticleSystems(SpaceFighter->Engine, SpaceFighter->EngineQuantity);
 
 		vw_SetCameraLocation(VECTOR3D(-50,30,-50));
-		vw_SetViewport(x, y, width, height, znear, zfar);
+		vw_SetViewport(x, y, width, height, 0.0f, 1.0f);
 		vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 		return;
 	}
@@ -597,8 +596,9 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 	{
 		WorkShopPointCamera = VECTOR3D(0.0f, 10.0f, -34.0f);
 		SpaceFighter->SetRotation(VECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
-		vw_SetViewport((int)((Setup.iAspectRatioWidth/2)/(AW/AWw)), (int)(0/(AH/AHw)), (int)(512/(AW/AWw)), (int)(512/(AH/AHw)), 0.0f, 0.3f, RI_UL_CORNER);
+		vw_SetViewport((int)((Setup.iAspectRatioWidth/2)/(AW/AWw)), (int)(0/(AH/AHw)), (int)(512/(AW/AWw)), (int)(512/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
 		vw_ResizeScene(45.0f, 512.0f/512.0f, 1.0f, 2000.0f);
+		vw_Clear(RI_DEPTH_BUFFER);
 		vw_LoadIdentity();
 		vw_SetCameraLocation(VECTOR3D(1000+WorkShopPointCamera.x/1.2f,-1000+WorkShopPointCamera.y/1.2f,WorkShopPointCamera.z/1.2f));
 		vw_SetCameraMoveAroundPoint(VECTOR3D(1000,-1000-SpaceFighter->AABB[6].y-SpaceFighter->Height/3,0), 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
@@ -609,8 +609,9 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		VECTOR3D PointCameraTMP = WorkShopPointCamera;
 		RotatePoint(&PointCameraTMP, VECTOR3D(0.0f, -90.0f, 0.0f));
 		SpaceFighter->SetRotation(VECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
-		vw_SetViewport((int)((Setup.iAspectRatioWidth/2-512)/(AW/AWw)), (int)(0/(AH/AHw)), (int)(512/(AW/AWw)), (int)(512/(AH/AHw)), 0.0f, 0.3f, RI_UL_CORNER);
+		vw_SetViewport((int)((Setup.iAspectRatioWidth/2-512)/(AW/AWw)), (int)(0/(AH/AHw)), (int)(512/(AW/AWw)), (int)(512/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
 		vw_ResizeScene(45.0f, 512.0f/512.0f, 1.0f, 2000.0f);
+		vw_Clear(RI_DEPTH_BUFFER);
 		vw_LoadIdentity();
 		vw_SetCameraLocation(VECTOR3D(2000+PointCameraTMP.x/1.2f,-2000+PointCameraTMP.y/1.2f,PointCameraTMP.z/1.2f));
 		vw_SetCameraMoveAroundPoint(VECTOR3D(2000,-2000-SpaceFighter->AABB[6].y-SpaceFighter->Height/3,0), 0.0f, VECTOR3D(0.0f, 170.0f, 0.0f));
@@ -656,7 +657,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 	vw_DrawParticleSystems(SpaceFighter->Engine, SpaceFighter->EngineQuantity);
 
 	vw_SetCameraLocation(VECTOR3D(-50,30,-50));
-	vw_SetViewport(x, y, width, height, znear, zfar);
+	vw_SetViewport(x, y, width, height, 0.0f, 1.0f);
 	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 
 }
@@ -668,14 +669,10 @@ void WorkshopDrawWeapon(CWeapon *Weapon)
 	if (Weapon == 0) return;
 
 	int x, y, width, height;
-	float znear, zfar;
-	vw_GetViewport(&x, &y, &width, &height, &znear, &zfar);
+	vw_GetViewport(&x, &y, &width, &height);
 
-
-	int W, H;
-	vw_GetViewport(0, 0, &W, &H);
-	float AWw = W*1.0f;
-	float AHw = H*1.0f;
+	float AWw = width*1.0f;
+	float AHw = height*1.0f;
 	float AW;
 	float AH;
 	bool ASpresent=false;
@@ -692,8 +689,9 @@ void WorkshopDrawWeapon(CWeapon *Weapon)
 	RotatePoint(&PointCameraTMP, VECTOR3D(0.0f, -90.0f, 0.0f));
 
 	Weapon->SetRotation(VECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
-	vw_SetViewport((int)((Setup.iAspectRatioWidth/2-448)/(AW/AWw)), (int)(105/(AH/AHw)), (int)(384/(AW/AWw)), (int)(350/(AH/AHw)), 0.0f, 0.3f, RI_UL_CORNER);
+	vw_SetViewport((int)((Setup.iAspectRatioWidth/2-448)/(AW/AWw)), (int)(105/(AH/AHw)), (int)(384/(AW/AWw)), (int)(350/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
 	vw_ResizeScene(45.0f, 384.0f/350.0f, 1.0f, 2000.0f);
+	vw_Clear(RI_DEPTH_BUFFER);
 	vw_LoadIdentity();
 	vw_SetCameraLocation(VECTOR3D(3000+PointCameraTMP.x,-3000+PointCameraTMP.y,PointCameraTMP.z));
 	vw_SetCameraMoveAroundPoint(VECTOR3D(3000,-3000,0), 0.0f, VECTOR3D(0.0f, 170.0f, 0.0f));
@@ -703,6 +701,6 @@ void WorkshopDrawWeapon(CWeapon *Weapon)
 
 	vw_SetCameraLocation(VECTOR3D(-50,30,-50));
 	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
-	vw_SetViewport(x, y, width, height, znear, zfar);
+	vw_SetViewport(x, y, width, height, 0.0f, 1.0f);
 }
 
