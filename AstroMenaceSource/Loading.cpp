@@ -259,8 +259,8 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/MENU/weapon_on_icon.tga",		0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f},
 {"DATA/MENU/weapon_empty_icon.tga",		0, 256, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f},
 // курсор
-{"DATA/cursor.tga",						0, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f},
-{"DATA/cursor_shadow.tga",				0, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f},
+{"DATA/MENU/cursor.tga",				0, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f},
+{"DATA/MENU/cursor_shadow.tga",			0, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f},
 // текстура брони для кораблей землян
 {"DATA/MODELS/EARTHFIGHTER/sf-text00.jpg",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f},
 {"DATA/MODELS/EARTHFIGHTER/sf-text05.jpg",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f},
@@ -363,8 +363,8 @@ const int	GameLevelsLoadListCount = 82+41+35;
 LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {
 // 2д часть
-{"DATA/cursor.tga",								0, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f},
-{"DATA/cursor_shadow.tga",						0, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f},
+{"DATA/MENU/cursor.tga",						0, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f},
+{"DATA/MENU/cursor_shadow.tga",					0, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f},
 {"DATA/MENU/blackpoint.tga",					0, 0, true, 255,255,255, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f},
 {"DATA/MENU/dialog512_256.tga",					0, 706, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f},
 {"DATA/MENU/button_dialog200_out.tga",			0, 57, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f},

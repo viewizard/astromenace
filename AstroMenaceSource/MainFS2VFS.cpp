@@ -36,7 +36,7 @@
 // для генерации используем (или как удобно)
 // find ./ -type f | grep -v ".svn" > list.txt
 
-const int	ConvertListCount = 514;
+const int	ConvertListCount = 512;
 const char *ConvertList[ConvertListCount] =
 {"DATA_RU/VOICE/EngineMalfunction.wav",
 "DATA_RU/VOICE/WeaponDamaged.wav",
@@ -54,7 +54,6 @@ const char *ConvertList[ConvertListCount] =
 "DATA_RU/GAME/pause.tga",
 "DATA_RU/GAME/mission.tga",
 "DATA_RU/GAME/missionfailed.tga",
-"DATA_RU/SCRIPT/text.xml",
 "LOADING/loading_back.tga",
 "MENU/weapon_empty_icon.tga",
 "MENU/system_engine1.tga",
@@ -94,7 +93,7 @@ const char *ConvertList[ConvertListCount] =
 "CREDITS/codeblocks.tga",
 "CREDITS/openal.tga",
 "CREDITS/svn.tga",
-"cursor.tga",
+"MENU/cursor.tga",
 "DATA_EN/VOICE/EngineMalfunction.wav",
 "DATA_EN/VOICE/WeaponDamaged.wav",
 "DATA_EN/VOICE/MissileDetected.wav",
@@ -111,7 +110,6 @@ const char *ConvertList[ConvertListCount] =
 "DATA_EN/GAME/pause.tga",
 "DATA_EN/GAME/mission.tga",
 "DATA_EN/GAME/missionfailed.tga",
-"DATA_EN/SCRIPT/text.xml",
 "SFX/weaponfire12.wav",
 "SFX/drag_offslot.wav",
 "SFX/menu_click.wav",
@@ -480,8 +478,7 @@ const char *ConvertList[ConvertListCount] =
 "DATA_DE/GAME/pause.tga",
 "DATA_DE/GAME/mission.tga",
 "DATA_DE/GAME/missionfailed.tga",
-"DATA_DE/SCRIPT/text.xml",
-"cursor_shadow.tga",
+"MENU/cursor_shadow.tga",
 "MUSIC/boss-intro.ogg",
 "MUSIC/menu.ogg",
 "MUSIC/boss-loop.ogg",
@@ -551,7 +548,8 @@ const char *ConvertList[ConvertListCount] =
 "FONT/FreeSerifBold.ttf",
 "FONT/Ubuntu-B.ttf",
 "CREDITS/freetype.tga",
-"CREDITS/oggvorbis.tga"};
+"CREDITS/oggvorbis.tga",
+"text.csv"};
 
 
 
