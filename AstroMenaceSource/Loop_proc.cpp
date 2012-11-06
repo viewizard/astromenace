@@ -190,23 +190,23 @@ void Loop_Proc()
 
 		SetRect(&SrcRest,0,0,64,64 );
 		SetRect(&DstRest,mX-13,mY-13,mX+64-13,mY+64-13 );
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/cursor_shadow.tga"), true, 1.0f);
+		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/cursor_shadow.tga"), true, 1.0f);
 		switch (CurrentCursorStatus)
 		{
 			case 0:
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/cursor.tga"), true, 0.80f, 0.0f, RI_UL_CORNER, 0.8f, 0.7f, 0.0f);
+				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/cursor.tga"), true, 0.80f, 0.0f, RI_UL_CORNER, 0.8f, 0.7f, 0.0f);
 				break;
 
 			case 1:
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/cursor.tga"), true, CurrentCursorFlash, 0.0f, RI_UL_CORNER, 0.0f, 1.0f, 0.0f);
+				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/cursor.tga"), true, CurrentCursorFlash, 0.0f, RI_UL_CORNER, 0.0f, 1.0f, 0.0f);
 				break;
 
 			case 2:
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/cursor.tga"), true, CurrentCursorFlash, 0.0f, RI_UL_CORNER, 1.0f, 0.2f, 0.0f);
+				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/cursor.tga"), true, CurrentCursorFlash, 0.0f, RI_UL_CORNER, 1.0f, 0.2f, 0.0f);
 				break;
 
 			case 3:
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/cursor.tga"), true, CurrentCursorFlash, 0.0f, RI_UL_CORNER, 0.8f, 0.7f, 0.0f);
+				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/cursor.tga"), true, CurrentCursorFlash, 0.0f, RI_UL_CORNER, 0.8f, 0.7f, 0.0f);
 				break;
 		}
 	}

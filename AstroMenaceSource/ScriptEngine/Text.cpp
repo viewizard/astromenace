@@ -34,20 +34,110 @@
 #include "../Game.h"
 
 
-// основной документ
-TiXmlDocument	xmlTextDoc;
-// основной элемент
-TiXmlElement	*xmlAstroMenaceText = 0;
-// буфер с текстом нашего хмл
-char 			*TextDocBuffer = 0;
+
+struct sTextNode
+{
+	char *id;
+	char *en;
+	char *de;
+	char *ru;
+
+	sTextNode *Next;
+	sTextNode *Prev;
+};
+
+
+sTextNode *StartTextNode;
+sTextNode *EndTextNode;
+
+// буфер со всем текстом
+char *TextBuffer = 0;
+
+
+
+
+
+// присоединяем к списку
+void vw_AttachTextNode(sTextNode* TextNode)
+{
+	if (TextNode == 0) return;
+
+	// первый в списке...
+	if (EndTextNode == 0)
+	{
+		TextNode->Prev = 0;
+		TextNode->Next = 0;
+		StartTextNode = TextNode;
+		EndTextNode = TextNode;
+	}
+	else // продолжаем заполнение...
+	{
+		TextNode->Prev = EndTextNode;
+		TextNode->Next = 0;
+		EndTextNode->Next = TextNode;
+		EndTextNode = TextNode;
+	}
+}
+// удаляем из списка
+void vw_DetachTextNode(sTextNode* TextNode)
+{
+	if (TextNode == 0) return;
+
+	// переустанавливаем указатели...
+	if (StartTextNode == TextNode) StartTextNode = TextNode->Next;
+	if (EndTextNode == TextNode) EndTextNode = TextNode->Prev;
+
+	if (TextNode->Next != 0) TextNode->Next->Prev = TextNode->Prev;
+		else if (TextNode->Prev != 0) TextNode->Prev->Next = 0;
+	if (TextNode->Prev != 0) TextNode->Prev->Next = TextNode->Next;
+		else if (TextNode->Next != 0) TextNode->Next->Prev = 0;
+}
+// переприсоединяе как первый в списке
+void vw_ReAttachTextNodeAsFirst(sTextNode* TextNode)
+{
+	if (TextNode == 0) return;
+
+	vw_DetachTextNode(TextNode);
+
+	// если список пустой - просто присоединяем к списку и все
+	if (StartTextNode == 0)
+	{
+		vw_AttachTextNode(TextNode);
+	}
+	else
+	{
+		TextNode->Next = StartTextNode;
+		TextNode->Prev = 0;
+		StartTextNode->Prev = TextNode;
+		StartTextNode = TextNode;
+	}
+}
+
+
+
+
+
+
+
 
 //-----------------------------------------------------------------------------
 // освобождаем данные
 //-----------------------------------------------------------------------------
 void ReleaseGameText()
 {
-	xmlTextDoc.Clear();
-	if (TextDocBuffer != 0) {delete [] TextDocBuffer; TextDocBuffer = 0;}
+	// Чистка памяти...
+	sTextNode *Tmp = StartTextNode;
+	while (Tmp != 0)
+	{
+		sTextNode *Tmp1 = Tmp->Next;
+		delete Tmp;
+		Tmp = Tmp1;
+	}
+
+	StartTextNode = 0;
+	EndTextNode = 0;
+
+	if (TextBuffer != 0) {delete [] TextBuffer; TextBuffer = 0;}
 }
 
 
@@ -56,42 +146,105 @@ void ReleaseGameText()
 //-----------------------------------------------------------------------------
 void InitGameText(const char *FileName)
 {
+	ReleaseGameText();
+
 	// читаем данные
 	eFILE *TempF = vw_fopen(FileName);
-	if (TextDocBuffer != 0) {delete [] TextDocBuffer; TextDocBuffer = 0;}
 
-	if (TempF == NULL)
-	{
-		ReleaseGameText();
-		return;
-	}
+	if (TempF == NULL) return;
 
 	TempF->fseek(0, SEEK_END);
 	int DataLength = TempF->ftell();
 	TempF->fseek(0, SEEK_SET);
-	TextDocBuffer = new char[DataLength];
-	TempF->fread(TextDocBuffer, DataLength, 1);
+	TextBuffer = new char[DataLength];
+	TempF->fread(TextBuffer, DataLength, 1);
 	vw_fclose(TempF);
-	xmlTextDoc.Parse((const char*)TextDocBuffer, 0, TIXML_ENCODING_UTF8);
 
-	// берем первый элемент в скрипте
-	xmlAstroMenaceText = xmlTextDoc.FirstChildElement("AstroMenaceText");
+
+	// парсим формат .csv
+	// не делаем проверок формата, символы между столбцами - ';', символ конца строки '\n'
+	// вся работа строится на TextBuffer, другой памяти не выделяем - только ссылаемся
+	// указателями на данные в этом буфере (предварительно поставив 0 для разграничения слов и предложений)
+	// ! важно - в конце файла должен быть перевод на новую строку, чтобы поставить ноль и сформировать конец строки, заменив символ '\n'
+
+	char *Buffer = TextBuffer;
+
+	// первую строчку пропускаем всегда, она не содержит полезной информации
+	while(Buffer[0] != '\n') {Buffer++;DataLength--;}
+	Buffer++;DataLength--;
+
+	// крутим пока не обработали все строки (3 - это три ';' - минимум для строки в нашем случае)
+	while(DataLength > 3)
+	{
+		char *id = 0;
+		char *en = 0;
+		char *de = 0;
+		char *ru = 0;
+
+
+		// проверяем id
+		id = Buffer;
+		// если у нас "пустой" id - значит это пустая строка, и надо переходить к следующей
+		if (id[0] == ';')
+		{
+			while(Buffer[0] != '\n') {Buffer++;DataLength--;}
+			Buffer++;DataLength--;
+			continue;
+		}
+		// ищем маркер следующего текстового столбца
+		while(Buffer[0] != ';') {Buffer++;DataLength--;}
+		// нашли, ставим туда ноль, чтобы ноль-терминальная строка была завершенной
+		Buffer[0] = 0;
+		Buffer++;DataLength--;
+
+
+		// проверяем en
+		en = Buffer;
+		// ищем маркер следующего текстового столбца
+		while(Buffer[0] != ';') {Buffer++;DataLength--;}
+		// нашли, ставим туда ноль, чтобы ноль-терминальная строка была завершенной
+		Buffer[0] = 0;
+		Buffer++;DataLength--;
+
+		// проверяем de
+		de = Buffer;
+		// ищем маркер следующего текстового столбца
+		while(Buffer[0] != ';') {Buffer++;DataLength--;}
+		// нашли, ставим туда ноль, чтобы ноль-терминальная строка была завершенной
+		Buffer[0] = 0;
+		Buffer++;DataLength--;
+
+		// проверяем ru
+		ru = Buffer;
+		// ищем маркер следующего текстового столбца
+		while(Buffer[0] != '\n') {Buffer++;DataLength--;}
+		// нашли, ставим туда ноль, чтобы ноль-терминальная строка была завершенной
+		Buffer[0] = 0;
+		Buffer++;DataLength--;
+
+
+		// все компоненты собраны, делаем ноду
+		sTextNode *NewTextNode;
+		NewTextNode = new sTextNode;
+
+		vw_AttachTextNode(NewTextNode);
+
+		NewTextNode->id = id;
+		NewTextNode->en = en;
+		NewTextNode->de = de;
+		NewTextNode->ru = ru;
+	}
+
 }
 
 
 
 
 // проверяем только цифры
-int strcmpNum(const char *a, const char *b)
+int strcmpIdNum(const char *a, const char *b)
 {
-	while(*a == *b)
-	{
-		if(*a == '\0')return 0;
-		a++;
-		b++;
-	}
-	// если дошли до этого - все нормально
-	if(*b == '_')return 0;
+	// если первые 2 символа одинаковые - значит по номеру 100% совпадают
+	if ((a[0] == b[0]) & (a[1] == b[1])) return 0;
 
 	return 1;
 }
@@ -102,101 +255,144 @@ int strcmpNum(const char *a, const char *b)
 //-----------------------------------------------------------------------------
 // получаем текст из файлы
 //-----------------------------------------------------------------------------
-const char NoText[] = " ";
 const char *GetText(const char *ItemID)
 {
-	if (TextDocBuffer == 0) return NoText;
-	if (xmlAstroMenaceText == 0) return NoText;
+	if (TextBuffer == 0) return 0;
+	if (ItemID == 0) return 0;
 
-
-	TiXmlElement *xmlTextElem = xmlAstroMenaceText->FirstChildElement("itemlist");
-
-
-
-
-	while (xmlTextElem)
+	sTextNode *Tmp = StartTextNode;
+	while (Tmp != 0)
 	{
-		// проверяем номер, будет проверять только цифры
-		if (!strcmpNum(xmlTextElem->Attribute("id"), ItemID))
+		sTextNode *Tmp1 = Tmp->Next;
+
+		if (!strcmpIdNum(Tmp->id, ItemID))
+		if (!vw_strcmp(ItemID, Tmp->id))
 		{
-			TiXmlElement *xmlTextElem2 = xmlTextElem->FirstChildElement("item");
+			// перемещаем его на первое место в списке для ускорения поиска в след. проходах
+			vw_ReAttachTextNodeAsFirst(Tmp);
 
-			while (xmlTextElem2)
+			// возвращаем с учетом текущего языка
+			switch(Setup.MenuLanguage)
 			{
-				if (!vw_strcmp(ItemID, xmlTextElem2->Attribute("id")))
-				{
-					return xmlTextElem2->GetText();
-				}
+				case 1: return Tmp->en;
+				case 2: return Tmp->de;
+				case 3: return Tmp->ru;
 
-
-				xmlTextElem2 = xmlTextElem2->NextSiblingElement("item");
+				default: return 0;
 			}
-
 		}
 
-
-		xmlTextElem = xmlTextElem->NextSiblingElement("itemlist");
+		Tmp = Tmp1;
 	}
 
-	return NoText;
+	fprintf(stderr, "Text not found, ID: %s\n", ItemID);
+	return 0;
 }
 
 
 
 
 //-----------------------------------------------------------------------------
-// проверяем, есть ли символ в фонте
+// проверяем, есть ли символ в фонте, перебираем по тексту всех языков
 //-----------------------------------------------------------------------------
 int CheckFontCharsInText()
 {
-	if (TextDocBuffer == 0) return -1;
-	if (xmlAstroMenaceText == 0) return -1;
-
-
-	TiXmlElement *xmlTextElem = xmlAstroMenaceText->FirstChildElement("itemlist");
+	if (TextBuffer == 0) return -1;
 
 
 	printf("Font characters detection start.\n");
 
-	while (xmlTextElem)
-	{
 
-		TiXmlElement *xmlTextElem2 = xmlTextElem->FirstChildElement("item");
-		while (xmlTextElem2)
+	sTextNode *Tmp = StartTextNode;
+	while (Tmp != 0)
+	{
+		sTextNode *Tmp1 = Tmp->Next;
+
+		const char *CharsList = Tmp->en;
+
+		if (CharsList!=0)
 		{
-				const char *CharsList = xmlTextElem2->GetText();
-				if (CharsList!=0)
+			// перебираем всю строку
+			while (strlen(CharsList) > 0)
+			{
+				unsigned CurrentChar;
+				// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
+				CharsList = utf8_to_utf32(CharsList, &CurrentChar);
+				// загружаем символ и все необходимые данные для него
+				if (!vw_FindFontCharByUTF32(CurrentChar))
 				{
-					// перебираем всю строку
-					while (strlen(CharsList) > 0)
+					printf("!!! FontChar was not created, Unicode: " );
+					if ( CurrentChar < 0x80 && CurrentChar > 0 )
 					{
-						unsigned CurrentChar;
-						// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
-						CharsList = utf8_to_utf32(CharsList, &CurrentChar);
-						// загружаем символ и все необходимые данные для него
-						if (!vw_FindFontCharByUTF32(CurrentChar))
-						{
-							printf("!!! FontChar was not created, Unicode: " );
-							if ( CurrentChar < 0x80 && CurrentChar > 0 )
-							{
-								printf( "%c (0x%04X)\n", (char)CurrentChar,
-										CurrentChar );
-							}
-							else
-							{
-								printf( "? (0x%04X)\n", CurrentChar );
-							}
-						}
+						printf( "%c (0x%04X)\n", (char)CurrentChar, CurrentChar );
+					}
+					else
+					{
+						printf( "? (0x%04X)\n", CurrentChar );
 					}
 				}
-
-
-			xmlTextElem2 = xmlTextElem2->NextSiblingElement("item");
+			}
 		}
 
 
-		xmlTextElem = xmlTextElem->NextSiblingElement("itemlist");
+		CharsList = Tmp->de;
+
+		if (CharsList!=0)
+		{
+			// перебираем всю строку
+			while (strlen(CharsList) > 0)
+			{
+				unsigned CurrentChar;
+				// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
+				CharsList = utf8_to_utf32(CharsList, &CurrentChar);
+				// загружаем символ и все необходимые данные для него
+				if (!vw_FindFontCharByUTF32(CurrentChar))
+				{
+					printf("!!! FontChar was not created, Unicode: " );
+					if ( CurrentChar < 0x80 && CurrentChar > 0 )
+					{
+						printf( "%c (0x%04X)\n", (char)CurrentChar, CurrentChar );
+					}
+					else
+					{
+						printf( "? (0x%04X)\n", CurrentChar );
+					}
+				}
+			}
+		}
+
+
+		CharsList = Tmp->ru;
+
+		if (CharsList!=0)
+		{
+			// перебираем всю строку
+			while (strlen(CharsList) > 0)
+			{
+				unsigned CurrentChar;
+				// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
+				CharsList = utf8_to_utf32(CharsList, &CurrentChar);
+				// загружаем символ и все необходимые данные для него
+				if (!vw_FindFontCharByUTF32(CurrentChar))
+				{
+					printf("!!! FontChar was not created, Unicode: " );
+					if ( CurrentChar < 0x80 && CurrentChar > 0 )
+					{
+						printf( "%c (0x%04X)\n", (char)CurrentChar, CurrentChar );
+					}
+					else
+					{
+						printf( "? (0x%04X)\n", CurrentChar );
+					}
+				}
+			}
+		}
+
+
+		Tmp = Tmp1;
 	}
+
+
 
 	printf("Font characters detection end.\n\n");
 
