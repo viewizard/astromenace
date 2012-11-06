@@ -69,16 +69,10 @@ void DrawAllObject3D(int DrawType)
 	// ставим всегда меньше или равно!
 	vw_DepthTest(true, RI_LESSEQUAL);
 
-	// т.к. мы в игре не на все объекты отбрасываем тени, смотрим, есть ли вообще эти объекты, надо ли вообще работать с шадовмепом
-	int ObjectsWithShadow = 1;
-	if (Setup.ShadowMap > 0)
-		if (DrawType == 2)
-			ObjectsWithShadow = DrawAllSpaceObjectCount(13) + DrawAllSpaceObjectCount(15);
-
 
 	bool ShadowMap = false;
 
-	if ((Setup.ShadowMap > 0) & (ObjectsWithShadow > 0))
+	if (Setup.ShadowMap > 0)
 	{
 		switch (DrawType)
 		{
@@ -95,7 +89,11 @@ void DrawAllObject3D(int DrawType)
 		DrawAllExplosion(true);
 		// от больших объектов в т.ч. частей баз, только в меню отбрасываем тень, в игре проблемы с точностью z буфера
 		if (DrawType == 1) DrawAllSpaceObject(true, 0);
-		else DrawAllSpaceObject(true, 0, 8); // делаем тень только от частей взорванных объектов
+		else
+		{
+			DrawAllSpaceObject(true, 0, 8); // части взорванных объектов
+			DrawAllSpaceObject(true, 0, 7); // мелкие астероиды
+		}
 
 		ShadowMap_EndRenderToFBO();
 
@@ -106,17 +104,7 @@ void DrawAllObject3D(int DrawType)
 
 
 	// космические объекты
-	DrawAllSpaceObject(false, ShadowMap, 13); // части базы
-	DrawAllSpaceObject(false, ShadowMap, 15); // большие астероиды
-
-
-	// если в игре - то не рисуем тени на мелкие объекты, чтобы избежать z-файтинга
-	if (DrawType == 2) ShadowMap = false;
-
-
-	// космические объекты
-	DrawAllSpaceObject(false, ShadowMap, 7); // мелкие астероиды
-	DrawAllSpaceObject(false, ShadowMap, 8); // части разруженных моделей
+	DrawAllSpaceObject(false, ShadowMap);
 	// корабли
 	DrawAllSpaceShip(false, ShadowMap);
 	// оружие
@@ -127,7 +115,7 @@ void DrawAllObject3D(int DrawType)
 	DrawAllProjectile(false, ShadowMap);
 
 
-	if ((Setup.ShadowMap > 0) & (ObjectsWithShadow > 0))
+	if (Setup.ShadowMap > 0)
 	{
 		ShadowMap_EndFinalRender();
 	}

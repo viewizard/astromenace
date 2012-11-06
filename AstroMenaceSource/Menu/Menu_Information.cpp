@@ -1678,23 +1678,20 @@ void InformationDrawObject()
 	vw_GetMousePos(&MouseX, &MouseY);
 
 	int x, y, width, height;
-	float znear, zfar;
-	vw_GetViewport(&x, &y, &width, &height, &znear, &zfar);
+	vw_GetViewport(&x, &y, &width, &height);
 
 
-	int W, H;
-	vw_GetViewport(0, 0, &W, &H);
-	float AWw = W*1.0f;
-	float AHw = H*1.0f;
+	float AWw = width*1.0f;
+	float AHw = height*1.0f;
 	float AW;
 	float AH;
 	bool ASpresent=false;
 	ASpresent = vw_GetAspectWH(&AW, &AH);
 
 
-	vw_SetViewport((int)((Setup.iAspectRatioWidth/2-432)/(AW/AWw)), (int)(80/(AH/AHw)), (int)(444/(AW/AWw)), (int)(333/(AH/AHw)), 0.0f, 0.3f, RI_UL_CORNER);
+	vw_SetViewport((int)((Setup.iAspectRatioWidth/2-432)/(AW/AWw)), (int)(80/(AH/AHw)), (int)(444/(AW/AWw)), (int)(333/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
 	vw_ResizeScene(45.0f, 444.0f/333.0f, 1.0f, 2000.0f);
-
+	vw_Clear(RI_DEPTH_BUFFER);
 
 
 	vw_LoadIdentity();
@@ -1774,6 +1771,7 @@ void InformationDrawObject()
 		{
 			fUp = 0.8f;
 			RotateInfoObjectX = -tmpRotateInfoObjectX*3;
+			RotateInfoObjectY = 0.0f;
 		}
 		else
 		if  (((DstRestDown.right  >= MouseX)&
@@ -1783,6 +1781,7 @@ void InformationDrawObject()
 		{
 			fDown = 0.8f;
 			RotateInfoObjectX = tmpRotateInfoObjectX*3;
+			RotateInfoObjectY = 0.0f;
 		}
 		else
 			RotateInfoObjectY = 0;
@@ -2079,7 +2078,7 @@ void InformationDrawObject()
 
 
 	vw_SetCameraLocation(VECTOR3D(-50,30,-50));
-	vw_SetViewport(x, y, width, height, znear, zfar);
+	vw_SetViewport(x, y, width, height, 0.0f, 1.0f);
 	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 
 
