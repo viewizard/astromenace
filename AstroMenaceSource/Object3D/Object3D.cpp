@@ -894,6 +894,10 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 								DrawObjectList[i].Stride*sizeof(float), DrawObjectList[i].VBO,
 								DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IBO, DrawObjectList[i].VAO);
 
+
+				if (DrawObjectList[i].ShaderType == 2)
+				if (GLSLShaderType2 != 0) vw_StopShaderProgram();
+
 				vw_PopMatrix();
 			}
 		}
