@@ -15,7 +15,7 @@ The easy way to get up to date AstroMenace on your computer:
    jpeg (libjpeg-turbo prefered), alut (freealut), libXinerama, GLU, freetype2
 
 For Ubuntu/Debian:
-$ sudo apt-get install g++ cmake subversion libsdl1.2-dev
+$ sudo apt-get install g++ cmake make subversion libsdl1.2-dev
   libogg-dev libvorbis-dev libopenal-dev libjpeg-dev libXinerama-dev
   libalut-dev libfreetype6-dev
 
