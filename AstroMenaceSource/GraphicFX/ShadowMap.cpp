@@ -114,7 +114,7 @@ void ShadowMap_StartRenderToFBO(VECTOR3D FocusPointCorrection, float Distance, f
 	// сохраняем данные вьюпорта (параметры буфера глубины не получаем, всегда используем его полностью, 0-1)
 	vw_GetViewport(&ShadowMapViewPort_x, &ShadowMapViewPort_y, &ShadowMapViewPort_width, &ShadowMapViewPort_height);
 	// устанавливаем вьюпорт согласно нашему фбо для шадовмепинга
-	vw_SetViewport(0, 0, ShadowMapFBO->Width, ShadowMapFBO->Height, 0.01f, 1.0f, RI_BL_CORNER);
+	vw_SetViewport(0, 0, ShadowMapFBO->Width, ShadowMapFBO->Height, 0.005f, 1.0f, RI_BL_CORNER);
 
 	// сохраняем данные текущего фбо или фб
 	CurrentSystemFBO = vw_GetCurrentFBO();
