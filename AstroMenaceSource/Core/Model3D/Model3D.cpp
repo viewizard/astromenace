@@ -378,7 +378,7 @@ void eModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 		DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount = 0;
 
 		// перебираем по треугольникам (3 точки)
-		for (int j=0; j<DrawObjectList[i].VertexCount; j+=3)
+		for (int j=0; j<DrawObjectList[i].VertexCount-2; j+=3)
 		{
 			float Point1[8] ={DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j],
 							DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+1],
@@ -429,7 +429,7 @@ void eModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 			int FakeCalculation = 0;
 
 			// перебираем по треугольникам (3 точки)
-			for (int j=0; j<DrawObjectList[i].VertexCount; j+=3)
+			for (int j=0; j<DrawObjectList[i].VertexCount-2; j+=3)
 			{
 				float Point1[8] ={DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j],
 								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+1],
