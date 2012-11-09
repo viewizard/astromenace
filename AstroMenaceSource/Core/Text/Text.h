@@ -3,12 +3,12 @@
 	This source file is part of Viewizard Game Engine
 	For the latest info, see http://www.viewizard.com/
 
-	File name: Core.h
+	File name: Text.h
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -29,33 +29,30 @@
 
 ******************************************************************************/
 
-#ifndef Core_H
-#define Core_H
+
+#ifndef TEXT_H
+#define TEXT_H
 
 
-#include "Base.h"
+#include "../Base.h"
+#include "../Font/Font.h"
+#include "../VirtualFileSystem/VFS.h"
 
 
-#include "Math/Math.h"
-#include "Texture/Texture.h"
-#include "Light/Light.h"
-#include "Font/Font.h"
-#include "Text/Text.h"
-#include "ParticleSystem/ParticleSystem.h"
-#include "ParticleSystem2D/ParticleSystem2D.h"
-#include "System/System.h"
-#include "CollisionDetection/CollisionDetection.h"
-#include "VirtualFileSystem/VFS.h"
-#include "RendererInterface/RendererInterface.h"
-#include "Sound/Sound.h"
-#include "Camera/Camera.h"
-#include "Model3D/Model3D.h"
-
-#ifdef buildin_tynixml
-	#include "Parser/TinyXML/tinyxml.h"
-#else
-	#include "tinyxml.h"
-#endif // buildin_tynixml
 
 
-#endif // Core_H
+// загружаем текстовый .csv
+void vw_InitText(const char *FileName, const char SymbolSeparator, const char SymbolEndOfLine);
+// устанавливаем язык
+void vw_SetTextLanguage(int Language);
+// получаем текст из файлы
+const char *vw_GetText(const char *ItemID);
+// проверяем, есть ли символ в фонте, перебираем по тексту всех языков
+int vw_CheckFontCharsInText();
+// освобождаем данные
+void vw_ReleaseText();
+
+
+
+#endif // TEXT_H
+

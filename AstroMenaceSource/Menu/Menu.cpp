@@ -571,11 +571,11 @@ void DrawMenu()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// Version
-	vw_DrawFont(6, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %s %s %i", GetText("11_Version"), GAME_VERSION, GetText("11_build"), GAME_BUILD);
+	vw_DrawFont(6, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %s %s %i", vw_GetText("11_Version"), GAME_VERSION, vw_GetText("11_build"), GAME_BUILD);
 
 	// Copyright
-	int CSize = vw_FontSize("%s © 2007-2012, Viewizard", GetText("11_Copyright"));
-	vw_DrawFont(Setup.iAspectRatioWidth-7-CSize, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s © 2007-2012, Viewizard", GetText("11_Copyright"));
+	int CSize = vw_FontSize("%s © 2007-2012, Viewizard", vw_GetText("11_Copyright"));
+	vw_DrawFont(Setup.iAspectRatioWidth-7-CSize, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s © 2007-2012, Viewizard", vw_GetText("11_Copyright"));
 
 
 
@@ -671,7 +671,7 @@ void MainMenu()
 	int X = (Setup.iAspectRatioWidth - 384)/2;
 	int Y = 165;
 
-	if (DrawButton384(X,Y, GetText("1_START_GAME"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime))
+	if (DrawButton384(X,Y, vw_GetText("1_START_GAME"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime))
 	{
 		ComBuffer = PROFILE;
 	}
@@ -681,19 +681,19 @@ void MainMenu()
 
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, GetText("1_TOP_SCORES"), MenuContentTransp, &Button2Transp, &LastButton2UpdateTime)) ComBuffer = TOP_SCORES;
+	if (DrawButton384(X,Y, vw_GetText("1_TOP_SCORES"), MenuContentTransp, &Button2Transp, &LastButton2UpdateTime)) ComBuffer = TOP_SCORES;
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, GetText("1_OPTIONS"), MenuContentTransp, &Button3Transp, &LastButton3UpdateTime)) ComBuffer = OPTIONS;
+	if (DrawButton384(X,Y, vw_GetText("1_OPTIONS"), MenuContentTransp, &Button3Transp, &LastButton3UpdateTime)) ComBuffer = OPTIONS;
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, GetText("1_INFORMATION"), MenuContentTransp, &Button4Transp, &LastButton4UpdateTime)) ComBuffer = INFORMATION;
+	if (DrawButton384(X,Y, vw_GetText("1_INFORMATION"), MenuContentTransp, &Button4Transp, &LastButton4UpdateTime)) ComBuffer = INFORMATION;
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, GetText("1_CREDITS"), MenuContentTransp, &Button5Transp, &LastButton5UpdateTime)) ComBuffer = CREDITS;
+	if (DrawButton384(X,Y, vw_GetText("1_CREDITS"), MenuContentTransp, &Button5Transp, &LastButton5UpdateTime)) ComBuffer = CREDITS;
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, GetText("1_QUIT"), MenuContentTransp, &Button6Transp, &LastButton6UpdateTime))SetCurrentDialogBox(0);
+	if (DrawButton384(X,Y, vw_GetText("1_QUIT"), MenuContentTransp, &Button6Transp, &LastButton6UpdateTime))SetCurrentDialogBox(0);
 
 }
 

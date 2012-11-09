@@ -4,7 +4,7 @@
 	(Hardcore 3D space shooter with spaceship upgrade possibilities.)
 	For the latest info, see http://www.viewizard.com/
 
-	File name: Text.h
+	File name: GameLvlText.h
 
 	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
@@ -31,8 +31,8 @@
 ******************************************************************************/
 
 
-#ifndef TEXT_H
-#define TEXT_H
+#ifndef GAMELVLTEXT_H
+#define GAMELVLTEXT_H
 
 
 #include "../../Core/Core.h"
@@ -102,4 +102,4 @@ void	UpdateAllGameLvlText(float Time);
 
 
 
-#endif //TEXT_H
+#endif //GAMELVLTEXT_H

@@ -115,8 +115,8 @@ void TopScoresMenu()
 	int Prir1 = 42;
 
 	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "#");
-	vw_DrawFont(X1+45, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, GetText("3_NAME"));
-	vw_DrawFont(X1+650, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, GetText("3_SCORE"));
+	vw_DrawFont(X1+45, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("3_NAME"));
+	vw_DrawFont(X1+650, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("3_SCORE"));
 
 	Y1 += 10;
 
@@ -134,6 +134,6 @@ void TopScoresMenu()
 
 	int X = (Setup.iAspectRatioWidth - 384)/2;
 	int Y = 165+100*5;
-	if (DrawButton384(X,Y, GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime)) ComBuffer = MAIN_MENU;
+	if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime)) ComBuffer = MAIN_MENU;
 
 }

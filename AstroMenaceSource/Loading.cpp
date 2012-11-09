@@ -933,7 +933,7 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, eTexture 
 	vw_DrawTransparent(&DstRest, &SrcRest, LoadImageTexture, false, 1.0f, 0.0f);
 
 	// пишем "загрузка"
-	vw_DrawFont(Setup.iAspectRatioWidth/2-vw_FontSize(GetText("11_Loading"))/2, 768-128, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f, GetText("11_Loading"));
+	vw_DrawFont(Setup.iAspectRatioWidth/2-vw_FontSize(vw_GetText("11_Loading"))/2, 768-128, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f, vw_GetText("11_Loading"));
 
 	// выводим подложку линии загрузки
 	SetRect(&SrcRest, 0,0,256,32);
@@ -949,8 +949,8 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, eTexture 
 	// выводим хинт при загрузке
 	if (NeedShowHint)
 	{
-		int	Size = (Setup.iAspectRatioWidth-vw_FontSize(GetText(LoadingHints[Setup.LoadingHint])))/2;
-		vw_DrawFont(Size, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, GetText(LoadingHints[Setup.LoadingHint]));
+		int	Size = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText(LoadingHints[Setup.LoadingHint])))/2;
+		vw_DrawFont(Size, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, vw_GetText(LoadingHints[Setup.LoadingHint]));
 	}
 
 	vw_End2DMode();
@@ -1429,7 +1429,7 @@ void LoadGameData(int LoadType)
 		// проверяем все ли символы из текущего языкового файла вошли в прегенерацию, иначе не сможем потом рисовать меню через одну текстуру
 		// смысла гонять постоянно такую проверку нет, один раз сводим все символы языка и не замедляем загрузку поиском
 		// + есть часть символов прописанных в коде, так что убирать англ и часть символов нельзя (!)
-		CheckFontCharsInText();
+		vw_CheckFontCharsInText();
 #endif // gamedebug
 	}
 

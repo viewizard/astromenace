@@ -5,10 +5,10 @@
 
 	File name: OGL_Texture.cpp
 
-	Copyright (c) 2003-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2003-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -153,7 +153,7 @@ GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Byt
 //------------------------------------------------------------------------------------
 void vw_BindTexture(DWORD Stage, GLuint TextureID)
 {
-	glActiveTexture_ARB(GL_TEXTURE0 + Stage);
+	if (glActiveTexture_ARB != 0) glActiveTexture_ARB(GL_TEXTURE0 + Stage);
 
 	if (TextureID != 0)
 	{

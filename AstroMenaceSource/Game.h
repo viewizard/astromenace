@@ -46,7 +46,7 @@
 #include "ScriptEngine/Script.h"
 // эффекты
 #include "GraphicFX/SpaceStars/SpaceStars.h"
-#include "GraphicFX/Text/Text.h"
+#include "GraphicFX/GameLvlText/GameLvlText.h"
 // модели и все обьъекты
 #include "Object3D/Object3D.h"
 #include "Object3D/SpaceShip/EarthSpaceFighter/EarthSpaceFighter.h"
