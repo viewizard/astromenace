@@ -234,6 +234,19 @@ void vw_ReleaseBuffer(eBuffer *Buffer)
 
 
 
+eBuffer *vw_FindBufferByName(const char *Name)
+{
+	eBuffer *Tmp = StartBufferMan;
+
+	while (Tmp != 0)
+	{
+		eBuffer *Tmp1 = Tmp->Next;
+		if(vw_strcmp(Tmp->Name, Name) == 0) return Tmp;
+		Tmp = Tmp1;
+	}
+
+	return 0;
+}
 
 ALuint vw_FindBufferIDByName(const char *Name)
 {

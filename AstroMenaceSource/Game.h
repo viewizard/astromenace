@@ -367,10 +367,12 @@ void GameOptions();
 //------------------------------------------------------------------------------------
 // Menu_Interface.cpp
 //------------------------------------------------------------------------------------
-extern int Options_MenuLanguage;
-extern int Options_VoiceLanguage;
 extern int Options_FontNumber;
 
+void CreateMenuLanguageEntryLinks();
+void ReCreateMenuLanguageEntryLinks();
+void CreateVoiceLanguageEntryLinks();
+void ReCreateVoiceLanguageEntryLinks();
 void InterfaceMenu();
 
 

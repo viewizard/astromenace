@@ -57,6 +57,7 @@ ALuint vw_CreateSoundBufferFromWAV(const char *Name);
 ALuint vw_CreateSoundBufferFromOGG(const char *Name);
 void vw_ReleaseBuffer(eBuffer *Buffer);
 
+eBuffer *vw_FindBufferByName(const char *Name);
 ALuint vw_FindBufferIDByName(const char *Name);
 
 void vw_ReleaseAllBuffers();
