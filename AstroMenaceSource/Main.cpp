@@ -713,81 +713,9 @@ ReCreate:
 
 
 	// делаем правильные симлинки на языковые ресурсы, автоматизации нет, просто линкуем нужные файлы
-
-	switch (Setup.MenuLanguage)
-	{
-		case 1: //en
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/GAME/mission.tga", "DATA/GAME/mission.tga");
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/GAME/missionfailed.tga", "DATA/GAME/missionfailed.tga");
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/GAME/pause.tga", "DATA/GAME/pause.tga");
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/button_weaponry_in.tga", "DATA/MENU/button_weaponry_in.tga");
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/button_weaponry_out.tga", "DATA/MENU/button_weaponry_out.tga");
-			break;
-
-		case 2: //de
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/GAME/mission.tga", "DATA/GAME/mission.tga");
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/GAME/missionfailed.tga", "DATA/GAME/missionfailed.tga");
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/GAME/pause.tga", "DATA/GAME/pause.tga");
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/button_weaponry_in.tga", "DATA/MENU/button_weaponry_in.tga");
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/button_weaponry_out.tga", "DATA/MENU/button_weaponry_out.tga");
-			break;
-
-		case 3: //ru
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/GAME/mission.tga", "DATA/GAME/mission.tga");
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/GAME/missionfailed.tga", "DATA/GAME/missionfailed.tga");
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/GAME/pause.tga", "DATA/GAME/pause.tga");
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/button_weaponry_in.tga", "DATA/MENU/button_weaponry_in.tga");
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/button_weaponry_out.tga", "DATA/MENU/button_weaponry_out.tga");
-			break;
-	}
-
-	switch (Setup.VoiceLanguage)
-	{
-		case 1: //en
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/Attention.wav", "DATA/VOICE/Attention.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/CeaseFire.wav", "DATA/VOICE/CeaseFire.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/EngineMalfunction.wav", "DATA/VOICE/EngineMalfunction.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/MissileDetected.wav", "DATA/VOICE/MissileDetected.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/PowerSupplyReestablished.wav", "DATA/VOICE/PowerSupplyReestablished.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/PrepareForAction.wav", "DATA/VOICE/PrepareForAction.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/ReactorMalfunction.wav", "DATA/VOICE/ReactorMalfunction.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/Warning.wav", "DATA/VOICE/Warning.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/WeaponDamaged.wav", "DATA/VOICE/WeaponDamaged.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/WeaponDestroyed.wav", "DATA/VOICE/WeaponDestroyed.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/WeaponMalfunction.wav", "DATA/VOICE/WeaponMalfunction.wav");
-			break;
-
-		case 2: //de
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/Attention.wav", "DATA/VOICE/Attention.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/CeaseFire.wav", "DATA/VOICE/CeaseFire.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/EngineMalfunction.wav", "DATA/VOICE/EngineMalfunction.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/MissileDetected.wav", "DATA/VOICE/MissileDetected.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/PowerSupplyReestablished.wav", "DATA/VOICE/PowerSupplyReestablished.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/PrepareForAction.wav", "DATA/VOICE/PrepareForAction.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/ReactorMalfunction.wav", "DATA/VOICE/ReactorMalfunction.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/Warning.wav", "DATA/VOICE/Warning.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/WeaponDamaged.wav", "DATA/VOICE/WeaponDamaged.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/WeaponDestroyed.wav", "DATA/VOICE/WeaponDestroyed.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/WeaponMalfunction.wav", "DATA/VOICE/WeaponMalfunction.wav");
-			break;
-
-		case 3: //ru
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/Attention.wav", "DATA/VOICE/Attention.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/CeaseFire.wav", "DATA/VOICE/CeaseFire.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/EngineMalfunction.wav", "DATA/VOICE/EngineMalfunction.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/MissileDetected.wav", "DATA/VOICE/MissileDetected.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/PowerSupplyReestablished.wav", "DATA/VOICE/PowerSupplyReestablished.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/PrepareForAction.wav", "DATA/VOICE/PrepareForAction.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/ReactorMalfunction.wav", "DATA/VOICE/ReactorMalfunction.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/Warning.wav", "DATA/VOICE/Warning.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/WeaponDamaged.wav", "DATA/VOICE/WeaponDamaged.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/WeaponDestroyed.wav", "DATA/VOICE/WeaponDestroyed.wav");
-			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/WeaponMalfunction.wav", "DATA/VOICE/WeaponMalfunction.wav");
-			break;
-	}
-	printf("\n");
-
-
+	CreateMenuLanguageEntryLinks();
+	// создаем линки для голосовых файлов
+	CreateVoiceLanguageEntryLinks();
 	// устанавливаем язык текста
 	vw_SetTextLanguage(Setup.MenuLanguage-1);
 

@@ -1663,11 +1663,11 @@ void DrawDialogBox()
 				CloseDialog();
 				if (Setup.MenuLanguage != 1)
 				{
-					CanQuit = false;
-					Quit = true;
-					NeedReCreate = true;
 					Setup.MenuLanguage = 1;
 					Setup.VoiceLanguage = 1;
+					ReCreateMenuLanguageEntryLinks();
+					ReCreateVoiceLanguageEntryLinks();
+					vw_SetTextLanguage(Setup.MenuLanguage-1);
 				}
 			}
 			if (DrawDialogButton200(X+128+64-72/2,Y+ButtonOffset-53, "Deutsch", DialogContentTransp))
@@ -1675,11 +1675,11 @@ void DrawDialogBox()
 				CloseDialog();
 				if (Setup.MenuLanguage != 2)
 				{
-					CanQuit = false;
-					Quit = true;
-					NeedReCreate = true;
 					Setup.MenuLanguage = 2;
 					Setup.VoiceLanguage = 2;
+					ReCreateMenuLanguageEntryLinks();
+					ReCreateVoiceLanguageEntryLinks();
+					vw_SetTextLanguage(Setup.MenuLanguage-1);
 				}
 			}
 			if (DrawDialogButton200(X+128+64-72/2,Y+ButtonOffset, "Русский", DialogContentTransp))
@@ -1687,11 +1687,11 @@ void DrawDialogBox()
 				CloseDialog();
 				if (Setup.MenuLanguage != 3)
 				{
-					CanQuit = false;
-					Quit = true;
-					NeedReCreate = true;
 					Setup.MenuLanguage = 3;
 					Setup.VoiceLanguage = 3;
+					ReCreateMenuLanguageEntryLinks();
+					ReCreateVoiceLanguageEntryLinks();
+					vw_SetTextLanguage(Setup.MenuLanguage-1);
 				}
 			}
 

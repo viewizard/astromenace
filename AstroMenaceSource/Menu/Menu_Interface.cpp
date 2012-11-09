@@ -33,8 +33,6 @@
 
 #include "../Game.h"
 
-int Options_MenuLanguage;
-int Options_VoiceLanguage;
 int Options_FontNumber;
 
 
@@ -43,6 +41,189 @@ const char *ButtonGameWeaponInfoType[4] =
 "3_Flat",
 "3_Slim",
 "1_Off"};
+
+
+
+
+
+
+
+void CreateMenuLanguageEntryLinks()
+{
+
+	switch (Setup.MenuLanguage)
+	{
+		case 1: //en
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/GAME/mission.tga", "DATA/GAME/mission.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/GAME/missionfailed.tga", "DATA/GAME/missionfailed.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/GAME/pause.tga", "DATA/GAME/pause.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/button_weaponry_in.tga", "DATA/MENU/button_weaponry_in.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/MENU/button_weaponry_out.tga", "DATA/MENU/button_weaponry_out.tga");
+			break;
+
+		case 2: //de
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/GAME/mission.tga", "DATA/GAME/mission.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/GAME/missionfailed.tga", "DATA/GAME/missionfailed.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/GAME/pause.tga", "DATA/GAME/pause.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/button_weaponry_in.tga", "DATA/MENU/button_weaponry_in.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/MENU/button_weaponry_out.tga", "DATA/MENU/button_weaponry_out.tga");
+			break;
+
+		case 3: //ru
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/GAME/mission.tga", "DATA/GAME/mission.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/GAME/missionfailed.tga", "DATA/GAME/missionfailed.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/GAME/pause.tga", "DATA/GAME/pause.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/button_weaponry_in.tga", "DATA/MENU/button_weaponry_in.tga");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/MENU/button_weaponry_out.tga", "DATA/MENU/button_weaponry_out.tga");
+			break;
+	}
+	printf("\n");
+}
+
+void ReCreateMenuLanguageEntryLinks()
+{
+	// удаляем все симлинки текстур
+	vw_DeleteEntryLinkVFS("DATA/GAME/mission.tga");
+	vw_DeleteEntryLinkVFS("DATA/GAME/missionfailed.tga");
+	vw_DeleteEntryLinkVFS("DATA/GAME/pause.tga");
+	vw_DeleteEntryLinkVFS("DATA/MENU/button_weaponry_in.tga");
+	vw_DeleteEntryLinkVFS("DATA/MENU/button_weaponry_out.tga");
+
+	// создаем новые симлинки
+	CreateMenuLanguageEntryLinks();
+
+	// если текстура была загружена - выгружаем, и загружаем по новой
+
+	if (vw_FindTextureByName("DATA/GAME/mission.tga"))
+	{
+		vw_ReleaseTexture(vw_FindTextureByName("DATA/GAME/mission.tga"));
+		vw_SetTextureAlpha(0.0f, 0.0f, 0.0f);
+		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE,
+						true, TX_ALPHA_EQUAL, false);
+		vw_LoadTexture("DATA/GAME/mission.tga", NULL, true);
+	}
+	if (vw_FindTextureByName("DATA/GAME/missionfailed.tga"))
+	{
+		vw_ReleaseTexture(vw_FindTextureByName("DATA/GAME/missionfailed.tga"));
+		vw_SetTextureAlpha(0.0f, 0.0f, 0.0f);
+		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE,
+						true, TX_ALPHA_EQUAL, false);
+		vw_LoadTexture("DATA/GAME/missionfailed.tga", NULL, true);
+	}
+	if (vw_FindTextureByName("DATA/GAME/pause.tga"))
+	{
+		vw_ReleaseTexture(vw_FindTextureByName("DATA/GAME/pause.tga"));
+		vw_SetTextureAlpha(0.0f, 0.0f, 0.0f);
+		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE,
+						true, TX_ALPHA_EQUAL, false);
+		vw_LoadTexture("DATA/GAME/pause.tga", NULL, true);
+	}
+	if (vw_FindTextureByName("DATA/MENU/button_weaponry_in.tga"))
+	{
+		vw_ReleaseTexture(vw_FindTextureByName("DATA/MENU/button_weaponry_in.tga"));
+		vw_SetTextureAlpha(0.0f, 0.0f, 0.0f);
+		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE,
+						false, TX_ALPHA_EQUAL, false);
+		vw_LoadTexture("DATA/MENU/button_weaponry_in.tga", NULL, false);
+	}
+	if (vw_FindTextureByName("DATA/MENU/button_weaponry_out.tga"))
+	{
+		vw_ReleaseTexture(vw_FindTextureByName("DATA/MENU/button_weaponry_out.tga"));
+		vw_SetTextureAlpha(0.0f, 0.0f, 0.0f);
+		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE,
+						false, TX_ALPHA_EQUAL, false);
+		vw_LoadTexture("DATA/MENU/button_weaponry_out.tga", NULL, false);
+	}
+}
+
+
+
+
+void CreateVoiceLanguageEntryLinks()
+{
+
+	switch (Setup.VoiceLanguage)
+	{
+		case 1: //en
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/Attention.wav", "DATA/VOICE/Attention.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/CeaseFire.wav", "DATA/VOICE/CeaseFire.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/EngineMalfunction.wav", "DATA/VOICE/EngineMalfunction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/MissileDetected.wav", "DATA/VOICE/MissileDetected.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/PowerSupplyReestablished.wav", "DATA/VOICE/PowerSupplyReestablished.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/PrepareForAction.wav", "DATA/VOICE/PrepareForAction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/ReactorMalfunction.wav", "DATA/VOICE/ReactorMalfunction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/Warning.wav", "DATA/VOICE/Warning.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/WeaponDamaged.wav", "DATA/VOICE/WeaponDamaged.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/WeaponDestroyed.wav", "DATA/VOICE/WeaponDestroyed.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/WeaponMalfunction.wav", "DATA/VOICE/WeaponMalfunction.wav");
+			break;
+
+		case 2: //de
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/Attention.wav", "DATA/VOICE/Attention.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/CeaseFire.wav", "DATA/VOICE/CeaseFire.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/EngineMalfunction.wav", "DATA/VOICE/EngineMalfunction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/MissileDetected.wav", "DATA/VOICE/MissileDetected.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/PowerSupplyReestablished.wav", "DATA/VOICE/PowerSupplyReestablished.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/PrepareForAction.wav", "DATA/VOICE/PrepareForAction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/ReactorMalfunction.wav", "DATA/VOICE/ReactorMalfunction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/Warning.wav", "DATA/VOICE/Warning.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/WeaponDamaged.wav", "DATA/VOICE/WeaponDamaged.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/WeaponDestroyed.wav", "DATA/VOICE/WeaponDestroyed.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_DE/VOICE/WeaponMalfunction.wav", "DATA/VOICE/WeaponMalfunction.wav");
+			break;
+
+		case 3: //ru
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/Attention.wav", "DATA/VOICE/Attention.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/CeaseFire.wav", "DATA/VOICE/CeaseFire.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/EngineMalfunction.wav", "DATA/VOICE/EngineMalfunction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/MissileDetected.wav", "DATA/VOICE/MissileDetected.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/PowerSupplyReestablished.wav", "DATA/VOICE/PowerSupplyReestablished.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/PrepareForAction.wav", "DATA/VOICE/PrepareForAction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/ReactorMalfunction.wav", "DATA/VOICE/ReactorMalfunction.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/Warning.wav", "DATA/VOICE/Warning.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/WeaponDamaged.wav", "DATA/VOICE/WeaponDamaged.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/WeaponDestroyed.wav", "DATA/VOICE/WeaponDestroyed.wav");
+			vw_CreateEntryLinkVFS("DATA/DATA_RU/VOICE/WeaponMalfunction.wav", "DATA/VOICE/WeaponMalfunction.wav");
+			break;
+	}
+	printf("\n");
+}
+
+void ReCreateVoiceLanguageEntryLinks()
+{
+	// удаляем все симлинки голосовых файлов
+	vw_DeleteEntryLinkVFS("DATA/VOICE/Attention.wav");
+	vw_DeleteEntryLinkVFS("DATA/VOICE/CeaseFire.wav");
+	vw_DeleteEntryLinkVFS("DATA/VOICE/EngineMalfunction.wav");
+	vw_DeleteEntryLinkVFS("DATA/VOICE/MissileDetected.wav");
+	vw_DeleteEntryLinkVFS("DATA/VOICE/PowerSupplyReestablished.wav");
+	vw_DeleteEntryLinkVFS("DATA/VOICE/PrepareForAction.wav");
+	vw_DeleteEntryLinkVFS("DATA/VOICE/ReactorMalfunction.wav");
+	vw_DeleteEntryLinkVFS("DATA/VOICE/Warning.wav");
+	vw_DeleteEntryLinkVFS("DATA/VOICE/WeaponDamaged.wav");
+	vw_DeleteEntryLinkVFS("DATA/VOICE/WeaponDestroyed.wav");
+	vw_DeleteEntryLinkVFS("DATA/VOICE/WeaponMalfunction.wav");
+
+	// чистим все что было загружено из голосовых файлов в буферы
+	vw_ReleaseBuffer(vw_FindBufferByName("DATA/VOICE/Attention.wav"));
+	vw_ReleaseBuffer(vw_FindBufferByName("DATA/VOICE/CeaseFire.wav"));
+	vw_ReleaseBuffer(vw_FindBufferByName("DATA/VOICE/EngineMalfunction.wav"));
+	vw_ReleaseBuffer(vw_FindBufferByName("DATA/VOICE/MissileDetected.wav"));
+	vw_ReleaseBuffer(vw_FindBufferByName("DATA/VOICE/PowerSupplyReestablished.wav"));
+	vw_ReleaseBuffer(vw_FindBufferByName("DATA/VOICE/PrepareForAction.wav"));
+	vw_ReleaseBuffer(vw_FindBufferByName("DATA/VOICE/ReactorMalfunction.wav"));
+	vw_ReleaseBuffer(vw_FindBufferByName("DATA/VOICE/Warning.wav"));
+	vw_ReleaseBuffer(vw_FindBufferByName("DATA/VOICE/WeaponDamaged.wav"));
+	vw_ReleaseBuffer(vw_FindBufferByName("DATA/VOICE/WeaponDestroyed.wav"));
+	vw_ReleaseBuffer(vw_FindBufferByName("DATA/VOICE/WeaponMalfunction.wav"));
+
+	// создаем новые симлинки
+	CreateVoiceLanguageEntryLinks();
+}
+
+
+
+
 
 
 
@@ -64,17 +245,23 @@ void InterfaceMenu()
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Menu_Language"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, false))
 	{
-		Options_MenuLanguage--;
-		if (Options_MenuLanguage < 1) Options_MenuLanguage = 3;
+		Setup.MenuLanguage--;
+		if (Setup.MenuLanguage < 1) Setup.MenuLanguage = 3;
+
+		ReCreateMenuLanguageEntryLinks();
+		vw_SetTextLanguage(Setup.MenuLanguage-1);
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, false))
 	{
-		Options_MenuLanguage++;
-		if (Options_MenuLanguage>3) Options_MenuLanguage = 1;
+		Setup.MenuLanguage++;
+		if (Setup.MenuLanguage>3) Setup.MenuLanguage = 1;
+
+		ReCreateMenuLanguageEntryLinks();
+		vw_SetTextLanguage(Setup.MenuLanguage-1);
 	}
 
 	int Size, SizeI;
-	switch (Options_MenuLanguage)
+	switch (Setup.MenuLanguage)
 	{
 		case 1:
 			Size = vw_FontSize("English");
@@ -101,16 +288,20 @@ void InterfaceMenu()
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Voice_Language"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, false))
 	{
-		Options_VoiceLanguage--;
-		if (Options_VoiceLanguage < 1) Options_VoiceLanguage = 3;
+		Setup.VoiceLanguage--;
+		if (Setup.VoiceLanguage < 1) Setup.VoiceLanguage = 3;
+
+		ReCreateVoiceLanguageEntryLinks();
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, false))
 	{
-		Options_VoiceLanguage++;
-		if (Options_VoiceLanguage>3) Options_VoiceLanguage = 1;
+		Setup.VoiceLanguage++;
+		if (Setup.VoiceLanguage>3) Setup.VoiceLanguage = 1;
+
+		ReCreateVoiceLanguageEntryLinks();
 	}
 
-	switch (Options_VoiceLanguage)
+	switch (Setup.VoiceLanguage)
 	{
 		case 1:
 			Size = vw_FontSize("English");
@@ -266,9 +457,7 @@ void InterfaceMenu()
 
 
 
-	if (Options_MenuLanguage == Setup.MenuLanguage &&
-		Options_VoiceLanguage == Setup.VoiceLanguage &&
-		Options_FontNumber == Setup.FontNumber)
+	if (Options_FontNumber == Setup.FontNumber)
 	{
 		X = (Setup.iAspectRatioWidth - 384)/2;
 		Y = Y+Prir;
@@ -289,9 +478,7 @@ void InterfaceMenu()
 		if (DrawButton256(X,Y, vw_GetText("1_APPLY"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime))
 		{
 			// проверяем, нужно перегружать или нет
-			if (Options_MenuLanguage != Setup.MenuLanguage ||
-				Options_VoiceLanguage != Setup.VoiceLanguage ||
-				Options_FontNumber != Setup.FontNumber)
+			if (Options_FontNumber != Setup.FontNumber)
 			{
 				CanQuit = false;
 				Quit = true;
@@ -299,8 +486,6 @@ void InterfaceMenu()
 			}
 
 			Setup.FontNumber = Options_FontNumber;
-			Setup.MenuLanguage = Options_MenuLanguage;
-			Setup.VoiceLanguage = Options_VoiceLanguage;
 		}
 	}
 }
