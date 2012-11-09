@@ -161,6 +161,8 @@
 		<Unit filename="AstroMenaceSource/Core/System/System.cpp" />
 		<Unit filename="AstroMenaceSource/Core/System/System.h" />
 		<Unit filename="AstroMenaceSource/Core/System/Timer.cpp" />
+		<Unit filename="AstroMenaceSource/Core/Text/Text.cpp" />
+		<Unit filename="AstroMenaceSource/Core/Text/Text.h" />
 		<Unit filename="AstroMenaceSource/Core/Texture/Texture.cpp" />
 		<Unit filename="AstroMenaceSource/Core/Texture/Texture.h" />
 		<Unit filename="AstroMenaceSource/Core/Texture/TextureManager.cpp" />
@@ -179,6 +181,9 @@
 		<Unit filename="AstroMenaceSource/Game/Game_Options.cpp" />
 		<Unit filename="AstroMenaceSource/Game/Game_PlayerShip.cpp" />
 		<Unit filename="AstroMenaceSource/Game/Game_WeaponSlot.cpp" />
+		<Unit filename="AstroMenaceSource/GraphicFX/GameLvlText/GameLvlText.cpp" />
+		<Unit filename="AstroMenaceSource/GraphicFX/GameLvlText/GameLvlText.h" />
+		<Unit filename="AstroMenaceSource/GraphicFX/GameLvlText/GameLvlTextManager.cpp" />
 		<Unit filename="AstroMenaceSource/GraphicFX/ShadowMap.cpp" />
 		<Unit filename="AstroMenaceSource/GraphicFX/SkyBox.cpp" />
 		<Unit filename="AstroMenaceSource/GraphicFX/SpaceStars/SpaceStars.cpp" />
@@ -186,9 +191,6 @@
 		<Unit filename="AstroMenaceSource/GraphicFX/SpaceStars/Star.cpp" />
 		<Unit filename="AstroMenaceSource/GraphicFX/SpaceStars/Star.h" />
 		<Unit filename="AstroMenaceSource/GraphicFX/StarSystem.cpp" />
-		<Unit filename="AstroMenaceSource/GraphicFX/Text/Text.cpp" />
-		<Unit filename="AstroMenaceSource/GraphicFX/Text/Text.h" />
-		<Unit filename="AstroMenaceSource/GraphicFX/Text/TextManager.cpp" />
 		<Unit filename="AstroMenaceSource/Loading.cpp" />
 		<Unit filename="AstroMenaceSource/Loop_audio.cpp" />
 		<Unit filename="AstroMenaceSource/Loop_proc.cpp" />
@@ -282,7 +284,6 @@
 		<Unit filename="AstroMenaceSource/ScriptEngine/Script.h" />
 		<Unit filename="AstroMenaceSource/ScriptEngine/ScriptFunction.cpp" />
 		<Unit filename="AstroMenaceSource/ScriptEngine/Setup.cpp" />
-		<Unit filename="AstroMenaceSource/ScriptEngine/Text.cpp" />
 		<Unit filename="AstroMenaceSource/Struct.h" />
 		<Unit filename="AstroMenaceSource/config.h" />
 		<Extensions>

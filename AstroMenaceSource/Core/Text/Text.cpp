@@ -1,7 +1,6 @@
 /******************************************************************************
 
-	This source file is part of AstroMenace game
-	(Hardcore 3D space shooter with spaceship upgrade possibilities.)
+	This source file is part of Viewizard Game Engine
 	For the latest info, see http://www.viewizard.com/
 
 	File name: Text.cpp
@@ -9,7 +8,7 @@
 	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.3
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -31,16 +30,14 @@
 ******************************************************************************/
 
 
-#include "../Game.h"
-
+#include "Text.h"
 
 
 struct sTextNode
 {
 	char *id;
-	char *en;
-	char *de;
-	char *ru;
+	char **text;
+	int count;
 
 	sTextNode *Next;
 	sTextNode *Prev;
@@ -53,6 +50,8 @@ sTextNode *EndTextNode;
 // буфер со всем текстом
 char *TextBuffer = 0;
 
+// текущий язык
+int CurrentLanguage = 0;
 
 
 
@@ -123,13 +122,14 @@ void vw_ReAttachTextNodeAsFirst(sTextNode* TextNode)
 //-----------------------------------------------------------------------------
 // освобождаем данные
 //-----------------------------------------------------------------------------
-void ReleaseGameText()
+void vw_ReleaseText()
 {
 	// Чистка памяти...
 	sTextNode *Tmp = StartTextNode;
 	while (Tmp != 0)
 	{
 		sTextNode *Tmp1 = Tmp->Next;
+		if (Tmp->text != 0) delete [] Tmp->text;
 		delete Tmp;
 		Tmp = Tmp1;
 	}
@@ -138,15 +138,32 @@ void ReleaseGameText()
 	EndTextNode = 0;
 
 	if (TextBuffer != 0) {delete [] TextBuffer; TextBuffer = 0;}
+
+	CurrentLanguage = 0;
 }
 
 
+
+
+
 //-----------------------------------------------------------------------------
-// иним текстовых xml
+// устанавливаем язык
 //-----------------------------------------------------------------------------
-void InitGameText(const char *FileName)
+void vw_SetTextLanguage(int Language)
 {
-	ReleaseGameText();
+	CurrentLanguage = Language;
+}
+
+
+
+
+
+//-----------------------------------------------------------------------------
+// загружаем текстовый .csv
+//-----------------------------------------------------------------------------
+void vw_InitText(const char *FileName, const char SymbolSeparator, const char SymbolEndOfLine)
+{
+	vw_ReleaseText();
 
 	// читаем данные
 	eFILE *TempF = vw_fopen(FileName);
@@ -162,80 +179,63 @@ void InitGameText(const char *FileName)
 
 
 	// парсим формат .csv
-	// не делаем проверок формата, символы между столбцами - ';', символ конца строки '\n'
-	// вся работа строится на TextBuffer, другой памяти не выделяем - только ссылаемся
-	// указателями на данные в этом буфере (предварительно поставив 0 для разграничения слов и предложений)
-	// ! важно - в конце файла должен быть перевод на новую строку, чтобы поставить ноль и сформировать конец строки, заменив символ '\n'
-	// перевод строки символ LF делать всегда в файле
+	// не делаем проверок формата
+	// вся работа строится на TextBuffer, другой памяти не выделяем - только ссылаемся указателями
+	// на данные в этом буфере (предварительно поставив 0 для разграничения слов и предложений)
+	// ! важно - в конце файла должен быть перевод на новую строку, чтобы поставить ноль и сформировать конец строки, заменив символ SymbolEndOfLine
+	// ! важно - первая строка с идентификаторами столбцов обязательно должна присутствовать, по ней считаем кол-во языков в файле
 
 	char *Buffer = TextBuffer;
 
-	// первую строчку пропускаем всегда, она не содержит полезной информации
-	while(Buffer[0] != '\n') {Buffer++;DataLength--;}
+	// по первой строчке считаем сколько у нас в файле языков
+	int LanguageCount = 0;
+	while(Buffer[0] != SymbolEndOfLine)
+	{
+		if (Buffer[0] == SymbolSeparator) LanguageCount++;
+		Buffer++;DataLength--;
+	}
 	Buffer++;DataLength--;
 
-	// крутим пока не обработали все строки (3 - это три ';' - минимум для строки в нашем случае)
-	while(DataLength > 3)
+	// крутим пока не обработали все строки
+	while(DataLength > LanguageCount)
 	{
-		char *id = 0;
-		char *en = 0;
-		char *de = 0;
-		char *ru = 0;
-
-
-		// проверяем id
-		id = Buffer;
-		// если у нас "пустой" id - значит это пустая строка, и надо переходить к следующей
-		if (id[0] == ';')
-		{
-			while(Buffer[0] != '\n') {Buffer++;DataLength--;}
-			Buffer++;DataLength--;
-			continue;
-		}
-		// ищем маркер следующего текстового столбца
-		while(Buffer[0] != ';') {Buffer++;DataLength--;}
-		// нашли, ставим туда ноль, чтобы ноль-терминальная строка была завершенной
-		Buffer[0] = 0;
-		Buffer++;DataLength--;
-
-
-		// проверяем en
-		en = Buffer;
-		// ищем маркер следующего текстового столбца
-		while(Buffer[0] != ';') {Buffer++;DataLength--;}
-		// нашли, ставим туда ноль, чтобы ноль-терминальная строка была завершенной
-		Buffer[0] = 0;
-		Buffer++;DataLength--;
-
-		// проверяем de
-		de = Buffer;
-		// ищем маркер следующего текстового столбца
-		while(Buffer[0] != ';') {Buffer++;DataLength--;}
-		// нашли, ставим туда ноль, чтобы ноль-терминальная строка была завершенной
-		Buffer[0] = 0;
-		Buffer++;DataLength--;
-
-		// проверяем ru
-		ru = Buffer;
-		// ищем маркер следующего текстового столбца
-		while(Buffer[0] != '\n') {Buffer++;DataLength--;}
-		// нашли, ставим туда ноль, чтобы ноль-терминальная строка была завершенной
-		Buffer[0] = 0;
-		Buffer++;DataLength--;
-
-
-		// все компоненты собраны, делаем ноду
+		// делаем ноду
 		sTextNode *NewTextNode;
 		NewTextNode = new sTextNode;
 
+		NewTextNode->count = LanguageCount;
+
+		// проверяем id
+		NewTextNode->id = Buffer;
+		// если у нас "пустой" id - значит это пустая строка, и надо переходить к следующей
+		if (NewTextNode->id[0] == SymbolSeparator)
+		{
+			while(Buffer[0] != SymbolEndOfLine) {Buffer++;DataLength--;}
+			Buffer++;DataLength--;
+
+			delete NewTextNode;
+			continue;
+		}
+		// ищем маркер следующего текстового столбца
+		while(Buffer[0] != SymbolSeparator) {Buffer++;DataLength--;}
+		// нашли, ставим туда ноль, чтобы ноль-терминальная строка была завершенной
+		Buffer[0] = 0;
+		Buffer++;DataLength--;
+
+		NewTextNode->text = new char*[NewTextNode->count];
+
+		for (int i=0; i<NewTextNode->count; i++)
+		{
+			NewTextNode->text[i] = Buffer;
+			// ищем маркер следующего текстового столбца или конец строки
+			while((Buffer[0] != SymbolEndOfLine) & (Buffer[0] != SymbolSeparator)) {Buffer++;DataLength--;}
+			// нашли, ставим туда ноль, чтобы ноль-терминальная строка была завершенной
+			Buffer[0] = 0;
+			Buffer++;DataLength--;
+		}
+
 		vw_AttachTextNode(NewTextNode);
-
-		NewTextNode->id = id;
-		NewTextNode->en = en;
-		NewTextNode->de = de;
-		NewTextNode->ru = ru;
 	}
-
 }
 
 
@@ -254,9 +254,9 @@ int strcmpIdNum(const char *a, const char *b)
 
 
 //-----------------------------------------------------------------------------
-// получаем текст из файлы
+// получаем текст из файла
 //-----------------------------------------------------------------------------
-const char *GetText(const char *ItemID)
+const char *vw_GetText(const char *ItemID)
 {
 	if (TextBuffer == 0) return 0;
 	if (ItemID == 0) return 0;
@@ -272,15 +272,7 @@ const char *GetText(const char *ItemID)
 			// перемещаем его на первое место в списке для ускорения поиска в след. проходах
 			vw_ReAttachTextNodeAsFirst(Tmp);
 
-			// возвращаем с учетом текущего языка
-			switch(Setup.MenuLanguage)
-			{
-				case 1: return Tmp->en;
-				case 2: return Tmp->de;
-				case 3: return Tmp->ru;
-
-				default: return 0;
-			}
+			return Tmp->text[CurrentLanguage];
 		}
 
 		Tmp = Tmp1;
@@ -296,7 +288,7 @@ const char *GetText(const char *ItemID)
 //-----------------------------------------------------------------------------
 // проверяем, есть ли символ в фонте, перебираем по тексту всех языков
 //-----------------------------------------------------------------------------
-int CheckFontCharsInText()
+int vw_CheckFontCharsInText()
 {
 	if (TextBuffer == 0) return -1;
 
@@ -309,81 +301,32 @@ int CheckFontCharsInText()
 	{
 		sTextNode *Tmp1 = Tmp->Next;
 
-		const char *CharsList = Tmp->en;
 
-		if (CharsList!=0)
+		for (int i=0; i<Tmp->count; i++)
 		{
-			// перебираем всю строку
-			while (strlen(CharsList) > 0)
+
+			const char *CharsList = Tmp->text[i];
+
+			if (CharsList!=0)
 			{
-				unsigned CurrentChar;
-				// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
-				CharsList = utf8_to_utf32(CharsList, &CurrentChar);
-				// загружаем символ и все необходимые данные для него
-				if (!vw_FindFontCharByUTF32(CurrentChar))
+				// перебираем всю строку
+				while (strlen(CharsList) > 0)
 				{
-					printf("!!! FontChar was not created, Unicode: " );
-					if ( CurrentChar < 0x80 && CurrentChar > 0 )
+					unsigned CurrentChar;
+					// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
+					CharsList = utf8_to_utf32(CharsList, &CurrentChar);
+					// загружаем символ и все необходимые данные для него
+					if (!vw_FindFontCharByUTF32(CurrentChar))
 					{
-						printf( "%c (0x%04X)\n", (char)CurrentChar, CurrentChar );
-					}
-					else
-					{
-						printf( "? (0x%04X)\n", CurrentChar );
-					}
-				}
-			}
-		}
-
-
-		CharsList = Tmp->de;
-
-		if (CharsList!=0)
-		{
-			// перебираем всю строку
-			while (strlen(CharsList) > 0)
-			{
-				unsigned CurrentChar;
-				// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
-				CharsList = utf8_to_utf32(CharsList, &CurrentChar);
-				// загружаем символ и все необходимые данные для него
-				if (!vw_FindFontCharByUTF32(CurrentChar))
-				{
-					printf("!!! FontChar was not created, Unicode: " );
-					if ( CurrentChar < 0x80 && CurrentChar > 0 )
-					{
-						printf( "%c (0x%04X)\n", (char)CurrentChar, CurrentChar );
-					}
-					else
-					{
-						printf( "? (0x%04X)\n", CurrentChar );
-					}
-				}
-			}
-		}
-
-
-		CharsList = Tmp->ru;
-
-		if (CharsList!=0)
-		{
-			// перебираем всю строку
-			while (strlen(CharsList) > 0)
-			{
-				unsigned CurrentChar;
-				// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
-				CharsList = utf8_to_utf32(CharsList, &CurrentChar);
-				// загружаем символ и все необходимые данные для него
-				if (!vw_FindFontCharByUTF32(CurrentChar))
-				{
-					printf("!!! FontChar was not created, Unicode: " );
-					if ( CurrentChar < 0x80 && CurrentChar > 0 )
-					{
-						printf( "%c (0x%04X)\n", (char)CurrentChar, CurrentChar );
-					}
-					else
-					{
-						printf( "? (0x%04X)\n", CurrentChar );
+						printf("!!! FontChar was not created, Unicode: " );
+						if ( CurrentChar < 0x80 && CurrentChar > 0 )
+						{
+							printf( "%c (0x%04X)\n", (char)CurrentChar, CurrentChar );
+						}
+						else
+						{
+							printf( "? (0x%04X)\n", CurrentChar );
+						}
 					}
 				}
 			}

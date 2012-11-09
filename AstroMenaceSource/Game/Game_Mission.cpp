@@ -6,10 +6,10 @@
 
 	File name: Game_Mission.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -248,7 +248,7 @@ void GameDrawMissionFailed()
 	int Y = 180+270;
 
 	int X = Setup.iAspectRatioWidth/2 - 230;
-	if (DrawButton200_2(X,Y, GetText("1_QUIT"), 1.0f, false))
+	if (DrawButton200_2(X,Y, vw_GetText("1_QUIT"), 1.0f, false))
 	{
 		ComBuffer = 101;
 		ExitGame();
@@ -256,7 +256,7 @@ void GameDrawMissionFailed()
 
 
 	X = Setup.iAspectRatioWidth/2 + 30;
-	if (DrawButton200_2(X,Y, GetText("1_RESTART"), 1.0f, false))
+	if (DrawButton200_2(X,Y, vw_GetText("1_RESTART"), 1.0f, false))
 	{
 		ComBuffer = GAME;
 		ExitGame();

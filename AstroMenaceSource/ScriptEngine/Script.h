@@ -102,17 +102,4 @@ public:
 
 
 
-
-
-
-
-// работа с текстом
-
-void ReleaseGameText();
-void InitGameText(const char *FileName);
-const char *GetText(const char *ItemID);
-int CheckFontCharsInText();
-
-
-
 #endif // SCRIPT_H

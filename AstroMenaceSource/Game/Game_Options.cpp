@@ -56,14 +56,14 @@ void GameOptions()
 
 
 
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, GetText("3_Music_Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), GameContentTransp, !Setup.Music_check || Setup.MusicSw==0))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, vw_GetText("3_Music_Volume"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), GameContentTransp, !Setup.Music_check || Setup.MusicSw==0))
 	{
 		Setup.MusicSw--;
 		if (Setup.MusicSw<0) Setup.MusicSw = 0;
 		vw_SetMusicMainVolume(Setup.MusicSw/10.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Increase"), GameContentTransp, !Setup.Music_check || Setup.MusicSw==10))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), GameContentTransp, !Setup.Music_check || Setup.MusicSw==10))
 	{
 		Setup.MusicSw++;
 		if (Setup.MusicSw>10) Setup.MusicSw = 10;
@@ -71,8 +71,8 @@ void GameOptions()
 	}
 	if (!Setup.Music_check)
 	{
-		int SizeI = (170-vw_FontSize(GetText("3_Not_available")))/2;
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, GameContentTransp, GetText("3_Not_available"));
+		int SizeI = (170-vw_FontSize(vw_GetText("3_Not_available")))/2;
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, GameContentTransp, vw_GetText("3_Not_available"));
 	}
 	else
 	{
@@ -92,14 +92,14 @@ void GameOptions()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, GetText("3_Sound_Effects_Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), GameContentTransp, !Setup.Sound_check || Setup.SoundSw==0))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, vw_GetText("3_Sound_Effects_Volume"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), GameContentTransp, !Setup.Sound_check || Setup.SoundSw==0))
 	{
 		Setup.SoundSw--;
 		if (Setup.SoundSw<0) Setup.SoundSw = 0;
 		Audio_SetSound2DMainVolume(Setup.SoundSw/10.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Increase"), GameContentTransp, !Setup.Sound_check || Setup.SoundSw==10))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), GameContentTransp, !Setup.Sound_check || Setup.SoundSw==10))
 	{
 		Setup.SoundSw++;
 		if (Setup.SoundSw>10) Setup.SoundSw = 10;
@@ -107,8 +107,8 @@ void GameOptions()
 	}
 	if (!Setup.Sound_check)
 	{
-		int SizeI = (170-vw_FontSize(GetText("3_Not_available")))/2;
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, GameContentTransp, GetText("3_Not_available"));
+		int SizeI = (170-vw_FontSize(vw_GetText("3_Not_available")))/2;
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, GameContentTransp, vw_GetText("3_Not_available"));
 	}
 	else
 	{
@@ -129,25 +129,25 @@ void GameOptions()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, GetText("3_Mouse_Control"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), GameContentTransp, false) | DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), GameContentTransp, false))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, vw_GetText("3_Mouse_Control"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), GameContentTransp, false) | DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), GameContentTransp, false))
 	if (NeedCheck == 0)
 	{
 		Setup.MouseControl = !Setup.MouseControl;
 	}
-	int Size = vw_FontSize(Setup.MouseControl ? GetText("1_On") : GetText("1_Off"));
+	int Size = vw_FontSize(Setup.MouseControl ? vw_GetText("1_On") : vw_GetText("1_Off"));
 	int SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, Setup.MouseControl ? GetText("1_On") : GetText("1_Off"));
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, Setup.MouseControl ? vw_GetText("1_On") : vw_GetText("1_Off"));
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, GetText("3_Control_Sensitivity"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Decrease"), GameContentTransp, Setup.ControlSensivity == 1))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, vw_GetText("3_Control_Sensitivity"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), GameContentTransp, Setup.ControlSensivity == 1))
 	{
 		Setup.ControlSensivity --;
 		if (Setup.ControlSensivity<1) Setup.ControlSensivity = 1;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Increase"), GameContentTransp, Setup.ControlSensivity == 10))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), GameContentTransp, Setup.ControlSensivity == 10))
 	{
 		Setup.ControlSensivity++;
 		if (Setup.ControlSensivity>10) Setup.ControlSensivity = 10;
@@ -176,15 +176,15 @@ void GameOptions()
 
 
 	Y1 += Prir1;
-	SizeI = (100-vw_FontSize(GetText("3_MOUSE")))/2;
-	vw_DrawFont(X1+315+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, GameContentTransp, GetText("3_MOUSE"));
-	SizeI = (150-vw_FontSize(GetText("3_KEYBOARD")))/2;
-	vw_DrawFont(X1+446+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, GameContentTransp, GetText("3_KEYBOARD"));
-	SizeI = (150-vw_FontSize(GetText("3_JOYSTICK")))/2;
-	vw_DrawFont(X1+605+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, GameContentTransp, GetText("3_JOYSTICK"));
+	SizeI = (100-vw_FontSize(vw_GetText("3_MOUSE")))/2;
+	vw_DrawFont(X1+315+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, GameContentTransp, vw_GetText("3_MOUSE"));
+	SizeI = (150-vw_FontSize(vw_GetText("3_KEYBOARD")))/2;
+	vw_DrawFont(X1+446+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, GameContentTransp, vw_GetText("3_KEYBOARD"));
+	SizeI = (150-vw_FontSize(vw_GetText("3_JOYSTICK")))/2;
+	vw_DrawFont(X1+605+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, GameContentTransp, vw_GetText("3_JOYSTICK"));
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, GetText("3_Primary_Attack"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, vw_GetText("3_Primary_Attack"));
 	float Transp = 1.0f;
 	bool Off = false;
 	if (NeedCheck == 7) {Transp = But[6]; Off = true;};
@@ -220,7 +220,7 @@ void GameOptions()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, GetText("3_Secondary_Attack"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, vw_GetText("3_Secondary_Attack"));
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 8) {Transp = But[7]; Off = true;};
@@ -256,7 +256,7 @@ void GameOptions()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, GetText("3_Move_Forward"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, vw_GetText("3_Move_Forward"));
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 1) {Transp = But[0]; Off = true;};
@@ -268,7 +268,7 @@ void GameOptions()
 	}
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, GetText("3_Move_Backward"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, vw_GetText("3_Move_Backward"));
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 2) {Transp = But[1]; Off = true;};
@@ -280,7 +280,7 @@ void GameOptions()
 	}
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, GetText("3_Move_Left"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, vw_GetText("3_Move_Left"));
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 3) {Transp = But[2]; Off = true;};
@@ -292,7 +292,7 @@ void GameOptions()
 	}
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, GetText("3_Move_Right"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, vw_GetText("3_Move_Right"));
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 4) {Transp = But[3]; Off = true;};
@@ -317,7 +317,7 @@ void GameOptions()
 	int Prir = 100;
 	int X = (Setup.iAspectRatioWidth - 384)/2;
 	int Y = 165+Prir*5;
-	if (DrawButton384(X,Y, GetText("1_GAME_MENU"), GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime))
+	if (DrawButton384(X,Y, vw_GetText("1_GAME_MENU"), GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime))
 	{
 		if (Setup.KeyBoardUp == 0) Setup.KeyBoardUp = SDLK_UP;
 		if (Setup.KeyBoardDown == 0) Setup.KeyBoardDown = SDLK_DOWN;

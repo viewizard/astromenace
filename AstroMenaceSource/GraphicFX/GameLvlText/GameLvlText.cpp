@@ -4,7 +4,7 @@
 	(Hardcore 3D space shooter with spaceship upgrade possibilities.)
 	For the latest info, see http://www.viewizard.com/
 
-	File name: Text.cpp
+	File name: GameLvlText.cpp
 
 	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
@@ -31,7 +31,7 @@
 ******************************************************************************/
 
 
-#include "Text.h"
+#include "GameLvlText.h"
 
 
 

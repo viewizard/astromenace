@@ -444,7 +444,7 @@ void ProfileMenu()
 	int Prir1 = 24;
 
 	// надпись
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_New_Pilot_Profile"));
+	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_New_Pilot_Profile"));
 
 
 	Y1 += 30;
@@ -456,7 +456,7 @@ void ProfileMenu()
 	// кнопка, создания новой записи
 	bool Off = false;
 	if (strlen(NewProfileName)<=0) Off = true;
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Create"), MenuContentTransp, Off))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Create"), MenuContentTransp, Off))
 	{
 		NewRecord();
 	}
@@ -477,8 +477,8 @@ void ProfileMenu()
 
 	// список для выбора записи
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Pilots_Profiles"));
-	int Size = vw_FontSize(GetText("3_Money"));
+	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Pilots_Profiles"));
+	int Size = vw_FontSize(vw_GetText("3_Money"));
 	float WScale = 0;
 	if (Size > 70)
 	{
@@ -486,9 +486,9 @@ void ProfileMenu()
 		WScale = -70;
 	}
 	int SizeI = Setup.iAspectRatioWidth/2+2 + (130 - Size)/2;
-	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Money"));
+	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Money"));
 
-	Size = vw_FontSize(GetText("3_Experience"));
+	Size = vw_FontSize(vw_GetText("3_Experience"));
 	WScale = 0;
 	if (Size > 100)
 	{
@@ -496,9 +496,9 @@ void ProfileMenu()
 		WScale = -100;
 	}
 	SizeI = Setup.iAspectRatioWidth/2+132 + (130 - Size)/2;
-	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Experience"));
+	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Experience"));
 
-	Size = vw_FontSize(GetText("3_Difficulty"));
+	Size = vw_FontSize(vw_GetText("3_Difficulty"));
 	WScale = 0;
 	if (Size > 100)
 	{
@@ -506,7 +506,7 @@ void ProfileMenu()
 		WScale = -100;
 	}
 	SizeI = Setup.iAspectRatioWidth/2+262 + (130 - Size)/2;
-	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Difficulty"));
+	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Difficulty"));
 
 
 	Y1 += 30;
@@ -605,7 +605,7 @@ void ProfileMenu()
 		{
 			float transp = 0.3f;
 			vw_DrawFont(X1+10, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, transp*MenuContentTransp, "%i.",i+1);
-			vw_DrawFont(X1+50, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, transp*MenuContentTransp, GetText("3_empty"));
+			vw_DrawFont(X1+50, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, transp*MenuContentTransp, vw_GetText("3_empty"));
 		}
 
 		TmpY += 46;
@@ -635,7 +635,7 @@ void ProfileMenu()
 	// кнопка создания дубликата
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton200_2(X1+6, Y1-6, GetText("1_Duplicate"), MenuContentTransp, Off))
+	if (DrawButton200_2(X1+6, Y1-6, vw_GetText("1_Duplicate"), MenuContentTransp, Off))
 	{
 		DuplicateRecord();
 	}
@@ -643,7 +643,7 @@ void ProfileMenu()
 	// кнопка удаления записи
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton128_2(X1+240, Y1-6, GetText("1_Delete"), MenuContentTransp, Off))
+	if (DrawButton128_2(X1+240, Y1-6, vw_GetText("1_Delete"), MenuContentTransp, Off))
 	{
 		SetCurrentDialogBox(2);
 	}
@@ -652,7 +652,7 @@ void ProfileMenu()
 	// кнопка установки сложности
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton200_2(X1+544, Y1-6, GetText("1_Difficulty"), MenuContentTransp, Off))
+	if (DrawButton200_2(X1+544, Y1-6, vw_GetText("1_Difficulty"), MenuContentTransp, Off))
 	{
 		ComBuffer = DIFFICULTY;
 	}
@@ -663,12 +663,12 @@ void ProfileMenu()
 	int Y = 165+100*5;
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton256(X,Y, GetText("1_NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
+	if (DrawButton256(X,Y, vw_GetText("1_NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
 	{
 		ComBuffer = MISSION;
 	}
 	X = Setup.iAspectRatioWidth/2 - 284;
-	if (DrawButton256(X,Y, GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+	if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 	{
 		ComBuffer = MAIN_MENU;
 	}

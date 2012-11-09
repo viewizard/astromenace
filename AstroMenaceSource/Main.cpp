@@ -443,6 +443,10 @@ int main( int argc, char **argv )
 	printf("\n");
 
 
+	// загружаем все текстовые данные
+	vw_InitText("DATA/text.csv", ';', '\n');
+
+
 
 ReCreate:
 
@@ -784,9 +788,8 @@ ReCreate:
 	printf("\n");
 
 
-	// загружаем все текстовые данные
-	InitGameText("DATA/text.csv");
-
+	// устанавливаем язык текста
+	vw_SetTextLanguage(Setup.MenuLanguage-1);
 
 
 
@@ -1314,8 +1317,6 @@ GotoQuit:
 	SDL_Quit();
 	// сохраняем настройки игры
 	SaveXMLSetupFile();
-	// освобождаем весь подготовленный текст из языкового xml файла
-	ReleaseGameText();
 
 	// если нужно перезагрузить игру с новыми параметрами
 	if (NeedReCreate)
@@ -1347,6 +1348,8 @@ GotoQuit:
 
 
 	vw_ShutdownFont();
+	// освобождаем весь подготовленный текст из языкового файла
+	vw_ReleaseText();
 	// закрываем файловую систему
 	vw_ShutdownVFS();
 

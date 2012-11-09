@@ -17,7 +17,7 @@ id;en;de;ru
 1_Off;Off;Aus;Выкл
 1_Decrease;Decrease;Verringern;Уменьшить
 1_Increase;Increase;Erhöhen;Увеличить
-1_Video_%s_Audio;Video %s Audio;Video %s Audio;Видео %s Аудио
+1_Video_&_Audio;Video & Audio;Video & Audio;Видео и Аудио
 1_Config_Controls;Config Controls;Tastenbelegung;Управление
 1_Interface;Interface;Ausblick;Интерфейс
 1_Advanced;Advanced;Erweitert;Специальные

@@ -110,8 +110,8 @@ void OptionsAdvMenu()
 
 
 	// качество визуальных эффектов
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Visual_Effects_Quality"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Setup.VisualEffectsQuality==2))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("3_Visual_Effects_Quality"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, Setup.VisualEffectsQuality==2))
 	{
 		Setup.VisualEffectsQuality++;
 		if (Setup.VisualEffectsQuality > 2) Setup.VisualEffectsQuality = 0;
@@ -121,7 +121,7 @@ void OptionsAdvMenu()
 		if (psSpaceStatic!=0){delete psSpaceStatic; psSpaceStatic = 0;}
 		psSpaceStatic = new CSpaceStars;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Setup.VisualEffectsQuality==0))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, Setup.VisualEffectsQuality==0))
 	{
 		Setup.VisualEffectsQuality--;
 		if (Setup.VisualEffectsQuality < 0) Setup.VisualEffectsQuality = 2;
@@ -131,9 +131,9 @@ void OptionsAdvMenu()
 		if (psSpaceStatic!=0){delete psSpaceStatic; psSpaceStatic = 0;}
 		psSpaceStatic = new CSpaceStars;
 	}
-	int Size = vw_FontSize(GetText(ButtonQuality[Setup.VisualEffectsQuality]));
+	int Size = vw_FontSize(vw_GetText(ButtonQuality[Setup.VisualEffectsQuality]));
 	int SizeI = (170-Size)/2;//High, Medium, Low
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(ButtonQuality[Setup.VisualEffectsQuality]));
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(ButtonQuality[Setup.VisualEffectsQuality]));
 
 
 
@@ -143,20 +143,20 @@ void OptionsAdvMenu()
 
 	// Максимальное кол-во источников света на 1 объекта
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Point_Lights_per_Object"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Setup.MaxPointLights==0))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("3_Point_Lights_per_Object"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, Setup.MaxPointLights==0))
 	{
 		Setup.MaxPointLights--;
 		if (Setup.MaxPointLights < 0) Setup.MaxPointLights = 0;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Setup.MaxPointLights==6))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, Setup.MaxPointLights==6))
 	{
 		Setup.MaxPointLights++;
 		if (Setup.MaxPointLights > 6) Setup.MaxPointLights = 6;
 	}
-	Size = vw_FontSize(GetText(ButtonPointLights[Setup.MaxPointLights]));
+	Size = vw_FontSize(vw_GetText(ButtonPointLights[Setup.MaxPointLights]));
 	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(ButtonPointLights[Setup.MaxPointLights]));
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(ButtonPointLights[Setup.MaxPointLights]));
 
 
 
@@ -166,20 +166,20 @@ void OptionsAdvMenu()
 
 	// качество текстур
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Textures_Quality"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Options_TexturesQuality==1))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("3_Textures_Quality"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, Options_TexturesQuality==1))
 	{
 		Options_TexturesQuality--;
 		if (Options_TexturesQuality < 1) Options_TexturesQuality = 3;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Options_TexturesQuality==3))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, Options_TexturesQuality==3))
 	{
 		Options_TexturesQuality++;
 		if (Options_TexturesQuality > 3) Options_TexturesQuality = 1;
 	}
-	Size = vw_FontSize(GetText(ButtonTexturesQuality[Options_TexturesQuality-1]));
+	Size = vw_FontSize(vw_GetText(ButtonTexturesQuality[Options_TexturesQuality-1]));
 	SizeI = (170-Size)/2;//High, Medium, Low
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(ButtonTexturesQuality[Options_TexturesQuality-1]));
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(ButtonTexturesQuality[Options_TexturesQuality-1]));
 
 
 
@@ -189,20 +189,20 @@ void OptionsAdvMenu()
 
 	// тип фильтрации текстуры
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Texture_Filtering_Mode"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Setup.TextureFilteringMode==1))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("3_Texture_Filtering_Mode"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, Setup.TextureFilteringMode==1))
 	{
 		Setup.TextureFilteringMode--;
 		if (Setup.TextureFilteringMode < 1) Setup.TextureFilteringMode = 2;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Setup.TextureFilteringMode==2))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, Setup.TextureFilteringMode==2))
 	{
 		Setup.TextureFilteringMode++;
 		if (Setup.TextureFilteringMode > 2) Setup.TextureFilteringMode = 1;
 	}
-	Size = vw_FontSize(GetText(ButtonTextFiltr[Setup.TextureFilteringMode-1]));
+	Size = vw_FontSize(vw_GetText(ButtonTextFiltr[Setup.TextureFilteringMode-1]));
 	SizeI = (170-Size)/2;//Bilinear, Trilinear
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(ButtonTextFiltr[Setup.TextureFilteringMode-1]));
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(ButtonTextFiltr[Setup.TextureFilteringMode-1]));
 
 
 
@@ -212,13 +212,13 @@ void OptionsAdvMenu()
 
 	// анизотропия
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Anisotropy_Level"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Setup.AnisotropyLevel==1))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("3_Anisotropy_Level"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, Setup.AnisotropyLevel==1))
 	{
 		Setup.AnisotropyLevel = (int)(Setup.AnisotropyLevel/2);
 		if (Setup.AnisotropyLevel < 1) Setup.AnisotropyLevel = 1;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Setup.AnisotropyLevel==CAPS->MaxAnisotropyLevel))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, Setup.AnisotropyLevel==CAPS->MaxAnisotropyLevel))
 	{
 		Setup.AnisotropyLevel = Setup.AnisotropyLevel*2;
 		if (Setup.AnisotropyLevel > CAPS->MaxAnisotropyLevel) Setup.AnisotropyLevel = CAPS->MaxAnisotropyLevel;
@@ -233,15 +233,15 @@ void OptionsAdvMenu()
 	{
 		if (CAPS->MaxAnisotropyLevel > 1)
 		{
-			Size = vw_FontSize(GetText("1_Off"));
+			Size = vw_FontSize(vw_GetText("1_Off"));
 			SizeI = (170-Size)/2;
-			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("1_Off"));
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("1_Off"));
 		}
 		else
 		{
-			Size = vw_FontSize(GetText("3_Not_available"));
+			Size = vw_FontSize(vw_GetText("3_Not_available"));
 			SizeI = (170-Size)/2;
-			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Not_available"));
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Not_available"));
 		}
 	}
 
@@ -250,15 +250,15 @@ void OptionsAdvMenu()
 
 	// вкл-выкл компрессии текстур
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, GetText("3_Textures_Compression"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, !CAPS->TexturesCompression) | DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, !CAPS->TexturesCompression))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("3_Textures_Compression"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, !CAPS->TexturesCompression) | DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, !CAPS->TexturesCompression))
 	{
 		Options_TexturesCompression++;
 		if (Options_TexturesCompression > 1) Options_TexturesCompression = 0;
 	}
-	Size = vw_FontSize(Options_TexturesCompression ? GetText("1_On") : GetText("1_Off"));
+	Size = vw_FontSize(Options_TexturesCompression ? vw_GetText("1_On") : vw_GetText("1_Off"));
 	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Options_TexturesCompression ? GetText("1_On") : GetText("1_Off"));
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Options_TexturesCompression ? vw_GetText("1_On") : vw_GetText("1_Off"));
 
 
 
@@ -266,8 +266,8 @@ void OptionsAdvMenu()
 
 	//Options_MultiSampleType
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Multisample_Antialiasing"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, (Options_MSAA == 0) | (CAPS->MaxSamples == 0)))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Multisample_Antialiasing"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, (Options_MSAA == 0) | (CAPS->MaxSamples == 0)))
 	{
 		// находим текущий режим
 		int CurrentMode = 0;
@@ -303,7 +303,7 @@ void OptionsAdvMenu()
 	bool TestStateButton = false;
 	if (CAPS->MaxMultisampleCoverageModes > 0) TestStateButton = (CAPS->MultisampleCoverageModes[CAPS->MaxMultisampleCoverageModes-1].ColorSamples == Options_MSAA) &
 												(CAPS->MultisampleCoverageModes[CAPS->MaxMultisampleCoverageModes-1].CoverageSamples == Options_CSAA);
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, TestStateButton | (CAPS->MaxSamples == 0)))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, TestStateButton | (CAPS->MaxSamples == 0)))
 	{
 		// находим текущий режим
 		int CurrentMode = 0;
@@ -340,15 +340,15 @@ void OptionsAdvMenu()
 	{
 		if (CAPS->MaxSamples == 0)
 		{
-			Size = vw_FontSize(GetText("3_Not_available"));
+			Size = vw_FontSize(vw_GetText("3_Not_available"));
 			SizeI = (170-Size)/2;
-			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Not_available"));
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Not_available"));
 		}
 		else
 		{
-			Size = vw_FontSize(GetText("1_Off"));
+			Size = vw_FontSize(vw_GetText("1_Off"));
 			SizeI = (170-Size)/2;
-			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText("1_Off"));
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("1_Off"));
 		}
 	}
 	else
@@ -371,8 +371,8 @@ void OptionsAdvMenu()
 
 	// вкл-выкл шейдеров, если они поддерживаются
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.0f,0.0f, MenuContentTransp, GetText("3_OpenGL_Shading_Language"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0) | DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.0f,0.0f, MenuContentTransp, vw_GetText("3_OpenGL_Shading_Language"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0) | DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0))
 	{
 		Options_UseGLSL = !Options_UseGLSL;
 		// если выключены шейдеры - выключаем и тени
@@ -381,15 +381,15 @@ void OptionsAdvMenu()
 	}
 	if (CAPS->GLSL100Supported & (CAPS->ShaderModel >= 3.0))
 	{
-		Size = vw_FontSize(Options_UseGLSL ? GetText("1_On") : GetText("1_Off"));
+		Size = vw_FontSize(Options_UseGLSL ? vw_GetText("1_On") : vw_GetText("1_Off"));
 		SizeI = (170-Size)/2;
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Options_UseGLSL ? GetText("1_On") : GetText("1_Off"));
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Options_UseGLSL ? vw_GetText("1_On") : vw_GetText("1_Off"));
 	}
 	else
 	{
-		Size = vw_FontSize(GetText("3_Not_available"));
+		Size = vw_FontSize(vw_GetText("3_Not_available"));
 		SizeI = (170-Size)/2;
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Not_available"));
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Not_available"));
 	}
 
 
@@ -398,28 +398,28 @@ void OptionsAdvMenu()
 
 	// качество теней
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.0f,0.0f, MenuContentTransp, GetText("3_Shadow_Quality"));
-	if (DrawButton128_2(X1+300, Y1-6, GetText("1_Prev"), MenuContentTransp, Options_ShadowMap==0 || !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0 || !CAPS->FramebufferObject || !Options_UseGLSL || (CAPS->FramebufferObjectDepthSize < 24)))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.0f,0.0f, MenuContentTransp, vw_GetText("3_Shadow_Quality"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, Options_ShadowMap==0 || !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0 || !CAPS->FramebufferObject || !Options_UseGLSL || (CAPS->FramebufferObjectDepthSize < 24)))
 	{
 		Options_ShadowMap--;
 		if (Options_ShadowMap < 0) Options_ShadowMap = 0;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, GetText("1_Next"), MenuContentTransp, Options_ShadowMap==3 || !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0 || !CAPS->FramebufferObject || !Options_UseGLSL || (CAPS->FramebufferObjectDepthSize < 24)))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, Options_ShadowMap==3 || !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0 || !CAPS->FramebufferObject || !Options_UseGLSL || (CAPS->FramebufferObjectDepthSize < 24)))
 	{
 		Options_ShadowMap++;
 		if (Options_ShadowMap > 3) Options_ShadowMap = 3;
 	}
 	if (CAPS->GLSL100Supported & (CAPS->ShaderModel >= 3.0) & CAPS->FramebufferObject & Options_UseGLSL & (CAPS->FramebufferObjectDepthSize >= 24))
 	{
-		Size = vw_FontSize(GetText(ShadowButtonQuality[Options_ShadowMap]));
+		Size = vw_FontSize(vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
 		SizeI = (170-Size)/2;//High, Medium, Low
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GetText(ShadowButtonQuality[Options_ShadowMap]));
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
 	}
 	else
 	{
-		Size = vw_FontSize(GetText("3_Not_available"));
+		Size = vw_FontSize(vw_GetText("3_Not_available"));
 		SizeI = (170-Size)/2;
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, GetText("3_Not_available"));
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Not_available"));
 	}
 
 
@@ -435,21 +435,19 @@ void OptionsAdvMenu()
 	int Y = 165+Prir*4;
 
 	X = Setup.iAspectRatioWidth/2 - 366;
-	if (DrawButton200_2(X,Y+28, GetText("1_Interface"), MenuContentTransp, false))
+	if (DrawButton200_2(X,Y+28, vw_GetText("1_Interface"), MenuContentTransp, false))
 	{
 		ComBuffer = INTERFACE;
 	}
 
 	X = Setup.iAspectRatioWidth/2 - 100;
-	char Text[1024];
-	sprintf(Text,GetText("1_Video_%s_Audio"),"&");
-	if (DrawButton200_2(X,Y+28, Text, MenuContentTransp, false))
+	if (DrawButton200_2(X,Y+28, vw_GetText("1_Video_&_Audio"), MenuContentTransp, false))
 	{
 		ComBuffer = OPTIONS;
 	}
 
 	X = Setup.iAspectRatioWidth/2 + 166;
-	if (DrawButton200_2(X,Y+28, GetText("1_Config_Controls"), MenuContentTransp, false))
+	if (DrawButton200_2(X,Y+28, vw_GetText("1_Config_Controls"), MenuContentTransp, false))
 	{
 		ComBuffer = CONFCONTROL;
 	}
@@ -470,7 +468,7 @@ void OptionsAdvMenu()
 	{
 		X = (Setup.iAspectRatioWidth - 384)/2;
 		Y = Y+Prir;
-		if (DrawButton384(X,Y, GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+		if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 		{
 			ComBuffer = MAIN_MENU;
 		}
@@ -479,12 +477,12 @@ void OptionsAdvMenu()
 	{
 		X = Setup.iAspectRatioWidth/2 - 256 - 38;
 		Y = Y+Prir;
-		if (DrawButton256(X,Y, GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+		if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 		{
 			ComBuffer = MAIN_MENU;
 		}
 		X = Setup.iAspectRatioWidth/2 + 38;
-		if (DrawButton256(X,Y, GetText("1_APPLY"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime))
+		if (DrawButton256(X,Y, vw_GetText("1_APPLY"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime))
 		{
 			// проверяем, нужно перегружать или нет
 			if (Options_TexturesCompression != Setup.TexturesCompression ||
