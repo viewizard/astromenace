@@ -328,9 +328,37 @@ void Loop_Proc()
 
 
 
+	// после обхода всех активных элементов меню, надо подкорректировать состояние выбора через клавиатуру (если оно было)
+	if (vw_GetKeys(SDLK_TAB)){CurrentKeyboardSelectMenuElement++;vw_SetKeys(SDLK_TAB, false);}
 
+	// если не в игре, используем и кнопки курсора
+	if ((GameStatus != GAME) | ((GameStatus == GAME) & (isDialogBoxDrawing() | (GameContentTransp >= 0.99f))))
+	{
+		if (vw_GetKeys(SDLK_RIGHT) | vw_GetKeys(SDLK_DOWN))
+		{
+			CurrentKeyboardSelectMenuElement++;
+			vw_SetKeys(SDLK_RIGHT, false);
+			vw_SetKeys(SDLK_DOWN, false);
+		}
+		if (vw_GetKeys(SDLK_LEFT) | vw_GetKeys(SDLK_UP))
+		{
+			CurrentKeyboardSelectMenuElement--;
+			vw_SetKeys(SDLK_LEFT, false);
+			vw_SetKeys(SDLK_UP, false);
+			if (CurrentKeyboardSelectMenuElement < 1) CurrentKeyboardSelectMenuElement = CurrentActiveMenuElement;
+		}
+	}
 
-
+	if (CurrentKeyboardSelectMenuElement > 0)
+	{
+		// если у нас вообще есть активные элементы, ставим на первый
+		if (CurrentActiveMenuElement > 0)
+		{
+			if (CurrentKeyboardSelectMenuElement > CurrentActiveMenuElement) CurrentKeyboardSelectMenuElement = 1;
+		}
+		else CurrentKeyboardSelectMenuElement = 0;
+	}
+	CurrentActiveMenuElement = 0;
 
 
 

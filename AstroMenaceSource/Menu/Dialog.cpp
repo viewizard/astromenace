@@ -112,11 +112,23 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 	bool CanClick = false;
 
 
+	// работаем с клавиатурой
+	if (Transp >= 0.99f) CurrentActiveMenuElement++;
+	bool InFocusByKeyboard = false;
+	if (CurrentKeyboardSelectMenuElement > 0)
+	{
+		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement)
+		{
+			InFocusByKeyboard = true;
+		}
+	}
+
+
 	SetRect(&DstRest,X,Y,X+204,Y+35);
 	if  (((DstRest.right  >= MouseX)&
 		(DstRest.left<= MouseX)&
 		(DstRest.bottom >= MouseY)&
-		(DstRest.top<= MouseY)))
+		(DstRest.top<= MouseY)) | InFocusByKeyboard)
 	{
 		// если тухнем или появляемся - не жать
 		ON = true;
@@ -171,9 +183,14 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true))
+		if (vw_GetWindowLBMouse(true) | (InFocusByKeyboard & (vw_GetKeys(SDLK_KP_ENTER) | vw_GetKeys(SDLK_RETURN))))
 		{
 			Audio_PlaySound2D(2,1.0f);
+			if (InFocusByKeyboard)
+			{
+				vw_SetKeys(SDLK_KP_ENTER, false);
+				vw_SetKeys(SDLK_RETURN, false);
+			}
 			return true;
 		}
 
@@ -203,11 +220,23 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 	bool CanClick = false;
 
 
+	// работаем с клавиатурой
+	if (Transp >= 0.99f) CurrentActiveMenuElement++;
+	bool InFocusByKeyboard = false;
+	if (CurrentKeyboardSelectMenuElement > 0)
+	{
+		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement)
+		{
+			InFocusByKeyboard = true;
+		}
+	}
+
+
 	SetRect(&DstRest,X,Y,X+132,Y+35);
 	if  (((DstRest.right  >= MouseX)&
 		(DstRest.left<= MouseX)&
 		(DstRest.bottom >= MouseY)&
-		(DstRest.top<= MouseY)))
+		(DstRest.top<= MouseY)) | InFocusByKeyboard)
 	{
 		// если тухнем или появляемся - не жать
 		ON = true;
@@ -261,9 +290,14 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true))
+		if (vw_GetWindowLBMouse(true) | (InFocusByKeyboard & (vw_GetKeys(SDLK_KP_ENTER) | vw_GetKeys(SDLK_RETURN))))
 		{
 			Audio_PlaySound2D(2,1.0f);
+			if (InFocusByKeyboard)
+			{
+				vw_SetKeys(SDLK_KP_ENTER, false);
+				vw_SetKeys(SDLK_RETURN, false);
+			}
 			return true;
 		}
 
@@ -294,12 +328,25 @@ void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float 
 	bool ON = false;
 	bool CanClick = false;
 
+
+	// работаем с клавиатурой
+	if ((Transp >= 0.99f) && DrawGameCursor) CurrentActiveMenuElement++;
+	bool InFocusByKeyboard = false;
+	if (CurrentKeyboardSelectMenuElement > 0)
+	{
+		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement)
+		{
+			InFocusByKeyboard = true;
+		}
+	}
+
+
 	// 20 - расстояние между текстом
 	SetRect(&DstRest,X+4,Y+4,X+40+20+Size,Y+40-4);
-	if  (((DstRest.right  >= MouseX)&
+	if  ((((DstRest.right  >= MouseX)&
 		(DstRest.left<= MouseX)&
 		(DstRest.bottom >= MouseY)&
-		(DstRest.top<= MouseY))  && DrawGameCursor)
+		(DstRest.top<= MouseY)) | InFocusByKeyboard)  && DrawGameCursor)
 	{
 		// если тухнем или появляемся - не жать
 		ON = true;
@@ -326,10 +373,15 @@ void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float 
 
 
 	if (CanClick && !DragWeapon)
-		if (vw_GetWindowLBMouse(true))
+		if (vw_GetWindowLBMouse(true) | (InFocusByKeyboard & (vw_GetKeys(SDLK_KP_ENTER) | vw_GetKeys(SDLK_RETURN))))
 		{
 			*CheckBoxStatus = !(*CheckBoxStatus);
 			Audio_PlaySound2D(2,1.0f);
+			if (InFocusByKeyboard)
+			{
+				vw_SetKeys(SDLK_KP_ENTER, false);
+				vw_SetKeys(SDLK_RETURN, false);
+			}
 		}
 }
 

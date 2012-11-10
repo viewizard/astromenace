@@ -1607,14 +1607,6 @@ void InformationMenu()
 	}
 
 
-	X = Setup.iAspectRatioWidth/2 + 432 - 200;
-	if (DrawButton200_2(X,Y+28, vw_GetText(InfoGroupNames[GetInfoNextGroup()-1]), MenuContentTransp, false))
-	{
-		CreateNum = GetInfoSwitchToGroup(GetInfoNextGroup());
-		CreateInfoObject();
-	}
-
-
 	X = Setup.iAspectRatioWidth/2 - 209;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Page_Up"), MenuContentTransp, false))
 	{
@@ -1643,6 +1635,14 @@ void InformationMenu()
 		if (CreateNum>InfoEnd) CreateNum = 1;
 		CreateInfoObject();
 		vw_SetKeys(SDLK_PAGEDOWN, false);
+	}
+
+
+	X = Setup.iAspectRatioWidth/2 + 432 - 200;
+	if (DrawButton200_2(X,Y+28, vw_GetText(InfoGroupNames[GetInfoNextGroup()-1]), MenuContentTransp, false))
+	{
+		CreateNum = GetInfoSwitchToGroup(GetInfoNextGroup());
+		CreateInfoObject();
 	}
 
 

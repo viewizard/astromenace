@@ -222,15 +222,15 @@ int vw_KeyboardNameCode(const char * Name)
 
 
 // текущий юникод нажатой клавиши
-Uint16 CurrentKeyUnicod = 0;
+Uint16 CurrentKeyUnicode = 0;
 // установка
-void vw_SetCurrentKeyUnicod(Uint16 NewKeyUnicod)
+void vw_SetCurrentKeyUnicode(Uint16 NewKeyUnicode)
 {
-	CurrentKeyUnicod = NewKeyUnicod;
+	CurrentKeyUnicode = NewKeyUnicode;
 }
 // получение
-Uint16 vw_GetCurrentKeyUnicod()
+Uint16 vw_GetCurrentKeyUnicode()
 {
-	return CurrentKeyUnicod;
+	return CurrentKeyUnicode;
 }
 

@@ -237,6 +237,9 @@ float ShadowMap_Get_yPixelOffset();
 //------------------------------------------------------------------------------------
 // Button.cpp
 //------------------------------------------------------------------------------------
+extern int CurrentActiveMenuElement;
+extern int CurrentKeyboardSelectMenuElement;
+
 bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTransp, float *Update);
 bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTransp, float *Update, bool Off=false);
 bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, bool SoundClick = true);
