@@ -300,19 +300,35 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	int MouseX, MouseY;
 	vw_GetMousePos(&MouseX, &MouseY);
 
+	// работаем с клавиатурой
+	if ((MenuContentTransp >= 0.99f) && !isDialogBoxDrawing() && !DragWeapon) CurrentActiveMenuElement++;
+	bool InFocusByKeyboard = false;
+	if (CurrentKeyboardSelectMenuElement > 0)
+	{
+		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement)
+		{
+			InFocusByKeyboard = true;
+		}
+	}
+
 	SetRect(&SrcRest,0,0,18,56);
 	SetRect(&DstRest,Xpos+23+154,Ypos+40,Xpos+18+23+154,Ypos+56+40);
-	if  (((DstRest.right  >= MouseX)&
+	if  ((((DstRest.right  >= MouseX)&
 		(DstRest.left<= MouseX)&
 		(DstRest.bottom >= MouseY)&
-		(DstRest.top<= MouseY)) && !isDialogBoxDrawing() && !DragWeapon)
+		(DstRest.top<= MouseY)) | InFocusByKeyboard) && !isDialogBoxDrawing() && !DragWeapon)
 	{
 		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button_weaponry_in.tga"), true, MenuContentTransp);
 		CurrentCursorStatus = 1;
-		if (vw_GetWindowLBMouse(true))
+		if (vw_GetWindowLBMouse(true) | (InFocusByKeyboard & (vw_GetKeys(SDLK_KP_ENTER) | vw_GetKeys(SDLK_RETURN))))
 		{
 			Audio_PlaySound2D(2,1.0f);
 			WeaponSetupSlot = SlotNum;
+			if (InFocusByKeyboard)
+			{
+				vw_SetKeys(SDLK_KP_ENTER, false);
+				vw_SetKeys(SDLK_RETURN, false);
+			}
 		}
 	}
 	else

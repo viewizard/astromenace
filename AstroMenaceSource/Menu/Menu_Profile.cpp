@@ -318,10 +318,10 @@ void ProfileInputText()
 	// пишем букву, если можем
 	if (Pos < 127)
 	if (vw_FontSize(NewProfileName)< 540)
-	if (vw_GetCurrentKeyUnicod()) // если тут не ноль, а юникод - значит нажали
+	if (vw_GetCurrentKeyUnicode()) // если тут не ноль, а юникод - значит нажали
 	{
-		Uint16 NewChar = vw_GetCurrentKeyUnicod();
-		vw_SetCurrentKeyUnicod(0); // сразу сбрасываем данные
+		Uint16 NewChar = vw_GetCurrentKeyUnicode();
+		vw_SetCurrentKeyUnicode(0); // сразу сбрасываем данные
 		// делаем простое преобразование, без учета суррогатной пары
 		char* str = NewProfileName + Pos;
 		if (NewChar <= 0x7F)
@@ -348,7 +348,7 @@ void ProfileInputText()
 
 		SoundTaping = Audio_PlaySound2D(4,1.0f);
 
-		vw_SetCurrentKeyUnicod(0);
+		vw_SetCurrentKeyUnicode(0);
 	}
 
 
@@ -547,12 +547,22 @@ void ProfileMenu()
 			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i%%", Setup.Profile[i].Difficulty);
 
 
+			// работаем с клавиатурой
+			if ((MenuContentTransp >= 0.99f) && !isDialogBoxDrawing()) CurrentActiveMenuElement++;
+			bool InFocusByKeyboard = false;
+			if (CurrentKeyboardSelectMenuElement > 0)
+			{
+				if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement)
+				{
+					InFocusByKeyboard = true;
+				}
+			}
 
 			// проверяем, если стоим над записью
 			SetRect(&SrcRest,0,0,2,2);
 			SetRect(&DstRest,X1,Y1-233+46*i,X1+750,Y1-234+46+46*i);
 			if (!isDialogBoxDrawing())
-			if (vw_OnRect(&DstRest))
+			if (vw_OnRect(&DstRest) | InFocusByKeyboard)
 			{
 				TMPSoundOnProfileID = i;
 				CurrentCursorStatus = 1;
@@ -560,10 +570,11 @@ void ProfileMenu()
 				if (SoundOnProfileID != i)
 				{
 					SoundOnProfileID = i;
-					Audio_PlaySound2D(5,1.0f);
+					// если задействуем клавиатуру - неиграем тут звук
+					if (CurrentKeyboardSelectMenuElement == 0) Audio_PlaySound2D(5,1.0f);
 				}
 
-				if (vw_GetWindowLBMouse(true))
+				if (vw_GetWindowLBMouse(true) | (InFocusByKeyboard & (vw_GetKeys(SDLK_KP_ENTER) | vw_GetKeys(SDLK_RETURN))))
 				{
 					// если другой - нужно сбросить миссию...
 					if (CurrentProfile != i) CurrentMission = Setup.Profile[i].LastMission;
@@ -571,6 +582,11 @@ void ProfileMenu()
 					Setup.LastProfile = CurrentProfile;
 					// играем звук выбора
 					Audio_PlaySound2D(6,1.0f);
+					if (InFocusByKeyboard)
+					{
+						vw_SetKeys(SDLK_KP_ENTER, false);
+						vw_SetKeys(SDLK_RETURN, false);
+					}
 				}
 
 				if (CurrentProfile != i)
@@ -659,18 +675,18 @@ void ProfileMenu()
 
 
 
-	int X = Setup.iAspectRatioWidth/2 + 28;
+	int X = Setup.iAspectRatioWidth/2 - 284;
 	int Y = 165+100*5;
-	Off = true;
-	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton256(X,Y, vw_GetText("1_NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
-	{
-		ComBuffer = MISSION;
-	}
-	X = Setup.iAspectRatioWidth/2 - 284;
 	if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 	{
 		ComBuffer = MAIN_MENU;
+	}
+	Off = true;
+	if (CurrentProfile >= 0) Off = false;
+	X = Setup.iAspectRatioWidth/2 + 28;
+	if (DrawButton256(X,Y, vw_GetText("1_NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
+	{
+		ComBuffer = MISSION;
 	}
 
 

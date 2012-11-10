@@ -509,7 +509,19 @@ void MissionMenu()
 		SetRect(&DstRest,X1,Y1+1,X1+750,Y1+64);
 		if (i <= Setup.Profile[CurrentProfile].OpenLevelNum)
 		{
-			if (vw_OnRect(&DstRest) && !isDialogBoxDrawing())
+			// работаем с клавиатурой
+			if ((MenuContentTransp >= 0.99f) && !isDialogBoxDrawing()) CurrentActiveMenuElement++;
+			bool InFocusByKeyboard = false;
+			if (CurrentKeyboardSelectMenuElement > 0)
+			{
+				if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement)
+				{
+					InFocusByKeyboard = true;
+				}
+			}
+
+
+			if ((vw_OnRect(&DstRest) | InFocusByKeyboard) && !isDialogBoxDrawing())
 			{
 				TMPSoundOnMissionID = i;
 				CurrentCursorStatus = 1;
@@ -517,7 +529,8 @@ void MissionMenu()
 				if (SoundOnMissionID != i)
 				{
 					SoundOnMissionID = i;
-					Audio_PlaySound2D(5,1.0f);
+					// если задействуем клавиатуру - неиграем тут звук
+					if (CurrentKeyboardSelectMenuElement == 0) Audio_PlaySound2D(5,1.0f);
 				}
 
 				// если стоим над ним...
@@ -567,12 +580,17 @@ void MissionMenu()
 					SetRect(&DstRest,X1+64,Y1+1,X1+749,Y1+63);
 					vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/whitepoint.tga"), true, 0.1f*MenuContentTransp);
 				}
-				if (vw_GetWindowLBMouse(true))
+				if (vw_GetWindowLBMouse(true) | (InFocusByKeyboard & (vw_GetKeys(SDLK_KP_ENTER) | vw_GetKeys(SDLK_RETURN))))
 				{
 
 					CurrentMission = i;
 					Setup.Profile[CurrentProfile].LastMission = CurrentMission;
 					Audio_PlaySound2D(6,1.0f);
+					if (InFocusByKeyboard)
+					{
+						vw_SetKeys(SDLK_KP_ENTER, false);
+						vw_SetKeys(SDLK_RETURN, false);
+					}
 				}
 
 				if (vw_GetWindowLBDoubleMouse(true))
@@ -693,10 +711,16 @@ void MissionMenu()
 
 
 
-	int X = Setup.iAspectRatioWidth/2 + 28;
+	int X = Setup.iAspectRatioWidth/2 - 284;
 	int Y = 165+100*5;
+	if (DrawButton256(X,Y, vw_GetText("1_BACK"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+	{
+		ComBuffer = PROFILE;
+	}
+
 	Off = true;
 	if (CurrentMission >= 0) Off = false;
+	X = Setup.iAspectRatioWidth/2 + 28;
 	if (DrawButton256(X,Y, vw_GetText("1_NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
 	{
 		// если уже играли в эту миссию
@@ -720,11 +744,7 @@ void MissionMenu()
 			WorkshopCreate();
 		}
 	}
-	X = Setup.iAspectRatioWidth/2 - 284;
-	if (DrawButton256(X,Y, vw_GetText("1_BACK"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
-	{
-		ComBuffer = PROFILE;
-	}
+
 
 
 

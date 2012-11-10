@@ -1056,7 +1056,8 @@ loop:
 				// работаем с движением мышки
 				case SDL_MOUSEMOTION:
                     vw_SetMousePos(event.motion.x, event.motion.y);
-                    //vw_SetMousePosRel(event.motion.xrel, event.motion.yrel);
+					// если есть перемещение мышкой - сразу убираем управление клавиатурой
+					CurrentKeyboardSelectMenuElement = 0;
 					break;
 
 				// обрабатываем кнопки мыши
@@ -1112,7 +1113,7 @@ loop:
 					if (event.key.keysym.unicode > 0x001F) // пропускаем С0 Сontrol Characters (ентер, бэкспейс и прочие...)
 					if (!((event.key.keysym.unicode >= 0x007F) & (event.key.keysym.unicode <= 0x009F))) // пропускаем С1 Сontrol Characters
 					if (event.key.keysym.unicode != 0x0025) // !!! потом разобраться, на символе % безбожно глючит
-						vw_SetCurrentKeyUnicod(event.key.keysym.unicode);
+						vw_SetCurrentKeyUnicode(event.key.keysym.unicode);
 #ifdef gamedebug
 					printf("Keydown, Unicode: " );
 					if ( event.key.keysym.unicode < 0x80 && event.key.keysym.unicode > 0 )
@@ -1129,7 +1130,7 @@ loop:
 
 				case SDL_KEYUP:
 					// сбрасываем юникод
-					vw_SetCurrentKeyUnicod(0);
+					vw_SetCurrentKeyUnicode(0);
 					break;
 
 				default:
