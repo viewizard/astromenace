@@ -50,7 +50,7 @@ void CreditsMenu()
 	LastCreditsCurrentPosUpdateTime = vw_GetTime();
 
 	// зацикливание
-	if (CreditsCurrentPos <= -3095) CreditsCurrentPos = 0.0f;
+	if (CreditsCurrentPos <= -3120) CreditsCurrentPos = 0.0f;
 
 
 
@@ -300,6 +300,13 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Mikhail_Storcheous"));
+	Y1 += Offset1;
+	Y2 += Offset1;
+	// текстуры для trail
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Daniel_Dye")))/2;
+	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Daniel_Dye"));
 
 
 

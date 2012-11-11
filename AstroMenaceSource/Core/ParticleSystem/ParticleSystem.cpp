@@ -53,6 +53,7 @@ eParticleSystem::eParticleSystem()
 	EmissionResidue =  0.0f;
 	Angle = Direction = VECTOR3D(0,0,0);
 	Texture = 0;
+	BlendType = 0;
 	AttractiveValue = 25.0f;
 	IsSuppressed = false;
 	DestroyIfNoParticles = false;
@@ -206,7 +207,7 @@ void eParticleSystem::Detach(eParticle * OldParticle)
 bool eParticleSystem::Update(float Time)
 {
 	// первый раз... просто берем время
-	if (TimeLastUpdate == -1.0f) {TimeLastUpdate = Time;return true;}
+	if (TimeLastUpdate < 0.0f) {TimeLastUpdate = Time;return true;}
 
 	// Time - это абсолютное время, вычисляем дельту
 	float TimeDelta = Time - TimeLastUpdate;
@@ -224,14 +225,17 @@ bool eParticleSystem::Update(float Time)
 	eParticle *tmp = Start;
 
 	// предварительная инициализация
-	float MinX, MaxX; MinX = MaxX = Location.x;
-	float MinY, MaxY; MinY = MaxY = Location.y;
-	float MinZ, MaxZ; MinZ = MaxZ = Location.z;
-	if (tmp!=0)
+	float MinX = Location.x+100000.0f;
+	float MinY = Location.y+100000.0f;
+	float MinZ = Location.z+100000.0f;
+	float MaxX = Location.x-100000.0f;
+	float MaxY = Location.y-100000.0f;
+	float MaxZ = Location.z-100000.0f;
+	if (tmp == 0)
 	{
-		MinX = MaxX = tmp->Location.x + tmp->Size;
-		MinY = MaxY = tmp->Location.y + tmp->Size;
-		MinZ = MaxZ = tmp->Location.z + tmp->Size;
+		MinX = MaxX = Location.x;
+		MinY = MaxY = Location.y;
+		MinZ = MaxZ = Location.z;
 	}
 
 	while (tmp!=0)
@@ -662,8 +666,18 @@ void eParticleSystem::Draw()
 	if (!vw_BoxInFrustum(AABB[6], AABB[0])) return;
 
 
+	int DrawCount = 0;
+	eParticle *tmp = Start;
+	while (tmp!=0)
+	{
+		eParticle *tmp2 = tmp->Next;
+		DrawCount++;
+		tmp = tmp2;
+	}
+
+
 	// если есть живые - рисуем их
-	if (ParticlesAlive > 0)
+	if (DrawCount > 0)
 	{
 		if (tmpDATA != 0){delete [] tmpDATA; tmpDATA = 0;}
 
@@ -674,7 +688,7 @@ void eParticleSystem::Draw()
 
 		// делаем массив для всех элементов
 		// RI_3f_XYZ | RI_2f_TEX | RI_4ub_COLOR
-		tmpDATA = new float[4*(3+2+1)*ParticlesAlive];
+		tmpDATA = new float[4*(3+2+1)*DrawCount];
 		tmpDATAub = (GLubyte *)tmpDATA;
 
 
@@ -836,9 +850,13 @@ void eParticleSystem::Draw()
 	}
 
 
-	if (ParticlesAlive > 0)
+	if (DrawCount > 0)
 	{
-		vw_SendVertices(RI_QUADS, 4*ParticlesAlive, RI_3f_XYZ | RI_4ub_COLOR | RI_1_TEX, tmpDATA, 6*sizeof(float));
+		if (BlendType == 1) vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+
+		vw_SendVertices(RI_QUADS, 4*DrawCount, RI_3f_XYZ | RI_4ub_COLOR | RI_1_TEX, tmpDATA, 6*sizeof(float));
+
+		if (BlendType != 0) vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 	}
 }
 

@@ -136,7 +136,7 @@ sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 #define TEXTURE_NO_MIPMAP	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE
 
 // сколько нужно загружать в листе меню
-const int	MenuLoadListCount = 175;
+const int	MenuLoadListCount = 180;
 // лист загрузки меню
 LoadList	MenuLoadList[MenuLoadListCount] =
 {
@@ -340,6 +340,11 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/GFX/flare1.tga",							1, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
 {"DATA/GFX/flare2.tga",							1, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
 {"DATA/GFX/flare3.tga",							1, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
+{"DATA/GFX/trail1.tga",							1, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
+{"DATA/GFX/trail2.tga",							1, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
+{"DATA/GFX/trail3.tga",							1, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
+{"DATA/GFX/trail4.tga",							1, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
+{"DATA/GFX/trail5.tga",							1, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
 
 };
 
@@ -359,7 +364,7 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 
 
 
-const int	GameLevelsLoadListCount = 82+41+35;
+const int	GameLevelsLoadListCount = 87+41+35;
 LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {
 // 2д часть
@@ -401,6 +406,11 @@ LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {"DATA/GFX/flare1.tga",							1, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
 {"DATA/GFX/flare2.tga",							1, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
 {"DATA/GFX/flare3.tga",							1, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
+{"DATA/GFX/trail1.tga",							1, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
+{"DATA/GFX/trail2.tga",							1, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
+{"DATA/GFX/trail3.tga",							1, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
+{"DATA/GFX/trail4.tga",							1, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
+{"DATA/GFX/trail5.tga",							1, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f},
 // иконки оружия для перетаскивания-отображения в слотах оружия
 {"DATA/MENU/weapon1_icon.tga",					0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f},
 {"DATA/MENU/weapon2_icon.tga",					0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f},

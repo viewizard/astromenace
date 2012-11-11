@@ -834,6 +834,47 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 			ParticleSystem->AlphaShowHide = true;
 			break;
 
+
+
+
+
+
+
+
+
+
+		case 101:	// шлейф ракеты
+
+			int TrailRandom = vw_iRandNum(4);
+			switch (TrailRandom)
+			{
+				case 1: ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/trail2.tga"); break;
+				case 2: ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/trail3.tga"); break;
+				case 3: ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/trail4.tga"); break;
+				case 4: ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/trail5.tga"); break;
+				default: ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/trail1.tga"); break;
+			}
+
+			ParticleSystem->ColorStart.r = 1.00f;
+			ParticleSystem->ColorStart.g = 1.00f;
+			ParticleSystem->ColorStart.b = 1.00f;
+			ParticleSystem->ColorEnd.r = 1.00f;
+			ParticleSystem->ColorEnd.g = 1.00f;
+			ParticleSystem->ColorEnd.b = 1.00f;
+			ParticleSystem->AlphaStart = 0.05f;
+			ParticleSystem->AlphaEnd   = 0.00f;
+			ParticleSystem->SizeStart  = 0.20f;
+			ParticleSystem->SizeVar    = 0.10f;
+			ParticleSystem->SizeEnd    = 2.00f;
+			ParticleSystem->Speed      = 0.20f;
+			ParticleSystem->SpeedVar   = 0.30f;
+			ParticleSystem->Theta      = 360.00f;
+			ParticleSystem->Life       = 5.00f;
+			ParticleSystem->LifeVar    = 5.00f;
+			ParticleSystem->ParticlesPerSec = 150;
+			ParticleSystem->BlendType = 1;
+			break;
+
 	}
 }
 

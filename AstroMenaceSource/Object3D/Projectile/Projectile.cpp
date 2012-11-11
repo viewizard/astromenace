@@ -85,10 +85,10 @@ ProjectileData PresetEarthProjectileData[PresetEarthProjectileDataCount] =
 	// Gauss
 	{1.1f, 100, 0, 	0, 80, 3, 1},
 	// Missiles
-	{0.2f, 100, 0, 	1, 40, 8, 1},
-	{0.2f, 20, 0, 	1, 40, 6, 1},
-	{0.2f, 400, 0, 	1, 35, 7, 1},
-	{0.2f, 800, 0, 	1, 30, 6, 1},
+	{0.2f, 100, 0, 	1, 40, 8, 2},
+	{0.2f, 20, 0, 	1, 40, 6, 2},
+	{0.2f, 400, 0, 	1, 35, 7, 2},
+	{0.2f, 800, 0, 	1, 30, 6, 2},
 };
 
 
@@ -137,17 +137,17 @@ ProjectileData PresetPirateProjectileData[PresetPirateProjectileDataCount] =
 	// как Kinetic1
 	{0.3f, 5, 0, 	0, 60, 4, 1},
 	// как Missile1
-	{0.2f, 40, 0, 	1, 60, 6, 1},
+	{0.2f, 40, 0, 	1, 60, 6, 2},
 	// как Missile2
-	{0.2f, 20, 0, 	1, 60, 6, 1},
+	{0.2f, 20, 0, 	1, 60, 6, 2},
 	// как Ion2
 	{1.5f, 0, 30, 	0, 40, 4, 2},
 	// как Antimatter
 	{1.0f, 80, 10, 	0, 70, 3, 1},
 	// как Missile3 (торпеда)
-	{0.2f, 400, 0, 	1, 55, 7, 1},
+	{0.2f, 400, 0, 	1, 55, 7, 2},
 	// как Missile4 (бомба)
-	{0.2f, 1000, 0, 1, 50, 6, 1},
+	{0.2f, 1000, 0, 1, 50, 6, 2},
 	// как Kinetic2
 	{0.6f, 20, 0, 	0, 45, 4, 1},
 	// как Kinetic3
@@ -551,6 +551,10 @@ void CProjectile::Create(int ProjectileNum)
 			SetProjectileGFX(GraphicFX[0], 13);
 			GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
 			NeedStopPartic = true;
+			// шлейф
+			GraphicFX[1] = new eParticleSystem;
+			SetProjectileGFX(GraphicFX[1], 101);
+			GraphicFXLocation[1] = GraphicFXLocation[0];
 			break;
 		// рой
 		case 17:
@@ -561,6 +565,10 @@ void CProjectile::Create(int ProjectileNum)
 			SetProjectileGFX(GraphicFX[0], 16);
 			GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
 			NeedStopPartic = true;
+			// шлейф
+			GraphicFX[1] = new eParticleSystem;
+			SetProjectileGFX(GraphicFX[1], 101);
+			GraphicFXLocation[1] = GraphicFXLocation[0];
 			break;
 		// торпеда
 		case 18:
@@ -571,6 +579,10 @@ void CProjectile::Create(int ProjectileNum)
 			SetProjectileGFX(GraphicFX[0], 14);
 			GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
 			NeedStopPartic = true;
+			// шлейф
+			GraphicFX[1] = new eParticleSystem;
+			SetProjectileGFX(GraphicFX[1], 101);
+			GraphicFXLocation[1] = GraphicFXLocation[0];
 			break;
 		// бомба
 		case 19:
@@ -581,6 +593,10 @@ void CProjectile::Create(int ProjectileNum)
 			SetProjectileGFX(GraphicFX[0], 15);
 			GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
 			NeedStopPartic = true;
+			// шлейф
+			GraphicFX[1] = new eParticleSystem;
+			SetProjectileGFX(GraphicFX[1], 101);
+			GraphicFXLocation[1] = GraphicFXLocation[0];
 			break;
 
 
@@ -712,6 +728,10 @@ void CProjectile::Create(int ProjectileNum)
 			SetProjectileGFX(GraphicFX[0], 27);
 			GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
 			NeedStopPartic = true;
+			// шлейф
+			GraphicFX[1] = new eParticleSystem;
+			SetProjectileGFX(GraphicFX[1], 101);
+			GraphicFXLocation[1] = GraphicFXLocation[0];
 			break;
 		// как Missile2
 		case 206:
@@ -722,6 +742,10 @@ void CProjectile::Create(int ProjectileNum)
 			SetProjectileGFX(GraphicFX[0], 31);
 			GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
 			NeedStopPartic = true;
+			// шлейф
+			GraphicFX[1] = new eParticleSystem;
+			SetProjectileGFX(GraphicFX[1], 101);
+			GraphicFXLocation[1] = GraphicFXLocation[0];
 			break;
 		// как Ion2
 		case 207:
@@ -746,6 +770,10 @@ void CProjectile::Create(int ProjectileNum)
 			SetProjectileGFX(GraphicFX[0], 32);
 			GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
 			NeedStopPartic = true;
+			// шлейф
+			GraphicFX[1] = new eParticleSystem;
+			SetProjectileGFX(GraphicFX[1], 101);
+			GraphicFXLocation[1] = GraphicFXLocation[0];
 			break;
 		// как бомба
 		case 210:
@@ -756,6 +784,10 @@ void CProjectile::Create(int ProjectileNum)
 			SetProjectileGFX(GraphicFX[0], 33);
 			GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
 			NeedStopPartic = true;
+			// шлейф
+			GraphicFX[1] = new eParticleSystem;
+			SetProjectileGFX(GraphicFX[1], 101);
+			GraphicFXLocation[1] = GraphicFXLocation[0];
 			break;
 		// как Kinetic2
 		case 211:
@@ -1025,6 +1057,7 @@ void CProjectile::SetLocation(VECTOR3D NewLocation)
 			case 18:
 			case 19:
 				if (GraphicFX[0] != 0) GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+				if (GraphicFX[1] != 0) GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
 				break;
 
 
@@ -1103,11 +1136,12 @@ void CProjectile::SetLocation(VECTOR3D NewLocation)
 			case 204:
 				if (GraphicFX[0] != 0) GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
 				break;
-			// как Missile1
-			case 205:
-			// как Missile2
-			case 206:
+			case 205: // как Missile1
+			case 206: // как Missile2
+			case 209: // как Missile3
+			case 210: // как Missile4
 				if (GraphicFX[0] != 0) GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+				if (GraphicFX[1] != 0) GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
 				break;
 			// как Ion2
 			case 207:
@@ -1117,12 +1151,6 @@ void CProjectile::SetLocation(VECTOR3D NewLocation)
 			// Antimatter
 			case 208:
 				if (GraphicFX[0] != 0) GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-				break;
-			// как Missile3
-			case 209:
-			// как Missile4
-			case 210:
-				if (GraphicFX[0] != 0) GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
 				break;
 			// как Kinetic2
 			case 211:

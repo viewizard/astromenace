@@ -57,7 +57,10 @@ public:
 	// базовая текстура частиц
 	eTexture	*Texture;
 	// последовательность прорисовки
-	float *tmpDATA;
+	float 		*tmpDATA;
+
+	// тип смешивания
+	int			BlendType;
 
 	// начальный установки, или установки где пред. и текушее положения равны
 	void		SetStartLocation(VECTOR3D NewLocation);
