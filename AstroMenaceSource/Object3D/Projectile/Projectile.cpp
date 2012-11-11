@@ -101,11 +101,11 @@ ProjectileData PresetAlienProjectileData[PresetAlienProjectileDataCount] =
 	// как Kinetic1
 	{0.3f, 5, 0, 	0, 70, 4, 1},
 	// с наведением, как Kinetic2
-	{0.6f, 10, 0, 	0, 50, 4, 1},
+	{0.6f, 10, 0, 	0, 50, 4, 2},
 	// как Kinetic3
 	{0.6f, 20, 0, 	0, 60, 4, 1},
 	// с наведением, как Kinetic3
-	{0.6f, 20, 0, 	0, 60, 4, 1},
+	{0.6f, 20, 0, 	0, 60, 4, 2},
 	// как Kinetic2
 	{0.6f, 10, 0, 	0, 50, 4, 1},
 	// энергетическая мина (1-й тип), только позиционируется по высоте (на ближайшего врага)
@@ -617,6 +617,10 @@ void CProjectile::Create(int ProjectileNum)
 		case 102:
 			GraphicFX[0] = new eParticleSystem;
 			SetProjectileGFX(GraphicFX[0], 23);
+			NeedStopPartic = true;
+			// шлейф
+			GraphicFX[1] = new eParticleSystem;
+			SetProjectileGFX(GraphicFX[1], 102);
 			break;
 		// как Kinetic3
 		case 103:
@@ -627,6 +631,10 @@ void CProjectile::Create(int ProjectileNum)
 		case 104:
 			GraphicFX[0] = new eParticleSystem;
 			SetProjectileGFX(GraphicFX[0], 24);
+			NeedStopPartic = true;
+			// шлейф
+			GraphicFX[1] = new eParticleSystem;
+			SetProjectileGFX(GraphicFX[1], 102);
 			break;
 		// как Kinetic2
 		case 105:
@@ -1072,6 +1080,7 @@ void CProjectile::SetLocation(VECTOR3D NewLocation)
 			// с наведением, как Kinetic2
 			case 102:
 				if (GraphicFX[0] != 0) GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+				if (GraphicFX[1] != 0) GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
 				break;
 			case 103:
 			// как Kinetic3
@@ -1080,6 +1089,7 @@ void CProjectile::SetLocation(VECTOR3D NewLocation)
 			// с наведением, как Kinetic3
 			case 104:
 				if (GraphicFX[0] != 0) GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+				if (GraphicFX[1] != 0) GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
 				break;
 			// как Kinetic2
 			case 105:
