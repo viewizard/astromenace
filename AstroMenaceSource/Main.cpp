@@ -281,7 +281,10 @@ int main( int argc, char **argv )
 #endif // unix
 
 
-
+#ifdef portable
+	strcpy(DatFileName, ProgrammDir);
+	strcat(DatFileName, "/amconfig.xml");
+#endif // portable
 
 
 
@@ -419,23 +422,9 @@ int main( int argc, char **argv )
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// установка звука, всегда до LoadGameData
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (!InitAudio())
-	{
-		Setup.Music_check = false;
-		Setup.Sound_check = false;
-		fprintf(stderr, "Unable to open audio!\n");
-		printf("\n");
-	}
-
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// подключаем VFS
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (vw_OpenVFS(VFSFileNamePath) != 0)
+	if (vw_OpenVFS(VFSFileNamePath, GAME_BUILD) != 0)
 	{
 		fprintf(stderr, "gamedata.vfs file not found or corrupted.\n");
 		return 0;
@@ -445,6 +434,19 @@ int main( int argc, char **argv )
 
 	// загружаем все текстовые данные
 	vw_InitText("DATA/text.csv", ';', '\n');
+
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// установка звука, всегда до LoadGameData
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	if (!InitAudio())
+	{
+		Setup.Music_check = false;
+		Setup.Sound_check = false;
+		fprintf(stderr, "Unable to open audio!\n");
+		printf("\n");
+	}
 
 
 

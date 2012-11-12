@@ -94,22 +94,6 @@ bool VFSfileIObusy = false;
 
 
 
-//------------------------------------------------------------------------------------
-// кодируем-декодируем
-//------------------------------------------------------------------------------------
-int XORCount = 0;
-char XORKey[] = "VASW%YTgbsbnj9243itmwreGFGRHWHTGGFNWASSGSHGmkwoy245i5hykjlgsajnqiot403wigunwrewg-3940514342";
-void VFSCodeXOR(char *Text, int Size)
-{
-	for (int i=0; i < Size; i++)
-	{
-		Text[i] = Text[i]^XORKey[XORCount];
-		XORCount++;
-		// чтобы не было переполнения
-		if (XORCount >= (int)strlen(XORKey)) XORCount=0;
-	}
-}
-
 
 
 //------------------------------------------------------------------------------------
@@ -172,7 +156,7 @@ int CheckCompression(int tmpLength, const BYTE *buffer, char *ArhKeyVFS)
 //------------------------------------------------------------------------------------
 // Создание VFS
 //------------------------------------------------------------------------------------
-int vw_CreateVFS(const char *Name)
+int vw_CreateVFS(const char *Name, unsigned int BuildNumber)
 {
 	// Начальная подготовка структуры списка...
 	eVFS *TempVFS = 0;
@@ -223,11 +207,12 @@ int vw_CreateVFS(const char *Name)
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// пишем VFS_ (4б) + версию (4б)
+	// пишем VFS_ (4б) + версию (4б) + номер билда (4б)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	char tmp1[5] = "VFS_";
 	SDL_RWwrite(TempVFS->File, tmp1, 4, 1);
 	SDL_RWwrite(TempVFS->File, VFS_VER, 4, 1);
+	SDL_RWwrite(TempVFS->File, &BuildNumber, 4, 1);
 
 
 
@@ -235,8 +220,8 @@ int vw_CreateVFS(const char *Name)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// пишем смещение начала таблицы
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	TempVFS->HeaderOffsetVFS = 4+4+4+4;//VFS ver offset lenght
-	TempVFS->DataStartOffsetVFS = 4+4;
+	TempVFS->HeaderOffsetVFS = 4+4+4+4+4;//VFS_ ver build offset lenght
+	TempVFS->DataStartOffsetVFS = 4+4+4; //VFS_ ver build
 
 	SDL_RWwrite(TempVFS->File, &TempVFS->HeaderOffsetVFS, 4, 1);
 	SDL_RWwrite(TempVFS->File, &TempVFS->HeaderLengthVFS, 4, 1);
@@ -414,14 +399,6 @@ int	vw_WriteIntoVFSfromMemory(const char *Name, const BYTE * buffer, int size)
 
 
 
-
-
-
-
-
-
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// если используется сжатие - запаковываем данные
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -525,10 +502,9 @@ int	vw_WriteIntoVFSfromMemory(const char *Name, const BYTE * buffer, int size)
 //------------------------------------------------------------------------------------
 // Открытие (подключение) VFS
 //------------------------------------------------------------------------------------
-int vw_OpenVFS(const char *Name)
+int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 {
-	XORCount = 0;
-	int VFSversion = 0;
+	unsigned int vfsBuildNumber = 0;
 	int POS = 0; // указатель позиции в буфере.
 	BYTE *buff = 0;
 	int HeaderOffsetVFS;
@@ -583,7 +559,7 @@ int vw_OpenVFS(const char *Name)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Проверяем сигнатуру "VFS_" - 4 байт
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	char Sign[4];
+	char Sign[4]; Sign[4] = 0;
 	if(SDL_RWread(TempVFS->File, &Sign, 4, 1) == -1)
 	{
 		// если файл меньше, значит ошибка
@@ -601,29 +577,36 @@ int vw_OpenVFS(const char *Name)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Bерсия - 4 байт
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	char Version[4];
+	char Version[4]; Version[4] = 0;
 	if(SDL_RWread(TempVFS->File, &Version, 4, 1) == -1)
 	{
-		printf("VFS file has wrong version or corrupted %s\n", Name);
+		printf("VFS file corrupted: %s\n", Name);
 		goto vw_OpenVFS_Error;
 	}
-	if (strncmp(Version, "v1.1", 4) == 0)
+	if (strncmp(Version, "v1.5", 4) != 0)
 	{
-		printf("VFS file has wrong version, version 1.1 not supported %s\n", Name);
+		printf("VFS file has wrong version, version %s not supported: %s\n", Version, Name);
 		goto vw_OpenVFS_Error;
 	}
-	if (strncmp(Version, "v1.2", 4) == 0)
+
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// Билд - 4 байт (если предали ноль - проверять билды не нужно)
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	if(SDL_RWread(TempVFS->File, &vfsBuildNumber, 4, 1) == -1)
 	{
-		printf("VFS file has wrong version, version 1.2 not supported %s\n", Name);
+		printf("VFS file corrupted: %s\n", Name);
 		goto vw_OpenVFS_Error;
 	}
-	if (strncmp(Version, "v1.3", 4) == 0) VFSversion = 3;
-	if (strncmp(Version, "v1.4", 4) == 0) VFSversion = 4;
-	// если по версии не нашли - значит она или больше чем нужно или ее вообще нет
-	if (VFSversion == 0)
+	// если передали ноль - проверка не нужна
+	if (BuildNumber != 0)
 	{
-		printf("VFS file has wrong version %s\n", Name);
-		goto vw_OpenVFS_Error;
+		if (BuildNumber != vfsBuildNumber)
+		{
+			printf("VFS file has wrong build number (%i), you need VFS with build number %i\n", vfsBuildNumber, BuildNumber);
+			goto vw_OpenVFS_Error;
+		}
 	}
 
 
@@ -688,8 +671,6 @@ int vw_OpenVFS(const char *Name)
 		Temp->Name = new char[Temp->NameLen+1]; if (Temp->Name == 0) return -1;
 		Temp->Name[Temp->NameLen] = 0;// последний символ всегда ноль - конец строки
 		SDL_RWread(TempVFS->File, Temp->Name, Temp->NameLen, 1);
-		// для поддержки 3-й версии дополнительно делае XOR на имени
-		if (VFSversion == 3) VFSCodeXOR(Temp->Name, Temp->NameLen);
 		Temp->Link = false;
 		Temp->Offset = SDL_ReadLE32(TempVFS->File);
 		Temp->Length = SDL_ReadLE32(TempVFS->File);

@@ -566,7 +566,7 @@ const char *ConvertList[ConvertListCount] =
 int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 {
 	// создаем новый файл VFS
-	vw_CreateVFS(VFSFileNamePath);
+	vw_CreateVFS(VFSFileNamePath, GAME_BUILD);
 
 
 	// используем не авто поиск по дирректориям, как было, а заранее сформированный список
