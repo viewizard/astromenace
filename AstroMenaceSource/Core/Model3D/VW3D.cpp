@@ -5,10 +5,10 @@
 
 	File name: VW3D.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -128,7 +128,7 @@ bool eModel3D::ReadVW3D(const char *FileName)
 bool eModel3D::WriteVW3D(const char *FileName)
 {
 	// небольшие проверки
-	if ((GlobalVertexBuffer == 0) | (GlobalIndexBuffer == 0) | (DrawObjectList == 0))
+	if ((GlobalVertexBuffer == 0) || (GlobalIndexBuffer == 0) || (DrawObjectList == 0))
 	{
         fprintf(stderr, "Can't create %s file for empty Model3D.\n", FileName);
         return false;

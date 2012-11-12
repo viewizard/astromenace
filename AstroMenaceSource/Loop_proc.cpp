@@ -332,15 +332,15 @@ void Loop_Proc()
 	if (vw_GetKeys(SDLK_TAB)){CurrentKeyboardSelectMenuElement++;vw_SetKeys(SDLK_TAB, false);}
 
 	// если не в игре, используем и кнопки курсора
-	if ((GameStatus != GAME) | ((GameStatus == GAME) & (isDialogBoxDrawing() | (GameContentTransp >= 0.99f))))
+	if ((GameStatus != GAME) || ((GameStatus == GAME) && (isDialogBoxDrawing() || (GameContentTransp >= 0.99f))))
 	{
-		if (vw_GetKeys(SDLK_RIGHT) | vw_GetKeys(SDLK_DOWN))
+		if (vw_GetKeys(SDLK_RIGHT) || vw_GetKeys(SDLK_DOWN))
 		{
 			CurrentKeyboardSelectMenuElement++;
 			vw_SetKeys(SDLK_RIGHT, false);
 			vw_SetKeys(SDLK_DOWN, false);
 		}
-		if (vw_GetKeys(SDLK_LEFT) | vw_GetKeys(SDLK_UP))
+		if (vw_GetKeys(SDLK_LEFT) || vw_GetKeys(SDLK_UP))
 		{
 			CurrentKeyboardSelectMenuElement--;
 			vw_SetKeys(SDLK_LEFT, false);
@@ -393,7 +393,7 @@ void Loop_Proc()
 	}
 
 	// управление скоростью игры, только в самой игре!
-	if ((GameStatus == GAME) & (GameContentTransp<=0.0f) & !GameMissionCompleteStatus)
+	if ((GameStatus == GAME) && (GameContentTransp<=0.0f) && !GameMissionCompleteStatus)
 	{
 		if (vw_GetKeys(Setup.KeyboardDecreaseGameSpeed))
 		{
@@ -449,7 +449,12 @@ void Loop_Proc()
 
 
 	// делаем принудительный выход из игры
-	if ((vw_GetKeys(SDLK_LALT) || vw_GetKeys(SDLK_RALT)) && (vw_GetKeys(SDLK_F4) || vw_GetKeys(SDLK_q)))
+#if defined(__APPLE__) && defined(__MACH__)
+	if ((vw_GetKeys(SDLK_LSUPER) || vw_GetKeys(SDLK_RSUPER)) && vw_GetKeys(SDLK_q))
+#else
+	if (((vw_GetKeys(SDLK_LALT) || vw_GetKeys(SDLK_RALT)) && vw_GetKeys(SDLK_F4)) |
+		((vw_GetKeys(SDLK_LCTRL) || vw_GetKeys(SDLK_RCTRL)) && vw_GetKeys(SDLK_q)))
+#endif // defined(__APPLE__) && defined(__MACH__)
 	{
 		CanQuit = true;
 		Quit = true;

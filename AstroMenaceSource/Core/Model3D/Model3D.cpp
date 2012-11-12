@@ -135,32 +135,32 @@ eModel3D::~eModel3D(void)
 		for (int i=0; i<DrawObjectCount; i++)
 		{
 			// удаляем только если это не ссылка на вертекс буфер блока
-			if ((DrawObjectList[i].VertexBufferLimitedBySizeTriangles != 0) & (DrawObjectList[i].VertexBufferLimitedBySizeTriangles != DrawObjectList[i].VertexBuffer))
+			if ((DrawObjectList[i].VertexBufferLimitedBySizeTriangles != 0) && (DrawObjectList[i].VertexBufferLimitedBySizeTriangles != DrawObjectList[i].VertexBuffer))
 			{
 				delete [] DrawObjectList[i].VertexBufferLimitedBySizeTriangles;
 				DrawObjectList[i].VertexBufferLimitedBySizeTriangles = 0;
 			}
-			if ((DrawObjectList[i].VertexBuffer != 0) & (DrawObjectList[i].VertexBuffer != GlobalVertexBuffer))
+			if ((DrawObjectList[i].VertexBuffer != 0) && (DrawObjectList[i].VertexBuffer != GlobalVertexBuffer))
 			{
 				delete [] DrawObjectList[i].VertexBuffer;
 				DrawObjectList[i].VertexBuffer = 0;
 			}
-			if ((DrawObjectList[i].IndexBuffer != 0) & (DrawObjectList[i].IndexBuffer != GlobalIndexBuffer))
+			if ((DrawObjectList[i].IndexBuffer != 0) && (DrawObjectList[i].IndexBuffer != GlobalIndexBuffer))
 			{
 				delete [] DrawObjectList[i].IndexBuffer;
 				DrawObjectList[i].IndexBuffer = 0;
 			}
-			if ((DrawObjectList[i].VBO != 0) & (DrawObjectList[i].VBO != GlobalVBO))
+			if ((DrawObjectList[i].VBO != 0) && (DrawObjectList[i].VBO != GlobalVBO))
 			{
 				vw_DeleteVBO(*DrawObjectList[i].VBO);
 				delete DrawObjectList[i].VBO; DrawObjectList[i].VBO = 0;
 			}
-			if ((DrawObjectList[i].IBO != 0) & (DrawObjectList[i].IBO != GlobalIBO))
+			if ((DrawObjectList[i].IBO != 0) && (DrawObjectList[i].IBO != GlobalIBO))
 			{
 				vw_DeleteVBO(*DrawObjectList[i].IBO);
 				delete DrawObjectList[i].IBO; DrawObjectList[i].IBO = 0;
 			}
-			if ((DrawObjectList[i].VAO != 0) & (DrawObjectList[i].VAO != GlobalVAO))
+			if ((DrawObjectList[i].VAO != 0) && (DrawObjectList[i].VAO != GlobalVAO))
 			{
 				vw_DeleteVAO(*DrawObjectList[i].VAO);
 				delete DrawObjectList[i].VAO; DrawObjectList[i].VAO = 0;
@@ -296,10 +296,10 @@ int RecursiveBufferLimitedBySizeTriangles(float Point1[8], float Point2[8], floa
 	float Dist2 = sqrtf((Point2[0]-Point3[0])*(Point2[0]-Point3[0]) + (Point2[1]-Point3[1])*(Point2[1]-Point3[1]) + (Point2[2]-Point3[2])*(Point2[2]-Point3[2]));
 	float Dist3 = sqrtf((Point3[0]-Point1[0])*(Point3[0]-Point1[0]) + (Point3[1]-Point1[1])*(Point3[1]-Point1[1]) + (Point3[2]-Point1[2])*(Point3[2]-Point1[2]));
 
-	if ((Dist1<=TriangleSizeLimit) & (Dist2<=TriangleSizeLimit) & (Dist3<=TriangleSizeLimit))
+	if ((Dist1<=TriangleSizeLimit) && (Dist2<=TriangleSizeLimit) && (Dist3<=TriangleSizeLimit))
 	{
 		// добавляем в новую последовательность треугольник
-		if ((VertexBuffer != 0) & (CurrentPosition != 0))
+		if ((VertexBuffer != 0) && (CurrentPosition != 0))
 		{
 			memcpy(VertexBuffer+(*CurrentPosition), Point1, sizeof(float)*8);
 			*CurrentPosition += Stride;
@@ -314,7 +314,7 @@ int RecursiveBufferLimitedBySizeTriangles(float Point1[8], float Point2[8], floa
 
 	// одна из сторон больше, ищем наибольшую, делим ее пополам и идем дальше в рекурсию
 
-	if ((Dist1 > Dist2) & (Dist1 > Dist3))
+	if ((Dist1 > Dist2) && (Dist1 > Dist3))
 	{
 		float Point_A[8]={(Point1[0]+Point2[0])/2.0f,
 							(Point1[1]+Point2[1])/2.0f,
@@ -329,7 +329,7 @@ int RecursiveBufferLimitedBySizeTriangles(float Point1[8], float Point2[8], floa
 				+ RecursiveBufferLimitedBySizeTriangles(Point_A, Point2, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
 	}
 	else
-	if ((Dist2 > Dist1) & (Dist2 > Dist3))
+	if ((Dist2 > Dist1) && (Dist2 > Dist3))
 	{
 		float Point_A[8]={(Point2[0]+Point3[0])/2.0f,
 							(Point2[1]+Point3[1])/2.0f,

@@ -228,7 +228,7 @@ void vw_InitText(const char *FileName, const char SymbolSeparator, const char Sy
 		{
 			NewTextNode->text[i] = Buffer;
 			// ищем маркер следующего текстового столбца или конец строки
-			while((Buffer[0] != SymbolEndOfLine) & (Buffer[0] != SymbolSeparator)) {Buffer++;DataLength--;}
+			while((Buffer[0] != SymbolEndOfLine) && (Buffer[0] != SymbolSeparator)) {Buffer++;DataLength--;}
 			// нашли, ставим туда ноль, чтобы ноль-терминальная строка была завершенной
 			Buffer[0] = 0;
 			Buffer++;DataLength--;
@@ -245,7 +245,7 @@ void vw_InitText(const char *FileName, const char SymbolSeparator, const char Sy
 int strcmpIdNum(const char *a, const char *b)
 {
 	// если первые 2 символа одинаковые - значит по номеру 100% совпадают
-	if ((a[0] == b[0]) & (a[1] == b[1])) return 0;
+	if ((a[0] == b[0]) && (a[1] == b[1])) return 0;
 
 	return 1;
 }

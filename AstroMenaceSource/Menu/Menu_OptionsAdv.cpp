@@ -251,7 +251,7 @@ void OptionsAdvMenu()
 	// вкл-выкл компрессии текстур
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("3_Textures_Compression"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, !CAPS->TexturesCompression) | DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, !CAPS->TexturesCompression))
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, !CAPS->TexturesCompression) || DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, !CAPS->TexturesCompression))
 	{
 		Options_TexturesCompression++;
 		if (Options_TexturesCompression > 1) Options_TexturesCompression = 0;
@@ -267,7 +267,7 @@ void OptionsAdvMenu()
 	//Options_MultiSampleType
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Multisample_Antialiasing"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, (Options_MSAA == 0) | (CAPS->MaxSamples == 0)))
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, (Options_MSAA == 0) || (CAPS->MaxSamples == 0)))
 	{
 		// находим текущий режим
 		int CurrentMode = 0;
@@ -303,7 +303,7 @@ void OptionsAdvMenu()
 	bool TestStateButton = false;
 	if (CAPS->MaxMultisampleCoverageModes > 0) TestStateButton = (CAPS->MultisampleCoverageModes[CAPS->MaxMultisampleCoverageModes-1].ColorSamples == Options_MSAA) &
 												(CAPS->MultisampleCoverageModes[CAPS->MaxMultisampleCoverageModes-1].CoverageSamples == Options_CSAA);
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, TestStateButton | (CAPS->MaxSamples == 0)))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, TestStateButton || (CAPS->MaxSamples == 0)))
 	{
 		// находим текущий режим
 		int CurrentMode = 0;
@@ -352,7 +352,7 @@ void OptionsAdvMenu()
 		}
 	}
 	else
-	{	if ((Options_MSAA == Options_CSAA) | (Options_CSAA == 0))
+	{	if ((Options_MSAA == Options_CSAA) || (Options_CSAA == 0))
 		{
 			Size = vw_FontSize("%ix MS",Options_MSAA);
 			SizeI = (170-Size)/2;//Off, 2x, 4x ...
@@ -372,14 +372,14 @@ void OptionsAdvMenu()
 	// вкл-выкл шейдеров, если они поддерживаются
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.0f,0.0f, MenuContentTransp, vw_GetText("3_OpenGL_Shading_Language"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0) | DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0))
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0) || DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0))
 	{
 		Options_UseGLSL = !Options_UseGLSL;
 		// если выключены шейдеры - выключаем и тени
 		if (!Options_UseGLSL) Options_ShadowMap = 0;
 		else Options_ShadowMap = Setup.ShadowMap;
 	}
-	if (CAPS->GLSL100Supported & (CAPS->ShaderModel >= 3.0))
+	if (CAPS->GLSL100Supported && (CAPS->ShaderModel >= 3.0))
 	{
 		Size = vw_FontSize(Options_UseGLSL ? vw_GetText("1_On") : vw_GetText("1_Off"));
 		SizeI = (170-Size)/2;
@@ -409,7 +409,7 @@ void OptionsAdvMenu()
 		Options_ShadowMap++;
 		if (Options_ShadowMap > 3) Options_ShadowMap = 3;
 	}
-	if (CAPS->GLSL100Supported & (CAPS->ShaderModel >= 3.0) & CAPS->FramebufferObject & Options_UseGLSL & (CAPS->FramebufferObjectDepthSize >= 24))
+	if (CAPS->GLSL100Supported && (CAPS->ShaderModel >= 3.0) && CAPS->FramebufferObject && Options_UseGLSL && (CAPS->FramebufferObjectDepthSize >= 24))
 	{
 		Size = vw_FontSize(vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
 		SizeI = (170-Size)/2;//High, Medium, Low

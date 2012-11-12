@@ -61,7 +61,7 @@ GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Byt
 	eDevCaps *OpenGL_DevCaps = vw_GetDevCaps();
 
 
-	if (OpenGL_DevCaps->TexturesCompression & NeedCompression)
+	if (OpenGL_DevCaps->TexturesCompression && NeedCompression)
 	{
 		if (Bytes == 4)
 		{	// компрессия 4 к 1
@@ -95,7 +95,7 @@ GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Byt
 
 	if (MipMap)
 	{	// используем по порядку наиболее новые решения при генерации мипмепов
-		if ((glGenerateMipmapEXT != NULL) & (glTexStorage2DEXT != NULL))
+		if ((glGenerateMipmapEXT != NULL) && (glTexStorage2DEXT != NULL))
 		{
 			// считаем сколько нужно создавать мипмапов
 			int NeedMipMapLvl = 1;

@@ -1431,7 +1431,7 @@ void LoadGameData(int LoadType)
 
 	// в самом начале () до прорисовки подложки загрузки - генерируем все возможные символы для меню (чтобы в процессе прорисовки меньше подгружать)
 	// если памяти мало, мы очищаем текстуры, надо перегенерировать шрифт и создать новые текстуры
-	if ((LoadType == -1) | (!Setup.EqualOrMore128MBVideoRAM))
+	if ((LoadType == -1) || (!Setup.EqualOrMore128MBVideoRAM))
 	{
 		// задаем размеры текстуры (всегда степерь 2 ставим, чтобы избежать проблем со старым железом)
 		vw_GenerateFontChars(256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
@@ -1585,7 +1585,7 @@ void LoadGameData(int LoadType)
 				{
 					int H = 0;
 					int W = 0;
-					int NeedCompression = CurrentList[i].NeedCompression & Setup.TexturesCompression;
+					bool NeedCompression = CurrentList[i].NeedCompression && Setup.TexturesCompression;
 
 					// установки параметров
 					vw_SetTextureAlpha(CurrentList[i].Red, CurrentList[i].Green, CurrentList[i].Blue);
