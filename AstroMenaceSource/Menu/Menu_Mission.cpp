@@ -521,7 +521,7 @@ void MissionMenu()
 			}
 
 
-			if ((vw_OnRect(&DstRest) | InFocusByKeyboard) && !isDialogBoxDrawing())
+			if ((vw_OnRect(&DstRest) || InFocusByKeyboard) && !isDialogBoxDrawing())
 			{
 				TMPSoundOnMissionID = i;
 				CurrentCursorStatus = 1;
@@ -580,7 +580,7 @@ void MissionMenu()
 					SetRect(&DstRest,X1+64,Y1+1,X1+749,Y1+63);
 					vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/whitepoint.tga"), true, 0.1f*MenuContentTransp);
 				}
-				if (vw_GetWindowLBMouse(true) | (InFocusByKeyboard & (vw_GetKeys(SDLK_KP_ENTER) | vw_GetKeys(SDLK_RETURN))))
+				if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN))))
 				{
 
 					CurrentMission = i;

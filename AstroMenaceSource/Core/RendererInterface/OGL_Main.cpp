@@ -5,10 +5,10 @@
 
 	File name: OGL_Main.cpp
 
-	Copyright (c) 2003-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2003-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -341,15 +341,15 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	}
 
 	// проверяем, есть ли поддержка GL_ARB_framebuffer_object (GL_EXT_framebuffer_object+GL_EXT_framebuffer_multisample+GL_EXT_framebuffer_blit)
-	if (ExtensionSupported("GL_ARB_framebuffer_object") |
-		(ExtensionSupported("GL_EXT_framebuffer_blit") & ExtensionSupported("GL_EXT_framebuffer_multisample") & ExtensionSupported("GL_EXT_framebuffer_object")))
+	if (ExtensionSupported("GL_ARB_framebuffer_object") ||
+		(ExtensionSupported("GL_EXT_framebuffer_blit") && ExtensionSupported("GL_EXT_framebuffer_multisample") && ExtensionSupported("GL_EXT_framebuffer_object")))
 	{
 		OpenGL_DevCaps.FramebufferObject = true;
 		printf("Frame Buffer Object support enabled.\n");
 	}
 
 	// проверяем, есть ли поддержка GL_ARB_texture_storage или GL_EXT_texture_storage
-	if (ExtensionSupported("GL_ARB_texture_storage") | ExtensionSupported("GL_EXT_texture_storage"))
+	if (ExtensionSupported("GL_ARB_texture_storage") || ExtensionSupported("GL_EXT_texture_storage"))
 	{
 		OpenGL_DevCaps.TextureStorage = true;
 		printf("Texture Storage support enabled.\n");
@@ -405,7 +405,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	// (если мы не нашли более высокую через расширения ранее, ставим по версии опенжл)
 	float OpenGLVersion = OpenGL_DevCaps.OpenGLmajorVersion;
 	if (OpenGL_DevCaps.OpenGLminorVersion != 0) OpenGLVersion += OpenGL_DevCaps.OpenGLminorVersion/10.0f;
-	if ((OpenGL_DevCaps.ShaderModel >= 3.0f) & (OpenGLVersion >= 3.3))
+	if ((OpenGL_DevCaps.ShaderModel >= 3.0f) && (OpenGLVersion >= 3.3))
 		if (OpenGL_DevCaps.ShaderModel < OpenGLVersion) OpenGL_DevCaps.ShaderModel = OpenGLVersion;
 
 	// выводим эти данные

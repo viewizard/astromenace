@@ -622,7 +622,7 @@ ReCreate:
 		VideoModesNum = 0;
 
 		for(int i=0; i<AllSupportedModesCount; i++)
-		if ((AllSupportedModes[i].W <= CurrentVideoMode.W) & (AllSupportedModes[i].H <= CurrentVideoMode.H))
+		if ((AllSupportedModes[i].W <= CurrentVideoMode.W) && (AllSupportedModes[i].H <= CurrentVideoMode.H))
 		{
 			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 16, SDL_FULLSCREEN | SDL_OPENGL) != 0) VideoModesNum++;
 			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 32, SDL_FULLSCREEN | SDL_OPENGL) != 0) VideoModesNum++;
@@ -634,7 +634,7 @@ ReCreate:
 
 		int k=0;
 		for(int i=0; i<AllSupportedModesCount; i++)
-		if ((AllSupportedModes[i].W <= CurrentVideoMode.W) & (AllSupportedModes[i].H <= CurrentVideoMode.H))
+		if ((AllSupportedModes[i].W <= CurrentVideoMode.W) && (AllSupportedModes[i].H <= CurrentVideoMode.H))
 		{
 			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 16, SDL_FULLSCREEN | SDL_OPENGL) != 0)
 			{
@@ -687,7 +687,7 @@ ReCreate:
 		Setup.BPP = CurrentVideoMode.BPP;
 	}
 	// если загруженные параметры, больше чем максимальные, ставим максимальные (если Xinerama, например)
-	if ((VideoModes[VideoModesNum-1].W < Setup.Width) | (VideoModes[VideoModesNum-1].H < Setup.Height))
+	if ((VideoModes[VideoModesNum-1].W < Setup.Width) || (VideoModes[VideoModesNum-1].H < Setup.Height))
 	{
 		Setup.Width = VideoModes[VideoModesNum-1].W;
 		Setup.Height = VideoModes[VideoModesNum-1].H;
@@ -827,7 +827,7 @@ ReCreate:
 	printf("Vertex Array Object support forced disabled.\n");
 #endif
 	// работаем только если есть VBO
-	if ((Setup.VAOCoreMode == 0) | (Setup.VBOCoreMode == 0) | (!CAPS->VBOSupported))
+	if ((Setup.VAOCoreMode == 0) || (Setup.VBOCoreMode == 0) || (!CAPS->VBOSupported))
 	{
 		CAPS->VAOSupported = false;
 	}
@@ -911,7 +911,7 @@ ReCreate:
 	}
 
 	// если не поддерживает железо фбо или шейдеры, выключаем шадовмеп
-	if (!CAPS->FramebufferObject | !CAPS->GLSL100Supported | (CAPS->ShaderModel < 3.0f)) Setup.ShadowMap = 0;
+	if (!CAPS->FramebufferObject || !CAPS->GLSL100Supported || (CAPS->ShaderModel < 3.0f)) Setup.ShadowMap = 0;
 
 	if (Setup.MSAA > CAPS->MaxSamples) Setup.MSAA = Setup.CSAA = CAPS->MaxSamples;
 	// на всякий случай проверяем, входит ли текущее сглаживание в список доступных
@@ -1113,7 +1113,7 @@ loop:
 				case SDL_KEYDOWN:
 					// устанавливаем текущий юникод нажатоу клавиши
 					if (event.key.keysym.unicode > 0x001F) // пропускаем С0 Сontrol Characters (ентер, бэкспейс и прочие...)
-					if (!((event.key.keysym.unicode >= 0x007F) & (event.key.keysym.unicode <= 0x009F))) // пропускаем С1 Сontrol Characters
+					if (!((event.key.keysym.unicode >= 0x007F) && (event.key.keysym.unicode <= 0x009F))) // пропускаем С1 Сontrol Characters
 					if (event.key.keysym.unicode != 0x0025) // !!! потом разобраться, на символе % безбожно глючит
 						vw_SetCurrentKeyUnicode(event.key.keysym.unicode);
 #ifdef gamedebug

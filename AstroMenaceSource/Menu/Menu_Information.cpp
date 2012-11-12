@@ -1739,45 +1739,45 @@ void InformationDrawObject()
 					80,
 					(Setup.iAspectRatioWidth/2-432)+444,
 					80+333);
-	if  (((DstRest.right  >= MouseX)&
-			(DstRest.left<= MouseX)&
-			(DstRest.bottom >= MouseY)&
-			(DstRest.top<= MouseY)) & !isDialogBoxDrawing())
+	if  (((DstRest.right  >= MouseX) &&
+			(DstRest.left<= MouseX) &&
+			(DstRest.bottom >= MouseY) &&
+			(DstRest.top<= MouseY)) && !isDialogBoxDrawing())
 	{
 		fLeft = fRight = fUp = fDown = 0.35f;
 
-		if  (((DstRestLeft.right  >= MouseX)&
-				(DstRestLeft.left<= MouseX)&
-				(DstRestLeft.bottom >= MouseY)&
-				(DstRestLeft.top<= MouseY)) & !isDialogBoxDrawing())
+		if  (((DstRestLeft.right  >= MouseX) &&
+				(DstRestLeft.left<= MouseX) &&
+				(DstRestLeft.bottom >= MouseY) &&
+				(DstRestLeft.top<= MouseY)) && !isDialogBoxDrawing())
 		{
 			fLeft = 0.8f;
 			RotateInfoObjectY = RotateInfoObjectY*3;
 		}
 		else
-		if  (((DstRestRight.right  >= MouseX)&
-				(DstRestRight.left<= MouseX)&
-				(DstRestRight.bottom >= MouseY)&
-				(DstRestRight.top<= MouseY)) & !isDialogBoxDrawing())
+		if  (((DstRestRight.right  >= MouseX) &&
+				(DstRestRight.left<= MouseX) &&
+				(DstRestRight.bottom >= MouseY) &&
+				(DstRestRight.top<= MouseY)) && !isDialogBoxDrawing())
 		{
 			fRight = 0.8f;
 			RotateInfoObjectY = -RotateInfoObjectY*3;
 		}
 		else
-		if  (((DstRestUp.right  >= MouseX)&
-				(DstRestUp.left<= MouseX)&
-				(DstRestUp.bottom >= MouseY)&
-				(DstRestUp.top<= MouseY)) & !isDialogBoxDrawing())
+		if  (((DstRestUp.right  >= MouseX) &&
+				(DstRestUp.left<= MouseX) &&
+				(DstRestUp.bottom >= MouseY) &&
+				(DstRestUp.top<= MouseY)) && !isDialogBoxDrawing())
 		{
 			fUp = 0.8f;
 			RotateInfoObjectX = -tmpRotateInfoObjectX*3;
 			RotateInfoObjectY = 0.0f;
 		}
 		else
-		if  (((DstRestDown.right  >= MouseX)&
-				(DstRestDown.left<= MouseX)&
-				(DstRestDown.bottom >= MouseY)&
-				(DstRestDown.top<= MouseY)) & !isDialogBoxDrawing())
+		if  (((DstRestDown.right  >= MouseX) &&
+				(DstRestDown.left<= MouseX) &&
+				(DstRestDown.bottom >= MouseY) &&
+				(DstRestDown.top<= MouseY)) && !isDialogBoxDrawing())
 		{
 			fDown = 0.8f;
 			RotateInfoObjectX = tmpRotateInfoObjectX*3;

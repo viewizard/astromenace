@@ -190,7 +190,7 @@ bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 		{
 			glGenRenderbuffersEXT(1, &FBO->ColorBuffer);
 			glBindRenderbufferEXT(GL_RENDERBUFFER, FBO->ColorBuffer);
-			if ((InternalCSAA == MSAA) | (InternalCSAA == 0))
+			if ((InternalCSAA == MSAA) || (InternalCSAA == 0))
 				glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, MSAA, GL_RGBA, FBO->Width, FBO->Height);
 			else
 				glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, InternalCSAA, MSAA, GL_RGBA, FBO->Width, FBO->Height);
@@ -227,7 +227,7 @@ bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 		{
 			glGenRenderbuffersEXT(1, &FBO->DepthBuffer);
 			glBindRenderbufferEXT(GL_RENDERBUFFER, FBO->DepthBuffer);
-			if ((InternalCSAA == MSAA) | (InternalCSAA == 0))
+			if ((InternalCSAA == MSAA) || (InternalCSAA == 0))
 				// Ставим "GL_DEPTH_COMPONENT" (No need to force GL_DEPTH_COMPONENT24, drivers usually give you the max precision if available ...)
 				glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, MSAA, GL_DEPTH_COMPONENT, FBO->Width, FBO->Height);
 			else
@@ -291,11 +291,11 @@ void vw_BindFBO(eFBO *FBO)
 
 	// проверяем текущий
 	if (CurrentFBO != 0)// если текущий был с мультисемплами - надо их выключить
-		if ((CurrentFBO->ColorBuffer != 0) | (CurrentFBO->DepthBuffer != 0)) glDisable(GL_MULTISAMPLE);
+		if ((CurrentFBO->ColorBuffer != 0) || (CurrentFBO->DepthBuffer != 0)) glDisable(GL_MULTISAMPLE);
 
 	if (FBO != 0)
 	{
-		if ((FBO->ColorBuffer != 0) | (FBO->DepthBuffer != 0)) glEnable(GL_MULTISAMPLE);
+		if ((FBO->ColorBuffer != 0) || (FBO->DepthBuffer != 0)) glEnable(GL_MULTISAMPLE);
 		glBindFramebufferEXT(GL_FRAMEBUFFER, FBO->FrameBufferObject);
 	}
 	else

@@ -459,7 +459,7 @@ int	vw_WriteIntoVFSfromMemory(const char *Name, const BYTE * buffer, int size)
 		eVFS_Entry *Tmp1 = Tmp->Next;
 
 		// пишем только файлы (не линки)
-		if ((!Tmp->Link) & (NewVFS_Entry->Parent == WritebleVFS))
+		if ((!Tmp->Link) && (NewVFS_Entry->Parent == WritebleVFS))
 		{
 			SDL_RWwrite(WritebleVFS->File, &Tmp->ArhKeyLen, 1, 1);
 			if (Tmp->ArhKeyLen > 0)

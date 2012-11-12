@@ -998,9 +998,9 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			eGLSL *CurrentObject3DGLSL = 0;
 
 			// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
-			if ((DrawObjectList[0].ShaderType == 1) & ShadowMap) DrawObjectList[0].ShaderType = 3;
+			if ((DrawObjectList[0].ShaderType == 1) && ShadowMap) DrawObjectList[0].ShaderType = 3;
 			// и на оборот, если стоит 3-й, но шадовмепа нет - ставим 1-й, просто попиксельное освещение
-			if ((DrawObjectList[0].ShaderType == 3) & !ShadowMap) DrawObjectList[0].ShaderType = 1;
+			if ((DrawObjectList[0].ShaderType == 3) && !ShadowMap) DrawObjectList[0].ShaderType = 1;
 
 			// ставим нужный шейдер
 			switch (DrawObjectList[0].ShaderType)
@@ -1209,9 +1209,9 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				eGLSL *CurrentObject3DGLSL = 0;
 
 				// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
-				if ((DrawObjectList[i].ShaderType == 1) & ShadowMap) DrawObjectList[i].ShaderType = 3;
+				if ((DrawObjectList[i].ShaderType == 1) && ShadowMap) DrawObjectList[i].ShaderType = 3;
 				// и на оборот, если стоит 3-й, но шадовмепа нет - ставим 1-й, просто попиксельное освещение
-				if ((DrawObjectList[i].ShaderType == 3) & !ShadowMap) DrawObjectList[i].ShaderType = 1;
+				if ((DrawObjectList[i].ShaderType == 3) && !ShadowMap) DrawObjectList[i].ShaderType = 1;
 
 				// ставим нужный шейдер
 				switch (DrawObjectList[i].ShaderType)

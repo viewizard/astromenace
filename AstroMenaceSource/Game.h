@@ -181,7 +181,7 @@ void LoadGameData(int LoadType);
 
 
 //------------------------------------------------------------------------------------
-// Camera.cpp, GameCamera.cpp & CameraMath.cpp
+// Camera.cpp, GameCamera.cpp, CameraMath.cpp
 //------------------------------------------------------------------------------------
 void GameCameraUpdate(float Time);
 void InitGameCamera();

@@ -562,7 +562,7 @@ void ProfileMenu()
 			SetRect(&SrcRest,0,0,2,2);
 			SetRect(&DstRest,X1,Y1-233+46*i,X1+750,Y1-234+46+46*i);
 			if (!isDialogBoxDrawing())
-			if (vw_OnRect(&DstRest) | InFocusByKeyboard)
+			if (vw_OnRect(&DstRest) || InFocusByKeyboard)
 			{
 				TMPSoundOnProfileID = i;
 				CurrentCursorStatus = 1;
@@ -574,7 +574,7 @@ void ProfileMenu()
 					if (CurrentKeyboardSelectMenuElement == 0) Audio_PlaySound2D(5,1.0f);
 				}
 
-				if (vw_GetWindowLBMouse(true) | (InFocusByKeyboard & (vw_GetKeys(SDLK_KP_ENTER) | vw_GetKeys(SDLK_RETURN))))
+				if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN))))
 				{
 					// если другой - нужно сбросить миссию...
 					if (CurrentProfile != i) CurrentMission = Setup.Profile[i].LastMission;

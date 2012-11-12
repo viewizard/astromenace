@@ -204,7 +204,7 @@ void OptionsMenu()
 	if (Options_BPP != 0) CurrentPos = 0;
 	else CurrentPos = 1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Full_Screen"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, !CanSwitchToFullScreen) | DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, !CanSwitchToFullScreen))
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, !CanSwitchToFullScreen) || DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, !CanSwitchToFullScreen))
 	{
 		if (Options_BPP != 0)
 		{
@@ -372,7 +372,7 @@ void OptionsMenu()
 
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "VSync (%s)", vw_GetText("3_VSync"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, false) | DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, false))
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, false) || DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, false))
 	if (NeedCheck == 0)
 	{
 		if (Options_VSync == 1) Options_VSync = 0;
