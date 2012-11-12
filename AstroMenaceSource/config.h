@@ -35,7 +35,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION	 	"1.3.1 svn"
-#define GAME_BUILD			121111
+#define GAME_BUILD			121112
 
 
 // VBO OpenGL extention support switcher (if defined - game will detect and use VBO) Game could crash
@@ -65,6 +65,9 @@
 
 // define DATADIR with gamedata.vfs file location if you don't put it together in the same directory with binary file
 // #define DATADIR "/usr/share/astromenace"
+
+// game configuration file will be stored with game binary file
+// #define portable
 
 
 

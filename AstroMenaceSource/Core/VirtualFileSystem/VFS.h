@@ -48,7 +48,7 @@
 
 
 // Current VFS version
-#define VFS_VER									"v1.4"
+#define VFS_VER									"v1.5"
 // Data compression
 #define VFS_DATA_ARH_NONE						'0'
 #define VFS_DATA_ARH_RLE						'1'
@@ -86,11 +86,11 @@ struct eFILE
 // VFS functions
 
 // Create VFS file
-int		vw_CreateVFS(const char *Name);
+int		vw_CreateVFS(const char *Name, unsigned int BuildNumber);
 // Write data from memory into VFS file
 int		vw_WriteIntoVFSfromMemory(const char *Name, const BYTE * buffer, int size);
 // Open VFS file
-int		vw_OpenVFS(const char *Name);
+int		vw_OpenVFS(const char *Name, unsigned int BuildNumber);
 // Close VFS file
 void	vw_CloseVFS(void);
 // Shutdown VFS (all eFILE files will be closed)
@@ -121,10 +121,11 @@ int vw_DATAtoRLE(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS);
 
 
 /*
-VFS v1.4
+VFS v1.5
 
   4b - 'VFS_'
-  4b - 'v1.4'
+  4b - 'v1.5'
+  4b - VFS build number
   4b - file table offset
   4b - file table size
   ?b - data (file data one by one)

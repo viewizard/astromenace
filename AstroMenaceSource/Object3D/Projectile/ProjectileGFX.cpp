@@ -860,7 +860,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 			ParticleSystem->ColorEnd.r = 1.00f;
 			ParticleSystem->ColorEnd.g = 1.00f;
 			ParticleSystem->ColorEnd.b = 1.00f;
-			ParticleSystem->AlphaStart = 0.07f;
+			ParticleSystem->AlphaStart = 0.05f;
 			ParticleSystem->AlphaEnd   = 0.00f;
 			ParticleSystem->SizeStart  = 0.20f;
 			ParticleSystem->SizeVar    = 0.10f;
