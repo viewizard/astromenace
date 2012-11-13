@@ -104,11 +104,11 @@ bool NeedCheckCollision(CObject3D* Object3D)
 //-----------------------------------------------------------------------------
 // Загрузка в модель нужной геометрии
 //-----------------------------------------------------------------------------
-void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum, float TriangleSizeLimit)
+void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
 	// получение геометрии модели
 	eModel3D  *Model;
-	Model = vw_LoadModel3D(Name, TriangleSizeLimit);
+	Model = vw_LoadModel3D(Name, TriangleSizeLimit, NeedTangentAndBinormal);
 
 
 	// т.е. нужны все объекты
@@ -144,11 +144,13 @@ void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum, float 
 	// резервируем память для текстур
 	Object3D->Texture = new eTexture*[Object3D->DrawObjectQuantity];
 	Object3D->TextureIllum = new eTexture*[Object3D->DrawObjectQuantity];
+	Object3D->NormalMap = new eTexture*[Object3D->DrawObjectQuantity];
 
 	for (int i=0; i<Object3D->DrawObjectQuantity; i++)
 	{
 		Object3D->Texture[i] = 0;
 		Object3D->TextureIllum[i] = 0;
+		Object3D->NormalMap[i] = 0;
 	}
 
 	// резервируем память для HitBB

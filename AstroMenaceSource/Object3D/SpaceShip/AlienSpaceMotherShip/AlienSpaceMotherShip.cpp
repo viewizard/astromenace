@@ -92,13 +92,16 @@ void CAlienSpaceMotherShip::Create(int	SpaceShipNum)
 	EngineQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum-1].EngineQuantity;
 
 
-	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Name, this, 0, 2.0f);
+	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Name, this, 0, 2.0f, Setup.UseGLSL);
 
 	// всегда только эти текстуры
 	for (int i=0; i<DrawObjectQuantity; i++)
 	{
 		Texture[i] =vw_FindTextureByName(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Texture);
 		TextureIllum[i] =vw_FindTextureByName(PresetAlienSpaceMotherShipData[SpaceShipNum-1].TextureIllum);
+		// если шейдеры выключены - вернет ноль (не загружаем текстуры нормал мепов если нет шейдеров)
+		// в LoadObjectData указываем Setup.UseGLSL
+		NormalMap[i] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/alien_mothership_nm.tga");
 	}
 
 

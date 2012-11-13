@@ -464,3 +464,118 @@ void eModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 		}
 	}
 }
+
+
+
+
+
+
+//-----------------------------------------------------------------------------
+// пересоздаем буфер вертексов, для работы с нормал меппингом в шейдерах, добавляем тангент и бинормаль
+//-----------------------------------------------------------------------------
+void eModel3D::CreateTangentAndBinormal()
+{
+	// пересоздаем глобальный вертексный буфер, (!) работаем с фиксированным типом,
+	// на входе у нас всегда RI_3f_XYZ | RI_3f_NORMAL | RI_2f_TEX
+	int	New_FVF_Format = RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX | RI_SEPARATE_TEX_COORD;
+	int	New_Stride = 3+3+6;
+	float *New_VertexBuffer = new float[New_Stride*GlobalIndexCount];
+
+
+	for (unsigned int j=0; j<GlobalIndexCount; j++)
+	{
+		memcpy(New_VertexBuffer+New_Stride*j,
+				GlobalVertexBuffer+GlobalIndexBuffer[j]*DrawObjectList[0].Stride,
+				DrawObjectList[0].Stride*sizeof(float));
+	}
+
+	// удаляем указатели на старый буфер
+	delete [] GlobalVertexBuffer;
+	// присваиваем новые значения
+	GlobalVertexBuffer = New_VertexBuffer;
+	GlobalVertexCount = GlobalIndexCount;
+
+
+
+
+
+	// создаем тангенты и бинормали, сохраняем их в 2 и 3 текстурных координатах
+	for (unsigned int j=0; j<GlobalVertexCount-2; j+=3)
+	{
+
+		VECTOR3D Point1(GlobalVertexBuffer[New_Stride*j],
+						GlobalVertexBuffer[New_Stride*j+1],
+						GlobalVertexBuffer[New_Stride*j+2]);
+
+		VECTOR3D Point2(GlobalVertexBuffer[New_Stride*(j+1)],
+						GlobalVertexBuffer[New_Stride*(j+1)+1],
+						GlobalVertexBuffer[New_Stride*(j+1)+2]);
+
+		VECTOR3D Point3(GlobalVertexBuffer[New_Stride*(j+2)],
+						GlobalVertexBuffer[New_Stride*(j+2)+1],
+						GlobalVertexBuffer[New_Stride*(j+2)+2]);
+
+		// находим 2 вектора, образующих плоскость
+		VECTOR3D PlaneVector1 = Point2 - Point1;
+		VECTOR3D PlaneVector2 = Point3 - Point1;
+		// находим нормаль плоскости
+		PlaneVector1.Multiply(PlaneVector2);
+		PlaneVector1.NormalizeHi();
+		VECTOR3D PlaneNormal = PlaneVector1;
+
+
+		// нормаль получили (нужна будет для проверки зеркалирования), можем идти дальше
+		// делаем просчет тангента и бинормали
+
+		PlaneVector1 = Point1 - Point2;
+		PlaneVector2 = Point3 - Point2;
+
+		float delta_U_0 = GlobalVertexBuffer[New_Stride*j+6] - GlobalVertexBuffer[New_Stride*(j+1)+6];
+		float delta_U_1 = GlobalVertexBuffer[New_Stride*(j+2)+6] - GlobalVertexBuffer[New_Stride*(j+1)+6];
+
+		float delta_V_0 = GlobalVertexBuffer[New_Stride*j+7] - GlobalVertexBuffer[New_Stride*(j+1)+7];
+		float delta_V_1 = GlobalVertexBuffer[New_Stride*(j+2)+7] - GlobalVertexBuffer[New_Stride*(j+1)+7];
+
+		VECTOR3D Tangent = ((PlaneVector1 ^ delta_V_1) - (PlaneVector2 ^ delta_V_0));
+		Tangent.NormalizeHi();
+		float TangentW = 1.0f;
+		VECTOR3D BiNormal = ((PlaneVector1 ^ delta_U_1) - (PlaneVector2 ^ delta_U_0));
+		BiNormal.NormalizeHi();
+
+
+		// проверка на зеркалирование нормал мепа
+		VECTOR3D TBCross = Tangent;
+		TBCross.Multiply(BiNormal);
+		if( (TBCross * PlaneNormal) < 0 )
+		{
+			// вот тут, нормал меп "перевернут"
+			// надо это учесть
+			Tangent = ((PlaneVector1 ^ (-delta_V_1)) - (PlaneVector2 ^ (-delta_V_0)));
+			Tangent.NormalizeHi();
+			TangentW = -1.0f;
+		}
+
+		// тангент
+		GlobalVertexBuffer[New_Stride*j+8] = GlobalVertexBuffer[New_Stride*(j+1)+8] = GlobalVertexBuffer[New_Stride*(j+2)+8] = Tangent.x;
+		GlobalVertexBuffer[New_Stride*j+9] = GlobalVertexBuffer[New_Stride*(j+1)+9] = GlobalVertexBuffer[New_Stride*(j+2)+9] = Tangent.y;
+		GlobalVertexBuffer[New_Stride*j+10] = GlobalVertexBuffer[New_Stride*(j+1)+10] = GlobalVertexBuffer[New_Stride*(j+2)+10] = Tangent.z;
+		GlobalVertexBuffer[New_Stride*j+11] = GlobalVertexBuffer[New_Stride*(j+1)+11] = GlobalVertexBuffer[New_Stride*(j+2)+11] = TangentW;
+	}
+
+
+
+
+
+	// меняем данные в глобальном индекс буфере, они теперь идут по порядку
+	for (unsigned int i=0; i<GlobalIndexCount; i++) GlobalIndexBuffer[i] = i;
+
+
+	// меняем указатели на вертексный буфер, шаг и FVF
+	for (int i=0; i<DrawObjectCount; i++)
+	{
+		DrawObjectList[i].VertexBuffer = GlobalVertexBuffer;
+		DrawObjectList[i].FVF_Format = New_FVF_Format;
+		DrawObjectList[i].Stride = New_Stride;
+	}
+
+}
