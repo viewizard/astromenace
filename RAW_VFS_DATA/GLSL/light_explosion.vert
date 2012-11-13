@@ -1,7 +1,6 @@
 #version 120
 
-//  directional & point light per pixel + multitexture
-//  + explosion geometry modification
+//  directional & point light per pixel + explosion geometry modification
 
 // глобальные данные взрыва
 uniform float SpeedData1;

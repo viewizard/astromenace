@@ -1,34 +1,20 @@
 #version 120
 
-//  directional & point light per pixel + normal mapping
+//  directional & point light per pixel
 
-uniform sampler2D Texture1, Texture2, NormalMap;
-uniform int NeedMultitexture;
-uniform int NeedNormalMapping;
+uniform sampler2D Texture1;
 
 uniform int DirectLightCount;
 uniform int PointLightCount;
 
 // тянем нормаль (уже нормализованную)
-varying vec3 pNormal;
-varying vec3 pTangent;
-varying vec3 pBinormal;
-
+varying vec3 Normal;
 // тянем вертекс
 varying vec3 Vertex;
 
 
 void main()
 {
-	// меняем нормаль с учетом нормал мепа, если нужно
-	vec3 Normal = pNormal;
-	if (NeedNormalMapping == 1)
-	{
-		mat3 TBN = mat3(pTangent, pBinormal, pNormal);
-		Normal = normalize(TBN * normalize(texture2D(NormalMap, gl_TexCoord[0].st).xyz * 2.0 - 1.0));
-	}
-
-
 	vec3 halfV;
 	float NdotL, NdotHV;
 
@@ -81,7 +67,4 @@ void main()
 
 
 	gl_FragColor = clamp(color,0.0,1.0)*texture2D(Texture1,gl_TexCoord[0].st);
-	// смотрим, если надо Texture2
-	if (NeedMultitexture == 1)
-		gl_FragColor = clamp(gl_FragColor+texture2D(Texture2,gl_TexCoord[0].st), 0.0, 1.0);
 }

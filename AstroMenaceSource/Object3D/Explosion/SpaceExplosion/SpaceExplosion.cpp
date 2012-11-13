@@ -456,6 +456,12 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			// только одна текстура (!) 2-ю для подстветки не тянем
             ShipPart->Texture = new eTexture*[1];
             ShipPart->Texture[0] = Object->Texture[i];
+			if (Object->NormalMap != 0)
+			if (Object->NormalMap[i] != 0)
+			{
+            	ShipPart->NormalMap = new eTexture*[1];
+            	ShipPart->NormalMap[0] = Object->NormalMap[i];
+			}
 
 			// берем то, что нужно
 			ShipPart->DrawObjectQuantity = 1;

@@ -47,7 +47,7 @@ eModel3D *EndModel3D = 0;
 //-----------------------------------------------------------------------------
 // Нахождение геометрии, или ее загрузка
 //-----------------------------------------------------------------------------
-eModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit)
+eModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
 	// сначала пытаемся найти уже сущ.
 	eModel3D *tmp = StartModel3D;
@@ -92,6 +92,8 @@ eModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit)
 		return 0;
 	}
 
+	// пересоздаем буфер вертексов, для работы с нормал меппингом в шейдерах, добавляем тангент и бинормаль
+	if (NeedTangentAndBinormal) Model->CreateTangentAndBinormal();
 	// создаем вертексные и индексные буферы для каждого блока
 	Model->CreateObjectsBuffers();
 	// создаем все поддерживаемые буферы (VAO, VBO, IBO)

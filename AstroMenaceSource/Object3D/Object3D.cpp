@@ -101,6 +101,7 @@ CObject3D::CObject3D(void)
 	// у нас нет текстур для этой модели
 	Texture = 0;
 	TextureIllum = 0;
+	NormalMap = 0;
 
 	// мы не знаем как ориентирован объект и где он находится
 	Location = GeometryCenterLocation = PrevLocation = Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
@@ -178,6 +179,7 @@ CObject3D::~CObject3D(void)
 
 	if (Texture != 0) {delete [] Texture; Texture = 0;}
 	if (TextureIllum != 0) {delete [] TextureIllum; TextureIllum = 0;}
+	if (NormalMap != 0) {delete [] NormalMap; NormalMap = 0;}
 
 	if (DebugInfo != 0){delete [] DebugInfo; DebugInfo = 0;}
 
@@ -882,11 +884,8 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					vw_Uniform1i(GLSLShaderType2, UniformLocations[10], 0);
 					vw_Uniform1i(GLSLShaderType2, UniformLocations[11], 0);
 					vw_Uniform1i(GLSLShaderType2, UniformLocations[12], 0);
-					vw_Uniform1i(GLSLShaderType2, UniformLocations[13], 0);
-					vw_Uniform1i(GLSLShaderType2, UniformLocations[14], 0);
-
-					vw_Uniform1f(GLSLShaderType2, UniformLocations[15], DrawObjectList[0].ShaderData[0]);
-					vw_Uniform1f(GLSLShaderType2, UniformLocations[16], DrawObjectList[0].ShaderData[1]);
+					vw_Uniform1f(GLSLShaderType2, UniformLocations[13], DrawObjectList[0].ShaderData[0]);
+					vw_Uniform1f(GLSLShaderType2, UniformLocations[14], DrawObjectList[0].ShaderData[1]);
 				}
 
 
@@ -932,8 +931,11 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 	// текущая текстура, чтобы не переставлять по 10 раз одно и то же
 	eTexture *CurrentText = 0;
+	// у модели может быть нормал меппинг только на отдельные объекты
+	eTexture *CurrentNormalMap = 0;
 	// текущий шейдер, чтобы не ставить лишний раз
 	eGLSL *CurrentGLSL = 0;
+	int NeedNormalMapping = 0;
 	// получаем матрицу, до всех преобразований
 	float Matrix[16];
 	vw_GetMatrix(RI_MODELVIEW_MATRIX, Matrix);
@@ -989,6 +991,21 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			vw_SetTextureBlendMode(RI_TBLEND_COLORARG2,  RI_TBLEND_TEXTURE);
 		}
 
+		// если у нас работают шейдеры и есть текстура нормал меппа - ставим ее
+		NeedNormalMapping = 0;
+		if (Setup.UseGLSL)
+		if (NormalMap!=0)
+		if (NormalMap[0]!=0)
+		{
+			NeedNormalMapping = 1;
+			CurrentNormalMap = NormalMap[0];
+			vw_SetTexture(3, CurrentNormalMap);
+			vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+			// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+			if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
+		}
+
+
 		int LightType1, LightType2;
 		// включаем источники света
 		vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
@@ -1038,23 +1055,18 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 						}
 						else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
 
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[5], 3);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[6], NeedNormalMapping);
+
 						break;
 
 					case 2: // шейдеры взрывов
 
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[10], 0);
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[11], 1);
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[12], LightType1);
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[13], LightType2);
-						if (TextureIllum != 0)
-						{
-							if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[14], 1);
-							else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[14], 0);
-						}
-						else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[14], 0);
-
-						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[15], DrawObjectList[0].ShaderData[0]);
-						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[16], DrawObjectList[0].ShaderData[1]);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[11], LightType1);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[12], LightType2);
+						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[13], DrawObjectList[0].ShaderData[0]);
+						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[14], DrawObjectList[0].ShaderData[1]);
 
 						break;
 
@@ -1074,6 +1086,8 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[25], 2);
 						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[26], ShadowMap_Get_xPixelOffset());
 						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[27], ShadowMap_Get_xPixelOffset());
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[28], 3);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[29], NeedNormalMapping);
 
 						break;
 				}
@@ -1132,6 +1146,17 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
 				if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 
+				// если есть тайловая анимация - работаем с текстурной матрицей
+				// ! исходим из того что активен всегда 0-вой стейдж текстуры т.к. у танков на траках нет илюминейшен текстуры
+				if (DrawObjectList[i].NeedTextureAnimation)
+				{
+					vw_MatrixMode(RI_TEXTURE_MATRIX);
+					vw_LoadIdentity();
+					vw_Translate(DrawObjectList[i].TextureAnimation);
+					vw_MatrixMode(RI_MODELVIEW_MATRIX);
+				}
+
+
 				// включаем вторую текстуру
 				if (TextureIllum!=0)
 				if (TextureIllum[i]!=0)
@@ -1147,19 +1172,32 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					vw_SetTextureBlendMode(RI_TBLEND_COLORARG2,  RI_TBLEND_TEXTURE);
 				}
 
+				// если у нас работают шейдеры и есть текстура нормал меппа - ставим ее
+				NeedNormalMapping = 0;
+				if (Setup.UseGLSL)
+				if (NormalMap!=0)
+				{
+					if (NormalMap[i]!=0)
+					{
+						NeedNormalMapping = 1;
+						CurrentNormalMap = NormalMap[i];
+						vw_SetTexture(3, CurrentNormalMap);
+						vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+						// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+						if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
+					}
+					else
+					{// если нет, но был установлен - нужно сделать сброс установки
+						if (CurrentNormalMap != 0)
+						{
+							vw_BindTexture(3, 0);
+							CurrentNormalMap = 0;
+						}
+					}
+				}
+
 				CurrentText = Texture[i];
 			}
-
-			// если есть тайловая анимация - работаем с текстурной матрицей
-			// ! исходим из того что активен всегда 0-вой стейдж текстуры т.к. у танков на траках нет илюминейшен текстуры
-			if (DrawObjectList[i].NeedTextureAnimation)
-			{
-				vw_MatrixMode(RI_TEXTURE_MATRIX);
-				vw_LoadIdentity();
-				vw_Translate(DrawObjectList[i].TextureAnimation);
-				vw_MatrixMode(RI_MODELVIEW_MATRIX);
-			}
-
 
 			vw_PushMatrix();
 
@@ -1249,23 +1287,18 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 							}
 							else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
 
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[5], 3);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[6], NeedNormalMapping);
+
 							break;
 
 						case 2: // шейдеры взрывов
 
 							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[10], 0);
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[11], 1);
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[12], LightType1);
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[13], LightType2);
-							if (TextureIllum != 0)
-							{
-								if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[14], 1);
-								else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[14], 0);
-							}
-							else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[14], 0);
-
-							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[15], DrawObjectList[0].ShaderData[0]);
-							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[16], DrawObjectList[0].ShaderData[1]);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[11], LightType1);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[12], LightType2);
+							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[13], DrawObjectList[0].ShaderData[0]);
+							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[14], DrawObjectList[0].ShaderData[1]);
 
 							break;
 
@@ -1285,6 +1318,8 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[25], 2);
 							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[26], ShadowMap_Get_xPixelOffset());
 							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[27], ShadowMap_Get_xPixelOffset());
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[28], 3);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[29], NeedNormalMapping);
 
 							break;
 					}
@@ -1312,9 +1347,11 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			// если меняли текстурную матрицу - обязательно восстанавливаем
 			if (DrawObjectList[i].NeedTextureAnimation)
 			{
+				vw_BindTexture(0, 0);
 				vw_MatrixMode(RI_TEXTURE_MATRIX);
 				vw_LoadIdentity();
 				vw_MatrixMode(RI_MODELVIEW_MATRIX);
+				CurrentText = 0;
 			}
 
 			vw_PopMatrix();
@@ -1329,6 +1366,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		CurrentGLSL = 0;
 	}
 	// установка параметров текстур в исходное состояние
+	if (CurrentNormalMap != 0) vw_BindTexture(3, 0);
 	vw_BindTexture(1, 0);
 	vw_BindTexture(0, 0);
 	if (NeedAlphaTest) vw_SetTextureAlphaTest(false, 0.01f);

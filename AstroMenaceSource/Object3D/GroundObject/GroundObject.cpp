@@ -617,8 +617,7 @@ bool CGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// вращение колес в транспорте
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (WheelObjectsNum != 0)
-	if (WheelTrackSpeed != 0.0f)
+	if (WheelObjectsNum != 0 && (WheelTrackSpeed >= 0.00001f || WheelTrackSpeed <= -0.00001f))
 	{
 		// перебираем все и ув. их угол вращения
 		for (int i=0; i<WheelQuantity; i++)
@@ -634,7 +633,7 @@ bool CGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// тайловая анимация для траков
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (TrackObjectNum != -1 && WheelTrackSpeed != 0.0f)
+	if (TrackObjectNum != -1 && (WheelTrackSpeed >= 0.00001f || WheelTrackSpeed <= -0.00001f))
 	{
 		DrawObjectList[TrackObjectNum].NeedTextureAnimation = true;
 		DrawObjectList[TrackObjectNum].TextureAnimation.x += (WheelTrackSpeed/500.0f)*TimeDelta*TrackRotationDirection;

@@ -119,7 +119,8 @@ public:
 	bool ReadVW3D(const char *FileName);
 	bool WriteVW3D(const char *FileName);
 
-
+	// пересоздаем вертексный буфер, добавляем тангент и бинормаль в 2 и 3 текстурные координаты
+	void CreateTangentAndBinormal();
 	// создание вертекс и индекс буферов для каждого блока модели
 	void CreateObjectsBuffers();
 	// создание всех поддерживаемых буферов (VAO, VBO, IBO)
@@ -151,7 +152,7 @@ public:
 
 // Предварительная загрузка геометрии модели, если нужно создания доп. буфера с треугольниками не более TriangleSizeLimit
 // если не нужно, передаем отрицательное значение
-eModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit);
+eModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal);
 // Присоеденяем Model3D к списку
 void vw_AttachModel3D(eModel3D * NewModel3D);
 // Удаляем Model3D из списка
