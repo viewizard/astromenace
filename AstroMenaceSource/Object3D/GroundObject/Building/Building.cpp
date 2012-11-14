@@ -71,12 +71,13 @@ void CBuilding::Create(int	BuildingNum)
 	ShowStrength = false;
 	PromptDrawDist2 = 100.0f;
 
-	LoadObjectData(PresetBuildingData[BuildingNum-1].Name, this, 0, -1.0f);
+	LoadObjectData(PresetBuildingData[BuildingNum-1].Name, this, 0, -1.0f, Setup.UseGLSL);
 
 	for (int i=0; i<DrawObjectQuantity; i++)
 	{
 		Texture[i] = vw_FindTextureByName("DATA/MODELS/BUILDING/bld.jpg");
 		TextureIllum[i] = vw_FindTextureByName("DATA/MODELS/BUILDING/bld_illum.tga");
+		NormalMap[i] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/buildings_nm.tga");
 	}
 
 	ResistanceHull = 1.0f;
