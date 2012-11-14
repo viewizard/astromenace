@@ -36,7 +36,7 @@
 // для генерации используем (или как удобно)
 // find ./ -type f | grep -v ".svn" > list.txt
 
-const int	ConvertListCount = 520;
+const int	ConvertListCount = 529;
 const char *ConvertList[ConvertListCount] =
 {"DATA_RU/VOICE/EngineMalfunction.wav",
 "DATA_RU/VOICE/WeaponDamaged.wav",
@@ -558,7 +558,15 @@ const char *ConvertList[ConvertListCount] =
 "GFX/trail4.tga",
 "GFX/trail5.tga",
 "MODELS/NORMALMAP/alien_mothership_nm.tga",
-
+"MODELS/NORMALMAP/planet_1_nm.tga",
+"MODELS/NORMALMAP/planet_3_nm.tga",
+"MODELS/NORMALMAP/planet_5_nm.tga",
+"MODELS/NORMALMAP/planet_asteroids_nm.tga",
+"MODELS/NORMALMAP/planet_moon_nm.tga",
+"MODELS/NORMALMAP/space_bigasteroid_nm.tga",
+"MODELS/NORMALMAP/spacebase_asteroid_nm.tga",
+"MODELS/NORMALMAP/bomber_nm.tga",
+"MODELS/NORMALMAP/buildings_nm.tga",
 };
 
 

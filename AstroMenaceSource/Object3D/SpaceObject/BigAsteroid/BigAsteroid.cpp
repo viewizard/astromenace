@@ -45,9 +45,6 @@ void CBigAsteroid::Create(int AsteroidNum)
 	ObjectStatus = 1; // чужой
 	ObjectType = 15;
 
-	// устанавливаем кому надо шейдеры, а кому нет
-	int ShaderType = 1;
-
 	// задали первичный, нужно случайным образом найти
 	if (AsteroidNum == 1 || AsteroidNum == 2)
 	{
@@ -63,24 +60,21 @@ void CBigAsteroid::Create(int AsteroidNum)
 	switch (AsteroidNum)
 	{
 		case 11:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-01.VW3D", this, 0, -1.0f);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-01.VW3D", this, 0, -1.0f, Setup.UseGLSL);
 			goto case9next;
 		case 12:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-02.VW3D", this, 0, -1.0f);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-02.VW3D", this, 0, -1.0f, Setup.UseGLSL);
 			goto case9next;
 		case 13:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-03.VW3D", this, 0, -1.0f);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-03.VW3D", this, 0, -1.0f, Setup.UseGLSL);
 			goto case9next;
 		case 14:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-04.VW3D", this, 0, -1.0f);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-04.VW3D", this, 0, -1.0f, Setup.UseGLSL);
 			goto case9next;
 		case 15:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-05.VW3D", this, 0, -1.0f);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-05.VW3D", this, 0, -1.0f, Setup.UseGLSL);
 
 case9next:
-
-			// это слишком большие объекты + очень далеко, чтобы на них воздействовали точечные источники света
-			ShaderType = -1;
 
 			//Speed = 25.0f;
 			RotationSpeed.x = 10.0f + 10.0f*vw_Randf0;
@@ -88,24 +82,25 @@ case9next:
 
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACE/bigasteroid.jpg");
 			TextureIllum[0] = 0;
+			NormalMap[0] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/space_bigasteroid_nm.tga");
 			break;
 
 
 		// те же астероиды, но они летят сверху...
 		case 21:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-01.VW3D", this, 0, -1.0f);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-01.VW3D", this, 0, -1.0f, Setup.UseGLSL);
 			goto case10next;
 		case 22:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-02.VW3D", this, 0, -1.0f);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-02.VW3D", this, 0, -1.0f, Setup.UseGLSL);
 			goto case10next;
 		case 23:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-03.VW3D", this, 0, -1.0f);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-03.VW3D", this, 0, -1.0f, Setup.UseGLSL);
 			goto case10next;
 		case 24:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-04.VW3D", this, 0, -1.0f);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-04.VW3D", this, 0, -1.0f, Setup.UseGLSL);
 			goto case10next;
 		case 25:
-			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-05.VW3D", this, 0, -1.0f);
+			LoadObjectData("DATA/MODELS/SPACE/bigasteroid-05.VW3D", this, 0, -1.0f, Setup.UseGLSL);
 
 case10next:
 
@@ -115,6 +110,7 @@ case10next:
 
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACE/bigasteroid.jpg");
 			TextureIllum[0] = 0;
+			NormalMap[0] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/space_bigasteroid_nm.tga");
 			break;
 	}
 
@@ -122,13 +118,6 @@ case10next:
 
 	// находим все данные по геометрии
 	::CObject3D::InitByDrawObjectList();
-
-
-	if (ShaderType == -1) // для дальних астероидов заднего плана шейдеры не нужны
-	for (int j=0; j<DrawObjectQuantity; j++)
-	{
-		DrawObjectList[j].ShaderType = -1;
-	}
 }
 
 

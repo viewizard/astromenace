@@ -138,7 +138,7 @@ sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 #define TEXTURE_NO_MIPMAP	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE
 
 // сколько нужно загружать в листе меню
-const int	MenuLoadListCount = 182;
+const int	MenuLoadListCount = 191;
 // лист загрузки меню
 LoadList	MenuLoadList[MenuLoadListCount] =
 {
@@ -293,17 +293,24 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/MODELS/PLANET/p5i.tga",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false, -1.0f, false},
 {"DATA/MODELS/PLANET/planet1.jpg",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/PLANET/planet3.jpg",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/planet_1_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/planet_3_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/planet_5_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/planet_asteroids_nm.tga",	1, 384, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/planet_moon_nm.tga",		1, 192, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // текстура наземной техники-сооружений
 {"DATA/MODELS/gr-01.jpg",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/gr-02.jpg",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/gr-03.jpg",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/gr-04.jpg",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/bomber_nm.tga",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/gr-05.jpg",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/gr-06.jpg",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/gr-07.jpg",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/track.jpg",							1, 48, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // большие астероиды
-{"DATA/MODELS/SPACE/bigasteroid.jpg",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/SPACE/bigasteroid.jpg",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/space_bigasteroid_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 
 // текстура больших кораблей пришельцев
 {"DATA/MODELS/ALIENMOTHERSHIP/alm-text02.jpg",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -319,11 +326,13 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/MODELS/TURRET/turrets.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // текстура зданий
 {"DATA/MODELS/BUILDING/bld.jpg",				1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/buildings_nm.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/BUILDING/bld_illum.tga",			1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // космическая база
 {"DATA/MODELS/SPACEBASE/allalpha.tga",		1, 1024, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/SPACEBASE/metal.jpg",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false, -1.0f, false},
 {"DATA/MODELS/SPACEBASE/aster.jpg",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/spacebase_asteroid_nm.tga",		1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // мины
 {"DATA/MODELS/MINE/mine1.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/MINE/mine1i.jpg",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -575,7 +584,7 @@ LoadList	AlienFighterLoadList[AlienFighterLoadListCount] =
 
 
 
-const int	PirateLoadListCount = 50;
+const int	PirateLoadListCount = 51;
 LoadList	PirateLoadList[PirateLoadListCount] =
 {
 // Pirate – load all pirate data (vehicles, military buildings, ships...) testures.
@@ -583,6 +592,7 @@ LoadList	PirateLoadList[PirateLoadListCount] =
 {"DATA/MODELS/gr-02.jpg",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/gr-03.jpg",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/gr-04.jpg",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/bomber_nm.tga",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/gr-05.jpg",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/gr-06.jpg",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/gr-07.jpg",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -597,8 +607,8 @@ LoadList	PirateLoadList[PirateLoadListCount] =
 {"DATA/MODELS/PIRATESHIP/bomber-03.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
 {"DATA/MODELS/PIRATESHIP/bomber-02.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
 {"DATA/MODELS/PIRATESHIP/bomber-04.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
-{"DATA/MODELS/PIRATESHIP/bomber-05.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
-{"DATA/MODELS/PIRATESHIP/bomber-06.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
+{"DATA/MODELS/PIRATESHIP/bomber-05.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, true},
+{"DATA/MODELS/PIRATESHIP/bomber-06.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, true},
 // турелей
 {"DATA/MODELS/TURRET/turret-01.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
 {"DATA/MODELS/TURRET/turret-02.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
@@ -638,55 +648,57 @@ LoadList	PirateLoadList[PirateLoadListCount] =
 
 
 
-const int	BasePartLoadListCount = 27;
+const int	BasePartLoadListCount = 28;
 LoadList	BasePartLoadList[BasePartLoadListCount] =
 {
 // BasePart – load pirate base textures.
 {"DATA/MODELS/SPACEBASE/aster.jpg",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/SPACEBASE/allalpha.tga",		1, 768, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/SPACEBASE/metal.jpg",			1, 1024, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/spacebase_asteroid_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // геометрия базы пиратов
-{"DATA/MODELS/SPACEBASE/1/1.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/1/2.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/1/3.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/1/4.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/1/5.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/2/1.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/2/2.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/2/3.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/2/4.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/2/5.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
+{"DATA/MODELS/SPACEBASE/1/1.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/1/2.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/1/3.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/1/4.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/1/5.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/2/1.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/2/2.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/2/3.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/2/4.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/2/5.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 {"DATA/MODELS/SPACEBASE/3/1.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
 {"DATA/MODELS/SPACEBASE/4/1.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
 {"DATA/MODELS/SPACEBASE/5/1.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/6/1.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/6/2.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/6/3.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/6/4.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/6/5.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
+{"DATA/MODELS/SPACEBASE/6/1.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/6/2.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/6/3.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/6/4.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/6/5.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 {"DATA/MODELS/SPACEBASE/7/1.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/8/1.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/8/2.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/8/3.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/8/4.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/8/5.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
+{"DATA/MODELS/SPACEBASE/8/1.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/8/2.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/8/3.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/8/4.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACEBASE/8/5.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 };
 
 
 
-const int	AsteroidLoadListCount = 2+25;
+const int	AsteroidLoadListCount = 3+25;
 LoadList	AsteroidLoadList[AsteroidLoadListCount] =
 {
 // Asteroid – load asteroids (for AsteroidField) textures.
-{"DATA/MODELS/SPACE/asteroid-01.jpg",			1, 96, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/SPACE/asteroid-01.jpg",				1, 96, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // большие астероиды
-{"DATA/MODELS/SPACE/bigasteroid.jpg",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/SPACE/bigasteroid.jpg",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/space_bigasteroid_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // геометрия больших астероидов
-{"DATA/MODELS/SPACE/bigasteroid-01.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACE/bigasteroid-02.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACE/bigasteroid-03.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACE/bigasteroid-04.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/SPACE/bigasteroid-05.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
+{"DATA/MODELS/SPACE/bigasteroid-01.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACE/bigasteroid-02.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACE/bigasteroid-03.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACE/bigasteroid-04.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/SPACE/bigasteroid-05.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 // астероиды
 {"DATA/MODELS/SPACE/asteroid-010.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
 {"DATA/MODELS/SPACE/asteroid-011.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
@@ -712,7 +724,7 @@ LoadList	AsteroidLoadList[AsteroidLoadListCount] =
 
 
 
-const int	PlanetLoadListCount = 7+6;
+const int	PlanetLoadListCount = 12+6;
 LoadList	PlanetLoadList[PlanetLoadListCount] =
 {
 // Planet – load planets textures.
@@ -723,13 +735,18 @@ LoadList	PlanetLoadList[PlanetLoadListCount] =
 {"DATA/MODELS/PLANET/p5i.tga",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false, -1.0f, false},
 {"DATA/MODELS/PLANET/planet1.jpg",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/PLANET/planet3.jpg",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/planet_1_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/planet_3_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/planet_5_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/planet_asteroids_nm.tga",	1, 384, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/planet_moon_nm.tga",		1, 192, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // планет
-{"DATA/MODELS/PLANET/aplanet.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/PLANET/dplanet.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/PLANET/gplanet.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/PLANET/moon.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/PLANET/planet5.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/PLANET/planet6.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
+{"DATA/MODELS/PLANET/aplanet.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/PLANET/dplanet.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/PLANET/gplanet.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/PLANET/moon.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/PLANET/planet5.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/PLANET/planet6.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 };
 
 
@@ -760,24 +777,25 @@ LoadList	AlienMotherShipLoadList[AlienMotherShipLoadListCount] =
 
 
 
-const int	BuildingLoadListCount = 2+11;
+const int	BuildingLoadListCount = 3+11;
 LoadList	BuildingLoadList[BuildingLoadListCount] =
 {
 // Building – load buildings textures.
 {"DATA/MODELS/BUILDING/bld.jpg",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/buildings_nm.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/BUILDING/bld_illum.tga",			1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // постройки (мирные)
-{"DATA/MODELS/BUILDING/bld-01.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/BUILDING/bld-02.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/BUILDING/bld-03.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/BUILDING/bld-04.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/BUILDING/bld-05.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/BUILDING/bld-06.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/BUILDING/bld-07.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/BUILDING/bld-08.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/BUILDING/bld-09.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/BUILDING/bld-10.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
-{"DATA/MODELS/BUILDING/bld-11.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
+{"DATA/MODELS/BUILDING/bld-01.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/BUILDING/bld-02.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/BUILDING/bld-03.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/BUILDING/bld-04.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/BUILDING/bld-05.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/BUILDING/bld-06.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/BUILDING/bld-07.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/BUILDING/bld-08.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/BUILDING/bld-09.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/BUILDING/bld-10.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
+{"DATA/MODELS/BUILDING/bld-11.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 };
 
 

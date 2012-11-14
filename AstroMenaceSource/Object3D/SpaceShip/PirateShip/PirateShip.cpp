@@ -44,28 +44,30 @@ struct PirateShipData
 	float	Strength;
 	const	char *Name;
 	const	char *TextureName;
+	const	char *NormalMapName;
+	bool	NeedTangentAndBinormal;
 };
 
 const int	PresetPirateShipDataCount = 15;
 PirateShipData PresetPirateShipData[PresetPirateShipDataCount] =
 {
-	{2,	0, 2,	20,	"DATA/MODELS/PIRATESHIP/gunship-01.VW3D",	"DATA/MODELS/gr-04.jpg"},
-	{1,	0, 2,	30,	"DATA/MODELS/PIRATESHIP/bomber-07.VW3D",	"DATA/MODELS/gr-04.jpg"},
-	{4,	0, 2,	100,"DATA/MODELS/PIRATESHIP/gunship-03.VW3D",	"DATA/MODELS/gr-03.jpg"},
-	{4,	0, 2,	200,"DATA/MODELS/PIRATESHIP/gunship-04.VW3D",	"DATA/MODELS/gr-03.jpg"},
-	{4,	0, 6,	400,"DATA/MODELS/PIRATESHIP/gunship-02.VW3D",	"DATA/MODELS/gr-03.jpg"},
+	{2,	0, 2,	20,	"DATA/MODELS/PIRATESHIP/gunship-01.VW3D",	"DATA/MODELS/gr-04.jpg", " ", false},
+	{1,	0, 2,	30,	"DATA/MODELS/PIRATESHIP/bomber-07.VW3D",	"DATA/MODELS/gr-04.jpg", " ", false},
+	{4,	0, 2,	100,"DATA/MODELS/PIRATESHIP/gunship-03.VW3D",	"DATA/MODELS/gr-03.jpg", " ", false},
+	{4,	0, 2,	200,"DATA/MODELS/PIRATESHIP/gunship-04.VW3D",	"DATA/MODELS/gr-03.jpg", " ", false},
+	{4,	0, 6,	400,"DATA/MODELS/PIRATESHIP/gunship-02.VW3D",	"DATA/MODELS/gr-03.jpg", " ", false},
 
-	{1,	2, 2,	600,"DATA/MODELS/PIRATESHIP/bomber-03.VW3D",	"DATA/MODELS/gr-05.jpg"},
-	{1,	2, 4,	1200,"DATA/MODELS/PIRATESHIP/bomber-02.VW3D",	"DATA/MODELS/gr-05.jpg"},
-	{1,	6, 4,	1000,"DATA/MODELS/PIRATESHIP/bomber-04.VW3D",	"DATA/MODELS/gr-03.jpg"},
-	{3,	2, 6,	2000,"DATA/MODELS/PIRATESHIP/bomber-05.VW3D",	"DATA/MODELS/gr-04.jpg"},
-	{4,	4, 8,	2500,"DATA/MODELS/PIRATESHIP/bomber-06.VW3D",	"DATA/MODELS/gr-04.jpg"},
+	{1,	2, 2,	600,"DATA/MODELS/PIRATESHIP/bomber-03.VW3D",	"DATA/MODELS/gr-05.jpg", " ", false},
+	{1,	2, 4,	1200,"DATA/MODELS/PIRATESHIP/bomber-02.VW3D",	"DATA/MODELS/gr-05.jpg", " ", false},
+	{1,	6, 4,	1000,"DATA/MODELS/PIRATESHIP/bomber-04.VW3D",	"DATA/MODELS/gr-03.jpg", " ", false},
+	{3,	2, 6,	2000,"DATA/MODELS/PIRATESHIP/bomber-05.VW3D",	"DATA/MODELS/gr-04.jpg", "DATA/MODELS/NORMALMAP/bomber_nm.tga", true},
+	{4,	4, 8,	2500,"DATA/MODELS/PIRATESHIP/bomber-06.VW3D",	"DATA/MODELS/gr-04.jpg", "DATA/MODELS/NORMALMAP/bomber_nm.tga", true},
 
-	{0,	2, 2,	300,"DATA/MODELS/PIRATESHIP/bomber-03.VW3D",	"DATA/MODELS/gr-05.jpg"},
-	{0,	2, 4,	600,"DATA/MODELS/PIRATESHIP/bomber-02.VW3D",	"DATA/MODELS/gr-05.jpg"},
-	{0,	6, 4,	500,"DATA/MODELS/PIRATESHIP/bomber-04.VW3D",	"DATA/MODELS/gr-03.jpg"},
-	{0,	2, 6,	1000,"DATA/MODELS/PIRATESHIP/bomber-05.VW3D",	"DATA/MODELS/gr-04.jpg"},
-	{0,	4, 8,	1500,"DATA/MODELS/PIRATESHIP/bomber-06.VW3D",	"DATA/MODELS/gr-04.jpg"}
+	{0,	2, 2,	300,"DATA/MODELS/PIRATESHIP/bomber-03.VW3D",	"DATA/MODELS/gr-05.jpg", " ", false},
+	{0,	2, 4,	600,"DATA/MODELS/PIRATESHIP/bomber-02.VW3D",	"DATA/MODELS/gr-05.jpg", " ", false},
+	{0,	6, 4,	500,"DATA/MODELS/PIRATESHIP/bomber-04.VW3D",	"DATA/MODELS/gr-03.jpg", " ", false},
+	{0,	2, 6,	1000,"DATA/MODELS/PIRATESHIP/bomber-05.VW3D",	"DATA/MODELS/gr-04.jpg", "DATA/MODELS/NORMALMAP/bomber_nm.tga", true},
+	{0,	4, 8,	1500,"DATA/MODELS/PIRATESHIP/bomber-06.VW3D",	"DATA/MODELS/gr-04.jpg", "DATA/MODELS/NORMALMAP/bomber_nm.tga", true}
 };
 
 
@@ -96,13 +98,15 @@ void CPirateShip::Create(int PirateShipNum)
 	EngineQuantity = PresetPirateShipData[PirateShipNum-1].EngineQuantity;
 
 
-	LoadObjectData(PresetPirateShipData[PirateShipNum-1].Name, this, 0, 2.0f);
+	LoadObjectData(PresetPirateShipData[PirateShipNum-1].Name, this, 0, 2.0f, PresetPirateShipData[PirateShipNum-1].NeedTangentAndBinormal && Setup.UseGLSL);
 
 	// всегда только эти текстуры
 	for (int i=0; i<DrawObjectQuantity; i++)
+	{
 		Texture[i] = vw_FindTextureByName(PresetPirateShipData[PirateShipNum-1].TextureName);
-
-
+		if (PresetPirateShipData[PirateShipNum-1].NeedTangentAndBinormal && Setup.UseGLSL)
+			NormalMap[i] = vw_FindTextureByName(PresetPirateShipData[PirateShipNum-1].NormalMapName);
+	}
 
 
 	// начальные установки для оружия
