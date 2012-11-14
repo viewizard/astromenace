@@ -5,10 +5,10 @@
 
 	File name: Sphere.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 3.0
+	File Version: 3.1
 
 ******************************************************************************
 
@@ -315,9 +315,9 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 
 		int j2;
 		if (Object1DrawObjectList->IndexBuffer != 0)
-			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart+i]*Object1DrawObjectList->Stride;
+			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart+i]*Object1DrawObjectList->VertexStride;
 		else
-			j2 = (Object1DrawObjectList->RangeStart+i)*Object1DrawObjectList->Stride;
+			j2 = (Object1DrawObjectList->RangeStart+i)*Object1DrawObjectList->VertexStride;
 
 		// находим точки триугольника
 		VECTOR3D Point1;
@@ -327,9 +327,9 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 		Matrix44CalcPoint(&Point1, TransMat);
 
 		if (Object1DrawObjectList->IndexBuffer != 0)
-			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart+i+1]*Object1DrawObjectList->Stride;
+			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart+i+1]*Object1DrawObjectList->VertexStride;
 		else
-			j2 = (Object1DrawObjectList->RangeStart+i+1)*Object1DrawObjectList->Stride;
+			j2 = (Object1DrawObjectList->RangeStart+i+1)*Object1DrawObjectList->VertexStride;
 
 		VECTOR3D Point2;
 		Point2.x = Object1DrawObjectList->VertexBuffer[j2];
@@ -338,9 +338,9 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 		Matrix44CalcPoint(&Point2, TransMat);
 
 		if (Object1DrawObjectList->IndexBuffer != 0)
-			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart+i+2]*Object1DrawObjectList->Stride;
+			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart+i+2]*Object1DrawObjectList->VertexStride;
 		else
-			j2 = (Object1DrawObjectList->RangeStart+i+2)*Object1DrawObjectList->Stride;
+			j2 = (Object1DrawObjectList->RangeStart+i+2)*Object1DrawObjectList->VertexStride;
 
 		VECTOR3D Point3;
 		Point3.x = Object1DrawObjectList->VertexBuffer[j2];

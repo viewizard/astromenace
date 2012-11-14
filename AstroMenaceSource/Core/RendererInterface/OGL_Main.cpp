@@ -273,6 +273,9 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	printf("Version    : %s\n", glGetString(GL_VERSION));
 	glGetIntegerv(GL_MAJOR_VERSION, &OpenGL_DevCaps.OpenGLmajorVersion);
 	glGetIntegerv(GL_MINOR_VERSION, &OpenGL_DevCaps.OpenGLminorVersion);
+	// после GL_MAJOR_VERSION и GL_MINOR_VERSION сбрасываем ошибку, т.к. тут можем получить
+	// 0x500 GL_INVALID_ENUM
+	glGetError();
 	printf("OpenGL Version    : %i.%i\n", OpenGL_DevCaps.OpenGLmajorVersion, OpenGL_DevCaps.OpenGLminorVersion);
 	printf("\n");
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &OpenGL_DevCaps.MaxTextureHeight);

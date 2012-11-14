@@ -67,10 +67,10 @@ bool eModel3D::ReadVW3D(const char *FileName)
 	{
 		DrawObjectList[i].RangeStart = GlobalIndexCount;
 
-		// FVF_Format
-		file->fread(&(DrawObjectList[i].FVF_Format),sizeof(int),1);
-		// Stride
-		file->fread(&(DrawObjectList[i].Stride),sizeof(int),1);
+		// VertexFormat
+		file->fread(&(DrawObjectList[i].VertexFormat),sizeof(int),1);
+		// VertexStride
+		file->fread(&(DrawObjectList[i].VertexStride),sizeof(int),1);
 		// VertexCount на самом деле, это кол-во индексов на объект
 		file->fread(&(DrawObjectList[i].VertexCount),sizeof(int),1);
 		GlobalIndexCount += DrawObjectList[i].VertexCount;
@@ -98,8 +98,8 @@ bool eModel3D::ReadVW3D(const char *FileName)
 	file->fread(&GlobalVertexCount,sizeof(unsigned int),1);
 
 	// собственно данные (берем смещение нулевого объекта, т.к. смещение одинаковое на весь объект)
-	GlobalVertexBuffer = new float[GlobalVertexCount*DrawObjectList[0].Stride];
-	file->fread(GlobalVertexBuffer,	GlobalVertexCount*DrawObjectList[0].Stride*sizeof(float),1);
+	GlobalVertexBuffer = new float[GlobalVertexCount*DrawObjectList[0].VertexStride];
+	file->fread(GlobalVertexBuffer,	GlobalVertexCount*DrawObjectList[0].VertexStride*sizeof(float),1);
 
 	// индекс буфер
 	GlobalIndexBuffer = new unsigned int[GlobalIndexCount];
@@ -154,10 +154,10 @@ bool eModel3D::WriteVW3D(const char *FileName)
 	// для каждого объекта в моделе
 	for (int i=0; i<DrawObjectCount; i++)
 	{
-		// FVF_Format
-		SDL_RWwrite(FileVW3D, &DrawObjectList[i].FVF_Format, sizeof(int), 1);
-		// Stride
-		SDL_RWwrite(FileVW3D, &DrawObjectList[i].Stride, sizeof(int), 1);
+		// VertexFormat
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].VertexFormat, sizeof(int), 1);
+		// VertexStride
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].VertexStride, sizeof(int), 1);
 		// VertexCount
 		SDL_RWwrite(FileVW3D, &DrawObjectList[i].VertexCount, sizeof(int), 1);
 
@@ -171,7 +171,7 @@ bool eModel3D::WriteVW3D(const char *FileName)
 	SDL_RWwrite(FileVW3D, &GlobalVertexCount, sizeof(unsigned int), 1);
 
 	// данные, вертексы (берем смещение нулевого объекта, т.к. смещение одинаковое на весь объект)
-	SDL_RWwrite(FileVW3D, GlobalVertexBuffer, DrawObjectList[0].Stride*GlobalVertexCount*sizeof(float), 1);
+	SDL_RWwrite(FileVW3D, GlobalVertexBuffer, DrawObjectList[0].VertexStride*GlobalVertexCount*sizeof(float), 1);
 
 	// данные, индексный буфер
 	SDL_RWwrite(FileVW3D, GlobalIndexBuffer, GlobalIndexCount*sizeof(unsigned int), 1);

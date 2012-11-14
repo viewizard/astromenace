@@ -885,26 +885,26 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 			DrawObjectList[i].NeedDestroyDataInObjectBlock = true; // удалять в объекте
 			DrawObjectList[i].RangeStart = 0;
 
-			// если у нас включены и работают шейдеры, надо приготовить место для данных + изменить FVF_Format и шаг
+			// если у нас включены и работают шейдеры, надо приготовить место для данных + изменить формат и шаг
 			if (Setup.UseGLSL)
 			{
-				DrawObjectList[i].Stride = 3+3+6;
-				DrawObjectList[i].FVF_Format = RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX;
+				DrawObjectList[i].VertexStride = 3+3+6;
+				DrawObjectList[i].VertexFormat = RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX;
 			}
 
 			// выделяем память для данных
-			DrawObjectList[i].VertexBuffer = new float[DrawObjectList[i].Stride*DrawObjectList[i].VertexCount];
+			DrawObjectList[i].VertexBuffer = new float[DrawObjectList[i].VertexStride*DrawObjectList[i].VertexCount];
 
 			// делаем поворот геометрии объекта чтобы правильно сделать разлет частиц
 			VECTOR3D TMP;
 			for (int j=0; j<DrawObjectList[i].VertexCount; j++)
 			{
-				int j1 = j*DrawObjectList[i].Stride;
+				int j1 = j*DrawObjectList[i].VertexStride;
 				int j2;
 				if (Projectile->DrawObjectList[i].IndexBuffer != 0)
-					j2 = Projectile->DrawObjectList[i].IndexBuffer[Projectile->DrawObjectList[i].RangeStart+j]*Projectile->DrawObjectList[i].Stride;
+					j2 = Projectile->DrawObjectList[i].IndexBuffer[Projectile->DrawObjectList[i].RangeStart+j]*Projectile->DrawObjectList[i].VertexStride;
 				else
-					j2 = (Projectile->DrawObjectList[i].RangeStart+j)*Projectile->DrawObjectList[i].Stride;
+					j2 = (Projectile->DrawObjectList[i].RangeStart+j)*Projectile->DrawObjectList[i].VertexStride;
 
 
 				TMP.x = Projectile->DrawObjectList[i].VertexBuffer[j2] + DrawObjectList[i].Location.x;
@@ -945,9 +945,9 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 		ExplosionPieceData = new CExplosionPiece[DrawObjectList[0].VertexCount/3];
 		for (int i=0; i<DrawObjectList[0].VertexCount; i+=3)
 		{
-			ExplosionPieceData[Count].Velocity.x = DrawObjectList[0].VertexBuffer[i*DrawObjectList[0].Stride];
-			ExplosionPieceData[Count].Velocity.y = DrawObjectList[0].VertexBuffer[i*DrawObjectList[0].Stride+1];
-			ExplosionPieceData[Count].Velocity.z = DrawObjectList[0].VertexBuffer[i*DrawObjectList[0].Stride+2];
+			ExplosionPieceData[Count].Velocity.x = DrawObjectList[0].VertexBuffer[i*DrawObjectList[0].VertexStride];
+			ExplosionPieceData[Count].Velocity.y = DrawObjectList[0].VertexBuffer[i*DrawObjectList[0].VertexStride+1];
+			ExplosionPieceData[Count].Velocity.z = DrawObjectList[0].VertexBuffer[i*DrawObjectList[0].VertexStride+2];
 
 			float VelocityTMP = vw_Randf0*tRadius2;
 
@@ -955,19 +955,19 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 			if (Setup.UseGLSL)
 			{
 				// Velocity/центр треугольника
-				DrawObjectList[0].VertexBuffer[DrawObjectList[0].Stride*i+8] = ExplosionPieceData[Count].Velocity.x;
-				DrawObjectList[0].VertexBuffer[DrawObjectList[0].Stride*i+9] = ExplosionPieceData[Count].Velocity.y;
-				DrawObjectList[0].VertexBuffer[DrawObjectList[0].Stride*i+10] = ExplosionPieceData[Count].Velocity.z;
-				DrawObjectList[0].VertexBuffer[DrawObjectList[0].Stride*(i+1)+8] = ExplosionPieceData[Count].Velocity.x;
-				DrawObjectList[0].VertexBuffer[DrawObjectList[0].Stride*(i+1)+9] = ExplosionPieceData[Count].Velocity.y;
-				DrawObjectList[0].VertexBuffer[DrawObjectList[0].Stride*(i+1)+10] = ExplosionPieceData[Count].Velocity.z;
-				DrawObjectList[0].VertexBuffer[DrawObjectList[0].Stride*(i+2)+8] = ExplosionPieceData[Count].Velocity.x;
-				DrawObjectList[0].VertexBuffer[DrawObjectList[0].Stride*(i+2)+9] = ExplosionPieceData[Count].Velocity.y;
-				DrawObjectList[0].VertexBuffer[DrawObjectList[0].Stride*(i+2)+10] = ExplosionPieceData[Count].Velocity.z;
+				DrawObjectList[0].VertexBuffer[DrawObjectList[0].VertexStride*i+8] = ExplosionPieceData[Count].Velocity.x;
+				DrawObjectList[0].VertexBuffer[DrawObjectList[0].VertexStride*i+9] = ExplosionPieceData[Count].Velocity.y;
+				DrawObjectList[0].VertexBuffer[DrawObjectList[0].VertexStride*i+10] = ExplosionPieceData[Count].Velocity.z;
+				DrawObjectList[0].VertexBuffer[DrawObjectList[0].VertexStride*(i+1)+8] = ExplosionPieceData[Count].Velocity.x;
+				DrawObjectList[0].VertexBuffer[DrawObjectList[0].VertexStride*(i+1)+9] = ExplosionPieceData[Count].Velocity.y;
+				DrawObjectList[0].VertexBuffer[DrawObjectList[0].VertexStride*(i+1)+10] = ExplosionPieceData[Count].Velocity.z;
+				DrawObjectList[0].VertexBuffer[DrawObjectList[0].VertexStride*(i+2)+8] = ExplosionPieceData[Count].Velocity.x;
+				DrawObjectList[0].VertexBuffer[DrawObjectList[0].VertexStride*(i+2)+9] = ExplosionPieceData[Count].Velocity.y;
+				DrawObjectList[0].VertexBuffer[DrawObjectList[0].VertexStride*(i+2)+10] = ExplosionPieceData[Count].Velocity.z;
 				// acc
-				DrawObjectList[0].VertexBuffer[DrawObjectList[0].Stride*i+11] = VelocityTMP;
-				DrawObjectList[0].VertexBuffer[DrawObjectList[0].Stride*(i+1)+11] = DrawObjectList[0].VertexBuffer[DrawObjectList[0].Stride*i+11];
-				DrawObjectList[0].VertexBuffer[DrawObjectList[0].Stride*(i+2)+11] = DrawObjectList[0].VertexBuffer[DrawObjectList[0].Stride*i+11];
+				DrawObjectList[0].VertexBuffer[DrawObjectList[0].VertexStride*i+11] = VelocityTMP;
+				DrawObjectList[0].VertexBuffer[DrawObjectList[0].VertexStride*(i+1)+11] = DrawObjectList[0].VertexBuffer[DrawObjectList[0].VertexStride*i+11];
+				DrawObjectList[0].VertexBuffer[DrawObjectList[0].VertexStride*(i+2)+11] = DrawObjectList[0].VertexBuffer[DrawObjectList[0].VertexStride*i+11];
 			}
 
 
@@ -1014,7 +1014,7 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 
 		// делаем VBO
 		DrawObjectList[0].VBO = new unsigned int;
-		if (!vw_BuildVBO(DrawObjectList[0].VertexCount, DrawObjectList[0].VertexBuffer, DrawObjectList[0].Stride, DrawObjectList[0].VBO))
+		if (!vw_BuildVBO(DrawObjectList[0].VertexCount, DrawObjectList[0].VertexBuffer, DrawObjectList[0].VertexStride, DrawObjectList[0].VBO))
 		{
 			delete DrawObjectList[0].VBO; DrawObjectList[0].VBO=0;
 		}
@@ -1031,8 +1031,8 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 
 		// делаем VAO
 		DrawObjectList[0].VAO = new unsigned int;
-		if (!vw_BuildVAO(DrawObjectList[0].VAO, DrawObjectList[0].VertexCount, DrawObjectList[0].FVF_Format, DrawObjectList[0].VertexBuffer,
-							DrawObjectList[0].Stride*sizeof(float), DrawObjectList[0].VBO,
+		if (!vw_BuildVAO(DrawObjectList[0].VAO, DrawObjectList[0].VertexCount, DrawObjectList[0].VertexFormat, DrawObjectList[0].VertexBuffer,
+							DrawObjectList[0].VertexStride*sizeof(float), DrawObjectList[0].VBO,
 							DrawObjectList[0].RangeStart, DrawObjectList[0].IndexBuffer, DrawObjectList[0].IBO))
 		{
 			delete DrawObjectList[0].VAO; DrawObjectList[0].VAO=0;

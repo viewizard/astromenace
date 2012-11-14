@@ -6,10 +6,10 @@
 
 	File name: Explosion.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
 	All Rights Reserved.
 
-	File Version: 1.2
+	File Version: 1.3
 
 ******************************************************************************
 
@@ -229,44 +229,44 @@ bool CExplosion::Update(float Time)
 						{
 							ExplosionPieceData[Count].Life = 0.0f;
 
-							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride];
-							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride+1] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+1];
-							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride+2] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+2];
+							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].VertexStride] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].VertexStride];
+							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].VertexStride+1] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].VertexStride+1];
+							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].VertexStride+2] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].VertexStride+2];
 
-							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride];
-							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride+1] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+1];
-							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride+2] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+2];
+							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].VertexStride] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].VertexStride];
+							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].VertexStride+1] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].VertexStride+1];
+							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].VertexStride+2] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].VertexStride+2];
 						}
 						else
 						{
 							// уменьшаем частицу, перебираем размер и текстурные координаты
 							{
-								float tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)] -DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i];
-								DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
-								tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)+1] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i+1];
-								DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)+1] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
-								tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)+2] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i+2];
-								DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+1)+2] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+								float tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)] -DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i];
+								DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+								tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)+1] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+1];
+								DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)+1] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+								tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)+2] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+2];
+								DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)+2] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
 
-								tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i];
-								DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
-								tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)+1] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i+1];
-								DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)+1] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
-								tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)+2] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*i+2];
-								DrawObjectList[j].VertexBuffer[DrawObjectList[j].Stride*(i+2)+2] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+								tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i];
+								DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+								tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)+1] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+1];
+								DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)+1] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+								tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)+2] - DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+2];
+								DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)+2] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
 							}
 
-							DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride] += TMP.x;
-							DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+1] += TMP.y;
-							DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].Stride+2] += TMP.z;
+							DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].VertexStride] += TMP.x;
+							DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].VertexStride+1] += TMP.y;
+							DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].VertexStride+2] += TMP.z;
 
-							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride] += TMP.x;
-							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride+1] += TMP.y;
-							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].Stride+2] += TMP.z;
+							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].VertexStride] += TMP.x;
+							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].VertexStride+1] += TMP.y;
+							DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].VertexStride+2] += TMP.z;
 
-							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride] += TMP.x;
-							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride+1] += TMP.y;
-							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].Stride+2] += TMP.z;
+							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].VertexStride] += TMP.x;
+							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].VertexStride+1] += TMP.y;
+							DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].VertexStride+2] += TMP.z;
 						}
 
 					}
@@ -291,7 +291,7 @@ bool CExplosion::Update(float Time)
 
 				// делаем VBO
 				DrawObjectList[j].VBO = new unsigned int;
-				if (!vw_BuildVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].Stride, DrawObjectList[j].VBO))
+				if (!vw_BuildVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].VertexStride, DrawObjectList[j].VBO))
 				{
 					delete DrawObjectList[j].VBO; DrawObjectList[j].VBO=0;
 				}
@@ -308,8 +308,8 @@ bool CExplosion::Update(float Time)
 
 				// делаем VAO
 				DrawObjectList[j].VAO = new unsigned int;
-				if (!vw_BuildVAO(DrawObjectList[j].VAO, DrawObjectList[j].VertexCount, DrawObjectList[j].FVF_Format, DrawObjectList[j].VertexBuffer,
-									DrawObjectList[j].Stride*sizeof(float), DrawObjectList[j].VBO,
+				if (!vw_BuildVAO(DrawObjectList[j].VAO, DrawObjectList[j].VertexCount, DrawObjectList[j].VertexFormat, DrawObjectList[j].VertexBuffer,
+									DrawObjectList[j].VertexStride*sizeof(float), DrawObjectList[j].VBO,
 									DrawObjectList[j].RangeStart, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO))
 				{
 					delete DrawObjectList[j].VAO; DrawObjectList[j].VAO=0;
