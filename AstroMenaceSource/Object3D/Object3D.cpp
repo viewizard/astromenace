@@ -222,9 +222,9 @@ void CObject3D::InitByDrawObjectList()
 			int j = 0;
 			int j2;
 			if (DrawObjectList[i].IndexBuffer != 0)
-				j2 = DrawObjectList[i].IndexBuffer[DrawObjectList[i].RangeStart+j]*DrawObjectList[i].Stride;
+				j2 = DrawObjectList[i].IndexBuffer[DrawObjectList[i].RangeStart+j]*DrawObjectList[i].VertexStride;
 			else
-				j2 = (DrawObjectList[i].RangeStart+j)*DrawObjectList[i].Stride;
+				j2 = (DrawObjectList[i].RangeStart+j)*DrawObjectList[i].VertexStride;
 
 			VECTOR3D tmp;
 			tmp.x = DrawObjectList[i].VertexBuffer[j2 + 0];
@@ -246,9 +246,9 @@ void CObject3D::InitByDrawObjectList()
 		{
 			int j2;
 			if (DrawObjectList[i].IndexBuffer != 0)
-				j2 = DrawObjectList[i].IndexBuffer[DrawObjectList[i].RangeStart+j]*DrawObjectList[i].Stride;
+				j2 = DrawObjectList[i].IndexBuffer[DrawObjectList[i].RangeStart+j]*DrawObjectList[i].VertexStride;
 			else
-				j2 = (DrawObjectList[i].RangeStart+j)*DrawObjectList[i].Stride;
+				j2 = (DrawObjectList[i].RangeStart+j)*DrawObjectList[i].VertexStride;
 
 			VECTOR3D v;
 			v.x = DrawObjectList[i].VertexBuffer[j2];
@@ -358,9 +358,9 @@ void CObject3D::InitByDrawObjectList()
 	for (int j=0; j<DrawObjectList[i].VertexCount; j++)
 	{
 		AllVertexCounted++;
-		GeometryCenterLocation += DrawObjectList[i].Location + VECTOR3D(DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j],
-								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+1],
-								DrawObjectList[i].VertexBuffer[DrawObjectList[i].Stride*j+2]);
+		GeometryCenterLocation += DrawObjectList[i].Location + VECTOR3D(DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*j],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*j+1],
+								DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*j+2]);
 	}
 	if (AllVertexCounted > 0) GeometryCenterLocation = GeometryCenterLocation/AllVertexCounted;
 }
@@ -848,7 +848,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 			// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
 			vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, RI_3f_XYZ, GlobalVertexBuffer,
-							DrawObjectList[0].Stride*sizeof(float), GlobalVBO, 0,
+							DrawObjectList[0].VertexStride*sizeof(float), GlobalVBO, 0,
 							GlobalIndexBuffer, GlobalIBO, GlobalVAO);
 		}
 		else
@@ -890,7 +890,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 				vw_SendVertices(RI_TRIANGLES, DrawObjectList[i].VertexCount, RI_3f_XYZ, DrawObjectList[i].VertexBuffer,
-								DrawObjectList[i].Stride*sizeof(float), DrawObjectList[i].VBO,
+								DrawObjectList[i].VertexStride*sizeof(float), DrawObjectList[i].VBO,
 								DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IBO, DrawObjectList[i].VAO);
 
 
@@ -1101,8 +1101,8 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		}
 
 		// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
-		vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, DrawObjectList[0].FVF_Format, GlobalVertexBuffer,
-						DrawObjectList[0].Stride*sizeof(float), GlobalVBO, 0,
+		vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, DrawObjectList[0].VertexFormat, GlobalVertexBuffer,
+						DrawObjectList[0].VertexStride*sizeof(float), GlobalVBO, 0,
 						GlobalIndexBuffer, GlobalIBO, GlobalVAO);
 
 		vw_DeActivateAllLights();
@@ -1327,8 +1327,8 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			}
 
 
-			vw_SendVertices(RI_TRIANGLES, DrawObjectList[i].VertexCount, DrawObjectList[i].FVF_Format, DrawObjectList[i].VertexBuffer,
-							DrawObjectList[i].Stride*sizeof(float), DrawObjectList[i].VBO,
+			vw_SendVertices(RI_TRIANGLES, DrawObjectList[i].VertexCount, DrawObjectList[i].VertexFormat, DrawObjectList[i].VertexBuffer,
+							DrawObjectList[i].VertexStride*sizeof(float), DrawObjectList[i].VBO,
 							DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IBO, DrawObjectList[i].VAO);
 
 

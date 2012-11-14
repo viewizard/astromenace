@@ -78,7 +78,7 @@ struct LoadList
 	bool	NeedCompression;
 	// для 3д моделей, если 1.0f делать структуру с мелкими треугольниками
 	float	TriangleSizeLimit;
-	// для 3д моделей, если надо - делаем нормали и бинормали
+	// для 3д моделей, если надо - делаем тангенты и бинормали
 	bool	NeedTangentAndBinormal;
 };
 // ВАЖНО!!!

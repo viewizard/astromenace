@@ -504,9 +504,9 @@ bool CheckHitBBMeshCollisionDetection(CObject3D *Object1, CObject3D *Object2, in
 
 				int j2;
 				if (Object2->DrawObjectList[j].IndexBuffer != 0)
-					j2 = Object2->DrawObjectList[j].IndexBuffer[Object2->DrawObjectList[j].RangeStart+k]*Object2->DrawObjectList[j].Stride;
+					j2 = Object2->DrawObjectList[j].IndexBuffer[Object2->DrawObjectList[j].RangeStart+k]*Object2->DrawObjectList[j].VertexStride;
 				else
-					j2 = (Object2->DrawObjectList[j].RangeStart+k)*Object2->DrawObjectList[j].Stride;
+					j2 = (Object2->DrawObjectList[j].RangeStart+k)*Object2->DrawObjectList[j].VertexStride;
 
 				// находим точки триугольника
 				VECTOR3D Point1;
@@ -516,9 +516,9 @@ bool CheckHitBBMeshCollisionDetection(CObject3D *Object1, CObject3D *Object2, in
 				Matrix44CalcPoint(&Point1, ObjTransMat);
 
 				if (Object2->DrawObjectList[j].IndexBuffer != 0)
-					j2 = Object2->DrawObjectList[j].IndexBuffer[Object2->DrawObjectList[j].RangeStart+k+1]*Object2->DrawObjectList[j].Stride;
+					j2 = Object2->DrawObjectList[j].IndexBuffer[Object2->DrawObjectList[j].RangeStart+k+1]*Object2->DrawObjectList[j].VertexStride;
 				else
-					j2 = (Object2->DrawObjectList[j].RangeStart+k+1)*Object2->DrawObjectList[j].Stride;
+					j2 = (Object2->DrawObjectList[j].RangeStart+k+1)*Object2->DrawObjectList[j].VertexStride;
 
 				VECTOR3D Point2;
 				Point2.x = Object2->DrawObjectList[j].VertexBuffer[j2];
@@ -527,9 +527,9 @@ bool CheckHitBBMeshCollisionDetection(CObject3D *Object1, CObject3D *Object2, in
 				Matrix44CalcPoint(&Point2, ObjTransMat);
 
 				if (Object2->DrawObjectList[j].IndexBuffer != 0)
-					j2 = Object2->DrawObjectList[j].IndexBuffer[Object2->DrawObjectList[j].RangeStart+k+2]*Object2->DrawObjectList[j].Stride;
+					j2 = Object2->DrawObjectList[j].IndexBuffer[Object2->DrawObjectList[j].RangeStart+k+2]*Object2->DrawObjectList[j].VertexStride;
 				else
-					j2 = (Object2->DrawObjectList[j].RangeStart+k+2)*Object2->DrawObjectList[j].Stride;
+					j2 = (Object2->DrawObjectList[j].RangeStart+k+2)*Object2->DrawObjectList[j].VertexStride;
 
 				VECTOR3D Point3;
 				Point3.x = Object2->DrawObjectList[j].VertexBuffer[j2];

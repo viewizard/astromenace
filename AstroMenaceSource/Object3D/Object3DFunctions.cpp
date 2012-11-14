@@ -146,20 +146,17 @@ void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum, float 
 	Object3D->TextureIllum = new eTexture*[Object3D->DrawObjectQuantity];
 	Object3D->NormalMap = new eTexture*[Object3D->DrawObjectQuantity];
 
-	for (int i=0; i<Object3D->DrawObjectQuantity; i++)
-	{
-		Object3D->Texture[i] = 0;
-		Object3D->TextureIllum[i] = 0;
-		Object3D->NormalMap[i] = 0;
-	}
-
 	// резервируем память для HitBB
 	Object3D->HitBBLocation = new VECTOR3D[Object3D->DrawObjectQuantity];
 	Object3D->HitBBRadius2 = new float[Object3D->DrawObjectQuantity];
 	Object3D->HitBBSize = new VECTOR3D[Object3D->DrawObjectQuantity];
 	Object3D->HitBB = new VECTOR3D*[Object3D->DrawObjectQuantity];
+
 	for (int i=0; i<Object3D->DrawObjectQuantity; i++)
 	{
+		Object3D->Texture[i] = 0;
+		Object3D->TextureIllum[i] = 0;
+		Object3D->NormalMap[i] = 0;
 		Object3D->HitBB[i] = new VECTOR3D[8];
 	}
 }
