@@ -497,8 +497,8 @@ bool eParticleSystem::Update(float Time)
 			}
 
 
-			// если малый фпс...
-			VECTOR3D L = (Location - PrevLocation)^vw_Randf1;
+			// учитываем перемещение системы, генерируем частицы равномерно
+			VECTOR3D L = (Location - PrevLocation)^((ParticlesNeeded-ParticlesCreated)/ParticlesNeeded);
 			NewParticle->Location = NewParticle->Location - L;
 
 
