@@ -274,7 +274,17 @@ int main( int argc, char **argv )
 
 	// укладываем в нужном месте (где 100% дають создавать) файл с настройками
 	strcpy(DatFileName, homeval);
-	strcat(DatFileName, "/.astromenace");
+
+	// game config file stored in "~/.config/astromenace" folder, if "~/.config" folder detected, otherwise in "~/.astromenace" folder
+	char ConfigDirCheck[MAX_PATH];
+	strcpy(ConfigDirCheck, homeval);
+	strcat(ConfigDirCheck, "/.config");
+	struct stat st;
+	if (stat(ConfigDirCheck,&st) == 0)
+		strcat(DatFileName, "/.config/astromenace");
+	else
+		strcat(DatFileName, "/.astromenace");
+
 	mkdir(DatFileName, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 	strcat(DatFileName, "/amconfig.xml");
 
