@@ -80,7 +80,7 @@ case9next:
 			RotationSpeed.x = 10.0f + 10.0f*vw_Randf0;
 			RotationSpeed.y = 2.0f + 20.0f*vw_Randf0;
 
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACE/bigasteroid.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACE/bigasteroid.tga");
 			TextureIllum[0] = 0;
 			NormalMap[0] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/space_bigasteroid_nm.tga");
 			break;
@@ -108,7 +108,7 @@ case10next:
 			RotationSpeed.x = 10.0f + 10.0f*vw_Randf0;
 			RotationSpeed.y = 2.0f + 20.0f*vw_Randf0;
 
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACE/bigasteroid.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACE/bigasteroid.tga");
 			TextureIllum[0] = 0;
 			NormalMap[0] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/space_bigasteroid_nm.tga");
 			break;

@@ -36,7 +36,6 @@
 					<Add library="ogg" />
 					<Add library="vorbis" />
 					<Add library="vorbisfile" />
-					<Add library="jpeg" />
 					<Add library="Xinerama" />
 					<Add library="freetype" />
 				</Linker>
@@ -62,7 +61,6 @@
 					<Add option="-DWIN32" />
 					<Add option="-DOV_EXCLUDE_STATIC_CALLBACKS" />
 					<Add directory="../AllLibraries/SDL-1.2.15/include" />
-					<Add directory="../AllLibraries/libjpeg-turbo-1.2.1/include" />
 					<Add directory="../AllLibraries/libogg-1.3.0/include" />
 					<Add directory="../AllLibraries/libvorbis-1.3.3/include" />
 					<Add directory="../AllLibraries/freealut-1.1.0/include" />
@@ -80,11 +78,9 @@
 					<Add library="ogg" />
 					<Add library="vorbis" />
 					<Add library="vorbisfile" />
-					<Add library="jpeg" />
 					<Add library="OpenAL32" />
 					<Add library="freetype" />
 					<Add directory="../AllLibraries/SDL-1.2.15/lib" />
-					<Add directory="../AllLibraries/libjpeg-turbo-1.2.1/lib" />
 					<Add directory="../AllLibraries/libogg-1.3.0/lib" />
 					<Add directory="../AllLibraries/libvorbis-1.3.3/lib" />
 					<Add directory="../AllLibraries/freealut-1.1.0/lib" />
@@ -166,7 +162,6 @@
 		<Unit filename="AstroMenaceSource/Core/Texture/Texture.cpp" />
 		<Unit filename="AstroMenaceSource/Core/Texture/Texture.h" />
 		<Unit filename="AstroMenaceSource/Core/Texture/TextureManager.cpp" />
-		<Unit filename="AstroMenaceSource/Core/Texture/Texture_BMP.cpp" />
 		<Unit filename="AstroMenaceSource/Core/Texture/Texture_JPG.cpp" />
 		<Unit filename="AstroMenaceSource/Core/Texture/Texture_PNG.cpp" />
 		<Unit filename="AstroMenaceSource/Core/Texture/Texture_TGA.cpp" />

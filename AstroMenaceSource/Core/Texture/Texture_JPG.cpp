@@ -33,6 +33,28 @@
 #include "Texture.h"
 
 
+#ifndef jpeg
+
+
+
+//------------------------------------------------------------------------------------
+// загрузка данных из JPG файла в DIB массив
+//------------------------------------------------------------------------------------
+int ReadJPG(BYTE **UNUSED(DIB), eFILE *UNUSED(pFile), int *UNUSED(DWidth), int *UNUSED(DHeight), int *UNUSED(DChanels))
+{
+	// просто сообщаем что не поддерживаем, так скомпилирован код
+	fprintf(stderr, "Game compiled without JPG format support.\n");
+	// возвращаем код ошибки
+	return 0;
+}
+
+
+
+#else // jpeg
+
+
+
+
 
 
 extern "C" {
@@ -247,4 +269,4 @@ int ReadJPG(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
 
 
 
-
+#endif // jpeg

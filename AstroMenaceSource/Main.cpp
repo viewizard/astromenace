@@ -272,7 +272,7 @@ int main( int argc, char **argv )
 	strcpy(VFSFileNamePath, ProgrammDir);
 	strcat(VFSFileNamePath, "gamedata.vfs");
 
-	// укладываем в нужном месте (где 100% дають создавать) файл с настройками
+	// укладываем в нужном месте (где 100% дают создавать) файл с настройками
 	strcpy(DatFileName, homeval);
 
 	// game config file stored in "~/.config/astromenace" folder, if "~/.config" folder detected, otherwise in "~/.astromenace" folder
