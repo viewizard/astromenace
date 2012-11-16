@@ -72,7 +72,7 @@ void CAsteroid::Create(int SpaceObjectNum)
 	// всегда только эти текстуры и 1 объект
 	for (int i=0; i<DrawObjectQuantity; i++)
 	{
-		Texture[i] = vw_FindTextureByName("DATA/MODELS/SPACE/asteroid-01.jpg");
+		Texture[i] = vw_FindTextureByName("DATA/MODELS/SPACE/asteroid-01.tga");
 	}
 
 

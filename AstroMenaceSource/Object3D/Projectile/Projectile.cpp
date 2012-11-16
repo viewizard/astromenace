@@ -545,7 +545,7 @@ void CProjectile::Create(int ProjectileNum)
 		// ракета
 		case 16:
 			LoadObjectData("DATA/MODELS/EARTHFIGHTER/missile.VW3D", this, 0, 2.0f);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.tga");
 			::CObject3D::InitByDrawObjectList();
 			GraphicFX[0] = new eParticleSystem;
 			SetProjectileGFX(GraphicFX[0], 13);
@@ -559,7 +559,7 @@ void CProjectile::Create(int ProjectileNum)
 		// рой
 		case 17:
 			LoadObjectData("DATA/MODELS/EARTHFIGHTER/swarm.VW3D", this, 0, 2.0f);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.tga");
 			::CObject3D::InitByDrawObjectList();
 			GraphicFX[0] = new eParticleSystem;
 			SetProjectileGFX(GraphicFX[0], 16);
@@ -573,7 +573,7 @@ void CProjectile::Create(int ProjectileNum)
 		// торпеда
 		case 18:
 			LoadObjectData("DATA/MODELS/EARTHFIGHTER/torpedo.VW3D", this, 0, 2.0f);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.tga");
 			::CObject3D::InitByDrawObjectList();
 			GraphicFX[0] = new eParticleSystem;
 			SetProjectileGFX(GraphicFX[0], 14);
@@ -587,7 +587,7 @@ void CProjectile::Create(int ProjectileNum)
 		// бомба
 		case 19:
 			LoadObjectData("DATA/MODELS/EARTHFIGHTER/nuke.VW3D", this, 0, 2.0f);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.tga");
 			::CObject3D::InitByDrawObjectList();
 			GraphicFX[0] = new eParticleSystem;
 			SetProjectileGFX(GraphicFX[0], 15);
@@ -730,7 +730,7 @@ void CProjectile::Create(int ProjectileNum)
 		// как Missile1
 		case 205:
 			LoadObjectData("DATA/MODELS/EARTHFIGHTER/missile.VW3D", this, 0, 2.0f);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.tga");
 			::CObject3D::InitByDrawObjectList();
 			GraphicFX[0] = new eParticleSystem;
 			SetProjectileGFX(GraphicFX[0], 27);
@@ -744,7 +744,7 @@ void CProjectile::Create(int ProjectileNum)
 		// как Missile2
 		case 206:
 			LoadObjectData("DATA/MODELS/EARTHFIGHTER/swarm.VW3D", this, 0, 2.0f);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.tga");
 			::CObject3D::InitByDrawObjectList();
 			GraphicFX[0] = new eParticleSystem;
 			SetProjectileGFX(GraphicFX[0], 31);
@@ -772,7 +772,7 @@ void CProjectile::Create(int ProjectileNum)
 		// как торпеда
 		case 209:
 			LoadObjectData("DATA/MODELS/EARTHFIGHTER/torpedo.VW3D", this, 0, 2.0f);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.tga");
 			::CObject3D::InitByDrawObjectList();
 			GraphicFX[0] = new eParticleSystem;
 			SetProjectileGFX(GraphicFX[0], 32);
@@ -786,7 +786,7 @@ void CProjectile::Create(int ProjectileNum)
 		// как бомба
 		case 210:
 			LoadObjectData("DATA/MODELS/EARTHFIGHTER/nuke.VW3D", this, 0, 2.0f);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/rockets.tga");
 			::CObject3D::InitByDrawObjectList();
 			GraphicFX[0] = new eParticleSystem;
 			SetProjectileGFX(GraphicFX[0], 33);
@@ -824,8 +824,8 @@ void CProjectile::Create(int ProjectileNum)
 			MineIData = 0.0f;
 			Strength = StrengthStart = 10.0f;
 			LoadObjectData("DATA/MODELS/MINE/mine-01.VW3D", this, 0, 2.0f);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine1.jpg");
-			TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine1i.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine1.tga");
+			TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine1i.tga");
 			::CObject3D::InitByDrawObjectList();
 			break;
 		// мина2 (наведение по высоте + приближение)
@@ -833,8 +833,8 @@ void CProjectile::Create(int ProjectileNum)
 			MineIData = 0.0f;
 			Strength = StrengthStart = 15.0f;
 			LoadObjectData("DATA/MODELS/MINE/mine-02.VW3D", this, 0, 2.0f);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine2.jpg");
-			TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine2i.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine2.tga");
+			TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine2i.tga");
 			::CObject3D::InitByDrawObjectList();
 
 			GraphicFX[0] = new eParticleSystem;
@@ -848,8 +848,8 @@ void CProjectile::Create(int ProjectileNum)
 			Strength = StrengthStart = 20.0f;
 			MineReloadTime = MineNextFireTime = 1.0f;
 			LoadObjectData("DATA/MODELS/MINE/mine-03.VW3D", this, 0, 2.0f);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine3.jpg");
-			TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine3i.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine3.tga");
+			TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine3i.tga");
 			::CObject3D::InitByDrawObjectList();
 
 			GraphicFX[0] = new eParticleSystem;
@@ -863,8 +863,8 @@ void CProjectile::Create(int ProjectileNum)
 			Strength = StrengthStart = 40.0f;
 			MineReloadTime = MineNextFireTime = 3.0f;
 			LoadObjectData("DATA/MODELS/MINE/mine-04.VW3D", this, 0, 2.0f);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine4.jpg");
-			TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine4i.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine4.tga");
+			TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine4i.tga");
 			::CObject3D::InitByDrawObjectList();
 
 			GraphicFX[0] = new eParticleSystem;
@@ -1427,7 +1427,7 @@ missile:
 			MineIData += TimeDelta;
 			if (MineIData >= 0.1f)
 			{
-				if (TextureIllum[0] == 0) TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine1i.jpg");
+				if (TextureIllum[0] == 0) TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine1i.tga");
 				else TextureIllum[0] = 0;
 				MineIData = 0.0f;
 			}
@@ -1470,7 +1470,7 @@ missile:
 			MineIData += TimeDelta;
 			if (MineIData >= 0.1f)
 			{
-				if (TextureIllum[0] == 0) TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine2i.jpg");
+				if (TextureIllum[0] == 0) TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine2i.tga");
 				else TextureIllum[0] = 0;
 				MineIData = 0.0f;
 			}
@@ -1545,7 +1545,7 @@ missile:
 			MineIData += TimeDelta;
 			if (MineIData >= 0.1f)
 			{
-				if (TextureIllum[0] == 0) TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine3i.jpg");
+				if (TextureIllum[0] == 0) TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine3i.tga");
 				else TextureIllum[0] = 0;
 				MineIData = 0.0f;
 			}
@@ -1656,7 +1656,7 @@ missile:
 			MineIData += TimeDelta;
 			if (MineIData >= 0.1f)
 			{
-				if (TextureIllum[0] == 0) TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine4i.jpg");
+				if (TextureIllum[0] == 0) TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/MINE/mine4i.tga");
 				else TextureIllum[0] = 0;
 				MineIData = 0.0f;
 			}

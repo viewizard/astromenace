@@ -48,20 +48,20 @@ struct TrackedData
 const int	PresetTrackedDataCount = 14;
 TrackedData PresetTrackedData[PresetTrackedDataCount] =
 {
-	{250, 1,	60.0f,	"DATA/MODELS/TRACKED/tank-01.VW3D",	"DATA/MODELS/gr-01.jpg"},
-	{200, 2,	45.0f,	"DATA/MODELS/TRACKED/tank-03.VW3D",	"DATA/MODELS/gr-01.jpg"},
-	{300, 1,	45.0f,	"DATA/MODELS/TRACKED/tank-05.VW3D",	"DATA/MODELS/gr-06.jpg"},
-	{300, 1,	55.0f,	"DATA/MODELS/TRACKED/tank-06.VW3D",	"DATA/MODELS/gr-03.jpg"},
-	{400, 1,	60.0f,	"DATA/MODELS/TRACKED/tank-07.VW3D",	"DATA/MODELS/gr-06.jpg"},
-	{250, 1,	70.0f,	"DATA/MODELS/TRACKED/tank-08.VW3D",	"DATA/MODELS/gr-01.jpg"},
-	{400, 1,	60.0f,	"DATA/MODELS/TRACKED/tank-09.VW3D",	"DATA/MODELS/gr-01.jpg"},
-	{300, 1,	60.0f,	"DATA/MODELS/TRACKED/tank-10.VW3D",	"DATA/MODELS/gr-03.jpg"},
-	{350, 1,	60.0f,	"DATA/MODELS/TRACKED/tank-11.VW3D",	"DATA/MODELS/gr-03.jpg"},
-	{300, 1,	60.0f,	"DATA/MODELS/TRACKED/apc-01.VW3D",	"DATA/MODELS/gr-03.jpg"},
-	{400, 2,	60.0f,	"DATA/MODELS/TRACKED/apc-03.VW3D",	"DATA/MODELS/gr-03.jpg"},
-	{250, 4,	60.0f,	"DATA/MODELS/TRACKED/apc-aa-01.VW3D",	"DATA/MODELS/gr-03.jpg"},
-	{200, 2,	42.0f,	"DATA/MODELS/TRACKED/apc-aa-02.VW3D",	"DATA/MODELS/gr-02.jpg"},
-	{50,  1,	50.0f,	"DATA/MODELS/TRACKED/engineering-01.VW3D",	"DATA/MODELS/gr-03.jpg"}
+	{250, 1,	60.0f,	"DATA/MODELS/TRACKED/tank-01.VW3D",	"DATA/MODELS/gr-01.tga"},
+	{200, 2,	45.0f,	"DATA/MODELS/TRACKED/tank-03.VW3D",	"DATA/MODELS/gr-01.tga"},
+	{300, 1,	45.0f,	"DATA/MODELS/TRACKED/tank-05.VW3D",	"DATA/MODELS/gr-06.tga"},
+	{300, 1,	55.0f,	"DATA/MODELS/TRACKED/tank-06.VW3D",	"DATA/MODELS/gr-03.tga"},
+	{400, 1,	60.0f,	"DATA/MODELS/TRACKED/tank-07.VW3D",	"DATA/MODELS/gr-06.tga"},
+	{250, 1,	70.0f,	"DATA/MODELS/TRACKED/tank-08.VW3D",	"DATA/MODELS/gr-01.tga"},
+	{400, 1,	60.0f,	"DATA/MODELS/TRACKED/tank-09.VW3D",	"DATA/MODELS/gr-01.tga"},
+	{300, 1,	60.0f,	"DATA/MODELS/TRACKED/tank-10.VW3D",	"DATA/MODELS/gr-03.tga"},
+	{350, 1,	60.0f,	"DATA/MODELS/TRACKED/tank-11.VW3D",	"DATA/MODELS/gr-03.tga"},
+	{300, 1,	60.0f,	"DATA/MODELS/TRACKED/apc-01.VW3D",	"DATA/MODELS/gr-03.tga"},
+	{400, 2,	60.0f,	"DATA/MODELS/TRACKED/apc-03.VW3D",	"DATA/MODELS/gr-03.tga"},
+	{250, 4,	60.0f,	"DATA/MODELS/TRACKED/apc-aa-01.VW3D",	"DATA/MODELS/gr-03.tga"},
+	{200, 2,	42.0f,	"DATA/MODELS/TRACKED/apc-aa-02.VW3D",	"DATA/MODELS/gr-02.tga"},
+	{50,  1,	50.0f,	"DATA/MODELS/TRACKED/engineering-01.VW3D",	"DATA/MODELS/gr-03.tga"}
 };
 
 
@@ -146,7 +146,7 @@ void CTracked::Create(int TrackedNum)
 			TargetVertObjectMaxAngle = 50.0f;
 
 			TrackObjectNum = 19;
-			Texture[19] = vw_FindTextureByName("DATA/MODELS/track.jpg");
+			Texture[19] = vw_FindTextureByName("DATA/MODELS/track.tga");
 			break;
 
 
@@ -183,7 +183,7 @@ void CTracked::Create(int TrackedNum)
 			TargetVertObjectMaxAngle = 50.0f;
 
 			TrackObjectNum = 13;
-			Texture[13] = vw_FindTextureByName("DATA/MODELS/track.jpg");
+			Texture[13] = vw_FindTextureByName("DATA/MODELS/track.tga");
 			break;
 
 
@@ -220,7 +220,7 @@ void CTracked::Create(int TrackedNum)
 			TargetVertObjectMaxAngle = 50.0f;
 
 			TrackObjectNum = 17;
-			Texture[17] = vw_FindTextureByName("DATA/MODELS/track.jpg");
+			Texture[17] = vw_FindTextureByName("DATA/MODELS/track.tga");
 			break;
 
 		case 4:
@@ -262,7 +262,7 @@ void CTracked::Create(int TrackedNum)
 			DrawObjectList[20].Location.z -= 1.0f;
 
 			TrackObjectNum = 21;
-			Texture[21] = vw_FindTextureByName("DATA/MODELS/track.jpg");
+			Texture[21] = vw_FindTextureByName("DATA/MODELS/track.tga");
 			break;
 
 		case 5:
@@ -298,7 +298,7 @@ void CTracked::Create(int TrackedNum)
 			TargetVertObjectMaxAngle = 30.0f;
 
 			TrackObjectNum = 17;
-			Texture[17] = vw_FindTextureByName("DATA/MODELS/track.jpg");
+			Texture[17] = vw_FindTextureByName("DATA/MODELS/track.tga");
 			break;
 
 		case 6:
@@ -336,7 +336,7 @@ void CTracked::Create(int TrackedNum)
 			TargetVertObjectMaxAngle = 50.0f;
 
 			TrackObjectNum = 19;
-			Texture[19] = vw_FindTextureByName("DATA/MODELS/track.jpg");
+			Texture[19] = vw_FindTextureByName("DATA/MODELS/track.tga");
 			break;
 
 		case 7:
@@ -380,7 +380,7 @@ void CTracked::Create(int TrackedNum)
 			TargetVertObjectMaxAngle = 50.0f;
 
 			TrackObjectNum = 25;
-			Texture[25] = vw_FindTextureByName("DATA/MODELS/track.jpg");
+			Texture[25] = vw_FindTextureByName("DATA/MODELS/track.tga");
 			break;
 
 		case 8:
@@ -418,7 +418,7 @@ void CTracked::Create(int TrackedNum)
 			TargetVertObjectMaxAngle = 50.0f;
 
 			TrackObjectNum = 20;
-			Texture[20] = vw_FindTextureByName("DATA/MODELS/track.jpg");
+			Texture[20] = vw_FindTextureByName("DATA/MODELS/track.tga");
 			break;
 
 		case 9:
@@ -457,7 +457,7 @@ void CTracked::Create(int TrackedNum)
 			TargetVertObjectMaxAngle = 50.0f;
 
 			TrackObjectNum = 19;
-			Texture[19] = vw_FindTextureByName("DATA/MODELS/track.jpg");
+			Texture[19] = vw_FindTextureByName("DATA/MODELS/track.tga");
 			break;
 
 		case 10:
@@ -496,7 +496,7 @@ void CTracked::Create(int TrackedNum)
 			TargetVertObjectMaxAngle = 50.0f;
 
 			TrackObjectNum = 19;
-			Texture[19] = vw_FindTextureByName("DATA/MODELS/track.jpg");
+			Texture[19] = vw_FindTextureByName("DATA/MODELS/track.tga");
 			break;
 
 		case 11:
@@ -533,7 +533,7 @@ void CTracked::Create(int TrackedNum)
 			TargetVertObjectMaxAngle = 55.0f;
 
 			TrackObjectNum = 18;
-			Texture[18] = vw_FindTextureByName("DATA/MODELS/track.jpg");
+			Texture[18] = vw_FindTextureByName("DATA/MODELS/track.tga");
 			break;
 
 		case 12:
@@ -582,7 +582,7 @@ void CTracked::Create(int TrackedNum)
 			TargetVertObjectMaxAngle = 40.0f;
 
 			TrackObjectNum = 19;
-			Texture[19] = vw_FindTextureByName("DATA/MODELS/track.jpg");
+			Texture[19] = vw_FindTextureByName("DATA/MODELS/track.tga");
 			break;
 
 		case 13:
@@ -624,7 +624,7 @@ void CTracked::Create(int TrackedNum)
 			TargetVertObjectMaxAngle = 50.0f;
 
 			TrackObjectNum = 17;
-			Texture[17] = vw_FindTextureByName("DATA/MODELS/track.jpg");
+			Texture[17] = vw_FindTextureByName("DATA/MODELS/track.tga");
 			break;
 
 		case 14:
@@ -642,7 +642,7 @@ void CTracked::Create(int TrackedNum)
 			WheelObjectsNum[7] = 8;
 
 			TrackObjectNum = 10;
-			Texture[10] = vw_FindTextureByName("DATA/MODELS/track.jpg");
+			Texture[10] = vw_FindTextureByName("DATA/MODELS/track.tga");
 			TrackRotationDirection = -1;
 			break;
 

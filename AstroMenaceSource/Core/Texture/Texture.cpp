@@ -55,7 +55,6 @@ void vw_DetachTexture(eTexture* Texture);
 int ReadJPG(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
 int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
 int ReadPNG(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
-int ReadBMP(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
 
 
 //------------------------------------------------------------------------------------
@@ -420,11 +419,6 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool Nee
 				{
 					LoadAs = PNG_FILE;
 				}
-				else
-				{
-					if( vw_TestFileExtension( nName, "bmp" ) || vw_TestFileExtension( nName, "BMP" ))
-						LoadAs = BMP_FILE;
-				}
 			}
 		}
 	}
@@ -444,10 +438,6 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool Nee
 
 		case PNG_FILE:
 			ReadPNG(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
-			break;
-
-		case BMP_FILE:
-			ReadBMP(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
 			break;
 
 		default:

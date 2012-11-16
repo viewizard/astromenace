@@ -48,14 +48,14 @@ struct WheeledData
 const int	PresetWheeledDataCount = 8;
 WheeledData PresetWheeledData[PresetWheeledDataCount] =
 {
-	{120, 4,	50.0f,	"DATA/MODELS/WHEELED/jeep-01.VW3D",	"DATA/MODELS/gr-02.jpg"},
-	{70, 2,		50.0f,	"DATA/MODELS/WHEELED/jeep-02.VW3D",	"DATA/MODELS/gr-02.jpg"},
-	{100, 2,	50.0f,	"DATA/MODELS/WHEELED/jeep-03.VW3D",	"DATA/MODELS/gr-02.jpg"},
-	{100, 1,	50.0f,	"DATA/MODELS/WHEELED/jeep-04.VW3D",	"DATA/MODELS/gr-07.jpg"},
-	{150, 1,	50.0f,	"DATA/MODELS/WHEELED/jeep-05.VW3D",	"DATA/MODELS/gr-03.jpg"},
-	{250,1,		30.0f,	"DATA/MODELS/WHEELED/apc-02.VW3D",	"DATA/MODELS/gr-03.jpg"},
-	{200, 2,	30.0f,	"DATA/MODELS/WHEELED/apc-04.VW3D",	"DATA/MODELS/gr-01.jpg"},
-	{400,2,		34.0f,	"DATA/MODELS/WHEELED/r-launcher-01.VW3D",	"DATA/MODELS/gr-02.jpg"}
+	{120, 4,	50.0f,	"DATA/MODELS/WHEELED/jeep-01.VW3D",	"DATA/MODELS/gr-02.tga"},
+	{70, 2,		50.0f,	"DATA/MODELS/WHEELED/jeep-02.VW3D",	"DATA/MODELS/gr-02.tga"},
+	{100, 2,	50.0f,	"DATA/MODELS/WHEELED/jeep-03.VW3D",	"DATA/MODELS/gr-02.tga"},
+	{100, 1,	50.0f,	"DATA/MODELS/WHEELED/jeep-04.VW3D",	"DATA/MODELS/gr-07.tga"},
+	{150, 1,	50.0f,	"DATA/MODELS/WHEELED/jeep-05.VW3D",	"DATA/MODELS/gr-03.tga"},
+	{250,1,		30.0f,	"DATA/MODELS/WHEELED/apc-02.VW3D",	"DATA/MODELS/gr-03.tga"},
+	{200, 2,	30.0f,	"DATA/MODELS/WHEELED/apc-04.VW3D",	"DATA/MODELS/gr-01.tga"},
+	{400,2,		34.0f,	"DATA/MODELS/WHEELED/r-launcher-01.VW3D",	"DATA/MODELS/gr-02.tga"}
 };
 
 

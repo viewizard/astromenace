@@ -58,7 +58,7 @@ void CPlanet::Create(int PlanetNum)
 			NeedCullFaces = false;
 			NeedAlphaTest = true;
 			LoadObjectData("DATA/MODELS/PLANET/aplanet.VW3D", this, 0, -1.0f, Setup.UseGLSL);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/PLANET/planet3.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/PLANET/planet3.tga");
 			TextureIllum[0] = 0;
 			NormalMap[0] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/planet_3_nm.tga");
 			Texture[1] = vw_FindTextureByName("DATA/MODELS/PLANET/asteroid.tga");
@@ -77,7 +77,7 @@ void CPlanet::Create(int PlanetNum)
 			LoadObjectData("DATA/MODELS/PLANET/dplanet.VW3D", this, 0, -1.0f, Setup.UseGLSL);
 			for (int i=0; i<DrawObjectQuantity; i++)
 			{
-				Texture[i] = vw_FindTextureByName("DATA/MODELS/PLANET/planet3.jpg");
+				Texture[i] = vw_FindTextureByName("DATA/MODELS/PLANET/planet3.tga");
 				TextureIllum[i] = 0;
 				NormalMap[i] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/planet_3_nm.tga");
 			}
@@ -86,7 +86,7 @@ void CPlanet::Create(int PlanetNum)
 		case 3:
 			NeedCullFaces = false;
 			LoadObjectData("DATA/MODELS/PLANET/gplanet.VW3D", this, 0, -1.0f, Setup.UseGLSL);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/PLANET/planet1.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/PLANET/planet1.tga");
 			TextureIllum[0] = 0;
 			NormalMap[0] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/planet_1_nm.tga");
 
@@ -104,14 +104,14 @@ void CPlanet::Create(int PlanetNum)
 		// планета пришельцев, с подсветкой
 		case 5:
 			LoadObjectData("DATA/MODELS/PLANET/planet5.VW3D", this, 0, -1.0f, Setup.UseGLSL);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/PLANET/p5base.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/PLANET/p5base.tga");
 			TextureIllum[0] = vw_FindTextureByName("DATA/MODELS/PLANET/p5i.tga");
 			NormalMap[0] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/planet_5_nm.tga");
 			break;
 		// планета пришельцев, _без_ подсветки
 		case 6:
 			LoadObjectData("DATA/MODELS/PLANET/planet6.VW3D", this, 0, -1.0f, Setup.UseGLSL);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/PLANET/planet3.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/PLANET/planet3.tga");
 			TextureIllum[0] = 0;
 			NormalMap[0] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/planet_3_nm.tga");
 			break;

@@ -35,7 +35,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION	 	"1.3.1 svn"
-#define GAME_BUILD			121115
+#define GAME_BUILD			121116
 
 
 // VBO OpenGL extention support switcher (if defined - game will detect and use VBO) Game could crash
@@ -77,7 +77,11 @@
 // compile with build-in tynixml lib (version 2.6.2)
 #define buildin_tynixml
 
-// PNG image format support via libpng. Don't use png images right now, disabled atm
+// PNG image format support via libpng.
 // #define png
+
+// JPEG image format support via libjpeg.
+// #define jpeg
+
 
 #endif // CONFIG_H

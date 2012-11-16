@@ -51,23 +51,23 @@ struct PirateShipData
 const int	PresetPirateShipDataCount = 15;
 PirateShipData PresetPirateShipData[PresetPirateShipDataCount] =
 {
-	{2,	0, 2,	20,	"DATA/MODELS/PIRATESHIP/gunship-01.VW3D",	"DATA/MODELS/gr-04.jpg", " ", false},
-	{1,	0, 2,	30,	"DATA/MODELS/PIRATESHIP/bomber-07.VW3D",	"DATA/MODELS/gr-04.jpg", " ", false},
-	{4,	0, 2,	100,"DATA/MODELS/PIRATESHIP/gunship-03.VW3D",	"DATA/MODELS/gr-03.jpg", " ", false},
-	{4,	0, 2,	200,"DATA/MODELS/PIRATESHIP/gunship-04.VW3D",	"DATA/MODELS/gr-03.jpg", " ", false},
-	{4,	0, 6,	400,"DATA/MODELS/PIRATESHIP/gunship-02.VW3D",	"DATA/MODELS/gr-03.jpg", " ", false},
+	{2,	0, 2,	20,	"DATA/MODELS/PIRATESHIP/gunship-01.VW3D",	"DATA/MODELS/gr-04.tga", " ", false},
+	{1,	0, 2,	30,	"DATA/MODELS/PIRATESHIP/bomber-07.VW3D",	"DATA/MODELS/gr-04.tga", " ", false},
+	{4,	0, 2,	100,"DATA/MODELS/PIRATESHIP/gunship-03.VW3D",	"DATA/MODELS/gr-03.tga", " ", false},
+	{4,	0, 2,	200,"DATA/MODELS/PIRATESHIP/gunship-04.VW3D",	"DATA/MODELS/gr-03.tga", " ", false},
+	{4,	0, 6,	400,"DATA/MODELS/PIRATESHIP/gunship-02.VW3D",	"DATA/MODELS/gr-03.tga", " ", false},
 
-	{1,	2, 2,	600,"DATA/MODELS/PIRATESHIP/bomber-03.VW3D",	"DATA/MODELS/gr-05.jpg", " ", false},
-	{1,	2, 4,	1200,"DATA/MODELS/PIRATESHIP/bomber-02.VW3D",	"DATA/MODELS/gr-05.jpg", " ", false},
-	{1,	6, 4,	1000,"DATA/MODELS/PIRATESHIP/bomber-04.VW3D",	"DATA/MODELS/gr-03.jpg", " ", false},
-	{3,	2, 6,	2000,"DATA/MODELS/PIRATESHIP/bomber-05.VW3D",	"DATA/MODELS/gr-04.jpg", "DATA/MODELS/NORMALMAP/bomber_nm.tga", true},
-	{4,	4, 8,	2500,"DATA/MODELS/PIRATESHIP/bomber-06.VW3D",	"DATA/MODELS/gr-04.jpg", "DATA/MODELS/NORMALMAP/bomber_nm.tga", true},
+	{1,	2, 2,	600,"DATA/MODELS/PIRATESHIP/bomber-03.VW3D",	"DATA/MODELS/gr-05.tga", " ", false},
+	{1,	2, 4,	1200,"DATA/MODELS/PIRATESHIP/bomber-02.VW3D",	"DATA/MODELS/gr-05.tga", " ", false},
+	{1,	6, 4,	1000,"DATA/MODELS/PIRATESHIP/bomber-04.VW3D",	"DATA/MODELS/gr-03.tga", " ", false},
+	{3,	2, 6,	2000,"DATA/MODELS/PIRATESHIP/bomber-05.VW3D",	"DATA/MODELS/gr-04.tga", "DATA/MODELS/NORMALMAP/bomber_nm.tga", true},
+	{4,	4, 8,	2500,"DATA/MODELS/PIRATESHIP/bomber-06.VW3D",	"DATA/MODELS/gr-04.tga", "DATA/MODELS/NORMALMAP/bomber_nm.tga", true},
 
-	{0,	2, 2,	300,"DATA/MODELS/PIRATESHIP/bomber-03.VW3D",	"DATA/MODELS/gr-05.jpg", " ", false},
-	{0,	2, 4,	600,"DATA/MODELS/PIRATESHIP/bomber-02.VW3D",	"DATA/MODELS/gr-05.jpg", " ", false},
-	{0,	6, 4,	500,"DATA/MODELS/PIRATESHIP/bomber-04.VW3D",	"DATA/MODELS/gr-03.jpg", " ", false},
-	{0,	2, 6,	1000,"DATA/MODELS/PIRATESHIP/bomber-05.VW3D",	"DATA/MODELS/gr-04.jpg", "DATA/MODELS/NORMALMAP/bomber_nm.tga", true},
-	{0,	4, 8,	1500,"DATA/MODELS/PIRATESHIP/bomber-06.VW3D",	"DATA/MODELS/gr-04.jpg", "DATA/MODELS/NORMALMAP/bomber_nm.tga", true}
+	{0,	2, 2,	300,"DATA/MODELS/PIRATESHIP/bomber-03.VW3D",	"DATA/MODELS/gr-05.tga", " ", false},
+	{0,	2, 4,	600,"DATA/MODELS/PIRATESHIP/bomber-02.VW3D",	"DATA/MODELS/gr-05.tga", " ", false},
+	{0,	6, 4,	500,"DATA/MODELS/PIRATESHIP/bomber-04.VW3D",	"DATA/MODELS/gr-03.tga", " ", false},
+	{0,	2, 6,	1000,"DATA/MODELS/PIRATESHIP/bomber-05.VW3D",	"DATA/MODELS/gr-04.tga", "DATA/MODELS/NORMALMAP/bomber_nm.tga", true},
+	{0,	4, 8,	1500,"DATA/MODELS/PIRATESHIP/bomber-06.VW3D",	"DATA/MODELS/gr-04.tga", "DATA/MODELS/NORMALMAP/bomber_nm.tga", true}
 };
 
 

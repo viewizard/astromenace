@@ -75,7 +75,7 @@ void CBuilding::Create(int	BuildingNum)
 
 	for (int i=0; i<DrawObjectQuantity; i++)
 	{
-		Texture[i] = vw_FindTextureByName("DATA/MODELS/BUILDING/bld.jpg");
+		Texture[i] = vw_FindTextureByName("DATA/MODELS/BUILDING/bld.tga");
 		TextureIllum[i] = vw_FindTextureByName("DATA/MODELS/BUILDING/bld_illum.tga");
 		NormalMap[i] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/buildings_nm.tga");
 	}

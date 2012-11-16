@@ -100,32 +100,32 @@ const int	PresetEarthWeaponDataCount = 19;
 WeaponData PresetEarthWeaponData[PresetEarthWeaponDataCount] =
 {
 	// Kinetic
-	{9,  true, 25,	1,	1.5f,	3000,	0.4f, 4, VECTOR3D(0.0f, -0.613f, 2.0f), VECTOR3D(0.0f, -0.65f, 1.0f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text00.jpg", "DATA/MODELS/EARTHFIGHTER/sf-illum01.tga"},
-	{10, true, 25,	1,	3,		1500,	0.6f, 10, VECTOR3D(0.0f, -0.613f, 2.93f), VECTOR3D(0.0f, -0.6f, 1.8f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text00.jpg", "DATA/MODELS/EARTHFIGHTER/sf-illum01.tga"},
-	{11, true, 30,	2,	3.5,	1000,	0.7f, 12, VECTOR3D(0.0f, -0.613f, 3.33f), VECTOR3D(0.0f, -0.6f, 2.2f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text00.jpg", "DATA/MODELS/EARTHFIGHTER/sf-illum01.tga"},
-	{12, true, 30,	2,	5,		7000,	0.3f, 7, VECTOR3D(0.0f, -0.613f, 2.33f), VECTOR3D(0.0f, -0.6f, 1.2f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text00.jpg", "DATA/MODELS/EARTHFIGHTER/sf-illum01.tga"},
+	{9,  true, 25,	1,	1.5f,	3000,	0.4f, 4, VECTOR3D(0.0f, -0.613f, 2.0f), VECTOR3D(0.0f, -0.65f, 1.0f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text00.tga", "DATA/MODELS/EARTHFIGHTER/sf-illum01.tga"},
+	{10, true, 25,	1,	3,		1500,	0.6f, 10, VECTOR3D(0.0f, -0.613f, 2.93f), VECTOR3D(0.0f, -0.6f, 1.8f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text00.tga", "DATA/MODELS/EARTHFIGHTER/sf-illum01.tga"},
+	{11, true, 30,	2,	3.5,	1000,	0.7f, 12, VECTOR3D(0.0f, -0.613f, 3.33f), VECTOR3D(0.0f, -0.6f, 2.2f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text00.tga", "DATA/MODELS/EARTHFIGHTER/sf-illum01.tga"},
+	{12, true, 30,	2,	5,		7000,	0.3f, 7, VECTOR3D(0.0f, -0.613f, 2.33f), VECTOR3D(0.0f, -0.6f, 1.2f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text00.tga", "DATA/MODELS/EARTHFIGHTER/sf-illum01.tga"},
 	// Ion
-	{13, true, 10,	1,	7,		1000,	0.7f, 0, VECTOR3D(0.0f, -0.43f, 2.13f), VECTOR3D(0.0f, -0.45f, 1.5f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text04.jpg", "DATA/MODELS/EARTHFIGHTER/sf-illum02.tga"},
-	{14, true, 10,	1,	10,		2000,	0.9f, 3, VECTOR3D(0.0f, -0.53f, 1.86f), VECTOR3D(0.0f, -0.5f, 1.8f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text04.jpg", "DATA/MODELS/EARTHFIGHTER/sf-illum02.tga"},
-	{15, true, 15,	2,	11.5,	3000,	1.0f, 5, VECTOR3D(0.0f, -0.63f, 2.26f), VECTOR3D(0.0f, -0.65f, 2.3f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text04.jpg", "DATA/MODELS/EARTHFIGHTER/sf-illum02.tga"},
+	{13, true, 10,	1,	7,		1000,	0.7f, 0, VECTOR3D(0.0f, -0.43f, 2.13f), VECTOR3D(0.0f, -0.45f, 1.5f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text04.tga", "DATA/MODELS/EARTHFIGHTER/sf-illum02.tga"},
+	{14, true, 10,	1,	10,		2000,	0.9f, 3, VECTOR3D(0.0f, -0.53f, 1.86f), VECTOR3D(0.0f, -0.5f, 1.8f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text04.tga", "DATA/MODELS/EARTHFIGHTER/sf-illum02.tga"},
+	{15, true, 15,	2,	11.5,	3000,	1.0f, 5, VECTOR3D(0.0f, -0.63f, 2.26f), VECTOR3D(0.0f, -0.65f, 2.3f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text04.tga", "DATA/MODELS/EARTHFIGHTER/sf-illum02.tga"},
 	// Plasma
-	{16, true, 10,	2,	20,		2000,	0.6f, 2, VECTOR3D(0.0f, -0.613f, 2.0f), VECTOR3D(0.0f, -0.65f, 1.8f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text06.jpg", "DATA/MODELS/EARTHFIGHTER/sf-illum03.tga"},
-	{17, true, 15,	2,	30,		1000,	0.7f, 1, VECTOR3D(0.0f, -0.8f, 1.86f), VECTOR3D(0.0f, -0.8f, 1.8f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text06.jpg", "DATA/MODELS/EARTHFIGHTER/sf-illum03.tga"},
-	{18, true, 10,	3,	50,		800,	0.9f, 6, VECTOR3D(0.0f, -0.613f, 1.2f), VECTOR3D(0.0f, -0.7f, 1.6f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text06.jpg", "DATA/MODELS/EARTHFIGHTER/sf-illum03.tga"},
+	{16, true, 10,	2,	20,		2000,	0.6f, 2, VECTOR3D(0.0f, -0.613f, 2.0f), VECTOR3D(0.0f, -0.65f, 1.8f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text06.tga", "DATA/MODELS/EARTHFIGHTER/sf-illum03.tga"},
+	{17, true, 15,	2,	30,		1000,	0.7f, 1, VECTOR3D(0.0f, -0.8f, 1.86f), VECTOR3D(0.0f, -0.8f, 1.8f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text06.tga", "DATA/MODELS/EARTHFIGHTER/sf-illum03.tga"},
+	{18, true, 10,	3,	50,		800,	0.9f, 6, VECTOR3D(0.0f, -0.613f, 1.2f), VECTOR3D(0.0f, -0.7f, 1.6f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text06.tga", "DATA/MODELS/EARTHFIGHTER/sf-illum03.tga"},
 	// Maser
-	{19, true, 10,	3,	50,		800,	3.0f, 9, VECTOR3D(0.0f, -0.55f, 2.1f), VECTOR3D(0.0f, -0.55f, 1.4f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text07.jpg", "DATA/MODELS/EARTHFIGHTER/sf-illum03.tga"},
-	{20, true, 15,	4,	80,		1000,	2.4f, 8, VECTOR3D(0.0f, -0.55f, 2.5f), VECTOR3D(0.0f, -0.55f, 1.8f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text07.jpg", "DATA/MODELS/EARTHFIGHTER/sf-illum03.tga"},
+	{19, true, 10,	3,	50,		800,	3.0f, 9, VECTOR3D(0.0f, -0.55f, 2.1f), VECTOR3D(0.0f, -0.55f, 1.4f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text07.tga", "DATA/MODELS/EARTHFIGHTER/sf-illum03.tga"},
+	{20, true, 15,	4,	80,		1000,	2.4f, 8, VECTOR3D(0.0f, -0.55f, 2.5f), VECTOR3D(0.0f, -0.55f, 1.8f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text07.tga", "DATA/MODELS/EARTHFIGHTER/sf-illum03.tga"},
 	// Antimatter
-	{21, true, 20,	4,	50,		5000,	0.8f, 11, VECTOR3D(0.0f, -0.65f, 2.1f), VECTOR3D(0.0f, -0.65f, 1.9f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text09.jpg", "DATA/MODELS/EARTHFIGHTER/sf-illum02.tga"},
+	{21, true, 20,	4,	50,		5000,	0.8f, 11, VECTOR3D(0.0f, -0.65f, 2.1f), VECTOR3D(0.0f, -0.65f, 1.9f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text09.tga", "DATA/MODELS/EARTHFIGHTER/sf-illum02.tga"},
 	// Laser
-	{22, true, 15,	5,	150,	800,	1.2f, 13, VECTOR3D(0.0f, -0.6f, 2.5f), VECTOR3D(0.0f, -0.6f, 2.1f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text05.jpg", "DATA/MODELS/EARTHFIGHTER/sf-illum03.tga"},
+	{22, true, 15,	5,	150,	800,	1.2f, 13, VECTOR3D(0.0f, -0.6f, 2.5f), VECTOR3D(0.0f, -0.6f, 2.1f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text05.tga", "DATA/MODELS/EARTHFIGHTER/sf-illum03.tga"},
 	// Gauss
-	{23, true, 20,	5,	150,	2000,	0.7f, 14, VECTOR3D(0.0f, -0.65f, 3.6f), VECTOR3D(0.0f, -0.55f, 2.2f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text08.jpg", "DATA/MODELS/EARTHFIGHTER/sf-illum03.tga"},
+	{23, true, 20,	5,	150,	2000,	0.7f, 14, VECTOR3D(0.0f, -0.65f, 3.6f), VECTOR3D(0.0f, -0.55f, 2.2f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text08.tga", "DATA/MODELS/EARTHFIGHTER/sf-illum03.tga"},
 	// Missiles
-	{24, false, 30,	4,	5,		200,	3.0f, 0, VECTOR3D(0.0f, -0.8f, 4.7f), VECTOR3D(0.0f, -0.9f, 1.5f), "DATA/MODELS/EARTHFIGHTER/lnch1.VW3D", "DATA/MODELS/EARTHFIGHTER/lnch12.jpg", ""},
-	{25, false, 30,	4,	15,		400,	8.0f, 0, VECTOR3D(0.2f, -0.95f, 2.6f), VECTOR3D(0.0f, -0.6f, 1.0f), "DATA/MODELS/EARTHFIGHTER/lnch2.VW3D", "DATA/MODELS/EARTHFIGHTER/lnch12.jpg", ""},
-	{26, false, 25,	5,	10,		50,		8.0f, 0, VECTOR3D(0.0f, -0.95f, 4.0f), VECTOR3D(0.0f, -0.9f, 1.5f), "DATA/MODELS/EARTHFIGHTER/lnch3.VW3D", "DATA/MODELS/EARTHFIGHTER/lnch34.jpg", ""},
-	{27, false, 30,	5,	15,		25,		10.0f, 0, VECTOR3D(0.0f, -0.95f, 5.0f), VECTOR3D(0.0f, -0.9f, 1.8f), "DATA/MODELS/EARTHFIGHTER/lnch4.VW3D", "DATA/MODELS/EARTHFIGHTER/lnch34.jpg", ""},
+	{24, false, 30,	4,	5,		200,	3.0f, 0, VECTOR3D(0.0f, -0.8f, 4.7f), VECTOR3D(0.0f, -0.9f, 1.5f), "DATA/MODELS/EARTHFIGHTER/lnch1.VW3D", "DATA/MODELS/EARTHFIGHTER/lnch12.tga", ""},
+	{25, false, 30,	4,	15,		400,	8.0f, 0, VECTOR3D(0.2f, -0.95f, 2.6f), VECTOR3D(0.0f, -0.6f, 1.0f), "DATA/MODELS/EARTHFIGHTER/lnch2.VW3D", "DATA/MODELS/EARTHFIGHTER/lnch12.tga", ""},
+	{26, false, 25,	5,	10,		50,		8.0f, 0, VECTOR3D(0.0f, -0.95f, 4.0f), VECTOR3D(0.0f, -0.9f, 1.5f), "DATA/MODELS/EARTHFIGHTER/lnch3.VW3D", "DATA/MODELS/EARTHFIGHTER/lnch34.tga", ""},
+	{27, false, 30,	5,	15,		25,		10.0f, 0, VECTOR3D(0.0f, -0.95f, 5.0f), VECTOR3D(0.0f, -0.9f, 1.8f), "DATA/MODELS/EARTHFIGHTER/lnch4.VW3D", "DATA/MODELS/EARTHFIGHTER/lnch34.tga", ""},
 };
 
 
@@ -169,9 +169,9 @@ const int	PresetPirateWeaponDataCount = 17;
 WeaponData PresetPirateWeaponData[PresetPirateWeaponDataCount] =
 {
 	// турель для кораблей пиратов
-	{9, false, 10,		1,	1,	3000,	0.7f, 4, VECTOR3D(0.0f, 1.5f, 1.0f), VECTOR3D(0.0f, 1.5f, 1.0f), "DATA/MODELS/TURRET/turret-01.VW3D", "DATA/MODELS/TURRET/turrets.jpg", ""},
+	{9, false, 10,		1,	1,	3000,	0.7f, 4, VECTOR3D(0.0f, 1.5f, 1.0f), VECTOR3D(0.0f, 1.5f, 1.0f), "DATA/MODELS/TURRET/turret-01.VW3D", "DATA/MODELS/TURRET/turrets.tga", ""},
 	// турель для кораблей пиратов
-	{10, false, 10,		1,	1,	3000,	0.7f, 4, VECTOR3D(0.0f, 1.0f, 0.0f), VECTOR3D(0.0f, 1.0f, 0.0f), "DATA/MODELS/TURRET/turret-02.VW3D", "DATA/MODELS/TURRET/turrets.jpg", ""},
+	{10, false, 10,		1,	1,	3000,	0.7f, 4, VECTOR3D(0.0f, 1.0f, 0.0f), VECTOR3D(0.0f, 1.0f, 0.0f), "DATA/MODELS/TURRET/turret-02.VW3D", "DATA/MODELS/TURRET/turrets.tga", ""},
 
 	// оружие пиратов - отстрел фларес для больших кораблей
 	{9, false, 1.0f,	1,	1,	2500,	4.0f, 0, VECTOR3D(0.0f, 0.0f, 0.0f), VECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},

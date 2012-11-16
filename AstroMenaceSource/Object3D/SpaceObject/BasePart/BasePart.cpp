@@ -76,12 +76,12 @@ void CBasePart::Create(int BasePartNum)
 
 case1next:
 
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/aster.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/aster.tga");
 			TextureIllum[0] = 0;
 			NormalMap[0] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/spacebase_asteroid_nm.tga");
 			Texture[1] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/allalpha.tga");
 			TextureIllum[1] = 0;
-			Texture[2] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/metal.jpg");
+			Texture[2] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/metal.tga");
 			TextureIllum[2] = 0;
 
 			GFXQuantity = 8;
@@ -135,17 +135,17 @@ case2next:
 
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/allalpha.tga");
 			TextureIllum[0] = 0;
-			Texture[1] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/aster.jpg");
+			Texture[1] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/aster.tga");
 			TextureIllum[1] = 0;
 			NormalMap[1] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/spacebase_asteroid_nm.tga");
-			Texture[2] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/metal.jpg");
+			Texture[2] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/metal.tga");
 			TextureIllum[2] = 0;
 			break;
 
 		case 3:
 			// геометрия
 			LoadObjectData("DATA/MODELS/SPACEBASE/3/1.VW3D", this, 0, -1.0f);
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/metal.jpg");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/metal.tga");
 			TextureIllum[0] = 0;
 			Texture[1] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/allalpha.tga");
 			TextureIllum[1] = 0;
@@ -197,7 +197,7 @@ case6next:
 
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/allalpha.tga");
 			TextureIllum[0] = 0;
-			Texture[1] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/aster.jpg");
+			Texture[1] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/aster.tga");
 			TextureIllum[1] = 0;
 			NormalMap[1] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/spacebase_asteroid_nm.tga");
 			break;
@@ -228,9 +228,9 @@ case8next:
 
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/allalpha.tga");
 			TextureIllum[0] = 0;
-			Texture[1] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/metal.jpg");
+			Texture[1] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/metal.tga");
 			TextureIllum[1] = 0;
-			Texture[2] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/aster.jpg");
+			Texture[2] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/aster.tga");
 			TextureIllum[2] = 0;
 			NormalMap[2] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/spacebase_asteroid_nm.tga");
 			break;
