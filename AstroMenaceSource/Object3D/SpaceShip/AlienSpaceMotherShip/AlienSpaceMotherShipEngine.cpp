@@ -197,56 +197,7 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 			ParticleSystem->IsAttractive = true;
 			ParticleSystem->AttractiveValue = 15.0f;
 			break;
-		case 7:
-			// внутренности4
-			ParticleSystem->ColorStart.r = 1.00f;
-			ParticleSystem->ColorStart.g = 1.00f;
-			ParticleSystem->ColorStart.b = 0.30f;
-			ParticleSystem->ColorEnd.r = 1.00f;
-			ParticleSystem->ColorEnd.g = 0.30f;
-			ParticleSystem->ColorEnd.b = 0.00f;
-			ParticleSystem->AlphaStart = 1.00f;
-			ParticleSystem->AlphaEnd   = 1.00f;
-			ParticleSystem->SizeStart  = 0.40f;
-			ParticleSystem->SizeVar    = 0.10f;
-			ParticleSystem->SizeEnd    = 0.40f;
-			ParticleSystem->Speed      = 15.00f;
-			ParticleSystem->SpeedVar   = 10.00f;
-			ParticleSystem->SpeedOnCreation	   = -1.00f;
-			ParticleSystem->Theta      = 0.00f;
-			ParticleSystem->Life       = 1.10f;
-			ParticleSystem->ParticlesPerSec = 50;
-			ParticleSystem->CreationType = 2;
-			ParticleSystem->CreationSize = VECTOR3D(4.0f,7.0f,1.0f);
-			//ParticleSystem->AlphaShowHide = true;
-			ParticleSystem->IsAttractive = true;
-			ParticleSystem->AttractiveValue = 5.0f;
-			ParticleSystem->Direction = VECTOR3D(0.0f, 0.0f, 1.0f);
-			break;
-		case 8:
-			// плазма
-			ParticleSystem->ColorStart.r = 1.00f;
-			ParticleSystem->ColorStart.g = 1.00f;
-			ParticleSystem->ColorStart.b = 0.30f;
-			ParticleSystem->ColorEnd.r = 1.00f;
-			ParticleSystem->ColorEnd.g = 0.30f;
-			ParticleSystem->ColorEnd.b = 0.00f;
-			ParticleSystem->AlphaStart = 1.00f;
-			ParticleSystem->AlphaEnd   = 0.20f;
-			ParticleSystem->SizeStart  = 0.20f;
-			ParticleSystem->SizeVar    = 0.20f;
-			ParticleSystem->SizeEnd    = 1.00f;
-			ParticleSystem->Speed      = 0.00f;
-			ParticleSystem->SpeedOnCreation	   = -1.00f;
-			ParticleSystem->Theta      = 0.00f;
-			ParticleSystem->Life       = 1.00f;
-			ParticleSystem->ParticlesPerSec = 50;
-			ParticleSystem->CreationType = 1;
-			ParticleSystem->CreationSize = VECTOR3D(3.0f,3.0f,3.0f);
-			ParticleSystem->DeadZone = 2.9f;
-			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.65f, 0.15f, 0.0f, 0.05f);
-			ParticleSystem->LightNeedDeviation = true;
-			break;
+
 
 
 
@@ -371,30 +322,7 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.01f);
 			ParticleSystem->LightNeedDeviation = true;
 			break;
-		case 14:
-			// плазма
-			ParticleSystem->ColorStart.r = 0.00f;
-			ParticleSystem->ColorStart.g = 0.50f;
-			ParticleSystem->ColorStart.b = 1.00f;
-			ParticleSystem->ColorEnd.r = 0.70f;
-			ParticleSystem->ColorEnd.g = 1.00f;
-			ParticleSystem->ColorEnd.b = 1.00f;
-			ParticleSystem->AlphaStart = 1.00f;
-			ParticleSystem->AlphaEnd   = 0.20f;
-			ParticleSystem->SizeStart  = 0.20f;
-			ParticleSystem->SizeVar    = 0.20f;
-			ParticleSystem->SizeEnd    = 1.00f;
-			ParticleSystem->Speed      = 0.00f;
-			ParticleSystem->SpeedOnCreation	   = -1.00f;
-			ParticleSystem->Theta      = 0.00f;
-			ParticleSystem->Life       = 1.00f;
-			ParticleSystem->ParticlesPerSec = 50;
-			ParticleSystem->CreationType = 1;
-			ParticleSystem->CreationSize = VECTOR3D(3.0f,3.0f,3.0f);
-			ParticleSystem->DeadZone = 2.9f;
-			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.01f);
-			ParticleSystem->LightNeedDeviation = true;
-			break;
+
 
 
 

@@ -373,6 +373,118 @@ void DeleteAlpha(BYTE **DIBRESULT, eTexture *Texture)
 
 
 
+//------------------------------------------------------------------------------------
+// конвертирование в VW2D
+//------------------------------------------------------------------------------------
+void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
+{
+	eFILE *pFile = 0;
+	int DWidth = 0;
+	int DHeight = 0;
+	int DChanels = 0;
+	BYTE *tmp_image = 0;
+
+	int LoadAs = TGA_FILE;
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// Открываем файл
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	pFile = vw_fopen(SrcName);
+	if (pFile == 0)
+	{
+		fprintf(stderr, "Unable to found %s\n", SrcName);
+		return;
+	}
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// Ищем как грузить по расширению
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	if( vw_TestFileExtension( SrcName, "tga" ) || vw_TestFileExtension( SrcName, "TGA" ))
+	{
+		LoadAs = TGA_FILE;
+	}
+	else
+	{
+		if( vw_TestFileExtension( SrcName, "jpg" ) || vw_TestFileExtension( SrcName, "JPG" ))
+		{
+			LoadAs = JPG_FILE;
+		}
+		else
+		{
+			if( vw_TestFileExtension( SrcName, "png" ) || vw_TestFileExtension( SrcName, "PNG" ))
+			{
+				LoadAs = PNG_FILE;
+			}
+		}
+	}
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// Загружаем
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	switch(LoadAs)
+	{
+		case TGA_FILE:
+			ReadTGA(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
+			break;
+
+		case JPG_FILE:
+			ReadJPG(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
+			break;
+
+		case PNG_FILE:
+			ReadPNG(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
+			break;
+
+		default:
+			fprintf(stderr, "Unable to load %s\n", SrcName);
+			return;
+			break;
+	}
+
+	if (tmp_image == 0)
+	{
+		fprintf(stderr, "Unable to load %s\n", SrcName);
+		return;
+	}
+
+	// все, файл нам больше не нужен
+	vw_fclose(pFile);
+
+
+
+	// записываем данные на диск
+
+	SDL_RWops *FileVW2D;
+	FileVW2D = SDL_RWFromFile(DestName, "wb");
+	// если не можем создать файл на запись - уходим
+    if (FileVW2D == NULL)
+    {
+        fprintf(stderr, "Can't create %s file on disk.\n", DestName);
+        return;
+    }
+
+	// маркер файла 4 байта
+	char tmp1[5] = "VW2D";
+	SDL_RWwrite(FileVW2D, tmp1, 4, 1);
+
+	SDL_RWwrite(FileVW2D, &DWidth, sizeof(int), 1);
+	SDL_RWwrite(FileVW2D, &DHeight, sizeof(int), 1);
+	SDL_RWwrite(FileVW2D, &DChanels, sizeof(int), 1);
+	SDL_RWwrite(FileVW2D, tmp_image, DWidth*DHeight*DChanels, 1);
+
+
+	// освобождаем память
+	if (tmp_image != 0){delete [] tmp_image; tmp_image = 0;}
+}
+
+
+
+
+
+
+
 
 //------------------------------------------------------------------------------------
 // загрузка текстуры из файла и подключение к менеджеру текстур
@@ -409,15 +521,22 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool Nee
 		}
 		else
 		{
-			if( vw_TestFileExtension( nName, "jpg" ) || vw_TestFileExtension( nName, "JPG" ))
+			if( vw_TestFileExtension( nName, "vw2d" ) || vw_TestFileExtension( nName, "VW2D" ))
 			{
-				LoadAs = JPG_FILE;
+				LoadAs = VW2D_FILE;
 			}
 			else
 			{
-				if( vw_TestFileExtension( nName, "png" ) || vw_TestFileExtension( nName, "PNG" ))
+				if( vw_TestFileExtension( nName, "jpg" ) || vw_TestFileExtension( nName, "JPG" ))
 				{
-					LoadAs = PNG_FILE;
+					LoadAs = JPG_FILE;
+				}
+				else
+				{
+					if( vw_TestFileExtension( nName, "png" ) || vw_TestFileExtension( nName, "PNG" ))
+					{
+						LoadAs = PNG_FILE;
+					}
 				}
 			}
 		}
@@ -438,6 +557,21 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool Nee
 
 		case PNG_FILE:
 			ReadPNG(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
+			break;
+
+		case VW2D_FILE:
+			// пропускаем заголовок "VW2D"
+			pFile->fseek(4, SEEK_SET);
+			// считываем ширину
+			pFile->fread(&DWidth, sizeof(int), 1);
+			// считываем высоту
+			pFile->fread(&DHeight, sizeof(int), 1);
+			// считываем кол-во каналов
+			pFile->fread(&DChanels, sizeof(int), 1);
+			// резервируем память
+			tmp_image = new BYTE[DWidth*DHeight*DChanels];
+			// считываем уже готовый к созданию текстуры массив
+			pFile->fread(tmp_image, DWidth*DHeight*DChanels, 1);
 			break;
 
 		default:

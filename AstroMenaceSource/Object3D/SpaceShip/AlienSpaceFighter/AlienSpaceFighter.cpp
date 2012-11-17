@@ -102,8 +102,8 @@ void CAlienSpaceFighter::Create(int	SpaceShipNum)
 	// всегда только эти текстуры и 1 объект
 	for (int i=0; i<DrawObjectQuantity; i++)
 	{
-		Texture[i] = vw_FindTextureByName("DATA/MODELS/ALIENFIGHTER/al-text04.tga");
-		TextureIllum[i] = vw_FindTextureByName("DATA/MODELS/ALIENFIGHTER/al-illum04.tga");
+		Texture[i] = vw_FindTextureByName("DATA/MODELS/ALIENFIGHTER/al-text04.VW2D");
+		TextureIllum[i] = vw_FindTextureByName("DATA/MODELS/ALIENFIGHTER/al-illum04.VW2D");
 	}
 
 	// начальные установки для оружия
