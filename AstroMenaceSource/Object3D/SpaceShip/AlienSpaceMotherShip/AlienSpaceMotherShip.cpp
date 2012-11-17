@@ -52,14 +52,14 @@ struct AlienSpaceMotherShipData
 const int	PresetAlienSpaceMotherShipDataCount = 8;
 AlienSpaceMotherShipData PresetAlienSpaceMotherShipData[PresetAlienSpaceMotherShipDataCount] =
 {
-	{14,1,	10,	3000, 1500,	"DATA/MODELS/ALIENMOTHERSHIP/alm-01.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text04.tga", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum04.tga"},
-	{8,	8,	10,	4000, 3000,	"DATA/MODELS/ALIENMOTHERSHIP/alm-02.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text04.tga", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum04.tga"},
-	{8,	1,	10,	5000, 3300,	"DATA/MODELS/ALIENMOTHERSHIP/alm-03.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text02.tga", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum02.tga"},
-	{8,	8,	13,	6000, 3500,	"DATA/MODELS/ALIENMOTHERSHIP/alm-04.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text02.tga", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum02.tga"},
-	{8,	6,	20,	7000, 3800,	"DATA/MODELS/ALIENMOTHERSHIP/alm-05.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text08.tga", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum08.tga"},
-	{12,6,	16,	8000, 4000,	"DATA/MODELS/ALIENMOTHERSHIP/alm-06.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text08.tga", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum08.tga"},
-	{5,	2,	6,	9000, 4300,	"DATA/MODELS/ALIENMOTHERSHIP/alm-07.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text03.tga", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum03.tga"},
-	{4,	6,	10,	10000,4500,	"DATA/MODELS/ALIENMOTHERSHIP/alm-08.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text03.tga", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum03.tga"}
+	{14,1,	10,	3000, 1500,	"DATA/MODELS/ALIENMOTHERSHIP/alm-01.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text04.VW2D", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum04.VW2D"},
+	{8,	8,	10,	4000, 3000,	"DATA/MODELS/ALIENMOTHERSHIP/alm-02.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text04.VW2D", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum04.VW2D"},
+	{8,	1,	8,	5000, 3300,	"DATA/MODELS/ALIENMOTHERSHIP/alm-03.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text02.VW2D", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum02.VW2D"},
+	{8,	8,	12,	6000, 3500,	"DATA/MODELS/ALIENMOTHERSHIP/alm-04.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text02.VW2D", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum02.VW2D"},
+	{8,	6,	19,	7000, 3800,	"DATA/MODELS/ALIENMOTHERSHIP/alm-05.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text08.VW2D", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum08.VW2D"},
+	{12,6,	15,	8000, 4000,	"DATA/MODELS/ALIENMOTHERSHIP/alm-06.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text08.VW2D", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum08.VW2D"},
+	{5,	2,	6,	9000, 4300,	"DATA/MODELS/ALIENMOTHERSHIP/alm-07.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text03.VW2D", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum03.VW2D"},
+	{4,	6,	10,	10000,4500,	"DATA/MODELS/ALIENMOTHERSHIP/alm-08.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text03.VW2D", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum03.VW2D"}
 };
 
 
@@ -378,17 +378,11 @@ void CAlienSpaceMotherShip::Create(int	SpaceShipNum)
 			EngineLocation[5] = VECTOR3D(-11.9f, -1.0f, -14.8f);
 			SetAlienSpaceMotherShipEngine(Engine[5], 1);
 			Engine[6] = new eParticleSystem;
-			EngineLocation[6] = VECTOR3D(0.0f, -2.0f, 2.0f);
-			SetAlienSpaceMotherShipEngine(Engine[6], 7);
+			EngineLocation[6] = VECTOR3D(0.0f, -1.0f, -10.0f);
+			SetAlienSpaceMotherShipEngine(Engine[6], 3);
 			Engine[7] = new eParticleSystem;
-			EngineLocation[7] = VECTOR3D(0.0f, -2.0f, 27.0f);
-			SetAlienSpaceMotherShipEngine(Engine[7], 8);
-			Engine[8] = new eParticleSystem;
-			EngineLocation[8] = VECTOR3D(0.0f, -1.0f, -10.0f);
-			SetAlienSpaceMotherShipEngine(Engine[8], 3);
-			Engine[9] = new eParticleSystem;
-			EngineLocation[9] = VECTOR3D(0.0f, -1.0f, -10.0f);
-			SetAlienSpaceMotherShipEngine(Engine[9], 4);
+			EngineLocation[7] = VECTOR3D(0.0f, -1.0f, -10.0f);
+			SetAlienSpaceMotherShipEngine(Engine[7], 4);
 			break;
 		case 4:
 			// оружие
@@ -481,18 +475,15 @@ void CAlienSpaceMotherShip::Create(int	SpaceShipNum)
 			EngineLocation[9] = VECTOR3D(-10.0f, -5.6f, -5.2f);
 			SetAlienSpaceMotherShipEngine(Engine[9], 1);
 			Engine[10] = new eParticleSystem;
-			EngineLocation[10] = VECTOR3D(0.0f, -1.0f, 23.0f);
-			SetAlienSpaceMotherShipEngine(Engine[10], 8);
+			EngineLocation[10] = VECTOR3D(0.0f, -6.0f, 10.0f);
+			SetAlienSpaceMotherShipEngine(Engine[10], 5);
+			Engine[10]->CreationSize = VECTOR3D(6.0f,6.0f,2.0f);
+			Engine[10]->DeadZone = 5.9f;
 			Engine[11] = new eParticleSystem;
 			EngineLocation[11] = VECTOR3D(0.0f, -6.0f, 10.0f);
-			SetAlienSpaceMotherShipEngine(Engine[11], 5);
+			SetAlienSpaceMotherShipEngine(Engine[11], 6);
 			Engine[11]->CreationSize = VECTOR3D(6.0f,6.0f,2.0f);
 			Engine[11]->DeadZone = 5.9f;
-			Engine[12] = new eParticleSystem;
-			EngineLocation[12] = VECTOR3D(0.0f, -6.0f, 10.0f);
-			SetAlienSpaceMotherShipEngine(Engine[12], 6);
-			Engine[12]->CreationSize = VECTOR3D(6.0f,6.0f,2.0f);
-			Engine[12]->DeadZone = 5.9f;
 			break;
 		case 5:
 			// оружие
@@ -606,9 +597,6 @@ void CAlienSpaceMotherShip::Create(int	SpaceShipNum)
 			Engine[18] = new eParticleSystem;
 			EngineLocation[18] = VECTOR3D(0.0f, -2.4f, -23.0f);
 			SetAlienSpaceMotherShipEngine(Engine[18], 13);
-			Engine[19] = new eParticleSystem;
-			EngineLocation[19] = VECTOR3D(0.0f, -2.4f, 20.0f);
-			SetAlienSpaceMotherShipEngine(Engine[19], 14);
 			break;
 
 
@@ -692,11 +680,8 @@ void CAlienSpaceMotherShip::Create(int	SpaceShipNum)
 			EngineLocation[0] = VECTOR3D(0.0f, -7.0f, -23.0f);
 			SetAlienSpaceMotherShipEngine(Engine[0], 13);
 			Engine[1] = new eParticleSystem;
-			EngineLocation[1] = VECTOR3D(0.0f, -4.4f, 18.0f);
-			SetAlienSpaceMotherShipEngine(Engine[1], 14);
-			Engine[1]->CreationSize = VECTOR3D(5.0f,5.0f,5.0f);
-			Engine[1]->DeadZone = 4.9f;
-			Engine[1]->ParticlesPerSec = 100;
+			EngineLocation[1] = VECTOR3D(-25.4f, -4.0f, -20.0f);
+			SetAlienSpaceMotherShipEngine(Engine[1], 11);
 			Engine[2] = new eParticleSystem;
 			EngineLocation[2] = VECTOR3D(20.6f, -4.0f, -20.0f);
 			SetAlienSpaceMotherShipEngine(Engine[2], 11);
@@ -736,9 +721,6 @@ void CAlienSpaceMotherShip::Create(int	SpaceShipNum)
 			Engine[14] = new eParticleSystem;
 			EngineLocation[14] = VECTOR3D(25.4f, -4.0f, -20.0f);
 			SetAlienSpaceMotherShipEngine(Engine[14], 11);
-			Engine[15] = new eParticleSystem;
-			EngineLocation[15] = VECTOR3D(-25.4f, -4.0f, -20.0f);
-			SetAlienSpaceMotherShipEngine(Engine[15], 11);
 			break;
 
 		case 7:

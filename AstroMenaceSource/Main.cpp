@@ -969,7 +969,8 @@ ReCreate:
 
 	// если поддерживает сторедж - вырубаем вообще поддержку сжатия (все равно работаем без него)
 	if (CAPS->TextureStorage) CAPS->TexturesCompression = false;
-
+	// проверка, поддерживаем компрессию текстур или нет
+	if (!CAPS->TexturesCompression) Setup.TexturesCompression = 0;
 
 
 

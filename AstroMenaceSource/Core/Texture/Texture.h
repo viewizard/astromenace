@@ -41,10 +41,10 @@
 
 // File types (for LoadAs parametre)
 #define AUTO_FILE			0	// Detect by file extension
-#define BMP_FILE			1	// BMP file
+#define VW2D_FILE			1	// VW2D file
 #define TGA_FILE			2	// TGA file
 #define JPG_FILE			4	// JPG file
-#define PNG_FILE			8	// JPG file
+#define PNG_FILE			8	// PNG file
 
 // Create alpha channel by image greyscale color
 #define TX_ALPHA_GREYSC		0x0021
@@ -104,6 +104,10 @@ void		vw_SetTextureAlpha(BYTE nARed, BYTE nAGreen, BYTE nABlue);
 eTexture*	vw_FindTextureByName(const char *Name);
 // Find texture by ID
 eTexture*	vw_FindTextureByNum(int Num);
+
+
+// Convert supported image file to VW2D format
+void 		vw_ConvertImageToVW2D(const char *SrcName, const char *DestName);
 
 
 #endif // Texture_H

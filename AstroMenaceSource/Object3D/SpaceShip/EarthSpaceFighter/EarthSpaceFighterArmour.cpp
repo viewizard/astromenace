@@ -88,35 +88,35 @@ eTexture *GetArmourTexture(int ArmourType)
 	{
 		// фактически - брони нет, только стальной корпус
 		case 0:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text00.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text00.VW2D");
 			break;
 		// примитивная броня
 		case 1:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text04.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text04.VW2D");
 			break;
 		// модернизированная броня
 		case 2:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text05.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text05.VW2D");
 			break;
 		// и против иона
 		case 3:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text07.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text07.VW2D");
 			break;
 		// и против иона+
 		case 4:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text08.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text08.VW2D");
 			break;
 		// и против иона++
 		case 5:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text09.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text09.VW2D");
 			break;
 		// и против плазмы
 		case 6:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text10.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text10.VW2D");
 			break;
 		// универсальная
 		case 7:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text06.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text06.VW2D");
 			break;
 	}
 
@@ -128,35 +128,35 @@ eTexture *GetArmourIllumTexture(int ArmourType)
 	{
 		// фактически - брони нет, только стальной корпус
 		case 0:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum01.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum01.VW2D");
 			break;
 		// примитивная броня
 		case 1:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum02.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum02.VW2D");
 			break;
 		// модернизированная броня
 		case 2:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum03.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum03.VW2D");
 			break;
 		// и против иона
 		case 3:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum03.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum03.VW2D");
 			break;
 		// и против иона+
 		case 4:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum03.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum03.VW2D");
 			break;
 		// и против иона++
 		case 5:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum02.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum02.VW2D");
 			break;
 		// и против плазмы
 		case 6:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum04.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum04.VW2D");
 			break;
 		// универсальная
 		case 7:
-			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum03.tga");
+			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum03.VW2D");
 			break;
 	}
 

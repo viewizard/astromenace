@@ -265,24 +265,24 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/MENU/cursor.tga",				0, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 {"DATA/MENU/cursor_shadow.tga",			0, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 // текстура брони для кораблей землян
-{"DATA/MODELS/EARTHFIGHTER/sf-text00.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-text05.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-text06.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-text07.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-text08.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-text09.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-text04.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-text10.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-illum01.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-illum02.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-illum03.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-illum04.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text00.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text05.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text06.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text07.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text08.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text09.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text04.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text10.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-illum01.VW2D",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-illum02.VW2D",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-illum03.VW2D",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-illum04.VW2D",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/EARTHFIGHTER/lnch12.tga",			1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/EARTHFIGHTER/lnch34.tga",			1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/EARTHFIGHTER/rockets.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // текстура истребителей пришельцев
-{"DATA/MODELS/ALIENFIGHTER/al-text04.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENFIGHTER/al-illum04.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENFIGHTER/al-text04.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENFIGHTER/al-illum04.VW2D",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // текстура космических объектов
 {"DATA/MODELS/SPACE/asteroid-01.tga",			1, 96, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // планеты
@@ -299,35 +299,35 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/MODELS/NORMALMAP/planet_asteroids_nm.tga",	1, 384, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/NORMALMAP/planet_moon_nm.tga",		1, 192, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // текстура наземной техники-сооружений
-{"DATA/MODELS/gr-01.tga",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/gr-02.tga",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/gr-03.tga",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/gr-04.tga",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/gr-01.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/gr-02.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/gr-03.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/gr-04.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/NORMALMAP/bomber_nm.tga",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/gr-05.tga",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/gr-06.tga",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/gr-07.tga",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/track.tga",							1, 48, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/gr-05.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/gr-06.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/gr-07.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/track.VW2D",							1, 48, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // большие астероиды
 {"DATA/MODELS/SPACE/bigasteroid.tga",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/NORMALMAP/space_bigasteroid_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 
 // текстура больших кораблей пришельцев
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-text02.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-text03.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-text04.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-text08.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum02.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum03.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum04.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum08.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-text02.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-text03.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-text04.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-text08.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum02.VW2D",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum03.VW2D",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum04.VW2D",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum08.VW2D",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/NORMALMAP/alien_mothership_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // турели пиратов
 {"DATA/MODELS/TURRET/turrets.tga",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // текстура зданий
-{"DATA/MODELS/BUILDING/bld.tga",				1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/BUILDING/bld.VW2D",				1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/NORMALMAP/buildings_nm.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/BUILDING/bld_illum.tga",			1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/BUILDING/bld_illum.VW2D",			1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // космическая база
 {"DATA/MODELS/SPACEBASE/allalpha.tga",		1, 1024, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/SPACEBASE/metal.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false, -1.0f, false},
@@ -344,10 +344,10 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/MODELS/MINE/mine4i.tga",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 
 // скайбокс - космос, загружаем только те, что нужно - экономим видео память
-{"DATA/SKYBOX/1/skybox_DN.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/1/skybox_FR.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/tile_14.tga",						1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/SKYBOX/tile_23.tga",						1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_DN.VW2D",				1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_FR.VW2D",				1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/tile_14.VW2D",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/SKYBOX/tile_23.VW2D",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // спец эффекты
 {"DATA/GFX/flare.tga",							1, 16, true,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f, false},
 {"DATA/GFX/flare1.tga",							1, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f, false},
@@ -412,8 +412,8 @@ LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {"DATA/GAME/weapon_energy.tga",					0, 1, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 {"DATA/MENU/weapon_on_icon.tga",				0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 {"DATA/GAME/missionfailed.tga",					0, 168, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/tile_14.tga",						1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/SKYBOX/tile_23.tga",						1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/SKYBOX/tile_14.VW2D",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/SKYBOX/tile_23.VW2D",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // спец эффекты
 {"DATA/GFX/flare.tga",							1, 16, true,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f, false},
 {"DATA/GFX/flare1.tga",							1, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f, false},
@@ -445,18 +445,18 @@ LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {"DATA/MENU/weapon18_icon.tga",					0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 {"DATA/MENU/weapon19_icon.tga",					0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 // текстура брони для кораблей землян
-{"DATA/MODELS/EARTHFIGHTER/sf-text00.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-text04.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-text05.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-text06.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-text07.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-text08.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-text09.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-text10.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-illum01.tga",		1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-illum02.tga",		1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-illum03.tga",		1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/EARTHFIGHTER/sf-illum04.tga",		1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text00.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text04.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text05.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text06.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text07.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text08.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text09.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-text10.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-illum01.VW2D",	1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-illum02.VW2D",	1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-illum03.VW2D",	1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/EARTHFIGHTER/sf-illum04.VW2D",	1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/EARTHFIGHTER/lnch12.tga",			1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/EARTHFIGHTER/lnch34.tga",			1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/EARTHFIGHTER/rockets.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -514,7 +514,7 @@ LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {"DATA/MODELS/MINE/mine3i.tga",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/MINE/mine4.tga",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/MINE/mine4i.tga",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-// мин
+// модели мин
 {"DATA/MODELS/MINE/mine-01.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
 {"DATA/MODELS/MINE/mine-02.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
 {"DATA/MODELS/MINE/mine-03.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
@@ -559,8 +559,8 @@ const int	AlienFighterLoadListCount = 19;
 LoadList	AlienFighterLoadList[AlienFighterLoadListCount] =
 {
 // AlienFighter – load alien fighters textures.
-{"DATA/MODELS/ALIENFIGHTER/al-text04.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENFIGHTER/al-illum04.tga",		1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENFIGHTER/al-text04.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENFIGHTER/al-illum04.VW2D",	1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // малые корабли пришельцев
 {"DATA/MODELS/ALIENFIGHTER/al-01.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
 {"DATA/MODELS/ALIENFIGHTER/al-02.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
@@ -588,15 +588,15 @@ const int	PirateLoadListCount = 51;
 LoadList	PirateLoadList[PirateLoadListCount] =
 {
 // Pirate – load all pirate data (vehicles, military buildings, ships...) testures.
-{"DATA/MODELS/gr-01.tga",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/gr-02.tga",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/gr-03.tga",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/gr-04.tga",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/gr-01.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/gr-02.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/gr-03.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/gr-04.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/NORMALMAP/bomber_nm.tga",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/gr-05.tga",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/gr-06.tga",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/gr-07.tga",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/track.tga",							1, 48, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/gr-05.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/gr-06.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/gr-07.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/track.VW2D",							1, 48, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/TURRET/turrets.tga",					1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // корабли пиратов
 {"DATA/MODELS/PIRATESHIP/gunship-01.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
@@ -740,7 +740,7 @@ LoadList	PlanetLoadList[PlanetLoadListCount] =
 {"DATA/MODELS/NORMALMAP/planet_5_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/NORMALMAP/planet_asteroids_nm.tga",	1, 384, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/NORMALMAP/planet_moon_nm.tga",		1, 192, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-// планет
+// модели планет
 {"DATA/MODELS/PLANET/aplanet.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 {"DATA/MODELS/PLANET/dplanet.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 {"DATA/MODELS/PLANET/gplanet.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
@@ -755,14 +755,14 @@ const int	AlienMotherShipLoadListCount = 9+8;
 LoadList	AlienMotherShipLoadList[AlienMotherShipLoadListCount] =
 {
 // AlienMotherShip – load alien motherships textures.
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-text02.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-text03.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-text04.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-text08.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum02.tga",	1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum03.tga",	1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum04.tga",	1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum08.tga",	1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-text02.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-text03.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-text04.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-text08.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum02.VW2D",	1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum03.VW2D",	1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum04.VW2D",	1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/ALIENMOTHERSHIP/alm-illum08.VW2D",	1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/NORMALMAP/alien_mothership_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // большие корабли пришельцев
 {"DATA/MODELS/ALIENMOTHERSHIP/alm-01.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, true},
@@ -781,9 +781,9 @@ const int	BuildingLoadListCount = 3+11;
 LoadList	BuildingLoadList[BuildingLoadListCount] =
 {
 // Building – load buildings textures.
-{"DATA/MODELS/BUILDING/bld.tga",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/BUILDING/bld.VW2D",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/NORMALMAP/buildings_nm.tga",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/BUILDING/bld_illum.tga",			1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/BUILDING/bld_illum.VW2D",			1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // постройки (мирные)
 {"DATA/MODELS/BUILDING/bld-01.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 {"DATA/MODELS/BUILDING/bld-02.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
@@ -804,12 +804,12 @@ const int	StarSystem1LoadListCount = 6;
 LoadList	StarSystem1LoadList[StarSystem1LoadListCount] =
 {
 // StarSystem1 – load StarSystem 1 SkyBox textures.
-{"DATA/SKYBOX/1/skybox_BK.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/1/skybox_DN.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/1/skybox_FR.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/1/skybox_LF.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/1/skybox_RT.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/1/skybox_UP.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_BK.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_DN.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_FR.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_LF.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_RT.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_UP.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 };
 
 
@@ -818,12 +818,12 @@ const int	StarSystem2LoadListCount = 6;
 LoadList	StarSystem2LoadList[StarSystem2LoadListCount] =
 {
 //StarSystem2 – load StarSystem 2 SkyBox textures.
-{"DATA/SKYBOX/2/skybox_BK.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/2/skybox_DN.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/2/skybox_FR.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/2/skybox_LF.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/2/skybox_RT.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/2/skybox_UP.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/2/skybox_BK.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/2/skybox_DN.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/2/skybox_FR.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/2/skybox_LF.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/2/skybox_RT.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/2/skybox_UP.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 };
 
 
@@ -832,12 +832,12 @@ const int	StarSystem3LoadListCount = 6;
 LoadList	StarSystem3LoadList[StarSystem3LoadListCount] =
 {
 //StarSystem3 – load StarSystem 3 SkyBox textures.
-{"DATA/SKYBOX/3/skybox_BK.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/3/skybox_DN.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/3/skybox_FR.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/3/skybox_LF.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/3/skybox_RT.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/3/skybox_UP.tga",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/3/skybox_BK.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/3/skybox_DN.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/3/skybox_FR.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/3/skybox_LF.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/3/skybox_RT.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/3/skybox_UP.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 };
 
 
@@ -1149,11 +1149,6 @@ void LoadGameData(int LoadType)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	bool NeedStartGoto = false;
 	if (ReleaseGameData(LoadType)) NeedStartGoto = true;
-
-
-
-	// проверка, поддерживаем компрессию текстур или нет
-	if (!CAPS->TexturesCompression) Setup.TexturesCompression = 0;
 
 
 	// ставим время последней прорисовки
@@ -1620,12 +1615,12 @@ void LoadGameData(int LoadType)
 					if (Setup.TexturesQuality == 1)
 					{
 						if (!strncmp("DATA/MODELS/", CurrentList[i].FileName, strlen("DATA/MODELS/")) &&
-							strcmp("DATA/MODELS/track.tga", CurrentList[i].FileName) &&
+							strcmp("DATA/MODELS/track.VW2D", CurrentList[i].FileName) &&
 							// не ставим низкое для текстур-подсветки файтеров землян - плохо...
-							strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum01.tga", CurrentList[i].FileName) &&
-							strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum02.tga", CurrentList[i].FileName) &&
-							strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum03.tga", CurrentList[i].FileName) &&
-							strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum04.tga", CurrentList[i].FileName) &&
+							strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum01.VW2D", CurrentList[i].FileName) &&
+							strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum02.VW2D", CurrentList[i].FileName) &&
+							strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum03.VW2D", CurrentList[i].FileName) &&
+							strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum04.VW2D", CurrentList[i].FileName) &&
 							strncmp("DATA/MODELS/SPACE/", CurrentList[i].FileName, strlen("DATA/MODELS/SPACE/")) &&
 							strncmp("DATA/MODELS/SPACEBASE/", CurrentList[i].FileName, strlen("DATA/MODELS/SPACEBASE/")) &&
 							strncmp("DATA/MODELS/PLANET/", CurrentList[i].FileName, strlen("DATA/MODELS/PLANET/")))
@@ -1639,10 +1634,10 @@ void LoadGameData(int LoadType)
 								H = W = 512;
 							}
 							else// не ставим низкое для текстур-подсветки файтеров землян - плохо...
-								if (!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum01.tga", CurrentList[i].FileName) ||
-									!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum02.tga", CurrentList[i].FileName) ||
-									!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum03.tga", CurrentList[i].FileName) ||
-									!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum04.tga", CurrentList[i].FileName) ||
+								if (!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum01.VW2D", CurrentList[i].FileName) ||
+									!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum02.VW2D", CurrentList[i].FileName) ||
+									!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum03.VW2D", CurrentList[i].FileName) ||
+									!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum04.VW2D", CurrentList[i].FileName) ||
 									!strncmp("DATA/MODELS/SPACEBASE/", CurrentList[i].FileName, strlen("DATA/MODELS/SPACEBASE/")) ||
 									!strncmp("DATA/MODELS/PLANET/", CurrentList[i].FileName, strlen("DATA/MODELS/PLANET/")))
 								{
@@ -1654,7 +1649,7 @@ void LoadGameData(int LoadType)
 					if (Setup.TexturesQuality == 2)
 					{
 						if (!strncmp("DATA/MODELS/", CurrentList[i].FileName, strlen("DATA/MODELS/")) &&
-							strcmp("DATA/MODELS/track.tga", CurrentList[i].FileName) &&
+							strcmp("DATA/MODELS/track.VW2D", CurrentList[i].FileName) &&
 							strncmp("DATA/MODELS/SPACE/", CurrentList[i].FileName, strlen("DATA/MODELS/SPACE/")) &&
 							strncmp("DATA/MODELS/SPACEBASE/", CurrentList[i].FileName, strlen("DATA/MODELS/SPACEBASE/")) &&
 							strncmp("DATA/MODELS/PLANET/", CurrentList[i].FileName, strlen("DATA/MODELS/PLANET/")))
