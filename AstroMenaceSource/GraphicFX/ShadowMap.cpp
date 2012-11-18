@@ -153,6 +153,9 @@ void ShadowMap_StartRenderToFBO(VECTOR3D FocusPointCorrection, float Distance, f
 	vw_GetMatrix(RI_MODELVIEW_MATRIX, ShadowMap_LightModelViewMatrix);
 
 	vw_CullFace(RI_FRONT);
+
+	glEnable(GL_POLYGON_OFFSET_FILL);
+	glPolygonOffset(2.0f, 2.0f);
 }
 
 
@@ -163,6 +166,8 @@ void ShadowMap_EndRenderToFBO()
 {
 	if (ShadowMapFBO == 0) return;
 	if (ShadowMapFBO->DepthTexture == 0) return;
+
+	glDisable(GL_POLYGON_OFFSET_FILL);
 
 	vw_CullFace(RI_BACK);
 

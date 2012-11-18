@@ -87,13 +87,7 @@ void DrawAllObject3D(int DrawType)
 		DrawAllGroundObject(true, 0);
 		DrawAllProjectile(true, 0);
 		DrawAllExplosion(true);
-		// от больших объектов в т.ч. частей баз, только в меню отбрасываем тень, в игре проблемы с точностью z буфера
-		if (DrawType == 1) DrawAllSpaceObject(true, 0);
-		else
-		{
-			DrawAllSpaceObject(true, 0, 8); // части взорванных объектов
-			DrawAllSpaceObject(true, 0, 7); // мелкие астероиды
-		}
+		DrawAllSpaceObject(true, 0);
 
 		ShadowMap_EndRenderToFBO();
 
