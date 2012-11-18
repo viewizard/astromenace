@@ -119,7 +119,7 @@ void UpdateAllSpaceObject(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllSpaceObject(bool VertexOnlyPass, unsigned int ShadowMap, int DrawOnlyType)
+void DrawAllSpaceObject(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 
 	CSpaceObject *tmp = StartSpaceObject;
@@ -127,19 +127,9 @@ void DrawAllSpaceObject(bool VertexOnlyPass, unsigned int ShadowMap, int DrawOnl
 	{
 		CSpaceObject *tmp2 = tmp->Next;
 
-		if (DrawOnlyType != -1)
-		{
-			// если нужно прорисовать только определенный тип
-			if (tmp->ObjectType == DrawOnlyType)
-			if (tmp->ObjectType != 14 && !(tmp->ObjectType == 15 && (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
-				tmp->Draw(VertexOnlyPass, ShadowMap);
-		}
-		else
-		{
-			// планеты и астероиды рисуем до тайловой анимации в игре!!!
-			if (tmp->ObjectType != 14 && !(tmp->ObjectType == 15 && (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
-				tmp->Draw(VertexOnlyPass, ShadowMap);
-		}
+		// планеты и астероиды рисуем до тайловой анимации в игре!!!
+		if (tmp->ObjectType != 14 && !(tmp->ObjectType == 15 && (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
+			tmp->Draw(VertexOnlyPass, ShadowMap);
 
 		tmp = tmp2;
 	}
