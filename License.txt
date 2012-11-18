@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License version 3 with
 
 AstroMenace Artwork
 
-* Part of 3d models and textures used in AstroMenace game was licensed, they all compiled in non common formats to avoid license violation and provide raw data for game data file (gamedata.vfs) compilation under current game license (GPLv3). Please note, you can't use them as separate files outside the OpenAstroMenace project until you license them at http://www.3drt.com (see RAW_VFS_DATA/MODELS/ReadMe.txt file for more info).
+* Part of 3d models and textures used in AstroMenace game was licensed, they all compiled in non common formats to avoid license violation and stored in raw data folder for game data file (gamedata.vfs) compilation and use under current game license (GPLv3). Please note, you can't use them as separate files outside the OpenAstroMenace project until you license them at http://www.3drt.com (see RAW_VFS_DATA/MODELS/ReadMe.txt file for more info).
 
-* AstroMenace game data contain ttf fonts from Ubuntu Font Family, GNU FreeFont, Liberation Fonts (see RAW_VFS_DATA/FONT folder for more info about ttf fonts license).
+* AstroMenace game raw data folder contain ttf font files from Ubuntu Font Family, GNU FreeFont and Liberation Fonts (see RAW_VFS_DATA/FONT folder for more info about this ttf fonts license).
 
 * AstroMenace game artwork pack with 3d models, textures, music and sfx sources available under GPLv3 license can be download from http://www.viewizard.com/download/astromenace-artwork.zip or http://sourceforge.net/projects/openastromenace/files/1.3.0/astromenace-artwork.zip
