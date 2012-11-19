@@ -138,7 +138,7 @@ sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 #define TEXTURE_NO_MIPMAP	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE
 
 // сколько нужно загружать в листе меню
-const int	MenuLoadListCount = 191;
+const int	MenuLoadListCount = 186;
 // лист загрузки меню
 LoadList	MenuLoadList[MenuLoadListCount] =
 {
@@ -288,16 +288,15 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 // планеты
 {"DATA/MODELS/PLANET/asteroid.tga",			1, 512, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/PLANET/clouds.tga",			1, 1024, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false, -1.0f, false},
-{"DATA/MODELS/PLANET/moon.tga",				1, 192, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/PLANET/p5base.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/PLANET/p5i.tga",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false, -1.0f, false},
-{"DATA/MODELS/PLANET/planet1.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/PLANET/planet3.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/NORMALMAP/planet_1_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/NORMALMAP/planet_3_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/NORMALMAP/planet_5_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/PLANET/q_class2.tga",				1, 192, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/PLANET/a_class4.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/PLANET/m_class7.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/PLANET/d_class3.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/m_class7_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/d_class3_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/a_class4_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/NORMALMAP/planet_asteroids_nm.tga",	1, 384, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/NORMALMAP/planet_moon_nm.tga",		1, 192, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/q_class2_nm.tga",		1, 192, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // текстура наземной техники-сооружений
 {"DATA/MODELS/gr-01.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/gr-02.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -308,9 +307,6 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/MODELS/gr-06.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/gr-07.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/track.VW2D",							1, 48, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-// большие астероиды
-{"DATA/MODELS/SPACE/bigasteroid.tga",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/NORMALMAP/space_bigasteroid_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 
 // текстура больших кораблей пришельцев
 {"DATA/MODELS/ALIENMOTHERSHIP/alm-text02.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -331,8 +327,6 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 // космическая база
 {"DATA/MODELS/SPACEBASE/allalpha.tga",		1, 1024, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/SPACEBASE/metal.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false, -1.0f, false},
-{"DATA/MODELS/SPACEBASE/aster.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/NORMALMAP/spacebase_asteroid_nm.tga",		1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // мины
 {"DATA/MODELS/MINE/mine1.tga",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/MINE/mine1i.tga",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -344,8 +338,8 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/MODELS/MINE/mine4i.tga",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 
 // скайбокс - космос, загружаем только те, что нужно - экономим видео память
-{"DATA/SKYBOX/1/skybox_DN.VW2D",				1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/1/skybox_FR.VW2D",				1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_bottom4.tga",			1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_front5.tga",				1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/SKYBOX/tile_14.VW2D",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/SKYBOX/tile_23.VW2D",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // спец эффекты
@@ -652,10 +646,10 @@ const int	BasePartLoadListCount = 28;
 LoadList	BasePartLoadList[BasePartLoadListCount] =
 {
 // BasePart – load pirate base textures.
-{"DATA/MODELS/SPACEBASE/aster.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/SPACEBASE/allalpha.tga",		1, 768, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/SPACEBASE/metal.tga",			1, 1024, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false, -1.0f, false},
-{"DATA/MODELS/NORMALMAP/spacebase_asteroid_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/PLANET/d_class3.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/d_class3_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // геометрия базы пиратов
 {"DATA/MODELS/SPACEBASE/1/1.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 {"DATA/MODELS/SPACEBASE/1/2.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
@@ -691,8 +685,8 @@ LoadList	AsteroidLoadList[AsteroidLoadListCount] =
 // Asteroid – load asteroids (for AsteroidField) textures.
 {"DATA/MODELS/SPACE/asteroid-01.tga",				1, 96, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // большие астероиды
-{"DATA/MODELS/SPACE/bigasteroid.tga",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/NORMALMAP/space_bigasteroid_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/PLANET/d_class3.tga",					1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/d_class3_nm.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // геометрия больших астероидов
 {"DATA/MODELS/SPACE/bigasteroid-01.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 {"DATA/MODELS/SPACE/bigasteroid-02.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
@@ -724,22 +718,21 @@ LoadList	AsteroidLoadList[AsteroidLoadListCount] =
 
 
 
-const int	PlanetLoadListCount = 12+6;
+const int	PlanetLoadListCount = 11+6;
 LoadList	PlanetLoadList[PlanetLoadListCount] =
 {
 // Planet – load planets textures.
 {"DATA/MODELS/PLANET/asteroid.tga",			1, 512, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/PLANET/clouds.tga",			1, 1024, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false, -1.0f, false},
-{"DATA/MODELS/PLANET/moon.tga",				1, 192, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/PLANET/p5base.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/PLANET/p5i.tga",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false, -1.0f, false},
-{"DATA/MODELS/PLANET/planet1.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/PLANET/planet3.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/NORMALMAP/planet_1_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/NORMALMAP/planet_3_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/NORMALMAP/planet_5_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/PLANET/q_class2.tga",				1, 192, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/PLANET/a_class4.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/PLANET/m_class7.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/PLANET/d_class3.tga",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/m_class7_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/d_class3_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/a_class4_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/NORMALMAP/planet_asteroids_nm.tga",	1, 384, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/MODELS/NORMALMAP/planet_moon_nm.tga",		1, 192, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/MODELS/NORMALMAP/q_class2_nm.tga",		1, 192, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // модели планет
 {"DATA/MODELS/PLANET/aplanet.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 {"DATA/MODELS/PLANET/dplanet.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
@@ -804,12 +797,12 @@ const int	StarSystem1LoadListCount = 6;
 LoadList	StarSystem1LoadList[StarSystem1LoadListCount] =
 {
 // StarSystem1 – load StarSystem 1 SkyBox textures.
-{"DATA/SKYBOX/1/skybox_BK.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/1/skybox_DN.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/1/skybox_FR.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/1/skybox_LF.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/1/skybox_RT.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/1/skybox_UP.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_back6.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_bottom4.tga",				1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_front5.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_left2.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_right1.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/1/skybox_top3.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 };
 
 
@@ -818,27 +811,15 @@ const int	StarSystem2LoadListCount = 6;
 LoadList	StarSystem2LoadList[StarSystem2LoadListCount] =
 {
 //StarSystem2 – load StarSystem 2 SkyBox textures.
-{"DATA/SKYBOX/2/skybox_BK.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/2/skybox_DN.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/2/skybox_FR.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/2/skybox_LF.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/2/skybox_RT.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/2/skybox_UP.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/2/skybox_back6.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/2/skybox_bottom4.tga",				1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/2/skybox_front5.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/2/skybox_left2.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/2/skybox_right1.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/SKYBOX/2/skybox_top3.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 };
 
 
-
-const int	StarSystem3LoadListCount = 6;
-LoadList	StarSystem3LoadList[StarSystem3LoadListCount] =
-{
-//StarSystem3 – load StarSystem 3 SkyBox textures.
-{"DATA/SKYBOX/3/skybox_BK.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/3/skybox_DN.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/3/skybox_FR.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/3/skybox_LF.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/3/skybox_RT.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/3/skybox_UP.VW2D",						1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-};
 
 
 
@@ -1186,7 +1167,6 @@ void LoadGameData(int LoadType)
 			// флаги нужно загружать или нет...
 			bool StarSystem1 = false;
 			bool StarSystem2 = false;
-			bool StarSystem3 = false;
 			bool Planet = false;
 			bool Asteroid = false;
 			bool AlienFighter = false;
@@ -1261,7 +1241,6 @@ void LoadGameData(int LoadType)
 			{
 				if (!strcmp(xmlElem->Value(), "StarSystem1")) StarSystem1 = true;
 				if (!strcmp(xmlElem->Value(), "StarSystem2")) StarSystem2 = true;
-				if (!strcmp(xmlElem->Value(), "StarSystem3")) StarSystem3 = true;
 				if (!strcmp(xmlElem->Value(), "Planet")) Planet = true;
 				if (!strcmp(xmlElem->Value(), "Asteroid")) Asteroid = true;
 				if (!strcmp(xmlElem->Value(), "AlienFighter")) AlienFighter = true;
@@ -1309,7 +1288,6 @@ void LoadGameData(int LoadType)
 			// считаем сколько там элементов
 			if (StarSystem1) CurrentListCount += StarSystem1LoadListCount;
 			if (StarSystem2) CurrentListCount += StarSystem2LoadListCount;
-			if (StarSystem3) CurrentListCount += StarSystem3LoadListCount;
 			if (Planet) CurrentListCount += PlanetLoadListCount;
 			if (Asteroid) CurrentListCount += AsteroidLoadListCount;
 			if (AlienFighter) CurrentListCount += AlienFighterLoadListCount;
@@ -1337,11 +1315,6 @@ void LoadGameData(int LoadType)
 			{
 				memcpy(CurrentList+Current, StarSystem2LoadList, StarSystem2LoadListCount*sizeof(LoadList));
 				Current += StarSystem2LoadListCount;
-			}
-			if (StarSystem3)
-			{
-				memcpy(CurrentList+Current, StarSystem3LoadList, StarSystem3LoadListCount*sizeof(LoadList));
-				Current += StarSystem3LoadListCount;
 			}
 
 			if (Planet)

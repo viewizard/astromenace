@@ -8,11 +8,10 @@
 	<!--Debug showline="1"/-->
 	
 	<!-- Начальные настройки окружения -->
-	<StarSystem system="1" anglex="-262" angley="40" anglez="154"/>
+	<StarSystem system="1" anglex="-262" angley="50" anglez="160"/>
 	<!-- Создаем планеты -->
-	<CreatePlanet type="6" posax="700" posay="-350" posaz="1900"/>
-	<CreatePlanet type="5" posax="700" posay="-550" posaz="1500" anglay="-180"/>
-	<CreatePlanet type="6" posax="750" posay="-2100" posaz="2900"/>
+	<CreatePlanet type="5" posax="320" posay="-250" posaz="500" anglay="-10"/>
+	<CreatePlanet type="6" posax="400" posay="-350" posaz="200"/>
 
 	
 	<!-- Установка источников света -->

@@ -50,7 +50,7 @@ void CreditsMenu()
 	LastCreditsCurrentPosUpdateTime = vw_GetTime();
 
 	// зацикливание
-	if (CreditsCurrentPos <= -3190) CreditsCurrentPos = 0.0f;
+	if (CreditsCurrentPos <= -3425) CreditsCurrentPos = 0.0f;
 
 
 
@@ -112,6 +112,26 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Egor_Kurteanu"));
+
+
+
+
+	Y1 += Offset2;
+	Y2 += Offset2;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_PLANETARY_TEXTURES")))/2;
+	if (Y1 > 300) {ttt = (650 - Y1) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y1 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, ttt*MenuContentTransp, vw_GetText("10_PLANETARY_TEXTURES"));
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Alex_(Esgaroth)_Reuter")))/2;
+	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Alex_(Esgaroth)_Reuter"));
+	Y1 += Offset1;
+	Y2 += Offset1;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Robert_Stein")))/2;
+	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Robert_Stein"));
 
 
 
@@ -588,6 +608,39 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://www.gimp.org");
+
+
+
+	// GIMP normalmap plugin
+	Y1 += Offset1+20;
+	Y2 += Offset1+20;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("GIMP normalmap plugin"))/2;
+	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "GIMP normalmap plugin");
+	Y1 += Offset1;
+	Y2 += Offset1;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("http://code.google.com/p/gimp-normalmap"))/2;
+	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://code.google.com/p/gimp-normalmap");
+
+
+
+	// Spacescape
+	Y1 += Offset1+20;
+	Y2 += Offset1+20;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Spacescape"))/2;
+	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Spacescape");
+	Y1 += Offset1;
+	Y2 += Offset1;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("http://sourceforge.net/projects/spacescape"))/2;
+	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://sourceforge.net/projects/spacescape");
+
 
 
 

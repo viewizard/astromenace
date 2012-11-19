@@ -8,10 +8,9 @@
 	<!--Debug showline="1"/-->
 	
 	<!-- Начальные настройки окружения -->
-	<StarSystem system="1" anglex="-262" angley="40" anglez="154"/>
+	<StarSystem system="1" anglex="-262" angley="50" anglez="160"/>
 	<!-- Создаем планеты -->
-	<CreatePlanet type="4" posax="800" posay="-250" posaz="1500"/>
-	<CreatePlanet type="2" posax="600" posay="-250" posaz="500" anglay="-180"/>
+	<CreatePlanet type="6" posax="300" posay="-150" posaz="300"/>
 
 	
 	<!-- Установка источников света -->
@@ -60,9 +59,6 @@
 		<CreateTracked type="14" posax="50" posay="-80" posaz="180" anglay="-30"/>
 		<CreateTracked type="14" posax="40" posay="-80" posaz="150" anglay="-70"/>	
 
-
-		<CreateMine type="3" posax="20" posay="-20" posaz="100" status="1"/>	
-		<CreateMine type="3" posax="300" posay="-55" posaz="150" status="1"/>
 
 	</TimeLine>
 

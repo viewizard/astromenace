@@ -24,7 +24,7 @@
 	<!-- Environment setup-->
 
 	<!-- Star system -->
-	<StarSystem system="1" angley="-50" anglez="75"/>
+	<StarSystem system="1" angley="-75" anglez="-245"/>
 	<!-- Planets -->
 	<CreatePlanet type="1" speed="0.7" posax="-200" posay="-220" posaz="700" anglax="-35"/>
 	<CreatePlanet type="4" speed="1.4" posax="270" posay="-350" posaz="700" anglax="45"/>

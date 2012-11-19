@@ -2,7 +2,7 @@
 <AstroMenaceScript name="AstroMenace mission script">
 <Load>
 
-	<StarSystem3/><!-- StarSystem 3 SkyBox -->
+	<StarSystem2/><!-- StarSystem 2 SkyBox -->
 	<AlienFighter/><!-- Aliens fighters -->
 	<Asteroid/><!-- Asteroids -->
 	<Planet/><!-- Planets -->
@@ -23,7 +23,7 @@
 	<!-- Environment setup-->
 
 	<!-- Star system -->
-	<StarSystem system="3" angley="-60" anglez="100"/>
+	<StarSystem system="2" angley="-60" anglez="100"/>
 	<!-- Planets -->
 	<CreatePlanet type="6" speed="1.3" posax="-500" posay="-550" posaz="1000"/>
 	<CreatePlanet type="6" speed="1.5" posax="250" posay="-500" posaz="1700"/>
