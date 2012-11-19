@@ -68,32 +68,22 @@ void StarSystemInit(int Num, VECTOR3D SetBaseRotation)
 	{
 		case 1:
 			SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/1/skybox_BK.VW2D"), 4);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/1/skybox_DN.VW2D"), 2);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/1/skybox_FR.VW2D"), 5);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/1/skybox_LF.VW2D"), 1);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/1/skybox_RT.VW2D"), 0);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/1/skybox_UP.VW2D"), 3);
+			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/1/skybox_back6.tga"), 4);
+			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/1/skybox_bottom4.tga"), 2);
+			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/1/skybox_front5.tga"), 5);
+			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/1/skybox_left2.tga"), 1);
+			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/1/skybox_right1.tga"), 0);
+			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/1/skybox_top3.tga"), 3);
 			StarSystem_Inited = true;
 			break;
 		case 2:
 			SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_BK.VW2D"), 4);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_DN.VW2D"), 2);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_FR.VW2D"), 5);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_LF.VW2D"), 1);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_RT.VW2D"), 0);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_UP.VW2D"), 3);
-			StarSystem_Inited = true;
-			break;
-		case 3:
-			SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/3/skybox_BK.VW2D"), 4);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/3/skybox_DN.VW2D"), 2);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/3/skybox_FR.VW2D"), 5);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/3/skybox_LF.VW2D"), 1);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/3/skybox_RT.VW2D"), 0);
-			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/3/skybox_UP.VW2D"), 3);
+			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_back6.tga"), 4);
+			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_bottom4.tga"), 2);
+			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_front5.tga"), 5);
+			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_left2.tga"), 1);
+			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_right1.tga"), 0);
+			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_top3.tga"), 3);
 			StarSystem_Inited = true;
 			break;
 	}
@@ -198,7 +188,8 @@ void StarSystemDraw(int DrawType)
 
 		tmp1 = tmp2;
 	}
-
+	// очищаем буфер глубины, чтобы "3д подложка" не участвовала в проверке глубины
+	vw_Clear(RI_DEPTH_BUFFER);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

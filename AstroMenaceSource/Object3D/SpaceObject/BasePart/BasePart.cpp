@@ -76,9 +76,9 @@ void CBasePart::Create(int BasePartNum)
 
 case1next:
 
-			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/aster.tga");
+			Texture[0] = vw_FindTextureByName("DATA/MODELS/PLANET/d_class3.tga");
 			TextureIllum[0] = 0;
-			NormalMap[0] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/spacebase_asteroid_nm.tga");
+			NormalMap[0] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/d_class3_nm.tga");
 			Texture[1] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/allalpha.tga");
 			TextureIllum[1] = 0;
 			Texture[2] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/metal.tga");
@@ -135,9 +135,9 @@ case2next:
 
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/allalpha.tga");
 			TextureIllum[0] = 0;
-			Texture[1] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/aster.tga");
+			Texture[1] = vw_FindTextureByName("DATA/MODELS/PLANET/d_class3.tga");
 			TextureIllum[1] = 0;
-			NormalMap[1] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/spacebase_asteroid_nm.tga");
+			NormalMap[1] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/d_class3_nm.tga");
 			Texture[2] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/metal.tga");
 			TextureIllum[2] = 0;
 			break;
@@ -197,9 +197,9 @@ case6next:
 
 			Texture[0] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/allalpha.tga");
 			TextureIllum[0] = 0;
-			Texture[1] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/aster.tga");
+			Texture[1] = vw_FindTextureByName("DATA/MODELS/PLANET/d_class3.tga");
 			TextureIllum[1] = 0;
-			NormalMap[1] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/spacebase_asteroid_nm.tga");
+			NormalMap[1] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/d_class3_nm.tga");
 			break;
 
 		case 7:
@@ -230,9 +230,9 @@ case8next:
 			TextureIllum[0] = 0;
 			Texture[1] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/metal.tga");
 			TextureIllum[1] = 0;
-			Texture[2] = vw_FindTextureByName("DATA/MODELS/SPACEBASE/aster.tga");
+			Texture[2] = vw_FindTextureByName("DATA/MODELS/PLANET/d_class3.tga");
 			TextureIllum[2] = 0;
-			NormalMap[2] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/spacebase_asteroid_nm.tga");
+			NormalMap[2] = vw_FindTextureByName("DATA/MODELS/NORMALMAP/d_class3_nm.tga");
 			break;
 
 	}

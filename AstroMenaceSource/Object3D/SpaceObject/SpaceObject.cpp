@@ -278,8 +278,7 @@ bool CSpaceObject::Update(float Time)
 				case 3:
 					DrawObjectList[0].Rotation.y += 0.5f*TimeDelta;
 					// атмосфера
-					DrawObjectList[1].Rotation.y -= 1.2f*TimeDelta;
-					DrawObjectList[1].Rotation.y -= 1.0f*TimeDelta;
+					DrawObjectList[1].Rotation.y -= 0.7*TimeDelta;
 					break;
 				// луна
 				case 4:
@@ -287,6 +286,10 @@ bool CSpaceObject::Update(float Time)
 					break;
 				// планета пришельцев, с подсветкой
 				case 5:
+					DrawObjectList[0].Rotation.y += 0.5f*TimeDelta;
+					break;
+				// планета пришельцев
+				case 6:
 					DrawObjectList[0].Rotation.y += 0.5f*TimeDelta;
 					break;
 			}

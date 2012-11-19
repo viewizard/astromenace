@@ -22,7 +22,7 @@
 	<!-- Environment setup-->
 
 	<!-- Star system -->
-	<StarSystem system="2" angley="-225" anglez="-175"/>
+	<StarSystem system="2" angley="-225" anglez="-195"/>
 	<!-- Planets -->
 	<CreatePlanet type="2" speed="0.9" posax="150" posay="-350" posaz="1300"/>
 	<CreatePlanet type="4" speed="2.0" posax="-250" posay="-500" posaz="1700" anglax="-90"/>
