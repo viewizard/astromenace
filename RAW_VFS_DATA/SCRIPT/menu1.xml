@@ -11,7 +11,7 @@
 	<StarSystem system="1" anglex="-262" angley="50" anglez="160"/>
 	<!-- Создаем планеты -->
 	<CreatePlanet type="6" posax="450" posay="-300" posaz="800"/>
-	<CreatePlanet type="3" posax="180" posay="-200" posaz="50" anglaz="-50"/>
+	<CreatePlanet type="3" posax="180" posay="-200" posaz="50" anglaz="-50" anglay="30"/>
 	
 	<!-- Установка источников света -->
 	<Light dirx="0.5" diry="-0.2" dirz="1" diffr="1" diffg="1" diffb="1" specr="1" specg="1" specb="1" ambir="1" ambig="1" ambib="1"/>
