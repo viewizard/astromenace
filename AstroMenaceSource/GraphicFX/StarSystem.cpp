@@ -190,7 +190,6 @@ void StarSystemDraw(int DrawType)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Прорисовка подложки с тайловой анимацией
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Setup.VisualEffectsQuality <= 1)
 	{
 		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
 
@@ -329,7 +328,7 @@ void StarSystemDraw(int DrawType)
 //------------------------------------------------------------------------------------
 void StarSystemDrawSecondLayer(int DrawType)
 {
-	if (Setup.VisualEffectsQuality == 0)
+	if (Setup.VisualEffectsQuality <= 1)
 	{
 		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
 

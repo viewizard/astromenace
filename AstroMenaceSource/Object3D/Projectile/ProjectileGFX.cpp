@@ -39,7 +39,7 @@
 void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 {
 
-	ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/flare1.tga");
+	ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/flare1.tga");
 
 
 	switch(GFXNum)
@@ -552,7 +552,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 			ParticleSystem->ParticlesPerSec = 200;
 			ParticleSystem->CreationType = 2;
 			ParticleSystem->CreationSize = VECTOR3D(4.0f,4.0f,4.0f);
-			ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/flare.tga");
+			ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/flare.tga");
 			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.25f, 0.05f, 0.0f, 0.05f);
 			break;
 		case 26:	// стрельба 1-го пирата Kinetic
@@ -840,14 +840,12 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 
 		case 101:	// шлейф ракеты землян и пиратов
 
-			switch (vw_iRandNum(4))
-			{
-				case 1: ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/trail2.tga"); break;
-				case 2: ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/trail3.tga"); break;
-				case 3: ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/trail4.tga"); break;
-				case 4: ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/trail5.tga"); break;
-				default: ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/trail1.tga"); break;
-			}
+			ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/trail1.tga");
+			ParticleSystem->Texture[1] = vw_FindTextureByName("DATA/GFX/trail2.tga");
+			ParticleSystem->Texture[2] = vw_FindTextureByName("DATA/GFX/trail3.tga");
+			ParticleSystem->Texture[3] = vw_FindTextureByName("DATA/GFX/trail4.tga");
+			ParticleSystem->Texture[4] = vw_FindTextureByName("DATA/GFX/trail5.tga");
+			ParticleSystem->TextureQuantity = 5;
 
 			ParticleSystem->ColorStart.r = 1.00f;
 			ParticleSystem->ColorStart.g = 1.00f;
@@ -871,14 +869,12 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 
 		case 102:	// шлейф ракет пришельцев
 
-			switch (vw_iRandNum(4))
-			{
-				case 1: ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/trail2.tga"); break;
-				case 2: ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/trail3.tga"); break;
-				case 3: ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/trail4.tga"); break;
-				case 4: ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/trail5.tga"); break;
-				default: ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/trail1.tga"); break;
-			}
+			ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/trail1.tga");
+			ParticleSystem->Texture[1] = vw_FindTextureByName("DATA/GFX/trail2.tga");
+			ParticleSystem->Texture[2] = vw_FindTextureByName("DATA/GFX/trail3.tga");
+			ParticleSystem->Texture[3] = vw_FindTextureByName("DATA/GFX/trail4.tga");
+			ParticleSystem->Texture[4] = vw_FindTextureByName("DATA/GFX/trail5.tga");
+			ParticleSystem->TextureQuantity = 5;
 
 			ParticleSystem->ColorStart.r = 0.00f;
 			ParticleSystem->ColorStart.g = 0.70f;
