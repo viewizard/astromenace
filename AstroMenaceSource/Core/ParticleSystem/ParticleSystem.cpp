@@ -589,12 +589,7 @@ bool eParticleSystem::Update(float Time)
 	// находим новые данные AABB
 
 	// предварительная инициализация
-	float MinX = Location.x+100000.0f;
-	float MinY = Location.y+100000.0f;
-	float MinZ = Location.z+100000.0f;
-	float MaxX = Location.x-100000.0f;
-	float MaxY = Location.y-100000.0f;
-	float MaxZ = Location.z-100000.0f;
+	float MinX, MinY, MinZ, MaxX, MaxY, MaxZ;
 	tmp = Start;
 	if (tmp == 0)
 	{
@@ -602,6 +597,13 @@ bool eParticleSystem::Update(float Time)
 		MinY = MaxY = Location.y;
 		MinZ = MaxZ = Location.z;
 	}
+	else
+	{
+		MinX = MaxX = tmp->Location.x;
+		MinY = MaxY = tmp->Location.y;
+		MinZ = MaxZ = tmp->Location.z;
+	}
+
 
 	while (tmp!=0)
 	{
@@ -613,31 +615,21 @@ bool eParticleSystem::Update(float Time)
 			VECTOR3D v;
 			v.x = tmp->Location.x + tmp->Size;
 			if (MaxX < v.x) MaxX = v.x;
-			else
-			{
-				v.y = tmp->Location.y + tmp->Size;
-				if (MaxY < v.y) MaxY = v.y;
-				else
-				{
-					v.z = tmp->Location.z + tmp->Size;
-					if (MaxZ < v.z) MaxZ = v.z;
-					else
-					{
-						v.x = tmp->Location.x - tmp->Size;
-						if (MinX > v.x) MinX = v.x;
-						else
-						{
-							v.y = tmp->Location.y - tmp->Size;
-							if (MinY > v.y) MinY = v.y;
-							else
-							{
-								v.z = tmp->Location.z - tmp->Size;
-								if (MinZ > v.z) MinZ = v.z;
-							}
-						}
-					}
-				}
-			}
+
+			v.y = tmp->Location.y + tmp->Size;
+			if (MaxY < v.y) MaxY = v.y;
+
+			v.z = tmp->Location.z + tmp->Size;
+			if (MaxZ < v.z) MaxZ = v.z;
+
+			v.x = tmp->Location.x - tmp->Size;
+			if (MinX > v.x) MinX = v.x;
+
+			v.y = tmp->Location.y - tmp->Size;
+			if (MinY > v.y) MinY = v.y;
+
+			v.z = tmp->Location.z - tmp->Size;
+			if (MinZ > v.z) MinZ = v.z;
 		}
 
 		tmp = tmp2;
