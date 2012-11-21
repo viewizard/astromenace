@@ -196,7 +196,7 @@ void InitMenu()
 	psSpace->CreationType = 1;
 	psSpace->CreationSize = VECTOR3D(2.0f,50.0f,30.0f);
 	psSpace->ParticlesPerSec = 100;
-	psSpace->Texture = vw_FindTextureByName("DATA/GFX/flare3.tga");
+	psSpace->Texture[0] = vw_FindTextureByName("DATA/GFX/flare3.tga");
 	psSpace->Direction = VECTOR3D(1.0f, 0.0f, 0.0f);
 	psSpace->Resize = 0.1f;
 	psSpace->SetStartLocation(VECTOR3D(-50,10,-20));

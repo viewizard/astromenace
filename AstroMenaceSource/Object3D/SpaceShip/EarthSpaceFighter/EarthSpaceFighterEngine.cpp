@@ -110,7 +110,7 @@ void CreateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 			ParticleSystem->Theta      = 30.00f;
 			ParticleSystem->Life       = 0.50f;
 			ParticleSystem->ParticlesPerSec = 100;
-			ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/flare1.tga");
+			ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/flare1.tga");
 			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.07f);
 			ParticleSystem->LightNeedDeviation = true;
 			break;
@@ -132,7 +132,7 @@ void CreateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 			ParticleSystem->Theta      = 12.00f;
 			ParticleSystem->Life       = 0.50f;
 			ParticleSystem->ParticlesPerSec = 100;
-			ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/flare1.tga");
+			ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/flare1.tga");
 			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.4f, 0.75f, 0.15f, 0.0f, 0.07f);
 			ParticleSystem->LightNeedDeviation = true;
 			break;
@@ -154,7 +154,7 @@ void CreateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 			ParticleSystem->Theta      = 3.00f;
 			ParticleSystem->Life       = 0.50f;
 			ParticleSystem->ParticlesPerSec = 80;
-			ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/flare1.tga");
+			ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/flare1.tga");
 			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.25f, 0.25f, 1.0f, 0.0f, 0.07f);
 			ParticleSystem->LightNeedDeviation = true;
 			break;
@@ -179,7 +179,7 @@ void CreateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 			ParticleSystem->CreationSize = VECTOR3D(0.6f,0.6f,0.1f);
 			ParticleSystem->IsAttractive = true;
 			ParticleSystem->AttractiveValue = 50.0f;
-			ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/flare1.tga");
+			ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/flare1.tga");
 			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.07f);
 			ParticleSystem->LightNeedDeviation = true;
 			break;
@@ -214,7 +214,7 @@ void CreateRotateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType
 			ParticleSystem->Life       = 0.50f;
 			ParticleSystem->IsSuppressed = true;
 			ParticleSystem->ParticlesPerSec = 50;
-			ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/flare1.tga");
+			ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/flare1.tga");
 			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
 			ParticleSystem->LightNeedDeviation = true;
 			break;
@@ -236,7 +236,7 @@ void CreateRotateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType
 			ParticleSystem->Life       = 0.50f;
 			ParticleSystem->IsSuppressed = true;
 			ParticleSystem->ParticlesPerSec = 50;
-			ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/flare1.tga");
+			ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/flare1.tga");
 			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.4f, 0.75f, 0.15f, 0.0f, 0.2f);
 			ParticleSystem->LightNeedDeviation = true;
 			break;
@@ -258,7 +258,7 @@ void CreateRotateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType
 			ParticleSystem->Life       = 0.50f;
 			ParticleSystem->IsSuppressed = true;
 			ParticleSystem->ParticlesPerSec = 50;
-			ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/flare1.tga");
+			ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/flare1.tga");
 			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.25f, 0.25f, 1.0f, 0.0f, 0.2f);
 			ParticleSystem->LightNeedDeviation = true;
 			break;
@@ -280,7 +280,7 @@ void CreateRotateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType
 			ParticleSystem->Life       = 0.50f;
 			ParticleSystem->IsSuppressed = true;
 			ParticleSystem->ParticlesPerSec = 50;
-			ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/flare1.tga");
+			ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/flare1.tga");
 			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.2f);
 			ParticleSystem->LightNeedDeviation = true;
 			break;

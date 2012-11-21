@@ -49,9 +49,10 @@ public:
 	// обновить все частицы в этой системе, по времени
 	bool Update(float Time);
 	// прорисовка всех частиц
-	void Draw();
+	void Draw(eTexture **CurrentTexture);
 	// базовая текстура частиц
-	eTexture	*Texture;
+	eTexture	*Texture[5];
+	int			TextureQuantity;
 	// последовательность прорисовки
 	float 		*tmpDATA;
 

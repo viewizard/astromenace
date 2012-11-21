@@ -173,12 +173,12 @@ void vw_DrawAllParticleSystems()
 	{
 		eParticleSystem *tmp2 = tmp->Next;
 
-		if (CurrentTexture != tmp->Texture)
+		if (CurrentTexture != tmp->Texture[0])
 		{
-			vw_SetTexture(0, tmp->Texture);
-			CurrentTexture = tmp->Texture;
+			vw_SetTexture(0, tmp->Texture[0]);
+			CurrentTexture = tmp->Texture[0];
 		}
-		tmp->Draw();
+		tmp->Draw(&CurrentTexture);
 
 		tmp = tmp2;
 	}
@@ -237,12 +237,12 @@ void vw_DrawParticleSystems(eParticleSystem **DrawParticleSystem, int Quantity)
 	for (int i=0; i<Quantity; i++)
 	if (DrawParticleSystem[i] != 0)
 	{
-		if (CurrentTexture != DrawParticleSystem[i]->Texture)
+		if (CurrentTexture != DrawParticleSystem[i]->Texture[0])
 		{
-			vw_SetTexture(0, DrawParticleSystem[i]->Texture);
-			CurrentTexture = DrawParticleSystem[i]->Texture;
+			vw_SetTexture(0, DrawParticleSystem[i]->Texture[0]);
+			CurrentTexture = DrawParticleSystem[i]->Texture[0];
 		}
-		DrawParticleSystem[i]->Draw();
+		DrawParticleSystem[i]->Draw(&CurrentTexture);
 	}
 
 

@@ -39,7 +39,7 @@
 void SetExplosionGFX(eParticleSystem *ParticleSystem, int GFXNum)
 {
 
-	ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/flare1.tga");
+	ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/flare1.tga");
 
 
 	switch(GFXNum)

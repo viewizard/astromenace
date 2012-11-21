@@ -48,7 +48,8 @@ eParticleSystem::eParticleSystem()
 	TimeLastUpdate = -1.0f;
 	EmissionResidue =  0.0f;
 	Angle = Direction = VECTOR3D(0,0,0);
-	Texture = 0;
+	Texture[0] = Texture[1] = Texture[2] = Texture[3] = Texture[4] = 0;
+	TextureQuantity = 1; // по умолчанию у нас всегда 1 текстура
 	BlendType = 0;
 	AttractiveValue = 25.0f;
 	IsSuppressed = false;
@@ -269,6 +270,10 @@ bool eParticleSystem::Update(float Time)
 			// создаем новую частицу
 			eParticle *NewParticle = 0;
 			NewParticle = new eParticle; if (NewParticle == 0) return true;
+
+			// устанавливаем номер текстуры (если нужно, случайным образом выбираем из набора текстур)
+			NewParticle->TextureNum = 0;
+			if (TextureQuantity > 1) NewParticle->TextureNum = vw_iRandNum(TextureQuantity-1);
 
 			// установка жизни новой частици и проверка, что не выходит из диапахона
 			NewParticle->Age = 0.0f;
@@ -660,206 +665,221 @@ bool eParticleSystem::Update(float Time)
 //-----------------------------------------------------------------------------
 // прорисовка системы
 //-----------------------------------------------------------------------------
-void eParticleSystem::Draw()
+void eParticleSystem::Draw(eTexture **CurrentTexture)
 {
-	// загрузка текстуры, уже должна быть подключена
-	if (Texture == 0) return;
-
 	// если не входит в фуструм - рисовать не нужно
 	if (!vw_BoxInFrustum(AABB[6], AABB[0])) return;
 
 
-	int DrawCount = 0;
-	eParticle *tmp = Start;
-	while (tmp!=0)
+	// т.к. у нас может быть набор текстур, обходим все текстуры по порядку
+	for (int i=0; i<TextureQuantity; i++)
 	{
-		eParticle *tmp2 = tmp->Next;
-		DrawCount++;
-		tmp = tmp2;
-	}
 
-
-	// если есть живые - рисуем их
-	if (DrawCount > 0)
-	{
-		if (tmpDATA != 0){delete [] tmpDATA; tmpDATA = 0;}
-
-		GLubyte *tmpDATAub = 0;
-		// номер float'а в последовательности
-		int k=0;
-
-
-		// делаем массив для всех элементов
-		// RI_3f_XYZ | RI_2f_TEX | RI_4ub_COLOR
-		tmpDATA = new float[4*(3+2+1)*DrawCount];
-		tmpDATAub = (GLubyte *)tmpDATA;
-
-
-		GLubyte R,G,B,A;
-
-		// шейдеры не поддерживаются - рисуем по старинке
-		if (!ParticleSystemUseGLSL)
+		int DrawCount = 0;
+		eParticle *tmp = Start;
+		while (tmp!=0)
 		{
-			// получаем текущее положение камеры
-			VECTOR3D CurrentCameraLocation;
-			vw_GetCameraLocation(&CurrentCameraLocation);
+			eParticle *tmp2 = tmp->Next;
+			if (tmp->TextureNum == i) DrawCount++;
+			tmp = tmp2;
+		}
 
-			eParticle *tmp = Start;
-			while (tmp!=0)
+
+		// если есть живые - рисуем их
+		if (DrawCount > 0)
+		{
+			if (tmpDATA != 0){delete [] tmpDATA; tmpDATA = 0;}
+
+			GLubyte *tmpDATAub = 0;
+			// номер float'а в последовательности
+			int k=0;
+
+
+			// делаем массив для всех элементов
+			// RI_3f_XYZ | RI_2f_TEX | RI_4ub_COLOR
+			tmpDATA = new float[4*(3+2+1)*DrawCount];
+			tmpDATAub = (GLubyte *)tmpDATA;
+
+
+			GLubyte R,G,B,A;
+
+			// шейдеры не поддерживаются - рисуем по старинке
+			if (!ParticleSystemUseGLSL)
 			{
-				eParticle *tmp2 = tmp->Next;
+				// получаем текущее положение камеры
+				VECTOR3D CurrentCameraLocation;
+				vw_GetCameraLocation(&CurrentCameraLocation);
 
-				// находим вектор камера-точка
-				VECTOR3D nnTmp;
-				nnTmp = CurrentCameraLocation - tmp->Location;
-				//nnTmp.Normalize();// - это тут не нужно, нам нужны только пропорции
+				eParticle *tmp = Start;
+				while (tmp!=0)
+				{
+					eParticle *tmp2 = tmp->Next;
 
-				// находим перпендикуляр к вектору nnTmp
-				VECTOR3D nnTmp2;
-				nnTmp2.x = 1.0f;
-				nnTmp2.y = 1.0f;
-				nnTmp2.z = -(nnTmp.x + nnTmp.y)/nnTmp.z;
-				nnTmp2.Normalize();
+					if (tmp->TextureNum != i){tmp = tmp2; continue;}
 
-				// находим перпендикуляр к векторам nnTmp и nnTmp2
-				// файтически - a x b = ( aybz - byaz , azbx - bzax , axby - bxay );
-				VECTOR3D nnTmp3;
-				nnTmp3.x = nnTmp.y*nnTmp2.z - nnTmp2.y*nnTmp.z;
-				nnTmp3.y = nnTmp.z*nnTmp2.x - nnTmp2.z*nnTmp.x;
-				nnTmp3.z = nnTmp.x*nnTmp2.y - nnTmp2.x*nnTmp.y;
-				nnTmp3.Normalize();
+					// находим вектор камера-точка
+					VECTOR3D nnTmp;
+					nnTmp = CurrentCameraLocation - tmp->Location;
+					//nnTmp.Normalize();// - это тут не нужно, нам нужны только пропорции
 
-				// находим
-				VECTOR3D tmpAngle1,tmpAngle2,tmpAngle3,tmpAngle4;
+					// находим перпендикуляр к вектору nnTmp
+					VECTOR3D nnTmp2;
+					nnTmp2.x = 1.0f;
+					nnTmp2.y = 1.0f;
+					nnTmp2.z = -(nnTmp.x + nnTmp.y)/nnTmp.z;
+					nnTmp2.Normalize();
 
-				tmpAngle1 = nnTmp3^(tmp->Size*1.5f);
-				tmpAngle3 = nnTmp3^(-tmp->Size*1.5f);
-				tmpAngle2 = nnTmp2^(tmp->Size*1.5f);
-				tmpAngle4 = nnTmp2^(-tmp->Size*1.5f);
+					// находим перпендикуляр к векторам nnTmp и nnTmp2
+					// файтически - a x b = ( aybz - byaz , azbx - bzax , axby - bxay );
+					VECTOR3D nnTmp3;
+					nnTmp3.x = nnTmp.y*nnTmp2.z - nnTmp2.y*nnTmp.z;
+					nnTmp3.y = nnTmp.z*nnTmp2.x - nnTmp2.z*nnTmp.x;
+					nnTmp3.z = nnTmp.x*nnTmp2.y - nnTmp2.x*nnTmp.y;
+					nnTmp3.Normalize();
 
-				// собираем квадраты
-				R = (GLubyte)(tmp->Color.r*255);
-				G = (GLubyte)(tmp->Color.g*255);
-				B = (GLubyte)(tmp->Color.b*255);
-				A = (GLubyte)(tmp->Alpha*255);
+					// находим
+					VECTOR3D tmpAngle1,tmpAngle2,tmpAngle3,tmpAngle4;
 
-				tmpDATA[k++] = tmp->Location.x+tmpAngle3.x;
-				tmpDATA[k++] = tmp->Location.y+tmpAngle3.y;
-				tmpDATA[k++] = tmp->Location.z+tmpAngle3.z;
-				tmpDATAub[k*sizeof(float)] = R;
-				tmpDATAub[k*sizeof(float)+1] = G;
-				tmpDATAub[k*sizeof(float)+2] = B;
-				tmpDATAub[k*sizeof(float)+3] = A;
-				k++;
-				tmpDATA[k++] = 0.0f;
-				tmpDATA[k++] = 1.0f;
+					tmpAngle1 = nnTmp3^(tmp->Size*1.5f);
+					tmpAngle3 = nnTmp3^(-tmp->Size*1.5f);
+					tmpAngle2 = nnTmp2^(tmp->Size*1.5f);
+					tmpAngle4 = nnTmp2^(-tmp->Size*1.5f);
 
-				tmpDATA[k++] = tmp->Location.x+tmpAngle2.x;
-				tmpDATA[k++] = tmp->Location.y+tmpAngle2.y;
-				tmpDATA[k++] = tmp->Location.z+tmpAngle2.z;
-				tmpDATAub[k*sizeof(float)] = R;
-				tmpDATAub[k*sizeof(float)+1] = G;
-				tmpDATAub[k*sizeof(float)+2] = B;
-				tmpDATAub[k*sizeof(float)+3] = A;
-				k++;
-				tmpDATA[k++] = 0.0f;
-				tmpDATA[k++] = 0.0f;
+					// собираем квадраты
+					R = (GLubyte)(tmp->Color.r*255);
+					G = (GLubyte)(tmp->Color.g*255);
+					B = (GLubyte)(tmp->Color.b*255);
+					A = (GLubyte)(tmp->Alpha*255);
 
-				tmpDATA[k++] = tmp->Location.x+tmpAngle1.x;
-				tmpDATA[k++] = tmp->Location.y+tmpAngle1.y;
-				tmpDATA[k++] = tmp->Location.z+tmpAngle1.z;
-				tmpDATAub[k*sizeof(float)] = R;
-				tmpDATAub[k*sizeof(float)+1] = G;
-				tmpDATAub[k*sizeof(float)+2] = B;
-				tmpDATAub[k*sizeof(float)+3] = A;
-				k++;
-				tmpDATA[k++] = 1.0f;
-				tmpDATA[k++] = 0.0f;
+					tmpDATA[k++] = tmp->Location.x+tmpAngle3.x;
+					tmpDATA[k++] = tmp->Location.y+tmpAngle3.y;
+					tmpDATA[k++] = tmp->Location.z+tmpAngle3.z;
+					tmpDATAub[k*sizeof(float)] = R;
+					tmpDATAub[k*sizeof(float)+1] = G;
+					tmpDATAub[k*sizeof(float)+2] = B;
+					tmpDATAub[k*sizeof(float)+3] = A;
+					k++;
+					tmpDATA[k++] = 0.0f;
+					tmpDATA[k++] = 1.0f;
 
-				tmpDATA[k++] = tmp->Location.x+tmpAngle4.x;
-				tmpDATA[k++] = tmp->Location.y+tmpAngle4.y;
-				tmpDATA[k++] = tmp->Location.z+tmpAngle4.z;
-				tmpDATAub[k*sizeof(float)] = R;
-				tmpDATAub[k*sizeof(float)+1] = G;
-				tmpDATAub[k*sizeof(float)+2] = B;
-				tmpDATAub[k*sizeof(float)+3] = A;
-				k++;
-				tmpDATA[k++] = 1.0f;
-				tmpDATA[k++] = 1.0f;
+					tmpDATA[k++] = tmp->Location.x+tmpAngle2.x;
+					tmpDATA[k++] = tmp->Location.y+tmpAngle2.y;
+					tmpDATA[k++] = tmp->Location.z+tmpAngle2.z;
+					tmpDATAub[k*sizeof(float)] = R;
+					tmpDATAub[k*sizeof(float)+1] = G;
+					tmpDATAub[k*sizeof(float)+2] = B;
+					tmpDATAub[k*sizeof(float)+3] = A;
+					k++;
+					tmpDATA[k++] = 0.0f;
+					tmpDATA[k++] = 0.0f;
 
-				tmp = tmp2;
+					tmpDATA[k++] = tmp->Location.x+tmpAngle1.x;
+					tmpDATA[k++] = tmp->Location.y+tmpAngle1.y;
+					tmpDATA[k++] = tmp->Location.z+tmpAngle1.z;
+					tmpDATAub[k*sizeof(float)] = R;
+					tmpDATAub[k*sizeof(float)+1] = G;
+					tmpDATAub[k*sizeof(float)+2] = B;
+					tmpDATAub[k*sizeof(float)+3] = A;
+					k++;
+					tmpDATA[k++] = 1.0f;
+					tmpDATA[k++] = 0.0f;
+
+					tmpDATA[k++] = tmp->Location.x+tmpAngle4.x;
+					tmpDATA[k++] = tmp->Location.y+tmpAngle4.y;
+					tmpDATA[k++] = tmp->Location.z+tmpAngle4.z;
+					tmpDATAub[k*sizeof(float)] = R;
+					tmpDATAub[k*sizeof(float)+1] = G;
+					tmpDATAub[k*sizeof(float)+2] = B;
+					tmpDATAub[k*sizeof(float)+3] = A;
+					k++;
+					tmpDATA[k++] = 1.0f;
+					tmpDATA[k++] = 1.0f;
+
+					tmp = tmp2;
+				}
+			}
+			else // иначе работаем с шейдерами, в них правильно развернем билборд
+			{
+				eParticle *tmp = Start;
+				while (tmp!=0)
+				{
+					eParticle *tmp2 = tmp->Next;
+
+					if (tmp->TextureNum != i){tmp = tmp2; continue;}
+
+					// собираем квадраты
+					R = (GLubyte)(tmp->Color.r*255);
+					G = (GLubyte)(tmp->Color.g*255);
+					B = (GLubyte)(tmp->Color.b*255);
+					A = (GLubyte)(tmp->Alpha*255);
+
+					tmpDATA[k++] = tmp->Location.x;
+					tmpDATA[k++] = tmp->Location.y;
+					tmpDATA[k++] = tmp->Location.z;
+					tmpDATAub[k*sizeof(float)] = R;
+					tmpDATAub[k*sizeof(float)+1] = G;
+					tmpDATAub[k*sizeof(float)+2] = B;
+					tmpDATAub[k*sizeof(float)+3] = A;
+					k++;
+					tmpDATA[k++] = 1.0f;
+					tmpDATA[k++] = tmp->Size;
+
+					tmpDATA[k++] = tmp->Location.x;
+					tmpDATA[k++] = tmp->Location.y;
+					tmpDATA[k++] = tmp->Location.z;
+					tmpDATAub[k*sizeof(float)] = R;
+					tmpDATAub[k*sizeof(float)+1] = G;
+					tmpDATAub[k*sizeof(float)+2] = B;
+					tmpDATAub[k*sizeof(float)+3] = A;
+					k++;
+					tmpDATA[k++] = 2.0f;
+					tmpDATA[k++] = tmp->Size;
+
+					tmpDATA[k++] = tmp->Location.x;
+					tmpDATA[k++] = tmp->Location.y;
+					tmpDATA[k++] = tmp->Location.z;
+					tmpDATAub[k*sizeof(float)] = R;
+					tmpDATAub[k*sizeof(float)+1] = G;
+					tmpDATAub[k*sizeof(float)+2] = B;
+					tmpDATAub[k*sizeof(float)+3] = A;
+					k++;
+					tmpDATA[k++] = 3.0f;
+					tmpDATA[k++] = tmp->Size;
+
+					tmpDATA[k++] = tmp->Location.x;
+					tmpDATA[k++] = tmp->Location.y;
+					tmpDATA[k++] = tmp->Location.z;
+					tmpDATAub[k*sizeof(float)] = R;
+					tmpDATAub[k*sizeof(float)+1] = G;
+					tmpDATAub[k*sizeof(float)+2] = B;
+					tmpDATAub[k*sizeof(float)+3] = A;
+					k++;
+					tmpDATA[k++] = 4.0f;
+					tmpDATA[k++] = tmp->Size;
+
+					tmp = tmp2;
+				}
 			}
 		}
-		else // иначе работаем с шейдерами, в них правильно развернем билборд
+
+
+		if (DrawCount > 0)
 		{
-			eParticle *tmp = Start;
-			while (tmp!=0)
+
+			if (*CurrentTexture != Texture[i])
 			{
-				eParticle *tmp2 = tmp->Next;
-
-				// собираем квадраты
-				R = (GLubyte)(tmp->Color.r*255);
-				G = (GLubyte)(tmp->Color.g*255);
-				B = (GLubyte)(tmp->Color.b*255);
-				A = (GLubyte)(tmp->Alpha*255);
-
-				tmpDATA[k++] = tmp->Location.x;
-				tmpDATA[k++] = tmp->Location.y;
-				tmpDATA[k++] = tmp->Location.z;
-				tmpDATAub[k*sizeof(float)] = R;
-				tmpDATAub[k*sizeof(float)+1] = G;
-				tmpDATAub[k*sizeof(float)+2] = B;
-				tmpDATAub[k*sizeof(float)+3] = A;
-				k++;
-				tmpDATA[k++] = 1.0f;
-				tmpDATA[k++] = tmp->Size;
-
-				tmpDATA[k++] = tmp->Location.x;
-				tmpDATA[k++] = tmp->Location.y;
-				tmpDATA[k++] = tmp->Location.z;
-				tmpDATAub[k*sizeof(float)] = R;
-				tmpDATAub[k*sizeof(float)+1] = G;
-				tmpDATAub[k*sizeof(float)+2] = B;
-				tmpDATAub[k*sizeof(float)+3] = A;
-				k++;
-				tmpDATA[k++] = 2.0f;
-				tmpDATA[k++] = tmp->Size;
-
-				tmpDATA[k++] = tmp->Location.x;
-				tmpDATA[k++] = tmp->Location.y;
-				tmpDATA[k++] = tmp->Location.z;
-				tmpDATAub[k*sizeof(float)] = R;
-				tmpDATAub[k*sizeof(float)+1] = G;
-				tmpDATAub[k*sizeof(float)+2] = B;
-				tmpDATAub[k*sizeof(float)+3] = A;
-				k++;
-				tmpDATA[k++] = 3.0f;
-				tmpDATA[k++] = tmp->Size;
-
-				tmpDATA[k++] = tmp->Location.x;
-				tmpDATA[k++] = tmp->Location.y;
-				tmpDATA[k++] = tmp->Location.z;
-				tmpDATAub[k*sizeof(float)] = R;
-				tmpDATAub[k*sizeof(float)+1] = G;
-				tmpDATAub[k*sizeof(float)+2] = B;
-				tmpDATAub[k*sizeof(float)+3] = A;
-				k++;
-				tmpDATA[k++] = 4.0f;
-				tmpDATA[k++] = tmp->Size;
-
-				tmp = tmp2;
+				vw_SetTexture(0, Texture[i]);
+				*CurrentTexture = Texture[i];
 			}
+
+
+			if (BlendType == 1) vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+
+			vw_SendVertices(RI_QUADS, 4*DrawCount, RI_3f_XYZ | RI_4ub_COLOR | RI_1_TEX, tmpDATA, 6*sizeof(float));
+
+			if (BlendType != 0) vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+
 		}
-	}
-
-
-	if (DrawCount > 0)
-	{
-		if (BlendType == 1) vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
-
-		vw_SendVertices(RI_QUADS, 4*DrawCount, RI_3f_XYZ | RI_4ub_COLOR | RI_1_TEX, tmpDATA, 6*sizeof(float));
-
-		if (BlendType != 0) vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 	}
 }
 

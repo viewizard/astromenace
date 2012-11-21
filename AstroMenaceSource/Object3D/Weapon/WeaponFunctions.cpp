@@ -398,7 +398,7 @@ void SetWeaponFire(eParticleSystem *ParticleSystem, int WeaponNum)
 
 	ParticleSystem->IsSuppressed = true;
 	ParticleSystem->ParticlesPerSec = 50;
-	ParticleSystem->Texture = vw_FindTextureByName("DATA/GFX/flare1.tga");
+	ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/flare1.tga");
 
 }
 

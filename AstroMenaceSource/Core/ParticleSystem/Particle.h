@@ -63,6 +63,9 @@ struct eParticle
 	// текущая скорость частицы
 	VECTOR3D		Velocity;
 
+	// texture number
+	int			TextureNum;
+
 	// текущий цвет частицы
 	COLORVALUE3D	Color;
 	// значение приращение цвета
