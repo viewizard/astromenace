@@ -1,33 +1,29 @@
-/******************************************************************************
+/********************************************************************************
 
-	This source file is part of Viewizard Game Engine
-	For the latest info, see http://www.viewizard.com/
+	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
+	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
 
-	File name: ParticleSystem.cpp
 
-	Copyright (c) 2006-2012 Michael Kurinnoy, Viewizard
-	All Rights Reserved.
+	AstroMenace is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-	File Version: 3.1
+	AstroMenace is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
 
-******************************************************************************
+	You should have received a copy of the GNU General Public License
+	along with AstroMenace. If not, see <http://www.gnu.org/licenses/>.
 
-	AstroMenace game source code available under "dual licensing" model.
-	The licensing options available are:
 
-	* Commercial Licensing. This is the appropriate option if you are
-	  creating proprietary applications and you are not prepared to
-	  distribute and share the source code of your application.
-	  Contact us for pricing at viewizard@viewizard.com
+	Web Site:		http://www.viewizard.com/
+	E-mail:			viewizard@viewizard.com
+	Postal address:	kvartal Zhukova, 10/79, Lugansk city, 91051, Ukraine
 
-	* Open Source Licensing. This is the appropriate option if you want
-	  to share the source code of your application with everyone you
-	  distribute it to, and you also want to give them the right to share
-	  who uses it. You should have received a copy of the GNU General Public
-	  License version 3 with this source codes.
-	  If not, see <http://www.gnu.org/licenses/>.
 
-******************************************************************************/
+*********************************************************************************/
 
 
 #include "ParticleSystem.h"
@@ -221,23 +217,8 @@ bool eParticleSystem::Update(float Time)
 	ParticlesAlive = 0;
 
 
-	// для всех частиц
+	// для всех частиц вызываем их собственный апдейт
 	eParticle *tmp = Start;
-
-	// предварительная инициализация
-	float MinX = Location.x+100000.0f;
-	float MinY = Location.y+100000.0f;
-	float MinZ = Location.z+100000.0f;
-	float MaxX = Location.x-100000.0f;
-	float MaxY = Location.y-100000.0f;
-	float MaxZ = Location.z-100000.0f;
-	if (tmp == 0)
-	{
-		MinX = MaxX = Location.x;
-		MinY = MaxY = Location.y;
-		MinZ = MaxZ = Location.z;
-	}
-
 	while (tmp!=0)
 	{
 		eParticle *tmp2 = tmp->Next;
@@ -245,38 +226,6 @@ bool eParticleSystem::Update(float Time)
 		if (tmp->Update(TimeDelta, Location, IsAttractive, AttractiveValue))
 		{
 			ParticlesAlive++;
-			// строим AABB
-			if (tmp->Alpha > 0.0f && tmp->Size > 0.0f)
-			{
-				VECTOR3D v;
-				v.x = tmp->Location.x + tmp->Size;
-				if (MaxX < v.x) MaxX = v.x;
-				else
-				{
-					v.y = tmp->Location.y + tmp->Size;
-					if (MaxY < v.y) MaxY = v.y;
-					else
-					{
-						v.z = tmp->Location.z + tmp->Size;
-						if (MaxZ < v.z) MaxZ = v.z;
-						else
-						{
-							v.x = tmp->Location.x - tmp->Size;
-							if (MinX > v.x) MinX = v.x;
-							else
-							{
-								v.y = tmp->Location.y - tmp->Size;
-								if (MinY > v.y) MinY = v.y;
-								else
-								{
-									v.z = tmp->Location.z - tmp->Size;
-									if (MinZ > v.z) MinZ = v.z;
-								}
-							}
-						}
-					}
-				}
-			}
 		}
 		else
 		{
@@ -285,16 +234,6 @@ bool eParticleSystem::Update(float Time)
 		}
 		tmp = tmp2;
 	}
-
-	// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-	AABB[0] = VECTOR3D(MaxX, MaxY, MaxZ);
-	AABB[1] = VECTOR3D(MinX, MaxY, MaxZ);
-	AABB[2] = VECTOR3D(MinX, MaxY, MinZ);
-	AABB[3] = VECTOR3D(MaxX, MaxY, MinZ);
-	AABB[4] = VECTOR3D(MaxX, MinY, MaxZ);
-	AABB[5] = VECTOR3D(MinX, MinY, MaxZ);
-	AABB[6] = VECTOR3D(MinX, MinY, MinZ);
-	AABB[7] = VECTOR3D(MaxX, MinY, MinZ);
 
 
 
@@ -572,7 +511,13 @@ bool eParticleSystem::Update(float Time)
 	}
 
 
-
+	// если уже ничего нет и нужно выйти - выходим
+	if (DestroyIfNoParticles)
+		if (ParticlesAlive == 0)
+		{
+			NeedDestroy = true;
+			return false;
+		}
 
 
 
@@ -636,15 +581,73 @@ bool eParticleSystem::Update(float Time)
 	}
 
 
+	// находим новые данные AABB
 
+	// предварительная инициализация
+	float MinX = Location.x+100000.0f;
+	float MinY = Location.y+100000.0f;
+	float MinZ = Location.z+100000.0f;
+	float MaxX = Location.x-100000.0f;
+	float MaxY = Location.y-100000.0f;
+	float MaxZ = Location.z-100000.0f;
+	tmp = Start;
+	if (tmp == 0)
+	{
+		MinX = MaxX = Location.x;
+		MinY = MaxY = Location.y;
+		MinZ = MaxZ = Location.z;
+	}
 
-	// проверка, если уже ничего нет и нужно выйти - выходим
-	if (DestroyIfNoParticles)
-		if (ParticlesAlive == 0)
+	while (tmp!=0)
+	{
+		eParticle *tmp2 = tmp->Next;
+
+		// строим AABB
+		if (tmp->Alpha > 0.0f && tmp->Size > 0.0f)
 		{
-			NeedDestroy = true;
-			return false;
+			VECTOR3D v;
+			v.x = tmp->Location.x + tmp->Size;
+			if (MaxX < v.x) MaxX = v.x;
+			else
+			{
+				v.y = tmp->Location.y + tmp->Size;
+				if (MaxY < v.y) MaxY = v.y;
+				else
+				{
+					v.z = tmp->Location.z + tmp->Size;
+					if (MaxZ < v.z) MaxZ = v.z;
+					else
+					{
+						v.x = tmp->Location.x - tmp->Size;
+						if (MinX > v.x) MinX = v.x;
+						else
+						{
+							v.y = tmp->Location.y - tmp->Size;
+							if (MinY > v.y) MinY = v.y;
+							else
+							{
+								v.z = tmp->Location.z - tmp->Size;
+								if (MinZ > v.z) MinZ = v.z;
+							}
+						}
+					}
+				}
+			}
 		}
+
+		tmp = tmp2;
+	}
+
+	AABB[0] = VECTOR3D(MaxX, MaxY, MaxZ);
+	AABB[1] = VECTOR3D(MinX, MaxY, MaxZ);
+	AABB[2] = VECTOR3D(MinX, MaxY, MinZ);
+	AABB[3] = VECTOR3D(MaxX, MaxY, MinZ);
+	AABB[4] = VECTOR3D(MaxX, MinY, MaxZ);
+	AABB[5] = VECTOR3D(MinX, MinY, MaxZ);
+	AABB[6] = VECTOR3D(MinX, MinY, MinZ);
+	AABB[7] = VECTOR3D(MaxX, MinY, MinZ);
+
+
 
     return true;
 }
