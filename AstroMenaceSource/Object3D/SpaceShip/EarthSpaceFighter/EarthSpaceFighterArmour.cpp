@@ -1,34 +1,29 @@
-/******************************************************************************
+/********************************************************************************
 
-	This source file is part of AstroMenace game
-	(Hardcore 3D space shooter with spaceship upgrade possibilities.)
-	For the latest info, see http://www.viewizard.com/
+	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
+	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
 
-	File name: EarthSpaceFighterArmour.cpp
 
-	Copyright (c) 2006-2007 Michael Kurinnoy, Viewizard
-	All Rights Reserved.
+	AstroMenace is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-	File Version: 1.2
+	AstroMenace is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
 
-******************************************************************************
+	You should have received a copy of the GNU General Public License
+	along with AstroMenace. If not, see <http://www.gnu.org/licenses/>.
 
-	AstroMenace game source code available under "dual licensing" model.
-	The licensing options available are:
 
-	* Commercial Licensing. This is the appropriate option if you are
-	  creating proprietary applications and you are not prepared to
-	  distribute and share the source code of your application.
-	  Contact us for pricing at viewizard@viewizard.com
+	Web Site:		http://www.viewizard.com/
+	E-mail:			viewizard@viewizard.com
+	Postal address:	kvartal Zhukova, 10/79, Lugansk city, 91051, Ukraine
 
-	* Open Source Licensing. This is the appropriate option if you want
-	  to share the source code of your application with everyone you
-	  distribute it to, and you also want to give them the right to share
-	  who uses it. You should have received a copy of the GNU General Public
-	  License version 3 with this source codes.
-	  If not, see <http://www.gnu.org/licenses/>.
 
-******************************************************************************/
+*********************************************************************************/
 
 
 /// подключаем нужные файлы
