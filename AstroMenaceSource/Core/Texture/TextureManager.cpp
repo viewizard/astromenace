@@ -53,12 +53,6 @@ bool MipMap = true;
 
 
 
-// чтобы при работе не было сбоев в последовательности текстур... блокируем этот участок
-// при создании и удалении текстур
-bool texturebusy = false;
-
-
-
 
 
 
@@ -102,11 +96,6 @@ void vw_AttachTexture(eTexture* Texture)
 {
 	if (Texture == 0) return;
 
-	// возможно используется многопоточность, смотрим чтобы не портить данные
-	while (texturebusy) SDL_Delay(1);
-	// говорим, что работаем с это процедурой
-	texturebusy = true;
-
 	// первый в списке...
 	if (EndTexMan == 0)
 	{
@@ -126,9 +115,6 @@ void vw_AttachTexture(eTexture* Texture)
 		Texture->Num = NumTexMan;
 		EndTexMan = Texture;
 	}
-
-	texturebusy = false;
-
 }
 
 
@@ -142,11 +128,6 @@ void vw_DetachTexture(eTexture* Texture)
 {
 	if (Texture == 0) return;
 
-	// возможно используется многопоточность, смотрим чтобы не портить данные
-	while (texturebusy) SDL_Delay(1);
-	// говорим, что работаем с это процедурой
-	texturebusy = true;
-
 	// переустанавливаем указатели...
 	if (StartTexMan == Texture) StartTexMan = Texture->Next;
 	if (EndTexMan == Texture) EndTexMan = Texture->Prev;
@@ -156,8 +137,6 @@ void vw_DetachTexture(eTexture* Texture)
 		else if (Texture->Prev != 0) Texture->Prev->Next = 0;
 	if (Texture->Prev != 0) Texture->Prev->Next = Texture->Next;
 		else if (Texture->Next != 0) Texture->Next->Prev = 0;
-
-	texturebusy = false;
 }
 
 

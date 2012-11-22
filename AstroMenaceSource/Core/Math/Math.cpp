@@ -276,36 +276,28 @@ float vw_sqrtf(float x)
 
 
 //------------------------------------------------------------------------------------
-// Randomize float
+// Rand
 //------------------------------------------------------------------------------------
 #include "MersenneTwister.h"
-// делаем при старте, т.к. инится все... иначе будут тормоза
 MTRand mtrand1;
 
-float vw_Rand()
+float vw_fRand()
 {
-	float Result = (float)mtrand1.rand(RAND_MAX);
-	if (Result < 0.0f) Result = 0.0f;
-	if (Result > RAND_MAX) Result = RAND_MAX;
-	return Result;
+	// 0.0f - 1.0f
+	return mtrand1.rand();
 }
 
-float vw_RandNum(float Max)
+float vw_fRandNum(float Max)
 {
-	float Result = (float)mtrand1.rand(RAND_MAX);
-	if (Result < 0.0f) Result = 0.0f;
-	if (Result > Max) Result = Max;
-	return Result;
+	// 0.0f - Max
+	return mtrand1.rand(Max);
 }
 
 int vw_iRandNum(int Max)
 {
-	int Result = mtrand1.randInt(Max);
-	if (Result < 0) Result = 0;
-	if (Result > Max) Result = Max;
-	return Result;
+	// 0 - Max
+	return mtrand1.randInt(Max);
 }
-
 
 
 

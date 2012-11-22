@@ -348,11 +348,7 @@ void CWheeled::Create(int WheeledNum)
 
 	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
 	for (int i=0; i<WheelQuantity; i++)
-	{
-		DrawObjectList[WheelObjectsNum[i]].Rotation.x = vw_RandNum(360.0f);
-		if (DrawObjectList[WheelObjectsNum[i]].Rotation.x < 0.0f) DrawObjectList[WheelObjectsNum[i]].Rotation.x = 0.0f;
-		if (DrawObjectList[WheelObjectsNum[i]].Rotation.x > 360.0f) DrawObjectList[WheelObjectsNum[i]].Rotation.x = 360.0f;
-	}
+		DrawObjectList[WheelObjectsNum[i]].Rotation.x = vw_fRandNum(360.0f);
 
 
 
