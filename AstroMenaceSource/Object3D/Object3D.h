@@ -338,7 +338,7 @@ bool GetTurretOnTargetOrientateion(int ObjectStatus, VECTOR3D Location, VECTOR3D
 		float RotationMatrix[9], VECTOR3D *NeedAngle, int WeaponType);
 // Получение данных для наведение ракет
 CObject3D *GetMissileOnTargetOrientateion(int	ObjectStatus, VECTOR3D Location,
-		VECTOR3D CurrentObjectRotation, float RotationMatrix[9], VECTOR3D *NeedAngle);
+		VECTOR3D CurrentObjectRotation, float RotationMatrix[9], VECTOR3D *NeedAngle, float MaxDistance);
 bool GetMissileOnTargetOrientateion(VECTOR3D Location, VECTOR3D CurrentObjectRotation, float RotationMatrix[9], CObject3D *TargetObject, VECTOR3D *NeedAngle);
 bool GetMissileTargetLiveStatus(CObject3D *TargetObject);
 // Получение положения ближайшего врага, для мин

@@ -31,7 +31,7 @@
 #include "../Explosion/BulletExplosion/BulletExplosion.h"
 
 CObject3D *GetMissileOnTargetOrientateion(int	ObjectStatus, VECTOR3D Location,
-		VECTOR3D CurrentObjectRotation, float RotationMatrix[9], VECTOR3D *NeedAngle);
+		VECTOR3D CurrentObjectRotation, float RotationMatrix[9], VECTOR3D *NeedAngle, float MaxDistance);
 bool GetMissileOnTargetOrientateion(VECTOR3D Location, VECTOR3D CurrentObjectRotation,
 		float RotationMatrix[9], CObject3D *TargetObject, VECTOR3D *NeedAngle);
 bool GetMissileTargetLiveStatus(CObject3D *TargetObject);
@@ -1355,7 +1355,7 @@ missile:
 				// устанавливаем в Target на что наведен этот снаряд, если еще ничего не выбрано
 				if (Target == 0)
 				{
-					Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle);
+					Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, Lifetime*Speed);
 				}
 				else // если уже что-то выбрали
 				{
@@ -1364,12 +1364,12 @@ missile:
 					{
 						// получаем углы, возвращает false - значит цель уже проскочили, и надо навестись на новую
 						if (!GetMissileOnTargetOrientateion(Location, Rotation, CurrentRotationMat, Target, &NeedAngle))
-							Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle);
+							Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, Lifetime*Speed);
 					}
 					// 2. если объекта нет (уже взорвали), надо наводить на другой
 					else
 					{
-						Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle);
+						Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, Lifetime*Speed);
 					}
 				}
 
@@ -1477,8 +1477,7 @@ missile:
 			{
 				VECTOR3D NeedAngle = Rotation;
 				// устанавливаем в Target на что наведен этот снаряд
-				Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
-					CurrentRotationMat, &NeedAngle);
+				Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, 1000000);
 
 
 				// учитываем скорость поворота по вертикали
@@ -1551,8 +1550,7 @@ missile:
 			{
 				VECTOR3D NeedAngle = Rotation;
 				// устанавливаем в Target на что наведен этот снаряд
-				Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
-					CurrentRotationMat, &NeedAngle);
+				Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, 1000000);
 
 
 				// учитываем скорость поворота по вертикали
@@ -1662,8 +1660,7 @@ missile:
 			{
 				VECTOR3D NeedAngle = Rotation;
 				// устанавливаем в Target на что наведен этот снаряд
-				Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
-					CurrentRotationMat, &NeedAngle);
+				Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, 1000000);
 
 
 				// учитываем скорость поворота по вертикали
@@ -1759,21 +1756,6 @@ missile:
 	}
 
 
-
-
-
-
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// понемногу сводим снаряд на нет... так красивее
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  /*  for (int i=0; i<GraphicFXQuantity; i++)
-	{
-	//	GraphicFX[i]->Theta = 1.0f + 20.0f*((Age-Lifetime)/Age);
-		if (Lifetime <= GraphicFX[i]->Life-0.1f) GraphicFX[i]->IsSuppressed = true;
-	}	*/
 
 
 	// объект в порядке - удалять не нужно

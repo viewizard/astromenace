@@ -1107,7 +1107,8 @@ CObject3D *GetMissileOnTargetOrientateion(
 		VECTOR3D	Location, // положение точки относительно которой будем наводить
 		VECTOR3D	CurrentObjectRotation, // текущие углы объекта
 		float		RotationMatrix[9], // матрица вращения объекта
-		VECTOR3D	*NeedAngle)// нужные углы, чтобы получить нужное направление
+		VECTOR3D	*NeedAngle, // нужные углы, чтобы получить нужное направление
+		float		MaxDistance) // максимальная дистанция, на которую может лететь снаряд
 {
 	// получаем точки для создания плоскости
 	VECTOR3D Orientation(0.0f, 0.0f, 1.0f);
@@ -1171,7 +1172,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 					float TargetDist2TMP = A2 * (tmpProjectile->Location.x)  + B2 * (tmpProjectile->Location.y)  + C2 * (tmpProjectile->Location.z)  + D2;
 
 					// проверяем, чтобы объект находился не ближе чем MinDistance
-					if (MinDistance<TargetDist2TMP)
+					if (MinDistance<TargetDist2TMP && MaxDistance>TargetDist2TMP)
 					{
 						// выбираем объект, так, чтобы он был наиболее длижайшим,
 						// идущим по нашему курсу...
@@ -1254,7 +1255,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 					float TargetDist2TMP = A2 * (TargetLocation.x)  + B2 * (TargetLocation.y)  + C2 * (TargetLocation.z)  + D2;
 
 					// проверяем, чтобы объект находился не ближе чем MinDistance
-					if (MinDistance<TargetDist2TMP)
+					if (MinDistance<TargetDist2TMP && MaxDistance>TargetDist2TMP)
 					{
 						// выбираем объект, так, чтобы он был наиболее длижайшим,
 						// идущим по нашему курсу...
@@ -1346,7 +1347,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 					float TargetDist2TMP = A2 * (tmp->Location.x)  + B2 * (tmp->Location.y)  + C2 * (tmp->Location.z)  + D2;
 
 					// проверяем, чтобы объект находился не ближе чем MinDistance
-					if (MinDistance<TargetDist2TMP)
+					if (MinDistance<TargetDist2TMP && MaxDistance>TargetDist2TMP)
 					{
 						// выбираем объект, так, чтобы он был наиболее длижайшим,
 						// идущим по нашему курсу...
@@ -1440,7 +1441,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 					float TargetDist2TMP = A2 * (tmpS->Location.x)  + B2 * (tmpS->Location.y)  + C2 * (tmpS->Location.z)  + D2;
 
 					// проверяем, чтобы объект находился не ближе чем MinDistance
-					if (MinDistance<TargetDist2TMP)
+					if (MinDistance<TargetDist2TMP && MaxDistance>TargetDist2TMP)
 					{
 						// выбираем объект, так, чтобы он был наиболее длижайшим,
 						// идущим по нашему курсу...

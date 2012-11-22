@@ -45,7 +45,7 @@ void CreditsMenu()
 	LastCreditsCurrentPosUpdateTime = vw_GetTime();
 
 	// зацикливание
-	if (CreditsCurrentPos <= -3425) CreditsCurrentPos = 0.0f;
+	if (CreditsCurrentPos <= -3540) CreditsCurrentPos = 0.0f;
 
 
 
@@ -86,10 +86,10 @@ void CreditsMenu()
 
 	Y1 += Offset2;
 	Y2 += Offset2;
-	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_3D_MODELING")))/2;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_3D_MODELS")))/2;
 	if (Y1 > 300) {ttt = (650 - Y1) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y1 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, ttt*MenuContentTransp, vw_GetText("10_3D_MODELING"));
+	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, ttt*MenuContentTransp, vw_GetText("10_3D_MODELS"));
 	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Max_Shelekhov")))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
@@ -206,10 +206,10 @@ void CreditsMenu()
 
 	Y1 += Offset2;
 	Y2 += Offset2;
-	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_TRANSLATOR")))/2;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_TRANSLATORS")))/2;
 	if (Y1 > 300) {ttt = (650 - Y1) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y1 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, ttt*MenuContentTransp, vw_GetText("10_TRANSLATOR"));
+	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, ttt*MenuContentTransp, vw_GetText("10_TRANSLATORS"));
 	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Bernd_Dau_(de)")))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
@@ -501,6 +501,29 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://www.vorbis.com");
+
+
+	Y1 += Offset1+30;
+	Y2 += Offset1+30;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Mersenne Twister random number generator"))/2;
+	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Mersenne Twister random number generator");
+	Y1 += Offset1;
+	Y2 += Offset1;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Copyright © 1997-2002, Makoto Matsumoto and Takuji Nishimura"))/2;
+	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Copyright © 1997-2002, Makoto Matsumoto and Takuji Nishimura,");
+	Y1 += Offset1;
+	Y2 += Offset1;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Copyright © 2000-2009, Richard J. Wagner"))/2;
+	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Copyright © 2000-2009, Richard J. Wagner");
+
+
+
 
 
 
