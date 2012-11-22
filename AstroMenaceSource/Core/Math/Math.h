@@ -59,22 +59,29 @@ int		vw_strcmp(const char *a, const char *b);
 const char* utf8_to_utf32(const char* utf8, unsigned* utf32);
 
 
-// rand
-float	vw_Rand();
-float   vw_RandNum(float Max);
+
+
+// Rand
+
+// 0.0f - 1.0f
+float	vw_fRand();
+// 0.0f - Max
+float   vw_fRandNum(float Max);
+// 0 - Max
 int		vw_iRandNum(int Max);
-// RANDOM_NUM возвращает значение -1.0f - 1.0f, стремится к нулю (!)
-#define vw_Randf0      ((vw_Rand()-vw_Rand())/RAND_MAX)
-// RANDOM_NUM2 возвращает значение 0.0f - 1.0f
-#define vw_Randf1		(vw_Rand()/RAND_MAX)	//(fmodf(vw_Rand(),100.0f)/100.0f)
-// Полезный макрос, гарантирует что в пределах
+// возвращает значение -1.0f - 1.0f, результат стремится к нулю (!)
+#define vw_Randf0      (vw_fRand()-vw_fRand())
+// возвращает значение 0.0f - 1.0f
+#define vw_Randf1		vw_fRand()
+// макрос, проверяет значение с учетом допустимых пределов
 #define Clamp(x, min, max)  x = (x<min  ? min : x<max ? x : max);
 
 
 
-// Нахождение максимального их 3
+
+// Нахождение максимального из 3
 float Max3(float a1,float a2,float a3);
-// Нахождение минимального их 3
+// Нахождение минимального из 3
 float Min3(float a1,float a2,float a3);
 
 
