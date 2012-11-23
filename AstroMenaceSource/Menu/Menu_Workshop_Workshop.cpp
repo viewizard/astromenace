@@ -327,7 +327,7 @@ void Workshop_Workshop()
 
 	SetRect(&SrcRest,0,0,256,256);
 	SetRect(&DstRest,Setup.iAspectRatioWidth/2-256,0,Setup.iAspectRatioWidth/2-256+512,412);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/back_spot.tga"), true, 0.55f*MenuContentTransp);
+	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/back_spot.tga"), true, 0.35f*MenuContentTransp);
 
 
 

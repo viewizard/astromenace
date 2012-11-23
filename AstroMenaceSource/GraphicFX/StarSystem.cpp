@@ -194,12 +194,12 @@ void StarSystemDraw(int DrawType)
 		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
 
 		float *buff = 0;
-		buff = new float[5*9]; if (buff == 0) return;
+		buff = new float[4*9]; if (buff == 0) return;
 
 		float width_2, heigh_2, length_2;
 		width_2 = 0.0f;
-		heigh_2 = 100.0f;
-		length_2 = 150.0f;
+		heigh_2 = 110.0f;
+		length_2 = 110.0f;
 		float x,y,z;
 		x = GamePoint.x;
 		y = GamePoint.y;
@@ -231,6 +231,87 @@ void StarSystemDraw(int DrawType)
 		buff[k++] = 1.0f;
 		buff[k++] = 1.0f;
 		buff[k++] = StartTransparentLayer1;
+		buff[k++] = 1.0f;
+		buff[k++] = 0.0f+StarsTile/3.0f;
+
+		buff[k++] = x + width_2;
+		buff[k++] = y + heigh_2;
+		buff[k++] = z - length_2/2;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = EndTransparentLayer1;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f+StarsTile/3.0f;
+
+		buff[k++] = x - width_2;
+		buff[k++] = y - heigh_2;
+		buff[k++] = z + length_2+length_2/2;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = StartTransparentLayer1;
+		buff[k++] = 0.0f;
+		buff[k++] = 0.0f+StarsTile/3.0f;
+
+		buff[k++] = x - width_2;
+		buff[k++] = y - heigh_2;
+		buff[k++] = z - length_2/2;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = EndTransparentLayer1;
+		buff[k++] = 0.0f;
+		buff[k++] = 1.0f+StarsTile/3.0f;
+
+
+		if (DrawType == 1)
+		{
+			StarsTile -= 0.005f*(vw_GetTime() - StarsTileUpdateTime);
+			StarsTileUpdateTime = vw_GetTime();
+		}
+		else
+		{
+			StarsTile -= 0.035f*(vw_GetTime(1) - StarsTileUpdateTime);
+			StarsTileUpdateTime = vw_GetTime(1);
+		}
+
+		if (StarsTile < -3.0f) StarsTile += 3.0f;
+
+
+		eTexture *TileTexture = vw_FindTextureByName("DATA/SKYBOX/tile_back.tga");
+		vw_SetTexture(0, TileTexture);
+		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
+
+		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+
+		vw_DepthTest(false, -1);
+
+		if (DrawType == 1)
+		{
+			vw_PushMatrix();
+			vw_Rotate(-20.0f, 0.0f, 0.0f, 1.0f);
+			vw_Rotate(-45.0f, 0.0f, 1.0f, 0.0f);
+			vw_Rotate(30.0f, 1.0f, 0.0f, 0.0f);
+		}
+
+		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(float));
+
+
+
+		// звезды рисуем отдельно, четкими (со своими текстурными координатами)
+
+		k=0;
+
+		buff[k++] = x + width_2;
+		buff[k++] = y + heigh_2;
+		buff[k++] = z + length_2+length_2/2;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = StartTransparentLayer1;
 		buff[k++] = 3.0f;
 		buff[k++] = 0.0f+StarsTile;
 
@@ -264,40 +345,12 @@ void StarSystemDraw(int DrawType)
 		buff[k++] = 0.0f;
 		buff[k++] = 3.0f+StarsTile;
 
-
-		if (DrawType == 1)
-		{
-			StarsTile -= 0.005f*(vw_GetTime() - StarsTileUpdateTime);
-			StarsTileUpdateTime = vw_GetTime();
-		}
-		else
-		{
-			StarsTile -= 0.035f*(vw_GetTime(1) - StarsTileUpdateTime);
-			StarsTileUpdateTime = vw_GetTime(1);
-		}
-
-		if (StarsTile < -3.0f) StarsTile += 3.0f;
-
-
-		eTexture *TileTexture = vw_FindTextureByName("DATA/SKYBOX/tile_14.VW2D");
-		vw_SetTexture(0, TileTexture);
-		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
-
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-
-		vw_DepthTest(false, -1);
-
-		if (DrawType == 1)
-		{
-			vw_PushMatrix();
-			vw_Rotate(-20.0f, 0.0f, 0.0f, 1.0f);
-			vw_Rotate(-45.0f, 0.0f, 1.0f, 0.0f);
-			vw_Rotate(30.0f, 1.0f, 0.0f, 0.0f);
-		}
+		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_stars.tga"));
 
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(float));
+
+
+
 
 		if (DrawType == 1) vw_PopMatrix();
 
@@ -333,12 +386,12 @@ void StarSystemDrawSecondLayer(int DrawType)
 		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
 
 		float *buff;
-		buff = new float[5*9]; if (buff == 0) return;
+		buff = new float[4*9]; if (buff == 0) return;
 
 		float width_2, heigh_2, length_2;
 		width_2 = 0.0f;
-		heigh_2 = 100.0f;
-		length_2 = 150.0f;
+		heigh_2 = 110.0f;
+		length_2 = 110.0f;
 		float x,y,z;
 		x = GamePoint.x;
 		y = GamePoint.y;
@@ -418,7 +471,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 		if (StarsTile2 < -3.0f) StarsTile2 += 3.0f;
 
 
-		eTexture *TileTexture = vw_FindTextureByName("DATA/SKYBOX/tile_23.VW2D");
+		eTexture *TileTexture = vw_FindTextureByName("DATA/SKYBOX/tile_stars.tga");
 		vw_SetTexture(0, TileTexture);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную

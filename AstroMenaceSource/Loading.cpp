@@ -335,8 +335,8 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 // скайбокс - космос, загружаем только те, что нужно - экономим видео память
 {"DATA/SKYBOX/1/skybox_bottom4.tga",			1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/SKYBOX/1/skybox_front5.tga",				1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/tile_14.VW2D",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/SKYBOX/tile_23.VW2D",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/SKYBOX/tile_back.tga",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/SKYBOX/tile_stars.tga",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // спец эффекты
 {"DATA/GFX/flare.tga",							1, 16, true,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f, false},
 {"DATA/GFX/flare1.tga",							1, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f, false},
@@ -401,8 +401,8 @@ LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {"DATA/GAME/weapon_energy.tga",					0, 1, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 {"DATA/MENU/weapon_on_icon.tga",				0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 {"DATA/GAME/missionfailed.tga",					0, 168, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/SKYBOX/tile_14.VW2D",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
-{"DATA/SKYBOX/tile_23.VW2D",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/SKYBOX/tile_back.tga",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
+{"DATA/SKYBOX/tile_stars.tga",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // спец эффекты
 {"DATA/GFX/flare.tga",							1, 16, true,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f, false},
 {"DATA/GFX/flare1.tga",							1, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f, false},

@@ -1092,9 +1092,9 @@ void Workshop_Weaponry()
 	// затемнение
 	SetRect(&SrcRest,0,0,256,256);
 	SetRect(&DstRest,Setup.iAspectRatioWidth/2-480,100-32,Setup.iAspectRatioWidth/2-32,450+32);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/back_spot2.tga"), true, 0.55f*MenuContentTransp);
+	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/back_spot2.tga"), true, 0.45f*MenuContentTransp);
 	SetRect(&DstRest,Setup.iAspectRatioWidth/2,0,Setup.iAspectRatioWidth/2+512,622);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/back_spot.tga"), true, 0.55f*MenuContentTransp);
+	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/back_spot.tga"), true, 0.35f*MenuContentTransp);
 
 
 	vw_End2DMode();
