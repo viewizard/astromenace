@@ -264,11 +264,11 @@ bool ScriptEngine::Update(float Time)
 
 			if (AsterFastCount != 20)
 				CreateAsteroid->SetLocation(
-				VECTOR3D(/*-AsterW/2.0f+*/AsterW*vw_Randf0+AsterXPos, AsterYPos*2+AsterH*vw_Randf1, AsterZPos+20.0f)
+				VECTOR3D(AsterW*vw_Randf0+AsterXPos, AsterYPos*2+AsterH*vw_Randf1, AsterZPos+20.0f)
 				+GamePoint);
 			else
 				CreateAsteroid->SetLocation(
-				VECTOR3D(/*-AsterW/4.0f+(AsterW/2.0f)*vw_Randf1*/AsterW*vw_Randf0+AsterXPos, AsterYPos*2+AsterH*vw_Randf1, AsterZPos)
+				VECTOR3D(AsterW*vw_Randf0+AsterXPos, AsterYPos*2+AsterH*vw_Randf1, AsterZPos)
 				+GamePoint);
 
 			NeedGenerInt--;

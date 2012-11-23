@@ -73,6 +73,8 @@ int		vw_iRandNum(int Max);
 #define vw_Randf0      (vw_fRand()-vw_fRand())
 // возвращает значение 0.0f - 1.0f
 #define vw_Randf1		vw_fRand()
+// возвращает значение -1.0f - 1.0f
+#define vw_Randf11		(vw_fRand()*2.0f - 1.0f)
 // макрос, проверяет значение с учетом допустимых пределов
 #define Clamp(x, min, max)  x = (x<min  ? min : x<max ? x : max);
 

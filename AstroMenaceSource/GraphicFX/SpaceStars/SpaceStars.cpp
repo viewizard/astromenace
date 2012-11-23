@@ -95,9 +95,9 @@ CSpaceStars::CSpaceStars()
 		if (minDist <= DeadZone*DeadZone) DeadZone = 0.0f;
 
 		// прибавляем к рандому, чтобы избежать вероятности появления всех трех нулей и деления на ноль в дальнейшем
-		tmp.x = (vw_Randf0 + 0.00001f) * CreationSize.x;
-		tmp.y = vw_Randf0 * CreationSize.y;
-		tmp.z = vw_Randf0 * CreationSize.z;
+		tmp.x = (vw_Randf11 + 0.00001f) * CreationSize.x;
+		tmp.y = vw_Randf11 * CreationSize.y;
+		tmp.z = vw_Randf11 * CreationSize.z;
 		float ParticleDist = tmp.x*tmp.x + tmp.y*tmp.y + tmp.z*tmp.z;
 		while (ParticleDist > minDist || ParticleDist < DeadZone*DeadZone)
 		{

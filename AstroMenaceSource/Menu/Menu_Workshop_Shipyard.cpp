@@ -494,9 +494,9 @@ void Workshop_Shipyard()
 	// затемнение
 	SetRect(&SrcRest,0,0,256,256 );
 	SetRect(&DstRest,Setup.iAspectRatioWidth/2-480,100-32,Setup.iAspectRatioWidth/2-32,450+32);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/back_spot2.tga"), true, 0.55f*MenuContentTransp);
+	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/back_spot2.tga"), true, 0.45f*MenuContentTransp);
 	SetRect(&DstRest,Setup.iAspectRatioWidth/2+32,100-32,Setup.iAspectRatioWidth/2+480,450+32);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/back_spot2.tga"), true, 0.55f*MenuContentTransp);
+	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/back_spot2.tga"), true, 0.45f*MenuContentTransp);
 
 
 
