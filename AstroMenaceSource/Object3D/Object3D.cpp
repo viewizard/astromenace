@@ -952,6 +952,28 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	}
 
 
+	// если используем тени - сразу находим режим сглаживания
+	int PCFMode = 0;
+	if (ShadowMap)
+	{
+		switch(Setup.ShadowMap)
+		{
+			case 1:
+			case 4:
+			case 7:
+					PCFMode = 2; break;
+			case 2:
+			case 5:
+			case 8:
+					PCFMode = 4; break;
+			case 3:
+			case 6:
+			case 9:
+					PCFMode = 8; break;
+		}
+	}
+
+
 	// Устанавливаем данные для поверхности объекта
 	vw_MaterialV(RI_DIFFUSE, Diffuse);
 	vw_MaterialV(RI_AMBIENT, Ambient);
@@ -1083,6 +1105,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[27], ShadowMap_Get_xPixelOffset());
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[28], 3);
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[29], NeedNormalMapping);
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[30], PCFMode);
 
 						break;
 				}
@@ -1315,6 +1338,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[27], ShadowMap_Get_xPixelOffset());
 							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[28], 3);
 							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[29], NeedNormalMapping);
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[30], PCFMode);
 
 							break;
 					}

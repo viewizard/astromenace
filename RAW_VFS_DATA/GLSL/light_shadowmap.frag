@@ -7,6 +7,7 @@ uniform int NeedMultitexture;
 uniform int NeedNormalMapping;
 
 uniform sampler2DShadow ShadowMap;
+uniform int PCFMode;
 
 uniform int DirectLightCount;
 uniform int PointLightCount;
@@ -50,40 +51,45 @@ void main()
 	// Avoid counter shadow
 	if (ShadowTexCoord.w > 1.0)
 	{
-/*
-		// Simple lookup, no PCF
-		Shadow = lookup(vec2(0.0,0.0));
-*/
-
-		// 4x4 kernel PCF
+		if (PCFMode == 8)
+		{
+			// 8x8 kernel PCF
+			float x,y;
+			for (y = -3.5 ; y <=3.5 ; y+=1.0)
+				for (x = -3.5 ; x <=3.5 ; x+=1.0)
+					Shadow += lookup(vec2(x,y));
 					
-		float x,y;
-		for (y = -1.5 ; y <=1.5 ; y+=1.0)
-			for (x = -1.5 ; x <=1.5 ; x+=1.0)
-				Shadow += lookup(vec2(x,y));
-		
-		Shadow /= 16.0 ;
-
-/*
-		// 8x8 kernel PCF
-		float x,y;
-		for (y = -3.5 ; y <=3.5 ; y+=1.0)
-			for (x = -3.5 ; x <=3.5 ; x+=1.0)
-				Shadow += lookup(vec2(x,y));
+			Shadow /= 64.0 ;
+		}
+		else
+		if (PCFMode == 4)
+		{
+			// 4x4 kernel PCF		
+			float x,y;
+			for (y = -1.5 ; y <=1.5 ; y+=1.0)
+				for (x = -1.5 ; x <=1.5 ; x+=1.0)
+					Shadow += lookup(vec2(x,y));
+			
+			Shadow /= 16.0 ;
+		}
+		else
+		if (PCFMode == 2)
+		{
+			// 2x2  PCF dithered
+			// use modulo to vary the sample pattern
+			vec2 o = mod(floor(gl_FragCoord.xy), 2.0);
 					
-		Shadow /= 64.0 ;
-*/
-/*
-		// 4x4  PCF dithered
-		// use modulo to vary the sample pattern
-		vec2 o = mod(floor(gl_FragCoord.xy), 2.0);
-				
-		Shadow += lookup(vec2(-1.5, 1.5) + o);
-		Shadow += lookup(vec2( 0.5, 1.5) + o);
-		Shadow += lookup(vec2(-1.5, -0.5) + o);
-		Shadow += lookup(vec2( 0.5, -0.5) + o);
-		Shadow *= 0.25 ;
-*/
+			Shadow += lookup(vec2(-1.5, 1.5) + o);
+			Shadow += lookup(vec2( 0.5, 1.5) + o);
+			Shadow += lookup(vec2(-1.5, -0.5) + o);
+			Shadow += lookup(vec2( 0.5, -0.5) + o);
+			Shadow *= 0.25 ;
+		}
+		else
+		{
+			// Simple lookup, no PCF
+			Shadow = lookup(vec2(0.0,0.0));
+		}		
 	}
 
 	// глобальный эмбиент учитываем сразу
