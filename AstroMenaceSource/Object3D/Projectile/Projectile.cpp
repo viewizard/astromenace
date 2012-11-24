@@ -1352,10 +1352,15 @@ bool CProjectile::Update(float Time)
 			{
 missile:
 				VECTOR3D NeedAngle = Rotation;
+
+				float EffectiveRange = 1000000.0f;
+				// только для ракет игрока учитываем максимальную дальность полета
+				if (ObjectStatus == 3) EffectiveRange = Lifetime*Speed;
+
 				// устанавливаем в Target на что наведен этот снаряд, если еще ничего не выбрано
 				if (Target == 0)
 				{
-					Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, Lifetime*Speed);
+					Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, EffectiveRange);
 				}
 				else // если уже что-то выбрали
 				{
@@ -1364,12 +1369,12 @@ missile:
 					{
 						// получаем углы, возвращает false - значит цель уже проскочили, и надо навестись на новую
 						if (!GetMissileOnTargetOrientateion(Location, Rotation, CurrentRotationMat, Target, &NeedAngle))
-							Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, Lifetime*Speed);
+							Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, EffectiveRange);
 					}
 					// 2. если объекта нет (уже взорвали), надо наводить на другой
 					else
 					{
-						Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, Lifetime*Speed);
+						Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, EffectiveRange);
 					}
 				}
 

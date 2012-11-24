@@ -1537,6 +1537,7 @@ void LoadGameData(int LoadType)
 		UniformLocations[27] = vw_GetUniformLocation(GLSLShaderType3, "yPixelOffset");
 		UniformLocations[28] = vw_GetUniformLocation(GLSLShaderType3, "NormalMap");
 		UniformLocations[29] = vw_GetUniformLocation(GLSLShaderType3, "NeedNormalMapping");
+		UniformLocations[30] = vw_GetUniformLocation(GLSLShaderType3, "PCFMode");
 	}
 	// еще одна проверка перед тем как будем использовать шадовмеп
 	// если не смогли загрузить шейдеры, то делать с шадовмеп нечего
@@ -1704,9 +1705,18 @@ AllDataLoaded:
 		int ShadowMapSize = 1024;
 		switch(Setup.ShadowMap)
 		{
-			case 1: ShadowMapSize = CAPS->MaxTextureWidth/4; break;
-			case 2: ShadowMapSize = CAPS->MaxTextureWidth/2; break;
-			case 3: ShadowMapSize = CAPS->MaxTextureWidth; break;
+			case 1:
+			case 2:
+			case 3:
+					ShadowMapSize = CAPS->MaxTextureWidth/4; break;
+			case 4:
+			case 5:
+			case 6:
+					ShadowMapSize = CAPS->MaxTextureWidth/2; break;
+			case 7:
+			case 8:
+			case 9:
+					ShadowMapSize = CAPS->MaxTextureWidth; break;
 		}
 
 		switch(LoadType)

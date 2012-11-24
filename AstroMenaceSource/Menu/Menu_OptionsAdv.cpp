@@ -44,11 +44,29 @@ const char *ButtonQuality[3] =
 "3_Medium",
 "3_Low"};
 
-const char *ShadowButtonQuality[4] =
+const char *ShadowButtonQuality[10] =
 {"1_Off",
 "3_Low",
+"3_Low",
+"3_Low",
 "3_Medium",
+"3_Medium",
+"3_Medium",
+"3_High",
+"3_High",
 "3_High"};
+
+const char *ShadowButtonQualityBase[10] =
+{"%s",
+"%s, 2x2 PCF",
+"%s, 4x4 PCF",
+"%s, 8x8 PCF",
+"%s, 2x2 PCF",
+"%s, 4x4 PCF",
+"%s, 8x8 PCF",
+"%s, 2x2 PCF",
+"%s, 4x4 PCF",
+"%s, 8x8 PCF"};
 
 
 const char *ButtonTile[3] =
@@ -399,16 +417,22 @@ void OptionsAdvMenu()
 		Options_ShadowMap--;
 		if (Options_ShadowMap < 0) Options_ShadowMap = 0;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, Options_ShadowMap==3 || !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0 || !CAPS->FramebufferObject || !Options_UseGLSL || (CAPS->FramebufferObjectDepthSize < 24)))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, Options_ShadowMap==9 || !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0 || !CAPS->FramebufferObject || !Options_UseGLSL || (CAPS->FramebufferObjectDepthSize < 24)))
 	{
 		Options_ShadowMap++;
-		if (Options_ShadowMap > 3) Options_ShadowMap = 3;
+		if (Options_ShadowMap > 9) Options_ShadowMap = 9;
 	}
 	if (CAPS->GLSL100Supported && (CAPS->ShaderModel >= 3.0) && CAPS->FramebufferObject && Options_UseGLSL && (CAPS->FramebufferObjectDepthSize >= 24))
 	{
-		Size = vw_FontSize(vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
+		Size = vw_FontSize(ShadowButtonQualityBase[Options_ShadowMap], vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
+		float WScale = 0;
+		if (Size > 170)
+		{
+			Size = 170;
+			WScale = -170;
+		}
 		SizeI = (170-Size)/2;//High, Medium, Low
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
+		vw_DrawFont(X1+438+SizeI, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, ShadowButtonQualityBase[Options_ShadowMap], vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
 	}
 	else
 	{

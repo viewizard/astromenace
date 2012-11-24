@@ -871,7 +871,7 @@ ReCreate:
 		{
 			// 100% держит наши шейдеры
 			Setup.UseGLSL = true;
-			Setup.ShadowMap = 1;
+			Setup.ShadowMap = 2;
 			// 100% больше чем нужно памяти и не надо сжимать текстуры (ув. качество и скорость загрузки)
 			Setup.TexturesCompression = false;
 			// немного больше ставим другие опции
@@ -884,7 +884,7 @@ ReCreate:
 		if (CAPS->ShaderModel >= 4.1f)
 		{
 			// немного больше ставим другие опции
-			Setup.ShadowMap = 2;
+			Setup.ShadowMap = 5;
 			Setup.MSAA = 4;
 			Setup.CSAA = 4;
 			Setup.MaxPointLights = 6;
