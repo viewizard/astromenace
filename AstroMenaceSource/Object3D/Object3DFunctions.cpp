@@ -1605,15 +1605,43 @@ bool GetMissileOnTargetOrientateion(
 
 
 //-----------------------------------------------------------------------------
-// Проверяем статус цели для ракет, жива она еще или нет
+// Проверяем где по отношению ракеты находится объект
 //-----------------------------------------------------------------------------
-bool GetMissileTargetLiveStatus(CObject3D *TargetObject)
+bool GetMissileTargetPosition(CObject3D	*TargetObject,
+								VECTOR3D	Location, // положение точки относительно которой будем наводить
+								float		RotationMatrix[9]) // матрица вращения объекта
+{
+	// (!) TargetObject должен существовать, до вызова этой функции проверять это, в этой функции проверки не делаем
+
+	VECTOR3D PointUp(0.0f, 1.0f, 0.0f);
+	Matrix33CalcPoint(&PointUp, RotationMatrix);
+	VECTOR3D PointRight(1.0f, 0.0f, 0.0f);
+	Matrix33CalcPoint(&PointRight, RotationMatrix);
+
+	// получаем вертикальную плоскость (отсечения перед-зад)
+	float A2, B2, C2, D2;
+	GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+PointRight, Location+PointUp);
+
+	float tmp1 = A2 * (TargetObject->Location.x)  + B2 * (TargetObject->Location.y)  + C2 * (TargetObject->Location.z)  + D2;
+	if (tmp1>0.0f)
+	{
+		return true;
+	}
+
+	return false;
+}
+//-----------------------------------------------------------------------------
+// Проверяем статус цели для ракет, жива она еще или нет, и где по отношению ракеты находится
+//-----------------------------------------------------------------------------
+bool GetMissileTargetStatus(CObject3D	*TargetObject,
+								VECTOR3D	Location, // положение точки относительно которой будем наводить
+								float		RotationMatrix[9]) // матрица вращения объекта
 {
 	CProjectile *tmpProjectile = StartProjectile;
 	while (tmpProjectile!=0)
 	{
 		CProjectile *tmpProjectile2 = tmpProjectile->Next;
-		if (tmpProjectile == TargetObject) return true;
+		if (tmpProjectile == TargetObject) return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
 		tmpProjectile = tmpProjectile2;
 	}
 
@@ -1621,7 +1649,7 @@ bool GetMissileTargetLiveStatus(CObject3D *TargetObject)
 	while (tmpG!=0)
 	{
 		CGroundObject *tmpGround2 = tmpG->Next;
-		if (tmpG == TargetObject) return true;
+		if (tmpG == TargetObject) return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
 		tmpG = tmpGround2;
 	}
 
@@ -1629,7 +1657,7 @@ bool GetMissileTargetLiveStatus(CObject3D *TargetObject)
 	while (tmp!=0)
 	{
 		CSpaceShip *tmpShip2 = tmp->Next;
-		if (tmp == TargetObject) return true;
+		if (tmp == TargetObject) return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
 		tmp = tmpShip2;
 	}
 
@@ -1637,7 +1665,7 @@ bool GetMissileTargetLiveStatus(CObject3D *TargetObject)
 	while (tmpS!=0)
 	{
 		CSpaceObject *tmpSpace2 = tmpS->Next;
-		if (tmpS == TargetObject) return true;
+		if (tmpS == TargetObject) return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
 		tmpS = tmpSpace2;
 	}
 
