@@ -30,12 +30,6 @@
 #include "Projectile.h"
 #include "../Explosion/BulletExplosion/BulletExplosion.h"
 
-CObject3D *GetMissileOnTargetOrientateion(int	ObjectStatus, VECTOR3D Location,
-		VECTOR3D CurrentObjectRotation, float RotationMatrix[9], VECTOR3D *NeedAngle, float MaxDistance);
-bool GetMissileOnTargetOrientateion(VECTOR3D Location, VECTOR3D CurrentObjectRotation,
-		float RotationMatrix[9], CObject3D *TargetObject, VECTOR3D *NeedAngle);
-bool GetMissileTargetLiveStatus(CObject3D *TargetObject);
-
 
 
 struct ProjectileData
@@ -1364,14 +1358,14 @@ missile:
 				}
 				else // если уже что-то выбрали
 				{
-					// 1. надо проверить, есть ли еще вообще этот объект, если он есть - летим к нему
-					if (GetMissileTargetLiveStatus(Target))
+					// 1. надо проверить, есть ли еще вообще этот объект и где по отношению ракеты он находится, если он есть и впереди - летим к нему
+					if (GetMissileTargetStatus(Target, Location, CurrentRotationMat))
 					{
 						// получаем углы, возвращает false - значит цель уже проскочили, и надо навестись на новую
 						if (!GetMissileOnTargetOrientateion(Location, Rotation, CurrentRotationMat, Target, &NeedAngle))
 							Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, EffectiveRange);
 					}
-					// 2. если объекта нет (уже взорвали), надо наводить на другой
+					// 2. если объекта нет (уже взорвали) или мы его уже проскочили, надо наводить на другой
 					else
 					{
 						Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, EffectiveRange);
