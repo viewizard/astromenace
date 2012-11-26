@@ -208,13 +208,14 @@ char **get_browsers(void) {
 	};
 	static const char *browser_list[] = {
 		"firefox", /* Listed in the order I feel like ;) */
-        "galeon",
-		"epiphany",
-		"konqueror",
 		"opera",
-		"netscape",
+		"chrome",
+		"konqueror",
+		"chromium",
+		"epiphany",
+		"midori",
 		"dillo",
-        "mozilla"
+		"rekonq"
 	};
 	char **tokenized_path = get_path(), **browsers = NULL;
 	unsigned int a;
