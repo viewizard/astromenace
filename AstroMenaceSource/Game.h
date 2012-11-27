@@ -37,12 +37,12 @@
 
 
 
-// скриптовый движек
+// скриптовый движок
 #include "ScriptEngine/Script.h"
 // эффекты
 #include "GraphicFX/SpaceStars/SpaceStars.h"
 #include "GraphicFX/GameLvlText/GameLvlText.h"
-// модели и все обьъекты
+// модели и все объекты
 #include "Object3D/Object3D.h"
 #include "Object3D/SpaceShip/EarthSpaceFighter/EarthSpaceFighter.h"
 #include "Object3D/SpaceShip/AlienSpaceFighter/AlienSpaceFighter.h"

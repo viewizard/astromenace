@@ -20,7 +20,7 @@ Postal address:	kvartal Zhukova, 10/79, Lugansk city, 91051, Ukraine
 
 AstroMenace Artwork
 
-* Part of 3d models and textures used in AstroMenace game was licensed, they all compiled in non common formats to avoid license violation and stored in raw data folder for game data file (gamedata.vfs) compilation and use under current game license (GPLv3). Please note, you can't use them as separate files outside the AstroMenace project until you license them at http://www.3drt.com (see RAW_VFS_DATA/MODELS/ReadMe.txt file for more info).
+* Part of 3d models and textures used in AstroMenace game was licensed, they all compiled in non common formats to avoid license violation and stored in raw data folder for game data file (gamedata.vfs) compilation. As soon, as you have compiled game data, you can distribute, give, transfer or do whatever your want with gamedata.vfs file under current game license (GPLv3). Please note, you can't use 3d models and textures as separate files outside the AstroMenace project until you license them at http://www.3drt.com (see RAW_VFS_DATA/MODELS/ReadMe.txt file for more info).
 
 * AstroMenace game raw data folder contain planetary textures from VegaTrek "Planetary textures add-on" licensed under GPLv3. Full "Planetary textures add-on" package can be download from VegaTrek file section http://sourceforge.net/projects/vegatrek
 

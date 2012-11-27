@@ -29,19 +29,18 @@
 #include "Text.h"
 
 
-struct sTextNode
+struct sCSVRow
 {
-	char *id;
-	char **text;
-	int count;
+	char **CellData;
+	int Columns;
 
-	sTextNode *Next;
-	sTextNode *Prev;
+	sCSVRow *Next;
+	sCSVRow *Prev;
 };
 
 
-sTextNode *StartTextNode;
-sTextNode *EndTextNode;
+sCSVRow *StartCSVRow;
+sCSVRow *EndCSVRow;
 
 // буфер со всем текстом
 char *TextBuffer = 0;
@@ -53,58 +52,58 @@ int CurrentLanguage = 0;
 
 
 // присоединяем к списку
-void vw_AttachTextNode(sTextNode* TextNode)
+void vw_AttachCSVRow(sCSVRow* CSVRow)
 {
-	if (TextNode == 0) return;
+	if (CSVRow == 0) return;
 
 	// первый в списке...
-	if (EndTextNode == 0)
+	if (EndCSVRow == 0)
 	{
-		TextNode->Prev = 0;
-		TextNode->Next = 0;
-		StartTextNode = TextNode;
-		EndTextNode = TextNode;
+		CSVRow->Prev = 0;
+		CSVRow->Next = 0;
+		StartCSVRow = CSVRow;
+		EndCSVRow = CSVRow;
 	}
 	else // продолжаем заполнение...
 	{
-		TextNode->Prev = EndTextNode;
-		TextNode->Next = 0;
-		EndTextNode->Next = TextNode;
-		EndTextNode = TextNode;
+		CSVRow->Prev = EndCSVRow;
+		CSVRow->Next = 0;
+		EndCSVRow->Next = CSVRow;
+		EndCSVRow = CSVRow;
 	}
 }
 // удаляем из списка
-void vw_DetachTextNode(sTextNode* TextNode)
+void vw_DetachCSVRow(sCSVRow* CSVRow)
 {
-	if (TextNode == 0) return;
+	if (CSVRow == 0) return;
 
 	// переустанавливаем указатели...
-	if (StartTextNode == TextNode) StartTextNode = TextNode->Next;
-	if (EndTextNode == TextNode) EndTextNode = TextNode->Prev;
+	if (StartCSVRow == CSVRow) StartCSVRow = CSVRow->Next;
+	if (EndCSVRow == CSVRow) EndCSVRow = CSVRow->Prev;
 
-	if (TextNode->Next != 0) TextNode->Next->Prev = TextNode->Prev;
-		else if (TextNode->Prev != 0) TextNode->Prev->Next = 0;
-	if (TextNode->Prev != 0) TextNode->Prev->Next = TextNode->Next;
-		else if (TextNode->Next != 0) TextNode->Next->Prev = 0;
+	if (CSVRow->Next != 0) CSVRow->Next->Prev = CSVRow->Prev;
+		else if (CSVRow->Prev != 0) CSVRow->Prev->Next = 0;
+	if (CSVRow->Prev != 0) CSVRow->Prev->Next = CSVRow->Next;
+		else if (CSVRow->Next != 0) CSVRow->Next->Prev = 0;
 }
-// переприсоединяе как первый в списке
-void vw_ReAttachTextNodeAsFirst(sTextNode* TextNode)
+// переприсоединяем как первый в списке
+void vw_ReAttachCSVRowAsFirst(sCSVRow* CSVRow)
 {
-	if (TextNode == 0) return;
+	if (CSVRow == 0) return;
 
-	vw_DetachTextNode(TextNode);
+	vw_DetachCSVRow(CSVRow);
 
 	// если список пустой - просто присоединяем к списку и все
-	if (StartTextNode == 0)
+	if (StartCSVRow == 0)
 	{
-		vw_AttachTextNode(TextNode);
+		vw_AttachCSVRow(CSVRow);
 	}
 	else
 	{
-		TextNode->Next = StartTextNode;
-		TextNode->Prev = 0;
-		StartTextNode->Prev = TextNode;
-		StartTextNode = TextNode;
+		CSVRow->Next = StartCSVRow;
+		CSVRow->Prev = 0;
+		StartCSVRow->Prev = CSVRow;
+		StartCSVRow = CSVRow;
 	}
 }
 
@@ -121,17 +120,17 @@ void vw_ReAttachTextNodeAsFirst(sTextNode* TextNode)
 void vw_ReleaseText()
 {
 	// Чистка памяти...
-	sTextNode *Tmp = StartTextNode;
+	sCSVRow *Tmp = StartCSVRow;
 	while (Tmp != 0)
 	{
-		sTextNode *Tmp1 = Tmp->Next;
-		if (Tmp->text != 0) delete [] Tmp->text;
+		sCSVRow *Tmp1 = Tmp->Next;
+		if (Tmp->CellData != 0) delete [] Tmp->CellData;
 		delete Tmp;
 		Tmp = Tmp1;
 	}
 
-	StartTextNode = 0;
-	EndTextNode = 0;
+	StartCSVRow = 0;
+	EndCSVRow = 0;
 
 	if (TextBuffer != 0) {delete [] TextBuffer; TextBuffer = 0;}
 
@@ -174,63 +173,46 @@ void vw_InitText(const char *FileName, const char SymbolSeparator, const char Sy
 	vw_fclose(TempF);
 
 
-	// парсим формат .csv
-	// не делаем проверок формата
+	// парсим формат .csv (табличный формат, поддерживаемый офисными редакторами)
+	// не делаем проверок формата на наличие в файле повреждений структуры
 	// вся работа строится на TextBuffer, другой памяти не выделяем - только ссылаемся указателями
-	// на данные в этом буфере (предварительно поставив 0 для разграничения слов и предложений)
+	// на данные в этом буфере (предварительно поставив 0 для разграничения текста в ячейках)
 	// ! важно - в конце файла должен быть перевод на новую строку, чтобы поставить ноль и сформировать конец строки, заменив символ SymbolEndOfLine
-	// ! важно - первая строка с идентификаторами столбцов обязательно должна присутствовать, по ней считаем кол-во языков в файле
 
 	char *Buffer = TextBuffer;
 
-	// по первой строчке считаем сколько у нас в файле языков
-	int LanguageCount = 0;
+	// по первой строче считаем сколько у нас в файле столбцов
+	int ColumnsCount = 0;
 	while(Buffer[0] != SymbolEndOfLine)
 	{
-		if (Buffer[0] == SymbolSeparator) LanguageCount++;
-		Buffer++;DataLength--;
+		if (Buffer[0] == SymbolSeparator) ColumnsCount++;
+		Buffer++;
 	}
-	Buffer++;DataLength--;
+	ColumnsCount++; // для последнего столбца конечный символ - SymbolEndOfLine, который мы получили в цикле
+
+	Buffer = TextBuffer; // восстанавливаем указатель
 
 	// крутим пока не обработали все строки
-	while(DataLength > LanguageCount)
+	while(DataLength > ColumnsCount-1)
 	{
-		// делаем ноду
-		sTextNode *NewTextNode;
-		NewTextNode = new sTextNode;
+		// создаем строку
+		sCSVRow *NewCSVRow;
+		NewCSVRow = new sCSVRow;
 
-		NewTextNode->count = LanguageCount;
+		NewCSVRow->Columns = ColumnsCount;
+		NewCSVRow->CellData = new char*[NewCSVRow->Columns];
 
-		// проверяем id
-		NewTextNode->id = Buffer;
-		// если у нас "пустой" id - значит это пустая строка, и надо переходить к следующей
-		if (NewTextNode->id[0] == SymbolSeparator)
+		for (int i=0; i<NewCSVRow->Columns; i++)
 		{
-			while(Buffer[0] != SymbolEndOfLine) {Buffer++;DataLength--;}
-			Buffer++;DataLength--;
-
-			delete NewTextNode;
-			continue;
-		}
-		// ищем маркер следующего текстового столбца
-		while(Buffer[0] != SymbolSeparator) {Buffer++;DataLength--;}
-		// нашли, ставим туда ноль, чтобы ноль-терминальная строка была завершенной
-		Buffer[0] = 0;
-		Buffer++;DataLength--;
-
-		NewTextNode->text = new char*[NewTextNode->count];
-
-		for (int i=0; i<NewTextNode->count; i++)
-		{
-			NewTextNode->text[i] = Buffer;
-			// ищем маркер следующего текстового столбца или конец строки
+			NewCSVRow->CellData[i] = Buffer;
+			// ищем маркер следующего столбца или конца строки
 			while((Buffer[0] != SymbolEndOfLine) && (Buffer[0] != SymbolSeparator)) {Buffer++;DataLength--;}
 			// нашли, ставим туда ноль, чтобы ноль-терминальная строка была завершенной
 			Buffer[0] = 0;
 			Buffer++;DataLength--;
 		}
 
-		vw_AttachTextNode(NewTextNode);
+		vw_AttachCSVRow(NewCSVRow);
 	}
 }
 
@@ -257,18 +239,22 @@ const char *vw_GetText(const char *ItemID)
 	if (TextBuffer == 0) return 0;
 	if (ItemID == 0) return 0;
 
-	sTextNode *Tmp = StartTextNode;
+	sCSVRow *Tmp = StartCSVRow;
 	while (Tmp != 0)
 	{
-		sTextNode *Tmp1 = Tmp->Next;
+		sCSVRow *Tmp1 = Tmp->Next;
 
-		if (!strcmpIdNum(Tmp->id, ItemID))
-		if (!vw_strcmp(ItemID, Tmp->id))
+		// в первом столбце у нас записан идентификатор текста с 1 или 2-х значным номером
+		// не работаем со строками без идентификатора
+		if (Tmp->CellData[0][0] != 0)
+		if (!strcmpIdNum(Tmp->CellData[0], ItemID))
+		if (!vw_strcmp(ItemID, Tmp->CellData[0]))
 		{
 			// перемещаем его на первое место в списке для ускорения поиска в след. проходах
-			vw_ReAttachTextNodeAsFirst(Tmp);
+			vw_ReAttachCSVRowAsFirst(Tmp);
 
-			return Tmp->text[CurrentLanguage];
+			// возвращаем указатель на нужный столбец
+			return Tmp->CellData[CurrentLanguage+1];
 		}
 
 		Tmp = Tmp1;
@@ -292,16 +278,14 @@ int vw_CheckFontCharsInText()
 	printf("Font characters detection start.\n");
 
 
-	sTextNode *Tmp = StartTextNode;
+	sCSVRow *Tmp = StartCSVRow;
 	while (Tmp != 0)
 	{
-		sTextNode *Tmp1 = Tmp->Next;
+		sCSVRow *Tmp1 = Tmp->Next;
 
-
-		for (int i=0; i<Tmp->count; i++)
+		for (int i=0; i<Tmp->Columns; i++)
 		{
-
-			const char *CharsList = Tmp->text[i];
+			const char *CharsList = Tmp->CellData[i];
 
 			if (CharsList!=0)
 			{
