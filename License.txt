@@ -25,7 +25,7 @@ AstroMenace Data
 
 * "models.pack" file (RAW_VFS_DATA/MODELS/ folder)
 
-This file is compiled "closed source" 3D models and textures package. All 3D models and textures in this package was created by Max Shelekhov, 3drt.com. "models.pack" file released under Creative Commons Attribution-ShareAlike (CC BY-SA) license (see RAW_VFS_DATA/MODELS/ReadMe.txt for more info).
+This file is compiled "closed source" 3D models and textures package. All 3D models and textures in this package was created by Max Shelekhov, 3drt.com. "models.pack" file released under Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0) license (see RAW_VFS_DATA/MODELS/ReadMe.txt for more info).
 
 
 * "a_class4.tga", "clouds.tga", "d_class3.tga" and "q_class2.tga" files (RAW_VFS_DATA/MODELS/PLANET/ folder)
