@@ -14,16 +14,38 @@ E-mail:		viewizard@viewizard.com
 Postal address:	kvartal Zhukova, 10/79, Lugansk city, 91051, Ukraine
 
 
-* AstroMenace game source code folder contain TinyXML source code released under ZLIB license (see Core/Parser/TinyXML folder for more info).
+* AstroMenace game source code folder contain TinyXML source code released under ZLIB license (see Core/Parser/TinyXML folder for more info). TinyXML project could be found at https://sourceforge.net/projects/tinyxml/
 
 
 
-AstroMenace Artwork
 
-* Part of 3d models and textures used in AstroMenace game was licensed, they all compiled in non common formats to avoid license violation and stored in raw data folder for game data file (gamedata.vfs) compilation. As soon, as you have compiled game data, you can distribute, give, transfer or do whatever your want with gamedata.vfs file under current game license (GPLv3). Please note, you can't use 3d models and textures as separate files outside the AstroMenace project until you license them at http://www.3drt.com (see RAW_VFS_DATA/MODELS/ReadMe.txt file for more info).
 
-* AstroMenace game raw data folder contain planetary textures from VegaTrek "Planetary textures add-on" licensed under GPLv3. Full "Planetary textures add-on" package can be download from VegaTrek file section http://sourceforge.net/projects/vegatrek
+AstroMenace Data
 
-* AstroMenace game raw data folder contain ttf font files from Ubuntu Font Family, GNU FreeFont and Liberation Fonts (see RAW_VFS_DATA/FONT folder for more info about this ttf fonts license).
 
-* AstroMenace game artwork pack with 3d models, textures, music and sfx sources available under GPLv3 license can be download from http://www.viewizard.com/download/astromenace-artwork.zip or http://sourceforge.net/projects/openastromenace/files/1.3.0/astromenace-artwork.zip
+* "models.pack" file (RAW_VFS_DATA/MODELS/ folder)
+
+This file is compiled "closed source" 3D models and textures package. All 3D models and textures in this package was created by Max Shelekhov, 3drt.com. "models.pack" file released under Creative Commons Attribution-ShareAlike (CC BY-SA) license (see RAW_VFS_DATA/MODELS/ReadMe.txt for more info).
+
+
+* "a_class4.tga", "clouds.tga", "d_class3.tga" and "q_class2.tga" files (RAW_VFS_DATA/MODELS/PLANET/ folder)
+
+This planetary textures are part of VegaTrek "Planetary textures add-on" licensed under "GNU GENERAL PUBLIC LICENSE Version 3". Full "Planetary textures add-on" package and all relative data can be download from VegaTrek file section at http://sourceforge.net/projects/vegatrek/
+
+
+* "Ubuntu-B.ttf" file (RAW_VFS_DATA/FONT/ folder)
+
+This ttf font is part of Ubuntu Font Family package released under "UBUNTU FONT LICENCE Version 1.0" (see RAW_VFS_DATA/FONT/UbuntuFontLicence-1.0.txt).
+
+
+* "FreeMonoBold.ttf", "FreeSansBold.ttf" and "FreeSerifBold.ttf" files (RAW_VFS_DATA/FONT/ folder)
+
+This ttf fonts are part of GNU FreeFont package released under "GNU GENERAL PUBLIC LICENSE Version 3" (see RAW_VFS_DATA/FONT/FreeFontLicense.txt).
+
+
+* "LiberationMono-Bold.ttf", "LiberationSans-Bold.ttf" and "LiberationSerif-Bold.ttf" files (RAW_VFS_DATA/FONT/ folder)
+
+This ttf fonts are part of Liberation Fonts package released under "SIL Open Font License, Version 1.1" (see RAW_VFS_DATA/FONT/LiberationFontLicense.txt).
+
+
+* Other game data (all 2D artwork, music, sfx, voice and part of 3D models with textures), except described above, was created by Viewizard team during AstroMenace development (see "Credits" menu in game for full list of authors) and released under "GNU GENERAL PUBLIC LICENSE Version 3". You can download this data "source" package from http://www.viewizard.com/download/astromenace-artwork.zip or http://sourceforge.net/projects/openastromenace/files/1.3.0/astromenace-artwork.zip

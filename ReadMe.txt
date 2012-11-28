@@ -10,7 +10,7 @@ The easy way to get up to date AstroMenace on your computer:
 1) Make sure all necessary packages with development headers
    installed in your system: 
 
-   gcc (with g++), cmake, subversion, libsdl, libogg, libvorbis, openal, 
+   gcc (with g++), cmake, make, subversion, libsdl, libogg, libvorbis, openal, 
    alut (freealut), libXinerama, GLU, freetype2
 
 For Ubuntu/Debian:
