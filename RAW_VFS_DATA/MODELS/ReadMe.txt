@@ -1,4 +1,4 @@
-models.pack file released under Creative Commons Attribution-ShareAlike (CC BY-SA).
+models.pack file released under Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0).
 
 
 
