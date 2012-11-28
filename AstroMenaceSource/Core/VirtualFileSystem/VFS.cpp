@@ -46,7 +46,7 @@ struct eVFS
 	eVFS*	Prev;
 	eVFS*	Next;
 };
-eVFS *StarVFS = 0;
+eVFS *StartVFS = 0;
 eVFS *EndVFS = 0;
 
 
@@ -189,7 +189,7 @@ int vw_CreateVFS(const char *Name, unsigned int BuildNumber)
 	{
 		TempVFS->Prev = 0;
 		TempVFS->Next = 0;
-		StarVFS = TempVFS;
+		StartVFS = TempVFS;
 		EndVFS = TempVFS;
 	}
 	else // продолжаем заполнение...
@@ -237,7 +237,7 @@ int	vw_WriteIntoVFSfromMemory(const char *Name, const BYTE * buffer, int size)
 
 	// (!) пока работаем только с одной открытой VFS в системе, собственно больше и не нужно
 
-	eVFS *WritebleVFS = StarVFS;
+	eVFS *WritebleVFS = StartVFS;
 
 	if (WritebleVFS == 0)
 	{
@@ -539,7 +539,7 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	{
 		TempVFS->Prev = 0;
 		TempVFS->Next = 0;
-		StarVFS = TempVFS;
+		StartVFS = TempVFS;
 		EndVFS = TempVFS;
 	}
 	else // продолжаем заполнение...
@@ -735,7 +735,7 @@ void vw_CloseVFS(void)
 
 
 
-	eVFS *TempVFS = StarVFS;
+	eVFS *TempVFS = StartVFS;
 	while (TempVFS != 0)
 	{
 		eVFS *TempVFS1 = TempVFS->Next;
@@ -764,6 +764,8 @@ void vw_CloseVFS(void)
 		TempVFS = TempVFS1;
 	}
 
+	StartVFS = 0;
+	EndVFS = 0;
 }
 
 
