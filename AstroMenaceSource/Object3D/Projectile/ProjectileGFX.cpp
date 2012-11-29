@@ -857,7 +857,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 			ParticleSystem->AlphaEnd   = 0.00f;
 			ParticleSystem->SizeStart  = 0.20f;
 			ParticleSystem->SizeVar    = 0.20f;
-			ParticleSystem->SizeEnd    = 1.50f+1.5f*vw_Randf1;
+			ParticleSystem->SizeEnd    = 2.50f;
 			ParticleSystem->Speed      = 0.20f;
 			ParticleSystem->SpeedVar   = 0.30f;
 			ParticleSystem->Theta      = 360.00f;

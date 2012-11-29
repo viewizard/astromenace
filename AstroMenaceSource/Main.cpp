@@ -91,7 +91,8 @@ SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = 0;
 //------------------------------------------------------------------------------------
 // полное путь к программе
 char ProgrammDir[MAX_PATH];
-char VFSFileNamePath[MAX_PATH];
+char VFSFileNamePath1[MAX_PATH];
+char VFSFileNamePath2[MAX_PATH];
 // полное имя для файла с данными игры
 char DatFileName[MAX_PATH];
 // для сохранения скриншотов
@@ -157,7 +158,8 @@ int main( int argc, char **argv )
 	strcat( ProgrammDir, Fi );
 
 	ZeroMemory(DatFileName, sizeof(DatFileName));
-	ZeroMemory(VFSFileNamePath, sizeof(VFSFileNamePath));
+	ZeroMemory(VFSFileNamePath1, sizeof(VFSFileNamePath1));
+	ZeroMemory(VFSFileNamePath2, sizeof(VFSFileNamePath2));
 	ZeroMemory(ScreenshotDir, sizeof(ScreenshotDir));
 
 	// Получаем данные, где папка пользователя
@@ -218,8 +220,10 @@ int main( int argc, char **argv )
 		strcat(ScreenshotDir, "AstroMenaceScreenshot");
 	}
 
-	strcpy(VFSFileNamePath, ProgrammDir);
-	strcat(VFSFileNamePath, "gamedata.vfs");
+	strcpy(VFSFileNamePath1, ProgrammDir);
+	strcat(VFSFileNamePath1, "gamedata.vfs");
+	strcpy(VFSFileNamePath2, ProgrammDir);
+	strcat(VFSFileNamePath2, "gamedata_cc.vfs");
 #elif defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 	// иним пути для юникса-линукса
 	// если передали параметр-путь
@@ -264,8 +268,10 @@ int main( int argc, char **argv )
 	strcpy(ScreenshotDir, homeval);
 	strcat(ScreenshotDir, "/Desktop/AstroMenaceScreenshot");
 
-	strcpy(VFSFileNamePath, ProgrammDir);
-	strcat(VFSFileNamePath, "gamedata.vfs");
+	strcpy(VFSFileNamePath1, ProgrammDir);
+	strcat(VFSFileNamePath1, "gamedata.vfs");
+	strcpy(VFSFileNamePath2, ProgrammDir);
+	strcat(VFSFileNamePath2, "gamedata_cc.vfs");
 
 	// укладываем в нужном месте (где 100% дают создавать) файл с настройками
 	strcpy(DatFileName, homeval);
@@ -429,11 +435,18 @@ int main( int argc, char **argv )
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// подключаем VFS
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (vw_OpenVFS(VFSFileNamePath, GAME_BUILD) != 0)
+	if (vw_OpenVFS(VFSFileNamePath1, GAME_BUILD) != 0)
 	{
 		fprintf(stderr, "gamedata.vfs file not found or corrupted.\n");
 		return 0;
 	}
+#ifdef separate_cc_vfs
+	if (vw_OpenVFS(VFSFileNamePath2, 0) != 0)
+	{
+		fprintf(stderr, "gamedata_cc.vfs file not found or corrupted.\n");
+		return 0;
+	}
+#endif // separate_cc_vfs
 	printf("\n");
 
 

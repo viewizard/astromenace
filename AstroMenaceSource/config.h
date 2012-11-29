@@ -30,7 +30,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION	 	"1.3.1 svn"
-#define GAME_BUILD			121128
+#define GAME_BUILD			121129
 
 
 // VBO OpenGL extention support switcher (if defined - game will detect and use VBO) Game could crash
@@ -66,6 +66,17 @@
 
 
 
+
+
+// Since game use content released under different licenses (GPL v3, OFL v1.1, CC BY-SA v3.0),
+// you might need create separate VFS game data file (gamedata_cc.vfs) with CC BY-SA licensed content only.
+// If not defined, all content merged into one VFS game data file (gamedata.vfs)
+// #define separate_cc_vfs
+
+
+
+
+
 // more actions and text outputs with debug information for bug hunting
 // #define gamedebug
 
@@ -77,6 +88,5 @@
 
 // JPEG image format support via libjpeg.
 // #define jpeg
-
 
 #endif // CONFIG_H
