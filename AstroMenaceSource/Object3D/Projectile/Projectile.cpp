@@ -558,6 +558,7 @@ void CProjectile::Create(int ProjectileNum)
 			GraphicFX[1] = new eParticleSystem;
 			SetProjectileGFX(GraphicFX[1], 101);
 			GraphicFXLocation[1] = GraphicFXLocation[0];
+			GraphicFX[1]->Life = 1.00f; // у роя слишком много ракет, если делать долгий шлейф - может просесть фпс
 			break;
 		// торпеда
 		case 18:

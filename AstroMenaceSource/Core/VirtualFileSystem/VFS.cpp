@@ -598,10 +598,17 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	// если передали ноль - проверка не нужна
 	if (BuildNumber != 0)
 	{
-		if (BuildNumber != vfsBuildNumber)
+		if (vfsBuildNumber == 0)
 		{
-			printf("VFS file has wrong build number (%i), you need VFS with build number %i\n", vfsBuildNumber, BuildNumber);
-			goto vw_OpenVFS_Error;
+			printf("VFS file build number was not set (0).\n");
+		}
+		else
+		{
+			if (BuildNumber != vfsBuildNumber)
+			{
+				printf("VFS file has wrong build number (%i), you need VFS with build number %i\n", vfsBuildNumber, BuildNumber);
+				goto vw_OpenVFS_Error;
+			}
 		}
 	}
 
