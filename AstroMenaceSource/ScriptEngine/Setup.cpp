@@ -226,7 +226,7 @@ void SaveXMLSetupFile()
 	root = new TiXmlElement("AstroMenaceSettings");
 	doc.LinkEndChild( root );
 
-	AddComment(root, " AstroMenace game Settings");
+	AddComment(root, " AstroMenace game Settings ");
 
 
 
