@@ -133,7 +133,7 @@ sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 #define TEXTURE_NO_MIPMAP	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE
 
 // сколько нужно загружать в листе меню
-const int	MenuLoadListCount = 186;
+const int	MenuLoadListCount = 185;
 // лист загрузки меню
 LoadList	MenuLoadList[MenuLoadListCount] =
 {
@@ -161,7 +161,6 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/CREDITS/codeblocks.tga",			0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/CREDITS/gnugcc.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/CREDITS/gentoo.tga",				0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/CREDITS/tinyxml.tga",			0, 32, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/CREDITS/freetype.tga",			0, 16, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/CREDITS/oggvorbis.tga",			0, 32, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/CREDITS/gimp.tga",				0, 32, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
@@ -1179,105 +1178,92 @@ void LoadGameData(int LoadType)
 				exit(0);
 			}
 
-			TiXmlDocument	xmlDoc;
-			TiXmlElement	*xmlElem = 0;
-			TiXmlElement	*xmlAstroMenaceScript = 0;
+			cXMLDocument *xmlDoc = new cXMLDocument;
 
 
 			// читаем данные
-			eFILE *TempF = vw_fopen(FileName);
-			char * buffer = 0;
-
-			if (TempF == NULL)
+			if (!xmlDoc->Load(FileName))
 			{
 				fprintf(stderr, "Can't find script file or file corrupted: %s\n", FileName);
-				xmlDoc.Clear();
+				delete xmlDoc;
 				exit(0);
 			}
 
-			TempF->fseek(0, SEEK_END);
-			int DataLength = TempF->ftell();
-			TempF->fseek(0, SEEK_SET);
-			buffer = new char[DataLength];
-			TempF->fread(buffer, DataLength, 1);
-			vw_fclose(TempF);
-			xmlDoc.Parse((const char*)buffer, 0, TIXML_ENCODING_UTF8);
-
-
-			// берем первый элемент в скрипте
-			xmlAstroMenaceScript = xmlDoc.FirstChildElement("AstroMenaceScript");
-			if (xmlAstroMenaceScript != 0)
-			{
-				xmlElem = xmlAstroMenaceScript->FirstChildElement();
-			}
-			else
+			// проверяем корневой элемент
+			if (strcmp("AstroMenaceScript", xmlDoc->RootXMLEntry->Name))
 			{
 				fprintf(stderr, "Can't find AstroMenaceScript element in the: %s\n", FileName);
-				xmlDoc.Clear();
-				if (buffer != 0) delete [] buffer;
+				delete xmlDoc;
 				exit(0);
 			}
 
 			// переходим на загрузку
-			xmlAstroMenaceScript = xmlAstroMenaceScript->FirstChildElement("Load");
-			if (xmlAstroMenaceScript != 0)
-			{
-				xmlElem = xmlAstroMenaceScript->FirstChildElement();
-			}
-			else
+			cXMLEntry *xmlEntry = xmlDoc->FindFirstChildEntryByName(xmlDoc->RootXMLEntry, "Load");
+			if (xmlEntry == 0)
 			{
 				fprintf(stderr, "Can't find Load element in the: %s\n", FileName);
-				xmlDoc.Clear();
-				if (buffer != 0) delete [] buffer;
+				delete xmlDoc;
 				exit(0);
 			}
 
-			while (xmlElem)
+			xmlEntry = xmlEntry->FirstChild;
+			if (xmlEntry == 0)
 			{
-				if (!strcmp(xmlElem->Value(), "StarSystem1")) StarSystem1 = true;
-				if (!strcmp(xmlElem->Value(), "StarSystem2")) StarSystem2 = true;
-				if (!strcmp(xmlElem->Value(), "Planet")) Planet = true;
-				if (!strcmp(xmlElem->Value(), "Asteroid")) Asteroid = true;
-				if (!strcmp(xmlElem->Value(), "AlienFighter")) AlienFighter = true;
-				if (!strcmp(xmlElem->Value(), "BasePart")) BasePart = true;
-				if (!strcmp(xmlElem->Value(), "AlienMotherShip")) AlienMotherShip = true;
-				if (!strcmp(xmlElem->Value(), "Building")) Building = true;
-				if (!strcmp(xmlElem->Value(), "Pirate")) Pirate = true;
+				fprintf(stderr, "Can't find Load element in the: %s\n", FileName);
+				delete xmlDoc;
+				exit(0);
+			}
 
+			// установка прозрачности слоев
+			StarsTileStartTransparentLayer1 = 0.2f;
+			StarsTileEndTransparentLayer1 = 0.7f;
+			StarsTileStartTransparentLayer2 = 0.9f;
+			StarsTileEndTransparentLayer2 = 0.7f;
 
-				// загружаем данные по AI
-				if (!strcmp(xmlElem->Value(), "AIFile"))
+			while (xmlEntry)
+			{
+				if (!strcmp(xmlEntry->Name, "StarSystem1")) StarSystem1 = true;
+				else
+				if (!strcmp(xmlEntry->Name, "StarSystem2")) StarSystem2 = true;
+				else
+				if (!strcmp(xmlEntry->Name, "Planet")) Planet = true;
+				else
+				if (!strcmp(xmlEntry->Name, "Asteroid")) Asteroid = true;
+				else
+				if (!strcmp(xmlEntry->Name, "AlienFighter")) AlienFighter = true;
+				else
+				if (!strcmp(xmlEntry->Name, "BasePart")) BasePart = true;
+				else
+				if (!strcmp(xmlEntry->Name, "AlienMotherShip")) AlienMotherShip = true;
+				else
+				if (!strcmp(xmlEntry->Name, "Building")) Building = true;
+				else
+				if (!strcmp(xmlEntry->Name, "Pirate")) Pirate = true;
+				else
+				if (!strcmp(xmlEntry->Name, "AIFile")) // загружаем данные по AI
 				{
-					if (strlen(xmlElem->GetText()) > 0)
-						InitGameAI(xmlElem->GetText()); // "DATA/SCRIPT/aimode.xml"
+					if (strlen(xmlEntry->Content) > 0)
+						InitGameAI(xmlEntry->Content); // "DATA/SCRIPT/aimode.xml"
 				}
-
-
-
-				// установка прозрачности слоев
-				StarsTileStartTransparentLayer1 = 0.2f;
-				StarsTileEndTransparentLayer1 = 0.7f;
-				StarsTileStartTransparentLayer2 = 0.9f;
-				StarsTileEndTransparentLayer2 = 0.7f;
-				if (!strcmp(xmlElem->Value(), "LayersTransp"))
+				else
+				if (!strcmp(xmlEntry->Name, "LayersTransp"))
 				{
-					if (xmlElem->Attribute("FirstStart"))
-							StarsTileStartTransparentLayer1 = (float)atof(xmlElem->Attribute("FirstStart"));
-					if (xmlElem->Attribute("FirstEnd"))
-							StarsTileEndTransparentLayer1 = (float)atof(xmlElem->Attribute("FirstEnd"));
-					if (xmlElem->Attribute("SecondStart"))
-							StarsTileStartTransparentLayer2 = (float)atof(xmlElem->Attribute("SecondStart"));
-					if (xmlElem->Attribute("SecondEnd"))
-							StarsTileEndTransparentLayer2 = (float)atof(xmlElem->Attribute("SecondEnd"));
+					if (xmlDoc->GetEntryAttribute(xmlEntry, "FirstStart") != 0)
+							StarsTileStartTransparentLayer1 = xmlDoc->fGetEntryAttribute(xmlEntry, "FirstStart");
+					if (xmlDoc->GetEntryAttribute(xmlEntry, "FirstEnd") != 0)
+							StarsTileEndTransparentLayer1 = xmlDoc->fGetEntryAttribute(xmlEntry, "FirstEnd");
+					if (xmlDoc->GetEntryAttribute(xmlEntry, "SecondStart") != 0)
+							StarsTileStartTransparentLayer2 = xmlDoc->fGetEntryAttribute(xmlEntry, "SecondStart");
+					if (xmlDoc->GetEntryAttribute(xmlEntry, "SecondEnd") != 0)
+							StarsTileStartTransparentLayer2 = xmlDoc->fGetEntryAttribute(xmlEntry, "SecondEnd");
 				}
 
 				// берем следующий элемент по порядку
-				xmlElem = xmlElem->NextSiblingElement();
+				xmlEntry = xmlEntry->Next;
 			}
 
 			// чистим память, со скриптом работать больше не надо
-			xmlDoc.Clear();
-			if (buffer != 0) delete [] buffer;
+			delete xmlDoc;
 
 
 			// считаем сколько там элементов

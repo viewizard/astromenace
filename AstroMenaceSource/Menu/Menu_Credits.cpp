@@ -45,7 +45,7 @@ void CreditsMenu()
 	LastCreditsCurrentPosUpdateTime = vw_GetTime();
 
 	// зацикливание
-	if (CreditsCurrentPos <= -3410) CreditsCurrentPos = 0.0f;
+	if (CreditsCurrentPos <= -3340) CreditsCurrentPos = 0.0f;
 
 
 
@@ -436,25 +436,6 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://www.openal.org");
-
-
-	// TinyXML
-	Y1 += Offset1+20;
-	Y2 += Offset1+20;
-	SetRect(&SrcRest,0,0,128,64);
-	SetRect(&DstRest,LogoX,Y2,LogoX+128,Y2+64);
-	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
-	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/CREDITS/tinyxml.tga"), true, ttt*MenuContentTransp);
-
-	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
-	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "TinyXml C++ XML parser");
-	Y1 += Offset1;
-	Y2 += Offset1;
-	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
-	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://tinyxml.sourceforge.net");
 
 
 

@@ -114,12 +114,6 @@
 		<Unit filename="AstroMenaceSource/Core/Model3D/Model3D.h" />
 		<Unit filename="AstroMenaceSource/Core/Model3D/Model3DManager.cpp" />
 		<Unit filename="AstroMenaceSource/Core/Model3D/VW3D.cpp" />
-		<Unit filename="AstroMenaceSource/Core/Parser/TinyXML/tinystr.cpp" />
-		<Unit filename="AstroMenaceSource/Core/Parser/TinyXML/tinystr.h" />
-		<Unit filename="AstroMenaceSource/Core/Parser/TinyXML/tinyxml.cpp" />
-		<Unit filename="AstroMenaceSource/Core/Parser/TinyXML/tinyxml.h" />
-		<Unit filename="AstroMenaceSource/Core/Parser/TinyXML/tinyxmlerror.cpp" />
-		<Unit filename="AstroMenaceSource/Core/Parser/TinyXML/tinyxmlparser.cpp" />
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem/Particle.cpp" />
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem/Particle.h" />
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem/ParticleSystem.cpp" />
@@ -169,6 +163,8 @@
 		<Unit filename="AstroMenaceSource/Core/VirtualFileSystem/RLE.cpp" />
 		<Unit filename="AstroMenaceSource/Core/VirtualFileSystem/VFS.cpp" />
 		<Unit filename="AstroMenaceSource/Core/VirtualFileSystem/VFS.h" />
+		<Unit filename="AstroMenaceSource/Core/XML/XML.cpp" />
+		<Unit filename="AstroMenaceSource/Core/XML/XML.h" />
 		<Unit filename="AstroMenaceSource/Game.h" />
 		<Unit filename="AstroMenaceSource/Game/Game.cpp" />
 		<Unit filename="AstroMenaceSource/Game/Game_Camera.cpp" />

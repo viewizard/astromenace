@@ -60,13 +60,9 @@ public:
 	float	TimeOpLag;
 
 	// основной документ
-	TiXmlDocument	xmlDoc;
-	// буфер с текстом нашего хмл
-	char 			*xmlDocBuffer;
-	// основной элемент
-	TiXmlElement	*xmlAstroMenaceScript;
+	cXMLDocument	*xmlDoc;
 	// текущий элемент
-	TiXmlElement	*xmlElem;
+	cXMLEntry		*xmlEntry;
 
 	// включен отладочный режим или нет... по умолчанию выключен
 	bool	ShowDebugModeLine;

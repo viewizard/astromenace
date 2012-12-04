@@ -46,12 +46,7 @@
 #include "Sound/Sound.h"
 #include "Camera/Camera.h"
 #include "Model3D/Model3D.h"
-
-#ifdef buildin_tynixml
-	#include "Parser/TinyXML/tinyxml.h"
-#else
-	#include "tinyxml.h"
-#endif // buildin_tynixml
+#include "XML/XML.h"
 
 
 #endif // Core_H

@@ -159,173 +159,109 @@ void InitSetup()
 //-----------------------------------------------------------------------------
 // записываем файл с настройками
 //-----------------------------------------------------------------------------
-void iAddLine(TiXmlElement * root, TiXmlElement * Element, const char *Name, const char *Attrib, int Data)
-{
-	char buffer[1024];
-	Element = root->FirstChildElement(Name);
-	if (Element == 0)
-	{
-		Element = new TiXmlElement(Name);
-		root->LinkEndChild(Element);
-	}
-	sprintf(buffer, "%i", Data);
-	Element->SetAttribute(Attrib, buffer);
-}
-void fAddLine(TiXmlElement * root, TiXmlElement * Element, const char *Name, const char *Attrib, float Data)
-{
-	char buffer[1024];
-	Element = root->FirstChildElement(Name);
-	if (Element == 0)
-	{
-		Element = new TiXmlElement(Name);
-		root->LinkEndChild(Element);
-	}
-	sprintf(buffer, "%f", Data);
-	Element->SetAttribute(Attrib, buffer);
-}
-void bAddLine(TiXmlElement * root, TiXmlElement * Element, const char *Name, const char *Attrib, bool Data)
-{
-	Element = root->FirstChildElement(Name);
-	if (Element == 0)
-	{
-		Element = new TiXmlElement(Name);
-		root->LinkEndChild(Element);
-	}
-	if (Data)
-		Element->SetAttribute(Attrib, "on");
-	else
-		Element->SetAttribute(Attrib, "off");
-}
-void sAddLine(TiXmlElement * root, TiXmlElement * Element, const char *Name, const char *Attrib, const char *Data)
-{
-	Element = root->FirstChildElement(Name);
-	if (Element == 0)
-	{
-		Element = new TiXmlElement(Name);
-		root->LinkEndChild(Element);
-	}
-	Element->SetAttribute(Attrib, Data);
-}
-void AddComment(TiXmlElement * root, const char *Comment)
-{
-	TiXmlComment *comment = new TiXmlComment();
-	comment->SetValue(Comment);
-	root->LinkEndChild(comment);
-}
 void SaveXMLSetupFile()
 {
-	TiXmlDocument doc;
-	TiXmlElement * root = 0;
-	TiXmlElement * setting = 0;
+	cXMLDocument *XMLdoc = new cXMLDocument;
+
+	cXMLEntry *RootXMLEntry = XMLdoc->AddEntry(0, "AstroMenaceSettings");
+
+	XMLdoc->AddComment(RootXMLEntry, " AstroMenace game Settings ");
 
 
 
-	TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
-	doc.LinkEndChild( decl );
-
-	root = new TiXmlElement("AstroMenaceSettings");
-	doc.LinkEndChild( root );
-
-	AddComment(root, " AstroMenace game Settings ");
-
-
-
-
-	iAddLine(root, setting, "GAME_BUILD", "value", GAME_BUILD);
-
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "GAME_BUILD"), "value", GAME_BUILD);
 	switch (Setup.MenuLanguage)
 	{
-		case 1: sAddLine(root, setting, "MenuLanguage", "value", "en"); break;
-		case 2: sAddLine(root, setting, "MenuLanguage", "value", "de"); break;
-		case 3: sAddLine(root, setting, "MenuLanguage", "value", "ru"); break;
+		case 1: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MenuLanguage"), "value", "en"); break;
+		case 2: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MenuLanguage"), "value", "de"); break;
+		case 3: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MenuLanguage"), "value", "ru"); break;
 	}
 	switch (Setup.VoiceLanguage)
 	{
-		case 1: sAddLine(root, setting, "VoiceLanguage", "value", "en"); break;
-		case 2: sAddLine(root, setting, "VoiceLanguage", "value", "de"); break;
-		case 3: sAddLine(root, setting, "VoiceLanguage", "value", "ru"); break;
+		case 1: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceLanguage"), "value", "en"); break;
+		case 2: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceLanguage"), "value", "de"); break;
+		case 3: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceLanguage"), "value", "ru"); break;
 	}
-	iAddLine(root, setting, "FontNumber", "value", Setup.FontNumber);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "FontNumber"), "value", Setup.FontNumber);
 
-	iAddLine(root, setting, "Width", "value", Setup.Width);
-	iAddLine(root, setting, "Height", "value", Setup.Height);
-	AddComment(root, " Windows (BPP = 0) or Full Screen (BPP = 16 or 32) ");
-	iAddLine(root, setting, "BPP", "value", Setup.BPP);
-	AddComment(root, " Aspect Ratio must be 4:3 or 16:10 ");
+
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "Width"), "value", Setup.Width);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "Height"), "value", Setup.Height);
+	XMLdoc->AddComment(RootXMLEntry, " Windows (BPP = 0) or Full Screen (BPP = 16 or 32) ");
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "BPP"), "value", Setup.BPP);
+	XMLdoc->AddComment(RootXMLEntry, " Aspect Ratio must be 4:3 or 16:10 ");
 	if (Setup.iAspectRatioWidth == 1024)
-		sAddLine(root, setting, "AspectRatio", "value", "4:3");
+		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "AspectRatio"), "value", "4:3");
 	else
-		sAddLine(root, setting, "AspectRatio", "value", "16:10");
-	iAddLine(root, setting, "CameraModeWithStandardAspectRatio", "value", Setup.CameraModeWithStandardAspectRatio);
+		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "AspectRatio"), "value", "16:10");
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value", Setup.CameraModeWithStandardAspectRatio);
+
+	XMLdoc->AddComment(RootXMLEntry, " Don't change this setting unless you know what you are doing ");
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VBOCoreMode"), "value", Setup.VBOCoreMode);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VAOCoreMode"), "value", Setup.VAOCoreMode);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "FBOCoreMode"), "value", Setup.FBOCoreMode);
+	XMLdoc->AddComment(RootXMLEntry, " If your video card have 128+ MB VRAM on board - turn it on ");
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "EqualOrMore128MBVideoRAM"), "value", Setup.EqualOrMore128MBVideoRAM);
+	XMLdoc->AddComment(RootXMLEntry, " Don't change this setting unless you know what you are doing ");
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "HardwareMipMapGeneration"), "value", Setup.HardwareMipMapGeneration);
 
 
-	AddComment(root, " Don't change this setting unless you know what you are doing ");
-	iAddLine(root, setting, "VBOCoreMode", "value", Setup.VBOCoreMode);
-	iAddLine(root, setting, "VAOCoreMode", "value", Setup.VAOCoreMode);
-	iAddLine(root, setting, "FBOCoreMode", "value", Setup.FBOCoreMode);
-	AddComment(root, " If your video card have 128+ MB VRAM on board - turn it on ");
-	bAddLine(root, setting, "EqualOrMore128MBVideoRAM", "value", Setup.EqualOrMore128MBVideoRAM);
-	AddComment(root, " Don't change this setting unless you know what you are doing ");
-	bAddLine(root, setting, "HardwareMipMapGeneration", "value", Setup.HardwareMipMapGeneration);
+	XMLdoc->AddComment(RootXMLEntry, " Common settings ");
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "TextureFilteringMode"), "value", Setup.TextureFilteringMode);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "TexturesQuality"), "value", Setup.TexturesQuality);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MSAA"), "value", Setup.MSAA);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "CSAA"), "value", Setup.CSAA);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VisualEffectsQuality"), "value", Setup.VisualEffectsQuality);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "AnisotropyLevel"), "value", Setup.AnisotropyLevel);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "TexturesCompression"), "value", Setup.TexturesCompression);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "UseGLSL"), "value", Setup.UseGLSL);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "ShadowMap"), "value", Setup.ShadowMap);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MaxPointLights"), "value", Setup.MaxPointLights);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MusicSw"), "value", Setup.MusicSw);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "SoundSw"), "value", Setup.SoundSw);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceSw"), "value", Setup.VoiceSw);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VSync"), "value", Setup.VSync);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "Gamma"), "value", Setup.Gamma);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "ShowFPS"), "value", Setup.ShowFPS);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "GameWeaponInfoType"), "value", Setup.GameWeaponInfoType);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "GameSpeed"), "value", Setup.GameSpeed);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "LoadingHint"), "value", Setup.LoadingHint);
 
 
-	AddComment(root, " Common settings ");
-	iAddLine(root, setting, "TextureFilteringMode", "value", Setup.TextureFilteringMode);
-	iAddLine(root, setting, "TexturesQuality", "value", Setup.TexturesQuality);
-	iAddLine(root, setting, "MSAA", "value", Setup.MSAA);
-	iAddLine(root, setting, "CSAA", "value", Setup.CSAA);
-	iAddLine(root, setting, "VisualEffectsQuality", "value", Setup.VisualEffectsQuality);
-	iAddLine(root, setting, "AnisotropyLevel", "value", Setup.AnisotropyLevel);
-	iAddLine(root, setting, "TexturesCompression", "value", Setup.TexturesCompression);
-	bAddLine(root, setting, "UseGLSL", "value", Setup.UseGLSL);
-	iAddLine(root, setting, "ShadowMap", "value", Setup.ShadowMap);
-	iAddLine(root, setting, "MaxPointLights", "value", Setup.MaxPointLights);
-	iAddLine(root, setting, "MusicSw", "value", Setup.MusicSw);
-	iAddLine(root, setting, "SoundSw", "value", Setup.SoundSw);
-	iAddLine(root, setting, "VoiceSw", "value", Setup.VoiceSw);
-	iAddLine(root, setting, "VSync", "value", Setup.VSync);
-	iAddLine(root, setting, "Gamma", "value", Setup.Gamma);
-	bAddLine(root, setting, "ShowFPS", "value", Setup.ShowFPS);
-	iAddLine(root, setting, "GameWeaponInfoType", "value", Setup.GameWeaponInfoType);
-	fAddLine(root, setting, "GameSpeed", "value", Setup.GameSpeed);
-	iAddLine(root, setting, "LoadingHint", "value", Setup.LoadingHint);
+	XMLdoc->AddComment(RootXMLEntry, " Control settings ");
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "KeyboardDecreaseGameSpeed"), "value", vw_KeyboardCodeName(Setup.KeyboardDecreaseGameSpeed));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "KeyboardResetGameSpeed"), "value", vw_KeyboardCodeName(Setup.KeyboardResetGameSpeed));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "KeyboardIncreaseGameSpeed"), "value", vw_KeyboardCodeName(Setup.KeyboardIncreaseGameSpeed));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "KeyboardGameWeaponInfoType"), "value", vw_KeyboardCodeName(Setup.KeyboardGameWeaponInfoType));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "KeyboardPrimaryWeaponFireMode"), "value", vw_KeyboardCodeName(Setup.KeyboardPrimaryWeaponFireMode));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "KeyboardSecondaryWeaponFireMode"), "value", vw_KeyboardCodeName(Setup.KeyboardSecondaryWeaponFireMode));
 
-
-	AddComment(root, " Control settings ");
-	sAddLine(root, setting, "KeyboardDecreaseGameSpeed", "value", vw_KeyboardCodeName(Setup.KeyboardDecreaseGameSpeed));
-	sAddLine(root, setting, "KeyboardResetGameSpeed", "value", vw_KeyboardCodeName(Setup.KeyboardResetGameSpeed));
-	sAddLine(root, setting, "KeyboardResetGameSpeed", "value", vw_KeyboardCodeName(Setup.KeyboardResetGameSpeed));
-	sAddLine(root, setting, "KeyboardIncreaseGameSpeed", "value", vw_KeyboardCodeName(Setup.KeyboardIncreaseGameSpeed));
-	sAddLine(root, setting, "KeyboardGameWeaponInfoType", "value", vw_KeyboardCodeName(Setup.KeyboardGameWeaponInfoType));
-	sAddLine(root, setting, "KeyboardPrimaryWeaponFireMode", "value", vw_KeyboardCodeName(Setup.KeyboardPrimaryWeaponFireMode));
-	sAddLine(root, setting, "KeyboardSecondaryWeaponFireMode", "value", vw_KeyboardCodeName(Setup.KeyboardSecondaryWeaponFireMode));
-
-	sAddLine(root, setting, "KeyBoardLeft", "value", vw_KeyboardCodeName(Setup.KeyBoardLeft));
-	sAddLine(root, setting, "KeyBoardRight", "value", vw_KeyboardCodeName(Setup.KeyBoardRight));
-	sAddLine(root, setting, "KeyBoardUp", "value", vw_KeyboardCodeName(Setup.KeyBoardUp));
-	sAddLine(root, setting, "KeyBoardDown", "value", vw_KeyboardCodeName(Setup.KeyBoardDown));
-	sAddLine(root, setting, "KeyBoardPrimary", "value", vw_KeyboardCodeName(Setup.KeyBoardPrimary));
-	sAddLine(root, setting, "KeyBoardSecondary", "value", vw_KeyboardCodeName(Setup.KeyBoardSecondary));
-	iAddLine(root, setting, "MousePrimary", "value", Setup.MousePrimary);
-	iAddLine(root, setting, "MouseSecondary", "value", Setup.MouseSecondary);
-	iAddLine(root, setting, "JoystickPrimary", "value", Setup.JoystickPrimary);
-	iAddLine(root, setting, "JoystickSecondary", "value", Setup.JoystickSecondary);
-	iAddLine(root, setting, "JoystickNum", "value", Setup.JoystickNum);
-	iAddLine(root, setting, "ControlSensivity", "value", Setup.ControlSensivity);
-	bAddLine(root, setting, "MouseControl", "value", Setup.MouseControl);
-	iAddLine(root, setting, "LastProfile", "value", Setup.LastProfile);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "KeyBoardLeft"), "value", vw_KeyboardCodeName(Setup.KeyBoardLeft));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "KeyBoardRight"), "value", vw_KeyboardCodeName(Setup.KeyBoardRight));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "KeyBoardUp"), "value", vw_KeyboardCodeName(Setup.KeyBoardUp));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "KeyBoardDown"), "value", vw_KeyboardCodeName(Setup.KeyBoardDown));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "KeyBoardPrimary"), "value", vw_KeyboardCodeName(Setup.KeyBoardPrimary));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "KeyBoardSecondary"), "value", vw_KeyboardCodeName(Setup.KeyBoardSecondary));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MousePrimary"), "value", Setup.MousePrimary);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MouseSecondary"), "value", Setup.MouseSecondary);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "JoystickPrimary"), "value", Setup.JoystickPrimary);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "JoystickSecondary"), "value", Setup.JoystickSecondary);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "JoystickNum"), "value", Setup.JoystickNum);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "ControlSensivity"), "value", Setup.ControlSensivity);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MouseControl"), "value", Setup.MouseControl);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "LastProfile"), "value", Setup.LastProfile);
 
 	for(int i=0; i<10; i++)
 	{
 		char Name[128];
 		sprintf(Name, "HintStatus%i", i+1);
-		bAddLine(root, setting, Name, "value", Setup.NeedShowHint[i]);
+		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, Name), "value", Setup.NeedShowHint[i]);
 	}
 
 
 
 	//
-	// всегда последние, всегда переписываем их
+	// всегда последние
 	//
 
 
@@ -381,13 +317,7 @@ void SaveXMLSetupFile()
 		TopScoresResultString[k] = 0;
 	}
 
-	// если он уже есть - его надо удалить
-	setting = root->FirstChildElement("TopScores");
-	if (setting != 0) root->RemoveChild(setting);
-	// пересоздаем
-	setting = new TiXmlElement("TopScores");
-	setting->LinkEndChild(new TiXmlText(TopScoresResultString));
-	root->LinkEndChild(setting);
+	XMLdoc->AddEntryContent(XMLdoc->AddEntry(RootXMLEntry, "TopScores"), TopScoresResultString);
 
 	if (TopScoresResultString != 0) delete [] TopScoresResultString;
 	if (TopScoresData != 0) delete [] TopScoresData;
@@ -450,14 +380,7 @@ void SaveXMLSetupFile()
 		}
 		ResultString[k] = 0;
 
-
-		// если он уже есть - его надо удалить
-		setting = root->FirstChildElement("PilotsProfiles");
-		if (setting != 0) root->RemoveChild(setting);
-		// переписываем все (пересоздаем)
-		setting = new TiXmlElement("PilotsProfiles");
-		setting->LinkEndChild(new TiXmlText(ResultString));
-		root->LinkEndChild(setting);
+		XMLdoc->AddEntryContent(XMLdoc->AddEntry(RootXMLEntry, "PilotsProfiles"), ResultString);
 
 		if (ResultString != 0) delete [] ResultString;
 		if (ProfileData != 0) delete [] ProfileData;
@@ -466,24 +389,9 @@ void SaveXMLSetupFile()
 
 
 
-	// сохраняем что получилось
-	TiXmlPrinter printer;
-	printer.SetLineBreak("\r\n"); // ставим перевод строки, чтобы в виндовсе было нормальное форматирование
-	doc.Accept( &printer );
 
-	SDL_RWops *TempRWops = SDL_RWFromFile(DatFileName, "w");
-
-	if (TempRWops == NULL)
-	{
-		fprintf(stderr, "Can't save file %s\n", DatFileName);
-	}
-	else
-	{
-		SDL_RWwrite(TempRWops, printer.CStr(), strlen(printer.CStr()), 1);
-	}
-
-	doc.Clear();
-	SDL_RWclose(TempRWops);
+	XMLdoc->Save(DatFileName);
+	delete XMLdoc;
 }
 
 
@@ -501,84 +409,35 @@ void SaveXMLSetupFile()
 //-----------------------------------------------------------------------------
 // считываем файл с настройками
 //-----------------------------------------------------------------------------
-void iGetLine(TiXmlElement * root, TiXmlElement * Element, const char *Name, const char *Attrib, int *Data)
-{
-	Element = root->FirstChildElement(Name);
-	if (Element != 0)
-	{
-		*Data = atoi(Element->Attribute(Attrib));
-	}
-}
-void fGetLine(TiXmlElement * root, TiXmlElement * Element, const char *Name, const char *Attrib, float *Data)
-{
-	Element = root->FirstChildElement(Name);
-	if (Element != 0)
-	{
-		*Data = (float)atof(Element->Attribute(Attrib));
-	}
-}
-void bGetLine(TiXmlElement * root, TiXmlElement * Element, const char *Name, const char *Attrib, bool *Data)
-{
-	Element = root->FirstChildElement(Name);
-	if (Element != 0)
-	{
-		if (!strcmp(Element->Attribute(Attrib), "off")){*Data = false;}
-		else
-			if (!strcmp(Element->Attribute(Attrib), "on")){*Data = true;}
-	}
-}
-void sGetLine(TiXmlElement * root, TiXmlElement * Element, const char *Name, const char *Attrib, char *Data)
-{
-	Element = root->FirstChildElement(Name);
-	if (Element != 0)
-	{
-		strcpy(Data, Element->Attribute(Attrib));
-	}
-}
 bool LoadXMLSetupFile(bool NeedSafeMode)
 {
-	TiXmlDocument doc;
-	TiXmlElement * root = 0;
-	TiXmlElement * setting = 0;
+	cXMLDocument *XMLdoc = new cXMLDocument;
 
 	// устанавливаем базовые настройки
 	InitSetup();
 
 
 	// читаем данные
-	SDL_RWops *TempRWops = SDL_RWFromFile(DatFileName, "r");
-	char * buffer = 0;
-
-	if (TempRWops == NULL)
+	if (!XMLdoc->Load(DatFileName))
 	{
+		delete XMLdoc;
 		SaveXMLSetupFile();
 		return true;
 	}
-	else
-	{
-		SDL_RWseek(TempRWops, 0, SEEK_END);
-		int DataLength = SDL_RWtell(TempRWops);
-		SDL_RWseek(TempRWops, 0, SEEK_SET);
-		buffer = new char[DataLength];
-		SDL_RWread(TempRWops, buffer, DataLength, 1);
-		SDL_RWclose(TempRWops);
 
-		doc.Parse((const char*)buffer, 0, TIXML_ENCODING_UTF8);
-	}
 
 
 	// берем первый элемент в скрипте
-	root = doc.FirstChildElement("AstroMenaceSettings");
+	cXMLEntry *RootXMLEntry = XMLdoc->RootXMLEntry;
+
 
 
 	// дополнительная проверка на содержимое конфигурационного файла
-	if (root == 0)
+	if (strcmp("AstroMenaceSettings", XMLdoc->RootXMLEntry->Name))
 	{
 		fprintf(stderr, "Game configuration file corrupted: %s\n", DatFileName);
-
 		// файл поврежден, надо завершить работу с ним
-		doc.Clear();
-		if (buffer != 0) delete [] buffer;
+		delete XMLdoc;
 		// сохранить дефолтные настройки, перезаписав файл
 		SaveXMLSetupFile();
 		// и сказать игре что это "первый запуск"
@@ -591,29 +450,22 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	// если установлен NeedSafeMode, не грузим часть данных
 	if (NeedSafeMode) goto LoadProfiles;
 
+	if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), "en")) Setup.MenuLanguage = 1;
+	if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), "de")) Setup.MenuLanguage = 2;
+	if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), "ru")) Setup.MenuLanguage = 3;
 
-	char MenuLanguageBuffer[16];
-	sGetLine(root, setting, "MenuLanguage", "value", MenuLanguageBuffer);
-	if (!strcmp(MenuLanguageBuffer, "en")) Setup.MenuLanguage = 1;
-	if (!strcmp(MenuLanguageBuffer, "de")) Setup.MenuLanguage = 2;
-	if (!strcmp(MenuLanguageBuffer, "ru")) Setup.MenuLanguage = 3;
+	if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), "en")) Setup.VoiceLanguage = 1;
+	if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), "de")) Setup.VoiceLanguage = 2;
+	if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), "ru")) Setup.VoiceLanguage = 3;
 
-	char VoiceLanguageBuffer[16];
-	sGetLine(root, setting, "VoiceLanguage", "value", VoiceLanguageBuffer);
-	if (!strcmp(VoiceLanguageBuffer, "en")) Setup.VoiceLanguage = 1;
-	if (!strcmp(VoiceLanguageBuffer, "de")) Setup.VoiceLanguage = 2;
-	if (!strcmp(VoiceLanguageBuffer, "ru")) Setup.VoiceLanguage = 3;
+	Setup.FontNumber = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber"), "value");
 
-	iGetLine(root, setting, "FontNumber", "value", &(Setup.FontNumber));
-
-	iGetLine(root, setting, "Width", "value", &(Setup.Width));
-	iGetLine(root, setting, "Height", "value", &Setup.Height);
-	iGetLine(root, setting, "BPP", "value", &Setup.BPP);
+	Setup.Width = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Width"), "value");
+	Setup.Height = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Height"), "value");
+	Setup.BPP = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "BPP"), "value");
 
 
-	char AspectRatioBuffer[16];
-	sGetLine(root, setting, "AspectRatio", "value", AspectRatioBuffer);
-	if (!strcmp(AspectRatioBuffer, "16:10"))
+	if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio"), "value"), "16:10"))
 	{
 		Setup.fAspectRatioWidth = 1228.0f;
 		Setup.fAspectRatioHeight = 768.0f;
@@ -628,83 +480,68 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		Setup.iAspectRatioHeight = 768;
 	}
 
-	iGetLine(root, setting, "CameraModeWithStandardAspectRatio", "value", &Setup.CameraModeWithStandardAspectRatio);
+	Setup.CameraModeWithStandardAspectRatio = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value");
 
 
-	iGetLine(root, setting, "VBOCoreMode", "value", &Setup.VBOCoreMode);
-	iGetLine(root, setting, "VAOCoreMode", "value", &Setup.VAOCoreMode);
-	iGetLine(root, setting, "FBOCoreMode", "value", &Setup.FBOCoreMode);
-	bGetLine(root, setting, "EqualOrMore128MBVideoRAM", "value", &Setup.EqualOrMore128MBVideoRAM);
-	bGetLine(root, setting, "HardwareMipMapGeneration", "value", &Setup.HardwareMipMapGeneration);
+	Setup.VBOCoreMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VBOCoreMode"), "value");
+	Setup.VAOCoreMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VAOCoreMode"), "value");
+	Setup.FBOCoreMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FBOCoreMode"), "value");
+	Setup.EqualOrMore128MBVideoRAM = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "EqualOrMore128MBVideoRAM"), "value");
+	Setup.HardwareMipMapGeneration = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "HardwareMipMapGeneration"), "value");
 
-	iGetLine(root, setting, "TextureFilteringMode", "value", &Setup.TextureFilteringMode);
-	iGetLine(root, setting, "TexturesQuality", "value", &Setup.TexturesQuality);
-	iGetLine(root, setting, "MSAA", "value", &Setup.MSAA);
-	iGetLine(root, setting, "CSAA", "value", &Setup.CSAA);
-	iGetLine(root, setting, "VisualEffectsQuality", "value", &Setup.VisualEffectsQuality);
-	iGetLine(root, setting, "AnisotropyLevel", "value", &Setup.AnisotropyLevel);
-	iGetLine(root, setting, "TexturesCompression", "value", &Setup.TexturesCompression);
-	bGetLine(root, setting, "UseGLSL", "value", &Setup.UseGLSL);
-	iGetLine(root, setting, "ShadowMap", "value", &Setup.ShadowMap);
-	iGetLine(root, setting, "MaxPointLights", "value", &Setup.MaxPointLights);
-	iGetLine(root, setting, "MusicSw", "value", &Setup.MusicSw);
-	iGetLine(root, setting, "SoundSw", "value", &Setup.SoundSw);
-	iGetLine(root, setting, "VoiceSw", "value", &Setup.VoiceSw);
-	iGetLine(root, setting, "VSync", "value", &Setup.VSync);
-	iGetLine(root, setting, "Gamma", "value", &Setup.Gamma);
-	bGetLine(root, setting, "ShowFPS", "value", &Setup.ShowFPS);
-	iGetLine(root, setting, "GameWeaponInfoType", "value", &Setup.GameWeaponInfoType);
-	fGetLine(root, setting, "GameSpeed", "value", &Setup.GameSpeed);
-	iGetLine(root, setting, "LoadingHint", "value", &Setup.LoadingHint);
-
-
+	Setup.TextureFilteringMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode"), "value");
+	Setup.TexturesQuality = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesQuality"), "value");
+	Setup.MSAA = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MSAA"), "value");
+	Setup.CSAA = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CSAA"), "value");
+	Setup.VisualEffectsQuality = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VisualEffectsQuality"), "value");
+	Setup.AnisotropyLevel = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AnisotropyLevel"), "value");
+	Setup.TexturesCompression = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompression"), "value");
+	Setup.UseGLSL = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL"), "value");
+	Setup.ShadowMap = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap"), "value");
+	Setup.MaxPointLights = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MaxPointLights"), "value");
+	Setup.MusicSw = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MusicSw"), "value");
+	Setup.SoundSw = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "SoundSw"), "value");
+	Setup.VoiceSw = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceSw"), "value");
+	Setup.VSync = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VSync"), "value");
+	Setup.Gamma = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Gamma"), "value");
+	Setup.ShowFPS = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS"), "value");
+	Setup.GameWeaponInfoType = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType"), "value");
+	Setup.GameSpeed = XMLdoc->fGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed"), "value");
+	Setup.LoadingHint = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LoadingHint"), "value");
 
 
-	char KeyName[64];
-	sGetLine(root, setting, "KeyboardDecreaseGameSpeed", "value", KeyName);
-	Setup.KeyboardDecreaseGameSpeed = vw_KeyboardNameCode(KeyName);
-	sGetLine(root, setting, "KeyboardResetGameSpeed", "value", KeyName);
-	Setup.KeyboardResetGameSpeed = vw_KeyboardNameCode(KeyName);
-	sGetLine(root, setting, "KeyboardResetGameSpeed", "value", KeyName);
-	Setup.KeyboardResetGameSpeed = vw_KeyboardNameCode(KeyName);
-	sGetLine(root, setting, "KeyboardIncreaseGameSpeed", "value", KeyName);
-	Setup.KeyboardIncreaseGameSpeed = vw_KeyboardNameCode(KeyName);
-	sGetLine(root, setting, "KeyboardGameWeaponInfoType", "value", KeyName);
-	Setup.KeyboardGameWeaponInfoType = vw_KeyboardNameCode(KeyName);
-	sGetLine(root, setting, "KeyboardPrimaryWeaponFireMode", "value", KeyName);
-	Setup.KeyboardPrimaryWeaponFireMode = vw_KeyboardNameCode(KeyName);
-	sGetLine(root, setting, "KeyboardSecondaryWeaponFireMode", "value", KeyName);
-	Setup.KeyboardSecondaryWeaponFireMode = vw_KeyboardNameCode(KeyName);
 
 
-	sGetLine(root, setting, "KeyBoardLeft", "value", KeyName);
-	Setup.KeyBoardLeft = vw_KeyboardNameCode(KeyName);
-	sGetLine(root, setting, "KeyBoardRight", "value", KeyName);
-	Setup.KeyBoardRight = vw_KeyboardNameCode(KeyName);
-	sGetLine(root, setting, "KeyBoardUp", "value", KeyName);
-	Setup.KeyBoardUp = vw_KeyboardNameCode(KeyName);
-	sGetLine(root, setting, "KeyBoardDown", "value", KeyName);
-	Setup.KeyBoardDown = vw_KeyboardNameCode(KeyName);
-	sGetLine(root, setting, "KeyBoardPrimary", "value", KeyName);
-	Setup.KeyBoardPrimary = vw_KeyboardNameCode(KeyName);
-	sGetLine(root, setting, "KeyBoardSecondary", "value", KeyName);
-	Setup.KeyBoardSecondary = vw_KeyboardNameCode(KeyName);
+	Setup.KeyboardDecreaseGameSpeed = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardDecreaseGameSpeed"), "value"));
+	Setup.KeyboardResetGameSpeed = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardResetGameSpeed"), "value"));
+	Setup.KeyboardIncreaseGameSpeed = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardIncreaseGameSpeed"), "value"));
+	Setup.KeyboardGameWeaponInfoType = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardGameWeaponInfoType"), "value"));
+	Setup.KeyboardPrimaryWeaponFireMode = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardPrimaryWeaponFireMode"), "value"));
+	Setup.KeyboardSecondaryWeaponFireMode = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardSecondaryWeaponFireMode"), "value"));
 
-	iGetLine(root, setting, "MousePrimary", "value", &Setup.MousePrimary);
-	iGetLine(root, setting, "MouseSecondary", "value", &Setup.MouseSecondary);
-	iGetLine(root, setting, "JoystickPrimary", "value", &Setup.JoystickPrimary);
-	iGetLine(root, setting, "JoystickSecondary", "value", &Setup.JoystickSecondary);
-	iGetLine(root, setting, "JoystickNum", "value", &Setup.JoystickNum);
-	iGetLine(root, setting, "ControlSensivity", "value", &Setup.ControlSensivity);
-	bGetLine(root, setting, "MouseControl", "value", &Setup.MouseControl);
-	iGetLine(root, setting, "LastProfile", "value", &Setup.LastProfile);
+
+	Setup.KeyBoardLeft = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardLeft"), "value"));
+	Setup.KeyBoardRight = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardRight"), "value"));
+	Setup.KeyBoardUp = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardUp"), "value"));
+	Setup.KeyBoardDown = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardDown"), "value"));
+	Setup.KeyBoardPrimary = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardPrimary"), "value"));
+	Setup.KeyBoardSecondary = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary"), "value"));
+
+	Setup.MousePrimary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary"), "value");
+	Setup.MouseSecondary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseSecondary"), "value");
+	Setup.JoystickPrimary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickPrimary"), "value");
+	Setup.JoystickSecondary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickSecondary"), "value");
+	Setup.JoystickNum = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum"), "value");
+	Setup.ControlSensivity = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity"), "value");
+	Setup.MouseControl = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl"), "value");
+	Setup.LastProfile = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile"), "value");
 
 
 	for(int i=0; i<10; i++)
 	{
 		char Name[128];
 		sprintf(Name, "HintStatus%i", i+1);
-		bGetLine(root, setting, Name, "value", &Setup.NeedShowHint[i]);
+		Setup.NeedShowHint[i] = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, Name), "value");
 	}
 
 
@@ -714,16 +551,15 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	// заполняем таблицу рекордов
 	//
 
-	setting = root->FirstChildElement("TopScores");
-	if (setting != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "TopScores") != 0)
 	{
 
-		int TopScoresDataSize = strlen(setting->GetText());
+		int TopScoresDataSize = strlen(XMLdoc->FindEntryByName(RootXMLEntry, "TopScores")->Content);
 		unsigned char *TopScoresData = new unsigned char[TopScoresDataSize+1];
 		unsigned char *TopScoresDataXORCode = new unsigned char[TopScoresDataSize+1];
 		char *TopScoresResultString = new char[TopScoresDataSize+1];
 
-		strcpy(TopScoresResultString, setting->GetText());
+		strcpy(TopScoresResultString, XMLdoc->FindEntryByName(RootXMLEntry, "TopScores")->Content);
 
 		// первый цикл, восстанавливаем правильную последовательность, убираем все лишние элементы
 		int k=0;
@@ -779,16 +615,14 @@ LoadProfiles:
 	// загрузка профайлов пилотов
 	//
 
-
-	setting = root->FirstChildElement("PilotsProfiles");
-	if (setting != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "PilotsProfiles") != 0)
 	{
-		int ProfileDataSize = strlen(setting->GetText());
+		int ProfileDataSize = strlen(XMLdoc->FindEntryByName(RootXMLEntry, "PilotsProfiles")->Content);
 		unsigned char *ProfileData = new unsigned char[ProfileDataSize+1];
 		unsigned char *ProfileDataXORCode = new unsigned char[ProfileDataSize+1];
 		char *ResultString = new char[ProfileDataSize+1];
 
-		strcpy(ResultString, setting->GetText());
+		strcpy(ResultString, XMLdoc->FindEntryByName(RootXMLEntry, "PilotsProfiles")->Content);
 
 		// первый цикл, восстанавливаем правильную последовательность, убираем все лишние элементы
 		int k=0;
@@ -801,7 +635,7 @@ LoadProfiles:
 				k++;
 			}
 		}
-		// находим правильное значение, т.к. загружали использую длину строки (!!!)
+		// находим правильное значение, т.к. загружали используя длину строки (!!!)
 		ProfileDataSize = k/3;
 
 		// второй цикл, восстанавливаем последовательность структуры
@@ -858,8 +692,7 @@ LoadProfiles:
 	CurrentProfile = Setup.LastProfile;
 	if (CurrentProfile != -1) CurrentMission = Setup.Profile[Setup.LastProfile].LastMission;
 
-	doc.Clear();
-	if (buffer != 0) delete [] buffer;
+	delete XMLdoc;
 
 	return false;
 }
