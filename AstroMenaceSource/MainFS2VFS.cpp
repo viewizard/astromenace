@@ -29,7 +29,7 @@
 #include "Game.h"
 
 
-const int	ConvertListCount = 388;
+const int	ConvertListCount = 387;
 const char *ConvertList[ConvertListCount] =
 {"DATA_RU/VOICE/EngineMalfunction.wav",
 "DATA_RU/VOICE/WeaponDamaged.wav",
@@ -84,7 +84,6 @@ const char *ConvertList[ConvertListCount] =
 "CREDITS/sdl.tga",
 "CREDITS/opengl.tga",
 "CREDITS/gnugcc.tga",
-"CREDITS/tinyxml.tga",
 "CREDITS/codeblocks.tga",
 "CREDITS/openal.tga",
 "CREDITS/svn.tga",

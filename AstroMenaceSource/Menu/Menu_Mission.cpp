@@ -96,55 +96,36 @@ char *GetMissionFileName()
 void MissionsListInit()
 {
 	// по скрипту, смотрим что загружать + считаем сколько позиций
-	TiXmlDocument	xmlDoc;
-	TiXmlElement	*xmlElem = 0;
-	TiXmlElement	*xmlAstroMenaceScript = 0;
+	cXMLDocument *xmlDoc = new cXMLDocument;
 
 	// читаем данные
-	eFILE *TempF = vw_fopen("DATA/SCRIPT/list.xml");
-	char * buffer = 0;
-
-	if (TempF == NULL)
+	if (!xmlDoc->Load("DATA/SCRIPT/list.xml"))
 	{
 		fprintf(stderr, "Can't find script file: %s\n", "DATA/SCRIPT/list.xml");
-		xmlDoc.Clear();
+		delete xmlDoc;
 		return;
 	}
 
-	TempF->fseek(0, SEEK_END);
-	int DataLength = TempF->ftell();
-	TempF->fseek(0, SEEK_SET);
-	buffer = new char[DataLength];
-	TempF->fread(buffer, DataLength, 1);
-	vw_fclose(TempF);
-	xmlDoc.Parse((const char*)buffer, 0, TIXML_ENCODING_UTF8);
 
-
-	// берем первый элемент в скрипте
-	xmlAstroMenaceScript = xmlDoc.FirstChildElement("AstroMenaceMissionsList");
-	if (xmlAstroMenaceScript != 0)
-	{
-		xmlElem = xmlAstroMenaceScript->FirstChildElement();
-	}
-	else
+	// проверяем корневой элемент
+	if (strcmp("AstroMenaceMissionsList", xmlDoc->RootXMLEntry->Name))
 	{
 		fprintf(stderr, "Can't find AstroMenaceMissionsList element in the: %s\n", "DATA/SCRIPT/list.xml");
-		xmlDoc.Clear();
-		delete [] buffer; buffer = 0;
+		delete xmlDoc;
 		return;
 	}
 
 
 	AllMission = 0;
-	while (xmlElem)
+	cXMLEntry *xmlEntry = xmlDoc->RootXMLEntry->FirstChild;
+	while (xmlEntry)
 	{
 		// считаем, сколько миссий в файле
-		if (!strcmp(xmlElem->Value(), "Mission")) AllMission++;
+		if (!strcmp(xmlEntry->Name, "Mission")) AllMission++;
 
 		// берем следующий элемент по порядку
-		xmlElem = xmlElem->NextSiblingElement();
+		xmlEntry = xmlEntry->Next;
 	}
-
 
 	// резервируем память
 	MissionTitle = new char*[AllMission];
@@ -178,67 +159,22 @@ void MissionsListInit()
 
 
 	// второй проход, заполняем массивы
-	xmlElem = xmlAstroMenaceScript->FirstChildElement();
+	xmlEntry = xmlDoc->RootXMLEntry->FirstChild;
 	int i = 0;
-	while (xmlElem)
+	while (xmlEntry)
 	{
-		// проверяем музыку, возможно есть необходимость что-то заменить
-		if (!strcmp(xmlElem->Value(), "GameMainMusic"))
-		{
-			eFILE *file = 0;
-			file = vw_fopen(xmlElem->GetText());
-			if (file != 0)
-			{
-				strcpy(GameMainMusic, xmlElem->GetText());
-				GameMainMusicSet = true;
-				vw_fclose(file);
-				fprintf(stderr, "New GameMainMusic music file %s\n", xmlElem->GetText());
-			}
-			else
-				fprintf(stderr, "Unable to find music file %s\n", xmlElem->GetText());
-		}
-		if (!strcmp(xmlElem->Value(), "GameBossMusic"))
-		{
-			eFILE *file = 0;
-			file = vw_fopen(xmlElem->GetText());
-			if (file != 0)
-			{
-				strcpy(GameBossMusic, xmlElem->GetText());
-				GameBossMusicSet = true;
-				vw_fclose(file);
-				fprintf(stderr, "New GameBossMusic music file %s\n", xmlElem->GetText());
-			}
-			else
-				fprintf(stderr, "Unable to find music file %s\n", xmlElem->GetText());
-		}
-		if (!strcmp(xmlElem->Value(), "GameDeathMusic"))
-		{
-			eFILE *file = 0;
-			file = vw_fopen(xmlElem->GetText());
-			if (file != 0)
-			{
-				strcpy(GameDeathMusic, xmlElem->GetText());
-				GameDeathMusicSet = true;
-				vw_fclose(file);
-				fprintf(stderr, "New GameDeathMusic music file %s\n", xmlElem->GetText());
-			}
-			else
-				fprintf(stderr, "Unable to find music file %s\n", xmlElem->GetText());
-		}
-
-
 		// берем каждую миссию и смотрим настройки
-		if (!strcmp(xmlElem->Value(), "Mission"))
+		if (!strcmp(xmlEntry->Name, "Mission"))
 		{
-			TiXmlElement *TMission = xmlElem->FirstChildElement();
+			cXMLEntry *TMission = xmlEntry->FirstChild;
 			while (TMission)
 			{
 				// тайтл миссии
-				if (!strcmp(TMission->Value(), "Title"))
+				if (!strcmp(TMission->Name, "Title"))
 				{
-					if (TMission->Attribute("color"))
+					if (xmlDoc->GetEntryAttribute(TMission, "color") != 0)
 					{
-						switch (atoi(TMission->Attribute("color")))
+						switch (xmlDoc->iGetEntryAttribute(TMission, "color"))
 						{
 							case 0: // белый
 								MissionTitleColorR[i]=1.0f;MissionTitleColorG[i]=1.0f;MissionTitleColorB[i]=1.0f;
@@ -260,18 +196,21 @@ void MissionsListInit()
 								break;
 						}
 					}
-					if (TMission->Attribute("type")) MissionTitleType[i] = atoi(TMission->Attribute("type"));
+					if (xmlDoc->GetEntryAttribute(TMission, "type") != 0) MissionTitleType[i] = xmlDoc->iGetEntryAttribute(TMission, "type");
 
-					MissionTitle[i] = new char[strlen(TMission->GetText())+1];
-					strcpy(MissionTitle[i], TMission->GetText());
-				}
-
-				// описание миссии
-				if (!strcmp(TMission->Value(), "Descr"))
-				{
-					if (TMission->Attribute("color"))
+					if (TMission->Content != 0)
 					{
-						switch (atoi(TMission->Attribute("color")))
+						MissionTitle[i] = new char[strlen(TMission->Content)+1];
+						strcpy(MissionTitle[i], TMission->Content);
+					}
+				}
+				else
+				// описание миссии
+				if (!strcmp(TMission->Name, "Descr"))
+				{
+					if (xmlDoc->GetEntryAttribute(TMission, "color") != 0)
+					{
+						switch (xmlDoc->iGetEntryAttribute(TMission, "color"))
 						{
 							case 0: // белый
 								MissionDescrColorR[i]=1.0f;MissionDescrColorG[i]=1.0f;MissionDescrColorB[i]=1.0f;
@@ -293,42 +232,97 @@ void MissionsListInit()
 								break;
 						}
 					}
-					if (TMission->Attribute("type")) MissionDescrType[i] = atoi(TMission->Attribute("type"));
+					if (xmlDoc->GetEntryAttribute(TMission, "type") != 0) MissionDescrType[i] = xmlDoc->iGetEntryAttribute(TMission, "type");
 
-					MissionDescr[i] = new char[strlen(TMission->GetText())+1];
-					strcpy(MissionDescr[i], TMission->GetText());
+					if (TMission->Content != 0)
+					{
+						MissionDescr[i] = new char[strlen(TMission->Content)+1];
+						strcpy(MissionDescr[i], TMission->Content);
+					}
 				}
-
+				else
 				// иконка миссии
-				if (!strcmp(TMission->Value(), "Icon"))
+				if (!strcmp(TMission->Name, "Icon"))
 				{
-					MissionIcon[i] = new char[strlen(TMission->GetText())+1];
-					strcpy(MissionIcon[i], TMission->GetText());
+					if (TMission->Content != 0)
+					{
+						MissionIcon[i] = new char[strlen(TMission->Content)+1];
+						strcpy(MissionIcon[i], TMission->Content);
+					}
 				}
-
+				else
 				// файл миссии
-				if (!strcmp(TMission->Value(), "File"))
+				if (!strcmp(TMission->Name, "File"))
 				{
-					MissionFile[i] = new char[strlen(TMission->GetText())+1];
-					strcpy(MissionFile[i], TMission->GetText());
+					if (TMission->Content != 0)
+					{
+						MissionFile[i] = new char[strlen(TMission->Content)+1];
+						strcpy(MissionFile[i], TMission->Content);
+					}
 				}
 
 
 				// берем следующий элемент
-				TMission = TMission->NextSiblingElement();
+				TMission = TMission->Next;
 			}
 
 			i++;
 		}
+		else
+		// проверяем музыку, возможно есть необходимость что-то заменить
+		if (!strcmp(xmlEntry->Name, "GameMainMusic"))
+		{
+			eFILE *file = 0;
+			file = vw_fopen(xmlEntry->Content);
+			if (file != 0)
+			{
+				strcpy(GameMainMusic, xmlEntry->Content);
+				GameMainMusicSet = true;
+				vw_fclose(file);
+				fprintf(stderr, "New GameMainMusic music file %s\n", xmlEntry->Content);
+			}
+			else
+				fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
+		}
+		else
+		if (!strcmp(xmlEntry->Name, "GameBossMusic"))
+		{
+			eFILE *file = 0;
+			file = vw_fopen(xmlEntry->Content);
+			if (file != 0)
+			{
+				strcpy(GameBossMusic, xmlEntry->Content);
+				GameBossMusicSet = true;
+				vw_fclose(file);
+				fprintf(stderr, "New GameBossMusic music file %s\n", xmlEntry->Content);
+			}
+			else
+				fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
+		}
+		else
+		if (!strcmp(xmlEntry->Name, "GameDeathMusic"))
+		{
+			eFILE *file = 0;
+			file = vw_fopen(xmlEntry->Content);
+			if (file != 0)
+			{
+				strcpy(GameDeathMusic, xmlEntry->Content);
+				GameDeathMusicSet = true;
+				vw_fclose(file);
+				fprintf(stderr, "New GameDeathMusic music file %s\n", xmlEntry->Content);
+			}
+			else
+				fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
+		}
+
 
 		// берем следующий элемент по порядку
-		xmlElem = xmlElem->NextSiblingElement();
+		xmlEntry = xmlEntry->Next;
 	}
 
 
 	// чистим память, со скриптом работать больше не надо
-	xmlDoc.Clear();
-	delete [] buffer;
+	delete xmlDoc;
 
 
 	// на одну меньше, т.к. это номер миссии, а не кол-во

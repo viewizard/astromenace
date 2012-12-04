@@ -14,8 +14,6 @@ E-mail:		viewizard@viewizard.com
 Postal address:	kvartal Zhukova, 10/79, Lugansk city, 91051, Ukraine
 
 
-* AstroMenace game source code folder contain TinyXML source code released under ZLIB license (see Core/Parser/TinyXML folder for more info). TinyXML project could be found at https://sourceforge.net/projects/tinyxml/
-
 
 
 

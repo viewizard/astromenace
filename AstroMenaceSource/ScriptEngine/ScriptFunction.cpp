@@ -34,9 +34,9 @@
 //-----------------------------------------------------------------------------
 // aimode
 //-----------------------------------------------------------------------------
-void SetAIMode(CObject3D *Object, TiXmlElement *Element)
+void SetAIMode(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
-	if (Element->Attribute("aimode"))
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "aimode") != 0)
 	{
 		// собираем новый элемент
 		CTimeSheet *TimeSheet;
@@ -44,7 +44,7 @@ void SetAIMode(CObject3D *Object, TiXmlElement *Element)
 		Object->AttachTimeSheet(TimeSheet);
 
 		TimeSheet->Time = -1;
-		TimeSheet->AI_Mode = atoi(Element->Attribute("aimode"));
+		TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(xmlEntry, "aimode");
 	}
 }
 
@@ -53,10 +53,10 @@ void SetAIMode(CObject3D *Object, TiXmlElement *Element)
 //-----------------------------------------------------------------------------
 //  ID
 //-----------------------------------------------------------------------------
-void SetID(CObject3D *Object, TiXmlElement *Element)
+void SetID(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
-	if (Element->Attribute("id"))
-		Object->ID = atoi(Element->Attribute("id"));
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "id") != 0)
+		Object->ID = xmlDoc->iGetEntryAttribute(xmlEntry, "id");
 }
 
 
@@ -64,78 +64,78 @@ void SetID(CObject3D *Object, TiXmlElement *Element)
 //-----------------------------------------------------------------------------
 // Location
 //-----------------------------------------------------------------------------
-void SetShipLocation(CSpaceShip *Object, TiXmlElement *Element, float TimeOpLag)
+void SetShipLocation(CSpaceShip *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag)
 {
 	VECTOR3D POS(0.0f, 0.0f, 0.0f);
 
 	// абсолютные координаты
-	if (Element->Attribute("posax"))
-		POS.x = (float)atof(Element->Attribute("posax"));
-	if (Element->Attribute("posay"))
-		POS.y = (float)atof(Element->Attribute("posay"));
-	if (Element->Attribute("posaz"))
-		POS.z = (float)atof(Element->Attribute("posaz"));
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posax") != 0)
+		POS.x = xmlDoc->fGetEntryAttribute(xmlEntry, "posax");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posay") != 0)
+		POS.y = xmlDoc->fGetEntryAttribute(xmlEntry, "posay");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posaz") != 0)
+		POS.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posaz");
 
 	// относительные координаты
 	VECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
-	if (Element->Attribute("posx"))
-		POS.x = (float)atof(Element->Attribute("posx")) + GamePoint.x + PosWithLag.x;
-	if (Element->Attribute("posy"))
-		POS.y = (float)atof(Element->Attribute("posy")) + GamePoint.y + PosWithLag.y;
-	if (Element->Attribute("posz"))
-		POS.z = (float)atof(Element->Attribute("posz")) + GamePoint.z + PosWithLag.z;
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posx") != 0)
+		POS.x = xmlDoc->fGetEntryAttribute(xmlEntry, "posx") + GamePoint.x + PosWithLag.x;
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posy") != 0)
+		POS.y = xmlDoc->fGetEntryAttribute(xmlEntry, "posy") + GamePoint.y + PosWithLag.y;
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posz") != 0)
+		POS.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posz") + GamePoint.z + PosWithLag.z;
 
 	Object->SetLocation(POS);
 }
-void SetProjectileLocation(CProjectile *Object, TiXmlElement *Element, float TimeOpLag)
+void SetProjectileLocation(CProjectile *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag)
 {
 	VECTOR3D POS(0.0f, 0.0f, 0.0f);
 
 	// абсолютные координаты
-	if (Element->Attribute("posax"))
-		POS.x = (float)atof(Element->Attribute("posax"));
-	if (Element->Attribute("posay"))
-		POS.y = (float)atof(Element->Attribute("posay"));
-	if (Element->Attribute("posaz"))
-		POS.z = (float)atof(Element->Attribute("posaz"));
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posax") != 0)
+		POS.x = xmlDoc->fGetEntryAttribute(xmlEntry, "posax");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posay") != 0)
+		POS.y = xmlDoc->fGetEntryAttribute(xmlEntry, "posay");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posaz") != 0)
+		POS.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posaz");
 
 	// относительные координаты
 	VECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
-	if (Element->Attribute("posx"))
-		POS.x = (float)atof(Element->Attribute("posx")) + GamePoint.x + PosWithLag.x;
-	if (Element->Attribute("posy"))
-		POS.y = (float)atof(Element->Attribute("posy")) + GamePoint.y + PosWithLag.y;
-	if (Element->Attribute("posz"))
-		POS.z = (float)atof(Element->Attribute("posz")) + GamePoint.z + PosWithLag.z;
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posx") != 0)
+		POS.x = xmlDoc->fGetEntryAttribute(xmlEntry, "posx") + GamePoint.x + PosWithLag.x;
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posy") != 0)
+		POS.y = xmlDoc->fGetEntryAttribute(xmlEntry, "posy") + GamePoint.y + PosWithLag.y;
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posz") != 0)
+		POS.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posz") + GamePoint.z + PosWithLag.z;
 
 	Object->SetLocation(POS);
 }
-void SetLocation(CObject3D *Object, TiXmlElement *Element, float TimeOpLag)
+void SetLocation(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag)
 {
 	VECTOR3D POS(0.0f, 0.0f, 0.0f);
 
 	// абсолютные координаты
-	if (Element->Attribute("posax"))
-		POS.x = (float)atof(Element->Attribute("posax"));
-	if (Element->Attribute("posay"))
-		POS.y = (float)atof(Element->Attribute("posay"));
-	if (Element->Attribute("posaz"))
-		POS.z = (float)atof(Element->Attribute("posaz"));
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posax") != 0)
+		POS.x = xmlDoc->fGetEntryAttribute(xmlEntry, "posax");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posay") != 0)
+		POS.y = xmlDoc->fGetEntryAttribute(xmlEntry, "posay");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posaz") != 0)
+		POS.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posaz");
 
 	// относительные координаты
 	VECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
-	if (Element->Attribute("posx"))
-		POS.x = (float)atof(Element->Attribute("posx")) + GamePoint.x + PosWithLag.x;
-	if (Element->Attribute("posy"))
-		POS.y = (float)atof(Element->Attribute("posy")) + GamePoint.y + PosWithLag.y;
-	if (Element->Attribute("posz"))
-		POS.z = (float)atof(Element->Attribute("posz")) + GamePoint.z + PosWithLag.z;
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posx") != 0)
+		POS.x = xmlDoc->fGetEntryAttribute(xmlEntry, "posx") + GamePoint.x + PosWithLag.x;
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posy") != 0)
+		POS.y = xmlDoc->fGetEntryAttribute(xmlEntry, "posy") + GamePoint.y + PosWithLag.y;
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "posz") != 0)
+		POS.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posz") + GamePoint.z + PosWithLag.z;
 
 	Object->SetLocation(POS);
 }
@@ -147,63 +147,63 @@ void SetLocation(CObject3D *Object, TiXmlElement *Element, float TimeOpLag)
 //-----------------------------------------------------------------------------
 // Rotation
 //-----------------------------------------------------------------------------
-void SetShipRotation(CSpaceShip *Object, TiXmlElement *Element)
+void SetShipRotation(CSpaceShip *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
 	VECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
-	if (Element->Attribute("anglax"))
-		ANGLE.x = (float)atof(Element->Attribute("anglax"));
-	if (Element->Attribute("anglay"))
-		ANGLE.y = (float)atof(Element->Attribute("anglay"));
-	if (Element->Attribute("anglaz"))
-		ANGLE.z = (float)atof(Element->Attribute("anglaz"));
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglax") != 0)
+		ANGLE.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglax");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglay") != 0)
+		ANGLE.y = xmlDoc->fGetEntryAttribute(xmlEntry, "anglay");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglaz") != 0)
+		ANGLE.z = xmlDoc->fGetEntryAttribute(xmlEntry, "anglaz");
 
 // пока делает тоже самое!!! потом переделать
-	if (Element->Attribute("anglx"))
-		ANGLE.x = (float)atof(Element->Attribute("anglx"));
-	if (Element->Attribute("angly"))
-		ANGLE.y = (float)atof(Element->Attribute("angly"));
-	if (Element->Attribute("anglz"))
-		ANGLE.z = (float)atof(Element->Attribute("anglz"));
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglx") != 0)
+		ANGLE.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglx");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "angly") != 0)
+		ANGLE.y = xmlDoc->fGetEntryAttribute(xmlEntry, "angly");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglz") != 0)
+		ANGLE.z = xmlDoc->fGetEntryAttribute(xmlEntry, "anglz");
 
 	Object->SetRotation(ANGLE);
 }
-void SetProjectileRotation(CProjectile *Object, TiXmlElement *Element)
+void SetProjectileRotation(CProjectile *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
 	VECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
-	if (Element->Attribute("anglax"))
-		ANGLE.x = (float)atof(Element->Attribute("anglax"));
-	if (Element->Attribute("anglay"))
-		ANGLE.y = (float)atof(Element->Attribute("anglay"));
-	if (Element->Attribute("anglaz"))
-		ANGLE.z = (float)atof(Element->Attribute("anglaz"));
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglax") != 0)
+		ANGLE.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglax");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglay") != 0)
+		ANGLE.y = xmlDoc->fGetEntryAttribute(xmlEntry, "anglay");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglaz") != 0)
+		ANGLE.z = xmlDoc->fGetEntryAttribute(xmlEntry, "anglaz");
 
 // пока делает тоже самое!!! потом переделать
-	if (Element->Attribute("anglx"))
-		ANGLE.x = (float)atof(Element->Attribute("anglx"));
-	if (Element->Attribute("angly"))
-		ANGLE.y = (float)atof(Element->Attribute("angly"));
-	if (Element->Attribute("anglz"))
-		ANGLE.z = (float)atof(Element->Attribute("anglz"));
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglx") != 0)
+		ANGLE.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglx");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "angly") != 0)
+		ANGLE.y = xmlDoc->fGetEntryAttribute(xmlEntry, "angly");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglz") != 0)
+		ANGLE.z = xmlDoc->fGetEntryAttribute(xmlEntry, "anglz");
 
 	Object->SetRotation(ANGLE);
 }
-void SetRotation(CObject3D *Object, TiXmlElement *Element)
+void SetRotation(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
 	VECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
-	if (Element->Attribute("anglax"))
-		ANGLE.x = (float)atof(Element->Attribute("anglax"));
-	if (Element->Attribute("anglay"))
-		ANGLE.y = (float)atof(Element->Attribute("anglay"));
-	if (Element->Attribute("anglaz"))
-		ANGLE.z = (float)atof(Element->Attribute("anglaz"));
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglax") != 0)
+		ANGLE.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglax");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglay") != 0)
+		ANGLE.y = xmlDoc->fGetEntryAttribute(xmlEntry, "anglay");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglaz") != 0)
+		ANGLE.z = xmlDoc->fGetEntryAttribute(xmlEntry, "anglaz");
 
 // пока делает тоже самое!!! потом переделать
-	if (Element->Attribute("anglx"))
-		ANGLE.x = (float)atof(Element->Attribute("anglx"));
-	if (Element->Attribute("angly"))
-		ANGLE.y = (float)atof(Element->Attribute("angly"));
-	if (Element->Attribute("anglz"))
-		ANGLE.z = (float)atof(Element->Attribute("anglz"));
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglx") != 0)
+		ANGLE.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglx");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "angly") != 0)
+		ANGLE.y = xmlDoc->fGetEntryAttribute(xmlEntry, "angly");
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglz") != 0)
+		ANGLE.z = xmlDoc->fGetEntryAttribute(xmlEntry, "anglz");
 
 	Object->SetRotation(ANGLE);
 }
@@ -214,11 +214,11 @@ void SetRotation(CObject3D *Object, TiXmlElement *Element)
 //-----------------------------------------------------------------------------
 // DeleteOnHide
 //-----------------------------------------------------------------------------
-void SetShowDeleteOnHide(CObject3D *Object, TiXmlElement *Element)
+void SetShowDeleteOnHide(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
 	Object->ShowDeleteOnHide = 0;
-	if (Element->Attribute("onhide"))
-		if (atoi(Element->Attribute("onhide")) <= 0) Object->ShowDeleteOnHide = -1;
+	if (xmlDoc->GetEntryAttribute(xmlEntry, "onhide") != 0)
+		if (xmlDoc->iGetEntryAttribute(xmlEntry, "onhide") <= 0) Object->ShowDeleteOnHide = -1;
 }
 
 
@@ -227,14 +227,19 @@ void SetShowDeleteOnHide(CObject3D *Object, TiXmlElement *Element)
 //-----------------------------------------------------------------------------
 // DebugInformation
 //-----------------------------------------------------------------------------
-void SetDebugInformation(CObject3D *Object, TiXmlElement *Element)
+void SetDebugInformation(CObject3D *Object, cXMLEntry *xmlEntry)
 {
 	// не нужно ничего устанавливать, выходим
 	if (!Script->ShowDebugModeLine) return;
 
+#ifndef gamedebug
+	printf("XML don't count lines, uncomment \"#define gamedebug\" line in config.h file and re-compile game first.");
+	return;
+#endif //gamedebug
+
 	// преобразовываем число в строку
 	char buffer[10];
-	itoa10(Element->Row(), buffer);
+	itoa10(xmlEntry->LineNumber, buffer);
 
 	Object->DebugInfo = new char[strlen(buffer)+1];
 	strcpy(Object->DebugInfo, buffer);
