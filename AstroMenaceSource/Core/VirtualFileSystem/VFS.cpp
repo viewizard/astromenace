@@ -171,7 +171,7 @@ int vw_CreateVFS(const char *Name, unsigned int BuildNumber)
 	TempVFS->File = SDL_RWFromFile(Name, "wb");
     if (TempVFS->File == NULL)
     {
-        printf("Can't open VFS file for write %s\n", Name);
+        fprintf(stderr, "Can't open VFS file for write %s\n", Name);
         return -1; // ERROR
     }
 
@@ -518,7 +518,7 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	TempVFS->File = SDL_RWFromFile(Name, "rb");
     if (TempVFS->File == NULL)
     {
-        printf("Can't find VFS file %s\n", Name);
+        fprintf(stderr, "Can't find VFS file %s\n", Name);
         return -1; // ERROR
     }
 
@@ -559,13 +559,13 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	if(SDL_RWread(TempVFS->File, &Sign, 4, 1) == -1)
 	{
 		// если файл меньше, значит ошибка
-		printf("VFS file size error %s\n", Name);
+		fprintf(stderr, "VFS file size error %s\n", Name);
 		goto vw_OpenVFS_Error;
 	}
 	if (strncmp(Sign, "VFS_", 4) != 0)
 	{
 		// нет сигнатуры
-		printf("VFS file header error %s\n", Name);
+		fprintf(stderr, "VFS file header error %s\n", Name);
 		goto vw_OpenVFS_Error;
 	}
 
@@ -576,12 +576,12 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	char Version[4]; Version[4] = 0;
 	if(SDL_RWread(TempVFS->File, &Version, 4, 1) == -1)
 	{
-		printf("VFS file corrupted: %s\n", Name);
+		fprintf(stderr, "VFS file corrupted: %s\n", Name);
 		goto vw_OpenVFS_Error;
 	}
 	if (strncmp(Version, "v1.5", 4) != 0)
 	{
-		printf("VFS file has wrong version, version %s not supported: %s\n", Version, Name);
+		fprintf(stderr, "VFS file has wrong version, version %s not supported: %s\n", Version, Name);
 		goto vw_OpenVFS_Error;
 	}
 
@@ -592,7 +592,7 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if(SDL_RWread(TempVFS->File, &vfsBuildNumber, 4, 1) == -1)
 	{
-		printf("VFS file corrupted: %s\n", Name);
+		fprintf(stderr, "VFS file corrupted: %s\n", Name);
 		goto vw_OpenVFS_Error;
 	}
 	// если передали ноль - проверка не нужна
@@ -606,7 +606,7 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 		{
 			if (BuildNumber != vfsBuildNumber)
 			{
-				printf("VFS file has wrong build number (%i), you need VFS with build number %i\n", vfsBuildNumber, BuildNumber);
+				fprintf(stderr, "VFS file has wrong build number (%i), you need VFS with build number %i\n", vfsBuildNumber, BuildNumber);
 				goto vw_OpenVFS_Error;
 			}
 		}
@@ -836,7 +836,7 @@ bool vw_CreateEntryLinkVFS(const char *FileName, const char *FileNameLink)
 		if (vw_strcmp(Tmp->Name, FileNameLink) == 0)
 		{
 			// нашли, такой файл или симлинк уже есть в системе
-			printf("VFS link creation error, file or link already present: %s\n", FileNameLink);
+			fprintf(stderr, "VFS link creation error, file or link already present: %s\n", FileNameLink);
 			return false;
 		}
 		Tmp = Tmp1;
@@ -887,7 +887,7 @@ bool vw_CreateEntryLinkVFS(const char *FileName, const char *FileNameLink)
 
 
 	// не нашли ничего
-	printf("VFS link creation error, file not found: %s\n", FileName);
+	fprintf(stderr, "VFS link creation error, file not found: %s\n", FileName);
 	return false;
 }
 
@@ -930,7 +930,7 @@ bool vw_DeleteEntryLinkVFS(const char *FileNameLink)
 			}
 			else
 			{
-				printf("VFS link deletion error, can not delete file: %s\n", FileNameLink);
+				fprintf(stderr, "VFS link deletion error, can not delete file: %s\n", FileNameLink);
 				return false;
 			}
 		}
@@ -941,7 +941,7 @@ bool vw_DeleteEntryLinkVFS(const char *FileNameLink)
 
 
 	// не нашли ничего
-	printf("VFS link deletion error, link not found: %s\n", FileNameLink);
+	fprintf(stderr, "VFS link deletion error, link not found: %s\n", FileNameLink);
 	return false;
 }
 

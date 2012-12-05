@@ -433,7 +433,17 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 
 
 	// дополнительная проверка на содержимое конфигурационного файла
-	if (strcmp("AstroMenaceSettings", XMLdoc->RootXMLEntry->Name))
+	if (RootXMLEntry == 0)
+	{
+		fprintf(stderr, "Game configuration file corrupted: %s\n", DatFileName);
+		// файл поврежден, надо завершить работу с ним
+		delete XMLdoc;
+		// сохранить дефолтные настройки, перезаписав файл
+		SaveXMLSetupFile();
+		// и сказать игре что это "первый запуск"
+		return true;
+	}
+	if (strcmp("AstroMenaceSettings", RootXMLEntry->Name))
 	{
 		fprintf(stderr, "Game configuration file corrupted: %s\n", DatFileName);
 		// файл поврежден, надо завершить работу с ним
@@ -450,98 +460,215 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	// если установлен NeedSafeMode, не грузим часть данных
 	if (NeedSafeMode) goto LoadProfiles;
 
-	if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), "en")) Setup.MenuLanguage = 1;
-	if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), "de")) Setup.MenuLanguage = 2;
-	if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), "ru")) Setup.MenuLanguage = 3;
 
-	if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), "en")) Setup.VoiceLanguage = 1;
-	if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), "de")) Setup.VoiceLanguage = 2;
-	if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), "ru")) Setup.VoiceLanguage = 3;
-
-	Setup.FontNumber = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber"), "value");
-
-	Setup.Width = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Width"), "value");
-	Setup.Height = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Height"), "value");
-	Setup.BPP = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "BPP"), "value");
-
-
-	if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio"), "value"), "16:10"))
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage") != 0)
 	{
-		Setup.fAspectRatioWidth = 1228.0f;
-		Setup.fAspectRatioHeight = 768.0f;
-		Setup.iAspectRatioWidth = 1228;
-		Setup.iAspectRatioHeight = 768;
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value") != 0)
+		{
+			if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), "en")) Setup.MenuLanguage = 1;
+			else
+			if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), "de")) Setup.MenuLanguage = 2;
+			else
+			if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), "ru")) Setup.MenuLanguage = 3;
+		}
 	}
-	else
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage") != 0)
 	{
-		Setup.fAspectRatioWidth = 1024.0f;
-		Setup.fAspectRatioHeight = 768.0f;
-		Setup.iAspectRatioWidth = 1024;
-		Setup.iAspectRatioHeight = 768;
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value") != 0)
+		{
+			if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), "en")) Setup.VoiceLanguage = 1;
+			else
+			if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), "de")) Setup.VoiceLanguage = 2;
+			else
+			if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), "ru")) Setup.VoiceLanguage = 3;
+		}
 	}
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber"), "value") != 0)
+			Setup.FontNumber = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber"), "value");
 
-	Setup.CameraModeWithStandardAspectRatio = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "Width") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Width"), "value") != 0)
+			Setup.Width = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Width"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "Height") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Height"), "value") != 0)
+			Setup.Height = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Height"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "BPP") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "BPP"), "value") != 0)
+			Setup.BPP = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "BPP"), "value");
+
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio") != 0)
+	{
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio"), "value") != 0)
+		{
+			if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio"), "value"), "16:10"))
+			{
+				Setup.fAspectRatioWidth = 1228.0f;
+				Setup.fAspectRatioHeight = 768.0f;
+				Setup.iAspectRatioWidth = 1228;
+				Setup.iAspectRatioHeight = 768;
+			}
+			else
+			{
+				Setup.fAspectRatioWidth = 1024.0f;
+				Setup.fAspectRatioHeight = 768.0f;
+				Setup.iAspectRatioWidth = 1024;
+				Setup.iAspectRatioHeight = 768;
+			}
+		}
+	}
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value") != 0)
+			Setup.CameraModeWithStandardAspectRatio = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value");
+
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "VBOCoreMode") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VBOCoreMode"), "value") != 0)
+			Setup.VBOCoreMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VBOCoreMode"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "VAOCoreMode") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VAOCoreMode"), "value") != 0)
+			Setup.VAOCoreMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VAOCoreMode"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "FBOCoreMode") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FBOCoreMode"), "value") != 0)
+			Setup.FBOCoreMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FBOCoreMode"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "EqualOrMore128MBVideoRAM") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "EqualOrMore128MBVideoRAM"), "value") != 0)
+			Setup.EqualOrMore128MBVideoRAM = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "EqualOrMore128MBVideoRAM"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "HardwareMipMapGeneration") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "HardwareMipMapGeneration"), "value") != 0)
+			Setup.HardwareMipMapGeneration = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "HardwareMipMapGeneration"), "value");
+
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode"), "value") != 0)
+			Setup.TextureFilteringMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "TexturesQuality") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesQuality"), "value") != 0)
+			Setup.TexturesQuality = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesQuality"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "MSAA") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MSAA"), "value") != 0)
+			Setup.MSAA = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MSAA"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "CSAA") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CSAA"), "value") != 0)
+			Setup.CSAA = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CSAA"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "VisualEffectsQuality") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VisualEffectsQuality"), "value") != 0)
+			Setup.VisualEffectsQuality = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VisualEffectsQuality"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "AnisotropyLevel") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AnisotropyLevel"), "value") != 0)
+			Setup.AnisotropyLevel = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AnisotropyLevel"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompression") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompression"), "value") != 0)
+			Setup.TexturesCompression = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompression"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL"), "value") != 0)
+			Setup.UseGLSL = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap"), "value") != 0)
+			Setup.ShadowMap = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "MaxPointLights") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MaxPointLights"), "value") != 0)
+			Setup.MaxPointLights = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MaxPointLights"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "MusicSw") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MusicSw"), "value") != 0)
+			Setup.MusicSw = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MusicSw"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "SoundSw") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "SoundSw"), "value") != 0)
+			Setup.SoundSw = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "SoundSw"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "VoiceSw") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceSw"), "value") != 0)
+			Setup.VoiceSw = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceSw"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "VSync") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VSync"), "value") != 0)
+			Setup.VSync = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VSync"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "Gamma") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Gamma"), "value") != 0)
+			Setup.Gamma = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Gamma"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS"), "value") != 0)
+			Setup.ShowFPS = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType"), "value") != 0)
+			Setup.GameWeaponInfoType = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed"), "value") != 0)
+			Setup.GameSpeed = XMLdoc->fGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "LoadingHint") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LoadingHint"), "value") != 0)
+			Setup.LoadingHint = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LoadingHint"), "value");
 
 
-	Setup.VBOCoreMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VBOCoreMode"), "value");
-	Setup.VAOCoreMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VAOCoreMode"), "value");
-	Setup.FBOCoreMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FBOCoreMode"), "value");
-	Setup.EqualOrMore128MBVideoRAM = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "EqualOrMore128MBVideoRAM"), "value");
-	Setup.HardwareMipMapGeneration = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "HardwareMipMapGeneration"), "value");
 
-	Setup.TextureFilteringMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode"), "value");
-	Setup.TexturesQuality = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesQuality"), "value");
-	Setup.MSAA = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MSAA"), "value");
-	Setup.CSAA = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CSAA"), "value");
-	Setup.VisualEffectsQuality = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VisualEffectsQuality"), "value");
-	Setup.AnisotropyLevel = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AnisotropyLevel"), "value");
-	Setup.TexturesCompression = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompression"), "value");
-	Setup.UseGLSL = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL"), "value");
-	Setup.ShadowMap = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap"), "value");
-	Setup.MaxPointLights = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MaxPointLights"), "value");
-	Setup.MusicSw = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MusicSw"), "value");
-	Setup.SoundSw = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "SoundSw"), "value");
-	Setup.VoiceSw = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceSw"), "value");
-	Setup.VSync = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VSync"), "value");
-	Setup.Gamma = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Gamma"), "value");
-	Setup.ShowFPS = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS"), "value");
-	Setup.GameWeaponInfoType = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType"), "value");
-	Setup.GameSpeed = XMLdoc->fGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed"), "value");
-	Setup.LoadingHint = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LoadingHint"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardDecreaseGameSpeed") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardDecreaseGameSpeed"), "value") != 0)
+			Setup.KeyboardDecreaseGameSpeed = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardDecreaseGameSpeed"), "value"));
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardResetGameSpeed") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardResetGameSpeed"), "value") != 0)
+			Setup.KeyboardResetGameSpeed = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardResetGameSpeed"), "value"));
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardIncreaseGameSpeed") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardIncreaseGameSpeed"), "value") != 0)
+			Setup.KeyboardIncreaseGameSpeed = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardIncreaseGameSpeed"), "value"));
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardGameWeaponInfoType") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardGameWeaponInfoType"), "value") != 0)
+			Setup.KeyboardGameWeaponInfoType = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardGameWeaponInfoType"), "value"));
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardPrimaryWeaponFireMode") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardPrimaryWeaponFireMode"), "value") != 0)
+			Setup.KeyboardPrimaryWeaponFireMode = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardPrimaryWeaponFireMode"), "value"));
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardSecondaryWeaponFireMode") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardSecondaryWeaponFireMode"), "value") != 0)
+			Setup.KeyboardSecondaryWeaponFireMode = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardSecondaryWeaponFireMode"), "value"));
 
 
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardLeft") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardLeft"), "value") != 0)
+			Setup.KeyBoardLeft = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardLeft"), "value"));
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardRight") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardRight"), "value") != 0)
+			Setup.KeyBoardRight = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardRight"), "value"));
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardUp") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardUp"), "value") != 0)
+			Setup.KeyBoardUp = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardUp"), "value"));
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardDown") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardDown"), "value") != 0)
+			Setup.KeyBoardDown = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardDown"), "value"));
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardPrimary") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardPrimary"), "value") != 0)
+			Setup.KeyBoardPrimary = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardPrimary"), "value"));
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary"), "value") != 0)
+			Setup.KeyBoardSecondary = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary"), "value"));
 
-
-	Setup.KeyboardDecreaseGameSpeed = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardDecreaseGameSpeed"), "value"));
-	Setup.KeyboardResetGameSpeed = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardResetGameSpeed"), "value"));
-	Setup.KeyboardIncreaseGameSpeed = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardIncreaseGameSpeed"), "value"));
-	Setup.KeyboardGameWeaponInfoType = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardGameWeaponInfoType"), "value"));
-	Setup.KeyboardPrimaryWeaponFireMode = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardPrimaryWeaponFireMode"), "value"));
-	Setup.KeyboardSecondaryWeaponFireMode = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardSecondaryWeaponFireMode"), "value"));
-
-
-	Setup.KeyBoardLeft = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardLeft"), "value"));
-	Setup.KeyBoardRight = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardRight"), "value"));
-	Setup.KeyBoardUp = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardUp"), "value"));
-	Setup.KeyBoardDown = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardDown"), "value"));
-	Setup.KeyBoardPrimary = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardPrimary"), "value"));
-	Setup.KeyBoardSecondary = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary"), "value"));
-
-	Setup.MousePrimary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary"), "value");
-	Setup.MouseSecondary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseSecondary"), "value");
-	Setup.JoystickPrimary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickPrimary"), "value");
-	Setup.JoystickSecondary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickSecondary"), "value");
-	Setup.JoystickNum = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum"), "value");
-	Setup.ControlSensivity = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity"), "value");
-	Setup.MouseControl = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl"), "value");
-	Setup.LastProfile = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary"), "value") != 0)
+			Setup.MousePrimary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "MouseSecondary") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseSecondary"), "value") != 0)
+			Setup.MouseSecondary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseSecondary"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickPrimary") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickPrimary"), "value") != 0)
+			Setup.JoystickPrimary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickPrimary"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickSecondary") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickSecondary"), "value") != 0)
+			Setup.JoystickSecondary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickSecondary"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum"), "value") != 0)
+			Setup.JoystickNum = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity"), "value") != 0)
+			Setup.ControlSensivity = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl"), "value") != 0)
+			Setup.MouseControl = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile"), "value") != 0)
+			Setup.LastProfile = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile"), "value");
 
 
 	for(int i=0; i<10; i++)
 	{
 		char Name[128];
 		sprintf(Name, "HintStatus%i", i+1);
-		Setup.NeedShowHint[i] = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, Name), "value");
+		if (XMLdoc->FindEntryByName(RootXMLEntry, Name) != 0)
+			if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, Name), "value") != 0)
+				Setup.NeedShowHint[i] = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, Name), "value");
 	}
 
 
@@ -551,7 +678,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	// заполняем таблицу рекордов
 	//
 
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "TopScores") != 0)
+	if ((XMLdoc->FindEntryByName(RootXMLEntry, "TopScores") != 0) && (XMLdoc->FindEntryByName(RootXMLEntry, "TopScores")->Content != 0))
 	{
 
 		int TopScoresDataSize = strlen(XMLdoc->FindEntryByName(RootXMLEntry, "TopScores")->Content);
@@ -615,7 +742,7 @@ LoadProfiles:
 	// загрузка профайлов пилотов
 	//
 
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "PilotsProfiles") != 0)
+	if ((XMLdoc->FindEntryByName(RootXMLEntry, "PilotsProfiles") != 0) && (XMLdoc->FindEntryByName(RootXMLEntry, "PilotsProfiles")->Content != 0))
 	{
 		int ProfileDataSize = strlen(XMLdoc->FindEntryByName(RootXMLEntry, "PilotsProfiles")->Content);
 		unsigned char *ProfileData = new unsigned char[ProfileDataSize+1];

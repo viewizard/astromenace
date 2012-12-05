@@ -251,6 +251,7 @@ public:
 
 	cXMLEntry *FindEntryByName(cXMLEntry *ParentXMLEntry, const char *Name)
 	{
+		if (ParentXMLEntry == 0) return 0;
 		cXMLEntry *TmpEntry = ParentXMLEntry->FirstChild;
 		while (TmpEntry != 0)
 		{

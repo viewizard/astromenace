@@ -450,7 +450,7 @@ bool eParticleSystem::Update(float Time)
 
 			// считаем размер частицы
 			NewParticle->Size = SizeStart + vw_Randf0 * SizeVar;
-			if (NewParticle->Size < 0.0f) NewParticle->Size = 0.0f;
+			if (NewParticle->Size < 0.0f) NewParticle->Size = SizeStart;
 			NewParticle->SizeDelta = (SizeEnd - NewParticle->Size) / NewParticle->Lifetime;
 			// если есть учет расстояния, работаем с ним
 			if (Resize < 1.0f)
