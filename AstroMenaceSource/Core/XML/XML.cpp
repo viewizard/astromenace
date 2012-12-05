@@ -361,16 +361,18 @@ bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPositio
 				return false;
 			}
 
-			// передаем данные на рекурсивную обработку
-			char *ElementContent = CreateSubString(Buffer, DetectTagCloseSymbol, CloseElementPosition);
-			if (!ParseTagContent(OriginBuffer, DetectTagCloseSymbol+StartPosition+CurrentBufferPosition, ElementContent, XMLEntry))
+			// передаем данные на рекурсивную обработку (если закрывающий тэг не стоит сразу после открывающего)
+			if (DetectTagCloseSymbol < CloseElementPosition)
 			{
-				// вернули с ошибкой, выходим
+				char *ElementContent = CreateSubString(Buffer, DetectTagCloseSymbol, CloseElementPosition);
+				if (!ParseTagContent(OriginBuffer, DetectTagCloseSymbol+StartPosition+CurrentBufferPosition, ElementContent, XMLEntry))
+				{
+					// вернули с ошибкой, выходим
+					delete [] ElementContent;
+					return false;
+				}
 				delete [] ElementContent;
-				return false;
 			}
-			delete [] ElementContent;
-
 
 			// смещаем буфер
 			Buffer += CloseElementPosition + strlen(XMLEntry->Name) + strlen("</>");

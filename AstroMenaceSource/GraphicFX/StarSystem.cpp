@@ -267,7 +267,7 @@ void StarSystemDraw(int DrawType)
 
 		if (DrawType == 1)
 		{
-			StarsTile -= 0.005f*(vw_GetTime() - StarsTileUpdateTime);
+			StarsTile -= 0.015f*(vw_GetTime() - StarsTileUpdateTime);
 			StarsTileUpdateTime = vw_GetTime();
 		}
 		else
@@ -460,7 +460,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 
 		if (DrawType == 1)
 		{
-			StarsTile2 -= 0.03f*(vw_GetTime() - StarsTileUpdateTime2);
+			StarsTile2 -= 0.04f*(vw_GetTime() - StarsTileUpdateTime2);
 			StarsTileUpdateTime2 = vw_GetTime();
 		}
 		else

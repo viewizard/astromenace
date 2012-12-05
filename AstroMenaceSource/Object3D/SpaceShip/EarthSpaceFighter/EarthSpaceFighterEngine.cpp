@@ -180,7 +180,7 @@ void CreateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 			ParticleSystem->IsAttractive = true;
 			ParticleSystem->AttractiveValue = 50.0f;
 			ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/flare1.tga");
-			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.07f);
+			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.0f, 0.7f, 1.0f, 0.0f, 0.07f);
 			ParticleSystem->LightNeedDeviation = true;
 			break;
 
