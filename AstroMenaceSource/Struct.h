@@ -257,8 +257,8 @@ struct GameSetup
 
 	// синхронизация
 	int		VSync;
-	// гамма
-	int		Gamma;
+	// яркость
+	int		Brightness;
 	// режим фильтра текстур
 	int		TextureFilteringMode;
 	// режим качества прорисовки текстур
@@ -342,6 +342,8 @@ struct GameSetup
 	// ставим 10, чтобы было с запасом
 	bool	NeedShowHint[10];
 
+	// номер скрипта подложки меню
+	int		MenuScript;
 
 
 

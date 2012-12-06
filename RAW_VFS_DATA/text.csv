@@ -135,7 +135,7 @@ id;en;de;ru
 3_Full_Screen;Full Screen;Ganzer Bildschirm;Полный Экран
 3_Refresh_Rate;Refresh Rate;Refresh Rate;Частота Обновления
 3_Default;Default;Default;По умолчанию
-3_Gamma;Gamma;Gamma;Гамма
+3_Brightness;Brightness;Helligkeit;Яркость
 3_Texture_Filtering_Mode;Texture Filtering Mode;Texture Filter Modus;Режим Вывода Текстуры
 3_Textures_Quality;Textures Quality;Texture Qualität;Качество Текстур
 3_Multisample_Antialiasing;Multisample Antialiasing;Multisample Antialiasing;Сглаживание
