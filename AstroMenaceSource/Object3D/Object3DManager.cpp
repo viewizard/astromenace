@@ -126,7 +126,7 @@ void DrawAllObject3D(int DrawType)
 	StarSystemDrawSecondLayer(DrawType);
 
 	// эмуляция гаммы, фактически это простой пост эффект, всегда самый последний в прорисовке
-	if( Setup.Gamma != 5 )
+	if( Setup.Brightness != 5 )
 	{
 
 		float *buff = 0;
@@ -159,17 +159,17 @@ void DrawAllObject3D(int DrawType)
 		eTexture *TileTexture = vw_FindTextureByName("DATA/MENU/whitepoint.tga");
 		vw_SetTexture(0, TileTexture);
 
-		float GammaF = 1.0f + (Setup.Gamma - 5)/5.0f;
+		float BrightnessF = 1.0f + (Setup.Brightness - 5)/5.0f;
 
-		if( GammaF > 1.0f )
+		if( BrightnessF > 1.0f )
 		{
 			vw_SetTextureBlend(true, RI_BLEND_DESTCOLOR, RI_BLEND_ONE);
-			vw_SetColor(GammaF-1.0f, GammaF-1.0f, GammaF-1.0f, 1.0f);
+			vw_SetColor(BrightnessF-1.0f, BrightnessF-1.0f, BrightnessF-1.0f, 1.0f);
 		}
 		else
 		{
 			vw_SetTextureBlend(true, RI_BLEND_ZERO, RI_BLEND_SRCCOLOR);
-			vw_SetColor(GammaF, GammaF, GammaF, 1.0f);
+			vw_SetColor(BrightnessF, BrightnessF, BrightnessF, 1.0f);
 		}
 
 		vw_Start2DMode(-1,1);

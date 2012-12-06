@@ -151,8 +151,8 @@ void InitMenu()
 	if (Script != 0){delete Script; Script = 0;}
 	Script = new ScriptEngine;
 
-	// делаем случайный выбор, какой скрипт прокручивать
-	switch (vw_iRandNum(2))
+	if (Setup.MenuScript > 2) Setup.MenuScript = 0;
+	switch (Setup.MenuScript)
 	{
 		case 0: Script->RunScript("DATA/SCRIPT/menu1.xml", vw_GetTime()); break;
 		case 1: Script->RunScript("DATA/SCRIPT/menu2.xml", vw_GetTime()); break;
@@ -160,6 +160,7 @@ void InitMenu()
 		// на всякий случай
 		default: Script->RunScript("DATA/SCRIPT/menu1.xml", vw_GetTime()); break;
 	}
+	Setup.MenuScript ++;
 
 	// немного прокручиваем скрипт
 	float Time1 = vw_GetTime();

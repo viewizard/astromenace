@@ -384,22 +384,22 @@ void OptionsMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Gamma"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), MenuContentTransp, Setup.Gamma<=1))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Brightness"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), MenuContentTransp, Setup.Brightness<=1))
 	{
-		Setup.Gamma -= 1;
-		if (Setup.Gamma <= 1) Setup.Gamma = 1;
+		Setup.Brightness -= 1;
+		if (Setup.Brightness <= 1) Setup.Brightness = 1;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), MenuContentTransp, Setup.Gamma>=10))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), MenuContentTransp, Setup.Brightness>=10))
 	{
-		Setup.Gamma += 1;
-		if (Setup.Gamma >= 10) Setup.Gamma = 10;
+		Setup.Brightness += 1;
+		if (Setup.Brightness >= 10) Setup.Brightness = 10;
 	}
 	for (int i=0; i<10; i++)
 	{
 		SetRect(&SrcRest,0,0,16,32);
 		SetRect(&DstRest,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
-		if (Setup.Gamma>i)
+		if (Setup.Brightness>i)
 			vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc.tga"), true, MenuContentTransp);
 		else
 			vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, MenuContentTransp);
