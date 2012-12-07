@@ -1,4 +1,4 @@
-/********************************************************************************
+/************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
 	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
@@ -18,12 +18,11 @@
 	along with AstroMenace. If not, see <http://www.gnu.org/licenses/>.
 
 
-	Web Site:		http://www.viewizard.com/
-	E-mail:			viewizard@viewizard.com
-	Postal address:	kvartal Zhukova, 10/79, Lugansk city, 91051, Ukraine
+	Web Site: http://www.viewizard.com/
+	Project: http://sourceforge.net/projects/openastromenace/
+	E-mail: viewizard@viewizard.com
 
-
-*********************************************************************************/
+*************************************************************************************/
 
 
 /// подключаем нужные файлы
@@ -903,9 +902,70 @@ CProjectile::~CProjectile(void)
 			else
 			{
 				if (!NeedStopPartic)
+				{
 					GraphicFX[i]->ChangeSpeed(Orientation^Speed);
+				}
 				else
+				{
 					GraphicFX[i]->StopAllParticles();
+
+
+					// для ракет землян и пиратов делаем изменение шлейфа при взрыве (только шлейф!, он всегда 2-й эффект)
+					if ( i == 1 )
+					{
+						// для разных типов ракет делаем разную "ударную волну"
+						float effective_dist2 = 100;
+						switch(Num)
+						{
+							case 16:
+							case 205:
+								effective_dist2 = 200.0f;
+							break;
+
+							case 18:
+							case 209:
+								effective_dist2 = 1000.0f;
+							break;
+
+							case 19:
+							case 210:
+								effective_dist2 = 2000.0f;
+							break;
+						}
+						switch(Num)
+						{
+							case 16:
+							case 17:
+							case 18:
+							case 19:
+							case 205:
+							case 206:
+							case 209:
+							case 210:
+
+							eParticle *tmp = GraphicFX[i]->Start;
+							while (tmp!=0)
+							{
+								VECTOR3D Dist2 = tmp->Location - Location;
+								float fDist2 = Dist2.x*Dist2.x + Dist2.y*Dist2.y + Dist2.z*Dist2.z;
+								if (fDist2 < 1.0f) fDist2 = 3.0f;
+
+								if (fDist2 < effective_dist2)
+								{
+									tmp->Velocity = VECTOR3D(Dist2.x+10.0f*vw_Randf0, Dist2.y+10.0f*vw_Randf0, Dist2.z+10.0f*vw_Randf0);
+									tmp->Velocity.Normalize();
+									tmp->Velocity = tmp->Velocity^(effective_dist2/fDist2);
+									tmp->NeedStop = true;
+								}
+
+								tmp = tmp->Next;
+							}
+
+							break;
+						}
+					}
+				}
+
 				GraphicFX[i]->IsSuppressed = true;
 				GraphicFX[i]->DestroyIfNoParticles = true;
 			}
