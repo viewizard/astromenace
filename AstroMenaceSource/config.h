@@ -1,4 +1,4 @@
-/********************************************************************************
+/************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
 	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
@@ -18,19 +18,18 @@
 	along with AstroMenace. If not, see <http://www.gnu.org/licenses/>.
 
 
-	Web Site:		http://www.viewizard.com/
-	E-mail:			viewizard@viewizard.com
-	Postal address:	kvartal Zhukova, 10/79, Lugansk city, 91051, Ukraine
+	Web Site: http://www.viewizard.com/
+	Project: http://sourceforge.net/projects/openastromenace/
+	E-mail: viewizard@viewizard.com
 
-
-*********************************************************************************/
+*************************************************************************************/
 
 
 #ifndef CONFIG_H
 #define CONFIG_H
 
 #define GAME_VERSION	 	"1.3.1 svn"
-#define GAME_BUILD			121206
+#define GAME_BUILD			121207
 
 
 // VBO OpenGL extention support switcher (if defined - game will detect and use VBO) Game could crash

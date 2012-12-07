@@ -1,4 +1,4 @@
-/********************************************************************************
+/************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
 	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
@@ -18,12 +18,11 @@
 	along with AstroMenace. If not, see <http://www.gnu.org/licenses/>.
 
 
-	Web Site:		http://www.viewizard.com/
-	E-mail:			viewizard@viewizard.com
-	Postal address:	kvartal Zhukova, 10/79, Lugansk city, 91051, Ukraine
+	Web Site: http://www.viewizard.com/
+	Project: http://sourceforge.net/projects/openastromenace/
+	E-mail: viewizard@viewizard.com
 
-
-*********************************************************************************/
+*************************************************************************************/
 
 
 
