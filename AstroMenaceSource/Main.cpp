@@ -902,6 +902,9 @@ ReCreate:
 			Setup.MaxPointLights = 6;
 		}
 
+		// если поддерживаем сторедж - выключаем поддержку сжатия, 100% у нас достаточно видео памяти
+		if (CAPS->TextureStorage) Setup.TexturesCompression = false;
+
 #if defined(__APPLE__) && defined(__MACH__)
 		// для маков по умолчанию выключаем сглаживание, тени и шейдеры, т.к. там может все софтово эмулироваться и жутко тормозить
 		Setup.MSAA = 0;
@@ -974,10 +977,6 @@ ReCreate:
 		return 0;
 	}
 
-	// если поддерживает сторедж - вырубаем вообще поддержку сжатия (все равно работаем без него)
-	if (CAPS->TextureStorage) CAPS->TexturesCompression = false;
-	// проверка, поддерживаем компрессию текстур или нет
-	if (!CAPS->TexturesCompression) Setup.TexturesCompression = 0;
 
 
 
