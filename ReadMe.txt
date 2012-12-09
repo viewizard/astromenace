@@ -13,15 +13,25 @@ The easy way to get up to date AstroMenace on your computer:
    gcc (with g++), cmake, make, subversion, libsdl, libogg, libvorbis, openal, 
    alut (freealut), libXinerama, GLU, freetype2
 
-For Ubuntu/Debian:
+For Ubuntu/Mint/Debian:
 $ sudo apt-get install g++ cmake make subversion libsdl1.2-dev
   libogg-dev libvorbis-dev libopenal-dev libXinerama-dev libalut-dev
   libfreetype6-dev
 
-For OpenSuse:
-$ sudo zypper install gcc-c++ cmake subversion libSDL-devel libvorbis-devel
-  openal-soft-devel libXinerama-devel freealut-devel ylibogg-devel
+For Mageia:
+$ sudo urpmi gcc-c++ cmake make subversion libSDL-devel libogg-devel
+  libvorbis-devel libopenal-devel libxinerama-devel libfreealut-devel
   freetype2-devel
+
+For OpenSuse:
+$ sudo zypper install gcc-c++ cmake make subversion libSDL-devel
+  libogg-devel libvorbis-devel openal-soft-devel libXinerama-devel
+  freealut-devel freetype2-devel
+
+For Fedora:
+$ sudo yum install gcc-c++ cmake make subversion SDL-devel libogg-devel
+  libvorbis-devel openal-soft-devel libXinerama-devel freealut-devel 
+  freetype-devel
 
 For FreeBSD:
 $ sudo pkg_add -r -v gcc cmake subversion sdl libogg libvorbis openal
