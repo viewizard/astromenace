@@ -737,7 +737,7 @@
 
 
 	<!-- aliens + fire (type 5) /-->
-	<TimeLine value="6">
+	<TimeLine value="8">
 		<AlienFighter type="5" speed="15" posx="160" posy="-4" posz="305" anglx="-90" angly="-180" anglz="-270">
 			<TimeSheet time="13" speed="15"/>
 			<TimeSheet time="2" speed="5" rotz="-90" rotacz="0.1"  rotx="90" rotacx="0.1"/>
