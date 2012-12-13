@@ -86,5 +86,5 @@ with textures), except described above, was created by Viewizard team
 during AstroMenace development (see "Credits" menu in game for full list of 
 authors) and released under "GNU GENERAL PUBLIC LICENSE Version 3". You can 
 download this data "source" package from 
-http://www.viewizard.com/download/astromenace-artwork.zip or 
-http://sourceforge.net/projects/openastromenace/files/1.3.0/astromenace-artwork.zip
+http://www.viewizard.com/download/astromenace-artwork-1.3.1.zip or 
+http://sourceforge.net/projects/openastromenace/files/1.3.1/astromenace-artwork-1.3.1.zip

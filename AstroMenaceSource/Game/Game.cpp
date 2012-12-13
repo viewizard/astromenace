@@ -684,7 +684,7 @@ void InitGame()
 	psSpace->AlphaStart = 0.50f;
 	psSpace->AlphaEnd   = 1.00f;
 	psSpace->SizeStart = 0.40f;
-	psSpace->SizeEnd = 0.15f;
+	psSpace->SizeEnd = 0.05f;
 	psSpace->Speed      = 25.00f;
 	psSpace->SpeedVar   = 5.00f;
 	psSpace->Theta      = 0.00f;
