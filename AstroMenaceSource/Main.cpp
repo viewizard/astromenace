@@ -92,8 +92,8 @@ SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = 0;
 char ProgrammDir[MAX_PATH];
 char VFSFileNamePath1[MAX_PATH];
 char VFSFileNamePath2[MAX_PATH];
-// полное имя для файла с данными игры
-char DatFileName[MAX_PATH];
+// полное имя для файла конфигурации игры
+char ConfigFileName[MAX_PATH];
 // для сохранения скриншотов
 char ScreenshotDir[MAX_PATH];
 
@@ -156,7 +156,7 @@ int main( int argc, char **argv )
 	const char *Fi = "\\";
 	strcat( ProgrammDir, Fi );
 
-	ZeroMemory(DatFileName, sizeof(DatFileName));
+	ZeroMemory(ConfigFileName, sizeof(ConfigFileName));
 	ZeroMemory(VFSFileNamePath1, sizeof(VFSFileNamePath1));
 	ZeroMemory(VFSFileNamePath2, sizeof(VFSFileNamePath2));
 	ZeroMemory(ScreenshotDir, sizeof(ScreenshotDir));
@@ -181,8 +181,8 @@ int main( int argc, char **argv )
 				strcat(UserPath, "\\AstroMenace\\");
 				CreateDirectory(UserPath, NULL);
 
-				strcpy(DatFileName, UserPath);
-				strcat(DatFileName, "amconfig.xml");
+				strcpy(ConfigFileName, UserPath);
+				strcat(ConfigFileName, "amconfig.xml");
 
 				// уже проинили, дальше не нужно
 				InitWithoutDLL = false;
@@ -210,8 +210,8 @@ int main( int argc, char **argv )
 	// иним, если старая винда, или была ошибка
 	if (InitWithoutDLL)
 	{
-		strcpy(DatFileName, ProgrammDir);
-		strcat(DatFileName, "amconfig.xml");
+		strcpy(ConfigFileName, ProgrammDir);
+		strcat(ConfigFileName, "amconfig.xml");
 	}
 	if (InitScrWithoutDLL)
 	{
@@ -227,8 +227,7 @@ int main( int argc, char **argv )
 	// иним пути для юникса-линукса
 	// если передали параметр-путь
 
-	const char* key = "HOME";
-	const char* homeval = getenv(key);
+	const char* HomeEnv = getenv("HOME");
 
 	bool dirpresent = false;
 	for (int i=1; i<argc; i++)
@@ -241,7 +240,7 @@ int main( int argc, char **argv )
 				strcpy(ProgrammDir, argv[i]+strlen("--dir="));
 			else
 			{
-				strcpy(ProgrammDir, homeval);// -1, это тильда... а в кол-ве нет, т.к. /0 там должен остаться
+				strcpy(ProgrammDir, HomeEnv);// -1, это тильда... а в кол-ве нет, т.к. /0 там должен остаться
 				strcat(ProgrammDir, argv[i]+strlen("--dir=")+1);
 			}
 			// если в конце нет слеша - ставим его
@@ -264,7 +263,7 @@ int main( int argc, char **argv )
 	}
 
 
-	strcpy(ScreenshotDir, homeval);
+	strcpy(ScreenshotDir, HomeEnv);
 	strcat(ScreenshotDir, "/Desktop/AstroMenaceScreenshot");
 
 	strcpy(VFSFileNamePath1, ProgrammDir);
@@ -272,28 +271,38 @@ int main( int argc, char **argv )
 	strcpy(VFSFileNamePath2, ProgrammDir);
 	strcat(VFSFileNamePath2, "gamedata_cc.vfs");
 
-	// укладываем в нужном месте (где 100% дают создавать) файл с настройками
-	strcpy(DatFileName, homeval);
 
-	// game config file stored in "~/.config/astromenace" folder, if "~/.config" folder detected, otherwise in "~/.astromenace" folder
-	char ConfigDirCheck[MAX_PATH];
-	strcpy(ConfigDirCheck, homeval);
-	strcat(ConfigDirCheck, "/.config");
-	struct stat st;
-	if (stat(ConfigDirCheck,&st) == 0)
-		strcat(DatFileName, "/.config/astromenace");
+	// first at all we need check XDG_CONFIG_HOME environment variable
+	const char* ConfigHomeEnv = getenv("XDG_CONFIG_HOME");
+	if (ConfigHomeEnv != 0)
+	{
+		strcpy(ConfigFileName, ConfigHomeEnv);
+		strcat(ConfigFileName, "/astromenace");
+	}
 	else
-		strcat(DatFileName, "/.astromenace");
+	{
+		// game config file will be stored in "~/.config/astromenace" folder
+		// if system have "~/.config" folder, otherwise in "~/.astromenace" folder
+		strcpy(ConfigFileName, HomeEnv);
+		char ConfigDirCheck[MAX_PATH];
+		strcpy(ConfigDirCheck, HomeEnv);
+		strcat(ConfigDirCheck, "/.config");
+		struct stat st;
+		if (stat(ConfigDirCheck,&st) == 0)
+			strcat(ConfigFileName, "/.config/astromenace");
+		else
+			strcat(ConfigFileName, "/.astromenace");
+	}
 
-	mkdir(DatFileName, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	strcat(DatFileName, "/amconfig.xml");
+	mkdir(ConfigFileName, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+	strcat(ConfigFileName, "/amconfig.xml");
 
 #endif // unix
 
 
 #ifdef portable
-	strcpy(DatFileName, ProgrammDir);
-	strcat(DatFileName, "/amconfig.xml");
+	strcpy(ConfigFileName, ProgrammDir);
+	strcat(ConfigFileName, "/amconfig.xml");
 #endif // portable
 
 
@@ -388,7 +397,7 @@ int main( int argc, char **argv )
 					strcpy(RawDataDir, argv[i]+strlen("--rawdata="));
 				else
 				{
-					strcpy(RawDataDir, homeval);// -1, это тильда... а в кол-ве нет, т.к. /0 там должен остаться
+					strcpy(RawDataDir, HomeEnv);// -1, это тильда... а в кол-ве нет, т.к. /0 там должен остаться
 					strcat(RawDataDir, argv[i]+strlen("--rawdata=")+1);
 				}
 #elif defined(WIN32)

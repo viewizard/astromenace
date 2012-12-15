@@ -258,8 +258,6 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	OpenGL_DevCaps.FramebufferObjectDepthSize = 0;
 
 
-	printf("Video card hardware test.\n\n");
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// получаем возможности железа
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

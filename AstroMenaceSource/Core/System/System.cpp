@@ -122,22 +122,24 @@ Runtime dependencies:
 #include <unistd.h>
 
 
-char **get_path(void) {
+char **get_path(void)
+{
 	const char *path = getenv("PATH"), *cstr;
 	char *null_path, **tokenized_path, *str;
 	unsigned int parts = (path[0] != '\0') ? 1 : 0, a;
 
 	null_path = (char *)malloc(strlen(path) + 1);
 
-	for(cstr = path, str = null_path; *cstr; ++cstr, ++str) {
-		switch(*cstr) {
+	for(cstr = path, str = null_path; *cstr; ++cstr, ++str)
+	{
+		switch(*cstr)
+		{
 			case ':':
 				*str = '\0';
 				++parts;
 				break;
 			default:
 				*str = *cstr;
-
 		}
 	}
 	*str = '\0';
@@ -145,7 +147,8 @@ char **get_path(void) {
 	tokenized_path = (char **)malloc(sizeof(char *) * (parts+1));
 	tokenized_path[parts] = NULL;
 
-	for(a = 0, str = null_path; a < parts; ++a) {
+	for(a = 0, str = null_path; a < parts; ++a)
+	{
 		tokenized_path[a] = str;
 
 		do { ++str; } while(str[-1]);
@@ -153,23 +156,25 @@ char **get_path(void) {
 
 	return tokenized_path;
 }
-void free_path(char **tokenized_path) {
-	free(tokenized_path[0]);
-	free(tokenized_path);
-}
 
-int executable_exists_in_path(char **tokenized_path, const char *app_name) {
+
+int executable_exists_in_path(char **tokenized_path, const char *app_name)
+{
 	unsigned int a;
 	int found = 0;
 
-	for(a = 0; !found && tokenized_path[a]; ++a) {
+	for(a = 0; !found && tokenized_path[a]; ++a)
+	{
 		DIR *dir = opendir(tokenized_path[a]);
 
-		if(dir) {
+		if(dir)
+		{
 			struct dirent *dirent;
 
-			for(dirent = readdir(dir); dirent != NULL; dirent = readdir(dir)) {
-				if(strcmp(dirent->d_name, app_name) == 0) {
+			for(dirent = readdir(dir); dirent != NULL; dirent = readdir(dir))
+			{
+				if(strcmp(dirent->d_name, app_name) == 0)
+				{
 					/* We found something with a correct name, is it a proper executable? */
 					size_t full_path_length = strlen(tokenized_path[a]) + 1 + strlen(app_name) + 1;
 					char *full_path = (char *)malloc(full_path_length);
@@ -177,10 +182,10 @@ int executable_exists_in_path(char **tokenized_path, const char *app_name) {
 
 					snprintf(full_path, full_path_length, "%s/%s", tokenized_path[a], app_name);
 
-					if(stat(full_path, &buf) == 0) {
+					if(stat(full_path, &buf) == 0)
+					{
 						/* Is is a regular file and is it executable by anyone? */
-						if(S_ISREG(buf.st_mode) && (buf.st_mode & S_IXOTH))
-							found = 1;
+						if(S_ISREG(buf.st_mode) && (buf.st_mode & S_IXOTH)) found = 1;
 
 						/* FIXME It would be more accurate to test if this user can
 						 * execute the file rather than if any user can.
@@ -198,15 +203,13 @@ int executable_exists_in_path(char **tokenized_path, const char *app_name) {
 	return found;
 }
 
-char **get_browsers(void) {
-	static const char *envvar_list[] = {
-		"BROWSER"
-	};
-	static const char *metabrowser_list[] = {
-		"sensible-browser" /* Debian */
-	};
-	static const char *browser_list[] = {
-		"firefox", /* Listed in the order I feel like ;) */
+char **get_browsers(void)
+{
+
+	static const char *browser_list[] =
+	{
+		"xdg-open", // первое ставим именно xdg-open
+		"firefox",
 		"opera",
 		"chrome",
 		"konqueror",
@@ -217,74 +220,31 @@ char **get_browsers(void) {
 		"rekonq"
 	};
 	char **tokenized_path = get_path(), **browsers = NULL;
-	unsigned int a;
-
-	/* Check for an environment variable telling us what browser to use */
-	if(!browsers) {
-		for(a = 0; a < sizeof(envvar_list)/sizeof(envvar_list[0]); ++a) {
-			char *value = getenv(envvar_list[a]);
-
-			if(value != NULL) {
-				// Assume the user is correct
-				browsers = (char **)malloc(sizeof(char *) * (1+1));
-
-				browsers[0] = strdup(value);
-				browsers[1] = NULL;
-
-				break;
-			}
-		}
-	}
 
 
-
-	/* Check for any browser */
-	if(!browsers) {
+	if(!browsers)
+	{
 		unsigned int a, b, browser_list_count = sizeof(browser_list)/sizeof(browser_list[0]);
 
 		browsers = (char **)calloc(browser_list_count, sizeof(char *));
 
-		for(a = b = 0; a < browser_list_count; ++a) {
+		for(a = b = 0; a < browser_list_count; ++a)
+		{
 			if(executable_exists_in_path(tokenized_path, browser_list[a]))
 				browsers[b++] = strdup(browser_list[a]);
 		}
 
-		if(b == 0) {
+		if(b == 0)
+		{
 			free(browsers);
 			browsers = NULL;
 		}
 	}
 
-
-	/* Check for distro-specific browser detection type stuff */
-	if(!browsers) {
-		for(a = 0; a < sizeof(metabrowser_list)/sizeof(metabrowser_list[0]); ++a) {
-			if(executable_exists_in_path(tokenized_path, metabrowser_list[a])) {
-				// Let it handle the work
-				browsers = (char **)malloc(sizeof(char *) * (1+1));
-
-				browsers[0] = strdup(metabrowser_list[a]);
-				browsers[1] = NULL;
-
-				break;
-			}
-		}
-	}
-
-
-
-	free_path(tokenized_path);
+	free(tokenized_path[0]);
+	free(tokenized_path);
 
 	return browsers;
-}
-void free_browsers(char **browsers) {
-	unsigned int a;
-
-	if(browsers) {
-		for(a = 0; browsers[a]; ++a)
-			free(browsers[a]);
-		free(browsers);
-	}
 }
 
 #endif// __unix
@@ -373,13 +333,10 @@ bool vw_OpenBrouser(const char *url)
 	unsigned int a = 0;
 
 
-
-
 	if(browsers)
     {
     	// не перебираем!!! берем первый броузер
     	a = 0;
-
 
 		// проверка, если установлен 93 дисплей - это компиз... открываем в 0-м
 		char *value = getenv("DISPLAY");
@@ -411,21 +368,17 @@ bool vw_OpenBrouser(const char *url)
         int x;
         x = fork();
 
-            switch(x)
-            {
-                case -1:
-                        printf("error, unable to fork process!\n");
-                        break;
-                case 0:
-                        //printf("This is the forked process!\n");
-                        //system(GotoUrl); - плохо...
-                        execl(getenv("SHELL"), "sh", "-c", GotoUrl, (char *)0);
-                        // should not be reached
-                        printf("Error executing process!\n");
-                        break;
-                //default:
-                        //printf("This is the original process!\n");
-            }
+		switch(x)
+		{
+			case -1:
+				printf("error, unable to fork process!\n");
+				break;
+			case 0:
+				execl(getenv("SHELL"), "sh", "-c", GotoUrl, (char *)0);
+				// should not be reached
+				printf("Error executing process!\n");
+				break;
+		}
 	}
 	else
 	{
@@ -434,8 +387,12 @@ bool vw_OpenBrouser(const char *url)
 	}
 
 
-
-	free_browsers(browsers);
+	if(browsers)
+	{
+		for(a = 0; browsers[a]; ++a)
+			free(browsers[a]);
+		free(browsers);
+	}
 
 #endif // unix
 

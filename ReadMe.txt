@@ -70,7 +70,6 @@ Game launch options:
     --pack - pack raw game data to gamedata.vfs file.
     --rawdata=/game/rawdata/folder/ - folder with game raw data for gamedata.vfs.
     --help - info about all launch options.
-Note: game settings file stored in the "$HOME/.astromenace" folder.
 
 For Xinerama/TwinView, use SDL_VIDEO_FULLSCREEN_DISPLAY environment variable if need. 
 The SDL_VIDEO_FULLSCREEN_DISPLAY environment variable set to 0 to place 

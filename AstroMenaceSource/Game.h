@@ -81,7 +81,7 @@ extern  int VideoModesNum;
 extern  sVideoModes CurrentVideoMode;
 
 extern bool LoadedTypes[1000];
-extern char DatFileName[MAX_PATH];
+extern char ConfigFileName[MAX_PATH];
 extern char ProgrammDir[MAX_PATH];
 extern char ScreenshotDir[MAX_PATH];
 extern char VFSFileNamePath1[MAX_PATH];
