@@ -391,7 +391,7 @@ void SaveXMLSetupFile()
 
 
 
-	XMLdoc->Save(DatFileName);
+	XMLdoc->Save(ConfigFileName);
 	delete XMLdoc;
 }
 
@@ -419,7 +419,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 
 
 	// читаем данные
-	if (!XMLdoc->Load(DatFileName))
+	if (!XMLdoc->Load(ConfigFileName))
 	{
 		delete XMLdoc;
 		SaveXMLSetupFile();
@@ -436,7 +436,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	// дополнительная проверка на содержимое конфигурационного файла
 	if (RootXMLEntry == 0)
 	{
-		fprintf(stderr, "Game configuration file corrupted: %s\n", DatFileName);
+		fprintf(stderr, "Game configuration file corrupted: %s\n", ConfigFileName);
 		// файл поврежден, надо завершить работу с ним
 		delete XMLdoc;
 		// сохранить дефолтные настройки, перезаписав файл
@@ -446,7 +446,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	}
 	if (strcmp("AstroMenaceSettings", RootXMLEntry->Name))
 	{
-		fprintf(stderr, "Game configuration file corrupted: %s\n", DatFileName);
+		fprintf(stderr, "Game configuration file corrupted: %s\n", ConfigFileName);
 		// файл поврежден, надо завершить работу с ним
 		delete XMLdoc;
 		// сохранить дефолтные настройки, перезаписав файл
