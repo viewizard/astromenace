@@ -310,7 +310,8 @@ struct GameSetup
 	int		JoystickSecondary;
 	// номер джойстика (может их несколько)
 	int		JoystickNum;
-
+	// мертвая зона хода ручки джойстика
+	int		JoystickDeadZone;
 
 
 

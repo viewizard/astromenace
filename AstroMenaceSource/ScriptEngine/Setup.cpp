@@ -96,6 +96,7 @@ void InitSetup()
 	Setup.JoystickPrimary = 0;
 	Setup.JoystickSecondary = 1;
 	Setup.JoystickNum = 0;
+	Setup.JoystickDeadZone = 2;
 
 	Setup.ControlSensivity = 5;
 	Setup.MouseControl = true;
@@ -247,6 +248,7 @@ void SaveXMLSetupFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "JoystickPrimary"), "value", Setup.JoystickPrimary);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "JoystickSecondary"), "value", Setup.JoystickSecondary);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "JoystickNum"), "value", Setup.JoystickNum);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "JoystickDeadZone"), "value", Setup.JoystickDeadZone);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "ControlSensivity"), "value", Setup.ControlSensivity);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MouseControl"), "value", Setup.MouseControl);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "LastProfile"), "value", Setup.LastProfile);
@@ -652,6 +654,9 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum") != 0)
 		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum"), "value") != 0)
 			Setup.JoystickNum = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickDeadZone") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickDeadZone"), "value") != 0)
+			Setup.JoystickDeadZone = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickDeadZone"), "value");
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity") != 0)
 		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity"), "value") != 0)
 			Setup.ControlSensivity = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity"), "value");
@@ -822,6 +827,12 @@ LoadProfiles:
 
 	CurrentProfile = Setup.LastProfile;
 	if (CurrentProfile != -1) CurrentMission = Setup.Profile[Setup.LastProfile].LastMission;
+
+	if ((Setup.FontNumber > FontQuantity-1) || (Setup.FontNumber < 0)) Setup.FontNumber = 0;
+	if (Setup.ControlSensivity > 10) Setup.ControlSensivity = 10;
+	if (Setup.Brightness > 10) Setup.Brightness = 10;
+	if (Setup.JoystickDeadZone > 10) Setup.JoystickDeadZone = 10;
+
 
 	delete XMLdoc;
 

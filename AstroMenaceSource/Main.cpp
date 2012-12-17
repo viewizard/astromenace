@@ -430,8 +430,6 @@ int main( int argc, char **argv )
 
 	// работа с файлом данных... передаем базовый режим окна
 	bool FirstStart = LoadXMLSetupFile(NeedSafeMode);
-	// проверяем, чтобы номер шрифта был из допустимого диапазона
-	if ((Setup.FontNumber > FontQuantity-1) || (Setup.FontNumber < 0)) Setup.FontNumber = 0;
 
 
 
@@ -1184,6 +1182,10 @@ loop:
 			{
 				int X = SDL_JoystickGetAxis(Joystick, 0);
 				int Y = SDL_JoystickGetAxis(Joystick, 1);
+
+				// учитываем "мертвую зону" хода ручки джойстика
+				if (abs(X) < Setup.JoystickDeadZone*3000) X = 0;
+				if (abs(Y) < Setup.JoystickDeadZone*3000) Y = 0;
 
 				if (JoystickAxisX != X || JoystickAxisY != Y)
 				{
