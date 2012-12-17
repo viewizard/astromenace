@@ -76,7 +76,7 @@ id;en;de;ru
 2_restart_line2;Note: the current game data will be lost.;Hinweis: Der aktuelle Spielstand geht verloren.;Текущие данные миссии будут потеряны.
 ;;;
 ;;;
-3_Mouse_Control;Mouse Control;Maus Steuerung;Управление Мышкой
+3_Joystick_DeadZone;Joystick DeadZone;Joystick Neutralzone;Мертвая зона джойстика
 3_Control_Sensitivity;Control Sensitivity;Empfindlichkeitskontrolle;Чувствительность
 3_MOUSE;MOUSE;MAUS;МЫШКА
 3_KEYBOARD;KEYBOARD;TASTATUR;КЛАВИАТУРА

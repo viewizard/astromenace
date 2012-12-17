@@ -123,15 +123,28 @@ void GameOptions()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, vw_GetText("3_Mouse_Control"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), GameContentTransp, false) | DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), GameContentTransp, false))
-	if (NeedCheck == 0)
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, vw_GetText("3_Joystick_DeadZone"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), GameContentTransp, Setup.JoystickDeadZone == 0))
 	{
-		Setup.MouseControl = !Setup.MouseControl;
+		Setup.JoystickDeadZone --;
+		if (Setup.JoystickDeadZone<0) Setup.JoystickDeadZone = 0;
 	}
-	int Size = vw_FontSize(Setup.MouseControl ? vw_GetText("1_On") : vw_GetText("1_Off"));
-	int SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, Setup.MouseControl ? vw_GetText("1_On") : vw_GetText("1_Off"));
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), GameContentTransp, Setup.JoystickDeadZone == 10))
+	{
+		Setup.JoystickDeadZone++;
+		if (Setup.JoystickDeadZone>10) Setup.JoystickDeadZone = 10;
+	}
+	for (int i=0; i<10; i++)
+	{
+		SetRect(&SrcRest,0,0,16,32);
+		SetRect(&DstRest,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
+		if (Setup.JoystickDeadZone > i)
+			vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc.tga"), true, GameContentTransp);
+		else
+			vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, GameContentTransp);
+	}
+
+
 
 
 	Y1 += Prir1;
@@ -170,7 +183,7 @@ void GameOptions()
 
 
 	Y1 += Prir1;
-	SizeI = (100-vw_FontSize(vw_GetText("3_MOUSE")))/2;
+	int SizeI = (100-vw_FontSize(vw_GetText("3_MOUSE")))/2;
 	vw_DrawFont(X1+315+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, GameContentTransp, vw_GetText("3_MOUSE"));
 	SizeI = (150-vw_FontSize(vw_GetText("3_KEYBOARD")))/2;
 	vw_DrawFont(X1+446+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, GameContentTransp, vw_GetText("3_KEYBOARD"));
