@@ -132,7 +132,7 @@ sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 #define TEXTURE_NO_MIPMAP	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE
 
 // сколько нужно загружать в листе меню
-const int	MenuLoadListCount = 185;
+const int	MenuLoadListCount = 187;
 // лист загрузки меню
 LoadList	MenuLoadList[MenuLoadListCount] =
 {
@@ -194,6 +194,8 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/MENU/arrows_on.tga",				0, 69, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/MENU/arrows_off.tga",			0, 69, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/MENU/arrows_blue.tga",			0, 69, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/MENU/arrow_list_up.tga",		0, 69, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/MENU/arrow_list_down.tga",		0, 69, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 // иконки отображения в меню выбора миссий
 {"DATA/SCRIPT/mission1_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 {"DATA/SCRIPT/mission2_icon.tga",			0, 12, false,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},

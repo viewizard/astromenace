@@ -16,7 +16,7 @@
 
 	<!-- Mission 2 -->
 	<Mission>
-		<Title color="2" type="1">6_Mission2Title</Title>
+		<Title color="6" type="1">6_Mission2Title</Title>
 		<Descr color="0" type="1">6_Mission2Descr</Descr>
 		<Icon>DATA/SCRIPT/mission2_icon.tga</Icon>
 		<File>DATA/SCRIPT/mission2.xml</File>
@@ -32,7 +32,7 @@
 
 	<!-- Mission 4 -->
 	<Mission>
-		<Title color="2" type="1">6_Mission4Title</Title>
+		<Title color="6" type="1">6_Mission4Title</Title>
 		<Descr color="0" type="1">6_Mission4Descr</Descr>
 		<Icon>DATA/SCRIPT/mission4_icon.tga</Icon>
 		<File>DATA/SCRIPT/mission4.xml</File>
@@ -48,7 +48,7 @@
 
 	<!-- Mission 6 -->
 	<Mission>
-		<Title color="4" type="1">6_Mission6Title</Title>
+		<Title color="6" type="1">6_Mission6Title</Title>
 		<Descr color="0" type="1">6_Mission6Descr</Descr>
 		<Icon>DATA/SCRIPT/mission6_icon.tga</Icon>
 		<File>DATA/SCRIPT/mission6.xml</File>
@@ -56,7 +56,7 @@
 
 	<!-- Mission 7 -->
 	<Mission>
-		<Title color="2" type="1">6_Mission7Title</Title>
+		<Title color="4" type="1">6_Mission7Title</Title>
 		<Descr color="0" type="1">6_Mission7Descr</Descr>
 		<Icon>DATA/SCRIPT/mission7_icon.tga</Icon>
 		<File>DATA/SCRIPT/mission7.xml</File>
@@ -64,7 +64,7 @@
 
 	<!-- Mission 8 -->
 	<Mission>
-		<Title color="4" type="1">6_Mission8Title</Title>
+		<Title color="6" type="1">6_Mission8Title</Title>
 		<Descr color="0" type="1">6_Mission8Descr</Descr>
 		<Icon>DATA/SCRIPT/mission8_icon.tga</Icon>
 		<File>DATA/SCRIPT/mission8.xml</File>
@@ -72,7 +72,7 @@
 
 	<!-- Mission 9 -->
 	<Mission>
-		<Title color="2" type="1">6_Mission9Title</Title>
+		<Title color="4" type="1">6_Mission9Title</Title>
 		<Descr color="0" type="1">6_Mission9Descr</Descr>
 		<Icon>DATA/SCRIPT/mission9_icon.tga</Icon>
 		<File>DATA/SCRIPT/mission9.xml</File>
@@ -80,7 +80,7 @@
 
 	<!-- Mission 10 -->
 	<Mission>
-		<Title color="4" type="1">6_Mission10Title</Title>
+		<Title color="6" type="1">6_Mission10Title</Title>
 		<Descr color="0" type="1">6_Mission10Descr</Descr>
 		<Icon>DATA/SCRIPT/mission10_icon.tga</Icon>
 		<File>DATA/SCRIPT/mission10.xml</File>
@@ -96,7 +96,7 @@
 
 	<!-- Mission 12 -->
 	<Mission>
-		<Title color="2" type="1">6_Mission12Title</Title>
+		<Title color="6" type="1">6_Mission12Title</Title>
 		<Descr color="0" type="1">6_Mission12Descr</Descr>
 		<Icon>DATA/SCRIPT/mission12_icon.tga</Icon>
 		<File>DATA/SCRIPT/mission12.xml</File>
@@ -112,7 +112,7 @@
 
 	<!-- Mission 14 -->
 	<Mission>
-		<Title color="2" type="1">6_Mission14Title</Title>
+		<Title color="6" type="1">6_Mission14Title</Title>
 		<Descr color="0" type="1">6_Mission14Descr</Descr>
 		<Icon>DATA/SCRIPT/mission14_icon.tga</Icon>
 		<File>DATA/SCRIPT/mission14.xml</File>

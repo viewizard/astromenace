@@ -678,3 +678,226 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 			}
 		}
 }
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// прорисовка кнопки вверх для списков
+//------------------------------------------------------------------------------------
+bool DrawListUpButton(int X, int Y, float Transp, bool Off)
+{
+	RECT SrcRest, DstRest, MouseRest;
+	SetRect(&SrcRest,0,0,32,32);
+	SetRect(&DstRest,X,Y,X+32,Y+32);
+	SetRect(&MouseRest,X,Y,X+32,Y+32);
+
+	// все проверки
+	int MouseX, MouseY;
+	vw_GetMousePos(&MouseX, &MouseY);
+
+
+	if (Off || DragWeapon)
+	{
+		SetRect(&DstRest,X+2,Y+2,X+32-2,Y+32-2);
+		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/arrow_list_up.tga"), true, 0.3f*Transp);
+
+		if  (((MouseRest.right  >= MouseX) &&
+			(MouseRest.left<= MouseX) &&
+			(MouseRest.bottom >= MouseY) &&
+			(MouseRest.top<= MouseY)) && !isDialogBoxDrawing())
+		{
+			if (Transp==1.0f && !DragWeapon)
+			{
+				CurrentCursorStatus = 2;
+				if (vw_GetWindowLBMouse(true))
+					Audio_PlaySound2D(7,1.0f);
+			}
+		}
+
+		return false;
+	}
+
+
+
+	bool ON = false;
+	bool CanClick = false;
+
+
+	// работаем с клавиатурой
+	if ((Transp >= 0.99f)  && !isDialogBoxDrawing() && DrawGameCursor) CurrentActiveMenuElement++;
+	bool InFocusByKeyboard = false;
+	if (CurrentKeyboardSelectMenuElement > 0)
+	{
+		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement)
+		{
+			InFocusByKeyboard = true;
+		}
+	}
+
+
+	if  ((((MouseRest.right  >= MouseX) &&
+		(MouseRest.left<= MouseX) &&
+		(MouseRest.bottom >= MouseY) &&
+		(MouseRest.top<= MouseY)) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor)
+	{
+		// если тухнем или появляемся - не жать
+		ON = true;
+		if (Transp==1.0f)
+		{
+			CanClick = true;
+			CurrentCursorStatus = 1;
+		}
+
+		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y)
+		{
+			Audio_PlaySound2D(15,1.0f);
+			NeedPlayOnButtonSoundX = X;
+			NeedPlayOnButtonSoundY = Y;
+		}
+	}
+	else
+	{
+		if (NeedPlayOnButtonSoundX == X && NeedPlayOnButtonSoundY == Y)
+		{
+			NeedPlayOnButtonSoundX = 0;
+			NeedPlayOnButtonSoundY = 0;
+		}
+	}
+
+
+	if (!ON)
+	{
+		SetRect(&DstRest,X+2,Y+2,X+32-2,Y+32-2);
+		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/arrow_list_up.tga"), true, 0.3f*Transp);
+	}
+	else
+		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/arrow_list_up.tga"), true, Transp);
+
+
+	if (CanClick)
+		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN))))
+		{
+			Audio_PlaySound2D(2,1.0f);
+			if (InFocusByKeyboard)
+			{
+				vw_SetKeys(SDLK_KP_ENTER, false);
+				vw_SetKeys(SDLK_RETURN, false);
+			}
+			return true;
+		}
+
+	return false;
+}
+
+
+
+//------------------------------------------------------------------------------------
+// прорисовка кнопки вниз для списков
+//------------------------------------------------------------------------------------
+bool DrawListDownButton(int X, int Y, float Transp, bool Off)
+{
+	RECT SrcRest, DstRest, MouseRest;
+	SetRect(&SrcRest,0,0,32,32);
+	SetRect(&DstRest,X,Y,X+32,Y+32);
+	SetRect(&MouseRest,X,Y,X+32,Y+32);
+
+	// все проверки
+	int MouseX, MouseY;
+	vw_GetMousePos(&MouseX, &MouseY);
+
+
+	if (Off || DragWeapon)
+	{
+		SetRect(&DstRest,X+2,Y+2,X+32-2,Y+32-2);
+		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/arrow_list_down.tga"), true, 0.3f*Transp);
+
+		if  (((MouseRest.right  >= MouseX) &&
+			(MouseRest.left<= MouseX) &&
+			(MouseRest.bottom >= MouseY) &&
+			(MouseRest.top<= MouseY)) && !isDialogBoxDrawing())
+		{
+			if (Transp==1.0f && !DragWeapon)
+			{
+				CurrentCursorStatus = 2;
+				if (vw_GetWindowLBMouse(true))
+					Audio_PlaySound2D(7,1.0f);
+			}
+		}
+
+		return false;
+	}
+
+
+
+	bool ON = false;
+	bool CanClick = false;
+
+
+	// работаем с клавиатурой
+	if ((Transp >= 0.99f)  && !isDialogBoxDrawing() && DrawGameCursor) CurrentActiveMenuElement++;
+	bool InFocusByKeyboard = false;
+	if (CurrentKeyboardSelectMenuElement > 0)
+	{
+		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement)
+		{
+			InFocusByKeyboard = true;
+		}
+	}
+
+
+	if  ((((MouseRest.right  >= MouseX) &&
+		(MouseRest.left<= MouseX) &&
+		(MouseRest.bottom >= MouseY) &&
+		(MouseRest.top<= MouseY)) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor)
+	{
+		// если тухнем или появляемся - не жать
+		ON = true;
+		if (Transp==1.0f)
+		{
+			CanClick = true;
+			CurrentCursorStatus = 1;
+		}
+
+		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y)
+		{
+			Audio_PlaySound2D(15,1.0f);
+			NeedPlayOnButtonSoundX = X;
+			NeedPlayOnButtonSoundY = Y;
+		}
+	}
+	else
+	{
+		if (NeedPlayOnButtonSoundX == X && NeedPlayOnButtonSoundY == Y)
+		{
+			NeedPlayOnButtonSoundX = 0;
+			NeedPlayOnButtonSoundY = 0;
+		}
+	}
+
+
+	if (!ON)
+	{
+		SetRect(&DstRest,X+2,Y+2,X+32-2,Y+32-2);
+		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/arrow_list_down.tga"), true, 0.3f*Transp);
+	}
+	else
+		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/arrow_list_down.tga"), true, Transp);
+
+
+	if (CanClick)
+		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN))))
+		{
+			Audio_PlaySound2D(2,1.0f);
+			if (InFocusByKeyboard)
+			{
+				vw_SetKeys(SDLK_KP_ENTER, false);
+				vw_SetKeys(SDLK_RETURN, false);
+			}
+			return true;
+		}
+
+	return false;
+}
+
