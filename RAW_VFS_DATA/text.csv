@@ -22,6 +22,7 @@ id;en;de;ru
 1_Interface;Interface;Ausblick;Интерфейс
 1_Advanced;Advanced;Erweitert;Специальные
 1_MAIN_MENU;MAIN MENU;HAUPTMENÜ;ОСНОВНОЕ МЕНЮ
+1_MISSIONS_LIST;MISSIONS LIST;MISSIONEN LISTE;СПИСОК МИССИЙ
 1_DONATE;DONATE;SPENDEN;ПОДДЕРЖАТЬ
 1_ORDER_NOW;ORDER NOW;JETZT BESTELLEN;КУПИТЬ СЕЙЧАС
 1_Arcade;Arcade;Spielhalle;Аркада
@@ -57,6 +58,7 @@ id;en;de;ru
 1_Page_Up;Page Up;Seite Rauf;Предыдущая
 1_Page_Down;Page Down;Seite Runter;Следующая
 1_Duplicate;Duplicate;Duplikat;Копия
+1_Change_Profile;Change Profile;Ändern Profil;Изменить Профиль
 ;;;
 ;;;
 2_quit_line1;Are you sure you want to quit?;Wollen Sie wirklich aufhören?;Вы уверены, что хотите завершить игру?
@@ -144,6 +146,7 @@ id;en;de;ru
 3_GAME_OBJECTS_INFORMATION;GAME OBJECTS INFORMATION;Informationen zum Spielziel;ИНФОРМАЦИЯ ОБ ОБЪЕКТАХ
 3_Page_%i_of_%i;Page %i of %i;Seite %i von %i;Страница %i из %i
 3_New_Pilot_Profile;New Pilot Profile;Neues Piloten Profile;Новый Профиль Пилота
+3_Pilot_Profile;Pilot Profile;Pilot Profil;Профиль Пилота
 3_Pilots_Profiles;Pilots Profiles;Piloten Profile;Профили Пилотов
 3_Money;Money;Geld;Деньги
 3_Experience;Exp;Erfahrung;Опыт

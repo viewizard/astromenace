@@ -976,28 +976,35 @@ void ExitGameWithSave()
 		}
 	}
 
-	// ставим нужною миссию
+	// ставим следующую миссию
 	CurrentMission ++;
-	// ставим ограничитель дальше, если это нужно
+	// перемещаем ограничитель дальше, если это нужно
 	if (Setup.Profile[CurrentProfile].OpenLevelNum < CurrentMission)
 		Setup.Profile[CurrentProfile].OpenLevelNum = CurrentMission;
 
-	// ставим нужный лист миссий
-	if (!(StartMission<=CurrentMission && CurrentMission<=EndMission && CurrentMission<AllMission))
-	{
-		StartMission += 5;
-		EndMission += 5;
-	}
-
-
-	// если дальше уже ничего, просто снимаем все... пусть игрок сам выберет
-	if (CurrentMission > MissionLimitation)
+	// если дальше уже ничего нет, просто снимаем все... пусть игрок сам выберет
+	if (CurrentMission > AllMission-1)
 	{
 		CurrentMission = -1;
-		// ставим первый лист миссий
-		StartMission = 0;
-		EndMission = 4;
 	}
+
+	vw_ResetWheelStatus();
+	// ставим нужный лист миссий
+	StartMission = 0;
+	EndMission = 4;
+	if (CurrentMission != -1)
+	if (CurrentMission > 2)// нужно сдвинуть лист, чтобы выбранный элемент был по середине списка
+	{
+		StartMission = CurrentMission-2;
+		EndMission = CurrentMission+2;
+
+		if (CurrentMission >= AllMission-2)
+		{
+			StartMission = AllMission-5;
+			EndMission = AllMission-1;
+		}
+	}
+
 
 	Setup.Profile[CurrentProfile].LastMission = CurrentMission;
 

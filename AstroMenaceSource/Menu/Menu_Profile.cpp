@@ -678,7 +678,7 @@ void ProfileMenu()
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
 	X = Setup.iAspectRatioWidth/2 + 28;
-	if (DrawButton256(X,Y, vw_GetText("1_NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
+	if (DrawButton256(X,Y, vw_GetText("1_MISSIONS_LIST"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
 	{
 		ComBuffer = MISSION;
 	}

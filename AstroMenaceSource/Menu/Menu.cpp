@@ -295,14 +295,21 @@ void SetMenu(eGameStatus Menu)
 			break;
 
 		case MISSION:
+			vw_ResetWheelStatus();
 			// ставим нужный лист миссий
 			StartMission = 0;
 			EndMission = 4;
 			if (CurrentMission != -1)
-			while (!(StartMission<=CurrentMission && CurrentMission<=EndMission))
+			if (CurrentMission > 2)// нужно сдвинуть лист, чтобы выбранный элемент был по середине списка
 			{
-				StartMission += 5;
-				EndMission += 5;
+				StartMission = CurrentMission-2;
+				EndMission = CurrentMission+2;
+
+				if (CurrentMission >= AllMission-2)
+				{
+					StartMission = AllMission-5;
+					EndMission = AllMission-1;
+				}
 			}
 			break;
 
@@ -667,7 +674,11 @@ void MainMenu()
 
 	if (DrawButton384(X,Y, vw_GetText("1_START_GAME"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime))
 	{
-		ComBuffer = PROFILE;
+		// если текущего профиля нет - нужно перейти на выбор профилей, если есть - сразу идем на выбор миссий
+		if (CurrentProfile < 0)
+			ComBuffer = PROFILE;
+		else
+			ComBuffer = MISSION;
 	}
 
 

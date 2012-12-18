@@ -1089,6 +1089,8 @@ loop:
 
 				// обрабатываем кнопки мыши
 				case SDL_MOUSEBUTTONDOWN:
+					if (event.button.button ==  SDL_BUTTON_WHEELUP) vw_ChangeWheelStatus(-1);
+					if (event.button.button ==  SDL_BUTTON_WHEELDOWN) vw_ChangeWheelStatus(1);
 					if (event.button.button == SDL_BUTTON_LEFT)
 					{
 						vw_SetWindowLBMouse(true);

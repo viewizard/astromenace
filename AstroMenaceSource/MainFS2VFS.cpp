@@ -28,7 +28,7 @@
 #include "Game.h"
 
 
-const int	ConvertListCount = 387;
+const int	ConvertListCount = 389;
 const char *ConvertList[ConvertListCount] =
 {"DATA_RU/VOICE/EngineMalfunction.wav",
 "DATA_RU/VOICE/WeaponDamaged.wav",
@@ -257,6 +257,8 @@ const char *ConvertList[ConvertListCount] =
 "MENU/weapon6_icon.tga",
 "MENU/arrows_off.tga",
 "MENU/arrows_blue.tga",
+"MENU/arrow_list_up.tga",
+"MENU/arrow_list_down.tga",
 "MENU/workshop_panel5.tga",
 "MENU/workshop_panel3.tga",
 "MENU/dialog768_600.tga",

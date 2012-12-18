@@ -240,7 +240,8 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, bool SoundClick = true);
 bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off);
 void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Transp);
-
+bool DrawListUpButton(int X, int Y, float Transp, bool Off);
+bool DrawListDownButton(int X, int Y, float Transp, bool Off);
 
 
 
@@ -462,7 +463,6 @@ void DifficultyMenu();
 // Menu_Mission.cpp
 //------------------------------------------------------------------------------------
 extern int CurrentMission;
-extern int MissionLimitation;
 extern int AllMission;
 extern int StartMission;
 extern int EndMission;
