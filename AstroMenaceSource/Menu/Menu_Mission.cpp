@@ -52,6 +52,7 @@ int *MissionTitleType = 0;
 int *MissionDescrType = 0;
 char **MissionFile = 0;
 
+bool SliderUnderMouseControl = false;
 
 
 
@@ -628,7 +629,7 @@ void MissionMenu()
 	// проверяем колесико мышки, если курсор находится над активной частью
 	SetRect(&DstRest,X1,Y1,X1+750,Y1+320);
 	if (vw_OnRect(&DstRest))
-	if (vw_GetWheelStatus() != 0)
+	if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing())
 	{
 		StartMission += vw_GetWheelStatus();
 		EndMission += vw_GetWheelStatus();
@@ -650,6 +651,51 @@ void MissionMenu()
 	SetRect(&SrcRest,0,0,32,32);
 	SetRect(&DstRest,X1+750-32+4,Y1+32+((320.0f-64)/AllMission)*StartMission,X1+750-4,Y1+32+((320.0f-64)/AllMission)*(EndMission+1));
 	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/whitepoint.tga"), true, 0.3f*MenuContentTransp);
+
+	// обработка перетягивания ползунка отображения позиции списка
+	// если стоим на ползунком и нажали кнопку мышки - "захватываем"
+	if (!SliderUnderMouseControl && vw_OnRect(&DstRest) && vw_GetWindowLBMouse(false) && !isDialogBoxDrawing())
+	{
+		SliderUnderMouseControl = true;
+		Audio_PlaySound2D(2,1.0f);
+	}
+	// если ползунок был захвачен, но уже не над секцией где его можно перетягивать или отпустили мышку - отпускаем
+	RECT DstRest2;
+	SetRect(&DstRest2,X1+750-32+4,Y1+32,X1+750-4,Y1+32+(320.0f-64));
+	if ((SliderUnderMouseControl && (!vw_OnRect(&DstRest2) || !vw_GetWindowLBMouse(false))) || isDialogBoxDrawing())
+	{
+		SliderUnderMouseControl = false;
+	}
+	// просто кликнули на зону перетягивания, не на ползунок
+	if (!vw_OnRect(&DstRest) && vw_OnRect(&DstRest2) && vw_GetWindowLBMouse(false) && !isDialogBoxDrawing())
+	{
+		SliderUnderMouseControl = true;
+		Audio_PlaySound2D(2,1.0f);
+		vw_SetWindowLBMouse(false);
+	}
+	// отображаем курсором, что можно кликать на полосе прокрутки
+	if (vw_OnRect(&DstRest2)) CurrentCursorStatus = 1;
+	// корректируем его положение ползунка согласно положению мышки
+	if (SliderUnderMouseControl)
+	{
+		int MouseX, MouseY;
+		vw_GetMousePos(&MouseX, &MouseY);
+		int SliderNewPosition = (MouseY - Y1-32)/((320.0f-64)/AllMission);
+
+		StartMission = 0;
+		EndMission = 4;
+		if (SliderNewPosition > 2)
+		{
+			StartMission = SliderNewPosition-2;
+			EndMission = SliderNewPosition+2;
+
+			if (SliderNewPosition >= AllMission-2)
+			{
+				StartMission = AllMission-5;
+				EndMission = AllMission-1;
+			}
+		}
+	}
 
 
 
