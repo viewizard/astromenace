@@ -30,8 +30,8 @@ AstroMenace Data
 
 * "models.pack" file (RAW_VFS_DATA/MODELS/ folder)
 
-This file contain compiled into AstroMenace game format 3D models and 
-textures created by Max Shelekhov, 3drt.com. "models.pack" file released 
+This file contains precompiled into AstroMenace game format 3D models and 
+textures created by Max Shelekhov, 3drt.com. "models.pack" file is released 
 under Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0) license 
 (see RAW_VFS_DATA/MODELS/ReadMe.txt or 
 <http://creativecommons.org/licenses/by-sa/3.0/legalcode>).
@@ -44,10 +44,10 @@ game data will be stored in main virtual file system (gamedata.vfs file).
 * "a_class4.tga", "clouds.tga", "d_class3.tga" and "q_class2.tga" files 
   (RAW_VFS_DATA/MODELS/PLANET/ folder)
 
-This planetary textures created by Alex (Esgaroth) Reuter and Robert Stein 
+These planetary textures created by Alex (Esgaroth) Reuter and Robert Stein 
 are part of VegaTrek "Planetary textures add-on" licensed under "GNU 
 GENERAL PUBLIC LICENSE Version 3". Full "Planetary textures add-on" 
-package and all relative data can be download from VegaTrek file section 
+package and all relative data can be downloaded from VegaTrek file section 
 at http://sourceforge.net/projects/vegatrek/
 Please note, all artwork in "Planetary textures add-on" (version 0.6) was 
 released under "Freeware" license, but according to Alex e-mail replay: 
@@ -67,7 +67,7 @@ or <http://font.ubuntu.com/ufl/ubuntu-font-licence-1.0.txt>).
 * "FreeMonoBold.ttf", "FreeSansBold.ttf" and "FreeSerifBold.ttf" files 
   (RAW_VFS_DATA/FONT/ folder)
 
-This ttf fonts are part of GNU FreeFont package released under "GNU GENERAL 
+These ttf fonts are part of GNU FreeFont package released under "GNU GENERAL 
 PUBLIC LICENSE Version 3" (see RAW_VFS_DATA/FONT/FreeFontLicense.txt or 
 <http://opensource.org/licenses/GPL-3.0>).
 
@@ -75,16 +75,16 @@ PUBLIC LICENSE Version 3" (see RAW_VFS_DATA/FONT/FreeFontLicense.txt or
 * "LiberationMono-Bold.ttf", "LiberationSans-Bold.ttf" and 
   "LiberationSerif-Bold.ttf" files (RAW_VFS_DATA/FONT/ folder)
 
-This ttf fonts are part of Liberation Fonts package released under "SIL 
+These ttf fonts are part of Liberation Fonts package released under "SIL 
 Open Font License, Version 1.1" 
 (see RAW_VFS_DATA/FONT/LiberationFontLicense.txt or 
 <http://opensource.org/licenses/OFL-1.1>).
 
 
 * Other game data (all 2D artwork, music, sfx, voice and part of 3D models 
-with textures), except described above, was created by Viewizard team 
+with textures), except described above, were created by Viewizard team 
 during AstroMenace development (see "Credits" menu in game for full list of 
-authors) and released under "GNU GENERAL PUBLIC LICENSE Version 3". You can 
-download this data "source" package from 
+authors) and were released under "GNU GENERAL PUBLIC LICENSE Version 3". 
+You can download package with souce files of these data from 
 http://www.viewizard.com/download/astromenace-artwork-1.3.1.zip or 
 http://sourceforge.net/projects/openastromenace/files/1.3.1/astromenace-artwork-1.3.1.zip
