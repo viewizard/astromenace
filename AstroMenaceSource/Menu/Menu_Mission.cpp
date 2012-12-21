@@ -629,24 +629,31 @@ void MissionMenu()
 	// проверяем колесико мышки, если курсор находится над активной частью
 	SetRect(&DstRest,X1,Y1,X1+750,Y1+320);
 	if (vw_OnRect(&DstRest))
-	if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing())
 	{
-		StartMission += vw_GetWheelStatus();
-		EndMission += vw_GetWheelStatus();
-
-		if (StartMission < 0)
+		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing())
 		{
-			StartMission = 0;
-			EndMission = 4;
-		}
-		if (EndMission > AllMission-1)
-		{
-			EndMission = AllMission-1;
-			StartMission = EndMission-4;
-		}
+			StartMission += vw_GetWheelStatus();
+			EndMission += vw_GetWheelStatus();
 
+			if (StartMission < 0)
+			{
+				StartMission = 0;
+				EndMission = 4;
+			}
+			if (EndMission > AllMission-1)
+			{
+				EndMission = AllMission-1;
+				StartMission = EndMission-4;
+			}
+
+			vw_ResetWheelStatus();
+		}
+	}
+	else if (vw_GetWheelStatus() != 0)
+	{
 		vw_ResetWheelStatus();
 	}
+
 	// выводим отображение положени в списке на полоске со стрелками
 	SetRect(&SrcRest,0,0,32,32);
 	SetRect(&DstRest,X1+750-32+4,Y1+32+((320.0f-64)/AllMission)*StartMission,X1+750-4,Y1+32+((320.0f-64)/AllMission)*(EndMission+1));

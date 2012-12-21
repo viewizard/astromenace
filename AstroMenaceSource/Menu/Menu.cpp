@@ -247,7 +247,6 @@ void SetMenu(eGameStatus Menu)
 			Options_FontNumber = Setup.FontNumber;
 			break;
 
-
 		case OPTIONS:
 			Options_Width = Setup.Width;
 			Options_Height = Setup.Height;
@@ -313,6 +312,12 @@ void SetMenu(eGameStatus Menu)
 			}
 			break;
 
+		case INFORMATION:
+			vw_ResetWheelStatus();
+			CreateNum = 1;
+			CreateInfoObject();
+			break;
+
 		case CREDITS:
 			CreditsCurrentPos = 0.0f;
 			LastCreditsCurrentPosUpdateTime = vw_GetTime();
@@ -338,37 +343,14 @@ void SetMenu(eGameStatus Menu)
 
 void SetMenu2(eGameStatus Menu)
 {
-
-	switch (Menu)
-	{
-		case INFORMATION:
-			CreateInfoObject();
-			break;
-		default:
-			break;
-	}
-
-
+	// текущее меню уже стало невидимым, освобождаем память после воркшопа + выключаем голосовые сообщения
+	// раньше удалять нельзя - для вывода используем данные из 3д объектов (!)
 	switch (GameStatus)
 	{
-		case INFORMATION:
-			CreateNum = 1;
-			break;
 		case WORKSHOP:
 			WorkshopDestroyData();
 			VoiceNeedMoreEnergy = 0;
 			VoiceAmmoOut = 0;
-			break;
-		case MISSION:
-			// ставим нужный лист миссий
-			StartMission = 0;
-			EndMission = 4;
-			if (CurrentMission != -1)
-			while (!(StartMission<=CurrentMission && CurrentMission<=EndMission))
-			{
-				StartMission += 5;
-				EndMission += 5;
-			}
 			break;
 		default:
 			break;
@@ -590,11 +572,6 @@ void DrawMenu()
 	// если нужно - рисуем в окошке еще одном
 	switch(GameStatus)
 	{
-		case MAIN_MENU:		break;
-		case TOP_SCORES:	break;
-		case OPTIONS:		break;
-		case CREDITS:		break;
-
 		case INFORMATION:	InformationDrawObject(); break;
 
 		default:
