@@ -1589,6 +1589,27 @@ void InformationMenu()
 
 
 
+	// проверяем колесико мышки
+	SetRect(&DstRest,(int)(Setup.iAspectRatioWidth/2-440),80,(int)(Setup.iAspectRatioWidth/2+440),590);
+	if (vw_OnRect(&DstRest))
+	{
+		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing())
+		{
+			CreateNum += vw_GetWheelStatus();
+
+			if (CreateNum<1) CreateNum = InfoEnd;
+			if (CreateNum>InfoEnd) CreateNum = 1;
+			CreateInfoObject();
+
+			vw_ResetWheelStatus();
+		}
+	}
+	else if (vw_GetWheelStatus() != 0)
+	{
+		vw_ResetWheelStatus();
+	}
+
+
 
 	int Prir = 100;
 	int X = Setup.iAspectRatioWidth/2 - 432;

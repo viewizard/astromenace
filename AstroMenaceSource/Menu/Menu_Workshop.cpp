@@ -425,8 +425,6 @@ void WorkshopMenu()
 		else
 		{
 			MenuContentTransp = 0.98f; // небольшая "защелка" от быстрых двойных нажатий на кнопку
-		//	WorkshopDestroyData();
-		//	CanDrawWorkshop = false;
 			// ничего не тянем... только включили меню
 			DragWeaponNum = 0;
 			DragWeaponLevel = 0;
