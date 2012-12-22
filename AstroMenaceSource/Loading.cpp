@@ -842,11 +842,11 @@ void DrawViewizardLogo(eTexture *ViewizardLogoTexture)
 
 	while (ShowLogoLife > 0)
 	{
-		RECT SrcRest,DstRest;
-		SetRect(&SrcRest, 1,1,511,511);
+		RECT SrcRect,DstRect;
+		SetRect(&SrcRect, 1,1,511,511);
 		int StartX = (Setup.iAspectRatioWidth-510)/2;
 		int EndX = StartX+510;
-		SetRect(&DstRest, StartX, 128+1, EndX, 640-2);
+		SetRect(&DstRect, StartX, 128+1, EndX, 640-2);
 		float Transp = 1.0f;
 		float GreyColor = 1.0f;
 
@@ -873,7 +873,7 @@ void DrawViewizardLogo(eTexture *ViewizardLogoTexture)
 		vw_BeginRendering(RI_COLOR_BUFFER | RI_DEPTH_BUFFER);
 		vw_Start2DMode(-1,1);
 
-		vw_DrawTransparent(&DstRest, &SrcRest, ViewizardLogoTexture, true, Transp, 0.0f, RI_UL_CORNER, GreyColor, GreyColor, GreyColor);
+		vw_DrawTransparent(&DstRect, &SrcRect, ViewizardLogoTexture, true, Transp, 0.0f, RI_UL_CORNER, GreyColor, GreyColor, GreyColor);
 
 		vw_End2DMode();
 		vw_EndRendering();
@@ -934,25 +934,25 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, eTexture 
 	vw_BeginRendering(RI_COLOR_BUFFER | RI_DEPTH_BUFFER);
 	vw_Start2DMode(-1,1);
 
-	RECT SrcRest, DstRest;
+	RECT SrcRect, DstRect;
 
 	// выводим картинку
-	SetRect(&SrcRest, 0,0,1024,512);
-	SetRect(&DstRest, 0, 64+32,Setup.iAspectRatioWidth,64+32+512);
-	vw_DrawTransparent(&DstRest, &SrcRest, LoadImageTexture, false, 1.0f, 0.0f);
+	SetRect(&SrcRect, 0,0,1024,512);
+	SetRect(&DstRect, 0, 64+32,Setup.iAspectRatioWidth,64+32+512);
+	vw_DrawTransparent(&DstRect, &SrcRect, LoadImageTexture, false, 1.0f, 0.0f);
 
 	// пишем "загрузка"
 	vw_DrawFont(Setup.iAspectRatioWidth/2-vw_FontSize(vw_GetText("11_Loading"))/2, 768-128, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f, vw_GetText("11_Loading"));
 
 	// выводим подложку линии загрузки
-	SetRect(&SrcRest, 0,0,256,32);
+	SetRect(&SrcRect, 0,0,256,32);
 	int StartX = (Setup.iAspectRatioWidth-256)/2;
-	vw_Draw(StartX, 768-64-8 -32, &SrcRest, vw_FindTextureByName("DATA/LOADING/loading_back.tga"), true);
+	vw_Draw(StartX, 768-64-8 -32, &SrcRect, vw_FindTextureByName("DATA/LOADING/loading_back.tga"), true);
 
 	// выводим линию загрузки
 	int loaded = (int)(256.0f*Current/AllDrawLoading);
-	SetRect(&SrcRest, 0,0,loaded,16);
-	vw_Draw(StartX, 768-64-1 -32, &SrcRest, vw_FindTextureByName("DATA/LOADING/loading_line.tga"), true);
+	SetRect(&SrcRect, 0,0,loaded,16);
+	vw_Draw(StartX, 768-64-1 -32, &SrcRect, vw_FindTextureByName("DATA/LOADING/loading_line.tga"), true);
 
 
 	// выводим хинт при загрузке

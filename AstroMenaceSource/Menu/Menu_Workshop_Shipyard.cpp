@@ -487,15 +487,15 @@ void Workshop_Shipyard()
 
 	// затемнение при выводе
 	int SizeI;
-	RECT SrcRest, DstRest;
+	RECT SrcRect, DstRect;
 
 
 	// затемнение
-	SetRect(&SrcRest,0,0,256,256 );
-	SetRect(&DstRest,Setup.iAspectRatioWidth/2-480,100-32,Setup.iAspectRatioWidth/2-32,450+32);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/back_spot2.tga"), true, 0.45f*MenuContentTransp);
-	SetRect(&DstRest,Setup.iAspectRatioWidth/2+32,100-32,Setup.iAspectRatioWidth/2+480,450+32);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/back_spot2.tga"), true, 0.45f*MenuContentTransp);
+	SetRect(&SrcRect,0,0,256,256 );
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2-480,100-32,Setup.iAspectRatioWidth/2-32,450+32);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/back_spot2.tga"), true, 0.45f*MenuContentTransp);
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2+32,100-32,Setup.iAspectRatioWidth/2+480,450+32);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/back_spot2.tga"), true, 0.45f*MenuContentTransp);
 
 
 
@@ -545,13 +545,13 @@ void Workshop_Shipyard()
 
 
 	// рамки
-	SetRect(&SrcRest,0,0,400,35 );
-	SetRect(&DstRest,Setup.iAspectRatioWidth/2-457,100-11,Setup.iAspectRatioWidth/2-57,100+35-11);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/workshop_panel4.tga"), true, MenuContentTransp);
+	SetRect(&SrcRect,0,0,400,35 );
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2-457,100-11,Setup.iAspectRatioWidth/2-57,100+35-11);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/workshop_panel4.tga"), true, MenuContentTransp);
 
-	SetRect(&SrcRest,0,0,400,173 );
-	SetRect(&DstRest,Setup.iAspectRatioWidth/2-457,450-13,Setup.iAspectRatioWidth/2-57,450+173-13);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/workshop_panel1.tga"), true, MenuContentTransp);
+	SetRect(&SrcRect,0,0,400,173 );
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2-457,450-13,Setup.iAspectRatioWidth/2-57,450+173-13);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/workshop_panel1.tga"), true, MenuContentTransp);
 
 
 	if (DrawButton128_2(Setup.iAspectRatioWidth/2-395,482, vw_GetText("1_Prev"), MenuContentTransp, false))
@@ -647,13 +647,13 @@ void Workshop_Shipyard()
 
 
 	// рамки
-	SetRect(&SrcRest,0,0,400,35 );
-	SetRect(&DstRest,Setup.iAspectRatioWidth/2+57,100-11,Setup.iAspectRatioWidth/2+457,100+35-11);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/workshop_panel4.tga"), true, MenuContentTransp);
+	SetRect(&SrcRect,0,0,400,35 );
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2+57,100-11,Setup.iAspectRatioWidth/2+457,100+35-11);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/workshop_panel4.tga"), true, MenuContentTransp);
 
-	SetRect(&SrcRest,0,0,400,173 );
-	SetRect(&DstRest,Setup.iAspectRatioWidth/2+57,450-13,Setup.iAspectRatioWidth/2+457,450+173-13);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/workshop_panel1+.tga"), true, MenuContentTransp);
+	SetRect(&SrcRect,0,0,400,173 );
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2+57,450-13,Setup.iAspectRatioWidth/2+457,450+173-13);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/workshop_panel1+.tga"), true, MenuContentTransp);
 
 
 

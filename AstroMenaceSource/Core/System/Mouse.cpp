@@ -210,10 +210,10 @@ bool vw_OnRect(RECT *MDetect)
 	vw_GetMousePos(&MouseX, &MouseY);
 
 
-	if  (((MDetect->right  >= MouseX)&
-		(MDetect->left<= MouseX)&
-		(MDetect->bottom >= MouseY)&
-		(MDetect->top<= MouseY)))
+	if  (((MDetect->right  >= MouseX) &&
+		(MDetect->left <= MouseX) &&
+		(MDetect->bottom >= MouseY) &&
+		(MDetect->top <= MouseY)))
 	{
 		return true;
 	}

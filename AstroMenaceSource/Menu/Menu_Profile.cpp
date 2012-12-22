@@ -392,10 +392,10 @@ void ProfileInputText()
 
 	// находим положения ввода
 	int Size = vw_FontSize(NewProfileName);
-	RECT SrcRest, DstRest;
-	SetRect(&SrcRest,0,0,2,2);
-	SetRect(&DstRest,X1+Size+2,Y1-2,X1+26+Size,Y1+24);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/whitepoint.tga"),
+	RECT SrcRect, DstRect;
+	SetRect(&SrcRect,0,0,2,2);
+	SetRect(&DstRect,X1+Size+2,Y1-2,X1+26+Size,Y1+24);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/whitepoint.tga"),
 		true, CurrentProfileNameTransp*MenuContentTransp);
 
 	float DeltaTime = vw_GetTime() - LastProfileNameTime;
@@ -427,10 +427,10 @@ void ProfileInputText()
 void ProfileMenu()
 {
 
-	RECT SrcRest, DstRest;
-	SetRect(&SrcRest,2,2,863-2,484-2);
-	SetRect(&DstRest,Setup.iAspectRatioWidth/2-427,175-15,Setup.iAspectRatioWidth/2-427+863-4,175-15+484-4);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
+	RECT SrcRect, DstRect;
+	SetRect(&SrcRect,2,2,863-2,484-2);
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2-427,175-15,Setup.iAspectRatioWidth/2-427+863-4,175-15+484-4);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
 
 
 	int X1 = Setup.iAspectRatioWidth/2 - 372;
@@ -442,11 +442,11 @@ void ProfileMenu()
 
 
 	Y1 += 30;
-	SetRect(&SrcRest,0,0,2,2);
-	SetRect(&DstRest,X1-2,Y1-6,X1+2+590,Y1-2+30);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.2f*MenuContentTransp);
-	SetRect(&DstRest,X1,Y1-4,X1+590,Y1-4+30);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+	SetRect(&SrcRect,0,0,2,2);
+	SetRect(&DstRect,X1-2,Y1-6,X1+2+590,Y1-2+30);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.2f*MenuContentTransp);
+	SetRect(&DstRect,X1,Y1-4,X1+590,Y1-4+30);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
 	// кнопка, создания новой записи
 	bool Off = false;
 	if (strlen(NewProfileName)<=0) Off = true;
@@ -504,11 +504,11 @@ void ProfileMenu()
 
 
 	Y1 += 30;
-	SetRect(&SrcRest,0,0,2,2);
-	SetRect(&DstRest,X1-2,Y1-6,X1+2+750,Y1-2+230);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.2f*MenuContentTransp);
-	SetRect(&DstRest,X1,Y1-4,X1+750,Y1-4+230);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+	SetRect(&SrcRect,0,0,2,2);
+	SetRect(&DstRect,X1-2,Y1-6,X1+2+750,Y1-2+230);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.2f*MenuContentTransp);
+	SetRect(&DstRect,X1,Y1-4,X1+750,Y1-4+230);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
 	Y1 += 230;
 
 
@@ -553,10 +553,10 @@ void ProfileMenu()
 			}
 
 			// проверяем, если стоим над записью
-			SetRect(&SrcRest,0,0,2,2);
-			SetRect(&DstRest,X1,Y1-233+46*i,X1+750,Y1-234+46+46*i);
+			SetRect(&SrcRect,0,0,2,2);
+			SetRect(&DstRect,X1,Y1-233+46*i,X1+750,Y1-234+46+46*i);
 			if (!isDialogBoxDrawing())
-			if (vw_OnRect(&DstRest) || InFocusByKeyboard)
+			if (vw_OnRect(&DstRect) || InFocusByKeyboard)
 			{
 				TMPSoundOnProfileID = i;
 				CurrentCursorStatus = 1;
@@ -596,9 +596,9 @@ void ProfileMenu()
 					}
 
 
-					SetRect(&DstRest,X1+2,Y1-233+46*i,X1+748,Y1-235+46+46*i);
+					SetRect(&DstRect,X1+2,Y1-233+46*i,X1+748,Y1-235+46+46*i);
 					if (CurrentProfile != i)
-						vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+						vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/whitepoint.tga"), true, 0.1f*MenuContentTransp);
 				}
 				else
 				{
@@ -627,9 +627,9 @@ void ProfileMenu()
 	// подсветка выбранного...
 	if (CurrentProfile != -1)
 	{
-		SetRect(&SrcRest,0,0,2,2);
-		SetRect(&DstRest,X1+2,Y1-233+46*CurrentProfile,X1+748,Y1-235+46+46*CurrentProfile);
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+		SetRect(&SrcRect,0,0,2,2);
+		SetRect(&DstRect,X1+2,Y1-233+46*CurrentProfile,X1+748,Y1-235+46+46*CurrentProfile);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/whitepoint.tga"), true, 0.1f*MenuContentTransp);
 	}
 
 

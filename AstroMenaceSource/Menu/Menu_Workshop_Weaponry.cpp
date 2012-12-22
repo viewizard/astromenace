@@ -248,13 +248,13 @@ const char *GetWeaponIconName(int Num)
 // вся работа с еденичным слотом
 void ShipSlotWeapon(int SlotNum, int X, int Y)
 {
-	RECT SrcRest, DstRest;
+	RECT SrcRect, DstRect;
 
-	SetRect(&SrcRest,0,0,220,128);
+	SetRect(&SrcRect,0,0,220,128);
 	int Xpos = X-45;
 	int Ypos = Y-36;
-	SetRect(&DstRest,Xpos,Ypos,Xpos+220,Ypos+128);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/workshop_panel3.tga"), true, MenuContentTransp);
+	SetRect(&DstRect,Xpos,Ypos,Xpos+220,Ypos+128);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/workshop_panel3.tga"), true, MenuContentTransp);
 
 
 	// нужны предупреждения...
@@ -267,12 +267,12 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
 		if (AmmoShow < 0) AmmoShow = 0;
 
-		SetRect(&SrcRest,0,AmmoShow,18,56);
-		SetRect(&DstRest,Xpos+23,Ypos+40+AmmoShow,Xpos+18+23,Ypos+56+40);
+		SetRect(&SrcRect,0,AmmoShow,18,56);
+		SetRect(&DstRect,Xpos+23,Ypos+40+AmmoShow,Xpos+18+23,Ypos+56+40);
 		if (AmmoShow > 0)
-			vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/ammo.tga"), true, CurrentAlert3*MenuContentTransp);
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/ammo.tga"), true, CurrentAlert3*MenuContentTransp);
 		else
-			vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/ammo.tga"), true, MenuContentTransp);
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/ammo.tga"), true, MenuContentTransp);
 
 
 		if (WorkshopFighterGame->Weapon[SlotNum]->Ammo == 0) WeaponAmmoOut = true;
@@ -305,14 +305,14 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		}
 	}
 
-	SetRect(&SrcRest,0,0,18,56);
-	SetRect(&DstRest,Xpos+23+154,Ypos+40,Xpos+18+23+154,Ypos+56+40);
-	if  ((((DstRest.right  >= MouseX) &&
-		(DstRest.left<= MouseX) &&
-		(DstRest.bottom >= MouseY) &&
-		(DstRest.top<= MouseY)) || InFocusByKeyboard) && !isDialogBoxDrawing() && !DragWeapon)
+	SetRect(&SrcRect,0,0,18,56);
+	SetRect(&DstRect,Xpos+23+154,Ypos+40,Xpos+18+23+154,Ypos+56+40);
+	if  ((((DstRect.right  >= MouseX) &&
+		(DstRect.left<= MouseX) &&
+		(DstRect.bottom >= MouseY) &&
+		(DstRect.top<= MouseY)) || InFocusByKeyboard) && !isDialogBoxDrawing() && !DragWeapon)
 	{
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button_weaponry_in.tga"), true, MenuContentTransp);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/button_weaponry_in.tga"), true, MenuContentTransp);
 		CurrentCursorStatus = 1;
 		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN))))
 		{
@@ -326,13 +326,13 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		}
 	}
 	else
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button_weaponry_out.tga"), true, MenuContentTransp);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/button_weaponry_out.tga"), true, MenuContentTransp);
 
 
 
 	// обработка перетягивания
-	SetRect(&DstRest,X,Y,X+128,Y+64);
-	if (vw_OnRect(&DstRest) && !isDialogBoxDrawing())
+	SetRect(&DstRect,X,Y,X+128,Y+64);
+	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing())
 	{
 
 		int Money = Setup.Profile[CurrentProfile].Money;
@@ -463,8 +463,8 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	if (DragWeapon && (WorkshopFighterGame->WeaponType[SlotNum] >= DragWeaponLevel)) CanOn = true;
 	if (!DragWeapon && (WorkshopFighterGame->WeaponType[SlotNum] >= WorkshopNewWeapon->WeaponLevel)) CanOn = true;
 
-	SetRect(&SrcRest,0,0,128,64);
-	SetRect(&DstRest,X,Y,X+128,Y+64);
+	SetRect(&SrcRect,0,0,128,64);
+	SetRect(&DstRect,X,Y,X+128,Y+64);
 
 	if (CanOn)
 	{
@@ -486,15 +486,15 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 			}
 
 			if (NeedAlert)
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0, RI_UL_CORNER, 0.0f, 1.0f, 0.0f);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0, RI_UL_CORNER, 0.0f, 1.0f, 0.0f);
 			else
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/weapon_on_icon.tga"), true, MenuContentTransp, 0, RI_UL_CORNER, 0.0f, 1.0f, 0.0f);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/weapon_on_icon.tga"), true, MenuContentTransp, 0, RI_UL_CORNER, 0.0f, 1.0f, 0.0f);
 		}
 		else
-			vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0, RI_UL_CORNER, 1.0f, 0.0f, 0.0f);
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0, RI_UL_CORNER, 1.0f, 0.0f, 0.0f);
 	}
 	else
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/weapon_on_icon.tga"), true, MenuContentTransp, 0, RI_UL_CORNER, 1.0f, 0.5f, 0.0f);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/weapon_on_icon.tga"), true, MenuContentTransp, 0, RI_UL_CORNER, 1.0f, 0.5f, 0.0f);
 
 
 
@@ -506,7 +506,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	{
 		// пустой слот, рисуем его
 
-		SetRect(&DstRest,X,Y,X+128,Y+64);
+		SetRect(&DstRect,X,Y,X+128,Y+64);
 
 		int Size = vw_FontSize(vw_GetText("3_EMPTY"));
 		float WScale = 0;
@@ -515,7 +515,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 			Size = 88;
 			WScale = -88;
 		}
-		vw_DrawFont(DstRest.left+(DstRest.right-DstRest.left-Size)/2, DstRest.bottom-53, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7*MenuContentTransp, vw_GetText("3_EMPTY"));
+		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-53, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7*MenuContentTransp, vw_GetText("3_EMPTY"));
 
 		Size = vw_FontSize("%s %i",vw_GetText("3_Level"),WorkshopFighterGame->WeaponType[SlotNum]);
 		WScale = 0;
@@ -524,15 +524,15 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 			Size = 88;
 			WScale = -88;
 		}
-		vw_DrawFont(DstRest.left+(DstRest.right-DstRest.left-Size)/2, DstRest.bottom-32, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7*MenuContentTransp, "%s %i",vw_GetText("3_Level"),WorkshopFighterGame->WeaponType[SlotNum]);
+		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-32, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7*MenuContentTransp, "%s %i",vw_GetText("3_Level"),WorkshopFighterGame->WeaponType[SlotNum]);
 
 
 		return;
 	}
 
-	SetRect(&SrcRest,0,0,128,64);
-	SetRect(&DstRest,X,Y,X+128,Y+64);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(GetWeaponIconName(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType)), true, MenuContentTransp);
+	SetRect(&SrcRect,0,0,128,64);
+	SetRect(&DstRect,X,Y,X+128,Y+64);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType)), true, MenuContentTransp);
 
 
 
@@ -546,16 +546,16 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 void ShipSlotSetupWeapon(int Slot)
 {
-	RECT SrcRest, DstRest;
+	RECT SrcRect, DstRect;
 
 	// проверяем, нужно ли вытягивать что-то или нет...
 	CheckMouseKeybJState();
 
-	SetRect(&SrcRest,0,0,404,570);
+	SetRect(&SrcRect,0,0,404,570);
 	int Xpos = Setup.iAspectRatioWidth/2+55;
 	int Ypos = 50-10;
-	SetRect(&DstRest,Xpos,Ypos,Xpos+404,Ypos+570);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/workshop_panel5.tga"), true, MenuContentTransp);
+	SetRect(&DstRect,Xpos,Ypos,Xpos+404,Ypos+570);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/workshop_panel5.tga"), true, MenuContentTransp);
 
 
 
@@ -564,9 +564,9 @@ void ShipSlotSetupWeapon(int Slot)
 		Xpos += 74;
 		Ypos += 128;
 		// пустой слот, рисуем его
-		SetRect(&SrcRest,0,0,256,256);
-		SetRect(&DstRest,Xpos,Ypos,Xpos+256,Ypos+256);
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/weapon_empty_icon.tga"), true, MenuContentTransp);
+		SetRect(&SrcRect,0,0,256,256);
+		SetRect(&DstRect,Xpos,Ypos,Xpos+256,Ypos+256);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/weapon_empty_icon.tga"), true, MenuContentTransp);
 
 		int Size = vw_FontSize(vw_GetText("3_Empty_Weapon_Slot"));
 		float WScale = 0;
@@ -575,7 +575,7 @@ void ShipSlotSetupWeapon(int Slot)
 			Size = 228;
 			WScale = -228;
 		}
-		vw_DrawFont(DstRest.left+(DstRest.right-DstRest.left-Size)/2, DstRest.bottom-40, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Empty_Weapon_Slot"));
+		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-40, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Empty_Weapon_Slot"));
 	}
 	else
 	{
@@ -745,8 +745,8 @@ void ShipSlotSetupWeapon(int Slot)
 	int SlotNum = Slot;
 	Xpos = Setup.iAspectRatioWidth/2+55;
 	Ypos = 50-10;
-	SetRect(&DstRest,Xpos+10,Ypos+10,Xpos+404-10,Ypos+570-10);
-	if (vw_OnRect(&DstRest) && !isDialogBoxDrawing())
+	SetRect(&DstRect,Xpos+10,Ypos+10,Xpos+404-10,Ypos+570-10);
+	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing())
 	{
 
 		int Money = Setup.Profile[CurrentProfile].Money;
@@ -1025,11 +1025,11 @@ void DrawDragingWeaponIcon(int X, int Y)
 	if (!DragWeapon) return;
 
 	// в х и у - положение точки курсора
-	RECT SrcRest, DstRest;
+	RECT SrcRect, DstRect;
 
-	SetRect(&SrcRest,0,0,128,64);
-	SetRect(&DstRest,X-64,Y-32,X+64,Y+32);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(GetWeaponIconName(DragWeaponNum)), true, MenuContentTransp);
+	SetRect(&SrcRect,0,0,128,64);
+	SetRect(&DstRect,X-64,Y-32,X+64,Y+32);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(DragWeaponNum)), true, MenuContentTransp);
 }
 
 
@@ -1056,13 +1056,13 @@ void DrawDragingWeaponIcon(int X, int Y)
 //------------------------------------------------------------------------------------
 void Workshop_Weaponry()
 {
-	RECT SrcRest, DstRest;
+	RECT SrcRect, DstRect;
 
 
 
 	// если нажали - установка и тянем
-	SetRect(&DstRest,Setup.iAspectRatioWidth/2-416,100+32,Setup.iAspectRatioWidth/2-96,450-32);
-	if (vw_OnRect(&DstRest) && !isDialogBoxDrawing())
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2-416,100+32,Setup.iAspectRatioWidth/2-96,450-32);
+	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing())
 	if (!DragWeapon)
 	{
 		CurrentCursorStatus = 1;
@@ -1089,11 +1089,11 @@ void Workshop_Weaponry()
 
 
 	// затемнение
-	SetRect(&SrcRest,0,0,256,256);
-	SetRect(&DstRest,Setup.iAspectRatioWidth/2-480,100-32,Setup.iAspectRatioWidth/2-32,450+32);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/back_spot2.tga"), true, 0.45f*MenuContentTransp);
-	SetRect(&DstRest,Setup.iAspectRatioWidth/2,0,Setup.iAspectRatioWidth/2+512,622);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/back_spot.tga"), true, 0.35f*MenuContentTransp);
+	SetRect(&SrcRect,0,0,256,256);
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2-480,100-32,Setup.iAspectRatioWidth/2-32,450+32);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/back_spot2.tga"), true, 0.45f*MenuContentTransp);
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2,0,Setup.iAspectRatioWidth/2+512,622);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/back_spot.tga"), true, 0.35f*MenuContentTransp);
 
 
 	vw_End2DMode();
@@ -1157,13 +1157,13 @@ void Workshop_Weaponry()
 
 
 	// рамки
-	SetRect(&SrcRest,0,0,400,35 );
-	SetRect(&DstRest,Setup.iAspectRatioWidth/2-457,100-11,Setup.iAspectRatioWidth/2-57,100+35-11);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/workshop_panel4.tga"), true, MenuContentTransp);
+	SetRect(&SrcRect,0,0,400,35 );
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2-457,100-11,Setup.iAspectRatioWidth/2-57,100+35-11);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/workshop_panel4.tga"), true, MenuContentTransp);
 
-	SetRect(&SrcRest,0,0,400,173 );
-	SetRect(&DstRest,Setup.iAspectRatioWidth/2-457,450-13,Setup.iAspectRatioWidth/2-57,450+173-13);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/workshop_panel1.tga"), true, MenuContentTransp);
+	SetRect(&SrcRect,0,0,400,173 );
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2-457,450-13,Setup.iAspectRatioWidth/2-57,450+173-13);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/workshop_panel1.tga"), true, MenuContentTransp);
 
 
 
