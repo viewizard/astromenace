@@ -224,10 +224,10 @@ void ReCreateVoiceLanguageEntryLinks()
 void InterfaceMenu()
 {
 
-	RECT SrcRest, DstRest;
-	SetRect(&SrcRest,0,0,2,2);
-	SetRect(&DstRest,0,0,Setup.iAspectRatioWidth,768);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+	RECT SrcRect, DstRect;
+	SetRect(&SrcRect,0,0,2,2);
+	SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
 
 	int X1 = Setup.iAspectRatioWidth/2 - 375;
 	int Y1 = 65;
@@ -351,13 +351,13 @@ void InterfaceMenu()
 
 		// выводим текстуру с превью шрифта
 		eTexture *FontPreview = vw_FindTextureByName(FontList[Options_FontNumber].FontName);
-		RECT SrcRest, DstRest;
+		RECT SrcRect, DstRect;
 		int Scale = FontPreview->SrcWidth;
 		if (Scale > 170) Scale = 170;
 		int CurretnXPosition = X1+438+(170-Scale)/2;
-		SetRect(&SrcRest,0,0,FontPreview->SrcWidth,FontPreview->SrcHeight);
-		SetRect(&DstRest,CurretnXPosition,Y1+2,CurretnXPosition+Scale,Y1+2+FontPreview->SrcHeight);
-		vw_DrawTransparent(&DstRest, &SrcRest, FontPreview,	true, MenuContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+		SetRect(&SrcRect,0,0,FontPreview->SrcWidth,FontPreview->SrcHeight);
+		SetRect(&DstRect,CurretnXPosition,Y1+2,CurretnXPosition+Scale,Y1+2+FontPreview->SrcHeight);
+		vw_DrawTransparent(&DstRect, &SrcRect, FontPreview,	true, MenuContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 	}
 
 

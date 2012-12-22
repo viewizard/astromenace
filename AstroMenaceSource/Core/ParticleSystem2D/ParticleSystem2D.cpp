@@ -430,9 +430,9 @@ void eParticleSystem2D::Draw()
 	// загрузка текстуры, уже должна быть подключена
 	if (Texture == 0) return;
 
-	RECT SrcRest, DestRest;
+	RECT SrcRect, DestRect;
 
-	SetRect(&SrcRest,0,0,64,64);
+	SetRect(&SrcRect,0,0,64,64);
 
 
 
@@ -487,22 +487,22 @@ void eParticleSystem2D::Draw()
 	{
 		eParticle2D *tmp2 = tmp1->Next;
 
-		SetRect(&DestRest,(int)(tmp1->Location.x - tmp1->Size/2),
+		SetRect(&DestRect,(int)(tmp1->Location.x - tmp1->Size/2),
 			(int)(tmp1->Location.y - tmp1->Size/2),
 			(int)(tmp1->Location.x + tmp1->Size/2),
 			(int)(tmp1->Location.y + tmp1->Size/2));
 
-			if (ASpresent) tmpPosY = (AH - DestRest.top - DestRest.top - (DestRest.bottom - DestRest.top));
-			else tmpPosY = (AHw - DestRest.top - DestRest.top - (DestRest.bottom - DestRest.top));
+			if (ASpresent) tmpPosY = (AH - DestRect.top - DestRect.top - (DestRect.bottom - DestRect.top));
+			else tmpPosY = (AHw - DestRect.top - DestRect.top - (DestRect.bottom - DestRect.top));
 
-			float FrameHeight = (SrcRest.bottom*1.0f )/ImageHeight;
-			float FrameWidth = (SrcRest.right*1.0f )/ImageWidth;
+			float FrameHeight = (SrcRect.bottom*1.0f )/ImageHeight;
+			float FrameWidth = (SrcRect.right*1.0f )/ImageWidth;
 
-			float Yst = (SrcRest.top*1.0f)/ImageHeight;
-			float Xst = (SrcRest.left*1.0f)/ImageWidth;
+			float Yst = (SrcRect.top*1.0f)/ImageHeight;
+			float Xst = (SrcRect.left*1.0f)/ImageWidth;
 
-				tmp[k++] = DestRest.left;
-				tmp[k++] = DestRest.top +tmpPosY +(DestRest.bottom - DestRest.top);
+				tmp[k++] = DestRect.left;
+				tmp[k++] = DestRect.top +tmpPosY +(DestRect.bottom - DestRect.top);
 				tmp[k++] = tmp1->Color.r;
 				tmp[k++] = tmp1->Color.g;
 				tmp[k++] = tmp1->Color.b;
@@ -510,8 +510,8 @@ void eParticleSystem2D::Draw()
 				tmp[k++] = Xst;
 				tmp[k++] = 1.0f-Yst;
 
-				tmp[k++] = DestRest.left;
-				tmp[k++] = DestRest.top +tmpPosY;
+				tmp[k++] = DestRect.left;
+				tmp[k++] = DestRect.top +tmpPosY;
 				tmp[k++] = tmp1->Color.r;
 				tmp[k++] = tmp1->Color.g;
 				tmp[k++] = tmp1->Color.b;
@@ -519,8 +519,8 @@ void eParticleSystem2D::Draw()
 				tmp[k++] = Xst;
 				tmp[k++] = 1.0f-FrameHeight;
 
-				tmp[k++] = DestRest.left + (DestRest.right - DestRest.left);
-				tmp[k++] = DestRest.top +tmpPosY;
+				tmp[k++] = DestRect.left + (DestRect.right - DestRect.left);
+				tmp[k++] = DestRect.top +tmpPosY;
 				tmp[k++] = tmp1->Color.r;
 				tmp[k++] = tmp1->Color.g;
 				tmp[k++] = tmp1->Color.b;
@@ -528,8 +528,8 @@ void eParticleSystem2D::Draw()
 				tmp[k++] = FrameWidth;
 				tmp[k++] = 1.0f-FrameHeight;
 
-				tmp[k++] = DestRest.left + (DestRest.right - DestRest.left);
-				tmp[k++] = DestRest.top +tmpPosY +(DestRest.bottom - DestRest.top);
+				tmp[k++] = DestRect.left + (DestRect.right - DestRect.left);
+				tmp[k++] = DestRect.top +tmpPosY +(DestRect.bottom - DestRect.top);
 				tmp[k++] = tmp1->Color.r;
 				tmp[k++] = tmp1->Color.g;
 				tmp[k++] = tmp1->Color.b;

@@ -60,10 +60,10 @@ const char *ButtonScreenModeTitle[2] =
 void OptionsMenu()
 {
 
-	RECT SrcRest, DstRest;
-	SetRect(&SrcRest,0,0,2,2);
-	SetRect(&DstRest,0,0,Setup.iAspectRatioWidth,768);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+	RECT SrcRect, DstRect;
+	SetRect(&SrcRect,0,0,2,2);
+	SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
 
 
 	int CurrentPos = 0;
@@ -95,12 +95,12 @@ void OptionsMenu()
 	{
 		for (int i=0; i<10; i++)
 		{
-			SetRect(&SrcRest,0,0,16,32);
-			SetRect(&DstRest,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
+			SetRect(&SrcRect,0,0,16,32);
+			SetRect(&DstRect,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 			if (Setup.MusicSw>i)
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc.tga"), true, MenuContentTransp);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc.tga"), true, MenuContentTransp);
 			else
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, MenuContentTransp);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, MenuContentTransp);
 		}
 	}
 
@@ -134,12 +134,12 @@ void OptionsMenu()
 	{
 		for (int i=0; i<10; i++)
 		{
-			SetRect(&SrcRest,0,0,16,32);
-			SetRect(&DstRest,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
+			SetRect(&SrcRect,0,0,16,32);
+			SetRect(&DstRect,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 			if (Setup.VoiceSw>i)
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc.tga"), true, MenuContentTransp);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc.tga"), true, MenuContentTransp);
 			else
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, MenuContentTransp);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, MenuContentTransp);
 		}
 	}
 
@@ -170,12 +170,12 @@ void OptionsMenu()
 	{
 		for (int i=0; i<10; i++)
 		{
-			SetRect(&SrcRest,0,0,16,32);
-			SetRect(&DstRest,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
+			SetRect(&SrcRect,0,0,16,32);
+			SetRect(&DstRect,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 			if (Setup.SoundSw>i)
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc.tga"), true, MenuContentTransp);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc.tga"), true, MenuContentTransp);
 			else
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, MenuContentTransp);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, MenuContentTransp);
 		}
 	}
 
@@ -396,12 +396,12 @@ void OptionsMenu()
 	}
 	for (int i=0; i<10; i++)
 	{
-		SetRect(&SrcRest,0,0,16,32);
-		SetRect(&DstRest,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
+		SetRect(&SrcRect,0,0,16,32);
+		SetRect(&DstRect,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 		if (Setup.Brightness>i)
-			vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc.tga"), true, MenuContentTransp);
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc.tga"), true, MenuContentTransp);
 		else
-			vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, MenuContentTransp);
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, MenuContentTransp);
 	}
 
 

@@ -406,10 +406,10 @@ void MissionMenu()
 
 
 
-	RECT SrcRest, DstRest;
-	SetRect(&SrcRest,2,2,863-2,484-2);
-	SetRect(&DstRest,Setup.iAspectRatioWidth/2-427,175-15,Setup.iAspectRatioWidth/2-427+863-4,175-15+484-4);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
+	RECT SrcRect, DstRect;
+	SetRect(&SrcRect,2,2,863-2,484-2);
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2-427,175-15,Setup.iAspectRatioWidth/2-427+863-4,175-15+484-4);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
 
 
 
@@ -440,11 +440,11 @@ void MissionMenu()
 
 
 	// подложка для вывода описания миссий
-	SetRect(&SrcRest,0,0,2,2);
-	SetRect(&DstRest,X1-2,Y1-2,X1+2+710,Y1+2+320);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.2f*MenuContentTransp);
-	SetRect(&DstRest,X1,Y1,X1+710,Y1+320);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+	SetRect(&SrcRect,0,0,2,2);
+	SetRect(&DstRect,X1-2,Y1-2,X1+2+710,Y1+2+320);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.2f*MenuContentTransp);
+	SetRect(&DstRect,X1,Y1,X1+710,Y1+320);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
 
 
 
@@ -456,9 +456,9 @@ void MissionMenu()
 		int ShowLine = CurrentMission;
 		if (ShowLine>=StartMission) ShowLine -= StartMission;
 
-		SetRect(&SrcRest,0,0,2,2);
-		SetRect(&DstRest,X1+1,Y1 + 64*ShowLine+1,X1+709,Y1 + 64*ShowLine+63);
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+		SetRect(&SrcRect,0,0,2,2);
+		SetRect(&DstRect,X1+1,Y1 + 64*ShowLine+1,X1+709,Y1 + 64*ShowLine+63);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/whitepoint.tga"), true, 0.1f*MenuContentTransp);
 	}
 
 
@@ -472,11 +472,11 @@ void MissionMenu()
 		// если не можем выбирать...
 		if (i > Setup.Profile[CurrentProfile].OpenLevelNum)
 		{
-			SetRect(&SrcRest,0,0,64,64);
-			SetRect(&DstRest,X1+2,Y1+2,X1+62,Y1+62);
+			SetRect(&SrcRect,0,0,64,64);
+			SetRect(&DstRect,X1+2,Y1+2,X1+62,Y1+62);
 
 			if (MissionIcon[i] != 0)
-				vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(MissionIcon[i]), true, 0.3f*MenuContentTransp);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(MissionIcon[i]), true, 0.3f*MenuContentTransp);
 
 
 			if (MissionTitleType[i] == 1)
@@ -492,7 +492,7 @@ void MissionMenu()
 		}
 
 
-		SetRect(&DstRest,X1,Y1+1,X1+710,Y1+64);
+		SetRect(&DstRect,X1,Y1+1,X1+710,Y1+64);
 		if (i <= Setup.Profile[CurrentProfile].OpenLevelNum)
 		{
 			// работаем с клавиатурой
@@ -507,7 +507,7 @@ void MissionMenu()
 			}
 
 
-			if ((vw_OnRect(&DstRest) || InFocusByKeyboard) && !isDialogBoxDrawing())
+			if ((vw_OnRect(&DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing())
 			{
 				TMPSoundOnMissionID = i;
 				CurrentCursorStatus = 1;
@@ -520,10 +520,10 @@ void MissionMenu()
 				}
 
 				// если стоим над ним...
-				SetRect(&SrcRest,0,0,64,64);
-				SetRect(&DstRest,X1,Y1,X1+64,Y1+64);
+				SetRect(&SrcRect,0,0,64,64);
+				SetRect(&DstRect,X1,Y1,X1+64,Y1+64);
 				if (MissionIcon != 0)
-					vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(MissionIcon[i]), true, MenuContentTransp);
+					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(MissionIcon[i]), true, MenuContentTransp);
 
 
 				if (MissionTitleType[i] == 1)
@@ -539,9 +539,9 @@ void MissionMenu()
 
 				if (CurrentMission != i)
 				{
-					SetRect(&SrcRest,0,0,2,2);
-					SetRect(&DstRest,X1+64,Y1+1,X1+709,Y1+63);
-					vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+					SetRect(&SrcRect,0,0,2,2);
+					SetRect(&DstRect,X1+64,Y1+1,X1+709,Y1+63);
+					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/whitepoint.tga"), true, 0.1f*MenuContentTransp);
 				}
 				if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN))))
 				{
@@ -585,10 +585,10 @@ void MissionMenu()
 			else
 			{
 				// если не стоим над ним, но можем выбирать
-				SetRect(&SrcRest,0,0,64,64);
-				SetRect(&DstRest,X1+2,Y1+2,X1+62,Y1+62);
+				SetRect(&SrcRect,0,0,64,64);
+				SetRect(&DstRect,X1+2,Y1+2,X1+62,Y1+62);
 				if (MissionIcon != 0)
-					vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName(MissionIcon[i]), true, 0.8f*MenuContentTransp);
+					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(MissionIcon[i]), true, 0.8f*MenuContentTransp);
 
 
 				if (MissionTitleType[i] == 1)
@@ -627,8 +627,8 @@ void MissionMenu()
 		EndMission++;
 	}
 	// проверяем колесико мышки, если курсор находится над активной частью
-	SetRect(&DstRest,X1,Y1,X1+750,Y1+320);
-	if (vw_OnRect(&DstRest))
+	SetRect(&DstRect,X1,Y1,X1+750,Y1+320);
+	if (vw_OnRect(&DstRect))
 	{
 		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing())
 		{
@@ -655,33 +655,33 @@ void MissionMenu()
 	}
 
 	// выводим отображение положени в списке на полоске со стрелками
-	SetRect(&SrcRest,0,0,32,32);
-	SetRect(&DstRest,X1+750-32+4,Y1+32+((320.0f-64)/AllMission)*StartMission,X1+750-4,Y1+32+((320.0f-64)/AllMission)*(EndMission+1));
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/whitepoint.tga"), true, 0.3f*MenuContentTransp);
+	SetRect(&SrcRect,0,0,32,32);
+	SetRect(&DstRect,X1+750-32+4,Y1+32+((320.0f-64)/AllMission)*StartMission,X1+750-4,Y1+32+((320.0f-64)/AllMission)*(EndMission+1));
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/whitepoint.tga"), true, 0.3f*MenuContentTransp);
 
 	// обработка перетягивания ползунка отображения позиции списка
 	// если стоим на ползунком и нажали кнопку мышки - "захватываем"
-	if (!SliderUnderMouseControl && vw_OnRect(&DstRest) && vw_GetWindowLBMouse(false) && !isDialogBoxDrawing())
+	if (!SliderUnderMouseControl && vw_OnRect(&DstRect) && vw_GetWindowLBMouse(false) && !isDialogBoxDrawing())
 	{
 		SliderUnderMouseControl = true;
 		Audio_PlaySound2D(2,1.0f);
 	}
 	// если ползунок был захвачен, но уже не над секцией где его можно перетягивать или отпустили мышку - отпускаем
-	RECT DstRest2;
-	SetRect(&DstRest2,X1+750-32+4,Y1+32,X1+750-4,Y1+32+(320.0f-64));
-	if ((SliderUnderMouseControl && (!vw_OnRect(&DstRest2) || !vw_GetWindowLBMouse(false))) || isDialogBoxDrawing())
+	RECT DstRect2;
+	SetRect(&DstRect2,X1+750-32+4,Y1+32,X1+750-4,Y1+32+(320.0f-64));
+	if ((SliderUnderMouseControl && (!vw_OnRect(&DstRect2) || !vw_GetWindowLBMouse(false))) || isDialogBoxDrawing())
 	{
 		SliderUnderMouseControl = false;
 	}
 	// просто кликнули на зону перетягивания, не на ползунок
-	if (!vw_OnRect(&DstRest) && vw_OnRect(&DstRest2) && vw_GetWindowLBMouse(false) && !isDialogBoxDrawing())
+	if (!vw_OnRect(&DstRect) && vw_OnRect(&DstRect2) && vw_GetWindowLBMouse(false) && !isDialogBoxDrawing())
 	{
 		SliderUnderMouseControl = true;
 		Audio_PlaySound2D(2,1.0f);
 		vw_SetWindowLBMouse(false);
 	}
 	// отображаем курсором, что можно кликать на полосе прокрутки
-	if (vw_OnRect(&DstRest2)) CurrentCursorStatus = 1;
+	if (vw_OnRect(&DstRect2)) CurrentCursorStatus = 1;
 	// корректируем его положение ползунка согласно положению мышки
 	if (SliderUnderMouseControl)
 	{

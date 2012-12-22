@@ -95,13 +95,7 @@ int NeedPlayDialogOnButtonSoundY = 0;
 //------------------------------------------------------------------------------------
 bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 {
-	RECT SrcRest, DstRest;
-
-
-	// все проверки
-	int MouseX, MouseY;
-	vw_GetMousePos(&MouseX, &MouseY);
-
+	RECT SrcRect, DstRect;
 	bool ON = false;
 	bool CanClick = false;
 
@@ -118,11 +112,8 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 	}
 
 
-	SetRect(&DstRest,X,Y,X+204,Y+35);
-	if  (((DstRest.right  >= MouseX) &&
-		(DstRest.left<= MouseX) &&
-		(DstRest.bottom >= MouseY) &&
-		(DstRest.top<= MouseY)) || InFocusByKeyboard)
+	SetRect(&DstRect,X,Y,X+204,Y+35);
+	if  (vw_OnRect(&DstRect) || InFocusByKeyboard)
 	{
 		// если тухнем или появляемся - не жать
 		ON = true;
@@ -150,13 +141,13 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 
 
 
-	SetRect(&SrcRest,2,2,230-2,64-2);
+	SetRect(&SrcRect,2,2,230-2,64-2);
 	// рисуем кнопку
-	SetRect(&DstRest,X-14+2,Y-14+2,X+230-14-2,Y+64-14-2);
+	SetRect(&DstRect,X-14+2,Y-14+2,X+230-14-2,Y+64-14-2);
 	if (!ON)
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button_dialog200_out.tga"), true, 0.8f*Transp);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/button_dialog200_out.tga"), true, 0.8f*Transp);
 	else
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button_dialog200_in.tga"), true, 0.8f*Transp);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/button_dialog200_in.tga"), true, 0.8f*Transp);
 
 
 	// получаем длину текста
@@ -169,7 +160,7 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 		WScale = -176;
 	}
 	// находим смещение текста
-	int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
+	int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
 	// рисуем текст
 	if (!ON)
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
@@ -203,13 +194,7 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 //------------------------------------------------------------------------------------
 bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 {
-	RECT SrcRest, DstRest;
-
-
-	// все проверки
-	int MouseX, MouseY;
-	vw_GetMousePos(&MouseX, &MouseY);
-
+	RECT SrcRect, DstRect;
 	bool ON = false;
 	bool CanClick = false;
 
@@ -226,11 +211,8 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 	}
 
 
-	SetRect(&DstRest,X,Y,X+132,Y+35);
-	if  (((DstRest.right  >= MouseX) &&
-		(DstRest.left<= MouseX) &&
-		(DstRest.bottom >= MouseY) &&
-		(DstRest.top<= MouseY)) || InFocusByKeyboard)
+	SetRect(&DstRect,X,Y,X+132,Y+35);
+	if  (vw_OnRect(&DstRect) || InFocusByKeyboard)
 	{
 		// если тухнем или появляемся - не жать
 		ON = true;
@@ -257,13 +239,13 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 	}
 
 
-	SetRect(&SrcRest,2,2,158-2,64-2);
+	SetRect(&SrcRect,2,2,158-2,64-2);
 	// рисуем кнопку
-	SetRect(&DstRest,X-14+2,Y-14+2,X+158-14-2,Y+64-14-2);
+	SetRect(&DstRect,X-14+2,Y-14+2,X+158-14-2,Y+64-14-2);
 	if (!ON)
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button_dialog128_out.tga"), true, 0.8f*Transp);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/button_dialog128_out.tga"), true, 0.8f*Transp);
 	else
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/button_dialog128_in.tga"), true, 0.8f*Transp);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/button_dialog128_in.tga"), true, 0.8f*Transp);
 
 
 	// получаем длину текста
@@ -276,7 +258,7 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 		WScale = -108;
 	}
 	// находим смещение текста
-	int SizeI = DstRest.left + (SrcRest.right-SrcRest.left-Size)/2;
+	int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
 	// рисуем текст
 	if (!ON)
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
@@ -310,11 +292,7 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 //------------------------------------------------------------------------------------
 void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float Transp)
 {
-	RECT SrcRest, DstRest;
-	// все проверки
-	int MouseX, MouseY;
-	vw_GetMousePos(&MouseX, &MouseY);
-
+	RECT SrcRect, DstRect;
 
 	// получаем длину текста
 	int Size = vw_FontSize(Text);
@@ -336,11 +314,8 @@ void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float 
 
 
 	// 20 - расстояние между текстом
-	SetRect(&DstRest,X+4,Y+4,X+40+20+Size,Y+40-4);
-	if  ((((DstRest.right  >= MouseX) &&
-		(DstRest.left<= MouseX) &&
-		(DstRest.bottom >= MouseY) &&
-		(DstRest.top<= MouseY)) || InFocusByKeyboard)  && DrawGameCursor)
+	SetRect(&DstRect,X+4,Y+4,X+40+20+Size,Y+40-4);
+	if  ((vw_OnRect(&DstRect) || InFocusByKeyboard)  && DrawGameCursor)
 	{
 		// если тухнем или появляемся - не жать
 		ON = true;
@@ -354,16 +329,16 @@ void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float 
 
 
 	// рисуем
-	SetRect(&SrcRest,0,0,40,38);
-	SetRect(&DstRest,X,Y,X+40,Y+38);
+	SetRect(&SrcRect,0,0,40,38);
+	SetRect(&DstRect,X,Y,X+40,Y+38);
 	if (!ON || DragWeapon)
 		vw_DrawFont(X+40+16, Y+8, 0, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 	else
 		vw_DrawFont(X+40+16, Y+8, 0, 0, 1.0f, 1.0f,0.5f,0.0f, Transp, Text);
 
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/checkbox_main.tga"), true, Transp);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/checkbox_main.tga"), true, Transp);
 	if (*CheckBoxStatus)
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/checkbox_in.tga"), true, Transp);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/checkbox_in.tga"), true, Transp);
 
 
 	if (CanClick && !DragWeapon)
@@ -515,7 +490,7 @@ void DrawDialogBox()
 
 
 
-	RECT SrcRest, DstRest;
+	RECT SrcRect, DstRect;
 	int WTitle = 234;
 
 	int W = 512;
@@ -534,9 +509,9 @@ void DrawDialogBox()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// затемнение при выводе
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	SetRect(&SrcRest,0,0,2,2);
-	SetRect(&DstRest,0,0,Setup.iAspectRatioWidth,768);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.6f*DialogContentTransp);
+	SetRect(&SrcRect,0,0,2,2);
+	SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.6f*DialogContentTransp);
 
 
 
@@ -546,23 +521,23 @@ void DrawDialogBox()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (DialogType == 1)
 	{
-		SetRect(&SrcRest,2,2,572-2,316-2 );
-		SetRect(&DstRest,X+2-30,Y+2-30,X+572-2-30,Y+316-2-30);
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/dialog512_256.tga"),
+		SetRect(&SrcRect,2,2,572-2,316-2 );
+		SetRect(&DstRect,X+2-30,Y+2-30,X+572-2-30,Y+316-2-30);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/dialog512_256.tga"),
 			true, DialogContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 	}
 	if (DialogType == 2)
 	{
-		SetRect(&SrcRest,2,2,564-2,564-2 );
-		SetRect(&DstRest,X+4-30,Y+2-30,X+564-30,Y+564-2-30);
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/dialog512_512.tga"),
+		SetRect(&SrcRect,2,2,564-2,564-2 );
+		SetRect(&DstRect,X+4-30,Y+2-30,X+564-30,Y+564-2-30);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/dialog512_512.tga"),
 			true, DialogContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 	}
 	if (DialogType == 3)
 	{
-		SetRect(&SrcRest,2,2,828-2,659-2 );
-		SetRect(&DstRest,X+2-30,Y+2-30,X+828-2-30,Y+659-2-30);
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/dialog768_600.tga"),
+		SetRect(&SrcRect,2,2,828-2,659-2 );
+		SetRect(&DstRect,X+2-30,Y+2-30,X+828-2-30,Y+659-2-30);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/dialog768_600.tga"),
 			true, DialogContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 	}
 

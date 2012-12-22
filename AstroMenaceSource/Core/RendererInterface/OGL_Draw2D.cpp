@@ -100,7 +100,7 @@ void vw_End2DMode()
 //------------------------------------------------------------------------------------
 // Прорисовка в 2д
 //------------------------------------------------------------------------------------
-void vw_Draw(int X, int Y, RECT *SrcRest, eTexture *Tex, bool Alpha, float RotateAngle, int DrawCorner)
+void vw_Draw(int X, int Y, RECT *SrcRect, eTexture *Tex, bool Alpha, float RotateAngle, int DrawCorner)
 {
 	if (Tex == 0) return;
 
@@ -124,19 +124,19 @@ void vw_Draw(int X, int Y, RECT *SrcRest, eTexture *Tex, bool Alpha, float Rotat
 	// изменяем только в случае RI_UL_CORNER
 	if (DrawCorner == RI_UL_CORNER)
 	{
-		if (ASpresent) tmpPosY = (AH - Y - Y - (SrcRest->bottom - SrcRest->top));
-		else tmpPosY = (AHw - Y - Y - (SrcRest->bottom - SrcRest->top));
+		if (ASpresent) tmpPosY = (AH - Y - Y - (SrcRect->bottom - SrcRect->top));
+		else tmpPosY = (AHw - Y - Y - (SrcRect->bottom - SrcRect->top));
 	}
 
 
 	float ImageHeight = Tex->Height*1.0f;
 	float ImageWidth = Tex->Width*1.0f;
 
-	float FrameHeight = (SrcRest->bottom*1.0f)/ImageHeight;
-	float FrameWidth = (SrcRest->right*1.0f)/ImageWidth;
+	float FrameHeight = (SrcRect->bottom*1.0f)/ImageHeight;
+	float FrameWidth = (SrcRect->right*1.0f)/ImageWidth;
 
-	float Yst = (SrcRest->top)/ImageHeight;
-	float Xst = (SrcRest->left)/ImageWidth;
+	float Yst = (SrcRect->top)/ImageHeight;
+	float Xst = (SrcRect->left)/ImageWidth;
 
 
 	// буфер для последовательности RI_TRIANGLE_STRIP
@@ -146,7 +146,7 @@ void vw_Draw(int X, int Y, RECT *SrcRest, eTexture *Tex, bool Alpha, float Rotat
 	int k=0;
 
 	tmp[k++] = X;
-	tmp[k++] = Y +tmpPosY + (SrcRest->bottom - SrcRest->top);
+	tmp[k++] = Y +tmpPosY + (SrcRect->bottom - SrcRect->top);
 	tmp[k++] = Xst;
 	tmp[k++] = 1.0f-Yst;
 
@@ -155,12 +155,12 @@ void vw_Draw(int X, int Y, RECT *SrcRest, eTexture *Tex, bool Alpha, float Rotat
 	tmp[k++] = Xst;
 	tmp[k++] = 1.0f-FrameHeight;
 
-	tmp[k++] = X + (SrcRest->right - SrcRest->left);
-	tmp[k++] = Y +tmpPosY + (SrcRest->bottom - SrcRest->top);
+	tmp[k++] = X + (SrcRect->right - SrcRect->left);
+	tmp[k++] = Y +tmpPosY + (SrcRect->bottom - SrcRect->top);
 	tmp[k++] = FrameWidth;
 	tmp[k++] = 1.0f-Yst;
 
-	tmp[k++] = X + (SrcRest->right - SrcRest->left);
+	tmp[k++] = X + (SrcRect->right - SrcRect->left);
 	tmp[k++] = Y +tmpPosY;
 	tmp[k++] = FrameWidth;
 	tmp[k++] = 1.0f-FrameHeight;
@@ -184,7 +184,7 @@ void vw_Draw(int X, int Y, RECT *SrcRest, eTexture *Tex, bool Alpha, float Rotat
 //------------------------------------------------------------------------------------
 // Прорисовка в 2д с прозрачностью
 //------------------------------------------------------------------------------------
-void vw_DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, bool Alpha, float Transp, float RotateAngle, int DrawCorner, float R, float G, float B)
+void vw_DrawTransparent(RECT *DstRect, RECT *SrcRect, eTexture *Tex, bool Alpha, float Transp, float RotateAngle, int DrawCorner, float R, float G, float B)
 {
 
 	if (Tex == 0) return;
@@ -200,8 +200,8 @@ void vw_DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, bool Alpha,
 	vw_GetViewport(0, 0, &W, &H);
 	float AHw = H*1.0f;
 
-	int X = DstRest->left;
-	int Y = DstRest->top;
+	int X = DstRect->left;
+	int Y = DstRect->top;
 
 	// Установка текстуры и ее свойств...
 	vw_SetTexture(0, Tex);
@@ -213,8 +213,8 @@ void vw_DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, bool Alpha,
 	// изменяем только в случае RI_UL_CORNER
 	if (DrawCorner == RI_UL_CORNER)
 	{
-		if (ASpresent) tmpPosY = (AH - Y - Y - (DstRest->bottom - DstRest->top));
-		else tmpPosY = (AHw - Y - Y - (DstRest->bottom - DstRest->top));
+		if (ASpresent) tmpPosY = (AH - Y - Y - (DstRect->bottom - DstRect->top));
+		else tmpPosY = (AHw - Y - Y - (DstRect->bottom - DstRect->top));
 	}
 
 
@@ -222,11 +222,11 @@ void vw_DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, bool Alpha,
 	float ImageHeight = Tex->Height*1.0f;
 	float ImageWidth = Tex->Width*1.0f;
 
-	float FrameHeight = (SrcRest->bottom*1.0f )/ImageHeight;
-	float FrameWidth = (SrcRest->right*1.0f )/ImageWidth;
+	float FrameHeight = (SrcRect->bottom*1.0f )/ImageHeight;
+	float FrameWidth = (SrcRect->right*1.0f )/ImageWidth;
 
-	float Yst = (SrcRest->top*1.0f)/ImageHeight;
-	float Xst = (SrcRest->left*1.0f)/ImageWidth;
+	float Yst = (SrcRect->top*1.0f)/ImageHeight;
+	float Xst = (SrcRect->left*1.0f)/ImageWidth;
 
 
 	vw_SetColor(R, G, B, Transp);
@@ -238,7 +238,7 @@ void vw_DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, bool Alpha,
 	int k=0;
 
 	tmp[k++] = X;
-	tmp[k++] = Y +tmpPosY + (DstRest->bottom - DstRest->top);
+	tmp[k++] = Y +tmpPosY + (DstRect->bottom - DstRect->top);
 	tmp[k++] = Xst;
 	tmp[k++] = 1.0f-Yst;
 
@@ -247,12 +247,12 @@ void vw_DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, bool Alpha,
 	tmp[k++] = Xst;
 	tmp[k++] = 1.0f-FrameHeight;
 
-	tmp[k++] = X + (DstRest->right - DstRest->left);
-	tmp[k++] = Y +tmpPosY + (DstRest->bottom - DstRest->top);
+	tmp[k++] = X + (DstRect->right - DstRect->left);
+	tmp[k++] = Y +tmpPosY + (DstRect->bottom - DstRect->top);
 	tmp[k++] = FrameWidth;
 	tmp[k++] = 1.0f-Yst;
 
-	tmp[k++] = X + (DstRest->right - DstRest->left);
+	tmp[k++] = X + (DstRect->right - DstRect->left);
 	tmp[k++] = Y +tmpPosY;
 	tmp[k++] = FrameWidth;
 	tmp[k++] = 1.0f-FrameHeight;

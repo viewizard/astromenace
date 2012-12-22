@@ -473,10 +473,10 @@ void DrawMenu()
 	// рисуем название игры, чтобы звезды и корабли пролетали перед ним
 	vw_Start2DMode(-1,1);
 	// надпись AstroMenace
-	RECT SrcRest, DstRest;
-	SetRect(&SrcRest,0,0,863,128 );
+	RECT SrcRect, DstRect;
+	SetRect(&SrcRect,0,0,863,128 );
 	int StartX = (Setup.iAspectRatioWidth - 863)/2;
-	SetRect(&DstRest,StartX,10,StartX+863,10+128);
+	SetRect(&DstRect,StartX,10,StartX+863,10+128);
 
 	if (GameStatus != WORKSHOP &&
 		GameStatus != INFORMATION &&
@@ -485,7 +485,7 @@ void DrawMenu()
 		GameStatus != CONFCONTROL &&
 		GameStatus != OPTIONS_ADVANCED)
 	{
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/astromenace.tga"),
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/astromenace.tga"),
 			true, MenuContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 	}
 
@@ -594,10 +594,10 @@ void DrawMenu()
 
 		vw_Start2DMode(-1,1);
 
-		RECT SrcRest, DstRest;
-		SetRect(&SrcRest,0,0,2,2);
-		SetRect(&DstRest,0,0,Setup.iAspectRatioWidth,768);
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, MenuBlackTransp);
+		RECT SrcRect, DstRect;
+		SetRect(&SrcRect,0,0,2,2);
+		SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, MenuBlackTransp);
 
 		vw_End2DMode();
 	}
@@ -618,10 +618,10 @@ void DrawMenu()
 
 		vw_Start2DMode(-1,1);
 
-		RECT SrcRest, DstRest;
-		SetRect(&SrcRest,0,0,2,2);
-		SetRect(&DstRest,0,0,Setup.iAspectRatioWidth,768);
-		vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, MenuBlackTransp);
+		RECT SrcRect, DstRect;
+		SetRect(&SrcRect,0,0,2,2);
+		SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, MenuBlackTransp);
 
 		vw_End2DMode();
 	}

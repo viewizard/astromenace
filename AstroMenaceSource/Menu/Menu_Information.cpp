@@ -1559,15 +1559,15 @@ void InformationObject3DText(int ObjectNum)
 void InformationMenu()
 {
 
-	RECT SrcRest, DstRest;
-	SetRect(&SrcRest,0,0,2,2);
-	SetRect(&DstRest,0,0,Setup.iAspectRatioWidth,768);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+	RECT SrcRect, DstRect;
+	SetRect(&SrcRect,0,0,2,2);
+	SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
 
 
-	SetRect(&SrcRest,2,2,464-2,353-2);
-	SetRect(&DstRest,(Setup.iAspectRatioWidth/2-432)-8,80-8,(Setup.iAspectRatioWidth/2-432)-8+464-4,80-8+353-4);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/panel444_333_back.tga"), true, 0.9f*MenuContentTransp);
+	SetRect(&SrcRect,2,2,464-2,353-2);
+	SetRect(&DstRect,(Setup.iAspectRatioWidth/2-432)-8,80-8,(Setup.iAspectRatioWidth/2-432)-8+464-4,80-8+353-4);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/panel444_333_back.tga"), true, 0.9f*MenuContentTransp);
 
 
 
@@ -1590,8 +1590,8 @@ void InformationMenu()
 
 
 	// проверяем колесико мышки
-	SetRect(&DstRest,(int)(Setup.iAspectRatioWidth/2-440),80,(int)(Setup.iAspectRatioWidth/2+440),590);
-	if (vw_OnRect(&DstRest))
+	SetRect(&DstRect,(int)(Setup.iAspectRatioWidth/2-440),80,(int)(Setup.iAspectRatioWidth/2+440),590);
+	if (vw_OnRect(&DstRect))
 	{
 		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing())
 		{
@@ -1725,73 +1725,73 @@ void InformationDrawObject()
 	float RotateInfoObjectX = 0;
 	LastRotateInfoObject = vw_GetTime();
 
-	RECT DstRestLeft, DstRestRight, DstRestUp, DstRestDown;
+	RECT DstRectLeft, DstRectRight, DstRectUp, DstRectDown;
 	float fLeft, fRight, fUp, fDown;
 	fLeft = fRight = fUp = fDown = 0.15f;
 
 
-	SetRect(&DstRestLeft,(Setup.iAspectRatioWidth/2-432)+10,
+	SetRect(&DstRectLeft,(Setup.iAspectRatioWidth/2-432)+10,
 					80+(333-32)/2,
 					(Setup.iAspectRatioWidth/2-432)+32+10,
 					80+(333+32)/2);
-	SetRect(&DstRestRight,(Setup.iAspectRatioWidth/2-432)+444-32-10,
+	SetRect(&DstRectRight,(Setup.iAspectRatioWidth/2-432)+444-32-10,
 					80+(333-32)/2,
 					(Setup.iAspectRatioWidth/2-432)+444-10,
 					80+(333+32)/2);
-	SetRect(&DstRestUp,(Setup.iAspectRatioWidth/2-432)+(444-32)/2,
+	SetRect(&DstRectUp,(Setup.iAspectRatioWidth/2-432)+(444-32)/2,
 					80+333-32-10,
 					(Setup.iAspectRatioWidth/2-432)+(444+32)/2,
 					80+333-10);
-	SetRect(&DstRestDown,(Setup.iAspectRatioWidth/2-432)+(444-32)/2,
+	SetRect(&DstRectDown,(Setup.iAspectRatioWidth/2-432)+(444-32)/2,
 					80+10,
 					(Setup.iAspectRatioWidth/2-432)+(444+32)/2,
 					80+32+10);
 
 	// для вращения объекта, только если мышка стоит над выводом 3д модели
-	RECT DstRest;
-	SetRect(&DstRest,(Setup.iAspectRatioWidth/2-432),
+	RECT DstRect;
+	SetRect(&DstRect,(Setup.iAspectRatioWidth/2-432),
 					80,
 					(Setup.iAspectRatioWidth/2-432)+444,
 					80+333);
-	if  (((DstRest.right  >= MouseX) &&
-			(DstRest.left<= MouseX) &&
-			(DstRest.bottom >= MouseY) &&
-			(DstRest.top<= MouseY)) && !isDialogBoxDrawing())
+	if  (((DstRect.right  >= MouseX) &&
+			(DstRect.left<= MouseX) &&
+			(DstRect.bottom >= MouseY) &&
+			(DstRect.top<= MouseY)) && !isDialogBoxDrawing())
 	{
 		fLeft = fRight = fUp = fDown = 0.35f;
 
-		if  (((DstRestLeft.right  >= MouseX) &&
-				(DstRestLeft.left<= MouseX) &&
-				(DstRestLeft.bottom >= MouseY) &&
-				(DstRestLeft.top<= MouseY)) && !isDialogBoxDrawing())
+		if  (((DstRectLeft.right  >= MouseX) &&
+				(DstRectLeft.left<= MouseX) &&
+				(DstRectLeft.bottom >= MouseY) &&
+				(DstRectLeft.top<= MouseY)) && !isDialogBoxDrawing())
 		{
 			fLeft = 0.8f;
 			RotateInfoObjectY = RotateInfoObjectY*3;
 		}
 		else
-		if  (((DstRestRight.right  >= MouseX) &&
-				(DstRestRight.left<= MouseX) &&
-				(DstRestRight.bottom >= MouseY) &&
-				(DstRestRight.top<= MouseY)) && !isDialogBoxDrawing())
+		if  (((DstRectRight.right  >= MouseX) &&
+				(DstRectRight.left<= MouseX) &&
+				(DstRectRight.bottom >= MouseY) &&
+				(DstRectRight.top<= MouseY)) && !isDialogBoxDrawing())
 		{
 			fRight = 0.8f;
 			RotateInfoObjectY = -RotateInfoObjectY*3;
 		}
 		else
-		if  (((DstRestUp.right  >= MouseX) &&
-				(DstRestUp.left<= MouseX) &&
-				(DstRestUp.bottom >= MouseY) &&
-				(DstRestUp.top<= MouseY)) && !isDialogBoxDrawing())
+		if  (((DstRectUp.right  >= MouseX) &&
+				(DstRectUp.left<= MouseX) &&
+				(DstRectUp.bottom >= MouseY) &&
+				(DstRectUp.top<= MouseY)) && !isDialogBoxDrawing())
 		{
 			fUp = 0.8f;
 			RotateInfoObjectX = -tmpRotateInfoObjectX*3;
 			RotateInfoObjectY = 0.0f;
 		}
 		else
-		if  (((DstRestDown.right  >= MouseX) &&
-				(DstRestDown.left<= MouseX) &&
-				(DstRestDown.bottom >= MouseY) &&
-				(DstRestDown.top<= MouseY)) && !isDialogBoxDrawing())
+		if  (((DstRectDown.right  >= MouseX) &&
+				(DstRectDown.left<= MouseX) &&
+				(DstRectDown.bottom >= MouseY) &&
+				(DstRectDown.top<= MouseY)) && !isDialogBoxDrawing())
 		{
 			fDown = 0.8f;
 			RotateInfoObjectX = tmpRotateInfoObjectX*3;
@@ -2109,20 +2109,20 @@ void InformationDrawObject()
 
 	// бордюр с тенью
 	vw_Start2DMode(-1,1);
-	RECT SrcRest;
-	SetRect(&SrcRest,2,2,482,371);
-	SetRect(&DstRest,Setup.iAspectRatioWidth/2-450,80-18,Setup.iAspectRatioWidth/2+30,80+351);
-	vw_DrawTransparent(&DstRest, &SrcRest, vw_FindTextureByName("DATA/MENU/panel444_333_border.tga"), true, 1.0f*MenuContentTransp);
+	RECT SrcRect;
+	SetRect(&SrcRect,2,2,482,371);
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2-450,80-18,Setup.iAspectRatioWidth/2+30,80+351);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/panel444_333_border.tga"), true, 1.0f*MenuContentTransp);
 
 	// отрисовка стрелок
-	SetRect(&SrcRest,32,0,64,32);
-	vw_DrawTransparent(&DstRestLeft, &SrcRest, vw_FindTextureByName("DATA/MENU/arrows_blue.tga"), true, fLeft*MenuContentTransp);
-	SetRect(&SrcRest,96,0,128,32);
-	vw_DrawTransparent(&DstRestRight, &SrcRest, vw_FindTextureByName("DATA/MENU/arrows_blue.tga"), true, fRight*MenuContentTransp);
-	SetRect(&SrcRest,0,0,32,32);
-	vw_DrawTransparent(&DstRestUp, &SrcRest, vw_FindTextureByName("DATA/MENU/arrows_blue.tga"), true, fUp*MenuContentTransp);
-	SetRect(&SrcRest,64,0,96,32);
-	vw_DrawTransparent(&DstRestDown, &SrcRest, vw_FindTextureByName("DATA/MENU/arrows_blue.tga"), true, fDown*MenuContentTransp);
+	SetRect(&SrcRect,32,0,64,32);
+	vw_DrawTransparent(&DstRectLeft, &SrcRect, vw_FindTextureByName("DATA/MENU/arrows_blue.tga"), true, fLeft*MenuContentTransp);
+	SetRect(&SrcRect,96,0,128,32);
+	vw_DrawTransparent(&DstRectRight, &SrcRect, vw_FindTextureByName("DATA/MENU/arrows_blue.tga"), true, fRight*MenuContentTransp);
+	SetRect(&SrcRect,0,0,32,32);
+	vw_DrawTransparent(&DstRectUp, &SrcRect, vw_FindTextureByName("DATA/MENU/arrows_blue.tga"), true, fUp*MenuContentTransp);
+	SetRect(&SrcRect,64,0,96,32);
+	vw_DrawTransparent(&DstRectDown, &SrcRect, vw_FindTextureByName("DATA/MENU/arrows_blue.tga"), true, fDown*MenuContentTransp);
 
 	vw_End2DMode();
 

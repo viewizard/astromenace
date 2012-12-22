@@ -286,7 +286,7 @@ extern float LastMenuOnOffUpdateTime;
 void InitMenu();
 void SetMenu(eGameStatus Menu);
 void DrawMenu();
-void DrawTransparent(RECT *DstRest, RECT *SrcRest, eTexture *Tex, eTexture *Tex2, bool Alpha, float Transp, float RotateAngle, int DrawCorner, float R, float G, float B);
+void DrawTransparent(RECT *DstRect, RECT *SrcRect, eTexture *Tex, eTexture *Tex2, bool Alpha, float Transp, float RotateAngle, int DrawCorner, float R, float G, float B);
 void MainMenu();
 
 
