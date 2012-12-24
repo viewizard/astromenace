@@ -98,8 +98,22 @@ extern bool JoysticButtons[100];
 void SaveGameData();
 void CodeXOR(char *Text, char *Key, int Count);
 
-const int FontQuantity=7;
-extern sFontList FontList[FontQuantity];
+const int FontQuantity = 7;
+struct sFontList
+{
+	const char *FontTitle;
+	const char *FontFileName;
+};
+const sFontList FontList[FontQuantity] =
+{
+{"Ubuntu Family", "DATA/FONT/Ubuntu-B.ttf"},
+{"Liberation Mono", "DATA/FONT/LiberationMono-Bold.ttf"},
+{"Liberation Sans", "DATA/FONT/LiberationSans-Bold.ttf"},
+{"Liberation Serif", "DATA/FONT/LiberationSerif-Bold.ttf"},
+{"FreeFont Mono", "DATA/FONT/FreeMonoBold.ttf"},
+{"FreeFont Sans", "DATA/FONT/FreeSansBold.ttf"},
+{"FreeFont Serif", "DATA/FONT/FreeSerifBold.ttf"},
+};
 
 
 
@@ -403,6 +417,8 @@ void OptionsAdvMenu();
 // Menu_Profile.cpp
 //------------------------------------------------------------------------------------
 extern int CurrentProfile;
+extern char NewProfileName[128];
+extern int NewProfileNamePos;
 
 void ProfileMenu();
 void DeleteRecord();

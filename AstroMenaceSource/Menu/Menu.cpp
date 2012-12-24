@@ -243,6 +243,11 @@ void SetMenu(eGameStatus Menu)
 
 	switch (Menu)
 	{
+		case PROFILE:
+			NewProfileNamePos = 0;
+			memset(NewProfileName, 0, sizeof(NewProfileName));
+			break;
+
 		case INTERFACE:
 			Options_FontNumber = Setup.FontNumber;
 			break;

@@ -697,40 +697,11 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 		strcpy(DstFileName, "DATA/");
 		strcat(DstFileName, ConvertList[i]);
 
-
-		// читаем данные файла в буфер
-		SDL_RWops *Ftmp = SDL_RWFromFile(SrcFileName, "rb");
-		// Если файл не найден - выходим
-		if (Ftmp == NULL)
-    	{
-			fprintf(stderr, "Can't find file %s !!!\n", SrcFileName);
+		if (0 != vw_WriteIntoVFSfromFile(SrcFileName, DstFileName))
+		{
 			fprintf(stderr, "VFS compilation process aborted!\n");
         	return -1;
-    	}
-
-		// получаем размер файла
-		SDL_RWseek(Ftmp, 0, SEEK_END);
-		int tmpLength = SDL_RWtell(Ftmp);
-		SDL_RWseek(Ftmp, 0, SEEK_SET);
-
-		// копируем все данные файла в массив
-		BYTE *tmp = 0;
-		tmp = new BYTE[tmpLength];
-		SDL_RWread(Ftmp, tmp, tmpLength, 1);
-		SDL_RWclose(Ftmp);
-
-		// запись в VFS
-		if (0 != vw_WriteIntoVFSfromMemory(DstFileName, tmp, tmpLength))
-		{
-			// какая-то ошибка, не можем записать в VFS
-			delete [] tmp; tmp = 0;
-			fprintf(stderr, "Can't write into VFS from memory %s !!!\n", DstFileName);
-			fprintf(stderr, "VFS compilation process aborted!\n");
-			return -1;
 		}
-
-		// Освобождаем память
-		delete [] tmp; tmp = 0;
 	}
 
 

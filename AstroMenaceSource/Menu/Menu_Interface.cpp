@@ -335,22 +335,22 @@ void InterfaceMenu()
 	if (Options_FontNumber == Setup.FontNumber)
 	{
 		int Scale = 0;
-		Size = vw_FontSize(FontList[Options_FontNumber].FontName);
+		Size = vw_FontSize(FontList[Options_FontNumber].FontTitle);
 		if (Size > 170)
 		{
 			Scale = -170;
 			Size = 170;
 		}
 		SizeI = (170-Size)/2;
-		vw_DrawFont(X1+438+SizeI, Y1, Scale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, FontList[Options_FontNumber].FontName);
+		vw_DrawFont(X1+438+SizeI, Y1, Scale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, FontList[Options_FontNumber].FontTitle);
 	}
 	else
 	{
 		// если текстуры с таким названием нет - надо создать
-		if (vw_FindTextureByName(FontList[Options_FontNumber].FontName) == 0) vw_TextureFromText(FontList[Options_FontNumber].FontFileName, 16, FontList[Options_FontNumber].FontName);
+		if (vw_FindTextureByName(FontList[Options_FontNumber].FontTitle) == 0) vw_TextureFromText(FontList[Options_FontNumber].FontFileName, 16, FontList[Options_FontNumber].FontTitle);
 
 		// выводим текстуру с превью шрифта
-		eTexture *FontPreview = vw_FindTextureByName(FontList[Options_FontNumber].FontName);
+		eTexture *FontPreview = vw_FindTextureByName(FontList[Options_FontNumber].FontTitle);
 		RECT SrcRect, DstRect;
 		int Scale = FontPreview->SrcWidth;
 		if (Scale > 170) Scale = 170;
