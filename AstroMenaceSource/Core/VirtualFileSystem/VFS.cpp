@@ -228,6 +228,61 @@ int vw_CreateVFS(const char *Name, unsigned int BuildNumber)
 
 
 
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// запись данных в VFS
+//------------------------------------------------------------------------------------
+int vw_WriteIntoVFSfromFile(const char *SrcName, const char *DstName)
+{
+	if (SrcName == 0) return -1;
+	if (DstName == 0) return -1;
+
+	// читаем данные файла в буфер
+	SDL_RWops *Ftmp = SDL_RWFromFile(SrcName, "rb");
+	// Если файл не найден - выходим
+	if (Ftmp == NULL)
+    {
+		fprintf(stderr, "Can't find file %s !!!\n", SrcName);
+        return -1;
+    }
+
+	// получаем размер файла
+	SDL_RWseek(Ftmp, 0, SEEK_END);
+	int tmpLength = SDL_RWtell(Ftmp);
+	SDL_RWseek(Ftmp, 0, SEEK_SET);
+
+	// копируем все данные файла в массив
+	BYTE *tmp = 0;
+	tmp = new BYTE[tmpLength];
+	SDL_RWread(Ftmp, tmp, tmpLength, 1);
+	SDL_RWclose(Ftmp);
+
+	// запись в VFS
+	if (0 != vw_WriteIntoVFSfromMemory(DstName, tmp, tmpLength))
+	{
+		// какая-то ошибка, не можем записать в VFS
+		delete [] tmp; tmp = 0;
+		fprintf(stderr, "Can't write into VFS from memory %s !!!\n", DstName);
+		return -1;
+	}
+
+	// Освобождаем память
+	delete [] tmp; tmp = 0;
+
+	return 0;
+}
+
+
+
+
 //------------------------------------------------------------------------------------
 // запись данных в VFS
 //------------------------------------------------------------------------------------

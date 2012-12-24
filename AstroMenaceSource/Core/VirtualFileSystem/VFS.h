@@ -84,6 +84,8 @@ struct eFILE
 int		vw_CreateVFS(const char *Name, unsigned int BuildNumber);
 // Write data from memory into VFS file
 int		vw_WriteIntoVFSfromMemory(const char *Name, const BYTE * buffer, int size);
+// Write data from file into VFS file
+int		vw_WriteIntoVFSfromFile(const char *SrcName, const char *DstName);
 // Open VFS file
 int		vw_OpenVFS(const char *Name, unsigned int BuildNumber);
 // Close VFS file

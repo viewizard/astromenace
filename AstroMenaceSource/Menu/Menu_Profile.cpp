@@ -33,7 +33,7 @@ int	CurrentProfile=-1;
 
 
 char NewProfileName[128] = "";
-int Pos = 0;
+int NewProfileNamePos = 0;
 float LastProfileNameTime = 0.0f;
 float CurrentProfileNameTransp = 0.9f;
 int	SoundOnProfileID = -1;
@@ -131,9 +131,8 @@ void NewRecord()
 
 
 	// подготавливаем, для новой записи
-	Pos = 0;
-	for(int i=0; i<128; i++)
-		NewProfileName[i] = 0;
+	NewProfileNamePos = 0;
+	memset(NewProfileName, 0, sizeof(NewProfileName));
 
 
 	CurrentProfile = ProfileNum;
@@ -309,32 +308,32 @@ exit:
 void ProfileInputText()
 {
 
-	// пишем букву, если можем
-	if (Pos < 127)
+	// пишем букву, если можем (т.к. у нас утф8 юникод, нужно как минимум 3 байта + 1 байт под \0 в конце строки)
+	if (NewProfileNamePos < 124)
 	if (vw_FontSize(NewProfileName)< 540)
 	if (vw_GetCurrentKeyUnicode()) // если тут не ноль, а юникод - значит нажали
 	{
 		Uint16 NewChar = vw_GetCurrentKeyUnicode();
 		vw_SetCurrentKeyUnicode(0); // сразу сбрасываем данные
 		// делаем простое преобразование, без учета суррогатной пары
-		char* str = NewProfileName + Pos;
+		char* str = NewProfileName + NewProfileNamePos;
 		if (NewChar <= 0x7F)
 		{
 			*str = (char)NewChar;
-			Pos++;
+			NewProfileNamePos++;
 		}
 		else if (NewChar <= 0x7FF)
 		{
 			*str++ = (char)(0xC0 | (NewChar >> 6));
 			*str = (char)(0x80 | (NewChar & 0x3F));
-			Pos+=2;
+			NewProfileNamePos+=2;
 		}
 		else
 		{
 			*str++ = (char)(0xE0 | (NewChar >> 12));
 			*str++ = (char)(0x80 | ((NewChar >> 6) & 0x3F));
 			*str = (char)(0x80 | (NewChar & 0x3F));
-			Pos+=3;
+			NewProfileNamePos+=3;
 		}
 
 		if (vw_FindSoundByNum(SoundTaping) != 0)
@@ -349,7 +348,7 @@ void ProfileInputText()
 
 	// проверяем, может спец-код
 	if (vw_GetKeys(SDLK_BACKSPACE))
-	if (Pos>0)
+	if (NewProfileNamePos>0)
 	{
 		// кривое решение на "пока", перебираем в поисках предпоследнего символа
 		const char *ReversePoint = NewProfileName;
@@ -362,11 +361,11 @@ void ProfileInputText()
 		}
 		while (ReversePointPrevious != ReversePoint)
 		{
-			NewProfileName[Pos] = 0;
-			Pos--;
+			NewProfileName[NewProfileNamePos] = 0;
+			NewProfileNamePos--;
 			ReversePointPrevious++;
 		}
-		NewProfileName[Pos] = 0;
+		NewProfileName[NewProfileNamePos] = 0;
 
 		if (vw_FindSoundByNum(SoundTaping) != 0)
 			vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
@@ -377,7 +376,7 @@ void ProfileInputText()
 
 	// ввод названия
 	if (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN))
-	if (Pos>0)
+	if (NewProfileNamePos>0)
 	{
 		NewRecord();
 		//Audio_PlayMenuSound(4,1.0f);

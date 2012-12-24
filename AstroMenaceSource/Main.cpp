@@ -44,18 +44,6 @@ GameSetup Setup;
 eDevCaps *CAPS=0;
 
 
-sFontList FontList[FontQuantity] =
-{
-{"Ubuntu Family", "DATA/FONT/Ubuntu-B.ttf"},
-{"Liberation Mono", "DATA/FONT/LiberationMono-Bold.ttf"},
-{"Liberation Sans", "DATA/FONT/LiberationSans-Bold.ttf"},
-{"Liberation Serif", "DATA/FONT/LiberationSerif-Bold.ttf"},
-{"FreeFont Mono", "DATA/FONT/FreeMonoBold.ttf"},
-{"FreeFont Sans", "DATA/FONT/FreeSansBold.ttf"},
-{"FreeFont Serif", "DATA/FONT/FreeSerifBold.ttf"},
-};
-
-
 //------------------------------------------------------------------------------------
 // общие состояния и статусы
 //------------------------------------------------------------------------------------
