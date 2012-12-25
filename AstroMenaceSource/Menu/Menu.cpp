@@ -248,10 +248,6 @@ void SetMenu(eGameStatus Menu)
 			memset(NewProfileName, 0, sizeof(NewProfileName));
 			break;
 
-		case INTERFACE:
-			Options_FontNumber = Setup.FontNumber;
-			break;
-
 		case OPTIONS:
 			Options_Width = Setup.Width;
 			Options_Height = Setup.Height;
