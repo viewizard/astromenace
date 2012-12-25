@@ -75,7 +75,9 @@ eFontChar* vw_LoadFontChar(unsigned UTF32);
 // Нахождение символа по его UTF32
 eFontChar* vw_FindFontCharByUTF32(unsigned UTF32);
 // освобождаем память от сгенерированных символов
-void vw_ReleaseAllFontChar();
+void vw_ReleaseAllFontChars();
+// освобождаем память от сгенерированных символов с удалением текстур
+void vw_ReleaseAllFontCharsWithTextures();
 // освобождаем память, завершаем работу с фонтом
 void vw_ShutdownFont();
 

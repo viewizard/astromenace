@@ -1250,7 +1250,7 @@ GotoQuit:
 	vw_ReleaseAllLights();
 	ReleaseAllGameLvlText();
 
-	vw_ShutdownFont();
+	vw_ShutdownFont(); // (!) всегда перед vw_ReleaseAllTextures
 	vw_ReleaseAllTextures();
 	ShadowMap_Release();
 	vw_ShutdownRenderer();
@@ -1297,7 +1297,6 @@ GotoQuit:
 	}
 
 
-	vw_ShutdownFont();
 	// освобождаем весь подготовленный текст из языкового файла
 	vw_ReleaseText();
 	// закрываем файловую систему

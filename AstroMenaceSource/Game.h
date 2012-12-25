@@ -380,8 +380,6 @@ void GameOptions();
 //------------------------------------------------------------------------------------
 // Menu_Interface.cpp
 //------------------------------------------------------------------------------------
-extern int Options_FontNumber;
-
 void CreateMenuLanguageEntryLinks();
 void ReCreateMenuLanguageEntryLinks();
 void CreateVoiceLanguageEntryLinks();

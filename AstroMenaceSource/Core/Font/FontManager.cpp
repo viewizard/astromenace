@@ -169,7 +169,7 @@ void vw_DetachFontChar(eFontChar* FontChar)
 //-----------------------------------------------------------------------------
 // освобождаем память от сгенерированных символов
 //-----------------------------------------------------------------------------
-void vw_ReleaseAllFontChar()
+void vw_ReleaseAllFontChars()
 {
 	// удаляем все символы
 	eFontChar *tmp = StartFontChar;
@@ -187,12 +187,48 @@ void vw_ReleaseAllFontChar()
 
 
 //-----------------------------------------------------------------------------
+// освобождаем память от сгенерированных символов с удалением текстур
+//-----------------------------------------------------------------------------
+void vw_ReleaseAllFontCharsWithTextures()
+{
+	// удаляем все символы
+	eFontChar *tmp = StartFontChar;
+	while (tmp!=0)
+	{
+		eFontChar *tmp2 = tmp->Next;
+
+		// удаляем текстуру
+		if (tmp->CharTexture != 0)
+		{
+			// проверяем все символы и "зануляем" указатель текстуры если другой символ использует эту же текстуру
+			eFontChar *tmp_texture = tmp->Next;
+			while (tmp_texture!=0)
+			{
+				if (tmp_texture->CharTexture == tmp->CharTexture) tmp_texture->CharTexture = 0;
+				tmp_texture = tmp_texture->Next;
+			}
+
+			// удаляем текстуру
+			vw_ReleaseTexture(tmp->CharTexture);
+		}
+
+		delete tmp; tmp = 0;
+		tmp = tmp2;
+	}
+
+	StartFontChar = 0;
+	EndFontChar = 0;
+}
+
+
+
+//-----------------------------------------------------------------------------
 // завершаем работу, освобождаем память
 //-----------------------------------------------------------------------------
 void vw_ShutdownFont()
 {
-	// удаляем все символы
-	vw_ReleaseAllFontChar();
+	// удаляем все символы, в этом случае всегда только символы без текстур
+	vw_ReleaseAllFontChars();
 
 	// освобождаем буфер фонта
 	if (InternalFontBuffer != 0)

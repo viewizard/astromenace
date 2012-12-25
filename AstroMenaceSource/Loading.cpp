@@ -1030,7 +1030,7 @@ bool ReleaseGameData(int LoadType)
 		}
 		else
 		{
-			vw_ReleaseAllFontChar();
+			vw_ReleaseAllFontChars(); // (!) всегда перед vw_ReleaseAllTextures
 			vw_ReleaseAllTextures();
 			CurretnLoadedData = LoadType;
 			return false;
