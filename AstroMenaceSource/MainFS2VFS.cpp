@@ -28,8 +28,8 @@
 #include "Game.h"
 
 
-const int	ConvertListCount = 389;
-const char *ConvertList[ConvertListCount] =
+const int	VFSFilesListCount = 390;
+const char *VFSFilesList[VFSFilesListCount] =
 {"DATA_RU/VOICE/EngineMalfunction.wav",
 "DATA_RU/VOICE/WeaponDamaged.wav",
 "DATA_RU/VOICE/MissileDetected.wav",
@@ -402,7 +402,8 @@ const char *ConvertList[ConvertListCount] =
 "FONT/FreeMonoBold.ttf",
 "FONT/FreeSansBold.ttf",
 "FONT/FreeSerifBold.ttf",
-"FONT/Ubuntu-B.ttf",
+"FONT/LinBiolinumBold.ttf",
+"FONT/LinLibertineBold.ttf",
 "CREDITS/freetype.tga",
 "CREDITS/oggvorbis.tga",
 "text.csv",
@@ -687,15 +688,15 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 	char DstFileName[MAX_PATH];
 
 	// добавляем физические файлы
-	for (int i=0; i<ConvertListCount; i++)
+	for (int i=0; i<VFSFilesListCount; i++)
 	{
 
 		strcpy(SrcFileName, RawDataDir);
-		strcat(SrcFileName, ConvertList[i]);
+		strcat(SrcFileName, VFSFilesList[i]);
 
 		// все наши файлы внутри VFS лежат в директории DATA
 		strcpy(DstFileName, "DATA/");
-		strcat(DstFileName, ConvertList[i]);
+		strcat(DstFileName, VFSFilesList[i]);
 
 		if (0 != vw_WriteIntoVFSfromFile(SrcFileName, DstFileName))
 		{

@@ -449,6 +449,9 @@ int main( int argc, char **argv )
 	vw_InitText("DATA/text.csv", ';', '\n');
 
 
+	// иним фонт
+	vw_InitFont(FontList[Setup.FontNumber].FontFileName, 16);
+
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// установка звука, всегда до LoadGameData
@@ -464,9 +467,6 @@ int main( int argc, char **argv )
 
 
 ReCreate:
-
-	// иним фонт
-	vw_InitFont(FontList[Setup.FontNumber].FontFileName, 16);
 
 
 #ifdef __unix
@@ -1250,7 +1250,7 @@ GotoQuit:
 	vw_ReleaseAllLights();
 	ReleaseAllGameLvlText();
 
-	vw_ShutdownFont(); // (!) всегда перед vw_ReleaseAllTextures
+	vw_ReleaseAllFontChars(); // (!) всегда перед vw_ReleaseAllTextures
 	vw_ReleaseAllTextures();
 	ShadowMap_Release();
 	vw_ShutdownRenderer();
@@ -1297,6 +1297,8 @@ GotoQuit:
 	}
 
 
+	// освобождаем память выделенную под ттф шрифт
+	vw_ShutdownFont();
 	// освобождаем весь подготовленный текст из языкового файла
 	vw_ReleaseText();
 	// закрываем файловую систему

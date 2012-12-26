@@ -57,6 +57,7 @@ struct eFontChar
 	int 		Height;
 	int 		Left;
 	int 		Top;
+	float		AdvanceX;
 
 	// указатели на список
 	eFontChar*	Prev;
@@ -81,8 +82,6 @@ void vw_ReleaseAllFontCharsWithTextures();
 // освобождаем память, завершаем работу с фонтом
 void vw_ShutdownFont();
 
-// создаем текстуру с текстом который передали
-int vw_TextureFromText(const char *FontName, int FontSize, const char * Text);
 
 // получаем размер строки
 int vw_FontSize(const char *Text, ...);

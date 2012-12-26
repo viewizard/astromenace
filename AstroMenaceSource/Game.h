@@ -98,15 +98,37 @@ extern bool JoysticButtons[100];
 void SaveGameData();
 void CodeXOR(char *Text, char *Key, int Count);
 
-const int FontQuantity = 7;
 struct sFontList
 {
 	const char *FontTitle;
 	const char *FontFileName;
 };
+
+// In order to change/add/delete font:
+//
+// 1. Edit AstroMenaceSource/Game.h file
+// - change/add/delete lines in FontList list
+// - correct FontQuantity variable value
+//
+// 2. Edit AstroMenaceSource/MainFS2VFS.cpp file (for bundled with game fonts only!)
+// - change/add/delete lines in VFSFilesList list
+// - correct VFSFilesListCount variable value
+// - make sure, that you have all font files in RAW_VFS_DATA/FONT/ folder
+//
+// You can also use external (installed into your system) ttf fonts. For example:
+/*
+const int FontQuantity = 2;
 const sFontList FontList[FontQuantity] =
 {
-{"Ubuntu Family", "DATA/FONT/Ubuntu-B.ttf"},
+{"Linux Biolinum", "DATA/FONT/LinBiolinumBold.ttf"},
+{"Liberation Sans", "/usr/share/fonts/liberation-fonts/LiberationSans-Bold.ttf"},
+};
+*/
+const int FontQuantity = 8;
+const sFontList FontList[FontQuantity] =
+{
+{"Linux Biolinum", "DATA/FONT/LinBiolinumBold.ttf"},
+{"Linux Libertine", "DATA/FONT/LinLibertineBold.ttf"},
 {"Liberation Mono", "DATA/FONT/LiberationMono-Bold.ttf"},
 {"Liberation Sans", "DATA/FONT/LiberationSans-Bold.ttf"},
 {"Liberation Serif", "DATA/FONT/LiberationSerif-Bold.ttf"},

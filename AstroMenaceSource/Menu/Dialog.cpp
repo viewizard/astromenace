@@ -1629,11 +1629,20 @@ void DrawDialogBox()
 			SizeI = (768 - vw_FontSize(vw_GetText("9_18Line1")))/2;
 			vw_DrawFont(X+SizeI, Y+80+k*0, -716, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("9_18Line1"));
 
-			vw_DrawFont(X+25, Y+80+k*2, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line2"));
+			SizeI = vw_FontSize(vw_GetText("9_18Line2"));
+			if (SizeI > 716) SizeI = -716;
+			else SizeI = 716;
+			vw_DrawFont(X+25, Y+80+k*2, SizeI, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line2"));
 			vw_DrawFont(X+25, Y+80+k*3, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line3"));
 
-			vw_DrawFont(X+25, Y+80+k*5, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line4"));
-			vw_DrawFont(X+25, Y+80+k*6, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line5"));
+			SizeI = vw_FontSize(vw_GetText("9_18Line4"));
+			if (SizeI > 716) SizeI = -716;
+			else SizeI = 716;
+			vw_DrawFont(X+25, Y+80+k*5, SizeI, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line4"));
+			SizeI = vw_FontSize(vw_GetText("9_18Line5"));
+			if (SizeI > 716) SizeI = -716;
+			else SizeI = 716;
+			vw_DrawFont(X+25, Y+80+k*6, SizeI, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line5"));
 			vw_DrawFont(X+25, Y+80+k*7, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line6"));
 
 			if (DrawDialogButton200(X+284, Y+80+k*9, vw_GetText("1_DONATE"), DialogContentTransp))

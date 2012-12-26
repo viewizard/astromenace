@@ -44,7 +44,7 @@ void CreditsMenu()
 	LastCreditsCurrentPosUpdateTime = vw_GetTime();
 
 	// зацикливание
-	if (CreditsCurrentPos <= -3340) CreditsCurrentPos = 0.0f;
+	if (CreditsCurrentPos <= -3280) CreditsCurrentPos = 0.0f;
 
 
 
@@ -327,17 +327,10 @@ void CreditsMenu()
 
 	Y1 += Offset1;
 	Y2 += Offset1;
-	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Ubuntu Font Family (http://font.ubuntu.com)"))/2;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Linux Libertine (http://www.linuxlibertine.org)"))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Ubuntu Font Family (http://font.ubuntu.com)");
-	Y1 += Offset1;
-	Y2 += Offset1;
-	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Copyright © 2010,2011 Canonical Ltd."))/2;
-	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
-	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Copyright © 2010,2011 Canonical Ltd.");
-
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Linux Libertine (http://www.linuxlibertine.org)");
 
 	Y1 += Offset1+15;
 	Y2 += Offset1+15;
@@ -345,13 +338,6 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "GNU FreeFont (http://www.gnu.org/software/freefont)");
-	Y1 += Offset1;
-	Y2 += Offset1;
-	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Free Software Foundation."))/2;
-	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
-	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Free Software Foundation.");
-
 
 	Y1 += Offset1+15;
 	Y2 += Offset1+15;
@@ -359,12 +345,6 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Liberation (https://fedorahosted.org/liberation-fonts)");
-	Y1 += Offset1;
-	Y2 += Offset1;
-	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Sponsored by Red Hat."))/2;
-	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
-	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Sponsored by Red Hat.");
 
 
 
