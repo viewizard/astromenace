@@ -57,13 +57,6 @@ be no problem, I´ll fix it with the next release.", can be used under
 GPLv3 license terms.
 
 
-* "Ubuntu-B.ttf" file (RAW_VFS_DATA/FONT/ folder)
-
-This ttf font is part of Ubuntu Font Family package released under "UBUNTU 
-FONT LICENCE Version 1.0" (see RAW_VFS_DATA/FONT/UbuntuFontLicence-1.0.txt 
-or <http://font.ubuntu.com/ufl/ubuntu-font-licence-1.0.txt>).
-
-
 * "FreeMonoBold.ttf", "FreeSansBold.ttf" and "FreeSerifBold.ttf" files 
   (RAW_VFS_DATA/FONT/ folder)
 
@@ -78,6 +71,15 @@ PUBLIC LICENSE Version 3" (see RAW_VFS_DATA/FONT/FreeFontLicense.txt or
 These ttf fonts are part of Liberation Fonts package released under "SIL 
 Open Font License, Version 1.1" 
 (see RAW_VFS_DATA/FONT/LiberationFontLicense.txt or 
+<http://opensource.org/licenses/OFL-1.1>).
+
+
+* "LinBiolinumBold.ttf" and "LinLibertineBold.txt" files 
+  (RAW_VFS_DATA/FONT/ folder)
+
+These ttf fonts are part of Linux Libertine package released under "SIL 
+Open Font License, Version 1.1" 
+(see RAW_VFS_DATA/FONT/LinLibertineLicense.txt or 
 <http://opensource.org/licenses/OFL-1.1>).
 
 
