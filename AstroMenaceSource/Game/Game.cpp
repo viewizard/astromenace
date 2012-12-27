@@ -1635,81 +1635,96 @@ void DrawGame()
 		}
 		else
 		{
-			if (GameMenuStatus == 1)
+			switch(GameMenuStatus)
 			{
-
-				// выводим подложку меню
-				SetRect(&SrcRect,2,2,564-2,564-2);
-				SetRect(&DstRect,Setup.iAspectRatioWidth/2-256+4-30,128+2-30,Setup.iAspectRatioWidth/2-256+564-30,128+564-2-30);
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/dialog512_512.tga"),
-					true, GameContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
-				// название меню
-				int SizeI = 17 + (234-vw_FontSize(vw_GetText("1_GAME_MENU")))/2;
-				vw_DrawFont(Setup.iAspectRatioWidth/2-256+SizeI, 128+22, 0, 0, 1.0f, 1.0f,1.0f,0.0f, 0.7f*GameContentTransp, vw_GetText("1_GAME_MENU"));
-
-				// выводим кнопки меню
-
-
-				int X = Setup.iAspectRatioWidth/2-192;
-				int Y = 225;
-				int Prir = 100;
-
-				// продолжаем игру
-				if (DrawButton384(X,Y, vw_GetText("1_RESUME"), GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime))
+				// основное меню игры
+				case 1:
 				{
-					GameMenu = false;
-					NeedShowGameMenu = false;
-					NeedHideGameMenu = true;
-					DrawGameCursor = false;
-					// установка в последюю точку указателя
-					SDL_WarpMouse(LastMouseXR, LastMouseYR);
+					// выводим подложку меню
+					SetRect(&SrcRect,2,2,564-2,564-2);
+					SetRect(&DstRect,Setup.iAspectRatioWidth/2-256+4-30,128+2-30,Setup.iAspectRatioWidth/2-256+564-30,128+564-2-30);
+					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/dialog512_512.tga"),
+						true, GameContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+					// название меню
+					int SizeI = 17 + (234-vw_FontSize(vw_GetText("1_GAME_MENU")))/2;
+					vw_DrawFont(Setup.iAspectRatioWidth/2-256+SizeI, 128+22, 0, 0, 1.0f, 1.0f,1.0f,0.0f, 0.7f*GameContentTransp, vw_GetText("1_GAME_MENU"));
 
-					if (SoundShowHideMenu != 0)
-						if (vw_FindSoundByNum(SoundShowHideMenu) != 0)
-							vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
-					SoundShowHideMenu = Audio_PlaySound2D(13, 1.0f);
-				}
+					// выводим кнопки меню
 
-				// выход в настройки
-				Y = Y+Prir;
-				if (DrawButton384(X,Y, vw_GetText("1_OPTIONS"), GameContentTransp, &GameButton2Transp, &LastGameButton2UpdateTime))
-				{
-					GameMenuStatus = 2;
-				}
 
-				// прерываем игру
-				Y = Y+Prir;
-				if (DrawButton384(X,Y, vw_GetText("1_RESTART"), GameContentTransp, &GameButton3Transp, &LastGameButton3UpdateTime))
-				{
-					// если убили, выводить диалог не нужно
-					if (PlayerFighter == 0)
+					int X = Setup.iAspectRatioWidth/2-192;
+					int Y = 225;
+					int Prir = 100;
+
+					// продолжаем игру
+					if (DrawButton384(X,Y, vw_GetText("1_RESUME"), GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime))
 					{
-						ComBuffer = GAME;
-						ExitGame();
-					}
-					else
-						SetCurrentDialogBox(5);
-				}
+						GameMenu = false;
+						NeedShowGameMenu = false;
+						NeedHideGameMenu = true;
+						DrawGameCursor = false;
+						// установка в последюю точку указателя
+						SDL_WarpMouse(LastMouseXR, LastMouseYR);
 
-				// выход из игры
-				Y = Y+Prir;
-				if (DrawButton384(X,Y, vw_GetText("1_QUIT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime))
-				{
-					// если убили, выводить диалог не нужно
-					if (PlayerFighter == 0)
+						if (SoundShowHideMenu != 0)
+							if (vw_FindSoundByNum(SoundShowHideMenu) != 0)
+								vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
+						SoundShowHideMenu = Audio_PlaySound2D(13, 1.0f);
+					}
+
+					// выход в настройки
+					Y = Y+Prir;
+					if (DrawButton384(X,Y, vw_GetText("1_OPTIONS"), GameContentTransp, &GameButton2Transp, &LastGameButton2UpdateTime))
 					{
-						ComBuffer = 101;
-						ExitGame();
+						SetOptionsMenu(OPTIONS);
+						GameMenuStatus = 2;
 					}
-					else
-						SetCurrentDialogBox(41);
+
+					// прерываем игру
+					Y = Y+Prir;
+					if (DrawButton384(X,Y, vw_GetText("1_RESTART"), GameContentTransp, &GameButton3Transp, &LastGameButton3UpdateTime))
+					{
+						// если убили, выводить диалог не нужно
+						if (PlayerFighter == 0)
+						{
+							ComBuffer = GAME;
+							ExitGame();
+						}
+						else
+							SetCurrentDialogBox(5);
+					}
+
+					// выход из игры
+					Y = Y+Prir;
+					if (DrawButton384(X,Y, vw_GetText("1_QUIT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime))
+					{
+						// если убили, выводить диалог не нужно
+						if (PlayerFighter == 0)
+						{
+							ComBuffer = 101;
+							ExitGame();
+						}
+						else
+							SetCurrentDialogBox(41);
+					}
+
+					break;
 				}
 
+				// основное меню настроек
+				case 2:
+					OptionsMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime, &GameButton2Transp, &LastGameButton2UpdateTime); break;
+				// меню продвинутых настроек
+				case 3:
+					OptionsAdvMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime, &GameButton2Transp, &LastGameButton2UpdateTime); break;
+				// меню настройки интерфейса
+				case 4:
+					InterfaceMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime); break;
+				// меню настройки управления
+				case 5:
+					ConfControlMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime); break;
 
-			}
-			else
-			{
-				GameOptions();
+
 			}
 
 

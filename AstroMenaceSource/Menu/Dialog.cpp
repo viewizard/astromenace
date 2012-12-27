@@ -483,6 +483,8 @@ void DrawDialogBox()
 			break;
 
 		case 16:
+		case 17:
+		case 18:
 			DialogType = 1;
 			break;
 	}
@@ -548,7 +550,7 @@ void DrawDialogBox()
 	int SizeI;
 	int SizeI1;
 	int TitleOffset = 25;
-	if (DialogType == 2) TitleOffset = 22;
+	if (DialogType == 2) TitleOffset = 20;
 
 
 	// для кнопок диалога
@@ -1390,25 +1392,33 @@ void DrawDialogBox()
 			break;
 
 
-		case 9: // подсказки на меню профайлов
+		case 9: // подсказки на меню профилей
 		{
 			// название диалога
 			SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("9_Tipsandhints")))/2;
 			vw_DrawFont(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
 			// текст диалога
 
-			vw_DrawFont(X+25, Y+ 80, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line1"));
-			vw_DrawFont(X+25, Y+115, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line2"));
-			vw_DrawFont(X+25, Y+150, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line3"));
+			SizeI = vw_FontSize(vw_GetText("9_9Line1"));
+			vw_DrawFont(X+25, Y+ 80, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line1"));
+			SizeI = vw_FontSize(vw_GetText("9_9Line2"));
+			vw_DrawFont(X+25, Y+115, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line2"));
+			SizeI = vw_FontSize(vw_GetText("9_9Line3"));
+			vw_DrawFont(X+25, Y+150, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line3"));
 			vw_DrawFont(X+25, Y+185, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line4"));
 
-			vw_DrawFont(X+25, Y+240, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line5"));
-			vw_DrawFont(X+25, Y+275, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line6"));
-			vw_DrawFont(X+25, Y+310, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line7"));
-			vw_DrawFont(X+25, Y+345, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line8"));
+			SizeI = vw_FontSize(vw_GetText("9_9Line5"));
+			vw_DrawFont(X+25, Y+240, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line5"));
+			SizeI = vw_FontSize(vw_GetText("9_9Line6"));
+			vw_DrawFont(X+25, Y+275, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line6"));
+			SizeI = vw_FontSize(vw_GetText("9_9Line7"));
+			vw_DrawFont(X+25, Y+310, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line7"));
+			SizeI = vw_FontSize(vw_GetText("9_9Line8"));
+			vw_DrawFont(X+25, Y+345, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line8"));
 			vw_DrawFont(X+25, Y+380, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_9Line9"));
 
-			vw_DrawFont(X+25, Y+435, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_9Line10"));
+			SizeI = vw_FontSize(vw_GetText("9_9Line10"));
+			vw_DrawFont(X+25, Y+435, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_9Line10"));
 			vw_DrawFont(X+25, Y+470, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_9Line11"));
 
 			// чекбокс
@@ -1427,14 +1437,20 @@ void DrawDialogBox()
 			// текст диалога
 
 			int k=28;
-			vw_DrawFont(X+25, Y+80+k*0, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_10Line1"));
-			vw_DrawFont(X+25, Y+80+k*1, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_10Line2"));
-			vw_DrawFont(X+25, Y+80+k*2, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_10Line3"));
+			SizeI = vw_FontSize(vw_GetText("9_10Line1"));
+			vw_DrawFont(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_10Line1"));
+			SizeI = vw_FontSize(vw_GetText("9_10Line2"));
+			vw_DrawFont(X+25, Y+80+k*1, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_10Line2"));
+			SizeI = vw_FontSize(vw_GetText("9_10Line3"));
+			vw_DrawFont(X+25, Y+80+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_10Line3"));
 			vw_DrawFont(X+25, Y+80+k*3, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_10Line4"));
 
-			vw_DrawFont(X+25, Y+100+k*4, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_10Line5"));
-			vw_DrawFont(X+25, Y+100+k*5, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_10Line6"));
-			vw_DrawFont(X+25, Y+100+k*6, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_10Line7"));
+			SizeI = vw_FontSize(vw_GetText("9_10Line5"));
+			vw_DrawFont(X+25, Y+100+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_10Line5"));
+			SizeI = vw_FontSize(vw_GetText("9_10Line6"));
+			vw_DrawFont(X+25, Y+100+k*5, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_10Line6"));
+			SizeI = vw_FontSize(vw_GetText("9_10Line7"));
+			vw_DrawFont(X+25, Y+100+k*6, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_10Line7"));
 			vw_DrawFont(X+25, Y+100+k*7, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_10Line8"));
 
 			vw_DrawFont(X+25, Y+120+k*8, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_10Line9"));
@@ -1460,24 +1476,34 @@ void DrawDialogBox()
 			// текст диалога
 
 			int k=25;
-			vw_DrawFont(X+25, Y+80+k*0, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_11Line1"));
-			vw_DrawFont(X+25, Y+80+k*1, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_11Line2"));
+			SizeI = vw_FontSize(vw_GetText("9_11Line1"));
+			vw_DrawFont(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_11Line1"));
+			SizeI = vw_FontSize(vw_GetText("9_11Line2"));
+			vw_DrawFont(X+25, Y+80+k*1, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_11Line2"));
 			vw_DrawFont(X+25, Y+80+k*2, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_11Line3"));
 
-			vw_DrawFont(X+25, Y+100+k*3, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_11Line4"));
-			vw_DrawFont(X+25, Y+100+k*4, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_11Line5"));
+			SizeI = vw_FontSize(vw_GetText("9_11Line4"));
+			vw_DrawFont(X+25, Y+100+k*3, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_11Line4"));
+			SizeI = vw_FontSize(vw_GetText("9_11Line5"));
+			vw_DrawFont(X+25, Y+100+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_11Line5"));
 			vw_DrawFont(X+25, Y+100+k*5, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_11Line6"));
 
-			vw_DrawFont(X+25, Y+120+k*6, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line7"));
-			vw_DrawFont(X+40, Y+120+k*7, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line8"));
-			vw_DrawFont(X+25, Y+120+k*8, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line9"));
-			vw_DrawFont(X+40, Y+120+k*9, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line10"));
-			vw_DrawFont(X+25, Y+120+k*10, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line11"));
-			vw_DrawFont(X+40, Y+120+k*11, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line12"));
-			vw_DrawFont(X+25, Y+120+k*12, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line13"));
-			vw_DrawFont(X+40, Y+120+k*13, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line14"));
-			vw_DrawFont(X+25, Y+120+k*14, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line15"));
-			vw_DrawFont(X+40, Y+120+k*15, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line16"));
+			SizeI = vw_FontSize(vw_GetText("9_11Line7"));
+			vw_DrawFont(X+25, Y+120+k*6, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line7"));
+			vw_DrawFont(X+40, Y+120+k*7, -701, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line8"));
+			SizeI = vw_FontSize(vw_GetText("9_11Line8"));
+			vw_DrawFont(X+25, Y+120+k*8, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line9"));
+			vw_DrawFont(X+40, Y+120+k*9, -701, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line10"));
+			SizeI = vw_FontSize(vw_GetText("9_11Line11"));
+			vw_DrawFont(X+25, Y+120+k*10, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line11"));
+			vw_DrawFont(X+40, Y+120+k*11, -701, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line12"));
+			SizeI = vw_FontSize(vw_GetText("9_11Line13"));
+			vw_DrawFont(X+25, Y+120+k*12, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line13"));
+			SizeI = vw_FontSize(vw_GetText("9_11Line14"));
+			vw_DrawFont(X+40, Y+120+k*13, -701, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line14"));
+			SizeI = vw_FontSize(vw_GetText("9_11Line15"));
+			vw_DrawFont(X+25, Y+120+k*14, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line15"));
+			vw_DrawFont(X+40, Y+120+k*15, -701, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line16"));
 
 			// чекбокс
 			bool ttt = !Setup.NeedShowHint[2];
@@ -1495,24 +1521,34 @@ void DrawDialogBox()
 			// текст диалога
 
 			int k=25;
-			vw_DrawFont(X+25, Y+80+k*0, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_12Line1"));
-			vw_DrawFont(X+25, Y+80+k*1, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_12Line2"));
-			vw_DrawFont(X+25, Y+80+k*2, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_12Line3"));
-			vw_DrawFont(X+25, Y+80+k*3, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_12Line4"));
-			vw_DrawFont(X+25, Y+80+k*4, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_12Line5"));
+			SizeI = vw_FontSize(vw_GetText("9_12Line1"));
+			vw_DrawFont(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_12Line1"));
+			SizeI = vw_FontSize(vw_GetText("9_12Line2"));
+			vw_DrawFont(X+25, Y+80+k*1, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_12Line2"));
+			SizeI = vw_FontSize(vw_GetText("9_12Line3"));
+			vw_DrawFont(X+25, Y+80+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_12Line3"));
+			SizeI = vw_FontSize(vw_GetText("9_12Line4"));
+			vw_DrawFont(X+25, Y+80+k*3, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_12Line4"));
+			SizeI = vw_FontSize(vw_GetText("9_12Line5"));
+			vw_DrawFont(X+25, Y+80+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_12Line5"));
 			vw_DrawFont(X+25, Y+80+k*5, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_12Line6"));
 
-			vw_DrawFont(X+25, Y+100+k*6, 716, 0,1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_12Line7"));
+			SizeI = vw_FontSize(vw_GetText("9_12Line7"));
+			vw_DrawFont(X+25, Y+100+k*6, SizeI > 716 ? -716 : 716, 0,1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_12Line7"));
 			vw_DrawFont(X+25, Y+100+k*7, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_12Line8"));
 
 			vw_DrawFont(X+25, Y+120+k*8, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_12Line9"));
-			vw_DrawFont(X+25, Y+120+k*9, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_12Line10"));
-			vw_DrawFont(X+40, Y+120+k*10, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_12Line11"));
-			vw_DrawFont(X+25, Y+120+k*11, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_12Line12"));
-			vw_DrawFont(X+40, Y+120+k*12, 716-15, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_12Line13"));
-			vw_DrawFont(X+40, Y+120+k*13, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_12Line14"));
-			vw_DrawFont(X+25, Y+120+k*14, 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_12Line15"));
-			vw_DrawFont(X+40, Y+120+k*15, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_12Line16"));
+			SizeI = vw_FontSize(vw_GetText("9_12Line10"));
+			vw_DrawFont(X+25, Y+120+k*9, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_12Line10"));
+			vw_DrawFont(X+40, Y+120+k*10, -701, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_12Line11"));
+			SizeI = vw_FontSize(vw_GetText("9_12Line12"));
+			vw_DrawFont(X+25, Y+120+k*11, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_12Line12"));
+			SizeI = vw_FontSize(vw_GetText("9_12Line13"));
+			vw_DrawFont(X+40, Y+120+k*12, SizeI > 701 ? -701 : 701, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_12Line13"));
+			vw_DrawFont(X+40, Y+120+k*13, -701, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_12Line14"));
+			SizeI = vw_FontSize(vw_GetText("9_12Line15"));
+			vw_DrawFont(X+25, Y+120+k*14, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_12Line15"));
+			vw_DrawFont(X+40, Y+120+k*15, -701, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_12Line16"));
 
 
 
@@ -1585,16 +1621,22 @@ void DrawDialogBox()
 
 			int k=30;
 
-			vw_DrawFont(X+25, Y+80+k*0, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_15Line1"));
+			SizeI = vw_FontSize(vw_GetText("9_15Line1"));
+			vw_DrawFont(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_15Line1"));
 			vw_DrawFont(X+25, Y+80+k*1, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_15Line2"), Setup.Profile[CurrentProfile].ByMissionExperience[CurrentMission]);
 
-			vw_DrawFont(X+25, Y+100+k*2, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_15Line3"));
-			vw_DrawFont(X+25, Y+100+k*3, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_15Line4"));
-			vw_DrawFont(X+25, Y+100+k*4, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_15Line5"));
+			SizeI = vw_FontSize(vw_GetText("9_15Line3"));
+			vw_DrawFont(X+25, Y+100+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_15Line3"));
+			SizeI = vw_FontSize(vw_GetText("9_15Line4"));
+			vw_DrawFont(X+25, Y+100+k*3, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_15Line4"));
+			SizeI = vw_FontSize(vw_GetText("9_15Line6"));
+			vw_DrawFont(X+25, Y+100+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_15Line5"));
 			vw_DrawFont(X+25, Y+100+k*5, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_15Line6"));
 
-			vw_DrawFont(X+25, Y+120+k*6, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_15Line7"));
-			vw_DrawFont(X+25, Y+120+k*7, 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_15Line8"));
+			SizeI = vw_FontSize(vw_GetText("9_15Line7"));
+			vw_DrawFont(X+25, Y+120+k*6, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_15Line7"));
+			SizeI = vw_FontSize(vw_GetText("9_15Line8"));
+			vw_DrawFont(X+25, Y+120+k*7, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_15Line8"));
 			vw_DrawFont(X+25, Y+120+k*8, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_15Line9"));
 
 
@@ -1621,28 +1663,19 @@ void DrawDialogBox()
 			SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("9_Tipsandhints")))/2;
 			vw_DrawFont(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
 			// текст диалога
-
-
-
 			int k=33;
 
 			SizeI = (768 - vw_FontSize(vw_GetText("9_18Line1")))/2;
 			vw_DrawFont(X+SizeI, Y+80+k*0, -716, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("9_18Line1"));
 
 			SizeI = vw_FontSize(vw_GetText("9_18Line2"));
-			if (SizeI > 716) SizeI = -716;
-			else SizeI = 716;
-			vw_DrawFont(X+25, Y+80+k*2, SizeI, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line2"));
+			vw_DrawFont(X+25, Y+80+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line2"));
 			vw_DrawFont(X+25, Y+80+k*3, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line3"));
 
 			SizeI = vw_FontSize(vw_GetText("9_18Line4"));
-			if (SizeI > 716) SizeI = -716;
-			else SizeI = 716;
-			vw_DrawFont(X+25, Y+80+k*5, SizeI, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line4"));
+			vw_DrawFont(X+25, Y+80+k*5, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line4"));
 			SizeI = vw_FontSize(vw_GetText("9_18Line5"));
-			if (SizeI > 716) SizeI = -716;
-			else SizeI = 716;
-			vw_DrawFont(X+25, Y+80+k*6, SizeI, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line5"));
+			vw_DrawFont(X+25, Y+80+k*6, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line5"));
 			vw_DrawFont(X+25, Y+80+k*7, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line6"));
 
 			if (DrawDialogButton200(X+284, Y+80+k*9, vw_GetText("1_DONATE"), DialogContentTransp))
@@ -1728,6 +1761,77 @@ void DrawDialogBox()
 			break;
 		}
 
+		case 17: // при изменении настроек в самой игре спрашиваем, с предупреждением, что не все сохраним
+			// название диалога
+			SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("1_RESTART")))/2;
+			vw_DrawFont(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("1_RESTART"));
+			// текст диалога
+			SizeI1 = vw_FontSize(vw_GetText("2_restart_line1"));
+			SizeI = (W-SizeI1)/2;
+			if (SizeI1 > 470)
+			{
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+100, -470, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("2_restart_line1"));
+			}
+			else
+				vw_DrawFont(X+SizeI, Y+100, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("2_restart_line1"));
+
+			SizeI1 = vw_FontSize(vw_GetText("2_restart_line2"));
+			SizeI = (W-SizeI1)/2;
+			if (SizeI1 > 470)
+			{
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+130, -470, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("2_restart_line2"));
+			}
+			else
+				vw_DrawFont(X+SizeI, Y+130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("2_restart_line2"));
+
+			// кнопки
+			if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("1_YES"), DialogContentTransp))
+			{
+				CloseDialog();
+				CanQuit = false;
+				Quit = true;
+				NeedReCreate = true;
+				SaveOptionsMenuTmpData();
+			}
+			if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetText("1_NO"), DialogContentTransp)) CloseDialog();
+			break;
+		case 18: // при изменении продвинутых настроек в самой игре, с предупреждением, что не все сохраним
+			// название диалога
+			SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("1_RESTART")))/2;
+			vw_DrawFont(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("1_RESTART"));
+			// текст диалога
+			SizeI1 = vw_FontSize(vw_GetText("2_restart_line1"));
+			SizeI = (W-SizeI1)/2;
+			if (SizeI1 > 470)
+			{
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+100, -470, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("2_restart_line1"));
+			}
+			else
+				vw_DrawFont(X+SizeI, Y+100, 0, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("2_restart_line1"));
+
+			SizeI1 = vw_FontSize(vw_GetText("2_restart_line2"));
+			SizeI = (W-SizeI1)/2;
+			if (SizeI1 > 470)
+			{
+				SizeI = (W - 470)/2;
+				vw_DrawFont(X+SizeI, Y+130, -470, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("2_restart_line2"));
+			}
+			else
+				vw_DrawFont(X+SizeI, Y+130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("2_restart_line2"));
+
+			// кнопки
+			if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("1_YES"), DialogContentTransp))
+			{
+				CloseDialog();
+				CanQuit = false;
+				Quit = true;
+				NeedReCreate = true;
+				SaveOptionsAdvMenuTmpData();
+			}
+			if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetText("1_NO"), DialogContentTransp)) CloseDialog();
 			break;
 
 	}

@@ -74,7 +74,7 @@ id;en;de;ru
 2_cnrepair_line1;Not enough money for the full hull repair.;Zuwenig Geld für komplette Instandsetzung.;Полный ремонт корабля невозможен.
 2_cnrepair_line2;Note: Repair has been limited by money.;Hinweis:Hülle wurde nur teilw. repariert.;Ремонт будет ограничен деньгами.
 ;;;
-2_restart_line1;Are you sure you want to restart the game?;Wollen Sie das Spiel wirklich neu starten?;Вы действительно хотите переиграть?
+2_restart_line1;Are you sure you want to restart the game?;Wollen Sie das Spiel wirklich neu starten?;Вы действительно хотите перезагрузить игру?
 2_restart_line2;Note: the current game data will be lost.;Hinweis: Der aktuelle Spielstand geht verloren.;Текущие данные миссии будут потеряны.
 ;;;
 ;;;

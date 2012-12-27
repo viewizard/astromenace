@@ -57,13 +57,13 @@ const char *ButtonScreenModeTitle[2] =
 
 
 
-void OptionsMenu()
+void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1, float *ButtonTransp2, float *LastButtonUpdateTime2)
 {
 
 	RECT SrcRect, DstRect;
 	SetRect(&SrcRect,0,0,2,2);
 	SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
-	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*ContentTransp);
 
 
 	int CurrentPos = 0;
@@ -73,14 +73,14 @@ void OptionsMenu()
 	int Prir1 = 55;
 
 
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Music_Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), MenuContentTransp, !Setup.Music_check || Setup.MusicSw==0))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Music_Volume"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), ContentTransp, !Setup.Music_check || Setup.MusicSw==0))
 	{
 		Setup.MusicSw--;
 		if (Setup.MusicSw<0) Setup.MusicSw = 0;
 		vw_SetMusicMainVolume(Setup.MusicSw/10.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), MenuContentTransp, !Setup.Music_check || Setup.MusicSw==10))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), ContentTransp, !Setup.Music_check || Setup.MusicSw==10))
 	{
 		Setup.MusicSw++;
 		if (Setup.MusicSw>10) Setup.MusicSw = 10;
@@ -89,7 +89,7 @@ void OptionsMenu()
 	if (!Setup.Music_check)
 	{
 		int SizeI = (170-vw_FontSize(vw_GetText("3_Not_available")))/2;
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Not_available"));
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_Not_available"));
 	}
 	else
 	{
@@ -98,9 +98,9 @@ void OptionsMenu()
 			SetRect(&SrcRect,0,0,16,32);
 			SetRect(&DstRect,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 			if (Setup.MusicSw>i)
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc.tga"), true, MenuContentTransp);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc.tga"), true, ContentTransp);
 			else
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, MenuContentTransp);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, ContentTransp);
 		}
 	}
 
@@ -110,15 +110,15 @@ void OptionsMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Voice_Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), MenuContentTransp, !Setup.Sound_check || Setup.VoiceSw==0, false))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Voice_Volume"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), ContentTransp, !Setup.Sound_check || Setup.VoiceSw==0, false))
 	{
 		Setup.VoiceSw--;
 		if (Setup.VoiceSw<0) Setup.VoiceSw = 0;
 		Audio_SetVoiceMainVolume(Setup.VoiceSw/10.0f);
 		Audio_PlayVoice(1, 1.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), MenuContentTransp, !Setup.Sound_check || Setup.VoiceSw==10, false))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), ContentTransp, !Setup.Sound_check || Setup.VoiceSw==10, false))
 	{
 		Setup.VoiceSw++;
 		if (Setup.VoiceSw>10) Setup.VoiceSw = 10;
@@ -128,7 +128,7 @@ void OptionsMenu()
 	if (!Setup.Sound_check)
 	{
 		int SizeI = (170-vw_FontSize(vw_GetText("3_Not_available")))/2;
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Not_available"));
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_Not_available"));
 	}
 	else
 	{
@@ -137,9 +137,9 @@ void OptionsMenu()
 			SetRect(&SrcRect,0,0,16,32);
 			SetRect(&DstRect,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 			if (Setup.VoiceSw>i)
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc.tga"), true, MenuContentTransp);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc.tga"), true, ContentTransp);
 			else
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, MenuContentTransp);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, ContentTransp);
 		}
 	}
 
@@ -148,14 +148,14 @@ void OptionsMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Sound_Effects_Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), MenuContentTransp, !Setup.Sound_check || Setup.SoundSw==0))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Sound_Effects_Volume"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), ContentTransp, !Setup.Sound_check || Setup.SoundSw==0))
 	{
 		Setup.SoundSw--;
 		if (Setup.SoundSw<0) Setup.SoundSw = 0;
 		Audio_SetSound2DMainVolume(Setup.SoundSw/10.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), MenuContentTransp, !Setup.Sound_check || Setup.SoundSw==10))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), ContentTransp, !Setup.Sound_check || Setup.SoundSw==10))
 	{
 		Setup.SoundSw++;
 		if (Setup.SoundSw>10) Setup.SoundSw = 10;
@@ -164,7 +164,7 @@ void OptionsMenu()
 	if (!Setup.Sound_check)
 	{
 		int SizeI = (170-vw_FontSize(vw_GetText("3_Not_available")))/2;
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Not_available"));
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_Not_available"));
 	}
 	else
 	{
@@ -173,9 +173,9 @@ void OptionsMenu()
 			SetRect(&SrcRect,0,0,16,32);
 			SetRect(&DstRect,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 			if (Setup.SoundSw>i)
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc.tga"), true, MenuContentTransp);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc.tga"), true, ContentTransp);
 			else
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, MenuContentTransp);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, ContentTransp);
 		}
 	}
 
@@ -197,8 +197,8 @@ void OptionsMenu()
 	Y1 += Prir1;
 	if (Options_BPP != 0) CurrentPos = 0;
 	else CurrentPos = 1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Full_Screen"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, !CanSwitchToFullScreen) || DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, !CanSwitchToFullScreen))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Full_Screen"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, !CanSwitchToFullScreen) || DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, !CanSwitchToFullScreen))
 	{
 		if (Options_BPP != 0)
 		{
@@ -238,7 +238,7 @@ void OptionsMenu()
 	}
 	int Size = vw_FontSize(Options_BPP ? vw_GetText("1_On") : vw_GetText("1_Off"));
 	int SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Options_BPP ? vw_GetText("1_On") : vw_GetText("1_Off"));
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, Options_BPP ? vw_GetText("1_On") : vw_GetText("1_Off"));
 
 
 
@@ -261,8 +261,8 @@ void OptionsMenu()
 	Y1 += Prir1;
 	if (Options_BPP != 0) CurrentPos = 0;
 	else CurrentPos = 1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(ButtonScreenModeTitle[CurrentPos]));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, false))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText(ButtonScreenModeTitle[CurrentPos]));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, false))
 	{
 		CurrentListNum--;
 
@@ -291,7 +291,7 @@ void OptionsMenu()
 		else
 			Options_iAspectRatioWidth = 1228;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, false))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, false))
 	{
 		CurrentListNum++;
 
@@ -330,18 +330,18 @@ void OptionsMenu()
 
 	Size = vw_FontSize(VideoModeTitle);
 	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, VideoModeTitle);
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, VideoModeTitle);
 
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Aspect_Ration"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, false))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Aspect_Ration"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, false))
 	{
 		if (Options_iAspectRatioWidth == 1228) Options_iAspectRatioWidth = 1024;
 		else Options_iAspectRatioWidth = 1228;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, false))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, false))
 	{
 		if (Options_iAspectRatioWidth == 1024) Options_iAspectRatioWidth = 1228;
 		else Options_iAspectRatioWidth = 1024;
@@ -350,13 +350,13 @@ void OptionsMenu()
 	{
 		Size = vw_FontSize(vw_GetText("3_Standard"));
 		SizeI = (170-Size)/2;
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Standard"));
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Standard"));
 	}
 	else
 	{
 		Size = vw_FontSize(vw_GetText("3_Widescreen"));
 		SizeI = (170-Size)/2;
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Widescreen"));
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Widescreen"));
 	}
 
 
@@ -365,8 +365,8 @@ void OptionsMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "VSync (%s)", vw_GetText("3_VSync"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, false) || DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, false))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, "VSync (%s)", vw_GetText("3_VSync"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, false) || DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, false))
 	if (NeedCheck == 0)
 	{
 		if (Options_VSync == 1) Options_VSync = 0;
@@ -374,7 +374,7 @@ void OptionsMenu()
 	}
 	Size = vw_FontSize(Options_VSync ? vw_GetText("1_On") : vw_GetText("1_Off"));
 	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Options_VSync ? vw_GetText("1_On") : vw_GetText("1_Off"));
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, Options_VSync ? vw_GetText("1_On") : vw_GetText("1_Off"));
 
 
 
@@ -383,13 +383,13 @@ void OptionsMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Brightness"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), MenuContentTransp, Setup.Brightness<=1))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Brightness"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), ContentTransp, Setup.Brightness<=1))
 	{
 		Setup.Brightness -= 1;
 		if (Setup.Brightness <= 1) Setup.Brightness = 1;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), MenuContentTransp, Setup.Brightness>=10))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), ContentTransp, Setup.Brightness>=10))
 	{
 		Setup.Brightness += 1;
 		if (Setup.Brightness >= 10) Setup.Brightness = 10;
@@ -399,9 +399,9 @@ void OptionsMenu()
 		SetRect(&SrcRect,0,0,16,32);
 		SetRect(&DstRect,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 		if (Setup.Brightness>i)
-			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc.tga"), true, MenuContentTransp);
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc.tga"), true, ContentTransp);
 		else
-			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, MenuContentTransp);
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/perc_none.tga"), true, ContentTransp);
 	}
 
 
@@ -427,23 +427,38 @@ void OptionsMenu()
 
 
 	X = Setup.iAspectRatioWidth/2 - 366;
-	if (DrawButton200_2(X,Y+28, vw_GetText("1_Advanced"), MenuContentTransp, false))
+	if (DrawButton200_2(X,Y+28, vw_GetText("1_Advanced"), ContentTransp, false))
 	{
-		ComBuffer = OPTIONS_ADVANCED;
+		if (GameStatus == GAME)
+		{
+			SetOptionsMenu(OPTIONS_ADVANCED);
+			GameMenuStatus = 3;
+		}
+		else ComBuffer = OPTIONS_ADVANCED;
 	}
 
 
 	X = Setup.iAspectRatioWidth/2 - 100;
-	if (DrawButton200_2(X,Y+28, vw_GetText("1_Interface"), MenuContentTransp, false))
+	if (DrawButton200_2(X,Y+28, vw_GetText("1_Interface"), ContentTransp, false))
 	{
-		ComBuffer = INTERFACE;
+		if (GameStatus == GAME)
+		{
+			SetOptionsMenu(INTERFACE);
+			GameMenuStatus = 4;
+		}
+		else ComBuffer = INTERFACE;
 	}
 
 
 	X = Setup.iAspectRatioWidth/2 + 166;
-	if (DrawButton200_2(X,Y+28, vw_GetText("1_Config_Controls"), MenuContentTransp, false))
+	if (DrawButton200_2(X,Y+28, vw_GetText("1_Config_Controls"), ContentTransp, false))
 	{
-		ComBuffer = CONFCONTROL;
+		if (GameStatus == GAME)
+		{
+			SetOptionsMenu(CONFCONTROL);
+			GameMenuStatus = 5;
+		}
+		else ComBuffer = CONFCONTROL;
 	}
 
 
@@ -460,21 +475,41 @@ void OptionsMenu()
 	{
 		X = (Setup.iAspectRatioWidth - 384)/2;
 		Y = Y+Prir;
-		if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+		if (GameStatus == GAME)
 		{
-			ComBuffer = MAIN_MENU;
+			if (DrawButton384(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			{
+				GameMenuStatus = 1;
+			}
+		}
+		else
+		{
+			if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			{
+				ComBuffer = MAIN_MENU;
+			}
 		}
 	}
 	else
 	{
 		X = Setup.iAspectRatioWidth/2 - 256 - 38;
 		Y = Y+Prir;
-		if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+		if (GameStatus == GAME)
 		{
-			ComBuffer = MAIN_MENU;
+			if (DrawButton256(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			{
+				GameMenuStatus = 1;
+			}
+		}
+		else
+		{
+			if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			{
+				ComBuffer = MAIN_MENU;
+			}
 		}
 		X = Setup.iAspectRatioWidth/2 + 38;
-		if (DrawButton256(X,Y, vw_GetText("1_APPLY"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime))
+		if (DrawButton256(X,Y, vw_GetText("1_APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2))
 		{
 			// проверяем, нужно перегружать или нет
 			if (Options_Width != Setup.Width ||
@@ -483,40 +518,44 @@ void OptionsMenu()
 				Options_VSync != Setup.VSync ||
 				Options_iAspectRatioWidth != Setup.iAspectRatioWidth)
 			{
-				CanQuit = false;
-				Quit = true;
-				NeedReCreate = true;
+				if (GameStatus == GAME) SetCurrentDialogBox(17);
+				else
+				{
+					CanQuit = false;
+					Quit = true;
+					NeedReCreate = true;
+					SaveOptionsMenuTmpData();
+				}
 			}
-
-			Setup.Width = Options_Width;
-			Setup.Height = Options_Height;
-
-			// пока своего управление нет- делаем автоматическую установку
-			if (Options_iAspectRatioWidth == 1024)
-			{
-				Setup.fAspectRatioWidth = 1024.0f;
-				Setup.fAspectRatioHeight = 768.0f;
-				Setup.iAspectRatioWidth = 1024;
-				Setup.iAspectRatioHeight = 768;
-			}
-			else
-			{
-				Setup.fAspectRatioWidth = 1228.0f;
-				Setup.fAspectRatioHeight = 768.0f;
-				Setup.iAspectRatioWidth = 1228;
-				Setup.iAspectRatioHeight = 768;
-			}
-
-			Setup.BPP = Options_BPP;
-			Setup.VSync = Options_VSync;
 		}
 	}
-
-
 }
 
 
+void SaveOptionsMenuTmpData()
+{
+	Setup.Width = Options_Width;
+	Setup.Height = Options_Height;
 
+	// пока своего управление нет- делаем автоматическую установку
+	if (Options_iAspectRatioWidth == 1024)
+	{
+		Setup.fAspectRatioWidth = 1024.0f;
+		Setup.fAspectRatioHeight = 768.0f;
+		Setup.iAspectRatioWidth = 1024;
+		Setup.iAspectRatioHeight = 768;
+	}
+	else
+	{
+		Setup.fAspectRatioWidth = 1228.0f;
+		Setup.fAspectRatioHeight = 768.0f;
+		Setup.iAspectRatioWidth = 1228;
+		Setup.iAspectRatioHeight = 768;
+	}
+
+	Setup.BPP = Options_BPP;
+	Setup.VSync = Options_VSync;
+}
 
 
 

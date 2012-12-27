@@ -36,6 +36,8 @@ FT_Face     InternalFace;
 BYTE 		*InternalFontBuffer = 0;
 // размер фонта при генерации
 int 		InternalFontSize;
+// смещение при прорисовки текста
+int			GlobalFontOffsetY = 0;
 
 eFontChar *StartFontChar = 0;
 eFontChar *EndFontChar = 0;
@@ -95,6 +97,18 @@ int vw_InitFont(const char *FontName, int FontSize)
 	printf("Font initialized: %s\n\n", FontName);
 	return 0;
 }
+
+
+
+
+//------------------------------------------------------------------------------------
+// задаем фиксированное смещение при прорисовке через vw_DrawFont
+//------------------------------------------------------------------------------------
+void vw_SetFontOffsetY(int NewOffsetY)
+{
+	GlobalFontOffsetY = NewOffsetY;
+}
+
 
 
 

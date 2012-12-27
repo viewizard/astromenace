@@ -33,6 +33,7 @@ void vw_AttachFontChar(eFontChar* FontChar);
 void vw_DetachFontChar(eFontChar* FontChar);
 extern FT_Face InternalFace;
 extern int InternalFontSize;
+extern int GlobalFontOffsetY;
 
 
 
@@ -419,7 +420,7 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 		{
 
 			float DrawX = Xstart + DrawChar->Left*FontWidthScale;
-			float DrawY = Y + 2 + (InternalFontSize - DrawChar->Top)*FontScale; // 2 доп смещение ("привет" от старого фонта)
+			float DrawY = Y + GlobalFontOffsetY + (InternalFontSize - DrawChar->Top)*FontScale;
 
 			// Вычисление поправки по У в зависимости от DrawCorner
 			// - расположения угла начала координат
