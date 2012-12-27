@@ -320,6 +320,7 @@ extern float MenuContentTransp;
 extern float LastMenuOnOffUpdateTime;
 
 void InitMenu();
+void SetOptionsMenu(eGameStatus Menu);
 void SetMenu(eGameStatus Menu);
 void DrawMenu();
 void DrawTransparent(RECT *DstRect, RECT *SrcRect, eTexture *Tex, eTexture *Tex2, bool Alpha, float Transp, float RotateAngle, int DrawCorner, float R, float G, float B);
@@ -359,8 +360,8 @@ extern int Options_BPP;
 extern int Options_VSync;
 extern int Options_iAspectRatioWidth;
 
-void OptionsMenu();
-
+void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1, float *ButtonTransp2, float *LastButtonUpdateTime2);
+void SaveOptionsMenuTmpData();
 
 
 
@@ -376,21 +377,11 @@ extern int NeedCheck;
 extern int ButQuant;
 extern float But[10];
 
-void ConfControlMenu();
+void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1);
 const char * MouseCodeName(char Num);
 const char * JoystickCodeName(char Num);
 void CheckMouseKeybJState();
 
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Game_Options.cpp
-//------------------------------------------------------------------------------------
-void GameOptions();
 
 
 
@@ -406,7 +397,7 @@ void CreateMenuLanguageEntryLinks();
 void ReCreateMenuLanguageEntryLinks();
 void CreateVoiceLanguageEntryLinks();
 void ReCreateVoiceLanguageEntryLinks();
-void InterfaceMenu();
+void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1);
 
 
 
@@ -424,8 +415,8 @@ extern int Options_CSAA;
 extern int Options_ShadowMap;
 extern int Options_TexturesQuality;
 
-void OptionsAdvMenu();
-
+void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1, float *ButtonTransp2, float *LastButtonUpdateTime2);
+void SaveOptionsAdvMenuTmpData();
 
 
 

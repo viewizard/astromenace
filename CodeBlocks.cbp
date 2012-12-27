@@ -169,7 +169,6 @@
 		<Unit filename="AstroMenaceSource/Game/Game.cpp" />
 		<Unit filename="AstroMenaceSource/Game/Game_Camera.cpp" />
 		<Unit filename="AstroMenaceSource/Game/Game_Mission.cpp" />
-		<Unit filename="AstroMenaceSource/Game/Game_Options.cpp" />
 		<Unit filename="AstroMenaceSource/Game/Game_PlayerShip.cpp" />
 		<Unit filename="AstroMenaceSource/Game/Game_WeaponSlot.cpp" />
 		<Unit filename="AstroMenaceSource/GraphicFX/GameLvlText/GameLvlText.cpp" />

@@ -219,13 +219,13 @@ void ReCreateVoiceLanguageEntryLinks()
 
 
 
-void InterfaceMenu()
+void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1)
 {
 
 	RECT SrcRect, DstRect;
 	SetRect(&SrcRect,0,0,2,2);
 	SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
-	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, 0.5f*ContentTransp);
 
 	int X1 = Setup.iAspectRatioWidth/2 - 375;
 	int Y1 = 65;
@@ -234,8 +234,8 @@ void InterfaceMenu()
 
 
 	// выбор языка меню
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Menu_Language"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, false))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Menu_Language"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, false))
 	{
 		Setup.MenuLanguage--;
 		if (Setup.MenuLanguage < 1) Setup.MenuLanguage = 3;
@@ -243,7 +243,7 @@ void InterfaceMenu()
 		ReCreateMenuLanguageEntryLinks();
 		vw_SetTextLanguage(Setup.MenuLanguage-1);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, false))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, false))
 	{
 		Setup.MenuLanguage++;
 		if (Setup.MenuLanguage>3) Setup.MenuLanguage = 1;
@@ -258,17 +258,17 @@ void InterfaceMenu()
 		case 1:
 			Size = vw_FontSize("English");
 			SizeI = (170-Size)/2;
-			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "English");
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, "English");
 			break;
 		case 2:
 			Size = vw_FontSize("Deutsch");
 			SizeI = (170-Size)/2;
-			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Deutsch");
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, "Deutsch");
 			break;
 		case 3:
 			Size = vw_FontSize("Русский");
 			SizeI = (170-Size)/2;
-			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Русский");
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, "Русский");
 			break;
 	}
 
@@ -277,15 +277,15 @@ void InterfaceMenu()
 
 	// выбор языка голосовых сообщений
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Voice_Language"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, false))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Voice_Language"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, false))
 	{
 		Setup.VoiceLanguage--;
 		if (Setup.VoiceLanguage < 1) Setup.VoiceLanguage = 3;
 
 		ReCreateVoiceLanguageEntryLinks();
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, false))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, false))
 	{
 		Setup.VoiceLanguage++;
 		if (Setup.VoiceLanguage>3) Setup.VoiceLanguage = 1;
@@ -298,17 +298,17 @@ void InterfaceMenu()
 		case 1:
 			Size = vw_FontSize("English");
 			SizeI = (170-Size)/2;
-			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "English");
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, "English");
 			break;
 		case 2:
 			Size = vw_FontSize("Deutsch");
 			SizeI = (170-Size)/2;
-			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Deutsch");
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, "Deutsch");
 			break;
 		case 3:
 			Size = vw_FontSize("Русский");
 			SizeI = (170-Size)/2;
-			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Русский");
+			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, "Русский");
 			break;
 	}
 
@@ -316,8 +316,8 @@ void InterfaceMenu()
 
 	// выбор шрифта
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Menu_Font"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, Setup.FontNumber <= 0))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Menu_Font"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, Setup.FontNumber <= 0))
 	{
 		Setup.FontNumber --;
 		if (Setup.FontNumber < 0) Setup.FontNumber = 0;
@@ -328,7 +328,7 @@ void InterfaceMenu()
 		vw_InitFont(FontList[Setup.FontNumber].FontFileName, 16);
 		vw_GenerateFontChars(256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, Setup.FontNumber >= FontQuantity-1))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.FontNumber >= FontQuantity-1))
 	{
 		Setup.FontNumber ++;
 		if (Setup.FontNumber > FontQuantity-1) Setup.FontNumber = FontQuantity-1;
@@ -347,19 +347,19 @@ void InterfaceMenu()
 		Size = 170;
 	}
 	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, Scale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, FontList[Setup.FontNumber].FontTitle);
+	vw_DrawFont(X1+438+SizeI, Y1, Scale, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, FontList[Setup.FontNumber].FontTitle);
 
 
 
 
 	// сброс подсказок
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Tipsandhints_Status"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Tipsandhints_Status"));
 	// узнаем есть ли вообще что ресетить
 	bool NeedReset = false;
 	for (int i=0; i<10; i++)
 		if (!Setup.NeedShowHint[i]) NeedReset = true;
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_GetText("3_Reset"), MenuContentTransp, !NeedReset))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_GetText("3_Reset"), ContentTransp, !NeedReset))
 	if (NeedCheck == 0)
 	{
 		for (int i=0; i<10; i++) Setup.NeedShowHint[i] = true;
@@ -370,34 +370,34 @@ void InterfaceMenu()
 
 	// вкл-выкл отображения счетчика фпс
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_FPS_Сounter"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, false) || DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, false))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_FPS_Сounter"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, false) || DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, false))
 	{
 		Setup.ShowFPS = !Setup.ShowFPS;
 	}
 	Size = vw_FontSize(Setup.ShowFPS ? vw_GetText("1_On") : vw_GetText("1_Off"));
 	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.ShowFPS ? vw_GetText("1_On") : vw_GetText("1_Off"));
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, Setup.ShowFPS ? vw_GetText("1_On") : vw_GetText("1_Off"));
 
 
 
 
 	// вид панелей с оружием в игре
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Weapon_Panels_View"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), MenuContentTransp, Setup.GameWeaponInfoType==1))
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Weapon_Panels_View"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, Setup.GameWeaponInfoType==1))
 	{
 		Setup.GameWeaponInfoType--;
 		if (Setup.GameWeaponInfoType < 1) Setup.GameWeaponInfoType = 1;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), MenuContentTransp, Setup.GameWeaponInfoType==4))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.GameWeaponInfoType==4))
 	{
 		Setup.GameWeaponInfoType++;
 		if (Setup.GameWeaponInfoType > 4) Setup.GameWeaponInfoType = 4;
 	}
 	Size = vw_FontSize(vw_GetText(ButtonGameWeaponInfoType[Setup.GameWeaponInfoType-1]));
 	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(ButtonGameWeaponInfoType[Setup.GameWeaponInfoType-1]));
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText(ButtonGameWeaponInfoType[Setup.GameWeaponInfoType-1]));
 
 
 
@@ -419,21 +419,36 @@ void InterfaceMenu()
 
 
 	X = Setup.iAspectRatioWidth/2 - 366;
-	if (DrawButton200_2(X,Y+28, vw_GetText("1_Advanced"), MenuContentTransp, false))
+	if (DrawButton200_2(X,Y+28, vw_GetText("1_Advanced"), ContentTransp, false))
 	{
-		ComBuffer = OPTIONS_ADVANCED;
+		if (GameStatus == GAME)
+		{
+			SetOptionsMenu(OPTIONS_ADVANCED);
+			GameMenuStatus = 3;
+		}
+		else ComBuffer = OPTIONS_ADVANCED;
 	}
 
 	X = Setup.iAspectRatioWidth/2 - 100;
-	if (DrawButton200_2(X,Y+28, vw_GetText("1_Video_&_Audio"), MenuContentTransp, false))
+	if (DrawButton200_2(X,Y+28, vw_GetText("1_Video_&_Audio"), ContentTransp, false))
 	{
-		ComBuffer = OPTIONS;
+		if (GameStatus == GAME)
+		{
+			SetOptionsMenu(OPTIONS);
+			GameMenuStatus = 2;
+		}
+		else ComBuffer = OPTIONS;
 	}
 
 	X = Setup.iAspectRatioWidth/2 + 166;
-	if (DrawButton200_2(X,Y+28, vw_GetText("1_Config_Controls"), MenuContentTransp, false))
+	if (DrawButton200_2(X,Y+28, vw_GetText("1_Config_Controls"), ContentTransp, false))
 	{
-		ComBuffer = CONFCONTROL;
+		if (GameStatus == GAME)
+		{
+			SetOptionsMenu(CONFCONTROL);
+			GameMenuStatus = 5;
+		}
+		else ComBuffer = CONFCONTROL;
 	}
 
 
@@ -443,9 +458,19 @@ void InterfaceMenu()
 
 	X = (Setup.iAspectRatioWidth - 384)/2;
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+	if (GameStatus == GAME)
 	{
-		ComBuffer = MAIN_MENU;
+		if (DrawButton384(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+		{
+			GameMenuStatus = 1;
+		}
+	}
+	else
+	{
+		if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+		{
+			ComBuffer = MAIN_MENU;
+		}
 	}
 }
 

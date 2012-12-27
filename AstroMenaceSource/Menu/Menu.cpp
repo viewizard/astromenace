@@ -237,17 +237,10 @@ void InitMenu()
 //------------------------------------------------------------------------------------
 // установка меню
 //------------------------------------------------------------------------------------
-void SetMenu(eGameStatus Menu)
+void SetOptionsMenu(eGameStatus Menu)
 {
-	Audio_PlaySound2D(3,1.0f);
-
 	switch (Menu)
 	{
-		case PROFILE:
-			NewProfileNamePos = 0;
-			memset(NewProfileName, 0, sizeof(NewProfileName));
-			break;
-
 		case OPTIONS:
 			Options_Width = Setup.Width;
 			Options_Height = Setup.Height;
@@ -276,6 +269,27 @@ void SetMenu(eGameStatus Menu)
 			if (Setup.MouseSecondary == 0) Setup.MouseSecondary = SDL_BUTTON_RIGHT;
 			if (Setup.JoystickPrimary == -1) Setup.JoystickPrimary = 0;
 			if (Setup.JoystickSecondary == -1) Setup.JoystickSecondary = 1;
+			break;
+
+		default:
+			break;
+	}
+}
+void SetMenu(eGameStatus Menu)
+{
+	Audio_PlaySound2D(3,1.0f);
+
+	switch (Menu)
+	{
+		case PROFILE:
+			NewProfileNamePos = 0;
+			memset(NewProfileName, 0, sizeof(NewProfileName));
+			break;
+
+		case OPTIONS:
+		case OPTIONS_ADVANCED:
+		case CONFCONTROL:
+			SetOptionsMenu(Menu);
 			break;
 
 		case TOP_SCORES:
@@ -532,12 +546,12 @@ void DrawMenu()
 	{
 		case MAIN_MENU:		MainMenu(); break;
 		case TOP_SCORES:	TopScoresMenu(); break;
-		case INTERFACE:		InterfaceMenu(); break;
-		case OPTIONS:		OptionsMenu(); break;
-		case OPTIONS_ADVANCED: OptionsAdvMenu(); break;
+		case INTERFACE:		InterfaceMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime); break;
+		case OPTIONS:		OptionsMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime, &Button11Transp, &LastButton11UpdateTime); break;
+		case OPTIONS_ADVANCED: OptionsAdvMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime, &Button11Transp, &LastButton11UpdateTime); break;
 		case INFORMATION:	InformationMenu(); break;
 		case CREDITS:		CreditsMenu(); break;
-		case CONFCONTROL:	ConfControlMenu(); break;
+		case CONFCONTROL:	ConfControlMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime); break;
 		case PROFILE:		ProfileMenu(); break;
 		case DIFFICULTY:	DifficultyMenu(); break;
 		case MISSION:		MissionMenu(); break;

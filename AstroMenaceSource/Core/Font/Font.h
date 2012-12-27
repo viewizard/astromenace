@@ -69,6 +69,8 @@ struct eFontChar
 
 // инициализация фонта
 int vw_InitFont(const char *FontName, int FontSize);
+// задаем фиксированное смещение при прорисовке через vw_DrawFont
+void vw_SetFontOffsetY(int NewOffsetY);
 // делаем генерацию нужных символов по списку
 void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const char * CharsList);
 // загрузка символа с генерацией всех необходимых данных
