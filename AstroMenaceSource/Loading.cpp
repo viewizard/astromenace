@@ -1568,51 +1568,63 @@ void LoadGameData(int LoadType)
 					vw_SetTextureProp(CurrentList[i].TextFiltr, CurrentList[i].TextWrap,
 						CurrentList[i].Alpha, CurrentList[i].AlphaMode, CurrentList[i].MipMap);
 
+					// мы можем принудительно менять размер текстур через настройки, но надо учитывать их размеры
+					// базовый размер почти всех текстур моделей - 512х512 пикселей, небольшая часть текстур 256х256 (мины, турели)
+					// текстуры всех планет - 1024х512
+					// "неформатные" текстуры - track.VW2D и asteroid-01.tga, им вообще не надо менять размеры
+
 					if (Setup.TexturesQuality == 1)
 					{
+						// только для текстур в папке MODELS (скайбоксы никогда не трогаем)
 						if (!strncmp("DATA/MODELS/", CurrentList[i].FileName, strlen("DATA/MODELS/")) &&
+							// не меняем размеры небольших текстур вообще
 							strcmp("DATA/MODELS/track.VW2D", CurrentList[i].FileName) &&
-							// не ставим низкое для текстур-подсветки файтеров землян - плохо...
+							strcmp("DATA/MODELS/SPACE/asteroid-01.tga", CurrentList[i].FileName) &&
+							// не меняем размер или ставим спец размер
+							strncmp("DATA/MODELS/SPACEBASE/", CurrentList[i].FileName, strlen("DATA/MODELS/SPACEBASE/")) &&
+							strncmp("DATA/MODELS/PLANET/", CurrentList[i].FileName, strlen("DATA/MODELS/PLANET/")) &&
+							strncmp("DATA/MODELS/NORMALMAP/", CurrentList[i].FileName, strlen("DATA/MODELS/NORMALMAP/")) &&
+							// не ставим маленький размер для текстур-подсветки файтеров землян - плохо смотрится
 							strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum01.VW2D", CurrentList[i].FileName) &&
 							strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum02.VW2D", CurrentList[i].FileName) &&
 							strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum03.VW2D", CurrentList[i].FileName) &&
-							strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum04.VW2D", CurrentList[i].FileName) &&
-							strncmp("DATA/MODELS/SPACE/", CurrentList[i].FileName, strlen("DATA/MODELS/SPACE/")) &&
-							strncmp("DATA/MODELS/SPACEBASE/", CurrentList[i].FileName, strlen("DATA/MODELS/SPACEBASE/")) &&
-							strncmp("DATA/MODELS/PLANET/", CurrentList[i].FileName, strlen("DATA/MODELS/PLANET/")))
+							strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum04.VW2D", CurrentList[i].FileName))
 						{
 							H = W = 128;
 						}
 						else
 						{
-							if (!strncmp("DATA/SKYBOX/", CurrentList[i].FileName, strlen("DATA/SKYBOX/")))
+							// для подсветки файтеров землян и частей баз (с решетками на альфа канале) - ставим больше размер
+							if (!strncmp("DATA/MODELS/SPACEBASE/", CurrentList[i].FileName, strlen("DATA/MODELS/SPACEBASE/")) ||
+								!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum01.VW2D", CurrentList[i].FileName) ||
+								!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum02.VW2D", CurrentList[i].FileName) ||
+								!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum03.VW2D", CurrentList[i].FileName) ||
+								!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum04.VW2D", CurrentList[i].FileName))
 							{
-								H = W = 512;
+								H = W = 256;
 							}
-							else// не ставим низкое для текстур-подсветки файтеров землян - плохо...
-								if (!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum01.VW2D", CurrentList[i].FileName) ||
-									!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum02.VW2D", CurrentList[i].FileName) ||
-									!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum03.VW2D", CurrentList[i].FileName) ||
-									!strcmp("DATA/MODELS/EARTHFIGHTER/sf-illum04.VW2D", CurrentList[i].FileName) ||
-									!strncmp("DATA/MODELS/SPACEBASE/", CurrentList[i].FileName, strlen("DATA/MODELS/SPACEBASE/")) ||
-									!strncmp("DATA/MODELS/PLANET/", CurrentList[i].FileName, strlen("DATA/MODELS/PLANET/")))
-								{
-									H = W = 256;
-								}
-
+							// текстуры планет не квадратные, учитываем это
+							if (!strncmp("DATA/MODELS/PLANET/", CurrentList[i].FileName, strlen("DATA/MODELS/PLANET/")) &&
+								strcmp("DATA/MODELS/PLANET/asteroid.tga", CurrentList[i].FileName))
+							{
+								W = 512; H = 256;
+							}
 						}
 					}
 					if (Setup.TexturesQuality == 2)
 					{
+						// только для текстур в папке MODELS (скайбоксы никогда не трогаем)
 						if (!strncmp("DATA/MODELS/", CurrentList[i].FileName, strlen("DATA/MODELS/")) &&
+							// не меняем размеры небольших текстур вообще
 							strcmp("DATA/MODELS/track.VW2D", CurrentList[i].FileName) &&
-							strncmp("DATA/MODELS/SPACE/", CurrentList[i].FileName, strlen("DATA/MODELS/SPACE/")) &&
+							strcmp("DATA/MODELS/SPACE/asteroid-01.tga", CurrentList[i].FileName) &&
+							// не меняем размер
 							strncmp("DATA/MODELS/SPACEBASE/", CurrentList[i].FileName, strlen("DATA/MODELS/SPACEBASE/")) &&
-							strncmp("DATA/MODELS/PLANET/", CurrentList[i].FileName, strlen("DATA/MODELS/PLANET/")))
+							strncmp("DATA/MODELS/PLANET/", CurrentList[i].FileName, strlen("DATA/MODELS/PLANET/")) &&
+							strncmp("DATA/MODELS/NORMALMAP/", CurrentList[i].FileName, strlen("DATA/MODELS/NORMALMAP/")))
 						{
 							H = W = 256;
 						}
-
 					}
 
 					// если это карта нормалей, но у нас не включены шейдеры - пропускаем
