@@ -47,6 +47,7 @@ CGroundObject::CGroundObject(void)
 	MaxWheelRotateAngle = 20.0f;
 	TrackObjectNum = -1;
 	TrackRotationDirection = 1;
+	WheelTrackSpeed = 0.0f;
 
 	TargetHorizObjectQuantity = 0;
 	TargetHorizObject = 0;
