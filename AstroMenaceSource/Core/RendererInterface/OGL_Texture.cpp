@@ -48,7 +48,7 @@ GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Byt
 	GLuint TextureID = 0;
 
 	glGenTextures(1, &TextureID);
-    vw_BindTexture(0, TextureID);
+	vw_BindTexture(0, TextureID);
 
 	int Format;
 	int InternalFormat;

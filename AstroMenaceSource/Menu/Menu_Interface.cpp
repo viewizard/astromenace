@@ -325,7 +325,8 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		// удаляем все символы и их текстуры
 		vw_ReleaseAllFontCharsWithTextures();
 		// инициализируем новый шрифт, вызывать vw_ShutdownFont не нужно
-		vw_InitFont(FontList[Setup.FontNumber].FontFileName, 16);
+		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
+		vw_SetFontSize(16);
 		vw_GenerateFontChars(256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.FontNumber >= FontQuantity-1))
@@ -336,7 +337,8 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		// удаляем все символы и их текстуры
 		vw_ReleaseAllFontCharsWithTextures();
 		// инициализируем новый шрифт, вызывать vw_ShutdownFont не нужно
-		vw_InitFont(FontList[Setup.FontNumber].FontFileName, 16);
+		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
+		vw_SetFontSize(16);
 		vw_GenerateFontChars(256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
 	}
 	int Scale = 0;

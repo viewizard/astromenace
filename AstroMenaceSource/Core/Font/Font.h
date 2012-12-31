@@ -45,6 +45,7 @@ struct eFontChar
 
 	// указатель на сгенерированную текстуру
 	eTexture* 	CharTexture;
+	int			FontSize;
 
 	// указатели точек границ символа, на использовании общей текстуры
 	int			TexturePositionLeft;
@@ -68,7 +69,9 @@ struct eFontChar
 
 
 // инициализация фонта
-int vw_InitFont(const char *FontName, int FontSize);
+int vw_InitFont(const char *FontName);
+// устанавливаем текущий размер шрифта
+void vw_SetFontSize(int FontSize);
 // задаем фиксированное смещение при прорисовке через vw_DrawFont
 void vw_SetFontOffsetY(int NewOffsetY);
 // делаем генерацию нужных символов по списку
