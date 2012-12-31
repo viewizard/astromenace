@@ -533,8 +533,9 @@ void Workshop_Workshop()
 		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 0.35f*MenuContentTransp, vw_GetText(GetSystemName(GetNextSystemStockNum())));
 	}
 
-	vw_DrawFont(Setup.iAspectRatioWidth/2-475, 630, 0, 0, 1.5f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("7_System_Stock"));
-
+	vw_SetFontSize(24);
+	vw_DrawFont(Setup.iAspectRatioWidth/2-475, 630, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("7_System_Stock"));
+	vw_SetFontSize(16);
 
 
 
@@ -1130,8 +1131,9 @@ void Workshop_Workshop()
 
 
 
-
-	vw_DrawFont(Setup.iAspectRatioWidth/2+475-vw_FontSize(vw_GetText("7_Installed_Systems"))*1.5f, 630, 0, 0, 1.5f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("7_Installed_Systems"));
+	vw_SetFontSize(24);
+	vw_DrawFont(Setup.iAspectRatioWidth/2+475-vw_FontSize(vw_GetText("7_Installed_Systems")), 630, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("7_Installed_Systems"));
+	vw_SetFontSize(16);
 
 	// текущая система
 	vw_DrawFont(Setup.iAspectRatioWidth/2-250, 430, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("7_Selected_System"));
@@ -1189,11 +1191,12 @@ void Workshop_Workshop()
 
 
 	// вывод информации
-	int SizeI = (Setup.iAspectRatioWidth-vw_FontSize("%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money)*1.25f)/2;
+	vw_SetFontSize(20);
+	int SizeI = (Setup.iAspectRatioWidth-vw_FontSize("%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money))/2;
 	if (CanBuy)
-		vw_DrawFont(SizeI, 630, 0, 0, 1.25f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
+		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
 	else
-		vw_DrawFont(SizeI, 630, 0, 0, 1.25f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
-
+		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
+	vw_SetFontSize(16);
 }
 

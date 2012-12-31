@@ -47,7 +47,7 @@ eFontChar *EndFontChar = 0;
 //------------------------------------------------------------------------------------
 // инициализация фонта
 //------------------------------------------------------------------------------------
-int vw_InitFont(const char *FontName, int FontSize)
+int vw_InitFont(const char *FontName)
 {
 	// иним библиотеку
 	if (FT_Init_FreeType( &InternalLibrary ))
@@ -85,18 +85,26 @@ int vw_InitFont(const char *FontName, int FontSize)
 	}
 
 
-	// устанавливаем размеры
-	if (FT_Set_Char_Size( InternalFace, FontSize <<6, FontSize <<6, 96, 96 ))
-	{
-		fprintf(stderr, "Can't set char size, font: %s\n", FontName);
-		return -1;
-	}
-
-	InternalFontSize = FontSize;
-
 	printf("Font initialized: %s\n\n", FontName);
 	return 0;
 }
+
+
+//------------------------------------------------------------------------------------
+// устанавливаем размеры шрифта
+//------------------------------------------------------------------------------------
+void vw_SetFontSize(int FontSize)
+{
+	InternalFontSize = FontSize;
+
+	// устанавливаем размеры
+	if (FT_Set_Char_Size( InternalFace, InternalFontSize <<6, InternalFontSize <<6, 96, 96 ))
+	{
+		fprintf(stderr, "Can't set char size %i.", InternalFontSize);
+		return;
+	}
+}
+
 
 
 
@@ -123,7 +131,7 @@ eFontChar* vw_FindFontCharByUTF32(unsigned UTF32)
 	while (Tmp != 0)
 	{
 		eFontChar *Tmp1 = Tmp->Next;
-		if (Tmp->UTF32 == UTF32) return Tmp;
+		if (Tmp->UTF32 == UTF32 && Tmp->FontSize == InternalFontSize) return Tmp;
 		Tmp = Tmp1;
 	}
 

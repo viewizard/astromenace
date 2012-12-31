@@ -59,6 +59,7 @@ eFontChar* vw_LoadFontChar(unsigned UTF32)
 
 	NewChar->UTF32 = UTF32;
 	NewChar->CharTexture = 0;
+	NewChar->FontSize = InternalFontSize;
 	NewChar->TexturePositionLeft = 0;
 	NewChar->TexturePositionRight = InternalFace->glyph->bitmap.width; // в случае одной текстуры совпадают с шириной
 	NewChar->TexturePositionTop = 0;
@@ -67,6 +68,7 @@ eFontChar* vw_LoadFontChar(unsigned UTF32)
 	NewChar->Height = InternalFace->glyph->bitmap.rows;
 	NewChar->Left = InternalFace->glyph->bitmap_left;
 	NewChar->Top = InternalFace->glyph->bitmap_top;
+	NewChar->AdvanceX = InternalFace->glyph->advance.x / 64.0f;
 	NewChar->Prev = 0;
 	NewChar->Next = 0;
 
@@ -93,7 +95,7 @@ eFontChar* vw_LoadFontChar(unsigned UTF32)
 	sprintf(texturefilename, "%i", UTF32);
 
 	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
-	NewChar->CharTexture = vw_CreateTextureFromMemory(texturefilename, pixels, NewChar->Width, NewChar->Height, 4, false);
+	NewChar->CharTexture = vw_CreateTextureFromMemory(texturefilename, pixels, NewChar->Width, NewChar->Height, 4, false, 0, 0, false);
 	// очищаем память
 	delete [] pixels;
 
@@ -148,6 +150,7 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 
 		NewChar->UTF32 = CurrentChar;
 		NewChar->CharTexture = 0;
+		NewChar->FontSize = InternalFontSize;
 		NewChar->TexturePositionLeft = 0;
 		NewChar->TexturePositionRight = 0;
 		NewChar->TexturePositionTop = 0;
@@ -274,9 +277,6 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 	vw_GetViewport(0, 0, &W, &H);
 	float AHw = H*1.0f;
 
-	float RealTextYPos = AHw - 2*Y + 4 + InternalFontSize*FontScale;
-	if (ASpresent) RealTextYPos = AH - 2*Y + 4 + InternalFontSize*FontScale;
-
 
 	// если текст ниже чем ширина нашего окна - не рисуем
 	if (ASpresent){ if (Y > AH) return;}
@@ -301,6 +301,7 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 
 	float Xstart = X;
 	// сразу определяем "базовую" ширину пробела, чтобы учитывать в расчетах
+	if (vw_FindFontCharByUTF32(0x020) == 0) vw_LoadFontChar(0x020);
 	float SpaceWidth = vw_FindFontCharByUTF32(0x020)->AdvanceX*FontScale;
 	// чтобы было более читаемо - делаем пробел не менее 2/3 ширины
 	if (SpaceWidth < (InternalFontSize * 0.65f)) SpaceWidth = InternalFontSize * 0.65f;
@@ -512,6 +513,7 @@ int vw_FontSize(const char *Text, ...)
 
 	const char *textdraw = text;
 	// сразу определяем "базовую" ширину пробела
+	if (vw_FindFontCharByUTF32(0x020) == 0) vw_LoadFontChar(0x020);
 	float SpaceWidth = vw_FindFontCharByUTF32(0x020)->AdvanceX;
 	// чтобы было более читаемо - делаем пробел не менее 2/3 ширины
 	if (SpaceWidth < (InternalFontSize * 0.65f)) SpaceWidth = InternalFontSize * 0.65f;

@@ -617,19 +617,22 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool Nee
 //------------------------------------------------------------------------------------
 // создание текстуры из памяти
 //------------------------------------------------------------------------------------
-eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DWidth, int DHeight, int DChanels, bool NeedCompression, int NeedResizeW, int NeedResizeH)
+eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DWidth, int DHeight, int DChanels, bool NeedCompression, int NeedResizeW, int NeedResizeH, bool NeedDuplicateCheck)
 {
 	// проверяем в списке, если уже создавали ее - просто возвращаем указатель
-	eTexture *Tmp = StartTexMan;
-	while (Tmp != 0)
+	if (NeedDuplicateCheck)
 	{
-		eTexture *Tmp1 = Tmp->Next;
-		if(vw_strcmp(Tmp->Name, TextureName) == 0)
+		eTexture *Tmp = StartTexMan;
+		while (Tmp != 0)
 		{
-			printf("Texture already loaded: %s\n", TextureName);
-			return Tmp;
+			eTexture *Tmp1 = Tmp->Next;
+			if(vw_strcmp(Tmp->Name, TextureName) == 0)
+			{
+				printf("Texture already loaded: %s\n", TextureName);
+				return Tmp;
+			}
+			Tmp = Tmp1;
 		}
-		Tmp = Tmp1;
 	}
 
 
