@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
+	Copyright © 2006-2013 Michael Kurinnoy, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -44,6 +44,7 @@ void InitSetup()
 	Setup.MenuLanguage = 1; // en by default
 	Setup.VoiceLanguage = 1; // en by default
 	Setup.FontNumber = 0;
+	Setup.FontSize = 16;
 
 	Setup.Width = 1228;
 	Setup.Height = 768;
@@ -184,6 +185,7 @@ void SaveXMLSetupFile()
 		case 3: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceLanguage"), "value", "ru"); break;
 	}
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "FontNumber"), "value", Setup.FontNumber);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "FontSize"), "value", Setup.FontSize);
 
 
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "Width"), "value", Setup.Width);
@@ -489,6 +491,9 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber") != 0)
 		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber"), "value") != 0)
 			Setup.FontNumber = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontSize") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontSize"), "value") != 0)
+			Setup.FontSize = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontSize"), "value");
 
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "Width") != 0)
 		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Width"), "value") != 0)
@@ -829,6 +834,7 @@ LoadProfiles:
 	if (CurrentProfile != -1) CurrentMission = Setup.Profile[Setup.LastProfile].LastMission;
 
 	if ((Setup.FontNumber > FontQuantity-1) || (Setup.FontNumber < 0)) Setup.FontNumber = 0;
+	if ((Setup.FontSize > 18) || (Setup.FontSize < 14)) Setup.FontSize = 16;
 	if (Setup.ControlSensivity > 10) Setup.ControlSensivity = 10;
 	if (Setup.Brightness > 10) Setup.Brightness = 10;
 	if (Setup.JoystickDeadZone > 10) Setup.JoystickDeadZone = 10;

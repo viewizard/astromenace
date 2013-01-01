@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
+	Copyright © 2006-2013 Michael Kurinnoy, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -96,13 +96,6 @@ int vw_InitFont(const char *FontName)
 void vw_SetFontSize(int FontSize)
 {
 	InternalFontSize = FontSize;
-
-	// устанавливаем размеры
-	if (FT_Set_Char_Size( InternalFace, InternalFontSize <<6, InternalFontSize <<6, 96, 96 ))
-	{
-		fprintf(stderr, "Can't set char size %i.", InternalFontSize);
-		return;
-	}
 }
 
 

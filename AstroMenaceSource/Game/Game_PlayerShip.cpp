@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
+	Copyright © 2006-2013 Michael Kurinnoy, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -442,9 +442,11 @@ void GamePlayerShip()
 
 			// визуальный вывод - выводим постоянно
 			vw_SetFontSize(24);
+			vw_SetFontOffsetY(2);
 			int TmpFontSize = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("4_Missile_Detected")))/2;
 			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3, vw_GetText("4_Missile_Detected"));
-			vw_SetFontSize(16);
+			vw_SetFontSize(Setup.FontSize);
+			vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
 			WarningMessagesCount++;
 		}
 		else
@@ -458,9 +460,11 @@ void GamePlayerShip()
 			{
 				// визуальный вывод - выводим постоянно
 				vw_SetFontSize(24);
+				vw_SetFontOffsetY(2);
 				int TmpFontSize = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("4_Missile_Detected")))/2;
 				vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3, vw_GetText("4_Missile_Detected"));
-				vw_SetFontSize(16);
+				vw_SetFontSize(Setup.FontSize);
+				vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
 				WarningMessagesCount++;
 			}
 		}
@@ -521,9 +525,11 @@ void GamePlayerShip()
 
 			// визуальный вывод - выводим постоянно
 			vw_SetFontSize(24);
+			vw_SetFontOffsetY(2);
 			int TmpFontSize = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("4_Collision_Course_Detected")))/2;
 			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3, vw_GetText("4_Collision_Course_Detected"));
-			vw_SetFontSize(16);
+			vw_SetFontSize(Setup.FontSize);
+			vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
 			WarningMessagesCount++;
 		}
 
