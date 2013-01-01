@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
+	Copyright © 2006-2013 Michael Kurinnoy, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -326,8 +326,9 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		vw_ReleaseAllFontCharsWithTextures();
 		// инициализируем новый шрифт, вызывать vw_ShutdownFont не нужно
 		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
-		vw_SetFontSize(16);
-		vw_GenerateFontChars(256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
+		vw_SetFontSize(Setup.FontSize);
+		vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
+		vw_GenerateFontChars(Setup.FontSize > 16 ? 512 : 256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.FontNumber >= FontQuantity-1))
 	{
@@ -338,8 +339,9 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		vw_ReleaseAllFontCharsWithTextures();
 		// инициализируем новый шрифт, вызывать vw_ShutdownFont не нужно
 		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
-		vw_SetFontSize(16);
-		vw_GenerateFontChars(256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
+		vw_SetFontSize(Setup.FontSize);
+		vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
+		vw_GenerateFontChars(Setup.FontSize > 16 ? 512 : 256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
 	}
 	int Scale = 0;
 	Size = vw_FontSize(FontList[Setup.FontNumber].FontTitle);
@@ -350,6 +352,50 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	}
 	SizeI = (170-Size)/2;
 	vw_DrawFont(X1+438+SizeI, Y1, Scale, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, FontList[Setup.FontNumber].FontTitle);
+
+
+
+
+	// выбор размера шрифта
+	Y1 += Prir1;
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Font_Size"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, Setup.FontSize <= 14))
+	{
+		Setup.FontSize --;
+		if (Setup.FontSize < 14) Setup.FontSize = 14;
+
+		// удаляем все символы и их текстуры
+		vw_ReleaseAllFontCharsWithTextures();
+		// инициализируем новый шрифт, вызывать vw_ShutdownFont не нужно
+		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
+		vw_SetFontSize(Setup.FontSize);
+		vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
+		vw_GenerateFontChars(Setup.FontSize > 16 ? 512 : 256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
+	}
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.FontSize >= 18))
+	{
+		Setup.FontSize ++;
+		if (Setup.FontSize > 18) Setup.FontSize = 18;
+
+		// удаляем все символы и их текстуры
+		vw_ReleaseAllFontCharsWithTextures();
+		// инициализируем новый шрифт, вызывать vw_ShutdownFont не нужно
+		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
+		vw_SetFontSize(Setup.FontSize);
+		vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
+		vw_GenerateFontChars(Setup.FontSize > 16 ? 512 : 256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
+	}
+	Scale = 0;
+	Size = vw_FontSize("%i", Setup.FontSize);
+	if (Size > 170)
+	{
+		Scale = -170;
+		Size = 170;
+	}
+	SizeI = (170-Size)/2;
+	vw_DrawFont(X1+438+SizeI, Y1, Scale, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, "%i", Setup.FontSize);
+
+
 
 
 

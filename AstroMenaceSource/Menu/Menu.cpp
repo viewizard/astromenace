@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
+	Copyright © 2006-2013 Michael Kurinnoy, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -572,8 +572,8 @@ void DrawMenu()
 	vw_DrawFont(6, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %s %s %i", vw_GetText("11_Version"), GAME_VERSION, vw_GetText("11_build"), GAME_BUILD);
 
 	// Copyright
-	int CSize = vw_FontSize("%s © 2007-2012, Viewizard", vw_GetText("11_Copyright"));
-	vw_DrawFont(Setup.iAspectRatioWidth-7-CSize, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s © 2007-2012, Viewizard", vw_GetText("11_Copyright"));
+	int CSize = vw_FontSize("%s © 2007-2013, Viewizard", vw_GetText("11_Copyright"));
+	vw_DrawFont(Setup.iAspectRatioWidth-7-CSize, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s © 2007-2013, Viewizard", vw_GetText("11_Copyright"));
 
 
 

@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
+	Copyright © 2006-2013 Michael Kurinnoy, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -1407,7 +1407,7 @@ void LoadGameData(int LoadType)
 	if ((LoadType == -1) || (!Setup.EqualOrMore128MBVideoRAM))
 	{
 		// задаем размеры текстуры (всегда степерь 2 ставим, чтобы избежать проблем со старым железом)
-		vw_GenerateFontChars(256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
+		vw_GenerateFontChars(Setup.FontSize > 16 ? 512 : 256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
 #ifdef gamedebug
 		// проверяем все ли символы из текущего языкового файла вошли в прегенерацию, иначе не сможем потом рисовать меню через одну текстуру
 		// смысла гонять постоянно такую проверку нет, один раз сводим все символы языка и не замедляем загрузку поиском

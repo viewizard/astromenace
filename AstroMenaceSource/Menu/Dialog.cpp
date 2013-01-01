@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
+	Copyright © 2006-2013 Michael Kurinnoy, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -1395,8 +1395,9 @@ void DrawDialogBox()
 		case 9: // подсказки на меню профилей
 		{
 			// название диалога
-			SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("9_Tipsandhints")))/2;
-			vw_DrawFont(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
+			SizeI1 = vw_FontSize(vw_GetText("9_Tipsandhints"));
+			SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
+			vw_DrawFont(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
 			// текст диалога
 
 			SizeI = vw_FontSize(vw_GetText("9_9Line1"));
@@ -1432,8 +1433,9 @@ void DrawDialogBox()
 		case 10: // подсказки на меню шипъярд
 		{
 			// название диалога
-			SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("9_Tipsandhints")))/2;
-			vw_DrawFont(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
+			SizeI1 = vw_FontSize(vw_GetText("9_Tipsandhints"));
+			SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
+			vw_DrawFont(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
 			// текст диалога
 
 			int k=28;
@@ -1471,8 +1473,9 @@ void DrawDialogBox()
 		case 11: // подсказки на меню системы
 		{
 			// название диалога
-			SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("9_Tipsandhints")))/2;
-			vw_DrawFont(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
+			SizeI1 = vw_FontSize(vw_GetText("9_Tipsandhints"));
+			SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
+			vw_DrawFont(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
 			// текст диалога
 
 			int k=25;
@@ -1516,8 +1519,9 @@ void DrawDialogBox()
 		case 12: // подсказки на меню оружейная
 		{
 			// название диалога
-			SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("9_Tipsandhints")))/2;
-			vw_DrawFont(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
+			SizeI1 = vw_FontSize(vw_GetText("9_Tipsandhints"));
+			SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
+			vw_DrawFont(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
 			// текст диалога
 
 			int k=25;
@@ -1564,8 +1568,9 @@ void DrawDialogBox()
 		case 13: // подсказки на горячие клавиши в игре
 		{
 			// название диалога
-			SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("9_Tipsandhints")))/2;
-			vw_DrawFont(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
+			SizeI1 = vw_FontSize(vw_GetText("9_Tipsandhints"));
+			SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
+			vw_DrawFont(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
 			// текст диалога
 
 			int k=23;
@@ -1615,8 +1620,9 @@ void DrawDialogBox()
 		case 14: // подсказка, если пытаемся по второму разу пройти миссию
 		{
 			// название диалога
-			SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("9_Tipsandhints")))/2;
-			vw_DrawFont(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
+			SizeI1 = vw_FontSize(vw_GetText("9_Tipsandhints"));
+			SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
+			vw_DrawFont(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
 			// текст диалога
 
 			int k=30;
@@ -1657,11 +1663,12 @@ void DrawDialogBox()
 		}
 
 
-		case 15: // подсказка, для линукс версии - пожертвование
+		case 15: // подсказка - пожертвование
 		{
 			// название диалога
-			SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("9_Tipsandhints")))/2;
-			vw_DrawFont(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
+			SizeI1 = vw_FontSize(vw_GetText("9_Tipsandhints"));
+			SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
+			vw_DrawFont(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
 			// текст диалога
 			int k=33;
 

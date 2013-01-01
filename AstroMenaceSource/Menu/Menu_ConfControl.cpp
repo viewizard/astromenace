@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
+	Copyright © 2006-2013 Michael Kurinnoy, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -302,12 +302,15 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	Y1 += Prir1;
-	int SizeI = (100-vw_FontSize(vw_GetText("3_MOUSE")))/2;
-	vw_DrawFont(X1+315+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_MOUSE"));
-	SizeI = (150-vw_FontSize(vw_GetText("3_KEYBOARD")))/2;
-	vw_DrawFont(X1+446+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_KEYBOARD"));
-	SizeI = (150-vw_FontSize(vw_GetText("3_JOYSTICK")))/2;
-	vw_DrawFont(X1+605+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_JOYSTICK"));
+	int SizeI1 = vw_FontSize(vw_GetText("3_MOUSE"));
+	int SizeI = SizeI1 > 130 ? -15 : (100-SizeI1)/2;
+	vw_DrawFont(X1+315+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_MOUSE"));
+	SizeI1 = vw_FontSize(vw_GetText("3_KEYBOARD"));
+	SizeI = SizeI1 > 130 ? 10 : (150-SizeI1)/2;
+	vw_DrawFont(X1+446+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_KEYBOARD"));
+	SizeI1 = vw_FontSize(vw_GetText("3_JOYSTICK"));
+	SizeI = SizeI1 > 130 ? 10 : (150-SizeI1)/2;
+	vw_DrawFont(X1+605+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_JOYSTICK"));
 
 
 	Y1 += Prir1;

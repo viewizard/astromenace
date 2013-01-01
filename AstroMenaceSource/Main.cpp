@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
+	Copyright © 2006-2013 Michael Kurinnoy, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -451,9 +451,9 @@ int main( int argc, char **argv )
 
 	// иним фонт
 	vw_InitFont(FontList[Setup.FontNumber].FontFileName);
-	vw_SetFontSize(16);
+	vw_SetFontSize(Setup.FontSize);
 	// ставим доп смещение при прорисовке в 2 ("привет" от старого шрифта из первых версий игры)
-	vw_SetFontOffsetY(2);
+	vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
+	Copyright © 2006-2013 Michael Kurinnoy, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -42,7 +42,12 @@ extern int GlobalFontOffsetY;
 //------------------------------------------------------------------------------------
 eFontChar* vw_LoadFontChar(unsigned UTF32)
 {
-	// прежде всего, пытаемся загрузить символ, а уже потом создаем структуру
+	// устанавливаем размеры
+	if (FT_Set_Char_Size( InternalFace, InternalFontSize <<6, InternalFontSize <<6, 96, 96 ))
+	{
+		fprintf(stderr, "Can't set char size %i.", InternalFontSize);
+		return 0;
+	}
 
 
 	// загрузка глифа нужного нам символа
@@ -127,6 +132,12 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 	int EdgingSpace = 2;
 	int MaxHeightInCurrentLine = 0;
 
+	// устанавливаем размеры
+	if (FT_Set_Char_Size( InternalFace, InternalFontSize <<6, InternalFontSize <<6, 96, 96 ))
+	{
+		fprintf(stderr, "Can't set char size %i.", InternalFontSize);
+		return;
+	}
 
 	// первый проход, формируем одну большую текстуру
 	const char *CharsList2 = CharsList;
@@ -211,19 +222,44 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 
 /////////////////////////////////
 /*
-		// выводим в bmp файл сгенерированный DIB, если нужно проверить
+	// выводим в tga файл сгенерированный DIB, если нужно проверить
 
-        SDL_Surface *temp;
-        temp = SDL_CreateRGBSurface(SDL_SWSURFACE, FontTextureWidth, FontTextureHeight, 32,
-#if SDL_BYTEORDER == SDL_LIL_ENDIAN
-        0x000000FF, 0x0000FF00, 0x00FF0000, 0
-#else
-        0x00FF0000, 0x0000FF00, 0x000000FF, 0
-#endif
-        );
-		memcpy(temp->pixels, DIB, FontTextureWidth*FontTextureHeight*4);
-        SDL_SaveBMP(temp, "fontgenerationtest.bmp");
-        SDL_FreeSurface(temp);
+	SDL_RWops *TgaFile = SDL_RWFromFile("fontgenerationtest.tga", "wb");
+	if (TgaFile == NULL)
+    {
+		fprintf(stderr, "Can't open VFS file for write.\n");
+        return;
+    }
+
+	unsigned char UselessChar = 0;	// used for useless char.
+	short int UselessInt = 0;		// used for useless int.
+	unsigned char ImageType = 2;	// Type of image we are saving.
+	unsigned char ImageBits = 32;		// Bit depth.
+	short int ImageWidth = (short int)FontTextureWidth;
+	short int ImageHeight = (short int)FontTextureHeight;
+
+	// пишем неиспользуемые данные
+	SDL_RWwrite(TgaFile, &UselessChar, sizeof(unsigned char), 1);
+	SDL_RWwrite(TgaFile, &UselessChar, sizeof(unsigned char), 1);
+	// тип картинки
+	SDL_RWwrite(TgaFile, &ImageType, sizeof(unsigned char), 1);
+	// пишем неиспользуемые данные
+	SDL_RWwrite(TgaFile, &UselessInt, sizeof(short int), 1);
+	SDL_RWwrite(TgaFile, &UselessInt, sizeof(short int), 1);
+	SDL_RWwrite(TgaFile, &UselessChar, sizeof(unsigned char), 1);
+	SDL_RWwrite(TgaFile, &UselessInt, sizeof(short int), 1);
+	SDL_RWwrite(TgaFile, &UselessInt, sizeof(short int), 1);
+	// записываем параметры картинки
+	SDL_RWwrite(TgaFile, &ImageWidth, sizeof(short int), 1);
+	SDL_RWwrite(TgaFile, &ImageHeight, sizeof(short int), 1);
+	SDL_RWwrite(TgaFile, &ImageBits, sizeof(unsigned char), 1);
+	// пишем неиспользуемые данные
+	SDL_RWwrite(TgaFile, &UselessChar, sizeof(unsigned char), 1);
+	// пишем данные диб массива
+	SDL_RWwrite(TgaFile, DIB, FontTextureWidth*FontTextureHeight*4, 1);
+
+	// закрываем файл
+	SDL_RWclose(TgaFile);
 */
 /////////////////////////////////
 

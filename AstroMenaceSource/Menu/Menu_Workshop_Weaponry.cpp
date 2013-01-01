@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2012 Michael Kurinnoy, Viewizard
+	Copyright © 2006-2013 Michael Kurinnoy, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -1195,8 +1195,10 @@ void Workshop_Weaponry()
 	}
 
 	vw_SetFontSize(24);
+	vw_SetFontOffsetY(2);
 	vw_DrawFont(Setup.iAspectRatioWidth/2-445, 600, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("7_Weapon_Stock"));
-	vw_SetFontSize(16);
+	vw_SetFontSize(Setup.FontSize);
+	vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
 
 	DrawShipWeaponsInSlots();
 
@@ -1229,17 +1231,21 @@ void Workshop_Weaponry()
 	}
 
 	vw_SetFontSize(24);
+	vw_SetFontOffsetY(2);
 	vw_DrawFont(Setup.iAspectRatioWidth/2+445-vw_FontSize(vw_GetText("7_Installed_Weapons")), 600, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("7_Installed_Weapons"));
-	vw_SetFontSize(16);
+	vw_SetFontSize(Setup.FontSize);
+	vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
 
 	// вывод информации
 	vw_SetFontSize(20);
+	vw_SetFontOffsetY(2);
 	int SizeI = (Setup.iAspectRatioWidth-vw_FontSize("%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money))/2;
 	if (Setup.Profile[CurrentProfile].Money >= GetWeaponBaseCost(CurrentWorkshopNewWeapon))
 		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
 	else
 		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
-	vw_SetFontSize(16);
+	vw_SetFontSize(Setup.FontSize);
+	vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
 
 
 	// проверяем состояние, если тянули и отжали, и сюда пришли - значит никто не перехватил, нужно сделать сброс
