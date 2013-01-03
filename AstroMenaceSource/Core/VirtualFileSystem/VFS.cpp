@@ -609,7 +609,7 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Проверяем сигнатуру "VFS_" - 4 байт
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	char Sign[4]; Sign[4] = 0;
+	char Sign[5]; Sign[4] = 0;
 	if(SDL_RWread(TempVFS->File, &Sign, 4, 1) == -1)
 	{
 		// если файл меньше, значит ошибка
@@ -627,7 +627,7 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Bерсия - 4 байт
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	char Version[4]; Version[4] = 0;
+	char Version[5]; Version[4] = 0;
 	if(SDL_RWread(TempVFS->File, &Version, 4, 1) == -1)
 	{
 		fprintf(stderr, "VFS file corrupted: %s\n", Name);

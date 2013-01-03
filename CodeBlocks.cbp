@@ -64,8 +64,8 @@
 					<Add directory="../AllLibraries/libogg-1.3.0/include" />
 					<Add directory="../AllLibraries/libvorbis-1.3.3/include" />
 					<Add directory="../AllLibraries/freealut-1.1.0/include" />
-					<Add directory="../AllLibraries/openal-soft-1.14/include" />
-					<Add directory="../AllLibraries/freetype-2.4.10/include" />
+					<Add directory="../AllLibraries/openal-soft-1.15.1/include" />
+					<Add directory="../AllLibraries/freetype-2.4.11/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -84,8 +84,8 @@
 					<Add directory="../AllLibraries/libogg-1.3.0/lib" />
 					<Add directory="../AllLibraries/libvorbis-1.3.3/lib" />
 					<Add directory="../AllLibraries/freealut-1.1.0/lib" />
-					<Add directory="../AllLibraries/openal-soft-1.14/lib" />
-					<Add directory="../AllLibraries/freetype-2.4.10/bin" />
+					<Add directory="../AllLibraries/openal-soft-1.15.1/lib" />
+					<Add directory="../AllLibraries/freetype-2.4.11/bin" />
 				</Linker>
 			</Target>
 		</Build>
