@@ -117,7 +117,7 @@ void ShadowMap_StartRenderToFBO(VECTOR3D FocusPointCorrection, float Distance, f
 	vw_BindFBO(ShadowMapFBO);
 
 	vw_Clear(RI_DEPTH_BUFFER);
-	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+	vw_SetColorMask(false, false, false, false);
 	//vw_Clear(RI_COLOR_BUFFER | RI_DEPTH_BUFFER); // тест, для вывода цветовой составляющей на экран
 
 	// сохраняем матрицу проекции
@@ -148,8 +148,7 @@ void ShadowMap_StartRenderToFBO(VECTOR3D FocusPointCorrection, float Distance, f
 
 	vw_CullFace(RI_FRONT);
 
-	glEnable(GL_POLYGON_OFFSET_FILL);
-	glPolygonOffset(2.0f, 2.0f);
+	vw_PolygonOffset(true, 2.0f, 2.0f);
 }
 
 
@@ -161,14 +160,14 @@ void ShadowMap_EndRenderToFBO()
 	if (ShadowMapFBO == 0) return;
 	if (ShadowMapFBO->DepthTexture == 0) return;
 
-	glDisable(GL_POLYGON_OFFSET_FILL);
+	vw_PolygonOffset(false, 0.0f, 0.0f);
 
 	vw_CullFace(RI_BACK);
 
 	// устанавливаем на место основной фбо или фб
 	vw_BindFBO(CurrentSystemFBO);
 
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	vw_SetColorMask(true, true, true, true);
 //--------- рисуем цвет сост. для теста
 //	vw_DrawColorFBO(ShadowMapFBO, CurrentSystemFBO);
 
@@ -197,12 +196,10 @@ void ShadowMap_StartFinalRender()
 
 	vw_BindTexture(2, ShadowMapFBO->DepthTexture);
 	// т.к. будем использовать shadow2DProj, ставим правильный режим работы
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-	glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
+	vw_SetTextureCompare(RI_COMPARE_R_TO_TEXTURE, RI_LESSEQUAL);
+	vw_SetTextureDepthMode(RI_DEPTH_TEXTURE_MODE_INTENSITY);
 	// ставим линеар сглаживание, чтобы PCF делало более плавные переходы
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	vw_SetTextureFiltering(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE);
 
 
 	vw_MatrixMode(RI_TEXTURE_MATRIX);

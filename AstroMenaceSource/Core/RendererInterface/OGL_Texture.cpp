@@ -440,6 +440,7 @@ void vw_SetTextureBlend(bool Flag, int Src, int Dst)
 	{
 		glDisable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ZERO);
+		return;
 	}
 
 	int tmpSRC,tmpDST;
@@ -572,5 +573,81 @@ void vw_GetPrioritizeTextures(GLuint TextureID, float *Prior)
 }
 
 
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// установка режима и функции сравнения
+//------------------------------------------------------------------------------------
+void vw_SetTextureCompare(int MODE, int FUNC)
+{
+
+	switch(MODE)
+	{
+		case RI_COMPARE_R_TO_TEXTURE:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+			break;
+		case RI_COMPARE_NONE:
+		default:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+			break;
+	}
+
+	switch(FUNC)
+	{
+		case RI_LESSEQUAL:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+			break;
+		case RI_GREATEREQUAL:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_GEQUAL);
+			break;
+		case RI_LESS:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LESS);
+			break;
+		case RI_GREATER:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_GREATER);
+			break;
+		case RI_EQUAL:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_EQUAL);
+			break;
+		case RI_NOTEQUAL:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_NOTEQUAL);
+			break;
+		case RI_ALWAYS:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_ALWAYS);
+			break;
+		case RI_NEVER:
+		default:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_NEVER);
+			break;
+	}
+
+}
+
+
+
+
+//------------------------------------------------------------------------------------
+// установка режима работы с компонентом глубины
+//------------------------------------------------------------------------------------
+void vw_SetTextureDepthMode(int MODE)
+{
+	switch(MODE)
+	{
+		case RI_DEPTH_TEXTURE_MODE_LUMINANCE:
+			glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_LUMINANCE);
+			break;
+		case RI_DEPTH_TEXTURE_MODE_INTENSITY:
+			glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
+			break;
+		case RI_DEPTH_TEXTURE_MODE_ALPHA:
+		default:
+			glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_ALPHA);
+			break;
+	}
+}
 
 
