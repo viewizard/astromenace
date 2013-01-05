@@ -1248,15 +1248,13 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			// для корректной прорисовки на всех видеокартах атмосферы планеты ...
 			if (N1)
 			{
-				glEnable(GL_POLYGON_OFFSET_FILL);
-				glPolygonOffset(2.0f, 2.0f);
+				vw_PolygonOffset(true, 2.0f, 2.0f);
 			}
 			if (DrawObjectList[i].DrawType == 1)
 			{
 				vw_SetTextureAlphaTest(true, 0.01f);
 				vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-				glEnable(GL_POLYGON_OFFSET_FILL);
-				glPolygonOffset(1.0f, 1.0f);
+				vw_PolygonOffset(true, 1.0f, 1.0f);
 			}
 
 			if (Setup.UseGLSL && DrawObjectList[i].ShaderType >= 0)
@@ -1355,9 +1353,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			{
 				vw_SetTextureAlphaTest(false, 0.01f);
 				vw_SetTextureBlend(false, 0, 0);
-				glDisable(GL_POLYGON_OFFSET_FILL);
-				// как было ставим
-				glPolygonOffset(1.0f, 2.0f);
+				vw_PolygonOffset(false, 0.0f, 0.0f);
 			}
 
 			vw_DeActivateAllLights();
