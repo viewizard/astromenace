@@ -55,48 +55,36 @@ int CurrentSystemStockNum = 1;
 
 
 
-
-int GetNextSystemStockNum()
+int GetCurrentSustemStockNumBase()
 {
-	int Res = CurrentSystemStockNum + 1;
+	switch (CurrentSystemStockNum)
+	{
+		case 1:
+		case 2:
+		case 3:
+		case 4:		return 1;
 
-	if (CurrentSystemStockNum>=1 && CurrentSystemStockNum<=4) if (Res > 4) Res = 1;
-	if (CurrentSystemStockNum>=5 && CurrentSystemStockNum<=8) if (Res > 8) Res = 5;
-	if (CurrentSystemStockNum>=9 && CurrentSystemStockNum<=12) if (Res > 12) Res = 9;
-	if (CurrentSystemStockNum>=13 && CurrentSystemStockNum<=16) if (Res > 16) Res = 13;
-	if (CurrentSystemStockNum>=17 && CurrentSystemStockNum<=20) if (Res > 20) Res = 17;
+		case 5:
+		case 6:
+		case 7:
+		case 8:		return 5;
 
-//	if (Res > 20) Res = 1;
-	return Res;
-}
-int GetNextSystemStockGroup()
-{
-	if (CurrentSystemStockNum>=1 && CurrentSystemStockNum<=4) return 5;
-	if (CurrentSystemStockNum>=5 && CurrentSystemStockNum<=8) return 9;
-	if (CurrentSystemStockNum>=9 && CurrentSystemStockNum<=12) return 13;
-	if (CurrentSystemStockNum>=13 && CurrentSystemStockNum<=16) return 17;
-	if (CurrentSystemStockNum>=17 && CurrentSystemStockNum<=20) return 1;
-	return 0;
-}
-int GetPrevSystemStockNum()
-{
-	int Res = CurrentSystemStockNum - 1;
-//	if (Res < 1) Res = 20;
-	if (CurrentSystemStockNum>=1 && CurrentSystemStockNum<=4) if (Res < 1) Res = 4;
-	if (CurrentSystemStockNum>=5 && CurrentSystemStockNum<=8) if (Res < 5) Res = 8;
-	if (CurrentSystemStockNum>=9 && CurrentSystemStockNum<=12) if (Res < 9) Res = 12;
-	if (CurrentSystemStockNum>=13 && CurrentSystemStockNum<=16) if (Res < 13) Res = 16;
-	if (CurrentSystemStockNum>=17 && CurrentSystemStockNum<=20) if (Res < 17) Res = 20;
+		case 9:
+		case 10:
+		case 11:
+		case 12:	return 9;
 
-	return Res;
-}
-int GetPrevSystemStockGroup()
-{
-	if (CurrentSystemStockNum>=1 && CurrentSystemStockNum<=4) return 17;
-	if (CurrentSystemStockNum>=5 && CurrentSystemStockNum<=8) return 1;
-	if (CurrentSystemStockNum>=9 && CurrentSystemStockNum<=12) return 5;
-	if (CurrentSystemStockNum>=13 && CurrentSystemStockNum<=16) return 9;
-	if (CurrentSystemStockNum>=17 && CurrentSystemStockNum<=20) return 13;
+		case 13:
+		case 14:
+		case 15:
+		case 16:	return 13;
+
+		case 17:
+		case 18:
+		case 19:
+		case 20:	return 17;
+	}
+
 	return 0;
 }
 
@@ -341,86 +329,12 @@ void Workshop_Workshop()
 
 
 
-	// стрелки
-
-	SetRect(&SrcRect,0,0,74,120);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-461,494,Setup.iAspectRatioWidth/2-461+74,494+120);
-	int MouseX, MouseY;
-	vw_GetMousePos(&MouseX, &MouseY);
-	if  (((DstRect.right-8  >= MouseX)&
-		(DstRect.left+8<= MouseX)&
-		(DstRect.bottom-10 >= MouseY)&
-		(DstRect.top+10<= MouseY))  && !isDialogBoxDrawing())
-	{
-		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top)
-		{
-			Audio_PlaySound2D(1,1.0f);
-			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
-			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
-		}
-
-		CurrentCursorStatus = 1;
-		if (vw_GetWindowLBMouse(true))
-		{
-			Audio_PlaySound2D(2,1.0f);
-			CurrentSystemStockNum = GetPrevSystemStockNum();
-		}
-
-		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/arrows_on.tga"), true, MenuContentTransp);
-	}
-	else
-	{
-		if (NeedPlayWorkshopOnButtonSoundX == DstRect.left && NeedPlayWorkshopOnButtonSoundY == DstRect.top)
-		{
-			NeedPlayWorkshopOnButtonSoundX = 0;
-			NeedPlayWorkshopOnButtonSoundY = 0;
-		}
-
-		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/arrows_off.tga"), true, MenuContentTransp);
-	}
-
-	SetRect(&SrcRect,74,0,148,120);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-461+74,494,Setup.iAspectRatioWidth/2-461+148,494+120);
-	if  (((DstRect.right-8  >= MouseX)&
-		(DstRect.left+8<= MouseX)&
-		(DstRect.bottom-10 >= MouseY)&
-		(DstRect.top+10<= MouseY))  && !isDialogBoxDrawing())
-	{
-		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top)
-		{
-			Audio_PlaySound2D(1,1.0f);
-			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
-			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
-		}
-
-		CurrentCursorStatus = 1;
-		if (vw_GetWindowLBMouse(true))
-		{
-			Audio_PlaySound2D(2,1.0f);
-			CurrentSystemStockNum = GetNextSystemStockNum();
-		}
-
-		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/arrows_on.tga"), true, MenuContentTransp);
-	}
-	else
-	{
-		if (NeedPlayWorkshopOnButtonSoundX == DstRect.left && NeedPlayWorkshopOnButtonSoundY == DstRect.top)
-		{
-			NeedPlayWorkshopOnButtonSoundX = 0;
-			NeedPlayWorkshopOnButtonSoundY = 0;
-		}
-
-		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/arrows_off.tga"), true, MenuContentTransp);
-	}
-
-
-
-
-
 	// выводим иконки систем в магазине, по которым тоже можно кликать
 
+	float Current = 0.4f;
+
 	SetRect(&SrcRect,0,0,128,128);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-436,50+20+5-5,Setup.iAspectRatioWidth/2-338,50+128-20+5+5);
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2-451,60,Setup.iAspectRatioWidth/2-451+128,60+128);
 	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing())
 	{
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top)
@@ -433,19 +347,11 @@ void Workshop_Workshop()
 		CurrentCursorStatus = 1;
 		if (vw_GetWindowLBMouse(true))
 		{
-			CurrentSystemStockNum = GetPrevSystemStockNum();
+			CurrentSystemStockNum = GetCurrentSustemStockNumBase();
 			Audio_PlaySound2D(2,1.0f);
 		}
-		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(GetPrevSystemStockNum()), true, MenuContentTransp);
 
-		int Size = vw_FontSize(vw_GetText(GetSystemName(GetPrevSystemStockNum())));
-		float WScale = 0;
-		if (Size > 128)
-		{
-			Size = 128;
-			WScale = -128;
-		}
-		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(GetSystemName(GetPrevSystemStockNum())));
+		Current = 0.7f;
 	}
 	else
 	{
@@ -454,39 +360,28 @@ void Workshop_Workshop()
 			NeedPlayWorkshopOnButtonSoundX = 0;
 			NeedPlayWorkshopOnButtonSoundY = 0;
 		}
-
-		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(GetPrevSystemStockNum()), true, 0.35f*MenuContentTransp);
-
-		int Size = vw_FontSize(vw_GetText(GetSystemName(GetPrevSystemStockNum())));
-		float WScale = 0;
-		if (Size > 128)
-		{
-			Size = 128;
-			WScale = -128;
-		}
-		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 0.35f*MenuContentTransp, vw_GetText(GetSystemName(GetPrevSystemStockNum())));
 	}
+	if (CurrentSystemStockNum == GetCurrentSustemStockNumBase())
+	{
+		Current = 1.0f;
+	}
+	vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()), true, MenuContentTransp*Current);
+	int Size = vw_FontSize(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase())));
+	float WScale = 0;
+	if (Size > 128)
+	{
+		Size = 128;
+		WScale = -128;
+	}
+	vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, 1.0f, 1.0f, 1.0f, MenuContentTransp*Current, vw_GetText(GetSystemName(GetCurrentSustemStockNumBase())));
 
 
+
+
+	Current = 0.4f;
 
 	SetRect(&SrcRect,0,0,128,128);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-451,55+128+20,Setup.iAspectRatioWidth/2-451+128,55+128+128+20);
-	vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(CurrentSystemStockNum), true, MenuContentTransp);
-		int Size = vw_FontSize(vw_GetText(GetSystemName(CurrentSystemStockNum)));
-		float WScale = 0;
-		if (Size > 128)
-		{
-			Size = 128;
-			WScale = -128;
-		}
-		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(GetSystemName(CurrentSystemStockNum)));
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) CurrentCursorStatus = 1;
-
-
-
-
-	SetRect(&SrcRect,0,0,128,128);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-451+20-5,60+20+256+40-5-5,Setup.iAspectRatioWidth/2-451+128-20+5,60-20+128+256+40-5 +5);
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2-451,200,Setup.iAspectRatioWidth/2-451+128,200+128);
 	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing())
 	{
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top)
@@ -499,19 +394,11 @@ void Workshop_Workshop()
 		CurrentCursorStatus = 1;
 		if (vw_GetWindowLBMouse(true))
 		{
+			CurrentSystemStockNum = GetCurrentSustemStockNumBase()+1;
 			Audio_PlaySound2D(2,1.0f);
-			CurrentSystemStockNum = GetNextSystemStockNum();
 		}
-		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(GetNextSystemStockNum()), true, MenuContentTransp);
 
-		int Size = vw_FontSize(vw_GetText(GetSystemName(GetNextSystemStockNum())));
-		float WScale = 0;
-		if (Size > 128)
-		{
-			Size = 128;
-			WScale = -128;
-		}
-		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(GetSystemName(GetNextSystemStockNum())));
+		Current = 0.7f;
 	}
 	else
 	{
@@ -520,18 +407,116 @@ void Workshop_Workshop()
 			NeedPlayWorkshopOnButtonSoundX = 0;
 			NeedPlayWorkshopOnButtonSoundY = 0;
 		}
-
-		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(GetNextSystemStockNum()), true, 0.35f*MenuContentTransp);
-
-		int Size = vw_FontSize(vw_GetText(GetSystemName(GetNextSystemStockNum())));
-		float WScale = 0;
-		if (Size > 128)
-		{
-			Size = 128;
-			WScale = -128;
-		}
-		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 0.35f*MenuContentTransp, vw_GetText(GetSystemName(GetNextSystemStockNum())));
 	}
+	if (CurrentSystemStockNum == GetCurrentSustemStockNumBase()+1)
+	{
+		Current = 1.0f;
+	}
+	vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()+1), true, MenuContentTransp*Current);
+	Size = vw_FontSize(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase()+1)));
+	WScale = 0;
+	if (Size > 128)
+	{
+		Size = 128;
+		WScale = -128;
+	}
+	vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, 1.0f, 1.0f, 1.0f, MenuContentTransp*Current, vw_GetText(GetSystemName(GetCurrentSustemStockNumBase()+1)));
+
+
+
+
+	Current = 0.4f;
+
+	SetRect(&SrcRect,0,0,128,128);
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2-451,340,Setup.iAspectRatioWidth/2-451+128,340+128);
+	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing())
+	{
+		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top)
+		{
+			Audio_PlaySound2D(1,1.0f);
+			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
+			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
+		}
+
+		CurrentCursorStatus = 1;
+		if (vw_GetWindowLBMouse(true))
+		{
+			CurrentSystemStockNum = GetCurrentSustemStockNumBase()+2;
+			Audio_PlaySound2D(2,1.0f);
+		}
+
+		Current = 0.7f;
+	}
+	else
+	{
+		if (NeedPlayWorkshopOnButtonSoundX == DstRect.left && NeedPlayWorkshopOnButtonSoundY == DstRect.top)
+		{
+			NeedPlayWorkshopOnButtonSoundX = 0;
+			NeedPlayWorkshopOnButtonSoundY = 0;
+		}
+	}
+	if (CurrentSystemStockNum == GetCurrentSustemStockNumBase()+2)
+	{
+		Current = 1.0f;
+	}
+	vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()+2), true, MenuContentTransp*Current);
+	Size = vw_FontSize(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase()+2)));
+	WScale = 0;
+	if (Size > 128)
+	{
+		Size = 128;
+		WScale = -128;
+	}
+	vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, 1.0f, 1.0f, 1.0f, MenuContentTransp*Current, vw_GetText(GetSystemName(GetCurrentSustemStockNumBase()+2)));
+
+
+
+
+	Current = 0.4f;
+
+	SetRect(&SrcRect,0,0,128,128);
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2-451,610-128,Setup.iAspectRatioWidth/2-451+128,610);
+	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing())
+	{
+		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top)
+		{
+			Audio_PlaySound2D(1,1.0f);
+			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
+			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
+		}
+
+		CurrentCursorStatus = 1;
+		if (vw_GetWindowLBMouse(true))
+		{
+			CurrentSystemStockNum = GetCurrentSustemStockNumBase()+3;
+			Audio_PlaySound2D(2,1.0f);
+		}
+
+		Current = 0.7f;
+	}
+	else
+	{
+		if (NeedPlayWorkshopOnButtonSoundX == DstRect.left && NeedPlayWorkshopOnButtonSoundY == DstRect.top)
+		{
+			NeedPlayWorkshopOnButtonSoundX = 0;
+			NeedPlayWorkshopOnButtonSoundY = 0;
+		}
+	}
+	if (CurrentSystemStockNum == GetCurrentSustemStockNumBase()+3)
+	{
+		Current = 1.0f;
+	}
+	vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()+3), true, MenuContentTransp*Current);
+	Size = vw_FontSize(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase()+3)));
+	WScale = 0;
+	if (Size > 128)
+	{
+		Size = 128;
+		WScale = -128;
+	}
+	vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, 1.0f, 1.0f, 1.0f, MenuContentTransp*Current, vw_GetText(GetSystemName(GetCurrentSustemStockNumBase()+3)));
+
+
 
 	vw_SetFontSize(24);
 	vw_SetFontOffsetY(2);
@@ -609,7 +594,7 @@ void Workshop_Workshop()
 
 
 	// сбор данных
-	float Current = 0.5f;
+	Current = 0.5f;
 	int Cost = 0;
 	bool CanSell = false;
 	bool CanBuy = true;
