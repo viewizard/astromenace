@@ -28,7 +28,7 @@
 #include "Game.h"
 
 
-const int	VFSFilesListCount = 390;
+const int	VFSFilesListCount = 388;
 const char *VFSFilesList[VFSFilesListCount] =
 {"DATA_RU/VOICE/EngineMalfunction.wav",
 "DATA_RU/VOICE/WeaponDamaged.wav",
@@ -255,7 +255,6 @@ const char *VFSFilesList[VFSFilesListCount] =
 "MENU/weapon2_icon.tga",
 "MENU/button_dialog128_in.tga",
 "MENU/weapon6_icon.tga",
-"MENU/arrows_off.tga",
 "MENU/arrows_blue.tga",
 "MENU/arrow_list_up.tga",
 "MENU/arrow_list_down.tga",
@@ -295,7 +294,6 @@ const char *VFSFilesList[VFSFilesListCount] =
 "MENU/button256_back.tga",
 "MENU/weapon_on_icon.tga",
 "MENU/weapon8_icon.tga",
-"MENU/arrows_on.tga",
 "MENU/astromenace.tga",
 "MENU/weapon9_icon.tga",
 "MENU/weapon1_icon.tga",
