@@ -177,6 +177,13 @@ struct eDevCaps
 #define RI_TBLEND_CONSTANT					0x103082
 #define RI_TBLEND_DIFFUSE					0x103083
 #define RI_TBLEND_SPECULAR					0x103084
+// vw_SetTextureEnvMode GL_TEXTURE_ENV_MODE
+#define RI_TENV_DECAL		1
+#define RI_TENV_BLEND		2
+#define RI_TENV_REPLACE		3
+#define RI_TENV_ADD			4
+#define RI_TENV_MODULATE	5
+#define RI_TENV_COMBINE		6
 
 // vw_SetTextureCompare MODE
 #define RI_COMPARE_R_TO_TEXTURE		1
@@ -349,6 +356,8 @@ void vw_SetTextureAlphaTest(bool Flag, float Value);
 void vw_SetTextureBlend(bool Flag, int Src, int Dst);
 // Set texture blending mode
 void vw_SetTextureBlendMode(int pname, int param);
+// Set texture env mode
+void vw_SetTextureEnvMode(int param);
 // Set texture compare mode
 void vw_SetTextureCompare(int MODE, int FUNC);
 // Set texture depth mode

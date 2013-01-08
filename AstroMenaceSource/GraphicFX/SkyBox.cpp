@@ -55,407 +55,232 @@ float SkyBox_length_2 = 100.0f;
 //-----------------------------------------------------------------------------
 void SkyBoxDraw(void)
 {
-	int VFV = RI_3f_XYZ | RI_1_TEX;
+	int VFV = RI_3f_XYZ | RI_2_TEX | RI_DUBLICATE_TEX_COORD;
 	float *buff = 0;
 	buff = new float[5*4]; if (buff == 0) return;
+	int k;
+
+
+	// сразу выполняем настройку второй текстуры
+	vw_SetTexture(1, vw_FindTextureByName("DATA/SKYBOX/tile_stars.tga"));
+	vw_SetTextureEnvMode(RI_TENV_DECAL);
+	vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+	// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+	if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
+	// корректируем текстурные координаты для второй текстуры через матрицу
+	vw_MatrixMode(RI_TEXTURE_MATRIX);
+	vw_LoadIdentity();
+	vw_Scale(2.0f, 2.0f, 1.0f);
+	vw_MatrixMode(RI_MODELVIEW_MATRIX);
+
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The BACK side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	int k=0;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 1.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 1.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 1.0f;
-	buff[k++] = 1.0f;
-
 	if (SkyBox_Texture[BACK] != 0)
 	{
+		k=0;
+		buff[k++] = SkyBox_x + SkyBox_width_2;
+		buff[k++] = SkyBox_y - SkyBox_height_2;
+		buff[k++] = SkyBox_z - SkyBox_length_2;
+		buff[k++] = 0.0f;
+		buff[k++] = 0.0f;
+		buff[k++] = SkyBox_x + SkyBox_width_2;
+		buff[k++] = SkyBox_y + SkyBox_height_2;
+		buff[k++] = SkyBox_z - SkyBox_length_2;
+		buff[k++] = 0.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = SkyBox_x - SkyBox_width_2;
+		buff[k++] = SkyBox_y - SkyBox_height_2;
+		buff[k++] = SkyBox_z - SkyBox_length_2;
+		buff[k++] = 1.0f;
+		buff[k++] = 0.0f;
+		buff[k++] = SkyBox_x - SkyBox_width_2;
+		buff[k++] = SkyBox_y + SkyBox_height_2;
+		buff[k++] = SkyBox_z - SkyBox_length_2;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+
 		vw_SetTexture(0, SkyBox_Texture[BACK]);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
-	}
-	k=0;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 2.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 2.0f;
-	buff[k++] = 2.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 2.0f;
-
-	if (SkyBox_Texture[BACK] != 0)
-	{
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_stars.tga"));
-		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
-		vw_SetTextureBlend(false, 0, 0);
 	}
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The FRONT side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	k=0;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 1.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 1.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 1.0f;
-	buff[k++] = 1.0f;
-
 	if (SkyBox_Texture[FRONT] != 0)
 	{
+		k=0;
+		buff[k++] = SkyBox_x - SkyBox_width_2;
+		buff[k++] = SkyBox_y - SkyBox_height_2;
+		buff[k++] = SkyBox_z + SkyBox_length_2;
+		buff[k++] = 0.0f;
+		buff[k++] = 0.0f;
+		buff[k++] = SkyBox_x - SkyBox_width_2;
+		buff[k++] = SkyBox_y + SkyBox_height_2;
+		buff[k++] = SkyBox_z + SkyBox_length_2;
+		buff[k++] = 0.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = SkyBox_x + SkyBox_width_2;
+		buff[k++] = SkyBox_y - SkyBox_height_2;
+		buff[k++] = SkyBox_z + SkyBox_length_2;
+		buff[k++] = 1.0f;
+		buff[k++] = 0.0f;
+		buff[k++] = SkyBox_x + SkyBox_width_2;
+		buff[k++] = SkyBox_y + SkyBox_height_2;
+		buff[k++] = SkyBox_z + SkyBox_length_2;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+
 		vw_SetTexture(0, SkyBox_Texture[FRONT]);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
+
 	}
 
-	k=0;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 2.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 2.0f;
-	buff[k++] = 2.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 2.0f;
-
-	if (SkyBox_Texture[FRONT] != 0)
-	{
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_stars.tga"));
-		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
-		vw_SetTextureBlend(false, 0, 0);
-	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The BOTTOM side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	k=0;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 1.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 1.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 1.0f;
-	buff[k++] = 1.0f;
-
 	if (SkyBox_Texture[BOTTOM] != 0)
 	{
+		k=0;
+		buff[k++] = SkyBox_x - SkyBox_width_2;
+		buff[k++] = SkyBox_y - SkyBox_height_2;
+		buff[k++] = SkyBox_z - SkyBox_length_2;
+		buff[k++] = 0.0f;
+		buff[k++] = 0.0f;
+		buff[k++] = SkyBox_x - SkyBox_width_2;
+		buff[k++] = SkyBox_y - SkyBox_height_2;
+		buff[k++] = SkyBox_z + SkyBox_length_2;
+		buff[k++] = 0.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = SkyBox_x + SkyBox_width_2;
+		buff[k++] = SkyBox_y - SkyBox_height_2;
+		buff[k++] = SkyBox_z - SkyBox_length_2;
+		buff[k++] = 1.0f;
+		buff[k++] = 0.0f;
+		buff[k++] = SkyBox_x + SkyBox_width_2;
+		buff[k++] = SkyBox_y - SkyBox_height_2;
+		buff[k++] = SkyBox_z + SkyBox_length_2;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+
 		vw_SetTexture(0, SkyBox_Texture[BOTTOM]);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
-	}
-
-	k=0;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 2.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 2.0f;
-	buff[k++] = 2.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 2.0f;
-	buff[k++] = 0.0f;
-
-	if (SkyBox_Texture[BOTTOM] != 0)
-	{
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_stars.tga"));
-		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
-		vw_SetTextureBlend(false, 0, 0);
 	}
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The TOP side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	k=0;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 1.0f;
-	buff[k++] = 1.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 1.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 1.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 0.0f;
-
 	if (SkyBox_Texture[TOP] != 0)
 	{
+		k=0;
+		buff[k++] = SkyBox_x + SkyBox_width_2;
+		buff[k++] = SkyBox_y + SkyBox_height_2;
+		buff[k++] = SkyBox_z - SkyBox_length_2;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = SkyBox_x + SkyBox_width_2;
+		buff[k++] = SkyBox_y + SkyBox_height_2;
+		buff[k++] = SkyBox_z + SkyBox_length_2;
+		buff[k++] = 1.0f;
+		buff[k++] = 0.0f;
+		buff[k++] = SkyBox_x - SkyBox_width_2;
+		buff[k++] = SkyBox_y + SkyBox_height_2;
+		buff[k++] = SkyBox_z - SkyBox_length_2;
+		buff[k++] = 0.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = SkyBox_x - SkyBox_width_2;
+		buff[k++] = SkyBox_y + SkyBox_height_2;
+		buff[k++] = SkyBox_z + SkyBox_length_2;
+		buff[k++] = 0.0f;
+		buff[k++] = 0.0f;
+
 		vw_SetTexture(0, SkyBox_Texture[TOP]);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
-	}
-
-	k=0;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 2.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 2.0f;
-	buff[k++] = 2.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 2.0f;
-
-	if (SkyBox_Texture[TOP] != 0)
-	{
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_stars.tga"));
-		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
-		vw_SetTextureBlend(false, 0, 0);
 	}
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The LEFT side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	k=0;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 1.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 1.0f;
-	buff[k++] = 1.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 1.0f;
-	buff[k++] = 0.0f;
-
 	if (SkyBox_Texture[LEFT] != 0)
 	{
+		k=0;
+		buff[k++] = SkyBox_x - SkyBox_width_2;
+		buff[k++] = SkyBox_y + SkyBox_height_2;
+		buff[k++] = SkyBox_z - SkyBox_length_2;
+		buff[k++] = 0.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = SkyBox_x - SkyBox_width_2;
+		buff[k++] = SkyBox_y + SkyBox_height_2;
+		buff[k++] = SkyBox_z + SkyBox_length_2;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = SkyBox_x - SkyBox_width_2;
+		buff[k++] = SkyBox_y - SkyBox_height_2;
+		buff[k++] = SkyBox_z - SkyBox_length_2;
+		buff[k++] = 0.0f;
+		buff[k++] = 0.0f;
+		buff[k++] = SkyBox_x - SkyBox_width_2;
+		buff[k++] = SkyBox_y - SkyBox_height_2;
+		buff[k++] = SkyBox_z + SkyBox_length_2;
+		buff[k++] = 1.0f;
+		buff[k++] = 0.0f;
+
 		vw_SetTexture(0, SkyBox_Texture[LEFT]);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
-	}
-
-	k=0;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 2.0f;
-	buff[k++] = 2.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 2.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 2.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x - SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 0.0f;
-
-	if (SkyBox_Texture[LEFT] != 0)
-	{
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_stars.tga"));
-		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
-		vw_SetTextureBlend(false, 0, 0);
 	}
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The RIGHT side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	k=0;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 1.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 1.0f;
-	buff[k++] = 1.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 1.0f;
-
 	if (SkyBox_Texture[RIGHT] != 0)
 	{
+		k=0;
+		buff[k++] = SkyBox_x + SkyBox_width_2;
+		buff[k++] = SkyBox_y - SkyBox_height_2;
+		buff[k++] = SkyBox_z - SkyBox_length_2;
+		buff[k++] = 1.0f;
+		buff[k++] = 0.0f;
+		buff[k++] = SkyBox_x + SkyBox_width_2;
+		buff[k++] = SkyBox_y - SkyBox_height_2;
+		buff[k++] = SkyBox_z + SkyBox_length_2;
+		buff[k++] = 0.0f;
+		buff[k++] = 0.0f;
+		buff[k++] = SkyBox_x + SkyBox_width_2;
+		buff[k++] = SkyBox_y + SkyBox_height_2;
+		buff[k++] = SkyBox_z - SkyBox_length_2;
+		buff[k++] = 1.0f;
+		buff[k++] = 1.0f;
+		buff[k++] = SkyBox_x + SkyBox_width_2;
+		buff[k++] = SkyBox_y + SkyBox_height_2;
+		buff[k++] = SkyBox_z + SkyBox_length_2;
+		buff[k++] = 0.0f;
+		buff[k++] = 1.0f;
+
 		vw_SetTexture(0, SkyBox_Texture[RIGHT]);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
 	}
 
-	k=0;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y - SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 2.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z - SkyBox_length_2;
-	buff[k++] = 0.0f;
-	buff[k++] = 2.0f;
-	buff[k++] = SkyBox_x + SkyBox_width_2;
-	buff[k++] = SkyBox_y + SkyBox_height_2;
-	buff[k++] = SkyBox_z + SkyBox_length_2;
-	buff[k++] = 2.0f;
-	buff[k++] = 2.0f;
 
-	if (SkyBox_Texture[RIGHT] != 0)
-	{
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-		vw_SetTexture(0, vw_FindTextureByName("DATA/SKYBOX/tile_stars.tga"));
-		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(float));
-		vw_SetTextureBlend(false, 0, 0);
-	}
-
-
+	vw_BindTexture(1, 0);
+	vw_MatrixMode(RI_TEXTURE_MATRIX);
+	vw_LoadIdentity();
+	vw_MatrixMode(RI_MODELVIEW_MATRIX);
 
 	vw_BindTexture(0, 0);
+
 	if (buff != 0){delete [] buff; buff = 0;}
 }
 
