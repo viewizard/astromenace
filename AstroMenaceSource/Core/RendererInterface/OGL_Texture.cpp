@@ -310,8 +310,6 @@ void vw_SetTextureBlendMode(int pname, int param)
 	}
 
 
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_EXT);
-
 	// работаем с MODULATE
 	switch (param)
 	{
@@ -651,3 +649,22 @@ void vw_SetTextureDepthMode(int MODE)
 }
 
 
+
+
+//------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------
+void vw_SetTextureEnvMode(int param)
+{
+	switch (param)
+	{
+		case RI_TENV_DECAL: glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); break;
+		case RI_TENV_BLEND: glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND); break;
+		case RI_TENV_REPLACE: glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); break;
+		case RI_TENV_ADD: glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD); break;
+		case RI_TENV_COMBINE: glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE); break;
+		default:
+		case RI_TENV_MODULATE: glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); break;
+	}
+
+}
