@@ -1002,9 +1002,8 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
 			if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 			// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
+			vw_SetTextureEnvMode(RI_TENV_COMBINE);
 			vw_SetTextureBlendMode(RI_TBLEND_COLOROP, RI_TBLEND_ADD);
-			vw_SetTextureBlendMode(RI_TBLEND_COLORARG1,  RI_TBLEND_CURRENT);
-			vw_SetTextureBlendMode(RI_TBLEND_COLORARG2,  RI_TBLEND_TEXTURE);
 		}
 
 		// если у нас работают шейдеры и есть текстура нормал меппа - ставим ее
@@ -1184,9 +1183,8 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
 					if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 					// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
+					vw_SetTextureEnvMode(RI_TENV_COMBINE);
 					vw_SetTextureBlendMode(RI_TBLEND_COLOROP, RI_TBLEND_ADD);
-					vw_SetTextureBlendMode(RI_TBLEND_COLORARG1,  RI_TBLEND_CURRENT);
-					vw_SetTextureBlendMode(RI_TBLEND_COLORARG2,  RI_TBLEND_TEXTURE);
 				}
 
 				// если у нас работают шейдеры и есть текстура нормал меппа - ставим ее
