@@ -152,7 +152,7 @@ void ResizeImage(int width, int height, BYTE **DIB, eTexture *Texture)
 {
 	if (width == Texture->Width && height == Texture->Height) return;
 
-	int		i, j, x, y, offset_y, offset_x;
+	int i, j, x, y, offset_y, offset_x;
 
 	// переносим во временный массив данные...
 	BYTE *src = *DIB;
@@ -170,11 +170,11 @@ void ResizeImage(int width, int height, BYTE **DIB, eTexture *Texture)
 			x = (i * Texture->Width) / width;
 			offset_x = (offset_y + x) * Texture->Bytes;
 
-			dst[(i+j*width)*Texture->Bytes] = src[(x+y*Texture->Width)*Texture->Bytes];
-			dst[(i+j*width)*Texture->Bytes+1] = src[(x+y*Texture->Width)*Texture->Bytes+1];
-			dst[(i+j*width)*Texture->Bytes+2] = src[(x+y*Texture->Width)*Texture->Bytes+2];
+			dst[(i+j*width)*Texture->Bytes] = src[offset_x];
+			dst[(i+j*width)*Texture->Bytes+1] = src[offset_x+1];
+			dst[(i+j*width)*Texture->Bytes+2] = src[offset_x+2];
 			if (Texture->Bytes == 4)
-				dst[(i+j*width)*Texture->Bytes+3] = src[(x+y*Texture->Width)*Texture->Bytes+3];
+				dst[(i+j*width)*Texture->Bytes+3] = src[offset_x+3];
 		}
 	}
 

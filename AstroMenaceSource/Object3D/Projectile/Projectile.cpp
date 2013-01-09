@@ -1667,13 +1667,6 @@ missile:
 						Projectile->Create(204);
 						Projectile->SetLocation(Location+VECTOR3D(0.0f, -2.0f, 0.0f));
 
-
-						// общий - пенальти, если не игрок
-						float CurrentPenalty = GameNPCWeaponPenalty*1.0f;
-						// если игрок или свои - ничего не надо...
-						if (ObjectStatus >= 2) CurrentPenalty = 1.0f;
-
-
 						Projectile->SetRotation(Rotation);
 						for (int i=0; i<Projectile->GraphicFXQuantity; i++)
 						{
@@ -1776,13 +1769,6 @@ missile:
 						Projectile  = new CProjectile;
 						Projectile->Create(206);
 						Projectile->SetLocation(Location+VECTOR3D(0.0f, 0.0f, 0.0f));
-
-
-						// общий - пенальти, если не игрок
-						float CurrentPenalty = GameNPCWeaponPenalty*1.0f;
-						// если игрок или свои - ничего не надо...
-						if (ObjectStatus >= 2) CurrentPenalty = 1.0f;
-
 
 						Projectile->SetRotation(Rotation);
 						for (int i=0; i<Projectile->GraphicFXQuantity; i++)
