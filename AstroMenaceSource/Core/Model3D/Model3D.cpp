@@ -454,7 +454,7 @@ void eModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 								DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*(j+2)+7]};
 
 				// идем на рекурсивную функцию
-				FakeCalculation = RecursiveBufferLimitedBySizeTriangles(Point1, Point2, Point3, DrawObjectList[i].VertexStride, DrawObjectList[i].VertexBufferLimitedBySizeTriangles, &CurrentPosition, TriangleSizeLimit)*3;
+				FakeCalculation += RecursiveBufferLimitedBySizeTriangles(Point1, Point2, Point3, DrawObjectList[i].VertexStride, DrawObjectList[i].VertexBufferLimitedBySizeTriangles, &CurrentPosition, TriangleSizeLimit)*3;
 			}
 		}
 	}

@@ -109,6 +109,7 @@ bool eLight::Activate(int CurrentLightNum, float Matrix[16])
 		RenderLocation[2] = -Direction.z;
 		RenderLocation[3] = 0.0f; // источник типа солнца
 
+		// т.к. мы не используем "сброс" состояния источника в исходное - надо обязательно переустановить все
 		vw_SetLightV(RealLightNum, RI_DIFFUSE, Diffuse);
 		vw_SetLightV(RealLightNum, RI_SPECULAR, Specular);
 		vw_SetLightV(RealLightNum, RI_AMBIENT, Ambient);
@@ -130,6 +131,7 @@ bool eLight::Activate(int CurrentLightNum, float Matrix[16])
 		RenderLocation[2] = Location.z;
 		RenderLocation[3] = 1.0f; // источник типа точки
 
+		// т.к. мы не используем "сброс" состояния источника в исходное - надо обязательно переустановить все
 		vw_SetLight(RealLightNum, RI_CONSTANT_ATTENUATION, ConstantAttenuation);
 		vw_SetLight(RealLightNum, RI_LINEAR_ATTENUATION, LinearAttenuation);
 		vw_SetLight(RealLightNum, RI_QUADRATIC_ATTENUATION, QuadraticAttenuation);
@@ -157,18 +159,6 @@ void eLight::DeActivate()
 	if (!On) return;
 	if (RealLightNum > -1)
 	{
-		// делаем сброс настроек источника, иначе может быть ерунда с освещением
-		float off[4];
-		off[0] = 0.0f;
-		off[1] = 0.0f;
-		off[2] = 0.0f;
-		off[3] = 1.0f;
-		vw_SetLightV(RealLightNum, RI_DIFFUSE, off);
-		vw_SetLightV(RealLightNum, RI_SPECULAR, off);
-		vw_SetLightV(RealLightNum, RI_AMBIENT, off);
-		vw_SetLightV(RealLightNum, RI_DIRECTION, off);
-		vw_SetLightV(RealLightNum, RI_POSITION, off);
-
 		vw_LightEnable(RealLightNum, false);
 		RealLightNum = -1;
 	}

@@ -334,9 +334,6 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 {
 	// если ничего не передали
 	if (Data == 0 && VBO == 0 && VAO == 0) return;
-	// флаг нужно ли с вбо делать
-	bool NeedVBO = OpenGL_DevCaps.VBOSupported;
-	if (VBO == 0) NeedVBO = false;
 	// флаг нужно ли с вaо делать
 	bool NeedVAO = OpenGL_DevCaps.VAOSupported;
 	if (VAO == 0) NeedVAO = false;

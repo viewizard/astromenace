@@ -1235,11 +1235,10 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 			int LightType1, LightType2;
 			// включаем источники света
-			int LightsCount;
 			if (HitBB != 0)
-				LightsCount = vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location + HitBBLocation[i], HitBBRadius2[i], 2, Setup.MaxPointLights, Matrix);
+				vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location + HitBBLocation[i], HitBBRadius2[i], 2, Setup.MaxPointLights, Matrix);
 			else
-				LightsCount = vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
+				vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
 
 
 			// если нужно рисовать прозрачным

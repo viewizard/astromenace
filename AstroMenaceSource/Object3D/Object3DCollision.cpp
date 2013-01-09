@@ -418,17 +418,11 @@ void AddPlayerBonus(CObject3D *Object, int KilledByObjectStatus)
 				break;
 			// 4 - Pirate Ship
 			case 4:
-				{
-					// если это грузовой - считаем меньше
-					float koff = 1.8f;
-					if (Object->ObjectCreationType > 5) koff = 4.0f;
-
-					PirateShipsKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
-					GameMoney += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
-					PirateShipsKillQuant += 1;
-					TTTExperience += (Object->StrengthStart*GameNPCArmorPenalty*(Setup.Profile[CurrentProfile].Difficulty/100.0f))/1.8f;
-					break;
-				}
+				PirateShipsKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
+				GameMoney += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
+				PirateShipsKillQuant += 1;
+				TTTExperience += (Object->StrengthStart*GameNPCArmorPenalty*(Setup.Profile[CurrentProfile].Difficulty/100.0f))/1.8f;
+				break;
 			// 5 - Pirate Vehicle (Wheeled + Tracked)
 			case 5:
 				PirateVehiclesKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
