@@ -426,148 +426,6 @@ const char *VFSFilesList[VFSFilesListCount] =
 
 
 
-const int	ModelsPackListCount = 130;
-const char *ModelsPackList[ModelsPackListCount] =
-{
-"DATA/MODELS/ALIENFIGHTER/al-04.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-06.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-12.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-10.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-16.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-illum04.VW2D",
-"DATA/MODELS/ALIENFIGHTER/al-13.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-07.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-02.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-15.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-03.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-01.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-14.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-text04.VW2D",
-"DATA/MODELS/ALIENFIGHTER/al-08.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-11.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-17.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-05.VW3D",
-"DATA/MODELS/ALIENFIGHTER/al-09.VW3D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-01.VW3D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-04.VW3D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-text04.VW2D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-text03.VW2D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-05.VW3D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-illum04.VW2D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-02.VW3D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-03.VW3D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-illum08.VW2D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-illum03.VW2D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-06.VW3D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-07.VW3D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-text02.VW2D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-text08.VW2D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-illum02.VW2D",
-"DATA/MODELS/ALIENMOTHERSHIP/alm-08.VW3D",
-"DATA/MODELS/BUILDING/bld-08.VW3D",
-"DATA/MODELS/BUILDING/bld-06.VW3D",
-"DATA/MODELS/BUILDING/bld-07.VW3D",
-"DATA/MODELS/BUILDING/bld-02.VW3D",
-"DATA/MODELS/BUILDING/bld.VW2D",
-"DATA/MODELS/BUILDING/bld-03.VW3D",
-"DATA/MODELS/BUILDING/bld-09.VW3D",
-"DATA/MODELS/BUILDING/bld-04.VW3D",
-"DATA/MODELS/BUILDING/bld-05.VW3D",
-"DATA/MODELS/BUILDING/bld_illum.VW2D",
-"DATA/MODELS/BUILDING/bld-10.VW3D",
-"DATA/MODELS/BUILDING/bld-01.VW3D",
-"DATA/MODELS/BUILDING/bld-11.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-07.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-16.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-06.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-09.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-01.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-text05.VW2D",
-"DATA/MODELS/EARTHFIGHTER/sf-text09.VW2D",
-"DATA/MODELS/EARTHFIGHTER/sf-19.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-illum01.VW2D",
-"DATA/MODELS/EARTHFIGHTER/sf-text00.VW2D",
-"DATA/MODELS/EARTHFIGHTER/sf-text10.VW2D",
-"DATA/MODELS/EARTHFIGHTER/sf-05.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-14.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-illum02.VW2D",
-"DATA/MODELS/EARTHFIGHTER/sf-illum03.VW2D",
-"DATA/MODELS/EARTHFIGHTER/sf-17.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-12.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-13.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-text08.VW2D",
-"DATA/MODELS/EARTHFIGHTER/sf-03.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-15.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-04.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-text07.VW2D",
-"DATA/MODELS/EARTHFIGHTER/sf-20.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-10.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-11.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-22.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-21.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-text06.VW2D",
-"DATA/MODELS/EARTHFIGHTER/sf-18.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-08.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-illum04.VW2D",
-"DATA/MODELS/EARTHFIGHTER/weapons.VW3D",
-"DATA/MODELS/EARTHFIGHTER/sf-text04.VW2D",
-"DATA/MODELS/EARTHFIGHTER/sf-02.VW3D",
-"DATA/MODELS/MILITARYBUILDING/artiler-gun-01.VW3D",
-"DATA/MODELS/MILITARYBUILDING/aa-gun-03.VW3D",
-"DATA/MODELS/MILITARYBUILDING/aa-gun-04.VW3D",
-"DATA/MODELS/MILITARYBUILDING/aa-gun-05.VW3D",
-"DATA/MODELS/MILITARYBUILDING/aa-gun-02.VW3D",
-"DATA/MODELS/MILITARYBUILDING/aa-gun-01.VW3D",
-"DATA/MODELS/MILITARYBUILDING/artiler-gun-02.VW3D",
-"DATA/MODELS/PIRATESHIP/bomber-06.VW3D",
-"DATA/MODELS/PIRATESHIP/gunship-01.VW3D",
-"DATA/MODELS/PIRATESHIP/gunship-04.VW3D",
-"DATA/MODELS/PIRATESHIP/gunship-03.VW3D",
-"DATA/MODELS/PIRATESHIP/gunship-02.VW3D",
-"DATA/MODELS/PIRATESHIP/bomber-04.VW3D",
-"DATA/MODELS/PIRATESHIP/bomber-03.VW3D",
-"DATA/MODELS/PIRATESHIP/bomber-05.VW3D",
-"DATA/MODELS/PIRATESHIP/bomber-07.VW3D",
-"DATA/MODELS/PIRATESHIP/bomber-02.VW3D",
-"DATA/MODELS/TRACKED/apc-03.VW3D",
-"DATA/MODELS/TRACKED/apc-01.VW3D",
-"DATA/MODELS/TRACKED/tank-03.VW3D",
-"DATA/MODELS/TRACKED/tank-09.VW3D",
-"DATA/MODELS/TRACKED/tank-08.VW3D",
-"DATA/MODELS/TRACKED/tank-07.VW3D",
-"DATA/MODELS/TRACKED/tank-05.VW3D",
-"DATA/MODELS/TRACKED/apc-aa-01.VW3D",
-"DATA/MODELS/TRACKED/tank-01.VW3D",
-"DATA/MODELS/TRACKED/engineering-01.VW3D",
-"DATA/MODELS/TRACKED/tank-10.VW3D",
-"DATA/MODELS/TRACKED/apc-aa-02.VW3D",
-"DATA/MODELS/TRACKED/tank-06.VW3D",
-"DATA/MODELS/TRACKED/tank-11.VW3D",
-"DATA/MODELS/WHEELED/apc-04.VW3D",
-"DATA/MODELS/WHEELED/jeep-01.VW3D",
-"DATA/MODELS/WHEELED/apc-02.VW3D",
-"DATA/MODELS/WHEELED/jeep-03.VW3D",
-"DATA/MODELS/WHEELED/jeep-02.VW3D",
-"DATA/MODELS/WHEELED/jeep-05.VW3D",
-"DATA/MODELS/WHEELED/jeep-04.VW3D",
-"DATA/MODELS/WHEELED/r-launcher-01.VW3D",
-"DATA/MODELS/track.VW2D",
-"DATA/MODELS/gr-04.VW2D",
-"DATA/MODELS/gr-07.VW2D",
-"DATA/MODELS/gr-01.VW2D",
-"DATA/MODELS/gr-06.VW2D",
-"DATA/MODELS/gr-03.VW2D",
-"DATA/MODELS/gr-05.VW2D",
-"DATA/MODELS/gr-02.VW2D"
-};
-
-
-
-
-
-
-
-
 
 
 
@@ -615,9 +473,6 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 
 #else
 
-	BYTE *filedata[ModelsPackListCount];
-	int filedatasize[ModelsPackListCount];
-
 	if (vw_OpenVFS(ModelsPackFile, 0) != 0)
 	{
 		fprintf(stderr, "models.pack file not found or corrupted.\n");
@@ -625,12 +480,32 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 	}
 
 
-	for (int i=0; i<ModelsPackListCount; i++)
+	// делаем первый проход и подсчитываем кол-во файлов
+	int	ModelsPackListCount = 0;
+	eVFS_Entry *TmpVFSEntry = vw_GetStarVFSArray();
+	while (TmpVFSEntry != 0)
 	{
-		eFILE *tmpFile = vw_fopen(ModelsPackList[i]);
+		ModelsPackListCount++;
+		TmpVFSEntry = TmpVFSEntry->Next;
+	}
+
+	// выделяем память для массивов
+	BYTE **filedata;
+	filedata = new BYTE*[ModelsPackListCount];
+	char **filename;
+	filename = new char*[ModelsPackListCount];
+	int *filedatasize;
+	filedatasize = new int[ModelsPackListCount];
+
+	// заполняем массивы
+	TmpVFSEntry = vw_GetStarVFSArray();
+	int i = 0;
+	while (TmpVFSEntry != 0)
+	{
+		eFILE *tmpFile = vw_fopen(TmpVFSEntry->Name);
 		if (tmpFile == 0)
 		{
-			fprintf(stderr, "models.pack file corrupted, 3d model or texture %s not found.\n", ModelsPackList[i]);
+			fprintf(stderr, "models.pack file corrupted, 3d model or texture %s not found.\n", TmpVFSEntry->Name);
 			return -1;
 		}
 
@@ -641,7 +516,12 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 		filedata[i] = new BYTE[filedatasize[i]];
 		tmpFile->fread(filedata[i], filedatasize[i], 1);
 
+		filename[i] = new char[strlen(TmpVFSEntry->Name)+1];
+		strcpy(filename[i], TmpVFSEntry->Name);
+
 		vw_fclose(tmpFile);
+		TmpVFSEntry = TmpVFSEntry->Next;
+		i++;
 	}
 
 
@@ -669,16 +549,21 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 	for (int i=0; i<ModelsPackListCount; i++)
 	{
 		// запись в VFS
-		if (0 != vw_WriteIntoVFSfromMemory(ModelsPackList[i], filedata[i], filedatasize[i]))
+		if (0 != vw_WriteIntoVFSfromMemory(filename[i], filedata[i], filedatasize[i]))
 		{
 			// какая-то ошибка, не можем записать в VFS
-			fprintf(stderr, "Can't write into VFS from memory %s !!!\n", ModelsPackList[i]);
+			fprintf(stderr, "Can't write into VFS from memory %s !!!\n", filename[i]);
 			fprintf(stderr, "VFS compilation process aborted!\n");
 			return -1;
 		}
 
 		delete [] filedata[i];
+		delete [] filename[i];
 	}
+
+	delete [] filedata;
+	delete [] filename;
+	delete [] filedatasize;
 #endif // separate_cc_vfs
 
 

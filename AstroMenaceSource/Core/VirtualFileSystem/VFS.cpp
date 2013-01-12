@@ -30,48 +30,17 @@
 
 
 // Список подключенных VFS файлов
-struct eVFS
-{
-	char *FileName;		// Имя файла VFS
-	SDL_RWops *File;	// Указатель на файл виртуальной системы
-
-	// данные для записи в создаваемую VFS
-	int NumberOfFilesVFS;
-	int HeaderLengthVFS;
-	int HeaderOffsetVFS;
-	int DataStartOffsetVFS;
-
-
-	eVFS*	Prev;
-	eVFS*	Next;
-};
 eVFS *StartVFS = 0;
 eVFS *EndVFS = 0;
-
+eVFS *vw_GetStartVFS(){ return StartVFS;};
 
 
 
 
 // Список файлов, доступных в подключенных (открытых) VFS
-struct eVFS_Entry
-{
-	BOOL	Link;		// флаг что это не реальная запись а линк на существующую в VFS
-	DWORD	NameLen;	// Кол-во байт в имени...
-	char	*Name;		// Имя записи (имя файла) (может быть "линком")
-	int		Offset;		// Смещение начала файла относительно начала файловой системы
-	int		Length;		// Длина файла в системе
-	int		RealLength;	// Длина файла после распаковки
-	eVFS	*Parent;
-	BYTE	ArhKeyLen;	// Кол-во байт ключа упаковки
-	char	*ArhKey;	// Ключ-упаковки
-
-	eVFS_Entry*	Prev;
-	eVFS_Entry*	Next;
-
-};
 eVFS_Entry *StarVFSArray = 0;
 eVFS_Entry *EndVFSArray = 0;
-
+eVFS_Entry *vw_GetStarVFSArray(){ return StarVFSArray;};
 
 
 
