@@ -558,6 +558,26 @@ void Workshop_Shipyard()
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/workshop_panel1.tga"), true, MenuContentTransp);
 
 
+	// проверяем колесо мышки
+	SetRect(&DstRect,Setup.iAspectRatioWidth/2-457,100+35-11,Setup.iAspectRatioWidth/2-57,450-13);
+	if (vw_OnRect(&DstRect))
+	{
+		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing())
+		{
+			CurrentWorkshopNewFighter += vw_GetWheelStatus();
+
+			if (CurrentWorkshopNewFighter < 1) CurrentWorkshopNewFighter = 22;
+			if (CurrentWorkshopNewFighter > 22) CurrentWorkshopNewFighter = 1;
+			WorkshopCreateNewShip();
+
+			vw_ResetWheelStatus();
+		}
+	}
+	else if (vw_GetWheelStatus() != 0)
+	{
+		vw_ResetWheelStatus();
+	}
+
 	if (DrawButton128_2(Setup.iAspectRatioWidth/2-395,482, vw_GetText("1_Prev"), MenuContentTransp, false))
 	{
 		CurrentWorkshopNewFighter --;
