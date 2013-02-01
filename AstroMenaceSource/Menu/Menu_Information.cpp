@@ -1589,7 +1589,7 @@ void InformationMenu()
 
 
 
-	// проверяем колесико мышки
+	// проверяем колесо мышки
 	SetRect(&DstRect,(int)(Setup.iAspectRatioWidth/2-440),80,(int)(Setup.iAspectRatioWidth/2+440),590);
 	if (vw_OnRect(&DstRect))
 	{
