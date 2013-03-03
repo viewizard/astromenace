@@ -317,7 +317,7 @@ void ProfileInputText()
 		vw_SetCurrentKeyUnicode(0); // сразу сбрасываем данные
 		// делаем простое преобразование, без учета суррогатной пары
 		char* str = NewProfileName + NewProfileNamePos;
-		if (NewChar <= 0x7F)
+		if (NewChar <= 0x7F && NewChar != 0x0025) // для символа % используем 2 байта, иначе не корректно будет добавляться и удаляться
 		{
 			*str = (char)NewChar;
 			NewProfileNamePos++;
@@ -340,8 +340,6 @@ void ProfileInputText()
 			vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
 
 		SoundTaping = Audio_PlaySound2D(4,1.0f);
-
-		vw_SetCurrentKeyUnicode(0);
 	}
 
 

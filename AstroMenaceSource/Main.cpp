@@ -1132,7 +1132,6 @@ loop:
 					// устанавливаем текущий юникод нажатоу клавиши
 					if (event.key.keysym.unicode > 0x001F) // пропускаем С0 Сontrol Characters (ентер, бэкспейс и прочие...)
 					if (!((event.key.keysym.unicode >= 0x007F) && (event.key.keysym.unicode <= 0x009F))) // пропускаем С1 Сontrol Characters
-					if (event.key.keysym.unicode != 0x0025) // !!! потом разобраться, на символе % безбожно глючит
 						vw_SetCurrentKeyUnicode(event.key.keysym.unicode);
 #ifdef gamedebug
 					printf("Keydown, Unicode: " );
