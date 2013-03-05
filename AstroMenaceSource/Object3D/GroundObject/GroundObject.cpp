@@ -324,21 +324,21 @@ bool CGroundObject::Update(float Time)
 			}
 
 			// находим угол, на который нужно повернуть
-			float NeedRotate = TargetHorizObjectCurrentAngle;
+			float NeedRotateCalculation = TargetHorizObjectCurrentAngle;
 
 			if (TargetHorizObjectNeedAngle>TargetHorizObjectCurrentAngle)
 			{
-				NeedRotate += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (NeedRotate > TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
+				NeedRotateCalculation += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+				if (NeedRotateCalculation > TargetHorizObjectNeedAngle) NeedRotateCalculation = TargetHorizObjectNeedAngle;
 			}
 			else
 			{
-				NeedRotate -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (NeedRotate < TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
+				NeedRotateCalculation -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+				if (NeedRotateCalculation < TargetHorizObjectNeedAngle) NeedRotateCalculation = TargetHorizObjectNeedAngle;
 			}
 
 			// устанавливаем текущий поворот
-			TargetHorizObjectCurrentAngle = NeedRotate;
+			TargetHorizObjectCurrentAngle = NeedRotateCalculation;
 
 			// поворачиваем все объекты
 			for (int i=0; i<TargetHorizObjectQuantity; i++)
@@ -349,7 +349,7 @@ bool CGroundObject::Update(float Time)
 				RotatePointInv(&tmp, DrawObjectList[TargetHorizObject[i]].Rotation^(-1.0f));
 
 				SetObjectRotation(VECTOR3D(DrawObjectList[TargetHorizObject[i]].Rotation.x,
-					-NeedRotate,
+					-NeedRotateCalculation,
 					DrawObjectList[TargetHorizObject[i]].Rotation.z), TargetHorizObject[i]);
 
 				RotatePoint(&tmp, DrawObjectList[TargetHorizObject[i]].Rotation);
@@ -370,22 +370,22 @@ bool CGroundObject::Update(float Time)
 		{
 
 			// находим угол, на который нужно повернуть
-			float NeedRotate = TargetVertObjectCurrentAngle;
+			float NeedRotateCalculation = TargetVertObjectCurrentAngle;
 			if (TargetVertObjectNeedAngle>TargetVertObjectCurrentAngle)
 			{
-				NeedRotate += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (NeedRotate > TargetVertObjectNeedAngle) NeedRotate = TargetVertObjectNeedAngle;
-				if (NeedRotate > TargetVertObjectMaxAngle) NeedRotate = TargetVertObjectMaxAngle;
+				NeedRotateCalculation += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+				if (NeedRotateCalculation > TargetVertObjectNeedAngle) NeedRotateCalculation = TargetVertObjectNeedAngle;
+				if (NeedRotateCalculation > TargetVertObjectMaxAngle) NeedRotateCalculation = TargetVertObjectMaxAngle;
 			}
 			else
 			{
-				NeedRotate -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (NeedRotate < TargetVertObjectNeedAngle) NeedRotate = TargetVertObjectNeedAngle;
-				if (NeedRotate < TargetVertObjectMinAngle) NeedRotate = TargetVertObjectMinAngle;
+				NeedRotateCalculation -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+				if (NeedRotateCalculation < TargetVertObjectNeedAngle) NeedRotateCalculation = TargetVertObjectNeedAngle;
+				if (NeedRotateCalculation < TargetVertObjectMinAngle) NeedRotateCalculation = TargetVertObjectMinAngle;
 			}
 
 			// устанавливаем текущий поворот
-			TargetVertObjectCurrentAngle = NeedRotate;
+			TargetVertObjectCurrentAngle = NeedRotateCalculation;
 
 			// поворачиваем все объекты
 			for (int i=0; i<TargetVertObjectQuantity; i++)
@@ -395,7 +395,7 @@ bool CGroundObject::Update(float Time)
 
 				RotatePointInv(&tmp, DrawObjectList[TargetVertObject[i]].Rotation^(-1.0f));
 
-				SetObjectRotation(VECTOR3D(-NeedRotate,
+				SetObjectRotation(VECTOR3D(-NeedRotateCalculation,
 					DrawObjectList[TargetVertObject[i]].Rotation.y,
 					DrawObjectList[TargetVertObject[i]].Rotation.z), TargetVertObject[i]);
 

@@ -202,10 +202,11 @@ void SetAlienSpaceFighterEngine(eParticleSystem *ParticleSystem, int EngineType)
 			ParticleSystem->CreationSize = VECTOR3D(0.1f,0.2f,0.1f);
 			ParticleSystem->IsAttractive = true;
 			break;
+
+		default:
+			fprintf(stderr, "Error in SetAlienSpaceFighterEngine function call, wrong EngineType.\n");
+			break;
 	}
-
-
-
 
 }
 

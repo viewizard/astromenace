@@ -206,6 +206,8 @@ const char *GetWeaponName(int Num)
 		case 17:	return "7_weapon17";
 		case 18:	return "7_weapon18";
 		case 19:	return "7_weapon19";
+
+		default: fprintf(stderr, "Error in GetWeaponName function call, wrong Num.\n"); break;
 	}
 
 	return 0;
@@ -238,6 +240,8 @@ const char *GetWeaponIconName(int Num)
 		case 17:	return "DATA/MENU/weapon17_icon.tga";
 		case 18:	return "DATA/MENU/weapon18_icon.tga";
 		case 19:	return "DATA/MENU/weapon19_icon.tga";
+
+		default: fprintf(stderr, "Error in GetWeaponIconName function call, wrong Num.\n"); break;
 	}
 	return 0;
 }

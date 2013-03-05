@@ -44,6 +44,7 @@ float GetEnginePower(int EngineType)
 		case 2:	return 17.0f;
 		case 3:	return 19.0f;
 		case 4:	return 22.0f;
+		default: fprintf(stderr, "Error in GetEnginePower function call, wrong EngineType.\n"); break;
 	}
 
 	return 0.0f;
@@ -59,6 +60,7 @@ float GetEngineAcceleration(int EngineType)
 		case 2:	return 19.0f;
 		case 3:	return 24.0f;
 		case 4:	return 28.0f;
+		default: fprintf(stderr, "Error in GetEngineAcceleration function call, wrong EngineType.\n"); break;
 	}
 
 	return 0.0f;
@@ -74,6 +76,7 @@ float GetEngineRotatePower(int EngineType)
 		case 2:	return 18.0f;
 		case 3:	return 20.0f;
 		case 4:	return 23.0f;
+		default: fprintf(stderr, "Error in GetEngineRotatePower function call, wrong EngineType.\n"); break;
 	}
 
 	return 0.0f;
@@ -183,6 +186,9 @@ void CreateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 			ParticleSystem->LightNeedDeviation = true;
 			break;
 
+		default:
+			fprintf(stderr, "Error in CreateSpaceShipEngine function call, wrong EngineType.\n");
+			break;
 	}
 }
 
@@ -284,6 +290,9 @@ void CreateRotateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType
 			ParticleSystem->LightNeedDeviation = true;
 			break;
 
+		default:
+			fprintf(stderr, "Error in CreateRotateSpaceShipEngine function call, wrong EngineType.\n");
+			break;
 	}
 }
 

@@ -107,6 +107,10 @@ void vw_SetLight(int light, int pname, float param)
 		case RI_QUADRATIC_ATTENUATION:
 			tmpPNAME = GL_QUADRATIC_ATTENUATION;
 			break;
+
+		default: 
+			fprintf(stderr, "Error in vw_SetLight function call, wrong pname.\n");
+			return;
  	}
 
 	glLightf(GL_LIGHT0+light, tmpPNAME, param);
@@ -162,6 +166,10 @@ void vw_SetLightV(int light, int pname, const float *param)
 		case RI_DIRECTION:
 			tmpPNAME = GL_SPOT_DIRECTION;
 			break;
+
+		default:
+			fprintf(stderr, "Error in vw_SetLightV function call, wrong pname.\n");
+			return;
 	}
 
 	glLightfv(GL_LIGHT0+light, tmpPNAME, param);
@@ -217,6 +225,10 @@ void vw_GetLightV(int light, int pname, float *param)
 		case RI_DIRECTION:
 			tmpPNAME = GL_SPOT_DIRECTION;
 			break;
+
+		default:
+			fprintf(stderr, "Error in vw_GetLightV function call, wrong pname.\n");
+			return;
 	}
 
 	glGetLightfv(GL_LIGHT0+light, tmpPNAME, param);
@@ -255,6 +267,9 @@ void vw_MaterialV(int pname, const float *param)
 			tmpPNAME = GL_SHININESS;
 			break;
 
+		default:
+			fprintf(stderr, "Error in vw_MaterialV function call, wrong pname.\n");
+			return;
 	}
 
 	glMaterialfv(GL_FRONT_AND_BACK, tmpPNAME, param);
@@ -290,6 +305,10 @@ void vw_GetMaterialV(int pname, float *param)
 		case RI_SHININESS:
 			tmpPNAME = GL_SHININESS;
 			break;
+
+		default:
+			fprintf(stderr, "Error in vw_GetMaterialV function call, wrong pname.\n");
+			return;
 	}
 
 	glGetMaterialfv(GL_FRONT_AND_BACK, tmpPNAME, param);

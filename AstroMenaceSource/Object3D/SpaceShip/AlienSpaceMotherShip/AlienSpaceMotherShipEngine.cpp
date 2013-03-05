@@ -468,8 +468,11 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
 			ParticleSystem->LightNeedDeviation = true;
 			break;
+
+
+		default:
+			fprintf(stderr, "Error in SetAlienSpaceMotherShipEngine function call, wrong EngineType.\n");
+			break;
 	}
-
-
 
 }

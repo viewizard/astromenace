@@ -112,10 +112,10 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius*6.0f));
 			Projectile->Orientation.Normalize();
 
-			for (int i=0; i<Projectile->GraphicFXQuantity; i++)
+			for (int j=0; j<Projectile->GraphicFXQuantity; j++)
 			{
-				Projectile->GraphicFX[i]->Direction = Projectile->Orientation^-1;
-				Projectile->GraphicFX[i]->Speed = 1.5f;
+				Projectile->GraphicFX[j]->Direction = Projectile->Orientation^-1;
+				Projectile->GraphicFX[j]->Speed = 1.5f;
 			}
 			Projectile->ObjectStatus = ObjectStatus;
 			// учитываем пенальти
@@ -196,16 +196,16 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius/4.0f));
 			Projectile->Orientation.Normalize();
 
-			for (int i=0; i<Projectile->GraphicFXQuantity; i++)
+			for (int j=0; j<Projectile->GraphicFXQuantity; j++)
 			{
-				Projectile->GraphicFX[i]->Direction = Projectile->Orientation^-1;
-				Projectile->GraphicFX[i]->Speed = 2.5f;
-				Projectile->GraphicFX[i]->ColorStart.r = 0.30f;
-				Projectile->GraphicFX[i]->ColorStart.g = 1.00f;
-				Projectile->GraphicFX[i]->ColorStart.b = 1.00f;
-				Projectile->GraphicFX[i]->ColorEnd.r = 0.00f;
-				Projectile->GraphicFX[i]->ColorEnd.g = 1.00f;
-				Projectile->GraphicFX[i]->ColorEnd.b = 1.00f;
+				Projectile->GraphicFX[j]->Direction = Projectile->Orientation^-1;
+				Projectile->GraphicFX[j]->Speed = 2.5f;
+				Projectile->GraphicFX[j]->ColorStart.r = 0.30f;
+				Projectile->GraphicFX[j]->ColorStart.g = 1.00f;
+				Projectile->GraphicFX[j]->ColorStart.b = 1.00f;
+				Projectile->GraphicFX[j]->ColorEnd.r = 0.00f;
+				Projectile->GraphicFX[j]->ColorEnd.g = 1.00f;
+				Projectile->GraphicFX[j]->ColorEnd.b = 1.00f;
 			}
 			Projectile->ObjectStatus = ObjectStatus;
 			// учитываем пенальти
@@ -381,10 +381,10 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius/2.0f));
 			Projectile->Orientation.Normalize();
 
-			for (int i=0; i<Projectile->GraphicFXQuantity; i++)
+			for (int j=0; j<Projectile->GraphicFXQuantity; j++)
 			{
-				Projectile->GraphicFX[i]->Direction = Projectile->Orientation^-1;
-				Projectile->GraphicFX[i]->Speed = 2.5f;
+				Projectile->GraphicFX[j]->Direction = Projectile->Orientation^-1;
+				Projectile->GraphicFX[j]->Speed = 2.5f;
 			}
 			Projectile->ObjectStatus = ObjectStatus;
 			// учитываем пенальти

@@ -218,21 +218,21 @@ bool eParticleSystem::Update(float Time)
 
 
 	// для всех частиц вызываем их собственный апдейт
-	eParticle *tmp = Start;
-	while (tmp!=0)
+	eParticle *ParticleTmp = Start;
+	while (ParticleTmp!=0)
 	{
-		eParticle *tmp2 = tmp->Next;
+		eParticle *ParticleTmp2 = ParticleTmp->Next;
 		// функция вернет false, если частица уже мертва
-		if (tmp->Update(TimeDelta, Location, IsAttractive, AttractiveValue))
+		if (ParticleTmp->Update(TimeDelta, Location, IsAttractive, AttractiveValue))
 		{
 			ParticlesAlive++;
 		}
 		else
 		{
-			Detach(tmp);
-			delete tmp; tmp = 0;
+			Detach(ParticleTmp);
+			delete ParticleTmp; ParticleTmp = 0;
 		}
-		tmp = tmp2;
+		ParticleTmp = ParticleTmp2;
 	}
 
 
@@ -589,8 +589,8 @@ bool eParticleSystem::Update(float Time)
 
 	// предварительная инициализация
 	float MinX, MinY, MinZ, MaxX, MaxY, MaxZ;
-	tmp = Start;
-	if (tmp == 0)
+	ParticleTmp = Start;
+	if (ParticleTmp == 0)
 	{
 		MinX = MaxX = Location.x;
 		MinY = MaxY = Location.y;
@@ -598,40 +598,40 @@ bool eParticleSystem::Update(float Time)
 	}
 	else
 	{
-		MinX = MaxX = tmp->Location.x;
-		MinY = MaxY = tmp->Location.y;
-		MinZ = MaxZ = tmp->Location.z;
+		MinX = MaxX = ParticleTmp->Location.x;
+		MinY = MaxY = ParticleTmp->Location.y;
+		MinZ = MaxZ = ParticleTmp->Location.z;
 	}
 
 
-	while (tmp!=0)
+	while (ParticleTmp!=0)
 	{
-		eParticle *tmp2 = tmp->Next;
+		eParticle *ParticleTmp2 = ParticleTmp->Next;
 
 		// строим AABB
-		if (tmp->Alpha > 0.0f && tmp->Size > 0.0f)
+		if (ParticleTmp->Alpha > 0.0f && ParticleTmp->Size > 0.0f)
 		{
 			VECTOR3D v;
-			v.x = tmp->Location.x + tmp->Size;
+			v.x = ParticleTmp->Location.x + ParticleTmp->Size;
 			if (MaxX < v.x) MaxX = v.x;
 
-			v.y = tmp->Location.y + tmp->Size;
+			v.y = ParticleTmp->Location.y + ParticleTmp->Size;
 			if (MaxY < v.y) MaxY = v.y;
 
-			v.z = tmp->Location.z + tmp->Size;
+			v.z = ParticleTmp->Location.z + ParticleTmp->Size;
 			if (MaxZ < v.z) MaxZ = v.z;
 
-			v.x = tmp->Location.x - tmp->Size;
+			v.x = ParticleTmp->Location.x - ParticleTmp->Size;
 			if (MinX > v.x) MinX = v.x;
 
-			v.y = tmp->Location.y - tmp->Size;
+			v.y = ParticleTmp->Location.y - ParticleTmp->Size;
 			if (MinY > v.y) MinY = v.y;
 
-			v.z = tmp->Location.z - tmp->Size;
+			v.z = ParticleTmp->Location.z - ParticleTmp->Size;
 			if (MinZ > v.z) MinZ = v.z;
 		}
 
-		tmp = tmp2;
+		ParticleTmp = ParticleTmp2;
 	}
 
 	AABB[0] = VECTOR3D(MaxX, MaxY, MaxZ);
@@ -667,12 +667,12 @@ void eParticleSystem::Draw(eTexture **CurrentTexture)
 	{
 
 		int DrawCount = 0;
-		eParticle *tmp = Start;
-		while (tmp!=0)
+		eParticle *ParticleTmp = Start;
+		while (ParticleTmp!=0)
 		{
-			eParticle *tmp2 = tmp->Next;
-			if (tmp->TextureNum == i) DrawCount++;
-			tmp = tmp2;
+			eParticle *ParticleTmp2 = ParticleTmp->Next;
+			if (ParticleTmp->TextureNum == i) DrawCount++;
+			ParticleTmp = ParticleTmp2;
 		}
 
 

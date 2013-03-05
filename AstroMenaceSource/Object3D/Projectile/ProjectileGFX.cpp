@@ -895,6 +895,10 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 			ParticleSystem->BlendType = 1;
 			break;
 
+
+		default:
+			fprintf(stderr, "Error in SetProjectileGFX function call, wrong GFXNum.\n");
+			break;
 	}
 }
 

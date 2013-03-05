@@ -60,6 +60,10 @@ const char *GetWeaponGroupTitle(int Num)
 		case 18:
 		case 19:
 			return "4_Propelled";
+
+		default:
+			fprintf(stderr, "Error in GetWeaponGroupTitle function call, wrong Num.\n");
+			break;
 	}
 	return 0;
 }

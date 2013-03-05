@@ -392,6 +392,10 @@ void SetWeaponFire(eParticleSystem *ParticleSystem, int WeaponNum)
 			ParticleSystem->Theta      = 30.00f;
 			ParticleSystem->Life       = 0.40f;
 			break;
+
+		default:
+			fprintf(stderr, "Error in SetWeaponFire function call, wrong WeaponNum.\n");
+			break;
 	}
 
 
@@ -400,14 +404,3 @@ void SetWeaponFire(eParticleSystem *ParticleSystem, int WeaponNum)
 	ParticleSystem->Texture[0] = vw_FindTextureByName("DATA/GFX/flare1.tga");
 
 }
-
-
-
-
-
-
-
-
-
-
-

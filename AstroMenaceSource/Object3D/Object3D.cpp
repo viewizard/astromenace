@@ -1551,15 +1551,15 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	// выводим щит, если он есть
 	if (ShieldStrengthStart > 0.0f)
 	{
-		int k=0;
+		k=0;
 
 		// рисуем заднюю часть - основу
-		float SizeX = Width/2.5f+0.1f;
-		float SizeY = 0.35f;
-		float ColorR = 0.0f;
-		float ColorG = 0.0f;
-		float ColorB = 0.0f;
-		float ColorA = 1.0f;
+		SizeX = Width/2.5f+0.1f;
+		SizeY = 0.35f;
+		ColorR = 0.0f;
+		ColorG = 0.0f;
+		ColorB = 0.0f;
+		ColorA = 1.0f;
 
 		tmpDATA[k++] = -SizeX;		// X
 		tmpDATA[k++] = -SizeY;		// Y
@@ -1596,8 +1596,6 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 		vw_PushMatrix();
-		VECTOR3D CurrentCameraRotation;
-		vw_GetCameraRotation(&CurrentCameraRotation);
 		// поднимаем
 		vw_Translate(VECTOR3D(Location.x, Location.y+AABB[0].y+SizeY*5.0f, Location.z));
 		// поворачиваем к камере
@@ -1610,8 +1608,8 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 		// рисуем вывод кол-ва жизни
 		k=0;
-		float SizeXStart = Width/2.5f - (2.0f*Width/2.5f)*ShieldStrength/ShieldStrengthStart;
-		float SizeXEnd = Width/2.5f;
+		SizeXStart = Width/2.5f - (2.0f*Width/2.5f)*ShieldStrength/ShieldStrengthStart;
+		SizeXEnd = Width/2.5f;
 		SizeY = 0.25f;
 		ColorR = 0.1f;
 		ColorG = 0.7f;

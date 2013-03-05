@@ -104,7 +104,7 @@ void CGameLvlText::Draw()
 
 		switch (Color)
 		{
-			case 0: // белый
+			default: // белый
 				R=1.0f;G=1.0f;B=1.0f;
 				break;
 			case 1: // желтый

@@ -79,6 +79,8 @@ const char *GetWorkshopShipName(int Num)
 		case 20: return "7_ship20";
 		case 21: return "7_ship21";
 		case 22: return "7_ship22";
+
+		default: fprintf(stderr, "Error in GetWorkshopShipName function call, wrong Num.\n"); break;
 	}
 
 	return 0;
@@ -121,6 +123,8 @@ const char *GetShipGroupTitle(int Num)
 		case 21:
 		case 22:
 			return "4_Scout";
+
+		default: fprintf(stderr, "Error in GetShipGroupTitle function call, wrong Num.\n"); break;
 	}
 
 	return 0;
@@ -157,6 +161,8 @@ int GetWorkshopShipCost(int Num)
 		case 20: return 9000;
 		case 21: return 10000;
 		case 22: return 8000;
+
+		default: fprintf(stderr, "Error in GetWorkshopShipCost function call, wrong Num.\n"); break;
 	}
 
 	return 0;

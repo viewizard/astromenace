@@ -623,14 +623,14 @@ void DetectCollisionAllObject3D()
 				if (tmpShip->Weapon[i]->Strength > 0.0f)
 				{
 					// делаем проверку
-					sDamagesData DamagesData;
-					int ObjectPieceNum;
-					if(DetectProjectileCollision(tmpShip->Weapon[i], &ObjectPieceNum, tmpProjectile, &IntercPoint, &DamagesData, tmpShip->Speed))
+					sDamagesData DamagesDataWeapon;
+					int ObjectPieceNumWeapon;
+					if(DetectProjectileCollision(tmpShip->Weapon[i], &ObjectPieceNumWeapon, tmpProjectile, &IntercPoint, &DamagesDataWeapon, tmpShip->Speed))
 					{
 						tmpShip2 = tmpShip->Next; // обязательно!!! если попали торпедой или бомбой!!!
 
 						// просто делаем изменения в прочности... и больше ничего
-						tmpShip->Weapon[i]->Strength -= DamagesData.DamageHull/tmpShip->Weapon[i]->ResistanceHull;
+						tmpShip->Weapon[i]->Strength -= DamagesDataWeapon.DamageHull/tmpShip->Weapon[i]->ResistanceHull;
 						if (tmpShip->Weapon[i]->Strength <= 0.0f)
 						{
 							tmpShip->Weapon[i]->Strength = 0.0f;

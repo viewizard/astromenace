@@ -131,6 +131,7 @@ void vw_BindVBO(int target, unsigned int VBO)
 	{
 		case RI_ARRAY_BUFFER: 			glBindBufferARB(GL_ARRAY_BUFFER_ARB, VBO); break;
 		case RI_ELEMENT_ARRAY_BUFFER: 	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, VBO); break;
+		default: fprintf(stderr, "Error in vw_BindVBO function call, wrong target.\n"); break;
 	}
 }
 

@@ -174,13 +174,13 @@ void SaveXMLSetupFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "GAME_BUILD"), "value", GAME_BUILD);
 	switch (Setup.MenuLanguage)
 	{
-		case 1: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MenuLanguage"), "value", "en"); break;
+		default: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MenuLanguage"), "value", "en"); break;
 		case 2: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MenuLanguage"), "value", "de"); break;
 		case 3: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MenuLanguage"), "value", "ru"); break;
 	}
 	switch (Setup.VoiceLanguage)
 	{
-		case 1: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceLanguage"), "value", "en"); break;
+		default: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceLanguage"), "value", "en"); break;
 		case 2: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceLanguage"), "value", "de"); break;
 		case 3: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceLanguage"), "value", "ru"); break;
 	}
@@ -333,64 +333,61 @@ void SaveXMLSetupFile()
 
 	// упаковка профайлов
 
+
+	int ProfileDataSize = sizeof(GameProfile)*5;
+	unsigned char *ProfileData = new unsigned char[ProfileDataSize];
+	memcpy(ProfileData, Setup.Profile, ProfileDataSize);
+
+	// сразу архивируем Хаффманом
+	vw_DATAtoHAFF(&dstVFS, (BYTE *)ProfileData, &dsizeVFS, ProfileDataSize);
+	delete [] ProfileData;
+	ProfileDataSize = dsizeVFS;
+	ProfileData = (unsigned char *)dstVFS;
+
+	unsigned char *ProfileDataXORCode = new unsigned char[ProfileDataSize*3];
+	char *ResultString = new char[ProfileDataSize*4+1];
+
+
+	// XOR
+	int k1;
+	int k2;
+	for (int i=0; i < ProfileDataSize; i++)
 	{
-		int ProfileDataSize = sizeof(GameProfile)*5;
-		unsigned char *ProfileData = new unsigned char[ProfileDataSize];
-		memcpy(ProfileData, Setup.Profile, ProfileDataSize);
-
-		// сразу архивируем Хаффманом
-		BYTE *dstVFS;
-		int dsizeVFS;
-		vw_DATAtoHAFF(&dstVFS, (BYTE *)ProfileData, &dsizeVFS, ProfileDataSize);
-		delete [] ProfileData;
-		ProfileDataSize = dsizeVFS;
-		ProfileData = (unsigned char *)dstVFS;
-
-		unsigned char *ProfileDataXORCode = new unsigned char[ProfileDataSize*3];
-		char *ResultString = new char[ProfileDataSize*4+1];
-
-
-		// XOR
-		int k1;
-		int k2;
-		for (int i=0; i < ProfileDataSize; i++)
-		{
-			k1 = i;
-			k2 = ProfileDataSize + i*2;
-			ProfileDataXORCode[k1] = 97 + (unsigned char)vw_iRandNum(25);
-			ProfileDataXORCode[k2] = 0;
-			ProfileDataXORCode[k2+1] = ProfileData[i]^ProfileDataXORCode[k1];
-			// в первую - десятки, во вторую - еденицы
-			ProfileDataXORCode[k2] = 97 + (unsigned char)(ProfileDataXORCode[k2+1]/10.0f);
-			ProfileDataXORCode[k2+1] = 97 + (ProfileDataXORCode[k2+1] - (ProfileDataXORCode[k2]-97)*10);
-			//fprintf(stderr, "--%i %i %i %i\n", ProfileDataXORCode[k], ProfileDataXORCode[k+1],ProfileDataXORCode[k+2],ProfileDataXORCode[k+3]);
-		}
-
-
-		// чтобы разбить на блоки вставляем пробел
-		// тогда красиво отображаться будет (если врапинг выставлен в редакторе)
-		int k=0;
-		int l=0;
-		for (int i=0; i < ProfileDataSize*3; i++)
-		{
-			ResultString[k] = ProfileDataXORCode[i];
-			k++;
-			l++;
-			if (l >= 125)
-			{
-				ResultString[k] = 0x20;
-				k++;
-				l=0;
-			}
-		}
-		ResultString[k] = 0;
-
-		XMLdoc->AddEntryContent(XMLdoc->AddEntry(RootXMLEntry, "PilotsProfiles"), ResultString);
-
-		if (ResultString != 0) delete [] ResultString;
-		if (ProfileData != 0) delete [] ProfileData;
-		if (ProfileDataXORCode != 0) delete [] ProfileDataXORCode;
+		k1 = i;
+		k2 = ProfileDataSize + i*2;
+		ProfileDataXORCode[k1] = 97 + (unsigned char)vw_iRandNum(25);
+		ProfileDataXORCode[k2] = 0;
+		ProfileDataXORCode[k2+1] = ProfileData[i]^ProfileDataXORCode[k1];
+		// в первую - десятки, во вторую - еденицы
+		ProfileDataXORCode[k2] = 97 + (unsigned char)(ProfileDataXORCode[k2+1]/10.0f);
+		ProfileDataXORCode[k2+1] = 97 + (ProfileDataXORCode[k2+1] - (ProfileDataXORCode[k2]-97)*10);
+		//fprintf(stderr, "--%i %i %i %i\n", ProfileDataXORCode[k], ProfileDataXORCode[k+1],ProfileDataXORCode[k+2],ProfileDataXORCode[k+3]);
 	}
+
+
+	// чтобы разбить на блоки вставляем пробел
+	// тогда красиво отображаться будет (если врапинг выставлен в редакторе)
+	int k=0;
+	int l=0;
+	for (int i=0; i < ProfileDataSize*3; i++)
+	{
+		ResultString[k] = ProfileDataXORCode[i];
+		k++;
+		l++;
+		if (l >= 125)
+		{
+			ResultString[k] = 0x20;
+			k++;
+			l=0;
+		}
+	}
+	ResultString[k] = 0;
+
+	XMLdoc->AddEntryContent(XMLdoc->AddEntry(RootXMLEntry, "PilotsProfiles"), ResultString);
+
+	if (ResultString != 0) delete [] ResultString;
+	if (ProfileData != 0) delete [] ProfileData;
+	if (ProfileDataXORCode != 0) delete [] ProfileDataXORCode;
 
 
 

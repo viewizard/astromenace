@@ -56,7 +56,6 @@ float GetShipArmor(int SpaceShipNum);
 CWeapon *DialogWeapon = 0;
 char *GetWeaponName(int Num);
 char *GetWeaponGroupTitle(int Num);
-float GetProjectileRange(int Num);
 int GetWeaponHullDamage(int Num);
 int GetWeaponSystemsDamage(int Num);
 
@@ -1693,7 +1692,7 @@ void DrawDialogBox()
 
 				switch (Setup.MenuLanguage)
 				{
-					case 1: //en
+					default: //en
 						vw_OpenBrouser("http://www.viewizard.com/astromenace/donors.php");
 						break;
 					case 2: //de
