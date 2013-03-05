@@ -451,8 +451,8 @@ void ProfileMenu()
 				vw_DrawFont(X1+50, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.Profile[i].Name);
 
 
-			int Size = vw_FontSize("%i", Setup.Profile[i].Money);
-			int SizeI = Setup.iAspectRatioWidth/2+2 + (130 - Size)/2;
+			Size = vw_FontSize("%i", Setup.Profile[i].Money);
+			SizeI = Setup.iAspectRatioWidth/2+2 + (130 - Size)/2;
 			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", Setup.Profile[i].Money);
 			Size = vw_FontSize("%i", Setup.Profile[i].Experience);
 			SizeI = Setup.iAspectRatioWidth/2+132 + (130 - Size)/2;

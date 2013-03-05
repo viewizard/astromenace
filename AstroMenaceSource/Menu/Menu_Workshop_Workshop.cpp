@@ -83,6 +83,8 @@ int GetCurrentSustemStockNumBase()
 		case 18:
 		case 19:
 		case 20:	return 17;
+
+		default: fprintf(stderr, "Error in GetCurrentSustemStockNumBase function call, wrong CurrentSystemStockNum.\n"); break;
 	}
 
 	return 0;
@@ -118,6 +120,8 @@ const char *GetSystemName(int Num)
 		case 18:	return "7_system18";
 		case 19:	return "7_system19";
 		case 20:	return "7_system20";
+
+		default: fprintf(stderr, "Error in GetSystemName function call, wrong Num.\n"); break;
 	}
 
 	return 0;
@@ -160,6 +164,8 @@ eTexture * GetSystemIcon(int Num)
 		case 18:	return vw_FindTextureByName("DATA/MENU/system_protect2.tga");
 		case 19:	return vw_FindTextureByName("DATA/MENU/system_protect3.tga");
 		case 20:	return vw_FindTextureByName("DATA/MENU/system_protect4.tga");
+
+		default: fprintf(stderr, "Error in GetSystemIcon function call, wrong Num.\n"); break;
 	}
 
 	return 0;
@@ -195,6 +201,8 @@ int GetSystemCost(int Num)
 		case 18:	return 6000;
 		case 19:	return 10000;
 		case 20:	return 15000;
+
+		default: fprintf(stderr, "Error in GetSystemCost function call, wrong Num.\n"); break;
 	}
 
 	return 0;
@@ -756,8 +764,8 @@ void Workshop_Workshop()
 	{
 		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(-4), true, Current*MenuContentTransp);
 
-		int Size = vw_FontSize(vw_GetText("3_empty"));
-		float WScale = 0;
+		Size = vw_FontSize(vw_GetText("3_empty"));
+		WScale = 0;
 		if (Size > 128)
 		{
 			Size = 128;
@@ -778,8 +786,8 @@ void Workshop_Workshop()
 	{
 		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].EngineSystem), true, Current*MenuContentTransp);
 
-		int Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].EngineSystem)));
-		float WScale = 0;
+		Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].EngineSystem)));
+		WScale = 0;
 		if (Size > 128)
 		{
 			Size = 128;
@@ -841,8 +849,8 @@ void Workshop_Workshop()
 	{
 		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(-2), true, Current*MenuContentTransp);
 
-		int Size = vw_FontSize(vw_GetText("3_empty"));
-		float WScale = 0;
+		Size = vw_FontSize(vw_GetText("3_empty"));
+		WScale = 0;
 		if (Size > 128)
 		{
 			Size = 128;
@@ -863,8 +871,8 @@ void Workshop_Workshop()
 	{
 		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].PowerSystem+4), true, Current*MenuContentTransp);
 
-		int Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].PowerSystem+4)));
-		float WScale = 0;
+		Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].PowerSystem+4)));
+		WScale = 0;
 		if (Size > 128)
 		{
 			Size = 128;
@@ -919,8 +927,8 @@ void Workshop_Workshop()
 	{
 		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(-1), true, Current*MenuContentTransp);
 
-		int Size = vw_FontSize(vw_GetText("3_empty"));
-		float WScale = 0;
+		Size = vw_FontSize(vw_GetText("3_empty"));
+		WScale = 0;
 		if (Size > 128)
 		{
 			Size = 128;
@@ -941,8 +949,8 @@ void Workshop_Workshop()
 	{
 		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].TargetingSystem+8), true, Current*MenuContentTransp);
 
-		int Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].TargetingSystem+8)));
-		float WScale = 0;
+		Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].TargetingSystem+8)));
+		WScale = 0;
 		if (Size > 128)
 		{
 			Size = 128;
@@ -997,8 +1005,8 @@ void Workshop_Workshop()
 	{
 		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(-3), true, Current*MenuContentTransp);
 
-		int Size = vw_FontSize(vw_GetText("3_empty"));
-		float WScale = 0;
+		Size = vw_FontSize(vw_GetText("3_empty"));
+		WScale = 0;
 		if (Size > 128)
 		{
 			Size = 128;
@@ -1019,8 +1027,8 @@ void Workshop_Workshop()
 	{
 		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].TargetingMechanicSystem+12), true, Current*MenuContentTransp);
 
-		int Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].TargetingMechanicSystem+12)));
-		float WScale = 0;
+		Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].TargetingMechanicSystem+12)));
+		WScale = 0;
 		if (Size > 128)
 		{
 			Size = 128;
@@ -1083,8 +1091,8 @@ void Workshop_Workshop()
 	{
 		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(0), true, Current*MenuContentTransp);
 
-		int Size = vw_FontSize(vw_GetText("3_empty"));
-		float WScale = 0;
+		Size = vw_FontSize(vw_GetText("3_empty"));
+		WScale = 0;
 		if (Size > 128)
 		{
 			Size = 128;
@@ -1106,8 +1114,8 @@ void Workshop_Workshop()
 	{
 		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16), true, Current*MenuContentTransp);
 
-		int Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16)));
-		float WScale = 0;
+		Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16)));
+		WScale = 0;
 		if (Size > 128)
 		{
 			Size = 128;

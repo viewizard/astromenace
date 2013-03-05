@@ -174,7 +174,7 @@ void MissionsListInit()
 					{
 						switch (xmlDoc->iGetEntryAttribute(TMission, "color"))
 						{
-							case 0: // белый
+							default: // белый
 								MissionTitleColorR[i]=1.0f;MissionTitleColorG[i]=1.0f;MissionTitleColorB[i]=1.0f;
 								break;
 							case 1: // желтый
@@ -213,7 +213,7 @@ void MissionsListInit()
 					{
 						switch (xmlDoc->iGetEntryAttribute(TMission, "color"))
 						{
-							case 0: // белый
+							default: // белый
 								MissionDescrColorR[i]=1.0f;MissionDescrColorG[i]=1.0f;MissionDescrColorB[i]=1.0f;
 								break;
 							case 1: // желтый

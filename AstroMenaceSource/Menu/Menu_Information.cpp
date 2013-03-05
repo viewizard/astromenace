@@ -53,7 +53,6 @@ char *GetWeaponGroupTitle(int Num);
 char *GetWeaponName(int Num);
 char *GetShipGroupTitle(int Num);
 char *GetWorkshopShipName(int Num);
-float GetProjectileRange(int Num);
 
 
 

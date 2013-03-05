@@ -387,6 +387,10 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 			glDrawElements(GL_QUADS,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
 			tmpPrimCountGL += NumVertices/4;
 			break;
+
+		default:
+			fprintf(stderr, "Error in vw_SendVertices function call, wrong PrimitiveType.\n");
+			return;
 	}
 
 

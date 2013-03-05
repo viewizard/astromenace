@@ -115,6 +115,8 @@ float GetShipMaxEnergy(int Num)
 		case 3:	return 400.0f;
 		// антиматерия
 		case 4:	return 800.0f;
+
+		default: fprintf(stderr, "Error in GetShipMaxEnergy function call, wrong Num.\n"); break;
 	}
 
 	return 0.0f;
@@ -134,6 +136,8 @@ float GetShipRechargeEnergy(int Num)
 		case 3:	return 130.0f;
 		// антиматерия
 		case 4:	return 250.0f;
+
+		default: fprintf(stderr, "Error in GetShipRechargeEnergy function call, wrong Num.\n"); break;
 	}
 
 	return 0.0f;
@@ -153,6 +157,8 @@ float GetShipProtectionSystemEnergyUse(int Num)
 		case 3:	return 50.0f;
 		// отражатель
 		case 4:	return 100.0f;
+
+		default: fprintf(stderr, "Error in GetShipProtectionSystemEnergyUse function call, wrong Num.\n"); break;
 	}
 
 	return 0.0f;
@@ -172,6 +178,8 @@ float GetShipEngineSystemEnergyUse(int Num)
 		case 3:	return 30.0f;
 		// на антиматерии
 		case 4:	return 60.0f;
+
+		default: fprintf(stderr, "Error in GetShipEngineSystemEnergyUse function call, wrong Num.\n"); break;
 	}
 
 	return 0.0f;

@@ -503,7 +503,6 @@ bool CheckHitBBMeshCollisionDetection(CObject3D *Object1, CObject3D *Object2, in
 					j2 = (Object2->DrawObjectList[j].RangeStart+k)*Object2->DrawObjectList[j].VertexStride;
 
 				// находим точки триугольника
-				VECTOR3D Point1;
 				Point1.x = Object2->DrawObjectList[j].VertexBuffer[j2];
 				Point1.y = Object2->DrawObjectList[j].VertexBuffer[j2+1];
 				Point1.z = Object2->DrawObjectList[j].VertexBuffer[j2+2];
@@ -514,7 +513,6 @@ bool CheckHitBBMeshCollisionDetection(CObject3D *Object1, CObject3D *Object2, in
 				else
 					j2 = (Object2->DrawObjectList[j].RangeStart+k+1)*Object2->DrawObjectList[j].VertexStride;
 
-				VECTOR3D Point2;
 				Point2.x = Object2->DrawObjectList[j].VertexBuffer[j2];
 				Point2.y = Object2->DrawObjectList[j].VertexBuffer[j2+1];
 				Point2.z = Object2->DrawObjectList[j].VertexBuffer[j2+2];
@@ -525,7 +523,6 @@ bool CheckHitBBMeshCollisionDetection(CObject3D *Object1, CObject3D *Object2, in
 				else
 					j2 = (Object2->DrawObjectList[j].RangeStart+k+2)*Object2->DrawObjectList[j].VertexStride;
 
-				VECTOR3D Point3;
 				Point3.x = Object2->DrawObjectList[j].VertexBuffer[j2];
 				Point3.y = Object2->DrawObjectList[j].VertexBuffer[j2+1];
 				Point3.z = Object2->DrawObjectList[j].VertexBuffer[j2+2];

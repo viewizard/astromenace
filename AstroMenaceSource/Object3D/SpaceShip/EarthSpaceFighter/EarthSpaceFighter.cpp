@@ -230,6 +230,10 @@ void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max)
 				case 0:	*Min = -25.0f; *Max = 25.0f; break;
 			}
 			break;
+
+		default:
+			fprintf(stderr, "Error in GetShipWeaponSlotAngle function call, wrong ShipNum.\n");
+			break;
 	}
 }
 

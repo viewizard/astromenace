@@ -164,10 +164,11 @@ void SetPirateShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.05f);
 			ParticleSystem->LightNeedDeviation = true;
 			break;
+
+		default:
+			fprintf(stderr, "Error in SetPirateShipEngine function call, wrong EngineType.\n");
+			break;
 	}
-
-
-
 
 }
 

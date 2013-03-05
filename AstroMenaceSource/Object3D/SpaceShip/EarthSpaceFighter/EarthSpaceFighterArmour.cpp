@@ -50,6 +50,7 @@ float GetHullResistance(int ArmourType)
 		case 5:	return 1.0f;
 		case 6:	return 1.0f;
 		case 7:	return 4.0f;
+		default: fprintf(stderr, "Error in GetHullResistance function call, wrong ArmourType.\n"); break;
 	}
 
 	return 0.0f;
@@ -69,6 +70,7 @@ float GetSystemsResistance(int ArmourType)
 		case 5:	return 1.0f;
 		case 6:	return 1.0f;
 		case 7:	return 5.0f;
+		default: fprintf(stderr, "Error in GetSystemsResistance function call, wrong ArmourType.\n"); break;
 	}
 
 	return 0.0f;
@@ -112,6 +114,10 @@ eTexture *GetArmourTexture(int ArmourType)
 		case 7:
 			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-text06.VW2D");
 			break;
+
+		default:
+			fprintf(stderr, "Error in GetArmourTexture function call, wrong ArmourType.\n");
+			break;
 	}
 
 	return 0;
@@ -151,6 +157,10 @@ eTexture *GetArmourIllumTexture(int ArmourType)
 		// универсальная
 		case 7:
 			return vw_FindTextureByName("DATA/MODELS/EARTHFIGHTER/sf-illum03.VW2D");
+			break;
+
+		default:
+			fprintf(stderr, "Error in GetArmourIllumTexture function call, wrong ArmourType.\n");
 			break;
 	}
 

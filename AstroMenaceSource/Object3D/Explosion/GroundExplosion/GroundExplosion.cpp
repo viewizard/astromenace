@@ -233,44 +233,16 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// звуковые спец эффекты
+	// спец эффекты
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	float fVol = 1.0f;
 
-	if (NeedExplosionSFX)
-	switch (ExplType)
+	if (ExplType == 1 || ExplType == 2)
 	{
-
-		   // взрыв
-        case 1:
-        case 2:
-			// постройки, транспорт
-            Audio_PlaySound3D(8, fVol, ExplLocation, false, 2);
-			break;
-
+		// постройки, транспорт
+		GameCameraSetExplosion(ExplLocation, 0.5f); // делаем сотрясание камеры, если нужно
+		if (NeedExplosionSFX) Audio_PlaySound3D(8, 1.0f, ExplLocation, false, 2);
 	}
-
-
-
-
-    // делаем сотрясание камеры, если нужно
-	switch (ExplType)
-	{
-	    // взрыв
-        case 1:
-        case 2:
-            // постройки, транспорт
-            GameCameraSetExplosion(ExplLocation, 0.5f);
-			break;
-	}
-
 
 
 }
-
-
-
-
-
-
 

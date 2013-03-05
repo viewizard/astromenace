@@ -920,17 +920,17 @@ CProjectile::~CProjectile(void)
 							case 16:
 							case 205:
 								effective_dist2 = 200.0f;
-							break;
+								break;
 
 							case 18:
 							case 209:
 								effective_dist2 = 1000.0f;
-							break;
+								break;
 
 							case 19:
 							case 210:
 								effective_dist2 = 2000.0f;
-							break;
+								break;
 						}
 						switch(Num)
 						{
@@ -942,26 +942,25 @@ CProjectile::~CProjectile(void)
 							case 206:
 							case 209:
 							case 210:
-
-							eParticle *tmp = GraphicFX[i]->Start;
-							while (tmp!=0)
-							{
-								VECTOR3D Dist2 = tmp->Location - Location;
-								float fDist2 = Dist2.x*Dist2.x + Dist2.y*Dist2.y + Dist2.z*Dist2.z;
-								if (fDist2 < 1.0f) fDist2 = 3.0f;
-
-								if (fDist2 < effective_dist2)
+								eParticle *tmp = GraphicFX[i]->Start;
+								while (tmp!=0)
 								{
-									tmp->Velocity = VECTOR3D(Dist2.x+10.0f*vw_Randf0, Dist2.y+10.0f*vw_Randf0, Dist2.z+10.0f*vw_Randf0);
-									tmp->Velocity.Normalize();
-									tmp->Velocity = tmp->Velocity^(effective_dist2/fDist2);
-									tmp->NeedStop = true;
+									VECTOR3D Dist2 = tmp->Location - Location;
+									float fDist2 = Dist2.x*Dist2.x + Dist2.y*Dist2.y + Dist2.z*Dist2.z;
+									if (fDist2 < 1.0f) fDist2 = 3.0f;
+
+									if (fDist2 < effective_dist2)
+									{
+										tmp->Velocity = VECTOR3D(Dist2.x+10.0f*vw_Randf0, Dist2.y+10.0f*vw_Randf0, Dist2.z+10.0f*vw_Randf0);
+										tmp->Velocity.Normalize();
+										tmp->Velocity = tmp->Velocity^(effective_dist2/fDist2);
+										tmp->NeedStop = true;
+									}
+
+									tmp = tmp->Next;
 								}
+								break;
 
-								tmp = tmp->Next;
-							}
-
-							break;
 						}
 					}
 				}

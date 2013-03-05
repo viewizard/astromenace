@@ -933,6 +933,10 @@ void vw_PolygonMode(int mode)
 		case RI_FILL:
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			break;
+
+		default:
+			fprintf(stderr, "Error in vw_PolygonMode function call, wrong mode.\n");
+			break;
 	}
 }
 
@@ -944,18 +948,22 @@ void vw_PolygonMode(int mode)
 //------------------------------------------------------------------------------------
 void vw_CullFace(int face)
 {
-	glEnable(GL_CULL_FACE);
-
 	switch (face)
 	{
 		case RI_BACK:
+			glEnable(GL_CULL_FACE);
 			glCullFace(GL_BACK);
 			break;
 		case RI_FRONT:
+			glEnable(GL_CULL_FACE);
 			glCullFace(GL_FRONT);
 			break;
 		case RI_NONE:
 			glDisable(GL_CULL_FACE);
+			break;
+
+		default:
+			fprintf(stderr, "Error in vw_CullFace function call, wrong face.\n");
 			break;
 	}
 }
@@ -1049,6 +1057,7 @@ void vw_DepthTest(bool mode, int funct)
 			case 6: fun = GL_NOTEQUAL; break;
 			case 7: fun = GL_GEQUAL; break;
 			case 8: fun = GL_ALWAYS; break;
+			default: fprintf(stderr, "Error in vw_DepthTest function call, wrong funct.\n"); return;
 		}
 		glDepthFunc(fun);
 	}

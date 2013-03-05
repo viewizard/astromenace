@@ -206,14 +206,14 @@ int vw_GetMousePos(int *X, int *Y)
 //------------------------------------------------------------------------------------
 bool vw_OnRect(RECT *MDetect)
 {
-	int MouseX, MouseY;
-	vw_GetMousePos(&MouseX, &MouseY);
+	int MouseXOnRect, MouseYOnRect;
+	vw_GetMousePos(&MouseXOnRect, &MouseYOnRect);
 
 
-	if  (((MDetect->right  >= MouseX) &&
-		(MDetect->left <= MouseX) &&
-		(MDetect->bottom >= MouseY) &&
-		(MDetect->top <= MouseY)))
+	if  (((MDetect->right  >= MouseXOnRect) &&
+		(MDetect->left <= MouseXOnRect) &&
+		(MDetect->bottom >= MouseYOnRect) &&
+		(MDetect->top <= MouseYOnRect)))
 	{
 		return true;
 	}

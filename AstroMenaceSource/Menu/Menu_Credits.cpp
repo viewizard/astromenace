@@ -630,7 +630,7 @@ void CreditsMenu()
 
 		switch (Setup.MenuLanguage)
 		{
-			case 1: //en
+			default: //en
 				vw_OpenBrouser("http://www.viewizard.com/astromenace/donors.php");
 				break;
 			case 2: //de

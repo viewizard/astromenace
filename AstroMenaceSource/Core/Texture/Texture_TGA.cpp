@@ -62,11 +62,11 @@ int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
 	pFile->fseek(9, SEEK_CUR);
 
 	// Read the width, height and bits per pixel (16, 24 or 32)
-	WORD tmp;
-	pFile->fread(&tmp,  sizeof(WORD), 1);
-	*DWidth = tmp;
-	pFile->fread(&tmp, sizeof(WORD), 1);
-	*DHeight = tmp;
+	WORD TmpReadData;
+	pFile->fread(&TmpReadData,  sizeof(WORD), 1);
+	*DWidth = TmpReadData;
+	pFile->fread(&TmpReadData, sizeof(WORD), 1);
+	*DHeight = TmpReadData;
 	pFile->fread(&bits,   sizeof(BYTE), 1);
 
 	// Now we move the file pointer to the pixel data
@@ -111,7 +111,7 @@ int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
 			if (*DIB == 0) return 0;
 
 			// Load in all the pixel data pixel by pixel
-			for(int i = 0; i < (*DWidth)*(*DHeight); i++)
+			for(i = 0; i < (*DWidth)*(*DHeight); i++)
 			{
 				// Read in the current pixel
 				pFile->fread(&pixels, sizeof(unsigned short), 1);
@@ -226,17 +226,16 @@ int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
 	*DChanels = channels;
 
 	// меняем местами цвета...
+
+	BYTE TmpColorSwap;
+	int k=0;
+	for (i=0; i<(*DHeight); i++)
+	for (int j=0; j<(*DWidth); j++)
 	{
-		BYTE tmp;
-		int k=0;
-		for (int i=0; i<(*DHeight); i++)
-		for (int j=0; j<(*DWidth); j++)
-		{
-			memcpy(&tmp, *DIB+k, 1);
-			memcpy(*DIB+k, *DIB+k+2, 1);
-			memcpy(*DIB+k+2, &tmp, 1);
-			k+=*DChanels;
-		}
+		memcpy(&TmpColorSwap, *DIB+k, 1);
+		memcpy(*DIB+k, *DIB+k+2, 1);
+		memcpy(*DIB+k+2, &TmpColorSwap, 1);
+		k+=*DChanels;
 	}
 
 	return 1;

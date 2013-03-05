@@ -33,7 +33,7 @@ const char * MouseCodeName(char Num)
 {
 	switch (Setup.MenuLanguage)
 	{
-		case 1: //en
+		default: //en
 			switch (Num)
 			{
 				case 1: return "Mouse1";

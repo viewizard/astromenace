@@ -1552,9 +1552,6 @@ void DrawGame()
 	{
 		if (GameMissionCompleteStatus)
 		{
-
-			RECT SrcRect, DstRect;
-
 			// выводим подложку меню
 			SetRect(&SrcRect,2,2,564-2,564-2);
 			SetRect(&DstRect,Setup.iAspectRatioWidth/2-256+4-30,128+2-30,Setup.iAspectRatioWidth/2-256+564-30,128+564-2-30);
@@ -1824,7 +1821,6 @@ void DrawGame()
 			NeedOnGame = false;
 		}
 
-		RECT SrcRect, DstRect;
 		SetRect(&SrcRect,0,0,2,2);
 		SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, GameBlackTransp);
@@ -1844,7 +1840,6 @@ void DrawGame()
 			ComBuffer = NewComBuffer;
 		}
 
-		RECT SrcRect, DstRect;
 		SetRect(&SrcRect,0,0,2,2);
 		SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/blackpoint.tga"), true, GameBlackTransp);

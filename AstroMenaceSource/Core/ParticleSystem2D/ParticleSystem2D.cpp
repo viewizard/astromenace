@@ -182,24 +182,23 @@ bool eParticleSystem2D::Update(float Time)
 
 
 	// для всех частиц
-	eParticle2D *tmp = Start;
+	eParticle2D *Particle2DTmp = Start;
 
-	while (tmp!=0)
+	while (Particle2DTmp!=0)
 	{
-		eParticle2D *tmp2 = tmp->Next;
+		eParticle2D *Particle2DTmp2 = Particle2DTmp->Next;
 		// функция вернет false, если частица уже мертва
-		if (tmp->Update(TimeDelta, Location, IsAttractive, AttractiveValue))
+		if (Particle2DTmp->Update(TimeDelta, Location, IsAttractive, AttractiveValue))
 		{
 			ParticlesAlive++;
-
 		}
 		else
 		{
-			Detach(tmp);
-			delete tmp; tmp = 0;
+			Detach(Particle2DTmp);
+			delete Particle2DTmp; Particle2DTmp = 0;
 		}
 
-		tmp = tmp2;
+		Particle2DTmp = Particle2DTmp2;
 	}
 
 

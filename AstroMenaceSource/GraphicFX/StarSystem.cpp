@@ -80,6 +80,9 @@ void StarSystemInit(int Num, VECTOR3D SetBaseRotation)
 			SkyBoxSetTexture(vw_FindTextureByName("DATA/SKYBOX/2/skybox_top3.tga"), 3);
 			StarSystem_Inited = true;
 			break;
+		default:
+			fprintf(stderr, "Error in StarSystemInit function call, wrong Num.\n");
+			break;
 	}
 
 

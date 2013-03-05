@@ -91,13 +91,10 @@ void SetSpaceObjectGFX(eParticleSystem *ParticleSystem, int GFXType)
 			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.3f);
 			break;
 
-
-
-
+		default:
+			fprintf(stderr, "Error in SetSpaceObjectGFX function call, wrong GFXType.\n");
+			break;
 	}
-
-
-
 
 }
 

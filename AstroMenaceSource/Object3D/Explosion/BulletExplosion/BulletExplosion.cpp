@@ -29,7 +29,6 @@
 #include "BulletExplosion.h"
 #include "../../../Game.h"
 void DestroyRadiusCollisionAllObject3D(CObject3D *DontTouchObject, VECTOR3D Point, float Radius, float Damage, int ObjectStatus);
-void GameCameraSetExplosion(VECTOR3D Location, float Power);
 
 
 
@@ -310,11 +309,11 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 					ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*6.0f));
 					ProjectileTMP->Orientation.Normalize();
 
-					for (int i=0; i<ProjectileTMP->GraphicFXQuantity; i++)
+					for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++)
 					{
-						ProjectileTMP->GraphicFX[i]->Direction = ProjectileTMP->Orientation^-1;
-						ProjectileTMP->GraphicFX[i]->Speed = 1.5f;
-						ProjectileTMP->GraphicFX[i]->SetStartLocation(Location);
+						ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
+						ProjectileTMP->GraphicFX[j]->Speed = 1.5f;
+						ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
 					}
 					ProjectileTMP->ObjectStatus = ObjectStatus;
 					// учитываем пенальти
@@ -525,11 +524,11 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 					ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 					ProjectileTMP->Orientation.Normalize();
 
-					for (int i=0; i<ProjectileTMP->GraphicFXQuantity; i++)
+					for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++)
 					{
-						ProjectileTMP->GraphicFX[i]->Direction = ProjectileTMP->Orientation^-1;
-						ProjectileTMP->GraphicFX[i]->Speed = ProjectileTMP->GraphicFX[i]->Speed/2.0f;
-						ProjectileTMP->GraphicFX[i]->SetStartLocation(Location);
+						ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
+						ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
+						ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
 					}
 					ProjectileTMP->ObjectStatus = ObjectStatus;
 					ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/7.0f;
@@ -581,11 +580,11 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 					ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 					ProjectileTMP->Orientation.Normalize();
 
-					for (int i=0; i<ProjectileTMP->GraphicFXQuantity; i++)
+					for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++)
 					{
-						ProjectileTMP->GraphicFX[i]->Direction = ProjectileTMP->Orientation^-1;
-						ProjectileTMP->GraphicFX[i]->Speed = ProjectileTMP->GraphicFX[i]->Speed/2.0f;
-						ProjectileTMP->GraphicFX[i]->SetStartLocation(Location);
+						ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
+						ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
+						ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
 					}
 					ProjectileTMP->ObjectStatus = ObjectStatus;
 					ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/7.0f;
@@ -638,11 +637,11 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 					ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 					ProjectileTMP->Orientation.Normalize();
 
-					for (int i=0; i<ProjectileTMP->GraphicFXQuantity; i++)
+					for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++)
 					{
-						ProjectileTMP->GraphicFX[i]->Direction = ProjectileTMP->Orientation^-1;
-						ProjectileTMP->GraphicFX[i]->Speed = ProjectileTMP->GraphicFX[i]->Speed/2.0f;
-						ProjectileTMP->GraphicFX[i]->SetStartLocation(Location);
+						ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
+						ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
+						ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
 					}
 					ProjectileTMP->ObjectStatus = ObjectStatus;
 					ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/7.0f;
@@ -699,11 +698,11 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 					ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*4.0f));
 					ProjectileTMP->Orientation.Normalize();
 
-					for (int i=0; i<ProjectileTMP->GraphicFXQuantity; i++)
+					for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++)
 					{
-						ProjectileTMP->GraphicFX[i]->Direction = ProjectileTMP->Orientation^-1;
-						ProjectileTMP->GraphicFX[i]->Speed = ProjectileTMP->GraphicFX[i]->Speed/2.0f;
-						ProjectileTMP->GraphicFX[i]->SetStartLocation(Location);
+						ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
+						ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
+						ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
 					}
 					ProjectileTMP->ObjectStatus = ObjectStatus;
 					ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
@@ -721,11 +720,11 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 					ProjectileTMP->SetLocation(Location);
 
 					ProjectileTMP->SetRotation(VECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
-					for (int i=0; i<ProjectileTMP->GraphicFXQuantity; i++)
+					for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++)
 					{
-						ProjectileTMP->GraphicFX[i]->Direction = ProjectileTMP->Orientation^-1;
-						ProjectileTMP->GraphicFX[i]->Speed = ProjectileTMP->GraphicFX[i]->Speed/2.0f;
-						ProjectileTMP->GraphicFX[i]->SetStartLocation(Location);
+						ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
+						ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
+						ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
 					}
 					ProjectileTMP->ObjectStatus = ObjectStatus;
 					ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
@@ -743,11 +742,11 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 					ProjectileTMP->SetLocation(Location);
 
 					ProjectileTMP->SetRotation(VECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
-					for (int i=0; i<ProjectileTMP->GraphicFXQuantity; i++)
+					for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++)
 					{
-						ProjectileTMP->GraphicFX[i]->Direction = ProjectileTMP->Orientation^-1;
-						ProjectileTMP->GraphicFX[i]->Speed = ProjectileTMP->GraphicFX[i]->Speed/2.0f;
-						ProjectileTMP->GraphicFX[i]->SetStartLocation(Location);
+						ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
+						ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
+						ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
 					}
 					ProjectileTMP->ObjectStatus = ObjectStatus;
 					ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
@@ -764,11 +763,11 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 					ProjectileTMP->SetLocation(Location);
 
 					ProjectileTMP->SetRotation(VECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
-					for (int i=0; i<ProjectileTMP->GraphicFXQuantity; i++)
+					for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++)
 					{
-						ProjectileTMP->GraphicFX[i]->Direction = ProjectileTMP->Orientation^-1;
-						ProjectileTMP->GraphicFX[i]->Speed = ProjectileTMP->GraphicFX[i]->Speed/2.0f;
-						ProjectileTMP->GraphicFX[i]->SetStartLocation(Location);
+						ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
+						ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
+						ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
 					}
 					ProjectileTMP->ObjectStatus = ObjectStatus;
 					ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
@@ -787,11 +786,11 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 					ProjectileTMP->SetLocation(Location);
 
 					ProjectileTMP->SetRotation(VECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
-					for (int i=0; i<ProjectileTMP->GraphicFXQuantity; i++)
+					for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++)
 					{
-						ProjectileTMP->GraphicFX[i]->Direction = ProjectileTMP->Orientation^-1;
-						ProjectileTMP->GraphicFX[i]->Speed = ProjectileTMP->GraphicFX[i]->Speed/2.0f;
-						ProjectileTMP->GraphicFX[i]->SetStartLocation(Location);
+						ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
+						ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
+						ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
 					}
 					ProjectileTMP->ObjectStatus = ObjectStatus;
 					ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;

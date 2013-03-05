@@ -85,6 +85,7 @@ void vw_GetMatrix(int pname, float *params)
 		case RI_PROJECTION_MATRIX: glGetFloatv(GL_PROJECTION_MATRIX, params); break;
 		case RI_MODELVIEW_MATRIX: glGetFloatv(GL_MODELVIEW_MATRIX, params); break;
 		case RI_TEXTURE_MATRIX: glGetFloatv(GL_TEXTURE, params); break;
+		default: fprintf(stderr, "Error in vw_GetMatrix function call, wrong pname.\n"); break;
 	}
 }
 void vw_SetMatrix(float *params)
@@ -106,6 +107,7 @@ void vw_MatrixMode(int pname)
 		case RI_PROJECTION_MATRIX: glMatrixMode(GL_PROJECTION); break;
 		case RI_MODELVIEW_MATRIX: glMatrixMode(GL_MODELVIEW); break;
 		case RI_TEXTURE_MATRIX: glMatrixMode(GL_TEXTURE); break;
+		default: fprintf(stderr, "Error in vw_MatrixMode function call, wrong pname.\n"); break;
 	}
 }
 

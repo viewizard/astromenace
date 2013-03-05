@@ -339,6 +339,10 @@ void SetExplosionGFX(eParticleSystem *ParticleSystem, int GFXNum)
 			ParticleSystem->ParticlesPerSec = 50;
 			ParticleSystem->NeedStop = true;
 			break;
+
+		default:
+			fprintf(stderr, "Error in SetExplosionGFX function call, wrong GFXNum.\n");
+			break;
 	}
 }
 

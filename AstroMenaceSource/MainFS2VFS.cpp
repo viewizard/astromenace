@@ -499,7 +499,7 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 
 	// заполняем массивы
 	TmpVFSEntry = vw_GetStarVFSArray();
-	int i = 0;
+	int FileCount = 0;
 	while (TmpVFSEntry != 0)
 	{
 		eFILE *tmpFile = vw_fopen(TmpVFSEntry->Name);
@@ -510,18 +510,18 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 		}
 
 		tmpFile->fseek( 0, SEEK_END );
-		filedatasize[i] = tmpFile->ftell();
+		filedatasize[FileCount] = tmpFile->ftell();
 		tmpFile->fseek( 0, SEEK_SET );
 
-		filedata[i] = new BYTE[filedatasize[i]];
-		tmpFile->fread(filedata[i], filedatasize[i], 1);
+		filedata[FileCount] = new BYTE[filedatasize[FileCount]];
+		tmpFile->fread(filedata[FileCount], filedatasize[FileCount], 1);
 
-		filename[i] = new char[strlen(TmpVFSEntry->Name)+1];
-		strcpy(filename[i], TmpVFSEntry->Name);
+		filename[FileCount] = new char[strlen(TmpVFSEntry->Name)+1];
+		strcpy(filename[FileCount], TmpVFSEntry->Name);
 
 		vw_fclose(tmpFile);
 		TmpVFSEntry = TmpVFSEntry->Next;
-		i++;
+		FileCount++;
 	}
 
 

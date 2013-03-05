@@ -226,11 +226,11 @@ bool ScriptEngine::Update(float Time)
 	if (AsterOn)
 	{
 		if (AsterLastTime == -1.0) AsterLastTime = Time;
-		float TimeDelta = Time - AsterLastTime;
+		float AsterTimeDelta = Time - AsterLastTime;
 		AsterLastTime = Time;
 
 		// складываем все
-		float NeedGener = AsterQuant*TimeDelta+AsterRealNeed;
+		float NeedGener = AsterQuant*AsterTimeDelta+AsterRealNeed;
 		// получаем целое кол-во на генерацию
 		unsigned int NeedGenerInt = (unsigned int)NeedGener;
 		// находим остаток... который нужно будет потом учесть

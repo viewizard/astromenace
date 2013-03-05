@@ -221,6 +221,10 @@ void vw_SetTextureBlendMode(int pname, int param)
 		case RI_TBLEND_COLORARG3:
 			cmd = GL_SOURCE2_RGB;
 			break;
+
+		default:
+			fprintf(stderr, "Error in vw_SetTextureBlendMode function call, wrong pname.\n");
+			return;
 	}
 
 	switch (param)
@@ -276,6 +280,10 @@ void vw_SetTextureBlendMode(int pname, int param)
 		case RI_TBLEND_SPECULAR: // ---
 			arg = 0;
 			break;
+
+		default:
+			fprintf(stderr, "Error in vw_SetTextureBlendMode function call, wrong param.\n");
+			return;
 	}
 
 
@@ -329,7 +337,9 @@ void vw_SetTextureFiltering(int nFiltering)
 			if ((nFiltering & 0x1030F0) == RI_MINFILTER_LINEAR)
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			break;
-
+		default:
+			fprintf(stderr, "Error in vw_SetTextureFiltering function call, wrong nFiltering.\n");
+			return;
 	}
 
 	// ставим MAG фильтр

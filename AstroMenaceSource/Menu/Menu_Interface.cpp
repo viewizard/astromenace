@@ -45,7 +45,7 @@ void CreateMenuLanguageEntryLinks()
 
 	switch (Setup.MenuLanguage)
 	{
-		case 1: //en
+		default: //en
 			vw_CreateEntryLinkVFS("DATA/DATA_EN/GAME/mission.tga", "DATA/GAME/mission.tga");
 			vw_CreateEntryLinkVFS("DATA/DATA_EN/GAME/missionfailed.tga", "DATA/GAME/missionfailed.tga");
 			vw_CreateEntryLinkVFS("DATA/DATA_EN/GAME/pause.tga", "DATA/GAME/pause.tga");
@@ -136,7 +136,7 @@ void CreateVoiceLanguageEntryLinks()
 
 	switch (Setup.VoiceLanguage)
 	{
-		case 1: //en
+		default: //en
 			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/Attention.wav", "DATA/VOICE/Attention.wav");
 			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/CeaseFire.wav", "DATA/VOICE/CeaseFire.wav");
 			vw_CreateEntryLinkVFS("DATA/DATA_EN/VOICE/EngineMalfunction.wav", "DATA/VOICE/EngineMalfunction.wav");
@@ -255,7 +255,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	int Size, SizeI;
 	switch (Setup.MenuLanguage)
 	{
-		case 1:
+		default:
 			Size = vw_FontSize("English");
 			SizeI = (170-Size)/2;
 			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, "English");
@@ -295,7 +295,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 
 	switch (Setup.VoiceLanguage)
 	{
-		case 1:
+		default:
 			Size = vw_FontSize("English");
 			SizeI = (170-Size)/2;
 			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, "English");
