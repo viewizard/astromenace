@@ -1116,7 +1116,9 @@ void LoadGameData(int LoadType)
 	int RealLoadedTextures = 0;
 	bool NeedLoadShaders = false;
 	int AllDrawLoading = 0;
+#ifdef multithread
 	SDL_Thread *SoundThread = 0;
+#endif //multithread
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверяем, если уже что-то было загружено, если данные для этой миссии-меню загружены - тут вообще нечего делать
