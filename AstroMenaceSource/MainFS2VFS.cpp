@@ -25,7 +25,203 @@
 *************************************************************************************/
 
 
+#include "config.h"
+
+
+#ifndef vfs_pack_standalone
+
 #include "Game.h"
+
+#else
+
+#include "Core/VirtualFileSystem/VFS.h"
+int ConvertFS2VFS(char RawDataDir[MAX_PATH]);
+
+
+//------------------------------------------------------------------------------------
+// пути к файлам
+//------------------------------------------------------------------------------------
+// полное путь к программе
+char ProgrammDir[MAX_PATH];
+char VFSFileNamePath1[MAX_PATH];
+char VFSFileNamePath2[MAX_PATH];
+
+
+
+//------------------------------------------------------------------------------------
+// основная процедура...
+//------------------------------------------------------------------------------------
+int main( int argc, char **argv )
+{
+
+#ifdef WIN32
+	// иним пути для винды
+	ZeroMemory(ProgrammDir, sizeof(ProgrammDir));
+	GetModuleFileName(NULL, ProgrammDir, MAX_PATH);
+	char* s = strrchr(ProgrammDir,'\\');
+	if (s) s[0]=0x0;
+	const char *Fi = "\\";
+	strcat( ProgrammDir, Fi );
+
+	ZeroMemory(DatFileName, sizeof(DatFileName));
+	ZeroMemory(VFSFileNamePath1, sizeof(VFSFileNamePath1));
+	ZeroMemory(VFSFileNamePath2, sizeof(VFSFileNamePath2));
+
+	strcpy(VFSFileNamePath1, ProgrammDir);
+	strcat(VFSFileNamePath1, "gamedata.vfs");
+	strcpy(VFSFileNamePath2, ProgrammDir);
+	strcat(VFSFileNamePath2, "gamedata_cc.vfs");
+#elif defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
+	// иним пути для юникса-линукса
+	// если передали параметр-путь
+
+	const char* key = "HOME";
+	const char* homeval = getenv(key);
+
+	bool dirpresent = false;
+	for (int i=1; i<argc; i++)
+	{
+		if (!strncmp(argv[i], "--dir=", sizeof("--dir")))
+		{
+			dirpresent = true;
+			// если передали относительный путь в папку пользователя с тильдой
+			if (argv[i][sizeof("--dir")] != '~')
+				strcpy(ProgrammDir, argv[i]+strlen("--dir="));
+			else
+			{
+				strcpy(ProgrammDir, homeval);// -1, это тильда... а в кол-ве нет, т.к. /0 там должен остаться
+				strcat(ProgrammDir, argv[i]+strlen("--dir=")+1);
+			}
+			// если в конце нет слеша - ставим его
+			if (ProgrammDir[strlen(ProgrammDir)-1] != '/')
+				strncat(ProgrammDir, "/", strlen("/"));
+
+		}
+	}
+	if (!dirpresent)
+	{
+#ifdef DATADIR
+		strcpy(ProgrammDir, DATADIR "/");
+#else
+ 		strcpy(ProgrammDir, argv[0]);
+ 		char* s = strrchr(ProgrammDir,'/');
+ 		if (s) s[0]=0x0;
+ 		const char *Fi = "/";
+ 		strcat( ProgrammDir, Fi );
+#endif // DATADIR
+	}
+
+	strcpy(VFSFileNamePath1, ProgrammDir);
+	strcat(VFSFileNamePath1, "gamedata.vfs");
+	strcpy(VFSFileNamePath2, ProgrammDir);
+	strcat(VFSFileNamePath2, "gamedata_cc.vfs");
+
+#endif // unix
+
+
+
+
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// исследуем другие ключи
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	// флаг перевода игры в режим упаковки gamedata.vfs файла
+	bool NeedPack = false;
+
+	for (int i=1; i<argc; i++)
+	{
+		// проверка ключа "--help"
+		if (!strcmp(argv[i], "--help"))
+		{
+			printf("AstroMenace launch options:\n\n");
+
+			printf("--dir=/game/data/folder/ - folder with gamedata.vfs file (Linux only)\n");
+			printf("--pack - pack data to gamedata.vfs file\n");
+			printf("--rawdata=/game/rawdata/folder/ - folder with game raw data for gamedata.vfs.\n");
+			printf("--help - info about all game launch options.\n");
+
+			return 0;
+		}
+
+
+		// проверка ключа "--pack"
+		if (!strcmp(argv[i], "--pack"))
+		{
+			NeedPack = true;
+		}
+	}
+
+
+
+	// версия
+	printf("AstroMenace %s %i\n\n", GAME_VERSION, GAME_BUILD);
+
+
+
+
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// переводим в режим генерации gamedata.vfs файла
+	// генерируем файл данный gamedata.vfs учитывая текущее его расположение
+	// !!! всегда делаем только с одним открытым на запись VFS
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	if (NeedPack)
+	{
+		char RawDataDir[MAX_PATH];
+		// по умолчанию, считаем что рав данные прямо с нами лежат
+		strcpy(RawDataDir, ProgrammDir);
+		strcat(RawDataDir, "RAW_VFS_DATA/");
+
+
+		// ищем, если передали ключем его расположение
+		for (int i=1; i<argc; i++)
+		{
+			if (!strncmp(argv[i], "--rawdata=", sizeof("--rawdata")))
+			{
+#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
+				// если передали относительный путь в папку пользователя с тильдой
+				if (argv[i][sizeof("--rawdata")] != '~')
+					strcpy(RawDataDir, argv[i]+strlen("--rawdata="));
+				else
+				{
+					strcpy(RawDataDir, homeval);// -1, это тильда... а в кол-ве нет, т.к. /0 там должен остаться
+					strcat(RawDataDir, argv[i]+strlen("--rawdata=")+1);
+				}
+#elif defined(WIN32)
+				// если есть двоеточия после второго символа - это полный путь с указанием девайса
+				if (argv[i][sizeof("--rawdata=")] == ':')
+				{
+					strcpy(RawDataDir, argv[i]+strlen("--rawdata="));
+				}
+				else
+				{
+					strcpy(RawDataDir, ProgrammDir);
+					strcat(RawDataDir, argv[i]+strlen("--rawdata="));
+				}
+#endif // WIN32
+				// если в конце нет слеша - ставим его
+				if (RawDataDir[strlen(RawDataDir)-1] != '/')
+					strncat(RawDataDir, "/", strlen("/"));
+			}
+		}
+
+		printf("Source Raw Folder: %s\n", RawDataDir);
+		return ConvertFS2VFS(RawDataDir);
+	}
+
+
+
+	// уходим из программы...
+	return 0;
+
+}
+
+
+
+#endif // vfs_pack_standalone
+
 
 
 const int	VFSFilesListCount = 388;

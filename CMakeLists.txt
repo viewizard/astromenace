@@ -4,6 +4,27 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
 PROJECT(AstroMenace)
 
 
+
+
+# AstroMenaceFS2VFS
+# standalone pack utility for AstroMenace game (gamedata.vfs file)
+IF(DEFINED FS2VFS)
+	# sources
+	FILE(GLOB astromenace_SRCS AstroMenaceSource/MainFS2VFS.cpp
+			AstroMenaceSource/Core/VirtualFileSystem/VFS.cpp
+			AstroMenaceSource/Core/VirtualFileSystem/Haff.cpp
+			AstroMenaceSource/Core/VirtualFileSystem/RLE.cpp)
+
+	# targets
+	ADD_EXECUTABLE(AstroMenaceFS2VFS ${astromenace_SRCS})
+	TARGET_LINK_LIBRARIES(AstroMenaceFS2VFS)
+	SET_TARGET_PROPERTIES(AstroMenaceFS2VFS PROPERTIES COMPILE_FLAGS "-O2 -fomit-frame-pointer -Wno-unused-result -Dvfs_pack_standalone")
+ENDIF(DEFINED FS2VFS)
+
+
+
+
+
 # depends
 set(SDL_CONFIG "sdl-config" CACHE STRING "Path to sdl-config script")
 EXEC_PROGRAM(${SDL_CONFIG} ARGS "--cflags" OUTPUT_VARIABLE SDL_CFLAGS)

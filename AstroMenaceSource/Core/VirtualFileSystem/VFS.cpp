@@ -26,7 +26,6 @@
 
 
 #include "VFS.h"
-#include "../Math/Math.h"
 
 
 // Список подключенных VFS файлов
@@ -49,12 +48,6 @@ eVFS_Entry *vw_GetStarVFSArray(){ return StarVFSArray;}
 eFILE *StartFileVFS = 0;	// Указатель на первый файл в списке...
 eFILE *EndFileVFS = 0;		// Указатель на последний файл в списке...
 
-
-// чтобы при работе не было сбоев в последовательности файлов... блокируем этот участок
-// при создании и закрытии файлов
-bool fileIObusy = false;
-// при чтении из файла вфс
-bool VFSfileIObusy = false;
 
 
 
@@ -639,13 +632,13 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// читаем смещение таблицы данных VFS - 4 байт
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	HeaderOffsetVFS = SDL_ReadLE32(TempVFS->File);
+	SDL_RWread(TempVFS->File, &HeaderOffsetVFS, sizeof(HeaderOffsetVFS), 1);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// читаем длину таблицы данных VFS
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	HeaderLengthVFS = SDL_ReadLE32(TempVFS->File);
+	SDL_RWread(TempVFS->File, &HeaderLengthVFS, sizeof(HeaderLengthVFS), 1);
 
 
 
@@ -698,9 +691,9 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 		Temp->Name[Temp->NameLen] = 0;// последний символ всегда ноль - конец строки
 		SDL_RWread(TempVFS->File, Temp->Name, Temp->NameLen, 1);
 		Temp->Link = false;
-		Temp->Offset = SDL_ReadLE32(TempVFS->File);
-		Temp->Length = SDL_ReadLE32(TempVFS->File);
-		Temp->RealLength = SDL_ReadLE32(TempVFS->File);
+		SDL_RWread(TempVFS->File, &(Temp->Offset), sizeof(Temp->Offset), 1);
+		SDL_RWread(TempVFS->File, &(Temp->Length), sizeof(Temp->Length), 1);
+		SDL_RWread(TempVFS->File, &(Temp->RealLength), sizeof(Temp->RealLength), 1);
 		POS = POS + 1 + Temp->ArhKeyLen + 2 + Temp->NameLen + 4 + 4 + 4;
 	}
 
@@ -856,7 +849,7 @@ bool vw_CreateEntryLinkVFS(const char *FileName, const char *FileNameLink)
 	while (Tmp != 0)
 	{
 		eVFS_Entry *Tmp1 = Tmp->Next;
-		if (vw_strcmp(Tmp->Name, FileNameLink) == 0)
+		if (strcmp(Tmp->Name, FileNameLink) == 0)
 		{
 			// нашли, такой файл или симлинк уже есть в системе
 			fprintf(stderr, "VFS link creation error, file or link already present: %s\n", FileNameLink);
@@ -872,7 +865,7 @@ bool vw_CreateEntryLinkVFS(const char *FileName, const char *FileNameLink)
 	while (Tmp != 0 && OutputEntry == 0)
 	{
 		eVFS_Entry *Tmp1 = Tmp->Next;
-		if (vw_strcmp(Tmp->Name, FileName) == 0)
+		if (strcmp(Tmp->Name, FileName) == 0)
 		{
 			OutputEntry = Tmp;
 
@@ -928,7 +921,7 @@ bool vw_DeleteEntryLinkVFS(const char *FileNameLink)
 	while (Tmp != 0)
 	{
 		eVFS_Entry *Tmp1 = Tmp->Next;
-		if (vw_strcmp(Tmp->Name, FileNameLink) == 0)
+		if (strcmp(Tmp->Name, FileNameLink) == 0)
 		{
 			if (Tmp->Link)
 			{
@@ -1040,7 +1033,7 @@ int FileDetect(const char *FileName)
 	{
 		eVFS_Entry *Tmp1 = Tmp->Next;
 
-		if(vw_strcmp(FileName, Tmp->Name) == 0)
+		if(strcmp(FileName, Tmp->Name) == 0)
 		{
 			// нашли
 			return VFS_FILE_VFS;
@@ -1096,7 +1089,7 @@ eFILE *vw_fopen(const char *FileName)
 	if (ResTMP == -1)
 	{
 		fprintf(stderr, "Can't find the file %s\n", FileName);
-		goto FOP_ERR;
+		return 0;
 	}
 
 
@@ -1108,11 +1101,6 @@ eFILE *vw_fopen(const char *FileName)
 		// Начальная подготовка структуры списка...
 		eFILE *Temp = 0;
 		Temp = new eFILE; if (Temp == 0) return 0;
-
-		// возможно используется многопоточность, смотрим чтобы не портить данные
-		while (fileIObusy) SDL_Delay(0);
-		// говорим, что работаем с это процедурой
-		fileIObusy = true;
 
 		// первый в списке...
 		if (EndFileVFS == 0)
@@ -1129,8 +1117,6 @@ eFILE *vw_fopen(const char *FileName)
 			EndFileVFS->Next = Temp;
 			EndFileVFS = Temp;
 		}
-
-		fileIObusy = false;
 
 		Temp->PackLength = 0;
 		Temp->Pos = 0;
@@ -1173,11 +1159,6 @@ eFILE *vw_fopen(const char *FileName)
 		eFILE *Temp = 0;
 		Temp = new eFILE; if (Temp == 0) return 0;
 
-		// возможно используется многопоточность, смотрим чтобы не портить данные
-		while (fileIObusy) SDL_Delay(0);
-		// говорим, что работаем с это процедурой
-		fileIObusy = true;
-
 		// первый в списке...
 		if (EndFileVFS == 0)
 		{
@@ -1193,8 +1174,6 @@ eFILE *vw_fopen(const char *FileName)
 			EndFileVFS->Next = Temp;
 			EndFileVFS = Temp;
 		}
-
-		fileIObusy = false;
 
 		Temp->PackLength = 0;
 		Temp->Pos = 0;
@@ -1214,7 +1193,7 @@ eFILE *vw_fopen(const char *FileName)
 		{
 			eVFS_Entry *Tmp1 = Tmp->Next;
 
-			if(vw_strcmp(Temp->Name, Tmp->Name) == 0)
+			if(strcmp(Temp->Name, Tmp->Name) == 0)
 			{
 				// нашли
 				OutputFile = Tmp;
@@ -1232,18 +1211,10 @@ eFILE *vw_fopen(const char *FileName)
 		Temp->Data = 0;
 		Temp->Data = new BYTE[Temp->PackLength]; if (Temp->Data == 0) return 0;
 
-
-		// возможно используется многопоточность, смотрим чтобы не портить данные
-		while (VFSfileIObusy) SDL_Delay(0);
-		// говорим, что работаем с это процедурой
-		VFSfileIObusy = true;
-
 		// плолучаем данные...
 		SDL_RWseek(OutputFile->Parent->File, Temp->VFS_Offset, SEEK_SET);
 		SDL_RWread(OutputFile->Parent->File, Temp->Data, Temp->PackLength, 1);
 		Temp->RealLength = Temp->PackLength;
-
-		VFSfileIObusy = false;
 
 
 
@@ -1302,8 +1273,6 @@ eFILE *vw_fopen(const char *FileName)
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// в системе нет такого файла, или какие-то проблемы
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-FOP_ERR:
-	fileIObusy = false;
 	return 0;
 }
 
@@ -1326,11 +1295,6 @@ int vw_fclose(eFILE *stream)
 	// файл не открыли...закрывать нечего...
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (stream == 0) return -1;
-
-	// возможно используется многопоточность, смотрим чтобы не портить данные
-	while (fileIObusy) SDL_Delay(0);
-	// говорим, что работаем с это процедурой
-	fileIObusy = true;
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Освобождаем память
@@ -1364,7 +1328,6 @@ int vw_fclose(eFILE *stream)
 	if (stream != 0){delete stream; stream = 0;}
 
 
-	fileIObusy = false;
 	return 0;
 }
 

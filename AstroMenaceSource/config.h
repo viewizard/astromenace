@@ -29,7 +29,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION	 	"1.3.2 svn"
-#define GAME_BUILD			130305
+#define GAME_BUILD			130406
 
 
 // VBO OpenGL extention support switcher (if defined - game will detect and use VBO) Game could crash
@@ -52,7 +52,7 @@
 #define joystick
 
 // separate thread for music during data loading (based on SDL multithread implementation)
-#define multithread
+// #define multithread
 
 // compression during gamedata.vfs creation, game will take more time for loading in exchange of size reducing (about 30 MB)
 // #define compression
@@ -71,6 +71,23 @@
 // you might need create separate VFS game data file (gamedata_cc.vfs) with CC BY-SA licensed content only.
 // If not defined, all content merged into one VFS game data file (gamedata.vfs)
 // #define separate_cc_vfs
+
+
+
+
+
+// You can create standalone AstroMenaceFS2VFS util for gamedata.vfs file creation.
+// Use CMakeLists.txt for your cmake with FS2VFS flag OR
+// Use CodeBlocks.cbp project file (you will need Code::Blocks IDE) with "FS2VFS Linux GCC" as Build target OR
+// 1) Uncomment "#define vfs_pack_standalone" line
+// 2) Make sure, that your compilation list consist only 4 source files:
+//			MainFS2VFS.cpp
+//			Core/VirtualFileSystem/VFS.cpp
+//			Core/VirtualFileSystem/Haff.cpp
+//			Core/VirtualFileSystem/RLE.cpp
+//    and you have 2 header files - config.h and Core/VirtualFileSystem/VFS.h close to them.
+//
+// #define vfs_pack_standalone
 
 
 

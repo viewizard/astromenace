@@ -341,7 +341,7 @@ int main( int argc, char **argv )
 			NeedSafeMode = true;
 		}
 
-		// проверка ключа "--safe-mode"
+		// проверка ключа "--pack"
 		if (!strcmp(argv[i], "--pack"))
 		{
 			NeedPack = true;

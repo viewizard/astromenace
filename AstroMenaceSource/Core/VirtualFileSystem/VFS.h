@@ -29,7 +29,78 @@
 #define VFS_H
 
 
+#include "../../config.h"
+
+
+#ifndef vfs_pack_standalone
+
 #include "../Base.h"
+
+#else
+
+
+#ifdef WIN32
+	#define WIN32_LEAN_AND_MEAN
+	#include <windows.h>
+#endif
+
+
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <memory.h>
+
+// определяем типы данных, для корректной работы
+#ifndef Uint8
+	#define Uint8 uint8_t
+#endif
+#ifndef Uint16
+	#define Uint16 uint16_t
+#endif
+#ifndef Uint32
+	#define Uint32 uint32_t
+#endif
+
+
+#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
+
+// декларируем типы данных, которых может не быть
+#ifndef BYTE
+	#define BYTE Uint8
+#endif
+#ifndef WORD
+	#define WORD Uint16
+#endif
+#ifndef DWORD
+	#define DWORD Uint32
+#endif
+#ifndef BOOL
+	#define BOOL bool
+#endif
+
+
+
+#ifndef MAX_PATH
+	#define MAX_PATH 1024
+#endif // MAX_PATH
+
+
+#endif // unix
+
+
+
+#define SDL_RWops FILE
+
+#define SDL_RWFromFile(file, mode) fopen(file, mode)
+#define SDL_RWclose(ctx) fclose(ctx)
+#define SDL_RWseek(ctx, offset, whence) fseek(ctx, offset, whence)
+#define SDL_RWtell(ctx) ftell(ctx)
+#define SDL_RWwrite(ctx, ptr, size, num) fwrite(ptr, size, num, ctx)
+#define SDL_RWread(ctx, ptr, size, maxnum) fread(ptr, size, maxnum, ctx)
+
+#endif // vfs_pack_standalone
+
+
 
 
 
