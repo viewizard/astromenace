@@ -18,7 +18,7 @@ IF(DEFINED FS2VFS)
 	# targets
 	ADD_EXECUTABLE(AstroMenaceFS2VFS ${astromenace_SRCS})
 	TARGET_LINK_LIBRARIES(AstroMenaceFS2VFS)
-	SET_TARGET_PROPERTIES(AstroMenaceFS2VFS PROPERTIES COMPILE_FLAGS "-O2 -fomit-frame-pointer -Wno-unused-result -Dvfs_pack_standalone")
+	SET_TARGET_PROPERTIES(AstroMenaceFS2VFS PROPERTIES COMPILE_FLAGS "-O2 -Wno-unused-result -Dvfs_pack_standalone")
 ENDIF(DEFINED FS2VFS)
 
 
@@ -198,11 +198,16 @@ FIND_PATH(FREETYPE_INCLUDE_DIR_freetype2 freetype/config/ftheader.h
 	PATH_SUFFIXES freetype2)
 IF(FREETYPE_INCLUDE_DIR_freetype2)
 	MESSAGE(STATUS "Found freetype2 headers: ${FREETYPE_INCLUDE_DIR_freetype2}")
+	INCLUDE_DIRECTORIES(${FREETYPE_INCLUDE_DIR_freetype2})
 ELSE(FREETYPE_INCLUDE_DIR_freetype2)
-	MESSAGE(FATAL_ERROR "freetype2 headers not found")
+	EXEC_PROGRAM("freetype-config" ARGS "--cflags" OUTPUT_VARIABLE freetype2_CFLAGS)
+	IF(freetype2_CFLAGS)
+		MESSAGE(STATUS "Found freetype2 cflags: ${freetype2_CFLAGS}")
+		SET(SDL_CFLAGS ${SDL_CFLAGS} ${freetype2_CFLAGS})
+	ELSE(freetype2_CFLAGS)
+		MESSAGE(FATAL_ERROR "freetype2 headers not found")
+	ENDIF(freetype2_CFLAGS)
 ENDIF(FREETYPE_INCLUDE_DIR_freetype2)
-INCLUDE_DIRECTORIES(${FREETYPE_INCLUDE_DIR_freetype2})
-
 
 
 # sources
@@ -213,7 +218,7 @@ IF(DEFINED DATADIR)
 	ADD_DEFINITIONS(-DDATADIR=\\"${DATADIR}\\")
 ENDIF(DEFINED DATADIR)
 
-# we need all speed optimization flags, this could add up to 40% FPS in game
-ADD_DEFINITIONS(${SDL_CFLAGS} "-O -O1 -O2 -O3 -Os -fomit-frame-pointer")
+# we need speed optimization flag O3, this could add up to 40% FPS in game
+ADD_DEFINITIONS(${SDL_CFLAGS} "-O3")
 ADD_EXECUTABLE(AstroMenace ${astromenace_SRCS})
 TARGET_LINK_LIBRARIES(AstroMenace ${ALL_LIBRARIES})

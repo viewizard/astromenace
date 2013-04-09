@@ -1129,7 +1129,7 @@ loop:
 					break;
 
 				case SDL_KEYDOWN:
-					// устанавливаем текущий юникод нажатоу клавиши
+					// устанавливаем текущий юникод нажатой клавиши
 					if (event.key.keysym.unicode > 0x001F) // пропускаем С0 Сontrol Characters (ентер, бэкспейс и прочие...)
 					if (!((event.key.keysym.unicode >= 0x007F) && (event.key.keysym.unicode <= 0x009F))) // пропускаем С1 Сontrol Characters
 						vw_SetCurrentKeyUnicode(event.key.keysym.unicode);
