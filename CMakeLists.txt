@@ -28,6 +28,7 @@ ENDIF(DEFINED FS2VFS)
 # depends
 set(SDL_CONFIG "sdl-config" CACHE STRING "Path to sdl-config script")
 EXEC_PROGRAM(${SDL_CONFIG} ARGS "--cflags" OUTPUT_VARIABLE SDL_CFLAGS)
+ADD_DEFINITIONS(${SDL_CFLAGS})
 EXEC_PROGRAM(${SDL_CONFIG} ARGS "--libs" OUTPUT_VARIABLE SDL_LIBS)
 
 
@@ -203,7 +204,7 @@ ELSE(FREETYPE_INCLUDE_DIR_freetype2)
 	EXEC_PROGRAM("freetype-config" ARGS "--cflags" OUTPUT_VARIABLE freetype2_CFLAGS)
 	IF(freetype2_CFLAGS)
 		MESSAGE(STATUS "Found freetype2 cflags: ${freetype2_CFLAGS}")
-		SET(SDL_CFLAGS ${SDL_CFLAGS} ${freetype2_CFLAGS})
+		ADD_DEFINITIONS(${freetype2_CFLAGS})
 	ELSE(freetype2_CFLAGS)
 		MESSAGE(FATAL_ERROR "freetype2 headers not found")
 	ENDIF(freetype2_CFLAGS)
@@ -218,7 +219,7 @@ IF(DEFINED DATADIR)
 	ADD_DEFINITIONS(-DDATADIR=\\"${DATADIR}\\")
 ENDIF(DEFINED DATADIR)
 
-# we need speed optimization flag O3, this could add up to 40% FPS in game
-ADD_DEFINITIONS(${SDL_CFLAGS} "-O3")
+# we need speed optimization flag Os, this could add up to 40% FPS in game
+ADD_DEFINITIONS("-Os")
 ADD_EXECUTABLE(AstroMenace ${astromenace_SRCS})
 TARGET_LINK_LIBRARIES(AstroMenace ${ALL_LIBRARIES})
