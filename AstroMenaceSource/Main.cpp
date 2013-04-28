@@ -847,8 +847,6 @@ ReCreate:
 	{
 		CAPS->VAOSupported = false;
 	}
-	// VAO дополнительно проверяем OpenGL версии 3.0 или выше, иначе могут быть проблемы с ATI/AMD картами
-	if (!CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0f) CAPS->VAOSupported = false;
 
 	// если нужно, выключаем fbo
 #ifndef fbo // принудительно отключаем вообще работу с fbo
