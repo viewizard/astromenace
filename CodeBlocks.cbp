@@ -15,7 +15,7 @@
 				<Option compiler="gcc" />
 				<Option projectResourceIncludeDirsRelation="1" />
 				<Compiler>
-					<Add option="-O3" />
+					<Add option="-Os" />
 					<Add option="-Wextra" />
 					<Add option="-Wall" />
 					<Add directory="/usr/include/freetype2/" />
@@ -43,7 +43,7 @@
 				<Option compiler="gcc" />
 				<Option projectResourceIncludeDirsRelation="1" />
 				<Compiler>
-					<Add option="-O3" />
+					<Add option="-Os" />
 					<Add option="-Wall" />
 					<Add option="-D__GNUWIN32__" />
 					<Add option="-DWIN32" />
@@ -85,7 +85,7 @@
 				<Option compiler="gcc" />
 				<Option projectResourceIncludeDirsRelation="1" />
 				<Compiler>
-					<Add option="-O3" />
+					<Add option="-O2" />
 					<Add option="-Wno-unused-result" />
 					<Add option="-Dvfs_pack_standalone" />
 				</Compiler>
@@ -194,6 +194,22 @@
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
 		</Unit>
+		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/Particle2D.cpp">
+			<Option target="Linux GCC" />
+			<Option target="Windows MinGw" />
+		</Unit>
+		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/Particle2D.h">
+			<Option target="Linux GCC" />
+			<Option target="Windows MinGw" />
+		</Unit>
+		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/ParticleSystem2D.cpp">
+			<Option target="Linux GCC" />
+			<Option target="Windows MinGw" />
+		</Unit>
+		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/ParticleSystem2D.h">
+			<Option target="Linux GCC" />
+			<Option target="Windows MinGw" />
+		</Unit>
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem/Particle.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
@@ -211,22 +227,6 @@
 			<Option target="Windows MinGw" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem/ParticleSystemManager.cpp">
-			<Option target="Linux GCC" />
-			<Option target="Windows MinGw" />
-		</Unit>
-		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/Particle2D.cpp">
-			<Option target="Linux GCC" />
-			<Option target="Windows MinGw" />
-		</Unit>
-		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/Particle2D.h">
-			<Option target="Linux GCC" />
-			<Option target="Windows MinGw" />
-		</Unit>
-		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/ParticleSystem2D.cpp">
-			<Option target="Linux GCC" />
-			<Option target="Windows MinGw" />
-		</Unit>
-		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/ParticleSystem2D.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
 		</Unit>
@@ -828,6 +828,15 @@
 			<envvars />
 			<code_completion />
 			<debugger />
+			<DoxyBlocks>
+				<comment_style block="0" line="1" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
