@@ -74,7 +74,7 @@ Open Font License, Version 1.1"
 <http://opensource.org/licenses/OFL-1.1>).
 
 
-* "LinBiolinumBold.ttf" and "LinLibertineBold.txt" files 
+* "LinBiolinumBold.ttf" and "LinLibertineBold.ttf" files 
   (RAW_VFS_DATA/FONT/ folder)
 
 These ttf fonts are part of Linux Libertine package released under "SIL 

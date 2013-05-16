@@ -53,7 +53,7 @@
 					<Add directory="../AllLibraries/libvorbis-1.3.3/include" />
 					<Add directory="../AllLibraries/freealut-1.1.0/include" />
 					<Add directory="../AllLibraries/openal-soft-1.15.1/include" />
-					<Add directory="../AllLibraries/freetype-2.4.11/include" />
+					<Add directory="../AllLibraries/freetype-2.4.12/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -73,7 +73,7 @@
 					<Add directory="../AllLibraries/libvorbis-1.3.3/lib" />
 					<Add directory="../AllLibraries/freealut-1.1.0/lib" />
 					<Add directory="../AllLibraries/openal-soft-1.15.1/lib" />
-					<Add directory="../AllLibraries/freetype-2.4.11/bin" />
+					<Add directory="../AllLibraries/freetype-2.4.12/bin" />
 				</Linker>
 			</Target>
 			<Target title="FS2VFS Linux GCC">

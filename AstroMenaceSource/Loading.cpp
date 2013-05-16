@@ -1148,6 +1148,7 @@ void LoadGameData(int LoadType)
 			break;
 		// переход игра-меню
 		case 0:
+			SaveXMLSetupFile();
 			CurrentList = MenuLoadList;
 			CurrentListCount = MenuLoadListCount;
 			NeedShowHint = true;
@@ -1156,6 +1157,7 @@ void LoadGameData(int LoadType)
 		// уровни игры
 		case 1:
 		{
+			SaveXMLSetupFile();
 			CurrentListCount = GameLevelsLoadListCount;
 			NeedShowHint = true;
 
