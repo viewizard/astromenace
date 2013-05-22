@@ -282,7 +282,7 @@ int main( int argc, char **argv )
 			strcat(ConfigFileName, "/.astromenace");
 	}
 
-	mkdir(ConfigFileName, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+	mkdir(ConfigFileName, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 	strcat(ConfigFileName, "/amconfig.xml");
 
 #endif // unix
