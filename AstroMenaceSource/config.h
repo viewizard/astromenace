@@ -29,7 +29,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION	 	"1.3.2 svn"
-#define GAME_BUILD			130522
+#define GAME_BUILD			130526
 
 
 // VBO OpenGL extention support switcher (if defined - game will detect and use VBO) Game could crash
@@ -46,7 +46,9 @@
 #define fbo
 
 // xinerama support, required libXinerama
-#define xinerama
+#ifdef xinerama_detected_by_cmake // do not comment this line, unless you are sure what are you doing
+	#define xinerama
+#endif // xinerama_detected_by_cmake
 
 // joystick support, required SDL compilled with "joystick" flag
 #define joystick
@@ -62,6 +64,32 @@
 
 // game configuration file will be stored with game binary file
 // #define portable
+
+// fontconfig support.
+// With fontconfig you don't need fonts bundled with game, system TrueType, Type 1 or CFF fonts will be used instead.
+// Make sure, that you have at least one installed bold style TrueType, Type 1 or CFF font with en, de and ru languages support.
+// RAW_VFS_DATA/FONT/ folder can be removed in case of fontconfig use.
+#ifdef fontconfig_detected_by_cmake // do not comment this line, unless you are sure what are you doing
+//	#define fontconfig
+#endif // fontconfig_detected_by_cmake
+
+// Default font family for game text rendering in case of fontconfig use.
+// Please note, font family name could be vary in different distros.
+// Recomended fonts as dafault game font (were tested for correct ingame text rendering):
+// 1) Linux Libertine/Linux Biolinum
+#define default_font_family "Linux Biolinum O"
+//#define default_font_family "Linux Libertine O"
+// 2) Liberation Fonts
+//#define default_font_family "Liberation Mono"
+//#define default_font_family "Liberation Sans"
+//#define default_font_family "Liberation Serif"
+// 3) GNU FreeFont
+//#define default_font_family "FreeMono"
+//#define default_font_family "FreeSans"
+//#define default_font_family "FreeSerif"
+
+
+
 
 
 

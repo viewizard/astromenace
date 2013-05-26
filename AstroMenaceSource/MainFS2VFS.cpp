@@ -590,6 +590,16 @@ const char *VFSFilesList[VFSFilesListCount] =
 "SKYBOX/2/skybox_back6.tga",
 "SKYBOX/2/skybox_bottom4.tga",
 "SKYBOX/2/skybox_top3.tga",
+#ifdef fontconfig
+"empty",
+"empty",
+"empty",
+"empty",
+"empty",
+"empty",
+"empty",
+"empty",
+#else
 "FONT/LiberationMono-Bold.ttf",
 "FONT/LiberationSans-Bold.ttf",
 "FONT/LiberationSerif-Bold.ttf",
@@ -598,6 +608,7 @@ const char *VFSFilesList[VFSFilesListCount] =
 "FONT/FreeSerifBold.ttf",
 "FONT/LinBiolinumBold.ttf",
 "FONT/LinLibertineBold.ttf",
+#endif //fontconfig
 "CREDITS/freetype.tga",
 "CREDITS/oggvorbis.tga",
 "text.csv",
@@ -768,6 +779,7 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 
 	// добавляем физические файлы
 	for (int i=0; i<VFSFilesListCount; i++)
+	if (strcmp(VFSFilesList[i], "empty"))
 	{
 
 		strcpy(SrcFileName, RawDataDir);

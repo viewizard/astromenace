@@ -44,6 +44,7 @@ void InitSetup()
 	Setup.MenuLanguage = 1; // en by default
 	Setup.VoiceLanguage = 1; // en by default
 	Setup.FontNumber = 0;
+	strcpy(Setup.FontName, default_font_family);
 	Setup.FontSize = 16;
 
 	Setup.Width = 1228;
@@ -186,6 +187,7 @@ void SaveXMLSetupFile()
 		case 3: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceLanguage"), "value", "ru"); break;
 	}
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "FontNumber"), "value", Setup.FontNumber);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "FontName"), "value", Setup.FontName);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "FontSize"), "value", Setup.FontSize);
 
 
@@ -489,6 +491,9 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber") != 0)
 		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber"), "value") != 0)
 			Setup.FontNumber = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber"), "value");
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontName") != 0)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontName"), "value") != 0)
+			strcpy(Setup.FontName, XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontName"), "value"));
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontSize") != 0)
 		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontSize"), "value") != 0)
 			Setup.FontSize = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontSize"), "value");

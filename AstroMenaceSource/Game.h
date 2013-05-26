@@ -98,6 +98,18 @@ extern bool JoysticButtons[100];
 void SaveGameData();
 void CodeXOR(char *Text, char *Key, int Count);
 
+#ifdef fontconfig
+
+struct sFontList
+{
+	char *FontTitle;
+	char *FontFileName;
+};
+extern int FontQuantity;
+extern sFontList *FontList;
+
+#else
+
 struct sFontList
 {
 	const char *FontTitle;
@@ -137,6 +149,7 @@ const sFontList FontList[FontQuantity] =
 {"FreeFont Serif", "DATA/FONT/FreeSerifBold.ttf"},
 };
 
+#endif //fontconfig
 
 
 

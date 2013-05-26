@@ -321,6 +321,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	{
 		Setup.FontNumber --;
 		if (Setup.FontNumber < 0) Setup.FontNumber = 0;
+		strcpy(Setup.FontName, FontList[Setup.FontNumber].FontTitle);
 
 		// удаляем все символы и их текстуры
 		vw_ReleaseAllFontCharsWithTextures();
@@ -334,6 +335,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	{
 		Setup.FontNumber ++;
 		if (Setup.FontNumber > FontQuantity-1) Setup.FontNumber = FontQuantity-1;
+		strcpy(Setup.FontName, FontList[Setup.FontNumber].FontTitle);
 
 		// удаляем все символы и их текстуры
 		vw_ReleaseAllFontCharsWithTextures();

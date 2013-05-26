@@ -18,6 +18,8 @@
 					<Add option="-Os" />
 					<Add option="-Wextra" />
 					<Add option="-Wall" />
+					<Add option="-Dxinerama_detected_by_cmake" />
+					<Add option="-Dfontconfig_detected_by_cmake" />
 					<Add directory="/usr/include/freetype2/" />
 				</Compiler>
 				<Linker>
@@ -32,6 +34,7 @@
 					<Add library="vorbisfile" />
 					<Add library="Xinerama" />
 					<Add library="freetype" />
+					<Add library="fontconfig" />
 				</Linker>
 			</Target>
 			<Target title="Windows MinGw">
@@ -194,22 +197,6 @@
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
 		</Unit>
-		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/Particle2D.cpp">
-			<Option target="Linux GCC" />
-			<Option target="Windows MinGw" />
-		</Unit>
-		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/Particle2D.h">
-			<Option target="Linux GCC" />
-			<Option target="Windows MinGw" />
-		</Unit>
-		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/ParticleSystem2D.cpp">
-			<Option target="Linux GCC" />
-			<Option target="Windows MinGw" />
-		</Unit>
-		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/ParticleSystem2D.h">
-			<Option target="Linux GCC" />
-			<Option target="Windows MinGw" />
-		</Unit>
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem/Particle.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
@@ -227,6 +214,22 @@
 			<Option target="Windows MinGw" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem/ParticleSystemManager.cpp">
+			<Option target="Linux GCC" />
+			<Option target="Windows MinGw" />
+		</Unit>
+		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/Particle2D.cpp">
+			<Option target="Linux GCC" />
+			<Option target="Windows MinGw" />
+		</Unit>
+		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/Particle2D.h">
+			<Option target="Linux GCC" />
+			<Option target="Windows MinGw" />
+		</Unit>
+		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/ParticleSystem2D.cpp">
+			<Option target="Linux GCC" />
+			<Option target="Windows MinGw" />
+		</Unit>
+		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/ParticleSystem2D.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
 		</Unit>

@@ -122,9 +122,248 @@ CSpaceStars *psSpaceStatic = 0;
 
 
 
+#ifdef fontconfig
+
+#include <fontconfig/fontconfig.h>
+
+
+static const int GameLanguageListCount = 3;
+static const char *GameLanguageList[GameLanguageListCount] =
+{
+    "en",
+    "ru",
+    "de"
+};
+
+int FontQuantity=0;
+sFontList *FontList=0;
+
+
+int InitFontConfig()
+{
+	FcPattern *pat;
+	FcFontSet *fs;
+	FcObjectSet *os;
+	FcChar8 *data;
+	FcConfig *config;
+	FcLangSet *langset;
+
+	if (!FcInit())
+	{
+		fprintf(stderr, "Couldn't init FontConfig.\n");
+		return -1;
+	}
+	config = FcConfigGetCurrent();
+	FcConfigSetRescanInterval(config, 0);
+
+	pat = FcPatternCreate();
+	os = FcObjectSetBuild(FC_FAMILY, FC_STYLE, FC_LANG, FC_FILE, FC_FONTFORMAT, (char *) 0);
+	fs = FcFontList(config, pat, os);
+
+	printf("\nTotal fonts installed: %d\n", fs->nfont);
+	int AppropriateFontsCount = 0;
+
+	// первый проход, считаем кол-во подходящих шрифтов
+	for (int i=0; fs && i < fs->nfont; i++)
+	{
+		FcPattern *font = fs->fonts[i];
+
+
+		// 1) Работаем только с TrueType, CFF и Type 1
+		if (FcPatternGetString(font, FC_FONTFORMAT, 0, &data) == FcResultMatch)
+		{
+			if (strcmp((const char *)data, "TrueType") &&
+				strcmp((const char *)data, "CFF") &&
+				strcmp((const char *)data, "Type 1"))
+			{
+				continue;
+			}
+		}
+		else continue;
+
+		// 2) берем только болд
+		if (FcPatternGetString(font, FC_STYLE, 0, &data) == FcResultMatch)
+		{
+			if (strcmp((const char *)data, "Bold")) continue;
+		}
+		else continue;
+
+		// 3) нужна поддержка всех языков меню en|de|ru
+		if (FcPatternGetLangSet(font, FC_LANG, 0, &langset) == FcResultMatch)
+		{
+			int FontLangCount = 0;
+			for (int i = 0; i < GameLanguageListCount; i++)
+			{
+				const FcChar8 *lang = (const FcChar8*) GameLanguageList[i];
+
+				if (lang)
+				{
+
+					FcLangResult langRes = FcLangSetHasLang(langset, lang);
+
+					if (langRes != FcLangDifferentLang) FontLangCount++;
+				}
+			}
+
+			if (FontLangCount < GameLanguageListCount) continue;
+		}
+		else continue;
+
+
+		AppropriateFontsCount ++;
+	}
+	printf("Appropriate fonts detected: %i\n\n", AppropriateFontsCount);
+	if (AppropriateFontsCount == 0)
+	{
+		fprintf(stderr, "Couldn't find any appropriate fonts installed in your system.\n");
+		fprintf(stderr, "Please, check your fonts or install TrueType, bold style font\n");
+		fprintf(stderr, "with en, ru and de languages support.\n");
+		return -1;
+	}
 
 
 
+	// второй проход, формируем таблицу
+	FontQuantity = 0;
+	FontList = new sFontList[AppropriateFontsCount];
+	for (int i=0; fs && i < fs->nfont; i++)
+	{
+		FcPattern *font = fs->fonts[i];
+
+
+		// 1) Работаем только с TrueType, CFF и Type 1
+		if (FcPatternGetString(font, FC_FONTFORMAT, 0, &data) == FcResultMatch)
+		{
+			if (strcmp((const char *)data, "TrueType") &&
+				strcmp((const char *)data, "CFF") &&
+				strcmp((const char *)data, "Type 1"))
+			{
+				continue;
+			}
+		}
+		else continue;
+
+		// 2) берем только болд
+		if (FcPatternGetString(font, FC_STYLE, 0, &data) == FcResultMatch)
+		{
+			if (strcmp((const char *)data, "Bold")) continue;
+		}
+		else continue;
+
+		// 3) нужна поддержка всех языков меню en|de|ru
+		if (FcPatternGetLangSet(font, FC_LANG, 0, &langset) == FcResultMatch)
+		{
+			int FontLangCount = 0;
+			for (int i = 0; i < GameLanguageListCount; i++)
+			{
+				const FcChar8 *lang = (const FcChar8*) GameLanguageList[i];
+
+				if (lang)
+				{
+
+					FcLangResult langRes = FcLangSetHasLang(langset, lang);
+
+					if (langRes != FcLangDifferentLang) FontLangCount++;
+				}
+			}
+
+			if (FontLangCount < GameLanguageListCount) continue;
+		}
+		else continue;
+
+
+
+
+		if (FcPatternGetString(font, FC_FAMILY, 0, &data) == FcResultMatch)
+		{
+			FontList[FontQuantity].FontTitle = new char[strlen((const char*)data)+1];
+			strcpy(FontList[FontQuantity].FontTitle, (const char *)data);
+			printf("Family: %s\n", FontList[FontQuantity].FontTitle);
+		}
+		if (FcPatternGetString(font, FC_FILE, 0, &data) == FcResultMatch)
+		{
+			FontList[FontQuantity].FontFileName = new char[strlen((const char*)data)+1];
+			strcpy(FontList[FontQuantity].FontFileName, (const char *)data);
+			printf(" Font Filename: %s\n", FontList[FontQuantity].FontFileName);
+		}
+
+		FontQuantity++;
+	}
+	printf("\n");
+
+
+
+	// fontconfig выдает все шрифты подряд, нужна сортировка по названию
+	for (int j=0; j<FontQuantity-1; j++)
+	for (int i=0; i<FontQuantity-1; i++)
+	{
+		unsigned int CurrentSymbol = 0;
+
+		while ((CurrentSymbol < strlen(FontList[i].FontTitle)) &&
+				(CurrentSymbol < strlen(FontList[i+1].FontTitle)))
+		{
+			if (FontList[i].FontTitle[CurrentSymbol] > FontList[i+1].FontTitle[CurrentSymbol])
+			{
+				char *Tmp = FontList[i+1].FontTitle;
+				FontList[i+1].FontTitle = FontList[i].FontTitle;
+				FontList[i].FontTitle = Tmp;
+
+				Tmp = FontList[i+1].FontFileName;
+				FontList[i+1].FontFileName = FontList[i].FontFileName;
+				FontList[i].FontFileName = Tmp;
+
+				break;
+			}
+			else
+			{
+				if (FontList[i].FontTitle[CurrentSymbol] < FontList[i+1].FontTitle[CurrentSymbol])
+				{
+					break;
+				}
+			}
+
+			CurrentSymbol++;
+		}
+	}
+
+
+
+	// по названию, находим текущий номер шрифта в таблице
+	Setup.FontNumber = -1;
+	for (int i=0; i<FontQuantity; i++)
+	{
+		if (!strcmp(Setup.FontName, FontList[i].FontTitle))
+		{
+			Setup.FontNumber = i;
+			break;
+		}
+	}
+	// если его нет - ставим
+	if (Setup.FontNumber == -1)
+	{
+		Setup.FontNumber = 0;
+		strcpy(Setup.FontName, FontList[Setup.FontNumber].FontTitle);
+	}
+
+
+
+	if (fs) FcFontSetDestroy(fs);
+	return 0;
+}
+
+
+void ReleaseFontConfig()
+{
+	for (int i=0; i<FontQuantity; i++)
+	{
+		delete [] FontList[i].FontTitle;
+		delete [] FontList[i].FontFileName;
+	}
+	delete [] FontList; FontList = 0;
+	FontQuantity = 0;
+}
+
+#endif // fontconfig
 
 
 
@@ -424,7 +663,12 @@ int main( int argc, char **argv )
 	// инициализация счета времени
 	vw_InitTime();
 
-
+#ifdef fontconfig
+	// инициализация fontconfig
+	if (InitFontConfig()) return -1;
+#endif // fontconfig
+	// дополнительная проверка, если использовали fontconfig, а потом вернулись на версию со встроенными шрифтами
+	if (Setup.FontNumber > FontQuantity) Setup.FontNumber = 0;
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1307,8 +1551,10 @@ GotoQuit:
 	vw_ReleaseText();
 	// закрываем файловую систему
 	vw_ShutdownVFS();
-
-
+#ifdef fontconfig
+	// освобождаем список шрифтов
+	ReleaseFontConfig();
+#endif // fontconfig
 
 	// уходим из программы...
 	return 0;
