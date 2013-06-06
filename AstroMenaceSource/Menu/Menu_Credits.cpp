@@ -44,7 +44,7 @@ void CreditsMenu()
 	LastCreditsCurrentPosUpdateTime = vw_GetTime();
 
 	// зацикливание
-	if (CreditsCurrentPos <= -3280) CreditsCurrentPos = 0.0f;
+	if (CreditsCurrentPos <= -3310) CreditsCurrentPos = 0.0f;
 
 
 
@@ -314,10 +314,17 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Mikhail_Storcheous"));
+	Y1 += Offset1;
+	Y2 += Offset1;
+	// помог разобраться с лицензиями, дал идеи по использованию XDG_CONFIG_HOME и fontconfig
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Boris_Pek")))/2;
+	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Boris_Pek"));
 
 
 
-
+#ifndef fontconfig
 	Y1 += Offset2;
 	Y2 += Offset2;
 	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("TTF FONTS"))/2;
@@ -345,7 +352,7 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Liberation (https://fedorahosted.org/liberation-fonts)");
-
+#endif // fontconfig
 
 
 
@@ -456,6 +463,22 @@ void CreditsMenu()
 	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://www.vorbis.com");
 
 
+#ifdef fontconfig
+	// fontconfig
+	Y1 += Offset1+25;
+	Y2 += Offset1+25;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Fontconfig"))/2;
+	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Fontconfig");
+	Y1 += Offset1;
+	Y2 += Offset1;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("http://www.fontconfig.org"))/2;
+	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://www.fontconfig.org");
+#endif // fontconfig
+
 
 
 
@@ -563,8 +586,8 @@ void CreditsMenu()
 
 
 	// GIMP normalmap plugin
-	Y1 += Offset1+20;
-	Y2 += Offset1+20;
+	Y1 += Offset1+25;
+	Y2 += Offset1+25;
 	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("GIMP normalmap plugin"))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}

@@ -29,7 +29,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION	 	"1.3.2 svn"
-#define GAME_BUILD			130526
+#define GAME_BUILD			130606
 
 
 // VBO OpenGL extention support switcher (if defined - game will detect and use VBO) Game could crash
@@ -59,7 +59,8 @@
 // compression during gamedata.vfs creation, game will take more time for loading in exchange of size reducing (about 30 MB)
 // #define compression
 
-// define DATADIR with gamedata.vfs file location if you don't put it together in the same directory with binary file
+// define DATADIR with gamedata.vfs file location if you don't put it together in the same directory with binary file.
+// Use cmake with DATADIR flag OR uncomment line below
 // #define DATADIR "/usr/share/astromenace"
 
 // game configuration file will be stored with game binary file
@@ -105,7 +106,7 @@
 
 
 // You can create standalone AstroMenaceFS2VFS util for gamedata.vfs file creation.
-// Use CMakeLists.txt for your cmake with FS2VFS flag OR
+// Use cmake with FS2VFS flag OR
 // Use CodeBlocks.cbp project file (you will need Code::Blocks IDE) with "FS2VFS Linux GCC" as Build target OR
 // 1) Uncomment "#define vfs_pack_standalone" line
 // 2) Make sure, that your compilation list consist only 4 source files:
