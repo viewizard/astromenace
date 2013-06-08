@@ -40,7 +40,7 @@ extern	PFNGLTEXSTORAGE2DPROC glTexStorage2DEXT;
 //------------------------------------------------------------------------------------
 // Создание текстуры
 //------------------------------------------------------------------------------------
-GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Bytes, bool NeedCompression)
+GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Bytes, int CompressionType)
 {
 	// ничего не передали
 	if (ustDIB == 0) return 0;
@@ -55,21 +55,23 @@ GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Byt
 	eDevCaps *OpenGL_DevCaps = vw_GetDevCaps();
 
 
-// как будет железо, поддерживающее расширение GL_ARB_texture_compression_bptc,
-// добавить поддержку BPTC компрессии текстур (см GLext.h)
-
-
-	if (OpenGL_DevCaps->TexturesCompression && NeedCompression)
+	if (OpenGL_DevCaps->TexturesCompression && (CompressionType > 0))
 	{
 		if (Bytes == 4)
-		{	// компрессия 4 к 1
+		{
 			Format = GL_RGBA;
-			InternalFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+			if (OpenGL_DevCaps->TexturesCompressionBPTC && (CompressionType > 1))
+				InternalFormat = GL_COMPRESSED_RGBA_BPTC_UNORM_ARB;
+			else
+				InternalFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
 		}
 		else
-		{	// компрессия 6 к 1
+		{
 			Format = GL_RGB;
-			InternalFormat = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
+			if (OpenGL_DevCaps->TexturesCompressionBPTC && (CompressionType > 1))
+				InternalFormat = GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB;
+			else
+				InternalFormat = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
 		}
 	}
 	else
