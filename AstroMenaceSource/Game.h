@@ -420,7 +420,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 //------------------------------------------------------------------------------------
 // Menu_OptionsAdvMenu.cpp
 //------------------------------------------------------------------------------------
-extern int Options_TexturesCompression;
+extern int Options_TexturesCompressionType;
 extern int Options_UseGLSL;
 extern int Options_MSAA;
 extern int Options_CSAA;

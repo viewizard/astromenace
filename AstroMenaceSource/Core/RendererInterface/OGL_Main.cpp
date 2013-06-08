@@ -246,6 +246,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	OpenGL_DevCaps.MaxSamples = 0;
 	OpenGL_DevCaps.MaxMultisampleCoverageModes = 0;
 	OpenGL_DevCaps.TexturesCompression = false;
+	OpenGL_DevCaps.TexturesCompressionBPTC = false;
 	OpenGL_DevCaps.VBOSupported = false;
 	OpenGL_DevCaps.VAOSupported = false;
 	OpenGL_DevCaps.TextureNPOTSupported = false;
@@ -321,7 +322,15 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 
 	// проверяем, есть ли поддержка компрессии текстур
 	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_EXT_texture_compression_s3tc"))
+	{
 		OpenGL_DevCaps.TexturesCompression = true;
+		printf("Textures S3TC compression support enabled.\n");
+	}
+	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_ARB_texture_compression_bptc"))
+	{
+		OpenGL_DevCaps.TexturesCompressionBPTC = true;
+		printf("Textures BPTC compression support enabled.\n");
+	}
 
 	// проверяем, есть ли поддержка OcclusionQuery
 	if (ExtensionSupported("GL_ARB_occlusion_query"))

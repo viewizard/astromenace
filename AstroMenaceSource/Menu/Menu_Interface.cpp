@@ -92,7 +92,7 @@ void ReCreateMenuLanguageEntryLinks()
 		vw_SetTextureAlpha(0.0f, 0.0f, 0.0f);
 		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE,
 						true, TX_ALPHA_EQUAL, false);
-		vw_LoadTexture("DATA/GAME/mission.tga", NULL, true);
+		vw_LoadTexture("DATA/GAME/mission.tga", NULL, Setup.TexturesCompressionType);
 	}
 	if (vw_FindTextureByName("DATA/GAME/missionfailed.tga"))
 	{
@@ -100,7 +100,7 @@ void ReCreateMenuLanguageEntryLinks()
 		vw_SetTextureAlpha(0.0f, 0.0f, 0.0f);
 		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE,
 						true, TX_ALPHA_EQUAL, false);
-		vw_LoadTexture("DATA/GAME/missionfailed.tga", NULL, true);
+		vw_LoadTexture("DATA/GAME/missionfailed.tga", NULL, Setup.TexturesCompressionType);
 	}
 	if (vw_FindTextureByName("DATA/GAME/pause.tga"))
 	{
@@ -108,7 +108,7 @@ void ReCreateMenuLanguageEntryLinks()
 		vw_SetTextureAlpha(0.0f, 0.0f, 0.0f);
 		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE,
 						true, TX_ALPHA_EQUAL, false);
-		vw_LoadTexture("DATA/GAME/pause.tga", NULL, true);
+		vw_LoadTexture("DATA/GAME/pause.tga", NULL, Setup.TexturesCompressionType);
 	}
 	if (vw_FindTextureByName("DATA/MENU/button_weaponry_in.tga"))
 	{
@@ -116,7 +116,7 @@ void ReCreateMenuLanguageEntryLinks()
 		vw_SetTextureAlpha(0.0f, 0.0f, 0.0f);
 		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE,
 						false, TX_ALPHA_EQUAL, false);
-		vw_LoadTexture("DATA/MENU/button_weaponry_in.tga", NULL, false);
+		vw_LoadTexture("DATA/MENU/button_weaponry_in.tga", NULL, 0);
 	}
 	if (vw_FindTextureByName("DATA/MENU/button_weaponry_out.tga"))
 	{
@@ -124,7 +124,7 @@ void ReCreateMenuLanguageEntryLinks()
 		vw_SetTextureAlpha(0.0f, 0.0f, 0.0f);
 		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE,
 						false, TX_ALPHA_EQUAL, false);
-		vw_LoadTexture("DATA/MENU/button_weaponry_out.tga", NULL, false);
+		vw_LoadTexture("DATA/MENU/button_weaponry_out.tga", NULL, 0);
 	}
 }
 

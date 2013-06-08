@@ -484,7 +484,7 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 //------------------------------------------------------------------------------------
 // загрузка текстуры из файла и подключение к менеджеру текстур
 //------------------------------------------------------------------------------------
-eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool NeedCompression, int LoadAs, int NeedResizeW, int NeedResizeH)
+eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int CompressionType, int LoadAs, int NeedResizeW, int NeedResizeH)
 {
 	// временно, файл текстуры
 	eFILE *pFile = 0;
@@ -592,11 +592,11 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool Nee
 
 	if (RememberAsName == NULL)
 	{
-		Result = vw_CreateTextureFromMemory(nName, tmp_image, DWidth, DHeight, DChanels, NeedCompression, NeedResizeW, NeedResizeH);
+		Result = vw_CreateTextureFromMemory(nName, tmp_image, DWidth, DHeight, DChanels, CompressionType, NeedResizeW, NeedResizeH);
 	}
 	else // иначе, есть имя под которым надо запомнить
 	{
-		Result = vw_CreateTextureFromMemory(RememberAsName, tmp_image, DWidth, DHeight, DChanels, NeedCompression, NeedResizeW, NeedResizeH);
+		Result = vw_CreateTextureFromMemory(RememberAsName, tmp_image, DWidth, DHeight, DChanels, CompressionType, NeedResizeW, NeedResizeH);
 	}
 
 
@@ -617,7 +617,7 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, bool Nee
 //------------------------------------------------------------------------------------
 // создание текстуры из памяти
 //------------------------------------------------------------------------------------
-eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DWidth, int DHeight, int DChanels, bool NeedCompression, int NeedResizeW, int NeedResizeH, bool NeedDuplicateCheck)
+eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DWidth, int DHeight, int DChanels, int CompressionType, int NeedResizeW, int NeedResizeH, bool NeedDuplicateCheck)
 {
 	// проверяем в списке, если уже создавали ее - просто возвращаем указатель
 	if (NeedDuplicateCheck)
@@ -710,7 +710,7 @@ eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DW
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Создаем текстуру
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	Texture->TextureID = vw_BuildTexture(tmp_image, Texture->Width, Texture->Height, MipMap, Texture->Bytes, NeedCompression);
+	Texture->TextureID = vw_BuildTexture(tmp_image, Texture->Width, Texture->Height, MipMap, Texture->Bytes, CompressionType);
 	// устанавливаем параметры
 	vw_SetTextureFiltering(FilteringTexMan);
 	vw_SetTextureAddressMode(Address_ModeTexMan);

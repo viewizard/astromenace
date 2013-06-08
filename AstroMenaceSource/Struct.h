@@ -263,8 +263,8 @@ struct GameSetup
 	int		VisualEffectsQuality;
 	// уровень анизотропии при фильтрации текстур
 	int 	AnisotropyLevel;
-	// компрессия текстур 0-выкл, 1-вкл
-	int		TexturesCompression;
+	// компрессия текстур 0-выкл, 1-S3TC, 2-BPTC
+	int		TexturesCompressionType;
 	// использование шейдеров
 	bool	UseGLSL;
 	// использование шадовмеп

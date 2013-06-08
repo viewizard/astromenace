@@ -29,7 +29,7 @@
 
 
 // временные данные для изменения и восстановления
-int Options_TexturesCompression;
+int Options_TexturesCompressionType;
 int Options_UseGLSL;
 int Options_MSAA;
 int Options_CSAA;
@@ -77,6 +77,12 @@ const char *ButtonTile[3] =
 const char *ButtonTextFiltr[2] =
 {"3_Bilinear",
 "3_Trilinear"};
+
+
+const char *ButtonTextCompression[3] =
+{"1_Off",
+"3_S3TC",
+"3_BPTC"};
 
 
 const char *ButtonPointLights[7] =
@@ -263,14 +269,21 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	// вкл-выкл компрессии текстур
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, ContentTransp, vw_GetText("3_Textures_Compression"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, !CAPS->TexturesCompression) || DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, !CAPS->TexturesCompression))
+	int MaxCompressionCount = 1;
+	if (CAPS->TexturesCompressionBPTC) MaxCompressionCount = 2;
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, !CAPS->TexturesCompression || (Options_TexturesCompressionType <= 0)))
 	{
-		Options_TexturesCompression++;
-		if (Options_TexturesCompression > 1) Options_TexturesCompression = 0;
+		Options_TexturesCompressionType--;
+		if (Options_TexturesCompressionType < 0) Options_TexturesCompressionType = 0;
 	}
-	Size = vw_FontSize(Options_TexturesCompression ? vw_GetText("1_On") : vw_GetText("1_Off"));
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, !CAPS->TexturesCompression || (Options_TexturesCompressionType >= MaxCompressionCount)))
+	{
+		Options_TexturesCompressionType++;
+		if (Options_TexturesCompressionType > MaxCompressionCount) Options_TexturesCompressionType = MaxCompressionCount;
+	}
+	Size = vw_FontSize(vw_GetText(ButtonTextCompression[Options_TexturesCompressionType]));
 	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, Options_TexturesCompression ? vw_GetText("1_On") : vw_GetText("1_Off"));
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText(ButtonTextCompression[Options_TexturesCompressionType]));
 
 
 
@@ -492,7 +505,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 
 
 
-	if (Options_TexturesCompression == Setup.TexturesCompression &&
+	if (Options_TexturesCompressionType == Setup.TexturesCompressionType &&
 		Options_MSAA == Setup.MSAA &&
 		Options_CSAA == Setup.CSAA &&
 		Options_UseGLSL == Setup.UseGLSL &&
@@ -538,7 +551,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		if (DrawButton256(X,Y, vw_GetText("1_APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2))
 		{
 			// проверяем, нужно перегружать или нет
-			if (Options_TexturesCompression != Setup.TexturesCompression ||
+			if (Options_TexturesCompressionType != Setup.TexturesCompressionType ||
 				Options_MSAA != Setup.MSAA ||
 				Options_CSAA != Setup.CSAA ||
 				Options_UseGLSL != Setup.UseGLSL ||
@@ -562,7 +575,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 void SaveOptionsAdvMenuTmpData()
 {
 	Setup.UseGLSL = Options_UseGLSL;
-	Setup.TexturesCompression = Options_TexturesCompression;
+	Setup.TexturesCompressionType = Options_TexturesCompressionType;
 	Setup.MSAA = Options_MSAA;
 	Setup.CSAA = Options_CSAA;
 	Setup.ShadowMap = Options_ShadowMap;

@@ -63,6 +63,8 @@ struct eDevCaps
 	eCoverageModes MultisampleCoverageModes[32]; // собственно сам список режимов CSAA+MSAA, ставим просто 32 штуки, чтобы не заморачиваться с освобождением памяти
 	// есть ли возможность включить сжатие текстур
 	bool TexturesCompression;
+	// поддержка GL_ARB_texture_compression_bptc
+	bool TexturesCompressionBPTC;
 	// GL_ARB_texture_storage
 	bool TextureStorage;
 	// поддержка FBO
@@ -339,7 +341,7 @@ void vw_SetColorMask(bool red, bool green, bool blue, bool alpha);
 // Texture functions
 
 // Create texture
-GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Bytes, bool NeedCompression);
+GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Bytes, int CompressionType);
 // Bind texture
 void vw_BindTexture(DWORD Stage, GLuint TextureID);
 // Delete texture

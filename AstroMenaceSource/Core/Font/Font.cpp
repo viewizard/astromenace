@@ -100,7 +100,7 @@ eFontChar* vw_LoadFontChar(unsigned UTF32)
 	sprintf(texturefilename, "%i", UTF32);
 
 	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
-	NewChar->CharTexture = vw_CreateTextureFromMemory(texturefilename, pixels, NewChar->Width, NewChar->Height, 4, false, 0, 0, false);
+	NewChar->CharTexture = vw_CreateTextureFromMemory(texturefilename, pixels, NewChar->Width, NewChar->Height, 4, 0, 0, 0, false);
 	// очищаем память
 	delete [] pixels;
 
@@ -266,7 +266,7 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 
 	// создаем текстуру
 	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
-	eTexture* FontTexture = vw_CreateTextureFromMemory(TextureName, DIB, FontTextureWidth, FontTextureHeight, 4, false);
+	eTexture* FontTexture = vw_CreateTextureFromMemory(TextureName, DIB, FontTextureWidth, FontTextureHeight, 4, 0);
 	// освобождаем память
 	delete [] DIB;
 	if (FontTexture == 0)
