@@ -374,6 +374,51 @@ void ReleaseFontConfig()
 int main( int argc, char **argv )
 {
 
+	// флаг отображать ли системный курсор
+	bool NeedShowSystemCursor = false;
+	// флаг нужно ли сбрасывать настройки игры при старте
+	bool NeedSafeMode = false;
+	// флаг перевода игры в режим упаковки gamedata.vfs файла
+	bool NeedPack = false;
+
+	for (int i=1; i<argc; i++)
+	{
+		// проверка ключа "--help"
+		if (!strcmp(argv[i], "--help"))
+		{
+			printf("AstroMenace launch options:\n\n");
+
+			printf("--dir=/game/data/folder/ - folder with gamedata.vfs file (Linux only)\n");
+			printf("--mouse - launch the game without system cursor hiding.\n");
+			printf("--safe-mode - reset all settings not connected to Pilots Profiles at the game launch.\n");
+			printf("--pack - pack data to gamedata.vfs file\n");
+			printf("--rawdata=/game/rawdata/folder/ - folder with game raw data for gamedata.vfs.\n");
+			printf("--help - info about all game launch options.\n");
+
+			return 0;
+		}
+
+		// проверка ключа "--mouse"
+		if (!strcmp(argv[i], "--mouse"))
+		{
+			NeedShowSystemCursor = true;
+		}
+
+		// проверка ключа "--safe-mode"
+		if (!strcmp(argv[i], "--safe-mode"))
+		{
+			NeedSafeMode = true;
+		}
+
+		// проверка ключа "--pack"
+		if (!strcmp(argv[i], "--pack"))
+		{
+			NeedPack = true;
+		}
+	}
+
+
+
 #ifdef WIN32
 	// иним пути для винды
 	ZeroMemory(ProgrammDir, sizeof(ProgrammDir));
@@ -521,7 +566,7 @@ int main( int argc, char **argv )
 			strcat(ConfigFileName, "/.astromenace");
 	}
 
-	mkdir(ConfigFileName, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+	if (!NeedPack) mkdir(ConfigFileName, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 	strcat(ConfigFileName, "/amconfig.xml");
 
 #endif // unix
@@ -532,60 +577,6 @@ int main( int argc, char **argv )
 	strcat(ConfigFileName, "/amconfig.xml");
 #endif // portable
 
-
-
-
-
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// исследуем другие ключи
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-	// флаг отображать ли системный курсор
-	bool NeedShowSystemCursor = false;
-	// флаг нужно ли сбрасывать настройки игры при старте
-	bool NeedSafeMode = false;
-	// флаг перевода игры в режим упаковки gamedata.vfs файла
-	bool NeedPack = false;
-
-	for (int i=1; i<argc; i++)
-	{
-		// проверка ключа "--help"
-		if (!strcmp(argv[i], "--help"))
-		{
-			printf("AstroMenace launch options:\n\n");
-
-			printf("--dir=/game/data/folder/ - folder with gamedata.vfs file (Linux only)\n");
-			printf("--mouse - launch the game without system cursor hiding.\n");
-			printf("--safe-mode - reset all settings not connected to Pilots Profiles at the game launch.\n");
-			printf("--pack - pack data to gamedata.vfs file\n");
-			printf("--rawdata=/game/rawdata/folder/ - folder with game raw data for gamedata.vfs.\n");
-			printf("--help - info about all game launch options.\n");
-
-			return 0;
-		}
-
-		// проверка ключа "--mouse"
-		if (!strcmp(argv[i], "--mouse"))
-		{
-			NeedShowSystemCursor = true;
-		}
-
-		// проверка ключа "--safe-mode"
-		if (!strcmp(argv[i], "--safe-mode"))
-		{
-			NeedSafeMode = true;
-		}
-
-		// проверка ключа "--pack"
-		if (!strcmp(argv[i], "--pack"))
-		{
-			NeedPack = true;
-		}
-	}
 
 
 
