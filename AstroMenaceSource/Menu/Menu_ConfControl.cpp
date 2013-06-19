@@ -85,7 +85,7 @@ const char * MouseCodeName(char Num)
 
 
 char JoystickCodeNameText[12];/*"JoystickXXX"*/
-const char * JoystickCodeName(char Num)
+const char * JoystickCodeName(int Num)
 {
 	// кнопки еще нет
 	if (Num == -1) return "?";
