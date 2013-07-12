@@ -1,3 +1,105 @@
+Version 1.3.2
+
+
+Overall changes:
+
+- Added "Joystick DeadZone" option in "Options" menu.
+- Removed Ubuntu Family Fonts from game bundle. All bundled with game fonts are GPLv3 or OFL v1.1 now.
+- Separate Game Options menu code removed from source, fully-featured main Options menu available as Game Menu now.
+- Added standalone pack game data util.
+- Added fontconfig support.
+
+
+Overall code changes:
+
+- Minor correction in text output code during game window initialization.
+- Added $XDG_CONFIG_HOME environment variable check during config file path detection.
+- Revised web browser search code, added xdg-open.
+- Some misspelled variables name corrected.
+- Added copy file from real FS to VFS function.
+- Improved font manager code. Menu Font option changes don't require game restart any more.
+- Improved font rendering code. Rendering operate with glyph's advance width (also known as its escapement) now.
+- Removed vw_TextureFromText function.
+- Added more text position checks in "Tips and hints" dialogs for proper text rendering with different fonts.
+- Fixed Info dialogs title position in Workshop menu.
+- Minor font manager code improvements, added global offset for text rendering.
+- Fixed minor bug with keyboard control over active menu elements during setup game control keys.
+- Fixed Textures Quality option work during game data loading with new planetary and normal map textures.
+- Fixed bug that might corrupt overall game rendering (big blinking triangles over scene).
+- Improved font rendering for big font size characters (outlines will be more clear now).
+- Test image file with font generated bitmap now will be stored in TGA format.
+- Fixed memory overflow in VFS code.
+- All OpenGL functions in shadow mapping code moved to core.
+- Fixed minor bug in texture blend setup code (now will change OpenGL state proper during blend disabling).
+- Improved SkyBox rendering for more speed.
+- Improved textures related code, redundant OpenGL functions calls removed.
+- Fixed menu elements texture generation, will count on compression options now.
+- Improved lighting related code, redundant OpenGL functions calls removed.
+- Minor code corrections and improvements.
+- Improved vfs file creation code. VFS core code corrected to be more flexible.
+- Fixed text input code in Profile Menu for percent sign (%).
+- Revised Profiles duplication and deletion code.
+- All language-related switch statements corrected, English language text/voice/images will be used now, if current language text/voice/images not implemented.
+- All color-related switch statements corrected, white color in mission list/mission text will be used now, if current color not implemented.
+- Minor code correction for some functions with switch statements, added text output, if required statement not implemented.
+- Minor code optimization for ground explosions.
+- Minor code optimization for "CullFace" OpenGL routine.
+- Some redundant functions declarations removed.
+- Minor code correction to avoid possible situation when local variable shadows another local variable.
+- Minor VFS code correction.
+- CMakeLists.txt file improved, added FS2VFS flag for AstroMenaceFS2VFS (standalone pack game data util) compilation.
+- Fixed CMakeLists.txt, will use freetype-config util now in order to find freetype headers location (multilib-aware freetype issue).
+- Fixed CFLAGS mess in CMakeLists.txt and Code::Blocks project files.
+- VAO feature turned off by default in configuration file from now due to game crashes and not proper work on some AMD and Intel video cards (probably, drivers issue).
+- Added game configuration file save after hardware detection to prevent configuration data loss.
+- Added game configuration file save at mission start and mission complete to prevent game progress lost.
+- Minor file mode bits correction in folder creation code for Linux.
+- CMakeLists.txt file improved, fontconfig lib and header files detection added as non required part. If fontconfig not installed, game will be compiled without fontconfig support.
+- CMakeLists.txt file improved, Xinerama lib and header files detection corrected. If Xinerama not installed, game will be compiled without Xinerama support.
+- Updated GLext.h file.
+- Added GL_ARB_texture_compression_bptc OpenGL extension support.
+- Fixed compression flag in language-related textures initialization code during language change.
+- Fixed game configuration folder owner issue in Linux during gamedata.vfs creation.
+- Fixed bug in Control Menu code relative to Joystick name.
+
+
+Menu changes:
+
+- Removed "Mouse Control" option from "Options" menu.
+- Added current Pilot Profile title in Missions List menu.
+- Added "Change Profile" button for Pilot Profile selection in Missions List menu. From now, Pilots Profiles menu will be skipped during game start process, if at least one Pilot Profile already created and set as current.
+- Added mouse wheel support for more convenient manipulations with missions list.
+- Added mouse wheel support in Weaponry, Information and Shipyard menu.
+- Added mouse control for scrollbar slider.
+- Added profile name edit box field reset on Pilots Profiles menu selection.
+- Added "Font Size" option in "Interface" menu.
+- Revised Workshop menu (System stock panel).
+- Minor corrections in Credits menu.
+- Improved "Textures Compression" option in Advanced Menu, compression type can be chosen now.
+
+
+Compilation flags changes (config.h):
+
+- Added "vfs_pack_standalone" compilation flag for standalone pack game data util compilation.
+- Added "fontconfig" compilation flag. With fontconfig you don't need fonts bundled with game, system fonts will be used. Make sure, that you have installed bold style TrueType, Type 1 or CFF font with en, de and ru languages support.
+- Added "default_font_family" compilation flag. Default fontconfig font family.
+
+
+Game data changes:
+
+- Added Linux Libertine (Linux Biolinum) fonts.
+- Removed Ubuntu fonts.
+- Fixed planet 4 geometry.
+- Minor correction for License.txt file (GLext.h file info added).
+
+
+
+
+
+
+
+
+
 Version 1.3.1 
 
 
