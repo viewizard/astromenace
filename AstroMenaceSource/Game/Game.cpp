@@ -201,8 +201,7 @@ void DrawGameExpMoney(int Exp, int Money)
 
 	float AW;
 	float AH;
-	bool ASpresent=false;
-	ASpresent = vw_GetAspectWH(&AW, &AH);
+	bool ASpresent = vw_GetAspectWH(&AW, &AH);
 
 	int W, H;
 	vw_GetViewport(0, 0, &W, &H);
@@ -1151,7 +1150,7 @@ void DrawGame()
 	{
 		// учитываем в эмблеме энергии, сколько у нас ее (визуально меняем вид эмблемы)
 		EnergyParticleSystem2D->ParticlesPerSec = (unsigned int) (50 * (CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem)));
-		if (EnergyParticleSystem2D->ParticlesPerSec <= 0) EnergyParticleSystem2D->ParticlesPerSec = 1;
+		if (EnergyParticleSystem2D->ParticlesPerSec == 0) EnergyParticleSystem2D->ParticlesPerSec = 1;
 	}
 	// эмблема жизни
 	LifeParticleSystem2D->Update(vw_GetTime());
@@ -1274,8 +1273,7 @@ void DrawGame()
 
 			float AW;
 			float AH;
-			bool ASpresent=false;
-			ASpresent = vw_GetAspectWH(&AW, &AH);
+			bool ASpresent = vw_GetAspectWH(&AW, &AH);
 
 			int W, H;
 			vw_GetViewport(0, 0, &W, &H);

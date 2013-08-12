@@ -64,8 +64,7 @@ int CheckCompression(int tmpLength, const BYTE *buffer, char *ArhKeyVFS)
 
 	// устанавливаем данные
 	BYTE *dstVFS = 0;
-	BYTE *srcVFS = tmp;
-	srcVFS = new BYTE[tmpLength];
+	BYTE *srcVFS = new BYTE[tmpLength];
 	memcpy(srcVFS, buffer, tmpLength);
 
 	int dsizeVFS = tmpLength;
@@ -83,7 +82,7 @@ int CheckCompression(int tmpLength, const BYTE *buffer, char *ArhKeyVFS)
 		if (S == VFS_DATA_ARH_RLE)
 		{
 			vw_DATAtoRLE(&dstVFS, srcVFS, &dsizeVFS, ssizeVFS);
-			delete [] srcVFS; srcVFS = 0;
+			delete [] srcVFS;
 			srcVFS = dstVFS;
 			ssizeVFS = dsizeVFS;
 			dstVFS = 0;
@@ -92,7 +91,7 @@ int CheckCompression(int tmpLength, const BYTE *buffer, char *ArhKeyVFS)
 		if (S == VFS_DATA_ARH_HAFF)
 		{
 			vw_DATAtoHAFF(&dstVFS, srcVFS, &dsizeVFS, ssizeVFS);
-			delete [] srcVFS; srcVFS = 0;
+			delete [] srcVFS;
 			srcVFS = dstVFS;
 			ssizeVFS = dsizeVFS;
 			dstVFS = 0;
@@ -434,7 +433,7 @@ int	vw_WriteIntoVFSfromMemory(const char *Name, const BYTE * buffer, int size)
 			if (S == VFS_DATA_ARH_RLE)
 			{
 				vw_DATAtoRLE(&dstVFS, srcVFS, &NewVFS_Entry->Length, ssizeVFS);
-				delete [] srcVFS; srcVFS = 0;
+				delete [] srcVFS;
 				srcVFS = dstVFS;
 				ssizeVFS = NewVFS_Entry->Length;
 				dstVFS = 0;
@@ -444,7 +443,7 @@ int	vw_WriteIntoVFSfromMemory(const char *Name, const BYTE * buffer, int size)
 			if (S == VFS_DATA_ARH_HAFF)
 			{
 				vw_DATAtoHAFF(&dstVFS, srcVFS, &NewVFS_Entry->Length, ssizeVFS);
-				delete [] srcVFS; srcVFS = 0;
+				delete [] srcVFS;
 				srcVFS = dstVFS;
 				ssizeVFS = NewVFS_Entry->Length;
 				dstVFS = 0;
@@ -622,7 +621,7 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 		{
 			if (BuildNumber != vfsBuildNumber)
 			{
-				fprintf(stderr, "VFS file has wrong build number (%i), you need VFS with build number %i\n", vfsBuildNumber, BuildNumber);
+				fprintf(stderr, "VFS file has wrong build number (%u), you need VFS with build number %u\n", vfsBuildNumber, BuildNumber);
 				goto vw_OpenVFS_Error;
 			}
 		}
@@ -1219,11 +1218,6 @@ eFILE *vw_fopen(const char *FileName)
 
 
 		// используем сжатие?
-		BYTE *srcVFS = 0;
-		BYTE *dstVFS = 0;
-		int ssizeVFS = 0;
-		int dsizeVFS = 0;
-
 		if (!((OutputFile->ArhKey[0]=='0')&(strlen(OutputFile->ArhKey)==1)))
 		{
 			for (size_t i=0; i<OutputFile->ArhKeyLen;i++)
@@ -1233,8 +1227,10 @@ eFILE *vw_fopen(const char *FileName)
 
 				if (S == VFS_DATA_ARH_RLE)
 				{
-					ssizeVFS = Temp->RealLength;
-					srcVFS = Temp->Data;
+					BYTE *srcVFS = Temp->Data;
+					BYTE *dstVFS = 0;
+					int ssizeVFS = Temp->RealLength;
+					int dsizeVFS = 0;
 
 					if (i == cur_i)
 						vw_RLEtoDATA(OutputFile->RealLength, &dstVFS, srcVFS, &dsizeVFS, ssizeVFS);
@@ -1248,8 +1244,10 @@ eFILE *vw_fopen(const char *FileName)
 				}
 				if (S == VFS_DATA_ARH_HAFF)
 				{
-					ssizeVFS = Temp->RealLength;
-					srcVFS = Temp->Data;
+					BYTE *srcVFS = Temp->Data;
+					BYTE *dstVFS = 0;
+					int ssizeVFS = Temp->RealLength;
+					int dsizeVFS = 0;
 
 					if (i == cur_i)
 						vw_HAFFtoDATA(OutputFile->RealLength, &dstVFS, srcVFS, &dsizeVFS, ssizeVFS);
@@ -1325,7 +1323,7 @@ int vw_fclose(eFILE *stream)
 	if (stream->Prev != 0) stream->Prev->Next = stream->Next;
 		else if (stream->Next != 0) stream->Next->Prev = 0;
 
-	if (stream != 0){delete stream; stream = 0;}
+	if (stream != 0) delete stream;
 
 
 	return 0;

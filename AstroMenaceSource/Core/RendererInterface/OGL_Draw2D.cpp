@@ -58,8 +58,7 @@ void vw_Start2DMode(float nZ1, float nZ2)
 	// смотрим, была ли установка на фиксированный внутренний размер
 	float AW;
 	float AH;
-	bool ASpresent=false;
-	ASpresent = vw_GetAspectWH(&AW, &AH);
+	bool ASpresent = vw_GetAspectWH(&AW, &AH);
 
 
 	if (ASpresent)
@@ -106,8 +105,7 @@ void vw_Draw(int X, int Y, RECT *SrcRect, eTexture *Tex, bool Alpha, float Rotat
 
 	float AW;
 	float AH;
-	bool ASpresent=false;
-	ASpresent = vw_GetAspectWH(&AW, &AH);
+	bool ASpresent = vw_GetAspectWH(&AW, &AH);
 
 	int W, H;
 	vw_GetViewport(0, 0, &W, &H);
@@ -172,7 +170,7 @@ void vw_Draw(int X, int Y, RECT *SrcRect, eTexture *Tex, bool Alpha, float Rotat
 	glPopMatrix();
 
 
-	if (tmp != 0){delete [] tmp; tmp = 0;}
+	delete [] tmp;
 	vw_SetTextureBlend(false, 0, 0);
 	vw_BindTexture(0, 0);
 }
@@ -193,8 +191,7 @@ void vw_DrawTransparent(RECT *DstRect, RECT *SrcRect, eTexture *Tex, bool Alpha,
 
 	float AW;
 	float AH;
-	bool ASpresent=false;
-	ASpresent = vw_GetAspectWH(&AW, &AH);
+	bool ASpresent = vw_GetAspectWH(&AW, &AH);
 
 	int W, H;
 	vw_GetViewport(0, 0, &W, &H);
@@ -267,7 +264,7 @@ void vw_DrawTransparent(RECT *DstRect, RECT *SrcRect, eTexture *Tex, bool Alpha,
 
 
 
-	if (tmp != 0){delete [] tmp; tmp = 0;}
+	delete [] tmp;
 
 	vw_SetTextureBlend(false, 0, 0);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);

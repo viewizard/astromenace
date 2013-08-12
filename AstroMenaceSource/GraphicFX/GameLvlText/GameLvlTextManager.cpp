@@ -143,8 +143,7 @@ void UpdateAllGameLvlText(float Time)
 	while (tmp!=0)
 	{
 		CGameLvlText *tmp2 = tmp->Next;
-		if (!tmp->Update(Time))
-			delete tmp; tmp = 0;
+		if (!tmp->Update(Time)) delete tmp;
 		tmp = tmp2;
 	}
 }

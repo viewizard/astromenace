@@ -191,7 +191,7 @@ void vw_ReleaseAllFontChars()
 	while (tmp!=0)
 	{
 		eFontChar *tmp2 = tmp->Next;
-		delete tmp; tmp = 0;
+		delete tmp;
 		tmp = tmp2;
 	}
 
@@ -227,7 +227,7 @@ void vw_ReleaseAllFontCharsWithTextures()
 			vw_ReleaseTexture(tmp->CharTexture);
 		}
 
-		delete tmp; tmp = 0;
+		delete tmp;
 		tmp = tmp2;
 	}
 

@@ -65,8 +65,8 @@ void vw_ReleaseTexture(eTexture* Texture)
 
 	// освобождаем память
 	vw_DeleteTexture(Texture->TextureID);
-	if (Texture->Name != 0) {delete [] Texture->Name; Texture->Name = 0;}
-	if (Texture != 0){delete Texture; Texture = 0;}
+	if (Texture->Name != 0) delete [] Texture->Name;
+	delete Texture;
 }
 
 
@@ -152,23 +152,21 @@ void ResizeImage(int width, int height, BYTE **DIB, eTexture *Texture)
 {
 	if (width == Texture->Width && height == Texture->Height) return;
 
-	int i, j, x, y, offset_y, offset_x;
-
 	// переносим во временный массив данные...
 	BYTE *src = *DIB;
 	BYTE *dst = 0;
 	dst = new BYTE[width*height*Texture->Bytes]; if (dst == 0) return;
 
 	// растягиваем исходный массив (или сжимаем)
-	for (j=0; j<height; j++)
+	for (int j=0; j<height; j++)
 	{
-		y = (j * Texture->Height) / height;
-		offset_y = y * Texture->Width;
+		int y = (j * Texture->Height) / height;
+		int offset_y = y * Texture->Width;
 
-		for (i=0; i<width; i++)
+		for (int i=0; i<width; i++)
 		{
-			x = (i * Texture->Width) / width;
-			offset_x = (offset_y + x) * Texture->Bytes;
+			int x = (i * Texture->Width) / width;
+			int offset_x = (offset_y + x) * Texture->Bytes;
 
 			dst[(i+j*width)*Texture->Bytes] = src[offset_x];
 			dst[(i+j*width)*Texture->Bytes+1] = src[offset_x+1];
@@ -212,9 +210,6 @@ void CreateAlpha(BYTE **DIBRESULT, eTexture *Texture, int AlphaFlag)
 	BYTE *DIB = 0;
 	DIB = new BYTE[stride2*Texture->Height]; if (DIB == 0) return;
 
-	int k1=0;
-	int k2=0;
-
 	// Формируем данные по цветам...
 	BYTE GreyRedC = (BYTE)(((float)Texture->ARed / 255) * 76);
 	BYTE GreyGreenC = (BYTE)(((float)Texture->AGreen / 255) * 150);
@@ -224,8 +219,8 @@ void CreateAlpha(BYTE **DIBRESULT, eTexture *Texture, int AlphaFlag)
 	for(int j1 = 0; j1 < Texture->Height;j1++)
 	{
 
-		k1 = stride*j1;// делаем правильное смещение при переходе
-		k2 = stride2*j1;
+		int k1 = stride*j1;// делаем правильное смещение при переходе
+		int k2 = stride2*j1;
 
 		for(int j2 = 0; j2 < Texture->Width;j2++)
 		{
@@ -311,7 +306,7 @@ void CreateAlpha(BYTE **DIBRESULT, eTexture *Texture, int AlphaFlag)
 		}
 	}
 
-	if (DIBtemp != 0){delete [] DIBtemp; DIBtemp = 0;}
+	if (DIBtemp != 0) delete [] DIBtemp;
 	*DIBRESULT = DIB;
 	Texture->Bytes = 4;
 }
@@ -337,13 +332,10 @@ void DeleteAlpha(BYTE **DIBRESULT, eTexture *Texture)
 	BYTE *DIB = 0;
 	DIB = new BYTE[stride*Texture->Height]; if (DIB == 0) return;
 
-	int k1=0;
-	int k2=0;
-
 	for(int j1 = 0; j1 < Texture->Height;j1++)
 	{
-		k1 = stride*j1;
-		k2 = stride2*j1;
+		int k1 = stride*j1;
+		int k2 = stride2*j1;
 
 		for(int j2 = 0; j2 < Texture->Width;j2++)
 		{
@@ -356,7 +348,7 @@ void DeleteAlpha(BYTE **DIBRESULT, eTexture *Texture)
 		}
 	}
 
-	if (DIBtemp != 0){delete [] DIBtemp; DIBtemp = 0;}
+	if (DIBtemp != 0) delete [] DIBtemp;
 	*DIBRESULT = DIB;
 	Texture->Bytes = 3;
 }
@@ -469,9 +461,10 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 	SDL_RWwrite(FileVW2D, &DChanels, sizeof(int), 1);
 	SDL_RWwrite(FileVW2D, tmp_image, DWidth*DHeight*DChanels, 1);
 
+	SDL_RWclose(FileVW2D);
 
 	// освобождаем память
-	if (tmp_image != 0){delete [] tmp_image; tmp_image = 0;}
+	delete [] tmp_image;
 }
 
 
@@ -660,13 +653,13 @@ eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DW
 
 	// временный массив данных
 	BYTE *tmp_image = 0;
-	tmp_image = new BYTE[DWidth*DHeight*DChanels];
+	tmp_image = new BYTE[DWidth*DHeight*DChanels]; if (tmp_image == 0) { delete Texture; return 0; }
 	memcpy(tmp_image, DIB, DWidth*DHeight*DChanels);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Сохраняем имя текстуры
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	Texture->Name = new char[strlen(TextureName)+1]; if (Texture->Name == 0) return 0;
+	Texture->Name = new char[strlen(TextureName)+1]; if (Texture->Name == 0) { delete Texture; delete [] tmp_image; return 0; }
 	strcpy(Texture->Name, TextureName);
 
 
@@ -718,7 +711,7 @@ eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DW
 	vw_BindTexture(0, 0);
 
 	// освобождаем память
-	if (tmp_image != 0){delete [] tmp_image; tmp_image = 0;}
+	if (tmp_image != 0) delete [] tmp_image;
 
 	// присоединяем текстуру к менеджеру текстур
 	vw_AttachTexture(Texture);

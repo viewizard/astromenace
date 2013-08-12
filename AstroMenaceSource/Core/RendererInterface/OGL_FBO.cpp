@@ -416,7 +416,7 @@ void vw_DrawColorFBO(eFBO *SourceFBO, eFBO *TargetFBO)
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, buff, 4*sizeof(float));
 
 		vw_BindTexture(0, 0);
-		if (buff != 0){delete [] buff; buff = 0;}
+		delete [] buff;
 
 
 	glMatrixMode(GL_MODELVIEW);				//select the modelview matrix

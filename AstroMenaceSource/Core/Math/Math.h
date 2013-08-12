@@ -92,6 +92,7 @@ struct VECTOR3D
 
 	VECTOR3D(){};
 	VECTOR3D(float nX, float nY, float nZ) { x = nX; y = nY; z = nZ; };
+	void Set(float nX, float nY, float nZ) { x = nX; y = nY; z = nZ; };
 	~VECTOR3D(){};
 	// Equal
 	bool operator == (const VECTOR3D &A)

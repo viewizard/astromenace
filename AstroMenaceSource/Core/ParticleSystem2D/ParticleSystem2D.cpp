@@ -41,7 +41,8 @@ eParticleSystem2D::eParticleSystem2D()
 	Age = 0.0f;
 	TimeLastUpdate = -1.0f;
 	EmissionResidue =  0.0f;
-	Angle = Direction = VECTOR3D(0,0,0);
+	Angle.Set(0.0f,0.0f,0.0f);
+	Direction.Set(0.0f,0.0f,0.0f);
 	Matrix33Identity(RotationMatrix);
 	Texture = 0;
 	AttractiveValue = 25.0f;
@@ -49,7 +50,7 @@ eParticleSystem2D::eParticleSystem2D()
 	DestroyIfNoParticles = false;
 
 	// положение системы
-	Location = VECTOR3D( 0.0f, 0.0f, 0.0f);
+	Location.Set(0.0f,0.0f,0.0f);
 
 	DeadZone = 0.0f; // нет мертвой зоны
 
@@ -86,7 +87,7 @@ eParticleSystem2D::eParticleSystem2D()
 	IsAttractive = 0;
 
 	CreationType = 0;
-	CreationSize = VECTOR3D(0.05f,0.05f,0.05f);
+	CreationSize.Set(0.05f,0.05f,0.05f);
 
 	// настройка массива
 	Start = 0;
@@ -106,7 +107,7 @@ eParticleSystem2D::~eParticleSystem2D()
 	{
 		eParticle2D *tmp2 = tmp->Next;
 		Detach(tmp);
-		delete tmp; tmp = 0;
+		delete tmp;
 		tmp = tmp2;
 	}
 }
@@ -269,10 +270,9 @@ bool eParticleSystem2D::Update(float Time)
 			{
 				// в квадрате
 				VECTOR3D tmp;
-				float minDist;
 				if (DeadZone != 0.0f)
 				{
-					minDist = CreationSize.x*CreationSize.x+CreationSize.y*CreationSize.y+CreationSize.z*CreationSize.z;
+					float minDist = CreationSize.x*CreationSize.x+CreationSize.y*CreationSize.y+CreationSize.z*CreationSize.z;
 					// если зона больше чем радиус излучения - выключаем ее
 					if (minDist <= DeadZone*DeadZone) DeadZone = 0.0f;
 				}
@@ -451,8 +451,7 @@ void eParticleSystem2D::Draw()
 
 	float AW;
 	float AH;
-	bool ASpresent=false;
-	ASpresent = vw_GetAspectWH(&AW, &AH);
+	bool ASpresent = vw_GetAspectWH(&AW, &AH);
 
 	int W, H;
 	vw_GetViewport(0, 0, &W, &H);

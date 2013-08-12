@@ -58,7 +58,14 @@ class eSound
 {
 public:
 
-	eSound(){FileName=0;};
+	eSound()
+	{
+		FileName = 0;
+		Volume = MainVolume = Age = LastUpdateTime = DestroyTime = DestroyTimeStart = 0.0f;
+		NeedRelease = false;
+		Group = GroupCount = SubGroup = SubGroupCount = Priority = Num = 0;
+		Prev = Next = 0;
+	};
 	~eSound(){if (FileName != 0){delete [] FileName; FileName=0;}};
 
 	// проигрывание звука

@@ -1148,7 +1148,6 @@ void CProjectile::SetLocation(VECTOR3D NewLocation)
 			case 106:
 				if (GraphicFX[0] != 0) GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
 				break;
-				break;
 			// энергетическая мина (2-й тип)
 			case 107:
 				if (GraphicFX[0] != 0) GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
