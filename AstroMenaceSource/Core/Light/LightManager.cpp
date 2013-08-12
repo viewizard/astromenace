@@ -322,7 +322,7 @@ void vw_DeActivateAllLights()
 //-----------------------------------------------------------------------------
 void vw_ReleaseLight(eLight *Light)
 {
-	if (Light != 0) {delete Light; Light = 0;}
+	if (Light != 0) delete Light;
 }
 
 

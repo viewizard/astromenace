@@ -224,7 +224,7 @@ void vw_ReleaseBuffer(eBuffer *Buffer)
 	if (Buffer->Buffer != 0){alDeleteBuffers(1, &Buffer->Buffer); Buffer->Buffer = 0;}
 	alGetError(); // сброс ошибок
 
-	delete Buffer; Buffer = 0;
+	delete Buffer;
 }
 
 

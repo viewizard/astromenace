@@ -98,9 +98,7 @@ void CGameLvlText::Draw()
 {
 	if (DrawText != 0)
 	{
-		float R=1.0f;
-		float G=1.0f;
-		float B=1.0f;
+		float R, G, B;
 
 		switch (Color)
 		{

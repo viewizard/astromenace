@@ -57,7 +57,9 @@ eLight::eLight()
 	QuadraticAttenuation = 0.0f;
 	tmpAttenuation = -1.0f;
 
-	Direction = Location = VECTOR3D(0.0f, 0.0f, 0.0f);
+	Direction.Set(0.0f, 0.0f, 0.0f);
+	Location.Set(0.0f, 0.0f, 0.0f);
+
 
 	On = true;
 	RealLightNum = -1;

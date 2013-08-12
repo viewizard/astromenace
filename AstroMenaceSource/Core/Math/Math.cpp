@@ -471,7 +471,6 @@ void RotatePoint(VECTOR3D *Point, VECTOR3D Angle)
 			Point->z = -xTMP*s + zTMP*c;
 			xTMP = Point->x;
 			yTMP = Point->y;
-			zTMP = Point->z;
 		}
 
 		// Z
@@ -516,7 +515,6 @@ void RotatePointInv(VECTOR3D *Point, VECTOR3D Angle)
 			float s = sinf(a);
 			Point->x = xTMP*c + zTMP*s;
 			Point->z = -xTMP*s + zTMP*c;
-			xTMP = Point->x;
 			yTMP = Point->y;
 			zTMP = Point->z;
 		}

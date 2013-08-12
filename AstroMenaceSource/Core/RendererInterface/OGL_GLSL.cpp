@@ -249,7 +249,6 @@ void vw_PrintShaderInfoLog(GLuint shader, const char *ShaderName)
 
     int infologLength = 0;
     int charsWritten  = 0;
-    GLchar *infoLog;
 
     CheckOGLError();  // Check for OpenGL errors
 
@@ -259,7 +258,7 @@ void vw_PrintShaderInfoLog(GLuint shader, const char *ShaderName)
 
     if (infologLength > 0)
     {
-        infoLog = (GLchar *)malloc(infologLength);
+        GLchar *infoLog = (GLchar *)malloc(infologLength);
         if (infoLog == NULL)
         {
             fprintf(stderr, "ERROR: Could not allocate InfoLog buffer\n");
@@ -281,7 +280,6 @@ void vw_PrintProgramInfoLog(GLuint program)
 
     int infologLength = 0;
     int charsWritten  = 0;
-    GLchar *infoLog;
 
     CheckOGLError();  // Check for OpenGL errors
 
@@ -291,7 +289,7 @@ void vw_PrintProgramInfoLog(GLuint program)
 
     if (infologLength > 0)
     {
-        infoLog = (GLchar *)malloc(infologLength);
+        GLchar *infoLog = (GLchar *)malloc(infologLength);
         if (infoLog == NULL)
         {
             printf("ERROR: Could not allocate InfoLog buffer\n");
@@ -331,7 +329,7 @@ void vw_ReleaseShader(eGLSL *GLSL)
 	if (GLSL->Name != 0){delete [] GLSL->Name; GLSL->Name = 0;}
 
 	// удаляем указатель
-	delete GLSL; GLSL = 0;
+	delete GLSL;
 }
 
 

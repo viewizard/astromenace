@@ -128,7 +128,7 @@ int vw_DATAtoRLE(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS)
     Start = new int[ssizeVFS / 2];
 	if (Start == 0) return 0;
     Stop = new int[ssizeVFS / 2];
-	if (Stop == 0) return 0;
+	if (Stop == 0) { delete [] Start; return 0; }
 
 	for (int i=1; i<ssizeVFS; i++)
 	{
@@ -142,7 +142,7 @@ int vw_DATAtoRLE(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS)
 
 		PRactiv = srcVFS[i];
 	}
-	if (rep) {rep=false;block++;} //если до конца...
+	if (rep) {block++;} //если до конца...
 
     // найти размер результ. последов.
 
@@ -223,16 +223,16 @@ int vw_DATAtoRLE(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS)
 
 	if (block > 0)
 	{
-		int Sr=0; //(предустановка на начало - бит 0)
+		int Sr = 0; //(предустановка на начало - бит 0)
 		int St;
 		int dl;
-		int popr=j;
+		int popr;
 
 		for (int i=0; i<block; i++)
 		{
 			St = Start[i] - 1;
 			dl = St - Sr + 1;
-			popr=0;
+			popr = 0;
 			// пишем с разбиением на части по FF ...если последовательность не идентична
 			while (dl >= 0xFF)
 			{
@@ -282,7 +282,7 @@ int vw_DATAtoRLE(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS)
 		}
 		St = ssizeVFS-1;
 		dl = St - Sr + 1;
-		popr=0;
+		popr = 0;
         // пишем с разбиением на части по FF ...если последовательность не идентична
         // концовка (до сомого последнего бита)
 		while (dl >= 0xFF)
@@ -304,17 +304,15 @@ int vw_DATAtoRLE(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS)
 			(*dstVFS)[j] = (BYTE)dl;
 			j++;
 			memcpy( (*dstVFS) + j, srcVFS + Sr + popr, (BYTE)dl );
-		    popr += dl;
-			j += dl;
 		};
 
 	}
 	else
 	{
-		int Sr=0;// начельный адрес последовательности...
+		int Sr = 0;// начельный адрес последовательности...
 		int dl;  // длина полседовательности...
 		dl = ssizeVFS - 0;
-		int popr=j;
+		int popr = 0;
 		while (dl >= 0xFF)
 		{
 			(*dstVFS)[j] = 0;
@@ -334,8 +332,6 @@ int vw_DATAtoRLE(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS)
 			(*dstVFS)[j] = (BYTE)dl;
 			j++;
 			memcpy( (*dstVFS) + j, srcVFS + Sr + popr, (BYTE)dl );
-		    popr += dl;
-			j += dl;
 		};
 	}
 

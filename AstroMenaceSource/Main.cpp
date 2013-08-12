@@ -1126,8 +1126,8 @@ ReCreate:
 			Setup.AnisotropyLevel = CAPS->MaxAnisotropyLevel;
 			Setup.MaxPointLights = 4;
 		}
-		// если шейдерная модель 4.1-я или выше
-		if (CAPS->ShaderModel >= 4.1f)
+		// если шейдерная модель 4.2-я или выше
+		if (CAPS->ShaderModel >= 4.2f)
 		{
 			// немного больше ставим другие опции
 			Setup.ShadowMap = 5;

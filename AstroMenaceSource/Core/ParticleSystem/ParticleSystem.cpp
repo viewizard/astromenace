@@ -46,7 +46,8 @@ eParticleSystem::eParticleSystem()
 	Age = 0.0f;
 	TimeLastUpdate = -1.0f;
 	EmissionResidue =  0.0f;
-	Angle = Direction = VECTOR3D(0,0,0);
+	Angle.Set(0,0,0);
+	Direction.Set(0,0,0);
 	Texture[0] = Texture[1] = Texture[2] = Texture[3] = Texture[4] = 0;
 	TextureQuantity = 1; // по умолчанию у нас всегда 1 текстура
 	BlendType = 0;
@@ -139,7 +140,7 @@ eParticleSystem::~eParticleSystem()
 	{
 		eParticle *tmp2 = tmp->Next;
 		Detach(tmp);
-		delete tmp; tmp = 0;
+		delete tmp;
 		tmp = tmp2;
 	}
 	if (Light != 0){vw_ReleaseLight(Light); Light = 0;}
@@ -319,10 +320,9 @@ bool eParticleSystem::Update(float Time)
 			{
 				// в кубе
 				VECTOR3D tmp;
-				float minDist;
 				if (DeadZone != 0.0f)
 				{
-					minDist = CreationSize.x*CreationSize.x+CreationSize.y*CreationSize.y+CreationSize.z*CreationSize.z;
+					float minDist = CreationSize.x*CreationSize.x+CreationSize.y*CreationSize.y+CreationSize.z*CreationSize.z;
 					// если зона больше чем радиус излучения - выключаем ее
 					if (minDist <= DeadZone*DeadZone) DeadZone = 0.0f;
 				}
@@ -347,10 +347,9 @@ bool eParticleSystem::Update(float Time)
 			{
 				// в кубе
 				VECTOR3D tmp;
-				float minDist;
 				if (DeadZone != 0.0f)
 				{
-					minDist = CreationSize.x*CreationSize.x+CreationSize.y*CreationSize.y+CreationSize.z*CreationSize.z;
+					float minDist = CreationSize.x*CreationSize.x+CreationSize.y*CreationSize.y+CreationSize.z*CreationSize.z;
 					// если зона больше чем радиус излучения - выключаем ее
 					if (minDist <= DeadZone*DeadZone) DeadZone = 0.0f;
 				}

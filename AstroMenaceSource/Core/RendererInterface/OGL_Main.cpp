@@ -575,8 +575,8 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 		// инициализируем буферы, если поддерживаем работу с ними - через них всегда рисуем
 		if (OpenGL_DevCaps.FramebufferObject)
 		{
-			if (!vw_BuildFBO(&MainFBO, Width, Height, true, true, *MSAA, CSAA) &
-				!vw_BuildFBO(&ResolveFBO, Width, Height, true, false))
+			if ((!vw_BuildFBO(&MainFBO, Width, Height, true, true, *MSAA, CSAA)) &&
+				(!vw_BuildFBO(&ResolveFBO, Width, Height, true, false)))
 			{
 				vw_DeleteFBO(&MainFBO);
 				vw_DeleteFBO(&ResolveFBO);

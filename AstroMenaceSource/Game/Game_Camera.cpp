@@ -111,7 +111,7 @@ void GameCameraSetExplosion(VECTOR3D Location, float Power)
 	if (Power>1.0f) // очень большой взрыв
 		GameCameraDeviationAge = GameCameraDeviationTime = GameCameraDeviationTime*3.0f;
 
-	GameCameraDeviationPower = Power*(10000.0f- dist2)/25000.0f;
+	GameCameraDeviationPower = Power*(10000.0f- dist2)/40000.0f;
 
 
 	GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower*vw_Randf0;
@@ -147,7 +147,7 @@ void GameCameraUpdate(float Time)
 	if (GameCameraDeviationTime < 0.0f) GameCameraDeviationTime = 0.0f;
 
 
-	if (GameCameraDeviationTime < GameCameraDeviationTime && GameCameraDeviationAge != 0.0f)
+	if ((GameCameraDeviationAge != GameCameraDeviationTime) && (GameCameraDeviationAge != 0.0f))
         GameCameraNeedDeviation = GameCameraNeedStartDeviation -  GameCameraNeedStartDeviation/((GameCameraDeviationAge-GameCameraDeviationTime)/GameCameraDeviationAge);
 
 	// просчет девиации камеры

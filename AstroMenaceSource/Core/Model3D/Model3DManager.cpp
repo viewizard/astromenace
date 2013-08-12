@@ -163,7 +163,7 @@ void vw_ReleaseAllModel3D()
 	while (tmp!=0)
 	{
 		eModel3D *tmp2 = tmp->Next;
-		delete tmp; tmp = 0;
+		delete tmp;
 		tmp = tmp2;
 	}
 

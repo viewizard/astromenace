@@ -118,7 +118,7 @@ void vw_ReleaseAllParticleSystems()
 	{
 		eParticleSystem *tmp2 = tmp->Next;
 		// удаляем и очищаем всю память, в релизе стоит DetachShip
-		delete tmp; tmp = 0;
+		delete tmp;
 		tmp = tmp2;
 	}
 

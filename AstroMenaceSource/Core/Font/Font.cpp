@@ -97,7 +97,7 @@ eFontChar* vw_LoadFontChar(unsigned UTF32)
 
 	// называем текстуру номером символа в утф32
 	char texturefilename[MAX_PATH];
-	sprintf(texturefilename, "%i", UTF32);
+	sprintf(texturefilename, "%u", UTF32);
 
 	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
 	NewChar->CharTexture = vw_CreateTextureFromMemory(texturefilename, pixels, NewChar->Width, NewChar->Height, 4, 0, 0, 0, false);
@@ -136,6 +136,7 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 	if (FT_Set_Char_Size( InternalFace, InternalFontSize <<6, InternalFontSize <<6, 96, 96 ))
 	{
 		fprintf(stderr, "Can't set char size %i.", InternalFontSize);
+		delete [] DIB;
 		return;
 	}
 
@@ -152,6 +153,7 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 		if (FT_Load_Char( InternalFace, CurrentChar, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT))
 		{
 			fprintf(stderr, "Can't load Char: %u\n", CurrentChar);
+			delete [] DIB;
 			return;
 		}
 
@@ -306,8 +308,7 @@ void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontSca
 	// учитываем аспект рейшен
 	float AW;
 	float AH;
-	bool ASpresent=false;
-	ASpresent = vw_GetAspectWH(&AW, &AH);
+	bool ASpresent = vw_GetAspectWH(&AW, &AH);
 	// получаем данные текущего вьюпорта
 	int W, H;
 	vw_GetViewport(0, 0, &W, &H);

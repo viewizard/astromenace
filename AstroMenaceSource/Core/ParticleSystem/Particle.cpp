@@ -38,11 +38,16 @@ eParticle::eParticle()
 {
 	TextureNum = 0;
 	Age = 0.0f;
+	Lifetime = 0.0f;
 	Size = 1.0f;
+	SizeDelta = 0.0f;
+	Alpha = 1.0f;
+	AlphaDelta = 0.0f;
 	Color.r = 1.0f;
 	Color.g = 0.0f;
 	Color.b = 0.0f;
 	Color.a = 0.5f;
+	ColorDelta.a = ColorDelta.b = ColorDelta.g = ColorDelta.r = 0.0f;
 	Next = 0;
 	Prev = 0;
 	Show = true;

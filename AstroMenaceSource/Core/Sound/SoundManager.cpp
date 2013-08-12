@@ -281,7 +281,7 @@ void vw_ReleaseSound(eSound* Sound)
 
 
 	// освобождаем память
-	if (Sound != 0){delete Sound; Sound = 0;}
+	if (Sound != 0) delete Sound;
 }
 
 
@@ -654,7 +654,7 @@ void vw_ReleaseMusic(eMusic* Music)
 	}
 
 	// освобождаем память
-	if (Music != 0){delete Music; Music = 0;}
+	if (Music != 0) delete Music;
 }
 
 

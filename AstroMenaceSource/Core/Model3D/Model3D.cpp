@@ -40,10 +40,12 @@ eObjectBlock::eObjectBlock(void)
 	VertexCount = 0;
 	DrawType = 0;
 	RangeStart = 0;
-	Location = Rotation = VECTOR3D(0.0f,0.0f,0.0f);
+	Location.Set(0.0f,0.0f,0.0f);
+	Rotation.Set(0.0f,0.0f,0.0f);
 
 	NeedGeometryAnimation = NeedTextureAnimation = false;
-	GeometryAnimation = TextureAnimation = VECTOR3D(0.0f,0.0f,0.0f);
+	GeometryAnimation.Set(0.0f,0.0f,0.0f);
+	TextureAnimation.Set(0.0f,0.0f,0.0f);
 
 	NeedDestroyDataInObjectBlock = false;
 	VertexBuffer = 0;
@@ -282,9 +284,9 @@ void eModel3D::CreateHardwareBuffers()
 
 
 //-----------------------------------------------------------------------------
-// рекурсивно создаем VertexBufferLimitedBySizeTriangles
+// рекурсивно просчитываем кол-во VertexBufferLimitedBySizeTriangles
 //-----------------------------------------------------------------------------
-int RecursiveBufferLimitedBySizeTriangles(float Point1[8], float Point2[8], float Point3[8], int Stride, float *VertexBuffer, int *CurrentPosition, float TriangleSizeLimit)
+int RecursiveBufferLimitedBySizeTrianglesCalculate(float Point1[8], float Point2[8], float Point3[8], int Stride, float *VertexBuffer, int *CurrentPosition, float TriangleSizeLimit)
 {
 	// подсчитываем длину сторон, если они меньше чем необходимый минимум - выходим с 1
 	float Dist1 = sqrtf((Point1[0]-Point2[0])*(Point1[0]-Point2[0]) + (Point1[1]-Point2[1])*(Point1[1]-Point2[1]) + (Point1[2]-Point2[2])*(Point1[2]-Point2[2]));
@@ -320,8 +322,8 @@ int RecursiveBufferLimitedBySizeTriangles(float Point1[8], float Point2[8], floa
 							(Point1[6]+Point2[6])/2.0f,
 							(Point1[7]+Point2[7])/2.0f};
 
-		return RecursiveBufferLimitedBySizeTriangles(Point1, Point_A, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit)
-				+ RecursiveBufferLimitedBySizeTriangles(Point_A, Point2, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
+		return RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point_A, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit)
+				+ RecursiveBufferLimitedBySizeTrianglesCalculate(Point_A, Point2, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
 	}
 	else
 	if ((Dist2 > Dist1) && (Dist2 > Dist3))
@@ -335,8 +337,8 @@ int RecursiveBufferLimitedBySizeTriangles(float Point1[8], float Point2[8], floa
 							(Point2[6]+Point3[6])/2.0f,
 							(Point2[7]+Point3[7])/2.0f};
 
-		return RecursiveBufferLimitedBySizeTriangles(Point1, Point2, Point_A, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit)
-				+ RecursiveBufferLimitedBySizeTriangles(Point1, Point_A, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
+		return RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point2, Point_A, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit)
+				+ RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point_A, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
 	}
 	else
 	{
@@ -349,8 +351,83 @@ int RecursiveBufferLimitedBySizeTriangles(float Point1[8], float Point2[8], floa
 							(Point3[6]+Point1[6])/2.0f,
 							(Point3[7]+Point1[7])/2.0f};
 
-		return RecursiveBufferLimitedBySizeTriangles(Point1, Point2, Point_A, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit)
-				+ RecursiveBufferLimitedBySizeTriangles(Point_A, Point2, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
+		return RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point2, Point_A, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit)
+				+ RecursiveBufferLimitedBySizeTrianglesCalculate(Point_A, Point2, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
+	}
+}
+//-----------------------------------------------------------------------------
+// рекурсивно создаем VertexBufferLimitedBySizeTriangles
+//-----------------------------------------------------------------------------
+void RecursiveBufferLimitedBySizeTrianglesGenerate(float Point1[8], float Point2[8], float Point3[8], int Stride, float *VertexBuffer, int *CurrentPosition, float TriangleSizeLimit)
+{
+	// подсчитываем длину сторон, если они меньше чем необходимый минимум - выходим с 1
+	float Dist1 = sqrtf((Point1[0]-Point2[0])*(Point1[0]-Point2[0]) + (Point1[1]-Point2[1])*(Point1[1]-Point2[1]) + (Point1[2]-Point2[2])*(Point1[2]-Point2[2]));
+	float Dist2 = sqrtf((Point2[0]-Point3[0])*(Point2[0]-Point3[0]) + (Point2[1]-Point3[1])*(Point2[1]-Point3[1]) + (Point2[2]-Point3[2])*(Point2[2]-Point3[2]));
+	float Dist3 = sqrtf((Point3[0]-Point1[0])*(Point3[0]-Point1[0]) + (Point3[1]-Point1[1])*(Point3[1]-Point1[1]) + (Point3[2]-Point1[2])*(Point3[2]-Point1[2]));
+
+	if ((Dist1<=TriangleSizeLimit) && (Dist2<=TriangleSizeLimit) && (Dist3<=TriangleSizeLimit))
+	{
+		// добавляем в новую последовательность треугольник
+		if ((VertexBuffer != 0) && (CurrentPosition != 0))
+		{
+			memcpy(VertexBuffer+(*CurrentPosition), Point1, sizeof(float)*8);
+			*CurrentPosition += Stride;
+			memcpy(VertexBuffer+(*CurrentPosition), Point2, sizeof(float)*8);
+			*CurrentPosition += Stride;
+			memcpy(VertexBuffer+(*CurrentPosition), Point3, sizeof(float)*8);
+			*CurrentPosition += Stride;
+		}
+
+		return;
+	}
+
+	// одна из сторон больше, ищем наибольшую, делим ее пополам и идем дальше в рекурсию
+
+	if ((Dist1 > Dist2) && (Dist1 > Dist3))
+	{
+		float Point_A[8]={(Point1[0]+Point2[0])/2.0f,
+							(Point1[1]+Point2[1])/2.0f,
+							(Point1[2]+Point2[2])/2.0f,
+							(Point1[3]+Point2[3])/2.0f,
+							(Point1[4]+Point2[4])/2.0f,
+							(Point1[5]+Point2[5])/2.0f,
+							(Point1[6]+Point2[6])/2.0f,
+							(Point1[7]+Point2[7])/2.0f};
+
+		RecursiveBufferLimitedBySizeTrianglesGenerate(Point1, Point_A, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
+		RecursiveBufferLimitedBySizeTrianglesGenerate(Point_A, Point2, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
+		return;
+	}
+	else
+	if ((Dist2 > Dist1) && (Dist2 > Dist3))
+	{
+		float Point_A[8]={(Point2[0]+Point3[0])/2.0f,
+							(Point2[1]+Point3[1])/2.0f,
+							(Point2[2]+Point3[2])/2.0f,
+							(Point2[3]+Point3[3])/2.0f,
+							(Point2[4]+Point3[4])/2.0f,
+							(Point2[5]+Point3[5])/2.0f,
+							(Point2[6]+Point3[6])/2.0f,
+							(Point2[7]+Point3[7])/2.0f};
+
+		RecursiveBufferLimitedBySizeTrianglesGenerate(Point1, Point2, Point_A, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
+		RecursiveBufferLimitedBySizeTrianglesGenerate(Point1, Point_A, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
+		return;
+	}
+	else
+	{
+		float Point_A[8]={(Point3[0]+Point1[0])/2.0f,
+							(Point3[1]+Point1[1])/2.0f,
+							(Point3[2]+Point1[2])/2.0f,
+							(Point3[3]+Point1[3])/2.0f,
+							(Point3[4]+Point1[4])/2.0f,
+							(Point3[5]+Point1[5])/2.0f,
+							(Point3[6]+Point1[6])/2.0f,
+							(Point3[7]+Point1[7])/2.0f};
+
+		RecursiveBufferLimitedBySizeTrianglesGenerate(Point1, Point2, Point_A, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
+		RecursiveBufferLimitedBySizeTrianglesGenerate(Point_A, Point2, Point3, Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
+		return;
 	}
 }
 void eModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
@@ -403,7 +480,7 @@ void eModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 							DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*(j+2)+7]};
 
 			// идем на рекурсивную функцию считать кол-во треугольников
-			DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount += RecursiveBufferLimitedBySizeTriangles(Point1, Point2, Point3, 0, 0, 0, TriangleSizeLimit)*3;
+			DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount += RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point2, Point3, 0, 0, 0, TriangleSizeLimit)*3;
 		}
 	}
 
@@ -421,7 +498,6 @@ void eModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 			// выделяем память
 			DrawObjectList[i].VertexBufferLimitedBySizeTriangles = new float[DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount*DrawObjectList[i].VertexStride];
 			int CurrentPosition = 0;
-			int FakeCalculation = 0;
 
 			// перебираем по треугольникам (3 точки)
 			for (int j=0; j<DrawObjectList[i].VertexCount-2; j+=3)
@@ -454,7 +530,7 @@ void eModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 								DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*(j+2)+7]};
 
 				// идем на рекурсивную функцию
-				FakeCalculation += RecursiveBufferLimitedBySizeTriangles(Point1, Point2, Point3, DrawObjectList[i].VertexStride, DrawObjectList[i].VertexBufferLimitedBySizeTriangles, &CurrentPosition, TriangleSizeLimit)*3;
+				RecursiveBufferLimitedBySizeTrianglesGenerate(Point1, Point2, Point3, DrawObjectList[i].VertexStride, DrawObjectList[i].VertexBufferLimitedBySizeTriangles, &CurrentPosition, TriangleSizeLimit);
 			}
 		}
 	}
