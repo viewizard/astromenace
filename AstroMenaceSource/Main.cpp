@@ -347,7 +347,7 @@ int InitFontConfig()
 
 
 
-	if (fs) FcFontSetDestroy(fs);
+	FcFontSetDestroy(fs);
 	return 0;
 }
 

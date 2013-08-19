@@ -206,24 +206,25 @@ int executable_exists_in_path(char **tokenized_path, const char *app_name)
 char **get_browsers(void)
 {
 
-	static const char *browser_list[] =
-	{
-		"xdg-open", // первое ставим именно xdg-open
-		"firefox",
-		"opera",
-		"chrome",
-		"konqueror",
-		"chromium",
-		"epiphany",
-		"midori",
-		"dillo",
-		"rekonq"
-	};
 	char **tokenized_path = get_path(), **browsers = NULL;
 
 
 	if(!browsers)
 	{
+		static const char *browser_list[] =
+		{
+			"xdg-open", // первое ставим именно xdg-open
+			"firefox",
+			"opera",
+			"chrome",
+			"konqueror",
+			"chromium",
+			"epiphany",
+			"midori",
+			"dillo",
+			"rekonq"
+		};
+
 		unsigned int a, b, browser_list_count = sizeof(browser_list)/sizeof(browser_list[0]);
 
 		browsers = (char **)calloc(browser_list_count, sizeof(char *));
@@ -338,31 +339,10 @@ bool vw_OpenBrouser(const char *url)
     	// не перебираем!!! берем первый броузер
     	a = 0;
 
-		// проверка, если установлен 93 дисплей - это компиз... открываем в 0-м
-		char *value = getenv("DISPLAY");
-		bool NeedSetDisplay = false;
-		if (value != 0)
-		{
-			char *display = new char[strlen(value)+1];
-			display = strdup(value);
-			if (!strcmp(display, ":93"))
-			{
-				NeedSetDisplay = true;
-				printf("DISPLAY=%s \n", display);
-			}
-			delete [] display;
-		}
-
-
         printf("%u:\t%s\n", a, browsers[a]);
 
         char GotoUrl[1024];
-
-        if (NeedSetDisplay)
-			sprintf(GotoUrl,"DISPLAY=:0 %s %s",browsers[a], url);
-		else
-			sprintf(GotoUrl,"%s %s",browsers[a], url);
-
+		sprintf(GotoUrl,"%s %s",browsers[a], url);
 
 
         int x;

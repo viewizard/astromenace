@@ -40,7 +40,7 @@ CSpaceStars::CSpaceStars()
 	TimeLastUpdate = -1.0f;
 
 	// положение системы
-	Location = VECTOR3D( 0.0f, 0.0f, 0.0f);
+	Location.Set( 0.0f, 0.0f, 0.0f);
 
 	Size = 0.003f;
 	CreationSize = VECTOR3D(5.21f,5.21f,5.21f);
@@ -151,6 +151,7 @@ CSpaceStars::CSpaceStars()
 	list = 0;
 	tmpDATA = 0;
 	VBO = 0;
+	PrimitCount = 0;
 	LastCameraAngleX = LastCameraAngleY = LastCameraAngleZ = 0.0f;
 }
 
@@ -166,7 +167,7 @@ CSpaceStars::~CSpaceStars()
 	{
 		CStar *tmp2 = tmp->Next;
 		Detach(tmp);
-		delete tmp; tmp = 0;
+		delete tmp;
 		tmp = tmp2;
 	}
 

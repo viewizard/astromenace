@@ -111,7 +111,7 @@ boolean JPEGFillInputBuffer(j_decompress_ptr cinfo)
 	// читаем кусками по c_JPEGInputBufferSize байт
 	size_t nbytes = src->file->fread(src->buffer, sizeof(JOCTET), c_JPEGInputBufferSize);
 	// если мы ничего не считали :(
-	if (nbytes <= 0)
+	if (nbytes == 0)
 	{
 		if ( src->sof )  return(FALSE); // блин, нам дали пустой файл - заорем "нехорошо" :)
 		// если уже читали до этого, то вставляем в буфер инфу о конце файла

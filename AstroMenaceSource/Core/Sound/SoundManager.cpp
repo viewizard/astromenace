@@ -157,13 +157,11 @@ bool vw_InitSound()
 
 #ifdef gamedebug
 	// получаем и выводим все поддерживаемые расширения
-	char *extensions_tmp;
-	size_t len;
-	extensions_tmp = (char *)alGetString(AL_EXTENSIONS);
+	char *extensions_tmp = (char *)alGetString(AL_EXTENSIONS);
 	if (extensions_tmp != 0)
 	{
 		char *extensions = 0;
-		len = strlen(extensions_tmp);
+		size_t len = strlen(extensions_tmp);
 		extensions = new char[len+1];
 		if (extensions != 0)
 		{

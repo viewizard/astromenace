@@ -141,7 +141,7 @@ void ReleaseAllWeapon()
 	while (tmp!=0)
 	{
 		CWeapon *tmp2 = tmp->Next;
-		delete tmp; tmp = 0;
+		delete tmp;
 		tmp = tmp2;
 	}
 }

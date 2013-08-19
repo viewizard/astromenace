@@ -292,12 +292,10 @@ void SaveXMLSetupFile()
 
 	{
 		// XOR
-		int k1;
-		int k2;
 		for (int i=0; i < TopScoresDataSize; i++)
 		{
-			k1 = i;
-			k2 = TopScoresDataSize + i*2;
+			int k1 = i;
+			int k2 = TopScoresDataSize + i*2;
 			TopScoresDataXORCode[k1] = 97 + (unsigned char)vw_iRandNum(25);
 			TopScoresDataXORCode[k2] = 0;
 			TopScoresDataXORCode[k2+1] = TopScoresData[i]^TopScoresDataXORCode[k1];
@@ -352,12 +350,10 @@ void SaveXMLSetupFile()
 
 
 	// XOR
-	int k1;
-	int k2;
 	for (int i=0; i < ProfileDataSize; i++)
 	{
-		k1 = i;
-		k2 = ProfileDataSize + i*2;
+		int k1 = i;
+		int k2 = ProfileDataSize + i*2;
 		ProfileDataXORCode[k1] = 97 + (unsigned char)vw_iRandNum(25);
 		ProfileDataXORCode[k2] = 0;
 		ProfileDataXORCode[k2+1] = ProfileData[i]^ProfileDataXORCode[k1];
@@ -388,7 +384,7 @@ void SaveXMLSetupFile()
 
 	XMLdoc->AddEntryContent(XMLdoc->AddEntry(RootXMLEntry, "PilotsProfiles"), ResultString);
 
-	if (ResultString != 0) delete [] ResultString;
+	delete [] ResultString;
 	if (ProfileData != 0) delete [] ProfileData;
 	if (ProfileDataXORCode != 0) delete [] ProfileDataXORCode;
 
@@ -720,12 +716,10 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		TopScoresDataSize = k/3;
 
 		// второй цикл, восстанавливаем последовательность структуры
-		int k1;
-		int k2;
 		for (int i=0; i<TopScoresDataSize; i++)
 		{
-			k1 = i;
-			k2 = TopScoresDataSize + i*2;
+			int k1 = i;
+			int k2 = TopScoresDataSize + i*2;
 
 			unsigned char XORhash = TopScoresDataXORCode[k1];
 			unsigned char XORdata = ((TopScoresDataXORCode[k2]-97)*10) + (TopScoresDataXORCode[k2+1]-97);
@@ -783,12 +777,10 @@ LoadProfiles:
 		ProfileDataSize = k/3;
 
 		// второй цикл, восстанавливаем последовательность структуры
-		int k1;
-		int k2;
 		for (int i=0; i<ProfileDataSize; i++)
 		{
-			k1 = i;
-			k2 = ProfileDataSize + i*2;
+			int k1 = i;
+			int k2 = ProfileDataSize + i*2;
 
 			unsigned char XORhash = ProfileDataXORCode[k1];
 			unsigned char XORdata = ((ProfileDataXORCode[k2]-97)*10) + (ProfileDataXORCode[k2+1]-97);

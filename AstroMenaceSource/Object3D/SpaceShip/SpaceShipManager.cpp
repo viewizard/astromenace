@@ -170,7 +170,7 @@ void ReleaseAllSpaceShip()
 	while (tmp!=0)
 	{
 		CSpaceShip *tmp2 = tmp->Next;
-		delete tmp; tmp = 0;
+		delete tmp;
 		tmp = tmp2;
 	}
 

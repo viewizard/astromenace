@@ -170,7 +170,7 @@ void ReleaseAllSpaceObject()
 	while (tmp!=0)
 	{
 		CSpaceObject *tmp2 = tmp->Next;
-		delete tmp; tmp = 0;
+		delete tmp;
 		tmp = tmp2;
 	}
 

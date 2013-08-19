@@ -1501,7 +1501,6 @@ void DrawDialogBox()
 			vw_DrawFont(X+40, Y+120+k*11, -701, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line12"));
 			SizeI = vw_FontSize(vw_GetText("9_11Line13"));
 			vw_DrawFont(X+25, Y+120+k*12, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line13"));
-			SizeI = vw_FontSize(vw_GetText("9_11Line14"));
 			vw_DrawFont(X+40, Y+120+k*13, -701, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line14"));
 			SizeI = vw_FontSize(vw_GetText("9_11Line15"));
 			vw_DrawFont(X+25, Y+120+k*14, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("9_11Line15"));

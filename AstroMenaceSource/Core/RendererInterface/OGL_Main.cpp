@@ -475,13 +475,11 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 
 #ifdef gamedebug
 	// получаем и выводим все поддерживаемые расширения
-	char *extensions_tmp;
-	size_t len;
-	extensions_tmp = (char *)glGetString(GL_EXTENSIONS);
+	char *extensions_tmp = (char *)glGetString(GL_EXTENSIONS);
 	if (extensions_tmp != 0)
 	{
 		char *extensions = 0;
-		len = strlen(extensions_tmp);
+		size_t len = strlen(extensions_tmp);
 		extensions = new char[len+1];
 		if (extensions != 0)
 		{
@@ -575,7 +573,7 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 		// инициализируем буферы, если поддерживаем работу с ними - через них всегда рисуем
 		if (OpenGL_DevCaps.FramebufferObject)
 		{
-			if ((!vw_BuildFBO(&MainFBO, Width, Height, true, true, *MSAA, CSAA)) &&
+			if ((!vw_BuildFBO(&MainFBO, Width, Height, true, true, *MSAA, CSAA)) &
 				(!vw_BuildFBO(&ResolveFBO, Width, Height, true, false)))
 			{
 				vw_DeleteFBO(&MainFBO);
