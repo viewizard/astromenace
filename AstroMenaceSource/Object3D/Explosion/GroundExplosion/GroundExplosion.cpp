@@ -209,7 +209,7 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 					CSpaceExplosion *TMPExplosion;
 					TMPExplosion = new CSpaceExplosion;
 					TMPExplosion->Create(ShipPart, 32, ShipPart->Location, ShipPart->Speed, -1);
-					if (ShipPart != 0){delete ShipPart; ShipPart = 0;}
+					delete ShipPart;
 				}
 			}
 		}

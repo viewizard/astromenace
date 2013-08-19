@@ -65,8 +65,8 @@ CGroundObject::CGroundObject(void)
 
 
 	// и никуда не нужно поворачивать
-	NeedRotate = VECTOR3D(0.0f, 0.0f, 0.0f);
-	RotationSpeed = VECTOR3D(1.0f, 1.0f, 1.0f);
+	NeedRotate.Set(0.0f, 0.0f, 0.0f);
+	RotationSpeed.Set(1.0f, 1.0f, 1.0f);
 
 	// скорость
 	MaxSpeed = Speed = NeedSpeed = 0.0f;

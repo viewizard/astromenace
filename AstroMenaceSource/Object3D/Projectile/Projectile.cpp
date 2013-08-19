@@ -288,7 +288,7 @@ CProjectile::CProjectile(void)
 	// не можем сбивать снаряд
 	ProjectileType = 0;
 
-	ProjectileCenter = VECTOR3D(0.0f, 0.0f, 0.0f);
+	ProjectileCenter.Set(0.0f, 0.0f, 0.0f);
 
 	Age = 0.0f;
 	NeedDeadSound = true;
@@ -1489,14 +1489,13 @@ missile:
 		// мина пришельцев, энергетическая (1-й тип)
 		case 106:
 			{
-				float MineSpeed = 5.0f;
-
 				// получаем положение ближайшего врага
 				CObject3D *tmpTarget = GetCloserTargetPosition(ObjectStatus, Location);
 
 				// !!! упращенно, не учитываем положение плоскости
 				if (tmpTarget != 0)
 				{
+					float MineSpeed = 5.0f;
 					float SpeedTmp = MineSpeed*TimeDelta;
 					if (SpeedTmp > fabs(Location.y-tmpTarget->Location.y)) SpeedTmp = fabs(Location.y-tmpTarget->Location.y);
 

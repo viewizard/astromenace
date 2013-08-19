@@ -736,12 +736,12 @@ void DrawLine(VECTOR3D Point1, VECTOR3D Point2, float ColorR, float ColorG, floa
 	tmpDATA[k++] = ColorR;
 	tmpDATA[k++] = ColorG;
 	tmpDATA[k++] = ColorB;
-	tmpDATA[k++] = ColorA;
+	tmpDATA[k] = ColorA;
 
 
 	vw_SendVertices(RI_LINES, 2, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(float));
 
-	if (tmpDATA != 0){delete [] tmpDATA; tmpDATA = 0;}
+	delete [] tmpDATA;
 }
 //-----------------------------------------------------------------------------
 // Прорисовка сетки бокса
@@ -923,8 +923,6 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 
-	// текущая текстура, чтобы не переставлять по 10 раз одно и то же
-	eTexture *CurrentText = 0;
 	// у модели может быть нормал меппинг только на отдельные объекты
 	eTexture *CurrentNormalMap = 0;
 	// текущий шейдер, чтобы не ставить лишний раз
@@ -1125,6 +1123,10 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	}
 	else
 	{
+
+		// текущая текстура, чтобы не переставлять по 10 раз одно и то же
+		eTexture *CurrentText = 0;
+
 		// установка текстур и подхотовка к прорисовке
 		for (int i=0; i<DrawObjectQuantity; i++)
 		{
@@ -1483,7 +1485,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	tmpDATA[k++] = ColorR;
 	tmpDATA[k++] = ColorG;
 	tmpDATA[k++] = ColorB;
-	tmpDATA[k++] = ColorA;
+	tmpDATA[k] = ColorA;
 
 
 	vw_PushMatrix();
@@ -1540,7 +1542,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	tmpDATA[k++] = ColorR;
 	tmpDATA[k++] = ColorG;
 	tmpDATA[k++] = ColorB;
-	tmpDATA[k++] = ColorA;
+	tmpDATA[k] = ColorA;
 
 	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(float));
 
@@ -1592,7 +1594,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		tmpDATA[k++] = ColorR;
 		tmpDATA[k++] = ColorG;
 		tmpDATA[k++] = ColorB;
-		tmpDATA[k++] = ColorA;
+		tmpDATA[k] = ColorA;
 
 
 		vw_PushMatrix();
@@ -1646,7 +1648,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		tmpDATA[k++] = ColorR;
 		tmpDATA[k++] = ColorG;
 		tmpDATA[k++] = ColorB;
-		tmpDATA[k++] = ColorA;
+		tmpDATA[k] = ColorA;
 
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(float));
 
@@ -1655,9 +1657,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 
-	if (tmpDATA != 0){delete [] tmpDATA; tmpDATA = 0;}
-
-
+	delete [] tmpDATA;
 
 	vw_BindTexture(0, 0);
 }

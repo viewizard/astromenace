@@ -40,157 +40,159 @@ void PlayBulletExplosion(VECTOR3D Location, bool NeedExplosionSFX, int ExplType)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// звуковые спец эффекты
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	float fVol = 1.0f;
-
 	if (NeedExplosionSFX)
-	switch (ExplType)
 	{
-	// самоликвидация рокет-торпед... и вообще всех снарядов...
-	// идет со знаком "-" к номеру снаряда при создании
+		float fVol = 1.0f;
 
-		// ракеты землян
-		case -16:
-		case -17:
-		case -18:
-		case -19:
-		// ракеты пиратов
-		case -205:
-		case -206:
-		case -209:
-		case -210:
-		// мины пиратов
-		case -214:
-		case -215:
-		case -216:
-		case -217:
-			// просто малый взрыв
-			Audio_PlaySound3D(6, fVol, Location, false);
-			break;
+		switch (ExplType)
+		{
+		// самоликвидация рокет-торпед... и вообще всех снарядов...
+		// идет со знаком "-" к номеру снаряда при создании
 
-
-	// взрыв и разлет при попадании снарядов в объект
-	// используем аналогичный номер, как при создании
-
-
-		// Kinetic
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-		// пираты (турели + стрельба как Kinetic1)
-		case 201:
-		case 202:
-		case 204:
-		case 211:
-		case 212:
-			// разваливание снарядов
-			Audio_PlaySound3D(28, fVol, Location, false);
-			break;
+			// ракеты землян
+			case -16:
+			case -17:
+			case -18:
+			case -19:
+			// ракеты пиратов
+			case -205:
+			case -206:
+			case -209:
+			case -210:
+			// мины пиратов
+			case -214:
+			case -215:
+			case -216:
+			case -217:
+				// просто малый взрыв
+				Audio_PlaySound3D(6, fVol, Location, false);
+				break;
 
 
-		// Ion
-		case 5:
-		case 6:
-		case 7:
-		// пришельцы (как Kinetic1)
-		case 101:
-		// пираты (как Ion2)
-		case 207:
-			// разваливание снарядов
-			Audio_PlaySound3D(29, fVol, Location, false);
-			break;
-
-		// Plasma
-		case 8:
-		case 9:
-		case 10:
-		// пришельцы (как Kinetic2 и Kinetic3)
-		case 102:
-		case 103:
-		case 104:
-		case 105:
-		// пришельцы (как Plasma3 и Plasma2)
-		case 108:
-		case 109:
-		// пираты (как Plasma2)
-		case 213:
-			// разваливание снарядов
-			Audio_PlaySound3D(30, fVol, Location, false);
-			break;
+		// взрыв и разлет при попадании снарядов в объект
+		// используем аналогичный номер, как при создании
 
 
-		// Maser - у него луч, тут не учитываем
-	/*	case 11:
-			break;
-		case 12:
-			break;*/
+			// Kinetic
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			// пираты (турели + стрельба как Kinetic1)
+			case 201:
+			case 202:
+			case 204:
+			case 211:
+			case 212:
+				// разваливание снарядов
+				Audio_PlaySound3D(28, fVol, Location, false);
+				break;
 
 
-		// Antimatter
-		case 13:
-		// пришельцы (мина 1 тип)
-		case 106:
-		// пришельцы (мина 2 тип)
-		case 107:
-		// пираты (как Antimatter)
-		case 208:
-			// разваливание снарядов
-			Audio_PlaySound3D(31, fVol, Location, false);
-			break;
+			// Ion
+			case 5:
+			case 6:
+			case 7:
+			// пришельцы (как Kinetic1)
+			case 101:
+			// пираты (как Ion2)
+			case 207:
+				// разваливание снарядов
+				Audio_PlaySound3D(29, fVol, Location, false);
+				break;
 
-		// Laser - у него луч, тут не учитываем
-	/*	case 14:
-			break;*/
-
-		// Gauss
-		case 15:
-			// разваливание снарядов
-			Audio_PlaySound3D(32, fVol, Location, false);
-			break;
-
-		// ракета
-		case 16:
-		// ракеты пиратов
-		case 205:
-		// мины пиратов
-		case 214:
-		case 215:
-		case 216:
-		case 217:
-			// малый взрыв
-			Audio_PlaySound3D(6, fVol, Location, false);
-			break;
-
-		// рой
-		case 17:
-		// ракеты пиратов
-		case 206:
-			// малый взрыв
-			Audio_PlaySound3D(6, fVol, Location, false);
-			break;
-
-		// торпеда
-		case 18:
-		// торпеда пиратов
-		case 209:
-			// средний взрыв
-			Audio_PlaySound3D(7, fVol, Location, false, 2);
-			break;
-
-		// бомба
-		case 19:
-		// бомба пиратов
-		case 210:
-			// большой взрыв
-			Audio_PlaySound3D(8, fVol, Location, false, 2);
-			break;
+			// Plasma
+			case 8:
+			case 9:
+			case 10:
+			// пришельцы (как Kinetic2 и Kinetic3)
+			case 102:
+			case 103:
+			case 104:
+			case 105:
+			// пришельцы (как Plasma3 и Plasma2)
+			case 108:
+			case 109:
+			// пираты (как Plasma2)
+			case 213:
+				// разваливание снарядов
+				Audio_PlaySound3D(30, fVol, Location, false);
+				break;
 
 
+			// Maser - у него луч, тут не учитываем
+		/*	case 11:
+				break;
+			case 12:
+				break;*/
 
-		default:
-			// если тут, значит взрыв делать не нужно... все и так само уничтожется
 
-			break;
+			// Antimatter
+			case 13:
+			// пришельцы (мина 1 тип)
+			case 106:
+			// пришельцы (мина 2 тип)
+			case 107:
+			// пираты (как Antimatter)
+			case 208:
+				// разваливание снарядов
+				Audio_PlaySound3D(31, fVol, Location, false);
+				break;
+
+			// Laser - у него луч, тут не учитываем
+		/*	case 14:
+				break;*/
+
+			// Gauss
+			case 15:
+				// разваливание снарядов
+				Audio_PlaySound3D(32, fVol, Location, false);
+				break;
+
+			// ракета
+			case 16:
+			// ракеты пиратов
+			case 205:
+			// мины пиратов
+			case 214:
+			case 215:
+			case 216:
+			case 217:
+				// малый взрыв
+				Audio_PlaySound3D(6, fVol, Location, false);
+				break;
+
+			// рой
+			case 17:
+			// ракеты пиратов
+			case 206:
+				// малый взрыв
+				Audio_PlaySound3D(6, fVol, Location, false);
+				break;
+
+			// торпеда
+			case 18:
+			// торпеда пиратов
+			case 209:
+				// средний взрыв
+				Audio_PlaySound3D(7, fVol, Location, false, 2);
+				break;
+
+			// бомба
+			case 19:
+			// бомба пиратов
+			case 210:
+				// большой взрыв
+				Audio_PlaySound3D(8, fVol, Location, false, 2);
+				break;
+
+
+
+			default:
+				// если тут, значит взрыв делать не нужно... все и так само уничтожется
+
+				break;
+		}
 	}
 }
 

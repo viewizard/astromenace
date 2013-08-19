@@ -280,7 +280,7 @@ void WorkshopCreateBuyShip()
 
 
 	// создаем объект
-	if (WorkshopFighterGame != 0){delete WorkshopFighterGame; WorkshopFighterGame = 0;}
+	delete WorkshopFighterGame;
 
 	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
 	GameNPCArmorPenalty = 1;

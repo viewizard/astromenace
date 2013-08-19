@@ -1881,7 +1881,7 @@ void InformationDrawObject()
 		tmpDATA[k++] = 0.0f;
 		tmpDATA[k++] = -SizeCell*1.0f;
 		tmpDATA[k++] = 0.0f;
-		tmpDATA[k++] = 0.0f;
+		tmpDATA[k] = 0.0f;
 
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_1_TEX, tmpDATA, 5*sizeof(float));
 
@@ -1910,7 +1910,7 @@ void InformationDrawObject()
 		tmpDATA[k++] = 0.0f;
 		tmpDATA[k++] = i*1.0f - LineSize;
 		tmpDATA[k++] = 1.0f;
-		tmpDATA[k++] = 1.0f;
+		tmpDATA[k] = 1.0f;
 
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_1_TEX, tmpDATA, 5*sizeof(float));
 	}

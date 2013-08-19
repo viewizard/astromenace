@@ -42,7 +42,8 @@ CSpaceObject::CSpaceObject(void)
 
 	Speed = 0.0f;
 
-	Velocity = RotationSpeed = VECTOR3D(0.0f,0.0f,0.0f);
+	Velocity.Set(0.0f,0.0f,0.0f);
+	RotationSpeed.Set(0.0f,0.0f,0.0f);
 
 	GFXQuantity = 0;
 	GFX = 0;

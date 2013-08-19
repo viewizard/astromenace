@@ -43,7 +43,7 @@
 struct eObjectBlock
 {
 	eObjectBlock(void);
-	virtual ~eObjectBlock(void);
+	~eObjectBlock(void);
 
 	int	VertexFormat;	// формат вертексов данных
 	int	VertexStride;	// отступ в (байтах*4, т.е. во float или DWORD) до начала данных следующей точки

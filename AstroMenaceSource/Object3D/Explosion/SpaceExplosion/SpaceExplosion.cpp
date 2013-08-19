@@ -50,10 +50,9 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 	// общий - пенальти, если не игрок
 	float CurrentPenalty = GameNPCWeaponPenalty*1.0f+1.0f; // чуть больше убираем...
 	// если игрок или свои - ничего не надо...
-	if (Object != 0)
-		if (Object->ObjectStatus >= 2) CurrentPenalty = 1.0f;
+	if (Object->ObjectStatus >= 2) CurrentPenalty = 1.0f;
 	// сохраняем статус объекта, чтобы правильно создавать части-снаряды и обломки
-	if (Object != 0) ObjectStatus = Object->ObjectStatus;
+	ObjectStatus = Object->ObjectStatus;
 	// сохраняем тип взрыва
 	ExplosionType = ExplType;
 	// для регулирования ускорения разлета геометрии
@@ -525,7 +524,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 				CSpaceExplosion *TMPExplosion;
 				TMPExplosion = new CSpaceExplosion;
 				TMPExplosion->Create(ShipPart, NeedExplosionType, ShipPart->Location, ShipPart->Speed, -1);
-				if (ShipPart != 0){delete ShipPart; ShipPart = 0;}
+				delete ShipPart;
 			}
 		}
 
@@ -855,38 +854,40 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// звуковые спец эффекты
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	float fVol = 1.0f;
-
 	if (NeedExplosionSFX)
-	switch (ExplType)
 	{
-	    // малый взрыв
-        case 1:
-            // астероид
-            Audio_PlaySound3D(33, fVol, ExplLocation, false, 2);
-			break;
 
-        // взрыв
-        case 2:
-            // пришельцы
-            Audio_PlaySound3D(7, fVol, ExplLocation, false, 2);
-			break;
-        case 3:
-            // земляне, пираты
-            Audio_PlaySound3D(8, fVol, ExplLocation, false, 2);
-			break;
-       // case 31:
-		case 32:
-            // внутренняя часть (пираты, земляне)
-            //fVol = fVol/2; // ум. т.к. их там очень много
-            Audio_PlaySound3D(8, fVol, ExplLocation, false, 2);
-			break;
-		//case 33:
-		case 34:
-            // внутренняя часть (босс пришельцев)
-            Audio_PlaySound3D(7, fVol, ExplLocation, false, 2);
-			break;
+		float fVol = 1.0f;
 
+		switch (ExplType)
+		{
+			// малый взрыв
+			case 1:
+				// астероид
+				Audio_PlaySound3D(33, fVol, ExplLocation, false, 2);
+				break;
+
+			// взрыв
+			case 2:
+				// пришельцы
+				Audio_PlaySound3D(7, fVol, ExplLocation, false, 2);
+				break;
+			case 3:
+				// земляне, пираты
+				Audio_PlaySound3D(8, fVol, ExplLocation, false, 2);
+				break;
+		   // case 31:
+			case 32:
+				// внутренняя часть (пираты, земляне)
+				//fVol = fVol/2; // ум. т.к. их там очень много
+				Audio_PlaySound3D(8, fVol, ExplLocation, false, 2);
+				break;
+			//case 33:
+			case 34:
+				// внутренняя часть (босс пришельцев)
+				Audio_PlaySound3D(7, fVol, ExplLocation, false, 2);
+				break;
+		}
 	}
 
 

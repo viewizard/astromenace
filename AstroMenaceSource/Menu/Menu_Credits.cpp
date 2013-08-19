@@ -491,7 +491,6 @@ void CreditsMenu()
 	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, ttt*MenuContentTransp, vw_GetText("10_DEVELOPING_WITH"));
 
 	// Code::Blocks
-	Y1 += Offset1-20;
 	Y2 += Offset1-20;
 	SetRect(&SrcRect,0,0,64,64);
 	SetRect(&DstRect,LogoX+32,Y2,LogoX+32+64,Y2+64);
@@ -502,14 +501,12 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Code::Blocks IDE");
-	Y1 += Offset1;
 	Y2 += Offset1;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://www.codeblocks.org");
 
 	// gcc
-	Y1 += Offset1+20;
 	Y2 += Offset1+20;
 	SetRect(&SrcRect,0,0,64,64);
 	SetRect(&DstRect,LogoX+32,Y2,LogoX+32+64,Y2+64);
@@ -520,7 +517,6 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "GNU GCC Compiler Collection");
-	Y1 += Offset1;
 	Y2 += Offset1;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
@@ -528,7 +524,6 @@ void CreditsMenu()
 
 
 	// svn
-	Y1 += Offset1+20;
 	Y2 += Offset1+20;
 	SetRect(&SrcRect,0,0,64,64);
 	SetRect(&DstRect,LogoX+32,Y2,LogoX+32+64,Y2+64);
@@ -539,7 +534,6 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Subversion");
-	Y1 += Offset1;
 	Y2 += Offset1;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
@@ -547,7 +541,6 @@ void CreditsMenu()
 
 
 	// gentoo
-	Y1 += Offset1+20;
 	Y2 += Offset1+20;
 	SetRect(&SrcRect,0,0,64,64);
 	SetRect(&DstRect,LogoX+32,Y2,LogoX+32+64,Y2+64);
@@ -558,7 +551,6 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Gentoo Linux");
-	Y1 += Offset1;
 	Y2 += Offset1;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
@@ -566,7 +558,6 @@ void CreditsMenu()
 
 
 	// gimp
-	Y1 += Offset1+20;
 	Y2 += Offset1+20;
 	SetRect(&SrcRect,0,0,64,64);
 	SetRect(&DstRect,LogoX+32,Y2,LogoX+32+64,Y2+64);
@@ -577,7 +568,6 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "GIMP ");
-	Y1 += Offset1;
 	Y2 += Offset1;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
@@ -586,13 +576,11 @@ void CreditsMenu()
 
 
 	// GIMP normalmap plugin
-	Y1 += Offset1+25;
 	Y2 += Offset1+25;
 	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("GIMP normalmap plugin"))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "GIMP normalmap plugin");
-	Y1 += Offset1;
 	Y2 += Offset1;
 	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("http://code.google.com/p/gimp-normalmap"))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
@@ -602,13 +590,11 @@ void CreditsMenu()
 
 
 	// Spacescape
-	Y1 += Offset1+20;
 	Y2 += Offset1+20;
 	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Spacescape"))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Spacescape");
-	Y1 += Offset1;
 	Y2 += Offset1;
 	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("http://sourceforge.net/projects/spacescape"))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
@@ -620,13 +606,11 @@ void CreditsMenu()
 
 
 	// логотип и копирайт
-	Y1 += Offset2+30;
 	Y2 += Offset2+30;
 	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Copyright © 2007-2013, Viewizard"))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Copyright © 2007-2013, Viewizard");
-	Y1 += Offset1;
 	Y2 += Offset1;
 	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("http://www.viewizard.com"))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}

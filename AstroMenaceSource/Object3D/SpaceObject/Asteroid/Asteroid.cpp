@@ -61,7 +61,7 @@ void CAsteroid::Create(int SpaceObjectNum)
 	::CObject3D::InitByDrawObjectList();
 
 
-	if (NameTMP != 0){delete [] NameTMP; NameTMP = 0;}
+	delete [] NameTMP;
 
 	// всегда только эти текстуры и 1 объект
 	for (int i=0; i<DrawObjectQuantity; i++)

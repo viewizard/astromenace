@@ -58,10 +58,6 @@ eFILE *EndFileVFS = 0;		// Указатель на последний файл �
 //------------------------------------------------------------------------------------
 int CheckCompression(int tmpLength, const BYTE *buffer, char *ArhKeyVFS)
 {
-	BYTE *tmp = 0;
-	tmp = new BYTE[tmpLength];
-	memcpy(tmp, buffer, tmpLength);
-
 	// устанавливаем данные
 	BYTE *dstVFS = 0;
 	BYTE *srcVFS = new BYTE[tmpLength];
@@ -360,7 +356,6 @@ int	vw_WriteIntoVFSfromMemory(const char *Name, const BYTE * buffer, int size)
 	if (TmpSize<BestSize)
 	{
 		BestMode = 4;
-		BestSize = TmpSize;
 	}
 
 #endif // compression
@@ -658,7 +653,7 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	{
 		// Начальная подготовка структуры списка...
 		eVFS_Entry *Temp = 0;
-		Temp = new eVFS_Entry; if (Temp == 0) return -1;
+		Temp = new eVFS_Entry; if (Temp == 0) {delete [] buff; return -1;}
 
 		// первый в списке...
 		if (EndVFSArray == 0)
@@ -680,13 +675,13 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 
 		SDL_RWseek(TempVFS->File, 1, SEEK_CUR);
 		Temp->ArhKeyLen = buff[POS];
-		Temp->ArhKey = new char[Temp->ArhKeyLen+1]; if (Temp->ArhKey == 0) return -1;
+		Temp->ArhKey = new char[Temp->ArhKeyLen+1]; if (Temp->ArhKey == 0) {delete [] buff; return -1;}
 		Temp->ArhKey[Temp->ArhKeyLen] = 0;// последний символ всегда ноль - конец строки
 		SDL_RWread(TempVFS->File, Temp->ArhKey, Temp->ArhKeyLen, 1);
 
 		SDL_RWseek(TempVFS->File, 2, SEEK_CUR);
 		Temp->NameLen = buff[POS+1+Temp->ArhKeyLen+1]*0x100+buff[POS+Temp->ArhKeyLen+1];
-		Temp->Name = new char[Temp->NameLen+1]; if (Temp->Name == 0) return -1;
+		Temp->Name = new char[Temp->NameLen+1]; if (Temp->Name == 0) {delete [] buff; return -1;}
 		Temp->Name[Temp->NameLen] = 0;// последний символ всегда ноль - конец строки
 		SDL_RWread(TempVFS->File, Temp->Name, Temp->NameLen, 1);
 		Temp->Link = false;
@@ -697,8 +692,7 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	}
 
 	// Освобождаем память...
-	if (buff != 0){delete [] buff; buff = 0;}
-
+	delete [] buff;
 
 
 	// выходим, все хорошо
@@ -1138,7 +1132,7 @@ eFILE *vw_fopen(const char *FileName)
 
 		// резервируем память
 		Temp->Data = 0;
-		Temp->Data = new BYTE[Temp->RealLength]; if (Temp->Data == 0) return 0;
+		Temp->Data = new BYTE[Temp->RealLength]; if (Temp->Data == 0) { SDL_RWclose(fTEMP); return 0;}
 
 		// плолучаем данные...
 		SDL_RWread(fTEMP, Temp->Data, 1, Temp->RealLength);

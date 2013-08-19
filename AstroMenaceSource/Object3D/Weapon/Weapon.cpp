@@ -266,10 +266,10 @@ CWeapon::CWeapon(void)
 
 	SoundNum = 0;
 	Fire = 0;
-	FireLocation = VECTOR3D(0.0f, 0.0f, 0.0f);
+	FireLocation.Set(0.0f, 0.0f, 0.0f);
 	DestroyedFire = 0;
 	DestroyedSmoke = 0;
-	DestroyedFireLocation = VECTOR3D(0.0f, 0.0f, 0.0f);
+	DestroyedFireLocation.Set(0.0f, 0.0f, 0.0f);
 
 	WeaponTurret = false;
 	TargetHorizObject = -1;
@@ -1344,8 +1344,6 @@ bool CWeapon::WeaponFire(float Time)
 	if (SoundNum != 0)
 	{
 		float fVol = 1.0f;
-		if (LaserMaser != 0) LaserMaserSoundNum = LaserMaserSoundNum;
-
 		LaserMaserSoundNum = Audio_PlaySound3D(SoundNum, fVol, Location+FireLocation, false);
 		// если не надо сохранять
 		if (LaserMaser == 0) LaserMaserSoundNum = 0;
