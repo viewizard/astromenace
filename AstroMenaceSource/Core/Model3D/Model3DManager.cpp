@@ -60,26 +60,46 @@ eModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool Nee
 
 
 
-	// определяем по расширению что загружать
-	if( vw_TestFileExtension( FileName, "vw3d" ) || vw_TestFileExtension( FileName, "VW3D" ))
+	// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
+	const char *file_ext = strrchr(FileName, '.');
+	if (file_ext)
 	{
-		if (!Model->ReadVW3D(FileName))
+		if (!strcasecmp(".vw3d", file_ext))
 		{
-			printf("Can't load file ... %s\n", FileName);
-			delete Model;
-			return 0;
+			if (!Model->ReadVW3D(FileName))
+			{
+				printf("Can't load file ... %s\n", FileName);
+				delete Model;
+				return 0;
+			}
 		}
+		else
+/*			if (!strcasecmp(".obj", file_ext))
+			{
+				if (!Model->ReadOBJ(FileName))
+				{
+					printf("Can't load file ... %s\n", FileName);
+					delete Model;
+					return 0;
+				}
+			}
+			else
+				if (!strcasecmp(".3ds", file_ext))
+				{
+					if (!Model->Read3DS(FileName))
+					{
+						printf("Can't load file ... %s\n", FileName);
+						delete Model;
+						return 0;
+					}
+				}
+				else*/
+					{
+						printf("Format not supported ... %s\n", FileName);
+						delete Model;
+						return 0;
+					}
 	}
-/*	else
-	if( vw_TestFileExtension( FileName, "obj" ) || vw_TestFileExtension( FileName, "OBJ" ))
-	{
-		Model->ReadOBJ(FileName);
-	}
-	else
-	if( vw_TestFileExtension( FileName, "3ds" ) || vw_TestFileExtension( FileName, "3DS" ))
-	{
-		Model->Read3DS(FileName);
-	}*/
 	else
 	{
 		printf("Format not supported ... %s\n", FileName);

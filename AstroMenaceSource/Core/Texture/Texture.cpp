@@ -387,23 +387,15 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Ищем как грузить по расширению
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if( vw_TestFileExtension( SrcName, "tga" ) || vw_TestFileExtension( SrcName, "TGA" ))
+	// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
+	const char *file_ext = strrchr(SrcName, '.');
+	if (file_ext)
 	{
-		LoadAs = TGA_FILE;
-	}
-	else
-	{
-		if( vw_TestFileExtension( SrcName, "jpg" ) || vw_TestFileExtension( SrcName, "JPG" ))
-		{
-			LoadAs = JPG_FILE;
-		}
+		if (!strcasecmp(".tga", file_ext)) LoadAs = TGA_FILE;
 		else
-		{
-			if( vw_TestFileExtension( SrcName, "png" ) || vw_TestFileExtension( SrcName, "PNG" ))
-			{
-				LoadAs = PNG_FILE;
-			}
-		}
+			if (!strcasecmp(".jpg", file_ext)) LoadAs = JPG_FILE;
+			else
+				if (!strcasecmp(".png", file_ext)) LoadAs = PNG_FILE;
 	}
 
 
@@ -503,30 +495,17 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (LoadAs == AUTO_FILE)
 	{
-		if( vw_TestFileExtension( nName, "tga" ) || vw_TestFileExtension( nName, "TGA" ))
+		// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
+		const char *file_ext = strrchr(nName, '.');
+		if (file_ext)
 		{
-			LoadAs = TGA_FILE;
-		}
-		else
-		{
-			if( vw_TestFileExtension( nName, "vw2d" ) || vw_TestFileExtension( nName, "VW2D" ))
-			{
-				LoadAs = VW2D_FILE;
-			}
+			if (!strcasecmp(".tga", file_ext)) LoadAs = TGA_FILE;
 			else
-			{
-				if( vw_TestFileExtension( nName, "jpg" ) || vw_TestFileExtension( nName, "JPG" ))
-				{
-					LoadAs = JPG_FILE;
-				}
+				if (!strcasecmp(".vw2d", file_ext)) LoadAs = VW2D_FILE;
 				else
-				{
-					if( vw_TestFileExtension( nName, "png" ) || vw_TestFileExtension( nName, "PNG" ))
-					{
-						LoadAs = PNG_FILE;
-					}
-				}
-			}
+					if (!strcasecmp(".jpg", file_ext)) LoadAs = JPG_FILE;
+					else
+						if (!strcasecmp(".png", file_ext)) LoadAs = PNG_FILE;
 		}
 	}
 
