@@ -65,14 +65,14 @@ bool eSound::Play(const char *Name, float fVol, float fMainVol, float x, float y
 	// у нас еще нет такого буфера, его надо попытаться создать
 	if (Buffer == 0)
 	{
-		if( vw_TestFileExtension( Name, "wav" ) || vw_TestFileExtension( Name, "WAV" ))
+		// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
+		const char *file_ext = strrchr(Name, '.');
+		if (file_ext)
 		{
-			Buffer = vw_CreateSoundBufferFromWAV(Name);
-		}
-		else
-		{
-			if( vw_TestFileExtension( Name, "ogg" ) || vw_TestFileExtension( Name, "OGG" ))
-				Buffer = vw_CreateSoundBufferFromOGG(Name);
+			if (!strcasecmp(".wav", file_ext)) Buffer = vw_CreateSoundBufferFromWAV(Name);
+			else
+				if (!strcasecmp(".ogg", file_ext)) Buffer = vw_CreateSoundBufferFromOGG(Name);
+
 		}
 	}
 

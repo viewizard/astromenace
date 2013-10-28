@@ -1648,14 +1648,13 @@ void LoadGameData(int LoadType)
 					// если еще не загрузили этот звук
 					if (vw_FindBufferIDByName(CurrentList[i].FileName) == 0)
 					{
-						if( vw_TestFileExtension( CurrentList[i].FileName, "wav" ) || vw_TestFileExtension( CurrentList[i].FileName, "WAV" ))
+						// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
+						const char *file_ext = strrchr(CurrentList[i].FileName, '.');
+						if (file_ext)
 						{
-							vw_CreateSoundBufferFromWAV(CurrentList[i].FileName);
-						}
-						else
-						{
-							if( vw_TestFileExtension( CurrentList[i].FileName, "ogg" ) || vw_TestFileExtension( CurrentList[i].FileName, "OGG" ))
-								vw_CreateSoundBufferFromOGG(CurrentList[i].FileName);
+							if (!strcasecmp(".wav", file_ext)) vw_CreateSoundBufferFromWAV(CurrentList[i].FileName);
+							else
+								if (!strcasecmp(".ogg", file_ext)) vw_CreateSoundBufferFromOGG(CurrentList[i].FileName);
 						}
 					}
 				}

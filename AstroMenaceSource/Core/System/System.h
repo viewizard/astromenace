@@ -31,8 +31,6 @@
 #include "../Base.h"
 
 
-// проверка расширения файла (нужен для детекта wav-ogg, tga-jpg...)
-bool 	vw_TestFileExtension(const char *name, const char *extension);
 
 // открываем браузер
 bool	vw_OpenBrouser(const char *url);

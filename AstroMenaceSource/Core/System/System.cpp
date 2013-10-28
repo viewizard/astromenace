@@ -32,31 +32,6 @@
 
 
 
-//------------------------------------------------------------------------------------
-// проверка расширения файла
-//------------------------------------------------------------------------------------
-bool vw_TestFileExtension(const char *name, const char *extension)
-{
-	if(name==0||extension==0) return false;
-	size_t LengthName=strlen(name), LengthString=strlen(extension);
-	if(LengthName<LengthString) return false;
-	for(int i=LengthName-1;i>=0;i--)
-		if(name[i]=='.')
-		{
-			if(!strcmp(&name[i+1],extension)) return true;
-			else return false;
-		}
-	return false;
-}
-
-
-
-
-
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // все что ниже, нужно для открытия броузера
