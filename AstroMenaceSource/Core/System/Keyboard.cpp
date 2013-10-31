@@ -70,11 +70,11 @@ const char * vw_VirtualCodeName(int Language, int Num)
 {
 	switch (Language)
 	{
-		default: return vw_VirtualCodeNameEN(Num);
+		default: break;
 		case 2: return vw_VirtualCodeNameDE(Num);
 		case 3: return vw_VirtualCodeNameRU(Num);
 	}
-	return 0;
+	return vw_VirtualCodeNameEN(Num);
 }
 
 

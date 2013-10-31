@@ -419,7 +419,6 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 		default:
 			fprintf(stderr, "Unable to load %s\n", SrcName);
 			return;
-			break;
 	}
 
 	if (tmp_image == 0)
@@ -543,7 +542,6 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 
 		default:
 			return 0;
-			break;
 	}
 
 	if (tmp_image == 0)
