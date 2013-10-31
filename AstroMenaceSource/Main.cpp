@@ -1310,7 +1310,6 @@ loop:
 				case SDL_QUIT:
 					Quit = true;
 					goto GotoQuit;
-					break;
 
 				// работаем с движением мышки
 				case SDL_MOUSEMOTION:
