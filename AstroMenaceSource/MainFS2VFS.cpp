@@ -224,8 +224,7 @@ int main( int argc, char **argv )
 
 
 
-const int	VFSFilesListCount = 388;
-const char *VFSFilesList[VFSFilesListCount] =
+static const char *VFSFilesList[] =
 {"DATA_RU/VOICE/EngineMalfunction.wav",
 "DATA_RU/VOICE/WeaponDamaged.wav",
 "DATA_RU/VOICE/MissileDetected.wav",
@@ -590,16 +589,7 @@ const char *VFSFilesList[VFSFilesListCount] =
 "SKYBOX/2/skybox_back6.tga",
 "SKYBOX/2/skybox_bottom4.tga",
 "SKYBOX/2/skybox_top3.tga",
-#ifdef fontconfig
-"empty",
-"empty",
-"empty",
-"empty",
-"empty",
-"empty",
-"empty",
-"empty",
-#else
+#ifndef fontconfig
 "FONT/LiberationMono-Bold.ttf",
 "FONT/LiberationSans-Bold.ttf",
 "FONT/LiberationSerif-Bold.ttf",
@@ -626,7 +616,7 @@ const char *VFSFilesList[VFSFilesListCount] =
 "MODELS/NORMALMAP/bomber_nm.tga",
 "MODELS/NORMALMAP/buildings_nm.tga",
 };
-
+#define VFSFilesListCount sizeof(VFSFilesList)/sizeof(VFSFilesList[0])
 
 
 
@@ -778,10 +768,8 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 	char DstFileName[MAX_PATH];
 
 	// добавляем физические файлы
-	for (int i=0; i<VFSFilesListCount; i++)
-	if (strcmp(VFSFilesList[i], "empty"))
+	for (unsigned int i=0; i<VFSFilesListCount; i++)
 	{
-
 		strcpy(SrcFileName, RawDataDir);
 		strcat(SrcFileName, VFSFilesList[i]);
 
