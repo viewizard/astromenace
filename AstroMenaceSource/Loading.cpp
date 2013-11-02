@@ -132,7 +132,7 @@ sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 #define TEXTURE_NO_MIPMAP	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE
 
 // сколько нужно загружать в листе меню
-const int	MenuLoadListCount = 185;
+const int	MenuLoadListCount = 189;
 // лист загрузки меню
 LoadList	MenuLoadList[MenuLoadListCount] =
 {
@@ -172,8 +172,12 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/MENU/workshop_panel4.tga",		0, 54, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/MENU/workshop_panel5.tga",		0, 899, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/MENU/ammo.tga",					0, 8, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
-{"DATA/MENU/button_weaponry_out.tga",	0, 6, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
-{"DATA/MENU/button_weaponry_in.tga",	0, 6, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
+{"DATA/DATA_EN/MENU/button_weaponry_out.tga",	0, 6, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
+{"DATA/DATA_EN/MENU/button_weaponry_in.tga",	0, 6, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
+{"DATA/DATA_DE/MENU/button_weaponry_out.tga",	0, 6, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
+{"DATA/DATA_DE/MENU/button_weaponry_in.tga",	0, 6, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
+{"DATA/DATA_RU/MENU/button_weaponry_out.tga",	0, 6, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
+{"DATA/DATA_RU/MENU/button_weaponry_in.tga",	0, 6, false, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 {"DATA/MENU/back_spot.tga",				0, 256, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/MENU/back_spot2.tga",			0, 256, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 // диалоги
@@ -364,7 +368,7 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 
 
 
-const int	GameLevelsLoadListCount = 87+41+35;
+const int	GameLevelsLoadListCount = 93+31+35;
 LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {
 // 2д часть
@@ -384,9 +388,7 @@ LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {"DATA/MENU/dialog512_512.tga",					0, 1242, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/MENU/perc.tga",							0, 2, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 {"DATA/MENU/perc_none.tga",						0, 2, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
-{"DATA/GAME/pause.tga",							0, 64, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/GAME/nums.tga",							0, 104, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-{"DATA/GAME/mission.tga",						0, 64, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/GAME/ammo.tga",							0, 2, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 {"DATA/GAME/energy.tga",						0, 2, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 {"DATA/GAME/game_panel.tga",					0, 296, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
@@ -398,7 +400,15 @@ LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {"DATA/GAME/weapon_ammo.tga",					0, 1, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 {"DATA/GAME/weapon_energy.tga",					0, 1, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 {"DATA/MENU/weapon_on_icon.tga",				0, 32, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
-{"DATA/GAME/missionfailed.tga",					0, 168, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/DATA_EN/GAME/mission.tga",					0, 64, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/DATA_EN/GAME/missionfailed.tga",				0, 168, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/DATA_EN/GAME/pause.tga",						0, 64, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/DATA_DE/GAME/mission.tga",					0, 64, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/DATA_DE/GAME/missionfailed.tga",				0, 168, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/DATA_DE/GAME/pause.tga",						0, 64, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/DATA_RU/GAME/mission.tga",					0, 64, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/DATA_RU/GAME/missionfailed.tga",				0, 168, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
+{"DATA/DATA_RU/GAME/pause.tga",						0, 64, true, 0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/SKYBOX/tile_back.tga",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/SKYBOX/tile_stars.tga",					1, 4096/2, true,  0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // спец эффекты
@@ -482,16 +492,6 @@ LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {"DATA/SFX/antimaterhit.wav",					4, 20, false, 0,0,0, 0, 0, 0, true, true, -1.0f, false},
 {"DATA/SFX/gausshit.wav",						4, 20, false, 0,0,0, 0, 0, 0, true, true, -1.0f, false},
 {"DATA/SFX/lowlife.wav",						4, 20, false, 0,0,0, 0, 0, 0, true, true, -1.0f, false},
-{"DATA/VOICE/Attention.wav",					4, 20, false, 0,0,0, 0, 0, 0, true, true, -1.0f, false},
-{"DATA/VOICE/EngineMalfunction.wav",			4, 20, false, 0,0,0, 0, 0, 0, true, true, -1.0f, false},
-{"DATA/VOICE/MissileDetected.wav",				4, 20, false, 0,0,0, 0, 0, 0, true, true, -1.0f, false},
-{"DATA/VOICE/PowerSupplyReestablished.wav",		4, 20, false, 0,0,0, 0, 0, 0, true, true, -1.0f, false},
-{"DATA/VOICE/PrepareForAction.wav",				4, 20, false, 0,0,0, 0, 0, 0, true, true, -1.0f, false},
-{"DATA/VOICE/ReactorMalfunction.wav",			4, 20, false, 0,0,0, 0, 0, 0, true, true, -1.0f, false},
-{"DATA/VOICE/Warning.wav",						4, 20, false, 0,0,0, 0, 0, 0, true, true, -1.0f, false},
-{"DATA/VOICE/WeaponDamaged.wav",				4, 20, false, 0,0,0, 0, 0, 0, true, true, -1.0f, false},
-{"DATA/VOICE/WeaponDestroyed.wav",				4, 20, false, 0,0,0, 0, 0, 0, true, true, -1.0f, false},
-{"DATA/VOICE/WeaponMalfunction.wav",			4, 20, false, 0,0,0, 0, 0, 0, true, true, -1.0f, false},
 // мины
 {"DATA/MODELS/MINE/mine1.tga",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 {"DATA/MODELS/MINE/mine1i.tga",				1, 192, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},

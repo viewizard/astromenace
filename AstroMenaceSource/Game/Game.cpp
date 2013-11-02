@@ -1730,9 +1730,9 @@ void DrawGame()
 			SetRect(&SrcRect,0,0,256,64);
 			SetRect(&DstRect,Setup.iAspectRatioWidth-256+60,768-64+10,Setup.iAspectRatioWidth+60,768+10);
 			if (GameContentTransp == 1.0f)
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/GAME/pause.tga"), true, CurrentAlert2*GameContentTransp);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_pause.tga")), true, CurrentAlert2*GameContentTransp);
 			else
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/GAME/pause.tga"), true, GameContentTransp);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_pause.tga")), true, GameContentTransp);
 
 		}
 

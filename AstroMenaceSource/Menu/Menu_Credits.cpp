@@ -44,7 +44,7 @@ void CreditsMenu()
 	LastCreditsCurrentPosUpdateTime = vw_GetTime();
 
 	// зацикливание
-	if (CreditsCurrentPos <= -3310) CreditsCurrentPos = 0.0f;
+	if (CreditsCurrentPos <= -3335) CreditsCurrentPos = 0.0f;
 
 
 
@@ -213,13 +213,19 @@ void CreditsMenu()
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Bernd_Dau_(de)"));
-
 	Y1 += Offset1;
 	Y2 += Offset1;
 	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Michael_Kurinnoy_(en,_ru)")))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Michael_Kurinnoy_(en,_ru)"));
+	Y1 += Offset1;
+	Y2 += Offset1;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Jacek_Fiedorowicz_(pl)")))/2;
+	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
+	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Jacek_Fiedorowicz_(pl)"));
+
 
 
 	Y1 += Offset2;
@@ -635,18 +641,10 @@ void CreditsMenu()
 		// нужно свернуть игру, запустить броузер и выйти в основное меню
 		SDL_WM_IconifyWindow();
 
-		switch (Setup.MenuLanguage)
-		{
-			default: //en
-				vw_OpenBrouser("http://www.viewizard.com/astromenace/donors.php");
-				break;
-			case 2: //de
-				vw_OpenBrouser("http://www.viewizard.com/de/astromenace/donors.php");
-				break;
-			case 3: //ru
-				vw_OpenBrouser("http://www.viewizard.com/ru/astromenace/donors.php");
-				break;
-		}
+		if (!strcmp(vw_GetLanguageList()[Setup.MenuLanguage-1].code, "ru")) vw_OpenBrouser("http://www.viewizard.com/ru/astromenace/donors.php");
+		else
+			if (!strcmp(vw_GetLanguageList()[Setup.MenuLanguage-1].code, "de")) vw_OpenBrouser("http://www.viewizard.com/de/astromenace/donors.php");
+			else vw_OpenBrouser("http://www.viewizard.com/astromenace/donors.php");
 
 		ComBuffer = MAIN_MENU;
 	}

@@ -66,14 +66,12 @@ const char * vw_VirtualCodeNameDE(int Num);
 const char * vw_VirtualCodeNameRU(int Num);
 
 
-const char * vw_VirtualCodeName(int Language, int Num)
+const char * vw_VirtualCodeName(const char *LanguageCode, int Num)
 {
-	switch (Language)
-	{
-		default: break;
-		case 2: return vw_VirtualCodeNameDE(Num);
-		case 3: return vw_VirtualCodeNameRU(Num);
-	}
+	if (!strcmp(LanguageCode, "ru")) return vw_VirtualCodeNameRU(Num);
+	else
+		if (!strcmp(LanguageCode, "de")) return vw_VirtualCodeNameDE(Num);
+
 	return vw_VirtualCodeNameEN(Num);
 }
 

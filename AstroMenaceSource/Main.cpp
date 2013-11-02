@@ -126,15 +126,6 @@ CSpaceStars *psSpaceStatic = 0;
 
 #include <fontconfig/fontconfig.h>
 
-
-static const int GameLanguageListCount = 3;
-static const char *GameLanguageList[GameLanguageListCount] =
-{
-    "en",
-    "ru",
-    "de"
-};
-
 int FontQuantity=0;
 sFontList *FontList=0;
 
@@ -192,9 +183,9 @@ int InitFontConfig()
 		if (FcPatternGetLangSet(font, FC_LANG, 0, &langset) == FcResultMatch)
 		{
 			int FontLangCount = 0;
-			for (int i = 0; i < GameLanguageListCount; i++)
+			for (int i = 0; i < vw_GetLanguageListCount(); i++)
 			{
-				const FcChar8 *lang = (const FcChar8*) GameLanguageList[i];
+				const FcChar8 *lang = (const FcChar8*) vw_GetLanguageList()[i].code;
 
 				if (lang)
 				{
@@ -205,7 +196,7 @@ int InitFontConfig()
 				}
 			}
 
-			if (FontLangCount < GameLanguageListCount) continue;
+			if (FontLangCount < vw_GetLanguageListCount()) continue;
 		}
 		else continue;
 
@@ -217,7 +208,9 @@ int InitFontConfig()
 	{
 		fprintf(stderr, "Couldn't find any appropriate fonts installed in your system.\n");
 		fprintf(stderr, "Please, check your fonts or install TrueType, bold style font\n");
-		fprintf(stderr, "with en, ru and de languages support.\n");
+		fprintf(stderr, "with ");
+		for (int i = 0; i < vw_GetLanguageListCount()-1; i++) fprintf(stderr, "%s, ", vw_GetLanguageList()[i].code);
+		fprintf(stderr, "and %s languages support.\n", vw_GetLanguageList()[vw_GetLanguageListCount()-1].code);
 		return -1;
 	}
 
@@ -254,9 +247,9 @@ int InitFontConfig()
 		if (FcPatternGetLangSet(font, FC_LANG, 0, &langset) == FcResultMatch)
 		{
 			int FontLangCount = 0;
-			for (int i = 0; i < GameLanguageListCount; i++)
+			for (int i = 0; i < vw_GetLanguageListCount(); i++)
 			{
-				const FcChar8 *lang = (const FcChar8*) GameLanguageList[i];
+				const FcChar8 *lang = (const FcChar8*) vw_GetLanguageList()[i].code;
 
 				if (lang)
 				{
@@ -267,7 +260,7 @@ int InitFontConfig()
 				}
 			}
 
-			if (FontLangCount < GameLanguageListCount) continue;
+			if (FontLangCount < vw_GetLanguageListCount()) continue;
 		}
 		else continue;
 
@@ -646,20 +639,8 @@ int main( int argc, char **argv )
 
 
 
-	// работа с файлом данных... передаем базовый режим окна
-	bool FirstStart = LoadXMLSetupFile(NeedSafeMode);
-
-
-
 	// инициализация счета времени
 	vw_InitTime();
-
-#ifdef fontconfig
-	// инициализация fontconfig
-	if (InitFontConfig()) return -1;
-#endif // fontconfig
-	// дополнительная проверка, если использовали fontconfig, а потом вернулись на версию со встроенными шрифтами
-	if (Setup.FontNumber > FontQuantity) Setup.FontNumber = 0;
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -680,9 +661,22 @@ int main( int argc, char **argv )
 	printf("\n");
 
 
-	// загружаем все текстовые данные
-	vw_InitText("DATA/text.csv", ';', '\n');
+	// загружаем все текстовые данные до инициализации шрифтов, т.к. нам нужен перечень языков в процессе инициализации fontconfig
+	if (vw_InitText("DATA/text.csv", ';', '\n') != 0)
+	{
+		fprintf(stderr, "text.csv file not found or corrupted.\n");
+		return 0;
+	}
 
+	// работа с файлом данных... передаем базовый режим окна (обязательно после инициализации языков!)
+	bool FirstStart = LoadXMLSetupFile(NeedSafeMode);
+
+#ifdef fontconfig
+	// инициализация fontconfig
+	if (InitFontConfig() != 0) {vw_ReleaseText();return -1;}
+#endif // fontconfig
+	// дополнительная проверка, если использовали fontconfig, а потом вернулись на версию со встроенными шрифтами
+	if (Setup.FontNumber > FontQuantity) Setup.FontNumber = 0;
 
 	// иним фонт
 	vw_InitFont(FontList[Setup.FontNumber].FontFileName);
@@ -965,12 +959,8 @@ ReCreate:
 
 
 
-	// делаем правильные симлинки на языковые ресурсы, автоматизации нет, просто линкуем нужные файлы
-	CreateMenuLanguageEntryLinks();
-	// создаем линки для голосовых файлов
-	CreateVoiceLanguageEntryLinks();
 	// устанавливаем язык текста
-	vw_SetTextLanguage(Setup.MenuLanguage-1);
+	vw_SetTextLanguage(Setup.MenuLanguage);
 
 
 

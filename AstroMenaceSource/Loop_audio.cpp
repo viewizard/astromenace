@@ -146,16 +146,16 @@ const int	VoiceQuantity = 10;
 // перечень имен файлов звуков для меню
 Sound2dData VoiceNames[VoiceQuantity] =
 {
-{"DATA/VOICE/Attention.wav", 1.0f, true},
-{"DATA/VOICE/EngineMalfunction.wav", 1.0f, true},
-{"DATA/VOICE/MissileDetected.wav", 1.0f, true},//++
-{"DATA/VOICE/PowerSupplyReestablished.wav", 1.0f, true},
-{"DATA/VOICE/PrepareForAction.wav", 1.0f, true},//++
-{"DATA/VOICE/ReactorMalfunction.wav", 1.0f, true},//++
-{"DATA/VOICE/Warning.wav", 1.0f, true},//++
-{"DATA/VOICE/WeaponDamaged.wav", 1.0f, true},//++
-{"DATA/VOICE/WeaponDestroyed.wav", 1.0f, true},//++
-{"DATA/VOICE/WeaponMalfunction.wav", 1.0f, true},//++
+{"13_Attention.wav", 1.0f, true},
+{"13_EngineMalfunction.wav", 1.0f, true},
+{"13_MissileDetected.wav", 1.0f, true},//++
+{"13_PowerSupplyReestablished.wav", 1.0f, true},
+{"13_PrepareForAction.wav", 1.0f, true},//++
+{"13_ReactorMalfunction.wav", 1.0f, true},//++
+{"13_Warning.wav", 1.0f, true},//++
+{"13_WeaponDamaged.wav", 1.0f, true},//++
+{"13_WeaponDestroyed.wav", 1.0f, true},//++
+{"13_WeaponMalfunction.wav", 1.0f, true},//++
 };
 
 
@@ -329,7 +329,7 @@ void Audio_SetVoiceMainVolume(float NewMainVolume)
 {
 	for (int i=0; i<VoiceQuantity; i++)
 	{
-		eSound* Tmp = vw_FindSoundByName(VoiceNames[i].FileName);
+		eSound* Tmp = vw_FindSoundByName(vw_GetText(VoiceNames[i].FileName, Setup.VoiceLanguage));
 		if (Tmp != 0) Tmp->SetMainVolume(NewMainVolume);
 	}
 }
@@ -405,7 +405,7 @@ int Audio_PlayVoice(int VoiceID, float fVol, bool Loop)
 	vw_AttachSound(Sound);
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
-	if (!Sound->Play(VoiceNames[VoiceID].FileName, fVol, Setup.VoiceSw/10.0f, 0.0f, 0.0f, 0.0f, true, Loop, VoiceNames[VoiceID].NeedRelease, 1))
+	if (!Sound->Play(vw_GetText(VoiceNames[VoiceID].FileName, Setup.VoiceLanguage), fVol, Setup.VoiceSw/10.0f, 0.0f, 0.0f, 0.0f, true, Loop, VoiceNames[VoiceID].NeedRelease, 1))
 	{
 		vw_ReleaseSound(Sound); Sound = 0;
 		return 0;

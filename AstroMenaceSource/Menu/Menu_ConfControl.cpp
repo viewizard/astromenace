@@ -31,53 +31,37 @@
 
 const char * MouseCodeName(char Num)
 {
-	switch (Setup.MenuLanguage)
+	if (!strcmp(vw_GetLanguageList()[Setup.MenuLanguage-1].code, "de"))
 	{
-		default: //en
-			switch (Num)
-			{
-				case 1: return "Mouse1";
-				case 2: return "Mouse3";
-				case 3: return "Mouse2";
-				case 4: return "Mouse4";
-				case 5: return "Mouse5";
-				case 6: return "Mouse6";
-				case 7: return "Mouse7";
-				case 8: return "Mouse8";
-				case 0: return "?";
-			}
-			break;
-
-		case 2: //de
-			switch (Num)
-			{
-				case 1: return "Maus1";
-				case 2: return "Maus3";
-				case 3: return "Maus2";
-				case 4: return "Maus4";
-				case 5: return "Maus5";
-				case 6: return "Maus6";
-				case 7: return "Maus7";
-				case 8: return "Maus8";
-				case 0: return "?";
-			}
-			break;
-
-		case 3: //ru
-			switch (Num)
-			{
-				case 1: return "Mouse1";
-				case 2: return "Mouse3";
-				case 3: return "Mouse2";
-				case 4: return "Mouse4";
-				case 5: return "Mouse5";
-				case 6: return "Mouse6";
-				case 7: return "Mouse7";
-				case 8: return "Mouse8";
-				case 0: return "?";
-			}
-			break;
+		switch (Num)
+		{
+			case 1: return "Maus1";
+			case 2: return "Maus3";
+			case 3: return "Maus2";
+			case 4: return "Maus4";
+			case 5: return "Maus5";
+			case 6: return "Maus6";
+			case 7: return "Maus7";
+			case 8: return "Maus8";
+			case 0: return "?";
+		}
 	}
+	else
+	{
+		switch (Num)
+		{
+			case 1: return "Mouse1";
+			case 2: return "Mouse3";
+			case 3: return "Mouse2";
+			case 4: return "Mouse4";
+			case 5: return "Mouse5";
+			case 6: return "Mouse6";
+			case 7: return "Mouse7";
+			case 8: return "Mouse8";
+			case 0: return "?";
+		}
+	}
+
 	return 0;
 }
 
@@ -120,7 +104,7 @@ void CheckMouseKeybJState()
 		for (int i=0; i<GetMaxKeys(); i++)
 		{
 			if (vw_GetKeys(i))
-			if (vw_VirtualCodeName(Setup.MenuLanguage, i) != 0) // если мы играем с этой кнопкой
+			if (vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, i) != 0) // если мы играем с этой кнопкой
 			{
 				switch(NeedCheck)
 				{
@@ -329,7 +313,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 5) {Transp = But[4]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardPrimary), Transp*ContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardPrimary), Transp*ContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardPrimary = 0;
@@ -364,7 +348,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 6) {Transp = But[5]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardSecondary), Transp*ContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardSecondary), Transp*ContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardSecondary = 0;
@@ -390,7 +374,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 1) {Transp = But[0]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardUp), Transp*ContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardUp), Transp*ContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardUp = 0;
@@ -402,7 +386,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 2) {Transp = But[1]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardDown), Transp*ContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardDown), Transp*ContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardDown = 0;
@@ -414,7 +398,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 3) {Transp = But[2]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardLeft), Transp*ContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardLeft), Transp*ContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardLeft = 0;
@@ -426,7 +410,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	Transp = 1.0f;
 	Off = false;
 	if (NeedCheck == 4) {Transp = But[3]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(Setup.MenuLanguage, Setup.KeyBoardRight), Transp*ContentTransp, Off))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardRight), Transp*ContentTransp, Off))
 	if (NeedCheck == 0)
 	{
 		Setup.KeyBoardRight = 0;

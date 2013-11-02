@@ -52,7 +52,7 @@ float 	vw_GetTimeThreadSpeed(int TimeThread=0);
 bool	vw_GetKeys(int Num);
 void	vw_SetKeys(int Num, bool NewKeyStatus);
 int 	GetMaxKeys();
-const char* 	vw_VirtualCodeName(int Language, int Num);
+const char* 	vw_VirtualCodeName(const char *LanguageCode, int Num);
 const char* 	vw_KeyboardCodeName(int Num);
 int 	vw_KeyboardNameCode(const char * Name);
 // установка-получение юникода текущей нажатой клавиши
