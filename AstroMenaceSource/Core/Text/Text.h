@@ -36,12 +36,21 @@
 
 
 
+struct sLanguageList
+{
+	const char *code;
+	const char *title;
+};
+sLanguageList *vw_GetLanguageList();
+int vw_GetLanguageListCount();
+
+
 // загружаем текстовый .csv
-void vw_InitText(const char *FileName, const char SymbolSeparator, const char SymbolEndOfLine);
+int vw_InitText(const char *FileName, const char SymbolSeparator, const char SymbolEndOfLine);
 // устанавливаем язык
 void vw_SetTextLanguage(int Language);
-// получаем текст из файлы
-const char *vw_GetText(const char *ItemID);
+// получаем текст из файлы, Language=-1 - будет использован язык, установленный через vw_SetTextLanguage
+const char *vw_GetText(const char *ItemID, int Language=-1);
 // проверяем, есть ли символ в фонте, перебираем по тексту всех языков
 int vw_CheckFontCharsInText();
 // освобождаем данные

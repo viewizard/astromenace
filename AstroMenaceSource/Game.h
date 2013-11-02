@@ -405,10 +405,6 @@ void CheckMouseKeybJState();
 //------------------------------------------------------------------------------------
 // Menu_Interface.cpp
 //------------------------------------------------------------------------------------
-void CreateMenuLanguageEntryLinks();
-void ReCreateMenuLanguageEntryLinks();
-void CreateVoiceLanguageEntryLinks();
-void ReCreateVoiceLanguageEntryLinks();
 void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1);
 
 

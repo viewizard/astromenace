@@ -44,6 +44,12 @@ sCSVRow *EndCSVRow;
 // буфер со всем текстом
 char *TextBuffer = 0;
 
+// указатель на таблицу данных по языкам
+sLanguageList *LanguageList = 0;
+sLanguageList *vw_GetLanguageList(){return LanguageList;};
+// кол-во языков
+int LanguageListCount = 0;
+int vw_GetLanguageListCount(){return LanguageListCount;};
 // текущий язык
 int CurrentLanguage = 0;
 
@@ -134,6 +140,9 @@ void vw_ReleaseText()
 	if (TextBuffer != 0) {delete [] TextBuffer; TextBuffer = 0;}
 
 	CurrentLanguage = 0;
+	LanguageListCount = 0;
+	delete [] LanguageList;
+	LanguageList = 0;
 }
 
 
@@ -155,14 +164,14 @@ void vw_SetTextLanguage(int Language)
 //-----------------------------------------------------------------------------
 // загружаем текстовый .csv
 //-----------------------------------------------------------------------------
-void vw_InitText(const char *FileName, const char SymbolSeparator, const char SymbolEndOfLine)
+int vw_InitText(const char *FileName, const char SymbolSeparator, const char SymbolEndOfLine)
 {
 	vw_ReleaseText();
 
 	// читаем данные
 	eFILE *TempF = vw_fopen(FileName);
 
-	if (TempF == NULL) return;
+	if (TempF == NULL) return -1;
 
 	TempF->fseek(0, SEEK_END);
 	int DataLength = TempF->ftell();
@@ -189,6 +198,9 @@ void vw_InitText(const char *FileName, const char SymbolSeparator, const char Sy
 	}
 	ColumnsCount++; // для последнего столбца конечный символ - SymbolEndOfLine, который мы получили в цикле
 
+	// если столбцов менее 2-х - данных недостаточно для работы
+	if (ColumnsCount < 2) return -1;
+
 	Buffer = TextBuffer; // восстанавливаем указатель
 
 	// крутим пока не обработали все строки
@@ -213,6 +225,21 @@ void vw_InitText(const char *FileName, const char SymbolSeparator, const char Sy
 
 		vw_AttachCSVRow(NewCSVRow);
 	}
+
+
+	// для работы с языками, создаем таблицу
+	LanguageListCount = ColumnsCount-1;
+	LanguageList = new sLanguageList[LanguageListCount];
+
+	for (int i=0; i<LanguageListCount; i++)
+	{
+		LanguageList[i].code = vw_GetText("0_code", i+1);
+		if (LanguageList[i].code == 0) return -2;
+		LanguageList[i].title = vw_GetText("0_title", i+1);
+		if (LanguageList[i].title == 0) return -2;
+	}
+
+	return 0;
 }
 
 
@@ -233,10 +260,11 @@ int strcmpIdNum(const char *a, const char *b)
 //-----------------------------------------------------------------------------
 // получаем текст из файла
 //-----------------------------------------------------------------------------
-const char *vw_GetText(const char *ItemID)
+const char *vw_GetText(const char *ItemID, int Language)
 {
 	if (TextBuffer == 0) return 0;
 	if (ItemID == 0) return 0;
+	if (Language < 1 || Language > LanguageListCount) Language = CurrentLanguage;
 
 	sCSVRow *Tmp = StartCSVRow;
 	while (Tmp != 0)
@@ -253,7 +281,7 @@ const char *vw_GetText(const char *ItemID)
 			vw_ReAttachCSVRowAsFirst(Tmp);
 
 			// возвращаем указатель на нужный столбец
-			return Tmp->CellData[CurrentLanguage+1];
+			return Tmp->CellData[Language];
 		}
 
 		Tmp = Tmp1;

@@ -1689,18 +1689,10 @@ void DrawDialogBox()
 				// нужно свернуть игру, запустить броузер и выйти в основное меню
 				SDL_WM_IconifyWindow();
 
-				switch (Setup.MenuLanguage)
-				{
-					default: //en
-						vw_OpenBrouser("http://www.viewizard.com/astromenace/donors.php");
-						break;
-					case 2: //de
-						vw_OpenBrouser("http://www.viewizard.com/de/astromenace/donors.php");
-						break;
-					case 3: //ru
-						vw_OpenBrouser("http://www.viewizard.com/ru/astromenace/donors.php");
-						break;
-				}
+				if (!strcmp(vw_GetLanguageList()[Setup.MenuLanguage-1].code, "ru")) vw_OpenBrouser("http://www.viewizard.com/ru/astromenace/donors.php");
+				else
+					if (!strcmp(vw_GetLanguageList()[Setup.MenuLanguage-1].code, "de")) vw_OpenBrouser("http://www.viewizard.com/de/astromenace/donors.php");
+					else vw_OpenBrouser("http://www.viewizard.com/astromenace/donors.php");
 			}
 
 
@@ -1726,43 +1718,38 @@ void DrawDialogBox()
 			SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("3_Language")))/2;
 			vw_DrawFont(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("3_Language"));
 
-			if (DrawDialogButton200(X+128+64-72/2,Y+ButtonOffset-106, "English", DialogContentTransp))
+
+			if (DrawDialogButton128(X+34, Y+ButtonOffset-73, vw_GetText("1_Prev"), DialogContentTransp))
 			{
-				CloseDialog();
-				if (Setup.MenuLanguage != 1)
-				{
-					Setup.MenuLanguage = 1;
-					Setup.VoiceLanguage = 1;
-					ReCreateMenuLanguageEntryLinks();
-					ReCreateVoiceLanguageEntryLinks();
-					vw_SetTextLanguage(Setup.MenuLanguage-1);
-				}
+				Setup.MenuLanguage--;
+				if (Setup.MenuLanguage < 1) Setup.MenuLanguage = vw_GetLanguageListCount();
+
+				vw_SetTextLanguage(Setup.MenuLanguage);
 			}
-			if (DrawDialogButton200(X+128+64-72/2,Y+ButtonOffset-53, "Deutsch", DialogContentTransp))
+			if (DrawDialogButton128(X+316+34, Y+ButtonOffset-73, vw_GetText("1_Next"), DialogContentTransp))
 			{
-				CloseDialog();
-				if (Setup.MenuLanguage != 2)
-				{
-					Setup.MenuLanguage = 2;
-					Setup.VoiceLanguage = 2;
-					ReCreateMenuLanguageEntryLinks();
-					ReCreateVoiceLanguageEntryLinks();
-					vw_SetTextLanguage(Setup.MenuLanguage-1);
-				}
-			}
-			if (DrawDialogButton200(X+128+64-72/2,Y+ButtonOffset, "Русский", DialogContentTransp))
-			{
-				CloseDialog();
-				if (Setup.MenuLanguage != 3)
-				{
-					Setup.MenuLanguage = 3;
-					Setup.VoiceLanguage = 3;
-					ReCreateMenuLanguageEntryLinks();
-					ReCreateVoiceLanguageEntryLinks();
-					vw_SetTextLanguage(Setup.MenuLanguage-1);
-				}
+				Setup.MenuLanguage++;
+				if (Setup.MenuLanguage > vw_GetLanguageListCount()) Setup.MenuLanguage = 1;
+
+				vw_SetTextLanguage(Setup.MenuLanguage);
 			}
 
+			vw_SetFontSize(24);
+			int Size, SizeI;
+			Size = vw_FontSize(vw_GetLanguageList()[Setup.MenuLanguage-1].title);
+			SizeI = (170-Size)/2;
+			if (Size > 170)
+				vw_DrawFont(X+138+34, Y+ButtonOffset-71, -170, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetLanguageList()[Setup.MenuLanguage-1].title);
+			else
+				vw_DrawFont(X+138+34+SizeI, Y+ButtonOffset-71, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetLanguageList()[Setup.MenuLanguage-1].title);
+			vw_SetFontSize(Setup.FontSize);
+
+			if (DrawDialogButton200(X+128+64-72/2, Y+ButtonOffset, vw_GetText("1_OK"), DialogContentTransp))
+			{
+				// первоначально, язык голоса ставим такой же, как и язык меню
+				Setup.VoiceLanguage = Setup.MenuLanguage;
+				CloseDialog();
+			}
 			break;
 		}
 

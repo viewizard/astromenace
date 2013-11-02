@@ -174,18 +174,8 @@ void SaveXMLSetupFile()
 
 
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "GAME_BUILD"), "value", GAME_BUILD);
-	switch (Setup.MenuLanguage)
-	{
-		default: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MenuLanguage"), "value", "en"); break;
-		case 2: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MenuLanguage"), "value", "de"); break;
-		case 3: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MenuLanguage"), "value", "ru"); break;
-	}
-	switch (Setup.VoiceLanguage)
-	{
-		default: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceLanguage"), "value", "en"); break;
-		case 2: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceLanguage"), "value", "de"); break;
-		case 3: XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceLanguage"), "value", "ru"); break;
-	}
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MenuLanguage"), "value", vw_GetLanguageList()[Setup.MenuLanguage-1].code);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceLanguage"), "value", vw_GetLanguageList()[Setup.VoiceLanguage-1].code);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "FontNumber"), "value", Setup.FontNumber);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "FontName"), "value", Setup.FontName);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "FontSize"), "value", Setup.FontSize);
@@ -466,22 +456,28 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	{
 		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value") != 0)
 		{
-			if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), "en")) Setup.MenuLanguage = 1;
-			else
-			if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), "de")) Setup.MenuLanguage = 2;
-			else
-			if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), "ru")) Setup.MenuLanguage = 3;
+			for (int i=0; i<vw_GetLanguageListCount(); i++)
+			{
+				if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), vw_GetLanguageList()[i].code))
+				{
+					Setup.MenuLanguage = i+1;
+					break;
+				}
+			}
 		}
 	}
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage") != 0)
 	{
 		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value") != 0)
 		{
-			if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), "en")) Setup.VoiceLanguage = 1;
-			else
-			if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), "de")) Setup.VoiceLanguage = 2;
-			else
-			if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), "ru")) Setup.VoiceLanguage = 3;
+			for (int i=0; i<vw_GetLanguageListCount(); i++)
+			{
+				if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), vw_GetLanguageList()[i].code))
+				{
+					Setup.VoiceLanguage = i+1;
+					break;
+				}
+			}
 		}
 	}
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber") != 0)

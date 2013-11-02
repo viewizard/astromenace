@@ -316,7 +316,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		(DstRect.bottom >= MouseY) &&
 		(DstRect.top<= MouseY)) || InFocusByKeyboard) && !isDialogBoxDrawing() && !DragWeapon)
 	{
-		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/button_weaponry_in.tga"), true, MenuContentTransp);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_button_weaponry_in.tga")), true, MenuContentTransp);
 		CurrentCursorStatus = 1;
 		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN))))
 		{
@@ -330,7 +330,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		}
 	}
 	else
-		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("DATA/MENU/button_weaponry_out.tga"), true, MenuContentTransp);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_button_weaponry_out.tga")), true, MenuContentTransp);
 
 
 
@@ -672,7 +672,7 @@ void ShipSlotSetupWeapon(int Slot)
 			if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] != 0)
 			{
 				if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] == 1)
-					TextTmp = vw_VirtualCodeName(Setup.MenuLanguage, Setup.Profile[CurrentProfile].WeaponAltControlData[Slot]);
+					TextTmp = vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.Profile[CurrentProfile].WeaponAltControlData[Slot]);
 				if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] == 2)
 					TextTmp = MouseCodeName(Setup.Profile[CurrentProfile].WeaponAltControlData[Slot]);
 				if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] == 3)
