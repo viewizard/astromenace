@@ -170,6 +170,14 @@ void CheckMouseKeybJState()
 				}
 		}
 #endif
+
+
+		// если нажали Esc - возвращаем старые настройки выбора текущей кнопки
+		if (vw_GetKeys(SDLK_ESCAPE))
+		{
+			vw_SetKeys(SDLK_ESCAPE, false);
+			NeedCheck = 0;
+		}
 	}
 
 	// мерцание кнопок, ставим сюда, чтобы не тягать его везде
@@ -301,35 +309,32 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Primary_Attack"));
 	float Transp = 1.0f;
 	bool Off = false;
-	if (NeedCheck == 7) {Transp = But[6]; Off = true;};
-	if (DrawButton128_2((int)X1+300, (int)Y1-6, MouseCodeName(Setup.MousePrimary), Transp*ContentTransp, Off))
-	if (NeedCheck == 0)
-	{
-		Setup.MousePrimary = 0;
-		NeedCheck = 7;
-		for (int i=0; i<8; i++) SDL_MouseCurrentStatus[i] = false;
-	}
+	const char *ButtonName = MouseCodeName(Setup.MousePrimary);
+	if (NeedCheck == 7) {Transp = But[6]; Off = true; ButtonName = "?";};
+	if (DrawButton128_2((int)X1+300, (int)Y1-6, ButtonName, Transp*ContentTransp, Off))
+		if (NeedCheck == 0)
+		{
+			NeedCheck = 7;
+			for (int i=0; i<8; i++) SDL_MouseCurrentStatus[i] = false;
+		}
 
 	Transp = 1.0f;
 	Off = false;
-	if (NeedCheck == 5) {Transp = But[4]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardPrimary), Transp*ContentTransp, Off))
-	if (NeedCheck == 0)
-	{
-		Setup.KeyBoardPrimary = 0;
-		NeedCheck = 5;
-	}
+	ButtonName = vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardPrimary);
+	if (NeedCheck == 5) {Transp = But[4]; Off = true; ButtonName = "?";};
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, ButtonName, Transp*ContentTransp, Off))
+		if (NeedCheck == 0) NeedCheck = 5;
 
 	Transp = 1.0f;
 	Off = false;
-	if (NeedCheck == 9) {Transp = But[8]; Off = true;};
-	if (DrawButton128_2((int)X1+616, (int)Y1-6, JoystickCodeName(Setup.JoystickPrimary), Transp*ContentTransp, !(Joystick != NULL) || Off))
-	if (NeedCheck == 0)
-	{
-		Setup.JoystickPrimary = -1;
-		NeedCheck = 9;
-		for (int i=0; i<100; i++) JoysticButtons[i] = false;
-	}
+	ButtonName = JoystickCodeName(Setup.JoystickPrimary);
+	if (NeedCheck == 9) {Transp = But[8]; Off = true; ButtonName = "?";};
+	if (DrawButton128_2((int)X1+616, (int)Y1-6, ButtonName, Transp*ContentTransp, !(Joystick != NULL) || Off))
+		if (NeedCheck == 0)
+		{
+			NeedCheck = 9;
+			for (int i=0; i<100; i++) JoysticButtons[i] = false;
+		}
 
 
 
@@ -337,34 +342,32 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Secondary_Attack"));
 	Transp = 1.0f;
 	Off = false;
-	if (NeedCheck == 8) {Transp = But[7]; Off = true;};
-	if (DrawButton128_2((int)X1+300, (int)Y1-6, MouseCodeName(Setup.MouseSecondary), Transp*ContentTransp, Off))
-	if (NeedCheck == 0)
-	{
-		Setup.MouseSecondary = 0;
-		NeedCheck = 8;
-		for (int i=0; i<8; i++) SDL_MouseCurrentStatus[i] = false;//MouseCurrentStatus[i] = vw_MouseIsBJustDown(i);
-	}
-	Transp = 1.0f;
-	Off = false;
-	if (NeedCheck == 6) {Transp = But[5]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardSecondary), Transp*ContentTransp, Off))
-	if (NeedCheck == 0)
-	{
-		Setup.KeyBoardSecondary = 0;
-		NeedCheck = 6;
-	}
+	ButtonName = MouseCodeName(Setup.MouseSecondary);
+	if (NeedCheck == 8) {Transp = But[7]; Off = true; ButtonName = "?";};
+	if (DrawButton128_2((int)X1+300, (int)Y1-6, ButtonName, Transp*ContentTransp, Off))
+		if (NeedCheck == 0)
+		{
+			NeedCheck = 8;
+			for (int i=0; i<8; i++) SDL_MouseCurrentStatus[i] = false;
+		}
 
 	Transp = 1.0f;
 	Off = false;
-	if (NeedCheck == 10) {Transp = But[9]; Off = true;};
-	if (DrawButton128_2((int)X1+616, (int)Y1-6, JoystickCodeName(Setup.JoystickSecondary), Transp*ContentTransp, !(Joystick != NULL) || Off))
-	if (NeedCheck == 0)
-	{
-		Setup.JoystickSecondary = -1;
-		NeedCheck = 10;
-		for (int i=0; i<100; i++) JoysticButtons[i] = false;
-	}
+	ButtonName = vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardSecondary);
+	if (NeedCheck == 6) {Transp = But[5]; Off = true; ButtonName = "?";};
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, ButtonName, Transp*ContentTransp, Off))
+		if (NeedCheck == 0) NeedCheck = 6;
+
+	Transp = 1.0f;
+	Off = false;
+	ButtonName = JoystickCodeName(Setup.JoystickSecondary);
+	if (NeedCheck == 10) {Transp = But[9]; Off = true; ButtonName = "?";};
+	if (DrawButton128_2((int)X1+616, (int)Y1-6, ButtonName, Transp*ContentTransp, !(Joystick != NULL) || Off))
+		if (NeedCheck == 0)
+		{
+			NeedCheck = 10;
+			for (int i=0; i<100; i++) JoysticButtons[i] = false;
+		}
 
 
 
@@ -373,49 +376,37 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Move_Forward"));
 	Transp = 1.0f;
 	Off = false;
-	if (NeedCheck == 1) {Transp = But[0]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardUp), Transp*ContentTransp, Off))
-	if (NeedCheck == 0)
-	{
-		Setup.KeyBoardUp = 0;
-		NeedCheck = 1;
-	}
+	ButtonName = vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardUp);
+	if (NeedCheck == 1) {Transp = But[0]; Off = true; ButtonName = "?";};
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, ButtonName, Transp*ContentTransp, Off))
+		if (NeedCheck == 0) NeedCheck = 1;
 
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Move_Backward"));
 	Transp = 1.0f;
 	Off = false;
-	if (NeedCheck == 2) {Transp = But[1]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardDown), Transp*ContentTransp, Off))
-	if (NeedCheck == 0)
-	{
-		Setup.KeyBoardDown = 0;
-		NeedCheck = 2;
-	}
+	ButtonName = vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardDown);
+	if (NeedCheck == 2) {Transp = But[1]; Off = true; ButtonName = "?";};
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, ButtonName, Transp*ContentTransp, Off))
+		if (NeedCheck == 0) NeedCheck = 2;
 
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Move_Left"));
 	Transp = 1.0f;
 	Off = false;
-	if (NeedCheck == 3) {Transp = But[2]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardLeft), Transp*ContentTransp, Off))
-	if (NeedCheck == 0)
-	{
-		Setup.KeyBoardLeft = 0;
-		NeedCheck = 3;
-	}
+	ButtonName = vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardLeft);
+	if (NeedCheck == 3) {Transp = But[2]; Off = true; ButtonName = "?";};
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, ButtonName, Transp*ContentTransp, Off))
+		if (NeedCheck == 0) NeedCheck = 3;
 
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0,1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Move_Right"));
 	Transp = 1.0f;
 	Off = false;
-	if (NeedCheck == 4) {Transp = But[3]; Off = true;};
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardRight), Transp*ContentTransp, Off))
-	if (NeedCheck == 0)
-	{
-		Setup.KeyBoardRight = 0;
-		NeedCheck = 4;
-	}
+	ButtonName = vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.KeyBoardRight);
+	if (NeedCheck == 4) {Transp = But[3]; Off = true; ButtonName = "?";};
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, ButtonName, Transp*ContentTransp, Off))
+		if (NeedCheck == 0) NeedCheck = 4;
 
 
 

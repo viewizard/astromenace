@@ -660,8 +660,6 @@ void ShipSlotSetupWeapon(int Slot)
 		// установка надписи на кнопке
 		if (NeedCheck != 100)
 		{
-			TextTmp = (char*)vw_GetText("1_Unimplemented");
-
 			if (NewWeaponControlType != 0)
 			{
 				Setup.Profile[CurrentProfile].WeaponAltControl[Slot] = NewWeaponControlType;
@@ -679,6 +677,7 @@ void ShipSlotSetupWeapon(int Slot)
 					TextTmp = JoystickCodeName(Setup.Profile[CurrentProfile].WeaponAltControlData[Slot]);
 
 			}
+			else TextTmp = (char*)vw_GetText("1_Unimplemented");
 		}
 
 		// собственно сама кнопка
