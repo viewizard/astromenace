@@ -236,10 +236,10 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		Setup.AnisotropyLevel = (int)(Setup.AnisotropyLevel/2);
 		if (Setup.AnisotropyLevel < 1) Setup.AnisotropyLevel = 1;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.AnisotropyLevel==CAPS->MaxAnisotropyLevel))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.AnisotropyLevel==vw_GetDevCaps()->MaxAnisotropyLevel))
 	{
 		Setup.AnisotropyLevel = Setup.AnisotropyLevel*2;
-		if (Setup.AnisotropyLevel > CAPS->MaxAnisotropyLevel) Setup.AnisotropyLevel = CAPS->MaxAnisotropyLevel;
+		if (Setup.AnisotropyLevel > vw_GetDevCaps()->MaxAnisotropyLevel) Setup.AnisotropyLevel = vw_GetDevCaps()->MaxAnisotropyLevel;
 	}
 	if (Setup.AnisotropyLevel>1)
 	{
@@ -249,7 +249,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	}
 	else
 	{
-		if (CAPS->MaxAnisotropyLevel > 1)
+		if (vw_GetDevCaps()->MaxAnisotropyLevel > 1)
 		{
 			Size = vw_FontSize(vw_GetText("1_Off"));
 			SizeI = (170-Size)/2;
@@ -270,13 +270,13 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, ContentTransp, vw_GetText("3_Textures_Compression"));
 	int MaxCompressionCount = 1;
-	if (CAPS->TexturesCompressionBPTC) MaxCompressionCount = 2;
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, !CAPS->TexturesCompression || (Options_TexturesCompressionType <= 0)))
+	if (vw_GetDevCaps()->TexturesCompressionBPTC) MaxCompressionCount = 2;
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, !vw_GetDevCaps()->TexturesCompression || (Options_TexturesCompressionType <= 0)))
 	{
 		Options_TexturesCompressionType--;
 		if (Options_TexturesCompressionType < 0) Options_TexturesCompressionType = 0;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, !CAPS->TexturesCompression || (Options_TexturesCompressionType >= MaxCompressionCount)))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, !vw_GetDevCaps()->TexturesCompression || (Options_TexturesCompressionType >= MaxCompressionCount)))
 	{
 		Options_TexturesCompressionType++;
 		if (Options_TexturesCompressionType > MaxCompressionCount) Options_TexturesCompressionType = MaxCompressionCount;
@@ -292,17 +292,17 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	//Options_MultiSampleType
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_Multisample_Antialiasing"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, (Options_MSAA == 0) || (CAPS->MaxSamples == 0)))
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, (Options_MSAA == 0) || (vw_GetDevCaps()->MaxSamples == 0)))
 	{
 		// находим текущий режим
 		int CurrentMode = 0;
 		if (Options_MSAA == 0) CurrentMode = -1;
 		else
 		{
-			for (int i=0;i<CAPS->MaxMultisampleCoverageModes; i++)
+			for (int i=0;i<vw_GetDevCaps()->MaxMultisampleCoverageModes; i++)
 			{
-				if ((CAPS->MultisampleCoverageModes[i].ColorSamples == Options_MSAA) &
-					(CAPS->MultisampleCoverageModes[i].CoverageSamples == Options_CSAA))
+				if ((vw_GetDevCaps()->MultisampleCoverageModes[i].ColorSamples == Options_MSAA) &
+					(vw_GetDevCaps()->MultisampleCoverageModes[i].CoverageSamples == Options_CSAA))
 					{
 						CurrentMode = i;
 						break;
@@ -311,7 +311,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		}
 
 		CurrentMode --;
-		if (CurrentMode < -1) CurrentMode = CAPS->MaxMultisampleCoverageModes-1;
+		if (CurrentMode < -1) CurrentMode = vw_GetDevCaps()->MaxMultisampleCoverageModes-1;
 
 		// -1 - делаем "выключение" антиалиасинга
 		if (CurrentMode == -1)
@@ -321,24 +321,24 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		}
 		else
 		{
-			Options_MSAA = CAPS->MultisampleCoverageModes[CurrentMode].ColorSamples;
-			Options_CSAA = CAPS->MultisampleCoverageModes[CurrentMode].CoverageSamples;
+			Options_MSAA = vw_GetDevCaps()->MultisampleCoverageModes[CurrentMode].ColorSamples;
+			Options_CSAA = vw_GetDevCaps()->MultisampleCoverageModes[CurrentMode].CoverageSamples;
 		}
 	}
 	bool TestStateButton = false;
-	if (CAPS->MaxMultisampleCoverageModes > 0) TestStateButton = (CAPS->MultisampleCoverageModes[CAPS->MaxMultisampleCoverageModes-1].ColorSamples == Options_MSAA) &
-												(CAPS->MultisampleCoverageModes[CAPS->MaxMultisampleCoverageModes-1].CoverageSamples == Options_CSAA);
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, TestStateButton || (CAPS->MaxSamples == 0)))
+	if (vw_GetDevCaps()->MaxMultisampleCoverageModes > 0) TestStateButton = (vw_GetDevCaps()->MultisampleCoverageModes[vw_GetDevCaps()->MaxMultisampleCoverageModes-1].ColorSamples == Options_MSAA) &
+												(vw_GetDevCaps()->MultisampleCoverageModes[vw_GetDevCaps()->MaxMultisampleCoverageModes-1].CoverageSamples == Options_CSAA);
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, TestStateButton || (vw_GetDevCaps()->MaxSamples == 0)))
 	{
 		// находим текущий режим
 		int CurrentMode = 0;
 		if (Options_MSAA == 0) CurrentMode = -1;
 		else
 		{
-			for (int i=0;i<CAPS->MaxMultisampleCoverageModes; i++)
+			for (int i=0;i<vw_GetDevCaps()->MaxMultisampleCoverageModes; i++)
 			{
-				if ((CAPS->MultisampleCoverageModes[i].ColorSamples == Options_MSAA) &
-					(CAPS->MultisampleCoverageModes[i].CoverageSamples == Options_CSAA))
+				if ((vw_GetDevCaps()->MultisampleCoverageModes[i].ColorSamples == Options_MSAA) &
+					(vw_GetDevCaps()->MultisampleCoverageModes[i].CoverageSamples == Options_CSAA))
 					{
 						CurrentMode = i;
 						break;
@@ -347,7 +347,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		}
 
 		CurrentMode ++;
-		if (CurrentMode > CAPS->MaxMultisampleCoverageModes-1) CurrentMode = -1;
+		if (CurrentMode > vw_GetDevCaps()->MaxMultisampleCoverageModes-1) CurrentMode = -1;
 
 		// -1 - делаем "выключение" антиалиасинга
 		if (CurrentMode == -1)
@@ -357,13 +357,13 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		}
 		else
 		{
-			Options_MSAA = CAPS->MultisampleCoverageModes[CurrentMode].ColorSamples;
-			Options_CSAA = CAPS->MultisampleCoverageModes[CurrentMode].CoverageSamples;
+			Options_MSAA = vw_GetDevCaps()->MultisampleCoverageModes[CurrentMode].ColorSamples;
+			Options_CSAA = vw_GetDevCaps()->MultisampleCoverageModes[CurrentMode].CoverageSamples;
 		}
 	}
 	if (Options_MSAA == 0)
 	{
-		if (CAPS->MaxSamples == 0)
+		if (vw_GetDevCaps()->MaxSamples == 0)
 		{
 			Size = vw_FontSize(vw_GetText("3_Not_available"));
 			SizeI = (170-Size)/2;
@@ -397,14 +397,15 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	// вкл-выкл шейдеров, если они поддерживаются
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.0f,0.0f, ContentTransp, vw_GetText("3_OpenGL_Shading_Language"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0) || DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0))
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, !vw_GetDevCaps()->GLSL100Supported || vw_GetDevCaps()->ShaderModel < 3.0) ||
+			DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, !vw_GetDevCaps()->GLSL100Supported || vw_GetDevCaps()->ShaderModel < 3.0))
 	{
 		Options_UseGLSL = !Options_UseGLSL;
 		// если выключены шейдеры - выключаем и тени
 		if (!Options_UseGLSL) Options_ShadowMap = 0;
 		else Options_ShadowMap = Setup.ShadowMap;
 	}
-	if (CAPS->GLSL100Supported && (CAPS->ShaderModel >= 3.0))
+	if (vw_GetDevCaps()->GLSL100Supported && (vw_GetDevCaps()->ShaderModel >= 3.0))
 	{
 		Size = vw_FontSize(Options_UseGLSL ? vw_GetText("1_On") : vw_GetText("1_Off"));
 		SizeI = (170-Size)/2;
@@ -424,17 +425,19 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	// качество теней
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.0f,0.0f, ContentTransp, vw_GetText("3_Shadow_Quality"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, Options_ShadowMap==0 || !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0 || !CAPS->FramebufferObject || !Options_UseGLSL || (CAPS->FramebufferObjectDepthSize < 24)))
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, Options_ShadowMap==0 || !vw_GetDevCaps()->GLSL100Supported ||
+		vw_GetDevCaps()->ShaderModel < 3.0 || !vw_GetDevCaps()->FramebufferObject || !Options_UseGLSL || (vw_GetDevCaps()->FramebufferObjectDepthSize < 24)))
 	{
 		Options_ShadowMap--;
 		if (Options_ShadowMap < 0) Options_ShadowMap = 0;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Options_ShadowMap==9 || !CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0 || !CAPS->FramebufferObject || !Options_UseGLSL || (CAPS->FramebufferObjectDepthSize < 24)))
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Options_ShadowMap==9 || !vw_GetDevCaps()->GLSL100Supported ||
+		vw_GetDevCaps()->ShaderModel < 3.0 || !vw_GetDevCaps()->FramebufferObject || !Options_UseGLSL || (vw_GetDevCaps()->FramebufferObjectDepthSize < 24)))
 	{
 		Options_ShadowMap++;
 		if (Options_ShadowMap > 9) Options_ShadowMap = 9;
 	}
-	if (CAPS->GLSL100Supported && (CAPS->ShaderModel >= 3.0) && CAPS->FramebufferObject && Options_UseGLSL && (CAPS->FramebufferObjectDepthSize >= 24))
+	if (vw_GetDevCaps()->GLSL100Supported && (vw_GetDevCaps()->ShaderModel >= 3.0) && vw_GetDevCaps()->FramebufferObject && Options_UseGLSL && (vw_GetDevCaps()->FramebufferObjectDepthSize >= 24))
 	{
 		Size = vw_FontSize(ShadowButtonQualityBase[Options_ShadowMap], vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
 		float WScale = 0;

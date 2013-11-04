@@ -26,7 +26,6 @@
 
 
 #include "RendererInterface.h"
-extern eDevCaps OpenGL_DevCaps;
 
 
 

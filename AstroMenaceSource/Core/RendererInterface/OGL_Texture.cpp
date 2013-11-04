@@ -52,15 +52,14 @@ GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Byt
 
 	int Format;
 	int InternalFormat;
-	eDevCaps *OpenGL_DevCaps = vw_GetDevCaps();
 
 
-	if (OpenGL_DevCaps->TexturesCompression && (CompressionType > 0))
+	if (vw_GetDevCaps()->TexturesCompression && (CompressionType > 0))
 	{
 		if (Bytes == 4)
 		{
 			Format = GL_RGBA;
-			if (OpenGL_DevCaps->TexturesCompressionBPTC && (CompressionType > 1))
+			if (vw_GetDevCaps()->TexturesCompressionBPTC && (CompressionType > 1))
 				InternalFormat = GL_COMPRESSED_RGBA_BPTC_UNORM_ARB;
 			else
 				InternalFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
@@ -68,7 +67,7 @@ GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Byt
 		else
 		{
 			Format = GL_RGB;
-			if (OpenGL_DevCaps->TexturesCompressionBPTC && (CompressionType > 1))
+			if (vw_GetDevCaps()->TexturesCompressionBPTC && (CompressionType > 1))
 				InternalFormat = GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB;
 			else
 				InternalFormat = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
@@ -109,7 +108,7 @@ GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Byt
 			glGenerateMipmapEXT(GL_TEXTURE_2D);
 		}
 		else
-		if (OpenGL_DevCaps->HardwareMipMapGeneration)
+		if (vw_GetDevCaps()->HardwareMipMapGeneration)
 		{
 			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format, GL_UNSIGNED_BYTE, ustDIB);
@@ -361,11 +360,9 @@ void vw_SetTextureAnisotropy(int AnisotropyLevel)
 	// ставим ANISOTROPY
 	if (AnisotropyLevel > 1)
 	{
-		eDevCaps *OpenGL_DevCaps = vw_GetDevCaps();
-
-		if (OpenGL_DevCaps->MaxAnisotropyLevel > 1)
+		if (vw_GetDevCaps()->MaxAnisotropyLevel > 1)
 		{
-			if (AnisotropyLevel > OpenGL_DevCaps->MaxAnisotropyLevel) AnisotropyLevel = OpenGL_DevCaps->MaxAnisotropyLevel;
+			if (AnisotropyLevel > vw_GetDevCaps()->MaxAnisotropyLevel) AnisotropyLevel = vw_GetDevCaps()->MaxAnisotropyLevel;
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, AnisotropyLevel);
 		}
 	}

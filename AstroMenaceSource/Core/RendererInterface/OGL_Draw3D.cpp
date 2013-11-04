@@ -31,7 +31,6 @@
 
 extern	int tmpPrimCountGL;
 extern	PFNGLCLIENTACTIVETEXTUREARBPROC	glClientActiveTexture_ARB;
-extern	eDevCaps OpenGL_DevCaps;
 
 
 
@@ -77,7 +76,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 	if (Data == 0 && VBO == 0) return 0;
 
 	// флаг нужно ли с вбо делать
-	bool NeedVBO = OpenGL_DevCaps.VBOSupported;
+	bool NeedVBO = vw_GetDevCaps()->VBOSupported;
 	if (VBO == 0) NeedVBO = false;
 
 
@@ -237,7 +236,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 			for (unsigned int i=0; i<NumVertices+RangeStart; i++) VertexIndex[i] = i;
 
 			// если держим VBO, все это один раз сразу запихиваем в видео память
-			if (OpenGL_DevCaps.VBOSupported)
+			if (vw_GetDevCaps()->VBOSupported)
 			{
 				// прежде всего удаляем старый буфер, если он был
 				if (IndexVBO != 0){vw_DeleteVBO(*IndexVBO); delete IndexVBO; IndexVBO=0;}
@@ -253,7 +252,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 		VertexIndexPointer = VertexIndex+RangeStart;
 
 		// собственно включаем индекс-вбо
-		if (OpenGL_DevCaps.VBOSupported)
+		if (vw_GetDevCaps()->VBOSupported)
 		if (IndexVBO != 0)
 		{
 			vw_BindVBO(RI_ELEMENT_ARRAY_BUFFER, *IndexVBO);
@@ -266,7 +265,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 		VertexIndexPointer = DataIndex+RangeStart;
 
 		// собственно включаем индекс-вбо
-		if (OpenGL_DevCaps.VBOSupported)
+		if (vw_GetDevCaps()->VBOSupported)
 		if (DataIndexVBO != 0)
 		{
 			vw_BindVBO(RI_ELEMENT_ARRAY_BUFFER, *DataIndexVBO);
@@ -289,7 +288,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int *VBO, unsigned int *VAO)
 {
 	// флаг нужно ли с вaо делать
-	bool NeedVAO = OpenGL_DevCaps.VAOSupported;
+	bool NeedVAO = vw_GetDevCaps()->VAOSupported;
 	if (VAO == 0) NeedVAO = false;
 
 	if (NeedVAO)
@@ -299,7 +298,7 @@ void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int *VBO,
 	else
 	{
 		// флаг нужно ли с вбо делать
-		bool NeedVBO = OpenGL_DevCaps.VBOSupported;
+		bool NeedVBO = vw_GetDevCaps()->VBOSupported;
 		if (VBO == 0) NeedVBO = false;
 
 
@@ -335,7 +334,7 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 	// если ничего не передали
 	if (Data == 0 && VBO == 0 && VAO == 0) return;
 	// флаг нужно ли с вaо делать
-	bool NeedVAO = OpenGL_DevCaps.VAOSupported;
+	bool NeedVAO = vw_GetDevCaps()->VAOSupported;
 	if (VAO == 0) NeedVAO = false;
 
 

@@ -531,7 +531,7 @@ void CSpaceStars::Draw()
 				tmpDATA[k++] = 1.0f;
 			}
 
-			if (CAPS->VBOSupported)
+			if (vw_GetDevCaps()->VBOSupported)
 			{
 				VBO = new unsigned int;
 				if (!vw_BuildVBO(4*PrimitCount, tmpDATA, 8, VBO))

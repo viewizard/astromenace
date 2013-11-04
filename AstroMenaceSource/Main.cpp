@@ -40,8 +40,6 @@
 //------------------------------------------------------------------------------------
 // настройки игры
 GameSetup Setup;
-// возможности железа, получаем через рендерер
-eDevCaps *CAPS=0;
 
 
 //------------------------------------------------------------------------------------
@@ -1050,60 +1048,58 @@ ReCreate:
 	// проверяем возможности железа
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	CAPS = vw_GetDevCaps();
-
 	// если нужно, устанавливаем перерытие значений внутри движка, може только выключить - включить то чего нет нельзя
 #ifndef vbo // принудительно отключаем вообще работу с vbo
-	CAPS->VBOSupported = false;
+	vw_GetDevCaps()->VBOSupported = false;
 	printf("Vertex Buffer support forced disabled.\n");
 #endif
 	if (Setup.VBOCoreMode == 0)
 	{
-		CAPS->VBOSupported = false;
+		vw_GetDevCaps()->VBOSupported = false;
 	}
 
 	// если нужно, выключаем vao
 #ifndef vao // принудительно отключаем вообще работу с vao
-	CAPS->VAOSupported = false;
+	vw_GetDevCaps()->VAOSupported = false;
 	printf("Vertex Array Object support forced disabled.\n");
 #endif
 	// работаем только если есть VBO
-	if ((Setup.VAOCoreMode == 0) || (Setup.VBOCoreMode == 0) || (!CAPS->VBOSupported))
+	if ((Setup.VAOCoreMode == 0) || (Setup.VBOCoreMode == 0) || (!vw_GetDevCaps()->VBOSupported))
 	{
-		CAPS->VAOSupported = false;
+		vw_GetDevCaps()->VAOSupported = false;
 	}
 
 	// если нужно, выключаем fbo
 #ifndef fbo // принудительно отключаем вообще работу с fbo
-	CAPS->FramebufferObject = false;
+	vw_GetDevCaps()->FramebufferObject = false;
 	printf("Frame Buffer Object support forced disabled.\n");
 #endif
 	if (Setup.FBOCoreMode == 0)
 	{
-		CAPS->FramebufferObject = false;
+		vw_GetDevCaps()->FramebufferObject = false;
 	}
 
 	// проверка поддержки шейдеров (нужна 100% поддержка GLSL 1.0)
 	if (Setup.UseGLSL)
-		if (!CAPS->GLSL100Supported || CAPS->ShaderModel < 3.0f) Setup.UseGLSL = false;
+		if (!vw_GetDevCaps()->GLSL100Supported || vw_GetDevCaps()->ShaderModel < 3.0f) Setup.UseGLSL = false;
 
 	// управление генерации мипмеп уровней- можем только выключить, нельзя включить если его нет
 	if (!Setup.HardwareMipMapGeneration)
 	{
-		CAPS->HardwareMipMapGeneration = false;
+		vw_GetDevCaps()->HardwareMipMapGeneration = false;
 	}
 
 	// анализ системы только если это первый запуск
 	if (FirstStart)
 	{
 		// если шейдерная модель 3-я или выше
-		if (CAPS->ShaderModel >= 3.0f)
+		if (vw_GetDevCaps()->ShaderModel >= 3.0f)
 		{
 			// памяти достаточно, включаем другой режим загрузки
 			Setup.EqualOrMore128MBVideoRAM = true;
 		}
 		// если шейдерная модель 4-я или выше
-		if (CAPS->ShaderModel >= 4.0f)
+		if (vw_GetDevCaps()->ShaderModel >= 4.0f)
 		{
 			// 100% держит наши шейдеры
 			Setup.UseGLSL = true;
@@ -1113,11 +1109,11 @@ ReCreate:
 			// немного больше ставим другие опции
 			Setup.MSAA = 2;
 			Setup.CSAA = 2;
-			Setup.AnisotropyLevel = CAPS->MaxAnisotropyLevel;
+			Setup.AnisotropyLevel = vw_GetDevCaps()->MaxAnisotropyLevel;
 			Setup.MaxPointLights = 4;
 		}
 		// если шейдерная модель 4.2-я или выше
-		if (CAPS->ShaderModel >= 4.2f)
+		if (vw_GetDevCaps()->ShaderModel >= 4.2f)
 		{
 			// немного больше ставим другие опции
 			Setup.ShadowMap = 5;
@@ -1127,7 +1123,7 @@ ReCreate:
 		}
 
 		// если поддерживаем сторедж - выключаем поддержку сжатия, 100% у нас достаточно видео памяти
-		if (CAPS->TextureStorage) Setup.TexturesCompressionType = 0;
+		if (vw_GetDevCaps()->TextureStorage) Setup.TexturesCompressionType = 0;
 
 #if defined(__APPLE__) && defined(__MACH__)
 		// для маков по умолчанию выключаем сглаживание, тени и шейдеры, т.к. там может все софтово эмулироваться и жутко тормозить
@@ -1155,17 +1151,17 @@ ReCreate:
 	}
 
 	// если не поддерживает железо фбо или шейдеры, выключаем шадовмеп
-	if (!CAPS->FramebufferObject || !CAPS->GLSL100Supported || (CAPS->ShaderModel < 3.0f)) Setup.ShadowMap = 0;
+	if (!vw_GetDevCaps()->FramebufferObject || !vw_GetDevCaps()->GLSL100Supported || (vw_GetDevCaps()->ShaderModel < 3.0f)) Setup.ShadowMap = 0;
 
-	if (Setup.MSAA > CAPS->MaxSamples) Setup.MSAA = Setup.CSAA = CAPS->MaxSamples;
+	if (Setup.MSAA > vw_GetDevCaps()->MaxSamples) Setup.MSAA = Setup.CSAA = vw_GetDevCaps()->MaxSamples;
 	// на всякий случай проверяем, входит ли текущее сглаживание в список доступных
 	int CurrentAAMode = -1;
 	if (Setup.MSAA != 0)
 	{
-		for (int i=0;i<CAPS->MaxMultisampleCoverageModes; i++)
+		for (int i=0;i<vw_GetDevCaps()->MaxMultisampleCoverageModes; i++)
 		{
-			if ((CAPS->MultisampleCoverageModes[i].ColorSamples == Setup.MSAA) &
-				(CAPS->MultisampleCoverageModes[i].CoverageSamples == Setup.CSAA))
+			if ((vw_GetDevCaps()->MultisampleCoverageModes[i].ColorSamples == Setup.MSAA) &
+				(vw_GetDevCaps()->MultisampleCoverageModes[i].CoverageSamples == Setup.CSAA))
 				{
 					CurrentAAMode = i;
 					break;
@@ -1176,8 +1172,8 @@ ReCreate:
 	if (CurrentAAMode == -1) Setup.MSAA = Setup.CSAA = 0;
 
 	// проверка режима сжатия текстур
-	if (!CAPS->TexturesCompression && (Setup.TexturesCompressionType > 0)) Setup.TexturesCompressionType = 0;
-	if (!CAPS->TexturesCompressionBPTC && (Setup.TexturesCompressionType > 1)) Setup.TexturesCompressionType = 1;
+	if (!vw_GetDevCaps()->TexturesCompression && (Setup.TexturesCompressionType > 0)) Setup.TexturesCompressionType = 0;
+	if (!vw_GetDevCaps()->TexturesCompressionBPTC && (Setup.TexturesCompressionType > 1)) Setup.TexturesCompressionType = 1;
 
 
 
@@ -1195,7 +1191,7 @@ ReCreate:
 
 
 	// если не поддерживаем как минимум 2 текстуры, железо очень слабое - не запустимся
-	if (CAPS->MaxMultTextures < 2)
+	if (vw_GetDevCaps()->MaxMultTextures < 2)
 	{
 		SDL_Quit();
         fprintf(stderr, "The Multi Textures feature unsupported by hardware. Fatal error.\n");

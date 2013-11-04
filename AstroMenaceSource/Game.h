@@ -68,7 +68,6 @@
 // Main.cpp
 //------------------------------------------------------------------------------------
 extern GameSetup Setup;
-extern eDevCaps *CAPS;
 extern eGameStatus GameStatus;
 extern SDL_Joystick *Joystick;
 extern eParticleSystem2D *CursorParticleSystem2D;
