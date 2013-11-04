@@ -26,7 +26,6 @@
 
 
 #include "RendererInterface.h"
-extern eDevCaps OpenGL_DevCaps;
 
 // текущий работающий буфер, если 0 - фрейм буфер
 eFBO *CurrentFBO = 0;
@@ -264,7 +263,7 @@ bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 	printf("Frame Buffer Object created. Depth Size: %i\n", FBO->DepthSize);
 
 	// запоминаем максимальные полученные данные по буферу глубины
-	if (OpenGL_DevCaps.FramebufferObjectDepthSize < FBO->DepthSize) OpenGL_DevCaps.FramebufferObjectDepthSize = FBO->DepthSize;
+	if (vw_GetDevCaps()->FramebufferObjectDepthSize < FBO->DepthSize) vw_GetDevCaps()->FramebufferObjectDepthSize = FBO->DepthSize;
 
 	return true;
 }

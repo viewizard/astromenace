@@ -31,8 +31,6 @@
 
 
 
-extern	eDevCaps OpenGL_DevCaps;
-
 extern eTexture *StartTexMan;
 extern int FilteringTexMan;
 extern int Address_ModeTexMan;
@@ -673,7 +671,7 @@ eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DW
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Делаем подгонку по размерам, с учетом необходимости железа
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (!OpenGL_DevCaps.TextureNPOTSupported) // если не поддерживаем - берем и сами растягиваем до степени двойки
+	if (!vw_GetDevCaps()->TextureNPOTSupported) // если не поддерживаем - берем и сами растягиваем до степени двойки
 		Resize(&tmp_image, Texture);
 
 
