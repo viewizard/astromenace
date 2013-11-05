@@ -49,8 +49,6 @@
 					<Add option="-Os" />
 					<Add option="-Wextra" />
 					<Add option="-Wall" />
-					<Add option="-Wconversion" />
-					<Add option="-Wsign-conversion" />
 					<Add option="-Dxinerama_detected_by_cmake" />
 					<Add option="-Dfontconfig_detected_by_cmake" />
 					<Add directory="/usr/include/freetype2/" />

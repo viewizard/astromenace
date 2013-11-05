@@ -35,7 +35,7 @@
 #include "Explosion/GroundExplosion/GroundExplosion.h"
 #include "Explosion/SpaceExplosion/SpaceExplosion.h"
 
-int Audio_PlayVoice(int SoundID, float fVol, bool Loop = false);
+int Audio_PlayVoice(unsigned int SoundID, float fVol, bool Loop = false);
 float GetProjectileSpeed(int Num);
 void PlayBulletExplosion(VECTOR3D Location, bool NeedExplosionSFX, int ExplType);
 

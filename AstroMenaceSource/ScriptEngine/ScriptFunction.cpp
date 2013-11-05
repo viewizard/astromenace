@@ -226,7 +226,11 @@ void SetShowDeleteOnHide(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *x
 //-----------------------------------------------------------------------------
 // DebugInformation
 //-----------------------------------------------------------------------------
+#ifndef gamedebug
+void SetDebugInformation(CObject3D *UNUSED(Object), cXMLEntry *UNUSED(xmlEntry))
+#else
 void SetDebugInformation(CObject3D *Object, cXMLEntry *xmlEntry)
+#endif //gamedebug
 {
 	// не нужно ничего устанавливать, выходим
 	if (!Script->ShowDebugModeLine) return;
@@ -234,12 +238,12 @@ void SetDebugInformation(CObject3D *Object, cXMLEntry *xmlEntry)
 #ifndef gamedebug
 	printf("XML don't count lines, uncomment \"#define gamedebug\" line in config.h file and re-compile game first.\n");
 	return;
-#endif //gamedebug
-
+#else
 	// преобразовываем число в строку
 	char buffer[10];
 	itoa10(xmlEntry->LineNumber, buffer);
 
 	Object->DebugInfo = new char[strlen(buffer)+1];
 	strcpy(Object->DebugInfo, buffer);
+#endif //gamedebug
 }

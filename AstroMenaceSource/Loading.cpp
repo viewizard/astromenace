@@ -36,13 +36,14 @@
 
 // прорисовка хинтов во время загрузки
 bool NeedShowHint = false;
-const char *LoadingHints[6] =
+static const char *LoadingHints[] =
 {"9_16Line1",
 "9_16Line2",
 "9_16Line3",
 "9_16Line4",
 "9_16Line5",
 "9_16Line6"};
+#define LoadingHintsCount (int)(sizeof(LoadingHints)/sizeof(LoadingHints[0]))
 
 
 
@@ -84,7 +85,7 @@ struct LoadList
 
 // подключаем список загрузки
 LoadList	*CurrentList = 0;
-int CurrentListCount = 0;
+unsigned int CurrentListCount = 0;
 
 
 
@@ -108,8 +109,7 @@ struct sGLSLLoadList
 	char VertexShaderFileName[MAX_PATH];
 	char FragmentShaderFileName[MAX_PATH];
 };
-const int GLSLLoadListCount = 5;
-sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
+static sGLSLLoadList GLSLLoadList[] =
 {
 {"ParticleSystem", "DATA/GLSL/particle.vert", "DATA/GLSL/particle.frag"},
 {"SpaceStars", "DATA/GLSL/particle_stars.vert", "DATA/GLSL/particle.frag"},
@@ -117,6 +117,7 @@ sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 {"PerPixelLight_ShadowMap", "DATA/GLSL/light_shadowmap.vert", "DATA/GLSL/light_shadowmap.frag"},
 {"PerPixelLight_Explosion", "DATA/GLSL/light_explosion.vert", "DATA/GLSL/light_explosion.frag"},
 };
+#define GLSLLoadListCount sizeof(GLSLLoadList)/sizeof(GLSLLoadList[0])
 
 
 
@@ -131,10 +132,8 @@ sGLSLLoadList	GLSLLoadList[GLSLLoadListCount] =
 
 #define TEXTURE_NO_MIPMAP	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE
 
-// сколько нужно загружать в листе меню
-const int	MenuLoadListCount = 189;
 // лист загрузки меню
-LoadList	MenuLoadList[MenuLoadListCount] =
+static LoadList MenuLoadList[] =
 {
 // текстуры меню... кнопки, диалоги, название игры
 {"DATA/MENU/astromenace.tga",			0, 512, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
@@ -351,6 +350,7 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 {"DATA/GFX/trail5.tga",							1, 64, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, RI_TEXTURE_BILINEAR, true, false, -1.0f, false},
 
 };
+#define MenuLoadListCount sizeof(MenuLoadList)/sizeof(MenuLoadList[0])
 
 
 
@@ -367,9 +367,7 @@ LoadList	MenuLoadList[MenuLoadListCount] =
 
 
 
-
-const int	GameLevelsLoadListCount = 93+31+35;
-LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
+static LoadList GameLevelsLoadList[] =
 {
 // 2д часть
 {"DATA/MENU/cursor.tga",						0, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
@@ -539,11 +537,11 @@ LoadList	GameLevelsLoadList[GameLevelsLoadListCount] =
 {"DATA/MODELS/EARTHFIGHTER/torpedo.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
 {"DATA/MODELS/EARTHFIGHTER/nuke.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
 };
+#define GameLevelsLoadListCount sizeof(GameLevelsLoadList)/sizeof(GameLevelsLoadList[0])
 
 
 
-const int	AlienFighterLoadListCount = 19;
-LoadList	AlienFighterLoadList[AlienFighterLoadListCount] =
+static LoadList AlienFighterLoadList[] =
 {
 // AlienFighter – load alien fighters textures.
 {"DATA/MODELS/ALIENFIGHTER/al-text04.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -567,12 +565,12 @@ LoadList	AlienFighterLoadList[AlienFighterLoadListCount] =
 {"DATA/MODELS/ALIENFIGHTER/al-16.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
 {"DATA/MODELS/ALIENFIGHTER/al-17.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
 };
+#define AlienFighterLoadListCount sizeof(AlienFighterLoadList)/sizeof(AlienFighterLoadList[0])
 
 
 
 
-const int	PirateLoadListCount = 51;
-LoadList	PirateLoadList[PirateLoadListCount] =
+static LoadList PirateLoadList[] =
 {
 // Pirate – load all pirate data (vehicles, military buildings, ships...) testures.
 {"DATA/MODELS/gr-01.VW2D",							1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -632,11 +630,11 @@ LoadList	PirateLoadList[PirateLoadListCount] =
 {"DATA/MODELS/MILITARYBUILDING/aa-gun-02.VW3D",		2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
 {"DATA/MODELS/MILITARYBUILDING/aa-gun-01.VW3D",		2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, false},
 };
+#define PirateLoadListCount sizeof(PirateLoadList)/sizeof(PirateLoadList[0])
 
 
 
-const int	BasePartLoadListCount = 28;
-LoadList	BasePartLoadList[BasePartLoadListCount] =
+static LoadList BasePartLoadList[] =
 {
 // BasePart – load pirate base textures.
 {"DATA/MODELS/SPACEBASE/allalpha.tga",		1, 768, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -669,11 +667,11 @@ LoadList	BasePartLoadList[BasePartLoadListCount] =
 {"DATA/MODELS/SPACEBASE/8/4.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 {"DATA/MODELS/SPACEBASE/8/5.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 };
+#define BasePartLoadListCount sizeof(BasePartLoadList)/sizeof(BasePartLoadList[0])
 
 
 
-const int	AsteroidLoadListCount = 3+25;
-LoadList	AsteroidLoadList[AsteroidLoadListCount] =
+static LoadList AsteroidLoadList[] =
 {
 // Asteroid – load asteroids (for AsteroidField) textures.
 {"DATA/MODELS/SPACE/asteroid-01.tga",				1, 96, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -708,11 +706,11 @@ LoadList	AsteroidLoadList[AsteroidLoadListCount] =
 {"DATA/MODELS/SPACE/asteroid-0118.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
 {"DATA/MODELS/SPACE/asteroid-0119.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, false},
 };
+#define AsteroidLoadListCount sizeof(AsteroidLoadList)/sizeof(AsteroidLoadList[0])
 
 
 
-const int	PlanetLoadListCount = 11+6;
-LoadList	PlanetLoadList[PlanetLoadListCount] =
+static LoadList PlanetLoadList[] =
 {
 // Planet – load planets textures.
 {"DATA/MODELS/PLANET/asteroid.tga",			1, 512, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -734,11 +732,11 @@ LoadList	PlanetLoadList[PlanetLoadListCount] =
 {"DATA/MODELS/PLANET/planet5.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 {"DATA/MODELS/PLANET/planet6.VW3D",					2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 };
+#define PlanetLoadListCount sizeof(PlanetLoadList)/sizeof(PlanetLoadList[0])
 
 
 
-const int	AlienMotherShipLoadListCount = 9+8;
-LoadList	AlienMotherShipLoadList[AlienMotherShipLoadListCount] =
+static LoadList AlienMotherShipLoadList[] =
 {
 // AlienMotherShip – load alien motherships textures.
 {"DATA/MODELS/ALIENMOTHERSHIP/alm-text02.VW2D",		1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -760,11 +758,11 @@ LoadList	AlienMotherShipLoadList[AlienMotherShipLoadListCount] =
 {"DATA/MODELS/ALIENMOTHERSHIP/alm-07.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, true},
 {"DATA/MODELS/ALIENMOTHERSHIP/alm-08.VW3D",			2, 20, true,  0,0,0, 0, 0, 0, true, false, 2.0f, true},
 };
+#define AlienMotherShipLoadListCount sizeof(AlienMotherShipLoadList)/sizeof(AlienMotherShipLoadList[0])
 
 
 
-const int	BuildingLoadListCount = 3+11;
-LoadList	BuildingLoadList[BuildingLoadListCount] =
+static LoadList BuildingLoadList[] =
 {
 // Building – load buildings textures.
 {"DATA/MODELS/BUILDING/bld.VW2D",				1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -783,11 +781,11 @@ LoadList	BuildingLoadList[BuildingLoadListCount] =
 {"DATA/MODELS/BUILDING/bld-10.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 {"DATA/MODELS/BUILDING/bld-11.VW3D",				2, 20, true,  0,0,0, 0, 0, 0, true, false, -1.0f, true},
 };
+#define BuildingLoadListCount sizeof(BuildingLoadList)/sizeof(BuildingLoadList[0])
 
 
 
-const int	StarSystem1LoadListCount = 6;
-LoadList	StarSystem1LoadList[StarSystem1LoadListCount] =
+static LoadList StarSystem1LoadList[] =
 {
 // StarSystem1 – load StarSystem 1 SkyBox textures.
 {"DATA/SKYBOX/1/skybox_back6.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
@@ -797,11 +795,11 @@ LoadList	StarSystem1LoadList[StarSystem1LoadListCount] =
 {"DATA/SKYBOX/1/skybox_right1.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/SKYBOX/1/skybox_top3.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 };
+#define StarSystem1LoadListCount sizeof(StarSystem1LoadList)/sizeof(StarSystem1LoadList[0])
 
 
 
-const int	StarSystem2LoadListCount = 6;
-LoadList	StarSystem2LoadList[StarSystem2LoadListCount] =
+static LoadList StarSystem2LoadList[] =
 {
 //StarSystem2 – load StarSystem 2 SkyBox textures.
 {"DATA/SKYBOX/2/skybox_back6.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
@@ -811,6 +809,7 @@ LoadList	StarSystem2LoadList[StarSystem2LoadListCount] =
 {"DATA/SKYBOX/2/skybox_right1.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 {"DATA/SKYBOX/2/skybox_top3.tga",					1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 };
+#define StarSystem2LoadListCount sizeof(StarSystem2LoadList)/sizeof(StarSystem2LoadList[0])
 
 
 
@@ -1372,7 +1371,7 @@ void LoadGameData(int LoadType)
 
 	AllDrawLoading = 0;
 	// получаем значение (реальное, по весам)
-	for (int i=0; i<CurrentListCount; i++)
+	for (unsigned int i=0; i<CurrentListCount; i++)
 	{
 		AllDrawLoading += CurrentList[i].Value;
 	}
@@ -1476,7 +1475,7 @@ void LoadGameData(int LoadType)
 	if (NeedLoadShaders)
 	if (vw_GetDevCaps()->GLSL100Supported)
 	{
-		for (int i=0; i<GLSLLoadListCount; i++)
+		for (unsigned int i=0; i<GLSLLoadListCount; i++)
 		if (Setup.UseGLSL)
 		{
 
@@ -1539,7 +1538,7 @@ void LoadGameData(int LoadType)
 
 
 
-	for (int i=0; i<CurrentListCount; i++)
+	for (unsigned int i=0; i<CurrentListCount; i++)
 	{
 		switch (CurrentList[i].FileType)
 		{
@@ -1748,7 +1747,7 @@ AllDataLoaded:
 			InitMenu();
 			GameStatus = MISSION; // чтобы не было перехода с основного меню в мисии
 			Setup.LoadingHint++;
-			if (Setup.LoadingHint >= 6) Setup.LoadingHint = 0;
+			if (Setup.LoadingHint >= LoadingHintsCount) Setup.LoadingHint = 0;
 			break;
 
 		// уровни игры
@@ -1760,7 +1759,7 @@ AllDataLoaded:
 			// приготовиться к действию (речь)
 			Audio_PlayVoice(5, 1.0f);
 			Setup.LoadingHint++;
-			if (Setup.LoadingHint >= 6) Setup.LoadingHint = 0;
+			if (Setup.LoadingHint >= LoadingHintsCount) Setup.LoadingHint = 0;
 			break;
 	}
 
