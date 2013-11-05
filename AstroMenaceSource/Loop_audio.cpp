@@ -52,10 +52,8 @@ struct GameSoundData
 
 
 
-// кол-во игровых звуков
-const int	GameSoundQuantity = 33;
 // перечень имен файлов игровых звуков
-GameSoundData GameSoundList[GameSoundQuantity] =
+static GameSoundData GameSoundList[] =
 {
 
 {"DATA/SFX/weapon1probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, механическое оружие (Kinetic)
@@ -98,7 +96,7 @@ GameSoundData GameSoundList[GameSoundQuantity] =
 {"DATA/SFX/explosion4.wav", 1.0f, 2, 6, 1, 4, 1},		// малый взрыв: астероиды
 
 };
-
+#define GameSoundQuantity sizeof(GameSoundList)/sizeof(GameSoundList[0])
 
 
 
@@ -116,10 +114,8 @@ struct Sound2dData
 	bool	NeedRelease;
 };
 
-// кол-во звуков для меню + голоса
-const int	MenuSoundQuantity = 15;
 // перечень имен файлов звуков для меню
-Sound2dData MenuSoundNames[MenuSoundQuantity] =
+static Sound2dData MenuSoundNames[] =
 {
 {"DATA/SFX/menu_onbutton.wav", 0.4f, false},	// навели на кнопку
 {"DATA/SFX/menu_click.wav", 0.6f, false},		// нажали на кнопку
@@ -137,14 +133,12 @@ Sound2dData MenuSoundNames[MenuSoundQuantity] =
 {"DATA/SFX/lowlife.wav", 1.0f, true},			// сирена или что-то подобное, когда менее 10% жизни остается (зацикленный небольшой фрагмент)
 {"DATA/SFX/menu_onbutton2.wav", 0.15f, false},	// навели на малую кнопку
 };
+#define MenuSoundQuantity sizeof(MenuSoundNames)/sizeof(MenuSoundNames[0])
 
 
 
-
-// кол-во звуков для меню + голоса
-const int	VoiceQuantity = 10;
 // перечень имен файлов звуков для меню
-Sound2dData VoiceNames[VoiceQuantity] =
+static Sound2dData VoiceNames[] =
 {
 {"13_Attention.wav", 1.0f, true},
 {"13_EngineMalfunction.wav", 1.0f, true},
@@ -157,16 +151,14 @@ Sound2dData VoiceNames[VoiceQuantity] =
 {"13_WeaponDestroyed.wav", 1.0f, true},//++
 {"13_WeaponMalfunction.wav", 1.0f, true},//++
 };
+#define VoiceQuantity sizeof(VoiceNames)/sizeof(VoiceNames[0])
 
 
 
 
 
-
-// кол-во музыкальных тем
-const int	MusicQuantity = 6;
 // перечень имен файлов музыки
-const char *GameMusicNames[MusicQuantity] =
+const char *GameMusicNames[] =
 {
 "DATA/MUSIC/menu.ogg",			// музыка в меню
 "DATA/MUSIC/intro.ogg",			// музыка в заставках перед миссиями
@@ -178,6 +170,7 @@ const char *GameMusicNames[MusicQuantity] =
 "DATA/MUSIC/boss-intro.ogg",	// музыка в игре, когда подходим к опастному участку
 
 };
+#define MusicQuantity sizeof(GameMusicNames)/sizeof(GameMusicNames[0])
 // для перекрытия музыки
 bool GameMainMusicSet = false;
 char GameMainMusic[MAX_PATH];
@@ -189,8 +182,7 @@ char GameDeathMusic[MAX_PATH];
 
 
 // массив указателей на музыку, точнее на ее идентификаторы
-int MusicList[MusicQuantity] =
-{0,0,0,0,0,0};
+int MusicList[MusicQuantity];
 int CurrentPlayingMusic = -1; //если вулючаем громкость с нуля, нужно знать что запускать
 
 
@@ -208,13 +200,22 @@ bool InitAudio()
 {
 	if (!vw_InitSound()) return false;
 
-	for (int i=0; i<MusicQuantity; i++)
+	for (unsigned int i=0; i<MusicQuantity; i++)
 		MusicList[i] = -1;
 
 	return true;
 }
 
 
+
+
+//------------------------------------------------------------------------------------
+// Завершение работы со звуком
+//------------------------------------------------------------------------------------
+void ShutdownAudio()
+{
+	vw_ShutdownSound();
+}
 
 
 
@@ -281,7 +282,7 @@ void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime)
 		// если что-то играем, нужно поставить чтобы уходило по громкости
 		if (vw_GetMusicIsPlaying())
 		{
-			for (int i=0; i<MusicQuantity; i++)
+			for (unsigned int i=0; i<MusicQuantity; i++)
 			if (vw_FindMusicByNum(MusicList[i]) != 0)
 			{
 				vw_FindMusicByNum(MusicList[i])->FadeOut(FadeOutTime);
@@ -318,7 +319,7 @@ void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime)
 // установка громкости на все 2д звуки
 void Audio_SetSound2DMainVolume(float NewMainVolume)
 {
-	for (int i=0; i<MenuSoundQuantity; i++)
+	for (unsigned int i=0; i<MenuSoundQuantity; i++)
 	{
 		eSound* Tmp = vw_FindSoundByName(MenuSoundNames[i].FileName);
 		if (Tmp != 0) Tmp->SetMainVolume(NewMainVolume);
@@ -327,7 +328,7 @@ void Audio_SetSound2DMainVolume(float NewMainVolume)
 // установка громкости на все голосовые звуки
 void Audio_SetVoiceMainVolume(float NewMainVolume)
 {
-	for (int i=0; i<VoiceQuantity; i++)
+	for (unsigned int i=0; i<VoiceQuantity; i++)
 	{
 		eSound* Tmp = vw_FindSoundByName(vw_GetText(VoiceNames[i].FileName, Setup.VoiceLanguage));
 		if (Tmp != 0) Tmp->SetMainVolume(NewMainVolume);
@@ -340,7 +341,7 @@ void Audio_SetVoiceMainVolume(float NewMainVolume)
 //------------------------------------------------------------------------------------
 // Проигрываем звук в меню, или другие 2д звуки
 //------------------------------------------------------------------------------------
-int Audio_PlaySound2D(int SoundID, float fVol, bool Loop)
+int Audio_PlaySound2D(unsigned int SoundID, float fVol, bool Loop)
 {
 	if (!Setup.Sound_check) return 0;
 	if (!Setup.SoundSw) return 0;
@@ -384,7 +385,7 @@ int Audio_PlaySound2D(int SoundID, float fVol, bool Loop)
 //------------------------------------------------------------------------------------
 // Проигрываем голос
 //------------------------------------------------------------------------------------
-int Audio_PlayVoice(int VoiceID, float fVol, bool Loop)
+int Audio_PlayVoice(unsigned int VoiceID, float fVol, bool Loop)
 {
 	if (!Setup.Sound_check) return 0;
 	if (!Setup.SoundSw) return 0;
@@ -532,7 +533,7 @@ void Audio_LoopProc()
 		if (Setup.Music_check) // но играть можно
 		{
 			vw_ReleaseAllMusic();
-			for (int i=0; i<MusicQuantity; i++)
+			for (unsigned int i=0; i<MusicQuantity; i++)
 				MusicList[i] = -1;
 		}
 	}

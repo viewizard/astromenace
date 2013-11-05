@@ -201,10 +201,11 @@ extern char GameBossMusic[MAX_PATH];
 extern bool GameDeathMusicSet;
 extern char GameDeathMusic[MAX_PATH];
 
-int Audio_PlaySound2D(int SoundID, float fVol, bool Loop = false);
-int Audio_PlayVoice(int VoiceID, float fVol, bool Loop = false);
+int Audio_PlaySound2D(unsigned int SoundID, float fVol, bool Loop = false);
+int Audio_PlayVoice(unsigned int VoiceID, float fVol, bool Loop = false);
 void Audio_LoopProc();
 bool InitAudio();
+void ShutdownAudio();
 void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime);
 void Audio_SetSound2DMainVolume(float NewMainVolume);
 void Audio_SetVoiceMainVolume(float NewMainVolume);
