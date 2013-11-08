@@ -40,8 +40,7 @@ struct AlienSpaceFighterData
 	const	char *Name;
 };
 
-const int	PresetAlienSpaceFighterDataCount = 17;
-AlienSpaceFighterData PresetAlienSpaceFighterData[PresetAlienSpaceFighterDataCount] =
+static AlienSpaceFighterData PresetAlienSpaceFighterData[] =
 {
 	{1,	4,	5,	0,	"DATA/MODELS/ALIENFIGHTER/al-01.VW3D"},
 	{1,	5,	15,	0,	"DATA/MODELS/ALIENFIGHTER/al-02.VW3D"},
@@ -61,6 +60,7 @@ AlienSpaceFighterData PresetAlienSpaceFighterData[PresetAlienSpaceFighterDataCou
 	{3,	4,	100,150,"DATA/MODELS/ALIENFIGHTER/al-16.VW3D"},
 	{5,	6,	150,200,"DATA/MODELS/ALIENFIGHTER/al-17.VW3D"}
 };
+#define PresetAlienSpaceFighterDataCount sizeof(PresetAlienSpaceFighterData)/sizeof(PresetAlienSpaceFighterData[0])
 
 
 
@@ -70,6 +70,12 @@ AlienSpaceFighterData PresetAlienSpaceFighterData[PresetAlienSpaceFighterDataCou
 //-----------------------------------------------------------------------------
 void CAlienSpaceFighter::Create(int	SpaceShipNum)
 {
+	if ((SpaceShipNum <= 0) || ((unsigned int)SpaceShipNum > PresetAlienSpaceFighterDataCount))
+	{
+		fprintf(stderr, "!!! Couldn't init CAlienSpaceFighter object with Number %i.\n", SpaceShipNum);
+		return;
+	}
+
 	ObjectStatus = 1; // чужой
 	ObjectType = 2;
 	ObjectCreationType = SpaceShipNum;

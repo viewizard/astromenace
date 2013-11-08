@@ -38,8 +38,7 @@ struct MilitaryBuildingData
 	const	char *TextureName;
 };
 
-const int	PresetMilitaryBuildingDataCount = 7;
-MilitaryBuildingData PresetMilitaryBuildingData[PresetMilitaryBuildingDataCount] =
+static MilitaryBuildingData PresetMilitaryBuildingData[] =
 {
 	{80, 2,	"DATA/MODELS/MILITARYBUILDING/aa-gun-01.VW3D", "DATA/MODELS/gr-01.VW2D"},
 	{120, 1,	"DATA/MODELS/MILITARYBUILDING/aa-gun-02.VW3D", "DATA/MODELS/gr-01.VW2D"},
@@ -49,6 +48,7 @@ MilitaryBuildingData PresetMilitaryBuildingData[PresetMilitaryBuildingDataCount]
 	{50, 1,	"DATA/MODELS/MILITARYBUILDING/artiler-gun-01.VW3D", "DATA/MODELS/gr-03.VW2D"},
 	{200, 1,	"DATA/MODELS/MILITARYBUILDING/artiler-gun-02.VW3D", "DATA/MODELS/gr-01.VW2D"}
 };
+#define PresetMilitaryBuildingDataCount sizeof(PresetMilitaryBuildingData)/sizeof(PresetMilitaryBuildingData[0])
 
 
 
@@ -57,6 +57,12 @@ MilitaryBuildingData PresetMilitaryBuildingData[PresetMilitaryBuildingDataCount]
 //-----------------------------------------------------------------------------
 void CMilitaryBuilding::Create(int	MilitaryBuildingNum)
 {
+	if ((MilitaryBuildingNum <= 0) || ((unsigned int)MilitaryBuildingNum > PresetMilitaryBuildingDataCount))
+	{
+		fprintf(stderr, "!!! Couldn't init CMilitaryBuilding object with Number %i.\n", MilitaryBuildingNum);
+		return;
+	}
+
 	ObjectType = 6;
 	ObjectCreationType = MilitaryBuildingNum;
 

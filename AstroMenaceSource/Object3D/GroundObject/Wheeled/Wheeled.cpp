@@ -39,8 +39,7 @@ struct WheeledData
 	const	char *TextureName;
 };
 
-const int	PresetWheeledDataCount = 8;
-WheeledData PresetWheeledData[PresetWheeledDataCount] =
+static WheeledData PresetWheeledData[] =
 {
 	{120, 4,	50.0f,	"DATA/MODELS/WHEELED/jeep-01.VW3D",	"DATA/MODELS/gr-02.VW2D"},
 	{70, 2,		50.0f,	"DATA/MODELS/WHEELED/jeep-02.VW3D",	"DATA/MODELS/gr-02.VW2D"},
@@ -51,6 +50,7 @@ WheeledData PresetWheeledData[PresetWheeledDataCount] =
 	{200, 2,	30.0f,	"DATA/MODELS/WHEELED/apc-04.VW3D",	"DATA/MODELS/gr-01.VW2D"},
 	{400,2,		34.0f,	"DATA/MODELS/WHEELED/r-launcher-01.VW3D",	"DATA/MODELS/gr-02.VW2D"}
 };
+#define PresetWheeledDataCount sizeof(PresetWheeledData)/sizeof(PresetWheeledData[0])
 
 
 
@@ -59,6 +59,12 @@ WheeledData PresetWheeledData[PresetWheeledDataCount] =
 //-----------------------------------------------------------------------------
 void CWheeled::Create(int WheeledNum)
 {
+	if ((WheeledNum <= 0) || ((unsigned int)WheeledNum > PresetWheeledDataCount))
+	{
+		fprintf(stderr, "!!! Couldn't init CWheeled object with Number %i.\n", WheeledNum);
+		return;
+	}
+
 	ObjectType = 5;
 	ObjectCreationType = WheeledNum;
 	MaxSpeed = 20.0f;

@@ -39,8 +39,7 @@ struct TrackedData
 	const	char *TextureName;
 };
 
-const int	PresetTrackedDataCount = 14;
-TrackedData PresetTrackedData[PresetTrackedDataCount] =
+static TrackedData PresetTrackedData[] =
 {
 	{250, 1,	60.0f,	"DATA/MODELS/TRACKED/tank-01.VW3D",	"DATA/MODELS/gr-01.VW2D"},
 	{200, 2,	45.0f,	"DATA/MODELS/TRACKED/tank-03.VW3D",	"DATA/MODELS/gr-01.VW2D"},
@@ -57,6 +56,7 @@ TrackedData PresetTrackedData[PresetTrackedDataCount] =
 	{200, 2,	42.0f,	"DATA/MODELS/TRACKED/apc-aa-02.VW3D",	"DATA/MODELS/gr-02.VW2D"},
 	{50,  1,	50.0f,	"DATA/MODELS/TRACKED/engineering-01.VW3D",	"DATA/MODELS/gr-03.VW2D"}
 };
+#define PresetTrackedDataCount sizeof(PresetTrackedData)/sizeof(PresetTrackedData[0])
 
 
 
@@ -65,6 +65,12 @@ TrackedData PresetTrackedData[PresetTrackedDataCount] =
 //-----------------------------------------------------------------------------
 void CTracked::Create(int TrackedNum)
 {
+	if ((TrackedNum <= 0) || ((unsigned int)TrackedNum > PresetTrackedDataCount))
+	{
+		fprintf(stderr, "!!! Couldn't init CTracked object with Number %i.\n", TrackedNum);
+		return;
+	}
+
 	ObjectType = 5;
 	MaxSpeed = 20.0f;
 	MaxAcceler = 5.0f;

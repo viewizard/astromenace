@@ -42,8 +42,7 @@ struct PirateShipData
 	bool	NeedTangentAndBinormal;
 };
 
-const int	PresetPirateShipDataCount = 15;
-PirateShipData PresetPirateShipData[PresetPirateShipDataCount] =
+static PirateShipData PresetPirateShipData[] =
 {
 	{2,	0, 2,	20,	"DATA/MODELS/PIRATESHIP/gunship-01.VW3D",	"DATA/MODELS/gr-04.VW2D", " ", false},
 	{1,	0, 2,	30,	"DATA/MODELS/PIRATESHIP/bomber-07.VW3D",	"DATA/MODELS/gr-04.VW2D", " ", false},
@@ -63,6 +62,7 @@ PirateShipData PresetPirateShipData[PresetPirateShipDataCount] =
 	{0,	2, 6,	1000,"DATA/MODELS/PIRATESHIP/bomber-05.VW3D",	"DATA/MODELS/gr-04.VW2D", "DATA/MODELS/NORMALMAP/bomber_nm.tga", true},
 	{0,	4, 8,	1500,"DATA/MODELS/PIRATESHIP/bomber-06.VW3D",	"DATA/MODELS/gr-04.VW2D", "DATA/MODELS/NORMALMAP/bomber_nm.tga", true}
 };
+#define PresetPirateShipDataCount sizeof(PresetPirateShipData)/sizeof(PresetPirateShipData[0])
 
 
 
@@ -72,6 +72,12 @@ PirateShipData PresetPirateShipData[PresetPirateShipDataCount] =
 //-----------------------------------------------------------------------------
 void CPirateShip::Create(int PirateShipNum)
 {
+	if ((PirateShipNum <= 0) || ((unsigned int)PirateShipNum > PresetPirateShipDataCount))
+	{
+		fprintf(stderr, "!!! Couldn't init CPirateShip object with Number %i.\n", PirateShipNum);
+		return;
+	}
+
 	ObjectStatus = 1; // чужой
 	ObjectType = 4;
 	ObjectCreationType = PirateShipNum;

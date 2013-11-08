@@ -94,8 +94,7 @@ struct WeaponData
 
 
 // оружие землян 1-99
-const int	PresetEarthWeaponDataCount = 19;
-WeaponData PresetEarthWeaponData[PresetEarthWeaponDataCount] =
+static WeaponData PresetEarthWeaponData[] =
 {
 	// Kinetic
 	{9,  true, 25,	1,	1.5f,	3000,	0.4f, 4, VECTOR3D(0.0f, -0.613f, 2.0f), VECTOR3D(0.0f, -0.65f, 1.0f), "DATA/MODELS/EARTHFIGHTER/weapons.VW3D", "DATA/MODELS/EARTHFIGHTER/sf-text00.VW2D", "DATA/MODELS/EARTHFIGHTER/sf-illum01.VW2D"},
@@ -125,13 +124,13 @@ WeaponData PresetEarthWeaponData[PresetEarthWeaponDataCount] =
 	{26, false, 25,	5,	10,		50,		8.0f, 0, VECTOR3D(0.0f, -0.95f, 4.0f), VECTOR3D(0.0f, -0.9f, 1.5f), "DATA/MODELS/EARTHFIGHTER/lnch3.VW3D", "DATA/MODELS/EARTHFIGHTER/lnch34.tga", ""},
 	{27, false, 30,	5,	15,		25,		10.0f, 0, VECTOR3D(0.0f, -0.95f, 5.0f), VECTOR3D(0.0f, -0.9f, 1.8f), "DATA/MODELS/EARTHFIGHTER/lnch4.VW3D", "DATA/MODELS/EARTHFIGHTER/lnch34.tga", ""},
 };
+#define PresetEarthWeaponDataCount sizeof(PresetEarthWeaponData)/sizeof(PresetEarthWeaponData[0])
 
 
 
 
 // оружие пришельцев 101-199
-const int	PresetAlienWeaponDataCount = 10;
-WeaponData PresetAlienWeaponData[PresetAlienWeaponDataCount] =
+static WeaponData PresetAlienWeaponData[] =
 {
 	// оружие пришельцев (как Kinetic1)
 	{14, true, 1.0f,	1,	1,	5000,	0.7f, 0, VECTOR3D(0.0f, 0.0f, 0.0f), VECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
@@ -157,14 +156,14 @@ WeaponData PresetAlienWeaponData[PresetAlienWeaponDataCount] =
 
 
 };
+#define PresetAlienWeaponDataCount sizeof(PresetAlienWeaponData)/sizeof(PresetAlienWeaponData[0])
 
 
 
 
 
 // оружие пиратов 201-299
-const int	PresetPirateWeaponDataCount = 17;
-WeaponData PresetPirateWeaponData[PresetPirateWeaponDataCount] =
+static WeaponData PresetPirateWeaponData[] =
 {
 	// турель для кораблей пиратов
 	{9, false, 10,		1,	1,	3000,	0.7f, 4, VECTOR3D(0.0f, 1.5f, 1.0f), VECTOR3D(0.0f, 1.5f, 1.0f), "DATA/MODELS/TURRET/turret-01.VW3D", "DATA/MODELS/TURRET/turrets.tga", ""},
@@ -206,6 +205,7 @@ WeaponData PresetPirateWeaponData[PresetPirateWeaponDataCount] =
 
 
 };
+#define PresetPirateWeaponDataCount sizeof(PresetPirateWeaponData)/sizeof(PresetPirateWeaponData[0])
 
 
 
@@ -293,6 +293,30 @@ CWeapon::CWeapon(void)
 //-----------------------------------------------------------------------------
 void CWeapon::Create(int WeaponNum)
 {
+	if (WeaponNum <= 0)
+	{
+		fprintf(stderr, "!!! Couldn't init CWeapon object with Number %i.\n", WeaponNum);
+		return;
+	}
+	else
+	if ((WeaponNum >= 1 && WeaponNum <= 99) && ((unsigned int)WeaponNum > PresetEarthWeaponDataCount))
+	{
+		fprintf(stderr, "!!! Couldn't init CWeapon(1) object with Number %i.\n", WeaponNum);
+		return;
+	}
+	else
+	if ((WeaponNum >= 101 && WeaponNum <= 199) && ((unsigned int)WeaponNum-100 > PresetAlienWeaponDataCount))
+	{
+		fprintf(stderr, "!!! Couldn't init CWeapon(2) object with Number %i.\n", WeaponNum);
+		return;
+	}
+	else
+	if ((WeaponNum >= 201 && WeaponNum <= 299) && ((unsigned int)WeaponNum-200 > PresetPirateWeaponDataCount))
+	{
+		fprintf(stderr, "!!! Couldn't init CWeapon(3) object with Number %i.\n", WeaponNum);
+		return;
+	}
+
 	ObjectCreationType = WeaponNum;
 
 

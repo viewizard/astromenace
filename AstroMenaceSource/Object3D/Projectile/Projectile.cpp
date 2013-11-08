@@ -47,8 +47,7 @@ struct ProjectileData
 
 
 // снаряды для оружия землян 1-99
-const int	PresetEarthProjectileDataCount = 19;
-ProjectileData PresetEarthProjectileData[PresetEarthProjectileDataCount] =
+static ProjectileData PresetEarthProjectileData[] =
 {
 	// Kinetic
 	{0.3f, 5, 0, 	0, 50, 4, 1},
@@ -78,13 +77,13 @@ ProjectileData PresetEarthProjectileData[PresetEarthProjectileDataCount] =
 	{0.2f, 400, 0, 	1, 35, 7, 2},
 	{0.2f, 800, 0, 	1, 30, 6, 2},
 };
+#define PresetEarthProjectileDataCount sizeof(PresetEarthProjectileData)/sizeof(PresetEarthProjectileData[0])
 
 
 
 
 // снаряды для оружия пришельцев 101-199
-const int	PresetAlienProjectileDataCount = 10;
-ProjectileData PresetAlienProjectileData[PresetAlienProjectileDataCount] =
+static ProjectileData PresetAlienProjectileData[] =
 {
 	// как Kinetic1
 	{0.3f, 5, 0, 	0, 70, 4, 1},
@@ -108,12 +107,12 @@ ProjectileData PresetAlienProjectileData[PresetAlienProjectileDataCount] =
 	{1.0f, 250, 0, 	2, 0, 1, 1},
 
 };
+#define PresetAlienProjectileDataCount sizeof(PresetAlienProjectileData)/sizeof(PresetAlienProjectileData[0])
 
 
 
 // снаряды для оружия пиратов 201-299
-const int	PresetPirateProjectileDataCount = 17;
-ProjectileData PresetPirateProjectileData[PresetPirateProjectileDataCount] =
+static ProjectileData PresetPirateProjectileData[] =
 {
 	// стрельба турели 1
 	{0.3f, 5, 0, 	0, 60, 4, 1},
@@ -152,6 +151,7 @@ ProjectileData PresetPirateProjectileData[PresetPirateProjectileDataCount] =
 	// мина4 (наведение по высоте + стрельба ракетами)
 	{1.2f, 200, 0, 	4, 0, -1, 1},
 };
+#define PresetPirateProjectileDataCount sizeof(PresetPirateProjectileData)/sizeof(PresetPirateProjectileData[0])
 
 
 
@@ -311,6 +311,30 @@ CProjectile::CProjectile(void)
 //-----------------------------------------------------------------------------
 void CProjectile::Create(int ProjectileNum)
 {
+	if (ProjectileNum <= 0)
+	{
+		fprintf(stderr, "!!! Couldn't init CProjectile object with Number %i.\n", ProjectileNum);
+		return;
+	}
+	else
+	if ((ProjectileNum >= 1 && ProjectileNum <= 99) && ((unsigned int)ProjectileNum > PresetEarthProjectileDataCount))
+	{
+		fprintf(stderr, "!!! Couldn't init CProjectile(1) object with Number %i.\n", ProjectileNum);
+		return;
+	}
+	else
+	if ((ProjectileNum >= 101 && ProjectileNum <= 199) && ((unsigned int)ProjectileNum-100 > PresetAlienProjectileDataCount))
+	{
+		fprintf(stderr, "!!! Couldn't init CProjectile(2) object with Number %i.\n", ProjectileNum);
+		return;
+	}
+	else
+	if ((ProjectileNum >= 201 && ProjectileNum <= 299) && ((unsigned int)ProjectileNum-200 > PresetPirateProjectileDataCount))
+	{
+		fprintf(stderr, "!!! Couldn't init CProjectile(3) object with Number %i.\n", ProjectileNum);
+		return;
+	}
+
 	Num = ProjectileNum;
 
 	// внутренний номер, номер в таблицах

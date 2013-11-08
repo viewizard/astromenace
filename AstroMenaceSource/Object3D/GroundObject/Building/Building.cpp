@@ -36,8 +36,7 @@ struct BuildingData
 	const	char *Name;
 };
 
-const int	PresetBuildingDataCount = 11;
-BuildingData PresetBuildingData[PresetBuildingDataCount] =
+static BuildingData PresetBuildingData[] =
 {
 	{150,	"DATA/MODELS/BUILDING/bld-01.VW3D"},
 	{150,	"DATA/MODELS/BUILDING/bld-02.VW3D"},
@@ -51,6 +50,7 @@ BuildingData PresetBuildingData[PresetBuildingDataCount] =
 	{150,	"DATA/MODELS/BUILDING/bld-10.VW3D"},
 	{150,	"DATA/MODELS/BUILDING/bld-11.VW3D"}
 };
+#define PresetBuildingDataCount sizeof(PresetBuildingData)/sizeof(PresetBuildingData[0])
 
 
 
@@ -59,6 +59,12 @@ BuildingData PresetBuildingData[PresetBuildingDataCount] =
 //-----------------------------------------------------------------------------
 void CBuilding::Create(int	BuildingNum)
 {
+	if ((BuildingNum <= 0) || ((unsigned int)BuildingNum > PresetBuildingDataCount))
+	{
+		fprintf(stderr, "!!! Couldn't init CBuilding object with Number %i.\n", BuildingNum);
+		return;
+	}
+
 	ObjectType = 12;
 	ObjectCreationType = BuildingNum;
 	// здания неразрушимы, не показываем вообще их жизнь
