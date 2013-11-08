@@ -256,8 +256,7 @@ struct EarthSpaceFighterData
 	const char *Name;
 };
 
-const int	PresetEarthSpaceFighterDataCount = 22;
-EarthSpaceFighterData PresetEarthSpaceFighterData[PresetEarthSpaceFighterDataCount] =
+static EarthSpaceFighterData PresetEarthSpaceFighterData[] =
 {
 	{5000,	30,	5,	2,	"DATA/MODELS/EARTHFIGHTER/sf-01.VW3D"},
 	{8000,	40,	4,	4,	"DATA/MODELS/EARTHFIGHTER/sf-02.VW3D"},
@@ -282,6 +281,7 @@ EarthSpaceFighterData PresetEarthSpaceFighterData[PresetEarthSpaceFighterDataCou
 	{4000,	80,	3,	2,	"DATA/MODELS/EARTHFIGHTER/sf-21.VW3D"},
 	{1500,	100,1,	1,	"DATA/MODELS/EARTHFIGHTER/sf-22.VW3D"}
 };
+#define PresetEarthSpaceFighterDataCount sizeof(PresetEarthSpaceFighterData)/sizeof(PresetEarthSpaceFighterData[0])
 
 float GetShipArmor(int SpaceShipNum)
 {
@@ -297,6 +297,12 @@ float GetShipArmor(int SpaceShipNum)
 //-----------------------------------------------------------------------------
 void CEarthSpaceFighter::Create(int	SpaceShipNum)
 {
+	if ((SpaceShipNum <= 0) || ((unsigned int)SpaceShipNum > PresetEarthSpaceFighterDataCount))
+	{
+		fprintf(stderr, "!!! Couldn't init CEarthSpaceFighter object with Number %i.\n", SpaceShipNum);
+		return;
+	}
+
 	ObjectStatus = 2; // свой
 	ObjectType = 1;
 	ObjectCreationType = SpaceShipNum;

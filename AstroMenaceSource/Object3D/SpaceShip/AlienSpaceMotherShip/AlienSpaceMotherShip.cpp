@@ -43,8 +43,7 @@ struct AlienSpaceMotherShipData
 	const	char *TextureIllum;
 };
 
-const int	PresetAlienSpaceMotherShipDataCount = 8;
-AlienSpaceMotherShipData PresetAlienSpaceMotherShipData[PresetAlienSpaceMotherShipDataCount] =
+static AlienSpaceMotherShipData PresetAlienSpaceMotherShipData[] =
 {
 	{14,1,	10,	3000, 1500,	"DATA/MODELS/ALIENMOTHERSHIP/alm-01.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text04.VW2D", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum04.VW2D"},
 	{8,	8,	10,	4000, 3000,	"DATA/MODELS/ALIENMOTHERSHIP/alm-02.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text04.VW2D", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum04.VW2D"},
@@ -55,6 +54,7 @@ AlienSpaceMotherShipData PresetAlienSpaceMotherShipData[PresetAlienSpaceMotherSh
 	{5,	2,	6,	9000, 4300,	"DATA/MODELS/ALIENMOTHERSHIP/alm-07.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text03.VW2D", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum03.VW2D"},
 	{4,	6,	10,	10000,4500,	"DATA/MODELS/ALIENMOTHERSHIP/alm-08.VW3D", "DATA/MODELS/ALIENMOTHERSHIP/alm-text03.VW2D", "DATA/MODELS/ALIENMOTHERSHIP/alm-illum03.VW2D"}
 };
+#define PresetAlienSpaceMotherShipDataCount sizeof(PresetAlienSpaceMotherShipData)/sizeof(PresetAlienSpaceMotherShipData[0])
 
 
 
@@ -64,6 +64,12 @@ AlienSpaceMotherShipData PresetAlienSpaceMotherShipData[PresetAlienSpaceMotherSh
 //-----------------------------------------------------------------------------
 void CAlienSpaceMotherShip::Create(int	SpaceShipNum)
 {
+	if ((SpaceShipNum <= 0) || ((unsigned int)SpaceShipNum > PresetAlienSpaceMotherShipDataCount))
+	{
+		fprintf(stderr, "!!! Couldn't init CAlienSpaceMotherShip object with Number %i.\n", SpaceShipNum);
+		return;
+	}
+
 	ObjectStatus = 1; // чужой
 	ObjectType = 3;
 	ObjectCreationType = SpaceShipNum;
