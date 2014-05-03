@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2013 Michael Kurinnoy, Viewizard
+	Copyright © 2006-2014 Michael Kurinnoy, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -108,7 +108,7 @@ void vw_SetLight(int light, int pname, float param)
 			tmpPNAME = GL_QUADRATIC_ATTENUATION;
 			break;
 
-		default: 
+		default:
 			fprintf(stderr, "Error in vw_SetLight function call, wrong pname.\n");
 			return;
  	}

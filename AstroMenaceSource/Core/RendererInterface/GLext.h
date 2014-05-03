@@ -6,7 +6,14 @@ extern "C" {
 #endif
 
 /*
-** Copyright (c) 2007-2012 The Khronos Group Inc.
+** THIS FILE IS OBSOLETE. Please migrate away from using the
+** ".spec" files and the headers generated from them to the
+** XML Registry and headers generated from that. See
+**   http://www.opengl.org/registry/api/README.txt
+** for more information.
+** 
+** 
+** Copyright (c) 2007-2013 The Khronos Group Inc.
 ** 
 ** Permission is hereby granted, free of charge, to any person obtaining a
 ** copy of this software and/or associated documentation files (the
@@ -29,9 +36,9 @@ extern "C" {
 */
 
 /* Header file version number, required by OpenGL ABI for Linux */
-/* glext.h last updated $Date: 2013-02-07 01:42:49 -0800 (Thu, 07 Feb 2013) $ */
+/* glext.h last updated $Date: 2013-06-13 02:52:31 -0700 (Thu, 13 Jun 2013) $ */
 /* Current version at http://www.opengl.org/registry/ */
-#define GL_GLEXT_VERSION 86
+#define GL_GLEXT_VERSION 87
 /* Function declaration macros - to move into glplatform.h */
 
 #if defined(_WIN32) && !defined(APIENTRY) && !defined(__CYGWIN__) && !defined(__SCITECH_SNAP__)
@@ -910,7 +917,6 @@ extern "C" {
 /* reuse GL_MIN_FRAGMENT_INTERPOLATION_OFFSET */
 /* reuse GL_MAX_FRAGMENT_INTERPOLATION_OFFSET */
 /* reuse GL_FRAGMENT_INTERPOLATION_OFFSET_BITS */
-/* reuse GL_MAX_VERTEX_STREAMS */
 /* Reuse tokens from ARB_gpu_shader_fp64 */
 /* reuse GL_DOUBLE_VEC2 */
 /* reuse GL_DOUBLE_VEC3 */

@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2013 Michael Kurinnoy, Viewizard
+	Copyright © 2006-2014 Michael Kurinnoy, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -1049,31 +1049,17 @@ ReCreate:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// если нужно, устанавливаем перерытие значений внутри движка, може только выключить - включить то чего нет нельзя
-#ifndef vbo // принудительно отключаем вообще работу с vbo
-	vw_GetDevCaps()->VBOSupported = false;
-	printf("Vertex Buffer support forced disabled.\n");
-#endif
 	if (Setup.VBOCoreMode == 0)
 	{
 		vw_GetDevCaps()->VBOSupported = false;
 	}
 
-	// если нужно, выключаем vao
-#ifndef vao // принудительно отключаем вообще работу с vao
-	vw_GetDevCaps()->VAOSupported = false;
-	printf("Vertex Array Object support forced disabled.\n");
-#endif
 	// работаем только если есть VBO
 	if ((Setup.VAOCoreMode == 0) || (Setup.VBOCoreMode == 0) || (!vw_GetDevCaps()->VBOSupported))
 	{
 		vw_GetDevCaps()->VAOSupported = false;
 	}
 
-	// если нужно, выключаем fbo
-#ifndef fbo // принудительно отключаем вообще работу с fbo
-	vw_GetDevCaps()->FramebufferObject = false;
-	printf("Frame Buffer Object support forced disabled.\n");
-#endif
 	if (Setup.FBOCoreMode == 0)
 	{
 		vw_GetDevCaps()->FramebufferObject = false;

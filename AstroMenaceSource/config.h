@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2013 Michael Kurinnoy, Viewizard
+	Copyright © 2006-2014 Michael Kurinnoy, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -29,21 +29,24 @@
 #define CONFIG_H
 
 #define GAME_VERSION	 	"1.3.3 svn"
-#define GAME_BUILD			131108
+#define GAME_BUILD			140503
 
 
-// VBO OpenGL extention support switcher (if defined - game will detect and use VBO) Game could crash
-// in FreeBSD under VirtualBox if vbo are used. Added just in case, if hardware capabilities detection fail.
-// Looks like only virtualized systems could have this issue.
-#define vbo
-
-// VAO OpenGL extention support switcher (if defined - game will detect and use VAO), VAO will not work without VBO
-// Intel video cards might have a problem with VAO (index buffer issue in intel video drivers)
-#define vao
-
-// FBO OpenGL extention support switcher (if defined - game will detect and use FBO)
-// Note, this will also take affect on anti aliasing support.
-#define fbo
+// You can disable some OpenGL features during compilation to avoid some drivers issues.
+// OpenGL 4.2+
+#define use_Texture_Storage
+#define use_BPTC_Texture_Compression
+// OpenGL 3.0+
+#define use_Vertex_Array_Objects
+#define use_Framebuffer_Objects
+// OpenGL 2.0+
+#define use_Shading_Language
+#define use_NPOT_Texture
+// OpenGL 1.5+
+#define use_Query_Objects
+#define use_Vertex_Buffer_Objects
+// OpenGL 1.4+
+#define use_Automatic_Mipmap_Generation
 
 // xinerama support, required libXinerama
 #ifdef xinerama_detected_by_cmake // do not comment this line, unless you are sure what are you doing
