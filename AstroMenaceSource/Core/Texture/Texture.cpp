@@ -603,6 +603,9 @@ eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DW
 		}
 	}
 
+	// доп. проверка на входящие размеры
+	if ((DWidth <= 0) || (DHeight<=0)) return 0;
+
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Cоздаем объект

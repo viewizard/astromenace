@@ -77,32 +77,35 @@ eFontChar* vw_LoadFontChar(unsigned UTF32)
 	NewChar->Prev = 0;
 	NewChar->Next = 0;
 
-	BYTE * pixels;
-	pixels = new BYTE[NewChar->Width*NewChar->Height*4];
-
-	// битмап идет в 1 канале градаций серого, делаем 32бита rgba
-	int k=0;
-	BYTE ColorRGB[3]={255,255,255};
-	for (int j=0; j<NewChar->Height; j++)
+	if ((NewChar->Width > 0) && (NewChar->Height > 0))
 	{
-		for (int i=0; i<NewChar->Width; i++)
+		BYTE * pixels;
+		pixels = new BYTE[NewChar->Width*NewChar->Height*4];
+
+		// битмап идет в 1 канале градаций серого, делаем 32бита rgba
+		int k=0;
+		BYTE ColorRGB[3]={255,255,255};
+		for (int j=0; j<NewChar->Height; j++)
 		{
-			// RGB составляющую заполняем белым
-			memcpy(pixels + k, ColorRGB, 3);
-			k+=3;
-			memcpy(pixels + k, InternalFace->glyph->bitmap.buffer+(NewChar->Height-j-1)*NewChar->Width+i, 1);
-			k++;
+			for (int i=0; i<NewChar->Width; i++)
+			{
+				// RGB составляющую заполняем белым
+				memcpy(pixels + k, ColorRGB, 3);
+				k+=3;
+				memcpy(pixels + k, InternalFace->glyph->bitmap.buffer+(NewChar->Height-j-1)*NewChar->Width+i, 1);
+				k++;
+			}
 		}
+
+		// называем текстуру номером символа в утф32
+		char texturefilename[MAX_PATH];
+		sprintf(texturefilename, "%u", UTF32);
+
+		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
+		NewChar->CharTexture = vw_CreateTextureFromMemory(texturefilename, pixels, NewChar->Width, NewChar->Height, 4, 0, 0, 0, false);
+		// очищаем память
+		delete [] pixels;
 	}
-
-	// называем текстуру номером символа в утф32
-	char texturefilename[MAX_PATH];
-	sprintf(texturefilename, "%u", UTF32);
-
-	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
-	NewChar->CharTexture = vw_CreateTextureFromMemory(texturefilename, pixels, NewChar->Width, NewChar->Height, 4, 0, 0, 0, false);
-	// очищаем память
-	delete [] pixels;
 
 	// подключаем к менеджеру
 	vw_AttachFontChar(NewChar);
