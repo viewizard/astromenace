@@ -38,14 +38,24 @@ int MaxKeyCount = 0;
 //------------------------------------------------------------------------------------
 bool vw_GetKeys(int Num)
 {
+#ifdef use_SDL2
+	const Uint8 *keystate = SDL_GetKeyboardState(&MaxKeyCount);
+	if (keystate[SDL_GetScancodeFromKey(Num)]) return true;
+#else
 	Uint8 *keystate = SDL_GetKeyState(&MaxKeyCount);
 	if (keystate[Num]) return true;
+#endif
 	return false;
 }
 void vw_SetKeys(int Num, bool NewKeyStatus)
 {
+#ifdef use_SDL2
+	Uint8 *keystate = (Uint8 *)SDL_GetKeyboardState(&MaxKeyCount);
+	keystate[SDL_GetScancodeFromKey(Num)] = NewKeyStatus;
+#else
 	Uint8 *keystate = SDL_GetKeyState(&MaxKeyCount);
 	keystate[Num] = NewKeyStatus;
+#endif
 }
 
 int GetMaxKeys()
@@ -159,19 +169,9 @@ sKeyboardCodeName KeyboardCodeNameData[KeyboardCodeNameDataCount] =
 {SDLK_ASTERISK, "SDLK_ASTERISK"},
 {SDLK_LALT, "SDLK_LALT"},
 {SDLK_SPACE, "SDLK_SPACE"},
-{SDLK_KP7, "SDLK_KP7"},
-{SDLK_KP8, "SDLK_KP8"},
-{SDLK_KP9, "SDLK_KP9"},
 {SDLK_KP_MINUS, "SDLK_KP_MINUS"},
 {SDLK_KP_MULTIPLY, "SDLK_KP_MULTIPLY"},
-{SDLK_KP4, "SDLK_KP4"},
-{SDLK_KP5, "SDLK_KP5"},
-{SDLK_KP6, "SDLK_KP6"},
 {SDLK_KP_PLUS, "SDLK_KP_PLUS"},
-{SDLK_KP1, "SDLK_KP1"},
-{SDLK_KP2, "SDLK_KP2"},
-{SDLK_KP3, "SDLK_KP3"},
-{SDLK_KP0, "SDLK_KP0"},
 {SDLK_KP_PERIOD, "SDLK_KP_PERIOD"},
 {SDLK_KP_ENTER, "SDLK_KP_ENTER"},
 {SDLK_RCTRL, "SDLK_RCTRL"},
@@ -188,8 +188,33 @@ sKeyboardCodeName KeyboardCodeNameData[KeyboardCodeNameDataCount] =
 {SDLK_PAGEDOWN, "SDLK_PAGEDOWN"},
 {SDLK_INSERT, "SDLK_INSERT"},
 {SDLK_DELETE, "SDLK_DELETE"},
+#ifdef use_SDL2
+{SDLK_KP_7, "SDLK_KP7"},
+{SDLK_KP_8, "SDLK_KP8"},
+{SDLK_KP_9, "SDLK_KP9"},
+{SDLK_KP_4, "SDLK_KP4"},
+{SDLK_KP_5, "SDLK_KP5"},
+{SDLK_KP_6, "SDLK_KP6"},
+{SDLK_KP_1, "SDLK_KP1"},
+{SDLK_KP_2, "SDLK_KP2"},
+{SDLK_KP_3, "SDLK_KP3"},
+{SDLK_KP_0, "SDLK_KP0"},
+{SDLK_LGUI, "SDLK_LSUPER"},
+{SDLK_RGUI, "SDLK_RSUPER"},
+#else
+{SDLK_KP7, "SDLK_KP7"},
+{SDLK_KP8, "SDLK_KP8"},
+{SDLK_KP9, "SDLK_KP9"},
+{SDLK_KP4, "SDLK_KP4"},
+{SDLK_KP5, "SDLK_KP5"},
+{SDLK_KP6, "SDLK_KP6"},
+{SDLK_KP1, "SDLK_KP1"},
+{SDLK_KP2, "SDLK_KP2"},
+{SDLK_KP3, "SDLK_KP3"},
+{SDLK_KP0, "SDLK_KP0"},
 {SDLK_LSUPER, "SDLK_LSUPER"},
 {SDLK_RSUPER, "SDLK_RSUPER"},
+#endif
 };
 
 
@@ -215,6 +240,21 @@ int vw_KeyboardNameCode(const char * Name)
 
 
 // текущий юникод нажатой клавиши
+#ifdef use_SDL2
+char CurrentUnicodeChar[8] = {0,0,0,0,0,0,0,0};
+// установка
+void vw_SetCurrentUnicodeChar(char *NewUnicodeChar)
+{
+	if (NewUnicodeChar != 0) strcpy(CurrentUnicodeChar, NewUnicodeChar);
+	else CurrentUnicodeChar[0] = 0;
+}
+// получение
+char *vw_GetCurrentUnicodeChar()
+{
+	if (CurrentUnicodeChar[0] != 0) return CurrentUnicodeChar;
+	return 0;
+}
+#else
 Uint16 CurrentKeyUnicode = 0;
 // установка
 void vw_SetCurrentKeyUnicode(Uint16 NewKeyUnicode)
@@ -226,4 +266,5 @@ Uint16 vw_GetCurrentKeyUnicode()
 {
 	return CurrentKeyUnicode;
 }
+#endif // use_SDL2
 

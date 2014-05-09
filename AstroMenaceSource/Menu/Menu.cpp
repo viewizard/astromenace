@@ -102,7 +102,11 @@ void InitMenu()
 	float ARHeight;
 	vw_GetAspectWH(&ARWidth, &ARHeight);
 	// установка мышки, чтобы не учитывать перемещения в меню
+#ifdef use_SDL2
+	SDL_WarpMouseInWindow(vw_GetSDL2Windows(), (int)((512.0f+256.0f)/(ARWidth/AWw)), (int)(384.0f/(ARHeight/AHw)));
+#else
 	SDL_WarpMouse((int)((512.0f+256.0f)/(ARWidth/AWw)), (int)(384.0f/(ARHeight/AHw)));
+#endif
 
 
 
@@ -284,6 +288,11 @@ void SetMenu(eGameStatus Menu)
 		case PROFILE:
 			NewProfileNamePos = 0;
 			memset(NewProfileName, 0, sizeof(NewProfileName));
+#ifdef use_SDL2
+			vw_SetCurrentUnicodeChar(0);
+#else
+			vw_SetCurrentKeyUnicode(0);
+#endif
 			break;
 
 		case OPTIONS:

@@ -35,20 +35,12 @@
 //------------------------------------------------------------------------------------
 // делаем скриншот
 //------------------------------------------------------------------------------------
-int vw_Screenshot(SDL_Surface *screen, char *filename)
+int vw_Screenshot(int w, int h, char *filename)
 {
         SDL_Surface *temp;
         unsigned char *pixels;
-        int i;
 
-        if (!(screen->flags & SDL_OPENGL))
-        {
-                SDL_SaveBMP(screen, filename);
-                return 0;
-        }
-
-        temp = SDL_CreateRGBSurface(SDL_SWSURFACE,
-                                    screen->w, screen->h, 24,
+        temp = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 24,
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
         0x000000FF, 0x0000FF00, 0x00FF0000, 0
 #else
@@ -57,19 +49,17 @@ int vw_Screenshot(SDL_Surface *screen, char *filename)
         );
         if (temp == NULL) return -1;
 
-        pixels = (unsigned char *)malloc(3 * screen->w * screen->h);
+        pixels = (unsigned char *)malloc(3 * w * h);
         if (pixels == NULL) {
                 SDL_FreeSurface(temp);
                 return -1;
         }
 
-        glReadPixels(0, 0, screen->w, screen->h,
-                     GL_RGB, GL_UNSIGNED_BYTE, pixels);
+        glReadPixels(0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, pixels);
 
-        for (i=0; i<screen->h; i++)
-                memcpy(((char *) temp->pixels) + temp->pitch * i,
-                       pixels + 3*screen->w * (screen->h-i-1),
-                       screen->w*3);
+        for (int i=0; i<h; i++)
+                memcpy(((char *) temp->pixels) + temp->pitch * i, pixels + 3*w * (h-i-1), w*3);
+
         free(pixels);
 
         SDL_SaveBMP(temp, filename);

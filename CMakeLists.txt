@@ -8,7 +8,11 @@ PROJECT(AstroMenace)
 
 # AstroMenaceFS2VFS
 # standalone pack utility for AstroMenace game (gamedata.vfs file)
-IF(DEFINED FS2VFS)
+# in order to build AstroMenace and AstroMenaceFS2VFS binary:
+# ~~~~~~~~~~~~~~~~~~~~
+# cmake -DFS2VFS=ON ./
+# ~~~~~~~~~~~~~~~~~~~~
+IF(FS2VFS)
 	# sources
 	FILE(GLOB astromenace_SRCS AstroMenaceSource/MainFS2VFS.cpp
 			AstroMenaceSource/Core/VirtualFileSystem/VFS.cpp
@@ -19,14 +23,32 @@ IF(DEFINED FS2VFS)
 	ADD_EXECUTABLE(AstroMenaceFS2VFS ${astromenace_SRCS})
 	TARGET_LINK_LIBRARIES(AstroMenaceFS2VFS)
 	SET_TARGET_PROPERTIES(AstroMenaceFS2VFS PROPERTIES COMPILE_FLAGS "-O2 -Wno-unused-result -Dvfs_pack_standalone")
-ENDIF(DEFINED FS2VFS)
+ENDIF(FS2VFS)
+
+
+
+
+
+
+# AstroMenace
+# in order to build AstroMenace binary with libSDL2, instead of previous libSDL version (1.2):
+# ~~~~~~~~~~~~~~~~~~~~
+# cmake -DSDL2=ON ./
+# ~~~~~~~~~~~~~~~~~~~~
+# Note:
+# 1) Make sure, that you have libSDL2 development package installed. 
+# 2) You can remove libXinerama development package from your system. libSDL2 have multiple displays support.
 
 
 
 
 
 # depends
-set(SDL_CONFIG "sdl-config" CACHE STRING "Path to sdl-config script")
+IF(SDL2)
+	set(SDL_CONFIG "sdl2-config" CACHE STRING "Path to sd2-config script")
+ELSE(SDL2)
+	set(SDL_CONFIG "sdl-config" CACHE STRING "Path to sdl-config script")
+ENDIF(SDL2)
 EXEC_PROGRAM(${SDL_CONFIG} ARGS "--cflags" OUTPUT_VARIABLE SDL_CFLAGS)
 ADD_DEFINITIONS(${SDL_CFLAGS})
 EXEC_PROGRAM(${SDL_CONFIG} ARGS "--libs" OUTPUT_VARIABLE SDL_LIBS)
@@ -37,7 +59,29 @@ FIND_PACKAGE(X11 REQUIRED)
 SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${X11_LIBRARIES})
 ENDIF (NOT APPLE)
 
-FIND_PACKAGE(SDL REQUIRED)
+IF(SDL2)
+	FIND_LIBRARY(SDL2_LIBRARY SDL2)
+	IF(SDL2_LIBRARY)
+		MESSAGE(STATUS "Found libSDL2: ${SDL2_LIBRARY}")
+		SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${SDL2_LIBRARY})
+	ELSE(SDL2_LIBRARY)
+		MESSAGE(FATAL_ERROR "libSDL2 not found")
+	ENDIF(SDL2_LIBRARY)
+	FIND_PATH(SDL2_INCLUDE_DIR SDL.h
+	 	HINTS
+		$ENV{SDL2DIR}
+		$ENV{SDL2_PATH}
+	 	PATHS
+	 	PATH_SUFFIXES include/SDL2 include)
+	IF(SDL2_INCLUDE_DIR)
+		MESSAGE(STATUS "Found libSDL2 headers: ${SDL2_INCLUDE_DIR}")
+		INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIR})
+	ELSE(SDL2_INCLUDE_DIR)
+		MESSAGE(FATAL_ERROR "libSDL2 headers not found")
+	ENDIF(SDL2_INCLUDE_DIR)
+ELSE(SDL2)
+	FIND_PACKAGE(SDL REQUIRED)
+ENDIF(SDL2)
 SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${SDL_LIBS})
 
 FIND_PACKAGE(OpenGL REQUIRED)
@@ -55,25 +99,27 @@ SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${OPENAL_LIBRARY})
 
 # Xinerama lib + header
 
-IF (NOT APPLE)
-FIND_LIBRARY(XINERAMA_LIBRARY Xinerama)
-IF(XINERAMA_LIBRARY)
-	MESSAGE(STATUS "Found Xinerama: ${XINERAMA_LIBRARY}")
-	SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${XINERAMA_LIBRARY})
-ELSE(XINERAMA_LIBRARY)
-	MESSAGE(STATUS "Xinerama library not found, Xinerama compilation feature disabled.")
-ENDIF(XINERAMA_LIBRARY)
-FIND_PATH(XINERAMA_INCLUDE_DIR X11/extensions/Xinerama.h
- 	HINTS
- 	PATHS
- 	PATH_SUFFIXES include)
-IF(XINERAMA_INCLUDE_DIR)
-	MESSAGE(STATUS "Found Xinerama headers: ${XINERAMA_INCLUDE_DIR}")
-	INCLUDE_DIRECTORIES(${XINERAMA_INCLUDE_DIR})
-ELSE(XINERAMA_INCLUDE_DIR)
-	MESSAGE(STATUS "Xinerama headers not found, Xinerama compilation feature disabled.")
-ENDIF(XINERAMA_INCLUDE_DIR)
-ENDIF (NOT APPLE)
+IF(NOT SDL2)
+	IF (NOT APPLE)
+		FIND_LIBRARY(XINERAMA_LIBRARY Xinerama)
+		IF(XINERAMA_LIBRARY)
+			MESSAGE(STATUS "Found Xinerama: ${XINERAMA_LIBRARY}")
+			SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${XINERAMA_LIBRARY})
+		ELSE(XINERAMA_LIBRARY)
+			MESSAGE(STATUS "Xinerama library not found, Xinerama compilation feature disabled.")
+		ENDIF(XINERAMA_LIBRARY)
+		FIND_PATH(XINERAMA_INCLUDE_DIR X11/extensions/Xinerama.h
+		 	HINTS
+		 	PATHS
+		 	PATH_SUFFIXES include)
+		IF(XINERAMA_INCLUDE_DIR)
+			MESSAGE(STATUS "Found Xinerama headers: ${XINERAMA_INCLUDE_DIR}")
+			INCLUDE_DIRECTORIES(${XINERAMA_INCLUDE_DIR})
+		ELSE(XINERAMA_INCLUDE_DIR)
+			MESSAGE(STATUS "Xinerama headers not found, Xinerama compilation feature disabled.")
+		ENDIF(XINERAMA_INCLUDE_DIR)
+	ENDIF (NOT APPLE)
+ENDIF(NOT SDL2)
 
 
 # GLU lib + header (GLU - part of OpenGL framework in MacOSX)
@@ -238,12 +284,16 @@ ENDIF (NOT APPLE)
 FILE(GLOB_RECURSE astromenace_SRCS AstroMenaceSource/*.cpp)
 
 # targets
-IF(DEFINED DATADIR)
+IF(DATADIR)
 	ADD_DEFINITIONS(-DDATADIR=\\"${DATADIR}\\")
-ENDIF(DEFINED DATADIR)
-IF(XINERAMA_LIBRARY AND XINERAMA_INCLUDE_DIR)
-	ADD_DEFINITIONS(-Dxinerama_detected_by_cmake)
-ENDIF(XINERAMA_LIBRARY AND XINERAMA_INCLUDE_DIR)
+ENDIF(DATADIR)
+IF(SDL2)
+	ADD_DEFINITIONS(-Duse_SDL2)
+ELSE(SDL2)
+	IF(XINERAMA_LIBRARY AND XINERAMA_INCLUDE_DIR)
+		ADD_DEFINITIONS(-Dxinerama_detected_by_cmake)
+	ENDIF(XINERAMA_LIBRARY AND XINERAMA_INCLUDE_DIR)
+ENDIF(SDL2)
 IF(FONTCONFIG_LIBRARY AND FONTCONFIG_INCLUDE_DIR_fontconfig)
 	ADD_DEFINITIONS(-Dfontconfig_detected_by_cmake)
 ENDIF(FONTCONFIG_LIBRARY AND FONTCONFIG_INCLUDE_DIR_fontconfig)

@@ -56,10 +56,12 @@
 
 
 #include "RendererInterface/GLext.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL_thread.h"
-#include "SDL/SDL_syswm.h"
-#include "SDL/SDL_endian.h" // для VFS, чтобы правильно считывать таблицу файлов + хранение данных игры
+#ifdef use_SDL2
+	#include "SDL2/SDL.h"
+#else
+	#include "SDL/SDL.h"
+	#include "SDL/SDL_syswm.h"
+#endif
 
 
 

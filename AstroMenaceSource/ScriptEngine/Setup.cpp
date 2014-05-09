@@ -183,7 +183,7 @@ void SaveXMLSetupFile()
 
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "Width"), "value", Setup.Width);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "Height"), "value", Setup.Height);
-	XMLdoc->AddComment(RootXMLEntry, " Windows (BPP = 0) or Full Screen (BPP = 16 or 32) ");
+	XMLdoc->AddComment(RootXMLEntry, " Window (BPP = 0) or Full Screen (BPP = 16, 24 or 32) ");
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "BPP"), "value", Setup.BPP);
 	XMLdoc->AddComment(RootXMLEntry, " Aspect Ratio must be 4:3 or 16:10 ");
 	if (Setup.iAspectRatioWidth == 1024)

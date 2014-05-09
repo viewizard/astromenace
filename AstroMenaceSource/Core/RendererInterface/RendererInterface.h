@@ -290,7 +290,12 @@ struct eDevCaps
 // Common functions
 
 // Initialization renderer
+#ifdef use_SDL2
+int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int VSync);
+SDL_Window *vw_GetSDL2Windows();
+#else
 int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideoModeW, int CurrentVideoModeH, int VSync);
+#endif
 void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA);
 // Shutdown renderer dll
 void vw_ShutdownRenderer(void);
@@ -611,7 +616,7 @@ void vw_DrawTransparent(RECT *DstRect, RECT *SrcRect, eTexture *Tex, bool Alpha,
 // Дополнительные функции
 
 // Создание скриншота
-int vw_Screenshot(SDL_Surface *screen, char *filename);
+int vw_Screenshot(int w, int h, char *filename);
 
 
 

@@ -600,7 +600,11 @@ void InitGame()
 	GameExperience = (Setup.Profile[CurrentProfile].Experience - Setup.Profile[CurrentProfile].ByMissionExperience[CurrentMission])*1.0f;
 
 	// забираем эксклюзивное управление мышкой и клавой, если оконный режим
+#ifdef use_SDL2
+	if (Setup.BPP == 0) SDL_SetRelativeMouseMode(SDL_TRUE);
+#else
 	if (Setup.BPP == 0) SDL_WM_GrabInput(SDL_GRAB_ON);
+#endif
 
 
 	// сбрасываем все кнопки мыши
@@ -609,7 +613,11 @@ void InitGame()
 	// установка мышки на центр
 	int W, H;
 	vw_GetViewport(0, 0, &W, &H);
+#ifdef use_SDL2
+	SDL_WarpMouseInWindow(vw_GetSDL2Windows(), W/2, H/2);
+#else
 	SDL_WarpMouse(W/2, H/2);
+#endif
 	DrawGameCursor = false;
 
 	LastMouseXR = 0;
@@ -911,7 +919,11 @@ void ExitGame()
 		NeedHideGameMenu = true;
 		DrawGameCursor = false;
 		// установка в последюю точку указателя
+#ifdef use_SDL2
+		SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
+#else
 		SDL_WarpMouse(LastMouseXR, LastMouseYR);
+#endif
 	}
 }
 void RealExitGame()
@@ -928,7 +940,11 @@ void RealExitGame()
 	if (Shild2 != 0){delete Shild2; Shild2 = 0;}
 
 	// отдаем управление
+#ifdef use_SDL2
+	if (Setup.BPP == 0) SDL_SetRelativeMouseMode(SDL_FALSE);
+#else
 	if (Setup.BPP == 0) SDL_WM_GrabInput(SDL_GRAB_OFF);
+#endif
 
 	// выгружаем AI файл
 	ReleaseGameAI();
@@ -1516,8 +1532,13 @@ void DrawGame()
 			DrawGameCursor = true;
 			if (Setup.BPP == 0)
 			{
+#ifdef use_SDL2
+				SDL_SetRelativeMouseMode(SDL_FALSE);
+				SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
+#else
 				SDL_WM_GrabInput(SDL_GRAB_OFF);
 				SDL_WarpMouse(LastMouseXR, LastMouseYR);
+#endif
 			}
 		}
 		// плавно возвращаем игре сокрость
@@ -1535,8 +1556,13 @@ void DrawGame()
 			GameMenuStatus = 1;
 			if (Setup.BPP == 0)
 			{
+#ifdef use_SDL2
+				SDL_SetRelativeMouseMode(SDL_TRUE);
+				SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
+#else
 				SDL_WM_GrabInput(SDL_GRAB_ON);
 				SDL_WarpMouse(LastMouseXR, LastMouseYR);
+#endif
 			}
 		}
 		// останавливаем игру
@@ -1662,7 +1688,11 @@ void DrawGame()
 						NeedHideGameMenu = true;
 						DrawGameCursor = false;
 						// установка в последюю точку указателя
+#ifdef use_SDL2
+						SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
+#else
 						SDL_WarpMouse(LastMouseXR, LastMouseYR);
+#endif
 
 						if (SoundShowHideMenu != 0)
 							if (vw_FindSoundByNum(SoundShowHideMenu) != 0)
@@ -1779,7 +1809,11 @@ void DrawGame()
 					NeedShowGameMenu = false;
 					NeedHideGameMenu = true;
 					// установка в последюю точку указателя
+#ifdef use_SDL2
+					SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
+#else
 					SDL_WarpMouse(LastMouseXR, LastMouseYR);
+#endif
 
 					if (NeedPlaySfx && SoundShowHideMenu != 0)
 						if (vw_FindSoundByNum(SoundShowHideMenu) != 0)

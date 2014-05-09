@@ -38,25 +38,25 @@
 					<Add library="X11" />
 				</Linker>
 			</Target>
-			<Target title="Linux Clang (LLVM)">
+			<Target title="Linux GCC libSDL2">
 				<Option output="../AstroMenace" prefix_auto="0" extension_auto="0" />
 				<Option working_dir="../" />
 				<Option object_output="../build/objs2" />
 				<Option deps_output="../build/deps" />
 				<Option type="1" />
-				<Option compiler="clang_compiler" />
+				<Option compiler="gcc" />
 				<Option projectResourceIncludeDirsRelation="1" />
 				<Compiler>
 					<Add option="-Os" />
 					<Add option="-Wextra" />
 					<Add option="-Wall" />
-					<Add option="-Dxinerama_detected_by_cmake" />
 					<Add option="-Dfontconfig_detected_by_cmake" />
+					<Add option="-Duse_SDL2" />
 					<Add directory="/usr/include/freetype2/" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add library="SDL" />
+					<Add library="SDL2" />
 					<Add library="GL" />
 					<Add library="GLU" />
 					<Add library="openal" />
@@ -64,7 +64,6 @@
 					<Add library="ogg" />
 					<Add library="vorbis" />
 					<Add library="vorbisfile" />
-					<Add library="Xinerama" />
 					<Add library="freetype" />
 					<Add library="fontconfig" />
 					<Add library="X11" />
@@ -135,352 +134,352 @@
 		<Unit filename="AstroMenaceSource/Core/Base.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Camera/Camera.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Camera/Camera.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Camera/CameraMath.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/CollisionDetection/AABB.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/CollisionDetection/CollisionDetection.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/CollisionDetection/CommonMath.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/CollisionDetection/OBB.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/CollisionDetection/Sphere.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Core.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Font/Font.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Font/Font.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Font/FontManager.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Light/Light.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Light/Light.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Light/LightManager.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Math/Math.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Math/Math.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Math/Matrix33.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Math/Matrix44.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Math/MersenneTwister.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Model3D/Model3D.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Model3D/Model3D.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Model3D/Model3DManager.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Model3D/VW3D.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem/Particle.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem/Particle.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem/ParticleSystem.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem/ParticleSystem.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem/ParticleSystemManager.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/Particle2D.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/Particle2D.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/ParticleSystem2D.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/ParticleSystem2D/ParticleSystem2D.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/RendererInterface/GLext.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/RendererInterface/OGL_Draw2D.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/RendererInterface/OGL_Draw3D.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/RendererInterface/OGL_FBO.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/RendererInterface/OGL_GLSL.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/RendererInterface/OGL_Light.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/RendererInterface/OGL_Main.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/RendererInterface/OGL_Matrix.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/RendererInterface/OGL_OcclusionQuery.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/RendererInterface/OGL_Texture.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/RendererInterface/OGL_VAO.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/RendererInterface/OGL_VBO.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/RendererInterface/RI_Int.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/RendererInterface/RendererInterface.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Sound/Buffer.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Sound/Buffer.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Sound/Music.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Sound/Sound.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Sound/Sound.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Sound/SoundManager.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/System/Keyboard.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/System/Languages/de.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/System/Languages/en.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/System/Languages/ru.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/System/Mouse.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/System/System.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/System/System.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/System/Timer.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Text/Text.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Text/Text.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Texture/Texture.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Texture/Texture.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Texture/TextureManager.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Texture/Texture_JPG.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Texture/Texture_PNG.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/Texture/Texture_TGA.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/VirtualFileSystem/Haff.cpp" />
 		<Unit filename="AstroMenaceSource/Core/VirtualFileSystem/RLE.cpp" />
@@ -489,558 +488,558 @@
 		<Unit filename="AstroMenaceSource/Core/XML/XML.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Core/XML/XML.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Game.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Game/Game.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Game/Game_Camera.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Game/Game_Mission.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Game/Game_PlayerShip.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Game/Game_WeaponSlot.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/GraphicFX/GameLvlText/GameLvlText.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/GraphicFX/GameLvlText/GameLvlText.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/GraphicFX/GameLvlText/GameLvlTextManager.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/GraphicFX/ShadowMap.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/GraphicFX/SkyBox.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/GraphicFX/SpaceStars/SpaceStars.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/GraphicFX/SpaceStars/SpaceStars.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/GraphicFX/SpaceStars/Star.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/GraphicFX/SpaceStars/Star.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/GraphicFX/StarSystem.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Loading.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Loop_audio.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Loop_proc.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Main.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/MainFS2VFS.cpp" />
 		<Unit filename="AstroMenaceSource/Menu/Button.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Dialog.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Menu.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Menu_ConfControl.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Menu_Credits.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Menu_Difficulty.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Menu_Information.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Menu_Interface.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Menu_Mission.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Menu_Options.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Menu_OptionsAdv.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Menu_Profile.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Menu_TopScores.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Menu_Workshop.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Menu_Workshop_Shipyard.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Menu_Workshop_Weaponry.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Menu/Menu_Workshop_Workshop.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/AI.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Explosion/BulletExplosion/BulletExplosion.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Explosion/BulletExplosion/BulletExplosion.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Explosion/Explosion.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Explosion/Explosion.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Explosion/ExplosionGFX.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Explosion/ExplosionManager.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Explosion/GroundExplosion/GroundExplosion.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Explosion/GroundExplosion/GroundExplosion.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Explosion/SpaceExplosion/SpaceExplosion.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Explosion/SpaceExplosion/SpaceExplosion.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/GroundObject/Building/Building.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/GroundObject/Building/Building.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/GroundObject/GroundObject.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/GroundObject/GroundObject.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/GroundObject/GroundObjectManager.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/GroundObject/MilitaryBuilding/MilitaryBuilding.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/GroundObject/MilitaryBuilding/MilitaryBuilding.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/GroundObject/Tracked/Tracked.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/GroundObject/Tracked/Tracked.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/GroundObject/Wheeled/Wheeled.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/GroundObject/Wheeled/Wheeled.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Object3D.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Object3D.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Object3DCollision.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Object3DCollisionMath.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Object3DFunctions.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Object3DManager.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Projectile/Projectile.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Projectile/Projectile.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Projectile/ProjectileGFX.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Projectile/ProjectileManager.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceObject/Asteroid/Asteroid.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceObject/Asteroid/Asteroid.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceObject/BasePart/BasePart.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceObject/BasePart/BasePart.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceObject/BigAsteroid/BigAsteroid.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceObject/BigAsteroid/BigAsteroid.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceObject/Planet/Planet.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceObject/Planet/Planet.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceObject/ShipPart/ShipPart.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceObject/ShipPart/ShipPart.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceObject/SpaceObject.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceObject/SpaceObject.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceObject/SpaceObjectGFX.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceObject/SpaceObjectManager.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/AlienSpaceFighter/AlienSpaceFighter.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/AlienSpaceFighter/AlienSpaceFighter.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/AlienSpaceFighter/AlienSpaceFighterEngine.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/AlienSpaceMotherShip/AlienSpaceMotherShip.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/AlienSpaceMotherShip/AlienSpaceMotherShip.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/AlienSpaceMotherShip/AlienSpaceMotherShipEngine.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/EarthSpaceFighter/EarthSpaceFighter.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/EarthSpaceFighter/EarthSpaceFighter.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/EarthSpaceFighter/EarthSpaceFighterArmour.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/EarthSpaceFighter/EarthSpaceFighterEngine.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/EarthSpaceFighter/EarthSpaceFighterWeapon.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/PirateShip/PirateShip.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/PirateShip/PirateShip.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/PirateShip/PirateShipEngine.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/SpaceShip.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/SpaceShip.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/SpaceShip/SpaceShipManager.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Weapon/Weapon.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Weapon/Weapon.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Weapon/WeaponFunctions.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Object3D/Weapon/WeaponManager.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/ScriptEngine/Script.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/ScriptEngine/Script.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/ScriptEngine/ScriptFunction.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/ScriptEngine/Setup.cpp">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/Struct.h">
 			<Option target="Linux GCC" />
 			<Option target="Windows MinGw" />
-			<Option target="Linux Clang (LLVM)" />
+			<Option target="Linux GCC libSDL2" />
 		</Unit>
 		<Unit filename="AstroMenaceSource/config.h" />
 		<Extensions>

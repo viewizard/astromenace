@@ -1687,7 +1687,11 @@ void DrawDialogBox()
 			{
 
 				// нужно свернуть игру, запустить броузер и выйти в основное меню
+#ifdef use_SDL2
+				SDL_MinimizeWindow(vw_GetSDL2Windows());
+#else
 				SDL_WM_IconifyWindow();
+#endif
 
 				if (!strcmp(vw_GetLanguageList()[Setup.MenuLanguage-1].code, "ru")) vw_OpenBrouser("http://www.viewizard.com/ru/astromenace/donors.php");
 				else
