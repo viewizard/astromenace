@@ -29,7 +29,19 @@
 #define CONFIG_H
 
 #define GAME_VERSION	 	"1.3.3 svn"
-#define GAME_BUILD			140503
+#define GAME_BUILD			140509
+
+
+
+
+// libSDL2 implementation. Work in progress.
+// #define use_SDL2
+// Note:
+// - Make sure, that you have libSDL2 development package installed.
+// - No need direct access to libXinerama in code. libSDL2 have multiple displays support.
+
+
+
 
 
 // You can disable some OpenGL features during compilation to avoid some drivers issues.
@@ -48,7 +60,7 @@
 // OpenGL 1.4+
 #define use_Automatic_Mipmap_Generation
 
-// xinerama support, required libXinerama
+// xinerama support, required libXinerama (* need for libSDL only, libSDL2 have internal implementation)
 #ifdef xinerama_detected_by_cmake // do not comment this line, unless you are sure what are you doing
 	#define xinerama
 #endif // xinerama_detected_by_cmake

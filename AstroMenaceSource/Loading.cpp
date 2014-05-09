@@ -1397,7 +1397,11 @@ void LoadGameData(int LoadType)
 
 #ifdef multithread
 	// поток проигрывания звука
+#ifdef use_SDL2
+	SoundThread = SDL_CreateThread(LoadSoundThread, "MusicThread", 0);
+#else
 	SoundThread = SDL_CreateThread(LoadSoundThread, 0);
+#endif // use_SDL2
 #endif //multithread
 
 

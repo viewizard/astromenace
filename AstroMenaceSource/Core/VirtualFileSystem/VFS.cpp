@@ -566,7 +566,11 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	// Проверяем сигнатуру "VFS_" - 4 байт
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	char Sign[5]; Sign[4] = 0;
+#ifdef use_SDL2
+	if(SDL_RWread(TempVFS->File, &Sign, 4, 1) == 0)
+#else
 	if(SDL_RWread(TempVFS->File, &Sign, 4, 1) == -1)
+#endif
 	{
 		// если файл меньше, значит ошибка
 		fprintf(stderr, "VFS file size error %s\n", Name);
@@ -584,7 +588,11 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	// Bерсия - 4 байт
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	char Version[5]; Version[4] = 0;
+#ifdef use_SDL2
+	if(SDL_RWread(TempVFS->File, &Version, 4, 1) == 0)
+#else
 	if(SDL_RWread(TempVFS->File, &Version, 4, 1) == -1)
+#endif
 	{
 		fprintf(stderr, "VFS file corrupted: %s\n", Name);
 		goto vw_OpenVFS_Error;
@@ -600,7 +608,11 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Билд - 4 байт (если предали ноль - проверять билды не нужно)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#ifdef use_SDL2
+	if(SDL_RWread(TempVFS->File, &vfsBuildNumber, 4, 1) == 0)
+#else
 	if(SDL_RWread(TempVFS->File, &vfsBuildNumber, 4, 1) == -1)
+#endif
 	{
 		fprintf(stderr, "VFS file corrupted: %s\n", Name);
 		goto vw_OpenVFS_Error;

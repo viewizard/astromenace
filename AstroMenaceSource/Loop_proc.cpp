@@ -311,6 +311,7 @@ void Loop_Proc()
 
 
 
+#ifndef use_SDL2 // for libSDL2 we use SDL_DisableScreenSaver function in vw_InitWindow
 #ifdef WIN32
 	POINT mouse;
 	// чтобы не перешли на скринсейвер, показываем "активность"
@@ -318,6 +319,7 @@ void Loop_Proc()
 	// координаты теже, главное - установка
 	SetCursorPos(mouse.x, mouse.y);
 #endif // WIN32
+#endif // not use_SDL2
 
 
 
@@ -369,7 +371,11 @@ void Loop_Proc()
 	}
 
 	// делаем на рабочем столе бмп скриншоты
+#ifdef use_SDL2
+	if (vw_GetKeys(SDLK_PRINTSCREEN) || vw_GetKeys(SDLK_F12))
+#else
 	if (vw_GetKeys(SDLK_PRINT) || vw_GetKeys(SDLK_F12))
+#endif
 	{
 		char SaveFileName[MAX_PATH];
 
@@ -380,9 +386,12 @@ void Loop_Proc()
 		strcat(SaveFileName, res);
 		strcat(SaveFileName, ".bmp");
 
-		SDL_Surface *GameScreen = SDL_GetVideoSurface();
-		vw_Screenshot(GameScreen, SaveFileName);
+		vw_Screenshot(Setup.Width, Setup.Height, SaveFileName);
+#ifdef use_SDL2
+		vw_SetKeys(SDLK_PRINTSCREEN, false);
+#else
 		vw_SetKeys(SDLK_PRINT, false);
+#endif
 		vw_SetKeys(SDLK_F12, false);
 	}
 
