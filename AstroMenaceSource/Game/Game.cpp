@@ -601,7 +601,7 @@ void InitGame()
 
 	// забираем эксклюзивное управление мышкой и клавой, если оконный режим
 #ifdef use_SDL2
-	if (Setup.BPP == 0) SDL_SetRelativeMouseMode(SDL_TRUE);
+	if (Setup.BPP == 0) SDL_SetWindowGrab(vw_GetSDL2Windows(),SDL_TRUE);
 #else
 	if (Setup.BPP == 0) SDL_WM_GrabInput(SDL_GRAB_ON);
 #endif
@@ -941,7 +941,7 @@ void RealExitGame()
 
 	// отдаем управление
 #ifdef use_SDL2
-	if (Setup.BPP == 0) SDL_SetRelativeMouseMode(SDL_FALSE);
+	if (Setup.BPP == 0) SDL_SetWindowGrab(vw_GetSDL2Windows(),SDL_FALSE);
 #else
 	if (Setup.BPP == 0) SDL_WM_GrabInput(SDL_GRAB_OFF);
 #endif
@@ -1533,7 +1533,7 @@ void DrawGame()
 			if (Setup.BPP == 0)
 			{
 #ifdef use_SDL2
-				SDL_SetRelativeMouseMode(SDL_FALSE);
+				SDL_SetWindowGrab(vw_GetSDL2Windows(),SDL_FALSE);
 				SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
 #else
 				SDL_WM_GrabInput(SDL_GRAB_OFF);
@@ -1557,7 +1557,7 @@ void DrawGame()
 			if (Setup.BPP == 0)
 			{
 #ifdef use_SDL2
-				SDL_SetRelativeMouseMode(SDL_TRUE);
+				SDL_SetWindowGrab(vw_GetSDL2Windows(),SDL_TRUE);
 				SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
 #else
 				SDL_WM_GrabInput(SDL_GRAB_ON);
