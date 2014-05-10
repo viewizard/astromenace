@@ -37,6 +37,7 @@
 	#define _CRT_SECURE_NO_DEPRECATE // выключаем задалбывание с безопасными функциями
 	#include <windows.h>
 	#include <shellapi.h>
+	#include <stdio.h>
 #endif
 
 #if defined(__APPLE__) && defined(__MACH__)
