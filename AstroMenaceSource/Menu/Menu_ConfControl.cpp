@@ -335,7 +335,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	Off = false;
 	ButtonName = JoystickCodeName(Setup.JoystickPrimary);
 	if (NeedCheck == 9) {Transp = But[8]; Off = true; ButtonName = "?";};
-	if (DrawButton128_2((int)X1+616, (int)Y1-6, ButtonName, Transp*ContentTransp, !(Joystick != NULL) || Off))
+	if (DrawButton128_2((int)X1+616, (int)Y1-6, ButtonName, Transp*ContentTransp, (Joystick == NULL) || Off))
 		if (NeedCheck == 0)
 		{
 			NeedCheck = 9;
@@ -368,7 +368,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	Off = false;
 	ButtonName = JoystickCodeName(Setup.JoystickSecondary);
 	if (NeedCheck == 10) {Transp = But[9]; Off = true; ButtonName = "?";};
-	if (DrawButton128_2((int)X1+616, (int)Y1-6, ButtonName, Transp*ContentTransp, !(Joystick != NULL) || Off))
+	if (DrawButton128_2((int)X1+616, (int)Y1-6, ButtonName, Transp*ContentTransp, (Joystick == NULL) || Off))
 		if (NeedCheck == 0)
 		{
 			NeedCheck = 10;

@@ -29,7 +29,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION	 	"1.3.3 svn"
-#define GAME_BUILD			140509
+#define GAME_BUILD			140512
 
 
 
