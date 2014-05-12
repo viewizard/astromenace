@@ -93,11 +93,8 @@ GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Byt
 		if ((glGenerateMipmapEXT != NULL) && (glTexStorage2DEXT != NULL))
 		{
 			// считаем сколько нужно создавать мипмапов
-			int NeedMipMapLvl = 1;
-			int MaxSize = Width;
-			if (MaxSize < Height) MaxSize = Height;
-			while (MaxSize > 2) {MaxSize = MaxSize/2; NeedMipMapLvl++;};
-			glTexStorage2DEXT(GL_TEXTURE_2D, NeedMipMapLvl, InternalFormat, Width, Height);
+			int NeedMipMapLvls = floor(log2(Width>Height?Width:Height)) + 1;
+			glTexStorage2DEXT(GL_TEXTURE_2D, NeedMipMapLvls, InternalFormat, Width, Height);
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Format, GL_UNSIGNED_BYTE, ustDIB);
 			glGenerateMipmapEXT(GL_TEXTURE_2D);
 		}

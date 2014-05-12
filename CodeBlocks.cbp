@@ -84,11 +84,11 @@
 					<Add option="-DWIN32" />
 					<Add option="-DOV_EXCLUDE_STATIC_CALLBACKS" />
 					<Add directory="../AllLibraries/SDL-1.2.15/include" />
-					<Add directory="../AllLibraries/libogg-1.3.0/include" />
-					<Add directory="../AllLibraries/libvorbis-1.3.3/include" />
+					<Add directory="../AllLibraries/libogg-1.3.1/include" />
+					<Add directory="../AllLibraries/libvorbis-1.3.4/include" />
 					<Add directory="../AllLibraries/freealut-1.1.0/include" />
 					<Add directory="../AllLibraries/openal-soft-1.15.1/include" />
-					<Add directory="../AllLibraries/freetype-2.4.12/include" />
+					<Add directory="../AllLibraries/freetype-2.5.3/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -106,11 +106,11 @@
 					<Add library="OpenAL32" />
 					<Add library="freetype" />
 					<Add directory="../AllLibraries/SDL-1.2.15/lib" />
-					<Add directory="../AllLibraries/libogg-1.3.0/lib" />
-					<Add directory="../AllLibraries/libvorbis-1.3.3/lib" />
+					<Add directory="../AllLibraries/libogg-1.3.1/lib" />
+					<Add directory="../AllLibraries/libvorbis-1.3.4/lib" />
 					<Add directory="../AllLibraries/freealut-1.1.0/lib" />
 					<Add directory="../AllLibraries/openal-soft-1.15.1/lib" />
-					<Add directory="../AllLibraries/freetype-2.4.12/bin" />
+					<Add directory="../AllLibraries/freetype-2.5.3/bin" />
 				</Linker>
 			</Target>
 			<Target title="Windows MinGw libSDL2">
@@ -129,11 +129,11 @@
 					<Add option="-DOV_EXCLUDE_STATIC_CALLBACKS" />
 					<Add option="-Duse_SDL2" />
 					<Add directory="../AllLibraries/SDL2-2.0.3/i686-w64-mingw32/include" />
-					<Add directory="../AllLibraries/libogg-1.3.0/include" />
-					<Add directory="../AllLibraries/libvorbis-1.3.3/include" />
+					<Add directory="../AllLibraries/libogg-1.3.1/include" />
+					<Add directory="../AllLibraries/libvorbis-1.3.4/include" />
 					<Add directory="../AllLibraries/freealut-1.1.0/include" />
 					<Add directory="../AllLibraries/openal-soft-1.15.1/include" />
-					<Add directory="../AllLibraries/freetype-2.4.12/include" />
+					<Add directory="../AllLibraries/freetype-2.5.3/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -151,11 +151,11 @@
 					<Add library="OpenAL32" />
 					<Add library="freetype" />
 					<Add directory="../AllLibraries/SDL2-2.0.3/i686-w64-mingw32/lib/" />
-					<Add directory="../AllLibraries/libogg-1.3.0/lib" />
-					<Add directory="../AllLibraries/libvorbis-1.3.3/lib" />
+					<Add directory="../AllLibraries/libogg-1.3.1/lib" />
+					<Add directory="../AllLibraries/libvorbis-1.3.4/lib" />
 					<Add directory="../AllLibraries/freealut-1.1.0/lib" />
 					<Add directory="../AllLibraries/openal-soft-1.15.1/lib" />
-					<Add directory="../AllLibraries/freetype-2.4.12/bin" />
+					<Add directory="../AllLibraries/freetype-2.5.3/bin" />
 				</Linker>
 			</Target>
 			<Target title="FS2VFS Linux GCC">
