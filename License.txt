@@ -1,7 +1,7 @@
 AstroMenace Source Code
 
 AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-Copyright (c) 2006-2013 Michael Kurinnoy, Viewizard
+Copyright (c) 2006-2014 Michael Kurinnoy, Viewizard
 
 
 AstroMenace is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ E-mail: viewizard@viewizard.com
 
 Please note, source code folder contain GLext.h file
 (AstroMenaceSource/Core/RendererInterface/ folder).
-Copyright (c) 2007-2012 The Khronos Group Inc.
+Copyright (c) 2007-2013 The Khronos Group Inc.
 License: Expat
 
 

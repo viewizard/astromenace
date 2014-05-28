@@ -615,6 +615,8 @@ static const char *VFSFilesList[] =
 "MODELS/NORMALMAP/q_class2_nm.tga",
 "MODELS/NORMALMAP/bomber_nm.tga",
 "MODELS/NORMALMAP/buildings_nm.tga",
+"DATA_PL/MENU/button_weaponry_in.tga",
+"DATA_PL/MENU/button_weaponry_out.tga",
 };
 #define VFSFilesListCount sizeof(VFSFilesList)/sizeof(VFSFilesList[0])
 

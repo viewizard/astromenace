@@ -79,11 +79,11 @@
 2_restart_line2;Note: the current game data will be lost.;Hinweis: Der aktuelle Spielstand geht verloren.;Текущие данные миссии будут потеряны.;Uwaga: Aktualny stan gry zostanie utracony.
 ;;;;
 ;;;;
-3_Joystick_DeadZone;Joystick DeadZone;Joystick Neutralzone;Мертвая зона джойстика;Joystick MartwaStrefa
+3_Joystick_DeadZone;Joystick DeadZone;Joystick Neutralzone;Мертвая зона джойстика;Dżojstik MartwaStrefa
 3_Control_Sensitivity;Control Sensitivity;Empfindlichkeitskontrolle;Чувствительность;Czułość kontrolerów
 3_MOUSE;MOUSE;MAUS;МЫШКА;MYSZ
 3_KEYBOARD;KEYBOARD;TASTATUR;КЛАВИАТУРА;KLAWIATURA
-3_JOYSTICK;JOYSTICK;JOYSTICK;ДЖОЙСТИК;JOYSTICK
+3_JOYSTICK;JOYSTICK;JOYSTICK;ДЖОЙСТИК;DŻOJSTIK
 3_Primary_Attack;Primary Attack;Primärer Angriff;Первичный Огонь;Atak Główny
 3_Secondary_Attack;Secondary Attack;Sekundärer Angriff;Вторичный Огонь;Atak Specjalny
 3_Move_Forward;Move Forward;Vorwärts Bewegen;Движение Вперед;Naprzód
@@ -594,7 +594,7 @@
 9_11Line9;Power - ship energy source. Pay attention to the main two characte-;Energie - Schiffsenergiequelle. Achte auf die zwei wichtigen ;О.К.Н. - Оптический Компьютер Наведения. Данная система;Moc - źródło zasilania. Zwróć uwagę na dwie główne cechy tego
 9_11Line10;ristics of this system - Recharge Rate and Capacity.;Eigenschaften dieses Systems - Aufladungsrate und Kapazität.;отвечает за оптическое наведение на цель.;systemu - Moc Ładowania oraz Pojemność.
 9_11Line11;O.T.C. - Optical Target Computer. As you can see from its name,;O.T.C. - Optischer Ziel Computer, dieses System ist für die;Наведение - Система наведения орудия на цель. От нее;O.K.C. - Optyczny Komputer Celowniczy. Jak się domyślasz po jego
-9_11Line12;this system is responsible for optical targeting.;optische Zielverfolgung zuständig.;зависит скорость поворота и точность выстрела.;nazwy, system ten jest odpowiedzialny za namierzanie optyczne.
+9_11Line12;this system is responsible for optical targeting.;optische Zielverfolgung zuständig.;зависит скорость поворота и точность выстрела.;nazwie, system ten jest odpowiedzialny za namierzanie optyczne.
 9_11Line13;Targeting - Weapon targeting system. It depends on this system how;Zielerfassung - Waffem Zielsystem. Von diesem System hängt es ab,;Нано Роботы - будут постоянно следить за состоянием;Namierzanie - System kierowania ogniem. Zależy od niego jak szybko
 9_11Line14;fast a weapon will aim and how accurate the shot will be.;wie lange die Waffe zum Zielerfassen benötigt und wie genau;вашего корабля и ремонтировать его.;broń zostanie wycelowana i jak dokładny będzie strzał.
 9_11Line15;Advanced - The most advanced, but yet untested systems for;der Schuss ist. Fortgeschritten - Die am höchsten entwickelten;А-Б Слой - специальная броня, позволяющая уменьшить;Zaawansowany - Najbardziej zaawansowany, ale jeszcze niesprawdzony
@@ -739,8 +739,8 @@
 12_mission.tga;DATA/DATA_EN/GAME/mission.tga;DATA/DATA_DE/GAME/mission.tga;DATA/DATA_RU/GAME/mission.tga;DATA/DATA_EN/GAME/mission.tga
 12_missionfailed.tga;DATA/DATA_EN/GAME/missionfailed.tga;DATA/DATA_DE/GAME/missionfailed.tga;DATA/DATA_RU/GAME/missionfailed.tga;DATA/DATA_EN/GAME/missionfailed.tga
 12_pause.tga;DATA/DATA_EN/GAME/pause.tga;DATA/DATA_DE/GAME/pause.tga;DATA/DATA_RU/GAME/pause.tga;DATA/DATA_EN/GAME/pause.tga
-12_button_weaponry_in.tga;DATA/DATA_EN/MENU/button_weaponry_in.tga;DATA/DATA_DE/MENU/button_weaponry_in.tga;DATA/DATA_RU/MENU/button_weaponry_in.tga;DATA/DATA_EN/MENU/button_weaponry_in.tga
-12_button_weaponry_out.tga;DATA/DATA_EN/MENU/button_weaponry_out.tga;DATA/DATA_DE/MENU/button_weaponry_out.tga;DATA/DATA_RU/MENU/button_weaponry_out.tga;DATA/DATA_EN/MENU/button_weaponry_out.tga
+12_button_weaponry_in.tga;DATA/DATA_EN/MENU/button_weaponry_in.tga;DATA/DATA_DE/MENU/button_weaponry_in.tga;DATA/DATA_RU/MENU/button_weaponry_in.tga;DATA/DATA_PL/MENU/button_weaponry_in.tga
+12_button_weaponry_out.tga;DATA/DATA_EN/MENU/button_weaponry_out.tga;DATA/DATA_DE/MENU/button_weaponry_out.tga;DATA/DATA_RU/MENU/button_weaponry_out.tga;DATA/DATA_PL/MENU/button_weaponry_out.tga
 ;;;;
 ;;;;
 13_Attention.wav;DATA/DATA_EN/VOICE/Attention.wav;DATA/DATA_DE/VOICE/Attention.wav;DATA/DATA_RU/VOICE/Attention.wav;DATA/DATA_EN/VOICE/Attention.wav
