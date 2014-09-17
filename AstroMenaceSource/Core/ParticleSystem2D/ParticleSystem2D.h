@@ -115,7 +115,6 @@ public:
 
 	// можем ли мы создавать частицы или нет
 	bool IsSuppressed;
-	bool DestroyIfNoParticles;
 
 	// возраст системы в секундах
 	float Age;
@@ -129,6 +128,7 @@ public:
 	// подвязка к динамическому массиву
 	eParticle2D * Start;
 	eParticle2D * End;
+	int ParticlesCount;
 	void Attach(eParticle2D * NewParticle);
 	void Detach(eParticle2D * OldParticle);
 

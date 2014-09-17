@@ -47,7 +47,6 @@ eParticleSystem2D::eParticleSystem2D()
 	Texture = 0;
 	AttractiveValue = 25.0f;
 	IsSuppressed = false;
-	DestroyIfNoParticles = false;
 
 	// положение системы
 	Location.Set(0.0f,0.0f,0.0f);
@@ -92,6 +91,7 @@ eParticleSystem2D::eParticleSystem2D()
 	// настройка массива
 	Start = 0;
 	End = 0;
+	ParticlesCount = 0;
 
 }
 
@@ -136,6 +136,7 @@ void eParticleSystem2D::Attach(eParticle2D * NewParticle)
 		End = NewParticle;
 	}
 
+	ParticlesCount++;
 }
 
 
@@ -156,6 +157,7 @@ void eParticleSystem2D::Detach(eParticle2D * OldParticle)
 	if (OldParticle->Prev != 0) OldParticle->Prev->Next = OldParticle->Next;
 		else if (OldParticle->Next != 0) OldParticle->Next->Prev = 0;
 
+	ParticlesCount--;
 }
 
 
@@ -178,10 +180,6 @@ bool eParticleSystem2D::Update(float Time)
 	TimeLastUpdate = Time;
 
 
-	// очищаем счетчик подсчета кол-ва действующий частиц
-	int ParticlesAlive = 0;
-
-
 	// для всех частиц
 	eParticle2D *Particle2DTmp = Start;
 
@@ -189,11 +187,7 @@ bool eParticleSystem2D::Update(float Time)
 	{
 		eParticle2D *Particle2DTmp2 = Particle2DTmp->Next;
 		// функция вернет false, если частица уже мертва
-		if (Particle2DTmp->Update(TimeDelta, Location, IsAttractive, AttractiveValue))
-		{
-			ParticlesAlive++;
-		}
-		else
+		if (!Particle2DTmp->Update(TimeDelta, Location, IsAttractive, AttractiveValue))
 		{
 			Detach(Particle2DTmp);
 			delete Particle2DTmp; Particle2DTmp = 0;
@@ -408,11 +402,6 @@ bool eParticleSystem2D::Update(float Time)
 		}
 	}
 
-
-	// проверка, если уже ничего нет и нужно выйти - выходим
-	if (DestroyIfNoParticles)
-		if (ParticlesAlive == 0) return false;
-
     return true;
 }
 
@@ -428,25 +417,11 @@ void eParticleSystem2D::Draw()
 
 	// загрузка текстуры, уже должна быть подключена
 	if (Texture == 0) return;
+	if (ParticlesCount == 0) return;
 
 	RECT SrcRect, DestRect;
 
 	SetRect(&SrcRect,0,0,64,64);
-
-
-
-	// подсчет кол-ва частиц
-	eParticle2D *tmp1 = Start;
-	int CurrentCount = 0;
-
-	while (tmp1!=0)
-	{
-		eParticle2D *tmp2 = tmp1->Next;
-		CurrentCount++;
-		tmp1 = tmp2;
-	}
-
-	if (CurrentCount == 0) return;
 
 
 	float AW;
@@ -471,20 +446,17 @@ void eParticleSystem2D::Draw()
 	// буфер для последовательности RI_TRIANGLE_STRIP
 	// войдет RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR
 	float *tmp = 0;
-	tmp = new float[(2+2+4)*4*CurrentCount]; if (tmp == 0) return;
+	tmp = new float[(2+2+4)*4*ParticlesCount]; if (tmp == 0) return;
 	int k=0;
 
 
 
 
-
 	// для всех частиц
-	tmp1 = Start;
+	eParticle2D *tmp1 = Start;
 
 	while (tmp1!=0)
 	{
-		eParticle2D *tmp2 = tmp1->Next;
-
 		SetRect(&DestRect,(int)(tmp1->Location.x - tmp1->Size/2),
 			(int)(tmp1->Location.y - tmp1->Size/2),
 			(int)(tmp1->Location.x + tmp1->Size/2),
@@ -535,11 +507,11 @@ void eParticleSystem2D::Draw()
 				tmp[k++] = FrameWidth;
 				tmp[k++] = 1.0f-Yst;
 
-		tmp1 = tmp2;
+		tmp1 = tmp1->Next;
 	}
 
 
-	vw_SendVertices(RI_QUADS, 4*CurrentCount, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
+	vw_SendVertices(RI_QUADS, 4*ParticlesCount, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
 
 	if (tmp != 0){delete [] tmp; tmp = 0;}
 	vw_SetTextureBlend(false, 0, 0);
@@ -561,10 +533,9 @@ void eParticleSystem2D::MoveSystem(VECTOR3D NewLocation)
 	eParticle2D *tmp = Start;
 	while (tmp!=0)
 	{
-		eParticle2D *tmp2 = tmp->Next;
 		// меняем каждой частице
 		tmp->Location += NewLocation-PrevLocation;
-		tmp = tmp2;
+		tmp = tmp->Next;
 	}
 }
 

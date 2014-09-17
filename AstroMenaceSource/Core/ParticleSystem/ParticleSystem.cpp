@@ -115,6 +115,7 @@ eParticleSystem::eParticleSystem()
 	// настройка массива
 	Start = 0;
 	End = 0;
+	ParticlesCount = 0;
 	Next = 0;
 	Prev = 0;
 	vw_AttachParticleSystem(this);
@@ -172,6 +173,7 @@ void eParticleSystem::Attach(eParticle * NewParticle)
 		End = NewParticle;
 	}
 
+	ParticlesCount++;
 }
 
 
@@ -192,6 +194,7 @@ void eParticleSystem::Detach(eParticle * OldParticle)
 	if (OldParticle->Prev != 0) OldParticle->Prev->Next = OldParticle->Next;
 		else if (OldParticle->Next != 0) OldParticle->Next->Prev = 0;
 
+	ParticlesCount--;
 }
 
 
@@ -214,9 +217,6 @@ bool eParticleSystem::Update(float Time)
 	TimeLastUpdate = Time;
 
 
-	// очищаем счетчик подсчета кол-ва действующий частиц
-	ParticlesAlive = 0;
-
 
 	// для всех частиц вызываем их собственный апдейт
 	eParticle *ParticleTmp = Start;
@@ -224,11 +224,7 @@ bool eParticleSystem::Update(float Time)
 	{
 		eParticle *ParticleTmp2 = ParticleTmp->Next;
 		// функция вернет false, если частица уже мертва
-		if (ParticleTmp->Update(TimeDelta, Location, IsAttractive, AttractiveValue))
-		{
-			ParticlesAlive++;
-		}
-		else
+		if (!ParticleTmp->Update(TimeDelta, Location, IsAttractive, AttractiveValue))
 		{
 			Detach(ParticleTmp);
 			delete ParticleTmp; ParticleTmp = 0;
@@ -506,7 +502,6 @@ bool eParticleSystem::Update(float Time)
 
 			// подключаем частицу к системе
 			Attach(NewParticle);
-			ParticlesAlive++;
 
 			// уменьшаем необходимое количество частиц
 			ParticlesCreated--;
@@ -516,7 +511,7 @@ bool eParticleSystem::Update(float Time)
 
 	// если уже ничего нет и нужно выйти - выходим
 	if (DestroyIfNoParticles)
-		if (ParticlesAlive == 0)
+		if (ParticlesCount == 0)
 		{
 			NeedDestroy = true;
 			return false;
@@ -579,7 +574,7 @@ bool eParticleSystem::Update(float Time)
 		}
 
 		// если уже ничего нет, надо выключить свет, если что-то есть то включить
-		if (ParticlesAlive == 0) Light->On = false;
+		if (ParticlesCount == 0) Light->On = false;
 		else Light->On = true;
 	}
 
@@ -605,8 +600,6 @@ bool eParticleSystem::Update(float Time)
 
 	while (ParticleTmp!=0)
 	{
-		eParticle *ParticleTmp2 = ParticleTmp->Next;
-
 		// строим AABB
 		if (ParticleTmp->Alpha > 0.0f && ParticleTmp->Size > 0.0f)
 		{
@@ -630,7 +623,7 @@ bool eParticleSystem::Update(float Time)
 			if (MinZ > v.z) MinZ = v.z;
 		}
 
-		ParticleTmp = ParticleTmp2;
+		ParticleTmp = ParticleTmp->Next;
 	}
 
 	AABB[0] = VECTOR3D(MaxX, MaxY, MaxZ);
@@ -669,9 +662,8 @@ void eParticleSystem::Draw(eTexture **CurrentTexture)
 		eParticle *ParticleTmp = Start;
 		while (ParticleTmp!=0)
 		{
-			eParticle *ParticleTmp2 = ParticleTmp->Next;
 			if (ParticleTmp->TextureNum == i) DrawCount++;
-			ParticleTmp = ParticleTmp2;
+			ParticleTmp = ParticleTmp->Next;
 		}
 
 
@@ -703,9 +695,7 @@ void eParticleSystem::Draw(eTexture **CurrentTexture)
 				eParticle *tmp = Start;
 				while (tmp!=0)
 				{
-					eParticle *tmp2 = tmp->Next;
-
-					if (tmp->TextureNum != i){tmp = tmp2; continue;}
+					if (tmp->TextureNum != i){tmp = tmp->Next; continue;}
 
 					// находим вектор камера-точка
 					VECTOR3D nnTmp;
@@ -785,7 +775,7 @@ void eParticleSystem::Draw(eTexture **CurrentTexture)
 					tmpDATA[k++] = 1.0f;
 					tmpDATA[k++] = 1.0f;
 
-					tmp = tmp2;
+					tmp = tmp->Next;
 				}
 			}
 			else // иначе работаем с шейдерами, в них правильно развернем билборд
@@ -793,9 +783,7 @@ void eParticleSystem::Draw(eTexture **CurrentTexture)
 				eParticle *tmp = Start;
 				while (tmp!=0)
 				{
-					eParticle *tmp2 = tmp->Next;
-
-					if (tmp->TextureNum != i){tmp = tmp2; continue;}
+					if (tmp->TextureNum != i){tmp = tmp->Next; continue;}
 
 					// собираем квадраты
 					R = (GLubyte)(tmp->Color.r*255);
@@ -847,7 +835,7 @@ void eParticleSystem::Draw(eTexture **CurrentTexture)
 					tmpDATA[k++] = 4.0f;
 					tmpDATA[k++] = tmp->Size;
 
-					tmp = tmp2;
+					tmp = tmp->Next;
 				}
 			}
 		}
@@ -903,10 +891,9 @@ void eParticleSystem::MoveSystem(VECTOR3D NewLocation)
 	eParticle *tmp = Start;
 	while (tmp!=0)
 	{
-		eParticle *tmp2 = tmp->Next;
 		// меняем каждой частице
 		tmp->Location += NewLocation-PrevLocation;
-		tmp = tmp2;
+		tmp = tmp->Next;
 	}
 
 
@@ -967,13 +954,12 @@ void eParticleSystem::RotateSystemAndParticlesByAngle(VECTOR3D NewAngle)
 	eParticle *tmp = Start;
 	while (tmp!=0)
 	{
-		eParticle *tmp2 = tmp->Next;
 		// меняем каждой частице
 		VECTOR3D TMP = tmp->Location - Location;
 		Matrix33CalcPoint(&TMP, OldInvRotationMat);
 		Matrix33CalcPoint(&TMP, CurrentRotationMat);
 		tmp->Location = TMP + Location;
-		tmp = tmp2;
+		tmp = tmp->Next;
 	}
 }
 
@@ -998,7 +984,6 @@ void eParticleSystem::RotateParticlesByAngle(VECTOR3D NewAngle)
 	eParticle *tmp = Start;
 	while (tmp!=0)
 	{
-		eParticle *tmp2 = tmp->Next;
 		// меняем каждой частице
 		VECTOR3D TMP = tmp->Location - Location;
 		Matrix33CalcPoint(&TMP, TmpOldInvRotationMat);
@@ -1006,7 +991,7 @@ void eParticleSystem::RotateParticlesByAngle(VECTOR3D NewAngle)
 		Matrix33CalcPoint(&TMP, TmpRotationMat);
 		Matrix33CalcPoint(&TMP, CurrentRotationMat);
 		tmp->Location = TMP + Location;
-		tmp = tmp2;
+		tmp = tmp->Next;
 	}
 
 }
@@ -1026,10 +1011,9 @@ void eParticleSystem::StopAllParticles()
 	eParticle *tmp = Start;
 	while (tmp!=0)
 	{
-		eParticle *tmp2 = tmp->Next;
 		// меняем каждой частице
 		tmp->Velocity = VECTOR3D(0.0f,0.0f,0.0f);
-		tmp = tmp2;
+		tmp = tmp->Next;
 	}
 }
 
@@ -1044,9 +1028,8 @@ void eParticleSystem::ChangeSpeed(VECTOR3D Vel)
 	eParticle *tmp = Start;
 	while (tmp!=0)
 	{
-		eParticle *tmp2 = tmp->Next;
 		// меняем каждой частице
 		tmp->Velocity += Vel;
-		tmp = tmp2;
+		tmp = tmp->Next;
 	}
 }

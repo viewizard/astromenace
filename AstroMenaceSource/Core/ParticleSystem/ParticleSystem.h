@@ -85,8 +85,6 @@ public:
 
 	// кол-во создаваемых частиц в секунду
 	int		ParticlesPerSec;
-	// кол-во частиц активных в настоящий момент
-	int		ParticlesAlive;
 	// сколько создавать
 	int ParticlesCreated;
 
@@ -161,6 +159,7 @@ public:
 	// подвязка к динамическому массиву
 	eParticle * Start;
 	eParticle * End;
+	int		ParticlesCount;
 	void Attach(eParticle * NewParticle);
 	void Detach(eParticle * OldParticle);
 	// указатели на цепь систем, для менеджера
