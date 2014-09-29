@@ -380,6 +380,7 @@ void Loop_Proc()
 		char SaveFileName[MAX_PATH];
 
 		strcpy(SaveFileName, ScreenshotDir);
+		strcat(SaveFileName, "/AstroMenaceScreenshot");
 
 		char res[128];
 		sprintf(res,"%4.1f",SDL_GetTicks()/1000.0f);

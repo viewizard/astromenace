@@ -37,6 +37,14 @@
 #endif // not use_SDL2
 
 
+
+#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
+#include <unistd.h>
+#include <pwd.h>
+#endif // unix
+
+
+
 //------------------------------------------------------------------------------------
 // настройки
 //------------------------------------------------------------------------------------
@@ -76,8 +84,7 @@ SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = 0;
 //------------------------------------------------------------------------------------
 // полное путь к программе
 char ProgrammDir[MAX_PATH];
-char VFSFileNamePath1[MAX_PATH];
-char VFSFileNamePath2[MAX_PATH];
+char VFSFileNamePath[MAX_PATH];
 // полное имя для файла конфигурации игры
 char ConfigFileName[MAX_PATH];
 // для сохранения скриншотов
@@ -420,8 +427,7 @@ int main( int argc, char **argv )
 	strcat( ProgrammDir, Fi );
 
 	ZeroMemory(ConfigFileName, sizeof(ConfigFileName));
-	ZeroMemory(VFSFileNamePath1, sizeof(VFSFileNamePath1));
-	ZeroMemory(VFSFileNamePath2, sizeof(VFSFileNamePath2));
+	ZeroMemory(VFSFileNamePath, sizeof(VFSFileNamePath));
 	ZeroMemory(ScreenshotDir, sizeof(ScreenshotDir));
 
 	// Получаем данные, где папка пользователя
@@ -482,15 +488,20 @@ int main( int argc, char **argv )
 		strcat(ScreenshotDir, "AstroMenaceScreenshot");
 	}
 
-	strcpy(VFSFileNamePath1, ProgrammDir);
-	strcat(VFSFileNamePath1, "gamedata.vfs");
-	strcpy(VFSFileNamePath2, ProgrammDir);
-	strcat(VFSFileNamePath2, "gamedata_cc.vfs");
+	strcpy(VFSFileNamePath, ProgrammDir);
+	strcat(VFSFileNamePath, "gamedata.vfs");
 #elif defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 	// иним пути для юникса-линукса
 	// если передали параметр-путь
 
 	const char* HomeEnv = getenv("HOME");
+	if (HomeEnv == 0)
+	{
+		fprintf(stderr, "$HOME is not set, will use getpwuid() and getuid() for home folder detection.\n");
+		struct passwd *pw = getpwuid(getuid());
+		if (pw != 0) HomeEnv = pw->pw_dir;
+		else fprintf(stderr, "Can't detect home folder. Note, this could occur segfault issue, if yours distro don't support XDG Base Directory Specification.\n");
+	}
 
 	bool dirpresent = false;
 	for (int i=1; i<argc; i++)
@@ -499,12 +510,12 @@ int main( int argc, char **argv )
 		{
 			dirpresent = true;
 			// если передали относительный путь в папку пользователя с тильдой
-			if (argv[i][sizeof("--dir")] != '~')
+			if ((argv[i][sizeof("--dir")] != '~') || (HomeEnv == 0))
 				strcpy(ProgrammDir, argv[i]+strlen("--dir="));
 			else
 			{
-				strcpy(ProgrammDir, HomeEnv);// -1, это тильда... а в кол-ве нет, т.к. /0 там должен остаться
-				strcat(ProgrammDir, argv[i]+strlen("--dir=")+1);
+				strcpy(ProgrammDir, HomeEnv);
+				strcat(ProgrammDir, argv[i]+strlen("--dir=~"));
 			}
 			// если в конце нет слеша - ставим его
 			if (ProgrammDir[strlen(ProgrammDir)-1] != '/')
@@ -526,39 +537,50 @@ int main( int argc, char **argv )
 	}
 
 
-	strcpy(ScreenshotDir, HomeEnv);
-	strcat(ScreenshotDir, "/Desktop/AstroMenaceScreenshot");
-
-	strcpy(VFSFileNamePath1, ProgrammDir);
-	strcat(VFSFileNamePath1, "gamedata.vfs");
-	strcpy(VFSFileNamePath2, ProgrammDir);
-	strcat(VFSFileNamePath2, "gamedata_cc.vfs");
+	strcpy(VFSFileNamePath, ProgrammDir);
+	strcat(VFSFileNamePath, "gamedata.vfs");
 
 
-	// first at all we need check XDG_CONFIG_HOME environment variable
-	const char* ConfigHomeEnv = getenv("XDG_CONFIG_HOME");
-	if (ConfigHomeEnv != 0)
+	if (!NeedPack)
 	{
-		strcpy(ConfigFileName, ConfigHomeEnv);
-		strcat(ConfigFileName, "/astromenace");
-	}
-	else
-	{
-		// game config file will be stored in "~/.config/astromenace" folder
-		// if system have "~/.config" folder, otherwise in "~/.astromenace" folder
-		strcpy(ConfigFileName, HomeEnv);
-		char ConfigDirCheck[MAX_PATH];
-		strcpy(ConfigDirCheck, HomeEnv);
-		strcat(ConfigDirCheck, "/.config");
-		struct stat st;
-		if (stat(ConfigDirCheck,&st) == 0)
-			strcat(ConfigFileName, "/.config/astromenace");
+		// first at all we need check XDG_DESKTOP_DIR environment variable
+		const char* DesktopDirEnv = getenv("XDG_DESKTOP_DIR");
+		if (DesktopDirEnv != 0)
+		{
+			strcpy(ScreenshotDir, DesktopDirEnv);
+		}
 		else
-			strcat(ConfigFileName, "/.astromenace");
-	}
+		{
+			strcpy(ScreenshotDir, HomeEnv);
+			strcat(ScreenshotDir, "/Desktop/");
+		}
 
-	if (!NeedPack) mkdir(ConfigFileName, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
-	strcat(ConfigFileName, "/amconfig.xml");
+
+		// first at all we need check XDG_CONFIG_HOME environment variable
+		const char* ConfigHomeEnv = getenv("XDG_CONFIG_HOME");
+		if (ConfigHomeEnv != 0)
+		{
+			strcpy(ConfigFileName, ConfigHomeEnv);
+			strcat(ConfigFileName, "/astromenace");
+		}
+		else
+		{
+			// game config file will be stored in "~/.config/astromenace" folder
+			// if system have "~/.config" folder, otherwise in "~/.astromenace" folder
+			strcpy(ConfigFileName, HomeEnv);
+			char ConfigDirCheck[MAX_PATH];
+			strcpy(ConfigDirCheck, HomeEnv);
+			strcat(ConfigDirCheck, "/.config");
+			struct stat st;
+			if (stat(ConfigDirCheck,&st) == 0)
+				strcat(ConfigFileName, "/.config/astromenace");
+			else
+				strcat(ConfigFileName, "/.astromenace");
+		}
+
+		mkdir(ConfigFileName, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+		strcat(ConfigFileName, "/amconfig.xml");
+	}
 
 #endif // unix
 
@@ -613,12 +635,12 @@ int main( int argc, char **argv )
 			{
 #if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 				// если передали относительный путь в папку пользователя с тильдой
-				if (argv[i][sizeof("--rawdata")] != '~')
+				if ((argv[i][sizeof("--rawdata")] != '~') || (HomeEnv == 0))
 					strcpy(RawDataDir, argv[i]+strlen("--rawdata="));
 				else
 				{
-					strcpy(RawDataDir, HomeEnv);// -1, это тильда... а в кол-ве нет, т.к. /0 там должен остаться
-					strcat(RawDataDir, argv[i]+strlen("--rawdata=")+1);
+					strcpy(RawDataDir, HomeEnv);
+					strcat(RawDataDir, argv[i]+strlen("--rawdata=~"));
 				}
 #elif defined(WIN32)
 				// если есть двоеточия после второго символа - это полный путь с указанием девайса
@@ -655,18 +677,11 @@ int main( int argc, char **argv )
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// подключаем VFS
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (vw_OpenVFS(VFSFileNamePath1, GAME_BUILD) != 0)
+	if (vw_OpenVFS(VFSFileNamePath, GAME_BUILD) != 0)
 	{
 		fprintf(stderr, "gamedata.vfs file not found or corrupted.\n");
 		return 0;
 	}
-#ifdef separate_cc_vfs
-	if (vw_OpenVFS(VFSFileNamePath2, 0) != 0)
-	{
-		fprintf(stderr, "gamedata_cc.vfs file not found or corrupted.\n");
-		return 0;
-	}
-#endif // separate_cc_vfs
 	printf("\n");
 
 

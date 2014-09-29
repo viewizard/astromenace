@@ -29,7 +29,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION	 	"1.3.3 svn"
-#define GAME_BUILD			140916
+#define GAME_BUILD			140929
 
 
 
@@ -106,15 +106,6 @@
 
 
 
-
-
-
-
-
-// Since game use content released under different licenses (GPL v3, OFL v1.1, CC BY-SA v3.0),
-// you might need create separate VFS game data file (gamedata_cc.vfs) with CC BY-SA licensed content only.
-// If not defined, all content merged into one VFS game data file (gamedata.vfs)
-// #define separate_cc_vfs
 
 
 
