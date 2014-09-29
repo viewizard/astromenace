@@ -38,13 +38,18 @@
 int ConvertFS2VFS(char RawDataDir[MAX_PATH]);
 
 
+#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
+#include <unistd.h>
+#include <pwd.h>
+#endif // unix
+
+
 //------------------------------------------------------------------------------------
 // пути к файлам
 //------------------------------------------------------------------------------------
 // полное путь к программе
 char ProgrammDir[MAX_PATH];
-char VFSFileNamePath1[MAX_PATH];
-char VFSFileNamePath2[MAX_PATH];
+char VFSFileNamePath[MAX_PATH];
 
 
 
@@ -64,19 +69,22 @@ int main( int argc, char **argv )
 	strcat( ProgrammDir, Fi );
 
 	ZeroMemory(DatFileName, sizeof(DatFileName));
-	ZeroMemory(VFSFileNamePath1, sizeof(VFSFileNamePath1));
-	ZeroMemory(VFSFileNamePath2, sizeof(VFSFileNamePath2));
+	ZeroMemory(VFSFileNamePath, sizeof(VFSFileNamePath));
 
-	strcpy(VFSFileNamePath1, ProgrammDir);
-	strcat(VFSFileNamePath1, "gamedata.vfs");
-	strcpy(VFSFileNamePath2, ProgrammDir);
-	strcat(VFSFileNamePath2, "gamedata_cc.vfs");
+	strcpy(VFSFileNamePath, ProgrammDir);
+	strcat(VFSFileNamePath, "gamedata.vfs");
 #elif defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 	// иним пути для юникса-линукса
 	// если передали параметр-путь
 
-	const char* key = "HOME";
-	const char* homeval = getenv(key);
+	const char* homeval = getenv("HOME");
+	if (homeval == 0)
+	{
+		fprintf(stderr, "$HOME is not set, will use getpwuid() and getuid() for home folder detection.\n");
+		struct passwd *pw = getpwuid(getuid());
+		if (pw != 0) homeval = pw->pw_dir;
+		else fprintf(stderr, "Can't detect home folder. Note, this could occur segfault issue, if yours distro don't support XDG Base Directory Specification.\n");
+	}
 
 	bool dirpresent = false;
 	for (int i=1; i<argc; i++)
@@ -85,12 +93,12 @@ int main( int argc, char **argv )
 		{
 			dirpresent = true;
 			// если передали относительный путь в папку пользователя с тильдой
-			if (argv[i][sizeof("--dir")] != '~')
+			if ((argv[i][sizeof("--dir")] != '~') || (HomeEnv == 0))
 				strcpy(ProgrammDir, argv[i]+strlen("--dir="));
 			else
 			{
-				strcpy(ProgrammDir, homeval);// -1, это тильда... а в кол-ве нет, т.к. /0 там должен остаться
-				strcat(ProgrammDir, argv[i]+strlen("--dir=")+1);
+				strcpy(ProgrammDir, homeval);
+				strcat(ProgrammDir, argv[i]+strlen("--dir=~"));
 			}
 			// если в конце нет слеша - ставим его
 			if (ProgrammDir[strlen(ProgrammDir)-1] != '/')
@@ -111,10 +119,8 @@ int main( int argc, char **argv )
 #endif // DATADIR
 	}
 
-	strcpy(VFSFileNamePath1, ProgrammDir);
-	strcat(VFSFileNamePath1, "gamedata.vfs");
-	strcpy(VFSFileNamePath2, ProgrammDir);
-	strcat(VFSFileNamePath2, "gamedata_cc.vfs");
+	strcpy(VFSFileNamePath, ProgrammDir);
+	strcat(VFSFileNamePath, "gamedata.vfs");
 
 #endif // unix
 
@@ -182,12 +188,12 @@ int main( int argc, char **argv )
 			{
 #if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 				// если передали относительный путь в папку пользователя с тильдой
-				if (argv[i][sizeof("--rawdata")] != '~')
+				if ((argv[i][sizeof("--rawdata")] != '~') || (HomeEnv == 0))
 					strcpy(RawDataDir, argv[i]+strlen("--rawdata="));
 				else
 				{
-					strcpy(RawDataDir, homeval);// -1, это тильда... а в кол-ве нет, т.к. /0 там должен остаться
-					strcat(RawDataDir, argv[i]+strlen("--rawdata=")+1);
+					strcpy(RawDataDir, homeval);
+					strcat(RawDataDir, argv[i]+strlen("--rawdata=~"));
 				}
 #elif defined(WIN32)
 				// если есть двоеточия после второго символа - это полный путь с указанием девайса
@@ -641,37 +647,6 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 	strcat(ModelsPackFile, "MODELS/models.pack");
 
 
-#ifdef separate_cc_vfs
-
-	SDL_RWops *MPFile = SDL_RWFromFile(ModelsPackFile, "rb");
-    if (MPFile == NULL)
-    {
-       fprintf(stderr, "models.pack file not found or corrupted.\n");
-		return -1;
-    }
-
-	SDL_RWseek(MPFile, 0, SEEK_END);
-	int filedatasize = SDL_RWtell(MPFile);
-	SDL_RWseek(MPFile, 0, SEEK_SET);
-
-	BYTE *filedata = new BYTE[filedatasize];
-	SDL_RWread(MPFile, filedata, 1, filedatasize);
-	SDL_RWclose(MPFile);
-
-
-	MPFile = SDL_RWFromFile(VFSFileNamePath2, "wb");
-    if (MPFile == NULL)
-    {
-        printf("Can't open VFS file for write %s\n", VFSFileNamePath2);
-        return -1; // ERROR
-    }
-	SDL_RWwrite(MPFile, filedata, filedatasize, 1);
-	SDL_RWclose(MPFile);
-
-	delete [] filedata;
-
-#else
-
 	if (vw_OpenVFS(ModelsPackFile, 0) != 0)
 	{
 		fprintf(stderr, "models.pack file not found or corrupted.\n");
@@ -726,14 +701,12 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 
 	vw_ShutdownVFS();
 
-#endif // separate_cc_vfs
-
 
 
 
 
 	// создаем новый файл VFS
-	vw_CreateVFS(VFSFileNamePath1, GAME_BUILD);
+	vw_CreateVFS(VFSFileNamePath, GAME_BUILD);
 
 
 	// используем не авто поиск по дирректориям, как было, а заранее сформированный список
@@ -743,7 +716,6 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 
 
 
-#ifndef separate_cc_vfs
 	// добавляем файлы из пакета 3д моделей
 	for (int i=0; i<ModelsPackListCount; i++)
 	{
@@ -763,7 +735,6 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 	delete [] filedata;
 	delete [] filename;
 	delete [] filedatasize;
-#endif // separate_cc_vfs
 
 
 	char SrcFileName[MAX_PATH];
