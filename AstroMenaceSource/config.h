@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2014 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2016 Mikhail Kurinnoi, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION	 	"1.3.3 svn"
-#define GAME_BUILD			140929
+#define GAME_BUILD			160125
 
 
 

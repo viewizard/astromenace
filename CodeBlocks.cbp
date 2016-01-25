@@ -11,7 +11,7 @@
 				<Option working_dir="../" />
 				<Option object_output="../build/objs2" />
 				<Option deps_output="../build/deps" />
-				<Option type="1" />
+				<Option type="0" />
 				<Option compiler="gcc" />
 				<Option projectResourceIncludeDirsRelation="1" />
 				<Compiler>
@@ -40,10 +40,10 @@
 			</Target>
 			<Target title="Linux GCC libSDL2">
 				<Option output="../AstroMenace" prefix_auto="0" extension_auto="0" />
-				<Option working_dir="../" />
+				<Option working_dir=".." />
 				<Option object_output="../build/objs2" />
 				<Option deps_output="../build/deps" />
-				<Option type="1" />
+				<Option type="0" />
 				<Option compiler="gcc" />
 				<Option projectResourceIncludeDirsRelation="1" />
 				<Compiler>
