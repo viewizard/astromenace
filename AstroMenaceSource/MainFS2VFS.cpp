@@ -93,7 +93,7 @@ int main( int argc, char **argv )
 		{
 			dirpresent = true;
 			// если передали относительный путь в папку пользователя с тильдой
-			if ((argv[i][sizeof("--dir")] != '~') || (HomeEnv == 0))
+			if ((argv[i][sizeof("--dir")] != '~') || (homeval == 0))
 				strcpy(ProgrammDir, argv[i]+strlen("--dir="));
 			else
 			{
@@ -188,7 +188,7 @@ int main( int argc, char **argv )
 			{
 #if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 				// если передали относительный путь в папку пользователя с тильдой
-				if ((argv[i][sizeof("--rawdata")] != '~') || (HomeEnv == 0))
+				if ((argv[i][sizeof("--rawdata")] != '~') || (homeval == 0))
 					strcpy(RawDataDir, argv[i]+strlen("--rawdata="));
 				else
 				{
