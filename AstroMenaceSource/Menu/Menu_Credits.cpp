@@ -1,7 +1,7 @@
 /************************************************************************************
 
 	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-	Copyright © 2006-2014 Michael Kurinnoy, Viewizard
+	Copyright (c) 2006-2016 Mikhail Kurinnoi, Viewizard
 
 
 	AstroMenace is free software: you can redistribute it and/or modify
@@ -64,10 +64,10 @@ void CreditsMenu()
 	if (Y1 > 300) {ttt = (650 - Y1) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y1 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, ttt*MenuContentTransp, vw_GetText("10_PROJECT_LEADER"));
-	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Michael_Kurinnoy")))/2;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Mikhail_Kurinnoi")))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Michael_Kurinnoy"));
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Mikhail_Kurinnoi"));
 
 
 
@@ -149,10 +149,10 @@ void CreditsMenu()
 	if (Y1 > 300) {ttt = (650 - Y1) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y1 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
 	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, ttt*MenuContentTransp, vw_GetText("10_SOUND_EFFECTS"));
-	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Michael_Sirotkin")))/2;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Mikhail_Sirotkin")))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Michael_Sirotkin"));
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Mikhail_Sirotkin"));
 	Y1 += Offset1;
 	Y2 += Offset1;
 	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Alexander_Matchugovsky")))/2;
@@ -215,10 +215,10 @@ void CreditsMenu()
 	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Bernd_Dau_(de)"));
 	Y1 += Offset1;
 	Y2 += Offset1;
-	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Michael_Kurinnoy_(en,_ru)")))/2;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Mikhail_Kurinnoi_(en,_ru)")))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Michael_Kurinnoy_(en,_ru)"));
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, vw_GetText("10_Mikhail_Kurinnoi_(en,_ru)"));
 	Y1 += Offset1;
 	Y2 += Offset1;
 	SizeI = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("10_Jacek_Fiedorowicz_(pl)")))/2;
@@ -616,7 +616,7 @@ void CreditsMenu()
 	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Copyright © 2007-2013, Viewizard"))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
 	else {ttt = (Y2 - 100) /100.0f; if (ttt < 0.0f) ttt = 0.0f;}
-	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Copyright © 2007-2014, Viewizard");
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Copyright © 2007-2016, Viewizard");
 	Y2 += Offset1;
 	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("http://www.viewizard.com"))/2;
 	if (Y2 > 300) {ttt = (650 - Y2) /100.0f; if (ttt > 1.0f) ttt = 1.0f;}
