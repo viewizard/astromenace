@@ -1,7 +1,7 @@
 AstroMenace Source Code
 
 AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-Copyright (c) 2006-2014 Michael Kurinnoy, Viewizard
+Copyright (c) 2006-2016 Mikhail Kurinnoi, Viewizard
 
 
 AstroMenace is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ E-mail: viewizard@viewizard.com
 
 Please note, source code folder contain GLext.h file
 (AstroMenaceSource/Core/RendererInterface/ folder).
-Copyright (c) 2007-2013 The Khronos Group Inc.
+Copyright (c) 2013-2015 The Khronos Group Inc.
 License: Expat
 
 
@@ -40,12 +40,12 @@ AstroMenace Data
 
 This file contains precompiled into AstroMenace game format 3D models and 
 textures created by Max Shelekhov, 3drt.com. "models.pack" file is released 
-under Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0) license 
+under Creative Commons Attribution-ShareAlike 4.0 (CC BY-SA 4.0) license 
 (see RAW_VFS_DATA/MODELS/ReadMe.txt or 
-<http://creativecommons.org/licenses/by-sa/3.0/legalcode>).
+<http://creativecommons.org/licenses/by-sa/4.0/legalcode>).
 Hint: uncomment "#define separate_cc_vfs" line in config.h file before 
 game code compilation, if you need separate virtual file system 
-(gamedata_cc.vfs file) for CC BY-SA 3.0 licensed content, otherwise, all 
+(gamedata_cc.vfs file) for CC BY-SA 4.0 licensed content, otherwise, all 
 game data will be stored in main virtual file system (gamedata.vfs file).
 
 
