@@ -424,8 +424,8 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	{
 		OpenGL_DevCaps.ShaderModel = 2.0f;
 	}
-	// If a card supports GL_NV_vertex_program3 or GL_ATI_shader_texture_lod it it supports Shader Model 3.0.
-	if (ExtensionSupported("GL_NV_vertex_program3") || ExtensionSupported("GL_ATI_shader_texture_lod"))
+	// If a card supports GL_NV_vertex_program3 or GL_ARB_shader_texture_lod/GL_ATI_shader_texture_lod it supports Shader Model 3.0.
+	if (ExtensionSupported("GL_ARB_shader_texture_lod") || ExtensionSupported("GL_NV_vertex_program3") || ExtensionSupported("GL_ATI_shader_texture_lod"))
 	{
 		OpenGL_DevCaps.ShaderModel = 3.0f;
 	}
