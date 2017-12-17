@@ -616,7 +616,9 @@ bool vw_LinkShaderProgram(eGLSL *GLSL)
     vw_PrintProgramInfoLog(GLSL->Program);
 
     if (!linked)
+    {
         return false;
+    }
 
 	return true;
 }
