@@ -1,6 +1,12 @@
+# AstroMenace
+
+Immerse into a decisive battle against tons of cunning foes, face the terrifying bosses and protect your homeland throughout 15 diverse levels of the game. The hardcore gameplay of AstroMenace, packed with pure non-stop action, will become a full scale test for your basic instinct of survival.
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/viewizard/astromenace/master/preview1.jpg" alt="preview"/>
 </p>
+
+The game provides a wide variety of armaments and weapon upgrades for discharging the retributive wrath upon the hordes of enemies, besides it has a great number of improvements for enhancing the defensive abilities of your spaceship. Collect money during the combat and invest them into turning your spaceship into an ultimate weapon of mass destruction.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/viewizard/astromenace/master/preview2.png" alt="preview"/>
@@ -20,8 +26,7 @@ fontconfig (optional), Linux Libertine/Biolinum fonts (optional)
 
 The easy way to get up to date AstroMenace on your computer:
 
-### 1) Make sure all necessary packages with development headers
-   installed in your system: 
+### 1) Make sure all necessary packages with development headers installed in your system: 
 
    gcc (with g++), cmake, make, subversion, libsdl, libogg, libvorbis, openal, 
    alut (freealut), libXinerama, GLU, freetype2, fontconfig
@@ -31,6 +36,7 @@ The easy way to get up to date AstroMenace on your computer:
 $ sudo apt-get install g++ cmake make subversion libsdl1.2-dev
   libogg-dev libvorbis-dev libopenal-dev libXinerama-dev libalut-dev
   libfreetype6-dev libfontconfig1-dev fonts-linuxlibertine
+```
 
 #### For Mageia:
 ```bash
@@ -40,6 +46,7 @@ $ sudo urpmi gcc-c++ cmake make subversion libSDL-devel libogg-devel
 ```
 
 #### For OpenSuse:
+```bash
 $ sudo zypper install gcc-c++ cmake make subversion libSDL-devel
   libogg-devel libvorbis-devel openal-soft-devel libXinerama-devel
   freealut-devel freetype2-devel fontconfig-devel linux-libertine-fonts
@@ -59,9 +66,9 @@ $ sudo pkg_add -r -v gcc cmake subversion sdl libogg libvorbis openal
   libXinerama freealut freetype2 fontconfig linuxlibertine
 ```
 
-For MacOSX 10.5+:
-  Download and install "Command Line Tools for Xcode" or "Xcode".
-  Install HomeBrew package manager: https://brew.sh/
+#### For MacOSX 10.5+:
+Download and install "Command Line Tools for Xcode" or "Xcode".
+Install HomeBrew package manager: https://brew.sh/
 ```bash
 $ brew install cmake sdl subversion libogg libvorbis freealut freetype
 ```
@@ -88,13 +95,13 @@ $ ./AstroMenace --pack --rawdata=./RAW_VFS_DATA
 ```bash
 $ ~/AstroMenace/AstroMenace
 ```
-
-
+<br />
+<br />
 ### Game launch options:
-   /game/bin/folder/AstroMenace [optional parameters]
-   where,
-   /game/bin/folder/AstroMenace - the game executable file
-   optional parameters:
+/game/bin/folder/AstroMenace [optional parameters]
+where,
+/game/bin/folder/AstroMenace - the game executable file
+#### optional parameters:
 ```bash
     --dir=/game/data/folder/ - folder with gamedata.vfs file
     --mouse - launch the game without system cursor hiding.
@@ -103,7 +110,7 @@ $ ~/AstroMenace/AstroMenace
     --rawdata=/game/rawdata/folder/ - folder with game raw data for gamedata.vfs.
     --help - info about all launch options.
 ```
-
+<br />
 For Xinerama/TwinView, use SDL_VIDEO_FULLSCREEN_DISPLAY environment variable if need. 
 The SDL_VIDEO_FULLSCREEN_DISPLAY environment variable set to 0 to place 
 fullscreen/windowed SDL windows on the first Xinerama/TwinView screen by default.
