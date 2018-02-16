@@ -132,7 +132,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	Uint32 Flags = SDL_WINDOW_OPENGL;
 
-	if (FullScreenFlag) Flags |= SDL_WINDOW_FULLSCREEN;
+	if (FullScreenFlag) Flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
 	window_SDL2 = SDL_CreateWindow(Title, CurrentVideoModeX, CurrentVideoModeY, Width, Height, Flags);
 	if (window_SDL2 == NULL)
