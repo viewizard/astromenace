@@ -44,9 +44,9 @@ For MacOSX 10.5+:
   Install HomeBrew package manager: http://mxcl.github.com/homebrew/
 $ brew install cmake sdl subversion libogg libvorbis freealut freetype
 
-2) Checkout svn with latest source files
+2) Clone git with latest source files
 $ cd ~/
-$ svn checkout http://svn.code.sf.net/p/openastromenace/code/ AstroMenace
+$ git clone https://github.com/viewizard/astromenace.git AstroMenace
 
 3) Compile game binary
 $ cd ~/AstroMenace

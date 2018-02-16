@@ -1,7 +1,7 @@
 AstroMenace Source Code
 
 AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
-Copyright (c) 2006-2016 Mikhail Kurinnoi, Viewizard
+Copyright (c) 2006-2018 Mikhail Kurinnoi, Viewizard
 
 
 AstroMenace is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@ along with AstroMenace. If not, see <http://www.gnu.org/licenses/>.
 
 
 Web Site: http://www.viewizard.com/
-Project: http://sourceforge.net/projects/openastromenace/
+Project: https://github.com/viewizard/astromenace
 E-mail: viewizard@viewizard.com
 
 
@@ -95,6 +95,3 @@ Open Font License, Version 1.1"
 with textures), except described above, were created by Viewizard team 
 during AstroMenace development (see "Credits" menu in game for full list of 
 authors) and were released under "GNU GENERAL PUBLIC LICENSE Version 3". 
-You can download package with souce files of these data from 
-http://www.viewizard.com/download/astromenace-artwork-1.3.2.zip or 
-http://sourceforge.net/projects/openastromenace/files/1.3.2/astromenace-artwork-1.3.2.zip

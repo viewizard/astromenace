@@ -19,7 +19,7 @@
 
 
 	Web Site: http://www.viewizard.com/
-	Project: http://sourceforge.net/projects/openastromenace/
+	Project: https://github.com/viewizard/astromenace
 	E-mail: viewizard@viewizard.com
 
 *************************************************************************************/
