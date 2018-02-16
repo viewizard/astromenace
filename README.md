@@ -95,22 +95,3 @@ $ ./AstroMenace --pack --rawdata=./RAW_VFS_DATA
 ```bash
 $ ~/AstroMenace/AstroMenace
 ```
-<br />
-<br />
-### Game launch options:
-/game/bin/folder/AstroMenace [optional parameters]
-where,
-/game/bin/folder/AstroMenace - the game executable file
-#### optional parameters:
-```bash
-    --dir=/game/data/folder/ - folder with gamedata.vfs file
-    --mouse - launch the game without system cursor hiding.
-    --safe-mode - reset all settings not connected to Pilots Profiles at the game start.
-    --pack - pack raw game data to gamedata.vfs file.
-    --rawdata=/game/rawdata/folder/ - folder with game raw data for gamedata.vfs.
-    --help - info about all launch options.
-```
-<br />
-For Xinerama/TwinView, use SDL_VIDEO_FULLSCREEN_DISPLAY environment variable if need. 
-The SDL_VIDEO_FULLSCREEN_DISPLAY environment variable set to 0 to place 
-fullscreen/windowed SDL windows on the first Xinerama/TwinView screen by default.
