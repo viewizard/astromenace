@@ -1,0 +1,756 @@
+0_code;en;de;ru;pl
+0_title;English;Deutsch;Русский;Polski
+;;;;
+1_START_GAME;START GAME;SPIEL STARTEN;НАЧАТЬ ИГРУ;ROZPOCZNIJ GRĘ
+1_TOP_SCORES;TOP SCORES;BESTENLISTE;РЕКОРДЫ;REKORDY
+1_OPTIONS;OPTIONS;OPTIONEN;НАСТРОЙКИ;USTAWIENIA
+1_INFORMATION;INFORMATION;INFORMATION;ИНФОРМАЦИЯ;INFORMACJE
+1_CREDITS;CREDITS;DANKSAGUNGEN;АВТОРЫ;AUTORZY
+1_QUIT;QUIT;ENDE;ВЫХОД;ZAKOŃCZ
+1_YES;YES;JA;ДА;TAK
+1_NO;NO;NEIN;НЕТ;NIE
+1_ERROR;ERROR;FEHLER;ОШИБКА;BŁĄD
+1_CLOSE;CLOSE;SCHLIESSEN;ЗАКРЫТЬ;ZAMKNIJ
+1_DELETE;DELETE;LÖSCHEN;УДАЛИТЬ;SKASUJ
+1_REPAIR;REPAIR;REPARIEREN;РЕМОНТ;NAPRAW
+1_OK;OK;OK;ОК;OK
+1_On;On;An;Вкл;Włączone
+1_Off;Off;Aus;Выкл;Wyłączone
+1_Decrease;Decrease;Verringern;Уменьшить;Zmniejsz
+1_Increase;Increase;Erhöhen;Увеличить;Zwiększ
+1_Video_&_Audio;Video & Audio;Video & Audio;Видео и Аудио;Grafika i Dźwięk
+1_Config_Controls;Config Controls;Tastenbelegung;Управление;Sterowanie
+1_Interface;Interface;Ausblick;Интерфейс;Interfejs
+1_Advanced;Advanced;Erweitert;Специальные;Zaawansowane
+1_MAIN_MENU;MAIN MENU;HAUPTMENÜ;ОСНОВНОЕ МЕНЮ;GŁÓWNE MENU
+1_MISSIONS_LIST;MISSIONS LIST;MISSIONEN LISTE;СПИСОК МИССИЙ;LISTA MISJI
+1_DONATE;DONATE;SPENDEN;ПОДДЕРЖАТЬ;DOTUJ
+1_ORDER_NOW;ORDER NOW;JETZT BESTELLEN;КУПИТЬ СЕЙЧАС;ZAMÓW TERAZ
+1_Arcade;Arcade;Spielhalle;Аркада;Gra
+1_Sim;Sim;Simulation;Симулятор;Symulator
+1_BACK;BACK;ZURÜCK;НАЗАД;POWRÓT
+1_Prev;Prev;Vorh;Пред;Wstecz
+1_Next;Next;Näch;След;Dalej
+1_APPLY;APPLY;ANWENDEN;ПРИНЯТЬ;ZASTOSUJ
+1_Create;Create;Anlegen;Создать;Stwórz
+1_Difficulty;Difficulty;Schwierigkeit;Сложность;Trudność
+1_Delete;Delete;Löschen;Удалить;Skasuj
+1_NEXT;NEXT;WEITER;ДАЛЕЕ;DALEJ
+1_Shipyard;Shipyard;Schiffwerft;Верфь;Stocznia
+1_Workshop;Workshop;Werkstatt;Мастерская;Warsztat
+1_Weaponry;Weaponry;Bewaffnung;Оружейная;Zbrojownia
+1_START;START;START;СТАРТ;START
+1_Info;Info;Info;Инфо;Info
+1_Buy_Ship;Buy Ship;Schiff Kaufen;Купить;Kup Statek
+1_Repair_Hull;Repair Hull;Hülle Reparieren;Ремонт;Napraw Kadłub
+1_Upgrade_Hull;Upgrade Hull;Hülle Aufwerten;Апгрейд;Ulepsz Kadłub
+1_Reload;Reload;Laden;Перезарядить;Przeładuj
+1_Reload_All;Reload All;Laden Alle;Перезарядить Все;Ładuj Broń
+1_Close;Close;Schliessen;Закрыть;Zamknij
+1_Buy;Buy;Kaufen;Купить;Kup
+1_Sell;Sell;Verkaufen;Продать;Sprzedaj
+1_RESTART;RESTART;NEUSTART;РЕСТАРТ;RESTART
+1_RESUME;RESUME;FORTFAHREN;ПРОДОЛЖИТЬ;WZNÓW
+1_GAME_MENU;GAME MENU;SPIEL MENÜ;МЕНЮ ИГРЫ;MENU GRY
+1_Unimplemented;Click to setup;Einrichten;Выбрать;Wybierać
+1_Left;Left;Links;Влево;Lewa
+1_Right;Right;Rechts;Вправо;Prawa
+1_Mission_Complete;Mission Complete;Mission Beendet;Миссия Завершена;Misja Zakończona
+1_Page_Up;Page Up;Seite Rauf;Предыдущая;Wstecz
+1_Page_Down;Page Down;Seite Runter;Следующая;Dalej
+1_Duplicate;Duplicate;Duplikat;Копия;Kopiuj
+1_Change_Profile;Change Profile;Ändern Profil;Изменить Профиль;Zmień Profil
+;;;;
+;;;;
+2_quit_line1;Are you sure you want to quit?;Wollen Sie wirklich aufhören?;Вы уверены, что хотите завершить игру?;Na pewno chcesz zakończyć?
+2_quit_line2;Note: all game data will be saved.;ACHTUNG: Spieldaten werden gesichert.;Текущие настройки будут сохранены.;Uwaga: Stan gry zostanie zapisany.
+2_quit_line3;Note: the current game data will be lost.;ACHTUNG: Spieldaten gehen verloren.;Игровое состояние будет потеряно.;Uwaga: Aktualny stan gry zostanie utracony.
+;;;;
+2_ccprof_line1;Cannot create a Pilot Profile.;Pilot Profil kann nicht angelegt werden.;Невозможно создать Профиль Пилота.;Nie można utworzyć profilu pilota.
+2_ccprof_line2;Tip: you should clear one line first.;Tipp: Lösche zuerst einen anderen.;Удалите один уже имеющийся Профиль.;Wskazówka: Najpierw usuń jedną linię.
+;;;;
+2_delprof_line1;Are you sure you want to delete the Profile?;Sind Sie sicher, das Sie das Profil löschen wollen?;Вы действительно хотите удалить запись?;Na pewno chcesz usunąć profil?
+2_delprof_line2;Note: all Pilot Profile data will be lost.;Hinweis: Alle Daten des Piloten werden gelöscht.;Все данные Профиля будут потеряны.;Uwaga: Dane profilu pilota zostaną utracone.
+;;;;
+2_cnrepair_line1;Not enough money for the full hull repair.;Zuwenig Geld für komplette Instandsetzung.;Полный ремонт корабля невозможен.;Za mało pieniędzy na całkowitą naprawę kadłuba.
+2_cnrepair_line2;Note: Repair has been limited by money.;Hinweis:Hülle wurde nur teilw. repariert.;Ремонт будет ограничен деньгами.;Uwaga: Naprawa ograniczona przez pieniędze.
+;;;;
+2_restart_line1;Are you sure you want to restart the game?;Wollen Sie das Spiel wirklich neu starten?;Вы действительно хотите перезагрузить игру?;Na pewno chcesz zrestartować grę?
+2_restart_line2;Note: the current game data will be lost.;Hinweis: Der aktuelle Spielstand geht verloren.;Текущие данные миссии будут потеряны.;Uwaga: Aktualny stan gry zostanie utracony.
+;;;;
+;;;;
+3_Joystick_DeadZone;Joystick DeadZone;Joystick Neutralzone;Мертвая зона джойстика;Dżojstik MartwaStrefa
+3_Control_Sensitivity;Control Sensitivity;Empfindlichkeitskontrolle;Чувствительность;Czułość kontrolerów
+3_MOUSE;MOUSE;MAUS;МЫШКА;MYSZ
+3_KEYBOARD;KEYBOARD;TASTATUR;КЛАВИАТУРА;KLAWIATURA
+3_JOYSTICK;JOYSTICK;JOYSTICK;ДЖОЙСТИК;DŻOJSTIK
+3_Primary_Attack;Primary Attack;Primärer Angriff;Первичный Огонь;Atak Główny
+3_Secondary_Attack;Secondary Attack;Sekundärer Angriff;Вторичный Огонь;Atak Specjalny
+3_Move_Forward;Move Forward;Vorwärts Bewegen;Движение Вперед;Naprzód
+3_Move_Backward;Move Backward;Rückwärts Bewegen;Движение Назад;Wstecz
+3_Move_Left;Move Left;Links Bewegen;Движение Влево;Lewo
+3_Move_Right;Move Right;Rechts Bewegen;Движение Вправо;Prawo
+3_Enemy_Weapon_Penalty;Enemy Weapon Penalty;Feindlicher Waffenabzug;Штраф Оружия Врага;Kara broni wroga
+3_None;None;Nichts;Нет;Brak
+3_Enemy_Armor_Penalty;Enemy Armor Penalty;Feindlicher Panzerungsabzug;Штраф Защиты Врага;Kara pancerza wroga
+3_Enemy_Targeting_Penalty;Enemy Targeting Penalty;Feindlicher Zielvermögen Abzug;Штраф Наведения Врага;Kara namierzania wroga
+3_Limited_Ammo;Limited Ammo;Begrenzte Munition;Ограниченный Боекомплект;Ograniczona amunicja
+3_Destroyable_Weapon;Destroyable Weapon;Zerstörbare Waffen;Уничтожаемое Оружие;Uszkodzenia broni
+3_SpaceShip_Control_Mode;SpaceShip Control Mode;Raumschiff Steuerungsmodus;Режим Управления Кораблем;Tryb sterowania statku
+3_Weapon_Targeting_Mode;Weapon Targeting Mode;Waffen Zielmodus;Режим Наведения Оружия;Tryb namierzania broni
+3_Not_implemented;Not implemented;Nicht verfügbar;Не задействован;Brak
+3_Screen_Mode;Screen Mode;Bildschirm Modus;Режим Экрана;Tryb Ekranu
+3_Window_Size;Window Size;Fenstergröße;Размер Окна;Rozmiar Okna
+3_Bilinear;Bilinear;Bilinear;Билинейный;Dwuliniowy
+3_Trilinear;Trilinear;Trilinear;Трилинейный;Trójliniowy
+3_Low;Low;Gering;Низкое;Niska
+3_Medium;Medium;Mittel;Среднее;Średnia
+3_High;High;Hoch;Высокое;Wysoka
+3_Disabled;Disabled;Ausgeschaltet;Отключено;Wyłączone
+3_1_Layer;1 Layer;1 Layer;1 Слой;1 Warstwa
+3_2_Layers;2 Layers;2 Layer;2 Слоя;2 Warstwy
+3_3_Layers;3 Layers;3 Layer;3 Слоя;3 Warstwy
+;;;;
+3_Menu_Language;Menu Language;Menü-Sprache;Язык Меню;Język Menu
+3_Keyboard_Layout;Keyboard Layout;Tastatur Layout;Раскладка клавиатуры;Układ Klawiatury
+3_Voice_Language;Voice Language;Stimme Sprache;Голос в Игре;Język Głosu
+3_Language;Language;Sprache;Язык;Język
+3_Menu_Font;Menu Font;Menü-Schriftart;Шрифт Меню;Czcionka Menu
+3_Font_Size;Font Size;Schriftgröße;Размер Шрифта;Rozmiar Czcionki
+3_Tipsandhints_Status;'Tips and hints' Status;'Tipps und Tricks' Stand;Окна 'Советы и подсказки';'Podpowiedzi' Status
+3_Reset;Reset;Reset;Сброс;Reset
+3_FPS_Сounter;FPS Сounter;FPS Zähler;FPS Счетчик;Licznik FPS
+3_Weapon_Panels_View;Weapon Panels View;Ansicht der Waffentafeln;Вид Панелей Оружия;Widok Broni
+3_Full;Full;Voll;Полный;Pełny
+3_Flat;Flat;Flach;Плоский;Płaski
+3_Slim;Slim;Gering;Тонкий;Wąski
+3_Empty_Weapon_Slot;Empty Weapon Slot;Waffe Leerer Schacht;Пустой Oружейный Cлот;Pusty Slot Broni
+3_EMPTY;EMPTY;LEER;ПУСТОЙ;PUSTY
+3_Level;level;schacht;уровень;poziom
+3_Visual_Effects_Quality;Visual Effects Quality;Visuelle Effekte Qualität;Качество Визуальных Эффектов;Jakość Efektów Wizualnych
+3_Shadow_Quality;Shadow Quality;Schatten Qualität;Качество Теней;Jakość Cieni
+3_VSync;Sync to VBlank;Synchronisierung auf VBlank;Вертикальная Синхронизация;Synchronizacja Pionowa
+;;;;
+;;;;
+3_Music_Volume;Music Volume;Musiklautstärke;Громкость Музыки;Głośność Muzyki
+3_Not_available;Not available;Nicht verfügbar;Недоступно;Niedostępna
+3_Sound_Effects_Volume;Sound Effects Volume;Soundeffektlautstärke;Громкость Эффектов;Głośność Efektów
+3_Voice_Volume;Voice Volume;Stimmelautstärke;Громкость Голоса;Głośność Mowy
+3_Full_Screen;Full Screen;Ganzer Bildschirm;Полный Экран;Pełny Ekran
+3_Refresh_Rate;Refresh Rate;Refresh Rate;Частота Обновления;Odświeżanie
+3_Default;Default;Default;По умолчанию;Domyślne
+3_Brightness;Brightness;Helligkeit;Яркость;Jasność
+3_Texture_Filtering_Mode;Texture Filtering Mode;Texture Filter Modus;Режим Вывода Текстуры;Filtrowanie Tekstur
+3_Textures_Quality;Textures Quality;Texture Qualität;Качество Текстур;Jakość Tekstur
+3_Multisample_Antialiasing;Multisample Antialiasing;Multisample Antialiasing;Сглаживание;Wielopróbkowy Antyaliasing
+3_NAME;NAME;NAME;ИМЯ;IMIĘ
+3_SCORE;SCORE;Punkte;СЧЕТ;WYNIK
+3_GAME_OBJECTS_INFORMATION;GAME OBJECTS INFORMATION;Informationen zum Spielziel;ИНФОРМАЦИЯ ОБ ОБЪЕКТАХ;INFORMACJE O OBIEKTACH
+3_Page_%i_of_%i;Page %i of %i;Seite %i von %i;Страница %i из %i;Strona %i z %i
+3_New_Pilot_Profile;New Pilot Profile;Neues Piloten Profile;Новый Профиль Пилота;Nowy Profil Pilota
+3_Pilot_Profile;Pilot Profile;Pilot Profil;Профиль Пилота;Profil Pilota
+3_Pilots_Profiles;Pilots Profiles;Piloten Profile;Профили Пилотов;Profile Pilotów
+3_Money;Money;Geld;Деньги;Gotówka
+3_Experience;Exp;Erfahrung;Опыт;Doś
+3_Difficulty;Difficulty;Schwierigkeit;Сложность;Trudność
+3_empty;empty;Leer;пусто;pusty
+3_Current_Profile_Difficulty;Current Profile Difficulty;Profilschwierigkeit;Сложность Профиля;Trudność Profilu
+3_Weapon_Fire_Control:;Weapon Fire Control:;Waffenfeuerkontrolle:;Основное Управление:;Kontrola Broni:
+3_Alternative_Fire_Control:;Alternative Fire Control:;Alternative Feuerkontrolle:;Вспомогательное:;Alternatywna Kontrola Broni:
+3_Weapon_Angle:_%2.1f;Weapon Angle: %2.1f;Waffenwinkel: %2.1f;Угол Поворота: %2.1f;Kąt Broni: %2.1f
+3_Type;Type;Typ;Тип;Typ
+3_Killed;Killed;Vernichtet;Убито;Zniszczone
+3_Bonus;Bonus;Bonus;Бонус;Bonus
+3_Total;Total;Total;Всего;Ogółem
+3_Textures_Compression;Textures Compression;Texturen Kompression;Компрессия Текстур;Kompresja Tekstur
+3_Mipmap_LOD_Management;Mipmap LOD Management;Mipmap LOD Verwaltung;Управление Мипмеп ЛОД;Zarządzanie Mipmap LOD
+3_OpenGL_Shading_Language;OpenGL Shading Language;OpenGL  Schattierungssprache;OpenGL шейдеры (GLSL);OpenGL Cienie
+3_Point_Lights_per_Object;Point Lights per Object;Anzahl Lichter pro  Objekt;Кол-во Источников Света;Światła na Obiekt
+3_1_Light;1 Light;1 Licht;1 источник;1 Światło
+3_2_Lights;2 Lights;2 Lichter;2 источника;2 Światła
+3_3_Lights;3 Lights;3 Lichter;3 источника;3 Światła
+3_4_Lights;4 Lights;4 Lichter;4 источника;4 Światła
+3_5_Lights;5 Lights;5 Lichter;5 источников;5 Świateł
+3_6_Lights;6 Lights;6 Lichter;6 источников;6 Świateł
+3_Anisotropy_Level;Anisotropy Level;Anisotropie Level;Уровень Анизотропии;Poziom Anizotropii
+3_Aspect_Ration;Aspect Ratio;Aspekt Ratio;Отношение Сторон;Proporcje
+3_Standard;Standard;Standard;Стандарт;Standart
+3_Widescreen;Widescreen;Widescreen;Широкоформат;Panoramiczny
+3_S3TC;S3TC;S3TC;S3TC;S3TC
+3_BPTC;BPTC;BPTC;BPTC;BPTC
+;;;;
+;;;;
+4_Earth_Spaceships;Earth Spaceships;Erdraumschiffe;Корабли;Statki Ziemskie
+4_Space_Mines;Space Mines;Raumminen;Мины;Miny
+4_Space_Mine;Space Mine;Raummine;Космическая Мина;Mina
+4_Auto_Cannon:;Auto Cannon:;Autokannone:;Авто Пушка:;Autodziało:
+4_Auto_Launcher:;Auto Launcher:;Autoraketenwerfer:;Авто Ракетомет:;Autowyrzutnia:
+4_Weapon;Weapon;Waffe;Оружие;Broń
+4_Weapons;Weapons;Waffen;Оружие;Bronie
+4_Weapons_Slots:;Weapons Slots:;Waffenschächte:;Оружейных Слотов:;Sloty Broni:
+4_Alien_Spaceships;Alien Spaceships;Außerirdische;Пришельцы;Statki Obce
+4_Alien_Motherships;Alien Motherships;Mutterschiffe;Носители;Obce Statki Bazy
+4_Pirate_Spaceships;Pirate Spaceships;Piraten;Пираты;Statki Pirackie
+4_Pirate_Vehicles;Pirate Vehicles;Piratenfahrzeuge;Транспорт Пиратов;Pojazdy Pirackie
+4_Pirate_Buildings;Pirate Buildings;Piratenbauten;Постройки Пиратов;Budynki Pirackie
+4_Asteroids;Asteroids;Asteroiden;Астероиды;Asteroidy
+4_Civilian_Buildings;Civilian Buildings;Zivile Bauten;Здания;Budynki Cywilne
+4_Military_Buildings;Military Buildings;Militärbauten;Турели;Budynki Militarne
+4_Wheeled_Vehicles;Wheeled Vehicles;RadFahrzeuge;Автомобили;Pojazdy Kołowe
+4_Tracked_Vehicles;Tracked Vehicles;Kettenfahrzeuge;Танки;Pojazdy Gąsinicowe
+4_Wheeled_Vehicle;Wheeled Vehicle;RadFahrzeuge;Автомобиль;Pojazd Kołowy
+4_Tracked_Vehicle;Tracked Vehicle;Kettenfahrzeuge;Танк;Pojazd Gąsinicowy
+4_Object_Class:;Object Class:;Objektklasse:;Класс:;Klasa:
+4_Space_Ship;Space Ship;Raumschiff;Корабль;Statek
+4_Ship_Type:;Ship Type:;Schiffstyp:;Тип Корабля:;Typ Statku:
+4_Developer:;Developer:;Entwickler:;Разработчик:;Konstruktor:
+4_Earth_Federation;Earth Federation;Erdförderation;Федерация;Federacja Ziemi
+4_Status:;Status:;Status:;Статус:;Status:
+4_Armor:;Armor:;Panzerung:;Защита:;Pancerz:
+4_Indestructible;Indestructible;Unzerstörbar;Неразрушимый;Niezniszczalny
+4_Upgrade_Mk2:;Upgrade Mk2:;Stufe Mk2:;Апгрейд Mk2:;Ulepszenie Mk2:
+4_Upgrade_Mk3:;Upgrade Mk3:;Stufe Mk3:;Апгрейд Mk3:;Ulepszenie Mk3:
+4_Upgrade_Mk4:;Upgrade Mk4:;Stufe Mk4:;Апгрейд Mk4:;Ulepszenie Mk4:
+4_Slots_Levels:;Slots Levels:;Schachtlevel:;Уровни слотов:;Poziomy Slotów:
+4_Codename:;Codename:;Codename:;Кодовое Имя:;Nazwa Kodowa:
+4_Width:;Width:;Breite:;Ширина:;Szerokość:
+4_Length:;Length:;Länge:;Длина:;Długość:
+4_Height:;Height:;Höhe:;Высота:;Wysokość:
+4_Engines:;Engines:;Antriebe:;Двигатели:;Silniki:
+4_Ally;Ally;Allierte;Союзник;Sojusznik
+4_Fighter;Fighter;Jäger;Истребитель;Myśliwiec
+4_Interceptor;Interceptor;Abfangjäger;Перехватчик;Eliminator
+4_Bomber;Bomber;Bomber;Бомбардировщик;Bombowiec
+4_Scout;Scout;Aufklärer;Разведчик;Zwiadowca
+4_Attack_Ship;Attack Ship;Angriffsschiff;Штурмовик;Szturmowiec
+4_Weapon,_Cannon;Weapon, Cannon;Waffe, Kanone;Пушка;Broń, Działo
+4_Weapon,_Launcher;Weapon, Launcher;Waffe, Raketenwerfer;Установка;Broń, Wyrzutnia
+4_Type:;Type:;Typ:;Тип:;Typ:
+4_Damage,_Hull:;Damage, Hull:;Hüllenschaden:;Урон, Корпус:;Uszk., Kadłub:
+4_Damage,_Systems:;Damage, Systems:;Systemschaden:;Урон, Системы:;Uszk., Systemy:
+4_Energy_Use:;Energy Use:;Energieverbrauch:;Расход Энергии:;Zużycie Energii:
+4_Ammo:;Ammo:;Munition:;Боекомплект:;Amunicja:
+4_Reload:;Reload:;Auffüllen:;Перезарядка:;Przeładowanie:
+4_Range:;Range:;Reichweite:;Дальность:;Zasięg:
+4_Kinetic;Kinetic;Kinetisch;Кинетика;Kinetyczna
+4_Ion;Ion;Ionen;Ион;Jonowa
+4_Plasma;Plasma;Plasma;Плазма;Plazmowa
+4_Maser;Maser;Maser;Мазер;Maser
+4_Antimatter;Antimatter;Antimaterie;Тахион;Antymateria
+4_Laser;Laser;Laser;Лазер;Laser
+4_Gauss;Gauss;Gauss;Гаусс;Gauss
+4_Propelled;Propelled;Angetrieben;Ракета;Rakietowa
+4_Unknown;Unknown;Unbekannt;Неизвестно;Nieznany
+4_Enemy;Enemy;Feind;Враг;Wróg
+4_Damage:;Damage:;Schaden:;Урон:;Zniszczenia:
+4_MotherShip;MotherShip;Mutterschiff;Носитель;Statek Baza
+4_Pirate_Ship;Pirate Ship;Piraten;Корабль Пиратов;Statek Piracki
+4_Pirates;Pirates;Piraten;Пираты;Piraci
+4_Marauder;Marauder;Plünderer;Мародер;Maruder
+4_Warder;Warder;Wächter;Страж;Strażnik
+4_Raider;Raider;Gangster;Рейдер;Łupieżca
+4_Carrier;Carrier;Träger;Транспорт;Nosiciel
+4_Missile_Carrier;Missile Carrier;Lenkwaffenträger;Ракетный Транспорт;Nosiciel Rakiet
+4_Freighter;Freighter;Frachter;Фрахтовщик;Frachtowiec
+4_Battle_Freighter;Battle Freighter;Schlachtfrachter;Боевой Фрахтовщик;Frachtowiec Wojenny
+4_Civilian_Building;Civilian Building;Zivilgebäude;Здание;Budynek Cywilny
+4_Old_Republic;Old Republic;Alte Repuplik;Старая Республика;Stara Republika
+4_Military_Building;Military Building;Militärgebäude;Турель;Budynek Militarny
+4_Cannon;Cannon;Kanone;Пушка;Działo
+4_MachineGun;MachineGun;Maschinengewehr;Пулемет;Działo maszynowe
+4_Turbo_Cannon;Turbo Cannon;Turbo Kanone;Турбо Пушка;Turbodziało
+4_Missile_Launcher;Missile Launcher;Lenkwaffenträger;Ракетная Установка;Wyrzutnia Rakiet
+4_Cannon_Turret;Cannon Turret;Kanonenturm;Турель с Пушкой;Wieżyczka Ogniowa
+4_Armored_Jeep;Armored Jeep;Gepanzerter Jeep;Бронированный Джип;Opancerzony Dżip
+4_Jeep;Jeep;Jeep;Джип;Dżip
+4_APC;APC;BAT;БТР;TO
+4_Tank;Tank;Panzer;Танк;Czołg
+4_Engineer;Engineer;Ingenieur;Трактор;Inżynier
+4_Not_combatant;Not combatant;Kein Gegner;Не боеспособен;Niebojowy
+4_System;System;System;Система;System
+4_Spaceship_Engine;Spaceship Engine;Raumschiffantrieb;Двигатель;Silnik Statku
+4_Ion_Resistance:;Ion Resistance:;Ionenresistenz:;Ионная Защита:;Odporność Jonowa:
+4_Engine_Power:;Engine Power:;Antriebsenergie:;Мощность:;Moc Silnika:
+4_Acceleration:;Acceleration:;Beschleunigung:;Ускорение:;Przyspieszenie:
+4_Relations/Dependences:;Relations/Dependences:;Beziehungen/Abhängigkeiten:;Зависимы/Зависят:;Relacje/Zależności:
+4_SpaceShip_Weight;SpaceShip Weight;Raumschiffgewicht;Вес Корабля;Masa Statku
+4_Power_Source;Power Source;Energiequelle;Источник Энергии;Źródło Zasilania
+4_ArcadeModeLine1;Useless with Arcade;Nutzlos im Arcade Modus;Бесполезно в Аркадном;Bezużyteczny w trybie Gry
+4_ArcadeModeLine2;SpaceShip Control Mode.;Raumschiffkontrollmodus.;Режиме Управления Кораблем.;Tryb Kontroli Statku.
+4_ArcadeModeLine3;Weapon Targeting Mode.;Waffenzielmodus.;Режиме Наведения Оружия.;Tryb Namierzania Broni.
+4_Energy_Capacity:;Energy Capacity:;Energie Kapazität:;Емкость:;Pojemność:
+4_Recharge_Rate:;Recharge Rate:;Aufladungsrate:;Перезарядка:;Moc Ładowania:
+4_Weapon_Recharge_Rate;Weapon Recharge Rate;Waffenaufladungsrate;Скорость Перезарядки;Moc Ładowania Broni
+4_Optical_Computer;Optical Computer;Optischer Computer;Компьютер;Komputer Optyczny
+4_Targeting_System;Targeting System;Zielsystem;Наведение;System Namierzania
+4_Advanced_System;Advanced System;Hochentwickeltes System;Защита;System Zaawansowany
+4_Target_Tracing:;Target Tracing:;Zielverfolgung:;Контроль Целей:;Śledzenie Celów:
+4_Auto_Adjustment:;Auto Adjustment:;Auto Anpassung:;Авто Наведение:;Autoskalowanie:
+4_No;No;Nein;Нет;Nie
+4_Yes;Yes;Ja;Да;Tak
+4_Weapon_Fire_Range;Weapon Fire Range;Waffenreichweite;Дальность Стрельбы;Zasięg Broni
+4_Weapon_Orientation;Weapon Orientation;Waffenrichtung;Ориентация Оружия;Orientacja Broni
+4_Orientation_Speed:;Orientation Speed:;Ausrichtungsgeschwindigkeit:;Скорость Поворота:;Prędkość Orientacji:
+4_Hull_Repair_Rate:;Hull Repair Rate:;Hüllenreparaturrate:;Скорость Ремонта:;Tempo Naprawy Kadłuba:
+4_Resistance,_Hull:;Resistance, Hull:;Hüllenresistenz:;Защита, Корпус:;Odporność, Kadłub:
+4_Resistance,_System:;Resistance, System:;Systemresistenz:;Защита, Система:;Odporność, System:
+4_Shield_Power:;Shield Power:;Schild Power:;Мощность Щита:;Moc Osłony:
+4_Hull_Resistance;Hull Resistance;Hüllenresistenz;Защита Корпуса;Odporność Kadłuba
+4_Systems_Resistance;Systems Resistance;Systemresistenz;Защита Систем;Odporność Systemu
+4_SpaceShip_Vitality;SpaceShip Vitality;Raumschiffdynamik;Живучесть Корабля;Żywotność Statku
+4_units;units;Einheiten;юнит;jedn
+4_units_per_shot;units per shot;Einheiten/Schuss;юнит/выстрел;jedn na strz
+4_seconds;seconds;Sekunden;секунд;sekundy
+4_units_per_sec;units per sec;Einheiten/sek;юнит в сек;jedn na sek
+4_object(s);object(s);Objekte(e);объект(ы);obiekt(ów)
+4_deg_per_sec;deg per sec;Grad pro Sek;град в сек;st na sek
+4_per_sec;per sec;pro sek;в секунду;na sek
+4_units/shot;units/shot;Einheiten/Schuss;юнит/выстрел;jedn/strz
+4_units/sec;units/sec;Einheiten/Sek;юнит/сек;jedn/sek
+4_Game_Speed:;Game Speed:;Spielgeschwindigkeit:;Скорость Игры:;Prędkość Gry:
+4_Missile_Detected;Missile Detected;Rakete erkannt;Обнаружена ракета;Wykryto Rakietę
+4_Collision_Course_Detected;Collision Course Detected;Collision Course Erkannt;Высокая Вероятность Столкновения;Wykryto Kurs Kolizyjny
+;;;;
+;;;;
+5_FighterLine1;Fighter is a military spaceship primarily designed to attack other space-;Der Jäger ist ein Raumschiff, welches in erster Linie zum Angriff auf;Истребитель - это военный боевой корабль сконструированный для атаки;Myśliwiec jest statkiem bojowym przeznaczonym głównie do zwalczania innych
+5_FighterLine2;ships. Fighters are comparatively fast, maneuverable and equipped with;andere Raumschiffe konstruiert wurde. Jäger sind beweglich und mit;вражеских кораблей. Истребитель относительно быстр и вооружен;statków. Myśliwce są względnie szybkie, zwrotne i wyposażone
+5_FighterLine3;primary and secondary weapon systems to attack other spaceships.;Primär- und Sekundärwaffen ausgestattet, um andere Raumschiffe anzugreifen.;первичными и вторичными системами ведения огня.;w systemy broni głównej oraz specjalnej do atakowania innych statków.
+;;;;
+5_InterceptorLine1;Interceptor is a type of fighter specifically designed to intercept and;Der Abfangjäger wurde konstruiert um feindliche Raumschiffe;Перехватчик - это специально сконструированные истребители, основной;Eliminator to typ myśliwca specjalnie zaprojektowany do przechwytywania
+5_InterceptorLine2;destroy enemy spaceships. Interceptors are very fast, maneuverable and;abzufangen und zu zerstören. Abfangjäger sind sehr schnell und;задачей которых является перехват вражеских целей. Как правило;i niszczenia wrogich statków. Eliminatory są bardzo szybkie, zwrotne
+5_InterceptorLine3;equipped only with primary weapon systems to attack other spaceships.;beweglich und haben nur Primärwaffen an Bord, um die Feinde zu zerstören.;максимально облегчены и не комплектуются тяжелыми орудиями.;i wyposażone jedynie w systemy broni głównej do atkowania innych statków.
+;;;;
+5_BomberLine1;Bomber is a military spaceship specifically designed to carry bombs, torpedoes;Der Bomber wurde konstruiert um Bomben, Torpedos und Raketen zu transportieren.;Бомбардировщик - это модификация истребителя дальнего действия.;Bombowiec jest statkiem bojowym przeznaczonym specjalnie do przenoszenia bomb,
+5_BomberLine2;and missiles. Bombers are comparatively slow and also equipped with some;Bomber sind ziemlich langsam und haben einige wenige Primärwaffensysteme;Может комплектоваться пусковыми установками для стрельбы ракетами,;torped i rakiet. Bombowce są względnie powolne oraz wyposażone w nieco
+5_BomberLine3;primary weapon systems to defend themselves from enemy spaceships.;zur Selbstverteidigung an Bord um die Angriffe von Raumschiffen abzuwehren.;торпедами и бомбами. Весьма уязвим в ближнем бою.;głównej broni do obrony przed wrogimi statkami.
+;;;;
+5_AttackShipLine1;Attack Ship is a type of bomber specifically designed for long-range;Das Angriffsschiff ist ein Bombertyp, der speziell für weit reichende;Штурмовик - это корабль тактической поддержки десанта при штурме.;Szturmowiec jest typem bombowca przeznaczonym specjalnie do dalekich
+5_AttackShipLine2;raids in small groups, as opposed to a bomber designed to attack;Raubzüge in kleinen Gruppen entwickelt wurde, im Gegenteil zu den Bombern,;Обладает улучшенной комплектацией системами вооружения. Из-за;nalotów w małych grupach, w przeciwieństwie do bombowców zaprojektowanych
+5_AttackShipLine3;under air cover provided by fighters.;die Luftschutz durch Jäger benötigen.;плохой маневренности нуждается в сопровождении истребителями.;do ataku pod osłoną myśliwców.
+;;;;
+5_ScoutLine1;Scout is a spaceship specifically designed to actively gather information;Der Aufklärer ist ein speziell entwickeltes Raumschiff zum sammeln von;Разведчик - это специально сконструированный слабо вооруженный;Zwiadowca to statek przeznaczony specjalnie do aktywnego zbierania informacji
+5_ScoutLine2;about the enemy or other objects by means of physical observation. Scouts;Informationen über den Feind oder die feindlichen Objekte. Aufklärer sind ;корабль. Основная задача Разведчика состоит в быстром сборе;o wrogu bądź innych obiektach przez obserwację. Statki zwiadowcze
+5_ScoutLine3;are very small, fast, and highly maneuverable.;sehr klein, schnell und hoch manöverierfähig.;информации и уничтожении единичных объектов противника.;są bardzo małe, szybkie i niezwykle zwrotne.
+;;;;
+5_KineticLine1;Kinetic is a weapon that forcibly throws projectiles at a target. These projec-;Kinetische Waffen schiessen Projektile auf das Ziel. Diese Projektile haben;Кинетика - оружие разгоняющее и выстреливающее снаряд в цель.;Kinetyczna to broń z mocą wyrzucająca pociski w cel. Pociski te same nie mają
+5_KineticLine2;tiles are not self-propelled. A projectile is an object usually made of a metal;keinen Antrieb. Sie bestehen meistens aus einer verdichteten Metalllegierung.;Как правило, снарядом выступает свинцовая болванка. Иногда содержит;napędu. Pocisk jest obiektem wykonanym zazwyczaj ze stopu metalu.
+5_KineticLine3;alloy. In contrast to a missile, a projectile does not contain explosives.;Im Gegensatz zu den Raketen, enthalten die Projektile keine Sprengkörper.;стальной бронебойный сердечник для причинения большего урона.;W przeciwieństwie do rakiet, pocisk nie zawiera ładunku wybuchowego.
+;;;;
+5_IonLine1;Ion is a particle-beam weapon employing a dual-particle beam array.;Ionenwaffen sind Strahlwaffen, bestehen aus zwei Partikelströmen. Der innere;Ион - пучок электрически заряженных частиц выступающий в качестве;Jony są bronią cząsteczkowo-promienną wykorzystującą dwucząsteczkową
+5_IonLine2;The inner part, or core, is composed of positively charged ions - normally;Teil, oder Kern, besteht aus positiv geladenen Ionen - gewöhnlich Eisennukleide,;снаряда. Способен проникать сквозь корпус корабля вызывая частичные;macierz promieni. Wewnętrzna część lub rdzeń zawiera jony dodatnie - zazwyczaj
+5_IonLine3;iron nuclei, while the outer part is composed of neutral particles.;während sich der äussere Teil aus neutralen Partikeln zusammen setzt.;или полные разрушения внутренних систем.;jądra atomów żelaza zaś część zewnętrzna cząsteczki neutralne.
+;;;;
+5_PlasmaLine1;Plasma is a weapon that forcibly throws highly ionized matter obtained;Plasmawaffen schleudern enorm hoch ionisierte Materie, die entweder durch;Плазма - в качестве снаряда выступает высоко ионизированный материал;Plazma to broń z mocą wyrzucająca wysoce zjonizowaną materię pozyskaną
+5_PlasmaLine2;either by heating some material to very high temperatures or by bombarding;die Erhitzung von irgendeinem Material auf extrem hohe Temperaturen, oder durch;полученный разогреванием материи до сверх высоких температур.;albo przez ogrzanie jakiegoś materiału do bardzo wysokiej temperatury albo
+5_PlasmaLine3;it with a strong flux of high-energy photons.;Bombardierung mit einem starken Strom an Hochenergiephotonen, gewonnen wird.;Совмещает в себе достоинства кинетического и ионного оружия.;też przez silny przepływ fotonów o wielkiej energii.
+;;;;
+5_MaserLine1;Microwave Amplification by Stimulated Emission of Radiation is a weapon;Maserwaffen, erzeugen kohärente elektromagnetische Wellen im Mikrowellen-;Мазер - Microwave Amplification by Stimulated Emission of Radiation. Поражает;Mikrofalowa Amplifikacja przez Stymulowaną Emisję Radiacji to broń z mocą
+5_MaserLine2;that forcibly throws projectile amplifier that produces coherent;bereich. Die Mikrowellen werden mit enormer Energie gerichtet;направленно испускаемым потоком когерентных микроволн. Обладает;wyrzucająca wzmacniacz pocisku wytwarzający spójne mikrofale jako rezultat
+5_MaserLine3;microwaves as the result of stimulated emission.;abgestrahlt. Beim Auftreffen werden damit verherende Wirkungen erzielt.;всеми свойствами лучевого оружия.;stymulowanej emisji.
+;;;;
+5_AntimatterLine1;Antimatter is a weapon that forcibly throws matter consisting of;Antimateriewaffen senden wie alle Partikelwaffen Teilchenströme aus. Diese;Тахион - пучок нестабильных частиц обладающих скоростью выше скорости;Antymateria to broń z mocą wyrzucająca materię składającą się
+5_AntimatterLine2;antiparticles, elementary particles of ordinary matter, such as protons and;Antipartikel sind aber anders herum geladen, dadurch haben die Protonen und;света. Для увеличения термо-энергетического поражающего воздействия,;z antycząsteczek, elementarnych cząstek zwyczajnej materii takiej jak protony
+5_AntimatterLine3;electrons, but having an opposite electrical charge.;Elektronen eine extrem verherende Wirkung beim Auftreffen auf normale Materie.;скорость частиц снижена до скорости света.;i elektrony, ale o przeciwnym ładunku elektrycznym.
+;;;;
+5_LaserLine1;Light Amplification by Stimulated Emission of Radiation. A high-energy light;Laserwaffen funktionieren durch Lichtverstärkung durch stimulierte Emission.;Лазер - Light Amplification by Stimulated Emission of Radiation. Высоко;Laserowa Amplifikacja przez Stymulowaną Emisję Radiacji. Wysokoenergetyczne
+5_LaserLine2;source that uses light emitted by the natural vibrations of atoms (in gas;Eine Hochenergie Lichtquelle ist der Ausgangspunkt um beliebige Materialien;энергетический источник света использующий излучения естественных;światło emitowane z naturalnej wibracji atomów (w gazie lub ciałach stałych)
+5_LaserLine3;or solid material) to cut, burn or dissolve materials for various purposes.;mit militärischen Umfeld zu zerschneiden bzw. zu verdampfen zu lassen.;вибраций атомов газообразных или твердых тел.;do cięcia, spalania lub rozpuszczania materiałów w różnych celach.
+;;;;
+5_GaussLine1;Gauss is a weapon that forcibly throws projectiles that operate on;Gauss ist ein Waffensystem, welches subatomare Projektile mit extrem hoher;Гаусс - в качестве снаряда выступает активная материя, оперирующая на;Gauss to broń z mocą wyrzucająca pociski operujące na poziomie subatomowym
+5_GaussLine2;the subatomic level of any matter they are used against by disintegrating;Geschwindigkeit auf das Ziel feuert. Dort kommt es zur sofortigen;субатомном уровне. При попадании в цель дезинтегрирует часть материи;każdej materii przeciwko, której zostaną użyte przez dezintegrację molekuł
+5_GaussLine3;the molecules of the target.;Desintegration der Moleküle.;цели сопоставимую с материей снаряда.;celu.
+;;;;
+5_MissileLine1;Missile is a self-propelled explosive projectile moving due to the ejection;Raketen haben einen Antrieb beruhend auf dem Rückstoßprinzip. Der;Ракета - это беспилотный летательный аппарат однократного;Rakieta jest samonapędzającym się pociskiem wybuchowym poruszanym za sprawą
+5_MissileLine2;of matter, especially the high-velocity ejection of gaseous combustion;Brennstoff erzeugt riesige Mengen an Gasen die mit sehr hoher;запуска, оснащённый крыльями-стабилизаторами, системой наведения;wyrzucanej materii, szczególnie wyrzucanych z wielką prędkością spalin gazowych
+5_MissileLine3;products produced by the internal ignition of solid or liquid fuel.;Geschwindigkeit ausgestossen werden und dadurch das Geschoss antreiben.;и кислородно-реактивным двигателем.;powstałych w wyniku wewnętrznego zapłonu stałego bądź ciekłego paliwa.
+;;;;
+5_TorpedoLine1;Torpedo is a self-propelled explosive projectile that (after being launched);Torpedos sind angetriebene Projektile, die nach dem Abschuss automatisch;Торпеда - это самодвижущееся оружие (снаряд). Оснащается мощным;Torpeda to samonapędzający się pocisk wybuchowy, który (po wystrzeleniu)
+5_TorpedoLine2;operates automatically and is designed to detonate on contact or in proximity;gesteuert werden. Sie tragen eine große Menge an Explosivstoffen, die bei;зарядом взрывчатого вещества. Как правило, настроена на детонацию;operuje automatycznie i jest zaprojektowany do dentonacji przy kontakcie
+5_TorpedoLine3;to the target.;Kontakt, oder Annäherung automatisch im Ziel explodieren.;при столкновении с кораблем противника.;z celem lub w jego pobliżu.
+;;;;
+5_NukeBombLine1;Nuke Bomb is a self-propelled explosive nuclear projectile that uses;Atombomben sind angetriebene Nuklearprojektile, die mittels ;Бомба - это самодвижущееся оружие (снаряд). Оснащается мощным;Bomba Nuklearna to samonapędzający się pocisk atomowy używający fuzji
+5_NukeBombLine2;nuclear fusion to release energy stored in the nuclei of hydrogen isotopes.;Wasserstofffusion eine heftige Kettenreaktion auslösen. Diese Bombe;ядерным зарядом. Как правило, настроена на детонацию при;nuklearnej celem wyzwolenia energi zmagazynowanej w jądrach izotopów wodoru.
+5_NukeBombLine3;This bomb is designed to detonate on contact or in proximity to the target.;ist konstruiert, um bei Kontakt oder Annäherung ans Ziel zu explodieren.;столкновении с кораблем противника.;Bomba detonuje przy kontakcie z celem lub w jego pobliżu.
+;;;;
+5_MineLine1;Space Mine is an explosive device, usually some kind of container filled with;Raummine werden üblicherweise in einem Behälter angefüllt mit Sprengstoff ;Космическая Мина - это боеприпас, установленный в космосе и предназна-;Mina jest urządzeniem wybuchowym, zazwyczaj jakimś pojemnikiem wypełnionym
+5_MineLine2;explosive material, designed to cause destruction when set off. The explosion;geliefert, die nach dem aussetzen scharfgeschaltet werden und üblicherweise ;ченный для поражения кораблей противника, а также для затруднения;materiałem wybuchowym, powodującym zniszczenia przy aktywacji. Eksplozja miny
+5_MineLine3;of the mine has to be triggered, usually by radar, or contact.;auf Radarimpulse oder bei Kontakt explodieren.;их маневрирования.;musi zostać zainicjowana, przeważnie przez radar lub kontakt.
+;;;;
+5_UnknownLine1;No information about this object. There is a lack of;Hierüber liegen keine weiteren Informationen vor. Wir haben nicht;Информация о данном объекте отсутствует или не доступна.;Brak informacji o tym obiekcie. Za mało danych by zbadać ten
+5_UnknownLine2;knowledge to research this object or obtain any information;genügend Hinweise über den Zweck oder die Arbeitsweise.;Недостаточно информации и знаний чтобы изучить принципы;obiekt lub zdobyć jakiekolwiek informacje na temat sposobu
+5_UnknownLine3;about its work.; ;действия и устройства данного объекта.;jego działania.
+;;;;
+5_MarauderLine1;Marauder is a pirate spaceship primarily designed to attack other;Plünderer wurden konstruiert, um andere Raumschiffe anzugreifen. Die ;Мародер - это пиратский класс боевых кораблей, основным назначением;Maruder jest pirackim statkiem przeznaczonym głównie do zwalczania
+5_MarauderLine2;spaceships. Marauders are very fast, maneuverable and equipped with;Plünderer sind sehr schnell, manöverierbar und mit Primär- und;которого является атака других космических кораблей. Мародер быстр и;innych statków. Marudery są bardzo szybkie, zwrotne i wyposażone
+5_MarauderLine3;primary and secondary weapon systems to attack other spaceships.;Sekundärwaffensystemen ausgestattet um andere Raumschiffe zu attackieren.;хорошо вооружен.;w systemy broni głównej i specjalnej do atakowania innych statków.
+;;;;
+5_WarderLine1;Warder is a pirate spaceship specifically designed to be part;Wächter wurden speziell als Teil des Basisverteidigungsystems;Страж - это пиратский класс космических кораблей, созданный как;Strażnik jest pirackim statkiem specjalnie zoprojektowanym by stanowić
+5_WarderLine2;of the pirate base defense system. Warders are highly armored and well;konstruiert. Wächter sind sehr gut bewaffnet und jederzeit bereit;часть системы обороны пиратских баз. Страж хорошо бронирован и;część systemu obronnego pirackiej bazy. Strażniki są potężnie opancerzonymi
+5_WarderLine3;equipped spaceships always ready for a rapid counterattack.;einen schnellen Gegenangriff zu starten.;отлично подходит для быстрых контратак.;i dobrze wyposażonymi statkami zawsze gotowymi do błyskawiczego kontrataku.
+;;;;
+5_RaiderLine1;Raider is a pirate attack ship specifically designed for long-range;Gangster wurden speziell für weiträumige Angriffe konstruiert. Häufig in;Рейдер - это пиратский штурмовик, специально разработанный для;Łupieżca jest pirackim szturmowcem specjalnie zaprojektowanym do dalekich
+5_RaiderLine2;raids in small groups or as the main attack ship in large groups.;kleinen Gruppen unterwegs, oder als Hauptangriffsmacht auch in grösseren;дальних рейдов на территорию противника в составе небольших групп.;nalotów w małych grupach lub jako główny statek atakujący w dużych.
+5_RaiderLine3;Unlike Warders, Raiders are designed to attack under Marauder cover.;Gruppen. Operieren die Gangster unter Plündererschutz.;Несмотря на наличие турелей, уязвим для истребителей.;Inaczej niż Strażniki, Łupieżców zaprojektowano do ataku pod osłoną Maruderów.
+;;;;
+5_MissileCarrierLine1;Missile Carrier is a pirate attack ship specifically designed for;Raketenträger sind speziell konstruiert für weiträumige Angriffe;Ракетный Транспорт - это модернизированное гражданское судно;Nosiciel Rakiet to piracki statek przeznaczony specjalnie do dalekich
+5_MissileCarrierLine2;long-range raids in large groups. Unlike Raiders, Missile Carriers;in großen Gruppen. Anders als die Gangster, können die Raketenträger;оснащенное турелями и ракетными системами. Используется пиратами;nalotów w dużych grupach. Inaczej niż Łupieżcy, Nosiciele Rakiet
+5_MissileCarrierLine3;can be used as regular carriers for slaves and goods.;Sklaven und Beutegut transportieren.;как судно огневой поддержки и транспорт.;mogą być użyte do transportu niewolników i dóbr.
+;;;;
+5_BattleFreighterLine1;Battle Freighter is a pirate freighter that is used for long-range raids;Der Schlachtenfrachter wird von den Piraten in weiträumigen Angriffen;Боевой Фрахтовщик - это пиратский тяжелый транспорт оснащенный;Frachtowiec Wojenny to piracki frachtowiec używany do dalekich nalotów
+5_BattleFreighterLine2;in large groups. Unlike Missile Carriers, Battle Freighters are;in großen Gruppen verwendet. Die Schlachtenfrachter können nur;системами защиты (турелями, противоракетными системами). Данные;w dużych grupach. Inaczej niż Nosiciele Rakiet, Frachtowce Wojenne są
+5_BattleFreighterLine3;civilian ships equipped with propelled weapon systems only.;mit angetriebenen Waffensystemen bestückt werden.;суда составляют ядро больших рейдерских групп.;cywilnymi statkami wyposażonymi jedynie w broń rakietową.
+;;;;
+5_CivilianBuildingLine1;Civilian Building is a structure having a roof supported by columns, piers,;Das Zivilgebäude schützt mit einem Dach oder Wände die darunter;Здания (Гражданские Постройки) - сооружения состоящие из стен,;Budynek Cywilny to struktura posiadająca dach wsparty na kolumnach, filarach,
+5_CivilianBuildingLine2;or walls and intended to shelter, house or enclose persons,;liegenden Häuser und Unterkünfte bzw. die darin wohnenden Personen,;крыши и основания. Содержат собственные генераторы гравитации;lub ścianach przeznaczonych na schronienie, dom lub pomieszczenie dla osób,
+5_CivilianBuildingLine3;animals or chattels.;Tiere oder Mobiliar.;и системы регенерации кислорода.;zwierząt albo ruchomości.
+;;;;
+5_WeaponturretLine1;Weapon turret is a self-contained armored weapon platform housing;Der Geschützturm  ist unabhängiges Waffensystem mit einer Kanone,;Турель - это самостоятельная неподвижная боевая еденица;Wieżyczka bojowa to samowystarczalna opancerzona platforma na broń 
+5_WeaponturretLine2;cannon or missile launcher system. Weapon turrets are strongly armored;oder Raketensystem. Geschütztürme sind stark gepanzert;вооруженная пушкой или ракетной установкой для ведения;posiadająca działo bądź wyrzutnię rakiet. Wieżyczki mają mocny pancerz
+5_WeaponturretLine3;and can rotate.;und können sich drehen.;огня. Являются неотъемлемой частью защиты баз.;i mogą się obracać.
+;;;;
+5_ArmoredJeepLine1;Armored Jeep is a type of jeep with special armored hull designed for close;Der gepanzerte Jeep besitzt eine Hülle, die ihn für den Nahkampf;Бронированный Джип - это разновидность джипов со специальным сверх;Opancerzony Dźip to typ dżipa ze specjalnym pancernym kadłubem do walki
+5_ArmoredJeepLine2;combat. Armored Jeeps are comparatively fast, maneuverable and equipped;prädistiniert. Gepanzerte Jeeps sind vergleichsweise schnell, manöverier-;бронированным корпусом созданным для ближнего боя. Данная техника;bezpośredniej. Opancerzone Dźipy są względnie szybkie, zwrotne i wyposażone
+5_ArmoredJeepLine3;with heavy weapon systems to attack enemy.;fähig und mit einem starken Waffensystem für den Angriff ausgestattet.;не столь маневренная, по сравнению с простыми джипами.;w systemy ciężkiego uzbrojenia do atakowania wroga.
+;;;;
+5_JeepLine1;Jeep is a military wheeled vehicle suitable for traveling over rough terrain.;Der Jeep ist ein militärisches Allradfahrzeug, gut geeignet für den rauhen ;Джип - это боевое колесное транспортное средство предназначенное;Dżip to militarny pojazd kołowy przystosowany do poruszania się w trudnym
+5_JeepLine2;Jeeps are highly maneuverable, and equipped with weapon systems to attack;Geländeeinsatz. Jeeps sind sehr schnell, manöverierfähig und mit;для транспортирования личного состава. В основном применяется как;terenie. Dżipy są wielce zwrotne i wyposażone w systemy uzbrojenia
+5_JeepLine3;enemy with direct fire.;Waffen für den Angriff ausgestattet.;разведывательное средство.;do atakowania wroga ogniem bezpośrednim.
+;;;;
+5_TankLine1;Tank is a tracked, armored combat vehicle primarily designed to destroy;Der Panzer ist mit Kettenantrieb ausgestattet und in der Lage den Feind;Танк - это гусеничное бронированное транспортное средство приме-;Czołg to gąsienicowy, opancerzony pojazd bojowy zaprojektowany głównie
+5_TankLine2;enemy forces with direct fire. A battle tank is distinguished by its high;im Direktangriff zu zerstören. Ein Panzer zeichnet sich durch seine hohe;няемое для уничтожения противника в открытом бою. Обладает;do niszczenia sił wroga ogniem bezpośrednim. Czołg bojowy w porównaniu
+5_TankLine3;level of firepower and stronger armor as compared to other vehicles.;Feuerkraft und seine stärkere Panzerung als die übrigen Mitlitärfahrzeuge aus.;высокими показателями бронированности.;z innymi pojazdami wyróżnia się ogromną siłą ognia i mocniejszym pancerzem.
+;;;;
+5_APCLine1;Armored Personnel Carrier is a military armored vehicle usually;Der Bewaffnete Armeetransporter ist mit Antriebsketten ausgestattet.;БТР (Бронетранспортер) - это бронированное транспортное средство;Transporter Opancerzony to militarny pojazd pancerny zwykle
+5_APCLine2;equipped with treads, weapon systems to attack enemy;Er ist mit Waffensystemen bestückt und wird benutzt,;используемое для транспортирования личного состава. Обладает;wyposażony w gąsienice, systemy uzbrojenia do atakowania wroga
+5_APCLine3;and used to transport infantry.;um Infantrie zu transportieren.;достаточным количеством вооружения для атаки противника.;i używany do trasportu piechoty.
+;;;;
+5_MissileLauncherLine1;Missile Launcher is a military armored vehicle equipped with;Der Raketenwerfer ist ein gepanzertes Militärfahzeug, das;Ракетная Установка - это боевое бронированное транспортное средство;Wyrzutnia Rakiet to militarny pojazd opancerzony wyposażony
+5_MissileLauncherLine2;a device that can launch missiles, torpedoes or bombs to attack;Raketen, Torpedos oder Bomben gegen den Gegner schiessen kann.;оборудованное устройствам запуска ракет, торпед или бомб с целью;w urządzenie zdolne do wystrzelenia rakiet, torped lub bomb
+5_MissileLauncherLine3;enemy.;;уничтожения наземного или воздушного противника.;do atakowania wroga.
+;;;;
+5_EngineerLine1;Engineer is a military vehicle primarily responsible for the design and;Der Konstrukteur kann in der Hauptsache Offensiv-, und Defensivstrukturen;Трактор - военный транспорт, основной задачей которого является;Inżynier to militarny pojazd odpowiedzialny głównie za projektowanie
+5_EngineerLine2;construction of offensive, defensive, logistical structures for warfare,;entwerfen und bauen. Er kann auch Wartungsarbeiten durchführen und wird;постройка и обслуживание оборонительных укреплений. Иногда;i wznoszenie bojowych struktur ataku, obrony, logistyki, a także
+5_EngineerLine3;maintenance and dismantling of defensive minefields.;zum abbauen von Minenfeldern eingesetzt.;используется для установки минных полей.;utrzymanie i demontaż pól minowych.
+;;;;
+;;;;
+6_Mission1Title;Mission 1 - First Contact with Unknown Enemy;Mission 1 - Erster Kontakt mit dem Feind;Миссия 1 - Первый Контакт с Врагом;Misja 1 - Kontakt z Nieznanym Wrogiem
+6_Mission2Title;Mission 2 - Attack, Do Not Let Them Go;Mission 2 - Angreifen und nicht entkommen lassen;Миссия 2 - Атакуйте, Не Дайте Им Уйти;Misja 2 - Atakuj, Nie Przepuść Ich
+6_Mission3Title;Mission 3 - Counterattack Is The Best Defense;Mission 3 - Gegenangriff ist die beste Verteidigung;Миссия 3 - Контратака - Лучшая Защита;Misja 3 - Kontratak Jest Najlepszą Obroną
+6_Mission4Title;Mission 4 - Attack on Fleet of Pirate Raiders;Mission 4 - Greife die Piratenflotte an!;Миссия 4 - Атакуйте Флот Пиратов-Рейдеров;Misja 4 - Atak na Piracką Flotę
+6_Mission5Title;Mission 5 - Surprise, Surprise... Aliens Again;Mission 5 - Überraschung...wieder Feinde!;Миссия 5 - Сюрприз, сюрприз... Снова Пришельцы;Misja 5 - Niespodzianka... Znowu Obcy
+6_Mission6Title;Mission 6 - Stop Alien MotherShip Now!;Mission 6 - Stoppe das Alien Mutterschiff sofort!;Миссия 6 - Остановите Носитель Пришельцев!;Misja 6 - Zatrzymaj Obcy Statek Bazę!
+6_Mission7Title;Mission 7 - Attack on Small Pirate Raiders Base;Mission 7 - Greife die kleine Piratenbasis an;Миссия 7 - Атака на Небольшую Базу Пиратов;Misja 7 - Atak na Małą Piracką Bazę
+6_Mission8Title;Mission 8 - Stay Close, They Are Coming;Mission 8 - Bleib in der Nähe, Sie kommen;Миссия 8 - Сомкнуть Ряды, Они Приближаются;Misja 8 - Trzymaj Się Blisko, Nadchodzą
+6_Mission9Title;Mission 9 - One More Pirate Raiders Base;Mission 9 - Eine weitere Piratenbasis;Миссия 9 - Еще Одна Пиратская База;Misja 9 - Jeszcze Jedna Piracka Baza
+6_Mission10Title;Mission 10 - Strange Slackness... Be Ready!;Mission 10 - Eigenartige Flaute! Pass auf!;Миссия 10 - Странное Затишье... Приготовьтесь!;Misja 10 - Dziwne Odprężenie... Gotuj się!
+6_Mission11Title;Mission 11 - Do Not Let Them Destroy Our Base!;Mission 11 - Lass Sie nicht unsere Basis zerstören!;Миссия 11 - Не Дайте Им Уничтожить Нашу Базу!;Misja 11 - Nie Pozwól Zniszczyć Im Naszej Bazy!
+6_Mission12Title;Mission 12 - Secret Pirate Base;Mission 12 - Geheime Piratenbasis;Миссия 12 - Секретная Пиратская База;Misja 12 - Tajna Piracka Baza
+6_Mission13Title;Mission 13 - Alien Transportation Port;Mission 13 - Alien Umschlaghafen;Миссия 13 - Транспортный Порт Пришельцев;Misja 13 - Obcy Port Transportowy
+6_Mission14Title;Mission 14 - Last Pirate Enclave;Mission 14 - Die letzte Piratenenklave;Миссия 14 - Последний Анклав Пиратов;Misja 14 - Ostatnia Piracka Enklawa
+6_Mission15Title;Mission 15 - Escape Under Aliens` Attack;Mission 15 - Flucht unter den Alienangriffen!;Миссия 15 - Отступление Под Атакой Пришельцев;Misja 15 - Ucieczka Podczas Ataku Obcych
+;;;;
+;;;;
+6_Mission1Descr;They are coming! They are everywhere!;Sie kommen! Sie sind überall!!;Они приближаются! Они повсюду!;Nadchodzą! Są wszędzie!
+6_Mission2Descr;Damned raiders here! No Mercy! Kill them all!;Verdammte Gangster hier! Keine Gnade! Töte Sie Alle!;Проклятые рейдеры! Никакой пощады! Убить всех!;Przeklęci łupieżcy! Bez litości! Zabij wszystkich!
+6_Mission3Descr;Our base is under attack! Stop the aliens` attack now!;Unsere Basis liegt unter Beschuss!;Наша база атакована! Остановите атаку пришельцев!;Nasza baza jest atakowana! Powstrzymaj atak obcych!
+6_Mission4Descr;Find a pirate raider base in this sector!;Finde eine Piraten Basis in diesem Sektor!;Найдите пиратскую базу в этом секторе!;Odnajdź piracką bazę w tym sektorze!
+6_Mission5Descr;Do not let them regroup for a counterattack!;Gib den Piraten keine Gelegenheit sich neu zu formieren!;Не дайте им перегруппироваться и контратаковать!;Nie pozwól im się przegrupować do kontrataku!
+6_Mission6Descr;They are too close! You should do something!;Sie sind viel zu dicht! Du solltest etwas tun!!;Они слишком близко! Сделайте хоть что-то!;Są zbyt blisko! Zrób coś!
+6_Mission7Descr;We found their base! Finally! Lets smash them!;Wir haben ihre Basis gefunden! Endlich! Rotten wir sie aus!;Мы обнаружили их базу! Наконец-то! Размажьте их!;Znaleźliśmy ich bazę! Nareszcie! Rozwalmy ich!
+6_Mission8Descr;Looks like the aliens got reinforcement!;Scheint, als erhielten die ALiens Verstärkung!;Похоже, пришельцы получили подкрепление!;Wygląda na to, że obcy otrzymali posiłki!
+6_Mission9Descr;This should be piece of cake for you, do it quickly!;Das sollte ein Spaziergang sein! Mach schnell!;Это должно быть легко для вас, сделайте это быстро!;Dla ciebie to pestka, działaj szybko!
+6_Mission10Descr;Our intelligence failed to find anything. It can be a trap!;Unsere Spionage konnte nichts herausfinden. Eine Falle?;Наша разведка ничего не нашла. Наверняка ловушка!;Nasz wywiad nic nie znalazł. To może być pułapka!
+6_Mission11Descr;Do not panic! We got reinforcement! Regroup and attack!;Keine Panik! Wir haben Verstärkung!;Без паники! Мы получили подкрепление! Атакуем!;Nie panikuj! Mamy posiłki! Przegrupuj się i atakuj!
+6_Mission12Descr;They are too smart now, and much more dangerous.;Sie sind nun zu schlau, und viel zu gefährlich!;Они теперь слишком умные, и значительно опаснее.;Teraz są zbyt sprytni i znacznie groźniejsi.
+6_Mission13Descr;We found their hyper port! We must destroy it right now!;Wir fanden ihren Hyper Port! Wir müssen ihn sofort zerstören!;Мы нашли их гипер-порт! Необходимо его уничтожить!;Odnaleźliśmy ich hiper port! Musimy go teraz zniszczyć!
+6_Mission14Descr;This sector must be clear and safe for ever!;Dieser Sektor muss sauber und sicher für immer sein!;Этот сектор должен быть очищен раз и навсегда!;Ten sektor musi pozostać czysty i bezpieczny na zawsze!
+6_Mission15Descr;We lost this sector, this battle is lost. Try to escape!;Wir haben die Schlacht verloren. Versuche zu fliehen!;Мы потеряли этот сектор. Спасайся кто может!;Utraciliśmy ten sektor, bitwa przegrana. Spróbuj uciec!
+;;;;
+;;;;
+7_ship1;Cobra;Cobra;Кобра;Kobra
+7_ship2;SpaceEagle;SpaceEagle;Орел;Orzeł
+7_ship3;FireStorm;FireStorm;Шторм;Burza
+7_ship4;Hedgehog;Hedgehog;Репейник;Jeż
+7_ship5;Thunder;Thunder;Гром;Grom
+7_ship6;Excalibur;Excalibur;Экскалибур;Excalibur
+7_ship7;DarkStar;DarkStar;Звезда;MrocznaGwiazda
+7_ship8;Scorpion;Scorpion;Скорпион;Skorpion
+7_ship9;Runner;Runner;Беглец;Goniec
+7_ship10;Kronos;Kronos;Кронос;Kronos
+7_ship11;Chameleon;Chameleon;Хамелеон;Kameleon
+7_ship12;Falcon;Falcon;Сокол;Sokół
+7_ship13;DeathRipple;DeathRipple;Смерч;FalaŚmierci
+7_ship14;AstroSword;AstroSword;Игла;Miecz
+7_ship15;Pulser;Pulser;Импульс;Pulsator
+7_ship16;ClumsyMace;ClumsyMace;Булава;Buzdygan
+7_ship17;Raptor;Raptor;Раптор;Drapieżca
+7_ship18;Destroyer;Destroyer;Разрушитель;Niszczyciel
+7_ship19;AstroSpear;AstroSpear;Копье;Włócznia
+7_ship20;Mite;Mite;Мышь;Okruch
+7_ship21;Viper;Viper;Гадюка;Żmija
+7_ship22;BlackIce;BlackIce;ЧерныйЛед;CzarnyLód
+7_shipfullname;%s Mk%i;%s Mk%i;%s Mk%i;%s Mk%i
+;;;;
+7_weapon1;FireFox;FireFox;Искра;Żarlis
+7_weapon2;FireBird;FireBird;Пламя;Żarptak
+7_weapon3;Meteor;Meteor;Метеор;Meteor
+7_weapon4;Hasher;Hasher;Мясорубка;Siekacz
+7_weapon5;Trammel;Trammel;Невод;Pogrzebacz
+7_weapon6;IonStorm;IonStorm;Шторм;Jonoburza
+7_weapon7;IonRipple;IonRipple;Смерч;Jonofala
+7_weapon8;Quasher;Quasher;Сокрушитель;Dławiciel
+7_weapon9;Destabilizer;Destabilizer;Дестабилизатор;Destabilizator
+7_weapon10;Anihilator;Anihilator;Аннигилятор;Anihilator
+7_weapon11;Devastator;Devastator;Опустошитель;Dewastator
+7_weapon12;DeathFlow;DeathFlow;ПотокСмерти;StrugaŚmierci
+7_weapon13;Vaporizer;Vaporizer;Испаритель;Parowator
+7_weapon14;Rapier;Rapier;Рапира;Rapier
+7_weapon15;Pandora;Pandora;Пандора;Pandora
+7_weapon16;Stinger;Stinger;Жало;Żądło
+7_weapon17;Swarm;Swarm;Рой;Rój
+7_weapon18;Vengeance;Vengeance;Месть;Zemsta
+7_weapon19;BabyDoll;BabyDoll;Кукла;Laleczka
+;;;;
+7_system1;Jet Engine;Jet Engine;Реактивный;Odrzutowy
+7_system2;Photon Jet;Photon Jet;Фотонный;Fotonowy
+7_system3;Plasma Jet;Plasma Jet;Плазменный;Plazmowy
+7_system4;Antimatter;Antimatter;Антиматерия;Antymateria
+7_system5;Ion Battery;Ion Battery;Батарея;Jonobateria
+7_system6;Nuclear;Nuclear;Ядерный;Atom
+7_system7;Plasma;Plasma;Плазменный;Plazma
+7_system8;Antimatter;Antimatter;Антиматерия;Antymateria
+7_system9;Base O.T.C.;Base O.T.C.;Базовая О.К.Н.;Bazowy O.K.C.
+7_system10;Hamerik O.T.C.;Hamerik O.T.C.;Хамерик О.К.Н.;Hamerik O.K.C.
+7_system11;Neo M.O.T.C.;Neo M.O.T.C.;Нео В.О.К.Н.;Neo W.O.K.C.
+7_system12;Supra M.O.T.C.;Supra M.O.T.C.;Супра В.О.К.Н.;Supra W.O.K.C.
+7_system13;Mechanical;Mechanical;Механика;Mechaniczny
+7_system14;Hydraulic;Hydraulic;Гидравлика;Hydrauliczny
+7_system15;Magnetic;Magnetic;Магнит;Magnetyczny
+7_system16;Vacuum;Vacuum;Вакуум;Próżniowy
+7_system17;Repair NaRs;Repair NaRs;Нано Роботы;NaRs Napraw
+7_system18;Layer;Layer;A-Б Слой;Powłoka
+7_system19;Energy Shield;Energy Shield;Энерго Щит;Energoosłona
+7_system20;Deflector;Deflector;Дефлектор;Deflektor
+;;;;
+7_Ships_Stock;Ship Stock;Schifflager;Склад Кораблей;Zasób Statków
+7_Ship_Hull_Cost;Ship Hull Cost;Schiff Hüllenkosten;Стоимость Корпуса;Koszt Kadłuba
+7_Not_Available_in_Demo_Version;Not Available in Demo Version;In der Demo Version nicht verfügbar;Недоступно в Демо Версии;Brak w Demo
+7_Player_Ship;Player Ship;Spielerschiff;Корабль Игрока;Statek Gracza
+7_Upgrade_Hull_Cost;Upgrade Hull Cost;Verbessern Hülle Kosten;Стоимость Апгрейда;Koszt Ulepszenia
+7_Repair_Hull_Cost;Repair Hull Cost;Reparieren Hülle Kosten;Стоимость Ремонта;Koszt Naprawy
+7_Ship_Cost;Ship Cost;Schiff Kosten;Общая Стоимость;Koszt Statku
+7_Weapon_Ammo:;Weapon Ammo:;Waffen Schuss:;Боекомплект:;Amunicja Broni:
+7_Weapon_Reload_Cost:;Weapon Reload Cost:;Waffen Nachladen Kosten:;Стоимость:;Przeładowanie:
+7_Weapon_Type;Weapon Type;Waffen Typ;Тип Оружия;Typ Broni
+7_Weapon_Level;Weapon Level;Waffen Level;Уровень Оружия;Poziom Broni
+7_Weapon_Cost;Weapon Cost;Waffen Kosten;Стоимость Оружия;Koszt Broni
+7_Weapon_Stock;Weapon Stock;Waffen Bestand;Склад Оружия;Zasób Broni
+7_Installed_Weapons;Installed Weapons;Installierte Waffen;Установленное;Broń Zamontowana
+7_System_Stock;System Stock;System Bestand;Склад Систем;Zasób Systemów
+7_Installed_Systems;Installed Systems;Installierte Systeme;Установленные;Systemy Zamontowane
+7_Installed_System;Installed System;Installiertes System;Установленная;System Zamontowany
+7_Selected_System;Selected System;Gewähltes System;Выбранная;System Wybrany
+7_Cost;Cost;Kosten;Стоимость;Koszt
+;;;;
+;;;;
+9_Tipsandhints;Tips and hints;Tipps und Tricks;Советы и подсказки;Podpowiedzi
+9_notshowtip;Do not show this tip again.;Diesen Tipp nicht wieder anzeigen.;Не показывать эту подсказку.;Więcej tego nie pokazuj.
+;;;;
+9_9Line1;It is possible to create five Pilot Profiles in the game in;Es können fünf Pilotenprofile angelegt werden. Jedes Profil;Для хранения персональных данных в игре предусмотрено;W grze możliwe jest utworzenie do pięciu Profili Pilotów by
+9_9Line2;order to store personal data. You can set an individual;kann unterschiedliche Spielstände und Schwierigkeitsgrade;создание пяти Профилей Пилотов. Вы можете настроить;przechowywać dane osobiste. Możesz ustawić indywidualny
+9_9Line3;difficulty level for each profile or delete the current;enthalten. Um Platz für ein neues Profil zu schaffen, ein;индивидуальную сложность для каждого Профиля или;stopień trudności dla każdego z profili bądź skasować
+9_9Line4;profile to free space for a new profile.;Profil löschen. Beachte, das der Schwierigkeitsgrad in Prozent;удалить его, освободив место для создания новой записи.;aktualny profil by zwolnić miejsce dla nowego.
+9_9Line5;Note that the current difficulty level is displayed in percent;pro einzelnes Profil angegeben ist. Dieser Wert beeinflusst;Обратите внимания, для каждой записи отображается;Obecny poziom trudności jest pokazany w procentach
+9_9Line6;for each profile. This value influences the increase of;direkt die Erfahrungspunktvergabe. Zum Beispiel, wenn du;текущая сложность в процентах. Данный показатель;dla każdego profilu. Wartość ta wpływa na wzrost
+9_9Line7;experience. For instance, if you bring down an enemy ship, you;ein Feindschiff zerstörst, bringt das 100 Einheiten Geld;влияет на начисление опыта. Например, сбив;doświadczenia. Przykładowo, zestrzeliwszy wrogi statek
+9_9Line8;will get 100 money units and only 65 experience units if the;und nur 65 Erfahrungspunkte, wenn der Schwierigkeitsgrad;противника вы получите 100 единиц денег и только;otrzymujesz 100 punktów gotówki i jedynie 65 punktów
+9_9Line9;difficulty percent is set to 65 for you.;auf 65 Prozent für dieses Profil steht.;65 единиц опыта, если процент сложности у вас равен 65.;doświadczenia jeśli procent trudności jest ustawiony na 65.
+9_9Line10;Note: you can change your difficulty level before each;Hinweis: Du kannst vor dem start jeder Mission;Примечание: вы можете изменить настройки сложности;Uwaga: możesz zmienić swój poziom trudności przed każdą
+9_9Line11;new mission.;den Schwierkeitsgrad verändern.;перед началом каждой новой миссии.;nową misją.
+;;;;
+9_10Line1;There are more than 20 spaceships with unique characteristics;Es gibt mehr als 20 Raumschiffe, jedes mit besonderen Eigensch-;В игре доступны более двух десятков кораблей с уникальны-;W grze jest dostępnych więcej niż 20 statków z unikalnymi
+9_10Line2;available in the game. You can use the right part of the screen;aften. Auf der rechten Seite dieses Bildschirms ist dein Raumschiff;ми характеристиками. В правой части экрана вы можете;cechami. Prawej strony ekranu używasz by obejrzeć swój obecny
+9_10Line3;to see your current spaceship, its characteristics and cost and;mit seinen Eigenschaften und Kosten dargestellt. Hier können auch;увидеть свой корабль, его характеристики и стоимость, а так;statek, jego charakterystykę i koszt jak również celem
+9_10Line4;also to perform basic operations, such as repair.;grundlegende Dinge wie Reparatur und Schiffshüllenverstärkung; же произвести ремонт и апгрейд корпуса корабля.;wykonania podstawowych operacji takich jak naprawa.
+9_10Line5;The left part of the screen contains Ship Stock where you can see;durchgeführt werden. Die linke Seite enthält die Liste aller;В левой части экрана расположен Склад, где вы можете;Lewa strona ekranu zawiera Zasób Statków gdzie możesz zobaczyć
+9_10Line6;all available spaceships and their characteristics. Do not;verfügbaren Schiffe mit ihren Eigenschaften. Vergiß nicht, das;просмотреть все имеющиеся корабли и их характеристики.;wszystkie dostępne statki i ich właściwości. Nie zapominaj, że
+9_10Line7;forget that each ship has its dimensions and, which is more;neben der Größe der Schiffe, die Anzahl der Waffenschächte und;Не забывайте, что каждый корабль имеет свои габариты и,;każdy statek ma swoje wymiary i co ważniejsze może
+9_10Line8;important, different weapon mounts.;Art der Waffenschächte angegeben ist, was noch wichtiger ist.;что более важно, различные крепления оружия.;przenosić różną broń.
+9_10Line9;The basic shipbuilding concept is as follows:;Das grundlegende Schiffsbaukonzept ist wie folgt:;Базовая концепция судостроение такова:;Bazowy koncept budowy statku jest następujący:
+9_10Line10;Scout - light, small and maneuverable ships with weak weapons.;Aufklärer - Leicht, schnell, wendig mit schwachen Waffen.;Разведчик - маневренные но слабо вооруженные корабли.;Zwiadowca - lekki, mały i zwrotny statek, słabo uzbrojony.
+9_10Line11;Interceptor - fast ships with light weapons.;Abfangjäger - Schnelle Schiffe mit leichten Waffen.;Перехватчик - быстрые легко вооруженые корабли.;Eliminator - szybki statek, lekko uzbrojony.
+9_10Line12;Fighter - main type of ships with light and semi-heavy weapons.;Jäger - Haupttyp der Schiffe mit leichten und mittleren Waffen.;Истребитель - наиболее сбалансированы тип кораблей.;Myśliwiec - główny typ statku z lekką i średnią bronią.
+9_10Line13;Bomber - heavy destroyers with mostly heavy attack weapons.;Bomber - Schwere Zerstörer mit hauptsächlich schweren Waffen.;Бомбардировщик - тяжелые истребители.;Bombowiec - ciężki niszczyciel przenoszący potężną broń.
+9_10Line14;Attack Ship - heavy, large and heavily armed ships.;Angriffsschiff - schwer, groß und schwer bewaffnet.;Штурмовик - тяжелые корабли с большой огневой мощью.;Szturmowiec - ciężki, duży i potężnie uzbrojony statek.
+;;;;
+9_11Line1;A set of systems is installed on the ship you operate. All systems;Etliche von Systeme sind auf deinem Schiff installiert. Alle;В управляемом вами корабле установлен набор систем.;Na statku, którym operujesz jest zamontowany zestaw systemów.
+9_11Line2;are connected with each other and with ship weapons in one way or;Systeme sind miteinander und mit den Waffensystemen und anderen;Все системы связаны между собой и вооружением;Wszystkie są wzajemnie powiązane ze sobą i z bronią statku w ten
+9_11Line3;another and play important role in the game.;Funktionen verbunden und spielen eine Rolle im Spiel.;корабля, и играют важную роль в процессе игры.;czy inny sposób odgrywając ważną rolę w grze.
+9_11Line4;You should carefully take into account the peculiarities of each;Achte auf die spezifischen Eigenheiten jedes einzelnen Systems;Следует внимательно учитывать особенности каждой системы;Należy starannie rozważyć właściwości każdego systemu
+9_11Line5;system and match their characteristics to each other to get;und stimme die Systeme aufeinander ab, um ein gut ausgewo-;и согласовывать их между собой, чтобы получить корабль;i dopasować wzajemnie ich cechy by uzyskać dobrze
+9_11Line6;a well balanced warship that can complete combat tasks.;genes Schiff zu haben, mit dem du im Kampf bestehen kannst.;способный выполнять боевую задачу.;wyważony statek wojenny zdolny wypełniać zadania bojowe.
+9_11Line7;Engine - ship engine system. Pay attention to how this system consumes;Antrieb - Schiffsantrieb. Achte auf die Energieaufnahme;Реактор - источник энергии. Обратите внимание на две;Silnik - silnik statku. Uważaj na sposób w jaki ten system zużywa
+9_11Line8;energy. Otherwise you run the risk of being unable to move.;Andernfalls könntest du ein bewegungsloses Schiff haben.;основные характеристики - емкость и перезарядка.;energię. W przeciwnym razie ryzykujesz niezdolność statku do ruchu.
+9_11Line9;Power - ship energy source. Pay attention to the main two characte-;Energie - Schiffsenergiequelle. Achte auf die zwei wichtigen ;О.К.Н. - Оптический Компьютер Наведения. Данная система;Moc - źródło zasilania. Zwróć uwagę na dwie główne cechy tego
+9_11Line10;ristics of this system - Recharge Rate and Capacity.;Eigenschaften dieses Systems - Aufladungsrate und Kapazität.;отвечает за оптическое наведение на цель.;systemu - Moc Ładowania oraz Pojemność.
+9_11Line11;O.T.C. - Optical Target Computer. As you can see from its name,;O.T.C. - Optischer Ziel Computer, dieses System ist für die;Наведение - Система наведения орудия на цель. От нее;O.K.C. - Optyczny Komputer Celowniczy. Jak się domyślasz po jego
+9_11Line12;this system is responsible for optical targeting.;optische Zielverfolgung zuständig.;зависит скорость поворота и точность выстрела.;nazwie, system ten jest odpowiedzialny za namierzanie optyczne.
+9_11Line13;Targeting - Weapon targeting system. It depends on this system how;Zielerfassung - Waffem Zielsystem. Von diesem System hängt es ab,;Нано Роботы - будут постоянно следить за состоянием;Namierzanie - System kierowania ogniem. Zależy od niego jak szybko
+9_11Line14;fast a weapon will aim and how accurate the shot will be.;wie lange die Waffe zum Zielerfassen benötigt und wie genau;вашего корабля и ремонтировать его.;broń zostanie wycelowana i jak dokładny będzie strzał.
+9_11Line15;Advanced - The most advanced, but yet untested systems for;der Schuss ist. Fortgeschritten - Die am höchsten entwickelten;А-Б Слой - специальная броня, позволяющая уменьшить;Zaawansowany - Najbardziej zaawansowany, ale jeszcze niesprawdzony
+9_11Line16;enhancing ship invulnerability.;Systeme, allerdings ungetestet, für höhere Ansprüche.;механические и ослабить ионные воздействия.;system wzmacniający niewrażliwość statku.
+;;;;
+9_12Line1;You can use this section to buy, sell and set up the weapons on;In dieser Abteilung kannst du Waffen für dein Schiff kaufen und;В данном разделе вы можете покупать, продавать и;Możesz używać tej sekcji by nabywać, sprzedawać i montować broń
+9_12Line2;your ship. To buy a weapon, just drag its icon from Weapon Stock;verkaufen. Um eine Waffe zu kaufen, ziehe das Abbild der Waffe;настраивать оружие корабля. Для покупки оружия, просто;na statku. By kupić broń przeciągnij jej ikonę z Zasobu Broni
+9_12Line3;to a weapon slot on your ship. Note that each weapon has its;über einen Waffenschacht. Beachte, das eine Waffe nur in einen;перетяните иконку оружия из Склада Оружия на слот оружия;do slotu broni twego statku. Każda broń ma swój własny poziom
+9_12Line4;own level (from 1 to 5), you should see that the slot level is;Schacht passt, wenn der Level kleiner oder genauso groß wie der ;корабля. Обратите внимание, каждое оружие обладает;(od 1 do 5), zwróć uwagę czy poziom slotu nie jest niższy
+9_12Line5;not less than the weapon level. To sell a weapon, perform;Schachtlevel ist (Level 1-5). Um eine Waffe zu verkaufen, ziehe;своим уровнем (от 1 до 5), следует учитывать, чтобы уровень;niż poziom broni. Aby sprzedać broń wykonaj odwrotne
+9_12Line6;the reverse operation.;die Waffe einfach aus den Schacht heraus auf die linke Seite.;слота был не меньше уровня оружия.;do poprzedniego działanie.
+9_12Line7;The weapon is set up and recharged with the Setup button;Die Waffe wird konfiguriert und aufgeladen über den;Чтобы продать оружие, выполните обратную манипуляцию.;Broń można modyfikować i załadować przyciskiem Opcje z prawej
+9_12Line8;in the right part of the weapon slot panel.;Einstellknopf im rechten Teil der Waffenschachttafel.;Для настройки оружия, нажмите кнопку Опции.;strony panelu slotu broni.
+9_12Line9;Main types of weapons by their projectiles:;Die Haupttypen der Waffen nach Projektilen:;Основные типы оружия по типу снаряда:;Główne typy broni ze względu na pociski:
+9_12Line10;Projectile - small projectiles based on billets or energy beams.;Projektile - kleine Geschosse basierend auf Kugeln oder Ener-;Снаряд - основанием является болванка или энергетический;Pocisk - małe pociski bazowane na kulach lub promieniach energii.
+9_12Line11;It is the main and most widespread weapon in the game.;giestrahlen. Das ist die am meisten verbreitete Waffe.;пучок. Это наиболее распространенное оружие в игре.;To główna i najbardziej rozpowszechniona broń w grze.
+9_12Line12;Self-propelled projectile - missiles, torpedoes and nuclear bombs.;Angetriebene Projektile - Raketen, Torpedos und Atombomben.;Реактивные - ракеты, торпеды и ядерные бомбы. К недостаткам;Pociski rakietowe - rakiety, torpedy i bomby nuklearne.
+9_12Line13;The disadvantages of these weapons include the low speed;Der Nachteil dieser Waffengattung ist die geringe Fluggesch-;данного оружия можно отнести низкую скорость полета;Wadą tych broni jest mała prędkość pocisku i możliwość
+9_12Line14;of the projectile and the possibility of bring it down.;windigkeit der Projektile.;снаряда, а так же возможность уничтожения снаряда.;zestrzelenia.
+9_12Line15;Beam - Lasers and Masers. Short-range highly energy-;Strahl - Laser und Maser. Kurzstrecke und Hohe Energie-;Лучевое - Лазеры и Мазеры. Не дальнобойное оружие, с;Promienie - Lasery i Masery. Bronie krótkiego zasięgu
+9_12Line16;consuming weapons.;verbrauchende Waffen.;высокими требованиями по энергообеспечению.;pochłaniające wielkie ilości energii.
+;;;;
+;;;;
+9_13Line1;GAME KEYBOARD SHORTCUTS;SPIEL FUNKTIONSTASTENBELEGUNG;ГОРЯЧИЕ КЛАВИШИ ИГРЫ;SKRÓTY KLAWISZOWE GRY
+9_13Line2;F2 - toggle show/hide game FPS counter.;F2 - FPS Zähler An/Aus.;F2 - вкл/выкл отображения FPS.;F2 - pokaż/ukryj licznik FPS.
+9_13Line4;Note: it will reduce visual effects. Use it, if you have old hardware;Hinweis: Reduziert die Optischen Effekte. Benutze das, wenn nur alte;Примечание: может быть полезно при настройке;Uwaga: to zredukuje efekty wizualne. Użyj jeśli masz stary sprzęt by
+9_13Line5;to increase game FPS.;Hardware vorhanden ist,um die FPS zu erhöhen.;оптимального соотношения качество/быстродействие.;zwiększyć ilość FPS.
+9_13Line6;F5 - decrease game speed.;F5 - Verringere Spielgeschwindigkeit. ;F5 - уменьшить скорость игры.;F5 - zmniejsz prędkość gry.
+9_13Line7;F6 - reset game speed to normal.;F6 - Normalisiere Spielgeschwindigkeit.;F6 - сбросить скорость игры.;F6 - zwykła prędkość gry.
+9_13Line8;F7 - increase game speed.;F7 - Erhöhe Spielgeschwindigkeit.;F7 - увеличить скорость игры.;F7 - zwiększ prędkość gry.
+9_13Line9;Note: do not increase game speed, if you have low FPS.;Hinweis: Wenn FPS zu gering, erhöhe nicht die Spielgeschwindigkeit.;Примечание: не увеличивайте скорость, если FPS низкий.;Uwaga: nie zwiększaj prędkości gry jeśli masz niski FPS.
+9_13Line10;F8 - change weapon panels view.;F8 - Die Ansicht der Waffentafeln verändern.;F8 - изменить вид панелей оружия.;F8 - zmień widok paneli broni.
+9_13Line11;F9 - change Primary weapon group fire mode.;F9 - Feuermodus der Primärwaffen wechseln.;F9 - изменить тип стрельбы Первичной группы.;F9 - zmień tryb strzału Głównej grupy broni.
+9_13Line12;F10 - change Secondary weapon group fire mode.;F10 - Feuermodus der Sekundärwaffen wechseln.;F10 - изменить тип стрельбы Вторичной группы.;F10 - zmień tryb strzału Specjalnej grupy broni.
+9_13Line13;F12 - capture screenshot. (File will be saved on your Desktop.);F12 - Bildschirmfoto. (Das File liegt auf deinem Desktop.);F12 - скриншот. (Файл будет сохранен на рабочем столе.);F12 - przechwyć obraz. (Plik zostanie zapisany na Pulpicie.)
+9_13Line14;Esc - show/hide game menu. (Pause.);Esc - Spielmenü. (Pause.);Esc - показать/скрыть меню игры. (Пауза.);Esc - pokaż/ukryj menu gry. (Pauza.)
+9_13Line15;Note: all changes will be saved in the game configuration file.;Hinweis: Alle Änderungen werden gespeichert.;Примечание: все измененные настройки будут сохранены.;Uwaga: wszystkie zmiany zostaną zapisane w pliku konfiguracyjnym gry.
+;;;;
+9_14Line1;Warning! Low energy recharge rate!;Warnung! Geringe Energie Wiederaufladungsrate!;Внимание! Низкий уровень перезарядки!;Ostrzeżenie! Niska moc ładowania!
+9_14Line2;Could be problems with;Das könnte Probleme mit den;Возможны проблемы с работой;Mogą wystąpić problemy
+9_14Line3;systems function and/or weapons recharge!;Systemfunktionen oder der Waffenfeuerrate geben!;внутренних систем корабля и оружия!;z działaniem systemów i/lub prowadzeniem ognia!
+;;;;
+;;;;
+9_15Line1;You have already completed this mission. Your previous best;Du hast diese Mission bereits geschafft. Dein bisheriges;Вы уже прошли эту миссию. Ваш предыдущий лучший;Ta misja jest już ukończona. Twój poprzedni najlepszy wynik
+9_15Line2;result is %i points of experience.;bestes Resultat ist  %i Erfahrungspunkte.;результат составляет %i очков опыта.;to %i punktów doświadczenia.
+9_15Line3;You can replay this mission as many times as you like, but you;Du kannst diese Mission so oft wiederholen, wie du magst,;Вы можете переиграть эту миссию сколь угодно много раз,;Możesz powtórzyć tę misję tyle razy ile chcesz, ale zważ, iż
+9_15Line4;should take into account that only the best result you;aber du solltest bedenken, das nur das beste Resultat von;но не забывайте, что только лучший результат будет;jedynie najlepszy osiągnięty przez ciebie w tej misji rezultat
+9_15Line5;achieve in this mission will be used to calculate the total;dir in die Messung der Gesamterfahrungspunkte eingeht.;зафиксирован и будет учитываться при подсчете общего;zostanie użyty do obliczenie całkowitej liczby punktów
+9_15Line6;number of experience points.; ;количества очков опыта.;doświadczenia.
+9_15Line7;Note that each time you complete the mission again,;Beachte, das jedes Mal, wenn du diese Mission erneut erfolgreich;Примечание: каждый раз прохождения миссии снова,;Za każdym razem kiedy ukończysz tę misję ponownie
+9_15Line8;the amount of money you get when you destroy the enemy;beendet hast, die Geldmenge, die du für das abschiessen der Feinde;количество денег получаемое вами при уничтожении;ilość pieniędzy otrzymana za zniszczenie wrogów w tej
+9_15Line9;in this mission is reduced two times.;erhälst, um die Hälfte reduziert wird.;противника будет сокращаться в два раза.;misji jest redukowana dwukrotnie.
+;;;;
+;;;;
+9_16Line1;Shortcut: F2 - toggle show/hide game FPS counter.;Shortcut: F2 - FPS Zähler An/Aus.;Клавиши: F2 - вкл/выкл отображения FPS.;Skrót: F2 - pokaż/ukryj licznik FPS.
+9_16Line2;Shortcuts: F5 / F6 / F7 - decrease / reset / increase game speed.;Shortcuts: F5 / F6 / F7 - verringere / normalisiere / erhöhe Spielgeschwindigkeit.;Клавиши: F5 / F6 / F7 - уменьшить / сбросить / увеличить скорость игры.;Skróty: F5 / F6 / F7 - zmniejsz / zresetuj / zwiększ prędkość gry.
+9_16Line3;Shortcut: F8 - change weapon panels view.;Shortcut: F8 - Ansicht der Waffentafeln verändern.;Клавиши: F8 - изменить вид панелей оружия.;Skrót: F8 - zmień widok paneli broni.
+9_16Line4;Shortcuts: F9 / F10 - change Primary / Secondary weapon group fire mode.;Shortcuts: F9 / F10 - Feuermodus der Primär /Sekundär Waffen verändern.;Клавиши: F9 / F10 - изменить тип стрельбы для Первичного / Вторичного оружия.;Skróty: F9 / F10 - zmień tryb strzału Głównej / Specjalnej grupy broni.
+9_16Line5;Shortcut: F12 - capture screenshot. (File will be saved on your Desktop.);Shortcut: F12 - Bildschirmfoto. (Foto landet auf dem Desktop.);Клавиши: F12 - скриншот. (Файл будет сохранен на рабочем столе.);Skrót: F12 - przechwyć obraz. (Plik zostanie zapisany na Pulpicie.)
+9_16Line6;Shortcut: Esc - show/hide game menu. (Pause.);Shortcut: Esc - Spielmenü An/Aus. (Pause.);Клавиши: Esc - показать / скрыть меню игры. (Пауза.);Skrót: Esc - pokaż/ukryj menu gry. (Pauza.)
+;;;;
+9_17Line1;Custom Weapon Angle is use-;Waffenwinkel ist nur mit;Угол поворота возможно;Zmiana Kąta Broni
+9_17Line2;ful with optical computer;optischem Computersystem;использовать только с;wyłącznie z optycznym
+9_17Line3;system Neo or Supra only.;Neo oder Supra nutzbar.;В.О.К.Н Нео и Супра.;komputerem Neo lub Supra.
+;;;;
+;;;;
+9_18Line1;AstroMenace Donation;AstroMenace Geldspende;Пожертвования для игры AstroMenace;AstroMenace Dotacja
+9_18Line2;AstroMenace is Open Source, you can support this game;AstroMenace ist Open Source, aber Sie können durch eine;Игра AstroMenace - проект с открытым исходным кодом (Open;AstroMenace jest wolnym oprogramowaniem, możesz
+9_18Line3;by donation.;Geldspende die Entwicklung unterstützen.;Source), вы можете поддержать разработку игры.;wesprzeć tą grę dotując ją.
+9_18Line4;Available donation methods: Credit and Debit Cards, PayPal,;Verfügbare Spendenmethoden: Kreditkarte, PayPal, WebMoney,;Поддерживаемые способы: Кредитные и дебетовые карты,;Dostępne metody dotowania: Karty Kredytowe i Debetowe, PayPal,
+9_18Line5;Direct Debit, Electronic Checks / ACH, Real Time Bank Transfers,;Internationale Überweisung, Eurochecks, Geldüberweisung,;WebMoney, PayPal, Банковский перевод, Денежный перевод,;Polecenie Zapłaty, Elektroniczne Czeki / ACH, Ekspresowe Przelewy,
+9_18Line6;WebMoney, Local Bank Transfers, Wire Transfers, Purchase Orders.;Überweisung, Post, Skrill (Moneybookers). ;Skrill (Moneybookers).;WebMoney, Zwykłe Przelewy Bankowe, Przelewy, Transakcje Zakupu.
+9_18Line7;Thank you everybody for showing your support;Vielen Dank an Alle für die Unterstützung und;Спасибо всем за поддержку и помощь в развитии;Dziękujemy wszystkim za okazane wsparcie
+9_18Line8;and furthering AstroMenace!;Förderung von AstroMenace!;игры AstroMenace!;i promowanie AstroMenace!
+;;;;
+;;;;
+10_PROJECT_LEADER;PROJECT LEADER, PROGRAMMING;PROJECT LEADER, PROGRAMMING;РУКОВОДИТЕЛЬ, ПРОГРАММИРОВАНИЕ;LIDER PROJEKTU, PROGRAMOWANIE
+10_Mikhail_Kurinnoi;Mikhail Kurinnoi;Mikhail Kurinnoi;Михаил Куринной;Mikhail Kurinnoi
+;;;;
+10_2D_ARTWORK;2D ARTWORK;2D ARTWORK;ГРАФИКА;GRAFIKA 2D
+10_Tatiana_Savitskaya;Tatiana Savitskaya;Tatiana Savitskaya;Татьяна Савицкая;Tatiana Savitskaya
+;;;;
+10_3D_MODELS;3D MODELS;3D MODELS;3Д МОДЕЛИ;MODELE 3D
+10_Max_Shelekhov;Max Shelekhov, 3drt.com;Max Shelekhov, 3drt.com;Макс Шелехов, 3drt.com;Max Shelekhov, 3drt.com
+10_Oleg_Linkov;Oleg Linkov;Oleg Linkov;Олег Линьков;Oleg Linkov
+10_Egor_Kurteanu;Egor Kurteanu;Egor Kurteanu;Egor Kurteanu;Egor Kurteanu
+;;;;
+10_PLANETARY_TEXTURES;PLANETARY TEXTURES;PLANETARY TEXTURES;ТЕКСТУРЫ ПЛАНЕТ;TEKSTURY PLANET
+10_Alex_(Esgaroth)_Reuter;Alex (Esgaroth) Reuter;Alex (Esgaroth) Reuter;Alex (Esgaroth) Reuter;Alex (Esgaroth) Reuter
+10_Robert_Stein;Robert Stein;Robert Stein;Robert Stein;Robert Stein
+;;;;
+10_MUSIC;MUSIC;MUSIC;МУЗЫКА;MUZYKA
+10_Alexander_Matchugovsky;Alexander Matchugovsky;Alexander Matchugovsky;Александр Мачуговский;Alexander Matchugovsky
+;;;;
+10_SOUND_EFFECTS;SOUND EFFECTS;SOUND EFFECTS;ЗВУКОВЫЕ ЭФФЕКТЫ;EFEKTY DŹWIĘKOWE
+10_Mikhail_Sirotkin;Mikhail Sirotkin;Mikhail Sirotkin;Михаил Сироткин;Mikhail Sirotkin
+10_Alexander_Vassilyevsky;Alexander Vassilyevsky;Alexander Vassilyevsky;Александр Васильевский;Alexander Vassilyevsky
+;;;;
+10_VOICE;VOICE;VOICE;ГОЛОС;GŁOS
+10_Elena_Zavalishina_(en,_ru);Elena Zavalishina (en, ru);Elena Zavalishina (en, ru);Елена Завалишина (en, ru);Elena Zavalishina (en, ru)
+10_Petra_Schulten_(de);Petra Schulten (de);Petra Schulten (de);Petra Schulten (de);Petra Schulten (de)
+;;;;
+10_WEB_PROGRAMMING;WEB PROGRAMMING;WEB PROGRAMMING;ВЕБ ПРОГРАММИРОВАНИЕ;PROGRAMOWANIE SIECIOWE
+10_Pavel_Voylov;Pavel Voylov;Pavel Voylov;Павел Войлов;Pavel Voylov
+;;;;
+10_TRANSLATORS;TRANSLATORS;TRANSLATORS;ПЕРЕВОД;TŁUMACZE
+10_Bernd_Dau_(de);Bernd Dau (de);Bernd Dau (de);Bernd Dau (de);Bernd Dau (de)
+10_Mikhail_Kurinnoi_(en,_ru);Mikhail Kurinnoi (en, ru);Mikhail Kurinnoi (en, ru);Михаил Куринной (en, ru);Mikhail Kurinnoi (en, ru)
+10_Jacek_Fiedorowicz_(pl);Jacek Fiedorowicz (pl);Jacek Fiedorowicz (pl);Jacek Fiedorowicz (pl);Jacek Fiedorowicz (pl)
+;;;;
+10_TESTERS;TESTERS;TESTERS;ТЕСТЕРЫ;TESTERZY
+10_Dmitriy_Schigolev;Dmitriy Schigolev;Dmitriy Schigolev;Дмитрий Щеголев;Dmitriy Schigolev
+10_Ivan_Bobrov;Ivan Bobrov;Ivan Bobrov;Иван Бобров;Ivan Bobrov
+10_Vadim_Sosenko;Vadim Sosenko;Vadim Sosenko;Вадим Сосенко;Vadim Sosenko
+10_Dmitriy_Tatarinov;Dmitriy Tatarinov;Dmitriy Tatarinov;Дмитрий Татаринов;Dmitriy Tatarinov
+10_Alexey_Mosesov;Alexey Mosesov;Alexey Mosesov;Алексей Мосесов;Alexey Mosesov
+10_Bernd_Dau;Bernd Dau;Bernd Dau;Bernd Dau;Bernd Dau
+10_Ryan_Foster;Ryan Foster;Ryan Foster;Ryan Foster;Ryan Foster
+10_Jason_Crowell;Jason Crowell;Jason Crowell;Jason Crowell;Jason Crowell
+;;;;
+10_SPECIAL_THANKS_TO;SPECIAL THANKS TO;SPECIAL THANKS TO;ОСОБЫЕ БЛАГОДАРНОСТИ;PODZIĘKOWANIA
+10_Richard_Benson;Richard Benson;Richard Benson;Richard Benson;Richard Benson
+10_Alexey_Madalinskiy;Alexey Madalinskiy;Alexey Madalinskiy;Алексей Мадалинский;Alexey Madalinskiy
+10_Olga_Zhuravleva;Olga Zhuravleva;Olga Zhuravleva;Ольга Журавлева;Olga Zhuravleva
+10_Nick_OConnell;Nick O`Connell;Nick O`Connell;Nick O`Connell;Nick O`Connell
+10_Mikhail_Storcheous;Mikhail Storcheous;Mikhail Storcheous;Михаил Сторчеус;Mikhail Storcheous
+10_Boris_Pek;Boris Pek;Boris Pek;Boris Pek;Boris Pek
+;;;;
+10_POWERED_BY;POWERED BY;POWERED BY;В ИГРЕ ИСПОЛЬЗУЮТСЯ;POWERED BY
+;;;;
+10_DEVELOPING_WITH;DEVELOPING WITH;DEVELOPING WITH;РАЗРАБАТЫВАЕТСЯ С ИСПОЛЬЗОВАНИЕМ;TWORZONE Z
+;;;;
+;;;;
+11_build;build;build;сборка;build
+11_fps;fps;fps;fps;fps
+11_triangles;triangles;triangles;треугольников;triangles
+11_Copyright;Copyright;Copyright;Copyright;Copyright
+11_Version;Version;Version;Версия;Wersja
+11_Loading;LOADING;LADE;ЗАГРУЗКА;WCZYTYWANIE
+;;;;
+;;;;
+12_mission.tga;lang/en/game/mission.tga;lang/de/game/mission.tga;lang/ru/game/mission.tga;lang/en/game/mission.tga
+12_missionfailed.tga;lang/en/game/missionfailed.tga;lang/de/game/missionfailed.tga;lang/ru/game/missionfailed.tga;lang/en/game/missionfailed.tga
+12_pause.tga;lang/en/game/pause.tga;lang/de/game/pause.tga;lang/ru/game/pause.tga;lang/en/game/pause.tga
+12_button_weaponry_in.tga;lang/en/menu/button_weaponry_in.tga;lang/de/menu/button_weaponry_in.tga;lang/ru/menu/button_weaponry_in.tga;lang/pl/menu/button_weaponry_in.tga
+12_button_weaponry_out.tga;lang/en/menu/button_weaponry_out.tga;lang/de/menu/button_weaponry_out.tga;lang/ru/menu/button_weaponry_out.tga;lang/pl/menu/button_weaponry_out.tga
+;;;;
+;;;;
+13_Attention.wav;lang/en/voice/Attention.wav;lang/de/voice/Attention.wav;lang/ru/voice/Attention.wav;lang/en/voice/Attention.wav
+13_CeaseFire.wav;lang/en/voice/CeaseFire.wav;lang/de/voice/CeaseFire.wav;lang/ru/voice/CeaseFire.wav;lang/en/voice/CeaseFire.wav
+13_EngineMalfunction.wav;lang/en/voice/EngineMalfunction.wav;lang/de/voice/EngineMalfunction.wav;lang/ru/voice/EngineMalfunction.wav;lang/en/voice/EngineMalfunction.wav
+13_MissileDetected.wav;lang/en/voice/MissileDetected.wav;lang/de/voice/MissileDetected.wav;lang/ru/voice/MissileDetected.wav;lang/en/voice/MissileDetected.wav
+13_PowerSupplyReestablished.wav;lang/en/voice/PowerSupplyReestablished.wav;lang/de/voice/PowerSupplyReestablished.wav;lang/ru/voice/PowerSupplyReestablished.wav;lang/en/voice/PowerSupplyReestablished.wav
+13_PrepareForAction.wav;lang/en/voice/PrepareForAction.wav;lang/de/voice/PrepareForAction.wav;lang/ru/voice/PrepareForAction.wav;lang/en/voice/PrepareForAction.wav
+13_ReactorMalfunction.wav;lang/en/voice/ReactorMalfunction.wav;lang/de/voice/ReactorMalfunction.wav;lang/ru/voice/ReactorMalfunction.wav;lang/en/voice/ReactorMalfunction.wav
+13_Warning.wav;lang/en/voice/Warning.wav;lang/de/voice/Warning.wav;lang/ru/voice/Warning.wav;lang/en/voice/Warning.wav
+13_WeaponDamaged.wav;lang/en/voice/WeaponDamaged.wav;lang/de/voice/WeaponDamaged.wav;lang/ru/voice/WeaponDamaged.wav;lang/en/voice/WeaponDamaged.wav
+13_WeaponDestroyed.wav;lang/en/voice/WeaponDestroyed.wav;lang/de/voice/WeaponDestroyed.wav;lang/ru/voice/WeaponDestroyed.wav;lang/en/voice/WeaponDestroyed.wav
+13_WeaponMalfunction.wav;lang/en/voice/WeaponMalfunction.wav;lang/de/voice/WeaponMalfunction.wav;lang/ru/voice/WeaponMalfunction.wav;lang/en/voice/WeaponMalfunction.wav

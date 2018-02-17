@@ -1,1 +1,0 @@
-This folder contain planetary textures from VegaTrek "Planetary textures add-on" licensed under GPLv3. Full "Planetary textures add-on" package can be download from VegaTrek file section http://sourceforge.net/projects/vegatrek

@@ -6,29 +6,6 @@ PROJECT(AstroMenace)
 
 
 
-# AstroMenaceFS2VFS
-# standalone pack utility for AstroMenace game (gamedata.vfs file)
-# in order to build AstroMenace and AstroMenaceFS2VFS binary:
-# ~~~~~~~~~~~~~~~~~~~~
-# cmake -DFS2VFS=ON ./
-# ~~~~~~~~~~~~~~~~~~~~
-IF(FS2VFS)
-	# sources
-	FILE(GLOB astromenace_SRCS AstroMenaceSource/MainFS2VFS.cpp
-			AstroMenaceSource/Core/VirtualFileSystem/VFS.cpp
-			AstroMenaceSource/Core/VirtualFileSystem/Haff.cpp
-			AstroMenaceSource/Core/VirtualFileSystem/RLE.cpp)
-
-	# targets
-	ADD_EXECUTABLE(AstroMenaceFS2VFS ${astromenace_SRCS})
-	TARGET_LINK_LIBRARIES(AstroMenaceFS2VFS)
-	SET_TARGET_PROPERTIES(AstroMenaceFS2VFS PROPERTIES COMPILE_FLAGS "-O2 -Wno-unused-result -Dvfs_pack_standalone")
-ENDIF(FS2VFS)
-
-
-
-
-
 
 # AstroMenace
 # in order to build AstroMenace binary with libSDL2, instead of previous libSDL version (1.2):
@@ -281,7 +258,7 @@ ENDIF (NOT APPLE)
 
 
 # sources
-FILE(GLOB_RECURSE astromenace_SRCS AstroMenaceSource/*.cpp)
+FILE(GLOB_RECURSE astromenace_SRCS src/*.cpp)
 
 # targets
 IF(DATADIR)

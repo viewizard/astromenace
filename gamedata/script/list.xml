@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AstroMenaceMissionsList name="AstroMenace Missions List">
+
+	<!-- Here you can override in-game music -->
+	<!--GameMainMusic>OGG File Name (with path)</GameMainMusic-->
+	<!--GameBossMusic>OGG File Name (with path)</GameBossMusic-->
+	<!--GameDeathMusic>OGG File Name (with path)</GameDeathMusic-->
+	
+	<!-- Mission 1 -->
+	<Mission>
+		<Title color="4" type="1">6_Mission1Title</Title>
+		<Descr color="0" type="1">6_Mission1Descr</Descr>
+		<Icon>script/mission1_icon.tga</Icon>
+		<File>script/mission1.xml</File>
+	</Mission>
+
+	<!-- Mission 2 -->
+	<Mission>
+		<Title color="6" type="1">6_Mission2Title</Title>
+		<Descr color="0" type="1">6_Mission2Descr</Descr>
+		<Icon>script/mission2_icon.tga</Icon>
+		<File>script/mission2.xml</File>
+	</Mission>
+
+	<!-- Mission 3 -->
+	<Mission>
+		<Title color="4" type="1">6_Mission3Title</Title>
+		<Descr color="0" type="1">6_Mission3Descr</Descr>
+		<Icon>script/mission3_icon.tga</Icon>
+		<File>script/mission3.xml</File>
+	</Mission>
+
+	<!-- Mission 4 -->
+	<Mission>
+		<Title color="6" type="1">6_Mission4Title</Title>
+		<Descr color="0" type="1">6_Mission4Descr</Descr>
+		<Icon>script/mission4_icon.tga</Icon>
+		<File>script/mission4.xml</File>
+	</Mission>
+
+	<!-- Mission 5 -->
+	<Mission>
+		<Title color="4" type="1">6_Mission5Title</Title>
+		<Descr color="0" type="1">6_Mission5Descr</Descr>
+		<Icon>script/mission5_icon.tga</Icon>
+		<File>script/mission5.xml</File>
+	</Mission>
+
+	<!-- Mission 6 -->
+	<Mission>
+		<Title color="6" type="1">6_Mission6Title</Title>
+		<Descr color="0" type="1">6_Mission6Descr</Descr>
+		<Icon>script/mission6_icon.tga</Icon>
+		<File>script/mission6.xml</File>
+	</Mission>
+
+	<!-- Mission 7 -->
+	<Mission>
+		<Title color="4" type="1">6_Mission7Title</Title>
+		<Descr color="0" type="1">6_Mission7Descr</Descr>
+		<Icon>script/mission7_icon.tga</Icon>
+		<File>script/mission7.xml</File>
+	</Mission>
+
+	<!-- Mission 8 -->
+	<Mission>
+		<Title color="6" type="1">6_Mission8Title</Title>
+		<Descr color="0" type="1">6_Mission8Descr</Descr>
+		<Icon>script/mission8_icon.tga</Icon>
+		<File>script/mission8.xml</File>
+	</Mission>
+
+	<!-- Mission 9 -->
+	<Mission>
+		<Title color="4" type="1">6_Mission9Title</Title>
+		<Descr color="0" type="1">6_Mission9Descr</Descr>
+		<Icon>script/mission9_icon.tga</Icon>
+		<File>script/mission9.xml</File>
+	</Mission>
+
+	<!-- Mission 10 -->
+	<Mission>
+		<Title color="6" type="1">6_Mission10Title</Title>
+		<Descr color="0" type="1">6_Mission10Descr</Descr>
+		<Icon>script/mission10_icon.tga</Icon>
+		<File>script/mission10.xml</File>
+	</Mission>
+
+	<!-- Mission 11 -->
+	<Mission>
+		<Title color="4" type="1">6_Mission11Title</Title>
+		<Descr color="0" type="1">6_Mission11Descr</Descr>
+		<Icon>script/mission11_icon.tga</Icon>
+		<File>script/mission11.xml</File>
+	</Mission>
+
+	<!-- Mission 12 -->
+	<Mission>
+		<Title color="6" type="1">6_Mission12Title</Title>
+		<Descr color="0" type="1">6_Mission12Descr</Descr>
+		<Icon>script/mission12_icon.tga</Icon>
+		<File>script/mission12.xml</File>
+	</Mission>
+
+	<!-- Mission 13 -->
+	<Mission>
+		<Title color="4" type="1">6_Mission13Title</Title>
+		<Descr color="0" type="1">6_Mission13Descr</Descr>
+		<Icon>script/mission13_icon.tga</Icon>
+		<File>script/mission13.xml</File>
+	</Mission>
+
+	<!-- Mission 14 -->
+	<Mission>
+		<Title color="6" type="1">6_Mission14Title</Title>
+		<Descr color="0" type="1">6_Mission14Descr</Descr>
+		<Icon>script/mission14_icon.tga</Icon>
+		<File>script/mission14.xml</File>
+	</Mission>
+
+	<!-- Mission 15 -->
+	<Mission>
+		<Title color="4" type="1">6_Mission15Title</Title>
+		<Descr color="0" type="1">6_Mission15Descr</Descr>
+		<Icon>script/mission15_icon.tga</Icon>
+		<File>script/mission15.xml</File>
+	</Mission>
+
+
+</AstroMenaceMissionsList>

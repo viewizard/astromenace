@@ -1,0 +1,629 @@
+/************************************************************************************
+
+	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
+	Copyright (c) 2006-2018 Mikhail Kurinnoi, Viewizard
+
+
+	AstroMenace is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	AstroMenace is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with AstroMenace. If not, see <http://www.gnu.org/licenses/>.
+
+
+	Web Site: http://www.viewizard.com/
+	Project: https://github.com/viewizard/astromenace
+	E-mail: viewizard@viewizard.com
+
+*************************************************************************************/
+
+
+#ifndef GAME_H
+#define GAME_H
+
+
+// ядро
+#include "core/core.h"
+// структуры
+#include "struct.h"
+
+
+
+// скриптовый движок
+#include "script_engine/script.h"
+// эффекты
+#include "gfx/space_stars/space_stars.h"
+#include "gfx/game_level_text/game_level_text.h"
+// модели и все объекты
+#include "object3d/object3d.h"
+#include "object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
+#include "object3d/space_ship/alien_space_fighter/alien_space_fighter.h"
+#include "object3d/space_ship/alien_space_mothership/alien_space_mothership.h"
+#include "object3d/space_ship/pirate_ship/pirate_ship.h"
+#include "object3d/ground_object/building/building.h"
+#include "object3d/ground_object/military_building/military_building.h"
+#include "object3d/ground_object/wheeled/wheeled.h"
+#include "object3d/ground_object/tracked/tracked.h"
+#include "object3d/space_object/asteroid/asteroid.h"
+#include "object3d/space_object/big_asteroid/big_asteroid.h"
+#include "object3d/space_object/base_part/base_part.h"
+#include "object3d/space_object/ship_part/ship_part.h"
+#include "object3d/space_object/planet/planet.h"
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Main.cpp
+//------------------------------------------------------------------------------------
+extern GameSetup Setup;
+extern eGameStatus GameStatus;
+extern SDL_Joystick *Joystick;
+extern eParticleSystem2D *CursorParticleSystem2D;
+extern CSpaceStars *psSpaceStatic;
+extern VECTOR3D GamePoint;
+extern VECTOR3D GameCameraMovement;
+
+extern  sVideoModes *VideoModes;
+extern  int VideoModesNum;
+extern  sVideoModes CurrentVideoMode;
+
+extern bool LoadedTypes[1000];
+extern char ConfigFileName[MAX_PATH];
+extern char ProgrammDir[MAX_PATH];
+extern char ScreenshotDir[MAX_PATH];
+extern char VFSFileNamePath[MAX_PATH];
+extern char UserPath[MAX_PATH];
+extern bool Quit;
+extern bool CanQuit;
+extern bool NeedReCreate;
+extern bool SDL_MouseCurrentStatus[8];
+extern int JoystickAxisX;
+extern int JoystickAxisY;
+extern bool JoysticButtons[100];
+
+void SaveGameData();
+void CodeXOR(char *Text, char *Key, int Count);
+
+#ifdef fontconfig
+
+struct sFontList
+{
+	char *FontTitle;
+	char *FontFileName;
+};
+extern int FontQuantity;
+extern sFontList *FontList;
+
+#else
+
+struct sFontList
+{
+	const char *FontTitle;
+	const char *FontFileName;
+};
+
+// In order to change/add/delete font:
+//
+// 1. Edit AstroMenaceSource/Game.h file
+// - change/add/delete lines in FontList list
+// - correct FontQuantity variable value
+//
+// 2. Edit AstroMenaceSource/MainFS2VFS.cpp file (for bundled with game fonts only!)
+// - change/add/delete lines in VFSFilesList list
+// - correct VFSFilesListCount variable value
+// - make sure, that you have all font files in ./gamedata/font/ folder
+//
+// You can also use external (installed into your system) ttf fonts. For example:
+/*
+const int FontQuantity = 2;
+const sFontList FontList[FontQuantity] =
+{
+{"Linux Biolinum", "font/LinBiolinumBold.ttf"},
+{"Liberation Sans", "/usr/share/fonts/liberation-fonts/LiberationSans-Bold.ttf"},
+};
+*/
+const int FontQuantity = 8;
+const sFontList FontList[FontQuantity] =
+{
+{"Linux Biolinum", "font/LinBiolinumBold.ttf"},
+{"Linux Libertine", "font/LinLibertineBold.ttf"},
+{"Liberation Mono", "font/LiberationMono-Bold.ttf"},
+{"Liberation Sans", "font/LiberationSans-Bold.ttf"},
+{"Liberation Serif", "font/LiberationSerif-Bold.ttf"},
+{"FreeFont Mono", "font/FreeMonoBold.ttf"},
+{"FreeFont Sans", "font/FreeSansBold.ttf"},
+{"FreeFont Serif", "font/FreeSerifBold.ttf"},
+};
+
+#endif //fontconfig
+
+
+
+
+//------------------------------------------------------------------------------------
+// MainFS2VFS.cpp
+//------------------------------------------------------------------------------------
+int ConvertFS2VFS(char RawDataDir[MAX_PATH]);
+
+
+
+
+//------------------------------------------------------------------------------------
+// Setup.cpp
+//------------------------------------------------------------------------------------
+bool LoadXMLSetupFile(bool NeedSafeMode);
+void SaveXMLSetupFile();
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// loop_proc.cpp
+//------------------------------------------------------------------------------------
+extern ScriptEngine *Script;
+
+extern int ComBuffer;
+extern int CurrentCursorStatus;
+extern bool DrawGameCursor;
+
+void Loop_Proc();
+void CreateCursor();
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// loop_audio.cpp
+//------------------------------------------------------------------------------------
+extern bool GameMainMusicSet;
+extern char GameMainMusic[MAX_PATH];
+extern bool GameBossMusicSet;
+extern char GameBossMusic[MAX_PATH];
+extern bool GameDeathMusicSet;
+extern char GameDeathMusic[MAX_PATH];
+
+int Audio_PlaySound2D(unsigned int SoundID, float fVol, bool Loop = false);
+int Audio_PlayVoice(unsigned int VoiceID, float fVol, bool Loop = false);
+void Audio_LoopProc();
+bool InitAudio();
+void ShutdownAudio();
+void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime);
+void Audio_SetSound2DMainVolume(float NewMainVolume);
+void Audio_SetVoiceMainVolume(float NewMainVolume);
+
+
+
+
+//------------------------------------------------------------------------------------
+// loading.cpp
+//------------------------------------------------------------------------------------
+void LoadGameData(int LoadType);
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Camera.cpp, GameCamera.cpp, CameraMath.cpp
+//------------------------------------------------------------------------------------
+void GameCameraUpdate(float Time);
+void InitGameCamera();
+float GameCameraGetDeviation();
+float GameCameraGetSpeed();
+void GameCameraSetExplosion(VECTOR3D Location, float Power);
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// SkyBox.cpp
+//------------------------------------------------------------------------------------
+void SkyBoxSetTexture(eTexture *nTexture, int Side);
+void SkyBoxCreate(float nx, float ny, float nz, float nwidth, float nheight, float nlength);
+void SkyBoxDraw(void);
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// StarSystem.cpp
+//------------------------------------------------------------------------------------
+void StarSystemInit(int Num, VECTOR3D SetBaseRotation);
+void StarSystemDraw(int DrawType); // 1- меню, 2- игра
+void StarSystemDrawSecondLayer(int DrawType);
+void StarSystemUpdate();
+void StarSystemRelease();
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// ShadowMap.cpp
+//------------------------------------------------------------------------------------
+bool ShadowMap_Init(int Width, int Height);
+void ShadowMap_Release();
+void ShadowMap_StartRenderToFBO(VECTOR3D FocusPointCorrection, float Distance, float fFarClip);
+void ShadowMap_EndRenderToFBO();
+void ShadowMap_StartFinalRender();
+void ShadowMap_EndFinalRender();
+float ShadowMap_Get_xPixelOffset();
+float ShadowMap_Get_yPixelOffset();
+
+
+
+
+//------------------------------------------------------------------------------------
+// Button.cpp
+//------------------------------------------------------------------------------------
+extern int CurrentActiveMenuElement;
+extern int CurrentKeyboardSelectMenuElement;
+
+bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTransp, float *Update);
+bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTransp, float *Update, bool Off=false);
+bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, bool SoundClick = true);
+bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off);
+void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Transp);
+bool DrawListUpButton(int X, int Y, float Transp, bool Off);
+bool DrawListDownButton(int X, int Y, float Transp, bool Off);
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Menu.cpp
+//------------------------------------------------------------------------------------
+extern float Button1Transp;
+extern float LastButton1UpdateTime;
+extern float Button2Transp;
+extern float LastButton2UpdateTime;
+extern float Button3Transp;
+extern float LastButton3UpdateTime;
+extern float Button4Transp;
+extern float LastButton4UpdateTime;
+extern float Button5Transp;
+extern float LastButton5UpdateTime;
+extern float Button6Transp;
+extern float LastButton6UpdateTime;
+extern float Button7Transp;
+extern float LastButton7UpdateTime;
+extern float Button8Transp;
+extern float LastButton8UpdateTime;
+extern float Button9Transp;
+extern float LastButton9UpdateTime;
+extern float Button10Transp;
+extern float LastButton10UpdateTime;
+extern float Button11Transp;
+extern float LastButton11UpdateTime;
+extern float Button12Transp;
+extern float LastButton12UpdateTime;
+extern float Button13Transp;
+extern float LastButton13UpdateTime;
+extern float Button14Transp;
+extern float LastButton14UpdateTime;
+extern float MenuContentTransp;
+extern float LastMenuOnOffUpdateTime;
+
+void InitMenu();
+void SetOptionsMenu(eGameStatus Menu);
+void SetMenu(eGameStatus Menu);
+void DrawMenu();
+void DrawTransparent(RECT *DstRect, RECT *SrcRect, eTexture *Tex, eTexture *Tex2, bool Alpha, float Transp, float RotateAngle, int DrawCorner, float R, float G, float B);
+void MainMenu();
+
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Menu_Credits.cpp
+//------------------------------------------------------------------------------------
+extern float CreditsCurrentPos;
+extern float LastCreditsCurrentPosUpdateTime;
+
+void CreditsMenu();
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Menu_Options.cpp
+//------------------------------------------------------------------------------------
+extern int Options_Width;
+extern int Options_Height;
+extern int Options_BPP;
+extern int Options_VSync;
+extern int Options_iAspectRatioWidth;
+
+void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1, float *ButtonTransp2, float *LastButtonUpdateTime2);
+void SaveOptionsMenuTmpData();
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Menu_ConfControl.cpp
+//------------------------------------------------------------------------------------
+extern int NeedCheck;
+extern int ButQuant;
+extern float But[10];
+
+void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1);
+const char * MouseCodeName(char Num);
+const char * JoystickCodeName(int Num);
+void CheckMouseKeybJState();
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Menu_Interface.cpp
+//------------------------------------------------------------------------------------
+void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1);
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Menu_OptionsAdvMenu.cpp
+//------------------------------------------------------------------------------------
+extern int Options_TexturesCompressionType;
+extern int Options_UseGLSL;
+extern int Options_MSAA;
+extern int Options_CSAA;
+extern int Options_ShadowMap;
+extern int Options_TexturesQuality;
+
+void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1, float *ButtonTransp2, float *LastButtonUpdateTime2);
+void SaveOptionsAdvMenuTmpData();
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Menu_Profile.cpp
+//------------------------------------------------------------------------------------
+extern int CurrentProfile;
+extern char NewProfileName[128];
+extern int NewProfileNamePos;
+
+void ProfileMenu();
+void DeleteRecord();
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Menu_Information.cpp
+//------------------------------------------------------------------------------------
+extern int CreateNum;
+
+void InformationMenu();
+void InformationDrawObject();
+void CreateInfoObject();
+void DestroyInfoObject();
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Menu_TopScores.cpp
+//------------------------------------------------------------------------------------
+extern char GameName[10][128];
+extern int GameScore[10];
+
+void TopScoresMenu();
+void AddTopScores(int Score, char Name[128], bool Type);
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Menu_Difficulty.cpp
+//------------------------------------------------------------------------------------
+void DifficultyMenu();
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Menu_Mission.cpp
+//------------------------------------------------------------------------------------
+extern int CurrentMission;
+extern int AllMission;
+extern int StartMission;
+extern int EndMission;
+
+void MissionMenu();
+char *GetMissionFileName();
+void MissionsListRelease();
+void MissionsListInit();
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Menu_Workshop.cpp
+//------------------------------------------------------------------------------------
+extern int CurrentWorkshop;
+extern int NewWeaponControlType;
+extern int NewWeaponControlTypeData;
+extern int VoiceNeedMoreEnergy;
+extern int VoiceAmmoOut;
+
+void WorkshopMenu();
+void WorkshopCreate();
+void WorkshopDestroyData();
+const char *GetWeaponIconName(int Num);
+
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// game.cpp
+//------------------------------------------------------------------------------------
+extern CEarthSpaceFighter *PlayerFighter;
+
+extern int GameNPCWeaponPenalty;
+extern int GameNPCArmorPenalty;
+extern int GameNPCTargetingSpeedPenalty;
+extern int GameLimitedAmmo;
+extern int GameDestroyableWeapon;
+extern int GameWeaponTargetingMode;
+extern int GameSpaceShipControlMode;
+extern int GameEngineSystem;
+extern int GameTargetingSystem;
+extern int GameAdvancedProtectionSystem;
+extern int GamePowerSystem;
+extern int GameTargetingMechanicSystem;
+extern int GameMenuStatus;
+extern float GameContentTransp;
+extern float GameButton1Transp;
+extern float LastGameButton1UpdateTime;
+extern bool NeedShowGameMenu;
+extern bool NeedHideGameMenu;
+extern bool GameMissionCompleteStatus;
+extern float StarsTileStartTransparentLayer1;
+extern float StarsTileEndTransparentLayer1;
+extern float StarsTileStartTransparentLayer2;
+extern float StarsTileEndTransparentLayer2;
+
+void InitGame();
+void DrawGame();
+void ExitGame();
+void RealExitGame();
+void ExitGameWithSave();
+void SetGameMissionComplete();
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Dialog.cpp
+//------------------------------------------------------------------------------------
+void SetCurrentDialogBox(int DialogBox);
+bool isDialogBoxDrawing();
+void DrawDialogBox();
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Game_Mission.cpp
+//------------------------------------------------------------------------------------
+void GameSetMissionTitleData(float ShowTime, int Num);
+void GameDrawMissionTitle();
+void GameSetMissionFailedData(float ShowTime);
+void GameDrawMissionFailed();
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------
+// Game_WeaponSlot.cpp
+//------------------------------------------------------------------------------------
+void DrawGameWeaponSlots();
+
+
+
+
+
+
+
+
+
+
+
+
+#endif // GAME_H

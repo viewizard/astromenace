@@ -88,7 +88,7 @@ $ make
 
 ### 4) Create game VFS data file
 ```bash
-$ ./AstroMenace --pack --rawdata=./RAW_VFS_DATA
+$ ./AstroMenace --pack --rawdata=./gamedata
 ```
 
 ### 5) Create desktop shortcut or start AstroMenace
