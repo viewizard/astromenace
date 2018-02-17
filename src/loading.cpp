@@ -901,10 +901,8 @@ void DrawViewizardLogo(eTexture *ViewizardLogoTexture)
 
 		SDL_Delay(2);
 
-#ifndef multithread
 		// ставим и сюда, иначе не сможем играть во время загрузки
 		Audio_LoopProc();
-#endif
 	}
 
 
@@ -979,10 +977,8 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, eTexture 
 		}
 	}
 
-#ifndef multithread
 	// ставим и сюда, иначе не сможем играть во время загрузки
 	Audio_LoopProc();
-#endif
 
 	(*LastDrawTime) = vw_GetTime();
 }
@@ -1067,40 +1063,6 @@ bool ReleaseGameData(int LoadType)
 
 
 
-
-
-
-// отдельный поток для проигывания музыки при загрузке
-#ifdef multithread
-
-//------------------------------------------------------------------------------------
-// Процедура звука
-//------------------------------------------------------------------------------------
-bool LoadSoundThreadNeedOff = false;
-int LoadSoundThread(void *UNUSED(data))
-{
-	LoadSoundThreadNeedOff = false;
-
-	while (!LoadSoundThreadNeedOff)
-	{
-		Audio_LoopProc();
-		SDL_Delay(10);
-	}
-
-	return 0;
-}
-
-#endif //multithread
-
-
-
-
-
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // процедура загрузки данных, тип загрузки, с логотипом (-1) или без (0-10)
 //------------------------------------------------------------------------------------
@@ -1117,9 +1079,6 @@ void LoadGameData(int LoadType)
 	int RealLoadedTextures = 0;
 	bool NeedLoadShaders = false;
 	int AllDrawLoading = 0;
-#ifdef multithread
-	SDL_Thread *SoundThread = 0;
-#endif //multithread
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверяем, если уже что-то было загружено, если данные для этой миссии-меню загружены - тут вообще нечего делать
@@ -1397,18 +1356,6 @@ void LoadGameData(int LoadType)
 
 
 
-#ifdef multithread
-	// поток проигрывания звука
-#ifdef use_SDL2
-	SoundThread = SDL_CreateThread(LoadSoundThread, "MusicThread", 0);
-#else
-	SoundThread = SDL_CreateThread(LoadSoundThread, 0);
-#endif // use_SDL2
-#endif //multithread
-
-
-
-
 	// в самом начале () до прорисовки подложки загрузки - генерируем все возможные символы для меню (чтобы в процессе прорисовки меньше подгружать)
 	// если памяти мало, мы очищаем текстуры, надо перегенерировать шрифт и создать новые текстуры
 	if ((LoadType == -1) || (!Setup.EqualOrMore128MBVideoRAM))
@@ -1675,19 +1622,6 @@ void LoadGameData(int LoadType)
 		DrawLoading(RealLoadedTextures, AllDrawLoading, &LastDrawTime, LoadImageTexture);
 
 	}
-
-
-
-
-
-
-#ifdef multithread
-	//ждем завершение звука
-	LoadSoundThreadNeedOff = true;
-	if (SoundThread != 0) SDL_WaitThread(SoundThread, NULL);
-#endif //multithread
-
-
 
 
 
