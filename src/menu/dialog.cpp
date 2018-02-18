@@ -1660,56 +1660,7 @@ void DrawDialogBox()
 			break;
 		}
 
-
-		case 15: // подсказка - пожертвование
-		{
-			// название диалога
-			SizeI1 = vw_FontSize(vw_GetText("9_Tipsandhints"));
-			SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
-			vw_DrawFont(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7f*DialogContentTransp, vw_GetText("9_Tipsandhints"));
-			// текст диалога
-			int k=33;
-
-			SizeI = (768 - vw_FontSize(vw_GetText("9_18Line1")))/2;
-			vw_DrawFont(X+SizeI, Y+80+k*0, -716, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("9_18Line1"));
-
-			SizeI = vw_FontSize(vw_GetText("9_18Line2"));
-			vw_DrawFont(X+25, Y+80+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line2"));
-			vw_DrawFont(X+25, Y+80+k*3, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line3"));
-
-			SizeI = vw_FontSize(vw_GetText("9_18Line4"));
-			vw_DrawFont(X+25, Y+80+k*5, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line4"));
-			SizeI = vw_FontSize(vw_GetText("9_18Line5"));
-			vw_DrawFont(X+25, Y+80+k*6, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line5"));
-			vw_DrawFont(X+25, Y+80+k*7, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("9_18Line6"));
-
-			if (DrawDialogButton200(X+284, Y+80+k*9, vw_GetText("1_DONATE"), DialogContentTransp))
-			{
-
-				// нужно свернуть игру, запустить броузер и выйти в основное меню
-				SDL_MinimizeWindow(vw_GetSDL2Windows());
-
-				if (!strcmp(vw_GetLanguageList()[Setup.MenuLanguage-1].code, "ru")) vw_OpenBrouser("http://www.viewizard.com/ru/astromenace/donors.php");
-				else
-					if (!strcmp(vw_GetLanguageList()[Setup.MenuLanguage-1].code, "de")) vw_OpenBrouser("http://www.viewizard.com/de/astromenace/donors.php");
-					else vw_OpenBrouser("http://www.viewizard.com/astromenace/donors.php");
-			}
-
-
-			SizeI = (768 - vw_FontSize(vw_GetText("9_18Line7")))/2;
-			vw_DrawFont(X+SizeI, Y+80+k*11, 0, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("9_18Line7"));
-
-			SizeI = (768 - vw_FontSize(vw_GetText("9_18Line8")))/2;
-			vw_DrawFont(X+SizeI, Y+80+k*12, 0, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("9_18Line8"));
-
-			// чекбокс
-			bool ttt = !Setup.NeedShowHint[6];
-			DrawCheckBox_2(X+36, Y+ButtonOffset, &ttt, vw_GetText("9_notshowtip"), DialogContentTransp);
-			Setup.NeedShowHint[6] = !ttt;
-			// кнопки
-			if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("1_CLOSE"), DialogContentTransp)) CloseDialog();
-			break;
-		}
+		/* 15 - reserved */
 
 		// спрашиваем какой язык при первом старте игры
 		case 16:

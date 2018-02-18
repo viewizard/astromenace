@@ -206,6 +206,6 @@ IF(FONTCONFIG_LIBRARY AND FONTCONFIG_INCLUDE_DIR_fontconfig)
 ENDIF(FONTCONFIG_LIBRARY AND FONTCONFIG_INCLUDE_DIR_fontconfig)
 
 # we need speed optimization flag Os, this could add up to 40% FPS in game
-ADD_DEFINITIONS("-Os -s")
+ADD_DEFINITIONS("-Os")
 ADD_EXECUTABLE(AstroMenace ${astromenace_SRCS})
 TARGET_LINK_LIBRARIES(AstroMenace ${ALL_LIBRARIES})

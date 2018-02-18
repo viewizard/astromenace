@@ -441,20 +441,6 @@ void DrawMenu()
 				if (CurrentWorkshop == 3)
 					if (Setup.NeedShowHint[3]) SetCurrentDialogBox(12);
 			}
-			if (GameStatus == MISSION)
-			{
-				// проверяем, если в одном из профайлов уже открыли 3 миссии - выводим хинт с пожертвованием
-				bool NeedShowDonate = false;
-				for (int i=0; i<5; i++)
-				{
-					if (Setup.Profile[i].Used)
-						if (Setup.Profile[i].ByMissionExperience[2] > 0) NeedShowDonate = true;
-				}
-
-				if (NeedShowDonate)
-					if (Setup.NeedShowHint[6]) SetCurrentDialogBox(15);
-			}
-
 		}
 	}
 
