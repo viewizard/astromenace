@@ -451,10 +451,9 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 		return -1;
 	}
 
-
 	// делаем первый проход и подсчитываем кол-во файлов
 	int	ModelsPackListCount = 0;
-	eVFS_Entry *TmpVFSEntry = vw_GetStarVFSArray();
+	eVFS_Entry *TmpVFSEntry = vw_GetStartVFSArray();
 	while (TmpVFSEntry != 0)
 	{
 		ModelsPackListCount++;
@@ -470,7 +469,7 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 	filedatasize = new int[ModelsPackListCount];
 
 	// заполняем массивы
-	TmpVFSEntry = vw_GetStarVFSArray();
+	TmpVFSEntry = vw_GetStartVFSArray();
 	int FileCount = 0;
 	while (TmpVFSEntry != 0)
 	{
@@ -504,7 +503,7 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 
 
 	// создаем новый файл VFS
-	vw_CreateVFS(VFSFileNamePath, GAME_BUILD);
+	eVFS *WritableVFS = vw_CreateVFS(VFSFileNamePath, GAME_BUILD);
 
 
 	// используем не авто поиск по дирректориям, как было, а заранее сформированный список
@@ -518,7 +517,7 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 	for (int i=0; i<ModelsPackListCount; i++)
 	{
 		// запись в VFS
-		if (0 != vw_WriteIntoVFSfromMemory(filename[i], filedata[i], filedatasize[i]))
+		if (0 != vw_WriteIntoVFSfromMemory(WritableVFS, filename[i], filedata[i], filedatasize[i]))
 		{
 			// какая-то ошибка, не можем записать в VFS
 			fprintf(stderr, "Can't write into VFS from memory %s !!!\n", filename[i]);
@@ -546,10 +545,10 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH])
 
 		strcpy(DstFileName, VFSFilesList[i]);
 
-		if (0 != vw_WriteIntoVFSfromFile(SrcFileName, DstFileName))
+		if (0 != vw_WriteIntoVFSfromFile(WritableVFS, SrcFileName, DstFileName))
 		{
 			fprintf(stderr, "VFS compilation process aborted!\n");
-        	return -1;
+		return -1;
 		}
 	}
 

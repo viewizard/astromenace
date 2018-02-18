@@ -50,6 +50,7 @@
 					<Add option="-Os" />
 					<Add option="-Wextra" />
 					<Add option="-Wall" />
+					<Add option="-std=c++98" />
 					<Add option="-Dfontconfig_detected_by_cmake" />
 					<Add option="-Duse_SDL2" />
 					<Add directory="/usr/include/freetype2/" />
@@ -230,8 +231,6 @@
 		<Unit filename="src/core/texture/texture_manager.cpp" />
 		<Unit filename="src/core/texture/texture_png.cpp" />
 		<Unit filename="src/core/texture/texture_tga.cpp" />
-		<Unit filename="src/core/vfs/haff.cpp" />
-		<Unit filename="src/core/vfs/rle.cpp" />
 		<Unit filename="src/core/vfs/vfs.cpp" />
 		<Unit filename="src/core/vfs/vfs.h" />
 		<Unit filename="src/core/xml/xml.cpp" />

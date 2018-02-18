@@ -188,7 +188,7 @@ ALuint vw_CreateSoundBufferFromWAV(const char *Name)
 	file = vw_fopen(Name);
 	if (file == 0) return 0;
 
-	Buffer = alutCreateBufferFromFileImage(file->Data, file->RealLength);
+	Buffer = alutCreateBufferFromFileImage(file->Data, file->Size);
 	if (!CheckALUTError()) return 0;
 
 	vw_fclose(file);

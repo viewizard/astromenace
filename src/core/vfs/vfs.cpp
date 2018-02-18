@@ -24,1394 +24,614 @@
 
 *************************************************************************************/
 
-
 #include "vfs.h"
 
+/* Doubly-linked list with connected VFS. */
+eVFS *StartVFS = NULL;
+eVFS *EndVFS = NULL;
 
-// Список подключенных VFS файлов
-eVFS *StartVFS = 0;
-eVFS *EndVFS = 0;
-eVFS *vw_GetStartVFS(){ return StartVFS;}
+/* Doubly-linked list with files in VFS. */
+eVFS_Entry *StartVFSArray = NULL;
+eVFS_Entry *EndVFSArray = NULL;
 
+/* Doubly-linked list with opened files. */
+eFILE *StartFileVFS = NULL;
+eFILE *EndFileVFS = NULL;
 
-
-
-// Список файлов, доступных в подключенных (открытых) VFS
-eVFS_Entry *StarVFSArray = 0;
-eVFS_Entry *EndVFSArray = 0;
-eVFS_Entry *vw_GetStarVFSArray(){ return StarVFSArray;}
-
-
-
-
-// Список файлов (открытых)
-eFILE *StartFileVFS = 0;	// Указатель на первый файл в списке...
-eFILE *EndFileVFS = 0;		// Указатель на последний файл в списке...
+enum file_location {
+FILE_NOT_FOUND = -1,
+FILE_IN_VFS = 1, /* File present in the VFS. */
+FILE_IN_FS = 2 /* File present in the File System. */
+};
 
 
-
-
-
-
-//------------------------------------------------------------------------------------
-// тест сжатия
-//------------------------------------------------------------------------------------
-int CheckCompression(int tmpLength, const BYTE *buffer, char *ArhKeyVFS)
+/*
+ * Get first entry from VFS linked list.
+ */
+eVFS_Entry *vw_GetStartVFSArray()
 {
-	// устанавливаем данные
-	BYTE *dstVFS = 0;
-	BYTE *srcVFS = new BYTE[tmpLength];
-	memcpy(srcVFS, buffer, tmpLength);
-
-	int dsizeVFS = tmpLength;
-	int ssizeVFS = tmpLength;
-
-
-
-	// цикл по кол-ву примененных методов сжатия в ArhKeyVFS
-	for (unsigned int i=0; i<strlen(ArhKeyVFS);i++)
-	{
-		// находим, какой текущий метод сжатия
-		char S = ArhKeyVFS[strlen(ArhKeyVFS)-i-1];
-
-		// если RLE
-		if (S == VFS_DATA_ARH_RLE)
-		{
-			vw_DATAtoRLE(&dstVFS, srcVFS, &dsizeVFS, ssizeVFS);
-			delete [] srcVFS;
-			srcVFS = dstVFS;
-			ssizeVFS = dsizeVFS;
-			dstVFS = 0;
-		}
-		// если HAFF
-		if (S == VFS_DATA_ARH_HAFF)
-		{
-			vw_DATAtoHAFF(&dstVFS, srcVFS, &dsizeVFS, ssizeVFS);
-			delete [] srcVFS;
-			srcVFS = dstVFS;
-			ssizeVFS = dsizeVFS;
-			dstVFS = 0;
-		}
-	}
-
-	delete [] srcVFS; srcVFS = 0;
-
-	return dsizeVFS;
+	return StartVFSArray;
 }
 
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Создание VFS
-//------------------------------------------------------------------------------------
-int vw_CreateVFS(const char *Name, unsigned int BuildNumber)
+/*
+ * Create VFS file.
+ */
+eVFS *vw_CreateVFS(const char *Name, unsigned int BuildNumber)
 {
-	// Начальная подготовка структуры списка...
-	eVFS *TempVFS = 0;
-	TempVFS = new eVFS; if (TempVFS == 0) return -1;
+	if (Name == NULL)
+		return NULL;
 
-	TempVFS->NumberOfFilesVFS = 0;
+	eVFS *TempVFS = new eVFS;
+
 	TempVFS->HeaderLengthVFS = 0;
 	TempVFS->HeaderOffsetVFS = 0;
 	TempVFS->DataStartOffsetVFS = 0;
+	TempVFS->Writable = true;
 
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// открываем файл VFS
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	TempVFS->File = 0;
 	TempVFS->File = SDL_RWFromFile(Name, "wb");
-    if (TempVFS->File == NULL)
-    {
-        fprintf(stderr, "Can't open VFS file for write %s\n", Name);
-        return -1; // ERROR
-    }
+	if (TempVFS->File == NULL) {
+		fprintf(stderr, "Can't open VFS file for write %s\n", Name);
+		delete TempVFS;
+		return NULL;
+	}
 
-
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// выделяем память для имени
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	TempVFS->FileName = 0;
-	TempVFS->FileName = new char[strlen(Name)+1]; if (TempVFS->FileName == 0) return -1;
+	TempVFS->FileName = new char[strlen(Name)+1];
 	strcpy(TempVFS->FileName, Name);
 
-
-	// первый в списке...
-	if (EndVFS == 0)
-	{
-		TempVFS->Prev = 0;
-		TempVFS->Next = 0;
+	/* attach VFS to linked list */
+	if (EndVFS == NULL) {
+		TempVFS->Prev = NULL;
+		TempVFS->Next = NULL;
 		StartVFS = TempVFS;
 		EndVFS = TempVFS;
 	}
-	else // продолжаем заполнение...
-	{
+	else {
 		TempVFS->Prev = EndVFS;
-		TempVFS->Next = 0;
+		TempVFS->Next = NULL;
 		EndVFS->Next = TempVFS;
 		EndVFS = TempVFS;
 	}
 
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// пишем VFS_ (4б) + версию (4б) + номер билда (4б)
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	/* write VFS sign, version and build number */
 	char tmp1[5] = "VFS_";
 	SDL_RWwrite(TempVFS->File, tmp1, 4, 1);
 	SDL_RWwrite(TempVFS->File, VFS_VER, 4, 1);
 	SDL_RWwrite(TempVFS->File, &BuildNumber, 4, 1);
 
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// пишем смещение начала таблицы
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	TempVFS->HeaderOffsetVFS = 4+4+4+4+4;//VFS_ ver build offset lenght
-	TempVFS->DataStartOffsetVFS = 4+4+4; //VFS_ ver build
-
+	/* write new table offset and size */
+	TempVFS->HeaderOffsetVFS = 4+4+4+4+4; /* VFS_ + ver + build + offset + size */
+	TempVFS->DataStartOffsetVFS = 4+4+4; /* VFS_ + ver + build */
 	SDL_RWwrite(TempVFS->File, &TempVFS->HeaderOffsetVFS, 4, 1);
 	SDL_RWwrite(TempVFS->File, &TempVFS->HeaderLengthVFS, 4, 1);
 
 	printf("VFS file was created %s\n", Name);
-	return 0;
+	return TempVFS;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// запись данных в VFS
-//------------------------------------------------------------------------------------
-int vw_WriteIntoVFSfromFile(const char *SrcName, const char *DstName)
+/*
+ * Write data from file into VFS file.
+ */
+int vw_WriteIntoVFSfromFile(eVFS *WritableVFS, const char *SrcName, const char *DstName)
 {
-	if (SrcName == 0) return -1;
-	if (DstName == 0) return -1;
+	if ((SrcName == 0) || (DstName == 0))
+		return -1;
 
 	// читаем данные файла в буфер
 	SDL_RWops *Ftmp = SDL_RWFromFile(SrcName, "rb");
 	// Если файл не найден - выходим
-	if (Ftmp == NULL)
-    {
-		fprintf(stderr, "Can't find file %s !!!\n", SrcName);
-        return -1;
-    }
+	if (Ftmp == NULL) {
+		fprintf(stderr, "Can't find file %s\n", SrcName);
+		return -1;
+	}
 
-	// получаем размер файла
 	SDL_RWseek(Ftmp, 0, SEEK_END);
-	int tmpLength = SDL_RWtell(Ftmp);
+	int tmpSize = SDL_RWtell(Ftmp);
 	SDL_RWseek(Ftmp, 0, SEEK_SET);
 
-	// копируем все данные файла в массив
-	BYTE *tmp = 0;
-	tmp = new BYTE[tmpLength];
-	SDL_RWread(Ftmp, tmp, tmpLength, 1);
+	/* copy data to tmp buffer */
+	BYTE *tmp = new BYTE[tmpSize];
+	SDL_RWread(Ftmp, tmp, tmpSize, 1);
 	SDL_RWclose(Ftmp);
 
-	// запись в VFS
-	if (0 != vw_WriteIntoVFSfromMemory(DstName, tmp, tmpLength))
-	{
-		// какая-то ошибка, не можем записать в VFS
-		delete [] tmp; tmp = 0;
-		fprintf(stderr, "Can't write into VFS from memory %s !!!\n", DstName);
-		return -1;
-	}
+	/* write into VFS */
+	int rc = vw_WriteIntoVFSfromMemory(WritableVFS, DstName, tmp, tmpSize);
+	if (rc != 0)
+		fprintf(stderr, "Can't write into VFS from memory %s\n", DstName);
+	/* release tmp buffer */
+	delete [] tmp;
 
-	// Освобождаем память
-	delete [] tmp; tmp = 0;
-
-	return 0;
+	return rc;
 }
 
-
-
-
-//------------------------------------------------------------------------------------
-// запись данных в VFS
-//------------------------------------------------------------------------------------
-int	vw_WriteIntoVFSfromMemory(const char *Name, const BYTE * buffer, int size)
+/*
+ * Write data from memory into VFS file.
+ */
+int vw_WriteIntoVFSfromMemory(eVFS *WritableVFS, const char *Name, const BYTE *buffer, int size)
 {
+	if ((WritableVFS == NULL) || (Name == NULL) ||
+	    (buffer == NULL) || (size <= 0))
+		return -1;
 
-	// (!) пока работаем только с одной открытой VFS в системе, собственно больше и не нужно
-
-	eVFS *WritebleVFS = StartVFS;
-
-	if (WritebleVFS == 0)
-	{
-		fprintf(stderr, "Can't find VFS opened for write\n");
+	if (!WritableVFS->Writable) {
+		fprintf(stderr, "Can't write into VFS, VFS not writable %s\n", Name);
 		return -1;
 	}
 
+	eVFS_Entry *NewVFS_Entry = new eVFS_Entry;
 
-
-	// Начальная подготовка структуры списка для новых данных
-	eVFS_Entry *NewVFS_Entry = 0;
-	NewVFS_Entry = new eVFS_Entry; if (NewVFS_Entry == 0) return -1;
-
-	// первый в списке...
-	if (EndVFSArray == 0)
-	{
-		NewVFS_Entry->Prev = 0;
-		NewVFS_Entry->Next = 0;
-		StarVFSArray = NewVFS_Entry;
+	/* attach VFS to linked list */
+	if (EndVFSArray == NULL) {
+		NewVFS_Entry->Prev = NULL;
+		NewVFS_Entry->Next = NULL;
+		StartVFSArray = NewVFS_Entry;
 		EndVFSArray = NewVFS_Entry;
 	}
-	else // продолжаем заполнение...
-	{
+	else {
 		NewVFS_Entry->Prev = EndVFSArray;
-		NewVFS_Entry->Next = 0;
+		NewVFS_Entry->Next = NULL;
 		EndVFSArray->Next = NewVFS_Entry;
 		EndVFSArray = NewVFS_Entry;
 	}
 
-	NewVFS_Entry->Parent = WritebleVFS;
-
-	NewVFS_Entry->ArhKeyLen = 0;
-	NewVFS_Entry->ArhKey = 0;
-	NewVFS_Entry->NameLen = (DWORD)strlen(Name);
-
-	NewVFS_Entry->Name = 0;
-	NewVFS_Entry->Name = new char[NewVFS_Entry->NameLen+1];
+	NewVFS_Entry->Parent = WritableVFS;
+	NewVFS_Entry->NameSize = (DWORD)strlen(Name);
+	NewVFS_Entry->Name = new char[NewVFS_Entry->NameSize+1];
 	strcpy(NewVFS_Entry->Name, Name);
 
-	NewVFS_Entry->Link = false;
-	NewVFS_Entry->Offset = WritebleVFS->HeaderOffsetVFS; // т.к. это будет последний файл в структуре...
-	NewVFS_Entry->Length = size;
-	NewVFS_Entry->RealLength = size;
+	/* add new data to VFS file, in this case we could use
+	 * HeaderOffsetVFS, since this is the end of data part
+	 */
+	NewVFS_Entry->Offset = WritableVFS->HeaderOffsetVFS;
+	NewVFS_Entry->Size = size;
+	SDL_RWseek(WritableVFS->File, NewVFS_Entry->Offset, SEEK_SET);
+	SDL_RWwrite(WritableVFS->File, buffer, NewVFS_Entry->Size, 1);
 
-
-
-
-
-
-
-
-	// надо составлять свою ArhKeyVFS
-	// 0 - 0
-	int BestMode = 0;
-
-#ifdef compression
-
-	int BestSize = NewVFS_Entry->Length;
-	int TmpSize = 0;
-
-
-	// 1 - 1
-	NewVFS_Entry->ArhKey = new char[1+1];
-	NewVFS_Entry->ArhKey[0] = '1';
-	NewVFS_Entry->ArhKey[1] = 0;
-	TmpSize = CheckCompression(NewVFS_Entry->Length, buffer, NewVFS_Entry->ArhKey);
-	if (TmpSize<BestSize)
-	{
-		BestMode = 1;
-		BestSize = TmpSize;
-	}
-
-	// 2 - 2
-	if (NewVFS_Entry->ArhKey != 0){delete [] NewVFS_Entry->ArhKey; NewVFS_Entry->ArhKey = 0;}
-	NewVFS_Entry->ArhKey = new char[1+1];
-	NewVFS_Entry->ArhKey[0] = '2';
-	NewVFS_Entry->ArhKey[1] = 0;
-	TmpSize = CheckCompression(NewVFS_Entry->Length, buffer, NewVFS_Entry->ArhKey);
-	if (TmpSize<BestSize)
-	{
-		BestMode = 2;
-		BestSize = TmpSize;
-	}
-
-	// 3 - 12
-	if (NewVFS_Entry->ArhKey != 0){delete [] NewVFS_Entry->ArhKey; NewVFS_Entry->ArhKey = 0;}
-	NewVFS_Entry->ArhKey = new char[2+1];
-	NewVFS_Entry->ArhKey[0] = '1';
-	NewVFS_Entry->ArhKey[0] = '2';
-	NewVFS_Entry->ArhKey[1] = 0;
-	TmpSize = CheckCompression(NewVFS_Entry->Length, buffer, NewVFS_Entry->ArhKey);
-	if (TmpSize<BestSize)
-	{
-		BestMode = 3;
-		BestSize = TmpSize;
-	}
-
-	// 4 - 21
-	if (NewVFS_Entry->ArhKey != 0){delete [] NewVFS_Entry->ArhKey; NewVFS_Entry->ArhKey = 0;}
-	NewVFS_Entry->ArhKey = new char[2+1];
-	NewVFS_Entry->ArhKey[0] = '2';
-	NewVFS_Entry->ArhKey[0] = '1';
-	NewVFS_Entry->ArhKey[1] = 0;
-	TmpSize = CheckCompression(NewVFS_Entry->Length, buffer, NewVFS_Entry->ArhKey);
-	if (TmpSize<BestSize)
-	{
-		BestMode = 4;
-	}
-
-#endif // compression
-
-	if (NewVFS_Entry->ArhKey != 0){delete [] NewVFS_Entry->ArhKey; NewVFS_Entry->ArhKey = 0;}
-
-	switch (BestMode)
-	{
-		default: // по умолчанию (0), или если неверный номер, не используем сжатие
-			NewVFS_Entry->ArhKeyLen = 2;
-			NewVFS_Entry->ArhKey = new char[NewVFS_Entry->ArhKeyLen];
-			NewVFS_Entry->ArhKey[0] = '0';
-			NewVFS_Entry->ArhKey[1] = 0;
-			break;
-		case 1:
-			NewVFS_Entry->ArhKeyLen = 2;
-			NewVFS_Entry->ArhKey = new char[NewVFS_Entry->ArhKeyLen];
-			NewVFS_Entry->ArhKey[0] = '1';
-			NewVFS_Entry->ArhKey[1] = 0;
-			break;
-		case 2:
-			NewVFS_Entry->ArhKeyLen = 2;
-			NewVFS_Entry->ArhKey = new char[NewVFS_Entry->ArhKeyLen];
-			NewVFS_Entry->ArhKey[0] = '2';
-			NewVFS_Entry->ArhKey[1] = 0;
-			break;
-		case 3:
-			NewVFS_Entry->ArhKeyLen = 3;
-			NewVFS_Entry->ArhKey = new char[NewVFS_Entry->ArhKeyLen];
-			NewVFS_Entry->ArhKey[0] = '1';
-			NewVFS_Entry->ArhKey[1] = '2';
-			NewVFS_Entry->ArhKey[2] = 0;
-			break;
-		case 4:
-			NewVFS_Entry->ArhKeyLen = 3;
-			NewVFS_Entry->ArhKey = new char[NewVFS_Entry->ArhKeyLen];
-			NewVFS_Entry->ArhKey[0] = '2';
-			NewVFS_Entry->ArhKey[1] = '1';
-			NewVFS_Entry->ArhKey[2] = 0;
-			break;
-	}
-
-
-
-
-
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// если используется сжатие - запаковываем данные
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	// устанавливаем данные
-	BYTE *dstVFS = 0;
-	BYTE *srcVFS = 0;
-	srcVFS = new BYTE[NewVFS_Entry->Length];
-	memcpy(srcVFS, buffer, NewVFS_Entry->Length);
-	int ssizeVFS = NewVFS_Entry->Length;
-
-	if (!((NewVFS_Entry->ArhKey[0]=='0')&(strlen(NewVFS_Entry->ArhKey)==1)))
-	{
-		// цикл по кол-ву примененных методов сжатия в ArhKeyVFS
-		for (unsigned int i=0; i<strlen(NewVFS_Entry->ArhKey);i++)
-		{
-			// находим, какой текущий метод сжатия
-			char S = NewVFS_Entry->ArhKey[strlen(NewVFS_Entry->ArhKey)-i-1];
-
-			// если RLE
-			if (S == VFS_DATA_ARH_RLE)
-			{
-				vw_DATAtoRLE(&dstVFS, srcVFS, &NewVFS_Entry->Length, ssizeVFS);
-				delete [] srcVFS;
-				srcVFS = dstVFS;
-				ssizeVFS = NewVFS_Entry->Length;
-				dstVFS = 0;
-
-			}
-			// если HAFF
-			if (S == VFS_DATA_ARH_HAFF)
-			{
-				vw_DATAtoHAFF(&dstVFS, srcVFS, &NewVFS_Entry->Length, ssizeVFS);
-				delete [] srcVFS;
-				srcVFS = dstVFS;
-				ssizeVFS = NewVFS_Entry->Length;
-				dstVFS = 0;
-			}
-		}
-	}
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// пишем данные в VFS
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	SDL_RWseek(WritebleVFS->File, WritebleVFS->HeaderOffsetVFS, SEEK_SET);
-	SDL_RWwrite(WritebleVFS->File, srcVFS, NewVFS_Entry->Length, 1);
-	delete [] srcVFS; srcVFS = 0;
-
-
-
-
-	// переписывать все ентри, принадлежащие этому вфс файлу, в конец
-	eVFS_Entry *Tmp = StarVFSArray;
-	while (Tmp != 0)
-	{
+	/* write all entries belong to this VFS file */
+	eVFS_Entry *Tmp = StartVFSArray;
+	while (Tmp != NULL) {
 		eVFS_Entry *Tmp1 = Tmp->Next;
 
-		// пишем только файлы (не линки)
-		if ((!Tmp->Link) && (NewVFS_Entry->Parent == WritebleVFS))
-		{
-			SDL_RWwrite(WritebleVFS->File, &Tmp->ArhKeyLen, 1, 1);
-			if (Tmp->ArhKeyLen > 0)
-				SDL_RWwrite(WritebleVFS->File, Tmp->ArhKey, Tmp->ArhKeyLen, 1);
-			SDL_RWwrite(WritebleVFS->File, &Tmp->NameLen, 2, 1);
-			SDL_RWwrite(WritebleVFS->File, Tmp->Name, Tmp->NameLen, 1);
-			SDL_RWwrite(WritebleVFS->File, &Tmp->Offset, 4, 1);
-			SDL_RWwrite(WritebleVFS->File, &Tmp->Length, 4, 1);
-			SDL_RWwrite(WritebleVFS->File, &Tmp->RealLength, 4, 1);
+		if (NewVFS_Entry->Parent == WritableVFS) {
+			SDL_RWwrite(WritableVFS->File, &Tmp->NameSize, 2, 1);
+			SDL_RWwrite(WritableVFS->File, Tmp->Name, Tmp->NameSize, 1);
+			SDL_RWwrite(WritableVFS->File, &Tmp->Offset, 4, 1);
+			SDL_RWwrite(WritableVFS->File, &Tmp->Size, 4, 1);
 		}
 
 		Tmp = Tmp1;
 	}
 
+	/* correct table offset and size */
+	WritableVFS->HeaderOffsetVFS += NewVFS_Entry->Size;
+	WritableVFS->HeaderLengthVFS += 1+2+NewVFS_Entry->NameSize+4+4+4;
 
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// меняем данные
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	WritebleVFS->HeaderOffsetVFS += NewVFS_Entry->Length;
-	WritebleVFS->HeaderLengthVFS += 1+NewVFS_Entry->ArhKeyLen+2+NewVFS_Entry->NameLen+4+4+4;
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// переписываем смещение начала таблицы
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	SDL_RWseek(WritebleVFS->File, WritebleVFS->DataStartOffsetVFS, SEEK_SET);
-	SDL_RWwrite(WritebleVFS->File, &WritebleVFS->HeaderOffsetVFS, 4, 1);
-	SDL_RWwrite(WritebleVFS->File, &WritebleVFS->HeaderLengthVFS, 4, 1);
-
+	/* rewrite table offset and size */
+	SDL_RWseek(WritableVFS->File, WritableVFS->DataStartOffsetVFS, SEEK_SET);
+	SDL_RWwrite(WritableVFS->File, &WritableVFS->HeaderOffsetVFS, 4, 1);
+	SDL_RWwrite(WritableVFS->File, &WritableVFS->HeaderLengthVFS, 4, 1);
 
 	printf("%s file added to VFS.\n", Name);
-
 	return 0;
 }
 
-
-
-
-//------------------------------------------------------------------------------------
-// Открытие (подключение) VFS
-//------------------------------------------------------------------------------------
+/*
+ * Open VFS file.
+ */
 int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 {
 	unsigned int vfsBuildNumber = 0;
-	int POS = 0; // указатель позиции в буфере.
-	BYTE *buff = 0;
 	int HeaderOffsetVFS;
 	int HeaderLengthVFS;
+	int VFS_FileSize;
+	eVFS *TempVFS;
 
+	TempVFS = new eVFS;
+	TempVFS->Writable = false;
 
-	// Начальная подготовка структуры списка...
-	eVFS *TempVFS = 0;
-	TempVFS = new eVFS; if (TempVFS == 0) return -1;
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// открываем файл VFS
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	TempVFS->File = 0;
 	TempVFS->File = SDL_RWFromFile(Name, "rb");
-    if (TempVFS->File == NULL)
-    {
-        fprintf(stderr, "Can't find VFS file %s\n", Name);
-        return -1; // ERROR
-    }
+	if (TempVFS->File == NULL)
+	{
+		fprintf(stderr, "Can't find VFS file %s\n", Name);
+		goto error;
+	}
 
+	SDL_RWseek(TempVFS->File,0,SEEK_END);
+	VFS_FileSize = SDL_RWtell(TempVFS->File);
+	SDL_RWseek(TempVFS->File,0,SEEK_SET);
 
-
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// выделяем память для имени
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	TempVFS->FileName = 0;
-	TempVFS->FileName = new char[strlen(Name)+1]; if (TempVFS->FileName == 0) return -1;
+	TempVFS->FileName = new char[strlen(Name)+1];
 	strcpy(TempVFS->FileName, Name);
 
-
-
-
-	// первый в списке...
-	if (EndVFS == 0)
-	{
-		TempVFS->Prev = 0;
-		TempVFS->Next = 0;
-		StartVFS = TempVFS;
-		EndVFS = TempVFS;
-	}
-	else // продолжаем заполнение...
-	{
-		TempVFS->Prev = EndVFS;
-		TempVFS->Next = 0;
-		EndVFS->Next = TempVFS;
-		EndVFS = TempVFS;
-	}
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Проверяем сигнатуру "VFS_" - 4 байт
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	char Sign[5]; Sign[4] = 0;
+	/* check VFS file sign "VFS_" */
+	char Sign[5];
+	Sign[4] = '\0'; /* just to be sure, that we have null-terminated string */
 #ifdef use_SDL2
-	if(SDL_RWread(TempVFS->File, &Sign, 4, 1) == 0)
+	if(SDL_RWread(TempVFS->File, &Sign, 4, 1) == 0) {
 #else
-	if(SDL_RWread(TempVFS->File, &Sign, 4, 1) == -1)
+	if(SDL_RWread(TempVFS->File, &Sign, 4, 1) == -1) {
 #endif
-	{
-		// если файл меньше, значит ошибка
 		fprintf(stderr, "VFS file size error %s\n", Name);
-		goto vw_OpenVFS_Error;
+		goto error;
 	}
-	if (strncmp(Sign, "VFS_", 4) != 0)
-	{
-		// нет сигнатуры
+	if (strncmp(Sign, "VFS_", 4) != 0) {
 		fprintf(stderr, "VFS file header error %s\n", Name);
-		goto vw_OpenVFS_Error;
+		goto error;
 	}
 
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Bерсия - 4 байт
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	char Version[5]; Version[4] = 0;
+	/* check VFS file version */
+	char Version[5];
+	Version[4] = '\0'; /* just to be sure, that we have null-terminated string */
 #ifdef use_SDL2
-	if(SDL_RWread(TempVFS->File, &Version, 4, 1) == 0)
+	if(SDL_RWread(TempVFS->File, &Version, 4, 1) == 0) {
 #else
-	if(SDL_RWread(TempVFS->File, &Version, 4, 1) == -1)
+	if(SDL_RWread(TempVFS->File, &Version, 4, 1) == -1) {
 #endif
-	{
 		fprintf(stderr, "VFS file corrupted: %s\n", Name);
-		goto vw_OpenVFS_Error;
+		goto error;
 	}
-	if (strncmp(Version, "v1.5", 4) != 0)
-	{
-		fprintf(stderr, "VFS file has wrong version, version %s not supported: %s\n", Version, Name);
-		goto vw_OpenVFS_Error;
+	if (strncmp(Version, VFS_VER, 4) != 0) {
+		fprintf(stderr,
+			"VFS file has wrong version, version %s not supported: %s\n",
+			Version, Name);
+		goto error;
 	}
 
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Билд - 4 байт (если предали ноль - проверять билды не нужно)
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	/* check VFS file build number */
 #ifdef use_SDL2
-	if(SDL_RWread(TempVFS->File, &vfsBuildNumber, 4, 1) == 0)
+	if(SDL_RWread(TempVFS->File, &vfsBuildNumber, 4, 1) == 0) {
 #else
-	if(SDL_RWread(TempVFS->File, &vfsBuildNumber, 4, 1) == -1)
+	if(SDL_RWread(TempVFS->File, &vfsBuildNumber, 4, 1) == -1) {
 #endif
-	{
 		fprintf(stderr, "VFS file corrupted: %s\n", Name);
-		goto vw_OpenVFS_Error;
+		goto error;
 	}
-	// если передали ноль - проверка не нужна
-	if (BuildNumber != 0)
-	{
-		if (vfsBuildNumber == 0)
-		{
+	if (BuildNumber != 0) {
+		if (vfsBuildNumber == 0) {
 			printf("VFS file build number was not set (0).\n");
 		}
-		else
-		{
-			if (BuildNumber != vfsBuildNumber)
-			{
-				fprintf(stderr, "VFS file has wrong build number (%u), you need VFS with build number %u\n", vfsBuildNumber, BuildNumber);
-				goto vw_OpenVFS_Error;
+		else {
+			if (BuildNumber != vfsBuildNumber) {
+				fprintf(stderr,
+					"VFS file has wrong build number (%u), you need VFS with build number %u\n",
+					vfsBuildNumber, BuildNumber);
+				goto error;
 			}
 		}
 	}
 
+	/* all looks legit, attach VFS to linked list */
+	if (EndVFS == NULL) {
+		TempVFS->Prev = NULL;
+		TempVFS->Next = NULL;
+		StartVFS = TempVFS;
+		EndVFS = TempVFS;
+	}
+	else {
+		TempVFS->Prev = EndVFS;
+		TempVFS->Next = NULL;
+		EndVFS->Next = TempVFS;
+		EndVFS = TempVFS;
+	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// читаем смещение таблицы данных VFS - 4 байт
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	SDL_RWread(TempVFS->File, &HeaderOffsetVFS, sizeof(HeaderOffsetVFS), 1);
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// читаем длину таблицы данных VFS
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	SDL_RWread(TempVFS->File, &HeaderLengthVFS, sizeof(HeaderLengthVFS), 1);
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Читаем в буфер всю таблицу
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	SDL_RWseek(TempVFS->File, HeaderOffsetVFS, SEEK_SET);
-	buff = new BYTE[HeaderLengthVFS]; if (buff == 0) return -1;
-	SDL_RWread(TempVFS->File, buff, HeaderLengthVFS, 1);
 
+	/* add entries from new connected VFS file */
+	while (VFS_FileSize != SDL_RWtell(TempVFS->File)) {
+		eVFS_Entry *Temp = new eVFS_Entry;
 
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Составляем (дополняем) список доступных файлов
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	SDL_RWseek(TempVFS->File, HeaderOffsetVFS, SEEK_SET);
-	while (POS<HeaderLengthVFS)
-	{
-		// Начальная подготовка структуры списка...
-		eVFS_Entry *Temp = 0;
-		Temp = new eVFS_Entry; if (Temp == 0) {delete [] buff; return -1;}
-
-		// первый в списке...
-		if (EndVFSArray == 0)
-		{
-			Temp->Prev = 0;
-			Temp->Next = 0;
-			StarVFSArray = Temp;
+		if (EndVFSArray == NULL) {
+			Temp->Prev = NULL;
+			Temp->Next = NULL;
+			StartVFSArray = Temp;
 			EndVFSArray = Temp;
 		}
-		else // продолжаем заполнение...
-		{
+		else {
 			Temp->Prev = EndVFSArray;
-			Temp->Next = 0;
+			Temp->Next = NULL;
 			EndVFSArray->Next = Temp;
 			EndVFSArray = Temp;
 		}
 
 		Temp->Parent = TempVFS;
 
-		SDL_RWseek(TempVFS->File, 1, SEEK_CUR);
-		Temp->ArhKeyLen = buff[POS];
-		Temp->ArhKey = new char[Temp->ArhKeyLen+1]; if (Temp->ArhKey == 0) {delete [] buff; return -1;}
-		Temp->ArhKey[Temp->ArhKeyLen] = 0;// последний символ всегда ноль - конец строки
-		SDL_RWread(TempVFS->File, Temp->ArhKey, Temp->ArhKeyLen, 1);
-
-		SDL_RWseek(TempVFS->File, 2, SEEK_CUR);
-		Temp->NameLen = buff[POS+1+Temp->ArhKeyLen+1]*0x100+buff[POS+Temp->ArhKeyLen+1];
-		Temp->Name = new char[Temp->NameLen+1]; if (Temp->Name == 0) {delete [] buff; return -1;}
-		Temp->Name[Temp->NameLen] = 0;// последний символ всегда ноль - конец строки
-		SDL_RWread(TempVFS->File, Temp->Name, Temp->NameLen, 1);
-		Temp->Link = false;
+		SDL_RWread(TempVFS->File, &Temp->NameSize, 2, 1);
+		Temp->Name = new char[Temp->NameSize+1];
+		SDL_RWread(TempVFS->File, Temp->Name, Temp->NameSize, 1);
+		/* just to be sure, that we have null-terminated string */
+		Temp->Name[Temp->NameSize] = '\0';
 		SDL_RWread(TempVFS->File, &(Temp->Offset), sizeof(Temp->Offset), 1);
-		SDL_RWread(TempVFS->File, &(Temp->Length), sizeof(Temp->Length), 1);
-		SDL_RWread(TempVFS->File, &(Temp->RealLength), sizeof(Temp->RealLength), 1);
-		POS = POS + 1 + Temp->ArhKeyLen + 2 + Temp->NameLen + 4 + 4 + 4;
+		SDL_RWread(TempVFS->File, &(Temp->Size), sizeof(Temp->Size), 1);
 	}
 
-	// Освобождаем память...
-	delete [] buff;
-
-
-	// выходим, все хорошо
 	printf("VFS file was opened %s\n", Name);
 	return 0;
 
+error:
+	if (TempVFS->File != NULL)
+		SDL_RWclose(TempVFS->File);
+	if (TempVFS->FileName != NULL)
+		delete [] TempVFS->FileName;
+	delete TempVFS;
 
-	// была ошибка
-vw_OpenVFS_Error:
-	SDL_RWclose(TempVFS->File);
-	if (TempVFS->FileName != 0){delete [] TempVFS->FileName; TempVFS->FileName = 0;}
 	return -1;
 }
 
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Закрываем VFS
-//------------------------------------------------------------------------------------
-void vw_CloseVFS(void)
+/*
+ * Close all VFS.
+ */
+void vw_CloseVFS()
 {
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// даже если файла нет, все равно освобождаем память
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	eVFS_Entry *Tmp = StarVFSArray;
-	while (Tmp != 0)
+	/* release all VFS entry */
+	eVFS_Entry *Tmp = StartVFSArray;
+	while (Tmp != NULL)
 	{
 		eVFS_Entry *Tmp1 = Tmp->Next;
 
-		if (Tmp->Name != 0) {delete [] Tmp->Name; Tmp->Name = 0;}
-		if (Tmp->ArhKey != 0) {delete [] Tmp->ArhKey; Tmp->ArhKey = 0;}
+		if (Tmp->Name != NULL)
+			delete [] Tmp->Name;
 
-		// переустанавливаем указатели...
-		if (StarVFSArray == Tmp) StarVFSArray = Tmp->Next;
-		if (EndVFSArray == Tmp) EndVFSArray = Tmp->Prev;
+		if (StartVFSArray == Tmp)
+			StartVFSArray = Tmp->Next;
+		if (EndVFSArray == Tmp)
+			EndVFSArray = Tmp->Prev;
 
+		if (Tmp->Next != NULL)
+			Tmp->Next->Prev = Tmp->Prev;
+		else if (Tmp->Prev != NULL)
+			Tmp->Prev->Next = NULL;
 
-		if (Tmp->Next != 0) Tmp->Next->Prev = Tmp->Prev;
-			else if (Tmp->Prev != 0) Tmp->Prev->Next = 0;
-		if (Tmp->Prev != 0) Tmp->Prev->Next = Tmp->Next;
-			else if (Tmp->Next != 0) Tmp->Next->Prev = 0;
+		if (Tmp->Prev != NULL)
+			Tmp->Prev->Next = Tmp->Next;
+		else if (Tmp->Next != NULL)
+			Tmp->Next->Prev = NULL;
 
 		delete Tmp;
 		Tmp = Tmp1;
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// устанавливаем указатели в исходное состояние
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	StarVFSArray = 0;
-	EndVFSArray = 0;
+	/* reset linked list */
+	StartVFSArray = NULL;
+	EndVFSArray = NULL;
 
-
-
+	/* release all VFS */
 	eVFS *TempVFS = StartVFS;
-	while (TempVFS != 0)
-	{
+	while (TempVFS != NULL) {
 		eVFS *TempVFS1 = TempVFS->Next;
 
-
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// если VFS файл открыт, закрываем его
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		if (TempVFS->File != NULL)
-		{
 			SDL_RWclose(TempVFS->File);
-			TempVFS->File = 0;
-		}
 
-
-
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// освобождаем пямять в VFSFileName и пишем сообщение о закрытии
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		if (TempVFS->FileName != 0)
-		{
+		if (TempVFS->FileName != NULL) {
 			printf("VFS file was closed %s\n", TempVFS->FileName);
-			delete [] TempVFS->FileName; TempVFS->FileName = 0;
+			delete [] TempVFS->FileName;
 		}
 
+		delete TempVFS;
 		TempVFS = TempVFS1;
 	}
 
-	StartVFS = 0;
-	EndVFS = 0;
+	/* reset linked list */
+	StartVFS = NULL;
+	EndVFS = NULL;
 }
 
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Завершаем работу с VFS
-//------------------------------------------------------------------------------------
-void vw_ShutdownVFS(void)
+/*
+ * Shutdown VFS (all eFILE files will be closed).
+ */
+void vw_ShutdownVFS()
 {
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// закрываем все открытые файлы
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (StartFileVFS != 0)
-	{
-		// берем указатель на первый файл
+	/* close all files */
+	if (StartFileVFS != NULL) {
 		eFILE *Tmp = StartFileVFS;
-		// просматриваем все файлы
-		while (Tmp != 0)
-		{
+
+		while (Tmp != NULL) {
 			eFILE *Tmp1 = Tmp->Next;
+
 			vw_fclose(Tmp);
 			Tmp = Tmp1;
 		}
 	}
 
+	/* reset linked list */
+	StartFileVFS = NULL;
+	EndFileVFS = NULL;
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// устанавливаем указатели в исходное состояние
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	StartFileVFS = 0;
-	EndFileVFS = 0;
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Закрываем VFS
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_CloseVFS();
 }
 
-
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// создаем "симлинк" внутри VFS
-//------------------------------------------------------------------------------------
-bool vw_CreateEntryLinkVFS(const char *FileName, const char *FileNameLink)
+/*
+ * Detect file location.
+ */
+static file_location DetectFileLocation(const char *FileName)
 {
-	// проверяем, если уже есть такой файл или линк - выходим
-	eVFS_Entry *Tmp = StarVFSArray;
-	while (Tmp != 0)
-	{
-		eVFS_Entry *Tmp1 = Tmp->Next;
-		if (strcmp(Tmp->Name, FileNameLink) == 0)
-		{
-			// нашли, такой файл или симлинк уже есть в системе
-			fprintf(stderr, "VFS link creation error, file or link already present: %s\n", FileNameLink);
-			return false;
-		}
-		Tmp = Tmp1;
+	if (FileName == NULL)
+		return FILE_NOT_FOUND;
+
+	/* trying to find file in VFS by name */
+	eVFS_Entry *Tmp1 = StartVFSArray;
+	while (Tmp1 != NULL) {
+		eVFS_Entry *Tmp2 = Tmp1->Next;
+
+		if(strcmp(FileName, Tmp1->Name) == 0)
+			return FILE_IN_VFS;
+
+		Tmp1 = Tmp2;
 	}
 
-
-	// находим запись с соотв. RealName и меняем Name
-	eVFS_Entry *OutputEntry = 0;
-	Tmp = StarVFSArray;
-	while (Tmp != 0 && OutputEntry == 0)
-	{
-		eVFS_Entry *Tmp1 = Tmp->Next;
-		if (strcmp(Tmp->Name, FileName) == 0)
-		{
-			OutputEntry = Tmp;
-
-			// добавляем новую eVFS_Entry запись в конец списка
-			eVFS_Entry *NewTemp = 0;
-			NewTemp = new eVFS_Entry;
-
-			NewTemp->Link = true;
-
-			NewTemp->NameLen = strlen(FileNameLink)+1;
-			NewTemp->Name = new char[NewTemp->NameLen];
-			strcpy(NewTemp->Name, FileNameLink);
-
-			NewTemp->Offset = OutputEntry->Offset;
-			NewTemp->Length = OutputEntry->Length;
-			NewTemp->RealLength = OutputEntry->RealLength;
-			NewTemp->Parent = OutputEntry->Parent;
-
-			NewTemp->ArhKeyLen = OutputEntry->ArhKeyLen;
-			NewTemp->ArhKey = new char[NewTemp->ArhKeyLen];
-			strcpy(NewTemp->ArhKey, OutputEntry->ArhKey);
-
-			// добавляем запись в конец списка
-			NewTemp->Prev = EndVFSArray;
-			NewTemp->Next = 0;
-			EndVFSArray->Next = NewTemp;
-			EndVFSArray = NewTemp;
-
-
-			printf("VFS link created: %s > %s\n", FileName, FileNameLink);
-			return true;
-		}
-		Tmp = Tmp1;
+	/* trying to open real file in file system */
+	SDL_RWops *File = SDL_RWFromFile(FileName, "rb");
+	if (File != NULL) {
+		SDL_RWclose(File);
+		return FILE_IN_FS;
 	}
 
-
-	// не нашли ничего
-	fprintf(stderr, "VFS link creation error, file not found: %s\n", FileName);
-	return false;
+	return FILE_NOT_FOUND;
 }
 
-
-
-
-//------------------------------------------------------------------------------------
-// удаляем "симлинк" внутри VFS
-//------------------------------------------------------------------------------------
-bool vw_DeleteEntryLinkVFS(const char *FileNameLink)
-{
-
-	// проверяем, если уже есть такой файл или линк - выходим
-	eVFS_Entry *Tmp = StarVFSArray;
-	while (Tmp != 0)
-	{
-		eVFS_Entry *Tmp1 = Tmp->Next;
-		if (strcmp(Tmp->Name, FileNameLink) == 0)
-		{
-			if (Tmp->Link)
-			{
-
-				if (Tmp->Name != 0) {delete [] Tmp->Name; Tmp->Name = 0;}
-				if (Tmp->ArhKey != 0) {delete [] Tmp->ArhKey; Tmp->ArhKey = 0;}
-
-				// переустанавливаем указатели...
-				if (StarVFSArray == Tmp) StarVFSArray = Tmp->Next;
-				if (EndVFSArray == Tmp) EndVFSArray = Tmp->Prev;
-
-				if (Tmp->Next != 0) Tmp->Next->Prev = Tmp->Prev;
-					else if (Tmp->Prev != 0) Tmp->Prev->Next = 0;
-				if (Tmp->Prev != 0) Tmp->Prev->Next = Tmp->Next;
-					else if (Tmp->Next != 0) Tmp->Next->Prev = 0;
-
-				delete Tmp;
-
-				printf("VFS link deleted: %s\n", FileNameLink);
-				return true;
-
-			}
-			else
-			{
-				fprintf(stderr, "VFS link deletion error, can not delete file: %s\n", FileNameLink);
-				return false;
-			}
-		}
-
-
-		Tmp = Tmp1;
-	}
-
-
-	// не нашли ничего
-	fprintf(stderr, "VFS link deletion error, link not found: %s\n", FileNameLink);
-	return false;
-}
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// удаляем все "симлинки" из VFS
-//------------------------------------------------------------------------------------
-bool vw_DeleteAllLinksVFS()
-{
-
-	// проверяем, если уже есть такой файл или линк - выходим
-	eVFS_Entry *Tmp = StarVFSArray;
-	while (Tmp != 0)
-	{
-		eVFS_Entry *Tmp1 = Tmp->Next;
-
-		if (Tmp->Link)
-		{
-			if (Tmp->Name != 0) printf("VFS link deleted: %s\n", Tmp->Name);
-
-			if (Tmp->Name != 0) {delete [] Tmp->Name; Tmp->Name = 0;}
-			if (Tmp->ArhKey != 0) {delete [] Tmp->ArhKey; Tmp->ArhKey = 0;}
-
-			// переустанавливаем указатели...
-			if (StarVFSArray == Tmp) StarVFSArray = Tmp->Next;
-			if (EndVFSArray == Tmp) EndVFSArray = Tmp->Prev;
-
-			if (Tmp->Next != 0) Tmp->Next->Prev = Tmp->Prev;
-				else if (Tmp->Prev != 0) Tmp->Prev->Next = 0;
-			if (Tmp->Prev != 0) Tmp->Prev->Next = Tmp->Next;
-				else if (Tmp->Next != 0) Tmp->Next->Prev = 0;
-
-			delete Tmp;
-		}
-
-		Tmp = Tmp1;
-	}
-
-
-	return true;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Проверка наличия файла в VFS или FS
-//------------------------------------------------------------------------------------
-int FileDetect(const char *FileName)
-{
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// поиск в VFS
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	eVFS_Entry *Tmp = StarVFSArray;
-	while (Tmp != 0)
-	{
-		eVFS_Entry *Tmp1 = Tmp->Next;
-
-		if(strcmp(FileName, Tmp->Name) == 0)
-		{
-			// нашли
-			return VFS_FILE_VFS;
-		}
-
-		Tmp = Tmp1;
-	}
-
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// поиск в FS
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	SDL_RWops *temp = SDL_RWFromFile(FileName, "rb");
-	// смогли открыть файл
-	if (temp != NULL)
-	{
-		SDL_RWclose(temp);
-        return VFS_FILE_FS;
-	}
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Файл не найден
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	return -1;
-}
-
-
-
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Открытие файла в VFS (или подгонка файла FS к классу VFS)
-//------------------------------------------------------------------------------------
-extern char ProgrammDir[MAX_PATH];
+/*
+ * Opens the eFILE.
+ */
 eFILE *vw_fopen(const char *FileName)
 {
+	file_location Location;
+	eFILE *File;
 
+	if (FileName == NULL)
+		return NULL;
 
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверяем наличие файла в системе
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	int ResTMP = FileDetect(FileName);
+	Location = DetectFileLocation(FileName);
 
-
-	if (ResTMP == -1)
-	{
+	if (Location == FILE_NOT_FOUND) {
 		fprintf(stderr, "Can't find the file %s\n", FileName);
-		return 0;
+		return NULL;
 	}
 
+	/* initial memory allocation and setup */
+	File = new eFILE;
+	File->Pos = 0;
+	File->Size = 0;
+	File->VFS_Offset = 0;
+	File->Name = new char[strlen(FileName)+1];
+	strcpy(File->Name, FileName);
 
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// файл в FS , подготовка данных и передача указателя на структуру
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    if (ResTMP == VFS_FILE_FS)
-	{
-		// Начальная подготовка структуры списка...
-		eFILE *Temp = 0;
-		Temp = new eFILE; if (Temp == 0) return 0;
+	if (Location == FILE_IN_VFS) {
+		/* find file in VFS by name */
+		eVFS_Entry *FileInVFS = NULL;
+		eVFS_Entry *Tmp = StartVFSArray;
 
-		// первый в списке...
-		if (EndFileVFS == 0)
-		{
-			Temp->Prev = 0;
-			Temp->Next = 0;
-			StartFileVFS = Temp;
-			EndFileVFS = Temp;
-		}
-		else // продолжаем заполнение...
-		{
-			Temp->Prev = EndFileVFS;
-			Temp->Next = 0;
-			EndFileVFS->Next = Temp;
-			EndFileVFS = Temp;
-		}
-
-		Temp->PackLength = 0;
-		Temp->Pos = 0;
-		Temp->RealLength = 0;
-		Temp->VFS_Offset = 0;
-
-		// заносим имя файла
-		Temp->Name = 0;
-		Temp->Name = new char[strlen(FileName)+1]; if (Temp->Name == 0) return 0;
-		strcpy(Temp->Name, FileName);
-
-		// открываем физ. файл, проверка в детекте...
-		SDL_RWops * fTEMP = SDL_RWFromFile(FileName, "rb");
-
-		// получаем размер файла
-		SDL_RWseek(fTEMP, 0, SEEK_END);
-		Temp->RealLength = SDL_RWtell(fTEMP);
-		Temp->PackLength = Temp->RealLength;
-		SDL_RWseek(fTEMP, 0, SEEK_SET);
-
-		// резервируем память
-		Temp->Data = 0;
-		Temp->Data = new BYTE[Temp->RealLength]; if (Temp->Data == 0) { SDL_RWclose(fTEMP); return 0;}
-
-		// плолучаем данные...
-		SDL_RWread(fTEMP, Temp->Data, 1, Temp->RealLength);
-		SDL_RWclose(fTEMP);
-
-		// передаем указатель на структуру...
-		return Temp;
-	}
-
-
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// файл в VFS , подготовка данных и передача указателя на структуру
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ResTMP == VFS_FILE_VFS)
-	{
-		// Начальная подготовка структуры списка...
-		eFILE *Temp = 0;
-		Temp = new eFILE; if (Temp == 0) return 0;
-
-		// первый в списке...
-		if (EndFileVFS == 0)
-		{
-			Temp->Prev = 0;
-			Temp->Next = 0;
-			StartFileVFS = Temp;
-			EndFileVFS = Temp;
-		}
-		else // продолжаем заполнение...
-		{
-			Temp->Prev = EndFileVFS;
-			Temp->Next = 0;
-			EndFileVFS->Next = Temp;
-			EndFileVFS = Temp;
-		}
-
-		Temp->PackLength = 0;
-		Temp->Pos = 0;
-		Temp->RealLength = 0;
-		Temp->VFS_Offset = 0;
-
-		Temp->Name = 0;
-		Temp->Name = new char[strlen(FileName)+1]; if (Temp->Name == 0) return 0;
-		strcpy(Temp->Name, FileName);
-
-
-
-		// находим указатель на запись в таблице файлов VFS
-		eVFS_Entry *OutputFile = 0;
-		eVFS_Entry *Tmp = StarVFSArray;
-		while (Tmp != 0 && OutputFile == 0)
-		{
+		while (Tmp != NULL) {
 			eVFS_Entry *Tmp1 = Tmp->Next;
 
-			if(strcmp(Temp->Name, Tmp->Name) == 0)
-			{
-				// нашли
-				OutputFile = Tmp;
+			if(strcmp(File->Name, Tmp->Name) == 0) {
+				FileInVFS = Tmp;
+				break;
 			}
-
 			Tmp = Tmp1;
 		}
-		if (OutputFile == 0) return 0;
 
+		File->VFS_Offset = FileInVFS->Offset;
 
-		Temp->PackLength = OutputFile->Length;
-		Temp->VFS_Offset = OutputFile->Offset;
+		File->Data = new BYTE[FileInVFS->Size];
 
-		// резервируем память
-		Temp->Data = 0;
-		Temp->Data = new BYTE[Temp->PackLength]; if (Temp->Data == 0) return 0;
+		SDL_RWseek(FileInVFS->Parent->File, File->VFS_Offset, SEEK_SET);
+		SDL_RWread(FileInVFS->Parent->File, File->Data, FileInVFS->Size, 1);
+		File->Size = FileInVFS->Size;
+	} else if (Location == FILE_IN_FS) {
+		/* open real file in file system */
+		SDL_RWops * fTEMP = SDL_RWFromFile(FileName, "rb");
 
-		// плолучаем данные...
-		SDL_RWseek(OutputFile->Parent->File, Temp->VFS_Offset, SEEK_SET);
-		SDL_RWread(OutputFile->Parent->File, Temp->Data, Temp->PackLength, 1);
-		Temp->RealLength = Temp->PackLength;
+		SDL_RWseek(fTEMP, 0, SEEK_END);
+		File->Size = SDL_RWtell(fTEMP);
+		SDL_RWseek(fTEMP, 0, SEEK_SET);
 
+		File->Data = new BYTE[File->Size];
 
-
-		// используем сжатие?
-		if (!((OutputFile->ArhKey[0]=='0')&(strlen(OutputFile->ArhKey)==1)))
-		{
-			for (size_t i=0; i<OutputFile->ArhKeyLen;i++)
-			{
-				char S = OutputFile->ArhKey[i];
-				size_t cur_i = OutputFile->ArhKeyLen-1;
-
-				if (S == VFS_DATA_ARH_RLE)
-				{
-					BYTE *srcVFS = Temp->Data;
-					BYTE *dstVFS = 0;
-					int ssizeVFS = Temp->RealLength;
-					int dsizeVFS = 0;
-
-					if (i == cur_i)
-						vw_RLEtoDATA(OutputFile->RealLength, &dstVFS, srcVFS, &dsizeVFS, ssizeVFS);
-					else
-						vw_RLEtoDATA(0, &dstVFS, srcVFS, &dsizeVFS, ssizeVFS);
-					srcVFS = 0;
-					Temp->RealLength = dsizeVFS;
-					if (Temp->Data != 0){delete [] Temp->Data; Temp->Data = 0;}
-					Temp->Data = dstVFS;
-					dstVFS = 0;
-				}
-				if (S == VFS_DATA_ARH_HAFF)
-				{
-					BYTE *srcVFS = Temp->Data;
-					BYTE *dstVFS = 0;
-					int ssizeVFS = Temp->RealLength;
-					int dsizeVFS = 0;
-
-					if (i == cur_i)
-						vw_HAFFtoDATA(OutputFile->RealLength, &dstVFS, srcVFS, &dsizeVFS, ssizeVFS);
-					else
-						vw_HAFFtoDATA(0, &dstVFS, srcVFS, &dsizeVFS, ssizeVFS);
-					srcVFS = 0;
-					Temp->RealLength = dsizeVFS;
-					if (Temp->Data != 0){delete [] Temp->Data; Temp->Data = 0;}
-					Temp->Data = dstVFS;
-					dstVFS = 0;
-				}
-			}
-		}
-
-		// передаем указатель на структуру...
-		return Temp;
+		SDL_RWread(fTEMP, File->Data, File->Size, 1);
+		SDL_RWclose(fTEMP);
 	}
 
+	/* add to linked lists */
+	if (EndFileVFS == NULL) {
+		File->Prev = NULL;
+		File->Next = NULL;
+		StartFileVFS = File;
+		EndFileVFS = File;
+	}
+	else {
+		File->Prev = EndFileVFS;
+		File->Next = NULL;
+		EndFileVFS->Next = File;
+		EndFileVFS = File;
+	}
 
-
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// в системе нет такого файла, или какие-то проблемы
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	return 0;
+	return File;
 }
 
-
-
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Закрытие файла в VFS
-//------------------------------------------------------------------------------------
+/*
+ * Closes the eFILE associated with the stream and disassociates it.
+ */
 int vw_fclose(eFILE *stream)
 {
+	if (stream == NULL)
+		return -1;
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// файл не открыли...закрывать нечего...
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (stream == 0) return -1;
+	/* remove from linked lists */
+	if (StartFileVFS == stream)
+		StartFileVFS = stream->Next;
+	if (EndFileVFS == stream)
+		EndFileVFS = stream->Prev;
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Освобождаем память
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (stream->Data != 0) {delete [] stream->Data; stream->Data = 0;}
-	if (stream->Name != 0) {delete [] stream->Name; stream->Name = 0;}
+	if (stream->Next != NULL)
+		stream->Next->Prev = stream->Prev;
+	else if (stream->Prev != NULL)
+		stream->Prev->Next = NULL;
 
+	if (stream->Prev != NULL)
+		stream->Prev->Next = stream->Next;
+	else if (stream->Next != NULL)
+		stream->Next->Prev = NULL;
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Устанавливаем все у начальное состояние
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    stream->PackLength = 0;
-	stream->Pos = 0;
-	stream->RealLength = 0;
-	stream->VFS_Offset =0;
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// переустанавливаем указатели
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-	if (StartFileVFS == stream) StartFileVFS = stream->Next;
-	if (EndFileVFS == stream) EndFileVFS = stream->Prev;
-
-	if (stream->Next != 0) stream->Next->Prev = stream->Prev;
-		else if (stream->Prev != 0) stream->Prev->Next = 0;
-	if (stream->Prev != 0) stream->Prev->Next = stream->Next;
-		else if (stream->Next != 0) stream->Next->Prev = 0;
-
-	if (stream != 0) delete stream;
-
+	/* release alocated memory */
+	if (stream->Data != NULL) {
+		delete [] stream->Data;
+		stream->Data = NULL;
+	}
+	if (stream->Name != NULL) {
+		delete [] stream->Name;
+		stream->Name = NULL;
+	}
+	delete stream;
 
 	return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// чтение блока данных из файла в VFS
-//------------------------------------------------------------------------------------
+/*
+ * Reads an array of count elements, each one with a size of size bytes,
+ * from the stream and stores them in the block of memory specified by buffer.
+ */
 int eFILE::fread(void *buffer, size_t size, size_t count)
 {
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверки
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (buffer == 0) return -1;
-	if (Data == 0) return -1;
+	int CopyCount = 0;
 
-	// Кол-во успешно считанных раз
-	int SecCount = 0;
+	if ((buffer == NULL) || (Data == 0))
+		return -1;
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// считываем данные
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	for (size_t i=0; i<count; i++)
-	{
-		// если можем прочитать следующий блок size размера - читаем
-		if (size <= (unsigned int)(RealLength - Pos))
-		{
-			// считываем байты
-			memcpy((BYTE*)buffer + SecCount*size, Data + Pos, size);
-			// передвигаем текущий указатель
+	/* read data */
+	for (size_t i=0; i<count; i++) {
+		if (size <= (unsigned int)(Size - Pos)) {
+			memcpy((BYTE*)buffer + CopyCount*size, Data + Pos, size);
 			Pos += size;
-			// устанавливаем успешное чтение
-			SecCount++;
+			CopyCount++;
 		}
-		// иначе, уже достигли конца файла - выходим из цикла
-		else break;
+		else break; /* end of eFILE */
 	}
 
-	return SecCount;
+	return CopyCount;
 }
 
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// поиск (установка текущей позиции)
-//------------------------------------------------------------------------------------
+/*
+ * Sets the position indicator associated with the stream to a new position.
+ */
 int eFILE::fseek(long offset, int origin)
 {
-	// изменяем значение указателя, согласно origin...
-	switch (origin)
-	{
+	switch (origin) {
 		case SEEK_CUR:
-			if (Pos + offset > RealLength) return 1;
+			if (Pos + offset > Size)
+				return 1;
 			Pos += offset;
 			break;
 
 		case SEEK_END:
-			if (RealLength-offset < 0) return 1;
-			Pos = RealLength-offset;
+			if (Size - offset < 0)
+				return 1;
+			Pos = Size - offset;
 			break;
 
 		case SEEK_SET:
-			if (offset < 0 || offset > RealLength) return 1;
+			if (offset < 0 || offset > Size)
+				return 1;
 			Pos = offset;
 			break;
 
@@ -1423,54 +643,10 @@ int eFILE::fseek(long offset, int origin)
 	return 0;
 }
 
-
-
-
-//------------------------------------------------------------------------------------
-// получить текущую позицию указателя
-//------------------------------------------------------------------------------------
+/*
+ * Returns the current value of the position indicator of the stream.
+ */
 long eFILE::ftell()
 {
 	return Pos;
 }
-
-
-
-
-//------------------------------------------------------------------------------------
-// узнаем, достигли конца файла или нет
-//------------------------------------------------------------------------------------
-int eFILE::feof()
-{
-	// если указатель больше или равен длине файла - значит он уже за массивом данных файла
-	if (Pos >= RealLength-1) return 1;
-	// иначе - все ок, еще можем читать файл
-	return 0;
-}
-
-
-
-
-//------------------------------------------------------------------------------------
-// Get string from stream
-//------------------------------------------------------------------------------------
-char *eFILE::fgets(char *str, int num)
-{
-	// проверка первая, не читаем больше, чем у нас длина файла
-	if (Pos+num >= RealLength-1) num = (RealLength-1)-Pos;
-
-	for (int i=0; i<num; i++)
-	{
-		str[i] = Data[Pos];
-		Pos++;
-		// конец строки, нужно выйти
-		if (Data[Pos-1] == '\n') return str;
-	}
-
-	return str;
-}
-
-
-
-
-

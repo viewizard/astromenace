@@ -24,161 +24,88 @@
 
 *************************************************************************************/
 
-
 #ifndef VFS_H
 #define VFS_H
 
-
-#include "../../config.h"
 #include "../base.h"
 
-
-
-// File present in the VFS
-#define VFS_FILE_VFS							0x0031
-// File present in the File System
-#define VFS_FILE_FS								0x0032
-
-
-
-
-
-// Current VFS version
-#define VFS_VER									"v1.5"
-// Data compression
-#define VFS_DATA_ARH_NONE						'0'
-#define VFS_DATA_ARH_RLE						'1'
-#define VFS_DATA_ARH_HAFF						'2'
-
-
-
-
-struct eVFS
-{
-	char *FileName;		// Имя файла VFS
-	SDL_RWops *File;	// Указатель на файл виртуальной системы
-
-	// данные для записи в создаваемую VFS
-	int NumberOfFilesVFS;
-	int HeaderLengthVFS;
-	int HeaderOffsetVFS;
-	int DataStartOffsetVFS;
-
-
-	eVFS*	Prev;
-	eVFS*	Next;
-};
-eVFS *vw_GetStartVFS();
-
-
-struct eVFS_Entry
-{
-	BOOL	Link;		// флаг, что это не реальная запись а линк на существующую в VFS
-	DWORD	NameLen;	// Кол-во байт в имени...
-	char	*Name;		// Имя записи (имя файла) (может быть "линком")
-	int		Offset;		// Смещение начала файла относительно начала файловой системы
-	int		Length;		// Длина файла в системе
-	int		RealLength;	// Длина файла после распаковки
-	eVFS	*Parent;
-	BYTE	ArhKeyLen;	// Кол-во байт ключа упаковки
-	char	*ArhKey;	// Ключ-упаковки
-
-	eVFS_Entry*	Prev;
-	eVFS_Entry*	Next;
-
-};
-eVFS_Entry *vw_GetStarVFSArray();
-
-
-struct eFILE
-{
-	char*	Name;		// File name
-  	int		VFS_Offset;	// File offset in the VFS file
-	int		PackLength;	// File size in the VFS file
-	int		RealLength;	// File size in the memory (unpacked file size)
-	long	Pos;		// Current position in the file
-	BYTE*	Data;		// Pointer to the file data (unpacked) in the memory
-
-	// Read data
-	int fread(void *buffer, size_t size, size_t count);
-	// Set current position in the file
-	int fseek(long offset, int origin);
-	// Get current position in the file
-	long ftell();
-	// Check End-of-File indicator
-	int feof();
-	// Get string from stream
-	char *fgets(char *str, int num);
-
-
-	eFILE*	Prev;		// Pointer to the previous opened file
-	eFILE*	Next;		// Pointer to the next opened file
-};
-
-
-
-// VFS functions
-
-// Create VFS file
-int		vw_CreateVFS(const char *Name, unsigned int BuildNumber);
-// Write data from memory into VFS file
-int		vw_WriteIntoVFSfromMemory(const char *Name, const BYTE * buffer, int size);
-// Write data from file into VFS file
-int		vw_WriteIntoVFSfromFile(const char *SrcName, const char *DstName);
-// Open VFS file
-int		vw_OpenVFS(const char *Name, unsigned int BuildNumber);
-// Close VFS file
-void	vw_CloseVFS(void);
-// Shutdown VFS (all eFILE files will be closed)
-void	vw_ShutdownVFS(void);
-// Get file location status (FS or VFS)
-int 	FileDetect(const char *FileName);
-// Create file "symlink"
-bool	vw_CreateEntryLinkVFS(const char *FileName, const char *FileNameLink);
-// Delete file "symlink"
-bool	vw_DeleteEntryLinkVFS(const char *FileNameLink);
-// Delete all "symlinks" in VFS
-bool	vw_DeleteAllLinksVFS();
-
-// eFILE functions
-
-// Open file
-eFILE*	vw_fopen(const char *FileName);
-// Close file
-int		vw_fclose(eFILE *stream);
-
-
-
-
-int vw_HAFFtoDATA(int size, BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS);
-int vw_RLEtoDATA(int size, BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS);
-int vw_DATAtoHAFF(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS);
-int vw_DATAtoRLE(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS);
-
+#define VFS_VER "v1.6"
 
 /*
-VFS v1.5
+
+ Game data VFS v1.6 structure.
 
   4b - 'VFS_'
-  4b - 'v1.5'
+  4b - 'v1.6'
   4b - VFS build number
   4b - file table offset
   4b - file table size
   ?b - data (file data one by one)
 
   - File table structure
-  1b - 00, if no encoding key
-	or
-  1b - encoding key size in byte
-  ?b - encoding key
   2b - file name size
   ?b - file name
   4b - file position offset in VFS file
-  4b - file size in VFS file
-  4b - original file size
+  4b - file size
+
 */
 
+struct eVFS {
+	char		*FileName;
+	SDL_RWops	*File;
 
+	int	HeaderLengthVFS;
+	int	HeaderOffsetVFS;
+	int	DataStartOffsetVFS;
+	bool	Writable;
+
+	eVFS	*Prev;
+	eVFS	*Next;
+};
+
+struct eVFS_Entry {
+	DWORD	NameSize;
+	char	*Name;
+	int	Offset;
+	int	Size;
+
+	eVFS	*Parent;
+
+	eVFS_Entry	*Prev;
+	eVFS_Entry	*Next;
+};
+
+/* Get first entry from VFS linked list */
+eVFS_Entry *vw_GetStartVFSArray();
+/* Create VFS file */
+eVFS	*vw_CreateVFS(const char *Name, unsigned int BuildNumber);
+/* Write data from file into VFS file */
+int	vw_WriteIntoVFSfromFile(eVFS *WritableVFS, const char *SrcName, const char *DstName);
+/* Write data from memory into VFS file */
+int	vw_WriteIntoVFSfromMemory(eVFS *WritableVFS, const char *Name, const BYTE *buffer, int size);
+/* Open VFS file */
+int	vw_OpenVFS(const char *Name, unsigned int BuildNumber);
+/* Close all VFS */
+void	vw_CloseVFS();
+/* Shutdown VFS (all eFILE files will be closed) */
+void	vw_ShutdownVFS();
+
+struct eFILE {
+	char	*Name;
+	int	VFS_Offset;
+	int	Size;
+	long	Pos;
+	BYTE	*Data;
+
+	int	fread(void *buffer, size_t size, size_t count);
+	int	fseek(long offset, int origin);
+	long	ftell();
+
+	eFILE	*Prev;
+	eFILE	*Next;
+};
+
+eFILE	*vw_fopen(const char *FileName);
+int	vw_fclose(eFILE *stream);
 
 #endif // VFS_H
-

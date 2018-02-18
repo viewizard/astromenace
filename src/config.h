@@ -28,7 +28,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION		"1.9.9 git"
-#define GAME_BUILD		180217
+#define GAME_BUILD		180218
 
 
 // libSDL2 implementation. Work in progress.
@@ -64,9 +64,6 @@
 
 // joystick support, required SDL compilled with "joystick" flag
 #define joystick
-
-// compression during gamedata.vfs creation, game will take more time for loading in exchange of size reducing (about 30 MB)
-// #define compression
 
 // define DATADIR with gamedata.vfs file location if you don't put it together in the same directory with binary file.
 // Use cmake with DATADIR flag OR uncomment line below

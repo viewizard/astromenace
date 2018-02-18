@@ -519,7 +519,7 @@ eGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 		if (VertexFile != 0)
 		{
 			const GLcharARB *TmpGLcharARB =  (const GLcharARB *)VertexFile->Data;
-			glShaderSourceARB(GLSLtmp->VertexShader, 1, &TmpGLcharARB, &VertexFile->RealLength);
+			glShaderSourceARB(GLSLtmp->VertexShader, 1, &TmpGLcharARB, &VertexFile->Size);
 			vw_fclose(VertexFile);
 			GLSLtmp->VertexShaderUse = true;
 		}
@@ -534,7 +534,7 @@ eGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 		if (FragmentFile != 0)
 		{
 			const GLcharARB *TmpGLcharARB =  (const GLcharARB *)FragmentFile->Data;
-			glShaderSourceARB(GLSLtmp->FragmentShader, 1, &TmpGLcharARB, &FragmentFile->RealLength);
+			glShaderSourceARB(GLSLtmp->FragmentShader, 1, &TmpGLcharARB, &FragmentFile->Size);
 			vw_fclose(FragmentFile);
 			GLSLtmp->FragmentShaderUse = true;
 		}
