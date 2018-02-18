@@ -38,8 +38,6 @@
 #define AUTO_FILE			0	// Detect by file extension
 #define VW2D_FILE			1	// VW2D file
 #define TGA_FILE			2	// TGA file
-#define JPG_FILE			4	// JPG file
-#define PNG_FILE			8	// PNG file
 
 // Create alpha channel by image greyscale color
 #define TX_ALPHA_GREYSC		0x0021

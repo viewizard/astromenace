@@ -45,9 +45,7 @@ void vw_AttachTexture(eTexture* Texture);
 void vw_DetachTexture(eTexture* Texture);
 
 
-int ReadJPG(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
 int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
-int ReadPNG(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
 
 
 //------------------------------------------------------------------------------------
@@ -387,31 +385,20 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
 	const char *file_ext = strrchr(SrcName, '.');
-	if (file_ext)
-	{
-		if (!strcasecmp(".tga", file_ext)) LoadAs = TGA_FILE;
+	if (file_ext) {
+		if (!strcasecmp(".tga", file_ext))
+			LoadAs = TGA_FILE;
 		else
-			if (!strcasecmp(".jpg", file_ext)) LoadAs = JPG_FILE;
-			else
-				if (!strcasecmp(".png", file_ext)) LoadAs = PNG_FILE;
+			fprintf(stderr, "Format not supported %s\n", SrcName);
 	}
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Загружаем
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	switch(LoadAs)
-	{
+	switch (LoadAs) {
 		case TGA_FILE:
 			ReadTGA(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
-			break;
-
-		case JPG_FILE:
-			ReadJPG(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
-			break;
-
-		case PNG_FILE:
-			ReadPNG(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
 			break;
 
 		default:
@@ -490,19 +477,16 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Ищем как грузить текстуру по расширению
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (LoadAs == AUTO_FILE)
-	{
+	if (LoadAs == AUTO_FILE) {
 		// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
 		const char *file_ext = strrchr(nName, '.');
-		if (file_ext)
-		{
-			if (!strcasecmp(".tga", file_ext)) LoadAs = TGA_FILE;
+		if (file_ext) {
+			if (!strcasecmp(".tga", file_ext))
+				LoadAs = TGA_FILE;
+			else if (!strcasecmp(".vw2d", file_ext))
+				LoadAs = VW2D_FILE;
 			else
-				if (!strcasecmp(".vw2d", file_ext)) LoadAs = VW2D_FILE;
-				else
-					if (!strcasecmp(".jpg", file_ext)) LoadAs = JPG_FILE;
-					else
-						if (!strcasecmp(".png", file_ext)) LoadAs = PNG_FILE;
+				fprintf(stderr, "Format not supported %s\n", nName);
 		}
 	}
 
@@ -513,14 +497,6 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 	{
 		case TGA_FILE:
 			ReadTGA(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
-			break;
-
-		case JPG_FILE:
-			ReadJPG(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
-			break;
-
-		case PNG_FILE:
-			ReadPNG(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
 			break;
 
 		case VW2D_FILE:

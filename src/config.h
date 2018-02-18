@@ -88,10 +88,4 @@
 // more actions and text outputs with debug information for bug hunting
 // #define gamedebug
 
-// PNG image format support via libpng.
-// #define png
-
-// JPEG image format support via libjpeg.
-// #define jpeg
-
 #endif // CONFIG_H
