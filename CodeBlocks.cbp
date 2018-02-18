@@ -8,38 +8,6 @@
 		<Build>
 			<Target title="Linux GCC">
 				<Option output="../AstroMenace" prefix_auto="0" extension_auto="0" />
-				<Option working_dir="../" />
-				<Option object_output="../build/objs2" />
-				<Option deps_output="../build/deps" />
-				<Option type="0" />
-				<Option compiler="gcc" />
-				<Option projectResourceIncludeDirsRelation="1" />
-				<Compiler>
-					<Add option="-Os" />
-					<Add option="-Wextra" />
-					<Add option="-Wall" />
-					<Add option="-Dxinerama_detected_by_cmake" />
-					<Add option="-Dfontconfig_detected_by_cmake" />
-					<Add directory="/usr/include/freetype2/" />
-				</Compiler>
-				<Linker>
-					<Add option="-s" />
-					<Add library="SDL" />
-					<Add library="GL" />
-					<Add library="GLU" />
-					<Add library="openal" />
-					<Add library="alut" />
-					<Add library="ogg" />
-					<Add library="vorbis" />
-					<Add library="vorbisfile" />
-					<Add library="Xinerama" />
-					<Add library="freetype" />
-					<Add library="fontconfig" />
-					<Add library="X11" />
-				</Linker>
-			</Target>
-			<Target title="Linux GCC libSDL2">
-				<Option output="../AstroMenace" prefix_auto="0" extension_auto="0" />
 				<Option working_dir=".." />
 				<Option object_output="../build/objs2" />
 				<Option deps_output="../build/deps" />
@@ -51,8 +19,6 @@
 					<Add option="-Wextra" />
 					<Add option="-Wall" />
 					<Add option="-std=c++98" />
-					<Add option="-Dfontconfig_detected_by_cmake" />
-					<Add option="-Duse_SDL2" />
 					<Add directory="/usr/include/freetype2/" />
 				</Compiler>
 				<Linker>
@@ -80,55 +46,11 @@
 				<Option projectResourceIncludeDirsRelation="1" />
 				<Compiler>
 					<Add option="-Os" />
+					<Add option="-Wextra" />
 					<Add option="-Wall" />
 					<Add option="-D__GNUWIN32__" />
 					<Add option="-DWIN32" />
 					<Add option="-DOV_EXCLUDE_STATIC_CALLBACKS" />
-					<Add directory="../AllLibraries/SDL-1.2.15/include" />
-					<Add directory="../AllLibraries/libogg-1.3.1/include" />
-					<Add directory="../AllLibraries/libvorbis-1.3.4/include" />
-					<Add directory="../AllLibraries/freealut-1.1.0/include" />
-					<Add directory="../AllLibraries/openal-soft-1.15.1/include" />
-					<Add directory="../AllLibraries/freetype-2.5.3/include" />
-				</Compiler>
-				<Linker>
-					<Add option="-s" />
-					<Add option="-static-libgcc" />
-					<Add option="-static-libstdc++" />
-					<Add library="mingw32" />
-					<Add library="SDLmain" />
-					<Add library="SDL" />
-					<Add library="opengl32" />
-					<Add library="glu32" />
-					<Add library="alut" />
-					<Add library="ogg" />
-					<Add library="vorbis" />
-					<Add library="vorbisfile" />
-					<Add library="OpenAL32" />
-					<Add library="freetype" />
-					<Add directory="../AllLibraries/SDL-1.2.15/lib" />
-					<Add directory="../AllLibraries/libogg-1.3.1/lib" />
-					<Add directory="../AllLibraries/libvorbis-1.3.4/lib" />
-					<Add directory="../AllLibraries/freealut-1.1.0/lib" />
-					<Add directory="../AllLibraries/openal-soft-1.15.1/lib" />
-					<Add directory="../AllLibraries/freetype-2.5.3/bin" />
-				</Linker>
-			</Target>
-			<Target title="Windows MinGw libSDL2">
-				<Option output="../AstroMenace.exe" prefix_auto="0" extension_auto="0" />
-				<Option working_dir="../" />
-				<Option object_output="../build/objs2_win" />
-				<Option deps_output="../build/deps" />
-				<Option type="0" />
-				<Option compiler="gcc" />
-				<Option projectResourceIncludeDirsRelation="1" />
-				<Compiler>
-					<Add option="-Os" />
-					<Add option="-Wall" />
-					<Add option="-D__GNUWIN32__" />
-					<Add option="-DWIN32" />
-					<Add option="-DOV_EXCLUDE_STATIC_CALLBACKS" />
-					<Add option="-Duse_SDL2" />
 					<Add directory="../AllLibraries/SDL2-2.0.3/i686-w64-mingw32/include" />
 					<Add directory="../AllLibraries/libogg-1.3.1/include" />
 					<Add directory="../AllLibraries/libvorbis-1.3.4/include" />

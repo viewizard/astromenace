@@ -112,7 +112,6 @@ const char * vw_VirtualCodeNameRU(int Num)
 		case SDLK_PAGEDOWN: return "PgDn";
 		case SDLK_INSERT: return "Insert";
 		case SDLK_DELETE: return "Delete";
-#ifdef use_SDL2
 		case SDLK_KP_7: return "NumPad 7";
 		case SDLK_KP_8: return "NumPad 8";
 		case SDLK_KP_9: return "NumPad 9";
@@ -125,21 +124,6 @@ const char * vw_VirtualCodeNameRU(int Num)
 		case SDLK_KP_0: return "NumPad 0";
 		case SDLK_LGUI: return "LeftWin";
 		case SDLK_RGUI: return "RightWin";
-#else
-		case SDLK_KP7: return "NumPad 7";
-		case SDLK_KP8: return "NumPad 8";
-		case SDLK_KP9: return "NumPad 9";
-		case SDLK_KP4: return "NumPad 4";
-		case SDLK_KP5: return "NumPad 5";
-		case SDLK_KP6: return "NumPad 6";
-		case SDLK_KP1: return "NumPad 1";
-		case SDLK_KP2: return "NumPad 2";
-		case SDLK_KP3: return "NumPad 3";
-		case SDLK_KP0: return "NumPad 0";
-		case SDLK_LSUPER: return "LeftWin";
-		case SDLK_RSUPER: return "RightWin";
-#endif
-
 		// забой... чтобы не показывать, пока ищем
 		case 0: return "?";
 	}

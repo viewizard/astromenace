@@ -28,16 +28,6 @@
 #include "game.h"
 
 
-#ifndef use_SDL2
-#ifdef __unix
-#ifdef xinerama
-	#include <X11/extensions/Xinerama.h>
-#endif // xinerama
-#endif // unix
-#endif // not use_SDL2
-
-
-
 #if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 #include <unistd.h>
 #include <pwd.h>
@@ -600,17 +590,12 @@ int main( int argc, char **argv )
 
 
 	SDL_version compiled;
-#ifdef use_SDL2
 	SDL_version linked;
 
 	SDL_VERSION(&compiled);
 	SDL_GetVersion(&linked);
 	printf("Compiled against SDL version %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
 	printf("Linking against SDL version %d.%d.%d\n\n", linked.major, linked.minor, linked.patch);
-#else
-	SDL_VERSION(&compiled);
-	printf("Compiled against SDL version %d.%d.%d\n\n", compiled.major, compiled.minor, compiled.patch);
-#endif
 
 
 
@@ -760,7 +745,6 @@ ReCreate:
 	CurrentVideoMode.H = 768;
 	CurrentVideoMode.BPP = 16;
 	// пытаемся получить данные
-#ifdef use_SDL2
 	int iScreen = 0;
 #ifdef __unix
 	// смотрим, если передали параметр SDL_VIDEO_FULLSCREEN_DISPLAY, берем параметры нужного дисплея
@@ -785,57 +769,7 @@ ReCreate:
 		SDL_GetDesktopDisplayMode(i, &testDisplayMode);
 		printf("Screen #%i: %i x %i\n", i, testDisplayMode.w, testDisplayMode.h);
 	}
-#else
-	int CurrentVideoModeX = 0;
-	int CurrentVideoModeY = 0;
-	CurrentVideoMode.BPP = SDL_GetVideoInfo()->vfmt->BitsPerPixel;
-	if (CurrentVideoMode.BPP <= 16) CurrentVideoMode.BPP = 16;
-	if (CurrentVideoMode.BPP > 16) CurrentVideoMode.BPP = 32;
-	CurrentVideoMode.W = SDL_GetVideoInfo()->current_w;
-	CurrentVideoMode.H = SDL_GetVideoInfo()->current_h;
-	printf("Current Video Mode: %ix%i %ibit \n", CurrentVideoMode.W, CurrentVideoMode.H, CurrentVideoMode.BPP);
 
-#ifdef __unix
-#ifdef xinerama
-	// определяем есть ли xinerama и какое разрешение экранов
-
-	printf("\n");
-    Display* display = XOpenDisplay(NULL);
-    if (!display)
-	{
-        fprintf(stderr, "XOpenDisplay() fails.\n");
-        return 1;
-    }
-    int xineramaScreenCount;
-    if (XineramaIsActive(display))
-	{
-        XineramaScreenInfo* xineramaScreenInfo = XineramaQueryScreens(display, &xineramaScreenCount);
-		printf("Xinerama/TwinView detected.\n");
-        printf("Screen count: %d\n", xineramaScreenCount);
-        for (int i = 0; i < xineramaScreenCount; i++)
-		{
-            printf("Screen #%d: (%d, %d) x (%d, %d)\n", i, xineramaScreenInfo[i].x_org, xineramaScreenInfo[i].y_org, xineramaScreenInfo[i].width, xineramaScreenInfo[i].height);
-
-		}
-
-		// смотрим, если передали параметр SDL_VIDEO_FULLSCREEN_DISPLAY, берем параметры нужного дисплея
-
-		char * pScreen;
-		int iScreen = 0;
-		pScreen = getenv("SDL_VIDEO_FULLSCREEN_DISPLAY");
-		if (pScreen != NULL) iScreen = atoi(pScreen);
-		if (iScreen > xineramaScreenCount - 1) iScreen = 0;
-
-		CurrentVideoModeX = xineramaScreenInfo[iScreen].x_org;
-		CurrentVideoModeY = xineramaScreenInfo[iScreen].y_org;
-		CurrentVideoMode.W = xineramaScreenInfo[iScreen].width;
-		CurrentVideoMode.H = xineramaScreenInfo[iScreen].height;
-
-        XFree(xineramaScreenInfo);
-    }
-#endif // xinerama
-#endif // unix
-#endif // use_SDL2
 
 
 
@@ -912,7 +846,6 @@ ReCreate:
 	#define AllSupportedModesCount sizeof(AllSupportedModes)/sizeof(AllSupportedModes[0])
 
 	// если списка еще нет - создаем его
-#ifdef use_SDL2
 	if (VideoModes == 0)
 	{
 		VideoModesNum = 0;
@@ -999,52 +932,6 @@ ReCreate:
 				}
 			}
 		}
-#else
-	if (VideoModes == 0)
-	{
-		VideoModesNum = 0;
-
-		for(unsigned int i=0; i<AllSupportedModesCount; i++)
-		if ((AllSupportedModes[i].W <= CurrentVideoMode.W) && (AllSupportedModes[i].H <= CurrentVideoMode.H))
-		{
-			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 16, SDL_FULLSCREEN | SDL_OPENGL) != 0) VideoModesNum++;
-			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 32, SDL_FULLSCREEN | SDL_OPENGL) != 0) VideoModesNum++;
-			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, CurrentVideoMode.BPP, SDL_ANYFORMAT | SDL_OPENGL) != 0) VideoModesNum++;
-		}
-
-
-		VideoModes = new sVideoModes[VideoModesNum];
-
-		int k=0;
-		for(unsigned int i=0; i<AllSupportedModesCount; i++)
-		if ((AllSupportedModes[i].W <= CurrentVideoMode.W) && (AllSupportedModes[i].H <= CurrentVideoMode.H))
-		{
-			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 16, SDL_FULLSCREEN | SDL_OPENGL) != 0)
-			{
-				VideoModes[k].W = AllSupportedModes[i].W;
-				VideoModes[k].H = AllSupportedModes[i].H;
-				VideoModes[k].BPP = 16;
-				k++;
-			}
-
-			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, 32, SDL_FULLSCREEN | SDL_OPENGL) != 0)
-			{
-				VideoModes[k].W = AllSupportedModes[i].W;
-				VideoModes[k].H = AllSupportedModes[i].H;
-				VideoModes[k].BPP = 32;
-				k++;
-			}
-
-			if (SDL_VideoModeOK(AllSupportedModes[i].W, AllSupportedModes[i].H, CurrentVideoMode.BPP, SDL_ANYFORMAT | SDL_OPENGL) != 0)
-			{
-				VideoModes[k].W = AllSupportedModes[i].W;
-				VideoModes[k].H = AllSupportedModes[i].H;
-				VideoModes[k].BPP = 0;
-				k++;
-			}
-		}
-#endif // use_SDL2
-
 		// выводим список поддерживаемых разрешений
 		printf("\n");
 		printf("Supported resolutions list:\n");
@@ -1116,22 +1003,14 @@ ReCreate:
 		{
 			printf("Found Joystick(s):\n");
 			for (int i=0; i<SDL_NumJoysticks(); i++)
-#ifdef use_SDL2
 				printf("Joystick Name %i: %s\n", i, SDL_JoystickNameForIndex(i));
-#else
-				printf("Joystick Name %i: %s\n", i, SDL_JoystickName(i));
-#endif
 
 			Joystick = SDL_JoystickOpen(Setup.JoystickNum);
 
 			if(Joystick)
 			{
 				printf("Opened Joystick %i\n", Setup.JoystickNum);
-#ifdef use_SDL2
 				printf("Joystick Name: %s\n", SDL_JoystickNameForIndex(Setup.JoystickNum));
-#else
-				printf("Joystick Name: %s\n", SDL_JoystickName(Setup.JoystickNum));
-#endif
 				printf("Joystick Number of Axes: %d\n", SDL_JoystickNumAxes(Joystick));
 				printf("Joystick Number of Buttons: %d\n", SDL_JoystickNumButtons(Joystick));
 				printf("Joystick Number of Balls: %d\n\n", SDL_JoystickNumBalls(Joystick));
@@ -1151,11 +1030,7 @@ ReCreate:
 	// создаем окно и базовые опенжл контекст
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	bool Fullscreen = (Setup.BPP != 0);
-#ifdef use_SDL2
 	int InitStatus = vw_InitWindow("AstroMenace", Setup.Width, Setup.Height, &Setup.BPP, Fullscreen, CurrentVideoModeX, CurrentVideoModeY, Setup.VSync);
-#else
-	int InitStatus = vw_InitWindow("AstroMenace", Setup.Width, Setup.Height, &Setup.BPP, Fullscreen, CurrentVideoModeX, CurrentVideoModeY, CurrentVideoMode.W, CurrentVideoMode.H, Setup.VSync);
-#endif
 
 	// ошибка окна (размеры)
 	if (InitStatus == 1)
@@ -1187,11 +1062,6 @@ ReCreate:
 		SDL_Quit();
 		return 0;									// Quit If Window Was Not Created
 	}
-#ifndef use_SDL2
-	// даже если 24, все равно тянем как 32 бита, а если меньше 16, то ставим 16
-	if (Setup.BPP <= 16) Setup.BPP = 16;
-	if (Setup.BPP > 16) Setup.BPP = 32;
-#endif
 	if (!Fullscreen) Setup.BPP = 0;
 
 
@@ -1422,11 +1292,6 @@ loop:
 	}
 #endif
 
-#ifndef use_SDL2
-	// сразу задаем режим работы с юникодом, чтобы SDL давал нам юникод при нажатии на клавишу
-	SDL_EnableUNICODE(1);
-#endif
-
 	while(!Quit)
 	{
 		SDL_Event event;
@@ -1446,18 +1311,11 @@ loop:
 					CurrentKeyboardSelectMenuElement = 0;
 					break;
 
-#ifdef use_SDL2
 				case SDL_MOUSEWHEEL:
 					vw_ChangeWheelStatus(-1*event.wheel.y);
 					break;
 				// обрабатываем кнопки мыши
 				case SDL_MOUSEBUTTONDOWN:
-#else
-				// обрабатываем кнопки мыши
-				case SDL_MOUSEBUTTONDOWN:
-					if (event.button.button ==  SDL_BUTTON_WHEELUP) vw_ChangeWheelStatus(-1);
-					if (event.button.button ==  SDL_BUTTON_WHEELDOWN) vw_ChangeWheelStatus(1);
-#endif
 					if (event.button.button == SDL_BUTTON_LEFT)
 					{
 						vw_SetWindowLBMouse(true);
@@ -1486,8 +1344,6 @@ loop:
 					vw_SetWindowLBMouse(false);
 					JoysticButtons[event.jbutton.button] = false;
 					break;
-
-#ifdef use_SDL2
 				case SDL_WINDOWEVENT:
 					switch (event.window.event)
 					{
@@ -1508,49 +1364,6 @@ loop:
 					printf("TextInput, Unicode: %s \n", event.text.text);
 #endif // gamedebug
 					break;
-#else
-				case SDL_ACTIVEEVENT:
-					if(event.active.state & SDL_APPACTIVE)
-					{
-						// iconified
-						if( event.active.gain == 0 ) NeedLoop = false;
-						// restored
-						if( event.active.gain == 1 )  NeedLoop = true;
-					}
-					if(event.active.state & SDL_APPINPUTFOCUS)
-					{
-						// input focus was lost
-						if( event.active.gain == 0 ) NeedLoop = false;
-						// input focus was gained
-						if( event.active.gain == 1 )  NeedLoop = true;
-					}
-					break;
-
-				case SDL_KEYDOWN:
-					// устанавливаем текущий юникод нажатой клавиши
-					if (event.key.keysym.unicode > 0x001F) // пропускаем С0 Сontrol Characters (ентер, бэкспейс и прочие...)
-					if (!((event.key.keysym.unicode >= 0x007F) && (event.key.keysym.unicode <= 0x009F))) // пропускаем С1 Сontrol Characters
-						vw_SetCurrentKeyUnicode(event.key.keysym.unicode);
-#ifdef gamedebug
-					printf("Keydown, Unicode: " );
-					if ( event.key.keysym.unicode < 0x80 && event.key.keysym.unicode > 0 )
-					{
-						printf( "%c (0x%04X)\n", (char)event.key.keysym.unicode,
-								event.key.keysym.unicode );
-					}
-					else
-					{
-						printf( "? (0x%04X)\n", event.key.keysym.unicode );
-					}
-#endif // gamedebug
-					break;
-
-				case SDL_KEYUP:
-					// сбрасываем юникод
-					vw_SetCurrentKeyUnicode(0);
-					break;
-#endif // use_SDL2
-
 				default:
 					break;
 			}
@@ -1657,15 +1470,9 @@ GotoQuit:
 #ifdef joystick
 	// закрываем джойстик, если он был
 	if(SDL_NumJoysticks()>0)
-#ifdef use_SDL2
 		if (Joystick != NULL)
 			if (SDL_JoystickGetAttached(Joystick))
 				SDL_JoystickClose(Joystick);
-#else
-		if (SDL_JoystickOpened(Setup.JoystickNum))
-			if (Joystick != NULL)
-				SDL_JoystickClose(Joystick);
-#endif // use_SDL2
 #endif //joystick
 
 	// полностью выходим из SDL

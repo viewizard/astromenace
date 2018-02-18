@@ -56,13 +56,8 @@ const char* 	vw_VirtualCodeName(const char *LanguageCode, int Num);
 const char* 	vw_KeyboardCodeName(int Num);
 int 	vw_KeyboardNameCode(const char * Name);
 // установка-получение юникода текущей нажатой клавиши
-#ifdef use_SDL2
 void 	vw_SetCurrentUnicodeChar(char *NewUnicodeChar);
 char* 	vw_GetCurrentUnicodeChar();
-#else
-void 	vw_SetCurrentKeyUnicode(Uint16 NewKeyUnicode);
-Uint16 	vw_GetCurrentKeyUnicode();
-#endif
 
 // работа с мышкой
 int		vw_GetMousePos(int *X, int *Y);

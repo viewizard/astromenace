@@ -245,11 +245,8 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	/* check VFS file sign "VFS_" */
 	char Sign[5];
 	Sign[4] = '\0'; /* just to be sure, that we have null-terminated string */
-#ifdef use_SDL2
+
 	if(SDL_RWread(TempVFS->File, &Sign, 4, 1) == 0) {
-#else
-	if(SDL_RWread(TempVFS->File, &Sign, 4, 1) == -1) {
-#endif
 		fprintf(stderr, "VFS file size error %s\n", Name);
 		goto error;
 	}
@@ -261,11 +258,8 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	/* check VFS file version */
 	char Version[5];
 	Version[4] = '\0'; /* just to be sure, that we have null-terminated string */
-#ifdef use_SDL2
+
 	if(SDL_RWread(TempVFS->File, &Version, 4, 1) == 0) {
-#else
-	if(SDL_RWread(TempVFS->File, &Version, 4, 1) == -1) {
-#endif
 		fprintf(stderr, "VFS file corrupted: %s\n", Name);
 		goto error;
 	}
@@ -277,11 +271,7 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	}
 
 	/* check VFS file build number */
-#ifdef use_SDL2
 	if(SDL_RWread(TempVFS->File, &vfsBuildNumber, 4, 1) == 0) {
-#else
-	if(SDL_RWread(TempVFS->File, &vfsBuildNumber, 4, 1) == -1) {
-#endif
 		fprintf(stderr, "VFS file corrupted: %s\n", Name);
 		goto error;
 	}

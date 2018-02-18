@@ -101,14 +101,9 @@ void CheckMouseKeybJState()
 
 		// клавиатура
 		if ((NeedCheck > 0 && NeedCheck <= 6) || NeedCheck == 100)
-#ifdef use_SDL2
 		for (int k=0; k<GetMaxKeys(); k++)
 		{
 			int i = SDL_GetKeyFromScancode((SDL_Scancode)k);
-#else
-		for (int i=0; i<GetMaxKeys(); i++)
-		{
-#endif
 			if (vw_GetKeys(i))
 			if (vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, i) != 0) // если мы играем с этой кнопкой
 			{

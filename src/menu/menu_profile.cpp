@@ -235,7 +235,6 @@ void ProfileInputText()
 	// пишем букву, если можем (т.к. у нас утф8 юникод, нужно как минимум 3 байта + 1 байт под \0 в конце строки)
 	if (NewProfileNamePos < 124)
 	if (vw_FontSize(NewProfileName)< 540)
-#ifdef use_SDL2
 	if (vw_GetCurrentUnicodeChar()) // если тут не ноль, а юникод - значит нажали
 	{
 		if (vw_GetCurrentUnicodeChar()[0] == 0x25) // для символа % используем перевод в 2 байта (чтобы не добавлять второй %), иначе некорректно будет прорисовываться из-за va_list в vw_DrawFont
@@ -252,32 +251,6 @@ void ProfileInputText()
 			NewProfileNamePos += strlen(vw_GetCurrentUnicodeChar());
 		}
 		vw_SetCurrentUnicodeChar(0); // сразу сбрасываем данные
-#else
-	if (vw_GetCurrentKeyUnicode()) // если тут не ноль, а юникод - значит нажали
-	{
-		Uint16 NewChar = vw_GetCurrentKeyUnicode();
-		vw_SetCurrentKeyUnicode(0); // сразу сбрасываем данные
-		// делаем простое преобразование, без учета суррогатной пары
-		char* str = NewProfileName + NewProfileNamePos;
-		if (NewChar <= 0x7F && NewChar != 0x25) // для символа % используем перевод в 2 байта (чтобы не добавлять второй %), иначе некорректно будет прорисовываться из-за va_list в vw_DrawFont
-		{
-			*str = (char)NewChar;
-			NewProfileNamePos++;
-		}
-		else if (NewChar <= 0x7FF)
-		{
-			*str++ = (char)(0xC0 | (NewChar >> 6));
-			*str = (char)(0x80 | (NewChar & 0x3F));
-			NewProfileNamePos+=2;
-		}
-		else
-		{
-			*str++ = (char)(0xE0 | (NewChar >> 12));
-			*str++ = (char)(0x80 | ((NewChar >> 6) & 0x3F));
-			*str = (char)(0x80 | (NewChar & 0x3F));
-			NewProfileNamePos+=3;
-		}
-#endif // use_SDL2
 
 		if (vw_FindSoundByNum(SoundTaping) != 0)
 			vw_FindSoundByNum(SoundTaping)->Stop(0.0f);

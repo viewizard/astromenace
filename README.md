@@ -19,58 +19,55 @@ Installers for Windows and Mac could be found at [release](https://github.com/vi
 ## Build
 
 Runtime dependencies:
-libSDL (ver 1.2.10+), libopenal (ver 1.0+), libalut (ver 1.0+), libogg (ver 1.1+), 
-libvorbis (ver 1.1+), freetype (ver 2.1.6+), GLU, libXinerama (optional), 
-fontconfig (optional), Linux Libertine/Biolinum fonts (optional)
+libSDL2 (ver 2.0.0+), libopenal (ver 1.0+), libalut (ver 1.0+), libogg (ver 1.1+), libvorbis (ver 1.1+), freetype (ver 2.1.6+), GLU, fontconfig (optional), Linux Libertine/Biolinum fonts (optional)
 
 
 The easy way to get up to date AstroMenace on your computer:
 
 ### 1) Make sure all necessary packages with development headers installed in your system: 
 
-   gcc (with g++), cmake, make, subversion, libsdl, libogg, libvorbis, openal, 
-   alut (freealut), libXinerama, GLU, freetype2, fontconfig
+   gcc (with g++), cmake, make, git, libsdl2, libogg, libvorbis, openal, 
+   alut (freealut), GLU, freetype2, fontconfig
 
 #### For Ubuntu/Mint/Debian:
 ```bash
-$ sudo apt-get install g++ cmake make subversion libsdl1.2-dev
-  libogg-dev libvorbis-dev libopenal-dev libXinerama-dev libalut-dev
+$ sudo apt-get install g++ cmake make git libsdl2-dev
+  libogg-dev libvorbis-dev libopenal-dev libalut-dev
   libfreetype6-dev libfontconfig1-dev fonts-linuxlibertine
 ```
 
 #### For Mageia:
 ```bash
-$ sudo urpmi gcc-c++ cmake make subversion libSDL-devel libogg-devel
-  libvorbis-devel libopenal-devel libxinerama-devel libfreealut-devel
-  freetype2-devel libfontconfig-devel fonts-ttf-libertine
+$ sudo urpmi gcc-c++ cmake make git libsdl2.0-devel libogg-devel
+  libvorbis-devel libopenal-devel libfreealut-devel freetype2-devel
+  libfontconfig-devel fonts-ttf-libertine
 ```
 
 #### For OpenSuse:
 ```bash
-$ sudo zypper install gcc-c++ cmake make subversion libSDL-devel
-  libogg-devel libvorbis-devel openal-soft-devel libXinerama-devel
-  freealut-devel freetype2-devel fontconfig-devel linux-libertine-fonts
+$ sudo zypper install gcc-c++ cmake make git libSDL2-devel
+  libogg-devel libvorbis-devel openal-soft-devel freealut-devel
+  freetype2-devel fontconfig-devel linux-libertine-fonts
 ```
 
 #### For Fedora:
 ```bash
-$ sudo yum install gcc-c++ cmake make subversion SDL-devel libogg-devel
-  libvorbis-devel openal-soft-devel libXinerama-devel freealut-devel 
-  freetype-devel fontconfig-devel linux-libertine-fonts
-  linux-libertine-biolinum-fonts
+$ sudo yum install gcc-c++ cmake make git SDL2-devel libogg-devel
+  libvorbis-devel openal-soft-devel freealut-devel freetype-devel
+  fontconfig-devel linux-libertine-fonts linux-libertine-biolinum-fonts
 ```
 
 #### For FreeBSD:
 ```bash
-$ sudo pkg_add -r -v gcc cmake subversion sdl libogg libvorbis openal
-  libXinerama freealut freetype2 fontconfig linuxlibertine
+$ sudo pkg_add -r -v gcc cmake git sdl20 libogg libvorbis openal
+  freealut freetype2 fontconfig linuxlibertine
 ```
 
 #### For MacOSX 10.5+:
 Download and install "Command Line Tools for Xcode" or "Xcode".
 Install HomeBrew package manager: https://brew.sh/
 ```bash
-$ brew install cmake sdl subversion libogg libvorbis freealut freetype
+$ brew install cmake sdl git libogg libvorbis freealut freetype
 ```
 
 ### 2) Clone git with latest source files

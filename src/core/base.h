@@ -57,12 +57,7 @@
 
 
 #include "graphics/glext.h"
-#ifdef use_SDL2
-	#include "SDL2/SDL.h"
-#else
-	#include "SDL/SDL.h"
-	#include "SDL/SDL_syswm.h"
-#endif
+#include "SDL2/SDL.h"
 
 
 

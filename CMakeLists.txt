@@ -1,65 +1,28 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.7)
 
 # project name
 PROJECT(AstroMenace)
 
-
-
-
-
-# AstroMenace
-# in order to build AstroMenace binary with libSDL2, instead of previous libSDL version (1.2):
-# ~~~~~~~~~~~~~~~~~~~~
-# cmake -DSDL2=ON ./
-# ~~~~~~~~~~~~~~~~~~~~
-# Note:
-# 1) Make sure, that you have libSDL2 development package installed. 
-# 2) You can remove libXinerama development package from your system. libSDL2 have multiple displays support.
-
-
-
-
-
 # depends
-IF(SDL2)
-	set(SDL_CONFIG "sdl2-config" CACHE STRING "Path to sd2-config script")
-ELSE(SDL2)
-	set(SDL_CONFIG "sdl-config" CACHE STRING "Path to sdl-config script")
-ENDIF(SDL2)
-EXEC_PROGRAM(${SDL_CONFIG} ARGS "--cflags" OUTPUT_VARIABLE SDL_CFLAGS)
-ADD_DEFINITIONS(${SDL_CFLAGS})
-EXEC_PROGRAM(${SDL_CONFIG} ARGS "--libs" OUTPUT_VARIABLE SDL_LIBS)
-
-
 IF (NOT APPLE)
 FIND_PACKAGE(X11 REQUIRED)
 SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${X11_LIBRARIES})
 ENDIF (NOT APPLE)
 
-IF(SDL2)
-	FIND_LIBRARY(SDL2_LIBRARY SDL2)
-	IF(SDL2_LIBRARY)
-		MESSAGE(STATUS "Found libSDL2: ${SDL2_LIBRARY}")
-		SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${SDL2_LIBRARY})
-	ELSE(SDL2_LIBRARY)
-		MESSAGE(FATAL_ERROR "libSDL2 not found")
-	ENDIF(SDL2_LIBRARY)
-	FIND_PATH(SDL2_INCLUDE_DIR SDL.h
-	 	HINTS
-		$ENV{SDL2DIR}
-		$ENV{SDL2_PATH}
-	 	PATHS
-	 	PATH_SUFFIXES include/SDL2 include)
-	IF(SDL2_INCLUDE_DIR)
-		MESSAGE(STATUS "Found libSDL2 headers: ${SDL2_INCLUDE_DIR}")
-		INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIR})
-	ELSE(SDL2_INCLUDE_DIR)
-		MESSAGE(FATAL_ERROR "libSDL2 headers not found")
-	ENDIF(SDL2_INCLUDE_DIR)
-ELSE(SDL2)
-	FIND_PACKAGE(SDL REQUIRED)
-ENDIF(SDL2)
-SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${SDL_LIBS})
+
+FIND_PACKAGE(SDL2 REQUIRED)
+IF(SDL2_FOUND)
+	INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS})
+	# Next line is Workaround for issue with sdl2-config.cmake, error message:
+	# ** Target "AstroMenace" links to item "-L/usr/lib64 -lSDL2 " which has leading
+  	# ** or trailing whitespace.  This is now an error according to policy CMP0004.
+	SET(SDL2_LIBRARIES "-L${SDL2_LIBDIR} -lSDL2")
+	SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${SDL2_LIBRARIES})
+	MESSAGE(STATUS "Found libSDL2: ${SDL2_LIBRARIES}")
+	MESSAGE(STATUS "Found libSDL2 headers: ${SDL2_INCLUDE_DIRS}")
+ELSE(SDL2_FOUND)
+	MESSAGE(FATAL_ERROR "libSDL2 not found")
+ENDIF(SDL2_FOUND)
 
 FIND_PACKAGE(OpenGL REQUIRED)
 IF(OPENGL_FOUND)
@@ -71,32 +34,6 @@ ENDIF(OPENGL_FOUND)
 
 FIND_PACKAGE(OpenAL REQUIRED)
 SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${OPENAL_LIBRARY})
-
-
-
-# Xinerama lib + header
-
-IF(NOT SDL2)
-	IF (NOT APPLE)
-		FIND_LIBRARY(XINERAMA_LIBRARY Xinerama)
-		IF(XINERAMA_LIBRARY)
-			MESSAGE(STATUS "Found Xinerama: ${XINERAMA_LIBRARY}")
-			SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${XINERAMA_LIBRARY})
-		ELSE(XINERAMA_LIBRARY)
-			MESSAGE(STATUS "Xinerama library not found, Xinerama compilation feature disabled.")
-		ENDIF(XINERAMA_LIBRARY)
-		FIND_PATH(XINERAMA_INCLUDE_DIR X11/extensions/Xinerama.h
-		 	HINTS
-		 	PATHS
-		 	PATH_SUFFIXES include)
-		IF(XINERAMA_INCLUDE_DIR)
-			MESSAGE(STATUS "Found Xinerama headers: ${XINERAMA_INCLUDE_DIR}")
-			INCLUDE_DIRECTORIES(${XINERAMA_INCLUDE_DIR})
-		ELSE(XINERAMA_INCLUDE_DIR)
-			MESSAGE(STATUS "Xinerama headers not found, Xinerama compilation feature disabled.")
-		ENDIF(XINERAMA_INCLUDE_DIR)
-	ENDIF (NOT APPLE)
-ENDIF(NOT SDL2)
 
 
 # GLU lib + header (GLU - part of OpenGL framework in MacOSX)
@@ -264,18 +201,11 @@ FILE(GLOB_RECURSE astromenace_SRCS src/*.cpp)
 IF(DATADIR)
 	ADD_DEFINITIONS(-DDATADIR=\\"${DATADIR}\\")
 ENDIF(DATADIR)
-IF(SDL2)
-	ADD_DEFINITIONS(-Duse_SDL2)
-ELSE(SDL2)
-	IF(XINERAMA_LIBRARY AND XINERAMA_INCLUDE_DIR)
-		ADD_DEFINITIONS(-Dxinerama_detected_by_cmake)
-	ENDIF(XINERAMA_LIBRARY AND XINERAMA_INCLUDE_DIR)
-ENDIF(SDL2)
 IF(FONTCONFIG_LIBRARY AND FONTCONFIG_INCLUDE_DIR_fontconfig)
 	ADD_DEFINITIONS(-Dfontconfig_detected_by_cmake)
 ENDIF(FONTCONFIG_LIBRARY AND FONTCONFIG_INCLUDE_DIR_fontconfig)
 
 # we need speed optimization flag Os, this could add up to 40% FPS in game
-ADD_DEFINITIONS("-Os")
+ADD_DEFINITIONS("-Os -s")
 ADD_EXECUTABLE(AstroMenace ${astromenace_SRCS})
 TARGET_LINK_LIBRARIES(AstroMenace ${ALL_LIBRARIES})

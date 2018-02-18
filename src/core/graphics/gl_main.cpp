@@ -63,10 +63,8 @@ PFNGLCLIENTACTIVETEXTUREARBPROC	glClientActiveTexture_ARB = NULL;
 PFNGLTEXSTORAGE2DPROC 			glTexStorage2DEXT = NULL;
 
 
-#ifdef use_SDL2
 SDL_Window *window_SDL2 = 0;
 SDL_Window *vw_GetSDL2Windows(){return window_SDL2;};
-#endif
 
 float CurrentGammaGL = 1.0f;
 float CurrentContrastGL = 1.0f;
@@ -120,7 +118,6 @@ bool ExtensionSupported( const char *Extension)
 //------------------------------------------------------------------------------------
 // инициализация окна приложения и получение возможностей железа
 //------------------------------------------------------------------------------------
-#ifdef use_SDL2
 int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int VSync)
 {
 	// самым первым делом - запоминаем все
@@ -146,100 +143,6 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	SDL_DisableScreenSaver();
 
 	UserDisplayRampStatus = SDL_GetWindowGammaRamp(window_SDL2, UserDisplayRamp, UserDisplayRamp+256, UserDisplayRamp+512);
-#else // use_SDL2
-int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int CurrentVideoModeW, int CurrentVideoModeH, int VSync)
-{
-	// самым первым делом - запоминаем все
-	UserDisplayRampStatus = SDL_GetGammaRamp(UserDisplayRamp, UserDisplayRamp+256, UserDisplayRamp+512);
-
-	fScreenWidthGL = Width*1.0f;
-	fScreenHeightGL = Height*1.0f;
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// устанавливаем режим и делаем окно
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	Uint32 Flags = SDL_OPENGL;
-
-	// если иним в первый раз, тут ноль и нужно взять что-то подходящее
-	if (*Bits == 0) *Bits = SDL_GetVideoInfo()->vfmt->BitsPerPixel;
-	if (*Bits < 8) *Bits = 8;
-	int WBits = *Bits;
-
-	if (FullScreenFlag)
-	{
-		Flags |= SDL_FULLSCREEN;
-	}
-	else
-	{	// для окна не нужно ставить глубину принудительно
-		WBits = SDL_GetVideoInfo()->vfmt->BitsPerPixel;
-		Flags |= SDL_ANYFORMAT; // чтобы для оконного взял лучший режим сам
-	}
-
-	// ставим двойную буферизацию (теоретически, и так ее должно брать)
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-	// синхронизация для линукс и мак ос (для виндовс может не сработать, по какой-то причине не работает в wine)
-	SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, VSync);
-
-
-	// создаем окно
-	if (SDL_SetVideoMode(Width, Height, WBits, Flags)  == NULL)
-	{
-		fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
-		fprintf(stderr, "Can't set video mode %i x %i x %i\n\n", Width, Height, WBits);
-		return 1;
-	}
-
-
-	// работаем с синхронизацией в виндовс через расширение
-#ifdef WIN32
-	typedef void (APIENTRY * WGLSWAPINTERVALEXT) (int);
-	WGLSWAPINTERVALEXT wglSwapIntervalEXT = (WGLSWAPINTERVALEXT)
-	wglGetProcAddress("wglSwapIntervalEXT");
-	if (wglSwapIntervalEXT)
-	   wglSwapIntervalEXT(VSync);
-#endif // WIN32
-
-
-	// центровка
-	if (!FullScreenFlag)
-	{
-		SDL_SysWMinfo info;
-
-		SDL_VERSION(&info.version);
-		if ( SDL_GetWMInfo(&info) > 0 )
-		{
-#ifdef __unix
-#ifdef SDL_VIDEO_DRIVER_X11
-			if ( info.subsystem == SDL_SYSWM_X11 )
-			{
-				SDL_Surface *GameScreen = SDL_GetVideoSurface();
-				info.info.x11.lock_func();
-				int x = (CurrentVideoModeW - GameScreen->w)/2 + CurrentVideoModeX;
-				int y = (CurrentVideoModeH - GameScreen->h)/2 + CurrentVideoModeY;
-				XMoveWindow(info.info.x11.display, info.info.x11.wmwindow, x, y);
-				info.info.x11.unlock_func();
-			}
-#endif // SDL_VIDEO_DRIVER_X11
-#endif // unix
-#ifdef WIN32
-			RECT rc;
-			HWND hwnd = info.window;
-			GetWindowRect(hwnd, &rc);
-			int x = (CurrentVideoModeW - (rc.right-rc.left))/2 + CurrentVideoModeX;
-			int y = (CurrentVideoModeH - (rc.bottom-rc.top))/2 + CurrentVideoModeY;
-			SetWindowPos(hwnd, NULL, x, y, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
-#endif // WIN32
-		}
-	}
-
-	// ставим название класса окна
-	SDL_WM_SetCaption(Title, 0);
-
-
-	// если полноэкранный режим, смотрим сколько действительно поставили bpp и запоминаем
-	if (FullScreenFlag) *Bits = SDL_GetVideoInfo()->vfmt->BitsPerPixel;
-#endif // use_SDL2
 
 	printf("Set video mode: %i x %i x %i\n\n", Width, Height, *Bits);
 
@@ -672,11 +575,7 @@ void vw_ShutdownRenderer()
 	// возвращаем гамму и все такое...
 	if (UserDisplayRampStatus != -1)
 	{
-#ifdef use_SDL2
 		SDL_SetWindowGammaRamp(window_SDL2, UserDisplayRamp, UserDisplayRamp+256, UserDisplayRamp+512);
-#else
-		SDL_SetGammaRamp(UserDisplayRamp, UserDisplayRamp+256, UserDisplayRamp+512);
-#endif
 	}
 	else
 	{
@@ -807,11 +706,7 @@ void vw_EndRendering()
 		vw_DrawColorFBO(&ResolveFBO, 0);
 	}
 
-#ifdef use_SDL2
 	SDL_GL_SwapWindow(window_SDL2);
-#else
-	SDL_GL_SwapBuffers();
-#endif
 
 	PrimCountGL = tmpPrimCountGL;
 }
@@ -893,11 +788,7 @@ void vw_SetGammaRamp(float Gamma, float Contrast, float Brightness)
 		ramp[i+512]	= (Uint16) value;
 	}
 
-#ifdef use_SDL2
 	SDL_SetWindowGammaRamp(window_SDL2, ramp, ramp+256, ramp+512);
-#else
-	SDL_SetGammaRamp(ramp, ramp+256, ramp+512);
-#endif
 
 	if (ramp != 0){delete [] ramp; ramp = 0;}
 }
