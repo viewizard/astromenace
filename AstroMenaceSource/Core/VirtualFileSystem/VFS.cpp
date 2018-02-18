@@ -128,6 +128,7 @@ int vw_CreateVFS(const char *Name, unsigned int BuildNumber)
     if (TempVFS->File == NULL)
     {
         fprintf(stderr, "Can't open VFS file for write %s\n", Name);
+        delete TempVFS;
         return -1; // ERROR
     }
 
@@ -529,6 +530,7 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
     if (TempVFS->File == NULL)
     {
         fprintf(stderr, "Can't find VFS file %s\n", Name);
+        delete TempVFS;
         return -1; // ERROR
     }
 
@@ -789,6 +791,7 @@ void vw_CloseVFS(void)
 			delete [] TempVFS->FileName; TempVFS->FileName = 0;
 		}
 
+		delete TempVFS;
 		TempVFS = TempVFS1;
 	}
 
