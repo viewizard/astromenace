@@ -18,11 +18,10 @@
 					<Add option="-Os" />
 					<Add option="-Wextra" />
 					<Add option="-Wall" />
-					<Add option="-std=c++98" />
+					<Add option="-std=c++11" />
 					<Add directory="/usr/include/freetype2/" />
 				</Compiler>
 				<Linker>
-					<Add option="-s" />
 					<Add library="SDL2" />
 					<Add library="GL" />
 					<Add library="GLU" />
@@ -59,7 +58,6 @@
 					<Add directory="../AllLibraries/freetype-2.5.3/include" />
 				</Compiler>
 				<Linker>
-					<Add option="-s" />
 					<Add option="-static-libgcc" />
 					<Add option="-static-libstdc++" />
 					<Add library="mingw32" />
@@ -149,9 +147,7 @@
 		<Unit filename="src/core/text/text.h" />
 		<Unit filename="src/core/texture/texture.cpp" />
 		<Unit filename="src/core/texture/texture.h" />
-		<Unit filename="src/core/texture/texture_jpg.cpp" />
 		<Unit filename="src/core/texture/texture_manager.cpp" />
-		<Unit filename="src/core/texture/texture_png.cpp" />
 		<Unit filename="src/core/texture/texture_tga.cpp" />
 		<Unit filename="src/core/vfs/vfs.cpp" />
 		<Unit filename="src/core/vfs/vfs.h" />
