@@ -26,31 +26,26 @@
 
 #include "vfs.h"
 
-/* Doubly-linked list with connected VFS. */
-eVFS *StartVFS = NULL;
-eVFS *EndVFS = NULL;
-
-/* Doubly-linked list with files in VFS. */
-eVFS_Entry *StartVFSArray = NULL;
-eVFS_Entry *EndVFSArray = NULL;
-
-/* Doubly-linked list with opened files. */
-eFILE *StartFileVFS = NULL;
-eFILE *EndFileVFS = NULL;
+/* List with connected VFS. */
+std::forward_list<eVFS*> VFS_List;
+/* List with file's entries in VFS. */
+std::forward_list<eVFS_Entry*> VFSEntries_List;
+/* List with opened files. */
+std::forward_list<eFILE*> VFSFiles_List;
 
 enum file_location {
-FILE_NOT_FOUND = -1,
-FILE_IN_VFS = 1, /* File present in the VFS. */
-FILE_IN_FS = 2 /* File present in the File System. */
+	FILE_NOT_FOUND = -1,
+	FILE_IN_VFS = 1, /* File present in the VFS. */
+	FILE_IN_FS = 2 /* File present in the File System. */
 };
 
 
 /*
- * Get first entry from VFS linked list.
+ * Get VFS entries list.
  */
-eVFS_Entry *vw_GetStartVFSArray()
+std::forward_list<eVFS_Entry*> *vw_GetVFSEntriesListHead()
 {
-	return StartVFSArray;
+	return &VFSEntries_List;
 }
 
 /*
@@ -58,8 +53,8 @@ eVFS_Entry *vw_GetStartVFSArray()
  */
 eVFS *vw_CreateVFS(const char *Name, unsigned int BuildNumber)
 {
-	if (Name == NULL)
-		return NULL;
+	if (Name == nullptr)
+		return nullptr;
 
 	eVFS *TempVFS = new eVFS;
 
@@ -69,28 +64,17 @@ eVFS *vw_CreateVFS(const char *Name, unsigned int BuildNumber)
 	TempVFS->Writable = true;
 
 	TempVFS->File = SDL_RWFromFile(Name, "wb");
-	if (TempVFS->File == NULL) {
+	if (TempVFS->File == nullptr) {
 		fprintf(stderr, "Can't open VFS file for write %s\n", Name);
 		delete TempVFS;
-		return NULL;
+		return nullptr;
 	}
 
 	TempVFS->FileName = new char[strlen(Name)+1];
 	strcpy(TempVFS->FileName, Name);
 
-	/* attach VFS to linked list */
-	if (EndVFS == NULL) {
-		TempVFS->Prev = NULL;
-		TempVFS->Next = NULL;
-		StartVFS = TempVFS;
-		EndVFS = TempVFS;
-	}
-	else {
-		TempVFS->Prev = EndVFS;
-		TempVFS->Next = NULL;
-		EndVFS->Next = TempVFS;
-		EndVFS = TempVFS;
-	}
+	/* push VFS to list */
+	VFS_List.push_front(TempVFS);
 
 	/* write VFS sign, version and build number */
 	char tmp1[5] = "VFS_";
@@ -99,8 +83,8 @@ eVFS *vw_CreateVFS(const char *Name, unsigned int BuildNumber)
 	SDL_RWwrite(TempVFS->File, &BuildNumber, 4, 1);
 
 	/* write new table offset and size */
-	TempVFS->HeaderOffsetVFS = 4+4+4+4+4; /* VFS_ + ver + build + offset + size */
-	TempVFS->DataStartOffsetVFS = 4+4+4; /* VFS_ + ver + build */
+	TempVFS->HeaderOffsetVFS = 4 + 4 + 4 + 4 + 4; /* VFS_ + ver + build + offset + size */
+	TempVFS->DataStartOffsetVFS = 4 + 4 + 4; /* VFS_ + ver + build */
 	SDL_RWwrite(TempVFS->File, &TempVFS->HeaderOffsetVFS, 4, 1);
 	SDL_RWwrite(TempVFS->File, &TempVFS->HeaderLengthVFS, 4, 1);
 
@@ -119,7 +103,7 @@ int vw_WriteIntoVFSfromFile(eVFS *WritableVFS, const char *SrcName, const char *
 	// читаем данные файла в буфер
 	SDL_RWops *Ftmp = SDL_RWFromFile(SrcName, "rb");
 	// Если файл не найден - выходим
-	if (Ftmp == NULL) {
+	if (Ftmp == nullptr) {
 		fprintf(stderr, "Can't find file %s\n", SrcName);
 		return -1;
 	}
@@ -148,8 +132,8 @@ int vw_WriteIntoVFSfromFile(eVFS *WritableVFS, const char *SrcName, const char *
  */
 int vw_WriteIntoVFSfromMemory(eVFS *WritableVFS, const char *Name, const BYTE *buffer, int size)
 {
-	if ((WritableVFS == NULL) || (Name == NULL) ||
-	    (buffer == NULL) || (size <= 0))
+	if ((WritableVFS == nullptr) || (Name == nullptr) ||
+	    (buffer == nullptr) || (size <= 0))
 		return -1;
 
 	if (!WritableVFS->Writable) {
@@ -159,19 +143,8 @@ int vw_WriteIntoVFSfromMemory(eVFS *WritableVFS, const char *Name, const BYTE *b
 
 	eVFS_Entry *NewVFS_Entry = new eVFS_Entry;
 
-	/* attach VFS to linked list */
-	if (EndVFSArray == NULL) {
-		NewVFS_Entry->Prev = NULL;
-		NewVFS_Entry->Next = NULL;
-		StartVFSArray = NewVFS_Entry;
-		EndVFSArray = NewVFS_Entry;
-	}
-	else {
-		NewVFS_Entry->Prev = EndVFSArray;
-		NewVFS_Entry->Next = NULL;
-		EndVFSArray->Next = NewVFS_Entry;
-		EndVFSArray = NewVFS_Entry;
-	}
+	/* push VFS entry to list */
+	VFSEntries_List.push_front(NewVFS_Entry);
 
 	NewVFS_Entry->Parent = WritableVFS;
 	NewVFS_Entry->NameSize = (DWORD)strlen(Name);
@@ -187,23 +160,18 @@ int vw_WriteIntoVFSfromMemory(eVFS *WritableVFS, const char *Name, const BYTE *b
 	SDL_RWwrite(WritableVFS->File, buffer, NewVFS_Entry->Size, 1);
 
 	/* write all entries belong to this VFS file */
-	eVFS_Entry *Tmp = StartVFSArray;
-	while (Tmp != NULL) {
-		eVFS_Entry *Tmp1 = Tmp->Next;
-
-		if (NewVFS_Entry->Parent == WritableVFS) {
+	for (eVFS_Entry *Tmp : VFSEntries_List) {
+		if (Tmp->Parent == WritableVFS) {
 			SDL_RWwrite(WritableVFS->File, &Tmp->NameSize, 2, 1);
 			SDL_RWwrite(WritableVFS->File, Tmp->Name, Tmp->NameSize, 1);
 			SDL_RWwrite(WritableVFS->File, &Tmp->Offset, 4, 1);
 			SDL_RWwrite(WritableVFS->File, &Tmp->Size, 4, 1);
 		}
-
-		Tmp = Tmp1;
 	}
 
 	/* correct table offset and size */
 	WritableVFS->HeaderOffsetVFS += NewVFS_Entry->Size;
-	WritableVFS->HeaderLengthVFS += 1+2+NewVFS_Entry->NameSize+4+4+4;
+	WritableVFS->HeaderLengthVFS += 1 + 2 + NewVFS_Entry->NameSize + 4 + 4 + 4;
 
 	/* rewrite table offset and size */
 	SDL_RWseek(WritableVFS->File, WritableVFS->DataStartOffsetVFS, SEEK_SET);
@@ -229,8 +197,7 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	TempVFS->Writable = false;
 
 	TempVFS->File = SDL_RWFromFile(Name, "rb");
-	if (TempVFS->File == NULL)
-	{
+	if (TempVFS->File == nullptr) {
 		fprintf(stderr, "Can't find VFS file %s\n", Name);
 		goto error;
 	}
@@ -278,8 +245,7 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	if (BuildNumber != 0) {
 		if (vfsBuildNumber == 0) {
 			printf("VFS file build number was not set (0).\n");
-		}
-		else {
+		} else {
 			if (BuildNumber != vfsBuildNumber) {
 				fprintf(stderr,
 					"VFS file has wrong build number (%u), you need VFS with build number %u\n",
@@ -289,19 +255,8 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 		}
 	}
 
-	/* all looks legit, attach VFS to linked list */
-	if (EndVFS == NULL) {
-		TempVFS->Prev = NULL;
-		TempVFS->Next = NULL;
-		StartVFS = TempVFS;
-		EndVFS = TempVFS;
-	}
-	else {
-		TempVFS->Prev = EndVFS;
-		TempVFS->Next = NULL;
-		EndVFS->Next = TempVFS;
-		EndVFS = TempVFS;
-	}
+	/* all looks legit, push VFS to list */
+	VFS_List.push_front(TempVFS);
 
 	SDL_RWread(TempVFS->File, &HeaderOffsetVFS, sizeof(HeaderOffsetVFS), 1);
 	SDL_RWread(TempVFS->File, &HeaderLengthVFS, sizeof(HeaderLengthVFS), 1);
@@ -311,18 +266,8 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	while (VFS_FileSize != SDL_RWtell(TempVFS->File)) {
 		eVFS_Entry *Temp = new eVFS_Entry;
 
-		if (EndVFSArray == NULL) {
-			Temp->Prev = NULL;
-			Temp->Next = NULL;
-			StartVFSArray = Temp;
-			EndVFSArray = Temp;
-		}
-		else {
-			Temp->Prev = EndVFSArray;
-			Temp->Next = NULL;
-			EndVFSArray->Next = Temp;
-			EndVFSArray = Temp;
-		}
+		/* push VFS entry to list */
+		VFSEntries_List.push_front(Temp);
 
 		Temp->Parent = TempVFS;
 
@@ -339,9 +284,9 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	return 0;
 
 error:
-	if (TempVFS->File != NULL)
+	if (TempVFS->File != nullptr)
 		SDL_RWclose(TempVFS->File);
-	if (TempVFS->FileName != NULL)
+	if (TempVFS->FileName != nullptr)
 		delete [] TempVFS->FileName;
 	delete TempVFS;
 
@@ -353,80 +298,47 @@ error:
  */
 void vw_CloseVFS()
 {
-	/* release all VFS entry */
-	eVFS_Entry *Tmp = StartVFSArray;
-	while (Tmp != NULL)
-	{
-		eVFS_Entry *Tmp1 = Tmp->Next;
+	/* release all VFS entries */
+	while (!VFSEntries_List.empty()) {
 
-		if (Tmp->Name != NULL)
-			delete [] Tmp->Name;
+		if (VFSEntries_List.front()->Name != nullptr)
+			delete [] VFSEntries_List.front()->Name;
 
-		if (StartVFSArray == Tmp)
-			StartVFSArray = Tmp->Next;
-		if (EndVFSArray == Tmp)
-			EndVFSArray = Tmp->Prev;
-
-		if (Tmp->Next != NULL)
-			Tmp->Next->Prev = Tmp->Prev;
-		else if (Tmp->Prev != NULL)
-			Tmp->Prev->Next = NULL;
-
-		if (Tmp->Prev != NULL)
-			Tmp->Prev->Next = Tmp->Next;
-		else if (Tmp->Next != NULL)
-			Tmp->Next->Prev = NULL;
-
-		delete Tmp;
-		Tmp = Tmp1;
+		delete VFSEntries_List.front();
+		VFSEntries_List.pop_front();
 	}
-
-	/* reset linked list */
-	StartVFSArray = NULL;
-	EndVFSArray = NULL;
+	/* reset list */
+	VFSEntries_List.clear();
 
 	/* release all VFS */
-	eVFS *TempVFS = StartVFS;
-	while (TempVFS != NULL) {
-		eVFS *TempVFS1 = TempVFS->Next;
+	while (!VFS_List.empty()) {
 
-		if (TempVFS->File != NULL)
-			SDL_RWclose(TempVFS->File);
+		if (VFS_List.front()->File != nullptr)
+			SDL_RWclose(VFS_List.front()->File);
 
-		if (TempVFS->FileName != NULL) {
-			printf("VFS file was closed %s\n", TempVFS->FileName);
-			delete [] TempVFS->FileName;
+		if (VFS_List.front()->FileName != nullptr) {
+			printf("VFS file was closed %s\n", VFS_List.front()->FileName);
+			delete [] VFS_List.front()->FileName;
 		}
 
-		delete TempVFS;
-		TempVFS = TempVFS1;
+		delete VFS_List.front();
+		VFS_List.pop_front();
 	}
-
-	/* reset linked list */
-	StartVFS = NULL;
-	EndVFS = NULL;
+	/* reset list */
+	VFS_List.clear();
 }
 
 /*
- * Shutdown VFS (all eFILE files will be closed).
+ * Shutdown VFS, close all opened files.
  */
 void vw_ShutdownVFS()
 {
 	/* close all files */
-	if (StartFileVFS != NULL) {
-		eFILE *Tmp = StartFileVFS;
-
-		while (Tmp != NULL) {
-			eFILE *Tmp1 = Tmp->Next;
-
-			vw_fclose(Tmp);
-			Tmp = Tmp1;
-		}
+	while (!VFSFiles_List.empty()) {
+		vw_fclose(VFSFiles_List.front());
 	}
-
-	/* reset linked list */
-	StartFileVFS = NULL;
-	EndFileVFS = NULL;
+	/* reset list */
+	VFSFiles_List.clear();
 
 	vw_CloseVFS();
 }
@@ -436,23 +348,18 @@ void vw_ShutdownVFS()
  */
 static file_location DetectFileLocation(const char *FileName)
 {
-	if (FileName == NULL)
+	if (FileName == nullptr)
 		return FILE_NOT_FOUND;
 
 	/* trying to find file in VFS by name */
-	eVFS_Entry *Tmp1 = StartVFSArray;
-	while (Tmp1 != NULL) {
-		eVFS_Entry *Tmp2 = Tmp1->Next;
-
-		if(strcmp(FileName, Tmp1->Name) == 0)
+	for (eVFS_Entry *Tmp : VFSEntries_List) {
+		if(strcmp(FileName, Tmp->Name) == 0)
 			return FILE_IN_VFS;
-
-		Tmp1 = Tmp2;
 	}
 
 	/* trying to open real file in file system */
 	SDL_RWops *File = SDL_RWFromFile(FileName, "rb");
-	if (File != NULL) {
+	if (File != nullptr) {
 		SDL_RWclose(File);
 		return FILE_IN_FS;
 	}
@@ -465,21 +372,18 @@ static file_location DetectFileLocation(const char *FileName)
  */
 eFILE *vw_fopen(const char *FileName)
 {
-	file_location Location;
-	eFILE *File;
+	if (FileName == nullptr)
+		return nullptr;
 
-	if (FileName == NULL)
-		return NULL;
-
-	Location = DetectFileLocation(FileName);
+	file_location Location = DetectFileLocation(FileName);
 
 	if (Location == FILE_NOT_FOUND) {
 		fprintf(stderr, "Can't find the file %s\n", FileName);
-		return NULL;
+		return nullptr;
 	}
 
 	/* initial memory allocation and setup */
-	File = new eFILE;
+	eFILE *File = new eFILE;
 	File->Pos = 0;
 	File->Size = 0;
 	File->VFS_Offset = 0;
@@ -488,18 +392,16 @@ eFILE *vw_fopen(const char *FileName)
 
 	if (Location == FILE_IN_VFS) {
 		/* find file in VFS by name */
-		eVFS_Entry *FileInVFS = NULL;
-		eVFS_Entry *Tmp = StartVFSArray;
-
-		while (Tmp != NULL) {
-			eVFS_Entry *Tmp1 = Tmp->Next;
-
+		eVFS_Entry *FileInVFS = nullptr;
+		for (eVFS_Entry *Tmp : VFSEntries_List) {
 			if(strcmp(File->Name, Tmp->Name) == 0) {
 				FileInVFS = Tmp;
 				break;
 			}
-			Tmp = Tmp1;
 		}
+		/* no need to check FileInVFS, since we know for sure,
+		 * file present in VFS
+		 */
 
 		File->VFS_Offset = FileInVFS->Offset;
 
@@ -522,19 +424,8 @@ eFILE *vw_fopen(const char *FileName)
 		SDL_RWclose(fTEMP);
 	}
 
-	/* add to linked lists */
-	if (EndFileVFS == NULL) {
-		File->Prev = NULL;
-		File->Next = NULL;
-		StartFileVFS = File;
-		EndFileVFS = File;
-	}
-	else {
-		File->Prev = EndFileVFS;
-		File->Next = NULL;
-		EndFileVFS->Next = File;
-		EndFileVFS = File;
-	}
+	/* add file to list */
+	VFSFiles_List.push_front(File);
 
 	return File;
 }
@@ -544,34 +435,17 @@ eFILE *vw_fopen(const char *FileName)
  */
 int vw_fclose(eFILE *stream)
 {
-	if (stream == NULL)
+	if (stream == nullptr)
 		return -1;
 
-	/* remove from linked lists */
-	if (StartFileVFS == stream)
-		StartFileVFS = stream->Next;
-	if (EndFileVFS == stream)
-		EndFileVFS = stream->Prev;
-
-	if (stream->Next != NULL)
-		stream->Next->Prev = stream->Prev;
-	else if (stream->Prev != NULL)
-		stream->Prev->Next = NULL;
-
-	if (stream->Prev != NULL)
-		stream->Prev->Next = stream->Next;
-	else if (stream->Next != NULL)
-		stream->Next->Prev = NULL;
+	/* remove from list */
+	VFSFiles_List.remove(stream);
 
 	/* release alocated memory */
-	if (stream->Data != NULL) {
+	if (stream->Data != nullptr)
 		delete [] stream->Data;
-		stream->Data = NULL;
-	}
-	if (stream->Name != NULL) {
+	if (stream->Name != nullptr)
 		delete [] stream->Name;
-		stream->Name = NULL;
-	}
 	delete stream;
 
 	return 0;
@@ -585,7 +459,7 @@ int eFILE::fread(void *buffer, size_t size, size_t count)
 {
 	int CopyCount = 0;
 
-	if ((buffer == NULL) || (Data == 0))
+	if ((buffer == nullptr) || (Data == 0))
 		return -1;
 
 	/* read data */
@@ -594,8 +468,8 @@ int eFILE::fread(void *buffer, size_t size, size_t count)
 			memcpy((BYTE*)buffer + CopyCount*size, Data + Pos, size);
 			Pos += size;
 			CopyCount++;
-		}
-		else break; /* end of eFILE */
+		} else
+			break; /* end of eFILE */
 	}
 
 	return CopyCount;
@@ -607,27 +481,27 @@ int eFILE::fread(void *buffer, size_t size, size_t count)
 int eFILE::fseek(long offset, int origin)
 {
 	switch (origin) {
-		case SEEK_CUR:
-			if (Pos + offset > Size)
-				return 1;
-			Pos += offset;
-			break;
+	case SEEK_CUR:
+		if (Pos + offset > Size)
+			return 1;
+		Pos += offset;
+		break;
 
-		case SEEK_END:
-			if (Size - offset < 0)
-				return 1;
-			Pos = Size - offset;
-			break;
+	case SEEK_END:
+		if (Size - offset < 0)
+			return 1;
+		Pos = Size - offset;
+		break;
 
-		case SEEK_SET:
-			if (offset < 0 || offset > Size)
-				return 1;
-			Pos = offset;
-			break;
+	case SEEK_SET:
+		if (offset < 0 || offset > Size)
+			return 1;
+		Pos = offset;
+		break;
 
-		default:
-			fprintf(stderr, "Error in fseek function call, wrong origin.\n");
-			break;
+	default:
+		fprintf(stderr, "Error in fseek function call, wrong origin.\n");
+		break;
 	}
 
 	return 0;

@@ -83,7 +83,6 @@ extern bool LoadedTypes[1000];
 extern char ConfigFileName[MAX_PATH];
 extern char ProgrammDir[MAX_PATH];
 extern char ScreenshotDir[MAX_PATH];
-extern char VFSFileNamePath[MAX_PATH];
 extern char UserPath[MAX_PATH];
 extern bool Quit;
 extern bool CanQuit;
@@ -155,7 +154,7 @@ const sFontList FontList[FontQuantity] =
 //------------------------------------------------------------------------------------
 // MainFS2VFS.cpp
 //------------------------------------------------------------------------------------
-int ConvertFS2VFS(char RawDataDir[MAX_PATH]);
+int ConvertFS2VFS(char RawDataDir[MAX_PATH], char VFSFileNamePath[MAX_PATH]);
 
 
 

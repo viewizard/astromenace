@@ -646,7 +646,7 @@ int main( int argc, char **argv )
 		}
 
 		printf("Source Raw Folder: %s\n", RawDataDir);
-		return ConvertFS2VFS(RawDataDir);
+		return ConvertFS2VFS(RawDataDir, VFSFileNamePath);
 	}
 
 

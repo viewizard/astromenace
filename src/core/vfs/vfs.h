@@ -28,6 +28,7 @@
 #define VFS_H
 
 #include "../base.h"
+#include <forward_list>
 
 #define VFS_VER "v1.6"
 
@@ -58,9 +59,6 @@ struct eVFS {
 	int	HeaderOffsetVFS;
 	int	DataStartOffsetVFS;
 	bool	Writable;
-
-	eVFS	*Prev;
-	eVFS	*Next;
 };
 
 struct eVFS_Entry {
@@ -70,13 +68,10 @@ struct eVFS_Entry {
 	int	Size;
 
 	eVFS	*Parent;
-
-	eVFS_Entry	*Prev;
-	eVFS_Entry	*Next;
 };
 
-/* Get first entry from VFS linked list */
-eVFS_Entry *vw_GetStartVFSArray();
+/* Get VFS entries list */
+std::forward_list<eVFS_Entry*> *vw_GetVFSEntriesListHead();
 /* Create VFS file */
 eVFS	*vw_CreateVFS(const char *Name, unsigned int BuildNumber);
 /* Write data from file into VFS file */
@@ -87,7 +82,7 @@ int	vw_WriteIntoVFSfromMemory(eVFS *WritableVFS, const char *Name, const BYTE *b
 int	vw_OpenVFS(const char *Name, unsigned int BuildNumber);
 /* Close all VFS */
 void	vw_CloseVFS();
-/* Shutdown VFS (all eFILE files will be closed) */
+/* Shutdown VFS, close all opened files */
 void	vw_ShutdownVFS();
 
 struct eFILE {
@@ -100,9 +95,6 @@ struct eFILE {
 	int	fread(void *buffer, size_t size, size_t count);
 	int	fseek(long offset, int origin);
 	long	ftell();
-
-	eFILE	*Prev;
-	eFILE	*Next;
 };
 
 eFILE	*vw_fopen(const char *FileName);
