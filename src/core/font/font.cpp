@@ -30,7 +30,7 @@
 /* TODO translate comments */
 /* TODO move to std::string, all utf8<->utf32 stuff must be revised first */
 /* TODO move vertex buffers to std::vector (?) looks pretty ugly now */
-/* TODO Font characters rendering should be revised in order to use use RI_TRIANGLES instead of RI_QUADS.
+/* TODO Font characters rendering should be revised in order to use RI_TRIANGLES instead of RI_QUADS.
  * The main reason is provide more friendly code portability on different platforms.
  * This also increase buffers size on 50%, but buffers are small enough.
  */

@@ -80,8 +80,6 @@ struct eDevCaps {
 	bool GLSL100Supported;
 	// шейдерная модель
 	float ShaderModel;
-	// поддержка Occlusion Query (попадает в видимую область прорисовки)
-	bool OcclusionQuerySupported;
 	// поддержка генерации мипмеп в железе
 	bool HardwareMipMapGeneration;
 };
@@ -559,20 +557,6 @@ bool vw_Uniform4fv(eGLSL *GLSL, int UniformLocation, int count, float *data);
 bool vw_Uniform4fv(eGLSL *GLSL, const char *name, int count, float *data);
 bool vw_UniformMatrix4fv(eGLSL *GLSL, int UniformLocation, bool transpose, int count, float *data);
 bool vw_UniformMatrix4fv(eGLSL *GLSL, const char *name, bool transpose, int count, float *data);
-
-
-
-
-
-// Occlusion Query
-void vw_GenQueries(int n, unsigned int *ids);
-void vw_DeleteQueries(int n, const unsigned int *ids);
-bool vw_IsQuery(unsigned int id);
-void vw_BeginQuery(unsigned int id);
-void vw_EndQuery();
-void vw_GetQueryiv(unsigned int target, unsigned int pname, int *params);
-void vw_GetQueryObjectiv(unsigned int id, unsigned int pname, int *params);
-void vw_GetQueryObjectuiv(unsigned int id, unsigned int pname, unsigned int *params);
 
 
 

@@ -83,8 +83,6 @@ int UserDisplayRampStatus = -1; // не использовать, была ош�
 
 // инициализация GLSL
 bool vw_Internal_InitializationGLSL();
-// инициализация Occlusion Queries
-bool vw_Internal_InitializationOcclusionQueries();
 // инициализация VBO
 bool vw_Internal_InitializationVBO();
 // инициализация VAO
@@ -168,7 +166,6 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	OpenGL_DevCaps.TextureNPOTSupported = false;
 	OpenGL_DevCaps.GLSL100Supported = false;
 	OpenGL_DevCaps.ShaderModel = 0;
-	OpenGL_DevCaps.OcclusionQuerySupported = false;
 	OpenGL_DevCaps.HardwareMipMapGeneration = false;
 	OpenGL_DevCaps.TextureStorage = false;
 	OpenGL_DevCaps.FramebufferObject = false;
@@ -248,14 +245,6 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_ARB_texture_compression_bptc")) {
 		OpenGL_DevCaps.TexturesCompressionBPTC = true;
 		printf("Textures BPTC compression support enabled.\n");
-	}
-#endif
-
-	// проверяем, есть ли поддержка OcclusionQuery
-#ifdef use_Query_Objects
-	if (ExtensionSupported("GL_ARB_occlusion_query")) {
-		OpenGL_DevCaps.OcclusionQuerySupported = true;
-		printf("Occlusion Query support enabled.\n");
 	}
 #endif
 
@@ -465,8 +454,6 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	vw_Internal_InitializationIndexBufferData();
 	// иним шейдеры
 	if (OpenGL_DevCaps.GLSL100Supported) OpenGL_DevCaps.GLSL100Supported = vw_Internal_InitializationGLSL();
-	// иним оклюжен
-	if (OpenGL_DevCaps.OcclusionQuerySupported) OpenGL_DevCaps.OcclusionQuerySupported = vw_Internal_InitializationOcclusionQueries();
 	// иним вбо
 	if (OpenGL_DevCaps.VBOSupported) OpenGL_DevCaps.VBOSupported = vw_Internal_InitializationVBO();
 	// иним вaо

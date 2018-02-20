@@ -44,7 +44,6 @@
 #define use_Shading_Language
 #define use_NPOT_Texture
 // OpenGL 1.5+
-#define use_Query_Objects
 #define use_Vertex_Buffer_Objects
 // OpenGL 1.4+
 #define use_Automatic_Mipmap_Generation

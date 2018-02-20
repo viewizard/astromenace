@@ -100,7 +100,6 @@
 		<Unit filename="src/core/graphics/gl_light.cpp" />
 		<Unit filename="src/core/graphics/gl_main.cpp" />
 		<Unit filename="src/core/graphics/gl_matrix.cpp" />
-		<Unit filename="src/core/graphics/gl_occlusion_query.cpp" />
 		<Unit filename="src/core/graphics/gl_texture.cpp" />
 		<Unit filename="src/core/graphics/gl_vao.cpp" />
 		<Unit filename="src/core/graphics/gl_vbo.cpp" />
