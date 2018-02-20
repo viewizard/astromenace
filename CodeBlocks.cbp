@@ -139,7 +139,6 @@
 		<Unit filename="src/core/system/languages/en.cpp" />
 		<Unit filename="src/core/system/languages/ru.cpp" />
 		<Unit filename="src/core/system/mouse.cpp" />
-		<Unit filename="src/core/system/system.cpp" />
 		<Unit filename="src/core/system/system.h" />
 		<Unit filename="src/core/system/timer.cpp" />
 		<Unit filename="src/core/text/text.cpp" />

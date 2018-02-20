@@ -32,10 +32,6 @@
 
 
 
-// открываем браузер
-bool	vw_OpenBrouser(const char *url);
-
-
 
 // работа со временем
 void 	vw_InitTime();
