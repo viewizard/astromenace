@@ -24,168 +24,155 @@
 
 *************************************************************************************/
 
-
-#include "camera.h"
 #include "../graphics/graphics.h"
+#include "camera.h"
 
-
-
-//-----------------------------------------------------------------------------
-// локальные/защищенные переменные
-//-----------------------------------------------------------------------------
-
-// флаг обновления фруструма
+/* Camera update flag (need for frustum calculation on camera update). */
 bool CameraUpdated = true;
-// точка положения камеры
-VECTOR3D	CameraLocation(0.0f, 0.0f, 0.0f);
-// углы поворота камеры
-VECTOR3D	CameraRotation(0.0f, 0.0f, 0.0f);
-// девиация камеры
-VECTOR3D	CameraDeviation(0.0f, 0.0f, 0.0f);
-// точка на которую смотрим
-VECTOR3D	CameraFocusPoint(0.0f, 0.0f, 0.0f);
+/* Camera location. */
+VECTOR3D CameraLocation(0.0f, 0.0f, 0.0f);
+/* Camera rotation angles. */
+VECTOR3D CameraRotation(0.0f, 0.0f, 0.0f);
+/* Camera deviation (need for camera shake effect). */
+VECTOR3D CameraDeviation(0.0f, 0.0f, 0.0f);
+/* Camera focus point (anchor). */
+VECTOR3D CameraFocusPoint(0.0f, 0.0f, 0.0f);
 
 
-
-//-----------------------------------------------------------------------------
-// получение-запись положения и поворота камеры
-//-----------------------------------------------------------------------------
+/*
+ * Set camera location.
+ */
 void vw_SetCameraLocation(VECTOR3D NewLocation)
 {
 	CameraLocation = NewLocation;
 	CameraUpdated = true;
 }
+
+/*
+ * Increment camera location by vector.
+ */
 void vw_IncCameraLocation(VECTOR3D IncLocation)
 {
 	CameraLocation += IncLocation;
 	CameraFocusPoint += IncLocation;
 	CameraUpdated = true;
 }
+
+/*
+ * Get camera location.
+ */
 VECTOR3D vw_GetCameraLocation(VECTOR3D *CurrentLocation)
 {
 	*CurrentLocation = CameraLocation;
 	return CameraLocation;
 }
+
+
+/*
+ * Set camera rotation angles.
+ */
 void vw_SetCameraRotation(VECTOR3D NewRotation)
 {
 	CameraRotation = NewRotation;
 	CameraUpdated = true;
 }
+
+/*
+ * Get camera rotation angles.
+ */
 VECTOR3D vw_GetCameraRotation(VECTOR3D *CurrentRotation)
 {
 	*CurrentRotation = CameraRotation;
 	return CameraRotation;
 }
+
+/*
+ * Get camera focus point (anchor).
+ */
 VECTOR3D vw_GetCameraFocusPoint()
 {
 	return CameraFocusPoint;
 }
 
-
-
-//-----------------------------------------------------------------------------
-// движение камеры
-//-----------------------------------------------------------------------------
+/*
+ * Move camera by direction.
+ */
 void vw_SetCameraMove(VECTOR3D NewRotation, float ChangeDistance, VECTOR3D Point)
 {
-	// убираем поправку на точку
+	/* revert back all movements */
 	CameraLocation -= Point;
-	// обратный поворот
 	RotatePointInv(&CameraLocation, CameraRotation);
-	// делаем приращение
+	/* change distance */
 	CameraLocation.z += ChangeDistance;
-
-	// присваеваем новые значения
+	/* change rotation angles */
 	CameraRotation += NewRotation;
-	// поворачиваем в нужную сторону
+	/* apply corrected distance and angles to camera */
 	RotatePoint(&CameraLocation, CameraRotation^(-1.0f));
-	// добавляем поправку на точку
 	CameraLocation += Point;
-
-	// нужно обновить данные
 	CameraUpdated = true;
 }
 
-
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// движение камеры вокруг точки
-//-----------------------------------------------------------------------------
+/*
+ * Move camera around point (anchor).
+ */
 void vw_SetCameraMoveAroundPoint(VECTOR3D Point, float ChangeDistance, VECTOR3D ChangeRotation)
 {
 	CameraFocusPoint = Point;
-
-	// двигаем и перемещаем как нужно
+	/* initial camera move */
 	vw_SetCameraMove(ChangeRotation, ChangeDistance, Point);
 
-
-	// установка углов, чтобы поворот был на нужную точку
-	VECTOR3D exV(0.0f,0.0f,0.0f);
-	VECTOR3D V = Point-CameraLocation;
+	/* rotate camera to the point */
+	VECTOR3D exV(0.0f, 0.0f, 0.0f);
+	VECTOR3D V = Point - CameraLocation;
 	V.Normalize();
-	if (V.x*V.x+V.y*V.y+V.z*V.z !=0) exV = V;
+	if (V.x*V.x + V.y*V.y + V.z*V.z != 0) exV = V;
 
-	// установка поворота на точку...
 	float newrotY = 0.0f;
-	if (exV.z != 0.0f)
-	{
-		if (((0.0f>exV.x)&(0.0f>-exV.z))|((0.0f<exV.x)&(0.0f<-exV.z)))
-			newrotY=(atanf(fabsf(exV.x)/fabsf(exV.z)))/0.0174532925f;
+	if (exV.z != 0.0f) {
+		if (((0.0f > exV.x) && (0.0f > -exV.z)) || ((0.0f < exV.x) && (0.0f < -exV.z)))
+			newrotY = (atanf(fabsf(exV.x) / fabsf(exV.z))) / 0.0174532925f;
 		else
-			newrotY=-(atanf(fabsf(exV.x)/fabsf(exV.z)))/0.0174532925f;
+			newrotY = -(atanf(fabsf(exV.x) / fabsf(exV.z))) / 0.0174532925f;
 	}
 
 	float newrotX = 0.0f;
-	float kat=(exV.z)*(exV.z)+(exV.x)*(exV.x);
-	if (kat != 0.0f)
-	{
-		kat=sqrtf(kat);
-		if (0<exV.y)
+	float kat = (exV.z)*(exV.z) + (exV.x)*(exV.x);
+	if (kat != 0.0f) {
+		kat = sqrtf(kat);
+		if (0 < exV.y)
 			newrotX=-(atanf(fabsf(exV.y)/kat))/0.0174532925f;
 		else
 			newrotX=(atanf(fabsf(exV.y)/kat))/0.0174532925f;
 	}
-	if (0>-exV.z) newrotY+=180;
-
+	if (0 > -exV.z)
+		newrotY += 180;
 
 	CameraRotation.x = -newrotX;
 	CameraRotation.y = -newrotY;
-
 	CameraUpdated = true;
 }
 
-
-
-
-//-----------------------------------------------------------------------------
-// установка болтания камеры
-//-----------------------------------------------------------------------------
+/*
+ * Camera deviation setup (need for camera shake effect).
+ */
 void vw_SetCameraDeviation(VECTOR3D NewCameraDeviation)
 {
 	CameraDeviation = NewCameraDeviation;
 }
 
-
-
-//-----------------------------------------------------------------------------
-// установка камеры
-//-----------------------------------------------------------------------------
-void vw_CameraLookAt(void)
+/*
+ * Camera setup.
+ */
+void vw_CameraLookAt()
 {
-	// установка камеры
 	vw_Rotate(-CameraRotation.x, 1.0f, 0.0f, 0.0f);
 	vw_Rotate(-CameraRotation.y, 0.0f, 1.0f, 0.0f);
 	vw_Rotate(-CameraRotation.z, 0.0f, 0.0f, 1.0f);
 
-	vw_Translate((CameraLocation^(-1.0f))-CameraDeviation);
+	vw_Translate((CameraLocation^(-1.0f)) - CameraDeviation);
 
-	// получаем фруструм
-	if (CameraUpdated)
-	{
+	/* recalculate frustum on camera update */
+	if (CameraUpdated) {
 		vw_CalculateFrustum();
 		CameraUpdated = false;
 	}

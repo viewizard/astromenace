@@ -24,54 +24,46 @@
 
 *************************************************************************************/
 
-
 #ifndef CAMERA_H
 #define CAMERA_H
-
 
 #include "../base.h"
 #include "../math/math.h"
 
+/* Camera related function. */
 
-// работа с положением камеры
+/* Set camera location. */
 void vw_SetCameraLocation(VECTOR3D NewLocation);
+/* Increment camera location by vector. */
 void vw_IncCameraLocation(VECTOR3D IncLocation);
+/* Get camera location. */
 VECTOR3D vw_GetCameraLocation(VECTOR3D *CurrentLocation);
+/* Get camera focus point (anchor). */
 VECTOR3D vw_GetCameraFocusPoint();
-// работа с поворотом камеры
+/* Set camera rotation angles. */
 void vw_SetCameraRotation(VECTOR3D NewRotation);
+/* Get camera rotation angles. */
 VECTOR3D vw_GetCameraRotation(VECTOR3D *CurrentRotation);
-// перемещение камеры
+/* Move camera by direction. */
 void vw_SetCameraMove(VECTOR3D NewRotation, float ChangeDistance, VECTOR3D Point);
-// перемещение относительно точки
+/* Move camera around point (anchor). */
 void vw_SetCameraMoveAroundPoint(VECTOR3D Point, float ChangeDistance, VECTOR3D ChangeRotation);
-// установка болтания камеры
+/* Camera deviation setup (need for camera shake effect). */
 void vw_SetCameraDeviation(VECTOR3D NewCameraDeviation);
-// установка камеры
-void vw_CameraLookAt(void);
+/* Camera setup. */
+void vw_CameraLookAt();
 
+/* Frustum related function. */
 
-
-
-// This normalizes a plane (A side) from a given frustum.
-void vw_NormalizePlane(float frustum[6][4], int side);
-// Call this every time the camera moves to update the frustum
-void vw_CalculateFrustum(void);
-// This takes a 3D point and returns TRUE if it's inside of the frustum
+/* Call this every time the camera moves to update the frustum. */
+void vw_CalculateFrustum();
+/* This takes a 3D point and returns TRUE if it's inside of the frustum. */
 bool vw_PointInFrustum(VECTOR3D Point);
-// This takes a 3D point and a radius and returns TRUE if the sphere is inside of the frustum
-bool vw_SphereInFrustum(VECTOR3D Point, float radius);
-// This takes the center and half the length of the cube.
-bool vw_CubeInFrustum(VECTOR3D CenterPoint, float size);
-// This checks if a box is in the frustum
+/* This takes a 3D point and a radius and returns TRUE if the sphere is inside of the frustum. */
+bool vw_SphereInFrustum(VECTOR3D Point, float Radius);
+/* This takes the center and half the length of the cube. */
+bool vw_CubeInFrustum(VECTOR3D CenterPoint, float Size);
+/* This checks if a box is in the frustum. */
 bool vw_BoxInFrustum(VECTOR3D MinPoint, VECTOR3D MaxPoint);
 
-
-
-
-
-
-
-
 #endif // CAMERA_H
-
