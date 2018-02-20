@@ -41,7 +41,7 @@ class CBasePart : public CSpaceObject
 {
 public:
 
-	virtual ~CBasePart(){};
+	virtual ~CBasePart() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int BasePartNum);

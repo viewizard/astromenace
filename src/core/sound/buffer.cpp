@@ -31,8 +31,8 @@ ALboolean CheckALError();
 ALboolean CheckALUTError();
 
 
-eBuffer *StartBufferMan = 0;
-eBuffer *EndBufferMan = 0;
+eBuffer *StartBufferMan = nullptr;
+eBuffer *EndBufferMan = nullptr;
 
 
 
@@ -54,7 +54,8 @@ int VorbisSeekSFX(void *datasource, ogg_int64_t offset, int whence)
 	return vorbisData->fseek(offset, whence);
 }
 int VorbisCloseSFX(void *UNUSED(datasource))
-{// похоже, без этой функции у линукс версии vorbis проблемы, хотя по документации...
+{
+	// похоже, без этой функции у линукс версии vorbis проблемы, хотя по документации...
 	return 1;
 }
 long VorbisTellSFX(void *datasource)
@@ -70,7 +71,8 @@ long VorbisTellSFX(void *datasource)
 //------------------------------------------------------------------------------------
 bool ReadOggBlockSFX(ALuint BufID, size_t Size, OggVorbis_File *mVF, ALsizei Rate, ALenum Format)
 {
-	if (mVF == 0) return false;
+	if (mVF == nullptr)
+		return false;
 
 	// var
 	int			current_section;
@@ -82,23 +84,18 @@ bool ReadOggBlockSFX(ALuint BufID, size_t Size, OggVorbis_File *mVF, ALsizei Rat
 	PCM = new char[Size];
 
 	// Read loop
-	while (TotalRet < Size)
-	{
+	while (TotalRet < Size) {
 		ret = ov_read(mVF, PCM + TotalRet, Size - TotalRet, 0, 2, 1, &current_section);
 
 		// if end of file or read limit exceeded
 		if (ret == 0) break;
-		else if (ret < 0) 		// Error in bitstream
-		{
+		else if (ret < 0) {	// Error in bitstream
 			//
-		}
-		else
-		{
+		} else {
 			TotalRet += ret;
 		}
 	}
-	if (TotalRet > 0)
-	{
+	if (TotalRet > 0) {
 		alBufferData(BufID, Format, PCM, TotalRet, Rate);
 		CheckALError();
 	}
@@ -115,9 +112,9 @@ ALuint vw_CreateSoundBufferFromOGG(const char *Name)
 {
 	ALuint Buffer;
 
-	eFILE *file = 0;
-	file = vw_fopen(Name);
-	if (file == 0) return 0;
+	eFILE *file = vw_fopen(Name);
+	if (file == nullptr)
+		return 0;
 
 	// OggVorbis specific structures
 	ov_callbacks	cb;
@@ -130,14 +127,12 @@ ALuint vw_CreateSoundBufferFromOGG(const char *Name)
 	OggVorbis_File *mVF = new OggVorbis_File;
 
 	// Generate local buffers
-	if (ov_open_callbacks(file, mVF, NULL, 0, cb) < 0)
-	{
+	if (ov_open_callbacks(file, mVF, nullptr, 0, cb) < 0)
 		// This is not ogg bitstream. Return
 		return 0;
-	}
 
 	// Return vorbis_info structures
-	vorbis_info		*mInfo		= ov_info(mVF, -1);
+	vorbis_info *mInfo = ov_info(mVF, -1);
 
 	// Create buffers
 	alGenBuffers(1, &Buffer);
@@ -149,17 +144,18 @@ ALuint vw_CreateSoundBufferFromOGG(const char *Name)
 	if (!CheckALError()) return 0;
 
 	vw_fclose(file);
-	if (!mVF){ov_clear(mVF);delete mVF;}
+	if (!mVF) {
+		ov_clear(mVF);
+		delete mVF;
+	}
 
 
 	// вот теперь создаем объект
-	if (Buffer != 0)
-	{
-		eBuffer *TMPBuffer = 0;
-		TMPBuffer = new eBuffer;
+	if (Buffer != 0) {
+		eBuffer *TMPBuffer = new eBuffer;
 		vw_AttachBuffer(TMPBuffer);
 
-		TMPBuffer->Name = new char[strlen(Name)+1]; if (TMPBuffer->Name == 0) return 0;
+		TMPBuffer->Name = new char[strlen(Name)+1];
 		strcpy(TMPBuffer->Name, Name);
 		TMPBuffer->Buffer = Buffer;
 
@@ -184,24 +180,23 @@ ALuint vw_CreateSoundBufferFromWAV(const char *Name)
 {
 	ALuint Buffer;
 
-	eFILE *file = 0;
-	file = vw_fopen(Name);
-	if (file == 0) return 0;
+	eFILE *file = vw_fopen(Name);
+	if (file == nullptr)
+		return 0;
 
 	Buffer = alutCreateBufferFromFileImage(file->Data, file->Size);
-	if (!CheckALUTError()) return 0;
+	if (!CheckALUTError())
+		return 0;
 
 	vw_fclose(file);
 
 
 	// вот теперь создаем объект
-	if (Buffer != 0)
-	{
-		eBuffer *TMPBuffer = 0;
-		TMPBuffer = new eBuffer;
+	if (Buffer != 0) {
+		eBuffer *TMPBuffer = new eBuffer;
 		vw_AttachBuffer(TMPBuffer);
 
-		TMPBuffer->Name = new char[strlen(Name)+1]; if (TMPBuffer->Name == 0) return 0;
+		TMPBuffer->Name = new char[strlen(Name) + 1];
 		strcpy(TMPBuffer->Name, Name);
 		TMPBuffer->Buffer = Buffer;
 
@@ -215,13 +210,20 @@ ALuint vw_CreateSoundBufferFromWAV(const char *Name)
 //------------------------------------------------------------------------------------
 void vw_ReleaseBuffer(eBuffer *Buffer)
 {
-	if (Buffer == 0) return;
+	if (Buffer == nullptr)
+		return;
 
 	vw_DetachBuffer(Buffer);
 
-	if (Buffer->Name != 0){delete [] Buffer->Name; Buffer->Name = 0;}
+	if (Buffer->Name != nullptr) {
+		delete [] Buffer->Name;
+		Buffer->Name = nullptr;
+	}
 
-	if (Buffer->Buffer != 0){alDeleteBuffers(1, &Buffer->Buffer); Buffer->Buffer = 0;}
+	if (Buffer->Buffer != 0) {
+		alDeleteBuffers(1, &Buffer->Buffer);
+		Buffer->Buffer = 0;
+	}
 	alGetError(); // сброс ошибок
 
 	delete Buffer;
@@ -233,24 +235,22 @@ eBuffer *vw_FindBufferByName(const char *Name)
 {
 	eBuffer *Tmp = StartBufferMan;
 
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eBuffer *Tmp1 = Tmp->Next;
-		if(vw_strcmp(Tmp->Name, Name) == 0) return Tmp;
+		if(strcmp(Tmp->Name, Name) == 0) return Tmp;
 		Tmp = Tmp1;
 	}
 
-	return 0;
+	return nullptr;
 }
 
 ALuint vw_FindBufferIDByName(const char *Name)
 {
 	eBuffer *Tmp = StartBufferMan;
 
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eBuffer *Tmp1 = Tmp->Next;
-		if(vw_strcmp(Tmp->Name, Name) == 0) return Tmp->Buffer;
+		if(strcmp(Tmp->Name, Name) == 0) return Tmp->Buffer;
 		Tmp = Tmp1;
 	}
 
@@ -261,33 +261,30 @@ void vw_ReleaseAllBuffers()
 {
 	// Чистка памяти...
 	eBuffer *Tmp = StartBufferMan;
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eBuffer *Tmp1 = Tmp->Next;
 		vw_ReleaseBuffer(Tmp);
 		Tmp = Tmp1;
 	}
 
-	StartBufferMan = 0;
-	EndBufferMan = 0;
+	StartBufferMan = nullptr;
+	EndBufferMan = nullptr;
 }
 
 void vw_AttachBuffer(eBuffer* Buffer)
 {
-	if (Buffer == 0) return;
+	if (Buffer == nullptr)
+		return;
 
 	// первый в списке...
-	if (EndBufferMan == 0)
-	{
-		Buffer->Prev = 0;
-		Buffer->Next = 0;
+	if (EndBufferMan == nullptr) {
+		Buffer->Prev = nullptr;
+		Buffer->Next = nullptr;
 		StartBufferMan = Buffer;
 		EndBufferMan = Buffer;
-	}
-	else // продолжаем заполнение...
-	{
+	} else { // продолжаем заполнение...
 		Buffer->Prev = EndBufferMan;
-		Buffer->Next = 0;
+		Buffer->Next = nullptr;
 		EndBufferMan->Next = Buffer;
 		EndBufferMan = Buffer;
 	}
@@ -295,14 +292,21 @@ void vw_AttachBuffer(eBuffer* Buffer)
 
 void vw_DetachBuffer(eBuffer* Buffer)
 {
-	if (Buffer == 0) return;
+	if (Buffer == nullptr)
+		return;
 
 	// переустанавливаем указатели...
-	if (StartBufferMan == Buffer) StartBufferMan = Buffer->Next;
-	if (EndBufferMan == Buffer) EndBufferMan = Buffer->Prev;
+	if (StartBufferMan == Buffer)
+		StartBufferMan = Buffer->Next;
+	if (EndBufferMan == Buffer)
+		EndBufferMan = Buffer->Prev;
 
-	if (Buffer->Next != 0) Buffer->Next->Prev = Buffer->Prev;
-		else if (Buffer->Prev != 0) Buffer->Prev->Next = 0;
-	if (Buffer->Prev != 0) Buffer->Prev->Next = Buffer->Next;
-		else if (Buffer->Next != 0) Buffer->Next->Prev = 0;
+	if (Buffer->Next != nullptr)
+		Buffer->Next->Prev = Buffer->Prev;
+	else if (Buffer->Prev != nullptr)
+		Buffer->Prev->Next = nullptr;
+	if (Buffer->Prev != nullptr)
+		Buffer->Prev->Next = Buffer->Next;
+	else if (Buffer->Next != nullptr)
+		Buffer->Next->Prev = nullptr;
 }

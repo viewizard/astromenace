@@ -28,7 +28,7 @@
 #include "../game.h"
 
 
-ScriptEngine *Script = 0;
+ScriptEngine *Script = nullptr;
 extern eParticleSystem *psSpace;
 
 
@@ -36,41 +36,41 @@ extern eParticleSystem *psSpace;
 
 
 // замедление снарядов NPC ... 1-3...
-int		GameNPCWeaponPenalty = 1;
+int	GameNPCWeaponPenalty = 1;
 // ум. защиты NPC объектов
-int		GameNPCArmorPenalty = 1;
+int	GameNPCArmorPenalty = 1;
 // "замедление" наведения NPC ... 1-4
-int		GameNPCTargetingSpeedPenalty = 1;
+int	GameNPCTargetingSpeedPenalty = 1;
 // 0-ограничено, 1-нет
-int		GameLimitedAmmo = 0;
+int	GameLimitedAmmo = 0;
 // 0-может быть уничтожено, 1-нет
-int		GameDestroyableWeapon = 0;
+int	GameDestroyableWeapon = 0;
 // 1-аркада, 0-симулятор
-int		GameWeaponTargetingMode = 0;
+int	GameWeaponTargetingMode = 0;
 // 1-аркада, 0-симулятор
-int		GameSpaceShipControlMode = 0;
+int	GameSpaceShipControlMode = 0;
 
-int		GameEngineSystem = 1;
-int		GameTargetingSystem = 1;
-int		GameAdvancedProtectionSystem = 0;
-int		GamePowerSystem = 1;
-int		GameTargetingMechanicSystem = 1;
+int	GameEngineSystem = 1;
+int	GameTargetingSystem = 1;
+int	GameAdvancedProtectionSystem = 0;
+int	GamePowerSystem = 1;
+int	GameTargetingMechanicSystem = 1;
 
 // присваиваем в профайл только по завершению уровня!
 float	GameMoney = 0;
 float	GameExperience = 0;
 
-int		AlienShipsKillQuant;
+int	AlienShipsKillQuant;
 float	AlienShipsKillBonus;
-int		AlienMotherShipsKillQuant;
+int	AlienMotherShipsKillQuant;
 float	AlienMotherShipsKillBonus;
-int		PirateShipsKillQuant;
+int	PirateShipsKillQuant;
 float	PirateShipsKillBonus;
-int		PirateVehiclesKillQuant;
+int	PirateVehiclesKillQuant;
 float	PirateVehiclesKillBonus;
-int		PirateBuildingsKillQuant;
+int	PirateBuildingsKillQuant;
 float	PirateBuildingsKillBonus;
-int		AsteroidsKillQuant;
+int	AsteroidsKillQuant;
 float	AsteroidsKillBonus;
 
 
@@ -79,12 +79,12 @@ bool GameMissionCompleteStatus = false;
 bool GameMissionCompleteStatusShowDialog = false;
 
 // собственно сам файтер
-CEarthSpaceFighter *PlayerFighter = 0;
+CEarthSpaceFighter *PlayerFighter = nullptr;
 
 
 
 // флаг отображения меню
-bool	GameMenu = false;
+bool GameMenu = false;
 float GameContentTransp = 0.0f;
 float LastGameUpdateTime = 0.0f;
 int GameMenuStatus = 1;
@@ -107,10 +107,10 @@ extern float CurrentAlert3;
 extern float CurentTime;
 
 // прорисовка эмблем энергии и жизни
-eParticleSystem2D *EnergyParticleSystem2D = 0;
-eParticleSystem2D *LifeParticleSystem2D = 0;
-eParticleSystem2D *Life2ParticleSystem2D = 0;
-eParticleSystem2D *Life3ParticleSystem2D = 0;
+eParticleSystem2D *EnergyParticleSystem2D = nullptr;
+eParticleSystem2D *LifeParticleSystem2D = nullptr;
+eParticleSystem2D *Life2ParticleSystem2D = nullptr;
+eParticleSystem2D *Life3ParticleSystem2D = nullptr;
 
 
 // работа с кораблем игрока
@@ -162,24 +162,51 @@ float LastGameTime;
 //------------------------------------------------------------------------------------
 void GetGameNumFontData(char Char, RECT *SrcRect)
 {
-	switch (Char)
-	{
-		case '0':	SetRect(SrcRect,232,4,245,25); break;
-		case '1':	SetRect(SrcRect,71,4,84,25); break;
-		case '2':	SetRect(SrcRect,88,4,101,25); break;
-		case '3':	SetRect(SrcRect,106,4,119,25); break;
-		case '4':	SetRect(SrcRect,124,4,137,25); break;
-		case '5':	SetRect(SrcRect,142,4,155,25); break;
-		case '6':	SetRect(SrcRect,160,4,173,25); break;
-		case '7':	SetRect(SrcRect,178,4,191,25); break;
-		case '8':	SetRect(SrcRect,196,4,209,25); break;
-		case '9':	SetRect(SrcRect,214,4,227,25); break;
+	switch (Char) {
+	case '0':
+		SetRect(SrcRect,232,4,245,25);
+		break;
+	case '1':
+		SetRect(SrcRect,71,4,84,25);
+		break;
+	case '2':
+		SetRect(SrcRect,88,4,101,25);
+		break;
+	case '3':
+		SetRect(SrcRect,106,4,119,25);
+		break;
+	case '4':
+		SetRect(SrcRect,124,4,137,25);
+		break;
+	case '5':
+		SetRect(SrcRect,142,4,155,25);
+		break;
+	case '6':
+		SetRect(SrcRect,160,4,173,25);
+		break;
+	case '7':
+		SetRect(SrcRect,178,4,191,25);
+		break;
+	case '8':
+		SetRect(SrcRect,196,4,209,25);
+		break;
+	case '9':
+		SetRect(SrcRect,214,4,227,25);
+		break;
 
-		case 'E':	SetRect(SrcRect,47,4,66,25); break;
-		case 'S':	SetRect(SrcRect,4,4,21,25); break;
-		case '$':	SetRect(SrcRect,25,4,41,25); break;
+	case 'E':
+		SetRect(SrcRect,47,4,66,25);
+		break;
+	case 'S':
+		SetRect(SrcRect,4,4,21,25);
+		break;
+	case '$':
+		SetRect(SrcRect,25,4,41,25);
+		break;
 
-		case ' ':	SetRect(SrcRect,0,0,13,0); break;
+	case ' ':
+		SetRect(SrcRect,0,0,13,0);
+		break;
 	}
 
 }
@@ -195,7 +222,8 @@ void DrawGameExpMoney(int Exp, int Money)
 	int Ystart;
 	float Xstart;
 	eTexture *Tex = vw_FindTextureByName("game/game_num.tga");
-	if (Tex == 0) return;
+	if (Tex == nullptr)
+		return;
 
 
 
@@ -204,7 +232,7 @@ void DrawGameExpMoney(int Exp, int Money)
 	bool ASpresent = vw_GetAspectWH(&AW, &AH);
 
 	int W, H;
-	vw_GetViewport(0, 0, &W, &H);
+	vw_GetViewport(nullptr, nullptr, &W, &H);
 	float AHw = H*1.0f;
 
 	// Установка текстуры и ее свойств...
@@ -224,8 +252,7 @@ void DrawGameExpMoney(int Exp, int Money)
 	// выделяем память
 	// буфер для последовательности RI_TRIANGLE_STRIP
 	// войдет RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR
-	float *tmp = 0;
-	tmp = new float[(2+2+4)*4*16]; if (tmp == 0) return;
+	float *tmp = new float[(2+2+4)*4*16];
 	int k=0;
 
 
@@ -236,7 +263,7 @@ void DrawGameExpMoney(int Exp, int Money)
 	Ystart = 5;
 	GetGameNumFontData('E', &SrcRect);
 	SetRect(&DstRect, (int)Xstart,	Ystart,
-				(int)Xstart+SrcRect.right-SrcRect.left, Ystart+SrcRect.bottom-SrcRect.top);
+		(int)Xstart+SrcRect.right-SrcRect.left, Ystart+SrcRect.bottom-SrcRect.top);
 
 	if (ASpresent) tmpPosY = (AH - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
 	else tmpPosY = (AHw - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
@@ -247,47 +274,47 @@ void DrawGameExpMoney(int Exp, int Money)
 	float Yst = (SrcRect.top*1.0f)/ImageHeight;
 	float Xst = (SrcRect.left*1.0f)/ImageWidth;
 
-		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = Xst;
-		tmp[k++] = 1.0f-Yst;
+	tmp[k++] = DstRect.left;	// X
+	tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+	tmp[k++] = R;
+	tmp[k++] = G;
+	tmp[k++] = B;
+	tmp[k++] = Transp;
+	tmp[k++] = Xst;
+	tmp[k++] = 1.0f-Yst;
 
-		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.top +tmpPosY;	// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = Xst;
-		tmp[k++] = 1.0f-FrameHeight;
+	tmp[k++] = DstRect.left;	// X
+	tmp[k++] = DstRect.top +tmpPosY;	// Y
+	tmp[k++] = R;
+	tmp[k++] = G;
+	tmp[k++] = B;
+	tmp[k++] = Transp;
+	tmp[k++] = Xst;
+	tmp[k++] = 1.0f-FrameHeight;
 
-		tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-		tmp[k++] = DstRect.top +tmpPosY;	// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = FrameWidth;
-		tmp[k++] = 1.0f-FrameHeight;
+	tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
+	tmp[k++] = DstRect.top +tmpPosY;	// Y
+	tmp[k++] = R;
+	tmp[k++] = G;
+	tmp[k++] = B;
+	tmp[k++] = Transp;
+	tmp[k++] = FrameWidth;
+	tmp[k++] = 1.0f-FrameHeight;
 
-		tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-		tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = FrameWidth;
-		tmp[k++] = 1.0f-Yst;
+	tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
+	tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+	tmp[k++] = R;
+	tmp[k++] = G;
+	tmp[k++] = B;
+	tmp[k++] = Transp;
+	tmp[k++] = FrameWidth;
+	tmp[k++] = 1.0f-Yst;
 
 	Xstart = Setup.iAspectRatioWidth/2-56.0f;
 	Ystart = 31;
 	GetGameNumFontData('$', &SrcRect);
 	SetRect(&DstRect, (int)Xstart,	Ystart,
-				(int)Xstart+SrcRect.right-SrcRect.left, Ystart+SrcRect.bottom-SrcRect.top);
+		(int)Xstart+SrcRect.right-SrcRect.left, Ystart+SrcRect.bottom-SrcRect.top);
 
 	if (ASpresent) tmpPosY = (AH - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
 	else tmpPosY = (AHw - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
@@ -298,41 +325,41 @@ void DrawGameExpMoney(int Exp, int Money)
 	Yst = (SrcRect.top*1.0f)/ImageHeight;
 	Xst = (SrcRect.left*1.0f)/ImageWidth;
 
-		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = Xst;
-		tmp[k++] = 1.0f-Yst;
+	tmp[k++] = DstRect.left;	// X
+	tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+	tmp[k++] = R;
+	tmp[k++] = G;
+	tmp[k++] = B;
+	tmp[k++] = Transp;
+	tmp[k++] = Xst;
+	tmp[k++] = 1.0f-Yst;
 
-		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.top +tmpPosY;	// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = Xst;
-		tmp[k++] = 1.0f-FrameHeight;
+	tmp[k++] = DstRect.left;	// X
+	tmp[k++] = DstRect.top +tmpPosY;	// Y
+	tmp[k++] = R;
+	tmp[k++] = G;
+	tmp[k++] = B;
+	tmp[k++] = Transp;
+	tmp[k++] = Xst;
+	tmp[k++] = 1.0f-FrameHeight;
 
-		tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-		tmp[k++] = DstRect.top +tmpPosY;	// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = FrameWidth;
-		tmp[k++] = 1.0f-FrameHeight;
+	tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
+	tmp[k++] = DstRect.top +tmpPosY;	// Y
+	tmp[k++] = R;
+	tmp[k++] = G;
+	tmp[k++] = B;
+	tmp[k++] = Transp;
+	tmp[k++] = FrameWidth;
+	tmp[k++] = 1.0f-FrameHeight;
 
-		tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-		tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = FrameWidth;
-		tmp[k++] = 1.0f-Yst;
+	tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
+	tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+	tmp[k++] = R;
+	tmp[k++] = G;
+	tmp[k++] = B;
+	tmp[k++] = Transp;
+	tmp[k++] = FrameWidth;
+	tmp[k++] = 1.0f-Yst;
 
 
 
@@ -344,20 +371,16 @@ void DrawGameExpMoney(int Exp, int Money)
 	if (Exp < 0) Exp = 0;
 	sprintf(buffer,"%i",Exp);
 
-	for (unsigned int i=0; i<7; i++)
-	{
-		if (7-i > strlen(buffer))
-		{
+	for (unsigned int i=0; i<7; i++) {
+		if (7-i > strlen(buffer)) {
 			Transp = 0.2f;
 			GetGameNumFontData('0', &SrcRect);
-		}
-		else
-		{
+		} else {
 			Transp = 1.0f;
 			GetGameNumFontData(buffer[i+strlen(buffer)-7], &SrcRect);
 		}
 		SetRect(&DstRect, (int)Xstart,	Ystart,
-				(int)Xstart+SrcRect.right-SrcRect.left, Ystart+SrcRect.bottom-SrcRect.top);
+			(int)Xstart+SrcRect.right-SrcRect.left, Ystart+SrcRect.bottom-SrcRect.top);
 
 
 
@@ -418,20 +441,16 @@ void DrawGameExpMoney(int Exp, int Money)
 	if (Money < 0) Money = 0;
 	sprintf(buffer,"%i",Money);
 
-	for (unsigned int i=0; i<7; i++)
-	{
-		if (7-i > strlen(buffer))
-		{
+	for (unsigned int i=0; i<7; i++) {
+		if (7-i > strlen(buffer)) {
 			Transp = 0.2f;
 			GetGameNumFontData('0', &SrcRect);
-		}
-		else
-		{
+		} else {
 			Transp = 1.0f;
 			GetGameNumFontData(buffer[i+strlen(buffer)-7], &SrcRect);
 		}
 		SetRect(&DstRect, (int)Xstart,	Ystart,
-				(int)Xstart+SrcRect.right-SrcRect.left, Ystart+SrcRect.bottom-SrcRect.top);
+			(int)Xstart+SrcRect.right-SrcRect.left, Ystart+SrcRect.bottom-SrcRect.top);
 
 
 
@@ -487,9 +506,10 @@ void DrawGameExpMoney(int Exp, int Money)
 
 	vw_SendVertices(RI_QUADS, 4*16, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
 
-	if (tmp != 0){delete [] tmp; tmp = 0;}
+	if (tmp != nullptr)
+		delete [] tmp;
 	vw_SetTextureBlend(false, 0, 0);
-    vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 	vw_BindTexture(0, 0);
 }
 
@@ -520,8 +540,7 @@ void DrawGameNumFontWiaFont(int X, int Y, bool Need0, unsigned int NeedNum, cons
 
 	// находим макс. ширину цифр
 	int MaxW = 0;
-	for (int i=0; i<=9; i++)
-	{
+	for (int i=0; i<=9; i++) {
 		int TmpMaxW = vw_FontSize("%i", i);
 		if (TmpMaxW > MaxW) MaxW = TmpMaxW;
 	}
@@ -530,23 +549,20 @@ void DrawGameNumFontWiaFont(int X, int Y, bool Need0, unsigned int NeedNum, cons
 
 	int Sm = 0;
 	if (Need0)
-	if (strlen(text)<NeedNum)
-	{
-		for (size_t i=0; i<NeedNum-strlen(text); i++)
-		{
-			char Cr[2];
-			Cr[0] = '0';
-			Cr[1] = 0;
-			int TmpW = vw_FontSize(Cr);
-			Sm = (int)((MaxW - TmpW)/2.0f);
-			vw_DrawFont(X+Sm, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, Cr);
-			X += MaxW-2;
+		if (strlen(text)<NeedNum) {
+			for (size_t i=0; i<NeedNum-strlen(text); i++) {
+				char Cr[2];
+				Cr[0] = '0';
+				Cr[1] = 0;
+				int TmpW = vw_FontSize(Cr);
+				Sm = (int)((MaxW - TmpW)/2.0f);
+				vw_DrawFont(X+Sm, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, Cr);
+				X += MaxW-2;
+			}
 		}
-	}
 
 	// прорисовка текста
-	for (size_t i=0; i<strlen(text); i++)
-	{
+	for (size_t i=0; i<strlen(text); i++) {
 		char Cr[2];
 		Cr[0] = text[i];
 		Cr[1] = 0;
@@ -608,7 +624,7 @@ void InitGame()
 		SDL_MouseCurrentStatus[i] = false;
 	// установка мышки на центр
 	int W, H;
-	vw_GetViewport(0, 0, &W, &H);
+	vw_GetViewport(nullptr, nullptr, &W, &H);
 	SDL_WarpMouseInWindow(vw_GetSDL2Windows(), W/2, H/2);
 	DrawGameCursor = false;
 
@@ -618,7 +634,7 @@ void InitGame()
 
 
 
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// инициализация счета времени (всегда первым)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_InitTimeNum(1);
@@ -645,21 +661,19 @@ void InitGame()
 	// иначе нужно выносить перечень загружаемого в скрипт (менять не смогут уровни)
 
 
-	if (Script != 0){delete Script; Script = 0;}
+	if (Script != nullptr)
+		delete Script;
 	Script = new ScriptEngine;
 
-	if (Script != 0)
-	{
-		if (GetMissionFileName() != 0)
-		{
-			if (!Script->RunScript(GetMissionFileName(), vw_GetTime(1)))
-			{
-				delete Script; Script = 0;
+	if (Script != nullptr) {
+		if (GetMissionFileName() != nullptr) {
+			if (!Script->RunScript(GetMissionFileName(), vw_GetTime(1))) {
+				delete Script;
+				Script = nullptr;
 			}
-		}
-		else
-		{
-			delete Script; Script = 0;
+		} else {
+			delete Script;
+			Script = nullptr;
 		}
 	}
 
@@ -706,8 +720,7 @@ void InitGame()
 
 
 	float Time = psSpace->TimeLastUpdate;
-	for (float i=Time; i<Time+25;i+=1.0f)
-	{
+	for (float i=Time; i<Time+25; i+=1.0f) {
 		psSpace->Update(i);
 	}
 	psSpace->TimeLastUpdate = Time;
@@ -717,7 +730,8 @@ void InitGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// иним 2д часть, эмблемы
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (EnergyParticleSystem2D != 0){delete EnergyParticleSystem2D; EnergyParticleSystem2D = 0;}
+	if (EnergyParticleSystem2D != nullptr)
+		delete EnergyParticleSystem2D;
 	EnergyParticleSystem2D = new eParticleSystem2D;
 	EnergyParticleSystem2D->ColorStart.r = 0.70f;
 	EnergyParticleSystem2D->ColorStart.g = 0.80f;
@@ -741,7 +755,8 @@ void InitGame()
 	EnergyParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
 	EnergyParticleSystem2D->MoveSystem(VECTOR3D(33.0f,29.0f,0.0f));
 
-	if (LifeParticleSystem2D != 0){delete LifeParticleSystem2D; LifeParticleSystem2D = 0;}
+	if (LifeParticleSystem2D != nullptr)
+		delete LifeParticleSystem2D;
 	LifeParticleSystem2D = new eParticleSystem2D;
 	LifeParticleSystem2D->ColorStart.r = 1.00f;
 	LifeParticleSystem2D->ColorStart.g = 0.60f;
@@ -771,7 +786,8 @@ void InitGame()
 	LifeParticleSystem2D->MoveSystem(VECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));
 	LifeParticleSystem2D->SetRotation(VECTOR3D(0.0f, 0.0f, 90.0f));
 
-	if (Life2ParticleSystem2D != 0){delete Life2ParticleSystem2D; Life2ParticleSystem2D = 0;}
+	if (Life2ParticleSystem2D != nullptr)
+		delete Life2ParticleSystem2D;
 	Life2ParticleSystem2D = new eParticleSystem2D;
 	Life2ParticleSystem2D->ColorStart.r = 1.00f;
 	Life2ParticleSystem2D->ColorStart.g = 0.40f;
@@ -797,7 +813,8 @@ void InitGame()
 	Life2ParticleSystem2D->MoveSystem(VECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));
 
 
-	if (Life3ParticleSystem2D != 0){delete Life3ParticleSystem2D; Life3ParticleSystem2D = 0;}
+	if (Life3ParticleSystem2D != nullptr)
+		delete Life3ParticleSystem2D;
 	Life3ParticleSystem2D = new eParticleSystem2D;
 	Life3ParticleSystem2D->ColorStart.r = 1.00f;
 	Life3ParticleSystem2D->ColorStart.g = 0.40f;
@@ -904,8 +921,7 @@ void ExitGame()
 	LastGameOnOffUpdateTime = vw_GetTime();
 
 	// убираем меню
-	if (GameMenu)
-	{
+	if (GameMenu) {
 		GameMenu = false;
 		NeedShowGameMenu = false;
 		NeedHideGameMenu = true;
@@ -917,18 +933,40 @@ void ExitGame()
 void RealExitGame()
 {
 	// удаляем корабль игрока
-	if (PlayerFighter != 0){delete PlayerFighter; PlayerFighter = 0;}
+	if (PlayerFighter != nullptr) {
+		delete PlayerFighter;
+		PlayerFighter = nullptr;
+	}
 
-	if (EnergyParticleSystem2D != 0){delete EnergyParticleSystem2D; EnergyParticleSystem2D = 0;}
-	if (LifeParticleSystem2D != 0){delete LifeParticleSystem2D;	LifeParticleSystem2D = 0;}
-	if (Life2ParticleSystem2D != 0){delete Life2ParticleSystem2D; Life2ParticleSystem2D = 0;}
-	if (Life3ParticleSystem2D != 0){delete Life3ParticleSystem2D; Life3ParticleSystem2D = 0;}
+	if (EnergyParticleSystem2D != nullptr) {
+		delete EnergyParticleSystem2D;
+		EnergyParticleSystem2D = nullptr;
+	}
+	if (LifeParticleSystem2D != nullptr) {
+		delete LifeParticleSystem2D;
+		LifeParticleSystem2D = nullptr;
+	}
+	if (Life2ParticleSystem2D != nullptr) {
+		delete Life2ParticleSystem2D;
+		Life2ParticleSystem2D = nullptr;
+	}
+	if (Life3ParticleSystem2D != nullptr) {
+		delete Life3ParticleSystem2D;
+		Life3ParticleSystem2D = nullptr;
+	}
 
-	if (Shild1 != 0){delete Shild1; Shild1 = 0;}
-	if (Shild2 != 0){delete Shild2; Shild2 = 0;}
+	if (Shild1 != nullptr) {
+		delete Shild1;
+		Shild1 = nullptr;
+	}
+	if (Shild2 != nullptr) {
+		delete Shild2;
+		Shild2 = nullptr;
+	}
 
 	// отдаем управление
-	if (Setup.BPP == 0) SDL_SetWindowGrab(vw_GetSDL2Windows(),SDL_FALSE);
+	if (Setup.BPP == 0)
+		SDL_SetWindowGrab(vw_GetSDL2Windows(),SDL_FALSE);
 
 	// выгружаем AI файл
 	ReleaseGameAI();
@@ -943,8 +981,7 @@ void ExitGameWithSave()
 	Setup.Profile[CurrentProfile].Money = (int)GameMoney;
 
 	// если получили больше опыта
-	if (Setup.Profile[CurrentProfile].Experience < (int)GameExperience)
-	{
+	if (Setup.Profile[CurrentProfile].Experience < (int)GameExperience) {
 		int Incr = (int)GameExperience - Setup.Profile[CurrentProfile].Experience;
 		Setup.Profile[CurrentProfile].ByMissionExperience[CurrentMission] += Incr;
 		Setup.Profile[CurrentProfile].Experience += Incr;
@@ -956,18 +993,13 @@ void ExitGameWithSave()
 	Setup.Profile[CurrentProfile].ShipHullCurrentStrength = PlayerFighter->Strength;
 
 	// учет состояния оружия
-	for (int i=0; i<PlayerFighter->WeaponQuantity; i++)
-	{
-		if (Setup.Profile[CurrentProfile].Weapon[i] != 0)
-		{
+	for (int i=0; i<PlayerFighter->WeaponQuantity; i++) {
+		if (Setup.Profile[CurrentProfile].Weapon[i] != 0) {
 			// если оружие было уничтожено во время игры
-			if (PlayerFighter->Weapon[i]->Strength <= 0.0f)
-			{
+			if (PlayerFighter->Weapon[i]->Strength <= 0.0f) {
 				Setup.Profile[CurrentProfile].WeaponAmmo[i] = 0;
 				Setup.Profile[CurrentProfile].Weapon[i] = 0;
-			}
-			else
-			{
+			} else {
 				// если все ок, нужно запомнить сколько осталось в боекомплекте
 				Setup.Profile[CurrentProfile].WeaponAmmo[i] = PlayerFighter->Weapon[i]->Ammo;
 			}
@@ -981,8 +1013,7 @@ void ExitGameWithSave()
 		Setup.Profile[CurrentProfile].OpenLevelNum = CurrentMission;
 
 	// если дальше уже ничего нет, просто снимаем все... пусть игрок сам выберет
-	if (CurrentMission > AllMission-1)
-	{
+	if (CurrentMission > AllMission-1) {
 		CurrentMission = -1;
 	}
 
@@ -991,17 +1022,15 @@ void ExitGameWithSave()
 	StartMission = 0;
 	EndMission = 4;
 	if (CurrentMission != -1)
-	if (CurrentMission > 2)// нужно сдвинуть лист, чтобы выбранный элемент был по середине списка
-	{
-		StartMission = CurrentMission-2;
-		EndMission = CurrentMission+2;
+		if (CurrentMission > 2) { // нужно сдвинуть лист, чтобы выбранный элемент был по середине списка
+			StartMission = CurrentMission-2;
+			EndMission = CurrentMission+2;
 
-		if (CurrentMission >= AllMission-2)
-		{
-			StartMission = AllMission-5;
-			EndMission = AllMission-1;
+			if (CurrentMission >= AllMission-2) {
+				StartMission = AllMission-5;
+				EndMission = AllMission-1;
+			}
 		}
-	}
 
 
 	Setup.Profile[CurrentProfile].LastMission = CurrentMission;
@@ -1020,7 +1049,8 @@ void ExitGameWithSave()
 void SetGameMissionComplete()
 {
 	// если убили, не устанавливаем!
-	if (PlayerFighter == 0) return;
+	if (PlayerFighter == nullptr)
+		return;
 	GameMissionCompleteStatus = true;
 	GameMissionCompleteStatusShowDialog = true;
 }
@@ -1086,11 +1116,11 @@ void DrawGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// работаем со скриптом, пока он есть
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Script != 0)
-	if (!Script->Update(vw_GetTime(1)))
-	{
+	if ((Script != nullptr) &&
+	    (!Script->Update(vw_GetTime(1)))) {
 		// удаляем скрипт
-		delete Script; Script = 0;
+		delete Script;
+		Script = nullptr;
 	}
 
 
@@ -1119,14 +1149,12 @@ void DrawGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Выводим верхнюю информационную панель
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Setup.iAspectRatioWidth == 1024)
-	{
+	if (Setup.iAspectRatioWidth == 1024) {
 		SetRect(&SrcRect,0,0,1024,74);
 		SetRect(&DstRect,0,0,1024,74);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/game_panel.tga"), true, 1.0f);
 	}
-	if (Setup.iAspectRatioWidth == 1228)
-	{
+	if (Setup.iAspectRatioWidth == 1228) {
 		SetRect(&SrcRect,0,0,466,73);
 		SetRect(&DstRect,0,0,466,73);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/game_panel2.tga"), true, 1.0f);
@@ -1158,8 +1186,7 @@ void DrawGame()
 	Life2ParticleSystem2D->Draw();
 	Life3ParticleSystem2D->Update(vw_GetTime());
 	Life3ParticleSystem2D->Draw();
-	if (PlayerFighter != 0)
-	{
+	if (PlayerFighter != nullptr) {
 
 		LifeParticleSystem2D->ColorStart.r = 1.00f;
 		LifeParticleSystem2D->ColorStart.g = 0.60f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
@@ -1172,28 +1199,22 @@ void DrawGame()
 		Life3ParticleSystem2D->ColorStart.b = 0.20f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
 
 		// если меньше 10% нужно бить тревогу
-		if (PlayerFighter->Strength < PlayerFighter->StrengthStart/10.0f)
-		{
+		if (PlayerFighter->Strength < PlayerFighter->StrengthStart/10.0f) {
 			LifeParticleSystem2D->AlphaStart = 1.00f*CurrentAlert2;
 			LifeParticleSystem2D->AlphaEnd   = 1.00f*CurrentAlert2;
 
-			if (CurrentAlert2 > 0.6f)
-			{
+			if (CurrentAlert2 > 0.6f) {
 				Life2ParticleSystem2D->AlphaStart = 1.00f*CurrentAlert2;
 				Life2ParticleSystem2D->AlphaEnd   = 1.00f*CurrentAlert2;
 				Life3ParticleSystem2D->AlphaStart = 1.00f*CurrentAlert2;
 				Life3ParticleSystem2D->AlphaEnd   = 1.00f*CurrentAlert2;
-			}
-			else
-			{
+			} else {
 				Life2ParticleSystem2D->AlphaStart = 0.00f;
 				Life2ParticleSystem2D->AlphaEnd   = 0.00f;
 				Life3ParticleSystem2D->AlphaStart = 0.00f;
 				Life3ParticleSystem2D->AlphaEnd   = 0.00f;
 			}
-		}
-		else // подчинились, восстанавливаем данные
-		{
+		} else { // подчинились, восстанавливаем данные
 			LifeParticleSystem2D->AlphaStart = 1.00f;
 			LifeParticleSystem2D->AlphaEnd   = 1.00f;
 			Life2ParticleSystem2D->AlphaStart = 1.00f;
@@ -1208,8 +1229,7 @@ void DrawGame()
 	// выводим состояние жизни и энергии
 	float NeedDrawEnergNumFull = 0.0f;
 	float NeedDrawLifeNumFull = 0.0f;
-	if (PlayerFighter != 0)
-	{
+	if (PlayerFighter != nullptr) {
 		// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
 		NeedDrawEnergNumFull = CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem);
 		// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
@@ -1228,15 +1248,11 @@ void DrawGame()
 	{
 
 		// находим правильное отображение
-		if (NeedDrawEnergNumFull > CurrentDrawEnergNumFull)
-		{
+		if (NeedDrawEnergNumFull > CurrentDrawEnergNumFull) {
 			CurrentDrawEnergNumFull += GamePowerSystem*0.5f*(vw_GetTime() - LastGameUpdateTime);
 			if (CurrentDrawEnergNumFull > NeedDrawEnergNumFull) CurrentDrawEnergNumFull = NeedDrawEnergNumFull;
-		}
-		else
-		{
-			if (NeedDrawEnergNumFull < CurrentDrawEnergNumFull)
-			{
+		} else {
+			if (NeedDrawEnergNumFull < CurrentDrawEnergNumFull) {
 				CurrentDrawEnergNumFull -= GamePowerSystem*0.5f*(vw_GetTime() - LastGameUpdateTime);
 				if (CurrentDrawEnergNumFull < NeedDrawEnergNumFull) CurrentDrawEnergNumFull = NeedDrawEnergNumFull;
 			}
@@ -1245,15 +1261,11 @@ void DrawGame()
 		int DrawEnergNum = (int)ceil(CurrentDrawEnergNumFull * 19);
 
 		// находим правильное отображение
-		if (NeedDrawLifeNumFull > CurrentDrawLifeNumFull)
-		{
+		if (NeedDrawLifeNumFull > CurrentDrawLifeNumFull) {
 			CurrentDrawLifeNumFull += 0.3f*(vw_GetTime() - LastGameUpdateTime);
 			if (CurrentDrawLifeNumFull > NeedDrawLifeNumFull) CurrentDrawLifeNumFull = NeedDrawLifeNumFull;
-		}
-		else
-		{
-			if (NeedDrawLifeNumFull < CurrentDrawLifeNumFull)
-			{
+		} else {
+			if (NeedDrawLifeNumFull < CurrentDrawLifeNumFull) {
 				CurrentDrawLifeNumFull -= 0.3f*(vw_GetTime() - LastGameUpdateTime);
 				if (CurrentDrawLifeNumFull < NeedDrawLifeNumFull) CurrentDrawLifeNumFull = NeedDrawLifeNumFull;
 			}
@@ -1261,21 +1273,21 @@ void DrawGame()
 		// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
 		int DrawLifeNum = (int)ceil(CurrentDrawLifeNumFull * 19);
 
-		if (DrawLifeNum+DrawEnergNum > 0)
-		{
+		if (DrawLifeNum+DrawEnergNum > 0) {
 			float R=1.0f;
 			float G=1.0f;
 			float B=1.0f;
 
 			eTexture *Tex = vw_FindTextureByName("game/game_panel_el.tga");
-			if (Tex == 0) return;
+			if (Tex == nullptr)
+				return;
 
 			float AW;
 			float AH;
 			bool ASpresent = vw_GetAspectWH(&AW, &AH);
 
 			int W, H;
-			vw_GetViewport(0, 0, &W, &H);
+			vw_GetViewport(nullptr, nullptr, &W, &H);
 			float AHw = H*1.0f;
 
 			// Установка текстуры и ее свойств...
@@ -1290,16 +1302,14 @@ void DrawGame()
 			// выделяем память
 			// буфер для последовательности RI_TRIANGLE_STRIP
 			// войдет RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR
-			float *tmp = 0;
-			tmp = new float[(2+2+4)*4*(DrawLifeNum+DrawEnergNum)];
-			int k=0;
+			float *tmp = new float[(2+2+4)*4*(DrawLifeNum+DrawEnergNum)];
+			int k = 0;
 
 
 
 			// вывод текущего заряда энергии
 			// прорисовываем все элементы
-			for (int i=0; i<DrawEnergNum; i++)
-			{
+			for (int i=0; i<DrawEnergNum; i++) {
 				// получаем данные текущего фрагмента
 				SetRect(&SrcRect,67+i*20,0,85+i*20,64);
 				DstRect = SrcRect;
@@ -1317,56 +1327,53 @@ void DrawGame()
 				float Yst = (SrcRect.top*1.0f)/ImageHeight;
 				float Xst = (SrcRect.left*1.0f)/ImageWidth;
 
-					tmp[k++] = DstRect.left;	// X
-					tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
-					tmp[k++] = R;
-					tmp[k++] = G;
-					tmp[k++] = B;
-					tmp[k++] = Transp;
-					tmp[k++] = Xst;
-					tmp[k++] = 1.0f-Yst;
+				tmp[k++] = DstRect.left;	// X
+				tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+				tmp[k++] = R;
+				tmp[k++] = G;
+				tmp[k++] = B;
+				tmp[k++] = Transp;
+				tmp[k++] = Xst;
+				tmp[k++] = 1.0f-Yst;
 
-					tmp[k++] = DstRect.left;	// X
-					tmp[k++] = DstRect.top +tmpPosY;	// Y
-					tmp[k++] = R;
-					tmp[k++] = G;
-					tmp[k++] = B;
-					tmp[k++] = Transp;
-					tmp[k++] = Xst;
-					tmp[k++] = 1.0f-FrameHeight;
+				tmp[k++] = DstRect.left;	// X
+				tmp[k++] = DstRect.top +tmpPosY;	// Y
+				tmp[k++] = R;
+				tmp[k++] = G;
+				tmp[k++] = B;
+				tmp[k++] = Transp;
+				tmp[k++] = Xst;
+				tmp[k++] = 1.0f-FrameHeight;
 
-					tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-					tmp[k++] = DstRect.top +tmpPosY;	// Y
-					tmp[k++] = R;
-					tmp[k++] = G;
-					tmp[k++] = B;
-					tmp[k++] = Transp;
-					tmp[k++] = FrameWidth;
-					tmp[k++] = 1.0f-FrameHeight;
+				tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
+				tmp[k++] = DstRect.top +tmpPosY;	// Y
+				tmp[k++] = R;
+				tmp[k++] = G;
+				tmp[k++] = B;
+				tmp[k++] = Transp;
+				tmp[k++] = FrameWidth;
+				tmp[k++] = 1.0f-FrameHeight;
 
-					tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-					tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
-					tmp[k++] = R;
-					tmp[k++] = G;
-					tmp[k++] = B;
-					tmp[k++] = Transp;
-					tmp[k++] = FrameWidth;
-					tmp[k++] = 1.0f-Yst;
+				tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
+				tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+				tmp[k++] = R;
+				tmp[k++] = G;
+				tmp[k++] = B;
+				tmp[k++] = Transp;
+				tmp[k++] = FrameWidth;
+				tmp[k++] = 1.0f-Yst;
 
 			}
 
 			// вывод текущего состояния жизни
 			// прорисовываем все элементы
-			for (int i=0; i<DrawLifeNum; i++)
-			{
+			for (int i=0; i<DrawLifeNum; i++) {
 				// получаем данные текущего фрагмента
 				SetRect(&SrcRect,582+i*20,0,599+i*20,64);
-				if (Setup.iAspectRatioWidth == 1024)
-				{
+				if (Setup.iAspectRatioWidth == 1024) {
 					DstRect = SrcRect;
 				}
-				if (Setup.iAspectRatioWidth == 1228)
-				{
+				if (Setup.iAspectRatioWidth == 1228) {
 					//SetRect(&DstRect,Setup.iAspectRatioWidth-446+i*20,0,Setup.iAspectRatioWidth-425+i*20,64);
 					SetRect(&DstRect,204+582+i*20,0,204+599+i*20,64);
 				}
@@ -1383,48 +1390,51 @@ void DrawGame()
 				float Yst = (SrcRect.top*1.0f)/ImageHeight;
 				float Xst = (SrcRect.left*1.0f)/ImageWidth;
 
-					tmp[k++] = DstRect.left;	// X
-					tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
-					tmp[k++] = R;
-					tmp[k++] = G;
-					tmp[k++] = B;
-					tmp[k++] = Transp;
-					tmp[k++] = Xst;
-					tmp[k++] = 1.0f-Yst;
+				tmp[k++] = DstRect.left;	// X
+				tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+				tmp[k++] = R;
+				tmp[k++] = G;
+				tmp[k++] = B;
+				tmp[k++] = Transp;
+				tmp[k++] = Xst;
+				tmp[k++] = 1.0f-Yst;
 
-					tmp[k++] = DstRect.left;	// X
-					tmp[k++] = DstRect.top +tmpPosY;	// Y
-					tmp[k++] = R;
-					tmp[k++] = G;
-					tmp[k++] = B;
-					tmp[k++] = Transp;
-					tmp[k++] = Xst;
-					tmp[k++] = 1.0f-FrameHeight;
+				tmp[k++] = DstRect.left;	// X
+				tmp[k++] = DstRect.top +tmpPosY;	// Y
+				tmp[k++] = R;
+				tmp[k++] = G;
+				tmp[k++] = B;
+				tmp[k++] = Transp;
+				tmp[k++] = Xst;
+				tmp[k++] = 1.0f-FrameHeight;
 
-					tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-					tmp[k++] = DstRect.top +tmpPosY;	// Y
-					tmp[k++] = R;
-					tmp[k++] = G;
-					tmp[k++] = B;
-					tmp[k++] = Transp;
-					tmp[k++] = FrameWidth;
-					tmp[k++] = 1.0f-FrameHeight;
+				tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
+				tmp[k++] = DstRect.top +tmpPosY;	// Y
+				tmp[k++] = R;
+				tmp[k++] = G;
+				tmp[k++] = B;
+				tmp[k++] = Transp;
+				tmp[k++] = FrameWidth;
+				tmp[k++] = 1.0f-FrameHeight;
 
-					tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-					tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
-					tmp[k++] = R;
-					tmp[k++] = G;
-					tmp[k++] = B;
-					tmp[k++] = Transp;
-					tmp[k++] = FrameWidth;
-					tmp[k++] = 1.0f-Yst;
+				tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
+				tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+				tmp[k++] = R;
+				tmp[k++] = G;
+				tmp[k++] = B;
+				tmp[k++] = Transp;
+				tmp[k++] = FrameWidth;
+				tmp[k++] = 1.0f-Yst;
 			}
 
 
 
 			vw_SendVertices(RI_QUADS, 4*(DrawLifeNum+DrawEnergNum), RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
 
-			if (tmp != 0){delete [] tmp; tmp = 0;}
+			if (tmp != nullptr) {
+				delete [] tmp;
+				tmp = nullptr;
+			}
 			vw_SetTextureBlend(false, 0, 0);
 			vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 			vw_BindTexture(0, 0);
@@ -1452,8 +1462,7 @@ void DrawGame()
 	// Скорость игры, если была изменена
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (GameContentTransp <= 0.0f) CurrentGameSpeed = Setup.GameSpeed;
-	if (CurrentGameSpeedShowTime > 0.0f)
-	{
+	if (CurrentGameSpeedShowTime > 0.0f) {
 		float GameSpeedShowTransp = CurrentGameSpeedShowTime;
 		if (GameSpeedShowTransp>1.0f) GameSpeedShowTransp = 1.0f;
 
@@ -1506,16 +1515,13 @@ void DrawGame()
 	// Рисуем меню, всегда самое последнее в игровой 2д части
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// делаем плавное появление меню
-	if (NeedShowGameMenu)
-	{
+	if (NeedShowGameMenu) {
 		GameContentTransp += 2.0f*(vw_GetTime()-LastGameUpdateTime);
-		if (GameContentTransp >= 1.0f)
-		{
+		if (GameContentTransp >= 1.0f) {
 			GameContentTransp = 1.0f;
 			NeedShowGameMenu = false;
 			DrawGameCursor = true;
-			if (Setup.BPP == 0)
-			{
+			if (Setup.BPP == 0) {
 				SDL_SetWindowGrab(vw_GetSDL2Windows(),SDL_FALSE);
 				SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
 			}
@@ -1525,16 +1531,13 @@ void DrawGame()
 			vw_SetTimeThreadSpeed(1, (1.0f - GameContentTransp)*Setup.GameSpeed);
 	}
 	// делаем полавное угасание меню
-	if (NeedHideGameMenu)
-	{
+	if (NeedHideGameMenu) {
 		GameContentTransp -= 1.0f*(vw_GetTime() - LastGameUpdateTime);
-		if (GameContentTransp <= 0.0f)
-		{
+		if (GameContentTransp <= 0.0f) {
 			GameContentTransp = 0.0f;
 			NeedHideGameMenu = false;
 			GameMenuStatus = 1;
-			if (Setup.BPP == 0)
-			{
+			if (Setup.BPP == 0) {
 				SDL_SetWindowGrab(vw_GetSDL2Windows(),SDL_TRUE);
 				SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
 			}
@@ -1545,20 +1548,17 @@ void DrawGame()
 	LastGameUpdateTime = vw_GetTime();
 
 	// если можем - рисуем игровое меню
-	if (GameContentTransp > 0.0f)
-	{
-		if (GameMissionCompleteStatus)
-		{
+	if (GameContentTransp > 0.0f) {
+		if (GameMissionCompleteStatus) {
 			// выводим подложку меню
 			SetRect(&SrcRect,2,2,564-2,564-2);
 			SetRect(&DstRect,Setup.iAspectRatioWidth/2-256+4-30,128+2-30,Setup.iAspectRatioWidth/2-256+564-30,128+564-2-30);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
-				true, 1.0f*GameContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+					   true, 1.0f*GameContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 			// название меню
 			int Size = vw_FontSize(vw_GetText("1_Mission_Complete"));
 			float WScale = 0;
-			if (Size > 190)
-			{
+			if (Size > 190) {
 				Size = 190;
 				WScale = -190;
 			}
@@ -1571,16 +1571,14 @@ void DrawGame()
 			vw_DrawFont(Setup.iAspectRatioWidth/2-256+38, Y, 0, 0, 1.0f, 1.0f,1.0f,0.0f, 0.5f*GameContentTransp, vw_GetText("3_Type"));
 			Size = vw_FontSize(vw_GetText("3_Killed"));
 			WScale = 0;
-			if (Size > 70)
-			{
+			if (Size > 70) {
 				Size = 70;
 				WScale = -70;
 			}
 			vw_DrawFont(Setup.iAspectRatioWidth/2-31+Size/2, Y, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 0.5f*GameContentTransp, vw_GetText("3_Killed"));
 			Size = vw_FontSize(vw_GetText("3_Bonus"));
 			WScale = 0;
-			if (Size > 70)
-			{
+			if (Size > 70) {
 				Size = 70;
 				WScale = -70;
 			}
@@ -1616,111 +1614,102 @@ void DrawGame()
 			Y += (int)(Prir*1.5);
 			vw_DrawFont(Setup.iAspectRatioWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 1.0f*GameContentTransp, vw_GetText("3_Total"));
 			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+17, Y, true, 4, "%i", AlienShipsKillQuant+AlienMotherShipsKillQuant+
-			PirateShipsKillQuant+PirateVehiclesKillQuant+PirateBuildingsKillQuant+AsteroidsKillQuant);
+					       PirateShipsKillQuant+PirateVehiclesKillQuant+PirateBuildingsKillQuant+AsteroidsKillQuant);
 			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+127, Y, true, 6, "%i", (int)(GameMoney - Setup.Profile[CurrentProfile].Money*1.0f));
 
 			// выводим кнопки меню
 			int X = Setup.iAspectRatioWidth/2-192;
 			Y = 545;
 			// продолжение игры
-			if (DrawButton384(X,Y, vw_GetText("1_NEXT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime))
-			{
+			if (DrawButton384(X,Y, vw_GetText("1_NEXT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime)) {
 				// переходим к выбору уровня
 				ComBuffer = 100;
 				ExitGameWithSave();
 			}
 
-		}
-		else
-		{
-			switch(GameMenuStatus)
-			{
-				// основное меню игры
-				case 1:
-				{
-					// выводим подложку меню
-					SetRect(&SrcRect,2,2,564-2,564-2);
-					SetRect(&DstRect,Setup.iAspectRatioWidth/2-256+4-30,128+2-30,Setup.iAspectRatioWidth/2-256+564-30,128+564-2-30);
-					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
-						true, GameContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
-					// название меню
-					int SizeI = 17 + (234-vw_FontSize(vw_GetText("1_GAME_MENU")))/2;
-					vw_DrawFont(Setup.iAspectRatioWidth/2-256+SizeI, 128+22, 0, 0, 1.0f, 1.0f,1.0f,0.0f, 0.7f*GameContentTransp, vw_GetText("1_GAME_MENU"));
+		} else {
+			switch(GameMenuStatus) {
+			// основное меню игры
+			case 1: {
+				// выводим подложку меню
+				SetRect(&SrcRect,2,2,564-2,564-2);
+				SetRect(&DstRect,Setup.iAspectRatioWidth/2-256+4-30,128+2-30,Setup.iAspectRatioWidth/2-256+564-30,128+564-2-30);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
+						   true, GameContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+				// название меню
+				int SizeI = 17 + (234-vw_FontSize(vw_GetText("1_GAME_MENU")))/2;
+				vw_DrawFont(Setup.iAspectRatioWidth/2-256+SizeI, 128+22, 0, 0, 1.0f, 1.0f,1.0f,0.0f, 0.7f*GameContentTransp, vw_GetText("1_GAME_MENU"));
 
-					// выводим кнопки меню
+				// выводим кнопки меню
 
 
-					int X = Setup.iAspectRatioWidth/2-192;
-					int Y = 225;
-					int Prir = 100;
+				int X = Setup.iAspectRatioWidth/2-192;
+				int Y = 225;
+				int Prir = 100;
 
-					// продолжаем игру
-					if (DrawButton384(X,Y, vw_GetText("1_RESUME"), GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime))
-					{
-						GameMenu = false;
-						NeedShowGameMenu = false;
-						NeedHideGameMenu = true;
-						DrawGameCursor = false;
-						// установка в последюю точку указателя
-						SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
+				// продолжаем игру
+				if (DrawButton384(X,Y, vw_GetText("1_RESUME"), GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime)) {
+					GameMenu = false;
+					NeedShowGameMenu = false;
+					NeedHideGameMenu = true;
+					DrawGameCursor = false;
+					// установка в последюю точку указателя
+					SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
 
-						if (SoundShowHideMenu != 0)
-							if (vw_FindSoundByNum(SoundShowHideMenu) != 0)
-								vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
-						SoundShowHideMenu = Audio_PlaySound2D(13, 1.0f);
-					}
-
-					// выход в настройки
-					Y = Y+Prir;
-					if (DrawButton384(X,Y, vw_GetText("1_OPTIONS"), GameContentTransp, &GameButton2Transp, &LastGameButton2UpdateTime))
-					{
-						SetOptionsMenu(OPTIONS);
-						GameMenuStatus = 2;
-					}
-
-					// прерываем игру
-					Y = Y+Prir;
-					if (DrawButton384(X,Y, vw_GetText("1_RESTART"), GameContentTransp, &GameButton3Transp, &LastGameButton3UpdateTime))
-					{
-						// если убили, выводить диалог не нужно
-						if (PlayerFighter == 0)
-						{
-							ComBuffer = GAME;
-							ExitGame();
-						}
-						else
-							SetCurrentDialogBox(5);
-					}
-
-					// выход из игры
-					Y = Y+Prir;
-					if (DrawButton384(X,Y, vw_GetText("1_QUIT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime))
-					{
-						// если убили, выводить диалог не нужно
-						if (PlayerFighter == 0)
-						{
-							ComBuffer = 101;
-							ExitGame();
-						}
-						else
-							SetCurrentDialogBox(41);
-					}
-
-					break;
+					if ((SoundShowHideMenu != 0) &&
+					    (vw_FindSoundByNum(SoundShowHideMenu) != nullptr))
+						vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
+					SoundShowHideMenu = Audio_PlaySound2D(13, 1.0f);
 				}
 
-				// основное меню настроек
-				case 2:
-					OptionsMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime, &GameButton2Transp, &LastGameButton2UpdateTime); break;
-				// меню продвинутых настроек
-				case 3:
-					OptionsAdvMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime, &GameButton2Transp, &LastGameButton2UpdateTime); break;
-				// меню настройки интерфейса
-				case 4:
-					InterfaceMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime); break;
-				// меню настройки управления
-				case 5:
-					ConfControlMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime); break;
+				// выход в настройки
+				Y = Y+Prir;
+				if (DrawButton384(X,Y, vw_GetText("1_OPTIONS"), GameContentTransp, &GameButton2Transp, &LastGameButton2UpdateTime)) {
+					SetOptionsMenu(OPTIONS);
+					GameMenuStatus = 2;
+				}
+
+				// прерываем игру
+				Y = Y+Prir;
+				if (DrawButton384(X,Y, vw_GetText("1_RESTART"), GameContentTransp, &GameButton3Transp, &LastGameButton3UpdateTime)) {
+					// если убили, выводить диалог не нужно
+					if (PlayerFighter == nullptr) {
+						ComBuffer = GAME;
+						ExitGame();
+					} else
+						SetCurrentDialogBox(5);
+				}
+
+				// выход из игры
+				Y = Y+Prir;
+				if (DrawButton384(X,Y, vw_GetText("1_QUIT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime)) {
+					// если убили, выводить диалог не нужно
+					if (PlayerFighter == nullptr) {
+						ComBuffer = 101;
+						ExitGame();
+					} else
+						SetCurrentDialogBox(41);
+				}
+
+				break;
+			}
+
+			// основное меню настроек
+			case 2:
+				OptionsMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime, &GameButton2Transp, &LastGameButton2UpdateTime);
+				break;
+			// меню продвинутых настроек
+			case 3:
+				OptionsAdvMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime, &GameButton2Transp, &LastGameButton2UpdateTime);
+				break;
+			// меню настройки интерфейса
+			case 4:
+				InterfaceMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime);
+				break;
+			// меню настройки управления
+			case 5:
+				ConfControlMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime);
+				break;
 
 
 			}
@@ -1747,61 +1736,55 @@ void DrawGame()
 	// открываем меню
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// если в игре - меню, если в меню - выход
-	if (!isDialogBoxDrawing())
-	{
-		if (PlayerFighter != 0) // если не убили
-		{
-			if (vw_GetKeys(SDLK_ESCAPE) || GameMissionCompleteStatusShowDialog)
-			{
+	if (!isDialogBoxDrawing()) {
+		if (PlayerFighter != nullptr) { // если не убили
+			if (vw_GetKeys(SDLK_ESCAPE) || GameMissionCompleteStatusShowDialog) {
 				bool NeedPlaySfx = true;
 				// если нужно показать конец игры, все равно его показываем
-				if (GameMissionCompleteStatusShowDialog)
-				{
+				if (GameMissionCompleteStatusShowDialog) {
 					// чтобы постоянно не проигрывать звук
-					if (GameMenu) NeedPlaySfx = false;
-					else GameMenu = true;
-				}
-				else GameMenu = !GameMenu;
+					if (GameMenu)
+						NeedPlaySfx = false;
+					else
+						GameMenu = true;
+				} else
+					GameMenu = !GameMenu;
 
-				if (GameMenu)
-				{
+				if (GameMenu) {
 					NeedShowGameMenu = true;
 					NeedHideGameMenu = false;
-					if (NeedPlaySfx && SoundShowHideMenu != 0)
-						if (vw_FindSoundByNum(SoundShowHideMenu) != 0)
-							vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
-					if (NeedPlaySfx) SoundShowHideMenu = Audio_PlaySound2D(12, 1.0f);
+					if ((NeedPlaySfx && SoundShowHideMenu != 0) &&
+					    (vw_FindSoundByNum(SoundShowHideMenu) != nullptr))
+						vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
+					if (NeedPlaySfx)
+						SoundShowHideMenu = Audio_PlaySound2D(12, 1.0f);
 					// сброс кнопки мышки, чтобы случайно не нажали
 					vw_GetWindowLBMouse(true);
-				}
-				else
-				{
+				} else {
 					NeedShowGameMenu = false;
 					NeedHideGameMenu = true;
 					// установка в последюю точку указателя
 					SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
 
-					if (NeedPlaySfx && SoundShowHideMenu != 0)
-						if (vw_FindSoundByNum(SoundShowHideMenu) != 0)
-							vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
-					if (NeedPlaySfx) SoundShowHideMenu = Audio_PlaySound2D(13, 1.0f);
+					if (NeedPlaySfx &&
+					    (SoundShowHideMenu != 0) &&
+					    (vw_FindSoundByNum(SoundShowHideMenu) != nullptr))
+						vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
+					if (NeedPlaySfx)
+						SoundShowHideMenu = Audio_PlaySound2D(13, 1.0f);
 					DrawGameCursor = false;
 				}
 
 				GameMissionCompleteStatusShowDialog = false;
 				vw_SetKeys(SDLK_ESCAPE, false);
 			}
-		}
-		else
-		{
-			if (vw_GetKeys(SDLK_ESCAPE))
-			{
+		} else {
+			if (vw_GetKeys(SDLK_ESCAPE)) {
 				ComBuffer = 101;
 				ExitGame();
 
 				vw_SetKeys(SDLK_ESCAPE, false);
 			}
-
 		}
 	}
 
@@ -1809,11 +1792,9 @@ void DrawGame()
 
 
 	// черное затемнение, если нужно
-	if (NeedOnGame)
-	{
+	if (NeedOnGame) {
 		GameBlackTransp = 1.0f - 2.4f*(vw_GetTime() - LastGameOnOffUpdateTime);
-		if (GameBlackTransp <= 0.0f)
-		{
+		if (GameBlackTransp <= 0.0f) {
 			GameBlackTransp = 0.0f;
 			NeedOnGame = false;
 		}
@@ -1824,11 +1805,9 @@ void DrawGame()
 	}
 
 	// черное затемнение, если нужно
-	if (NeedOffGame)
-	{
+	if (NeedOffGame) {
 		GameBlackTransp = 2.4f*(vw_GetTime() - LastGameOnOffUpdateTime);
-		if (GameBlackTransp >= 1.0f)
-		{
+		if (GameBlackTransp >= 1.0f) {
 			GameBlackTransp = 1.0f;
 			NeedOffGame = false;
 

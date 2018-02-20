@@ -31,8 +31,8 @@
 
 
 // Указатели на начальный и конечный объект в списке
-CGroundObject *StartGroundObject = 0;
-CGroundObject *EndGroundObject = 0;
+CGroundObject *StartGroundObject = nullptr;
+CGroundObject *EndGroundObject = nullptr;
 
 
 
@@ -43,20 +43,18 @@ CGroundObject *EndGroundObject = 0;
 //-----------------------------------------------------------------------------
 void AttachGroundObject(CGroundObject* GroundObject)
 {
-	if (GroundObject == 0) return;
+	if (GroundObject == nullptr)
+		return;
 
 	// первый в списке...
-	if (EndGroundObject == 0)
-	{
-		GroundObject->Prev = 0;
-		GroundObject->Next = 0;
+	if (EndGroundObject == nullptr) {
+		GroundObject->Prev = nullptr;
+		GroundObject->Next = nullptr;
 		StartGroundObject = GroundObject;
 		EndGroundObject = GroundObject;
-	}
-	else // продолжаем заполнение...
-	{
+	} else { // продолжаем заполнение...
 		GroundObject->Prev = EndGroundObject;
-		GroundObject->Next = 0;
+		GroundObject->Next = nullptr;
 		EndGroundObject->Next = GroundObject;
 		EndGroundObject = GroundObject;
 	}
@@ -71,17 +69,23 @@ void AttachGroundObject(CGroundObject* GroundObject)
 //-----------------------------------------------------------------------------
 void DetachGroundObject(CGroundObject* GroundObject)
 {
-	if (GroundObject == 0) return;
+	if (GroundObject == nullptr) return;
 
 	// переустанавливаем указатели...
-	if (StartGroundObject == GroundObject) StartGroundObject = GroundObject->Next;
-	if (EndGroundObject == GroundObject) EndGroundObject = GroundObject->Prev;
+	if (StartGroundObject == GroundObject)
+		StartGroundObject = GroundObject->Next;
+	if (EndGroundObject == GroundObject)
+		EndGroundObject = GroundObject->Prev;
 
+	if (GroundObject->Next != nullptr)
+		GroundObject->Next->Prev = GroundObject->Prev;
+	else if (GroundObject->Prev != nullptr)
+		GroundObject->Prev->Next = nullptr;
 
-	if (GroundObject->Next != 0) GroundObject->Next->Prev = GroundObject->Prev;
-		else if (GroundObject->Prev != 0) GroundObject->Prev->Next = 0;
-	if (GroundObject->Prev != 0) GroundObject->Prev->Next = GroundObject->Next;
-		else if (GroundObject->Next != 0) GroundObject->Next->Prev = 0;
+	if (GroundObject->Prev != nullptr)
+		GroundObject->Prev->Next = GroundObject->Next;
+	else if (GroundObject->Next != nullptr)
+		GroundObject->Next->Prev = nullptr;
 }
 
 
@@ -94,15 +98,12 @@ void DetachGroundObject(CGroundObject* GroundObject)
 void UpdateAllGroundObject(float Time)
 {
 	CGroundObject *tmp = StartGroundObject;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CGroundObject *tmp2 = tmp->Next;
 		// делаем обновление данных по объекту
 		if (!tmp->Update(Time))
-		{
 			// если его нужно уничтожить - делаем это
-			delete tmp; tmp = 0;
-		}
+			delete tmp;
 		tmp = tmp2;
 	}
 }
@@ -117,8 +118,7 @@ void DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 
 	CGroundObject *tmp = StartGroundObject;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CGroundObject *tmp2 = tmp->Next;
 		tmp->Draw(VertexOnlyPass, ShadowMap);
 		tmp = tmp2;
@@ -136,13 +136,12 @@ void DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap)
 void ReleaseAllGroundObject()
 {
 	CGroundObject *tmp = StartGroundObject;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CGroundObject *tmp2 = tmp->Next;
 		delete tmp;
 		tmp = tmp2;
 	}
 
-	StartGroundObject = 0;
-	EndGroundObject = 0;
+	StartGroundObject = nullptr;
+	EndGroundObject = nullptr;
 }

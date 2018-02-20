@@ -55,35 +55,58 @@ extern CSpaceShip *DialogSpaceShip;
 //------------------------------------------------------------------------------------
 const char *GetWorkshopShipName(int Num)
 {
-	switch (Num)
-	{
-		case 1: return "7_ship1";
-		case 2: return "7_ship2";
-		case 3: return "7_ship3";
-		case 4: return "7_ship4";
-		case 5: return "7_ship5";
-		case 6: return "7_ship6";
-		case 7: return "7_ship7";
-		case 8: return "7_ship8";
-		case 9: return "7_ship9";
-		case 10: return "7_ship10";
-		case 11: return "7_ship11";
-		case 12: return "7_ship12";
-		case 13: return "7_ship13";
-		case 14: return "7_ship14";
-		case 15: return "7_ship15";
-		case 16: return "7_ship16";
-		case 17: return "7_ship17";
-		case 18: return "7_ship18";
-		case 19: return "7_ship19";
-		case 20: return "7_ship20";
-		case 21: return "7_ship21";
-		case 22: return "7_ship22";
+	switch (Num) {
+	case 1:
+		return "7_ship1";
+	case 2:
+		return "7_ship2";
+	case 3:
+		return "7_ship3";
+	case 4:
+		return "7_ship4";
+	case 5:
+		return "7_ship5";
+	case 6:
+		return "7_ship6";
+	case 7:
+		return "7_ship7";
+	case 8:
+		return "7_ship8";
+	case 9:
+		return "7_ship9";
+	case 10:
+		return "7_ship10";
+	case 11:
+		return "7_ship11";
+	case 12:
+		return "7_ship12";
+	case 13:
+		return "7_ship13";
+	case 14:
+		return "7_ship14";
+	case 15:
+		return "7_ship15";
+	case 16:
+		return "7_ship16";
+	case 17:
+		return "7_ship17";
+	case 18:
+		return "7_ship18";
+	case 19:
+		return "7_ship19";
+	case 20:
+		return "7_ship20";
+	case 21:
+		return "7_ship21";
+	case 22:
+		return "7_ship22";
 
-		default: fprintf(stderr, "Error in GetWorkshopShipName function call, wrong Num.\n"); break;
+	default:
+		fprintf(stderr, "Error in GetWorkshopShipName function call, wrong Num.\n");
+		break;
 	}
 
-	return 0;
+	return nullptr;
 }
 
 
@@ -94,40 +117,41 @@ const char *GetWorkshopShipName(int Num)
 //------------------------------------------------------------------------------------
 const char *GetShipGroupTitle(int Num)
 {
-	switch (Num)
-	{
-		case 1:
-		case 4:
-		case 6:
-		case 10:
-		case 12:
-		case 14:
-		case 15:
-		case 17:
-		case 20:
-			return "4_Fighter";
-		case 2:
-		case 5:
-		case 19:
-			return "4_Interceptor";
-		case 3:
-		case 16:
-		case 18:
-			return "4_Bomber";
-		case 7:
-		case 13:
-			return "4_Attack_Ship";
-		case 8:
-		case 9:
-		case 11:
-		case 21:
-		case 22:
-			return "4_Scout";
+	switch (Num) {
+	case 1:
+	case 4:
+	case 6:
+	case 10:
+	case 12:
+	case 14:
+	case 15:
+	case 17:
+	case 20:
+		return "4_Fighter";
+	case 2:
+	case 5:
+	case 19:
+		return "4_Interceptor";
+	case 3:
+	case 16:
+	case 18:
+		return "4_Bomber";
+	case 7:
+	case 13:
+		return "4_Attack_Ship";
+	case 8:
+	case 9:
+	case 11:
+	case 21:
+	case 22:
+		return "4_Scout";
 
-		default: fprintf(stderr, "Error in GetShipGroupTitle function call, wrong Num.\n"); break;
+	default:
+		fprintf(stderr, "Error in GetShipGroupTitle function call, wrong Num.\n");
+		break;
 	}
 
-	return 0;
+	return nullptr;
 }
 
 
@@ -137,32 +161,55 @@ const char *GetShipGroupTitle(int Num)
 //------------------------------------------------------------------------------------
 int GetWorkshopShipCost(int Num)
 {
-	switch (Num)
-	{
-		case 1: return 1100;
-		case 2: return 900;
-		case 3: return 1500;
-		case 4: return 1300;
-		case 5: return 1350;
-		case 6: return 2400;
-		case 7: return 3000;
-		case 8: return 3500;
-		case 9: return 4000;
-		case 10: return 6000;
-		case 11: return 4500;
-		case 12: return 5000;
-		case 13: return 9000;
-		case 14: return 7500;
-		case 15: return 7000;
-		case 16: return 9000;
-		case 17: return 10000;
-		case 18: return 12000;
-		case 19: return 5000;
-		case 20: return 9000;
-		case 21: return 10000;
-		case 22: return 8000;
+	switch (Num) {
+	case 1:
+		return 1100;
+	case 2:
+		return 900;
+	case 3:
+		return 1500;
+	case 4:
+		return 1300;
+	case 5:
+		return 1350;
+	case 6:
+		return 2400;
+	case 7:
+		return 3000;
+	case 8:
+		return 3500;
+	case 9:
+		return 4000;
+	case 10:
+		return 6000;
+	case 11:
+		return 4500;
+	case 12:
+		return 5000;
+	case 13:
+		return 9000;
+	case 14:
+		return 7500;
+	case 15:
+		return 7000;
+	case 16:
+		return 9000;
+	case 17:
+		return 10000;
+	case 18:
+		return 12000;
+	case 19:
+		return 5000;
+	case 20:
+		return 9000;
+	case 21:
+		return 10000;
+	case 22:
+		return 8000;
 
-		default: fprintf(stderr, "Error in GetWorkshopShipCost function call, wrong Num.\n"); break;
+	default:
+		fprintf(stderr, "Error in GetWorkshopShipCost function call, wrong Num.\n");
+		break;
 	}
 
 	return 0;
@@ -189,17 +236,16 @@ int GetWorkshopShipFullCost(int Num, CEarthSpaceFighter *Fighter)
 {
 	// полная стоимость корпуса корабля с повреждениями корабля
 	int ShipCost = GetWorkshopShipCost(Num)* Setup.Profile[CurrentProfile].ShipHullUpgrade -
-		GetWorkshopShipRepairCost(Num, Fighter);
+		       GetWorkshopShipRepairCost(Num, Fighter);
 
 
 	// прибавить стоимость оружия
-	for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++)
-	if (WorkshopFighterGame->Weapon[i] != 0)
-	{
-		ShipCost += GetWeaponCost(WorkshopFighterGame->Weapon[i]->ObjectCreationType,
-			WorkshopFighterGame->Weapon[i]->Ammo,
-			WorkshopFighterGame->Weapon[i]->AmmoStart);
-	}
+	for (int i = 0; i < WorkshopFighterGame->WeaponQuantity; i++)
+		if (WorkshopFighterGame->Weapon[i] != nullptr) {
+			ShipCost += GetWeaponCost(WorkshopFighterGame->Weapon[i]->ObjectCreationType,
+						  WorkshopFighterGame->Weapon[i]->Ammo,
+						  WorkshopFighterGame->Weapon[i]->AmmoStart);
+		}
 
 	// прибавить стоимость систем
 	if (Setup.Profile[CurrentProfile].EngineSystem != 0)
@@ -258,14 +304,14 @@ void WorkshopCreateBuyShip()
 
 	// 2 - Оружие
 	int OldWeaponQuantity = WorkshopFighterGame->WeaponQuantity;
-	for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++)
-	if (WorkshopFighterGame->Weapon[i] != 0)
-	{
-		Setup.Profile[CurrentProfile].Money += GetWeaponCost(WorkshopFighterGame->Weapon[i]->ObjectCreationType,
-															WorkshopFighterGame->Weapon[i]->Ammo,
-															WorkshopFighterGame->Weapon[i]->AmmoStart);
-		delete WorkshopFighterGame->Weapon[i]; WorkshopFighterGame->Weapon[i] = 0;
-	}
+	for (int i = 0; i < WorkshopFighterGame->WeaponQuantity; i++)
+		if (WorkshopFighterGame->Weapon[i] != nullptr) {
+			Setup.Profile[CurrentProfile].Money += GetWeaponCost(WorkshopFighterGame->Weapon[i]->ObjectCreationType,
+							       WorkshopFighterGame->Weapon[i]->Ammo,
+							       WorkshopFighterGame->Weapon[i]->AmmoStart);
+			delete WorkshopFighterGame->Weapon[i];
+			WorkshopFighterGame->Weapon[i] = nullptr;
+		}
 
 	// 3 - корпус
 	Setup.Profile[CurrentProfile].Money +=
@@ -298,64 +344,56 @@ void WorkshopCreateBuyShip()
 
 	// 1 - Системы
 	if (EngineSystem != 0)
-	if (Setup.Profile[CurrentProfile].Money >= GetSystemCost(EngineSystem))
-	{
-		Setup.Profile[CurrentProfile].Money -= GetSystemCost(EngineSystem);
-		Setup.Profile[CurrentProfile].EngineSystem = EngineSystem;
-	}
+		if (Setup.Profile[CurrentProfile].Money >= GetSystemCost(EngineSystem)) {
+			Setup.Profile[CurrentProfile].Money -= GetSystemCost(EngineSystem);
+			Setup.Profile[CurrentProfile].EngineSystem = EngineSystem;
+		}
 	if (PowerSystem != 0)
-	if (Setup.Profile[CurrentProfile].Money >= GetSystemCost(PowerSystem+4))
-	{
-		Setup.Profile[CurrentProfile].Money -= GetSystemCost(PowerSystem+4);
-		Setup.Profile[CurrentProfile].PowerSystem = PowerSystem;
-	}
+		if (Setup.Profile[CurrentProfile].Money >= GetSystemCost(PowerSystem+4)) {
+			Setup.Profile[CurrentProfile].Money -= GetSystemCost(PowerSystem+4);
+			Setup.Profile[CurrentProfile].PowerSystem = PowerSystem;
+		}
 	if (TargetingSystem != 0)
-	if (Setup.Profile[CurrentProfile].Money >= GetSystemCost(TargetingSystem+8))
-	{
-		Setup.Profile[CurrentProfile].Money -= GetSystemCost(TargetingSystem+8);
-		Setup.Profile[CurrentProfile].TargetingSystem = TargetingSystem;
-	}
+		if (Setup.Profile[CurrentProfile].Money >= GetSystemCost(TargetingSystem+8)) {
+			Setup.Profile[CurrentProfile].Money -= GetSystemCost(TargetingSystem+8);
+			Setup.Profile[CurrentProfile].TargetingSystem = TargetingSystem;
+		}
 	if (TargetingMechanicSystem != 0)
-	if (Setup.Profile[CurrentProfile].Money >= GetSystemCost(TargetingMechanicSystem+12))
-	{
-		Setup.Profile[CurrentProfile].Money -= GetSystemCost(TargetingMechanicSystem+12);
-		Setup.Profile[CurrentProfile].TargetingMechanicSystem = TargetingMechanicSystem;
-	}
+		if (Setup.Profile[CurrentProfile].Money >= GetSystemCost(TargetingMechanicSystem+12)) {
+			Setup.Profile[CurrentProfile].Money -= GetSystemCost(TargetingMechanicSystem+12);
+			Setup.Profile[CurrentProfile].TargetingMechanicSystem = TargetingMechanicSystem;
+		}
 	if (AdvancedProtectionSystem != 0)
-	if (Setup.Profile[CurrentProfile].Money >= GetSystemCost(AdvancedProtectionSystem+16))
-	{
-		Setup.Profile[CurrentProfile].Money -= GetSystemCost(AdvancedProtectionSystem+16);
-		Setup.Profile[CurrentProfile].AdvancedProtectionSystem = AdvancedProtectionSystem;
-	}
+		if (Setup.Profile[CurrentProfile].Money >= GetSystemCost(AdvancedProtectionSystem+16)) {
+			Setup.Profile[CurrentProfile].Money -= GetSystemCost(AdvancedProtectionSystem+16);
+			Setup.Profile[CurrentProfile].AdvancedProtectionSystem = AdvancedProtectionSystem;
+		}
 
 
 
 	// покупаем оружие, если можем... нет - ставим что продали его (это сделали ранее)
 	// всегда покупаем новое, т.е. с полным боекомплектом!
-	for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++)
-	{
-		if (Setup.Profile[CurrentProfile].Weapon[i] != 0)
-		{
-			if (Setup.Profile[CurrentProfile].Money >= GetWeaponBaseCost(Setup.Profile[CurrentProfile].Weapon[i]))
-			{
-				if (SetEarthSpaceFighterWeapon(WorkshopFighterGame, i+1, Setup.Profile[CurrentProfile].Weapon[i]))
-				{
-					if (WorkshopFighterGame->Weapon[i]->Fire != 0)
-					if (WorkshopFighterGame->Weapon[i]->Fire->Light != 0){vw_ReleaseLight(WorkshopFighterGame->Weapon[i]->Fire->Light); WorkshopFighterGame->Weapon[i]->Fire->Light = 0;}
+	for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++) {
+		if (Setup.Profile[CurrentProfile].Weapon[i] != 0) {
+			if (Setup.Profile[CurrentProfile].Money >= GetWeaponBaseCost(Setup.Profile[CurrentProfile].Weapon[i])) {
+				if (SetEarthSpaceFighterWeapon(WorkshopFighterGame, i+1, Setup.Profile[CurrentProfile].Weapon[i])) {
+					if (WorkshopFighterGame->Weapon[i]->Fire != nullptr)
+						if (WorkshopFighterGame->Weapon[i]->Fire->Light != nullptr) {
+							vw_ReleaseLight(WorkshopFighterGame->Weapon[i]->Fire->Light);
+							WorkshopFighterGame->Weapon[i]->Fire->Light = nullptr;
+						}
 
 					Setup.Profile[CurrentProfile].Money -= GetWeaponBaseCost(Setup.Profile[CurrentProfile].Weapon[i]);
 					Setup.Profile[CurrentProfile].WeaponAmmo[i] = WorkshopFighterGame->Weapon[i]->AmmoStart;
 					Setup.Profile[CurrentProfile].WeaponSlotYAngle[i] = 0.0f;
-				}
-				else
-				// если поставить не смогли - не такой слот
+				} else
+					// если поставить не смогли - не такой слот
 				{
 					Setup.Profile[CurrentProfile].Weapon[i] = 0;
 					Setup.Profile[CurrentProfile].WeaponAmmo[i] = 0;
 				}
 			}// если не хватило денег снова купить
-			else
-			{
+			else {
 				Setup.Profile[CurrentProfile].Weapon[i] = 0;
 				Setup.Profile[CurrentProfile].WeaponAmmo[i] = 0;
 			}
@@ -363,8 +401,8 @@ void WorkshopCreateBuyShip()
 	}
 	// если было больше слотов чем есть сейчас
 	if (OldWeaponQuantity > WorkshopFighterGame->WeaponQuantity)
-	for (int i=0; i<OldWeaponQuantity; i++)
-	if (WorkshopFighterGame->WeaponQuantity <= i) Setup.Profile[CurrentProfile].Weapon[i] = 0;
+		for (int i=0; i<OldWeaponQuantity; i++)
+			if (WorkshopFighterGame->WeaponQuantity <= i) Setup.Profile[CurrentProfile].Weapon[i] = 0;
 
 
 
@@ -391,8 +429,7 @@ void WorkshopCreateBuyShip()
 void BuyShip()
 {
 	// сбрасываем особенные настройки слотов оружия
-	for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++)
-	{
+	for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++) {
 		Setup.Profile[CurrentProfile].WeaponSlotYAngle[i] = 0;
 	}
 
@@ -416,8 +453,7 @@ void BuyShip()
 void RepairShip()
 {
 	// смотрим, если денег достаточно для полного ремонта - делаем его
-	if (Setup.Profile[CurrentProfile].Money >= GetWorkshopShipRepairCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame))
-	{
+	if (Setup.Profile[CurrentProfile].Money >= GetWorkshopShipRepairCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame)) {
 		Setup.Profile[CurrentProfile].Money -= GetWorkshopShipRepairCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame);
 		Setup.Profile[CurrentProfile].ShipHullCurrentStrength = WorkshopFighterGame->StrengthStart;
 		WorkshopFighterGame->Strength = Setup.Profile[CurrentProfile].ShipHullCurrentStrength;
@@ -455,7 +491,7 @@ void UpgradeShip()
 
 	WorkshopFighterGame->StrengthStart *= Setup.Profile[CurrentProfile].ShipHullUpgrade;
 	WorkshopFighterGame->Strength = WorkshopFighterGame->StrengthStart - OldStr +
-		Setup.Profile[CurrentProfile].ShipHullCurrentStrength;
+					Setup.Profile[CurrentProfile].ShipHullCurrentStrength;
 
 	Setup.Profile[CurrentProfile].ShipHullCurrentStrength = WorkshopFighterGame->Strength;
 
@@ -514,7 +550,7 @@ void Workshop_Shipyard()
 	// условия, при которых корабль купить можно
 	bool CanBuy = false;
 	if (GetWorkshopShipFullCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame) +
-		Setup.Profile[CurrentProfile].Money >= GetWorkshopShipCost(CurrentWorkshopNewFighter))
+	    Setup.Profile[CurrentProfile].Money >= GetWorkshopShipCost(CurrentWorkshopNewFighter))
 		CanBuy = true;
 
 
@@ -528,8 +564,7 @@ void Workshop_Shipyard()
 
 	// вывод названия корабля
 	vw_DrawFont(Setup.iAspectRatioWidth/2-448, 50+6, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("7_shipfullname"), vw_GetText(GetWorkshopShipName(CurrentWorkshopNewFighter)), 1);
-	if (DrawButton128_2(Setup.iAspectRatioWidth/2-197,50, vw_GetText("1_Info"), MenuContentTransp, false))
-	{
+	if (DrawButton128_2(Setup.iAspectRatioWidth/2-197,50, vw_GetText("1_Info"), MenuContentTransp, false)) {
 		SetCurrentDialogBox(6);
 		DialogSpaceShip = WorkshopNewFighter;
 	}
@@ -566,10 +601,8 @@ void Workshop_Shipyard()
 
 	// проверяем колесо мышки
 	SetRect(&DstRect,Setup.iAspectRatioWidth/2-457,100+35-11,Setup.iAspectRatioWidth/2-57,450-13);
-	if (vw_OnRect(&DstRect))
-	{
-		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing())
-		{
+	if (vw_OnRect(&DstRect)) {
+		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing()) {
 			CurrentWorkshopNewFighter += vw_GetWheelStatus();
 
 			if (CurrentWorkshopNewFighter < 1) CurrentWorkshopNewFighter = 22;
@@ -578,26 +611,21 @@ void Workshop_Shipyard()
 
 			vw_ResetWheelStatus();
 		}
-	}
-	else if (vw_GetWheelStatus() != 0)
-	{
+	} else if (vw_GetWheelStatus() != 0) {
 		vw_ResetWheelStatus();
 	}
 
-	if (DrawButton128_2(Setup.iAspectRatioWidth/2-395,482, vw_GetText("1_Prev"), MenuContentTransp, false))
-	{
+	if (DrawButton128_2(Setup.iAspectRatioWidth/2-395,482, vw_GetText("1_Prev"), MenuContentTransp, false)) {
 		CurrentWorkshopNewFighter --;
 		if (CurrentWorkshopNewFighter < 1) CurrentWorkshopNewFighter = 22;
 		WorkshopCreateNewShip();
 	}
-	if (DrawButton128_2(Setup.iAspectRatioWidth/2-247,482, vw_GetText("1_Next"), MenuContentTransp, false))
-	{
+	if (DrawButton128_2(Setup.iAspectRatioWidth/2-247,482, vw_GetText("1_Next"), MenuContentTransp, false)) {
 		CurrentWorkshopNewFighter ++;
 		if (CurrentWorkshopNewFighter > 22) CurrentWorkshopNewFighter = 1;
 		WorkshopCreateNewShip();
 	}
-	if (DrawButton200_2(Setup.iAspectRatioWidth/2-357,533, vw_GetText("1_Buy_Ship"), MenuContentTransp, !CanBuy))
-	{
+	if (DrawButton200_2(Setup.iAspectRatioWidth/2-357,533, vw_GetText("1_Buy_Ship"), MenuContentTransp, !CanBuy)) {
 		BuyShip();
 	}
 
@@ -618,8 +646,7 @@ void Workshop_Shipyard()
 	// вывод названия корабля
 	vw_DrawFont(Setup.iAspectRatioWidth/2+64, 56, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("7_shipfullname"), vw_GetText(GetWorkshopShipName(Setup.Profile[CurrentProfile].Ship)), Setup.Profile[CurrentProfile].ShipHullUpgrade);
 
-	if (DrawButton128_2(Setup.iAspectRatioWidth/2+315, 50, vw_GetText("1_Info"), MenuContentTransp, false))
-	{
+	if (DrawButton128_2(Setup.iAspectRatioWidth/2+315, 50, vw_GetText("1_Info"), MenuContentTransp, false)) {
 		SetCurrentDialogBox(6);
 		DialogSpaceShip = WorkshopFighterGame;
 	}
@@ -635,8 +662,7 @@ void Workshop_Shipyard()
 	bool CanUpgrade = false;
 	if (Setup.Profile[CurrentProfile].ShipHullUpgrade<4) CanUpgrade = true;
 
-	if (CanUpgrade)
-	{
+	if (CanUpgrade) {
 		if (Setup.Profile[CurrentProfile].Money < GetWorkshopShipCost(Setup.Profile[CurrentProfile].Ship)) CanUpgrade = false;
 		if (CanUpgrade)
 			vw_DrawFont(Setup.iAspectRatioWidth/2+438-vw_FontSize("%s: %i", vw_GetText("7_Upgrade_Hull_Cost"), GetWorkshopShipCost(Setup.Profile[CurrentProfile].Ship)), LinePos, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s: %i", vw_GetText("7_Upgrade_Hull_Cost"), GetWorkshopShipCost(Setup.Profile[CurrentProfile].Ship));
@@ -649,8 +675,7 @@ void Workshop_Shipyard()
 
 	// вывод стомости ремонта, если нужно
 	bool NeedRepair = false;
-	if (GetWorkshopShipRepairCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame) > 0)
-	{
+	if (GetWorkshopShipRepairCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame) > 0) {
 		SizeI = vw_FontSize("%s: %i", vw_GetText("7_Repair_Hull_Cost"), GetWorkshopShipRepairCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame));
 		vw_DrawFont(Setup.iAspectRatioWidth/2+438-SizeI, LinePos, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("7_Repair_Hull_Cost"), GetWorkshopShipRepairCost(Setup.Profile[CurrentProfile].Ship, WorkshopFighterGame));
 		LinePos -= 20;
@@ -660,9 +685,8 @@ void Workshop_Shipyard()
 		vw_DrawFont(Setup.iAspectRatioWidth/2+74, 110, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, vw_GetText("4_Armor:"));
 		SizeI = vw_FontSize("%i/%i", (int)WorkshopFighterGame->Strength, (int)WorkshopFighterGame->StrengthStart);
 		vw_DrawFont(Setup.iAspectRatioWidth/2+74+14+SmSizeI, 110, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, "%i/%i", (int)WorkshopFighterGame->Strength, (int)WorkshopFighterGame->StrengthStart);
-	}
-	else
-	{	// надпись Armor, нормальная
+	} else {
+		// надпись Armor, нормальная
 		vw_DrawFont(Setup.iAspectRatioWidth/2+74, 110, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, vw_GetText("4_Armor:"));
 		SizeI = vw_FontSize("%i/%i", (int)WorkshopFighterGame->Strength, (int)WorkshopFighterGame->StrengthStart);
 		vw_DrawFont(Setup.iAspectRatioWidth/2+74+14+SmSizeI, 110, 0, 0,1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, "%i/%i", (int)WorkshopFighterGame->Strength, (int)WorkshopFighterGame->StrengthStart);
@@ -691,14 +715,12 @@ void Workshop_Shipyard()
 
 
 
-	if (DrawButton200_2(Setup.iAspectRatioWidth/2+153, 482, vw_GetText("1_Repair_Hull"), MenuContentTransp, !NeedRepair))
-	{
+	if (DrawButton200_2(Setup.iAspectRatioWidth/2+153, 482, vw_GetText("1_Repair_Hull"), MenuContentTransp, !NeedRepair)) {
 		RepairShip();
 	}
 
 
-	if (DrawButton200_2(Setup.iAspectRatioWidth/2+153, 533, vw_GetText("1_Upgrade_Hull"), MenuContentTransp, !CanUpgrade))
-	{
+	if (DrawButton200_2(Setup.iAspectRatioWidth/2+153, 533, vw_GetText("1_Upgrade_Hull"), MenuContentTransp, !CanUpgrade)) {
 		UpgradeShip();
 	}
 

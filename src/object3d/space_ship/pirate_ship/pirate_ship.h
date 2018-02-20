@@ -40,7 +40,7 @@ class CPirateShip : public CSpaceShip
 {
 public:
 
-	virtual ~CPirateShip(){};
+	virtual ~CPirateShip() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int	PirateShipNum);

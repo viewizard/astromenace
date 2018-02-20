@@ -61,8 +61,8 @@ float CurrentPlayerShipEnergy;
 bool PlayerFighterLeftEng = false;
 bool PlayerFighterRightEng = false;
 
-eParticleSystem *Shild1 = 0;
-eParticleSystem *Shild2 = 0;
+eParticleSystem *Shild1 = nullptr;
+eParticleSystem *Shild2 = nullptr;
 float ShildRadius;
 float ShildEnergyStatus;
 float ShildStartHitStatus;
@@ -105,18 +105,23 @@ float SecondaryGroupCurrentFireWeaponDelay = 0.0f;
 //------------------------------------------------------------------------------------
 float GetShipMaxEnergy(int Num)
 {
-	switch (Num)
-	{
-		// аккамулятор
-		case 1:	return 100.0f;
-		// ядерный
-		case 2:	return 200.0f;
-		// плазменный
-		case 3:	return 400.0f;
-		// антиматерия
-		case 4:	return 800.0f;
+	switch (Num) {
+	// аккамулятор
+	case 1:
+		return 100.0f;
+	// ядерный
+	case 2:
+		return 200.0f;
+	// плазменный
+	case 3:
+		return 400.0f;
+	// антиматерия
+	case 4:
+		return 800.0f;
 
-		default: fprintf(stderr, "Error in GetShipMaxEnergy function call, wrong Num.\n"); break;
+	default:
+		fprintf(stderr, "Error in GetShipMaxEnergy function call, wrong Num.\n");
+		break;
 	}
 
 	return 0.0f;
@@ -126,18 +131,23 @@ float GetShipMaxEnergy(int Num)
 //------------------------------------------------------------------------------------
 float GetShipRechargeEnergy(int Num)
 {
-	switch (Num)
-	{
-		// аккамулятор
-		case 1:	return 20.0f;
-		// ядерный
-		case 2:	return 50.0f;
-		// плазменный
-		case 3:	return 130.0f;
-		// антиматерия
-		case 4:	return 250.0f;
+	switch (Num) {
+	// аккамулятор
+	case 1:
+		return 20.0f;
+	// ядерный
+	case 2:
+		return 50.0f;
+	// плазменный
+	case 3:
+		return 130.0f;
+	// антиматерия
+	case 4:
+		return 250.0f;
 
-		default: fprintf(stderr, "Error in GetShipRechargeEnergy function call, wrong Num.\n"); break;
+	default:
+		fprintf(stderr, "Error in GetShipRechargeEnergy function call, wrong Num.\n");
+		break;
 	}
 
 	return 0.0f;
@@ -147,18 +157,23 @@ float GetShipRechargeEnergy(int Num)
 //------------------------------------------------------------------------------------
 float GetShipProtectionSystemEnergyUse(int Num)
 {
-	switch (Num)
-	{
-		// нано роботы
-		case 1:	return 10.0f;
-		// спец защитный слой
-		case 2:	return 0.0f;
-		// щит
-		case 3:	return 50.0f;
-		// отражатель
-		case 4:	return 100.0f;
+	switch (Num) {
+	// нано роботы
+	case 1:
+		return 10.0f;
+	// спец защитный слой
+	case 2:
+		return 0.0f;
+	// щит
+	case 3:
+		return 50.0f;
+	// отражатель
+	case 4:
+		return 100.0f;
 
-		default: fprintf(stderr, "Error in GetShipProtectionSystemEnergyUse function call, wrong Num.\n"); break;
+	default:
+		fprintf(stderr, "Error in GetShipProtectionSystemEnergyUse function call, wrong Num.\n");
+		break;
 	}
 
 	return 0.0f;
@@ -168,18 +183,23 @@ float GetShipProtectionSystemEnergyUse(int Num)
 //------------------------------------------------------------------------------------
 float GetShipEngineSystemEnergyUse(int Num)
 {
-	switch (Num)
-	{
-		// обычные двигатели
-		case 1:	return 5.0f;
-		// фатоновые
-		case 2:	return 10.0f;
-		// плазменные
-		case 3:	return 30.0f;
-		// на антиматерии
-		case 4:	return 60.0f;
+	switch (Num) {
+	// обычные двигатели
+	case 1:
+		return 5.0f;
+	// фатоновые
+	case 2:
+		return 10.0f;
+	// плазменные
+	case 3:
+		return 30.0f;
+	// на антиматерии
+	case 4:
+		return 60.0f;
 
-		default: fprintf(stderr, "Error in GetShipEngineSystemEnergyUse function call, wrong Num.\n"); break;
+	default:
+		fprintf(stderr, "Error in GetShipEngineSystemEnergyUse function call, wrong Num.\n");
+		break;
 	}
 
 	return 0.0f;
@@ -196,7 +216,10 @@ float GetShipEngineSystemEnergyUse(int Num)
 void InitGamePlayerShip()
 {
 	// создаем корабль игрока по настройкам в профайле
-	if (PlayerFighter != 0){delete PlayerFighter; PlayerFighter = 0;}
+	if (PlayerFighter != nullptr) {
+		delete PlayerFighter;
+		PlayerFighter = nullptr;
+	}
 
 	VoiceMissileDetected = 0;
 	VoiceMissileDetectedStatus = false;
@@ -220,13 +243,10 @@ void InitGamePlayerShip()
 	PlayerFighter->Strength = Setup.Profile[CurrentProfile].ShipHullCurrentStrength;
 	PlayerFighter->ShowStrength = false;
 
-    // создаем оружие
-	for (int i=0; i<PlayerFighter->WeaponQuantity; i++)
-	{
-		if (Setup.Profile[CurrentProfile].Weapon[i] != 0)
-		{
-			if (SetEarthSpaceFighterWeapon(PlayerFighter, i+1, Setup.Profile[CurrentProfile].Weapon[i]))
-			{
+	// создаем оружие
+	for (int i=0; i<PlayerFighter->WeaponQuantity; i++) {
+		if (Setup.Profile[CurrentProfile].Weapon[i] != 0) {
+			if (SetEarthSpaceFighterWeapon(PlayerFighter, i+1, Setup.Profile[CurrentProfile].Weapon[i])) {
 				PlayerFighter->Weapon[i]->Ammo = Setup.Profile[CurrentProfile].WeaponAmmo[i];
 				PlayerFighter->WeaponYAngle[i] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[i];
 			}
@@ -254,8 +274,7 @@ void InitGamePlayerShip()
 
 
 
-	if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem == 3)
-	{
+	if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem == 3) {
 		Shild1 = new eParticleSystem;
 		Shild1->ColorStart.r = 0.20f;
 		Shild1->ColorStart.g = 0.50f;
@@ -286,8 +305,7 @@ void InitGamePlayerShip()
 		ShildStartHitStatus = 100.0f;
 		ShildEnergyStatus = 1.0f;
 	}
-	if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem == 4)
-	{
+	if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem == 4) {
 		Shild1 = new eParticleSystem;
 		Shild1->ColorStart.r = 0.50f;
 		Shild1->ColorStart.g = 0.50f;
@@ -376,20 +394,17 @@ void InitGamePlayerShip()
 void GamePlayerShip()
 {
 	// если корабля нет - нам тут делать нечего
-	if (PlayerFighter == 0) return;
+	if (PlayerFighter == nullptr)
+		return;
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверяем, корабль живой еще, или сбили и нужно его удалить...
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (PlayerFighter->Strength <= 0.0f)
-	{
+	if (PlayerFighter->Strength <= 0.0f) {
 		// редкий случай
-		if (UndeadDebugMode)
-		{
+		if (UndeadDebugMode) {
 			PlayerFighter->Strength = PlayerFighter->StrengthStart;
-		}
-		else
-		{
+		} else {
 			// делаем взрыв
 			CSpaceExplosion *TMPExplosion;
 			TMPExplosion = new CSpaceExplosion;
@@ -400,7 +415,8 @@ void GamePlayerShip()
 			StartMusicWithFade(4, 2.0f, 2.0f);
 
 			// удаляем и уходим отсюда
-			delete PlayerFighter; PlayerFighter = 0;
+			delete PlayerFighter;
+			PlayerFighter = nullptr;
 
 			// 20 секунд просто проигрываем музыку...
 			GameSetMissionFailedData(20);
@@ -413,8 +429,7 @@ void GamePlayerShip()
 
 	// голос выводим только в игре! в меню включается пауза
 	// и если не закончился уровень
-	if (GameContentTransp < 0.99f && !GameMissionCompleteStatus)
-	{
+	if (GameContentTransp < 0.99f && !GameMissionCompleteStatus) {
 		int WarningMessagesCount = 0;
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -422,27 +437,24 @@ void GamePlayerShip()
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		CProjectile *tmpProjectile = StartProjectile;
 		bool CheckStatus = false;
-		while (tmpProjectile!=0)
-		{
+		while (tmpProjectile != nullptr) {
 			CProjectile *tmpProjectile2 = tmpProjectile->Next;
 			// если навелись на этот объект ракетой
 			// т.к. только у ракеты тут не ноль
 			if (tmpProjectile->Target == PlayerFighter)
-			// если это не мина
-			if (tmpProjectile->Num < 26 || tmpProjectile->Num > 29)
-			{
-				// проверяем, есть ли ракеты или нет
-				CheckStatus = true;
-			}
+				// если это не мина
+				if (tmpProjectile->Num < 26 || tmpProjectile->Num > 29) {
+					// проверяем, есть ли ракеты или нет
+					CheckStatus = true;
+				}
 
 			tmpProjectile = tmpProjectile2;
 		}
 
-		if (CheckStatus)
-		{
+		if (CheckStatus) {
 			// проверяем, действительно еще играем (играем только 1 раз!)
-			if (vw_FindSoundByNum(VoiceMissileDetected) == 0 && !VoiceMissileDetectedStatus)
-			{
+			if ((vw_FindSoundByNum(VoiceMissileDetected) == nullptr) &&
+			    !VoiceMissileDetectedStatus) {
 				// уже не играем, нужно запустить опять
 				VoiceMissileDetected = Audio_PlayVoice(3, 1.0f);
 				VoiceMissileDetectedStatus = true;
@@ -456,16 +468,10 @@ void GamePlayerShip()
 			vw_SetFontSize(Setup.FontSize);
 			vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
 			WarningMessagesCount++;
-		}
-		else
-		{
-			if (CurrentAlert3 == 1.0f) // сделали полный цикл , предыдущее значение счетчика было минимальное
-			{
+		} else {
+			if (CurrentAlert3 == 1.0f) { // сделали полный цикл , предыдущее значение счетчика было минимальное
 				VoiceMissileDetectedStatus = false;
-			}
-			else
-			if (VoiceMissileDetectedStatus)
-			{
+			} else if (VoiceMissileDetectedStatus) {
 				// визуальный вывод - выводим постоянно
 				vw_SetFontSize(24);
 				vw_SetFontOffsetY(2);
@@ -484,49 +490,43 @@ void GamePlayerShip()
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		bool CollisionDetected = false;
 		CSpaceObject *tmpS = StartSpaceObject;
-		while (tmpS != 0 && PlayerFighter != 0)
-		{
+		while ((tmpS != nullptr) && (PlayerFighter != nullptr)) {
 			CSpaceObject *tmpSpace2 = tmpS->Next;
 
 			// проверка на возможное столкновение с неразрушаемым объектом, вывод голосового предупреждения
 			// если объект ближе чем радиус, кричим
 			if (tmpS->ObjectType == 15) // только с большими астероидами
-			if (vw_SphereSphereCollision(PlayerFighter->Radius, PlayerFighter->Location,
-								tmpS->Radius, tmpS->Location, tmpS->PrevLocation))
-			if (vw_SphereAABBCollision(tmpS->AABB, tmpS->Location,
-								PlayerFighter->Radius, PlayerFighter->Location, PlayerFighter->PrevLocation))
-			{
-				CollisionDetected = true;
-			}
+				if (vw_SphereSphereCollision(PlayerFighter->Radius, PlayerFighter->Location,
+							     tmpS->Radius, tmpS->Location, tmpS->PrevLocation))
+					if (vw_SphereAABBCollision(tmpS->AABB, tmpS->Location,
+								   PlayerFighter->Radius, PlayerFighter->Location, PlayerFighter->PrevLocation)) {
+						CollisionDetected = true;
+					}
 
 			tmpS = tmpSpace2;
 		}
 		CGroundObject *tmpG = StartGroundObject;
-		while (tmpG!=0 && PlayerFighter != 0)
-		{
+		while ((tmpG != nullptr) && (PlayerFighter != nullptr)) {
 			CGroundObject *tmpGround2 = tmpG->Next;
 
 			// проверка на возможное столкновение с неразрушаемым объектом, вывод голосового предупреждения
 			// если объект ближе чем радиус, кричим
 			if (tmpG->ObjectType == 12) // только со зданиями (чтобы не цепляло блоки конструкций баз)
-			if (vw_SphereSphereCollision(PlayerFighter->Radius, PlayerFighter->Location,
-								tmpG->Radius, tmpG->Location, tmpG->PrevLocation))
-			if (vw_SphereAABBCollision(tmpG->AABB, tmpG->Location,
-								PlayerFighter->Radius, PlayerFighter->Location, PlayerFighter->PrevLocation))
-			if (vw_SphereOBBCollision(tmpG->OBB, tmpG->OBBLocation, tmpG->Location, tmpG->CurrentRotationMat,
-								PlayerFighter->Radius, PlayerFighter->Location, PlayerFighter->PrevLocation))
-			{
-				CollisionDetected = true;
-			}
+				if (vw_SphereSphereCollision(PlayerFighter->Radius, PlayerFighter->Location,
+							     tmpG->Radius, tmpG->Location, tmpG->PrevLocation))
+					if (vw_SphereAABBCollision(tmpG->AABB, tmpG->Location,
+								   PlayerFighter->Radius, PlayerFighter->Location, PlayerFighter->PrevLocation))
+						if (vw_SphereOBBCollision(tmpG->OBB, tmpG->OBBLocation, tmpG->Location, tmpG->CurrentRotationMat,
+									  PlayerFighter->Radius, PlayerFighter->Location, PlayerFighter->PrevLocation)) {
+							CollisionDetected = true;
+						}
 
 			tmpG = tmpGround2;
 		}
-		if (CollisionDetected)
-		{
+		if (CollisionDetected) {
 			// голос, ворнинг, можем столкнуться с объектом
 			// проверяем, действительно еще играем
-			if (vw_FindSoundByNum(VoiceWarningCollisionDetected) == 0)
-			{
+			if (vw_FindSoundByNum(VoiceWarningCollisionDetected) == nullptr) {
 				// уже не играем, нужно запустить опять
 				VoiceWarningCollisionDetected = Audio_PlayVoice(7, 1.0f);
 			}
@@ -548,33 +548,29 @@ void GamePlayerShip()
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// Вывод голосового предупреждения, если в оружие нет пуль
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		if (PlayerFighter->WeaponSetFire!=0) // если вообще есть оружие
-		for (int i=0; i<PlayerFighter->WeaponQuantity; i++)
-		{
-			// если нажали стрелять, а патронов нет в одном из орудий
-			if (PlayerFighter->Weapon[i] != 0)
-			if (PlayerFighter->WeaponSetFire[i])
-			if (PlayerFighter->Weapon[i]->Ammo <= 0)
-			{
-				// проверяем, действительно еще играем
-				if (vw_FindSoundByNum(VoiceWeaponMalfunction) == 0)
-				{
-					// уже не играем, нужно запустить опять
-					VoiceWeaponMalfunction = Audio_PlayVoice(10, 1.0f);
+		if (PlayerFighter->WeaponSetFire != nullptr) // если вообще есть оружие
+			for (int i = 0; i < PlayerFighter->WeaponQuantity; i++) {
+				// если нажали стрелять, а патронов нет в одном из орудий
+				if ((PlayerFighter->Weapon[i] != nullptr) &&
+				    (PlayerFighter->WeaponSetFire[i]) &&
+				    (PlayerFighter->Weapon[i]->Ammo <= 0)) {
+					// проверяем, действительно еще играем
+					if (vw_FindSoundByNum(VoiceWeaponMalfunction) == nullptr) {
+						// уже не играем, нужно запустить опять
+						VoiceWeaponMalfunction = Audio_PlayVoice(10, 1.0f);
+					}
 				}
-			}
 
-		}
+			}
 
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// Звуковое оповещение, если жизни менее 10%
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// если меньше 10% нужно бить тревогу
-		if (PlayerFighter->Strength < PlayerFighter->StrengthStart/10.0f)
-		{
+		if (PlayerFighter->Strength < PlayerFighter->StrengthStart/10.0f) {
 			// если не играем, запускаем звук сирены
-			if (vw_FindSoundByNum(SoundLowLife) == 0)
+			if (vw_FindSoundByNum(SoundLowLife) == nullptr)
 				SoundLowLife = Audio_PlaySound2D(14, 1.0f);
 		}
 	}
@@ -586,28 +582,22 @@ void GamePlayerShip()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// управление кораблем - движение
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (GameContentTransp < 1.0f) // если не в меню нажимают
-	{
+	if (GameContentTransp < 1.0f) { // если не в меню нажимают
 		// получаем данные, для обоих типов управления
 		// уже получили данные, нужно игнорировать остальные источникик
 		bool NeedSkip = false;
 
 		// мышка
-		if (Setup.MouseControl)
-		{
+		if (Setup.MouseControl) {
 			SDL_GetMouseState(&LastMouseXR, &LastMouseYR);
 
 			int X, Y;
 			vw_GetMousePos(&X, &Y);
-			if (LastMouseX == -1 && LastMouseY == -1)
-			{
+			if (LastMouseX == -1 && LastMouseY == -1) {
 				LastMouseX = X;
 				LastMouseY = Y;
-			}
-			else
-			{
-				if (X != LastMouseX || Y != LastMouseY)
-				{
+			} else {
+				if (X != LastMouseX || Y != LastMouseY) {
 					// 0.9+0.1 = 1.0 - минимум, всегда 1.0 должен быть!
 					float Koef = 0.9f+Setup.ControlSensivity/10.0f;
 
@@ -630,15 +620,13 @@ void GamePlayerShip()
 
 #ifdef joystick
 		// джойстик
-		if (Joystick != NULL && !NeedSkip)
-		{
+		if (Joystick != nullptr && !NeedSkip) {
 			int X, Y;
 			X = SDL_JoystickGetAxis(Joystick, 0);
 			Y = SDL_JoystickGetAxis(Joystick, 1);
 
 
-			if (JoystickAxisX != X || JoystickAxisY != Y)
-			{
+			if (JoystickAxisX != X || JoystickAxisY != Y) {
 				JoystickAxisX = 0;
 				JoystickAxisY = 0;
 
@@ -647,17 +635,28 @@ void GamePlayerShip()
 				float AccMoveLR = fabsf(X/32768.0f);
 
 				// -3000 3000 мертвая зона
-				if (Y > 3000) {MoveFB -= 2.0f*(Setup.ControlSensivity/10.0f)*AccMoveFB*PlayerFighter->TimeDelta;NeedSkip = true;}
-				if (Y < -3000) {MoveFB += 2.0f*(Setup.ControlSensivity/10.0f)*AccMoveFB*PlayerFighter->TimeDelta;NeedSkip = true;}
-				if (X < -3000) {MoveLR -= 2.0f*(Setup.ControlSensivity/10.0f)*AccMoveLR*PlayerFighter->TimeDelta;NeedSkip = true;}
-				if (X > 3000) {MoveLR += 2.0f*(Setup.ControlSensivity/10.0f)*AccMoveLR*PlayerFighter->TimeDelta;NeedSkip = true;}
+				if (Y > 3000) {
+					MoveFB -= 2.0f*(Setup.ControlSensivity/10.0f)*AccMoveFB*PlayerFighter->TimeDelta;
+					NeedSkip = true;
+				}
+				if (Y < -3000) {
+					MoveFB += 2.0f*(Setup.ControlSensivity/10.0f)*AccMoveFB*PlayerFighter->TimeDelta;
+					NeedSkip = true;
+				}
+				if (X < -3000) {
+					MoveLR -= 2.0f*(Setup.ControlSensivity/10.0f)*AccMoveLR*PlayerFighter->TimeDelta;
+					NeedSkip = true;
+				}
+				if (X > 3000) {
+					MoveLR += 2.0f*(Setup.ControlSensivity/10.0f)*AccMoveLR*PlayerFighter->TimeDelta;
+					NeedSkip = true;
+				}
 			}
 		}
 #endif
 
 		// клавиатура
-		if (!NeedSkip)
-		{
+		if (!NeedSkip) {
 			if (vw_GetKeys(Setup.KeyBoardDown)) MoveFB -= 2.0f*(Setup.ControlSensivity/10.0f)*PlayerFighter->TimeDelta;
 			if (vw_GetKeys(Setup.KeyBoardUp)) MoveFB += 2.0f*(Setup.ControlSensivity/10.0f)*PlayerFighter->TimeDelta;
 			if (vw_GetKeys(Setup.KeyBoardLeft)) MoveLR -= 2.0f*(Setup.ControlSensivity/10.0f)*PlayerFighter->TimeDelta;
@@ -688,26 +687,22 @@ void GamePlayerShip()
 		PlayerFighterEndLocation += GamePoint;
 
 		// если есть двигатель
-		if (GameEngineSystem != 0)
-		{
+		if (GameEngineSystem != 0) {
 			// в зависимости от типа управления выполняем действия
-			if (Setup.Profile[CurrentProfile].SpaceShipControlMode == 1)
-			{// аркадный режим
+			if (Setup.Profile[CurrentProfile].SpaceShipControlMode == 1) {
+				// аркадный режим
 
 				// запускаем маневровые двигатели, если тянем корабль в сторону
-				if ((int)PlayerFighter->Location.x > (int)PlayerFighterEndLocation.x)
-				{
+				if ((int)PlayerFighter->Location.x > (int)PlayerFighterEndLocation.x) {
 					PlayerFighterLeftEng = true;
 					PlayerFighterRightEng = false;
 				}
-				if ((int)PlayerFighter->Location.x < (int)PlayerFighterEndLocation.x)
-				{
+				if ((int)PlayerFighter->Location.x < (int)PlayerFighterEndLocation.x) {
 					PlayerFighterLeftEng = false;
 					PlayerFighterRightEng = true;
 				}
 				// если не двигаем, останавливаем маневровые двигатели
-				if ((int)PlayerFighter->Location.x == (int)PlayerFighterEndLocation.x)
-				{
+				if ((int)PlayerFighter->Location.x == (int)PlayerFighterEndLocation.x) {
 					PlayerFighterLeftEng = false;
 					PlayerFighterRightEng = false;
 				}
@@ -737,25 +732,21 @@ void GamePlayerShip()
 
 				CurrentMovementVel = CurrentMovementVel^MaxSpeed;
 
-			}
-			else
-			{// симулятивный режим
+			} else {
+				// симулятивный режим
 
 
 				// запускаем маневровые двигатели, если тянем корабль в сторону
-				if ((int)PlayerFighter->Location.x > (int)PlayerFighterEndLocation.x)
-				{
+				if ((int)PlayerFighter->Location.x > (int)PlayerFighterEndLocation.x) {
 					PlayerFighterLeftEng = true;
 					PlayerFighterRightEng = false;
 				}
-				if ((int)PlayerFighter->Location.x < (int)PlayerFighterEndLocation.x)
-				{
+				if ((int)PlayerFighter->Location.x < (int)PlayerFighterEndLocation.x) {
 					PlayerFighterLeftEng = false;
 					PlayerFighterRightEng = true;
 				}
 				// если не двигаем, останавливаем маневровые двигатели
-				if ((int)PlayerFighter->Location.x == (int)PlayerFighterEndLocation.x)
-				{
+				if ((int)PlayerFighter->Location.x == (int)PlayerFighterEndLocation.x) {
 					PlayerFighterLeftEng = false;
 					PlayerFighterRightEng = false;
 				}
@@ -799,32 +790,28 @@ void GamePlayerShip()
 
 		// если стандартный аспект рейшен, надо смещать камеру
 		if (Setup.iAspectRatioWidth == 1024)
-		if (Setup.CameraModeWithStandardAspectRatio == 0)
-		{
-			float DeviationSize = 14.55f;
+			if (Setup.CameraModeWithStandardAspectRatio == 0) {
+				float DeviationSize = 14.55f;
 
 
-			if (PlayerFighter->Location.x < 0.0f)
-			{
-				float Diff = PlayerFighter->Location.x/3.5f;
-				if (Diff < -DeviationSize) Diff = -DeviationSize;
+				if (PlayerFighter->Location.x < 0.0f) {
+					float Diff = PlayerFighter->Location.x/3.5f;
+					if (Diff < -DeviationSize) Diff = -DeviationSize;
 
-				VECTOR3D TMPCameraLocation;
-				vw_GetCameraLocation(&TMPCameraLocation);
-				TMPCameraLocation.x = Diff;
-				vw_SetCameraLocation(TMPCameraLocation);
+					VECTOR3D TMPCameraLocation;
+					vw_GetCameraLocation(&TMPCameraLocation);
+					TMPCameraLocation.x = Diff;
+					vw_SetCameraLocation(TMPCameraLocation);
+				} else {
+					float Diff = PlayerFighter->Location.x/3.5f;
+					if (Diff > DeviationSize) Diff = DeviationSize;
+
+					VECTOR3D TMPCameraLocation;
+					vw_GetCameraLocation(&TMPCameraLocation);
+					TMPCameraLocation.x = Diff;
+					vw_SetCameraLocation(TMPCameraLocation);
+				}
 			}
-			else
-			{
-				float Diff = PlayerFighter->Location.x/3.5f;
-				if (Diff > DeviationSize) Diff = DeviationSize;
-
-				VECTOR3D TMPCameraLocation;
-				vw_GetCameraLocation(&TMPCameraLocation);
-				TMPCameraLocation.x = Diff;
-				vw_SetCameraLocation(TMPCameraLocation);
-			}
-		}
 
 	}
 
@@ -836,219 +823,182 @@ void GamePlayerShip()
 	// управление кораблем - стрельба
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (GameContentTransp < 0.5f) // если не в меню нажимают
-	if (PlayerFighter->WeaponSetFire!=0) // если вообще есть оружие
-	{
+		if (PlayerFighter->WeaponSetFire != nullptr) { // если вообще есть оружие
 
-		int PrimCount = 0;
-		float PrimTime = 0.0f;
-		int SecCount = 0;
-		float SecTime = 0.0f;
+			int PrimCount = 0;
+			float PrimTime = 0.0f;
+			int SecCount = 0;
+			float SecTime = 0.0f;
 
-		PrimaryGroupCurrentFireWeaponDelay -= PlayerFighter->TimeDelta;
-		SecondaryGroupCurrentFireWeaponDelay -= PlayerFighter->TimeDelta;
+			PrimaryGroupCurrentFireWeaponDelay -= PlayerFighter->TimeDelta;
+			SecondaryGroupCurrentFireWeaponDelay -= PlayerFighter->TimeDelta;
 
-		// находим кол-во оружия в группах
-		for (int i=0; i<PlayerFighter->WeaponQuantity; i++)
-		if (Setup.Profile[CurrentProfile].Weapon[i] != 0) // если это оружие установлено
-		{
+			// находим кол-во оружия в группах
+			for (int i=0; i<PlayerFighter->WeaponQuantity; i++)
+				if (Setup.Profile[CurrentProfile].Weapon[i] != 0) { // если это оружие установлено
 
-			if (Setup.Profile[CurrentProfile].WeaponControl[i] == 1 ||
-			Setup.Profile[CurrentProfile].WeaponControl[i] ==3)
-			{
-				PrimCount++;
-				PrimTime += PlayerFighter->Weapon[i]->NextFireTime;
-			}
-
-			if (Setup.Profile[CurrentProfile].WeaponControl[i] == 2 ||
-			Setup.Profile[CurrentProfile].WeaponControl[i] ==3)
-			{
-				SecCount++;
-				SecTime += PlayerFighter->Weapon[i]->NextFireTime;
-			}
-
-		}
-
-
-		int PrimNum = 0;
-		int SecNum = 0;
-
-		for (int i=0; i<PlayerFighter->WeaponQuantity; i++)
-		if (Setup.Profile[CurrentProfile].Weapon[i] != 0) // если это оружие установлено
-		{
-
-			PlayerFighter->WeaponSetFire[i] = false;
-
-			// получаем данные, в какую группу относится
-			bool primary_fire = false;
-			bool secondary_fire = false;
-			if (Setup.Profile[CurrentProfile].WeaponControl[i] == 1 ||
-			Setup.Profile[CurrentProfile].WeaponControl[i] ==3) primary_fire = true;
-			if (Setup.Profile[CurrentProfile].WeaponControl[i] == 2 ||
-			Setup.Profile[CurrentProfile].WeaponControl[i] ==3) secondary_fire = true;
-
-			// мышка
-			if (Setup.MouseControl)
-			{
-				// primary fire
-				if (primary_fire)
-					if (SDL_MouseCurrentStatus[Setup.MousePrimary])
-					{
-						if (Setup.Profile[CurrentProfile].PrimaryWeaponFireMode == 1)
-						{
-							PlayerFighter->WeaponSetFire[i] = true;
-						}
-						else
-						{
-							PrimNum++;
-							if (PrimaryGroupCurrentFireWeaponNum == PrimNum &&
-								PrimaryGroupCurrentFireWeaponDelay <= 0.0f)
-							{
-								PrimaryGroupCurrentFireWeaponDelay = PrimTime/(PrimCount*PrimCount);
-								PlayerFighter->WeaponSetFire[i] = true;
-								PrimaryGroupCurrentFireWeaponNum ++;
-								if (PrimaryGroupCurrentFireWeaponNum > PrimCount) PrimaryGroupCurrentFireWeaponNum = 1;
-							}
-						}
+					if (Setup.Profile[CurrentProfile].WeaponControl[i] == 1 ||
+					    Setup.Profile[CurrentProfile].WeaponControl[i] ==3) {
+						PrimCount++;
+						PrimTime += PlayerFighter->Weapon[i]->NextFireTime;
 					}
 
-				// secondary fire
-				if (secondary_fire)
-					if (SDL_MouseCurrentStatus[Setup.MouseSecondary])
-					{
-						if (Setup.Profile[CurrentProfile].SecondaryWeaponFireMode == 1)
-						{
-							PlayerFighter->WeaponSetFire[i] = true;
-						}
-						else
-						{
-							SecNum++;
-							if (SecondaryGroupCurrentFireWeaponNum == SecNum &&
-								SecondaryGroupCurrentFireWeaponDelay <= 0.0f)
-							{
-								SecondaryGroupCurrentFireWeaponDelay = SecTime/(SecCount*SecCount);
-								PlayerFighter->WeaponSetFire[i] = true;
-								SecondaryGroupCurrentFireWeaponNum ++;
-								if (SecondaryGroupCurrentFireWeaponNum > SecCount) SecondaryGroupCurrentFireWeaponNum = 1;
-							}
-						}
+					if (Setup.Profile[CurrentProfile].WeaponControl[i] == 2 ||
+					    Setup.Profile[CurrentProfile].WeaponControl[i] ==3) {
+						SecCount++;
+						SecTime += PlayerFighter->Weapon[i]->NextFireTime;
 					}
 
-				// альтернативное управление
-				if (Setup.Profile[CurrentProfile].WeaponAltControl[i] == 2)
-					if (SDL_MouseCurrentStatus[Setup.Profile[CurrentProfile].WeaponAltControlData[i]])
-						PlayerFighter->WeaponSetFire[i] = true;
-			}
+				}
+
+
+			int PrimNum = 0;
+			int SecNum = 0;
+
+			for (int i=0; i<PlayerFighter->WeaponQuantity; i++)
+				if (Setup.Profile[CurrentProfile].Weapon[i] != 0) { // если это оружие установлено
+
+					PlayerFighter->WeaponSetFire[i] = false;
+
+					// получаем данные, в какую группу относится
+					bool primary_fire = false;
+					bool secondary_fire = false;
+					if (Setup.Profile[CurrentProfile].WeaponControl[i] == 1 ||
+					    Setup.Profile[CurrentProfile].WeaponControl[i] ==3) primary_fire = true;
+					if (Setup.Profile[CurrentProfile].WeaponControl[i] == 2 ||
+					    Setup.Profile[CurrentProfile].WeaponControl[i] ==3) secondary_fire = true;
+
+					// мышка
+					if (Setup.MouseControl) {
+						// primary fire
+						if (primary_fire)
+							if (SDL_MouseCurrentStatus[Setup.MousePrimary]) {
+								if (Setup.Profile[CurrentProfile].PrimaryWeaponFireMode == 1) {
+									PlayerFighter->WeaponSetFire[i] = true;
+								} else {
+									PrimNum++;
+									if (PrimaryGroupCurrentFireWeaponNum == PrimNum &&
+									    PrimaryGroupCurrentFireWeaponDelay <= 0.0f) {
+										PrimaryGroupCurrentFireWeaponDelay = PrimTime/(PrimCount*PrimCount);
+										PlayerFighter->WeaponSetFire[i] = true;
+										PrimaryGroupCurrentFireWeaponNum ++;
+										if (PrimaryGroupCurrentFireWeaponNum > PrimCount) PrimaryGroupCurrentFireWeaponNum = 1;
+									}
+								}
+							}
+
+						// secondary fire
+						if (secondary_fire)
+							if (SDL_MouseCurrentStatus[Setup.MouseSecondary]) {
+								if (Setup.Profile[CurrentProfile].SecondaryWeaponFireMode == 1) {
+									PlayerFighter->WeaponSetFire[i] = true;
+								} else {
+									SecNum++;
+									if (SecondaryGroupCurrentFireWeaponNum == SecNum &&
+									    SecondaryGroupCurrentFireWeaponDelay <= 0.0f) {
+										SecondaryGroupCurrentFireWeaponDelay = SecTime/(SecCount*SecCount);
+										PlayerFighter->WeaponSetFire[i] = true;
+										SecondaryGroupCurrentFireWeaponNum ++;
+										if (SecondaryGroupCurrentFireWeaponNum > SecCount) SecondaryGroupCurrentFireWeaponNum = 1;
+									}
+								}
+							}
+
+						// альтернативное управление
+						if (Setup.Profile[CurrentProfile].WeaponAltControl[i] == 2)
+							if (SDL_MouseCurrentStatus[Setup.Profile[CurrentProfile].WeaponAltControlData[i]])
+								PlayerFighter->WeaponSetFire[i] = true;
+					}
 
 
 #ifdef joystick
-			// джойстик
-			if (Joystick != NULL)
-			{
-				// primary fire
-				if (primary_fire)
-					if (SDL_JoystickGetButton(Joystick, Setup.JoystickPrimary) == 1)
-					{
-						if (Setup.Profile[CurrentProfile].PrimaryWeaponFireMode == 1)
-						{
-							PlayerFighter->WeaponSetFire[i] = true;
-						}
-						else
-						{
-							PrimNum++;
-							if (PrimaryGroupCurrentFireWeaponNum == PrimNum &&
-								PrimaryGroupCurrentFireWeaponDelay <= 0.0f)
-							{
-								PrimaryGroupCurrentFireWeaponDelay = PrimTime/(PrimCount*PrimCount);
-								PlayerFighter->WeaponSetFire[i] = true;
-								PrimaryGroupCurrentFireWeaponNum ++;
-								if (PrimaryGroupCurrentFireWeaponNum > PrimCount) PrimaryGroupCurrentFireWeaponNum = 1;
+					// джойстик
+					if (Joystick != nullptr) {
+						// primary fire
+						if (primary_fire)
+							if (SDL_JoystickGetButton(Joystick, Setup.JoystickPrimary) == 1) {
+								if (Setup.Profile[CurrentProfile].PrimaryWeaponFireMode == 1) {
+									PlayerFighter->WeaponSetFire[i] = true;
+								} else {
+									PrimNum++;
+									if (PrimaryGroupCurrentFireWeaponNum == PrimNum &&
+									    PrimaryGroupCurrentFireWeaponDelay <= 0.0f) {
+										PrimaryGroupCurrentFireWeaponDelay = PrimTime/(PrimCount*PrimCount);
+										PlayerFighter->WeaponSetFire[i] = true;
+										PrimaryGroupCurrentFireWeaponNum ++;
+										if (PrimaryGroupCurrentFireWeaponNum > PrimCount) PrimaryGroupCurrentFireWeaponNum = 1;
+									}
+								}
 							}
-						}
-					}
 
-				// secondary fire
-				if (secondary_fire)
-					if (SDL_JoystickGetButton(Joystick, Setup.JoystickSecondary) == 1)
-					{
-						if (Setup.Profile[CurrentProfile].SecondaryWeaponFireMode == 1)
-						{
-							PlayerFighter->WeaponSetFire[i] = true;
-						}
-						else
-						{
-							SecNum++;
-							if (SecondaryGroupCurrentFireWeaponNum == SecNum &&
-								SecondaryGroupCurrentFireWeaponDelay <= 0.0f)
-							{
-								SecondaryGroupCurrentFireWeaponDelay = SecTime/(SecCount*SecCount);
-								PlayerFighter->WeaponSetFire[i] = true;
-								SecondaryGroupCurrentFireWeaponNum ++;
-								if (SecondaryGroupCurrentFireWeaponNum > SecCount) SecondaryGroupCurrentFireWeaponNum = 1;
+						// secondary fire
+						if (secondary_fire)
+							if (SDL_JoystickGetButton(Joystick, Setup.JoystickSecondary) == 1) {
+								if (Setup.Profile[CurrentProfile].SecondaryWeaponFireMode == 1) {
+									PlayerFighter->WeaponSetFire[i] = true;
+								} else {
+									SecNum++;
+									if (SecondaryGroupCurrentFireWeaponNum == SecNum &&
+									    SecondaryGroupCurrentFireWeaponDelay <= 0.0f) {
+										SecondaryGroupCurrentFireWeaponDelay = SecTime/(SecCount*SecCount);
+										PlayerFighter->WeaponSetFire[i] = true;
+										SecondaryGroupCurrentFireWeaponNum ++;
+										if (SecondaryGroupCurrentFireWeaponNum > SecCount) SecondaryGroupCurrentFireWeaponNum = 1;
+									}
+								}
 							}
-						}
-					}
 
-				// альтернативное управление
-				if (Setup.Profile[CurrentProfile].WeaponAltControl[i] == 3)
-					if (SDL_JoystickGetButton(Joystick, Setup.Profile[CurrentProfile].WeaponAltControlData[i]) == 1)
-						PlayerFighter->WeaponSetFire[i] = true;
-			}
+						// альтернативное управление
+						if (Setup.Profile[CurrentProfile].WeaponAltControl[i] == 3)
+							if (SDL_JoystickGetButton(Joystick, Setup.Profile[CurrentProfile].WeaponAltControlData[i]) == 1)
+								PlayerFighter->WeaponSetFire[i] = true;
+					}
 #endif
 
-			// клавиатура
+					// клавиатура
 
-			// primary fire
-			if (primary_fire)
-				if (vw_GetKeys(Setup.KeyBoardPrimary))
-				{
-					if (Setup.Profile[CurrentProfile].PrimaryWeaponFireMode == 1)
-					{
-						PlayerFighter->WeaponSetFire[i] = true;
-					}
-					else
-					{
-						PrimNum++;
-						if (PrimaryGroupCurrentFireWeaponNum == PrimNum &&
-							PrimaryGroupCurrentFireWeaponDelay <= 0.0f)
-						{
-							PrimaryGroupCurrentFireWeaponDelay = PrimTime/(PrimCount*PrimCount);
-							PlayerFighter->WeaponSetFire[i] = true;
-							PrimaryGroupCurrentFireWeaponNum ++;
-							if (PrimaryGroupCurrentFireWeaponNum > PrimCount) PrimaryGroupCurrentFireWeaponNum = 1;
+					// primary fire
+					if (primary_fire)
+						if (vw_GetKeys(Setup.KeyBoardPrimary)) {
+							if (Setup.Profile[CurrentProfile].PrimaryWeaponFireMode == 1) {
+								PlayerFighter->WeaponSetFire[i] = true;
+							} else {
+								PrimNum++;
+								if (PrimaryGroupCurrentFireWeaponNum == PrimNum &&
+								    PrimaryGroupCurrentFireWeaponDelay <= 0.0f) {
+									PrimaryGroupCurrentFireWeaponDelay = PrimTime/(PrimCount*PrimCount);
+									PlayerFighter->WeaponSetFire[i] = true;
+									PrimaryGroupCurrentFireWeaponNum ++;
+									if (PrimaryGroupCurrentFireWeaponNum > PrimCount) PrimaryGroupCurrentFireWeaponNum = 1;
+								}
+							}
 						}
-					}
-				}
 
-			// secondary fire
-			if (secondary_fire)
-				if (vw_GetKeys(Setup.KeyBoardSecondary))
-				{
-					if (Setup.Profile[CurrentProfile].SecondaryWeaponFireMode == 1)
-					{
-						PlayerFighter->WeaponSetFire[i] = true;
-					}
-					else
-					{
-						SecNum++;
-						if (SecondaryGroupCurrentFireWeaponNum == SecNum &&
-							SecondaryGroupCurrentFireWeaponDelay <= 0.0f)
-						{
-							SecondaryGroupCurrentFireWeaponDelay = SecTime/(SecCount*SecCount);
-							PlayerFighter->WeaponSetFire[i] = true;
-							SecondaryGroupCurrentFireWeaponNum ++;
-							if (SecondaryGroupCurrentFireWeaponNum > SecCount) SecondaryGroupCurrentFireWeaponNum = 1;
+					// secondary fire
+					if (secondary_fire)
+						if (vw_GetKeys(Setup.KeyBoardSecondary)) {
+							if (Setup.Profile[CurrentProfile].SecondaryWeaponFireMode == 1) {
+								PlayerFighter->WeaponSetFire[i] = true;
+							} else {
+								SecNum++;
+								if (SecondaryGroupCurrentFireWeaponNum == SecNum &&
+								    SecondaryGroupCurrentFireWeaponDelay <= 0.0f) {
+									SecondaryGroupCurrentFireWeaponDelay = SecTime/(SecCount*SecCount);
+									PlayerFighter->WeaponSetFire[i] = true;
+									SecondaryGroupCurrentFireWeaponNum ++;
+									if (SecondaryGroupCurrentFireWeaponNum > SecCount) SecondaryGroupCurrentFireWeaponNum = 1;
+								}
+							}
 						}
-					}
-				}
 
-			// альтернативное управление
-			if (Setup.Profile[CurrentProfile].WeaponAltControl[i] == 1)
-				if (vw_GetKeys(Setup.Profile[CurrentProfile].WeaponAltControlData[i]))
-					PlayerFighter->WeaponSetFire[i] = true;
+					// альтернативное управление
+					if (Setup.Profile[CurrentProfile].WeaponAltControl[i] == 1)
+						if (vw_GetKeys(Setup.Profile[CurrentProfile].WeaponAltControlData[i]))
+							PlayerFighter->WeaponSetFire[i] = true;
+
+				}
 
 		}
-
-	}
 
 
 
@@ -1060,57 +1010,47 @@ void GamePlayerShip()
 	// сделать:
 	// учитывать, как работает двигатель... стоим или летим...
 	// если не аркадный режим...
-	if (GameSpaceShipControlMode != 1)
-	{
-		if (CurrentPlayerShipEnergy < GetShipEngineSystemEnergyUse(GameEngineSystem)*PlayerFighter->TimeDelta)
-		{
+	if (GameSpaceShipControlMode != 1) {
+		if (CurrentPlayerShipEnergy < GetShipEngineSystemEnergyUse(GameEngineSystem)*PlayerFighter->TimeDelta) {
 			PlayerFighter->MaxSpeed = 0.0f;
 			PlayerFighter->MaxAcceler = 0.0f;
 			PlayerFighter->MaxSpeedRotate = 0.0f;
 			// глушим двигатели
-			if (PlayerFighter->Engine != 0)
-			for (int i=0; i<PlayerFighter->EngineQuantity; i++)
-			{
-				if (PlayerFighter->Engine[i] != 0)
-					PlayerFighter->Engine[i]->IsSuppressed = true;
-			}
-			if (PlayerFighter->EngineLeft != 0)
-			for (int i=0; i<PlayerFighter->EngineLeftQuantity; i++)
-			{
-				if (PlayerFighter->EngineLeft[i] != 0)
-					PlayerFighter->EngineLeft[i]->IsSuppressed = true;
-			}
-			if (PlayerFighter->EngineRight != 0)
-			for (int i=0; i<PlayerFighter->EngineRightQuantity; i++)
-			{
-				if (PlayerFighter->EngineRight[i] != 0)
-					PlayerFighter->EngineRight[i]->IsSuppressed = true;
-			}
-		}
-		else
-		{
+			if (PlayerFighter->Engine != nullptr)
+				for (int i=0; i<PlayerFighter->EngineQuantity; i++) {
+					if (PlayerFighter->Engine[i] != nullptr)
+						PlayerFighter->Engine[i]->IsSuppressed = true;
+				}
+			if (PlayerFighter->EngineLeft != nullptr)
+				for (int i=0; i<PlayerFighter->EngineLeftQuantity; i++) {
+					if (PlayerFighter->EngineLeft[i] != nullptr)
+						PlayerFighter->EngineLeft[i]->IsSuppressed = true;
+				}
+			if (PlayerFighter->EngineRight != nullptr)
+				for (int i=0; i<PlayerFighter->EngineRightQuantity; i++) {
+					if (PlayerFighter->EngineRight[i] != nullptr)
+						PlayerFighter->EngineRight[i]->IsSuppressed = true;
+				}
+		} else {
 			PlayerFighter->MaxSpeed = GetEnginePower(GameEngineSystem)*2.0f - PlayerFighter->Weight/1000.0f;
 			PlayerFighter->MaxAcceler = GetEngineAcceleration(GameEngineSystem)*2.0f - PlayerFighter->Weight/1000.0f;
 			PlayerFighter->MaxSpeedRotate = GetEngineRotatePower(GameEngineSystem)*2.0f - PlayerFighter->Weight/1000.0f;
 			// запускаем прорисовку
-			if (PlayerFighter->Engine != 0)
-			for (int i=0; i<PlayerFighter->EngineQuantity; i++)
-			{
-				if (PlayerFighter->Engine[i] != 0)
-					PlayerFighter->Engine[i]->IsSuppressed = false;
-			}
-			if (PlayerFighter->EngineLeft != 0)
-			for (int i=0; i<PlayerFighter->EngineLeftQuantity; i++)
-			{
-				if (PlayerFighter->EngineLeft[i] != 0)
-					PlayerFighter->EngineLeft[i]->IsSuppressed = false;
-			}
-			if (PlayerFighter->EngineRight != 0)
-			for (int i=0; i<PlayerFighter->EngineRightQuantity; i++)
-			{
-				if (PlayerFighter->EngineRight[i] != 0)
-					PlayerFighter->EngineRight[i]->IsSuppressed = false;
-			}
+			if (PlayerFighter->Engine != nullptr)
+				for (int i=0; i<PlayerFighter->EngineQuantity; i++) {
+					if (PlayerFighter->Engine[i] != nullptr)
+						PlayerFighter->Engine[i]->IsSuppressed = false;
+				}
+			if (PlayerFighter->EngineLeft != nullptr)
+				for (int i=0; i<PlayerFighter->EngineLeftQuantity; i++) {
+					if (PlayerFighter->EngineLeft[i] != nullptr)
+						PlayerFighter->EngineLeft[i]->IsSuppressed = false;
+				}
+			if (PlayerFighter->EngineRight != nullptr)
+				for (int i=0; i<PlayerFighter->EngineRightQuantity; i++) {
+					if (PlayerFighter->EngineRight[i] != nullptr)
+						PlayerFighter->EngineRight[i]->IsSuppressed = false;
+				}
 			CurrentPlayerShipEnergy -= GetShipEngineSystemEnergyUse(GameEngineSystem)*PlayerFighter->TimeDelta;
 		}
 	}
@@ -1123,68 +1063,59 @@ void GamePlayerShip()
 	// сейчас получаем всю энергию для перезарядки и выстрела
 	// потом лучше будет переделать на постепенный отбор энергии
 	for (int i=0; i<PlayerFighter->WeaponQuantity; i++)
-	if (Setup.Profile[CurrentProfile].Weapon[i] != 0)
-	{
-		if (PlayerFighter->Weapon[i]->CurrentEnergyAccumulated < PlayerFighter->Weapon[i]->EnergyUse)
-		{
-			// если энергии не достаточно для зарядки орудия
-			if (CurrentPlayerShipEnergy < PlayerFighter->Weapon[i]->EnergyUse)
-			{
-				// останавливаем перезарядку оружия
-				PlayerFighter->Weapon[i]->LastFireTime += PlayerFighter->TimeDelta;
-				PlayerFighter->Weapon[i]->Fire->IsSuppressed = true;
-			}
-			else
-			{
-				// если энергии достаточно, все нормально берем ее и перезаряжаем оружие
-				PlayerFighter->Weapon[i]->CurrentEnergyAccumulated = PlayerFighter->Weapon[i]->EnergyUse;
-				CurrentPlayerShipEnergy -= PlayerFighter->Weapon[i]->EnergyUse;
+		if (Setup.Profile[CurrentProfile].Weapon[i] != 0) {
+			if (PlayerFighter->Weapon[i]->CurrentEnergyAccumulated < PlayerFighter->Weapon[i]->EnergyUse) {
+				// если энергии не достаточно для зарядки орудия
+				if (CurrentPlayerShipEnergy < PlayerFighter->Weapon[i]->EnergyUse) {
+					// останавливаем перезарядку оружия
+					PlayerFighter->Weapon[i]->LastFireTime += PlayerFighter->TimeDelta;
+					PlayerFighter->Weapon[i]->Fire->IsSuppressed = true;
+				} else {
+					// если энергии достаточно, все нормально берем ее и перезаряжаем оружие
+					PlayerFighter->Weapon[i]->CurrentEnergyAccumulated = PlayerFighter->Weapon[i]->EnergyUse;
+					CurrentPlayerShipEnergy -= PlayerFighter->Weapon[i]->EnergyUse;
+				}
 			}
 		}
-	}
 
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// питание других (защитных) систем
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (CurrentPlayerShipEnergy >= GetShipEngineSystemEnergyUse(GameEngineSystem)*PlayerFighter->TimeDelta)
-	{
+	if (CurrentPlayerShipEnergy >= GetShipEngineSystemEnergyUse(GameEngineSystem)*PlayerFighter->TimeDelta) {
 
-		switch (GameAdvancedProtectionSystem)
-		{
-			// нано роботы
-			case 1:
-				// восстанавливаем на 0.5% в секунду
-				if (PlayerFighter->Strength < PlayerFighter->StrengthStart)
-				{
-					CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem)*PlayerFighter->TimeDelta;
-					PlayerFighter->Strength += (PlayerFighter->StrengthStart/200.0f) * PlayerFighter->TimeDelta;
-					if (PlayerFighter->Strength > PlayerFighter->StrengthStart) PlayerFighter->Strength = PlayerFighter->StrengthStart;
-				}
-				break;
-			// спец защитный слой
-			case 2:	break; // ничего не делаем
-			// щит
-			case 3:
-				// восстанавливаем полностью за 4 секунды
-				if (ShildEnergyStatus < 1.0f)
-				{
-					CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem)*PlayerFighter->TimeDelta;
-					ShildEnergyStatus += 0.02f*PlayerFighter->TimeDelta;
-					if (ShildEnergyStatus > 1.0f) ShildEnergyStatus = 1.0f;
-				}
-				break;
-			// отражатель
-			case 4:
-				// восстанавливаем полностью за 2 секунды
-				if (ShildEnergyStatus < 1.0f)
-				{
-					CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem)*PlayerFighter->TimeDelta;
-					ShildEnergyStatus += 0.03f*PlayerFighter->TimeDelta;
-					if (ShildEnergyStatus > 1.0f) ShildEnergyStatus = 1.0f;
-				}
-				break;
+		switch (GameAdvancedProtectionSystem) {
+		// нано роботы
+		case 1:
+			// восстанавливаем на 0.5% в секунду
+			if (PlayerFighter->Strength < PlayerFighter->StrengthStart) {
+				CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem)*PlayerFighter->TimeDelta;
+				PlayerFighter->Strength += (PlayerFighter->StrengthStart/200.0f) * PlayerFighter->TimeDelta;
+				if (PlayerFighter->Strength > PlayerFighter->StrengthStart) PlayerFighter->Strength = PlayerFighter->StrengthStart;
+			}
+			break;
+		// спец защитный слой
+		case 2:
+			break; // ничего не делаем
+		// щит
+		case 3:
+			// восстанавливаем полностью за 4 секунды
+			if (ShildEnergyStatus < 1.0f) {
+				CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem)*PlayerFighter->TimeDelta;
+				ShildEnergyStatus += 0.02f*PlayerFighter->TimeDelta;
+				if (ShildEnergyStatus > 1.0f) ShildEnergyStatus = 1.0f;
+			}
+			break;
+		// отражатель
+		case 4:
+			// восстанавливаем полностью за 2 секунды
+			if (ShildEnergyStatus < 1.0f) {
+				CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem)*PlayerFighter->TimeDelta;
+				ShildEnergyStatus += 0.03f*PlayerFighter->TimeDelta;
+				if (ShildEnergyStatus > 1.0f) ShildEnergyStatus = 1.0f;
+			}
+			break;
 		}
 	}
 
@@ -1192,15 +1123,13 @@ void GamePlayerShip()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// управление визуализацией щитов-дефлекторов
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Shild1 != 0)
-	{
+	if (Shild1 != nullptr) {
 		Shild1->MoveSystem(PlayerFighter->Location+PlayerFighter->OBBLocation);
 		Shild1->SetStartLocation(PlayerFighter->Location+PlayerFighter->OBBLocation);
 		Shild1->RotateSystemAndParticlesByAngle(PlayerFighter->Rotation);
 		Shild1->ParticlesPerSec = (int)(40*ShildEnergyStatus*ShildRadius);
 	}
-	if (Shild2 != 0)
-	{
+	if (Shild2 != nullptr) {
 		Shild2->MoveSystem(PlayerFighter->Location+PlayerFighter->OBBLocation);
 		Shild2->SetStartLocation(PlayerFighter->Location+PlayerFighter->OBBLocation);
 		Shild2->RotateSystemAndParticlesByAngle(PlayerFighter->Rotation);

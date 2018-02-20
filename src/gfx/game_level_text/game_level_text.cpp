@@ -36,7 +36,7 @@ CGameLvlText::CGameLvlText()
 {
 	TimeLastUpdate = -1.0f;
 	Lifetime = -1.0f;
-	DrawText = 0;
+	DrawText = nullptr;
 	Color = 0;
 
 	PosX = PosY = 0;
@@ -51,7 +51,10 @@ CGameLvlText::CGameLvlText()
 //-----------------------------------------------------------------------------
 CGameLvlText::~CGameLvlText()
 {
-	if (DrawText != 0){delete [] DrawText; DrawText = 0;}
+	if (DrawText != nullptr) {
+		delete [] DrawText;
+		DrawText = nullptr;
+	}
 	DetachGameLvlText(this);
 }
 
@@ -62,7 +65,10 @@ CGameLvlText::~CGameLvlText()
 bool CGameLvlText::Update(float Time)
 {
 	// первый раз... просто берем время
-	if (TimeLastUpdate == -1.0f) {TimeLastUpdate = Time;return true;}
+	if (TimeLastUpdate == -1.0f) {
+		TimeLastUpdate = Time;
+		return true;
+	}
 
 	// Time - это абсолютное время, вычисляем дельту
 	float TimeDelta = Time - TimeLastUpdate;
@@ -73,8 +79,7 @@ bool CGameLvlText::Update(float Time)
 
 
 	// проверяем, сколько объекту жить, если нужно...-1.0f  - проверка не нужна
-	if (Lifetime > -1.0f)
-	{
+	if (Lifetime > -1.0f) {
 		// считаем, сколько осталось жить
 		Lifetime -= TimeDelta;
 		// если уже ничего не осталось - его нужно уничтожить
@@ -82,9 +87,10 @@ bool CGameLvlText::Update(float Time)
 	}
 
 
-	if (DrawText == 0) return false;
+	if (DrawText == nullptr)
+		return false;
 
-    return true;
+	return true;
 }
 
 
@@ -96,30 +102,40 @@ bool CGameLvlText::Update(float Time)
 //-----------------------------------------------------------------------------
 void CGameLvlText::Draw()
 {
-	if (DrawText != 0)
-	{
+	if (DrawText != nullptr) {
 		float R, G, B;
 
-		switch (Color)
-		{
-			default: // белый
-				R=1.0f;G=1.0f;B=1.0f;
-				break;
-			case 1: // желтый
-				R=1.0f;G=1.0f;B=0.0f;
-				break;
-			case 2: // красный
-				R=1.0f;G=0.0f;B=0.0f;
-				break;
-			case 3: // зеленый
-				R=0.0f;G=1.0f;B=0.0f;
-				break;
-			case 4: // оранжевый
-				R=1.0f;G=0.5f;B=0.0f;
-				break;
-			case 5: // серый
-				R=0.5f;G=0.5f;B=0.5f;
-				break;
+		switch (Color) {
+		default: // белый
+			R=1.0f;
+			G=1.0f;
+			B=1.0f;
+			break;
+		case 1: // желтый
+			R=1.0f;
+			G=1.0f;
+			B=0.0f;
+			break;
+		case 2: // красный
+			R=1.0f;
+			G=0.0f;
+			B=0.0f;
+			break;
+		case 3: // зеленый
+			R=0.0f;
+			G=1.0f;
+			B=0.0f;
+			break;
+		case 4: // оранжевый
+			R=1.0f;
+			G=0.5f;
+			B=0.0f;
+			break;
+		case 5: // серый
+			R=0.5f;
+			G=0.5f;
+			B=0.5f;
+			break;
 		}
 
 		vw_DrawFont(PosX, PosY, 0, 0, 1.0f, R,G,B, 1.0f, DrawText);

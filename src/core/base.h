@@ -33,23 +33,23 @@
 
 
 #ifdef WIN32
-	#define WIN32_LEAN_AND_MEAN
-	#define _CRT_SECURE_NO_DEPRECATE // выключаем задалбывание с безопасными функциями
-	#include <windows.h>
-	#include <shellapi.h>
-	#include <stdio.h>
+#define WIN32_LEAN_AND_MEAN
+#define _CRT_SECURE_NO_DEPRECATE // выключаем задалбывание с безопасными функциями
+#include <windows.h>
+#include <shellapi.h>
+#include <stdio.h>
 #endif
 
 #if defined(__APPLE__) && defined(__MACH__)
-	#define __glext_h_  // Don't let gl.h include glext.h
-	#include <OpenGL/gl.h>	// Header File For The OpenGL Library
-	#include <OpenGL/glu.h>	// Header File For The GLu Library
-	#undef __glext_h_
+#define __glext_h_  // Don't let gl.h include glext.h
+#include <OpenGL/gl.h>	// Header File For The OpenGL Library
+#include <OpenGL/glu.h>	// Header File For The GLu Library
+#undef __glext_h_
 #else
-	#define __glext_h_  // Don't let gl.h include glext.h
-	#include <GL/gl.h>	// Header File For The OpenGL Library
-	#include <GL/glu.h>	// Header File For The GLu Library
-	#undef __glext_h_
+#define __glext_h_  // Don't let gl.h include glext.h
+#include <GL/gl.h>	// Header File For The OpenGL Library
+#include <GL/glu.h>	// Header File For The GLu Library
+#undef __glext_h_
 #endif
 
 #include <stdlib.h> // rand, ...
@@ -74,43 +74,42 @@
 
 // декларируем типы данных, которых может не быть
 #ifndef BYTE
-	#define BYTE Uint8
+#define BYTE Uint8
 #endif
 #ifndef WORD
-	#define WORD Uint16
+#define WORD Uint16
 #endif
 #ifndef DWORD
-	#define DWORD Uint32
+#define DWORD Uint32
 #endif
 #ifndef BOOL
-	#define BOOL bool
+#define BOOL bool
 #endif
 
-	struct RECT
-	{
-		int left;
-		int top;
-		int right;
-		int bottom;
-	};
-	inline void SetRect(RECT *rect, int left, int top, int right, int bottom)
-	{
-		rect->right = right;
-		rect->top = top;
-		rect->left = left;
-		rect->bottom =bottom;
-	}
+struct RECT {
+	int left;
+	int top;
+	int right;
+	int bottom;
+};
+inline void SetRect(RECT *rect, int left, int top, int right, int bottom)
+{
+	rect->right = right;
+	rect->top = top;
+	rect->left = left;
+	rect->bottom =bottom;
+}
 
 
-	#include <valarray> // memcpy
-	#include <stdarg.h> // va_start
+#include <valarray> // memcpy
+#include <stdarg.h> // va_start
 
-	#include <sys/stat.h> // mkdir
-	#include <sys/types.h> // mkdir
+#include <sys/stat.h> // mkdir
+#include <sys/types.h> // mkdir
 
 
 #ifndef MAX_PATH
-	#define MAX_PATH 1024
+#define MAX_PATH 1024
 #endif // MAX_PATH
 
 

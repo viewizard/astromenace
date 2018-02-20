@@ -75,9 +75,9 @@ extern CSpaceStars *psSpaceStatic;
 extern VECTOR3D GamePoint;
 extern VECTOR3D GameCameraMovement;
 
-extern  sVideoModes *VideoModes;
-extern  int VideoModesNum;
-extern  sVideoModes CurrentVideoMode;
+extern sVideoModes *VideoModes;
+extern int VideoModesNum;
+extern sVideoModes CurrentVideoMode;
 
 extern bool LoadedTypes[1000];
 extern char ConfigFileName[MAX_PATH];
@@ -97,8 +97,7 @@ void CodeXOR(char *Text, char *Key, int Count);
 
 #ifdef fontconfig
 
-struct sFontList
-{
+struct sFontList {
 	char *FontTitle;
 	char *FontFileName;
 };
@@ -107,8 +106,7 @@ extern sFontList *FontList;
 
 #else
 
-struct sFontList
-{
+struct sFontList {
 	const char *FontTitle;
 	const char *FontFileName;
 };
@@ -134,16 +132,15 @@ const sFontList FontList[FontQuantity] =
 };
 */
 const int FontQuantity = 8;
-const sFontList FontList[FontQuantity] =
-{
-{"Linux Biolinum", "font/LinBiolinumBold.ttf"},
-{"Linux Libertine", "font/LinLibertineBold.ttf"},
-{"Liberation Mono", "font/LiberationMono-Bold.ttf"},
-{"Liberation Sans", "font/LiberationSans-Bold.ttf"},
-{"Liberation Serif", "font/LiberationSerif-Bold.ttf"},
-{"FreeFont Mono", "font/FreeMonoBold.ttf"},
-{"FreeFont Sans", "font/FreeSansBold.ttf"},
-{"FreeFont Serif", "font/FreeSerifBold.ttf"},
+const sFontList FontList[FontQuantity] = {
+	{"Linux Biolinum", "font/LinBiolinumBold.ttf"},
+	{"Linux Libertine", "font/LinLibertineBold.ttf"},
+	{"Liberation Mono", "font/LiberationMono-Bold.ttf"},
+	{"Liberation Sans", "font/LiberationSans-Bold.ttf"},
+	{"Liberation Serif", "font/LiberationSerif-Bold.ttf"},
+	{"FreeFont Mono", "font/FreeMonoBold.ttf"},
+	{"FreeFont Sans", "font/FreeSansBold.ttf"},
+	{"FreeFont Serif", "font/FreeSerifBold.ttf"},
 };
 
 #endif //fontconfig

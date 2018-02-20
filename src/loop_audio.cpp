@@ -31,69 +31,67 @@
 //------------------------------------------------------------------------------------
 // локальная структура данных 3D sfx
 //------------------------------------------------------------------------------------
-struct GameSoundData
-{
+struct GameSoundData {
 	// имя звукового файла
 	const	char *FileName;
 	// корректировка громкости
 	float	VolumeCorrection;
 	// номер группы
-	int		Group;
+	int	Group;
 	// макс. кол-во одновременно проигрываемых звуков в группе
-	int		GroupCount;
+	int	GroupCount;
 	// номер подгруппы
-	int		SubGroup;
+	int	SubGroup;
 	// макс. кол-во одновременно проигрываемых звуков в подгруппе
-	int		SubGroupCount;
+	int	SubGroupCount;
 	// приоритет звука в группе (не подгруппе!) от 1 до ... (1-самый высокий)
-	int		Priority;
+	int	Priority;
 };
 
 
 
 
 // перечень имен файлов игровых звуков
-static GameSoundData GameSoundList[] =
-{
+static GameSoundData GameSoundList[] = {
 
-{"sfx/weapon1probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, механическое оружие (Kinetic)
-{"sfx/weapon2probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, "слабое" энергетическое оружие (Ion, Plasma)
-{"sfx/weapon3probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, "лучевое/среднее" энергетическое оружие (Maser, Laser)
-{"sfx/weapon4probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, "мощьное" энергетическое оружие (Antimatter, Gauss)
-{"sfx/weapon5probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, пусковые установки (ракеты, торпеды, бомбы)
+	{"sfx/weapon1probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, механическое оружие (Kinetic)
+	{"sfx/weapon2probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, "слабое" энергетическое оружие (Ion, Plasma)
+	{"sfx/weapon3probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, "лучевое/среднее" энергетическое оружие (Maser, Laser)
+	{"sfx/weapon4probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, "мощьное" энергетическое оружие (Antimatter, Gauss)
+	{"sfx/weapon5probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, пусковые установки (ракеты, торпеды, бомбы)
 
-{"sfx/explosion1.wav", 1.0f, 2, 6, 1, 4, 1},		// малый взрыв: ракеты
-{"sfx/explosion2.wav", 1.0f, 2, 6, 1, 4, 1},		// взрыв (обычный): торпеды, истребители землян и пиратов
-{"sfx/explosion3.wav", 1.0f, 2, 6, 1, 4, 1},		// взрыв (энергетический): ядерные бомбы, корабли пришельцев
+	{"sfx/explosion1.wav", 1.0f, 2, 6, 1, 4, 1},	// малый взрыв: ракеты
+	{"sfx/explosion2.wav", 1.0f, 2, 6, 1, 4, 1},	// взрыв (обычный): торпеды, истребители землян и пиратов
+	{"sfx/explosion3.wav", 1.0f, 2, 6, 1, 4, 1},	// взрыв (энергетический): ядерные бомбы, корабли пришельцев
 
-{"sfx/weaponfire1.wav", 0.7f, 1, 8, 2, 4, 4},	// выстрел, Kinetic 1
-{"sfx/weaponfire2.wav", 0.65f, 1, 8, 2, 4, 4},	// выстрел, Kinetic 2
-{"sfx/weaponfire3.wav", 0.7f, 1, 8, 2, 4, 4},	// выстрел, Kinetic 3
-{"sfx/weaponfire4.wav", 1.0f, 1, 8, 2, 4, 4},	// выстрел, Kinetic 4
-{"sfx/weaponfire5.wav", 1.0f, 1, 8, 2, 4, 4},	// выстрел, Ion 1
-{"sfx/weaponfire6.wav", 1.0f, 1, 8, 2, 4, 4},	// выстрел, Ion 2
-{"sfx/weaponfire7.wav", 0.7f, 1, 8, 2, 4, 4},	// выстрел, Ion 3
-{"sfx/weaponfire8.wav", 0.85f, 1, 8, 2, 4, 4},	// выстрел, Plasma 1
-{"sfx/weaponfire9.wav", 0.95f, 1, 8, 2, 4, 4},	// выстрел, Plasma 2
-{"sfx/weaponfire10.wav", 0.9f, 1, 8, 2, 4, 4},	// выстрел, Plasma 3
-{"sfx/weaponfire11.wav", 0.6f, 1, 8, 2, 4, 1},	// выстрел, Maser 1 - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
-{"sfx/weaponfire12.wav", 0.55f, 1, 8, 2, 4, 1},	// выстрел, Maser 2 - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
-{"sfx/weaponfire13.wav", 0.9f, 1, 8, 2, 4, 4},	// выстрел, Antimatter
-{"sfx/weaponfire14.wav", 0.8f, 1, 8, 2, 4, 1},	// выстрел, Laser - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
-{"sfx/weaponfire15.wav", 0.8f, 1, 8, 2, 4, 4},	// выстрел, Gauss
-{"sfx/weaponfire16.wav", 1.0f, 1, 8, 3, 2, 2},	// выстрел, одиночная ракета; приоритет выше, не красиво если снимаем "хвост" эффекта
-{"sfx/weaponfire17.wav", 1.0f, 1, 8, 3, 2, 3},	// выстрел, одна ракета из группы; приоритет выше, не красиво если снимаем "хвост" эффекта
-{"sfx/weaponfire18.wav", 1.0f, 1, 8, 3, 2, 2},	// выстрел, торпеда; приоритет выше, не красиво если снимаем "хвост" эффекта
-{"sfx/weaponfire19.wav", 1.0f, 1, 8, 3, 2, 2},	// выстрел, бомба; приоритет выше, не красиво если снимаем "хвост" эффекта
+	{"sfx/weaponfire1.wav", 0.7f, 1, 8, 2, 4, 4},	// выстрел, Kinetic 1
+	{"sfx/weaponfire2.wav", 0.65f, 1, 8, 2, 4, 4},	// выстрел, Kinetic 2
+	{"sfx/weaponfire3.wav", 0.7f, 1, 8, 2, 4, 4},	// выстрел, Kinetic 3
+	{"sfx/weaponfire4.wav", 1.0f, 1, 8, 2, 4, 4},	// выстрел, Kinetic 4
+	{"sfx/weaponfire5.wav", 1.0f, 1, 8, 2, 4, 4},	// выстрел, Ion 1
+	{"sfx/weaponfire6.wav", 1.0f, 1, 8, 2, 4, 4},	// выстрел, Ion 2
+	{"sfx/weaponfire7.wav", 0.7f, 1, 8, 2, 4, 4},	// выстрел, Ion 3
+	{"sfx/weaponfire8.wav", 0.85f, 1, 8, 2, 4, 4},	// выстрел, Plasma 1
+	{"sfx/weaponfire9.wav", 0.95f, 1, 8, 2, 4, 4},	// выстрел, Plasma 2
+	{"sfx/weaponfire10.wav", 0.9f, 1, 8, 2, 4, 4},	// выстрел, Plasma 3
+	{"sfx/weaponfire11.wav", 0.6f, 1, 8, 2, 4, 1},	// выстрел, Maser 1 - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
+	{"sfx/weaponfire12.wav", 0.55f, 1, 8, 2, 4, 1},	// выстрел, Maser 2 - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
+	{"sfx/weaponfire13.wav", 0.9f, 1, 8, 2, 4, 4},	// выстрел, Antimatter
+	{"sfx/weaponfire14.wav", 0.8f, 1, 8, 2, 4, 1},	// выстрел, Laser - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
+	{"sfx/weaponfire15.wav", 0.8f, 1, 8, 2, 4, 4},	// выстрел, Gauss
+	{"sfx/weaponfire16.wav", 1.0f, 1, 8, 3, 2, 2},	// выстрел, одиночная ракета; приоритет выше, не красиво если снимаем "хвост" эффекта
+	{"sfx/weaponfire17.wav", 1.0f, 1, 8, 3, 2, 3},	// выстрел, одна ракета из группы; приоритет выше, не красиво если снимаем "хвост" эффекта
+	{"sfx/weaponfire18.wav", 1.0f, 1, 8, 3, 2, 2},	// выстрел, торпеда; приоритет выше, не красиво если снимаем "хвост" эффекта
+	{"sfx/weaponfire19.wav", 1.0f, 1, 8, 3, 2, 2},	// выстрел, бомба; приоритет выше, не красиво если снимаем "хвост" эффекта
 
 
-{"sfx/kinetichit.wav", 1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Kinetic снарядов
-{"sfx/ionhit.wav",		1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Ion снарядов
-{"sfx/plasmahit.wav",	1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Plasma снарядов
-{"sfx/antimaterhit.wav",1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Antimatter снарядов
-{"sfx/gausshit.wav",	1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Gauss снарядов
+	{"sfx/kinetichit.wav", 1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Kinetic снарядов
+	{"sfx/ionhit.wav", 1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Ion снарядов
+	{"sfx/plasmahit.wav", 1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Plasma снарядов
+	{"sfx/antimaterhit.wav",1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Antimatter снарядов
+	{"sfx/gausshit.wav", 1.0f, 2, 6, 2, 2, 10},	// попадание и "разваливание" снаряда о корпус объекта, для Gauss снарядов
 
-{"sfx/explosion4.wav", 1.0f, 2, 6, 1, 4, 1},		// малый взрыв: астероиды
+	{"sfx/explosion4.wav", 1.0f, 2, 6, 1, 4, 1},	// малый взрыв: астероиды
 
 };
 #define GameSoundQuantity sizeof(GameSoundList)/sizeof(GameSoundList[0])
@@ -104,8 +102,7 @@ static GameSoundData GameSoundList[] =
 //------------------------------------------------------------------------------------
 // локальная структура данных 2D sfx
 //------------------------------------------------------------------------------------
-struct Sound2dData
-{
+struct Sound2dData {
 	// имя звукового файла
 	const	char *FileName;
 	// корректировка громкости
@@ -115,41 +112,39 @@ struct Sound2dData
 };
 
 // перечень имен файлов звуков для меню
-static Sound2dData MenuSoundNames[] =
-{
-{"sfx/menu_onbutton.wav", 0.4f, false},	// навели на кнопку
-{"sfx/menu_click.wav", 0.6f, false},		// нажали на кнопку
-{"sfx/menu_new.wav", 1.0f, true},			// меняем меню
-{"sfx/menu_taping.wav", 0.8f, true},		// набор текста-названия профайла
-{"sfx/menu_online.wav", 0.75f, true},		// стоим над профайлом-миссией
-{"sfx/menu_selectline.wav", 1.0f, true},	// выбрали профайл-миссию
-{"sfx/menu_nclick.wav", 1.0f, false},		// не можем нажать на кнопку, но жмем
-{"sfx/drag_error.wav", 1.0f, true},		// не можем установить в слот
-{"sfx/drag_offslot.wav", 0.65f, true},		// снимаем со слота оружие
-{"sfx/drag_onslot.wav", 0.82f, true},		// устанавливаем в слот оружие
-{"sfx/drag_release.wav", 0.6f, true},		// освобождаем курсор от оружия, если тянули
-{"sfx/game_showmenu.wav", 1.0f, false},	// проказываем меню в игре (звук во время его появления)
-{"sfx/game_hidemenu.wav", 1.0f, false},	// скрываем меню в игре (звук во время его исчезновения)
-{"sfx/lowlife.wav", 1.0f, true},			// сирена или что-то подобное, когда менее 10% жизни остается (зацикленный небольшой фрагмент)
-{"sfx/menu_onbutton2.wav", 0.15f, false},	// навели на малую кнопку
+static Sound2dData MenuSoundNames[] = {
+	{"sfx/menu_onbutton.wav", 0.4f, false},		// навели на кнопку
+	{"sfx/menu_click.wav", 0.6f, false},		// нажали на кнопку
+	{"sfx/menu_new.wav", 1.0f, true},		// меняем меню
+	{"sfx/menu_taping.wav", 0.8f, true},		// набор текста-названия профайла
+	{"sfx/menu_online.wav", 0.75f, true},		// стоим над профайлом-миссией
+	{"sfx/menu_selectline.wav", 1.0f, true},	// выбрали профайл-миссию
+	{"sfx/menu_nclick.wav", 1.0f, false},		// не можем нажать на кнопку, но жмем
+	{"sfx/drag_error.wav", 1.0f, true},		// не можем установить в слот
+	{"sfx/drag_offslot.wav", 0.65f, true},		// снимаем со слота оружие
+	{"sfx/drag_onslot.wav", 0.82f, true},		// устанавливаем в слот оружие
+	{"sfx/drag_release.wav", 0.6f, true},		// освобождаем курсор от оружия, если тянули
+	{"sfx/game_showmenu.wav", 1.0f, false},		// проказываем меню в игре (звук во время его появления)
+	{"sfx/game_hidemenu.wav", 1.0f, false},		// скрываем меню в игре (звук во время его исчезновения)
+	{"sfx/lowlife.wav", 1.0f, true},		// сирена или что-то подобное, когда менее 10% жизни остается (зацикленный небольшой фрагмент)
+	{"sfx/menu_onbutton2.wav", 0.15f, false},	// навели на малую кнопку
 };
 #define MenuSoundQuantity sizeof(MenuSoundNames)/sizeof(MenuSoundNames[0])
 
 
 
 // перечень имен файлов звуков для меню
-static Sound2dData VoiceNames[] =
-{
-{"13_Attention.wav", 1.0f, true},
-{"13_EngineMalfunction.wav", 1.0f, true},
-{"13_MissileDetected.wav", 1.0f, true},//++
-{"13_PowerSupplyReestablished.wav", 1.0f, true},
-{"13_PrepareForAction.wav", 1.0f, true},//++
-{"13_ReactorMalfunction.wav", 1.0f, true},//++
-{"13_Warning.wav", 1.0f, true},//++
-{"13_WeaponDamaged.wav", 1.0f, true},//++
-{"13_WeaponDestroyed.wav", 1.0f, true},//++
-{"13_WeaponMalfunction.wav", 1.0f, true},//++
+static Sound2dData VoiceNames[] = {
+	{"13_Attention.wav", 1.0f, true},
+	{"13_EngineMalfunction.wav", 1.0f, true},
+	{"13_MissileDetected.wav", 1.0f, true},//++
+	{"13_PowerSupplyReestablished.wav", 1.0f, true},
+	{"13_PrepareForAction.wav", 1.0f, true},//++
+	{"13_ReactorMalfunction.wav", 1.0f, true},//++
+	{"13_Warning.wav", 1.0f, true},//++
+	{"13_WeaponDamaged.wav", 1.0f, true},//++
+	{"13_WeaponDestroyed.wav", 1.0f, true},//++
+	{"13_WeaponMalfunction.wav", 1.0f, true},//++
 };
 #define VoiceQuantity sizeof(VoiceNames)/sizeof(VoiceNames[0])
 
@@ -158,16 +153,14 @@ static Sound2dData VoiceNames[] =
 
 
 // перечень имен файлов музыки
-const char *GameMusicNames[] =
-{
-"music/menu.ogg",			// музыка в меню
-"music/intro.ogg",			// музыка в заставках перед миссиями
-"music/game.ogg",			// музыка в игре
-"music/boss-loop.ogg",		// музыка в игре, когда подходим к опастному участку
-"music/missionfailed.ogg",	// музыка в игре, когда убили (20 секунд, зацикленная!!!)
-
+const char *GameMusicNames[] = {
+	"music/menu.ogg",			// музыка в меню
+	"music/intro.ogg",			// музыка в заставках перед миссиями
+	"music/game.ogg",			// музыка в игре
+	"music/boss-loop.ogg",		// музыка в игре, когда подходим к опастному участку
+	"music/missionfailed.ogg",	// музыка в игре, когда убили (20 секунд, зацикленная!!!)
 // вставки для тем
-"music/boss-intro.ogg",	// музыка в игре, когда подходим к опастному участку
+	"music/boss-intro.ogg",	// музыка в игре, когда подходим к опастному участку
 
 };
 #define MusicQuantity sizeof(GameMusicNames)/sizeof(GameMusicNames[0])
@@ -198,7 +191,8 @@ int CurrentPlayingMusic = -1; //если вулючаем громкость с 
 //------------------------------------------------------------------------------------
 bool InitAudio()
 {
-	if (!vw_InitSound()) return false;
+	if (!vw_InitSound())
+		return false;
 
 	for (unsigned int i=0; i<MusicQuantity; i++)
 		MusicList[i] = -1;
@@ -236,57 +230,47 @@ void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime)
 	// в начале проигрывания, а потом вызывать луп часть
 
 	bool MusicLoop = true;
-	const char *LoopFileName = 0;
+	const char *LoopFileName = nullptr;
 	const char *CurrentPlayingMusicName = GameMusicNames[CurrentPlayingMusic];
 	float MusicCorrection = 1.0f;
 
 
-	switch (StartMusic)
-	{
-		case 2:
-			if (GameMainMusicSet) CurrentPlayingMusicName = GameMainMusic;
-			break;
-
-		case 3:
-			if (GameBossMusicSet)
-			{
-				CurrentPlayingMusicName = GameBossMusic;
-			}
-			else
-			{
-				CurrentPlayingMusic = 5; MusicLoop = false; LoopFileName = GameMusicNames[StartMusic];
-			}
-
-			break;
-
-		case 4:
-			if (GameDeathMusicSet)
-			{
-				CurrentPlayingMusicName = GameDeathMusic;
-			}
-			else
-			{
-				MusicCorrection = 0.7f;
-			}
-			break;
+	switch (StartMusic) {
+	case 2:
+		if (GameMainMusicSet)
+			CurrentPlayingMusicName = GameMainMusic;
+		break;
+	case 3:
+		if (GameBossMusicSet) {
+			CurrentPlayingMusicName = GameBossMusic;
+		} else {
+			CurrentPlayingMusic = 5;
+			MusicLoop = false;
+			LoopFileName = GameMusicNames[StartMusic];
+		}
+		break;
+	case 4:
+		if (GameDeathMusicSet)
+			CurrentPlayingMusicName = GameDeathMusic;
+		else
+			MusicCorrection = 0.7f;
+		break;
 	}
 
 
 
 
-	if (Setup.Music_check) //если можно играть
-	if (Setup.MusicSw) // и громкость не нулевая
-	if (vw_FindMusicByNum(MusicList[CurrentPlayingMusic]) == 0) // если это еще не играем
-	{
+	if (Setup.Music_check && //если можно играть
+	    Setup.MusicSw && // и громкость не нулевая
+	    (vw_FindMusicByNum(MusicList[CurrentPlayingMusic]) == nullptr)) { // если это еще не играем
 
 		// если что-то играем, нужно поставить чтобы уходило по громкости
-		if (vw_GetMusicIsPlaying())
-		{
-			for (unsigned int i=0; i<MusicQuantity; i++)
-			if (vw_FindMusicByNum(MusicList[i]) != 0)
-			{
-				vw_FindMusicByNum(MusicList[i])->FadeOut(FadeOutTime);
-				MusicList[i] = -1;
+		if (vw_GetMusicIsPlaying()) {
+			for (unsigned int i = 0; i < MusicQuantity; i++) {
+				if (vw_FindMusicByNum(MusicList[i]) != nullptr) {
+					vw_FindMusicByNum(MusicList[i])->FadeOut(FadeOutTime);
+					MusicList[i] = -1;
+				}
 			}
 		}
 
@@ -298,14 +282,15 @@ void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime)
 		MusicList[CurrentPlayingMusic] = Music->Num;
 
 		// пытаемся загрузить и играть
-		if (!Music->Play(CurrentPlayingMusicName, 0.0f, MusicCorrection*(Setup.MusicSw/10.0f), MusicLoop, LoopFileName))
-		{
-			vw_ReleaseMusic(Music); Music = 0;
+		if (!Music->Play(CurrentPlayingMusicName, 0.0f, MusicCorrection*(Setup.MusicSw/10.0f),
+				 MusicLoop, LoopFileName)) {
+			vw_ReleaseMusic(Music);
 			MusicList[CurrentPlayingMusic] = -1;
 			CurrentPlayingMusic = -1;
-		}
-		else // играем, ставим плавное появление громкости
+		} else {
+			// играем, ставим плавное появление громкости
 			Music->FadeIn(1.0f, FadeInTime);
+		}
 	}
 
 
@@ -319,19 +304,19 @@ void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime)
 // установка громкости на все 2д звуки
 void Audio_SetSound2DMainVolume(float NewMainVolume)
 {
-	for (unsigned int i=0; i<MenuSoundQuantity; i++)
-	{
+	for (unsigned int i=0; i<MenuSoundQuantity; i++) {
 		eSound* Tmp = vw_FindSoundByName(MenuSoundNames[i].FileName);
-		if (Tmp != 0) Tmp->SetMainVolume(NewMainVolume);
+		if (Tmp != nullptr)
+			Tmp->SetMainVolume(NewMainVolume);
 	}
 }
 // установка громкости на все голосовые звуки
 void Audio_SetVoiceMainVolume(float NewMainVolume)
 {
-	for (unsigned int i=0; i<VoiceQuantity; i++)
-	{
+	for (unsigned int i=0; i<VoiceQuantity; i++) {
 		eSound* Tmp = vw_FindSoundByName(vw_GetText(VoiceNames[i].FileName, Setup.VoiceLanguage));
-		if (Tmp != 0) Tmp->SetMainVolume(NewMainVolume);
+		if (Tmp != nullptr)
+			Tmp->SetMainVolume(NewMainVolume);
 	}
 }
 
@@ -343,9 +328,10 @@ void Audio_SetVoiceMainVolume(float NewMainVolume)
 //------------------------------------------------------------------------------------
 int Audio_PlaySound2D(unsigned int SoundID, float fVol, bool Loop)
 {
-	if (!Setup.Sound_check) return 0;
-	if (!Setup.SoundSw) return 0;
-	if (SoundID > MenuSoundQuantity) return 0;
+	if (!Setup.Sound_check ||
+	    !Setup.SoundSw ||
+	    (SoundID > MenuSoundQuantity))
+		return 0;
 
 	// т.к. у нас со смещением же в 1 идет
 	SoundID --;
@@ -354,23 +340,20 @@ int Audio_PlaySound2D(unsigned int SoundID, float fVol, bool Loop)
 
 	// если это звук меню и мы его игрываем, его надо перезапустить
 	eSound* Tmp = vw_FindSoundByName(MenuSoundNames[SoundID].FileName);
-	if (Tmp != 0)
-	{
+	if (Tmp != nullptr) {
 		Tmp->Replay();
 		return Tmp->Num;
 	}
 
 
 	// создаем новый источник и проигрываем его
-	eSound *Sound = 0;
-	Sound = new eSound;
-	if (Sound == 0) return 0;
+	eSound *Sound = new eSound;
 	vw_AttachSound(Sound);
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
-	if (!Sound->Play(MenuSoundNames[SoundID].FileName, fVol, Setup.SoundSw/10.0f, 0.0f, 0.0f, 0.0f, true, Loop, MenuSoundNames[SoundID].NeedRelease, 1))
-	{
-		vw_ReleaseSound(Sound); Sound = 0;
+	if (!Sound->Play(MenuSoundNames[SoundID].FileName, fVol, Setup.SoundSw/10.0f, 0.0f, 0.0f, 0.0f,
+			 true, Loop, MenuSoundNames[SoundID].NeedRelease, 1)) {
+		vw_ReleaseSound(Sound);
 		return 0;
 	}
 
@@ -387,28 +370,27 @@ int Audio_PlaySound2D(unsigned int SoundID, float fVol, bool Loop)
 //------------------------------------------------------------------------------------
 int Audio_PlayVoice(unsigned int VoiceID, float fVol, bool Loop)
 {
-	if (!Setup.Sound_check) return 0;
-	if (!Setup.SoundSw) return 0;
-	if (VoiceID > VoiceQuantity) return 0;
+	if (!Setup.Sound_check ||
+	    !Setup.SoundSw ||
+	    (VoiceID > VoiceQuantity))
+		return 0;
 
 	// т.к. у нас со смещением же в 1 идет
 	VoiceID --;
 
 	// русский голос делаем немного тише
-	if (Setup.VoiceLanguage==3) VoiceNames[VoiceID].VolumeCorrection = 0.6f;
+	if (Setup.VoiceLanguage==3)
+		VoiceNames[VoiceID].VolumeCorrection = 0.6f;
 
 	fVol = fVol*VoiceNames[VoiceID].VolumeCorrection;
 
 	// создаем новый источник и проигрываем его
-	eSound *Sound = 0;
-	Sound = new eSound;
-	if (Sound == 0) return 0;
+	eSound *Sound = new eSound;
 	vw_AttachSound(Sound);
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
-	if (!Sound->Play(vw_GetText(VoiceNames[VoiceID].FileName, Setup.VoiceLanguage), fVol, Setup.VoiceSw/10.0f, 0.0f, 0.0f, 0.0f, true, Loop, VoiceNames[VoiceID].NeedRelease, 1))
-	{
-		vw_ReleaseSound(Sound); Sound = 0;
+	if (!Sound->Play(vw_GetText(VoiceNames[VoiceID].FileName, Setup.VoiceLanguage), fVol, Setup.VoiceSw/10.0f, 0.0f, 0.0f, 0.0f, true, Loop, VoiceNames[VoiceID].NeedRelease, 1)) {
+		vw_ReleaseSound(Sound);
 		return 0;
 	}
 
@@ -423,8 +405,9 @@ int Audio_PlayVoice(unsigned int VoiceID, float fVol, bool Loop)
 //------------------------------------------------------------------------------------
 int Audio_PlaySound3D(int SoundID, float fVol, VECTOR3D Location, bool Loop, int AtType)
 {
-	if (!Setup.Sound_check) return 0;
-	if (!Setup.SoundSw) return 0;
+	if (!Setup.Sound_check ||
+	    !Setup.SoundSw)
+		return 0;
 
 	fVol = fVol*GameSoundList[SoundID-1].VolumeCorrection;
 
@@ -433,23 +416,21 @@ int Audio_PlaySound3D(int SoundID, float fVol, VECTOR3D Location, bool Loop, int
 
 	// проверяем, можем ли мы играть этот звук
 	if (!vw_CheckCanPlaySound(GameSoundList[SoundID].Group, GameSoundList[SoundID].GroupCount, GameSoundList[SoundID].SubGroup,
-			GameSoundList[SoundID].SubGroupCount, GameSoundList[SoundID].Priority)) return 0;
+				  GameSoundList[SoundID].SubGroupCount, GameSoundList[SoundID].Priority))
+		return 0;
 
 
 	// создаем новый источник и проигрываем его
-	eSound *Sound = 0;
-	Sound = new eSound;
-	if (Sound == 0) return 0;
+	eSound *Sound = new eSound;
 	vw_AttachSound(Sound);
-	if (!Sound->Play(GameSoundList[SoundID].FileName, fVol, Setup.SoundSw/10.0f, Location.x, Location.y, Location.z, false, Loop, true, AtType))
-	{
-		vw_ReleaseSound(Sound); Sound = 0;
+	if (!Sound->Play(GameSoundList[SoundID].FileName, fVol, Setup.SoundSw/10.0f, Location.x, Location.y, Location.z, false, Loop, true, AtType)) {
+		vw_ReleaseSound(Sound);
 		return 0;
 	}
 
 	// устанавливаем нужные данные
 	Sound->SetInfo(GameSoundList[SoundID].Group, GameSoundList[SoundID].GroupCount, GameSoundList[SoundID].SubGroup,
-			GameSoundList[SoundID].SubGroupCount, GameSoundList[SoundID].Priority);
+		       GameSoundList[SoundID].SubGroupCount, GameSoundList[SoundID].Priority);
 
 	return Sound->Num;
 }
@@ -487,7 +468,8 @@ void Audio_LoopProc()
 	// Orientation of the Listener. (first 3 elements are "at", second 3 are "up")
 	// Also note that these should be units of '1'.
 	ALfloat ListenerOri[6] = { ListenerOriV1.x, ListenerOriV1.y, ListenerOriV1.z,
-								ListenerOriV2.x, ListenerOriV2.y, ListenerOriV2.z };
+				   ListenerOriV2.x, ListenerOriV2.y, ListenerOriV2.z
+				 };
 
 	vw_Listener(ListenerPos, ListenerVel, ListenerOri);
 
@@ -505,40 +487,33 @@ void Audio_LoopProc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// запускаем нужную музыку... только включили громкость или выключили
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (!vw_GetMusicIsPlaying())
-	{
-		if (Setup.MusicSw) // если громкость не нулевая
-		if (Setup.Music_check) // если можно вообще играть
-		if (CurrentPlayingMusic != -1) // если установлен номер
-		if (vw_FindMusicByNum(MusicList[CurrentPlayingMusic]) == 0) // если это еще не играем
-		{
+	if (!vw_GetMusicIsPlaying()) {
+		if (Setup.MusicSw && // если громкость не нулевая
+		    Setup.Music_check && // если можно вообще играть
+		    (CurrentPlayingMusic != -1) && // если установлен номер
+		    (vw_FindMusicByNum(MusicList[CurrentPlayingMusic]) == nullptr)) { // если это еще не играем
 			// создаем новый источник и проигрываем его
 			eMusic *Music;
 			Music = new eMusic;
 			vw_AttachMusic(Music);
 			MusicList[CurrentPlayingMusic] = Music->Num;
 
-			if (!Music->Play(GameMusicNames[CurrentPlayingMusic], 1.0f, Setup.MusicSw/10.0f, true, 0))
-			{
-				vw_ReleaseMusic(Music); Music = 0;
+			if (!Music->Play(GameMusicNames[CurrentPlayingMusic], 1.0f, Setup.MusicSw/10.0f, true, nullptr)) {
+				vw_ReleaseMusic(Music);
 				MusicList[CurrentPlayingMusic] = -1;
 				CurrentPlayingMusic = -1;
 			}
 		}
-	}
-	else
-	{
+	} else {
 		// если что-то играем, но звук уже выключен, нужно все убрать...
-		if (!Setup.MusicSw) // если громкость нулевая
-		if (Setup.Music_check) // но играть можно
-		{
+		if (!Setup.MusicSw && // если громкость нулевая
+		    Setup.Music_check) { // но играть можно
 			vw_ReleaseAllMusic();
-			for (unsigned int i=0; i<MusicQuantity; i++)
+			for (unsigned int i=0; i<MusicQuantity; i++) {
 				MusicList[i] = -1;
+			}
 		}
 	}
 
 
 }
-
-

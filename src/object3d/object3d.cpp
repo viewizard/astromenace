@@ -65,37 +65,37 @@ CObject3D::CObject3D(void)
 
 	// лист пуст, и никуда не указывает
 	DrawObjectQuantity = 0;
-	DrawObjectList = 0;
+	DrawObjectList = nullptr;
 	PromptDrawDist2 = -1.0f;
 	InternalLights = 0;
-	GlobalVertexBuffer= 0;
-	GlobalVBO = 0;
-	GlobalIndexBuffer = 0;
-	GlobalIBO = 0;
-	GlobalVAO = 0;
+	GlobalVertexBuffer= nullptr;
+	GlobalVBO = nullptr;
+	GlobalIndexBuffer = nullptr;
+	GlobalIBO = nullptr;
+	GlobalVAO = nullptr;
 
 	// начальныя установка коробок
 	AABB[0]=AABB[1]=AABB[2]=AABB[3]=AABB[4]=AABB[5]=AABB[6]=AABB[7]= VECTOR3D(0.0f, 0.0f, 0.0f);
 	OBBLocation = OBB[0]=OBB[1]=OBB[2]=OBB[3]=OBB[4]=OBB[5]=OBB[6]=OBB[7]= VECTOR3D(0.0f, 0.0f, 0.0f);
-	HitBB = 0;
-	HitBBLocation = 0;
-	HitBBRadius2 = 0;
-	HitBBSize = 0;
+	HitBB = nullptr;
+	HitBBLocation = nullptr;
+	HitBBRadius2 = nullptr;
+	HitBBSize = nullptr;
 
 	// болтание объекта
 	DeviationOn = false;
 	DeviationObjQuantity = 0;
-	Deviation = 0;
-	NeedDeviation = 0;
-	CurentDeviation = 0;
-	CurentDeviationSum = 0;
-	DeviationObjNum = 0;
+	Deviation = nullptr;
+	NeedDeviation = nullptr;
+	CurentDeviation = nullptr;
+	CurentDeviationSum = nullptr;
+	DeviationObjNum = nullptr;
 
 
 	// у нас нет текстур для этой модели
-	Texture = 0;
-	TextureIllum = 0;
-	NormalMap = 0;
+	Texture = nullptr;
+	TextureIllum = nullptr;
+	NormalMap = nullptr;
 
 	// мы не знаем как ориентирован объект и где он находится
 	Location = GeometryCenterLocation = PrevLocation = Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
@@ -134,10 +134,10 @@ CObject3D::CObject3D(void)
 
 
 	// изночально, ничего не выводим
-	DebugInfo = 0;
+	DebugInfo = nullptr;
 
-	StartTimeSheet = 0;
-	EndTimeSheet = 0;
+	StartTimeSheet = nullptr;
+	EndTimeSheet = nullptr;
 }
 
 
@@ -148,38 +148,77 @@ CObject3D::CObject3D(void)
 CObject3D::~CObject3D(void)
 {
 	// освобождаем память, выделенную для геометрии
-	if (DrawObjectList != 0){delete [] DrawObjectList; DrawObjectList = 0;}
+	if (DrawObjectList != nullptr) {
+		delete [] DrawObjectList;
+		DrawObjectList = nullptr;
+	}
 
-	if (HitBB != 0)
-	{
-		for (int i=0; i<DrawObjectQuantity; i++)
-		{
-			if (HitBB[i] != 0){delete [] HitBB[i]; HitBB[i] = 0;}
+	if (HitBB != nullptr) {
+		for (int i = 0; i < DrawObjectQuantity; i++) {
+			if (HitBB[i] != nullptr) {
+				delete [] HitBB[i];
+				HitBB[i] = nullptr;
+			}
 		}
-		delete [] HitBB; HitBB = 0;
+		delete [] HitBB;
+		HitBB = nullptr;
 	}
-	if (HitBBLocation != 0){delete [] HitBBLocation; HitBBLocation = 0;}
-	if (HitBBRadius2 != 0){delete [] HitBBRadius2; HitBBRadius2 = 0;}
-	if (HitBBSize != 0){delete [] HitBBSize; HitBBSize = 0;}
-
-	if (DeviationObjQuantity != 0)
-	{
-		if (Deviation != 0){delete [] Deviation; Deviation = 0;}
-		if (NeedDeviation != 0){delete [] NeedDeviation; NeedDeviation = 0;}
-		if (CurentDeviation != 0){delete [] CurentDeviation; CurentDeviation = 0;}
-		if (CurentDeviationSum != 0){delete [] CurentDeviationSum; CurentDeviationSum = 0;}
-		if (DeviationObjNum != 0){delete [] DeviationObjNum; DeviationObjNum = 0;}
+	if (HitBBLocation != nullptr) {
+		delete [] HitBBLocation;
+		HitBBLocation = nullptr;
+	}
+	if (HitBBRadius2 != nullptr) {
+		delete [] HitBBRadius2;
+		HitBBRadius2 = nullptr;
+	}
+	if (HitBBSize != nullptr) {
+		delete [] HitBBSize;
+		HitBBSize = nullptr;
 	}
 
-	if (Texture != 0) {delete [] Texture; Texture = 0;}
-	if (TextureIllum != 0) {delete [] TextureIllum; TextureIllum = 0;}
-	if (NormalMap != 0) {delete [] NormalMap; NormalMap = 0;}
+	if (DeviationObjQuantity != 0) {
+		if (Deviation != nullptr) {
+			delete [] Deviation;
+			Deviation = nullptr;
+		}
+		if (NeedDeviation != nullptr) {
+			delete [] NeedDeviation;
+			NeedDeviation = nullptr;
+		}
+		if (CurentDeviation != nullptr) {
+			delete [] CurentDeviation;
+			CurentDeviation = nullptr;
+		}
+		if (CurentDeviationSum != nullptr) {
+			delete [] CurentDeviationSum;
+			CurentDeviationSum = nullptr;
+		}
+		if (DeviationObjNum != nullptr) {
+			delete [] DeviationObjNum;
+			DeviationObjNum = nullptr;
+		}
+	}
 
-	if (DebugInfo != 0){delete [] DebugInfo; DebugInfo = 0;}
+	if (Texture != nullptr) {
+		delete [] Texture;
+		Texture = nullptr;
+	}
+	if (TextureIllum != nullptr) {
+		delete [] TextureIllum;
+		TextureIllum = nullptr;
+	}
+	if (NormalMap != nullptr) {
+		delete [] NormalMap;
+		NormalMap = nullptr;
+	}
+
+	if (DebugInfo != nullptr) {
+		delete [] DebugInfo;
+		DebugInfo = nullptr;
+	}
 
 	// удаляем все записи, если они есть
-	while (StartTimeSheet!=0)
-	{
+	while (StartTimeSheet != nullptr) {
 		DetachTimeSheet(StartTimeSheet);
 	}
 
@@ -196,11 +235,11 @@ CObject3D::~CObject3D(void)
 void CObject3D::InitByDrawObjectList()
 {
 	// нет самой геометрии, работать не можем
-	if (DrawObjectList == 0) return;
+	if (DrawObjectList == nullptr)
+		return;
 
 	// создаем HitBB
-	for (int i=0; i<DrawObjectQuantity; i++)
-	{
+	for (int i = 0; i < DrawObjectQuantity; i++) {
 		float Matrix[9];
 		Matrix33CreateRotate(Matrix, DrawObjectList[i].Rotation);
 
@@ -211,11 +250,10 @@ void CObject3D::InitByDrawObjectList()
 		float MaxY = -10000.0f;
 		float MinZ = 10000.0f;
 		float MaxZ = -10000.0f;
-		if (DrawObjectList[i].VertexCount > 0)
-		{
+		if (DrawObjectList[i].VertexCount > 0) {
 			int j = 0;
 			int j2;
-			if (DrawObjectList[i].IndexBuffer != 0)
+			if (DrawObjectList[i].IndexBuffer != nullptr)
 				j2 = DrawObjectList[i].IndexBuffer[DrawObjectList[i].RangeStart+j]*DrawObjectList[i].VertexStride;
 			else
 				j2 = (DrawObjectList[i].RangeStart+j)*DrawObjectList[i].VertexStride;
@@ -228,18 +266,16 @@ void CObject3D::InitByDrawObjectList()
 			MinX = MaxX = tmp.x;
 			MinY = MaxY = tmp.y;
 			MinZ = MaxZ = tmp.z;
-		}
-		else
-		{	// пустой объект
+		} else {
+			// пустой объект
 			MinX = MaxX = 0.0f;
 			MinY = MaxY = 0.0f;
 			MinZ = MaxZ = 0.0f;
 		}
 
-		for (int j=0; j<DrawObjectList[i].VertexCount; j++)
-		{
+		for (int j=0; j<DrawObjectList[i].VertexCount; j++) {
 			int j2;
-			if (DrawObjectList[i].IndexBuffer != 0)
+			if (DrawObjectList[i].IndexBuffer != nullptr)
 				j2 = DrawObjectList[i].IndexBuffer[DrawObjectList[i].RangeStart+j]*DrawObjectList[i].VertexStride;
 			else
 				j2 = (DrawObjectList[i].RangeStart+j)*DrawObjectList[i].VertexStride;
@@ -279,8 +315,8 @@ void CObject3D::InitByDrawObjectList()
 
 		// находим квадрат радиуса
 		HitBBRadius2[i] = (HitBBSize[i].x/2.0f) * (HitBBSize[i].x/2.0f) +
-				(HitBBSize[i].y/2.0f) * (HitBBSize[i].y/2.0f) +
-				(HitBBSize[i].z/2.0f) * (HitBBSize[i].z/2.0f);
+				  (HitBBSize[i].y/2.0f) * (HitBBSize[i].y/2.0f) +
+				  (HitBBSize[i].z/2.0f) * (HitBBSize[i].z/2.0f);
 
 		// переносим данные HitBB чтобы центр стал геометрическим центром
 		for (int k=0; k<8; k++)
@@ -302,8 +338,7 @@ void CObject3D::InitByDrawObjectList()
 	float MaxZ = HitBB[0][0].z + HitBBLocation[0].z;
 
 	// берем то по HitBB, причем со 2-го сразу, т.к. первый учли выше
-	for (int i=1; i<DrawObjectQuantity; i++)
-	{
+	for (int i=1; i<DrawObjectQuantity; i++) {
 		if (MinX > HitBB[i][6].x + HitBBLocation[i].x) MinX = HitBB[i][6].x + HitBBLocation[i].x;
 		if (MaxX < HitBB[i][0].x + HitBBLocation[i].x) MaxX = HitBB[i][0].x + HitBBLocation[i].x;
 		if (MinY > HitBB[i][6].y + HitBBLocation[i].y) MinY = HitBB[i][6].y + HitBBLocation[i].y;
@@ -328,8 +363,7 @@ void CObject3D::InitByDrawObjectList()
 	OBBLocation.z = (MaxZ + MinZ)/2.0f;
 
 	// переносим данные OBB чтобы центр стал центром
-	for (int k=0; k<8; k++)
-	{
+	for (int k=0; k<8; k++) {
 		OBB[k] -= OBBLocation;
 	}
 
@@ -349,13 +383,12 @@ void CObject3D::InitByDrawObjectList()
 	// находим "центр массы", в базовом режиме считаем всю геометрию
 	int AllVertexCounted = 0;
 	for (int i=0; i<DrawObjectQuantity; i++)
-	for (int j=0; j<DrawObjectList[i].VertexCount; j++)
-	{
-		AllVertexCounted++;
-		GeometryCenterLocation += DrawObjectList[i].Location + VECTOR3D(DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*j],
-								DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*j+1],
-								DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*j+2]);
-	}
+		for (int j=0; j<DrawObjectList[i].VertexCount; j++) {
+			AllVertexCounted++;
+			GeometryCenterLocation += DrawObjectList[i].Location + VECTOR3D(DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*j],
+						  DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*j+1],
+						  DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*j+2]);
+		}
 	if (AllVertexCounted > 0) GeometryCenterLocation = GeometryCenterLocation/AllVertexCounted;
 }
 
@@ -371,8 +404,7 @@ void CObject3D::SetObjectLocation(VECTOR3D NewLocation, int ObjectNum)
 {
 
 	// пересчет HitBB
-	if (HitBB != 0)
-	{
+	if (HitBB != nullptr) {
 		// делаем временную обратную матрицу модели
 		float OldInvRotationMatTmp[9];
 		memcpy(OldInvRotationMatTmp, CurrentRotationMat, 9*sizeof(float));
@@ -392,12 +424,10 @@ void CObject3D::SetObjectLocation(VECTOR3D NewLocation, int ObjectNum)
 		float MaxZ = -10000.0f;
 
 		// проверяем данные
-		for (int i=0; i<DrawObjectQuantity; i++)
-		{
+		for (int i=0; i<DrawObjectQuantity; i++) {
 			Matrix33CalcPoint(&HitBBLocation[i], OldInvRotationMatTmp);
 
-			for (int j=0; j<8; j++)
-			{
+			for (int j=0; j<8; j++) {
 				Matrix33CalcPoint(&HitBB[i][j], OldInvRotationMatTmp);
 
 				if (MinX > HitBB[i][j].x + HitBBLocation[i].x) MinX = HitBB[i][j].x + HitBBLocation[i].x;
@@ -441,8 +471,7 @@ void CObject3D::SetObjectLocation(VECTOR3D NewLocation, int ObjectNum)
 		OBBLocation.z = (MaxZ + MinZ)/2.0f;
 
 		// переносим данные OBB чтобы центр стал центром
-		for (int k=0; k<8; k++)
-		{
+		for (int k=0; k<8; k++) {
 			OBB[k] -= OBBLocation;
 			Matrix33CalcPoint(&OBB[k], CurrentRotationMat);
 		}
@@ -453,8 +482,7 @@ void CObject3D::SetObjectLocation(VECTOR3D NewLocation, int ObjectNum)
 		MinY = MaxY = OBB[0].y + OBBLocation.y;
 		MinZ = MaxZ = OBB[0].z + OBBLocation.z;
 		// берем и проверяем
-		for (int j=0; j<8; j++)
-		{
+		for (int j=0; j<8; j++) {
 			if (MinX > OBB[j].x + OBBLocation.x) MinX = OBB[j].x + OBBLocation.x;
 			if (MinY > OBB[j].y + OBBLocation.y) MinY = OBB[j].y + OBBLocation.y;
 			if (MinZ > OBB[j].z + OBBLocation.z) MinZ = OBB[j].z + OBBLocation.z;
@@ -485,8 +513,7 @@ void CObject3D::SetObjectLocation(VECTOR3D NewLocation, int ObjectNum)
 void CObject3D::SetObjectRotation(VECTOR3D NewRotation, int ObjectNum)
 {
 	// пересчет HitBB
-	if (HitBB != 0)
-	{
+	if (HitBB != nullptr) {
 		// создаем матрицу поворота объекта
 		float CurrentRotationMatTmp2[9];
 		Matrix33CreateRotate(CurrentRotationMatTmp2, NewRotation);
@@ -507,8 +534,7 @@ void CObject3D::SetObjectRotation(VECTOR3D NewRotation, int ObjectNum)
 		Matrix33CalcPoint(&HitBBLocation[ObjectNum], CurrentRotationMatTmp2);
 		HitBBLocation[ObjectNum] += DrawObjectList[ObjectNum].Location;
 		Matrix33CalcPoint(&HitBBLocation[ObjectNum], CurrentRotationMat);
-		for (int j=0; j<8; j++)
-		{
+		for (int j=0; j<8; j++) {
 			Matrix33CalcPoint(&HitBB[ObjectNum][j], OldInvRotationMatTmp);
 			Matrix33CalcPoint(&HitBB[ObjectNum][j], OldInvRotationMatTmp2);
 			Matrix33CalcPoint(&HitBB[ObjectNum][j], CurrentRotationMatTmp2);
@@ -526,12 +552,10 @@ void CObject3D::SetObjectRotation(VECTOR3D NewRotation, int ObjectNum)
 		float MaxZ = -10000.0f;
 
 		// проверяем данные
-		for (int i=0; i<DrawObjectQuantity; i++)
-		{
+		for (int i=0; i<DrawObjectQuantity; i++) {
 			Matrix33CalcPoint(&HitBBLocation[i], OldInvRotationMatTmp);
 
-			for (int j=0; j<8; j++)
-			{
+			for (int j=0; j<8; j++) {
 				Matrix33CalcPoint(&HitBB[i][j], OldInvRotationMatTmp);
 
 				if (MinX > HitBB[i][j].x + HitBBLocation[i].x) MinX = HitBB[i][j].x + HitBBLocation[i].x;
@@ -575,8 +599,7 @@ void CObject3D::SetObjectRotation(VECTOR3D NewRotation, int ObjectNum)
 		OBBLocation.z = (MaxZ + MinZ)/2.0f;
 
 		// переносим данные OBB чтобы центр стал центром
-		for (int k=0; k<8; k++)
-		{
+		for (int k=0; k<8; k++) {
 			OBB[k] -= OBBLocation;
 			Matrix33CalcPoint(&OBB[k], CurrentRotationMat);
 		}
@@ -587,8 +610,7 @@ void CObject3D::SetObjectRotation(VECTOR3D NewRotation, int ObjectNum)
 		MinY = MaxY = OBB[0].y + OBBLocation.y;
 		MinZ = MaxZ = OBB[0].z + OBBLocation.z;
 		// берем и проверяем
-		for (int j=0; j<8; j++)
-		{
+		for (int j=0; j<8; j++) {
 			if (MinX > OBB[j].x + OBBLocation.x) MinX = OBB[j].x + OBBLocation.x;
 			if (MinY > OBB[j].y + OBBLocation.y) MinY = OBB[j].y + OBBLocation.y;
 			if (MinZ > OBB[j].z + OBBLocation.z) MinZ = OBB[j].z + OBBLocation.z;
@@ -653,24 +675,21 @@ void CObject3D::SetRotation(VECTOR3D NewRotation)
 
 
 	// пересчет HitBB
-	if (HitBB != 0)
-	for (int i=0; i<DrawObjectQuantity; i++)
-	{
-		Matrix33CalcPoint(&HitBBLocation[i], OldInvRotationMat);
-		Matrix33CalcPoint(&HitBBLocation[i], CurrentRotationMat);
+	if (HitBB != nullptr)
+		for (int i = 0; i < DrawObjectQuantity; i++) {
+			Matrix33CalcPoint(&HitBBLocation[i], OldInvRotationMat);
+			Matrix33CalcPoint(&HitBBLocation[i], CurrentRotationMat);
 
-		for (int j=0; j<8; j++)
-		{
-			Matrix33CalcPoint(&HitBB[i][j], OldInvRotationMat);
-			Matrix33CalcPoint(&HitBB[i][j], CurrentRotationMat);
+			for (int j = 0; j < 8; j++) {
+				Matrix33CalcPoint(&HitBB[i][j], OldInvRotationMat);
+				Matrix33CalcPoint(&HitBB[i][j], CurrentRotationMat);
+			}
 		}
-	}
 
 	// Пересчитываем OBB, просто поворачиваем его как и модель
 	Matrix33CalcPoint(&OBBLocation, OldInvRotationMat);
 	Matrix33CalcPoint(&OBBLocation, CurrentRotationMat);
-	for (int j=0; j<8; j++)
-	{
+	for (int j = 0; j < 8; j++) {
 		Matrix33CalcPoint(&OBB[j], OldInvRotationMat);
 		Matrix33CalcPoint(&OBB[j], CurrentRotationMat);
 	}
@@ -684,8 +703,7 @@ void CObject3D::SetRotation(VECTOR3D NewRotation)
 	float MinZ = 10000.0f;
 	float MaxZ = -10000.0f;
 	// берем и проверяем
-	for (int j=0; j<8; j++)
-	{
+	for (int j=0; j<8; j++) {
 		if (MinX > OBB[j].x + OBBLocation.x) MinX = OBB[j].x + OBBLocation.x;
 		if (MinY > OBB[j].y + OBBLocation.y) MinY = OBB[j].y + OBBLocation.y;
 		if (MinZ > OBB[j].z + OBBLocation.z) MinZ = OBB[j].z + OBBLocation.z;
@@ -718,8 +736,7 @@ void DrawLine(VECTOR3D Point1, VECTOR3D Point2, float ColorR, float ColorG, floa
 {
 	// буфер для последовательности RI_LINES
 	// войдет RI_3f_XYZ | RI_4f_COLOR
-	float *tmpDATA = 0;
-	tmpDATA = new float[2*(3+4)];
+	float *tmpDATA = new float[2*(3+4)];
 	int k=0;
 
 	tmpDATA[k++] = Point1.x;		// X
@@ -786,14 +803,14 @@ void DrawBoxLines(VECTOR3D Point[8], VECTOR3D LocalLocation, float ColorR, float
 void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 {
 	// если нечего рисовать - выходим
-	if (DrawObjectList == 0) return;
+	if (DrawObjectList == nullptr)
+		return;
 
 
 	// если есть установка, нужно получить квадрат расстояния до камеры
 	// прорисовка модели "полностью", "одним куском" (только то что без "составных" частей - колес, стволов и т.п.)
 	bool NeedOnePieceDraw = false;
-	if (PromptDrawDist2 >= 0.0f)
-	{
+	if (PromptDrawDist2 >= 0.0f) {
 		VECTOR3D CurrentCameraLocation;
 		vw_GetCameraLocation(&CurrentCameraLocation);
 		float PromptDrawRealDist2 = (Location.x-CurrentCameraLocation.x)*(Location.x-CurrentCameraLocation.x)+(Location.y-CurrentCameraLocation.y)*(Location.y-CurrentCameraLocation.y)+(Location.z-CurrentCameraLocation.z)*(Location.z-CurrentCameraLocation.z);
@@ -802,17 +819,14 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		int LightsCount = vw_CheckAllPointLights(Location, Radius*Radius);
 
 		// если дальше - смотрим сколько воздействует источников света
-		if (PromptDrawRealDist2 > PromptDrawDist2)
-		{
+		if (PromptDrawRealDist2 > PromptDrawDist2) {
 			// если больше заданного кол-ва
 			if (LightsCount <= Setup.MaxPointLights) NeedOnePieceDraw = true;
 			else NeedOnePieceDraw = false;
 
 			// если это двигатели - не надо переходить
 			if (InternalLights >= LightsCount) NeedOnePieceDraw = true;
-		}
-		else
-		{
+		} else {
 			// находимся близко, но нужно посмотреть, если кол-во источников ниже макс, надо перейти в упращенный режим
 			if (LightsCount <= Setup.MaxPointLights) NeedOnePieceDraw = true;
 		}
@@ -821,8 +835,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 	// быстрая прорисовка только вертексов, без установки текстур, шейдеров и прочего
-	if (VertexOnlyPass)
-	{
+	if (VertexOnlyPass) {
 		vw_PushMatrix();
 		// переносим и двигаем уже по данным всей модели
 		vw_Translate(Location);
@@ -831,26 +844,21 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		vw_Rotate(Rotation.x, 1.0f, 0.0f, 0.0f);
 
 
-		if (NeedOnePieceDraw)
-		{
+		if (NeedOnePieceDraw) {
 
 			int GlobalVertexCount = 0;
-			for (int i=0; i<DrawObjectQuantity; i++)
-			{
+			for (int i=0; i<DrawObjectQuantity; i++) {
 				GlobalVertexCount += DrawObjectList[i].VertexCount;
 			}
 
 			// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
 			vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, RI_3f_XYZ, GlobalVertexBuffer,
-							DrawObjectList[0].VertexStride*sizeof(float), GlobalVBO, 0,
-							GlobalIndexBuffer, GlobalIBO, GlobalVAO);
-		}
-		else
-		{
+					DrawObjectList[0].VertexStride*sizeof(float), GlobalVBO, 0,
+					GlobalIndexBuffer, GlobalIBO, GlobalVAO);
+		} else {
 
 			// установка текстур и подхотовка к прорисовке
-			for (int i=0; i<DrawObjectQuantity; i++)
-			{
+			for (int i=0; i<DrawObjectQuantity; i++) {
 
 				vw_PushMatrix();
 
@@ -861,8 +869,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				vw_Rotate(DrawObjectList[i].Rotation.y, 0.0f, 1.0f, 0.0f);
 				vw_Rotate(DrawObjectList[i].Rotation.x, 1.0f, 0.0f, 0.0f);
 				// если нужна дополнительная анимация геометрией
-				if (DrawObjectList[i].NeedGeometryAnimation)
-				{
+				if (DrawObjectList[i].NeedGeometryAnimation) {
 					vw_Rotate(DrawObjectList[i].GeometryAnimation.z, 0.0f, 0.0f, 1.0f);
 					vw_Rotate(DrawObjectList[i].GeometryAnimation.y, 0.0f, 1.0f, 0.0f);
 					vw_Rotate(DrawObjectList[i].GeometryAnimation.x, 1.0f, 0.0f, 0.0f);
@@ -871,25 +878,24 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 				// работаем только с шейдером взрывов, т.к. он меняет положение и размеры треугольников
 				if (DrawObjectList[i].ShaderType == 2)
-				if (GLSLShaderType2 != 0)
-				{
-					vw_UseShaderProgram(GLSLShaderType2);
+					if (GLSLShaderType2 != nullptr) {
+						vw_UseShaderProgram(GLSLShaderType2);
 
-					vw_Uniform1i(GLSLShaderType2, UniformLocations[10], 0);
-					vw_Uniform1i(GLSLShaderType2, UniformLocations[11], 0);
-					vw_Uniform1i(GLSLShaderType2, UniformLocations[12], 0);
-					vw_Uniform1f(GLSLShaderType2, UniformLocations[13], DrawObjectList[0].ShaderData[0]);
-					vw_Uniform1f(GLSLShaderType2, UniformLocations[14], DrawObjectList[0].ShaderData[1]);
-				}
+						vw_Uniform1i(GLSLShaderType2, UniformLocations[10], 0);
+						vw_Uniform1i(GLSLShaderType2, UniformLocations[11], 0);
+						vw_Uniform1i(GLSLShaderType2, UniformLocations[12], 0);
+						vw_Uniform1f(GLSLShaderType2, UniformLocations[13], DrawObjectList[0].ShaderData[0]);
+						vw_Uniform1f(GLSLShaderType2, UniformLocations[14], DrawObjectList[0].ShaderData[1]);
+					}
 
 
 				vw_SendVertices(RI_TRIANGLES, DrawObjectList[i].VertexCount, RI_3f_XYZ, DrawObjectList[i].VertexBuffer,
-								DrawObjectList[i].VertexStride*sizeof(float), DrawObjectList[i].VBO,
-								DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IBO, DrawObjectList[i].VAO);
+						DrawObjectList[i].VertexStride*sizeof(float), DrawObjectList[i].VBO,
+						DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IBO, DrawObjectList[i].VAO);
 
 
 				if (DrawObjectList[i].ShaderType == 2)
-				if (GLSLShaderType2 != 0) vw_StopShaderProgram();
+					if (GLSLShaderType2 != nullptr) vw_StopShaderProgram();
 
 				vw_PopMatrix();
 			}
@@ -903,8 +909,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 	// оптимизация, если не в фруструме - соотв. и не видем его
-	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0]))
-	{
+	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0])) {
 		// если показали а сейчас нет - установка флага
 		if (ShowDeleteOnHide == 1) ShowDeleteOnHide = 2;
 
@@ -915,8 +920,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	// показываем - нужно установить флаг
 	if (ShowDeleteOnHide == 0) ShowDeleteOnHide = 1;
 	// уже включили обратный отсчет на удаление - нужно его выключить
-	if (ShowDeleteOnHide == 3)
-	{
+	if (ShowDeleteOnHide == 3) {
 		ShowDeleteOnHide = 1;
 		Lifetime = -1.0f;
 	}
@@ -924,9 +928,9 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 	// у модели может быть нормал меппинг только на отдельные объекты
-	eTexture *CurrentNormalMap = 0;
+	eTexture *CurrentNormalMap = nullptr;
 	// текущий шейдер, чтобы не ставить лишний раз
-	eGLSL *CurrentGLSL = 0;
+	eGLSL *CurrentGLSL = nullptr;
 	int NeedNormalMapping = 0;
 	// получаем матрицу, до всех преобразований
 	float Matrix[16];
@@ -943,30 +947,30 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 	// для корректной прорисовки на всех видеокартах атмосферы планеты ...
 	bool N1 = false;
-	for (int i=0; i<DrawObjectQuantity; i++)
-	{
+	for (int i=0; i<DrawObjectQuantity; i++) {
 		if (DrawObjectList[i].DrawType == 1) N1 = true;
 	}
 
 
 	// если используем тени - сразу находим режим сглаживания
 	int PCFMode = 0;
-	if (ShadowMap)
-	{
-		switch(Setup.ShadowMap)
-		{
-			case 1:
-			case 4:
-			case 7:
-					PCFMode = 2; break;
-			case 2:
-			case 5:
-			case 8:
-					PCFMode = 4; break;
-			case 3:
-			case 6:
-			case 9:
-					PCFMode = 8; break;
+	if (ShadowMap) {
+		switch(Setup.ShadowMap) {
+		case 1:
+		case 4:
+		case 7:
+			PCFMode = 2;
+			break;
+		case 2:
+		case 5:
+		case 8:
+			PCFMode = 4;
+			break;
+		case 3:
+		case 6:
+		case 9:
+			PCFMode = 8;
+			break;
 		}
 	}
 
@@ -983,17 +987,15 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	if (NeedAlphaTest) vw_SetTextureAlphaTest(true, 0.4f);
 
 	// если надо рисовать одним проходом
-	if (NeedOnePieceDraw)
-	{
+	if (NeedOnePieceDraw) {
 		vw_SetTexture(0, Texture[0]);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
 		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 
 		// включаем вторую текстуру
-		if (TextureIllum!=0)
-		if (TextureIllum[0]!=0)
-		{
+		if ((TextureIllum != nullptr) &&
+		    (TextureIllum[0] != nullptr)) {
 			// свечение
 			vw_SetTexture(1, TextureIllum[0]);
 			vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
@@ -1006,16 +1008,16 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 		// если у нас работают шейдеры и есть текстура нормал меппа - ставим ее
 		NeedNormalMapping = 0;
-		if (Setup.UseGLSL)
-		if (NormalMap!=0)
-		if (NormalMap[0]!=0)
-		{
+		if ((Setup.UseGLSL) &&
+		    (NormalMap != nullptr) &&
+		    (NormalMap[0] != nullptr)) {
 			NeedNormalMapping = 1;
 			CurrentNormalMap = NormalMap[0];
 			vw_SetTexture(3, CurrentNormalMap);
 			vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 			// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-			if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
+			if (Setup.TextureFilteringMode == 1)
+				vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 		}
 
 
@@ -1023,9 +1025,8 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		// включаем источники света
 		vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
 
-		if (Setup.UseGLSL && DrawObjectList[0].ShaderType >= 0)
-		{
-			eGLSL *CurrentObject3DGLSL = 0;
+		if (Setup.UseGLSL && DrawObjectList[0].ShaderType >= 0) {
+			eGLSL *CurrentObject3DGLSL = nullptr;
 
 			// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
 			if ((DrawObjectList[0].ShaderType == 1) && ShadowMap) DrawObjectList[0].ShaderType = 3;
@@ -1033,40 +1034,269 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			if ((DrawObjectList[0].ShaderType == 3) && !ShadowMap) DrawObjectList[0].ShaderType = 1;
 
 			// ставим нужный шейдер
-			switch (DrawObjectList[0].ShaderType)
-			{
-				case 1: CurrentObject3DGLSL = GLSLShaderType1; break;
-				case 2: CurrentObject3DGLSL = GLSLShaderType2; break;
-				case 3: CurrentObject3DGLSL = GLSLShaderType3; break;
+			switch (DrawObjectList[0].ShaderType) {
+			case 1:
+				CurrentObject3DGLSL = GLSLShaderType1;
+				break;
+			case 2:
+				CurrentObject3DGLSL = GLSLShaderType2;
+				break;
+			case 3:
+				CurrentObject3DGLSL = GLSLShaderType3;
+				break;
 			}
 
 
-			if (CurrentGLSL != CurrentObject3DGLSL)
-			{
-				if (CurrentGLSL != 0) vw_StopShaderProgram();
+			if (CurrentGLSL != CurrentObject3DGLSL) {
+				if (CurrentGLSL != nullptr)
+					vw_StopShaderProgram();
 
 				CurrentGLSL = CurrentObject3DGLSL;
 
-				if (CurrentObject3DGLSL != 0) vw_UseShaderProgram(CurrentObject3DGLSL);
+				if (CurrentObject3DGLSL != nullptr)
+					vw_UseShaderProgram(CurrentObject3DGLSL);
 			}
 
 			// данные ставим каждый раз, т.к. может что-то поменяться
-			if (CurrentObject3DGLSL != 0)
-			{
-				switch (DrawObjectList[0].ShaderType)
-				{
+			if (CurrentObject3DGLSL != nullptr) {
+				switch (DrawObjectList[0].ShaderType) {
+				case 1: // только попиксельное освещение
+
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[0], 0);
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[1], 1);
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[2], LightType1);
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[3], LightType2);
+					if (TextureIllum != nullptr) {
+						if (TextureIllum[0] != nullptr)
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 1);
+						else
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
+					} else
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
+
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[5], 3);
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[6], NeedNormalMapping);
+
+					break;
+
+				case 2: // шейдеры взрывов
+
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[10], 0);
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[11], LightType1);
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[12], LightType2);
+					vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[13], DrawObjectList[0].ShaderData[0]);
+					vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[14], DrawObjectList[0].ShaderData[1]);
+
+					break;
+
+				case 3: // шадов меп
+
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[20], 0);
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[21], 1);
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[22], LightType1);
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[23], LightType2);
+					if (TextureIllum != nullptr) {
+						if (TextureIllum[0] != nullptr)
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 1);
+						else
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
+					} else
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
+
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[25], 2);
+					vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[26], ShadowMap_Get_xPixelOffset());
+					vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[27], ShadowMap_Get_xPixelOffset());
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[28], 3);
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[29], NeedNormalMapping);
+					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[30], PCFMode);
+
+					break;
+				}
+			}
+		}
+
+		int GlobalVertexCount = 0;
+		for (int i=0; i<DrawObjectQuantity; i++) {
+			GlobalVertexCount += DrawObjectList[i].VertexCount;
+		}
+
+		// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
+		vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, DrawObjectList[0].VertexFormat, GlobalVertexBuffer,
+				DrawObjectList[0].VertexStride*sizeof(float), GlobalVBO, 0,
+				GlobalIndexBuffer, GlobalIBO, GlobalVAO);
+
+		vw_DeActivateAllLights();
+	} else {
+
+		// текущая текстура, чтобы не переставлять по 10 раз одно и то же
+		eTexture *CurrentText = nullptr;
+
+		// установка текстур и подхотовка к прорисовке
+		for (int i = 0; i < DrawObjectQuantity; i++) {
+
+			// небольшая проверка для конкретной части
+			if ((HitBB != nullptr) && (HitBBLocation != nullptr)) {
+				VECTOR3D Min, Max;
+				Min.x = Max.x = HitBB[i][0].x + HitBBLocation[i].x;
+				Min.y = Max.y = HitBB[i][0].y + HitBBLocation[i].y;
+				Min.z = Max.z = HitBB[i][0].z + HitBBLocation[i].z;
+				// берем и проверяем
+				for (int j=0; j<8; j++) {
+					if (Min.x > HitBB[i][j].x + HitBBLocation[i].x) Min.x = HitBB[i][j].x + HitBBLocation[i].x;
+					if (Min.y > HitBB[i][j].y + HitBBLocation[i].y) Min.y = HitBB[i][j].y + HitBBLocation[i].y;
+					if (Min.z > HitBB[i][j].z + HitBBLocation[i].z) Min.z = HitBB[i][j].z + HitBBLocation[i].z;
+					if (Max.x < HitBB[i][j].x + HitBBLocation[i].x) Max.x = HitBB[i][j].x + HitBBLocation[i].x;
+					if (Max.y < HitBB[i][j].y + HitBBLocation[i].y) Max.y = HitBB[i][j].y + HitBBLocation[i].y;
+					if (Max.z < HitBB[i][j].z + HitBBLocation[i].z) Max.z = HitBB[i][j].z + HitBBLocation[i].z;
+				}
+
+				if (!vw_BoxInFrustum(Location + Min, Location + Max)) {
+					continue;
+				}
+			}
+
+
+			// работа с текстурами
+			if (CurrentText != Texture[i]) {
+				vw_SetTexture(0, Texture[i]);
+				vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+				// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+				if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
+
+				// если есть тайловая анимация - работаем с текстурной матрицей
+				// ! исходим из того что активен всегда 0-вой стейдж текстуры т.к. у танков на траках нет илюминейшен текстуры
+				if (DrawObjectList[i].NeedTextureAnimation) {
+					vw_MatrixMode(RI_TEXTURE_MATRIX);
+					vw_LoadIdentity();
+					vw_Translate(DrawObjectList[i].TextureAnimation);
+					vw_MatrixMode(RI_MODELVIEW_MATRIX);
+				}
+
+
+				// включаем вторую текстуру
+				if (TextureIllum != nullptr)
+					if (TextureIllum[i] != nullptr) {
+						// свечение
+						vw_SetTexture(1, TextureIllum[i]);
+						vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+						// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+						if (Setup.TextureFilteringMode == 1)
+							vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
+						// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
+						vw_SetTextureEnvMode(RI_TENV_COMBINE);
+						vw_SetTextureBlendMode(RI_TBLEND_COLOROP, RI_TBLEND_ADD);
+					}
+
+				// если у нас работают шейдеры и есть текстура нормал меппа - ставим ее
+				NeedNormalMapping = 0;
+				if (Setup.UseGLSL &&
+				    (NormalMap != nullptr)) {
+					if (NormalMap[i] != nullptr) {
+						NeedNormalMapping = 1;
+						CurrentNormalMap = NormalMap[i];
+						vw_SetTexture(3, CurrentNormalMap);
+						vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+						// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+						if (Setup.TextureFilteringMode == 1)
+							vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
+					} else {
+						// если нет, но был установлен - нужно сделать сброс установки
+						if (CurrentNormalMap != nullptr) {
+							vw_BindTexture(3, 0);
+							CurrentNormalMap = nullptr;
+						}
+					}
+				}
+
+				CurrentText = Texture[i];
+			}
+
+			vw_PushMatrix();
+
+			// сдвигаем его в нужное место
+			vw_Translate(DrawObjectList[i].Location);
+			// поворачиваем объект
+			vw_Rotate(DrawObjectList[i].Rotation.z, 0.0f, 0.0f, 1.0f);
+			vw_Rotate(DrawObjectList[i].Rotation.y, 0.0f, 1.0f, 0.0f);
+			vw_Rotate(DrawObjectList[i].Rotation.x, 1.0f, 0.0f, 0.0f);
+
+
+			// если нужна дополнительная анимация геометрией
+			if (DrawObjectList[i].NeedGeometryAnimation) {
+				vw_Rotate(DrawObjectList[i].GeometryAnimation.z, 0.0f, 0.0f, 1.0f);
+				vw_Rotate(DrawObjectList[i].GeometryAnimation.y, 0.0f, 1.0f, 0.0f);
+				vw_Rotate(DrawObjectList[i].GeometryAnimation.x, 1.0f, 0.0f, 0.0f);
+			}
+
+
+			int LightType1, LightType2;
+			// включаем источники света
+			if (HitBB != nullptr)
+				vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location + HitBBLocation[i], HitBBRadius2[i], 2, Setup.MaxPointLights, Matrix);
+			else
+				vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
+
+
+			// если нужно рисовать прозрачным
+			// для корректной прорисовки на всех видеокартах атмосферы планеты ...
+			if (N1) {
+				vw_PolygonOffset(true, 2.0f, 2.0f);
+			}
+			if (DrawObjectList[i].DrawType == 1) {
+				vw_SetTextureAlphaTest(true, 0.01f);
+				vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+				vw_PolygonOffset(true, 1.0f, 1.0f);
+			}
+
+			if (Setup.UseGLSL &&
+			    (DrawObjectList[i].ShaderType >= 0)) {
+				eGLSL *CurrentObject3DGLSL = nullptr;
+
+				// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
+				if ((DrawObjectList[i].ShaderType == 1) && ShadowMap) DrawObjectList[i].ShaderType = 3;
+				// и на оборот, если стоит 3-й, но шадовмепа нет - ставим 1-й, просто попиксельное освещение
+				if ((DrawObjectList[i].ShaderType == 3) && !ShadowMap) DrawObjectList[i].ShaderType = 1;
+
+				// ставим нужный шейдер
+				switch (DrawObjectList[i].ShaderType) {
+				case 1:
+					CurrentObject3DGLSL = GLSLShaderType1;
+					break;
+				case 2:
+					CurrentObject3DGLSL = GLSLShaderType2;
+					break;
+				case 3:
+					CurrentObject3DGLSL = GLSLShaderType3;
+					break;
+				}
+
+
+				if (CurrentGLSL != CurrentObject3DGLSL) {
+					if (CurrentGLSL != nullptr)
+						vw_StopShaderProgram();
+
+					CurrentGLSL = CurrentObject3DGLSL;
+
+					if (CurrentObject3DGLSL != nullptr)
+						vw_UseShaderProgram(CurrentObject3DGLSL);
+				}
+
+				// данные ставим каждый раз, т.к. может что-то поменяться
+				if (CurrentObject3DGLSL != nullptr) {
+					switch (DrawObjectList[i].ShaderType) {
 					case 1: // только попиксельное освещение
 
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[0], 0);
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[1], 1);
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[2], LightType1);
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[3], LightType2);
-						if (TextureIllum != 0)
-						{
-							if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 1);
-							else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
-						}
-						else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
+						if (TextureIllum != nullptr) {
+							if (TextureIllum[0] != nullptr)
+								vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 1);
+							else
+								vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
+						} else
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
 
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[5], 3);
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[6], NeedNormalMapping);
@@ -1089,12 +1319,13 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[21], 1);
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[22], LightType1);
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[23], LightType2);
-						if (TextureIllum != 0)
-						{
-							if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 1);
-							else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
-						}
-						else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
+						if (TextureIllum != nullptr) {
+							if (TextureIllum[0] != nullptr)
+								vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 1);
+							else
+								vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
+						} else
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
 
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[25], 2);
 						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[26], ShadowMap_Get_xPixelOffset());
@@ -1104,252 +1335,18 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[30], PCFMode);
 
 						break;
-				}
-			}
-		}
-
-		int GlobalVertexCount = 0;
-		for (int i=0; i<DrawObjectQuantity; i++)
-		{
-			GlobalVertexCount += DrawObjectList[i].VertexCount;
-		}
-
-		// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
-		vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, DrawObjectList[0].VertexFormat, GlobalVertexBuffer,
-						DrawObjectList[0].VertexStride*sizeof(float), GlobalVBO, 0,
-						GlobalIndexBuffer, GlobalIBO, GlobalVAO);
-
-		vw_DeActivateAllLights();
-	}
-	else
-	{
-
-		// текущая текстура, чтобы не переставлять по 10 раз одно и то же
-		eTexture *CurrentText = 0;
-
-		// установка текстур и подхотовка к прорисовке
-		for (int i=0; i<DrawObjectQuantity; i++)
-		{
-
-			// небольшая проверка для конкретной части
-			if (HitBB != 0 && HitBBLocation != 0)
-			{
-				VECTOR3D Min, Max;
-				Min.x = Max.x = HitBB[i][0].x + HitBBLocation[i].x;
-				Min.y = Max.y = HitBB[i][0].y + HitBBLocation[i].y;
-				Min.z = Max.z = HitBB[i][0].z + HitBBLocation[i].z;
-				// берем и проверяем
-				for (int j=0; j<8; j++)
-				{
-					if (Min.x > HitBB[i][j].x + HitBBLocation[i].x) Min.x = HitBB[i][j].x + HitBBLocation[i].x;
-					if (Min.y > HitBB[i][j].y + HitBBLocation[i].y) Min.y = HitBB[i][j].y + HitBBLocation[i].y;
-					if (Min.z > HitBB[i][j].z + HitBBLocation[i].z) Min.z = HitBB[i][j].z + HitBBLocation[i].z;
-					if (Max.x < HitBB[i][j].x + HitBBLocation[i].x) Max.x = HitBB[i][j].x + HitBBLocation[i].x;
-					if (Max.y < HitBB[i][j].y + HitBBLocation[i].y) Max.y = HitBB[i][j].y + HitBBLocation[i].y;
-					if (Max.z < HitBB[i][j].z + HitBBLocation[i].z) Max.z = HitBB[i][j].z + HitBBLocation[i].z;
-				}
-
-				if (!vw_BoxInFrustum(Location + Min, Location + Max))
-				{
-					continue;
-				}
-			}
-
-
-			// работа с текстурами
-			if (CurrentText != Texture[i])
-			{
-				vw_SetTexture(0, Texture[i]);
-				vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-				// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-				if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
-
-				// если есть тайловая анимация - работаем с текстурной матрицей
-				// ! исходим из того что активен всегда 0-вой стейдж текстуры т.к. у танков на траках нет илюминейшен текстуры
-				if (DrawObjectList[i].NeedTextureAnimation)
-				{
-					vw_MatrixMode(RI_TEXTURE_MATRIX);
-					vw_LoadIdentity();
-					vw_Translate(DrawObjectList[i].TextureAnimation);
-					vw_MatrixMode(RI_MODELVIEW_MATRIX);
-				}
-
-
-				// включаем вторую текстуру
-				if (TextureIllum!=0)
-				if (TextureIllum[i]!=0)
-				{
-					// свечение
-					vw_SetTexture(1, TextureIllum[i]);
-					vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-					// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-					if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
-					// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
-					vw_SetTextureEnvMode(RI_TENV_COMBINE);
-					vw_SetTextureBlendMode(RI_TBLEND_COLOROP, RI_TBLEND_ADD);
-				}
-
-				// если у нас работают шейдеры и есть текстура нормал меппа - ставим ее
-				NeedNormalMapping = 0;
-				if (Setup.UseGLSL)
-				if (NormalMap!=0)
-				{
-					if (NormalMap[i]!=0)
-					{
-						NeedNormalMapping = 1;
-						CurrentNormalMap = NormalMap[i];
-						vw_SetTexture(3, CurrentNormalMap);
-						vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-						// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-						if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
-					}
-					else
-					{// если нет, но был установлен - нужно сделать сброс установки
-						if (CurrentNormalMap != 0)
-						{
-							vw_BindTexture(3, 0);
-							CurrentNormalMap = 0;
-						}
-					}
-				}
-
-				CurrentText = Texture[i];
-			}
-
-			vw_PushMatrix();
-
-			// сдвигаем его в нужное место
-			vw_Translate(DrawObjectList[i].Location);
-			// поворачиваем объект
-			vw_Rotate(DrawObjectList[i].Rotation.z, 0.0f, 0.0f, 1.0f);
-			vw_Rotate(DrawObjectList[i].Rotation.y, 0.0f, 1.0f, 0.0f);
-			vw_Rotate(DrawObjectList[i].Rotation.x, 1.0f, 0.0f, 0.0f);
-
-
-			// если нужна дополнительная анимация геометрией
-			if (DrawObjectList[i].NeedGeometryAnimation)
-			{
-				vw_Rotate(DrawObjectList[i].GeometryAnimation.z, 0.0f, 0.0f, 1.0f);
-				vw_Rotate(DrawObjectList[i].GeometryAnimation.y, 0.0f, 1.0f, 0.0f);
-				vw_Rotate(DrawObjectList[i].GeometryAnimation.x, 1.0f, 0.0f, 0.0f);
-			}
-
-
-			int LightType1, LightType2;
-			// включаем источники света
-			if (HitBB != 0)
-				vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location + HitBBLocation[i], HitBBRadius2[i], 2, Setup.MaxPointLights, Matrix);
-			else
-				vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
-
-
-			// если нужно рисовать прозрачным
-			// для корректной прорисовки на всех видеокартах атмосферы планеты ...
-			if (N1)
-			{
-				vw_PolygonOffset(true, 2.0f, 2.0f);
-			}
-			if (DrawObjectList[i].DrawType == 1)
-			{
-				vw_SetTextureAlphaTest(true, 0.01f);
-				vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-				vw_PolygonOffset(true, 1.0f, 1.0f);
-			}
-
-			if (Setup.UseGLSL && DrawObjectList[i].ShaderType >= 0)
-			{
-				eGLSL *CurrentObject3DGLSL = 0;
-
-				// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
-				if ((DrawObjectList[i].ShaderType == 1) && ShadowMap) DrawObjectList[i].ShaderType = 3;
-				// и на оборот, если стоит 3-й, но шадовмепа нет - ставим 1-й, просто попиксельное освещение
-				if ((DrawObjectList[i].ShaderType == 3) && !ShadowMap) DrawObjectList[i].ShaderType = 1;
-
-				// ставим нужный шейдер
-				switch (DrawObjectList[i].ShaderType)
-				{
-					case 1: CurrentObject3DGLSL = GLSLShaderType1; break;
-					case 2: CurrentObject3DGLSL = GLSLShaderType2; break;
-					case 3: CurrentObject3DGLSL = GLSLShaderType3; break;
-				}
-
-
-				if (CurrentGLSL != CurrentObject3DGLSL)
-				{
-					if (CurrentGLSL != 0) vw_StopShaderProgram();
-
-					CurrentGLSL = CurrentObject3DGLSL;
-
-					if (CurrentObject3DGLSL != 0) vw_UseShaderProgram(CurrentObject3DGLSL);
-				}
-
-				// данные ставим каждый раз, т.к. может что-то поменяться
-				if (CurrentObject3DGLSL != 0)
-				{
-					switch (DrawObjectList[i].ShaderType)
-					{
-						case 1: // только попиксельное освещение
-
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[0], 0);
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[1], 1);
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[2], LightType1);
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[3], LightType2);
-							if (TextureIllum != 0)
-							{
-								if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 1);
-								else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
-							}
-							else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
-
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[5], 3);
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[6], NeedNormalMapping);
-
-							break;
-
-						case 2: // шейдеры взрывов
-
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[10], 0);
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[11], LightType1);
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[12], LightType2);
-							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[13], DrawObjectList[0].ShaderData[0]);
-							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[14], DrawObjectList[0].ShaderData[1]);
-
-							break;
-
-						case 3: // шадов меп
-
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[20], 0);
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[21], 1);
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[22], LightType1);
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[23], LightType2);
-							if (TextureIllum != 0)
-							{
-								if (TextureIllum[0] != 0) vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 1);
-								else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
-							}
-							else vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
-
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[25], 2);
-							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[26], ShadowMap_Get_xPixelOffset());
-							vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[27], ShadowMap_Get_xPixelOffset());
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[28], 3);
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[29], NeedNormalMapping);
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[30], PCFMode);
-
-							break;
 					}
 				}
 			}
 
 
 			vw_SendVertices(RI_TRIANGLES, DrawObjectList[i].VertexCount, DrawObjectList[i].VertexFormat, DrawObjectList[i].VertexBuffer,
-							DrawObjectList[i].VertexStride*sizeof(float), DrawObjectList[i].VBO,
-							DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IBO, DrawObjectList[i].VAO);
+					DrawObjectList[i].VertexStride*sizeof(float), DrawObjectList[i].VBO,
+					DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer, DrawObjectList[i].IBO, DrawObjectList[i].VAO);
 
 
 
-			if (DrawObjectList[i].DrawType == 1)
-			{
+			if (DrawObjectList[i].DrawType == 1) {
 				vw_SetTextureAlphaTest(false, 0.01f);
 				vw_SetTextureBlend(false, 0, 0);
 				vw_PolygonOffset(false, 0.0f, 0.0f);
@@ -1358,13 +1355,12 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			vw_DeActivateAllLights();
 
 			// если меняли текстурную матрицу - обязательно восстанавливаем
-			if (DrawObjectList[i].NeedTextureAnimation)
-			{
+			if (DrawObjectList[i].NeedTextureAnimation) {
 				vw_BindTexture(0, 0);
 				vw_MatrixMode(RI_TEXTURE_MATRIX);
 				vw_LoadIdentity();
 				vw_MatrixMode(RI_MODELVIEW_MATRIX);
-				CurrentText = 0;
+				CurrentText = nullptr;
 			}
 
 			vw_PopMatrix();
@@ -1373,17 +1369,19 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 	// останавливаем шейдер, если был запущен
-	if (Setup.UseGLSL)
-	{
+	if (Setup.UseGLSL) {
 		vw_StopShaderProgram();
-		CurrentGLSL = 0;
+		CurrentGLSL = nullptr;
 	}
 	// установка параметров текстур в исходное состояние
-	if (CurrentNormalMap != 0) vw_BindTexture(3, 0);
+	if (CurrentNormalMap != nullptr)
+		vw_BindTexture(3, 0);
 	vw_BindTexture(1, 0);
 	vw_BindTexture(0, 0);
-	if (NeedAlphaTest) vw_SetTextureAlphaTest(false, 0.01f);
-	if (!NeedCullFaces) vw_CullFace(RI_BACK);
+	if (NeedAlphaTest)
+		vw_SetTextureAlphaTest(false, 0.01f);
+	if (!NeedCullFaces)
+		vw_CullFace(RI_BACK);
 	vw_PopMatrix();
 
 
@@ -1393,10 +1391,8 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 	// вывод отладочной информации, если она есть
-	if (DebugInfo != 0)
-	{
+	if (DebugInfo != nullptr)
 		vw_DrawFont3D(Location.x, Location.y+AABB[0].y, Location.z, DebugInfo);
-	}
 
 
 
@@ -1407,20 +1403,20 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 /////////////////////
 // рисуем боксы
 
-	if (NeedShowBB>=1)
+	if (NeedShowBB >= 1)
 		// AABB объекта
 		DrawBoxLines(AABB, Location, 1.0f, 0.0f, 0.0f, 1.0f);
 
-	if (NeedShowBB>=2)
+	if (NeedShowBB >= 2)
 		// OBB объекта
 		DrawBoxLines(OBB, Location+OBBLocation, 0.0f, 1.0f, 0.0f, 1.0f);
 
-	if (NeedShowBB>=3)
-		if (HitBB != 0)
-		for (int i=0; i<DrawObjectQuantity; i++)
-		{
+	if ((NeedShowBB >= 3) &&
+	    (HitBB != nullptr)) {
+		for (int i=0; i<DrawObjectQuantity; i++) {
 			DrawBoxLines(HitBB[i], Location+HitBBLocation[i], 0.0f, 0.0f, 1.0f, 1.0f);
 		}
+	}
 
 ///////////////////////
 
@@ -1442,8 +1438,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 	// буфер для последовательности RI_TRIANGLE_STRIP
 	// войдет RI_3f_XYZ | RI_4f_COLOR
-	float *tmpDATA = 0;
-	tmpDATA = new float[4*(3+4)];
+	float *tmpDATA = new float[4*(3+4)];
 	int k=0;
 
 	// рисуем заднюю часть - основу
@@ -1551,8 +1546,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 	// выводим щит, если он есть
-	if (ShieldStrengthStart > 0.0f)
-	{
+	if (ShieldStrengthStart > 0.0f) {
 		k=0;
 
 		// рисуем заднюю часть - основу
@@ -1678,16 +1672,14 @@ bool CObject3D::Update(float Time)
 
 
 	// если еще ни разу не обновляли - просто запоминаем время
-	if (TimeLastUpdate == -1.0f)
-	{
+	if (TimeLastUpdate == -1.0f) {
 		TimeLastUpdate = Time;
 		return true;
 	}
 
 
 	// нужно удалить объект - он вышел из зоны видемости
-	if (ShowDeleteOnHide == 2)
-	{
+	if (ShowDeleteOnHide == 2) {
 		// показываем еще 1 секунду, и удаляем
 		Lifetime = 1.0f;
 		// если объект еще раз покажем, опять будем показывать 1 секунду с момента ухода со сцены
@@ -1703,8 +1695,7 @@ bool CObject3D::Update(float Time)
 	TimeLastUpdate = Time;
 
 	// проверяем, сколько объекту жить, если нужно...-1.0f  - проверка не нужна
-	if (Lifetime > -1.0f)
-	{
+	if (Lifetime > -1.0f) {
 		// считаем, сколько осталось жить
 		Lifetime -= TimeDelta;
 		// если уже ничего не осталось - его нужно уничтожить
@@ -1715,48 +1706,46 @@ bool CObject3D::Update(float Time)
 
 	// проверка, зарядка щита если он есть
 	if (ShieldStrengthStart > 0.0f)
-	if (ShieldStrength < ShieldStrengthStart)
-	{
-		ShieldStrength += ShieldRecharge*TimeDelta;
-		if (ShieldStrength > ShieldStrengthStart) ShieldStrength = ShieldStrengthStart;
-	}
+		if (ShieldStrength < ShieldStrengthStart) {
+			ShieldStrength += ShieldRecharge*TimeDelta;
+			if (ShieldStrength > ShieldStrengthStart) ShieldStrength = ShieldStrengthStart;
+		}
 
 
 
 	// если есть, нужно обработать
-	if (StartTimeSheet != 0)
-	{
+	if (StartTimeSheet != nullptr) {
 
 		// если это не вечная запись
-		if (StartTimeSheet != 0)
-		if (StartTimeSheet->Time > -1.0f)
-		{
+		if ((StartTimeSheet != nullptr) &&
+		    (StartTimeSheet->Time > -1.0f)) {
 			StartTimeSheet->Time -= TimeDelta;
 			// ставим первую запись
-			if (StartTimeSheet->Time <= 0.0f)
-			{
+			if (StartTimeSheet->Time <= 0.0f) {
 				// чтобы не переделать больше чем нужно (особенно при поворотах)
-				if (StartTimeSheet->Time < 0.0f) TimeDelta -= StartTimeSheet->Time;
+				if (StartTimeSheet->Time < 0.0f)
+					TimeDelta -= StartTimeSheet->Time;
 
 				CTimeSheet* TmpTimeSheet = StartTimeSheet;
 				// отсоединяем от списка
 				DetachTimeSheet(StartTimeSheet);
 				// удаляем
-				delete TmpTimeSheet; TmpTimeSheet = 0;
+				delete TmpTimeSheet;
+				TmpTimeSheet = nullptr;
 			}
 		}
 
 
 		// нужно проверить, если это упаковынные действия, нужно распаковать
-		if (StartTimeSheet != 0)
-		if (StartTimeSheet->AI_Mode != 0)
-		{
+		if ((StartTimeSheet != nullptr) &&
+		    (StartTimeSheet->AI_Mode != 0)) {
 			// передаем на распаковку
 			InterAIMode(this, StartTimeSheet);
 			// удаляем эту запись, мы ее уже распаковали
 			CTimeSheet* TmpTimeSheet = StartTimeSheet;
 			DetachTimeSheet(StartTimeSheet);
-			delete TmpTimeSheet; TmpTimeSheet = 0;
+			delete TmpTimeSheet;
+			TmpTimeSheet = nullptr;
 		}
 	}
 
@@ -1777,20 +1766,18 @@ bool CObject3D::Update(float Time)
 //-----------------------------------------------------------------------------
 void CObject3D::AttachTimeSheet(CTimeSheet* TimeSheet)
 {
-	if (TimeSheet == 0) return;
+	if (TimeSheet == nullptr)
+		return;
 
 	// первый в списке...
-	if (EndTimeSheet == 0)
-	{
-		TimeSheet->Prev = 0;
-		TimeSheet->Next = 0;
+	if (EndTimeSheet == nullptr) {
+		TimeSheet->Prev = nullptr;
+		TimeSheet->Next = nullptr;
 		StartTimeSheet = TimeSheet;
 		EndTimeSheet = TimeSheet;
-	}
-	else // продолжаем заполнение...
-	{
+	} else { // продолжаем заполнение...
 		TimeSheet->Prev = EndTimeSheet;
-		TimeSheet->Next = 0;
+		TimeSheet->Next = nullptr;
 		EndTimeSheet->Next = TimeSheet;
 		EndTimeSheet = TimeSheet;
 	}
@@ -1805,17 +1792,24 @@ void CObject3D::AttachTimeSheet(CTimeSheet* TimeSheet)
 //-----------------------------------------------------------------------------
 void CObject3D::DetachTimeSheet(CTimeSheet* TimeSheet)
 {
-	if (TimeSheet == 0) return;
+	if (TimeSheet == nullptr)
+		return;
 
 	// переустанавливаем указатели...
-	if (StartTimeSheet == TimeSheet) StartTimeSheet = TimeSheet->Next;
-	if (EndTimeSheet == TimeSheet) EndTimeSheet = TimeSheet->Prev;
+	if (StartTimeSheet == TimeSheet)
+		StartTimeSheet = TimeSheet->Next;
+	if (EndTimeSheet == TimeSheet)
+		EndTimeSheet = TimeSheet->Prev;
 
+	if (TimeSheet->Next != nullptr)
+		TimeSheet->Next->Prev = TimeSheet->Prev;
+	else if (TimeSheet->Prev != nullptr)
+		TimeSheet->Prev->Next = nullptr;
 
-	if (TimeSheet->Next != 0) TimeSheet->Next->Prev = TimeSheet->Prev;
-		else if (TimeSheet->Prev != 0) TimeSheet->Prev->Next = 0;
-	if (TimeSheet->Prev != 0) TimeSheet->Prev->Next = TimeSheet->Next;
-		else if (TimeSheet->Next != 0) TimeSheet->Next->Prev = 0;
+	if (TimeSheet->Prev != nullptr)
+		TimeSheet->Prev->Next = TimeSheet->Next;
+	else if (TimeSheet->Next != nullptr)
+		TimeSheet->Next->Prev = nullptr;
 }
 
 

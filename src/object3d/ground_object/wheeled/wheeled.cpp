@@ -30,8 +30,7 @@
 
 
 
-struct WheeledData
-{
+struct WheeledData {
 	float	Strength;
 	int		WeaponQuantity;
 	float 	SpeedToRotate;
@@ -39,8 +38,7 @@ struct WheeledData
 	const	char *TextureName;
 };
 
-static WheeledData PresetWheeledData[] =
-{
+static WheeledData PresetWheeledData[] = {
 	{120, 4,	50.0f,	"models/wheeled/jeep-01.vw3d",	"models/gr-02.vw2d"},
 	{70, 2,		50.0f,	"models/wheeled/jeep-02.vw3d",	"models/gr-02.vw2d"},
 	{100, 2,	50.0f,	"models/wheeled/jeep-03.vw3d",	"models/gr-02.vw2d"},
@@ -59,8 +57,7 @@ static WheeledData PresetWheeledData[] =
 //-----------------------------------------------------------------------------
 void CWheeled::Create(int WheeledNum)
 {
-	if ((WheeledNum <= 0) || ((unsigned int)WheeledNum > PresetWheeledDataCount))
-	{
+	if ((WheeledNum <= 0) || ((unsigned int)WheeledNum > PresetWheeledDataCount)) {
 		fprintf(stderr, "!!! Couldn't init CWheeled object with Number %i.\n", WheeledNum);
 		return;
 	}
@@ -74,8 +71,7 @@ void CWheeled::Create(int WheeledNum)
 
 	LoadObjectData(PresetWheeledData[WheeledNum-1].Name, this, 0, 2.0f);
 
-	for (int i=0; i<DrawObjectQuantity; i++)
-	{
+	for (int i=0; i<DrawObjectQuantity; i++) {
 		Texture[i] = vw_FindTextureByName(PresetWheeledData[WheeledNum-1].TextureName);
 	}
 	ResistanceHull = 1.0f;
@@ -92,241 +88,239 @@ void CWheeled::Create(int WheeledNum)
 	WeaponLocation = new VECTOR3D[WeaponQuantity];
 	Weapon = new CWeapon*[WeaponQuantity];
 	WeaponBound = new VECTOR3D[WeaponQuantity];
-	for (int i=0; i<WeaponQuantity; i++)
-	{
+	for (int i=0; i<WeaponQuantity; i++) {
 		WeaponSetFire[i] = false;
-		Weapon[i] = 0;
+		Weapon[i] = nullptr;
 	}
 
 
 
 	// установка доп. текстуры и других настроек для каждой модели
-	switch (WheeledNum)
-	{
-		case 1:
-			WeaponLocation[0] = VECTOR3D(0.3f, 4.5f, -1.5f);
-			Weapon[0] = new CWeapon;
-			Weapon[0]->Create(206);
-			WeaponLocation[1] = VECTOR3D(-0.3f, 4.5f, -1.5f);
-			Weapon[1] = new CWeapon;
-			Weapon[1]->Create(206);
-			WeaponLocation[2] = VECTOR3D(0.9f, 4.5f, -1.5f);
-			Weapon[2] = new CWeapon;
-			Weapon[2]->Create(206);
-			WeaponLocation[3] = VECTOR3D(-0.9f, 4.5f, -1.5f);
-			Weapon[3] = new CWeapon;
-			Weapon[3]->Create(206);
-			WeaponFireType = 3;
+	switch (WheeledNum) {
+	case 1:
+		WeaponLocation[0] = VECTOR3D(0.3f, 4.5f, -1.5f);
+		Weapon[0] = new CWeapon;
+		Weapon[0]->Create(206);
+		WeaponLocation[1] = VECTOR3D(-0.3f, 4.5f, -1.5f);
+		Weapon[1] = new CWeapon;
+		Weapon[1]->Create(206);
+		WeaponLocation[2] = VECTOR3D(0.9f, 4.5f, -1.5f);
+		Weapon[2] = new CWeapon;
+		Weapon[2]->Create(206);
+		WeaponLocation[3] = VECTOR3D(-0.9f, 4.5f, -1.5f);
+		Weapon[3] = new CWeapon;
+		Weapon[3]->Create(206);
+		WeaponFireType = 3;
 
-			WheelQuantity = 4;
-			WheelObjectsNum = new int[4];
-			WheelObjectsNum[0] = 0;
-			WheelObjectsNum[1] = 2;
-			WheelObjectsNum[2] = 3;
-			WheelObjectsNum[3] = 4;
+		WheelQuantity = 4;
+		WheelObjectsNum = new int[4];
+		WheelObjectsNum[0] = 0;
+		WheelObjectsNum[1] = 2;
+		WheelObjectsNum[2] = 3;
+		WheelObjectsNum[3] = 4;
 
-			WheelRotateQuantity = 2;
-			WheelRotateObjectsNum = new int[2];
-			WheelRotateObjectsNum[0] = 3;
-			WheelRotateObjectsNum[1] = 4;
-			MaxWheelRotateAngle = 30.0f;
+		WheelRotateQuantity = 2;
+		WheelRotateObjectsNum = new int[2];
+		WheelRotateObjectsNum[0] = 3;
+		WheelRotateObjectsNum[1] = 4;
+		MaxWheelRotateAngle = 30.0f;
 
-			TargetVertObjectQuantity = 1;
-			TargetVertObject = new int[TargetVertObjectQuantity];
-			TargetVertObject[0] = 5;
-			TargetVertObjectMaxAngle = 30.0f;
-			break;
+		TargetVertObjectQuantity = 1;
+		TargetVertObject = new int[TargetVertObjectQuantity];
+		TargetVertObject[0] = 5;
+		TargetVertObjectMaxAngle = 30.0f;
+		break;
 
-		case 2:
-			WeaponLocation[0] = VECTOR3D(1.3f, 3.5f, -1.5f);
-			Weapon[0] = new CWeapon;
-			Weapon[0]->Create(206);
-			WeaponLocation[1] = VECTOR3D(-1.3f, 3.5f, -1.5f);
-			Weapon[1] = new CWeapon;
-			Weapon[1]->Create(206);
-			WeaponFireType = 3;
-			DoNotCalculateRotation = true;
+	case 2:
+		WeaponLocation[0] = VECTOR3D(1.3f, 3.5f, -1.5f);
+		Weapon[0] = new CWeapon;
+		Weapon[0]->Create(206);
+		WeaponLocation[1] = VECTOR3D(-1.3f, 3.5f, -1.5f);
+		Weapon[1] = new CWeapon;
+		Weapon[1]->Create(206);
+		WeaponFireType = 3;
+		DoNotCalculateRotation = true;
 
-			WheelQuantity = 4;
-			WheelObjectsNum = new int[4];
-			WheelObjectsNum[0] = 1;
-			WheelObjectsNum[1] = 2;
-			WheelObjectsNum[2] = 3;
-			WheelObjectsNum[3] = 4;
+		WheelQuantity = 4;
+		WheelObjectsNum = new int[4];
+		WheelObjectsNum[0] = 1;
+		WheelObjectsNum[1] = 2;
+		WheelObjectsNum[2] = 3;
+		WheelObjectsNum[3] = 4;
 
-			WheelRotateQuantity = 2;
-			WheelRotateObjectsNum = new int[2];
-			WheelRotateObjectsNum[0] = 1;
-			WheelRotateObjectsNum[1] = 4;
-			MaxWheelRotateAngle = 20.0f;
-			break;
+		WheelRotateQuantity = 2;
+		WheelRotateObjectsNum = new int[2];
+		WheelRotateObjectsNum[0] = 1;
+		WheelRotateObjectsNum[1] = 4;
+		MaxWheelRotateAngle = 20.0f;
+		break;
 
-		case 3:
-			WeaponLocation[0] = VECTOR3D(0.8f, 4.2f, -1.0f);
-			Weapon[0] = new CWeapon;
-			Weapon[0]->Create(204);
-			WeaponLocation[1] = VECTOR3D(-0.8f, 4.2f, -1.0f);
-			Weapon[1] = new CWeapon;
-			Weapon[1]->Create(204);
-			WeaponFireType = 2;
+	case 3:
+		WeaponLocation[0] = VECTOR3D(0.8f, 4.2f, -1.0f);
+		Weapon[0] = new CWeapon;
+		Weapon[0]->Create(204);
+		WeaponLocation[1] = VECTOR3D(-0.8f, 4.2f, -1.0f);
+		Weapon[1] = new CWeapon;
+		Weapon[1]->Create(204);
+		WeaponFireType = 2;
 
-			WheelQuantity = 4;
-			WheelObjectsNum = new int[4];
-			WheelObjectsNum[0] = 0;
-			WheelObjectsNum[1] = 1;
-			WheelObjectsNum[2] = 2;
-			WheelObjectsNum[3] = 5;
+		WheelQuantity = 4;
+		WheelObjectsNum = new int[4];
+		WheelObjectsNum[0] = 0;
+		WheelObjectsNum[1] = 1;
+		WheelObjectsNum[2] = 2;
+		WheelObjectsNum[3] = 5;
 
-			WheelRotateQuantity = 2;
-			WheelRotateObjectsNum = new int[2];
-			WheelRotateObjectsNum[0] = 0;
-			WheelRotateObjectsNum[1] = 1;
-			MaxWheelRotateAngle = 20.0f;
+		WheelRotateQuantity = 2;
+		WheelRotateObjectsNum = new int[2];
+		WheelRotateObjectsNum[0] = 0;
+		WheelRotateObjectsNum[1] = 1;
+		MaxWheelRotateAngle = 20.0f;
 
-			TargetHorizObjectQuantity = 2;
-			TargetHorizObject = new int[TargetHorizObjectQuantity];
-			TargetHorizObject[0] = 3;
-			TargetHorizObject[1] = 6;
+		TargetHorizObjectQuantity = 2;
+		TargetHorizObject = new int[TargetHorizObjectQuantity];
+		TargetHorizObject[0] = 3;
+		TargetHorizObject[1] = 6;
 
-			TargetVertObjectQuantity = 1;
-			TargetVertObject = new int[TargetVertObjectQuantity];
-			TargetVertObject[0] = 6;
-			TargetVertObjectMaxAngle = 60.0f;
-			break;
+		TargetVertObjectQuantity = 1;
+		TargetVertObject = new int[TargetVertObjectQuantity];
+		TargetVertObject[0] = 6;
+		TargetVertObjectMaxAngle = 60.0f;
+		break;
 
-		case 4:
-			WeaponLocation[0] = VECTOR3D(0.0f, 4.5f, -4.0f);
-			Weapon[0] = new CWeapon;
-			Weapon[0]->Create(207);
+	case 4:
+		WeaponLocation[0] = VECTOR3D(0.0f, 4.5f, -4.0f);
+		Weapon[0] = new CWeapon;
+		Weapon[0]->Create(207);
 
-			WheelQuantity = 4;
-			WheelObjectsNum = new int[4];
-			WheelObjectsNum[0] = 0;
-			WheelObjectsNum[1] = 1;
-			WheelObjectsNum[2] = 3;
-			WheelObjectsNum[3] = 4;
+		WheelQuantity = 4;
+		WheelObjectsNum = new int[4];
+		WheelObjectsNum[0] = 0;
+		WheelObjectsNum[1] = 1;
+		WheelObjectsNum[2] = 3;
+		WheelObjectsNum[3] = 4;
 
-			WheelRotateQuantity = 2;
-			WheelRotateObjectsNum = new int[2];
-			WheelRotateObjectsNum[0] = 0;
-			WheelRotateObjectsNum[1] = 3;
-			MaxWheelRotateAngle = 20.0f;
-			break;
+		WheelRotateQuantity = 2;
+		WheelRotateObjectsNum = new int[2];
+		WheelRotateObjectsNum[0] = 0;
+		WheelRotateObjectsNum[1] = 3;
+		MaxWheelRotateAngle = 20.0f;
+		break;
 
-		case 5:
-			WeaponLocation[0] = VECTOR3D(0.0f, 4.5f, -4.0f);
-			Weapon[0] = new CWeapon;
-			Weapon[0]->Create(208);
+	case 5:
+		WeaponLocation[0] = VECTOR3D(0.0f, 4.5f, -4.0f);
+		Weapon[0] = new CWeapon;
+		Weapon[0]->Create(208);
 
-			WheelQuantity = 4;
-			WheelObjectsNum = new int[4];
-			WheelObjectsNum[0] = 1;
-			WheelObjectsNum[1] = 2;
-			WheelObjectsNum[2] = 3;
-			WheelObjectsNum[3] = 4;
+		WheelQuantity = 4;
+		WheelObjectsNum = new int[4];
+		WheelObjectsNum[0] = 1;
+		WheelObjectsNum[1] = 2;
+		WheelObjectsNum[2] = 3;
+		WheelObjectsNum[3] = 4;
 
-			WheelRotateQuantity = 2;
-			WheelRotateObjectsNum = new int[2];
-			WheelRotateObjectsNum[0] = 1;
-			WheelRotateObjectsNum[1] = 2;
-			MaxWheelRotateAngle = 30.0f;
-			break;
+		WheelRotateQuantity = 2;
+		WheelRotateObjectsNum = new int[2];
+		WheelRotateObjectsNum[0] = 1;
+		WheelRotateObjectsNum[1] = 2;
+		MaxWheelRotateAngle = 30.0f;
+		break;
 
-		case 6:
-			WeaponLocation[0] = VECTOR3D(0.0f, 6.0f, -3.0f);
-			Weapon[0] = new CWeapon;
-			Weapon[0]->Create(204);
+	case 6:
+		WeaponLocation[0] = VECTOR3D(0.0f, 6.0f, -3.0f);
+		Weapon[0] = new CWeapon;
+		Weapon[0]->Create(204);
 
-			WheelQuantity = 4;
-			WheelObjectsNum = new int[4];
-			WheelObjectsNum[0] = 1;
-			WheelObjectsNum[1] = 2;
-			WheelObjectsNum[2] = 3;
-			WheelObjectsNum[3] = 4;
+		WheelQuantity = 4;
+		WheelObjectsNum = new int[4];
+		WheelObjectsNum[0] = 1;
+		WheelObjectsNum[1] = 2;
+		WheelObjectsNum[2] = 3;
+		WheelObjectsNum[3] = 4;
 
-			WheelRotateQuantity = 2;
-			WheelRotateObjectsNum = new int[2];
-			WheelRotateObjectsNum[0] = 1;
-			WheelRotateObjectsNum[1] = 4;
-			MaxWheelRotateAngle = 30.0f;
+		WheelRotateQuantity = 2;
+		WheelRotateObjectsNum = new int[2];
+		WheelRotateObjectsNum[0] = 1;
+		WheelRotateObjectsNum[1] = 4;
+		MaxWheelRotateAngle = 30.0f;
 
-			TargetHorizObjectQuantity = 2;
-			TargetHorizObject = new int[TargetHorizObjectQuantity];
-			TargetHorizObject[0] = 5;
-			TargetHorizObject[1] = 6;
+		TargetHorizObjectQuantity = 2;
+		TargetHorizObject = new int[TargetHorizObjectQuantity];
+		TargetHorizObject[0] = 5;
+		TargetHorizObject[1] = 6;
 
-			TargetVertObjectQuantity = 1;
-			TargetVertObject = new int[TargetVertObjectQuantity];
-			TargetVertObject[0] = 6;
-			TargetVertObjectMaxAngle = 40.0f;
-			break;
+		TargetVertObjectQuantity = 1;
+		TargetVertObject = new int[TargetVertObjectQuantity];
+		TargetVertObject[0] = 6;
+		TargetVertObjectMaxAngle = 40.0f;
+		break;
 
-		case 7:
-			WeaponLocation[0] = VECTOR3D(0.1f, 5.0f, -1.0f);
-			Weapon[0] = new CWeapon;
-			Weapon[0]->Create(204);
-			WeaponLocation[1] = VECTOR3D(-0.1f, 5.0f, -1.0f);
-			Weapon[1] = new CWeapon;
-			Weapon[1]->Create(204);
-			WeaponFireType = 2;
+	case 7:
+		WeaponLocation[0] = VECTOR3D(0.1f, 5.0f, -1.0f);
+		Weapon[0] = new CWeapon;
+		Weapon[0]->Create(204);
+		WeaponLocation[1] = VECTOR3D(-0.1f, 5.0f, -1.0f);
+		Weapon[1] = new CWeapon;
+		Weapon[1]->Create(204);
+		WeaponFireType = 2;
 
-			WheelQuantity = 4;
-			WheelObjectsNum = new int[4];
-			WheelObjectsNum[0] = 1;
-			WheelObjectsNum[1] = 2;
-			WheelObjectsNum[2] = 3;
-			WheelObjectsNum[3] = 4;
+		WheelQuantity = 4;
+		WheelObjectsNum = new int[4];
+		WheelObjectsNum[0] = 1;
+		WheelObjectsNum[1] = 2;
+		WheelObjectsNum[2] = 3;
+		WheelObjectsNum[3] = 4;
 
-			WheelRotateQuantity = 2;
-			WheelRotateObjectsNum = new int[2];
-			WheelRotateObjectsNum[0] = 1;
-			WheelRotateObjectsNum[1] = 4;
-			MaxWheelRotateAngle = 20.0f;
+		WheelRotateQuantity = 2;
+		WheelRotateObjectsNum = new int[2];
+		WheelRotateObjectsNum[0] = 1;
+		WheelRotateObjectsNum[1] = 4;
+		MaxWheelRotateAngle = 20.0f;
 
-			TargetHorizObjectQuantity = 2;
-			TargetHorizObject = new int[TargetHorizObjectQuantity];
-			TargetHorizObject[0] = 5;
-			TargetHorizObject[1] = 6;
+		TargetHorizObjectQuantity = 2;
+		TargetHorizObject = new int[TargetHorizObjectQuantity];
+		TargetHorizObject[0] = 5;
+		TargetHorizObject[1] = 6;
 
-			TargetVertObjectQuantity = 1;
-			TargetVertObject = new int[TargetVertObjectQuantity];
-			TargetVertObject[0] = 6;
-			TargetVertObjectMaxAngle = 40.0f;
-			break;
+		TargetVertObjectQuantity = 1;
+		TargetVertObject = new int[TargetVertObjectQuantity];
+		TargetVertObject[0] = 6;
+		TargetVertObjectMaxAngle = 40.0f;
+		break;
 
-		case 8:
-			WeaponLocation[0] = VECTOR3D(1.5f, 5.2f, 7.0f);
-			Weapon[0] = new CWeapon;
-			Weapon[0]->Create(210);
-			WeaponLocation[1] = VECTOR3D(-1.5f, 5.2f, 7.0f);
-			Weapon[1] = new CWeapon;
-			Weapon[1]->Create(210);
-			WeaponFireType = 3;
+	case 8:
+		WeaponLocation[0] = VECTOR3D(1.5f, 5.2f, 7.0f);
+		Weapon[0] = new CWeapon;
+		Weapon[0]->Create(210);
+		WeaponLocation[1] = VECTOR3D(-1.5f, 5.2f, 7.0f);
+		Weapon[1] = new CWeapon;
+		Weapon[1]->Create(210);
+		WeaponFireType = 3;
 
-			WheelQuantity = 8;
-			WheelObjectsNum = new int[8];
-			WheelObjectsNum[0] = 1;
-			WheelObjectsNum[1] = 3;
-			WheelObjectsNum[2] = 4;
-			WheelObjectsNum[3] = 5;
-			WheelObjectsNum[4] = 6;
-			WheelObjectsNum[5] = 7;
-			WheelObjectsNum[6] = 8;
-			WheelObjectsNum[7] = 9;
+		WheelQuantity = 8;
+		WheelObjectsNum = new int[8];
+		WheelObjectsNum[0] = 1;
+		WheelObjectsNum[1] = 3;
+		WheelObjectsNum[2] = 4;
+		WheelObjectsNum[3] = 5;
+		WheelObjectsNum[4] = 6;
+		WheelObjectsNum[5] = 7;
+		WheelObjectsNum[6] = 8;
+		WheelObjectsNum[7] = 9;
 
-			WheelRotateQuantity = 4;
-			WheelRotateObjectsNum = new int[4];
-			WheelRotateObjectsNum[0] = 1;
-			WheelRotateObjectsNum[1] = 3;
-			WheelRotateObjectsNum[2] = 6;
-			WheelRotateObjectsNum[3] = 7;
-			MaxWheelRotateAngle = 20.0f;
+		WheelRotateQuantity = 4;
+		WheelRotateObjectsNum = new int[4];
+		WheelRotateObjectsNum[0] = 1;
+		WheelRotateObjectsNum[1] = 3;
+		WheelRotateObjectsNum[2] = 6;
+		WheelRotateObjectsNum[3] = 7;
+		MaxWheelRotateAngle = 20.0f;
 
-			TargetVertObjectQuantity = 1;
-			TargetVertObject = new int[TargetVertObjectQuantity];
-			TargetVertObject[0] = 2;
-			TargetVertObjectMaxAngle = 90.0f;
-			break;
+		TargetVertObjectQuantity = 1;
+		TargetVertObject = new int[TargetVertObjectQuantity];
+		TargetVertObject[0] = 2;
+		TargetVertObjectMaxAngle = 90.0f;
+		break;
 	}
 
 
@@ -343,8 +337,7 @@ void CWheeled::Create(int WheeledNum)
 	CurentDeviationSum = new float[DeviationObjQuantity];
 	DeviationObjNum = new int[DeviationObjQuantity];
 
-	for (int i=0; i<DeviationObjQuantity; i++)
-	{
+	for (int i=0; i<DeviationObjQuantity; i++) {
 		Deviation[i] = VECTOR3D(0.0f, 1.0f, 0.0f);
 		NeedDeviation[i] = vw_Randf0*0.1f;
 		CurentDeviation[i] = CurentDeviationSum[i] = 0.0f;
@@ -358,40 +351,26 @@ void CWheeled::Create(int WheeledNum)
 
 
 	// вычисляем данные для нахождения точки стрельбы
-	if (TargetHorizObject != 0)
-	{
+	if (TargetHorizObject != nullptr)
 		BaseBound = DrawObjectList[TargetHorizObject[0]].Location;
-	}
 
-	if (TargetVertObject != 0)
-	{
-		if (TargetHorizObject != 0)
-		{
+	if (TargetVertObject != nullptr) {
+		if (TargetHorizObject != nullptr) {
 			MiddleBound = DrawObjectList[TargetVertObject[0]].Location - DrawObjectList[TargetHorizObject[0]].Location;
-		}
-		else
-		{
+		} else {
 			MiddleBound = DrawObjectList[TargetVertObject[0]].Location;
 		}
 	}
 
-	if (WeaponBound != 0)
-	for (int i=0; i<WeaponQuantity; i++)
-	{
-		if (TargetVertObject != 0)
-		{
-			WeaponBound[i] = WeaponLocation[i] - DrawObjectList[TargetVertObject[0]].Location;
-		}
-		else
-		if (TargetHorizObject != 0)
-		{
-			WeaponBound[i] = WeaponLocation[i] - DrawObjectList[TargetHorizObject[0]].Location;
-		}
-		else
-		{
-			WeaponBound[i] = WeaponLocation[i];
+	if (WeaponBound != nullptr) {
+		for (int i = 0; i < WeaponQuantity; i++) {
+			if (TargetVertObject != nullptr)
+				WeaponBound[i] = WeaponLocation[i] - DrawObjectList[TargetVertObject[0]].Location;
+			else if (TargetHorizObject != nullptr)
+				WeaponBound[i] = WeaponLocation[i] - DrawObjectList[TargetHorizObject[0]].Location;
+			else
+				WeaponBound[i] = WeaponLocation[i];
 		}
 	}
-
 }
 

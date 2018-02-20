@@ -68,22 +68,40 @@ int CheckMissionTitleNum(char *Num)
 	int XSum = 0;
 
 	// считаем
-	for (size_t i=0; i<strlen(Num); i++)
-	{
+	for (size_t i=0; i<strlen(Num); i++) {
 		char Char = Num[i];
 
-		switch (Char)
-		{
-			case '1':	SetRect(&SrcRect,15,1,48,63); break;
-			case '2':	SetRect(&SrcRect,48,1,86,63); break;
-			case '3':	SetRect(&SrcRect,86,1,124,63); break;
-			case '4':	SetRect(&SrcRect,124,1,160,63); break;
-			case '5':	SetRect(&SrcRect,161,1,200,63); break;
-			case '6':	SetRect(&SrcRect,200,1,238,63); break;
-			case '7':	SetRect(&SrcRect,239,1,275,63); break;
-			case '8':	SetRect(&SrcRect,276,1,315,63); break;
-			case '9':	SetRect(&SrcRect,319,1,385,63); break;
-			case '0':	SetRect(&SrcRect,360,1,399,63); break;
+		switch (Char) {
+		case '1':
+			SetRect(&SrcRect,15,1,48,63);
+			break;
+		case '2':
+			SetRect(&SrcRect,48,1,86,63);
+			break;
+		case '3':
+			SetRect(&SrcRect,86,1,124,63);
+			break;
+		case '4':
+			SetRect(&SrcRect,124,1,160,63);
+			break;
+		case '5':
+			SetRect(&SrcRect,161,1,200,63);
+			break;
+		case '6':
+			SetRect(&SrcRect,200,1,238,63);
+			break;
+		case '7':
+			SetRect(&SrcRect,239,1,275,63);
+			break;
+		case '8':
+			SetRect(&SrcRect,276,1,315,63);
+			break;
+		case '9':
+			SetRect(&SrcRect,319,1,385,63);
+			break;
+		case '0':
+			SetRect(&SrcRect,360,1,399,63);
+			break;
 		}
 
 		XSum += SrcRect.right - SrcRect.left;
@@ -107,22 +125,40 @@ void DrawMissionTitleNum(int X, int Y, char *Num, float Transp)
 
 
 	// рисуем
-	for (size_t i=0; i<strlen(Num); i++)
-	{
+	for (size_t i=0; i<strlen(Num); i++) {
 		char Char = Num[i];
 
-		switch (Char)
-		{
-			case '1':	SetRect(&SrcRect,15,1,48,63); break;
-			case '2':	SetRect(&SrcRect,48,1,86,63); break;
-			case '3':	SetRect(&SrcRect,86,1,124,63); break;
-			case '4':	SetRect(&SrcRect,124,1,160,63); break;
-			case '5':	SetRect(&SrcRect,161,1,200,63); break;
-			case '6':	SetRect(&SrcRect,200,1,238,63); break;
-			case '7':	SetRect(&SrcRect,239,1,275,63); break;
-			case '8':	SetRect(&SrcRect,276,1,315,63); break;
-			case '9':	SetRect(&SrcRect,319,1,355,63); break;
-			case '0':	SetRect(&SrcRect,360,1,399,63); break;
+		switch (Char) {
+		case '1':
+			SetRect(&SrcRect,15,1,48,63);
+			break;
+		case '2':
+			SetRect(&SrcRect,48,1,86,63);
+			break;
+		case '3':
+			SetRect(&SrcRect,86,1,124,63);
+			break;
+		case '4':
+			SetRect(&SrcRect,124,1,160,63);
+			break;
+		case '5':
+			SetRect(&SrcRect,161,1,200,63);
+			break;
+		case '6':
+			SetRect(&SrcRect,200,1,238,63);
+			break;
+		case '7':
+			SetRect(&SrcRect,239,1,275,63);
+			break;
+		case '8':
+			SetRect(&SrcRect,276,1,315,63);
+			break;
+		case '9':
+			SetRect(&SrcRect,319,1,355,63);
+			break;
+		case '0':
+			SetRect(&SrcRect,360,1,399,63);
+			break;
 		}
 
 
@@ -168,17 +204,14 @@ void GameDrawMissionTitle()
 	SetRect(&SrcRect,0,0,226,64);
 	SetRect(&DstRect,XStart,352,XStart+226,352+64);
 
-	if (MissionTitleLifeTime >= 1.0f)
-	{
+	if (MissionTitleLifeTime >= 1.0f) {
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_mission.tga")),
-			true, 1.0f, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+				   true, 1.0f, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 		// вывод номера миссии
 		DrawMissionTitleNum(XStart+226+20, 352+1, buffer, 1.0f);
-	}
-	else
-	{
+	} else {
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_mission.tga")),
-			true, MissionTitleLifeTime, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+				   true, MissionTitleLifeTime, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 		// вывод номера миссии
 		DrawMissionTitleNum(XStart+226+20, 352+1, buffer, MissionTitleLifeTime);
 	}
@@ -221,8 +254,7 @@ void GameDrawMissionFailed()
 		MissionFailedLifeTime -= TimeDelta;
 
 	// все, время вышло... нужно сделать сброс и загрузить меню
-	if (MissionFailedLifeTime <= 0.0f)
-	{
+	if (MissionFailedLifeTime <= 0.0f) {
 		ComBuffer = 100;
 		ExitGame();
 	}
@@ -234,7 +266,7 @@ void GameDrawMissionFailed()
 	SetRect(&DstRect,Setup.iAspectRatioWidth/2-256,342,Setup.iAspectRatioWidth/2+256,342+84);
 
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_missionfailed.tga")),
-		true, 1.0f, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+			   true, 1.0f, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 
 
 	// выводим кнопки...
@@ -242,16 +274,14 @@ void GameDrawMissionFailed()
 	int Y = 180+270;
 
 	int X = Setup.iAspectRatioWidth/2 - 230;
-	if (DrawButton200_2(X,Y, vw_GetText("1_QUIT"), 1.0f, false))
-	{
+	if (DrawButton200_2(X,Y, vw_GetText("1_QUIT"), 1.0f, false)) {
 		ComBuffer = 101;
 		ExitGame();
 	}
 
 
 	X = Setup.iAspectRatioWidth/2 + 30;
-	if (DrawButton200_2(X,Y, vw_GetText("1_RESTART"), 1.0f, false))
-	{
+	if (DrawButton200_2(X,Y, vw_GetText("1_RESTART"), 1.0f, false)) {
 		ComBuffer = GAME;
 		ExitGame();
 	}

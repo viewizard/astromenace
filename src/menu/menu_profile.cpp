@@ -54,8 +54,7 @@ void NewRecord()
 
 
 	// выводим диалог - все заняты!
-	if (ProfileNum == -1)
-	{
+	if (ProfileNum == -1) {
 		SetCurrentDialogBox(1);
 		return;
 	}
@@ -82,8 +81,7 @@ void NewRecord()
 	Setup.Profile[ProfileNum].ShipHullCurrentStrength = 30;
 
 	// сброс настроек оружия
-	for (int i=0; i<6; i++)
-	{
+	for (int i=0; i<6; i++) {
 		Setup.Profile[ProfileNum].Weapon[i] = 0;
 		Setup.Profile[ProfileNum].WeaponAmmo[i] = 0;
 		Setup.Profile[ProfileNum].WeaponControl[i] = 0;
@@ -120,8 +118,7 @@ void NewRecord()
 	Setup.Profile[ProfileNum].Experience = 0;
 
 	// сброс настроек
-	for (int i=0; i<100; i++)
-	{
+	for (int i=0; i<100; i++) {
 		Setup.Profile[ProfileNum].ByMissionExperience[i] = 0;
 		Setup.Profile[ProfileNum].MissionReplayCount[i] = 0;
 	}
@@ -156,8 +153,7 @@ void DuplicateRecord()
 		if (!Setup.Profile[i].Used) ProfileNum = i;
 
 	// выводим диалог - все слоты заняты!
-	if (ProfileNum == -1)
-	{
+	if (ProfileNum == -1) {
 		SetCurrentDialogBox(1);
 		return;
 	}
@@ -187,27 +183,22 @@ void DeleteRecord()
 
 
 	// если это последняя запись
-	if (CurrentProfile == 4)
-	{
+	if (CurrentProfile == 4) {
 		Setup.Profile[CurrentProfile].Used = false;
 		CurrentProfile -= 1;
-	}
-	else
-	// или после этой записи - ничего нет
-	if (!Setup.Profile[CurrentProfile+1].Used)
-	{
-		Setup.Profile[CurrentProfile].Used = false;
-		CurrentProfile -= 1;
-	}
-	else
-	// удалили где-то в середине, сдвигаем все записи
-	{
-		for (int i=CurrentProfile; i<4; i++)
+	} else
+		// или после этой записи - ничего нет
+		if (!Setup.Profile[CurrentProfile+1].Used) {
+			Setup.Profile[CurrentProfile].Used = false;
+			CurrentProfile -= 1;
+		} else
+			// удалили где-то в середине, сдвигаем все записи
 		{
-			memcpy(&Setup.Profile[i], &Setup.Profile[i+1], sizeof(GameProfile));
-			Setup.Profile[i+1].Used = false;
+			for (int i=CurrentProfile; i<4; i++) {
+				memcpy(&Setup.Profile[i], &Setup.Profile[i+1], sizeof(GameProfile));
+				Setup.Profile[i+1].Used = false;
+			}
 		}
-	}
 
 
 	// проверяем, текущий номер
@@ -233,26 +224,23 @@ void ProfileInputText()
 {
 
 	// пишем букву, если можем (т.к. у нас утф8 юникод, нужно как минимум 3 байта + 1 байт под \0 в конце строки)
-	if (NewProfileNamePos < 124)
-	if (vw_FontSize(NewProfileName)< 540)
-	if (vw_GetCurrentUnicodeChar()) // если тут не ноль, а юникод - значит нажали
-	{
-		if (vw_GetCurrentUnicodeChar()[0] == 0x25) // для символа % используем перевод в 2 байта (чтобы не добавлять второй %), иначе некорректно будет прорисовываться из-за va_list в vw_DrawFont
-		{
+	if ((NewProfileNamePos < 124) &&
+	    (vw_FontSize(NewProfileName) < 540) &&
+	    (vw_GetCurrentUnicodeChar() != nullptr)) { // если тут не ноль, а юникод - значит нажали
+
+		if (vw_GetCurrentUnicodeChar()[0] == 0x25) { // для символа % используем перевод в 2 байта (чтобы не добавлять второй %), иначе некорректно будет прорисовываться из-за va_list в vw_DrawFont
 			NewProfileName[NewProfileNamePos] = (char)(0xC0 | (vw_GetCurrentUnicodeChar()[0] >> 6));
 			NewProfileNamePos++;
 			NewProfileName[NewProfileNamePos] = (char)(0x80 | (vw_GetCurrentUnicodeChar()[0] & 0x3F));
 			NewProfileNamePos++;
 			NewProfileName[NewProfileNamePos+1] = '\0';
-		}
-		else
-		{
+		} else {
 			strcat(NewProfileName, vw_GetCurrentUnicodeChar());
 			NewProfileNamePos += strlen(vw_GetCurrentUnicodeChar());
 		}
-		vw_SetCurrentUnicodeChar(0); // сразу сбрасываем данные
+		vw_SetCurrentUnicodeChar(nullptr); // сразу сбрасываем данные
 
-		if (vw_FindSoundByNum(SoundTaping) != 0)
+		if (vw_FindSoundByNum(SoundTaping) != nullptr)
 			vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
 
 		SoundTaping = Audio_PlaySound2D(4,1.0f);
@@ -262,41 +250,37 @@ void ProfileInputText()
 
 	// проверяем, может спец-код
 	if (vw_GetKeys(SDLK_BACKSPACE))
-	if (NewProfileNamePos>0)
-	{
-		// кривое решение на "пока", перебираем в поисках предпоследнего символа
-		const char *ReversePoint = NewProfileName;
-		const char *ReversePointPrevious = 0;
-		while (strlen(ReversePoint) > 0)
-		{
-			unsigned CurrentChar;
-			ReversePointPrevious = ReversePoint;
-			ReversePoint = utf8_to_utf32(ReversePoint, &CurrentChar);
-		}
-		while (ReversePointPrevious != ReversePoint)
-		{
+		if (NewProfileNamePos>0) {
+			// кривое решение на "пока", перебираем в поисках предпоследнего символа
+			const char *ReversePoint = NewProfileName;
+			const char *ReversePointPrevious = nullptr;
+			while (strlen(ReversePoint) > 0) {
+				unsigned CurrentChar;
+				ReversePointPrevious = ReversePoint;
+				ReversePoint = utf8_to_utf32(ReversePoint, &CurrentChar);
+			}
+			while (ReversePointPrevious != ReversePoint) {
+				NewProfileName[NewProfileNamePos] = 0;
+				NewProfileNamePos--;
+				ReversePointPrevious++;
+			}
 			NewProfileName[NewProfileNamePos] = 0;
-			NewProfileNamePos--;
-			ReversePointPrevious++;
+
+			if (vw_FindSoundByNum(SoundTaping) != nullptr)
+				vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
+			SoundTaping = Audio_PlaySound2D(4,1.0f);
+
+			vw_SetKeys(SDLK_BACKSPACE, false);
 		}
-		NewProfileName[NewProfileNamePos] = 0;
-
-		if (vw_FindSoundByNum(SoundTaping) != 0)
-			vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
-		SoundTaping = Audio_PlaySound2D(4,1.0f);
-
-		vw_SetKeys(SDLK_BACKSPACE, false);
-	}
 
 	// ввод названия
 	if (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN))
-	if (NewProfileNamePos>0)
-	{
-		NewRecord();
-		//Audio_PlayMenuSound(4,1.0f);
-		vw_SetKeys(SDLK_KP_ENTER, false);
-		vw_SetKeys(SDLK_RETURN, false);
-	}
+		if (NewProfileNamePos>0) {
+			NewRecord();
+			//Audio_PlayMenuSound(4,1.0f);
+			vw_SetKeys(SDLK_KP_ENTER, false);
+			vw_SetKeys(SDLK_RETURN, false);
+		}
 
 
 
@@ -309,7 +293,7 @@ void ProfileInputText()
 	SetRect(&SrcRect,0,0,2,2);
 	SetRect(&DstRect,X1+Size+2,Y1-2,X1+26+Size,Y1+24);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"),
-		true, CurrentProfileNameTransp*MenuContentTransp);
+			   true, CurrentProfileNameTransp*MenuContentTransp);
 
 	float DeltaTime = vw_GetTime() - LastProfileNameTime;
 	LastProfileNameTime = vw_GetTime();
@@ -363,14 +347,13 @@ void ProfileMenu()
 	// кнопка, создания новой записи
 	bool Off = false;
 	if (strlen(NewProfileName)<=0) Off = true;
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Create"), MenuContentTransp, Off))
-	{
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Create"), MenuContentTransp, Off)) {
 		NewRecord();
 	}
 
 	// ввод текста
 	if (!isDialogBoxDrawing())
-	if (MenuContentTransp == 1.0f) ProfileInputText();
+		if (MenuContentTransp == 1.0f) ProfileInputText();
 
 	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, NewProfileName);
 
@@ -387,8 +370,7 @@ void ProfileMenu()
 	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Pilots_Profiles"));
 	int Size = vw_FontSize(vw_GetText("3_Money"));
 	float WScale = 0;
-	if (Size > 70)
-	{
+	if (Size > 70) {
 		Size = 70;
 		WScale = -70;
 	}
@@ -397,8 +379,7 @@ void ProfileMenu()
 
 	Size = vw_FontSize(vw_GetText("3_Experience"));
 	WScale = 0;
-	if (Size > 100)
-	{
+	if (Size > 100) {
 		Size = 100;
 		WScale = -100;
 	}
@@ -407,8 +388,7 @@ void ProfileMenu()
 
 	Size = vw_FontSize(vw_GetText("3_Difficulty"));
 	WScale = 0;
-	if (Size > 100)
-	{
+	if (Size > 100) {
 		Size = 100;
 		WScale = -100;
 	}
@@ -428,18 +408,14 @@ void ProfileMenu()
 
 	int TMPSoundOnProfileID = -1;
 	int TmpY = Y1-230+8;
-	for (int i=0; i<5; i++)
-	{
-		if (Setup.Profile[i].Used)
-		{
+	for (int i=0; i<5; i++) {
+		if (Setup.Profile[i].Used) {
 			vw_DrawFont(X1+10, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i.",i+1);
 
-			if (vw_FontSize(Setup.Profile[i].Name) > 300)
-			{
+			if (vw_FontSize(Setup.Profile[i].Name) > 300) {
 				vw_DrawFont(X1+50, TmpY, 0, 300, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.Profile[i].Name);
 				vw_DrawFont(X1+50+310, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "...");
-			}
-			else
+			} else
 				vw_DrawFont(X1+50, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.Profile[i].Name);
 
 
@@ -457,10 +433,8 @@ void ProfileMenu()
 			// работаем с клавиатурой
 			if ((MenuContentTransp >= 0.99f) && !isDialogBoxDrawing()) CurrentActiveMenuElement++;
 			bool InFocusByKeyboard = false;
-			if (CurrentKeyboardSelectMenuElement > 0)
-			{
-				if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement)
-				{
+			if (CurrentKeyboardSelectMenuElement > 0) {
+				if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
 					InFocusByKeyboard = true;
 				}
 			}
@@ -469,63 +443,52 @@ void ProfileMenu()
 			SetRect(&SrcRect,0,0,2,2);
 			SetRect(&DstRect,X1,Y1-233+46*i,X1+750,Y1-234+46+46*i);
 			if (!isDialogBoxDrawing())
-			if (vw_OnRect(&DstRect) || InFocusByKeyboard)
-			{
-				TMPSoundOnProfileID = i;
-				CurrentCursorStatus = 1;
-				// если только встали - нужно звуком это показать
-				if (SoundOnProfileID != i)
-				{
-					SoundOnProfileID = i;
-					// если задействуем клавиатуру - неиграем тут звук
-					if (CurrentKeyboardSelectMenuElement == 0) Audio_PlaySound2D(5,1.0f);
-				}
-
-				if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN))))
-				{
-					// если другой - нужно сбросить миссию...
-					if (CurrentProfile != i) CurrentMission = Setup.Profile[i].LastMission;
-					CurrentProfile = i;
-					Setup.LastProfile = CurrentProfile;
-					// играем звук выбора
-					Audio_PlaySound2D(6,1.0f);
-					if (InFocusByKeyboard)
-					{
-						vw_SetKeys(SDLK_KP_ENTER, false);
-						vw_SetKeys(SDLK_RETURN, false);
+				if (vw_OnRect(&DstRect) || InFocusByKeyboard) {
+					TMPSoundOnProfileID = i;
+					CurrentCursorStatus = 1;
+					// если только встали - нужно звуком это показать
+					if (SoundOnProfileID != i) {
+						SoundOnProfileID = i;
+						// если задействуем клавиатуру - неиграем тут звук
+						if (CurrentKeyboardSelectMenuElement == 0) Audio_PlaySound2D(5,1.0f);
 					}
-				}
 
-				if (CurrentProfile != i)
-				{
-					// переход по 2-му клику
-					if (vw_GetWindowLBDoubleMouse(true))
-					{
+					if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN)))) {
+						// если другой - нужно сбросить миссию...
+						if (CurrentProfile != i) CurrentMission = Setup.Profile[i].LastMission;
 						CurrentProfile = i;
 						Setup.LastProfile = CurrentProfile;
-						// если другой - нужно сбросить миссию...
-						CurrentMission = Setup.Profile[CurrentProfile].LastMission;
-						ComBuffer = MISSION;
+						// играем звук выбора
+						Audio_PlaySound2D(6,1.0f);
+						if (InFocusByKeyboard) {
+							vw_SetKeys(SDLK_KP_ENTER, false);
+							vw_SetKeys(SDLK_RETURN, false);
+						}
 					}
 
+					if (CurrentProfile != i) {
+						// переход по 2-му клику
+						if (vw_GetWindowLBDoubleMouse(true)) {
+							CurrentProfile = i;
+							Setup.LastProfile = CurrentProfile;
+							// если другой - нужно сбросить миссию...
+							CurrentMission = Setup.Profile[CurrentProfile].LastMission;
+							ComBuffer = MISSION;
+						}
 
-					SetRect(&DstRect,X1+2,Y1-233+46*i,X1+748,Y1-235+46+46*i);
-					if (CurrentProfile != i)
-						vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
-				}
-				else
-				{
-					// переход по 2-му клику
-					if (vw_GetWindowLBDoubleMouse(true))
-					{
-						ComBuffer = MISSION;
+
+						SetRect(&DstRect,X1+2,Y1-233+46*i,X1+748,Y1-235+46+46*i);
+						if (CurrentProfile != i)
+							vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+					} else {
+						// переход по 2-му клику
+						if (vw_GetWindowLBDoubleMouse(true)) {
+							ComBuffer = MISSION;
+						}
 					}
 				}
-			}
 
-		}
-		else
-		{
+		} else {
 			float transp = 0.3f;
 			vw_DrawFont(X1+10, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, transp*MenuContentTransp, "%i.",i+1);
 			vw_DrawFont(X1+50, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, transp*MenuContentTransp, vw_GetText("3_empty"));
@@ -538,8 +501,7 @@ void ProfileMenu()
 
 
 	// подсветка выбранного...
-	if (CurrentProfile != -1)
-	{
+	if (CurrentProfile != -1) {
 		SetRect(&SrcRect,0,0,2,2);
 		SetRect(&DstRect,X1+2,Y1-233+46*CurrentProfile,X1+748,Y1-235+46+46*CurrentProfile);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
@@ -558,16 +520,14 @@ void ProfileMenu()
 	// кнопка создания дубликата
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton200_2(X1+6, Y1-6, vw_GetText("1_Duplicate"), MenuContentTransp, Off))
-	{
+	if (DrawButton200_2(X1+6, Y1-6, vw_GetText("1_Duplicate"), MenuContentTransp, Off)) {
 		DuplicateRecord();
 	}
 
 	// кнопка удаления записи
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton128_2(X1+240, Y1-6, vw_GetText("1_Delete"), MenuContentTransp, Off))
-	{
+	if (DrawButton128_2(X1+240, Y1-6, vw_GetText("1_Delete"), MenuContentTransp, Off)) {
 		SetCurrentDialogBox(2);
 	}
 
@@ -575,8 +535,7 @@ void ProfileMenu()
 	// кнопка установки сложности
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton200_2(X1+544, Y1-6, vw_GetText("1_Difficulty"), MenuContentTransp, Off))
-	{
+	if (DrawButton200_2(X1+544, Y1-6, vw_GetText("1_Difficulty"), MenuContentTransp, Off)) {
 		ComBuffer = DIFFICULTY;
 	}
 
@@ -584,15 +543,13 @@ void ProfileMenu()
 
 	int X = Setup.iAspectRatioWidth/2 - 284;
 	int Y = 165+100*5;
-	if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
-	{
+	if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime)) {
 		ComBuffer = MAIN_MENU;
 	}
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
 	X = Setup.iAspectRatioWidth/2 + 28;
-	if (DrawButton256(X,Y, vw_GetText("1_MISSIONS_LIST"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
-	{
+	if (DrawButton256(X,Y, vw_GetText("1_MISSIONS_LIST"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off)) {
 		ComBuffer = MISSION;
 	}
 

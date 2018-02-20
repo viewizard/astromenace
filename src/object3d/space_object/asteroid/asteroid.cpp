@@ -64,8 +64,7 @@ void CAsteroid::Create(int SpaceObjectNum)
 	delete [] NameTMP;
 
 	// всегда только эти текстуры и 1 объект
-	for (int i=0; i<DrawObjectQuantity; i++)
-	{
+	for (int i=0; i<DrawObjectQuantity; i++) {
 		Texture[i] = vw_FindTextureByName("models/space/asteroid-01.tga");
 	}
 
@@ -80,7 +79,7 @@ void CAsteroid::Create(int SpaceObjectNum)
 	// небольшая поправка... в зависимости от размеров объекта
 	Strength = StrengthStart = Radius*StrengthStart;
 
-    // ставим правильный радиус
+	// ставим правильный радиус
 	Radius = Width/2.0f;
 }
 

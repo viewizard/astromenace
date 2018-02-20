@@ -36,15 +36,15 @@ static int vw_HAFFtoDATA(int size, BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, i
 	// читаем счетчик бит...
 	int BitCount = 0 ;
 	BitCount = srcVFS[3];
-    BitCount *= 0x100; // сдвиг на 8 бит...
+	BitCount *= 0x100; // сдвиг на 8 бит...
 	BitCount += srcVFS[2];
-    BitCount *= 0x100; // сдвиг на 8 бит...
+	BitCount *= 0x100; // сдвиг на 8 бит...
 	BitCount += srcVFS[1];
-    BitCount *= 0x100; // сдвиг на 8 бит...
+	BitCount *= 0x100; // сдвиг на 8 бит...
 	BitCount += srcVFS[0];
 
-    // читаем кол-во элементов таблицы
-    int  TabCount = srcVFS[4] + 1;// кол-во элементов...
+	// читаем кол-во элементов таблицы
+	int  TabCount = srcVFS[4] + 1;// кол-во элементов...
 
 	// в цикле, читаем все элементы таблицы
 	BYTE Count[256]; // порядковый номер (код) элемента в таблице...
@@ -56,24 +56,20 @@ static int vw_HAFFtoDATA(int size, BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, i
 	BYTE tmpMask = 0;// маска, с которой будем работать...
 	BYTE mMask = 0;// маска, которую составляем...
 	int cBit = 0;// кол-во информационных бит в маске...
-    int j = 0; // указатель на позицию в преобразованных данных.
+	int j = 0; // указатель на позицию в преобразованных данных.
 	bool Dat = false;
 	int tmpBitCount = BitCount;
 	bool ex = false;
 
-	if (size == 0)
-	{
-		for (int i = 0 + 4 + 1 + TabCount; i < ssizeVFS; i++)
-		{
+	if (size == 0) {
+		for (int i = 0 + 4 + 1 + TabCount; i < ssizeVFS; i++) {
 			tmpMask = srcVFS[i];
 			if (tmpBitCount<=0) break;
 			// работаем с каждым битом в байте...
-			for (int k = 0; k < 8; k++)
-			{
+			for (int k = 0; k < 8; k++) {
 				ex=false;
 				// если закрыли последовательность и след. бит - 0, символ 0...
-				if ((cBit==0)&((tmpMask & 1) == 0)&(!Dat)&(!ex))
-				{
+				if ((cBit==0)&((tmpMask & 1) == 0)&(!Dat)&(!ex)) {
 					// пишем в рез. послед. 0-й элемент...
 					(*dsizeVFS)++;
 					tmpBitCount --;
@@ -81,22 +77,19 @@ static int vw_HAFFtoDATA(int size, BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, i
 					ex=true;
 				}
 				// если закрыли последовательность и след. бит - 1, работаем...
-				if ((cBit>=0)&((tmpMask & 1) == 1)&(!Dat)&(!ex))
-				{
+				if ((cBit>=0)&((tmpMask & 1) == 1)&(!Dat)&(!ex)) {
 					// ув. счетчик бит...
 					cBit++;
 					tmpBitCount --;
 					if (tmpBitCount<=0) break;
 					ex=true;
 				}
-				if ((Dat)&(!ex))
-				{
-  					mMask = mMask*2;
+				if ((Dat)&(!ex)) {
+					mMask = mMask*2;
 					mMask = mMask & 0xFE;
 					mMask = mMask | (tmpMask & 1);
 					cBit --;
-					if (cBit<=0)
-					{
+					if (cBit<=0) {
 						Dat = false;
 						(*dsizeVFS)++;
 						cBit = 0;
@@ -105,13 +98,14 @@ static int vw_HAFFtoDATA(int size, BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, i
 					if (tmpBitCount<=0) break;
 					ex=true;
 				}
-				if ((cBit>0)&((tmpMask & 1) == 0)&(!Dat)&(!ex))
-				{
+				if ((cBit>0)&((tmpMask & 1) == 0)&(!Dat)&(!ex)) {
 					mMask = 1;
 					cBit --;
-					if (cBit>0) {Dat= true;}
-					else
-					{ (*dsizeVFS)++; }
+					if (cBit>0) {
+						Dat= true;
+					} else {
+						(*dsizeVFS)++;
+					}
 					tmpBitCount --;
 					if (tmpBitCount<=0) break;
 					ex=true;
@@ -120,28 +114,26 @@ static int vw_HAFFtoDATA(int size, BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, i
 				tmpMask = tmpMask/2;
 			}
 		}
-	}
-	else (*dsizeVFS) = size;
+	} else (*dsizeVFS) = size;
 
 	// резервируем память...
-    *dstVFS = new BYTE[*dsizeVFS]; if ((*dstVFS) == 0) return 0;
+	*dstVFS = new BYTE[*dsizeVFS];
+	if ((*dstVFS) == nullptr)
+		return 0;
 
 	// второй проход - получение результирующ. послед...
 	cBit = 0;
 	Dat = false;
 	tmpBitCount = BitCount;
 	ex = false;
-	for (int i = 0 + 4 + 1 + TabCount; i < ssizeVFS; i++)
-	{
+	for (int i = 0 + 4 + 1 + TabCount; i < ssizeVFS; i++) {
 		tmpMask = srcVFS[i];
 		if (tmpBitCount<=0) break;
 		// работаем с каждым битом в байте...
-		for (int k = 0; k < 8; k++)
-		{
+		for (int k = 0; k < 8; k++) {
 			ex=false;
 			// если закрыли последовательность и след. бит - 0, символ 0...
-			if ((cBit==0)&((tmpMask & 1) == 0)&(!Dat)&(!ex))
-			{
+			if ((cBit==0)&((tmpMask & 1) == 0)&(!Dat)&(!ex)) {
 				// пишем в рез. послед. 0-й элемент...
 				(*dstVFS)[j] = Count[0];
 				j++;
@@ -150,22 +142,19 @@ static int vw_HAFFtoDATA(int size, BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, i
 				ex=true;
 			}
 			// если закрыли последовательность и след. бит - 1, работаем...
-			if ((cBit>=0)&((tmpMask & 1) == 1)&(!Dat)&(!ex))
-			{
+			if ((cBit>=0)&((tmpMask & 1) == 1)&(!Dat)&(!ex)) {
 				// ув. счетчик бит...
 				cBit++;
 				tmpBitCount --;
 				if (tmpBitCount<=0) break;
 				ex=true;
 			}
-			if ((Dat)&(!ex))
-			{
+			if ((Dat)&(!ex)) {
 				mMask = mMask*2;
 				mMask = mMask & 0xFE;
 				mMask = mMask | (tmpMask & 1);
 				cBit --;
-				if (cBit<=0)
-				{
+				if (cBit<=0) {
 					Dat = false;
 					(*dstVFS)[j] = Count[mMask];
 					cBit = 0;
@@ -176,13 +165,12 @@ static int vw_HAFFtoDATA(int size, BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, i
 				ex=true;
 			}
 
-			if ((cBit>0)&((tmpMask & 1) == 0)&(!Dat)&(!ex))
-			{
+			if ((cBit>0)&((tmpMask & 1) == 0)&(!Dat)&(!ex)) {
 				mMask = 1;
 				cBit --;
-				if (cBit>0) {Dat= true;}
-				else
-				{
+				if (cBit>0) {
+					Dat= true;
+				} else {
 					(*dstVFS)[j] = Count[mMask];
 					j++;
 				}
@@ -208,17 +196,16 @@ static int vw_HAFFtoDATA(int size, BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, i
 static int vw_DATAtoHAFF(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS)
 {
 	// мат. анализ структуры входных данных...
-    // собираем данные о вхождении каждого символа...
+	// собираем данные о вхождении каждого символа...
 	BYTE Count[256]; // порядковый номер (код) элемента в таблице...
 	int  mathTab[256]; // кол-во вхождений каждого эл-та...
 	int  TabCount = 0;// кол-во элементов... (для составления динам. таблици...)
-    short bitMask[256]; // битовая маска для каждого эл-та таблици...(2 бита - по макс.)
+	short bitMask[256]; // битовая маска для каждого эл-та таблици...(2 бита - по макс.)
 	int bitMaskS[256]; // количество бит в маске...
 	*dsizeVFS = 0;
 
-    // заносим номера (коды) в таблицу...иниц. табл. вхождений...
-    for (int i = 0; i < 256; i++)
-	{
+	// заносим номера (коды) в таблицу...иниц. табл. вхождений...
+	for (int i = 0; i < 256; i++) {
 		Count[i] = i;
 		mathTab[i] = 0;
 		bitMask[i] = 0;
@@ -226,14 +213,13 @@ static int vw_DATAtoHAFF(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVF
 	}
 
 	// исследуем данные...
-    for (int i = 0; i < ssizeVFS; i++) mathTab[srcVFS[i]]++;
+	for (int i = 0; i < ssizeVFS; i++) mathTab[srcVFS[i]]++;
 
 	// упорядочевание полученной таблицы...
-    // сортируем данные по возростанию кол-ва вхождений...Пузырьковая Сортировка
+	// сортируем данные по возростанию кол-ва вхождений...Пузырьковая Сортировка
 	for (int i = 0; i < 255; i++)
 		for (int j = 0; j < 255; j++)
-			if (mathTab[j+1] > mathTab[j])
-			{
+			if (mathTab[j+1] > mathTab[j]) {
 				int tmp1 = mathTab[j+1];
 				mathTab[j+1] = mathTab[j];
 				mathTab[j] = tmp1;
@@ -246,93 +232,83 @@ static int vw_DATAtoHAFF(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVF
 	for (int i = 0; i < 256; i++)
 		if (mathTab[i] >0) TabCount++;
 
-    // составляем маски для существующих элементов....
-    // для 0...
-    bitMask[0] = 0;
-    bitMaskS[0] = 1;
-    // для 1...
-    bitMask[1] = 2;
-    bitMaskS[1] = 2;
-    // для 2,3...
-	for (int i = 2; i < 4; i++)
-    {
+	// составляем маски для существующих элементов....
+	// для 0...
+	bitMask[0] = 0;
+	bitMaskS[0] = 1;
+	// для 1...
+	bitMask[1] = 2;
+	bitMaskS[1] = 2;
+	// для 2,3...
+	for (int i = 2; i < 4; i++) {
 		bitMask[i] = i-2;
 		bitMask[i] = bitMask[i] | 12; // 1100
 		bitMaskS[i] = 4;
 	}
-    // для 4,7...
-	for (int i = 4; i < 8; i++)
-    {
+	// для 4,7...
+	for (int i = 4; i < 8; i++) {
 		bitMask[i] = i-4;
 		bitMask[i] = bitMask[i] | 56; // 111000
 		bitMaskS[i] = 6;
 	}
-    // для 8,15...
-	for (int i = 8; i < 16; i++)
-    {
+	// для 8,15...
+	for (int i = 8; i < 16; i++) {
 		bitMask[i] = i-8;
 		bitMask[i] = bitMask[i] | 240; // 11110000
 		bitMaskS[i] = 8;
 	}
-    // для 16,31...
-	for (int i = 16; i < 32; i++)
-    {
+	// для 16,31...
+	for (int i = 16; i < 32; i++) {
 		bitMask[i] = i-16;
 		bitMask[i] = bitMask[i] | 992; // 1111100000
 		bitMaskS[i] = 10;
 	}
-    // для 32,63...
-	for (int i = 32; i < 64; i++)
-    {
+	// для 32,63...
+	for (int i = 32; i < 64; i++) {
 		bitMask[i] = i-32;
 		bitMask[i] = bitMask[i] | 4032; // 11111110000000
 		bitMaskS[i] = 12;
 	}
-    // для 64,127...
-	for (int i = 64; i < 128; i++)
-    {
+	// для 64,127...
+	for (int i = 64; i < 128; i++) {
 		bitMask[i] = i-64;
 		bitMask[i] = bitMask[i] | 16256; // 11111110000000
 		bitMaskS[i] = 14;
 	}
-    // для 128,255...
-	for (int i = 128; i < 256; i++)
-    {
+	// для 128,255...
+	for (int i = 128; i < 256; i++) {
 		bitMask[i] = i-128;
 		bitMask[i] = bitMask[i] | 65280; // 1111111100000000
 		bitMaskS[i] = 16;
 	}
 
 	// просчет кол-ва необходимого места...
-    (*dsizeVFS) ++;// кол-во элементов в массиве...
-    (*dsizeVFS) += TabCount;// место для таблици...
-    // вычисляем место для данных...
+	(*dsizeVFS) ++;// кол-во элементов в массиве...
+	(*dsizeVFS) += TabCount;// место для таблици...
+	// вычисляем место для данных...
 	int tmp = 0;
-    for (int i = 0; i < TabCount; i++)
-	{
+	for (int i = 0; i < TabCount; i++) {
 		tmp += (mathTab[i] * bitMaskS[i]);
 	}
 	(*dsizeVFS) += 4 ; //счетчик бит...
-    (*dsizeVFS) += tmp / 8 +1;// т.к. считали в битах...
+	(*dsizeVFS) += tmp / 8 +1;// т.к. считали в битах...
 
-    // резервируем память...
-	*dstVFS = 0;
-    *dstVFS = new BYTE[*dsizeVFS];
-	if (*dstVFS == 0) return 0;
+	// резервируем память...
+	*dstVFS = new BYTE[*dsizeVFS];
 
-    // создаем выходную последовательность...
-    int j = 0; // указатель на позицию в преобразованных данных.
+	// создаем выходную последовательность...
+	int j = 0; // указатель на позицию в преобразованных данных.
 
 	// записываем счетчик бит...
 	(*dstVFS)[j] =  (BYTE)tmp;
 	j++;
-    tmp /= 0x100;
+	tmp /= 0x100;
 	(*dstVFS)[j] =  (BYTE)tmp;
 	j++;
-    tmp /= 0x100;
+	tmp /= 0x100;
 	(*dstVFS)[j] =  (BYTE)tmp;
 	j++;
-    tmp /= 0x100;
+	tmp /= 0x100;
 	(*dstVFS)[j] =  (BYTE)tmp;
 	j++;
 
@@ -340,33 +316,30 @@ static int vw_DATAtoHAFF(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVF
 	(*dstVFS)[j] = (BYTE)(TabCount-1) ;// чтобы было от 0 до 255 ...
 	j++;
 	// пишем таблицу...
-    for (int i = 0; i < TabCount; i++)
-	{
+	for (int i = 0; i < TabCount; i++) {
 		(*dstVFS)[j] = Count[i];// записываем только код...
 		j++;
 	}
-    // "разупорядочиваем" массивы во временные последовательности...
-    short tmbitMask[256];
+	// "разупорядочиваем" массивы во временные последовательности...
+	short tmbitMask[256];
 	int tmbitMaskS[256];
-    for (int i = 0; i < 256; i++)
-	{
+	for (int i = 0; i < 256; i++) {
 		tmbitMask[Count[i]] = bitMask[i];
 		tmbitMaskS[Count[i]] = bitMaskS[i];
 	}
 
 
-    // перебираем данные и пакуем...
+	// перебираем данные и пакуем...
 	int DstBA = 0; // текущий указатель на активный бит в байте результ. массива...
-    BYTE T = 0; // текущий бит на установку...
+	BYTE T = 0; // текущий бит на установку...
 	(*dstVFS)[j] = 0; // предустановка на ИЛИ...
 
-    for (int i = 0; i < ssizeVFS; i++)
-	{
+	for (int i = 0; i < ssizeVFS; i++) {
 		// берем исходные данные...
 		short tmpMask = tmbitMask[srcVFS[i]]; // маска, с которой будем работать...
 		int BitWr = tmbitMaskS[srcVFS[i]]; // кол-во бит, которые надо записать из маски...
 
- 		// уст. крайний бит...
+		// уст. крайний бит...
 		//tmpMask = (short)(tmpMask * exp( (16-BitWr) * log(2)));
 		if (BitWr == 1) tmpMask = tmpMask * 32768;
 		if (BitWr == 2) tmpMask = tmpMask * 16384;
@@ -378,8 +351,7 @@ static int vw_DATAtoHAFF(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVF
 		if (BitWr == 14) tmpMask = tmpMask * 4;
 
 		// в цикле по BitWr
-		while (BitWr > 0)
-		{
+		while (BitWr > 0) {
 			// проверка крайнего бита в tmpMask
 			// установка аналога в dst[j]
 			if ((tmpMask & 0x8000) == 0x8000) T = 1;
@@ -400,9 +372,8 @@ static int vw_DATAtoHAFF(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVF
 			// увеличение DstBA
 			DstBA++;
 			// проверка на достижение DstBA==8
-			if (DstBA > 7)
-			{
- 				// если да - j++, dst[j] = 0, DstBA=0
+			if (DstBA > 7) {
+				// если да - j++, dst[j] = 0, DstBA=0
 				j++;
 				(*dstVFS)[j] = 0;
 				DstBA=0;
@@ -551,7 +522,7 @@ void SaveXMLSetupFile()
 {
 	cXMLDocument *XMLdoc = new cXMLDocument;
 
-	cXMLEntry *RootXMLEntry = XMLdoc->AddEntry(0, "AstroMenaceSettings");
+	cXMLEntry *RootXMLEntry = XMLdoc->AddEntry(nullptr, "AstroMenaceSettings");
 
 	XMLdoc->AddComment(RootXMLEntry, " AstroMenace game Settings ");
 
@@ -633,8 +604,7 @@ void SaveXMLSetupFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "LastProfile"), "value", Setup.LastProfile);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MenuScript"), "value", Setup.MenuScript);
 
-	for(int i=0; i<10; i++)
-	{
+	for(int i=0; i<10; i++) {
 		char Name[128];
 		sprintf(Name, "HintStatus%i", i+1);
 		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, Name), "value", Setup.NeedShowHint[i]);
@@ -666,8 +636,7 @@ void SaveXMLSetupFile()
 
 	{
 		// XOR
-		for (int i=0; i < TopScoresDataSize; i++)
-		{
+		for (int i=0; i < TopScoresDataSize; i++) {
 			int k1 = i;
 			int k2 = TopScoresDataSize + i*2;
 			TopScoresDataXORCode[k1] = 97 + (unsigned char)vw_iRandNum(25);
@@ -682,13 +651,11 @@ void SaveXMLSetupFile()
 		// тогда красиво отображаться будет (если врапинг выставлен в редакторе)
 		int k=0;
 		int l=0;
-		for (int i=0; i < TopScoresDataSize*3; i++)
-		{
+		for (int i=0; i < TopScoresDataSize*3; i++) {
 			TopScoresResultString[k] = TopScoresDataXORCode[i];
 			k++;
 			l++;
-			if (l >= 125)
-			{
+			if (l >= 125) {
 				TopScoresResultString[k] = 0x20;
 				k++;
 				l=0;
@@ -699,9 +666,12 @@ void SaveXMLSetupFile()
 
 	XMLdoc->AddEntryContent(XMLdoc->AddEntry(RootXMLEntry, "TopScores"), TopScoresResultString);
 
-	if (TopScoresResultString != 0) delete [] TopScoresResultString;
-	if (TopScoresData != 0) delete [] TopScoresData;
-	if (TopScoresDataXORCode != 0) delete [] TopScoresDataXORCode;
+	if (TopScoresResultString != nullptr)
+		delete [] TopScoresResultString;
+	if (TopScoresData != nullptr)
+		delete [] TopScoresData;
+	if (TopScoresDataXORCode != nullptr)
+		delete [] TopScoresDataXORCode;
 
 
 
@@ -724,8 +694,7 @@ void SaveXMLSetupFile()
 
 
 	// XOR
-	for (int i=0; i < ProfileDataSize; i++)
-	{
+	for (int i=0; i < ProfileDataSize; i++) {
 		int k1 = i;
 		int k2 = ProfileDataSize + i*2;
 		ProfileDataXORCode[k1] = 97 + (unsigned char)vw_iRandNum(25);
@@ -742,13 +711,11 @@ void SaveXMLSetupFile()
 	// тогда красиво отображаться будет (если врапинг выставлен в редакторе)
 	int k=0;
 	int l=0;
-	for (int i=0; i < ProfileDataSize*3; i++)
-	{
+	for (int i=0; i < ProfileDataSize*3; i++) {
 		ResultString[k] = ProfileDataXORCode[i];
 		k++;
 		l++;
-		if (l >= 125)
-		{
+		if (l >= 125) {
 			ResultString[k] = 0x20;
 			k++;
 			l=0;
@@ -759,8 +726,10 @@ void SaveXMLSetupFile()
 	XMLdoc->AddEntryContent(XMLdoc->AddEntry(RootXMLEntry, "PilotsProfiles"), ResultString);
 
 	delete [] ResultString;
-	if (ProfileData != 0) delete [] ProfileData;
-	if (ProfileDataXORCode != 0) delete [] ProfileDataXORCode;
+	if (ProfileData != nullptr)
+		delete [] ProfileData;
+	if (ProfileDataXORCode != nullptr)
+		delete [] ProfileDataXORCode;
 
 
 
@@ -793,8 +762,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 
 
 	// читаем данные
-	if (!XMLdoc->Load(ConfigFileName))
-	{
+	if (!XMLdoc->Load(ConfigFileName)) {
 		delete XMLdoc;
 		SaveXMLSetupFile();
 		return true;
@@ -808,8 +776,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 
 
 	// дополнительная проверка на содержимое конфигурационного файла
-	if (RootXMLEntry == 0)
-	{
+	if (RootXMLEntry == nullptr) {
 		fprintf(stderr, "Game configuration file corrupted: %s\n", ConfigFileName);
 		// файл поврежден, надо завершить работу с ним
 		delete XMLdoc;
@@ -818,8 +785,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		// и сказать игре что это "первый запуск"
 		return true;
 	}
-	if (strcmp("AstroMenaceSettings", RootXMLEntry->Name))
-	{
+	if (strcmp("AstroMenaceSettings", RootXMLEntry->Name)) {
 		fprintf(stderr, "Game configuration file corrupted: %s\n", ConfigFileName);
 		// файл поврежден, надо завершить работу с ним
 		delete XMLdoc;
@@ -836,67 +802,54 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (NeedSafeMode) goto LoadProfiles;
 
 
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage") != 0)
-	{
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value") != 0)
-		{
-			for (int i=0; i<vw_GetLanguageListCount(); i++)
-			{
-				if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), vw_GetLanguageList()[i].code))
-				{
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage") != nullptr) {
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value") != nullptr) {
+			for (int i=0; i<vw_GetLanguageListCount(); i++) {
+				if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), vw_GetLanguageList()[i].code)) {
 					Setup.MenuLanguage = i+1;
 					break;
 				}
 			}
 		}
 	}
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage") != 0)
-	{
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value") != 0)
-		{
-			for (int i=0; i<vw_GetLanguageListCount(); i++)
-			{
-				if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), vw_GetLanguageList()[i].code))
-				{
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage") != nullptr) {
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value") != nullptr) {
+			for (int i=0; i<vw_GetLanguageListCount(); i++) {
+				if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), vw_GetLanguageList()[i].code)) {
 					Setup.VoiceLanguage = i+1;
 					break;
 				}
 			}
 		}
 	}
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber"), "value") != nullptr)
 			Setup.FontNumber = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontName") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontName"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontName") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontName"), "value") != nullptr)
 			strcpy(Setup.FontName, XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontName"), "value"));
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontSize") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontSize"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontSize") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontSize"), "value") != nullptr)
 			Setup.FontSize = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontSize"), "value");
 
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "Width") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Width"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "Width") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Width"), "value") != nullptr)
 			Setup.Width = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Width"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "Height") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Height"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "Height") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Height"), "value") != nullptr)
 			Setup.Height = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Height"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "BPP") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "BPP"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "BPP") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "BPP"), "value") != nullptr)
 			Setup.BPP = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "BPP"), "value");
 
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio") != 0)
-	{
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio"), "value") != 0)
-		{
-			if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio"), "value"), "16:10"))
-			{
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio") != nullptr) {
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio"), "value") != nullptr) {
+			if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio"), "value"), "16:10")) {
 				Setup.fAspectRatioWidth = 1228.0f;
 				Setup.fAspectRatioHeight = 768.0f;
 				Setup.iAspectRatioWidth = 1228;
 				Setup.iAspectRatioHeight = 768;
-			}
-			else
-			{
+			} else {
 				Setup.fAspectRatioWidth = 1024.0f;
 				Setup.fAspectRatioHeight = 768.0f;
 				Setup.iAspectRatioWidth = 1024;
@@ -904,163 +857,162 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 			}
 		}
 	}
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value") != nullptr)
 			Setup.CameraModeWithStandardAspectRatio = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value");
 
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "VBOCoreMode") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VBOCoreMode"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "VBOCoreMode") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VBOCoreMode"), "value") != nullptr)
 			Setup.VBOCoreMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VBOCoreMode"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "VAOCoreMode") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VAOCoreMode"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "VAOCoreMode") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VAOCoreMode"), "value") != nullptr)
 			Setup.VAOCoreMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VAOCoreMode"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "FBOCoreMode") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FBOCoreMode"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "FBOCoreMode") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FBOCoreMode"), "value") != nullptr)
 			Setup.FBOCoreMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FBOCoreMode"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "EqualOrMore128MBVideoRAM") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "EqualOrMore128MBVideoRAM"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "EqualOrMore128MBVideoRAM") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "EqualOrMore128MBVideoRAM"), "value") != nullptr)
 			Setup.EqualOrMore128MBVideoRAM = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "EqualOrMore128MBVideoRAM"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "HardwareMipMapGeneration") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "HardwareMipMapGeneration"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "HardwareMipMapGeneration") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "HardwareMipMapGeneration"), "value") != nullptr)
 			Setup.HardwareMipMapGeneration = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "HardwareMipMapGeneration"), "value");
 
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode"), "value") != nullptr)
 			Setup.TextureFilteringMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "TexturesQuality") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesQuality"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "TexturesQuality") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesQuality"), "value") != nullptr)
 			Setup.TexturesQuality = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesQuality"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "MSAA") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MSAA"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "MSAA") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MSAA"), "value") != nullptr)
 			Setup.MSAA = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MSAA"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "CSAA") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CSAA"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "CSAA") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CSAA"), "value") != nullptr)
 			Setup.CSAA = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CSAA"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "VisualEffectsQuality") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VisualEffectsQuality"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "VisualEffectsQuality") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VisualEffectsQuality"), "value") != nullptr)
 			Setup.VisualEffectsQuality = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VisualEffectsQuality"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "AnisotropyLevel") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AnisotropyLevel"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "AnisotropyLevel") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AnisotropyLevel"), "value") != nullptr)
 			Setup.AnisotropyLevel = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AnisotropyLevel"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompressionType") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompressionType"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompressionType") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompressionType"), "value") != nullptr)
 			Setup.TexturesCompressionType = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompressionType"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL"), "value") != nullptr)
 			Setup.UseGLSL = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap"), "value") != nullptr)
 			Setup.ShadowMap = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "MaxPointLights") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MaxPointLights"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "MaxPointLights") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MaxPointLights"), "value") != nullptr)
 			Setup.MaxPointLights = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MaxPointLights"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "MusicSw") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MusicSw"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "MusicSw") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MusicSw"), "value") != nullptr)
 			Setup.MusicSw = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MusicSw"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "SoundSw") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "SoundSw"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "SoundSw") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "SoundSw"), "value") != nullptr)
 			Setup.SoundSw = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "SoundSw"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "VoiceSw") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceSw"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "VoiceSw") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceSw"), "value") != nullptr)
 			Setup.VoiceSw = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceSw"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "VSync") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VSync"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "VSync") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VSync"), "value") != nullptr)
 			Setup.VSync = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VSync"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "Brightness") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Brightness"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "Brightness") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Brightness"), "value") != nullptr)
 			Setup.Brightness = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Brightness"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS"), "value") != nullptr)
 			Setup.ShowFPS = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType"), "value") != nullptr)
 			Setup.GameWeaponInfoType = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed"), "value") != nullptr)
 			Setup.GameSpeed = XMLdoc->fGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "LoadingHint") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LoadingHint"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "LoadingHint") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LoadingHint"), "value") != nullptr)
 			Setup.LoadingHint = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LoadingHint"), "value");
 
 
 
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardDecreaseGameSpeed") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardDecreaseGameSpeed"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardDecreaseGameSpeed") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardDecreaseGameSpeed"), "value") != nullptr)
 			Setup.KeyboardDecreaseGameSpeed = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardDecreaseGameSpeed"), "value"));
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardResetGameSpeed") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardResetGameSpeed"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardResetGameSpeed") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardResetGameSpeed"), "value") != nullptr)
 			Setup.KeyboardResetGameSpeed = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardResetGameSpeed"), "value"));
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardIncreaseGameSpeed") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardIncreaseGameSpeed"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardIncreaseGameSpeed") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardIncreaseGameSpeed"), "value") != nullptr)
 			Setup.KeyboardIncreaseGameSpeed = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardIncreaseGameSpeed"), "value"));
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardGameWeaponInfoType") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardGameWeaponInfoType"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardGameWeaponInfoType") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardGameWeaponInfoType"), "value") != nullptr)
 			Setup.KeyboardGameWeaponInfoType = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardGameWeaponInfoType"), "value"));
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardPrimaryWeaponFireMode") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardPrimaryWeaponFireMode"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardPrimaryWeaponFireMode") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardPrimaryWeaponFireMode"), "value") != nullptr)
 			Setup.KeyboardPrimaryWeaponFireMode = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardPrimaryWeaponFireMode"), "value"));
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardSecondaryWeaponFireMode") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardSecondaryWeaponFireMode"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardSecondaryWeaponFireMode") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardSecondaryWeaponFireMode"), "value") != nullptr)
 			Setup.KeyboardSecondaryWeaponFireMode = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardSecondaryWeaponFireMode"), "value"));
 
 
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardLeft") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardLeft"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardLeft") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardLeft"), "value") != nullptr)
 			Setup.KeyBoardLeft = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardLeft"), "value"));
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardRight") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardRight"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardRight") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardRight"), "value") != nullptr)
 			Setup.KeyBoardRight = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardRight"), "value"));
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardUp") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardUp"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardUp") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardUp"), "value") != nullptr)
 			Setup.KeyBoardUp = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardUp"), "value"));
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardDown") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardDown"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardDown") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardDown"), "value") != nullptr)
 			Setup.KeyBoardDown = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardDown"), "value"));
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardPrimary") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardPrimary"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardPrimary") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardPrimary"), "value") != nullptr)
 			Setup.KeyBoardPrimary = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardPrimary"), "value"));
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary"), "value") != nullptr)
 			Setup.KeyBoardSecondary = vw_KeyboardNameCode(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary"), "value"));
 
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary"), "value") != nullptr)
 			Setup.MousePrimary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "MouseSecondary") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseSecondary"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "MouseSecondary") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseSecondary"), "value") != nullptr)
 			Setup.MouseSecondary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseSecondary"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickPrimary") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickPrimary"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickPrimary") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickPrimary"), "value") != nullptr)
 			Setup.JoystickPrimary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickPrimary"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickSecondary") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickSecondary"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickSecondary") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickSecondary"), "value") != nullptr)
 			Setup.JoystickSecondary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickSecondary"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum"), "value") != nullptr)
 			Setup.JoystickNum = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickDeadZone") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickDeadZone"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickDeadZone") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickDeadZone"), "value") != nullptr)
 			Setup.JoystickDeadZone = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickDeadZone"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity"), "value") != nullptr)
 			Setup.ControlSensivity = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl"), "value") != nullptr)
 			Setup.MouseControl = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile"), "value") != nullptr)
 			Setup.LastProfile = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "MenuScript") != 0)
-		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuScript"), "value") != 0)
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "MenuScript") != nullptr)
+		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuScript"), "value") != nullptr)
 			Setup.MenuScript = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuScript"), "value");
 
 
-	for(int i=0; i<10; i++)
-	{
+	for(int i=0; i<10; i++) {
 		char Name[128];
 		sprintf(Name, "HintStatus%i", i+1);
-		if (XMLdoc->FindEntryByName(RootXMLEntry, Name) != 0)
-			if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, Name), "value") != 0)
+		if (XMLdoc->FindEntryByName(RootXMLEntry, Name) != nullptr)
+			if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, Name), "value") != nullptr)
 				Setup.NeedShowHint[i] = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, Name), "value");
 	}
 
@@ -1071,8 +1023,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	// заполняем таблицу рекордов
 	//
 
-	if ((XMLdoc->FindEntryByName(RootXMLEntry, "TopScores") != 0) && (XMLdoc->FindEntryByName(RootXMLEntry, "TopScores")->Content != 0))
-	{
+	if ((XMLdoc->FindEntryByName(RootXMLEntry, "TopScores") != nullptr) && (XMLdoc->FindEntryByName(RootXMLEntry, "TopScores")->Content != nullptr)) {
 
 		int TopScoresDataSize = strlen(XMLdoc->FindEntryByName(RootXMLEntry, "TopScores")->Content);
 		unsigned char *TopScoresData = new unsigned char[TopScoresDataSize+1];
@@ -1083,11 +1034,9 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 
 		// первый цикл, восстанавливаем правильную последовательность, убираем все лишние элементы
 		int k=0;
-		for (int i=0; i<TopScoresDataSize; i++)
-		{
+		for (int i=0; i<TopScoresDataSize; i++) {
 			// берем только нужные символы
-			if (TopScoresResultString[i] >= 97 && TopScoresResultString[i] <= 97+26)
-			{
+			if (TopScoresResultString[i] >= 97 && TopScoresResultString[i] <= 97+26) {
 				TopScoresDataXORCode[k] = TopScoresResultString[i];
 				k++;
 			}
@@ -1096,8 +1045,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		TopScoresDataSize = k/3;
 
 		// второй цикл, восстанавливаем последовательность структуры
-		for (int i=0; i<TopScoresDataSize; i++)
-		{
+		for (int i=0; i<TopScoresDataSize; i++) {
 			int k1 = i;
 			int k2 = TopScoresDataSize + i*2;
 
@@ -1118,9 +1066,12 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		// переносим данные в структуру
 		memcpy(Setup.TopScores, TopScoresData, TopScoresDataSize);
 
-		if (TopScoresResultString != 0) delete [] TopScoresResultString;
-		if (TopScoresData != 0) delete [] TopScoresData;
-		if (TopScoresDataXORCode != 0) delete [] TopScoresDataXORCode;
+		if (TopScoresResultString != nullptr)
+			delete [] TopScoresResultString;
+		if (TopScoresData != nullptr)
+			delete [] TopScoresData;
+		if (TopScoresDataXORCode != nullptr)
+			delete [] TopScoresDataXORCode;
 	}
 
 
@@ -1133,8 +1084,7 @@ LoadProfiles:
 	// загрузка профайлов пилотов
 	//
 
-	if ((XMLdoc->FindEntryByName(RootXMLEntry, "PilotsProfiles") != 0) && (XMLdoc->FindEntryByName(RootXMLEntry, "PilotsProfiles")->Content != 0))
-	{
+	if ((XMLdoc->FindEntryByName(RootXMLEntry, "PilotsProfiles") != nullptr) && (XMLdoc->FindEntryByName(RootXMLEntry, "PilotsProfiles")->Content != nullptr)) {
 		int ProfileDataSize = strlen(XMLdoc->FindEntryByName(RootXMLEntry, "PilotsProfiles")->Content);
 		unsigned char *ProfileData = new unsigned char[ProfileDataSize+1];
 		unsigned char *ProfileDataXORCode = new unsigned char[ProfileDataSize+1];
@@ -1144,11 +1094,9 @@ LoadProfiles:
 
 		// первый цикл, восстанавливаем правильную последовательность, убираем все лишние элементы
 		int k=0;
-		for (unsigned int i=0; i<strlen(ResultString); i++)
-		{
+		for (unsigned int i=0; i<strlen(ResultString); i++) {
 			// берем только нужные символы
-			if (ResultString[i] >= 97 && ResultString[i] <= 97+26)
-			{
+			if (ResultString[i] >= 97 && ResultString[i] <= 97+26) {
 				ProfileDataXORCode[k] = ResultString[i];
 				k++;
 			}
@@ -1157,8 +1105,7 @@ LoadProfiles:
 		ProfileDataSize = k/3;
 
 		// второй цикл, восстанавливаем последовательность структуры
-		for (int i=0; i<ProfileDataSize; i++)
-		{
+		for (int i=0; i<ProfileDataSize; i++) {
 			int k1 = i;
 			int k2 = ProfileDataSize + i*2;
 
@@ -1179,9 +1126,12 @@ LoadProfiles:
 		// переносим данные в структуру
 		memcpy(Setup.Profile, ProfileData, ProfileDataSize);
 
-		if (ResultString != 0) delete [] ResultString;
-		if (ProfileData != 0) delete [] ProfileData;
-		if (ProfileDataXORCode != 0) delete [] ProfileDataXORCode;
+		if (ResultString != nullptr)
+			delete [] ResultString;
+		if (ProfileData != nullptr)
+			delete [] ProfileData;
+		if (ProfileDataXORCode != nullptr)
+			delete [] ProfileDataXORCode;
 	}
 
 

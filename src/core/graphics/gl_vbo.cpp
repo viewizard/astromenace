@@ -29,11 +29,11 @@
 
 
 // VBO Extension Function Pointers
-PFNGLGENBUFFERSARBPROC 		glGenBuffersARB = NULL;		// VBO Name Generation Procedure
-PFNGLBINDBUFFERARBPROC 		glBindBufferARB = NULL;		// VBO Bind Procedure
-PFNGLBUFFERDATAARBPROC 		glBufferDataARB = NULL;		// VBO Data Loading Procedure
-PFNGLDELETEBUFFERSARBPROC 	glDeleteBuffersARB = NULL;	// VBO Deletion Procedure
-PFNGLISBUFFERARBPROC 		glIsBufferARB = NULL;
+PFNGLGENBUFFERSARBPROC 		glGenBuffersARB = nullptr;		// VBO Name Generation Procedure
+PFNGLBINDBUFFERARBPROC 		glBindBufferARB = nullptr;		// VBO Bind Procedure
+PFNGLBUFFERDATAARBPROC 		glBufferDataARB = nullptr;		// VBO Data Loading Procedure
+PFNGLDELETEBUFFERSARBPROC 	glDeleteBuffersARB = nullptr;	// VBO Deletion Procedure
+PFNGLISBUFFERARBPROC 		glIsBufferARB = nullptr;
 
 
 
@@ -52,14 +52,13 @@ bool vw_Internal_InitializationVBO()
 	glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) SDL_GL_GetProcAddress("glDeleteBuffersARB");
 	glIsBufferARB = (PFNGLISBUFFERARBPROC) SDL_GL_GetProcAddress("glIsBufferARB");
 
-	if (glGenBuffersARB == NULL || glBindBufferARB == NULL || glBufferDataARB == NULL ||
-		glDeleteBuffersARB == NULL || glIsBufferARB == NULL)
-	{
-		glGenBuffersARB 	= NULL;
-		glBindBufferARB 	= NULL;
-		glBufferDataARB 	= NULL;
-		glDeleteBuffersARB 	= NULL;
-		glIsBufferARB 		= NULL;
+	if (glGenBuffersARB == nullptr || glBindBufferARB == nullptr || glBufferDataARB == nullptr ||
+	    glDeleteBuffersARB == nullptr || glIsBufferARB == nullptr) {
+		glGenBuffersARB 	= nullptr;
+		glBindBufferARB 	= nullptr;
+		glBufferDataARB 	= nullptr;
+		glDeleteBuffersARB 	= nullptr;
+		glIsBufferARB 		= nullptr;
 
 		return false;
 	}
@@ -75,21 +74,22 @@ bool vw_Internal_InitializationVBO()
 //------------------------------------------------------------------------------------
 bool vw_BuildVBO(int NumVertices, void *Data, int Stride, unsigned int *VBO)
 {
-	if (Data == 0) return false;
-	if (VBO == 0) return false;
-	if (glGenBuffersARB == NULL) return false;
-	if (glBindBufferARB == NULL) return false;
-	if (glBufferDataARB == NULL) return false;
-	if (glIsBufferARB == NULL) return false;
+	if ((Data == nullptr) || (VBO == nullptr) ||
+	    (glGenBuffersARB == nullptr) ||
+	    (glBindBufferARB == nullptr) ||
+	    (glBufferDataARB == nullptr) ||
+	    (glIsBufferARB == nullptr))
+		return false;
 
-	glGenBuffersARB( 1, VBO );						// Get A Valid Name
-	glBindBufferARB( GL_ARRAY_BUFFER_ARB, *VBO );	// Bind The Buffer
+	glGenBuffersARB(1, VBO);			// Get A Valid Name
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB, *VBO);	// Bind The Buffer
 	// Load The Data
-	glBufferDataARB( GL_ARRAY_BUFFER_ARB, NumVertices*Stride*sizeof(float), Data, GL_STATIC_DRAW_ARB );
+	glBufferDataARB(GL_ARRAY_BUFFER_ARB, NumVertices*Stride*sizeof(float), Data, GL_STATIC_DRAW_ARB);
 	// убираем буфер
-	glBindBufferARB( GL_ARRAY_BUFFER_ARB, 0 );
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 
-	if (!glIsBufferARB(*VBO)) return false;
+	if (!glIsBufferARB(*VBO))
+		return false;
 
 	return true;
 }
@@ -100,21 +100,22 @@ bool vw_BuildVBO(int NumVertices, void *Data, int Stride, unsigned int *VBO)
 //------------------------------------------------------------------------------------
 bool vw_BuildIBO(int NumIndex, void *Data, unsigned int *IBO)
 {
-	if (Data == 0) return false;
-	if (IBO == 0) return false;
-	if (glGenBuffersARB == NULL) return false;
-	if (glBindBufferARB == NULL) return false;
-	if (glBufferDataARB == NULL) return false;
-	if (glIsBufferARB == NULL) return false;
+	if ((Data == nullptr) || (IBO == nullptr) ||
+	    (glGenBuffersARB == nullptr) ||
+	    (glBindBufferARB == nullptr) ||
+	    (glBufferDataARB == nullptr) ||
+	    (glIsBufferARB == nullptr))
+		return false;
 
-	glGenBuffersARB( 1, IBO );								// Get A Valid Name
-	glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER_ARB, *IBO );	// Bind The Buffer
+	glGenBuffersARB(1, IBO);				// Get A Valid Name
+	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, *IBO);	// Bind The Buffer
 	// Load The Data
-	glBufferDataARB( GL_ELEMENT_ARRAY_BUFFER_ARB, NumIndex*sizeof(unsigned int), Data, GL_STATIC_DRAW_ARB );
+	glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, NumIndex*sizeof(unsigned int), Data, GL_STATIC_DRAW_ARB);
 	// убираем буфер
-	glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER_ARB, 0 );
+	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
 
-	if (!glIsBufferARB(*IBO)) return false;
+	if (!glIsBufferARB(*IBO))
+		return false;
 
 	return true;
 }
@@ -125,13 +126,18 @@ bool vw_BuildIBO(int NumIndex, void *Data, unsigned int *IBO)
 //------------------------------------------------------------------------------------
 void vw_BindVBO(int target, unsigned int VBO)
 {
-	if (glBindBufferARB == NULL) return;
+	if (glBindBufferARB == nullptr) return;
 
-	switch (target)
-	{
-		case RI_ARRAY_BUFFER: 			glBindBufferARB(GL_ARRAY_BUFFER_ARB, VBO); break;
-		case RI_ELEMENT_ARRAY_BUFFER: 	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, VBO); break;
-		default: fprintf(stderr, "Error in vw_BindVBO function call, wrong target.\n"); break;
+	switch (target) {
+	case RI_ARRAY_BUFFER:
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, VBO);
+		break;
+	case RI_ELEMENT_ARRAY_BUFFER:
+		glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, VBO);
+		break;
+	default:
+		fprintf(stderr, "Error in vw_BindVBO function call, wrong target.\n");
+		break;
 	}
 }
 
@@ -144,8 +150,8 @@ void vw_BindVBO(int target, unsigned int VBO)
 //------------------------------------------------------------------------------------
 void vw_DeleteVBO(unsigned int VBO)
 {
-	if (glIsBufferARB == NULL) return;
-	if (glDeleteBuffersARB == NULL) return;
+	if (glIsBufferARB == nullptr) return;
+	if (glDeleteBuffersARB == nullptr) return;
 
 	if (glIsBufferARB(VBO))	glDeleteBuffersARB(1, &VBO);
 }

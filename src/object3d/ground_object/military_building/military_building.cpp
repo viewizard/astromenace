@@ -30,16 +30,14 @@
 
 
 
-struct MilitaryBuildingData
-{
+struct MilitaryBuildingData {
 	float	Strength;
 	int		WeaponQuantity;
 	const	char *Name;
 	const	char *TextureName;
 };
 
-static MilitaryBuildingData PresetMilitaryBuildingData[] =
-{
+static MilitaryBuildingData PresetMilitaryBuildingData[] = {
 	{80, 2,	"models/militarybuilding/aa-gun-01.vw3d", "models/gr-01.vw2d"},
 	{120, 1,	"models/militarybuilding/aa-gun-02.vw3d", "models/gr-01.vw2d"},
 	{80, 2,	"models/militarybuilding/aa-gun-03.vw3d", "models/gr-02.vw2d"},
@@ -57,8 +55,7 @@ static MilitaryBuildingData PresetMilitaryBuildingData[] =
 //-----------------------------------------------------------------------------
 void CMilitaryBuilding::Create(int	MilitaryBuildingNum)
 {
-	if ((MilitaryBuildingNum <= 0) || ((unsigned int)MilitaryBuildingNum > PresetMilitaryBuildingDataCount))
-	{
+	if ((MilitaryBuildingNum <= 0) || ((unsigned int)MilitaryBuildingNum > PresetMilitaryBuildingDataCount)) {
 		fprintf(stderr, "!!! Couldn't init CMilitaryBuilding object with Number %i.\n", MilitaryBuildingNum);
 		return;
 	}
@@ -69,8 +66,7 @@ void CMilitaryBuilding::Create(int	MilitaryBuildingNum)
 	LoadObjectData(PresetMilitaryBuildingData[MilitaryBuildingNum-1].Name, this, 0, 2.0f);
 
 
-	for (int i=0; i<DrawObjectQuantity; i++)
-	{
+	for (int i=0; i<DrawObjectQuantity; i++) {
 		Texture[i] = vw_FindTextureByName(PresetMilitaryBuildingData[MilitaryBuildingNum-1].TextureName);
 	}
 
@@ -88,183 +84,181 @@ void CMilitaryBuilding::Create(int	MilitaryBuildingNum)
 	WeaponLocation = new VECTOR3D[WeaponQuantity];
 	Weapon = new CWeapon*[WeaponQuantity];
 	WeaponBound = new VECTOR3D[WeaponQuantity];
-	for (int i=0; i<WeaponQuantity; i++)
-	{
+	for (int i = 0; i < WeaponQuantity; i++) {
 		WeaponSetFire[i] = false;
-		Weapon[i] = 0;
+		Weapon[i] = nullptr;
 	}
 
 
 
 	// установка доп. текстуры и других настроек для каждой модели
-	switch (MilitaryBuildingNum)
-	{
-		case 1:
-			WeaponLocation[0] = VECTOR3D(0.3f, 4.6f, 2.6f);
-			Weapon[0] = new CWeapon;
-			Weapon[0]->Create(204);
-			WeaponLocation[1] = VECTOR3D(-0.3f, 4.6f, 2.6f);
-			Weapon[1] = new CWeapon;
-			Weapon[1]->Create(204);
-			WeaponFireType = 2;
+	switch (MilitaryBuildingNum) {
+	case 1:
+		WeaponLocation[0] = VECTOR3D(0.3f, 4.6f, 2.6f);
+		Weapon[0] = new CWeapon;
+		Weapon[0]->Create(204);
+		WeaponLocation[1] = VECTOR3D(-0.3f, 4.6f, 2.6f);
+		Weapon[1] = new CWeapon;
+		Weapon[1]->Create(204);
+		WeaponFireType = 2;
 
-			TargetHorizObjectQuantity = 4;
-			TargetHorizObject = new int[TargetHorizObjectQuantity];
-			TargetHorizObject[0] = 1;
-			TargetHorizObject[1] = 2;
-			TargetHorizObject[2] = 3;
-			TargetHorizObject[3] = 4;
+		TargetHorizObjectQuantity = 4;
+		TargetHorizObject = new int[TargetHorizObjectQuantity];
+		TargetHorizObject[0] = 1;
+		TargetHorizObject[1] = 2;
+		TargetHorizObject[2] = 3;
+		TargetHorizObject[3] = 4;
 
-			TargetVertObjectQuantity = 3;
-			TargetVertObject = new int[TargetVertObjectQuantity];
-			TargetVertObject[0] = 2;
-			TargetVertObject[1] = 3;
-			TargetVertObject[2] = 4;
-			TargetVertObjectMaxAngle = 60.0f;
-			break;
+		TargetVertObjectQuantity = 3;
+		TargetVertObject = new int[TargetVertObjectQuantity];
+		TargetVertObject[0] = 2;
+		TargetVertObject[1] = 3;
+		TargetVertObject[2] = 4;
+		TargetVertObjectMaxAngle = 60.0f;
+		break;
 
-		case 2:
-			WeaponLocation[0] = VECTOR3D(0.0f, 4.6f, 4.5f);
-			Weapon[0] = new CWeapon;
-			Weapon[0]->Create(204);
-			Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 3.0f;
-			WeaponFireType = 2;
+	case 2:
+		WeaponLocation[0] = VECTOR3D(0.0f, 4.6f, 4.5f);
+		Weapon[0] = new CWeapon;
+		Weapon[0]->Create(204);
+		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 3.0f;
+		WeaponFireType = 2;
 
-			TargetHorizObjectQuantity = 4;
-			TargetHorizObject = new int[TargetHorizObjectQuantity];
-			TargetHorizObject[0] = 1;
-			TargetHorizObject[1] = 2;
-			TargetHorizObject[2] = 3;
-			TargetHorizObject[3] = 4;
+		TargetHorizObjectQuantity = 4;
+		TargetHorizObject = new int[TargetHorizObjectQuantity];
+		TargetHorizObject[0] = 1;
+		TargetHorizObject[1] = 2;
+		TargetHorizObject[2] = 3;
+		TargetHorizObject[3] = 4;
 
-			TargetVertObjectQuantity = 3;
-			TargetVertObject = new int[TargetVertObjectQuantity];
-			TargetVertObject[0] = 2;
-			TargetVertObject[1] = 3;
-			TargetVertObject[2] = 4;
-			TargetVertObjectMaxAngle = 60.0f;
+		TargetVertObjectQuantity = 3;
+		TargetVertObject = new int[TargetVertObjectQuantity];
+		TargetVertObject[0] = 2;
+		TargetVertObject[1] = 3;
+		TargetVertObject[2] = 4;
+		TargetVertObjectMaxAngle = 60.0f;
 
-			BarrelObjectQuantity = 1;
-			BarrelObject = new int[BarrelObjectQuantity];
-			BarrelObject[0] = 4;
-			break;
+		BarrelObjectQuantity = 1;
+		BarrelObject = new int[BarrelObjectQuantity];
+		BarrelObject[0] = 4;
+		break;
 
-		case 3:
-			WeaponLocation[0] = VECTOR3D(2.8f, 5.3f, 7.5f);
-			Weapon[0] = new CWeapon;
-			Weapon[0]->Create(205);
-			Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
-			WeaponLocation[1] = VECTOR3D(-2.8f, 5.3f, 7.5f);
-			Weapon[1] = new CWeapon;
-			Weapon[1]->Create(205);
-			Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 2.0f;
-			WeaponFireType = 3;
+	case 3:
+		WeaponLocation[0] = VECTOR3D(2.8f, 5.3f, 7.5f);
+		Weapon[0] = new CWeapon;
+		Weapon[0]->Create(205);
+		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
+		WeaponLocation[1] = VECTOR3D(-2.8f, 5.3f, 7.5f);
+		Weapon[1] = new CWeapon;
+		Weapon[1]->Create(205);
+		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 2.0f;
+		WeaponFireType = 3;
 
-			TargetHorizObjectQuantity = 2;
-			TargetHorizObject = new int[TargetHorizObjectQuantity];
-			TargetHorizObject[0] = 1;
-			TargetHorizObject[1] = 2;
+		TargetHorizObjectQuantity = 2;
+		TargetHorizObject = new int[TargetHorizObjectQuantity];
+		TargetHorizObject[0] = 1;
+		TargetHorizObject[1] = 2;
 
-			TargetVertObjectQuantity = 1;
-			TargetVertObject = new int[TargetVertObjectQuantity];
-			TargetVertObject[0] = 2;
-			TargetVertObjectMaxAngle = 60.0f;
-			break;
+		TargetVertObjectQuantity = 1;
+		TargetVertObject = new int[TargetVertObjectQuantity];
+		TargetVertObject[0] = 2;
+		TargetVertObjectMaxAngle = 60.0f;
+		break;
 
-		case 4:
-			WeaponLocation[0] = VECTOR3D(3.6f, 8.5f, 4.0f);
-			Weapon[0] = new CWeapon;
-			Weapon[0]->Create(204);
-			Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
-			WeaponLocation[1] = VECTOR3D(-3.6f, 8.5f, 4.0f);
-			Weapon[1] = new CWeapon;
-			Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 2.0f;
-			Weapon[1]->Create(204);
-			WeaponFireType = 2;
+	case 4:
+		WeaponLocation[0] = VECTOR3D(3.6f, 8.5f, 4.0f);
+		Weapon[0] = new CWeapon;
+		Weapon[0]->Create(204);
+		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
+		WeaponLocation[1] = VECTOR3D(-3.6f, 8.5f, 4.0f);
+		Weapon[1] = new CWeapon;
+		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 2.0f;
+		Weapon[1]->Create(204);
+		WeaponFireType = 2;
 
-			TargetHorizObjectQuantity = 4;
-			TargetHorizObject = new int[TargetHorizObjectQuantity];
-			TargetHorizObject[0] = 1;
-			TargetHorizObject[1] = 2;
-			TargetHorizObject[2] = 3;
-			TargetHorizObject[3] = 4;
+		TargetHorizObjectQuantity = 4;
+		TargetHorizObject = new int[TargetHorizObjectQuantity];
+		TargetHorizObject[0] = 1;
+		TargetHorizObject[1] = 2;
+		TargetHorizObject[2] = 3;
+		TargetHorizObject[3] = 4;
 
-			TargetVertObjectQuantity = 3;
-			TargetVertObject = new int[TargetVertObjectQuantity];
-			TargetVertObject[0] = 2;
-			TargetVertObject[1] = 3;
-			TargetVertObject[2] = 4;
-			TargetVertObjectMaxAngle = 60.0f;
+		TargetVertObjectQuantity = 3;
+		TargetVertObject = new int[TargetVertObjectQuantity];
+		TargetVertObject[0] = 2;
+		TargetVertObject[1] = 3;
+		TargetVertObject[2] = 4;
+		TargetVertObjectMaxAngle = 60.0f;
 
-			BarrelObjectQuantity = 2;
-			BarrelObject = new int[BarrelObjectQuantity];
-			BarrelObject[0] = 3;
-			BarrelObject[1] = 4;
-			break;
+		BarrelObjectQuantity = 2;
+		BarrelObject = new int[BarrelObjectQuantity];
+		BarrelObject[0] = 3;
+		BarrelObject[1] = 4;
+		break;
 
-		case 5:
-			WeaponLocation[0] = VECTOR3D(1.95f, 6.5f, 3.7f);
-			Weapon[0] = new CWeapon;
-			Weapon[0]->Create(204);
-			Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 3.0f;
-			WeaponLocation[1] = VECTOR3D(-1.95f, 6.5f, 3.7f);
-			Weapon[1] = new CWeapon;
-			Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 3.0f;
-			Weapon[1]->Create(204);
-			WeaponFireType = 2;
+	case 5:
+		WeaponLocation[0] = VECTOR3D(1.95f, 6.5f, 3.7f);
+		Weapon[0] = new CWeapon;
+		Weapon[0]->Create(204);
+		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 3.0f;
+		WeaponLocation[1] = VECTOR3D(-1.95f, 6.5f, 3.7f);
+		Weapon[1] = new CWeapon;
+		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 3.0f;
+		Weapon[1]->Create(204);
+		WeaponFireType = 2;
 
-			TargetHorizObjectQuantity = 2;
-			TargetHorizObject = new int[TargetHorizObjectQuantity];
-			TargetHorizObject[0] = 1;
-			TargetHorizObject[1] = 2;
+		TargetHorizObjectQuantity = 2;
+		TargetHorizObject = new int[TargetHorizObjectQuantity];
+		TargetHorizObject[0] = 1;
+		TargetHorizObject[1] = 2;
 
-			TargetVertObjectQuantity = 1;
-			TargetVertObject = new int[TargetVertObjectQuantity];
-			TargetVertObject[0] = 2;
-			TargetVertObjectMaxAngle = 60.0f;
-			break;
+		TargetVertObjectQuantity = 1;
+		TargetVertObject = new int[TargetVertObjectQuantity];
+		TargetVertObject[0] = 2;
+		TargetVertObjectMaxAngle = 60.0f;
+		break;
 
-		case 6:
-			WeaponLocation[0] = VECTOR3D(0.0f, 3.0f, 7.0f);
-			Weapon[0] = new CWeapon;
-			Weapon[0]->Create(204);
-			Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 3.5f;
+	case 6:
+		WeaponLocation[0] = VECTOR3D(0.0f, 3.0f, 7.0f);
+		Weapon[0] = new CWeapon;
+		Weapon[0]->Create(204);
+		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 3.5f;
 
-			TargetHorizObjectQuantity = 2;
-			TargetHorizObject = new int[TargetHorizObjectQuantity];
-			TargetHorizObject[0] = 2;
-			TargetHorizObject[1] = 1;
+		TargetHorizObjectQuantity = 2;
+		TargetHorizObject = new int[TargetHorizObjectQuantity];
+		TargetHorizObject[0] = 2;
+		TargetHorizObject[1] = 1;
 
-			TargetVertObjectQuantity = 1;
-			TargetVertObject = new int[TargetVertObjectQuantity];
-			TargetVertObject[0] = 1;
-			TargetVertObjectMaxAngle = 80.0f;
-			break;
+		TargetVertObjectQuantity = 1;
+		TargetVertObject = new int[TargetVertObjectQuantity];
+		TargetVertObject[0] = 1;
+		TargetVertObjectMaxAngle = 80.0f;
+		break;
 
-		case 7:
-			WeaponLocation[0] = VECTOR3D(0.0f, 5.2f, 10.3f);
-			Weapon[0] = new CWeapon;
-			Weapon[0]->Create(211);
-			Weapon[0]->NextFireTime = Weapon[0]->NextFireTime;
+	case 7:
+		WeaponLocation[0] = VECTOR3D(0.0f, 5.2f, 10.3f);
+		Weapon[0] = new CWeapon;
+		Weapon[0]->Create(211);
+		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime;
 
-			TargetHorizObjectQuantity = 4;
-			TargetHorizObject = new int[TargetHorizObjectQuantity];
-			TargetHorizObject[0] = 4;
-			TargetHorizObject[1] = 2;
-			TargetHorizObject[2] = 3;
-			TargetHorizObject[3] = 1;
+		TargetHorizObjectQuantity = 4;
+		TargetHorizObject = new int[TargetHorizObjectQuantity];
+		TargetHorizObject[0] = 4;
+		TargetHorizObject[1] = 2;
+		TargetHorizObject[2] = 3;
+		TargetHorizObject[3] = 1;
 
-			TargetVertObjectQuantity = 3;
-			TargetVertObject = new int[TargetVertObjectQuantity];
-			TargetVertObject[0] = 3;
-			TargetVertObject[1] = 2;
-			TargetVertObject[2] = 1;
-			TargetVertObjectMaxAngle = 60.0f;
+		TargetVertObjectQuantity = 3;
+		TargetVertObject = new int[TargetVertObjectQuantity];
+		TargetVertObject[0] = 3;
+		TargetVertObject[1] = 2;
+		TargetVertObject[2] = 1;
+		TargetVertObjectMaxAngle = 60.0f;
 
-			BarrelObjectQuantity = 1;
-			BarrelObject = new int[BarrelObjectQuantity];
-			BarrelObject[0] = 1;
-			break;
+		BarrelObjectQuantity = 1;
+		BarrelObject = new int[BarrelObjectQuantity];
+		BarrelObject[0] = 1;
+		break;
 
 	}
 
@@ -272,38 +266,25 @@ void CMilitaryBuilding::Create(int	MilitaryBuildingNum)
 
 
 	// вычисляем данные для нахождения точки стрельбы
-	if (TargetHorizObject != 0)
-	{
+	if (TargetHorizObject != nullptr) {
 		BaseBound = DrawObjectList[TargetHorizObject[0]].Location;
 	}
 
-	if (TargetVertObject != 0)
-	{
-		if (TargetHorizObject != 0)
-		{
+	if (TargetVertObject != nullptr) {
+		if (TargetHorizObject != nullptr)
 			MiddleBound = DrawObjectList[TargetVertObject[0]].Location - DrawObjectList[TargetHorizObject[0]].Location;
-		}
 		else
-		{
 			MiddleBound = DrawObjectList[TargetVertObject[0]].Location;
-		}
 	}
 
-	if (WeaponBound != 0)
-	for (int i=0; i<WeaponQuantity; i++)
-	{
-		if (TargetVertObject != 0)
-		{
-			WeaponBound[i] = WeaponLocation[i] - DrawObjectList[TargetVertObject[0]].Location;
-		}
-		else
-		if (TargetHorizObject != 0)
-		{
-			WeaponBound[i] = WeaponLocation[i] - DrawObjectList[TargetHorizObject[0]].Location;
-		}
-		else
-		{
-			WeaponBound[i] = WeaponLocation[i];
+	if (WeaponBound != nullptr) {
+		for (int i = 0; i < WeaponQuantity; i++) {
+			if (TargetVertObject != nullptr)
+				WeaponBound[i] = WeaponLocation[i] - DrawObjectList[TargetVertObject[0]].Location;
+			else if (TargetHorizObject != nullptr)
+				WeaponBound[i] = WeaponLocation[i] - DrawObjectList[TargetHorizObject[0]].Location;
+			else
+				WeaponBound[i] = WeaponLocation[i];
 		}
 	}
 

@@ -35,16 +35,16 @@
 //------------------------------------------------------------------------------------
 // переменные
 //------------------------------------------------------------------------------------
-CEarthSpaceFighter *InfoFighter = 0;
-CWeapon *InfoWeapon = 0;
-CProjectile *InfoMine = 0;
-CAlienSpaceFighter *InfoAlien = 0;
-CAlienSpaceMotherShip *InfoAlienMotherShip = 0;
-CPirateShip *InfoPirateShip = 0;
-CBuilding *InfoBuilding = 0;
-CMilitaryBuilding *InfoMilitaryBuilding = 0;
-CWheeled *InfoWheeled = 0;
-CTracked *InfoTracked = 0;
+CEarthSpaceFighter *InfoFighter = nullptr;
+CWeapon *InfoWeapon = nullptr;
+CProjectile *InfoMine = nullptr;
+CAlienSpaceFighter *InfoAlien = nullptr;
+CAlienSpaceMotherShip *InfoAlienMotherShip = nullptr;
+CPirateShip *InfoPirateShip = nullptr;
+CBuilding *InfoBuilding = nullptr;
+CMilitaryBuilding *InfoMilitaryBuilding = nullptr;
+CWheeled *InfoWheeled = nullptr;
+CTracked *InfoTracked = nullptr;
 
 
 int GetWeaponHullDamage(int Num);
@@ -123,17 +123,18 @@ float		InfoObjectRange = 0;
 
 
 
-const char *InfoGroupNames[10] =
-{"4_Earth_Spaceships",
-"4_Weapons",
-"4_Space_Mines",
-"4_Alien_Spaceships",
-"4_Alien_Motherships",
-"4_Pirate_Spaceships",
-"4_Civilian_Buildings",
-"4_Military_Buildings",
-"4_Wheeled_Vehicles",
-"4_Tracked_Vehicles"};
+const char *InfoGroupNames[10] = {
+	"4_Earth_Spaceships",
+	"4_Weapons",
+	"4_Space_Mines",
+	"4_Alien_Spaceships",
+	"4_Alien_Motherships",
+	"4_Pirate_Spaceships",
+	"4_Civilian_Buildings",
+	"4_Military_Buildings",
+	"4_Wheeled_Vehicles",
+	"4_Tracked_Vehicles"
+};
 
 
 
@@ -142,44 +143,34 @@ const char *InfoGroupNames[10] =
 //------------------------------------------------------------------------------------
 int GetInfoNextGroup()
 {
-	if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant)
-	{
+	if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant) {
 		return 2;
 	}
-	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant)
-	{
+	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant) {
 		return 3;
 	}
-	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant)
-	{
+	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant) {
 		return 4;
 	}
-	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant)
-	{
+	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant) {
 		return 5;
 	}
-	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant)
-	{
+	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant) {
 		return 6;
 	}
-	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant)
-	{
+	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant) {
 		return 7;
 	}
-	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant)
-	{
+	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant) {
 		return 8;
 	}
-	if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant)
-	{
+	if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant) {
 		return 9;
 	}
-	if (CreateNum>=InfoWheeledStart && CreateNum<InfoWheeledStart+InfoWheeledQuant)
-	{
+	if (CreateNum>=InfoWheeledStart && CreateNum<InfoWheeledStart+InfoWheeledQuant) {
 		return 10;
 	}
-	if (CreateNum>=InfoTrackedStart && CreateNum<InfoTrackedStart+InfoTrackedQuant)
-	{
+	if (CreateNum>=InfoTrackedStart && CreateNum<InfoTrackedStart+InfoTrackedQuant) {
 		return 1;
 	}
 
@@ -187,44 +178,34 @@ int GetInfoNextGroup()
 }
 int GetInfoPrevGroup()
 {
-	if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant)
-	{
+	if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant) {
 		return 10;
 	}
-	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant)
-	{
+	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant) {
 		return 1;
 	}
-	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant)
-	{
+	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant) {
 		return 2;
 	}
-	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant)
-	{
+	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant) {
 		return 3;
 	}
-	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant)
-	{
+	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant) {
 		return 4;
 	}
-	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant)
-	{
+	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant) {
 		return 5;
 	}
-	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant)
-	{
+	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant) {
 		return 6;
 	}
-	if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant)
-	{
+	if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant) {
 		return 7;
 	}
-	if (CreateNum>=InfoWheeledStart && CreateNum<InfoWheeledStart+InfoWheeledQuant)
-	{
+	if (CreateNum>=InfoWheeledStart && CreateNum<InfoWheeledStart+InfoWheeledQuant) {
 		return 8;
 	}
-	if (CreateNum>=InfoTrackedStart && CreateNum<InfoTrackedStart+InfoTrackedQuant)
-	{
+	if (CreateNum>=InfoTrackedStart && CreateNum<InfoTrackedStart+InfoTrackedQuant) {
 		return 9;
 	}
 
@@ -234,28 +215,27 @@ int GetInfoPrevGroup()
 
 int GetInfoSwitchToGroup(int Group)
 {
-	switch (Group)
-	{
-		case 1:
-			return InfoFighterStart;
-		case 2:
-			return InfoWeaponStart;
-		case 3:
-			return InfoMineStart;
-		case 4:
-			return InfoAlienStart;
-		case 5:
-			return InfoAlienMotherShipStart;
-		case 6:
-			return InfoPirateShipStart;
-		case 7:
-			return InfoBuildingStart;
-		case 8:
-			return InfoMilitaryBuildingStart;
-		case 9:
-			return InfoWheeledStart;
-		case 10:
-			return InfoTrackedStart;
+	switch (Group) {
+	case 1:
+		return InfoFighterStart;
+	case 2:
+		return InfoWeaponStart;
+	case 3:
+		return InfoMineStart;
+	case 4:
+		return InfoAlienStart;
+	case 5:
+		return InfoAlienMotherShipStart;
+	case 6:
+		return InfoPirateShipStart;
+	case 7:
+		return InfoBuildingStart;
+	case 8:
+		return InfoMilitaryBuildingStart;
+	case 9:
+		return InfoWheeledStart;
+	case 10:
+		return InfoTrackedStart;
 	}
 
 	return 1;
@@ -276,16 +256,46 @@ int GetInfoSwitchToGroup(int Group)
 //------------------------------------------------------------------------------------
 void DestroyInfoObject()
 {
-	if (InfoFighter != 0){delete InfoFighter; InfoFighter = 0;}
-	if (InfoWeapon != 0){delete InfoWeapon; InfoWeapon = 0;}
-	if (InfoMine != 0){delete InfoMine; InfoMine = 0;}
-	if (InfoAlien != 0){delete InfoAlien; InfoAlien = 0;}
-	if (InfoAlienMotherShip != 0){delete InfoAlienMotherShip; InfoAlienMotherShip = 0;}
-	if (InfoPirateShip != 0){delete InfoPirateShip; InfoPirateShip = 0;}
-	if (InfoBuilding != 0){delete InfoBuilding; InfoBuilding = 0;}
-	if (InfoMilitaryBuilding != 0){delete InfoMilitaryBuilding; InfoMilitaryBuilding = 0;}
-	if (InfoWheeled != 0){delete InfoWheeled; InfoWheeled = 0;}
-	if (InfoTracked != 0){delete InfoTracked; InfoTracked = 0;}
+	if (InfoFighter != nullptr) {
+		delete InfoFighter;
+		InfoFighter = nullptr;
+	}
+	if (InfoWeapon != nullptr) {
+		delete InfoWeapon;
+		InfoWeapon = nullptr;
+	}
+	if (InfoMine != nullptr) {
+		delete InfoMine;
+		InfoMine = nullptr;
+	}
+	if (InfoAlien != nullptr) {
+		delete InfoAlien;
+		InfoAlien = nullptr;
+	}
+	if (InfoAlienMotherShip != nullptr) {
+		delete InfoAlienMotherShip;
+		InfoAlienMotherShip = nullptr;
+	}
+	if (InfoPirateShip != nullptr) {
+		delete InfoPirateShip;
+		InfoPirateShip = nullptr;
+	}
+	if (InfoBuilding != nullptr) {
+		delete InfoBuilding;
+		InfoBuilding = nullptr;
+	}
+	if (InfoMilitaryBuilding != nullptr) {
+		delete InfoMilitaryBuilding;
+		InfoMilitaryBuilding = nullptr;
+	}
+	if (InfoWheeled != nullptr) {
+		delete InfoWheeled;
+		InfoWheeled = nullptr;
+	}
+	if (InfoTracked != nullptr) {
+		delete InfoTracked;
+		InfoTracked = nullptr;
+	}
 }
 
 
@@ -307,8 +317,7 @@ void CreateInfoObject()
 
 	Point = VECTOR3D(1000,-1000,0);
 
-	if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant)
-	{
+	if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant) {
 		int tmpCreateNum = CreateNum-InfoFighterStart+1;
 		InfoFighter = new CEarthSpaceFighter;
 		InfoFighter->Create(tmpCreateNum);
@@ -320,11 +329,11 @@ void CreateInfoObject()
 		Point = VECTOR3D(1000,-1000+InfoFighter->Height/3.0f,0);
 
 		PointCamera = VECTOR3D(0.0f,(InfoFighter->Length
-			+InfoFighter->Width+
-			InfoFighter->Height)*0.24f +InfoFighter->Height*0.3f,
-			-(InfoFighter->Length
-			+InfoFighter->Width+
-			InfoFighter->Height)*0.56f-InfoFighter->Height*0.7f);
+					     +InfoFighter->Width+
+					     InfoFighter->Height)*0.24f +InfoFighter->Height*0.3f,
+				       -(InfoFighter->Length
+					 +InfoFighter->Width+
+					 InfoFighter->Height)*0.56f-InfoFighter->Height*0.7f);
 		InfoObjectWidth = InfoFighter->Width;
 		InfoObjectLength = InfoFighter->Length;
 		InfoObjectHeight = InfoFighter->Height;
@@ -332,15 +341,16 @@ void CreateInfoObject()
 		InfoObjectWeaponQuantity = InfoFighter->WeaponQuantity;
 		InfoObjectEngineQuantity = InfoFighter->EngineQuantity;
 
-		if (InfoFighter->Engine != 0)
-		for (int i=0; i<InfoFighter->EngineQuantity; i++)
-		if (InfoFighter->Engine[i] != 0)
-			InfoFighter->Engine[i]->SpeedOnCreation = -1.0f;
+		if (InfoFighter->Engine != nullptr) {
+			for (int i = 0; i < InfoFighter->EngineQuantity; i++) {
+				if (InfoFighter->Engine[i] != nullptr)
+					InfoFighter->Engine[i]->SpeedOnCreation = -1.0f;
+			}
+		}
 
 		InfoFighter->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
-	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant)
-	{
+	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant) {
 		int tmpCreateNum = CreateNum-InfoWeaponStart+1;
 		InfoWeapon = new CWeapon;
 		InfoWeapon->Create(tmpCreateNum);
@@ -350,11 +360,11 @@ void CreateInfoObject()
 		Point = VECTOR3D(1000,-1000+InfoWeapon->Height/3.0f,0);
 
 		PointCamera = VECTOR3D(0.0f,(InfoWeapon->Length
-			+InfoWeapon->Width+
-			InfoWeapon->Height)*0.3f +InfoWeapon->Height*0.3f,
-			-(InfoWeapon->Length
-			+InfoWeapon->Width+
-			InfoWeapon->Height)*0.7f-InfoWeapon->Height*0.7f);
+					     +InfoWeapon->Width+
+					     InfoWeapon->Height)*0.3f +InfoWeapon->Height*0.3f,
+				       -(InfoWeapon->Length
+					 +InfoWeapon->Width+
+					 InfoWeapon->Height)*0.7f-InfoWeapon->Height*0.7f);
 		InfoObjectWidth = InfoWeapon->Width;
 		InfoObjectLength = InfoWeapon->Length;
 		InfoObjectHeight = InfoWeapon->Height;
@@ -367,11 +377,13 @@ void CreateInfoObject()
 		InfoObjectReload = InfoWeapon->NextFireTime;
 		InfoObjectRange = GetProjectileRange(tmpCreateNum);
 		// убираем источник света
-		if (InfoWeapon->Fire != 0)
-		if (InfoWeapon->Fire->Light != 0){vw_ReleaseLight(InfoWeapon->Fire->Light); InfoWeapon->Fire->Light = 0;}
+		if ((InfoWeapon->Fire != nullptr) &&
+		    (InfoWeapon->Fire->Light != nullptr)) {
+			vw_ReleaseLight(InfoWeapon->Fire->Light);
+			InfoWeapon->Fire->Light = nullptr;
+		}
 	}
-	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant)
-	{
+	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant) {
 		int tmpCreateNum = CreateNum-InfoMineStart+1;
 		InfoMine = new CProjectile;
 		InfoMine->Create(213+tmpCreateNum);
@@ -385,11 +397,11 @@ void CreateInfoObject()
 		Point = VECTOR3D(1000,-1000+InfoMine->Height/2.0f,0);
 
 		PointCamera = VECTOR3D(0.0f,(InfoMine->Length
-			+InfoMine->Width+
-			InfoMine->Height)*0.3f +InfoMine->Height*0.3f,
-			-(InfoMine->Length
-			+InfoMine->Width+
-			InfoMine->Height)*0.7f-InfoMine->Height*0.7f);
+					     +InfoMine->Width+
+					     InfoMine->Height)*0.3f +InfoMine->Height*0.3f,
+				       -(InfoMine->Length
+					 +InfoMine->Width+
+					 InfoMine->Height)*0.7f-InfoMine->Height*0.7f);
 
 		InfoObjectWidth = InfoMine->Width;
 		InfoObjectLength = InfoMine->Length;
@@ -398,8 +410,7 @@ void CreateInfoObject()
 
 		InfoMine->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
-	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant)
-	{
+	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant) {
 		int tmpCreateNum = CreateNum-InfoAlienStart+1;
 		InfoAlien = new CAlienSpaceFighter;
 		InfoAlien->Create(tmpCreateNum);
@@ -411,26 +422,27 @@ void CreateInfoObject()
 		Point = VECTOR3D(1000,-1000+InfoAlien->Height/3.0f,0);
 
 		PointCamera = VECTOR3D(0.0f,(InfoAlien->Length
-			+InfoAlien->Width+
-			InfoAlien->Height)*0.24f +InfoAlien->Height*0.3f,
-			-(InfoAlien->Length
-			+InfoAlien->Width+
-			InfoAlien->Height)*0.56f-InfoAlien->Height*0.7f);
+					     +InfoAlien->Width+
+					     InfoAlien->Height)*0.24f +InfoAlien->Height*0.3f,
+				       -(InfoAlien->Length
+					 +InfoAlien->Width+
+					 InfoAlien->Height)*0.56f-InfoAlien->Height*0.7f);
 
 		InfoObjectWidth = InfoAlien->Width;
 		InfoObjectLength = InfoAlien->Length;
 		InfoObjectHeight = InfoAlien->Height;
 		InfoObjectStrength = InfoAlien->StrengthStart;
 
-		if (InfoAlien->Engine != 0)
-		for (int i=0; i<InfoAlien->EngineQuantity; i++)
-		if (InfoAlien->Engine[i] != 0)
-			InfoAlien->Engine[i]->SpeedOnCreation = -1.0f;
+		if (InfoAlien->Engine != nullptr) {
+			for (int i = 0; i < InfoAlien->EngineQuantity; i++) {
+				if (InfoAlien->Engine[i] != nullptr)
+					InfoAlien->Engine[i]->SpeedOnCreation = -1.0f;
+			}
+		}
 
 		InfoAlien->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
-	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant)
-	{
+	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant) {
 		int tmpCreateNum = CreateNum-InfoAlienMotherShipStart+1;
 		InfoAlienMotherShip = new CAlienSpaceMotherShip;
 		InfoAlienMotherShip->Create(tmpCreateNum);
@@ -442,25 +454,26 @@ void CreateInfoObject()
 		Point = VECTOR3D(1000,-1000+InfoAlienMotherShip->Height/3.0f,0);
 
 		PointCamera = VECTOR3D(0.0f,(InfoAlienMotherShip->Length
-			+InfoAlienMotherShip->Width+
-			InfoAlienMotherShip->Height)*0.24f +InfoAlienMotherShip->Height*0.3f,
-			-(InfoAlienMotherShip->Length
-			+InfoAlienMotherShip->Width+
-			InfoAlienMotherShip->Height)*0.56f-InfoAlienMotherShip->Height*0.7f);
+					     +InfoAlienMotherShip->Width+
+					     InfoAlienMotherShip->Height)*0.24f +InfoAlienMotherShip->Height*0.3f,
+				       -(InfoAlienMotherShip->Length
+					 +InfoAlienMotherShip->Width+
+					 InfoAlienMotherShip->Height)*0.56f-InfoAlienMotherShip->Height*0.7f);
 		InfoObjectWidth = InfoAlienMotherShip->Width;
 		InfoObjectLength = InfoAlienMotherShip->Length;
 		InfoObjectHeight = InfoAlienMotherShip->Height;
 		InfoObjectStrength = InfoAlienMotherShip->StrengthStart;
 
-		if (InfoAlienMotherShip->Engine != 0)
-		for (int i=0; i<InfoAlienMotherShip->EngineQuantity; i++)
-		if (InfoAlienMotherShip->Engine[i] != 0)
-			InfoAlienMotherShip->Engine[i]->SpeedOnCreation = -1.0f;
+		if (InfoAlienMotherShip->Engine != nullptr) {
+			for (int i = 0; i < InfoAlienMotherShip->EngineQuantity; i++) {
+				if (InfoAlienMotherShip->Engine[i] != nullptr)
+					InfoAlienMotherShip->Engine[i]->SpeedOnCreation = -1.0f;
+			}
+		}
 
 		InfoAlienMotherShip->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
-	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant)
-	{
+	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant) {
 		int tmpCreateNum = CreateNum-InfoPirateShipStart+1;
 		InfoPirateShip = new CPirateShip;
 		InfoPirateShip->Create(tmpCreateNum);
@@ -472,33 +485,36 @@ void CreateInfoObject()
 		Point = VECTOR3D(1000,-1000+InfoPirateShip->Height/3.0f,0);
 
 		PointCamera = VECTOR3D(0.0f,(InfoPirateShip->Length
-			+InfoPirateShip->Width+
-			InfoPirateShip->Height)*0.24f +InfoPirateShip->Height*0.3f,
-			-(InfoPirateShip->Length
-			+InfoPirateShip->Width+
-			InfoPirateShip->Height)*0.56f-InfoPirateShip->Height*0.7f);
+					     +InfoPirateShip->Width+
+					     InfoPirateShip->Height)*0.24f +InfoPirateShip->Height*0.3f,
+				       -(InfoPirateShip->Length
+					 +InfoPirateShip->Width+
+					 InfoPirateShip->Height)*0.56f-InfoPirateShip->Height*0.7f);
 		InfoObjectWidth = InfoPirateShip->Width;
 		InfoObjectLength = InfoPirateShip->Length;
 		InfoObjectHeight = InfoPirateShip->Height;
 		InfoObjectStrength = InfoPirateShip->StrengthStart;
 
-		if (InfoPirateShip->Engine != 0)
-		for (int i=0; i<InfoPirateShip->EngineQuantity; i++)
-		if (InfoPirateShip->Engine[i] != 0)
-			InfoPirateShip->Engine[i]->SpeedOnCreation = -1.0f;
+		if (InfoPirateShip->Engine != nullptr) {
+			for (int i = 0; i < InfoPirateShip->EngineQuantity; i++) {
+				if (InfoPirateShip->Engine[i] != nullptr)
+					InfoPirateShip->Engine[i]->SpeedOnCreation = -1.0f;
+			}
+		}
 
 		// убираем поворот турелей
-		if (InfoPirateShip->Weapon != 0)
-		for (int i=0; i<InfoPirateShip->WeaponQuantity; i++)
-		if (InfoPirateShip->Weapon[i] != 0)
-		{
-			InfoPirateShip->Weapon[i]->SetRotation(VECTOR3D(-InfoPirateShip->Weapon[i]->Rotation.x,-InfoPirateShip->Weapon[i]->Rotation.y,-InfoPirateShip->Weapon[i]->Rotation.z));
+		if (InfoPirateShip->Weapon != nullptr) {
+			for (int i = 0; i < InfoPirateShip->WeaponQuantity; i++) {
+				if (InfoPirateShip->Weapon[i] != nullptr)
+					InfoPirateShip->Weapon[i]->SetRotation(VECTOR3D(-InfoPirateShip->Weapon[i]->Rotation.x,
+											-InfoPirateShip->Weapon[i]->Rotation.y,
+											-InfoPirateShip->Weapon[i]->Rotation.z));
+			}
 		}
 
 		InfoPirateShip->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
-	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant)
-	{
+	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant) {
 		int tmpCreateNum = CreateNum-InfoBuildingStart+1;
 		InfoBuilding = new CBuilding;
 		InfoBuilding->Create(tmpCreateNum);
@@ -509,11 +525,11 @@ void CreateInfoObject()
 		Point = VECTOR3D(1000,-1000+InfoBuilding->Height/3.0f,0);
 
 		PointCamera = VECTOR3D(0.0f,(InfoBuilding->Length
-			+InfoBuilding->Width+
-			InfoBuilding->Height)*0.16f +InfoBuilding->Height*0.3f,
-			-(InfoBuilding->Length
-			+InfoBuilding->Width+
-			InfoBuilding->Height)*0.38f-InfoBuilding->Height*0.7f);
+					     +InfoBuilding->Width+
+					     InfoBuilding->Height)*0.16f +InfoBuilding->Height*0.3f,
+				       -(InfoBuilding->Length
+					 +InfoBuilding->Width+
+					 InfoBuilding->Height)*0.38f-InfoBuilding->Height*0.7f);
 		InfoObjectWidth = InfoBuilding->Width;
 		InfoObjectLength = InfoBuilding->Length;
 		InfoObjectHeight = InfoBuilding->Height;
@@ -521,8 +537,7 @@ void CreateInfoObject()
 
 		InfoBuilding->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
-	if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant)
-	{
+	if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant) {
 		int tmpCreateNum = CreateNum-InfoMilitaryBuildingStart+1;
 		InfoMilitaryBuilding = new CMilitaryBuilding;
 		InfoMilitaryBuilding->Create(tmpCreateNum);
@@ -533,11 +548,11 @@ void CreateInfoObject()
 		Point = VECTOR3D(1000,-1000+InfoMilitaryBuilding->Height/3.0f,0);
 
 		PointCamera = VECTOR3D(0.0f,(InfoMilitaryBuilding->Length
-			+InfoMilitaryBuilding->Width+
-			InfoMilitaryBuilding->Height)*0.24f +InfoMilitaryBuilding->Height*0.3f,
-			-(InfoMilitaryBuilding->Length
-			+InfoMilitaryBuilding->Width+
-			InfoMilitaryBuilding->Height)*0.56f-InfoMilitaryBuilding->Height*0.7f);
+					     +InfoMilitaryBuilding->Width+
+					     InfoMilitaryBuilding->Height)*0.24f +InfoMilitaryBuilding->Height*0.3f,
+				       -(InfoMilitaryBuilding->Length
+					 +InfoMilitaryBuilding->Width+
+					 InfoMilitaryBuilding->Height)*0.56f-InfoMilitaryBuilding->Height*0.7f);
 		InfoObjectWidth = InfoMilitaryBuilding->Width;
 		InfoObjectLength = InfoMilitaryBuilding->Length;
 		InfoObjectHeight = InfoMilitaryBuilding->Height;
@@ -545,8 +560,7 @@ void CreateInfoObject()
 
 		InfoMilitaryBuilding->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
-	if (CreateNum>=InfoWheeledStart && CreateNum<InfoWheeledStart+InfoWheeledQuant)
-	{
+	if (CreateNum>=InfoWheeledStart && CreateNum<InfoWheeledStart+InfoWheeledQuant) {
 		int tmpCreateNum = CreateNum-InfoWheeledStart+1;
 		InfoWheeled = new CWheeled;
 		InfoWheeled->Create(tmpCreateNum);
@@ -559,11 +573,11 @@ void CreateInfoObject()
 		Point = VECTOR3D(1000,-1000+InfoWheeled->Height/3.0f,0);
 
 		PointCamera = VECTOR3D(0.0f,(InfoWheeled->Length
-			+InfoWheeled->Width+
-			InfoWheeled->Height)*0.24f +InfoWheeled->Height*0.3f,
-			-(InfoWheeled->Length
-			+InfoWheeled->Width+
-			InfoWheeled->Height)*0.56f-InfoWheeled->Height*0.7f);
+					     +InfoWheeled->Width+
+					     InfoWheeled->Height)*0.24f +InfoWheeled->Height*0.3f,
+				       -(InfoWheeled->Length
+					 +InfoWheeled->Width+
+					 InfoWheeled->Height)*0.56f-InfoWheeled->Height*0.7f);
 		InfoObjectWidth = InfoWheeled->Width;
 		InfoObjectLength = InfoWheeled->Length;
 		InfoObjectHeight = InfoWheeled->Height;
@@ -571,8 +585,7 @@ void CreateInfoObject()
 
 		InfoWheeled->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
-	if (CreateNum>=InfoTrackedStart && CreateNum<InfoTrackedStart+InfoTrackedQuant)
-	{
+	if (CreateNum>=InfoTrackedStart && CreateNum<InfoTrackedStart+InfoTrackedQuant) {
 		int tmpCreateNum = CreateNum-InfoTrackedStart+1;
 		InfoTracked = new CTracked;
 		InfoTracked->Create(tmpCreateNum);
@@ -585,11 +598,11 @@ void CreateInfoObject()
 		Point = VECTOR3D(1000,-1000+InfoTracked->Height/3.0f,0);
 
 		PointCamera = VECTOR3D(0.0f,(InfoTracked->Length
-			+InfoTracked->Width+
-			InfoTracked->Height)*0.24f +InfoTracked->Height*0.3f,
-			-(InfoTracked->Length
-			+InfoTracked->Width+
-			InfoTracked->Height)*0.56f-InfoTracked->Height*0.7f);
+					     +InfoTracked->Width+
+					     InfoTracked->Height)*0.24f +InfoTracked->Height*0.3f,
+				       -(InfoTracked->Length
+					 +InfoTracked->Width+
+					 InfoTracked->Height)*0.56f-InfoTracked->Height*0.7f);
 		InfoObjectWidth = InfoTracked->Width;
 		InfoObjectLength = InfoTracked->Length;
 		InfoObjectHeight = InfoTracked->Height;
@@ -624,8 +637,7 @@ void InformationObject3DText(int ObjectNum)
 
 
 	// общее для файтеров землян
-	if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant)
-	{
+	if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant) {
 		Y1 += Offset+5;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Space_Ship"));
@@ -661,8 +673,7 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", InfoObjectEngineQuantity, vw_GetText("4_units"));
 	}
 	// оружие для кораблей землян
-	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant)
-	{
+	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant) {
 		Y1 += Offset+5;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
 		if (CreateNum<InfoWeaponStart+15)
@@ -684,8 +695,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage,_Hull:"));
 		if ((CreateNum-InfoWeaponStart+1 == 11) |
-			(CreateNum-InfoWeaponStart+1 == 12) |
-			(CreateNum-InfoWeaponStart+1 == 14))
+		    (CreateNum-InfoWeaponStart+1 == 12) |
+		    (CreateNum-InfoWeaponStart+1 == 14))
 			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponHullDamage(CreateNum-InfoWeaponStart+1), vw_GetText("4_units/sec"));
 		else
 			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponHullDamage(CreateNum-InfoWeaponStart+1), vw_GetText("4_units/shot"));
@@ -693,8 +704,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage,_Systems:"));
 		if ((CreateNum-InfoWeaponStart+1 == 11) |
-			(CreateNum-InfoWeaponStart+1 == 12) |
-			(CreateNum-InfoWeaponStart+1 == 14))
+		    (CreateNum-InfoWeaponStart+1 == 12) |
+		    (CreateNum-InfoWeaponStart+1 == 14))
 			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(CreateNum-InfoWeaponStart+1), vw_GetText("4_units/sec"));
 		else
 			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(CreateNum-InfoWeaponStart+1), vw_GetText("4_units/shot"));
@@ -714,8 +725,7 @@ void InformationObject3DText(int ObjectNum)
 
 	}
 	// мины
-	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant)
-	{
+	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant) {
 		Y1 += Offset+5;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Weapon"));
@@ -760,8 +770,7 @@ void InformationObject3DText(int ObjectNum)
 
 	}
 	// общее для файтеров пришельцев
-	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant)
-	{
+	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant) {
 		Y1 += Offset+5;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Space_Ship"));
@@ -794,8 +803,7 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("4_units"));
 	}
 	// общее для MotherShip пришельцев
-	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant)
-	{
+	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant) {
 		Y1 += Offset+5;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_MotherShip"));
@@ -828,8 +836,7 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 50, 500, vw_GetText("4_units"));
 	}
 	// общее для пиратов
-	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant)
-	{
+	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant) {
 		Y1 += Offset+5;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Pirate_Ship"));
@@ -855,14 +862,13 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("4_units"));
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("4_Weapons"));
-	//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage:"));
-	//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("4_units"));
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("4_units"));
 	}
 	// общее для зданий
-	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant)
-	{
+	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant) {
 		Y1 += Offset+5;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Civilian_Building"));
@@ -886,14 +892,13 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("4_units"));
 	}
 	// общее для наземных войск
-	if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant)
-	{
+	if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant) {
 		Y1 += Offset+5;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Military_Building"));
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Type:"));
-	//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Civilian Building");
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Civilian Building");
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Developer:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Pirates"));
@@ -914,20 +919,19 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("4_units"));
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("4_Weapons"));
-	//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Kinetic");
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Kinetic");
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage:"));
-	//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("4_units"));
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("4_units"));
 	}
 	// общее для колесного
-	if (CreateNum>=InfoWheeledStart && CreateNum<InfoWheeledStart+InfoWheeledQuant)
-	{
+	if (CreateNum>=InfoWheeledStart && CreateNum<InfoWheeledStart+InfoWheeledQuant) {
 		Y1 += Offset+5;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Wheeled_Vehicle"));
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Type:"));
-	//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Civilian Building");
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Civilian Building");
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Developer:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Pirates"));
@@ -948,20 +952,19 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("4_units"));
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("4_Weapons"));
-	//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Kinetic");
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Kinetic");
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage:"));
-	//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("4_units"));
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("4_units"));
 	}
 	// общее для гусенечного
-	if (CreateNum>=InfoTrackedStart && CreateNum<InfoTrackedStart+InfoTrackedQuant)
-	{
+	if (CreateNum>=InfoTrackedStart && CreateNum<InfoTrackedStart+InfoTrackedQuant) {
 		Y1 += Offset+5;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Tracked_Vehicle"));
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Type:"));
-	//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Civilian Building");
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Civilian Building");
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Developer:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Pirates"));
@@ -982,10 +985,10 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("4_units"));
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("4_Weapons"));
-	//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Kinetic");
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Kinetic");
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage:"));
-	//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("4_units"));
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("4_units"));
 	}
 
 
@@ -994,242 +997,241 @@ void InformationObject3DText(int ObjectNum)
 
 
 
-	switch (ObjectNum)
-	{
+	switch (ObjectNum) {
 
 
 	// для пиратов
-		case InfoPirateShipStart:
-		case InfoPirateShipStart+1:
-		case InfoPirateShipStart+2:
-		case InfoPirateShipStart+3:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Marauder"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
-			break;
-		case InfoPirateShipStart+4:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Warder"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("4_units"));
-			break;
-		case InfoPirateShipStart+5:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Raider"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("4_units"));
-			break;
-		case InfoPirateShipStart+6:
-		case InfoPirateShipStart+7:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Missile_Carrier"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("4_units"));
-			break;
-		case InfoPirateShipStart+8:
-		case InfoPirateShipStart+9:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Battle_Freighter"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("4_units"));
-			break;
-		case InfoPirateShipStart+10:
-		case InfoPirateShipStart+11:
-		case InfoPirateShipStart+12:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Missile_Carrier"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 50, 300, vw_GetText("4_units"));
-			break;
-		case InfoPirateShipStart+13:
-		case InfoPirateShipStart+14:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Battle_Freighter"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 50, 200, vw_GetText("4_units"));
-			break;
+	case InfoPirateShipStart:
+	case InfoPirateShipStart+1:
+	case InfoPirateShipStart+2:
+	case InfoPirateShipStart+3:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Marauder"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
+		break;
+	case InfoPirateShipStart+4:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Warder"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("4_units"));
+		break;
+	case InfoPirateShipStart+5:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Raider"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("4_units"));
+		break;
+	case InfoPirateShipStart+6:
+	case InfoPirateShipStart+7:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Missile_Carrier"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("4_units"));
+		break;
+	case InfoPirateShipStart+8:
+	case InfoPirateShipStart+9:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Battle_Freighter"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("4_units"));
+		break;
+	case InfoPirateShipStart+10:
+	case InfoPirateShipStart+11:
+	case InfoPirateShipStart+12:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Missile_Carrier"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 50, 300, vw_GetText("4_units"));
+		break;
+	case InfoPirateShipStart+13:
+	case InfoPirateShipStart+14:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Battle_Freighter"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 50, 200, vw_GetText("4_units"));
+		break;
 
 
 
 
 
 	// для наземных войск
-		case InfoMilitaryBuildingStart:
-		case InfoMilitaryBuildingStart+5:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Cannon"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 30, vw_GetText("4_units"));
-			break;
-		case InfoMilitaryBuildingStart+3:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_MachineGun"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("4_units"));
-			break;
-		case InfoMilitaryBuildingStart+1:
-		case InfoMilitaryBuildingStart+6:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Turbo_Cannon"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
-			break;
-		case InfoMilitaryBuildingStart+2:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Missile_Launcher"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("4_units"));
-			break;
-		case InfoMilitaryBuildingStart+4:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Cannon_Turret"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
-			break;
+	case InfoMilitaryBuildingStart:
+	case InfoMilitaryBuildingStart+5:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Cannon"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 30, vw_GetText("4_units"));
+		break;
+	case InfoMilitaryBuildingStart+3:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_MachineGun"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("4_units"));
+		break;
+	case InfoMilitaryBuildingStart+1:
+	case InfoMilitaryBuildingStart+6:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Turbo_Cannon"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
+		break;
+	case InfoMilitaryBuildingStart+2:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Missile_Launcher"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("4_units"));
+		break;
+	case InfoMilitaryBuildingStart+4:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Cannon_Turret"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
+		break;
 
 
 	// для колесного транспорта
-		case InfoWheeledStart:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Armored_Jeep"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("4_units"));
-			break;
-		case InfoWheeledStart+1:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Jeep"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
-			break;
-		case InfoWheeledStart+2:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Armored_Jeep"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("4_units"));
-			break;
-		case InfoWheeledStart+3:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Jeep"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Ion"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("4_units"));
-			break;
-		case InfoWheeledStart+4:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Armored_Jeep"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Antimatter"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
-			break;
-		case InfoWheeledStart+5:
-		case InfoWheeledStart+6:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_APC"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("4_units"));
-			break;
-		case InfoWheeledStart+7:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Missile_Launcher"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 400, vw_GetText("4_units"));
-			break;
+	case InfoWheeledStart:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Armored_Jeep"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("4_units"));
+		break;
+	case InfoWheeledStart+1:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Jeep"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
+		break;
+	case InfoWheeledStart+2:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Armored_Jeep"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("4_units"));
+		break;
+	case InfoWheeledStart+3:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Jeep"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Ion"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("4_units"));
+		break;
+	case InfoWheeledStart+4:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Armored_Jeep"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Antimatter"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
+		break;
+	case InfoWheeledStart+5:
+	case InfoWheeledStart+6:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_APC"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("4_units"));
+		break;
+	case InfoWheeledStart+7:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Missile_Launcher"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 400, vw_GetText("4_units"));
+		break;
 
 
 	// для гусенечного транспорта
-		case InfoTrackedStart:
-		case InfoTrackedStart+1:
-		case InfoTrackedStart+5:
-		case InfoTrackedStart+6:
-		case InfoTrackedStart+8:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Tank"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("4_units"));
-			break;
-		case InfoTrackedStart+2:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Tank"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Plasma"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
-			break;
-		case InfoTrackedStart+3:
-		case InfoTrackedStart+4:
-		case InfoTrackedStart+7:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Tank"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Antimatter"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("4_units"));
-			break;
-		case InfoTrackedStart+9:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_APC"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("4_units"));
-			break;
-		case InfoTrackedStart+10:
-		case InfoTrackedStart+11:
-		case InfoTrackedStart+12:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Missile_Launcher"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 400, vw_GetText("4_units"));
-			break;
-		case InfoTrackedStart+13:
-			Y1 += Offset+Offset+5;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Engineer"));
-			Y1 += Offset*7;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Not_combatant"));
-			Y1 += Offset;
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", 0, vw_GetText("4_units"));
-			break;
+	case InfoTrackedStart:
+	case InfoTrackedStart+1:
+	case InfoTrackedStart+5:
+	case InfoTrackedStart+6:
+	case InfoTrackedStart+8:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Tank"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("4_units"));
+		break;
+	case InfoTrackedStart+2:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Tank"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Plasma"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
+		break;
+	case InfoTrackedStart+3:
+	case InfoTrackedStart+4:
+	case InfoTrackedStart+7:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Tank"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Antimatter"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("4_units"));
+		break;
+	case InfoTrackedStart+9:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_APC"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("4_units"));
+		break;
+	case InfoTrackedStart+10:
+	case InfoTrackedStart+11:
+	case InfoTrackedStart+12:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Missile_Launcher"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 400, vw_GetText("4_units"));
+		break;
+	case InfoTrackedStart+13:
+		Y1 += Offset+Offset+5;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Engineer"));
+		Y1 += Offset*7;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Not_combatant"));
+		Y1 += Offset;
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", 0, vw_GetText("4_units"));
+		break;
 
 
 	}
@@ -1242,300 +1244,363 @@ void InformationObject3DText(int ObjectNum)
 	float W = 1024.0f-75*2;
 	X1 = Setup.iAspectRatioWidth/2 - 437;
 	// вывод краткого описания
-	switch (ObjectNum)
-	{
-		case InfoFighterStart:
-		case InfoFighterStart+3:
-		case InfoFighterStart+5:
-		case InfoFighterStart+9:
-		case InfoFighterStart+11:
-		case InfoFighterStart+13:
-		case InfoFighterStart+14:
-		case InfoFighterStart+16:
-		case InfoFighterStart+19:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_FighterLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_FighterLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_FighterLine3"));
-			break;
+	switch (ObjectNum) {
+	case InfoFighterStart:
+	case InfoFighterStart+3:
+	case InfoFighterStart+5:
+	case InfoFighterStart+9:
+	case InfoFighterStart+11:
+	case InfoFighterStart+13:
+	case InfoFighterStart+14:
+	case InfoFighterStart+16:
+	case InfoFighterStart+19:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_FighterLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_FighterLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_FighterLine3"));
+		break;
 
-  		case InfoFighterStart+1:
-		case InfoFighterStart+4:
-		case InfoFighterStart+18:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_InterceptorLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_InterceptorLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_InterceptorLine3"));
-			break;
+	case InfoFighterStart+1:
+	case InfoFighterStart+4:
+	case InfoFighterStart+18:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_InterceptorLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_InterceptorLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_InterceptorLine3"));
+		break;
 
-  		case InfoFighterStart+2:
-		case InfoFighterStart+15:
-		case InfoFighterStart+17:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BomberLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BomberLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BomberLine3"));
-			break;
+	case InfoFighterStart+2:
+	case InfoFighterStart+15:
+	case InfoFighterStart+17:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BomberLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BomberLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BomberLine3"));
+		break;
 
-		case InfoFighterStart+6:
-		case InfoFighterStart+12:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_AttackShipLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_AttackShipLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_AttackShipLine3"));
-			break;
+	case InfoFighterStart+6:
+	case InfoFighterStart+12:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_AttackShipLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_AttackShipLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_AttackShipLine3"));
+		break;
 
-  		case InfoFighterStart+7:
-		case InfoFighterStart+8:
-		case InfoFighterStart+10:
-		case InfoFighterStart+20:
-		case InfoFighterStart+21:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_ScoutLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_ScoutLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_ScoutLine3"));
-			break;
-
-
-
-
-
-  		case InfoWeaponStart:
-		case InfoWeaponStart+1:
-		case InfoWeaponStart+2:
-		case InfoWeaponStart+3:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_KineticLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_KineticLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_KineticLine3"));
-			break;
-
-		case InfoWeaponStart+4:
-		case InfoWeaponStart+5:
-		case InfoWeaponStart+6:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_IonLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_IonLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_IonLine3"));
-			break;
-
-		case InfoWeaponStart+7:
-		case InfoWeaponStart+8:
-		case InfoWeaponStart+9:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_PlasmaLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_PlasmaLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_PlasmaLine3"));
-			break;
-
-		case InfoWeaponStart+10:
-		case InfoWeaponStart+11:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MaserLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MaserLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MaserLine3"));
-			break;
-
-		case InfoWeaponStart+12:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_AntimatterLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_AntimatterLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_AntimatterLine3"));
-			break;
-
-		case InfoWeaponStart+13:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_LaserLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_LaserLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_LaserLine3"));
-			break;
-
-		case InfoWeaponStart+14:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_GaussLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_GaussLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_GaussLine3"));
-			break;
-
-		case InfoWeaponStart+15:
-		case InfoWeaponStart+16:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileLine3"));
-			break;
-
-		case InfoWeaponStart+17:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_TorpedoLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_TorpedoLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_TorpedoLine3"));
-			break;
-
-		case InfoWeaponStart+18:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_NukeBombLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_NukeBombLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_NukeBombLine3"));
-			break;
-
-
-		case InfoMineStart:
-		case InfoMineStart+1:
-		case InfoMineStart+2:
-		case InfoMineStart+3:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MineLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MineLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MineLine3"));
-			break;
-
-
-		case InfoAlienStart:
-		case InfoAlienStart+1:
-		case InfoAlienStart+2:
-		case InfoAlienStart+3:
-		case InfoAlienStart+4:
-		case InfoAlienStart+5:
-		case InfoAlienStart+6:
-		case InfoAlienStart+7:
-		case InfoAlienStart+8:
-		case InfoAlienStart+9:
-		case InfoAlienStart+10:
-		case InfoAlienStart+11:
-		case InfoAlienStart+12:
-		case InfoAlienStart+13:
-		case InfoAlienStart+14:
-		case InfoAlienStart+15:
-		case InfoAlienStart+16:
-		case InfoAlienMotherShipStart:
-		case InfoAlienMotherShipStart+1:
-		case InfoAlienMotherShipStart+2:
-		case InfoAlienMotherShipStart+3:
-		case InfoAlienMotherShipStart+4:
-		case InfoAlienMotherShipStart+5:
-		case InfoAlienMotherShipStart+6:
-		case InfoAlienMotherShipStart+7:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_UnknownLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_UnknownLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_UnknownLine3"));
-			break;
+	case InfoFighterStart+7:
+	case InfoFighterStart+8:
+	case InfoFighterStart+10:
+	case InfoFighterStart+20:
+	case InfoFighterStart+21:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_ScoutLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_ScoutLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_ScoutLine3"));
+		break;
 
 
 
 
 
-		case InfoPirateShipStart:
-		case InfoPirateShipStart+1:
-		case InfoPirateShipStart+2:
-		case InfoPirateShipStart+3:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MarauderLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MarauderLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MarauderLine3"));
-			break;
-		case InfoPirateShipStart+4:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_WarderLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_WarderLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_WarderLine3"));
-			break;
-		case InfoPirateShipStart+5:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_RaiderLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_RaiderLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_RaiderLine3"));
-			break;
-		case InfoPirateShipStart+6:
-		case InfoPirateShipStart+7:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileCarrierLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileCarrierLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileCarrierLine3"));
-			break;
-		case InfoPirateShipStart+8:
-		case InfoPirateShipStart+9:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BattleFreighterLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BattleFreighterLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BattleFreighterLine3"));
-			break;
-		case InfoPirateShipStart+10:
-		case InfoPirateShipStart+11:
-		case InfoPirateShipStart+12:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileCarrierLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileCarrierLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileCarrierLine3"));
-			break;
-		case InfoPirateShipStart+13:
-		case InfoPirateShipStart+14:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BattleFreighterLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BattleFreighterLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BattleFreighterLine3"));
-			break;
+	case InfoWeaponStart:
+	case InfoWeaponStart+1:
+	case InfoWeaponStart+2:
+	case InfoWeaponStart+3:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_KineticLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_KineticLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_KineticLine3"));
+		break;
+
+	case InfoWeaponStart+4:
+	case InfoWeaponStart+5:
+	case InfoWeaponStart+6:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_IonLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_IonLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_IonLine3"));
+		break;
+
+	case InfoWeaponStart+7:
+	case InfoWeaponStart+8:
+	case InfoWeaponStart+9:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_PlasmaLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_PlasmaLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_PlasmaLine3"));
+		break;
+
+	case InfoWeaponStart+10:
+	case InfoWeaponStart+11:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MaserLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MaserLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MaserLine3"));
+		break;
+
+	case InfoWeaponStart+12:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_AntimatterLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_AntimatterLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_AntimatterLine3"));
+		break;
+
+	case InfoWeaponStart+13:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_LaserLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_LaserLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_LaserLine3"));
+		break;
+
+	case InfoWeaponStart+14:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_GaussLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_GaussLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_GaussLine3"));
+		break;
+
+	case InfoWeaponStart+15:
+	case InfoWeaponStart+16:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileLine3"));
+		break;
+
+	case InfoWeaponStart+17:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_TorpedoLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_TorpedoLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_TorpedoLine3"));
+		break;
+
+	case InfoWeaponStart+18:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_NukeBombLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_NukeBombLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_NukeBombLine3"));
+		break;
+
+
+	case InfoMineStart:
+	case InfoMineStart+1:
+	case InfoMineStart+2:
+	case InfoMineStart+3:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MineLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MineLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MineLine3"));
+		break;
+
+
+	case InfoAlienStart:
+	case InfoAlienStart+1:
+	case InfoAlienStart+2:
+	case InfoAlienStart+3:
+	case InfoAlienStart+4:
+	case InfoAlienStart+5:
+	case InfoAlienStart+6:
+	case InfoAlienStart+7:
+	case InfoAlienStart+8:
+	case InfoAlienStart+9:
+	case InfoAlienStart+10:
+	case InfoAlienStart+11:
+	case InfoAlienStart+12:
+	case InfoAlienStart+13:
+	case InfoAlienStart+14:
+	case InfoAlienStart+15:
+	case InfoAlienStart+16:
+	case InfoAlienMotherShipStart:
+	case InfoAlienMotherShipStart+1:
+	case InfoAlienMotherShipStart+2:
+	case InfoAlienMotherShipStart+3:
+	case InfoAlienMotherShipStart+4:
+	case InfoAlienMotherShipStart+5:
+	case InfoAlienMotherShipStart+6:
+	case InfoAlienMotherShipStart+7:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_UnknownLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_UnknownLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_UnknownLine3"));
+		break;
 
 
 
 
 
-		case InfoBuildingStart:
-		case InfoBuildingStart+1:
-		case InfoBuildingStart+2:
-		case InfoBuildingStart+3:
-		case InfoBuildingStart+4:
-		case InfoBuildingStart+5:
-		case InfoBuildingStart+6:
-		case InfoBuildingStart+7:
-		case InfoBuildingStart+8:
-		case InfoBuildingStart+9:
-		case InfoBuildingStart+10:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_CivilianBuildingLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_CivilianBuildingLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_CivilianBuildingLine3"));
-			break;
+	case InfoPirateShipStart:
+	case InfoPirateShipStart+1:
+	case InfoPirateShipStart+2:
+	case InfoPirateShipStart+3:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MarauderLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MarauderLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MarauderLine3"));
+		break;
+	case InfoPirateShipStart+4:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_WarderLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_WarderLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_WarderLine3"));
+		break;
+	case InfoPirateShipStart+5:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_RaiderLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_RaiderLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_RaiderLine3"));
+		break;
+	case InfoPirateShipStart+6:
+	case InfoPirateShipStart+7:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileCarrierLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileCarrierLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileCarrierLine3"));
+		break;
+	case InfoPirateShipStart+8:
+	case InfoPirateShipStart+9:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BattleFreighterLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BattleFreighterLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BattleFreighterLine3"));
+		break;
+	case InfoPirateShipStart+10:
+	case InfoPirateShipStart+11:
+	case InfoPirateShipStart+12:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileCarrierLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileCarrierLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileCarrierLine3"));
+		break;
+	case InfoPirateShipStart+13:
+	case InfoPirateShipStart+14:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BattleFreighterLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BattleFreighterLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_BattleFreighterLine3"));
+		break;
 
-		case InfoMilitaryBuildingStart:
-		case InfoMilitaryBuildingStart+1:
-		case InfoMilitaryBuildingStart+2:
-		case InfoMilitaryBuildingStart+3:
-		case InfoMilitaryBuildingStart+4:
-		case InfoMilitaryBuildingStart+5:
-		case InfoMilitaryBuildingStart+6:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_WeaponturretLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_WeaponturretLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_WeaponturretLine3"));
-			break;
 
-		case InfoWheeledStart:
-		case InfoWheeledStart+2:
-		case InfoWheeledStart+4:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_ArmoredJeepLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_ArmoredJeepLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_ArmoredJeepLine3"));
-			break;
 
-		case InfoWheeledStart+1:
-		case InfoWheeledStart+3:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_JeepLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_JeepLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_JeepLine3"));
-			break;
 
-		case InfoTrackedStart:
-		case InfoTrackedStart+1:
-		case InfoTrackedStart+2:
-		case InfoTrackedStart+3:
-		case InfoTrackedStart+4:
-		case InfoTrackedStart+5:
-		case InfoTrackedStart+6:
-		case InfoTrackedStart+7:
-		case InfoTrackedStart+8:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_TankLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_TankLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_TankLine3"));
-			break;
 
-		case InfoWheeledStart+5:
-		case InfoWheeledStart+6:
-		case InfoTrackedStart+9:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_APCLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_APCLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_APCLine3"));
-			break;
+	case InfoBuildingStart:
+	case InfoBuildingStart+1:
+	case InfoBuildingStart+2:
+	case InfoBuildingStart+3:
+	case InfoBuildingStart+4:
+	case InfoBuildingStart+5:
+	case InfoBuildingStart+6:
+	case InfoBuildingStart+7:
+	case InfoBuildingStart+8:
+	case InfoBuildingStart+9:
+	case InfoBuildingStart+10:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_CivilianBuildingLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_CivilianBuildingLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_CivilianBuildingLine3"));
+		break;
 
-		case InfoWheeledStart+7:
-		case InfoTrackedStart+10:
-		case InfoTrackedStart+11:
-		case InfoTrackedStart+12:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileLauncherLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileLauncherLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileLauncherLine3"));
-			break;
+	case InfoMilitaryBuildingStart:
+	case InfoMilitaryBuildingStart+1:
+	case InfoMilitaryBuildingStart+2:
+	case InfoMilitaryBuildingStart+3:
+	case InfoMilitaryBuildingStart+4:
+	case InfoMilitaryBuildingStart+5:
+	case InfoMilitaryBuildingStart+6:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_WeaponturretLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_WeaponturretLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_WeaponturretLine3"));
+		break;
 
-		case InfoTrackedStart+13:
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_EngineerLine1")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_EngineerLine2")); Y1 += Offset;
-			vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_EngineerLine3"));
-			break;
+	case InfoWheeledStart:
+	case InfoWheeledStart+2:
+	case InfoWheeledStart+4:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_ArmoredJeepLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_ArmoredJeepLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_ArmoredJeepLine3"));
+		break;
+
+	case InfoWheeledStart+1:
+	case InfoWheeledStart+3:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_JeepLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_JeepLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_JeepLine3"));
+		break;
+
+	case InfoTrackedStart:
+	case InfoTrackedStart+1:
+	case InfoTrackedStart+2:
+	case InfoTrackedStart+3:
+	case InfoTrackedStart+4:
+	case InfoTrackedStart+5:
+	case InfoTrackedStart+6:
+	case InfoTrackedStart+7:
+	case InfoTrackedStart+8:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_TankLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_TankLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_TankLine3"));
+		break;
+
+	case InfoWheeledStart+5:
+	case InfoWheeledStart+6:
+	case InfoTrackedStart+9:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_APCLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_APCLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_APCLine3"));
+		break;
+
+	case InfoWheeledStart+7:
+	case InfoTrackedStart+10:
+	case InfoTrackedStart+11:
+	case InfoTrackedStart+12:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileLauncherLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileLauncherLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_MissileLauncherLine3"));
+		break;
+
+	case InfoTrackedStart+13:
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_EngineerLine1"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_EngineerLine2"));
+		Y1 += Offset;
+		vw_DrawFont(X1, Y1, W*(-1.0f), 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("5_EngineerLine3"));
+		break;
 
 
 	}
@@ -1590,10 +1655,8 @@ void InformationMenu()
 
 	// проверяем колесо мышки
 	SetRect(&DstRect,(int)(Setup.iAspectRatioWidth/2-440),80,(int)(Setup.iAspectRatioWidth/2+440),590);
-	if (vw_OnRect(&DstRect))
-	{
-		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing())
-		{
+	if (vw_OnRect(&DstRect)) {
+		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing()) {
 			CreateNum += vw_GetWheelStatus();
 
 			if (CreateNum<1) CreateNum = InfoEnd;
@@ -1602,9 +1665,7 @@ void InformationMenu()
 
 			vw_ResetWheelStatus();
 		}
-	}
-	else if (vw_GetWheelStatus() != 0)
-	{
+	} else if (vw_GetWheelStatus() != 0) {
 		vw_ResetWheelStatus();
 	}
 
@@ -1613,22 +1674,19 @@ void InformationMenu()
 	int Prir = 100;
 	int X = Setup.iAspectRatioWidth/2 - 432;
 	int Y = 165+Prir*4;
-	if (DrawButton200_2(X,Y+28, vw_GetText(InfoGroupNames[GetInfoPrevGroup()-1]), MenuContentTransp, false))
-	{
+	if (DrawButton200_2(X,Y+28, vw_GetText(InfoGroupNames[GetInfoPrevGroup()-1]), MenuContentTransp, false)) {
 		CreateNum = GetInfoSwitchToGroup(GetInfoPrevGroup());
 		CreateInfoObject();
 	}
 
 
 	X = Setup.iAspectRatioWidth/2 - 209;
-	if (DrawButton200_2(X,Y+28, vw_GetText("1_Page_Up"), MenuContentTransp, false))
-	{
+	if (DrawButton200_2(X,Y+28, vw_GetText("1_Page_Up"), MenuContentTransp, false)) {
 		CreateNum --;
 		if (CreateNum<1) CreateNum = InfoEnd;
 		CreateInfoObject();
 	}
-	if (vw_GetKeys(SDLK_PAGEUP))
-	{
+	if (vw_GetKeys(SDLK_PAGEUP)) {
 		CreateNum --;
 		if (CreateNum<1) CreateNum = InfoEnd;
 		CreateInfoObject();
@@ -1636,14 +1694,12 @@ void InformationMenu()
 	}
 
 	X = Setup.iAspectRatioWidth/2 + 9;
-	if (DrawButton200_2(X,Y+28, vw_GetText("1_Page_Down"), MenuContentTransp, false))
-	{
+	if (DrawButton200_2(X,Y+28, vw_GetText("1_Page_Down"), MenuContentTransp, false)) {
 		CreateNum ++;
 		if (CreateNum>InfoEnd) CreateNum = 1;
 		CreateInfoObject();
 	}
-	if (vw_GetKeys(SDLK_PAGEDOWN))
-	{
+	if (vw_GetKeys(SDLK_PAGEDOWN)) {
 		CreateNum ++;
 		if (CreateNum>InfoEnd) CreateNum = 1;
 		CreateInfoObject();
@@ -1652,8 +1708,7 @@ void InformationMenu()
 
 
 	X = Setup.iAspectRatioWidth/2 + 432 - 200;
-	if (DrawButton200_2(X,Y+28, vw_GetText(InfoGroupNames[GetInfoNextGroup()-1]), MenuContentTransp, false))
-	{
+	if (DrawButton200_2(X,Y+28, vw_GetText(InfoGroupNames[GetInfoNextGroup()-1]), MenuContentTransp, false)) {
 		CreateNum = GetInfoSwitchToGroup(GetInfoNextGroup());
 		CreateInfoObject();
 	}
@@ -1661,8 +1716,7 @@ void InformationMenu()
 
 	X = (Setup.iAspectRatioWidth - 384)/2;
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime))
-	{
+	if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
 		DestroyInfoObject();
 		ComBuffer = MAIN_MENU;
 	}
@@ -1729,77 +1783,64 @@ void InformationDrawObject()
 
 
 	SetRect(&DstRectLeft,(Setup.iAspectRatioWidth/2-432)+10,
-					80+(333-32)/2,
-					(Setup.iAspectRatioWidth/2-432)+32+10,
-					80+(333+32)/2);
+		80+(333-32)/2,
+		(Setup.iAspectRatioWidth/2-432)+32+10,
+		80+(333+32)/2);
 	SetRect(&DstRectRight,(Setup.iAspectRatioWidth/2-432)+444-32-10,
-					80+(333-32)/2,
-					(Setup.iAspectRatioWidth/2-432)+444-10,
-					80+(333+32)/2);
+		80+(333-32)/2,
+		(Setup.iAspectRatioWidth/2-432)+444-10,
+		80+(333+32)/2);
 	SetRect(&DstRectUp,(Setup.iAspectRatioWidth/2-432)+(444-32)/2,
-					80+333-32-10,
-					(Setup.iAspectRatioWidth/2-432)+(444+32)/2,
-					80+333-10);
+		80+333-32-10,
+		(Setup.iAspectRatioWidth/2-432)+(444+32)/2,
+		80+333-10);
 	SetRect(&DstRectDown,(Setup.iAspectRatioWidth/2-432)+(444-32)/2,
-					80+10,
-					(Setup.iAspectRatioWidth/2-432)+(444+32)/2,
-					80+32+10);
+		80+10,
+		(Setup.iAspectRatioWidth/2-432)+(444+32)/2,
+		80+32+10);
 
 	// для вращения объекта, только если мышка стоит над выводом 3д модели
 	RECT DstRect;
 	SetRect(&DstRect,(Setup.iAspectRatioWidth/2-432),
-					80,
-					(Setup.iAspectRatioWidth/2-432)+444,
-					80+333);
+		80,
+		(Setup.iAspectRatioWidth/2-432)+444,
+		80+333);
 	if  (((DstRect.right  >= MouseX) &&
-			(DstRect.left<= MouseX) &&
-			(DstRect.bottom >= MouseY) &&
-			(DstRect.top<= MouseY)) && !isDialogBoxDrawing())
-	{
+	      (DstRect.left<= MouseX) &&
+	      (DstRect.bottom >= MouseY) &&
+	      (DstRect.top<= MouseY)) && !isDialogBoxDrawing()) {
 		fLeft = fRight = fUp = fDown = 0.35f;
 
 		if  (((DstRectLeft.right  >= MouseX) &&
-				(DstRectLeft.left<= MouseX) &&
-				(DstRectLeft.bottom >= MouseY) &&
-				(DstRectLeft.top<= MouseY)) && !isDialogBoxDrawing())
-		{
+		      (DstRectLeft.left<= MouseX) &&
+		      (DstRectLeft.bottom >= MouseY) &&
+		      (DstRectLeft.top<= MouseY)) && !isDialogBoxDrawing()) {
 			fLeft = 0.8f;
 			RotateInfoObjectY = RotateInfoObjectY*3;
-		}
-		else
-		if  (((DstRectRight.right  >= MouseX) &&
-				(DstRectRight.left<= MouseX) &&
-				(DstRectRight.bottom >= MouseY) &&
-				(DstRectRight.top<= MouseY)) && !isDialogBoxDrawing())
-		{
+		} else if  (((DstRectRight.right  >= MouseX) &&
+			     (DstRectRight.left<= MouseX) &&
+			     (DstRectRight.bottom >= MouseY) &&
+			     (DstRectRight.top<= MouseY)) && !isDialogBoxDrawing()) {
 			fRight = 0.8f;
 			RotateInfoObjectY = -RotateInfoObjectY*3;
-		}
-		else
-		if  (((DstRectUp.right  >= MouseX) &&
-				(DstRectUp.left<= MouseX) &&
-				(DstRectUp.bottom >= MouseY) &&
-				(DstRectUp.top<= MouseY)) && !isDialogBoxDrawing())
-		{
+		} else if  (((DstRectUp.right  >= MouseX) &&
+			     (DstRectUp.left<= MouseX) &&
+			     (DstRectUp.bottom >= MouseY) &&
+			     (DstRectUp.top<= MouseY)) && !isDialogBoxDrawing()) {
 			fUp = 0.8f;
 			RotateInfoObjectX = -tmpRotateInfoObjectX*3;
 			RotateInfoObjectY = 0.0f;
-		}
-		else
-		if  (((DstRectDown.right  >= MouseX) &&
-				(DstRectDown.left<= MouseX) &&
-				(DstRectDown.bottom >= MouseY) &&
-				(DstRectDown.top<= MouseY)) && !isDialogBoxDrawing())
-		{
+		} else if  (((DstRectDown.right  >= MouseX) &&
+			     (DstRectDown.left<= MouseX) &&
+			     (DstRectDown.bottom >= MouseY) &&
+			     (DstRectDown.top<= MouseY)) && !isDialogBoxDrawing()) {
 			fDown = 0.8f;
 			RotateInfoObjectX = tmpRotateInfoObjectX*3;
 			RotateInfoObjectY = 0.0f;
-		}
-		else
+		} else
 			RotateInfoObjectY = 0;
 
-		if (vw_GetWindowLBMouse(true))
-		{
+		if (vw_GetWindowLBMouse(true)) {
 			RotateInfoObjectY = -RotationSumY+140; // 140 -базовый угол разворота при создании
 			RotateInfoObjectX = -RotationSumX;
 		}
@@ -1830,16 +1871,15 @@ void InformationDrawObject()
 	// рисуем линии
 
 	// делаем массив для всех элементов RI_3f_XYZ | RI_2f_TEX
-	float *tmpDATA = 0;
-	tmpDATA = new float[4*(3+2)];
+	float *tmpDATA = new float[4*(3+2)];
 
 
 	int SizeCell = (int)(vw_sqrtf((InfoObjectLength*InfoObjectLength/4.0f+
-	InfoObjectWidth*InfoObjectWidth/4.0f+
-	InfoObjectHeight*InfoObjectHeight/4.0f)));
+				       InfoObjectWidth*InfoObjectWidth/4.0f+
+				       InfoObjectHeight*InfoObjectHeight/4.0f)));
 
 	float LineSize = 0.004f * vw_sqrtf(PointCamera.x*PointCamera.x+PointCamera.y*PointCamera.y+
-		PointCamera.z*PointCamera.z);
+					   PointCamera.z*PointCamera.z);
 
 	if (SizeCell<2) SizeCell = 2;
 
@@ -1854,8 +1894,7 @@ void InformationDrawObject()
 	vw_SetColor(0.7f, 0.7f, 1.0f, 0.3f*MenuContentTransp);
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 	vw_SetTexture(0, vw_FindTextureByName("menu/line.tga"));
-	for (int i=-SizeCell; i<SizeCell+2; i+=2)
-	{
+	for (int i=-SizeCell; i<SizeCell+2; i+=2) {
 		// номер float'а в последовательности
 		int k=0;
 
@@ -1914,7 +1953,8 @@ void InformationDrawObject()
 
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_1_TEX, tmpDATA, 5*sizeof(float));
 	}
-	if (tmpDATA != 0) {delete [] tmpDATA; tmpDATA = 0;}
+	if (tmpDATA != nullptr)
+		delete [] tmpDATA;
 	vw_SetTextureBlend(false, 0, 0);
 	vw_BindTexture(0, 0);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -1929,8 +1969,7 @@ void InformationDrawObject()
 
 	bool ShadowMap = false;
 
-	if (Setup.ShadowMap > 0)
-	{
+	if (Setup.ShadowMap > 0) {
 		float EffectiveDistance = PointCamera.Length();
 		ShadowMap_StartRenderToFBO(VECTOR3D(0,0,0), EffectiveDistance, EffectiveDistance*2);
 
@@ -1939,67 +1978,57 @@ void InformationDrawObject()
 		// важно (!) оставляя лицевые части можно получить погрешности прорисовки уже на лицевых частях, надо выбирать,
 		// какие визуальные погрешности при прорисовке теней убрать
 		if ((CreateNum == 40) || // торпедная пусковая установка
-			(CreateNum == 41) || // установка пуска бомб
-			(CreateNum == 48) || // 3-й истребитель пришельцев
-			((CreateNum >= 86) && (CreateNum <= 90)) || // первые 4 типа зданий
-			(CreateNum == 92))   // 6-й тип зданий
+		    (CreateNum == 41) || // установка пуска бомб
+		    (CreateNum == 48) || // 3-й истребитель пришельцев
+		    ((CreateNum >= 86) && (CreateNum <= 90)) || // первые 4 типа зданий
+		    (CreateNum == 92))   // 6-й тип зданий
 			vw_CullFace(RI_NONE);
 
 
-		if (InfoFighter != 0)
-		{
+		if (InfoFighter != nullptr) {
 			InfoFighter->SetLocation(TMPLocation);
 			InfoFighter->Draw(true);
 		}
-		if (InfoWeapon != 0)
-		{
+		if (InfoWeapon != nullptr) {
 			InfoWeapon->SetLocation(TMPLocation);
 			InfoWeapon->Draw(true);
 		}
-		if (InfoMine != 0)
-		{
+		if (InfoMine != nullptr) {
 			InfoMine->SetLocation(TMPLocation);
 			InfoMine->Draw(true);
 		}
-		if (InfoAlien != 0)
-		{
+		if (InfoAlien != nullptr) {
 			InfoAlien->SetLocation(TMPLocation);
 			InfoAlien->Draw(true);
 		}
-		if (InfoAlienMotherShip != 0)
-		{
+		if (InfoAlienMotherShip != nullptr) {
 			InfoAlienMotherShip->SetLocation(TMPLocation);
 			InfoAlienMotherShip->Draw(true);
 		}
-		if (InfoPirateShip != 0)
-		{
+		if (InfoPirateShip != nullptr) {
 			InfoPirateShip->SetLocation(TMPLocation);
 			InfoPirateShip->Draw(true);
 			// рисуем оружие
-			if (InfoPirateShip->Weapon != 0)
-			for (int i=0; i<InfoPirateShip->WeaponQuantity; i++)
-			if (InfoPirateShip->Weapon[i] != 0)
-			{
-				InfoPirateShip->Weapon[i]->Draw(true);
+			if (InfoPirateShip->Weapon != nullptr) {
+				for (int i = 0; i < InfoPirateShip->WeaponQuantity; i++) {
+					if (InfoPirateShip->Weapon[i] != nullptr)
+						InfoPirateShip->Weapon[i]->Draw(true);
+				}
 			}
 		}
-		if (InfoBuilding != 0)
-		{
+		if (InfoBuilding != nullptr) {
 			InfoBuilding->SetLocation(TMPLocation);
 			InfoBuilding->Draw(true);
 		}
-		if (InfoMilitaryBuilding != 0)
-		{
+		if (InfoMilitaryBuilding != nullptr) {
 			InfoMilitaryBuilding->SetLocation(TMPLocation);
 			InfoMilitaryBuilding->Draw(true);
 		}
-		if (InfoWheeled != 0)
-		{
+		if (InfoWheeled != nullptr) {
 			InfoWheeled->SetLocation(TMPLocation);
 			InfoWheeled->Draw(true);
 		}
-		if (InfoTracked != 0)
-		{
+		if (InfoTracked != nullptr) {
 			InfoTracked->SetLocation(TMPLocation);
 			InfoTracked->Draw(true);
 		}
@@ -2012,87 +2041,76 @@ void InformationDrawObject()
 	}
 
 
-	if (InfoFighter != 0)
-	{
+	if (InfoFighter != nullptr) {
 		InfoFighter->SetLocation(TMPLocation);
 		InfoFighter->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoFighter->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoFighter->Engine, InfoFighter->EngineQuantity);
 	}
-	if (InfoWeapon != 0)
-	{
+	if (InfoWeapon != nullptr) {
 		InfoWeapon->SetLocation(TMPLocation);
 		InfoWeapon->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoWeapon->Draw(false, ShadowMap);
 	}
-	if (InfoMine != 0)
-	{
+	if (InfoMine != nullptr) {
 		InfoMine->SetLocation(TMPLocation);
 		InfoMine->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoMine->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoMine->GraphicFX, InfoMine->GraphicFXQuantity);
 	}
-	if (InfoAlien != 0)
-	{
+	if (InfoAlien != nullptr) {
 		InfoAlien->SetLocation(TMPLocation);
 		InfoAlien->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoAlien->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoAlien->Engine, InfoAlien->EngineQuantity);
 	}
-	if (InfoAlienMotherShip != 0)
-	{
+	if (InfoAlienMotherShip != nullptr) {
 		InfoAlienMotherShip->SetLocation(TMPLocation);
 		InfoAlienMotherShip->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoAlienMotherShip->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoAlienMotherShip->Engine, InfoAlienMotherShip->EngineQuantity);
 	}
-	if (InfoPirateShip != 0)
-	{
+	if (InfoPirateShip != nullptr) {
 		InfoPirateShip->SetLocation(TMPLocation);
 		InfoPirateShip->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoPirateShip->Draw(false, ShadowMap);
 		// рисуем оружие
-		if (InfoPirateShip->Weapon != 0)
-		for (int i=0; i<InfoPirateShip->WeaponQuantity; i++)
-		if (InfoPirateShip->Weapon[i] != 0)
-		{
-			InfoPirateShip->Weapon[i]->Draw(false, ShadowMap);
+		if (InfoPirateShip->Weapon != nullptr) {
+			for (int i = 0; i < InfoPirateShip->WeaponQuantity; i++) {
+				if (InfoPirateShip->Weapon[i] != nullptr)
+					InfoPirateShip->Weapon[i]->Draw(false, ShadowMap);
+			}
 		}
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoPirateShip->Engine, InfoPirateShip->EngineQuantity);
 	}
-	if (InfoBuilding != 0)
-	{
+	if (InfoBuilding != nullptr) {
 		InfoBuilding->SetLocation(TMPLocation);
 		InfoBuilding->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoBuilding->Draw(false, ShadowMap);
 	}
-	if (InfoMilitaryBuilding != 0)
-	{
+	if (InfoMilitaryBuilding != nullptr) {
 		InfoMilitaryBuilding->SetLocation(TMPLocation);
 		InfoMilitaryBuilding->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoMilitaryBuilding->Draw(false, ShadowMap);
 	}
-	if (InfoWheeled != 0)
-	{
+	if (InfoWheeled != nullptr) {
 		InfoWheeled->SetLocation(TMPLocation);
 		InfoWheeled->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoWheeled->Draw(false, ShadowMap);
 	}
-	if (InfoTracked != 0)
-	{
+	if (InfoTracked != nullptr) {
 		InfoTracked->SetLocation(TMPLocation);
 		InfoTracked->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoTracked->Draw(false, ShadowMap);
 	}
 
 
-	if (Setup.ShadowMap > 0)
-	{
+	if (Setup.ShadowMap > 0) {
 		ShadowMap_EndFinalRender();
 	}
 

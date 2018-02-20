@@ -31,8 +31,8 @@
 
 
 // Указатели на начальный и конечный объект в списке
-CSpaceObject *StartSpaceObject = 0;
-CSpaceObject *EndSpaceObject = 0;
+CSpaceObject *StartSpaceObject = nullptr;
+CSpaceObject *EndSpaceObject = nullptr;
 
 
 
@@ -43,20 +43,17 @@ CSpaceObject *EndSpaceObject = 0;
 //-----------------------------------------------------------------------------
 void AttachSpaceObject(CSpaceObject* SpaceObject)
 {
-	if (SpaceObject == 0) return;
+	if (SpaceObject == nullptr)
+		return;
 
-	// первый в списке...
-	if (EndSpaceObject == 0)
-	{
-		SpaceObject->Prev = 0;
-		SpaceObject->Next = 0;
+	if (EndSpaceObject == nullptr) {
+		SpaceObject->Prev = nullptr;
+		SpaceObject->Next = nullptr;
 		StartSpaceObject = SpaceObject;
 		EndSpaceObject = SpaceObject;
-	}
-	else // продолжаем заполнение...
-	{
+	} else {
 		SpaceObject->Prev = EndSpaceObject;
-		SpaceObject->Next = 0;
+		SpaceObject->Next = nullptr;
 		EndSpaceObject->Next = SpaceObject;
 		EndSpaceObject = SpaceObject;
 	}
@@ -71,17 +68,24 @@ void AttachSpaceObject(CSpaceObject* SpaceObject)
 //-----------------------------------------------------------------------------
 void DetachSpaceObject(CSpaceObject* SpaceObject)
 {
-	if (SpaceObject == 0) return;
+	if (SpaceObject == nullptr)
+		return;
 
-	// переустанавливаем указатели...
-	if (StartSpaceObject == SpaceObject) StartSpaceObject = SpaceObject->Next;
-	if (EndSpaceObject == SpaceObject) EndSpaceObject = SpaceObject->Prev;
+	if (StartSpaceObject == SpaceObject)
+		StartSpaceObject = SpaceObject->Next;
+	if (EndSpaceObject == SpaceObject)
+		EndSpaceObject = SpaceObject->Prev;
 
 
-	if (SpaceObject->Next != 0) SpaceObject->Next->Prev = SpaceObject->Prev;
-		else if (SpaceObject->Prev != 0) SpaceObject->Prev->Next = 0;
-	if (SpaceObject->Prev != 0) SpaceObject->Prev->Next = SpaceObject->Next;
-		else if (SpaceObject->Next != 0) SpaceObject->Next->Prev = 0;
+	if (SpaceObject->Next != nullptr)
+		SpaceObject->Next->Prev = SpaceObject->Prev;
+	else if (SpaceObject->Prev != nullptr)
+		SpaceObject->Prev->Next = nullptr;
+
+	if (SpaceObject->Prev != nullptr)
+		SpaceObject->Prev->Next = SpaceObject->Next;
+	else if (SpaceObject->Next != nullptr)
+		SpaceObject->Next->Prev = nullptr;
 }
 
 
@@ -94,15 +98,11 @@ void DetachSpaceObject(CSpaceObject* SpaceObject)
 void UpdateAllSpaceObject(float Time)
 {
 	CSpaceObject *tmp = StartSpaceObject;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CSpaceObject *tmp2 = tmp->Next;
 		// делаем обновление данных по объекту
 		if (!tmp->Update(Time))
-		{
-			// если его нужно уничтожить - делаем это
-			delete tmp; tmp = 0;
-		}
+			delete tmp;
 		tmp = tmp2;
 	}
 }
@@ -117,38 +117,37 @@ void DrawAllSpaceObject(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 
 	CSpaceObject *tmp = StartSpaceObject;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CSpaceObject *tmp2 = tmp->Next;
 
 		// планеты и астероиды рисуем до тайловой анимации в игре!!!
-		if (tmp->ObjectType != 14 && !(tmp->ObjectType == 15 && (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
+		if ((tmp->ObjectType != 14) &&
+		    !((tmp->ObjectType == 15) &&
+		      (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
 			tmp->Draw(VertexOnlyPass, ShadowMap);
 
 		tmp = tmp2;
 	}
-
 }
 int DrawAllSpaceObjectCount(int DrawOnlyType)
 {
 	int Count = 0;
 
 	CSpaceObject *tmp = StartSpaceObject;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CSpaceObject *tmp2 = tmp->Next;
 
-		if (DrawOnlyType != -1)
-		{
+		if (DrawOnlyType != -1) {
 			// если нужно прорисовать только определенный тип
-			if (tmp->ObjectType == DrawOnlyType)
-			if (tmp->ObjectType != 14 && !(tmp->ObjectType == 15 && (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
+			if ((tmp->ObjectType == DrawOnlyType) &&
+			    (tmp->ObjectType != 14 &&
+			     !(tmp->ObjectType == 15 && (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20))))
 				Count++;
-		}
-		else
-		{
+		} else {
 			// планеты и астероиды рисуем до тайловой анимации в игре!!!
-			if (tmp->ObjectType != 14 && !(tmp->ObjectType == 15 && (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
+			if (tmp->ObjectType != 14 &&
+			    !(tmp->ObjectType == 15 &&
+			      (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
 				Count++;
 		}
 
@@ -167,13 +166,12 @@ int DrawAllSpaceObjectCount(int DrawOnlyType)
 void ReleaseAllSpaceObject()
 {
 	CSpaceObject *tmp = StartSpaceObject;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CSpaceObject *tmp2 = tmp->Next;
 		delete tmp;
 		tmp = tmp2;
 	}
 
-	StartSpaceObject = 0;
-	EndSpaceObject = 0;
+	StartSpaceObject = nullptr;
+	EndSpaceObject = nullptr;
 }

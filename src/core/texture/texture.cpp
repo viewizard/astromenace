@@ -54,14 +54,16 @@ int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
 void vw_ReleaseTexture(eTexture* Texture)
 {
 	// проверка входящих данных
-	if (Texture == 0) return;
+	if (Texture == nullptr)
+		return;
 
 	// отключаем текстуру от менерджера текстур
 	vw_DetachTexture(Texture);
 
 	// освобождаем память
 	vw_DeleteTexture(Texture->TextureID);
-	if (Texture->Name != 0) delete [] Texture->Name;
+	if (Texture->Name != nullptr)
+		delete [] Texture->Name;
 	delete Texture;
 }
 
@@ -77,8 +79,7 @@ static int power_of_two(int Num)
 {
 	int value = 1;
 
-	while (value < Num)
-	{
+	while (value < Num) {
 		value <<= 1;
 	}
 	return value;
@@ -93,8 +94,7 @@ void Resize(BYTE **DIB, eTexture *Texture)
 	if (powWidth==Texture->Width && powHeight==Texture->Height) return;
 
 	BYTE *DIBtemp = *DIB;
-	*DIB = 0;
-	*DIB = new BYTE[powWidth*powHeight*Texture->Bytes]; if (*DIB == 0) return;
+	*DIB = new BYTE[powWidth*powHeight*Texture->Bytes];
 
 	// делаем все по цвету-прозначности + ставим все прозрачным
 	BYTE ColorF[4];
@@ -102,8 +102,7 @@ void Resize(BYTE **DIB, eTexture *Texture)
 	ColorF[1] = Texture->AGreen;
 	ColorF[2] = Texture->ABlue;
 	ColorF[3] = 0;//если Texture->Bytes == 4, его возьмем
-	for (int i=0; i<powWidth*powHeight*Texture->Bytes; i+=Texture->Bytes)
-	{
+	for (int i=0; i<powWidth*powHeight*Texture->Bytes; i+=Texture->Bytes) {
 		memcpy(*DIB+i, ColorF, Texture->Bytes);
 	}
 
@@ -115,8 +114,7 @@ void Resize(BYTE **DIB, eTexture *Texture)
 
 
 	// вставляем исходный рисунок
-	for (int y=0; y<Texture->Height; y++)
-	{
+	for (int y=0; y<Texture->Height; y++) {
 		//int st1 = (y*(powWidth))*Texture->Bytes;
 		// чтобы правильно делать без SDL_image
 		int st1 = ((y + (powHeight - Texture->Height))*(powWidth))*Texture->Bytes;
@@ -128,7 +126,8 @@ void Resize(BYTE **DIB, eTexture *Texture)
 	Texture->Width = powWidth;
 	Texture->Height = powHeight;
 	// освобождаем память
-	if (DIBtemp != 0){delete [] DIBtemp; DIBtemp = 0;}
+	if (DIBtemp != nullptr)
+		delete [] DIBtemp;
 }
 
 
@@ -150,17 +149,14 @@ void ResizeImage(int width, int height, BYTE **DIB, eTexture *Texture)
 
 	// переносим во временный массив данные...
 	BYTE *src = *DIB;
-	BYTE *dst = 0;
-	dst = new BYTE[width*height*Texture->Bytes]; if (dst == 0) return;
+	BYTE *dst = new BYTE[width*height*Texture->Bytes];
 
 	// растягиваем исходный массив (или сжимаем)
-	for (int j=0; j<height; j++)
-	{
+	for (int j = 0; j < height; j++) {
 		int y = (j * Texture->Height) / height;
 		int offset_y = y * Texture->Width;
 
-		for (int i=0; i<width; i++)
-		{
+		for (int i=0; i<width; i++) {
 			int x = (i * Texture->Width) / width;
 			int offset_x = (offset_y + x) * Texture->Bytes;
 
@@ -176,7 +172,9 @@ void ResizeImage(int width, int height, BYTE **DIB, eTexture *Texture)
 	Texture->Width = width;
 	Texture->Height = height;
 	// освобождаем память
-	if (src != 0){delete [] src; src = 0;}
+	if (src != nullptr)
+		delete [] src;
+
 	// устанавливаем указатель на новый блок памяти
 	*DIB = dst;
 }
@@ -203,8 +201,7 @@ void CreateAlpha(BYTE **DIBRESULT, eTexture *Texture, int AlphaFlag)
 
 	// сохраняем во временном указателе
 	BYTE *DIBtemp  = *DIBRESULT;
-	BYTE *DIB = 0;
-	DIB = new BYTE[stride2*Texture->Height]; if (DIB == 0) return;
+	BYTE *DIB = new BYTE[stride2*Texture->Height];
 
 	// Формируем данные по цветам...
 	BYTE GreyRedC = (BYTE)(((float)Texture->ARed / 255) * 76);
@@ -212,88 +209,78 @@ void CreateAlpha(BYTE **DIBRESULT, eTexture *Texture, int AlphaFlag)
 	BYTE GreyBlueC = (BYTE)(((float)Texture->ABlue / 255) * 28);
 	BYTE GreyC = GreyBlueC+GreyGreenC+GreyRedC;
 
-	for(int j1 = 0; j1 < Texture->Height;j1++)
-	{
+	for(int j1 = 0; j1 < Texture->Height; j1++) {
 
 		int k1 = stride*j1;// делаем правильное смещение при переходе
 		int k2 = stride2*j1;
 
-		for(int j2 = 0; j2 < Texture->Width;j2++)
-		{
+		for(int j2 = 0; j2 < Texture->Width; j2++) {
 			DIB[k2] = DIBtemp[k1];
 			DIB[k2 + 1] = DIBtemp[k1 + 1];
 			DIB[k2 + 2] = DIBtemp[k1 + 2];
 
-			switch(AlphaFlag)
-			{
-				case TX_ALPHA_GREYSC:
-				{
-					// Формируем данные по цветам...
-					BYTE GreyRed = (BYTE)(((float)DIB[k2+2] / 255) * 76);
-					BYTE GreyGreen = (BYTE)(((float)DIB[k2+1] / 255) * 150);
-					BYTE GreyBlue = (BYTE)(((float)DIB[k2] / 255) * 28);
-					DIB[k2 + 3] = GreyBlue+GreyGreen+GreyRed;
-					break;
-				}
-				case TX_ALPHA_EQUAL:
-				{
-					if ((Texture->ABlue==DIB[k2])&(Texture->AGreen==DIB[k2+1])&(Texture->ARed==DIB[k2+2])) DIB[k2+3] = 0;//Alpha
-						else DIB[k2 + 3] = 255;
-					break;
-				}
-				case TX_ALPHA_GEQUAL:
-				{
-					// Формируем данные по цветам...
-					BYTE GreyRed = (BYTE)(((float)DIB[k2+2] / 255) * 76);
-					BYTE GreyGreen = (BYTE)(((float)DIB[k2+1] / 255) * 150);
-					BYTE GreyBlue = (BYTE)(((float)DIB[k2] / 255) * 28);
-					BYTE Grey = GreyBlue+GreyGreen+GreyRed;
+			switch(AlphaFlag) {
+			case TX_ALPHA_GREYSC: {
+				// Формируем данные по цветам...
+				BYTE GreyRed = (BYTE)(((float)DIB[k2+2] / 255) * 76);
+				BYTE GreyGreen = (BYTE)(((float)DIB[k2+1] / 255) * 150);
+				BYTE GreyBlue = (BYTE)(((float)DIB[k2] / 255) * 28);
+				DIB[k2 + 3] = GreyBlue+GreyGreen+GreyRed;
+				break;
+			}
+			case TX_ALPHA_EQUAL: {
+				if ((Texture->ABlue==DIB[k2])&(Texture->AGreen==DIB[k2+1])&(Texture->ARed==DIB[k2+2])) DIB[k2+3] = 0;//Alpha
+				else DIB[k2 + 3] = 255;
+				break;
+			}
+			case TX_ALPHA_GEQUAL: {
+				// Формируем данные по цветам...
+				BYTE GreyRed = (BYTE)(((float)DIB[k2+2] / 255) * 76);
+				BYTE GreyGreen = (BYTE)(((float)DIB[k2+1] / 255) * 150);
+				BYTE GreyBlue = (BYTE)(((float)DIB[k2] / 255) * 28);
+				BYTE Grey = GreyBlue+GreyGreen+GreyRed;
 
-					if (GreyC >= Grey) DIB[k2+3] = 0;//Alpha
-						else DIB[k2 + 3] = 255;
-					break;
-				}
-				case TX_ALPHA_LEQUAL:
-				{
-					// Формируем данные по цветам...
-					BYTE GreyRed = (BYTE)(((float)DIB[k2+2] / 255) * 76);
-					BYTE GreyGreen = (BYTE)(((float)DIB[k2+1] / 255) * 150);
-					BYTE GreyBlue = (BYTE)(((float)DIB[k2] / 255) * 28);
-					BYTE Grey = GreyBlue+GreyGreen+GreyRed;
+				if (GreyC >= Grey) DIB[k2+3] = 0;//Alpha
+				else DIB[k2 + 3] = 255;
+				break;
+			}
+			case TX_ALPHA_LEQUAL: {
+				// Формируем данные по цветам...
+				BYTE GreyRed = (BYTE)(((float)DIB[k2+2] / 255) * 76);
+				BYTE GreyGreen = (BYTE)(((float)DIB[k2+1] / 255) * 150);
+				BYTE GreyBlue = (BYTE)(((float)DIB[k2] / 255) * 28);
+				BYTE Grey = GreyBlue+GreyGreen+GreyRed;
 
-					if (GreyC <= Grey) DIB[k2+3] = 0;//Alpha
-						else DIB[k2 + 3] = 255;
-					break;
-				}
-				case TX_ALPHA_GREAT:
-				{
-					// Формируем данные по цветам...
-					BYTE GreyRed = (BYTE)(((float)DIB[k2+2] / 255) * 76);
-					BYTE GreyGreen = (BYTE)(((float)DIB[k2+1] / 255) * 150);
-					BYTE GreyBlue = (BYTE)(((float)DIB[k2] / 255) * 28);
-					BYTE Grey = GreyBlue+GreyGreen+GreyRed;
+				if (GreyC <= Grey) DIB[k2+3] = 0;//Alpha
+				else DIB[k2 + 3] = 255;
+				break;
+			}
+			case TX_ALPHA_GREAT: {
+				// Формируем данные по цветам...
+				BYTE GreyRed = (BYTE)(((float)DIB[k2+2] / 255) * 76);
+				BYTE GreyGreen = (BYTE)(((float)DIB[k2+1] / 255) * 150);
+				BYTE GreyBlue = (BYTE)(((float)DIB[k2] / 255) * 28);
+				BYTE Grey = GreyBlue+GreyGreen+GreyRed;
 
-					if (GreyC > Grey) DIB[k2+3] = 0;//Alpha
-						else DIB[k2 + 3] = 255;
-					break;
-				}
-				case TX_ALPHA_LESS:
-				{
-					// Формируем данные по цветам...
-					BYTE GreyRed = (BYTE)(((float)DIB[k2+2] / 255) * 76);
-					BYTE GreyGreen = (BYTE)(((float)DIB[k2+1] / 255) * 150);
-					BYTE GreyBlue = (BYTE)(((float)DIB[k2] / 255) * 28);
-					BYTE Grey = GreyBlue+GreyGreen+GreyRed;
+				if (GreyC > Grey) DIB[k2+3] = 0;//Alpha
+				else DIB[k2 + 3] = 255;
+				break;
+			}
+			case TX_ALPHA_LESS: {
+				// Формируем данные по цветам...
+				BYTE GreyRed = (BYTE)(((float)DIB[k2+2] / 255) * 76);
+				BYTE GreyGreen = (BYTE)(((float)DIB[k2+1] / 255) * 150);
+				BYTE GreyBlue = (BYTE)(((float)DIB[k2] / 255) * 28);
+				BYTE Grey = GreyBlue+GreyGreen+GreyRed;
 
-					if (GreyC < Grey) DIB[k2+3] = 0;//Alpha
-						else DIB[k2 + 3] = 255;
-					break;
-				}
-				default:
-				{
-					DIB[k2 + 3] = 255;
-					break;
-				}
+				if (GreyC < Grey) DIB[k2+3] = 0;//Alpha
+				else DIB[k2 + 3] = 255;
+				break;
+			}
+			default: {
+				DIB[k2 + 3] = 255;
+				break;
+			}
 
 			}
 
@@ -302,7 +289,8 @@ void CreateAlpha(BYTE **DIBRESULT, eTexture *Texture, int AlphaFlag)
 		}
 	}
 
-	if (DIBtemp != 0) delete [] DIBtemp;
+	if (DIBtemp != nullptr)
+		delete [] DIBtemp;
 	*DIBRESULT = DIB;
 	Texture->Bytes = 4;
 }
@@ -325,16 +313,13 @@ void DeleteAlpha(BYTE **DIBRESULT, eTexture *Texture)
 
 	// сохраняем во временном указателе
 	BYTE *DIBtemp  = *DIBRESULT;
-	BYTE *DIB = 0;
-	DIB = new BYTE[stride*Texture->Height]; if (DIB == 0) return;
+	BYTE *DIB = new BYTE[stride*Texture->Height];
 
-	for(int j1 = 0; j1 < Texture->Height;j1++)
-	{
+	for(int j1 = 0; j1 < Texture->Height; j1++) {
 		int k1 = stride*j1;
 		int k2 = stride2*j1;
 
-		for(int j2 = 0; j2 < Texture->Width;j2++)
-		{
+		for(int j2 = 0; j2 < Texture->Width; j2++) {
 			DIB[k1] = DIBtemp[k2];
 			DIB[k1 + 1] = DIBtemp[k2 + 1];
 			DIB[k1 + 2] = DIBtemp[k2 + 2];
@@ -344,7 +329,8 @@ void DeleteAlpha(BYTE **DIBRESULT, eTexture *Texture)
 		}
 	}
 
-	if (DIBtemp != 0) delete [] DIBtemp;
+	if (DIBtemp != nullptr)
+		delete [] DIBtemp;
 	*DIBRESULT = DIB;
 	Texture->Bytes = 3;
 }
@@ -361,11 +347,11 @@ void DeleteAlpha(BYTE **DIBRESULT, eTexture *Texture)
 //------------------------------------------------------------------------------------
 void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 {
-	eFILE *pFile = 0;
+	eFILE *pFile = nullptr;
 	int DWidth = 0;
 	int DHeight = 0;
 	int DChanels = 0;
-	BYTE *tmp_image = 0;
+	BYTE *tmp_image = nullptr;
 
 	int LoadAs = TGA_FILE;
 
@@ -373,8 +359,7 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 	// Открываем файл
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	pFile = vw_fopen(SrcName);
-	if (pFile == 0)
-	{
+	if (pFile == nullptr) {
 		fprintf(stderr, "Unable to found %s\n", SrcName);
 		return;
 	}
@@ -397,17 +382,16 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 	// Загружаем
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	switch (LoadAs) {
-		case TGA_FILE:
-			ReadTGA(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
-			break;
+	case TGA_FILE:
+		ReadTGA(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
+		break;
 
-		default:
-			fprintf(stderr, "Unable to load %s\n", SrcName);
-			return;
+	default:
+		fprintf(stderr, "Unable to load %s\n", SrcName);
+		return;
 	}
 
-	if (tmp_image == 0)
-	{
+	if (tmp_image == nullptr) {
 		fprintf(stderr, "Unable to load %s\n", SrcName);
 		return;
 	}
@@ -422,11 +406,10 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 	SDL_RWops *FileVW2D;
 	FileVW2D = SDL_RWFromFile(DestName, "wb");
 	// если не можем создать файл на запись - уходим
-    if (FileVW2D == NULL)
-    {
-        fprintf(stderr, "Can't create %s file on disk.\n", DestName);
-        return;
-    }
+	if (FileVW2D == nullptr) {
+		fprintf(stderr, "Can't create %s file on disk.\n", DestName);
+		return;
+	}
 
 	// маркер файла 4 байта
 	char tmp1[5] = "VW2D";
@@ -456,21 +439,20 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int CompressionType, int LoadAs, int NeedResizeW, int NeedResizeH)
 {
 	// временно, файл текстуры
-	eFILE *pFile = 0;
+	eFILE *pFile = nullptr;
 
 	int DWidth = 0;
 	int DHeight = 0;
 	int DChanels = 0;
-	BYTE *tmp_image = 0;
+	BYTE *tmp_image = nullptr;
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Открываем файл
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	pFile = vw_fopen(nName);
-	if (pFile == 0)
-	{
+	if (pFile == nullptr) {
 		fprintf(stderr, "Unable to found %s\n", nName);
-		return 0;
+		return nullptr;
 	}
 
 
@@ -493,35 +475,33 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Загружаем текстуру
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	switch(LoadAs)
-	{
-		case TGA_FILE:
-			ReadTGA(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
-			break;
+	switch(LoadAs) {
+	case TGA_FILE:
+		ReadTGA(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
+		break;
 
-		case VW2D_FILE:
-			// пропускаем заголовок "VW2D"
-			pFile->fseek(4, SEEK_SET);
-			// считываем ширину
-			pFile->fread(&DWidth, sizeof(int), 1);
-			// считываем высоту
-			pFile->fread(&DHeight, sizeof(int), 1);
-			// считываем кол-во каналов
-			pFile->fread(&DChanels, sizeof(int), 1);
-			// резервируем память
-			tmp_image = new BYTE[DWidth*DHeight*DChanels];
-			// считываем уже готовый к созданию текстуры массив
-			pFile->fread(tmp_image, DWidth*DHeight*DChanels, 1);
-			break;
+	case VW2D_FILE:
+		// пропускаем заголовок "VW2D"
+		pFile->fseek(4, SEEK_SET);
+		// считываем ширину
+		pFile->fread(&DWidth, sizeof(int), 1);
+		// считываем высоту
+		pFile->fread(&DHeight, sizeof(int), 1);
+		// считываем кол-во каналов
+		pFile->fread(&DChanels, sizeof(int), 1);
+		// резервируем память
+		tmp_image = new BYTE[DWidth*DHeight*DChanels];
+		// считываем уже готовый к созданию текстуры массив
+		pFile->fread(tmp_image, DWidth*DHeight*DChanels, 1);
+		break;
 
-		default:
-			return 0;
+	default:
+		return nullptr;
 	}
 
-	if (tmp_image == 0)
-	{
+	if (tmp_image == nullptr) {
 		fprintf(stderr, "Unable to load %s\n", nName);
-		return 0;
+		return nullptr;
 	}
 
 	// все, файл нам больше не нужен
@@ -532,20 +512,18 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Сохраняем имя текстуры
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	eTexture *Result = 0;
+	eTexture *Result = nullptr;
 
-	if (RememberAsName == NULL)
-	{
+	if (RememberAsName == nullptr) {
 		Result = vw_CreateTextureFromMemory(nName, tmp_image, DWidth, DHeight, DChanels, CompressionType, NeedResizeW, NeedResizeH);
-	}
-	else // иначе, есть имя под которым надо запомнить
-	{
+	} else { // иначе, есть имя под которым надо запомнить
 		Result = vw_CreateTextureFromMemory(RememberAsName, tmp_image, DWidth, DHeight, DChanels, CompressionType, NeedResizeW, NeedResizeH);
 	}
 
 
 	// освобождаем память
-	if (tmp_image != 0){delete [] tmp_image; tmp_image = 0;}
+	if (tmp_image != nullptr)
+		delete [] tmp_image;
 
 
 	return Result;
@@ -564,14 +542,11 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DWidth, int DHeight, int DChanels, int CompressionType, int NeedResizeW, int NeedResizeH, bool NeedDuplicateCheck)
 {
 	// проверяем в списке, если уже создавали ее - просто возвращаем указатель
-	if (NeedDuplicateCheck)
-	{
+	if (NeedDuplicateCheck) {
 		eTexture *Tmp = StartTexMan;
-		while (Tmp != 0)
-		{
+		while (Tmp != nullptr) {
 			eTexture *Tmp1 = Tmp->Next;
-			if(vw_strcmp(Tmp->Name, TextureName) == 0)
-			{
+			if(strcmp(Tmp->Name, TextureName) == 0) {
 				printf("Texture already loaded: %s\n", TextureName);
 				return Tmp;
 			}
@@ -580,14 +555,14 @@ eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DW
 	}
 
 	// доп. проверка на входящие размеры
-	if ((DWidth <= 0) || (DHeight<=0)) return 0;
+	if ((DWidth <= 0) || (DHeight<=0))
+		return nullptr;
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Cоздаем объект
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	eTexture *Texture = 0;
-	Texture = new eTexture; if (Texture == 0) return 0;
+	eTexture *Texture = new eTexture;
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -596,38 +571,35 @@ eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DW
 	Texture->ARed = ARedTexMan;
 	Texture->AGreen = AGreenTexMan;
 	Texture->ABlue = ABlueTexMan;
-	Texture->Prev = 0;
-	Texture->Next = 0;
+	Texture->Prev = nullptr;
+	Texture->Next = nullptr;
 	Texture->Num = 0;
-	Texture->Name = 0;
+	Texture->Name = nullptr;
 	Texture->TextureID = 0;
 	Texture->Width = DWidth;
 	Texture->Height = DHeight;
 	Texture->Bytes = DChanels;
 
 	// временный массив данных
-	BYTE *tmp_image = 0;
-	tmp_image = new BYTE[DWidth*DHeight*DChanels]; if (tmp_image == 0) { delete Texture; return 0; }
+	BYTE *tmp_image = new BYTE[DWidth*DHeight*DChanels];
 	memcpy(tmp_image, DIB, DWidth*DHeight*DChanels);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Сохраняем имя текстуры
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	Texture->Name = new char[strlen(TextureName)+1]; if (Texture->Name == 0) { delete Texture; delete [] tmp_image; return 0; }
+	Texture->Name = new char[strlen(TextureName)+1];
 	strcpy(Texture->Name, TextureName);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Делаем альфа канал
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Texture->Bytes == 4)
-	{
+	if (Texture->Bytes == 4) {
 		if (!AlphaTexMan)
 			DeleteAlpha(&tmp_image, Texture);
 
 	}
-	if (Texture->Bytes == 3)
-	{
+	if (Texture->Bytes == 3) {
 		if (AlphaTexMan)
 			CreateAlpha(&tmp_image, Texture, AFlagTexMan);
 	}
@@ -665,7 +637,8 @@ eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DW
 	vw_BindTexture(0, 0);
 
 	// освобождаем память
-	if (tmp_image != 0) delete [] tmp_image;
+	if (tmp_image != nullptr)
+		delete [] tmp_image;
 
 	// присоединяем текстуру к менеджеру текстур
 	vw_AttachTexture(Texture);

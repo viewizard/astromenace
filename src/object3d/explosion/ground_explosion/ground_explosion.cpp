@@ -45,16 +45,14 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// 1 - взрыв постройки (турелей)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ExplType == 1)
-	{
+	if (ExplType == 1) {
 		InternalExplosionType = 1;
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// 2 - взрыв транспорта
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ExplType == 2)
-	{
+	if (ExplType == 2) {
 		InternalExplosionType = 1;
 	}
 
@@ -73,8 +71,7 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// взрыв на части
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (InternalExplosionType == 1)
-	{
+	if (InternalExplosionType == 1) {
 		// строим обратную матрицу
 		float InvRotationMat[9];
 		// сохраняем старые значения + пересчет новых
@@ -84,16 +81,12 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
-		for (int i=0; i<Object->DrawObjectQuantity; i++)
-		{
+		for (int i=0; i<Object->DrawObjectQuantity; i++) {
 			// могут быть пустые группы, убираем их и идем смотрим на следующую группу
 			// или это гусеница, тоже ее пропускаем
-			if (Object->DrawObjectList[i].VertexCount == 0 || Object->TrackObjectNum == i)
-			{
+			if (Object->DrawObjectList[i].VertexCount == 0 || Object->TrackObjectNum == i) {
 				continue;
-			}
-			else
-			{
+			} else {
 				// создаем часть
 				CShipPart *ShipPart;
 				ShipPart = new CShipPart;
@@ -103,9 +96,7 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 				// только одна текстура (!) 2-ю для подстветки не тянем
 				ShipPart->Texture = new eTexture*[1];
 				ShipPart->Texture[0] = Object->Texture[i];
-				if (Object->NormalMap != 0)
-				if (Object->NormalMap[i] != 0)
-				{
+				if ((Object->NormalMap != nullptr) && (Object->NormalMap[i] != nullptr)) {
 					ShipPart->NormalMap = new eTexture*[1];
 					ShipPart->NormalMap[0] = Object->NormalMap[i];
 				}
@@ -118,8 +109,7 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 				// берем стандартные шейдеры
 				ShipPart->DrawObjectList[0].ShaderType = 1;
 				// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
-				if (Object->DrawObjectList[i].NeedDestroyDataInObjectBlock)
-				{
+				if (Object->DrawObjectList[i].NeedDestroyDataInObjectBlock) {
 					Object->DrawObjectList[i].NeedDestroyDataInObjectBlock = false;
 					ShipPart->DrawObjectList[0].NeedDestroyDataInObjectBlock = true;
 				}
@@ -129,8 +119,7 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 				ShipPart->HitBBRadius2 = new float[ShipPart->DrawObjectQuantity];
 				ShipPart->HitBBSize = new VECTOR3D[ShipPart->DrawObjectQuantity];
 				ShipPart->HitBB = new VECTOR3D*[ShipPart->DrawObjectQuantity];
-				for (int i1=0; i1<ShipPart->DrawObjectQuantity; i1++)
-				{
+				for (int i1=0; i1<ShipPart->DrawObjectQuantity; i1++) {
 					ShipPart->HitBB[i1] = new VECTOR3D[8];
 				}
 
@@ -151,8 +140,7 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 				ShipPart->SetRotation(Object->Rotation);
 
 
-				if (ExplType == 1)
-				{
+				if (ExplType == 1) {
 					ShipPart->Speed = 0.0f;
 					VECTOR3D VelocityTMP = ShipPart->Location - ExplLocation;
 					if (ShipPart->Radius != 0) ShipPart->Velocity = VelocityTMP^(1.0f/ShipPart->Radius);
@@ -161,17 +149,14 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 					ShipPart->RotationSpeed.x = 2.0f*vw_Randf0;
 					ShipPart->RotationSpeed.y = 2.0f*vw_Randf0;
 				}
-				if (ExplType == 2)
-				{
+				if (ExplType == 2) {
 					// проверяем, это колесо или нет
 					bool Wheel = false;
-					for (int k=0; k<Object->WheelQuantity; k++)
-					{
+					for (int k=0; k<Object->WheelQuantity; k++) {
 						if (Object->WheelObjectsNum[k] == i) Wheel = true;
 					}
 
-					if (Wheel)
-					{
+					if (Wheel) {
 						//if(ShipPart->Speed != 0.0f) Speed-2*vw_Randf1;
 						VECTOR3D VelocityTMP = ShipPart->Location - Object->Location;
 						// делаем небольшой случайный доворот
@@ -182,9 +167,7 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 						ShipPart->RotationSpeed.x = 40.0f+80.0f*vw_Randf0;
 						ShipPart->RotationSpeed.y = 40.0f+80.0f*vw_Randf0;
 						ShipPart->RotationSpeed.z = 40.0f+80.0f*vw_Randf0;
-					}
-					else
-					{
+					} else {
 						//if(ShipPart->Speed != 0.0f) Speed-2*vw_Randf1;
 						VECTOR3D VelocityTMP = ShipPart->Location - Object->Location;
 						if(ShipPart->Radius != 0.0f) ShipPart->Velocity = VelocityTMP^(5.0f/ShipPart->Radius);
@@ -203,14 +186,13 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 
 
 				if (ObjectPieceNum != -1)
-				if (ObjectPieceNum == i)
-				{
-					// а теперь взрываем ту, в которую попали...
-					CSpaceExplosion *TMPExplosion;
-					TMPExplosion = new CSpaceExplosion;
-					TMPExplosion->Create(ShipPart, 32, ShipPart->Location, ShipPart->Speed, -1);
-					delete ShipPart;
-				}
+					if (ObjectPieceNum == i) {
+						// а теперь взрываем ту, в которую попали...
+						CSpaceExplosion *TMPExplosion;
+						TMPExplosion = new CSpaceExplosion;
+						TMPExplosion->Create(ShipPart, 32, ShipPart->Location, ShipPart->Speed, -1);
+						delete ShipPart;
+					}
 			}
 		}
 
@@ -225,8 +207,7 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 
 
 	// дальше, если не видем точку взрыва не делать... проверяем...
-	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0]))
-	{
+	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0])) {
 		return;
 	}
 
@@ -236,8 +217,7 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 	// спец эффекты
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	if (ExplType == 1 || ExplType == 2)
-	{
+	if (ExplType == 1 || ExplType == 2) {
 		// постройки, транспорт
 		GameCameraSetExplosion(ExplLocation, 0.5f); // делаем сотрясание камеры, если нужно
 		if (NeedExplosionSFX) Audio_PlaySound3D(8, 1.0f, ExplLocation, false, 2);

@@ -35,9 +35,9 @@
 
 inline void itoa10(int val, char* res)
 {
-    // http://www.cplusplus.com/ref/cstdio/sprintf.html
-    // если нужны не 10-ки
-    sprintf(res,"%i",val);
+	// http://www.cplusplus.com/ref/cstdio/sprintf.html
+	// если нужны не 10-ки
+	sprintf(res,"%i",val);
 }
 
 
@@ -48,10 +48,6 @@ double	vw_dsin(int Angle);
 // быстрый sqrtf
 float	vw_sqrtf(float x);
 
-
-
-// быстрое сравнение строк (по аналогии с strcmp)
-int		vw_strcmp(const char *a, const char *b);
 
 
 // преобразуем утф8 в утф32, как результат возвращаем указатель на след утф8 символ
@@ -86,47 +82,82 @@ float Min3(float a1,float a2,float a3);
 
 
 // вектор в 3д пространстве
-struct VECTOR3D
-{
+struct VECTOR3D {
 	float x,y,z;
 
-	VECTOR3D(){};
-	VECTOR3D(float nX, float nY, float nZ) { x = nX; y = nY; z = nZ; };
-	void Set(float nX, float nY, float nZ) { x = nX; y = nY; z = nZ; };
-	~VECTOR3D(){};
+	VECTOR3D() {};
+	VECTOR3D(float nX, float nY, float nZ)
+	{
+		x = nX;
+		y = nY;
+		z = nZ;
+	};
+	void Set(float nX, float nY, float nZ)
+	{
+		x = nX;
+		y = nY;
+		z = nZ;
+	};
+	~VECTOR3D() {};
 	// Equal
 	bool operator == (const VECTOR3D &A)
-	{ return (A.x == x &&
+	{
+		return (A.x == x &&
 			A.y == y &&
-			A.z == z); };
+			A.z == z);
+	};
 	// Not equal
 	bool operator != (const VECTOR3D &A)
-	{ return (A.x != x ||
+	{
+		return (A.x != x ||
 			A.y != y ||
-			A.z != z); };
+			A.z != z);
+	};
 	// Multiply
 	friend float operator * (const VECTOR3D &A, const VECTOR3D &B)
-	{ return A.x * B.x + A.y * B.y + A.z * B.z; };
+	{
+		return A.x * B.x + A.y * B.y + A.z * B.z;
+	};
 
 	VECTOR3D operator ^ (const float C)
-	{ return VECTOR3D(x*C,y*C, z*C); };
+	{
+		return VECTOR3D(x*C,y*C, z*C);
+	};
 
 	VECTOR3D operator / (const float C)
-	{ return VECTOR3D(x/C,y/C, z/C); };
+	{
+		return VECTOR3D(x/C,y/C, z/C);
+	};
 
 	void operator *= (float C)
-	{ x *= C; y *= C; z *= C; };
+	{
+		x *= C;
+		y *= C;
+		z *= C;
+	};
 
 	// Add
 	VECTOR3D operator + (const VECTOR3D &A)
-	{ return VECTOR3D(x + A.x, y + A.y, z + A.z); };
+	{
+		return VECTOR3D(x + A.x, y + A.y, z + A.z);
+	};
 	void operator += (const VECTOR3D &A)
-	{ x += A.x; y += A.y; z += A.z; };
+	{
+		x += A.x;
+		y += A.y;
+		z += A.z;
+	};
 	// Subtract
 	VECTOR3D operator - (const VECTOR3D &A)
-	{ return VECTOR3D(x - A.x, y - A.y, z - A.z); };
+	{
+		return VECTOR3D(x - A.x, y - A.y, z - A.z);
+	};
 	void operator -= (const VECTOR3D &A)
-	{ x -= A.x; y -= A.y; z -= A.z; };
+	{
+		x -= A.x;
+		y -= A.y;
+		z -= A.z;
+	};
 
 
 	float Length();

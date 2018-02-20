@@ -48,8 +48,8 @@ eParticle::eParticle()
 	Color.b = 0.0f;
 	Color.a = 0.5f;
 	ColorDelta.a = ColorDelta.b = ColorDelta.g = ColorDelta.r = 0.0f;
-	Next = 0;
-	Prev = 0;
+	Next = nullptr;
+	Prev = nullptr;
 	Show = true;
 	AlphaShowHide = false;
 	NeedStop = false;
@@ -72,13 +72,10 @@ bool eParticle::Update(float TimeDelta, VECTOR3D ParentLocation, bool Attractive
 {
 
 	// Если частица уже мертва, ее нужно отключить - передаем в систему эти данные
-	if ( Age + TimeDelta >= Lifetime )
-	{
+	if ( Age + TimeDelta >= Lifetime ) {
 		Age = -1.0f;
 		return false;
-	}
-	else
-	{
+	} else {
 
 		// увеличиваем возраст частицы
 		Age += TimeDelta;
@@ -91,8 +88,7 @@ bool eParticle::Update(float TimeDelta, VECTOR3D ParentLocation, bool Attractive
 
 
 		// если есть притяжение системы, просчитываем воздействие
-		if ( Attractive )
-		{
+		if ( Attractive ) {
 			VECTOR3D AttractLocation = ParentLocation;
 
 			// рассчитывае вектор взаимодействия между частицей и точкой притяжения
@@ -113,22 +109,16 @@ bool eParticle::Update(float TimeDelta, VECTOR3D ParentLocation, bool Attractive
 		Color.b += ColorDelta.b * TimeDelta;
 
 		// просчитываем текущую прозрачность
-		if (!AlphaShowHide)
-		{
+		if (!AlphaShowHide) {
 			Alpha += AlphaDelta * TimeDelta;
-		}
-		else
-		{
-			if (Show)
-			{
+		} else {
+			if (Show) {
 				Alpha += AlphaDelta * TimeDelta;
-				if (Alpha >= 1.0f)
-				{
+				if (Alpha >= 1.0f) {
 					Alpha = 1.0f;
 					Show = false;
 				}
-			}
-			else
+			} else
 				Alpha -= AlphaDelta * TimeDelta;
 
 			Clamp( Alpha, 0.0f, 1.0f );

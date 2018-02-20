@@ -40,7 +40,7 @@ class CBuilding : public CGroundObject
 {
 public:
 
-	virtual ~CBuilding(){};
+	virtual ~CBuilding() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int	BuildingNum);

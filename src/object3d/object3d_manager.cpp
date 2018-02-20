@@ -66,14 +66,16 @@ void DrawAllObject3D(int DrawType)
 
 	bool ShadowMap = false;
 
-	if (Setup.ShadowMap > 0)
-	{
-		switch (DrawType)
-		{
-			// меню
-			case 1: ShadowMap_StartRenderToFBO(VECTOR3D(50,-5,-120), 120.0f, 500.0f); break;
-			// игра
-			case 2: ShadowMap_StartRenderToFBO(VECTOR3D(0,0,160), 600.0f, 800.0f); break;
+	if (Setup.ShadowMap > 0) {
+		switch (DrawType) {
+		// меню
+		case 1:
+			ShadowMap_StartRenderToFBO(VECTOR3D(50,-5,-120), 120.0f, 500.0f);
+			break;
+		// игра
+		case 2:
+			ShadowMap_StartRenderToFBO(VECTOR3D(0,0,160), 600.0f, 800.0f);
+			break;
 		}
 
 		DrawAllSpaceShip(true, 0);
@@ -103,8 +105,7 @@ void DrawAllObject3D(int DrawType)
 	DrawAllProjectile(false, ShadowMap);
 
 
-	if (Setup.ShadowMap > 0)
-	{
+	if (Setup.ShadowMap > 0) {
 		ShadowMap_EndFinalRender();
 	}
 
@@ -125,12 +126,9 @@ void DrawAllObject3D(int DrawType)
 	StarSystemDrawSecondLayer(DrawType);
 
 	// эмуляция гаммы, фактически это простой пост эффект, всегда самый последний в прорисовке
-	if( Setup.Brightness != 5 )
-	{
+	if( Setup.Brightness != 5 ) {
 
-		float *buff = 0;
-		// RI_2f_XY | RI_1_TEX
-		buff = new float[4*4]; if (buff == 0) return;
+		float *buff = new float[4*4]; // RI_2f_XY | RI_1_TEX
 
 		int k=0;
 
@@ -160,13 +158,10 @@ void DrawAllObject3D(int DrawType)
 
 		float BrightnessF = 1.0f + (Setup.Brightness - 5)/5.0f;
 
-		if( BrightnessF > 1.0f )
-		{
+		if( BrightnessF > 1.0f ) {
 			vw_SetTextureBlend(true, RI_BLEND_DESTCOLOR, RI_BLEND_ONE);
 			vw_SetColor(BrightnessF-1.0f, BrightnessF-1.0f, BrightnessF-1.0f, 1.0f);
-		}
-		else
-		{
+		} else {
 			vw_SetTextureBlend(true, RI_BLEND_ZERO, RI_BLEND_SRCCOLOR);
 			vw_SetColor(BrightnessF, BrightnessF, BrightnessF, 1.0f);
 		}
@@ -177,7 +172,8 @@ void DrawAllObject3D(int DrawType)
 
 		vw_SetTextureBlend(false, 0, 0);
 		vw_BindTexture(0, 0);
-		if (buff != 0){delete [] buff; buff = 0;}
+		if (buff != nullptr)
+			delete [] buff;
 	}
 }
 

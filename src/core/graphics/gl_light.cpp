@@ -39,7 +39,7 @@
 void vw_Lighting(bool param)
 {
 	if (param) glEnable(GL_LIGHTING);
-		else glDisable(GL_LIGHTING);
+	else glDisable(GL_LIGHTING);
 
 }
 
@@ -86,32 +86,31 @@ void vw_SetLight(int light, int pname, float param)
 {
 	int tmpPNAME=0;
 
-	switch (pname)
-	{
-		case RI_SPOT_EXPONENT:
-			tmpPNAME = GL_SPOT_EXPONENT;
-			break;
+	switch (pname) {
+	case RI_SPOT_EXPONENT:
+		tmpPNAME = GL_SPOT_EXPONENT;
+		break;
 
-		case RI_SPOT_CUTOFF:
-			tmpPNAME = GL_SPOT_CUTOFF;
-			break;
+	case RI_SPOT_CUTOFF:
+		tmpPNAME = GL_SPOT_CUTOFF;
+		break;
 
-		case RI_CONSTANT_ATTENUATION:
-			tmpPNAME = GL_CONSTANT_ATTENUATION;
-			break;
+	case RI_CONSTANT_ATTENUATION:
+		tmpPNAME = GL_CONSTANT_ATTENUATION;
+		break;
 
-		case RI_LINEAR_ATTENUATION:
-			tmpPNAME = GL_LINEAR_ATTENUATION;
-			break;
+	case RI_LINEAR_ATTENUATION:
+		tmpPNAME = GL_LINEAR_ATTENUATION;
+		break;
 
-		case RI_QUADRATIC_ATTENUATION:
-			tmpPNAME = GL_QUADRATIC_ATTENUATION;
-			break;
+	case RI_QUADRATIC_ATTENUATION:
+		tmpPNAME = GL_QUADRATIC_ATTENUATION;
+		break;
 
-		default:
-			fprintf(stderr, "Error in vw_SetLight function call, wrong pname.\n");
-			return;
- 	}
+	default:
+		fprintf(stderr, "Error in vw_SetLight function call, wrong pname.\n");
+		return;
+	}
 
 	glLightf(GL_LIGHT0+light, tmpPNAME, param);
 }
@@ -125,51 +124,50 @@ void vw_SetLightV(int light, int pname, const float *param)
 {
 	int tmpPNAME=0;
 
-	switch (pname)
-	{
-		case RI_SPOT_EXPONENT:
-			tmpPNAME = GL_SPOT_EXPONENT;
-			break;
+	switch (pname) {
+	case RI_SPOT_EXPONENT:
+		tmpPNAME = GL_SPOT_EXPONENT;
+		break;
 
-		case RI_SPOT_CUTOFF:
-			tmpPNAME = GL_SPOT_CUTOFF;
-			break;
+	case RI_SPOT_CUTOFF:
+		tmpPNAME = GL_SPOT_CUTOFF;
+		break;
 
-		case RI_CONSTANT_ATTENUATION:
-			tmpPNAME = GL_CONSTANT_ATTENUATION;
-			break;
+	case RI_CONSTANT_ATTENUATION:
+		tmpPNAME = GL_CONSTANT_ATTENUATION;
+		break;
 
-		case RI_LINEAR_ATTENUATION:
-			tmpPNAME = GL_LINEAR_ATTENUATION;
-			break;
+	case RI_LINEAR_ATTENUATION:
+		tmpPNAME = GL_LINEAR_ATTENUATION;
+		break;
 
-		case RI_QUADRATIC_ATTENUATION:
-			tmpPNAME = GL_QUADRATIC_ATTENUATION;
-			break;
+	case RI_QUADRATIC_ATTENUATION:
+		tmpPNAME = GL_QUADRATIC_ATTENUATION;
+		break;
 
-		case RI_AMBIENT:
-			tmpPNAME = GL_AMBIENT;
-			break;
+	case RI_AMBIENT:
+		tmpPNAME = GL_AMBIENT;
+		break;
 
-		case RI_DIFFUSE:
-			tmpPNAME = GL_DIFFUSE;
-			break;
+	case RI_DIFFUSE:
+		tmpPNAME = GL_DIFFUSE;
+		break;
 
-		case RI_SPECULAR:
-			tmpPNAME = GL_SPECULAR;
-			break;
+	case RI_SPECULAR:
+		tmpPNAME = GL_SPECULAR;
+		break;
 
-		case RI_POSITION:
-			tmpPNAME = GL_POSITION;
-			break;
+	case RI_POSITION:
+		tmpPNAME = GL_POSITION;
+		break;
 
-		case RI_DIRECTION:
-			tmpPNAME = GL_SPOT_DIRECTION;
-			break;
+	case RI_DIRECTION:
+		tmpPNAME = GL_SPOT_DIRECTION;
+		break;
 
-		default:
-			fprintf(stderr, "Error in vw_SetLightV function call, wrong pname.\n");
-			return;
+	default:
+		fprintf(stderr, "Error in vw_SetLightV function call, wrong pname.\n");
+		return;
 	}
 
 	glLightfv(GL_LIGHT0+light, tmpPNAME, param);
@@ -184,51 +182,50 @@ void vw_GetLightV(int light, int pname, float *param)
 {
 	int tmpPNAME=0;
 
-	switch (pname)
-	{
-		case RI_SPOT_EXPONENT:
-			tmpPNAME = GL_SPOT_EXPONENT;
-			break;
+	switch (pname) {
+	case RI_SPOT_EXPONENT:
+		tmpPNAME = GL_SPOT_EXPONENT;
+		break;
 
-		case RI_SPOT_CUTOFF:
-			tmpPNAME = GL_SPOT_CUTOFF;
-			break;
+	case RI_SPOT_CUTOFF:
+		tmpPNAME = GL_SPOT_CUTOFF;
+		break;
 
-		case RI_CONSTANT_ATTENUATION:
-			tmpPNAME = GL_CONSTANT_ATTENUATION;
-			break;
+	case RI_CONSTANT_ATTENUATION:
+		tmpPNAME = GL_CONSTANT_ATTENUATION;
+		break;
 
-		case RI_LINEAR_ATTENUATION:
-			tmpPNAME = GL_LINEAR_ATTENUATION;
-			break;
+	case RI_LINEAR_ATTENUATION:
+		tmpPNAME = GL_LINEAR_ATTENUATION;
+		break;
 
-		case RI_QUADRATIC_ATTENUATION:
-			tmpPNAME = GL_QUADRATIC_ATTENUATION;
-			break;
+	case RI_QUADRATIC_ATTENUATION:
+		tmpPNAME = GL_QUADRATIC_ATTENUATION;
+		break;
 
-		case RI_AMBIENT:
-			tmpPNAME = GL_AMBIENT;
-			break;
+	case RI_AMBIENT:
+		tmpPNAME = GL_AMBIENT;
+		break;
 
-		case RI_DIFFUSE:
-			tmpPNAME = GL_DIFFUSE;
-			break;
+	case RI_DIFFUSE:
+		tmpPNAME = GL_DIFFUSE;
+		break;
 
-		case RI_SPECULAR:
-			tmpPNAME = GL_SPECULAR;
-			break;
+	case RI_SPECULAR:
+		tmpPNAME = GL_SPECULAR;
+		break;
 
-		case RI_POSITION:
-			tmpPNAME = GL_POSITION;
-			break;
+	case RI_POSITION:
+		tmpPNAME = GL_POSITION;
+		break;
 
-		case RI_DIRECTION:
-			tmpPNAME = GL_SPOT_DIRECTION;
-			break;
+	case RI_DIRECTION:
+		tmpPNAME = GL_SPOT_DIRECTION;
+		break;
 
-		default:
-			fprintf(stderr, "Error in vw_GetLightV function call, wrong pname.\n");
-			return;
+	default:
+		fprintf(stderr, "Error in vw_GetLightV function call, wrong pname.\n");
+		return;
 	}
 
 	glGetLightfv(GL_LIGHT0+light, tmpPNAME, param);
@@ -245,31 +242,30 @@ void vw_MaterialV(int pname, const float *param)
 {
 	int tmpPNAME=0;
 
-	switch (pname)
-	{
-		case RI_AMBIENT:
-			tmpPNAME = GL_AMBIENT;
-			break;
+	switch (pname) {
+	case RI_AMBIENT:
+		tmpPNAME = GL_AMBIENT;
+		break;
 
-		case RI_DIFFUSE:
-			tmpPNAME = GL_DIFFUSE;
-			break;
+	case RI_DIFFUSE:
+		tmpPNAME = GL_DIFFUSE;
+		break;
 
-		case RI_SPECULAR:
-			tmpPNAME = GL_SPECULAR;
-			break;
+	case RI_SPECULAR:
+		tmpPNAME = GL_SPECULAR;
+		break;
 
-		case RI_EMISSION:
-			tmpPNAME = GL_EMISSION;
-			break;
+	case RI_EMISSION:
+		tmpPNAME = GL_EMISSION;
+		break;
 
-		case RI_SHININESS:
-			tmpPNAME = GL_SHININESS;
-			break;
+	case RI_SHININESS:
+		tmpPNAME = GL_SHININESS;
+		break;
 
-		default:
-			fprintf(stderr, "Error in vw_MaterialV function call, wrong pname.\n");
-			return;
+	default:
+		fprintf(stderr, "Error in vw_MaterialV function call, wrong pname.\n");
+		return;
 	}
 
 	glMaterialfv(GL_FRONT_AND_BACK, tmpPNAME, param);
@@ -284,31 +280,30 @@ void vw_GetMaterialV(int pname, float *param)
 {
 	int tmpPNAME=0;
 
-	switch (pname)
-	{
-		case RI_AMBIENT:
-			tmpPNAME = GL_AMBIENT;
-			break;
+	switch (pname) {
+	case RI_AMBIENT:
+		tmpPNAME = GL_AMBIENT;
+		break;
 
-		case RI_DIFFUSE:
-			tmpPNAME = GL_DIFFUSE;
-			break;
+	case RI_DIFFUSE:
+		tmpPNAME = GL_DIFFUSE;
+		break;
 
-		case RI_SPECULAR:
-			tmpPNAME = GL_SPECULAR;
-			break;
+	case RI_SPECULAR:
+		tmpPNAME = GL_SPECULAR;
+		break;
 
-		case RI_EMISSION:
-			tmpPNAME = GL_EMISSION;
-			break;
+	case RI_EMISSION:
+		tmpPNAME = GL_EMISSION;
+		break;
 
-		case RI_SHININESS:
-			tmpPNAME = GL_SHININESS;
-			break;
+	case RI_SHININESS:
+		tmpPNAME = GL_SHININESS;
+		break;
 
-		default:
-			fprintf(stderr, "Error in vw_GetMaterialV function call, wrong pname.\n");
-			return;
+	default:
+		fprintf(stderr, "Error in vw_GetMaterialV function call, wrong pname.\n");
+		return;
 	}
 
 	glGetMaterialfv(GL_FRONT_AND_BACK, tmpPNAME, param);

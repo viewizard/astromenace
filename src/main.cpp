@@ -53,7 +53,7 @@ bool NeedReCreate = false;
 // выходим или нет
 bool CanQuit = true;
 // для выбора в списке режимов разрешения
-sVideoModes *VideoModes = 0;
+sVideoModes *VideoModes = nullptr;
 int VideoModesNum = 0;
 // текущие параметры десктопа
 sVideoModes CurrentVideoMode;
@@ -87,7 +87,7 @@ char ScreenshotDir[MAX_PATH];
 // состояние кнопок мышки
 bool SDL_MouseCurrentStatus[8];
 // джойстик
-SDL_Joystick *Joystick = NULL;
+SDL_Joystick *Joystick = nullptr;
 // базовые параметры, или параметры блокировки управления (нет сигнала, нули)
 int JoystickAxisX = 0;
 int JoystickAxisY = 0;
@@ -99,18 +99,18 @@ bool JoysticButtons[100];
 // камера
 //------------------------------------------------------------------------------------
 // ближайшая точка, основная точка отсчета локальной системы координат игры
-VECTOR3D	GamePoint(0.0f, 0.0f, 0.0f);
+VECTOR3D GamePoint(0.0f, 0.0f, 0.0f);
 // направление движения камеры
-VECTOR3D	GameCameraMovement(0.0f, 0.0f, 1.0f);
+VECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
 
 
 //------------------------------------------------------------------------------------
 // графическая часть
 //------------------------------------------------------------------------------------
 // прорисовка динамической части курсора
-eParticleSystem2D *CursorParticleSystem2D = 0;
+eParticleSystem2D *CursorParticleSystem2D = nullptr;
 // статические частицы - звезды на скайбоксе
-CSpaceStars *psSpaceStatic = 0;
+CSpaceStars *psSpaceStatic = nullptr;
 
 
 
@@ -121,8 +121,8 @@ CSpaceStars *psSpaceStatic = 0;
 
 #include <fontconfig/fontconfig.h>
 
-int FontQuantity=0;
-sFontList *FontList=0;
+int FontQuantity = 0;
+sFontList *FontList = 0;
 
 
 int InitFontConfig()
@@ -134,8 +134,7 @@ int InitFontConfig()
 	FcConfig *config;
 	FcLangSet *langset;
 
-	if (!FcInit())
-	{
+	if (!FcInit()) {
 		fprintf(stderr, "Couldn't init FontConfig.\n");
 		return -1;
 	}
@@ -150,61 +149,56 @@ int InitFontConfig()
 	int AppropriateFontsCount = 0;
 
 	// первый проход, считаем кол-во подходящих шрифтов
-	for (int i=0; fs && i < fs->nfont; i++)
-	{
+	for (int i = 0; fs && (i < fs->nfont); i++) {
 		FcPattern *font = fs->fonts[i];
 
 
 		// 1) Работаем только с TrueType, CFF и Type 1
-		if (FcPatternGetString(font, FC_FONTFORMAT, 0, &data) == FcResultMatch)
-		{
+		if (FcPatternGetString(font, FC_FONTFORMAT, 0, &data) == FcResultMatch) {
 			if (strcmp((const char *)data, "TrueType") &&
-				strcmp((const char *)data, "CFF") &&
-				strcmp((const char *)data, "Type 1"))
-			{
+			    strcmp((const char *)data, "CFF") &&
+			    strcmp((const char *)data, "Type 1")) {
 				continue;
 			}
-		}
-		else continue;
+		} else
+			continue;
 
 		// 2) берем только болд
-		if (FcPatternGetString(font, FC_STYLE, 0, &data) == FcResultMatch)
-		{
-			if (strcmp((const char *)data, "Bold")) continue;
-		}
-		else continue;
+		if (FcPatternGetString(font, FC_STYLE, 0, &data) == FcResultMatch) {
+			if (strcmp((const char *)data, "Bold"))
+				continue;
+		} else
+			continue;
 
 		// 3) нужна поддержка всех языков меню en|de|ru
-		if (FcPatternGetLangSet(font, FC_LANG, 0, &langset) == FcResultMatch)
-		{
+		if (FcPatternGetLangSet(font, FC_LANG, 0, &langset) == FcResultMatch) {
 			int FontLangCount = 0;
-			for (int i = 0; i < vw_GetLanguageListCount(); i++)
-			{
+			for (int i = 0; i < vw_GetLanguageListCount(); i++) {
 				const FcChar8 *lang = (const FcChar8*) vw_GetLanguageList()[i].code;
 
-				if (lang)
-				{
-
+				if (lang) {
 					FcLangResult langRes = FcLangSetHasLang(langset, lang);
-
-					if (langRes != FcLangDifferentLang) FontLangCount++;
+					if (langRes != FcLangDifferentLang)
+						FontLangCount++;
 				}
 			}
 
-			if (FontLangCount < vw_GetLanguageListCount()) continue;
-		}
-		else continue;
+			if (FontLangCount < vw_GetLanguageListCount())
+				continue;
+		} else
+			continue;
 
 
-		AppropriateFontsCount ++;
+		AppropriateFontsCount++;
 	}
 	printf("Appropriate fonts detected: %i\n\n", AppropriateFontsCount);
-	if (AppropriateFontsCount == 0)
-	{
+	if (AppropriateFontsCount == 0) {
 		fprintf(stderr, "Couldn't find any appropriate fonts installed in your system.\n");
 		fprintf(stderr, "Please, check your fonts or install TrueType, bold style font\n");
 		fprintf(stderr, "with ");
-		for (int i = 0; i < vw_GetLanguageListCount()-1; i++) fprintf(stderr, "%s, ", vw_GetLanguageList()[i].code);
+		for (int i = 0; i < vw_GetLanguageListCount()-1; i++) {
+			fprintf(stderr, "%s, ", vw_GetLanguageList()[i].code);
+		}
 		fprintf(stderr, "and %s languages support.\n", vw_GetLanguageList()[vw_GetLanguageListCount()-1].code);
 		return -1;
 	}
@@ -214,62 +208,54 @@ int InitFontConfig()
 	// второй проход, формируем таблицу
 	FontQuantity = 0;
 	FontList = new sFontList[AppropriateFontsCount];
-	for (int i=0; fs && i < fs->nfont; i++)
-	{
+	for (int i = 0; fs && (i < fs->nfont); i++) {
 		FcPattern *font = fs->fonts[i];
 
 
 		// 1) Работаем только с TrueType, CFF и Type 1
-		if (FcPatternGetString(font, FC_FONTFORMAT, 0, &data) == FcResultMatch)
-		{
+		if (FcPatternGetString(font, FC_FONTFORMAT, 0, &data) == FcResultMatch) {
 			if (strcmp((const char *)data, "TrueType") &&
-				strcmp((const char *)data, "CFF") &&
-				strcmp((const char *)data, "Type 1"))
-			{
+			    strcmp((const char *)data, "CFF") &&
+			    strcmp((const char *)data, "Type 1")) {
 				continue;
 			}
-		}
-		else continue;
+		} else
+			continue;
 
 		// 2) берем только болд
-		if (FcPatternGetString(font, FC_STYLE, 0, &data) == FcResultMatch)
-		{
-			if (strcmp((const char *)data, "Bold")) continue;
-		}
-		else continue;
+		if (FcPatternGetString(font, FC_STYLE, 0, &data) == FcResultMatch) {
+			if (strcmp((const char *)data, "Bold"))
+				continue;
+		} else
+			continue;
 
 		// 3) нужна поддержка всех языков меню en|de|ru
-		if (FcPatternGetLangSet(font, FC_LANG, 0, &langset) == FcResultMatch)
-		{
+		if (FcPatternGetLangSet(font, FC_LANG, 0, &langset) == FcResultMatch) {
 			int FontLangCount = 0;
-			for (int i = 0; i < vw_GetLanguageListCount(); i++)
-			{
+			for (int i = 0; i < vw_GetLanguageListCount(); i++) {
 				const FcChar8 *lang = (const FcChar8*) vw_GetLanguageList()[i].code;
 
-				if (lang)
-				{
-
+				if (lang) {
 					FcLangResult langRes = FcLangSetHasLang(langset, lang);
-
-					if (langRes != FcLangDifferentLang) FontLangCount++;
+					if (langRes != FcLangDifferentLang)
+						FontLangCount++;
 				}
 			}
 
-			if (FontLangCount < vw_GetLanguageListCount()) continue;
-		}
-		else continue;
+			if (FontLangCount < vw_GetLanguageListCount())
+				continue;
+		} else
+			continue;
 
 
 
 
-		if (FcPatternGetString(font, FC_FAMILY, 0, &data) == FcResultMatch)
-		{
+		if (FcPatternGetString(font, FC_FAMILY, 0, &data) == FcResultMatch) {
 			FontList[FontQuantity].FontTitle = new char[strlen((const char*)data)+1];
 			strcpy(FontList[FontQuantity].FontTitle, (const char *)data);
 			printf("Family: %s\n", FontList[FontQuantity].FontTitle);
 		}
-		if (FcPatternGetString(font, FC_FILE, 0, &data) == FcResultMatch)
-		{
+		if (FcPatternGetString(font, FC_FILE, 0, &data) == FcResultMatch) {
 			FontList[FontQuantity].FontFileName = new char[strlen((const char*)data)+1];
 			strcpy(FontList[FontQuantity].FontFileName, (const char *)data);
 			printf(" Font Filename: %s\n", FontList[FontQuantity].FontFileName);
@@ -282,53 +268,43 @@ int InitFontConfig()
 
 
 	// fontconfig выдает все шрифты подряд, нужна сортировка по названию
-	for (int j=0; j<FontQuantity-1; j++)
-	for (int i=0; i<FontQuantity-1; i++)
-	{
-		unsigned int CurrentSymbol = 0;
+	for (int j=0; j<FontQuantity-1; j++) {
+		for (int i=0; i<FontQuantity-1; i++) {
+			unsigned int CurrentSymbol = 0;
 
-		while ((CurrentSymbol < strlen(FontList[i].FontTitle)) &&
-				(CurrentSymbol < strlen(FontList[i+1].FontTitle)))
-		{
-			if (FontList[i].FontTitle[CurrentSymbol] > FontList[i+1].FontTitle[CurrentSymbol])
-			{
-				char *Tmp = FontList[i+1].FontTitle;
-				FontList[i+1].FontTitle = FontList[i].FontTitle;
-				FontList[i].FontTitle = Tmp;
+			while ((CurrentSymbol < strlen(FontList[i].FontTitle)) &&
+			       (CurrentSymbol < strlen(FontList[i+1].FontTitle))) {
+				if (FontList[i].FontTitle[CurrentSymbol] > FontList[i+1].FontTitle[CurrentSymbol]) {
+					char *Tmp = FontList[i+1].FontTitle;
+					FontList[i+1].FontTitle = FontList[i].FontTitle;
+					FontList[i].FontTitle = Tmp;
 
-				Tmp = FontList[i+1].FontFileName;
-				FontList[i+1].FontFileName = FontList[i].FontFileName;
-				FontList[i].FontFileName = Tmp;
+					Tmp = FontList[i+1].FontFileName;
+					FontList[i+1].FontFileName = FontList[i].FontFileName;
+					FontList[i].FontFileName = Tmp;
 
-				break;
-			}
-			else
-			{
-				if (FontList[i].FontTitle[CurrentSymbol] < FontList[i+1].FontTitle[CurrentSymbol])
-				{
 					break;
+				} else {
+					if (FontList[i].FontTitle[CurrentSymbol] < FontList[i+1].FontTitle[CurrentSymbol])
+						break;
 				}
-			}
 
-			CurrentSymbol++;
+				CurrentSymbol++;
+			}
 		}
 	}
 
 
-
 	// по названию, находим текущий номер шрифта в таблице
 	Setup.FontNumber = -1;
-	for (int i=0; i<FontQuantity; i++)
-	{
-		if (!strcmp(Setup.FontName, FontList[i].FontTitle))
-		{
+	for (int i=0; i<FontQuantity; i++) {
+		if (!strcmp(Setup.FontName, FontList[i].FontTitle)) {
 			Setup.FontNumber = i;
 			break;
 		}
 	}
 	// если его нет - ставим
-	if (Setup.FontNumber == -1)
-	{
+	if (Setup.FontNumber == -1) {
 		Setup.FontNumber = 0;
 		strcpy(Setup.FontName, FontList[Setup.FontNumber].FontTitle);
 	}
@@ -342,12 +318,12 @@ int InitFontConfig()
 
 void ReleaseFontConfig()
 {
-	for (int i=0; i<FontQuantity; i++)
-	{
+	for (int i=0; i<FontQuantity; i++) {
 		delete [] FontList[i].FontTitle;
 		delete [] FontList[i].FontFileName;
 	}
-	delete [] FontList; FontList = 0;
+	delete [] FontList;
+	FontList = 0;
 	FontQuantity = 0;
 }
 
@@ -369,11 +345,9 @@ int main( int argc, char **argv )
 	// флаг перевода игры в режим упаковки gamedata.vfs файла
 	bool NeedPack = false;
 
-	for (int i=1; i<argc; i++)
-	{
+	for (int i=1; i<argc; i++) {
 		// проверка ключа "--help"
-		if (!strcmp(argv[i], "--help"))
-		{
+		if (!strcmp(argv[i], "--help")) {
 			printf("AstroMenace launch options:\n\n");
 
 			printf("--dir=/game/data/folder/ - folder with gamedata.vfs file (Linux only)\n");
@@ -388,21 +362,15 @@ int main( int argc, char **argv )
 
 		// проверка ключа "--mouse"
 		if (!strcmp(argv[i], "--mouse"))
-		{
 			NeedShowSystemCursor = true;
-		}
 
 		// проверка ключа "--safe-mode"
 		if (!strcmp(argv[i], "--safe-mode"))
-		{
 			NeedSafeMode = true;
-		}
 
 		// проверка ключа "--pack"
 		if (!strcmp(argv[i], "--pack"))
-		{
 			NeedPack = true;
-		}
 	}
 
 
@@ -410,7 +378,7 @@ int main( int argc, char **argv )
 #ifdef WIN32
 	// иним пути для винды
 	ZeroMemory(ProgrammDir, sizeof(ProgrammDir));
-	GetModuleFileName(NULL, ProgrammDir, MAX_PATH);
+	GetModuleFileName(nullptr, ProgrammDir, MAX_PATH);
 	char* s = strrchr(ProgrammDir,'\\');
 	if (s) s[0]=0x0;
 	const char *Fi = "\\";
@@ -424,21 +392,18 @@ int main( int argc, char **argv )
 	bool InitWithoutDLL = true;
 	bool InitScrWithoutDLL = true;
 	HMODULE hShellDLL = LoadLibrary("shell32.dll");
-	if (hShellDLL)
-	{
+	if (hShellDLL) {
 		pSHGetSpecialFolderPath = (SHGETSPECIALFOLDERPATH) GetProcAddress(hShellDLL, "SHGetSpecialFolderPathA");
 		char UserPath[MAX_PATH];
 		ZeroMemory(UserPath, sizeof(UserPath));
 
-		if (pSHGetSpecialFolderPath != NULL)
-		{
-			if(SUCCEEDED(pSHGetSpecialFolderPath(NULL,
-									UserPath,
-									SD_APPDATA, //CSIDL_APPDATA
-									true)))
-			{
+		if (pSHGetSpecialFolderPath != nullptr) {
+			if(SUCCEEDED(pSHGetSpecialFolderPath(nullptr,
+							     UserPath,
+							     SD_APPDATA, //CSIDL_APPDATA
+							     true))) {
 				strcat(UserPath, "\\AstroMenace\\");
-				CreateDirectory(UserPath, NULL);
+				CreateDirectory(UserPath, nullptr);
 
 				strcpy(ConfigFileName, UserPath);
 				strcat(ConfigFileName, "amconfig.xml");
@@ -447,11 +412,10 @@ int main( int argc, char **argv )
 				InitWithoutDLL = false;
 			}
 
-			if(SUCCEEDED(pSHGetSpecialFolderPath(NULL,
-									ScreenshotDir,
-									SD_DESKTOPDIRECTORY, // SD_DESKTOPDIRECTORY
-									true)))
-			{
+			if(SUCCEEDED(pSHGetSpecialFolderPath(nullptr,
+							     ScreenshotDir,
+							     SD_DESKTOPDIRECTORY, // SD_DESKTOPDIRECTORY
+							     true))) {
 
 				strcat(ScreenshotDir, "\\AstroMenaceScreenshot");
 
@@ -467,13 +431,11 @@ int main( int argc, char **argv )
 
 
 	// иним, если старая винда, или была ошибка
-	if (InitWithoutDLL)
-	{
+	if (InitWithoutDLL) {
 		strcpy(ConfigFileName, ProgrammDir);
 		strcat(ConfigFileName, "amconfig.xml");
 	}
-	if (InitScrWithoutDLL)
-	{
+	if (InitScrWithoutDLL) {
 		strcpy(ScreenshotDir, ProgrammDir);
 		strcat(ScreenshotDir, "AstroMenaceScreenshot");
 	}
@@ -485,25 +447,23 @@ int main( int argc, char **argv )
 	// если передали параметр-путь
 
 	const char* HomeEnv = getenv("HOME");
-	if (HomeEnv == 0)
-	{
+	if (HomeEnv == nullptr) {
 		fprintf(stderr, "$HOME is not set, will use getpwuid() and getuid() for home folder detection.\n");
 		struct passwd *pw = getpwuid(getuid());
-		if (pw != 0) HomeEnv = pw->pw_dir;
-		else fprintf(stderr, "Can't detect home folder. Note, this could occur segfault issue, if yours distro don't support XDG Base Directory Specification.\n");
+		if (pw != nullptr)
+			HomeEnv = pw->pw_dir;
+		else
+			fprintf(stderr, "Can't detect home folder. Note, this could occur segfault issue, if yours distro don't support XDG Base Directory Specification.\n");
 	}
 
 	bool dirpresent = false;
-	for (int i=1; i<argc; i++)
-	{
-		if (!strncmp(argv[i], "--dir=", sizeof("--dir")))
-		{
+	for (int i=1; i<argc; i++) {
+		if (!strncmp(argv[i], "--dir=", sizeof("--dir"))) {
 			dirpresent = true;
 			// если передали относительный путь в папку пользователя с тильдой
-			if ((argv[i][sizeof("--dir")] != '~') || (HomeEnv == 0))
+			if ((argv[i][sizeof("--dir")] != '~') || (HomeEnv == nullptr)) {
 				strcpy(ProgrammDir, argv[i]+strlen("--dir="));
-			else
-			{
+			} else {
 				strcpy(ProgrammDir, HomeEnv);
 				strcat(ProgrammDir, argv[i]+strlen("--dir=~"));
 			}
@@ -513,16 +473,15 @@ int main( int argc, char **argv )
 
 		}
 	}
-	if (!dirpresent)
-	{
+	if (!dirpresent) {
 #ifdef DATADIR
 		strcpy(ProgrammDir, DATADIR "/");
 #else
- 		strcpy(ProgrammDir, argv[0]);
- 		char* s = strrchr(ProgrammDir,'/');
- 		if (s) s[0]=0x0;
- 		const char *Fi = "/";
- 		strcat( ProgrammDir, Fi );
+		strcpy(ProgrammDir, argv[0]);
+		char* s = strrchr(ProgrammDir,'/');
+		if (s) s[0]=0x0;
+		const char *Fi = "/";
+		strcat( ProgrammDir, Fi );
 #endif // DATADIR
 	}
 
@@ -531,16 +490,12 @@ int main( int argc, char **argv )
 	strcat(VFSFileNamePath, "gamedata.vfs");
 
 
-	if (!NeedPack)
-	{
+	if (!NeedPack) {
 		// first at all we need check XDG_DESKTOP_DIR environment variable
 		const char* DesktopDirEnv = getenv("XDG_DESKTOP_DIR");
-		if (DesktopDirEnv != 0)
-		{
+		if (DesktopDirEnv != nullptr) {
 			strcpy(ScreenshotDir, DesktopDirEnv);
-		}
-		else
-		{
+		} else {
 			strcpy(ScreenshotDir, HomeEnv);
 			strcat(ScreenshotDir, "/Desktop/");
 		}
@@ -548,13 +503,10 @@ int main( int argc, char **argv )
 
 		// first at all we need check XDG_CONFIG_HOME environment variable
 		const char* ConfigHomeEnv = getenv("XDG_CONFIG_HOME");
-		if (ConfigHomeEnv != 0)
-		{
+		if (ConfigHomeEnv != nullptr) {
 			strcpy(ConfigFileName, ConfigHomeEnv);
 			strcat(ConfigFileName, "/astromenace");
-		}
-		else
-		{
+		} else {
 			// game config file will be stored in "~/.config/astromenace" folder
 			// if system have "~/.config" folder, otherwise in "~/.astromenace" folder
 			strcpy(ConfigFileName, HomeEnv);
@@ -605,8 +557,7 @@ int main( int argc, char **argv )
 	// генерируем файл данный gamedata.vfs учитывая текущее его расположение
 	// !!! всегда делаем только с одним открытым на запись VFS
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (NeedPack)
-	{
+	if (NeedPack) {
 		char RawDataDir[MAX_PATH];
 		// по умолчанию, считаем что рав данные прямо с нами лежат
 		strcpy(RawDataDir, ProgrammDir);
@@ -614,27 +565,21 @@ int main( int argc, char **argv )
 
 
 		// ищем, если передали ключем его расположение
-		for (int i=1; i<argc; i++)
-		{
-			if (!strncmp(argv[i], "--rawdata=", sizeof("--rawdata")))
-			{
+		for (int i=1; i<argc; i++) {
+			if (!strncmp(argv[i], "--rawdata=", sizeof("--rawdata"))) {
 #if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 				// если передали относительный путь в папку пользователя с тильдой
-				if ((argv[i][sizeof("--rawdata")] != '~') || (HomeEnv == 0))
+				if ((argv[i][sizeof("--rawdata")] != '~') || (HomeEnv == nullptr))
 					strcpy(RawDataDir, argv[i]+strlen("--rawdata="));
-				else
-				{
+				else {
 					strcpy(RawDataDir, HomeEnv);
 					strcat(RawDataDir, argv[i]+strlen("--rawdata=~"));
 				}
 #elif defined(WIN32)
 				// если есть двоеточия после второго символа - это полный путь с указанием девайса
-				if (argv[i][sizeof("--rawdata=")] == ':')
-				{
+				if (argv[i][sizeof("--rawdata=")] == ':') {
 					strcpy(RawDataDir, argv[i]+strlen("--rawdata="));
-				}
-				else
-				{
+				} else {
 					strcpy(RawDataDir, ProgrammDir);
 					strcat(RawDataDir, argv[i]+strlen("--rawdata="));
 				}
@@ -662,8 +607,7 @@ int main( int argc, char **argv )
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// подключаем VFS
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (vw_OpenVFS(VFSFileNamePath, GAME_BUILD) != 0)
-	{
+	if (vw_OpenVFS(VFSFileNamePath, GAME_BUILD) != 0) {
 		fprintf(stderr, "gamedata.vfs file not found or corrupted.\n");
 		return 0;
 	}
@@ -671,8 +615,7 @@ int main( int argc, char **argv )
 
 
 	// загружаем все текстовые данные до инициализации шрифтов, т.к. нам нужен перечень языков в процессе инициализации fontconfig
-	if (vw_InitText("lang/text.csv", ';', '\n') != 0)
-	{
+	if (vw_InitText("lang/text.csv", ';', '\n') != 0) {
 		fprintf(stderr, "lang/text.csv file not found or corrupted.\n");
 		return 0;
 	}
@@ -682,7 +625,10 @@ int main( int argc, char **argv )
 
 #ifdef fontconfig
 	// инициализация fontconfig
-	if (InitFontConfig() != 0) {vw_ReleaseText();return -1;}
+	if (InitFontConfig() != 0) {
+		vw_ReleaseText();
+		return -1;
+	}
 #endif // fontconfig
 	// дополнительная проверка, если использовали fontconfig, а потом вернулись на версию со встроенными шрифтами
 	if (Setup.FontNumber > FontQuantity) Setup.FontNumber = 0;
@@ -697,8 +643,7 @@ int main( int argc, char **argv )
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// установка звука, всегда до LoadGameData
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (!InitAudio())
-	{
+	if (!InitAudio()) {
 		Setup.Music_check = false;
 		Setup.Sound_check = false;
 		fprintf(stderr, "Unable to open audio!\n");
@@ -719,8 +664,7 @@ ReCreate:
 	// иним SDL
 	// это нужно сделать сразу, чтобы правильно поставить разрешение
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SDL_Init(SDL_INIT_VIDEO) == -1)
-	{
+	if (SDL_Init(SDL_INIT_VIDEO) == -1) {
 		fprintf(stderr, "Couldn't init SDL: %s\n", SDL_GetError());
 		return 1;
 	}
@@ -731,9 +675,7 @@ ReCreate:
 	// сбрасываем все, ничего не загружали
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	for (int i=0; i<1000; i++)
-	{
 		LoadedTypes[i] = false;
-	}
 
 
 
@@ -750,8 +692,10 @@ ReCreate:
 	// смотрим, если передали параметр SDL_VIDEO_FULLSCREEN_DISPLAY, берем параметры нужного дисплея
 	char * pScreen;
 	pScreen = getenv("SDL_VIDEO_FULLSCREEN_DISPLAY");
-	if (pScreen != NULL) iScreen = atoi(pScreen);
-	if (iScreen > SDL_GetNumVideoDisplays() - 1) iScreen = 0;
+	if (pScreen != nullptr)
+		iScreen = atoi(pScreen);
+	if (iScreen > SDL_GetNumVideoDisplays() - 1)
+		iScreen = 0;
 #endif // unix
 	int CurrentVideoModeX = SDL_WINDOWPOS_CENTERED_DISPLAY(iScreen);
 	int CurrentVideoModeY = SDL_WINDOWPOS_CENTERED_DISPLAY(iScreen);
@@ -763,8 +707,7 @@ ReCreate:
 	printf("Current Video Mode: %ix%i %ibit \n", CurrentVideoMode.W, CurrentVideoMode.H, CurrentVideoMode.BPP);
 
 	printf("Screen count: %i\n", SDL_GetNumVideoDisplays());
-	for (int i = 0; i < SDL_GetNumVideoDisplays(); i++)
-	{
+	for (int i = 0; i < SDL_GetNumVideoDisplays(); i++) {
 		SDL_DisplayMode testDisplayMode;
 		SDL_GetDesktopDisplayMode(i, &testDisplayMode);
 		printf("Screen #%i: %i x %i\n", i, testDisplayMode.w, testDisplayMode.h);
@@ -775,8 +718,7 @@ ReCreate:
 
 
 	// детектим и составляем перечень всех возможных разрешений самостоятельно
-	sVideoModes AllSupportedModes[] =
-	{
+	sVideoModes AllSupportedModes[] = {
 		{640, 480, -1},
 		{768, 480, -1},
 		{800, 480, -1},
@@ -843,100 +785,94 @@ ReCreate:
 		{7680, 4320, -1},
 		{7680, 4800, -1},
 	};
-	#define AllSupportedModesCount sizeof(AllSupportedModes)/sizeof(AllSupportedModes[0])
+#define AllSupportedModesCount sizeof(AllSupportedModes)/sizeof(AllSupportedModes[0])
 
 	// если списка еще нет - создаем его
-	if (VideoModes == 0)
-	{
+	if (VideoModes == nullptr) {
 		VideoModesNum = 0;
 
-		for(unsigned int i=0; i<AllSupportedModesCount; i++)
-		if ((AllSupportedModes[i].W <= CurrentVideoMode.W) && (AllSupportedModes[i].H <= CurrentVideoMode.H))
-		{
-			// если мы подходим по размерам экрана для оконного режима - просто добавляем его
-			VideoModesNum++;
+		for(unsigned int i = 0; i < AllSupportedModesCount; i++)
+			if ((AllSupportedModes[i].W <= CurrentVideoMode.W) &&
+			    (AllSupportedModes[i].H <= CurrentVideoMode.H)) {
+				// если мы подходим по размерам экрана для оконного режима - просто добавляем его
+				VideoModesNum++;
 
-			// пропускаем разрешение с одинаковыми параметрами и разной частотой
-			int SkipPrevH = -1;
-			int SkipPrevW = -1;
-			// добавляем к полноэкранным режимам, если входит в список
-			for (int j = 0; j < SDL_GetNumDisplayModes(iScreen); j++)
-			{
-				SDL_DisplayMode testDisplayMode;
-				SDL_GetDisplayMode(iScreen, j, &testDisplayMode);
-				if (SkipPrevH == -1)
-				{
-					SkipPrevH = testDisplayMode.h;
-					SkipPrevW = testDisplayMode.w;
-					if ((testDisplayMode.w == AllSupportedModes[i].W) && (testDisplayMode.h == AllSupportedModes[i].H)) VideoModesNum++;
-				}
-				else
-				{
-					if ((SkipPrevH != testDisplayMode.h) || (SkipPrevW != testDisplayMode.w))
-					{
-						if ((testDisplayMode.w == AllSupportedModes[i].W) && (testDisplayMode.h == AllSupportedModes[i].H)) VideoModesNum++;
+				// пропускаем разрешение с одинаковыми параметрами и разной частотой
+				int SkipPrevH = -1;
+				int SkipPrevW = -1;
+				// добавляем к полноэкранным режимам, если входит в список
+				for (int j = 0; j < SDL_GetNumDisplayModes(iScreen); j++) {
+					SDL_DisplayMode testDisplayMode;
+					SDL_GetDisplayMode(iScreen, j, &testDisplayMode);
+					if (SkipPrevH == -1) {
 						SkipPrevH = testDisplayMode.h;
 						SkipPrevW = testDisplayMode.w;
+						if ((testDisplayMode.w == AllSupportedModes[i].W) &&
+						    (testDisplayMode.h == AllSupportedModes[i].H))
+							VideoModesNum++;
+					} else {
+						if ((SkipPrevH != testDisplayMode.h) ||
+						    (SkipPrevW != testDisplayMode.w)) {
+							if ((testDisplayMode.w == AllSupportedModes[i].W) &&
+							    (testDisplayMode.h == AllSupportedModes[i].H))
+								VideoModesNum++;
+							SkipPrevH = testDisplayMode.h;
+							SkipPrevW = testDisplayMode.w;
+						}
 					}
 				}
 			}
-		}
 
 
 		VideoModes = new sVideoModes[VideoModesNum];
 
 		int k=0;
-		for(unsigned int i=0; i<AllSupportedModesCount; i++)
-		if ((AllSupportedModes[i].W <= CurrentVideoMode.W) && (AllSupportedModes[i].H <= CurrentVideoMode.H))
-		{
-			// если мы подходим по размерам экрана для оконного режима - просто добавляем его
-			VideoModes[k].W = AllSupportedModes[i].W;
-			VideoModes[k].H = AllSupportedModes[i].H;
-			VideoModes[k].BPP = 0;
-			k++;
+		for(unsigned int i = 0; i < AllSupportedModesCount; i++)
+			if ((AllSupportedModes[i].W <= CurrentVideoMode.W) &&
+			    (AllSupportedModes[i].H <= CurrentVideoMode.H)) {
+				// если мы подходим по размерам экрана для оконного режима - просто добавляем его
+				VideoModes[k].W = AllSupportedModes[i].W;
+				VideoModes[k].H = AllSupportedModes[i].H;
+				VideoModes[k].BPP = 0;
+				k++;
 
-			// пропускаем разрешение с одинаковыми параметрами и разной частотой
-			int SkipPrevH = -1;
-			int SkipPrevW = -1;
-			// добавляем к полноэкранным режимам, если входит в список
-			for (int j = 0; j < SDL_GetNumDisplayModes(iScreen); j++)
-			{
-				SDL_DisplayMode testDisplayMode;
-				SDL_GetDisplayMode(iScreen, j, &testDisplayMode);
-				if (SkipPrevH == -1)
-				{
-					SkipPrevH = testDisplayMode.h;
-					SkipPrevW = testDisplayMode.w;
-					if ((testDisplayMode.w == AllSupportedModes[i].W) && (testDisplayMode.h == AllSupportedModes[i].H))
-					{
-						VideoModes[k].W = AllSupportedModes[i].W;
-						VideoModes[k].H = AllSupportedModes[i].H;
-						VideoModes[k].BPP = CurrentVideoMode.BPP;
-						k++;
-					}
-				}
-				else
-				{
-					if ((SkipPrevH != testDisplayMode.h) || (SkipPrevW != testDisplayMode.w))
-					{
-						if ((testDisplayMode.w == AllSupportedModes[i].W) && (testDisplayMode.h == AllSupportedModes[i].H))
-						{
+				// пропускаем разрешение с одинаковыми параметрами и разной частотой
+				int SkipPrevH = -1;
+				int SkipPrevW = -1;
+				// добавляем к полноэкранным режимам, если входит в список
+				for (int j = 0; j < SDL_GetNumDisplayModes(iScreen); j++) {
+					SDL_DisplayMode testDisplayMode;
+					SDL_GetDisplayMode(iScreen, j, &testDisplayMode);
+					if (SkipPrevH == -1) {
+						SkipPrevH = testDisplayMode.h;
+						SkipPrevW = testDisplayMode.w;
+						if ((testDisplayMode.w == AllSupportedModes[i].W) &&
+						    (testDisplayMode.h == AllSupportedModes[i].H)) {
 							VideoModes[k].W = AllSupportedModes[i].W;
 							VideoModes[k].H = AllSupportedModes[i].H;
 							VideoModes[k].BPP = CurrentVideoMode.BPP;
 							k++;
 						}
-						SkipPrevH = testDisplayMode.h;
-						SkipPrevW = testDisplayMode.w;
+					} else {
+						if ((SkipPrevH != testDisplayMode.h) ||
+						    (SkipPrevW != testDisplayMode.w)) {
+							if ((testDisplayMode.w == AllSupportedModes[i].W) &&
+							    (testDisplayMode.h == AllSupportedModes[i].H)) {
+								VideoModes[k].W = AllSupportedModes[i].W;
+								VideoModes[k].H = AllSupportedModes[i].H;
+								VideoModes[k].BPP = CurrentVideoMode.BPP;
+								k++;
+							}
+							SkipPrevH = testDisplayMode.h;
+							SkipPrevW = testDisplayMode.w;
+						}
 					}
 				}
 			}
-		}
 		// выводим список поддерживаемых разрешений
 		printf("\n");
 		printf("Supported resolutions list:\n");
-		for(int i=0; i<VideoModesNum; i++)
-		{
+		for(int i = 0; i < VideoModesNum; i++) {
 			printf("%ix%i %ibit \n", VideoModes[i].W, VideoModes[i].H, VideoModes[i].BPP);
 		}
 		printf("\n");
@@ -950,32 +886,30 @@ ReCreate:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// устанавливаем и корректируем текущие настройки окна
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (FirstStart)
-	{
+	if (FirstStart) {
 		Setup.Width = CurrentVideoMode.W;
 		Setup.Height = CurrentVideoMode.H;
 		Setup.BPP = CurrentVideoMode.BPP;
 	}
 	// если загруженные параметры, больше чем максимальные, ставим максимальные (если Xinerama, например)
-	if ((VideoModes[VideoModesNum-1].W < Setup.Width) || (VideoModes[VideoModesNum-1].H < Setup.Height))
-	{
+	if ((VideoModes[VideoModesNum-1].W < Setup.Width) ||
+	    (VideoModes[VideoModesNum-1].H < Setup.Height)) {
 		Setup.Width = VideoModes[VideoModesNum-1].W;
 		Setup.Height = VideoModes[VideoModesNum-1].H;
 		Setup.BPP = CurrentVideoMode.BPP;
 	}
 	// делаем проверку по листу разрешений экрана, если входит - все ок, если нет - ставим оконный режим принудительно
 	bool NeedResetToWindowedMode = true;
-	for(int i=0; i<VideoModesNum; i++)
-	{
-		if ((VideoModes[i].W == Setup.Width) &
-			(VideoModes[i].H == Setup.Height) &
-			(VideoModes[i].BPP == Setup.BPP))
-		{
+	for(int i = 0; i < VideoModesNum; i++) {
+		if ((VideoModes[i].W == Setup.Width) &&
+		    (VideoModes[i].H == Setup.Height) &&
+		    (VideoModes[i].BPP == Setup.BPP)) {
 			NeedResetToWindowedMode = false;
 			break;
 		}
 	}
-	if (NeedResetToWindowedMode) Setup.BPP = 0;
+	if (NeedResetToWindowedMode)
+		Setup.BPP = 0;
 
 
 
@@ -997,29 +931,28 @@ ReCreate:
 	// проверяем и иним джойстик
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #ifdef joystick
-	if (SDL_InitSubSystem(SDL_INIT_JOYSTICK) == 0)
-	{
-		if (SDL_NumJoysticks()>0)
-		{
+	if (SDL_InitSubSystem(SDL_INIT_JOYSTICK) == 0) {
+		if (SDL_NumJoysticks()>0) {
 			printf("Found Joystick(s):\n");
-			for (int i=0; i<SDL_NumJoysticks(); i++)
+			for (int i=0; i<SDL_NumJoysticks(); i++) {
 				printf("Joystick Name %i: %s\n", i, SDL_JoystickNameForIndex(i));
+			}
 
 			Joystick = SDL_JoystickOpen(Setup.JoystickNum);
 
-			if(Joystick)
-			{
+			if(Joystick) {
 				printf("Opened Joystick %i\n", Setup.JoystickNum);
 				printf("Joystick Name: %s\n", SDL_JoystickNameForIndex(Setup.JoystickNum));
 				printf("Joystick Number of Axes: %d\n", SDL_JoystickNumAxes(Joystick));
 				printf("Joystick Number of Buttons: %d\n", SDL_JoystickNumButtons(Joystick));
 				printf("Joystick Number of Balls: %d\n\n", SDL_JoystickNumBalls(Joystick));
-			}
-			else
+			} else {
 				fprintf(stderr, "Couldn't open Joystick 0\n\n");
+			}
 		}
+	} else {
+		fprintf(stderr, "Can't init Joystick, SDL Error: %s\n", SDL_GetError());
 	}
-	else fprintf(stderr, "Can't init Joystick, SDL Error: %s\n", SDL_GetError());
 #endif
 
 
@@ -1033,13 +966,11 @@ ReCreate:
 	int InitStatus = vw_InitWindow("AstroMenace", Setup.Width, Setup.Height, &Setup.BPP, Fullscreen, CurrentVideoModeX, CurrentVideoModeY, Setup.VSync);
 
 	// ошибка окна (размеры)
-	if (InitStatus == 1)
-	{
+	if (InitStatus == 1) {
 		// не можем создать окно или включить полноэкранный режим - ставим минимальный оконный режим
-		if (640 != Setup.Width ||
-			480 != Setup.Height ||
-			0 != Setup.BPP)
-		{
+		if ((640 != Setup.Width) ||
+		    (480 != Setup.Height) ||
+		    (0 != Setup.BPP)) {
 			Setup.Width = 640;
 			Setup.Height = 480;
 			Setup.BPP = 0;
@@ -1057,12 +988,13 @@ ReCreate:
 
 		fprintf(stderr, "Wrong resolution. Fatal error.\n");
 #ifdef WIN32
-		MessageBox(NULL,"Wrong resolution. Please, install the newest video drivers from your video card vendor.", "Render system - Fatal Error",MB_OK|MB_APPLMODAL|MB_ICONERROR);
+		MessageBox(nullptr,"Wrong resolution. Please, install the newest video drivers from your video card vendor.", "Render system - Fatal Error", MB_OK|MB_APPLMODAL|MB_ICONERROR);
 #endif // WIN32
 		SDL_Quit();
 		return 0;									// Quit If Window Was Not Created
 	}
-	if (!Fullscreen) Setup.BPP = 0;
+	if (!Fullscreen)
+		Setup.BPP = 0;
 
 
 
@@ -1074,43 +1006,35 @@ ReCreate:
 
 	// если нужно, устанавливаем перерытие значений внутри движка, може только выключить - включить то чего нет нельзя
 	if (Setup.VBOCoreMode == 0)
-	{
 		vw_GetDevCaps()->VBOSupported = false;
-	}
 
 	// работаем только если есть VBO
-	if ((Setup.VAOCoreMode == 0) || (Setup.VBOCoreMode == 0) || (!vw_GetDevCaps()->VBOSupported))
-	{
+	if ((Setup.VAOCoreMode == 0) ||
+	    (Setup.VBOCoreMode == 0) ||
+	    (!vw_GetDevCaps()->VBOSupported))
 		vw_GetDevCaps()->VAOSupported = false;
-	}
 
 	if (Setup.FBOCoreMode == 0)
-	{
 		vw_GetDevCaps()->FramebufferObject = false;
-	}
 
 	// проверка поддержки шейдеров (нужна 100% поддержка GLSL 1.0)
-	if (Setup.UseGLSL)
-		if (!vw_GetDevCaps()->GLSL100Supported || vw_GetDevCaps()->ShaderModel < 3.0f) Setup.UseGLSL = false;
+	if (Setup.UseGLSL &&
+	    (!vw_GetDevCaps()->GLSL100Supported || vw_GetDevCaps()->ShaderModel < 3.0f))
+		Setup.UseGLSL = false;
 
 	// управление генерации мипмеп уровней- можем только выключить, нельзя включить если его нет
 	if (!Setup.HardwareMipMapGeneration)
-	{
 		vw_GetDevCaps()->HardwareMipMapGeneration = false;
-	}
 
 	// анализ системы только если это первый запуск
-	if (FirstStart)
-	{
+	if (FirstStart) {
 		// если шейдерная модель 3-я или выше
-		if (vw_GetDevCaps()->ShaderModel >= 3.0f)
-		{
+		if (vw_GetDevCaps()->ShaderModel >= 3.0f) {
 			// памяти достаточно, включаем другой режим загрузки
 			Setup.EqualOrMore128MBVideoRAM = true;
 		}
 		// если шейдерная модель 4-я или выше
-		if (vw_GetDevCaps()->ShaderModel >= 4.0f)
-		{
+		if (vw_GetDevCaps()->ShaderModel >= 4.0f) {
 			// 100% держит наши шейдеры
 			Setup.UseGLSL = true;
 			Setup.ShadowMap = 2;
@@ -1123,8 +1047,7 @@ ReCreate:
 			Setup.MaxPointLights = 4;
 		}
 		// если шейдерная модель 4.2-я или выше
-		if (vw_GetDevCaps()->ShaderModel >= 4.2f)
-		{
+		if (vw_GetDevCaps()->ShaderModel >= 4.2f) {
 			// немного больше ставим другие опции
 			Setup.ShadowMap = 5;
 			Setup.MSAA = 4;
@@ -1133,7 +1056,8 @@ ReCreate:
 		}
 
 		// если поддерживаем сторедж - выключаем поддержку сжатия, 100% у нас достаточно видео памяти
-		if (vw_GetDevCaps()->TextureStorage) Setup.TexturesCompressionType = 0;
+		if (vw_GetDevCaps()->TextureStorage)
+			Setup.TexturesCompressionType = 0;
 
 #if defined(__APPLE__) && defined(__MACH__)
 		// для маков по умолчанию выключаем сглаживание, тени и шейдеры, т.к. там может все софтово эмулироваться и жутко тормозить
@@ -1144,15 +1068,12 @@ ReCreate:
 #endif
 
 		// устанавливаем соотношение сторон по установленному разрешению экрана
-		if ((Setup.Width*1.0f)/(Setup.Height*1.0f) < 1.4f)
-		{
+		if ((Setup.Width*1.0f)/(Setup.Height*1.0f) < 1.4f) {
 			Setup.fAspectRatioWidth = 1024.0f;
 			Setup.fAspectRatioHeight = 768.0f;
 			Setup.iAspectRatioWidth = 1024;
 			Setup.iAspectRatioHeight = 768;
-		}
-		else
-		{
+		} else {
 			Setup.fAspectRatioWidth = 1228.0f;
 			Setup.fAspectRatioHeight = 768.0f;
 			Setup.iAspectRatioWidth = 1228;
@@ -1161,29 +1082,32 @@ ReCreate:
 	}
 
 	// если не поддерживает железо фбо или шейдеры, выключаем шадовмеп
-	if (!vw_GetDevCaps()->FramebufferObject || !vw_GetDevCaps()->GLSL100Supported || (vw_GetDevCaps()->ShaderModel < 3.0f)) Setup.ShadowMap = 0;
+	if (!vw_GetDevCaps()->FramebufferObject ||
+	    !vw_GetDevCaps()->GLSL100Supported ||
+	    (vw_GetDevCaps()->ShaderModel < 3.0f))
+		Setup.ShadowMap = 0;
 
 	if (Setup.MSAA > vw_GetDevCaps()->MaxSamples) Setup.MSAA = Setup.CSAA = vw_GetDevCaps()->MaxSamples;
 	// на всякий случай проверяем, входит ли текущее сглаживание в список доступных
 	int CurrentAAMode = -1;
-	if (Setup.MSAA != 0)
-	{
-		for (int i=0;i<vw_GetDevCaps()->MaxMultisampleCoverageModes; i++)
-		{
-			if ((vw_GetDevCaps()->MultisampleCoverageModes[i].ColorSamples == Setup.MSAA) &
-				(vw_GetDevCaps()->MultisampleCoverageModes[i].CoverageSamples == Setup.CSAA))
-				{
-					CurrentAAMode = i;
-					break;
-				}
+	if (Setup.MSAA != 0) {
+		for (int i = 0; i < vw_GetDevCaps()->MaxMultisampleCoverageModes; i++) {
+			if ((vw_GetDevCaps()->MultisampleCoverageModes[i].ColorSamples == Setup.MSAA) &&
+			    (vw_GetDevCaps()->MultisampleCoverageModes[i].CoverageSamples == Setup.CSAA)) {
+				CurrentAAMode = i;
+				break;
+			}
 		}
 	}
 	// если ничего не нашли, сбрасываем в нули
-	if (CurrentAAMode == -1) Setup.MSAA = Setup.CSAA = 0;
+	if (CurrentAAMode == -1)
+		Setup.MSAA = Setup.CSAA = 0;
 
 	// проверка режима сжатия текстур
-	if (!vw_GetDevCaps()->TexturesCompression && (Setup.TexturesCompressionType > 0)) Setup.TexturesCompressionType = 0;
-	if (!vw_GetDevCaps()->TexturesCompressionBPTC && (Setup.TexturesCompressionType > 1)) Setup.TexturesCompressionType = 1;
+	if (!vw_GetDevCaps()->TexturesCompression && (Setup.TexturesCompressionType > 0))
+		Setup.TexturesCompressionType = 0;
+	if (!vw_GetDevCaps()->TexturesCompressionBPTC && (Setup.TexturesCompressionType > 1))
+		Setup.TexturesCompressionType = 1;
 
 
 
@@ -1201,19 +1125,19 @@ ReCreate:
 
 
 	// если не поддерживаем как минимум 2 текстуры, железо очень слабое - не запустимся
-	if (vw_GetDevCaps()->MaxMultTextures < 2)
-	{
+	if (vw_GetDevCaps()->MaxMultTextures < 2) {
 		SDL_Quit();
-        fprintf(stderr, "The Multi Textures feature unsupported by hardware. Fatal error.\n");
+		fprintf(stderr, "The Multi Textures feature unsupported by hardware. Fatal error.\n");
 #ifdef WIN32
-		MessageBox(NULL,"OpenGL 1.3 required. Please, install the newest video drivers from your video card vendor.", "Render system - Fatal Error",MB_OK|MB_APPLMODAL|MB_ICONERROR);
+		MessageBox(nullptr,"OpenGL 1.3 required. Please, install the newest video drivers from your video card vendor.", "Render system - Fatal Error", MB_OK|MB_APPLMODAL|MB_ICONERROR);
 #endif // WIN32
 		return 0;
 	}
 
 	// сохраняем данные во время первого старта сразу после инициализации "железа"
 	// в случае некорректного завершения игры, файл настроек будет содержать актуальные параметры
-	if (FirstStart) SaveXMLSetupFile();
+	if (FirstStart)
+		SaveXMLSetupFile();
 
 
 
@@ -1259,13 +1183,15 @@ ReCreate:
 	vw_SetMousePos(mouse_x, mouse_y);
 
 	// первоначальный сброс кнопок мышки
-	for (int i=0; i<8; i++)
+	for (int i = 0; i < 8; i++) {
 		SDL_MouseCurrentStatus[i] = false;
+	}
 
 
 
 	// если первый запуск игры - предлогаем выбор языка
-	if (FirstStart) SetCurrentDialogBox(16);
+	if (FirstStart)
+		SetCurrentDialogBox(16);
 
 
 
@@ -1283,107 +1209,100 @@ loop:
 	float JoystickCurentTime = vw_GetTime();
 	float JoystickTimeDelta = 0.0f;
 #ifdef joystick
-	if (Joystick != NULL)
-	{
+	if (Joystick != nullptr) {
 		JoystickAxisX = SDL_JoystickGetAxis(Joystick, 0);
 		JoystickAxisY = SDL_JoystickGetAxis(Joystick, 1);
 
-		for (int i=0; i<100; i++) JoysticButtons[i] = false;
+		for (int i=0; i<100; i++) {
+			JoysticButtons[i] = false;
+		}
 	}
 #endif
 
-	while(!Quit)
-	{
+	while(!Quit) {
 		SDL_Event event;
-		while (SDL_PollEvent(&event) )
-		{
-			switch (event.type)
-			{
-				// если нажали закрыть окно
-				case SDL_QUIT:
-					Quit = true;
-					goto GotoQuit;
+		while (SDL_PollEvent(&event)) {
+			switch (event.type) {
+			// если нажали закрыть окно
+			case SDL_QUIT:
+				Quit = true;
+				goto GotoQuit;
 
-				// работаем с движением мышки
-				case SDL_MOUSEMOTION:
-                    vw_SetMousePos(event.motion.x, event.motion.y);
-					// если есть перемещение мышкой - сразу убираем управление клавиатурой
-					CurrentKeyboardSelectMenuElement = 0;
-					break;
+			// работаем с движением мышки
+			case SDL_MOUSEMOTION:
+				vw_SetMousePos(event.motion.x, event.motion.y);
+				// если есть перемещение мышкой - сразу убираем управление клавиатурой
+				CurrentKeyboardSelectMenuElement = 0;
+				break;
 
-				case SDL_MOUSEWHEEL:
-					vw_ChangeWheelStatus(-1*event.wheel.y);
-					break;
-				// обрабатываем кнопки мыши
-				case SDL_MOUSEBUTTONDOWN:
-					if (event.button.button == SDL_BUTTON_LEFT)
-					{
-						vw_SetWindowLBMouse(true);
-						vw_SetWindowLBDoubleMouse(true);
-					}
-					if (event.button.button ==  SDL_BUTTON_RIGHT)
-						vw_SetWindowRBMouse(true);
-					if (event.button.button<8) // на всякий случай небольшая проверка
-						SDL_MouseCurrentStatus[event.button.button] = true;
-					break;
-				case SDL_JOYBUTTONDOWN:
+			case SDL_MOUSEWHEEL:
+				vw_ChangeWheelStatus(-1*event.wheel.y);
+				break;
+			// обрабатываем кнопки мыши
+			case SDL_MOUSEBUTTONDOWN:
+				if (event.button.button == SDL_BUTTON_LEFT) {
 					vw_SetWindowLBMouse(true);
 					vw_SetWindowLBDoubleMouse(true);
-					JoysticButtons[event.jbutton.button] = true;
-					break;
+				}
+				if (event.button.button ==  SDL_BUTTON_RIGHT)
+					vw_SetWindowRBMouse(true);
+				if (event.button.button < 8) // на всякий случай небольшая проверка
+					SDL_MouseCurrentStatus[event.button.button] = true;
+				break;
+			case SDL_JOYBUTTONDOWN:
+				vw_SetWindowLBMouse(true);
+				vw_SetWindowLBDoubleMouse(true);
+				JoysticButtons[event.jbutton.button] = true;
+				break;
 
-				case SDL_MOUSEBUTTONUP:
-					if (event.button.button ==  SDL_BUTTON_LEFT)
-						vw_SetWindowLBMouse(false);
-					if (event.button.button ==  SDL_BUTTON_RIGHT)
-						vw_SetWindowRBMouse(false);
-					if (event.button.button<8) // на всякий случай небольшая проверка
-						SDL_MouseCurrentStatus[event.button.button] = false;
-					break;
-				case SDL_JOYBUTTONUP:
+			case SDL_MOUSEBUTTONUP:
+				if (event.button.button ==  SDL_BUTTON_LEFT)
 					vw_SetWindowLBMouse(false);
-					JoysticButtons[event.jbutton.button] = false;
+				if (event.button.button ==  SDL_BUTTON_RIGHT)
+					vw_SetWindowRBMouse(false);
+				if (event.button.button < 8) // на всякий случай небольшая проверка
+					SDL_MouseCurrentStatus[event.button.button] = false;
+				break;
+			case SDL_JOYBUTTONUP:
+				vw_SetWindowLBMouse(false);
+				JoysticButtons[event.jbutton.button] = false;
+				break;
+			case SDL_WINDOWEVENT:
+				switch (event.window.event) {
+				case SDL_WINDOWEVENT_FOCUS_LOST:
+				case SDL_WINDOWEVENT_MINIMIZED:
+					NeedLoop = false;
 					break;
-				case SDL_WINDOWEVENT:
-					switch (event.window.event)
-					{
-						case SDL_WINDOWEVENT_FOCUS_LOST:
-						case SDL_WINDOWEVENT_MINIMIZED:
-							NeedLoop = false;
-							break;
-						case SDL_WINDOWEVENT_FOCUS_GAINED:
-						case SDL_WINDOWEVENT_RESTORED:
-							NeedLoop = true;
-							break;
-					}
+				case SDL_WINDOWEVENT_FOCUS_GAINED:
+				case SDL_WINDOWEVENT_RESTORED:
+					NeedLoop = true;
 					break;
-				case SDL_TEXTINPUT:
-					// устанавливаем текущий юникод нажатой клавиши
-					vw_SetCurrentUnicodeChar(event.text.text);
+				}
+				break;
+			case SDL_TEXTINPUT:
+				// устанавливаем текущий юникод нажатой клавиши
+				vw_SetCurrentUnicodeChar(event.text.text);
 #ifdef gamedebug
-					printf("TextInput, Unicode: %s \n", event.text.text);
+				printf("TextInput, Unicode: %s \n", event.text.text);
 #endif // gamedebug
-					break;
-				default:
-					break;
+				break;
+			default:
+				break;
 			}
 		}
 
 		// если есть джойстик, считаем для него время
-		if (Joystick != NULL)
-		{
+		if (Joystick != nullptr) {
 			JoystickTimeDelta = vw_GetTime() - JoystickCurentTime;
 			JoystickCurentTime = vw_GetTime();
 		}
 
 		// если окно видемое - рисуем
-		if (NeedLoop)
-		{
+		if (NeedLoop) {
 
 #ifdef joystick
 			// управление джойстиком
-			if (Joystick != NULL)
-			{
+			if (Joystick != nullptr) {
 				int X = SDL_JoystickGetAxis(Joystick, 0);
 				int Y = SDL_JoystickGetAxis(Joystick, 1);
 
@@ -1391,8 +1310,7 @@ loop:
 				if (abs(X) < Setup.JoystickDeadZone*3000) X = 0;
 				if (abs(Y) < Setup.JoystickDeadZone*3000) Y = 0;
 
-				if (JoystickAxisX != X || JoystickAxisY != Y)
-				{
+				if ((JoystickAxisX != X) || (JoystickAxisY != Y)) {
 					JoystickAxisX = 0;
 					JoystickAxisY = 0;
 
@@ -1409,17 +1327,14 @@ loop:
 			// переход на основную программу
 			Loop_Proc();
 
-		}
-		else
-		{
+		} else {
 			// всегда выключаем счет времени и считаем новый лаг
 			vw_StopTime();
 			// выключаем музыку
 			if (vw_GetMusicIsPlaying()) vw_ReleaseAllMusic();
 
 			// если в игре, ставим паузу, т.е. открываем меню мгновенно
-			if (GameStatus == GAME && GameContentTransp < 1.0f)
-			{
+			if (GameStatus == GAME && (GameContentTransp < 1.0f)) {
 				NeedShowGameMenu = true;
 				NeedHideGameMenu = false;
 				GameContentTransp = 1.0f;
@@ -1428,14 +1343,13 @@ loop:
 			}
 
 			// ждем пока не поступит команда
-			SDL_WaitEvent(NULL);
+			SDL_WaitEvent(nullptr);
 		}
 	}
 GotoQuit:
 
 	// если не выходим...
-	if (!NeedReCreate && !CanQuit && Quit)
-	{
+	if (!NeedReCreate && !CanQuit && Quit) {
 		SetCurrentDialogBox(0);
 		goto loop;
 	}
@@ -1446,15 +1360,24 @@ GotoQuit:
 		SDL_ShowCursor(SDL_ENABLE);
 
 	// завершение, и освобождение памяти...
-	if (Script != 0){delete Script; Script = 0;}
+	if (Script != nullptr) {
+		delete Script;
+		Script = nullptr;
+	}
 
 	RealExitGame();// удаляем объекты, они могут быть...
 	MissionsListRelease();
-	if (CursorParticleSystem2D != 0){delete CursorParticleSystem2D; CursorParticleSystem2D = 0;}
+	if (CursorParticleSystem2D != nullptr) {
+		delete CursorParticleSystem2D;
+		CursorParticleSystem2D = nullptr;
+	}
 	DestroyInfoObject();
 	WorkshopDestroyData();
 
-	if (psSpaceStatic!=0){delete psSpaceStatic; psSpaceStatic = 0;}
+	if (psSpaceStatic != nullptr) {
+		delete psSpaceStatic;
+		psSpaceStatic = nullptr;
+	}
 
 	ReleaseAllObject3D();
 	vw_ReleaseAllModel3D();
@@ -1462,17 +1385,17 @@ GotoQuit:
 	vw_ReleaseAllLights();
 	ReleaseAllGameLvlText();
 
-	vw_ReleaseAllFontChars(); // (!) всегда перед vw_ReleaseAllTextures
+	vw_ReleaseAllFontChars(); /* call before vw_ReleaseAllTextures() */
 	vw_ReleaseAllTextures();
 	ShadowMap_Release();
 	vw_ShutdownRenderer();
 
 #ifdef joystick
 	// закрываем джойстик, если он был
-	if(SDL_NumJoysticks()>0)
-		if (Joystick != NULL)
-			if (SDL_JoystickGetAttached(Joystick))
-				SDL_JoystickClose(Joystick);
+	if ((SDL_NumJoysticks() > 0) &&
+	    (Joystick != nullptr) &&
+	    (SDL_JoystickGetAttached(Joystick)))
+		SDL_JoystickClose(Joystick);
 #endif //joystick
 
 	// полностью выходим из SDL
@@ -1481,8 +1404,7 @@ GotoQuit:
 	SaveXMLSetupFile();
 
 	// если нужно перезагрузить игру с новыми параметрами
-	if (NeedReCreate)
-	{
+	if (NeedReCreate) {
 		FirstStart = false;
 
 		// убираем все голосовые файлы и звуки (для изменения языка голоса)
@@ -1490,11 +1412,14 @@ GotoQuit:
 		vw_ReleaseAllBuffers();
 
 		// пересоздаем окно
-	    goto ReCreate;
+		goto ReCreate;
 	}
 
 
-	if (VideoModes != 0) {delete [] VideoModes; VideoModes = 0;}
+	if (VideoModes != nullptr) {
+		delete [] VideoModes;
+		VideoModes = nullptr;
+	}
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -31,102 +31,190 @@
 // название кнопок
 const char * vw_VirtualCodeNameRU(int Num)
 {
-	switch (Num)
-	{
-		case SDLK_1: return "1";
-		case SDLK_2: return "2";
-		case SDLK_3: return "3";
-		case SDLK_4: return "4";
-		case SDLK_5: return "5";
-		case SDLK_6: return "6";
-		case SDLK_7: return "7";
-		case SDLK_8: return "8";
-		case SDLK_9: return "9";
-		case SDLK_0: return "0";
-		case SDLK_MINUS: return "Minus";
-		case SDLK_EQUALS: return "Equals";
-		case SDLK_BACKSPACE: return "BackSpace";
-		case SDLK_TAB: return "Tab";
-		case SDLK_q: return "Й";
-		case SDLK_w: return "Ц";
-		case SDLK_e: return "У";
-		case SDLK_r: return "К";
-		case SDLK_t: return "Е";
-		case SDLK_y: return "Н";
-		case SDLK_u: return "Г";
-		case SDLK_i: return "Ш";
-		case SDLK_o: return "Щ";
-		case SDLK_p: return "З";
-		case SDLK_LEFTBRACKET: return "Х";
-		case SDLK_RIGHTBRACKET: return "Ъ";
-		case SDLK_RETURN: return "Enter";
-		case SDLK_LCTRL: return "LeftCtrl";
-		case SDLK_a: return "Ф";
-		case SDLK_s: return "Ы";
-		case SDLK_d: return "В";
-		case SDLK_f: return "А";
-		case SDLK_g: return "П";
-		case SDLK_h: return "Р";
-		case SDLK_j: return "О";
-		case SDLK_k: return "Л";
-		case SDLK_l: return "Д";
-		case SDLK_SEMICOLON: return "Ж";
-		case SDLK_QUOTE: return "Э";
-		case SDLK_QUOTEDBL: return "Quotedbl";
-		case SDLK_BACKQUOTE: return "Ё";
-		case SDLK_LSHIFT: return "LeftShift";
-		case SDLK_BACKSLASH: return "BackSlash";
-		case SDLK_z: return "Я";
-		case SDLK_x: return "Ч";
-		case SDLK_c: return "С";
-		case SDLK_v: return "М";
-		case SDLK_b: return "И";
-		case SDLK_n: return "Т";
-		case SDLK_m: return "Ь";
-		case SDLK_COMMA: return "Б";
-		case SDLK_PERIOD: return "Ю";
-		case SDLK_SLASH: return "Slash";
-		case SDLK_RSHIFT: return "RightShift";
-		case SDLK_ASTERISK: return "Asterisk";
-		case SDLK_LALT: return "LeftAlt";
-		case SDLK_SPACE: return "Space";
+	switch (Num) {
+	case SDLK_1:
+		return "1";
+	case SDLK_2:
+		return "2";
+	case SDLK_3:
+		return "3";
+	case SDLK_4:
+		return "4";
+	case SDLK_5:
+		return "5";
+	case SDLK_6:
+		return "6";
+	case SDLK_7:
+		return "7";
+	case SDLK_8:
+		return "8";
+	case SDLK_9:
+		return "9";
+	case SDLK_0:
+		return "0";
+	case SDLK_MINUS:
+		return "Minus";
+	case SDLK_EQUALS:
+		return "Equals";
+	case SDLK_BACKSPACE:
+		return "BackSpace";
+	case SDLK_TAB:
+		return "Tab";
+	case SDLK_q:
+		return "Й";
+	case SDLK_w:
+		return "Ц";
+	case SDLK_e:
+		return "У";
+	case SDLK_r:
+		return "К";
+	case SDLK_t:
+		return "Е";
+	case SDLK_y:
+		return "Н";
+	case SDLK_u:
+		return "Г";
+	case SDLK_i:
+		return "Ш";
+	case SDLK_o:
+		return "Щ";
+	case SDLK_p:
+		return "З";
+	case SDLK_LEFTBRACKET:
+		return "Х";
+	case SDLK_RIGHTBRACKET:
+		return "Ъ";
+	case SDLK_RETURN:
+		return "Enter";
+	case SDLK_LCTRL:
+		return "LeftCtrl";
+	case SDLK_a:
+		return "Ф";
+	case SDLK_s:
+		return "Ы";
+	case SDLK_d:
+		return "В";
+	case SDLK_f:
+		return "А";
+	case SDLK_g:
+		return "П";
+	case SDLK_h:
+		return "Р";
+	case SDLK_j:
+		return "О";
+	case SDLK_k:
+		return "Л";
+	case SDLK_l:
+		return "Д";
+	case SDLK_SEMICOLON:
+		return "Ж";
+	case SDLK_QUOTE:
+		return "Э";
+	case SDLK_QUOTEDBL:
+		return "Quotedbl";
+	case SDLK_BACKQUOTE:
+		return "Ё";
+	case SDLK_LSHIFT:
+		return "LeftShift";
+	case SDLK_BACKSLASH:
+		return "BackSlash";
+	case SDLK_z:
+		return "Я";
+	case SDLK_x:
+		return "Ч";
+	case SDLK_c:
+		return "С";
+	case SDLK_v:
+		return "М";
+	case SDLK_b:
+		return "И";
+	case SDLK_n:
+		return "Т";
+	case SDLK_m:
+		return "Ь";
+	case SDLK_COMMA:
+		return "Б";
+	case SDLK_PERIOD:
+		return "Ю";
+	case SDLK_SLASH:
+		return "Slash";
+	case SDLK_RSHIFT:
+		return "RightShift";
+	case SDLK_ASTERISK:
+		return "Asterisk";
+	case SDLK_LALT:
+		return "LeftAlt";
+	case SDLK_SPACE:
+		return "Space";
 	//	case SDLK_CAPSLOCK: return "CapsLock";
 	//	case SDLK_NUMLOCK: return "NumLock";
 	//	case SDLK_SCROLLOCK: return "Scroll";
-		case SDLK_KP_MINUS: return "Minus";
-		case SDLK_KP_MULTIPLY: return "Multiply";
-		case SDLK_KP_PLUS: return "Plus";
-		case SDLK_KP_PERIOD: return "Period";
-		case SDLK_KP_ENTER: return "Enter";
-		case SDLK_RCTRL: return "RightCtrl";
-		case SDLK_KP_DIVIDE: return "Divide";
-		case SDLK_RALT: return "RightAlt";
-		case SDLK_PAUSE: return "Pause";
-		case SDLK_HOME: return "Home";
-		case SDLK_UP: return "Up";
-		case SDLK_PAGEUP: return "PgUp";
-		case SDLK_LEFT: return "Left";
-		case SDLK_RIGHT: return "Right";
-		case SDLK_END: return "End";
-		case SDLK_DOWN: return "Down";
-		case SDLK_PAGEDOWN: return "PgDn";
-		case SDLK_INSERT: return "Insert";
-		case SDLK_DELETE: return "Delete";
-		case SDLK_KP_7: return "NumPad 7";
-		case SDLK_KP_8: return "NumPad 8";
-		case SDLK_KP_9: return "NumPad 9";
-		case SDLK_KP_4: return "NumPad 4";
-		case SDLK_KP_5: return "NumPad 5";
-		case SDLK_KP_6: return "NumPad 6";
-		case SDLK_KP_1: return "NumPad 1";
-		case SDLK_KP_2: return "NumPad 2";
-		case SDLK_KP_3: return "NumPad 3";
-		case SDLK_KP_0: return "NumPad 0";
-		case SDLK_LGUI: return "LeftWin";
-		case SDLK_RGUI: return "RightWin";
-		// забой... чтобы не показывать, пока ищем
-		case 0: return "?";
+	case SDLK_KP_MINUS:
+		return "Minus";
+	case SDLK_KP_MULTIPLY:
+		return "Multiply";
+	case SDLK_KP_PLUS:
+		return "Plus";
+	case SDLK_KP_PERIOD:
+		return "Period";
+	case SDLK_KP_ENTER:
+		return "Enter";
+	case SDLK_RCTRL:
+		return "RightCtrl";
+	case SDLK_KP_DIVIDE:
+		return "Divide";
+	case SDLK_RALT:
+		return "RightAlt";
+	case SDLK_PAUSE:
+		return "Pause";
+	case SDLK_HOME:
+		return "Home";
+	case SDLK_UP:
+		return "Up";
+	case SDLK_PAGEUP:
+		return "PgUp";
+	case SDLK_LEFT:
+		return "Left";
+	case SDLK_RIGHT:
+		return "Right";
+	case SDLK_END:
+		return "End";
+	case SDLK_DOWN:
+		return "Down";
+	case SDLK_PAGEDOWN:
+		return "PgDn";
+	case SDLK_INSERT:
+		return "Insert";
+	case SDLK_DELETE:
+		return "Delete";
+	case SDLK_KP_7:
+		return "NumPad 7";
+	case SDLK_KP_8:
+		return "NumPad 8";
+	case SDLK_KP_9:
+		return "NumPad 9";
+	case SDLK_KP_4:
+		return "NumPad 4";
+	case SDLK_KP_5:
+		return "NumPad 5";
+	case SDLK_KP_6:
+		return "NumPad 6";
+	case SDLK_KP_1:
+		return "NumPad 1";
+	case SDLK_KP_2:
+		return "NumPad 2";
+	case SDLK_KP_3:
+		return "NumPad 3";
+	case SDLK_KP_0:
+		return "NumPad 0";
+	case SDLK_LGUI:
+		return "LeftWin";
+	case SDLK_RGUI:
+		return "RightWin";
+	// забой... чтобы не показывать, пока ищем
+	case 0:
+		return "?";
 	}
 
-	return 0;
+	return nullptr;
 }

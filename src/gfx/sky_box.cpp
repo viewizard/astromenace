@@ -35,7 +35,7 @@
 //-----------------------------------------------------------------------------
 
 // SkyBox textures
-eTexture *SkyBox_Texture[6]={0,0,0,0,0,0};
+eTexture *SkyBox_Texture[6] = {nullptr,nullptr,nullptr,nullptr,nullptr,nullptr};
 // SkyBox location
 float SkyBox_x = 0.0f;
 float SkyBox_y = 0.0f;
@@ -56,8 +56,7 @@ float SkyBox_length_2 = 100.0f;
 void SkyBoxDraw(void)
 {
 	int VFV = RI_3f_XYZ | RI_2_TEX | RI_DUBLICATE_TEX_COORD;
-	float *buff = 0;
-	buff = new float[5*4]; if (buff == 0) return;
+	float *buff = new float[5*4];
 	int k;
 
 
@@ -78,8 +77,7 @@ void SkyBoxDraw(void)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The BACK side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SkyBox_Texture[BACK] != 0)
-	{
+	if (SkyBox_Texture[BACK] != nullptr) {
 		k=0;
 		buff[k++] = SkyBox_x + SkyBox_width_2;
 		buff[k++] = SkyBox_y - SkyBox_height_2;
@@ -111,8 +109,7 @@ void SkyBoxDraw(void)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The FRONT side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SkyBox_Texture[FRONT] != 0)
-	{
+	if (SkyBox_Texture[FRONT] != nullptr) {
 		k=0;
 		buff[k++] = SkyBox_x - SkyBox_width_2;
 		buff[k++] = SkyBox_y - SkyBox_height_2;
@@ -145,8 +142,7 @@ void SkyBoxDraw(void)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The BOTTOM side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SkyBox_Texture[BOTTOM] != 0)
-	{
+	if (SkyBox_Texture[BOTTOM] != nullptr) {
 		k=0;
 		buff[k++] = SkyBox_x - SkyBox_width_2;
 		buff[k++] = SkyBox_y - SkyBox_height_2;
@@ -178,8 +174,7 @@ void SkyBoxDraw(void)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The TOP side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SkyBox_Texture[TOP] != 0)
-	{
+	if (SkyBox_Texture[TOP] != nullptr) {
 		k=0;
 		buff[k++] = SkyBox_x + SkyBox_width_2;
 		buff[k++] = SkyBox_y + SkyBox_height_2;
@@ -211,8 +206,7 @@ void SkyBoxDraw(void)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The LEFT side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SkyBox_Texture[LEFT] != 0)
-	{
+	if (SkyBox_Texture[LEFT] != nullptr) {
 		k=0;
 		buff[k++] = SkyBox_x - SkyBox_width_2;
 		buff[k++] = SkyBox_y + SkyBox_height_2;
@@ -244,8 +238,7 @@ void SkyBoxDraw(void)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The RIGHT side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SkyBox_Texture[RIGHT] != 0)
-	{
+	if (SkyBox_Texture[RIGHT] != nullptr) {
 		k=0;
 		buff[k++] = SkyBox_x + SkyBox_width_2;
 		buff[k++] = SkyBox_y - SkyBox_height_2;
@@ -281,7 +274,8 @@ void SkyBoxDraw(void)
 
 	vw_BindTexture(0, 0);
 
-	if (buff != 0){delete [] buff; buff = 0;}
+	if (buff != nullptr)
+		delete [] buff;
 }
 
 
@@ -302,7 +296,7 @@ void SkyBoxSetTexture(eTexture *nTexture, int Side)
 // Create SkyBox
 //-----------------------------------------------------------------------------
 void SkyBoxCreate(float nx, float ny, float nz,
-							 float nwidth, float nheight, float nlength)
+		  float nwidth, float nheight, float nlength)
 {
 	SkyBox_x = nx;
 	SkyBox_y = ny;

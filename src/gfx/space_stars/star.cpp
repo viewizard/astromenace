@@ -38,8 +38,8 @@ CStar::CStar()
 {
 	Alpha = 1.0f;
 	AlphaDelta = 0.0f;
-	Next = 0;
-	Prev = 0;
+	Next = nullptr;
+	Prev = nullptr;
 	Show = true;
 }
 
@@ -59,13 +59,10 @@ CStar::~CStar()
 bool CStar::Update(float TimeDelta)
 {
 
-	if (Show)
-	{
+	if (Show) {
 		Alpha += AlphaDelta * TimeDelta;
 		if (Alpha >= 1.0f) Show = false;
-	}
-	else
-	{
+	} else {
 		Alpha -= AlphaDelta * TimeDelta;
 		if (Alpha <= 0.3f) Show = true;
 	}

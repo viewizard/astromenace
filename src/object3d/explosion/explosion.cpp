@@ -43,7 +43,7 @@ CExplosion::CExplosion(void)
 	// нужно рисовать без оптимизации
 	NeedCullFaces = false;
 
-	ExplosionPieceData = 0;
+	ExplosionPieceData = nullptr;
 
 	ExplosionGeometryMoveLastTime = -1;
 
@@ -52,7 +52,7 @@ CExplosion::CExplosion(void)
 
 	// нет графических эффектов
 	GraphicFXQuantity = 0;
-	GraphicFX = 0;
+	GraphicFX = nullptr;
 
 	ExplosionType = 0;
 
@@ -62,7 +62,7 @@ CExplosion::CExplosion(void)
 	AABBSpeed = 0.0f;
 
 	// подключаем к своему списку
-	Next = Prev = 0;
+	Next = Prev = nullptr;
 	AttachExplosion(this);
 }
 
@@ -73,17 +73,19 @@ CExplosion::CExplosion(void)
 //-----------------------------------------------------------------------------
 CExplosion::~CExplosion(void)
 {
-	if (ExplosionPieceData!=0){delete [] ExplosionPieceData; ExplosionPieceData = 0;}
+	if (ExplosionPieceData != nullptr) {
+		delete [] ExplosionPieceData;
+		ExplosionPieceData = nullptr;
+	}
 
-	if (GraphicFX != 0)
-	{
-		for (int i=0; i<GraphicFXQuantity; i++)
-		if (GraphicFX[i] != 0)
-		{
-			GraphicFX[i]->IsSuppressed = true;
-			GraphicFX[i]->DestroyIfNoParticles = true;
-		}
-		delete [] GraphicFX; GraphicFX = 0;
+	if (GraphicFX != nullptr) {
+		for (int i = 0; i < GraphicFXQuantity; i++)
+			if (GraphicFX[i] != nullptr) {
+				GraphicFX[i]->IsSuppressed = true;
+				GraphicFX[i]->DestroyIfNoParticles = true;
+			}
+		delete [] GraphicFX;
+		GraphicFX = nullptr;
 	}
 
 
@@ -104,23 +106,22 @@ bool CExplosion::Update(float Time)
 {
 	// вызываем родительскую функцию
 	// если там передали удалить - выходим
-	if (!::CObject3D::Update(Time))
-	{
+	if (!::CObject3D::Update(Time)) {
 		// делаем правильную остановку частиц...
-		if (GraphicFX != 0)
-		for (int i=0; i<GraphicFXQuantity; i++)
-		if (GraphicFX[i] != 0)
-		{
-			GraphicFX[i]->StopAllParticles();
+		if (GraphicFX != nullptr) {
+			for (int i=0; i<GraphicFXQuantity; i++) {
+				if (GraphicFX[i] != nullptr) {
+					GraphicFX[i]->StopAllParticles();
 
-			if (!(ExplosionTypeByClass == 2 && (ExplosionType == 16 || ExplosionType == 17
-			|| ExplosionType == 18 || ExplosionType == 19
-			|| ExplosionType == 205 || ExplosionType == 206 || ExplosionType == 209 || ExplosionType == 210)))
-			{
-                delete GraphicFX[i]; GraphicFX[i] = 0;
+					if (!(ExplosionTypeByClass == 2 && (ExplosionType == 16 || ExplosionType == 17
+									    || ExplosionType == 18 || ExplosionType == 19
+									    || ExplosionType == 205 || ExplosionType == 206 || ExplosionType == 209 || ExplosionType == 210))) {
+						delete GraphicFX[i];
+						GraphicFX[i] = nullptr;
+					}
+				}
 			}
 		}
-
 		return false;
 	}
 
@@ -129,55 +130,49 @@ bool CExplosion::Update(float Time)
 
 	// остановка испускания частиц... для взрывов
 	if (ExplosionTypeByClass == 1 ||
-        (ExplosionTypeByClass == 2 && (ExplosionType == 16 || ExplosionType == 17
-			|| ExplosionType == 18 || ExplosionType == 19
-			|| ExplosionType == 205 || ExplosionType == 206 || ExplosionType == 209 || ExplosionType == 210
-			|| ExplosionType == 214 || ExplosionType == 215 || ExplosionType == 216
-			|| ExplosionType == 217)) ||
-        (ExplosionTypeByClass == 2 && (ExplosionType == -16 || ExplosionType == -17
-			|| ExplosionType == -18 || ExplosionType == -19
-			|| ExplosionType == -205 || ExplosionType == -206 || ExplosionType == -209 || ExplosionType == -210
-			|| ExplosionType == -214 || ExplosionType == -215 || ExplosionType == -216
-			|| ExplosionType == -217))
-        )
-	{
-        if (GraphicFX != 0)
-        for (int i=0; i<GraphicFXQuantity; i++)
-        if (GraphicFX[i] != 0)
-        if (Lifetime < GraphicFX[i]->Life)
-        {
-            // только говорим, чтобы больше не создавал частиц!!!
-            // не удаляем и не зануляем - иначе не сможем им управлять
-            GraphicFX[i]->IsSuppressed = true;
-        }
-    }
+	    (ExplosionTypeByClass == 2 && (ExplosionType == 16 || ExplosionType == 17
+					   || ExplosionType == 18 || ExplosionType == 19
+					   || ExplosionType == 205 || ExplosionType == 206 || ExplosionType == 209 || ExplosionType == 210
+					   || ExplosionType == 214 || ExplosionType == 215 || ExplosionType == 216
+					   || ExplosionType == 217)) ||
+	    (ExplosionTypeByClass == 2 && (ExplosionType == -16 || ExplosionType == -17
+					   || ExplosionType == -18 || ExplosionType == -19
+					   || ExplosionType == -205 || ExplosionType == -206 || ExplosionType == -209 || ExplosionType == -210
+					   || ExplosionType == -214 || ExplosionType == -215 || ExplosionType == -216
+					   || ExplosionType == -217))
+	   ) {
+		if (GraphicFX != nullptr)
+			for (int i=0; i<GraphicFXQuantity; i++)
+				if (GraphicFX[i] != nullptr)
+					if (Lifetime < GraphicFX[i]->Life) {
+						// только говорим, чтобы больше не создавал частиц!!!
+						// не удаляем и не зануляем - иначе не сможем им управлять
+						GraphicFX[i]->IsSuppressed = true;
+					}
+	}
 
 	// работа с эффектами
-    if (ExplosionTypeByClass == 2)
-    {
-        if (ExplosionType == 16 || ExplosionType == 17 || ExplosionType == 205 || ExplosionType == 206)
-        {
-            GraphicFX[0]->CreationSize.x -= GraphicFX[0]->CreationSize.x*TimeDelta;
-            GraphicFX[0]->CreationSize.z -= GraphicFX[0]->CreationSize.z*TimeDelta;
-            GraphicFX[0]->DeadZone -= GraphicFX[0]->DeadZone*TimeDelta;
-        }
-        if (ExplosionType == 18 || ExplosionType == 209)
-        {
-            GraphicFX[0]->CreationSize.x -= GraphicFX[0]->CreationSize.x*TimeDelta;
-            GraphicFX[0]->CreationSize.z -= GraphicFX[0]->CreationSize.z*TimeDelta;
-            GraphicFX[0]->DeadZone -= GraphicFX[0]->DeadZone*TimeDelta;
-        }
-        if (ExplosionType == 19 || ExplosionType == 210)
-        {
-            GraphicFX[0]->CreationSize.x += 10.0f*TimeDelta;
-            GraphicFX[0]->CreationSize.z += 10.0f*TimeDelta;
-            GraphicFX[0]->DeadZone += 10.0f*TimeDelta;
+	if (ExplosionTypeByClass == 2) {
+		if (ExplosionType == 16 || ExplosionType == 17 || ExplosionType == 205 || ExplosionType == 206) {
+			GraphicFX[0]->CreationSize.x -= GraphicFX[0]->CreationSize.x*TimeDelta;
+			GraphicFX[0]->CreationSize.z -= GraphicFX[0]->CreationSize.z*TimeDelta;
+			GraphicFX[0]->DeadZone -= GraphicFX[0]->DeadZone*TimeDelta;
+		}
+		if (ExplosionType == 18 || ExplosionType == 209) {
+			GraphicFX[0]->CreationSize.x -= GraphicFX[0]->CreationSize.x*TimeDelta;
+			GraphicFX[0]->CreationSize.z -= GraphicFX[0]->CreationSize.z*TimeDelta;
+			GraphicFX[0]->DeadZone -= GraphicFX[0]->DeadZone*TimeDelta;
+		}
+		if (ExplosionType == 19 || ExplosionType == 210) {
+			GraphicFX[0]->CreationSize.x += 10.0f*TimeDelta;
+			GraphicFX[0]->CreationSize.z += 10.0f*TimeDelta;
+			GraphicFX[0]->DeadZone += 10.0f*TimeDelta;
 
-            GraphicFX[1]->CreationSize.x -= GraphicFX[1]->CreationSize.x*TimeDelta;
-            GraphicFX[1]->CreationSize.z -= GraphicFX[1]->CreationSize.z*TimeDelta;
-            GraphicFX[1]->DeadZone -= GraphicFX[1]->DeadZone*TimeDelta;
-        }
-    }
+			GraphicFX[1]->CreationSize.x -= GraphicFX[1]->CreationSize.x*TimeDelta;
+			GraphicFX[1]->CreationSize.z -= GraphicFX[1]->CreationSize.z*TimeDelta;
+			GraphicFX[1]->DeadZone -= GraphicFX[1]->DeadZone*TimeDelta;
+		}
+	}
 
 
 
@@ -187,31 +182,25 @@ bool CExplosion::Update(float Time)
 
 
 	// если не считаем в шейдере, нужно перебрать геометрию и собрать новые буферы
-	if (!Setup.UseGLSL)
-	{
+	if (!Setup.UseGLSL) {
 		// первый раз - просто запоминаем время
 		if (ExplosionGeometryMoveLastTime == -1) ExplosionGeometryMoveLastTime = Time;
 
 		// если время подошло - делаем анимацию, иначе - пропускаем этот цикл
-		if (ExplosionGeometryMoveLastTime + 0.035f < Time)
-		{
+		if (ExplosionGeometryMoveLastTime + 0.035f < Time) {
 			// поворачиваем все объекты
 			float ExplosionGeometryMove = Time-ExplosionGeometryMoveLastTime;
 			ExplosionGeometryMoveLastTime = Time;
 
 
 			// расчет физики для каждой частицы
-			if (DrawObjectList != 0)
-			{
+			if (DrawObjectList != nullptr) {
 				VECTOR3D TMP;
 				int Count = 0;
 
-				for (int j=0; j<DrawObjectQuantity; j++)
-				{
-					for (int i=0; i<DrawObjectList[j].VertexCount; i+=3)
-					{
-						if (ExplosionPieceData[Count].Life > 0.0f)
-						{
+				for (int j = 0; j < DrawObjectQuantity; j++) {
+					for (int i = 0; i < DrawObjectList[j].VertexCount; i+=3) {
+						if (ExplosionPieceData[Count].Life > 0.0f) {
 							// получаем текущий вектор движения данного треугольника
 							TMP = ExplosionPieceData[Count].Velocity^ExplosionGeometryMove;
 							ExplosionPieceData[Count].Velocity -= TMP;
@@ -220,8 +209,7 @@ bool CExplosion::Update(float Time)
 							ExplosionPieceData[Count].Life -= ExplosionGeometryMove;
 
 
-							if (ExplosionPieceData[Count].Life<=0.001f)
-							{
+							if (ExplosionPieceData[Count].Life<=0.001f) {
 								ExplosionPieceData[Count].Life = 0.0f;
 
 								DrawObjectList[j].VertexBuffer[(i+1)*DrawObjectList[j].VertexStride] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].VertexStride];
@@ -231,9 +219,7 @@ bool CExplosion::Update(float Time)
 								DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].VertexStride] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].VertexStride];
 								DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].VertexStride+1] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].VertexStride+1];
 								DrawObjectList[j].VertexBuffer[(i+2)*DrawObjectList[j].VertexStride+2] = DrawObjectList[j].VertexBuffer[i*DrawObjectList[j].VertexStride+2];
-							}
-							else
-							{
+							} else {
 								// уменьшаем частицу, перебираем размер и текстурные координаты
 								{
 									float tmp = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)] -DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i];
@@ -274,51 +260,49 @@ bool CExplosion::Update(float Time)
 					// удаляем старые буферы, если они есть, создаем новые
 					// ! индексный буфер не трогаем, его не надо пересоздавать вообще
 
-					if (DrawObjectList[j].VBO != 0)
-					{
-						vw_DeleteVBO(*DrawObjectList[j].VBO); delete DrawObjectList[j].VBO; DrawObjectList[j].VBO = 0;
+					if (DrawObjectList[j].VBO != nullptr) {
+						vw_DeleteVBO(*DrawObjectList[j].VBO);
+						delete DrawObjectList[j].VBO;
+						DrawObjectList[j].VBO = nullptr;
 					}
-					if (DrawObjectList[j].VAO != 0)
-					{
-						vw_DeleteVAO(*DrawObjectList[j].VAO); delete DrawObjectList[j].VAO; DrawObjectList[j].VAO = 0;
+					if (DrawObjectList[j].VAO != nullptr) {
+						vw_DeleteVAO(*DrawObjectList[j].VAO);
+						delete DrawObjectList[j].VAO;
+						DrawObjectList[j].VAO = nullptr;
 					}
 
 
 					// делаем VBO
 					DrawObjectList[j].VBO = new unsigned int;
-					if (!vw_BuildVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].VertexStride, DrawObjectList[j].VBO))
-					{
-						delete DrawObjectList[j].VBO; DrawObjectList[j].VBO=0;
+					if (!vw_BuildVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].VertexStride, DrawObjectList[j].VBO)) {
+						delete DrawObjectList[j].VBO;
+						DrawObjectList[j].VBO = nullptr;
 					}
 
 					// делаем IBO, создаем его один раз, если его нет
-					if (DrawObjectList[j].IBO == 0)
-					{
+					if (DrawObjectList[j].IBO == nullptr) {
 						DrawObjectList[j].IBO = new unsigned int;
-						if (!vw_BuildIBO(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO))
-						{
-							delete DrawObjectList[j].IBO; DrawObjectList[j].IBO=0;
+						if (!vw_BuildIBO(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO)) {
+							delete DrawObjectList[j].IBO;
+							DrawObjectList[j].IBO = nullptr;
 						}
 					}
 
 					// делаем VAO
 					DrawObjectList[j].VAO = new unsigned int;
 					if (!vw_BuildVAO(DrawObjectList[j].VAO, DrawObjectList[j].VertexCount, DrawObjectList[j].VertexFormat, DrawObjectList[j].VertexBuffer,
-										DrawObjectList[j].VertexStride*sizeof(float), DrawObjectList[j].VBO,
-										DrawObjectList[j].RangeStart, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO))
-					{
-						delete DrawObjectList[j].VAO; DrawObjectList[j].VAO=0;
+							 DrawObjectList[j].VertexStride*sizeof(float), DrawObjectList[j].VBO,
+							 DrawObjectList[j].RangeStart, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO)) {
+						delete DrawObjectList[j].VAO;
+						DrawObjectList[j].VAO = nullptr;
 					}
 
 				}
 			}
 		}
-	}
-	else
-	{
+	} else {
 		// меняем данные глобальные для шейдера, тут делаем столько столько позволяет, а не 30 раз как с изменением геометрии
-		for (int j=0; j<DrawObjectQuantity; j++)
-		{
+		for (int j=0; j<DrawObjectQuantity; j++) {
 			// общий коэф. расстояния
 			DrawObjectList[j].ShaderData[1] += DrawObjectList[j].ShaderData[0]*TimeDelta;
 			// дельта скорости
@@ -334,8 +318,7 @@ bool CExplosion::Update(float Time)
 	// делаем AABB по упращенной схеме, главное для нас - скорость
 	float AABBSpeedTmp = AABBSpeed*TimeDelta;
 	AABBSpeed -= AABBSpeedTmp;
-	if (DrawObjectList != 0)
-	{
+	if (DrawObjectList != nullptr) {
 		float MinX = AABB[6].x - AABBSpeedTmp;
 		float MaxX = AABB[0].x + AABBSpeedTmp;
 		float MinY = AABB[6].y - AABBSpeedTmp;
@@ -364,30 +347,26 @@ bool CExplosion::Update(float Time)
 
 
 	// перемещаем эффекты
-	if (GraphicFX != 0)
-	for (int i=0; i<GraphicFXQuantity; i++)
-	if (GraphicFX[i] != 0)
-	{
-		VECTOR3D Loc;
-		GraphicFX[i]->GetLocation(&Loc);
+	if (GraphicFX != nullptr) {
+		for (int i = 0; i < GraphicFXQuantity; i++) {
+			if (GraphicFX[i] != nullptr) {
+				VECTOR3D Loc;
+				GraphicFX[i]->GetLocation(&Loc);
 
-        // взрыв пришельцев
-        if (ExplosionTypeByClass == 1 && ExplosionType == 2)
-        {
-			if (i==1)
-				GraphicFX[i]->MoveSystemLocation(Loc + TMP2);
-			else
-				GraphicFX[i]->MoveSystem(Loc + TMP2);
+				// взрыв пришельцев
+				if ((ExplosionTypeByClass == 1) && (ExplosionType == 2)) {
+					if (i==1)
+						GraphicFX[i]->MoveSystemLocation(Loc + TMP2);
+					else
+						GraphicFX[i]->MoveSystem(Loc + TMP2);
+				} else
+					GraphicFX[i]->MoveSystem(Loc + TMP2);
+
+				// всегда подтягиваем данные
+				GraphicFX[i]->SetStartLocation(Loc + TMP2);
+			}
 		}
-        else
-            GraphicFX[i]->MoveSystem(Loc + TMP2);
-
-
-		// всегда подтягиваем данные
-		GraphicFX[i]->SetStartLocation(Loc + TMP2);
 	}
-
-
 
 
 	// плавно замедляем...

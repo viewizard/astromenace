@@ -55,7 +55,8 @@ int VorbisSeek(void *datasource, ogg_int64_t offset, int whence)
 
 
 int VorbisClose(void *UNUSED(datasource))
-{// похоже, без этой функции у линукс версии vorbis проблемы, хотя по документации...
+{
+	// похоже, без этой функции у линукс версии vorbis проблемы, хотя по документации...
 	return 1;
 }
 
@@ -85,23 +86,18 @@ bool eMusic::ReadOggBlock(ALuint BufID, size_t Size)
 	PCM = new char[Size];
 
 	// Read loop
-	while (TotalRet < Size)
-	{
+	while (TotalRet < Size) {
 		ret = ov_read(mVF, PCM + TotalRet, Size - TotalRet, 0, 2, 1, &current_section);
 
 		// if end of file or read limit exceeded
 		if (ret == 0) break;
-		else if (ret < 0) 		// Error in bitstream
-		{
+		else if (ret < 0) {	// Error in bitstream
 			//
-		}
-		else
-		{
+		} else {
 			TotalRet += ret;
 		}
 	}
-	if (TotalRet > 0)
-	{
+	if (TotalRet > 0) {
 		alBufferData(BufID, Format, PCM, TotalRet, Rate);
 		CheckALError();
 	}
@@ -118,19 +114,18 @@ bool eMusic::ReadOggBlock(ALuint BufID, size_t Size)
 //------------------------------------------------------------------------------------
 // Проигрывание звука
 //------------------------------------------------------------------------------------
-bool eMusic::Play(const char * Name, float fVol, float fMainVol, bool Loop, const char *LoopFileName)
+bool eMusic::Play(const char *Name, float fVol, float fMainVol, bool Loop, const char *LoopFileName)
 {
+	if (Name == nullptr)
+		return false;
+
 	Volume = fVol;
 	MainVolume = fMainVol;
 
-	if (LoopFileName == 0)
-	{
+	if (LoopFileName == nullptr)
 		LoopPart[0] = 0;
-	}
 	else
-	{
 		strcpy(LoopPart, LoopFileName);
-	}
 
 	FadeInSw = false;
 	FadeInStartVol = Volume;
@@ -139,7 +134,7 @@ bool eMusic::Play(const char * Name, float fVol, float fMainVol, bool Loop, cons
 	FadeTime = 0.0f;
 	FadeAge = 0.0f;
 	LastTime = vw_GetTime();
-	mVF = 0;
+	mVF = nullptr;
 
 	// Position of the source sound.
 	ALfloat SourcePos[] = { 0.0f, 0.0f, 0.0f }; // -1.0 1.0 по иксам это баланс
@@ -163,7 +158,8 @@ bool eMusic::Play(const char * Name, float fVol, float fMainVol, bool Loop, cons
 
 	// Open Ogg file
 	MusicFile = vw_fopen(Name);
-	if (MusicFile == 0) return false;
+	if (MusicFile == nullptr)
+		return false;
 
 	int	 i, DynBuffs = 1, BlockSize;
 
@@ -178,11 +174,9 @@ bool eMusic::Play(const char * Name, float fVol, float fMainVol, bool Loop, cons
 	mVF = new OggVorbis_File;
 
 	// Generate local buffers
-	if (ov_open_callbacks(MusicFile, mVF, NULL, 0, cb) < 0)
-	{
+	if (ov_open_callbacks(MusicFile, mVF, nullptr, 0, cb) < 0)
 		// This is not ogg bitstream. Return
 		return false;
-	}
 
 
 
@@ -195,21 +189,23 @@ bool eMusic::Play(const char * Name, float fVol, float fMainVol, bool Loop, cons
 	mInfo			= ov_info(mVF, -1);
 
 	// Fill buffer infos
-	Rate		= mInfo->rate;
-	Format 		= (mInfo->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
+	Rate	= mInfo->rate;
+	Format 	= (mInfo->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
 
 	// Create buffers
 	alGenBuffers(DynBuffs, Buffers);
-	if (!CheckALError()) return false;
+	if (!CheckALError())
+		return false;
 
-	for (i = 0; i < DynBuffs; i++)
-	{
+	for (i = 0; i < DynBuffs; i++) {
 		// Read amount (DYNBUF_SIZE) data into each buffer
 		ReadOggBlock(Buffers[i], BlockSize);
-		if (!CheckALError()) return false;
+		if (!CheckALError())
+			return false;
 
 		alSourceQueueBuffers(Source, 1, &Buffers[i]);
-		if (!CheckALError()) return false;
+		if (!CheckALError())
+			return false;
 	}
 
 
@@ -218,7 +214,8 @@ bool eMusic::Play(const char * Name, float fVol, float fMainVol, bool Loop, cons
 	// запускаем на проигрывание
 
 	alSourcePlay(Source);
-	if(!CheckALError()) return AL_FALSE;
+	if(!CheckALError())
+		return AL_FALSE;
 
 	return AL_TRUE;
 }
@@ -230,39 +227,35 @@ bool eMusic::Play(const char * Name, float fVol, float fMainVol, bool Loop, cons
 //------------------------------------------------------------------------------------
 bool eMusic::Update()
 {
-	int	 Processed = 0;
+	int Processed = 0;
 
 	alGetSourcei(Source, AL_BUFFERS_PROCESSED, &Processed);
 
 	// We still have processed buffers
-	while (Processed--)
-	{
+	while (Processed--) {
 		// не создаем новые буферы, просто берем уже использованный и заполняем новыми данными
 		// а потом ставим его опять в очередь
 		ALuint bufferID;
 		alSourceUnqueueBuffers(Source, 1, &bufferID);
 		if (!CheckALError()) return true;
 
-		if (ReadOggBlock(bufferID, DYNBUF_SIZE) != 0)
-		{
+		if (ReadOggBlock(bufferID, DYNBUF_SIZE) != 0) {
 			alSourceQueueBuffers(Source, 1, &bufferID);
 			if (!CheckALError()) return true;
-		}
-		else
-		{
+		} else {
 
-			if (LoopPart[0] != 0)
-			{
-				if (mVF != 0){ov_clear(mVF);delete mVF; mVF = 0;}
-				if (MusicFile != 0)
-				{
-					vw_fclose(MusicFile);
+			if (LoopPart[0] != 0) {
+				if (mVF != nullptr) {
+					ov_clear(mVF);
+					delete mVF;
+					mVF = nullptr;
 				}
+				if (MusicFile != nullptr)
+					vw_fclose(MusicFile);
 
 				// Open Ogg file
 				MusicFile = vw_fopen(LoopPart);
-				if (MusicFile != 0)
-				{
+				if (MusicFile != nullptr) {
 					// OggVorbis specific structures
 					ov_callbacks	cb;
 					// Fill cb struct
@@ -274,14 +267,12 @@ bool eMusic::Update()
 					mVF = new OggVorbis_File;
 
 					// Generate local buffers
-					if (ov_open_callbacks(MusicFile, mVF, NULL, 0, cb) < 0)
-					{
+					if (ov_open_callbacks(MusicFile, mVF, nullptr, 0, cb) < 0)
 						// This is not ogg bitstream. Return
 						return false;
-					}
 
-				}
-				else return false;
+				} else
+					return false;
 
 				Looped = true;
 				LoopPart[0] = 0;
@@ -289,12 +280,14 @@ bool eMusic::Update()
 
 
 			// если не нужно больше повторять - выходим
-			if (!Looped) return false;
+			if (!Looped)
+				return false;
 
 			// устанавливаем на начало
 			ov_pcm_seek(mVF, 0);
 			alSourceQueueBuffers(Source, 1, &bufferID);
-			if (!CheckALError()) return true;
+			if (!CheckALError())
+				return true;
 
 		}
 	}
@@ -303,18 +296,16 @@ bool eMusic::Update()
 	// обрабатываем эффекты
 	float TimeDelta = vw_GetTime() - LastTime;
 
-	if (FadeInSw)
-	if (Volume < FadeInEndVol)
-	{
+	if (FadeInSw &&
+	    (Volume < FadeInEndVol)) {
 		FadeTime += TimeDelta;
 		Volume = FadeInEndVol*(FadeTime/FadeAge);
 		alSourcef(Source, AL_GAIN, MainVolume*Volume );
 		alGetError(); // сброс ошибок
 	}
 
-	if (FadeOutSw)
-	if (Volume > 0.0f)
-	{
+	if (FadeOutSw &&
+	    (Volume > 0.0f)) {
 		FadeTime += TimeDelta;
 		Volume = FadeInStartVol*((FadeAge-FadeTime)/FadeAge);
 		alSourcef(Source, AL_GAIN, MainVolume*Volume);

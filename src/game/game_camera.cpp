@@ -69,9 +69,9 @@ void InitGameCamera()
 	GameCameraDeviationTime = 0.0f;
 	GameCameraNeedDeviation = 0.0f;
 	GameCameraDeviationPower = 0.0f;
-    GameCameraNeedStartDeviation = 0.0f;
-    GameCameraDeviationAge = 0.0f;
-    vw_SetCameraDeviation(VECTOR3D(0,0,0));
+	GameCameraNeedStartDeviation = 0.0f;
+	GameCameraDeviationAge = 0.0f;
+	vw_SetCameraDeviation(VECTOR3D(0,0,0));
 }
 
 
@@ -85,22 +85,22 @@ void InitGameCamera()
 //-----------------------------------------------------------------------------
 void GameCameraSetExplosion(VECTOR3D Location, float Power)
 {
-    // если корабля нет, нам тут делать нечего
-    if (PlayerFighter == 0) return;
+	// если корабля нет, нам тут делать нечего
+	if (PlayerFighter == nullptr)
+		return;
 
-    // вычисляем по дистанции время болтанки....
-    // чуствительность начинается со 100 едениц (10000 в квадрате)
+	// вычисляем по дистанции время болтанки....
+	// чуствительность начинается со 100 едениц (10000 в квадрате)
 
-    float dist2 = (PlayerFighter->Location.x - Location.x)*(PlayerFighter->Location.x - Location.x)+
-                (PlayerFighter->Location.y - Location.y)*(PlayerFighter->Location.y - Location.y)+
-                (PlayerFighter->Location.z - Location.z)*(PlayerFighter->Location.z - Location.z);
+	float dist2 = (PlayerFighter->Location.x - Location.x)*(PlayerFighter->Location.x - Location.x)+
+		      (PlayerFighter->Location.y - Location.y)*(PlayerFighter->Location.y - Location.y)+
+		      (PlayerFighter->Location.z - Location.z)*(PlayerFighter->Location.z - Location.z);
 
 
 	// слишком далеко
 	if (dist2 > 10000.0f) return;
 	// или очень близко
-	if (dist2 <= PlayerFighter->Radius*PlayerFighter->Radius)
-	{
+	if (dist2 <= PlayerFighter->Radius*PlayerFighter->Radius) {
 		dist2 = PlayerFighter->Radius*PlayerFighter->Radius;
 	}
 
@@ -148,44 +148,35 @@ void GameCameraUpdate(float Time)
 
 
 	if ((GameCameraDeviationAge != GameCameraDeviationTime) && (GameCameraDeviationAge != 0.0f))
-        GameCameraNeedDeviation = GameCameraNeedStartDeviation -  GameCameraNeedStartDeviation/((GameCameraDeviationAge-GameCameraDeviationTime)/GameCameraDeviationAge);
+		GameCameraNeedDeviation = GameCameraNeedStartDeviation -  GameCameraNeedStartDeviation/((GameCameraDeviationAge-GameCameraDeviationTime)/GameCameraDeviationAge);
 
 	// просчет девиации камеры
-	if (GameCameraDeviationTime > 0.0f)
-	{
+	if (GameCameraDeviationTime > 0.0f) {
 		float Sign = 1.0f;
 		// нужно двигать
 		if (GameCameraNeedDeviation < 0.0f) Sign = -1.0f;
-		if (Sign == 1.0f)
-		{if (GameCameraNeedDeviation < GameCameraDeviation) Sign = -1.0f;}
-		else
-		{if (GameCameraNeedDeviation > GameCameraDeviation) Sign = 1.0f;}
+		if (Sign == 1.0f) {
+			if (GameCameraNeedDeviation < GameCameraDeviation) Sign = -1.0f;
+		} else {
+			if (GameCameraNeedDeviation > GameCameraDeviation) Sign = 1.0f;
+		}
 
 
 		float CurrentDeviation = Sign*5.0f*TimeDelta;
 
-		if (Sign == 1.0f)
-		{
-			if (GameCameraNeedDeviation <= GameCameraDeviation+CurrentDeviation)
-			{
+		if (Sign == 1.0f) {
+			if (GameCameraNeedDeviation <= GameCameraDeviation+CurrentDeviation) {
 				GameCameraDeviation = GameCameraNeedDeviation;
 				GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower*vw_Randf0;
-			}
-			else GameCameraDeviation += CurrentDeviation;
-		}
-		else
-		{
-			if (GameCameraNeedDeviation >= GameCameraDeviation+CurrentDeviation)
-			{
+			} else GameCameraDeviation += CurrentDeviation;
+		} else {
+			if (GameCameraNeedDeviation >= GameCameraDeviation+CurrentDeviation) {
 				GameCameraDeviation = GameCameraNeedDeviation;
 				GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower*vw_Randf0;
-			}
-			else GameCameraDeviation += CurrentDeviation;
+			} else GameCameraDeviation += CurrentDeviation;
 		}
-	}
-	else // нужно остановить ровно, уже не надо болтать
-		if (GameCameraDeviation != 0.0f)
-		{
+	} else // нужно остановить ровно, уже не надо болтать
+		if (GameCameraDeviation != 0.0f) {
 			GameCameraNeedStartDeviation = GameCameraNeedDeviation = 0.0f;
 			float Sign = 1.0f;
 			if (GameCameraNeedDeviation < GameCameraDeviation) Sign = -1.0f;
@@ -193,21 +184,14 @@ void GameCameraUpdate(float Time)
 
 			float CurrentDeviation = Sign*5.0f*TimeDelta;
 
-			if (Sign == 1.0f)
-			{
-				if (GameCameraNeedDeviation <= GameCameraDeviation+CurrentDeviation)
-				{
+			if (Sign == 1.0f) {
+				if (GameCameraNeedDeviation <= GameCameraDeviation+CurrentDeviation) {
 					GameCameraDeviation = GameCameraNeedDeviation;
-				}
-				else GameCameraDeviation += CurrentDeviation;
-			}
-			else
-			{
-				if (GameCameraNeedDeviation >= GameCameraDeviation+CurrentDeviation)
-				{
+				} else GameCameraDeviation += CurrentDeviation;
+			} else {
+				if (GameCameraNeedDeviation >= GameCameraDeviation+CurrentDeviation) {
 					GameCameraDeviation = GameCameraNeedDeviation;
-				}
-				else GameCameraDeviation += CurrentDeviation;
+				} else GameCameraDeviation += CurrentDeviation;
 			}
 		}
 
@@ -221,13 +205,12 @@ void GameCameraUpdate(float Time)
 
 
 	GamePoint - делаем учет
-!!! - учесть поворот в скрипте!!!void SetRotation(CObject3D *Object, TiXmlElement *Element)
+	!!! - учесть поворот в скрипте!!!void SetRotation(CObject3D *Object, TiXmlElement *Element)
 	*/
 
 
 	// делаем действия над кораблем игрока, если он есть
-	if (PlayerFighter != 0)
-	{
+	if (PlayerFighter != nullptr) {
 		// нужно сместить корабль на расстояние
 		PlayerFighter->SetLocationArcadePlayer(PlayerFighter->Location+TmpNeedPos);
 	}
@@ -243,7 +226,13 @@ void GameCameraUpdate(float Time)
 //-----------------------------------------------------------------------------
 // передача параметров
 //-----------------------------------------------------------------------------
-float GameCameraGetDeviation(){return GameCameraDeviation;}
-float GameCameraGetSpeed(){return GameCameraSpeed;}
+float GameCameraGetDeviation()
+{
+	return GameCameraDeviation;
+}
+float GameCameraGetSpeed()
+{
+	return GameCameraSpeed;
+}
 
 

@@ -42,7 +42,7 @@ class CBulletExplosion : public CExplosion
 {
 public:
 
-	virtual ~CBulletExplosion(){};
+	virtual ~CBulletExplosion() {};
 
 	// Создание взрыва из частей объекта
 	virtual void	Create(CObject3D *Object, CProjectile *Projectile, int ExplType, VECTOR3D ExplLocation, float Speed, bool NeedExplosionSFX = true);

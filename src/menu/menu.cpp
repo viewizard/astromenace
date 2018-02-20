@@ -33,7 +33,7 @@
 // переменные
 //------------------------------------------------------------------------------------
 
-eParticleSystem *psSpace = 0;
+eParticleSystem *psSpace = nullptr;
 
 float LastMenuUpdateTime = 0.0f;
 float MenuContentTransp = 0.0f;
@@ -95,7 +95,7 @@ void InitMenu()
 	// установка курсора на центр
 	// получаем размер клиентской области
 	int W, H;
-	vw_GetViewport(0, 0, &W, &H);
+	vw_GetViewport(nullptr, nullptr, &W, &H);
 	float AWw = W*1.0f;
 	float AHw = H*1.0f;
 	float ARWidth;
@@ -147,17 +147,27 @@ void InitMenu()
 	vw_SetCameraMoveAroundPoint(VECTOR3D(0,0,0), 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
 
 
-	if (Script != 0){delete Script; Script = 0;}
+	if (Script != nullptr) {
+		delete Script;
+		Script = nullptr;
+	}
 	Script = new ScriptEngine;
 
 	if (Setup.MenuScript > 2) Setup.MenuScript = 0;
-	switch (Setup.MenuScript)
-	{
-		case 0: Script->RunScript("script/menu1.xml", vw_GetTime()); break;
-		case 1: Script->RunScript("script/menu2.xml", vw_GetTime()); break;
-		case 2: Script->RunScript("script/menu3.xml", vw_GetTime()); break;
-		// на всякий случай
-		default: Script->RunScript("script/menu1.xml", vw_GetTime()); break;
+	switch (Setup.MenuScript) {
+	case 0:
+		Script->RunScript("script/menu1.xml", vw_GetTime());
+		break;
+	case 1:
+		Script->RunScript("script/menu2.xml", vw_GetTime());
+		break;
+	case 2:
+		Script->RunScript("script/menu3.xml", vw_GetTime());
+		break;
+	// на всякий случай
+	default:
+		Script->RunScript("script/menu1.xml", vw_GetTime());
+		break;
 	}
 	Setup.MenuScript ++;
 
@@ -165,8 +175,7 @@ void InitMenu()
 	float Time1 = vw_GetTime();
 	Script->StartTime = Time1-30;
 	Script->TimeLastOp = Time1-30;
-	for (float i=Time1-30; i<Time1;i+=1.0f)
-	{
+	for (float i=Time1-30; i<Time1; i+=1.0f) {
 		UpdateAllObject3D(i);
 		Script->Update(i);
 	}
@@ -176,8 +185,7 @@ void InitMenu()
 
 
 	// активные частицы космоса
-	psSpace = 0;
-	if (psSpace==0) psSpace = new eParticleSystem;
+	psSpace = new eParticleSystem;
 	psSpace->ColorStart.r = 0.80f;
 	psSpace->ColorStart.g = 0.80f;
 	psSpace->ColorStart.b = 1.00f;
@@ -204,8 +212,7 @@ void InitMenu()
 
 	// немного "прокручиваем", чтобы сразу по появлению было заполнено
 	float Time = psSpace->TimeLastUpdate;
-	for (float i=Time; i<Time+20;i+=1.0f)
-	{
+	for (float i = Time; i < (Time + 20); i += 1.0f) {
 		psSpace->Update(i);
 	}
 	psSpace->TimeLastUpdate = Time;
@@ -239,108 +246,102 @@ void InitMenu()
 //------------------------------------------------------------------------------------
 void SetOptionsMenu(eGameStatus Menu)
 {
-	switch (Menu)
-	{
-		case OPTIONS:
-			Options_Width = Setup.Width;
-			Options_Height = Setup.Height;
-			Options_BPP = Setup.BPP;
-			Options_VSync = Setup.VSync;
-			Options_iAspectRatioWidth = Setup.iAspectRatioWidth;
-			break;
+	switch (Menu) {
+	case OPTIONS:
+		Options_Width = Setup.Width;
+		Options_Height = Setup.Height;
+		Options_BPP = Setup.BPP;
+		Options_VSync = Setup.VSync;
+		Options_iAspectRatioWidth = Setup.iAspectRatioWidth;
+		break;
 
-		case OPTIONS_ADVANCED:
-			Options_TexturesCompressionType = Setup.TexturesCompressionType;
-			Options_UseGLSL = Setup.UseGLSL;
-			Options_MSAA = Setup.MSAA;
-			Options_CSAA = Setup.CSAA;
-			Options_TexturesQuality = Setup.TexturesQuality;
-			Options_ShadowMap = Setup.ShadowMap;
-			break;
+	case OPTIONS_ADVANCED:
+		Options_TexturesCompressionType = Setup.TexturesCompressionType;
+		Options_UseGLSL = Setup.UseGLSL;
+		Options_MSAA = Setup.MSAA;
+		Options_CSAA = Setup.CSAA;
+		Options_TexturesQuality = Setup.TexturesQuality;
+		Options_ShadowMap = Setup.ShadowMap;
+		break;
 
-		case CONFCONTROL:
-			if (Setup.KeyBoardUp == 0) Setup.KeyBoardUp = SDLK_UP;
-			if (Setup.KeyBoardDown == 0) Setup.KeyBoardDown = SDLK_DOWN;
-			if (Setup.KeyBoardLeft == 0) Setup.KeyBoardLeft = SDLK_LEFT;
-			if (Setup.KeyBoardRight == 0) Setup.KeyBoardRight = SDLK_RIGHT;
-			if (Setup.KeyBoardPrimary == 0) Setup.KeyBoardPrimary = SDLK_LCTRL;
-			if (Setup.KeyBoardSecondary == 0) Setup.KeyBoardSecondary = SDLK_SPACE;
-			if (Setup.MousePrimary == 0) Setup.MousePrimary = SDL_BUTTON_LEFT;
-			if (Setup.MouseSecondary == 0) Setup.MouseSecondary = SDL_BUTTON_RIGHT;
-			if (Setup.JoystickPrimary == -1) Setup.JoystickPrimary = 0;
-			if (Setup.JoystickSecondary == -1) Setup.JoystickSecondary = 1;
-			break;
+	case CONFCONTROL:
+		if (Setup.KeyBoardUp == 0) Setup.KeyBoardUp = SDLK_UP;
+		if (Setup.KeyBoardDown == 0) Setup.KeyBoardDown = SDLK_DOWN;
+		if (Setup.KeyBoardLeft == 0) Setup.KeyBoardLeft = SDLK_LEFT;
+		if (Setup.KeyBoardRight == 0) Setup.KeyBoardRight = SDLK_RIGHT;
+		if (Setup.KeyBoardPrimary == 0) Setup.KeyBoardPrimary = SDLK_LCTRL;
+		if (Setup.KeyBoardSecondary == 0) Setup.KeyBoardSecondary = SDLK_SPACE;
+		if (Setup.MousePrimary == 0) Setup.MousePrimary = SDL_BUTTON_LEFT;
+		if (Setup.MouseSecondary == 0) Setup.MouseSecondary = SDL_BUTTON_RIGHT;
+		if (Setup.JoystickPrimary == -1) Setup.JoystickPrimary = 0;
+		if (Setup.JoystickSecondary == -1) Setup.JoystickSecondary = 1;
+		break;
 
-		default:
-			break;
+	default:
+		break;
 	}
 }
 void SetMenu(eGameStatus Menu)
 {
 	Audio_PlaySound2D(3,1.0f);
 
-	switch (Menu)
-	{
-		case PROFILE:
-			NewProfileNamePos = 0;
-			memset(NewProfileName, 0, sizeof(NewProfileName));
-			vw_SetCurrentUnicodeChar(0);
-			break;
+	switch (Menu) {
+	case PROFILE:
+		NewProfileNamePos = 0;
+		memset(NewProfileName, 0, sizeof(NewProfileName));
+		vw_SetCurrentUnicodeChar(nullptr);
+		break;
 
-		case OPTIONS:
-		case OPTIONS_ADVANCED:
-		case CONFCONTROL:
-			SetOptionsMenu(Menu);
-			break;
+	case OPTIONS:
+	case OPTIONS_ADVANCED:
+	case CONFCONTROL:
+		SetOptionsMenu(Menu);
+		break;
 
-		case TOP_SCORES:
-			// копируем исходные данные
-			for (int i=0; i<10; i++)
-			{
-				strcpy(GameName[i], Setup.TopScores[i].Name);
-				GameScore[i] = Setup.TopScores[i].Score;
-			}
+	case TOP_SCORES:
+		// копируем исходные данные
+		for (int i=0; i<10; i++) {
+			strcpy(GameName[i], Setup.TopScores[i].Name);
+			GameScore[i] = Setup.TopScores[i].Score;
+		}
 
-			// проверяем профайлы
-			for (int j=0; j<5; j++)
-			if (Setup.Profile[j].Used)
-			{
+		// проверяем профайлы
+		for (int j=0; j<5; j++)
+			if (Setup.Profile[j].Used) {
 				AddTopScores(Setup.Profile[j].Experience, Setup.Profile[j].Name, true);
 			}
-			break;
+		break;
 
-		case MISSION:
-			vw_ResetWheelStatus();
-			// ставим нужный лист миссий
-			StartMission = 0;
-			EndMission = 4;
-			if (CurrentMission != -1)
-			if (CurrentMission > 2)// нужно сдвинуть лист, чтобы выбранный элемент был по середине списка
-			{
+	case MISSION:
+		vw_ResetWheelStatus();
+		// ставим нужный лист миссий
+		StartMission = 0;
+		EndMission = 4;
+		if (CurrentMission != -1)
+			if (CurrentMission > 2) { // нужно сдвинуть лист, чтобы выбранный элемент был по середине списка
 				StartMission = CurrentMission-2;
 				EndMission = CurrentMission+2;
 
-				if (CurrentMission >= AllMission-2)
-				{
+				if (CurrentMission >= AllMission-2) {
 					StartMission = AllMission-5;
 					EndMission = AllMission-1;
 				}
 			}
-			break;
+		break;
 
-		case INFORMATION:
-			vw_ResetWheelStatus();
-			CreateNum = 1;
-			CreateInfoObject();
-			break;
+	case INFORMATION:
+		vw_ResetWheelStatus();
+		CreateNum = 1;
+		CreateInfoObject();
+		break;
 
-		case CREDITS:
-			CreditsCurrentPos = 0.0f;
-			LastCreditsCurrentPosUpdateTime = vw_GetTime();
-			break;
+	case CREDITS:
+		CreditsCurrentPos = 0.0f;
+		LastCreditsCurrentPosUpdateTime = vw_GetTime();
+		break;
 
-		default:
-			break;
+	default:
+		break;
 
 	}
 
@@ -361,15 +362,14 @@ void SetMenu2(eGameStatus Menu)
 {
 	// текущее меню уже стало невидимым, освобождаем память после воркшопа + выключаем голосовые сообщения
 	// раньше удалять нельзя - для вывода используем данные из 3д объектов (!)
-	switch (GameStatus)
-	{
-		case WORKSHOP:
-			WorkshopDestroyData();
-			VoiceNeedMoreEnergy = 0;
-			VoiceAmmoOut = 0;
-			break;
-		default:
-			break;
+	switch (GameStatus) {
+	case WORKSHOP:
+		WorkshopDestroyData();
+		VoiceNeedMoreEnergy = 0;
+		VoiceAmmoOut = 0;
+		break;
+	default:
+		break;
 	}
 
 
@@ -420,11 +420,9 @@ void DrawMenu()
 {
 
 	// делаем плавное появление меню
-	if (NeedShowMenu)
-	{
+	if (NeedShowMenu) {
 		MenuContentTransp = 2.4f*(vw_GetTime()-LastMenuUpdateTime);
-		if (MenuContentTransp >= 1.0f)
-		{
+		if (MenuContentTransp >= 1.0f) {
 			MenuContentTransp = 1.0f;
 			NeedShowMenu = false;
 			LastMenuUpdateTime = vw_GetTime();
@@ -432,8 +430,7 @@ void DrawMenu()
 			// выводим подсказку, если нужно
 			if (GameStatus == PROFILE)
 				if (Setup.NeedShowHint[0]) SetCurrentDialogBox(9);
-			if (GameStatus == WORKSHOP)
-			{
+			if (GameStatus == WORKSHOP) {
 				if (CurrentWorkshop == 1)
 					if (Setup.NeedShowHint[1]) SetCurrentDialogBox(10);
 				if (CurrentWorkshop == 2)
@@ -445,11 +442,9 @@ void DrawMenu()
 	}
 
 	// делаем полавное угасание меню
-	if (NeedHideMenu)
-	{
+	if (NeedHideMenu) {
 		MenuContentTransp = 1.0f - 2.4f*(vw_GetTime() - LastMenuUpdateTime);
-		if (MenuContentTransp <= 0.0f)
-		{
+		if (MenuContentTransp <= 0.0f) {
 			MenuContentTransp = 0.0f;
 			SetMenu2(NextMenu);
 			LastMenuUpdateTime = vw_GetTime();
@@ -481,14 +476,13 @@ void DrawMenu()
 	SetRect(&DstRect,StartX,10,StartX+863,10+128);
 
 	if (GameStatus != WORKSHOP &&
-		GameStatus != INFORMATION &&
-		GameStatus != INTERFACE &&
-		GameStatus != OPTIONS &&
-		GameStatus != CONFCONTROL &&
-		GameStatus != OPTIONS_ADVANCED)
-	{
+	    GameStatus != INFORMATION &&
+	    GameStatus != INTERFACE &&
+	    GameStatus != OPTIONS &&
+	    GameStatus != CONFCONTROL &&
+	    GameStatus != OPTIONS_ADVANCED) {
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/astromenace.tga"),
-			true, MenuContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+				   true, MenuContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 	}
 
 	vw_End2DMode();
@@ -510,11 +504,11 @@ void DrawMenu()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// работаем со скриптом, пока он есть
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Script != 0)
-	if (!Script->Update(vw_GetTime()))
-	{
+	if ((Script != nullptr) &&
+	    (!Script->Update(vw_GetTime()))) {
 		// удаляем скрипт
-		delete Script; Script = 0;
+		delete Script;
+		Script = nullptr;
 	}
 
 
@@ -529,23 +523,46 @@ void DrawMenu()
 
 
 
-	switch(GameStatus)
-	{
-		case MAIN_MENU:		MainMenu(); break;
-		case TOP_SCORES:	TopScoresMenu(); break;
-		case INTERFACE:		InterfaceMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime); break;
-		case OPTIONS:		OptionsMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime, &Button11Transp, &LastButton11UpdateTime); break;
-		case OPTIONS_ADVANCED: OptionsAdvMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime, &Button11Transp, &LastButton11UpdateTime); break;
-		case INFORMATION:	InformationMenu(); break;
-		case CREDITS:		CreditsMenu(); break;
-		case CONFCONTROL:	ConfControlMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime); break;
-		case PROFILE:		ProfileMenu(); break;
-		case DIFFICULTY:	DifficultyMenu(); break;
-		case MISSION:		MissionMenu(); break;
-		case WORKSHOP:		WorkshopMenu(); break;
+	switch(GameStatus) {
+	case MAIN_MENU:
+		MainMenu();
+		break;
+	case TOP_SCORES:
+		TopScoresMenu();
+		break;
+	case INTERFACE:
+		InterfaceMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime);
+		break;
+	case OPTIONS:
+		OptionsMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime, &Button11Transp, &LastButton11UpdateTime);
+		break;
+	case OPTIONS_ADVANCED:
+		OptionsAdvMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime, &Button11Transp, &LastButton11UpdateTime);
+		break;
+	case INFORMATION:
+		InformationMenu();
+		break;
+	case CREDITS:
+		CreditsMenu();
+		break;
+	case CONFCONTROL:
+		ConfControlMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime);
+		break;
+	case PROFILE:
+		ProfileMenu();
+		break;
+	case DIFFICULTY:
+		DifficultyMenu();
+		break;
+	case MISSION:
+		MissionMenu();
+		break;
+	case WORKSHOP:
+		WorkshopMenu();
+		break;
 
-		default:
-			break;
+	default:
+		break;
 	}
 
 
@@ -572,23 +589,22 @@ void DrawMenu()
 
 
 	// если нужно - рисуем в окошке еще одном
-	switch(GameStatus)
-	{
-		case INFORMATION:	InformationDrawObject(); break;
+	switch(GameStatus) {
+	case INFORMATION:
+		InformationDrawObject();
+		break;
 
-		default:
-			break;
+	default:
+		break;
 	}
 
 
 
 
 	// черное затемнение, если нужно
-	if (NeedOnMenu)
-	{
+	if (NeedOnMenu) {
 		MenuBlackTransp = 1.0f - 2.4f*(vw_GetTime() - LastMenuOnOffUpdateTime);
-		if (MenuBlackTransp <= 0.0f)
-		{
+		if (MenuBlackTransp <= 0.0f) {
 			MenuBlackTransp = 0.0f;
 			NeedOnMenu = false;
 			LastMenuOnOffUpdateTime = vw_GetTime();
@@ -604,11 +620,9 @@ void DrawMenu()
 	}
 
 	// черное затемнение, если нужно
-	if (NeedOffMenu)
-	{
+	if (NeedOffMenu) {
 		MenuBlackTransp = 2.4f*(vw_GetTime() - LastMenuOnOffUpdateTime);
-		if (MenuBlackTransp >= 1.0f)
-		{
+		if (MenuBlackTransp >= 1.0f) {
 			MenuBlackTransp = 1.0f;
 			NeedOffMenu = false;
 			LastMenuOnOffUpdateTime = vw_GetTime();
@@ -649,8 +663,7 @@ void MainMenu()
 	int X = (Setup.iAspectRatioWidth - 384)/2;
 	int Y = 165;
 
-	if (DrawButton384(X,Y, vw_GetText("1_START_GAME"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime))
-	{
+	if (DrawButton384(X,Y, vw_GetText("1_START_GAME"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
 		// если текущего профиля нет - нужно перейти на выбор профилей, если есть - сразу идем на выбор миссий
 		if (CurrentProfile < 0)
 			ComBuffer = PROFILE;

@@ -49,8 +49,7 @@ float TimeThreadBuffer[MAX_TIMETHREAD_COUNT];
 //------------------------------------------------------------------------------------
 void vw_InitTime()
 {
-	for (int i=0; i<MAX_TIMETHREAD_COUNT; i++)
-	{
+	for (int i=0; i<MAX_TIMETHREAD_COUNT; i++) {
 		TimeCurrentStatus[i] = true;
 		LastGetTicks[i] = 0;
 		DiffGetTicks[i] = 0;
@@ -74,8 +73,7 @@ void vw_InitTimeNum(int Num)
 float vw_GetTime(int TimeThread)
 {
 	// если скорость не 1.0, нужно учитывать поправку
-	if (TimeThreadSpeed[TimeThread] != 1.0f)
-	{
+	if (TimeThreadSpeed[TimeThread] != 1.0f) {
 		// находим время с учетом скорости
 		float RealTimeThread = ((SDL_GetTicks() - DiffGetTicks[TimeThread])*TimeThreadSpeed[TimeThread])/1000.0f;
 		// выдаем уже правильные данные
@@ -94,11 +92,10 @@ float vw_GetTime(int TimeThread)
 void vw_StartTime()
 {
 	for (int i=0; i<MAX_TIMETHREAD_COUNT; i++)
-	if (!TimeCurrentStatus[i])
-	{
-		DiffGetTicks[i] += SDL_GetTicks() - LastGetTicks[i];
-		TimeCurrentStatus[i] = true;
-	}
+		if (!TimeCurrentStatus[i]) {
+			DiffGetTicks[i] += SDL_GetTicks() - LastGetTicks[i];
+			TimeCurrentStatus[i] = true;
+		}
 }
 
 
@@ -109,11 +106,10 @@ void vw_StartTime()
 void vw_StopTime()
 {
 	for (int i=0; i<MAX_TIMETHREAD_COUNT; i++)
-	if (TimeCurrentStatus[i])
-	{
-		LastGetTicks[i] = SDL_GetTicks();
-		TimeCurrentStatus[i] = false;
-	}
+		if (TimeCurrentStatus[i]) {
+			LastGetTicks[i] = SDL_GetTicks();
+			TimeCurrentStatus[i] = false;
+		}
 }
 
 

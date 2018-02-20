@@ -37,11 +37,11 @@
 //------------------------------------------------------------------------------------
 void vw_Start2DMode(float nZ1, float nZ2)
 {
-    // запоминаем состояние флагов
+	// запоминаем состояние флагов
 	glPushAttrib(GL_ENABLE_BIT);
-    // и выключаем "ненужные"
+	// и выключаем "ненужные"
 	glDisable(GL_CULL_FACE);
-    glDisable(GL_DEPTH_TEST);
+	glDisable(GL_DEPTH_TEST);
 
 	// берем размер вьюпорта
 	int X, Y, W, H;
@@ -87,7 +87,7 @@ void vw_End2DMode()
 
 	glMatrixMode(GL_MODELVIEW);				//select the modelview matrix
 
-    // восстанавливаем флаги
+	// восстанавливаем флаги
 	glPopAttrib();
 }
 
@@ -101,14 +101,15 @@ void vw_End2DMode()
 //------------------------------------------------------------------------------------
 void vw_Draw(int X, int Y, RECT *SrcRect, eTexture *Tex, bool Alpha, float RotateAngle, int DrawCorner)
 {
-	if (Tex == 0) return;
+	if (Tex == nullptr)
+		return;
 
 	float AW;
 	float AH;
 	bool ASpresent = vw_GetAspectWH(&AW, &AH);
 
 	int W, H;
-	vw_GetViewport(0, 0, &W, &H);
+	vw_GetViewport(nullptr, nullptr, &W, &H);
 	float AHw = H*1.0f;
 
 	// Установка текстуры и ее свойств...
@@ -120,8 +121,7 @@ void vw_Draw(int X, int Y, RECT *SrcRect, eTexture *Tex, bool Alpha, float Rotat
 	// - расположения угла начала координат
 	float tmpPosY = 0;
 	// изменяем только в случае RI_UL_CORNER
-	if (DrawCorner == RI_UL_CORNER)
-	{
+	if (DrawCorner == RI_UL_CORNER) {
 		if (ASpresent) tmpPosY = (AH - Y - Y - (SrcRect->bottom - SrcRect->top));
 		else tmpPosY = (AHw - Y - Y - (SrcRect->bottom - SrcRect->top));
 	}
@@ -139,9 +139,8 @@ void vw_Draw(int X, int Y, RECT *SrcRect, eTexture *Tex, bool Alpha, float Rotat
 
 	// буфер для последовательности RI_TRIANGLE_STRIP
 	// войдет RI_2f_XYZ | RI_2f_TEX
-	float *tmp = 0;
-	tmp = new float[(2+2)*4]; if (tmp == 0) return;
-	int k=0;
+	float *tmp = new float[(2+2)*4];
+	int k = 0;
 
 	tmp[k++] = X;
 	tmp[k++] = Y +tmpPosY + (SrcRect->bottom - SrcRect->top);
@@ -185,16 +184,17 @@ void vw_Draw(int X, int Y, RECT *SrcRect, eTexture *Tex, bool Alpha, float Rotat
 void vw_DrawTransparent(RECT *DstRect, RECT *SrcRect, eTexture *Tex, bool Alpha, float Transp, float RotateAngle, int DrawCorner, float R, float G, float B)
 {
 
-	if (Tex == 0) return;
-	if (Transp <= 0.0f) return;
-	if (Transp > 1.0f) Transp = 1.0f;
+	if ((Tex == nullptr) || (Transp <= 0.0f))
+		return;
+	if (Transp > 1.0f)
+		Transp = 1.0f;
 
 	float AW;
 	float AH;
 	bool ASpresent = vw_GetAspectWH(&AW, &AH);
 
 	int W, H;
-	vw_GetViewport(0, 0, &W, &H);
+	vw_GetViewport(nullptr, nullptr, &W, &H);
 	float AHw = H*1.0f;
 
 	int X = DstRect->left;
@@ -208,8 +208,7 @@ void vw_DrawTransparent(RECT *DstRect, RECT *SrcRect, eTexture *Tex, bool Alpha,
 	// - расположения угла начала координат
 	float tmpPosY = 0;
 	// изменяем только в случае RI_UL_CORNER
-	if (DrawCorner == RI_UL_CORNER)
-	{
+	if (DrawCorner == RI_UL_CORNER) {
 		if (ASpresent) tmpPosY = (AH - Y - Y - (DstRect->bottom - DstRect->top));
 		else tmpPosY = (AHw - Y - Y - (DstRect->bottom - DstRect->top));
 	}
@@ -230,8 +229,7 @@ void vw_DrawTransparent(RECT *DstRect, RECT *SrcRect, eTexture *Tex, bool Alpha,
 
 	// буфер для последовательности RI_TRIANGLE_STRIP
 	// войдет RI_2f_XYZ | RI_2f_TEX
-	float *tmp = 0;
-	tmp = new float[(2+2)*4]; if (tmp == 0) return;
+	float *tmp = new float[(2+2)*4];
 	int k=0;
 
 	tmp[k++] = X;

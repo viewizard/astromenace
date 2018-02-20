@@ -31,8 +31,8 @@
 
 
 // Указатели на начальный и конечный объект в списке
-CProjectile *StartProjectile = 0;
-CProjectile *EndProjectile = 0;
+CProjectile *StartProjectile = nullptr;
+CProjectile *EndProjectile = nullptr;
 
 
 
@@ -43,20 +43,18 @@ CProjectile *EndProjectile = 0;
 //-----------------------------------------------------------------------------
 void AttachProjectile(CProjectile* Projectile)
 {
-	if (Projectile == 0) return;
+	if (Projectile == nullptr)
+		return;
 
 	// первый в списке...
-	if (EndProjectile == 0)
-	{
-		Projectile->Prev = 0;
-		Projectile->Next = 0;
+	if (EndProjectile == nullptr) {
+		Projectile->Prev = nullptr;
+		Projectile->Next = nullptr;
 		StartProjectile = Projectile;
 		EndProjectile = Projectile;
-	}
-	else // продолжаем заполнение...
-	{
+	} else { // продолжаем заполнение...
 		Projectile->Prev = EndProjectile;
-		Projectile->Next = 0;
+		Projectile->Next = nullptr;
 		EndProjectile->Next = Projectile;
 		EndProjectile = Projectile;
 	}
@@ -71,17 +69,24 @@ void AttachProjectile(CProjectile* Projectile)
 //-----------------------------------------------------------------------------
 void DetachProjectile(CProjectile* Projectile)
 {
-	if (Projectile == 0) return;
+	if (Projectile == nullptr)
+		return;
 
 	// переустанавливаем указатели...
-	if (StartProjectile == Projectile) StartProjectile = Projectile->Next;
-	if (EndProjectile == Projectile) EndProjectile = Projectile->Prev;
+	if (StartProjectile == Projectile)
+		StartProjectile = Projectile->Next;
+	if (EndProjectile == Projectile)
+		EndProjectile = Projectile->Prev;
 
+	if (Projectile->Next != nullptr)
+		Projectile->Next->Prev = Projectile->Prev;
+	else if (Projectile->Prev != nullptr)
+		Projectile->Prev->Next = nullptr;
 
-	if (Projectile->Next != 0) Projectile->Next->Prev = Projectile->Prev;
-		else if (Projectile->Prev != 0) Projectile->Prev->Next = 0;
-	if (Projectile->Prev != 0) Projectile->Prev->Next = Projectile->Next;
-		else if (Projectile->Next != 0) Projectile->Next->Prev = 0;
+	if (Projectile->Prev != nullptr)
+		Projectile->Prev->Next = Projectile->Next;
+	else if (Projectile->Next != nullptr)
+		Projectile->Next->Prev = nullptr;
 }
 
 
@@ -96,15 +101,11 @@ void DetachProjectile(CProjectile* Projectile)
 void UpdateAllProjectile(float Time)
 {
 	CProjectile *tmp = StartProjectile;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CProjectile *tmp2 = tmp->Next;
 		// делаем обновление данных по объекту
 		if (!tmp->Update(Time))
-		{
-			// если его нужно уничтожить - делаем это
-			delete tmp; tmp = 0;
-		}
+			delete tmp;
 		tmp = tmp2;
 	}
 }
@@ -119,8 +120,7 @@ void DrawAllProjectile(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 
 	CProjectile *tmp = StartProjectile;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CProjectile *tmp2 = tmp->Next;
 		tmp->Draw(VertexOnlyPass, ShadowMap);
 		tmp = tmp2;
@@ -138,8 +138,7 @@ void DrawAllProjectile(bool VertexOnlyPass, unsigned int ShadowMap)
 void ReleaseAllProjectile()
 {
 	CProjectile *tmp = StartProjectile;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CProjectile *tmp2 = tmp->Next;
 		delete tmp;
 		tmp = tmp2;

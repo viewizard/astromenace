@@ -30,14 +30,12 @@
 
 
 
-struct BuildingData
-{
+struct BuildingData {
 	float	Strength;
 	const	char *Name;
 };
 
-static BuildingData PresetBuildingData[] =
-{
+static BuildingData PresetBuildingData[] = {
 	{150,	"models/building/bld-01.vw3d"},
 	{150,	"models/building/bld-02.vw3d"},
 	{150,	"models/building/bld-03.vw3d"},
@@ -59,8 +57,7 @@ static BuildingData PresetBuildingData[] =
 //-----------------------------------------------------------------------------
 void CBuilding::Create(int	BuildingNum)
 {
-	if ((BuildingNum <= 0) || ((unsigned int)BuildingNum > PresetBuildingDataCount))
-	{
+	if ((BuildingNum <= 0) || ((unsigned int)BuildingNum > PresetBuildingDataCount)) {
 		fprintf(stderr, "!!! Couldn't init CBuilding object with Number %i.\n", BuildingNum);
 		return;
 	}
@@ -73,8 +70,7 @@ void CBuilding::Create(int	BuildingNum)
 
 	LoadObjectData(PresetBuildingData[BuildingNum-1].Name, this, 0, -1.0f, Setup.UseGLSL);
 
-	for (int i=0; i<DrawObjectQuantity; i++)
-	{
+	for (int i=0; i<DrawObjectQuantity; i++) {
 		Texture[i] = vw_FindTextureByName("models/building/bld.vw2d");
 		TextureIllum[i] = vw_FindTextureByName("models/building/bld_illum.vw2d");
 		NormalMap[i] = vw_FindTextureByName("models/normalmap/buildings_nm.tga");

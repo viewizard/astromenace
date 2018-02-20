@@ -35,15 +35,13 @@
 
 
 
-struct eCoverageModes
-{
+struct eCoverageModes {
 	int ColorSamples;
 	int CoverageSamples;
 };
 
 
-struct eDevCaps
-{
+struct eDevCaps {
 	// версия OpenGL
 	int OpenGLmajorVersion;
 	int OpenGLminorVersion;
@@ -308,7 +306,7 @@ bool vw_GetAspectWH(float *ARWidth, float *ARHeight);
 // Set viewport data
 void vw_SetViewport(int x, int y, int width, int height, float znear, float zfar, int Corner = RI_UL_CORNER);
 // Get viewport data
-void vw_GetViewport(int *x=0, int *y=0, int *width=0, int *height=0, float *znear=0, float *zfar=0);
+void vw_GetViewport(int *x = nullptr, int *y = nullptr, int *width = nullptr, int *height = nullptr, float *znear = nullptr, float *zfar = nullptr);
 // Resize scene
 void vw_ResizeScene(float nfAngle, float AR, float nfNearClip, float nfFarClip);
 // Function for window WM_SIZE message only
@@ -385,8 +383,9 @@ void vw_GetPrioritizeTextures(GLuint TextureID, float *Prior);
 // 3D rendering functions
 
 // Send (draw) vertices
-void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO=0,
-						unsigned int RangeStart=0,	unsigned int *DataIndex=0, unsigned int *DataIndexVBO=0, unsigned int *VAO=0);
+void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride,
+		     unsigned int *VBO = nullptr, unsigned int RangeStart = 0, unsigned int *DataIndex = nullptr,
+		     unsigned int *DataIndexVBO = nullptr, unsigned int *VAO = nullptr);
 // Set color
 void vw_SetColor(float nRed, float nGreen, float nBlue, float nAlpha);
 // Set polygon rasterization mode
@@ -469,7 +468,7 @@ void vw_DeleteVBO(unsigned int VBO);
 
 // создаем
 bool vw_BuildVAO(unsigned int *VAO, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO,
-						unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO);
+		 unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO);
 // устанавливаем
 void vw_BindVAO(unsigned int VAO);
 // удаляем
@@ -484,8 +483,7 @@ void vw_DeleteVAO(unsigned int VAO);
 // FBO
 
 // структура FBO
-struct eFBO
-{
+struct eFBO {
 	unsigned int 	ColorBuffer;
 	unsigned int 	DepthBuffer;
 	unsigned int 	ColorTexture;
@@ -497,7 +495,8 @@ struct eFBO
 };
 
 // создаем (FBO - уже заранее подготовленный объект, в функции память не выделяем)
-bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDepth, int MSAA=0, int *CSAA=0);
+bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor,
+		 bool NeedDepth, int MSAA = 0, int *CSAA = nullptr);
 // устанавливаем
 void vw_BindFBO(eFBO *FBO);
 // получаем текущий установленный FBO, 0 - если фрейм буфер
@@ -518,8 +517,7 @@ void vw_DeleteFBO(eFBO *FBO);
 // шейдеры GLSL
 
 // структура шейдера
-struct eGLSL
-{
+struct eGLSL {
 	// хендлы
 	GLhandleARB Program;
 	GLhandleARB VertexShader;

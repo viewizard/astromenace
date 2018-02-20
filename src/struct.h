@@ -35,14 +35,13 @@
 //------------------------------------------------------------------------------------
 // стороны
 //------------------------------------------------------------------------------------
-enum Side
-{
+enum Side {
 	RIGHT	= 0,		// The RIGHT side
-	LEFT	= 1,		// The LEFT	 side
+	LEFT	= 1,		// The LEFT side
 	BOTTOM	= 2,		// The BOTTOM side
-	TOP		= 3,		// The TOP side
-	BACK	= 4,		// The BACK	side
-	FRONT	= 5			// The FRONT side
+	TOP	= 3,		// The TOP side
+	BACK	= 4,		// The BACK side
+	FRONT	= 5		// The FRONT side
 };
 
 
@@ -53,8 +52,7 @@ enum Side
 //------------------------------------------------------------------------------------
 // возможные состояния... для прорисовки и обхода
 //------------------------------------------------------------------------------------
-enum eGameStatus
-{
+enum eGameStatus {
 	// основное меню
 	MAIN_MENU = 1,
 
@@ -93,8 +91,7 @@ enum eGameStatus
 //------------------------------------------------------------------------------------
 // для выбора в списке режимов разрешения
 //------------------------------------------------------------------------------------
-struct sVideoModes
-{
+struct sVideoModes {
 	// ширина
 	int W;
 	// высота
@@ -110,8 +107,7 @@ struct sVideoModes
 //------------------------------------------------------------------------------------
 // структура данных профайла игрока
 //------------------------------------------------------------------------------------
-struct GameProfile
-{
+struct GameProfile {
 	bool	Used;
 
 	char	Name[128];
@@ -136,7 +132,7 @@ struct GameProfile
 	float	ShipHullCurrentStrength;
 
 	BYTE	Weapon[6];
-	int		WeaponAmmo[6];
+	int	WeaponAmmo[6];
 	// для каждого
 	// 1-только примари, 2 только секондари, 3 оба
 	BYTE	WeaponControl[6];
@@ -156,8 +152,8 @@ struct GameProfile
 
 	BYTE	Difficulty;
 
-	int		Money;
-	int		Experience;
+	int	Money;
+	int	Experience;
 
 
 	// как стрелять // 1 - как и раньше, все вместе... 2 - поочереди
@@ -170,9 +166,9 @@ struct GameProfile
 	BYTE	LastMission; // BYTE - 255, у нас макс 100
 
 	// опыт за каждую миссию
-	int		ByMissionExperience[100]; // ставим 100, на максимум миссий
+	int	ByMissionExperience[100]; // ставим 100, на максимум миссий
 	// кол-во раз которое играли в миссию
-	int		MissionReplayCount[100]; // ставим 100, на максимум миссий
+	int	MissionReplayCount[100]; // ставим 100, на максимум миссий
 
 
 
@@ -188,10 +184,9 @@ struct GameProfile
 //------------------------------------------------------------------------------------
 // структура лучших результатов
 //------------------------------------------------------------------------------------
-struct sTopScores
-{
+struct sTopScores {
 	char	Name[128];
-	int		Score;
+	int	Score;
 };
 
 
@@ -200,65 +195,64 @@ struct sTopScores
 //------------------------------------------------------------------------------------
 // структура данных настройки игры
 //------------------------------------------------------------------------------------
-struct GameSetup
-{
+struct GameSetup {
 	// номер билда, в котором был создан файл
 	int BuildVersion;
 
 	// язык меню
-	int		MenuLanguage; // 1-en, 2-de, 3-ru
+	int	MenuLanguage; // 1-en, 2-de, 3-ru
 	// язык голосовых сообщений
-	int		VoiceLanguage; // 1-en, 2-de, 3-ru
+	int	VoiceLanguage; // 1-en, 2-de, 3-ru
 	// номер шрифта
-	int		FontNumber;
+	int	FontNumber;
 	// имя шрифта для fontconfig
 	char	FontName[1024];
 	// размер шрифта
-	int		FontSize;
+	int	FontSize;
 
 	// вкл/откл музыки
-	int		MusicSw;
+	int	MusicSw;
 	bool	Music_check; // вообще можем-не можем играть музыку
 	// вкл/откл SFX
-	int		SoundSw;
-	int		VoiceSw;
+	int	SoundSw;
+	int	VoiceSw;
 	bool	Sound_check; // вообще можем-не можем играть sfx
 	// режим отображения игры
-	int		Width;
-	int		Height;
-	int		BPP;
+	int	Width;
+	int	Height;
+	int	BPP;
 	float	fAspectRatioWidth;
 	float	fAspectRatioHeight;
-	int		iAspectRatioWidth;
-	int		iAspectRatioHeight;
+	int	iAspectRatioWidth;
+	int	iAspectRatioHeight;
 	// поведение камеры при стандартном отношении (перемещать-не перемешать)
 	int 	CameraModeWithStandardAspectRatio;
 
 	// синхронизация
-	int		VSync;
+	int	VSync;
 	// яркость
-	int		Brightness;
+	int	Brightness;
 	// режим фильтра текстур
-	int		TextureFilteringMode;
+	int	TextureFilteringMode;
 	// режим качества прорисовки текстур
-	int		TexturesQuality;
+	int	TexturesQuality;
 	// мультисэмпл антиалиасинг
-	int		MSAA;
-	int		CSAA;
+	int	MSAA;
+	int	CSAA;
 
 
 	// качество визуальных эффектов (тайловая подложка, взрывы, системы частиц)  //0-2
-	int		VisualEffectsQuality;
+	int	VisualEffectsQuality;
 	// уровень анизотропии при фильтрации текстур
 	int 	AnisotropyLevel;
 	// компрессия текстур 0-выкл, 1-S3TC, 2-BPTC
-	int		TexturesCompressionType;
+	int	TexturesCompressionType;
 	// использование шейдеров
 	bool	UseGLSL;
 	// использование шадовмеп
-	int		ShadowMap;
+	int	ShadowMap;
 	// кол-во точечных источников света на 1 объект
-	int		MaxPointLights;
+	int	MaxPointLights;
 
 
 
@@ -268,37 +262,37 @@ struct GameSetup
 
 
 
-	int		KeyboardDecreaseGameSpeed;
-	int		KeyboardResetGameSpeed;
-	int		KeyboardIncreaseGameSpeed;
-	int		KeyboardGameWeaponInfoType;
-	int		KeyboardPrimaryWeaponFireMode;
-	int		KeyboardSecondaryWeaponFireMode;
+	int	KeyboardDecreaseGameSpeed;
+	int	KeyboardResetGameSpeed;
+	int	KeyboardIncreaseGameSpeed;
+	int	KeyboardGameWeaponInfoType;
+	int	KeyboardPrimaryWeaponFireMode;
+	int	KeyboardSecondaryWeaponFireMode;
 	// управление в игре
 	// клавиатура
-	int		KeyBoardLeft;
-	int		KeyBoardRight;
-	int		KeyBoardUp;
-	int		KeyBoardDown;
-	int		KeyBoardPrimary;
-	int		KeyBoardSecondary;
+	int	KeyBoardLeft;
+	int	KeyBoardRight;
+	int	KeyBoardUp;
+	int	KeyBoardDown;
+	int	KeyBoardPrimary;
+	int	KeyBoardSecondary;
 	// мышка
-	int		MousePrimary;
-	int		MouseSecondary;
+	int	MousePrimary;
+	int	MouseSecondary;
 	// джойстик
-	int		JoystickPrimary;
-	int		JoystickSecondary;
+	int	JoystickPrimary;
+	int	JoystickSecondary;
 	// номер джойстика (может их несколько)
-	int		JoystickNum;
+	int	JoystickNum;
 	// мертвая зона хода ручки джойстика
-	int		JoystickDeadZone;
+	int	JoystickDeadZone;
 
 
 
 	// задействовать мышку
 	bool	MouseControl;
 	// чуствительность мышки
-	int		ControlSensivity;
+	int	ControlSensivity;
 
 	// скорость времени в игре
 	float 	GameSpeed;
@@ -313,24 +307,24 @@ struct GameSetup
 	GameProfile	Profile[5];
 
 	// последняя выбранный профайл
-	int		LastProfile;
+	int	LastProfile;
 
 	// показываемые хинты в загрузке
-	int		LoadingHint;
+	int	LoadingHint;
 
 	// флаги, показывать-нет подсказки на меню
 	// ставим 10, чтобы было с запасом
 	bool	NeedShowHint[10];
 
 	// номер скрипта подложки меню
-	int		MenuScript;
+	int	MenuScript;
 
 
 
 	// параметры управление движком игры
-	int		VBOCoreMode;
-	int		VAOCoreMode;
-	int		FBOCoreMode;
+	int	VBOCoreMode;
+	int	VAOCoreMode;
+	int	FBOCoreMode;
 	// тип работы с видео памятью, больше или нет 128 мегабайт
 	bool	EqualOrMore128MBVideoRAM;
 	// работа с хардварной генерацией мипмеп уровней

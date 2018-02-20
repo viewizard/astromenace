@@ -41,59 +41,58 @@ void SetSpaceObjectGFX(eParticleSystem *ParticleSystem, int GFXType)
 	ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
 	ParticleSystem->Direction = VECTOR3D(0.0f, -1.0f, 0.0f);
 
-	switch(GFXType)
-	{
-		// двигатели на базе пиратов
-		case 1:
-			ParticleSystem->ColorStart.r = 0.60f;
-			ParticleSystem->ColorStart.g = 0.60f;
-			ParticleSystem->ColorStart.b = 0.30f;
-			ParticleSystem->ColorEnd.r = 0.30f;
-			ParticleSystem->ColorEnd.g = 1.00f;
-			ParticleSystem->ColorEnd.b = 0.30f;
-			ParticleSystem->AlphaStart = 1.00f;
-			ParticleSystem->AlphaEnd   = 0.00f;
-			ParticleSystem->SizeStart  = 0.30f;
-			ParticleSystem->SizeVar    = 0.30f;
-			ParticleSystem->SizeEnd    = 0.60f;
-			ParticleSystem->Speed      = 10.00f;
-			ParticleSystem->SpeedOnCreation	   = -1.00f;
-			ParticleSystem->SpeedVar   = 2.00f;
-			ParticleSystem->Theta      = 5.00f;
-			ParticleSystem->Life       = 0.50f;
-			ParticleSystem->ParticlesPerSec = 100;
-			ParticleSystem->CreationType = 1;
-			ParticleSystem->CreationSize = VECTOR3D(0.8f,0.1f,0.8f);
-			ParticleSystem->AlphaShowHide= true;
-			ParticleSystem->Direction = VECTOR3D(0.0f, -1.0f, 0.0f);
-			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.025f);
-			break;
-		case 2:
-			ParticleSystem->ColorStart.r = 0.60f;
-			ParticleSystem->ColorStart.g = 0.60f;
-			ParticleSystem->ColorStart.b = 0.30f;
-			ParticleSystem->ColorEnd.r = 0.30f;
-			ParticleSystem->ColorEnd.g = 1.00f;
-			ParticleSystem->ColorEnd.b = 0.30f;
-			ParticleSystem->AlphaStart = 1.00f;
-			ParticleSystem->AlphaEnd   = 0.00f;
-			ParticleSystem->SizeStart  = 0.30f;
-			ParticleSystem->SizeVar    = 0.20f;
-			ParticleSystem->SizeEnd    = 0.10f;
-			ParticleSystem->Speed      = 3.00f;
-			ParticleSystem->SpeedOnCreation	   = -1.00f;
-			ParticleSystem->SpeedVar   = 2.00f;
-			ParticleSystem->Theta      = 180.00f;
-			ParticleSystem->Life       = 0.50f;
-			ParticleSystem->ParticlesPerSec = 100;
-			ParticleSystem->AlphaShowHide= true;
-			ParticleSystem->Direction = VECTOR3D(0.0f, 1.0f, 0.0f);
-			ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.3f);
-			break;
+	switch(GFXType) {
+	// двигатели на базе пиратов
+	case 1:
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.30f;
+		ParticleSystem->SizeEnd    = 0.60f;
+		ParticleSystem->Speed      = 10.00f;
+		ParticleSystem->SpeedOnCreation	   = -1.00f;
+		ParticleSystem->SpeedVar   = 2.00f;
+		ParticleSystem->Theta      = 5.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 100;
+		ParticleSystem->CreationType = 1;
+		ParticleSystem->CreationSize = VECTOR3D(0.8f,0.1f,0.8f);
+		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->Direction = VECTOR3D(0.0f, -1.0f, 0.0f);
+		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.025f);
+		break;
+	case 2:
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.20f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedOnCreation	   = -1.00f;
+		ParticleSystem->SpeedVar   = 2.00f;
+		ParticleSystem->Theta      = 180.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 100;
+		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->Direction = VECTOR3D(0.0f, 1.0f, 0.0f);
+		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.3f);
+		break;
 
-		default:
-			fprintf(stderr, "Error in SetSpaceObjectGFX function call, wrong GFXType.\n");
-			break;
+	default:
+		fprintf(stderr, "Error in SetSpaceObjectGFX function call, wrong GFXType.\n");
+		break;
 	}
 
 }

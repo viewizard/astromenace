@@ -41,8 +41,8 @@ extern	PFNGLCLIENTACTIVETEXTUREARBPROC	glClientActiveTexture_ARB;
 // данный для индекс буфера
 //------------------------------------------------------------------------------------
 int VertexIndexCount = 0;
-GLuint *VertexIndex = 0;
-GLuint *IndexVBO = 0;
+GLuint *VertexIndex = nullptr;
+GLuint *IndexVBO = nullptr;
 
 //------------------------------------------------------------------------------------
 // Инициализация данных индекс буфера
@@ -50,17 +50,24 @@ GLuint *IndexVBO = 0;
 void vw_Internal_InitializationIndexBufferData()
 {
 	VertexIndexCount = 0;
-	VertexIndex = 0;
-	IndexVBO = 0;
+	VertexIndex = nullptr;
+	IndexVBO = nullptr;
 }
 //------------------------------------------------------------------------------------
 // Чистка памяти данных индекс буфера
 //------------------------------------------------------------------------------------
 void vw_Internal_ReleaseIndexBufferData()
 {
-	if (VertexIndex != 0){delete [] VertexIndex; VertexIndex = 0;}
+	if (VertexIndex != nullptr) {
+		delete [] VertexIndex;
+		VertexIndex = nullptr;
+	}
 	VertexIndexCount = 0;
-	if (IndexVBO != 0){vw_DeleteVBO(*IndexVBO); delete IndexVBO; IndexVBO=0;}
+	if (IndexVBO != nullptr) {
+		vw_DeleteVBO(*IndexVBO);
+		delete IndexVBO;
+		IndexVBO = nullptr;
+	}
 }
 
 
@@ -73,11 +80,13 @@ void vw_Internal_ReleaseIndexBufferData()
 GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO, unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO)
 {
 	// если ничего не передали
-	if (Data == 0 && VBO == 0) return 0;
+	if ((Data == nullptr) && (VBO == nullptr))
+		return nullptr;
 
 	// флаг нужно ли с вбо делать
 	bool NeedVBO = vw_GetDevCaps()->VBOSupported;
-	if (VBO == 0) NeedVBO = false;
+	if (VBO == nullptr)
+		NeedVBO = false;
 
 
 	// обязательно в байты, т.к. делаем смещение в байтах!
@@ -90,25 +99,43 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 	// длина блока
 	int TextSize = 2;
 	int TextCoordType = 1; // float
-	switch (DataFormat & 0x0F00000)
-	{
-		case 0x0100000: TextSize = 1;	break;
-		case 0x0200000: TextSize = 2;	break;
-		case 0x0300000: TextSize = 3;	break;
-		case 0x0400000: TextSize = 4;	break;
-		// short
-		case 0x0500000: TextSize = 1; TextCoordType = 2;	break;
-		case 0x0600000: TextSize = 2; TextCoordType = 2;	break;
-		case 0x0700000: TextSize = 3; TextCoordType = 2;	break;
-		case 0x0800000: TextSize = 4; TextCoordType = 2;	break;
+	switch (DataFormat & 0x0F00000) {
+	case 0x0100000:
+		TextSize = 1;
+		break;
+	case 0x0200000:
+		TextSize = 2;
+		break;
+	case 0x0300000:
+		TextSize = 3;
+		break;
+	case 0x0400000:
+		TextSize = 4;
+		break;
+	// short
+	case 0x0500000:
+		TextSize = 1;
+		TextCoordType = 2;
+		break;
+	case 0x0600000:
+		TextSize = 2;
+		TextCoordType = 2;
+		break;
+	case 0x0700000:
+		TextSize = 3;
+		TextCoordType = 2;
+		break;
+	case 0x0800000:
+		TextSize = 4;
+		TextCoordType = 2;
+		break;
 	}
 
 	if (NeedVBO) vw_BindVBO(RI_ARRAY_BUFFER, *VBO);
 
 
 	// делаем установку поинтеров + ставим смещения для прорисовки
-	if ((DataFormat & 0x000F000) == RI_3f_XYZ)
-	{
+	if ((DataFormat & 0x000F000) == RI_3f_XYZ) {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		if (NeedVBO)
 			glVertexPointer(3, GL_FLOAT, Stride, (intptr_t *)(AddStride));
@@ -116,8 +143,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 			glVertexPointer(3, GL_FLOAT, Stride, TMP + AddStride);
 		AddStride += 3*sizeof(GLfloat);
 	}
-	if ((DataFormat & 0x000F000) == RI_3i_XYZ)
-	{
+	if ((DataFormat & 0x000F000) == RI_3i_XYZ) {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		if (NeedVBO)
 			glVertexPointer(3, GL_INT, Stride, (BYTE *)(AddStride));
@@ -125,8 +151,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 			glVertexPointer(3, GL_INT, Stride, TMP + AddStride);
 		AddStride += 3*sizeof(GLint);
 	}
-	if ((DataFormat & 0x000F000) == RI_3s_XYZ)
-	{
+	if ((DataFormat & 0x000F000) == RI_3s_XYZ) {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		if (NeedVBO)
 			glVertexPointer(3, GL_SHORT, Stride, (BYTE *)(AddStride));
@@ -135,8 +160,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 		AddStride += 3*sizeof(GLshort);
 	}
 
-	if ((DataFormat & 0x000F000) == RI_2f_XY)
-	{
+	if ((DataFormat & 0x000F000) == RI_2f_XY) {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		if (NeedVBO)
 			glVertexPointer(2, GL_FLOAT, Stride, (BYTE *)(AddStride));
@@ -144,8 +168,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 			glVertexPointer(2, GL_FLOAT, Stride, TMP + AddStride);
 		AddStride += 2*sizeof(GLfloat);
 	}
-	if ((DataFormat & 0x000F000) == RI_2s_XY)
-	{
+	if ((DataFormat & 0x000F000) == RI_2s_XY) {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		if (NeedVBO)
 			glVertexPointer(2, GL_SHORT, Stride, (BYTE *)(AddStride));
@@ -155,8 +178,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 	}
 
 
-	if ((DataFormat & 0x0000F00) == RI_3f_NORMAL)
-	{
+	if ((DataFormat & 0x0000F00) == RI_3f_NORMAL) {
 		glEnableClientState(GL_NORMAL_ARRAY);
 		if (NeedVBO)
 			glNormalPointer(GL_FLOAT, Stride, (BYTE *)(AddStride));
@@ -166,8 +188,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 	}
 
 
-	if ((DataFormat & 0x00000F0) == RI_4f_COLOR)
-	{
+	if ((DataFormat & 0x00000F0) == RI_4f_COLOR) {
 		glEnableClientState(GL_COLOR_ARRAY);
 		if (NeedVBO)
 			glColorPointer(4, GL_FLOAT, Stride, (BYTE *)(AddStride));
@@ -175,8 +196,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 			glColorPointer(4, GL_FLOAT, Stride, TMP + AddStride);
 		AddStride += 4*sizeof(GLfloat);
 	}
-	if ((DataFormat & 0x00000F0) == RI_4ub_COLOR)
-	{
+	if ((DataFormat & 0x00000F0) == RI_4ub_COLOR) {
 		glEnableClientState(GL_COLOR_ARRAY);
 		if (NeedVBO)
 			glColorPointer(4, GL_UNSIGNED_BYTE, Stride, (BYTE *)(AddStride));
@@ -186,33 +206,28 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 	}
 
 
-	if (TextQ > 0)// текстурные коорд. есть...
-	{
-		for (int i=0; i<TextQ; i++)
-		{
-			if (glClientActiveTexture_ARB != 0) glClientActiveTexture_ARB(GL_TEXTURE0+i);
+	if (TextQ > 0) { // текстурные коорд. есть...
+		for (int i=0; i<TextQ; i++) {
+			if (glClientActiveTexture_ARB != nullptr) glClientActiveTexture_ARB(GL_TEXTURE0+i);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-			switch (TextCoordType)
-			{
-				case 1:
-				{
-					if (NeedVBO)
-						glTexCoordPointer(TextSize, GL_FLOAT, Stride, (BYTE *)(AddStride));
-					else
-						glTexCoordPointer(TextSize, GL_FLOAT, Stride, TMP + AddStride);
-					if ((DataFormat & 0xF000000) == RI_SEPARATE_TEX_COORD) AddStride += TextSize*sizeof(GLfloat);
-				}
-				break;
-				case 2:
-				{
-					if (NeedVBO)
-						glTexCoordPointer(TextSize, GL_SHORT, Stride, (BYTE *)(AddStride));
-					else
-						glTexCoordPointer(TextSize, GL_SHORT, Stride, TMP + AddStride);
-					if ((DataFormat & 0xF000000) == RI_SEPARATE_TEX_COORD) AddStride += TextSize*sizeof(GLshort);
-				}
-				break;
+			switch (TextCoordType) {
+			case 1: {
+				if (NeedVBO)
+					glTexCoordPointer(TextSize, GL_FLOAT, Stride, (BYTE *)(AddStride));
+				else
+					glTexCoordPointer(TextSize, GL_FLOAT, Stride, TMP + AddStride);
+				if ((DataFormat & 0xF000000) == RI_SEPARATE_TEX_COORD) AddStride += TextSize*sizeof(GLfloat);
+			}
+			break;
+			case 2: {
+				if (NeedVBO)
+					glTexCoordPointer(TextSize, GL_SHORT, Stride, (BYTE *)(AddStride));
+				else
+					glTexCoordPointer(TextSize, GL_SHORT, Stride, TMP + AddStride);
+				if ((DataFormat & 0xF000000) == RI_SEPARATE_TEX_COORD) AddStride += TextSize*sizeof(GLshort);
+			}
+			break;
 			}
 		}
 	}
@@ -220,31 +235,32 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 
 
 	// указатель на смещение (в случае вбо) или на массив индексов
-	GLuint *VertexIndexPointer = 0;
+	GLuint *VertexIndexPointer = nullptr;
 	// если нет своего, ставим общей массив индексов
-	if (DataIndexVBO == 0 && DataIndex == 0)
-	{
+	if ((DataIndexVBO == nullptr) && (DataIndex == nullptr)) {
 		// собираем если нужно массив индексов
-		if ((unsigned int)VertexIndexCount < (unsigned int)(NumVertices+RangeStart))
-		{
-			if (VertexIndex != 0){delete [] VertexIndex; VertexIndex = 0;}
+		if ((unsigned int)VertexIndexCount < (unsigned int)(NumVertices+RangeStart)) {
+			if (VertexIndex != nullptr)
+				delete [] VertexIndex;
 			VertexIndexCount = 0;
 
-			VertexIndex = new GLuint[NumVertices+RangeStart]; if (VertexIndex == 0) return 0;
+			VertexIndex = new GLuint[NumVertices+RangeStart];
 
 			VertexIndexCount = NumVertices+RangeStart;
 			for (unsigned int i=0; i<NumVertices+RangeStart; i++) VertexIndex[i] = i;
 
 			// если держим VBO, все это один раз сразу запихиваем в видео память
-			if (vw_GetDevCaps()->VBOSupported)
-			{
+			if (vw_GetDevCaps()->VBOSupported) {
 				// прежде всего удаляем старый буфер, если он был
-				if (IndexVBO != 0){vw_DeleteVBO(*IndexVBO); delete IndexVBO; IndexVBO=0;}
+				if (IndexVBO != nullptr) {
+					vw_DeleteVBO(*IndexVBO);
+					delete IndexVBO;
+				}
 				// создаем новый
 				IndexVBO = new GLuint;
-				if (!vw_BuildIBO(VertexIndexCount, VertexIndex, IndexVBO))
-				{
-					delete IndexVBO; IndexVBO=0;
+				if (!vw_BuildIBO(VertexIndexCount, VertexIndex, IndexVBO)) {
+					delete IndexVBO;
+					IndexVBO = nullptr;
 				}
 			}
 		}
@@ -252,24 +268,18 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 		VertexIndexPointer = VertexIndex+RangeStart;
 
 		// собственно включаем индекс-вбо
-		if (vw_GetDevCaps()->VBOSupported)
-		if (IndexVBO != 0)
-		{
+		if (vw_GetDevCaps()->VBOSupported && (IndexVBO != nullptr)) {
 			vw_BindVBO(RI_ELEMENT_ARRAY_BUFFER, *IndexVBO);
-			VertexIndexPointer = NULL;
-			VertexIndexPointer = VertexIndexPointer+RangeStart;
+			VertexIndexPointer = nullptr;
+			VertexIndexPointer = VertexIndexPointer + RangeStart;
 		}
-	}
-	else
-	{	// если массив или вбо индексов передали, просто подключаем их
+	} else {	// если массив или вбо индексов передали, просто подключаем их
 		VertexIndexPointer = DataIndex+RangeStart;
 
 		// собственно включаем индекс-вбо
-		if (vw_GetDevCaps()->VBOSupported)
-		if (DataIndexVBO != 0)
-		{
+		if (vw_GetDevCaps()->VBOSupported && (DataIndexVBO != nullptr)) {
 			vw_BindVBO(RI_ELEMENT_ARRAY_BUFFER, *DataIndexVBO);
-			VertexIndexPointer = NULL;
+			VertexIndexPointer = nullptr;
 			VertexIndexPointer = VertexIndexPointer+RangeStart;
 		}
 	}
@@ -289,17 +299,16 @@ void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int *VBO,
 {
 	// флаг нужно ли с вaо делать
 	bool NeedVAO = vw_GetDevCaps()->VAOSupported;
-	if (VAO == 0) NeedVAO = false;
+	if (VAO == nullptr)
+		NeedVAO = false;
 
-	if (NeedVAO)
-	{
+	if (NeedVAO) {
 		vw_BindVAO(0);
-	}
-	else
-	{
+	} else {
 		// флаг нужно ли с вбо делать
 		bool NeedVBO = vw_GetDevCaps()->VBOSupported;
-		if (VBO == 0) NeedVBO = false;
+		if (VBO == nullptr)
+			NeedVBO = false;
 
 
 		if ((DataFormat & 0x0000F00) != 0) glDisableClientState(GL_NORMAL_ARRAY);
@@ -308,16 +317,18 @@ void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int *VBO,
 
 		// кол-во текстур
 		int TextQ = DataFormat & 0x000000F;
-		for (int i=TextQ-1; i>=0; i--)
-		{
-			if (glClientActiveTexture_ARB != 0) glClientActiveTexture_ARB(GL_TEXTURE0+i);
+		for (int i=TextQ-1; i>=0; i--) {
+			if (glClientActiveTexture_ARB != nullptr)
+				glClientActiveTexture_ARB(GL_TEXTURE0+i);
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		}
 
 
 		// сбрасываем индексный и вертексный буфера, если они были установлены
-		if (IndexVBO != 0) vw_BindVBO(RI_ELEMENT_ARRAY_BUFFER, 0);
-		if (NeedVBO) vw_BindVBO(RI_ARRAY_BUFFER, 0);
+		if (IndexVBO != nullptr)
+			vw_BindVBO(RI_ELEMENT_ARRAY_BUFFER, 0);
+		if (NeedVBO)
+			vw_BindVBO(RI_ARRAY_BUFFER, 0);
 	}
 }
 
@@ -329,24 +340,25 @@ void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int *VBO,
 //------------------------------------------------------------------------------------
 // Процедура передачи последовательности вертексов для прорисовки
 //------------------------------------------------------------------------------------
-void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO, unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO, unsigned int *VAO)
+void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO,
+		     unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO, unsigned int *VAO)
 {
 	// если ничего не передали
-	if (Data == 0 && VBO == 0 && VAO == 0) return;
+	if ((Data == nullptr) && (VBO == nullptr) && (VAO == nullptr))
+		return;
 	// флаг нужно ли с вaо делать
 	bool NeedVAO = vw_GetDevCaps()->VAOSupported;
-	if (VAO == 0) NeedVAO = false;
+	if (VAO == nullptr)
+		NeedVAO = false;
 
 
 	// устанавливаем все необходимые указатели для прорисовки и получаем индексы
-	GLuint *VertexIndexPointer = 0;
-	if (NeedVAO)
-	{
+	GLuint *VertexIndexPointer = nullptr;
+	if (NeedVAO) {
 		vw_BindVAO(*VAO);
-	}
-	else
-	{
-		VertexIndexPointer = vw_SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, Data, Stride, VBO, RangeStart, DataIndex, DataIndexVBO);
+	} else {
+		VertexIndexPointer = vw_SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, Data, Stride, VBO,
+				     RangeStart, DataIndex, DataIndexVBO);
 	}
 
 // 1) Нельзя использовать short индексы (глючит в линуксе на картах нвидия, проверял на 97.55 драйвере)
@@ -355,41 +367,40 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 
 
 	// рисуем
-	switch(PrimitiveType)
-	{
-		case RI_POINTS:
-			glDrawElements(GL_POINTS,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-			tmpPrimCountGL += NumVertices;
-			break;
+	switch(PrimitiveType) {
+	case RI_POINTS:
+		glDrawElements(GL_POINTS,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
+		tmpPrimCountGL += NumVertices;
+		break;
 
-		case RI_LINES:
-			glDrawElements(GL_LINES,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-			tmpPrimCountGL += NumVertices/2;
-			break;
+	case RI_LINES:
+		glDrawElements(GL_LINES,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
+		tmpPrimCountGL += NumVertices/2;
+		break;
 
-		case RI_TRIANGLES:
-			glDrawElements(GL_TRIANGLES,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-			tmpPrimCountGL += NumVertices/3;
-			break;
+	case RI_TRIANGLES:
+		glDrawElements(GL_TRIANGLES,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
+		tmpPrimCountGL += NumVertices/3;
+		break;
 
-		case RI_TRIANGLE_STRIP:
-			glDrawElements(GL_TRIANGLE_STRIP,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-			tmpPrimCountGL += NumVertices-2;
-			break;
+	case RI_TRIANGLE_STRIP:
+		glDrawElements(GL_TRIANGLE_STRIP,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
+		tmpPrimCountGL += NumVertices-2;
+		break;
 
-		case RI_TRIANGLE_FAN:
-			glDrawElements(GL_TRIANGLE_FAN,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-			tmpPrimCountGL += NumVertices-2;
-			break;
+	case RI_TRIANGLE_FAN:
+		glDrawElements(GL_TRIANGLE_FAN,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
+		tmpPrimCountGL += NumVertices-2;
+		break;
 
-		case RI_QUADS:
-			glDrawElements(GL_QUADS,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-			tmpPrimCountGL += NumVertices/4;
-			break;
+	case RI_QUADS:
+		glDrawElements(GL_QUADS,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
+		tmpPrimCountGL += NumVertices/4;
+		break;
 
-		default:
-			fprintf(stderr, "Error in vw_SendVertices function call, wrong PrimitiveType.\n");
-			return;
+	default:
+		fprintf(stderr, "Error in vw_SendVertices function call, wrong PrimitiveType.\n");
+		return;
 	}
 
 

@@ -39,8 +39,7 @@
 int FindSubString(char *String, const char *SubString)
 {
 	unsigned int lenght = strlen(SubString);
-	for (int i = 0; (String+i)[0] != '\0'; i++)
-	{
+	for (int i = 0; (String+i)[0] != '\0'; i++) {
 		if (!strncmp(String+i, SubString, lenght)) return i;
 	}
 	return -1;
@@ -50,8 +49,7 @@ int FindSubString(char *String, const char *SubString)
 void EraseSubString(char *String, unsigned int StartPos, unsigned int EndPos)
 {
 	// проверяем, если не символы конце строки \r или \n - меняем на пробелы
-	for (unsigned int i=StartPos; i<EndPos; i++)
-	{
+	for (unsigned int i=StartPos; i<EndPos; i++) {
 		if ((String[i] != '\r') && (String[i] != '\n')) String[i] = ' ';
 	}
 }
@@ -63,8 +61,7 @@ unsigned int GetLineNumber(char *String, unsigned int Pos)
 	unsigned int LineNumber = 1;
 	unsigned int CurrentPos = 0;
 
-	while ((strlen(String) > 0) && (CurrentPos <= Pos))
-	{
+	while ((strlen(String) > 0) && (CurrentPos <= Pos)) {
 		if (String[0] == '\n') LineNumber++;
 		CurrentPos++;
 		String++;
@@ -81,7 +78,8 @@ unsigned int GetLineNumber(char *UNUSED(String), unsigned int UNUSED(Pos))
 // создаем подстроку из строки с выделением памяти
 char *CreateSubString(char *String, unsigned int StartPos, unsigned int EndPos)
 {
-	if (EndPos <= StartPos) return 0;
+	if (EndPos <= StartPos)
+		return nullptr;
 
 	char * Result = new char[EndPos-StartPos+1];
 	strncpy(Result, String+StartPos, EndPos-StartPos);
@@ -107,28 +105,25 @@ char *CreateSubString(char *String, unsigned int StartPos, unsigned int EndPos)
 //-----------------------------------------------------------------------------
 void cXMLDocument::AttachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *ChildXMLEntry)
 {
-	if ((RootXMLEntry == 0) && (ParentXMLEntry == 0))
-	{
+	if ((RootXMLEntry == nullptr) &&
+	    (ParentXMLEntry == nullptr)) {
 		RootXMLEntry = ChildXMLEntry;
 		return;
 	}
 
-
-	if (ParentXMLEntry == 0) return;
-	if (ChildXMLEntry == 0) return;
+	if ((ParentXMLEntry == nullptr) ||
+	    (ChildXMLEntry == nullptr))
+		return;
 
 	// первый в списке...
-	if (ParentXMLEntry->LastChild == 0)
-	{
-		ChildXMLEntry->Prev = 0;
-		ChildXMLEntry->Next = 0;
+	if (ParentXMLEntry->LastChild == nullptr) {
+		ChildXMLEntry->Prev = nullptr;
+		ChildXMLEntry->Next = nullptr;
 		ParentXMLEntry->FirstChild = ChildXMLEntry;
 		ParentXMLEntry->LastChild = ChildXMLEntry;
-	}
-	else // продолжаем заполнение...
-	{
+	} else { // продолжаем заполнение...
 		ChildXMLEntry->Prev = ParentXMLEntry->LastChild;
-		ChildXMLEntry->Next = 0;
+		ChildXMLEntry->Next = nullptr;
 		ParentXMLEntry->LastChild->Next = ChildXMLEntry;
 		ParentXMLEntry->LastChild = ChildXMLEntry;
 	}
@@ -139,18 +134,25 @@ void cXMLDocument::AttachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *Chi
 //-----------------------------------------------------------------------------
 void cXMLDocument::DetachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *XMLChildEntry)
 {
-	if (ParentXMLEntry == 0) return;
-	if (XMLChildEntry == 0) return;
+	if ((ParentXMLEntry == nullptr) ||
+	    (XMLChildEntry == nullptr))
+		return;
 
 	// переустанавливаем указатели...
-	if (ParentXMLEntry->FirstChild == XMLChildEntry) ParentXMLEntry->FirstChild = XMLChildEntry->Next;
-	if (ParentXMLEntry->LastChild == XMLChildEntry) ParentXMLEntry->LastChild = XMLChildEntry->Prev;
+	if (ParentXMLEntry->FirstChild == XMLChildEntry)
+		ParentXMLEntry->FirstChild = XMLChildEntry->Next;
+	if (ParentXMLEntry->LastChild == XMLChildEntry)
+		ParentXMLEntry->LastChild = XMLChildEntry->Prev;
 
+	if (XMLChildEntry->Next != nullptr)
+		XMLChildEntry->Next->Prev = XMLChildEntry->Prev;
+	else if (XMLChildEntry->Prev != nullptr)
+		XMLChildEntry->Prev->Next = nullptr;
 
-	if (XMLChildEntry->Next != 0) XMLChildEntry->Next->Prev = XMLChildEntry->Prev;
-		else if (XMLChildEntry->Prev != 0) XMLChildEntry->Prev->Next = 0;
-	if (XMLChildEntry->Prev != 0) XMLChildEntry->Prev->Next = XMLChildEntry->Next;
-		else if (XMLChildEntry->Next != 0) XMLChildEntry->Next->Prev = 0;
+	if (XMLChildEntry->Prev != nullptr)
+		XMLChildEntry->Prev->Next = XMLChildEntry->Next;
+	else if (XMLChildEntry->Next != nullptr)
+		XMLChildEntry->Next->Prev = nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -158,21 +160,19 @@ void cXMLDocument::DetachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *XML
 //-----------------------------------------------------------------------------
 void cXMLDocument::AttachXMLAttribute(cXMLEntry *XMLEntry, cXMLAttribute *XMLAttribute)
 {
-	if (XMLEntry == 0) return;
-	if (XMLAttribute == 0) return;
+	if ((XMLEntry == nullptr) ||
+	    (XMLAttribute == nullptr))
+		return;
 
 	// первый в списке...
-	if (XMLEntry->LastAttribute == 0)
-	{
-		XMLAttribute->Prev = 0;
-		XMLAttribute->Next = 0;
+	if (XMLEntry->LastAttribute == nullptr) {
+		XMLAttribute->Prev = nullptr;
+		XMLAttribute->Next = nullptr;
 		XMLEntry->FirstAttribute = XMLAttribute;
 		XMLEntry->LastAttribute = XMLAttribute;
-	}
-	else // продолжаем заполнение...
-	{
+	} else { // продолжаем заполнение...
 		XMLAttribute->Prev = XMLEntry->LastAttribute;
-		XMLAttribute->Next = 0;
+		XMLAttribute->Next = nullptr;
 		XMLEntry->LastAttribute->Next = XMLAttribute;
 		XMLEntry->LastAttribute = XMLAttribute;
 	}
@@ -183,18 +183,25 @@ void cXMLDocument::AttachXMLAttribute(cXMLEntry *XMLEntry, cXMLAttribute *XMLAtt
 //-----------------------------------------------------------------------------
 void cXMLDocument::DetachXMLAttribute(cXMLEntry *XMLEntry, cXMLAttribute *XMLAttribute)
 {
-	if (XMLEntry == 0) return;
-	if (XMLAttribute == 0) return;
+	if ((XMLEntry == nullptr) ||
+	    (XMLAttribute == nullptr))
+		return;
 
 	// переустанавливаем указатели...
-	if (XMLEntry->FirstAttribute == XMLAttribute) XMLEntry->FirstAttribute = XMLAttribute->Next;
-	if (XMLEntry->LastAttribute == XMLAttribute) XMLEntry->LastAttribute = XMLAttribute->Prev;
+	if (XMLEntry->FirstAttribute == XMLAttribute)
+		XMLEntry->FirstAttribute = XMLAttribute->Next;
+	if (XMLEntry->LastAttribute == XMLAttribute)
+		XMLEntry->LastAttribute = XMLAttribute->Prev;
 
+	if (XMLAttribute->Next != nullptr)
+		XMLAttribute->Next->Prev = XMLAttribute->Prev;
+	else if (XMLAttribute->Prev != nullptr)
+		XMLAttribute->Prev->Next = nullptr;
 
-	if (XMLAttribute->Next != 0) XMLAttribute->Next->Prev = XMLAttribute->Prev;
-		else if (XMLAttribute->Prev != 0) XMLAttribute->Prev->Next = 0;
-	if (XMLAttribute->Prev != 0) XMLAttribute->Prev->Next = XMLAttribute->Next;
-		else if (XMLAttribute->Next != 0) XMLAttribute->Next->Prev = 0;
+	if (XMLAttribute->Prev != nullptr)
+		XMLAttribute->Prev->Next = XMLAttribute->Next;
+	else if (XMLAttribute->Next != nullptr)
+		XMLAttribute->Next->Prev = nullptr;
 }
 
 
@@ -220,24 +227,32 @@ bool cXMLDocument::ParseTagLine(char *OriginBuffer, unsigned int StartPosition, 
 
 	// 2 - проверяем наличие атрибутов и заносим их в динамический массив
 	unsigned int i = TagNameEnd;
-	while (((Buffer+i)[0] != '>') || ((Buffer+i)[0] != '\0'))
-	{
+	while (((Buffer+i)[0] != '>') || ((Buffer+i)[0] != '\0')) {
 		// пропускаем все пробелы и табы
 		while ((((Buffer+i)[0] == ' ') || ((Buffer+i)[0] == '\t')) && ((Buffer+i)[0] != '\0')) i++;
-		if ((Buffer+i)[0] == '\0') {fprintf(stderr, "XML file corrupted, line: %i.", GetLineNumber(OriginBuffer, StartPosition)); break;}
+		if ((Buffer+i)[0] == '\0') {
+			fprintf(stderr, "XML file corrupted, line: %i.", GetLineNumber(OriginBuffer, StartPosition));
+			break;
+		}
 		// еще раз проверяем, возможно завершение тэга ставили через пробел или таб
 		if (((Buffer+i)[0] == '>') || (!strncmp(Buffer+i, "/>", strlen("/>")))) break;
 
 		// находим имя атрибута
 		unsigned int AttribNameStart = i;
 		while (((Buffer+i)[0] != '=') && ((Buffer+i)[0] != '\0')) i++;
-		if ((Buffer+i)[0] == '\0') {fprintf(stderr, "XML file corrupted, line: %i.", GetLineNumber(OriginBuffer, StartPosition)); break;}
+		if ((Buffer+i)[0] == '\0') {
+			fprintf(stderr, "XML file corrupted, line: %i.", GetLineNumber(OriginBuffer, StartPosition));
+			break;
+		}
 		unsigned int AttribNameEnd = i;
 		// пропускаем все до кавычек (они у нас следующие, после знака равенства)
 		i+=2;
 		unsigned int AttribDataStart = i;
 		while ((((Buffer+i)[0] != '\'') && ((Buffer+i)[0] != '\"')) && ((Buffer+i)[0] != '\0')) i++;
-		if ((Buffer+i)[0] == '\0') {fprintf(stderr, "XML file corrupted, line: %i.", GetLineNumber(OriginBuffer, StartPosition)); break;}
+		if ((Buffer+i)[0] == '\0') {
+			fprintf(stderr, "XML file corrupted, line: %i.", GetLineNumber(OriginBuffer, StartPosition));
+			break;
+		}
 		unsigned int AttribDataEnd = i;
 		i++;
 
@@ -266,17 +281,14 @@ bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPositio
 	bool ChildsFound = true;
 	int DetectTagOpenSymbol = FindSubString(Buffer, "<");
 	// если символа открытия в строке нет - это просто данные, иначе проверяем, что стоит до этого символа
-	if (DetectTagOpenSymbol > 0)
-	{
+	if (DetectTagOpenSymbol > 0) {
 		int CurrentPos = 0;
-		while(CurrentPos != DetectTagOpenSymbol)
-		{
+		while(CurrentPos != DetectTagOpenSymbol) {
 			// если до открывающего тэга идут не " ", "\t", "\r", "\n", значит у нас просто данные
 			if (((Buffer+CurrentPos)[0] != ' ') &&
-				((Buffer+CurrentPos)[0] != '\t') &&
-				((Buffer+CurrentPos)[0] != '\r') &&
-				((Buffer+CurrentPos)[0] != '\n'))
-			{
+			    ((Buffer+CurrentPos)[0] != '\t') &&
+			    ((Buffer+CurrentPos)[0] != '\r') &&
+			    ((Buffer+CurrentPos)[0] != '\n')) {
 				ChildsFound = false;
 				break;
 			}
@@ -284,33 +296,27 @@ bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPositio
 			CurrentPos++;
 		}
 
-	}
-	else ChildsFound = false;
+	} else ChildsFound = false;
 
 
 	// 1 - это просто контент, заносим данные и выходи из рекурсии
-	if (!ChildsFound)
-	{
+	if (!ChildsFound) {
 		ParentXMLEntry->Content = CreateSubString(Buffer, 0, strlen(Buffer));
 		return true;
 	}
 	// 2 - если в строке нашли открывающий символ тэга - идем на рекурсивную обработку строки с хмл данными
-	else
-	{
+	else {
 		// в цикле, пока не достигнем конца обрабатываемой строки:
 		unsigned int CurrentBufferPosition = 0;
-		while(strlen(Buffer) > 0)
-		{
+		while(strlen(Buffer) > 0) {
 			// находим положение открывающего тэг символа и закрывающего
 			DetectTagOpenSymbol = FindSubString(Buffer, "<");
 
 			// это может быть комментарий, проверяем
-			if (!strncmp(Buffer+DetectTagOpenSymbol, "<!--", strlen("<!--")))
-			{
+			if (!strncmp(Buffer+DetectTagOpenSymbol, "<!--", strlen("<!--"))) {
 				// ищем завершающую часть, и сразу перемещаемся к ней
 				int DetectCommentCloseSymbol = FindSubString(Buffer, "-->");
-				if (DetectCommentCloseSymbol == -1)
-				{
+				if (DetectCommentCloseSymbol == -1) {
 					fprintf(stderr, "XML file corrupted, can't find comment end in line %i.\n", GetLineNumber(OriginBuffer, StartPosition+DetectTagOpenSymbol+CurrentBufferPosition));
 					return false;
 				}
@@ -323,8 +329,7 @@ bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPositio
 			if (DetectTagOpenSymbol == -1) return true;
 			int DetectTagCloseSymbol = FindSubString(Buffer, ">");
 			// если был открывающий символ, но нет закрывающего - это ошибка структуры документа
-			if (DetectTagCloseSymbol == -1)
-			{
+			if (DetectTagCloseSymbol == -1) {
 				fprintf(stderr, "XML file corrupted, can't find element end for element in line %i.\n", GetLineNumber(OriginBuffer, StartPosition+DetectTagOpenSymbol+CurrentBufferPosition));
 				return false;
 			}
@@ -340,8 +345,7 @@ bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPositio
 			delete [] TagString;
 
 			// если у нас закрытый тэг - с этим элементом закончили, идем искать дальше
-			if (!ElementHaveContent)
-			{
+			if (!ElementHaveContent) {
 				Buffer += DetectTagCloseSymbol;
 				CurrentBufferPosition += DetectTagCloseSymbol;
 				continue;
@@ -349,23 +353,22 @@ bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPositio
 
 			// если тэг открытый - ищем завершающий тэг </имя>
 			char *CloseElement = new char[strlen("</>")+strlen(XMLEntry->Name)+1];
-			strcpy(CloseElement, "</"); strcat(CloseElement, XMLEntry->Name); strcat(CloseElement, ">");
+			strcpy(CloseElement, "</");
+			strcat(CloseElement, XMLEntry->Name);
+			strcat(CloseElement, ">");
 			CloseElement[strlen("</>")+strlen(XMLEntry->Name)] = 0;
 			int CloseElementPosition = FindSubString(Buffer, CloseElement);
 			delete [] CloseElement;
 			// если закрывающего элемента нет - значит файл поврежден
-			if (CloseElementPosition == -1)
-			{
+			if (CloseElementPosition == -1) {
 				fprintf(stderr, "XML file corrupted, can't find element end: %s in line: %i\n", XMLEntry->Name, GetLineNumber(OriginBuffer, StartPosition+DetectTagOpenSymbol+CurrentBufferPosition));
 				return false;
 			}
 
 			// передаем данные на рекурсивную обработку (если закрывающий тэг не стоит сразу после открывающего)
-			if (DetectTagCloseSymbol < CloseElementPosition)
-			{
+			if (DetectTagCloseSymbol < CloseElementPosition) {
 				char *ElementContent = CreateSubString(Buffer, DetectTagCloseSymbol, CloseElementPosition);
-				if (!ParseTagContent(OriginBuffer, DetectTagCloseSymbol+StartPosition+CurrentBufferPosition, ElementContent, XMLEntry))
-				{
+				if (!ParseTagContent(OriginBuffer, DetectTagCloseSymbol+StartPosition+CurrentBufferPosition, ElementContent, XMLEntry)) {
 					// вернули с ошибкой, выходим
 					delete [] ElementContent;
 					return false;
@@ -407,8 +410,7 @@ bool cXMLDocument::Load(const char *XMLFileName)
 	// читаем данные
 	eFILE *XMLFile = vw_fopen(XMLFileName);
 
-	if (XMLFile == NULL)
-	{
+	if (XMLFile == nullptr) {
 		fprintf(stderr, "XML file not found: %s\n", XMLFileName);
 		return false;
 	}
@@ -424,28 +426,24 @@ bool cXMLDocument::Load(const char *XMLFileName)
 
 
 	// проверяем заголовок
-	if (FindSubString(Buffer, "<?xml") == -1)
-	{
+	if (FindSubString(Buffer, "<?xml") == -1) {
 		fprintf(stderr, "XML file corrupted: %s\n", XMLFileName);
 		return false;
 	}
-	if (FindSubString(Buffer, "?>") == -1)
-	{
+	if (FindSubString(Buffer, "?>") == -1) {
 		fprintf(stderr, "XML file corrupted: %s\n", XMLFileName);
 		return false;
 	}
 
 
 	// идем на рекурсивную обработку
-	if (!ParseTagContent(Buffer, FindSubString(Buffer, "?>")+strlen("?>"), Buffer+FindSubString(Buffer, "?>")+strlen("?>"), 0))
-	{
+	if (!ParseTagContent(Buffer, FindSubString(Buffer, "?>")+strlen("?>"), Buffer+FindSubString(Buffer, "?>")+strlen("?>"), nullptr)) {
 		fprintf(stderr, "XML file corrupted: %s\n", XMLFileName);
 		delete [] Buffer;
 		return false;
 	}
 
-	if (RootXMLEntry == 0)
-	{
+	if (RootXMLEntry == nullptr) {
 		fprintf(stderr, "XML file corrupted, root element not found: %s\n", XMLFileName);
 		delete [] Buffer;
 		return false;
@@ -469,26 +467,25 @@ bool cXMLDocument::Load(const char *XMLFileName)
 void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned int Level)
 {
 	// если это комментарий
-	if (XMLEntry->EntryType == 1)
-	{
-		for (unsigned int i=0; i<Level; i++) SDL_RWwrite(File, "    ", strlen("    "), 1);
+	if (XMLEntry->EntryType == 1) {
+		for (unsigned int i=0; i<Level; i++) {
+			SDL_RWwrite(File, "    ", strlen("    "), 1);
+		}
 		SDL_RWwrite(File, "<!--", strlen("<!--"), 1);
 		SDL_RWwrite(File, XMLEntry->Name, strlen(XMLEntry->Name), 1);
 		SDL_RWwrite(File, "-->\r\n", strlen("-->\r\n"), 1);
-	}
-	else
-	{
+	} else {
 		// пишем имя
-		for (unsigned int i=0; i<Level; i++) SDL_RWwrite(File, "    ", strlen("    "), 1);
+		for (unsigned int i=0; i<Level; i++) {
+			SDL_RWwrite(File, "    ", strlen("    "), 1);
+		}
 		SDL_RWwrite(File, "<", strlen("<"), 1);
 		SDL_RWwrite(File, XMLEntry->Name, strlen(XMLEntry->Name), 1);
 
 		// пишем атрибуты
-		if (XMLEntry->FirstAttribute != 0)
-		{
+		if (XMLEntry->FirstAttribute != nullptr) {
 			cXMLAttribute *TmpAttrib = XMLEntry->FirstAttribute;
-			while (TmpAttrib != 0)
-			{
+			while (TmpAttrib != nullptr) {
 				SDL_RWwrite(File, " ", strlen(" "), 1);
 				SDL_RWwrite(File, TmpAttrib->Name, strlen(TmpAttrib->Name), 1);
 				SDL_RWwrite(File, "=\"", strlen("=\""), 1);
@@ -501,22 +498,17 @@ void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 
 
 		// пишем данные
-		if ((XMLEntry->FirstChild != 0) || (XMLEntry->Content != 0))
-		{
-			if (XMLEntry->Content != 0)
-			{
+		if ((XMLEntry->FirstChild != nullptr) || (XMLEntry->Content != nullptr)) {
+			if (XMLEntry->Content != nullptr) {
 				SDL_RWwrite(File, ">", strlen(">"), 1);
 				SDL_RWwrite(File, XMLEntry->Content, strlen(XMLEntry->Content), 1);
 				SDL_RWwrite(File, "</", strlen("</"), 1);
 				SDL_RWwrite(File, XMLEntry->Name, strlen(XMLEntry->Name), 1);
 				SDL_RWwrite(File, ">\r\n", strlen(">\r\n"), 1);
-			}
-			else
-			{
+			} else {
 				SDL_RWwrite(File, ">\r\n", strlen(">\r\n"), 1);
 				cXMLEntry *Tmp = XMLEntry->FirstChild;
-				while (Tmp != 0)
-				{
+				while (Tmp != nullptr) {
 					SaveRecursive(Tmp, File, Level+1);
 					Tmp = Tmp->Next;
 				}
@@ -525,9 +517,7 @@ void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 				SDL_RWwrite(File, XMLEntry->Name, strlen(XMLEntry->Name), 1);
 				SDL_RWwrite(File, ">\r\n", strlen(">\r\n"), 1);
 			}
-		}
-		else
-		{
+		} else {
 			SDL_RWwrite(File, "/>\r\n", strlen("/>\r\n"), 1);
 		}
 	}
@@ -537,18 +527,16 @@ bool cXMLDocument::Save(const char *XMLFileName)
 	printf("Save XML file: %s\n", XMLFileName);
 
 	SDL_RWops *File = SDL_RWFromFile(XMLFileName, "wb");
-    if (File == NULL)
-    {
-        fprintf(stderr, "Can't open XML file for write %s\n", XMLFileName);
-        return false;
-    }
+	if (File == nullptr) {
+		fprintf(stderr, "Can't open XML file for write %s\n", XMLFileName);
+		return false;
+	}
 
 
 	// пишем заголовок
 	SDL_RWwrite(File, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n", strlen("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n"), 1);
 
-	if (RootXMLEntry == 0)
-	{
+	if (RootXMLEntry == nullptr) {
 		SDL_RWclose(File);
 		return true;
 	}

@@ -120,8 +120,7 @@ void Matrix44CreateRotate(float Matrix44[16], VECTOR3D Angle)
 	const float p180 = 0.0174532925f;
 
 	// если угол только один - сюда идем
-	if (Angle.z != 0.0f && Angle.x == 0.0f && Angle.y == 0.0f)
-	{
+	if (Angle.z != 0.0f && Angle.x == 0.0f && Angle.y == 0.0f) {
 		float a = -Angle.z*p180;
 		float c = cosf(a);
 		float s = sinf(a);
@@ -138,8 +137,7 @@ void Matrix44CreateRotate(float Matrix44[16], VECTOR3D Angle)
 		return;
 	}
 
-	if (Angle.y != 0.0f && Angle.x == 0.0f && Angle.z == 0.0f)
-	{
+	if (Angle.y != 0.0f && Angle.x == 0.0f && Angle.z == 0.0f) {
 		float a = -Angle.y*p180;
 		float c = cosf(a);
 		float s = sinf(a);
@@ -156,8 +154,7 @@ void Matrix44CreateRotate(float Matrix44[16], VECTOR3D Angle)
 		return;
 	}
 
-	if (Angle.x != 0.0f && Angle.y == 0.0f && Angle.z == 0.0f)
-	{
+	if (Angle.x != 0.0f && Angle.y == 0.0f && Angle.z == 0.0f) {
 		float a = -Angle.x*p180;
 		float c = cosf(a);
 		float s = sinf(a);
@@ -189,18 +186,18 @@ void Matrix44CreateRotate(float Matrix44[16], VECTOR3D Angle)
 	float AD = A * D;
 	float BD = B * D;
 	// эти формулы получили после оптимизации верхних 3-х преобразований
-    Matrix44[0]  =   C * E;
-    Matrix44[1]  =  -C * F;
-    Matrix44[2]  =   D;
-    Matrix44[4]  =  BD * E + A * F;
-    Matrix44[5]  = -BD * F + A * E;
-    Matrix44[6]  =  -B * C;
-    Matrix44[8]  = -AD * E + B * F;
-    Matrix44[9]  =  AD * F + B * E;
-    Matrix44[10] =   A * C;
+	Matrix44[0]  =   C * E;
+	Matrix44[1]  =  -C * F;
+	Matrix44[2]  =   D;
+	Matrix44[4]  =  BD * E + A * F;
+	Matrix44[5]  = -BD * F + A * E;
+	Matrix44[6]  =  -B * C;
+	Matrix44[8]  = -AD * E + B * F;
+	Matrix44[9]  =  AD * F + B * E;
+	Matrix44[10] =   A * C;
 	// делаем инициализацю, чтобы не вызывать функцию и не делать 9 лишних операции
-    Matrix44[3]  =  Matrix44[7] = Matrix44[11] = Matrix44[12] = Matrix44[13] = Matrix44[14] = 0.0f;
-    Matrix44[15] =  1.0f;
+	Matrix44[3]  =  Matrix44[7] = Matrix44[11] = Matrix44[12] = Matrix44[13] = Matrix44[14] = 0.0f;
+	Matrix44[15] =  1.0f;
 }
 
 

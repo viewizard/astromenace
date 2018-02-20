@@ -84,29 +84,23 @@ int LastTimeLBDoubleMouseY  = -1;
 void vw_SetWindowLBDoubleMouse(bool NewStatus)
 {
 	// сбрасываем просто, устанавливать - только с проверками
-	if (!NewStatus)
-	{
+	if (!NewStatus) {
 		wLBDoubleMouse = NewStatus;
 		LastTimeLBDoubleMouse  = -1;
 		LastTimeLBDoubleMouseX  = -1;
 		LastTimeLBDoubleMouseY  = -1;
-	}
-	else
-	{
+	} else {
 		// если на том же месте, и время не вышло - ставим 2-й клик
 		int X, Y;
 		vw_GetMousePos(&X, &Y);
 		float Time = vw_GetTime();
 
 		if ( LastTimeLBDoubleMouseX == X && LastTimeLBDoubleMouseY == Y &&
-			Time < LastTimeLBDoubleMouse+0.5f)
-		{
+		     Time < LastTimeLBDoubleMouse+0.5f) {
 			wLBDoubleMouse = true;
 			// на тот случае, если кликнем 3 и более раз
 			LastTimeLBDoubleMouse = Time;
-		}
-		else
-		{
+		} else {
 			LastTimeLBDoubleMouseX = X;
 			LastTimeLBDoubleMouseY = Y;
 			LastTimeLBDoubleMouse = Time;
@@ -118,8 +112,7 @@ bool vw_GetWindowLBDoubleMouse(bool ResetStatus)
 {
 	bool tmp = wLBDoubleMouse;
 	// на тот случае, если кликнем 3 и более раз
-	if (wLBDoubleMouse)
-	{
+	if (wLBDoubleMouse) {
 		LastTimeLBDoubleMouseX = -1;
 		LastTimeLBDoubleMouseY = -1;
 	}
@@ -156,7 +149,7 @@ void vw_SetMousePosRel(int X, int Y)
 	MouseY += Y;
 
 	int W, H;
-	vw_GetViewport(0, 0, &W, &H);
+	vw_GetViewport(nullptr, nullptr, &W, &H);
 
 	if (MouseX > W) MouseX = W;
 	if (MouseY > H) MouseY = H;
@@ -176,7 +169,7 @@ int vw_GetMousePos(int *X, int *Y)
 {
 	// получаем размер клиентской области
 	int W, H;
-	vw_GetViewport(0, 0, &W, &H);
+	vw_GetViewport(nullptr, nullptr, &W, &H);
 	float AWw = W*1.0f;
 	float AHw = H*1.0f;
 
@@ -187,8 +180,7 @@ int vw_GetMousePos(int *X, int *Y)
 	*X = MouseX;
 	*Y = MouseY;
 
-	if (ARFLAG)
-	{
+	if (ARFLAG) {
 		*X = (int)(MouseX * (ARWidth/AWw));
 		*Y = (int)(MouseY * (ARHeight/AHw));
 	}
@@ -211,10 +203,9 @@ bool vw_OnRect(RECT *MDetect)
 
 
 	if  (((MDetect->right  >= MouseXOnRect) &&
-		(MDetect->left <= MouseXOnRect) &&
-		(MDetect->bottom >= MouseYOnRect) &&
-		(MDetect->top <= MouseYOnRect)))
-	{
+	      (MDetect->left <= MouseXOnRect) &&
+	      (MDetect->bottom >= MouseYOnRect) &&
+	      (MDetect->top <= MouseYOnRect))) {
 		return true;
 	}
 

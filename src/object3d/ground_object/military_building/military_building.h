@@ -40,7 +40,7 @@ class CMilitaryBuilding : public CGroundObject
 {
 public:
 
-	virtual ~CMilitaryBuilding(){};
+	virtual ~CMilitaryBuilding() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int	MilitaryBuildingNum);

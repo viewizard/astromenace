@@ -36,8 +36,7 @@
 
 
 
-struct sLanguageList
-{
+struct sLanguageList {
 	const char *code;
 	const char *title;
 };

@@ -37,32 +37,32 @@
 //------------------------------------------------------------------------------------
 int vw_Screenshot(int w, int h, char *filename)
 {
-        SDL_Surface *temp;
-        unsigned char *pixels;
+	SDL_Surface *temp;
+	unsigned char *pixels;
 
-        temp = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 24,
+	temp = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 24,
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
-        0x000000FF, 0x0000FF00, 0x00FF0000, 0
+				    0x000000FF, 0x0000FF00, 0x00FF0000, 0
 #else
-        0x00FF0000, 0x0000FF00, 0x000000FF, 0
+				    0x00FF0000, 0x0000FF00, 0x000000FF, 0
 #endif
-        );
-        if (temp == NULL) return -1;
+				   );
+	if (temp == nullptr) return -1;
 
-        pixels = (unsigned char *)malloc(3 * w * h);
-        if (pixels == NULL) {
-                SDL_FreeSurface(temp);
-                return -1;
-        }
+	pixels = (unsigned char *)malloc(3 * w * h);
+	if (pixels == nullptr) {
+		SDL_FreeSurface(temp);
+		return -1;
+	}
 
-        glReadPixels(0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+	glReadPixels(0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, pixels);
 
-        for (int i=0; i<h; i++)
-                memcpy(((char *) temp->pixels) + temp->pitch * i, pixels + 3*w * (h-i-1), w*3);
+	for (int i=0; i<h; i++)
+		memcpy(((char *) temp->pixels) + temp->pitch * i, pixels + 3*w * (h-i-1), w*3);
 
-        free(pixels);
+	free(pixels);
 
-        SDL_SaveBMP(temp, filename);
-        SDL_FreeSurface(temp);
-        return 0;
+	SDL_SaveBMP(temp, filename);
+	SDL_FreeSurface(temp);
+	return 0;
 }

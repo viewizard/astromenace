@@ -100,14 +100,12 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// начальная установка
 	CurrentCursorStatus = 0;
-	if (CurrentCursorFlashLastTime == -1.0f)
-	{
+	if (CurrentCursorFlashLastTime == -1.0f) {
 		CurrentCursorFlashLastTime = vw_GetTime();
-	}
-	else
-	{
+	} else {
 		CurrentCursorFlash -= vw_GetTime() - CurrentCursorFlashLastTime;
-		if (CurrentCursorFlash < 0.3f) CurrentCursorFlash = 1.0f;
+		if (CurrentCursorFlash < 0.3f)
+			CurrentCursorFlash = 1.0f;
 		CurrentCursorFlashLastTime = vw_GetTime();
 	}
 
@@ -125,26 +123,25 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// рисуем то, что нужно
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	switch(GameStatus)
-	{
-		case MAIN_MENU:
-		case TOP_SCORES:
-		case INTERFACE:
-		case OPTIONS:
-		case INFORMATION:
-		case CREDITS:
-		case CONFCONTROL:
-		case OPTIONS_ADVANCED:
-		case PROFILE:
-		case DIFFICULTY:
-		case MISSION:
-		case WORKSHOP:
-			DrawMenu();
-			break;
+	switch(GameStatus) {
+	case MAIN_MENU:
+	case TOP_SCORES:
+	case INTERFACE:
+	case OPTIONS:
+	case INFORMATION:
+	case CREDITS:
+	case CONFCONTROL:
+	case OPTIONS_ADVANCED:
+	case PROFILE:
+	case DIFFICULTY:
+	case MISSION:
+	case WORKSHOP:
+		DrawMenu();
+		break;
 
-		case GAME:
-			DrawGame();
-			break;
+	case GAME:
+		DrawGame();
+		break;
 	}
 
 
@@ -168,14 +165,14 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// рисуем курсор
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (DrawGameCursor)
-	{
+	if (DrawGameCursor) {
 		RECT SrcRect, DstRect;
 		int mX,mY;
 		vw_GetMousePos(&mX,&mY);
 
 		// если нужно, рисуем перетягиваемое оружие
-		if (GameStatus == WORKSHOP) DrawDragingWeaponIcon(mX, mY);
+		if (GameStatus == WORKSHOP)
+			DrawDragingWeaponIcon(mX, mY);
 
 
 		CursorParticleSystem2D->MoveSystem(VECTOR3D(mX*1.0f+23,mY*1.0f+19,0.0f));
@@ -185,23 +182,22 @@ void Loop_Proc()
 		SetRect(&SrcRect,0,0,64,64 );
 		SetRect(&DstRect,mX-13,mY-13,mX+64-13,mY+64-13 );
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/cursor_shadow.tga"), true, 1.0f);
-		switch (CurrentCursorStatus)
-		{
-			case 0:
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, 0.80f, 0.0f, RI_UL_CORNER, 0.8f, 0.7f, 0.0f);
-				break;
+		switch (CurrentCursorStatus) {
+		case 0:
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, 0.80f, 0.0f, RI_UL_CORNER, 0.8f, 0.7f, 0.0f);
+			break;
 
-			case 1:
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, RI_UL_CORNER, 0.0f, 1.0f, 0.0f);
-				break;
+		case 1:
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, RI_UL_CORNER, 0.0f, 1.0f, 0.0f);
+			break;
 
-			case 2:
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, RI_UL_CORNER, 1.0f, 0.2f, 0.0f);
-				break;
+		case 2:
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, RI_UL_CORNER, 1.0f, 0.2f, 0.0f);
+			break;
 
-			case 3:
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, RI_UL_CORNER, 0.8f, 0.7f, 0.0f);
-				break;
+		case 3:
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, RI_UL_CORNER, 0.8f, 0.7f, 0.0f);
+			break;
 		}
 	}
 
@@ -212,11 +208,12 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// вывод вспомогательной информации
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Setup.ShowFPS)
-	{
+	if (Setup.ShowFPS) {
 		// фпс
-		if (Setup.VSync == 0) vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f", vw_GetText("11_fps"), eFPS);
-		else vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f (VSync - %s)", vw_GetText("11_fps"), eFPS, vw_GetText("1_On"));
+		if (Setup.VSync == 0)
+			vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f", vw_GetText("11_fps"), eFPS);
+		else
+			vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f (VSync - %s)", vw_GetText("11_fps"), eFPS, vw_GetText("1_On"));
 		// кол-во прорисовываемых триугольников
 		vw_DrawFont(6,25, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %i", vw_GetText("11_triangles"), vw_GetPrimCount());
 	}
@@ -235,8 +232,7 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// выход по нажатию на Esc
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (vw_GetKeys(SDLK_ESCAPE))
-	{
+	if (vw_GetKeys(SDLK_ESCAPE)) {
 		SetCurrentDialogBox(0);
 		vw_SetKeys(SDLK_ESCAPE, false);
 	}
@@ -256,39 +252,69 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// выполняем то, что есть в буфере команд, если там что-то есть
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ComBuffer != 0)
-	{
+	if (ComBuffer != 0) {
 
-		switch(ComBuffer)
-		{
-			case MAIN_MENU:				SetMenu(MAIN_MENU); break;
-			case TOP_SCORES:			SetMenu(TOP_SCORES); break;
-			case INTERFACE:				SetMenu(INTERFACE); break;
-			case OPTIONS:				SetMenu(OPTIONS); break;
-			case OPTIONS_ADVANCED:		SetMenu(OPTIONS_ADVANCED); break;
-			case INFORMATION:			SetMenu(INFORMATION); break;
-			case CREDITS:				SetMenu(CREDITS); break;
-			case CONFCONTROL:			SetMenu(CONFCONTROL); break;
-			case PROFILE:				SetMenu(PROFILE); break;
-			case DIFFICULTY:			SetMenu(DIFFICULTY); break;
-			case MISSION:				SetMenu(MISSION); break;
-			case WORKSHOP:				SetMenu(WORKSHOP); break;
+		switch(ComBuffer) {
+		case MAIN_MENU:
+			SetMenu(MAIN_MENU);
+			break;
+		case TOP_SCORES:
+			SetMenu(TOP_SCORES);
+			break;
+		case INTERFACE:
+			SetMenu(INTERFACE);
+			break;
+		case OPTIONS:
+			SetMenu(OPTIONS);
+			break;
+		case OPTIONS_ADVANCED:
+			SetMenu(OPTIONS_ADVANCED);
+			break;
+		case INFORMATION:
+			SetMenu(INFORMATION);
+			break;
+		case CREDITS:
+			SetMenu(CREDITS);
+			break;
+		case CONFCONTROL:
+			SetMenu(CONFCONTROL);
+			break;
+		case PROFILE:
+			SetMenu(PROFILE);
+			break;
+		case DIFFICULTY:
+			SetMenu(DIFFICULTY);
+			break;
+		case MISSION:
+			SetMenu(MISSION);
+			break;
+		case WORKSHOP:
+			SetMenu(WORKSHOP);
+			break;
 
 
-			// переходим на игру
-			case 99:					NeedOffMenu = true; LastMenuOnOffUpdateTime = vw_GetTime(); break;
-			case GAME:					LoadGameData(1); break;
+		// переходим на игру
+		case 99:
+			NeedOffMenu = true;
+			LastMenuOnOffUpdateTime = vw_GetTime();
+			break;
+		case GAME:
+			LoadGameData(1);
+			break;
 
-			// переход игра-меню (выбор миссии)
-			case 100:					LoadGameData(0); break;
-			// переход игра-главное меню
-			case 101:					LoadGameData(0);
-										GameStatus = MAIN_MENU;
-										break;
+		// переход игра-меню (выбор миссии)
+		case 100:
+			LoadGameData(0);
+			break;
+		// переход игра-главное меню
+		case 101:
+			LoadGameData(0);
+			GameStatus = MAIN_MENU;
+			break;
 
-			default:
-				fprintf(stderr, "ComBuffer = %i... error!", ComBuffer);
-				break;
+		default:
+			fprintf(stderr, "ComBuffer = %i... error!", ComBuffer);
+			break;
 
 		}
 
@@ -300,8 +326,7 @@ void Loop_Proc()
 
 	// самым последним - просчет фпс
 	float FPSTime = vw_GetTime();
-	if (FPSTime - LastSecond > UPDATE_SPEED_MS)
-	{
+	if (FPSTime - LastSecond > UPDATE_SPEED_MS) {
 		eFPS = eCurrentFrames * (FPSTime - LastSecond);
 		eCurrentFrames = 0;
 		LastSecond = FPSTime;
@@ -312,34 +337,34 @@ void Loop_Proc()
 
 
 	// после обхода всех активных элементов меню, надо подкорректировать состояние выбора через клавиатуру (если оно было)
-	if (vw_GetKeys(SDLK_TAB)){CurrentKeyboardSelectMenuElement++;vw_SetKeys(SDLK_TAB, false);}
+	if (vw_GetKeys(SDLK_TAB)) {
+		CurrentKeyboardSelectMenuElement++;
+		vw_SetKeys(SDLK_TAB, false);
+	}
 
 	// если не в игре, используем и кнопки курсора
-	if ((GameStatus != GAME) || ((GameStatus == GAME) && (isDialogBoxDrawing() || (GameContentTransp >= 0.99f))))
-	{
-		if (vw_GetKeys(SDLK_RIGHT) || vw_GetKeys(SDLK_DOWN))
-		{
+	if ((GameStatus != GAME) || ((GameStatus == GAME) &&
+	    (isDialogBoxDrawing() || (GameContentTransp >= 0.99f)))) {
+		if (vw_GetKeys(SDLK_RIGHT) || vw_GetKeys(SDLK_DOWN)) {
 			CurrentKeyboardSelectMenuElement++;
 			vw_SetKeys(SDLK_RIGHT, false);
 			vw_SetKeys(SDLK_DOWN, false);
 		}
-		if (vw_GetKeys(SDLK_LEFT) || vw_GetKeys(SDLK_UP))
-		{
+		if (vw_GetKeys(SDLK_LEFT) || vw_GetKeys(SDLK_UP)) {
 			CurrentKeyboardSelectMenuElement--;
 			vw_SetKeys(SDLK_LEFT, false);
 			vw_SetKeys(SDLK_UP, false);
-			if (CurrentKeyboardSelectMenuElement < 1) CurrentKeyboardSelectMenuElement = CurrentActiveMenuElement;
+			if (CurrentKeyboardSelectMenuElement < 1)
+				CurrentKeyboardSelectMenuElement = CurrentActiveMenuElement;
 		}
 	}
 
-	if (CurrentKeyboardSelectMenuElement > 0)
-	{
+	if (CurrentKeyboardSelectMenuElement > 0) {
 		// если у нас вообще есть активные элементы, ставим на первый
-		if (CurrentActiveMenuElement > 0)
-		{
-			if (CurrentKeyboardSelectMenuElement > CurrentActiveMenuElement) CurrentKeyboardSelectMenuElement = 1;
-		}
-		else CurrentKeyboardSelectMenuElement = 0;
+		if (CurrentActiveMenuElement > 0) {
+			if (CurrentKeyboardSelectMenuElement > CurrentActiveMenuElement)
+				CurrentKeyboardSelectMenuElement = 1;
+		} else CurrentKeyboardSelectMenuElement = 0;
 	}
 	CurrentActiveMenuElement = 0;
 
@@ -351,15 +376,13 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// выключение fps и примитивов
-	if (vw_GetKeys(SDLK_F2))
-	{
+	if (vw_GetKeys(SDLK_F2)) {
 		Setup.ShowFPS = !Setup.ShowFPS;
 		vw_SetKeys(SDLK_F2, false);
 	}
 
 	// делаем на рабочем столе бмп скриншоты
-	if (vw_GetKeys(SDLK_PRINTSCREEN) || vw_GetKeys(SDLK_F12))
-	{
+	if (vw_GetKeys(SDLK_PRINTSCREEN) || vw_GetKeys(SDLK_F12)) {
 		char SaveFileName[MAX_PATH];
 
 		strcpy(SaveFileName, ScreenshotDir);
@@ -376,53 +399,52 @@ void Loop_Proc()
 	}
 
 	// управление скоростью игры, только в самой игре!
-	if ((GameStatus == GAME) && (GameContentTransp<=0.0f) && !GameMissionCompleteStatus)
-	{
-		if (vw_GetKeys(Setup.KeyboardDecreaseGameSpeed))
-		{
+	if ((GameStatus == GAME) &&
+	    (GameContentTransp<=0.0f) &&
+	    !GameMissionCompleteStatus) {
+		if (vw_GetKeys(Setup.KeyboardDecreaseGameSpeed)) {
 			Setup.GameSpeed -= 0.1f;
-			if (Setup.GameSpeed < 0.1f) Setup.GameSpeed = 0.1f;
+			if (Setup.GameSpeed < 0.1f)
+				Setup.GameSpeed = 0.1f;
 			CurrentGameSpeedShowTime = 2.0f;
 			vw_SetTimeThreadSpeed(1, Setup.GameSpeed);
 			vw_SetKeys(Setup.KeyboardDecreaseGameSpeed, false);
 		}
-		if (vw_GetKeys(Setup.KeyboardResetGameSpeed))
-		{
+		if (vw_GetKeys(Setup.KeyboardResetGameSpeed)) {
 			Setup.GameSpeed = 1.5f;
 			vw_SetTimeThreadSpeed(1, Setup.GameSpeed);
 			CurrentGameSpeedShowTime = 2.0f;
 			vw_SetKeys(Setup.KeyboardResetGameSpeed, false);
 		}
-		if (vw_GetKeys(Setup.KeyboardIncreaseGameSpeed))
-		{
+		if (vw_GetKeys(Setup.KeyboardIncreaseGameSpeed)) {
 			Setup.GameSpeed += 0.1f;
-			if (Setup.GameSpeed > 3.0f) Setup.GameSpeed = 3.0f;
+			if (Setup.GameSpeed > 3.0f)
+				Setup.GameSpeed = 3.0f;
 			CurrentGameSpeedShowTime = 2.0f;
 			vw_SetTimeThreadSpeed(1, Setup.GameSpeed);
 			vw_SetKeys(Setup.KeyboardIncreaseGameSpeed, false);
 		}
 	}
 
-	if (GameStatus == GAME)
-	{
+	if (GameStatus == GAME) {
 		// изменение вывода состояния вооружения
-		if (vw_GetKeys(Setup.KeyboardGameWeaponInfoType))
-		{
+		if (vw_GetKeys(Setup.KeyboardGameWeaponInfoType)) {
 			Setup.GameWeaponInfoType ++;
-			if (Setup.GameWeaponInfoType > 4) Setup.GameWeaponInfoType = 1;
+			if (Setup.GameWeaponInfoType > 4)
+				Setup.GameWeaponInfoType = 1;
 			vw_SetKeys(Setup.KeyboardGameWeaponInfoType, false);
 		}
 		// изменение типов стрельбы
-		if (vw_GetKeys(Setup.KeyboardPrimaryWeaponFireMode))
-		{
+		if (vw_GetKeys(Setup.KeyboardPrimaryWeaponFireMode)) {
 			Setup.Profile[CurrentProfile].PrimaryWeaponFireMode ++;
-			if (Setup.Profile[CurrentProfile].PrimaryWeaponFireMode > 2) Setup.Profile[CurrentProfile].PrimaryWeaponFireMode = 1;
+			if (Setup.Profile[CurrentProfile].PrimaryWeaponFireMode > 2)
+				Setup.Profile[CurrentProfile].PrimaryWeaponFireMode = 1;
 			vw_SetKeys(Setup.KeyboardPrimaryWeaponFireMode, false);
 		}
-		if (vw_GetKeys(Setup.KeyboardSecondaryWeaponFireMode))
-		{
+		if (vw_GetKeys(Setup.KeyboardSecondaryWeaponFireMode)) {
 			Setup.Profile[CurrentProfile].SecondaryWeaponFireMode ++;
-			if (Setup.Profile[CurrentProfile].SecondaryWeaponFireMode > 2) Setup.Profile[CurrentProfile].SecondaryWeaponFireMode = 1;
+			if (Setup.Profile[CurrentProfile].SecondaryWeaponFireMode > 2)
+				Setup.Profile[CurrentProfile].SecondaryWeaponFireMode = 1;
 			vw_SetKeys(Setup.KeyboardSecondaryWeaponFireMode, false);
 		}
 
@@ -435,8 +457,8 @@ void Loop_Proc()
 #if defined(__APPLE__) && defined(__MACH__)
 	if ((vw_GetKeys(SDLK_LSUPER) || vw_GetKeys(SDLK_RSUPER)) && vw_GetKeys(SDLK_q))
 #else
-	if (((vw_GetKeys(SDLK_LALT) || vw_GetKeys(SDLK_RALT)) && vw_GetKeys(SDLK_F4)) |
-		((vw_GetKeys(SDLK_LCTRL) || vw_GetKeys(SDLK_RCTRL)) && vw_GetKeys(SDLK_q)))
+	if (((vw_GetKeys(SDLK_LALT) || vw_GetKeys(SDLK_RALT)) && vw_GetKeys(SDLK_F4)) ||
+	    ((vw_GetKeys(SDLK_LCTRL) || vw_GetKeys(SDLK_RCTRL)) && vw_GetKeys(SDLK_q)))
 #endif // defined(__APPLE__) && defined(__MACH__)
 	{
 		CanQuit = true;
@@ -453,5 +475,3 @@ void Loop_Proc()
 
 
 }
-
-

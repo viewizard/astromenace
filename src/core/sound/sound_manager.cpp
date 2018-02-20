@@ -35,12 +35,12 @@
 //------------------------------------------------------------------------------------
 // переменные
 //------------------------------------------------------------------------------------
-eSound *StartSoundMan = 0;
-eSound *EndSoundMan = 0;
+eSound *StartSoundMan = nullptr;
+eSound *EndSoundMan = nullptr;
 int NumSoundMan = 0;
 
-eMusic *StartMusicMan = 0;
-eMusic *EndMusicMan = 0;
+eMusic *StartMusicMan = nullptr;
+eMusic *EndMusicMan = nullptr;
 int NumMusicMan = 0;
 
 
@@ -58,8 +58,7 @@ ALboolean CheckALCError(ALCdevice *Device)
 	char Err[1024];
 	strcpy(Err, "ALC error: ");
 
-	if ((ErrCode = alcGetError(Device)) != ALC_NO_ERROR)
-	{
+	if ((ErrCode = alcGetError(Device)) != ALC_NO_ERROR) {
 		strcat(Err, alcGetString(Device, ErrCode));
 		strcat(Err, "\n");
 		fprintf(stderr, "%s", Err);
@@ -73,8 +72,7 @@ ALboolean CheckALError()
 	char Err[1024];
 	strcpy(Err, "OpenAL error: ");
 
-	if ((ErrCode = alGetError()) != AL_NO_ERROR)
-	{
+	if ((ErrCode = alGetError()) != AL_NO_ERROR) {
 		strcat(Err, alGetString(ErrCode));
 		strcat(Err, "\n");
 		fprintf(stderr, "%s", Err);
@@ -88,8 +86,7 @@ ALboolean CheckALUTError()
 	char Err[1024];
 	strcpy(Err, "OpenAL alut error: ");
 
-	if ((ErrCode = alutGetError()) != ALUT_ERROR_NO_ERROR)
-	{
+	if ((ErrCode = alutGetError()) != ALUT_ERROR_NO_ERROR) {
 		strcat(Err, alutGetErrorString(ErrCode));
 		strcat(Err, "\n");
 		fprintf(stderr, "%s", Err);
@@ -116,38 +113,40 @@ bool vw_InitSound()
 	ALfloat ListenerOri[] = { 0.0f, 0.0f, -1.0f,  0.0f, 1.0f, 0.0f };
 
 
-	alutInitWithoutContext(NULL, NULL);
-	if (!CheckALUTError()) return false;
+	alutInitWithoutContext(nullptr, nullptr);
+	if (!CheckALUTError())
+		return false;
 
-	ALCcontext *Context = 0;
-	ALCdevice *Device = 0;
+	ALCcontext *Context = nullptr;
+	ALCdevice *Device = nullptr;
 
 	// Open default sound device
-	Device = alcOpenDevice(NULL); // "Generic Software"
+	Device = alcOpenDevice(nullptr); // "Generic Software"
 	// Check for errors
-	if (!Device)
-	{
+	if (!Device) {
 		fprintf(stderr, "Default sound device not present!\n");
 		return false;
 	}
 
 	// Creating rendering context
-	Context = alcCreateContext(Device, NULL);
-	if (!CheckALCError(Device)) return false;
+	Context = alcCreateContext(Device, nullptr);
+	if (!CheckALCError(Device))
+		return false;
 
 	alcMakeContextCurrent(Context);
-	if (!CheckALCError(Device)) return false;
+	if (!CheckALCError(Device))
+		return false;
 
 	// сброс ошибок
 	alGetError();
 	alcGetError(Device);
 
 	// Set listener properties
-    alListenerfv(AL_POSITION,    ListenerPos);
-    alListenerfv(AL_VELOCITY,    ListenerVel);
-    alListenerfv(AL_ORIENTATION, ListenerOri);
-    // затухание звука
-    alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
+	alListenerfv(AL_POSITION,    ListenerPos);
+	alListenerfv(AL_VELOCITY,    ListenerVel);
+	alListenerfv(AL_ORIENTATION, ListenerOri);
+	// затухание звука
+	alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 
 
 	printf("Vendor     : %s\n", alGetString(AL_VENDOR));
@@ -158,13 +157,11 @@ bool vw_InitSound()
 #ifdef gamedebug
 	// получаем и выводим все поддерживаемые расширения
 	char *extensions_tmp = (char *)alGetString(AL_EXTENSIONS);
-	if (extensions_tmp != 0)
-	{
+	if (extensions_tmp != 0) {
 		char *extensions = 0;
 		size_t len = strlen(extensions_tmp);
 		extensions = new char[len+1];
-		if (extensions != 0)
-		{
+		if (extensions != 0) {
 			strcpy(extensions, extensions_tmp);
 			for (unsigned int i=0; i<len; i++) // меняем разделитель
 				if (extensions[i]==' ') extensions[i]='\n';
@@ -206,8 +203,8 @@ void vw_ShutdownSound()
 
 
 
-	ALCcontext *Context = 0;
-	ALCdevice *Device = 0;
+	ALCcontext *Context = nullptr;
+	ALCdevice *Device = nullptr;
 
 	//Get active context
 	Context = alcGetCurrentContext();
@@ -216,17 +213,18 @@ void vw_ShutdownSound()
 
 
 	// Если можем убрать Context, чтобы он не был текущим
-	if (alcMakeContextCurrent(NULL))
-	{
+	if (alcMakeContextCurrent(nullptr)) {
 		alcGetError(Device);
 
 		// Destroy context
-		if (Context != 0)
-		if (alcGetCurrentContext() != Context) alcDestroyContext(Context);
+		if ((Context != nullptr) &&
+		    (alcGetCurrentContext() != Context))
+			alcDestroyContext(Context);
 		alcGetError(Device);
 
 		// Close sound device
-		if (Device != 0) alcCloseDevice(Device);
+		if (Device != nullptr)
+			alcCloseDevice(Device);
 	}
 
 
@@ -240,10 +238,10 @@ void vw_ShutdownSound()
 //------------------------------------------------------------------------------------
 void vw_Listener(float ListenerPos[3], float ListenerVel[3], float ListenerOri[6])
 {
-    alListenerfv(AL_POSITION,    ListenerPos);
-    alListenerfv(AL_VELOCITY,    ListenerVel);
-    alListenerfv(AL_ORIENTATION, ListenerOri);
-    alGetError(); // сброс ошибок
+	alListenerfv(AL_POSITION,    ListenerPos);
+	alListenerfv(AL_VELOCITY,    ListenerVel);
+	alListenerfv(AL_ORIENTATION, ListenerOri);
+	alGetError(); // сброс ошибок
 }
 
 
@@ -260,13 +258,13 @@ void vw_Listener(float ListenerPos[3], float ListenerVel[3], float ListenerOri[6
 void vw_ReleaseSound(eSound* Sound)
 {
 	// проверка входящих данных
-	if (Sound == 0) return;
+	if (Sound == nullptr)
+		return;
 
 	// отключаем от менерджера
 	vw_DetachSound(Sound);
 
-	if (alIsSource(Sound->Source))
-	{
+	if (alIsSource(Sound->Source)) {
 		// если останавливать играющий звук, возможен щелчек (и в линуксе и в виндовсе)
 		alSourceStop(Sound->Source);
 		alGetError(); // сброс ошибок
@@ -279,7 +277,8 @@ void vw_ReleaseSound(eSound* Sound)
 
 
 	// освобождаем память
-	if (Sound != 0) delete Sound;
+	if (Sound != nullptr)
+		delete Sound;
 }
 
 
@@ -291,26 +290,21 @@ void vw_ReleaseSound(eSound* Sound)
 //------------------------------------------------------------------------------------
 void vw_ReleaseAllSounds(int ReleaseType)
 {
-	if (ReleaseType == 0)
-	{
+	if (ReleaseType == 0) {
 		// Чистка памяти...
 		eSound *Tmp = StartSoundMan;
-		while (Tmp != 0)
-		{
+		while (Tmp != nullptr) {
 			eSound *Tmp1 = Tmp->Next;
 			vw_ReleaseSound(Tmp);
 			Tmp = Tmp1;
 		}
 
-		StartSoundMan = 0;
-		EndSoundMan = 0;
-	}
-	else
-	{
+		StartSoundMan = nullptr;
+		EndSoundMan = nullptr;
+	} else {
 
 		eSound *Tmp = StartSoundMan;
-		while (Tmp != 0)
-		{
+		while (Tmp != nullptr) {
 			eSound *Tmp1 = Tmp->Next;
 			if (Tmp->NeedRelease) vw_ReleaseSound(Tmp);
 			Tmp = Tmp1;
@@ -325,22 +319,20 @@ void vw_ReleaseAllSounds(int ReleaseType)
 //------------------------------------------------------------------------------------
 void vw_AttachSound(eSound* Sound)
 {
-	if (Sound == 0) return;
+	if (Sound == nullptr)
+		return;
 
 	// первый в списке...
-	if (EndSoundMan == 0)
-	{
-		Sound->Prev = 0;
-		Sound->Next = 0;
+	if (EndSoundMan == nullptr) {
+		Sound->Prev = nullptr;
+		Sound->Next = nullptr;
 		NumSoundMan += 1;
 		Sound->Num = NumSoundMan;
 		StartSoundMan = Sound;
 		EndSoundMan = Sound;
-	}
-	else // продолжаем заполнение...
-	{
+	} else { // продолжаем заполнение...
 		Sound->Prev = EndSoundMan;
-		Sound->Next = 0;
+		Sound->Next = nullptr;
 		EndSoundMan->Next = Sound;
 		NumSoundMan += 1;
 		Sound->Num = NumSoundMan;
@@ -354,16 +346,24 @@ void vw_AttachSound(eSound* Sound)
 //------------------------------------------------------------------------------------
 void vw_DetachSound(eSound* Sound)
 {
-	if (Sound == 0) return;
+	if (Sound == nullptr)
+		return;
 
 	// переустанавливаем указатели...
-	if (StartSoundMan == Sound) StartSoundMan = Sound->Next;
-	if (EndSoundMan == Sound) EndSoundMan = Sound->Prev;
+	if (StartSoundMan == Sound)
+		StartSoundMan = Sound->Next;
+	if (EndSoundMan == Sound)
+		EndSoundMan = Sound->Prev;
 
-	if (Sound->Next != 0) Sound->Next->Prev = Sound->Prev;
-		else if (Sound->Prev != 0) Sound->Prev->Next = 0;
-	if (Sound->Prev != 0) Sound->Prev->Next = Sound->Next;
-		else if (Sound->Next != 0) Sound->Next->Prev = 0;
+	if (Sound->Next != nullptr)
+		Sound->Next->Prev = Sound->Prev;
+	else if (Sound->Prev != nullptr)
+		Sound->Prev->Next = nullptr;
+
+	if (Sound->Prev != nullptr)
+		Sound->Prev->Next = Sound->Next;
+	else if (Sound->Next != nullptr)
+		Sound->Next->Prev = nullptr;
 }
 
 
@@ -373,13 +373,12 @@ void vw_DetachSound(eSound* Sound)
 eSound* vw_FindSoundByNum(int Num)
 {
 	eSound *Tmp = StartSoundMan;
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eSound *Tmp1 = Tmp->Next;
 		if (Tmp->Num == Num) return Tmp;
 		Tmp = Tmp1;
 	}
-	return 0;
+	return nullptr;
 }
 
 
@@ -388,17 +387,18 @@ eSound* vw_FindSoundByNum(int Num)
 //------------------------------------------------------------------------------------
 eSound* vw_FindSoundByName(const char *Name)
 {
-	if (Name == 0) return 0;
+	if (Name == nullptr)
+		return nullptr;
 
 	eSound *Tmp = StartSoundMan;
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eSound *Tmp1 = Tmp->Next;
-		if (Tmp->FileName != 0)
-			if (!strcmp(Tmp->FileName, Name)) return Tmp;
+		if ((Tmp->FileName != nullptr) &&
+		    (!strcmp(Tmp->FileName, Name)))
+			return Tmp;
 		Tmp = Tmp1;
 	}
-	return 0;
+	return nullptr;
 }
 
 //------------------------------------------------------------------------------------
@@ -410,8 +410,7 @@ void vw_UpdateSound()
 
 	float CurrentGetTime = vw_GetTime();
 
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eSound *Tmp1 = Tmp->Next;
 
 		// считаем сколько играем этот эффект
@@ -419,29 +418,24 @@ void vw_UpdateSound()
 		Tmp->Age += DeltaTime;
 		Tmp->LastUpdateTime = CurrentGetTime;
 
-		if (alIsSource(Tmp->Source))
-		if (Tmp->DestroyTimeStart > 0.0f)
-		{
-			if (Tmp->DestroyTime > 0.0f)
-			{
+		if ((alIsSource(Tmp->Source)) &&
+		    (Tmp->DestroyTimeStart > 0.0f)) {
+			if (Tmp->DestroyTime > 0.0f) {
 				Tmp->DestroyTime -= DeltaTime;
-				if (Tmp->DestroyTime < 0.0f) Tmp->DestroyTime = 0.0f;
+				if (Tmp->DestroyTime < 0.0f)
+					Tmp->DestroyTime = 0.0f;
 				alSourcef (Tmp->Source, AL_GAIN, Tmp->MainVolume*Tmp->Volume*(Tmp->DestroyTime/Tmp->DestroyTimeStart));
 				alGetError(); // сброс ошибок
-			}
-			else
-			{
+			} else {
 				// уже нулевая громкость, можем удалять
 				vw_ReleaseSound(Tmp);
-				Tmp = 0;
+				Tmp = nullptr;
 			}
-
 		}
 
 		// смотрим, если уже не играем - надо удалить
-		if (Tmp != 0)
-		if (alIsSource(Tmp->Source))
-		{
+		if ((Tmp != nullptr) &&
+		    (alIsSource(Tmp->Source))) {
 			ALint TMPS;
 			alGetSourcei(Tmp->Source, AL_SOURCE_STATE, &TMPS);
 			alGetError(); // сброс ошибок
@@ -461,8 +455,7 @@ void vw_SetSoundMainVolume(float NewMainVolume)
 {
 	eSound *Tmp = StartSoundMan;
 
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eSound *Tmp1 = Tmp->Next;
 		Tmp->SetMainVolume(NewMainVolume);
 		Tmp = Tmp1;
@@ -481,56 +474,46 @@ bool vw_CheckCanPlaySound(int Group, int GroupCount, int SubGroup, int SubGroupC
 	// находим кол-во звуков в подгруппе
 	int SubGroupCurrentCount = 0;
 	// находим звук, из этой группы с наименьшим приоритетом + самый старый
-	eSound *GroupCanStop = 0;
+	eSound *GroupCanStop = nullptr;
 	// находим звук, из этой подгруппы с меньшим или равным приоритетом + самый старый
-	eSound *SubGroupCanStop = 0;
+	eSound *SubGroupCanStop = nullptr;
 
 
 	eSound *Tmp = StartSoundMan;
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eSound *Tmp1 = Tmp->Next;
 
-		if (Tmp->DestroyTimeStart == -1.0f)
-		if (Tmp->Group == Group)
-		{
-			if (Tmp->SubGroup == SubGroup)
-			{
+		if ((Tmp->DestroyTimeStart == -1.0f) &&
+		    (Tmp->Group == Group)) {
+			if (Tmp->SubGroup == SubGroup) {
 				SubGroupCurrentCount++;
 
 				// если приоритет выше или такой же, можем его останавливать
-				if (Priority <= Tmp->Priority)
-				{
-					if (SubGroupCanStop == 0)
+				if (Priority <= Tmp->Priority) {
+					if (SubGroupCanStop == nullptr)
 						SubGroupCanStop = Tmp;// если ничего еще нет, ставим этот
-					else
-					{
+					else {
 						if (SubGroupCanStop->Priority < Tmp->Priority)
 							SubGroupCanStop = Tmp;	// если этот с меньшим приоритетом - берем сразу
-						else
-							if (SubGroupCanStop->Age < Tmp->Age)
-								SubGroupCanStop = Tmp;	// меняем на более старый
+						else if (SubGroupCanStop->Age < Tmp->Age)
+							SubGroupCanStop = Tmp;	// меняем на более старый
 					}
 				}
 			}
 
 			GroupCurrentCount++;
 			// если приоритет выше или такой же, можем его останавливать
-			if (Priority <= Tmp->Priority)
-			{
-				if (GroupCanStop == 0)
+			if (Priority <= Tmp->Priority) {
+				if (GroupCanStop == nullptr)
 					GroupCanStop = Tmp;// если ничего еще нет, ставим этот
-				else
-				{
+				else {
 					if (GroupCanStop->Priority < Tmp->Priority)
-							GroupCanStop = Tmp;	// если этот с меньшим приоритетом - берем сразу
-					else
-						if (GroupCanStop->Age < Tmp->Age)
-							GroupCanStop = Tmp;	// меняем на более старый
+						GroupCanStop = Tmp;	// если этот с меньшим приоритетом - берем сразу
+					else if (GroupCanStop->Age < Tmp->Age)
+						GroupCanStop = Tmp;	// меняем на более старый
 				}
 			}
 		}
-
 
 		Tmp = Tmp1;
 	}
@@ -538,24 +521,19 @@ bool vw_CheckCanPlaySound(int Group, int GroupCount, int SubGroup, int SubGroupC
 
 
 	// если в подгруппе нет места - останавливаем звук из подгруппы
-	if (SubGroupCount <= SubGroupCurrentCount)
-	{
-		if (SubGroupCanStop != 0)
-		{
+	if (SubGroupCount <= SubGroupCurrentCount) {
+		if (SubGroupCanStop != nullptr) {
 			SubGroupCanStop->Stop(0.15f);
 			GroupCurrentCount--;
 			SubGroupCurrentCount--;
 		}
-	}
-	else // если уже удалили, само собой в группе будет пустое место
-	{
+	} else { // если уже удалили, само собой в группе будет пустое место
 		// если в группе нет места - останавливаем звук из группы
 		if (GroupCount <= GroupCurrentCount)
-		if (GroupCanStop != 0)
-		{
-			GroupCanStop->Stop(0.15f);
-			GroupCurrentCount--;
-		}
+			if (GroupCanStop != nullptr) {
+				GroupCanStop->Stop(0.15f);
+				GroupCurrentCount--;
+			}
 	}
 
 
@@ -585,12 +563,10 @@ bool vw_GetMusicIsPlaying()
 {
 	eMusic *Tmp = StartMusicMan;
 
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eMusic *Tmp1 = Tmp->Next;
 		// смотрим, если играем что-то, передаем...
-		if (alIsSource(Tmp->Source))
-		{
+		if (alIsSource(Tmp->Source)) {
 			ALint TMPS;
 			alGetSourcei(Tmp->Source, AL_SOURCE_STATE, &TMPS);
 			alGetError(); // сброс ошибок
@@ -610,22 +586,21 @@ bool vw_GetMusicIsPlaying()
 void vw_ReleaseMusic(eMusic* Music)
 {
 	// проверка входящих данных
-	if (Music == 0) return;
+	if (Music == nullptr)
+		return;
 
 	// отключаем от менерджера
 	vw_DetachMusic(Music);
 
 	// обязательно остановить!!!
-	if (alIsSource(Music->Source))
-	{
+	if (alIsSource(Music->Source)) {
 		alSourceStop(Music->Source);
 
 		// открепляем все буферы от источника
 		int queued;
 		alGetSourcei(Music->Source, AL_BUFFERS_QUEUED, &queued);
 		alGetError(); // сброс ошибок
-		while(queued--)
-		{
+		while(queued--) {
 			ALuint buffer;
 			alSourceUnqueueBuffers(Music->Source, 1, &buffer);
 			alGetError(); // сброс ошибок
@@ -635,24 +610,28 @@ void vw_ReleaseMusic(eMusic* Music)
 		alDeleteSources(1, &Music->Source);
 		Music->Source = 0;
 		alGetError(); // сброс ошибок
-    }
+	}
 
 
 	// удаляем буфер (для музыки именно тут)
 	alDeleteBuffers(NUM_OF_DYNBUF, Music->Buffers);
 	alGetError(); // сброс ошибок
 
-	if (Music->mVF != 0){ov_clear(Music->mVF);delete Music->mVF; Music->mVF = 0;}
+	if (Music->mVF != nullptr) {
+		ov_clear(Music->mVF);
+		delete Music->mVF;
+		Music->mVF = nullptr;
+	}
 
 
-	if (Music->MusicFile != 0)
-	{
+	if (Music->MusicFile != nullptr) {
 		eFILE *TMPFile = (eFILE *)Music->MusicFile;
 		vw_fclose(TMPFile);
 	}
 
 	// освобождаем память
-	if (Music != 0) delete Music;
+	if (Music != nullptr)
+		delete Music;
 }
 
 
@@ -663,15 +642,14 @@ void vw_ReleaseAllMusic()
 {
 	// Чистка памяти...
 	eMusic *Tmp = StartMusicMan;
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eMusic *Tmp1 = Tmp->Next;
 		vw_ReleaseMusic(Tmp);
 		Tmp = Tmp1;
 	}
 
-	StartMusicMan = 0;
-	EndMusicMan = 0;
+	StartMusicMan = nullptr;
+	EndMusicMan = nullptr;
 }
 
 
@@ -680,22 +658,20 @@ void vw_ReleaseAllMusic()
 //------------------------------------------------------------------------------------
 void vw_AttachMusic(eMusic* Music)
 {
-	if (Music == 0) return;
+	if (Music == nullptr)
+		return;
 
 	// первый в списке...
-	if (EndMusicMan == 0)
-	{
-		Music->Prev = 0;
-		Music->Next = 0;
+	if (EndMusicMan == nullptr) {
+		Music->Prev = nullptr;
+		Music->Next = nullptr;
 		NumMusicMan += 1;
 		Music->Num = NumMusicMan;
 		StartMusicMan = Music;
 		EndMusicMan = Music;
-	}
-	else // продолжаем заполнение...
-	{
+	} else { // продолжаем заполнение...
 		Music->Prev = EndMusicMan;
-		Music->Next = 0;
+		Music->Next = nullptr;
 		EndMusicMan->Next = Music;
 		NumMusicMan += 1;
 		Music->Num = NumMusicMan;
@@ -709,16 +685,23 @@ void vw_AttachMusic(eMusic* Music)
 //------------------------------------------------------------------------------------
 void vw_DetachMusic(eMusic* Music)
 {
-	if (Music == 0) return;
+	if (Music == nullptr) return;
 
 	// переустанавливаем указатели...
-	if (StartMusicMan == Music) StartMusicMan = Music->Next;
-	if (EndMusicMan == Music) EndMusicMan = Music->Prev;
+	if (StartMusicMan == Music)
+		StartMusicMan = Music->Next;
+	if (EndMusicMan == Music)
+		EndMusicMan = Music->Prev;
 
-	if (Music->Next != 0) Music->Next->Prev = Music->Prev;
-		else if (Music->Prev != 0) Music->Prev->Next = 0;
-	if (Music->Prev != 0) Music->Prev->Next = Music->Next;
-		else if (Music->Next != 0) Music->Next->Prev = 0;
+	if (Music->Next != nullptr)
+		Music->Next->Prev = Music->Prev;
+	else if (Music->Prev != nullptr)
+		Music->Prev->Next = nullptr;
+
+	if (Music->Prev != nullptr)
+		Music->Prev->Next = Music->Next;
+	else if (Music->Next != nullptr)
+		Music->Next->Prev = nullptr;
 }
 
 
@@ -730,8 +713,7 @@ void vw_UpdateMusic()
 {
 	eMusic *Tmp = StartMusicMan;
 
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eMusic *Tmp1 = Tmp->Next;
 		if (!Tmp->Update()) vw_ReleaseMusic(Tmp);
 		Tmp = Tmp1;
@@ -746,8 +728,7 @@ void vw_SetMusicMainVolume(float NewMainVolume)
 {
 	eMusic *Tmp = StartMusicMan;
 
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eMusic *Tmp1 = Tmp->Next;
 		Tmp->SetMainVolume(NewMainVolume);
 		Tmp = Tmp1;
@@ -761,11 +742,10 @@ void vw_SetMusicMainVolume(float NewMainVolume)
 eMusic* vw_FindMusicByNum(int Num)
 {
 	eMusic *Tmp = StartMusicMan;
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eMusic *Tmp1 = Tmp->Next;
 		if (Tmp->Num == Num) return Tmp;
 		Tmp = Tmp1;
 	}
-	return 0;
+	return nullptr;
 }

@@ -29,14 +29,14 @@
 
 
 // функции для использования Occlusion Queries
-PFNGLGENQUERIESARBPROC        glGenQueriesARB        = NULL;
-PFNGLDELETEQUERIESARBPROC     glDeleteQueriesARB     = NULL;
-PFNGLISQUERYARBPROC           glIsQueryARB           = NULL;
-PFNGLBEGINQUERYARBPROC        glBeginQueryARB        = NULL;
-PFNGLENDQUERYARBPROC          glEndQueryARB          = NULL;
-PFNGLGETQUERYIVARBPROC        glGetQueryivARB        = NULL;
-PFNGLGETQUERYOBJECTIVARBPROC  glGetQueryObjectivARB  = NULL;
-PFNGLGETQUERYOBJECTUIVARBPROC glGetQueryObjectuivARB = NULL;
+PFNGLGENQUERIESARBPROC        glGenQueriesARB        = nullptr;
+PFNGLDELETEQUERIESARBPROC     glDeleteQueriesARB     = nullptr;
+PFNGLISQUERYARBPROC           glIsQueryARB           = nullptr;
+PFNGLBEGINQUERYARBPROC        glBeginQueryARB        = nullptr;
+PFNGLENDQUERYARBPROC          glEndQueryARB          = nullptr;
+PFNGLGETQUERYIVARBPROC        glGetQueryivARB        = nullptr;
+PFNGLGETQUERYOBJECTIVARBPROC  glGetQueryObjectivARB  = nullptr;
+PFNGLGETQUERYOBJECTUIVARBPROC glGetQueryObjectuivARB = nullptr;
 
 
 
@@ -57,18 +57,17 @@ bool vw_Internal_InitializationOcclusionQueries()
 	glGetQueryObjectuivARB = (PFNGLGETQUERYOBJECTUIVARBPROC) SDL_GL_GetProcAddress("glGetQueryObjectuivARB");
 
 	// если хоть с одной функцией проблемы - не работаем вообще
-	if (glGenQueriesARB == NULL || glDeleteQueriesARB == NULL || glIsQueryARB == NULL ||
-		glBeginQueryARB == NULL || glEndQueryARB == NULL || glGetQueryivARB == NULL ||
-		glGetQueryObjectivARB == NULL || glGetQueryObjectuivARB)
-	{
-		glGenQueriesARB        = NULL;
-		glDeleteQueriesARB     = NULL;
-		glIsQueryARB           = NULL;
-		glBeginQueryARB        = NULL;
-		glEndQueryARB          = NULL;
-		glGetQueryivARB        = NULL;
-		glGetQueryObjectivARB  = NULL;
-		glGetQueryObjectuivARB = NULL;
+	if (glGenQueriesARB == nullptr || glDeleteQueriesARB == nullptr || glIsQueryARB == nullptr ||
+	    glBeginQueryARB == nullptr || glEndQueryARB == nullptr || glGetQueryivARB == nullptr ||
+	    glGetQueryObjectivARB == nullptr || glGetQueryObjectuivARB) {
+		glGenQueriesARB        = nullptr;
+		glDeleteQueriesARB     = nullptr;
+		glIsQueryARB           = nullptr;
+		glBeginQueryARB        = nullptr;
+		glEndQueryARB          = nullptr;
+		glGetQueryivARB        = nullptr;
+		glGetQueryObjectivARB  = nullptr;
+		glGetQueryObjectuivARB = nullptr;
 		return false;
 	}
 
@@ -82,7 +81,7 @@ bool vw_Internal_InitializationOcclusionQueries()
 //------------------------------------------------------------------------------------
 void vw_GenQueries(int n, unsigned int *ids)
 {
-	if (glGenQueriesARB == NULL) return;
+	if (glGenQueriesARB == nullptr) return;
 	glGenQueriesARB(n, ids);
 }
 
@@ -93,7 +92,7 @@ void vw_GenQueries(int n, unsigned int *ids)
 //------------------------------------------------------------------------------------
 void vw_DeleteQueries(int n, const unsigned int *ids)
 {
-	if (glDeleteQueriesARB == NULL) return;
+	if (glDeleteQueriesARB == nullptr) return;
 	glDeleteQueriesARB(n, ids);
 }
 
@@ -104,7 +103,7 @@ void vw_DeleteQueries(int n, const unsigned int *ids)
 //------------------------------------------------------------------------------------
 bool vw_IsQuery(unsigned int id)
 {
-	if (glIsQueryARB == NULL) return false;
+	if (glIsQueryARB == nullptr) return false;
 	return glIsQueryARB(id);
 }
 
@@ -114,7 +113,7 @@ bool vw_IsQuery(unsigned int id)
 //------------------------------------------------------------------------------------
 void vw_BeginQuery(unsigned int id)
 {
-	if (glBeginQueryARB == NULL) return;
+	if (glBeginQueryARB == nullptr) return;
 	glBeginQueryARB(GL_SAMPLES_PASSED_ARB, id);
 }
 
@@ -125,7 +124,7 @@ void vw_BeginQuery(unsigned int id)
 //------------------------------------------------------------------------------------
 void vw_EndQuery()
 {
-	if (glEndQueryARB == NULL) return;
+	if (glEndQueryARB == nullptr) return;
 	glEndQueryARB(GL_SAMPLES_PASSED_ARB);
 }
 
@@ -136,7 +135,7 @@ void vw_EndQuery()
 //------------------------------------------------------------------------------------
 void vw_GetQueryiv(unsigned int target, unsigned int pname, int *params)
 {
-	if (glGetQueryivARB == NULL) return;
+	if (glGetQueryivARB == nullptr) return;
 	glGetQueryivARB(target, pname, params);
 }
 
@@ -147,7 +146,7 @@ void vw_GetQueryiv(unsigned int target, unsigned int pname, int *params)
 //------------------------------------------------------------------------------------
 void vw_GetQueryObjectiv(unsigned int id, unsigned int pname, int *params)
 {
-	if (glGetQueryObjectivARB == NULL) return;
+	if (glGetQueryObjectivARB == nullptr) return;
 	glGetQueryObjectivARB(id, pname, params);
 }
 
@@ -158,6 +157,6 @@ void vw_GetQueryObjectiv(unsigned int id, unsigned int pname, int *params)
 //------------------------------------------------------------------------------------
 void vw_GetQueryObjectuiv(unsigned int id, unsigned int pname, unsigned int *params)
 {
-	if (glGetQueryObjectuivARB == NULL) return;
+	if (glGetQueryObjectuivARB == nullptr) return;
 	glGetQueryObjectuivARB(id, pname, params);
 }

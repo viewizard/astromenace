@@ -58,31 +58,30 @@ float StarsTileEndTransparentLayer2 = 0.0f;
 void StarSystemInit(int Num, VECTOR3D SetBaseRotation)
 {
 	// SkyBox setup
-	switch (Num)
-	{
-		case 1:
-			SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
-			SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_back6.tga"), 4);
-			SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_bottom4.tga"), 2);
-			SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_front5.tga"), 5);
-			SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_left2.tga"), 1);
-			SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_right1.tga"), 0);
-			SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_top3.tga"), 3);
-			StarSystem_Inited = true;
-			break;
-		case 2:
-			SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
-			SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_back6.tga"), 4);
-			SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_bottom4.tga"), 2);
-			SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_front5.tga"), 5);
-			SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_left2.tga"), 1);
-			SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_right1.tga"), 0);
-			SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_top3.tga"), 3);
-			StarSystem_Inited = true;
-			break;
-		default:
-			fprintf(stderr, "Error in StarSystemInit function call, wrong Num.\n");
-			break;
+	switch (Num) {
+	case 1:
+		SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_back6.tga"), 4);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_bottom4.tga"), 2);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_front5.tga"), 5);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_left2.tga"), 1);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_right1.tga"), 0);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_top3.tga"), 3);
+		StarSystem_Inited = true;
+		break;
+	case 2:
+		SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_back6.tga"), 4);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_bottom4.tga"), 2);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_front5.tga"), 5);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_left2.tga"), 1);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_right1.tga"), 0);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_top3.tga"), 3);
+		StarSystem_Inited = true;
+		break;
+	default:
+		fprintf(stderr, "Error in StarSystemInit function call, wrong Num.\n");
+		break;
 	}
 
 
@@ -91,8 +90,11 @@ void StarSystemInit(int Num, VECTOR3D SetBaseRotation)
 	StarSystem_BaseRotation = SetBaseRotation;
 
 	// static space stars initialization
-	if (psSpaceStatic != 0){delete psSpaceStatic; psSpaceStatic = 0;}
-	psSpaceStatic = new CSpaceStars; if (psSpaceStatic == 0) return;
+	if (psSpaceStatic != nullptr) {
+		delete psSpaceStatic;
+		psSpaceStatic = nullptr;
+	}
+	psSpaceStatic = new CSpaceStars;
 }
 
 
@@ -104,12 +106,15 @@ void StarSystemInit(int Num, VECTOR3D SetBaseRotation)
 void StarSystemRelease()
 {
 	for (int i=0; i<6; i++)
-		SkyBoxSetTexture(0, i);
+		SkyBoxSetTexture(nullptr, i);
 
 	StarSystem_Inited = false;
 
 	// static space stars
-	if (psSpaceStatic != 0){delete psSpaceStatic; psSpaceStatic = 0;}
+	if (psSpaceStatic != nullptr) {
+		delete psSpaceStatic;
+		psSpaceStatic = nullptr;
+	}
 }
 
 
@@ -131,8 +136,7 @@ void StarSystemDraw(int DrawType)
 
 	vw_DepthTest(false, -1);
 
-	if (StarSystem_Inited)
-	{
+	if (StarSystem_Inited) {
 		// SkyBox
 		vw_PushMatrix();
 		vw_Translate(CurrentCameraLocation);
@@ -144,7 +148,8 @@ void StarSystemDraw(int DrawType)
 	}
 
 	// static space stars
-	if (psSpaceStatic!=0) psSpaceStatic->Draw();
+	if (psSpaceStatic != nullptr)
+		psSpaceStatic->Draw();
 
 	vw_DepthTest(true, RI_LESSEQUAL);
 
@@ -155,32 +160,29 @@ void StarSystemDraw(int DrawType)
 	// космические объекты
 	// рисуем планеты и большие астероиды _до_ тайловой анимации
 	CSpaceObject *tmp1 = StartSpaceObject;
-	while (tmp1!=0)
-	{
+	while (tmp1 != nullptr) {
 		CSpaceObject *tmp2 = tmp1->Next;
 
 		// если это планета на заднем фоне
-		if (tmp1->ObjectType == 14)
-		{
-			if (DrawType == 2)
-			{
+		if (tmp1->ObjectType == 14) {
+			if (DrawType == 2) {
 				vw_PushMatrix();
 				vw_Translate(VECTOR3D(CurrentCameraLocation.x*0.90f-GameCameraGetDeviation()*4.0f, GameCameraGetDeviation()*2.0f,0.0f));
 			}
 			tmp1->Draw(false);
-			if (DrawType == 2) vw_PopMatrix();
-		}
-		else
-		// если это большой астероид летящий на заднем фоне
-		if (tmp1->ObjectType == 15 && (tmp1->ObjectCreationType>10 && tmp1->ObjectCreationType<20))
-		{
 			if (DrawType == 2)
-			{
-				vw_PushMatrix();
-				vw_Translate(VECTOR3D(CurrentCameraLocation.x*0.70f-GameCameraGetDeviation()*4.0f, GameCameraGetDeviation()*2.0f,0.0f));
+				vw_PopMatrix();
+		} else {
+			// если это большой астероид летящий на заднем фоне
+			if (tmp1->ObjectType == 15 && (tmp1->ObjectCreationType>10 && tmp1->ObjectCreationType<20)) {
+				if (DrawType == 2) {
+					vw_PushMatrix();
+					vw_Translate(VECTOR3D(CurrentCameraLocation.x*0.70f-GameCameraGetDeviation()*4.0f, GameCameraGetDeviation()*2.0f,0.0f));
+				}
+				tmp1->Draw(false);
+				if (DrawType == 2)
+					vw_PopMatrix();
 			}
-			tmp1->Draw(false);
-			if (DrawType == 2) vw_PopMatrix();
 		}
 
 		tmp1 = tmp2;
@@ -195,8 +197,7 @@ void StarSystemDraw(int DrawType)
 	{
 		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
 
-		float *buff = 0;
-		buff = new float[4*9]; if (buff == 0) return;
+		float *buff = new float[4*9];
 
 		float width_2, heigh_2, length_2;
 		width_2 = 0.0f;
@@ -210,8 +211,7 @@ void StarSystemDraw(int DrawType)
 		float EndTransparentLayer1 = 0.7f;
 
 
-		if (DrawType == 2)
-		{
+		if (DrawType == 2) {
 			width_2 = length_2 = 175.0f;
 			heigh_2 = 0.0f;
 			// чем ниже слой, тем меньше его двигаем при перемещении камеры (при стандартном аспект рейшен)
@@ -267,13 +267,10 @@ void StarSystemDraw(int DrawType)
 		buff[k++] = 1.0f+StarsTile/3.0f;
 
 
-		if (DrawType == 1)
-		{
+		if (DrawType == 1) {
 			StarsTile -= 0.015f*(vw_GetTime() - StarsTileUpdateTime);
 			StarsTileUpdateTime = vw_GetTime();
-		}
-		else
-		{
+		} else {
 			StarsTile -= 0.035f*(vw_GetTime(1) - StarsTileUpdateTime);
 			StarsTileUpdateTime = vw_GetTime(1);
 		}
@@ -291,8 +288,7 @@ void StarSystemDraw(int DrawType)
 
 		vw_DepthTest(false, -1);
 
-		if (DrawType == 1)
-		{
+		if (DrawType == 1) {
 			vw_PushMatrix();
 			vw_Rotate(-20.0f, 0.0f, 0.0f, 1.0f);
 			vw_Rotate(-45.0f, 0.0f, 1.0f, 0.0f);
@@ -305,7 +301,7 @@ void StarSystemDraw(int DrawType)
 
 		// звезды рисуем отдельно, четкими (со своими текстурными координатами)
 
-		k=0;
+		k = 0;
 
 		buff[k++] = x + width_2;
 		buff[k++] = y + heigh_2;
@@ -360,14 +356,14 @@ void StarSystemDraw(int DrawType)
 
 		vw_SetTextureBlend(false, 0, 0);
 		vw_BindTexture(0, 0);
-		if (buff != 0){delete [] buff; buff = 0;}
+		if (buff != nullptr)
+			delete [] buff;
 	}
 
 
 
 	// корректируем положение частиц "космической пыли", если в игре и камера движется
-	if (DrawType == 2)
-	{
+	if (DrawType == 2) {
 		VECTOR3D TMPpsSpace;
 		psSpace->GetLocation(&TMPpsSpace);
 		psSpace->SetStartLocation(TMPpsSpace);
@@ -383,12 +379,10 @@ void StarSystemDraw(int DrawType)
 //------------------------------------------------------------------------------------
 void StarSystemDrawSecondLayer(int DrawType)
 {
-	if (Setup.VisualEffectsQuality <= 1)
-	{
+	if (Setup.VisualEffectsQuality <= 1) {
 		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
 
-		float *buff;
-		buff = new float[4*9]; if (buff == 0) return;
+		float *buff = new float[4*9];
 
 		float width_2, heigh_2, length_2;
 		width_2 = 0.0f;
@@ -401,8 +395,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 		float StartTransparentLayer2 = 0.9f;
 		float EndTransparentLayer2 = 0.7f;
 
-		if (DrawType == 2)
-		{
+		if (DrawType == 2) {
 			width_2 = length_2 = 175.0f;
 			heigh_2 = 0.0f;
 
@@ -418,7 +411,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 		}
 
 
-		int k=0;
+		int k = 0;
 
 		buff[k++] = x + width_2;
 		buff[k++] = y + heigh_2;
@@ -460,13 +453,10 @@ void StarSystemDrawSecondLayer(int DrawType)
 		buff[k++] = 0.2f;
 		buff[k++] = 3.0f+StarsTile2;
 
-		if (DrawType == 1)
-		{
+		if (DrawType == 1) {
 			StarsTile2 -= 0.04f*(vw_GetTime() - StarsTileUpdateTime2);
 			StarsTileUpdateTime2 = vw_GetTime();
-		}
-		else
-		{
+		} else {
 			StarsTile2 -= 0.12f*(vw_GetTime(1) - StarsTileUpdateTime2);
 			StarsTileUpdateTime2 = vw_GetTime(1);
 		}
@@ -484,8 +474,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 
 		vw_DepthTest(false, -1);
 
-		if (DrawType == 1)
-		{
+		if (DrawType == 1) {
 			vw_PushMatrix();
 			vw_Rotate(-20.0f, 0.0f, 0.0f, 1.0f);
 			vw_Rotate(-45.0f, 0.0f, 1.0f, 0.0f);
@@ -500,7 +489,8 @@ void StarSystemDrawSecondLayer(int DrawType)
 		vw_DepthTest(true, RI_LESSEQUAL);
 		vw_SetTextureBlend(false, 0, 0);
 		vw_BindTexture(0, 0);
-		if (buff != 0){delete [] buff; buff = 0;}
+		if (buff != nullptr)
+			delete [] buff;
 	}
 }
 
@@ -515,5 +505,6 @@ void StarSystemUpdate()
 	if (!StarSystem_InitedAll) return;
 
 	// static space stars
-	if (psSpaceStatic!=0) psSpaceStatic->Update(vw_GetTime());
+	if (psSpaceStatic != nullptr)
+		psSpaceStatic->Update(vw_GetTime());
 }

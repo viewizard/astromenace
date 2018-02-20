@@ -59,8 +59,7 @@ int Audio_PlaySound3D(int SoundID, float fVol, VECTOR3D Location, bool Loop, int
 //-----------------------------------------------------------------------------
 // еденичная запись поведения
 //-----------------------------------------------------------------------------
-struct CTimeSheet
-{
+struct CTimeSheet {
 	// флаг, показывает что установлен и задействован этот режим
 	bool InUse;
 	// кол-во времени (оставшееся), которое работает этот режим
@@ -327,14 +326,14 @@ bool NeedCheckCollision(CObject3D* Object3D);
 void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum, float TriangleSizeLimit, bool NeedTangentAndBinormal=false);
 // Получение угла поворота оружия на врага
 void GetShipOnTargetOrientateion(int ObjectStatus, VECTOR3D Location, VECTOR3D CurrentObjectRotation,
-		float MinDistance, float RotationMatrix[9], VECTOR3D *NeedAngle, float ObjectWidth, bool NeedCenterOrientation,
-		bool NeedByWeaponOrientation, VECTOR3D WeponLocation, int WeaponType);
+				 float MinDistance, float RotationMatrix[9], VECTOR3D *NeedAngle, float ObjectWidth, bool NeedCenterOrientation,
+				 bool NeedByWeaponOrientation, VECTOR3D WeponLocation, int WeaponType);
 // Получение угла поворота оружия на врага для противника
 void GetEnemyShipOnTargetOrientateion(int ObjectStatus, VECTOR3D Location, VECTOR3D CurrentObjectRotation,
-		float RotationMatrix[9], VECTOR3D *NeedAngle, int WeaponType);
+				      float RotationMatrix[9], VECTOR3D *NeedAngle, int WeaponType);
 // Получение угла поворота турели на врага
 bool GetTurretOnTargetOrientateion(int ObjectStatus, VECTOR3D Location, VECTOR3D CurrentObjectRotation,
-		float RotationMatrix[9], VECTOR3D *NeedAngle, int WeaponType);
+				   float RotationMatrix[9], VECTOR3D *NeedAngle, int WeaponType);
 // Получение данных для наведение ракет
 CObject3D *GetMissileOnTargetOrientateion(int	ObjectStatus, VECTOR3D Location,
 		VECTOR3D CurrentObjectRotation, float RotationMatrix[9], VECTOR3D *NeedAngle, float MaxDistance);

@@ -40,8 +40,7 @@ void CBigAsteroid::Create(int AsteroidNum)
 	ObjectType = 15;
 
 	// задали первичный, нужно случайным образом найти
-	if (AsteroidNum == 1 || AsteroidNum == 2)
-	{
+	if (AsteroidNum == 1 || AsteroidNum == 2) {
 		int Rand = 1 + vw_iRandNum(4);
 		if (Rand < 1) Rand = 1;
 		if (Rand > 5) Rand = 5;
@@ -51,61 +50,60 @@ void CBigAsteroid::Create(int AsteroidNum)
 
 
 	// перебираем и ставим нужные данные
-	switch (AsteroidNum)
-	{
-		case 11:
-			LoadObjectData("models/space/bigasteroid-01.vw3d", this, 0, -1.0f, Setup.UseGLSL);
-			goto case9next;
-		case 12:
-			LoadObjectData("models/space/bigasteroid-02.vw3d", this, 0, -1.0f, Setup.UseGLSL);
-			goto case9next;
-		case 13:
-			LoadObjectData("models/space/bigasteroid-03.vw3d", this, 0, -1.0f, Setup.UseGLSL);
-			goto case9next;
-		case 14:
-			LoadObjectData("models/space/bigasteroid-04.vw3d", this, 0, -1.0f, Setup.UseGLSL);
-			goto case9next;
-		case 15:
-			LoadObjectData("models/space/bigasteroid-05.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+	switch (AsteroidNum) {
+	case 11:
+		LoadObjectData("models/space/bigasteroid-01.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		goto case9next;
+	case 12:
+		LoadObjectData("models/space/bigasteroid-02.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		goto case9next;
+	case 13:
+		LoadObjectData("models/space/bigasteroid-03.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		goto case9next;
+	case 14:
+		LoadObjectData("models/space/bigasteroid-04.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		goto case9next;
+	case 15:
+		LoadObjectData("models/space/bigasteroid-05.vw3d", this, 0, -1.0f, Setup.UseGLSL);
 
 case9next:
 
-			//Speed = 25.0f;
-			RotationSpeed.x = 10.0f + 10.0f*vw_Randf0;
-			RotationSpeed.y = 2.0f + 20.0f*vw_Randf0;
+		//Speed = 25.0f;
+		RotationSpeed.x = 10.0f + 10.0f*vw_Randf0;
+		RotationSpeed.y = 2.0f + 20.0f*vw_Randf0;
 
-			Texture[0] = vw_FindTextureByName("models/planet/d_class3.tga");
-			TextureIllum[0] = 0;
-			NormalMap[0] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
-			break;
+		Texture[0] = vw_FindTextureByName("models/planet/d_class3.tga");
+		TextureIllum[0] = nullptr;
+		NormalMap[0] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
+		break;
 
 
-		// те же астероиды, но они летят сверху...
-		case 21:
-			LoadObjectData("models/space/bigasteroid-01.vw3d", this, 0, -1.0f, Setup.UseGLSL);
-			goto case10next;
-		case 22:
-			LoadObjectData("models/space/bigasteroid-02.vw3d", this, 0, -1.0f, Setup.UseGLSL);
-			goto case10next;
-		case 23:
-			LoadObjectData("models/space/bigasteroid-03.vw3d", this, 0, -1.0f, Setup.UseGLSL);
-			goto case10next;
-		case 24:
-			LoadObjectData("models/space/bigasteroid-04.vw3d", this, 0, -1.0f, Setup.UseGLSL);
-			goto case10next;
-		case 25:
-			LoadObjectData("models/space/bigasteroid-05.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+	// те же астероиды, но они летят сверху...
+	case 21:
+		LoadObjectData("models/space/bigasteroid-01.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		goto case10next;
+	case 22:
+		LoadObjectData("models/space/bigasteroid-02.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		goto case10next;
+	case 23:
+		LoadObjectData("models/space/bigasteroid-03.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		goto case10next;
+	case 24:
+		LoadObjectData("models/space/bigasteroid-04.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		goto case10next;
+	case 25:
+		LoadObjectData("models/space/bigasteroid-05.vw3d", this, 0, -1.0f, Setup.UseGLSL);
 
 case10next:
 
-			//Speed = 25.0f;
-			RotationSpeed.x = 10.0f + 10.0f*vw_Randf0;
-			RotationSpeed.y = 2.0f + 20.0f*vw_Randf0;
+		//Speed = 25.0f;
+		RotationSpeed.x = 10.0f + 10.0f*vw_Randf0;
+		RotationSpeed.y = 2.0f + 20.0f*vw_Randf0;
 
-			Texture[0] = vw_FindTextureByName("models/planet/d_class3.tga");
-			TextureIllum[0] = 0;
-			NormalMap[0] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
-			break;
+		Texture[0] = vw_FindTextureByName("models/planet/d_class3.tga");
+		TextureIllum[0] = nullptr;
+		NormalMap[0] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
+		break;
 	}
 
 

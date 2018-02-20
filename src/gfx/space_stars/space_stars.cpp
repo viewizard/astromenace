@@ -49,8 +49,7 @@ CSpaceStars::CSpaceStars()
 
 
 
-	if (Setup.UseGLSL)
-	{
+	if (Setup.UseGLSL) {
 		GLSL = vw_FindShaderByName("SpaceStars");
 		UniformLocations[0] = vw_GetUniformLocation(GLSL, "ParticleTexture");
 		UniformLocations[1] = vw_GetUniformLocation(GLSL, "ParticleAge");
@@ -63,18 +62,16 @@ CSpaceStars::CSpaceStars()
 	Matrix33Identity(OldInvRotationMat);
 
 	// настройка массива
-	Start = 0;
-	End = 0;
+	Start = nullptr;
+	End = nullptr;
 
 
 	unsigned int ParticlesCreated = 10000 - 4000*Setup.VisualEffectsQuality;
 
 	// пока не создадим все необходимые частицы
-	while (ParticlesCreated > 0)
-	{
+	while (ParticlesCreated > 0) {
 		// создаем новую частицу
-		CStar *NewParticle = 0;
-		NewParticle = new CStar; if (NewParticle == 0) return;
+		CStar *NewParticle = new CStar;
 
 
 		// считаем значение альфы
@@ -98,37 +95,37 @@ CSpaceStars::CSpaceStars()
 		tmp.y = vw_Randf0 * CreationSize.y;
 		tmp.z = vw_Randf0 * CreationSize.z;
 		float ParticleDist = tmp.x*tmp.x + tmp.y*tmp.y + tmp.z*tmp.z;
-		while (ParticleDist > minDist || ParticleDist < DeadZone*DeadZone)
-		{
-			if (ParticleDist > minDist)
-			{
+		while (ParticleDist > minDist || ParticleDist < DeadZone*DeadZone) {
+			if (ParticleDist > minDist) {
 				// ум. радиус
 				VECTOR3D tmp1 = tmp;
 				tmp1.Normalize();
 				tmp1 = tmp1^(1/100.0f);
 				tmp = tmp - tmp1;
 			}
-			if ( ParticleDist < DeadZone*DeadZone)
-			{
+			if ( ParticleDist < DeadZone*DeadZone) {
 				// ув. радиус
 				VECTOR3D tmp1 = tmp;
 				tmp1.Normalize();
 				tmp1 = tmp1^(1/100.0f);
 				tmp = tmp + tmp1;
 
-				if (tmp.x > 0.0f)
-				{if (tmp.x > CreationSize.x) tmp.x = CreationSize.x;}
-				else
-				{if (tmp.x < -CreationSize.x) tmp.x = -CreationSize.x;}
-				if (tmp.y > 0.0f)
-				{if (tmp.y > CreationSize.y) tmp.y = CreationSize.y;}
-				else
-				{if (tmp.y < -CreationSize.y) tmp.y = -CreationSize.y;}
+				if (tmp.x > 0.0f) {
+					if (tmp.x > CreationSize.x) tmp.x = CreationSize.x;
+				} else {
+					if (tmp.x < -CreationSize.x) tmp.x = -CreationSize.x;
+				}
+				if (tmp.y > 0.0f) {
+					if (tmp.y > CreationSize.y) tmp.y = CreationSize.y;
+				} else {
+					if (tmp.y < -CreationSize.y) tmp.y = -CreationSize.y;
+				}
 
-				if (tmp.z > 0.0f)
-				{if (tmp.z > CreationSize.z) tmp.z = CreationSize.z;}
-				else
-				{if (tmp.z < -CreationSize.z) tmp.z = -CreationSize.z;}
+				if (tmp.z > 0.0f) {
+					if (tmp.z > CreationSize.z) tmp.z = CreationSize.z;
+				} else {
+					if (tmp.z < -CreationSize.z) tmp.z = -CreationSize.z;
+				}
 			}
 			ParticleDist = tmp.x*tmp.x + tmp.y*tmp.y + tmp.z*tmp.z;
 		}
@@ -148,9 +145,9 @@ CSpaceStars::CSpaceStars()
 
 
 
-	list = 0;
-	tmpDATA = 0;
-	VBO = 0;
+	list = nullptr;
+	tmpDATA = nullptr;
+	VBO = nullptr;
 	PrimitCount = 0;
 	LastCameraAngleX = LastCameraAngleY = LastCameraAngleZ = 0.0f;
 }
@@ -163,17 +160,26 @@ CSpaceStars::~CSpaceStars()
 {
 	// полностью освобождаем память от всех частиц в системе
 	CStar *tmp = Start;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CStar *tmp2 = tmp->Next;
 		Detach(tmp);
 		delete tmp;
 		tmp = tmp2;
 	}
 
-	if (VBO!=0){vw_DeleteVBO(*VBO); delete VBO; VBO=0;}
-	if (tmpDATA!=0){delete [] tmpDATA; tmpDATA = 0;}
-	if (list!=0){delete [] list; list = 0;}
+	if (VBO != nullptr) {
+		vw_DeleteVBO(*VBO);
+		delete VBO;
+		VBO = nullptr;
+	}
+	if (tmpDATA != nullptr) {
+		delete [] tmpDATA;
+		tmpDATA = nullptr;
+	}
+	if (list != nullptr) {
+		delete [] list;
+		list = nullptr;
+	}
 }
 
 
@@ -182,20 +188,18 @@ CSpaceStars::~CSpaceStars()
 //-----------------------------------------------------------------------------
 void CSpaceStars::Attach(CStar * NewParticle)
 {
-	if (NewParticle == 0) return;
+	if (NewParticle == nullptr)
+		return;
 
 	// первый в списке...
-	if (End == 0)
-	{
-		NewParticle->Prev = 0;
-		NewParticle->Next = 0;
+	if (End == nullptr) {
+		NewParticle->Prev = nullptr;
+		NewParticle->Next = nullptr;
 		Start = NewParticle;
 		End = NewParticle;
-	}
-	else // продолжаем заполнение...
-	{
+	} else { // продолжаем заполнение...
 		NewParticle->Prev = End;
-		NewParticle->Next = 0;
+		NewParticle->Next = nullptr;
 		End->Next = NewParticle;
 		End = NewParticle;
 	}
@@ -208,18 +212,24 @@ void CSpaceStars::Attach(CStar * NewParticle)
 //-----------------------------------------------------------------------------
 void CSpaceStars::Detach(CStar * OldParticle)
 {
-	if (OldParticle == 0) return;
+	if (OldParticle == nullptr)
+		return;
 
 	// переустанавливаем указатели...
-	if (Start == OldParticle) Start = OldParticle->Next;
-	if (End == OldParticle) End = OldParticle->Prev;
+	if (Start == OldParticle)
+		Start = OldParticle->Next;
+	if (End == OldParticle)
+		End = OldParticle->Prev;
 
+	if (OldParticle->Next != nullptr)
+		OldParticle->Next->Prev = OldParticle->Prev;
+	else if (OldParticle->Prev != nullptr)
+		OldParticle->Prev->Next = nullptr;
 
-	if (OldParticle->Next != 0) OldParticle->Next->Prev = OldParticle->Prev;
-		else if (OldParticle->Prev != 0) OldParticle->Prev->Next = 0;
-	if (OldParticle->Prev != 0) OldParticle->Prev->Next = OldParticle->Next;
-		else if (OldParticle->Next != 0) OldParticle->Next->Prev = 0;
-
+	if (OldParticle->Prev != nullptr)
+		OldParticle->Prev->Next = OldParticle->Next;
+	else if (OldParticle->Next != nullptr)
+		OldParticle->Next->Prev = nullptr;
 }
 
 
@@ -232,7 +242,10 @@ void CSpaceStars::Detach(CStar * OldParticle)
 bool CSpaceStars::Update(float Time)
 {
 	// первый раз... просто берем время
-	if (TimeLastUpdate == -1.0f) {TimeLastUpdate = Time;return true;}
+	if (TimeLastUpdate == -1.0f) {
+		TimeLastUpdate = Time;
+		return true;
+	}
 
 	// Time - это абсолютное время, вычисляем дельту
 	float TimeDelta = Time - TimeLastUpdate;
@@ -244,32 +257,28 @@ bool CSpaceStars::Update(float Time)
 
 
 	// эти расчеты делаем в шейдере, они нам не нужны
-	if (!Setup.UseGLSL)
-	{
+	if (!Setup.UseGLSL) {
 		// для всех частиц
 		CStar *tmp = Start;
-		while (tmp!=0)
-		{
+		while (tmp != nullptr) {
 			CStar *tmp2 = tmp->Next;
 			// функция вернет false, если частица уже мертва
-			if (!tmp->Update(TimeDelta))
-			{
+			if (!tmp->Update(TimeDelta)) {
 				Detach(tmp);
-				delete tmp; tmp = 0;
+				delete tmp;
+				tmp = nullptr;
 			}
 			tmp = tmp2;
 		}
 
 		// обновляем данные в массиве прорисовки
-		if (tmpDATA != 0 && list != 0)
-		{
+		if ((tmpDATA != nullptr) && (list != nullptr)) {
 			// для каждого меняем альфу
 			int k=0;
 			GLubyte A;
 			GLubyte *tmpDATAub = (GLubyte *)tmpDATA;
 
-			for (int i=0; i<PrimitCount; i++)
-			{
+			for (int i=0; i<PrimitCount; i++) {
 				A = (GLubyte)(list[i]->Alpha*255);
 
 				k+=3;
@@ -285,7 +294,7 @@ bool CSpaceStars::Update(float Time)
 		}
 	}
 
-    return true;
+	return true;
 }
 
 
@@ -299,19 +308,32 @@ void CSpaceStars::Draw()
 {
 
 	// загрузка текстуры, уже должна быть подключена
-	if (Texture == 0) return;
+	if (Texture == nullptr)
+		return;
 
 	VECTOR3D CurrentCameraRotation;
 	vw_GetCameraRotation(&CurrentCameraRotation);
 
 
 	// если еще нет последовательности, или камеру повернули - надо пересчитать прорисовку
-	if ((tmpDATA == 0 && VBO == 0) || CurrentCameraRotation.x != LastCameraAngleX || CurrentCameraRotation.y != LastCameraAngleY || CurrentCameraRotation.z != LastCameraAngleZ)
-	{
+	if (((tmpDATA == nullptr) && (VBO == nullptr)) ||
+	    (CurrentCameraRotation.x != LastCameraAngleX) ||
+	    (CurrentCameraRotation.y != LastCameraAngleY) ||
+	    (CurrentCameraRotation.z != LastCameraAngleZ)) {
 
-		if (list != 0){delete [] list; list = 0;}
-		if (tmpDATA != 0){delete [] tmpDATA; tmpDATA = 0;}
-		if (VBO!=0){vw_DeleteVBO(*VBO); delete VBO; VBO=0;}
+		if (list != nullptr) {
+			delete [] list;
+			list = nullptr;
+		}
+		if (tmpDATA != nullptr) {
+			delete [] tmpDATA;
+			tmpDATA = nullptr;
+		}
+		if (VBO != nullptr) {
+			vw_DeleteVBO(*VBO);
+			delete VBO;
+			VBO = nullptr;
+		}
 
 		// находим реальное кол-во частиц на прорисовку
 		CStar *tmp = Start;
@@ -327,8 +349,7 @@ void CSpaceStars::Draw()
 		vw_GetCameraLocation(&CurrentCameraLocation);
 
 
-		while (tmp!=0)
-		{
+		while (tmp != nullptr) {
 			CStar *tmp2 = tmp->Next;
 			// небольшая оптимизация, если попадает в сферу - рисуем, нет - значит не видно
 			if (vw_SphereInFrustum(tmp->Location + CurrentCameraLocation, Size))
@@ -340,17 +361,17 @@ void CSpaceStars::Draw()
 		if (PrimitCount == 0) return;
 
 		// список, в котором они будут упорядочены
-		list = new CStar*[PrimitCount]; if (list == 0) return;
+		list = new CStar*[PrimitCount];
+		if (list == nullptr)
+			return;
 		int LenCount = 0;
-		float *Len = 0;
+		float *Len = nullptr;
 
 		tmp = Start;
-		while (tmp!=0)
-		{
+		while (tmp != nullptr) {
 			CStar *tmp2 = tmp->Next;
 			// небольшая оптимизация, если попадает в сферу - рисуем, нет - значит не видно
-			if (vw_SphereInFrustum(tmp->Location + CurrentCameraLocation, Size))
-			{
+			if (vw_SphereInFrustum(tmp->Location + CurrentCameraLocation, Size)) {
 				list[LenCount] = tmp;
 				LenCount++;
 			}
@@ -361,18 +382,16 @@ void CSpaceStars::Draw()
 
 		// если не поддерживаем/не включены шейдеры, или нет поддержки вбо
 		// делаем старым способом, через временный буфер
-		if (!Setup.UseGLSL)
-		{
+		if (!Setup.UseGLSL) {
 			// делаем массив для всех элементов
 			// войдет RI_3f_XYZ | RI_2f_TEX | RI_4ub_COLOR
-			tmpDATA = new float[4*(3+2+1)*PrimitCount]; if (tmpDATA == 0) return;
+			tmpDATA = new float[4*(3+2+1)*PrimitCount];
 			GLubyte *tmpDATAub = (GLubyte *)tmpDATA;
 
 			// номер float'а в последовательности
 			int k=0;
 
-			for (int i=0; i<PrimitCount; i++)
-			{
+			for (int i=0; i<PrimitCount; i++) {
 				// находим вектор камера-точка
 				VECTOR3D nnTmp;
 				// смотрим, если есть не нужно поворачивать, работаем с направлением
@@ -449,21 +468,18 @@ void CSpaceStars::Draw()
 				tmpDATA[k++] = 1.0f;
 				tmpDATA[k++] = 1.0f;
 			}
-		}
-		else
-		{
+		} else {
 			// все нормально, работаем с шейдерами и вбо
 
 
 			// делаем массив для всех элементов
 			// войдет RI_3f_XYZ | RI_2f_TEX | RI_3f_NORMAL*/
-			tmpDATA = new float[4*(3+2+3)*PrimitCount]; if (tmpDATA == 0) return;
+			tmpDATA = new float[4*(3+2+3)*PrimitCount];
 
 			// номер float'а в последовательности
-			int k=0;
+			int k = 0;
 
-			for (int i=0; i<PrimitCount; i++)
-			{
+			for (int i=0; i<PrimitCount; i++) {
 				// находим вектор камера-точка
 				VECTOR3D nnTmp;
 				// смотрим, если есть не нужно поворачивать, работаем с направлением
@@ -531,32 +547,34 @@ void CSpaceStars::Draw()
 				tmpDATA[k++] = 1.0f;
 			}
 
-			if (vw_GetDevCaps()->VBOSupported)
-			{
+			if (vw_GetDevCaps()->VBOSupported) {
 				VBO = new unsigned int;
-				if (!vw_BuildVBO(4*PrimitCount, tmpDATA, 8, VBO))
-				{
-					delete VBO; VBO = 0;
-				}
-				else
-				{
-					// только если поддерживае вбо, иначе им рисуем
-					if (tmpDATA != 0){delete [] tmpDATA; tmpDATA = 0;}
+				if (!vw_BuildVBO(4*PrimitCount, tmpDATA, 8, VBO)) {
+					delete VBO;
+					VBO = nullptr;
+				} else if (tmpDATA != nullptr) { // только если поддерживае вбо, иначе им рисуем
+					delete [] tmpDATA;
+					tmpDATA = nullptr;
 				}
 			}
 
-			if (list != 0){delete [] list; list = 0;}
+			if (list != nullptr) {
+				delete [] list;
+				list = nullptr;
+			}
 		}
 
-		if (Len != 0){delete [] Len; Len = 0;}
+		if (Len != nullptr) {
+			delete [] Len;
+			Len = nullptr;
+		}
 	}
 
 
 
 
 
-	if (PrimitCount > 0)
-	{
+	if (PrimitCount > 0) {
 		vw_SetTexture(0, Texture);
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 
@@ -572,14 +590,10 @@ void CSpaceStars::Draw()
 
 
 
-		if (!Setup.UseGLSL)
-		{
+		if (!Setup.UseGLSL) {
 			vw_SendVertices(RI_QUADS, 4*PrimitCount, RI_3f_XYZ | RI_4ub_COLOR | RI_1_TEX, tmpDATA, 6*sizeof(float));
-		}
-		else
-		{
-			if (GLSL != 0)
-			{
+		} else {
+			if (GLSL != nullptr) {
 				vw_UseShaderProgram(GLSL);
 				vw_Uniform1i(GLSL, UniformLocations[0], 0);
 				vw_Uniform1f(GLSL, UniformLocations[1], Age);
@@ -587,7 +601,8 @@ void CSpaceStars::Draw()
 
 			vw_SendVertices(RI_QUADS, 4*PrimitCount, RI_3f_XYZ | RI_1_TEX | RI_3f_NORMAL, tmpDATA, 8*sizeof(float), VBO);
 
-			if (GLSL != 0) vw_StopShaderProgram();
+			if (GLSL != nullptr)
+				vw_StopShaderProgram();
 		}
 
 

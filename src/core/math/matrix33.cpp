@@ -90,8 +90,7 @@ void Matrix33CreateRotate(float Matrix33[9], VECTOR3D Angle)
 	const float p180 = 0.0174532925f;
 
 	// если угол только один - сюда идем
-	if (Angle.z != 0.0f && Angle.x == 0.0f && Angle.y == 0.0f)
-	{
+	if (Angle.z != 0.0f && Angle.x == 0.0f && Angle.y == 0.0f) {
 		float a = -Angle.z*p180;
 		float c = cosf(a);
 		float s = sinf(a);
@@ -107,8 +106,7 @@ void Matrix33CreateRotate(float Matrix33[9], VECTOR3D Angle)
 		return;
 	}
 
-	if (Angle.y != 0.0f && Angle.x == 0.0f && Angle.z == 0.0f)
-	{
+	if (Angle.y != 0.0f && Angle.x == 0.0f && Angle.z == 0.0f) {
 		float a = -Angle.y*p180;
 		float c = cosf(a);
 		float s = sinf(a);
@@ -124,8 +122,7 @@ void Matrix33CreateRotate(float Matrix33[9], VECTOR3D Angle)
 		return;
 	}
 
-	if (Angle.x != 0.0f && Angle.y == 0.0f && Angle.z == 0.0f)
-	{
+	if (Angle.x != 0.0f && Angle.y == 0.0f && Angle.z == 0.0f) {
 		float a = -Angle.x*p180;
 		float c = cosf(a);
 		float s = sinf(a);
@@ -156,15 +153,15 @@ void Matrix33CreateRotate(float Matrix33[9], VECTOR3D Angle)
 	float AD = A * D;
 	float BD = B * D;
 	// эти формулы получили после оптимизации верхних 3-х преобразований
-    Matrix33[0]  =   C * E;
-    Matrix33[1]  =  -C * F;
-    Matrix33[2]  =   D;
-    Matrix33[3]  =  BD * E + A * F;
-    Matrix33[4]  = -BD * F + A * E;
-    Matrix33[5]  =  -B * C;
-    Matrix33[6]  = -AD * E + B * F;
-    Matrix33[7]  =  AD * F + B * E;
-    Matrix33[8] =   A * C;
+	Matrix33[0]  =   C * E;
+	Matrix33[1]  =  -C * F;
+	Matrix33[2]  =   D;
+	Matrix33[3]  =  BD * E + A * F;
+	Matrix33[4]  = -BD * F + A * E;
+	Matrix33[5]  =  -B * C;
+	Matrix33[6]  = -AD * E + B * F;
+	Matrix33[7]  =  AD * F + B * E;
+	Matrix33[8] =   A * C;
 }
 
 

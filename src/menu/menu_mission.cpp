@@ -39,18 +39,18 @@ int StartMission = 0;
 int EndMission = 4;
 
 // списки с данными для каждой миссии
-char **MissionTitle = 0;
-char **MissionDescr = 0;
-float *MissionTitleColorR = 0;
-float *MissionTitleColorG = 0;
-float *MissionTitleColorB = 0;
-float *MissionDescrColorR = 0;
-float *MissionDescrColorG = 0;
-float *MissionDescrColorB = 0;
-char **MissionIcon = 0;
-int *MissionTitleType = 0;
-int *MissionDescrType = 0;
-char **MissionFile = 0;
+char **MissionTitle = nullptr;
+char **MissionDescr = nullptr;
+float *MissionTitleColorR = nullptr;
+float *MissionTitleColorG = nullptr;
+float *MissionTitleColorB = nullptr;
+float *MissionDescrColorR = nullptr;
+float *MissionDescrColorG = nullptr;
+float *MissionDescrColorB = nullptr;
+char **MissionIcon = nullptr;
+int *MissionTitleType = nullptr;
+int *MissionDescrType = nullptr;
+char **MissionFile = nullptr;
 
 bool SliderUnderMouseControl = false;
 
@@ -62,15 +62,13 @@ char *GetMissionFileName()
 {
 	for(int i = 0; i<MAX_PATH; i++) MissionFileName[i] = 0;
 
-	if (MissionFile != 0)
-	{
-		if (MissionFile[CurrentMission] != 0)
+	if (MissionFile != nullptr) {
+		if (MissionFile[CurrentMission] != nullptr)
 			strcpy(MissionFileName, MissionFile[CurrentMission]);
 		else
-			return 0;
-	}
-	else
-		return 0;
+			return nullptr;
+	} else
+		return nullptr;
 
 	return MissionFileName;
 }
@@ -97,8 +95,7 @@ void MissionsListInit()
 	cXMLDocument *xmlDoc = new cXMLDocument;
 
 	// читаем данные
-	if (!xmlDoc->Load("script/list.xml"))
-	{
+	if (!xmlDoc->Load("script/list.xml")) {
 		fprintf(stderr, "Can't find script file: %s\n", "script/list.xml");
 		delete xmlDoc;
 		return;
@@ -106,8 +103,7 @@ void MissionsListInit()
 
 
 	// проверяем корневой элемент
-	if (strcmp("AstroMenaceMissionsList", xmlDoc->RootXMLEntry->Name))
-	{
+	if (strcmp("AstroMenaceMissionsList", xmlDoc->RootXMLEntry->Name)) {
 		fprintf(stderr, "Can't find AstroMenaceMissionsList element in the: %s\n", "script/list.xml");
 		delete xmlDoc;
 		return;
@@ -116,8 +112,7 @@ void MissionsListInit()
 
 	AllMission = 0;
 	cXMLEntry *xmlEntry = xmlDoc->RootXMLEntry->FirstChild;
-	while (xmlEntry)
-	{
+	while (xmlEntry) {
 		// считаем, сколько миссий в файле
 		if (!strcmp(xmlEntry->Name, "Mission")) AllMission++;
 
@@ -139,18 +134,21 @@ void MissionsListInit()
 	MissionTitleType = new int[AllMission];
 	MissionDescrType = new int[AllMission];
 	// зануляем данные, на всякий случай
-	for (int i=0; i<AllMission; i++)
-	{
-		MissionTitle[i] = 0;
-		MissionDescr[i] = 0;
-		MissionIcon[i] = 0;
-		MissionFile[i] = 0;
+	for (int i=0; i<AllMission; i++) {
+		MissionTitle[i] = nullptr;
+		MissionDescr[i] = nullptr;
+		MissionIcon[i] = nullptr;
+		MissionFile[i] = nullptr;
 		// установка типа, название (не ссылка)
 		MissionTitleType[i] = 0;
 		MissionDescrType[i] = 0;
 		// установка цвета
-		MissionTitleColorR[i] = 1.0f;MissionTitleColorG[i] = 0.5f;MissionTitleColorB[i] = 0.0f;
-		MissionDescrColorR[i] = 1.0f;MissionDescrColorG[i] = 1.0f;MissionDescrColorB[i] = 1.0f;
+		MissionTitleColorR[i] = 1.0f;
+		MissionTitleColorG[i] = 0.5f;
+		MissionTitleColorB[i] = 0.0f;
+		MissionDescrColorR[i] = 1.0f;
+		MissionDescrColorG[i] = 1.0f;
+		MissionDescrColorB[i] = 1.0f;
 	}
 
 
@@ -159,111 +157,123 @@ void MissionsListInit()
 	// второй проход, заполняем массивы
 	xmlEntry = xmlDoc->RootXMLEntry->FirstChild;
 	int i = 0;
-	while (xmlEntry)
-	{
+	while (xmlEntry) {
 		// берем каждую миссию и смотрим настройки
-		if (!strcmp(xmlEntry->Name, "Mission"))
-		{
+		if (!strcmp(xmlEntry->Name, "Mission")) {
 			cXMLEntry *TMission = xmlEntry->FirstChild;
-			while (TMission)
-			{
+			while (TMission) {
 				// тайтл миссии
-				if (!strcmp(TMission->Name, "Title"))
-				{
-					if (xmlDoc->GetEntryAttribute(TMission, "color") != 0)
-					{
-						switch (xmlDoc->iGetEntryAttribute(TMission, "color"))
-						{
-							default: // белый
-								MissionTitleColorR[i]=1.0f;MissionTitleColorG[i]=1.0f;MissionTitleColorB[i]=1.0f;
-								break;
-							case 1: // желтый
-								MissionTitleColorR[i]=1.0f;MissionTitleColorG[i]=1.0f;MissionTitleColorB[i]=0.0f;
-								break;
-							case 2: // красный
-								MissionTitleColorR[i]=1.0f;MissionTitleColorG[i]=0.0f;MissionTitleColorB[i]=0.0f;
-								break;
-							case 3: // зеленый
-								MissionTitleColorR[i]=0.0f;MissionTitleColorG[i]=1.0f;MissionTitleColorB[i]=0.0f;
-								break;
-							case 4: // оранжевый
-								MissionTitleColorR[i]=1.0f;MissionTitleColorG[i]=0.5f;MissionTitleColorB[i]=0.0f;
-								break;
-							case 5: // серый,
-								MissionTitleColorR[i]=0.5f;MissionTitleColorG[i]=0.5f;MissionTitleColorB[i]=0.5f;
-								break;
-							case 6: // темно оранжевый
-								MissionTitleColorR[i]=1.0f;MissionTitleColorG[i]=0.3f;MissionTitleColorB[i]=0.0f;
-								break;
+				if (!strcmp(TMission->Name, "Title")) {
+					if (xmlDoc->GetEntryAttribute(TMission, "color") != nullptr) {
+						switch (xmlDoc->iGetEntryAttribute(TMission, "color")) {
+						default: // белый
+							MissionTitleColorR[i]=1.0f;
+							MissionTitleColorG[i]=1.0f;
+							MissionTitleColorB[i]=1.0f;
+							break;
+						case 1: // желтый
+							MissionTitleColorR[i]=1.0f;
+							MissionTitleColorG[i]=1.0f;
+							MissionTitleColorB[i]=0.0f;
+							break;
+						case 2: // красный
+							MissionTitleColorR[i]=1.0f;
+							MissionTitleColorG[i]=0.0f;
+							MissionTitleColorB[i]=0.0f;
+							break;
+						case 3: // зеленый
+							MissionTitleColorR[i]=0.0f;
+							MissionTitleColorG[i]=1.0f;
+							MissionTitleColorB[i]=0.0f;
+							break;
+						case 4: // оранжевый
+							MissionTitleColorR[i]=1.0f;
+							MissionTitleColorG[i]=0.5f;
+							MissionTitleColorB[i]=0.0f;
+							break;
+						case 5: // серый,
+							MissionTitleColorR[i]=0.5f;
+							MissionTitleColorG[i]=0.5f;
+							MissionTitleColorB[i]=0.5f;
+							break;
+						case 6: // темно оранжевый
+							MissionTitleColorR[i]=1.0f;
+							MissionTitleColorG[i]=0.3f;
+							MissionTitleColorB[i]=0.0f;
+							break;
 						}
 					}
-					if (xmlDoc->GetEntryAttribute(TMission, "type") != 0) MissionTitleType[i] = xmlDoc->iGetEntryAttribute(TMission, "type");
+					if (xmlDoc->GetEntryAttribute(TMission, "type") != nullptr)
+						MissionTitleType[i] = xmlDoc->iGetEntryAttribute(TMission, "type");
 
-					if (TMission->Content != 0)
-					{
+					if (TMission->Content != nullptr) {
 						MissionTitle[i] = new char[strlen(TMission->Content)+1];
 						strcpy(MissionTitle[i], TMission->Content);
 					}
-				}
-				else
-				// описание миссии
-				if (!strcmp(TMission->Name, "Descr"))
-				{
-					if (xmlDoc->GetEntryAttribute(TMission, "color") != 0)
-					{
-						switch (xmlDoc->iGetEntryAttribute(TMission, "color"))
-						{
+				} else
+					// описание миссии
+					if (!strcmp(TMission->Name, "Descr")) {
+						if (xmlDoc->GetEntryAttribute(TMission, "color") != nullptr) {
+							switch (xmlDoc->iGetEntryAttribute(TMission, "color")) {
 							default: // белый
-								MissionDescrColorR[i]=1.0f;MissionDescrColorG[i]=1.0f;MissionDescrColorB[i]=1.0f;
+								MissionDescrColorR[i]=1.0f;
+								MissionDescrColorG[i]=1.0f;
+								MissionDescrColorB[i]=1.0f;
 								break;
 							case 1: // желтый
-								MissionDescrColorR[i]=1.0f;MissionDescrColorG[i]=1.0f;MissionDescrColorB[i]=0.0f;
+								MissionDescrColorR[i]=1.0f;
+								MissionDescrColorG[i]=1.0f;
+								MissionDescrColorB[i]=0.0f;
 								break;
 							case 2: // красный
-								MissionDescrColorR[i]=1.0f;MissionDescrColorG[i]=0.0f;MissionDescrColorB[i]=0.0f;
+								MissionDescrColorR[i]=1.0f;
+								MissionDescrColorG[i]=0.0f;
+								MissionDescrColorB[i]=0.0f;
 								break;
 							case 3: // зеленый
-								MissionDescrColorR[i]=0.0f;MissionDescrColorG[i]=1.0f;MissionDescrColorB[i]=0.0f;
+								MissionDescrColorR[i]=0.0f;
+								MissionDescrColorG[i]=1.0f;
+								MissionDescrColorB[i]=0.0f;
 								break;
 							case 4: // оранжевый
-								MissionDescrColorR[i]=1.0f;MissionDescrColorG[i]=0.5f;MissionDescrColorB[i]=0.0f;
+								MissionDescrColorR[i]=1.0f;
+								MissionDescrColorG[i]=0.5f;
+								MissionDescrColorB[i]=0.0f;
 								break;
 							case 5: // серый,
-								MissionDescrColorR[i]=0.5f;MissionDescrColorG[i]=0.5f;MissionDescrColorB[i]=0.5f;
+								MissionDescrColorR[i]=0.5f;
+								MissionDescrColorG[i]=0.5f;
+								MissionDescrColorB[i]=0.5f;
 								break;
 							case 6: // темно оранжевый
-								MissionDescrColorR[i]=0.8f;MissionDescrColorG[i]=0.4f;MissionDescrColorB[i]=0.0f;
+								MissionDescrColorR[i]=0.8f;
+								MissionDescrColorG[i]=0.4f;
+								MissionDescrColorB[i]=0.0f;
 								break;
+							}
 						}
-					}
-					if (xmlDoc->GetEntryAttribute(TMission, "type") != 0) MissionDescrType[i] = xmlDoc->iGetEntryAttribute(TMission, "type");
+						if (xmlDoc->GetEntryAttribute(TMission, "type") != nullptr)
+							MissionDescrType[i] = xmlDoc->iGetEntryAttribute(TMission, "type");
 
-					if (TMission->Content != 0)
-					{
-						MissionDescr[i] = new char[strlen(TMission->Content)+1];
-						strcpy(MissionDescr[i], TMission->Content);
-					}
-				}
-				else
-				// иконка миссии
-				if (!strcmp(TMission->Name, "Icon"))
-				{
-					if (TMission->Content != 0)
-					{
-						MissionIcon[i] = new char[strlen(TMission->Content)+1];
-						strcpy(MissionIcon[i], TMission->Content);
-					}
-				}
-				else
-				// файл миссии
-				if (!strcmp(TMission->Name, "File"))
-				{
-					if (TMission->Content != 0)
-					{
-						MissionFile[i] = new char[strlen(TMission->Content)+1];
-						strcpy(MissionFile[i], TMission->Content);
-					}
-				}
+						if (TMission->Content != nullptr) {
+							MissionDescr[i] = new char[strlen(TMission->Content)+1];
+							strcpy(MissionDescr[i], TMission->Content);
+						}
+					} else
+						// иконка миссии
+						if (!strcmp(TMission->Name, "Icon")) {
+							if (TMission->Content != nullptr) {
+								MissionIcon[i] = new char[strlen(TMission->Content)+1];
+								strcpy(MissionIcon[i], TMission->Content);
+							}
+						} else
+							// файл миссии
+							if (!strcmp(TMission->Name, "File")) {
+								if (TMission->Content != nullptr) {
+									MissionFile[i] = new char[strlen(TMission->Content)+1];
+									strcpy(MissionFile[i], TMission->Content);
+								}
+							}
 
 
 				// берем следующий элемент
@@ -271,53 +281,36 @@ void MissionsListInit()
 			}
 
 			i++;
-		}
-		else
-		// проверяем музыку, возможно есть необходимость что-то заменить
-		if (!strcmp(xmlEntry->Name, "GameMainMusic"))
-		{
-			eFILE *file = 0;
-			file = vw_fopen(xmlEntry->Content);
-			if (file != 0)
-			{
-				strcpy(GameMainMusic, xmlEntry->Content);
-				GameMainMusicSet = true;
-				vw_fclose(file);
-				fprintf(stderr, "New GameMainMusic music file %s\n", xmlEntry->Content);
+		} else
+			// проверяем музыку, возможно есть необходимость что-то заменить
+			if (!strcmp(xmlEntry->Name, "GameMainMusic")) {
+				eFILE *file = vw_fopen(xmlEntry->Content);
+				if (file != nullptr) {
+					strcpy(GameMainMusic, xmlEntry->Content);
+					GameMainMusicSet = true;
+					vw_fclose(file);
+					fprintf(stderr, "New GameMainMusic music file %s\n", xmlEntry->Content);
+				} else
+					fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
+			} else if (!strcmp(xmlEntry->Name, "GameBossMusic")) {
+				eFILE *file = vw_fopen(xmlEntry->Content);
+				if (file != nullptr) {
+					strcpy(GameBossMusic, xmlEntry->Content);
+					GameBossMusicSet = true;
+					vw_fclose(file);
+					fprintf(stderr, "New GameBossMusic music file %s\n", xmlEntry->Content);
+				} else
+					fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
+			} else if (!strcmp(xmlEntry->Name, "GameDeathMusic")) {
+				eFILE *file = vw_fopen(xmlEntry->Content);
+				if (file != nullptr) {
+					strcpy(GameDeathMusic, xmlEntry->Content);
+					GameDeathMusicSet = true;
+					vw_fclose(file);
+					fprintf(stderr, "New GameDeathMusic music file %s\n", xmlEntry->Content);
+				} else
+					fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
 			}
-			else
-				fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
-		}
-		else
-		if (!strcmp(xmlEntry->Name, "GameBossMusic"))
-		{
-			eFILE *file = 0;
-			file = vw_fopen(xmlEntry->Content);
-			if (file != 0)
-			{
-				strcpy(GameBossMusic, xmlEntry->Content);
-				GameBossMusicSet = true;
-				vw_fclose(file);
-				fprintf(stderr, "New GameBossMusic music file %s\n", xmlEntry->Content);
-			}
-			else
-				fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
-		}
-		else
-		if (!strcmp(xmlEntry->Name, "GameDeathMusic"))
-		{
-			eFILE *file = 0;
-			file = vw_fopen(xmlEntry->Content);
-			if (file != 0)
-			{
-				strcpy(GameDeathMusic, xmlEntry->Content);
-				GameDeathMusicSet = true;
-				vw_fclose(file);
-				fprintf(stderr, "New GameDeathMusic music file %s\n", xmlEntry->Content);
-			}
-			else
-				fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
-		}
 
 
 		// берем следующий элемент по порядку
@@ -337,50 +330,74 @@ void MissionsListInit()
 //------------------------------------------------------------------------------------
 void MissionsListRelease()
 {
-	if (MissionFile != 0)
-	{
-		for (int i=0; i<AllMission; i++)
-		{
-			delete [] MissionFile[i]; MissionFile[i] = 0;
+	if (MissionFile != nullptr) {
+		for (int i = 0; i < AllMission; i++) {
+			delete [] MissionFile[i];
+			MissionFile[i] = nullptr;
 		}
-		delete [] MissionFile; MissionFile = 0;
+		delete [] MissionFile;
+		MissionFile = nullptr;
 	}
 
-	if (MissionTitle != 0)
-	{
-		for (int i=0; i<AllMission; i++)
-		{
-			delete [] MissionTitle[i]; MissionTitle[i] = 0;
+	if (MissionTitle != nullptr) {
+		for (int i = 0; i < AllMission; i++) {
+			delete [] MissionTitle[i];
+			MissionTitle[i] = nullptr;
 		}
-		delete [] MissionTitle; MissionTitle = 0;
+		delete [] MissionTitle;
+		MissionTitle = nullptr;
 	}
 
-	if (MissionDescr != 0)
-	{
-		for (int i=0; i<AllMission; i++)
-		{
-			delete [] MissionDescr[i]; MissionDescr[i] = 0;
+	if (MissionDescr != nullptr) {
+		for (int i = 0; i < AllMission; i++) {
+			delete [] MissionDescr[i];
+			MissionDescr[i] = nullptr;
 		}
-		delete [] MissionDescr; MissionDescr = 0;
+		delete [] MissionDescr;
+		MissionDescr = nullptr;
 	}
 
-	if (MissionIcon != 0)
-	{
-		for (int i=0; i<AllMission; i++)
-		{
-			delete [] MissionIcon[i]; MissionIcon[i] = 0;
+	if (MissionIcon != nullptr) {
+		for (int i = 0; i < AllMission; i++) {
+			delete [] MissionIcon[i];
+			MissionIcon[i] = nullptr;
 		}
-		delete [] MissionIcon; MissionIcon = 0;
+		delete [] MissionIcon;
+		MissionIcon = nullptr;
 	}
 
-	if (MissionTitleColorR != 0){delete [] MissionTitleColorR; MissionTitleColorR = 0;}
-	if (MissionTitleColorG != 0){delete [] MissionTitleColorG; MissionTitleColorG = 0;}
-	if (MissionTitleColorB != 0){delete [] MissionTitleColorB; MissionTitleColorB = 0;}
-	if (MissionDescrColorR != 0){delete [] MissionDescrColorR; MissionDescrColorR = 0;}
-	if (MissionDescrColorG != 0){delete [] MissionDescrColorG; MissionDescrColorG = 0;}
-	if (MissionDescrColorB != 0){delete [] MissionDescrColorB; MissionDescrColorB = 0;}
-	if (MissionTitleType != 0){delete [] MissionTitleType; MissionTitleType = 0;}
-	if (MissionDescrType != 0){delete [] MissionDescrType; MissionDescrType = 0;}
+	if (MissionTitleColorR != nullptr) {
+		delete [] MissionTitleColorR;
+		MissionTitleColorR = nullptr;
+	}
+	if (MissionTitleColorG != nullptr) {
+		delete [] MissionTitleColorG;
+		MissionTitleColorG = nullptr;
+	}
+	if (MissionTitleColorB != nullptr) {
+		delete [] MissionTitleColorB;
+		MissionTitleColorB = nullptr;
+	}
+	if (MissionDescrColorR != nullptr) {
+		delete [] MissionDescrColorR;
+		MissionDescrColorR = nullptr;
+	}
+	if (MissionDescrColorG != nullptr) {
+		delete [] MissionDescrColorG;
+		MissionDescrColorG = nullptr;
+	}
+	if (MissionDescrColorB != nullptr) {
+		delete [] MissionDescrColorB;
+		MissionDescrColorB = nullptr;
+	}
+	if (MissionTitleType != nullptr) {
+		delete [] MissionTitleType;
+		MissionTitleType = nullptr;
+	}
+	if (MissionDescrType != nullptr) {
+		delete [] MissionDescrType;
+		MissionDescrType = nullptr;
+	}
 }
 
 
@@ -423,16 +440,13 @@ void MissionMenu()
 	int Size = vw_FontSize("%s: ", vw_GetText("3_Pilot_Profile"));
 	vw_DrawFont(X1, 208+12, 0, 0, 1.0f, 0.0f,1.0f,0.0f, 1.0f*MenuContentTransp, "%s: ", vw_GetText("3_Pilot_Profile"));
 
-	if (Size+vw_FontSize(Setup.Profile[CurrentProfile].Name) > 500)
-	{
+	if (Size+vw_FontSize(Setup.Profile[CurrentProfile].Name) > 500) {
 		vw_DrawFont(X1+Size, 208+12, 0, 500-Size, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.Profile[CurrentProfile].Name);
 		vw_DrawFont(X1+510, 208+12, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "...");
-	}
-	else
+	} else
 		vw_DrawFont(X1+Size, 208+12, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.Profile[CurrentProfile].Name);
 
-	if (DrawButton200_2(X1+616-72, 212, vw_GetText("1_Change_Profile"), MenuContentTransp, false))
-	{
+	if (DrawButton200_2(X1+616-72, 212, vw_GetText("1_Change_Profile"), MenuContentTransp, false)) {
 		ComBuffer = PROFILE;
 	}
 
@@ -451,15 +465,14 @@ void MissionMenu()
 
 	// подсвечиваем выбранный уровень
 	if (CurrentMission != -1)
-	if (StartMission<=CurrentMission && CurrentMission<=EndMission)
-	{
-		int ShowLine = CurrentMission;
-		if (ShowLine>=StartMission) ShowLine -= StartMission;
+		if (StartMission<=CurrentMission && CurrentMission<=EndMission) {
+			int ShowLine = CurrentMission;
+			if (ShowLine>=StartMission) ShowLine -= StartMission;
 
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,X1+1,Y1 + 64*ShowLine+1,X1+709,Y1 + 64*ShowLine+63);
-		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
-	}
+			SetRect(&SrcRect,0,0,2,2);
+			SetRect(&DstRect,X1+1,Y1 + 64*ShowLine+1,X1+709,Y1 + 64*ShowLine+63);
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+		}
 
 
 
@@ -467,145 +480,126 @@ void MissionMenu()
 	// выводим миссии текущего листа
 	int TMPSoundOnMissionID = -1;
 	for (int i=StartMission; i<=EndMission; i++)
-	if (AllMission > i)
-	{
-		// если не можем выбирать...
-		if (i > Setup.Profile[CurrentProfile].OpenLevelNum)
-		{
-			SetRect(&SrcRect,0,0,64,64);
-			SetRect(&DstRect,X1+2,Y1+2,X1+62,Y1+62);
-
-			if (MissionIcon[i] != 0)
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(MissionIcon[i]), true, 0.3f*MenuContentTransp);
-
-
-			if (MissionTitleType[i] == 1)
-				vw_DrawFont(X1+20+64, Y1+9, -610, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, vw_GetText(MissionTitle[i]));
-			else
-				vw_DrawFont(X1+20+64, Y1+9, -610, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, MissionTitle[i]);
-
-			if (MissionDescrType[i] == 1)
-				vw_DrawFont(X1+20+64, Y1+33, -610, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, vw_GetText(MissionDescr[i]));
-			else
-				vw_DrawFont(X1+20+64, Y1+33, -610, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, MissionDescr[i]);
-
-		}
-
-
-		SetRect(&DstRect,X1,Y1+1,X1+710,Y1+64);
-		if (i <= Setup.Profile[CurrentProfile].OpenLevelNum)
-		{
-			// работаем с клавиатурой
-			if ((MenuContentTransp >= 0.99f) && !isDialogBoxDrawing()) CurrentActiveMenuElement++;
-			bool InFocusByKeyboard = false;
-			if (CurrentKeyboardSelectMenuElement > 0)
-			{
-				if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement)
-				{
-					InFocusByKeyboard = true;
-				}
-			}
-
-
-			if ((vw_OnRect(&DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing())
-			{
-				TMPSoundOnMissionID = i;
-				CurrentCursorStatus = 1;
-				// если только встали - нужно звуком это показать
-				if (SoundOnMissionID != i)
-				{
-					SoundOnMissionID = i;
-					// если задействуем клавиатуру - неиграем тут звук
-					if (CurrentKeyboardSelectMenuElement == 0) Audio_PlaySound2D(5,1.0f);
-				}
-
-				// если стоим над ним...
+		if (AllMission > i) {
+			// если не можем выбирать...
+			if (i > Setup.Profile[CurrentProfile].OpenLevelNum) {
 				SetRect(&SrcRect,0,0,64,64);
-				SetRect(&DstRect,X1,Y1,X1+64,Y1+64);
-				if (MissionIcon != 0)
-					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(MissionIcon[i]), true, MenuContentTransp);
+				SetRect(&DstRect,X1+2,Y1+2,X1+62,Y1+62);
+
+				if (MissionIcon[i] != nullptr)
+					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(MissionIcon[i]), true, 0.3f*MenuContentTransp);
 
 
 				if (MissionTitleType[i] == 1)
-					vw_DrawFont(X1+20+64, Y1+9, -610, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, vw_GetText(MissionTitle[i]));
+					vw_DrawFont(X1+20+64, Y1+9, -610, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, vw_GetText(MissionTitle[i]));
 				else
-					vw_DrawFont(X1+20+64, Y1+9, -610, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, MissionTitle[i]);
+					vw_DrawFont(X1+20+64, Y1+9, -610, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.3f*MenuContentTransp, MissionTitle[i]);
 
 				if (MissionDescrType[i] == 1)
-					vw_DrawFont(X1+20+64, Y1+33, -610, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, vw_GetText(MissionDescr[i]));
+					vw_DrawFont(X1+20+64, Y1+33, -610, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, vw_GetText(MissionDescr[i]));
 				else
-					vw_DrawFont(X1+20+64, Y1+33, -610, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, MissionDescr[i]);
+					vw_DrawFont(X1+20+64, Y1+33, -610, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.3f*MenuContentTransp, MissionDescr[i]);
+
+			}
 
 
-				if (CurrentMission != i)
-				{
-					SetRect(&SrcRect,0,0,2,2);
-					SetRect(&DstRect,X1+64,Y1+1,X1+709,Y1+63);
-					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
-				}
-				if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN))))
-				{
-
-					CurrentMission = i;
-					Setup.Profile[CurrentProfile].LastMission = CurrentMission;
-					Audio_PlaySound2D(6,1.0f);
-					if (InFocusByKeyboard)
-					{
-						vw_SetKeys(SDLK_KP_ENTER, false);
-						vw_SetKeys(SDLK_RETURN, false);
+			SetRect(&DstRect,X1,Y1+1,X1+710,Y1+64);
+			if (i <= Setup.Profile[CurrentProfile].OpenLevelNum) {
+				// работаем с клавиатурой
+				if ((MenuContentTransp >= 0.99f) && !isDialogBoxDrawing()) CurrentActiveMenuElement++;
+				bool InFocusByKeyboard = false;
+				if (CurrentKeyboardSelectMenuElement > 0) {
+					if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+						InFocusByKeyboard = true;
 					}
 				}
 
-				if (vw_GetWindowLBDoubleMouse(true))
-				{
-					CurrentMission = i;
-					Setup.Profile[CurrentProfile].LastMission = CurrentMission;
-					// если уже играли в эту миссию
-					if (Setup.Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0)
-					{
-						if (Setup.NeedShowHint[5])
-						{
-							SetCurrentDialogBox(14);
+
+				if ((vw_OnRect(&DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing()) {
+					TMPSoundOnMissionID = i;
+					CurrentCursorStatus = 1;
+					// если только встали - нужно звуком это показать
+					if (SoundOnMissionID != i) {
+						SoundOnMissionID = i;
+						// если задействуем клавиатуру - неиграем тут звук
+						if (CurrentKeyboardSelectMenuElement == 0) Audio_PlaySound2D(5,1.0f);
+					}
+
+					// если стоим над ним...
+					SetRect(&SrcRect,0,0,64,64);
+					SetRect(&DstRect,X1,Y1,X1+64,Y1+64);
+					if (MissionIcon != nullptr)
+						vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(MissionIcon[i]), true, MenuContentTransp);
+
+
+					if (MissionTitleType[i] == 1)
+						vw_DrawFont(X1+20+64, Y1+9, -610, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, vw_GetText(MissionTitle[i]));
+					else
+						vw_DrawFont(X1+20+64, Y1+9, -610, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], MenuContentTransp, MissionTitle[i]);
+
+					if (MissionDescrType[i] == 1)
+						vw_DrawFont(X1+20+64, Y1+33, -610, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, vw_GetText(MissionDescr[i]));
+					else
+						vw_DrawFont(X1+20+64, Y1+33, -610, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], MenuContentTransp, MissionDescr[i]);
+
+
+					if (CurrentMission != i) {
+						SetRect(&SrcRect,0,0,2,2);
+						SetRect(&DstRect,X1+64,Y1+1,X1+709,Y1+63);
+						vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+					}
+					if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN)))) {
+
+						CurrentMission = i;
+						Setup.Profile[CurrentProfile].LastMission = CurrentMission;
+						Audio_PlaySound2D(6,1.0f);
+						if (InFocusByKeyboard) {
+							vw_SetKeys(SDLK_KP_ENTER, false);
+							vw_SetKeys(SDLK_RETURN, false);
 						}
-						else
-						{
+					}
+
+					if (vw_GetWindowLBDoubleMouse(true)) {
+						CurrentMission = i;
+						Setup.Profile[CurrentProfile].LastMission = CurrentMission;
+						// если уже играли в эту миссию
+						if (Setup.Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0) {
+							if (Setup.NeedShowHint[5]) {
+								SetCurrentDialogBox(14);
+							} else {
+								ComBuffer = WORKSHOP;
+								CurrentWorkshop = 3;
+								WorkshopCreate();
+							}
+						} else {
 							ComBuffer = WORKSHOP;
 							CurrentWorkshop = 3;
 							WorkshopCreate();
 						}
 					}
+				} else {
+					// если не стоим над ним, но можем выбирать
+					SetRect(&SrcRect,0,0,64,64);
+					SetRect(&DstRect,X1+2,Y1+2,X1+62,Y1+62);
+					if (MissionIcon != nullptr)
+						vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(MissionIcon[i]), true, 0.8f*MenuContentTransp);
+
+
+					if (MissionTitleType[i] == 1)
+						vw_DrawFont(X1+20+64, Y1+9, -610, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, vw_GetText(MissionTitle[i]));
 					else
-					{
-						ComBuffer = WORKSHOP;
-						CurrentWorkshop = 3;
-						WorkshopCreate();
-					}
+						vw_DrawFont(X1+20+64, Y1+9, -610, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, MissionTitle[i]);
+
+					if (MissionDescrType[i] == 1)
+						vw_DrawFont(X1+20+64, Y1+33, -610, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, vw_GetText(MissionDescr[i]));
+					else
+						vw_DrawFont(X1+20+64, Y1+33, -610, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, MissionDescr[i]);
+
 				}
 			}
-			else
-			{
-				// если не стоим над ним, но можем выбирать
-				SetRect(&SrcRect,0,0,64,64);
-				SetRect(&DstRect,X1+2,Y1+2,X1+62,Y1+62);
-				if (MissionIcon != 0)
-					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(MissionIcon[i]), true, 0.8f*MenuContentTransp);
 
-
-				if (MissionTitleType[i] == 1)
-					vw_DrawFont(X1+20+64, Y1+9, -610, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, vw_GetText(MissionTitle[i]));
-				else
-					vw_DrawFont(X1+20+64, Y1+9, -610, 0, 1.0f, MissionTitleColorR[i],MissionTitleColorG[i],MissionTitleColorB[i], 0.8f*MenuContentTransp, MissionTitle[i]);
-
-				if (MissionDescrType[i] == 1)
-					vw_DrawFont(X1+20+64, Y1+33, -610, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, vw_GetText(MissionDescr[i]));
-				else
-					vw_DrawFont(X1+20+64, Y1+33, -610, 0, 1.0f, MissionDescrColorR[i],MissionDescrColorG[i],MissionDescrColorB[i], 0.8f*MenuContentTransp, MissionDescr[i]);
-
-			}
+			Y1 += 64;
 		}
-
-		Y1 += 64;
-	}
 	// если не стоим над профилями - нужно сбросить флаг
 	if (TMPSoundOnMissionID == -1) SoundOnMissionID = -1;
 
@@ -615,42 +609,34 @@ void MissionMenu()
 
 	Y1 = 270;
 	// стрелки перемещения списка
-	if (DrawListUpButton(X1+718, Y1, MenuContentTransp, !(StartMission > 0)))
-	{
+	if (DrawListUpButton(X1+718, Y1, MenuContentTransp, !(StartMission > 0))) {
 		StartMission--;
 		EndMission--;
 	}
 
-	if (DrawListDownButton(X1+718,Y1+320-32, MenuContentTransp, !(StartMission < AllMission-5)))
-	{
+	if (DrawListDownButton(X1+718,Y1+320-32, MenuContentTransp, !(StartMission < AllMission-5))) {
 		StartMission++;
 		EndMission++;
 	}
 	// проверяем колесико мышки, если курсор находится над активной частью
 	SetRect(&DstRect,X1,Y1,X1+750,Y1+320);
-	if (vw_OnRect(&DstRect))
-	{
-		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing())
-		{
+	if (vw_OnRect(&DstRect)) {
+		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing()) {
 			StartMission += vw_GetWheelStatus();
 			EndMission += vw_GetWheelStatus();
 
-			if (StartMission < 0)
-			{
+			if (StartMission < 0) {
 				StartMission = 0;
 				EndMission = 4;
 			}
-			if (EndMission > AllMission-1)
-			{
+			if (EndMission > AllMission-1) {
 				EndMission = AllMission-1;
 				StartMission = EndMission-4;
 			}
 
 			vw_ResetWheelStatus();
 		}
-	}
-	else if (vw_GetWheelStatus() != 0)
-	{
+	} else if (vw_GetWheelStatus() != 0) {
 		vw_ResetWheelStatus();
 	}
 
@@ -661,21 +647,18 @@ void MissionMenu()
 
 	// обработка перетягивания ползунка отображения позиции списка
 	// если стоим на ползунком и нажали кнопку мышки - "захватываем"
-	if (!SliderUnderMouseControl && vw_OnRect(&DstRect) && vw_GetWindowLBMouse(false) && !isDialogBoxDrawing())
-	{
+	if (!SliderUnderMouseControl && vw_OnRect(&DstRect) && vw_GetWindowLBMouse(false) && !isDialogBoxDrawing()) {
 		SliderUnderMouseControl = true;
 		Audio_PlaySound2D(2,1.0f);
 	}
 	// если ползунок был захвачен, но уже не над секцией где его можно перетягивать или отпустили мышку - отпускаем
 	RECT DstRect2;
 	SetRect(&DstRect2,X1+750-32+4,Y1+32,X1+750-4,Y1+32+(320.0f-64));
-	if ((SliderUnderMouseControl && (!vw_OnRect(&DstRect2) || !vw_GetWindowLBMouse(false))) || isDialogBoxDrawing())
-	{
+	if ((SliderUnderMouseControl && (!vw_OnRect(&DstRect2) || !vw_GetWindowLBMouse(false))) || isDialogBoxDrawing()) {
 		SliderUnderMouseControl = false;
 	}
 	// просто кликнули на зону перетягивания, не на ползунок
-	if (!vw_OnRect(&DstRect) && vw_OnRect(&DstRect2) && vw_GetWindowLBMouse(false) && !isDialogBoxDrawing())
-	{
+	if (!vw_OnRect(&DstRect) && vw_OnRect(&DstRect2) && vw_GetWindowLBMouse(false) && !isDialogBoxDrawing()) {
 		SliderUnderMouseControl = true;
 		Audio_PlaySound2D(2,1.0f);
 		vw_SetWindowLBMouse(false);
@@ -683,21 +666,18 @@ void MissionMenu()
 	// отображаем курсором, что можно кликать на полосе прокрутки
 	if (vw_OnRect(&DstRect2)) CurrentCursorStatus = 1;
 	// корректируем его положение ползунка согласно положению мышки
-	if (SliderUnderMouseControl)
-	{
+	if (SliderUnderMouseControl) {
 		int MouseX, MouseY;
 		vw_GetMousePos(&MouseX, &MouseY);
 		int SliderNewPosition = (MouseY - Y1-32)/((320.0f-64)/AllMission);
 
 		StartMission = 0;
 		EndMission = 4;
-		if (SliderNewPosition > 2)
-		{
+		if (SliderNewPosition > 2) {
 			StartMission = SliderNewPosition-2;
 			EndMission = SliderNewPosition+2;
 
-			if (SliderNewPosition >= AllMission-2)
-			{
+			if (SliderNewPosition >= AllMission-2) {
 				StartMission = AllMission-5;
 				EndMission = AllMission-1;
 			}
@@ -711,30 +691,22 @@ void MissionMenu()
 
 	int X = Setup.iAspectRatioWidth/2 - 284;
 	int Y = 165+100*5;
-	if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
-	{
+	if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime)) {
 		ComBuffer = MAIN_MENU;
 	}
 
 	X = Setup.iAspectRatioWidth/2 + 28;
-	if (DrawButton256(X,Y, vw_GetText("1_NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, !(CurrentMission >= 0)))
-	{
+	if (DrawButton256(X,Y, vw_GetText("1_NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, !(CurrentMission >= 0))) {
 		// если уже играли в эту миссию
-		if (Setup.Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0)
-		{
-			if (Setup.NeedShowHint[5])
-			{
+		if (Setup.Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0) {
+			if (Setup.NeedShowHint[5]) {
 				SetCurrentDialogBox(14);
-			}
-			else
-			{
+			} else {
 				ComBuffer = WORKSHOP;
 				CurrentWorkshop = 3;
 				WorkshopCreate();
 			}
-		}
-		else
-		{
+		} else {
 			ComBuffer = WORKSHOP;
 			CurrentWorkshop = 3;
 			WorkshopCreate();

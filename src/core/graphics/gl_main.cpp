@@ -57,14 +57,17 @@ int PrimCountGL=0;
 
 
 // multitexture (OpenGL 1.3)
-PFNGLACTIVETEXTUREARBPROC		glActiveTexture_ARB = NULL;
-PFNGLCLIENTACTIVETEXTUREARBPROC	glClientActiveTexture_ARB = NULL;
+PFNGLACTIVETEXTUREARBPROC		glActiveTexture_ARB = nullptr;
+PFNGLCLIENTACTIVETEXTUREARBPROC	glClientActiveTexture_ARB = nullptr;
 // GL_ARB_texture_storage (OpenGL 4.2)
-PFNGLTEXSTORAGE2DPROC 			glTexStorage2DEXT = NULL;
+PFNGLTEXSTORAGE2DPROC 			glTexStorage2DEXT = nullptr;
 
 
-SDL_Window *window_SDL2 = 0;
-SDL_Window *vw_GetSDL2Windows(){return window_SDL2;};
+SDL_Window *window_SDL2 = nullptr;
+SDL_Window *vw_GetSDL2Windows()
+{
+	return window_SDL2;
+};
 
 float CurrentGammaGL = 1.0f;
 float CurrentContrastGL = 1.0f;
@@ -105,7 +108,7 @@ bool ExtensionSupported( const char *Extension)
 	char *extensions;
 	extensions=(char *) glGetString(GL_EXTENSIONS);
 	// если можем получить указатель, значит это расширение есть
-	if (strstr(extensions, Extension) != NULL) return true;
+	if (strstr(extensions, Extension) != nullptr) return true;
 	return false;
 }
 
@@ -132,8 +135,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	if (FullScreenFlag) Flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
 	window_SDL2 = SDL_CreateWindow(Title, CurrentVideoModeX, CurrentVideoModeY, Width, Height, Flags);
-	if (window_SDL2 == NULL)
-	{
+	if (window_SDL2 == nullptr) {
 		fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
 		fprintf(stderr, "Can't set video mode %i x %i\n\n", Width, Height);
 		return 1;
@@ -209,8 +211,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// проверем поддержку анизотропной фильтрации
-	if (ExtensionSupported("GL_EXT_texture_filter_anisotropic"))
-	{
+	if (ExtensionSupported("GL_EXT_texture_filter_anisotropic")) {
 		// получим максимально доступный угол анизотропии...
 		glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT,&OpenGL_DevCaps.MaxAnisotropyLevel);
 		printf("Max anisotropy: %i\n", OpenGL_DevCaps.MaxAnisotropyLevel);
@@ -218,8 +219,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 
 	// проверем поддержку VBO
 #ifdef use_Vertex_Buffer_Objects
-	if (ExtensionSupported("GL_ARB_vertex_buffer_object"))
-	{
+	if (ExtensionSupported("GL_ARB_vertex_buffer_object")) {
 		OpenGL_DevCaps.VBOSupported = true;
 		printf("Vertex Buffer support enabled.\n");
 	}
@@ -227,8 +227,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 
 	// проверем поддержку VAO
 #ifdef use_Vertex_Array_Objects
-	if (ExtensionSupported("GL_ARB_vertex_array_object"))
-	{
+	if (ExtensionSupported("GL_ARB_vertex_array_object")) {
 		OpenGL_DevCaps.VAOSupported = true;
 		printf("Vertex Array support enabled.\n");
 	}
@@ -241,14 +240,12 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 #endif
 
 	// проверяем, есть ли поддержка компрессии текстур
-	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_EXT_texture_compression_s3tc"))
-	{
+	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_EXT_texture_compression_s3tc")) {
 		OpenGL_DevCaps.TexturesCompression = true;
 		printf("Textures S3TC compression support enabled.\n");
 	}
 #ifdef use_BPTC_Texture_Compression
-	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_ARB_texture_compression_bptc"))
-	{
+	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_ARB_texture_compression_bptc")) {
 		OpenGL_DevCaps.TexturesCompressionBPTC = true;
 		printf("Textures BPTC compression support enabled.\n");
 	}
@@ -256,8 +253,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 
 	// проверяем, есть ли поддержка OcclusionQuery
 #ifdef use_Query_Objects
-	if (ExtensionSupported("GL_ARB_occlusion_query"))
-	{
+	if (ExtensionSupported("GL_ARB_occlusion_query")) {
 		OpenGL_DevCaps.OcclusionQuerySupported = true;
 		printf("Occlusion Query support enabled.\n");
 	}
@@ -265,8 +261,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 
 	// проверяем, есть ли поддержка SGIS_generate_mipmap (хардварная генерация мипмеп уровней)
 #ifdef use_Automatic_Mipmap_Generation
-	if (ExtensionSupported("SGIS_generate_mipmap"))
-	{
+	if (ExtensionSupported("SGIS_generate_mipmap")) {
 		OpenGL_DevCaps.HardwareMipMapGeneration = true;
 	}
 #endif
@@ -274,8 +269,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	// проверяем, есть ли поддержка GL_ARB_framebuffer_object (GL_EXT_framebuffer_object+GL_EXT_framebuffer_multisample+GL_EXT_framebuffer_blit)
 #ifdef use_Framebuffer_Objects
 	if (ExtensionSupported("GL_ARB_framebuffer_object") ||
-		(ExtensionSupported("GL_EXT_framebuffer_blit") && ExtensionSupported("GL_EXT_framebuffer_multisample") && ExtensionSupported("GL_EXT_framebuffer_object")))
-	{
+	    (ExtensionSupported("GL_EXT_framebuffer_blit") && ExtensionSupported("GL_EXT_framebuffer_multisample") && ExtensionSupported("GL_EXT_framebuffer_object"))) {
 		OpenGL_DevCaps.FramebufferObject = true;
 		printf("Frame Buffer Object support enabled.\n");
 	}
@@ -283,8 +277,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 
 	// проверяем, есть ли поддержка GL_ARB_texture_storage или GL_EXT_texture_storage
 #ifdef use_Texture_Storage
-	if (ExtensionSupported("GL_ARB_texture_storage") || ExtensionSupported("GL_EXT_texture_storage"))
-	{
+	if (ExtensionSupported("GL_ARB_texture_storage") || ExtensionSupported("GL_EXT_texture_storage")) {
 		OpenGL_DevCaps.TextureStorage = true;
 		printf("Texture Storage support enabled.\n");
 	}
@@ -298,10 +291,9 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	// проверяем, есть ли поддержка шейдеров GLSL версии 1.00
 #ifdef use_Shading_Language
 	if (ExtensionSupported("GL_ARB_shader_objects") &&
-		ExtensionSupported("GL_ARB_vertex_shader") &&
-		ExtensionSupported("GL_ARB_fragment_shader") &&
-		ExtensionSupported("GL_ARB_shading_language_100"))
-	{
+	    ExtensionSupported("GL_ARB_vertex_shader") &&
+	    ExtensionSupported("GL_ARB_fragment_shader") &&
+	    ExtensionSupported("GL_ARB_shading_language_100")) {
 		OpenGL_DevCaps.GLSL100Supported = true;
 	}
 #endif
@@ -313,28 +305,23 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 	// If a card supports GL_ARB_vertex_program and/or GL_ARB_vertex_shader, it supports vertex shader 1.1.
 	// If a card supports GL_NV_texture_shader and GL_NV_register_combiners, it supports pixel shader 1.1.
 	if ((ExtensionSupported("GL_ARB_vertex_program") || ExtensionSupported("GL_ARB_vertex_shader")) &&
-			ExtensionSupported("GL_NV_texture_shader") && ExtensionSupported("GL_NV_register_combiners"))
-	{
+	    ExtensionSupported("GL_NV_texture_shader") && ExtensionSupported("GL_NV_register_combiners")) {
 		OpenGL_DevCaps.ShaderModel = 1.1f;
 	}
 	// If a card supports GL_ATI_fragment_shader or GL_ATI_text_fragment_shader it supports pixel shader 1.4.
-	if (ExtensionSupported("GL_ATI_fragment_shader") || ExtensionSupported("GL_ATI_text_fragment_shader"))
-	{
+	if (ExtensionSupported("GL_ATI_fragment_shader") || ExtensionSupported("GL_ATI_text_fragment_shader")) {
 		OpenGL_DevCaps.ShaderModel = 1.4f;
 	}
 	// If a card supports GL_ARB_fragment_program and/or GL_ARB_fragment_shader it supports Shader Model 2.0.
-	if (ExtensionSupported("GL_ARB_fragment_program") || ExtensionSupported("GL_ARB_fragment_shader"))
-	{
+	if (ExtensionSupported("GL_ARB_fragment_program") || ExtensionSupported("GL_ARB_fragment_shader")) {
 		OpenGL_DevCaps.ShaderModel = 2.0f;
 	}
 	// If a card supports GL_NV_vertex_program3 or GL_ARB_shader_texture_lod/GL_ATI_shader_texture_lod it supports Shader Model 3.0.
-	if (ExtensionSupported("GL_ARB_shader_texture_lod") || ExtensionSupported("GL_NV_vertex_program3") || ExtensionSupported("GL_ATI_shader_texture_lod"))
-	{
+	if (ExtensionSupported("GL_ARB_shader_texture_lod") || ExtensionSupported("GL_NV_vertex_program3") || ExtensionSupported("GL_ATI_shader_texture_lod")) {
 		OpenGL_DevCaps.ShaderModel = 3.0f;
 	}
 	// If a card supports GL_EXT_gpu_shader4 it is a Shader Model 4.0 card. (Geometry shaders are implemented in GL_EXT_geometry_shader4)
-	if (ExtensionSupported("GL_EXT_gpu_shader4"))
-	{
+	if (ExtensionSupported("GL_EXT_gpu_shader4")) {
 		OpenGL_DevCaps.ShaderModel = 4.0f;
 	}
 
@@ -351,16 +338,14 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 
 
 	// если есть полная поддержка FBO, значит можем работать с семплами
-	if (OpenGL_DevCaps.FramebufferObject)
-	{
+	if (OpenGL_DevCaps.FramebufferObject) {
 		glGetIntegerv(GL_MAX_SAMPLES_EXT, &OpenGL_DevCaps.MaxSamples);
 		printf("Max Samples: %i\n", OpenGL_DevCaps.MaxSamples);
 
 		// дальше может и не быть GL_NV_framebuffer_multisample_coverage, потому делаем список сглаживаний
 		int TestSample = 2;
 		OpenGL_DevCaps.MaxMultisampleCoverageModes = 0;
-		while (TestSample <= OpenGL_DevCaps.MaxSamples)
-		{
+		while (TestSample <= OpenGL_DevCaps.MaxSamples) {
 			OpenGL_DevCaps.MultisampleCoverageModes[OpenGL_DevCaps.MaxMultisampleCoverageModes].ColorSamples = TestSample;
 			OpenGL_DevCaps.MultisampleCoverageModes[OpenGL_DevCaps.MaxMultisampleCoverageModes].CoverageSamples = TestSample;
 			OpenGL_DevCaps.MaxMultisampleCoverageModes++;
@@ -368,29 +353,24 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 		}
 
 		// проверяем, есть ли поддержка CSAA
-		if (ExtensionSupported("GL_NV_framebuffer_multisample_coverage"))
-		{
+		if (ExtensionSupported("GL_NV_framebuffer_multisample_coverage")) {
 			glGetIntegerv( GL_MAX_MULTISAMPLE_COVERAGE_MODES_NV, &OpenGL_DevCaps.MaxMultisampleCoverageModes);
 			printf("Max Multisample coverage modes: %i\n", OpenGL_DevCaps.MaxMultisampleCoverageModes);
-			int *coverageConfigs = 0;
+			int *coverageConfigs = nullptr;
 			coverageConfigs = new int[OpenGL_DevCaps.MaxMultisampleCoverageModes * 2 + 4];
 			glGetIntegerv( GL_MULTISAMPLE_COVERAGE_MODES_NV, coverageConfigs);
 
 			// просматриваем все конфиги, печатаем их и делаем второй тест на MSAA
 			int MaxMultiSampleTypeTest2 = -1;
-			for (int kk = 0; kk < OpenGL_DevCaps.MaxMultisampleCoverageModes; kk++)
-			{
+			for (int kk = 0; kk < OpenGL_DevCaps.MaxMultisampleCoverageModes; kk++) {
 				OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples = coverageConfigs[kk*2+1];
 				OpenGL_DevCaps.MultisampleCoverageModes[kk].CoverageSamples = coverageConfigs[kk*2];
 
-				if (OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples == OpenGL_DevCaps.MultisampleCoverageModes[kk].CoverageSamples)
-				{
+				if (OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples == OpenGL_DevCaps.MultisampleCoverageModes[kk].CoverageSamples) {
 					// если ковередж и глубина/цвет одинаковые - это обычный MSAA
 					printf( " - %d MSAA\n", OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples);
 					if (MaxMultiSampleTypeTest2 < OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples) MaxMultiSampleTypeTest2 = OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples;
-				}
-				else
-				{
+				} else {
 					// CSAA
 					printf( " - %d/%d CSAA\n", OpenGL_DevCaps.MultisampleCoverageModes[kk].CoverageSamples, OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples);
 				}
@@ -408,13 +388,11 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL Full
 #ifdef gamedebug
 	// получаем и выводим все поддерживаемые расширения
 	char *extensions_tmp = (char *)glGetString(GL_EXTENSIONS);
-	if (extensions_tmp != 0)
-	{
+	if (extensions_tmp != 0) {
 		char *extensions = 0;
 		size_t len = strlen(extensions_tmp);
 		extensions = new char[len+1];
-		if (extensions != 0)
-		{
+		if (extensions != 0) {
 			strcpy(extensions, extensions_tmp);
 			for (unsigned int i=0; i<len; i++) // меняем разделитель
 				if (extensions[i]==' ') extensions[i]='\n';
@@ -465,23 +443,19 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	// подключаем расширения
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	if (OpenGL_DevCaps.MaxMultTextures > 1)
-	{
+	if (OpenGL_DevCaps.MaxMultTextures > 1) {
 		glActiveTexture_ARB = (PFNGLACTIVETEXTUREARBPROC) SDL_GL_GetProcAddress("glActiveTexture");
 		glClientActiveTexture_ARB = (PFNGLCLIENTACTIVETEXTUREARBPROC) SDL_GL_GetProcAddress("glClientActiveTexture");
-		if (glActiveTexture_ARB == NULL || glClientActiveTexture_ARB == NULL)
-		{
+		if (glActiveTexture_ARB == nullptr || glClientActiveTexture_ARB == nullptr) {
 			OpenGL_DevCaps.MaxMultTextures = 1;
 			fprintf(stderr, "Can't get proc address for glActiveTexture or glClientActiveTexture.\n\n");
 		}
 	}
 
-	if (OpenGL_DevCaps.TextureStorage)
-	{
+	if (OpenGL_DevCaps.TextureStorage) {
 		glTexStorage2DEXT = (PFNGLTEXSTORAGE2DPROC) SDL_GL_GetProcAddress("glTexStorage2D");
-		if (glTexStorage2DEXT == NULL) glTexStorage2DEXT = (PFNGLTEXSTORAGE2DPROC) SDL_GL_GetProcAddress("glTexStorage2DEXT");
-		if (glTexStorage2DEXT == NULL)
-		{
+		if (glTexStorage2DEXT == nullptr) glTexStorage2DEXT = (PFNGLTEXSTORAGE2DPROC) SDL_GL_GetProcAddress("glTexStorage2DEXT");
+		if (glTexStorage2DEXT == nullptr) {
 			OpenGL_DevCaps.TextureStorage = false;
 			fprintf(stderr, "Can't get proc address for glTexStorage2DEXT.\n\n");
 		}
@@ -498,16 +472,13 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	// иним вaо
 	if (OpenGL_DevCaps.VAOSupported) OpenGL_DevCaps.VAOSupported = vw_Internal_InitializationVAO();
 	// инициализируем FBO
-	if (OpenGL_DevCaps.FramebufferObject)
-	{
+	if (OpenGL_DevCaps.FramebufferObject) {
 		OpenGL_DevCaps.FramebufferObject = vw_Internal_InitializationFBO();
 
 		// инициализируем буферы, если поддерживаем работу с ними - через них всегда рисуем
-		if (OpenGL_DevCaps.FramebufferObject)
-		{
+		if (OpenGL_DevCaps.FramebufferObject) {
 			if ((!vw_BuildFBO(&MainFBO, Width, Height, true, true, *MSAA, CSAA)) &
-				(!vw_BuildFBO(&ResolveFBO, Width, Height, true, false)))
-			{
+			    (!vw_BuildFBO(&ResolveFBO, Width, Height, true, false))) {
 				vw_DeleteFBO(&MainFBO);
 				vw_DeleteFBO(&ResolveFBO);
 				OpenGL_DevCaps.FramebufferObject = false;
@@ -517,8 +488,7 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 
 
 	// если с FBO работать не получилось
-	if (!OpenGL_DevCaps.FramebufferObject)
-	{
+	if (!OpenGL_DevCaps.FramebufferObject) {
 		//выключаем антиалиасинг
 		*MSAA = OpenGL_DevCaps.MaxSamples = 0;
 
@@ -573,12 +543,9 @@ int vw_GetPrimCount(void)
 void vw_ShutdownRenderer()
 {
 	// возвращаем гамму и все такое...
-	if (UserDisplayRampStatus != -1)
-	{
+	if (UserDisplayRampStatus != -1) {
 		SDL_SetWindowGammaRamp(window_SDL2, UserDisplayRamp, UserDisplayRamp+256, UserDisplayRamp+512);
-	}
-	else
-	{
+	} else {
 		vw_SetGammaRamp(1.0f,1.0f,1.0f);
 	}
 
@@ -603,8 +570,7 @@ void vw_ResizeScene(float nfAngle, float AR, float nfNearClip, float nfFarClip)
 
 	if(nfNearClip==0 && nfFarClip==0)
 		;
-	else
-	{
+	else {
 		fNearClipGL = nfNearClip;
 		fFarClipGL = nfFarClip;
 	}
@@ -694,16 +660,13 @@ void vw_BeginRendering(int mask)
 void vw_EndRendering()
 {
 	// завершаем прорисовку, и переключаемся на основной буфер, если работали с FBO
-	if (MainFBO.ColorTexture != 0)
-	{
+	if (MainFBO.ColorTexture != 0) {
 		// если у нас буфер простой - достаточно просто прорисовать его текстуру
-		vw_DrawColorFBO(&MainFBO, 0);
-	}
-	else
-	{
+		vw_DrawColorFBO(&MainFBO, nullptr);
+	} else {
 		// если буфер с мультисемплами, надо сначало сделать блит в простой буфер
 		vw_BlitFBO(&MainFBO, &ResolveFBO);
-		vw_DrawColorFBO(&ResolveFBO, 0);
+		vw_DrawColorFBO(&ResolveFBO, nullptr);
 	}
 
 	SDL_GL_SwapWindow(window_SDL2);
@@ -723,13 +686,11 @@ void vw_EndRendering()
 //------------------------------------------------------------------------------------
 void vw_SetAspectRatio(float nWidth, float nHeight, bool Value)
 {
-	if (Value)
-	{
+	if (Value) {
 		ARWidthGL = nWidth;
 		ARHeightGL = nHeight;
 		ARFLAGGL = true;
-	}
-	else
+	} else
 		ARFLAGGL=false;
 }
 
@@ -769,28 +730,29 @@ void vw_SetGammaRamp(float Gamma, float Contrast, float Brightness)
 	CurrentContrastGL = Contrast;
 	CurrentBrightnessGL = Brightness;
 
-	Uint16 *ramp = 0;
-	ramp = new Uint16[256*3]; if (ramp == 0) return;
+	Uint16 *ramp = new Uint16[256*3];
 
 	float angle = CurrentContrastGL;
 	float offset = (CurrentBrightnessGL-1)*256;
-	for (int i = 0; i < 256; i++)
-	{
+	for (int i = 0; i < 256; i++) {
 		float k = i/256.0f;
 		k = (float)pow(k, 1.f/CurrentGammaGL);
 		k = k*256;
 		float value = k*angle*256+offset*256;
-		if (value > 65535)	value = 65535;
-		if (value < 0)		value = 0;
+		if (value > 65535)
+			value = 65535;
+		else if (value < 0)
+			value = 0;
 
-		ramp[i]		= (Uint16) value;
-		ramp[i+256]	= (Uint16) value;
-		ramp[i+512]	= (Uint16) value;
+		ramp[i] = (Uint16) value;
+		ramp[i+256] = (Uint16) value;
+		ramp[i+512] = (Uint16) value;
 	}
 
 	SDL_SetWindowGammaRamp(window_SDL2, ramp, ramp+256, ramp+512);
 
-	if (ramp != 0){delete [] ramp; ramp = 0;}
+	if (ramp != nullptr)
+		delete [] ramp;
 }
 
 
@@ -835,14 +797,23 @@ void vw_GetViewport(int *x, int *y, int *width, int *height, float *znear, float
 {
 	int buff[4];
 	glGetIntegerv(GL_VIEWPORT, buff);
-	if (x != 0) *x = buff[0];
-	if (y != 0) *y = buff[1];
-	if (width != 0) *width = buff[2];
-	if (height != 0) *height = buff[3];
+
+	if (x != nullptr)
+		*x = buff[0];
+	if (y != nullptr)
+		*y = buff[1];
+	if (width != nullptr)
+		*width = buff[2];
+	if (height != nullptr)
+		*height = buff[3];
+
 	float buff2[2];
 	glGetFloatv(GL_DEPTH_RANGE, buff2);
-	if (znear != 0) *znear = buff2[0];
-	if (zfar != 0) *zfar = buff2[1];
+
+	if (znear != nullptr)
+		*znear = buff2[0];
+	if (zfar != nullptr)
+		*zfar = buff2[1];
 }
 
 
@@ -856,21 +827,20 @@ void vw_GetViewport(int *x, int *y, int *width, int *height, float *znear, float
 //------------------------------------------------------------------------------------
 void vw_PolygonMode(int mode)
 {
-	switch (mode)
-	{
-		case RI_POINT:
-			glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-			break;
-		case RI_LINE:
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			break;
-		case RI_FILL:
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			break;
+	switch (mode) {
+	case RI_POINT:
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		break;
+	case RI_LINE:
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		break;
+	case RI_FILL:
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		break;
 
-		default:
-			fprintf(stderr, "Error in vw_PolygonMode function call, wrong mode.\n");
-			break;
+	default:
+		fprintf(stderr, "Error in vw_PolygonMode function call, wrong mode.\n");
+		break;
 	}
 }
 
@@ -882,23 +852,22 @@ void vw_PolygonMode(int mode)
 //------------------------------------------------------------------------------------
 void vw_CullFace(int face)
 {
-	switch (face)
-	{
-		case RI_BACK:
-			glEnable(GL_CULL_FACE);
-			glCullFace(GL_BACK);
-			break;
-		case RI_FRONT:
-			glEnable(GL_CULL_FACE);
-			glCullFace(GL_FRONT);
-			break;
-		case RI_NONE:
-			glDisable(GL_CULL_FACE);
-			break;
+	switch (face) {
+	case RI_BACK:
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		break;
+	case RI_FRONT:
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_FRONT);
+		break;
+	case RI_NONE:
+		glDisable(GL_CULL_FACE);
+		break;
 
-		default:
-			fprintf(stderr, "Error in vw_CullFace function call, wrong face.\n");
-			break;
+	default:
+		fprintf(stderr, "Error in vw_CullFace function call, wrong face.\n");
+		break;
 	}
 }
 
@@ -967,31 +936,44 @@ void vw_SetColorMask(bool red, bool green, bool blue, bool alpha)
 //------------------------------------------------------------------------------------
 void vw_DepthTest(bool mode, int funct)
 {
-	if (mode)
-	{
+	if (mode) {
 		glEnable(GL_DEPTH_TEST);
-	}
-	else
-	{
+	} else {
 		glDisable(GL_DEPTH_TEST);
 		// и сразу выходим, там тут делать нечего
 		return;
 	}
 
-	if (funct>=1 && funct<=8)
-	{
+	if (funct>=1 && funct<=8) {
 		GLenum fun = GL_NEVER;
-		switch(funct)
-		{
-			case 1: fun = GL_NEVER; break;
-			case 2: fun = GL_LESS; break;
-			case 3: fun = GL_EQUAL; break;
-			case 4: fun = GL_LEQUAL; break;
-			case 5: fun = GL_GREATER; break;
-			case 6: fun = GL_NOTEQUAL; break;
-			case 7: fun = GL_GEQUAL; break;
-			case 8: fun = GL_ALWAYS; break;
-			default: fprintf(stderr, "Error in vw_DepthTest function call, wrong funct.\n"); return;
+		switch(funct) {
+		case 1:
+			fun = GL_NEVER;
+			break;
+		case 2:
+			fun = GL_LESS;
+			break;
+		case 3:
+			fun = GL_EQUAL;
+			break;
+		case 4:
+			fun = GL_LEQUAL;
+			break;
+		case 5:
+			fun = GL_GREATER;
+			break;
+		case 6:
+			fun = GL_NOTEQUAL;
+			break;
+		case 7:
+			fun = GL_GEQUAL;
+			break;
+		case 8:
+			fun = GL_ALWAYS;
+			break;
+		default:
+			fprintf(stderr, "Error in vw_DepthTest function call, wrong funct.\n");
+			return;
 		}
 		glDepthFunc(fun);
 	}

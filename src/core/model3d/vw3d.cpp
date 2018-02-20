@@ -38,9 +38,9 @@
 //-----------------------------------------------------------------------------
 bool eModel3D::ReadVW3D(const char *FileName)
 {
-	eFILE *file = 0;
-	file = vw_fopen(FileName);
-	if (file == 0) return false;
+	eFILE *file = vw_fopen(FileName);
+	if (file == nullptr)
+		return false;
 
 	size_t SizeB = strlen(FileName)+1;
 	Name = new char[SizeB];
@@ -58,8 +58,7 @@ bool eModel3D::ReadVW3D(const char *FileName)
 
 
 	// для каждого объекта
-	for (int i=0; i<DrawObjectCount; i++)
-	{
+	for (int i=0; i<DrawObjectCount; i++) {
 		DrawObjectList[i].RangeStart = GlobalIndexCount;
 
 		// VertexFormat
@@ -80,13 +79,13 @@ bool eModel3D::ReadVW3D(const char *FileName)
 
 		// вертексный буфер
 		DrawObjectList[i].NeedDestroyDataInObjectBlock = false;
-		DrawObjectList[i].VertexBuffer = 0;
-		DrawObjectList[i].VBO = 0;
+		DrawObjectList[i].VertexBuffer = nullptr;
+		DrawObjectList[i].VBO = nullptr;
 		// индексный буфер
-		DrawObjectList[i].IndexBuffer = 0;
-		DrawObjectList[i].IBO = 0;
+		DrawObjectList[i].IndexBuffer = nullptr;
+		DrawObjectList[i].IBO = nullptr;
 		// vao
-		DrawObjectList[i].VAO = 0;
+		DrawObjectList[i].VAO = nullptr;
 	}
 
 	// получаем сколько всего вертексов
@@ -101,8 +100,7 @@ bool eModel3D::ReadVW3D(const char *FileName)
 	file->fread(GlobalIndexBuffer, GlobalIndexCount*sizeof(unsigned int),1);
 
 	// т.к. наши объекты используют глобальные буферы, надо поставить указатели
-	for (int i=0; i<DrawObjectCount; i++)
-	{
+	for (int i=0; i<DrawObjectCount; i++) {
 		DrawObjectList[i].VertexBuffer = GlobalVertexBuffer;
 		DrawObjectList[i].IndexBuffer = GlobalIndexBuffer;
 	}
@@ -123,21 +121,19 @@ bool eModel3D::ReadVW3D(const char *FileName)
 bool eModel3D::WriteVW3D(const char *FileName)
 {
 	// небольшие проверки
-	if ((GlobalVertexBuffer == 0) || (GlobalIndexBuffer == 0) || (DrawObjectList == 0))
-	{
-        fprintf(stderr, "Can't create %s file for empty Model3D.\n", FileName);
-        return false;
+	if ((GlobalVertexBuffer == nullptr) || (GlobalIndexBuffer == nullptr) || (DrawObjectList == nullptr)) {
+		fprintf(stderr, "Can't create %s file for empty Model3D.\n", FileName);
+		return false;
 	}
 
 
 	SDL_RWops *FileVW3D;
 	FileVW3D = SDL_RWFromFile(FileName, "wb");
 	// если не можем создать файл на запись - уходим
-    if (FileVW3D == NULL)
-    {
-        fprintf(stderr, "Can't create %s file on disk.\n", FileName);
-        return false;
-    }
+	if (FileVW3D == nullptr) {
+		fprintf(stderr, "Can't create %s file on disk.\n", FileName);
+		return false;
+	}
 
 	// маркер файла 4 байта
 	char tmp1[5] = "VW3D";
@@ -147,8 +143,7 @@ bool eModel3D::WriteVW3D(const char *FileName)
 	SDL_RWwrite(FileVW3D, &DrawObjectCount, sizeof(int), 1);
 
 	// для каждого объекта в моделе
-	for (int i=0; i<DrawObjectCount; i++)
-	{
+	for (int i=0; i<DrawObjectCount; i++) {
 		// VertexFormat
 		SDL_RWwrite(FileVW3D, &DrawObjectList[i].VertexFormat, sizeof(int), 1);
 		// VertexStride

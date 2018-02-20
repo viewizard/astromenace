@@ -64,8 +64,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// малый внутренний взрыв для астероидов
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ExplType == 1)
-	{
+	if (ExplType == 1) {
 		InternalExplosionType = 2;
 		OldSpeed = Speed;
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
@@ -78,9 +77,8 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 		// эффект
 		GraphicFXQuantity = 1;
 		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
-		for (int i=0; i<GraphicFXQuantity; i++)
-		{
-			GraphicFX[i] = 0;
+		for (int i=0; i<GraphicFXQuantity; i++) {
+			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
@@ -99,10 +97,8 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(3*Object->Radius) + (int)(vw_Randf0*3*Object->Radius);
-		for (int i=0; i<ttt; i++)
-		{
-			CProjectile *Projectile  = 0;
-			Projectile  = new CProjectile;
+		for (int i=0; i<ttt; i++) {
+			CProjectile *Projectile  = new CProjectile;
 			Projectile->Create(1);
 			Projectile->SetLocation(Location);
 
@@ -111,8 +107,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius*6.0f));
 			Projectile->Orientation.Normalize();
 
-			for (int j=0; j<Projectile->GraphicFXQuantity; j++)
-			{
+			for (int j=0; j<Projectile->GraphicFXQuantity; j++) {
 				Projectile->GraphicFX[j]->Direction = Projectile->Orientation^-1;
 				Projectile->GraphicFX[j]->Speed = 1.5f;
 			}
@@ -135,10 +130,9 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// средний внутренний взрыв для пришельцев
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ExplType == 2)
-	{
+	if (ExplType == 2) {
 		InternalExplosionType = 2;
-        OldSpeed = Speed;
+		OldSpeed = Speed;
 		Lifetime = 3.0f; // должно соотв. максимальной жизни частицы
 		MeshAcc = 20.0f;
 
@@ -149,9 +143,8 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 		// эффект
 		GraphicFXQuantity = 3;
 		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
-		for (int i=0; i<GraphicFXQuantity; i++)
-		{
-			GraphicFX[i] = 0;
+		for (int i=0; i<GraphicFXQuantity; i++) {
+			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
@@ -183,10 +176,8 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(Object->Radius) + (int)(vw_Randf0*Object->Radius);
-		for (int i=0; i<ttt; i++)
-		{
-			CProjectile *Projectile  = 0;
-			Projectile  = new CProjectile;
+		for (int i=0; i<ttt; i++) {
+			CProjectile *Projectile  = new CProjectile;
 			Projectile->Create(1);
 			Projectile->SetLocation(Location);
 
@@ -195,8 +186,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius/4.0f));
 			Projectile->Orientation.Normalize();
 
-			for (int j=0; j<Projectile->GraphicFXQuantity; j++)
-			{
+			for (int j=0; j<Projectile->GraphicFXQuantity; j++) {
 				Projectile->GraphicFX[j]->Direction = Projectile->Orientation^-1;
 				Projectile->GraphicFX[j]->Speed = 2.5f;
 				Projectile->GraphicFX[j]->ColorStart.r = 0.30f;
@@ -224,8 +214,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 	// средний внутренний взрыв для больших пиратов c разлетем частей
 	// + именно так взрываем свои корабли и корабль игрока...
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ExplType == 31)
-	{
+	if (ExplType == 31) {
 		InternalExplosionType = 1;
 	}
 
@@ -234,10 +223,9 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// взрыв внутренний части (пираты, земляне)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ExplType == 32)
-	{
+	if (ExplType == 32) {
 		InternalExplosionType = 2;
-        OldSpeed = Speed;
+		OldSpeed = Speed;
 		Lifetime = 3.0f; // должно соотв. максимальной жизни частицы
 		MeshAcc = 20.0f;
 
@@ -248,9 +236,8 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 		// эффект
 		GraphicFXQuantity = 2;
 		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
-		for (int i=0; i<GraphicFXQuantity; i++)
-		{
-			GraphicFX[i] = 0;
+		for (int i=0; i<GraphicFXQuantity; i++) {
+			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
@@ -277,8 +264,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// взрыв на части (босс пришельцев)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ExplType == 33)
-	{
+	if (ExplType == 33) {
 		InternalExplosionType = 1;
 	}
 
@@ -286,10 +272,9 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// взрыв внутренний части (босс пришельцев)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ExplType == 34)
-	{
+	if (ExplType == 34) {
 		InternalExplosionType = 2;
-        OldSpeed = Speed;
+		OldSpeed = Speed;
 		Lifetime = 3.0f; // должно соотв. максимальной жизни частицы
 		MeshAcc = 20.0f;
 
@@ -300,9 +285,8 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 		// эффект
 		GraphicFXQuantity = 2;
 		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
-		for (int i=0; i<GraphicFXQuantity; i++)
-		{
-			GraphicFX[i] = 0;
+		for (int i=0; i<GraphicFXQuantity; i++) {
+			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
@@ -328,10 +312,9 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// средний внутренний взрыв для землян и пиратов
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ExplType == 3)
-	{
+	if (ExplType == 3) {
 		InternalExplosionType = 2;
-        OldSpeed = Speed;
+		OldSpeed = Speed;
 		Lifetime = 3.0f; // должно соотв. максимальной жизни частицы
 		MeshAcc = 20.0f;
 
@@ -342,9 +325,8 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 		// эффект
 		GraphicFXQuantity = 2;
 		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
-		for (int i=0; i<GraphicFXQuantity; i++)
-		{
-			GraphicFX[i] = 0;
+		for (int i=0; i<GraphicFXQuantity; i++) {
+			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
@@ -368,10 +350,8 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(0.5f*Object->Radius) + (int)(vw_Randf0*Object->Radius);
-		for (int i=0; i<ttt; i++)
-		{
-			CProjectile *Projectile  = 0;
-			Projectile  = new CProjectile;
+		for (int i=0; i<ttt; i++) {
+			CProjectile *Projectile = new CProjectile;
 			Projectile->Create(1);
 			Projectile->SetLocation(Location);
 
@@ -380,8 +360,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius/2.0f));
 			Projectile->Orientation.Normalize();
 
-			for (int j=0; j<Projectile->GraphicFXQuantity; j++)
-			{
+			for (int j=0; j<Projectile->GraphicFXQuantity; j++) {
 				Projectile->GraphicFX[j]->Direction = Projectile->Orientation^-1;
 				Projectile->GraphicFX[j]->Speed = 2.5f;
 			}
@@ -403,8 +382,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// распад ракеты, если она папала в облако фларес
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ExplType == 4)
-	{
+	if (ExplType == 4) {
 		InternalExplosionType = 2;
 		// резко тормозим
 		OldSpeed = Speed/5.0f;
@@ -425,8 +403,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// взрыв на части для больших кораблей
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (InternalExplosionType == 1)
-	{
+	if (InternalExplosionType == 1) {
 		// строим обратную матрицу
 		float InvRotationMat[9];
 		// сохраняем старые значения + пересчет новых
@@ -436,8 +413,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
-		for (int i=0; i<Object->DrawObjectQuantity; i++)
-		{
+		for (int i=0; i<Object->DrawObjectQuantity; i++) {
 			// могут быть пустые группы, убираем их и идем смотрим на следующую группу
 			if (Object->DrawObjectList[i].VertexCount == 0) continue;
 
@@ -447,14 +423,13 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			ShipPart->ShowDeleteOnHide = 0;
 
 			// только одна текстура (!) 2-ю для подстветки не тянем
-            ShipPart->Texture = new eTexture*[1];
-            ShipPart->Texture[0] = Object->Texture[i];
-			if (Object->NormalMap != 0)
-			if (Object->NormalMap[i] != 0)
-			{
-            	ShipPart->NormalMap = new eTexture*[1];
-            	ShipPart->NormalMap[0] = Object->NormalMap[i];
-			}
+			ShipPart->Texture = new eTexture*[1];
+			ShipPart->Texture[0] = Object->Texture[i];
+			if (Object->NormalMap != nullptr)
+				if (Object->NormalMap[i] != nullptr) {
+					ShipPart->NormalMap = new eTexture*[1];
+					ShipPart->NormalMap[0] = Object->NormalMap[i];
+				}
 
 			// берем то, что нужно
 			ShipPart->DrawObjectQuantity = 1;
@@ -462,8 +437,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
 			memcpy(&(ShipPart->DrawObjectList[0]), &(Object->DrawObjectList[i]), sizeof(eObjectBlock));
 			// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
-			if (Object->DrawObjectList[i].NeedDestroyDataInObjectBlock)
-			{
+			if (Object->DrawObjectList[i].NeedDestroyDataInObjectBlock) {
 				Object->DrawObjectList[i].NeedDestroyDataInObjectBlock = false;
 				ShipPart->DrawObjectList[0].NeedDestroyDataInObjectBlock = true;
 			}
@@ -473,8 +447,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			ShipPart->HitBBRadius2 = new float[ShipPart->DrawObjectQuantity];
 			ShipPart->HitBBSize = new VECTOR3D[ShipPart->DrawObjectQuantity];
 			ShipPart->HitBB = new VECTOR3D*[ShipPart->DrawObjectQuantity];
-			for (int i1=0; i1<ShipPart->DrawObjectQuantity; i1++)
-			{
+			for (int i1=0; i1<ShipPart->DrawObjectQuantity; i1++) {
 				ShipPart->HitBB[i1] = new VECTOR3D[8];
 			}
 
@@ -507,25 +480,23 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 
 			// взрываем тот объект, в который попали
 			int NeedExplosionType = 32;
-			switch (ExplType)
-			{
-				case 31: // взрыв пиратов или землян
-					NeedExplosionType = 32;
-					break;
-				case 33: // взрыв боссов пришельцев
-					// взорвем все в течении 3-х секунд
-					ShipPart->BossPartCountDown = 3.0f * vw_Randf1;
-					NeedExplosionType = 34;
-					break;
+			switch (ExplType) {
+			case 31: // взрыв пиратов или землян
+				NeedExplosionType = 32;
+				break;
+			case 33: // взрыв боссов пришельцев
+				// взорвем все в течении 3-х секунд
+				ShipPart->BossPartCountDown = 3.0f * vw_Randf1;
+				NeedExplosionType = 34;
+				break;
 			}
 			if (ObjectPieceNum != -1)
-			if (ObjectPieceNum == i)
-			{
-				CSpaceExplosion *TMPExplosion;
-				TMPExplosion = new CSpaceExplosion;
-				TMPExplosion->Create(ShipPart, NeedExplosionType, ShipPart->Location, ShipPart->Speed, -1);
-				delete ShipPart;
-			}
+				if (ObjectPieceNum == i) {
+					CSpaceExplosion *TMPExplosion;
+					TMPExplosion = new CSpaceExplosion;
+					TMPExplosion->Create(ShipPart, NeedExplosionType, ShipPart->Location, ShipPart->Speed, -1);
+					delete ShipPart;
+				}
 		}
 
 		Lifetime = 0.0f;
@@ -539,25 +510,24 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// взрыв с разлетом геометрии
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (InternalExplosionType == 2)
-	{
-        // AABB нужен, т.к. по нему рисуем, если во фруструме
-        // копируем AABB, т.к. они сейчас подходят...
-        AABB[0] = Object->AABB[0];
-        AABB[1] = Object->AABB[1];
-        AABB[2] = Object->AABB[2];
-        AABB[3] = Object->AABB[3];
-        AABB[4] = Object->AABB[4];
-        AABB[5] = Object->AABB[5];
-        AABB[6] = Object->AABB[6];
-        AABB[7] = Object->AABB[7];
+	if (InternalExplosionType == 2) {
+		// AABB нужен, т.к. по нему рисуем, если во фруструме
+		// копируем AABB, т.к. они сейчас подходят...
+		AABB[0] = Object->AABB[0];
+		AABB[1] = Object->AABB[1];
+		AABB[2] = Object->AABB[2];
+		AABB[3] = Object->AABB[3];
+		AABB[4] = Object->AABB[4];
+		AABB[5] = Object->AABB[5];
+		AABB[6] = Object->AABB[6];
+		AABB[7] = Object->AABB[7];
 
 		// поправка в зависимости от скорости объекта до взрыва
 		VelocityOrientation = Object->Orientation;
 
 
-        // общее кол-во элементов прорисовки (т.к. может быть не один объект + разные настройки качества взрыва)
-        int TotalCount = 0;
+		// общее кол-во элементов прорисовки (т.к. может быть не один объект + разные настройки качества взрыва)
+		int TotalCount = 0;
 
 		// создаем последовательность
 		DrawObjectQuantity = Object->DrawObjectQuantity;
@@ -568,20 +538,19 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 		int NeedIn = Setup.VisualEffectsQuality;
 
 		// составляем данные для взрыва
-		for (int i=0; i<DrawObjectQuantity; i++)
-		{
+		for (int i=0; i<DrawObjectQuantity; i++) {
 			Texture[i] = Object->Texture[i];
 			// копируем данные
 			memcpy(&(DrawObjectList[i]), &(Object->DrawObjectList[i]), sizeof(eObjectBlock));
 			// делаем изменения
-			DrawObjectList[i].VBO = 0;
-			DrawObjectList[i].VertexBuffer = 0;
-			DrawObjectList[i].IBO = 0;
-			DrawObjectList[i].IndexBuffer = 0;
-			DrawObjectList[i].VAO = 0;
+			DrawObjectList[i].VBO = nullptr;
+			DrawObjectList[i].VertexBuffer = nullptr;
+			DrawObjectList[i].IBO = nullptr;
+			DrawObjectList[i].IndexBuffer = nullptr;
+			DrawObjectList[i].VAO = nullptr;
 			DrawObjectList[i].NeedDestroyDataInObjectBlock = true; // удалять в объекте
 			DrawObjectList[i].RangeStart = 0;
-			DrawObjectList[i].VertexBufferLimitedBySizeTriangles = 0;
+			DrawObjectList[i].VertexBufferLimitedBySizeTriangles = nullptr;
 			DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount = 0;
 
 			// делаем поворот геометрии объекта чтобы правильно сделать разлет частиц
@@ -592,20 +561,16 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			int tricount = 0;
 
 			// если 2 текстурных координаты, нужно убрать 2-ю...
-			if ((Object->DrawObjectList[i].VertexFormat & 0x000000F) >= 2)
-			{
+			if ((Object->DrawObjectList[i].VertexFormat & 0x000000F) >= 2) {
 				DrawObjectList[i].VertexFormat = (Object->DrawObjectList[i].VertexFormat & 0xFFFFFF0) | RI_1_TEX;
-			}
-			else
-			{
+			} else {
 				DrawObjectList[i].VertexFormat = Object->DrawObjectList[i].VertexFormat;
 			}
 			DrawObjectList[i].VertexStride = Object->DrawObjectList[i].VertexStride;
 
 
 			// если у нас включены и работают шейдеры, надо приготовить место для данных + изменить формат и шаг
-			if (Setup.UseGLSL)
-			{
+			if (Setup.UseGLSL) {
 				DrawObjectList[i].VertexStride = 3+3+6;
 				DrawObjectList[i].VertexFormat = RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX;
 			}
@@ -623,9 +588,8 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			Matrix33Identity(TransMatTMPNorm);
 			// если нужно - создаем матрицу, иначе - копируем ее
 			if (Object->DrawObjectList[i].Rotation.x != 0.0f ||
-				Object->DrawObjectList[i].Rotation.y != 0.0f ||
-				Object->DrawObjectList[i].Rotation.z != 0.0f)
-			{
+			    Object->DrawObjectList[i].Rotation.y != 0.0f ||
+			    Object->DrawObjectList[i].Rotation.z != 0.0f) {
 				Matrix44CreateRotate(TransMatTMP, Object->DrawObjectList[i].Rotation);
 				Matrix33CreateRotate(TransMatTMPNorm, Object->DrawObjectList[i].Rotation);
 			}
@@ -634,10 +598,8 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 
 
 			VECTOR3D TMP;
-			for (int j=0; j<Object->DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount; j++)
-			{
-				if (NeedInCur <= 0)
-				{
+			for (int j=0; j<Object->DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount; j++) {
+				if (NeedInCur <= 0) {
 					int j1 = k*DrawObjectList[i].VertexStride;
 					int j2 = j*Object->DrawObjectList[i].VertexStride;
 
@@ -666,9 +628,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 					k++;
 
 					if (tricount == 2) NeedInCur = NeedIn;
-				}
-				else
-				{
+				} else {
 					if (tricount == 2) NeedInCur --;
 				}
 
@@ -691,16 +651,14 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 
 		// расстояние от центра до крайней точки
 		float Diag = (Object->Length*Object->Length)+
-			(Object->Height*Object->Height) + (Object->Width*Object->Width);
+			     (Object->Height*Object->Height) + (Object->Width*Object->Width);
 
 		// для каждого треугольника - свои данные
 		int Count = 0;
 		VECTOR3D TMP;
 		ExplosionPieceData = new CExplosionPiece[TotalCount/3];
-		for (int j=0; j<DrawObjectQuantity; j++)
-		{
-			for (int i=0; i<DrawObjectList[j].VertexCount; i+=3)
-			{
+		for (int j=0; j<DrawObjectQuantity; j++) {
+			for (int i=0; i<DrawObjectList[j].VertexCount; i+=3) {
 				ExplosionPieceData[Count].Velocity.x = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i];
 				ExplosionPieceData[Count].Velocity.x += DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)];
 				ExplosionPieceData[Count].Velocity.x += DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)];
@@ -716,8 +674,8 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 
 				// находим расстояние, чтобы включить его
 				float dist = ExplosionPieceData[Count].Velocity.x*ExplosionPieceData[Count].Velocity.x +
-					ExplosionPieceData[Count].Velocity.y*ExplosionPieceData[Count].Velocity.y+
-					ExplosionPieceData[Count].Velocity.z*ExplosionPieceData[Count].Velocity.z + vw_Randf0;
+					     ExplosionPieceData[Count].Velocity.y*ExplosionPieceData[Count].Velocity.y+
+					     ExplosionPieceData[Count].Velocity.z*ExplosionPieceData[Count].Velocity.z + vw_Randf0;
 
 
 				float Acc = (MeshAcc/1000.0f)*(Diag/dist)*(MeshAcc/Object->Radius);
@@ -726,8 +684,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 
 
 				// записываем центр треугольника, оно же базовое ускорение + цент UV, для передачи шейдеру
-				if (Setup.UseGLSL)
-				{
+				if (Setup.UseGLSL) {
 					// Velocity/центр треугольника
 					DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+8] = ExplosionPieceData[Count].Velocity.x;
 					DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+9] = ExplosionPieceData[Count].Velocity.y;
@@ -739,14 +696,11 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 					DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)+9] = ExplosionPieceData[Count].Velocity.y;
 					DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)+10] = ExplosionPieceData[Count].Velocity.z;
 					// acc
-					if (dist/Diag < 0.01f)
-					{
+					if (dist/Diag < 0.01f) {
 						DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+11] = Acc+4.0f*vw_Randf0;
 						DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)+11] = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+11];
 						DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)+11] = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+11];
-					}
-					else
-					{
+					} else {
 						DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+11] = Acc;
 						DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)+11] = Acc;
 						DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)+11] = Acc;
@@ -767,8 +721,8 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 
 				// делаем анализ для ААBB, смотрим отлет частицы
 				float tmpSpeed = ExplosionPieceData[Count].Velocity.x*ExplosionPieceData[Count].Velocity.x +
-								ExplosionPieceData[Count].Velocity.y*ExplosionPieceData[Count].Velocity.y +
-								ExplosionPieceData[Count].Velocity.z*ExplosionPieceData[Count].Velocity.z;
+						 ExplosionPieceData[Count].Velocity.y*ExplosionPieceData[Count].Velocity.y +
+						 ExplosionPieceData[Count].Velocity.z*ExplosionPieceData[Count].Velocity.z;
 				if (tmpSpeed > AABBSpeed) AABBSpeed = tmpSpeed;
 
 				Count++;
@@ -780,45 +734,45 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			// удаляем старые буферы, если они есть, создаем новые
 			// ! индексный буфер не трогаем, его не надо пересоздавать вообще
 
-			if (DrawObjectList[j].VBO != 0)
-			{
-				vw_DeleteVBO(*DrawObjectList[j].VBO); delete DrawObjectList[j].VBO; DrawObjectList[j].VBO = 0;
+			if (DrawObjectList[j].VBO != nullptr) {
+				vw_DeleteVBO(*DrawObjectList[j].VBO);
+				delete DrawObjectList[j].VBO;
+				DrawObjectList[j].VBO = nullptr;
 			}
-			if (DrawObjectList[j].VAO != 0)
-			{
-				vw_DeleteVAO(*DrawObjectList[j].VAO); delete DrawObjectList[j].VAO; DrawObjectList[j].VAO = 0;
+			if (DrawObjectList[j].VAO != nullptr) {
+				vw_DeleteVAO(*DrawObjectList[j].VAO);
+				delete DrawObjectList[j].VAO;
+				DrawObjectList[j].VAO = nullptr;
 			}
 
 			// делаем VBO
 			DrawObjectList[j].VBO = new unsigned int;
-			if (!vw_BuildVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].VertexStride, DrawObjectList[j].VBO))
-			{
-				delete DrawObjectList[j].VBO; DrawObjectList[j].VBO=0;
+			if (!vw_BuildVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].VertexStride, DrawObjectList[j].VBO)) {
+				delete DrawObjectList[j].VBO;
+				DrawObjectList[j].VBO = nullptr;
 			}
 
 			// делаем IBO, создаем его один раз, если его нет
-			if (DrawObjectList[j].IBO == 0)
-			{
+			if (DrawObjectList[j].IBO == nullptr) {
 				DrawObjectList[j].IBO = new unsigned int;
-				if (!vw_BuildIBO(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO))
-				{
-					delete DrawObjectList[j].IBO; DrawObjectList[j].IBO=0;
+				if (!vw_BuildIBO(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO)) {
+					delete DrawObjectList[j].IBO;
+					DrawObjectList[j].IBO = nullptr;
 				}
 			}
 
 			// делаем VAO
 			DrawObjectList[j].VAO = new unsigned int;
 			if (!vw_BuildVAO(DrawObjectList[j].VAO, DrawObjectList[j].VertexCount, DrawObjectList[j].VertexFormat, DrawObjectList[j].VertexBuffer,
-								DrawObjectList[j].VertexStride*sizeof(float), DrawObjectList[j].VBO,
-								DrawObjectList[j].RangeStart, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO))
-			{
-				delete DrawObjectList[j].VAO; DrawObjectList[j].VAO=0;
+					 DrawObjectList[j].VertexStride*sizeof(float), DrawObjectList[j].VBO,
+					 DrawObjectList[j].RangeStart, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO)) {
+				delete DrawObjectList[j].VAO;
+				DrawObjectList[j].VAO = nullptr;
 			}
 
 
 			// установки по шейдеру для объекта
-			if (Setup.UseGLSL)
-			{
+			if (Setup.UseGLSL) {
 				DrawObjectList[j].ShaderType = 2;
 				// дельта скорости
 				DrawObjectList[j].ShaderData[0] = 1.0f;
@@ -844,8 +798,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 
 
 	// дальше, если не видем точку взрыва не делать... проверяем...
-	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0]))
-	{
+	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0])) {
 		return;
 	}
 
@@ -854,70 +807,67 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// звуковые спец эффекты
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (NeedExplosionSFX)
-	{
+	if (NeedExplosionSFX) {
 
 		float fVol = 1.0f;
 
-		switch (ExplType)
-		{
-			// малый взрыв
-			case 1:
-				// астероид
-				Audio_PlaySound3D(33, fVol, ExplLocation, false, 2);
-				break;
+		switch (ExplType) {
+		// малый взрыв
+		case 1:
+			// астероид
+			Audio_PlaySound3D(33, fVol, ExplLocation, false, 2);
+			break;
 
-			// взрыв
-			case 2:
-				// пришельцы
-				Audio_PlaySound3D(7, fVol, ExplLocation, false, 2);
-				break;
-			case 3:
-				// земляне, пираты
-				Audio_PlaySound3D(8, fVol, ExplLocation, false, 2);
-				break;
-		   // case 31:
-			case 32:
-				// внутренняя часть (пираты, земляне)
-				//fVol = fVol/2; // ум. т.к. их там очень много
-				Audio_PlaySound3D(8, fVol, ExplLocation, false, 2);
-				break;
-			//case 33:
-			case 34:
-				// внутренняя часть (босс пришельцев)
-				Audio_PlaySound3D(7, fVol, ExplLocation, false, 2);
-				break;
+		// взрыв
+		case 2:
+			// пришельцы
+			Audio_PlaySound3D(7, fVol, ExplLocation, false, 2);
+			break;
+		case 3:
+			// земляне, пираты
+			Audio_PlaySound3D(8, fVol, ExplLocation, false, 2);
+			break;
+		// case 31:
+		case 32:
+			// внутренняя часть (пираты, земляне)
+			//fVol = fVol/2; // ум. т.к. их там очень много
+			Audio_PlaySound3D(8, fVol, ExplLocation, false, 2);
+			break;
+		//case 33:
+		case 34:
+			// внутренняя часть (босс пришельцев)
+			Audio_PlaySound3D(7, fVol, ExplLocation, false, 2);
+			break;
 		}
 	}
 
 
 
 
-    // делаем сотрясание камеры, если нужно
-	switch (ExplType)
-	{
-	    // малый взрыв
-        case 1:
-            // астероид
-            GameCameraSetExplosion(ExplLocation, 0.2f);
-			break;
+	// делаем сотрясание камеры, если нужно
+	switch (ExplType) {
+	// малый взрыв
+	case 1:
+		// астероид
+		GameCameraSetExplosion(ExplLocation, 0.2f);
+		break;
 
-        // взрыв
-        case 2:
-            // пришельцы
-            GameCameraSetExplosion(ExplLocation, 0.5f);
-			break;
-        case 3:
-        //case 31:
-        case 32:
-            // земляне, пираты
-            GameCameraSetExplosion(ExplLocation, 0.5f);
-			break;
-		//case 33:
-        case 34:
-            // босс пришельцев
-            GameCameraSetExplosion(ExplLocation, 0.5f);
-			break;
+	// взрыв
+	case 2:
+		// пришельцы
+		GameCameraSetExplosion(ExplLocation, 0.5f);
+		break;
+	case 3:
+	//case 31:
+	case 32:
+		// земляне, пираты
+		GameCameraSetExplosion(ExplLocation, 0.5f);
+		break;
+	//case 33:
+	case 34:
+		// босс пришельцев
+		GameCameraSetExplosion(ExplLocation, 0.5f);
+		break;
 	}
 
 

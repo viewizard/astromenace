@@ -40,7 +40,7 @@ class CTracked : public CGroundObject
 {
 public:
 
-	virtual ~CTracked(){};
+	virtual ~CTracked() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int	TrackedNum);

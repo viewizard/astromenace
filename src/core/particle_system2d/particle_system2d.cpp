@@ -44,7 +44,7 @@ eParticleSystem2D::eParticleSystem2D()
 	Angle.Set(0.0f,0.0f,0.0f);
 	Direction.Set(0.0f,0.0f,0.0f);
 	Matrix33Identity(RotationMatrix);
-	Texture = 0;
+	Texture = nullptr;
 	AttractiveValue = 25.0f;
 	IsSuppressed = false;
 
@@ -89,8 +89,8 @@ eParticleSystem2D::eParticleSystem2D()
 	CreationSize.Set(0.05f,0.05f,0.05f);
 
 	// настройка массива
-	Start = 0;
-	End = 0;
+	Start = nullptr;
+	End = nullptr;
 	ParticlesCount = 0;
 
 }
@@ -103,8 +103,7 @@ eParticleSystem2D::~eParticleSystem2D()
 {
 	// полностью освобождаем память от всех частиц в системе
 	eParticle2D *tmp = Start;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		eParticle2D *tmp2 = tmp->Next;
 		Detach(tmp);
 		delete tmp;
@@ -118,20 +117,17 @@ eParticleSystem2D::~eParticleSystem2D()
 //-----------------------------------------------------------------------------
 void eParticleSystem2D::Attach(eParticle2D * NewParticle)
 {
-	if (NewParticle == 0) return;
+	if (NewParticle == nullptr)
+		return;
 
-	// первый в списке...
-	if (End == 0)
-	{
-		NewParticle->Prev = 0;
-		NewParticle->Next = 0;
+	if (End == nullptr) {
+		NewParticle->Prev = nullptr;
+		NewParticle->Next = nullptr;
 		Start = NewParticle;
 		End = NewParticle;
-	}
-	else // продолжаем заполнение...
-	{
+	} else {
 		NewParticle->Prev = End;
-		NewParticle->Next = 0;
+		NewParticle->Next = nullptr;
 		End->Next = NewParticle;
 		End = NewParticle;
 	}
@@ -145,17 +141,23 @@ void eParticleSystem2D::Attach(eParticle2D * NewParticle)
 //-----------------------------------------------------------------------------
 void eParticleSystem2D::Detach(eParticle2D * OldParticle)
 {
-	if (OldParticle == 0) return;
+	if (OldParticle == nullptr)
+		return;
 
-	// переустанавливаем указатели...
-	if (Start == OldParticle) Start = OldParticle->Next;
-	if (End == OldParticle) End = OldParticle->Prev;
+	if (Start == OldParticle)
+		Start = OldParticle->Next;
+	if (End == OldParticle)
+		End = OldParticle->Prev;
 
+	if (OldParticle->Next != nullptr)
+		OldParticle->Next->Prev = OldParticle->Prev;
+	else if (OldParticle->Prev != nullptr)
+		OldParticle->Prev->Next = nullptr;
 
-	if (OldParticle->Next != 0) OldParticle->Next->Prev = OldParticle->Prev;
-		else if (OldParticle->Prev != 0) OldParticle->Prev->Next = 0;
-	if (OldParticle->Prev != 0) OldParticle->Prev->Next = OldParticle->Next;
-		else if (OldParticle->Next != 0) OldParticle->Next->Prev = 0;
+	if (OldParticle->Prev != nullptr)
+		OldParticle->Prev->Next = OldParticle->Next;
+	else if (OldParticle->Next != nullptr)
+		OldParticle->Next->Prev = nullptr;
 
 	ParticlesCount--;
 }
@@ -170,7 +172,10 @@ void eParticleSystem2D::Detach(eParticle2D * OldParticle)
 bool eParticleSystem2D::Update(float Time)
 {
 	// первый раз... просто берем время
-	if (TimeLastUpdate == -1.0f) {TimeLastUpdate = Time;return true;}
+	if (TimeLastUpdate == -1.0f) {
+		TimeLastUpdate = Time;
+		return true;
+	}
 
 	// Time - это абсолютное время, вычисляем дельту
 	float TimeDelta = Time - TimeLastUpdate;
@@ -183,14 +188,12 @@ bool eParticleSystem2D::Update(float Time)
 	// для всех частиц
 	eParticle2D *Particle2DTmp = Start;
 
-	while (Particle2DTmp!=0)
-	{
+	while (Particle2DTmp != nullptr) {
 		eParticle2D *Particle2DTmp2 = Particle2DTmp->Next;
 		// функция вернет false, если частица уже мертва
-		if (!Particle2DTmp->Update(TimeDelta, Location, IsAttractive, AttractiveValue))
-		{
+		if (!Particle2DTmp->Update(TimeDelta, Location, IsAttractive, AttractiveValue)) {
 			Detach(Particle2DTmp);
-			delete Particle2DTmp; Particle2DTmp = 0;
+			delete Particle2DTmp;
 		}
 
 		Particle2DTmp = Particle2DTmp2;
@@ -204,30 +207,24 @@ bool eParticleSystem2D::Update(float Time)
 	// переводим в целочисленные значения
 	unsigned int ParticlesCreated = (unsigned int)ParticlesNeeded;
 
-	if ( !IsSuppressed )
-	{
+	if ( !IsSuppressed ) {
 		// запоминаем разницу между тем сколько нужно и сколько создадим
 		EmissionResidue = ParticlesNeeded - ParticlesCreated;
-	}
-	else
-	{
+	} else {
 		// ничего создавать не нужно
 		EmissionResidue = ParticlesNeeded;
 		ParticlesCreated = 0;
 	}
 
 	// если нужно что-то создавать, создаем
-	if ( ParticlesCreated > 0 )
-	{
+	if ( ParticlesCreated > 0 ) {
 		// если пытаемся создать за один раз больше чем можем в секунду
 		// убираем этот "глюк", видно компьютер тормозит
 		if (ParticlesCreated > ParticlesPerSec) ParticlesCreated = ParticlesPerSec;
 		// пока не создадим все необходимые частицы
-		while (ParticlesCreated > 0)
-		{
+		while (ParticlesCreated > 0) {
 			// создаем новую частицу
-			eParticle2D *NewParticle = 0;
-			NewParticle = new eParticle2D; if (NewParticle == 0) return true;
+			eParticle2D *NewParticle = new eParticle2D;
 
 			// установка жизни новой частици и проверка, что не выходит из диапахона
 			NewParticle->Age = 0.0f;
@@ -260,12 +257,10 @@ bool eParticleSystem2D::Update(float Time)
 			// выпускаем частицу возле места нахождения системы
 			if (CreationType == 0) // точка
 				NewParticle->Location = Location + VECTOR3D(vw_Randf0 * CreationSize.x, vw_Randf0 * CreationSize.y, vw_Randf0 * CreationSize.z);
-			if (CreationType == 1)
-			{
+			if (CreationType == 1) {
 				// в квадрате
 				VECTOR3D tmp;
-				if (DeadZone != 0.0f)
-				{
+				if (DeadZone != 0.0f) {
 					float minDist = CreationSize.x*CreationSize.x+CreationSize.y*CreationSize.y+CreationSize.z*CreationSize.z;
 					// если зона больше чем радиус излучения - выключаем ее
 					if (minDist <= DeadZone*DeadZone) DeadZone = 0.0f;
@@ -274,8 +269,7 @@ bool eParticleSystem2D::Update(float Time)
 				tmp.x = (1.0f-vw_Randf1*2) * CreationSize.x;
 				tmp.y = (1.0f-vw_Randf1*2) * CreationSize.y;
 				tmp.z = (1.0f-vw_Randf1*2) * CreationSize.z;
-				while (tmp.x*tmp.x + tmp.y*tmp.y + tmp.z*tmp.z < DeadZone*DeadZone)
-				{
+				while (tmp.x*tmp.x + tmp.y*tmp.y + tmp.z*tmp.z < DeadZone*DeadZone) {
 					// ув. радиус
 					VECTOR3D tmp1 = tmp;
 					tmp1.Normalize();
@@ -285,8 +279,7 @@ bool eParticleSystem2D::Update(float Time)
 
 				NewParticle->Location = Location + tmp;
 			}
-			if (CreationType == 2)
-			{
+			if (CreationType == 2) {
 				// в окружности
 				VECTOR3D tmp;
 				float minDist = CreationSize.x*CreationSize.x+CreationSize.y*CreationSize.y+CreationSize.z*CreationSize.z;
@@ -297,38 +290,38 @@ bool eParticleSystem2D::Update(float Time)
 				tmp.y = vw_Randf0 * CreationSize.y;
 				tmp.z = vw_Randf0 * CreationSize.z;
 				float ParticleDist = tmp.x*tmp.x + tmp.y*tmp.y + tmp.z*tmp.z;
-				while (ParticleDist > minDist || ParticleDist < DeadZone*DeadZone)
-				{
-					if (ParticleDist > minDist)
-					{
+				while (ParticleDist > minDist || ParticleDist < DeadZone*DeadZone) {
+					if (ParticleDist > minDist) {
 						// ум. радиус
 						VECTOR3D tmp1 = tmp;
 						tmp1.Normalize();
 						tmp1 = tmp1^(1/100.0f);
 						tmp = tmp - tmp1;
 					}
-					if ( ParticleDist < DeadZone*DeadZone)
-					{
+					if ( ParticleDist < DeadZone*DeadZone) {
 						// ув. радиус
 						VECTOR3D tmp1 = tmp;
 						tmp1.Normalize();
 						tmp1 = tmp1^(1/100.0f);
 						tmp = tmp + tmp1;
 
-						if (tmp.x > 0.0f)
-						{if (tmp.x > CreationSize.x) tmp.x = CreationSize.x;}
-						else
-						{if (tmp.x < -CreationSize.x) tmp.x = -CreationSize.x;}
+						if (tmp.x > 0.0f) {
+							if (tmp.x > CreationSize.x) tmp.x = CreationSize.x;
+						} else {
+							if (tmp.x < -CreationSize.x) tmp.x = -CreationSize.x;
+						}
 
-						if (tmp.y > 0.0f)
-						{if (tmp.y > CreationSize.y) tmp.y = CreationSize.y;}
-						else
-						{if (tmp.y < -CreationSize.y) tmp.y = -CreationSize.y;}
+						if (tmp.y > 0.0f) {
+							if (tmp.y > CreationSize.y) tmp.y = CreationSize.y;
+						} else {
+							if (tmp.y < -CreationSize.y) tmp.y = -CreationSize.y;
+						}
 
-						if (tmp.z > 0.0f)
-						{if (tmp.z > CreationSize.z) tmp.z = CreationSize.z;}
-						else
-						{if (tmp.z < -CreationSize.z) tmp.z = -CreationSize.z;}
+						if (tmp.z > 0.0f) {
+							if (tmp.z > CreationSize.z) tmp.z = CreationSize.z;
+						} else {
+							if (tmp.z < -CreationSize.z) tmp.z = -CreationSize.z;
+						}
 					}
 
 					ParticleDist = tmp.x*tmp.x + tmp.y*tmp.y + tmp.z*tmp.z;
@@ -355,14 +348,10 @@ bool eParticleSystem2D::Update(float Time)
 
 			// учитываем нужное нам направление, вектор Direction
 			if ((Direction.x != 0.0f || Direction.y != 0.0f || Direction.z != 0.0f) &&
-				360.00f != Theta)
-			{
-				if (Theta == 0.0f)
-				{
+			    360.00f != Theta) {
+				if (Theta == 0.0f) {
 					NewParticle->Velocity = Direction;
-				}
-				else
-				{
+				} else {
 					// y
 					NewParticle->Velocity.y = Direction.y * cosf(RandomPitch);
 					NewParticle->Velocity.x = Direction.y * sinf(RandomPitch) * cosf(RandomYaw);
@@ -378,9 +367,7 @@ bool eParticleSystem2D::Update(float Time)
 
 					Matrix33CalcPoint(&NewParticle->Velocity, RotationMatrix);
 				}
-			}
-			else
-			{
+			} else {
 				// без направления, излучаем во все стороны
 				NewParticle->Velocity.y = vw_Randf0 * Theta / 360.0f;
 				NewParticle->Velocity.x = vw_Randf0 * Theta / 360.0f;
@@ -402,7 +389,7 @@ bool eParticleSystem2D::Update(float Time)
 		}
 	}
 
-    return true;
+	return true;
 }
 
 
@@ -416,8 +403,8 @@ void eParticleSystem2D::Draw()
 {
 
 	// загрузка текстуры, уже должна быть подключена
-	if (Texture == 0) return;
-	if (ParticlesCount == 0) return;
+	if ((Texture == nullptr) || (ParticlesCount == 0))
+		return;
 
 	RECT SrcRect, DestRect;
 
@@ -429,7 +416,7 @@ void eParticleSystem2D::Draw()
 	bool ASpresent = vw_GetAspectWH(&AW, &AH);
 
 	int W, H;
-	vw_GetViewport(0, 0, &W, &H);
+	vw_GetViewport(nullptr, nullptr, &W, &H);
 	float AHw = H*1.0f;
 
 	// Установка текстуры и ее свойств...
@@ -445,9 +432,9 @@ void eParticleSystem2D::Draw()
 	// выделяем память
 	// буфер для последовательности RI_TRIANGLE_STRIP
 	// войдет RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR
-	float *tmp = 0;
-	tmp = new float[(2+2+4)*4*ParticlesCount]; if (tmp == 0) return;
-	int k=0;
+	float *tmp = new float[(2+2+4)*4*ParticlesCount];
+
+	int k = 0;
 
 
 
@@ -455,57 +442,56 @@ void eParticleSystem2D::Draw()
 	// для всех частиц
 	eParticle2D *tmp1 = Start;
 
-	while (tmp1!=0)
-	{
+	while (tmp1 != nullptr) {
 		SetRect(&DestRect,(int)(tmp1->Location.x - tmp1->Size/2),
 			(int)(tmp1->Location.y - tmp1->Size/2),
 			(int)(tmp1->Location.x + tmp1->Size/2),
 			(int)(tmp1->Location.y + tmp1->Size/2));
 
-			if (ASpresent) tmpPosY = (AH - DestRect.top - DestRect.top - (DestRect.bottom - DestRect.top));
-			else tmpPosY = (AHw - DestRect.top - DestRect.top - (DestRect.bottom - DestRect.top));
+		if (ASpresent) tmpPosY = (AH - DestRect.top - DestRect.top - (DestRect.bottom - DestRect.top));
+		else tmpPosY = (AHw - DestRect.top - DestRect.top - (DestRect.bottom - DestRect.top));
 
-			float FrameHeight = (SrcRect.bottom*1.0f )/ImageHeight;
-			float FrameWidth = (SrcRect.right*1.0f )/ImageWidth;
+		float FrameHeight = (SrcRect.bottom*1.0f )/ImageHeight;
+		float FrameWidth = (SrcRect.right*1.0f )/ImageWidth;
 
-			float Yst = (SrcRect.top*1.0f)/ImageHeight;
-			float Xst = (SrcRect.left*1.0f)/ImageWidth;
+		float Yst = (SrcRect.top*1.0f)/ImageHeight;
+		float Xst = (SrcRect.left*1.0f)/ImageWidth;
 
-				tmp[k++] = DestRect.left;
-				tmp[k++] = DestRect.top +tmpPosY +(DestRect.bottom - DestRect.top);
-				tmp[k++] = tmp1->Color.r;
-				tmp[k++] = tmp1->Color.g;
-				tmp[k++] = tmp1->Color.b;
-				tmp[k++] = tmp1->Alpha;
-				tmp[k++] = Xst;
-				tmp[k++] = 1.0f-Yst;
+		tmp[k++] = DestRect.left;
+		tmp[k++] = DestRect.top +tmpPosY +(DestRect.bottom - DestRect.top);
+		tmp[k++] = tmp1->Color.r;
+		tmp[k++] = tmp1->Color.g;
+		tmp[k++] = tmp1->Color.b;
+		tmp[k++] = tmp1->Alpha;
+		tmp[k++] = Xst;
+		tmp[k++] = 1.0f-Yst;
 
-				tmp[k++] = DestRect.left;
-				tmp[k++] = DestRect.top +tmpPosY;
-				tmp[k++] = tmp1->Color.r;
-				tmp[k++] = tmp1->Color.g;
-				tmp[k++] = tmp1->Color.b;
-				tmp[k++] = tmp1->Alpha;
-				tmp[k++] = Xst;
-				tmp[k++] = 1.0f-FrameHeight;
+		tmp[k++] = DestRect.left;
+		tmp[k++] = DestRect.top +tmpPosY;
+		tmp[k++] = tmp1->Color.r;
+		tmp[k++] = tmp1->Color.g;
+		tmp[k++] = tmp1->Color.b;
+		tmp[k++] = tmp1->Alpha;
+		tmp[k++] = Xst;
+		tmp[k++] = 1.0f-FrameHeight;
 
-				tmp[k++] = DestRect.left + (DestRect.right - DestRect.left);
-				tmp[k++] = DestRect.top +tmpPosY;
-				tmp[k++] = tmp1->Color.r;
-				tmp[k++] = tmp1->Color.g;
-				tmp[k++] = tmp1->Color.b;
-				tmp[k++] = tmp1->Alpha;
-				tmp[k++] = FrameWidth;
-				tmp[k++] = 1.0f-FrameHeight;
+		tmp[k++] = DestRect.left + (DestRect.right - DestRect.left);
+		tmp[k++] = DestRect.top +tmpPosY;
+		tmp[k++] = tmp1->Color.r;
+		tmp[k++] = tmp1->Color.g;
+		tmp[k++] = tmp1->Color.b;
+		tmp[k++] = tmp1->Alpha;
+		tmp[k++] = FrameWidth;
+		tmp[k++] = 1.0f-FrameHeight;
 
-				tmp[k++] = DestRect.left + (DestRect.right - DestRect.left);
-				tmp[k++] = DestRect.top +tmpPosY +(DestRect.bottom - DestRect.top);
-				tmp[k++] = tmp1->Color.r;
-				tmp[k++] = tmp1->Color.g;
-				tmp[k++] = tmp1->Color.b;
-				tmp[k++] = tmp1->Alpha;
-				tmp[k++] = FrameWidth;
-				tmp[k++] = 1.0f-Yst;
+		tmp[k++] = DestRect.left + (DestRect.right - DestRect.left);
+		tmp[k++] = DestRect.top +tmpPosY +(DestRect.bottom - DestRect.top);
+		tmp[k++] = tmp1->Color.r;
+		tmp[k++] = tmp1->Color.g;
+		tmp[k++] = tmp1->Color.b;
+		tmp[k++] = tmp1->Alpha;
+		tmp[k++] = FrameWidth;
+		tmp[k++] = 1.0f-Yst;
 
 		tmp1 = tmp1->Next;
 	}
@@ -513,9 +499,11 @@ void eParticleSystem2D::Draw()
 
 	vw_SendVertices(RI_QUADS, 4*ParticlesCount, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
 
-	if (tmp != 0){delete [] tmp; tmp = 0;}
+	if (tmp != nullptr)
+		delete [] tmp;
+
 	vw_SetTextureBlend(false, 0, 0);
-    vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 	vw_BindTexture(0, 0);
 
 }
@@ -531,8 +519,7 @@ void eParticleSystem2D::MoveSystem(VECTOR3D NewLocation)
 
 
 	eParticle2D *tmp = Start;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		// меняем каждой частице
 		tmp->Location += NewLocation-PrevLocation;
 		tmp = tmp->Next;

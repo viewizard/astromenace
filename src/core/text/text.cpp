@@ -28,8 +28,7 @@
 #include "text.h"
 
 
-struct sCSVRow
-{
+struct sCSVRow {
 	char **CellData;
 	int Columns;
 
@@ -42,14 +41,20 @@ sCSVRow *StartCSVRow;
 sCSVRow *EndCSVRow;
 
 // буфер со всем текстом
-char *TextBuffer = 0;
+char *TextBuffer = nullptr;
 
 // указатель на таблицу данных по языкам
-sLanguageList *LanguageList = 0;
-sLanguageList *vw_GetLanguageList(){return LanguageList;};
+sLanguageList *LanguageList = nullptr;
+sLanguageList *vw_GetLanguageList()
+{
+	return LanguageList;
+};
 // кол-во языков
 int LanguageListCount = 0;
-int vw_GetLanguageListCount(){return LanguageListCount;};
+int vw_GetLanguageListCount()
+{
+	return LanguageListCount;
+};
 // текущий язык
 int CurrentLanguage = 0;
 
@@ -59,20 +64,18 @@ int CurrentLanguage = 0;
 // присоединяем к списку
 void vw_AttachCSVRow(sCSVRow* CSVRow)
 {
-	if (CSVRow == 0) return;
+	if (CSVRow == nullptr)
+		return;
 
 	// первый в списке...
-	if (EndCSVRow == 0)
-	{
-		CSVRow->Prev = 0;
-		CSVRow->Next = 0;
+	if (EndCSVRow == nullptr) {
+		CSVRow->Prev = nullptr;
+		CSVRow->Next = nullptr;
 		StartCSVRow = CSVRow;
 		EndCSVRow = CSVRow;
-	}
-	else // продолжаем заполнение...
-	{
+	} else { // продолжаем заполнение...
 		CSVRow->Prev = EndCSVRow;
-		CSVRow->Next = 0;
+		CSVRow->Next = nullptr;
 		EndCSVRow->Next = CSVRow;
 		EndCSVRow = CSVRow;
 	}
@@ -80,33 +83,39 @@ void vw_AttachCSVRow(sCSVRow* CSVRow)
 // удаляем из списка
 void vw_DetachCSVRow(sCSVRow* CSVRow)
 {
-	if (CSVRow == 0) return;
+	if (CSVRow == nullptr)
+		return;
 
 	// переустанавливаем указатели...
-	if (StartCSVRow == CSVRow) StartCSVRow = CSVRow->Next;
-	if (EndCSVRow == CSVRow) EndCSVRow = CSVRow->Prev;
+	if (StartCSVRow == CSVRow)
+		StartCSVRow = CSVRow->Next;
+	if (EndCSVRow == CSVRow)
+		EndCSVRow = CSVRow->Prev;
 
-	if (CSVRow->Next != 0) CSVRow->Next->Prev = CSVRow->Prev;
-		else if (CSVRow->Prev != 0) CSVRow->Prev->Next = 0;
-	if (CSVRow->Prev != 0) CSVRow->Prev->Next = CSVRow->Next;
-		else if (CSVRow->Next != 0) CSVRow->Next->Prev = 0;
+	if (CSVRow->Next != nullptr)
+		CSVRow->Next->Prev = CSVRow->Prev;
+	else if (CSVRow->Prev != nullptr)
+		CSVRow->Prev->Next = nullptr;
+
+	if (CSVRow->Prev != nullptr)
+		CSVRow->Prev->Next = CSVRow->Next;
+	else if (CSVRow->Next != nullptr)
+		CSVRow->Next->Prev = nullptr;
 }
 // переприсоединяем как первый в списке
 void vw_ReAttachCSVRowAsFirst(sCSVRow* CSVRow)
 {
-	if (CSVRow == 0) return;
+	if (CSVRow == nullptr)
+		return;
 
 	vw_DetachCSVRow(CSVRow);
 
 	// если список пустой - просто присоединяем к списку и все
-	if (StartCSVRow == 0)
-	{
+	if (StartCSVRow == nullptr) {
 		vw_AttachCSVRow(CSVRow);
-	}
-	else
-	{
+	} else {
 		CSVRow->Next = StartCSVRow;
-		CSVRow->Prev = 0;
+		CSVRow->Prev = nullptr;
 		StartCSVRow->Prev = CSVRow;
 		StartCSVRow = CSVRow;
 	}
@@ -126,23 +135,26 @@ void vw_ReleaseText()
 {
 	// Чистка памяти...
 	sCSVRow *Tmp = StartCSVRow;
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		sCSVRow *Tmp1 = Tmp->Next;
-		if (Tmp->CellData != 0) delete [] Tmp->CellData;
+		if (Tmp->CellData != nullptr)
+			delete [] Tmp->CellData;
 		delete Tmp;
 		Tmp = Tmp1;
 	}
 
-	StartCSVRow = 0;
-	EndCSVRow = 0;
+	StartCSVRow = nullptr;
+	EndCSVRow = nullptr;
 
-	if (TextBuffer != 0) {delete [] TextBuffer; TextBuffer = 0;}
+	if (TextBuffer != nullptr) {
+		delete [] TextBuffer;
+		TextBuffer = nullptr;
+	}
 
 	CurrentLanguage = 0;
 	LanguageListCount = 0;
 	delete [] LanguageList;
-	LanguageList = 0;
+	LanguageList = nullptr;
 }
 
 
@@ -171,7 +183,7 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 	// читаем данные
 	eFILE *TempF = vw_fopen(FileName);
 
-	if (TempF == NULL) return -1;
+	if (TempF == nullptr) return -1;
 
 	TempF->fseek(0, SEEK_END);
 	int DataLength = TempF->ftell();
@@ -191,8 +203,7 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 
 	// по первой строче считаем сколько у нас в файле столбцов
 	int ColumnsCount = 0;
-	while(Buffer[0] != SymbolEndOfLine)
-	{
+	while(Buffer[0] != SymbolEndOfLine) {
 		if (Buffer[0] == SymbolSeparator) ColumnsCount++;
 		Buffer++;
 	}
@@ -204,8 +215,7 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 	Buffer = TextBuffer; // восстанавливаем указатель
 
 	// крутим пока не обработали все строки
-	while(DataLength > ColumnsCount-1)
-	{
+	while(DataLength > ColumnsCount-1) {
 		// создаем строку
 		sCSVRow *NewCSVRow;
 		NewCSVRow = new sCSVRow;
@@ -213,14 +223,17 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 		NewCSVRow->Columns = ColumnsCount;
 		NewCSVRow->CellData = new char*[NewCSVRow->Columns];
 
-		for (int i=0; i<NewCSVRow->Columns; i++)
-		{
+		for (int i=0; i<NewCSVRow->Columns; i++) {
 			NewCSVRow->CellData[i] = Buffer;
 			// ищем маркер следующего столбца или конца строки
-			while((Buffer[0] != SymbolEndOfLine) && (Buffer[0] != SymbolSeparator)) {Buffer++;DataLength--;}
+			while((Buffer[0] != SymbolEndOfLine) && (Buffer[0] != SymbolSeparator)) {
+				Buffer++;
+				DataLength--;
+			}
 			// нашли, ставим туда ноль, чтобы ноль-терминальная строка была завершенной
 			Buffer[0] = 0;
-			Buffer++;DataLength--;
+			Buffer++;
+			DataLength--;
 		}
 
 		vw_AttachCSVRow(NewCSVRow);
@@ -231,12 +244,13 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 	LanguageListCount = ColumnsCount-1;
 	LanguageList = new sLanguageList[LanguageListCount];
 
-	for (int i=0; i<LanguageListCount; i++)
-	{
+	for (int i = 0; i < LanguageListCount; i++) {
 		LanguageList[i].code = vw_GetText("0_code", i+1);
-		if (LanguageList[i].code == 0) return -2;
+		if (LanguageList[i].code == nullptr)
+			return -2;
 		LanguageList[i].title = vw_GetText("0_title", i+1);
-		if (LanguageList[i].title == 0) return -2;
+		if (LanguageList[i].title == nullptr)
+			return -2;
 	}
 
 	return 0;
@@ -262,33 +276,34 @@ int strcmpIdNum(const char *a, const char *b)
 //-----------------------------------------------------------------------------
 const char *vw_GetText(const char *ItemID, int Language)
 {
-	if (TextBuffer == 0) return 0;
-	if (ItemID == 0) return 0;
-	if (Language < 1 || Language > LanguageListCount) Language = CurrentLanguage;
+	if ((TextBuffer == nullptr) ||
+	    (ItemID == nullptr))
+		return nullptr;
+
+	if (Language < 1 || Language > LanguageListCount)
+		Language = CurrentLanguage;
 
 	sCSVRow *Tmp = StartCSVRow;
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		sCSVRow *Tmp1 = Tmp->Next;
 
 		// в первом столбце у нас записан идентификатор текста с 1 или 2-х значным номером
 		// не работаем со строками без идентификатора
 		if (Tmp->CellData[0][0] != 0)
-		if (!strcmpIdNum(Tmp->CellData[0], ItemID))
-		if (!vw_strcmp(ItemID, Tmp->CellData[0]))
-		{
-			// перемещаем его на первое место в списке для ускорения поиска в след. проходах
-			vw_ReAttachCSVRowAsFirst(Tmp);
+			if (!strcmpIdNum(Tmp->CellData[0], ItemID))
+				if (strcmp(ItemID, Tmp->CellData[0]) == 0) {
+					// перемещаем его на первое место в списке для ускорения поиска в след. проходах
+					vw_ReAttachCSVRowAsFirst(Tmp);
 
-			// возвращаем указатель на нужный столбец
-			return Tmp->CellData[Language];
-		}
+					// возвращаем указатель на нужный столбец
+					return Tmp->CellData[Language];
+				}
 
 		Tmp = Tmp1;
 	}
 
 	fprintf(stderr, "Text not found, ID: %s\n", ItemID);
-	return 0;
+	return nullptr;
 }
 
 
@@ -299,39 +314,32 @@ const char *vw_GetText(const char *ItemID, int Language)
 //-----------------------------------------------------------------------------
 int vw_CheckFontCharsInText()
 {
-	if (TextBuffer == 0) return -1;
+	if (TextBuffer == nullptr)
+		return -1;
 
 
 	printf("Font characters detection start.\n");
 
 
 	sCSVRow *Tmp = StartCSVRow;
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		sCSVRow *Tmp1 = Tmp->Next;
 
-		for (int i=0; i<Tmp->Columns; i++)
-		{
+		for (int i = 0; i < Tmp->Columns; i++) {
 			const char *CharsList = Tmp->CellData[i];
 
-			if (CharsList!=0)
-			{
+			if (CharsList != nullptr) {
 				// перебираем всю строку
-				while (strlen(CharsList) > 0)
-				{
+				while (strlen(CharsList) > 0) {
 					unsigned CurrentChar;
 					// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
 					CharsList = utf8_to_utf32(CharsList, &CurrentChar);
-					// загружаем символ и все необходимые данные для него
-					if (!vw_FindFontCharByUTF32(CurrentChar))
-					{
+					// проверяем, что загружен символ и все необходимые данные для него
+					if (!vw_CheckFontCharByUTF32(CurrentChar)) {
 						printf("!!! FontChar was not created, Unicode: " );
-						if ( CurrentChar < 0x80 && CurrentChar > 0 )
-						{
+						if ( CurrentChar < 0x80 && CurrentChar > 0 ) {
 							printf( "%c (0x%04X)\n", (char)CurrentChar, CurrentChar );
-						}
-						else
-						{
+						} else {
 							printf( "? (0x%04X)\n", CurrentChar );
 						}
 					}

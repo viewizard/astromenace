@@ -52,8 +52,7 @@
 // Create alpha channel by less Alpha color
 #define TX_ALPHA_LESS		0x0026
 
-struct eTexture
-{
+struct eTexture {
 	char*	Name;			// File name
 
 	BYTE	ARed;			// Alpha channel red color
@@ -67,7 +66,7 @@ struct eTexture
 
 	int		Bytes;			// Bytes Per Pixel
 
-    GLuint	TextureID;		// Номер текстуры
+	GLuint	TextureID;		// Номер текстуры
 
 	eTexture*	Prev;		// Pointer to the previous loaded Texture in the memory
 	eTexture*	Next;		// Pointer to the next loaded Texture in the memory

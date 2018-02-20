@@ -40,7 +40,7 @@ class CWheeled : public CGroundObject
 {
 public:
 
-	virtual ~CWheeled(){};
+	virtual ~CWheeled() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int	WheeledNum);

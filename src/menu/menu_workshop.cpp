@@ -33,9 +33,9 @@
 //------------------------------------------------------------------------------------
 // переменные
 //------------------------------------------------------------------------------------
-CEarthSpaceFighter *WorkshopFighterGame = 0;
-CEarthSpaceFighter *WorkshopNewFighter = 0;
-CWeapon *WorkshopNewWeapon = 0;
+CEarthSpaceFighter *WorkshopFighterGame = nullptr;
+CEarthSpaceFighter *WorkshopNewFighter = nullptr;
+CWeapon *WorkshopNewWeapon = nullptr;
 int	CurrentWorkshopNewFighter = 1;
 int	CurrentWorkshopNewWeapon = 1;
 
@@ -78,7 +78,10 @@ extern int WeaponSetupSlot;
 void WorkshopCreateShip(int Num)
 {
 	// создаем объект
-	if (WorkshopFighterGame != 0){delete WorkshopFighterGame; WorkshopFighterGame = 0;}
+	if (WorkshopFighterGame != nullptr) {
+		delete WorkshopFighterGame;
+		WorkshopFighterGame = nullptr;
+	}
 
 	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
 	GameNPCArmorPenalty = 1;
@@ -95,16 +98,16 @@ void WorkshopCreateShip(int Num)
 	WorkshopFighterGame->Strength = Setup.Profile[CurrentProfile].ShipHullCurrentStrength;
 
 
-    // создаем оружие
-	for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++)
-	{
-		if (Setup.Profile[CurrentProfile].Weapon[i] != 0)
-		{
-			if (SetEarthSpaceFighterWeapon(WorkshopFighterGame, i+1, Setup.Profile[CurrentProfile].Weapon[i]))
-			{
+	// создаем оружие
+	for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++) {
+		if (Setup.Profile[CurrentProfile].Weapon[i] != 0) {
+			if (SetEarthSpaceFighterWeapon(WorkshopFighterGame, i+1, Setup.Profile[CurrentProfile].Weapon[i])) {
 				// убираем источник света
-				if (WorkshopFighterGame->Weapon[i]->Fire != 0)
-				if (WorkshopFighterGame->Weapon[i]->Fire->Light != 0){vw_ReleaseLight(WorkshopFighterGame->Weapon[i]->Fire->Light); WorkshopFighterGame->Weapon[i]->Fire->Light = 0;}
+				if (WorkshopFighterGame->Weapon[i]->Fire != nullptr)
+					if (WorkshopFighterGame->Weapon[i]->Fire->Light != nullptr) {
+						vw_ReleaseLight(WorkshopFighterGame->Weapon[i]->Fire->Light);
+						WorkshopFighterGame->Weapon[i]->Fire->Light = nullptr;
+					}
 
 				WorkshopFighterGame->Weapon[i]->Ammo = Setup.Profile[CurrentProfile].WeaponAmmo[i];
 				WorkshopFighterGame->WeaponYAngle[i] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[i];
@@ -146,7 +149,10 @@ void WorkshopCreateShip(int Num)
 void WorkshopCreateNewShip()
 {
 	// создаем объект
-	if (WorkshopNewFighter != 0){delete WorkshopNewFighter; WorkshopNewFighter = 0;}
+	if (WorkshopNewFighter != nullptr) {
+		delete WorkshopNewFighter;
+		WorkshopNewFighter = nullptr;
+	}
 
 	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
 	GameNPCArmorPenalty = 1;
@@ -173,7 +179,10 @@ void WorkshopCreateNewShip()
 void WorkshopCreateNewWeapon()
 {
 	// создаем объект
-	if (WorkshopNewWeapon != 0){delete WorkshopNewWeapon; WorkshopNewWeapon = 0;}
+	if (WorkshopNewWeapon != nullptr) {
+		delete WorkshopNewWeapon;
+		WorkshopNewWeapon = nullptr;
+	}
 
 	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
 	GameNPCArmorPenalty = 1;
@@ -191,8 +200,11 @@ void WorkshopCreateNewWeapon()
 	WorkshopNewWeapon->SetRotation(VECTOR3D(0.0f,-45.0f,0.0f));
 
 	// убираем источник света
-	if (WorkshopNewWeapon->Fire != 0)
-	if (WorkshopNewWeapon->Fire->Light != 0){vw_ReleaseLight(WorkshopNewWeapon->Fire->Light); WorkshopNewWeapon->Fire->Light = 0;}
+	if ((WorkshopNewWeapon->Fire != nullptr) &&
+	    (WorkshopNewWeapon->Fire->Light != nullptr)) {
+		vw_ReleaseLight(WorkshopNewWeapon->Fire->Light);
+		WorkshopNewWeapon->Fire->Light = nullptr;
+	}
 }
 
 
@@ -243,9 +255,18 @@ void WorkshopCreate()
 //------------------------------------------------------------------------------------
 void WorkshopDestroyData()
 {
-	if (WorkshopFighterGame != 0){delete WorkshopFighterGame; WorkshopFighterGame = 0;}
-	if (WorkshopNewFighter != 0){delete WorkshopNewFighter;	WorkshopNewFighter = 0;}
-	if (WorkshopNewWeapon != 0){delete WorkshopNewWeapon; WorkshopNewWeapon = 0;}
+	if (WorkshopFighterGame != nullptr) {
+		delete WorkshopFighterGame;
+		WorkshopFighterGame = nullptr;
+	}
+	if (WorkshopNewFighter != nullptr) {
+		delete WorkshopNewFighter;
+		WorkshopNewFighter = nullptr;
+	}
+	if (WorkshopNewWeapon != nullptr) {
+		delete WorkshopNewWeapon;
+		WorkshopNewWeapon = nullptr;
+	}
 }
 
 
@@ -265,42 +286,33 @@ void WorkshopMenu()
 
 	// небольшое качение... девиация
 	float TimeDelta = vw_GetTime() - CurentTime;
-	if (CurentTime==0.0f)
-	{
+	if (CurentTime==0.0f) {
 		CurentTime = vw_GetTime();
-	}
-	else
-	{
+	} else {
 		CurentTime = vw_GetTime();
 		float Sign = 1.0f;
 		// нужно двигать
 		if (NeedDeviation < 0.0f) Sign = -1.0f;
-		if (Sign == 1.0f)
-		{if (NeedDeviation < CurentDeviationSum) Sign = -1.0f;}
-		else
-		{if (NeedDeviation > CurentDeviationSum) Sign = 1.0f;}
+		if (Sign == 1.0f) {
+			if (NeedDeviation < CurentDeviationSum) Sign = -1.0f;
+		} else {
+			if (NeedDeviation > CurentDeviationSum) Sign = 1.0f;
+		}
 
 		CurentDeviation = Sign*0.7f*TimeDelta;
 
-		if (Sign == 1.0f)
-		{
-			if (NeedDeviation <= CurentDeviationSum+CurentDeviation)
-			{
+		if (Sign == 1.0f) {
+			if (NeedDeviation <= CurentDeviationSum+CurentDeviation) {
 				CurentDeviation -= CurentDeviationSum+CurentDeviation-NeedDeviation;
 				CurentDeviationSum += CurentDeviation;
 				NeedDeviation = vw_Randf0*5.0f;
-			}
-			else CurentDeviationSum += CurentDeviation;
-		}
-		else
-		{
-			if (NeedDeviation >= CurentDeviationSum+CurentDeviation)
-			{
+			} else CurentDeviationSum += CurentDeviation;
+		} else {
+			if (NeedDeviation >= CurentDeviationSum+CurentDeviation) {
 				CurentDeviation += CurentDeviationSum+CurentDeviation-NeedDeviation;
 				CurentDeviationSum += CurentDeviation;
 				NeedDeviation = vw_Randf0*5.0f;
-			}
-			else CurentDeviationSum += CurentDeviation;
+			} else CurentDeviationSum += CurentDeviation;
 		}
 	}
 
@@ -320,23 +332,22 @@ void WorkshopMenu()
 
 
 	// прорисовка 3д части
-	switch (CurrentWorkshop)
-	{
+	switch (CurrentWorkshop) {
 // покупка - ремонт корабля
-		case 1:
-			Workshop_Shipyard();
-			break;
+	case 1:
+		Workshop_Shipyard();
+		break;
 
 
 // покупка - внутренних систем корабля
-		case 2:
-			Workshop_Workshop();
-			break;
+	case 2:
+		Workshop_Workshop();
+		break;
 
 // покупка - оружия корабля
-		case 3:
-			Workshop_Weaponry();
-			break;
+	case 3:
+		Workshop_Weaponry();
+		break;
 	}
 
 
@@ -348,8 +359,7 @@ void WorkshopMenu()
 
 	int X = Setup.iAspectRatioWidth/2-482;
 	int Y = 180+100*5;
-	if (DrawButton128_2(X,Y, vw_GetText("1_BACK"), MenuContentTransp, false))
-	{
+	if (DrawButton128_2(X,Y, vw_GetText("1_BACK"), MenuContentTransp, false)) {
 		ComBuffer = MISSION;
 		CanDrawWorkshop = false;
 		// ничего не тянем... только включили меню
@@ -364,8 +374,7 @@ void WorkshopMenu()
 	X = Setup.iAspectRatioWidth/2-320;
 	bool Off = false;
 	if (CurrentWorkshop == 1) Off = true;
-	if (DrawButton200_2(X,Y, vw_GetText("1_Shipyard"), MenuContentTransp, Off))
-	{
+	if (DrawButton200_2(X,Y, vw_GetText("1_Shipyard"), MenuContentTransp, Off)) {
 		CurrentWorkshop = 1;
 		// используем разные повороты объектов, нужно пересоздать объект
 		WorkshopCreateShip(CurrentWorkshop);
@@ -383,8 +392,7 @@ void WorkshopMenu()
 	X = Setup.iAspectRatioWidth/2-100;
 	Off = false;
 	if (CurrentWorkshop == 2) Off = true;
-	if (DrawButton200_2(X,Y, vw_GetText("1_Workshop"), MenuContentTransp, Off))
-	{
+	if (DrawButton200_2(X,Y, vw_GetText("1_Workshop"), MenuContentTransp, Off)) {
 		CurrentWorkshop = 2;
 		// используем разные повороты объектов, нужно пересоздать объект
 		WorkshopCreateShip(CurrentWorkshop);
@@ -401,8 +409,7 @@ void WorkshopMenu()
 	X = Setup.iAspectRatioWidth/2+120;
 	Off = false;
 	if (CurrentWorkshop == 3) Off = true;
-	if (DrawButton200_2(X,Y, vw_GetText("1_Weaponry"), MenuContentTransp, Off))
-	{
+	if (DrawButton200_2(X,Y, vw_GetText("1_Weaponry"), MenuContentTransp, Off)) {
 		CurrentWorkshop = 3;
 		// используем разные повороты объектов, нужно пересоздать объект
 		WorkshopCreateShip(CurrentWorkshop);
@@ -419,11 +426,9 @@ void WorkshopMenu()
 
 
 	X = Setup.iAspectRatioWidth/2+354;
-	if (DrawButton128_2(X,Y, vw_GetText("1_START"), MenuContentTransp, false))
-	{
+	if (DrawButton128_2(X,Y, vw_GetText("1_START"), MenuContentTransp, false)) {
 		if (Setup.NeedShowHint[4]) SetCurrentDialogBox(13);
-		else
-		{
+		else {
 			MenuContentTransp = 0.98f; // небольшая "защелка" от быстрых двойных нажатий на кнопку
 			// ничего не тянем... только включили меню
 			DragWeaponNum = 0;
@@ -450,8 +455,8 @@ void WorkshopMenu()
 //------------------------------------------------------------------------------------
 void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 {
-	if (!CanDrawWorkshop) return;
-	if (SpaceFighter == 0) return;
+	if (!CanDrawWorkshop || (SpaceFighter == nullptr))
+		return;
 
 	int x, y, width, height;
 	vw_GetViewport(&x, &y, &width, &height);
@@ -463,8 +468,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 	vw_GetAspectWH(&AW, &AH);
 
 
-	if (Mode == 1)
-	{
+	if (Mode == 1) {
 		WorkShopPointCamera = VECTOR3D(0.0f, 4.0f, -32.0f);
 		SpaceFighter->SetRotation(VECTOR3D(0.0f, 0.0f, CurentDeviation));
 		SpaceFighter->SetRotation(VECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
@@ -481,18 +485,16 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 
 		bool ShadowMap = false;
 
-		if (Setup.ShadowMap > 0)
-		{
+		if (Setup.ShadowMap > 0) {
 			float EffectiveDistance = 20.0f;
 			ShadowMap_StartRenderToFBO(VECTOR3D(0,5,0), EffectiveDistance, EffectiveDistance*2);
 
 			SpaceFighter->Draw(true);
-			if (SpaceFighter->Weapon != 0)
-			for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
-			{
-				if (SpaceFighter->Weapon[i] != 0)
-					SpaceFighter->Weapon[i]->Draw(true);
-			}
+			if (SpaceFighter->Weapon != nullptr)
+				for (int i=0; i<SpaceFighter->WeaponQuantity; i++) {
+					if (SpaceFighter->Weapon[i] != nullptr)
+						SpaceFighter->Weapon[i]->Draw(true);
+				}
 
 			ShadowMap_EndRenderToFBO();
 			ShadowMap = true;
@@ -500,15 +502,13 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		}
 
 		SpaceFighter->Draw(false, ShadowMap);
-		if (SpaceFighter->Weapon != 0)
-		for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
-		{
-			if (SpaceFighter->Weapon[i] != 0)
-				SpaceFighter->Weapon[i]->Draw(false, ShadowMap);
-		}
+		if (SpaceFighter->Weapon != nullptr)
+			for (int i=0; i<SpaceFighter->WeaponQuantity; i++) {
+				if (SpaceFighter->Weapon[i] != nullptr)
+					SpaceFighter->Weapon[i]->Draw(false, ShadowMap);
+			}
 
-		if (Setup.ShadowMap > 0)
-		{
+		if (Setup.ShadowMap > 0) {
 			ShadowMap_EndFinalRender();
 		}
 
@@ -523,8 +523,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 
 
 
-	if (Mode == 4)
-	{
+	if (Mode == 4) {
 		WorkShopPointCamera = VECTOR3D(0.0f, 35.0f, -0.01f);
 		SpaceFighter->SetRotation(VECTOR3D(0.0f, 0.0f, CurentDeviation));
 		vw_SetViewport((int)((Setup.iAspectRatioWidth/2)/(AW/AWw)), 30, (int)(512/(AW/AWw)), (int)(638/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
@@ -538,18 +537,16 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 
 		bool ShadowMap = false;
 
-		if (Setup.ShadowMap > 0)
-		{
+		if (Setup.ShadowMap > 0) {
 			float EffectiveDistance = 20.0f;
 			ShadowMap_StartRenderToFBO(VECTOR3D(0,0,0), EffectiveDistance, EffectiveDistance*2);
 
 			SpaceFighter->Draw(true);
-			if (SpaceFighter->Weapon != 0)
-			for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
-			{
-				if (SpaceFighter->Weapon[i] != 0)
-					SpaceFighter->Weapon[i]->Draw(true);
-			}
+			if (SpaceFighter->Weapon != nullptr)
+				for (int i=0; i<SpaceFighter->WeaponQuantity; i++) {
+					if (SpaceFighter->Weapon[i] != nullptr)
+						SpaceFighter->Weapon[i]->Draw(true);
+				}
 
 			ShadowMap_EndRenderToFBO();
 			ShadowMap = true;
@@ -557,15 +554,13 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		}
 
 		SpaceFighter->Draw(false, ShadowMap);
-		if (SpaceFighter->Weapon != 0)
-		for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
-		{
-			if (SpaceFighter->Weapon[i] != 0)
-				SpaceFighter->Weapon[i]->Draw(false, ShadowMap);
-		}
+		if (SpaceFighter->Weapon != nullptr)
+			for (int i=0; i<SpaceFighter->WeaponQuantity; i++) {
+				if (SpaceFighter->Weapon[i] != nullptr)
+					SpaceFighter->Weapon[i]->Draw(false, ShadowMap);
+			}
 
-		if (Setup.ShadowMap > 0)
-		{
+		if (Setup.ShadowMap > 0) {
 			ShadowMap_EndFinalRender();
 		}
 
@@ -583,8 +578,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 
 
 
-	if (Mode == 3)
-	{
+	if (Mode == 3) {
 		WorkShopPointCamera = VECTOR3D(0.0f, 10.0f, -34.0f);
 		SpaceFighter->SetRotation(VECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
 		vw_SetViewport((int)((Setup.iAspectRatioWidth/2)/(AW/AWw)), (int)(0/(AH/AHw)), (int)(512/(AW/AWw)), (int)(512/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
@@ -594,8 +588,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		vw_SetCameraLocation(VECTOR3D(1000+WorkShopPointCamera.x/1.2f,-1000+WorkShopPointCamera.y/1.2f,WorkShopPointCamera.z/1.2f));
 		vw_SetCameraMoveAroundPoint(VECTOR3D(1000,-1000-SpaceFighter->AABB[6].y-SpaceFighter->Height/3,0), 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
 	}
-	if (Mode == 2)
-	{
+	if (Mode == 2) {
 		WorkShopPointCamera = VECTOR3D(0.0f, 10.0f, -34.0f);
 		VECTOR3D PointCameraTMP = WorkShopPointCamera;
 		RotatePoint(&PointCameraTMP, VECTOR3D(0.0f, -90.0f, 0.0f));
@@ -612,18 +605,16 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 
 	bool ShadowMap = false;
 
-	if (Setup.ShadowMap > 0)
-	{
+	if (Setup.ShadowMap > 0) {
 		float EffectiveDistance = 20.0f;
 		ShadowMap_StartRenderToFBO(VECTOR3D(0,-2,0), EffectiveDistance, EffectiveDistance*2);
 
 		SpaceFighter->Draw(true);
-		if (SpaceFighter->Weapon != 0)
-		for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
-		{
-			if (SpaceFighter->Weapon[i] != 0)
-				SpaceFighter->Weapon[i]->Draw(true);
-		}
+		if (SpaceFighter->Weapon != nullptr)
+			for (int i=0; i<SpaceFighter->WeaponQuantity; i++) {
+				if (SpaceFighter->Weapon[i] != nullptr)
+					SpaceFighter->Weapon[i]->Draw(true);
+			}
 
 		ShadowMap_EndRenderToFBO();
 		ShadowMap = true;
@@ -632,15 +623,13 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 
 	SpaceFighter->Draw(false, ShadowMap);
 
-	if (SpaceFighter->Weapon != 0)
-	for (int i=0; i<SpaceFighter->WeaponQuantity; i++)
-	{
-		if (SpaceFighter->Weapon[i] != 0)
-			SpaceFighter->Weapon[i]->Draw(false, ShadowMap);
-	}
+	if (SpaceFighter->Weapon != nullptr)
+		for (int i=0; i<SpaceFighter->WeaponQuantity; i++) {
+			if (SpaceFighter->Weapon[i] != nullptr)
+				SpaceFighter->Weapon[i]->Draw(false, ShadowMap);
+		}
 
-	if (Setup.ShadowMap > 0)
-	{
+	if (Setup.ShadowMap > 0) {
 		ShadowMap_EndFinalRender();
 	}
 
@@ -656,8 +645,8 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 
 void WorkshopDrawWeapon(CWeapon *Weapon)
 {
-	if (!CanDrawWorkshop) return;
-	if (Weapon == 0) return;
+	if (!CanDrawWorkshop || (Weapon == nullptr))
+		return;
 
 	int x, y, width, height;
 	vw_GetViewport(&x, &y, &width, &height);

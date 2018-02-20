@@ -46,8 +46,8 @@ eParticle2D::eParticle2D()
 	Color.b = 0.0f;
 	Color.a = 0.5f;
 	ColorDelta.a = ColorDelta.b = ColorDelta.g = ColorDelta.r = 0.0f;
-	Next = 0;
-	Prev = 0;
+	Next = nullptr;
+	Prev = nullptr;
 	NeedStop = false;
 }
 
@@ -68,13 +68,10 @@ bool eParticle2D::Update(float TimeDelta, VECTOR3D ParentLocation, bool Attracti
 {
 
 	// Если частица уже мертва, ее нужно отключить - передаем в систему эти данные
-	if ( Age + TimeDelta >= Lifetime )
-	{
+	if ( Age + TimeDelta >= Lifetime ) {
 		Age = -1.0f;
 		return false;
-	}
-	else
-	{
+	} else {
 
 		// увеличиваем возраст частицы
 		Age += TimeDelta;
@@ -87,8 +84,7 @@ bool eParticle2D::Update(float TimeDelta, VECTOR3D ParentLocation, bool Attracti
 
 
 		// если есть притяжение системы, просчитываем воздействие
-		if ( Attractive )
-		{
+		if ( Attractive ) {
 			VECTOR3D AttractLocation = ParentLocation;
 
 			// рассчитывае вектор взаимодействия между частицей и точкой притяжения

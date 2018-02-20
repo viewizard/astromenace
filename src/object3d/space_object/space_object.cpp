@@ -46,15 +46,15 @@ CSpaceObject::CSpaceObject(void)
 	RotationSpeed.Set(0.0f,0.0f,0.0f);
 
 	GFXQuantity = 0;
-	GFX = 0;
-	GFXLocation = 0;
+	GFX = nullptr;
+	GFXLocation = nullptr;
 
 	BossPartCountDown = -1.0f;
 
 	LastCameraPoint = GamePoint;
 
 	// подключаем к своему списку
-	Next = Prev = 0;
+	Next = Prev = nullptr;
 	AttachSpaceObject(this);
 
 }
@@ -67,16 +67,18 @@ CSpaceObject::CSpaceObject(void)
 //-----------------------------------------------------------------------------
 CSpaceObject::~CSpaceObject(void)
 {
-	if (GFXLocation != 0) {delete [] GFXLocation; GFXLocation = 0;}
-	if (GFX != 0)
-	{
-		for (int i=0; i<GFXQuantity; i++)
-			if (GFX[i] != 0)
-			{
+	if (GFXLocation != nullptr) {
+		delete [] GFXLocation;
+		GFXLocation = nullptr;
+	}
+	if (GFX != nullptr) {
+		for (int i = 0; i < GFXQuantity; i++)
+			if (GFX[i] != nullptr) {
 				GFX[i]->IsSuppressed = true;
 				GFX[i]->DestroyIfNoParticles = true;
 			}
-		delete [] GFX; GFX = 0;
+		delete [] GFX;
+		GFX = nullptr;
 	}
 
 	DetachSpaceObject(this);
@@ -100,15 +102,13 @@ void CSpaceObject::SetLocation(VECTOR3D NewLocation)
 	::CObject3D::SetLocation(NewLocation);
 
 
-	if (GFX != 0)
-	for (int i=0; i<GFXQuantity; i++)
-	{
-		if (GFX[i] != 0)
-		{
-			GFX[i]->MoveSystem(NewLocation + GFXLocation[i]);
-			GFX[i]->SetStartLocation(GFXLocation[i] + NewLocation);
+	if (GFX != nullptr)
+		for (int i = 0; i < GFXQuantity; i++) {
+			if (GFX[i] != nullptr) {
+				GFX[i]->MoveSystem(NewLocation + GFXLocation[i]);
+				GFX[i]->SetStartLocation(GFXLocation[i] + NewLocation);
+			}
 		}
-	}
 }
 
 
@@ -123,27 +123,22 @@ void CSpaceObject::SetRotation(VECTOR3D NewRotation)
 	::CObject3D::SetRotation(NewRotation);
 
 
-	if (GFX != 0)
-	for (int i=0; i<GFXQuantity; i++)
-	{
-		Matrix33CalcPoint(&(GFXLocation[i]), OldInvRotationMat);
-		Matrix33CalcPoint(&(GFXLocation[i]), CurrentRotationMat);
+	if (GFX != nullptr)
+		for (int i = 0; i < GFXQuantity; i++) {
+			Matrix33CalcPoint(&(GFXLocation[i]), OldInvRotationMat);
+			Matrix33CalcPoint(&(GFXLocation[i]), CurrentRotationMat);
 
-		if (GFX[i] != 0)
-		{
-			if (GFX[i]->SpeedOnCreation == -1.0f)
-			{
-				GFX[i]->MoveSystem(GFXLocation[i] + Location);
-				GFX[i]->SetStartLocation(GFXLocation[i] + Location);
-				GFX[i]->RotateSystemAndParticlesByAngle(Rotation);
-			}
-			else
-			{
-				GFX[i]->MoveSystemLocation(GFXLocation[i] + Location);
-				GFX[i]->RotateSystemByAngle(Rotation);
+			if (GFX[i] != nullptr) {
+				if (GFX[i]->SpeedOnCreation == -1.0f) {
+					GFX[i]->MoveSystem(GFXLocation[i] + Location);
+					GFX[i]->SetStartLocation(GFXLocation[i] + Location);
+					GFX[i]->RotateSystemAndParticlesByAngle(Rotation);
+				} else {
+					GFX[i]->MoveSystemLocation(GFXLocation[i] + Location);
+					GFX[i]->RotateSystemByAngle(Rotation);
+				}
 			}
 		}
-	}
 }
 
 
@@ -164,12 +159,10 @@ bool CSpaceObject::Update(float Time)
 	if (!::CObject3D::Update(Time)) return false;
 
 	// если это часть корабля босса, взрываем через время
-	if (BossPartCountDown > -1.0f)
-	{
+	if (BossPartCountDown > -1.0f) {
 		BossPartCountDown -= TimeDelta;
 
-		if (BossPartCountDown<=0.0f)
-		{
+		if (BossPartCountDown<=0.0f) {
 			CSpaceExplosion *TMPExplosion;
 			TMPExplosion = new CSpaceExplosion;
 			TMPExplosion->Create(this, 34, Location, Speed, -1);
@@ -180,22 +173,16 @@ bool CSpaceObject::Update(float Time)
 
 
 	// если астероиды
-	if (ObjectType == 7 || ObjectType == 15)
-	{
+	if (ObjectType == 7 || ObjectType == 15) {
 		// если большие астероиды летящие сверху
-		if (ObjectType == 15 && (ObjectCreationType>20 && ObjectCreationType<30))
-		{
+		if (ObjectType == 15 && (ObjectCreationType>20 && ObjectCreationType<30)) {
 			SetRotation(VECTOR3D(RotationSpeed.x*TimeDelta, RotationSpeed.y*TimeDelta, 0.0f));
-		}
-		else
-		{
-			if (RotationSpeed.x != 0.0f)
-			{
+		} else {
+			if (RotationSpeed.x != 0.0f) {
 				Rotation.x -= RotationSpeed.x*TimeDelta;
 				if (Rotation.x <= 360.0f) Rotation.x += 360.0f;
 			}
-			if (RotationSpeed.y != 0.0f)
-			{
+			if (RotationSpeed.y != 0.0f) {
 				Rotation.y -= RotationSpeed.y*TimeDelta;
 				if (Rotation.y <= 360.0f) Rotation.y += 360.0f;
 			}
@@ -207,31 +194,25 @@ bool CSpaceObject::Update(float Time)
 
 
 	// если части корабля или техники, останавливаем
-	if (ObjectType == 8)
-	{
-		if (Speed>0.0f)
-		{
+	if (ObjectType == 8) {
+		if (Speed>0.0f) {
 			Speed -= 1.0f*TimeDelta;
 			if (Speed<0.0f) Speed=0.0f;
 		}
-		if (Speed<0.0f)
-		{
+		if (Speed<0.0f) {
 			Speed += 1.0f*TimeDelta;
 			if (Speed>0.0f) Speed=0.0f;
 		}
 
-		if (RotationSpeed.x != 0.0f)
-		{
+		if (RotationSpeed.x != 0.0f) {
 			SetRotation(VECTOR3D(-RotationSpeed.x*TimeDelta,0.0f,0.0f));
 			RotationSpeed.x -= (RotationSpeed.x/4.0f)*TimeDelta;
 		}
-		if (RotationSpeed.y != 0.0f)
-		{
+		if (RotationSpeed.y != 0.0f) {
 			SetRotation(VECTOR3D(0.0f,-RotationSpeed.y*TimeDelta,0.0f));
 			RotationSpeed.y -= (RotationSpeed.y/4.0f)*TimeDelta;
 		}
-		if (RotationSpeed.z != 0.0f)
-		{
+		if (RotationSpeed.z != 0.0f) {
 			SetRotation(VECTOR3D(0.0f,0.0f,-RotationSpeed.z*TimeDelta));
 			RotationSpeed.z -= (RotationSpeed.z/4.0f)*TimeDelta;
 		}
@@ -241,8 +222,7 @@ bool CSpaceObject::Update(float Time)
 
 
 	// если планеты, должны учесть положение камеры т.е. ее смещение
-	if (ObjectType == 14 ||	ObjectType == 15)
-	{
+	if (ObjectType == 14 ||	ObjectType == 15) {
 		VECTOR3D Temp = GamePoint - LastCameraPoint;
 
 		// у планет особое движение... они немного могут двигаться на камеру...
@@ -252,45 +232,42 @@ bool CSpaceObject::Update(float Time)
 		LastCameraPoint = GamePoint;
 
 		// вращения планет и их частей
-		if (ObjectType == 14)
-		{
-			switch (ObjectCreationType)
-			{
-				// планета с астероидным кольцом
-				case 1:
-					DrawObjectList[0].Rotation.y += 0.5f*TimeDelta;
-					// кольца
-					DrawObjectList[1].Rotation.y += 0.7f*TimeDelta;
-					DrawObjectList[2].Rotation.y += 0.8f*TimeDelta;
-					DrawObjectList[3].Rotation.y += 0.9f*TimeDelta;
-					break;
-				// полу разрушенная планета
-				case 2:
-					Rotation.y += 0.5f*TimeDelta;
-					if (Rotation.y >= 360.0f) Rotation.y -= 360.0f;
-					break;
-				// планета с атмосферой
-				case 3:
-					DrawObjectList[0].Rotation.y += 0.5f*TimeDelta;
-					// атмосфера
-					DrawObjectList[1].Rotation.y -= 0.7*TimeDelta;
-					break;
-				// луна
-				case 4:
-					DrawObjectList[0].Rotation.y += 1.0f*TimeDelta;
-					break;
-				// планета пришельцев, с подсветкой
-				case 5:
-					DrawObjectList[0].Rotation.y += 0.5f*TimeDelta;
-					break;
-				// планета пришельцев
-				case 6:
-					DrawObjectList[0].Rotation.y += 0.5f*TimeDelta;
-					break;
+		if (ObjectType == 14) {
+			switch (ObjectCreationType) {
+			// планета с астероидным кольцом
+			case 1:
+				DrawObjectList[0].Rotation.y += 0.5f*TimeDelta;
+				// кольца
+				DrawObjectList[1].Rotation.y += 0.7f*TimeDelta;
+				DrawObjectList[2].Rotation.y += 0.8f*TimeDelta;
+				DrawObjectList[3].Rotation.y += 0.9f*TimeDelta;
+				break;
+			// полу разрушенная планета
+			case 2:
+				Rotation.y += 0.5f*TimeDelta;
+				if (Rotation.y >= 360.0f) Rotation.y -= 360.0f;
+				break;
+			// планета с атмосферой
+			case 3:
+				DrawObjectList[0].Rotation.y += 0.5f*TimeDelta;
+				// атмосфера
+				DrawObjectList[1].Rotation.y -= 0.7*TimeDelta;
+				break;
+			// луна
+			case 4:
+				DrawObjectList[0].Rotation.y += 1.0f*TimeDelta;
+				break;
+			// планета пришельцев, с подсветкой
+			case 5:
+				DrawObjectList[0].Rotation.y += 0.5f*TimeDelta;
+				break;
+			// планета пришельцев
+			case 6:
+				DrawObjectList[0].Rotation.y += 0.5f*TimeDelta;
+				break;
 			}
 
-			for (int i=0; i<DrawObjectQuantity; i++)
-			{
+			for (int i=0; i<DrawObjectQuantity; i++) {
 				if (DrawObjectList[i].Rotation.x >= 360.0f) DrawObjectList[i].Rotation.x -= 360.0f;
 				if (DrawObjectList[i].Rotation.x <= -360.0f) DrawObjectList[i].Rotation.x += 360.0f;
 				if (DrawObjectList[i].Rotation.y >= 360.0f) DrawObjectList[i].Rotation.y -= 360.0f;
@@ -298,16 +275,13 @@ bool CSpaceObject::Update(float Time)
 			}
 		}
 
-	}
-	else
-	{
+	} else {
 		SetLocation(Location + (Orientation^(Speed*TimeDelta)));
 	}
 
 
 
-	if (Velocity.x + Velocity.y + Velocity.z != 0.0f)
-	{
+	if (Velocity.x + Velocity.y + Velocity.z != 0.0f) {
 		SetLocation(Location + (Velocity^TimeDelta));
 		Velocity -= Velocity^(0.5f*TimeDelta);
 	}

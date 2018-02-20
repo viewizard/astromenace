@@ -46,13 +46,10 @@ void AddTopScores(int Score, char Name[128], bool Type)
 	strcpy(NameBuffer, Name);
 
 	// сдвигаем...
-	if (Type)
-	{
-		for(int i=0; i<10; i++)
-		{
+	if (Type) {
+		for(int i=0; i<10; i++) {
 			if (ScoreBuffer < GameScore[i]) continue;
-			else
-			{
+			else {
 				// сохраняем данные текущей строки
 				int ScoreBuffer2 = GameScore[i];
 				char NameBuffer2[128];
@@ -67,15 +64,11 @@ void AddTopScores(int Score, char Name[128], bool Type)
 				strcpy(NameBuffer, NameBuffer2);
 			}
 		}
-	}
-	else
-	{
+	} else {
 		// если нужно установить в основную (удалили профайл)
-		for(int i=0; i<10; i++)
-		{
+		for(int i=0; i<10; i++) {
 			if (ScoreBuffer < Setup.TopScores[i].Score) continue;
-			else
-			{
+			else {
 				// сохраняем данные текущей строки
 				int ScoreBuffer2 = Setup.TopScores[i].Score;
 				char NameBuffer2[128];
@@ -114,8 +107,7 @@ void TopScoresMenu()
 
 	Y1 += 10;
 
-	for (int i=0; i<10; i++)
-	{
+	for (int i=0; i<10; i++) {
 		Y1 += Prir1;
 
 		vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.6f*MenuContentTransp, "%i", i+1);

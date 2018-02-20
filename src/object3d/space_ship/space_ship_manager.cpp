@@ -31,8 +31,8 @@
 
 
 // Указатели на начальный и конечный объект в списке
-CSpaceShip *StartSpaceShip = 0;
-CSpaceShip *EndSpaceShip = 0;
+CSpaceShip *StartSpaceShip = nullptr;
+CSpaceShip *EndSpaceShip = nullptr;
 
 
 
@@ -43,20 +43,18 @@ CSpaceShip *EndSpaceShip = 0;
 //-----------------------------------------------------------------------------
 void AttachSpaceShip(CSpaceShip* SpaceShip)
 {
-	if (SpaceShip == 0) return;
+	if (SpaceShip == nullptr)
+		return;
 
 	// первый в списке...
-	if (EndSpaceShip == 0)
-	{
-		SpaceShip->Prev = 0;
-		SpaceShip->Next = 0;
+	if (EndSpaceShip == nullptr) {
+		SpaceShip->Prev = nullptr;
+		SpaceShip->Next = nullptr;
 		StartSpaceShip = SpaceShip;
 		EndSpaceShip = SpaceShip;
-	}
-	else // продолжаем заполнение...
-	{
+	} else { // продолжаем заполнение...
 		SpaceShip->Prev = EndSpaceShip;
-		SpaceShip->Next = 0;
+		SpaceShip->Next = nullptr;
 		EndSpaceShip->Next = SpaceShip;
 		EndSpaceShip = SpaceShip;
 	}
@@ -71,17 +69,24 @@ void AttachSpaceShip(CSpaceShip* SpaceShip)
 //-----------------------------------------------------------------------------
 void DetachSpaceShip(CSpaceShip* SpaceShip)
 {
-	if (SpaceShip == 0) return;
+	if (SpaceShip == nullptr)
+		return;
 
 	// переустанавливаем указатели...
-	if (StartSpaceShip == SpaceShip) StartSpaceShip = SpaceShip->Next;
-	if (EndSpaceShip == SpaceShip) EndSpaceShip = SpaceShip->Prev;
+	if (StartSpaceShip == SpaceShip)
+		StartSpaceShip = SpaceShip->Next;
+	if (EndSpaceShip == SpaceShip)
+		EndSpaceShip = SpaceShip->Prev;
 
+	if (SpaceShip->Next != nullptr)
+		SpaceShip->Next->Prev = SpaceShip->Prev;
+	else if (SpaceShip->Prev != nullptr)
+		SpaceShip->Prev->Next = nullptr;
 
-	if (SpaceShip->Next != 0) SpaceShip->Next->Prev = SpaceShip->Prev;
-		else if (SpaceShip->Prev != 0) SpaceShip->Prev->Next = 0;
-	if (SpaceShip->Prev != 0) SpaceShip->Prev->Next = SpaceShip->Next;
-		else if (SpaceShip->Next != 0) SpaceShip->Next->Prev = 0;
+	if (SpaceShip->Prev != nullptr)
+		SpaceShip->Prev->Next = SpaceShip->Next;
+	else if (SpaceShip->Next != nullptr)
+		SpaceShip->Next->Prev = nullptr;
 }
 
 
@@ -96,13 +101,12 @@ void DetachSpaceShip(CSpaceShip* SpaceShip)
 CSpaceShip *FindSpaceShipByID(int ID)
 {
 	CSpaceShip *tmp = StartSpaceShip;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CSpaceShip *tmp2 = tmp->Next;
 		if (tmp->ID == ID) return tmp;
 		tmp = tmp2;
 	}
-	return 0;
+	return nullptr;
 }
 
 
@@ -116,15 +120,12 @@ CSpaceShip *FindSpaceShipByID(int ID)
 void UpdateAllSpaceShip(float Time)
 {
 	CSpaceShip *tmp = StartSpaceShip;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CSpaceShip *tmp2 = tmp->Next;
 		// делаем обновление данных по объекту
 		if (!tmp->Update(Time))
-		{
 			// если его нужно уничтожить - делаем это
-			delete tmp; tmp = 0;
-		}
+			delete tmp;
 		tmp = tmp2;
 	}
 }
@@ -139,17 +140,14 @@ void DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap, int DrawOnlyT
 {
 
 	CSpaceShip *tmp = StartSpaceShip;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CSpaceShip *tmp2 = tmp->Next;
 
-		if (DrawOnlyType != -1)
-		{
+		if (DrawOnlyType != -1) {
 			// если нужно прорисовать только определенный тип
 			if (tmp->ObjectType == DrawOnlyType)
 				tmp->Draw(VertexOnlyPass, ShadowMap);
-		}
-		else
+		} else
 			tmp->Draw(VertexOnlyPass, ShadowMap);
 
 		tmp = tmp2;
@@ -167,13 +165,12 @@ void DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap, int DrawOnlyT
 void ReleaseAllSpaceShip()
 {
 	CSpaceShip *tmp = StartSpaceShip;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CSpaceShip *tmp2 = tmp->Next;
 		delete tmp;
 		tmp = tmp2;
 	}
 
-	StartSpaceShip = 0;
-	EndSpaceShip = 0;
+	StartSpaceShip = nullptr;
+	EndSpaceShip = nullptr;
 }

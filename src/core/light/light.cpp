@@ -97,8 +97,7 @@ bool eLight::Activate(int CurrentLightNum, float Matrix[16])
 	vw_LoadIdentity();
 	vw_SetMatrix(Matrix);
 
-	if (LightType == 0)
-	{
+	if (LightType == 0) {
 		float RenderDirection[4];
 		float RenderLocation[4];
 
@@ -117,9 +116,7 @@ bool eLight::Activate(int CurrentLightNum, float Matrix[16])
 		vw_SetLightV(RealLightNum, RI_AMBIENT, Ambient);
 		vw_SetLightV(RealLightNum, RI_DIRECTION, RenderDirection);
 		vw_SetLightV(RealLightNum, RI_POSITION, RenderLocation);
-	}
-	else
-	{
+	} else {
 		float RenderDirection[4];
 		float RenderLocation[4];
 
@@ -159,8 +156,7 @@ bool eLight::Activate(int CurrentLightNum, float Matrix[16])
 void eLight::DeActivate()
 {
 	if (!On) return;
-	if (RealLightNum > -1)
-	{
+	if (RealLightNum > -1) {
 		vw_LightEnable(RealLightNum, false);
 		RealLightNum = -1;
 	}

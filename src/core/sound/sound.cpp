@@ -63,15 +63,12 @@ bool eSound::Play(const char *Name, float fVol, float fMainVol, float x, float y
 	// находим существующий или делаем новый буфер
 	ALuint Buffer = vw_FindBufferIDByName(Name);
 	// у нас еще нет такого буфера, его надо попытаться создать
-	if (Buffer == 0)
-	{
+	if (Buffer == 0) {
 		// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
 		const char *file_ext = strrchr(Name, '.');
-		if (file_ext)
-		{
+		if (file_ext) {
 			if (!strcasecmp(".wav", file_ext)) Buffer = vw_CreateSoundBufferFromWAV(Name);
-			else
-				if (!strcasecmp(".ogg", file_ext)) Buffer = vw_CreateSoundBufferFromOGG(Name);
+			else if (!strcasecmp(".ogg", file_ext)) Buffer = vw_CreateSoundBufferFromOGG(Name);
 
 		}
 	}
@@ -102,16 +99,12 @@ bool eSound::Play(const char *Name, float fVol, float fMainVol, float x, float y
 
 
 	// параметры затухания сигнала от источника
-	if (AtType == 1)
-	{
+	if (AtType == 1) {
 		alSourcef (Source, AL_REFERENCE_DISTANCE,  30.0f     );
 		alSourcef (Source, AL_MAX_DISTANCE,  250.0f     );
 		alSourcef (Source, AL_ROLLOFF_FACTOR,  0.5f     );
 		alGetError(); // сброс ошибок
-	}
-	else
-	if (AtType == 2)
-	{
+	} else if (AtType == 2) {
 		alSourcef (Source, AL_REFERENCE_DISTANCE,  150.0f     );
 		alSourcef (Source, AL_MAX_DISTANCE,  600.0f     );
 		alSourcef (Source, AL_ROLLOFF_FACTOR,  0.2f     );
@@ -153,13 +146,10 @@ void eSound::Stop(float StopDelay)
 
 	if (StopDelay < 0.0f) StopDelay = 0.0f;
 
-	if (StopDelay == 0.0f)
-	{
+	if (StopDelay == 0.0f) {
 		alSourceStop(Source);
 		alGetError(); // сброс ошибок
-	}
-	else
-	{
+	} else {
 		DestroyTimeStart = DestroyTime = StopDelay;
 	}
 }

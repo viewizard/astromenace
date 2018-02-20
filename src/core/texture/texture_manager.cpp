@@ -33,8 +33,8 @@
 //------------------------------------------------------------------------------------
 // переменные
 //------------------------------------------------------------------------------------
-eTexture *StartTexMan = 0;// Указатель на первую текстуру в списке...
-eTexture *EndTexMan = 0;	// Указатель на последнюю текстуру в списке...
+eTexture *StartTexMan = nullptr;// Указатель на первую текстуру в списке...
+eTexture *EndTexMan = nullptr;	// Указатель на последнюю текстуру в списке...
 int NumTexMan = 0;		// Последний использов. уникальный номер
 // Ключ прорисовки текстуры (near, linear, ... )
 int FilteringTexMan = RI_MAGFILTER_POINT | RI_MINFILTER_POINT | RI_MIPFILTER_POINT;
@@ -65,16 +65,15 @@ void vw_ReleaseAllTextures()
 {
 	// Чистка памяти...
 	eTexture *Tmp = StartTexMan;
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eTexture *Tmp1 = Tmp->Next;
 		vw_ReleaseTexture(Tmp);
 		Tmp = Tmp1;
 	}
 
 
-	StartTexMan = 0;
-	EndTexMan = 0;
+	StartTexMan = nullptr;
+	EndTexMan = nullptr;
 	NumTexMan = 0;
 
 	FilteringTexMan = RI_MAGFILTER_POINT | RI_MINFILTER_POINT | RI_MIPFILTER_POINT;
@@ -93,22 +92,20 @@ void vw_ReleaseAllTextures()
 //------------------------------------------------------------------------------------
 void vw_AttachTexture(eTexture* Texture)
 {
-	if (Texture == 0) return;
+	if (Texture == nullptr)
+		return;
 
 	// первый в списке...
-	if (EndTexMan == 0)
-	{
-		Texture->Prev = 0;
-		Texture->Next = 0;
+	if (EndTexMan == nullptr) {
+		Texture->Prev = nullptr;
+		Texture->Next = nullptr;
 		NumTexMan += 1;
 		Texture->Num = NumTexMan;
 		StartTexMan = Texture;
 		EndTexMan = Texture;
-	}
-	else // продолжаем заполнение...
-	{
+	} else { // продолжаем заполнение...
 		Texture->Prev = EndTexMan;
-		Texture->Next = 0;
+		Texture->Next = nullptr;
 		EndTexMan->Next = Texture;
 		NumTexMan += 1;
 		Texture->Num = NumTexMan;
@@ -125,17 +122,24 @@ void vw_AttachTexture(eTexture* Texture)
 //------------------------------------------------------------------------------------
 void vw_DetachTexture(eTexture* Texture)
 {
-	if (Texture == 0) return;
+	if (Texture == nullptr)
+		return;
 
 	// переустанавливаем указатели...
-	if (StartTexMan == Texture) StartTexMan = Texture->Next;
-	if (EndTexMan == Texture) EndTexMan = Texture->Prev;
+	if (StartTexMan == Texture)
+		StartTexMan = Texture->Next;
+	if (EndTexMan == Texture)
+		EndTexMan = Texture->Prev;
 
+	if (Texture->Next != nullptr)
+		Texture->Next->Prev = Texture->Prev;
+	else if (Texture->Prev != nullptr)
+		Texture->Prev->Next = nullptr;
 
-	if (Texture->Next != 0) Texture->Next->Prev = Texture->Prev;
-		else if (Texture->Prev != 0) Texture->Prev->Next = 0;
-	if (Texture->Prev != 0) Texture->Prev->Next = Texture->Next;
-		else if (Texture->Next != 0) Texture->Next->Prev = 0;
+	if (Texture->Prev != nullptr)
+		Texture->Prev->Next = Texture->Next;
+	else if (Texture->Next != nullptr)
+		Texture->Next->Prev = nullptr;
 }
 
 
@@ -189,14 +193,14 @@ eTexture* vw_FindTextureByNum(int Num)
 {
 	eTexture *Tmp = StartTexMan;
 
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eTexture *Tmp1 = Tmp->Next;
-		if (Tmp->Num == Num) return Tmp;
+		if (Tmp->Num == Num)
+			return Tmp;
 		Tmp = Tmp1;
 	}
 
-	return 0;
+	return nullptr;
 }
 
 
@@ -211,14 +215,14 @@ eTexture* vw_FindTextureByName(const char *Name)
 {
 	eTexture *Tmp = StartTexMan;
 
-	while (Tmp != 0)
-	{
+	while (Tmp != nullptr) {
 		eTexture *Tmp1 = Tmp->Next;
-		if(vw_strcmp(Tmp->Name, Name) == 0) return Tmp;
+		if(strcmp(Tmp->Name, Name) == 0)
+			return Tmp;
 		Tmp = Tmp1;
 	}
 
-	return 0;
+	return nullptr;
 }
 
 

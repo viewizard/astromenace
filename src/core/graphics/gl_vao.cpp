@@ -29,10 +29,10 @@
 
 
 // VAO Extension Function Pointers
-PFNGLGENVERTEXARRAYSPROC 		glGenVertexArraysARB = NULL;		// VAO Name Generation Procedure
-PFNGLBINDVERTEXARRAYPROC 		glBindVertexArrayARB = NULL;		// VAO Bind Procedure
-PFNGLDELETEVERTEXARRAYSPROC 	glDeleteVertexArraysARB = NULL;		// VAO Deletion Procedure
-PFNGLISVERTEXARRAYPROC 			glIsVertexArrayARB = NULL;
+PFNGLGENVERTEXARRAYSPROC 		glGenVertexArraysARB = nullptr;		// VAO Name Generation Procedure
+PFNGLBINDVERTEXARRAYPROC 		glBindVertexArrayARB = nullptr;		// VAO Bind Procedure
+PFNGLDELETEVERTEXARRAYSPROC 	glDeleteVertexArraysARB = nullptr;		// VAO Deletion Procedure
+PFNGLISVERTEXARRAYPROC 			glIsVertexArrayARB = nullptr;
 
 
 void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int *VBO, unsigned int *VAO);
@@ -51,13 +51,12 @@ bool vw_Internal_InitializationVAO()
 	glDeleteVertexArraysARB = (PFNGLDELETEVERTEXARRAYSPROC) SDL_GL_GetProcAddress("glDeleteVertexArrays");
 	glIsVertexArrayARB = (PFNGLISVERTEXARRAYPROC) SDL_GL_GetProcAddress("glIsVertexArray");
 
-	if (glGenVertexArraysARB == NULL || glBindVertexArrayARB == NULL ||
-		glDeleteVertexArraysARB == NULL || glIsVertexArrayARB == NULL)
-	{
-		glGenVertexArraysARB 	= NULL;
-		glBindVertexArrayARB 	= NULL;
-		glDeleteVertexArraysARB = NULL;
-		glIsVertexArrayARB 		= NULL;
+	if (glGenVertexArraysARB == nullptr || glBindVertexArrayARB == nullptr ||
+	    glDeleteVertexArraysARB == nullptr || glIsVertexArrayARB == nullptr) {
+		glGenVertexArraysARB 	= nullptr;
+		glBindVertexArrayARB 	= nullptr;
+		glDeleteVertexArraysARB = nullptr;
+		glIsVertexArrayARB 		= nullptr;
 
 		return false;
 	}
@@ -72,11 +71,12 @@ bool vw_Internal_InitializationVAO()
 // Процедура генерации буферов
 //------------------------------------------------------------------------------------
 bool vw_BuildVAO(unsigned int *VAO, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO,
-						unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO)
+		 unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO)
 {
-	if (VAO == 0) return false;
-	if (glGenVertexArraysARB == NULL) return false;
-	if (glIsVertexArrayARB == NULL) return false;
+	if ((VAO == nullptr) ||
+	    (glGenVertexArraysARB == nullptr) ||
+	    (glIsVertexArrayARB == nullptr))
+		return false;
 
 	glGenVertexArraysARB(1, VAO);
 
@@ -87,9 +87,10 @@ bool vw_BuildVAO(unsigned int *VAO, int NumVertices, int DataFormat, void *Data,
 
 	vw_BindVAO(0);
 
-	vw_SendVertices_DisableStatesAndPointers(DataFormat, VBO, 0);
+	vw_SendVertices_DisableStatesAndPointers(DataFormat, VBO, nullptr);
 
-	if (!glIsVertexArrayARB(*VAO)) return false;
+	if (!glIsVertexArrayARB(*VAO))
+		return false;
 
 	return true;
 }
@@ -102,7 +103,7 @@ bool vw_BuildVAO(unsigned int *VAO, int NumVertices, int DataFormat, void *Data,
 //------------------------------------------------------------------------------------
 void vw_BindVAO(unsigned int VAO)
 {
-	if (glBindVertexArrayARB == NULL) return;
+	if (glBindVertexArrayARB == nullptr) return;
 
 	glBindVertexArrayARB(VAO);
 }
@@ -116,8 +117,8 @@ void vw_BindVAO(unsigned int VAO)
 //------------------------------------------------------------------------------------
 void vw_DeleteVAO(unsigned int VAO)
 {
-	if (glIsVertexArrayARB == NULL) return;
-	if (glDeleteVertexArraysARB == NULL) return;
+	if (glIsVertexArrayARB == nullptr) return;
+	if (glDeleteVertexArraysARB == nullptr) return;
 
 	if (glIsVertexArrayARB(VAO)) glDeleteVertexArraysARB(1, &VAO);
 }

@@ -29,8 +29,8 @@
 #include "../system/system.h"
 
 
-eModel3D *StartModel3D = 0;
-eModel3D *EndModel3D = 0;
+eModel3D *StartModel3D = nullptr;
+eModel3D *EndModel3D = nullptr;
 
 
 
@@ -44,67 +44,39 @@ eModel3D *EndModel3D = 0;
 //-----------------------------------------------------------------------------
 eModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
+	if (FileName == nullptr)
+		return nullptr;
+
 	// сначала пытаемся найти уже сущ.
 	eModel3D *tmp = StartModel3D;
-	while (tmp != 0)
-	{
+	while (tmp != nullptr) {
 		eModel3D *tmp2 = tmp->Next;
-		if(!strcmp(tmp->Name, FileName)) return tmp;
+		if(!strcmp(tmp->Name, FileName))
+			return tmp;
 		tmp = tmp2;
 	}
 
 	// если ничего нет, значит нужно загрузить
-	eModel3D * Model = 0;
-	Model = new eModel3D;
-	if (Model == 0) return 0;
-
-
+	eModel3D * Model = new eModel3D;
 
 	// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
 	const char *file_ext = strrchr(FileName, '.');
-	if (file_ext)
-	{
-		if (!strcasecmp(".vw3d", file_ext))
-		{
-			if (!Model->ReadVW3D(FileName))
-			{
+	if (file_ext != nullptr) {
+		if (!strcasecmp(".vw3d", file_ext)) {
+			if (!Model->ReadVW3D(FileName)) {
 				printf("Can't load file ... %s\n", FileName);
 				delete Model;
-				return 0;
+				return nullptr;
 			}
+		} else {
+			printf("Format not supported ... %s\n", FileName);
+			delete Model;
+			return nullptr;
 		}
-		else
-/*			if (!strcasecmp(".obj", file_ext))
-			{
-				if (!Model->ReadOBJ(FileName))
-				{
-					printf("Can't load file ... %s\n", FileName);
-					delete Model;
-					return 0;
-				}
-			}
-			else
-				if (!strcasecmp(".3ds", file_ext))
-				{
-					if (!Model->Read3DS(FileName))
-					{
-						printf("Can't load file ... %s\n", FileName);
-						delete Model;
-						return 0;
-					}
-				}
-				else*/
-					{
-						printf("Format not supported ... %s\n", FileName);
-						delete Model;
-						return 0;
-					}
-	}
-	else
-	{
+	} else {
 		printf("Format not supported ... %s\n", FileName);
 		delete Model;
-		return 0;
+		return nullptr;
 	}
 
 	// пересоздаем буфер вертексов, для работы с нормал меппингом в шейдерах, добавляем тангент и бинормаль
@@ -131,20 +103,17 @@ eModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool Nee
 //-----------------------------------------------------------------------------
 void vw_AttachModel3D(eModel3D * NewModel3D)
 {
-	if (NewModel3D == 0) return;
+	if (NewModel3D == nullptr)
+		return;
 
-	// первый в списке...
-	if (EndModel3D == 0)
-	{
-		NewModel3D->Prev = 0;
-		NewModel3D->Next = 0;
+	if (EndModel3D == nullptr) {
+		NewModel3D->Prev = nullptr;
+		NewModel3D->Next = nullptr;
 		StartModel3D = NewModel3D;
 		EndModel3D = NewModel3D;
-	}
-	else // продолжаем заполнение...
-	{
+	} else {
 		NewModel3D->Prev = EndModel3D;
-		NewModel3D->Next = 0;
+		NewModel3D->Next = nullptr;
 		EndModel3D->Next = NewModel3D;
 		EndModel3D = NewModel3D;
 	}
@@ -158,17 +127,23 @@ void vw_AttachModel3D(eModel3D * NewModel3D)
 //-----------------------------------------------------------------------------
 void vw_DetachModel3D(eModel3D * OldModel3D)
 {
-	if (OldModel3D == 0) return;
+	if (OldModel3D == nullptr)
+		return;
 
-	// переустанавливаем указатели...
-	if (StartModel3D == OldModel3D) StartModel3D = OldModel3D->Next;
-	if (EndModel3D == OldModel3D) EndModel3D = OldModel3D->Prev;
+	if (StartModel3D == OldModel3D)
+		StartModel3D = OldModel3D->Next;
+	if (EndModel3D == OldModel3D)
+		EndModel3D = OldModel3D->Prev;
 
+	if (OldModel3D->Next != nullptr)
+		OldModel3D->Next->Prev = OldModel3D->Prev;
+	else if (OldModel3D->Prev != nullptr)
+		OldModel3D->Prev->Next = nullptr;
 
-	if (OldModel3D->Next != 0) OldModel3D->Next->Prev = OldModel3D->Prev;
-		else if (OldModel3D->Prev != 0) OldModel3D->Prev->Next = 0;
-	if (OldModel3D->Prev != 0) OldModel3D->Prev->Next = OldModel3D->Next;
-		else if (OldModel3D->Next != 0) OldModel3D->Next->Prev = 0;
+	if (OldModel3D->Prev != nullptr)
+		OldModel3D->Prev->Next = OldModel3D->Next;
+	else if (OldModel3D->Next != nullptr)
+		OldModel3D->Next->Prev = nullptr;
 }
 
 
@@ -180,14 +155,13 @@ void vw_DetachModel3D(eModel3D * OldModel3D)
 void vw_ReleaseAllModel3D()
 {
 	eModel3D *tmp = StartModel3D;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		eModel3D *tmp2 = tmp->Next;
 		delete tmp;
 		tmp = tmp2;
 	}
 
-	StartModel3D = 0;
-	EndModel3D = 0;
+	StartModel3D = nullptr;
+	EndModel3D = nullptr;
 }
 

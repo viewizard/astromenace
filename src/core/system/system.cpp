@@ -51,11 +51,10 @@ static LONG GetRegistryKey(HKEY key, LPCTSTR subkey, LPTSTR retdata)
 {
 	HKEY hkey;
 	LONG retval = RegOpenKeyEx(key, subkey, 0, KEY_QUERY_VALUE, &hkey);
-	if (retval == ERROR_SUCCESS)
-	{
+	if (retval == ERROR_SUCCESS) {
 		long datasize = MAX_PATH;
 		TCHAR data[MAX_PATH];
-		RegQueryValue(hkey, NULL, data, &datasize);
+		RegQueryValue(hkey, nullptr, data, &datasize);
 		_tcscpy(retdata,data);
 		RegCloseKey(hkey);
 	}
@@ -105,28 +104,27 @@ char **get_path(void)
 
 	null_path = (char *)malloc(strlen(path) + 1);
 
-	for(cstr = path, str = null_path; *cstr; ++cstr, ++str)
-	{
-		switch(*cstr)
-		{
-			case ':':
-				*str = '\0';
-				++parts;
-				break;
-			default:
-				*str = *cstr;
+	for(cstr = path, str = null_path; *cstr; ++cstr, ++str) {
+		switch(*cstr) {
+		case ':':
+			*str = '\0';
+			++parts;
+			break;
+		default:
+			*str = *cstr;
 		}
 	}
 	*str = '\0';
 
 	tokenized_path = (char **)malloc(sizeof(char *) * (parts+1));
-	tokenized_path[parts] = NULL;
+	tokenized_path[parts] = nullptr;
 
-	for(a = 0, str = null_path; a < parts; ++a)
-	{
+	for(a = 0, str = null_path; a < parts; ++a) {
 		tokenized_path[a] = str;
 
-		do { ++str; } while(str[-1]);
+		do {
+			++str;
+		} while(str[-1]);
 	}
 
 	return tokenized_path;
@@ -138,18 +136,14 @@ int executable_exists_in_path(char **tokenized_path, const char *app_name)
 	unsigned int a;
 	int found = 0;
 
-	for(a = 0; !found && tokenized_path[a]; ++a)
-	{
+	for(a = 0; !found && tokenized_path[a]; ++a) {
 		DIR *dir = opendir(tokenized_path[a]);
 
-		if(dir)
-		{
+		if(dir) {
 			struct dirent *dirent;
 
-			for(dirent = readdir(dir); dirent != NULL; dirent = readdir(dir))
-			{
-				if(strcmp(dirent->d_name, app_name) == 0)
-				{
+			for(dirent = readdir(dir); dirent != nullptr; dirent = readdir(dir)) {
+				if(strcmp(dirent->d_name, app_name) == 0) {
 					/* We found something with a correct name, is it a proper executable? */
 					size_t full_path_length = strlen(tokenized_path[a]) + 1 + strlen(app_name) + 1;
 					char *full_path = (char *)malloc(full_path_length);
@@ -157,8 +151,7 @@ int executable_exists_in_path(char **tokenized_path, const char *app_name)
 
 					snprintf(full_path, full_path_length, "%s/%s", tokenized_path[a], app_name);
 
-					if(stat(full_path, &buf) == 0)
-					{
+					if(stat(full_path, &buf) == 0) {
 						/* Is is a regular file and is it executable by anyone? */
 						if(S_ISREG(buf.st_mode) && (buf.st_mode & S_IXOTH)) found = 1;
 
@@ -181,13 +174,11 @@ int executable_exists_in_path(char **tokenized_path, const char *app_name)
 char **get_browsers(void)
 {
 
-	char **tokenized_path = get_path(), **browsers = NULL;
+	char **tokenized_path = get_path(), **browsers = nullptr;
 
 
-	if(!browsers)
-	{
-		static const char *browser_list[] =
-		{
+	if(!browsers) {
+		static const char *browser_list[] = {
 			"xdg-open", // первое ставим именно xdg-open
 			"firefox",
 			"opera",
@@ -204,16 +195,14 @@ char **get_browsers(void)
 
 		browsers = (char **)calloc(browser_list_count, sizeof(char *));
 
-		for(a = b = 0; a < browser_list_count; ++a)
-		{
+		for(a = b = 0; a < browser_list_count; ++a) {
 			if(executable_exists_in_path(tokenized_path, browser_list[a]))
 				browsers[b++] = strdup(browser_list[a]);
 		}
 
-		if(b == 0)
-		{
+		if(b == 0) {
 			free(browsers);
-			browsers = NULL;
+			browsers = nullptr;
 		}
 	}
 
@@ -258,47 +247,43 @@ bool vw_OpenBrouser(const char *url)
 #ifdef WIN32
 
 	HINSTANCE result;
-	result = ShellExecute(NULL, _T("open"), url, NULL,NULL, SW_NORMAL);
+	result = ShellExecute(nullptr, _T("open"), url, nullptr,nullptr, SW_NORMAL);
 	if ((UINT)result > HINSTANCE_ERROR) return true;
 
 	// если не получилось, делаем по второму сценарию
 	TCHAR key[MAX_PATH + MAX_PATH];
-	if (GetRegistryKey(HKEY_CLASSES_ROOT, _T(".htm"), key) == ERROR_SUCCESS)
-	{
+	if (GetRegistryKey(HKEY_CLASSES_ROOT, _T(".htm"), key) == ERROR_SUCCESS) {
 		lstrcat(key, _T("\\shell\\open\\command"));
 
-		if (GetRegistryKey(HKEY_CLASSES_ROOT,key,key) == ERROR_SUCCESS)
-		{
+		if (GetRegistryKey(HKEY_CLASSES_ROOT,key,key) == ERROR_SUCCESS) {
 			TCHAR *pos;
 			pos = _tcsstr(key, _T("\"%1\""));
-			if (pos == NULL)
-			{                     // No quotes found
+			if (pos == nullptr) {
+				// No quotes found
 				pos = strstr(key, _T("%1"));       // Check for %1, without quotes
-				if (pos == NULL)                   // No parameter at all...
+				if (pos == nullptr)                   // No parameter at all...
 					pos = key+_tcslen(key)-1;
 				else
 					*pos = _T('\0');                   // Remove the parameter
-			}
-			else
+			} else
 				*pos = _T('\0');                       // Remove the parameter
 
 			lstrcat(pos, _T(" "));
 			lstrcat(pos, url);
 			result = (HINSTANCE) WinExec(key,SW_NORMAL);
 		}
-	}
-	else
+	} else
 		return false;
 
 #endif // WIN32
 #if defined(__APPLE__) && defined(__MACH__)
 
 	CFURLRef openurl = CFURLCreateWithBytes (
-				NULL,						// allocator
-				(BYTE*)url,					// URLBytes
-				strlen(url),				// length
-				kCFStringEncodingASCII,		// encoding
-				NULL);						// baseURL
+				   nullptr,						// allocator
+				   (BYTE*)url,					// URLBytes
+				   strlen(url),				// length
+				   kCFStringEncodingASCII,		// encoding
+				   nullptr);						// baseURL
 	LSOpenCFURLRef(openurl,0);
 	CFRelease(openurl);
 
@@ -309,41 +294,36 @@ bool vw_OpenBrouser(const char *url)
 	unsigned int a = 0;
 
 
-	if(browsers)
-    {
-    	// не перебираем!!! берем первый броузер
-    	a = 0;
+	if(browsers) {
+		// не перебираем!!! берем первый броузер
+		a = 0;
 
-        printf("%u:\t%s\n", a, browsers[a]);
+		printf("%u:\t%s\n", a, browsers[a]);
 
-        char GotoUrl[1024];
+		char GotoUrl[1024];
 		sprintf(GotoUrl,"%s %s",browsers[a], url);
 
 
-        int x;
-        x = fork();
+		int x;
+		x = fork();
 
-		switch(x)
-		{
-			case -1:
-				printf("error, unable to fork process!\n");
-				break;
-			case 0:
-				execl(getenv("SHELL"), "sh", "-c", GotoUrl, (char *)0);
-				// should not be reached
-				printf("Error executing process!\n");
-				break;
+		switch(x) {
+		case -1:
+			printf("error, unable to fork process!\n");
+			break;
+		case 0:
+			execl(getenv("SHELL"), "sh", "-c", GotoUrl, nullptr);
+			// should not be reached
+			printf("Error executing process!\n");
+			break;
 		}
-	}
-	else
-	{
+	} else {
 		printf("Could not open Web page. Please, visit %s\n", url);
 		return false;
 	}
 
 
-	if(browsers)
-	{
+	if(browsers) {
 		for(a = 0; browsers[a]; ++a)
 			free(browsers[a]);
 		free(browsers);

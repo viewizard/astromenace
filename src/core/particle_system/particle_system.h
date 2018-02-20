@@ -175,7 +175,10 @@ public:
 	float LightDeviationSpeed;
 
 	// доступ к private данным
-	void GetLocation(VECTOR3D *Vec){*Vec = Location;};
+	void GetLocation(VECTOR3D *Vec)
+	{
+		*Vec = Location;
+	};
 
 private:
 

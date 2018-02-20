@@ -34,11 +34,11 @@
 
 
 #if defined(__APPLE__) && defined(__MACH__)
-	#include "OpenAL/al.h"
-	#include "OpenAL/alc.h"
+#include "OpenAL/al.h"
+#include "OpenAL/alc.h"
 #else // defined(__APPLE__) && defined(__MACH__)
-	#include "AL/al.h"
-	#include "AL/alc.h"
+#include "AL/al.h"
+#include "AL/alc.h"
 #endif // defined(__APPLE__) && defined(__MACH__)
 #include "AL/alut.h"
 
@@ -60,13 +60,19 @@ public:
 
 	eSound()
 	{
-		FileName = 0;
+		FileName = nullptr;
 		Volume = MainVolume = Age = LastUpdateTime = DestroyTime = DestroyTimeStart = 0.0f;
 		NeedRelease = false;
 		Group = GroupCount = SubGroup = SubGroupCount = Priority = Num = 0;
-		Prev = Next = 0;
+		Prev = Next = nullptr;
 	};
-	~eSound(){if (FileName != 0){delete [] FileName; FileName=0;}};
+	~eSound()
+	{
+		if (FileName != nullptr) {
+			delete [] FileName;
+			FileName = nullptr;
+		}
+	};
 
 	// проигрывание звука
 	// нельзя разделять пока на отдельную загрузку и проигрывание... т.к. удаляем по остановке!!!
@@ -113,8 +119,7 @@ public:
 //------------------------------------------------------------------------------------
 // Структура музыки
 //------------------------------------------------------------------------------------
-struct eMusic
-{
+struct eMusic {
 	// проигрывание музыки
 	bool Play(const char * Name, float fVol, float fMainVol, bool Loop, const char *LoopFileName);
 	char LoopPart[MAX_PATH];

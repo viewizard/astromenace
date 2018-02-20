@@ -31,8 +31,8 @@
 
 
 // Указатели на начальный и конечный объект в списке
-CExplosion *StartExplosion = 0;
-CExplosion *EndExplosion = 0;
+CExplosion *StartExplosion = nullptr;
+CExplosion *EndExplosion = nullptr;
 
 
 
@@ -42,20 +42,17 @@ CExplosion *EndExplosion = 0;
 //-----------------------------------------------------------------------------
 void AttachExplosion(CExplosion* Explosion)
 {
-	if (Explosion == 0) return;
+	if (Explosion == nullptr)
+		return;
 
-	// первый в списке...
-	if (EndExplosion == 0)
-	{
-		Explosion->Prev = 0;
-		Explosion->Next = 0;
+	if (EndExplosion == nullptr) {
+		Explosion->Prev = nullptr;
+		Explosion->Next = nullptr;
 		StartExplosion = Explosion;
 		EndExplosion = Explosion;
-	}
-	else // продолжаем заполнение...
-	{
+	} else {
 		Explosion->Prev = EndExplosion;
-		Explosion->Next = 0;
+		Explosion->Next = nullptr;
 		EndExplosion->Next = Explosion;
 		EndExplosion = Explosion;
 	}
@@ -70,17 +67,23 @@ void AttachExplosion(CExplosion* Explosion)
 //-----------------------------------------------------------------------------
 void DetachExplosion(CExplosion* Explosion)
 {
-	if (Explosion == 0) return;
+	if (Explosion == nullptr)
+		return;
 
-	// переустанавливаем указатели...
-	if (StartExplosion == Explosion) StartExplosion = Explosion->Next;
-	if (EndExplosion == Explosion) EndExplosion = Explosion->Prev;
+	if (StartExplosion == Explosion)
+		StartExplosion = Explosion->Next;
+	if (EndExplosion == Explosion)
+		EndExplosion = Explosion->Prev;
 
+	if (Explosion->Next != nullptr)
+		Explosion->Next->Prev = Explosion->Prev;
+	else if (Explosion->Prev != nullptr)
+		Explosion->Prev->Next = nullptr;
 
-	if (Explosion->Next != 0) Explosion->Next->Prev = Explosion->Prev;
-		else if (Explosion->Prev != 0) Explosion->Prev->Next = 0;
-	if (Explosion->Prev != 0) Explosion->Prev->Next = Explosion->Next;
-		else if (Explosion->Next != 0) Explosion->Next->Prev = 0;
+	if (Explosion->Prev != nullptr)
+		Explosion->Prev->Next = Explosion->Next;
+	else if (Explosion->Next != nullptr)
+		Explosion->Next->Prev = nullptr;
 }
 
 
@@ -93,15 +96,11 @@ void DetachExplosion(CExplosion* Explosion)
 void UpdateAllExplosion(float Time)
 {
 	CExplosion *tmp = StartExplosion;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CExplosion *tmp2 = tmp->Next;
 		// делаем обновление данных по объекту
 		if (!tmp->Update(Time))
-		{
-			// если его нужно уничтожить - делаем это
-			delete tmp; tmp = 0;
-		}
+			delete tmp;
 		tmp = tmp2;
 	}
 }
@@ -116,8 +115,7 @@ void DrawAllExplosion(bool VertexOnlyPass)
 {
 
 	CExplosion *tmp = StartExplosion;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CExplosion *tmp2 = tmp->Next;
 		tmp->Draw(VertexOnlyPass);
 		tmp = tmp2;
@@ -135,13 +133,12 @@ void DrawAllExplosion(bool VertexOnlyPass)
 void ReleaseAllExplosion()
 {
 	CExplosion *tmp = StartExplosion;
-	while (tmp!=0)
-	{
+	while (tmp != nullptr) {
 		CExplosion *tmp2 = tmp->Next;
 		delete tmp;
 		tmp = tmp2;
 	}
 
-	StartExplosion = 0;
-	EndExplosion = 0;
+	StartExplosion = nullptr;
+	EndExplosion = nullptr;
 }

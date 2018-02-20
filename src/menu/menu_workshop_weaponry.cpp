@@ -117,36 +117,55 @@ int PrevWeaponGroup()
 
 int GetWeaponBaseCost(int Num)
 {
-	switch (Num)
-	{
-		case 1:		return 150;
-		case 2:		return 300;
-		case 3:		return 1000;
-		case 4:		return 1500;
+	switch (Num) {
+	case 1:
+		return 150;
+	case 2:
+		return 300;
+	case 3:
+		return 1000;
+	case 4:
+		return 1500;
 
-		case 5:		return 250;
-		case 6:		return 1000;
-		case 7:		return 1900;
+	case 5:
+		return 250;
+	case 6:
+		return 1000;
+	case 7:
+		return 1900;
 
-		case 8:		return 1700;
-		case 9:		return 2500;
-		case 10:	return 4500;
+	case 8:
+		return 1700;
+	case 9:
+		return 2500;
+	case 10:
+		return 4500;
 
-		case 11:	return 2500;
-		case 12:	return 5000;
+	case 11:
+		return 2500;
+	case 12:
+		return 5000;
 
-		case 13:	return 6000;
+	case 13:
+		return 6000;
 
-		case 14:	return 8000;
+	case 14:
+		return 8000;
 
-		case 15:	return 10000;
+	case 15:
+		return 10000;
 
-		case 16:	return 1500;
-		case 17:	return 4000;
-		case 18:	return 5000;
-		case 19:	return 8000;
+	case 16:
+		return 1500;
+	case 17:
+		return 4000;
+	case 18:
+		return 5000;
+	case 19:
+		return 8000;
 
-		default:	return 0;
+	default:
+		return 0;
 	}
 }
 int GetWeaponCost(int Num, int Ammo, int AmmoStart)
@@ -178,39 +197,59 @@ int GetWeaponReloadCost(int Num, int Ammo, int AmmoStart)
 
 const char *GetWeaponName(int Num)
 {
-	switch (Num)
-	{
-		case 1:		return "7_weapon1";
-		case 2:		return "7_weapon2";
-		case 3:		return "7_weapon3";
-		case 4:		return "7_weapon4";
+	switch (Num) {
+	case 1:
+		return "7_weapon1";
+	case 2:
+		return "7_weapon2";
+	case 3:
+		return "7_weapon3";
+	case 4:
+		return "7_weapon4";
 
-		case 5:		return "7_weapon5";
-		case 6:		return "7_weapon6";
-		case 7:		return "7_weapon7";
+	case 5:
+		return "7_weapon5";
+	case 6:
+		return "7_weapon6";
+	case 7:
+		return "7_weapon7";
 
-		case 8:		return "7_weapon8";
-		case 9:		return "7_weapon9";
-		case 10:	return "7_weapon10";
+	case 8:
+		return "7_weapon8";
+	case 9:
+		return "7_weapon9";
+	case 10:
+		return "7_weapon10";
 
-		case 11:	return "7_weapon11";
-		case 12:	return "7_weapon12";
+	case 11:
+		return "7_weapon11";
+	case 12:
+		return "7_weapon12";
 
-		case 13:	return "7_weapon13";
+	case 13:
+		return "7_weapon13";
 
-		case 14:	return "7_weapon14";
+	case 14:
+		return "7_weapon14";
 
-		case 15:	return "7_weapon15";
+	case 15:
+		return "7_weapon15";
 
-		case 16:	return "7_weapon16";
-		case 17:	return "7_weapon17";
-		case 18:	return "7_weapon18";
-		case 19:	return "7_weapon19";
+	case 16:
+		return "7_weapon16";
+	case 17:
+		return "7_weapon17";
+	case 18:
+		return "7_weapon18";
+	case 19:
+		return "7_weapon19";
 
-		default: fprintf(stderr, "Error in GetWeaponName function call, wrong Num.\n"); break;
+	default:
+		fprintf(stderr, "Error in GetWeaponName function call, wrong Num.\n");
+		break;
 	}
 
-	return 0;
+	return nullptr;
 }
 
 
@@ -219,31 +258,51 @@ const char *GetWeaponName(int Num)
 
 const char *GetWeaponIconName(int Num)
 {
-	switch (Num)
-	{
-		case 1:		return "menu/weapon1_icon.tga";
-		case 2:		return "menu/weapon2_icon.tga";
-		case 3:		return "menu/weapon3_icon.tga";
-		case 4:		return "menu/weapon4_icon.tga";
-		case 5:		return "menu/weapon5_icon.tga";
-		case 6:		return "menu/weapon6_icon.tga";
-		case 7:		return "menu/weapon7_icon.tga";
-		case 8:		return "menu/weapon8_icon.tga";
-		case 9:		return "menu/weapon9_icon.tga";
-		case 10:	return "menu/weapon10_icon.tga";
-		case 11:	return "menu/weapon11_icon.tga";
-		case 12:	return "menu/weapon12_icon.tga";
-		case 13:	return "menu/weapon13_icon.tga";
-		case 14:	return "menu/weapon14_icon.tga";
-		case 15:	return "menu/weapon15_icon.tga";
-		case 16:	return "menu/weapon16_icon.tga";
-		case 17:	return "menu/weapon17_icon.tga";
-		case 18:	return "menu/weapon18_icon.tga";
-		case 19:	return "menu/weapon19_icon.tga";
+	switch (Num) {
+	case 1:
+		return "menu/weapon1_icon.tga";
+	case 2:
+		return "menu/weapon2_icon.tga";
+	case 3:
+		return "menu/weapon3_icon.tga";
+	case 4:
+		return "menu/weapon4_icon.tga";
+	case 5:
+		return "menu/weapon5_icon.tga";
+	case 6:
+		return "menu/weapon6_icon.tga";
+	case 7:
+		return "menu/weapon7_icon.tga";
+	case 8:
+		return "menu/weapon8_icon.tga";
+	case 9:
+		return "menu/weapon9_icon.tga";
+	case 10:
+		return "menu/weapon10_icon.tga";
+	case 11:
+		return "menu/weapon11_icon.tga";
+	case 12:
+		return "menu/weapon12_icon.tga";
+	case 13:
+		return "menu/weapon13_icon.tga";
+	case 14:
+		return "menu/weapon14_icon.tga";
+	case 15:
+		return "menu/weapon15_icon.tga";
+	case 16:
+		return "menu/weapon16_icon.tga";
+	case 17:
+		return "menu/weapon17_icon.tga";
+	case 18:
+		return "menu/weapon18_icon.tga";
+	case 19:
+		return "menu/weapon19_icon.tga";
 
-		default: fprintf(stderr, "Error in GetWeaponIconName function call, wrong Num.\n"); break;
+	default:
+		fprintf(stderr, "Error in GetWeaponIconName function call, wrong Num.\n");
+		break;
 	}
-	return 0;
+	return nullptr;
 }
 
 
@@ -265,11 +324,11 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	bool WeaponAmmoOut = false;
 
 	// отображаем боекомплект
-	if (WorkshopFighterGame->Weapon[SlotNum] != 0)
-	{
+	if (WorkshopFighterGame->Weapon[SlotNum] != nullptr) {
 		int AmmoShow = (int)((56.0f*(WorkshopFighterGame->Weapon[SlotNum]->AmmoStart-WorkshopFighterGame->Weapon[SlotNum]->Ammo))/WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
 		// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
-		if (AmmoShow < 0) AmmoShow = 0;
+		if (AmmoShow < 0)
+			AmmoShow = 0;
 
 		SetRect(&SrcRect,0,AmmoShow,18,56);
 		SetRect(&DstRect,Xpos+23,Ypos+40+AmmoShow,Xpos+18+23,Ypos+56+40);
@@ -278,20 +337,14 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		else
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/ammo.tga"), true, MenuContentTransp);
 
-
-		if (WorkshopFighterGame->Weapon[SlotNum]->Ammo == 0) WeaponAmmoOut = true;
+		if (WorkshopFighterGame->Weapon[SlotNum]->Ammo == 0)
+			WeaponAmmoOut = true;
 	}
 
-
-	if (WeaponAmmoOut)
-	{
-		// запускаем голос...
-		if (vw_FindSoundByNum(VoiceAmmoOut) == 0)
-		{
-			// уже не играем, нужно запустить опять
-			VoiceAmmoOut = Audio_PlayVoice(10, 1.0f);
-		}
-	}
+	// запускаем голос...
+	if ((WeaponAmmoOut) &&
+	    (vw_FindSoundByNum(VoiceAmmoOut) == nullptr)) // уже не играем, нужно запустить опять
+		VoiceAmmoOut = Audio_PlayVoice(10, 1.0f);
 
 
 	// кнопка Setup
@@ -301,10 +354,8 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	// работаем с клавиатурой
 	if ((MenuContentTransp >= 0.99f) && !isDialogBoxDrawing() && !DragWeapon) CurrentActiveMenuElement++;
 	bool InFocusByKeyboard = false;
-	if (CurrentKeyboardSelectMenuElement > 0)
-	{
-		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement)
-		{
+	if (CurrentKeyboardSelectMenuElement > 0) {
+		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
 			InFocusByKeyboard = true;
 		}
 	}
@@ -312,57 +363,50 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	SetRect(&SrcRect,0,0,18,56);
 	SetRect(&DstRect,Xpos+23+154,Ypos+40,Xpos+18+23+154,Ypos+56+40);
 	if  ((((DstRect.right  >= MouseX) &&
-		(DstRect.left<= MouseX) &&
-		(DstRect.bottom >= MouseY) &&
-		(DstRect.top<= MouseY)) || InFocusByKeyboard) && !isDialogBoxDrawing() && !DragWeapon)
-	{
+	       (DstRect.left<= MouseX) &&
+	       (DstRect.bottom >= MouseY) &&
+	       (DstRect.top<= MouseY)) || InFocusByKeyboard) && !isDialogBoxDrawing() && !DragWeapon) {
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_button_weaponry_in.tga")), true, MenuContentTransp);
 		CurrentCursorStatus = 1;
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN))))
-		{
+		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			WeaponSetupSlot = SlotNum;
-			if (InFocusByKeyboard)
-			{
+			if (InFocusByKeyboard) {
 				vw_SetKeys(SDLK_KP_ENTER, false);
 				vw_SetKeys(SDLK_RETURN, false);
 			}
 		}
-	}
-	else
+	} else
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_button_weaponry_out.tga")), true, MenuContentTransp);
 
 
 
 	// обработка перетягивания
 	SetRect(&DstRect,X,Y,X+128,Y+64);
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing())
-	{
+	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
 
 		int Money = Setup.Profile[CurrentProfile].Money;
-		if (WorkshopFighterGame->Weapon[SlotNum] != 0)
+		if (WorkshopFighterGame->Weapon[SlotNum] != nullptr)
 			Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType,
-									WorkshopFighterGame->Weapon[SlotNum]->Ammo,
-									WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
+					       WorkshopFighterGame->Weapon[SlotNum]->Ammo,
+					       WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
 
 		// если отпустили тут
-		if (!vw_GetWindowLBMouse(false) && DragWeapon)
-		{
+		if (!vw_GetWindowLBMouse(false) && DragWeapon) {
 			// есть уровень слота соотв. уровню оружия
 			if ((WorkshopFighterGame->WeaponType[SlotNum] >= DragWeaponLevel) &&
-			// если стоимость меньше чем есть денег + стоимость оружия
-				(Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart)))
-			{
+			    // если стоимость меньше чем есть денег + стоимость оружия
+			    (Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart))) {
 				// звук устанавливаемого оружия
 				Audio_PlaySound2D(10,1.0f);
 
 				// если тут было оружие - сначало продаем его
-				if (WorkshopFighterGame->Weapon[SlotNum] != 0)
-				{
+				if (WorkshopFighterGame->Weapon[SlotNum] != nullptr) {
 					Setup.Profile[CurrentProfile].Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType,
-										WorkshopFighterGame->Weapon[SlotNum]->Ammo,
-										WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
-					delete WorkshopFighterGame->Weapon[SlotNum]; WorkshopFighterGame->Weapon[SlotNum] = 0;
+									       WorkshopFighterGame->Weapon[SlotNum]->Ammo,
+									       WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
+					delete WorkshopFighterGame->Weapon[SlotNum];
+					WorkshopFighterGame->Weapon[SlotNum] = nullptr;
 					Setup.Profile[CurrentProfile].Weapon[SlotNum] = 0;
 					Setup.Profile[CurrentProfile].WeaponAmmo[SlotNum] = 0;
 				}
@@ -373,8 +417,11 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 				// все проверки сделали до этого, можем просто вызвать функцию, там 100% будет оружие
 				SetEarthSpaceFighterWeapon(WorkshopFighterGame, SlotNum+1, DragWeaponNum);
 				// убираем источник света
-				if (WorkshopFighterGame->Weapon[SlotNum]->Fire != 0)
-				if (WorkshopFighterGame->Weapon[SlotNum]->Fire->Light != 0){vw_ReleaseLight(WorkshopFighterGame->Weapon[SlotNum]->Fire->Light); WorkshopFighterGame->Weapon[SlotNum]->Fire->Light = 0;}
+				if ((WorkshopFighterGame->Weapon[SlotNum]->Fire != nullptr) &&
+				    (WorkshopFighterGame->Weapon[SlotNum]->Fire->Light != nullptr)) {
+					vw_ReleaseLight(WorkshopFighterGame->Weapon[SlotNum]->Fire->Light);
+					WorkshopFighterGame->Weapon[SlotNum]->Fire->Light = nullptr;
+				}
 
 				Setup.Profile[CurrentProfile].Weapon[SlotNum] = DragWeaponNum;
 				Setup.Profile[CurrentProfile].WeaponAmmo[SlotNum] = DragWeaponAmmo;
@@ -385,14 +432,12 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 				WorkshopFighterGame->Weapon[SlotNum]->AmmoStart = DragWeaponAmmoStart;
 
 				// если не ракетная установка
-				if (DragWeaponNum < 16)
-				{
+				if (DragWeaponNum < 16) {
 					WorkshopFighterGame->WeaponYAngle[SlotNum] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
 					VECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
 					NeedAngle.y += WorkshopFighterGame->WeaponYAngle[SlotNum];
 					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(NeedAngle);
-				}
-				else
+				} else
 					Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] = 0.0f;
 
 				// чтобы оружие заняло свое место...
@@ -407,9 +452,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 				DragWeaponControl = 0;
 				DragWeaponAltControl = 0;
 				DragWeaponAltControlData = 0;
-			}
-			else
-			{
+			} else {
 				// особый случай - есть не соответствие, нужно проиграть звук неудачной установки
 				Audio_PlaySound2D(8, 1.0f);
 
@@ -427,9 +470,9 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 
 		// взяли оружие из слота, чтобы тащить - фактически продали его
-		if (WorkshopFighterGame->Weapon[SlotNum] != 0)
-		if (vw_GetWindowLBMouse(false) && !DragWeapon)
-		{
+		if ((WorkshopFighterGame->Weapon[SlotNum] != nullptr) &&
+		    vw_GetWindowLBMouse(false) &&
+		    !DragWeapon) {
 			// звук снятия оружия из слота
 			Audio_PlaySound2D(9, 1.0f);
 
@@ -443,9 +486,10 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 			DragWeaponAltControlData = Setup.Profile[CurrentProfile].WeaponAltControlData[SlotNum];
 
 			Setup.Profile[CurrentProfile].Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType,
-									WorkshopFighterGame->Weapon[SlotNum]->Ammo,
-									WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
-			delete WorkshopFighterGame->Weapon[SlotNum]; WorkshopFighterGame->Weapon[SlotNum] = 0;
+							       WorkshopFighterGame->Weapon[SlotNum]->Ammo,
+							       WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
+			delete WorkshopFighterGame->Weapon[SlotNum];
+			WorkshopFighterGame->Weapon[SlotNum] = nullptr;
 			Setup.Profile[CurrentProfile].Weapon[SlotNum] = 0;
 			Setup.Profile[CurrentProfile].WeaponAmmo[SlotNum] = 0;
 		}
@@ -453,7 +497,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 
 		// если не тянем и в слоте что-то есть, показываем, что можем тянуть
-		if (!DragWeapon && (WorkshopFighterGame->Weapon[SlotNum] != 0))
+		if (!DragWeapon && (WorkshopFighterGame->Weapon[SlotNum] != nullptr))
 			CurrentCursorStatus = 1;
 
 	}
@@ -470,21 +514,15 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	SetRect(&SrcRect,0,0,128,64);
 	SetRect(&DstRect,X,Y,X+128,Y+64);
 
-	if (CanOn)
-	{
-		if (!WeaponAmmoOut)
-		{
+	if (CanOn) {
+		if (!WeaponAmmoOut) {
 			bool NeedAlert = false;
 			// если есть хоть 1 слот меньшего уровня
-			for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++)
-			{
+			for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++) {
 				// если что-то тянем, смотрим по нему...
-				if (DragWeapon)
-				{
+				if (DragWeapon) {
 					if (WorkshopFighterGame->WeaponType[i] < DragWeaponLevel) NeedAlert = true;
-				}
-				else
-				{
+				} else {
 					if (WorkshopFighterGame->WeaponType[i] < WorkshopNewWeapon->WeaponLevel) NeedAlert = true;
 				}
 			}
@@ -493,11 +531,9 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0, RI_UL_CORNER, 0.0f, 1.0f, 0.0f);
 			else
 				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0, RI_UL_CORNER, 0.0f, 1.0f, 0.0f);
-		}
-		else
+		} else
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0, RI_UL_CORNER, 1.0f, 0.0f, 0.0f);
-	}
-	else
+	} else
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0, RI_UL_CORNER, 1.0f, 0.5f, 0.0f);
 
 
@@ -506,16 +542,14 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 	// прорисовка
 
-	if (WorkshopFighterGame->Weapon[SlotNum] == 0)
-	{
+	if (WorkshopFighterGame->Weapon[SlotNum] == nullptr) {
 		// пустой слот, рисуем его
 
 		SetRect(&DstRect,X,Y,X+128,Y+64);
 
 		int Size = vw_FontSize(vw_GetText("3_EMPTY"));
 		float WScale = 0;
-		if (Size > 88)
-		{
+		if (Size > 88) {
 			Size = 88;
 			WScale = -88;
 		}
@@ -523,8 +557,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 		Size = vw_FontSize("%s %i",vw_GetText("3_Level"),WorkshopFighterGame->WeaponType[SlotNum]);
 		WScale = 0;
-		if (Size > 88)
-		{
+		if (Size > 88) {
 			Size = 88;
 			WScale = -88;
 		}
@@ -563,8 +596,7 @@ void ShipSlotSetupWeapon(int Slot)
 
 
 
-	if (WorkshopFighterGame->Weapon[Slot] == 0)
-	{
+	if (WorkshopFighterGame->Weapon[Slot] == nullptr) {
 		Xpos += 74;
 		Ypos += 128;
 		// пустой слот, рисуем его
@@ -574,15 +606,12 @@ void ShipSlotSetupWeapon(int Slot)
 
 		int Size = vw_FontSize(vw_GetText("3_Empty_Weapon_Slot"));
 		float WScale = 0;
-		if (Size > 228)
-		{
+		if (Size > 228) {
 			Size = 228;
 			WScale = -228;
 		}
 		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-40, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Empty_Weapon_Slot"));
-	}
-	else
-	{
+	} else {
 		Xpos += 74+64;
 		Ypos += 33;
 		// выводим боекомплект   текущий/полный
@@ -604,8 +633,8 @@ void ShipSlotSetupWeapon(int Slot)
 		vw_DrawFont(Xpos, Ypos, -230, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("7_Weapon_Reload_Cost:"));
 		// находим стоимость перезарядки
 		int ReloadCost = GetWeaponReloadCost(WorkshopFighterGame->Weapon[Slot]->ObjectCreationType,
-			WorkshopFighterGame->Weapon[Slot]->Ammo,
-			WorkshopFighterGame->Weapon[Slot]->AmmoStart);
+						     WorkshopFighterGame->Weapon[Slot]->Ammo,
+						     WorkshopFighterGame->Weapon[Slot]->AmmoStart);
 		Xpos = (Setup.iAspectRatioWidth/2+512)-55 - 50 - vw_FontSize("%i", ReloadCost);
 		if (ReloadCost == 0)
 			vw_DrawFont(Xpos, Ypos, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", ReloadCost);
@@ -615,8 +644,7 @@ void ShipSlotSetupWeapon(int Slot)
 
 		// кнопка перезарядить оружие
 		Ypos += 40;
-		if (DrawButton200_2(Setup.iAspectRatioWidth/2+155, Ypos, vw_GetText("1_Reload"), MenuContentTransp, ReloadCost==0 || Setup.Profile[CurrentProfile].Money<ReloadCost))
-		{
+		if (DrawButton200_2(Setup.iAspectRatioWidth/2+155, Ypos, vw_GetText("1_Reload"), MenuContentTransp, ReloadCost==0 || Setup.Profile[CurrentProfile].Money<ReloadCost)) {
 			WorkshopFighterGame->Weapon[Slot]->Ammo = WorkshopFighterGame->Weapon[Slot]->AmmoStart;
 			Setup.Profile[CurrentProfile].WeaponAmmo[Slot] = WorkshopFighterGame->Weapon[Slot]->Ammo;
 			Setup.Profile[CurrentProfile].Money -= ReloadCost;
@@ -634,13 +662,13 @@ void ShipSlotSetupWeapon(int Slot)
 		vw_DrawFont(Xpos, Ypos, -300, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_Weapon_Fire_Control:"));
 		// вкл-выкл первичного управления
 		if (Setup.Profile[CurrentProfile].WeaponControl[Slot] == 1 ||
-		Setup.Profile[CurrentProfile].WeaponControl[Slot] ==3) Status1 = true;
+		    Setup.Profile[CurrentProfile].WeaponControl[Slot] ==3) Status1 = true;
 		Xpos = Setup.iAspectRatioWidth/2+55+54 + 16;
 		Ypos += 30;
 		DrawCheckBox(Xpos,Ypos, &Status1, vw_GetText("3_Primary_Attack"), MenuContentTransp);
 		// вкл-выкл вторичного управления
 		if (Setup.Profile[CurrentProfile].WeaponControl[Slot] == 2 ||
-		Setup.Profile[CurrentProfile].WeaponControl[Slot] ==3) Status2 = true;
+		    Setup.Profile[CurrentProfile].WeaponControl[Slot] ==3) Status2 = true;
 		Xpos = Setup.iAspectRatioWidth/2+55+54 + 16;
 		Ypos += 40;
 		DrawCheckBox(Xpos,Ypos, &Status2, vw_GetText("3_Secondary_Attack"), MenuContentTransp);
@@ -658,17 +686,14 @@ void ShipSlotSetupWeapon(int Slot)
 
 		const char *TextTmp = "?";
 		// установка надписи на кнопке
-		if (NeedCheck != 100)
-		{
-			if (NewWeaponControlType != 0)
-			{
+		if (NeedCheck != 100) {
+			if (NewWeaponControlType != 0) {
 				Setup.Profile[CurrentProfile].WeaponAltControl[Slot] = NewWeaponControlType;
 				Setup.Profile[CurrentProfile].WeaponAltControlData[Slot] = NewWeaponControlTypeData;
 				NewWeaponControlType = 0;
 				NewWeaponControlTypeData = 0;
 			}
-			if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] != 0)
-			{
+			if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] != 0) {
 				if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] == 1)
 					TextTmp = vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.Profile[CurrentProfile].WeaponAltControlData[Slot]);
 				if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] == 2)
@@ -676,16 +701,17 @@ void ShipSlotSetupWeapon(int Slot)
 				if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] == 3)
 					TextTmp = JoystickCodeName(Setup.Profile[CurrentProfile].WeaponAltControlData[Slot]);
 
-			}
-			else TextTmp = (char*)vw_GetText("1_Unimplemented");
+			} else TextTmp = (char*)vw_GetText("1_Unimplemented");
 		}
 
 		// собственно сама кнопка
 		float Transp = 1.0f;
 		bool Off = false;
-		if (NeedCheck == 100){Transp = But[1]; Off = true;}
-		if (DrawButton200_2(Setup.iAspectRatioWidth/2+155, Ypos, TextTmp, Transp*MenuContentTransp, Off))
-		{
+		if (NeedCheck == 100) {
+			Transp = But[1];
+			Off = true;
+		}
+		if (DrawButton200_2(Setup.iAspectRatioWidth/2+155, Ypos, TextTmp, Transp*MenuContentTransp, Off)) {
 			NeedCheck = 100;
 			for (int i=0; i<8; i++) SDL_MouseCurrentStatus[i] = false;
 			NewWeaponControlType = 0;
@@ -694,8 +720,7 @@ void ShipSlotSetupWeapon(int Slot)
 
 
 
-		if (Setup.Profile[CurrentProfile].Weapon[Slot] < 16)
-		{
+		if (Setup.Profile[CurrentProfile].Weapon[Slot] < 16) {
 
 			// выводим угол поворота ствола
 			Xpos = Setup.iAspectRatioWidth/2+55+34 + 16;
@@ -708,16 +733,12 @@ void ShipSlotSetupWeapon(int Slot)
 			GetShipWeaponSlotAngle(Setup.Profile[CurrentProfile].Ship, Slot, &Min, &Max);
 
 
-			if (Setup.Profile[CurrentProfile].TargetingSystem <= 2)
-			{
+			if (Setup.Profile[CurrentProfile].TargetingSystem <= 2) {
 				vw_DrawFont(Xpos, Ypos-15, 300, 0, 1.0f, 1.0f,0.5f,0.0f, 1.0f, vw_GetText("9_17Line1"));
 				vw_DrawFont(Xpos, Ypos+5, 300, 0, 1.0f, 1.0f,0.5f,0.0f, 1.0f, vw_GetText("9_17Line2"));
 				vw_DrawFont(Xpos, Ypos+25, 300, 0, 1.0f, 1.0f,0.5f,0.0f, 1.0f, vw_GetText("9_17Line3"));
-			}
-			else
-			{
-				if (DrawButton128_2(Setup.iAspectRatioWidth/2+118, Ypos, vw_GetText("1_Left"), MenuContentTransp, Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot] <= Min))
-				{
+			} else {
+				if (DrawButton128_2(Setup.iAspectRatioWidth/2+118, Ypos, vw_GetText("1_Left"), MenuContentTransp, Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot] <= Min)) {
 					Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot] -= 5.0f;
 					WorkshopFighterGame->WeaponYAngle[Slot] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot];
 
@@ -726,8 +747,7 @@ void ShipSlotSetupWeapon(int Slot)
 					NeedAngle.y += WorkshopFighterGame->WeaponYAngle[Slot];
 					WorkshopFighterGame->Weapon[Slot]->SetRotation(NeedAngle);
 				}
-				if (DrawButton128_2(Setup.iAspectRatioWidth/2+266, Ypos, vw_GetText("1_Right"), MenuContentTransp, Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot] >= Max))
-				{
+				if (DrawButton128_2(Setup.iAspectRatioWidth/2+266, Ypos, vw_GetText("1_Right"), MenuContentTransp, Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot] >= Max)) {
 					Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot] += 5.0f;
 					WorkshopFighterGame->WeaponYAngle[Slot] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot];
 
@@ -749,33 +769,30 @@ void ShipSlotSetupWeapon(int Slot)
 	Xpos = Setup.iAspectRatioWidth/2+55;
 	Ypos = 50-10;
 	SetRect(&DstRect,Xpos+10,Ypos+10,Xpos+404-10,Ypos+570-10);
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing())
-	{
+	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
 
 		int Money = Setup.Profile[CurrentProfile].Money;
-		if (WorkshopFighterGame->Weapon[SlotNum] != 0)
+		if (WorkshopFighterGame->Weapon[SlotNum] != nullptr)
 			Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType,
-									WorkshopFighterGame->Weapon[SlotNum]->Ammo,
-									WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
+					       WorkshopFighterGame->Weapon[SlotNum]->Ammo,
+					       WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
 
 		// если отпустили тут
-		if (!vw_GetWindowLBMouse(false) && DragWeapon)
-		{
+		if (!vw_GetWindowLBMouse(false) && DragWeapon) {
 			// есть уровень слота соотв. уровню оружия
 			if ((WorkshopFighterGame->WeaponType[SlotNum] >= DragWeaponLevel) &&
-			// если стоимость меньше чем есть денег + стоимость оружия
-				(Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart)))
-			{
+			    // если стоимость меньше чем есть денег + стоимость оружия
+			    (Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart))) {
 				// звук устанавливаемого оружия
 				Audio_PlaySound2D(10,1.0f);
 
 				// если тут было оружие - сначало продаем его
-				if (WorkshopFighterGame->Weapon[SlotNum] != 0)
-				{
+				if (WorkshopFighterGame->Weapon[SlotNum] != nullptr) {
 					Setup.Profile[CurrentProfile].Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType,
-										WorkshopFighterGame->Weapon[SlotNum]->Ammo,
-										WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
-					delete WorkshopFighterGame->Weapon[SlotNum]; WorkshopFighterGame->Weapon[SlotNum] = 0;
+									       WorkshopFighterGame->Weapon[SlotNum]->Ammo,
+									       WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
+					delete WorkshopFighterGame->Weapon[SlotNum];
+					WorkshopFighterGame->Weapon[SlotNum] = nullptr;
 					Setup.Profile[CurrentProfile].Weapon[SlotNum] = 0;
 					Setup.Profile[CurrentProfile].WeaponAmmo[SlotNum] = 0;
 				}
@@ -786,8 +803,11 @@ void ShipSlotSetupWeapon(int Slot)
 				// все проверки сделали до этого, можем просто вызвать функцию, там 100% будет оружие
 				SetEarthSpaceFighterWeapon(WorkshopFighterGame, SlotNum+1, DragWeaponNum);
 				// убираем источник света
-				if (WorkshopFighterGame->Weapon[SlotNum]->Fire != 0)
-				if (WorkshopFighterGame->Weapon[SlotNum]->Fire->Light != 0){vw_ReleaseLight(WorkshopFighterGame->Weapon[SlotNum]->Fire->Light); WorkshopFighterGame->Weapon[SlotNum]->Fire->Light = 0;}
+				if ((WorkshopFighterGame->Weapon[SlotNum]->Fire != nullptr) &&
+				    (WorkshopFighterGame->Weapon[SlotNum]->Fire->Light != nullptr)) {
+					vw_ReleaseLight(WorkshopFighterGame->Weapon[SlotNum]->Fire->Light);
+					WorkshopFighterGame->Weapon[SlotNum]->Fire->Light = nullptr;
+				}
 
 				Setup.Profile[CurrentProfile].Weapon[SlotNum] = DragWeaponNum;
 				Setup.Profile[CurrentProfile].WeaponAmmo[SlotNum] = DragWeaponAmmo;
@@ -798,14 +818,12 @@ void ShipSlotSetupWeapon(int Slot)
 				WorkshopFighterGame->Weapon[SlotNum]->AmmoStart = DragWeaponAmmoStart;
 
 				// если не ракетная установка
-				if (DragWeaponNum < 16)
-				{
+				if (DragWeaponNum < 16) {
 					WorkshopFighterGame->WeaponYAngle[SlotNum] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
 					VECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
 					NeedAngle.y += WorkshopFighterGame->WeaponYAngle[SlotNum];
 					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(NeedAngle);
-				}
-				else
+				} else
 					Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] = 0.0f;
 
 				// чтобы оружие заняло свое место...
@@ -820,9 +838,7 @@ void ShipSlotSetupWeapon(int Slot)
 				DragWeaponControl = 0;
 				DragWeaponAltControl = 0;
 				DragWeaponAltControlData = 0;
-			}
-			else
-			{
+			} else {
 				// особый случай - есть не соответствие, нужно проиграть звук неудачной установки
 				Audio_PlaySound2D(8, 1.0f);
 
@@ -845,8 +861,7 @@ void ShipSlotSetupWeapon(int Slot)
 
 
 	//кнопка закрыть
-	if (DrawButton200_2(Setup.iAspectRatioWidth/2+155, 533, vw_GetText("1_Close"), MenuContentTransp, false))
-	{
+	if (DrawButton200_2(Setup.iAspectRatioWidth/2+155, 533, vw_GetText("1_Close"), MenuContentTransp, false)) {
 		WeaponSetupSlot = -1;
 		NeedCheck = 0;
 	}
@@ -869,138 +884,136 @@ void ShipSlotSetupWeapon(int Slot)
 void DrawShipWeaponsInSlots()
 {
 	// если нужно - выводим настройку нужного оружия
-	if (WeaponSetupSlot != -1)
-	{
+	if (WeaponSetupSlot != -1) {
 		ShipSlotSetupWeapon(WeaponSetupSlot);
 		return;
 	}
 
-	switch (Setup.Profile[CurrentProfile].Ship)
-	{
-		case 1:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 130);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 330);
-			break;
-		case 2:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 130);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
-			break;
-		case 3:
-			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 130);
-			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			break;
-		case 4:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 330);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 130);
-			break;
-		case 5:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 330);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
-			break;
-		case 6:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 330);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 130);
-			break;
-		case 7:
-			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 130);
-			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 330);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
-			ShipSlotWeapon(3, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			break;
-		case 8:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 330);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
-			break;
-		case 9:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 330);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
-			break;
-		case 10:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 330);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 130);
-			break;
-		case 11:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+256)-64, 130);
-			break;
-		case 12:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+256)-64, 130);
-			break;
-		case 13:
-			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 530);
-			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 330);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
-			ShipSlotWeapon(3, Setup.iAspectRatioWidth/2+50, 130);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
-			break;
-		case 14:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 130);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 330);
-			break;
-		case 15:
-			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 130);
-			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			break;
-		case 16:
-			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 130);
-			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			break;
-		case 17:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 330);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 130);
-			break;
-		case 18:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 130);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			break;
-		case 19:
-			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 130);
-			ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			break;
-		case 20:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 130);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
-			ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			break;
-		case 21:
-			ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
-			ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
-			ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+256)-64, 130);
-			break;
-		case 22:
-			ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 330);
-			break;
+	switch (Setup.Profile[CurrentProfile].Ship) {
+	case 1:
+		ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 130);
+		ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
+		ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 330);
+		break;
+	case 2:
+		ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 130);
+		ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
+		break;
+	case 3:
+		ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 130);
+		ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		break;
+	case 4:
+		ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 330);
+		ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
+		ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 130);
+		break;
+	case 5:
+		ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 330);
+		ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
+		break;
+	case 6:
+		ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 330);
+		ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
+		ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 130);
+		break;
+	case 7:
+		ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 130);
+		ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 330);
+		ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
+		ShipSlotWeapon(3, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		break;
+	case 8:
+		ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 330);
+		ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
+		break;
+	case 9:
+		ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 330);
+		ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
+		break;
+	case 10:
+		ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 330);
+		ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
+		ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 130);
+		break;
+	case 11:
+		ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+256)-64, 130);
+		break;
+	case 12:
+		ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+256)-64, 130);
+		break;
+	case 13:
+		ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 530);
+		ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 330);
+		ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
+		ShipSlotWeapon(3, Setup.iAspectRatioWidth/2+50, 130);
+		ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
+		break;
+	case 14:
+		ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 130);
+		ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
+		ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 330);
+		break;
+	case 15:
+		ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 130);
+		ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		break;
+	case 16:
+		ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 130);
+		ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		break;
+	case 17:
+		ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 330);
+		ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 330);
+		ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		ShipSlotWeapon(4, (Setup.iAspectRatioWidth/2+256)-64, 130);
+		break;
+	case 18:
+		ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 130);
+		ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
+		ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		break;
+	case 19:
+		ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 130);
+		ShipSlotWeapon(1, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		break;
+	case 20:
+		ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 130);
+		ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 130);
+		ShipSlotWeapon(2, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(3, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		break;
+	case 21:
+		ShipSlotWeapon(0, Setup.iAspectRatioWidth/2+50, 530);
+		ShipSlotWeapon(1, (Setup.iAspectRatioWidth/2+512)-128-50, 530);
+		ShipSlotWeapon(2, (Setup.iAspectRatioWidth/2+256)-64, 130);
+		break;
+	case 22:
+		ShipSlotWeapon(0, (Setup.iAspectRatioWidth/2+256)-64, 330);
+		break;
 	}
 
 }
@@ -1066,29 +1079,27 @@ void Workshop_Weaponry()
 	// если нажали - установка и тянем
 	SetRect(&DstRect,Setup.iAspectRatioWidth/2-416,100+32,Setup.iAspectRatioWidth/2-96,450-32);
 	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing())
-	if (!DragWeapon)
-	{
-		CurrentCursorStatus = 1;
+		if (!DragWeapon) {
+			CurrentCursorStatus = 1;
 
-		if (vw_GetWindowLBMouse(false))
-		{
-			// звук взяли оружие
-			Audio_PlaySound2D(9,1.0f);
+			if (vw_GetWindowLBMouse(false)) {
+				// звук взяли оружие
+				Audio_PlaySound2D(9,1.0f);
 
-			// установка
-			DragWeapon = true;
-			DragWeaponNum = CurrentWorkshopNewWeapon;
-			DragWeaponLevel = WorkshopNewWeapon->WeaponLevel;
-			DragWeaponAmmo = WorkshopNewWeapon->Ammo;
-			DragWeaponAmmoStart = WorkshopNewWeapon->AmmoStart;
-			// второй по умолчанию только для рокет
-			if (CurrentWorkshopNewWeapon<=15) DragWeaponControl = 1;
-			else DragWeaponControl = 2;
-			DragWeaponAltControl = 0;
-			DragWeaponAltControlData = 0;
+				// установка
+				DragWeapon = true;
+				DragWeaponNum = CurrentWorkshopNewWeapon;
+				DragWeaponLevel = WorkshopNewWeapon->WeaponLevel;
+				DragWeaponAmmo = WorkshopNewWeapon->Ammo;
+				DragWeaponAmmoStart = WorkshopNewWeapon->AmmoStart;
+				// второй по умолчанию только для рокет
+				if (CurrentWorkshopNewWeapon<=15) DragWeaponControl = 1;
+				else DragWeaponControl = 2;
+				DragWeaponAltControl = 0;
+				DragWeaponAltControlData = 0;
 
+			}
 		}
-	}
 
 
 	// затемнение
@@ -1107,8 +1118,7 @@ void Workshop_Weaponry()
 
 	// вывод названия
 	vw_DrawFont(Setup.iAspectRatioWidth/2-438, 50+6, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText(GetWeaponName(CurrentWorkshopNewWeapon)));
-	if (DrawButton128_2(Setup.iAspectRatioWidth/2-197,50, vw_GetText("1_Info"), MenuContentTransp, false))
-	{
+	if (DrawButton128_2(Setup.iAspectRatioWidth/2-197,50, vw_GetText("1_Info"), MenuContentTransp, false)) {
 		SetCurrentDialogBox(7);
 		DialogWeapon = WorkshopNewWeapon;
 	}
@@ -1119,24 +1129,22 @@ void Workshop_Weaponry()
 
 
 	int k2 = 0;
-	if (GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType) > 0.0f)
-	{
+	if (GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType) > 0.0f) {
 		vw_DrawFont(Setup.iAspectRatioWidth/2-438, 130, -170, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Damage,_Hull:"));
 		if ((WorkshopNewWeapon->ObjectCreationType == 11) |
-			(WorkshopNewWeapon->ObjectCreationType == 12) |
-			(WorkshopNewWeapon->ObjectCreationType == 14))
+		    (WorkshopNewWeapon->ObjectCreationType == 12) |
+		    (WorkshopNewWeapon->ObjectCreationType == 14))
 			vw_DrawFont(Setup.iAspectRatioWidth/2-438+175, 130, -184, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("4_units/sec"));
 		else
 			vw_DrawFont(Setup.iAspectRatioWidth/2-438+175, 130, -184, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("4_units/shot"));
 
 		k2=20;
 	}
-	if (GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType) > 0.0f)
-	{
+	if (GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType) > 0.0f) {
 		vw_DrawFont(Setup.iAspectRatioWidth/2-438, 130+k2, -170, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Damage,_Systems:"));
 		if ((WorkshopNewWeapon->ObjectCreationType == 11) |
-			(WorkshopNewWeapon->ObjectCreationType == 12) |
-			(WorkshopNewWeapon->ObjectCreationType == 14))
+		    (WorkshopNewWeapon->ObjectCreationType == 12) |
+		    (WorkshopNewWeapon->ObjectCreationType == 14))
 			vw_DrawFont(Setup.iAspectRatioWidth/2-438+175, 130+k2, -184, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("4_units/sec"));
 		else
 			vw_DrawFont(Setup.iAspectRatioWidth/2-438+175, 130+k2, -184, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("4_units/shot"));
@@ -1174,10 +1182,8 @@ void Workshop_Weaponry()
 
 	// проверяем колесо мышки
 	SetRect(&DstRect,Setup.iAspectRatioWidth/2-457,100+35-11,Setup.iAspectRatioWidth/2-57,450-13);
-	if (vw_OnRect(&DstRect))
-	{
-		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing())
-		{
+	if (vw_OnRect(&DstRect)) {
+		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing()) {
 			CurrentWorkshopNewWeapon += vw_GetWheelStatus();
 
 			if (CurrentWorkshopNewWeapon < 1) CurrentWorkshopNewWeapon = 19;
@@ -1186,34 +1192,28 @@ void Workshop_Weaponry()
 
 			vw_ResetWheelStatus();
 		}
-	}
-	else if (vw_GetWheelStatus() != 0)
-	{
+	} else if (vw_GetWheelStatus() != 0) {
 		vw_ResetWheelStatus();
 	}
 
 
-	if (DrawButton128_2(Setup.iAspectRatioWidth/2-395,482, vw_GetText("1_Prev"), MenuContentTransp, false))
-	{
+	if (DrawButton128_2(Setup.iAspectRatioWidth/2-395,482, vw_GetText("1_Prev"), MenuContentTransp, false)) {
 		CurrentWorkshopNewWeapon --;
 		if (CurrentWorkshopNewWeapon < 1) CurrentWorkshopNewWeapon = 19;
 		WorkshopCreateNewWeapon();
 	}
-	if (DrawButton128_2(Setup.iAspectRatioWidth/2-247,482, vw_GetText("1_Next"), MenuContentTransp, false))
-	{
+	if (DrawButton128_2(Setup.iAspectRatioWidth/2-247,482, vw_GetText("1_Next"), MenuContentTransp, false)) {
 		CurrentWorkshopNewWeapon ++;
 		if (CurrentWorkshopNewWeapon > 19) CurrentWorkshopNewWeapon = 1;
 		WorkshopCreateNewWeapon();
 	}
 
 
-	if (DrawButton128_2(Setup.iAspectRatioWidth/2-395,533, vw_GetText(GetWeaponGroupTitle(PrevWeaponGroup())), MenuContentTransp, false))
-	{
+	if (DrawButton128_2(Setup.iAspectRatioWidth/2-395,533, vw_GetText(GetWeaponGroupTitle(PrevWeaponGroup())), MenuContentTransp, false)) {
 		CurrentWorkshopNewWeapon = PrevWeaponGroup();
 		WorkshopCreateNewWeapon();
 	}
-	if (DrawButton128_2(Setup.iAspectRatioWidth/2-247,533, vw_GetText(GetWeaponGroupTitle(NextWeaponGroup())), MenuContentTransp, false))
-	{
+	if (DrawButton128_2(Setup.iAspectRatioWidth/2-247,533, vw_GetText(GetWeaponGroupTitle(NextWeaponGroup())), MenuContentTransp, false)) {
 		CurrentWorkshopNewWeapon = NextWeaponGroup();
 		WorkshopCreateNewWeapon();
 	}
@@ -1228,27 +1228,24 @@ void Workshop_Weaponry()
 
 
 	// кнопка "перезарядить все" оружие
-	if (WeaponSetupSlot == -1)
-	{
+	if (WeaponSetupSlot == -1) {
 		int ReloadCost = 0;
 		// находим стоимость перезарядки
-		for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++)
-		if (WorkshopFighterGame->Weapon[i] != 0)
-		{
-			ReloadCost += GetWeaponReloadCost(WorkshopFighterGame->Weapon[i]->ObjectCreationType,
-												WorkshopFighterGame->Weapon[i]->Ammo,
-												WorkshopFighterGame->Weapon[i]->AmmoStart);
+		for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++) {
+			if (WorkshopFighterGame->Weapon[i] != nullptr)
+				ReloadCost += GetWeaponReloadCost(WorkshopFighterGame->Weapon[i]->ObjectCreationType,
+								  WorkshopFighterGame->Weapon[i]->Ammo,
+								  WorkshopFighterGame->Weapon[i]->AmmoStart);
 		}
 		char ButtonName[1024];
 		sprintf(ButtonName, "%s: %i", vw_GetText("1_Reload_All"), ReloadCost);
 
-		if (DrawButton200_2(Setup.iAspectRatioWidth/2+153, 50, ButtonName, MenuContentTransp, ReloadCost==0 || Setup.Profile[CurrentProfile].Money<ReloadCost))
-		{
-			for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++)
-			if (WorkshopFighterGame->Weapon[i] != 0)
-			{
-				WorkshopFighterGame->Weapon[i]->Ammo = WorkshopFighterGame->Weapon[i]->AmmoStart;
-				Setup.Profile[CurrentProfile].WeaponAmmo[i] = WorkshopFighterGame->Weapon[i]->Ammo;
+		if (DrawButton200_2(Setup.iAspectRatioWidth/2+153, 50, ButtonName, MenuContentTransp, ReloadCost==0 || Setup.Profile[CurrentProfile].Money<ReloadCost)) {
+			for (int i = 0; i < WorkshopFighterGame->WeaponQuantity; i++) {
+				if (WorkshopFighterGame->Weapon[i] != nullptr) {
+					WorkshopFighterGame->Weapon[i]->Ammo = WorkshopFighterGame->Weapon[i]->AmmoStart;
+					Setup.Profile[CurrentProfile].WeaponAmmo[i] = WorkshopFighterGame->Weapon[i]->Ammo;
+				}
 			}
 			Setup.Profile[CurrentProfile].Money -= ReloadCost;
 		}
@@ -1273,8 +1270,7 @@ void Workshop_Weaponry()
 
 
 	// проверяем состояние, если тянули и отжали, и сюда пришли - значит никто не перехватил, нужно сделать сброс
-	if (!vw_GetWindowLBMouse(false) && DragWeapon)
-	{
+	if (!vw_GetWindowLBMouse(false) && DragWeapon) {
 		// звук пропадающего оружия
 		Audio_PlaySound2D(11,1.0f);
 

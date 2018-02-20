@@ -33,39 +33,41 @@
 // название типа оружия землян
 const char *GetWeaponGroupTitle(int Num)
 {
-	switch (Num)
-	{
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-			return "4_Kinetic";
-		case 5:
-		case 6:
-		case 7:
-			return "4_Ion";
-		case 8:
-		case 9:
-		case 10:
-			return "4_Plasma";
-		case 11:
-		case 12:
-			return "4_Maser";
-		case 13:	return "4_Antimatter";
-		case 14:	return "4_Laser";
-		case 15:	return "4_Gauss";
+	switch (Num) {
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+		return "4_Kinetic";
+	case 5:
+	case 6:
+	case 7:
+		return "4_Ion";
+	case 8:
+	case 9:
+	case 10:
+		return "4_Plasma";
+	case 11:
+	case 12:
+		return "4_Maser";
+	case 13:
+		return "4_Antimatter";
+	case 14:
+		return "4_Laser";
+	case 15:
+		return "4_Gauss";
 
-		case 16:
-		case 17:
-		case 18:
-		case 19:
-			return "4_Propelled";
+	case 16:
+	case 17:
+	case 18:
+	case 19:
+		return "4_Propelled";
 
-		default:
-			fprintf(stderr, "Error in GetWeaponGroupTitle function call, wrong Num.\n");
-			break;
+	default:
+		fprintf(stderr, "Error in GetWeaponGroupTitle function call, wrong Num.\n");
+		break;
 	}
-	return 0;
+	return nullptr;
 }
 
 
@@ -75,8 +77,7 @@ const char *GetWeaponGroupTitle(int Num)
 
 
 
-struct WeaponData
-{
+struct WeaponData {
 	int		SoundNum;
 	bool	NeedRotateOnTargeting;
 	float	Strength;
@@ -94,8 +95,7 @@ struct WeaponData
 
 
 // оружие землян 1-99
-static WeaponData PresetEarthWeaponData[] =
-{
+static WeaponData PresetEarthWeaponData[] = {
 	// Kinetic
 	{9,  true, 25,	1,	1.5f,	3000,	0.4f, 4, VECTOR3D(0.0f, -0.613f, 2.0f), VECTOR3D(0.0f, -0.65f, 1.0f), "models/earthfighter/weapons.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
 	{10, true, 25,	1,	3,		1500,	0.6f, 10, VECTOR3D(0.0f, -0.613f, 2.93f), VECTOR3D(0.0f, -0.6f, 1.8f), "models/earthfighter/weapons.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
@@ -130,8 +130,7 @@ static WeaponData PresetEarthWeaponData[] =
 
 
 // оружие пришельцев 101-199
-static WeaponData PresetAlienWeaponData[] =
-{
+static WeaponData PresetAlienWeaponData[] = {
 	// оружие пришельцев (как Kinetic1)
 	{14, true, 1.0f,	1,	1,	5000,	0.7f, 0, VECTOR3D(0.0f, 0.0f, 0.0f), VECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// оружие пришельцев (с наведением, как Kinetic2)
@@ -163,8 +162,7 @@ static WeaponData PresetAlienWeaponData[] =
 
 
 // оружие пиратов 201-299
-static WeaponData PresetPirateWeaponData[] =
-{
+static WeaponData PresetPirateWeaponData[] = {
 	// турель для кораблей пиратов
 	{9, false, 10,		1,	1,	3000,	0.7f, 4, VECTOR3D(0.0f, 1.5f, 1.0f), VECTOR3D(0.0f, 1.5f, 1.0f), "models/turret/turret-01.vw3d", "models/turret/turrets.tga", ""},
 	// турель для кораблей пиратов
@@ -259,16 +257,16 @@ CWeapon::CWeapon(void)
 
 	NeedRotateOnTargeting = true;
 
-	LaserMaser = 0;
+	LaserMaser = nullptr;
 	LaserMaserSoundNum = 0;
 
 	SwampNum = 0;
 
 	SoundNum = 0;
-	Fire = 0;
+	Fire = nullptr;
 	FireLocation.Set(0.0f, 0.0f, 0.0f);
-	DestroyedFire = 0;
-	DestroyedSmoke = 0;
+	DestroyedFire = nullptr;
+	DestroyedSmoke = nullptr;
 	DestroyedFireLocation.Set(0.0f, 0.0f, 0.0f);
 
 	WeaponTurret = false;
@@ -282,7 +280,7 @@ CWeapon::CWeapon(void)
 	TargetVertObjectNeedAngle = 0.0f;
 
 
-	Next = Prev = 0;
+	Next = Prev = nullptr;
 	AttachWeapon(this);
 }
 
@@ -293,26 +291,16 @@ CWeapon::CWeapon(void)
 //-----------------------------------------------------------------------------
 void CWeapon::Create(int WeaponNum)
 {
-	if (WeaponNum <= 0)
-	{
+	if (WeaponNum <= 0) {
 		fprintf(stderr, "!!! Couldn't init CWeapon object with Number %i.\n", WeaponNum);
 		return;
-	}
-	else
-	if ((WeaponNum >= 1 && WeaponNum <= 99) && ((unsigned int)WeaponNum > PresetEarthWeaponDataCount))
-	{
+	} else if ((WeaponNum >= 1 && WeaponNum <= 99) && ((unsigned int)WeaponNum > PresetEarthWeaponDataCount)) {
 		fprintf(stderr, "!!! Couldn't init CWeapon(1) object with Number %i.\n", WeaponNum);
 		return;
-	}
-	else
-	if ((WeaponNum >= 101 && WeaponNum <= 199) && ((unsigned int)WeaponNum-100 > PresetAlienWeaponDataCount))
-	{
+	} else if ((WeaponNum >= 101 && WeaponNum <= 199) && ((unsigned int)WeaponNum-100 > PresetAlienWeaponDataCount)) {
 		fprintf(stderr, "!!! Couldn't init CWeapon(2) object with Number %i.\n", WeaponNum);
 		return;
-	}
-	else
-	if ((WeaponNum >= 201 && WeaponNum <= 299) && ((unsigned int)WeaponNum-200 > PresetPirateWeaponDataCount))
-	{
+	} else if ((WeaponNum >= 201 && WeaponNum <= 299) && ((unsigned int)WeaponNum-200 > PresetPirateWeaponDataCount)) {
 		fprintf(stderr, "!!! Couldn't init CWeapon(3) object with Number %i.\n", WeaponNum);
 		return;
 	}
@@ -323,8 +311,7 @@ void CWeapon::Create(int WeaponNum)
 
 
 	// 1-99 - это оружие землян
-	if (WeaponNum >= 1 && WeaponNum <= 99)
-	{
+	if (WeaponNum >= 1 && WeaponNum <= 99) {
 		// союзник
 		ObjectStatus = 2;
 
@@ -346,8 +333,7 @@ void CWeapon::Create(int WeaponNum)
 
 		LoadObjectData(PresetEarthWeaponData[WeaponNum-1].NameVW3D, this, PresetEarthWeaponData[WeaponNum-1].ObjectNum+1, 2.0f);
 
-		for (int i=0; i<DrawObjectQuantity; i++)
-		{
+		for (int i=0; i<DrawObjectQuantity; i++) {
 			Texture[i] = vw_FindTextureByName(PresetEarthWeaponData[WeaponNum-1].TextureName);
 			if (WeaponNum < 16)
 				TextureIllum[i] = vw_FindTextureByName(PresetEarthWeaponData[WeaponNum-1].TextureIllumName);
@@ -358,9 +344,7 @@ void CWeapon::Create(int WeaponNum)
 
 	}
 	// 101-199 - это оружие пришельцев
-	else
-	if (WeaponNum >= 101 && WeaponNum <= 199)
-	{
+	else if (WeaponNum >= 101 && WeaponNum <= 199) {
 		// внутренний номер
 		int IntWeaponNum = WeaponNum - 100;
 
@@ -379,9 +363,7 @@ void CWeapon::Create(int WeaponNum)
 
 	}
 	// 201-299 - это оружие пиратов
-	else
-	if (WeaponNum >= 201 && WeaponNum <= 299)
-	{
+	else if (WeaponNum >= 201 && WeaponNum <= 299) {
 		// внутренний номер
 		int IntWeaponNum = WeaponNum - 200;
 
@@ -399,82 +381,65 @@ void CWeapon::Create(int WeaponNum)
 		FireLocation = PresetPirateWeaponData[IntWeaponNum-1].FireLocation;
 
 		// турели пиратов
-		switch (WeaponNum)
-		{
-			case 201:
-				{
-					WeaponTurret = true;
-					TargetHorizObject = 0;
-					TargetVertObject = 1;
-					TargetVertObjectMaxAngle = 89.0f;
-					TargetVertObjectMinAngle = 0.0f;
+		switch (WeaponNum) {
+		case 201: {
+			WeaponTurret = true;
+			TargetHorizObject = 0;
+			TargetVertObject = 1;
+			TargetVertObjectMaxAngle = 89.0f;
+			TargetVertObjectMinAngle = 0.0f;
 
-					LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this, 0, 2.0f);
-					for (int i=0; i<DrawObjectQuantity; i++)
-					{
-						Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
-						TextureIllum[i] = 0;
-					}
+			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this, 0, 2.0f);
+			for (int i=0; i<DrawObjectQuantity; i++) {
+				Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
+				TextureIllum[i] = nullptr;
+			}
 
-					// находим все данные по геометрии
-					::CObject3D::InitByDrawObjectList();
-				}
-				break;
+			// находим все данные по геометрии
+			::CObject3D::InitByDrawObjectList();
+		}
+		break;
 
 
-			case 202:
-				{
-					WeaponTurret = true;
-					TargetHorizObject = 0;
-					TargetVertObject = 1;
-					TargetVertObjectMaxAngle = 89.0f;
-					TargetVertObjectMinAngle = 20.0f;
+		case 202: {
+			WeaponTurret = true;
+			TargetHorizObject = 0;
+			TargetVertObject = 1;
+			TargetVertObjectMaxAngle = 89.0f;
+			TargetVertObjectMinAngle = 20.0f;
 
-					LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this, 0, 2.0f);
-					for (int i=0; i<DrawObjectQuantity; i++)
-					{
-						Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
-						TextureIllum[i] = 0;
-					}
+			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this, 0, 2.0f);
+			for (int i=0; i<DrawObjectQuantity; i++) {
+				Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
+				TextureIllum[i] = nullptr;
+			}
 
-					// находим все данные по геометрии
-					::CObject3D::InitByDrawObjectList();
-				}
-				break;
+			// находим все данные по геометрии
+			::CObject3D::InitByDrawObjectList();
+		}
+		break;
 		}
 
-		if (WeaponNum == 201 || WeaponNum == 202)
-		{
+		if (WeaponNum == 201 || WeaponNum == 202) {
 			// вычисляем данные для нахождения точки стрельбы
-			if (TargetHorizObject != -1)
-			{
+			if (TargetHorizObject != -1) {
 				BaseBound = DrawObjectList[TargetHorizObject].Location;
 			}
 
-			if (TargetVertObject != -1)
-			{
-				if (TargetHorizObject != -1)
-				{
+			if (TargetVertObject != -1) {
+				if (TargetHorizObject != -1) {
 					MiddleBound = DrawObjectList[TargetVertObject].Location - DrawObjectList[TargetHorizObject].Location;
-				}
-				else
-				{
+				} else {
 					MiddleBound = DrawObjectList[TargetVertObject].Location;
 				}
 			}
 
 
-			if (TargetVertObject != -1)
-			{
+			if (TargetVertObject != -1) {
 				WeaponBound = FireLocation - DrawObjectList[TargetVertObject].Location;
-			}
-			else
-			if (TargetHorizObject != -1)
-			{
+			} else if (TargetHorizObject != -1) {
 				WeaponBound = FireLocation - DrawObjectList[TargetHorizObject].Location;
-			}
-			else
-			{
+			} else {
 				WeaponBound = FireLocation;
 			}
 
@@ -501,30 +466,27 @@ void CWeapon::Create(int WeaponNum)
 //-----------------------------------------------------------------------------
 CWeapon::~CWeapon(void)
 {
-	if (Fire != 0)
-	{
+	if (Fire != nullptr) {
 		Fire->IsSuppressed = true;
 		Fire->DestroyIfNoParticles = true;
-		Fire = 0;
+		Fire = nullptr;
 	}
-	if (DestroyedFire != 0)
-	{
+	if (DestroyedFire != nullptr) {
 		DestroyedFire->IsSuppressed = true;
 		DestroyedFire->DestroyIfNoParticles = true;
-		DestroyedFire = 0;
+		DestroyedFire = nullptr;
 	}
-	if (DestroyedSmoke != 0)
-	{
+	if (DestroyedSmoke != nullptr) {
 		DestroyedSmoke->IsSuppressed = true;
 		DestroyedSmoke->DestroyIfNoParticles = true;
-		DestroyedSmoke = 0;
+		DestroyedSmoke = nullptr;
 	}
 	// если лучевое оружие
-	if (LaserMaser != 0)
-	{
-		delete LaserMaser; LaserMaser = 0;
+	if (LaserMaser != nullptr) {
+		delete LaserMaser;
+		LaserMaser = nullptr;
 		// убираем звук выстрела
-		if (vw_FindSoundByNum(LaserMaserSoundNum) != 0)
+		if (vw_FindSoundByNum(LaserMaserSoundNum) != nullptr)
 			vw_FindSoundByNum(LaserMaserSoundNum)->Stop(0.15f);
 	}
 
@@ -546,31 +508,27 @@ bool CWeapon::Update(float Time)
 {
 
 	// если лучевое оружие
-	if (LaserMaser != 0)
-	{
-		if (LaserMaser->Lifetime <= 0.0f)
-		{
-			delete LaserMaser; LaserMaser = 0;
+	if (LaserMaser != nullptr) {
+		if (LaserMaser->Lifetime <= 0.0f) {
+			delete LaserMaser;
+			LaserMaser = nullptr;
 		}
 	}
 
 
 	// вызываем родительскую функцию
 	// если там передали удалить - выходим
-	if (!::CObject3D::Update(Time))
-	{
+	if (!::CObject3D::Update(Time)) {
 		return false;
 	}
 
 
 
 	// если запущено - выключаем прорисовку эффекта выстрела (вспышка возле ствола)
-	if (Fire != 0)
-	if (!Fire->IsSuppressed)
-	if (LastFireTime + TimeDelta <= Time)
-	{
+	if ((Fire != nullptr) &&
+	    !Fire->IsSuppressed &&
+	    (LastFireTime + TimeDelta <= Time))
 		Fire->IsSuppressed = true;
-	}
 
 
 
@@ -578,10 +536,10 @@ bool CWeapon::Update(float Time)
 
 	// для землян, создание эффекта повреждения оружия
 	// если оружие только повредили...
-	if (ObjectCreationType >= 1 && ObjectCreationType <= 99)
-	if (Strength < StrengthStart)
-	if (DestroyedFire == 0)
-	{
+	if ((ObjectCreationType >= 1) &&
+	    (ObjectCreationType <= 99) &&
+	    (Strength < StrengthStart) &&
+	    (DestroyedFire == nullptr)) {
 		// горение
 		DestroyedFire = new eParticleSystem;
 		DestroyedFire->ColorStart.r = 1.00f;
@@ -608,17 +566,12 @@ bool CWeapon::Update(float Time)
 
 		// небольшая поправка для ракетных систем
 
-		if (ObjectCreationType == 16 || ObjectCreationType == 17)
-		{
+		if (ObjectCreationType == 16 || ObjectCreationType == 17) {
 			DestroyedFire->DeadZone = Width/2.0f - 0.1f;
-		}
-		if (ObjectCreationType == 18)
-		{
+		} else if (ObjectCreationType == 18) {
 			DestroyedFire->CreationSize = VECTOR3D(Width/3.5f,Width/3.5f,0.1f);
 			DestroyedFire->DeadZone = Width/3.5f - 0.1f;
-		}
-		if (ObjectCreationType == 19)
-		{
+		} else if (ObjectCreationType == 19) {
 			DestroyedFire->CreationSize = VECTOR3D(Width/3.0f,Width/3.0f,0.1f);
 			DestroyedFire->DeadZone = Width/3.0f - 0.1f;
 		}
@@ -627,10 +580,10 @@ bool CWeapon::Update(float Time)
 
 	// для землян, создание эффекта уничтоженного оружия
 	// проверяем тут был ли выход из строя
-	if (ObjectCreationType >= 1 && ObjectCreationType <= 99)
-	if (Strength <= 0.0f)
-	if (DestroyedSmoke == 0)
-	{
+	if ((ObjectCreationType >= 1) &&
+	    (ObjectCreationType <= 99) &&
+	    (Strength <= 0.0f) &&
+	    (DestroyedSmoke == nullptr)) {
 		// дым
 		DestroyedSmoke = new eParticleSystem;
 		DestroyedSmoke->ColorStart.r = 1.00f;
@@ -664,69 +617,82 @@ bool CWeapon::Update(float Time)
 
 	// если это swamp - запуск других ракет
 	if (ObjectCreationType == 17 && SwampNum > 0)
-	if (LastFireTime + 0.15f < Time)
-	if (Ammo > 0 || GameLimitedAmmo != 1)
-	{
-		LastFireTime = Time;
+		if (LastFireTime + 0.15f < Time)
+			if (Ammo > 0 || GameLimitedAmmo != 1) {
+				LastFireTime = Time;
 
-		// ум. кол-во боеприпасов, если нужно
-		if (GameLimitedAmmo == 0)	Ammo -= 1;
+				// ум. кол-во боеприпасов, если нужно
+				if (GameLimitedAmmo == 0)	Ammo -= 1;
 
-		// общий - пенальти, если не игрок
-		float CurrentPenalty = GameNPCWeaponPenalty*1.0f;
-		// если игрок - ничего не надо...
-		if (ObjectStatus >= 2) CurrentPenalty = 1.0f;
+				// общий - пенальти, если не игрок
+				float CurrentPenalty = GameNPCWeaponPenalty*1.0f;
+				// если игрок - ничего не надо...
+				if (ObjectStatus >= 2) CurrentPenalty = 1.0f;
 
-		switch (SwampNum)
-		{
-			case 9: FireLocation = VECTOR3D(-0.5f, -0.5f, 2.6f); break;
-			case 8: FireLocation = VECTOR3D(0.5f, -0.8f, 2.6f); break;
-			case 7: FireLocation = VECTOR3D(-0.5f, -0.8f, 2.6f); break;
-			case 6: FireLocation = VECTOR3D(0.5f, -0.5f, 2.6f); break;
-			case 5: FireLocation = VECTOR3D(-0.2f, -0.95f, 2.6f); break;
-			case 4: FireLocation = VECTOR3D(0.2f, -0.65f, 2.6f); break;
-			case 3: FireLocation = VECTOR3D(-0.2f, -0.3f, 2.6f); break;
-			case 2: FireLocation = VECTOR3D(0.2f, -0.65f, 2.6f); break;
-			case 1: FireLocation = VECTOR3D(0.2f, -0.3f, 2.6f); break;
-		}
-		Matrix33CalcPoint(&FireLocation, CurrentRotationMat);
+				switch (SwampNum) {
+				case 9:
+					FireLocation = VECTOR3D(-0.5f, -0.5f, 2.6f);
+					break;
+				case 8:
+					FireLocation = VECTOR3D(0.5f, -0.8f, 2.6f);
+					break;
+				case 7:
+					FireLocation = VECTOR3D(-0.5f, -0.8f, 2.6f);
+					break;
+				case 6:
+					FireLocation = VECTOR3D(0.5f, -0.5f, 2.6f);
+					break;
+				case 5:
+					FireLocation = VECTOR3D(-0.2f, -0.95f, 2.6f);
+					break;
+				case 4:
+					FireLocation = VECTOR3D(0.2f, -0.65f, 2.6f);
+					break;
+				case 3:
+					FireLocation = VECTOR3D(-0.2f, -0.3f, 2.6f);
+					break;
+				case 2:
+					FireLocation = VECTOR3D(0.2f, -0.65f, 2.6f);
+					break;
+				case 1:
+					FireLocation = VECTOR3D(0.2f, -0.3f, 2.6f);
+					break;
+				}
+				Matrix33CalcPoint(&FireLocation, CurrentRotationMat);
 
-		// создаем снаряд
-		CProjectile *Projectile  = 0;
-		Projectile  = new CProjectile;
-		Projectile->Create(ObjectCreationType);
-		Projectile->SetLocation(Location+FireLocation);
-		Projectile->SetRotation(Rotation);
-		for (int i=0; i<Projectile->GraphicFXQuantity; i++)
-		{
-			Projectile->GraphicFX[i]->Direction = Fire->Direction^-1;
-			// учитываем пенальти для визуальных эффектов
-			if (CurrentPenalty == 2)
-				Projectile->GraphicFX[i]->ParticlesPerSec -= (int)(Projectile->GraphicFX[i]->ParticlesPerSec*0.33f);
-			if (CurrentPenalty == 3)
-				Projectile->GraphicFX[i]->ParticlesPerSec -= (int)(Projectile->GraphicFX[i]->ParticlesPerSec*0.5f);
-			Projectile->GraphicFX[i]->Speed = Projectile->GraphicFX[i]->Speed/CurrentPenalty;
-			Projectile->GraphicFX[i]->Life = Projectile->GraphicFX[i]->Life*CurrentPenalty;
-			Projectile->GraphicFX[i]->AttractiveValue = Projectile->GraphicFX[i]->AttractiveValue/(CurrentPenalty*CurrentPenalty);
-		}
-		Projectile->ObjectStatus = ObjectStatus;
-		// учитываем пенальти для снаряда
-		Projectile->SpeedStart = Projectile->SpeedEnd = Projectile->SpeedStart/CurrentPenalty;
-		Projectile->Age = Projectile->Lifetime = Projectile->Age*CurrentPenalty;
-		Projectile->DamageHull = Projectile->DamageHull/CurrentPenalty;
-		Projectile->DamageSystems = Projectile->DamageSystems/CurrentPenalty;
+				// создаем снаряд
+				CProjectile *Projectile = new CProjectile;
+				Projectile->Create(ObjectCreationType);
+				Projectile->SetLocation(Location+FireLocation);
+				Projectile->SetRotation(Rotation);
+				for (int i = 0; i < Projectile->GraphicFXQuantity; i++) {
+					Projectile->GraphicFX[i]->Direction = Fire->Direction^-1;
+					// учитываем пенальти для визуальных эффектов
+					if (CurrentPenalty == 2)
+						Projectile->GraphicFX[i]->ParticlesPerSec -= (int)(Projectile->GraphicFX[i]->ParticlesPerSec*0.33f);
+					if (CurrentPenalty == 3)
+						Projectile->GraphicFX[i]->ParticlesPerSec -= (int)(Projectile->GraphicFX[i]->ParticlesPerSec*0.5f);
+					Projectile->GraphicFX[i]->Speed = Projectile->GraphicFX[i]->Speed/CurrentPenalty;
+					Projectile->GraphicFX[i]->Life = Projectile->GraphicFX[i]->Life*CurrentPenalty;
+					Projectile->GraphicFX[i]->AttractiveValue = Projectile->GraphicFX[i]->AttractiveValue/(CurrentPenalty*CurrentPenalty);
+				}
+				Projectile->ObjectStatus = ObjectStatus;
+				// учитываем пенальти для снаряда
+				Projectile->SpeedStart = Projectile->SpeedEnd = Projectile->SpeedStart/CurrentPenalty;
+				Projectile->Age = Projectile->Lifetime = Projectile->Age*CurrentPenalty;
+				Projectile->DamageHull = Projectile->DamageHull/CurrentPenalty;
+				Projectile->DamageSystems = Projectile->DamageSystems/CurrentPenalty;
 
 
-		// звук...
-		if (SoundNum != 0)
-		{
-			float fVol = 1.0f;
-			Audio_PlaySound3D(SoundNum, fVol, Projectile->Location, false);
-		}
+				// звук...
+				if (SoundNum != 0) {
+					float fVol = 1.0f;
+					Audio_PlaySound3D(SoundNum, fVol, Projectile->Location, false);
+				}
 
 
-		SwampNum--;
-	}
+				SwampNum--;
+			}
 
 
 
@@ -735,54 +701,50 @@ bool CWeapon::Update(float Time)
 	// если это фларес - выпускаем остальные
 	// SwampNum в этом случае используем с другой целью
 	if (ObjectCreationType == 203 && SwampNum > 0)
-	if (LastFireTime + 0.4f < Time)
-	if (Ammo > 0 || GameLimitedAmmo != 1)
-	{
-		LastFireTime = Time;
+		if (LastFireTime + 0.4f < Time)
+			if (Ammo > 0 || GameLimitedAmmo != 1) {
+				LastFireTime = Time;
 
-		// ум. кол-во боеприпасов, если нужно
-		if (GameLimitedAmmo == 0)	Ammo -= 1;
+				// ум. кол-во боеприпасов, если нужно
+				if (GameLimitedAmmo == 0)	Ammo -= 1;
 
-		// общий - пенальти, если не игрок
-		float CurrentPenalty = 1.0f;
-
-
-		// создаем снаряд
-		CProjectile *Projectile  = 0;
-		Projectile  = new CProjectile;
-		Projectile->Create(ObjectCreationType);
-		Projectile->SetLocation(Location+FireLocation);
-		Projectile->SetRotation(Rotation+VECTOR3D(vw_Randf0*30.0f,0.0f,vw_Randf0*30.0f));
-
-		for (int i=0; i<Projectile->GraphicFXQuantity; i++)
-		{
-			Projectile->GraphicFX[i]->Direction = Orientation^-1;
-			// учитываем пенальти для визуальных эффектов
-			if (CurrentPenalty == 2)
-				Projectile->GraphicFX[i]->ParticlesPerSec -= (int)(Projectile->GraphicFX[i]->ParticlesPerSec*0.33f);
-			if (CurrentPenalty == 3)
-				Projectile->GraphicFX[i]->ParticlesPerSec -= (int)(Projectile->GraphicFX[i]->ParticlesPerSec*0.5f);
-			Projectile->GraphicFX[i]->Speed = Projectile->GraphicFX[i]->Speed/CurrentPenalty;
-			Projectile->GraphicFX[i]->Life = Projectile->GraphicFX[i]->Life*CurrentPenalty;
-			Projectile->GraphicFX[i]->AttractiveValue = Projectile->GraphicFX[i]->AttractiveValue/(CurrentPenalty*CurrentPenalty);
-		}
-		Projectile->ObjectStatus = ObjectStatus;
-		// учитываем пенальти для снаряда
-		Projectile->SpeedStart = Projectile->SpeedEnd = Projectile->SpeedStart/CurrentPenalty;
-		Projectile->Age = Projectile->Lifetime = Projectile->Age*CurrentPenalty;
-		Projectile->DamageHull = Projectile->DamageHull/CurrentPenalty;
-		Projectile->DamageSystems = Projectile->DamageSystems/CurrentPenalty;
+				// общий - пенальти, если не игрок
+				float CurrentPenalty = 1.0f;
 
 
-		// звук...
-		if (SoundNum != 0)
-		{
-			float fVol = 1.0f;
-			Audio_PlaySound3D(SoundNum, fVol, Projectile->Location, false);
-		}
+				// создаем снаряд
+				CProjectile *Projectile = new CProjectile;
+				Projectile->Create(ObjectCreationType);
+				Projectile->SetLocation(Location+FireLocation);
+				Projectile->SetRotation(Rotation+VECTOR3D(vw_Randf0*30.0f,0.0f,vw_Randf0*30.0f));
 
-		SwampNum--;
-	}
+				for (int i = 0; i < Projectile->GraphicFXQuantity; i++) {
+					Projectile->GraphicFX[i]->Direction = Orientation^-1;
+					// учитываем пенальти для визуальных эффектов
+					if (CurrentPenalty == 2)
+						Projectile->GraphicFX[i]->ParticlesPerSec -= (int)(Projectile->GraphicFX[i]->ParticlesPerSec*0.33f);
+					if (CurrentPenalty == 3)
+						Projectile->GraphicFX[i]->ParticlesPerSec -= (int)(Projectile->GraphicFX[i]->ParticlesPerSec*0.5f);
+					Projectile->GraphicFX[i]->Speed = Projectile->GraphicFX[i]->Speed/CurrentPenalty;
+					Projectile->GraphicFX[i]->Life = Projectile->GraphicFX[i]->Life*CurrentPenalty;
+					Projectile->GraphicFX[i]->AttractiveValue = Projectile->GraphicFX[i]->AttractiveValue/(CurrentPenalty*CurrentPenalty);
+				}
+				Projectile->ObjectStatus = ObjectStatus;
+				// учитываем пенальти для снаряда
+				Projectile->SpeedStart = Projectile->SpeedEnd = Projectile->SpeedStart/CurrentPenalty;
+				Projectile->Age = Projectile->Lifetime = Projectile->Age*CurrentPenalty;
+				Projectile->DamageHull = Projectile->DamageHull/CurrentPenalty;
+				Projectile->DamageSystems = Projectile->DamageSystems/CurrentPenalty;
+
+
+				// звук...
+				if (SoundNum != 0) {
+					float fVol = 1.0f;
+					Audio_PlaySound3D(SoundNum, fVol, Projectile->Location, false);
+				}
+
+				SwampNum--;
+			}
 
 
 
@@ -792,8 +754,7 @@ bool CWeapon::Update(float Time)
 
 
 	// для турелей
-	if (WeaponTurret)
-	{
+	if (WeaponTurret) {
 
 		// если нужно наводить на цель
 		//if (Fire != 0)
@@ -805,7 +766,7 @@ bool CWeapon::Update(float Time)
 			// находимся в начальном состоянии поворота ствола
 			VECTOR3D NeedAngle(TargetVertObjectNeedAngle,TargetHorizObjectNeedAngle,0);
 			GetTurretOnTargetOrientateion(ObjectStatus, Location+FireLocation, Rotation,
-					CurrentRotationMat,	&NeedAngle, ObjectCreationType);
+						      CurrentRotationMat,	&NeedAngle, ObjectCreationType);
 
 			// наводим на цель
 			TargetHorizObjectNeedAngle = NeedAngle.y;
@@ -829,45 +790,39 @@ bool CWeapon::Update(float Time)
 		// поворот башни по горизонтале
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		if (TargetHorizObject != -1)
-		if (TargetHorizObjectNeedAngle != TargetHorizObjectCurrentAngle)
-		{
-			if (fabsf(TargetHorizObjectNeedAngle-TargetHorizObjectCurrentAngle) > 180.0f)
-			{
-				if (TargetHorizObjectCurrentAngle - TargetHorizObjectNeedAngle > 180.0f) TargetHorizObjectCurrentAngle -= 360.0f;
-				if (TargetHorizObjectNeedAngle - TargetHorizObjectCurrentAngle > 180.0f) TargetHorizObjectCurrentAngle += 360.0f;
+			if (TargetHorizObjectNeedAngle != TargetHorizObjectCurrentAngle) {
+				if (fabsf(TargetHorizObjectNeedAngle-TargetHorizObjectCurrentAngle) > 180.0f) {
+					if (TargetHorizObjectCurrentAngle - TargetHorizObjectNeedAngle > 180.0f) TargetHorizObjectCurrentAngle -= 360.0f;
+					if (TargetHorizObjectNeedAngle - TargetHorizObjectCurrentAngle > 180.0f) TargetHorizObjectCurrentAngle += 360.0f;
+				}
+
+				// находим угол, на который нужно повернуть
+				float NeedRotate = TargetHorizObjectCurrentAngle;
+
+				if (TargetHorizObjectNeedAngle>TargetHorizObjectCurrentAngle) {
+					NeedRotate += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+					if (NeedRotate > TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
+				} else {
+					NeedRotate -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+					if (NeedRotate < TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
+				}
+
+				// устанавливаем текущий поворот
+				TargetHorizObjectCurrentAngle = NeedRotate;
+
+				// поворачиваем все объекты
+				for (int i=0; i<DrawObjectQuantity; i++) {
+					VECTOR3D tmp = DrawObjectList[i].Location-DrawObjectList[TargetHorizObject].Location;
+
+					RotatePointInv(&tmp, DrawObjectList[i].Rotation^(-1.0f));
+
+					DrawObjectList[i].Rotation.y = -NeedRotate;
+
+					RotatePoint(&tmp, DrawObjectList[i].Rotation);
+
+					DrawObjectList[i].Location = tmp+DrawObjectList[TargetHorizObject].Location;
+				}
 			}
-
-			// находим угол, на который нужно повернуть
-			float NeedRotate = TargetHorizObjectCurrentAngle;
-
-			if (TargetHorizObjectNeedAngle>TargetHorizObjectCurrentAngle)
-			{
-				NeedRotate += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (NeedRotate > TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
-			}
-			else
-			{
-				NeedRotate -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (NeedRotate < TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
-			}
-
-			// устанавливаем текущий поворот
-			TargetHorizObjectCurrentAngle = NeedRotate;
-
-			// поворачиваем все объекты
-			for (int i=0; i<DrawObjectQuantity; i++)
-			{
-				VECTOR3D tmp = DrawObjectList[i].Location-DrawObjectList[TargetHorizObject].Location;
-
-				RotatePointInv(&tmp, DrawObjectList[i].Rotation^(-1.0f));
-
-				DrawObjectList[i].Rotation.y = -NeedRotate;
-
-				RotatePoint(&tmp, DrawObjectList[i].Rotation);
-
-				DrawObjectList[i].Location = tmp+DrawObjectList[TargetHorizObject].Location;
-			}
-		}
 
 
 
@@ -878,38 +833,34 @@ bool CWeapon::Update(float Time)
 		// поворот стволов по вертикали
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		if (TargetVertObject != -1)
-		if (TargetVertObjectNeedAngle != TargetVertObjectCurrentAngle)
-		{
+			if (TargetVertObjectNeedAngle != TargetVertObjectCurrentAngle) {
 
-			// находим угол, на который нужно повернуть
-			float NeedRotate = TargetVertObjectCurrentAngle;
-			if (TargetVertObjectNeedAngle>TargetVertObjectCurrentAngle)
-			{
-				NeedRotate += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (NeedRotate > TargetVertObjectNeedAngle) NeedRotate = TargetVertObjectNeedAngle;
-				if (NeedRotate > TargetVertObjectMaxAngle) NeedRotate = TargetVertObjectMaxAngle;
+				// находим угол, на который нужно повернуть
+				float NeedRotate = TargetVertObjectCurrentAngle;
+				if (TargetVertObjectNeedAngle>TargetVertObjectCurrentAngle) {
+					NeedRotate += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+					if (NeedRotate > TargetVertObjectNeedAngle) NeedRotate = TargetVertObjectNeedAngle;
+					if (NeedRotate > TargetVertObjectMaxAngle) NeedRotate = TargetVertObjectMaxAngle;
+				} else {
+					NeedRotate -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+					if (NeedRotate < TargetVertObjectNeedAngle) NeedRotate = TargetVertObjectNeedAngle;
+					if (NeedRotate < TargetVertObjectMinAngle) NeedRotate = TargetVertObjectMinAngle;
+				}
+
+				// устанавливаем текущий поворот
+				TargetVertObjectCurrentAngle = NeedRotate;
+
+				// поворачиваем все объекты
+				VECTOR3D tmp = DrawObjectList[TargetVertObject].Location-DrawObjectList[TargetVertObject].Location;
+
+				RotatePointInv(&tmp, DrawObjectList[TargetVertObject].Rotation^(-1.0f));
+
+				DrawObjectList[TargetVertObject].Rotation.x = -NeedRotate;
+
+				RotatePoint(&tmp, DrawObjectList[TargetVertObject].Rotation);
+
+				DrawObjectList[TargetVertObject].Location = tmp+DrawObjectList[TargetVertObject].Location;
 			}
-			else
-			{
-				NeedRotate -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (NeedRotate < TargetVertObjectNeedAngle) NeedRotate = TargetVertObjectNeedAngle;
-				if (NeedRotate < TargetVertObjectMinAngle) NeedRotate = TargetVertObjectMinAngle;
-			}
-
-			// устанавливаем текущий поворот
-			TargetVertObjectCurrentAngle = NeedRotate;
-
-			// поворачиваем все объекты
-			VECTOR3D tmp = DrawObjectList[TargetVertObject].Location-DrawObjectList[TargetVertObject].Location;
-
-			RotatePointInv(&tmp, DrawObjectList[TargetVertObject].Rotation^(-1.0f));
-
-			DrawObjectList[TargetVertObject].Rotation.x = -NeedRotate;
-
-			RotatePoint(&tmp, DrawObjectList[TargetVertObject].Rotation);
-
-			DrawObjectList[TargetVertObject].Location = tmp+DrawObjectList[TargetVertObject].Location;
-		}
 
 
 		// турель
@@ -919,15 +870,13 @@ bool CWeapon::Update(float Time)
 
 		VECTOR3D RotationMiddle = Rotation;
 		VECTOR3D MiddleBoundTMP = MiddleBound;
-		if (TargetHorizObject != -1)
-		{
+		if (TargetHorizObject != -1) {
 			RotationMiddle = DrawObjectList[TargetHorizObject].Rotation+Rotation;
 		}
 		RotatePoint(&MiddleBoundTMP, RotationMiddle);
 
 		VECTOR3D RotationWeapon = Rotation;
-		if (TargetVertObject != -1)
-		{
+		if (TargetVertObject != -1) {
 			RotationWeapon = DrawObjectList[TargetVertObject].Rotation+Rotation;
 		}
 
@@ -938,8 +887,7 @@ bool CWeapon::Update(float Time)
 
 
 		// особый случай, испускаем без вращающихся частей (антиматерия, ион)
-		if (TargetHorizObject == -1 && TargetVertObject == -1)
-		{
+		if (TargetHorizObject == -1 && TargetVertObject == -1) {
 			RotationWeapon = VECTOR3D(TargetVertObjectNeedAngle, TargetHorizObjectNeedAngle, 0.0f)+Rotation;
 		}
 
@@ -977,21 +925,17 @@ void CWeapon::SetRotation(VECTOR3D NewRotation)
 	::CObject3D::SetRotation(NewRotation);
 
 
-	if (!WeaponTurret)
-	{
+	if (!WeaponTurret) {
 		// положение точки выстрела
 		Matrix33CalcPoint(&FireLocation, OldInvRotationMat);
 		Matrix33CalcPoint(&FireLocation, CurrentRotationMat);
 
-		if (Fire != 0)
-		{
+		if (Fire != nullptr) {
 			Fire->MoveSystem(Location + FireLocation);
 			Fire->SetStartLocation(Location + FireLocation);
 			Fire->RotateSystemByAngle(Rotation);
 		}
-	}
-	else
-	{
+	} else {
 		// турель
 		VECTOR3D RotationBase = Rotation;
 		VECTOR3D BaseBoundTMP = BaseBound;
@@ -1000,16 +944,12 @@ void CWeapon::SetRotation(VECTOR3D NewRotation)
 		VECTOR3D RotationMiddle = Rotation;
 		VECTOR3D MiddleBoundTMP = MiddleBound;
 		if (TargetHorizObject != -1)
-		{
 			RotationMiddle = DrawObjectList[TargetHorizObject].Rotation + Rotation;
-		}
 		RotatePoint(&MiddleBoundTMP, RotationMiddle);
 
 		VECTOR3D RotationWeapon = Rotation;
 		if (TargetVertObject != -1)
-		{
 			RotationWeapon = DrawObjectList[TargetVertObject].Rotation + Rotation;
-		}
 
 		VECTOR3D WeaponBoundTMP = WeaponBound;
 		RotatePoint(&WeaponBoundTMP, RotationWeapon);
@@ -1018,9 +958,7 @@ void CWeapon::SetRotation(VECTOR3D NewRotation)
 
 		// особый случай, испускаем без вращающихся частей (антиматерия, ион)
 		if (TargetHorizObject == -1 && TargetVertObject == -1)
-		{
 			RotationWeapon = VECTOR3D(TargetVertObjectNeedAngle, TargetHorizObjectNeedAngle, 0.0f)+Rotation;
-		}
 
 		Orientation = VECTOR3D(0.0f, 0.0f, 1.0f);
 		RotatePoint(&Orientation, RotationWeapon);
@@ -1029,8 +967,7 @@ void CWeapon::SetRotation(VECTOR3D NewRotation)
 
 
 
-	if (DestroyedFire != 0)
-	{
+	if (DestroyedFire != nullptr) {
 		Matrix33CalcPoint(&DestroyedFireLocation, OldInvRotationMat);
 		Matrix33CalcPoint(&DestroyedFireLocation, CurrentRotationMat);
 		DestroyedFire->MoveSystem(Location + DestroyedFireLocation);
@@ -1038,14 +975,12 @@ void CWeapon::SetRotation(VECTOR3D NewRotation)
 		DestroyedFire->RotateSystemByAngle(Rotation);
 	}
 	// тут DestroyedFireLocation не считаем, т.к. все равно всегда создаем DestroyedFire
-	if (DestroyedSmoke != 0)
-	{
+	if (DestroyedSmoke != nullptr) {
 		DestroyedSmoke->MoveSystemLocation(Location + DestroyedFireLocation);
 		DestroyedSmoke->RotateSystemByAngle(Rotation);
 	}
 	// если лучевое оружие
-	if (LaserMaser != 0)
-	{
+	if (LaserMaser != nullptr) {
 		Matrix33CalcPoint(&LaserMaser->ProjectileCenter, OldInvRotationMat);
 		Matrix33CalcPoint(&LaserMaser->ProjectileCenter, CurrentRotationMat);
 		LaserMaser->SetLocation(Location+FireLocation+LaserMaser->ProjectileCenter);
@@ -1068,36 +1003,27 @@ void CWeapon::SetLocation(VECTOR3D NewLocation)
 	::CObject3D::SetLocation(NewLocation);
 
 	// положение утечки
-	if (Fire != 0)
-	{
+	if (Fire != nullptr) {
 		Fire->MoveSystem(NewLocation + FireLocation);
 		Fire->SetStartLocation(NewLocation + FireLocation);
 	}
-	if (DestroyedFire != 0)
-	{
+	if (DestroyedFire != nullptr) {
 		DestroyedFire->MoveSystem(NewLocation + DestroyedFireLocation);
 		DestroyedFire->SetStartLocation(NewLocation + DestroyedFireLocation);
 	}
-	if (DestroyedSmoke != 0)
-	{
+	if (DestroyedSmoke != nullptr)
 		DestroyedSmoke->MoveSystemLocation(NewLocation + DestroyedFireLocation);
-	}
 
 	// если лучевое оружие
-	if (LaserMaser != 0)
-	{
+	if (LaserMaser != nullptr)
 		LaserMaser->SetLocation(Location+FireLocation+LaserMaser->ProjectileCenter);
-	}
 
 
 
 	// звук... для мазеров-лазеров нужно учитывать перемещение
-	if (LaserMaserSoundNum != 0)
-	{
-		// уже играем, нужно изменить данные
-		if (vw_FindSoundByNum(LaserMaserSoundNum) != 0)
-			vw_FindSoundByNum(LaserMaserSoundNum)->SetLocation(Location.x, Location.y, Location.z);
-	}
+	if ((LaserMaserSoundNum != 0) &&
+	    (vw_FindSoundByNum(LaserMaserSoundNum) != nullptr))  // уже играем, нужно изменить данные
+		vw_FindSoundByNum(LaserMaserSoundNum)->SetLocation(Location.x, Location.y, Location.z);
 
 }
 
@@ -1136,71 +1062,67 @@ bool CWeapon::WeaponFire(float Time)
 
 
 	// для оружия землян, делаем небольшие проверки...
-	if (ObjectCreationType >= 1 && ObjectCreationType <= 99)
-	{
+	if (ObjectCreationType >= 1 && ObjectCreationType <= 99) {
 
 		// для поврежденного оружия проверяем... может быть осечка в стрельбе
 		bool Misfire = false;
 		if (Strength < StrengthStart)
-		if (Strength/StrengthStart > vw_Randf1)
-		{
-			Misfire = true;
-		}
+			if (Strength/StrengthStart > vw_Randf1) {
+				Misfire = true;
+			}
 
 
 		// если оружие уничтожено или уже нечем стрелять - нам тут делать нечего
-		if (Strength <= 0.0f || Ammo == 0 || Misfire)
-		{
+		if (Strength <= 0.0f || Ammo == 0 || Misfire) {
 			// перед тем как уйти, ставим проигрывание звука "проблема с оружием"
 
 			float fVol = 1.0f;
 
-			switch (ObjectCreationType)
-			{
-				// Kinetic
-				case 1:
-				case 2:
-				case 3:
-				case 4:
-					Audio_PlaySound3D(1, fVol, Location, false);
-					break;
+			switch (ObjectCreationType) {
+			// Kinetic
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+				Audio_PlaySound3D(1, fVol, Location, false);
+				break;
 
-				// Ion
-				case 5:
-				case 6:
-				case 7:
-				// Plasma
-				case 8:
-				case 9:
-				case 10:
-					Audio_PlaySound3D(2, fVol, Location, false);
-					break;
+			// Ion
+			case 5:
+			case 6:
+			case 7:
+			// Plasma
+			case 8:
+			case 9:
+			case 10:
+				Audio_PlaySound3D(2, fVol, Location, false);
+				break;
 
-				// Maser
-				case 11:
-				case 12:
-				// Laser
-				case 14:
-					Audio_PlaySound3D(3, fVol, Location, false);
+			// Maser
+			case 11:
+			case 12:
+			// Laser
+			case 14:
+				Audio_PlaySound3D(3, fVol, Location, false);
 
-					break;
-				// Antimatter
-				case 13:
-				// Gauss
-				case 15:
-					Audio_PlaySound3D(4, fVol, Location, false);
-					break;
+				break;
+			// Antimatter
+			case 13:
+			// Gauss
+			case 15:
+				Audio_PlaySound3D(4, fVol, Location, false);
+				break;
 
-				// ракета
-				case 16:
-				// рой
-				case 17:
-				// торпеда
-				case 18:
-				// бомба
-				case 19:
-					Audio_PlaySound3D(5, fVol, Location, false);
-					break;
+			// ракета
+			case 16:
+			// рой
+			case 17:
+			// торпеда
+			case 18:
+			// бомба
+			case 19:
+				Audio_PlaySound3D(5, fVol, Location, false);
+				break;
 			}
 
 			return false;
@@ -1210,8 +1132,7 @@ bool CWeapon::WeaponFire(float Time)
 
 
 		// только для игрока! проверяем заряд энергии для выстрела
-		if (ObjectStatus == 3)
-		{
+		if (ObjectStatus == 3) {
 			if (CurrentEnergyAccumulated < EnergyUse) return false;
 			else CurrentEnergyAccumulated = 0.0f;
 		}
@@ -1237,8 +1158,7 @@ bool CWeapon::WeaponFire(float Time)
 
 
 	VECTOR3D RotationWeapon = Rotation;
-	if (WeaponTurret)
-	{
+	if (WeaponTurret) {
 		// турель
 		VECTOR3D RotationBase = Rotation;
 		VECTOR3D BaseBoundTMP = BaseBound;
@@ -1246,14 +1166,12 @@ bool CWeapon::WeaponFire(float Time)
 
 		VECTOR3D RotationMiddle = Rotation;
 		VECTOR3D MiddleBoundTMP = MiddleBound;
-		if (TargetHorizObject != -1)
-		{
+		if (TargetHorizObject != -1) {
 			RotationMiddle = DrawObjectList[TargetHorizObject].Rotation + Rotation;
 		}
 		RotatePoint(&MiddleBoundTMP, RotationMiddle);
 
-		if (TargetVertObject != -1)
-		{
+		if (TargetVertObject != -1) {
 			RotationWeapon = DrawObjectList[TargetVertObject].Rotation + Rotation;
 		}
 
@@ -1264,8 +1182,7 @@ bool CWeapon::WeaponFire(float Time)
 
 
 		// особый случай, испускаем без вращающихся частей (антиматерия, ион)
-		if (TargetHorizObject == -1 && TargetVertObject == -1)
-		{
+		if (TargetHorizObject == -1 && TargetVertObject == -1) {
 			RotationWeapon = VECTOR3D(TargetVertObjectNeedAngle, TargetHorizObjectNeedAngle, 0.0f)+Rotation;
 		}
 
@@ -1280,32 +1197,29 @@ bool CWeapon::WeaponFire(float Time)
 
 
 	// создаем снаряд
-	CProjectile *Projectile  = 0;
-	Projectile  = new CProjectile;
+	CProjectile *Projectile = new CProjectile;
 	Projectile->Create(ObjectCreationType);
 
 
 	// если лучевое оружие, немного все делаем по другому
 	// или это испускатель мин
-	if (Projectile->ProjectileType == 2)
-	{
-		if (LaserMaser != 0){delete LaserMaser; LaserMaser = 0;}
+	if (Projectile->ProjectileType == 2) {
+		if (LaserMaser != nullptr) {
+			delete LaserMaser;
+			LaserMaser = nullptr;
+		}
 		LaserMaser = Projectile;
 		Matrix33CalcPoint(&LaserMaser->ProjectileCenter, CurrentRotationMat);
 		LaserMaser->SetLocation(Location+FireLocation+LaserMaser->ProjectileCenter);
-	}
-	else// если это снаряд, его нужно немного вынести, так лучше смотрится
-	{
-		if (Projectile->ProjectileType == 0)
-		{
+	} else { // если это снаряд, его нужно немного вынести, так лучше смотрится
+		if (Projectile->ProjectileType == 0) {
 			VECTOR3D ADDPOS(0,0,4.0f);
 			if (WeaponTurret) ADDPOS = VECTOR3D(0,0,2.0f);
 
 			RotatePoint(&ADDPOS, RotationWeapon);
 
 			Projectile->SetLocation(Location+FireLocation+ADDPOS);
-		}
-		else // для ракет и мин все без изменения
+		} else // для ракет и мин все без изменения
 			Projectile->SetLocation(Location+FireLocation);
 	}
 
@@ -1315,11 +1229,9 @@ bool CWeapon::WeaponFire(float Time)
 
 
 	// если это мина, то нужно делать немного по другому
-	if (Projectile->ProjectileType == 3 || Projectile->ProjectileType == 4)
-	{
+	if (Projectile->ProjectileType == 3 || Projectile->ProjectileType == 4) {
 		Projectile->SetRotation(RotationWeapon);
-		for (int i=0; i<Projectile->GraphicFXQuantity; i++)
-		{
+		for (int i=0; i<Projectile->GraphicFXQuantity; i++) {
 			Projectile->GraphicFX[i]->Direction = Orientation;
 			// учитываем пенальти для визуальных эффектов
 			Projectile->GraphicFX[i]->ParticlesPerSec = (int)(Projectile->GraphicFX[i]->ParticlesPerSec);
@@ -1337,12 +1249,9 @@ bool CWeapon::WeaponFire(float Time)
 
 		// приводим к типу снаряда (0-обычный или 1-уничтожаемый)
 		Projectile->ProjectileType = Projectile->ProjectileType - 3;
-	}
-	else
-	{
+	} else {
 		Projectile->SetRotation(RotationWeapon);
-		for (int i=0; i<Projectile->GraphicFXQuantity; i++)
-		{
+		for (int i=0; i<Projectile->GraphicFXQuantity; i++) {
 			Projectile->GraphicFX[i]->Direction = Orientation;//Fire->Direction^-1;
 			// учитываем пенальти для визуальных эффектов
 			Projectile->GraphicFX[i]->ParticlesPerSec = (int)(Projectile->GraphicFX[i]->ParticlesPerSec/CurrentPenalty);
@@ -1365,12 +1274,12 @@ bool CWeapon::WeaponFire(float Time)
 
 
 	// звук...
-	if (SoundNum != 0)
-	{
+	if (SoundNum != 0) {
 		float fVol = 1.0f;
 		LaserMaserSoundNum = Audio_PlaySound3D(SoundNum, fVol, Location+FireLocation, false);
 		// если не надо сохранять
-		if (LaserMaser == 0) LaserMaserSoundNum = 0;
+		if (LaserMaser == nullptr)
+			LaserMaserSoundNum = 0;
 	}
 
 

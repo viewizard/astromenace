@@ -97,7 +97,7 @@ eVFS *vw_CreateVFS(const char *Name, unsigned int BuildNumber)
  */
 int vw_WriteIntoVFSfromFile(eVFS *WritableVFS, const char *SrcName, const char *DstName)
 {
-	if ((SrcName == 0) || (DstName == 0))
+	if ((SrcName == nullptr) || (DstName == nullptr))
 		return -1;
 
 	// читаем данные файла в буфер
@@ -192,6 +192,8 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	int HeaderLengthVFS;
 	int VFS_FileSize;
 	eVFS *TempVFS;
+	char Sign[5];
+	char Version[5];
 
 	TempVFS = new eVFS;
 	TempVFS->Writable = false;
@@ -210,7 +212,6 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	strcpy(TempVFS->FileName, Name);
 
 	/* check VFS file sign "VFS_" */
-	char Sign[5];
 	Sign[4] = '\0'; /* just to be sure, that we have null-terminated string */
 
 	if(SDL_RWread(TempVFS->File, &Sign, 4, 1) == 0) {
@@ -223,7 +224,6 @@ int vw_OpenVFS(const char *Name, unsigned int BuildNumber)
 	}
 
 	/* check VFS file version */
-	char Version[5];
 	Version[4] = '\0'; /* just to be sure, that we have null-terminated string */
 
 	if(SDL_RWread(TempVFS->File, &Version, 4, 1) == 0) {
@@ -402,14 +402,12 @@ eFILE *vw_fopen(const char *FileName)
 		/* no need to check FileInVFS, since we know for sure,
 		 * file present in VFS
 		 */
-
 		File->VFS_Offset = FileInVFS->Offset;
-
 		File->Data = new BYTE[FileInVFS->Size];
+		File->Size = FileInVFS->Size;
 
 		SDL_RWseek(FileInVFS->Parent->File, File->VFS_Offset, SEEK_SET);
 		SDL_RWread(FileInVFS->Parent->File, File->Data, FileInVFS->Size, 1);
-		File->Size = FileInVFS->Size;
 	} else if (Location == FILE_IN_FS) {
 		/* open real file in file system */
 		SDL_RWops * fTEMP = SDL_RWFromFile(FileName, "rb");
@@ -459,7 +457,7 @@ int eFILE::fread(void *buffer, size_t size, size_t count)
 {
 	int CopyCount = 0;
 
-	if ((buffer == nullptr) || (Data == 0))
+	if ((buffer == nullptr) || (Data == nullptr))
 		return -1;
 
 	/* read data */

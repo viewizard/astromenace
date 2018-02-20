@@ -58,12 +58,15 @@ public:
 
 	cXMLAttribute()
 	{
-		Name = Data = 0; Next = Prev = 0;
+		Name = Data = nullptr;
+		Next = Prev = nullptr;
 	};
 	~cXMLAttribute()
 	{
-		if (Name != 0) delete [] Name;
-		if (Data != 0) delete [] Data;
+		if (Name != nullptr)
+			delete [] Name;
+		if (Data != nullptr)
+			delete [] Data;
 	};
 
 	// данные атрибута
@@ -86,27 +89,27 @@ public:
 	cXMLEntry()
 	{
 		EntryType = 0;
-		Name = Content = 0;
+		Name = Content = nullptr;
 		LineNumber = 0;
-		FirstAttribute = LastAttribute = 0;
-		Next = Prev = FirstChild = LastChild = 0;
+		FirstAttribute = LastAttribute = nullptr;
+		Next = Prev = FirstChild = LastChild = nullptr;
 	}
 	~cXMLEntry()
 	{
-		if (Name != 0) delete [] Name;
-		if (Content != 0) delete [] Content;
+		if (Name != nullptr)
+			delete [] Name;
+		if (Content != nullptr)
+			delete [] Content;
 
 		cXMLAttribute *TmpAttribute = FirstAttribute;
-		while (TmpAttribute != 0)
-		{
+		while (TmpAttribute != nullptr) {
 			cXMLAttribute *TmpAttribute1 = TmpAttribute->Next;
 			delete TmpAttribute;
 			TmpAttribute = TmpAttribute1;
 		}
 
 		cXMLEntry *TmpEntry = FirstChild;
-		while (TmpEntry != 0)
-		{
+		while (TmpEntry != nullptr) {
 			cXMLEntry *TmpEntry1 = TmpEntry->Next;
 			delete TmpEntry;
 			TmpEntry = TmpEntry1;
@@ -144,12 +147,19 @@ class cXMLDocument
 {
 public:
 
-	cXMLDocument(){	RootXMLEntry = 0; };
-	~cXMLDocument(){ ReleaseXMLDocument(); };
+	cXMLDocument()
+	{
+		RootXMLEntry = nullptr;
+	};
+	~cXMLDocument()
+	{
+		ReleaseXMLDocument();
+	};
 	void ReleaseXMLDocument()
 	{
-		if (RootXMLEntry != 0) delete RootXMLEntry;
-		RootXMLEntry = 0;
+		if (RootXMLEntry != nullptr)
+			delete RootXMLEntry;
+		RootXMLEntry = nullptr;
 	};
 
 
@@ -169,16 +179,13 @@ public:
 
 	cXMLEntry *AddEntry(cXMLEntry *ParentXMLEntry, const char *EntryName)
 	{
-		if (ParentXMLEntry == 0)
-		{
+		if (ParentXMLEntry == nullptr) {
 			RootXMLEntry = new cXMLEntry;
 			RootXMLEntry->Name = new char[strlen(EntryName)+1];
 			strcpy(RootXMLEntry->Name, EntryName);
 			RootXMLEntry->Name[strlen(EntryName)] = 0;
 			return RootXMLEntry;
-		}
-		else
-		{
+		} else {
 			cXMLEntry *NewXMLEntry = new cXMLEntry;
 			NewXMLEntry->Name = new char[strlen(EntryName)+1];
 			strcpy(NewXMLEntry->Name, EntryName);
@@ -250,43 +257,42 @@ public:
 
 	cXMLEntry *FindEntryByName(cXMLEntry *ParentXMLEntry, const char *Name)
 	{
-		if (ParentXMLEntry == 0) return 0;
+		if (ParentXMLEntry == nullptr)
+			return nullptr;
 		cXMLEntry *TmpEntry = ParentXMLEntry->FirstChild;
-		while (TmpEntry != 0)
-		{
+		while (TmpEntry != nullptr) {
 			if (!strcmp(Name, TmpEntry->Name)) return TmpEntry;
 			TmpEntry = TmpEntry->Next;
 		}
-		return 0;
+		return nullptr;
 	};
 
 	char *GetEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName)
 	{
-		if (XMLEntry == 0) return 0;
+		if (XMLEntry == nullptr) return nullptr;
 		cXMLAttribute *TmpAttribute = XMLEntry->FirstAttribute;
-		while (TmpAttribute != 0)
-		{
+		while (TmpAttribute != nullptr) {
 			if (!strcmp(AttributeName, TmpAttribute->Name)) return TmpAttribute->Data;
 			TmpAttribute = TmpAttribute->Next;
 		}
-		return 0;
+		return nullptr;
 	};
 
 	int iGetEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName)
 	{
-		if (XMLEntry == 0) return 0;
+		if (XMLEntry == nullptr) return 0;
 		return atoi(GetEntryAttribute(XMLEntry, AttributeName));
 	};
 
 	float fGetEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName)
 	{
-		if (XMLEntry == 0) return 0.0f;
+		if (XMLEntry == nullptr) return 0.0f;
 		return (float)atof(GetEntryAttribute(XMLEntry, AttributeName));
 	};
 
 	bool bGetEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName)
 	{
-		if (XMLEntry == 0) return false;
+		if (XMLEntry == nullptr) return false;
 		char *Data = GetEntryAttribute(XMLEntry, AttributeName);
 		if ((!strcmp(Data, "on")) || (!strcmp(Data, "true")) || (!strcmp(Data, "yes")) || (!strcmp(Data, "1"))) return true;
 		return false;
@@ -296,15 +302,14 @@ public:
 
 	cXMLEntry *FindFirstChildEntryByName(cXMLEntry *ParentXMLEntry, const char *ChildEntryName)
 	{
-		if (ParentXMLEntry == 0) return 0;
+		if (ParentXMLEntry == nullptr) return nullptr;
 
 		cXMLEntry *TmpEntry = ParentXMLEntry->FirstChild;
-		while (TmpEntry != 0)
-		{
+		while (TmpEntry != nullptr) {
 			if (!strcmp(ChildEntryName, TmpEntry->Name)) return TmpEntry;
 			TmpEntry = TmpEntry->Next;
 		}
-		return 0;
+		return nullptr;
 	}
 
 

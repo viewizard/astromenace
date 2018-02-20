@@ -458,7 +458,7 @@ int ConvertFS2VFS(char RawDataDir[MAX_PATH], char VFSFileNamePath[MAX_PATH])
 	int FileCount = 0;
 	for (eVFS_Entry *TmpVFSEntry : *TmpVFSEntries) {
 		eFILE *tmpFile = vw_fopen(TmpVFSEntry->Name);
-		if (tmpFile == 0) {
+		if (tmpFile == nullptr) {
 			fprintf(stderr, "models.pack file corrupted, 3d model or texture %s not found.\n", TmpVFSEntry->Name);
 			return -1;
 		}

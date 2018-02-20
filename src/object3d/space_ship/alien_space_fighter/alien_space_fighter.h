@@ -40,7 +40,7 @@ class CAlienSpaceFighter : public CSpaceShip
 {
 public:
 
-	virtual ~CAlienSpaceFighter(){};
+	virtual ~CAlienSpaceFighter() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int	SpaceShipNum);
