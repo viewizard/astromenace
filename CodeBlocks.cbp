@@ -16,6 +16,8 @@
 				<Option projectResourceIncludeDirsRelation="1" />
 				<Compiler>
 					<Add option="-Os" />
+					<Add option="-Wnon-virtual-dtor" />
+					<Add option="-Winit-self" />
 					<Add option="-Wzero-as-null-pointer-constant" />
 					<Add option="-Wextra" />
 					<Add option="-Wall" />
@@ -91,7 +93,6 @@
 		<Unit filename="src/core/core.h" />
 		<Unit filename="src/core/font/font.cpp" />
 		<Unit filename="src/core/font/font.h" />
-		<Unit filename="src/core/font/font_manager.cpp" />
 		<Unit filename="src/core/graphics/gl_draw2d.cpp" />
 		<Unit filename="src/core/graphics/gl_draw3d.cpp" />
 		<Unit filename="src/core/graphics/gl_fbo.cpp" />

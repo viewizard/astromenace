@@ -24,81 +24,34 @@
 
 *************************************************************************************/
 
-
 #ifndef FONT_H
 #define FONT_H
-
 
 #include "../core.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-
-
-//-----------------------------------------------------------------------------
-// структура eFontChar
-//-----------------------------------------------------------------------------
-struct eFontChar
-{
-	// utf32 идентификатор
-	unsigned 	UTF32;
-
-	// указатель на сгенерированную текстуру
-	eTexture* 	CharTexture;
-	int			FontSize;
-
-	// указатели точек границ символа, на использовании общей текстуры
-	int			TexturePositionLeft;
-	int			TexturePositionRight;
-	int			TexturePositionTop;
-	int			TexturePositionBottom;
-
-	// метрика растра символа
-	int 		Width;
-	int 		Height;
-	int 		Left;
-	int 		Top;
-	float		AdvanceX;
-
-	// указатели на список
-	eFontChar*	Prev;
-	eFontChar*	Next;
-};
-
-
-
-
-// инициализация фонта
+/* Font initialization by font name (path to file). */
 int vw_InitFont(const char *FontName);
-// устанавливаем текущий размер шрифта
+/* Set current font size. */
 void vw_SetFontSize(int FontSize);
-// задаем фиксированное смещение при прорисовке через vw_DrawFont
+/* Set font offset. */
 void vw_SetFontOffsetY(int NewOffsetY);
-// делаем генерацию нужных символов по списку
-void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const char * CharsList);
-// загрузка символа с генерацией всех необходимых данных
-eFontChar* vw_LoadFontChar(unsigned UTF32);
-// Нахождение символа по его UTF32
-eFontChar* vw_FindFontCharByUTF32(unsigned UTF32);
-// освобождаем память от сгенерированных символов
+/* Generate font characters by list. */
+void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const char *CharsList);
+/* Check font character by UTF32 code. */
+bool vw_CheckFontCharByUTF32(unsigned UTF32);
+/* Release all font characters and created for this characters textures. */
 void vw_ReleaseAllFontChars();
-// освобождаем память от сгенерированных символов с удалением текстур
-void vw_ReleaseAllFontCharsWithTextures();
-// освобождаем память, завершаем работу с фонтом
+/* Shutdown font. */
 void vw_ShutdownFont();
 
-
-// получаем размер строки
+/* Get string size with current font size. */
 int vw_FontSize(const char *Text, ...);
-// вывод строки в 2д
-void vw_DrawFont(int X, int Y, float FlattenWidth, float MaxWidth, float FontScale, float R, float G, float B, float Transp, const char *Text, ...);
-// вывод строки в 3д
+/* Draw text with current font. */
+void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
+		 float R, float G, float B, float Transp, const char *Text, ...);
+/* Draw 3D text with current font. */
 void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...);
 
-
-
-
-
-
 #endif // FONT_H
-
