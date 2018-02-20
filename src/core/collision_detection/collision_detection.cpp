@@ -26,6 +26,7 @@
 
 #include "collision_detection.h"
 
+/* TODO translate comments */
 
 /*
  * Check, is point belong triangle.
