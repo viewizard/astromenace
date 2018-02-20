@@ -16,6 +16,7 @@
 				<Option projectResourceIncludeDirsRelation="1" />
 				<Compiler>
 					<Add option="-Os" />
+					<Add option="-Wzero-as-null-pointer-constant" />
 					<Add option="-Wextra" />
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
@@ -85,11 +86,8 @@
 		<Unit filename="src/core/camera/camera.cpp" />
 		<Unit filename="src/core/camera/camera.h" />
 		<Unit filename="src/core/camera/camera_math.cpp" />
-		<Unit filename="src/core/collision_detection/aabb.cpp" />
+		<Unit filename="src/core/collision_detection/collision_detection.cpp" />
 		<Unit filename="src/core/collision_detection/collision_detection.h" />
-		<Unit filename="src/core/collision_detection/common_math.cpp" />
-		<Unit filename="src/core/collision_detection/obb.cpp" />
-		<Unit filename="src/core/collision_detection/sphere.cpp" />
 		<Unit filename="src/core/core.h" />
 		<Unit filename="src/core/font/font.cpp" />
 		<Unit filename="src/core/font/font.h" />
