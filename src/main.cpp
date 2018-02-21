@@ -74,7 +74,7 @@ SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = 0;
 //------------------------------------------------------------------------------------
 // полное путь к программе
 char ProgrammDir[MAX_PATH];
-char VFSFileNamePath[MAX_PATH];
+std::string VFSFileNamePath;
 // полное имя для файла конфигурации игры
 char ConfigFileName[MAX_PATH];
 // для сохранения скриншотов
@@ -486,8 +486,8 @@ int main( int argc, char **argv )
 	}
 
 
-	strcpy(VFSFileNamePath, ProgrammDir);
-	strcat(VFSFileNamePath, "gamedata.vfs");
+	VFSFileNamePath = ProgrammDir;
+	VFSFileNamePath += "gamedata.vfs";
 
 
 	if (!NeedPack) {

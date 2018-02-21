@@ -347,7 +347,6 @@ void DeleteAlpha(BYTE **DIBRESULT, eTexture *Texture)
 //------------------------------------------------------------------------------------
 void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 {
-	eFILE *pFile = nullptr;
 	int DWidth = 0;
 	int DHeight = 0;
 	int DChanels = 0;
@@ -358,7 +357,7 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Открываем файл
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	pFile = vw_fopen(SrcName);
+	std::unique_ptr<eFILE> pFile = vw_fopen(SrcName);
 	if (pFile == nullptr) {
 		fprintf(stderr, "Unable to found %s\n", SrcName);
 		return;
@@ -383,7 +382,7 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	switch (LoadAs) {
 	case TGA_FILE:
-		ReadTGA(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
+		ReadTGA(&tmp_image, pFile.get(), &DWidth, &DHeight, &DChanels);
 		break;
 
 	default:
@@ -438,9 +437,6 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 //------------------------------------------------------------------------------------
 eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int CompressionType, int LoadAs, int NeedResizeW, int NeedResizeH)
 {
-	// временно, файл текстуры
-	eFILE *pFile = nullptr;
-
 	int DWidth = 0;
 	int DHeight = 0;
 	int DChanels = 0;
@@ -449,7 +445,7 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Открываем файл
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	pFile = vw_fopen(nName);
+	std::unique_ptr<eFILE> pFile = vw_fopen(nName);
 	if (pFile == nullptr) {
 		fprintf(stderr, "Unable to found %s\n", nName);
 		return nullptr;
@@ -477,7 +473,7 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	switch(LoadAs) {
 	case TGA_FILE:
-		ReadTGA(&tmp_image, pFile, &DWidth, &DHeight, &DChanels);
+		ReadTGA(&tmp_image, pFile.get(), &DWidth, &DHeight, &DChanels);
 		break;
 
 	case VW2D_FILE:

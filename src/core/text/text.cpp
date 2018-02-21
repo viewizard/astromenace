@@ -181,7 +181,7 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 	vw_ReleaseText();
 
 	// читаем данные
-	eFILE *TempF = vw_fopen(FileName);
+	std::unique_ptr<eFILE> TempF = vw_fopen(FileName);
 
 	if (TempF == nullptr) return -1;
 

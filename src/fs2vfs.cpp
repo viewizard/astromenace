@@ -27,7 +27,7 @@
 #include "core/vfs/vfs.h"
 #include "config.h"
 
-const char *GameData[] = {
+std::string GameData[] = {
 	"lang/ru/voice/EngineMalfunction.wav",
 	"lang/ru/voice/WeaponDamaged.wav",
 	"lang/ru/voice/MissileDetected.wav",
@@ -401,7 +401,7 @@ const char *GameData[] = {
 	"font/FreeSerifBold.ttf",
 	"font/LinBiolinumBold.ttf",
 	"font/LinLibertineBold.ttf",
-#endif //fontconfig
+#endif /* fontconfig */
 	"credits/freetype.tga",
 	"credits/oggvorbis.tga",
 	"lang/text.csv",
@@ -426,90 +426,9 @@ const char *GameData[] = {
 /*
  * Create game data VFS file (convert FS to VFS).
  */
-int ConvertFS2VFS(char RawDataDir[MAX_PATH], char VFSFileNamePath[MAX_PATH])
+int ConvertFS2VFS(const std::string RawDataDir, const std::string VFSFileNamePath)
 {
-	char ModelsPackFile[MAX_PATH];
-	strcpy(ModelsPackFile, RawDataDir);
-	strcat(ModelsPackFile, "models/models.pack");
-
-	if (vw_OpenVFS(ModelsPackFile, 0) != 0) {
-		fprintf(stderr, "models.pack file not found or corrupted.\n");
-		return -1;
-	}
-
-	/* culculate files in pack */
-	int ModelsPackListCount = 0;
-	std::forward_list<eVFS_Entry*> *TmpVFSEntries = vw_GetVFSEntriesListHead();
-	for (eVFS_Entry *Tmp : *TmpVFSEntries) {
-		if (Tmp != nullptr)
-			ModelsPackListCount++;
-	}
-
-	/* allocate memory */
-	BYTE **filedata;
-	filedata = new BYTE*[ModelsPackListCount];
-	char **filename;
-	filename = new char*[ModelsPackListCount];
-	int *filedatasize;
-	filedatasize = new int[ModelsPackListCount];
-
-	/* fill all data from pack into memory */
-	TmpVFSEntries = vw_GetVFSEntriesListHead();
-	int FileCount = 0;
-	for (eVFS_Entry *TmpVFSEntry : *TmpVFSEntries) {
-		eFILE *tmpFile = vw_fopen(TmpVFSEntry->Name);
-		if (tmpFile == nullptr) {
-			fprintf(stderr, "models.pack file corrupted, 3d model or texture %s not found.\n", TmpVFSEntry->Name);
-			return -1;
-		}
-
-		tmpFile->fseek( 0, SEEK_END );
-		filedatasize[FileCount] = tmpFile->ftell();
-		tmpFile->fseek( 0, SEEK_SET );
-
-		filedata[FileCount] = new BYTE[filedatasize[FileCount]];
-		tmpFile->fread(filedata[FileCount], filedatasize[FileCount], 1);
-
-		filename[FileCount] = new char[strlen(TmpVFSEntry->Name)+1];
-		strcpy(filename[FileCount], TmpVFSEntry->Name);
-
-		vw_fclose(tmpFile);
-		FileCount++;
-	}
-	/* close pack VFS, we don't need it any more */
-	vw_ShutdownVFS();
-
-	/* create new VFS */
-	eVFS *WritableVFS = vw_CreateVFS(VFSFileNamePath, GAME_BUILD);
-
-	/* add files from 3d models package */
-	for (int i = 0; i < ModelsPackListCount; i++) {
-		if (0 != vw_WriteIntoVFSfromMemory(WritableVFS, filename[i], filedata[i], filedatasize[i])) {
-			fprintf(stderr, "Can't write into VFS from memory %s\n", filename[i]);
-			fprintf(stderr, "VFS compilation process aborted!\n");
-			return -1;
-		}
-		delete [] filedata[i];
-		delete [] filename[i];
-	}
-	delete [] filedata;
-	delete [] filename;
-	delete [] filedatasize;
-
-	/* add real files into VFS */
-	char SrcFileName[MAX_PATH];
-	char DstFileName[MAX_PATH];
-	for (unsigned int i=0; i<GameDataCount; i++) {
-		strcpy(SrcFileName, RawDataDir);
-		strcat(SrcFileName, GameData[i]);
-		strcpy(DstFileName, GameData[i]);
-
-		if (0 != vw_WriteIntoVFSfromFile(WritableVFS, SrcFileName, DstFileName)) {
-			fprintf(stderr, "VFS compilation process aborted!\n");
-			return -1;
-		}
-	}
-
-	vw_ShutdownVFS();
-	return 0;
+	return vw_CreateVFS(VFSFileNamePath, GAME_BUILD,
+			    RawDataDir, "models/models.pack",
+			    GameData, GameDataCount);
 }

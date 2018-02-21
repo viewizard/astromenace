@@ -142,7 +142,7 @@ struct eMusic {
 	ALuint 		Buffers[NUM_OF_DYNBUF];		// у музыки свой собственный буфер
 	bool		Looped;		// запоминаем, нужно ли зацикливание
 
-	eFILE 		*MusicFile; // файл, для потока
+	std::unique_ptr<eFILE>	MusicFile; // файл, для потока
 
 	ALsizei		Rate; // OAL specific
 	ALenum		Format;	 // OAL specific

@@ -151,7 +151,7 @@ const sFontList FontList[FontQuantity] = {
 //------------------------------------------------------------------------------------
 // MainFS2VFS.cpp
 //------------------------------------------------------------------------------------
-int ConvertFS2VFS(char RawDataDir[MAX_PATH], char VFSFileNamePath[MAX_PATH]);
+int ConvertFS2VFS(const std::string RawDataDir, const std::string VFSFileNamePath);
 
 
 

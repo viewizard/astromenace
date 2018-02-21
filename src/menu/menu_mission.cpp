@@ -284,7 +284,7 @@ void MissionsListInit()
 		} else
 			// проверяем музыку, возможно есть необходимость что-то заменить
 			if (!strcmp(xmlEntry->Name, "GameMainMusic")) {
-				eFILE *file = vw_fopen(xmlEntry->Content);
+				std::unique_ptr<eFILE> file = vw_fopen(xmlEntry->Content);
 				if (file != nullptr) {
 					strcpy(GameMainMusic, xmlEntry->Content);
 					GameMainMusicSet = true;
@@ -293,7 +293,7 @@ void MissionsListInit()
 				} else
 					fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
 			} else if (!strcmp(xmlEntry->Name, "GameBossMusic")) {
-				eFILE *file = vw_fopen(xmlEntry->Content);
+				std::unique_ptr<eFILE> file = vw_fopen(xmlEntry->Content);
 				if (file != nullptr) {
 					strcpy(GameBossMusic, xmlEntry->Content);
 					GameBossMusicSet = true;
@@ -302,7 +302,7 @@ void MissionsListInit()
 				} else
 					fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
 			} else if (!strcmp(xmlEntry->Name, "GameDeathMusic")) {
-				eFILE *file = vw_fopen(xmlEntry->Content);
+				std::unique_ptr<eFILE> file = vw_fopen(xmlEntry->Content);
 				if (file != nullptr) {
 					strcpy(GameDeathMusic, xmlEntry->Content);
 					GameDeathMusicSet = true;

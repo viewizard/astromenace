@@ -408,7 +408,7 @@ bool cXMLDocument::Load(const char *XMLFileName)
 	ReleaseXMLDocument();
 
 	// читаем данные
-	eFILE *XMLFile = vw_fopen(XMLFileName);
+	std::unique_ptr<eFILE> XMLFile = vw_fopen(XMLFileName);
 
 	if (XMLFile == nullptr) {
 		fprintf(stderr, "XML file not found: %s\n", XMLFileName);

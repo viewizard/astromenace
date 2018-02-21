@@ -624,10 +624,8 @@ void vw_ReleaseMusic(eMusic* Music)
 	}
 
 
-	if (Music->MusicFile != nullptr) {
-		eFILE *TMPFile = (eFILE *)Music->MusicFile;
-		vw_fclose(TMPFile);
-	}
+	if (Music->MusicFile != nullptr)
+		vw_fclose(Music->MusicFile);
 
 	// освобождаем память
 	if (Music != nullptr)

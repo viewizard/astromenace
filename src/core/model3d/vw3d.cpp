@@ -38,7 +38,7 @@
 //-----------------------------------------------------------------------------
 bool eModel3D::ReadVW3D(const char *FileName)
 {
-	eFILE *file = vw_fopen(FileName);
+	std::unique_ptr<eFILE> file = vw_fopen(FileName);
 	if (file == nullptr)
 		return false;
 

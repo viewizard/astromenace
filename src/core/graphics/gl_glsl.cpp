@@ -515,10 +515,10 @@ eGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 	// вертекстный шейдер
 	GLSLtmp->VertexShaderUse = false;
 	if (VertexShaderFileName != nullptr) {
-		eFILE *VertexFile = vw_fopen(VertexShaderFileName);
+		std::unique_ptr<eFILE> VertexFile = vw_fopen(VertexShaderFileName);
 
 		if (VertexFile != nullptr) {
-			const GLcharARB *TmpGLcharARB = (const GLcharARB *)VertexFile->Data;
+			const GLcharARB *TmpGLcharARB = (const GLcharARB *)VertexFile->Data.get();
 			glShaderSourceARB(GLSLtmp->VertexShader, 1, &TmpGLcharARB, &VertexFile->Size);
 			vw_fclose(VertexFile);
 			GLSLtmp->VertexShaderUse = true;
@@ -527,10 +527,10 @@ eGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 	// фрагментный шейдер
 	GLSLtmp->FragmentShaderUse = false;
 	if (FragmentShaderFileName != nullptr) {
-		eFILE *FragmentFile = vw_fopen(FragmentShaderFileName);
+		std::unique_ptr<eFILE> FragmentFile = vw_fopen(FragmentShaderFileName);
 
 		if (FragmentFile != nullptr) {
-			const GLcharARB *TmpGLcharARB = (const GLcharARB *)FragmentFile->Data;
+			const GLcharARB *TmpGLcharARB = (const GLcharARB *)FragmentFile->Data.get();
 			glShaderSourceARB(GLSLtmp->FragmentShader, 1, &TmpGLcharARB, &FragmentFile->Size);
 			vw_fclose(FragmentFile);
 			GLSLtmp->FragmentShaderUse = true;

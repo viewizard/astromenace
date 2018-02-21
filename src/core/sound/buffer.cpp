@@ -112,7 +112,7 @@ ALuint vw_CreateSoundBufferFromOGG(const char *Name)
 {
 	ALuint Buffer;
 
-	eFILE *file = vw_fopen(Name);
+	std::unique_ptr<eFILE> file = vw_fopen(Name);
 	if (file == nullptr)
 		return 0;
 
@@ -127,7 +127,7 @@ ALuint vw_CreateSoundBufferFromOGG(const char *Name)
 	OggVorbis_File *mVF = new OggVorbis_File;
 
 	// Generate local buffers
-	if (ov_open_callbacks(file, mVF, nullptr, 0, cb) < 0)
+	if (ov_open_callbacks(file.get(), mVF, nullptr, 0, cb) < 0)
 		// This is not ogg bitstream. Return
 		return 0;
 
@@ -180,11 +180,11 @@ ALuint vw_CreateSoundBufferFromWAV(const char *Name)
 {
 	ALuint Buffer;
 
-	eFILE *file = vw_fopen(Name);
+	std::unique_ptr<eFILE> file = vw_fopen(Name);
 	if (file == nullptr)
 		return 0;
 
-	Buffer = alutCreateBufferFromFileImage(file->Data, file->Size);
+	Buffer = alutCreateBufferFromFileImage(file->Data.get(), file->Size);
 	if (!CheckALUTError())
 		return 0;
 

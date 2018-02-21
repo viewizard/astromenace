@@ -174,7 +174,7 @@ bool eMusic::Play(const char *Name, float fVol, float fMainVol, bool Loop, const
 	mVF = new OggVorbis_File;
 
 	// Generate local buffers
-	if (ov_open_callbacks(MusicFile, mVF, nullptr, 0, cb) < 0)
+	if (ov_open_callbacks(MusicFile.get(), mVF, nullptr, 0, cb) < 0)
 		// This is not ogg bitstream. Return
 		return false;
 
@@ -267,7 +267,7 @@ bool eMusic::Update()
 					mVF = new OggVorbis_File;
 
 					// Generate local buffers
-					if (ov_open_callbacks(MusicFile, mVF, nullptr, 0, cb) < 0)
+					if (ov_open_callbacks(MusicFile.get(), mVF, nullptr, 0, cb) < 0)
 						// This is not ogg bitstream. Return
 						return false;
 

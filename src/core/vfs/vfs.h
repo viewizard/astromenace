@@ -29,75 +29,42 @@
 
 #include "../base.h"
 #include <forward_list>
+#include <memory>
 
 #define VFS_VER "v1.6"
 
-/*
-
- Game data VFS v1.6 structure.
-
-  4b - 'VFS_'
-  4b - 'v1.6'
-  4b - VFS build number
-  4b - file table offset
-  4b - file table size
-  ?b - data (file data one by one)
-
-  - File table structure
-  2b - file name size
-  ?b - file name
-  4b - file position offset in VFS file
-  4b - file size
-
-*/
-
-struct eVFS {
-	char		*FileName;
-	SDL_RWops	*File;
-
-	int	HeaderLengthVFS;
-	int	HeaderOffsetVFS;
-	int	DataStartOffsetVFS;
-	bool	Writable;
-};
-
-struct eVFS_Entry {
-	DWORD	NameSize;
-	char	*Name;
-	int	Offset;
-	int	Size;
-
-	eVFS	*Parent;
-};
-
-/* Get VFS entries list */
-std::forward_list<eVFS_Entry*> *vw_GetVFSEntriesListHead();
-/* Create VFS file */
-eVFS	*vw_CreateVFS(const char *Name, unsigned int BuildNumber);
-/* Write data from file into VFS file */
-int	vw_WriteIntoVFSfromFile(eVFS *WritableVFS, const char *SrcName, const char *DstName);
-/* Write data from memory into VFS file */
-int	vw_WriteIntoVFSfromMemory(eVFS *WritableVFS, const char *Name, const BYTE *buffer, int size);
-/* Open VFS file */
-int	vw_OpenVFS(const char *Name, unsigned int BuildNumber);
-/* Close all VFS */
-void	vw_CloseVFS();
-/* Shutdown VFS, close all opened files */
+/* Create VFS file. */
+int	vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
+		     const std::string &RawDataDir, const std::string &ModelsPack,
+		     const std::string GameData[], unsigned int GameDataCount);
+/* Open VFS file. */
+int	vw_OpenVFS(const std::string &Name, unsigned int BuildNumber);
+/* Shutdown VFS. */
 void	vw_ShutdownVFS();
 
 struct eFILE {
-	char	*Name;
-	int	VFS_Offset;
-	int	Size;
-	long	Pos;
-	BYTE	*Data;
+	std::string		Name;
+	int			Size;
+	std::unique_ptr<BYTE[]>	Data;
 
 	int	fread(void *buffer, size_t size, size_t count);
 	int	fseek(long offset, int origin);
 	long	ftell();
+
+	eFILE(int _Size, long _Pos, const std::string &_Name) :
+		Size(_Size),
+		Pos(_Pos)
+	{
+		Name = _Name;
+	}
+
+private:
+	long	Pos;
 };
 
-eFILE	*vw_fopen(const char *FileName);
-int	vw_fclose(eFILE *stream);
+/* Open the eFILE. */
+std::unique_ptr<eFILE>	vw_fopen(const std::string &FileName);
+/* We don't really close stream, but release memory. */
+int			vw_fclose(std::unique_ptr<eFILE> &stream);
 
 #endif // VFS_H

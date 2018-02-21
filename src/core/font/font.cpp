@@ -99,7 +99,7 @@ int vw_InitFont(const char *FontName)
 		InternalFontBuffer = nullptr;
 	}
 
-	eFILE* FontFile = vw_fopen(FontName);
+	std::unique_ptr<eFILE> FontFile = vw_fopen(FontName);
 	if (FontFile == nullptr) {
 		fprintf(stderr, "Can't open font file: %s\n", FontName);
 		return -1;
