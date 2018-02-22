@@ -37,8 +37,9 @@
  Opened eFILE is not connected to VFS file or VFS entries list in any way.
 
  Caller should hold eFILE open as long, as it need memory buffer (eFILE->Data).
- In order to code simplicity, read only direct access to eFILE data allowed,
- Caller should not change eFILE variables or memory buffer (eFILE->Data).
+ In order to code simplicity, read and write direct access to eFILE data allowed.
+ Caller could reset() memory buffer with different size (eFILE->Data), but should
+ care about eFILE->Size and eFILE->Pos field (access by fseek()).
 
  Game data VFS v1.6 structure.
 
@@ -287,12 +288,15 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
  */
 int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 {
-	unsigned int vfsBuildNumber = 0;
-	int HeaderOffsetVFS;
-	int HeaderLengthVFS;
-	int VFS_FileSize;
-	char Sign[5];
-	char Version[5];
+	/* small trick for replace 'goto' statement usage (for release
+	 * memory on errors) to Lambda expression
+	 */
+	auto errPrintWithVFSListPop = [&Name] (const std::string &Text)
+	{
+		fprintf(stderr, (Text + " " + Name + "\n").c_str());
+		VFS_List.pop_front();
+		return -1;
+	};
 
 	/* since we can't move unique_ptr into std::forward_list with push_front(),
 	 * forced to explicitly create the std::unique_ptr in the list
@@ -300,59 +304,46 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 	VFS_List.push_front(std::unique_ptr<eVFS>(new eVFS(Name)));
 
 	VFS_List.front()->File = SDL_RWFromFile(Name.c_str(), "rb");
-	if (VFS_List.front()->File == nullptr) {
-		fprintf(stderr, "Can't find VFS file %s\n", Name.c_str());
-		goto error;
-	}
+	if (VFS_List.front()->File == nullptr)
+		return errPrintWithVFSListPop("Can't find VFS file");
 
 	SDL_RWseek(VFS_List.front()->File,0,SEEK_END);
-	VFS_FileSize = SDL_RWtell(VFS_List.front()->File);
+	int VFS_FileSize = SDL_RWtell(VFS_List.front()->File);
 	SDL_RWseek(VFS_List.front()->File,0,SEEK_SET);
 
 	/* check VFS file sign "VFS_" */
+	char Sign[5];
 	Sign[4] = '\0'; /* just to be sure, that we have null-terminated string */
 
-	if(SDL_RWread(VFS_List.front()->File, &Sign, 4, 1) == 0) {
-		fprintf(stderr, "VFS file size error %s\n", Name.c_str());
-		goto error;
-	}
-	if (strncmp(Sign, "VFS_", 4) != 0) {
-		fprintf(stderr, "VFS file header error %s\n", Name.c_str());
-		goto error;
-	}
+	if(SDL_RWread(VFS_List.front()->File, &Sign, 4, 1) == 0)
+		return errPrintWithVFSListPop("VFS file size error");
+	if (strncmp(Sign, "VFS_", 4) != 0)
+		return errPrintWithVFSListPop("VFS file header error");
 
 	/* check VFS file version */
+	char Version[5];
 	Version[4] = '\0'; /* just to be sure, that we have null-terminated string */
 
-	if(SDL_RWread(VFS_List.front()->File, &Version, 4, 1) == 0) {
-		fprintf(stderr, "VFS file corrupted: %s\n", Name.c_str());
-		goto error;
-	}
-	if (strncmp(Version, VFS_VER, 4) != 0) {
-		fprintf(stderr,
-			"VFS file has wrong version, version %s not supported: %s\n",
-			Version, Name.c_str());
-		goto error;
-	}
+	if(SDL_RWread(VFS_List.front()->File, &Version, 4, 1) == 0)
+		return errPrintWithVFSListPop("VFS file corrupted:");
+	if (strncmp(Version, VFS_VER, 4) != 0)
+		return errPrintWithVFSListPop("VFS file has wrong version:");
 
 	/* check VFS file build number */
-	if(SDL_RWread(VFS_List.front()->File, &vfsBuildNumber, 4, 1) == 0) {
-		fprintf(stderr, "VFS file corrupted: %s\n", Name.c_str());
-		goto error;
-	}
+	unsigned int vfsBuildNumber;
+	if(SDL_RWread(VFS_List.front()->File, &vfsBuildNumber, 4, 1) == 0)
+		return errPrintWithVFSListPop("VFS file corrupted:");
 	if (BuildNumber != 0) {
 		if (vfsBuildNumber == 0) {
 			printf("VFS file build number was not set (0).\n");
 		} else {
-			if (BuildNumber != vfsBuildNumber) {
-				fprintf(stderr,
-					"VFS file has wrong build number (%u), you need VFS with build number %u\n",
-					vfsBuildNumber, BuildNumber);
-				goto error;
-			}
+			if (BuildNumber != vfsBuildNumber)
+				return errPrintWithVFSListPop("VFS file has wrong build number");
 		}
 	}
 
+	int HeaderOffsetVFS;
+	int HeaderLengthVFS;
 	SDL_RWread(VFS_List.front()->File, &HeaderOffsetVFS, sizeof(HeaderOffsetVFS), 1);
 	SDL_RWread(VFS_List.front()->File, &HeaderLengthVFS, sizeof(HeaderLengthVFS), 1);
 	SDL_RWseek(VFS_List.front()->File, HeaderOffsetVFS, SEEK_SET);
@@ -373,10 +364,6 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 
 	printf("VFS file was opened %s\n", Name.c_str());
 	return 0;
-
-error:
-	VFS_List.pop_front();
-	return -1;
 }
 
 /*
