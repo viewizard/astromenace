@@ -1557,7 +1557,7 @@ void DrawDialogBox()
 		}
 
 		vw_SetFontSize(24);
-		int Size, SizeI;
+		int Size;
 		Size = vw_FontSize(vw_GetLanguageList()[Setup.MenuLanguage-1].title);
 		SizeI = (170-Size)/2;
 		if (Size > 170)

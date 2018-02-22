@@ -49,7 +49,7 @@ enum Side {
 /*
  * This normalizes a plane (A side) from a given frustum.
  */
-static void NormalizePlane(float Frustum[6][4], int Side)
+static void NormalizePlane(int Side)
 {
 	/* Here we calculate the magnitude of the normal to the plane (point A B C)
 	 * Remember that (A, B, C) is that same thing as the normal's (X, Y, Z).
@@ -117,37 +117,37 @@ void vw_CalculateFrustum()
 	Frustum[RIGHT][B] = clip[ 7] - clip[ 4];
 	Frustum[RIGHT][C] = clip[11] - clip[ 8];
 	Frustum[RIGHT][D] = clip[15] - clip[12];
-	NormalizePlane(Frustum, RIGHT);
+	NormalizePlane(RIGHT);
 
 	Frustum[LEFT][A] = clip[ 3] + clip[ 0];
 	Frustum[LEFT][B] = clip[ 7] + clip[ 4];
 	Frustum[LEFT][C] = clip[11] + clip[ 8];
 	Frustum[LEFT][D] = clip[15] + clip[12];
-	NormalizePlane(Frustum, LEFT);
+	NormalizePlane(LEFT);
 
 	Frustum[BOTTOM][A] = clip[ 3] + clip[ 1];
 	Frustum[BOTTOM][B] = clip[ 7] + clip[ 5];
 	Frustum[BOTTOM][C] = clip[11] + clip[ 9];
 	Frustum[BOTTOM][D] = clip[15] + clip[13];
-	NormalizePlane(Frustum, BOTTOM);
+	NormalizePlane(BOTTOM);
 
 	Frustum[TOP][A] = clip[ 3] - clip[ 1];
 	Frustum[TOP][B] = clip[ 7] - clip[ 5];
 	Frustum[TOP][C] = clip[11] - clip[ 9];
 	Frustum[TOP][D] = clip[15] - clip[13];
-	NormalizePlane(Frustum, TOP);
+	NormalizePlane(TOP);
 
 	Frustum[BACK][A] = clip[ 3] - clip[ 2];
 	Frustum[BACK][B] = clip[ 7] - clip[ 6];
 	Frustum[BACK][C] = clip[11] - clip[10];
 	Frustum[BACK][D] = clip[15] - clip[14];
-	NormalizePlane(Frustum, BACK);
+	NormalizePlane(BACK);
 
 	Frustum[FRONT][A] = clip[ 3] + clip[ 2];
 	Frustum[FRONT][B] = clip[ 7] + clip[ 6];
 	Frustum[FRONT][C] = clip[11] + clip[10];
 	Frustum[FRONT][D] = clip[15] + clip[14];
-	NormalizePlane(Frustum, FRONT);
+	NormalizePlane(FRONT);
 }
 
 /*
