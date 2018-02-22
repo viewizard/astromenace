@@ -27,7 +27,7 @@
 #include "core/vfs/vfs.h"
 #include "config.h"
 
-std::string GameData[] = {
+const std::string GameData[] = {
 	"lang/ru/voice/EngineMalfunction.wav",
 	"lang/ru/voice/WeaponDamaged.wav",
 	"lang/ru/voice/MissileDetected.wav",

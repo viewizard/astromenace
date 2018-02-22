@@ -100,10 +100,12 @@ struct eVFS_Entry {
 	}
 };
 
+namespace {
 /* List with connected VFS. */
 std::forward_list<std::unique_ptr<eVFS>> VFS_List;
 /* List with file's entries in VFS. */
 std::forward_list<std::unique_ptr<eVFS_Entry>> VFSEntries_List;
+}
 
 
 /*
