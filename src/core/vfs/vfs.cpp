@@ -278,9 +278,6 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 		}
 	}
 
-	/* release all VFS entries */
-	WritableVFSEntries_List.clear();
-
 	printf("VFS file was created %s\n", Name.c_str());
 	return 0;
 }
