@@ -253,7 +253,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 			std::unique_ptr<eFILE> tmpFile = vw_fopen(TmpVFSEntry->Name);
 			if (tmpFile == nullptr)
 				return -1;
-			if (0 != WriteIntoVFSfromMemory(TempVFS.get(), tmpFile->Name, tmpFile->Data, tmpFile->Size,
+			if (0 != WriteIntoVFSfromMemory(TempVFS.get(), TmpVFSEntry->Name, tmpFile->Data, tmpFile->Size,
 							&HeaderLengthVFS, &HeaderOffsetVFS, &DataStartOffsetVFS,
 							WritableVFSEntries_List)) {
 				fprintf(stderr, "VFS compilation process aborted!\n");
@@ -439,7 +439,7 @@ std::unique_ptr<eFILE> vw_fopen(const std::string &FileName)
 	}
 
 	/* initial memory allocation and setup */
-	std::unique_ptr<eFILE> File(new eFILE(0, 0, FileName));
+	std::unique_ptr<eFILE> File(new eFILE(0, 0));
 
 	if (Location == FILE_IN_VFS) {
 		/* find file in VFS by name */

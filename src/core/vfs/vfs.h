@@ -43,7 +43,6 @@ int	vw_OpenVFS(const std::string &Name, unsigned int BuildNumber);
 void	vw_ShutdownVFS();
 
 struct eFILE {
-	std::string		Name;
 	int			Size;
 	std::unique_ptr<BYTE[]>	Data;
 
@@ -51,12 +50,10 @@ struct eFILE {
 	int	fseek(long offset, int origin);
 	long	ftell();
 
-	eFILE(int _Size, long _Pos, const std::string &_Name) :
+	eFILE(int _Size, long _Pos) :
 		Size(_Size),
 		Pos(_Pos)
-	{
-		Name = _Name;
-	}
+	{}
 
 private:
 	long	Pos;
