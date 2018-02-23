@@ -35,13 +35,14 @@
  * This also increase buffers size on 50%, but buffers are small enough.
  */
 
+namespace {
 /* FreeType related stuff. */
 FT_Library	InternalLibrary;
 FT_Face		InternalFace;
-BYTE		*InternalFontBuffer = nullptr;
+BYTE		*InternalFontBuffer{nullptr};
 /* Font settings. */
 int 		InternalFontSize;
-int		GlobalFontOffsetY = 0;
+int		GlobalFontOffsetY{0};
 
 struct eFontChar {
 	unsigned 	UTF32; /* UTF32 code */
@@ -82,6 +83,7 @@ struct eFontChar {
 
 /* List with connected font characters. */
 std::forward_list<eFontChar*> FontChars_List;
+}
 
 
 /*
@@ -263,7 +265,7 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 	printf("Font characters generation start.\n");
 
 	/* fake texture file name based on CharsList */
-	const char *TextureName = CharsList;
+	const char *TextureName{CharsList};
 	/* buffer for RGBA, data for font characters texture */
 	BYTE *DIB = new BYTE[FontTextureWidth*FontTextureHeight*4];
 	/* make sure, DIB filled by black and alpha set to zero,
@@ -272,11 +274,6 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 	memset(DIB, 0, FontTextureWidth*FontTextureHeight*4);
 
 	/* initial setup */
-	int CurrentDIBX = 0;
-	int CurrentDIBY = 0;
-	int EdgingSpace = 2;
-	int MaxHeightInCurrentLine = 0;
-
 	if (FT_Set_Char_Size(InternalFace, InternalFontSize << 6, InternalFontSize << 6, 96, 96)) {
 		fprintf(stderr, "Can't set char size %i.", InternalFontSize);
 		delete [] DIB;
@@ -284,7 +281,11 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 	}
 
 	/* create one large bitmap with all font characters from list */
-	const char *CharsList2 = CharsList;
+	int CurrentDIBX{0};
+	int CurrentDIBY{0};
+	int EdgingSpace{2};
+	int MaxHeightInCurrentLine{0};
+	const char *CharsList2{CharsList};
 	while (strlen(CharsList) > 0) {
 		unsigned CurrentChar;
 		/* convert into UTF32 code */
@@ -384,7 +385,7 @@ void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontS
 	/* get current viewport */
 	int W, H;
 	vw_GetViewport(nullptr, nullptr, &W, &H);
-	float AHw = H*1.0f;
+	float AHw{H*1.0f};
 
 	/* check text position */
 	if (ASpresent) {
@@ -406,24 +407,26 @@ void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontS
 	if (strlen(text) == 0)
 		return;
 
-	float Xstart = X;
+	float Xstart{X*1.0f};
 	/* calculate default space width */
 	if (FindFontCharByUTF32(0x020) == nullptr)
 		LoadFontChar(0x020);
 	float SpaceWidth = FindFontCharByUTF32(0x020)->AdvanceX*FontScale;
 	/* make sure, we have space width at least 65% of current font size */
-	if (SpaceWidth < (InternalFontSize * 0.65f)) SpaceWidth = InternalFontSize * 0.65f;
+	if (SpaceWidth < (InternalFontSize * 0.65f))
+		SpaceWidth = InternalFontSize * 0.65f;
 	// коэф. изменения букв по ширине
-	float FontWidthScale = 1.0f;
+	float FontWidthScale{1.0f};
 
-	if (Transp >= 1.0f) Transp = 1.0f;
+	if (Transp >= 1.0f)
+		Transp = 1.0f;
 
 	// если нужно выравнивать, считаем данные пробелов
 	if (StrictWidth > 0) {
-		float LineWidth = 0;
-		int SpaceCount = 0;
+		float LineWidth{0};
+		int SpaceCount{0};
 
-		const char *CountCheck = text;
+		const char *CountCheck{text};
 		while (strlen(CountCheck) > 0) {
 			unsigned UTF32;
 			// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
@@ -446,9 +449,9 @@ void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontS
 	}
 	// если нужно сжать, считаем коэф. сжатия букв
 	if (StrictWidth < 0) {
-		float LineWidth = 0;
+		float LineWidth{0};
 
-		const char *CountCheck = text;
+		const char *CountCheck{text};
 		while (strlen(CountCheck) > 0) {
 			unsigned UTF32;
 			// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
@@ -465,10 +468,11 @@ void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontS
 				LineWidth += SpaceWidth;
 		}
 
-		if (StrictWidth*(-1.0f) < LineWidth) FontWidthScale = StrictWidth/LineWidth*(-1.0f);
+		if (StrictWidth*(-1.0f) < LineWidth)
+			FontWidthScale = StrictWidth/LineWidth*(-1.0f);
 	}
 
-	float LineWidth = 0;
+	float LineWidth{0};
 
 	// установка свойств текстуры
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
@@ -476,8 +480,8 @@ void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontS
 	vw_SetColor(R, G, B, Transp);
 
 	// для отрисовки
-	eTexture *CurrentTexture = nullptr;
-	int k = 0;
+	eTexture *CurrentTexture{nullptr};
+	int k{0};
 	// буфер для последовательности RI_QUADS
 	// войдет RI_2f_XYZ | RI_2f_TEX
 	float *tmp = new float[(2+2)*4*strlen(text)];
@@ -486,7 +490,7 @@ void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontS
 	FontWidthScale = FontScale*FontWidthScale;
 
 	// прорисовка текста
-	const char *textdraw = text;
+	const char *textdraw{text};
 	// прорисовываем все символы
 	while (strlen(textdraw) > 0) {
 		unsigned UTF32;
@@ -516,24 +520,26 @@ void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontS
 
 		// если не пробел - рисуем
 		if (UTF32 != 0x020) {
-			float DrawX = Xstart + DrawChar->Left*FontWidthScale;
-			float DrawY = Y + GlobalFontOffsetY + (InternalFontSize - DrawChar->Top)*FontScale;
+			float DrawX{Xstart + DrawChar->Left*FontWidthScale};
+			float DrawY{Y + GlobalFontOffsetY + (InternalFontSize - DrawChar->Top)*FontScale};
 
 			// Вычисление поправки по У в зависимости от DrawCorner
 			// - расположения угла начала координат
-			float tmpPosY = 0;
+			float tmpPosY{0};
 			// изменяем только в случае RI_UL_CORNER
-			if (ASpresent) tmpPosY = (AH - DrawY - DrawY - DrawChar->Height*FontScale);
-			else tmpPosY = (AHw - DrawY - DrawY - DrawChar->Height*FontScale);
+			if (ASpresent)
+				tmpPosY = (AH - DrawY - DrawY - DrawChar->Height*FontScale);
+			else
+				tmpPosY = (AHw - DrawY - DrawY - DrawChar->Height*FontScale);
 
-			float ImageHeight = DrawChar->Texture->Height*1.0f;
-			float ImageWidth = DrawChar->Texture->Width*1.0f;
+			float ImageHeight{DrawChar->Texture->Height*1.0f};
+			float ImageWidth{DrawChar->Texture->Width*1.0f};
 
-			float FrameHeight = (DrawChar->TexturePositionBottom*1.0f )/ImageHeight;
-			float FrameWidth = (DrawChar->TexturePositionRight*1.0f )/ImageWidth;
+			float FrameHeight{(DrawChar->TexturePositionBottom*1.0f )/ImageHeight};
+			float FrameWidth{(DrawChar->TexturePositionRight*1.0f )/ImageWidth};
 
-			float Yst = (DrawChar->TexturePositionTop*1.0f)/ImageHeight;
-			float Xst = (DrawChar->TexturePositionLeft*1.0f)/ImageWidth;
+			float Yst{(DrawChar->TexturePositionTop*1.0f)/ImageHeight};
+			float Xst{(DrawChar->TexturePositionLeft*1.0f)/ImageWidth};
 
 			tmp[k++] = DrawX;
 			tmp[k++] = DrawY + tmpPosY + DrawChar->Height*FontScale;
@@ -600,15 +606,16 @@ int vw_FontSize(const char *Text, ...)
 	if (strlen(text) == 0)
 		return 0;
 
-	const char *textdraw = text;
+	const char *textdraw{text};
 	/* calculate default space width */
 	if (FindFontCharByUTF32(0x020) == nullptr)
 		LoadFontChar(0x020);
 	float SpaceWidth = FindFontCharByUTF32(0x020)->AdvanceX;
 	/* make sure, we have space width at least 65% of current font size */
-	if (SpaceWidth < (InternalFontSize * 0.65f)) SpaceWidth = InternalFontSize * 0.65f;
+	if (SpaceWidth < (InternalFontSize * 0.65f))
+		SpaceWidth = InternalFontSize * 0.65f;
 
-	float LineWidth = 0;
+	float LineWidth{0.0f};
 	while (strlen(textdraw) > 0) {
 		unsigned UTF32;
 		// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
@@ -646,9 +653,9 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 		return;
 
 	// прорисовка текста
-	const char *textdraw = text;
+	const char *textdraw{text};
 
-	float Xstart = 0.0f;
+	float Xstart{0.0f};
 	/* calculate default space width */
 	float SpaceWidth = FindFontCharByUTF32(0x020)->AdvanceX;
 	/* make sure, we have space width at least 65% of current font size */
@@ -658,8 +665,8 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 	textdraw = text;
 
 	// для отрисовки
-	eTexture* CurrentTexture = nullptr;
-	int k = 0;
+	eTexture* CurrentTexture{nullptr};
+	int k{0};
 	// буфер для последовательности RI_QUADS
 	// войдет RI_2f_XY | RI_2f_TEX
 	float *tmp = new float[(2 + 2) * 4 * strlen(textdraw)];
@@ -708,17 +715,17 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 
 		// если не пробел - рисуем
 		if (UTF32 != 0x020) {
-			float DrawX = Xstart + DrawChar->Left;
-			float DrawY = InternalFontSize - DrawChar->Top;
+			float DrawX{Xstart + DrawChar->Left};
+			float DrawY{(InternalFontSize - DrawChar->Top)*1.0f};
 
-			float ImageHeight = DrawChar->Texture->Height*1.0f;
-			float ImageWidth = DrawChar->Texture->Width*1.0f;
+			float ImageHeight{DrawChar->Texture->Height*1.0f};
+			float ImageWidth{DrawChar->Texture->Width*1.0f};
 
-			float FrameHeight = (DrawChar->TexturePositionBottom*1.0f )/ImageHeight;
-			float FrameWidth = (DrawChar->TexturePositionRight*1.0f )/ImageWidth;
+			float FrameHeight{(DrawChar->TexturePositionBottom*1.0f )/ImageHeight};
+			float FrameWidth{(DrawChar->TexturePositionRight*1.0f )/ImageWidth};
 
-			float Yst = (DrawChar->TexturePositionTop*1.0f)/ImageHeight;
-			float Xst = (DrawChar->TexturePositionLeft*1.0f)/ImageWidth;
+			float Yst{(DrawChar->TexturePositionTop*1.0f)/ImageHeight};
+			float Xst{(DrawChar->TexturePositionLeft*1.0f)/ImageWidth};
 
 			tmp[k++] = DrawX/10.0f;
 			tmp[k++] = (DrawY + DrawChar->Height)/10.0f;
@@ -741,9 +748,8 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 			tmp[k++] = 1.0f - Yst;
 
 			Xstart += DrawChar->AdvanceX;
-		} else {
+		} else
 			Xstart += SpaceWidth;
-		}
 	}
 
 	// если что-то было в буфере - выводим
