@@ -27,7 +27,9 @@
 #include "../graphics/graphics.h"
 #include "camera.h"
 
+namespace {
 float Frustum[6][4];
+}
 
 enum PlaneData {
 	A = 0,		/* The X value of the plane's normal. */
@@ -73,9 +75,9 @@ static void NormalizePlane(int Side)
  */
 void vw_CalculateFrustum()
 {
-	float   proj[16]; /* This will hold our projection matrix. */
-	float   modl[16]; /* This will hold our modelview matrix. */
-	float   clip[16]; /* This will hold the clipping planes. */
+	float proj[16]; /* This will hold our projection matrix. */
+	float modl[16]; /* This will hold our modelview matrix. */
+	float clip[16]; /* This will hold the clipping planes. */
 
 	/* Below, we pass in RI_PROJECTION_MATRIX to abstract our projection matrix.
 	 * It then stores the matrix into an array of [16].
@@ -151,26 +153,9 @@ void vw_CalculateFrustum()
 }
 
 /*
- * This takes a 3D point and returns TRUE if it's inside of the frustum.
- */
-bool vw_PointInFrustum(VECTOR3D Point)
-{
-	/* go through all the sides of the frustum */
-	for (int i = 0; i < 6; i++) {
-		/* calculate the plane equation and check if the point is behind a side of the frustum */
-		if (Frustum[i][A] * Point.x + Frustum[i][B] * Point.y + Frustum[i][C] * Point.z + Frustum[i][D] <= 0)
-			/* the point was behind a side, so it ISN'T in the frustum */
-			return false;
-	}
-
-	/* the point was inside of the frustum (in front of ALL the sides of the frustum) */
-	return true;
-}
-
-/*
  * This takes a 3D point and a radius and returns TRUE if the sphere is inside of the frustum
  */
-bool vw_SphereInFrustum(VECTOR3D Point, float Radius)
+bool vw_SphereInFrustum(const VECTOR3D &Point, float Radius)
 {
 	/* go through all the sides of the frustum */
 	for (int i = 0; i < 6; i++) {
@@ -184,47 +169,9 @@ bool vw_SphereInFrustum(VECTOR3D Point, float Radius)
 }
 
 /*
- * This takes the center and half the length of the cube.
- */
-bool vw_CubeInFrustum(VECTOR3D CenterPoint, float Size)
-{
-	/* Basically, what is going on is, that we are given the center of the cube,
-	 * and half the length.  Think of it like a radius.  Then we checking each point
-	 * in the cube and seeing if it is inside the frustum.  If a point is found in front
-	 * of a side, then we skip to the next side.  If we get to a plane that does NOT have
-	 * a point in front of it, then it will return false.
-	 * Note! This will sometimes say that a cube is inside the frustum when it is not.
-	 * This happens when all the corners of the bounding box are not behind any one plane.
-	 * This is rare and should not effect the overall rendering speed.
-	 */
-	for (int i = 0; i < 6; i++) {
-		if (Frustum[i][A] * (CenterPoint.x - Size) + Frustum[i][B] * (CenterPoint.y - Size) + Frustum[i][C] * (CenterPoint.z - Size) + Frustum[i][D] > 0)
-			continue;
-		if (Frustum[i][A] * (CenterPoint.x + Size) + Frustum[i][B] * (CenterPoint.y - Size) + Frustum[i][C] * (CenterPoint.z - Size) + Frustum[i][D] > 0)
-			continue;
-		if (Frustum[i][A] * (CenterPoint.x - Size) + Frustum[i][B] * (CenterPoint.y + Size) + Frustum[i][C] * (CenterPoint.z - Size) + Frustum[i][D] > 0)
-			continue;
-		if (Frustum[i][A] * (CenterPoint.x + Size) + Frustum[i][B] * (CenterPoint.y + Size) + Frustum[i][C] * (CenterPoint.z - Size) + Frustum[i][D] > 0)
-			continue;
-		if (Frustum[i][A] * (CenterPoint.x - Size) + Frustum[i][B] * (CenterPoint.y - Size) + Frustum[i][C] * (CenterPoint.z + Size) + Frustum[i][D] > 0)
-			continue;
-		if (Frustum[i][A] * (CenterPoint.x + Size) + Frustum[i][B] * (CenterPoint.y - Size) + Frustum[i][C] * (CenterPoint.z + Size) + Frustum[i][D] > 0)
-			continue;
-		if (Frustum[i][A] * (CenterPoint.x - Size) + Frustum[i][B] * (CenterPoint.y + Size) + Frustum[i][C] * (CenterPoint.z + Size) + Frustum[i][D] > 0)
-			continue;
-		if (Frustum[i][A] * (CenterPoint.x + Size) + Frustum[i][B] * (CenterPoint.y + Size) + Frustum[i][C] * (CenterPoint.z + Size) + Frustum[i][D] > 0)
-			continue;
-		/* if we get here, it is not in the frustum */
-		return false;
-	}
-	/* return a true for the cube being inside of the frustum */
-	return true;
-}
-
-/*
  * This checks if a box is in the frustum.
  */
-bool vw_BoxInFrustum(VECTOR3D MinPoint, VECTOR3D MaxPoint)
+bool vw_BoxInFrustum(const VECTOR3D &MinPoint, const VECTOR3D &MaxPoint)
 {
 	/* Go through all of the corners of the box and check then again each plane
 	 * in the frustum.  If all of them are behind one of the planes, then it most

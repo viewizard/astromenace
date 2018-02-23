@@ -33,23 +33,21 @@
 /* Camera related function. */
 
 /* Set camera location. */
-void vw_SetCameraLocation(VECTOR3D NewLocation);
+void vw_SetCameraLocation(const VECTOR3D &NewLocation);
 /* Increment camera location by vector. */
-void vw_IncCameraLocation(VECTOR3D IncLocation);
+void vw_IncCameraLocation(const VECTOR3D &IncLocation);
 /* Get camera location. */
 VECTOR3D vw_GetCameraLocation(VECTOR3D *CurrentLocation);
-/* Get camera focus point (anchor). */
-VECTOR3D vw_GetCameraFocusPoint();
-/* Set camera rotation angles. */
-void vw_SetCameraRotation(VECTOR3D NewRotation);
 /* Get camera rotation angles. */
 VECTOR3D vw_GetCameraRotation(VECTOR3D *CurrentRotation);
+/* Get camera focus point (anchor). */
+VECTOR3D vw_GetCameraFocusPoint();
 /* Move camera by direction. */
-void vw_SetCameraMove(VECTOR3D NewRotation, float ChangeDistance, VECTOR3D Point);
+void vw_SetCameraMove(const VECTOR3D &NewRotation, float ChangeDistance, const VECTOR3D &Point);
 /* Move camera around point (anchor). */
-void vw_SetCameraMoveAroundPoint(VECTOR3D Point, float ChangeDistance, VECTOR3D ChangeRotation);
+void vw_SetCameraMoveAroundPoint(const VECTOR3D &Point, float ChangeDistance, const VECTOR3D &ChangeRotation);
 /* Camera deviation setup (need for camera shake effect). */
-void vw_SetCameraDeviation(VECTOR3D NewCameraDeviation);
+void vw_SetCameraDeviation(const VECTOR3D &NewCameraDeviation);
 /* Camera setup. */
 void vw_CameraLookAt();
 
@@ -57,13 +55,9 @@ void vw_CameraLookAt();
 
 /* Call this every time the camera moves to update the frustum. */
 void vw_CalculateFrustum();
-/* This takes a 3D point and returns TRUE if it's inside of the frustum. */
-bool vw_PointInFrustum(VECTOR3D Point);
 /* This takes a 3D point and a radius and returns TRUE if the sphere is inside of the frustum. */
-bool vw_SphereInFrustum(VECTOR3D Point, float Radius);
-/* This takes the center and half the length of the cube. */
-bool vw_CubeInFrustum(VECTOR3D CenterPoint, float Size);
+bool vw_SphereInFrustum(const VECTOR3D &Point, float Radius);
 /* This checks if a box is in the frustum. */
-bool vw_BoxInFrustum(VECTOR3D MinPoint, VECTOR3D MaxPoint);
+bool vw_BoxInFrustum(const VECTOR3D &MinPoint, const VECTOR3D &MaxPoint);
 
 #endif // CAMERA_H
