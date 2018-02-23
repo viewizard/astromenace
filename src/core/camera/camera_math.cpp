@@ -181,24 +181,17 @@ bool vw_BoxInFrustum(const VECTOR3D &MinPoint, const VECTOR3D &MaxPoint)
 	 * This is rare and should not effect the overall rendering speed.
 	 */
 	for (int i = 0; i < 6; i++) {
-		if (Frustum[i][A] * MinPoint.x + Frustum[i][B] * MinPoint.y + Frustum[i][C] * MinPoint.z + Frustum[i][D] > 0)
-			continue;
-		if (Frustum[i][A] * MaxPoint.x + Frustum[i][B] * MinPoint.y + Frustum[i][C] * MinPoint.z + Frustum[i][D] > 0)
-			continue;
-		if (Frustum[i][A] * MinPoint.x + Frustum[i][B] * MaxPoint.y + Frustum[i][C] * MinPoint.z + Frustum[i][D] > 0)
-			continue;
-		if (Frustum[i][A] * MaxPoint.x + Frustum[i][B] * MaxPoint.y + Frustum[i][C] * MinPoint.z + Frustum[i][D] > 0)
-			continue;
-		if (Frustum[i][A] * MinPoint.x + Frustum[i][B] * MinPoint.y + Frustum[i][C] * MaxPoint.z + Frustum[i][D] > 0)
-			continue;
-		if (Frustum[i][A] * MaxPoint.x + Frustum[i][B] * MinPoint.y + Frustum[i][C] * MaxPoint.z + Frustum[i][D] > 0)
-			continue;
-		if (Frustum[i][A] * MinPoint.x + Frustum[i][B] * MaxPoint.y + Frustum[i][C] * MaxPoint.z + Frustum[i][D] > 0)
-			continue;
-		if (Frustum[i][A] * MaxPoint.x + Frustum[i][B] * MaxPoint.y + Frustum[i][C] * MaxPoint.z + Frustum[i][D] > 0)
-			continue;
-		/* if we get here, it is not in the frustum */
-		return false;
+		if ((Frustum[i][A] * MinPoint.x + Frustum[i][B] * MinPoint.y + Frustum[i][C] * MinPoint.z + Frustum[i][D] <= 0) &&
+		    (Frustum[i][A] * MaxPoint.x + Frustum[i][B] * MinPoint.y + Frustum[i][C] * MinPoint.z + Frustum[i][D] <= 0) &&
+		    (Frustum[i][A] * MinPoint.x + Frustum[i][B] * MaxPoint.y + Frustum[i][C] * MinPoint.z + Frustum[i][D] <= 0) &&
+		    (Frustum[i][A] * MaxPoint.x + Frustum[i][B] * MaxPoint.y + Frustum[i][C] * MinPoint.z + Frustum[i][D] <= 0) &&
+		    (Frustum[i][A] * MinPoint.x + Frustum[i][B] * MinPoint.y + Frustum[i][C] * MaxPoint.z + Frustum[i][D] <= 0) &&
+		    (Frustum[i][A] * MaxPoint.x + Frustum[i][B] * MinPoint.y + Frustum[i][C] * MaxPoint.z + Frustum[i][D] <= 0) &&
+		    (Frustum[i][A] * MinPoint.x + Frustum[i][B] * MaxPoint.y + Frustum[i][C] * MaxPoint.z + Frustum[i][D] <= 0) &&
+		    (Frustum[i][A] * MaxPoint.x + Frustum[i][B] * MaxPoint.y + Frustum[i][C] * MaxPoint.z + Frustum[i][D] <= 0))
+			/* if we get here, it is not in the frustum */
+			return false;
+
 	}
 	/* return a true for the box being inside of the frustum */
 	return true;
