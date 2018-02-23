@@ -29,15 +29,15 @@
 
 namespace {
 /* Camera update flag (need for frustum calculation on camera update). */
-bool CameraUpdated = true;
+bool CameraUpdated{true};
 /* Camera location. */
-VECTOR3D CameraLocation(0.0f, 0.0f, 0.0f);
+VECTOR3D CameraLocation{0.0f, 0.0f, 0.0f};
 /* Camera rotation angles. */
-VECTOR3D CameraRotation(0.0f, 0.0f, 0.0f);
+VECTOR3D CameraRotation{0.0f, 0.0f, 0.0f};
 /* Camera deviation (need for camera shake effect). */
-VECTOR3D CameraDeviation(0.0f, 0.0f, 0.0f);
+VECTOR3D CameraDeviation{0.0f, 0.0f, 0.0f};
 /* Camera focus point (anchor). */
-VECTOR3D CameraFocusPoint(0.0f, 0.0f, 0.0f);
+VECTOR3D CameraFocusPoint{0.0f, 0.0f, 0.0f};
 }
 
 
@@ -116,14 +116,14 @@ void vw_SetCameraMoveAroundPoint(const VECTOR3D &Point, float ChangeDistance, co
 	vw_SetCameraMove(ChangeRotation, ChangeDistance, Point);
 
 	/* rotate camera to the point */
-	VECTOR3D exV(0.0f, 0.0f, 0.0f);
-	VECTOR3D V(Point.x - CameraLocation.x,
+	VECTOR3D exV{0.0f, 0.0f, 0.0f};
+	VECTOR3D V{Point.x - CameraLocation.x,
 		   Point.y - CameraLocation.y,
-		   Point.z - CameraLocation.z);
+		   Point.z - CameraLocation.z};
 	V.Normalize();
 	if (V.x*V.x + V.y*V.y + V.z*V.z != 0) exV = V;
 
-	float newrotY = 0.0f;
+	float newrotY{0.0f};
 	if (exV.z != 0.0f) {
 		if (((0.0f > exV.x) && (0.0f > -exV.z)) || ((0.0f < exV.x) && (0.0f < -exV.z)))
 			newrotY = (atanf(fabsf(exV.x) / fabsf(exV.z))) / 0.0174532925f;
@@ -131,8 +131,8 @@ void vw_SetCameraMoveAroundPoint(const VECTOR3D &Point, float ChangeDistance, co
 			newrotY = -(atanf(fabsf(exV.x) / fabsf(exV.z))) / 0.0174532925f;
 	}
 
-	float newrotX = 0.0f;
-	float kat = (exV.z)*(exV.z) + (exV.x)*(exV.x);
+	float newrotX{0.0f};
+	float kat{(exV.z)*(exV.z) + (exV.x)*(exV.x)};
 	if (kat != 0.0f) {
 		kat = sqrtf(kat);
 		if (0 < exV.y)

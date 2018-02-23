@@ -57,9 +57,9 @@ static void NormalizePlane(int Side)
 	 * Remember that (A, B, C) is that same thing as the normal's (X, Y, Z).
 	 * To calculate magnitude you use the equation:  magnitude = sqrt( x^2 + y^2 + z^2)
 	 */
-	float Magnitude = vw_sqrtf(Frustum[Side][A] * Frustum[Side][A] +
-				   Frustum[Side][B] * Frustum[Side][B] +
-				   Frustum[Side][C] * Frustum[Side][C]);
+	float Magnitude{vw_sqrtf(Frustum[Side][A] * Frustum[Side][A] +
+				 Frustum[Side][B] * Frustum[Side][B] +
+				 Frustum[Side][C] * Frustum[Side][C])};
 
 	/* Then we divide the plane's values by it's magnitude.
 	 * This makes it easier to work with.
