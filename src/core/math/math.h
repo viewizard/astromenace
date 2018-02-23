@@ -56,18 +56,22 @@ const char* utf8_to_utf32(const char* utf8, unsigned* utf32);
 
 
 
-// Rand
+/* Random number generator */
 
-// 0.0f - 1.0f
+/* Generate random float between 0.0f and 1.0f. */
 float	vw_fRand();
-// 0.0f - Max
-float   vw_fRandNum(float Max);
-// 0 - Max
-int		vw_iRandNum(int Max);
-// возвращает значение -1.0f - 1.0f, результат стремится к нулю (!)
-#define vw_Randf0      (vw_fRand()-vw_fRand())
-// возвращает значение 0.0f - 1.0f
-#define vw_Randf1		vw_fRand()
+#define vw_Randf1	vw_fRand()
+/* Generate random float between 0.0f and Max. */
+float	vw_fRandNum(float Max);
+/* Generate random integer between 0.0f and Max. */
+int	vw_iRandNum(int Max);
+/* Generate random float between -1.0f and 1.0f. */
+#define vw_Randf0	(vw_fRand() - vw_fRand())
+
+
+
+
+
 // макрос, проверяет значение с учетом допустимых пределов
 #define Clamp(x, min, max)  x = (x<min  ? min : x<max ? x : max);
 

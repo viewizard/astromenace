@@ -119,7 +119,7 @@
 		<Unit filename="src/core/math/math.h" />
 		<Unit filename="src/core/math/matrix33.cpp" />
 		<Unit filename="src/core/math/matrix44.cpp" />
-		<Unit filename="src/core/math/mersenne_twister.h" />
+		<Unit filename="src/core/math/rand.cpp" />
 		<Unit filename="src/core/model3d/model3d.cpp" />
 		<Unit filename="src/core/model3d/model3d.h" />
 		<Unit filename="src/core/model3d/model3d_manager.cpp" />

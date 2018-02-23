@@ -26,7 +26,6 @@
 
 
 #include "math.h"
-#include "mersenne_twister.h"
 
 
 
@@ -248,35 +247,6 @@ float vw_sqrtf(float x)
 {
 	return x*InvSqrt(x);
 }
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Rand
-//------------------------------------------------------------------------------------
-MTRand mtrand1;
-
-float vw_fRand()
-{
-	// 0.0f - 1.0f
-	return mtrand1.rand();
-}
-
-float vw_fRandNum(float Max)
-{
-	// 0.0f - Max
-	return mtrand1.rand(Max);
-}
-
-int vw_iRandNum(int Max)
-{
-	// 0 - Max
-	return mtrand1.randInt(Max);
-}
-
-
 
 
 
