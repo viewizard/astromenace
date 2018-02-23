@@ -20,22 +20,22 @@ Installers for Windows and Mac could be found at [release](https://github.com/vi
 
 Almost all popular Linux distros already have stable AstroMenace package in official repository. Check "astromenace" package with your package manager.
 
-### Debian/Ubuntu and derivatives
+#### Debian/Ubuntu and derivatives
 ```
 sudo apt-get install astromenace
 ```
 
-### OpenSuse
+#### OpenSuse
 ```
 sudo zypper install astromenace
 ```
 
-### Fedora
+#### Fedora
 ```
 sudo yum install astromenace
 ```
 
-### Gentoo
+#### Gentoo
 ```
 sudo emerge openastromenace
 ```
