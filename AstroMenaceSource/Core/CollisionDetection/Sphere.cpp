@@ -38,15 +38,16 @@
 bool vw_SphereSphereCollision(float Object1Radius, VECTOR3D Object1Location,
 								float Object2Radius, VECTOR3D Object2Location, VECTOR3D Object2PrevLocation)
 {
-	bool Result = false;
+	bool Result = true;
 
 	VECTOR3D Object1m2Location = Object1Location - Object2Location;
 	float Object1p1Radius = Object1Radius + Object2Radius;
 
 	// быстрая проверка на кубы... чтобы не делать много умножений
-	if (fabsf(Object1m2Location.x) <= Object1p1Radius) Result = true;
-	if (fabsf(Object1m2Location.y) <= Object1p1Radius) Result = true;
-	if (fabsf(Object1m2Location.z) <= Object1p1Radius) Result = true;
+	if ((fabsf(Object1m2Location.x) > Object1p1Radius) ||
+	    (fabsf(Object1m2Location.y) > Object1p1Radius) ||
+	    (fabsf(Object1m2Location.z) > Object1p1Radius))
+		Result = false;
 
 
 	// делаем просчет по радиусам... т.е. уже работаем со сферами
