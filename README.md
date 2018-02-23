@@ -16,6 +16,30 @@ More information and screenshots could be found at [AstroMenace web site](http:/
 
 Installers for Windows and Mac could be found at [release](https://github.com/viewizard/astromenace/releases) section.
 
+## Installation
+
+Almost all popular Linux distros already have stable AstroMenace package in official repository. Check "astromenace" package with your package manager.
+
+### Debian/Ubuntu and derivatives
+```
+sudo apt-get install astromenace
+```
+
+### OpenSuse
+```
+sudo zypper install astromenace
+```
+
+### Fedora
+```
+sudo yum install astromenace
+```
+
+### Gentoo
+```
+sudo emerge openastromenace
+```
+
 ## Build
 
 Runtime dependencies:
