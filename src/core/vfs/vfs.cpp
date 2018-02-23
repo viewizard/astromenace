@@ -68,11 +68,10 @@ enum file_location {
 
 struct eVFS {
 	std::string	FileName;
-	SDL_RWops	*File;
+	SDL_RWops	*File{nullptr};
 
 	eVFS(const std::string &_FileName) :
-		FileName(_FileName),
-		File(nullptr)
+		FileName(_FileName)
 	{}
 	~eVFS()
 	{
@@ -83,16 +82,13 @@ struct eVFS {
 };
 
 struct eVFS_Entry {
-	DWORD		NameSize;
+	DWORD		NameSize{0};
 	std::string	Name;
-	int		Offset;
-	int		Size;
-	eVFS		*Parent;
+	int		Offset{0};
+	int		Size{0};
+	eVFS		*Parent{nullptr};
 
 	eVFS_Entry(eVFS *_Parent) :
-		NameSize(0),
-		Offset(0),
-		Size(0),
 		Parent(_Parent)
 	{}
 	/* trick for forward_list<unique_ptr<T>> work with iterator */
@@ -208,25 +204,22 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 
 	std::unique_ptr<eVFS> TempVFS(new eVFS(Name));
 
-	int HeaderLengthVFS = 0;
-	int HeaderOffsetVFS = 0;
-	int DataStartOffsetVFS = 0;
-
 	TempVFS->File = SDL_RWFromFile(Name.c_str(), "wb");
 	if (TempVFS->File == nullptr) {
 		fprintf(stderr, "Can't open VFS file for write %s\n", Name.c_str());
 		return -1;
 	}
 
-	/* write VFS sign, version and build number */
-	char Sign[5] = "VFS_";
+	/* write VFS sign "VFS_", version and build number */
+	char Sign[4]{'V','F','S','_'};
 	SDL_RWwrite(TempVFS->File, Sign, 4, 1);
 	SDL_RWwrite(TempVFS->File, VFS_VER, 4, 1);
 	SDL_RWwrite(TempVFS->File, &BuildNumber, 4, 1);
 
 	/* write new table offset and size */
-	HeaderOffsetVFS = 4 + 4 + 4 + 4 + 4; /* VFS_ + ver + build + offset + size */
-	DataStartOffsetVFS = 4 + 4 + 4; /* VFS_ + ver + build */
+	int HeaderOffsetVFS{4 + 4 + 4 + 4 + 4}; /* VFS_ + ver + build + offset + size */
+	int HeaderLengthVFS{0};
+	int DataStartOffsetVFS{4 + 4 + 4}; /* VFS_ + ver + build */
 	SDL_RWwrite(TempVFS->File, &HeaderOffsetVFS, 4, 1);
 	SDL_RWwrite(TempVFS->File, &HeaderLengthVFS, 4, 1);
 
@@ -235,18 +228,14 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 
 	/* add model pack files into VFS */
 	if (!ModelsPack.empty()) {
-		std::string ModelsPackFile;
-		ModelsPackFile = RawDataDir;
-		ModelsPackFile += ModelsPack;
-
 		/* close opened VFS, we need empty VFS related lists */
 		if (!VFS_List.empty()) {
 			fprintf(stderr, "Detected open VFS, close it now.\n");
 			vw_ShutdownVFS();
 		}
 
-		if (vw_OpenVFS(ModelsPackFile, 0) != 0) {
-			fprintf(stderr, "%s file not found or corrupted.\n", ModelsPack.c_str());
+		if (vw_OpenVFS(RawDataDir + ModelsPack, 0) != 0) {
+			fprintf(stderr, "%s file not found or corrupted.\n", (RawDataDir + ModelsPack).c_str());
 			return -1;
 		}
 
@@ -316,20 +305,18 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 	SDL_RWseek(VFS_List.front()->File,0,SEEK_SET);
 
 	/* check VFS file sign "VFS_" */
-	char Sign[5];
-	Sign[4] = '\0'; /* just to be sure, that we have null-terminated string */
-
+	char Sign[4];
 	if(SDL_RWread(VFS_List.front()->File, &Sign, 4, 1) == 0)
 		return errPrintWithVFSListPop("VFS file size error");
+	/* Sign don't contain null-terminated string, strncmp() should be used */
 	if (strncmp(Sign, "VFS_", 4) != 0)
 		return errPrintWithVFSListPop("VFS file header error");
 
 	/* check VFS file version */
-	char Version[5];
-	Version[4] = '\0'; /* just to be sure, that we have null-terminated string */
-
+	char Version[4];
 	if(SDL_RWread(VFS_List.front()->File, &Version, 4, 1) == 0)
 		return errPrintWithVFSListPop("VFS file corrupted:");
+	/* Version don't contain null-terminated string, strncmp() should be used */
 	if (strncmp(Version, VFS_VER, 4) != 0)
 		return errPrintWithVFSListPop("VFS file has wrong version:");
 
@@ -482,13 +469,13 @@ int vw_fclose(std::unique_ptr<eFILE> &stream)
  */
 int eFILE::fread(void *buffer, size_t size, size_t count)
 {
-	int CopyCount = 0;
+	int CopyCount{0};
 
 	if ((buffer == nullptr) || (Data == nullptr))
 		return -1;
 
 	/* read data */
-	for (size_t i=0; i<count; i++) {
+	for (size_t i = 0; i < count; i++) {
 		if (size <= (unsigned int)(Size - Pos)) {
 			memcpy((BYTE*)buffer + CopyCount*size, Data.get() + Pos, size);
 			Pos += size;

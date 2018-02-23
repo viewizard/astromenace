@@ -43,7 +43,7 @@ int	vw_OpenVFS(const std::string &Name, unsigned int BuildNumber);
 void	vw_ShutdownVFS();
 
 struct eFILE {
-	int			Size;
+	int			Size{0};
 	std::unique_ptr<BYTE[]>	Data;
 
 	int	fread(void *buffer, size_t size, size_t count);
@@ -56,7 +56,7 @@ struct eFILE {
 	{}
 
 private:
-	long	Pos;
+	long	Pos{0};
 };
 
 /* Open the eFILE. */
