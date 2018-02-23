@@ -24,36 +24,21 @@
 
 *************************************************************************************/
 
-
 #ifndef BULLETEXPLOSION_H
 #define BULLETEXPLOSION_H
-
 
 #include "../explosion.h"
 
 
-
-
-
-//-----------------------------------------------------------------------------
-// Класс CBulletExplosion
-//-----------------------------------------------------------------------------
+/*
+ * All bullets/rockets explosions.
+ */
 class CBulletExplosion : public CExplosion
 {
 public:
-
+	CBulletExplosion(CObject3D *Object, CProjectile *Projectile, int ExplType,
+			 const VECTOR3D &ExplLocation, float Speed, bool NeedExplosionSFX = true);
 	virtual ~CBulletExplosion() {};
-
-	// Создание взрыва из частей объекта
-	virtual void	Create(CObject3D *Object, CProjectile *Projectile, int ExplType, VECTOR3D ExplLocation, float Speed, bool NeedExplosionSFX = true);
-
 };
-
-
-
-
-
-
-
 
 #endif // BULLETEXPLOSION_H

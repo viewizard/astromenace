@@ -24,15 +24,9 @@
 
 *************************************************************************************/
 
-
-/// подключаем нужные файлы
 #include "bullet_explosion.h"
 #include "../../../game.h"
 void DestroyRadiusCollisionAllObject3D(CObject3D *DontTouchObject, VECTOR3D Point, float Radius, float Damage, int ObjectStatus);
-
-
-
-
 
 
 void PlayBulletExplosion(VECTOR3D Location, bool NeedExplosionSFX, int ExplType)
@@ -194,20 +188,11 @@ void PlayBulletExplosion(VECTOR3D Location, bool NeedExplosionSFX, int ExplType)
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // Создание взрыва из частей объекта
 //-----------------------------------------------------------------------------
-void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int ExplType, VECTOR3D ExplLocation, float Speed, bool NeedExplosionSFX)
+CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, int ExplType,
+				   const VECTOR3D &ExplLocation, float Speed, bool NeedExplosionSFX)
 {
 	TimeLastUpdate = Projectile->TimeLastUpdate;
 	ExplosionTypeByClass = 2;
@@ -1030,13 +1015,4 @@ void CBulletExplosion::Create(CObject3D *Object, CProjectile *Projectile, int Ex
 
 	}
 
-
-
 }
-
-
-
-
-
-
-

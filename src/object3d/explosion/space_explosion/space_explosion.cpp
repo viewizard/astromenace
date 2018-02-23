@@ -24,20 +24,15 @@
 
 *************************************************************************************/
 
-
-/// подключаем нужные файлы
 #include "space_explosion.h"
 #include "../../../game.h"
-
-
-
-
 
 
 //-----------------------------------------------------------------------------
 // Создание взрыва из частей объекта
 //-----------------------------------------------------------------------------
-void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocation, float Speed, int ObjectPieceNum, bool NeedExplosionSFX)
+CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D &ExplLocation,
+				 float Speed, int ObjectPieceNum, bool NeedExplosionSFX)
 {
 	// если ObjectPieceNum==-1 полный взрыв... не частями
 	// например ядерная ракета взрывает все объекты, или это астероид
@@ -492,9 +487,7 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 			}
 			if (ObjectPieceNum != -1)
 				if (ObjectPieceNum == i) {
-					CSpaceExplosion *TMPExplosion;
-					TMPExplosion = new CSpaceExplosion;
-					TMPExplosion->Create(ShipPart, NeedExplosionType, ShipPart->Location, ShipPart->Speed, -1);
+					new CSpaceExplosion(ShipPart, NeedExplosionType, ShipPart->Location, ShipPart->Speed, -1);
 					delete ShipPart;
 				}
 		}
@@ -870,6 +863,4 @@ void CSpaceExplosion::Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocat
 		break;
 	}
 
-
 }
-

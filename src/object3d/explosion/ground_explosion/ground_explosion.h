@@ -24,36 +24,22 @@
 
 *************************************************************************************/
 
-
 #ifndef GROUNDEXPLOSION_H
 #define GROUNDEXPLOSION_H
-
 
 #include "../explosion.h"
 #include "../../ground_object/ground_object.h"
 
 
-
-
-//-----------------------------------------------------------------------------
-// Класс CBulletExplosion
-//-----------------------------------------------------------------------------
+/*
+ * All ground objects explosions.
+ */
 class CGroundExplosion : public CExplosion
 {
 public:
-
+	CGroundExplosion(CGroundObject *Object, int ExplType, const VECTOR3D &ExplLocation,
+			 int ObjectPieceNum, bool NeedExplosionSFX=true);
 	virtual ~CGroundExplosion() {};
-
-	// Создание взрыва из частей объекта
-	virtual void	Create(CGroundObject *Object, int ExplType, VECTOR3D ExplLocation, int ObjectPieceNum, bool NeedExplosionSFX=true);
-
 };
-
-
-
-
-
-
-
 
 #endif // GROUNDEXPLOSION_H

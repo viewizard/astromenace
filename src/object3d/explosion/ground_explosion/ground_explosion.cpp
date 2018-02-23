@@ -24,17 +24,15 @@
 
 *************************************************************************************/
 
-
-/// подключаем нужные файлы
 #include "ground_explosion.h"
 #include "../../../game.h"
-
 
 
 //-----------------------------------------------------------------------------
 // Создание взрыва из частей объекта
 //-----------------------------------------------------------------------------
-void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D ExplLocation, int ObjectPieceNum, bool NeedExplosionSFX)
+CGroundExplosion::CGroundExplosion(CGroundObject *Object, int ExplType, const VECTOR3D &ExplLocation,
+				   int ObjectPieceNum, bool NeedExplosionSFX)
 {
 	TimeLastUpdate = Object->TimeLastUpdate;
 	ExplosionTypeByClass = 3;
@@ -188,9 +186,7 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 				if (ObjectPieceNum != -1)
 					if (ObjectPieceNum == i) {
 						// а теперь взрываем ту, в которую попали...
-						CSpaceExplosion *TMPExplosion;
-						TMPExplosion = new CSpaceExplosion;
-						TMPExplosion->Create(ShipPart, 32, ShipPart->Location, ShipPart->Speed, -1);
+						new CSpaceExplosion(ShipPart, 32, ShipPart->Location, ShipPart->Speed, -1);
 						delete ShipPart;
 					}
 			}
@@ -225,4 +221,3 @@ void CGroundExplosion::Create(CGroundObject *Object, int ExplType, VECTOR3D Expl
 
 
 }
-

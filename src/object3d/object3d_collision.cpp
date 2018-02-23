@@ -140,11 +140,8 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 						// здесь только так! иначе уничтожим снаряд
 						return false;
 					} else {
-						// "разбиваем" снаряд о корпус
-						CBulletExplosion *TMPBulletExplosion;
-						TMPBulletExplosion = new CBulletExplosion;
-						// звук тянем отдельно!
-						TMPBulletExplosion->Create(Object, Projectile, Projectile->Num, Projectile->Location, ObjectSpeed, false);
+						// "разбиваем" снаряд о корпус, звук тянем отдельно!
+						new CBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, ObjectSpeed, false);
 
 						// где сейчас, там и погибли
 						*IntercPoint = Projectile->Location;
@@ -178,14 +175,11 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 									DamagesData->DamageSystems = Projectile->DamageSystems;
 								}
 								// "разбиваем" снаряд о корпус
-								CBulletExplosion *TMPBulletExplosion;
-								TMPBulletExplosion = new CBulletExplosion;
-
 								// звук тянем отдельно!
 								if (NeedCheckCollision(Object))
-									TMPBulletExplosion->Create(Object, Projectile, Projectile->Num, *IntercPoint, ObjectSpeed, false);
+									new CBulletExplosion(Object, Projectile, Projectile->Num, *IntercPoint, ObjectSpeed, false);
 								else
-									TMPBulletExplosion->Create(Object, Projectile, Projectile->Num, *IntercPoint, 0.0f, false);
+									new CBulletExplosion(Object, Projectile, Projectile->Num, *IntercPoint, 0.0f, false);
 
 								// столкновение было
 								return true;
@@ -205,9 +199,7 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 					*IntercPoint = Projectile->Location;
 
 					// "разбиваем" снаряд о корпус
-					CBulletExplosion *TMPBulletExplosion;
-					TMPBulletExplosion = new CBulletExplosion;
-					TMPBulletExplosion->Create(Object, Projectile, -Projectile->Num, Projectile->Location, ObjectSpeed);
+					new CBulletExplosion(Object, Projectile, -Projectile->Num, Projectile->Location, ObjectSpeed);
 
 					// корректируем данные щита
 					float CurrentStatus = ShildEnergyStatus*ShildStartHitStatus;
@@ -241,13 +233,10 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 									if (!NeedCheckCollision(Object)) {
 										if (CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
 											// взрываем...
-											CBulletExplosion *TMPBulletExplosion;
-											TMPBulletExplosion = new CBulletExplosion;
-
 											if (NeedCheckCollision(Object))
-												TMPBulletExplosion->Create(Object, Projectile, Projectile->Num, Projectile->Location, Projectile->Speed);
+												new CBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, Projectile->Speed);
 											else
-												TMPBulletExplosion->Create(Object, Projectile, Projectile->Num, Projectile->Location, 0.0f);
+												new CBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, 0.0f);
 
 											return true;
 										} else
@@ -262,13 +251,10 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 										DamagesData->DamageSystems = Projectile->DamageSystems;
 									}
 									// взрываем...
-									CBulletExplosion *TMPBulletExplosion;
-									TMPBulletExplosion = new CBulletExplosion;
-
 									if (NeedCheckCollision(Object))
-										TMPBulletExplosion->Create(Object, Projectile, Projectile->Num, Projectile->Location, Projectile->Speed);
+										new CBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, Projectile->Speed);
 									else
-										TMPBulletExplosion->Create(Object, Projectile, Projectile->Num, Projectile->Location, 0.0f);
+										new CBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, 0.0f);
 									// столкновение было
 									return true;
 								}
@@ -508,29 +494,22 @@ void DetectCollisionAllObject3D()
 
 					// если не корабль игрока! его удалим сами
 					if (tmpShip->ObjectStatus != 3) {
-						CSpaceExplosion *TMPExplosion;
-						TMPExplosion = new CSpaceExplosion;
 						switch (tmpShip->ObjectType) {
 						case 2:
-							TMPExplosion->Create(tmpShip, 2, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+							new CSpaceExplosion(tmpShip, 2, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							break;
 						case 1:
-							TMPExplosion->Create(tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+							new CSpaceExplosion(tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							break;
 						case 3:
-							TMPExplosion->Create(tmpShip, 33, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+							new CSpaceExplosion(tmpShip, 33, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							break;
-						case 4: {
+						case 4:
 							if (tmpShip->ObjectCreationType <= 5)
-								TMPExplosion->Create(tmpShip, 3, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+								new CSpaceExplosion(tmpShip, 3, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							else
-								TMPExplosion->Create(tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+								new CSpaceExplosion(tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 
-							break;
-						}
-						default:
-							delete TMPExplosion;
-							TMPExplosion = nullptr;
 							break;
 						}
 						delete tmpShip;
@@ -667,14 +646,12 @@ void DetectCollisionAllObject3D()
 								if (tmpS->Strength <= 0.0f) {
 									AddPlayerBonus(tmpS, tmpShip->ObjectStatus);
 
-									CSpaceExplosion *TMPExplosion;
-									TMPExplosion = new CSpaceExplosion;
 									switch (tmpS->ObjectType) {
 									case 7:
-										TMPExplosion->Create(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
+										new CSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
 										break;
 									case 8:
-										TMPExplosion->Create(tmpS, 32, tmpS->Location, tmpS->Speed, -1);
+										new CSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1);
 										break;
 									}
 									delete tmpS;
@@ -687,30 +664,22 @@ void DetectCollisionAllObject3D()
 								if (tmpShip->Strength <= 0.0f) {
 									// если не корабль игрока! его удалим сами
 									if (tmpShip->ObjectStatus != 3) {
-										CSpaceExplosion *TMPExplosion;
-										TMPExplosion = new CSpaceExplosion;
 										switch (tmpShip->ObjectType) {
 										case 2:
-											TMPExplosion->Create(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+											new CSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 											break;
 										case 1:
-											TMPExplosion->Create(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+											new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 											break;
 										case 3:
-											TMPExplosion->Create(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+											new CSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 											break;
-										case 4: {
+										case 4:
 											if (tmpShip->ObjectCreationType <= 5)
-												TMPExplosion->Create(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+												new CSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 											else
-												TMPExplosion->Create(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+												new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 
-											break;
-										}
-
-										default:
-											delete TMPExplosion;
-											TMPExplosion = nullptr;
 											break;
 										}
 										delete tmpShip;
@@ -772,19 +741,12 @@ exitN1:
 								if (tmpG->Strength <= 0.0f) {
 									AddPlayerBonus(tmpG, tmpShip->ObjectStatus);
 
-									CGroundExplosion *TMPExplosion;
-									TMPExplosion = new CGroundExplosion;
-
 									switch (tmpG->ObjectType) {
 									case 6:
-										TMPExplosion->Create(tmpG, 1, tmpG->Location, ObjectPieceNum2);
+										new CGroundExplosion(tmpG, 1, tmpG->Location, ObjectPieceNum2);
 										break;
 									case 5:
-										TMPExplosion->Create(tmpG, 2, tmpG->Location, ObjectPieceNum2);
-										break;
-									default:
-										delete TMPExplosion;
-										TMPExplosion = nullptr;
+										new CGroundExplosion(tmpG, 2, tmpG->Location, ObjectPieceNum2);
 										break;
 									}
 									delete tmpG;
@@ -797,30 +759,22 @@ exitN1:
 								if (tmpShip->Strength <= 0.0f) {
 									// если не корабль игрока! его удалим сами
 									if (tmpShip->ObjectStatus != 3) {
-										CSpaceExplosion *TMPExplosion;
-										TMPExplosion = new CSpaceExplosion;
 										switch (tmpShip->ObjectType) {
 										case 2:
-											TMPExplosion->Create(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+											new CSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
 										case 1:
-											TMPExplosion->Create(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+											new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
 										case 3:
-											TMPExplosion->Create(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+											new CSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
-										case 4: {
+										case 4:
 											if (tmpShip->ObjectCreationType <= 5)
-												TMPExplosion->Create(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+												new CSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											else
-												TMPExplosion->Create(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+												new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 
-											break;
-										}
-
-										default:
-											delete TMPExplosion;
-											TMPExplosion = nullptr;
 											break;
 										}
 										delete tmpShip;
@@ -879,29 +833,22 @@ exitN2:
 								if (tmpCollisionShip1->Strength <= 0.0f) {
 									// если не корабль игрока! его удалим сами
 									if (tmpCollisionShip1->ObjectStatus != 3) {
-										CSpaceExplosion *TMPExplosion;
-										TMPExplosion = new CSpaceExplosion;
 										switch (tmpCollisionShip1->ObjectType) {
 										case 2:
-											TMPExplosion->Create(tmpCollisionShip1, 2, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
+											new CSpaceExplosion(tmpCollisionShip1, 2, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 											break;
 										case 1:
-											TMPExplosion->Create(tmpCollisionShip1, 31, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
+											new CSpaceExplosion(tmpCollisionShip1, 31, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 											break;
 										case 3:
-											TMPExplosion->Create(tmpCollisionShip1, 33, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
+											new CSpaceExplosion(tmpCollisionShip1, 33, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 											break;
-										case 4: {
+										case 4:
 											if (tmpCollisionShip1->ObjectCreationType <= 5)
-												TMPExplosion->Create(tmpCollisionShip1, 3, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
+												new CSpaceExplosion(tmpCollisionShip1, 3, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 											else
-												TMPExplosion->Create(tmpCollisionShip1, 31, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
+												new CSpaceExplosion(tmpCollisionShip1, 31, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 
-											break;
-										}
-										default:
-											delete TMPExplosion;
-											TMPExplosion = nullptr;
 											break;
 										}
 										// если удаляем, нужно подправить указатель...
@@ -921,29 +868,22 @@ exitN2:
 								if (tmpShip->Strength <= 0.0f) {
 									// если не корабль игрока! его удалим сами
 									if (tmpShip->ObjectStatus != 3) {
-										CSpaceExplosion *TMPExplosion;
-										TMPExplosion = new CSpaceExplosion;
 										switch (tmpShip->ObjectType) {
 										case 2:
-											TMPExplosion->Create(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+											new CSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
 										case 1:
-											TMPExplosion->Create(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+											new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
 										case 3:
-											TMPExplosion->Create(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+											new CSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
-										case 4: {
+										case 4:
 											if (tmpShip->ObjectCreationType <= 5)
-												TMPExplosion->Create(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+												new CSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											else
-												TMPExplosion->Create(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+												new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 
-											break;
-										}
-										default:
-											delete TMPExplosion;
-											TMPExplosion = nullptr;
 											break;
 										}
 										delete tmpShip;
@@ -1001,19 +941,12 @@ exitN2:
 						// проверка, нужно начислять или нет
 						AddPlayerBonus(tmpG, tmpProjectile->ObjectStatus);
 
-						CGroundExplosion *TMPExplosion;
-						TMPExplosion = new CGroundExplosion;
-
 						switch (tmpG->ObjectType) {
 						case 6:
-							TMPExplosion->Create(tmpG, 1, IntercPoint, ObjectPieceNum);
+							new CGroundExplosion(tmpG, 1, IntercPoint, ObjectPieceNum);
 							break;
 						case 5:
-							TMPExplosion->Create(tmpG, 2, IntercPoint, ObjectPieceNum);
-							break;
-						default:
-							delete TMPExplosion;
-							TMPExplosion = nullptr;
+							new CGroundExplosion(tmpG, 2, IntercPoint, ObjectPieceNum);
 							break;
 						}
 						delete tmpG;
@@ -1074,14 +1007,12 @@ exitN2:
 										if (tmpS->Strength <= 0.0f) {
 											AddPlayerBonus(tmpS, tmpG->ObjectStatus);
 
-											CSpaceExplosion *TMPExplosion;
-											TMPExplosion = new CSpaceExplosion;
 											switch (tmpS->ObjectType) {
 											case 7:
-												TMPExplosion->Create(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
+												new CSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
 												break;
 											case 8:
-												TMPExplosion->Create(tmpS, 32, tmpS->Location, tmpS->Speed, -1);
+												new CSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1);
 												break;
 											}
 											delete tmpS;
@@ -1092,19 +1023,12 @@ exitN2:
 									if (NeedCheckCollision(tmpG))
 										// если уже все... удаляем
 										if (tmpG->Strength <= 0.0f) {
-											CGroundExplosion *TMPExplosion;
-											TMPExplosion = new CGroundExplosion;
-
 											switch (tmpG->ObjectType) {
 											case 6:
-												TMPExplosion->Create(tmpG, 1, tmpG->Location, ObjectPieceNum);
+												new CGroundExplosion(tmpG, 1, tmpG->Location, ObjectPieceNum);
 												break;
 											case 5:
-												TMPExplosion->Create(tmpG, 2, tmpG->Location, ObjectPieceNum);
-												break;
-											default:
-												delete TMPExplosion;
-												TMPExplosion = nullptr;
+												new CGroundExplosion(tmpG, 2, tmpG->Location, ObjectPieceNum);
 												break;
 											}
 											delete tmpG;
@@ -1151,15 +1075,12 @@ exitN2:
 						// проверка, нужно начислять или нет
 						AddPlayerBonus(tmpS, tmpProjectile->ObjectStatus);
 
-						CSpaceExplosion *TMPExplosion;
-						TMPExplosion = new CSpaceExplosion;
-
 						switch (tmpS->ObjectType) {
 						case 7:
-							TMPExplosion->Create(tmpS, 1, IntercPoint, tmpS->Speed, -1);
+							new CSpaceExplosion(tmpS, 1, IntercPoint, tmpS->Speed, -1);
 							break;
 						case 8:
-							TMPExplosion->Create(tmpS, 32, IntercPoint, tmpS->Speed, -1);
+							new CSpaceExplosion(tmpS, 32, IntercPoint, tmpS->Speed, -1);
 							break;
 						}
 						delete tmpS;
@@ -1240,32 +1161,29 @@ exitN2:
 
 							if (NeedCheckCollision(tmpCollisionSpace1))
 								if (tmpCollisionSpace1->ObjectType == 7 || tmpCollisionSpace1->ObjectType == 8) {
-									CSpaceExplosion *TMPExplosion;
-									TMPExplosion = new CSpaceExplosion;
 									switch (tmpCollisionSpace1->ObjectType) {
 									case 7:
-										TMPExplosion->Create(tmpCollisionSpace1, 1, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
+										new CSpaceExplosion(tmpCollisionSpace1, 1, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
 										break;
 									case 8:
-										TMPExplosion->Create(tmpCollisionSpace1, 32, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
+										new CSpaceExplosion(tmpCollisionSpace1, 32, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
 										break;
 									}
 									SFXplayed = true;
 									// проверка, можем удалить следующий (tmpSpace2), берем другой
-									if (tmpCollisionSpace1 == tmpSpace2) tmpSpace2 = tmpSpace2->Next;
+									if (tmpCollisionSpace1 == tmpSpace2)
+										tmpSpace2 = tmpSpace2->Next;
 									delete tmpCollisionSpace1;// tmpCollisionSpace1 = 0;
 								}
 
 							if (NeedCheckCollision(tmpS))
 								if (tmpS->ObjectType == 7 || tmpS->ObjectType == 8) {
-									CSpaceExplosion *TMPExplosion;
-									TMPExplosion = new CSpaceExplosion;
 									switch (tmpS->ObjectType) {
 									case 7:
-										TMPExplosion->Create(tmpS, 1, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
+										new CSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
 										break;
 									case 8:
-										TMPExplosion->Create(tmpS, 32, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
+										new CSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
 										break;
 									}
 									delete tmpS;
@@ -1336,28 +1254,22 @@ exitN4:
 
 										// тоже ракета
 										if (tmpProject1->ProjectileType == 1) {
-											CBulletExplosion *TMPExplosion;
-											TMPExplosion = new CBulletExplosion;
 											tmpProject1->Speed = 0.0f;
-											TMPExplosion->Create(nullptr, tmpProject1, -tmpProject1->Num, tmpProject1->Location, tmpProject1->Speed);
+											new CBulletExplosion(nullptr, tmpProject1, -tmpProject1->Num, tmpProject1->Location, tmpProject1->Speed);
 										}
 										delete tmpProject1;
 										tmpProject1 = nullptr;
 
 										// взрываем...
-										CBulletExplosion *TMPExplosion;
-										TMPExplosion = new CBulletExplosion;
 										tmpProjectile->Speed = 0.0f;
-										TMPExplosion->Create(nullptr, tmpProjectile, -tmpProjectile->Num, tmpProjectile->Location, tmpProjectile->Speed);
+										new CBulletExplosion(nullptr, tmpProjectile, -tmpProjectile->Num, tmpProjectile->Location, tmpProjectile->Speed);
 										// в самый последний момент - удаляем снаряд... он разбился
 										delete tmpProjectile;
 										tmpProjectile = nullptr;
 
 									} else {
 										// разрушаем
-										CSpaceExplosion *TMPExplosion;
-										TMPExplosion = new CSpaceExplosion;
-										TMPExplosion->Create(tmpProjectile, 4, tmpProjectile->Location, tmpProjectile->Speed, -1);
+										new CSpaceExplosion(tmpProjectile, 4, tmpProjectile->Location, tmpProjectile->Speed, -1);
 										// в самый последний момент - удаляем снаряд... он разбился
 										delete tmpProjectile;
 										tmpProjectile = nullptr;
@@ -1391,19 +1303,15 @@ exitN4:
 							    (tmpProjectile->ProjectileType != 3)) {
 								// тоже ракета
 								if (tmpProjectile->ProjectileType == 1) {
-									CBulletExplosion *TMPExplosion;
-									TMPExplosion = new CBulletExplosion;
 									tmpProjectile->Speed = 0.0f;
-									TMPExplosion->Create(nullptr, tmpProjectile, -tmpProjectile->Num, tmpProjectile->Location, tmpProjectile->Speed);
+									new CBulletExplosion(nullptr, tmpProjectile, -tmpProjectile->Num, tmpProjectile->Location, tmpProjectile->Speed);
 								}
 								delete tmpProjectile;
 								tmpProjectile = nullptr;
 
 								// взрываем...
-								CBulletExplosion *TMPExplosion;
-								TMPExplosion = new CBulletExplosion;
 								tmpProject1->Speed = 0.0f;
-								TMPExplosion->Create(nullptr, tmpProject1, -tmpProject1->Num, tmpProject1->Location, tmpProject1->Speed);
+								new CBulletExplosion(nullptr, tmpProject1, -tmpProject1->Num, tmpProject1->Location, tmpProject1->Speed);
 								// корректировка указателя
 								if (tmpProjectile2 == tmpProject1)
 									tmpProjectile2 = tmpProjectile2->Next;
@@ -1412,10 +1320,8 @@ exitN4:
 								tmpProject1 = nullptr;
 
 							} else {
-							// разрушаем
-								CSpaceExplosion *TMPExplosion;
-								TMPExplosion = new CSpaceExplosion;
-								TMPExplosion->Create(tmpProject1, 4, tmpProject1->Location, tmpProject1->Speed, -1);
+								// разрушаем
+								new CSpaceExplosion(tmpProject1, 4, tmpProject1->Location, tmpProject1->Speed, -1);
 								// корректировка указателя
 								if (tmpProjectile2 == tmpProject1)
 									tmpProjectile2 = tmpProjectile2->Next;
@@ -1523,9 +1429,7 @@ void DestroyRadiusCollisionAllObject3D(CObject3D *DontTouchObject, VECTOR3D Poin
 						// проверка, нужно начислять или нет
 						AddPlayerBonus(tmpS, ObjectStatus);
 
-						CSpaceExplosion *TMPExplosion;
-						TMPExplosion = new CSpaceExplosion;
-						TMPExplosion->Create(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
+						new CSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
 						delete tmpS;
 						tmpS = nullptr;
 					}
@@ -1573,29 +1477,22 @@ NexttmpS:
 
 					// если не корабль игрока! его удалим сами
 					if (tmpShip->ObjectStatus != 3) {
-						CSpaceExplosion *TMPExplosion;
-						TMPExplosion = new CSpaceExplosion;
 						switch (tmpShip->ObjectType) {
 						case 2:
-							TMPExplosion->Create(tmpShip, 2, tmpShip->Location, tmpShip->Speed, -1);
+							new CSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, -1);
 							break;
 						case 1:
-							TMPExplosion->Create(tmpShip, 31, tmpShip->Location, tmpShip->Speed, -1);
+							new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, -1);
 							break;
 						case 3:
-							TMPExplosion->Create(tmpShip, 33, tmpShip->Location, tmpShip->Speed, 0);
+							new CSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, 0);
 							break;
-						case 4: {
+						case 4:
 							if (tmpShip->ObjectCreationType <= 5)
-								TMPExplosion->Create(tmpShip, 3, tmpShip->Location, tmpShip->Speed, -1);
+								new CSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, -1);
 							else
-								TMPExplosion->Create(tmpShip, 31, tmpShip->Location, tmpShip->Speed, 0);
+								new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, 0);
 
-							break;
-						}
-						default:
-							delete TMPExplosion;
-							TMPExplosion = nullptr;
 							break;
 						}
 						delete tmpShip;
@@ -1637,19 +1534,12 @@ NexttmpS:
 					// проверка, нужно начислять или нет
 					AddPlayerBonus(tmpG, ObjectStatus);
 
-					CGroundExplosion *TMPExplosion;
-					TMPExplosion = new CGroundExplosion;
-
 					switch (tmpG->ObjectType) {
 					case 6:
-						TMPExplosion->Create(tmpG, 1, tmpG->Location, -1);
+						new CGroundExplosion(tmpG, 1, tmpG->Location, -1);
 						break;
 					case 5:
-						TMPExplosion->Create(tmpG, 2, tmpG->Location, -1);
-						break;
-					default:
-						delete TMPExplosion;
-						TMPExplosion = nullptr;
+						new CGroundExplosion(tmpG, 2, tmpG->Location, -1);
 						break;
 					}
 

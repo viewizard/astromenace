@@ -1282,13 +1282,8 @@ bool CProjectile::Update(float Time)
 		// это сделаем в пушке...
 		if (ProjectileType == 2)
 			return true;
-
-
 		// передаем на самоуничтожение... там все сделаем правильно
-		CBulletExplosion *TMPBulletExplosion;
-		TMPBulletExplosion = new CBulletExplosion;
-		TMPBulletExplosion->Create(nullptr, this, -Num, Location, Speed);
-
+		new CBulletExplosion(nullptr, this, -Num, Location, Speed);
 		return false;
 	}
 

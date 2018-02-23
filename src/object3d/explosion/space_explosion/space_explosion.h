@@ -27,32 +27,19 @@
 #ifndef SPACEEXPLOSION_H
 #define SPACEEXPLOSION_H
 
-
 #include "../explosion.h"
 
 
-
-
-
-//-----------------------------------------------------------------------------
-// Класс CSpaceExplosion
-//-----------------------------------------------------------------------------
+/*
+ * All space ships explosions.
+ */
 class CSpaceExplosion : public CExplosion
 {
 public:
-
+	CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D &ExplLocation,
+			float Speed, int ObjectPieceNum, bool NeedExplosionSFX = true);
 	virtual ~CSpaceExplosion() {};
-
-	// Создание взрыва из частей объекта
-	virtual void	Create(CObject3D *Object, int ExplType, VECTOR3D ExplLocation, float Speed, int ObjectPieceNum, bool NeedExplosionSFX = true);
-
 };
-
-
-
-
-
-
 
 
 #endif // SPACEEXPLOSION_H

@@ -406,10 +406,8 @@ void GamePlayerShip()
 			PlayerFighter->Strength = PlayerFighter->StrengthStart;
 		} else {
 			// делаем взрыв
-			CSpaceExplosion *TMPExplosion;
-			TMPExplosion = new CSpaceExplosion;
 			// + 10.0f движение камеры
-			TMPExplosion->Create(PlayerFighter, 31, PlayerFighter->Location, PlayerFighter->Speed+10.0f, PlayerDeadObjectPieceNum);
+			new CSpaceExplosion(PlayerFighter, 31, PlayerFighter->Location, PlayerFighter->Speed+10.0f, PlayerDeadObjectPieceNum);
 
 			// включаем музыку и отображение "миссия провалена"
 			StartMusicWithFade(4, 2.0f, 2.0f);
