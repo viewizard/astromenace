@@ -70,11 +70,10 @@ struct eVFS {
 	std::string	FileName;
 	SDL_RWops	*File;
 
-	eVFS(const std::string &_FileName)
-	{
-		File = nullptr;
-		FileName = _FileName;
-	}
+	eVFS(const std::string &_FileName) :
+		FileName(_FileName),
+		File(nullptr)
+	{}
 	~eVFS()
 	{
 		/* not sure, if libSDL close SDL_RWops on "out of scope" */
@@ -91,6 +90,9 @@ struct eVFS_Entry {
 	eVFS		*Parent;
 
 	eVFS_Entry(eVFS *_Parent) :
+		NameSize(0),
+		Offset(0),
+		Size(0),
 		Parent(_Parent)
 	{}
 	/* trick for forward_list<unique_ptr<T>> work with iterator */
