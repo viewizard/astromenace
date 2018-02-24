@@ -49,12 +49,10 @@ void CAsteroid::Create(int SpaceObjectNum)
 	if (Num<0) Num=0;
 	size_t SizeB = strlen("models/space/asteroid-01XX.vw3d")+1;
 	char *NameTMP = new char[SizeB];
-	char buffer[10];
-	itoa10(Num, buffer);
+	std::string buffer{std::to_string(Num)};
 	strcpy(NameTMP, "models/space/asteroid-01");
-	strcat(NameTMP, buffer);
+	strcat(NameTMP, buffer.c_str());
 	strcat(NameTMP, ".vw3d");
-
 
 	LoadObjectData(NameTMP, this, 0, -1.0f);
 	// находим все данные по геометрии

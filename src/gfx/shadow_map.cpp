@@ -223,7 +223,7 @@ void ShadowMap_StartFinalRender()
 
 	float CurrentInvModelView[16];
 	vw_GetMatrix(RI_MODELVIEW_MATRIX, CurrentInvModelView);
-	Matrix44InverseRotate(CurrentInvModelView);
+	vw_Matrix44InverseRotate(CurrentInvModelView);
 	vw_MultMatrix(CurrentInvModelView);
 
 	vw_MatrixMode(RI_MODELVIEW_MATRIX);

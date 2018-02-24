@@ -193,7 +193,7 @@ void WorkshopCreateNewWeapon()
 	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
 
 	VECTOR3D Ptmp = VECTOR3D(0,-(WorkshopNewWeapon->Height/2.0f + WorkshopNewWeapon->AABB[6].y), -(WorkshopNewWeapon->Length/2.0f + WorkshopNewWeapon->AABB[6].z)-0.5f);
-	RotatePoint(&Ptmp, VECTOR3D(0.0f, -45.0f, 0.0f));
+	vw_RotatePoint(&Ptmp, VECTOR3D(0.0f, -45.0f, 0.0f));
 
 	WorkshopNewWeapon->SetLocation(VECTOR3D(3000+Ptmp.x, -3000+Ptmp.y, Ptmp.z));
 
@@ -591,7 +591,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 	if (Mode == 2) {
 		WorkShopPointCamera = VECTOR3D(0.0f, 10.0f, -34.0f);
 		VECTOR3D PointCameraTMP = WorkShopPointCamera;
-		RotatePoint(&PointCameraTMP, VECTOR3D(0.0f, -90.0f, 0.0f));
+		vw_RotatePoint(&PointCameraTMP, VECTOR3D(0.0f, -90.0f, 0.0f));
 		SpaceFighter->SetRotation(VECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
 		vw_SetViewport((int)((Setup.iAspectRatioWidth/2-512)/(AW/AWw)), (int)(0/(AH/AHw)), (int)(512/(AW/AWw)), (int)(512/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
 		vw_ResizeScene(45.0f, 512.0f/512.0f, 1.0f, 2000.0f);
@@ -665,7 +665,7 @@ void WorkshopDrawWeapon(CWeapon *Weapon)
 		WorkShopPointCamera = VECTOR3D(0.0f, 1.0f, -4.0f);
 
 	VECTOR3D PointCameraTMP = WorkShopPointCamera;
-	RotatePoint(&PointCameraTMP, VECTOR3D(0.0f, -90.0f, 0.0f));
+	vw_RotatePoint(&PointCameraTMP, VECTOR3D(0.0f, -90.0f, 0.0f));
 
 	Weapon->SetRotation(VECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
 	vw_SetViewport((int)((Setup.iAspectRatioWidth/2-448)/(AW/AWw)), (int)(105/(AH/AHw)), (int)(384/(AW/AWw)), (int)(350/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);

@@ -55,7 +55,7 @@ CSpaceStars::CSpaceStars()
 		// считаем значение альфы
 		NewParticle->Alpha = 0.5f + 0.5f * vw_Randf1;
 		// убираем переполнение
-		Clamp( NewParticle->Alpha, 0.0f, 1.0f );
+		vw_Clamp(NewParticle->Alpha, 0.0f, 1.0f);
 		// считаем дельту альфы
 		NewParticle->AlphaDelta = (1.5f + 1.5f * vw_Randf1) / 3.0f;
 
@@ -108,7 +108,7 @@ CSpaceStars::CSpaceStars()
 			ParticleDist = tmp.x*tmp.x + tmp.y*tmp.y + tmp.z*tmp.z;
 		}
 
-		Matrix33CalcPoint(&tmp, CurrentRotationMat);
+		vw_Matrix33CalcPoint(&tmp, CurrentRotationMat);
 		NewParticle->Location = Location + tmp;
 
 		// подключаем частицу к системе

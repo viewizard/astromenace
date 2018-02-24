@@ -239,10 +239,9 @@ void SetDebugInformation(CObject3D *Object, cXMLEntry *xmlEntry)
 	return;
 #else
 	// преобразовываем число в строку
-	char buffer[10];
-	itoa10(xmlEntry->LineNumber, buffer);
+	std::string buffer{std::to_string(xmlEntry->LineNumber)};
 
-	Object->DebugInfo = new char[strlen(buffer)+1];
-	strcpy(Object->DebugInfo, buffer);
+	Object->DebugInfo = new char[buffer.size()+1];
+	strcpy(Object->DebugInfo, buffer.c_str());
 #endif //gamedebug
 }

@@ -95,13 +95,13 @@ void vw_SetCameraMove(const VECTOR3D &NewRotation, float ChangeDistance, const V
 {
 	/* revert back all movements */
 	CameraLocation -= Point;
-	RotatePointInv(&CameraLocation, CameraRotation);
+	vw_RotatePointInv(&CameraLocation, CameraRotation);
 	/* change distance */
 	CameraLocation.z += ChangeDistance;
 	/* change rotation angles */
 	CameraRotation += NewRotation;
 	/* apply corrected distance and angles to camera */
-	RotatePoint(&CameraLocation, CameraRotation^(-1.0f));
+	vw_RotatePoint(&CameraLocation, CameraRotation^(-1.0f));
 	CameraLocation += Point;
 	CameraUpdated = true;
 }

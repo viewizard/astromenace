@@ -175,9 +175,9 @@ bool eParticleSystem2D::Update(float Time)
 			NewParticle->Color.a = 1.0f;
 
 			// проверяем, чтобы не было переполнения цвета
-			Clamp( NewParticle->Color.r, 0.0f, 1.0f );
-			Clamp( NewParticle->Color.g, 0.0f, 1.0f );
-			Clamp( NewParticle->Color.b, 0.0f, 1.0f );
+			vw_Clamp(NewParticle->Color.r, 0.0f, 1.0f);
+			vw_Clamp(NewParticle->Color.g, 0.0f, 1.0f);
+			vw_Clamp(NewParticle->Color.b, 0.0f, 1.0f);
 
 			// считаем delta относительно жизни частицы
 			NewParticle->ColorDelta.r = (ColorEnd.r - NewParticle->Color.r) / NewParticle->Lifetime;
@@ -187,7 +187,7 @@ bool eParticleSystem2D::Update(float Time)
 			// считаем значение альфы
 			NewParticle->Alpha = AlphaStart + vw_Randf0 * AlphaVar;
 			// убираем переполнение
-			Clamp( NewParticle->Alpha, 0.0f, 1.0f );
+			vw_Clamp(NewParticle->Alpha, 0.0f, 1.0f);
 
 
 			// выпускаем частицу возле места нахождения системы
@@ -301,7 +301,7 @@ bool eParticleSystem2D::Update(float Time)
 					NewParticle->Velocity.x += Direction.z * sinf(RandomPitch) * cosf(RandomYaw);
 					NewParticle->Velocity.z += Direction.z * cosf(RandomPitch);
 
-					Matrix33CalcPoint(&NewParticle->Velocity, RotationMatrix);
+					vw_Matrix33CalcPoint(&NewParticle->Velocity, RotationMatrix);
 				}
 			} else {
 				// без направления, излучаем во все стороны
@@ -478,8 +478,8 @@ void eParticleSystem2D::MoveSystemLocation(VECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 void eParticleSystem2D::SetRotation(VECTOR3D NewAngle)
 {
-	Matrix33CreateRotate(RotationMatrix, Angle^-1);
-	Matrix33CreateRotate(RotationMatrix, NewAngle);
+	vw_Matrix33CreateRotate(RotationMatrix, Angle^-1);
+	vw_Matrix33CreateRotate(RotationMatrix, NewAngle);
 	Angle = NewAngle;
 }
 

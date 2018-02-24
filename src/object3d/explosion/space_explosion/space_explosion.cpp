@@ -404,7 +404,7 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 		// сохраняем старые значения + пересчет новых
 		memcpy(InvRotationMat, Object->CurrentRotationMat, 9*sizeof(float));
 		// делаем инверсную старую матрицу
-		Matrix33InverseRotate(InvRotationMat);
+		vw_Matrix33InverseRotate(InvRotationMat);
 
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
@@ -449,9 +449,9 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 
 			// находим точку локального положения объекта в моделе
 			VECTOR3D LocalLocation = Object->DrawObjectList[i].Location;
-			Matrix33CalcPoint(&LocalLocation, Object->CurrentRotationMat);
+			vw_Matrix33CalcPoint(&LocalLocation, Object->CurrentRotationMat);
 			LocalLocation = Object->HitBBLocation[i]-LocalLocation;
-			Matrix33CalcPoint(&LocalLocation, InvRotationMat);
+			vw_Matrix33CalcPoint(&LocalLocation, InvRotationMat);
 			// и меняем внутрее положение
 			ShipPart->DrawObjectList[0].Location = LocalLocation^(-1.0f);
 
@@ -576,18 +576,18 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 
 			// матрица для учета внутреннего состояния объекта
 			float TransMatTMP[16];
-			Matrix44Identity(TransMatTMP);
+			vw_Matrix44Identity(TransMatTMP);
 			float TransMatTMPNorm[9];
-			Matrix33Identity(TransMatTMPNorm);
+			vw_Matrix33Identity(TransMatTMPNorm);
 			// если нужно - создаем матрицу, иначе - копируем ее
 			if (Object->DrawObjectList[i].Rotation.x != 0.0f ||
 			    Object->DrawObjectList[i].Rotation.y != 0.0f ||
 			    Object->DrawObjectList[i].Rotation.z != 0.0f) {
-				Matrix44CreateRotate(TransMatTMP, Object->DrawObjectList[i].Rotation);
-				Matrix33CreateRotate(TransMatTMPNorm, Object->DrawObjectList[i].Rotation);
+				vw_Matrix44CreateRotate(TransMatTMP, Object->DrawObjectList[i].Rotation);
+				vw_Matrix33CreateRotate(TransMatTMPNorm, Object->DrawObjectList[i].Rotation);
 			}
-			Matrix44Translate(TransMatTMP, DrawObjectList[i].Location);
-			Matrix33Mult(TransMatTMPNorm, Object->CurrentRotationMat);
+			vw_Matrix44Translate(TransMatTMP, DrawObjectList[i].Location);
+			vw_Matrix33Mult(TransMatTMPNorm, Object->CurrentRotationMat);
 
 
 			VECTOR3D TMP;
@@ -599,8 +599,8 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 					TMP.x = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2];
 					TMP.y = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+1];
 					TMP.z = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+2];
-					Matrix44CalcPoint(&TMP, TransMatTMP);
-					Matrix33CalcPoint(&TMP, Object->CurrentRotationMat);
+					vw_Matrix44CalcPoint(&TMP, TransMatTMP);
+					vw_Matrix33CalcPoint(&TMP, Object->CurrentRotationMat);
 					// координаты
 					DrawObjectList[i].VertexBuffer[j1] = TMP.x;
 					DrawObjectList[i].VertexBuffer[j1+1] = TMP.y;
@@ -609,7 +609,7 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 					TMP.x = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+3];
 					TMP.y = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+4];
 					TMP.z = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+5];
-					Matrix33CalcPoint(&TMP, TransMatTMPNorm);
+					vw_Matrix33CalcPoint(&TMP, TransMatTMPNorm);
 					DrawObjectList[i].VertexBuffer[j1+3] = TMP.x;
 					DrawObjectList[i].VertexBuffer[j1+4] = TMP.y;
 					DrawObjectList[i].VertexBuffer[j1+5] = TMP.z;

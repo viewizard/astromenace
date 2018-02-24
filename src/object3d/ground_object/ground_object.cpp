@@ -118,13 +118,13 @@ void CGroundObject::SetRotation(VECTOR3D NewRotation)
 	// оружие
 	VECTOR3D RotationBase = Rotation;
 	VECTOR3D BaseBoundTMP = BaseBound;
-	RotatePoint(&BaseBoundTMP, RotationBase);
+	vw_RotatePoint(&BaseBoundTMP, RotationBase);
 
 	VECTOR3D RotationMiddle = Rotation;
 	VECTOR3D MiddleBoundTMP = MiddleBound;
 	if (TargetHorizObject != nullptr)
 		RotationMiddle = DrawObjectList[TargetHorizObject[0]].Rotation + Rotation;
-	RotatePoint(&MiddleBoundTMP, RotationMiddle);
+	vw_RotatePoint(&MiddleBoundTMP, RotationMiddle);
 
 	VECTOR3D RotationWeapon = Rotation;
 	if (TargetVertObject != nullptr)
@@ -135,7 +135,7 @@ void CGroundObject::SetRotation(VECTOR3D NewRotation)
 		for (int i = 0; i < WeaponQuantity; i++)
 			if (Weapon[i] != nullptr) {
 				VECTOR3D WeaponBoundTMP = WeaponBound[i];
-				RotatePoint(&WeaponBoundTMP, RotationWeapon);
+				vw_RotatePoint(&WeaponBoundTMP, RotationWeapon);
 
 				WeaponLocation[i] = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
@@ -285,13 +285,13 @@ bool CGroundObject::Update(float Time)
 
 				VECTOR3D tmp = DrawObjectList[TargetHorizObject[i]].Location-DrawObjectList[TargetHorizObject[0]].Location;
 
-				RotatePointInv(&tmp, DrawObjectList[TargetHorizObject[i]].Rotation^(-1.0f));
+				vw_RotatePointInv(&tmp, DrawObjectList[TargetHorizObject[i]].Rotation^(-1.0f));
 
 				SetObjectRotation(VECTOR3D(DrawObjectList[TargetHorizObject[i]].Rotation.x,
 							   -NeedRotateCalculation,
 							   DrawObjectList[TargetHorizObject[i]].Rotation.z), TargetHorizObject[i]);
 
-				RotatePoint(&tmp, DrawObjectList[TargetHorizObject[i]].Rotation);
+				vw_RotatePoint(&tmp, DrawObjectList[TargetHorizObject[i]].Rotation);
 
 				SetObjectLocation(tmp+DrawObjectList[TargetHorizObject[0]].Location, TargetHorizObject[i]);
 			}
@@ -331,13 +331,13 @@ bool CGroundObject::Update(float Time)
 
 				VECTOR3D tmp = DrawObjectList[TargetVertObject[i]].Location-DrawObjectList[TargetVertObject[0]].Location;
 
-				RotatePointInv(&tmp, DrawObjectList[TargetVertObject[i]].Rotation^(-1.0f));
+				vw_RotatePointInv(&tmp, DrawObjectList[TargetVertObject[i]].Rotation^(-1.0f));
 
 				SetObjectRotation(VECTOR3D(-NeedRotateCalculation,
 							   DrawObjectList[TargetVertObject[i]].Rotation.y,
 							   DrawObjectList[TargetVertObject[i]].Rotation.z), TargetVertObject[i]);
 
-				RotatePoint(&tmp, DrawObjectList[TargetVertObject[i]].Rotation);
+				vw_RotatePoint(&tmp, DrawObjectList[TargetVertObject[i]].Rotation);
 
 				SetObjectLocation(tmp+DrawObjectList[TargetVertObject[0]].Location, TargetVertObject[i]);
 			}
@@ -353,13 +353,13 @@ bool CGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	VECTOR3D RotationBase = Rotation;
 	VECTOR3D BaseBoundTMP = BaseBound;
-	RotatePoint(&BaseBoundTMP, RotationBase);
+	vw_RotatePoint(&BaseBoundTMP, RotationBase);
 
 	VECTOR3D RotationMiddle = Rotation;
 	VECTOR3D MiddleBoundTMP = MiddleBound;
 	if (TargetHorizObject != nullptr)
 		RotationMiddle = DrawObjectList[TargetHorizObject[0]].Rotation + Rotation;
-	RotatePoint(&MiddleBoundTMP, RotationMiddle);
+	vw_RotatePoint(&MiddleBoundTMP, RotationMiddle);
 
 	VECTOR3D RotationWeapon = Rotation;
 	if (TargetVertObject != nullptr)
@@ -370,7 +370,7 @@ bool CGroundObject::Update(float Time)
 		for (int i = 0; i < WeaponQuantity; i++)
 			if (Weapon[i] != nullptr) {
 				VECTOR3D WeaponBoundTMP = WeaponBound[i];
-				RotatePoint(&WeaponBoundTMP, RotationWeapon);
+				vw_RotatePoint(&WeaponBoundTMP, RotationWeapon);
 
 				WeaponLocation[i] = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
@@ -699,9 +699,9 @@ bool CGroundObject::Update(float Time)
 
 		// "ровняем" скорость под модель
 		if (Sign == 1.0f) {
-			Clamp(NeedSpeed, 0.0f, MaxSpeed);
+			vw_Clamp(NeedSpeed, 0.0f, MaxSpeed);
 		} else {
-			Clamp(NeedSpeed, -MaxSpeed, 0.0f);
+			vw_Clamp(NeedSpeed, -MaxSpeed, 0.0f);
 		}
 
 		// случай, когда нужно затормозить а не менять направление

@@ -24,70 +24,13 @@
 
 *************************************************************************************/
 
-
 #ifndef CoreMath_H
 #define CoreMath_H
 
-
 #include "../base.h"
 
-
-
-inline void itoa10(int val, char* res)
-{
-	// http://www.cplusplus.com/ref/cstdio/sprintf.html
-	// если нужны не 10-ки
-	sprintf(res,"%i",val);
-}
-
-
-// Get cosine
-double	vw_dcos(int Angle);
-// Get sine
-double	vw_dsin(int Angle);
-// быстрый sqrtf
-float	vw_sqrtf(float x);
-
-
-
-// преобразуем утф8 в утф32, как результат возвращаем указатель на след утф8 символ
-const char* utf8_to_utf32(const char* utf8, unsigned* utf32);
-
-
-
-
-/* Random number generator */
-
-/* Generate random float between 0.0f and 1.0f. */
-float	vw_fRand();
-#define vw_Randf1	vw_fRand()
-/* Generate random float between 0.0f and Max. */
-float	vw_fRandNum(float Max);
-/* Generate random integer between 0.0f and Max. */
-int	vw_iRandNum(int Max);
-/* Generate random float between -1.0f and 1.0f. */
-#define vw_Randf0	(vw_fRand() - vw_fRand())
-
-
-
-
-
-// макрос, проверяет значение с учетом допустимых пределов
-#define Clamp(x, min, max)  x = (x<min  ? min : x<max ? x : max);
-
-
-
-
-// Нахождение максимального из 3
-float Max3(float a1,float a2,float a3);
-// Нахождение минимального из 3
-float Min3(float a1,float a2,float a3);
-
-
-
-// вектор в 3д пространстве
 struct VECTOR3D {
-	float x{0}, y{0}, z{0};
+	float x{0.0f}, y{0.0f}, z{0.0f};
 
 	VECTOR3D() {};
 	VECTOR3D(float _x, float _y, float _z) :
@@ -124,12 +67,12 @@ struct VECTOR3D {
 
 	VECTOR3D operator ^ (const float C)
 	{
-		return VECTOR3D(x*C,y*C, z*C);
+		return VECTOR3D(x*C, y*C, z*C);
 	};
 
 	VECTOR3D operator / (const float C)
 	{
-		return VECTOR3D(x/C,y/C, z/C);
+		return VECTOR3D(x/C, y/C, z/C);
 	};
 
 	void operator *= (float C)
@@ -162,58 +105,96 @@ struct VECTOR3D {
 		z -= A.z;
 	};
 
-
-	float Length();
-	void Normalize();
-	void NormalizeHi();
-	void Multiply(VECTOR3D A);
+	float	Length();
+	void	Normalize();
+	void	NormalizeHi();
+	void	Multiply(const VECTOR3D &A);
 };
 
+/*
+ * Misc functions.
+ */
 
+/* Convert utf8 into utf32 code. */
+const char *vw_UTF8toUTF32(const char *utf8, unsigned *utf32);
 
+/* Fast cosine function. */
+double	vw_dcos(int Angle);
+/* Fast sine function. */
+double	vw_dsin(int Angle);
+/* Fast sqrtf function. */
+float	vw_sqrtf(float x);
 
-// вращение точки на углы
-void RotatePoint(VECTOR3D *Point, VECTOR3D Angle);
-void RotatePointInv(VECTOR3D *Point, VECTOR3D Angle);
-// получение данных плоскости по 3 -м точкам
-void GetPlaneABCD(float *A, float *B, float *C, float *D, VECTOR3D Point1, VECTOR3D Point2, VECTOR3D Point3);
+/* Reference to low if value is less than low, reference to high if high is less than value, otherwise reference to value. */
+/* TODO in future, move to std::clamp (C++17) implementation */
+template <typename T> void vw_Clamp(T &value, T low, T high)
+{
+	value = (value < low) ? low : ((value > high) ? high : value);
+}
 
+/* Calculate point rotation. */
+void	vw_RotatePoint(VECTOR3D *Point, const VECTOR3D &Angle);
+/* Calculate point inverse rotation. */
+void	vw_RotatePointInv(VECTOR3D *Point, const VECTOR3D &Angle);
+/* Calculates the plane equation given three points. */
+void	vw_GetPlaneABCD(float *A, float *B, float *C, float *D,
+			const VECTOR3D &Point1, const VECTOR3D &Point2, const VECTOR3D &Point3);
 
+/*
+ * Random number generator.
+ */
 
+/* Generate random float between 0.0f and 1.0f. */
+float	vw_fRand();
+#define vw_Randf1 vw_fRand()
+/* Generate random float between 0.0f and Max. */
+float	vw_fRandNum(float Max);
+/* Generate random integer between 0.0f and Max. */
+int	vw_iRandNum(int Max);
+/* Generate random float between -1.0f and 1.0f ->> 0. */
+#define vw_Randf0 (vw_fRand() - vw_fRand())
 
+/*
+ * 4x4 matrix, float Matrix[16]:
+ *
+ *  Matrix[0]  Matrix[1]  Matrix[2]  Matrix[3]
+ *  Matrix[4]  Matrix[5]  Matrix[6]  Matrix[7]
+ *  Matrix[8]  Matrix[9]  Matrix[10] Matrix[11]
+ *  Matrix[12] Matrix[13] Matrix[14] Matrix[15]
+ *
+ */
 
+/* Setup matrix identity. */
+void	vw_Matrix44Identity(float Matrix44[16]);
+/* Matrix multiplication. */
+void	vw_Matrix44Mult(float DstMatrix44[16], float SrcMatrix44[16]);
+/* Calculate translation matrix by new location point. */
+void	vw_Matrix44Translate(float Matrix44[16], const VECTOR3D &Location);
+/* Create rotation matrix. */
+void	vw_Matrix44CreateRotate(float Matrix44[16], const VECTOR3D &Angle);
+/* Create inverted rotation matrix. */
+void	vw_Matrix44InverseRotate(float Matrix44[16]);
+/* Calculate point position by transformation matrix. */
+void	vw_Matrix44CalcPoint(VECTOR3D *Point, float Matrix44[16]);
 
-// матрица 4на4 (float Matrix[16])
+/*
+ * 3x3 matrix, float Matrix[9]:
+ *
+ *  Matrix[0] Matrix[1] Matrix[2]
+ *  Matrix[3] Matrix[4] Matrix[5]
+ *  Matrix[6] Matrix[7] Matrix[8]
+ *
+ */
 
-// начальная установка
-void Matrix44Identity(float Matrix44[16]);
-// перемножение
-void Matrix44Mult(float DstMatrix44[16], float SrcMatrix44[16]);
-// перенос в точку Location
-void Matrix44Translate(float Matrix44[16], VECTOR3D Location);
-// создаем матрицу поворота на углы Angle
-void Matrix44CreateRotate(float Matrix44[16], VECTOR3D Angle);
-// Получение обратной матрицы поворота
-void Matrix44InverseRotate(float Matrix44[16]);
-// Получаем точку по матрице трансформаций
-void Matrix44CalcPoint(VECTOR3D *Point, float Matrix44[16]);
-
-
-// матрица 3на3 (float Matrix[9])
-
-// начальная установка
-void Matrix33Identity(float Matrix33[9]);
-// перемножение
-void Matrix33Mult(float DstMatrix33[9], float SrcMatrix33[9]);
-// создаем матрицу поворота на углы Angle
-void Matrix33CreateRotate(float Matrix33[9], VECTOR3D Angle);
-// Получение обратной матрицы поворота
-void Matrix33InverseRotate(float Matrix33[9]);
-// Получаем точку по матрице трансформаций
-void Matrix33CalcPoint(VECTOR3D *Point, float Matrix33[9]);
-
-
-
+/* Setup matrix identity. */
+void	vw_Matrix33Identity(float Matrix33[9]);
+/* Matrix multiplication. */
+void	vw_Matrix33Mult(float DstMatrix33[9], float SrcMatrix33[9]);
+/* Create rotation matrix. */
+void	vw_Matrix33CreateRotate(float Matrix33[9], const VECTOR3D &Angle);
+/* Create inverted rotation matrix. */
+void	vw_Matrix33InverseRotate(float Matrix33[9]);
+/* Calculate point position by transformation matrix. */
+void	vw_Matrix33CalcPoint(VECTOR3D *Point, float Matrix33[9]);
 
 #endif // CoreMath_H
-

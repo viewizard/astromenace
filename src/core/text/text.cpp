@@ -333,7 +333,7 @@ int vw_CheckFontCharsInText()
 				while (strlen(CharsList) > 0) {
 					unsigned CurrentChar;
 					// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
-					CharsList = utf8_to_utf32(CharsList, &CurrentChar);
+					CharsList = vw_UTF8toUTF32(CharsList, &CurrentChar);
 					// проверяем, что загружен символ и все необходимые данные для него
 					if (!vw_CheckFontCharByUTF32(CurrentChar)) {
 						printf("!!! FontChar was not created, Unicode: " );

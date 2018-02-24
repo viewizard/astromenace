@@ -61,7 +61,7 @@ void GameSetMissionTitleData(float ShowTime, int Num)
 //------------------------------------------------------------------------------------
 // считаем, сколько в ширину займет прорисовка номера
 //------------------------------------------------------------------------------------
-int CheckMissionTitleNum(char *Num)
+int CheckMissionTitleNum(const char *Num)
 {
 	RECT SrcRect;
 	SetRect(&SrcRect,0,0,0,0);
@@ -115,7 +115,7 @@ int CheckMissionTitleNum(char *Num)
 //------------------------------------------------------------------------------------
 // прорисовка номера
 //------------------------------------------------------------------------------------
-void DrawMissionTitleNum(int X, int Y, char *Num, float Transp)
+void DrawMissionTitleNum(int X, int Y, const char *Num, float Transp)
 {
 	// здесь X - крайняя левая(!!!) точка
 	// Y - крайняя верхняя точка (т.е. как и везде)
@@ -190,14 +190,12 @@ void GameDrawMissionTitle()
 	RECT SrcRect, DstRect;
 
 	// преобразовываем число в строку
-	char buffer[10];
-	itoa10(MissionTitleNum, buffer);
-
+	std::string buffer{std::to_string(MissionTitleNum)};
 
 	// вывод надписи Mission
 
 	// считаем сколько в ширину надпись всего... 30 - пробел между надписью и номером
-	int TotalW = 226+20+CheckMissionTitleNum(buffer);
+	int TotalW = 226+20+CheckMissionTitleNum(buffer.c_str());
 	// находим откуда начинать рисовать
 	int XStart = (Setup.iAspectRatioWidth-TotalW)/2;
 
@@ -208,12 +206,12 @@ void GameDrawMissionTitle()
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_mission.tga")),
 				   true, 1.0f, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 		// вывод номера миссии
-		DrawMissionTitleNum(XStart+226+20, 352+1, buffer, 1.0f);
+		DrawMissionTitleNum(XStart+226+20, 352+1, buffer.c_str(), 1.0f);
 	} else {
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_mission.tga")),
 				   true, MissionTitleLifeTime, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 		// вывод номера миссии
-		DrawMissionTitleNum(XStart+226+20, 352+1, buffer, MissionTitleLifeTime);
+		DrawMissionTitleNum(XStart+226+20, 352+1, buffer.c_str(), MissionTitleLifeTime);
 	}
 
 

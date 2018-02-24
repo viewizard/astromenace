@@ -164,7 +164,7 @@ void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
 							TimeSheet->Acceler = 1.0f;//0-1
 							if (xmlAI->GetEntryAttribute(TChildEntry, "acceler") != nullptr)
 								TimeSheet->Acceler = xmlAI->fGetEntryAttribute(TChildEntry, "acceler");
-							Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
 							TimeSheet->SpeedLR = 0.0f;
 							if (xmlAI->GetEntryAttribute(TChildEntry, "speedlr") != nullptr)
@@ -173,7 +173,7 @@ void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
 							TimeSheet->AccelerLR = 1.0f;//0-1
 							if (xmlAI->GetEntryAttribute(TChildEntry, "accelerlr") != nullptr)
 								TimeSheet->AccelerLR = xmlAI->fGetEntryAttribute(TChildEntry, "accelerlr");
-							Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
 
 							TimeSheet->SpeedUD = 0.0f;
 							if (xmlAI->GetEntryAttribute(TChildEntry, "speedud") != nullptr)
@@ -188,7 +188,7 @@ void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
 							TimeSheet->AccelerByCamFB = 1.0f;//0-1
 							if (xmlAI->GetEntryAttribute(TChildEntry, "accelerbycamfb") != nullptr)
 								TimeSheet->AccelerByCamFB = xmlAI->fGetEntryAttribute(TChildEntry, "accelerbycamfb");
-							Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
 
 							TimeSheet->SpeedByCamLR = 0.0f;
 							if (xmlAI->GetEntryAttribute(TChildEntry, "speedbycamlr") != nullptr)
@@ -197,7 +197,7 @@ void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
 							TimeSheet->AccelerByCamLR = 1.0f;//0-1
 							if (xmlAI->GetEntryAttribute(TChildEntry, "accelerbycamlr") != nullptr)
 								TimeSheet->AccelerByCamLR = xmlAI->fGetEntryAttribute(TChildEntry, "accelerbycamlr");
-							Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
 
 							TimeSheet->SpeedByCamUD = 0.0f;
 							if (xmlAI->GetEntryAttribute(TChildEntry, "speedbycamud") != nullptr)
@@ -206,7 +206,7 @@ void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
 							TimeSheet->AccelerByCamUD = 1.0f;//0-1
 							if (xmlAI->GetEntryAttribute(TChildEntry, "accelerbycamud") != nullptr)
 								TimeSheet->SpeedByCamUD = xmlAI->fGetEntryAttribute(TChildEntry, "accelerbycamud");
-							Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
 
 
@@ -225,9 +225,9 @@ void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
 								TimeSheet->RotationAcceler.y = xmlAI->fGetEntryAttribute(TChildEntry, "rotacy");
 							if (xmlAI->GetEntryAttribute(TChildEntry, "rotacz") != nullptr)
 								TimeSheet->RotationAcceler.z = xmlAI->fGetEntryAttribute(TChildEntry, "rotacz");
-							Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
-							Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
-							Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 							TimeSheet->Fire = false;
 							if ((xmlAI->GetEntryAttribute(TChildEntry, "fire") != nullptr) &&

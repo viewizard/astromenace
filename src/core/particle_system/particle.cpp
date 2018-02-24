@@ -87,7 +87,7 @@ bool eParticle::Update(float TimeDelta, VECTOR3D ParentLocation, bool Attractive
 			} else
 				Alpha -= AlphaDelta * TimeDelta;
 
-			Clamp( Alpha, 0.0f, 1.0f );
+			vw_Clamp( Alpha, 0.0f, 1.0f );
 		}
 
 

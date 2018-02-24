@@ -943,8 +943,8 @@ void CProjectile::SetRotation(VECTOR3D NewRotation)
 	if (GraphicFX != nullptr)
 		for (int i = 0; i < GraphicFXQuantity; i++) {
 			if (GraphicFX[i] != nullptr) {
-				Matrix33CalcPoint(&(GraphicFXLocation[i]), OldInvRotationMat);
-				Matrix33CalcPoint(&(GraphicFXLocation[i]), CurrentRotationMat);
+				vw_Matrix33CalcPoint(&(GraphicFXLocation[i]), OldInvRotationMat);
+				vw_Matrix33CalcPoint(&(GraphicFXLocation[i]), CurrentRotationMat);
 				// если лучевое оружие, нужно вращать все, и частицы тоже
 				if (ProjectileType == 2)
 					GraphicFX[i]->RotateSystemAndParticlesByAngle(Rotation);

@@ -24,16 +24,12 @@
 
 *************************************************************************************/
 
-
 #include "math.h"
 
-
-
-
-//------------------------------------------------------------------------------------
-// начальная установка
-//------------------------------------------------------------------------------------
-void Matrix33Identity(float Matrix33[9])
+/*
+ * Setup matrix identity.
+ */
+void vw_Matrix33Identity(float Matrix33[9])
 {
 	Matrix33[0] = 1.0f;
 	Matrix33[1] = 0.0f;
@@ -48,17 +44,14 @@ void Matrix33Identity(float Matrix33[9])
 	Matrix33[8] = 1.0f;
 }
 
-
-
-
-
-//------------------------------------------------------------------------------------
-// Матрица, перемножение
-//------------------------------------------------------------------------------------
-void Matrix33Mult(float DstMatrix33[9], float SrcMatrix33[9])
+/*
+ * Matrix multiplication.
+ */
+void vw_Matrix33Mult(float DstMatrix33[9], float SrcMatrix33[9])
 {
-	float tmp[9];
-	memcpy(tmp, DstMatrix33, 9*sizeof(float));
+	float tmp[9]{DstMatrix33[0], DstMatrix33[1], DstMatrix33[2],
+		     DstMatrix33[3], DstMatrix33[4], DstMatrix33[5],
+		     DstMatrix33[6], DstMatrix33[7], DstMatrix33[8]};
 
 	DstMatrix33[0] = SrcMatrix33[0]*tmp[0] + SrcMatrix33[1]*tmp[3] + SrcMatrix33[2]*tmp[6];
 	DstMatrix33[1] = SrcMatrix33[0]*tmp[1] + SrcMatrix33[1]*tmp[4] + SrcMatrix33[2]*tmp[7];
@@ -73,36 +66,23 @@ void Matrix33Mult(float DstMatrix33[9], float SrcMatrix33[9])
 	DstMatrix33[8] = SrcMatrix33[6]*tmp[2] + SrcMatrix33[7]*tmp[5] + SrcMatrix33[8]*tmp[8];
 }
 
-
-
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Матрица, создаем матрицу поворота на углы Angle
-//------------------------------------------------------------------------------------
-void Matrix33CreateRotate(float Matrix33[9], VECTOR3D Angle)
+/*
+ * Create rotation matrix.
+ */
+void vw_Matrix33CreateRotate(float Matrix33[9], const VECTOR3D &Angle)
 {
 	const float p180 = 0.0174532925f;
 
-	// если угол только один - сюда идем
 	if (Angle.z != 0.0f && Angle.x == 0.0f && Angle.y == 0.0f) {
 		float a = -Angle.z*p180;
 		float c = cosf(a);
 		float s = sinf(a);
-		// ставим в нужные элементы
 		Matrix33[0] = c;
 		Matrix33[1] = -s;
 		Matrix33[3] = s;
 		Matrix33[4] = c;
-		// делаем инициализацю
 		Matrix33[2] = Matrix33[5] = Matrix33[6] = Matrix33[7] = 0.0f;
 		Matrix33[8] = 1.0f;
-		// выходим
 		return;
 	}
 
@@ -110,15 +90,12 @@ void Matrix33CreateRotate(float Matrix33[9], VECTOR3D Angle)
 		float a = -Angle.y*p180;
 		float c = cosf(a);
 		float s = sinf(a);
-		// ставим в нужные элементы
 		Matrix33[0] = c;
 		Matrix33[2] = s;
 		Matrix33[6] = -s;
 		Matrix33[8] = c;
-		// делаем инициализацю
 		Matrix33[1] = Matrix33[3] = Matrix33[5] = Matrix33[7] = 0.0f;
 		Matrix33[4] = 1.0f;
-		// выходим
 		return;
 	}
 
@@ -126,21 +103,16 @@ void Matrix33CreateRotate(float Matrix33[9], VECTOR3D Angle)
 		float a = -Angle.x*p180;
 		float c = cosf(a);
 		float s = sinf(a);
-		// ставим в нужные элементы
 		Matrix33[4] = c;
 		Matrix33[5] = -s;
 		Matrix33[7] = s;
 		Matrix33[8] = c;
-		// делаем инициализацю
 		Matrix33[1] = Matrix33[2] = Matrix33[3] = Matrix33[6] = 0.0f;
 		Matrix33[0] = 1.0f;
-		// выходим
 		return;
 	}
 
-
-	// если 2 или более углов
-
+	/* if we need 2 or more angles */
 	float a = -Angle.x*p180;
 	float A = cosf(a);
 	float B = sinf(a);
@@ -152,7 +124,6 @@ void Matrix33CreateRotate(float Matrix33[9], VECTOR3D Angle)
 	float F = sinf(a);
 	float AD = A * D;
 	float BD = B * D;
-	// эти формулы получили после оптимизации верхних 3-х преобразований
 	Matrix33[0]  =   C * E;
 	Matrix33[1]  =  -C * F;
 	Matrix33[2]  =   D;
@@ -161,25 +132,17 @@ void Matrix33CreateRotate(float Matrix33[9], VECTOR3D Angle)
 	Matrix33[5]  =  -B * C;
 	Matrix33[6]  = -AD * E + B * F;
 	Matrix33[7]  =  AD * F + B * E;
-	Matrix33[8] =   A * C;
+	Matrix33[8] =    A * C;
 }
 
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Получение обратной матрицы поворота
-//------------------------------------------------------------------------------------
-void Matrix33InverseRotate(float Matrix33[9])
+/*
+ * Create inverted rotation matrix.
+ */
+void vw_Matrix33InverseRotate(float Matrix33[9])
 {
 	float tmp[9];
 	memcpy(tmp, Matrix33, 9*sizeof(float));
 
-	// транспонируем
 	Matrix33[0] = tmp[0];
 	Matrix33[1] = tmp[3];
 	Matrix33[2] = tmp[6];
@@ -193,24 +156,13 @@ void Matrix33InverseRotate(float Matrix33[9])
 	Matrix33[8] = tmp[8];
 }
 
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Получаем точку по матрице трансформаций
-//------------------------------------------------------------------------------------
-void Matrix33CalcPoint(VECTOR3D *Point, float Matrix33[9])
+/*
+ * Calculate point position by transformation matrix.
+ */
+void vw_Matrix33CalcPoint(VECTOR3D *Point, float Matrix33[9])
 {
 	VECTOR3D TmpPoint = *Point;
 	Point->x = Matrix33[0]*TmpPoint.x + Matrix33[3]*TmpPoint.y + Matrix33[6]*TmpPoint.z;
 	Point->y = Matrix33[1]*TmpPoint.x + Matrix33[4]*TmpPoint.y + Matrix33[7]*TmpPoint.z;
 	Point->z = Matrix33[2]*TmpPoint.x + Matrix33[5]*TmpPoint.y + Matrix33[8]*TmpPoint.z;
 }
-
-
-
-

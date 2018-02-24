@@ -80,24 +80,24 @@ bool vw_OBBOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation, VEC
 	float TMPInvObject1RotationMatrix[9]{Object1RotationMatrix[0], Object1RotationMatrix[1], Object1RotationMatrix[2],
 					     Object1RotationMatrix[3], Object1RotationMatrix[4], Object1RotationMatrix[5],
 					     Object1RotationMatrix[6], Object1RotationMatrix[7], Object1RotationMatrix[8]};
-	Matrix33InverseRotate(TMPInvObject1RotationMatrix);
+	vw_Matrix33InverseRotate(TMPInvObject1RotationMatrix);
 	/* calcuate first box size */
 	VECTOR3D a{(Object1OBB[0] - Object1OBB[6])^0.5f};
-	Matrix33CalcPoint(&a, TMPInvObject1RotationMatrix);
+	vw_Matrix33CalcPoint(&a, TMPInvObject1RotationMatrix);
 	/* calcuate inverse rotation matrix */
 	float TMPInvObject2RotationMatrix[9]{Object2RotationMatrix[0], Object2RotationMatrix[1], Object2RotationMatrix[2],
 					     Object2RotationMatrix[3], Object2RotationMatrix[4], Object2RotationMatrix[5],
 					     Object2RotationMatrix[6], Object2RotationMatrix[7], Object2RotationMatrix[8]};
-	Matrix33InverseRotate(TMPInvObject2RotationMatrix);
+	vw_Matrix33InverseRotate(TMPInvObject2RotationMatrix);
 	/* calcuate second box size */
 	VECTOR3D b{(Object2OBB[0] - Object2OBB[6])^0.5f};
-	Matrix33CalcPoint(&b, TMPInvObject2RotationMatrix);
+	vw_Matrix33CalcPoint(&b, TMPInvObject2RotationMatrix);
 	/* calcuate offset in global coordinate systems */
 	VECTOR3D T{(Object2Location + Object2OBBLocation) -
 		   (Object1Location + Object1OBBLocation)};
-	Matrix33CalcPoint(&T, TMPInvObject1RotationMatrix);
+	vw_Matrix33CalcPoint(&T, TMPInvObject1RotationMatrix);
 	/* calcuate transformation matrix */
-	Matrix33Mult(TMPInvObject1RotationMatrix, Object2RotationMatrix);
+	vw_Matrix33Mult(TMPInvObject1RotationMatrix, Object2RotationMatrix);
 	float R[3][3]{{TMPInvObject1RotationMatrix[0], TMPInvObject1RotationMatrix[3], TMPInvObject1RotationMatrix[6]},
 		      {TMPInvObject1RotationMatrix[1], TMPInvObject1RotationMatrix[4], TMPInvObject1RotationMatrix[7]},
 		      {TMPInvObject1RotationMatrix[2], TMPInvObject1RotationMatrix[5], TMPInvObject1RotationMatrix[8]}};
@@ -308,12 +308,12 @@ bool vw_SphereOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation,
 	float TMPInvRotationMatrix[9]{Object1RotationMatrix[0], Object1RotationMatrix[1], Object1RotationMatrix[2],
 				      Object1RotationMatrix[3], Object1RotationMatrix[4], Object1RotationMatrix[5],
 				      Object1RotationMatrix[6], Object1RotationMatrix[7], Object1RotationMatrix[8]};
-	Matrix33InverseRotate(TMPInvRotationMatrix);
+	vw_Matrix33InverseRotate(TMPInvRotationMatrix);
 	/* move it to coordinates */
-	Matrix33CalcPoint(&TMPMax, TMPInvRotationMatrix);
-	Matrix33CalcPoint(&TMPMin, TMPInvRotationMatrix);
-	Matrix33CalcPoint(&TMPPoint1, TMPInvRotationMatrix);
-	Matrix33CalcPoint(&TMPPoint2, TMPInvRotationMatrix);
+	vw_Matrix33CalcPoint(&TMPMax, TMPInvRotationMatrix);
+	vw_Matrix33CalcPoint(&TMPMin, TMPInvRotationMatrix);
+	vw_Matrix33CalcPoint(&TMPPoint1, TMPInvRotationMatrix);
+	vw_Matrix33CalcPoint(&TMPPoint2, TMPInvRotationMatrix);
 
 	/* same idea as for Sphere-AABB collision detection */
 	bool Result{true};
@@ -383,20 +383,20 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 
 	// находим точку локального положения объекта в моделе
 	VECTOR3D LocalLocation{Object1DrawObjectList->Location};
-	Matrix33CalcPoint(&LocalLocation, Object1RotationMatrix);
+	vw_Matrix33CalcPoint(&LocalLocation, Object1RotationMatrix);
 
 	// если нужно - создаем матрицу, иначе - копируем ее
 	if ((Object1DrawObjectList->Rotation.x != 0.0f) ||
 	    (Object1DrawObjectList->Rotation.y != 0.0f) ||
 	    (Object1DrawObjectList->Rotation.z != 0.0f)) {
 		float TransMatTMP[16];
-		Matrix44Identity(TransMatTMP);
-		Matrix44CreateRotate(TransMatTMP, Object1DrawObjectList->Rotation);
-		Matrix44Translate(TransMatTMP, LocalLocation);
+		vw_Matrix44Identity(TransMatTMP);
+		vw_Matrix44CreateRotate(TransMatTMP, Object1DrawObjectList->Rotation);
+		vw_Matrix44Translate(TransMatTMP, LocalLocation);
 		// и умножаем на основную матрицу, со сведениями по всему объекту
-		Matrix44Mult(TransMat, TransMatTMP);
+		vw_Matrix44Mult(TransMat, TransMatTMP);
 	} else
-		Matrix44Translate(TransMat, LocalLocation);
+		vw_Matrix44Translate(TransMat, LocalLocation);
 
 	// проверяем все треугольники объекта
 	for (int i = 0; i < Object1DrawObjectList->VertexCount; i += 3) {
@@ -411,7 +411,7 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 		VECTOR3D Point1{Object1DrawObjectList->VertexBuffer[j2],
 				Object1DrawObjectList->VertexBuffer[j2 + 1],
 				Object1DrawObjectList->VertexBuffer[j2 + 2]};
-		Matrix44CalcPoint(&Point1, TransMat);
+		vw_Matrix44CalcPoint(&Point1, TransMat);
 
 		if (Object1DrawObjectList->IndexBuffer != nullptr)
 			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart + i + 1]*Object1DrawObjectList->VertexStride;
@@ -421,7 +421,7 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 		VECTOR3D Point2{Object1DrawObjectList->VertexBuffer[j2],
 				Object1DrawObjectList->VertexBuffer[j2 + 1],
 				Object1DrawObjectList->VertexBuffer[j2 + 2]};
-		Matrix44CalcPoint(&Point2, TransMat);
+		vw_Matrix44CalcPoint(&Point2, TransMat);
 
 		if (Object1DrawObjectList->IndexBuffer != nullptr)
 			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart + i + 2]*Object1DrawObjectList->VertexStride;
@@ -431,7 +431,7 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 		VECTOR3D Point3{Object1DrawObjectList->VertexBuffer[j2],
 				Object1DrawObjectList->VertexBuffer[j2 + 1],
 				Object1DrawObjectList->VertexBuffer[j2 + 2]};
-		Matrix44CalcPoint(&Point3, TransMat);
+		vw_Matrix44CalcPoint(&Point3, TransMat);
 
 		// находим 2 вектора, образующих плоскость
 		VECTOR3D PlaneVector1{Point2 - Point1};

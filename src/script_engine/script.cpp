@@ -674,7 +674,7 @@ void ScriptEngine::UpdateTimeLine()
 						TimeSheet->Acceler = 1.0f;//0-1
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "acceler") != nullptr)
 							TimeSheet->Acceler = xmlDoc->fGetEntryAttribute(TLEarthFighter, "acceler");
-						Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
+						vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
 						TimeSheet->SpeedLR = 0.0f;
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "speedlr") != nullptr)
@@ -683,7 +683,7 @@ void ScriptEngine::UpdateTimeLine()
 						TimeSheet->AccelerLR = 1.0f;//0-1
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "accelerlr") != nullptr)
 							TimeSheet->AccelerLR = xmlDoc->fGetEntryAttribute(TLEarthFighter, "accelerlr");
-						Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
+						vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
 
 						TimeSheet->SpeedUD = 0.0f;
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "speedud") != nullptr)
@@ -692,7 +692,7 @@ void ScriptEngine::UpdateTimeLine()
 						TimeSheet->AccelerUD = 1.0f;//0-1
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "accelerud") != nullptr)
 							TimeSheet->AccelerUD = xmlDoc->fGetEntryAttribute(TLEarthFighter, "accelerud");
-						Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
+						vw_Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
 
 
 						TimeSheet->SpeedByCamFB = 0.0f;
@@ -702,7 +702,7 @@ void ScriptEngine::UpdateTimeLine()
 						TimeSheet->AccelerByCamFB = 1.0f;//0-1
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "accelerbycamfb") != nullptr)
 							TimeSheet->AccelerByCamFB = xmlDoc->fGetEntryAttribute(TLEarthFighter, "accelerbycamfb");
-						Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
+						vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
 
 						TimeSheet->SpeedByCamLR = 0.0f;
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "speedbycamlr") != nullptr)
@@ -711,7 +711,7 @@ void ScriptEngine::UpdateTimeLine()
 						TimeSheet->AccelerByCamLR = 1.0f;//0-1
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "accelerbycamlr") != nullptr)
 							TimeSheet->AccelerByCamLR = xmlDoc->fGetEntryAttribute(TLEarthFighter, "accelerbycamlr");
-						Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
+						vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
 
 						TimeSheet->SpeedByCamUD = 0.0f;
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "speedbycamud") != nullptr)
@@ -720,7 +720,7 @@ void ScriptEngine::UpdateTimeLine()
 						TimeSheet->AccelerByCamUD = 1.0f;//0-1
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "accelerbycamud") != nullptr)
 							TimeSheet->AccelerByCamUD = xmlDoc->fGetEntryAttribute(TLEarthFighter, "accelerbycamud");
-						Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
+						vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
 
 						TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
@@ -738,9 +738,9 @@ void ScriptEngine::UpdateTimeLine()
 							TimeSheet->RotationAcceler.y = xmlDoc->fGetEntryAttribute(TLEarthFighter, "rotacy");
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "rotacz") != nullptr)
 							TimeSheet->RotationAcceler.z = xmlDoc->fGetEntryAttribute(TLEarthFighter, "rotacz");
-						Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
-						Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
-						Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
+						vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
+						vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
+						vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 						TimeSheet->Fire = false;
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "fire") != nullptr)
@@ -848,7 +848,7 @@ void ScriptEngine::UpdateTimeLine()
 							TimeSheet->Acceler = 1.0f;//0-1
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "acceler") != nullptr)
 								TimeSheet->Acceler = xmlDoc->fGetEntryAttribute(TLAlienFighter, "acceler");
-							Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
 							TimeSheet->SpeedLR = 0.0f;
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "speedlr") != nullptr)
@@ -857,7 +857,7 @@ void ScriptEngine::UpdateTimeLine()
 							TimeSheet->AccelerLR = 1.0f;//0-1
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "accelerlr") != nullptr)
 								TimeSheet->AccelerLR = xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerlr");
-							Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
 
 							TimeSheet->SpeedUD = 0.0f;
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "speedud") != nullptr)
@@ -866,7 +866,7 @@ void ScriptEngine::UpdateTimeLine()
 							TimeSheet->AccelerUD = 1.0f;//0-1
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "accelerud") != nullptr)
 								TimeSheet->AccelerUD = xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerud");
-							Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
 
 							TimeSheet->SpeedByCamFB = 0.0f;
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "speedbycamfb") != nullptr)
@@ -875,7 +875,7 @@ void ScriptEngine::UpdateTimeLine()
 							TimeSheet->AccelerByCamFB = 1.0f;//0-1
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "accelerbycamfb") != nullptr)
 								TimeSheet->AccelerByCamFB = xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerbycamfb");
-							Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
 
 							TimeSheet->SpeedByCamLR = 0.0f;
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "speedbycamlr") != nullptr)
@@ -884,7 +884,7 @@ void ScriptEngine::UpdateTimeLine()
 							TimeSheet->AccelerByCamLR = 1.0f;//0-1
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "accelerbycamlr") != nullptr)
 								TimeSheet->AccelerByCamLR = xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerbycamlr");
-							Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
 
 							TimeSheet->SpeedByCamUD = 0.0f;
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "speedbycamud") != nullptr)
@@ -893,7 +893,7 @@ void ScriptEngine::UpdateTimeLine()
 							TimeSheet->AccelerByCamUD = 1.0f;//0-1
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "accelerbycamud") != nullptr)
 								TimeSheet->AccelerByCamUD = xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerbycamud");
-							Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
 							TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "rotx") != nullptr)
@@ -910,9 +910,9 @@ void ScriptEngine::UpdateTimeLine()
 								TimeSheet->RotationAcceler.y = xmlDoc->fGetEntryAttribute(TLAlienFighter, "rotacy");
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "rotacz") != nullptr)
 								TimeSheet->RotationAcceler.z = xmlDoc->fGetEntryAttribute(TLAlienFighter, "rotacz");
-							Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
-							Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
-							Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
+							vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 							TimeSheet->Fire = false;
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "fire") != nullptr)
@@ -1021,7 +1021,7 @@ void ScriptEngine::UpdateTimeLine()
 								TimeSheet->Acceler = 1.0f;//0-1
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "acceler") != nullptr)
 									TimeSheet->Acceler = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "acceler");
-								Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
+								vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
 								TimeSheet->SpeedLR = 0.0f;
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "speedlr") != nullptr)
@@ -1030,7 +1030,7 @@ void ScriptEngine::UpdateTimeLine()
 								TimeSheet->AccelerLR = 1.0f;//0-1
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "accelerlr") != nullptr)
 									TimeSheet->AccelerLR = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerlr");
-								Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
+								vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
 
 								TimeSheet->SpeedUD = 0.0f;
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "speedud") != nullptr)
@@ -1039,7 +1039,7 @@ void ScriptEngine::UpdateTimeLine()
 								TimeSheet->AccelerUD = 1.0f;//0-1
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "accelerud") != nullptr)
 									TimeSheet->AccelerUD = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerud");
-								Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
+								vw_Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
 
 								TimeSheet->SpeedByCamFB = 0.0f;
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "speedbycamfb") != nullptr)
@@ -1048,7 +1048,7 @@ void ScriptEngine::UpdateTimeLine()
 								TimeSheet->AccelerByCamFB = 1.0f;//0-1
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "accelerbycamfb") != nullptr)
 									TimeSheet->AccelerByCamFB = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerbycamfb");
-								Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
+								vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
 
 								TimeSheet->SpeedByCamLR = 0.0f;
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "speedbycamlr") != nullptr)
@@ -1057,7 +1057,7 @@ void ScriptEngine::UpdateTimeLine()
 								TimeSheet->AccelerByCamLR = 1.0f;//0-1
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "accelerbycamlr") != nullptr)
 									TimeSheet->AccelerByCamLR = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerbycamlr");
-								Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
+								vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
 
 								TimeSheet->SpeedByCamUD = 0.0f;
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "speedbycamud") != nullptr)
@@ -1066,7 +1066,7 @@ void ScriptEngine::UpdateTimeLine()
 								TimeSheet->AccelerByCamUD = 1.0f;//0-1
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "accelerbycamud") != nullptr)
 									TimeSheet->AccelerByCamUD = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerbycamud");
-								Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
+								vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
 								TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "rotx") != nullptr)
@@ -1083,9 +1083,9 @@ void ScriptEngine::UpdateTimeLine()
 									TimeSheet->RotationAcceler.y = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "rotacy");
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "rotacz") != nullptr)
 									TimeSheet->RotationAcceler.z = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "rotacz");
-								Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
-								Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
-								Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
+								vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
+								vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
+								vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 								TimeSheet->Fire = false;
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "fire") != nullptr)
@@ -1197,7 +1197,7 @@ void ScriptEngine::UpdateTimeLine()
 									TimeSheet->Acceler = 1.0f;//0-1
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "acceler") != nullptr)
 										TimeSheet->Acceler = xmlDoc->fGetEntryAttribute(TLPirateShip, "acceler");
-									Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
+									vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
 									TimeSheet->SpeedLR = 0.0f;
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "speedlr") != nullptr)
@@ -1206,7 +1206,7 @@ void ScriptEngine::UpdateTimeLine()
 									TimeSheet->AccelerLR = 1.0f;//0-1
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "accelerlr") != nullptr)
 										TimeSheet->AccelerLR = xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerlr");
-									Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
+									vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
 
 									TimeSheet->SpeedUD = 0.0f;
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "speedud") != nullptr)
@@ -1215,7 +1215,7 @@ void ScriptEngine::UpdateTimeLine()
 									TimeSheet->AccelerUD = 1.0f;//0-1
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "accelerud") != nullptr)
 										TimeSheet->AccelerUD = xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerud");
-									Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
+									vw_Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
 
 									TimeSheet->SpeedByCamFB = 0.0f;
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "speedbycamfb") != nullptr)
@@ -1224,7 +1224,7 @@ void ScriptEngine::UpdateTimeLine()
 									TimeSheet->AccelerByCamFB = 1.0f;//0-1
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "accelerbycamfb") != nullptr)
 										TimeSheet->AccelerByCamFB = xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerbycamfb");
-									Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
+									vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
 
 									TimeSheet->SpeedByCamLR = 0.0f;
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "speedbycamlr") != nullptr)
@@ -1233,7 +1233,7 @@ void ScriptEngine::UpdateTimeLine()
 									TimeSheet->AccelerByCamLR = 1.0f;//0-1
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "accelerbycamlr") != nullptr)
 										TimeSheet->AccelerByCamLR = xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerbycamlr");
-									Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
+									vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
 
 									TimeSheet->SpeedByCamUD = 0.0f;
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "speedbycamud") != nullptr)
@@ -1242,7 +1242,7 @@ void ScriptEngine::UpdateTimeLine()
 									TimeSheet->AccelerByCamUD = 1.0f;//0-1
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "accelerbycamud") != nullptr)
 										TimeSheet->AccelerByCamUD = xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerbycamud");
-									Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
+									vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
 									TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "rotx") != nullptr)
@@ -1259,9 +1259,9 @@ void ScriptEngine::UpdateTimeLine()
 										TimeSheet->RotationAcceler.y = xmlDoc->fGetEntryAttribute(TLPirateShip, "rotacy");
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "rotacz") != nullptr)
 										TimeSheet->RotationAcceler.z = xmlDoc->fGetEntryAttribute(TLPirateShip, "rotacz");
-									Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
-									Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
-									Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
+									vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
+									vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
+									vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 									TimeSheet->Fire = false;
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "fire") != nullptr)
@@ -1568,7 +1568,7 @@ void ScriptEngine::UpdateTimeLine()
 																TimeSheet->Acceler = 1.0f;//0-1
 																if (xmlDoc->GetEntryAttribute(TLGroundObject, "acceler") != nullptr)
 																	TimeSheet->Acceler = xmlDoc->fGetEntryAttribute(TLGroundObject, "acceler");
-																Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
+																vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
 																TimeSheet->SpeedLR = 0.0f;
 																TimeSheet->AccelerLR = 1.0f;//0-1
@@ -1596,9 +1596,9 @@ void ScriptEngine::UpdateTimeLine()
 																	TimeSheet->RotationAcceler.y = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacy");
 																if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotacz") != nullptr)
 																	TimeSheet->RotationAcceler.z = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacz");
-																Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
-																Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
-																Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
+																vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
+																vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
+																vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 																TimeSheet->Fire = false;
 																if (xmlDoc->GetEntryAttribute(TLGroundObject, "fire") != nullptr)
@@ -1690,7 +1690,7 @@ void ScriptEngine::UpdateTimeLine()
 																	TimeSheet->Acceler = 1.0f;//0-1
 																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "acceler") != nullptr)
 																		TimeSheet->Acceler = xmlDoc->fGetEntryAttribute(TLGroundObject, "acceler");
-																	Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
+																	vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
 																	TimeSheet->SpeedLR = 0.0f;
 																	TimeSheet->AccelerLR = 1.0f;//0-1
@@ -1718,9 +1718,9 @@ void ScriptEngine::UpdateTimeLine()
 																		TimeSheet->RotationAcceler.y = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacy");
 																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotacz") != nullptr)
 																		TimeSheet->RotationAcceler.z = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacz");
-																	Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
-																	Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
-																	Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
+																	vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
+																	vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
+																	vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 																	TimeSheet->Fire = false;
 																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "fire") != nullptr)

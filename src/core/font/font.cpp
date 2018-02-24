@@ -289,7 +289,7 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 	while (strlen(CharsList) > 0) {
 		unsigned CurrentChar;
 		/* convert into UTF32 code */
-		CharsList = utf8_to_utf32(CharsList, &CurrentChar);
+		CharsList = vw_UTF8toUTF32(CharsList, &CurrentChar);
 
 		/* load glyph*/
 		if (FT_Load_Char(InternalFace, CurrentChar, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT)) {
@@ -356,7 +356,7 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 	/* setup texture to all font characters from list */
 	while (strlen(CharsList2) > 0) {
 		unsigned CurrentChar;
-		CharsList2 = utf8_to_utf32(CharsList2, &CurrentChar);
+		CharsList2 = vw_UTF8toUTF32(CharsList2, &CurrentChar);
 		eFontChar *TMPChar = FindFontCharByUTF32(CurrentChar);
 		if (TMPChar != nullptr)
 			TMPChar->Texture = FontTexture;
@@ -430,7 +430,7 @@ void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontS
 		while (strlen(CountCheck) > 0) {
 			unsigned UTF32;
 			// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
-			CountCheck = utf8_to_utf32(CountCheck, &UTF32);
+			CountCheck = vw_UTF8toUTF32(CountCheck, &UTF32);
 			// находим наш текущий символ
 			eFontChar *DrawChar = FindFontCharByUTF32(UTF32);
 			if (DrawChar == nullptr)
@@ -455,7 +455,7 @@ void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontS
 		while (strlen(CountCheck) > 0) {
 			unsigned UTF32;
 			// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
-			CountCheck = utf8_to_utf32(CountCheck, &UTF32);
+			CountCheck = vw_UTF8toUTF32(CountCheck, &UTF32);
 			// находим наш текущий символ
 			eFontChar *DrawChar = FindFontCharByUTF32(UTF32);
 			if (DrawChar == nullptr)
@@ -495,7 +495,7 @@ void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontS
 	while (strlen(textdraw) > 0) {
 		unsigned UTF32;
 		// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
-		textdraw = utf8_to_utf32(textdraw, &UTF32);
+		textdraw = vw_UTF8toUTF32(textdraw, &UTF32);
 		// находим наш текущий символ
 		eFontChar *DrawChar = FindFontCharByUTF32(UTF32);
 		if (DrawChar == nullptr)
@@ -619,7 +619,7 @@ int vw_FontSize(const char *Text, ...)
 	while (strlen(textdraw) > 0) {
 		unsigned UTF32;
 		// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
-		textdraw = utf8_to_utf32(textdraw, &UTF32);
+		textdraw = vw_UTF8toUTF32(textdraw, &UTF32);
 		// находим наш текущий символ
 		eFontChar *DrawChar = FindFontCharByUTF32(UTF32);
 		if (DrawChar == nullptr)
@@ -690,7 +690,7 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 	while (strlen(textdraw) > 0) {
 		unsigned UTF32;
 		// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
-		textdraw = utf8_to_utf32(textdraw, &UTF32);
+		textdraw = vw_UTF8toUTF32(textdraw, &UTF32);
 		// находим наш текущий символ
 		eFontChar* DrawChar = FindFontCharByUTF32(UTF32);
 		if (DrawChar == nullptr)

@@ -257,7 +257,7 @@ void ProfileInputText()
 			while (strlen(ReversePoint) > 0) {
 				unsigned CurrentChar;
 				ReversePointPrevious = ReversePoint;
-				ReversePoint = utf8_to_utf32(ReversePoint, &CurrentChar);
+				ReversePoint = vw_UTF8toUTF32(ReversePoint, &CurrentChar);
 			}
 			while (ReversePointPrevious != ReversePoint) {
 				NewProfileName[NewProfileNamePos] = 0;

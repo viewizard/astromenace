@@ -75,7 +75,7 @@ CGroundExplosion::CGroundExplosion(CGroundObject *Object, int ExplType, const VE
 		// сохраняем старые значения + пересчет новых
 		memcpy(InvRotationMat, Object->CurrentRotationMat, 9*sizeof(float));
 		// делаем инверсную старую матрицу
-		Matrix33InverseRotate(InvRotationMat);
+		vw_Matrix33InverseRotate(InvRotationMat);
 
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
@@ -124,9 +124,9 @@ CGroundExplosion::CGroundExplosion(CGroundObject *Object, int ExplType, const VE
 
 				// находим точку локального положения объекта в моделе
 				VECTOR3D LocalLocation = Object->DrawObjectList[i].Location;
-				Matrix33CalcPoint(&LocalLocation, Object->CurrentRotationMat);
+				vw_Matrix33CalcPoint(&LocalLocation, Object->CurrentRotationMat);
 				LocalLocation = Object->HitBBLocation[i]-LocalLocation;
-				Matrix33CalcPoint(&LocalLocation, InvRotationMat);
+				vw_Matrix33CalcPoint(&LocalLocation, InvRotationMat);
 				// и меняем внутрее положение
 				ShipPart->DrawObjectList[0].Location = LocalLocation^(-1.0f);
 
@@ -158,7 +158,7 @@ CGroundExplosion::CGroundExplosion(CGroundObject *Object, int ExplType, const VE
 						//if(ShipPart->Speed != 0.0f) Speed-2*vw_Randf1;
 						VECTOR3D VelocityTMP = ShipPart->Location - Object->Location;
 						// делаем небольшой случайный доворот
-						RotatePoint(&VelocityTMP, VECTOR3D(-5.0f-15.0f*vw_Randf1, 10.0f*vw_Randf0, 0.0f));
+						vw_RotatePoint(&VelocityTMP, VECTOR3D(-5.0f-15.0f*vw_Randf1, 10.0f*vw_Randf0, 0.0f));
 						if(ShipPart->Radius != 0.0f) ShipPart->Velocity = VelocityTMP^((1.0f+5.0f*vw_Randf1)/ShipPart->Radius);
 						else ShipPart->Velocity = VelocityTMP^(1.0f+5.0f*vw_Randf1);
 

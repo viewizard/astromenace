@@ -41,8 +41,8 @@ extern float ParticleSystemQuality;
 eParticleSystem::eParticleSystem()
 {
 	// начальные установки для мартиц поворотов
-	Matrix33Identity(CurrentRotationMat);
-	Matrix33Identity(OldInvRotationMat);
+	vw_Matrix33Identity(CurrentRotationMat);
+	vw_Matrix33Identity(OldInvRotationMat);
 	// настройка массива
 	vw_AttachParticleSystem(this);
 }
@@ -196,9 +196,9 @@ bool eParticleSystem::Update(float Time)
 			NewParticle->Color.a = 1.0f;
 
 			// проверяем, чтобы не было переполнения цвета
-			Clamp( NewParticle->Color.r, 0.0f, 1.0f );
-			Clamp( NewParticle->Color.g, 0.0f, 1.0f );
-			Clamp( NewParticle->Color.b, 0.0f, 1.0f );
+			vw_Clamp(NewParticle->Color.r, 0.0f, 1.0f);
+			vw_Clamp(NewParticle->Color.g, 0.0f, 1.0f);
+			vw_Clamp(NewParticle->Color.b, 0.0f, 1.0f);
 
 			// считаем delta относительно жизни частицы
 			NewParticle->ColorDelta.r = (ColorEnd.r - NewParticle->Color.r) / NewParticle->Lifetime;
@@ -208,7 +208,7 @@ bool eParticleSystem::Update(float Time)
 			// считаем значение альфы
 			NewParticle->Alpha = AlphaStart + vw_Randf0 * AlphaVar;
 			// убираем переполнение
-			Clamp( NewParticle->Alpha, 0.0f, 1.0f );
+			vw_Clamp(NewParticle->Alpha, 0.0f, 1.0f);
 			// считаем дельту альфы
 			NewParticle->AlphaDelta = (AlphaEnd - NewParticle->Alpha) / NewParticle->Lifetime;
 			// передаем тип изменения альфы
@@ -243,7 +243,7 @@ bool eParticleSystem::Update(float Time)
 					tmp = tmp + tmp1;
 				}
 
-				Matrix33CalcPoint(&tmp, CurrentRotationMat);
+				vw_Matrix33CalcPoint(&tmp, CurrentRotationMat);
 				NewParticle->Location = Location + tmp;
 			}
 			// тип 11 только !!! для лазеров-мазеров
@@ -286,7 +286,7 @@ bool eParticleSystem::Update(float Time)
 					if (tmp.z < -CreationSizeText.z) tmp.z = -CreationSizeText.z;
 				}
 
-				Matrix33CalcPoint(&tmp, CurrentRotationMat);
+				vw_Matrix33CalcPoint(&tmp, CurrentRotationMat);
 				NewParticle->Location = Location + tmp;
 			}
 			if (CreationType == 2) {
@@ -337,7 +337,7 @@ bool eParticleSystem::Update(float Time)
 					ParticleDist = tmp.x*tmp.x + tmp.y*tmp.y + tmp.z*tmp.z;
 				}
 
-				Matrix33CalcPoint(&tmp, CurrentRotationMat);
+				vw_Matrix33CalcPoint(&tmp, CurrentRotationMat);
 				NewParticle->Location = Location + tmp;
 			}
 
@@ -389,7 +389,7 @@ bool eParticleSystem::Update(float Time)
 			} else {
 
 				NewParticle->Velocity = Direction;
-				RotatePoint(&NewParticle->Velocity, VECTOR3D(Theta*vw_Randf0/2.0f, Theta*vw_Randf0/2.0f, 0.0f));
+				vw_RotatePoint(&NewParticle->Velocity, VECTOR3D(Theta*vw_Randf0/2.0f, Theta*vw_Randf0/2.0f, 0.0f));
 			}
 
 
@@ -811,11 +811,11 @@ void eParticleSystem::RotateSystemByAngle(VECTOR3D NewAngle)
 	// сохраняем старые значения + пересчет новых
 	memcpy(OldInvRotationMat, CurrentRotationMat, 9*sizeof(float));
 	// делаем инверсную старую матрицу
-	Matrix33InverseRotate(OldInvRotationMat);
-	Matrix33CreateRotate(CurrentRotationMat, Angle);
+	vw_Matrix33InverseRotate(OldInvRotationMat);
+	vw_Matrix33CreateRotate(CurrentRotationMat, Angle);
 
-	Matrix33CalcPoint(&Direction, OldInvRotationMat);
-	Matrix33CalcPoint(&Direction, CurrentRotationMat);
+	vw_Matrix33CalcPoint(&Direction, OldInvRotationMat);
+	vw_Matrix33CalcPoint(&Direction, CurrentRotationMat);
 }
 
 
@@ -830,19 +830,19 @@ void eParticleSystem::RotateSystemAndParticlesByAngle(VECTOR3D NewAngle)
 	// сохраняем старые значения + пересчет новых
 	memcpy(OldInvRotationMat, CurrentRotationMat, 9*sizeof(float));
 	// делаем инверсную старую матрицу
-	Matrix33InverseRotate(OldInvRotationMat);
-	Matrix33CreateRotate(CurrentRotationMat, Angle);
+	vw_Matrix33InverseRotate(OldInvRotationMat);
+	vw_Matrix33CreateRotate(CurrentRotationMat, Angle);
 
-	Matrix33CalcPoint(&Direction, OldInvRotationMat);
-	Matrix33CalcPoint(&Direction, CurrentRotationMat);
+	vw_Matrix33CalcPoint(&Direction, OldInvRotationMat);
+	vw_Matrix33CalcPoint(&Direction, CurrentRotationMat);
 
 
 	eParticle *tmp = Start;
 	while (tmp != nullptr) {
 		// меняем каждой частице
 		VECTOR3D TMP = tmp->Location - Location;
-		Matrix33CalcPoint(&TMP, OldInvRotationMat);
-		Matrix33CalcPoint(&TMP, CurrentRotationMat);
+		vw_Matrix33CalcPoint(&TMP, OldInvRotationMat);
+		vw_Matrix33CalcPoint(&TMP, CurrentRotationMat);
 		tmp->Location = TMP + Location;
 		tmp = tmp->Next;
 	}
@@ -859,21 +859,21 @@ void eParticleSystem::RotateParticlesByAngle(VECTOR3D NewAngle)
 	// делаем обратку для отматывания назад
 	float TmpOldInvRotationMat[9];
 	memcpy(TmpOldInvRotationMat, CurrentRotationMat, 9*sizeof(float));
-	Matrix33InverseRotate(TmpOldInvRotationMat);
+	vw_Matrix33InverseRotate(TmpOldInvRotationMat);
 
 	// матрица поворота частиц
 	float TmpRotationMat[9];
-	Matrix33CreateRotate(TmpRotationMat, NewAngle);
+	vw_Matrix33CreateRotate(TmpRotationMat, NewAngle);
 
 
 	eParticle *tmp = Start;
 	while (tmp != nullptr) {
 		// меняем каждой частице
 		VECTOR3D TMP = tmp->Location - Location;
-		Matrix33CalcPoint(&TMP, TmpOldInvRotationMat);
+		vw_Matrix33CalcPoint(&TMP, TmpOldInvRotationMat);
 		// поворачиваем каждую точку
-		Matrix33CalcPoint(&TMP, TmpRotationMat);
-		Matrix33CalcPoint(&TMP, CurrentRotationMat);
+		vw_Matrix33CalcPoint(&TMP, TmpRotationMat);
+		vw_Matrix33CalcPoint(&TMP, CurrentRotationMat);
 		tmp->Location = TMP + Location;
 		tmp = tmp->Next;
 	}

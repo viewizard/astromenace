@@ -1858,8 +1858,8 @@ void InformationDrawObject()
 	// корректируем положение (у нас объекты стоят не в нулевой точке, а со смещением
 	VECTOR3D TMPLocation = ObjectBaseLocation;
 	float tmp_matrix[33];
-	Matrix33CreateRotate(tmp_matrix, VECTOR3D(RotationSumX,RotationSumY,0));
-	Matrix33CalcPoint(&TMPLocation, tmp_matrix);
+	vw_Matrix33CreateRotate(tmp_matrix, VECTOR3D(RotationSumX, RotationSumY, 0));
+	vw_Matrix33CalcPoint(&TMPLocation, tmp_matrix);
 	TMPLocation += VECTOR3D(1000,-1000,0);
 
 

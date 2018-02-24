@@ -37,12 +37,14 @@ bool CStar::Update(float TimeDelta)
 
 	if (Show) {
 		Alpha += AlphaDelta * TimeDelta;
-		if (Alpha >= 1.0f) Show = false;
+		if (Alpha >= 1.0f)
+			Show = false;
 	} else {
 		Alpha -= AlphaDelta * TimeDelta;
-		if (Alpha <= 0.3f) Show = true;
+		if (Alpha <= 0.3f)
+			Show = true;
 	}
-	Clamp( Alpha, 0.0f, 1.0f );
+	vw_Clamp(Alpha, 0.0f, 1.0f);
 
 
 	// если пришли сюда - значит все хорошо и частица работает

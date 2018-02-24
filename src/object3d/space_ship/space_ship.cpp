@@ -307,8 +307,8 @@ void CSpaceShip::SetRotation(VECTOR3D NewRotation)
 	// оружие
 	if (Weapon != nullptr)
 		for (int i = 0; i < WeaponQuantity; i++) {
-			Matrix33CalcPoint(&(WeaponLocation[i]), OldInvRotationMat);
-			Matrix33CalcPoint(&(WeaponLocation[i]), CurrentRotationMat);
+			vw_Matrix33CalcPoint(&(WeaponLocation[i]), OldInvRotationMat);
+			vw_Matrix33CalcPoint(&(WeaponLocation[i]), CurrentRotationMat);
 
 			if (Weapon[i] != nullptr)
 				// если нужно поворачивать, или не нужно и в этом оружие наведение не используем (ракетная система)
@@ -319,8 +319,8 @@ void CSpaceShip::SetRotation(VECTOR3D NewRotation)
 		}
 	if (BossWeapon != nullptr)
 		for (int i = 0; i < BossWeaponQuantity; i++) {
-			Matrix33CalcPoint(&(BossWeaponLocation[i]), OldInvRotationMat);
-			Matrix33CalcPoint(&(BossWeaponLocation[i]), CurrentRotationMat);
+			vw_Matrix33CalcPoint(&(BossWeaponLocation[i]), OldInvRotationMat);
+			vw_Matrix33CalcPoint(&(BossWeaponLocation[i]), CurrentRotationMat);
 
 			if (BossWeapon[i] != nullptr)
 				// если нужно поворачивать, или не нужно и в этом оружие наведение не используем (ракетная система)
@@ -330,8 +330,8 @@ void CSpaceShip::SetRotation(VECTOR3D NewRotation)
 				}
 		}
 	if (WeaponFlare != nullptr) {
-		Matrix33CalcPoint(&WeaponFlareLocation, OldInvRotationMat);
-		Matrix33CalcPoint(&WeaponFlareLocation, CurrentRotationMat);
+		vw_Matrix33CalcPoint(&WeaponFlareLocation, OldInvRotationMat);
+		vw_Matrix33CalcPoint(&WeaponFlareLocation, CurrentRotationMat);
 		WeaponFlare->SetRotation(NewRotation);
 		WeaponFlare->SetLocation(Location + WeaponFlareLocation);
 	}
@@ -342,8 +342,8 @@ void CSpaceShip::SetRotation(VECTOR3D NewRotation)
 	// двигатели
 	if (Engine != nullptr)
 		for (int i = 0; i < EngineQuantity; i++) {
-			Matrix33CalcPoint(&(EngineLocation[i]), OldInvRotationMat);
-			Matrix33CalcPoint(&(EngineLocation[i]), CurrentRotationMat);
+			vw_Matrix33CalcPoint(&(EngineLocation[i]), OldInvRotationMat);
+			vw_Matrix33CalcPoint(&(EngineLocation[i]), CurrentRotationMat);
 
 			if (Engine[i] != nullptr) {
 				if (Engine[i]->SpeedOnCreation == -1.0f) {
@@ -358,8 +358,8 @@ void CSpaceShip::SetRotation(VECTOR3D NewRotation)
 		}
 	if (EngineLeft != nullptr)
 		for (int i = 0; i < EngineLeftQuantity; i++) {
-			Matrix33CalcPoint(&(EngineLeftLocation[i]), OldInvRotationMat);
-			Matrix33CalcPoint(&(EngineLeftLocation[i]), CurrentRotationMat);
+			vw_Matrix33CalcPoint(&(EngineLeftLocation[i]), OldInvRotationMat);
+			vw_Matrix33CalcPoint(&(EngineLeftLocation[i]), CurrentRotationMat);
 
 			if (EngineLeft[i] != nullptr) {
 				EngineLeft[i]->MoveSystemLocation(EngineLeftLocation[i] + Location);
@@ -369,8 +369,8 @@ void CSpaceShip::SetRotation(VECTOR3D NewRotation)
 		}
 	if (EngineRight != nullptr)
 		for (int i = 0; i < EngineRightQuantity; i++) {
-			Matrix33CalcPoint(&(EngineRightLocation[i]), OldInvRotationMat);
-			Matrix33CalcPoint(&(EngineRightLocation[i]), CurrentRotationMat);
+			vw_Matrix33CalcPoint(&(EngineRightLocation[i]), OldInvRotationMat);
+			vw_Matrix33CalcPoint(&(EngineRightLocation[i]), CurrentRotationMat);
 
 			if (EngineRight[i] != nullptr) {
 				EngineRight[i]->MoveSystemLocation(EngineRightLocation[i] + Location);
@@ -696,20 +696,22 @@ bool CSpaceShip::Update(float Time)
 	if (NeedSpeed != 0.0f || (ObjectStatus == 3 && Speed != 0.0f)) {
 		float Sign = 1.0f;
 		// нужно двигать назад
-		if (NeedSpeed < 0.0f) Sign = -1.0f;
+		if (NeedSpeed < 0.0f)
+			Sign = -1.0f;
 
 		// "ровняем" скорость под модель
-		if (Sign == 1.0f) {
-			Clamp(NeedSpeed, 0.0f, MaxSpeed);
-		} else {
-			Clamp(NeedSpeed, -MaxSpeed, 0.0f);
-		}
+		if (Sign == 1.0f)
+			vw_Clamp(NeedSpeed, 0.0f, MaxSpeed);
+		else
+			vw_Clamp(NeedSpeed, -MaxSpeed, 0.0f);
 
 		// случай, когда нужно затормозить а не менять направление
 		if (Sign == 1.0f) {
-			if (NeedSpeed < Speed) Sign = -1.0f;
+			if (NeedSpeed < Speed)
+				Sign = -1.0f;
 		} else {
-			if (NeedSpeed > Speed) Sign = 1.0f;
+			if (NeedSpeed > Speed)
+				Sign = 1.0f;
 		}
 
 
@@ -755,9 +757,9 @@ bool CSpaceShip::Update(float Time)
 
 		// "ровняем" скорость под модель
 		if (Sign == 1.0f) {
-			Clamp(NeedSpeedLR, 0.0f, MaxSpeed);
+			vw_Clamp(NeedSpeedLR, 0.0f, MaxSpeed);
 		} else {
-			Clamp(NeedSpeedLR, -MaxSpeed, 0.0f);
+			vw_Clamp(NeedSpeedLR, -MaxSpeed, 0.0f);
 		}
 
 		// случай, когда нужно затормозить а не менять направление
@@ -795,17 +797,18 @@ bool CSpaceShip::Update(float Time)
 		if (NeedSpeedUD < 0.0f) Sign = -1.0f;
 
 		// "ровняем" скорость под модель
-		if (Sign == 1.0f) {
-			Clamp(NeedSpeedUD, 0.0f, MaxSpeed);
-		} else {
-			Clamp(NeedSpeedUD, -MaxSpeed, 0.0f);
-		}
+		if (Sign == 1.0f)
+			vw_Clamp(NeedSpeedUD, 0.0f, MaxSpeed);
+		else
+			vw_Clamp(NeedSpeedUD, -MaxSpeed, 0.0f);
 
 		// случай, когда нужно затормозить а не менять направление
 		if (Sign == 1.0f) {
-			if (NeedSpeedUD < SpeedUD) Sign = -1.0f;
+			if (NeedSpeedUD < SpeedUD)
+				Sign = -1.0f;
 		} else {
-			if (NeedSpeedUD > SpeedUD) Sign = 1.0f;
+			if (NeedSpeedUD > SpeedUD)
+				Sign = 1.0f;
 		}
 
 
@@ -842,17 +845,18 @@ bool CSpaceShip::Update(float Time)
 		if (NeedSpeedByCamFB < 0.0f) Sign = -1.0f;
 
 		// "ровняем" скорость под модель
-		if (Sign == 1.0f) {
-			Clamp(NeedSpeedByCamFB, 0.0f, MaxSpeed);
-		} else {
-			Clamp(NeedSpeedByCamFB, -MaxSpeed, 0.0f);
-		}
+		if (Sign == 1.0f)
+			vw_Clamp(NeedSpeedByCamFB, 0.0f, MaxSpeed);
+		else
+			vw_Clamp(NeedSpeedByCamFB, -MaxSpeed, 0.0f);
 
 		// случай, когда нужно затормозить а не менять направление
 		if (Sign == 1.0f) {
-			if (NeedSpeedByCamFB < SpeedByCamFB) Sign = -1.0f;
+			if (NeedSpeedByCamFB < SpeedByCamFB)
+				Sign = -1.0f;
 		} else {
-			if (NeedSpeedByCamFB > SpeedByCamFB) Sign = 1.0f;
+			if (NeedSpeedByCamFB > SpeedByCamFB)
+				Sign = 1.0f;
 		}
 
 
@@ -882,17 +886,18 @@ bool CSpaceShip::Update(float Time)
 		if (NeedSpeedByCamLR < 0.0f) Sign = -1.0f;
 
 		// "ровняем" скорость под модель
-		if (Sign == 1.0f) {
-			Clamp(NeedSpeedByCamLR, 0.0f, MaxSpeed);
-		} else {
-			Clamp(NeedSpeedByCamLR, -MaxSpeed, 0.0f);
-		}
+		if (Sign == 1.0f)
+			vw_Clamp(NeedSpeedByCamLR, 0.0f, MaxSpeed);
+		else
+			vw_Clamp(NeedSpeedByCamLR, -MaxSpeed, 0.0f);
 
 		// случай, когда нужно затормозить а не менять направление
 		if (Sign == 1.0f) {
-			if (NeedSpeedByCamLR < SpeedByCamLR) Sign = -1.0f;
+			if (NeedSpeedByCamLR < SpeedByCamLR)
+				Sign = -1.0f;
 		} else {
-			if (NeedSpeedByCamLR > SpeedByCamLR) Sign = 1.0f;
+			if (NeedSpeedByCamLR > SpeedByCamLR)
+				Sign = 1.0f;
 		}
 
 
@@ -923,17 +928,18 @@ bool CSpaceShip::Update(float Time)
 		if (NeedSpeedByCamUD < 0.0f) Sign = -1.0f;
 
 		// "ровняем" скорость под модель
-		if (Sign == 1.0f) {
-			Clamp(NeedSpeedByCamUD, 0.0f, MaxSpeed);
-		} else {
-			Clamp(NeedSpeedByCamUD, -MaxSpeed, 0.0f);
-		}
+		if (Sign == 1.0f)
+			vw_Clamp(NeedSpeedByCamUD, 0.0f, MaxSpeed);
+		else
+			vw_Clamp(NeedSpeedByCamUD, -MaxSpeed, 0.0f);
 
 		// случай, когда нужно затормозить а не менять направление
 		if (Sign == 1.0f) {
-			if (NeedSpeedByCamUD < SpeedByCamUD) Sign = -1.0f;
+			if (NeedSpeedByCamUD < SpeedByCamUD)
+				Sign = -1.0f;
 		} else {
-			if (NeedSpeedByCamUD > SpeedByCamUD) Sign = 1.0f;
+			if (NeedSpeedByCamUD > SpeedByCamUD)
+				Sign = 1.0f;
 		}
 
 
@@ -1147,12 +1153,12 @@ bool CSpaceShip::Update(float Time)
 	Velocity = Orientation^(Speed*TimeDelta);
 	if (fabs(SpeedLR) > 0.01f) {
 		VECTOR3D tmp(SpeedLR*TimeDelta,0.0f,0.0f);
-		Matrix33CalcPoint(&tmp, CurrentRotationMat);
+		vw_Matrix33CalcPoint(&tmp, CurrentRotationMat);
 		Velocity += tmp;
 	}
 	if (fabs(SpeedUD) > 0.01f) {
 		VECTOR3D tmp(0.0f,SpeedUD*TimeDelta,0.0f);
-		Matrix33CalcPoint(&tmp, CurrentRotationMat);
+		vw_Matrix33CalcPoint(&tmp, CurrentRotationMat);
 		Velocity += tmp;
 	}
 
@@ -1163,12 +1169,12 @@ bool CSpaceShip::Update(float Time)
 	}
 	if (fabs(SpeedByCamLR) > 0.01f) {
 		VECTOR3D tmp = GameCameraMovement^(SpeedByCamLR*TimeDelta);
-		RotatePoint(&tmp, VECTOR3D(0.0,-90.0f,0.0f));
+		vw_RotatePoint(&tmp, VECTOR3D(0.0,-90.0f,0.0f));
 		Velocity += tmp;
 	}
 	if (fabs(SpeedByCamUD) > 0.01f) {
 		VECTOR3D tmp = GameCameraMovement^(SpeedByCamUD*TimeDelta);
-		RotatePoint(&tmp, VECTOR3D(90.0f,0.0f,0.0f));
+		vw_RotatePoint(&tmp, VECTOR3D(90.0f,0.0f,0.0f));
 		Velocity += tmp;
 	}
 
@@ -1531,7 +1537,7 @@ bool CSpaceShip::Update(float Time)
 		if (DeviationOn) {
 			Rotation2 = Rotation - (Deviation[0]^(CurentDeviation[0]*50.0f));
 
-			Matrix33CreateRotate(RotationMat2, Rotation2);
+			vw_Matrix33CreateRotate(RotationMat2, Rotation2);
 		}
 
 

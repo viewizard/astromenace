@@ -1125,11 +1125,11 @@ exitN2:
 						    (tmpS->ObjectType == 8 && tmpCollisionSpace1->ObjectType == 13)) {
 							if (tmpS->ObjectType == 8) {
 								//tmpS->SetRotation(VECTOR3D(0.0f,180.0f,0.0f));
-								RotatePoint(&tmpS->Orientation, VECTOR3D(0.0f,180.0f,0.0f));
+								vw_RotatePoint(&tmpS->Orientation, VECTOR3D(0.0f,180.0f,0.0f));
 							}
 							if (tmpCollisionSpace1->ObjectType == 8) {
 								//tmpCollisionSpace1->SetRotation(VECTOR3D(0.0f,180.0f,0.0f));
-								RotatePoint(&tmpCollisionSpace1->Orientation, VECTOR3D(0.0f,180.0f,0.0f));
+								vw_RotatePoint(&tmpCollisionSpace1->Orientation, VECTOR3D(0.0f,180.0f,0.0f));
 							}
 
 							goto exitN4;
@@ -1143,52 +1143,50 @@ exitN2:
 							int ObjectPieceNum;
 
 							// проверка, если это столкновение с базой - надо внимательно смотреть
-							if (tmpS->ObjectType == 13)
-								if (!CheckHitBBMeshCollisionDetection(tmpCollisionSpace1, tmpS, &ObjectPieceNum)) {
+							if ((tmpS->ObjectType == 13) &&
+							    (!CheckHitBBMeshCollisionDetection(tmpCollisionSpace1, tmpS, &ObjectPieceNum)))
 									// если не столкнулись = выходим
 									goto exitN4;
-								}
 							// проверка, если это столкновение с базой - надо внимательно смотреть
-							if (tmpCollisionSpace1->ObjectType == 13)
-								if (!CheckHitBBMeshCollisionDetection(tmpS, tmpCollisionSpace1, &ObjectPieceNum)) {
+							if ((tmpCollisionSpace1->ObjectType == 13) &&
+							    (!CheckHitBBMeshCollisionDetection(tmpS, tmpCollisionSpace1, &ObjectPieceNum)))
 									// если не столкнулись = выходим
 									goto exitN4;
-								}
 
 
 
 							bool SFXplayed = false;
 
-							if (NeedCheckCollision(tmpCollisionSpace1))
-								if (tmpCollisionSpace1->ObjectType == 7 || tmpCollisionSpace1->ObjectType == 8) {
-									switch (tmpCollisionSpace1->ObjectType) {
-									case 7:
-										new CSpaceExplosion(tmpCollisionSpace1, 1, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
-										break;
-									case 8:
-										new CSpaceExplosion(tmpCollisionSpace1, 32, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
-										break;
-									}
-									SFXplayed = true;
-									// проверка, можем удалить следующий (tmpSpace2), берем другой
-									if (tmpCollisionSpace1 == tmpSpace2)
-										tmpSpace2 = tmpSpace2->Next;
-									delete tmpCollisionSpace1;// tmpCollisionSpace1 = 0;
+							if ((NeedCheckCollision(tmpCollisionSpace1)) &&
+							    (tmpCollisionSpace1->ObjectType == 7 || tmpCollisionSpace1->ObjectType == 8)) {
+								switch (tmpCollisionSpace1->ObjectType) {
+								case 7:
+									new CSpaceExplosion(tmpCollisionSpace1, 1, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
+									break;
+								case 8:
+									new CSpaceExplosion(tmpCollisionSpace1, 32, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
+									break;
 								}
+								SFXplayed = true;
+								// проверка, можем удалить следующий (tmpSpace2), берем другой
+								if (tmpCollisionSpace1 == tmpSpace2)
+									tmpSpace2 = tmpSpace2->Next;
+								delete tmpCollisionSpace1;// tmpCollisionSpace1 = 0;
+							}
 
-							if (NeedCheckCollision(tmpS))
-								if (tmpS->ObjectType == 7 || tmpS->ObjectType == 8) {
-									switch (tmpS->ObjectType) {
-									case 7:
-										new CSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
-										break;
-									case 8:
-										new CSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
-										break;
-									}
-									delete tmpS;
-									tmpS = nullptr;
+							if ((NeedCheckCollision(tmpS)) &&
+							    (tmpS->ObjectType == 7 || tmpS->ObjectType == 8)) {
+								switch (tmpS->ObjectType) {
+								case 7:
+									new CSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
+									break;
+								case 8:
+									new CSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
+									break;
 								}
+								delete tmpS;
+								tmpS = nullptr;
+							}
 						}
 					}
 exitN4:
