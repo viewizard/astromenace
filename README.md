@@ -18,7 +18,7 @@ Installers for Windows and Mac could be found at [release](https://github.com/vi
 
 ## Installation
 
-Almost all popular Linux distros already have stable AstroMenace package in official repository. Check "astromenace" package with your package manager.
+Almost all popular Linux distros already have a stable version of the game in their repositories. Install the "astromenace" package with your distro's package manager. We do not provide compiled binary packages for Linux anymore, contact maintainers of your Linux distro in order to get binary package.
 
 #### Debian/Ubuntu and derivatives
 ```
