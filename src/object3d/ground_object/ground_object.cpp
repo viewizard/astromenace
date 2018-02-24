@@ -35,70 +35,9 @@
 //-----------------------------------------------------------------------------
 CGroundObject::CGroundObject(void)
 {
-
 	ObjectStatus = 1; // чужой
 
-	// колес или траков нет
-	WheelQuantity = 0;
-	WheelObjectsNum = nullptr;
-	WheelRotateQuantity = 0;
-	WheelRotateObjectsNum = nullptr;
-	WheelRotateSpeed = 0.0f;
-	MaxWheelRotateAngle = 20.0f;
-	TrackObjectNum = -1;
-	TrackRotationDirection = 1;
-	WheelTrackSpeed = 0.0f;
-
-	TargetHorizObjectQuantity = 0;
-	TargetHorizObject = nullptr;
-	TargetHorizObjectCurrentAngle = 0.0f;
-	TargetHorizObjectNeedAngle = 0.0f;
-	TargetVertObjectQuantity = 0;
-	TargetVertObject = nullptr;
-	TargetVertObjectMaxAngle = 80.0f;
-	TargetVertObjectMinAngle = 0.0f;
-	TargetVertObjectCurrentAngle = 0.0f;
-	TargetVertObjectNeedAngle = 0.0f;
-
-	BarrelObjectQuantity = 0;
-	BarrelObject = nullptr;
-
-
-	// и никуда не нужно поворачивать
-	NeedRotate.Set(0.0f, 0.0f, 0.0f);
-	RotationSpeed.Set(1.0f, 1.0f, 1.0f);
-
-	// скорость
-	MaxSpeed = Speed = NeedSpeed = 0.0f;
-
-	// ускорение, пока нет двигателей - его нет...
-	MaxAcceler = MaxSpeedRotate = Acceler = 0.0f;
-	// даем максимальное ускорение
-	NeedAcceler = 1.0f;
-
-	SpeedToRotate = 0.0f;
-
-
-	// наведение на цель
-	WeaponTargeting = false;
-
-
-	// оружие пока не установлено
-	WeaponQuantity = 0;
-	WeaponSetFire = nullptr;
-	WeaponLocation = nullptr;
-	Weapon = nullptr;
-	WeaponFireType = 2;
-	WeaponGroupCurrentFireNum = -1;
-	WeaponGroupCurrentFireDelay = 0.0f;
-
-	BaseBound = VECTOR3D(0.0f,0.0f,0.0f);
-	MiddleBound = VECTOR3D(0.0f,0.0f,0.0f);
-	WeaponBound = nullptr;
-	DoNotCalculateRotation = false;
-
 	// подключаем к своему списку
-	Next = Prev = nullptr;
 	AttachGroundObject(this);
 
 }

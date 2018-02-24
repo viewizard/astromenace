@@ -36,34 +36,6 @@
 //-----------------------------------------------------------------------------
 eLight::eLight()
 {
-	// типа нет
-	LightType = 1;
-	// цвета нет
-	Diffuse[0] = 0.0f;
-	Diffuse[1] = 0.0f;
-	Diffuse[2] = 0.0f;
-	Diffuse[3] = 1.0f;
-	Specular[0] = 0.0f;
-	Specular[1] = 0.0f;
-	Specular[2] = 0.0f;
-	Specular[3] = 1.0f;
-	Ambient[0] = 0.0f;
-	Ambient[1] = 0.0f;
-	Ambient[2] = 0.0f;
-	Ambient[3] = 1.0f;
-
-	ConstantAttenuation = 0.0f;
-	LinearAttenuation = 0.0f;
-	QuadraticAttenuation = 0.0f;
-	tmpAttenuation = -1.0f;
-
-	Direction.Set(0.0f, 0.0f, 0.0f);
-	Location.Set(0.0f, 0.0f, 0.0f);
-
-
-	On = true;
-	RealLightNum = -1;
-
 	vw_AttachLight(this);
 }
 

@@ -60,59 +60,19 @@ extern bool ShowGameTime;
 
 
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+
+
 ScriptEngine::ScriptEngine()
 {
-	// еще нет времени
-	TimeLastOp = 0;
-	TimeOpLag = 0;
-	StartTime = 0;
-	xmlDoc = nullptr;
-	xmlEntry = nullptr;
-
-
-	NeedCheckSpaceShip = false;
-	NeedCheckGroundObject = false;
-	EndDelayMissionComplete = 0.0f;
-	LastTimeMissionComplete = -1.0f;
-
-	AsterQuant = 2.0f;
-	AsterW = 280.0f;
-	AsterH = 7.5f;
-	AsterXPos = 0.0f;
-	AsterYPos = -10.0f;
-	AsterZPos = 340.0f;
-	AsterRealNeed = 0.0f;
-	AsterMaxSpeed = 5.0f;
-	AsterMinFastSpeed = 35.0f;
-	AsterFastCount = 0;
-	AsterOn = false;
-	AsterLastTime = -1.0f;
-
-
 	// отладочный режим
-	ShowDebugModeLine = false;
 	NeedShowBB = 0;
 	UndeadDebugMode = false;
-}
+};
 
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// Деструктор
-//-----------------------------------------------------------------------------
 ScriptEngine::~ScriptEngine()
 {
 	delete xmlDoc;
-}
-
-
-
+};
 
 
 

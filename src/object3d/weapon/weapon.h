@@ -24,14 +24,11 @@
 
 *************************************************************************************/
 
-
 #ifndef WEAPON_H
 #define WEAPON_H
 
-
 #include "../object3d.h"
 #include "../projectile/projectile.h"
-
 
 
 //-----------------------------------------------------------------------------
@@ -44,7 +41,6 @@ public:
 	CWeapon();
 	virtual ~CWeapon();
 
-
 	// Обновление данных объектa
 	virtual bool	Update(float Time);
 	// Выстрел
@@ -54,88 +50,69 @@ public:
 	// Установка положения
 	virtual void	SetLocation(VECTOR3D NewLocation);
 	// Создание нужного объекта
-	virtual void	Create(int	WeaponNum);
-
+	virtual void	Create(int WeaponNum);
 
 	// уровень оружия, по мощьности
-	int			WeaponLevel;
+	int	WeaponLevel{1};
 
 	// боекомплект
-	int			Ammo;
+	int	Ammo{100};
 	// начальное значение боекомплекта
-	int			AmmoStart;
+	int	AmmoStart{100};
 
 	// скорострельность, в мили секундах - время между выстрелами
-	float		NextFireTime;
+	float	NextFireTime{0.3f};
 	// время последнего выстрела
-	float		LastFireTime;
+	float	LastFireTime{-10.0f};
 
 	// потребление энергии на выстрел
-	float		EnergyUse;
+	float	EnergyUse{1.0f};
 	// текущее состояние энергии
-	float		CurrentEnergyAccumulated;
+	float	CurrentEnergyAccumulated{0.0f};
 
 	// swamp
-	int			SwampNum;
+	int	SwampNum{0};
 
 	// нужно вращать-поворачивать при наведении внешне ( не нужно для турелей и ракетных систем)
-	bool		NeedRotateOnTargeting;
+	bool	NeedRotateOnTargeting{true};
 
 	// лучевое оружие
 	// собственно объект=снаряд
-	CProjectile	*LaserMaser;
+	CProjectile	*LaserMaser{nullptr};
 	// номер проигрываемого звука, чтобы была возможность выключить при уничтожении
-	int			LaserMaserSoundNum;
-
-
-
-
-
+	int	LaserMaserSoundNum{0};
 	// флаг, это турель
-	bool	WeaponTurret;
+	bool	WeaponTurret{false};
 
 	// для просчета положения точки стрельбы, считаем как кости
-	VECTOR3D			BaseBound;
-	VECTOR3D			MiddleBound;
-	VECTOR3D			WeaponBound;
+	VECTOR3D	BaseBound{0.0f, 0.0f, 0.0f};
+	VECTOR3D	MiddleBound{0.0f, 0.0f, 0.0f};
+	VECTOR3D	WeaponBound{0.0f, 0.0f, 0.0f};
 
 	// набор указателей на номера объектов, которыми нацеливаемся по горизонтале
-	int		TargetHorizObject;
-	float	TargetHorizObjectCurrentAngle;
-	float	TargetHorizObjectNeedAngle;
+	int	TargetHorizObject{-1};
+	float	TargetHorizObjectCurrentAngle{0.0f};
+	float	TargetHorizObjectNeedAngle{0.0f};
 	// набор указателей на номера объектов, которыми нацеливаемся по вертикали
-	int		TargetVertObject;
-	float	TargetVertObjectMaxAngle;
-	float	TargetVertObjectMinAngle;
-	float	TargetVertObjectCurrentAngle;
-	float	TargetVertObjectNeedAngle;
-
-
-
-
-
-
+	int	TargetVertObject{-1};
+	float	TargetVertObjectMaxAngle{80.0f};
+	float	TargetVertObjectMinAngle{0.0f};
+	float	TargetVertObjectCurrentAngle{0.0f};
+	float	TargetVertObjectNeedAngle{0.0f};
 
 	// выстрел - вылет частиц (засветка возле ствола)
-	eParticleSystem	*Fire;
-	VECTOR3D		FireLocation;
-	int		SoundNum; // нужный номер
+	eParticleSystem	*Fire{nullptr};
+	VECTOR3D	FireLocation{0.0f, 0.0f, 0.0f};
+	int		SoundNum{0}; // нужный номер
 
 	// если оружие уничтожено, делаем вырывающийся огонь
-	eParticleSystem	*DestroyedFire;
-	eParticleSystem	*DestroyedSmoke;
-	VECTOR3D		DestroyedFireLocation;
+	eParticleSystem	*DestroyedFire{nullptr};
+	eParticleSystem	*DestroyedSmoke{nullptr};
+	VECTOR3D	DestroyedFireLocation{0.0f, 0.0f, 0.0f};
 
-
-	CWeapon *Next;
-	CWeapon *Prev;
-
+	CWeapon	*Next{nullptr};
+	CWeapon	*Prev{nullptr};
 };
-
-
-
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -144,10 +121,6 @@ public:
 
 // Установка нужных данных для вспышки возле ствола
 void SetWeaponFire(eParticleSystem *ParticleSystem, int WeaponNum);
-
-
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -164,8 +137,5 @@ void	UpdateAllWeapon(float Time);
 void	DrawAllWeapon(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllWeapon();
-
-
-
 
 #endif // WEAPON_H

@@ -24,14 +24,11 @@
 
 *************************************************************************************/
 
-
 #ifndef GROUNDOBJECT_H
 #define GROUNDOBJECT_H
 
-
 #include "../object3d.h"
 #include "../weapon/weapon.h"
-
 
 
 //-----------------------------------------------------------------------------
@@ -40,11 +37,9 @@
 class CGroundObject : public CObject3D
 {
 public:
-
 	// базовые конструктор и деструктор объекта
 	CGroundObject();
 	virtual ~CGroundObject();
-
 
 	// Обновление данных объектa
 	virtual bool	Update(float Time);
@@ -53,112 +48,99 @@ public:
 	// Установка углов поворота объекта
 	virtual void	SetRotation(VECTOR3D NewRotation);
 
-
 	// колеса, для транспорта
 
 	// скорость вращения колес
-	float	WheelTrackSpeed;
+	float	WheelTrackSpeed{0.0f};
 
 	// кол-во колес
-	int		WheelQuantity;
+	int	WheelQuantity{0};
 	// перечень номеров объектов с колесами
-	int		*WheelObjectsNum;
+	int	*WheelObjectsNum{nullptr};
 
 	// колеса поворотные, для установки угла поворота
 	// кол-во колес
-	int		WheelRotateQuantity;
+	int	WheelRotateQuantity{0};
 	// перечень номеров объектов с колесами
-	int		*WheelRotateObjectsNum;
+	int	*WheelRotateObjectsNum{nullptr};
 	// скорость вращения колес
-	float	WheelRotateSpeed;
+	float	WheelRotateSpeed{0.0f};
 	// максимальный угол поворота колес для модели
-	float	MaxWheelRotateAngle;
+	float	MaxWheelRotateAngle{20.0f};
 
 	// если нужно, номер объекта с траком для тайловой анимации
-	int		TrackObjectNum;
-	int		TrackRotationDirection;// направление вращения траков
-
+	int	TrackObjectNum{-1};
+	int	TrackRotationDirection{1};// направление вращения траков
 
 	// нужно повернуть (пересчитать мэш) при следующем проходе
 	// Update + учесть эти данные в Rotation
-	VECTOR3D	NeedRotate;
+	VECTOR3D	NeedRotate{0.0f, 0.0f, 0.0f};
 	// скорость поворота по каждому раправлению
-	VECTOR3D	RotationSpeed;
+	VECTOR3D	RotationSpeed{1.0f, 1.0f, 1.0f};
 
 	// максимальная скорость units/sec, зависит от двигателя
-	float		MaxSpeed;
+	float	MaxSpeed{0.0f};
 	// текущая скорость
-	float		Speed;
+	float	Speed{0.0f};
 	// нужная скорость
-	float		NeedSpeed;
+	float	NeedSpeed{0.0f};
 
 	// максимальное ускорение units/sec*sec, зависит от двигателя
-	float		MaxAcceler;
+	float	MaxAcceler{0.0f};
 	// макс. маневровых двигателей
-	float		MaxSpeedRotate;
+	float	MaxSpeedRotate{0.0f};
 	// текущее ускорение
-	float		Acceler;
+	float	Acceler{0.0f};
 	// нужное ускорение
-	float		NeedAcceler;
-
-
-
+	float	NeedAcceler{1.0f};
 
 	// кол-во оружия доступного на данной моделе
-	int					WeaponQuantity;
+	int		WeaponQuantity{0};
 	// выстрел из оружия, т.е. передача команды "стрелять" оружию при сделующем Update'е
-	bool				*WeaponSetFire;
+	bool		*WeaponSetFire{nullptr};
 	// указатель на массив оружия
-	CWeapon				**Weapon;
+	CWeapon		**Weapon{nullptr};
 	// расположение оружия (относительное)
-	VECTOR3D			*WeaponLocation;
+	VECTOR3D	*WeaponLocation{nullptr};
 	// тип стрельбы из оружия 1-обычный, 2-переменный (по умолчанию)
-	int					WeaponFireType;
-	int 				WeaponGroupCurrentFireNum;
-	float 				WeaponGroupCurrentFireDelay;
+	int		WeaponFireType{2};
+	int		WeaponGroupCurrentFireNum{-1};
+	float		WeaponGroupCurrentFireDelay{0.0f};
 	// наведение на цель
-	bool				WeaponTargeting;
+	bool		WeaponTargeting{false};
 
 	// для просчета положения точки стрельбы, считаем как кости
-	VECTOR3D			BaseBound;
-	VECTOR3D			MiddleBound;
-	VECTOR3D			*WeaponBound;
+	VECTOR3D	BaseBound{0.0f, 0.0f, 0.0f};
+	VECTOR3D	MiddleBound{0.0f, 0.0f, 0.0f};
+	VECTOR3D	*WeaponBound{nullptr};
 	// если точки фиксированы, не нужно менять направление точки выстрела
 	// только учитываем общий поворот модели и соотв. точку выстрела
 	// работает только если объекты поворота башни и ствола не заданы!
-	bool				DoNotCalculateRotation;
-
-
+	bool	DoNotCalculateRotation{false};
 
 	// коэф. преобразования скорость в скорость вращения колес
-	float	SpeedToRotate;
-
+	float	SpeedToRotate{0.0f};
 
 	// набор указателей на номера объектов, которыми нацеливаемся по горизонтале
-	int		TargetHorizObjectQuantity;
-	int		*TargetHorizObject;
-	float	TargetHorizObjectCurrentAngle;
-	float	TargetHorizObjectNeedAngle;
+	int	TargetHorizObjectQuantity{0};
+	int	*TargetHorizObject{nullptr};
+	float	TargetHorizObjectCurrentAngle{0.0f};
+	float	TargetHorizObjectNeedAngle{0.0f};
 	// набор указателей на номера объектов, которыми нацеливаемся по вертикали
-	int		TargetVertObjectQuantity;
-	int		*TargetVertObject;
-	float	TargetVertObjectMaxAngle;
-	float	TargetVertObjectMinAngle;
-	float	TargetVertObjectCurrentAngle;
-	float	TargetVertObjectNeedAngle;
+	int	TargetVertObjectQuantity{0};
+	int	*TargetVertObject{nullptr};
+	float	TargetVertObjectMaxAngle{80.0f};
+	float	TargetVertObjectMinAngle{0.0f};
+	float	TargetVertObjectCurrentAngle{0.0f};
+	float	TargetVertObjectNeedAngle{0.0f};
 	// если нужно вращать ствол (многоствольный пулемет)
-	int		BarrelObjectQuantity;
-	int		*BarrelObject;
-
+	int	BarrelObjectQuantity{0};
+	int	*BarrelObject{nullptr};
 
 	// для собственного списка
-	CGroundObject* Next;
-	CGroundObject* Prev;
-
+	CGroundObject	*Next{nullptr};
+	CGroundObject	*Prev{nullptr};
 };
-
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -175,9 +157,5 @@ void	UpdateAllGroundObject(float Time);
 void	DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllGroundObject();
-
-
-
-
 
 #endif // GROUNDOBJECT_H

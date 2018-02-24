@@ -24,17 +24,11 @@
 
 *************************************************************************************/
 
-
 #ifndef STAR_H
 #define STAR_H
 
-
 #include "../../core/core.h"
 #include "../../struct.h"
-
-
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -42,29 +36,27 @@
 //-----------------------------------------------------------------------------
 struct CStar {
 	// конструктор и деструктор
-	CStar();
-	~CStar();
+	CStar() {};
+	~CStar() {};
 
 	// обновление информации в частице
-	bool Update(float TimeDelta);
+	bool	Update(float TimeDelta);
 	// переносим положение частицы на указаное растояние
-	void Move(VECTOR3D NewLocationDelta);
+	void	Move(VECTOR3D NewLocationDelta);
 	// текущее место расположения частицы
-	VECTOR3D		Location;
+	VECTOR3D	Location{0.0f, 0.0f, 0.0f};
 
 	// прозрачность
-	float		Alpha;
+	float	Alpha{1.0f};
 	// изменение прозрачности
-	float		AlphaDelta;
-
+	float	AlphaDelta{0.0f};
 
 	// какой цикл - затухаем, или только появляемся
-	bool	Show;
+	bool	Show{true};
 
 	// указатели на цепь частиц
-	CStar *Next;
-	CStar *Prev;
+	CStar	*Next{nullptr};
+	CStar	*Prev{nullptr};
 };
-
 
 #endif // STAR_H

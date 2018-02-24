@@ -40,21 +40,9 @@ CSpaceObject::CSpaceObject(void)
 
 	ObjectStatus = 1; // чужой
 
-	Speed = 0.0f;
-
-	Velocity.Set(0.0f,0.0f,0.0f);
-	RotationSpeed.Set(0.0f,0.0f,0.0f);
-
-	GFXQuantity = 0;
-	GFX = nullptr;
-	GFXLocation = nullptr;
-
-	BossPartCountDown = -1.0f;
-
 	LastCameraPoint = GamePoint;
 
 	// подключаем к своему списку
-	Next = Prev = nullptr;
 	AttachSpaceObject(this);
 
 }

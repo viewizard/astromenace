@@ -34,13 +34,6 @@
 //-----------------------------------------------------------------------------
 CGameLvlText::CGameLvlText()
 {
-	TimeLastUpdate = -1.0f;
-	Lifetime = -1.0f;
-	DrawText = nullptr;
-	Color = 0;
-
-	PosX = PosY = 0;
-
 	AttachGameLvlText(this);
 
 }
@@ -51,10 +44,8 @@ CGameLvlText::CGameLvlText()
 //-----------------------------------------------------------------------------
 CGameLvlText::~CGameLvlText()
 {
-	if (DrawText != nullptr) {
+	if (DrawText != nullptr)
 		delete [] DrawText;
-		DrawText = nullptr;
-	}
 	DetachGameLvlText(this);
 }
 

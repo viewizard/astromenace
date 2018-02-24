@@ -24,14 +24,11 @@
 
 *************************************************************************************/
 
-
 #ifndef PARTICLE_H
 #define PARTICLE_H
 
 #include "../base.h"
 #include "../math/math.h"
-
-
 
 //-----------------------------------------------------------------------------
 // Структура цвета
@@ -44,59 +41,57 @@ struct COLORVALUE3D {
 };
 
 
-
 //-----------------------------------------------------------------------------
 // Класс eParticle
-//-----------------------------------------------------------------------------
+//--------------------------------------------z---------------------------------
 struct eParticle {
 	// конструктор и деструктор
-	eParticle();
-	~eParticle();
+	eParticle() {};
+	~eParticle() {};
 
 	// обновление информации в частице
-	bool Update(float TimeDelta, VECTOR3D ParentLocation = VECTOR3D(0.0f,0.0f,0.0f), bool Attractive = false, float AttractiveValue = 25.0f);
+	bool Update(float TimeDelta, VECTOR3D ParentLocation = VECTOR3D{0.0f,0.0f,0.0f}, bool Attractive = false, float AttractiveValue = 25.0f);
 	// текущее место расположения частицы
-	VECTOR3D		Location;
+	VECTOR3D	Location{0.0f, 0.0f, 0.0f};
 	// текущая скорость частицы
-	VECTOR3D		Velocity;
+	VECTOR3D	Velocity{0.0f, 0.0f, 0.0f};
 
 	// texture number
-	int			TextureNum;
+	int		TextureNum{0};
 
 	// текущий цвет частицы
-	COLORVALUE3D	Color;
+	COLORVALUE3D	Color{1.0f, 0.0f, 0.0f, 0.5f};
 	// значение приращение цвета
-	COLORVALUE3D	ColorDelta;
+	COLORVALUE3D	ColorDelta{0.0f, 0.0f, 0.0f, 0.0f};
 
 	// время жизни частицы в секундах
-	float		Age;
+	float		Age{0.0f};
 
 	// оставщееся время жизни частицы
-	float		Lifetime;
+	float		Lifetime{0.0f};
 
 	// размер частицы
-	float		Size;
+	float		Size{1.0f};
 	// значение изменения размера
-	float		SizeDelta;
+	float		SizeDelta{0.0f};
 
 	// прозрачность
-	float		Alpha;
+	float		Alpha{1.0f};
 	// изменение прозрачности
-	float		AlphaDelta;
+	float		AlphaDelta{0.0f};
 
 
 	// сначало ув. альфу, потом уменьшаем
-	bool	AlphaShowHide;
+	bool		AlphaShowHide{false};
 	// какой цикл - затухаем, или только появляемся
-	bool	Show;
+	bool		Show{true};
 
 	// если нужно замедлять и остановить
-	bool	NeedStop;
+	bool		NeedStop{false};
 
 	// указатели на цепь частиц
-	eParticle *Next;
-	eParticle *Prev;
+	eParticle	*Next{nullptr};
+	eParticle	*Prev{nullptr};
 };
-
 
 #endif // PARTICLE_H

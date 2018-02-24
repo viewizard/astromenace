@@ -71,7 +71,7 @@ struct eVFS {
 	SDL_RWops	*File{nullptr};
 
 	eVFS(const std::string &_FileName) :
-		FileName(_FileName)
+		FileName{_FileName}
 	{}
 	~eVFS()
 	{
@@ -89,7 +89,7 @@ struct eVFS_Entry {
 	eVFS		*Parent{nullptr};
 
 	eVFS_Entry(eVFS *_Parent) :
-		Parent(_Parent)
+		Parent{_Parent}
 	{}
 	/* trick for forward_list<unique_ptr<T>> work with iterator */
 	bool CheckName(const std::string &FileName)
@@ -286,7 +286,7 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 	 */
 	auto errPrintWithVFSListPop = [&Name] (const std::string &Text)
 	{
-		fprintf(stderr, (Text + " " + Name + "\n").c_str());
+		fprintf(stderr, "%s %s\n", Text.c_str(), Name.c_str());
 		VFS_List.pop_front();
 		return -1;
 	};

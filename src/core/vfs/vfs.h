@@ -44,15 +44,15 @@ void	vw_ShutdownVFS();
 
 struct eFILE {
 	int			Size{0};
-	std::unique_ptr<BYTE[]>	Data;
+	std::unique_ptr<BYTE[]>	Data{};
 
 	int	fread(void *buffer, size_t size, size_t count);
 	int	fseek(long offset, int origin);
 	long	ftell();
 
 	eFILE(int _Size, long _Pos) :
-		Size(_Size),
-		Pos(_Pos)
+		Size{_Size},
+		Pos{_Pos}
 	{}
 
 private:

@@ -34,112 +34,10 @@
 int NeedShowBB = 0;
 
 
-extern eGLSL 	*GLSLShaderType1;
-extern eGLSL 	*GLSLShaderType2;
-extern eGLSL 	*GLSLShaderType3;
-extern int 		UniformLocations[100];
-
-
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
-CObject3D::CObject3D(void)
-{
-	// друг
-	ObjectStatus = 2;
-
-	// типа пока нет
-	ObjectType = 0;
-	ObjectCreationType = 0;
-
-	// не задействуем
-	ShowDeleteOnHide = -1;
-
-	// идентификатора объекта - нет
-	ID = 0;
-
-	// по умолчанию - рисуем с оптимизацией
-	NeedCullFaces = true;
-
-	NeedAlphaTest = false;
-
-	// лист пуст, и никуда не указывает
-	DrawObjectQuantity = 0;
-	DrawObjectList = nullptr;
-	PromptDrawDist2 = -1.0f;
-	InternalLights = 0;
-	GlobalVertexBuffer= nullptr;
-	GlobalVBO = nullptr;
-	GlobalIndexBuffer = nullptr;
-	GlobalIBO = nullptr;
-	GlobalVAO = nullptr;
-
-	// начальныя установка коробок
-	AABB[0]=AABB[1]=AABB[2]=AABB[3]=AABB[4]=AABB[5]=AABB[6]=AABB[7]= VECTOR3D(0.0f, 0.0f, 0.0f);
-	OBBLocation = OBB[0]=OBB[1]=OBB[2]=OBB[3]=OBB[4]=OBB[5]=OBB[6]=OBB[7]= VECTOR3D(0.0f, 0.0f, 0.0f);
-	HitBB = nullptr;
-	HitBBLocation = nullptr;
-	HitBBRadius2 = nullptr;
-	HitBBSize = nullptr;
-
-	// болтание объекта
-	DeviationOn = false;
-	DeviationObjQuantity = 0;
-	Deviation = nullptr;
-	NeedDeviation = nullptr;
-	CurentDeviation = nullptr;
-	CurentDeviationSum = nullptr;
-	DeviationObjNum = nullptr;
-
-
-	// у нас нет текстур для этой модели
-	Texture = nullptr;
-	TextureIllum = nullptr;
-	NormalMap = nullptr;
-
-	// мы не знаем как ориентирован объект и где он находится
-	Location = GeometryCenterLocation = PrevLocation = Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
-	Orientation = VECTOR3D(0.0f, 0.0f, 1.0f);
-
-	Radius = 0.0f;
-
-	// объект еще не проверяли
-	TimeLastUpdate = -1.0f;
-	// время между апдейтами
-	TimeDelta = 0.0f;
-
-	// время жизни не установлено, объект не проверяется по времени
-	Lifetime = -1.0f;
-
-	// габаритов и других данных пока нет
-	Weight = Width = Length = Height = 1.0f;
-	Strength = StrengthStart = 0.0f;
-	ShieldStrength = ShieldStrengthStart = ShieldRecharge = 0.0f;
-	ShowStrength = true;
-	NeedShowStrengthNow = false;
-
-	// нет ослабления
-	ResistanceHull = ResistanceSystems = 1.0f;
-
-	// начальные установки для мартиц поворотов
-	Matrix33Identity(CurrentRotationMat);
-	Matrix33Identity(OldInvRotationMat);
-
-
-	// пока базовые установки материала
-	Diffuse[0] = Diffuse[1] = Diffuse[2] = Diffuse[3] = 1.0f;
-	Specular[0] = Specular[1] = Specular[2] = Specular[3] = 1.0f;
-	Ambient[0] = Ambient[1] = Ambient[2] = Ambient[3] = 0.1f;
-	Power[0] = 64.0f;//128.0f;
-
-
-	// изночально, ничего не выводим
-	DebugInfo = nullptr;
-
-	StartTimeSheet = nullptr;
-	EndTimeSheet = nullptr;
-}
-
+extern eGLSL	*GLSLShaderType1;
+extern eGLSL	*GLSLShaderType2;
+extern eGLSL	*GLSLShaderType3;
+extern int	UniformLocations[100];
 
 
 //-----------------------------------------------------------------------------
@@ -148,74 +46,44 @@ CObject3D::CObject3D(void)
 CObject3D::~CObject3D(void)
 {
 	// освобождаем память, выделенную для геометрии
-	if (DrawObjectList != nullptr) {
+	if (DrawObjectList != nullptr)
 		delete [] DrawObjectList;
-		DrawObjectList = nullptr;
-	}
 
 	if (HitBB != nullptr) {
 		for (int i = 0; i < DrawObjectQuantity; i++) {
-			if (HitBB[i] != nullptr) {
+			if (HitBB[i] != nullptr)
 				delete [] HitBB[i];
-				HitBB[i] = nullptr;
-			}
 		}
 		delete [] HitBB;
-		HitBB = nullptr;
 	}
-	if (HitBBLocation != nullptr) {
+	if (HitBBLocation != nullptr)
 		delete [] HitBBLocation;
-		HitBBLocation = nullptr;
-	}
-	if (HitBBRadius2 != nullptr) {
+	if (HitBBRadius2 != nullptr)
 		delete [] HitBBRadius2;
-		HitBBRadius2 = nullptr;
-	}
-	if (HitBBSize != nullptr) {
+	if (HitBBSize != nullptr)
 		delete [] HitBBSize;
-		HitBBSize = nullptr;
-	}
 
 	if (DeviationObjQuantity != 0) {
-		if (Deviation != nullptr) {
+		if (Deviation != nullptr)
 			delete [] Deviation;
-			Deviation = nullptr;
-		}
-		if (NeedDeviation != nullptr) {
+		if (NeedDeviation != nullptr)
 			delete [] NeedDeviation;
-			NeedDeviation = nullptr;
-		}
-		if (CurentDeviation != nullptr) {
+		if (CurentDeviation != nullptr)
 			delete [] CurentDeviation;
-			CurentDeviation = nullptr;
-		}
-		if (CurentDeviationSum != nullptr) {
+		if (CurentDeviationSum != nullptr)
 			delete [] CurentDeviationSum;
-			CurentDeviationSum = nullptr;
-		}
-		if (DeviationObjNum != nullptr) {
+		if (DeviationObjNum != nullptr)
 			delete [] DeviationObjNum;
-			DeviationObjNum = nullptr;
-		}
 	}
 
-	if (Texture != nullptr) {
+	if (Texture != nullptr)
 		delete [] Texture;
-		Texture = nullptr;
-	}
-	if (TextureIllum != nullptr) {
+	if (TextureIllum != nullptr)
 		delete [] TextureIllum;
-		TextureIllum = nullptr;
-	}
-	if (NormalMap != nullptr) {
+	if (NormalMap != nullptr)
 		delete [] NormalMap;
-		NormalMap = nullptr;
-	}
-
-	if (DebugInfo != nullptr) {
+	if (DebugInfo != nullptr)
 		delete [] DebugInfo;
-		DebugInfo = nullptr;
-	}
 
 	// удаляем все записи, если они есть
 	while (StartTimeSheet != nullptr) {

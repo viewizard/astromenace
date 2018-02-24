@@ -24,14 +24,10 @@
 
 *************************************************************************************/
 
-
 #ifndef GAMELVLTEXT_H
 #define GAMELVLTEXT_H
 
-
 #include "../../core/core.h"
-
-
 
 
 class CGameLvlText
@@ -41,37 +37,27 @@ public:
 	~CGameLvlText();
 
 	// обновить
-	bool Update(float Time);
+	bool	Update(float Time);
 	// прорисовка
-	void Draw();
+	void	Draw();
 
 	// собственно сам текст
-	char *DrawText;
+	char	*DrawText{nullptr};
 	// положение текста
-	int PosX;
-	int PosY;
+	int	PosX{0};
+	int	PosY{0};
 	// цвет
-	int Color;
+	int	Color{0};
 
 	// жизнь в секундах (-1.0 - бесконечно)
-	float Lifetime;
-
+	float	Lifetime{-1.0f};
 
 	// последнее время обновления системы
-	float TimeLastUpdate;
+	float	TimeLastUpdate{-1.0f};
 
-
-
-	CGameLvlText *Next;
-	CGameLvlText *Prev;
-
-
+	CGameLvlText	*Next{nullptr};
+	CGameLvlText	*Prev{nullptr};
 };
-
-
-
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -88,12 +74,5 @@ void	ReleaseAllGameLvlText();
 void	DrawAllGameLvlText();
 //	Проверяем все объекты, обновляем данные
 void	UpdateAllGameLvlText(float Time);
-
-
-
-
-
-
-
 
 #endif //GAMELVLTEXT_H

@@ -30,37 +30,7 @@
 
 
 
-//-----------------------------------------------------------------------------
-// Конструктор
-//-----------------------------------------------------------------------------
-eObjectBlock::eObjectBlock(void)
-{
-	VertexFormat = 0;
-	VertexStride = 0;
-	VertexCount = 0;
-	DrawType = 0;
-	RangeStart = 0;
-	Location.Set(0.0f,0.0f,0.0f);
-	Rotation.Set(0.0f,0.0f,0.0f);
 
-	NeedGeometryAnimation = NeedTextureAnimation = false;
-	GeometryAnimation.Set(0.0f,0.0f,0.0f);
-	TextureAnimation.Set(0.0f,0.0f,0.0f);
-
-	NeedDestroyDataInObjectBlock = false;
-	VertexBuffer = nullptr;
-	VBO = nullptr;
-	IndexBuffer = nullptr;
-	IBO = nullptr;
-	VAO = nullptr;
-
-	VertexBufferLimitedBySizeTriangles = nullptr;
-	VertexBufferLimitedBySizeTrianglesCount = 0;
-
-	ShaderType = 1;
-	for (int i=0; i<16; i++) ShaderData[i] = 0;
-
-}
 //-----------------------------------------------------------------------------
 // Деструктор
 //-----------------------------------------------------------------------------
@@ -101,16 +71,6 @@ eObjectBlock::~eObjectBlock(void)
 //-----------------------------------------------------------------------------
 eModel3D::eModel3D(void)
 {
-	Name = nullptr;
-	DrawObjectList = nullptr;
-	DrawObjectCount = 0;
-	GlobalVertexBuffer = nullptr;
-	GlobalVBO = nullptr;
-	GlobalIndexBuffer = nullptr;
-	GlobalIBO = nullptr;
-	GlobalVAO = nullptr;
-	Next = nullptr;
-	Prev = nullptr;
 	vw_AttachModel3D(this);
 }
 

@@ -66,18 +66,18 @@ struct eFontChar {
 		  int _TexturePositionLeft, int _TexturePositionRight,
 		  int _TexturePositionTop, int _TexturePositionBottom,
 		  int _Width, int _Height, int _Left, int _Top, float _AdvanceX) :
-		UTF32(_UTF32),
-		FontSize(_FontSize),
-		Texture(_Texture),
-		TexturePositionLeft(_TexturePositionLeft),
-		TexturePositionRight(_TexturePositionRight),
-		TexturePositionTop(_TexturePositionTop),
-		TexturePositionBottom(_TexturePositionBottom),
-		Width(_Width),
-		Height(_Height),
-		Left(_Left),
-		Top(_Top),
-		AdvanceX(_AdvanceX)
+		UTF32{_UTF32},
+		FontSize{_FontSize},
+		Texture{_Texture},
+		TexturePositionLeft{_TexturePositionLeft},
+		TexturePositionRight{_TexturePositionRight},
+		TexturePositionTop{_TexturePositionTop},
+		TexturePositionBottom{_TexturePositionBottom},
+		Width{_Width},
+		Height{_Height},
+		Left{_Left},
+		Top{_Top},
+		AdvanceX{_AdvanceX}
 	{};
 };
 

@@ -24,14 +24,11 @@
 
 *************************************************************************************/
 
-
 #ifndef LIGHT_H
 #define LIGHT_H
 
-
 #include "../base.h"
 #include "../math/math.h"
-
 
 
 //-----------------------------------------------------------------------------
@@ -43,8 +40,6 @@ struct eLight {
 	eLight();
 	~eLight();
 
-
-
 	// установка источника света
 	bool		Activate(int CurrentLightNum, float Matrix[16]);
 	// выключить этот источник света
@@ -52,53 +47,44 @@ struct eLight {
 	// перенос источника (если это не направленный) в нужное место
 	void		SetLocation(VECTOR3D NewLocation);
 
-
 	// все характеристики источника света
 
 	// тип 1-солнце, 2- точка, по умю =1
-	int			LightType;
+	int		LightType{1};
 	// цвет испускаемый источникос света
-	float		Diffuse[4];
-	float		Specular[4];
-	float		Ambient[4];
+	float		Diffuse[4]{0.0f, 0.0f, 0.0f, 1.0f};
+	float		Specular[4]{0.0f, 0.0f, 0.0f, 1.0f};
+	float		Ambient[4]{0.0f, 0.0f, 0.0f, 1.0f};
 	// максимальный цвет (нужен для просчета девиации источника)
 	float		DiffuseMax[4];
 	float		SpecularMax[4];
 
 	// коэф. затухания
-	float		ConstantAttenuation;
-	float		LinearAttenuation;
-	float		LinearAttenuationBase;
-	float		QuadraticAttenuation;
-	float		QuadraticAttenuationBase;
+	float		ConstantAttenuation{0.0f};
+	float		LinearAttenuation{0.0f};
+	float		LinearAttenuationBase{0.0f};
+	float		QuadraticAttenuation{0.0f};
+	float		QuadraticAttenuationBase{0.0f};
 	// временный показатель, нужен для поиска по воздействию
-	float		tmpAttenuation;
-
+	float		tmpAttenuation{-1.0f};
 
 	// направление
-	VECTOR3D	Direction;
+	VECTOR3D	Direction{0.0f, 0.0f, 0.0f};
 
 	// положение в мировых координатах, если нужно (не направленный свет)
-	VECTOR3D	Location;
-
-
-
+	VECTOR3D	Location{0.0f, 0.0f, 0.0f};
 
 	// включен-выключен источник света
-	bool		On;
+	bool		On{true};
 
 	// задействован в прорисовке модели или нет + номер реального источника если задействован
 	// для того, чтобы потом его выключить
-	int			RealLightNum;
-
+	int		RealLightNum{-1};
 
 	// указатели на цепь источников света
-	eLight *Next;
-	eLight *Prev;
+	eLight *Next{nullptr};
+	eLight *Prev{nullptr};
 };
-
-
-
 
 
 
@@ -111,9 +97,9 @@ void	vw_AttachLight(eLight * NewLight);
 // Исключаем из списка
 void	vw_DetachLight(eLight * OldLight);
 // включаем нужные источники света + освещение
-int		vw_CheckAndActivateAllLights(int *Type1, int *Type2, VECTOR3D Location, float Radius2, int DirLimit, int PointLimit, float Matrix[16]);
+int	vw_CheckAndActivateAllLights(int *Type1, int *Type2, VECTOR3D Location, float Radius2, int DirLimit, int PointLimit, float Matrix[16]);
 // находим кол-во точечных источников
-int		vw_CheckAllPointLights(VECTOR3D Location, float Radius2);
+int	vw_CheckAllPointLights(VECTOR3D Location, float Radius2);
 // включаем источники и освещение
 void	vw_DeActivateAllLights();
 // Удаляем все источники в списке
@@ -131,4 +117,3 @@ eLight 	*vw_GetMainDirectLight();
 
 
 #endif // LIGHT_H
-

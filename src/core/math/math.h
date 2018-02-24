@@ -87,20 +87,19 @@ float Min3(float a1,float a2,float a3);
 
 // вектор в 3д пространстве
 struct VECTOR3D {
-	float x,y,z;
+	float x{0}, y{0}, z{0};
 
 	VECTOR3D() {};
-	VECTOR3D(float nX, float nY, float nZ)
+	VECTOR3D(float _x, float _y, float _z) :
+		x{_x},
+		y{_y},
+		z{_z}
+	{};
+	void Set(float _x, float _y, float _z)
 	{
-		x = nX;
-		y = nY;
-		z = nZ;
-	};
-	void Set(float nX, float nY, float nZ)
-	{
-		x = nX;
-		y = nY;
-		z = nZ;
+		x = _x;
+		y = _y;
+		z = _z;
 	};
 	~VECTOR3D() {};
 	// Equal

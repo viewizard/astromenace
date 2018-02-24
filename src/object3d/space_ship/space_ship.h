@@ -41,11 +41,9 @@
 class CSpaceShip : public CObject3D
 {
 public:
-
 	// базовые конструктор и деструктор объекта
 	CSpaceShip();
 	virtual ~CSpaceShip();
-
 
 	// Обновление данных объектa
 	virtual bool	Update(float Time);
@@ -55,183 +53,158 @@ public:
 	// Установка углов поворота объекта
 	virtual void	SetRotation(VECTOR3D NewRotation, bool NeedWeaponRotate = true);
 
-
 	// текущей вектор движения корабля
-	VECTOR3D	Velocity;
-
+	VECTOR3D	Velocity{0.0f, 0.0f, 0.0f};
 
 	// нужно повернуть (пересчитать мэш) при следующем проходе
 	// Update + учесть эти данные в Rotation
-	VECTOR3D	NeedRotate;
+	VECTOR3D	NeedRotate{0.0f, 0.0f, 0.0f};
 	// скорость поворота по каждому раправлению
-	VECTOR3D	RotationSpeed;
-
-
+	VECTOR3D	RotationSpeed{1.0f, 1.0f, 1.0f};
 
 	// максимальная скорость units/sec, зависит от двигателя
-	float		MaxSpeed;
+	float	MaxSpeed{0.0f};
 	// максимальное ускорение units/sec*sec, зависит от двигателя
-	float		MaxAcceler;
+	float	MaxAcceler{0.0f};
 	// макс. маневровых двигателей
-	float		MaxSpeedRotate;
-
-
+	float	MaxSpeedRotate{0.0f};
 
 	// вперед-назад
 	// текущая скорость
-	float		Speed;
+	float	Speed{0.0f};
 	// нужная скорость
-	float		NeedSpeed;
+	float	NeedSpeed{0.0f};
 	// текущее ускорение
-	float		Acceler;
+	float	Acceler{0.0f};
 	// нужное ускорение
-	float		NeedAcceler;
+	float	NeedAcceler{1.0f};
 
 	// влево-вправо
 	// текущая скорость
-	float		SpeedLR;
+	float	SpeedLR{0.0f};
 	// нужная скорость
-	float		NeedSpeedLR;
+	float	NeedSpeedLR{0.0f};
 	// текущее ускорение
-	float		AccelerLR;
+	float	AccelerLR{0.0f};
 	// нужное ускорение
-	float		NeedAccelerLR;
+	float	NeedAccelerLR{1.0f};
 
 	// вверх-вниз
 	// текущая скорость
-	float		SpeedUD;
+	float	SpeedUD{0.0f};
 	// нужная скорость
-	float		NeedSpeedUD;
+	float	NeedSpeedUD{0.0f};
 	// текущее ускорение
-	float		AccelerUD;
+	float	AccelerUD{0.0f};
 	// нужное ускорение
-	float		NeedAccelerUD;
-
-
+	float	NeedAccelerUD{1.0f};
 
 	// вперед-назад по вектору камеры
 	// текущая скорость
-	float		SpeedByCamFB;
+	float	SpeedByCamFB{0.0f};
 	// нужная скорость
-	float		NeedSpeedByCamFB;
+	float	NeedSpeedByCamFB{0.0f};
 	// текущее ускорение
-	float		AccelerByCamFB;
+	float	AccelerByCamFB{0.0f};
 	// нужное ускорение
-	float		NeedAccelerByCamFB;
+	float	NeedAccelerByCamFB{1.0f};
 
 	// влево-вправо
 	// текущая скорость
-	float		SpeedByCamLR;
+	float	SpeedByCamLR{0.0f};
 	// нужная скорость
-	float		NeedSpeedByCamLR;
+	float	NeedSpeedByCamLR{0.0f};
 	// текущее ускорение
-	float		AccelerByCamLR;
+	float	AccelerByCamLR{0.0f};
 	// нужное ускорение
-	float		NeedAccelerByCamLR;
+	float	NeedAccelerByCamLR{1.0f};
 
 	// вверх-вниз
 	// текущая скорость
-	float		SpeedByCamUD;
+	float	SpeedByCamUD{0.0f};
 	// нужная скорость
-	float		NeedSpeedByCamUD;
+	float	NeedSpeedByCamUD{0.0f};
 	// текущее ускорение
-	float		AccelerByCamUD;
+	float	AccelerByCamUD{0.0f};
 	// нужное ускорение
-	float		NeedAccelerByCamUD;
-
-
-
-
+	float	NeedAccelerByCamUD{1.0f};
 
 	// управление - куда перемещаться при сделующем Update'е
 	// от 0.0 до 1.0, по "силе" движения в нужную сторону
-	float	MoveForward;
-	float	MoveBackward;
-	float	MoveLeft;
-	float	MoveRight;
-	float	MoveUp;
-	float	MoveDown;
-
-
+	float	MoveForward{0.0f};
+	float	MoveBackward{0.0f};
+	float	MoveLeft{0.0f};
+	float	MoveRight{0.0f};
+	float	MoveUp{0.0f};
+	float	MoveDown{0.0f};
 
 	// кол-во оружия доступного на данной моделе
-	int					WeaponQuantity;
+	int		WeaponQuantity{0};
 	// выстрел из оружия, т.е. передача команды "стрелять" оружию при сделующем Update'е
-	bool				*WeaponSetFire;
+	bool		*WeaponSetFire{nullptr};
 	// указатель на массив оружия
-	CWeapon				**Weapon;
+	CWeapon		**Weapon{nullptr};
 	// расположение оружия на коробле (относительное)
-	VECTOR3D			*WeaponLocation;
+	VECTOR3D	*WeaponLocation{nullptr};
 	// тип оружия по мощьности, для определенных слотов
-	int					*WeaponType;
+	int		*WeaponType{nullptr};
 	// первоначальный доворот оружия для корабля (будем использовать только для игрка, для остальных он ноль)
-	float				*WeaponYAngle;
+	float		*WeaponYAngle{nullptr};
 	// тип стрельбы из оружия 1-обычный, 2-переменный (по умолчанию)
-	int					WeaponFireType;
-	int 				WeaponGroupCurrentFireNum;
-	float 				WeaponGroupCurrentFireDelay;
-
+	int		WeaponFireType{2};
+	int 		WeaponGroupCurrentFireNum{-1};
+	float 		WeaponGroupCurrentFireDelay{0.0f};
 
 	// кол-во оружия доступного на данной моделе
-	int					BossWeaponQuantity;
+	int		BossWeaponQuantity{0};
 	// выстрел из оружия, т.е. передача команды "стрелять" оружию при сделующем Update'е
-	bool				*BossWeaponSetFire;
+	bool		*BossWeaponSetFire{nullptr};
 	// указатель на массив оружия
-	CWeapon				**BossWeapon;
+	CWeapon		**BossWeapon{nullptr};
 	// расположение оружия на коробле (относительное)
-	VECTOR3D			*BossWeaponLocation;
+	VECTOR3D	*BossWeaponLocation{nullptr};
 	// тип оружия по мощьности, для определенных слотов
-	int					*BossWeaponType;
+	int		*BossWeaponType{nullptr};
 	// первоначальный доворот оружия для корабля (будем использовать только для игрка, для остальных он ноль)
-	float				*BossWeaponYAngle;
+	float		*BossWeaponYAngle{nullptr};
 	// тип стрельбы из оружия 1-обычный, 2-переменный (по умолчанию)
-	int					BossWeaponFireType;
-	int 				BossWeaponGroupCurrentFireNum;
-	float 				BossWeaponGroupCurrentFireDelay;
-
+	int		BossWeaponFireType{2};
+	int 		BossWeaponGroupCurrentFireNum{-1};
+	float 		BossWeaponGroupCurrentFireDelay{0.0f};
 
 	// выстрел из оружия-фларес, т.е. передача команды "стрелять" оружию при сделующем Update'е
-	bool				WeaponFlareSetFire;
+	bool		WeaponFlareSetFire{false};
 	// указатель на оружие-фларе
-	CWeapon				*WeaponFlare;
+	CWeapon		*WeaponFlare{nullptr};
 	// расположение оружия на коробле (относительное)
-	VECTOR3D			WeaponFlareLocation;
-
-
+	VECTOR3D	WeaponFlareLocation{0.0f, 0.0f, 0.0f};
 
 	// кол-во двигателей
-	int				EngineQuantity;
+	int		EngineQuantity{0};
 	// тип, как будем удалять двигатели -сразу, или глушить
-	bool			EngineDestroyType;
+	bool		EngineDestroyType{false};
 	// двигатели
-	eParticleSystem	**Engine;
+	eParticleSystem	**Engine{nullptr};
 	// положение двигателей
-	VECTOR3D		*EngineLocation;
-
+	VECTOR3D	*EngineLocation{nullptr};
 
 	// вкл. двигатели торможения при повороте
-	bool	NeedStopRotation;
+	bool	NeedStopRotation{false};
 
 	// двигатели поворотов, левый
-	int				EngineLeftQuantity; // кол-во двигателей
-	eParticleSystem	**EngineLeft; // двигатели
-	VECTOR3D		*EngineLeftLocation; // положение двигателей
+	int		EngineLeftQuantity{0}; // кол-во двигателей
+	eParticleSystem	**EngineLeft{nullptr}; // двигатели
+	VECTOR3D	*EngineLeftLocation{nullptr}; // положение двигателей
 
 	// двигатели поворотов, правый
-	int				EngineRightQuantity; // кол-во двигателей
-	eParticleSystem	**EngineRight; // двигатели
-	VECTOR3D		*EngineRightLocation; // положение двигателей
-
-
+	int		EngineRightQuantity{0}; // кол-во двигателей
+	eParticleSystem	**EngineRight{nullptr}; // двигатели
+	VECTOR3D	*EngineRightLocation{nullptr}; // положение двигателей
 
 	// для собственного списка
-	CSpaceShip* Next;
-	CSpaceShip* Prev;
-
+	CSpaceShip	*Next{nullptr};
+	CSpaceShip	*Prev{nullptr};
 };
-
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -250,9 +223,5 @@ void	UpdateAllSpaceShip(float Time);
 void	DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap, int DrawOnlyType=-1);
 // Удаляем все объекты в списке
 void	ReleaseAllSpaceShip();
-
-
-
-
 
 #endif // SPACESHIP_H

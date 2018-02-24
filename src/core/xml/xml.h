@@ -24,7 +24,6 @@
 
 *************************************************************************************/
 
-
 #ifndef XML_H
 #define XML_H
 
@@ -47,20 +46,12 @@
 // 3) тэги не должны разбиваться на несколько строк (c < до > все должно быть на одной строке)
 // 4) не работаем с CDATA
 
-
-
-
-
-
 class cXMLAttribute
 {
 public:
 
 	cXMLAttribute()
-	{
-		Name = Data = nullptr;
-		Next = Prev = nullptr;
-	};
+	{};
 	~cXMLAttribute()
 	{
 		if (Name != nullptr)
@@ -70,30 +61,19 @@ public:
 	};
 
 	// данные атрибута
-	char *Name;
-	char *Data;
+	char *Name{nullptr};
+	char *Data{nullptr};
 
 	// указатели на массив атрибутов
-	cXMLAttribute *Next;
-	cXMLAttribute *Prev;
+	cXMLAttribute *Next{nullptr};
+	cXMLAttribute *Prev{nullptr};
 };
-
-
-
-
 
 class cXMLEntry
 {
 public:
 
-	cXMLEntry()
-	{
-		EntryType = 0;
-		Name = Content = nullptr;
-		LineNumber = 0;
-		FirstAttribute = LastAttribute = nullptr;
-		Next = Prev = FirstChild = LastChild = nullptr;
-	}
+	cXMLEntry() {};
 	~cXMLEntry()
 	{
 		if (Name != nullptr)
@@ -114,43 +94,36 @@ public:
 			delete TmpEntry;
 			TmpEntry = TmpEntry1;
 		}
-	}
+	};
 
 	// тип записи 0-обычная, 1-коментарий
-	int EntryType;
+	int EntryType{0};
 	// имя элемента (если коментарий - текст)
-	char *Name;
+	char *Name{nullptr};
 	// содержимое элемента
-	char *Content;
+	char *Content{nullptr};
 	// номер строки в документе (если читаем из документа, если создаем - всегда ноль)
-	int LineNumber;
+	int LineNumber{0};
 
 
 	// указатели на динамический массив атрибутов данной записи
-	cXMLAttribute *FirstAttribute;
-	cXMLAttribute *LastAttribute;
+	cXMLAttribute *FirstAttribute{nullptr};
+	cXMLAttribute *LastAttribute{nullptr};
 
 	// указатели на массив дочерних элементов
-	cXMLEntry *FirstChild;
-	cXMLEntry *LastChild;
+	cXMLEntry *FirstChild{nullptr};
+	cXMLEntry *LastChild{nullptr};
 
 	// указатели на массив элементов текущего уровня вложенности
-	cXMLEntry *Next;
-	cXMLEntry *Prev;
+	cXMLEntry *Next{nullptr};
+	cXMLEntry *Prev{nullptr};
 };
-
-
-
-
 
 class cXMLDocument
 {
 public:
 
-	cXMLDocument()
-	{
-		RootXMLEntry = nullptr;
-	};
+	cXMLDocument() {};
 	~cXMLDocument()
 	{
 		ReleaseXMLDocument();
@@ -162,20 +135,15 @@ public:
 		RootXMLEntry = nullptr;
 	};
 
-
 	// указатель на корневой элемент
-	cXMLEntry *RootXMLEntry;
-
+	cXMLEntry *RootXMLEntry{nullptr};
 
 	bool Load(const char *XMLFileName);
 	bool ParseTagLine(char *OriginBuffer, unsigned int StartPosition, char *Buffer, cXMLEntry *XMLEntry);
 	bool ParseTagContent(char *OriginBuffer, unsigned int StartPosition, char *Buffer, cXMLEntry *ParentXMLEntry);
 
-
 	bool Save(const char *XMLFileName);
 	void SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned int Level);
-
-
 
 	cXMLEntry *AddEntry(cXMLEntry *ParentXMLEntry, const char *EntryName)
 	{
@@ -195,14 +163,12 @@ public:
 		}
 	};
 
-
 	void AddEntryContent(cXMLEntry *XMLEntry, char *EntryData)
 	{
 		XMLEntry->Content = new char[strlen(EntryData)+1];
 		strcpy(XMLEntry->Content, EntryData);
 		XMLEntry->Content[strlen(EntryData)] = 0;
 	};
-
 
 	void AddEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName, const char *AttributeData)
 	{
@@ -236,7 +202,6 @@ public:
 		else AddEntryAttribute(XMLEntry, AttributeName, "off");
 	};
 
-
 	void AddComment(cXMLEntry *ParentXMLEntry, const char *Text)
 	{
 		cXMLEntry *NewXMLEntry = new cXMLEntry;
@@ -246,14 +211,6 @@ public:
 		NewXMLEntry->Name[strlen(Text)] = 0;
 		AttachXMLChildEntry(ParentXMLEntry, NewXMLEntry);
 	};
-
-
-
-
-
-
-
-
 
 	cXMLEntry *FindEntryByName(cXMLEntry *ParentXMLEntry, const char *Name)
 	{
@@ -298,8 +255,6 @@ public:
 		return false;
 	};
 
-
-
 	cXMLEntry *FindFirstChildEntryByName(cXMLEntry *ParentXMLEntry, const char *ChildEntryName)
 	{
 		if (ParentXMLEntry == nullptr) return nullptr;
@@ -311,9 +266,6 @@ public:
 		}
 		return nullptr;
 	}
-
-
-
 
 	void AttachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *ChildXMLEntry);
 	void DetachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *ChildXMLEntry);

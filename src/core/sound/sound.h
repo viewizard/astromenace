@@ -59,19 +59,11 @@ class eSound
 public:
 
 	eSound()
-	{
-		FileName = nullptr;
-		Volume = MainVolume = Age = LastUpdateTime = DestroyTime = DestroyTimeStart = 0.0f;
-		NeedRelease = false;
-		Group = GroupCount = SubGroup = SubGroupCount = Priority = Num = 0;
-		Prev = Next = nullptr;
-	};
+	{};
 	~eSound()
 	{
-		if (FileName != nullptr) {
+		if (FileName != nullptr)
 			delete [] FileName;
-			FileName = nullptr;
-		}
 	};
 
 	// проигрывание звука
@@ -87,30 +79,30 @@ public:
 	void SetMainVolume(float NewMainVolume);
 
 
-	char*		FileName;
+	char*	FileName{nullptr};
 
-	ALuint		Source;		// источник
-	float		Volume;		// громкость, внутренняя... для данного источника (чтобы была возможность корректировки общей громкости)
-	float		MainVolume;
-	bool		NeedRelease; // для 2-х типов релиза...
+	ALuint	Source{0};		// источник
+	float	Volume{0.0f};		// громкость, внутренняя... для данного источника (чтобы была возможность корректировки общей громкости)
+	float	MainVolume{0.0f};
+	bool	NeedRelease{false};	// для 2-х типов релиза...
 
 	// установка информации о звуке
 	void SetInfo(int NewGroup, int NewGroupCount, int NewSubGroup, int NewSubGroupCount, int NewPriority);
-	int			Group; 			// номер группы
-	int			GroupCount; 	// макс. кол-во одновременно проигрываемых звуков в группе
-	int			SubGroup;		// номер подгруппы
-	int			SubGroupCount;	// макс. кол-во одновременно проигрываемых звуков в подгруппы
-	int			Priority;		// приоритет звука в группе от 1 до ... (1-самый высокий)
-	float 		Age;			// время, в течении которого проигрываем звук (для остановки более старого звука)
-	float		LastUpdateTime; // тянем тут, т.к. глобальный может быть не корректный (если была остановка игры)
+	int	Group{0}; 			// номер группы
+	int	GroupCount{0}; 		// макс. кол-во одновременно проигрываемых звуков в группе
+	int	SubGroup{0};		// номер подгруппы
+	int	SubGroupCount{0};	// макс. кол-во одновременно проигрываемых звуков в подгруппы
+	int	Priority{0};		// приоритет звука в группе от 1 до ... (1-самый высокий)
+	float 	Age{0.0f};		// время, в течении которого проигрываем звук (для остановки более старого звука)
+	float	LastUpdateTime{0.0f};	// тянем тут, т.к. глобальный может быть не корректный (если была остановка игры)
 
 
-	float		DestroyTime;
-	float		DestroyTimeStart;
+	float	DestroyTime{0.0f};
+	float	DestroyTimeStart{0.0f};
 
-	eSound*		Prev;		// Pointer to the previous loaded Sound in the memory
-	eSound*		Next;		// Pointer to the next loaded Sound in the memory
-	int			Num;		// ID number
+	eSound*	Prev{nullptr};	// Pointer to the previous loaded Sound in the memory
+	eSound*	Next{nullptr};	// Pointer to the next loaded Sound in the memory
+	int	Num{0};		// ID number
 };
 
 

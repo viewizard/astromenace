@@ -24,16 +24,11 @@
 
 *************************************************************************************/
 
-
 #ifndef PARTICLE2D_H
 #define PARTICLE2D_H
 
 #include "../base.h"
 #include "../math/math.h"
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // Структура цвета
@@ -46,50 +41,46 @@ struct COLORVALUE2D {
 };
 
 
-
-
-
 //-----------------------------------------------------------------------------
 // Класс eParticle2D
 //-----------------------------------------------------------------------------
 struct eParticle2D {
 	// конструктор и деструктор
-	eParticle2D();
-	~eParticle2D();
+	eParticle2D() {};
+	~eParticle2D() {};
 
 	// обновление информации в частице
 	bool Update(float TimeDelta, VECTOR3D ParentLocation = VECTOR3D(0.0f,0.0f,0.0f), bool Attractive = false, float AttractiveValue = 25.0f);
 	// текущее место расположения частицы
-	VECTOR3D		Location;
+	VECTOR3D	Location{0.0f, 0.0f, 0.0f};
 	// текущая скорость частицы
-	VECTOR3D		Velocity;
+	VECTOR3D	Velocity{0.0f, 0.0f, 0.0f};
 
 	// текущий цвет частицы
-	COLORVALUE2D	Color;
+	COLORVALUE2D	Color{1.0f, 0.0f, 0.0f, 0.5f};
 	// значение приращение цвета
-	COLORVALUE2D	ColorDelta;
+	COLORVALUE2D	ColorDelta{0.0f, 0.0f, 0.0f, 0.0f};
 
 	// время жизни частицы в секундах
-	float		Age;
+	float		Age{0.0f};
 
 	// оставщееся время жизни частицы
-	float		Lifetime;
+	float		Lifetime{0.0f};
 
 	// размер частицы
-	float		Size;
+	float		Size{1.0f};
 	// значение изменения размера
-	float		SizeDelta;
+	float		SizeDelta{0.0f};
 
 	// прозрачность
-	float		Alpha;
+	float		Alpha{1.0f};
 
 	// если нужно замедлять и остановить
-	bool	NeedStop;
+	bool		NeedStop{false};
 
 	// указатели на цепь частиц
-	eParticle2D *Next;
-	eParticle2D *Prev;
+	eParticle2D	*Next{nullptr};
+	eParticle2D	*Prev{nullptr};
 };
-
 
 #endif // PARTICLE2D_H

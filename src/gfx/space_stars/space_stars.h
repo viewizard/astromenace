@@ -24,14 +24,10 @@
 
 *************************************************************************************/
 
-
 #ifndef SPACESTARS_H
 #define SPACESTARS_H
 
-
 #include "star.h"
-
-
 
 
 class CSpaceStars
@@ -41,65 +37,54 @@ public:
 	~CSpaceStars();
 
 	// обновить все частицы в этой системе, по времени
-	bool Update(float Time);
+	bool	Update(float Time);
 	// прорисовка всех частиц
-	void Draw();
+	void	Draw();
 	// базовая текстура частиц
-	eTexture	*Texture;
+	eTexture	*Texture{nullptr};
 
 	// работа с шейдерами
-	eGLSL 	*GLSL;
-	int		UniformLocations[10];
+	eGLSL 	*GLSL{nullptr};
+	int	UniformLocations[10];
 
 	// текущее положение частиц в пространстве
-	VECTOR3D		Location;
+	VECTOR3D	Location{0.0f, 0.0f, 0.0f};
 
 	// размер частиц в мировых координатах
-	float Size;
+	float		Size{0.003f};
 
-
-	VECTOR3D	CreationSize;
-
+	VECTOR3D	CreationSize{5.21f,5.21f,5.21f};
 
 	// если нужно - корректировка размера частицы при создании относительно камеры
 	// мертвая зона (радиус, где вообще не рисуем)
-	float	DeadZone;
-
+	float	DeadZone{5.2f};
 
 	// возраст системы в секундах
-	float Age;
+	float	Age{0.0f};
 
 	// последнее время обновления системы
-	float TimeLastUpdate;
-
+	float	TimeLastUpdate{-1.0f};
 
 	// матрицы поворота, для оптимизации просчетов
-	float	CurrentRotationMat[9];
-	float	OldInvRotationMat[9];
-
+	float	CurrentRotationMat[9]{1.0f, 0.0f, 0.0f,
+				      0.0f, 1.0f, 0.0f,
+				      0.0f, 0.0f, 1.0f};
+	float	OldInvRotationMat[9]{1.0f, 0.0f, 0.0f,
+				     0.0f, 1.0f, 0.0f,
+				     0.0f, 0.0f, 1.0f};
 
 	// подвязка к динамическому массиву
-	CStar * Start;
-	CStar * End;
-	void Attach(CStar * NewParticle);
-	void Detach(CStar * OldParticle);
-
+	CStar	*Start{nullptr};
+	CStar	*End{nullptr};
+	void	Attach(CStar * NewParticle);
+	void	Detach(CStar * OldParticle);
 
 	// данные, храним их, чтобы каждый раз не пересчитывать
-	CStar **list;
-	float *tmpDATA;
-	unsigned int *VBO; // указатель на номер VBO массива
-	int PrimitCount;
-	float LastCameraAngleX, LastCameraAngleY, LastCameraAngleZ;
+	CStar	**list{nullptr};
+	float	*tmpDATA{nullptr};
+	unsigned int	*VBO{nullptr}; // указатель на номер VBO массива
+	int	PrimitCount{0};
+	float	LastCameraAngleX{0.0f}, LastCameraAngleY{0.0f}, LastCameraAngleZ{0.0f};
 };
-
-
-
-
-
-
-
-
-
 
 #endif //SPACESTARS_H

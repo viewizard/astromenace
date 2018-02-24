@@ -24,14 +24,10 @@
 
 *************************************************************************************/
 
-
 #ifndef PROJECTILE_H
 #define PROJECTILE_H
 
-
 #include "../object3d.h"
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -40,7 +36,6 @@
 class CProjectile : public CObject3D
 {
 public:
-
 	CProjectile();
 	virtual ~CProjectile();
 
@@ -53,70 +48,58 @@ public:
 	// Создание нужного объекта
 	virtual void	Create(int ProjectileNum);
 
-
 	// Номер типа снаряда при создании
-	int			Num;
+	int		Num{0};
 
 	// повреждение снаряда
-	float		DamageHull;
-	float		DamageSystems;
-
+	float		DamageHull{0.0f};
+	float		DamageSystems{0.0f};
 
 	// Класс снаряда
 	// 0 - обычный
 	// 1 - можем наводится и сбивать снаряд
 	// 2 - лучевое оружие
 	// 3 - фларе против ракет
-	int			ProjectileType;
+	int		ProjectileType{0};
 
 	// для ракет, тянем на кого навелись... чтобы цель могла принять действия
-	CObject3D	*Target;
+	CObject3D	*Target{nullptr};
 
 	// данные для 2-го класса (лучевого снаряда)
 	// эти данные меняем только в объекте-орудии!!!
 	// точка центра снаряда
-	VECTOR3D	ProjectileCenter;
-
+	VECTOR3D	ProjectileCenter{0.0f, 0.0f, 0.0f};
 
 	// скорость снаряда
-	float		Speed;
-	float		SpeedStart;
-	float		SpeedEnd;
-
+	float		Speed{0.0f};
+	float		SpeedStart{0.0f};
+	float		SpeedEnd{0.0f};
 
 	// общее время жизни снаряда
-	float		Age;
+	float		Age{0.0f};
 
 	// нужно ли играть звук при уничтожении
-	bool		NeedDeadSound;
-
+	bool		NeedDeadSound{true};
 
 	// временные данные, для подсветки мин
-	float		MineIData;
+	float		MineIData{0.0f};
 
 	// временные данные, для мин которые стреляют - время перезарядки
-	float		MineReloadTime;
-	float		MineNextFireTime;
-
+	float		MineReloadTime{1.0f};
+	float		MineNextFireTime{1.0f};
 
 	// для прорисовки графических эффектов
-	int					GraphicFXQuantity;
+	int		GraphicFXQuantity{0};
 	// тип, как будем удалять -сразу, или глушить
-	bool				GraphicFXDestroyType;
-	VECTOR3D			*GraphicFXLocation;
-	eParticleSystem		**GraphicFX;
+	bool		GraphicFXDestroyType{false};
+	VECTOR3D	*GraphicFXLocation{nullptr};
+	eParticleSystem	**GraphicFX{nullptr};
 
-	bool				NeedStopPartic;
+	bool		NeedStopPartic{false};
 
-	CProjectile *Next;
-	CProjectile *Prev;
-
+	CProjectile *Next{nullptr};
+	CProjectile *Prev{nullptr};
 };
-
-
-
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -127,9 +110,6 @@ public:
 void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum);
 // получаем время жизни снаряда
 float GetProjectileRange(int Num);
-
-
-
 
 //-----------------------------------------------------------------------------
 // Менеджер CSpaceShipWeapon, дополнительный
@@ -145,8 +125,5 @@ void	UpdateAllProjectile(float Time);
 void	DrawAllProjectile(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllProjectile();
-
-
-
 
 #endif // PROJECTILE_H

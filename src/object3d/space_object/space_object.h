@@ -24,14 +24,11 @@
 
 *************************************************************************************/
 
-
 #ifndef SPACEOBJECT_H
 #define SPACEOBJECT_H
 
-
 #include "../object3d.h"
 #include "../explosion/space_explosion/space_explosion.h"
-
 
 //-----------------------------------------------------------------------------
 // Класс CSpaceObject
@@ -39,7 +36,6 @@
 class CSpaceObject : public CObject3D
 {
 public:
-
 	// базовые конструктор и деструктор объекта
 	CSpaceObject();
 	virtual ~CSpaceObject();
@@ -52,35 +48,30 @@ public:
 	virtual void	SetRotation(VECTOR3D NewRotation);
 
 	// скорость
-	float	Speed;
-	VECTOR3D	RotationSpeed;
-	VECTOR3D	Velocity;
+	float		Speed{0.0f};
+	VECTOR3D	RotationSpeed{0.0f, 0.0f, 0.0f};
+	VECTOR3D	Velocity{0.0f, 0.0f, 0.0f};
 
 	// последнее положение камеры нужно для планет
-	VECTOR3D	LastCameraPoint;
+	VECTOR3D	LastCameraPoint{0.0f, 0.0f, 0.0f};
 
 	// кол-во эффектов
-	int				GFXQuantity;
+	int		GFXQuantity{0};
 	// эффекты
-	VECTOR3D		*GFXLocation;
-	eParticleSystem	**GFX;
-
+	VECTOR3D	*GFXLocation{nullptr};
+	eParticleSystem	**GFX{nullptr};
 
 	// чтобы возрвать часть корабля босса пришельцев через время
-	float BossPartCountDown;
-
-
+	float		BossPartCountDown{-1.0f};
 
 	// для собственного списка
-	CSpaceObject* Next;
-	CSpaceObject* Prev;
-
+	CSpaceObject	*Next{nullptr};
+	CSpaceObject	*Prev{nullptr};
 };
 
 
 // установка эффекта, если нужно
 void SetSpaceObjectGFX(eParticleSystem *ParticleSystem, int GFXType);
-
 
 
 //-----------------------------------------------------------------------------
@@ -98,9 +89,5 @@ void	DrawAllSpaceObject(bool VertexOnlyPass, unsigned int ShadowMap);
 int 	DrawAllSpaceObjectCount(int DrawOnlyType);
 // Удаляем все объекты в списке
 void	ReleaseAllSpaceObject();
-
-
-
-
 
 #endif // SPACEOBJECT_H

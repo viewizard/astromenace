@@ -41,9 +41,6 @@ extern CProjectile *EndProjectile;
 //-----------------------------------------------------------------------------
 CSpaceShip::CSpaceShip(void)
 {
-	// никуда не двигаемся
-	Velocity.Set(0.0f, 0.0f, 0.0f);
-
 	// болтание объекта, в случае кораблей болтаем всю модель
 	DeviationOn = false;
 	DeviationObjQuantity = 1;
@@ -56,60 +53,8 @@ CSpaceShip::CSpaceShip(void)
 	NeedDeviation[0] = vw_Randf0*0.1f;
 	CurentDeviation[0] = CurentDeviationSum[0] = 0.0f;
 
-	// и никуда не нужно поворачивать
-	NeedRotate.Set(0.0f, 0.0f, 0.0f);
-	RotationSpeed.Set(1.0f, 1.0f, 1.0f);
-
-	// скорость
-	MaxSpeed = Speed = NeedSpeed = 0.0f;
-	SpeedLR = NeedSpeedLR = SpeedUD = NeedSpeedUD = 0.0f;
-	SpeedByCamFB = NeedSpeedByCamFB = SpeedByCamLR = NeedSpeedByCamLR = SpeedByCamUD = NeedSpeedByCamUD = 0.0f;
-
-	// ускорение, пока нет двигателей - его нет...
-	MaxAcceler = MaxSpeedRotate = Acceler = AccelerLR = AccelerUD = AccelerByCamFB = AccelerByCamLR = AccelerByCamUD = 0.0f;
-	// даем максимальное ускорение
-	NeedAcceler = NeedAccelerLR = NeedAccelerUD = NeedAccelerByCamFB = NeedAccelerByCamLR = NeedAccelerByCamUD = 1.0f;
-
-
-
-	// двигатели не установлены
-	EngineDestroyType = false;
-	EngineQuantity = EngineLeftQuantity = EngineRightQuantity = 0;
-	Engine = EngineLeft = EngineRight = nullptr;
-	EngineLocation = EngineLeftLocation = EngineRightLocation = nullptr;
-	NeedStopRotation = false;
-
-
-	// никуда не двигаемся
-	MoveForward = MoveBackward = MoveLeft = MoveRight = MoveUp = MoveDown = 0.0f;
-
-	// оружие пока не установлено
-	WeaponQuantity = 0;
-	WeaponSetFire = nullptr;
-	WeaponLocation = nullptr;
-	WeaponType = nullptr;
-	Weapon = nullptr;
-	WeaponYAngle = nullptr;
-	WeaponFireType = 2;
-	WeaponGroupCurrentFireNum = -1;
-	WeaponGroupCurrentFireDelay = 0.0f;
-
-	BossWeaponQuantity = 0;
-	BossWeaponSetFire = nullptr;
-	BossWeaponLocation = nullptr;
-	BossWeaponType = nullptr;
-	BossWeapon = nullptr;
-	BossWeaponYAngle = nullptr;
-	BossWeaponFireType = 2;
-	BossWeaponGroupCurrentFireNum = -1;
-	BossWeaponGroupCurrentFireDelay = 0.0f;
-
-	WeaponFlare = nullptr;
-
 	// подключаем к своему списку
-	Next = Prev = nullptr;
 	AttachSpaceShip(this);
-
 }
 
 

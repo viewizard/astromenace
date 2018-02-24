@@ -36,10 +36,10 @@ struct ProjectileData {
 	float	DamageHull;
 	float	DamageSystems;
 	// 0-обычный снаряд, 1-уничтожаемый, 2-лучевой, 3-мина (не уничтожаемая), 4-мина (уничтожаемая)
-	int		ProjectileType;
+	int	ProjectileType;
 	float	Speed;
 	float	Age;
-	int		GraphicFXQuantity;
+	int	GraphicFXQuantity;
 };
 
 
@@ -238,37 +238,8 @@ CProjectile::CProjectile(void)
 	// проверяем на столкновения только по радиусу
 	Radius = 0.0f;
 
-	// нет цели
-	Target = nullptr;
-
-	// пока не повреждает вообще
-	DamageHull = 0.0f;
-	DamageSystems = 0.0f;
-
-	// нет графических эффектов
-	GraphicFXQuantity = 0;
-	GraphicFXLocation = nullptr;
-	GraphicFX = nullptr;
-	GraphicFXDestroyType = false;
-
-	NeedStopPartic = false;
-
-	// не можем сбивать снаряд
-	ProjectileType = 0;
-
-	ProjectileCenter.Set(0.0f, 0.0f, 0.0f);
-
-	Age = 0.0f;
-	NeedDeadSound = true;
-
-	SpeedStart = SpeedEnd = Speed = 0.0f;
-
-	MineReloadTime = MineNextFireTime = 1.0f;
-
-
 	Ambient[0] = Ambient[1] = Ambient[2] = Ambient[3] = 0.35f;
 
-	Next = Prev = nullptr;
 	AttachProjectile(this);
 }
 

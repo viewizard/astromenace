@@ -36,35 +36,13 @@
 //-----------------------------------------------------------------------------
 CSpaceStars::CSpaceStars()
 {
-	Age = 0.0f;
-	TimeLastUpdate = -1.0f;
-
-	// положение системы
-	Location.Set( 0.0f, 0.0f, 0.0f);
-
-	Size = 0.003f;
-	CreationSize = VECTOR3D(5.21f,5.21f,5.21f);
 	Texture = vw_FindTextureByName("gfx/flare1.tga");
-	DeadZone = 5.2f;
-
-
 
 	if (Setup.UseGLSL) {
 		GLSL = vw_FindShaderByName("SpaceStars");
 		UniformLocations[0] = vw_GetUniformLocation(GLSL, "ParticleTexture");
 		UniformLocations[1] = vw_GetUniformLocation(GLSL, "ParticleAge");
 	}
-
-
-
-	// начальные установки для мартиц поворотов
-	Matrix33Identity(CurrentRotationMat);
-	Matrix33Identity(OldInvRotationMat);
-
-	// настройка массива
-	Start = nullptr;
-	End = nullptr;
-
 
 	unsigned int ParticlesCreated = 10000 - 4000*Setup.VisualEffectsQuality;
 
@@ -133,23 +111,12 @@ CSpaceStars::CSpaceStars()
 		Matrix33CalcPoint(&tmp, CurrentRotationMat);
 		NewParticle->Location = Location + tmp;
 
-
-
 		// подключаем частицу к системе
 		Attach(NewParticle);
 
 		// уменьшаем необходимое количество частиц
 		ParticlesCreated--;
 	}
-
-
-
-
-	list = nullptr;
-	tmpDATA = nullptr;
-	VBO = nullptr;
-	PrimitCount = 0;
-	LastCameraAngleX = LastCameraAngleY = LastCameraAngleZ = 0.0f;
 }
 
 

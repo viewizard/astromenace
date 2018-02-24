@@ -43,26 +43,10 @@ CExplosion::CExplosion(void)
 	// нужно рисовать без оптимизации
 	NeedCullFaces = false;
 
-	ExplosionPieceData = nullptr;
-
-	ExplosionGeometryMoveLastTime = -1;
-
 	// нет взрыва, сразу уничтожаем
 	Lifetime = 0.0f;
 
-	// нет графических эффектов
-	GraphicFXQuantity = 0;
-	GraphicFX = nullptr;
-
-	ExplosionType = 0;
-
-	OldSpeed = 0.0f;
-	VelocityOrientation.Set(0,0,0);
-	NeedStop = true;
-	AABBSpeed = 0.0f;
-
 	// подключаем к своему списку
-	Next = Prev = nullptr;
 	AttachExplosion(this);
 }
 

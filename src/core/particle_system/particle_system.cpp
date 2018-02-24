@@ -37,102 +37,15 @@ extern float ParticleSystemQuality;
 
 
 
-//-----------------------------------------------------------------------------
-// инициализация класса
-//-----------------------------------------------------------------------------
+
 eParticleSystem::eParticleSystem()
 {
-	NeedDestroy = false;
-	Age = 0.0f;
-	TimeLastUpdate = -1.0f;
-	EmissionResidue =  0.0f;
-	Angle.Set(0,0,0);
-	Direction.Set(0,0,0);
-	Texture[0] = Texture[1] = Texture[2] = Texture[3] = Texture[4] = nullptr;
-	TextureQuantity = 1; // по умолчанию у нас всегда 1 текстура
-	BlendType = 0;
-	AttractiveValue = 25.0f;
-	IsSuppressed = false;
-	DestroyIfNoParticles = false;
-
-	// положение системы
-	Location = PrevLocation = VECTOR3D( 0.0f, 0.0f, 0.0f);
-
-	DeadZone = 0.0f; // нет мертвой зоны
-	Resize = 1.0f; // нет изменений
-
-
-	ColorStart.r = 1.00f;
-	ColorStart.g = 1.00f;
-	ColorStart.b = 1.00f;
-
-	ColorVar.r = 0.00f;
-	ColorVar.g = 0.00f;
-	ColorVar.b = 0.00f;
-
-	ColorEnd.r = 1.00f;
-	ColorEnd.g = 1.00f;
-	ColorEnd.b = 1.00f;
-
-	AlphaStart = 1.00f;
-	AlphaVar   = 0.00f;
-	AlphaEnd   = 1.00f;
-	AlphaShowHide = false;
-
-	SizeStart  = 1.00f;
-	SizeVar    = 0.00f;
-	SizeEnd    = 1.00f;
-
-	Speed      = 1.00f;
-	SpeedOnCreation	   = 1.00f;
-	SpeedVar   = 1.00f;
-	Theta      = 1.00f;
-
-	Life       = 1.00f;
-	LifeVar    = 0.00f;
-
-	NeedStop = false;
-
-	ParticlesPerSec = 100;
-	IsAttractive = 0;
-	ParticlesCreated = 0;
-
-	CreationType = 0;
-	CreationSize = VECTOR3D(0.05f,0.05f,0.05f);
-
 	// начальные установки для мартиц поворотов
 	Matrix33Identity(CurrentRotationMat);
 	Matrix33Identity(OldInvRotationMat);
-
-	Light = nullptr;
-	LightNeedDeviation = false;
-	NextLightDeviation = 0.7f+0.3f*vw_Randf1;
-	LightDeviation = 100.0f;
-	LightDeviationSpeed = 3.5f+3.5f*vw_Randf1;
-
-	tmpDATA = nullptr;
-
 	// настройка массива
-	Start = nullptr;
-	End = nullptr;
-	ParticlesCount = 0;
-	Next = nullptr;
-	Prev = nullptr;
 	vw_AttachParticleSystem(this);
-
-
-	// начальныя установка коробок
-	// ставим тут очень большие параметры, вне зоны прорисовки, т.к. в партиклах на функциях перемещения
-	// не учитываем изменение коробки, и координаты в коробках у нас абсолютные (!!!)
-	// использовать относительные координаты бокса нельзя, т.к. можем преносить только центр, а можем
-	// и центр, и все частицы...
-	AABB[0]=AABB[1]=AABB[2]=AABB[3]=AABB[4]=AABB[5]=AABB[6]=AABB[7]= VECTOR3D(-1000000.0f, 1000000.0f, -1000000.0f);
 }
-
-
-//-----------------------------------------------------------------------------
-//	При разрушении класса
-//-----------------------------------------------------------------------------
 eParticleSystem::~eParticleSystem()
 {
 	// полностью освобождаем память от всех частиц в системе
@@ -143,17 +56,12 @@ eParticleSystem::~eParticleSystem()
 		delete tmp;
 		tmp = tmp2;
 	}
-	if (Light != nullptr) {
+	if (Light != nullptr)
 		vw_ReleaseLight(Light);
-		Light = nullptr;
-	}
-	if (tmpDATA != nullptr) {
+	if (tmpDATA != nullptr)
 		delete [] tmpDATA;
-		tmpDATA = nullptr;
-	}
 	vw_DetachParticleSystem(this);
 }
-
 
 //-----------------------------------------------------------------------------
 //	подключить частицу к системе

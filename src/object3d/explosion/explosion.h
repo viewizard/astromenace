@@ -59,7 +59,6 @@ struct CExplosionPiece {
 class CExplosion : public CObject3D
 {
 public:
-
 	// базовые конструктор и деструктор объекта
 	CExplosion();
 	virtual ~CExplosion();
@@ -67,34 +66,28 @@ public:
 	// Обновление данных объектa
 	virtual bool	Update(float Time);
 
-	int		ExplosionType;
-	int		ExplosionTypeByClass;
-
+	int		ExplosionType{0};
+	int		ExplosionTypeByClass{0};
 
 	// набор управления частицами
-	CExplosionPiece	*ExplosionPieceData;
+	CExplosionPiece	*ExplosionPieceData{nullptr};
 
+	float	ExplosionGeometryMoveLastTime{-1}; // последнее время изменения геометрии, нет смысла постоянно менять геометрию, делаем это 30 раз в секунду только
 
-	float	ExplosionGeometryMoveLastTime;// последнее время изменения геометрии, нет смысла постоянно менять геометрию, делаем это 30 раз в секунду только
-
-
-
-	VECTOR3D	VelocityOrientation;
-	float		OldSpeed;
-	bool		NeedStop;
+	VECTOR3D	VelocityOrientation{0.0f, 0.0f, 0.0f};
+	float		OldSpeed{0.0f};
+	bool		NeedStop{true};
 
 	// скорость изменения AABB
-	float AABBSpeed;
-
+	float		AABBSpeed{0.0f};
 
 	// для прорисовки графических эффектов
-	int					GraphicFXQuantity;
-	eParticleSystem		**GraphicFX;
-
+	int			GraphicFXQuantity{0};
+	eParticleSystem		**GraphicFX{nullptr};
 
 	// для собственного списка
-	CExplosion* Next;
-	CExplosion* Prev;
+	CExplosion	*Next{nullptr};
+	CExplosion	*Prev{nullptr};
 };
 
 

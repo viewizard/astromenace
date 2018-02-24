@@ -24,13 +24,10 @@
 
 *************************************************************************************/
 
-
 #ifndef SCRIPT_H
 #define SCRIPT_H
 
 #include "../game.h"
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -39,57 +36,48 @@
 class ScriptEngine
 {
 public:
-
 	ScriptEngine();
 	~ScriptEngine();
 
 	// запустить скрипт на выполнение
 	bool	RunScript(const char *FileName, float InitTime);
 
-
 	// проверяем скрипт
 	bool	Update(float Time);
 	// доп. проверка для TimeLine
 	void	UpdateTimeLine();
 	// последнее время выполнения команды
-	float	TimeLastOp;
+	float	TimeLastOp{0};
 	// время старта скрипта
-	float	StartTime;
+	float	StartTime{0};
 	// разность между текущем временем и необходимым, нужно чтобы правильно считать положение при появлении
-	float	TimeOpLag;
+	float	TimeOpLag{0};
 
 	// основной документ
-	cXMLDocument	*xmlDoc;
+	cXMLDocument	*xmlDoc{nullptr};
 	// текущий элемент
-	cXMLEntry		*xmlEntry;
+	cXMLEntry	*xmlEntry{nullptr};
 
 	// включен отладочный режим или нет... по умолчанию выключен
-	bool	ShowDebugModeLine;
+	bool	ShowDebugModeLine{false};
 
+	bool	NeedCheckSpaceShip{false};
+	bool	NeedCheckGroundObject{false};
+	float	EndDelayMissionComplete{0.0f};
+	float	LastTimeMissionComplete{-1.0f};
 
-
-
-	bool NeedCheckSpaceShip;
-	bool NeedCheckGroundObject;
-	float EndDelayMissionComplete;
-	float LastTimeMissionComplete;
-
-	float AsterQuant;
-	float AsterW;
-	float AsterH;
-	float AsterXPos;
-	float AsterYPos;
-	float AsterZPos;
-	float AsterRealNeed;
-	float AsterMaxSpeed;
-	float AsterMinFastSpeed;
-	float AsterLastTime;
-	int AsterFastCount;
-	bool AsterOn;
-
+	float	AsterQuant{2.0f};
+	float	AsterW{280.0f};
+	float	AsterH{7.5f};
+	float	AsterXPos{0.0f};
+	float	AsterYPos{-10.0f};
+	float	AsterZPos{340.0f};
+	float	AsterRealNeed{0.0f};
+	float	AsterMaxSpeed{5.0f};
+	float	AsterMinFastSpeed{35.0f};
+	float	AsterLastTime{-1.0f};
+	int	AsterFastCount{0};
+	bool	AsterOn{false};
 };
-
-
-
 
 #endif // SCRIPT_H

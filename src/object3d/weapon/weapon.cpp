@@ -242,45 +242,9 @@ CWeapon::CWeapon(void)
 	// никогда не показываем линию
 	ShowStrength = false;
 
-	// уровень оружия, ставим самый слабый
-	WeaponLevel = 1;
 	// вес
 	Weight = 500;
-	// боекомплект
-	Ammo = AmmoStart = 100;
-	// задержка при стрельбе
-	NextFireTime = 0.3f;
-	// время последнего выстрела, ставим -10 секунд, чтобы сразу стрелять
-	LastFireTime = -10.0f;
 
-	EnergyUse = 1.0f;
-
-	NeedRotateOnTargeting = true;
-
-	LaserMaser = nullptr;
-	LaserMaserSoundNum = 0;
-
-	SwampNum = 0;
-
-	SoundNum = 0;
-	Fire = nullptr;
-	FireLocation.Set(0.0f, 0.0f, 0.0f);
-	DestroyedFire = nullptr;
-	DestroyedSmoke = nullptr;
-	DestroyedFireLocation.Set(0.0f, 0.0f, 0.0f);
-
-	WeaponTurret = false;
-	TargetHorizObject = -1;
-	TargetHorizObjectCurrentAngle = 0.0f;
-	TargetHorizObjectNeedAngle = 0.0f;
-	TargetVertObject = -1;
-	TargetVertObjectMaxAngle = 80.0f;
-	TargetVertObjectMinAngle = 0.0f;
-	TargetVertObjectCurrentAngle = 0.0f;
-	TargetVertObjectNeedAngle = 0.0f;
-
-
-	Next = Prev = nullptr;
 	AttachWeapon(this);
 }
 
