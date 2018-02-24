@@ -97,22 +97,22 @@ $ brew install cmake sdl git libogg libvorbis freealut freetype
 ### 2) Clone git with latest source files
 ```bash
 $ cd ~/
-$ git clone https://github.com/viewizard/astromenace.git AstroMenace
+$ git clone https://github.com/viewizard/astromenace.git astromenace
 ```
 
 ### 3) Compile game binary
 ```bash
-$ cd ~/AstroMenace
+$ cd ~/astromenace
 $ cmake ./
 $ make
 ```
 
 ### 4) Create game VFS data file
 ```bash
-$ ./AstroMenace --pack --rawdata=./gamedata
+$ ./astromenace --pack --rawdata=./gamedata
 ```
 
 ### 5) Create desktop shortcut or start AstroMenace
 ```bash
-$ ~/AstroMenace/AstroMenace
+$ ~/astromenace/astromenace
 ```
