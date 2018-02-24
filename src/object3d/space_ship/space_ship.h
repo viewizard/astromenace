@@ -51,7 +51,7 @@ public:
 	virtual void	SetLocation(VECTOR3D NewLocation);
 	virtual void	SetLocationArcadePlayer(VECTOR3D NewLocation);
 	// Установка углов поворота объекта
-	virtual void	SetRotation(VECTOR3D NewRotation, bool NeedWeaponRotate = true);
+	virtual void	SetRotation(VECTOR3D NewRotation);
 
 	// текущей вектор движения корабля
 	VECTOR3D	Velocity{0.0f, 0.0f, 0.0f};
@@ -154,6 +154,8 @@ public:
 	int		WeaponFireType{2};
 	int 		WeaponGroupCurrentFireNum{-1};
 	float 		WeaponGroupCurrentFireDelay{0.0f};
+	// поворот оружия
+	bool		NeedWeaponRotate{true};
 
 	// кол-во оружия доступного на данной моделе
 	int		BossWeaponQuantity{0};

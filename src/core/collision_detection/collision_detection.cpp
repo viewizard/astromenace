@@ -98,9 +98,9 @@ bool vw_OBBOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation, VEC
 	Matrix33CalcPoint(&T, TMPInvObject1RotationMatrix);
 	/* calcuate transformation matrix */
 	Matrix33Mult(TMPInvObject1RotationMatrix, Object2RotationMatrix);
-	float R[3][3]{TMPInvObject1RotationMatrix[0], TMPInvObject1RotationMatrix[3], TMPInvObject1RotationMatrix[6],
-		      TMPInvObject1RotationMatrix[1], TMPInvObject1RotationMatrix[4], TMPInvObject1RotationMatrix[7],
-		      TMPInvObject1RotationMatrix[2], TMPInvObject1RotationMatrix[5], TMPInvObject1RotationMatrix[8]};
+	float R[3][3]{{TMPInvObject1RotationMatrix[0], TMPInvObject1RotationMatrix[3], TMPInvObject1RotationMatrix[6]},
+		      {TMPInvObject1RotationMatrix[1], TMPInvObject1RotationMatrix[4], TMPInvObject1RotationMatrix[7]},
+		      {TMPInvObject1RotationMatrix[2], TMPInvObject1RotationMatrix[5], TMPInvObject1RotationMatrix[8]}};
 
 	/* 1 (Ra)x */
 	if(fabsf(T.x) > a.x + b.x * fabsf(R[0][0]) + b.y * fabsf(R[0][1]) + b.z * fabsf(R[0][2]))

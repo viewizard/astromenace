@@ -297,7 +297,7 @@ void CSpaceShip::SetLocationArcadePlayer(VECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 // Установка углов поворота объекта
 //-----------------------------------------------------------------------------
-void CSpaceShip::SetRotation(VECTOR3D NewRotation, bool NeedWeaponRotate)
+void CSpaceShip::SetRotation(VECTOR3D NewRotation)
 {
 	// вызываем родительскую функцию
 	::CObject3D::SetRotation(NewRotation);
@@ -1132,9 +1132,10 @@ bool CSpaceShip::Update(float Time)
 		}
 
 	// только для корабля игрока - небольшое болтание во время полета
-	if (ObjectStatus == 3)
-		if (DeviationOn) {
-			SetRotation((Deviation[0]^(CurentDeviation[0]*50.0f)), false);
+	if ((ObjectStatus == 3) &&
+	    (DeviationOn)) {
+			NeedWeaponRotate = false;
+			SetRotation((Deviation[0]^(CurentDeviation[0]*50.0f)));
 		}
 
 
