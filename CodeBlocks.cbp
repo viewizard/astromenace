@@ -9,13 +9,52 @@
 			<Target title="Linux GCC">
 				<Option output="../astromenace" prefix_auto="0" extension_auto="0" />
 				<Option working_dir=".." />
-				<Option object_output="../build/objs2" />
+				<Option object_output="../build/objs2_linux_gcc" />
 				<Option deps_output="../build/deps" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Option projectResourceIncludeDirsRelation="1" />
 				<Compiler>
-					<Add option="-Os" />
+					<Add option="-O2" />
+					<Add option="-Wnon-virtual-dtor" />
+					<Add option="-Wshadow" />
+					<Add option="-Winit-self" />
+					<Add option="-Wredundant-decls" />
+					<Add option="-Wcast-align" />
+					<Add option="-Winline" />
+					<Add option="-Wunreachable-code" />
+					<Add option="-Wmissing-include-dirs" />
+					<Add option="-Wzero-as-null-pointer-constant" />
+					<Add option="-Wmain" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-std=c++11" />
+					<Add directory="/usr/include/freetype2/" />
+				</Compiler>
+				<Linker>
+					<Add library="SDL2" />
+					<Add library="GL" />
+					<Add library="GLU" />
+					<Add library="openal" />
+					<Add library="alut" />
+					<Add library="ogg" />
+					<Add library="vorbis" />
+					<Add library="vorbisfile" />
+					<Add library="freetype" />
+					<Add library="fontconfig" />
+					<Add library="X11" />
+				</Linker>
+			</Target>
+			<Target title="Linux Clang">
+				<Option output="../astromenace" prefix_auto="0" extension_auto="0" />
+				<Option working_dir=".." />
+				<Option object_output="../build/objs2_linux_clang" />
+				<Option deps_output="../build/deps" />
+				<Option type="0" />
+				<Option compiler="clang_compiler" />
+				<Option projectResourceIncludeDirsRelation="1" />
+				<Compiler>
+					<Add option="-O2" />
 					<Add option="-Wnon-virtual-dtor" />
 					<Add option="-Wshadow" />
 					<Add option="-Winit-self" />
