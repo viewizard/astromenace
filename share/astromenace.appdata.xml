@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>com.viewizard.astromenace.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+ AND GPL-3.0 AND CC-BY-SA-4.0 AND OFL-1.1</project_license>
+  <name>AstroMenace</name>
+  <summary>Hardcore 3D space shooter with spaceship upgrade possibilities</summary>
+  <description>
+    <p>
+      AstroMenace is an astonishing hardcore scroll-shooter where brave space warriors may find a great opportunity to hone their combat skills. Gather money during the battle to spend them on turning your spaceship into an ultimate weapon of mass destruction and give hell to swarms of adversaries. Enjoy the wonderfully crafted 3d graphics and high-quality special effects along with a detailed difficulty adjustment and a handy interface of AstroMenace.
+    </p>
+    <p>
+      Features:
+    </p>
+    <ul>
+      <li>22 playable ships with unique characteristics</li>
+      <li>19 unique weapons with the easy drag-and-drop weapon mount mode</li>
+      <li>15 missions with 100+ unique enemies and 40+ space objects</li>
+      <li>Simulative and arcade ship control mode</li>
+      <li>Flexible difficulty control</li>
+    </ul>
+  </description>
+  <launchable type="desktop-id">astomenace.desktop</launchable>
+​  <screenshots>
+​    <screenshot type="default">
+​      <image type="source" width="1366" height="768">https://raw.githubusercontent.com/viewizard/astromenace/master/share/preview_wide1.jpg</image>
+ ​   </screenshot>
+​    <screenshot>
+​      <image type="source" width="1366" height="768">https://raw.githubusercontent.com/viewizard/astromenace/master/share/preview_wide2.jpg</image>
+​    </screenshot>
+​    <screenshot>
+​      <image type="source" width="1366" height="768">https://raw.githubusercontent.com/viewizard/astromenace/master/share/preview_wide3.jpg</image>
+​    </screenshot>
+​  </screenshots>
+  <url type="homepage">http://viewizard.com</url>
+  <developer_name>Viewizard</developer_name>
+</component>

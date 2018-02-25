@@ -1,0 +1,13 @@
+language: cpp
+sudo: required
+dist: trusty
+os: linux
+script:
+  - cmake ./
+  - make
+compiler: gcc
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get -qq install cmake make libsdl2-dev libogg-dev libvorbis-dev libopenal-dev libalut-dev libfreetype6-dev libfontconfig1-dev
+notifications:
+  email: false

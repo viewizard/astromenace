@@ -1,9 +1,10 @@
+[rss](https://github.com/viewizard/astromenace/commits/master.atom)
 # AstroMenace
 
 Immerse into a decisive battle against tons of cunning foes, face the terrifying bosses and protect your homeland throughout 15 diverse levels of the game. The hardcore gameplay of AstroMenace, packed with pure non-stop action, will become a full scale test for your basic instinct of survival.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/viewizard/astromenace/master/share/preview1.jpg" alt="preview"/>
+  <img src="https://raw.githubusercontent.com/viewizard/astromenace/master/share/preview1.png" alt="preview"/>
 </p>
 
 The game provides a wide variety of armaments and weapon upgrades for discharging the retributive wrath upon the hordes of enemies, besides it has a great number of improvements for enhancing the defensive abilities of your spaceship. Collect money during the combat and invest them into turning your spaceship into an ultimate weapon of mass destruction.

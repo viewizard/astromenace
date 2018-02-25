@@ -8,7 +8,7 @@ You should have received a copy of the GNU General Public License along with Ast
 
 ## AstroMenace Data
 
-All game data (all 2D artwork, music, sfx, voice and part of 3D models with textures), except described belowe, were created by Viewizard team during AstroMenace development (see "Credits" menu in game for full list of authors) and were released under "GNU GENERAL PUBLIC LICENSE Version 3" (see ./licenses/GPL-3.0.txt or <https://opensource.org/licenses/GPL-3.0>).
+All game data (all 2D artwork, music, sfx, voice and part of 3D models with textures), except described below, were created by Viewizard team during AstroMenace development (see "Credits" menu in game for full list of authors) and were released under "GNU GENERAL PUBLIC LICENSE Version 3" (see ./licenses/GPL-3.0.txt or <https://opensource.org/licenses/GPL-3.0>).
 
 #### "models.pack" file (./gamedata/models/ folder)
 

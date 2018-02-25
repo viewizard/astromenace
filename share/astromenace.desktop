@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=AstroMenace
+Comment=Hardcore 3D space shooter with spaceship upgrade possibilities
+Exec=astromenace
+Icon=astromenace
+Categories=Game;
+StartupNotify=false
+Terminal=false
