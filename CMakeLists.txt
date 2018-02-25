@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.7)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 # project name
 PROJECT(AstroMenace)
@@ -10,16 +10,13 @@ SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${X11_LIBRARIES})
 ENDIF (NOT APPLE)
 
 
+# includes ./share/cmake/FindSDL2.cmake
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/share/cmake)
+
 FIND_PACKAGE(SDL2 REQUIRED)
 IF(SDL2_FOUND)
-	INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS})
-	# Next line is Workaround for issue with sdl2-config.cmake, error message:
-	# ** Target "AstroMenace" links to item "-L/usr/lib64 -lSDL2 " which has leading
-  	# ** or trailing whitespace.  This is now an error according to policy CMP0004.
-	SET(SDL2_LIBRARIES "-L${SDL2_LIBDIR} -lSDL2")
-	SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${SDL2_LIBRARIES})
-	MESSAGE(STATUS "Found libSDL2: ${SDL2_LIBRARIES}")
-	MESSAGE(STATUS "Found libSDL2 headers: ${SDL2_INCLUDE_DIRS}")
+	INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIR})
+	SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${SDL2_LIBRARY})
 ELSE(SDL2_FOUND)
 	MESSAGE(FATAL_ERROR "libSDL2 not found")
 ENDIF(SDL2_FOUND)
@@ -192,6 +189,15 @@ ELSE(FONTCONFIG_INCLUDE_DIR_fontconfig)
 	MESSAGE(STATUS "fontconfig headers not found, fontconfig compilation feature disabled.")
 ENDIF(FONTCONFIG_INCLUDE_DIR_fontconfig)
 ENDIF (NOT APPLE)
+
+
+# Use C++11.
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
+
+# the compiler flags for compiling C++ sources
+MESSAGE( STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
 
 
 # sources

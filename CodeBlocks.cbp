@@ -29,6 +29,8 @@
 					<Add option="-Wextra" />
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
+					<Add option="-fno-exceptions" />
+					<Add option="-fno-rtti" />
 					<Add directory="/usr/include/freetype2/" />
 				</Compiler>
 				<Linker>
@@ -68,6 +70,8 @@
 					<Add option="-Wextra" />
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
+					<Add option="-fno-exceptions" />
+					<Add option="-fno-rtti" />
 					<Add directory="/usr/include/freetype2/" />
 				</Compiler>
 				<Linker>
@@ -96,6 +100,8 @@
 					<Add option="-Os" />
 					<Add option="-Wextra" />
 					<Add option="-Wall" />
+					<Add option="-fno-exceptions" />
+					<Add option="-fno-rtti" />
 					<Add option="-D__GNUWIN32__" />
 					<Add option="-DWIN32" />
 					<Add option="-DOV_EXCLUDE_STATIC_CALLBACKS" />
