@@ -5,9 +5,10 @@ os: linux
 script:
   - cmake ./
   - make
+  - ./astromenace --pack --rawdata=./gamedata
 compiler: gcc
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get -qq install cmake make libsdl2-dev libogg-dev libvorbis-dev libopenal-dev libalut-dev libfreetype6-dev libfontconfig1-dev
+  - sudo apt-get -qq install cmake make libsdl2-dev libegl1-mesa-dev libogg-dev libvorbis-dev libopenal-dev libalut-dev libfreetype6-dev libfontconfig1-dev
 notifications:
   email: false
