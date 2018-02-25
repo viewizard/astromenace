@@ -450,7 +450,8 @@ std::unique_ptr<eFILE> vw_fopen(const std::string &FileName)
 }
 
 /*
- * We don't really close stream, but release memory.
+ * You could call vw fclose() if you should release memory in particular
+ * part of code. Otherwise, it will be deleted automatically (see. unique_ptr).
  */
 int vw_fclose(std::unique_ptr<eFILE> &stream)
 {
