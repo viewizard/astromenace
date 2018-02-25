@@ -95,7 +95,7 @@
 - All jpeg image format textures replaced on tga image format. libjpeg removed from dependencies. 
 - All planetary, skybox, background tile-animated textures replaced on new one.
 - Added keyboard control over active menu elements with Arrow Keys, "Tab" and "Enter" keyboard buttons.
-- (Linux) Game config file from now stored in "~/.config/astromenace" folder, if "~/.config" folder detected, otherwise in "~/.astromenace" folder. Move "amconfig.xml" from "~/.astromenace" to "~/.config/astromenace" folder if you need. 
+- (Linux) Game config file from now stored in "$HOME/.config/astromenace" folder, if "$HOME/.config" folder detected, otherwise in "$HOME/.astromenace" folder. Move "amconfig.xml" from "$HOME/.astromenace" to "$HOME/.config/astromenace" folder if you need. 
 
 ### Overall code changes:
 
