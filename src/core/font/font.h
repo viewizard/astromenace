@@ -32,7 +32,7 @@
 #include FT_FREETYPE_H
 
 /* Font initialization by font name (path to file). */
-int vw_InitFont(const char *FontName);
+int vw_InitFont(const std::string &FontName);
 /* Set current font size. */
 void vw_SetFontSize(int FontSize);
 /* Set font offset. */

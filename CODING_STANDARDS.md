@@ -21,3 +21,8 @@ AstroMenace is compiled without support for [RTTI], as such code contributions u
 AstroMenace coding style based on Linux kernel coding style (K&R coding style derivative) with one major exception -- AstroMenace coding style allow long lines and strings.
 
 Linux kernel coding style documentation could be found here: https://www.kernel.org/doc/html/latest/process/coding-style.html
+
+<!-- Markdown links -->
+[ISO/IEC/C++11]: http://www.iso.org/iso/catalogue_detail.htm?csnumber=50372
+[Exceptions]: https://en.wikipedia.org/wiki/C%2B%2B#Exception_handling
+[RTTI]: https://en.wikipedia.org/wiki/Run-time_type_information
