@@ -1,7 +1,6 @@
-Version 1.3.2
+# Version 1.3.2
 
-
-Overall changes:
+### Overall changes:
 
 - Added "Joystick DeadZone" option in "Options" menu.
 - Removed Ubuntu Family Fonts from game bundle. All bundled with game fonts are GPLv3 or OFL v1.1 now.
@@ -9,8 +8,7 @@ Overall changes:
 - Added standalone pack game data util.
 - Added fontconfig support.
 
-
-Overall code changes:
+### Overall code changes:
 
 - Minor correction in text output code during game window initialization.
 - Added $XDG_CONFIG_HOME environment variable check during config file path detection.
@@ -62,8 +60,7 @@ Overall code changes:
 - Fixed game configuration folder owner issue in Linux during gamedata.vfs creation.
 - Fixed bug in Control Menu code relative to Joystick name.
 
-
-Menu changes:
+### Menu changes:
 
 - Removed "Mouse Control" option from "Options" menu.
 - Added current Pilot Profile title in Missions List menu.
@@ -77,33 +74,22 @@ Menu changes:
 - Minor corrections in Credits menu.
 - Improved "Textures Compression" option in Advanced Menu, compression type can be chosen now.
 
-
-Compilation flags changes (config.h):
+### Compilation flags changes (config.h):
 
 - Added "vfs_pack_standalone" compilation flag for standalone pack game data util compilation.
 - Added "fontconfig" compilation flag. With fontconfig you don't need fonts bundled with game, system fonts will be used. Make sure, that you have installed bold style TrueType, Type 1 or CFF font with en, de and ru languages support.
 - Added "default_font_family" compilation flag. Default fontconfig font family.
 
-
-Game data changes:
+### Game data changes:
 
 - Added Linux Libertine (Linux Biolinum) fonts.
 - Removed Ubuntu fonts.
 - Fixed planet 4 geometry.
 - Minor correction for License.txt file (GLext.h file info added).
 
+# Version 1.3.1 
 
-
-
-
-
-
-
-
-Version 1.3.1 
-
-
-Overall changes:
+### Overall changes:
 
 - Added normal mapping support. Added normal maps for all motherships, planets, big asteroids, battle freighters, buildings. 
 - All jpeg image format textures replaced on tga image format. libjpeg removed from dependencies. 
@@ -111,8 +97,7 @@ Overall changes:
 - Added keyboard control over active menu elements with Arrow Keys, "Tab" and "Enter" keyboard buttons.
 - (Linux) Game config file from now stored in "~/.config/astromenace" folder, if "~/.config" folder detected, otherwise in "~/.astromenace" folder. Move "amconfig.xml" from "~/.astromenace" to "~/.config/astromenace" folder if you need. 
 
-
-Overall code changes:
+### Overall code changes:
 
 - Fixed bug in game data loading code, that might crash game in Linux/BSD on pirates missions. 
 - (CmakeList.txt) Improved libs and headers detection, added text output. 
@@ -173,8 +158,7 @@ Overall code changes:
 - Fixed work with texture compression on modern video card that support glTexStorage2D.
 - Menu language and voice language change don't required game restart any more.
 
-
-Menu changes:
+### Menu changes:
 
 - Fixed "Shadow Quality" option status, if hardware don't support FBO Depth size more than 16 bits (game require at least 24 bits for shadows). 
 - Added font preview in "Interface" menu.
@@ -184,15 +168,13 @@ Menu changes:
 - "Textures Quality" option moved to "Advanced" menu. 
 - "Gamma" option renamed to "Brightness". 
 
-
-Compilation flags changes (config.h):
+### Compilation flags changes (config.h):
 
 - Added "portable". Game configuration file will be stored with game binary file. 
 - Added "separate_cc_vfs". Since game use content released under different licenses, you might need create separate VFS game data file (gamedata_cc.vfs) with CC BY-SA licensed content only. 
 - Removed "buildin_tynixml". 
 
-
-Game data changes: 
+### Game data changes: 
 
 - Added license files for fonts.
 - Fixed shadow on game icons. 
@@ -204,18 +186,9 @@ Game data changes:
 - Tile animated layer textures replaced. 
 - Fixed issue with license for models. More info added to License.txt file.
 
+# Version 1.3.0
 
-
-
-
-
-
-
-
-Version 1.3.0
-
-
-Overall changes:
+### Overall changes:
 
 - Added Xinerama/TwinView support.
 - Added multilingual support (en/de/ru), all language data files merged with main VFS data file.
@@ -224,8 +197,7 @@ Overall changes:
 - Added current OS keyboard layout support for Profile name input.
 - Added soft shadows (Shadow Mapping with PCF).
 
-
-Overall code changes:
+### Overall code changes:
 
 - Fixed compilation error connected to "PFNGLCLIENTACTIVETEXTUREPROC" and new mesa version.
 - Fixed compilation warnings "deprecated conversion from string constant to ‘char*’" with new gcc version.
@@ -262,8 +234,7 @@ Overall code changes:
 - Revised all code connected to objects rotation, changed to right-handed coordinate system. All scripts revised.
 - Removed all Windows demo version related code.
 
-
-Menu changes:
+### Menu changes:
 
 - Added box with Language selection on first game start.
 - Added "Ogg Vorbis" and "FreeType2" to credits list.
@@ -286,16 +257,14 @@ Menu changes:
 - Removed "Background Tile Animation" option in "Advanced" menu.
 - Removed "Stars Quantity" option in "Advanced" menu.
 
-
-Launch options changes:
+### Launch options changes:
 
 - Added libSDL "SDL_VIDEO_FULLSCREEN_DISPLAY" environment variable support for Xinerama/TwinView.
 - Added "--pack" parameter to switch AstroMenace in VFS creation mode (terminal output only).
 - Added "--rawdata" parameter (used with "--pack" only), to define raw data folder location (./RAW_VFS_DATA by default).
 - Removed "--noAA" parameter.
 
-
-Compilation flags changes (config.h):
+### Compilation flags changes (config.h):
 
 - Removed EN, DE and RU.
 - Added "joystick". Required libSDL compilled with "joystick" flag.
@@ -307,14 +276,6 @@ Compilation flags changes (config.h):
 - Added "vao". VAO OpenGL extension support switcher (if defined - game will detect vao support in hardware during initialization).
 - Added "fbo". FBO OpenGL extension support switcher (if defined - game will detect fbo support in hardware during initialization).
 
-
-
-
-
-
-
-
-
-Version 1.2.0
+# Version 1.2.0
 
 Initial release.
