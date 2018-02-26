@@ -16,11 +16,24 @@ AstroMenace is compiled without support for [C++11 exceptions][Exceptions], mean
 
 AstroMenace is compiled without support for [RTTI], as such code contributions using `dynamic_cast()` or `std::dynamic_pointer_cast()` may fail to compile and may be rejected on this basis. The implications of this are that the signature of all polymorphic types must be known at compile time or stored in an implementation-specific way. In essence, if a substitution from `dynamic_cast()` to `static_cast()` can be performed without affecting program correctness, the construct in question is valid.
 
+### No GOTO statement
+
+GOTO statement not allowed. Code logic should not demand long jumps. Functions should be short and clear, so, if you need GOTO in AstroMenace code - you are doing something wrong. For some cases, GOTO could be replaced by another C++ features, for example, Lambda expressions.
+
+### No CONTINUE statement, avoid BREAK statement
+
+CONTINUE and BREAK statements in the middle of cycle could act like a trap. Try to avoid their usage by altering cycle logic and/or cycle conditions.
+
+### Dynamic memory management
+
+Only [Smart Pointers] are allowed. Manual memory management are prohibited. Even if you need small temporary memory buffer, use std::vector or std::unique_ptr instead of new/delete.
+
 ## AstroMenace Coding Style
 
-AstroMenace coding style based on **[Linux kernel coding style](https://www.kernel.org/doc/html/latest/process/coding-style.html)** and **[Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)** (K&R coding style derivatives) with one major exception -- AstroMenace coding style allow long lines and strings.
+AstroMenace coding style based on **[Linux kernel coding style](https://www.kernel.org/doc/html/latest/process/coding-style.html)** and **[Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)** (K&R coding style derivatives) with one major exception - AstroMenace coding style allow long lines and strings (up to 200-300 symbols).
 
 <!-- Markdown links -->
 [ISO/IEC/C++11]: http://www.iso.org/iso/catalogue_detail.htm?csnumber=50372
 [Exceptions]: https://en.wikipedia.org/wiki/C%2B%2B#Exception_handling
 [RTTI]: https://en.wikipedia.org/wiki/Run-time_type_information
+[Smart Pointers]: http://en.cppreference.com/w/cpp/memory

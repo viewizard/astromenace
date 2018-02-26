@@ -11,7 +11,6 @@ compiler:
   - gcc
 before_install:
   - sudo apt-get -qq update
-  - # forced to resolve libsdl2-dev dependencies on this PC manually
   - sudo apt-get -qq install libegl1-mesa-dev
   - sudo apt-get -qq install cmake make libsdl2-dev libogg-dev libvorbis-dev libopenal-dev libalut-dev libfreetype6-dev libfontconfig1-dev
 notifications:
