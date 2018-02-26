@@ -59,6 +59,8 @@
 */
 
 #include "vfs.h"
+#include <unordered_map>
+#include <limits>
 
 enum file_location {
 	FILE_NOT_FOUND	= -1,
@@ -82,69 +84,62 @@ struct eVFS {
 };
 
 struct eVFS_Entry {
-	DWORD		NameSize{0};
-	std::string	Name;
-	int		Offset{0};
-	int		Size{0};
+	uint32_t	Offset{0};
+	uint32_t	Size{0};
 	eVFS		*Parent{nullptr};
 
 	eVFS_Entry(eVFS *_Parent) :
 		Parent{_Parent}
 	{}
-	/* trick for forward_list<unique_ptr<T>> work with iterator */
-	bool CheckName(const std::string &FileName)
-	{
-		return (FileName == Name);
-	}
 };
 
 namespace {
 /* List with connected VFS. */
 std::forward_list<std::unique_ptr<eVFS>> VFS_List;
-/* List with file's entries in VFS. */
-std::forward_list<std::unique_ptr<eVFS_Entry>> VFSEntries_List;
+/* Map with file's entries in VFS. */
+std::unordered_map<std::string, std::unique_ptr<eVFS_Entry>> VFSEntries_Map;
 }
 
 
 /*
  * Write data from memory into VFS file.
  */
-static int WriteIntoVFSfromMemory(eVFS *WritableVFS, const std::string &Name, const std::unique_ptr<BYTE[]> &buffer,
-				  int size, int *HeaderLengthVFS, int *HeaderOffsetVFS, int *DataStartOffsetVFS,
-				  std::forward_list<std::unique_ptr<eVFS_Entry>> &WritableVFSEntries_List)
+static int WriteIntoVFSfromMemory(eVFS *WritableVFS, const std::string &Name, const std::unique_ptr<uint8_t[]> &Data,
+				  uint32_t DataSize, uint32_t *HeaderLengthVFS, uint32_t *HeaderOffsetVFS, uint32_t *DataStartOffsetVFS,
+				  std::unordered_map<std::string, std::unique_ptr<eVFS_Entry>> &WritableVFSEntries_Map)
 {
-	if ((WritableVFS == nullptr) || Name.empty() || (buffer.get() == nullptr) ||
-	    (size <= 0) || (HeaderLengthVFS == nullptr) ||
-	    (HeaderOffsetVFS == nullptr) || (DataStartOffsetVFS == nullptr))
+	if ((WritableVFS == nullptr) || Name.empty() || (Data.get() == nullptr) ||
+	    (DataSize <= 0) || (HeaderLengthVFS == nullptr) ||
+	    (HeaderOffsetVFS == nullptr) || (DataStartOffsetVFS == nullptr) ||
+	    (Name.size() > UINT16_MAX)) /* we should store string size in uint16_t variable */
 		return -1;
 
-	/* push VFS entry to list */
-	WritableVFSEntries_List.push_front(std::unique_ptr<eVFS_Entry>(new eVFS_Entry(WritableVFS)));
-
-	WritableVFSEntries_List.front()->NameSize = (DWORD)Name.size();
-	WritableVFSEntries_List.front()->Name = Name;
+	/* push VFS entry to map */
+	WritableVFSEntries_Map[Name] = std::unique_ptr<eVFS_Entry>(new eVFS_Entry(WritableVFS));
+	auto tmpVFSEntry = WritableVFSEntries_Map[Name].get();
 
 	/* add new data to VFS file, in this case we could use
 	 * HeaderOffsetVFS, since this is the end of data part
 	 */
-	WritableVFSEntries_List.front()->Offset = *HeaderOffsetVFS;
-	WritableVFSEntries_List.front()->Size = size;
-	SDL_RWseek(WritableVFS->File, WritableVFSEntries_List.front()->Offset, SEEK_SET);
-	SDL_RWwrite(WritableVFS->File, buffer.get(), WritableVFSEntries_List.front()->Size, 1);
+	tmpVFSEntry->Offset = *HeaderOffsetVFS;
+	tmpVFSEntry->Size = DataSize;
+	SDL_RWseek(WritableVFS->File, tmpVFSEntry->Offset, SEEK_SET);
+	SDL_RWwrite(WritableVFS->File, Data.get(), tmpVFSEntry->Size, 1);
 
 	/* write all entries belong to this VFS file */
-	for (auto&& Tmp : WritableVFSEntries_List) {
-		if (Tmp->Parent == WritableVFS) {
-			SDL_RWwrite(WritableVFS->File, &Tmp->NameSize, 2, 1);
-			SDL_RWwrite(WritableVFS->File, Tmp->Name.data(), Tmp->NameSize, 1);
-			SDL_RWwrite(WritableVFS->File, &Tmp->Offset, 4, 1);
-			SDL_RWwrite(WritableVFS->File, &Tmp->Size, 4, 1);
+	for (const auto &Tmp : WritableVFSEntries_Map) {
+		if (Tmp.second->Parent == WritableVFS) {
+			uint16_t tmpNameSize{(uint16_t)(Tmp.first.size())};
+			SDL_RWwrite(WritableVFS->File, &tmpNameSize, 2, 1);
+			SDL_RWwrite(WritableVFS->File, Tmp.first.c_str(), Tmp.first.size(), 1);
+			SDL_RWwrite(WritableVFS->File, &Tmp.second->Offset, 4, 1);
+			SDL_RWwrite(WritableVFS->File, &Tmp.second->Size, 4, 1);
 		}
 	}
 
 	/* correct table offset and size */
-	*HeaderOffsetVFS += WritableVFSEntries_List.front()->Size;
-	*HeaderLengthVFS += 1 + 2 + WritableVFSEntries_List.front()->NameSize + 4 + 4 + 4;
+	*HeaderOffsetVFS += DataSize;
+	*HeaderLengthVFS += 1 + 2 + Name.size() + 4 + 4 + 4;
 
 	/* rewrite table offset and size */
 	SDL_RWseek(WritableVFS->File, *DataStartOffsetVFS, SEEK_SET);
@@ -159,8 +154,8 @@ static int WriteIntoVFSfromMemory(eVFS *WritableVFS, const std::string &Name, co
  * Write data from file into VFS file.
  */
 static int WriteIntoVFSfromFile(eVFS *WritableVFS, const std::string &SrcName, const std::string &DstName,
-				int *HeaderLengthVFS, int *HeaderOffsetVFS, int *DataStartOffsetVFS,
-				std::forward_list<std::unique_ptr<eVFS_Entry>> &WritableVFSEntries_List)
+				uint32_t *HeaderLengthVFS, uint32_t *HeaderOffsetVFS, uint32_t *DataStartOffsetVFS,
+				std::unordered_map<std::string, std::unique_ptr<eVFS_Entry>> &WritableVFSEntries_Map)
 {
 	if ((WritableVFS == nullptr) || SrcName.empty() || DstName.empty() ||
 	    (HeaderLengthVFS == nullptr) || (HeaderOffsetVFS == nullptr) ||
@@ -178,14 +173,14 @@ static int WriteIntoVFSfromFile(eVFS *WritableVFS, const std::string &SrcName, c
 	SDL_RWseek(Ftmp, 0, SEEK_SET);
 
 	/* copy data to tmp buffer */
-	std::unique_ptr<BYTE[]> tmpBuffer(new BYTE[tmpSize]);
+	std::unique_ptr<uint8_t[]> tmpBuffer(new uint8_t[tmpSize]);
 	SDL_RWread(Ftmp, tmpBuffer.get(), tmpSize, 1);
 	SDL_RWclose(Ftmp);
 
 	/* write into VFS */
 	int rc = WriteIntoVFSfromMemory(WritableVFS, DstName, tmpBuffer, tmpSize,
 					HeaderLengthVFS, HeaderOffsetVFS, DataStartOffsetVFS,
-					WritableVFSEntries_List);
+					WritableVFSEntries_Map);
 	if (rc != 0)
 		fprintf(stderr, "Can't write into VFS from memory %s\n", DstName.c_str());
 
@@ -217,14 +212,14 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 	SDL_RWwrite(TempVFS->File, &BuildNumber, 4, 1);
 
 	/* write new table offset and size */
-	int HeaderOffsetVFS{4 + 4 + 4 + 4 + 4}; /* VFS_ + ver + build + offset + size */
-	int HeaderLengthVFS{0};
-	int DataStartOffsetVFS{4 + 4 + 4}; /* VFS_ + ver + build */
+	uint32_t HeaderOffsetVFS{4 + 4 + 4 + 4 + 4}; /* VFS_ + ver + build + offset + size */
+	uint32_t HeaderLengthVFS{0};
+	uint32_t DataStartOffsetVFS{4 + 4 + 4}; /* VFS_ + ver + build */
 	SDL_RWwrite(TempVFS->File, &HeaderOffsetVFS, 4, 1);
 	SDL_RWwrite(TempVFS->File, &HeaderLengthVFS, 4, 1);
 
-	/* we need separate VFS entries list */
-	std::forward_list<std::unique_ptr<eVFS_Entry>> WritableVFSEntries_List;
+	/* we need separate VFS entries map */
+	std::unordered_map<std::string, std::unique_ptr<eVFS_Entry>> WritableVFSEntries_Map;
 
 	/* add model pack files into VFS */
 	if (!ModelsPack.empty()) {
@@ -239,17 +234,14 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 			return -1;
 		}
 
-		/* copy all files from pack into new VFS,
-		 * a bit tricky, since we can't work with iterator for
-		 * forward_list<unique_ptr<T>> in usual way
-		 */
-		for (auto&& TmpVFSEntry : VFSEntries_List) {
-			std::unique_ptr<eFILE> tmpFile = vw_fopen(TmpVFSEntry->Name);
+		/* copy all files from pack into new VFS */
+		for (const auto &TmpVFSEntry : VFSEntries_Map) {
+			std::unique_ptr<eFILE> tmpFile = vw_fopen(TmpVFSEntry.first);
 			if (tmpFile == nullptr)
 				return -1;
-			if (0 != WriteIntoVFSfromMemory(TempVFS.get(), TmpVFSEntry->Name, tmpFile->Data, tmpFile->Size,
+			if (0 != WriteIntoVFSfromMemory(TempVFS.get(), TmpVFSEntry.first, tmpFile->Data, tmpFile->Size,
 							&HeaderLengthVFS, &HeaderOffsetVFS, &DataStartOffsetVFS,
-							WritableVFSEntries_List)) {
+							WritableVFSEntries_Map)) {
 				fprintf(stderr, "VFS compilation process aborted!\n");
 				return -1;
 			}
@@ -265,7 +257,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 		for (unsigned int i = 0; i < GameDataCount; i++) {
 			if (0 != WriteIntoVFSfromFile(TempVFS.get(), RawDataDir + GameData[i], GameData[i],
 						      &HeaderLengthVFS, &HeaderOffsetVFS, &DataStartOffsetVFS,
-						      WritableVFSEntries_List)) {
+						      WritableVFSEntries_Map)) {
 				fprintf(stderr, "VFS compilation process aborted!\n");
 				return -1;
 			}
@@ -333,24 +325,26 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 		}
 	}
 
-	int HeaderOffsetVFS;
-	int HeaderLengthVFS;
+	uint32_t HeaderOffsetVFS;
+	uint32_t HeaderLengthVFS;
 	SDL_RWread(VFS_List.front()->File, &HeaderOffsetVFS, sizeof(HeaderOffsetVFS), 1);
 	SDL_RWread(VFS_List.front()->File, &HeaderLengthVFS, sizeof(HeaderLengthVFS), 1);
 	SDL_RWseek(VFS_List.front()->File, HeaderOffsetVFS, SEEK_SET);
 
 	/* add entries from new connected VFS file */
+	uint16_t tmpNameSize{0};
+	std::string tmpName;
 	while (VFS_FileSize != SDL_RWtell(VFS_List.front()->File)) {
-		/* push VFS entry to list */
-		VFSEntries_List.push_front(std::unique_ptr<eVFS_Entry>(new eVFS_Entry(VFS_List.front().get())));
+		SDL_RWread(VFS_List.front()->File, &tmpNameSize, 2, 1);
+		tmpName.resize(tmpNameSize); /* make sure, that we have enough allocated memory for string before SDL_RWread */
+		SDL_RWread(VFS_List.front()->File, &tmpName[0], tmpNameSize, 1);
 
-		SDL_RWread(VFS_List.front()->File, &VFSEntries_List.front()->NameSize, 2, 1);
-		VFSEntries_List.front()->Name.resize(VFSEntries_List.front()->NameSize);
-		SDL_RWread(VFS_List.front()->File, &(VFSEntries_List.front()->Name[0]), VFSEntries_List.front()->NameSize, 1);
-		/* just to be sure, that we have null-terminated string */
-		VFSEntries_List.front()->Name[VFSEntries_List.front()->NameSize] = '\0';
-		SDL_RWread(VFS_List.front()->File, &(VFSEntries_List.front()->Offset), sizeof(VFSEntries_List.front()->Offset), 1);
-		SDL_RWread(VFS_List.front()->File, &(VFSEntries_List.front()->Size), sizeof(VFSEntries_List.front()->Size), 1);
+		/* push VFS entry to map */
+		VFSEntries_Map[tmpName] = std::unique_ptr<eVFS_Entry>(new eVFS_Entry(VFS_List.front().get()));
+		auto tmpVFSEntry = VFSEntries_Map[tmpName].get();
+
+		SDL_RWread(VFS_List.front()->File, &(tmpVFSEntry->Offset), sizeof(tmpVFSEntry->Offset), 1);
+		SDL_RWread(VFS_List.front()->File, &(tmpVFSEntry->Size), sizeof(tmpVFSEntry->Size), 1);
 	}
 
 	printf("VFS file was opened %s\n", Name.c_str());
@@ -363,7 +357,7 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 void vw_ShutdownVFS()
 {
 	/* release all VFS entries */
-	VFSEntries_List.clear();
+	VFSEntries_Map.clear();
 
 	/* release all VFS */
 	VFS_List.clear();
@@ -379,14 +373,8 @@ static file_location DetectFileLocation(const std::string &FileName)
 	if (FileName.empty())
 		return FILE_NOT_FOUND;
 
-	/* trying to find file in VFS by name,
-	 * a bit tricky, since we can't work with iterator for
-	 * forward_list<unique_ptr<T>> in usual way
-	 */
-	for (auto&& Tmp : VFSEntries_List) {
-		if (Tmp->CheckName(FileName))
-			return FILE_IN_VFS;
-	}
+	if (VFSEntries_Map.find(FileName) != VFSEntries_Map.end())
+		return FILE_IN_VFS;
 
 	/* trying to open real file in file system */
 	SDL_RWops *File = SDL_RWFromFile(FileName.c_str(), "rb");
@@ -418,29 +406,22 @@ std::unique_ptr<eFILE> vw_fopen(const std::string &FileName)
 
 	if (Location == FILE_IN_VFS) {
 		/* find file in VFS by name */
-		for (auto&& FileInVFS : VFSEntries_List) {
-			/* a bit tricky, since we can't work with iterator for
-			 * forward_list<unique_ptr<T>> in usual way
-			 */
-			if (FileInVFS->CheckName(FileName)) {
-				File->Data.reset(new BYTE[FileInVFS->Size]);
-				File->Size = FileInVFS->Size;
+		auto FileInVFS = VFSEntries_Map.find(FileName);
 
-				SDL_RWseek(FileInVFS->Parent->File, FileInVFS->Offset, SEEK_SET);
-				SDL_RWread(FileInVFS->Parent->File, File->Data.get(), FileInVFS->Size, 1);
+		File->Data.reset(new uint8_t[FileInVFS->second->Size]);
+		File->Size = FileInVFS->second->Size;
 
-				break;
-			}
-		}
+		SDL_RWseek(FileInVFS->second->Parent->File, FileInVFS->second->Offset, SEEK_SET);
+		SDL_RWread(FileInVFS->second->Parent->File, File->Data.get(), FileInVFS->second->Size, 1);
 	} else if (Location == FILE_IN_FS) {
 		/* open real file in file system */
-		SDL_RWops * fTEMP = SDL_RWFromFile(FileName.c_str(), "rb");
+		SDL_RWops *fTEMP = SDL_RWFromFile(FileName.c_str(), "rb");
 
 		SDL_RWseek(fTEMP, 0, SEEK_END);
 		File->Size = SDL_RWtell(fTEMP);
 		SDL_RWseek(fTEMP, 0, SEEK_SET);
 
-		File->Data.reset(new BYTE[File->Size]);
+		File->Data.reset(new uint8_t[File->Size]);
 
 		SDL_RWread(fTEMP, File->Data.get(), File->Size, 1);
 		SDL_RWclose(fTEMP);
@@ -478,7 +459,7 @@ int eFILE::fread(void *buffer, size_t size, size_t count)
 	/* read data */
 	for (size_t i = 0; i < count; i++) {
 		if (size <= (unsigned int)(Size - Pos)) {
-			memcpy((BYTE*)buffer + CopyCount*size, Data.get() + Pos, size);
+			memcpy((uint8_t *)buffer + CopyCount * size, Data.get() + Pos, size);
 			Pos += size;
 			CopyCount++;
 		} else
