@@ -59,7 +59,7 @@ void vw_Matrix44Identity(float Matrix44[16])
 void vw_Matrix44Mult(float DstMatrix44[16], float SrcMatrix44[16])
 {
 	float tmp[16];
-	memcpy(tmp, DstMatrix44, 16*sizeof(float));
+	memcpy(tmp, DstMatrix44, 16*sizeof(DstMatrix44[0]));
 
 	DstMatrix44[0] = SrcMatrix44[0]*tmp[0] + SrcMatrix44[1]*tmp[4] + SrcMatrix44[2]*tmp[8] + SrcMatrix44[3]*tmp[12];
 	DstMatrix44[1] = SrcMatrix44[0]*tmp[1] + SrcMatrix44[1]*tmp[5] + SrcMatrix44[2]*tmp[9] + SrcMatrix44[3]*tmp[13];

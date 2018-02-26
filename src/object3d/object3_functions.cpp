@@ -130,7 +130,7 @@ void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum, float 
 		Object3D->GlobalVAO = Model->GlobalVAO;
 		Object3D->DrawObjectList = new eObjectBlock[Object3D->DrawObjectQuantity];
 		// копируем все данные
-		memcpy(Object3D->DrawObjectList, Model->DrawObjectList, sizeof(eObjectBlock)*Object3D->DrawObjectQuantity);
+		memcpy(Object3D->DrawObjectList, Model->DrawObjectList, sizeof(Model->DrawObjectList[0])*Object3D->DrawObjectQuantity);
 	} else {
 		// работаем только с одним объектом ( так работаем с оружием для кораблей землян )
 
@@ -143,7 +143,7 @@ void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum, float 
 		Object3D->GlobalVAO = Model->DrawObjectList[ObjectNum-1].VAO;
 		Object3D->DrawObjectList = new eObjectBlock[Object3D->DrawObjectQuantity];
 		// копируем данные нужного объекта
-		memcpy(Object3D->DrawObjectList, &(Model->DrawObjectList[ObjectNum-1]), sizeof(eObjectBlock));
+		memcpy(Object3D->DrawObjectList, &(Model->DrawObjectList[ObjectNum-1]), sizeof(Model->DrawObjectList[0]));
 	}
 
 	// резервируем память для текстур

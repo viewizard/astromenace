@@ -141,7 +141,7 @@ void vw_Matrix33CreateRotate(float Matrix33[9], const VECTOR3D &Angle)
 void vw_Matrix33InverseRotate(float Matrix33[9])
 {
 	float tmp[9];
-	memcpy(tmp, Matrix33, 9*sizeof(float));
+	memcpy(tmp, Matrix33, 9*sizeof(Matrix33[0]));
 
 	Matrix33[0] = tmp[0];
 	Matrix33[1] = tmp[3];

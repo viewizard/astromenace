@@ -31,7 +31,7 @@
 //------------------------------------------------------------------------------------
 // разарх данных методом Хаффмана с динамической таблицей
 //------------------------------------------------------------------------------------
-static int vw_HAFFtoDATA(int size, BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS)
+static int HAFFtoDATA(int size, uint8_t **dstVFS, uint8_t *srcVFS, int *dsizeVFS, int ssizeVFS)
 {
 	// читаем счетчик бит...
 	int BitCount = 0 ;
@@ -47,14 +47,14 @@ static int vw_HAFFtoDATA(int size, BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, i
 	int  TabCount = srcVFS[4] + 1;// кол-во элементов...
 
 	// в цикле, читаем все элементы таблицы
-	BYTE Count[256]; // порядковый номер (код) элемента в таблице...
+	uint8_t Count[256]; // порядковый номер (код) элемента в таблице...
 	for (int i = 5; i < TabCount+5; i++)
 		Count[i-5] = srcVFS[i];// записываем только код...
 
 	// первый проход - просчет памяти резулт. послед...
 	(*dsizeVFS) = 0;
-	BYTE tmpMask = 0;// маска, с которой будем работать...
-	BYTE mMask = 0;// маска, которую составляем...
+	uint8_t tmpMask = 0;// маска, с которой будем работать...
+	uint8_t mMask = 0;// маска, которую составляем...
 	int cBit = 0;// кол-во информационных бит в маске...
 	int j = 0; // указатель на позицию в преобразованных данных.
 	bool Dat = false;
@@ -117,7 +117,7 @@ static int vw_HAFFtoDATA(int size, BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, i
 	} else (*dsizeVFS) = size;
 
 	// резервируем память...
-	*dstVFS = new BYTE[*dsizeVFS];
+	*dstVFS = new uint8_t[*dsizeVFS];
 	if ((*dstVFS) == nullptr)
 		return 0;
 
@@ -193,11 +193,11 @@ static int vw_HAFFtoDATA(int size, BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, i
 //------------------------------------------------------------------------------------
 // архивир данных методом Хаффмана с динамической таблицей
 //------------------------------------------------------------------------------------
-static int vw_DATAtoHAFF(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVFS)
+static int DATAtoHAFF(uint8_t **dstVFS, uint8_t *srcVFS, int *dsizeVFS, int ssizeVFS)
 {
 	// мат. анализ структуры входных данных...
 	// собираем данные о вхождении каждого символа...
-	BYTE Count[256]; // порядковый номер (код) элемента в таблице...
+	uint8_t Count[256]; // порядковый номер (код) элемента в таблице...
 	int  mathTab[256]; // кол-во вхождений каждого эл-та...
 	int  TabCount = 0;// кол-во элементов... (для составления динам. таблици...)
 	short bitMask[256]; // битовая маска для каждого эл-та таблици...(2 бита - по макс.)
@@ -223,7 +223,7 @@ static int vw_DATAtoHAFF(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVF
 				int tmp1 = mathTab[j+1];
 				mathTab[j+1] = mathTab[j];
 				mathTab[j] = tmp1;
-				BYTE tmp2 = Count[j+1];
+				uint8_t tmp2 = Count[j+1];
 				Count[j+1] = Count[j];
 				Count[j] = tmp2;
 			}
@@ -294,26 +294,26 @@ static int vw_DATAtoHAFF(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVF
 	(*dsizeVFS) += tmp / 8 +1;// т.к. считали в битах...
 
 	// резервируем память...
-	*dstVFS = new BYTE[*dsizeVFS];
+	*dstVFS = new uint8_t[*dsizeVFS];
 
 	// создаем выходную последовательность...
 	int j = 0; // указатель на позицию в преобразованных данных.
 
 	// записываем счетчик бит...
-	(*dstVFS)[j] =  (BYTE)tmp;
+	(*dstVFS)[j] =  (uint8_t)tmp;
 	j++;
 	tmp /= 0x100;
-	(*dstVFS)[j] =  (BYTE)tmp;
+	(*dstVFS)[j] =  (uint8_t)tmp;
 	j++;
 	tmp /= 0x100;
-	(*dstVFS)[j] =  (BYTE)tmp;
+	(*dstVFS)[j] =  (uint8_t)tmp;
 	j++;
 	tmp /= 0x100;
-	(*dstVFS)[j] =  (BYTE)tmp;
+	(*dstVFS)[j] =  (uint8_t)tmp;
 	j++;
 
 	// записываем кол-во данных в таблице...
-	(*dstVFS)[j] = (BYTE)(TabCount-1) ;// чтобы было от 0 до 255 ...
+	(*dstVFS)[j] = (uint8_t)(TabCount-1) ;// чтобы было от 0 до 255 ...
 	j++;
 	// пишем таблицу...
 	for (int i = 0; i < TabCount; i++) {
@@ -331,7 +331,7 @@ static int vw_DATAtoHAFF(BYTE **dstVFS, BYTE *srcVFS, int *dsizeVFS, int ssizeVF
 
 	// перебираем данные и пакуем...
 	int DstBA = 0; // текущий указатель на активный бит в байте результ. массива...
-	BYTE T = 0; // текущий бит на установку...
+	uint8_t T = 0; // текущий бит на установку...
 	(*dstVFS)[j] = 0; // предустановка на ИЛИ...
 
 	for (int i = 0; i < ssizeVFS; i++) {
@@ -623,9 +623,9 @@ void SaveXMLSetupFile()
 	memcpy(TopScoresData, Setup.TopScores, TopScoresDataSize);
 
 	// сразу архивируем Хаффманом
-	BYTE *dstVFS;
+	uint8_t *dstVFS;
 	int dsizeVFS;
-	vw_DATAtoHAFF(&dstVFS, (BYTE *)TopScoresData, &dsizeVFS, TopScoresDataSize);
+	DATAtoHAFF(&dstVFS, (uint8_t *)TopScoresData, &dsizeVFS, TopScoresDataSize);
 	delete [] TopScoresData;
 	TopScoresDataSize = dsizeVFS;
 	TopScoresData = (unsigned char *)dstVFS;
@@ -684,7 +684,7 @@ void SaveXMLSetupFile()
 	memcpy(ProfileData, Setup.Profile, ProfileDataSize);
 
 	// сразу архивируем Хаффманом
-	vw_DATAtoHAFF(&dstVFS, (BYTE *)ProfileData, &dsizeVFS, ProfileDataSize);
+	DATAtoHAFF(&dstVFS, (uint8_t *)ProfileData, &dsizeVFS, ProfileDataSize);
 	delete [] ProfileData;
 	ProfileDataSize = dsizeVFS;
 	ProfileData = (unsigned char *)dstVFS;
@@ -1056,9 +1056,9 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		}
 
 		// третий цикл, распаковка Хаффмана
-		BYTE *dstVFS;
+		uint8_t *dstVFS;
 		int dsizeVFS;
-		vw_HAFFtoDATA(sizeof(sTopScores)*10, &dstVFS, (BYTE *)TopScoresData, &dsizeVFS, TopScoresDataSize);
+		HAFFtoDATA(sizeof(sTopScores)*10, &dstVFS, (uint8_t *)TopScoresData, &dsizeVFS, TopScoresDataSize);
 		delete [] TopScoresData;
 		TopScoresDataSize = dsizeVFS;
 		TopScoresData = (unsigned char *)dstVFS;
@@ -1116,9 +1116,9 @@ LoadProfiles:
 		}
 
 		// третий цикл, распаковка Хаффмана
-		BYTE *dstVFS;
+		uint8_t *dstVFS;
 		int dsizeVFS;
-		vw_HAFFtoDATA(sizeof(GameProfile)*5, &dstVFS, (BYTE *)ProfileData, &dsizeVFS, ProfileDataSize);
+		HAFFtoDATA(sizeof(GameProfile)*5, &dstVFS, (uint8_t *)ProfileData, &dsizeVFS, ProfileDataSize);
 		delete [] ProfileData;
 		ProfileDataSize = dsizeVFS;
 		ProfileData = (unsigned char *)dstVFS;

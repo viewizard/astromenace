@@ -27,7 +27,7 @@
 
 /// подключаем нужные файлы
 #include "object3d.h"
-
+#include <algorithm>
 
 
 
@@ -140,11 +140,11 @@ bool CheckHitBBHitBBCollisionDetection(CObject3D *Object1, CObject3D *Object2, i
 
 					// строим матрицу, чтобы развернуть точки
 					float TMPOldInvRotationMat[9];
-					memcpy(TMPOldInvRotationMat, Object1->CurrentRotationMat, 9*sizeof(float));
+					memcpy(TMPOldInvRotationMat, Object1->CurrentRotationMat, 9*sizeof(Object1->CurrentRotationMat[0]));
 					vw_Matrix33InverseRotate(TMPOldInvRotationMat);
 
 					float matB[9];
-					memcpy(matB, Object2->CurrentRotationMat, 9*sizeof(float));
+					memcpy(matB, Object2->CurrentRotationMat, 9*sizeof(Object2->CurrentRotationMat[0]));
 					vw_Matrix33Mult(matB, TMPOldInvRotationMat);
 
 
@@ -271,11 +271,11 @@ bool CheckHitBBOBBCollisionDetection(CObject3D *Object1, CObject3D *Object2, int
 
 			// строим матрицу, чтобы развернуть точки
 			float TMPOldInvRotationMat[9];
-			memcpy(TMPOldInvRotationMat, Object2->CurrentRotationMat, 9*sizeof(float));
+			memcpy(TMPOldInvRotationMat, Object2->CurrentRotationMat, 9*sizeof(Object2->CurrentRotationMat[0]));
 			vw_Matrix33InverseRotate(TMPOldInvRotationMat);
 
 			float matB[9];
-			memcpy(matB, Object1->CurrentRotationMat, 9*sizeof(float));
+			memcpy(matB, Object1->CurrentRotationMat, 9*sizeof(Object1->CurrentRotationMat[0]));
 			vw_Matrix33Mult(matB, TMPOldInvRotationMat);
 
 
@@ -427,7 +427,7 @@ bool CheckHitBBMeshCollisionDetection(CObject3D *Object1, CObject3D *Object2, in
 
 			// строим матрицу, чтобы развернуть точки
 			float TMPOldInvRotationMat[9];
-			memcpy(TMPOldInvRotationMat, Object1->CurrentRotationMat, 9*sizeof(float));
+			memcpy(TMPOldInvRotationMat, Object1->CurrentRotationMat, 9*sizeof(Object1->CurrentRotationMat[0]));
 			vw_Matrix33InverseRotate(TMPOldInvRotationMat);
 
 			// перемещаем в общие координаты, теперь это как-бы крайние точки аабб
@@ -459,7 +459,7 @@ bool CheckHitBBMeshCollisionDetection(CObject3D *Object1, CObject3D *Object2, in
 
 					// делаем временную матрицу для объекта, т.к. портить основную нельзя
 					float ObjTransMat[16];
-					memcpy(ObjTransMat, TransMat, 16*sizeof(float));
+					memcpy(ObjTransMat, TransMat, 16*sizeof(TransMat[0]));
 
 					// если нужно - создаем матрицу, иначе - копируем ее
 					if (Object2->DrawObjectList[j].Rotation.x != 0.0f ||

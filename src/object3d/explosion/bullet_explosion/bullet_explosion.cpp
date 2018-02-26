@@ -810,7 +810,7 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 		for (int i=0; i<DrawObjectQuantity; i++) {
 			Texture[i] = Projectile->Texture[i];
 			// копируем данные
-			memcpy(&(DrawObjectList[i]), &(Projectile->DrawObjectList[i]), sizeof(eObjectBlock));
+			memcpy(&(DrawObjectList[i]), &(Projectile->DrawObjectList[i]), sizeof(Projectile->DrawObjectList[0]));
 			// делаем изменения
 			DrawObjectList[i].VBO = nullptr;
 			DrawObjectList[i].VertexBuffer = nullptr;
@@ -868,7 +868,7 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 			// копируем индексный буфер блока
 			DrawObjectList[i].IndexBuffer = new unsigned int[DrawObjectList[i].VertexCount];
 			memcpy(DrawObjectList[i].IndexBuffer, Projectile->DrawObjectList[i].IndexBuffer,
-			       DrawObjectList[i].VertexCount*sizeof(unsigned int));
+			       DrawObjectList[i].VertexCount*sizeof(DrawObjectList[0].VertexCount));
 		}
 
 		float tRadius2 = Projectile->Radius/1.5f;

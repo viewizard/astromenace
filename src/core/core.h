@@ -27,10 +27,7 @@
 #ifndef Core_H
 #define Core_H
 
-
 #include "base.h"
-
-
 #include "math/math.h"
 #include "texture/texture.h"
 #include "light/light.h"
@@ -46,6 +43,5 @@
 #include "camera/camera.h"
 #include "model3d/model3d.h"
 #include "xml/xml.h"
-
 
 #endif // Core_H

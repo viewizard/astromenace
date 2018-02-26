@@ -43,9 +43,9 @@ int Address_ModeTexMan = RI_WRAP_U | RI_WRAP_V;
 // указывает, что канал есть...(или нужно создать по цвету...)
 bool AlphaTexMan = false;
 // цвет прозрачности для создания Alpha канала...
-BYTE ARedTexMan = 0;
-BYTE AGreenTexMan = 0;
-BYTE ABlueTexMan = 0;
+uint8_t ARedTexMan = 0;
+uint8_t AGreenTexMan = 0;
+uint8_t ABlueTexMan = 0;
 int  AFlagTexMan = TX_ALPHA_EQUAL;
 
 bool MipMap = true;
@@ -171,7 +171,7 @@ void vw_SetTextureProp(int nFiltering, int nAddress_Mode, bool nAlpha, int nAFla
 //------------------------------------------------------------------------------------
 // Установка цвета альфа канала
 //------------------------------------------------------------------------------------
-void vw_SetTextureAlpha(BYTE nARed, BYTE nAGreen, BYTE nABlue)
+void vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue)
 {
 	ARedTexMan = nARed;
 	AGreenTexMan = nAGreen;

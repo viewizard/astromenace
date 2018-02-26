@@ -119,7 +119,7 @@ bool ExtensionSupported( const char *Extension)
 //------------------------------------------------------------------------------------
 // инициализация окна приложения и получение возможностей железа
 //------------------------------------------------------------------------------------
-int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int VSync)
+int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int VSync)
 {
 	// самым первым делом - запоминаем все
 	fScreenWidthGL = Width*1.0f;

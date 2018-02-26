@@ -26,6 +26,7 @@
 
 
 #include "../game.h"
+#include <stdarg.h> /* va_start */
 
 
 ScriptEngine *Script = nullptr;
@@ -504,7 +505,7 @@ void DrawGameExpMoney(int Exp, int Money)
 	}
 
 
-	vw_SendVertices(RI_QUADS, 4*16, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
+	vw_SendVertices(RI_QUADS, 4*16, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(tmp[0]));
 
 	if (tmp != nullptr)
 		delete [] tmp;
@@ -1429,7 +1430,7 @@ void DrawGame()
 
 
 
-			vw_SendVertices(RI_QUADS, 4*(DrawLifeNum+DrawEnergNum), RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
+			vw_SendVertices(RI_QUADS, 4*(DrawLifeNum+DrawEnergNum), RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(tmp[0]));
 
 			if (tmp != nullptr) {
 				delete [] tmp;

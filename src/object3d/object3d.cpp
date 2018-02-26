@@ -275,7 +275,7 @@ void CObject3D::SetObjectLocation(VECTOR3D NewLocation, int ObjectNum)
 	if (HitBB != nullptr) {
 		// делаем временную обратную матрицу модели
 		float OldInvRotationMatTmp[9];
-		memcpy(OldInvRotationMatTmp, CurrentRotationMat, 9*sizeof(float));
+		memcpy(OldInvRotationMatTmp, CurrentRotationMat, 9*sizeof(CurrentRotationMat[0]));
 		vw_Matrix33InverseRotate(OldInvRotationMatTmp);
 
 		vw_Matrix33CalcPoint(&HitBBLocation[ObjectNum], OldInvRotationMatTmp);
@@ -392,7 +392,7 @@ void CObject3D::SetObjectRotation(VECTOR3D NewRotation, int ObjectNum)
 
 		// делаем временную обратную матрицу модели
 		float OldInvRotationMatTmp[9];
-		memcpy(OldInvRotationMatTmp, CurrentRotationMat, 9*sizeof(float));
+		memcpy(OldInvRotationMatTmp, CurrentRotationMat, 9*sizeof(CurrentRotationMat[0]));
 		vw_Matrix33InverseRotate(OldInvRotationMatTmp);
 
 		// собственно меняем данные в геометрии
@@ -530,7 +530,7 @@ void CObject3D::SetRotation(VECTOR3D NewRotation)
 
 
 	// сохраняем старые значения + пересчет новых
-	memcpy(OldInvRotationMat, CurrentRotationMat, 9*sizeof(float));
+	memcpy(OldInvRotationMat, CurrentRotationMat, 9*sizeof(CurrentRotationMat[0]));
 	// делаем инверсную старую матрицу
 	vw_Matrix33InverseRotate(OldInvRotationMat);
 	vw_Matrix33CreateRotate(CurrentRotationMat, Rotation);
@@ -624,7 +624,7 @@ void DrawLine(VECTOR3D Point1, VECTOR3D Point2, float ColorR, float ColorG, floa
 	tmpDATA[k] = ColorA;
 
 
-	vw_SendVertices(RI_LINES, 2, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(float));
+	vw_SendVertices(RI_LINES, 2, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(tmpDATA[0]));
 
 	delete [] tmpDATA;
 }
@@ -1362,7 +1362,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 
-	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(float));
+	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(tmpDATA[0]));
 
 
 	// рисуем вывод кол-ва жизни
@@ -1407,7 +1407,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	tmpDATA[k++] = ColorB;
 	tmpDATA[k] = ColorA;
 
-	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(float));
+	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(tmpDATA[0]));
 
 	vw_PopMatrix();
 
@@ -1467,7 +1467,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		vw_Rotate(-CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
 
 
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(float));
+		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(tmpDATA[0]));
 
 
 		// рисуем вывод кол-ва жизни
@@ -1512,7 +1512,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		tmpDATA[k++] = ColorB;
 		tmpDATA[k] = ColorA;
 
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(float));
+		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(tmpDATA[0]));
 
 		vw_PopMatrix();
 	}

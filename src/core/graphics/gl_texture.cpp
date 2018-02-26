@@ -40,7 +40,7 @@ extern	PFNGLTEXSTORAGE2DPROC glTexStorage2DEXT;
 //------------------------------------------------------------------------------------
 // Создание текстуры
 //------------------------------------------------------------------------------------
-GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Bytes, int CompressionType)
+GLuint vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int Bytes, int CompressionType)
 {
 	// ничего не передали
 	if (ustDIB == nullptr)
@@ -120,7 +120,7 @@ GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Byt
 //------------------------------------------------------------------------------------
 // Bind
 //------------------------------------------------------------------------------------
-void vw_BindTexture(DWORD Stage, GLuint TextureID)
+void vw_BindTexture(uint32_t Stage, GLuint TextureID)
 {
 	if (glActiveTexture_ARB != nullptr)
 		glActiveTexture_ARB(GL_TEXTURE0 + Stage);
@@ -153,7 +153,7 @@ void vw_DeleteTexture(GLuint TextureID)
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_SetTexture(DWORD Stage, eTexture *Texture)
+void vw_SetTexture(uint32_t Stage, eTexture *Texture)
 {
 	if (Texture == nullptr)
 		return;

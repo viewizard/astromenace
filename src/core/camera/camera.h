@@ -60,4 +60,4 @@ bool vw_SphereInFrustum(const VECTOR3D &Point, float Radius);
 /* This checks if a box is in the frustum. */
 bool vw_BoxInFrustum(const VECTOR3D &MinPoint, const VECTOR3D &MaxPoint);
 
-#endif // CAMERA_H
+#endif /* CAMERA_H */

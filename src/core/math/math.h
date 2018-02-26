@@ -115,6 +115,21 @@ struct VECTOR3D {
  * Misc functions.
  */
 
+struct RECT {
+	int left;
+	int top;
+	int right;
+	int bottom;
+};
+
+inline void SetRect(RECT *rect, int left, int top, int right, int bottom)
+{
+	rect->right = right;
+	rect->top = top;
+	rect->left = left;
+	rect->bottom =bottom;
+}
+
 /* Convert utf8 into utf32 code. */
 const char *vw_UTF8toUTF32(const char *utf8, unsigned *utf32);
 
@@ -127,7 +142,8 @@ float	vw_sqrtf(float x);
 
 /* Reference to low if value is less than low, reference to high if high is less than value, otherwise reference to value. */
 /* TODO in future, move to std::clamp (C++17) implementation */
-template <typename T> void vw_Clamp(T &value, T low, T high)
+template <typename T>
+inline void vw_Clamp(T &value, T low, T high)
 {
 	value = (value < low) ? low : ((value > high) ? high : value);
 }
@@ -197,4 +213,4 @@ void	vw_Matrix33InverseRotate(float Matrix33[9]);
 /* Calculate point position by transformation matrix. */
 void	vw_Matrix33CalcPoint(VECTOR3D *Point, float Matrix33[9]);
 
-#endif // CoreMath_H
+#endif /* CoreMath_H */

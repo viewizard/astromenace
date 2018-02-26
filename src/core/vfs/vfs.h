@@ -67,4 +67,4 @@ std::unique_ptr<eFILE>	vw_fopen(const std::string &FileName);
  */
 int			vw_fclose(std::unique_ptr<eFILE> &stream);
 
-#endif // VFS_H
+#endif /* VFS_H */

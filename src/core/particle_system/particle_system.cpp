@@ -735,7 +735,7 @@ void eParticleSystem::Draw(eTexture **CurrentTexture)
 
 			if (BlendType == 1) vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
-			vw_SendVertices(RI_QUADS, 4*DrawCount, RI_3f_XYZ | RI_4ub_COLOR | RI_1_TEX, tmpDATA, 6*sizeof(float));
+			vw_SendVertices(RI_QUADS, 4*DrawCount, RI_3f_XYZ | RI_4ub_COLOR | RI_1_TEX, tmpDATA, 6*sizeof(tmpDATA[0]));
 
 			if (BlendType != 0) vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 
@@ -809,7 +809,7 @@ void eParticleSystem::RotateSystemByAngle(VECTOR3D NewAngle)
 	Angle = NewAngle;
 
 	// сохраняем старые значения + пересчет новых
-	memcpy(OldInvRotationMat, CurrentRotationMat, 9*sizeof(float));
+	memcpy(OldInvRotationMat, CurrentRotationMat, 9*sizeof(CurrentRotationMat[0]));
 	// делаем инверсную старую матрицу
 	vw_Matrix33InverseRotate(OldInvRotationMat);
 	vw_Matrix33CreateRotate(CurrentRotationMat, Angle);
@@ -828,7 +828,7 @@ void eParticleSystem::RotateSystemAndParticlesByAngle(VECTOR3D NewAngle)
 	Angle = NewAngle;
 
 	// сохраняем старые значения + пересчет новых
-	memcpy(OldInvRotationMat, CurrentRotationMat, 9*sizeof(float));
+	memcpy(OldInvRotationMat, CurrentRotationMat, 9*sizeof(CurrentRotationMat[0]));
 	// делаем инверсную старую матрицу
 	vw_Matrix33InverseRotate(OldInvRotationMat);
 	vw_Matrix33CreateRotate(CurrentRotationMat, Angle);
@@ -858,7 +858,7 @@ void eParticleSystem::RotateParticlesByAngle(VECTOR3D NewAngle)
 {
 	// делаем обратку для отматывания назад
 	float TmpOldInvRotationMat[9];
-	memcpy(TmpOldInvRotationMat, CurrentRotationMat, 9*sizeof(float));
+	memcpy(TmpOldInvRotationMat, CurrentRotationMat, 9*sizeof(CurrentRotationMat[0]));
 	vw_Matrix33InverseRotate(TmpOldInvRotationMat);
 
 	// матрица поворота частиц

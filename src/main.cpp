@@ -26,6 +26,7 @@
 
 
 #include "game.h"
+#include <sys/stat.h> /* stat */
 
 
 #if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
@@ -63,7 +64,7 @@ bool LoadedTypes[1000];
 #ifdef WIN32
 #define SD_APPDATA                   0x001a
 #define SD_DESKTOPDIRECTORY          0x0010        // <user name>\Desktop
-typedef BOOL (WINAPI *SHGETSPECIALFOLDERPATH)(HWND hwndOwner, LPTSTR lpszPath, int nFolder, BOOL fCreate);
+typedef bool (WINAPI *SHGETSPECIALFOLDERPATH)(HWND hwndOwner, LPTSTR lpszPath, int nFolder, bool fCreate);
 SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = 0;
 #endif // WIN32
 

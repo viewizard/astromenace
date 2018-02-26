@@ -159,7 +159,7 @@ void DuplicateRecord()
 	}
 
 	// копируем данные в новый профайл
-	memcpy(&Setup.Profile[ProfileNum], &Setup.Profile[CurrentProfile], sizeof(GameProfile));
+	memcpy(&Setup.Profile[ProfileNum], &Setup.Profile[CurrentProfile], sizeof(Setup.Profile[0]));
 
 	CurrentProfile = ProfileNum;
 	Setup.LastProfile = CurrentProfile;
@@ -195,7 +195,7 @@ void DeleteRecord()
 			// удалили где-то в середине, сдвигаем все записи
 		{
 			for (int i=CurrentProfile; i<4; i++) {
-				memcpy(&Setup.Profile[i], &Setup.Profile[i+1], sizeof(GameProfile));
+				memcpy(&Setup.Profile[i], &Setup.Profile[i+1], sizeof(Setup.Profile[0]));
 				Setup.Profile[i+1].Used = false;
 			}
 		}

@@ -90,7 +90,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 
 
 	// обязательно в байты, т.к. делаем смещение в байтах!
-	BYTE *TMP = (BYTE *)Data;
+	uint8_t *TMP = (uint8_t *)Data;
 
 	// чтобы знать сколько отступать, кол-во ед. элементов, в нашем случае float
 	intptr_t AddStride = 0;
@@ -146,7 +146,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 	if ((DataFormat & 0x000F000) == RI_3i_XYZ) {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		if (NeedVBO)
-			glVertexPointer(3, GL_INT, Stride, (BYTE *)(AddStride));
+			glVertexPointer(3, GL_INT, Stride, (uint8_t *)(AddStride));
 		else
 			glVertexPointer(3, GL_INT, Stride, TMP + AddStride);
 		AddStride += 3*sizeof(GLint);
@@ -154,7 +154,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 	if ((DataFormat & 0x000F000) == RI_3s_XYZ) {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		if (NeedVBO)
-			glVertexPointer(3, GL_SHORT, Stride, (BYTE *)(AddStride));
+			glVertexPointer(3, GL_SHORT, Stride, (uint8_t *)(AddStride));
 		else
 			glVertexPointer(3, GL_SHORT, Stride, TMP + AddStride);
 		AddStride += 3*sizeof(GLshort);
@@ -163,7 +163,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 	if ((DataFormat & 0x000F000) == RI_2f_XY) {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		if (NeedVBO)
-			glVertexPointer(2, GL_FLOAT, Stride, (BYTE *)(AddStride));
+			glVertexPointer(2, GL_FLOAT, Stride, (uint8_t *)(AddStride));
 		else
 			glVertexPointer(2, GL_FLOAT, Stride, TMP + AddStride);
 		AddStride += 2*sizeof(GLfloat);
@@ -171,7 +171,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 	if ((DataFormat & 0x000F000) == RI_2s_XY) {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		if (NeedVBO)
-			glVertexPointer(2, GL_SHORT, Stride, (BYTE *)(AddStride));
+			glVertexPointer(2, GL_SHORT, Stride, (uint8_t *)(AddStride));
 		else
 			glVertexPointer(2, GL_SHORT, Stride, TMP + AddStride);
 		AddStride += 2*sizeof(GLshort);
@@ -181,7 +181,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 	if ((DataFormat & 0x0000F00) == RI_3f_NORMAL) {
 		glEnableClientState(GL_NORMAL_ARRAY);
 		if (NeedVBO)
-			glNormalPointer(GL_FLOAT, Stride, (BYTE *)(AddStride));
+			glNormalPointer(GL_FLOAT, Stride, (uint8_t *)(AddStride));
 		else
 			glNormalPointer(GL_FLOAT, Stride, TMP + AddStride);
 		AddStride += 3*sizeof(GLfloat);
@@ -191,7 +191,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 	if ((DataFormat & 0x00000F0) == RI_4f_COLOR) {
 		glEnableClientState(GL_COLOR_ARRAY);
 		if (NeedVBO)
-			glColorPointer(4, GL_FLOAT, Stride, (BYTE *)(AddStride));
+			glColorPointer(4, GL_FLOAT, Stride, (uint8_t *)(AddStride));
 		else
 			glColorPointer(4, GL_FLOAT, Stride, TMP + AddStride);
 		AddStride += 4*sizeof(GLfloat);
@@ -199,7 +199,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 	if ((DataFormat & 0x00000F0) == RI_4ub_COLOR) {
 		glEnableClientState(GL_COLOR_ARRAY);
 		if (NeedVBO)
-			glColorPointer(4, GL_UNSIGNED_BYTE, Stride, (BYTE *)(AddStride));
+			glColorPointer(4, GL_UNSIGNED_BYTE, Stride, (uint8_t *)(AddStride));
 		else
 			glColorPointer(4, GL_UNSIGNED_BYTE, Stride, TMP + AddStride);
 		AddStride += 4*sizeof(GLubyte);
@@ -214,7 +214,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 			switch (TextCoordType) {
 			case 1: {
 				if (NeedVBO)
-					glTexCoordPointer(TextSize, GL_FLOAT, Stride, (BYTE *)(AddStride));
+					glTexCoordPointer(TextSize, GL_FLOAT, Stride, (uint8_t *)(AddStride));
 				else
 					glTexCoordPointer(TextSize, GL_FLOAT, Stride, TMP + AddStride);
 				if ((DataFormat & 0xF000000) == RI_SEPARATE_TEX_COORD) AddStride += TextSize*sizeof(GLfloat);
@@ -222,7 +222,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 			break;
 			case 2: {
 				if (NeedVBO)
-					glTexCoordPointer(TextSize, GL_SHORT, Stride, (BYTE *)(AddStride));
+					glTexCoordPointer(TextSize, GL_SHORT, Stride, (uint8_t *)(AddStride));
 				else
 					glTexCoordPointer(TextSize, GL_SHORT, Stride, TMP + AddStride);
 				if ((DataFormat & 0xF000000) == RI_SEPARATE_TEX_COORD) AddStride += TextSize*sizeof(GLshort);

@@ -112,58 +112,58 @@ struct GameProfile {
 
 	char	Name[128];
 	// замедление снарядов NPC ... 1-3...
-	BYTE	NPCWeaponPenalty;
+	uint8_t	NPCWeaponPenalty;
 	// ум. защиты NPC объектов
-	BYTE	NPCArmorPenalty;
+	uint8_t	NPCArmorPenalty;
 	// "замедление" наведения NPC ... 1-4
-	BYTE	NPCTargetingSpeedPenalty;
+	uint8_t	NPCTargetingSpeedPenalty;
 	// 0-ограничено, 1-нет
-	BYTE	LimitedAmmo;
+	uint8_t	LimitedAmmo;
 	// 0-может быть уничтожено, 1-нет
-	BYTE	DestroyableWeapon;
+	uint8_t	DestroyableWeapon;
 	// 1-аркада, 0-симулятор
-	BYTE	WeaponTargetingMode;
+	uint8_t	WeaponTargetingMode;
 	// 1-аркада, 0-симулятор
-	BYTE	SpaceShipControlMode;
+	uint8_t	SpaceShipControlMode;
 
 
-	BYTE	Ship;
-	BYTE	ShipHullUpgrade;
+	uint8_t	Ship;
+	uint8_t	ShipHullUpgrade;
 	float	ShipHullCurrentStrength;
 
-	BYTE	Weapon[6];
+	uint8_t	Weapon[6];
 	int	WeaponAmmo[6];
 	// для каждого
 	// 1-только примари, 2 только секондари, 3 оба
-	BYTE	WeaponControl[6];
+	uint8_t	WeaponControl[6];
 	// доп. управление, 0-нет, 1-клава,2-мышка,3-джойст
-	BYTE	WeaponAltControl[6];
-	BYTE	WeaponAltControlData[6];
+	uint8_t	WeaponAltControl[6];
+	uint8_t	WeaponAltControlData[6];
 	// для каждого слота - текущее положение оружия
 	float	WeaponSlotYAngle[6];
 
 
 
-	BYTE	EngineSystem;
-	BYTE	TargetingSystem;
-	BYTE	AdvancedProtectionSystem;
-	BYTE	PowerSystem;
-	BYTE	TargetingMechanicSystem;
+	uint8_t	EngineSystem;
+	uint8_t	TargetingSystem;
+	uint8_t	AdvancedProtectionSystem;
+	uint8_t	PowerSystem;
+	uint8_t	TargetingMechanicSystem;
 
-	BYTE	Difficulty;
+	uint8_t	Difficulty;
 
 	int	Money;
 	int	Experience;
 
 
 	// как стрелять // 1 - как и раньше, все вместе... 2 - поочереди
-	BYTE	PrimaryWeaponFireMode;
-	BYTE	SecondaryWeaponFireMode;
+	uint8_t	PrimaryWeaponFireMode;
+	uint8_t	SecondaryWeaponFireMode;
 
 	// последний открытый уровень для данной записи
-	BYTE	OpenLevelNum; // BYTE - 255, у нас макс 100
+	uint8_t	OpenLevelNum; // uint8_t - 255, у нас макс 100
 	// последняя выбранная миссия
-	BYTE	LastMission; // BYTE - 255, у нас макс 100
+	uint8_t	LastMission; // uint8_t - 255, у нас макс 100
 
 	// опыт за каждую миссию
 	int	ByMissionExperience[100]; // ставим 100, на максимум миссий
@@ -174,7 +174,7 @@ struct GameProfile {
 
 	// резерв
 	int 	i[3];
-	BYTE	c[3];
+	uint8_t	c[3];
 	bool	b[3];
 	float	f[3];
 };

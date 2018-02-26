@@ -24,99 +24,48 @@
 
 *************************************************************************************/
 
-
 #ifndef Base_H
 #define Base_H
 
+/* TODO should not be connected to core in this way */
 #include "../config.h"
-
-
 
 #ifdef WIN32
 #define WIN32_LEAN_AND_MEAN
-#define _CRT_SECURE_NO_DEPRECATE // выключаем задалбывание с безопасными функциями
+#define _CRT_SECURE_NO_DEPRECATE /* suppress warnings */
 #include <windows.h>
 #include <shellapi.h>
 #include <stdio.h>
 #endif
 
 #if defined(__APPLE__) && defined(__MACH__)
-#define __glext_h_  // Don't let gl.h include glext.h
-#include <OpenGL/gl.h>	// Header File For The OpenGL Library
-#include <OpenGL/glu.h>	// Header File For The GLu Library
+#define __glext_h_	/* Don't let gl.h include glext.h */
+#include <OpenGL/gl.h>	/* Header File For The OpenGL Library */
+#include <OpenGL/glu.h>	/* Header File For The GLu Library */
 #undef __glext_h_
 #else
-#define __glext_h_  // Don't let gl.h include glext.h
-#include <GL/gl.h>	// Header File For The OpenGL Library
-#include <GL/glu.h>	// Header File For The GLu Library
+#define __glext_h_	/* Don't let gl.h include glext.h */
+#include <GL/gl.h>	/* Header File For The OpenGL Library */
+#include <GL/glu.h>	/* Header File For The GLu Library */
 #undef __glext_h_
 #endif
-
-#include <stdlib.h> // rand, ...
-#include <math.h> // math for core Math
-
 
 #include "graphics/glext.h"
 #include "SDL2/SDL.h"
 
-
-
-// если не используем переменные, и их нельзя убрать (используем прототип функции, к примеру)
+/* suppress warnings about unused variables, when we need to */
 #ifdef __GNUC__
 #  define UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
 #else
 #  define UNUSED(x) UNUSED_ ## x
 #endif
 
-
-
 #if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
-
-// декларируем типы данных, которых может не быть
-#ifndef BYTE
-#define BYTE Uint8
-#endif
-#ifndef WORD
-#define WORD Uint16
-#endif
-#ifndef DWORD
-#define DWORD Uint32
-#endif
-#ifndef BOOL
-#define BOOL bool
-#endif
-
-struct RECT {
-	int left;
-	int top;
-	int right;
-	int bottom;
-};
-inline void SetRect(RECT *rect, int left, int top, int right, int bottom)
-{
-	rect->right = right;
-	rect->top = top;
-	rect->left = left;
-	rect->bottom =bottom;
-}
-
-
-#include <valarray> // memcpy
-#include <stdarg.h> // va_start
-
-#include <sys/stat.h> // mkdir
-#include <sys/types.h> // mkdir
-
 
 #ifndef MAX_PATH
 #define MAX_PATH 1024
-#endif // MAX_PATH
+#endif /* MAX_PATH */
 
+#endif /* unix */
 
-#endif // unix
-
-
-
-
-
-#endif // Base_H
+#endif /* Base_H */

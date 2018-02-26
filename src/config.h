@@ -28,7 +28,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION		"1.9.9 git"
-#define GAME_BUILD		180224
+#define GAME_BUILD		180227
 
 
 
@@ -87,4 +87,4 @@
 // more actions and text outputs with debug information for bug hunting
 // #define gamedebug
 
-#endif // CONFIG_H
+#endif /* CONFIG_H */

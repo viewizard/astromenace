@@ -55,9 +55,9 @@
 struct eTexture {
 	char*	Name;			// File name
 
-	BYTE	ARed;			// Alpha channel red color
-	BYTE	AGreen;			// Alpha channel green color
-	BYTE	ABlue;			// Alpha channel blue color
+	uint8_t	ARed;			// Alpha channel red color
+	uint8_t	AGreen;			// Alpha channel green color
+	uint8_t	ABlue;			// Alpha channel blue color
 
 	int		Width;			// Texture width
 	int		Height;			// Texture height
@@ -78,7 +78,7 @@ struct eTexture {
 // Load texture from file
 eTexture*	vw_LoadTexture(const char *TextureName, const char *RememberAsName, int CompressionType, int LoadAs=AUTO_FILE, int NeedResizeW=0, int NeedResizeH=0);
 // Create texture from memory
-eTexture*	vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DWidth, int DHeight, int DChanels, int CompressionType, int NeedResizeW=0, int NeedResizeH=0, bool NeedDuplicateCheck=true);
+eTexture*	vw_CreateTextureFromMemory(const char *TextureName, uint8_t *DIB, int DWidth, int DHeight, int DChanels, int CompressionType, int NeedResizeW=0, int NeedResizeH=0, bool NeedDuplicateCheck=true);
 // Release texture
 void		vw_ReleaseTexture(eTexture* Texture);
 
@@ -90,7 +90,7 @@ void		vw_ReleaseAllTextures();
 // Set textures properties
 void		vw_SetTextureProp(int nFiltering, int nAddress_Mode, bool nAlpha = false, int nAFlag = TX_ALPHA_EQUAL, bool nMipMap = true);
 // Set textures alpha color
-void		vw_SetTextureAlpha(BYTE nARed, BYTE nAGreen, BYTE nABlue);
+void		vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue);
 
 // Find texture by name
 eTexture*	vw_FindTextureByName(const char *Name);

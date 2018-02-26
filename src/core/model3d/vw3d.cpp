@@ -50,7 +50,7 @@ bool eModel3D::ReadVW3D(const char *FileName)
 	file->fread(&DrawObjectCount, 4, 1);
 
 	// читаем, сколько объектов
-	file->fread(&DrawObjectCount, sizeof(int), 1);
+	file->fread(&DrawObjectCount, sizeof(DrawObjectCount), 1);
 
 	DrawObjectList = new eObjectBlock[DrawObjectCount];
 
@@ -62,17 +62,17 @@ bool eModel3D::ReadVW3D(const char *FileName)
 		DrawObjectList[i].RangeStart = GlobalIndexCount;
 
 		// VertexFormat
-		file->fread(&(DrawObjectList[i].VertexFormat),sizeof(int),1);
+		file->fread(&(DrawObjectList[i].VertexFormat),sizeof(DrawObjectList[0].VertexFormat),1);
 		// VertexStride
-		file->fread(&(DrawObjectList[i].VertexStride),sizeof(int),1);
+		file->fread(&(DrawObjectList[i].VertexStride),sizeof(DrawObjectList[0].VertexStride),1);
 		// VertexCount на самом деле, это кол-во индексов на объект
-		file->fread(&(DrawObjectList[i].VertexCount),sizeof(int),1);
+		file->fread(&(DrawObjectList[i].VertexCount),sizeof(DrawObjectList[0].VertexCount),1);
 		GlobalIndexCount += DrawObjectList[i].VertexCount;
 
 		// Location
-		file->fread(&(DrawObjectList[i].Location),sizeof(float)*3,1);
+		file->fread(&(DrawObjectList[i].Location),sizeof(DrawObjectList[0].Location.x)*3,1);
 		// Rotation
-		file->fread(&(DrawObjectList[i].Rotation),sizeof(float)*3,1);
+		file->fread(&(DrawObjectList[i].Rotation),sizeof(DrawObjectList[0].Rotation.x)*3,1);
 
 		// рисуем нормально, не прозрачным
 		DrawObjectList[i].DrawType = 0;
@@ -89,15 +89,15 @@ bool eModel3D::ReadVW3D(const char *FileName)
 	}
 
 	// получаем сколько всего вертексов
-	file->fread(&GlobalVertexCount,sizeof(unsigned int),1);
+	file->fread(&GlobalVertexCount,sizeof(GlobalVertexCount),1);
 
 	// собственно данные (берем смещение нулевого объекта, т.к. смещение одинаковое на весь объект)
 	GlobalVertexBuffer = new float[GlobalVertexCount*DrawObjectList[0].VertexStride];
-	file->fread(GlobalVertexBuffer,	GlobalVertexCount*DrawObjectList[0].VertexStride*sizeof(float),1);
+	file->fread(GlobalVertexBuffer,	GlobalVertexCount*DrawObjectList[0].VertexStride*sizeof(GlobalVertexBuffer[0]),1);
 
 	// индекс буфер
 	GlobalIndexBuffer = new unsigned int[GlobalIndexCount];
-	file->fread(GlobalIndexBuffer, GlobalIndexCount*sizeof(unsigned int),1);
+	file->fread(GlobalIndexBuffer, GlobalIndexCount*sizeof(GlobalIndexBuffer[0]),1);
 
 	// т.к. наши объекты используют глобальные буферы, надо поставить указатели
 	for (int i=0; i<DrawObjectCount; i++) {
@@ -140,31 +140,31 @@ bool eModel3D::WriteVW3D(const char *FileName)
 	SDL_RWwrite(FileVW3D, tmp1, 4, 1);
 
 	// общее кол-во объектов в моделе - 4 байта (int)
-	SDL_RWwrite(FileVW3D, &DrawObjectCount, sizeof(int), 1);
+	SDL_RWwrite(FileVW3D, &DrawObjectCount, sizeof(DrawObjectCount), 1);
 
 	// для каждого объекта в моделе
 	for (int i=0; i<DrawObjectCount; i++) {
 		// VertexFormat
-		SDL_RWwrite(FileVW3D, &DrawObjectList[i].VertexFormat, sizeof(int), 1);
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].VertexFormat, sizeof(DrawObjectList[0].VertexFormat), 1);
 		// VertexStride
-		SDL_RWwrite(FileVW3D, &DrawObjectList[i].VertexStride, sizeof(int), 1);
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].VertexStride, sizeof(DrawObjectList[0].VertexStride), 1);
 		// VertexCount
-		SDL_RWwrite(FileVW3D, &DrawObjectList[i].VertexCount, sizeof(int), 1);
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].VertexCount, sizeof(DrawObjectList[0].VertexCount), 1);
 
 		// Location
-		SDL_RWwrite(FileVW3D, &DrawObjectList[i].Location, sizeof(float)*3, 1);
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].Location, sizeof(DrawObjectList[0].Location.x)*3, 1);
 		// Rotation
-		SDL_RWwrite(FileVW3D, &DrawObjectList[i].Rotation, sizeof(float)*3, 1);
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].Rotation, sizeof(DrawObjectList[0].Rotation.x)*3, 1);
 	}
 
 	// записываем реальное кол-во вертексов в общем вертекс буфере, мы их посчитали заранее
-	SDL_RWwrite(FileVW3D, &GlobalVertexCount, sizeof(unsigned int), 1);
+	SDL_RWwrite(FileVW3D, &GlobalVertexCount, sizeof(GlobalVertexCount), 1);
 
 	// данные, вертексы (берем смещение нулевого объекта, т.к. смещение одинаковое на весь объект)
-	SDL_RWwrite(FileVW3D, GlobalVertexBuffer, DrawObjectList[0].VertexStride*GlobalVertexCount*sizeof(float), 1);
+	SDL_RWwrite(FileVW3D, GlobalVertexBuffer, DrawObjectList[0].VertexStride*GlobalVertexCount*sizeof(GlobalVertexBuffer[0]), 1);
 
 	// данные, индексный буфер
-	SDL_RWwrite(FileVW3D, GlobalIndexBuffer, GlobalIndexCount*sizeof(unsigned int), 1);
+	SDL_RWwrite(FileVW3D, GlobalIndexBuffer, GlobalIndexCount*sizeof(GlobalIndexBuffer[0]), 1);
 
 	// закрываем файл
 	SDL_RWclose(FileVW3D);

@@ -402,7 +402,7 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 		// строим обратную матрицу
 		float InvRotationMat[9];
 		// сохраняем старые значения + пересчет новых
-		memcpy(InvRotationMat, Object->CurrentRotationMat, 9*sizeof(float));
+		memcpy(InvRotationMat, Object->CurrentRotationMat, 9*sizeof(Object->CurrentRotationMat[0]));
 		// делаем инверсную старую матрицу
 		vw_Matrix33InverseRotate(InvRotationMat);
 
@@ -430,7 +430,7 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 			ShipPart->DrawObjectQuantity = 1;
 			ShipPart->DrawObjectList = new eObjectBlock[ShipPart->DrawObjectQuantity];
 			// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
-			memcpy(&(ShipPart->DrawObjectList[0]), &(Object->DrawObjectList[i]), sizeof(eObjectBlock));
+			memcpy(&(ShipPart->DrawObjectList[0]), &(Object->DrawObjectList[i]), sizeof(Object->DrawObjectList[0]));
 			// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
 			if (Object->DrawObjectList[i].NeedDestroyDataInObjectBlock) {
 				Object->DrawObjectList[i].NeedDestroyDataInObjectBlock = false;
@@ -534,7 +534,7 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 		for (int i=0; i<DrawObjectQuantity; i++) {
 			Texture[i] = Object->Texture[i];
 			// копируем данные
-			memcpy(&(DrawObjectList[i]), &(Object->DrawObjectList[i]), sizeof(eObjectBlock));
+			memcpy(&(DrawObjectList[i]), &(Object->DrawObjectList[i]), sizeof(Object->DrawObjectList[0]));
 			// делаем изменения
 			DrawObjectList[i].VBO = nullptr;
 			DrawObjectList[i].VertexBuffer = nullptr;

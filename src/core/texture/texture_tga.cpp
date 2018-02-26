@@ -31,30 +31,30 @@
 #define TGA_A		 3	/* ALPHA file */
 #define TGA_RLE		10	/* RLE file */
 
-int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
+int ReadTGA(uint8_t **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
 {
 
-	BYTE length = 0;
-	BYTE imageType = 0;	/* RLE, RGB, Alpha */
-	BYTE bits = 0;		/* 16, 24, 32 */
+	uint8_t length = 0;
+	uint8_t imageType = 0;	/* RLE, RGB, Alpha */
+	uint8_t bits = 0;		/* 16, 24, 32 */
 	int channels = 0;	/* 3 = RGA : 4 = RGBA */
 	size_t stride = 0;	/* (channels * width) */
 	int i = 0;
 
-	pFile->fread(&length, sizeof(BYTE), 1);
+	pFile->fread(&length, sizeof(length), 1);
 	/* jump over one byte */
 	pFile->fseek(1, SEEK_CUR);
 	/* image type (RLE, RGB, ...) */
-	pFile->fread(&imageType, sizeof(BYTE), 1);
+	pFile->fread(&imageType, sizeof(imageType), 1);
 	/* skip past general information */
 	pFile->fseek(9, SEEK_CUR);
 	/* read the width, height and bpp */
-	WORD TmpReadData;
-	pFile->fread(&TmpReadData,  sizeof(WORD), 1);
+	uint16_t TmpReadData;
+	pFile->fread(&TmpReadData,  sizeof(TmpReadData), 1);
 	*DWidth = TmpReadData;
-	pFile->fread(&TmpReadData, sizeof(WORD), 1);
+	pFile->fread(&TmpReadData, sizeof(TmpReadData), 1);
 	*DHeight = TmpReadData;
-	pFile->fread(&bits,   sizeof(BYTE), 1);
+	pFile->fread(&bits, sizeof(bits), 1);
 	/* move to the pixel data */
 	pFile->fseek(length + 1, SEEK_CUR);
 
@@ -62,11 +62,11 @@ int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
 		if((bits == 24) || (bits == 32)) {
 			channels = bits / 8;
 			stride = channels * (*DWidth);
-			*DIB = new BYTE[stride * (*DHeight)];
+			*DIB = new uint8_t[stride * (*DHeight)];
 
 			/* load line by line */
 			for(int y = 0; y < (*DHeight); y++) {
-				BYTE *pLine = (*DIB+stride * y);
+				uint8_t *pLine = (*DIB+stride * y);
 				pFile->fread(pLine, stride, 1);
 			}
 		} else if(bits == 16) {
@@ -76,45 +76,45 @@ int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
 			/* convert 16-bit images to 24 bit */
 			channels = 3;
 			stride = channels * (*DWidth);
-			*DIB = new BYTE[stride * (*DHeight)];
+			*DIB = new uint8_t[stride * (*DHeight)];
 
 			for(i = 0; i < (*DWidth)*(*DHeight); i++) {
-				pFile->fread(&pixels, sizeof(unsigned short), 1);
+				pFile->fread(&pixels, sizeof(pixels), 1);
 
 				b = (pixels & 0x1f) << 3;
 				g = ((pixels >> 5) & 0x1f) << 3;
 				r = ((pixels >> 10) & 0x1f) << 3;
-				memcpy(*DIB+i*3+2, &r, sizeof(BYTE));
-				memcpy(*DIB+i*3+1, &g, sizeof(BYTE));
-				memcpy(*DIB+i*3+0, &b, sizeof(BYTE));
+				memcpy(*DIB+i*3+2, &r, sizeof(uint8_t));
+				memcpy(*DIB+i*3+1, &g, sizeof(uint8_t));
+				memcpy(*DIB+i*3+0, &b, sizeof(uint8_t));
 			}
 		} else {
 			return 0;
 		}
 	} else { /* RLE*/
-		BYTE rleID = 0;
+		uint8_t rleID = 0;
 		int colorsRead = 0;
 		channels = bits / 8;
 		stride = channels * (*DWidth);
 
-		*DIB = new BYTE[stride * (*DHeight)];
-		BYTE *pColors = new BYTE[channels];
+		*DIB = new uint8_t[stride * (*DHeight)];
+		uint8_t *pColors = new uint8_t[channels];
 
 		while(i < (*DWidth)*(*DHeight)) {
-			pFile->fread(&rleID, sizeof(BYTE), 1);
+			pFile->fread(&rleID, sizeof(rleID), 1);
 
 			if(rleID < 128) {
 				rleID++;
 
 				while(rleID) {
-					pFile->fread(pColors, sizeof(BYTE) * channels, 1);
+					pFile->fread(pColors, sizeof(pColors[0]) * channels, 1);
 
-					memcpy(*DIB+colorsRead+0, &pColors[0], sizeof(BYTE));
-					memcpy(*DIB+colorsRead+1, &pColors[1], sizeof(BYTE));
-					memcpy(*DIB+colorsRead+2, &pColors[2], sizeof(BYTE));
+					memcpy(*DIB+colorsRead+0, &pColors[0], sizeof(pColors[0]));
+					memcpy(*DIB+colorsRead+1, &pColors[1], sizeof(pColors[0]));
+					memcpy(*DIB+colorsRead+2, &pColors[2], sizeof(pColors[0]));
 
 					if(bits == 32)
-						memcpy(*DIB+colorsRead+3, &pColors[3], sizeof(BYTE));
+						memcpy(*DIB+colorsRead+3, &pColors[3], sizeof(pColors[0]));
 
 					i++;
 					rleID--;
@@ -123,12 +123,12 @@ int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
 			} else {
 				rleID -= 127;
 
-				pFile->fread(pColors, sizeof(BYTE) * channels, 1);
+				pFile->fread(pColors, sizeof(pColors[0]) * channels, 1);
 
 				while(rleID) {
-					memcpy(*DIB+colorsRead+0, &pColors[0], sizeof(BYTE));
-					memcpy(*DIB+colorsRead+1, &pColors[1], sizeof(BYTE));
-					memcpy(*DIB+colorsRead+2, &pColors[2], sizeof(BYTE));
+					memcpy(*DIB+colorsRead+0, &pColors[0], sizeof(pColors[0]));
+					memcpy(*DIB+colorsRead+1, &pColors[1], sizeof(pColors[0]));
+					memcpy(*DIB+colorsRead+2, &pColors[2], sizeof(pColors[0]));
 
 					if(bits == 32)
 						*DIB[colorsRead + 3] = pColors[3];
@@ -144,7 +144,7 @@ int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
 	*DChanels = channels;
 
 	/* swap colors */
-	BYTE TmpColorSwap;
+	uint8_t TmpColorSwap;
 	int k=0;
 	for (i=0; i<(*DHeight); i++)
 		for (int j=0; j<(*DWidth); j++) {

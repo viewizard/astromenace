@@ -286,7 +286,7 @@ struct eDevCaps {
 // Common functions
 
 // Initialization renderer
-int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, BOOL FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int VSync);
+int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int VSync);
 SDL_Window *vw_GetSDL2Windows();
 void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA);
 // Shutdown renderer dll
@@ -338,9 +338,9 @@ void vw_SetColorMask(bool red, bool green, bool blue, bool alpha);
 // Texture functions
 
 // Create texture
-GLuint vw_BuildTexture(BYTE *ustDIB, int Width, int Height, bool MipMap, int Bytes, int CompressionType);
+GLuint vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int Bytes, int CompressionType);
 // Bind texture
-void vw_BindTexture(DWORD Stage, GLuint TextureID);
+void vw_BindTexture(uint32_t Stage, GLuint TextureID);
 // Delete texture
 void vw_DeleteTexture(GLuint TextureID);
 // Set texture filtering mode
@@ -362,7 +362,7 @@ void vw_SetTextureCompare(int MODE, int FUNC);
 // Set texture depth mode
 void vw_SetTextureDepthMode(int MODE);
 // Set texture by pointer
-void vw_SetTexture(DWORD Stage, eTexture *Texture);
+void vw_SetTexture(uint32_t Stage, eTexture *Texture);
 // Get texture image bitmap (RGBA) by void pointer
 void vw_GetTextureImage(eTexture *Texture, void *bits, int BPP);
 // Set texture priority

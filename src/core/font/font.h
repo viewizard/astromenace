@@ -54,4 +54,4 @@ void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontS
 /* Draw 3D text with current font. */
 void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...);
 
-#endif // FONT_H
+#endif /* FONT_H */

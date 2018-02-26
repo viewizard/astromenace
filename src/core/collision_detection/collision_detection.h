@@ -54,4 +54,4 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 			    float Object2Radius, VECTOR3D Object2Location, VECTOR3D Object2PrevLocation,
 			    VECTOR3D *CollisionLocation);
 
-#endif // COLLISIONDETECTION_H
+#endif /* COLLISIONDETECTION_H */

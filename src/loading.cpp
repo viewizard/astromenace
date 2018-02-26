@@ -62,7 +62,7 @@ struct LoadList {
 	// альфа канал, если нужно
 	bool	Alpha;
 	// цвет альфа канала
-	BYTE Red, Green, Blue;
+	uint8_t	Red, Green, Blue;
 	// режим создания альфа канала
 	int	AlphaMode;
 	// фильтр текстуры
@@ -1215,44 +1215,44 @@ void LoadGameData(int LoadType)
 
 		// копируем основную часть
 		int Current = 0;
-		memcpy(CurrentList+Current, GameLevelsLoadList, GameLevelsLoadListCount*sizeof(LoadList));
+		memcpy(CurrentList+Current, GameLevelsLoadList, GameLevelsLoadListCount*sizeof(GameLevelsLoadList[0]));
 		Current += GameLevelsLoadListCount;
 
 		if (StarSystem1) {
-			memcpy(CurrentList+Current, StarSystem1LoadList, StarSystem1LoadListCount*sizeof(LoadList));
+			memcpy(CurrentList+Current, StarSystem1LoadList, StarSystem1LoadListCount*sizeof(StarSystem1LoadList[0]));
 			Current += StarSystem1LoadListCount;
 		}
 		if (StarSystem2) {
-			memcpy(CurrentList+Current, StarSystem2LoadList, StarSystem2LoadListCount*sizeof(LoadList));
+			memcpy(CurrentList+Current, StarSystem2LoadList, StarSystem2LoadListCount*sizeof(StarSystem2LoadList[0]));
 			Current += StarSystem2LoadListCount;
 		}
 
 		if (Planet) {
-			memcpy(CurrentList+Current, PlanetLoadList, PlanetLoadListCount*sizeof(LoadList));
+			memcpy(CurrentList+Current, PlanetLoadList, PlanetLoadListCount*sizeof(PlanetLoadList[0]));
 			Current += PlanetLoadListCount;
 		}
 		if (Asteroid) {
-			memcpy(CurrentList+Current, AsteroidLoadList, AsteroidLoadListCount*sizeof(LoadList));
+			memcpy(CurrentList+Current, AsteroidLoadList, AsteroidLoadListCount*sizeof(AsteroidLoadList[0]));
 			Current += AsteroidLoadListCount;
 		}
 		if (AlienFighter) {
-			memcpy(CurrentList+Current, AlienFighterLoadList, AlienFighterLoadListCount*sizeof(LoadList));
+			memcpy(CurrentList+Current, AlienFighterLoadList, AlienFighterLoadListCount*sizeof(AlienFighterLoadList[0]));
 			Current += AlienFighterLoadListCount;
 		}
 		if (BasePart) {
-			memcpy(CurrentList+Current, BasePartLoadList, BasePartLoadListCount*sizeof(LoadList));
+			memcpy(CurrentList+Current, BasePartLoadList, BasePartLoadListCount*sizeof(BasePartLoadList[0]));
 			Current += BasePartLoadListCount;
 		}
 		if (AlienMotherShip) {
-			memcpy(CurrentList+Current, AlienMotherShipLoadList, AlienMotherShipLoadListCount*sizeof(LoadList));
+			memcpy(CurrentList+Current, AlienMotherShipLoadList, AlienMotherShipLoadListCount*sizeof(AlienMotherShipLoadList[0]));
 			Current += AlienMotherShipLoadListCount;
 		}
 		if (Building) {
-			memcpy(CurrentList+Current, BuildingLoadList, BuildingLoadListCount*sizeof(LoadList));
+			memcpy(CurrentList+Current, BuildingLoadList, BuildingLoadListCount*sizeof(BuildingLoadList[0]));
 			Current += BuildingLoadListCount;
 		}
 		if (Pirate) {
-			memcpy(CurrentList+Current, PirateLoadList, PirateLoadListCount*sizeof(LoadList));
+			memcpy(CurrentList+Current, PirateLoadList, PirateLoadListCount*sizeof(PirateLoadList[0]));
 			Current += PirateLoadListCount;
 		}
 	}

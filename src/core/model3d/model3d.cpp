@@ -244,11 +244,11 @@ int RecursiveBufferLimitedBySizeTrianglesCalculate(float Point1[8], float Point2
 	if ((Dist1<=TriangleSizeLimit) && (Dist2<=TriangleSizeLimit) && (Dist3<=TriangleSizeLimit)) {
 		// добавляем в новую последовательность треугольник
 		if ((VertexBuffer != nullptr) && (CurrentPosition != nullptr)) {
-			memcpy(VertexBuffer+(*CurrentPosition), Point1, sizeof(float)*8);
+			memcpy(VertexBuffer+(*CurrentPosition), Point1, sizeof(Point1[0])*8);
 			*CurrentPosition += Stride;
-			memcpy(VertexBuffer+(*CurrentPosition), Point2, sizeof(float)*8);
+			memcpy(VertexBuffer+(*CurrentPosition), Point2, sizeof(Point2[0])*8);
 			*CurrentPosition += Stride;
-			memcpy(VertexBuffer+(*CurrentPosition), Point3, sizeof(float)*8);
+			memcpy(VertexBuffer+(*CurrentPosition), Point3, sizeof(Point3[0])*8);
 			*CurrentPosition += Stride;
 		}
 
@@ -325,11 +325,11 @@ void RecursiveBufferLimitedBySizeTrianglesGenerate(float Point1[8], float Point2
 	if ((Dist1<=TriangleSizeLimit) && (Dist2<=TriangleSizeLimit) && (Dist3<=TriangleSizeLimit)) {
 		// добавляем в новую последовательность треугольник
 		if ((VertexBuffer != nullptr) && (CurrentPosition != nullptr)) {
-			memcpy(VertexBuffer+(*CurrentPosition), Point1, sizeof(float)*8);
+			memcpy(VertexBuffer+(*CurrentPosition), Point1, sizeof(Point1[0])*8);
 			*CurrentPosition += Stride;
-			memcpy(VertexBuffer+(*CurrentPosition), Point2, sizeof(float)*8);
+			memcpy(VertexBuffer+(*CurrentPosition), Point2, sizeof(Point2[0])*8);
 			*CurrentPosition += Stride;
-			memcpy(VertexBuffer+(*CurrentPosition), Point3, sizeof(float)*8);
+			memcpy(VertexBuffer+(*CurrentPosition), Point3, sizeof(Point3[0])*8);
 			*CurrentPosition += Stride;
 		}
 

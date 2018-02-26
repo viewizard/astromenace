@@ -249,13 +249,13 @@ bool CSpaceStars::Update(float Time)
 				A = (GLubyte)(list[i]->Alpha*255);
 
 				k+=3;
-				tmpDATAub[k*sizeof(float)+3] = A;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+3] = A;
 				k+=6;
-				tmpDATAub[k*sizeof(float)+3] = A;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+3] = A;
 				k+=6;
-				tmpDATAub[k*sizeof(float)+3] = A;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+3] = A;
 				k+=6;
-				tmpDATAub[k*sizeof(float)+3] = A;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+3] = A;
 				k+=3;
 			}
 		}
@@ -394,10 +394,10 @@ void CSpaceStars::Draw()
 				tmpDATA[k++] = list[i]->Location.x+tmpAngle3.x;	// X
 				tmpDATA[k++] = list[i]->Location.y+tmpAngle3.y;		// Y
 				tmpDATA[k++] = list[i]->Location.z+tmpAngle3.z;		// Z
-				tmpDATAub[k*sizeof(float)] = 204;
-				tmpDATAub[k*sizeof(float)+1] = 204;
-				tmpDATAub[k*sizeof(float)+2] = 255;
-				tmpDATAub[k*sizeof(float)+3] = A;
+				tmpDATAub[k*sizeof(tmpDATAub[0])] = 204;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+1] = 204;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+2] = 255;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+3] = A;
 				k++;
 				tmpDATA[k++] = 0.0f;
 				tmpDATA[k++] = 1.0f;
@@ -405,10 +405,10 @@ void CSpaceStars::Draw()
 				tmpDATA[k++] = list[i]->Location.x+tmpAngle2.x;	// X
 				tmpDATA[k++] = list[i]->Location.y+tmpAngle2.y;		// Y
 				tmpDATA[k++] = list[i]->Location.z+tmpAngle2.z;		// Z
-				tmpDATAub[k*sizeof(float)] = 204;
-				tmpDATAub[k*sizeof(float)+1] = 204;
-				tmpDATAub[k*sizeof(float)+2] = 255;
-				tmpDATAub[k*sizeof(float)+3] = A;
+				tmpDATAub[k*sizeof(tmpDATAub[0])] = 204;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+1] = 204;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+2] = 255;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+3] = A;
 				k++;
 				tmpDATA[k++] = 0.0f;
 				tmpDATA[k++] = 0.0f;
@@ -416,10 +416,10 @@ void CSpaceStars::Draw()
 				tmpDATA[k++] = list[i]->Location.x+tmpAngle1.x;	// X
 				tmpDATA[k++] = list[i]->Location.y+tmpAngle1.y;		// Y
 				tmpDATA[k++] = list[i]->Location.z+tmpAngle1.z;		// Z
-				tmpDATAub[k*sizeof(float)] = 204;
-				tmpDATAub[k*sizeof(float)+1] = 204;
-				tmpDATAub[k*sizeof(float)+2] = 255;
-				tmpDATAub[k*sizeof(float)+3] = A;
+				tmpDATAub[k*sizeof(tmpDATAub[0])] = 204;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+1] = 204;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+2] = 255;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+3] = A;
 				k++;
 				tmpDATA[k++] = 1.0f;
 				tmpDATA[k++] = 0.0f;
@@ -427,10 +427,10 @@ void CSpaceStars::Draw()
 				tmpDATA[k++] = list[i]->Location.x+tmpAngle4.x;	// X
 				tmpDATA[k++] = list[i]->Location.y+tmpAngle4.y;		// Y
 				tmpDATA[k++] = list[i]->Location.z+tmpAngle4.z;		// Z
-				tmpDATAub[k*sizeof(float)] = 204;
-				tmpDATAub[k*sizeof(float)+1] = 204;
-				tmpDATAub[k*sizeof(float)+2] = 255;
-				tmpDATAub[k*sizeof(float)+3] = A;
+				tmpDATAub[k*sizeof(tmpDATAub[0])] = 204;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+1] = 204;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+2] = 255;
+				tmpDATAub[k*sizeof(tmpDATAub[0])+3] = A;
 				k++;
 				tmpDATA[k++] = 1.0f;
 				tmpDATA[k++] = 1.0f;
@@ -558,7 +558,7 @@ void CSpaceStars::Draw()
 
 
 		if (!Setup.UseGLSL) {
-			vw_SendVertices(RI_QUADS, 4*PrimitCount, RI_3f_XYZ | RI_4ub_COLOR | RI_1_TEX, tmpDATA, 6*sizeof(float));
+			vw_SendVertices(RI_QUADS, 4*PrimitCount, RI_3f_XYZ | RI_4ub_COLOR | RI_1_TEX, tmpDATA, 6*sizeof(tmpDATA[0]));
 		} else {
 			if (GLSL != nullptr) {
 				vw_UseShaderProgram(GLSL);
@@ -566,7 +566,7 @@ void CSpaceStars::Draw()
 				vw_Uniform1f(GLSL, UniformLocations[1], Age);
 			}
 
-			vw_SendVertices(RI_QUADS, 4*PrimitCount, RI_3f_XYZ | RI_1_TEX | RI_3f_NORMAL, tmpDATA, 8*sizeof(float), VBO);
+			vw_SendVertices(RI_QUADS, 4*PrimitCount, RI_3f_XYZ | RI_1_TEX | RI_3f_NORMAL, tmpDATA, 8*sizeof(tmpDATA[0]), VBO);
 
 			if (GLSL != nullptr)
 				vw_StopShaderProgram();

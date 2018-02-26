@@ -34,9 +34,9 @@
 extern eTexture *StartTexMan;
 extern int FilteringTexMan;
 extern int Address_ModeTexMan;
-extern BYTE ARedTexMan;
-extern BYTE AGreenTexMan;
-extern BYTE ABlueTexMan;
+extern uint8_t ARedTexMan;
+extern uint8_t AGreenTexMan;
+extern uint8_t ABlueTexMan;
 
 extern bool MipMap;
 extern int  AFlagTexMan;
@@ -45,7 +45,7 @@ void vw_AttachTexture(eTexture* Texture);
 void vw_DetachTexture(eTexture* Texture);
 
 
-int ReadTGA(BYTE **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
+int ReadTGA(uint8_t **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
 
 
 //------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ static int power_of_two(int Num)
 	}
 	return value;
 }
-void Resize(BYTE **DIB, eTexture *Texture)
+void Resize(uint8_t **DIB, eTexture *Texture)
 {
 	// берем размеры к которым нужно "подгонять"
 	int powWidth = power_of_two(Texture->Width);
@@ -93,11 +93,11 @@ void Resize(BYTE **DIB, eTexture *Texture)
 	// нужно ли обрабатывать вообще?
 	if (powWidth==Texture->Width && powHeight==Texture->Height) return;
 
-	BYTE *DIBtemp = *DIB;
-	*DIB = new BYTE[powWidth*powHeight*Texture->Bytes];
+	uint8_t *DIBtemp = *DIB;
+	*DIB = new uint8_t[powWidth * powHeight * Texture->Bytes];
 
 	// делаем все по цвету-прозначности + ставим все прозрачным
-	BYTE ColorF[4];
+	uint8_t ColorF[4];
 	ColorF[0] = Texture->ARed;
 	ColorF[1] = Texture->AGreen;
 	ColorF[2] = Texture->ABlue;
@@ -109,7 +109,7 @@ void Resize(BYTE **DIB, eTexture *Texture)
 
 	// находим отступ между строчками
 	int stride = Texture->Width * Texture->Bytes;
-	// должен быть приведен к DWORD построчно (чтобы не было проблем с нечетными данными)
+	// должен быть приведен к кратности 4 байта построчно (чтобы не было проблем с нечетными данными)
 	while((stride % 4) != 0) stride++;
 
 
@@ -143,13 +143,13 @@ void Resize(BYTE **DIB, eTexture *Texture)
 //------------------------------------------------------------------------------------
 // Растягивание картинки, нужно устанавливать дополнительно...
 //------------------------------------------------------------------------------------
-void ResizeImage(int width, int height, BYTE **DIB, eTexture *Texture)
+void ResizeImage(int width, int height, uint8_t **DIB, eTexture *Texture)
 {
 	if (width == Texture->Width && height == Texture->Height) return;
 
 	// переносим во временный массив данные...
-	BYTE *src = *DIB;
-	BYTE *dst = new BYTE[width*height*Texture->Bytes];
+	uint8_t *src = *DIB;
+	uint8_t *dst = new uint8_t[width * height * Texture->Bytes];
 
 	// растягиваем исходный массив (или сжимаем)
 	for (int j = 0; j < height; j++) {
@@ -190,7 +190,7 @@ void ResizeImage(int width, int height, BYTE **DIB, eTexture *Texture)
 //------------------------------------------------------------------------------------
 // Создание альфа канала
 //------------------------------------------------------------------------------------
-void CreateAlpha(BYTE **DIBRESULT, eTexture *Texture, int AlphaFlag)
+void CreateAlpha(uint8_t **DIBRESULT, eTexture *Texture, int AlphaFlag)
 {
 	// находим отступ между строчками
 	int stride = Texture->Width * 3;
@@ -200,14 +200,14 @@ void CreateAlpha(BYTE **DIBRESULT, eTexture *Texture, int AlphaFlag)
 	while((stride2 % 4) != 0) stride2++;
 
 	// сохраняем во временном указателе
-	BYTE *DIBtemp  = *DIBRESULT;
-	BYTE *DIB = new BYTE[stride2*Texture->Height];
+	uint8_t *DIBtemp  = *DIBRESULT;
+	uint8_t *DIB = new uint8_t[stride2*Texture->Height];
 
 	// Формируем данные по цветам...
-	BYTE GreyRedC = (BYTE)(((float)Texture->ARed / 255) * 76);
-	BYTE GreyGreenC = (BYTE)(((float)Texture->AGreen / 255) * 150);
-	BYTE GreyBlueC = (BYTE)(((float)Texture->ABlue / 255) * 28);
-	BYTE GreyC = GreyBlueC+GreyGreenC+GreyRedC;
+	uint8_t GreyRedC = (uint8_t)(((float)Texture->ARed / 255) * 76);
+	uint8_t GreyGreenC = (uint8_t)(((float)Texture->AGreen / 255) * 150);
+	uint8_t GreyBlueC = (uint8_t)(((float)Texture->ABlue / 255) * 28);
+	uint8_t GreyC = GreyBlueC+GreyGreenC+GreyRedC;
 
 	for(int j1 = 0; j1 < Texture->Height; j1++) {
 
@@ -222,9 +222,9 @@ void CreateAlpha(BYTE **DIBRESULT, eTexture *Texture, int AlphaFlag)
 			switch(AlphaFlag) {
 			case TX_ALPHA_GREYSC: {
 				// Формируем данные по цветам...
-				BYTE GreyRed = (BYTE)(((float)DIB[k2+2] / 255) * 76);
-				BYTE GreyGreen = (BYTE)(((float)DIB[k2+1] / 255) * 150);
-				BYTE GreyBlue = (BYTE)(((float)DIB[k2] / 255) * 28);
+				uint8_t GreyRed = (uint8_t)(((float)DIB[k2+2] / 255) * 76);
+				uint8_t GreyGreen = (uint8_t)(((float)DIB[k2+1] / 255) * 150);
+				uint8_t GreyBlue = (uint8_t)(((float)DIB[k2] / 255) * 28);
 				DIB[k2 + 3] = GreyBlue+GreyGreen+GreyRed;
 				break;
 			}
@@ -235,10 +235,10 @@ void CreateAlpha(BYTE **DIBRESULT, eTexture *Texture, int AlphaFlag)
 			}
 			case TX_ALPHA_GEQUAL: {
 				// Формируем данные по цветам...
-				BYTE GreyRed = (BYTE)(((float)DIB[k2+2] / 255) * 76);
-				BYTE GreyGreen = (BYTE)(((float)DIB[k2+1] / 255) * 150);
-				BYTE GreyBlue = (BYTE)(((float)DIB[k2] / 255) * 28);
-				BYTE Grey = GreyBlue+GreyGreen+GreyRed;
+				uint8_t GreyRed = (uint8_t)(((float)DIB[k2+2] / 255) * 76);
+				uint8_t GreyGreen = (uint8_t)(((float)DIB[k2+1] / 255) * 150);
+				uint8_t GreyBlue = (uint8_t)(((float)DIB[k2] / 255) * 28);
+				uint8_t Grey = GreyBlue+GreyGreen+GreyRed;
 
 				if (GreyC >= Grey) DIB[k2+3] = 0;//Alpha
 				else DIB[k2 + 3] = 255;
@@ -246,10 +246,10 @@ void CreateAlpha(BYTE **DIBRESULT, eTexture *Texture, int AlphaFlag)
 			}
 			case TX_ALPHA_LEQUAL: {
 				// Формируем данные по цветам...
-				BYTE GreyRed = (BYTE)(((float)DIB[k2+2] / 255) * 76);
-				BYTE GreyGreen = (BYTE)(((float)DIB[k2+1] / 255) * 150);
-				BYTE GreyBlue = (BYTE)(((float)DIB[k2] / 255) * 28);
-				BYTE Grey = GreyBlue+GreyGreen+GreyRed;
+				uint8_t GreyRed = (uint8_t)(((float)DIB[k2+2] / 255) * 76);
+				uint8_t GreyGreen = (uint8_t)(((float)DIB[k2+1] / 255) * 150);
+				uint8_t GreyBlue = (uint8_t)(((float)DIB[k2] / 255) * 28);
+				uint8_t Grey = GreyBlue+GreyGreen+GreyRed;
 
 				if (GreyC <= Grey) DIB[k2+3] = 0;//Alpha
 				else DIB[k2 + 3] = 255;
@@ -257,10 +257,10 @@ void CreateAlpha(BYTE **DIBRESULT, eTexture *Texture, int AlphaFlag)
 			}
 			case TX_ALPHA_GREAT: {
 				// Формируем данные по цветам...
-				BYTE GreyRed = (BYTE)(((float)DIB[k2+2] / 255) * 76);
-				BYTE GreyGreen = (BYTE)(((float)DIB[k2+1] / 255) * 150);
-				BYTE GreyBlue = (BYTE)(((float)DIB[k2] / 255) * 28);
-				BYTE Grey = GreyBlue+GreyGreen+GreyRed;
+				uint8_t GreyRed = (uint8_t)(((float)DIB[k2+2] / 255) * 76);
+				uint8_t GreyGreen = (uint8_t)(((float)DIB[k2+1] / 255) * 150);
+				uint8_t GreyBlue = (uint8_t)(((float)DIB[k2] / 255) * 28);
+				uint8_t Grey = GreyBlue+GreyGreen+GreyRed;
 
 				if (GreyC > Grey) DIB[k2+3] = 0;//Alpha
 				else DIB[k2 + 3] = 255;
@@ -268,10 +268,10 @@ void CreateAlpha(BYTE **DIBRESULT, eTexture *Texture, int AlphaFlag)
 			}
 			case TX_ALPHA_LESS: {
 				// Формируем данные по цветам...
-				BYTE GreyRed = (BYTE)(((float)DIB[k2+2] / 255) * 76);
-				BYTE GreyGreen = (BYTE)(((float)DIB[k2+1] / 255) * 150);
-				BYTE GreyBlue = (BYTE)(((float)DIB[k2] / 255) * 28);
-				BYTE Grey = GreyBlue+GreyGreen+GreyRed;
+				uint8_t GreyRed = (uint8_t)(((float)DIB[k2+2] / 255) * 76);
+				uint8_t GreyGreen = (uint8_t)(((float)DIB[k2+1] / 255) * 150);
+				uint8_t GreyBlue = (uint8_t)(((float)DIB[k2] / 255) * 28);
+				uint8_t Grey = GreyBlue+GreyGreen+GreyRed;
 
 				if (GreyC < Grey) DIB[k2+3] = 0;//Alpha
 				else DIB[k2 + 3] = 255;
@@ -302,7 +302,7 @@ void CreateAlpha(BYTE **DIBRESULT, eTexture *Texture, int AlphaFlag)
 //------------------------------------------------------------------------------------
 // Удаляем альфа канал
 //------------------------------------------------------------------------------------
-void DeleteAlpha(BYTE **DIBRESULT, eTexture *Texture)
+void DeleteAlpha(uint8_t **DIBRESULT, eTexture *Texture)
 {
 
 	// находим отступ между строчками
@@ -312,8 +312,8 @@ void DeleteAlpha(BYTE **DIBRESULT, eTexture *Texture)
 	while((stride2 % 4) != 0) stride2++;
 
 	// сохраняем во временном указателе
-	BYTE *DIBtemp  = *DIBRESULT;
-	BYTE *DIB = new BYTE[stride*Texture->Height];
+	uint8_t *DIBtemp  = *DIBRESULT;
+	uint8_t *DIB = new uint8_t[stride*Texture->Height];
 
 	for(int j1 = 0; j1 < Texture->Height; j1++) {
 		int k1 = stride*j1;
@@ -350,7 +350,7 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 	int DWidth = 0;
 	int DHeight = 0;
 	int DChanels = 0;
-	BYTE *tmp_image = nullptr;
+	uint8_t *tmp_image = nullptr;
 
 	int LoadAs = TGA_FILE;
 
@@ -414,9 +414,9 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 	char tmp1[5] = "VW2D";
 	SDL_RWwrite(FileVW2D, tmp1, 4, 1);
 
-	SDL_RWwrite(FileVW2D, &DWidth, sizeof(int), 1);
-	SDL_RWwrite(FileVW2D, &DHeight, sizeof(int), 1);
-	SDL_RWwrite(FileVW2D, &DChanels, sizeof(int), 1);
+	SDL_RWwrite(FileVW2D, &DWidth, sizeof(DWidth), 1);
+	SDL_RWwrite(FileVW2D, &DHeight, sizeof(DHeight), 1);
+	SDL_RWwrite(FileVW2D, &DChanels, sizeof(DChanels), 1);
 	SDL_RWwrite(FileVW2D, tmp_image, DWidth*DHeight*DChanels, 1);
 
 	SDL_RWclose(FileVW2D);
@@ -440,7 +440,7 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 	int DWidth = 0;
 	int DHeight = 0;
 	int DChanels = 0;
-	BYTE *tmp_image = nullptr;
+	uint8_t *tmp_image = nullptr;
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Открываем файл
@@ -480,13 +480,13 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 		// пропускаем заголовок "VW2D"
 		pFile->fseek(4, SEEK_SET);
 		// считываем ширину
-		pFile->fread(&DWidth, sizeof(int), 1);
+		pFile->fread(&DWidth, sizeof(DWidth), 1);
 		// считываем высоту
-		pFile->fread(&DHeight, sizeof(int), 1);
+		pFile->fread(&DHeight, sizeof(DHeight), 1);
 		// считываем кол-во каналов
-		pFile->fread(&DChanels, sizeof(int), 1);
+		pFile->fread(&DChanels, sizeof(DChanels), 1);
 		// резервируем память
-		tmp_image = new BYTE[DWidth*DHeight*DChanels];
+		tmp_image = new uint8_t[DWidth*DHeight*DChanels];
 		// считываем уже готовый к созданию текстуры массив
 		pFile->fread(tmp_image, DWidth*DHeight*DChanels, 1);
 		break;
@@ -535,7 +535,7 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 //------------------------------------------------------------------------------------
 // создание текстуры из памяти
 //------------------------------------------------------------------------------------
-eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DWidth, int DHeight, int DChanels, int CompressionType, int NeedResizeW, int NeedResizeH, bool NeedDuplicateCheck)
+eTexture* vw_CreateTextureFromMemory(const char *TextureName, uint8_t *DIB, int DWidth, int DHeight, int DChanels, int CompressionType, int NeedResizeW, int NeedResizeH, bool NeedDuplicateCheck)
 {
 	// проверяем в списке, если уже создавали ее - просто возвращаем указатель
 	if (NeedDuplicateCheck) {
@@ -577,8 +577,8 @@ eTexture* vw_CreateTextureFromMemory(const char *TextureName, BYTE * DIB, int DW
 	Texture->Bytes = DChanels;
 
 	// временный массив данных
-	BYTE *tmp_image = new BYTE[DWidth*DHeight*DChanels];
-	memcpy(tmp_image, DIB, DWidth*DHeight*DChanels);
+	uint8_t *tmp_image = new uint8_t[DWidth * DHeight * DChanels];
+	memcpy(tmp_image, DIB, DWidth * DHeight * DChanels);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Сохраняем имя текстуры

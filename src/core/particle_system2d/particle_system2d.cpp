@@ -433,7 +433,7 @@ void eParticleSystem2D::Draw()
 	}
 
 
-	vw_SendVertices(RI_QUADS, 4*ParticlesCount, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(float));
+	vw_SendVertices(RI_QUADS, 4*ParticlesCount, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(tmp[0]));
 
 	if (tmp != nullptr)
 		delete [] tmp;

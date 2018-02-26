@@ -1531,7 +1531,7 @@ bool CSpaceShip::Update(float Time)
 
 		// т.к. у нас включена девиация, нужно принять меры
 		float RotationMat2[9];
-		memcpy(RotationMat2, CurrentRotationMat, sizeof(float)*9);
+		memcpy(RotationMat2, CurrentRotationMat, sizeof(CurrentRotationMat[0])*9);
 		VECTOR3D Rotation2 = Rotation;
 
 		if (DeviationOn) {

@@ -73,7 +73,7 @@ CGroundExplosion::CGroundExplosion(CGroundObject *Object, int ExplType, const VE
 		// строим обратную матрицу
 		float InvRotationMat[9];
 		// сохраняем старые значения + пересчет новых
-		memcpy(InvRotationMat, Object->CurrentRotationMat, 9*sizeof(float));
+		memcpy(InvRotationMat, Object->CurrentRotationMat, 9*sizeof(Object->CurrentRotationMat[0]));
 		// делаем инверсную старую матрицу
 		vw_Matrix33InverseRotate(InvRotationMat);
 
@@ -103,7 +103,7 @@ CGroundExplosion::CGroundExplosion(CGroundObject *Object, int ExplType, const VE
 				ShipPart->DrawObjectQuantity = 1;
 				ShipPart->DrawObjectList = new eObjectBlock[ShipPart->DrawObjectQuantity];
 				// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
-				memcpy(&(ShipPart->DrawObjectList[0]), &(Object->DrawObjectList[i]), sizeof(eObjectBlock));
+				memcpy(&(ShipPart->DrawObjectList[0]), &(Object->DrawObjectList[i]), sizeof(Object->DrawObjectList[0]));
 				// берем стандартные шейдеры
 				ShipPart->DrawObjectList[0].ShaderType = 1;
 				// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
