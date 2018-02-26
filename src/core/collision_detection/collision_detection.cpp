@@ -271,7 +271,7 @@ bool vw_SphereAABBCollision(VECTOR3D Object1AABB[8], VECTOR3D Object1Location,
 			return false;
 
 		/* check X ^ dir */
-		float r{Object1AABB[0].y*fabs(dir.z) + Object1AABB[0].z*fabs(dir.y)};
+		double r{Object1AABB[0].y*fabs(dir.z) + Object1AABB[0].z*fabs(dir.y)};
 		if (fabs(T.y*dir.z - T.z*dir.y) > r)
 			return false;
 
@@ -344,7 +344,7 @@ bool vw_SphereOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation,
 			return false;
 
 		/* check X ^ dir */
-		float r{TMPMax.y*fabs(dir.z) + TMPMax.z*fabs(dir.y)};
+		double r{TMPMax.y*fabs(dir.z) + TMPMax.z*fabs(dir.y)};
 		if ( fabs(T.y*dir.z - T.z*dir.y) > r )
 			return false;
 
