@@ -18,7 +18,7 @@ AstroMenace is compiled without support for [RTTI], as such code contributions u
 
 ### No GOTO statement
 
-GOTO statement not allowed. Code logic should not demand long jumps. Functions should be short and clear, so, if you need GOTO in AstroMenace code - you are doing something wrong. For some cases, GOTO could be replaced by another C++ features, for example, Lambda expressions.
+GOTO statement not allowed. Code logic should not demand long jumps. Functions should be short and clear, so, if you need GOTO in AstroMenace code - you are doing something wrong. For some cases, GOTO could be replaced by another C++ features, for example, named Lambda functions.
 
 ### No CONTINUE statement, avoid BREAK statement
 

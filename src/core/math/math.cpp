@@ -280,12 +280,12 @@ void VECTOR3D::Multiply(const VECTOR3D &A)
 /*
  * Calculates the plane equation given three points.
  */
-void vw_GetPlaneABCD(float *A, float *B, float *C, float *D,
+int vw_GetPlaneABCD(float *A, float *B, float *C, float *D,
 		  const VECTOR3D &Point1, const VECTOR3D &Point2, const VECTOR3D &Point3)
 {
 	if ((A == nullptr) || (B == nullptr) ||
 	    (C == nullptr) || (D == nullptr))
-		return;
+		return ERR_PARAMETERS;
 
 	*A = (Point2.y-Point1.y)*(Point3.z-Point1.z)-(Point2.z-Point1.z)*(Point3.y-Point1.y);
 	*B = (Point2.z-Point1.z)*(Point3.x-Point1.x)-(Point2.x-Point1.x)*(Point3.z-Point1.z);
@@ -296,15 +296,17 @@ void vw_GetPlaneABCD(float *A, float *B, float *C, float *D,
 	     +Point1.z*(Point2.y-Point1.y)*(Point3.x-Point1.x)
 	     +Point1.y*(Point2.x-Point1.x)*(Point3.z-Point1.z)
 	     +Point1.x*(Point2.z-Point1.z)*(Point3.y-Point1.y);
+
+	return 0;
 }
 
 /*
  * Calculate point rotation.
  */
-void vw_RotatePoint(VECTOR3D *Point, const VECTOR3D &Angle)
+int vw_RotatePoint(VECTOR3D *Point, const VECTOR3D &Angle)
 {
 	if (Point == nullptr)
-		return;
+		return ERR_PARAMETERS;
 
 	const float p180 = 0.0174532925f;
 	float xTMP = Point->x;
@@ -340,15 +342,17 @@ void vw_RotatePoint(VECTOR3D *Point, const VECTOR3D &Angle)
 		Point->x = xTMP*c + yTMP*s;
 		Point->y = -xTMP*s + yTMP*c;
 	}
+
+	return 0;
 }
 
 /*
  * Calculate point inverse rotation.
  */
-void vw_RotatePointInv(VECTOR3D *Point, const VECTOR3D &Angle)
+int vw_RotatePointInv(VECTOR3D *Point, const VECTOR3D &Angle)
 {
 	if (Point == nullptr)
-		return;
+		return ERR_PARAMETERS;
 
 	const float p180 = 0.0174532925f;
 	float xTMP = Point->x;
@@ -384,4 +388,6 @@ void vw_RotatePointInv(VECTOR3D *Point, const VECTOR3D &Angle)
 		Point->y = yTMP*c + zTMP*s;
 		Point->z = -yTMP*s + zTMP*c;
 	}
+
+	return 0;
 }

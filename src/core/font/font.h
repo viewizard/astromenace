@@ -38,7 +38,7 @@ void vw_SetFontSize(int FontSize);
 // Set font offset.
 void vw_SetFontOffsetY(int NewOffsetY);
 // Generate font characters by list.
-void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const char *CharsList);
+int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const char *CharsList);
 // Check font character by UTF32 code.
 bool vw_CheckFontCharByUTF32(unsigned UTF32);
 // Release all font characters and created for this characters textures.
@@ -49,9 +49,9 @@ void vw_ShutdownFont();
 // Get string size with current font size.
 int vw_FontSize(const char *Text, ...);
 // Draw text with current font.
-void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
+int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
 		 float R, float G, float B, float Transp, const char *Text, ...);
 // Draw 3D text with current font.
-void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...);
+int vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...);
 
 #endif // FONT_H

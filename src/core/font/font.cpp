@@ -107,11 +107,11 @@ std::vector<float> DrawBuffer{};
 int vw_InitFont(const std::string &FontName)
 {
 	if (FontName.empty())
-		return -1;
+		return ERR_PARAMETERS;
 
 	if (FT_Init_FreeType(&InternalLibrary)) {
 		fprintf(stderr, "Can't initialize library, font: %s\n", FontName.c_str());
-		return -1;
+		return ERR_EXT_RES;
 	}
 
 	if (InternalFontBuffer.get() != nullptr)
@@ -120,7 +120,7 @@ int vw_InitFont(const std::string &FontName)
 	std::unique_ptr<eFILE> FontFile = vw_fopen(FontName);
 	if (FontFile == nullptr) {
 		fprintf(stderr, "Can't open font file: %s\n", FontName.c_str());
-		return -1;
+		return ERR_FILE_NOT_FOUND;
 	}
 
 	FontFile->fseek(0, SEEK_END);
@@ -134,7 +134,7 @@ int vw_InitFont(const std::string &FontName)
 
 	if (FT_New_Memory_Face(InternalLibrary, InternalFontBuffer.get(), FontBufferSize, 0, &InternalFace)) {
 		fprintf(stderr, "Can't create font face from memory, font: %s\n", FontName.c_str());
-		return -1;
+		return ERR_EXT_RES;
 	}
 
 	printf("Font initialized: %s\n\n", FontName.c_str());
@@ -272,10 +272,10 @@ static eFontChar* LoadFontChar(unsigned UTF32)
 /*
  * Generate font characters by list.
  */
-void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const char *CharsList)
+int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const char *CharsList)
 {
 	if (CharsList ==nullptr)
-		return;
+		return ERR_PARAMETERS;
 
 	printf("Font characters generation start.\n");
 
@@ -290,7 +290,7 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 	// initial setup
 	if (FT_Set_Char_Size(InternalFace, InternalFontSize << 6, InternalFontSize << 6, 96, 96)) {
 		fprintf(stderr, "Can't set char size %i.", InternalFontSize);
-		return;
+		return ERR_EXT_RES;
 	}
 
 	// create one large bitmap with all font characters from list
@@ -307,7 +307,7 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 		// load glyph
 		if (FT_Load_Char(InternalFace, CurrentChar, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT)) {
 			fprintf(stderr, "Can't load Char: %u\n", CurrentChar);
-			return;
+			return ERR_EXT_RES;
 		}
 
 		FontChars_List.push_front(std::unique_ptr<eFontChar>(new eFontChar(CurrentChar, InternalFontSize, nullptr,
@@ -356,7 +356,7 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 	eTexture *FontTexture = vw_CreateTextureFromMemory(TextureName, DIB.get(), FontTextureWidth, FontTextureHeight, 4, 0);
 	if (FontTexture == nullptr) {
 		fprintf(stderr, "Can't create font texture.\n");
-		return;
+		return ERR_MEM;
 	}
 
 	// setup texture to all font characters from list
@@ -369,6 +369,7 @@ void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const cha
 	}
 
 	printf("Font characters generation end.\n\n");
+	return 0;
 }
 
 /*
@@ -431,11 +432,11 @@ static void CalculateWidthFactors(const char *Text, const float StrictWidth, flo
  *      if StrictWidth < 0, reduce all font character's width
  * ExpandWidth - expand width to provided parameter
  */
-void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
+int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
 		 float R, float G, float B, float Transp, const char *Text, ...)
 {
 	if (Text == nullptr)
-		return;
+		return ERR_PARAMETERS;
 	if (Transp >= 1.0f)
 		Transp = 1.0f;
 
@@ -450,13 +451,13 @@ void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontS
 	// check text position
 	if (ASpresent) {
 		if (Y > AH)
-			return;
+			return 0; // it's ok, we work in proper way here
 	} else {
 		if (Y > H)
-			return;
+			return 0; // it's ok, we work in proper way here
 	}
 	if (Y + InternalFontSize * FontScale < 0)
-		return;
+		return 0; // it's ok, we work in proper way here
 
 	// get string with variable arguments
 	char text[1024];
@@ -465,7 +466,7 @@ void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontS
 	vsprintf(text, Text, ap);
 	va_end(ap);
 	if (strlen(text) == 0)
-		return;
+		return ERR_PARAMETERS; // error, the idea was render text, but we don't have text
 
 	// start position on X axis for character
 	float Xstart{X * 1.0f};
@@ -576,6 +577,7 @@ void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontS
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 	vw_SetTextureBlend(false, 0, 0);
 	vw_BindTexture(0, 0);
+	return 0;
 }
 
 /*
@@ -584,7 +586,7 @@ void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontS
 int vw_FontSize(const char *Text, ...)
 {
 	if (Text == nullptr)
-		return 0;
+		return ERR_PARAMETERS;
 
 	// get string with variable arguments
 	char text[1024];
@@ -593,7 +595,7 @@ int vw_FontSize(const char *Text, ...)
 	vsprintf(text, Text, ap);
 	va_end(ap);
 	if (strlen(text) == 0)
-		return 0;
+		return ERR_PARAMETERS;
 
 	const char *textdraw{text};
 	// calculate default space width
@@ -626,10 +628,10 @@ int vw_FontSize(const char *Text, ...)
 /*
  * Draw 3D text with current font.
  */
-void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
+int vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 {
 	if (Text == nullptr)
-		return;
+		return ERR_PARAMETERS;
 
 	// get string with variable arguments
 	char text[1024];
@@ -638,7 +640,7 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 	vsprintf(text, Text, ap);
 	va_end(ap);
 	if (strlen(text) == 0)
-		return;
+		return ERR_PARAMETERS;
 
 	// start position on X axis for character
 	float Xstart{0.0f};
@@ -728,4 +730,5 @@ void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 	vw_PopMatrix();
 	vw_SetTextureBlend(false, 0, 0);
 	vw_BindTexture(0, 0);
+	return 0;
 }

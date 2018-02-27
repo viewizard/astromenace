@@ -112,7 +112,7 @@ static int WriteIntoVFSfromMemory(eVFS *WritableVFS, const std::string &Name, co
 	    (DataSize <= 0) || (HeaderLengthVFS == nullptr) ||
 	    (HeaderOffsetVFS == nullptr) || (DataStartOffsetVFS == nullptr) ||
 	    (Name.size() > UINT16_MAX)) // we should store string size in uint16_t variable
-		return -1;
+		return ERR_PARAMETERS;
 
 	// push VFS entry to map
 	WritableVFSEntries_Map[Name] = std::unique_ptr<eVFS_Entry>(new eVFS_Entry(WritableVFS));
@@ -159,12 +159,12 @@ static int WriteIntoVFSfromFile(eVFS *WritableVFS, const std::string &SrcName, c
 	if ((WritableVFS == nullptr) || SrcName.empty() || DstName.empty() ||
 	    (HeaderLengthVFS == nullptr) || (HeaderOffsetVFS == nullptr) ||
 	    (DataStartOffsetVFS == nullptr))
-		return -1;
+		return ERR_PARAMETERS;
 
 	SDL_RWops *Ftmp = SDL_RWFromFile(SrcName.c_str(), "rb");
 	if (Ftmp == nullptr) {
 		fprintf(stderr, "Can't find file %s\n", SrcName.c_str());
-		return -1;
+		return ERR_FILE_NOT_FOUND;
 	}
 
 	SDL_RWseek(Ftmp, 0, SEEK_END);
@@ -193,15 +193,17 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 		 const std::string &RawDataDir, const std::string &ModelsPack,
 		 const std::string GameData[], unsigned int GameDataCount)
 {
+	int rc;
+
 	if (Name.empty())
-		return false;
+		return ERR_PARAMETERS;
 
 	std::unique_ptr<eVFS> TempVFS(new eVFS(Name));
 
 	TempVFS->File = SDL_RWFromFile(Name.c_str(), "wb");
 	if (TempVFS->File == nullptr) {
 		fprintf(stderr, "Can't open VFS file for write %s\n", Name.c_str());
-		return -1;
+		return ERR_FILE_NOT_FOUND;
 	}
 
 	// write VFS sign "VFS_", version and build number
@@ -228,21 +230,23 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 			vw_ShutdownVFS();
 		}
 
-		if (vw_OpenVFS(RawDataDir + ModelsPack, 0) != 0) {
+		rc = vw_OpenVFS(RawDataDir + ModelsPack, 0);
+		if (rc != 0) {
 			fprintf(stderr, "%s file not found or corrupted.\n", (RawDataDir + ModelsPack).c_str());
-			return -1;
+			return rc;
 		}
 
 		// copy all files from pack into new VFS
 		for (const auto &TmpVFSEntry : VFSEntries_Map) {
 			std::unique_ptr<eFILE> tmpFile = vw_fopen(TmpVFSEntry.first);
 			if (tmpFile == nullptr)
-				return -1;
-			if (0 != WriteIntoVFSfromMemory(TempVFS.get(), TmpVFSEntry.first, tmpFile->Data, tmpFile->Size,
-							&HeaderLengthVFS, &HeaderOffsetVFS, &DataStartOffsetVFS,
-							WritableVFSEntries_Map)) {
+				return ERR_FILE_NOT_FOUND;
+			rc = WriteIntoVFSfromMemory(TempVFS.get(), TmpVFSEntry.first, tmpFile->Data, tmpFile->Size,
+						    &HeaderLengthVFS, &HeaderOffsetVFS, &DataStartOffsetVFS,
+						    WritableVFSEntries_Map);
+			if (rc != 0) {
 				fprintf(stderr, "VFS compilation process aborted!\n");
-				return -1;
+				return rc;
 			}
 			vw_fclose(tmpFile);
 		}
@@ -254,11 +258,12 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 	// add real files into VFS
 	if (GameDataCount > 0) {
 		for (unsigned int i = 0; i < GameDataCount; i++) {
-			if (0 != WriteIntoVFSfromFile(TempVFS.get(), RawDataDir + GameData[i], GameData[i],
-						      &HeaderLengthVFS, &HeaderOffsetVFS, &DataStartOffsetVFS,
-						      WritableVFSEntries_Map)) {
+			rc = WriteIntoVFSfromFile(TempVFS.get(), RawDataDir + GameData[i], GameData[i],
+						  &HeaderLengthVFS, &HeaderOffsetVFS, &DataStartOffsetVFS,
+						  WritableVFSEntries_Map);
+			if (rc != 0) {
 				fprintf(stderr, "VFS compilation process aborted!\n");
-				return -1;
+				return rc;
 			}
 		}
 	}
@@ -273,12 +278,12 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 {
 	// small trick for replace 'goto' statement usage (for release
-	// memory on errors) to Lambda expression
-	auto errPrintWithVFSListPop = [&Name] (const std::string &Text)
+	// memory on errors) to named Lambda function
+	auto errPrintWithVFSListPop = [&Name] (const std::string &Text, int rc)
 	{
 		fprintf(stderr, "%s %s\n", Text.c_str(), Name.c_str());
 		VFS_List.pop_front();
-		return -1;
+		return rc;
 	};
 
 	// since we can't move unique_ptr into std::forward_list with push_front(),
@@ -287,7 +292,7 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 
 	VFS_List.front()->File = SDL_RWFromFile(Name.c_str(), "rb");
 	if (VFS_List.front()->File == nullptr)
-		return errPrintWithVFSListPop("Can't find VFS file");
+		return errPrintWithVFSListPop("Can't find VFS file", ERR_FILE_NOT_FOUND);
 
 	SDL_RWseek(VFS_List.front()->File,0,SEEK_END);
 	int VFS_FileSize = SDL_RWtell(VFS_List.front()->File);
@@ -296,29 +301,29 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 	// check VFS file sign "VFS_"
 	char Sign[4];
 	if(SDL_RWread(VFS_List.front()->File, &Sign, 4, 1) == 0)
-		return errPrintWithVFSListPop("VFS file size error");
+		return errPrintWithVFSListPop("VFS file size error", ERR_FILE_IO);
 	// Sign don't contain null-terminated string, strncmp() should be used
 	if (strncmp(Sign, "VFS_", 4) != 0)
-		return errPrintWithVFSListPop("VFS file header error");
+		return errPrintWithVFSListPop("VFS file header error", ERR_FILE_IO);
 
 	// check VFS file version
 	char Version[4];
 	if(SDL_RWread(VFS_List.front()->File, &Version, 4, 1) == 0)
-		return errPrintWithVFSListPop("VFS file corrupted:");
+		return errPrintWithVFSListPop("VFS file corrupted:", ERR_FILE_IO);
 	// Version don't contain null-terminated string, strncmp() should be used
 	if (strncmp(Version, VFS_VER, 4) != 0)
-		return errPrintWithVFSListPop("VFS file has wrong version:");
+		return errPrintWithVFSListPop("VFS file has wrong version:", ERR_FILE_IO);
 
 	// check VFS file build number
 	unsigned int vfsBuildNumber;
 	if(SDL_RWread(VFS_List.front()->File, &vfsBuildNumber, 4, 1) == 0)
-		return errPrintWithVFSListPop("VFS file corrupted:");
+		return errPrintWithVFSListPop("VFS file corrupted:", ERR_FILE_IO);
 	if (BuildNumber != 0) {
 		if (vfsBuildNumber == 0) {
-			printf("VFS file build number was not set (0).\n");
+			return errPrintWithVFSListPop("VFS file build number was not set", ERR_VFS_BUILD);
 		} else {
 			if (BuildNumber != vfsBuildNumber)
-				return errPrintWithVFSListPop("VFS file has wrong build number");
+				return errPrintWithVFSListPop("VFS file has wrong build number", ERR_VFS_BUILD);
 		}
 	}
 
@@ -434,7 +439,7 @@ std::unique_ptr<eFILE> vw_fopen(const std::string &FileName)
 int vw_fclose(std::unique_ptr<eFILE> &stream)
 {
 	if (stream.get() == nullptr)
-		return -1;
+		return ERR_PARAMETERS;
 
 	// release allocated memory
 	stream.reset();
@@ -451,7 +456,7 @@ int eFILE::fread(void *buffer, size_t size, size_t count)
 	int CopyCount{0};
 
 	if ((buffer == nullptr) || (Data == nullptr))
-		return -1;
+		return ERR_PARAMETERS;
 
 	// read data
 	for (size_t i = 0; i < count; i++) {
@@ -474,24 +479,25 @@ int eFILE::fseek(long offset, int origin)
 	switch (origin) {
 	case SEEK_CUR:
 		if (Pos + offset > Size)
-			return 1;
+			return ERR_PARAMETERS;
 		Pos += offset;
 		break;
 
 	case SEEK_END:
 		if (Size - offset < 0)
-			return 1;
+			return ERR_PARAMETERS;
 		Pos = Size - offset;
 		break;
 
 	case SEEK_SET:
 		if (offset < 0 || offset > Size)
-			return 1;
+			return ERR_PARAMETERS;
 		Pos = offset;
 		break;
 
 	default:
 		fprintf(stderr, "Error in fseek function call, wrong origin.\n");
+		return ERR_PARAMETERS;
 		break;
 	}
 

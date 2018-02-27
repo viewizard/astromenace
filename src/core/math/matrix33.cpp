@@ -83,10 +83,7 @@ void vw_Matrix33CreateRotate(float Matrix33[9], const VECTOR3D &Angle)
 		Matrix33[4] = c;
 		Matrix33[2] = Matrix33[5] = Matrix33[6] = Matrix33[7] = 0.0f;
 		Matrix33[8] = 1.0f;
-		return;
-	}
-
-	if (Angle.y != 0.0f && Angle.x == 0.0f && Angle.z == 0.0f) {
+	} else if (Angle.y != 0.0f && Angle.x == 0.0f && Angle.z == 0.0f) {
 		float a = -Angle.y*p180;
 		float c = cosf(a);
 		float s = sinf(a);
@@ -96,10 +93,7 @@ void vw_Matrix33CreateRotate(float Matrix33[9], const VECTOR3D &Angle)
 		Matrix33[8] = c;
 		Matrix33[1] = Matrix33[3] = Matrix33[5] = Matrix33[7] = 0.0f;
 		Matrix33[4] = 1.0f;
-		return;
-	}
-
-	if (Angle.x != 0.0f && Angle.y == 0.0f && Angle.z == 0.0f) {
+	} else if (Angle.x != 0.0f && Angle.y == 0.0f && Angle.z == 0.0f) {
 		float a = -Angle.x*p180;
 		float c = cosf(a);
 		float s = sinf(a);
@@ -109,30 +103,29 @@ void vw_Matrix33CreateRotate(float Matrix33[9], const VECTOR3D &Angle)
 		Matrix33[8] = c;
 		Matrix33[1] = Matrix33[2] = Matrix33[3] = Matrix33[6] = 0.0f;
 		Matrix33[0] = 1.0f;
-		return;
+	} else {
+		// if we need 2 or more angles
+		float a = -Angle.x*p180;
+		float A = cosf(a);
+		float B = sinf(a);
+		a = -Angle.y*p180;
+		float C = cosf(a);
+		float D = sinf(a);
+		a = -Angle.z*p180;
+		float E = cosf(a);
+		float F = sinf(a);
+		float AD = A * D;
+		float BD = B * D;
+		Matrix33[0]  =   C * E;
+		Matrix33[1]  =  -C * F;
+		Matrix33[2]  =   D;
+		Matrix33[3]  =  BD * E + A * F;
+		Matrix33[4]  = -BD * F + A * E;
+		Matrix33[5]  =  -B * C;
+		Matrix33[6]  = -AD * E + B * F;
+		Matrix33[7]  =  AD * F + B * E;
+		Matrix33[8] =    A * C;
 	}
-
-	// if we need 2 or more angles
-	float a = -Angle.x*p180;
-	float A = cosf(a);
-	float B = sinf(a);
-	a = -Angle.y*p180;
-	float C = cosf(a);
-	float D = sinf(a);
-	a = -Angle.z*p180;
-	float E = cosf(a);
-	float F = sinf(a);
-	float AD = A * D;
-	float BD = B * D;
-	Matrix33[0]  =   C * E;
-	Matrix33[1]  =  -C * F;
-	Matrix33[2]  =   D;
-	Matrix33[3]  =  BD * E + A * F;
-	Matrix33[4]  = -BD * F + A * E;
-	Matrix33[5]  =  -B * C;
-	Matrix33[6]  = -AD * E + B * F;
-	Matrix33[7]  =  AD * F + B * E;
-	Matrix33[8] =    A * C;
 }
 
 /*

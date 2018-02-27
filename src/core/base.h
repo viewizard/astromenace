@@ -68,4 +68,14 @@
 
 #endif /* unix */
 
+
+// error codes
+#define ERR_PARAMETERS		-1	// function's parameters related issue
+#define ERR_FILE_NOT_FOUND	-2	// file not found
+#define ERR_FILE_IO		-3	// file I/O issue
+#define ERR_VFS_BUILD		-4	// VFS build number issue
+#define ERR_EXT_RES		-5	// issue with external resources
+#define ERR_MEM			-6	// memory allocation related issue
+
+
 #endif /* Base_H */

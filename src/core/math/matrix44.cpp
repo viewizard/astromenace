@@ -107,10 +107,7 @@ void vw_Matrix44CreateRotate(float Matrix44[16], const VECTOR3D &Angle)
 		Matrix44[2] = Matrix44[3] = Matrix44[6] = Matrix44[7] = Matrix44[8] = Matrix44[9] = 0.0f;
 		Matrix44[11] = Matrix44[12] = Matrix44[13] = Matrix44[14] = 0.0f;
 		Matrix44[15] = Matrix44[10] = 1.0f;
-		return;
-	}
-
-	if (Angle.y != 0.0f && Angle.x == 0.0f && Angle.z == 0.0f) {
+	} else if (Angle.y != 0.0f && Angle.x == 0.0f && Angle.z == 0.0f) {
 		float a = -Angle.y*p180;
 		float c = cosf(a);
 		float s = sinf(a);
@@ -121,10 +118,7 @@ void vw_Matrix44CreateRotate(float Matrix44[16], const VECTOR3D &Angle)
 		Matrix44[1] = Matrix44[3] = Matrix44[4] = Matrix44[6] = Matrix44[7] = 0.0f;
 		Matrix44[9] = Matrix44[11] = Matrix44[12] = Matrix44[13] = Matrix44[14] = 0.0f;
 		Matrix44[15] = Matrix44[5] = 1.0f;
-		return;
-	}
-
-	if (Angle.x != 0.0f && Angle.y == 0.0f && Angle.z == 0.0f) {
+	} else if (Angle.x != 0.0f && Angle.y == 0.0f && Angle.z == 0.0f) {
 		float a = -Angle.x*p180;
 		float c = cosf(a);
 		float s = sinf(a);
@@ -135,32 +129,31 @@ void vw_Matrix44CreateRotate(float Matrix44[16], const VECTOR3D &Angle)
 		Matrix44[1] = Matrix44[2] = Matrix44[3] = Matrix44[4] = Matrix44[7] = 0.0f;
 		Matrix44[8] = Matrix44[11] = Matrix44[12] = Matrix44[13] = Matrix44[14] = 0.0f;
 		Matrix44[0] = Matrix44[15] = 1.0f;
-		return;
+	} else {
+		// if we need 2 or more angles
+		float a = -Angle.x*p180;
+		float A = cosf(a);
+		float B = sinf(a);
+		a = -Angle.y*p180;
+		float C = cosf(a);
+		float D = sinf(a);
+		a = -Angle.z*p180;
+		float E = cosf(a);
+		float F = sinf(a);
+		float AD = A * D;
+		float BD = B * D;
+		Matrix44[0]  =   C * E;
+		Matrix44[1]  =  -C * F;
+		Matrix44[2]  =   D;
+		Matrix44[4]  =  BD * E + A * F;
+		Matrix44[5]  = -BD * F + A * E;
+		Matrix44[6]  =  -B * C;
+		Matrix44[8]  = -AD * E + B * F;
+		Matrix44[9]  =  AD * F + B * E;
+		Matrix44[10] =   A * C;
+		Matrix44[3]  =  Matrix44[7] = Matrix44[11] = Matrix44[12] = Matrix44[13] = Matrix44[14] = 0.0f;
+		Matrix44[15] =  1.0f;
 	}
-
-	// if we need 2 or more angles
-	float a = -Angle.x*p180;
-	float A = cosf(a);
-	float B = sinf(a);
-	a = -Angle.y*p180;
-	float C = cosf(a);
-	float D = sinf(a);
-	a = -Angle.z*p180;
-	float E = cosf(a);
-	float F = sinf(a);
-	float AD = A * D;
-	float BD = B * D;
-	Matrix44[0]  =   C * E;
-	Matrix44[1]  =  -C * F;
-	Matrix44[2]  =   D;
-	Matrix44[4]  =  BD * E + A * F;
-	Matrix44[5]  = -BD * F + A * E;
-	Matrix44[6]  =  -B * C;
-	Matrix44[8]  = -AD * E + B * F;
-	Matrix44[9]  =  AD * F + B * E;
-	Matrix44[10] =   A * C;
-	Matrix44[3]  =  Matrix44[7] = Matrix44[11] = Matrix44[12] = Matrix44[13] = Matrix44[14] = 0.0f;
-	Matrix44[15] =  1.0f;
 }
 
 /*

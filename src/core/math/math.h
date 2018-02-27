@@ -149,11 +149,11 @@ inline void vw_Clamp(T &value, T low, T high)
 }
 
 // Calculate point rotation.
-void vw_RotatePoint(VECTOR3D *Point, const VECTOR3D &Angle);
+int vw_RotatePoint(VECTOR3D *Point, const VECTOR3D &Angle);
 // Calculate point inverse rotation.
-void vw_RotatePointInv(VECTOR3D *Point, const VECTOR3D &Angle);
+int vw_RotatePointInv(VECTOR3D *Point, const VECTOR3D &Angle);
 // Calculates the plane equation given three points.
-void vw_GetPlaneABCD(float *A, float *B, float *C, float *D,
+int vw_GetPlaneABCD(float *A, float *B, float *C, float *D,
 		     const VECTOR3D &Point1, const VECTOR3D &Point2, const VECTOR3D &Point3);
 
 /*
