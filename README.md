@@ -91,7 +91,7 @@ $ sudo pkg_add -r -v gcc cmake git sdl20 libogg libvorbis openal
 Download and install "Command Line Tools for Xcode" or "Xcode".
 Install HomeBrew package manager: https://brew.sh/
 ```bash
-$ brew install cmake sdl git libogg libvorbis freealut freetype
+$ brew install cmake sdl2 git libogg libvorbis freealut freetype
 ```
 
 ### 2) Clone git with latest source files
