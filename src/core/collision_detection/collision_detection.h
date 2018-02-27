@@ -32,26 +32,26 @@
 #include "../model3d/model3d.h"
 
 
-/* AABB-AABB collision detection. */
+// AABB-AABB collision detection.
 bool vw_AABBAABBCollision(const VECTOR3D Object1AABB[8], const VECTOR3D &Object1Location,
 			  const VECTOR3D Object2AABB[8], const VECTOR3D &Object2Location);
-/* OBB-OBB collision detection. */
+// OBB-OBB collision detection.
 bool vw_OBBOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation, VECTOR3D Object1Location, float Object1RotationMatrix[9],
 			VECTOR3D Object2OBB[8], VECTOR3D Object2OBBLocation, VECTOR3D Object2Location, float Object2RotationMatrix[9]);
-/* Sphere-Sphere collision detection. */
+// Sphere-Sphere collision detection.
 bool vw_SphereSphereCollision(float Object1Radius, const VECTOR3D &Object1Location,
 			      float Object2Radius, const VECTOR3D &Object2Location,
 			      const VECTOR3D &Object2PrevLocation);
-/* Sphere-AABB collision detection. */
+// Sphere-AABB collision detection.
 bool vw_SphereAABBCollision(VECTOR3D Object1AABB[8], VECTOR3D Object1Location,
 			    float Object2Radius, VECTOR3D Object2Location, VECTOR3D Object2PrevLocation);
-/* Sphere-OBB collision detection. */
+// Sphere-OBB collision detection.
 bool vw_SphereOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation,
 			   VECTOR3D Object1Location, float Object1RotationMatrix[9],
 			   float Object2Radius, VECTOR3D Object2Location, VECTOR3D Object2PrevLocation);
-/* Sphere-Mesh collision detection. */
+// Sphere-Mesh collision detection.
 bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawObjectList, float Object1RotationMatrix[9],
 			    float Object2Radius, VECTOR3D Object2Location, VECTOR3D Object2PrevLocation,
 			    VECTOR3D *CollisionLocation);
 
-#endif /* COLLISIONDETECTION_H */
+#endif // COLLISIONDETECTION_H

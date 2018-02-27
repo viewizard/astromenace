@@ -33,13 +33,13 @@
 
 #define VFS_VER "v1.6"
 
-/* Create VFS file. */
+// Create VFS file.
 int	vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 		     const std::string &RawDataDir, const std::string &ModelsPack,
 		     const std::string GameData[], unsigned int GameDataCount);
-/* Open VFS file. */
+// Open VFS file.
 int	vw_OpenVFS(const std::string &Name, unsigned int BuildNumber);
-/* Shutdown VFS. */
+// Shutdown VFS.
 void	vw_ShutdownVFS();
 
 struct eFILE {
@@ -59,12 +59,10 @@ private:
 	long	Pos{0};
 };
 
-/* Open the eFILE. */
+// Open the eFILE.
 std::unique_ptr<eFILE>	vw_fopen(const std::string &FileName);
-/*
- * You could call vw fclose() if you should release memory in particular
- * part of code. Otherwise, it will be deleted automatically (see. unique_ptr).
- */
+// You could call vw fclose() if you should release memory in particular
+// part of code. Otherwise, it will be deleted automatically (see. unique_ptr).
 int			vw_fclose(std::unique_ptr<eFILE> &stream);
 
-#endif /* VFS_H */
+#endif // VFS_H

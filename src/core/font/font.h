@@ -31,27 +31,27 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-/* Font initialization by font name (path to file). */
+// Font initialization by font name (path to file).
 int vw_InitFont(const std::string &FontName);
-/* Set current font size. */
+// Set current font size.
 void vw_SetFontSize(int FontSize);
-/* Set font offset. */
+// Set font offset.
 void vw_SetFontOffsetY(int NewOffsetY);
-/* Generate font characters by list. */
+// Generate font characters by list.
 void vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const char *CharsList);
-/* Check font character by UTF32 code. */
+// Check font character by UTF32 code.
 bool vw_CheckFontCharByUTF32(unsigned UTF32);
-/* Release all font characters and created for this characters textures. */
+// Release all font characters and created for this characters textures.
 void vw_ReleaseAllFontChars();
-/* Shutdown font. */
+// Shutdown font.
 void vw_ShutdownFont();
 
-/* Get string size with current font size. */
+// Get string size with current font size.
 int vw_FontSize(const char *Text, ...);
-/* Draw text with current font. */
+// Draw text with current font.
 void vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
 		 float R, float G, float B, float Transp, const char *Text, ...);
-/* Draw 3D text with current font. */
+// Draw 3D text with current font.
 void vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...);
 
-#endif /* FONT_H */
+#endif // FONT_H

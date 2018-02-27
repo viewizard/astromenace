@@ -32,19 +32,19 @@ float Frustum[6][4];
 }
 
 enum PlaneData {
-	A = 0,		/* The X value of the plane's normal. */
-	B = 1,		/* The Y value of the plane's normal. */
-	C = 2,		/* The Z value of the plane's normal. */
-	D = 3		/* The distance the plane is from the origin. */
+	A = 0,		// The X value of the plane's normal.
+	B = 1,		// The Y value of the plane's normal.
+	C = 2,		// The Z value of the plane's normal.
+	D = 3		// The distance the plane is from the origin.
 };
 
 enum Side {
-	RIGHT	= 0,	/* The RIGHT side. */
-	LEFT	= 1,	/* The LEFT side. */
-	BOTTOM	= 2,	/* The BOTTOM side. */
-	TOP	= 3,	/* The TOP side. */
-	BACK	= 4,	/* The BACK side. */
-	FRONT	= 5	/* The FRONT side. */
+	RIGHT	= 0,	// The RIGHT side.
+	LEFT	= 1,	// The LEFT side.
+	BOTTOM	= 2,	// The BOTTOM side.
+	TOP	= 3,	// The TOP side.
+	BACK	= 4,	// The BACK side.
+	FRONT	= 5	// The FRONT side.
 };
 
 
@@ -53,17 +53,15 @@ enum Side {
  */
 static void NormalizePlane(int Side)
 {
-	/* Here we calculate the magnitude of the normal to the plane (point A B C)
-	 * Remember that (A, B, C) is that same thing as the normal's (X, Y, Z).
-	 * To calculate magnitude you use the equation:  magnitude = sqrt( x^2 + y^2 + z^2)
-	 */
+	// Here we calculate the magnitude of the normal to the plane (point A B C)
+	// Remember that (A, B, C) is that same thing as the normal's (X, Y, Z).
+	// To calculate magnitude you use the equation:  magnitude = sqrt( x^2 + y^2 + z^2)
 	float Magnitude{vw_sqrtf(Frustum[Side][A] * Frustum[Side][A] +
 				 Frustum[Side][B] * Frustum[Side][B] +
 				 Frustum[Side][C] * Frustum[Side][C])};
 
-	/* Then we divide the plane's values by it's magnitude.
-	 * This makes it easier to work with.
-	 */
+	// Then we divide the plane's values by it's magnitude.
+	// This makes it easier to work with.
 	Frustum[Side][A] /= Magnitude;
 	Frustum[Side][B] /= Magnitude;
 	Frustum[Side][C] /= Magnitude;
@@ -75,23 +73,20 @@ static void NormalizePlane(int Side)
  */
 void vw_CalculateFrustum()
 {
-	float proj[16]; /* This will hold our projection matrix. */
-	float modl[16]; /* This will hold our modelview matrix. */
-	float clip[16]; /* This will hold the clipping planes. */
+	float proj[16]; // This will hold our projection matrix.
+	float modl[16]; // This will hold our modelview matrix.
+	float clip[16]; // This will hold the clipping planes.
 
-	/* Below, we pass in RI_PROJECTION_MATRIX to abstract our projection matrix.
-	 * It then stores the matrix into an array of [16].
-	 */
+	// Below, we pass in RI_PROJECTION_MATRIX to abstract our projection matrix.
+	// It then stores the matrix into an array of [16].
 	vw_GetMatrix(RI_PROJECTION_MATRIX, proj);
 
-	/* By passing in RI_MODELVIEW_MATRIX, we can abstract our model view matrix.
-	 * This also stores it in an array of [16].
-	 */
+	// By passing in RI_MODELVIEW_MATRIX, we can abstract our model view matrix.
+	// This also stores it in an array of [16].
 	vw_GetMatrix(RI_MODELVIEW_MATRIX, modl);
 
-	/* Now that we have our modelview and projection matrix, if we combine these 2 matrices,
-	 * it will give us our clipping planes.  To combine 2 matrices, we multiply them.
-	 */
+	// Now that we have our modelview and projection matrix, if we combine these 2 matrices,
+	// it will give us our clipping planes.  To combine 2 matrices, we multiply them.
 	clip[ 0] = modl[ 0] * proj[ 0] + modl[ 1] * proj[ 4] + modl[ 2] * proj[ 8] + modl[ 3] * proj[12];
 	clip[ 1] = modl[ 0] * proj[ 1] + modl[ 1] * proj[ 5] + modl[ 2] * proj[ 9] + modl[ 3] * proj[13];
 	clip[ 2] = modl[ 0] * proj[ 2] + modl[ 1] * proj[ 6] + modl[ 2] * proj[10] + modl[ 3] * proj[14];
@@ -112,9 +107,8 @@ void vw_CalculateFrustum()
 	clip[14] = modl[12] * proj[ 2] + modl[13] * proj[ 6] + modl[14] * proj[10] + modl[15] * proj[14];
 	clip[15] = modl[12] * proj[ 3] + modl[13] * proj[ 7] + modl[14] * proj[11] + modl[15] * proj[15];
 
-	/* Now we actually want to get the sides of the frustum.  To do this we take
-	 * the clipping planes we received above and extract the sides from them.
-	 */
+	// Now we actually want to get the sides of the frustum.  To do this we take
+	// the clipping planes we received above and extract the sides from them.
 	Frustum[RIGHT][A] = clip[ 3] - clip[ 0];
 	Frustum[RIGHT][B] = clip[ 7] - clip[ 4];
 	Frustum[RIGHT][C] = clip[11] - clip[ 8];
@@ -157,14 +151,14 @@ void vw_CalculateFrustum()
  */
 bool vw_SphereInFrustum(const VECTOR3D &Point, float Radius)
 {
-	/* go through all the sides of the frustum */
+	// go through all the sides of the frustum
 	for (int i = 0; i < 6; i++) {
-		/* if the center of the sphere is farther away from the plane than the radius */
+		// if the center of the sphere is farther away from the plane than the radius
 		if (Frustum[i][A] * Point.x + Frustum[i][B] * Point.y + Frustum[i][C] * Point.z + Frustum[i][D] <= -Radius)
-			/* the distance was greater than the radius so the sphere is outside of the frustum */
+			// the distance was greater than the radius so the sphere is outside of the frustum
 			return false;
 	}
-	/* the sphere inside of the frustum */
+	// the sphere inside of the frustum
 	return true;
 }
 
@@ -173,13 +167,12 @@ bool vw_SphereInFrustum(const VECTOR3D &Point, float Radius)
  */
 bool vw_BoxInFrustum(const VECTOR3D &MinPoint, const VECTOR3D &MaxPoint)
 {
-	/* Go through all of the corners of the box and check then again each plane
-	 * in the frustum.  If all of them are behind one of the planes, then it most
-	 * like is not in the frustum.
-	 * Note! This will sometimes say that a box is inside the frustum when it is not.
-	 * This happens when all the corners of the bounding box are not behind any one plane.
-	 * This is rare and should not effect the overall rendering speed.
-	 */
+	// Go through all of the corners of the box and check then again each plane
+	// in the frustum.  If all of them are behind one of the planes, then it most
+	// like is not in the frustum.
+	// Note! This will sometimes say that a box is inside the frustum when it is not.
+	// This happens when all the corners of the bounding box are not behind any one plane.
+	// This is rare and should not effect the overall rendering speed.
 	for (int i = 0; i < 6; i++) {
 		if ((Frustum[i][A] * MinPoint.x + Frustum[i][B] * MinPoint.y + Frustum[i][C] * MinPoint.z + Frustum[i][D] <= 0) &&
 		    (Frustum[i][A] * MaxPoint.x + Frustum[i][B] * MinPoint.y + Frustum[i][C] * MinPoint.z + Frustum[i][D] <= 0) &&
@@ -189,10 +182,10 @@ bool vw_BoxInFrustum(const VECTOR3D &MinPoint, const VECTOR3D &MaxPoint)
 		    (Frustum[i][A] * MaxPoint.x + Frustum[i][B] * MinPoint.y + Frustum[i][C] * MaxPoint.z + Frustum[i][D] <= 0) &&
 		    (Frustum[i][A] * MinPoint.x + Frustum[i][B] * MaxPoint.y + Frustum[i][C] * MaxPoint.z + Frustum[i][D] <= 0) &&
 		    (Frustum[i][A] * MaxPoint.x + Frustum[i][B] * MaxPoint.y + Frustum[i][C] * MaxPoint.z + Frustum[i][D] <= 0))
-			/* if we get here, it is not in the frustum */
+			// if we get here, it is not in the frustum
 			return false;
 
 	}
-	/* return a true for the box being inside of the frustum */
+	// return a true for the box being inside of the frustum
 	return true;
 }

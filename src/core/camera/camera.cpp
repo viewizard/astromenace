@@ -28,15 +28,15 @@
 #include "camera.h"
 
 namespace {
-/* Camera update flag (need for frustum calculation on camera update). */
+// Camera update flag (need for frustum calculation on camera update).
 bool CameraUpdated{true};
-/* Camera location. */
+// Camera location.
 VECTOR3D CameraLocation{0.0f, 0.0f, 0.0f};
-/* Camera rotation angles. */
+// Camera rotation angles.
 VECTOR3D CameraRotation{0.0f, 0.0f, 0.0f};
-/* Camera deviation (need for camera shake effect). */
+// Camera deviation (need for camera shake effect).
 VECTOR3D CameraDeviation{0.0f, 0.0f, 0.0f};
-/* Camera focus point (anchor). */
+// Camera focus point (anchor).
 VECTOR3D CameraFocusPoint{0.0f, 0.0f, 0.0f};
 }
 
@@ -93,14 +93,14 @@ VECTOR3D vw_GetCameraFocusPoint()
  */
 void vw_SetCameraMove(const VECTOR3D &NewRotation, float ChangeDistance, const VECTOR3D &Point)
 {
-	/* revert back all movements */
+	// revert back all movements
 	CameraLocation -= Point;
 	vw_RotatePointInv(&CameraLocation, CameraRotation);
-	/* change distance */
+	// change distance
 	CameraLocation.z += ChangeDistance;
-	/* change rotation angles */
+	// change rotation angles
 	CameraRotation += NewRotation;
-	/* apply corrected distance and angles to camera */
+	// apply corrected distance and angles to camera
 	vw_RotatePoint(&CameraLocation, CameraRotation^(-1.0f));
 	CameraLocation += Point;
 	CameraUpdated = true;
@@ -112,10 +112,10 @@ void vw_SetCameraMove(const VECTOR3D &NewRotation, float ChangeDistance, const V
 void vw_SetCameraMoveAroundPoint(const VECTOR3D &Point, float ChangeDistance, const VECTOR3D &ChangeRotation)
 {
 	CameraFocusPoint = Point;
-	/* initial camera move */
+	// initial camera move
 	vw_SetCameraMove(ChangeRotation, ChangeDistance, Point);
 
-	/* rotate camera to the point */
+	// rotate camera to the point
 	VECTOR3D exV{0.0f, 0.0f, 0.0f};
 	VECTOR3D V{Point.x - CameraLocation.x,
 		   Point.y - CameraLocation.y,
@@ -167,7 +167,7 @@ void vw_CameraLookAt()
 
 	vw_Translate((CameraLocation^(-1.0f)) - CameraDeviation);
 
-	/* recalculate frustum on camera update */
+	// recalculate frustum on camera update
 	if (CameraUpdated) {
 		vw_CalculateFrustum();
 		CameraUpdated = false;

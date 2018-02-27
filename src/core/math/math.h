@@ -130,29 +130,29 @@ inline void SetRect(RECT *rect, int left, int top, int right, int bottom)
 	rect->bottom =bottom;
 }
 
-/* Convert utf8 into utf32 code. */
+// Convert utf8 into utf32 code.
 const char *vw_UTF8toUTF32(const char *utf8, unsigned *utf32);
 
-/* Fast cosine function. */
+// Fast cosine function.
 double	vw_dcos(int Angle);
-/* Fast sine function. */
+// Fast sine function.
 double	vw_dsin(int Angle);
-/* Fast sqrtf function. */
+// Fast sqrtf function.
 float	vw_sqrtf(float x);
 
-/* Reference to low if value is less than low, reference to high if high is less than value, otherwise reference to value. */
-/* TODO in future, move to std::clamp (C++17) implementation */
+// Reference to low if value is less than low, reference to high if high is less than value, otherwise reference to value.
+// TODO in future, move to std::clamp (C++17) implementation
 template <typename T>
 inline void vw_Clamp(T &value, T low, T high)
 {
 	value = (value < low) ? low : ((value > high) ? high : value);
 }
 
-/* Calculate point rotation. */
+// Calculate point rotation.
 void	vw_RotatePoint(VECTOR3D *Point, const VECTOR3D &Angle);
-/* Calculate point inverse rotation. */
+// Calculate point inverse rotation.
 void	vw_RotatePointInv(VECTOR3D *Point, const VECTOR3D &Angle);
-/* Calculates the plane equation given three points. */
+// Calculates the plane equation given three points.
 void	vw_GetPlaneABCD(float *A, float *B, float *C, float *D,
 			const VECTOR3D &Point1, const VECTOR3D &Point2, const VECTOR3D &Point3);
 
@@ -160,14 +160,14 @@ void	vw_GetPlaneABCD(float *A, float *B, float *C, float *D,
  * Random number generator.
  */
 
-/* Generate random float between 0.0f and 1.0f. */
+// Generate random float between 0.0f and 1.0f.
 float	vw_fRand();
 #define vw_Randf1 vw_fRand()
-/* Generate random float between 0.0f and Max. */
+// Generate random float between 0.0f and Max.
 float	vw_fRandNum(float Max);
-/* Generate random integer between 0.0f and Max. */
+// Generate random integer between 0.0f and Max.
 int	vw_iRandNum(int Max);
-/* Generate random float between -1.0f and 1.0f ->> 0. */
+// Generate random float between -1.0f and 1.0f ->> 0.
 #define vw_Randf0 (vw_fRand() - vw_fRand())
 
 /*
@@ -180,17 +180,17 @@ int	vw_iRandNum(int Max);
  *
  */
 
-/* Setup matrix identity. */
+// Setup matrix identity.
 void	vw_Matrix44Identity(float Matrix44[16]);
-/* Matrix multiplication. */
+// Matrix multiplication.
 void	vw_Matrix44Mult(float DstMatrix44[16], float SrcMatrix44[16]);
-/* Calculate translation matrix by new location point. */
+// Calculate translation matrix by new location point.
 void	vw_Matrix44Translate(float Matrix44[16], const VECTOR3D &Location);
-/* Create rotation matrix. */
+// Create rotation matrix.
 void	vw_Matrix44CreateRotate(float Matrix44[16], const VECTOR3D &Angle);
-/* Create inverted rotation matrix. */
+// Create inverted rotation matrix.
 void	vw_Matrix44InverseRotate(float Matrix44[16]);
-/* Calculate point position by transformation matrix. */
+// Calculate point position by transformation matrix.
 void	vw_Matrix44CalcPoint(VECTOR3D *Point, float Matrix44[16]);
 
 /*
@@ -202,15 +202,15 @@ void	vw_Matrix44CalcPoint(VECTOR3D *Point, float Matrix44[16]);
  *
  */
 
-/* Setup matrix identity. */
+// Setup matrix identity.
 void	vw_Matrix33Identity(float Matrix33[9]);
-/* Matrix multiplication. */
+// Matrix multiplication.
 void	vw_Matrix33Mult(float DstMatrix33[9], float SrcMatrix33[9]);
-/* Create rotation matrix. */
+// Create rotation matrix.
 void	vw_Matrix33CreateRotate(float Matrix33[9], const VECTOR3D &Angle);
-/* Create inverted rotation matrix. */
+// Create inverted rotation matrix.
 void	vw_Matrix33InverseRotate(float Matrix33[9]);
-/* Calculate point position by transformation matrix. */
+// Calculate point position by transformation matrix.
 void	vw_Matrix33CalcPoint(VECTOR3D *Point, float Matrix33[9]);
 
-#endif /* CoreMath_H */
+#endif // CoreMath_H

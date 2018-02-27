@@ -32,32 +32,32 @@
 
 /* Camera related function. */
 
-/* Set camera location. */
+// Set camera location.
 void vw_SetCameraLocation(const VECTOR3D &NewLocation);
-/* Increment camera location by vector. */
+// Increment camera location by vector.
 void vw_IncCameraLocation(const VECTOR3D &IncLocation);
-/* Get camera location. */
+// Get camera location.
 VECTOR3D vw_GetCameraLocation(VECTOR3D *CurrentLocation);
-/* Get camera rotation angles. */
+// Get camera rotation angles.
 VECTOR3D vw_GetCameraRotation(VECTOR3D *CurrentRotation);
-/* Get camera focus point (anchor). */
+// Get camera focus point (anchor).
 VECTOR3D vw_GetCameraFocusPoint();
-/* Move camera by direction. */
+// Move camera by direction.
 void vw_SetCameraMove(const VECTOR3D &NewRotation, float ChangeDistance, const VECTOR3D &Point);
-/* Move camera around point (anchor). */
+// Move camera around point (anchor).
 void vw_SetCameraMoveAroundPoint(const VECTOR3D &Point, float ChangeDistance, const VECTOR3D &ChangeRotation);
-/* Camera deviation setup (need for camera shake effect). */
+// Camera deviation setup (need for camera shake effect).
 void vw_SetCameraDeviation(const VECTOR3D &NewCameraDeviation);
-/* Camera setup. */
+// Camera setup.
 void vw_CameraLookAt();
 
 /* Frustum related function. */
 
-/* Call this every time the camera moves to update the frustum. */
+// Call this every time the camera moves to update the frustum.
 void vw_CalculateFrustum();
-/* This takes a 3D point and a radius and returns TRUE if the sphere is inside of the frustum. */
+// This takes a 3D point and a radius and returns TRUE if the sphere is inside of the frustum.
 bool vw_SphereInFrustum(const VECTOR3D &Point, float Radius);
-/* This checks if a box is in the frustum. */
+// This checks if a box is in the frustum.
 bool vw_BoxInFrustum(const VECTOR3D &MinPoint, const VECTOR3D &MaxPoint);
 
-#endif /* CAMERA_H */
+#endif // CAMERA_H

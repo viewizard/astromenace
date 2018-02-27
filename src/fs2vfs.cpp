@@ -401,7 +401,7 @@ const std::string GameData[] = {
 	"font/FreeSerifBold.ttf",
 	"font/LinBiolinumBold.ttf",
 	"font/LinLibertineBold.ttf",
-#endif /* fontconfig */
+#endif // fontconfig
 	"credits/freetype.tga",
 	"credits/oggvorbis.tga",
 	"lang/text.csv",

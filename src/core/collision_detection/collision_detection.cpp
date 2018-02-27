@@ -26,7 +26,7 @@
 
 #include "collision_detection.h"
 
-/* TODO translate comments */
+// TODO translate comments
 
 /*
  * Check, is point belong triangle.
@@ -59,7 +59,7 @@ static bool PointInTriangle(const VECTOR3D &point, const VECTOR3D &pa,
 bool vw_AABBAABBCollision(const VECTOR3D Object1AABB[8], const VECTOR3D &Object1Location,
 			  const VECTOR3D Object2AABB[8], const VECTOR3D &Object2Location)
 {
-	/* check projection's collisions */
+	// check projection's collisions
 	if (fabsf(Object1Location.x - Object2Location.x) > fabsf(Object1AABB[0].x + Object2AABB[0].x))
 		return false;
 	if (fabsf(Object1Location.y - Object2Location.y) > fabsf(Object1AABB[0].y + Object2AABB[0].y))
@@ -76,88 +76,88 @@ bool vw_AABBAABBCollision(const VECTOR3D Object1AABB[8], const VECTOR3D &Object1
 bool vw_OBBOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation, VECTOR3D Object1Location, float Object1RotationMatrix[9],
 			VECTOR3D Object2OBB[8], VECTOR3D Object2OBBLocation, VECTOR3D Object2Location, float Object2RotationMatrix[9])
 {
-	/* calcuate rotation matrix */
+	// calcuate rotation matrix
 	float TMPInvObject1RotationMatrix[9]{Object1RotationMatrix[0], Object1RotationMatrix[1], Object1RotationMatrix[2],
 					     Object1RotationMatrix[3], Object1RotationMatrix[4], Object1RotationMatrix[5],
 					     Object1RotationMatrix[6], Object1RotationMatrix[7], Object1RotationMatrix[8]};
 	vw_Matrix33InverseRotate(TMPInvObject1RotationMatrix);
-	/* calcuate first box size */
+	// calcuate first box size
 	VECTOR3D a{(Object1OBB[0] - Object1OBB[6])^0.5f};
 	vw_Matrix33CalcPoint(&a, TMPInvObject1RotationMatrix);
-	/* calcuate inverse rotation matrix */
+	// calcuate inverse rotation matrix
 	float TMPInvObject2RotationMatrix[9]{Object2RotationMatrix[0], Object2RotationMatrix[1], Object2RotationMatrix[2],
 					     Object2RotationMatrix[3], Object2RotationMatrix[4], Object2RotationMatrix[5],
 					     Object2RotationMatrix[6], Object2RotationMatrix[7], Object2RotationMatrix[8]};
 	vw_Matrix33InverseRotate(TMPInvObject2RotationMatrix);
-	/* calcuate second box size */
+	// calcuate second box size
 	VECTOR3D b{(Object2OBB[0] - Object2OBB[6])^0.5f};
 	vw_Matrix33CalcPoint(&b, TMPInvObject2RotationMatrix);
-	/* calcuate offset in global coordinate systems */
+	// calcuate offset in global coordinate systems
 	VECTOR3D T{(Object2Location + Object2OBBLocation) -
 		   (Object1Location + Object1OBBLocation)};
 	vw_Matrix33CalcPoint(&T, TMPInvObject1RotationMatrix);
-	/* calcuate transformation matrix */
+	// calcuate transformation matrix
 	vw_Matrix33Mult(TMPInvObject1RotationMatrix, Object2RotationMatrix);
 	float R[3][3]{{TMPInvObject1RotationMatrix[0], TMPInvObject1RotationMatrix[3], TMPInvObject1RotationMatrix[6]},
 		      {TMPInvObject1RotationMatrix[1], TMPInvObject1RotationMatrix[4], TMPInvObject1RotationMatrix[7]},
 		      {TMPInvObject1RotationMatrix[2], TMPInvObject1RotationMatrix[5], TMPInvObject1RotationMatrix[8]}};
 
-	/* 1 (Ra)x */
+	// 1 (Ra)x
 	if(fabsf(T.x) > a.x + b.x * fabsf(R[0][0]) + b.y * fabsf(R[0][1]) + b.z * fabsf(R[0][2]))
 		return false;
-	/* 2 (Ra)y */
+	// 2 (Ra)y
 	if(fabsf(T.y) > a.y + b.x * fabsf(R[1][0]) + b.y * fabsf(R[1][1]) + b.z * fabsf(R[1][2]))
 		return false;
-	/* 3 (Ra)z */
+	// 3 (Ra)z
 	if(fabsf(T.z) > a.z + b.x * fabsf(R[2][0]) + b.y * fabsf(R[2][1]) + b.z * fabsf(R[2][2]))
 		return false;
 
-	/* 4 (Rb)x */
+	// 4 (Rb)x
 	if(fabsf(T.x*R[0][0] + T.y*R[1][0] + T.z*R[2][0]) >
 	    (b.x + a.x*fabsf(R[0][0]) + a.y * fabsf(R[1][0]) + a.z*fabsf(R[2][0])))
 		return false;
-	/* 5 (Rb)y */
+	// 5 (Rb)y
 	if(fabsf(T.x*R[0][1] + T.y*R[1][1] + T.z*R[2][1]) >
 	    (b.y + a.x*fabsf(R[0][1]) + a.y * fabsf(R[1][1]) + a.z*fabsf(R[2][1])))
 		return false;
-	/* 6 (Rb)z */
+	// 6 (Rb)z
 	if(fabsf(T.x*R[0][2] + T.y*R[1][2] + T.z*R[2][2]) >
 	    (b.z + a.x*fabsf(R[0][2]) + a.y * fabsf(R[1][2]) + a.z*fabsf(R[2][2])))
 		return false;
 
-	/* 7 (Ra)x X (Rb)x */
+	// 7 (Ra)x X (Rb)x
 	if(fabsf(T.z*R[1][0] - T.y*R[2][0]) >
 	    a.y*fabsf(R[2][0]) + a.z*fabsf(R[1][0]) + b.y*fabsf(R[0][2]) + b.z*fabsf(R[0][1]))
 		return false;
-	/* 8 (Ra)x X (Rb)y */
+	// 8 (Ra)x X (Rb)y
 	if(fabsf(T.z*R[1][1] - T.y*R[2][1]) >
 	    a.y*fabsf(R[2][1]) + a.z*fabsf(R[1][1]) + b.x*fabsf(R[0][2]) + b.z*fabsf(R[0][0]))
 		return false;
-	/* 9 (Ra)x X (Rb)z */
+	// 9 (Ra)x X (Rb)z
 	if(fabsf(T.z*R[1][2]-T.y*R[2][2]) >
 	    a.y*fabsf(R[2][2]) + a.z*fabsf(R[1][2]) + b.x*fabsf(R[0][1]) + b.y*fabsf(R[0][0]))
 		return false;
-	/* 10 (Ra)y X (Rb)x */
+	// 10 (Ra)y X (Rb)x
 	if(fabsf(T.x*R[2][0]-T.z*R[0][0]) >
 	    a.x*fabsf(R[2][0]) + a.z*fabsf(R[0][0]) + b.y*fabsf(R[1][2]) + b.z*fabsf(R[1][1]))
 		return false;
-	/* 11 (Ra)y X (Rb)y */
+	// 11 (Ra)y X (Rb)y
 	if(fabsf(T.x*R[2][1]-T.z*R[0][1]) >
 	    a.x*fabsf(R[2][1]) + a.z*fabsf(R[0][1]) + b.x*fabsf(R[1][2]) + b.z*fabsf(R[1][0]))
 		return false;
-	/* 12 (Ra)y X (Rb)z */
+	// 12 (Ra)y X (Rb)z
 	if(fabsf(T.x*R[2][2]-T.z*R[0][2]) >
 	    a.x*fabsf(R[2][2]) + a.z*fabsf(R[0][2]) + b.x*fabsf(R[1][1]) + b.y*fabsf(R[1][0]))
 		return false;
-	/* 13 (Ra)z X (Rb)x */
+	// 13 (Ra)z X (Rb)x
 	if(fabsf(T.y*R[0][0]-T.x*R[1][0]) >
 	    a.x*fabsf(R[1][0]) + a.y*fabsf(R[0][0]) + b.y*fabsf(R[2][2]) + b.z*fabsf(R[2][1]))
 		return false;
-	/* 14 (Ra)z X (Rb)y */
+	// 14 (Ra)z X (Rb)y
 	if(fabsf(T.y*R[0][1]-T.x*R[1][1]) >
 	    a.x*fabsf(R[1][1]) + a.y*fabsf(R[0][1]) + b.x*fabsf(R[2][2]) + b.z*fabsf(R[2][0]))
 		return false;
-	/* 15 (Ra)z X (Rb)z */
+	// 15 (Ra)z X (Rb)z
 	if(fabsf(T.y*R[0][2]-T.x*R[1][2]) >
 	    a.x*fabsf(R[1][2]) + a.y*fabsf(R[0][2]) + b.x*fabsf(R[2][1]) + b.y*fabsf(R[2][0]))
 		return false;
@@ -179,53 +179,53 @@ bool vw_SphereSphereCollision(float Object1Radius, const VECTOR3D &Object1Locati
 				   Object1Location.z - Object2Location.z};
 	float Object1p1Radius{Object1Radius + Object2Radius};
 
-	/* fast check cube collisions */
+	// fast check cube collisions
 	if ((fabsf(Object1m2Location.x) > Object1p1Radius) ||
 	    (fabsf(Object1m2Location.y) > Object1p1Radius) ||
 	    (fabsf(Object1m2Location.z) > Object1p1Radius))
 		Result = false;
 
-	/* fast check for sphere collision */
+	// fast check for sphere collision
 	if (Result) {
-		/* power of 2 for distance, no reason in sqrt here */
+		// power of 2 for distance, no reason in sqrt here
 		float Dist2{Object1m2Location.x*Object1m2Location.x +
 			    Object1m2Location.y*Object1m2Location.y +
 			    Object1m2Location.z*Object1m2Location.z};
 
-		/* power of 2 for minimal distance */
+		// power of 2 for minimal distance
 		float NeedDist2{Object1p1Radius*Object1p1Radius};
 
-		/* if distance less or equal - collision detected */
+		// if distance less or equal - collision detected
 		if (Dist2 <= NeedDist2)
 			return true;
 	}
 
-	/* check for distance from point to line (ray)*/
+	// check for distance from point to line (ray)
 	if (!Result) {
 		VECTOR3D Ray{Object2Location.x - Object2PrevLocation.x,
 			     Object2Location.y - Object2PrevLocation.y,
 			     Object2Location.z - Object2PrevLocation.z};
 		Ray.Normalize();
 
-		/* calculate closest point on ray */
+		// calculate closest point on ray
 		float Point{Ray.x*Object1Location.x +
 			    Ray.y*Object1Location.y +
 			    Ray.z*Object1Location.z - Ray.x*Object2PrevLocation.x +
 						      Ray.y*Object2PrevLocation.y +
 						      Ray.z*Object2PrevLocation.z};
 
-		/* calculate closest point on line segment */
+		// calculate closest point on line segment
 		VECTOR3D IntercPoint{Object2PrevLocation.x*Point,
 				     Object2PrevLocation.y*Point,
 				     Object2PrevLocation.z*Point};
 
-		/* out of our line segment */
+		// out of our line segment
 		if ((Object2PrevLocation.x - IntercPoint.x)*(Object2Location.x - IntercPoint.x) +
 		    (Object2PrevLocation.y - IntercPoint.y)*(Object2Location.y - IntercPoint.y) +
 		    (Object2PrevLocation.z - IntercPoint.z)*(Object2Location.z - IntercPoint.z) >= 0.0f)
 			return false;
 
-		/* check distance, same idea with power of 2 as above */
+		// check distance, same idea with power of 2 as above
 		float NewDist2{(IntercPoint.x - Object1Location.x)*(IntercPoint.x - Object1Location.x)+
 			       (IntercPoint.y - Object1Location.y)*(IntercPoint.y - Object1Location.y)+
 			       (IntercPoint.z - Object1Location.z)*(IntercPoint.z - Object1Location.z)};
@@ -234,7 +234,7 @@ bool vw_SphereSphereCollision(float Object1Radius, const VECTOR3D &Object1Locati
 			return true;
 	}
 
-	/* objects too far from each other */
+	// objects too far from each other
 	return false;
 }
 
@@ -246,46 +246,46 @@ bool vw_SphereAABBCollision(VECTOR3D Object1AABB[8], VECTOR3D Object1Location,
 {
 	bool Result{true};
 
-	/* detect distance AABB<->cube */
+	// detect distance AABB<->cube
 	if ((fabsf(Object1Location.x - Object2Location.x) > Object1AABB[0].x + Object2Radius) ||
 	    (fabsf(Object1Location.y - Object2Location.y) > Object1AABB[0].y + Object2Radius) ||
 	    (fabsf(Object1Location.z - Object2Location.z) > Object1AABB[0].z + Object2Radius))
 		Result = false;
 
-	/* check for distance to line (ray)*/
+	// check for distance to line (ray)
 	if (!Result) {
-		/* middle point */
+		// middle point
 		VECTOR3D mid{(Object2Location + Object2PrevLocation) / 2.0f};
-		/* line (ray) direction */
+		// line (ray) direction
 		VECTOR3D dir{Object2Location - Object2PrevLocation};
-		/* half of line */
+		// half of line
 		float hl{dir.Length() / 2.0f};
 		dir.Normalize();
 
 		VECTOR3D T{Object1Location - mid};
 
-		/* check axis */
+		// check axis
 		if ((fabs(T.x) > Object1AABB[0].x + hl*fabs(dir.x)) ||
 		    (fabs(T.y) > Object1AABB[0].y + hl*fabs(dir.y)) ||
 		    (fabs(T.z) > Object1AABB[0].z + hl*fabs(dir.z)))
 			return false;
 
-		/* check X ^ dir */
+		// check X ^ dir
 		double r{Object1AABB[0].y*fabs(dir.z) + Object1AABB[0].z*fabs(dir.y)};
 		if (fabs(T.y*dir.z - T.z*dir.y) > r)
 			return false;
 
-		/* check  Y ^ dir */
+		// check  Y ^ dir
 		r = Object1AABB[0].x*fabs(dir.z) + Object1AABB[0].z*fabs(dir.x);
 		if (fabs(T.z*dir.x - T.x*dir.z) > r)
 			return false;
 
-		/* check  Z ^ dir */
+		// check  Z ^ dir
 		r = Object1AABB[0].x*fabs(dir.y) + Object1AABB[0].y*fabs(dir.x);
 		if (fabs(T.x*dir.y - T.y*dir.x) > r)
 			return false;
 
-		/* collision detected */
+		// collision detected
 		return true;
 	}
 
@@ -304,18 +304,18 @@ bool vw_SphereOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation,
 	VECTOR3D TMPPoint1{Object2Location - (Object1Location + Object1OBBLocation)};
 	VECTOR3D TMPPoint2{Object2PrevLocation - (Object1Location + Object1OBBLocation)};
 
-	/* calculate rotation matrix */
+	// calculate rotation matrix
 	float TMPInvRotationMatrix[9]{Object1RotationMatrix[0], Object1RotationMatrix[1], Object1RotationMatrix[2],
 				      Object1RotationMatrix[3], Object1RotationMatrix[4], Object1RotationMatrix[5],
 				      Object1RotationMatrix[6], Object1RotationMatrix[7], Object1RotationMatrix[8]};
 	vw_Matrix33InverseRotate(TMPInvRotationMatrix);
-	/* move it to coordinates */
+	// move it to coordinates
 	vw_Matrix33CalcPoint(&TMPMax, TMPInvRotationMatrix);
 	vw_Matrix33CalcPoint(&TMPMin, TMPInvRotationMatrix);
 	vw_Matrix33CalcPoint(&TMPPoint1, TMPInvRotationMatrix);
 	vw_Matrix33CalcPoint(&TMPPoint2, TMPInvRotationMatrix);
 
-	/* same idea as for Sphere-AABB collision detection */
+	// same idea as for Sphere-AABB collision detection
 	bool Result{true};
 	if ((TMPPoint1.x + Object2Radius < TMPMin.x) ||
 	    (TMPPoint1.y + Object2Radius < TMPMin.y) ||
@@ -325,40 +325,40 @@ bool vw_SphereOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation,
 	    (TMPPoint1.z - Object2Radius > TMPMax.z))
 		Result = false;
 
-	/* check for distance to line (ray)*/
+	// check for distance to line (ray)
 	if (!Result) {
-		/* middle point */
+		// middle point
 		VECTOR3D mid{(Object2Location + Object2PrevLocation) / 2.0f};
-		/* line (ray) direction */
+		// line (ray) direction
 		VECTOR3D dir{Object2Location - Object2PrevLocation};
-		/* half of line */
+		// half of line
 		float hl{dir.Length() / 2.0f};
 		dir.Normalize();
 
 		VECTOR3D T{Object1Location - mid};
 
-		/* check axis */
+		// check axis
 		if ( (fabs(T.x) > TMPMax.x + hl*fabs(dir.x)) ||
 		     (fabs(T.y) > TMPMax.y + hl*fabs(dir.y)) ||
 		     (fabs(T.z) > TMPMax.z + hl*fabs(dir.z)) )
 			return false;
 
-		/* check X ^ dir */
+		// check X ^ dir
 		double r{TMPMax.y*fabs(dir.z) + TMPMax.z*fabs(dir.y)};
 		if ( fabs(T.y*dir.z - T.z*dir.y) > r )
 			return false;
 
-		/* check  Y ^ dir */
+		// check  Y ^ dir
 		r = TMPMax.x*fabs(dir.z) + TMPMax.z*fabs(dir.x);
 		if ( fabs(T.z*dir.x - T.x*dir.z) > r )
 			return false;
 
-		/* check  Z ^ dir */
+		// check  Z ^ dir
 		r = TMPMax.x*fabs(dir.y) + TMPMax.y*fabs(dir.x);
 		if ( fabs(T.x*dir.y - T.y*dir.x) > r )
 			return false;
 
-		/* collision detected */
+		// collision detected
 		return true;
 	}
 

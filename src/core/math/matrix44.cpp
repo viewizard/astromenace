@@ -138,7 +138,7 @@ void vw_Matrix44CreateRotate(float Matrix44[16], const VECTOR3D &Angle)
 		return;
 	}
 
-	/* if we need 2 or more angles */
+	// if we need 2 or more angles
 	float a = -Angle.x*p180;
 	float A = cosf(a);
 	float B = sinf(a);
