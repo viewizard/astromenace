@@ -520,69 +520,6 @@ void DrawGameExpMoney(int Exp, int Money)
 
 
 
-
-
-
-//------------------------------------------------------------------------------------
-// прорисовка цифр
-//------------------------------------------------------------------------------------
-void DrawGameNumFontWiaFont(int X, int Y, bool Need0, unsigned int NeedNum, const char *Text, ...)
-{
-	// смотрим значения параметров в строке
-	char	text[1024];
-	va_list		ap;
-
-	va_start(ap, Text);
-	vsprintf(text, Text, ap);
-	va_end(ap);
-	// в text уже полная строка
-
-
-
-	// находим макс. ширину цифр
-	int MaxW = 0;
-	for (int i=0; i<=9; i++) {
-		int TmpMaxW = vw_FontSize("%i", i);
-		if (TmpMaxW > MaxW) MaxW = TmpMaxW;
-	}
-
-
-
-	int Sm = 0;
-	if (Need0)
-		if (strlen(text)<NeedNum) {
-			for (size_t i=0; i<NeedNum-strlen(text); i++) {
-				char Cr[2];
-				Cr[0] = '0';
-				Cr[1] = 0;
-				int TmpW = vw_FontSize(Cr);
-				Sm = (int)((MaxW - TmpW)/2.0f);
-				vw_DrawFont(X+Sm, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, Cr);
-				X += MaxW-2;
-			}
-		}
-
-	// прорисовка текста
-	for (size_t i=0; i<strlen(text); i++) {
-		char Cr[2];
-		Cr[0] = text[i];
-		Cr[1] = 0;
-		int TmpW = vw_FontSize(Cr);
-		Sm = (int)((MaxW - TmpW)/2.0f);
-		vw_DrawFont(X+Sm, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, GameContentTransp, Cr);
-		X += MaxW-2;
-	}
-
-
-}
-
-
-
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // Инициализация игровой части
 //------------------------------------------------------------------------------------
@@ -1589,34 +1526,34 @@ void DrawGame()
 			WScale = -210;
 
 			vw_DrawFont(Setup.iAspectRatioWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  vw_GetText("4_Alien_Spaceships"));
-			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+17, Y, true, 4, "%i", AlienShipsKillQuant);
-			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+127, Y, true, 6, "%i", (int)AlienShipsKillBonus);
+			vw_DrawFont(Setup.iAspectRatioWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", AlienShipsKillQuant);
+			vw_DrawFont(Setup.iAspectRatioWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)AlienShipsKillBonus);
 			Y += Prir;
 			vw_DrawFont(Setup.iAspectRatioWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("4_Alien_Motherships"));
-			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+17, Y, true, 4, "%i", AlienMotherShipsKillQuant);
-			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+127, Y, true, 6, "%i", (int)AlienMotherShipsKillBonus);
+			vw_DrawFont(Setup.iAspectRatioWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", AlienMotherShipsKillQuant);
+			vw_DrawFont(Setup.iAspectRatioWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)AlienMotherShipsKillQuant);
 			Y += Prir;
 			vw_DrawFont(Setup.iAspectRatioWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("4_Pirate_Spaceships"));
-			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+17, Y, true, 4, "%i", PirateShipsKillQuant);
-			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+127, Y, true, 6, "%i", (int)PirateShipsKillBonus);
+			vw_DrawFont(Setup.iAspectRatioWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", PirateShipsKillQuant);
+			vw_DrawFont(Setup.iAspectRatioWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)PirateShipsKillBonus);
 			Y += Prir;
 			vw_DrawFont(Setup.iAspectRatioWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("4_Pirate_Vehicles"));
-			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+17, Y, true, 4, "%i", PirateVehiclesKillQuant);
-			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+127, Y, true, 6, "%i", (int)PirateVehiclesKillBonus);
+			vw_DrawFont(Setup.iAspectRatioWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", PirateVehiclesKillQuant);
+			vw_DrawFont(Setup.iAspectRatioWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)PirateVehiclesKillBonus);
 			Y += Prir;
 			vw_DrawFont(Setup.iAspectRatioWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("4_Pirate_Buildings"));
-			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+17, Y, true, 4, "%i", PirateBuildingsKillQuant);
-			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+127, Y, true, 6, "%i", (int)PirateBuildingsKillBonus);
+			vw_DrawFont(Setup.iAspectRatioWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", PirateBuildingsKillQuant);
+			vw_DrawFont(Setup.iAspectRatioWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)PirateBuildingsKillBonus);
 			Y += Prir;
 			vw_DrawFont(Setup.iAspectRatioWidth/2-256+38, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("4_Asteroids"));
-			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+17, Y, true, 4, "%i", AsteroidsKillQuant);
-			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+127, Y, true, 6, "%i", (int)AsteroidsKillBonus);
+			vw_DrawFont(Setup.iAspectRatioWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", AsteroidsKillQuant);
+			vw_DrawFont(Setup.iAspectRatioWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)AsteroidsKillBonus);
 
 			Y += (int)(Prir*1.5);
 			vw_DrawFont(Setup.iAspectRatioWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 1.0f*GameContentTransp, vw_GetText("3_Total"));
-			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+17, Y, true, 4, "%i", AlienShipsKillQuant+AlienMotherShipsKillQuant+
+			vw_DrawFont(Setup.iAspectRatioWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", AlienShipsKillQuant+AlienMotherShipsKillQuant+
 					       PirateShipsKillQuant+PirateVehiclesKillQuant+PirateBuildingsKillQuant+AsteroidsKillQuant);
-			DrawGameNumFontWiaFont(Setup.iAspectRatioWidth/2+127, Y, true, 6, "%i", (int)(GameMoney - Setup.Profile[CurrentProfile].Money*1.0f));
+			vw_DrawFont(Setup.iAspectRatioWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)(GameMoney - Setup.Profile[CurrentProfile].Money*1.0f));
 
 			// выводим кнопки меню
 			int X = Setup.iAspectRatioWidth/2-192;
@@ -1741,9 +1678,8 @@ void DrawGame()
 		if (PlayerFighter != nullptr) { // если не убили
 			if (vw_GetKeys(SDLK_ESCAPE) || GameMissionCompleteStatusShowDialog) {
 				bool NeedPlaySfx = true;
-				// если нужно показать конец игры, все равно его показываем
 				if (GameMissionCompleteStatusShowDialog) {
-					// чтобы постоянно не проигрывать звук
+					// если уже было открыто меню и появляется меню окончания миссии, не проигрываем sfx
 					if (GameMenu)
 						NeedPlaySfx = false;
 					else
@@ -1751,7 +1687,7 @@ void DrawGame()
 				} else
 					GameMenu = !GameMenu;
 
-				if (GameMenu) {
+				if (GameMenu && (!GameMissionCompleteStatus || GameMissionCompleteStatusShowDialog)) { // открытываем меню с результатом миссии и больше не даем ничего открывать, после завершения миссии
 					NeedShowGameMenu = true;
 					NeedHideGameMenu = false;
 					if ((NeedPlaySfx && SoundShowHideMenu != 0) &&
@@ -1761,7 +1697,7 @@ void DrawGame()
 						SoundShowHideMenu = Audio_PlaySound2D(12, 1.0f);
 					// сброс кнопки мышки, чтобы случайно не нажали
 					vw_GetWindowLBMouse(true);
-				} else {
+				} else if (!GameMenu && !GameMissionCompleteStatus) { // открыто меню с выводом результата миссии, нельзя давать его закрывать
 					NeedShowGameMenu = false;
 					NeedHideGameMenu = true;
 					// установка в последюю точку указателя
@@ -1776,6 +1712,8 @@ void DrawGame()
 					DrawGameCursor = false;
 				}
 
+				if (GameMissionCompleteStatus && !GameMissionCompleteStatusShowDialog) // в процессе вывода результатов разрешаем только выход в основное меню (отображение диалога)
+					SetCurrentDialogBox(41);
 				GameMissionCompleteStatusShowDialog = false;
 				vw_SetKeys(SDLK_ESCAPE, false);
 			}
