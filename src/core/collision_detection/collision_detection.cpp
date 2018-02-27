@@ -26,8 +26,6 @@
 
 #include "collision_detection.h"
 
-// TODO translate comments
-
 /*
  * Check, is point belong triangle.
  */
@@ -375,17 +373,17 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 	if (Object1DrawObjectList == nullptr)
 		return false;
 
-	// делаем матрицу перемещения точек, для геометрии
+	// translation matrix
 	float TransMat[16]{Object1RotationMatrix[0], Object1RotationMatrix[1], Object1RotationMatrix[2], 0.0f,
 			   Object1RotationMatrix[3], Object1RotationMatrix[4], Object1RotationMatrix[5], 0.0f,
 			   Object1RotationMatrix[6], Object1RotationMatrix[7], Object1RotationMatrix[8], 0.0f,
 			   Object1Location.x, Object1Location.y, Object1Location.z, 1.0f};
 
-	// находим точку локального положения объекта в моделе
+	// calculate local position
 	VECTOR3D LocalLocation{Object1DrawObjectList->Location};
 	vw_Matrix33CalcPoint(&LocalLocation, Object1RotationMatrix);
 
-	// если нужно - создаем матрицу, иначе - копируем ее
+	// care about rotation and generate final translation matrix
 	if ((Object1DrawObjectList->Rotation.x != 0.0f) ||
 	    (Object1DrawObjectList->Rotation.y != 0.0f) ||
 	    (Object1DrawObjectList->Rotation.z != 0.0f)) {
@@ -393,21 +391,20 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 		vw_Matrix44Identity(TransMatTMP);
 		vw_Matrix44CreateRotate(TransMatTMP, Object1DrawObjectList->Rotation);
 		vw_Matrix44Translate(TransMatTMP, LocalLocation);
-		// и умножаем на основную матрицу, со сведениями по всему объекту
 		vw_Matrix44Mult(TransMat, TransMatTMP);
 	} else
 		vw_Matrix44Translate(TransMat, LocalLocation);
 
-	// проверяем все треугольники объекта
+	// detect collision with mesh triangles
 	for (int i = 0; i < Object1DrawObjectList->VertexCount; i += 3) {
-		// находим 3 точки треугольника (с учетом индекс буфера)
+		// we use index buffer here in order to find triangle's vertices in mesh
 		int j2{0};
 		if (Object1DrawObjectList->IndexBuffer != nullptr)
 			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart+i]*Object1DrawObjectList->VertexStride;
 		else
 			j2 = (Object1DrawObjectList->RangeStart+i)*Object1DrawObjectList->VertexStride;
 
-		// находим точки триугольника
+		// translate triangle's vertices in proper coordinates for collision detection
 		VECTOR3D Point1{Object1DrawObjectList->VertexBuffer[j2],
 				Object1DrawObjectList->VertexBuffer[j2 + 1],
 				Object1DrawObjectList->VertexBuffer[j2 + 2]};
@@ -433,41 +430,35 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 				Object1DrawObjectList->VertexBuffer[j2 + 2]};
 		vw_Matrix44CalcPoint(&Point3, TransMat);
 
-		// находим 2 вектора, образующих плоскость
+		// calculate 2 vectors for plane
 		VECTOR3D PlaneVector1{Point2 - Point1};
 		VECTOR3D PlaneVector2{Point3 - Point1};
 
-		// находим нормаль плоскости
+		// calculate normal for plane
 		VECTOR3D NormalVector{PlaneVector1};
 		NormalVector.Multiply(PlaneVector2);
 		NormalVector.Normalize();
 
-		// проверка, сферы
-		//	- в сфере или нет?, т.е. расстояние от плоскости до центра сферы
-		//	- по нормале находим точку на плоскости
-		//	- точка принадлежит треугольнику?
-
-		// находим расстояние от точки до плоскости
+		// calculate distance from point to plane
 		float Distance{(Object2Location - Point1)*NormalVector};
 
-		// если точка дальше радиуса - нам тут делать нечего, берем следующую точку
+		// point close enough to plane for check collision with plane (triangle)
 		if (fabsf(Distance) <= Object2Radius) {
-			// находим реальную точку пересечения с плоскостью
+			// calculate collision point on plane for ray
 			VECTOR3D IntercPoint{Object2Location - (NormalVector^Distance)};
 
-			// передаем точку и флаг успешной коллизии
+			// return the point data if point belongs to triangle (not just plane)
 			if (PointInTriangle(IntercPoint, Point1, Point2, Point3)) {
 				*CollisionLocation = IntercPoint;
 				return true;
 			}
 		}
 
-		// проверка, сферы
-		// если от точек до текущего положения расстояние меньше
-
+		// check for distance, do we really close enough
+		// note, we use ^2 and don't calculate the real distance
 		float Object2Radius2{Object2Radius*Object2Radius};
 
-		// находим расстояние
+		// check distance to point1
 		VECTOR3D DistancePoint1{Object2Location - Point1};
 		float Distance2Point1{DistancePoint1.x*DistancePoint1.x +
 				      DistancePoint1.y*DistancePoint1.y +
@@ -477,7 +468,7 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 			return true;
 		}
 
-		// находим расстояние
+		// check distance to point2
 		VECTOR3D DistancePoint2{Object2Location - Point2};
 		float Distance2Point2{DistancePoint2.x*DistancePoint2.x +
 				      DistancePoint2.y*DistancePoint2.y +
@@ -487,7 +478,7 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 			return true;
 		}
 
-		// находим расстояние
+		// check distance to point3
 		VECTOR3D DistancePoint3{Object2Location - Point3};
 		float Distance2Point3{DistancePoint3.x*DistancePoint3.x +
 				      DistancePoint3.y*DistancePoint3.y +
@@ -497,24 +488,20 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 			return true;
 		}
 
-		// проверка луч, старое положение - новое положение объекта
-		//	- пересекает плоскость (обе точки с одной стороны? знак, или ноль)
-		//	- точка пересечения плоскости
-		//	- принадлежит треугольнику?
+		// check for ray, old object location - current object location
+		// make sure we don't slipped through object (low FPS, fast object, etc)
 
-		// проверка, если это фронт-часть, нормально... иначе - берем следующую
+		// check that this is "front" for triangle, and skip triangles with "back" sided to ray start point
 		VECTOR3D vDir1{Point1 - Object2PrevLocation};
 		float d1{vDir1*NormalVector};
 		if (d1 <= 0.001f) {
-			// находим расстояние от плоскости до точки
+			// calculate distance from point to plane
 			float originDistance{NormalVector*Point1};
 
-			// пересечение прямой с плоскостью
 			VECTOR3D vLineDir{Object2Location - Object2PrevLocation};
-			// может и не нужно этого делать... т.к. все и так хорошо работает в нашем случае
-			//vLineDir.Normalize();
 
-			float Numerator{ -(NormalVector.x * Object2PrevLocation.x +		// Use the plane equation with the normal and the line
+			// Use the plane equation with the normal and the ray
+			float Numerator{ -(NormalVector.x * Object2PrevLocation.x +
 					   NormalVector.y * Object2PrevLocation.y +
 					   NormalVector.z * Object2PrevLocation.z - originDistance)};
 
@@ -522,13 +509,12 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 			if(Denominator != 0.0f) {
 				float dist{Numerator / Denominator};
 
-				// зная расстояние, находим точку пересечения с плоскостью
+				// calculate collision point on plane for ray
 				VECTOR3D IntercPoint{Object2PrevLocation + (vLineDir ^ dist)};
 
-				// проверяем, на отрезке или нет (до этого работали с прямой/лучем)
+				// check, do line (not ray here) cross the plane
 				if (((Object2PrevLocation - IntercPoint)*(Object2Location - IntercPoint) < 0.0f) &&
 				    (PointInTriangle(IntercPoint, Point1, Point2, Point3))) {
-					// передаем точку и флаг успешной коллизии
 					*CollisionLocation = IntercPoint;
 					return true;
 				}
