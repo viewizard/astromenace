@@ -64,13 +64,13 @@
 
 enum file_location {
 	FILE_NOT_FOUND	= -1,
-	FILE_IN_VFS	= 1,	// File present in the VFS.
-	FILE_IN_FS	= 2 	// File present in the File System.
+	FILE_IN_VFS	=  1,	// File present in the VFS.
+	FILE_IN_FS	=  2	// File present in the File System.
 };
 
 struct eVFS {
-	std::string	FileName;
-	SDL_RWops	*File{nullptr};
+	std::string FileName;
+	SDL_RWops *File{nullptr};
 
 	eVFS(const std::string &_FileName) :
 		FileName{_FileName}
@@ -84,9 +84,9 @@ struct eVFS {
 };
 
 struct eVFS_Entry {
-	uint32_t	Offset{0};
-	uint32_t	Size{0};
-	eVFS		*Parent{nullptr};
+	uint32_t Offset{0};
+	uint32_t Size{0};
+	eVFS *Parent{nullptr};
 
 	eVFS_Entry(eVFS *_Parent) :
 		Parent{_Parent}

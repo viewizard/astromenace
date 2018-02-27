@@ -37,29 +37,29 @@
 
 namespace {
 // FreeType related stuff.
-FT_Library		InternalLibrary;
-FT_Face			InternalFace;
-std::unique_ptr<uint8_t[]>	InternalFontBuffer{};
+FT_Library InternalLibrary;
+FT_Face InternalFace;
+std::unique_ptr<uint8_t[]> InternalFontBuffer{};
 // Font settings.
-int 			InternalFontSize{0};
-int			GlobalFontOffsetY{0};
+int InternalFontSize{0};
+int GlobalFontOffsetY{0};
 
 struct eFontChar {
-	unsigned	UTF32; // key element 1 (UTF32 code)
-	int		FontSize; // key element 2 (character generated size)
+	unsigned UTF32; // key element 1 (UTF32 code)
+	int FontSize; // key element 2 (character generated size)
 
-	eTexture	*Texture; // font character texture
-	int		TexturePositionLeft;
-	int		TexturePositionRight;
-	int		TexturePositionTop;
-	int		TexturePositionBottom;
+	eTexture *Texture; // font character texture
+	int TexturePositionLeft;
+	int TexturePositionRight;
+	int TexturePositionTop;
+	int TexturePositionBottom;
 
 	// font character metrics
-	int		Width;
-	int		Height;
-	int		Left;
-	int		Top;
-	float		AdvanceX;
+	int Width;
+	int Height;
+	int Left;
+	int Top;
+	float AdvanceX;
 
 	// constructor
 	eFontChar(unsigned _UTF32, int _FontSize, eTexture *_Texture,
