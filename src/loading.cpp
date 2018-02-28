@@ -972,8 +972,8 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, sTexture 
 //------------------------------------------------------------------------------------
 // процедура освобождения данных, что удалять определяем по типу загрузки
 //------------------------------------------------------------------------------------
-int CurretnLoadedData = -2;
-bool ReleaseGameData(int LoadType)
+eLoading CurretnLoadedData{eLoading::InitialValue};
+bool ReleaseGameData(eLoading LoadType)
 {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// сбрасываем данные глобальных переменных
@@ -996,7 +996,7 @@ bool ReleaseGameData(int LoadType)
 	// если не менее 128 мб видео памяти - выгружать текстуры вообще не нужно
 	if (!Setup.EqualOrMore128MBVideoRAM) {
 		// если выбрали миссию, и была миссия (т.е. рестарт миссии) - ничего не удаляем-чистим
-		if (CurretnLoadedData == LoadType && CurretnLoadedData == 1) {
+		if (CurretnLoadedData == LoadType && CurretnLoadedData == eLoading::Game) {
 			// эту миссию уже загружали
 			CurretnLoadedData = LoadType;
 			return true;
@@ -1008,7 +1008,7 @@ bool ReleaseGameData(int LoadType)
 		}
 	} else {
 		// нужно понять, мы конкретно это загружали или нет
-		if (LoadType <= 0) { // это меню
+		if (LoadType <= eLoading::Menu) { // это меню
 			if (LoadedTypes[0])
 				return true;
 			else {
@@ -1034,17 +1034,10 @@ bool ReleaseGameData(int LoadType)
 
 
 //------------------------------------------------------------------------------------
-// процедура загрузки данных, тип загрузки, с логотипом (-1) или без (0-10)
+// процедура загрузки данных
 //------------------------------------------------------------------------------------
-void LoadGameData(int LoadType)
+void LoadGameData(eLoading LoadType)
 {
-
-	// потом передавать в функцию тип загрузки:
-	// -1 - загрузка меню с логотипом
-	// 0 - загрузка меню без логотипа
-	// 1...10 - загрузка 1...10 уровня
-
-
 	sTexture *LoadImageTexture = nullptr;
 	int RealLoadedTextures = 0;
 	bool NeedLoadShaders = false;
@@ -1071,13 +1064,14 @@ void LoadGameData(int LoadType)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	switch(LoadType) {
 	// меню, загрузка в самом начале
-	case -1:
+	case eLoading::MenuWithLogo:
 		CurrentList = MenuLoadList;
 		CurrentListCount = MenuLoadListCount;
 		NeedShowHint = false;
 		break;
+
 	// переход игра-меню
-	case 0:
+	case eLoading::Menu:
 		SaveXMLSetupFile();
 		CurrentList = MenuLoadList;
 		CurrentListCount = MenuLoadListCount;
@@ -1085,7 +1079,7 @@ void LoadGameData(int LoadType)
 		break;
 
 	// уровни игры
-	case 1: {
+	case eLoading::Game: {
 		SaveXMLSetupFile();
 		CurrentListCount = GameLevelsLoadListCount;
 		NeedShowHint = true;
@@ -1255,8 +1249,11 @@ void LoadGameData(int LoadType)
 			memcpy(CurrentList+Current, PirateLoadList, PirateLoadListCount*sizeof(PirateLoadList[0]));
 			Current += PirateLoadListCount;
 		}
-	}
-	break;
+		}
+		break;
+
+	default:
+		break;
 	}
 
 
@@ -1266,15 +1263,17 @@ void LoadGameData(int LoadType)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	switch(LoadType) {
 	// меню, загрузка в самом начале
-	case -1:
-		GameStatus = MAIN_MENU;
+	case eLoading::MenuWithLogo:
+		MenuStatus = eMenuStatus::MAIN_MENU;
 		Audio_LoopProc();
 		StartMusicWithFade(0, 4.0f, 4.0f);
 		break;
 	// переход игра-меню
-	case 0:
-		GameStatus = MISSION;
+	case eLoading::Menu:
+		MenuStatus = eMenuStatus::MISSION;
 		StartMusicWithFade(0, 2.0f, 2.0f);
+		break;
+	default:
 		break;
 	}
 
@@ -1313,7 +1312,7 @@ void LoadGameData(int LoadType)
 
 	// в самом начале () до прорисовки подложки загрузки - генерируем все возможные символы для меню (чтобы в процессе прорисовки меньше подгружать)
 	// если памяти мало, мы очищаем текстуры, надо перегенерировать шрифт и создать новые текстуры
-	if ((LoadType == -1) || (!Setup.EqualOrMore128MBVideoRAM)) {
+	if ((LoadType == eLoading::MenuWithLogo) || (!Setup.EqualOrMore128MBVideoRAM)) {
 		// задаем размеры текстуры (всегда степерь 2 ставим, чтобы избежать проблем со старым железом)
 		vw_GenerateFontChars(Setup.FontSize > 16 ? 512 : 256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
 #ifdef gamedebug
@@ -1330,7 +1329,7 @@ void LoadGameData(int LoadType)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// загружаем логотип компании
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (LoadType == -1) {
+	if (LoadType == eLoading::MenuWithLogo) {
 		// выводим логотип Viewizard
 		vw_SetTextureProp(TEXTURE_NO_MIPMAP, RI_CLAMP_TO_EDGE, false, TX_ALPHA_EQUAL, false);
 		sTexture *ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga", nullptr, 0);
@@ -1589,20 +1588,24 @@ AllDataLoaded:
 		}
 
 		switch(LoadType) {
-		case -1:  // меню (только запустили)
+		case eLoading::MenuWithLogo:  // меню (только запустили)
 			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize/2))
 				Setup.ShadowMap = 0;
 			break;
-		case 0:   // меню (выходим из игры)
+
+		case eLoading::Menu:   // меню (выходим из игры)
 			ShadowMap_Release();
 			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize/2))
 				Setup.ShadowMap = 0;
 			break;
 
-		case 1: // переход на уровни игры
+		case eLoading::Game: // переход на уровни игры
 			ShadowMap_Release();
 			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize))
 				Setup.ShadowMap = 0;
+			break;
+
+		default:
 			break;
 		}
 	}
@@ -1611,20 +1614,21 @@ AllDataLoaded:
 	// переходим в нужное место...
 	switch(LoadType) {
 	// меню, первая загрузка, самый старт
-	case -1:
+	case eLoading::MenuWithLogo:
 		InitMenu();
 		break;
+
 	// меню, выходим из игры, входим в меню
-	case 0:
+	case eLoading::Menu:
 		InitMenu();
-		GameStatus = MISSION; // чтобы не было перехода с основного меню в мисии
+		MenuStatus = eMenuStatus::MISSION; // чтобы не было перехода с основного меню в мисии
 		Setup.LoadingHint++;
 		if (Setup.LoadingHint >= LoadingHintsCount)
 			Setup.LoadingHint = 0;
 		break;
 
 	// уровни игры
-	case 1:
+	case eLoading::Game:
 		// освобождаем память от того, что загружали
 		if (CurrentList != nullptr) {
 			delete [] CurrentList;
@@ -1637,6 +1641,9 @@ AllDataLoaded:
 		Setup.LoadingHint++;
 		if (Setup.LoadingHint >= LoadingHintsCount)
 			Setup.LoadingHint = 0;
+		break;
+
+	default:
 		break;
 	}
 

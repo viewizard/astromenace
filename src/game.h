@@ -68,7 +68,7 @@
 // Main.cpp
 //------------------------------------------------------------------------------------
 extern sGameSetup Setup;
-extern eGameStatus GameStatus;
+extern eMenuStatus MenuStatus;
 extern SDL_Joystick *Joystick;
 extern cParticleSystem2D *CursorParticleSystem2D;
 extern cSpaceStars *psSpaceStatic;
@@ -172,7 +172,7 @@ void SaveXMLSetupFile();
 //------------------------------------------------------------------------------------
 extern cScriptEngine *Script;
 
-extern int ComBuffer;
+extern eCommand ComBuffer;
 extern int CurrentCursorStatus;
 extern bool DrawGameCursor;
 
@@ -211,7 +211,7 @@ void Audio_SetVoiceMainVolume(float NewMainVolume);
 //------------------------------------------------------------------------------------
 // loading.cpp
 //------------------------------------------------------------------------------------
-void LoadGameData(int LoadType);
+void LoadGameData(eLoading LoadType);
 
 
 
@@ -327,8 +327,8 @@ extern float MenuContentTransp;
 extern float LastMenuOnOffUpdateTime;
 
 void InitMenu();
-void SetOptionsMenu(eGameStatus Menu);
-void SetMenu(eGameStatus Menu);
+void SetOptionsMenu(eMenuStatus Menu);
+void SetMenu(eMenuStatus Menu);
 void DrawMenu();
 void DrawTransparent(sRECT *DstRect, sRECT *SrcRect, sTexture *Tex, sTexture *Tex2, bool Alpha, float Transp, float RotateAngle, int DrawCorner, float R, float G, float B);
 void MainMenu();
@@ -549,7 +549,7 @@ extern int GameTargetingSystem;
 extern int GameAdvancedProtectionSystem;
 extern int GamePowerSystem;
 extern int GameTargetingMechanicSystem;
-extern int GameMenuStatus;
+extern eGameMenuStatus GameMenuStatus;
 extern float GameContentTransp;
 extern float GameButton1Transp;
 extern float LastGameButton1UpdateTime;
@@ -579,10 +579,7 @@ void SetGameMissionComplete();
 //------------------------------------------------------------------------------------
 // Dialog.cpp
 //------------------------------------------------------------------------------------
-enum eDialogBox {
-	DIALOGBOX_NONE	= -1
-};
-void SetCurrentDialogBox(int DialogBox);
+void SetCurrentDialogBox(eDialogBox DialogBox);
 bool isDialogBoxDrawing();
 void DrawDialogBox();
 

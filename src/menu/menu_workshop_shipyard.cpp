@@ -473,7 +473,7 @@ void RepairShip()
 	Setup.Profile[CurrentProfile].Money = 0;
 
 	// выводим диалог с надписью, что не достаточно денег для полного ремонта
-	SetCurrentDialogBox(3);
+	SetCurrentDialogBox(eDialogBox::RepairShip);
 }
 
 
@@ -565,7 +565,7 @@ void Workshop_Shipyard()
 	// вывод названия корабля
 	vw_DrawFont(Setup.iAspectRatioWidth/2-448, 50+6, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("7_shipfullname"), vw_GetText(GetWorkshopShipName(CurrentWorkshopNewFighter)), 1);
 	if (DrawButton128_2(Setup.iAspectRatioWidth/2-197,50, vw_GetText("1_Info"), MenuContentTransp, false)) {
-		SetCurrentDialogBox(6);
+		SetCurrentDialogBox(eDialogBox::ShowShipInfo);
 		DialogSpaceShip = WorkshopNewFighter;
 	}
 
@@ -647,7 +647,7 @@ void Workshop_Shipyard()
 	vw_DrawFont(Setup.iAspectRatioWidth/2+64, 56, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("7_shipfullname"), vw_GetText(GetWorkshopShipName(Setup.Profile[CurrentProfile].Ship)), Setup.Profile[CurrentProfile].ShipHullUpgrade);
 
 	if (DrawButton128_2(Setup.iAspectRatioWidth/2+315, 50, vw_GetText("1_Info"), MenuContentTransp, false)) {
-		SetCurrentDialogBox(6);
+		SetCurrentDialogBox(eDialogBox::ShowShipInfo);
 		DialogSpaceShip = WorkshopFighterGame;
 	}
 

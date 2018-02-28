@@ -120,6 +120,7 @@ void TopScoresMenu()
 
 	int X = (Setup.iAspectRatioWidth - 384)/2;
 	int Y = 165+100*5;
-	if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime)) ComBuffer = MAIN_MENU;
+	if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 
 }

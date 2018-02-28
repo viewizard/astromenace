@@ -88,7 +88,7 @@ cEarthSpaceFighter *PlayerFighter = nullptr;
 bool GameMenu = false;
 float GameContentTransp = 0.0f;
 float LastGameUpdateTime = 0.0f;
-int GameMenuStatus = 1;
+eGameMenuStatus GameMenuStatus = eGameMenuStatus::GAME_MENU;
 
 float GameButton1Transp = 1.0f;
 float LastGameButton1UpdateTime = 0.0f;
@@ -798,7 +798,7 @@ void InitGame()
 	NeedShowGameMenu = false;
 	NeedHideGameMenu = false;
 
-	GameMenuStatus = 1;
+	GameMenuStatus = eGameMenuStatus::GAME_MENU;
 
 	AlienShipsKillQuant = 0;
 	AlienShipsKillBonus = 0.0f;
@@ -821,7 +821,7 @@ void InitGame()
 	CurrentAlert2 = 1.0f;
 	CurrentAlert3 = 1.0f;
 
-	GameStatus = GAME;
+	MenuStatus = eMenuStatus::GAME;
 
 	GameMissionCompleteStatus = false;
 	GameMissionCompleteStatusShowDialog = false;
@@ -850,11 +850,11 @@ void InitGame()
 //------------------------------------------------------------------------------------
 // Завершаем игру
 //------------------------------------------------------------------------------------
-int NewComBuffer;
+eCommand NewComBuffer;
 void ExitGame()
 {
 	NewComBuffer = ComBuffer;
-	ComBuffer = 0; // пока сбрасываем в ноль, чтобы не переключилось до затухания
+	ComBuffer = eCommand::DO_NOTHING; // пока сбрасываем в ноль, чтобы не переключилось до затухания
 	NeedOffGame = true;
 	LastGameOnOffUpdateTime = vw_GetTime();
 
@@ -1474,7 +1474,7 @@ void DrawGame()
 		if (GameContentTransp <= 0.0f) {
 			GameContentTransp = 0.0f;
 			NeedHideGameMenu = false;
-			GameMenuStatus = 1;
+			GameMenuStatus = eGameMenuStatus::GAME_MENU;
 			if (Setup.BPP == 0) {
 				SDL_SetWindowGrab(vw_GetSDL2Windows(),SDL_TRUE);
 				SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
@@ -1561,14 +1561,14 @@ void DrawGame()
 			// продолжение игры
 			if (DrawButton384(X,Y, vw_GetText("1_NEXT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime)) {
 				// переходим к выбору уровня
-				ComBuffer = 100;
+				ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU;
 				ExitGameWithSave();
 			}
 
 		} else {
 			switch(GameMenuStatus) {
 			// основное меню игры
-			case 1: {
+			case eGameMenuStatus::GAME_MENU: {
 				// выводим подложку меню
 				SetRect(&SrcRect,2,2,564-2,564-2);
 				SetRect(&DstRect,Setup.iAspectRatioWidth/2-256+4-30,128+2-30,Setup.iAspectRatioWidth/2-256+564-30,128+564-2-30);
@@ -1603,8 +1603,8 @@ void DrawGame()
 				// выход в настройки
 				Y = Y+Prir;
 				if (DrawButton384(X,Y, vw_GetText("1_OPTIONS"), GameContentTransp, &GameButton2Transp, &LastGameButton2UpdateTime)) {
-					SetOptionsMenu(OPTIONS);
-					GameMenuStatus = 2;
+					SetOptionsMenu(eMenuStatus::OPTIONS);
+					GameMenuStatus = eGameMenuStatus::OPTIONS;
 				}
 
 				// прерываем игру
@@ -1612,10 +1612,10 @@ void DrawGame()
 				if (DrawButton384(X,Y, vw_GetText("1_RESTART"), GameContentTransp, &GameButton3Transp, &LastGameButton3UpdateTime)) {
 					// если убили, выводить диалог не нужно
 					if (PlayerFighter == nullptr) {
-						ComBuffer = GAME;
+						ComBuffer = eCommand::SWITCH_TO_GAME;
 						ExitGame();
 					} else
-						SetCurrentDialogBox(5);
+						SetCurrentDialogBox(eDialogBox::RestartLevelNoSave);
 				}
 
 				// выход из игры
@@ -1623,29 +1623,29 @@ void DrawGame()
 				if (DrawButton384(X,Y, vw_GetText("1_QUIT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime)) {
 					// если убили, выводить диалог не нужно
 					if (PlayerFighter == nullptr) {
-						ComBuffer = 101;
+						ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU;
 						ExitGame();
 					} else
-						SetCurrentDialogBox(41);
+						SetCurrentDialogBox(eDialogBox::QuiToMenuNoSave);
 				}
 
 				break;
 			}
 
 			// основное меню настроек
-			case 2:
+			case eGameMenuStatus::OPTIONS:
 				OptionsMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime, &GameButton2Transp, &LastGameButton2UpdateTime);
 				break;
 			// меню продвинутых настроек
-			case 3:
+			case eGameMenuStatus::OPTIONS_ADVANCED:
 				OptionsAdvMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime, &GameButton2Transp, &LastGameButton2UpdateTime);
 				break;
 			// меню настройки интерфейса
-			case 4:
+			case eGameMenuStatus::INTERFACE:
 				InterfaceMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime);
 				break;
 			// меню настройки управления
-			case 5:
+			case eGameMenuStatus::CONFCONTROL:
 				ConfControlMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime);
 				break;
 
@@ -1713,13 +1713,13 @@ void DrawGame()
 				}
 
 				if (GameMissionCompleteStatus && !GameMissionCompleteStatusShowDialog) // в процессе вывода результатов разрешаем только выход в основное меню (отображение диалога)
-					SetCurrentDialogBox(41);
+					SetCurrentDialogBox(eDialogBox::QuiToMenuNoSave);
 				GameMissionCompleteStatusShowDialog = false;
 				vw_SetKeys(SDLK_ESCAPE, false);
 			}
 		} else {
 			if (vw_GetKeys(SDLK_ESCAPE)) {
-				ComBuffer = 101;
+				ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU;
 				ExitGame();
 
 				vw_SetKeys(SDLK_ESCAPE, false);

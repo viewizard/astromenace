@@ -241,26 +241,29 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 
 	X = Setup.iAspectRatioWidth/2 - 366;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Advanced"), ContentTransp, false)) {
-		if (GameStatus == GAME) {
-			SetOptionsMenu(OPTIONS_ADVANCED);
-			GameMenuStatus = 3;
-		} else ComBuffer = OPTIONS_ADVANCED;
+		if (MenuStatus == eMenuStatus::GAME) {
+			SetOptionsMenu(eMenuStatus::OPTIONS_ADVANCED);
+			GameMenuStatus = eGameMenuStatus::OPTIONS_ADVANCED;
+		} else
+			ComBuffer = eCommand::SWITCH_TO_OPTIONS_ADVANCED;
 	}
 
 	X = Setup.iAspectRatioWidth/2 - 100;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Video_&_Audio"), ContentTransp, false)) {
-		if (GameStatus == GAME) {
-			SetOptionsMenu(OPTIONS);
-			GameMenuStatus = 2;
-		} else ComBuffer = OPTIONS;
+		if (MenuStatus == eMenuStatus::GAME) {
+			SetOptionsMenu(eMenuStatus::OPTIONS);
+			GameMenuStatus = eGameMenuStatus::OPTIONS;
+		} else
+			ComBuffer = eCommand::SWITCH_TO_OPTIONS;
 	}
 
 	X = Setup.iAspectRatioWidth/2 + 166;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Config_Controls"), ContentTransp, false)) {
-		if (GameStatus == GAME) {
-			SetOptionsMenu(CONFCONTROL);
-			GameMenuStatus = 5;
-		} else ComBuffer = CONFCONTROL;
+		if (MenuStatus == eMenuStatus::GAME) {
+			SetOptionsMenu(eMenuStatus::CONFCONTROL);
+			GameMenuStatus = eGameMenuStatus::CONFCONTROL;
+		} else
+			ComBuffer = eCommand::SWITCH_TO_CONFCONTROL;
 	}
 
 
@@ -270,14 +273,12 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 
 	X = (Setup.iAspectRatioWidth - 384)/2;
 	Y = Y+Prir;
-	if (GameStatus == GAME) {
-		if (DrawButton384(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
-			GameMenuStatus = 1;
-		}
+	if (MenuStatus == eMenuStatus::GAME) {
+		if (DrawButton384(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			GameMenuStatus = eGameMenuStatus::GAME_MENU;
 	} else {
-		if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
-			ComBuffer = MAIN_MENU;
-		}
+		if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 	}
 }
 

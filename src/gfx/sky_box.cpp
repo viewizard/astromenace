@@ -27,7 +27,18 @@
 
 #include "../game.h"
 
+namespace {
 
+enum eSide {
+	RIGHT	= 0,	// The RIGHT side
+	LEFT	= 1,	// The LEFT side
+	BOTTOM	= 2,	// The BOTTOM side
+	TOP	= 3,	// The TOP side
+	BACK	= 4,	// The BACK side
+	FRONT	= 5	// The FRONT side
+};
+
+} // unnamed namespace
 
 
 //-----------------------------------------------------------------------------

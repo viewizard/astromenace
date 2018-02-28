@@ -473,30 +473,33 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 	X = Setup.iAspectRatioWidth/2 - 366;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Advanced"), ContentTransp, false)) {
-		if (GameStatus == GAME) {
-			SetOptionsMenu(OPTIONS_ADVANCED);
-			GameMenuStatus = 3;
-		} else ComBuffer = OPTIONS_ADVANCED;
+		if (MenuStatus == eMenuStatus::GAME) {
+			SetOptionsMenu(eMenuStatus::OPTIONS_ADVANCED);
+			GameMenuStatus = eGameMenuStatus::OPTIONS_ADVANCED;
+		} else
+			ComBuffer = eCommand::SWITCH_TO_OPTIONS_ADVANCED;
 		CheckKeysBeforeExit();
 	}
 
 
 	X = Setup.iAspectRatioWidth/2 - 100;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Video_&_Audio"), ContentTransp, false)) {
-		if (GameStatus == GAME) {
-			SetOptionsMenu(OPTIONS);
-			GameMenuStatus = 2;
-		} else ComBuffer = OPTIONS;
+		if (MenuStatus == eMenuStatus::GAME) {
+			SetOptionsMenu(eMenuStatus::OPTIONS);
+			GameMenuStatus = eGameMenuStatus::OPTIONS;
+		} else
+			ComBuffer = eCommand::SWITCH_TO_OPTIONS;
 		CheckKeysBeforeExit();
 	}
 
 
 	X = Setup.iAspectRatioWidth/2 + 166;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Interface"), ContentTransp, false)) {
-		if (GameStatus == GAME) {
-			SetOptionsMenu(INTERFACE);
-			GameMenuStatus = 4;
-		} else ComBuffer = INTERFACE;
+		if (MenuStatus == eMenuStatus::GAME) {
+			SetOptionsMenu(eMenuStatus::INTERFACE);
+			GameMenuStatus = eGameMenuStatus::INTERFACE;
+		} else
+			ComBuffer = eCommand::SWITCH_TO_INTERFACE;
 		CheckKeysBeforeExit();
 	}
 
@@ -505,14 +508,14 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 	X = (Setup.iAspectRatioWidth - 384)/2;
 	Y = Y+Prir;
-	if (GameStatus == GAME) {
+	if (MenuStatus == eMenuStatus::GAME) {
 		if (DrawButton384(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
-			GameMenuStatus = 1;
+			GameMenuStatus = eGameMenuStatus::GAME_MENU;
 			CheckKeysBeforeExit();
 		}
 	} else {
 		if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
-			ComBuffer = MAIN_MENU;
+			ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 			CheckKeysBeforeExit();
 		}
 	}

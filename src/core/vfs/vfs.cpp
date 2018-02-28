@@ -61,10 +61,10 @@
 #include "vfs.h"
 #include <limits> // need this one for UINT16_MAX only
 
-enum eFileLocation {
-	FILE_NOT_FOUND	= -1,
-	FILE_IN_VFS	=  1,	// File present in the VFS.
-	FILE_IN_FS	=  2	// File present in the File System.
+enum class eFileLocation {
+	Unknown		= -1,
+	VFS		=  1,	// File present in the VFS.
+	FS		=  2	// File present in the File System.
 };
 
 struct sVFS {
@@ -93,11 +93,13 @@ struct sVFS_Entry {
 };
 
 namespace {
+
 // List with connected VFS.
 std::forward_list<std::unique_ptr<sVFS>> VFS_List;
 // Map with file's entries in VFS.
 std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> VFSEntries_Map;
-}
+
+} // unnamed namespace
 
 
 /*
@@ -372,19 +374,19 @@ void vw_ShutdownVFS()
 static eFileLocation DetectFileLocation(const std::string &FileName)
 {
 	if (FileName.empty())
-		return FILE_NOT_FOUND;
+		return eFileLocation::Unknown;
 
 	if (VFSEntries_Map.find(FileName) != VFSEntries_Map.end())
-		return FILE_IN_VFS;
+		return eFileLocation::VFS;
 
 	// trying to open real file in file system
 	SDL_RWops *File = SDL_RWFromFile(FileName.c_str(), "rb");
 	if (File != nullptr) {
 		SDL_RWclose(File);
-		return FILE_IN_FS;
+		return eFileLocation::FS;
 	}
 
-	return FILE_NOT_FOUND;
+	return eFileLocation::Unknown;
 }
 
 /*
@@ -397,7 +399,7 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
 
 	eFileLocation Location = DetectFileLocation(FileName);
 
-	if (Location == FILE_NOT_FOUND) {
+	if (Location == eFileLocation::Unknown) {
 		fprintf(stderr, "Can't find the file %s\n", FileName.c_str());
 		return nullptr;
 	}
@@ -405,7 +407,7 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
 	// initial memory allocation and setup
 	std::unique_ptr<sFILE> File(new sFILE(0, 0));
 
-	if (Location == FILE_IN_VFS) {
+	if (Location == eFileLocation::VFS) {
 		// find file in VFS by name
 		auto FileInVFS = VFSEntries_Map.find(FileName);
 
@@ -414,7 +416,7 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
 
 		SDL_RWseek(FileInVFS->second->Parent->File, FileInVFS->second->Offset, SEEK_SET);
 		SDL_RWread(FileInVFS->second->Parent->File, File->Data.get(), FileInVFS->second->Size, 1);
-	} else if (Location == FILE_IN_FS) {
+	} else if (Location == eFileLocation::FS) {
 		// open real file in file system
 		SDL_RWops *fTEMP = SDL_RWFromFile(FileName.c_str(), "rb");
 

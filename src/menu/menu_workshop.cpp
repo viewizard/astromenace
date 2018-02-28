@@ -360,7 +360,7 @@ void WorkshopMenu()
 	int X = Setup.iAspectRatioWidth/2-482;
 	int Y = 180+100*5;
 	if (DrawButton128_2(X,Y, vw_GetText("1_BACK"), MenuContentTransp, false)) {
-		ComBuffer = MISSION;
+		ComBuffer = eCommand::SWITCH_TO_MISSION;
 		CanDrawWorkshop = false;
 		// ничего не тянем... только включили меню
 		DragWeaponNum = 0;
@@ -385,7 +385,7 @@ void WorkshopMenu()
 		DragWeapon = false;
 		WeaponSetupSlot = -1;
 
-		if (Setup.NeedShowHint[1]) SetCurrentDialogBox(10);
+		if (Setup.NeedShowHint[1]) SetCurrentDialogBox(eDialogBox::ShipyardTipsAndTricks);
 	}
 
 
@@ -402,7 +402,7 @@ void WorkshopMenu()
 		DragWeapon = false;
 		WeaponSetupSlot = -1;
 
-		if (Setup.NeedShowHint[2]) SetCurrentDialogBox(11);
+		if (Setup.NeedShowHint[2]) SetCurrentDialogBox(eDialogBox::SystemsTipsAndTricks);
 	}
 
 
@@ -420,14 +420,14 @@ void WorkshopMenu()
 		DragWeapon = false;
 		WeaponSetupSlot = -1;
 
-		if (Setup.NeedShowHint[3]) SetCurrentDialogBox(12);
+		if (Setup.NeedShowHint[3]) SetCurrentDialogBox(eDialogBox::WeaponryTipsAndTricks);
 	}
 
 
 
 	X = Setup.iAspectRatioWidth/2+354;
 	if (DrawButton128_2(X,Y, vw_GetText("1_START"), MenuContentTransp, false)) {
-		if (Setup.NeedShowHint[4]) SetCurrentDialogBox(13);
+		if (Setup.NeedShowHint[4]) SetCurrentDialogBox(eDialogBox::ShortkeyTipsAndTricks);
 		else {
 			MenuContentTransp = 0.98f; // небольшая "защелка" от быстрых двойных нажатий на кнопку
 			// ничего не тянем... только включили меню
@@ -436,7 +436,8 @@ void WorkshopMenu()
 			DragWeapon = false;
 			WeaponSetupSlot = -1;
 			//
-			ComBuffer = 99;
+			LastMenuOnOffUpdateTime = vw_GetTime();
+			ComBuffer = eCommand::TURN_OFF_WORKSHOP_MENU;
 		}
 	}
 }

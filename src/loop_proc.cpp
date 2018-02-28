@@ -29,7 +29,7 @@
 
 
 // командный буфер
-int ComBuffer = 0;
+eCommand ComBuffer{eCommand::DO_NOTHING};
 
 // для просчета фпс
 float LastSecond;
@@ -49,7 +49,6 @@ extern cParticleSystem2D *CursorParticleSystem2D;
 void DrawDragingWeaponIcon(int X, int Y);
 
 extern float CurrentGameSpeedShowTime;
-extern bool NeedOffMenu;
 
 
 
@@ -123,23 +122,23 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// рисуем то, что нужно
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	switch(GameStatus) {
-	case MAIN_MENU:
-	case TOP_SCORES:
-	case INTERFACE:
-	case OPTIONS:
-	case INFORMATION:
-	case CREDITS:
-	case CONFCONTROL:
-	case OPTIONS_ADVANCED:
-	case PROFILE:
-	case DIFFICULTY:
-	case MISSION:
-	case WORKSHOP:
+	switch(MenuStatus) {
+	case eMenuStatus::MAIN_MENU:
+	case eMenuStatus::TOP_SCORES:
+	case eMenuStatus::INTERFACE:
+	case eMenuStatus::OPTIONS:
+	case eMenuStatus::INFORMATION:
+	case eMenuStatus::CREDITS:
+	case eMenuStatus::CONFCONTROL:
+	case eMenuStatus::OPTIONS_ADVANCED:
+	case eMenuStatus::PROFILE:
+	case eMenuStatus::DIFFICULTY:
+	case eMenuStatus::MISSION:
+	case eMenuStatus::WORKSHOP:
 		DrawMenu();
 		break;
 
-	case GAME:
+	case eMenuStatus::GAME:
 		DrawGame();
 		break;
 	}
@@ -171,7 +170,7 @@ void Loop_Proc()
 		vw_GetMousePos(&mX,&mY);
 
 		// если нужно, рисуем перетягиваемое оружие
-		if (GameStatus == WORKSHOP)
+		if (MenuStatus == eMenuStatus::WORKSHOP)
 			DrawDragingWeaponIcon(mX, mY);
 
 
@@ -233,7 +232,7 @@ void Loop_Proc()
 	// выход по нажатию на Esc
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (vw_GetKeys(SDLK_ESCAPE)) {
-		SetCurrentDialogBox(0);
+		SetCurrentDialogBox(eDialogBox::QuitFromGame);
 		vw_SetKeys(SDLK_ESCAPE, false);
 	}
 
@@ -252,73 +251,70 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// выполняем то, что есть в буфере команд, если там что-то есть
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ComBuffer != 0) {
+	if ((ComBuffer != eCommand::DO_NOTHING) &&
+	    (ComBuffer != eCommand::TURN_OFF_WORKSHOP_MENU)) {
 
 		switch(ComBuffer) {
-		case MAIN_MENU:
-			SetMenu(MAIN_MENU);
+		case eCommand::SWITCH_TO_MAIN_MENU:
+			SetMenu(eMenuStatus::MAIN_MENU);
 			break;
-		case TOP_SCORES:
-			SetMenu(TOP_SCORES);
+		case eCommand::SWITCH_TO_TOP_SCORES:
+			SetMenu(eMenuStatus::TOP_SCORES);
 			break;
-		case INTERFACE:
-			SetMenu(INTERFACE);
+		case eCommand::SWITCH_TO_INTERFACE:
+			SetMenu(eMenuStatus::INTERFACE);
 			break;
-		case OPTIONS:
-			SetMenu(OPTIONS);
+		case eCommand::SWITCH_TO_OPTIONS:
+			SetMenu(eMenuStatus::OPTIONS);
 			break;
-		case OPTIONS_ADVANCED:
-			SetMenu(OPTIONS_ADVANCED);
+		case eCommand::SWITCH_TO_OPTIONS_ADVANCED:
+			SetMenu(eMenuStatus::OPTIONS_ADVANCED);
 			break;
-		case INFORMATION:
-			SetMenu(INFORMATION);
+		case eCommand::SWITCH_TO_INFORMATION:
+			SetMenu(eMenuStatus::INFORMATION);
 			break;
-		case CREDITS:
-			SetMenu(CREDITS);
+		case eCommand::SWITCH_TO_CREDITS:
+			SetMenu(eMenuStatus::CREDITS);
 			break;
-		case CONFCONTROL:
-			SetMenu(CONFCONTROL);
+		case eCommand::SWITCH_TO_CONFCONTROL:
+			SetMenu(eMenuStatus::CONFCONTROL);
 			break;
-		case PROFILE:
-			SetMenu(PROFILE);
+		case eCommand::SWITCH_TO_PROFILE:
+			SetMenu(eMenuStatus::PROFILE);
 			break;
-		case DIFFICULTY:
-			SetMenu(DIFFICULTY);
+		case eCommand::SWITCH_TO_DIFFICULTY:
+			SetMenu(eMenuStatus::DIFFICULTY);
 			break;
-		case MISSION:
-			SetMenu(MISSION);
+		case eCommand::SWITCH_TO_MISSION:
+			SetMenu(eMenuStatus::MISSION);
 			break;
-		case WORKSHOP:
-			SetMenu(WORKSHOP);
+		case eCommand::SWITCH_TO_WORKSHOP:
+			SetMenu(eMenuStatus::WORKSHOP);
 			break;
 
 
 		// переходим на игру
-		case 99:
-			NeedOffMenu = true;
-			LastMenuOnOffUpdateTime = vw_GetTime();
-			break;
-		case GAME:
-			LoadGameData(1);
+		case eCommand::SWITCH_TO_GAME:
+			LoadGameData(eLoading::Game);
 			break;
 
 		// переход игра-меню (выбор миссии)
-		case 100:
-			LoadGameData(0);
+		case eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU:
+			LoadGameData(eLoading::Menu);
 			break;
 		// переход игра-главное меню
-		case 101:
-			LoadGameData(0);
-			GameStatus = MAIN_MENU;
+		case eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU:
+			LoadGameData(eLoading::Menu);
+			MenuStatus = eMenuStatus::MAIN_MENU;
 			break;
 
 		default:
-			fprintf(stderr, "ComBuffer = %i... error!", ComBuffer);
+			fprintf(stderr, "ComBuffer = %i... error!", (int)ComBuffer);
 			break;
 
 		}
 
-		ComBuffer = 0;
+		ComBuffer = eCommand::DO_NOTHING;
 	}
 
 
@@ -343,7 +339,7 @@ void Loop_Proc()
 	}
 
 	// если не в игре, используем и кнопки курсора
-	if ((GameStatus != GAME) || ((GameStatus == GAME) &&
+	if ((MenuStatus != eMenuStatus::GAME) || ((MenuStatus == eMenuStatus::GAME) &&
 	    (isDialogBoxDrawing() || (GameContentTransp >= 0.99f)))) {
 		if (vw_GetKeys(SDLK_RIGHT) || vw_GetKeys(SDLK_DOWN)) {
 			CurrentKeyboardSelectMenuElement++;
@@ -399,7 +395,7 @@ void Loop_Proc()
 	}
 
 	// управление скоростью игры, только в самой игре!
-	if ((GameStatus == GAME) &&
+	if ((MenuStatus == eMenuStatus::GAME) &&
 	    (GameContentTransp<=0.0f) &&
 	    !GameMissionCompleteStatus) {
 		if (vw_GetKeys(Setup.KeyboardDecreaseGameSpeed)) {
@@ -426,7 +422,7 @@ void Loop_Proc()
 		}
 	}
 
-	if (GameStatus == GAME) {
+	if (MenuStatus == eMenuStatus::GAME) {
 		// изменение вывода состояния вооружения
 		if (vw_GetKeys(Setup.KeyboardGameWeaponInfoType)) {
 			Setup.GameWeaponInfoType ++;

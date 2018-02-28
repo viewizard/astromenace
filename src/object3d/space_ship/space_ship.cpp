@@ -1384,7 +1384,7 @@ bool cSpaceShip::Update(float Time)
 
 
 	// если в игре, а не в меню - иначе в оружейной дергается оружие
-	if (GameStatus == GAME)
+	if (MenuStatus == eMenuStatus::GAME)
 		// так стреляют только свои :)
 		if (ObjectStatus == 2) {
 			// используем ID как маркер, чтобы не обрабатывать этот объект в процедуре

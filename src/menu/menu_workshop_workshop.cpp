@@ -1112,12 +1112,12 @@ void Workshop_Workshop()
 
 
 	if (DrawButton128_2(Setup.iAspectRatioWidth/2-250,580-55, vw_GetText("1_Info"), MenuContentTransp, false)) {
-		SetCurrentDialogBox(8);
+		SetCurrentDialogBox(eDialogBox::ShowSystemsInfo);
 		DialogSystem = CurrentSystemStockNum;
 	}
 
 	if (DrawButton128_2(Setup.iAspectRatioWidth/2+250-128,580-55, vw_GetText("1_Info"), MenuContentTransp, !CanSell)) {
-		SetCurrentDialogBox(8);
+		SetCurrentDialogBox(eDialogBox::ShowSystemsInfo);
 
 		NeedMoreEnergyDialog = NeedMoreEnergy;
 

@@ -447,7 +447,7 @@ void MissionMenu()
 		vw_DrawFont(X1+Size, 208+12, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.Profile[CurrentProfile].Name);
 
 	if (DrawButton200_2(X1+616-72, 212, vw_GetText("1_Change_Profile"), MenuContentTransp, false)) {
-		ComBuffer = PROFILE;
+		ComBuffer = eCommand::SWITCH_TO_PROFILE;
 	}
 
 
@@ -565,14 +565,14 @@ void MissionMenu()
 						// если уже играли в эту миссию
 						if (Setup.Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0) {
 							if (Setup.NeedShowHint[5]) {
-								SetCurrentDialogBox(14);
+								SetCurrentDialogBox(eDialogBox::StartMissionSecondTime);
 							} else {
-								ComBuffer = WORKSHOP;
+								ComBuffer = eCommand::SWITCH_TO_WORKSHOP;
 								CurrentWorkshop = 3;
 								WorkshopCreate();
 							}
 						} else {
-							ComBuffer = WORKSHOP;
+							ComBuffer = eCommand::SWITCH_TO_WORKSHOP;
 							CurrentWorkshop = 3;
 							WorkshopCreate();
 						}
@@ -691,23 +691,22 @@ void MissionMenu()
 
 	int X = Setup.iAspectRatioWidth/2 - 284;
 	int Y = 165+100*5;
-	if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime)) {
-		ComBuffer = MAIN_MENU;
-	}
+	if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 
 	X = Setup.iAspectRatioWidth/2 + 28;
 	if (DrawButton256(X,Y, vw_GetText("1_NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, !(CurrentMission >= 0))) {
 		// если уже играли в эту миссию
 		if (Setup.Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0) {
 			if (Setup.NeedShowHint[5]) {
-				SetCurrentDialogBox(14);
+				SetCurrentDialogBox(eDialogBox::StartMissionSecondTime);
 			} else {
-				ComBuffer = WORKSHOP;
+				ComBuffer = eCommand::SWITCH_TO_WORKSHOP;
 				CurrentWorkshop = 3;
 				WorkshopCreate();
 			}
 		} else {
-			ComBuffer = WORKSHOP;
+			ComBuffer = eCommand::SWITCH_TO_WORKSHOP;
 			CurrentWorkshop = 3;
 			WorkshopCreate();
 		}

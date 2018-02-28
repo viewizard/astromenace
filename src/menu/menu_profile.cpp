@@ -55,7 +55,7 @@ void NewRecord()
 
 	// выводим диалог - все заняты!
 	if (ProfileNum == -1) {
-		SetCurrentDialogBox(1);
+		SetCurrentDialogBox(eDialogBox::ProfileCreationError);
 		return;
 	}
 
@@ -154,7 +154,7 @@ void DuplicateRecord()
 
 	// выводим диалог - все слоты заняты!
 	if (ProfileNum == -1) {
-		SetCurrentDialogBox(1);
+		SetCurrentDialogBox(eDialogBox::ProfileCreationError);
 		return;
 	}
 
@@ -473,7 +473,7 @@ void ProfileMenu()
 							Setup.LastProfile = CurrentProfile;
 							// если другой - нужно сбросить миссию...
 							CurrentMission = Setup.Profile[CurrentProfile].LastMission;
-							ComBuffer = MISSION;
+							ComBuffer = eCommand::SWITCH_TO_MISSION;
 						}
 
 
@@ -483,7 +483,7 @@ void ProfileMenu()
 					} else {
 						// переход по 2-му клику
 						if (vw_GetWindowLBDoubleMouse(true)) {
-							ComBuffer = MISSION;
+							ComBuffer = eCommand::SWITCH_TO_MISSION;
 						}
 					}
 				}
@@ -527,30 +527,27 @@ void ProfileMenu()
 	// кнопка удаления записи
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton128_2(X1+240, Y1-6, vw_GetText("1_Delete"), MenuContentTransp, Off)) {
-		SetCurrentDialogBox(2);
-	}
+	if (DrawButton128_2(X1+240, Y1-6, vw_GetText("1_Delete"), MenuContentTransp, Off))
+		SetCurrentDialogBox(eDialogBox::DeleteProfile);
 
 
 	// кнопка установки сложности
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton200_2(X1+544, Y1-6, vw_GetText("1_Difficulty"), MenuContentTransp, Off)) {
-		ComBuffer = DIFFICULTY;
-	}
+	if (DrawButton200_2(X1+544, Y1-6, vw_GetText("1_Difficulty"), MenuContentTransp, Off))
+		ComBuffer = eCommand::SWITCH_TO_DIFFICULTY;
 
 
 
 	int X = Setup.iAspectRatioWidth/2 - 284;
 	int Y = 165+100*5;
-	if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime)) {
-		ComBuffer = MAIN_MENU;
-	}
+	if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
+
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
 	X = Setup.iAspectRatioWidth/2 + 28;
-	if (DrawButton256(X,Y, vw_GetText("1_MISSIONS_LIST"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off)) {
-		ComBuffer = MISSION;
-	}
+	if (DrawButton256(X,Y, vw_GetText("1_MISSIONS_LIST"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
+		ComBuffer = eCommand::SWITCH_TO_MISSION;
 
 }

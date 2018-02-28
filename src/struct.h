@@ -27,30 +27,17 @@
 #ifndef STRUCT_H
 #define STRUCT_H
 
-namespace {
-enum eSide {
-	RIGHT	= 0,		// The RIGHT side
-	LEFT	= 1,		// The LEFT side
-	BOTTOM	= 2,		// The BOTTOM side
-	TOP	= 3,		// The TOP side
-	BACK	= 4,		// The BACK side
-	FRONT	= 5		// The FRONT side
-};
-} // unnamed namespace
-
-
 
 
 
 //------------------------------------------------------------------------------------
 // возможные состояния... для прорисовки и обхода
 //------------------------------------------------------------------------------------
-enum eGameStatus {
+enum class eMenuStatus {
 	// основное меню
 	MAIN_MENU = 1,
 
-
-	// игра
+	// игра, рассматриваем как еще одно "меню"
 	GAME,
 
 	// лучшие результаты
@@ -76,6 +63,105 @@ enum eGameStatus {
 	// мастерская покупка-усовершенствование корабля
 	WORKSHOP
 };
+
+
+// меню настроек в игре (когда уже запустили прохождение миссии)
+enum class eGameMenuStatus {
+	// основное меню игры
+	GAME_MENU = 1,
+	// основное меню настроек
+	OPTIONS,
+	// меню продвинутых настроек
+	OPTIONS_ADVANCED,
+	// меню настройки интерфейса
+	INTERFACE,
+	// меню настройки управления
+	CONFCONTROL
+};
+
+
+// commands, that should be executed after rendering cycle
+enum class eCommand {
+	DO_NOTHING = 0,
+
+	// основное меню
+	SWITCH_TO_MAIN_MENU = 1,
+
+	// игра
+	SWITCH_TO_GAME,
+
+	// лучшие результаты
+	SWITCH_TO_TOP_SCORES,
+	// настройка интерфейса
+	SWITCH_TO_INTERFACE,
+	// настройка
+	SWITCH_TO_OPTIONS,
+	// настройка управления
+	SWITCH_TO_CONFCONTROL,
+	// настройки быстродействия
+	SWITCH_TO_OPTIONS_ADVANCED,
+	// информация об игре и т.п.
+	SWITCH_TO_INFORMATION,
+	// кто делал игру
+	SWITCH_TO_CREDITS,
+	// профайл
+	SWITCH_TO_PROFILE,
+	// настройка сложности
+	SWITCH_TO_DIFFICULTY,
+	// выбор миссии
+	SWITCH_TO_MISSION,
+	// мастерская покупка-усовершенствование корабля
+	SWITCH_TO_WORKSHOP,
+
+	// выключаем воркшоп (готовимся к переходу на игру) (ранее 99)
+	TURN_OFF_WORKSHOP_MENU,
+	// переход игра-меню (выбор миссии) (ранее 100)
+	SWITCH_FROM_GAME_TO_MISSION_MENU,
+	// переход игра-главное меню (ранее 101)
+	SWITCH_FROM_GAME_TO_MAIN_MENU
+};
+
+
+
+// -1 - загрузка меню с логотипом
+// 0 - загрузка меню без логотипа
+// 1 - загрузка игры
+enum class eLoading {
+	InitialValue	= -2,	// initial value for variables (some fake, not used loading trigger)
+	MenuWithLogo	= -1,	// loading menu with logo at game launch
+	Menu		=  0,
+	Game		=  1
+};
+
+
+
+
+
+enum class eDialogBox {
+	None			= -1,	// none
+	QuitFromGame		=  0,	// хотим выйти или нет?
+	ProfileCreationError	=  1,	// в профайле все занято, не можем создать новую запись
+	DeleteProfile		=  2,	// удаление профайла - запрос
+	RepairShip		=  3,	// неполный ремонт (не достаточно денег)
+	QuitNoSave		=  4,	// хотим выйти или нет?, с предупреждением, что не все сохраним
+	QuiToMenuNoSave		=  41,	// выход из игры в меню (основное) с предупреждением, что не все сохраним
+	RestartLevelNoSave	=  5,	// хотим рестарт игры?, с предупреждением, что не все сохраним
+	ShowShipInfo		=  6,	// вывод данных по кораблю
+	ShowWeaponsInfo		=  7,	// вывод данных по оружию
+	ShowSystemsInfo		=  8,	// вывод данных по системам
+	ProfileTipsAndTricks	=  9,	// подсказки на меню профилей
+	ShipyardTipsAndTricks	= 10,	// подсказки на меню шипъярд
+	SystemsTipsAndTricks	= 11,	// подсказки на меню системы
+	WeaponryTipsAndTricks	= 12,	// подсказки на меню оружейная
+	ShortkeyTipsAndTricks	= 13,	// подсказки на горячие клавиши в игре
+	StartMissionSecondTime	= 14,	// подсказка, если пытаемся по второму разу пройти миссию
+	ChoseLanguage		= 16,	// спрашиваем какой язык при первом старте игры
+	RestartOnOptionsChanged	= 17,	// при изменении настроек в самой игре спрашиваем, с предупреждением, что не все сохраним
+	RestartOnAdvOptChanged	= 18	// при изменении продвинутых настроек в самой игре, с предупреждением, что не все сохраним
+};
+
+
+
 
 
 

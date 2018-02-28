@@ -380,28 +380,29 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	X = Setup.iAspectRatioWidth/2 - 366;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Advanced"), ContentTransp, false)) {
-		if (GameStatus == GAME) {
-			SetOptionsMenu(OPTIONS_ADVANCED);
-			GameMenuStatus = 3;
-		} else ComBuffer = OPTIONS_ADVANCED;
+		if (MenuStatus == eMenuStatus::GAME) {
+			SetOptionsMenu(eMenuStatus::OPTIONS_ADVANCED);
+			GameMenuStatus = eGameMenuStatus::OPTIONS_ADVANCED;
+		} else ComBuffer = eCommand::SWITCH_TO_OPTIONS_ADVANCED;
 	}
 
 
 	X = Setup.iAspectRatioWidth/2 - 100;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Interface"), ContentTransp, false)) {
-		if (GameStatus == GAME) {
-			SetOptionsMenu(INTERFACE);
-			GameMenuStatus = 4;
-		} else ComBuffer = INTERFACE;
+		if (MenuStatus == eMenuStatus::GAME) {
+			SetOptionsMenu(eMenuStatus::INTERFACE);
+			GameMenuStatus = eGameMenuStatus::INTERFACE;
+		} else ComBuffer = eCommand::SWITCH_TO_INTERFACE;
 	}
 
 
 	X = Setup.iAspectRatioWidth/2 + 166;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Config_Controls"), ContentTransp, false)) {
-		if (GameStatus == GAME) {
-			SetOptionsMenu(CONFCONTROL);
-			GameMenuStatus = 5;
-		} else ComBuffer = CONFCONTROL;
+		if (MenuStatus == eMenuStatus::GAME) {
+			SetOptionsMenu(eMenuStatus::CONFCONTROL);
+			GameMenuStatus = eGameMenuStatus::CONFCONTROL;
+		} else
+			ComBuffer = eCommand::SWITCH_TO_CONFCONTROL;
 	}
 
 
@@ -417,26 +418,22 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	     Options_iAspectRatioWidth == Setup.iAspectRatioWidth)) {
 		X = (Setup.iAspectRatioWidth - 384)/2;
 		Y = Y+Prir;
-		if (GameStatus == GAME) {
-			if (DrawButton384(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
-				GameMenuStatus = 1;
-			}
+		if (MenuStatus == eMenuStatus::GAME) {
+			if (DrawButton384(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+				GameMenuStatus = eGameMenuStatus::GAME_MENU;
 		} else {
-			if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
-				ComBuffer = MAIN_MENU;
-			}
+			if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+				ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 		}
 	} else {
 		X = Setup.iAspectRatioWidth/2 - 256 - 38;
 		Y = Y+Prir;
-		if (GameStatus == GAME) {
-			if (DrawButton256(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
-				GameMenuStatus = 1;
-			}
+		if (MenuStatus == eMenuStatus::GAME) {
+			if (DrawButton256(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+				GameMenuStatus = eGameMenuStatus::GAME_MENU;
 		} else {
-			if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
-				ComBuffer = MAIN_MENU;
-			}
+			if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+				ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 		}
 		X = Setup.iAspectRatioWidth/2 + 38;
 		if (DrawButton256(X,Y, vw_GetText("1_APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2)) {
@@ -446,7 +443,8 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			    Options_BPP != Setup.BPP ||
 			    Options_VSync != Setup.VSync ||
 			    Options_iAspectRatioWidth != Setup.iAspectRatioWidth) {
-				if (GameStatus == GAME) SetCurrentDialogBox(17);
+				if (MenuStatus == eMenuStatus::GAME)
+					SetCurrentDialogBox(eDialogBox::RestartOnOptionsChanged);
 				else {
 					CanQuit = false;
 					Quit = true;

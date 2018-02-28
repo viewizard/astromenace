@@ -47,7 +47,7 @@ sGameSetup Setup;
 // общие состояния и статусы
 //------------------------------------------------------------------------------------
 // текущий статус (текущее меню)
-eGameStatus GameStatus;
+eMenuStatus MenuStatus;
 // защелка на выход, когда нужно перегрузить, а когда просто поменять режим
 bool Quit = false;
 bool NeedReCreate = false;
@@ -1165,7 +1165,7 @@ ReCreate:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// загрузка текстур согласно моделе загрузки
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	LoadGameData(-1);
+	LoadGameData(eLoading::MenuWithLogo);
 	// загрузка списка миссий
 	MissionsListInit();
 
@@ -1192,7 +1192,7 @@ ReCreate:
 	// TODO check std::locale first
 	// show dialog with language setup during first game launch
 	if (FirstStart)
-		SetCurrentDialogBox(16);
+		SetCurrentDialogBox(eDialogBox::ChoseLanguage);
 
 
 
@@ -1335,7 +1335,7 @@ loop:
 			if (vw_GetMusicIsPlaying()) vw_ReleaseAllMusic();
 
 			// если в игре, ставим паузу, т.е. открываем меню мгновенно
-			if (GameStatus == GAME && (GameContentTransp < 1.0f)) {
+			if ((MenuStatus == eMenuStatus::GAME) && (GameContentTransp < 1.0f)) {
 				NeedShowGameMenu = true;
 				NeedHideGameMenu = false;
 				GameContentTransp = 1.0f;
@@ -1351,7 +1351,7 @@ GotoQuit:
 
 	// если не выходим...
 	if (!NeedReCreate && !CanQuit && Quit) {
-		SetCurrentDialogBox(0);
+		SetCurrentDialogBox(eDialogBox::QuitFromGame);
 		goto loop;
 	}
 

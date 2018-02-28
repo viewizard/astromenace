@@ -1119,7 +1119,7 @@ void Workshop_Weaponry()
 	// вывод названия
 	vw_DrawFont(Setup.iAspectRatioWidth/2-438, 50+6, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText(GetWeaponName(CurrentWorkshopNewWeapon)));
 	if (DrawButton128_2(Setup.iAspectRatioWidth/2-197,50, vw_GetText("1_Info"), MenuContentTransp, false)) {
-		SetCurrentDialogBox(7);
+		SetCurrentDialogBox(eDialogBox::ShowWeaponsInfo);
 		DialogWeapon = WorkshopNewWeapon;
 	}
 

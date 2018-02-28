@@ -28,8 +28,8 @@
 #include "camera.h"
 
 namespace {
+
 float Frustum[6][4];
-} // unnamed namespace
 
 enum ePlaneData {
 	A = 0,		// The X value of the plane's normal.
@@ -47,6 +47,7 @@ enum eSide {
 	FRONT	= 5	// The FRONT side.
 };
 
+} // unnamed namespace
 
 /*
  * This normalizes a plane (A side) from a given frustum.
