@@ -34,7 +34,7 @@
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void CBasePart::Create(int BasePartNum)
+void cBasePart::Create(int BasePartNum)
 {
 	ObjectType = 13;
 	ObjectStatus = 1; // чужой
@@ -77,34 +77,34 @@ case1next:
 		TextureIllum[2] = nullptr;
 
 		GFXQuantity = 8;
-		GFXLocation = new VECTOR3D[GFXQuantity];
-		GFX = new eParticleSystem*[GFXQuantity];
+		GFXLocation = new sVECTOR3D[GFXQuantity];
+		GFX = new cParticleSystem*[GFXQuantity];
 		for (int i = 0; i < GFXQuantity; i++) GFX[i] = nullptr;
 
-		GFX[0] = new eParticleSystem;
-		GFXLocation[0] = VECTOR3D(14.3f, -4.0f, -14.3f);
+		GFX[0] = new cParticleSystem;
+		GFXLocation[0] = sVECTOR3D(14.3f, -4.0f, -14.3f);
 		SetSpaceObjectGFX(GFX[0], 1);
-		GFX[1] = new eParticleSystem;
-		GFXLocation[1] = VECTOR3D(14.3f, -4.0f, 14.3f);
+		GFX[1] = new cParticleSystem;
+		GFXLocation[1] = sVECTOR3D(14.3f, -4.0f, 14.3f);
 		SetSpaceObjectGFX(GFX[1], 1);
-		GFX[2] = new eParticleSystem;
-		GFXLocation[2] = VECTOR3D(-14.3f, -4.0f, -14.3f);
+		GFX[2] = new cParticleSystem;
+		GFXLocation[2] = sVECTOR3D(-14.3f, -4.0f, -14.3f);
 		SetSpaceObjectGFX(GFX[2], 1);
-		GFX[3] = new eParticleSystem;
-		GFXLocation[3] = VECTOR3D(-14.3f, -4.0f, 14.3f);
+		GFX[3] = new cParticleSystem;
+		GFXLocation[3] = sVECTOR3D(-14.3f, -4.0f, 14.3f);
 		SetSpaceObjectGFX(GFX[3], 1);
 		//----
-		GFX[4] = new eParticleSystem;
-		GFXLocation[4] = VECTOR3D(14.3f, 3.2f, -14.3f);
+		GFX[4] = new cParticleSystem;
+		GFXLocation[4] = sVECTOR3D(14.3f, 3.2f, -14.3f);
 		SetSpaceObjectGFX(GFX[4], 2);
-		GFX[5] = new eParticleSystem;
-		GFXLocation[5] = VECTOR3D(14.3f, 3.2f, 14.3f);
+		GFX[5] = new cParticleSystem;
+		GFXLocation[5] = sVECTOR3D(14.3f, 3.2f, 14.3f);
 		SetSpaceObjectGFX(GFX[5], 2);
-		GFX[6] = new eParticleSystem;
-		GFXLocation[6] = VECTOR3D(-14.3f, 3.2f, -14.3f);
+		GFX[6] = new cParticleSystem;
+		GFXLocation[6] = sVECTOR3D(-14.3f, 3.2f, -14.3f);
 		SetSpaceObjectGFX(GFX[6], 2);
-		GFX[7] = new eParticleSystem;
-		GFXLocation[7] = VECTOR3D(-14.3f, 3.2f, 14.3f);
+		GFX[7] = new cParticleSystem;
+		GFXLocation[7] = sVECTOR3D(-14.3f, 3.2f, 14.3f);
 		SetSpaceObjectGFX(GFX[7], 2);
 		break;
 
@@ -143,16 +143,16 @@ case2next:
 		TextureIllum[1] = nullptr;
 
 		GFXQuantity = 2;
-		GFXLocation = new VECTOR3D[GFXQuantity];
-		GFX = new eParticleSystem*[GFXQuantity];
+		GFXLocation = new sVECTOR3D[GFXQuantity];
+		GFX = new cParticleSystem*[GFXQuantity];
 		for (int i = 0; i < GFXQuantity; i++) GFX[i] = nullptr;
 
-		GFX[0] = new eParticleSystem;
-		GFXLocation[0] = VECTOR3D(0.0f, -5.0f, 13.7f);
+		GFX[0] = new cParticleSystem;
+		GFXLocation[0] = sVECTOR3D(0.0f, -5.0f, 13.7f);
 		SetSpaceObjectGFX(GFX[0], 1);
 		//----
-		GFX[1] = new eParticleSystem;
-		GFXLocation[1] = VECTOR3D(0.0f, 5.0f, 13.7f);
+		GFX[1] = new cParticleSystem;
+		GFXLocation[1] = sVECTOR3D(0.0f, 5.0f, 13.7f);
 		SetSpaceObjectGFX(GFX[1], 2);
 		break;
 
@@ -232,7 +232,7 @@ case8next:
 
 
 	// находим все данные по геометрии
-	::CObject3D::InitByDrawObjectList();
+	::cObject3D::InitByDrawObjectList();
 
 }
 

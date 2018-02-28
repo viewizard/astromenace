@@ -43,7 +43,7 @@ const char *ButtonGameWeaponInfoType[4] = {
 void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1)
 {
 
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 	SetRect(&SrcRect,0,0,2,2);
 	SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);

@@ -31,47 +31,47 @@
 #include "../explosion/space_explosion/space_explosion.h"
 
 //-----------------------------------------------------------------------------
-// Класс CSpaceObject
+// Класс cSpaceObject
 //-----------------------------------------------------------------------------
-class CSpaceObject : public CObject3D
+class cSpaceObject : public cObject3D
 {
 public:
 	// базовые конструктор и деструктор объекта
-	CSpaceObject();
-	virtual ~CSpaceObject();
+	cSpaceObject();
+	virtual ~cSpaceObject();
 
 	// Обновление данных объектa
 	virtual bool	Update(float Time);
 	// Установка положения объекта
-	virtual void	SetLocation(VECTOR3D NewLocation);
+	virtual void	SetLocation(sVECTOR3D NewLocation);
 	// Установка углов поворота объекта
-	virtual void	SetRotation(VECTOR3D NewRotation);
+	virtual void	SetRotation(sVECTOR3D NewRotation);
 
 	// скорость
 	float		Speed{0.0f};
-	VECTOR3D	RotationSpeed{0.0f, 0.0f, 0.0f};
-	VECTOR3D	Velocity{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	RotationSpeed{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Velocity{0.0f, 0.0f, 0.0f};
 
 	// последнее положение камеры нужно для планет
-	VECTOR3D	LastCameraPoint{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	LastCameraPoint{0.0f, 0.0f, 0.0f};
 
 	// кол-во эффектов
 	int		GFXQuantity{0};
 	// эффекты
-	VECTOR3D	*GFXLocation{nullptr};
-	eParticleSystem	**GFX{nullptr};
+	sVECTOR3D	*GFXLocation{nullptr};
+	cParticleSystem	**GFX{nullptr};
 
 	// чтобы возрвать часть корабля босса пришельцев через время
 	float		BossPartCountDown{-1.0f};
 
 	// для собственного списка
-	CSpaceObject	*Next{nullptr};
-	CSpaceObject	*Prev{nullptr};
+	cSpaceObject	*Next{nullptr};
+	cSpaceObject	*Prev{nullptr};
 };
 
 
 // установка эффекта, если нужно
-void SetSpaceObjectGFX(eParticleSystem *ParticleSystem, int GFXType);
+void SetSpaceObjectGFX(cParticleSystem *ParticleSystem, int GFXType);
 
 
 //-----------------------------------------------------------------------------
@@ -79,9 +79,9 @@ void SetSpaceObjectGFX(eParticleSystem *ParticleSystem, int GFXType);
 //-----------------------------------------------------------------------------
 
 // Включаем в список
-void	AttachSpaceObject(CSpaceObject* SpaceObject);
+void	AttachSpaceObject(cSpaceObject* SpaceObject);
 // Исключаем из списка
-void	DetachSpaceObject(CSpaceObject* SpaceObject);
+void	DetachSpaceObject(cSpaceObject* SpaceObject);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllSpaceObject(float Time);
 // Прорисовываем все объекты

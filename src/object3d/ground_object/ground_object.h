@@ -32,21 +32,21 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CGroundObject
+// Класс cGroundObject
 //-----------------------------------------------------------------------------
-class CGroundObject : public CObject3D
+class cGroundObject : public cObject3D
 {
 public:
 	// базовые конструктор и деструктор объекта
-	CGroundObject();
-	virtual ~CGroundObject();
+	cGroundObject();
+	virtual ~cGroundObject();
 
 	// Обновление данных объектa
 	virtual bool	Update(float Time);
 	// Установка положения объекта
-	virtual void	SetLocation(VECTOR3D NewLocation);
+	virtual void	SetLocation(sVECTOR3D NewLocation);
 	// Установка углов поворота объекта
-	virtual void	SetRotation(VECTOR3D NewRotation);
+	virtual void	SetRotation(sVECTOR3D NewRotation);
 
 	// колеса, для транспорта
 
@@ -74,9 +74,9 @@ public:
 
 	// нужно повернуть (пересчитать мэш) при следующем проходе
 	// Update + учесть эти данные в Rotation
-	VECTOR3D	NeedRotate{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	NeedRotate{0.0f, 0.0f, 0.0f};
 	// скорость поворота по каждому раправлению
-	VECTOR3D	RotationSpeed{1.0f, 1.0f, 1.0f};
+	sVECTOR3D	RotationSpeed{1.0f, 1.0f, 1.0f};
 
 	// максимальная скорость units/sec, зависит от двигателя
 	float	MaxSpeed{0.0f};
@@ -99,9 +99,9 @@ public:
 	// выстрел из оружия, т.е. передача команды "стрелять" оружию при сделующем Update'е
 	bool		*WeaponSetFire{nullptr};
 	// указатель на массив оружия
-	CWeapon		**Weapon{nullptr};
+	cWeapon		**Weapon{nullptr};
 	// расположение оружия (относительное)
-	VECTOR3D	*WeaponLocation{nullptr};
+	sVECTOR3D	*WeaponLocation{nullptr};
 	// тип стрельбы из оружия 1-обычный, 2-переменный (по умолчанию)
 	int		WeaponFireType{2};
 	int		WeaponGroupCurrentFireNum{-1};
@@ -110,9 +110,9 @@ public:
 	bool		WeaponTargeting{false};
 
 	// для просчета положения точки стрельбы, считаем как кости
-	VECTOR3D	BaseBound{0.0f, 0.0f, 0.0f};
-	VECTOR3D	MiddleBound{0.0f, 0.0f, 0.0f};
-	VECTOR3D	*WeaponBound{nullptr};
+	sVECTOR3D	BaseBound{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	MiddleBound{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	*WeaponBound{nullptr};
 	// если точки фиксированы, не нужно менять направление точки выстрела
 	// только учитываем общий поворот модели и соотв. точку выстрела
 	// работает только если объекты поворота башни и ствола не заданы!
@@ -138,8 +138,8 @@ public:
 	int	*BarrelObject{nullptr};
 
 	// для собственного списка
-	CGroundObject	*Next{nullptr};
-	CGroundObject	*Prev{nullptr};
+	cGroundObject	*Next{nullptr};
+	cGroundObject	*Prev{nullptr};
 };
 
 
@@ -148,9 +148,9 @@ public:
 //-----------------------------------------------------------------------------
 
 // Включаем в список
-void	AttachGroundObject(CGroundObject* GroundObject);
+void	AttachGroundObject(cGroundObject* GroundObject);
 // Исключаем из списка
-void	DetachGroundObject(CGroundObject* GroundObject);
+void	DetachGroundObject(cGroundObject* GroundObject);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllGroundObject(float Time);
 // Прорисовываем все объекты

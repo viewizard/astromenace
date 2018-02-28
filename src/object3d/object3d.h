@@ -30,7 +30,7 @@
 #include "../core/core.h"
 #include "../struct.h"
 
-extern GameSetup Setup;
+extern sGameSetup Setup;
 
 extern int GameNPCWeaponPenalty;
 extern int GameNPCArmorPenalty;
@@ -45,13 +45,13 @@ extern int GameAdvancedProtectionSystem;
 extern int GamePowerSystem;
 extern int GameTargetingMechanicSystem;
 
-int Audio_PlaySound3D(int SoundID, float fVol, VECTOR3D Location, bool Loop, int AtType=1);
+int Audio_PlaySound3D(int SoundID, float fVol, sVECTOR3D Location, bool Loop, int AtType=1);
 
 
 //-----------------------------------------------------------------------------
 // еденичная запись поведения
 //-----------------------------------------------------------------------------
-struct CTimeSheet {
+struct sTimeSheet {
 	// флаг, показывает что установлен и задействован этот режим
 	bool	InUse;
 	// кол-во времени (оставшееся), которое работает этот режим
@@ -75,8 +75,8 @@ struct CTimeSheet {
 	float	AccelerByCamUD;
 
 	// поворот
-	VECTOR3D	Rotation;
-	VECTOR3D	RotationAcceler;
+	sVECTOR3D	Rotation;
+	sVECTOR3D	RotationAcceler;
 	// стрельба
 	bool	Fire;
 	// стрельба спец оружием боса
@@ -85,19 +85,19 @@ struct CTimeSheet {
 	bool	Targeting;
 
 	// указатели на цепочку
-	CTimeSheet	*Next;
-	CTimeSheet	*Prev;
+	sTimeSheet	*Next;
+	sTimeSheet	*Prev;
 };
 
 //-----------------------------------------------------------------------------
-// Класс CObject3D
+// Класс cObject3D
 //-----------------------------------------------------------------------------
-class CObject3D
+class cObject3D
 {
 public:
 	// базовые конструктор и деструктор объекта
-	CObject3D() {};
-	virtual ~CObject3D();
+	cObject3D() {};
+	virtual ~cObject3D();
 
 	// Установка AABB, OBB и габаритов по геометрии объекта
 	virtual void	InitByDrawObjectList();
@@ -109,13 +109,13 @@ public:
 	virtual bool	Update(float Time);
 
 	// Установка положения 1 объекта модели
-	void	SetObjectLocation(VECTOR3D NewLocation, int ObjectNum);
+	void	SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum);
 	// Установка углов поворота 1 объекта модели
-	void	SetObjectRotation(VECTOR3D NewRotation, int ObjectNum);
+	void	SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum);
 	// Установка положения модели
-	virtual void	SetLocation(VECTOR3D NewLocation);
+	virtual void	SetLocation(sVECTOR3D NewLocation);
 	// Установка углов поворота модели
-	virtual void	SetRotation(VECTOR3D NewRotation);
+	virtual void	SetRotation(sVECTOR3D NewRotation);
 
 	// статус объекта свой-чужой (1враг-2друг-3игрок)
 	int	ObjectStatus{2};
@@ -149,19 +149,19 @@ public:
 	float	Lifetime{-1.0f};
 
 	// направление, куда ориентирован объект
-	VECTOR3D	Orientation{0.0f, 0.0f, 1.0f};
+	sVECTOR3D	Orientation{0.0f, 0.0f, 1.0f};
 	// углы поворота объекта по трем осям на данный момент
-	VECTOR3D	Rotation{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Rotation{0.0f, 0.0f, 0.0f};
 	// обратный угол поворота, старого
-	VECTOR3D	OldRotationInv{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	OldRotationInv{0.0f, 0.0f, 0.0f};
 	// положение объекта
-	VECTOR3D	Location{0.0f, 0.0f, 0.0f};
-	VECTOR3D	GeometryCenterLocation{0.0f, 0.0f, 0.0f}; // точка "центра геометрии" внутри модели
+	sVECTOR3D	Location{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	GeometryCenterLocation{0.0f, 0.0f, 0.0f}; // точка "центра геометрии" внутри модели
 	// предыдущее положение объекта
-	VECTOR3D	PrevLocation{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	PrevLocation{0.0f, 0.0f, 0.0f};
 
 	// коробки объекта для проверки прорисовки и коллизий
-	VECTOR3D	AABB[8]{{0.0f, 0.0f, 0.0f},
+	sVECTOR3D	AABB[8]{{0.0f, 0.0f, 0.0f},
 				{0.0f, 0.0f, 0.0f},
 				{0.0f, 0.0f, 0.0f},
 				{0.0f, 0.0f, 0.0f},
@@ -169,7 +169,7 @@ public:
 				{0.0f, 0.0f, 0.0f},
 				{0.0f, 0.0f, 0.0f},
 				{0.0f, 0.0f, 0.0f}}; // в AABB всегда абсолютные координаты (относ. коорд. модели)
-	VECTOR3D	OBB[8]{{0.0f, 0.0f, 0.0f},
+	sVECTOR3D	OBB[8]{{0.0f, 0.0f, 0.0f},
 			       {0.0f, 0.0f, 0.0f},
 			       {0.0f, 0.0f, 0.0f},
 			       {0.0f, 0.0f, 0.0f},
@@ -177,12 +177,12 @@ public:
 			       {0.0f, 0.0f, 0.0f},
 			       {0.0f, 0.0f, 0.0f},
 			       {0.0f, 0.0f, 0.0f}};
-	VECTOR3D	OBBLocation{0.0f, 0.0f, 0.0f}; // положение OBB относительно координат модели
+	sVECTOR3D	OBBLocation{0.0f, 0.0f, 0.0f}; // положение OBB относительно координат модели
 	// для каждого объекта в моделе
-	VECTOR3D	**HitBB{nullptr};
-	VECTOR3D	*HitBBLocation{nullptr}; // положение HitBB относительно координат модели
+	sVECTOR3D	**HitBB{nullptr};
+	sVECTOR3D	*HitBBLocation{nullptr}; // положение HitBB относительно координат модели
 	float		*HitBBRadius2{nullptr}; 	// квадрат радиуса HitBB
-	VECTOR3D	*HitBBSize{nullptr}; // размеры HitBB
+	sVECTOR3D	*HitBBSize{nullptr}; // размеры HitBB
 	// радиус, для первой проверки коллизий
 	float		Radius{0.0f};
 
@@ -194,7 +194,7 @@ public:
 	// небольшая девиация-болтание модели или каки-то объектов
 	bool		DeviationOn{false};
 	int		DeviationObjQuantity{0};
-	VECTOR3D	*Deviation{nullptr};
+	sVECTOR3D	*Deviation{nullptr};
 	float		*CurentDeviation{nullptr};
 	float		*NeedDeviation{nullptr};
 	float		*CurentDeviationSum{nullptr};
@@ -202,12 +202,12 @@ public:
 	int		*DeviationObjNum{nullptr};
 
 	// текстура для объектов геометрии
-	eTexture	**Texture{nullptr};
-	eTexture	**TextureIllum{nullptr};
-	eTexture	**NormalMap{nullptr};
+	sTexture	**Texture{nullptr};
+	sTexture	**TextureIllum{nullptr};
+	sTexture	**NormalMap{nullptr};
 
 	// список с геометрией модели, объекты для прорисовки
-	eObjectBlock	*DrawObjectList{nullptr};
+	sObjectBlock	*DrawObjectList{nullptr};
 	float		*GlobalVertexBuffer{nullptr};
 	unsigned int	*GlobalVBO{nullptr};
 	unsigned int	*GlobalIndexBuffer{nullptr};
@@ -263,23 +263,23 @@ public:
 	char	*DebugInfo{nullptr};
 
 	// данные по текущему сценарию действий объекта
-	CTimeSheet	*StartTimeSheet{nullptr}; // - этот текущий
-	CTimeSheet	*EndTimeSheet{nullptr};
+	sTimeSheet	*StartTimeSheet{nullptr}; // - этот текущий
+	sTimeSheet	*EndTimeSheet{nullptr};
 	// действия
-	void	AttachTimeSheet(CTimeSheet *TimeSheet);
-	void	DetachTimeSheet(CTimeSheet *TimeSheet);
+	void	AttachTimeSheet(sTimeSheet *TimeSheet);
+	void	DetachTimeSheet(sTimeSheet *TimeSheet);
 };
 
 
-// работа с распаковкой CTimeSheet
-void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheet);
+// работа с распаковкой sTimeSheet
+void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheet);
 // работа с набором AI
 void ReleaseGameAI();
 void InitGameAI(const char *FileName);
 
 
 //-----------------------------------------------------------------------------
-// Менеджер CObject3D
+// Менеджер cObject3D
 //-----------------------------------------------------------------------------
 
 // Удаляем все объекты в списке
@@ -293,29 +293,29 @@ void UpdateAllObject3D(float Time);
 
 
 //-----------------------------------------------------------------------------
-// Дополнительные функции для CObject3D
+// Дополнительные функции для cObject3D
 //-----------------------------------------------------------------------------
 
 // Проверяем, нужно ли для данного объекта проверка коллизии и наведение на него
-bool NeedCheckCollision(CObject3D* Object3D);
+bool NeedCheckCollision(cObject3D* Object3D);
 // Загрузка в модель нужной геометрии
-void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum, float TriangleSizeLimit, bool NeedTangentAndBinormal=false);
+void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float TriangleSizeLimit, bool NeedTangentAndBinormal=false);
 // Получение угла поворота оружия на врага
-void GetShipOnTargetOrientateion(int ObjectStatus, VECTOR3D Location, VECTOR3D CurrentObjectRotation,
-				 float MinDistance, float RotationMatrix[9], VECTOR3D *NeedAngle, float ObjectWidth, bool NeedCenterOrientation,
-				 bool NeedByWeaponOrientation, VECTOR3D WeponLocation, int WeaponType);
+void GetShipOnTargetOrientateion(int ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
+				 float MinDistance, float RotationMatrix[9], sVECTOR3D *NeedAngle, float ObjectWidth, bool NeedCenterOrientation,
+				 bool NeedByWeaponOrientation, sVECTOR3D WeponLocation, int WeaponType);
 // Получение угла поворота оружия на врага для противника
-void GetEnemyShipOnTargetOrientateion(int ObjectStatus, VECTOR3D Location, VECTOR3D CurrentObjectRotation,
-				      float RotationMatrix[9], VECTOR3D *NeedAngle, int WeaponType);
+void GetEnemyShipOnTargetOrientateion(int ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
+				      float RotationMatrix[9], sVECTOR3D *NeedAngle, int WeaponType);
 // Получение угла поворота турели на врага
-bool GetTurretOnTargetOrientateion(int ObjectStatus, VECTOR3D Location, VECTOR3D CurrentObjectRotation,
-				   float RotationMatrix[9], VECTOR3D *NeedAngle, int WeaponType);
+bool GetTurretOnTargetOrientateion(int ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
+				   float RotationMatrix[9], sVECTOR3D *NeedAngle, int WeaponType);
 // Получение данных для наведение ракет
-CObject3D *GetMissileOnTargetOrientateion(int ObjectStatus, VECTOR3D Location,
-		VECTOR3D CurrentObjectRotation, float RotationMatrix[9], VECTOR3D *NeedAngle, float MaxDistance);
-bool GetMissileOnTargetOrientateion(VECTOR3D Location, VECTOR3D CurrentObjectRotation, float RotationMatrix[9], CObject3D *TargetObject, VECTOR3D *NeedAngle);
-bool GetMissileTargetStatus(CObject3D *TargetObject, VECTOR3D Location, float RotationMatrix[9]);
+cObject3D *GetMissileOnTargetOrientateion(int ObjectStatus, sVECTOR3D Location,
+		sVECTOR3D CurrentObjectRotation, float RotationMatrix[9], sVECTOR3D *NeedAngle, float MaxDistance);
+bool GetMissileOnTargetOrientateion(sVECTOR3D Location, sVECTOR3D CurrentObjectRotation, float RotationMatrix[9], cObject3D *TargetObject, sVECTOR3D *NeedAngle);
+bool GetMissileTargetStatus(cObject3D *TargetObject, sVECTOR3D Location, float RotationMatrix[9]);
 // Получение положения ближайшего врага, для мин
-CObject3D *GetCloserTargetPosition(int ObjectStatus, VECTOR3D Location);
+cObject3D *GetCloserTargetPosition(int ObjectStatus, sVECTOR3D Location);
 
 #endif // OBJECT3D_H

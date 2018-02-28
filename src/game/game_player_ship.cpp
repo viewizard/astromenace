@@ -29,10 +29,10 @@
 #include "../object3d/explosion/space_explosion/space_explosion.h"
 
 
-extern CProjectile *StartProjectile;
-extern CProjectile *EndProjectile;
-extern CSpaceObject *StartSpaceObject;
-extern CGroundObject *StartGroundObject;
+extern cProjectile *StartProjectile;
+extern cProjectile *EndProjectile;
+extern cSpaceObject *StartSpaceObject;
+extern cGroundObject *StartGroundObject;
 
 float GetEnginePower(int EngineType);
 float GetEngineAcceleration(int EngineType);
@@ -61,8 +61,8 @@ float CurrentPlayerShipEnergy;
 bool PlayerFighterLeftEng = false;
 bool PlayerFighterRightEng = false;
 
-eParticleSystem *Shild1 = nullptr;
-eParticleSystem *Shild2 = nullptr;
+cParticleSystem *Shild1 = nullptr;
+cParticleSystem *Shild2 = nullptr;
 float ShildRadius;
 float ShildEnergyStatus;
 float ShildStartHitStatus;
@@ -85,7 +85,7 @@ int PlayerDeadObjectPieceNum;
 
 
 // симулятивный режим
-VECTOR3D CurrentMovementVel(0.0f, 0.0f, 0.0f);
+sVECTOR3D CurrentMovementVel(0.0f, 0.0f, 0.0f);
 
 // работа с морганием вывода
 extern float CurrentAlert2;
@@ -232,10 +232,10 @@ void InitGamePlayerShip()
 	// если не создано, здесь будет ноль скорее всего
 	if (Setup.Profile[CurrentProfile].Ship == 0) fprintf(stderr, "!!!Pilot Profile has been not created!!!\n");
 
-	PlayerFighter = new CEarthSpaceFighter;
+	PlayerFighter = new cEarthSpaceFighter;
 	PlayerFighter->Create(Setup.Profile[CurrentProfile].Ship);
 	PlayerFighter->DeviationOn = true;
-	PlayerFighter->Deviation[0] = VECTOR3D(0.0f, 0.0f, 1.0f);
+	PlayerFighter->Deviation[0] = sVECTOR3D(0.0f, 0.0f, 1.0f);
 
 	PlayerFighter->ID = -1;
 	PlayerFighter->ObjectStatus = 3;
@@ -275,7 +275,7 @@ void InitGamePlayerShip()
 
 
 	if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem == 3) {
-		Shild1 = new eParticleSystem;
+		Shild1 = new cParticleSystem;
 		Shild1->ColorStart.r = 0.20f;
 		Shild1->ColorStart.g = 0.50f;
 		Shild1->ColorStart.b = 0.10f;
@@ -293,20 +293,20 @@ void InitGamePlayerShip()
 		Shild1->Life       = 1.00f;
 		Shild1->ParticlesPerSec = (int)(40*ShildRadius);
 		Shild1->CreationType = 2;
-		Shild1->CreationSize = VECTOR3D(ShildRadius,0.05f*ShildRadius,ShildRadius);
+		Shild1->CreationSize = sVECTOR3D(ShildRadius,0.05f*ShildRadius,ShildRadius);
 		Shild1->DeadZone = ShildRadius-0.05;
 		Shild1->AlphaShowHide = true;
 		Shild1->IsAttractive = true;
 		Shild1->AttractiveValue = -3.0f;
 		Shild1->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		Shild1->Direction = VECTOR3D(0.0f, 0.0f, -1.0f);
+		Shild1->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 		Shild1->SetStartLocation(PlayerFighter->Location+PlayerFighter->OBBLocation);
 
 		ShildStartHitStatus = 100.0f;
 		ShildEnergyStatus = 1.0f;
 	}
 	if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem == 4) {
-		Shild1 = new eParticleSystem;
+		Shild1 = new cParticleSystem;
 		Shild1->ColorStart.r = 0.50f;
 		Shild1->ColorStart.g = 0.50f;
 		Shild1->ColorStart.b = 1.00f;
@@ -324,16 +324,16 @@ void InitGamePlayerShip()
 		Shild1->Life       = 1.00f;
 		Shild1->ParticlesPerSec = (int)(40*ShildRadius);
 		Shild1->CreationType = 2;
-		Shild1->CreationSize = VECTOR3D(ShildRadius,0.05f*ShildRadius,ShildRadius);
+		Shild1->CreationSize = sVECTOR3D(ShildRadius,0.05f*ShildRadius,ShildRadius);
 		Shild1->DeadZone = ShildRadius-0.05;
 		Shild1->IsAttractive = true;
 		Shild1->AlphaShowHide = true;
 		Shild1->AttractiveValue = 2.5f;
 		Shild1->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		Shild1->Direction = VECTOR3D(0.0f, 0.0f, -1.0f);
+		Shild1->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 		Shild1->SetStartLocation(PlayerFighter->Location+PlayerFighter->OBBLocation);
 
-		Shild2 = new eParticleSystem;
+		Shild2 = new cParticleSystem;
 		Shild2->ColorStart.r = 0.50f;
 		Shild2->ColorStart.g = 0.50f;
 		Shild2->ColorStart.b = 1.00f;
@@ -351,12 +351,12 @@ void InitGamePlayerShip()
 		Shild2->Life       = 1.00f;
 		Shild2->ParticlesPerSec = (int)(5*ShildRadius);
 		Shild2->CreationType = 2;
-		Shild2->CreationSize = VECTOR3D(ShildRadius,0.05f*ShildRadius,ShildRadius);
+		Shild2->CreationSize = sVECTOR3D(ShildRadius,0.05f*ShildRadius,ShildRadius);
 		Shild2->DeadZone = ShildRadius-0.05;
 		Shild2->IsAttractive = true;
 		Shild2->AttractiveValue = 20.0f;
 		Shild2->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		Shild2->Direction = VECTOR3D(0.0f, 0.0f, -1.0f);
+		Shild2->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 
 		ShildStartHitStatus = 150.0f;
 		ShildEnergyStatus = 1.0f;
@@ -372,7 +372,7 @@ void InitGamePlayerShip()
 	LastMouseY = -1;
 	MoveFB = 0.0f;
 	MoveLR = 0.0f;
-	CurrentMovementVel = VECTOR3D(0.0f, 0.0f, 0.0f);
+	CurrentMovementVel = sVECTOR3D(0.0f, 0.0f, 0.0f);
 
 	// сброс стрельбы...
 	PrimaryGroupCurrentFireWeaponNum = 1;
@@ -407,7 +407,7 @@ void GamePlayerShip()
 		} else {
 			// делаем взрыв
 			// + 10.0f движение камеры
-			new CSpaceExplosion(PlayerFighter, 31, PlayerFighter->Location, PlayerFighter->Speed+10.0f, PlayerDeadObjectPieceNum);
+			new cSpaceExplosion(PlayerFighter, 31, PlayerFighter->Location, PlayerFighter->Speed+10.0f, PlayerDeadObjectPieceNum);
 
 			// включаем музыку и отображение "миссия провалена"
 			StartMusicWithFade(4, 2.0f, 2.0f);
@@ -433,10 +433,10 @@ void GamePlayerShip()
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// Вывод голосового предупреждения, если навелась ракета
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		CProjectile *tmpProjectile = StartProjectile;
+		cProjectile *tmpProjectile = StartProjectile;
 		bool CheckStatus = false;
 		while (tmpProjectile != nullptr) {
-			CProjectile *tmpProjectile2 = tmpProjectile->Next;
+			cProjectile *tmpProjectile2 = tmpProjectile->Next;
 			// если навелись на этот объект ракетой
 			// т.к. только у ракеты тут не ноль
 			if (tmpProjectile->Target == PlayerFighter)
@@ -487,9 +487,9 @@ void GamePlayerShip()
 		// Вывод голосового предупреждения если возможно столкновение
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		bool CollisionDetected = false;
-		CSpaceObject *tmpS = StartSpaceObject;
+		cSpaceObject *tmpS = StartSpaceObject;
 		while ((tmpS != nullptr) && (PlayerFighter != nullptr)) {
-			CSpaceObject *tmpSpace2 = tmpS->Next;
+			cSpaceObject *tmpSpace2 = tmpS->Next;
 
 			// проверка на возможное столкновение с неразрушаемым объектом, вывод голосового предупреждения
 			// если объект ближе чем радиус, кричим
@@ -503,9 +503,9 @@ void GamePlayerShip()
 
 			tmpS = tmpSpace2;
 		}
-		CGroundObject *tmpG = StartGroundObject;
+		cGroundObject *tmpG = StartGroundObject;
 		while ((tmpG != nullptr) && (PlayerFighter != nullptr)) {
-			CGroundObject *tmpGround2 = tmpG->Next;
+			cGroundObject *tmpGround2 = tmpG->Next;
 
 			// проверка на возможное столкновение с неразрушаемым объектом, вывод голосового предупреждения
 			// если объект ближе чем радиус, кричим
@@ -675,11 +675,11 @@ void GamePlayerShip()
 
 
 		// находим конечную точку перемещения
-		VECTOR3D PlayerFighterEndLocation;
+		sVECTOR3D PlayerFighterEndLocation;
 		if (Setup.iAspectRatioWidth == 1024)
-			PlayerFighterEndLocation = VECTOR3D(-(73.15f-PlayerFighter->Width/2.0f+MoveFB*(20.05f-PlayerFighter->Length/6.0f))*MoveLR, 0.0f, (46.0f-PlayerFighter->Length/2.0f)*MoveFB);
+			PlayerFighterEndLocation = sVECTOR3D(-(73.15f-PlayerFighter->Width/2.0f+MoveFB*(20.05f-PlayerFighter->Length/6.0f))*MoveLR, 0.0f, (46.0f-PlayerFighter->Length/2.0f)*MoveFB);
 		else
-			PlayerFighterEndLocation = VECTOR3D(-(70.0f-PlayerFighter->Width/2.0f+MoveFB*(23.2f-PlayerFighter->Length/6.0f))*MoveLR, 0.0f, (46.0f-PlayerFighter->Length/2.0f)*MoveFB);
+			PlayerFighterEndLocation = sVECTOR3D(-(70.0f-PlayerFighter->Width/2.0f+MoveFB*(23.2f-PlayerFighter->Length/6.0f))*MoveLR, 0.0f, (46.0f-PlayerFighter->Length/2.0f)*MoveFB);
 
 		// учет положение камеры
 		PlayerFighterEndLocation += GamePoint;
@@ -707,7 +707,7 @@ void GamePlayerShip()
 
 
 				// находим расстояние
-				VECTOR3D PlayerFighterNewDirection = PlayerFighterEndLocation - PlayerFighter->Location;
+				sVECTOR3D PlayerFighterNewDirection = PlayerFighterEndLocation - PlayerFighter->Location;
 				float EndLocationDistance = PlayerFighterNewDirection.Length();
 
 				// находим направление движения
@@ -751,7 +751,7 @@ void GamePlayerShip()
 
 
 				// находим расстояние
-				VECTOR3D PlayerFighterNewDirection = PlayerFighterEndLocation - PlayerFighter->Location;
+				sVECTOR3D PlayerFighterNewDirection = PlayerFighterEndLocation - PlayerFighter->Location;
 				float EndLocationDistance = PlayerFighterNewDirection.Length();
 
 				// находим направление движения
@@ -780,7 +780,7 @@ void GamePlayerShip()
 		}
 
 		// переносим корабль
-		VECTOR3D CurrentVel = PlayerFighter->Location + CurrentMovementVel;
+		sVECTOR3D CurrentVel = PlayerFighter->Location + CurrentMovementVel;
 		CurrentVel.y = 0.0f;
 		PlayerFighter->SetLocationArcadePlayer(CurrentVel);
 
@@ -796,7 +796,7 @@ void GamePlayerShip()
 					float Diff = PlayerFighter->Location.x/3.5f;
 					if (Diff < -DeviationSize) Diff = -DeviationSize;
 
-					VECTOR3D TMPCameraLocation;
+					sVECTOR3D TMPCameraLocation;
 					vw_GetCameraLocation(&TMPCameraLocation);
 					TMPCameraLocation.x = Diff;
 					vw_SetCameraLocation(TMPCameraLocation);
@@ -804,7 +804,7 @@ void GamePlayerShip()
 					float Diff = PlayerFighter->Location.x/3.5f;
 					if (Diff > DeviationSize) Diff = DeviationSize;
 
-					VECTOR3D TMPCameraLocation;
+					sVECTOR3D TMPCameraLocation;
 					vw_GetCameraLocation(&TMPCameraLocation);
 					TMPCameraLocation.x = Diff;
 					vw_SetCameraLocation(TMPCameraLocation);

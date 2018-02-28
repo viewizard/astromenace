@@ -36,9 +36,9 @@
 //-----------------------------------------------------------------------------
 // загрузка "родного" формата
 //-----------------------------------------------------------------------------
-bool eModel3D::ReadVW3D(const char *FileName)
+bool cModel3D::ReadVW3D(const char *FileName)
 {
-	std::unique_ptr<eFILE> file = vw_fopen(FileName);
+	std::unique_ptr<sFILE> file = vw_fopen(FileName);
 	if (file == nullptr)
 		return false;
 
@@ -52,7 +52,7 @@ bool eModel3D::ReadVW3D(const char *FileName)
 	// читаем, сколько объектов
 	file->fread(&DrawObjectCount, sizeof(DrawObjectCount), 1);
 
-	DrawObjectList = new eObjectBlock[DrawObjectCount];
+	DrawObjectList = new sObjectBlock[DrawObjectCount];
 
 	GlobalIndexCount = 0;
 
@@ -118,7 +118,7 @@ bool eModel3D::ReadVW3D(const char *FileName)
 //-----------------------------------------------------------------------------
 // запись "родного" формата на диск
 //-----------------------------------------------------------------------------
-bool eModel3D::WriteVW3D(const char *FileName)
+bool cModel3D::WriteVW3D(const char *FileName)
 {
 	// небольшие проверки
 	if ((GlobalVertexBuffer == nullptr) || (GlobalIndexBuffer == nullptr) || (DrawObjectList == nullptr)) {

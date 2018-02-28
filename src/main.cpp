@@ -40,7 +40,7 @@
 // настройки
 //------------------------------------------------------------------------------------
 // настройки игры
-GameSetup Setup;
+sGameSetup Setup;
 
 
 //------------------------------------------------------------------------------------
@@ -100,18 +100,18 @@ bool JoysticButtons[100];
 // камера
 //------------------------------------------------------------------------------------
 // ближайшая точка, основная точка отсчета локальной системы координат игры
-VECTOR3D GamePoint(0.0f, 0.0f, 0.0f);
+sVECTOR3D GamePoint(0.0f, 0.0f, 0.0f);
 // направление движения камеры
-VECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
+sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
 
 
 //------------------------------------------------------------------------------------
 // графическая часть
 //------------------------------------------------------------------------------------
 // прорисовка динамической части курсора
-eParticleSystem2D *CursorParticleSystem2D = nullptr;
+cParticleSystem2D *CursorParticleSystem2D = nullptr;
 // статические частицы - звезды на скайбоксе
-CSpaceStars *psSpaceStatic = nullptr;
+cSpaceStars *psSpaceStatic = nullptr;
 
 
 
@@ -514,8 +514,8 @@ int main( int argc, char **argv )
 			char ConfigDirCheck[MAX_PATH];
 			strcpy(ConfigDirCheck, HomeEnv);
 			strcat(ConfigDirCheck, "/.config");
-			struct stat st;
-			if (stat(ConfigDirCheck,&st) == 0)
+			struct stat tmpStat;
+			if (stat(ConfigDirCheck, &tmpStat) == 0)
 				strcat(ConfigFileName, "/.config/astromenace");
 			else
 				strcat(ConfigFileName, "/.astromenace");

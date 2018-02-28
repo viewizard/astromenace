@@ -33,12 +33,12 @@
 /*
  * All space ships explosions.
  */
-class CSpaceExplosion : public CExplosion
+class cSpaceExplosion : public cExplosion
 {
 public:
-	CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D &ExplLocation,
+	cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3D &ExplLocation,
 			float Speed, int ObjectPieceNum, bool NeedExplosionSFX = true);
-	virtual ~CSpaceExplosion() {};
+	virtual ~cSpaceExplosion() {};
 };
 
 

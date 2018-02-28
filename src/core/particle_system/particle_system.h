@@ -32,11 +32,11 @@
 #include "../texture/texture.h"
 
 
-class eParticleSystem
+class cParticleSystem
 {
 public:
-	eParticleSystem();
-	~eParticleSystem();
+	cParticleSystem();
+	~cParticleSystem();
 
 	// нужно удалить
 	bool	NeedDestroy{false};
@@ -44,38 +44,38 @@ public:
 	// обновить все частицы в этой системе, по времени
 	bool	Update(float Time);
 	// прорисовка всех частиц
-	void	Draw(eTexture **CurrentTexture);
+	void	Draw(sTexture **CurrentTexture);
 	// базовая текстура частиц
-	eTexture	*Texture[5]{nullptr, nullptr, nullptr, nullptr, nullptr};
+	sTexture *Texture[5]{nullptr, nullptr, nullptr, nullptr, nullptr};
 	int	TextureQuantity{1};
 	// последовательность прорисовки
-	float 	*tmpDATA{nullptr};
+	float *tmpDATA{nullptr};
 
 	// тип смешивания
 	int	BlendType{0};
 
 	// начальный установки, или установки где пред. и текушее положения равны
-	void	SetStartLocation(VECTOR3D NewLocation);
+	void	SetStartLocation(sVECTOR3D NewLocation);
 	// передвинуть все частици на указаное значение
-	void	MoveSystem(VECTOR3D NewLocation);
+	void	MoveSystem(sVECTOR3D NewLocation);
 	// сдвинуть только центр системы
-	void	MoveSystemLocation(VECTOR3D NewLocation);
+	void	MoveSystemLocation(sVECTOR3D NewLocation);
 	// развернуть направление системы
-	void	RotateSystemByAngle(VECTOR3D NewDirection);
-	void	RotateSystemAndParticlesByAngle(VECTOR3D NewAngle);
+	void	RotateSystemByAngle(sVECTOR3D NewDirection);
+	void	RotateSystemAndParticlesByAngle(sVECTOR3D NewAngle);
 	// разворот только частиц
-	void	RotateParticlesByAngle(VECTOR3D NewAngle);
+	void	RotateParticlesByAngle(sVECTOR3D NewAngle);
 
 	// остановить все частицы в системе
 	void	StopAllParticles();
 
 	// поставить правильный полет частиц, т.е. учет внешней скорости
-	void	ChangeSpeed(VECTOR3D Vel);
+	void	ChangeSpeed(sVECTOR3D Vel);
 
 	// текущее направление системы (используется для создания частиц+некоторые вариации)
-	VECTOR3D	Direction{0, 0, 0};
+	sVECTOR3D	Direction{0, 0, 0};
 	// угол поворота системы
-	VECTOR3D	Angle{0, 0, 0};
+	sVECTOR3D	Angle{0, 0, 0};
 
 	// кол-во создаваемых частиц в секунду
 	int	ParticlesPerSec{100};
@@ -98,9 +98,9 @@ public:
 
 	// Цвет частиц при старте и завершении
 	// линейно интерполируется
-	COLORVALUE3D	ColorStart{1.0f, 1.0f, 1.0f, 1.0f};
-	COLORVALUE3D	ColorVar{0.0f, 0.0f, 0.0f, 0.0f};
-	COLORVALUE3D	ColorEnd{1.0f, 1.0f, 1.0f, 1.0f};
+	sCOLORVALUE3D	ColorStart{1.0f, 1.0f, 1.0f, 1.0f};
+	sCOLORVALUE3D	ColorVar{0.0f, 0.0f, 0.0f, 0.0f};
+	sCOLORVALUE3D	ColorEnd{1.0f, 1.0f, 1.0f, 1.0f};
 
 	// Скалярная скорость, с вектором направления получаем вектор движения
 	float	Speed{1.0f};
@@ -110,7 +110,7 @@ public:
 
 	// тип создания... 0-точка, 1-куб, 2-сфера
 	int		CreationType{0};
-	VECTOR3D	CreationSize{0.05f, 0.05f, 0.05f};
+	sVECTOR3D	CreationSize{0.05f, 0.05f, 0.05f};
 
 	// если нужно - корректировка размера частицы при создании относительно камеры
 	// мертвая зона (радиус, где вообще не рисуем)
@@ -150,7 +150,7 @@ public:
 	// не учитываем изменение коробки, и координаты в коробках у нас абсолютные (!!!)
 	// использовать относительные координаты бокса нельзя, т.к. можем преносить только центр, а можем
 	// и центр, и все частицы...
-	VECTOR3D AABB[8]{{-1000000.0f, 1000000.0f, -1000000.0f},
+	sVECTOR3D AABB[8]{{-1000000.0f, 1000000.0f, -1000000.0f},
 			 {-1000000.0f, 1000000.0f, -1000000.0f},
 			 {-1000000.0f, 1000000.0f, -1000000.0f},
 			 {-1000000.0f, 1000000.0f, -1000000.0f},
@@ -160,24 +160,24 @@ public:
 			 {-1000000.0f, 1000000.0f, -1000000.0f}};
 
 	// подвязка к динамическому массиву
-	eParticle	*Start{nullptr};
-	eParticle	*End{nullptr};
+	sParticle	*Start{nullptr};
+	sParticle	*End{nullptr};
 	int		ParticlesCount{0};
-	void Attach(eParticle *NewParticle);
-	void Detach(eParticle *OldParticle);
+	void Attach(sParticle *NewParticle);
+	void Detach(sParticle *OldParticle);
 	// указатели на цепь систем, для менеджера
-	eParticleSystem	*Next{nullptr};
-	eParticleSystem	*Prev{nullptr};
+	cParticleSystem	*Next{nullptr};
+	cParticleSystem	*Prev{nullptr};
 
 	// источник света, если он нужен
-	eLight *Light{nullptr};
+	sLight *Light{nullptr};
 	bool LightNeedDeviation{false};
 	float LightDeviation{100.0f};
 	float NextLightDeviation{0.7f+0.3f*vw_Randf1};
 	float LightDeviationSpeed{3.5f+3.5f*vw_Randf1};
 
 	// доступ к private данным
-	void GetLocation(VECTOR3D *Vec)
+	void GetLocation(sVECTOR3D *Vec)
 	{
 		if (Vec != nullptr)
 			*Vec = Location;
@@ -185,9 +185,9 @@ public:
 
 private:
 	// последнее положение системы (для интерполяции)
-	VECTOR3D	PrevLocation{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	PrevLocation{0.0f, 0.0f, 0.0f};
 	// текущее положение частиц в пространстве
-	VECTOR3D	Location{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Location{0.0f, 0.0f, 0.0f};
 
 	// матрицы поворота, для оптимизации просчетов
 	float	CurrentRotationMat[9];
@@ -202,15 +202,15 @@ private:
 // Инициализация менеджера частиц
 void	vw_InitParticleSystems(bool UseGLSL, float Quality);
 // Включаем в список
-void	vw_AttachParticleSystem(eParticleSystem * NewParticleSystem);
+void	vw_AttachParticleSystem(cParticleSystem * NewParticleSystem);
 // Исключаем из списка
-void	vw_DetachParticleSystem(eParticleSystem * OldParticleSystem);
+void	vw_DetachParticleSystem(cParticleSystem * OldParticleSystem);
 // Удаляем все объекты в списке
 void	vw_ReleaseAllParticleSystems();
 // Прорисовываем все системы
 void	vw_DrawAllParticleSystems();
 //	Прорисовываем блок ParticleSystems
-void	vw_DrawParticleSystems(eParticleSystem **DrawParticleSystem, int Quantity);
+void	vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity);
 // Проверяем все объекты, обновляем данные
 void	vw_UpdateAllParticleSystems(float Time);
 

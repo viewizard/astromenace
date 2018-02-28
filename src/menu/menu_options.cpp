@@ -61,7 +61,7 @@ const char *ButtonScreenModeTitle[2] = {
 void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1, float *ButtonTransp2, float *LastButtonUpdateTime2)
 {
 
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 	SetRect(&SrcRect,0,0,2,2);
 	SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);

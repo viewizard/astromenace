@@ -30,12 +30,12 @@
 #include "../graphics/graphics.h"
 
 
-eParticleSystem * StartParticleSystem = nullptr;
-eParticleSystem * EndParticleSystem = nullptr;
+cParticleSystem * StartParticleSystem = nullptr;
+cParticleSystem * EndParticleSystem = nullptr;
 
 bool ParticleSystemUseGLSL = false;
 float ParticleSystemQuality = 1.0f;
-eGLSL *ParticleSystemGLSL = nullptr;
+sGLSL *ParticleSystemGLSL = nullptr;
 int ParticleSystemUniformLocations[10];
 
 
@@ -61,7 +61,7 @@ void vw_InitParticleSystems(bool UseGLSL, float Quality)
 //-----------------------------------------------------------------------------
 //	Присоеденяем ParticleSystem к списку
 //-----------------------------------------------------------------------------
-void vw_AttachParticleSystem(eParticleSystem * NewParticleSystem)
+void vw_AttachParticleSystem(cParticleSystem * NewParticleSystem)
 {
 	if (NewParticleSystem == nullptr)
 		return;
@@ -86,7 +86,7 @@ void vw_AttachParticleSystem(eParticleSystem * NewParticleSystem)
 //-----------------------------------------------------------------------------
 //	Удаляем ParticleSystem из списка
 //-----------------------------------------------------------------------------
-void vw_DetachParticleSystem(eParticleSystem * OldParticleSystem)
+void vw_DetachParticleSystem(cParticleSystem * OldParticleSystem)
 {
 	if (OldParticleSystem == nullptr)
 		return;
@@ -117,9 +117,9 @@ void vw_DetachParticleSystem(eParticleSystem * OldParticleSystem)
 void vw_ReleaseAllParticleSystems()
 {
 	// для всех ParticleSystem
-	eParticleSystem *tmp = StartParticleSystem;
+	cParticleSystem *tmp = StartParticleSystem;
 	while (tmp != nullptr) {
-		eParticleSystem *tmp2 = tmp->Next;
+		cParticleSystem *tmp2 = tmp->Next;
 		// удаляем и очищаем всю память, в релизе стоит DetachShip
 		delete tmp;
 		tmp = tmp2;
@@ -146,7 +146,7 @@ void vw_ReleaseAllParticleSystems()
 void vw_DrawAllParticleSystems()
 {
 	// текущая текстура
-	eTexture *CurrentTexture = nullptr;
+	sTexture *CurrentTexture = nullptr;
 
 	// делаем все предустановки для прорисовки частиц, чтобы не менять каждый раз
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
@@ -154,7 +154,7 @@ void vw_DrawAllParticleSystems()
 	if ((ParticleSystemUseGLSL) &&
 	    (ParticleSystemGLSL != nullptr)) {
 		// получаем текущее положение камеры
-		VECTOR3D CurrentCameraLocation;
+		sVECTOR3D CurrentCameraLocation;
 		vw_GetCameraLocation(&CurrentCameraLocation);
 
 		vw_UseShaderProgram(ParticleSystemGLSL);
@@ -167,9 +167,9 @@ void vw_DrawAllParticleSystems()
 
 
 	// для всех
-	eParticleSystem *tmp = StartParticleSystem;
+	cParticleSystem *tmp = StartParticleSystem;
 	while (tmp != nullptr) {
-		eParticleSystem *tmp2 = tmp->Next;
+		cParticleSystem *tmp2 = tmp->Next;
 
 		if (CurrentTexture != tmp->Texture[0]) {
 			vw_SetTexture(0, tmp->Texture[0]);
@@ -202,13 +202,13 @@ void vw_DrawAllParticleSystems()
 //-----------------------------------------------------------------------------
 //	Прорисовываем блок ParticleSystems
 //-----------------------------------------------------------------------------
-void vw_DrawParticleSystems(eParticleSystem **DrawParticleSystem, int Quantity)
+void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
 {
 	if (DrawParticleSystem == nullptr)
 		return;
 
 	// текущая текстура
-	eTexture *CurrentTexture = nullptr;
+	sTexture *CurrentTexture = nullptr;
 
 	// делаем все предустановки для прорисовки частиц, чтобы не менять каждый раз
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
@@ -216,7 +216,7 @@ void vw_DrawParticleSystems(eParticleSystem **DrawParticleSystem, int Quantity)
 	if ((ParticleSystemUseGLSL) &&
 	    (ParticleSystemGLSL != nullptr)) {
 		// получаем текущее положение камеры
-		VECTOR3D CurrentCameraLocation;
+		sVECTOR3D CurrentCameraLocation;
 		vw_GetCameraLocation(&CurrentCameraLocation);
 
 		vw_UseShaderProgram(ParticleSystemGLSL);
@@ -262,9 +262,9 @@ void vw_DrawParticleSystems(eParticleSystem **DrawParticleSystem, int Quantity)
 void vw_UpdateAllParticleSystems(float Time)
 {
 	// для всех
-	eParticleSystem *tmp = StartParticleSystem;
+	cParticleSystem *tmp = StartParticleSystem;
 	while (tmp != nullptr) {
-		eParticleSystem *tmp2 = tmp->Next;
+		cParticleSystem *tmp2 = tmp->Next;
 		if (!tmp->Update(Time))
 			delete tmp;
 		tmp = tmp2;

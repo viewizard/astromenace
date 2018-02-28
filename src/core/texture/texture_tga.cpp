@@ -31,7 +31,7 @@
 #define TGA_A		 3	/* ALPHA file */
 #define TGA_RLE		10	/* RLE file */
 
-int ReadTGA(uint8_t **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
+int ReadTGA(uint8_t **DIB, sFILE *pFile, int *DWidth, int *DHeight, int *DChanels)
 {
 
 	uint8_t length = 0;

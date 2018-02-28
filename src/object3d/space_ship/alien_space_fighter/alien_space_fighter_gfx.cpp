@@ -36,11 +36,11 @@
 //-----------------------------------------------------------------------------
 // Создание двигателя
 //-----------------------------------------------------------------------------
-void SetAlienSpaceFighterEngine(eParticleSystem *ParticleSystem, int EngineType)
+void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType)
 {
 
 	ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-	ParticleSystem->Direction = VECTOR3D(0.0f, 0.0f, -1.0f);
+	ParticleSystem->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 
 	switch(EngineType) {
 	case 1:
@@ -62,9 +62,9 @@ void SetAlienSpaceFighterEngine(eParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(0.8f,0.8f,0.8f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.8f,0.8f,0.8f);
 		ParticleSystem->IsAttractive = true;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.1f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 2:
@@ -86,9 +86,9 @@ void SetAlienSpaceFighterEngine(eParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(0.4f,0.7f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.4f,0.7f,0.1f);
 		ParticleSystem->IsAttractive = true;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.3f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.3f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 3:
@@ -131,7 +131,7 @@ void SetAlienSpaceFighterEngine(eParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->ParticlesPerSec = 20;
 		ParticleSystem->IsAttractive = true;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(0.1f,0.9f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.1f,0.9f,0.1f);
 		break;
 	case 5:
 		// основа для очень большого двигателя
@@ -152,7 +152,7 @@ void SetAlienSpaceFighterEngine(eParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 1.50f;
 		ParticleSystem->ParticlesPerSec = 40;
 		ParticleSystem->IsAttractive = true;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.0f, 0.55f, 1.0f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.0f, 0.55f, 1.0f, 0.0f, 0.1f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 6:
@@ -174,9 +174,9 @@ void SetAlienSpaceFighterEngine(eParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(0.5f,0.5f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.5f,0.5f,0.1f);
 		ParticleSystem->IsAttractive = true;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.3f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.3f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 7:
@@ -198,7 +198,7 @@ void SetAlienSpaceFighterEngine(eParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 20;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(0.1f,0.2f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.1f,0.2f,0.1f);
 		ParticleSystem->IsAttractive = true;
 		break;
 

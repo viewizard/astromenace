@@ -30,12 +30,12 @@
 
 
 
-struct BuildingData {
+struct sBuildingData {
 	float	Strength;
 	const	char *Name;
 };
 
-static BuildingData PresetBuildingData[] = {
+static sBuildingData PresetBuildingData[] = {
 	{150,	"models/building/bld-01.vw3d"},
 	{150,	"models/building/bld-02.vw3d"},
 	{150,	"models/building/bld-03.vw3d"},
@@ -55,10 +55,10 @@ static BuildingData PresetBuildingData[] = {
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void CBuilding::Create(int	BuildingNum)
+void cBuilding::Create(int	BuildingNum)
 {
 	if ((BuildingNum <= 0) || ((unsigned int)BuildingNum > PresetBuildingDataCount)) {
-		fprintf(stderr, "!!! Couldn't init CBuilding object with Number %i.\n", BuildingNum);
+		fprintf(stderr, "!!! Couldn't init cBuilding object with Number %i.\n", BuildingNum);
 		return;
 	}
 
@@ -83,6 +83,6 @@ void CBuilding::Create(int	BuildingNum)
 
 
 	// находим все данные по геометрии
-	::CObject3D::InitByDrawObjectList();
+	::cObject3D::InitByDrawObjectList();
 }
 

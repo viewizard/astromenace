@@ -49,7 +49,7 @@ void CreditsMenu()
 
 
 
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 
 	int Y1 = 690+(int)CreditsCurrentPos;

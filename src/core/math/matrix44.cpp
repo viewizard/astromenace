@@ -82,7 +82,7 @@ void vw_Matrix44Mult(float DstMatrix44[16], float SrcMatrix44[16])
 /*
  * Calculate translation matrix by new location point.
  */
-void vw_Matrix44Translate(float Matrix44[16], const VECTOR3D &Location)
+void vw_Matrix44Translate(float Matrix44[16], const sVECTOR3D &Location)
 {
 	Matrix44[12] += Location.x;
 	Matrix44[13] += Location.y;
@@ -92,7 +92,7 @@ void vw_Matrix44Translate(float Matrix44[16], const VECTOR3D &Location)
 /*
  * Create rotation matrix.
  */
-void vw_Matrix44CreateRotate(float Matrix44[16], const VECTOR3D &Angle)
+void vw_Matrix44CreateRotate(float Matrix44[16], const sVECTOR3D &Angle)
 {
 	const float p180 = 0.0174532925f;
 
@@ -187,9 +187,9 @@ void vw_Matrix44InverseRotate(float Matrix44[16])
 /*
  * Calculate point position by transformation matrix.
  */
-void vw_Matrix44CalcPoint(VECTOR3D *Point, float Matrix44[16])
+void vw_Matrix44CalcPoint(sVECTOR3D *Point, float Matrix44[16])
 {
-	VECTOR3D TmpPoint = *Point;
+	sVECTOR3D TmpPoint = *Point;
 	Point->x = Matrix44[0]*TmpPoint.x + Matrix44[4]*TmpPoint.y + Matrix44[8]*TmpPoint.z + Matrix44[12];
 	Point->y = Matrix44[1]*TmpPoint.x + Matrix44[5]*TmpPoint.y + Matrix44[9]*TmpPoint.z + Matrix44[13];
 	Point->z = Matrix44[2]*TmpPoint.x + Matrix44[6]*TmpPoint.y + Matrix44[10]*TmpPoint.z + Matrix44[14];

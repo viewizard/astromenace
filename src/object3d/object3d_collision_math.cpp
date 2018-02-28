@@ -35,7 +35,7 @@
 //-----------------------------------------------------------------------------
 // Проверка столкновений Sphere-Mesh
 //-----------------------------------------------------------------------------
-bool CheckMeshSphereCollisionDetection(CObject3D *Object1, CObject3D *Object2, VECTOR3D *NewLoc, int *Object1PieceNum)
+bool CheckMeshSphereCollisionDetection(cObject3D *Object1, cObject3D *Object2, sVECTOR3D *NewLoc, int *Object1PieceNum)
 {
 	if (Object1->DrawObjectList == nullptr)
 		return false;
@@ -53,14 +53,14 @@ bool CheckMeshSphereCollisionDetection(CObject3D *Object1, CObject3D *Object2, V
 				// но сначала делаем еще одну проверку
 				if (Distance2 > Object1->HitBBRadius2[j] + Object2->Radius*Object2->Radius) {
 					// средняя точка линии
-					VECTOR3D mid = (Object2->Location + Object2->PrevLocation) / 2.0f;
+					sVECTOR3D mid = (Object2->Location + Object2->PrevLocation) / 2.0f;
 					// направление линии
-					VECTOR3D dir = Object2->Location - Object2->PrevLocation;
+					sVECTOR3D dir = Object2->Location - Object2->PrevLocation;
 					// полудлина линии
 					float hl = dir.Length()/2.0f;
 					dir.Normalize();
 
-					VECTOR3D T = Object1->Location + Object1->HitBBLocation[j] - mid;
+					sVECTOR3D T = Object1->Location + Object1->HitBBLocation[j] - mid;
 					float r;
 
 					// проверяем, является ли одна из осей X,Y,Z разделяющей
@@ -113,7 +113,7 @@ bool CheckMeshSphereCollisionDetection(CObject3D *Object1, CObject3D *Object2, V
 //-----------------------------------------------------------------------------
 // Проверка столкновений HitBB-HitBB
 //-----------------------------------------------------------------------------
-bool CheckHitBBHitBBCollisionDetection(CObject3D *Object1, CObject3D *Object2, int *Object1PieceNum, int *Object2PieceNum)
+bool CheckHitBBHitBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, int *Object1PieceNum, int *Object2PieceNum)
 {
 	// проверяем HitBB, находим номера пересекающихся
 	for (int i=0; i<Object1->DrawObjectQuantity; i++)
@@ -148,18 +148,18 @@ bool CheckHitBBHitBBCollisionDetection(CObject3D *Object1, CObject3D *Object2, i
 
 
 
-					VECTOR3D vPosB = (Object2->Location + Object2->HitBBLocation[j])
+					sVECTOR3D vPosB = (Object2->Location + Object2->HitBBLocation[j])
 							 - (Object1->Location + Object1->HitBBLocation[i]);
 					vw_Matrix33CalcPoint(&vPosB, TMPOldInvRotationMat);
 
 
-					VECTOR3D XAxis(matB[0],matB[3],matB[6]);
-					VECTOR3D YAxis(matB[1],matB[4],matB[7]);
-					VECTOR3D ZAxis(matB[2],matB[5],matB[8]);
+					sVECTOR3D XAxis(matB[0],matB[3],matB[6]);
+					sVECTOR3D YAxis(matB[1],matB[4],matB[7]);
+					sVECTOR3D ZAxis(matB[2],matB[5],matB[8]);
 
 
-					VECTOR3D Obj1_data(Object1->HitBBSize[i].x/2.0f, Object1->HitBBSize[i].y/2.0f, Object1->HitBBSize[i].z/2.0f);
-					VECTOR3D Obj2_data(Object2->HitBBSize[j].x/2.0f, Object2->HitBBSize[j].y/2.0f, Object2->HitBBSize[j].z/2.0f);
+					sVECTOR3D Obj1_data(Object1->HitBBSize[i].x/2.0f, Object1->HitBBSize[i].y/2.0f, Object1->HitBBSize[i].z/2.0f);
+					sVECTOR3D Obj2_data(Object2->HitBBSize[j].x/2.0f, Object2->HitBBSize[j].y/2.0f, Object2->HitBBSize[j].z/2.0f);
 
 
 
@@ -262,7 +262,7 @@ bool CheckHitBBHitBBCollisionDetection(CObject3D *Object1, CObject3D *Object2, i
 //-----------------------------------------------------------------------------
 // Проверка столкновений HitBB-OBB
 //-----------------------------------------------------------------------------
-bool CheckHitBBOBBCollisionDetection(CObject3D *Object1, CObject3D *Object2, int *Object1PieceNum)
+bool CheckHitBBOBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, int *Object1PieceNum)
 {
 	// проверяем HitBB, находим номера пересекающихся
 	for (int i=0; i<Object1->DrawObjectQuantity; i++)
@@ -278,17 +278,17 @@ bool CheckHitBBOBBCollisionDetection(CObject3D *Object1, CObject3D *Object2, int
 			vw_Matrix33Mult(matB, TMPOldInvRotationMat);
 
 
-			VECTOR3D vPosB = (Object1->Location + Object1->HitBBLocation[i])-(Object2->Location + Object2->OBBLocation);
+			sVECTOR3D vPosB = (Object1->Location + Object1->HitBBLocation[i])-(Object2->Location + Object2->OBBLocation);
 			vw_Matrix33CalcPoint(&vPosB, TMPOldInvRotationMat);
 
 
-			VECTOR3D XAxis(matB[0],matB[3],matB[6]);
-			VECTOR3D YAxis(matB[1],matB[4],matB[7]);
-			VECTOR3D ZAxis(matB[2],matB[5],matB[8]);
+			sVECTOR3D XAxis(matB[0],matB[3],matB[6]);
+			sVECTOR3D YAxis(matB[1],matB[4],matB[7]);
+			sVECTOR3D ZAxis(matB[2],matB[5],matB[8]);
 
 
-			VECTOR3D Obj2_data(Object1->HitBBSize[i].x/2.0f, Object1->HitBBSize[i].y/2.0f, Object1->HitBBSize[i].z/2.0f);
-			VECTOR3D Obj1_data(Object2->Width/2.0f, Object2->Height/2.0f, Object2->Length/2.0f);
+			sVECTOR3D Obj2_data(Object1->HitBBSize[i].x/2.0f, Object1->HitBBSize[i].y/2.0f, Object1->HitBBSize[i].z/2.0f);
+			sVECTOR3D Obj1_data(Object2->Width/2.0f, Object2->Height/2.0f, Object2->Length/2.0f);
 
 
 
@@ -393,7 +393,7 @@ bool CheckHitBBOBBCollisionDetection(CObject3D *Object1, CObject3D *Object2, int
 //-----------------------------------------------------------------------------
 // Проверка столкновений геометрия больших астероидов -HitBB
 //-----------------------------------------------------------------------------
-bool CheckHitBBMeshCollisionDetection(CObject3D *Object1, CObject3D *Object2, int *Object1PieceNum)
+bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, int *Object1PieceNum)
 {
 	// делаем матрицу перемещения точки, для геометрии
 	float TransMat[16];
@@ -421,8 +421,8 @@ bool CheckHitBBMeshCollisionDetection(CObject3D *Object1, CObject3D *Object2, in
 		if (Object1->DrawObjectList[i].VertexCount != 0) {
 
 			// параметры HitBB
-			VECTOR3D TMPMax = Object1->HitBB[i][0];
-			VECTOR3D TMPMin = Object1->HitBB[i][6];
+			sVECTOR3D TMPMax = Object1->HitBB[i][0];
+			sVECTOR3D TMPMin = Object1->HitBB[i][6];
 
 			// строим матрицу, чтобы развернуть точки
 			float TMPOldInvRotationMat[9];
@@ -434,15 +434,15 @@ bool CheckHitBBMeshCollisionDetection(CObject3D *Object1, CObject3D *Object2, in
 			vw_Matrix33CalcPoint(&TMPMin, TMPOldInvRotationMat);
 
 
-			VECTOR3D Center = Object1->HitBBLocation[i] + Object1->Location;
+			sVECTOR3D Center = Object1->HitBBLocation[i] + Object1->Location;
 			vw_Matrix33CalcPoint(&Center, TMPOldInvRotationMat);
 
 
-			VECTOR3D TMPMax2;
-			VECTOR3D TMPMin2;
-			VECTOR3D Point1;
-			VECTOR3D Point2;
-			VECTOR3D Point3;
+			sVECTOR3D TMPMax2;
+			sVECTOR3D TMPMin2;
+			sVECTOR3D Point1;
+			sVECTOR3D Point2;
+			sVECTOR3D Point3;
 
 
 			// проверяем все треугольники объекта
@@ -453,7 +453,7 @@ bool CheckHitBBMeshCollisionDetection(CObject3D *Object1, CObject3D *Object2, in
 
 
 					// находим точку локального положения объекта в моделе
-					VECTOR3D LocalLocation(Object2->DrawObjectList[j].Location);
+					sVECTOR3D LocalLocation(Object2->DrawObjectList[j].Location);
 					vw_Matrix33CalcPoint(&LocalLocation, Object2->CurrentRotationMat);
 
 					// делаем временную матрицу для объекта, т.к. портить основную нельзя
@@ -559,7 +559,7 @@ bool CheckHitBBMeshCollisionDetection(CObject3D *Object1, CObject3D *Object2, in
 						TMPMin2.z = std::min({Point1.z, Point2.z, Point3.z});
 
 
-						VECTOR3D Center2((TMPMax2.x+TMPMin2.x)/2.0f,(TMPMax2.y+TMPMin2.y)/2.0f,(TMPMax2.z+TMPMin2.z)/2.0f);
+						sVECTOR3D Center2((TMPMax2.x+TMPMin2.x)/2.0f,(TMPMax2.y+TMPMin2.y)/2.0f,(TMPMax2.z+TMPMin2.z)/2.0f);
 
 						TMPMax2.x = TMPMax2.x - Center2.x;
 						TMPMax2.y = TMPMax2.y - Center2.y;

@@ -47,7 +47,7 @@ void vw_LoadIdentity()
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_Translate(VECTOR3D Location)
+void vw_Translate(sVECTOR3D Location)
 {
 	glTranslatef(Location.x, Location.y, Location.z);
 }

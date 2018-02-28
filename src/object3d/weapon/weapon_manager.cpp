@@ -31,8 +31,8 @@
 
 
 // Указатели на начальный и конечный объект в списке
-CWeapon *StartWeapon = nullptr;
-CWeapon *EndWeapon = nullptr;
+cWeapon *StartWeapon = nullptr;
+cWeapon *EndWeapon = nullptr;
 
 
 
@@ -41,7 +41,7 @@ CWeapon *EndWeapon = nullptr;
 //-----------------------------------------------------------------------------
 // Включаем в список
 //-----------------------------------------------------------------------------
-void AttachWeapon(CWeapon *Weapon)
+void AttachWeapon(cWeapon *Weapon)
 {
 	if (Weapon == nullptr)
 		return;
@@ -67,7 +67,7 @@ void AttachWeapon(CWeapon *Weapon)
 //-----------------------------------------------------------------------------
 // Исключаем из списка
 //-----------------------------------------------------------------------------
-void DetachWeapon(CWeapon *Weapon)
+void DetachWeapon(cWeapon *Weapon)
 {
 	if (Weapon == nullptr)
 		return;
@@ -98,9 +98,9 @@ void DetachWeapon(CWeapon *Weapon)
 //-----------------------------------------------------------------------------
 void UpdateAllWeapon(float Time)
 {
-	CWeapon *tmp = StartWeapon;
+	cWeapon *tmp = StartWeapon;
 	while (tmp != nullptr) {
-		CWeapon *tmp2 = tmp->Next;
+		cWeapon *tmp2 = tmp->Next;
 		// делаем обновление данных по объекту
 		if (!tmp->Update(Time))
 			delete tmp;
@@ -117,9 +117,9 @@ void UpdateAllWeapon(float Time)
 void DrawAllWeapon(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 
-	CWeapon *tmp = StartWeapon;
+	cWeapon *tmp = StartWeapon;
 	while (tmp != nullptr) {
-		CWeapon *tmp2 = tmp->Next;
+		cWeapon *tmp2 = tmp->Next;
 		tmp->Draw(VertexOnlyPass, ShadowMap);
 		tmp = tmp2;
 	}
@@ -135,9 +135,9 @@ void DrawAllWeapon(bool VertexOnlyPass, unsigned int ShadowMap)
 //-----------------------------------------------------------------------------
 void ReleaseAllWeapon()
 {
-	CWeapon *tmp = StartWeapon;
+	cWeapon *tmp = StartWeapon;
 	while (tmp != nullptr) {
-		CWeapon *tmp2 = tmp->Next;
+		cWeapon *tmp2 = tmp->Next;
 		delete tmp;
 		tmp = tmp2;
 	}

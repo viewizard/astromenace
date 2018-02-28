@@ -37,25 +37,25 @@
 
 int Audio_PlayVoice(unsigned int SoundID, float fVol, bool Loop = false);
 float GetProjectileSpeed(int Num);
-void PlayBulletExplosion(VECTOR3D Location, bool NeedExplosionSFX, int ExplType);
+void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType);
 
-extern CSpaceShip *StartSpaceShip;
-extern CSpaceShip *EndSpaceShip;
-extern CProjectile *StartProjectile;
-extern CProjectile *EndProjectile;
-extern CGroundObject *StartGroundObject;
-extern CGroundObject *EndGroundObject;
-extern CSpaceObject *StartSpaceObject;
-extern CSpaceObject *EndSpaceObject;
+extern cSpaceShip *StartSpaceShip;
+extern cSpaceShip *EndSpaceShip;
+extern cProjectile *StartProjectile;
+extern cProjectile *EndProjectile;
+extern cGroundObject *StartGroundObject;
+extern cGroundObject *EndGroundObject;
+extern cSpaceObject *StartSpaceObject;
+extern cSpaceObject *EndSpaceObject;
 
 extern int CurrentMission;
 float GameCameraGetSpeed();
 
-bool CheckHitBBMeshCollisionDetection(CObject3D *Object1, CObject3D *Object2, int *Object1PieceNum);
+bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, int *Object1PieceNum);
 
-bool CheckMeshSphereCollisionDetection(CObject3D *Object1, CObject3D *Object2, VECTOR3D *NewLoc, int *Object1PieceNum);
-bool CheckHitBBHitBBCollisionDetection(CObject3D *Object1, CObject3D *Object2, int *Object1PieceNum, int *Object2PieceNum);
-bool CheckHitBBOBBCollisionDetection(CObject3D *Object1, CObject3D *Object2, int *Object1PieceNum);
+bool CheckMeshSphereCollisionDetection(cObject3D *Object1, cObject3D *Object2, sVECTOR3D *NewLoc, int *Object1PieceNum);
+bool CheckHitBBHitBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, int *Object1PieceNum, int *Object2PieceNum);
+bool CheckHitBBOBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, int *Object1PieceNum);
 
 
 
@@ -76,7 +76,7 @@ struct sDamagesData {
 	float DamageSystems;
 };
 
-bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjectile *Projectile, VECTOR3D *IntercPoint, sDamagesData *DamagesData, float ObjectSpeed)
+bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjectile *Projectile, sVECTOR3D *IntercPoint, sDamagesData *DamagesData, float ObjectSpeed)
 {
 
 	DamagesData->DamageHull = 0.0f;
@@ -141,7 +141,7 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 						return false;
 					} else {
 						// "разбиваем" снаряд о корпус, звук тянем отдельно!
-						new CBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, ObjectSpeed, false);
+						new cBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, ObjectSpeed, false);
 
 						// где сейчас, там и погибли
 						*IntercPoint = Projectile->Location;
@@ -177,9 +177,9 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 								// "разбиваем" снаряд о корпус
 								// звук тянем отдельно!
 								if (NeedCheckCollision(Object))
-									new CBulletExplosion(Object, Projectile, Projectile->Num, *IntercPoint, ObjectSpeed, false);
+									new cBulletExplosion(Object, Projectile, Projectile->Num, *IntercPoint, ObjectSpeed, false);
 								else
-									new CBulletExplosion(Object, Projectile, Projectile->Num, *IntercPoint, 0.0f, false);
+									new cBulletExplosion(Object, Projectile, Projectile->Num, *IntercPoint, 0.0f, false);
 
 								// столкновение было
 								return true;
@@ -199,7 +199,7 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 					*IntercPoint = Projectile->Location;
 
 					// "разбиваем" снаряд о корпус
-					new CBulletExplosion(Object, Projectile, -Projectile->Num, Projectile->Location, ObjectSpeed);
+					new cBulletExplosion(Object, Projectile, -Projectile->Num, Projectile->Location, ObjectSpeed);
 
 					// корректируем данные щита
 					float CurrentStatus = ShildEnergyStatus*ShildStartHitStatus;
@@ -234,9 +234,9 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 										if (CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
 											// взрываем...
 											if (NeedCheckCollision(Object))
-												new CBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, Projectile->Speed);
+												new cBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, Projectile->Speed);
 											else
-												new CBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, 0.0f);
+												new cBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, 0.0f);
 
 											return true;
 										} else
@@ -252,9 +252,9 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 									}
 									// взрываем...
 									if (NeedCheckCollision(Object))
-										new CBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, Projectile->Speed);
+										new cBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, Projectile->Speed);
 									else
-										new CBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, 0.0f);
+										new cBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, 0.0f);
 									// столкновение было
 									return true;
 								}
@@ -294,7 +294,7 @@ bool DetectProjectileCollision(CObject3D *Object, int *ObjectPieceNum, CProjecti
 
 
 // единая процедура для проигрывания эффекта разлета всех снарядов
-void DestroyProjectileWithExplosion(CProjectile *Projectile, VECTOR3D IntercPoint)
+void DestroyProjectileWithExplosion(cProjectile *Projectile, sVECTOR3D IntercPoint)
 {
 	if (Projectile == nullptr)
 		return;
@@ -303,8 +303,8 @@ void DestroyProjectileWithExplosion(CProjectile *Projectile, VECTOR3D IntercPoin
 	// обычные снаряды
 	case 0:
 		// "разбиваем" снаряд о корпус
-		/*	CBulletExplosion *TMPBulletExplosion;
-			TMPBulletExplosion = new CBulletExplosion;
+		/*	cBulletExplosion *TMPBulletExplosion;
+			TMPBulletExplosion = new cBulletExplosion;
 			TMPBulletExplosion->Create(0, Projectile, Projectile->Num, IntercPoint, ObjectSpeed, Projectile->NeedDeadSound);
 		*/
 		PlayBulletExplosion(IntercPoint, Projectile->NeedDeadSound, Projectile->Num);
@@ -333,7 +333,7 @@ void DestroyProjectileWithExplosion(CProjectile *Projectile, VECTOR3D IntercPoin
 //-----------------------------------------------------------------------------
 extern float GameMoney;
 extern float GameExperience;
-extern GameSetup Setup;
+extern sGameSetup Setup;
 extern int CurrentProfile;
 extern int		AlienShipsKillQuant;
 extern float	AlienShipsKillBonus;
@@ -347,7 +347,7 @@ extern int		PirateBuildingsKillQuant;
 extern float	PirateBuildingsKillBonus;
 extern int		AsteroidsKillQuant;
 extern float	AsteroidsKillBonus;
-void AddPlayerBonus(CObject3D *Object, int KilledByObjectStatus)
+void AddPlayerBonus(cObject3D *Object, int KilledByObjectStatus)
 {
 	// убили врага
 	if (Object->ObjectStatus == 1 && KilledByObjectStatus == 3) {
@@ -437,17 +437,17 @@ void DetectCollisionAllObject3D()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверка для всех кораблей
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	CSpaceShip *tmpShip = StartSpaceShip;
+	cSpaceShip *tmpShip = StartSpaceShip;
 	while (tmpShip != nullptr) {
-		CSpaceShip *tmpShip2 = tmpShip->Next;
+		cSpaceShip *tmpShip2 = tmpShip->Next;
 
 		// точка попадания, если оно есть
-		VECTOR3D IntercPoint;
+		sVECTOR3D IntercPoint;
 
 		// проверяем со снарядами
-		CProjectile *tmpProjectile = StartProjectile;
+		cProjectile *tmpProjectile = StartProjectile;
 		while ((tmpProjectile != nullptr) && (tmpShip != nullptr)) {
-			CProjectile *tmpProjectile2 = tmpProjectile->Next;
+			cProjectile *tmpProjectile2 = tmpProjectile->Next;
 
 			// проверка на попадание в корпус корабля
 			sDamagesData DamagesData;
@@ -496,19 +496,19 @@ void DetectCollisionAllObject3D()
 					if (tmpShip->ObjectStatus != 3) {
 						switch (tmpShip->ObjectType) {
 						case 2:
-							new CSpaceExplosion(tmpShip, 2, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+							new cSpaceExplosion(tmpShip, 2, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							break;
 						case 1:
-							new CSpaceExplosion(tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+							new cSpaceExplosion(tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							break;
 						case 3:
-							new CSpaceExplosion(tmpShip, 33, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+							new cSpaceExplosion(tmpShip, 33, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							break;
 						case 4:
 							if (tmpShip->ObjectCreationType <= 5)
-								new CSpaceExplosion(tmpShip, 3, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+								new cSpaceExplosion(tmpShip, 3, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							else
-								new CSpaceExplosion(tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+								new cSpaceExplosion(tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 
 							break;
 						}
@@ -605,10 +605,10 @@ void DetectCollisionAllObject3D()
 
 
 		// проверяем столкновение
-		// CSpaceObject
-		CSpaceObject *tmpS = StartSpaceObject;
+		// cSpaceObject
+		cSpaceObject *tmpS = StartSpaceObject;
 		while ((tmpS != nullptr) && (tmpShip != nullptr)) {
-			CSpaceObject *tmpSpace2 = tmpS->Next;
+			cSpaceObject *tmpSpace2 = tmpS->Next;
 
 			int ObjectPieceNum;
 			if (vw_SphereSphereCollision(tmpShip->Radius, tmpShip->Location,
@@ -648,10 +648,10 @@ void DetectCollisionAllObject3D()
 
 									switch (tmpS->ObjectType) {
 									case 7:
-										new CSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
+										new cSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
 										break;
 									case 8:
-										new CSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1);
+										new cSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1);
 										break;
 									}
 									delete tmpS;
@@ -666,19 +666,19 @@ void DetectCollisionAllObject3D()
 									if (tmpShip->ObjectStatus != 3) {
 										switch (tmpShip->ObjectType) {
 										case 2:
-											new CSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+											new cSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 											break;
 										case 1:
-											new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+											new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 											break;
 										case 3:
-											new CSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+											new cSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 											break;
 										case 4:
 											if (tmpShip->ObjectCreationType <= 5)
-												new CSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+												new cSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 											else
-												new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+												new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 
 											break;
 										}
@@ -700,9 +700,9 @@ exitN1:
 		// 2 - AABB-AABB
 		// 3 - OBB-OBB
 		// 4 - HitBB-HitBB
-		CGroundObject *tmpG = StartGroundObject;
+		cGroundObject *tmpG = StartGroundObject;
 		while ((tmpG != nullptr) && (tmpShip != nullptr)) {
-			CGroundObject *tmpGround2 = tmpG->Next;
+			cGroundObject *tmpGround2 = tmpG->Next;
 
 			int ObjectPieceNum1;
 			int ObjectPieceNum2;
@@ -743,10 +743,10 @@ exitN1:
 
 									switch (tmpG->ObjectType) {
 									case 6:
-										new CGroundExplosion(tmpG, 1, tmpG->Location, ObjectPieceNum2);
+										new cGroundExplosion(tmpG, 1, tmpG->Location, ObjectPieceNum2);
 										break;
 									case 5:
-										new CGroundExplosion(tmpG, 2, tmpG->Location, ObjectPieceNum2);
+										new cGroundExplosion(tmpG, 2, tmpG->Location, ObjectPieceNum2);
 										break;
 									}
 									delete tmpG;
@@ -761,19 +761,19 @@ exitN1:
 									if (tmpShip->ObjectStatus != 3) {
 										switch (tmpShip->ObjectType) {
 										case 2:
-											new CSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+											new cSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
 										case 1:
-											new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+											new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
 										case 3:
-											new CSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+											new cSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
 										case 4:
 											if (tmpShip->ObjectCreationType <= 5)
-												new CSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+												new cSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											else
-												new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+												new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 
 											break;
 										}
@@ -792,15 +792,15 @@ exitN2:
 
 
 
-		// проверяем все CSpaceShip с CSpaceShip
+		// проверяем все cSpaceShip с cSpaceShip
 		// 1 - радиус-радиус
 		// 2 - AABB-AABB
 		// 3 - OBB-OBB
 		// 4 - HitBB-HitBB
 		// проверяем со всеми, начиная со следующего и до конца
-		CSpaceShip *tmpCollisionShip1 = tmpShip2;
+		cSpaceShip *tmpCollisionShip1 = tmpShip2;
 		while ((tmpCollisionShip1 != nullptr) && (tmpShip != nullptr)) {
-			CSpaceShip *tmpCollisionShip2 = tmpCollisionShip1->Next;
+			cSpaceShip *tmpCollisionShip2 = tmpCollisionShip1->Next;
 
 			int ObjectPieceNum1;
 			int ObjectPieceNum2;
@@ -835,19 +835,19 @@ exitN2:
 									if (tmpCollisionShip1->ObjectStatus != 3) {
 										switch (tmpCollisionShip1->ObjectType) {
 										case 2:
-											new CSpaceExplosion(tmpCollisionShip1, 2, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
+											new cSpaceExplosion(tmpCollisionShip1, 2, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 											break;
 										case 1:
-											new CSpaceExplosion(tmpCollisionShip1, 31, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
+											new cSpaceExplosion(tmpCollisionShip1, 31, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 											break;
 										case 3:
-											new CSpaceExplosion(tmpCollisionShip1, 33, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
+											new cSpaceExplosion(tmpCollisionShip1, 33, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 											break;
 										case 4:
 											if (tmpCollisionShip1->ObjectCreationType <= 5)
-												new CSpaceExplosion(tmpCollisionShip1, 3, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
+												new cSpaceExplosion(tmpCollisionShip1, 3, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 											else
-												new CSpaceExplosion(tmpCollisionShip1, 31, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
+												new cSpaceExplosion(tmpCollisionShip1, 31, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 
 											break;
 										}
@@ -870,19 +870,19 @@ exitN2:
 									if (tmpShip->ObjectStatus != 3) {
 										switch (tmpShip->ObjectType) {
 										case 2:
-											new CSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+											new cSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
 										case 1:
-											new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+											new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
 										case 3:
-											new CSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+											new cSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
 										case 4:
 											if (tmpShip->ObjectCreationType <= 5)
-												new CSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+												new cSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											else
-												new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+												new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 
 											break;
 										}
@@ -913,19 +913,19 @@ exitN2:
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверяем все CGroundObject с
-	// CProjectile
+	// проверяем все cGroundObject с
+	// cProjectile
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	CGroundObject *tmpG = StartGroundObject;
+	cGroundObject *tmpG = StartGroundObject;
 	while (tmpG != nullptr) {
-		CGroundObject *tmpGround2 = tmpG->Next;
+		cGroundObject *tmpGround2 = tmpG->Next;
 
 		// точка попадания, если оно есть
-		VECTOR3D IntercPoint;
+		sVECTOR3D IntercPoint;
 		// проверяем со снарядами
-		CProjectile *tmpProjectile = StartProjectile;
+		cProjectile *tmpProjectile = StartProjectile;
 		while ((tmpProjectile != nullptr) && (tmpG != nullptr)) {
-			CProjectile *tmpProjectile2 = tmpProjectile->Next;
+			cProjectile *tmpProjectile2 = tmpProjectile->Next;
 			sDamagesData DamagesData;
 			int ObjectPieceNum;
 
@@ -943,10 +943,10 @@ exitN2:
 
 						switch (tmpG->ObjectType) {
 						case 6:
-							new CGroundExplosion(tmpG, 1, IntercPoint, ObjectPieceNum);
+							new cGroundExplosion(tmpG, 1, IntercPoint, ObjectPieceNum);
 							break;
 						case 5:
-							new CGroundExplosion(tmpG, 2, IntercPoint, ObjectPieceNum);
+							new cGroundExplosion(tmpG, 2, IntercPoint, ObjectPieceNum);
 							break;
 						}
 						delete tmpG;
@@ -972,10 +972,10 @@ exitN2:
 
 
 		// проверяем столкновение
-		// CSpaceObject
-		CSpaceObject *tmpS = StartSpaceObject;
+		// cSpaceObject
+		cSpaceObject *tmpS = StartSpaceObject;
 		while ((tmpS != nullptr) && (tmpG != nullptr)) {
-			CSpaceObject *tmpSpace2 = tmpS->Next;
+			cSpaceObject *tmpSpace2 = tmpS->Next;
 
 			int ObjectPieceNum;
 
@@ -1009,10 +1009,10 @@ exitN2:
 
 											switch (tmpS->ObjectType) {
 											case 7:
-												new CSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
+												new cSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
 												break;
 											case 8:
-												new CSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1);
+												new cSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1);
 												break;
 											}
 											delete tmpS;
@@ -1025,10 +1025,10 @@ exitN2:
 										if (tmpG->Strength <= 0.0f) {
 											switch (tmpG->ObjectType) {
 											case 6:
-												new CGroundExplosion(tmpG, 1, tmpG->Location, ObjectPieceNum);
+												new cGroundExplosion(tmpG, 1, tmpG->Location, ObjectPieceNum);
 												break;
 											case 5:
-												new CGroundExplosion(tmpG, 2, tmpG->Location, ObjectPieceNum);
+												new cGroundExplosion(tmpG, 2, tmpG->Location, ObjectPieceNum);
 												break;
 											}
 											delete tmpG;
@@ -1050,18 +1050,18 @@ exitN2:
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверяем все CSpaceObject
+	// проверяем все cSpaceObject
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	CSpaceObject *tmpS = StartSpaceObject;
+	cSpaceObject *tmpS = StartSpaceObject;
 	while (tmpS != nullptr) {
-		CSpaceObject *tmpSpace2 = tmpS->Next;
+		cSpaceObject *tmpSpace2 = tmpS->Next;
 
 		// точка попадания, если оно есть
-		VECTOR3D IntercPoint;
+		sVECTOR3D IntercPoint;
 		// проверяем со снарядами
-		CProjectile *tmpProjectile = StartProjectile;
+		cProjectile *tmpProjectile = StartProjectile;
 		while ((tmpProjectile != nullptr) && (tmpS != nullptr)) {
-			CProjectile *tmpProjectile2 = tmpProjectile->Next;
+			cProjectile *tmpProjectile2 = tmpProjectile->Next;
 			sDamagesData DamagesData;
 			int ObjectPieceNum;
 
@@ -1077,10 +1077,10 @@ exitN2:
 
 						switch (tmpS->ObjectType) {
 						case 7:
-							new CSpaceExplosion(tmpS, 1, IntercPoint, tmpS->Speed, -1);
+							new cSpaceExplosion(tmpS, 1, IntercPoint, tmpS->Speed, -1);
 							break;
 						case 8:
-							new CSpaceExplosion(tmpS, 32, IntercPoint, tmpS->Speed, -1);
+							new cSpaceExplosion(tmpS, 32, IntercPoint, tmpS->Speed, -1);
 							break;
 						}
 						delete tmpS;
@@ -1106,11 +1106,11 @@ exitN2:
 
 
 
-		// CSpaceObject на столкновения только по Сфера-Сфера
+		// cSpaceObject на столкновения только по Сфера-Сфера
 		// начиная со следующего объекта, чтобы 2 раза не сравнивать
-		CSpaceObject *tmpCollisionSpace1 = tmpSpace2;
+		cSpaceObject *tmpCollisionSpace1 = tmpSpace2;
 		while ((tmpCollisionSpace1 != nullptr) && (tmpS != nullptr)) {
-			CSpaceObject *tmpCollisionSpace2 = tmpCollisionSpace1->Next;
+			cSpaceObject *tmpCollisionSpace2 = tmpCollisionSpace1->Next;
 
 			// если хоть один из них уничтожаемый
 			if (NeedCheckCollision(tmpCollisionSpace1) || NeedCheckCollision(tmpS))
@@ -1124,12 +1124,12 @@ exitN2:
 						if ((tmpS->ObjectType == 13 && tmpCollisionSpace1->ObjectType == 8) ||
 						    (tmpS->ObjectType == 8 && tmpCollisionSpace1->ObjectType == 13)) {
 							if (tmpS->ObjectType == 8) {
-								//tmpS->SetRotation(VECTOR3D(0.0f,180.0f,0.0f));
-								vw_RotatePoint(&tmpS->Orientation, VECTOR3D(0.0f,180.0f,0.0f));
+								//tmpS->SetRotation(sVECTOR3D(0.0f,180.0f,0.0f));
+								vw_RotatePoint(&tmpS->Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
 							}
 							if (tmpCollisionSpace1->ObjectType == 8) {
-								//tmpCollisionSpace1->SetRotation(VECTOR3D(0.0f,180.0f,0.0f));
-								vw_RotatePoint(&tmpCollisionSpace1->Orientation, VECTOR3D(0.0f,180.0f,0.0f));
+								//tmpCollisionSpace1->SetRotation(sVECTOR3D(0.0f,180.0f,0.0f));
+								vw_RotatePoint(&tmpCollisionSpace1->Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
 							}
 
 							goto exitN4;
@@ -1161,10 +1161,10 @@ exitN2:
 							    (tmpCollisionSpace1->ObjectType == 7 || tmpCollisionSpace1->ObjectType == 8)) {
 								switch (tmpCollisionSpace1->ObjectType) {
 								case 7:
-									new CSpaceExplosion(tmpCollisionSpace1, 1, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
+									new cSpaceExplosion(tmpCollisionSpace1, 1, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
 									break;
 								case 8:
-									new CSpaceExplosion(tmpCollisionSpace1, 32, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
+									new cSpaceExplosion(tmpCollisionSpace1, 32, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
 									break;
 								}
 								SFXplayed = true;
@@ -1178,10 +1178,10 @@ exitN2:
 							    (tmpS->ObjectType == 7 || tmpS->ObjectType == 8)) {
 								switch (tmpS->ObjectType) {
 								case 7:
-									new CSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
+									new cSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
 									break;
 								case 8:
-									new CSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
+									new cSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
 									break;
 								}
 								delete tmpS;
@@ -1203,21 +1203,21 @@ exitN4:
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// для CProjectile игрока проверяем со всеми
-	// CProjectile врага, которые можно уничтожить
+	// для cProjectile игрока проверяем со всеми
+	// cProjectile врага, которые можно уничтожить
 	// на попадание
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	CProjectile *tmpProjectile = StartProjectile;
+	cProjectile *tmpProjectile = StartProjectile;
 	while (tmpProjectile != nullptr) {
-		CProjectile *tmpProjectile2 = tmpProjectile->Next;
+		cProjectile *tmpProjectile2 = tmpProjectile->Next;
 
 		// точка попадания, если оно есть
-		VECTOR3D IntercPoint;
+		sVECTOR3D IntercPoint;
 
-		CProjectile *tmpProject1 = tmpProjectile2;
+		cProjectile *tmpProject1 = tmpProjectile2;
 
 		while ((tmpProject1 != nullptr) && (tmpProjectile != nullptr)) {
-			CProjectile *tmpProject2 = tmpProject1->Next;
+			cProjectile *tmpProject2 = tmpProject1->Next;
 
 			// делаем все тут , а не в общей процедуре, тк не обрабатываем там фларес
 
@@ -1253,21 +1253,21 @@ exitN4:
 										// тоже ракета
 										if (tmpProject1->ProjectileType == 1) {
 											tmpProject1->Speed = 0.0f;
-											new CBulletExplosion(nullptr, tmpProject1, -tmpProject1->Num, tmpProject1->Location, tmpProject1->Speed);
+											new cBulletExplosion(nullptr, tmpProject1, -tmpProject1->Num, tmpProject1->Location, tmpProject1->Speed);
 										}
 										delete tmpProject1;
 										tmpProject1 = nullptr;
 
 										// взрываем...
 										tmpProjectile->Speed = 0.0f;
-										new CBulletExplosion(nullptr, tmpProjectile, -tmpProjectile->Num, tmpProjectile->Location, tmpProjectile->Speed);
+										new cBulletExplosion(nullptr, tmpProjectile, -tmpProjectile->Num, tmpProjectile->Location, tmpProjectile->Speed);
 										// в самый последний момент - удаляем снаряд... он разбился
 										delete tmpProjectile;
 										tmpProjectile = nullptr;
 
 									} else {
 										// разрушаем
-										new CSpaceExplosion(tmpProjectile, 4, tmpProjectile->Location, tmpProjectile->Speed, -1);
+										new cSpaceExplosion(tmpProjectile, 4, tmpProjectile->Location, tmpProjectile->Speed, -1);
 										// в самый последний момент - удаляем снаряд... он разбился
 										delete tmpProjectile;
 										tmpProjectile = nullptr;
@@ -1302,14 +1302,14 @@ exitN4:
 								// тоже ракета
 								if (tmpProjectile->ProjectileType == 1) {
 									tmpProjectile->Speed = 0.0f;
-									new CBulletExplosion(nullptr, tmpProjectile, -tmpProjectile->Num, tmpProjectile->Location, tmpProjectile->Speed);
+									new cBulletExplosion(nullptr, tmpProjectile, -tmpProjectile->Num, tmpProjectile->Location, tmpProjectile->Speed);
 								}
 								delete tmpProjectile;
 								tmpProjectile = nullptr;
 
 								// взрываем...
 								tmpProject1->Speed = 0.0f;
-								new CBulletExplosion(nullptr, tmpProject1, -tmpProject1->Num, tmpProject1->Location, tmpProject1->Speed);
+								new cBulletExplosion(nullptr, tmpProject1, -tmpProject1->Num, tmpProject1->Location, tmpProject1->Speed);
 								// корректировка указателя
 								if (tmpProjectile2 == tmpProject1)
 									tmpProjectile2 = tmpProjectile2->Next;
@@ -1319,7 +1319,7 @@ exitN4:
 
 							} else {
 								// разрушаем
-								new CSpaceExplosion(tmpProject1, 4, tmpProject1->Location, tmpProject1->Speed, -1);
+								new cSpaceExplosion(tmpProject1, 4, tmpProject1->Location, tmpProject1->Speed, -1);
 								// корректировка указателя
 								if (tmpProjectile2 == tmpProject1)
 									tmpProjectile2 = tmpProjectile2->Next;
@@ -1357,7 +1357,7 @@ exitN4:
 //-----------------------------------------------------------------------------
 // Проверка попадания в сферу Sphere-Sphere
 //-----------------------------------------------------------------------------
-bool CheckSphereSphereDestroyDetection(CObject3D *Object1, VECTOR3D Point, float Radius, float *Distance2)
+bool CheckSphereSphereDestroyDetection(cObject3D *Object1, sVECTOR3D Point, float Radius, float *Distance2)
 {
 	// квадрат расстояния между объектами
 	*Distance2 = (Object1->Location.x - Point.x)*(Object1->Location.x - Point.x)+
@@ -1379,7 +1379,7 @@ bool CheckSphereSphereDestroyDetection(CObject3D *Object1, VECTOR3D Point, float
 //-----------------------------------------------------------------------------
 // Удаление всех удаляемых объектов, если они ближе радиуса
 //-----------------------------------------------------------------------------
-void DestroyRadiusCollisionAllObject3D(CObject3D *DontTouchObject, VECTOR3D Point, float Radius, float Damage, int ObjectStatus)
+void DestroyRadiusCollisionAllObject3D(cObject3D *DontTouchObject, sVECTOR3D Point, float Radius, float Damage, int ObjectStatus)
 {
 
 	// важно!!!
@@ -1398,14 +1398,14 @@ void DestroyRadiusCollisionAllObject3D(CObject3D *DontTouchObject, VECTOR3D Poin
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверяем все CSpaceObject
+	// проверяем все cSpaceObject
 	//
 	// делаем это первым, т.к. потом тут будет куча осколков которые тоже
 	// придется взрывать
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	CSpaceObject *tmpS = StartSpaceObject;
+	cSpaceObject *tmpS = StartSpaceObject;
 	while (tmpS != nullptr) {
-		CSpaceObject *tmpSpace2 = tmpS->Next;
+		cSpaceObject *tmpSpace2 = tmpS->Next;
 
 		if (NeedCheckCollision(tmpS))
 			// своих не трогаем
@@ -1427,7 +1427,7 @@ void DestroyRadiusCollisionAllObject3D(CObject3D *DontTouchObject, VECTOR3D Poin
 						// проверка, нужно начислять или нет
 						AddPlayerBonus(tmpS, ObjectStatus);
 
-						new CSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
+						new cSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
 						delete tmpS;
 						tmpS = nullptr;
 					}
@@ -1449,9 +1449,9 @@ NexttmpS:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверка для всех кораблей
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	CSpaceShip *tmpShip = StartSpaceShip;
+	cSpaceShip *tmpShip = StartSpaceShip;
 	while (tmpShip != nullptr) {
-		CSpaceShip *tmpShip2 = tmpShip->Next;
+		cSpaceShip *tmpShip2 = tmpShip->Next;
 
 		if (NeedCheckCollision(tmpShip))
 			// своих не трогаем
@@ -1477,19 +1477,19 @@ NexttmpS:
 					if (tmpShip->ObjectStatus != 3) {
 						switch (tmpShip->ObjectType) {
 						case 2:
-							new CSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, -1);
+							new cSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, -1);
 							break;
 						case 1:
-							new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, -1);
+							new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, -1);
 							break;
 						case 3:
-							new CSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, 0);
+							new cSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, 0);
 							break;
 						case 4:
 							if (tmpShip->ObjectCreationType <= 5)
-								new CSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, -1);
+								new cSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, -1);
 							else
-								new CSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, 0);
+								new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, 0);
 
 							break;
 						}
@@ -1509,12 +1509,12 @@ NexttmpS:
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверяем все CGroundObject с
-	// CProjectile
+	// проверяем все cGroundObject с
+	// cProjectile
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	CGroundObject *tmpG = StartGroundObject;
+	cGroundObject *tmpG = StartGroundObject;
 	while (tmpG != nullptr) {
-		CGroundObject *tmpGround2 = tmpG->Next;
+		cGroundObject *tmpGround2 = tmpG->Next;
 
 		if (NeedCheckCollision(tmpG))
 			// своих не трогаем
@@ -1534,10 +1534,10 @@ NexttmpS:
 
 					switch (tmpG->ObjectType) {
 					case 6:
-						new CGroundExplosion(tmpG, 1, tmpG->Location, -1);
+						new cGroundExplosion(tmpG, 1, tmpG->Location, -1);
 						break;
 					case 5:
-						new CGroundExplosion(tmpG, 2, tmpG->Location, -1);
+						new cGroundExplosion(tmpG, 2, tmpG->Location, -1);
 						break;
 					}
 

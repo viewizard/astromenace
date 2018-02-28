@@ -29,26 +29,26 @@
 
 
 
-void SetID(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
-void SetDebugInformation(CObject3D *Object, cXMLEntry *xmlEntry);
-void SetShowDeleteOnHide(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
-void SetShipRotation(CSpaceShip *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
-void SetShipLocation(CSpaceShip *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag);
-void SetProjectileRotation(CProjectile *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
-void SetProjectileLocation(CProjectile *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag);
-void SetRotation(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
-void SetLocation(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag);
-void SetAIMode(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
+void SetID(cObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
+void SetDebugInformation(cObject3D *Object, cXMLEntry *xmlEntry);
+void SetShowDeleteOnHide(cObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
+void SetShipRotation(cSpaceShip *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
+void SetShipLocation(cSpaceShip *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag);
+void SetProjectileRotation(cProjectile *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
+void SetProjectileLocation(cProjectile *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag);
+void SetRotation(cObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
+void SetLocation(cObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag);
+void SetAIMode(cObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
 
 
 
 
 // проверка, если конец уровня как всех убъем
 
-extern CSpaceShip *StartSpaceShip;
-extern CSpaceShip *EndSpaceShip;
-extern CGroundObject *StartGroundObject;
-extern CGroundObject *EndGroundObject;
+extern cSpaceShip *StartSpaceShip;
+extern cSpaceShip *EndSpaceShip;
+extern cGroundObject *StartGroundObject;
+extern cGroundObject *EndGroundObject;
 
 // отображение коробок... отладка
 extern int NeedShowBB;
@@ -62,14 +62,14 @@ extern bool ShowGameTime;
 
 
 
-ScriptEngine::ScriptEngine()
+cScriptEngine::cScriptEngine()
 {
 	// отладочный режим
 	NeedShowBB = 0;
 	UndeadDebugMode = false;
 };
 
-ScriptEngine::~ScriptEngine()
+cScriptEngine::~cScriptEngine()
 {
 	delete xmlDoc;
 };
@@ -79,7 +79,7 @@ ScriptEngine::~ScriptEngine()
 //-----------------------------------------------------------------------------
 // запустить скрипт на выполнение
 //-----------------------------------------------------------------------------
-bool ScriptEngine::RunScript(const char *FileName, float InitTime)
+bool cScriptEngine::RunScript(const char *FileName, float InitTime)
 {
 	// установка значений
 	StartTime = TimeLastOp = InitTime;
@@ -172,7 +172,7 @@ bool ScriptEngine::RunScript(const char *FileName, float InitTime)
 //-----------------------------------------------------------------------------
 // проверяем скрипт
 //-----------------------------------------------------------------------------
-bool ScriptEngine::Update(float Time)
+bool cScriptEngine::Update(float Time)
 {
 	// скрипт не загружен
 	if (xmlDoc == nullptr)
@@ -196,22 +196,22 @@ bool ScriptEngine::Update(float Time)
 		AsterRealNeed = NeedGener - NeedGenerInt;
 
 		while (NeedGenerInt>0) {
-			CAsteroid *CreateAsteroid = new CAsteroid;
+			cAsteroid *CreateAsteroid = new cAsteroid;
 			CreateAsteroid->Create(1);
 			if (AsterFastCount != 20)
 				CreateAsteroid->Speed = AsterMaxSpeed*vw_Randf1;
 			else
 				CreateAsteroid->Speed = AsterMinFastSpeed + AsterMaxSpeed*vw_Randf1;
 			CreateAsteroid->ShowDeleteOnHide = 0;
-			CreateAsteroid->SetRotation(VECTOR3D(0.0f, 180.0f, 0.0f));// !!!учесть камеру
+			CreateAsteroid->SetRotation(sVECTOR3D(0.0f, 180.0f, 0.0f));// !!!учесть камеру
 
 			if (AsterFastCount != 20)
 				CreateAsteroid->SetLocation(
-					VECTOR3D(AsterW*vw_Randf0+AsterXPos, AsterYPos*2+AsterH*vw_Randf1, AsterZPos+20.0f)
+					sVECTOR3D(AsterW * vw_Randf0 + AsterXPos, AsterYPos * 2 + AsterH * vw_Randf1, AsterZPos + 20.0f)
 					+GamePoint);
 			else
 				CreateAsteroid->SetLocation(
-					VECTOR3D(AsterW*vw_Randf0+AsterXPos, AsterYPos*2+AsterH*vw_Randf1, AsterZPos)
+					sVECTOR3D(AsterW * vw_Randf0 + AsterXPos, AsterYPos * 2 + AsterH * vw_Randf1, AsterZPos)
 					+GamePoint);
 
 			NeedGenerInt--;
@@ -237,7 +237,7 @@ bool ScriptEngine::Update(float Time)
 		if (NeedCheckSpaceShip) {
 			// если нет врагов
 			int count = 0;
-			CSpaceShip *Tmp1 = StartSpaceShip;
+			cSpaceShip *Tmp1 = StartSpaceShip;
 			while (Tmp1 != nullptr) {
 				// если это враг, и мы его показали (иначе он где-то там летает)
 				if ((Tmp1->ObjectStatus == 1) && (Tmp1->ShowDeleteOnHide != 0))
@@ -250,7 +250,7 @@ bool ScriptEngine::Update(float Time)
 		if (NeedCheckGroundObject) {
 			// если нет врагов, которых можем уничтожить
 			int count = 0;
-			CGroundObject *Tmp1 = StartGroundObject;
+			cGroundObject *Tmp1 = StartGroundObject;
 			while (Tmp1 != nullptr) {
 				// если это враг, и мы его показали
 				if (NeedCheckCollision(Tmp1) && (Tmp1->ShowDeleteOnHide != 0))
@@ -322,7 +322,7 @@ bool ScriptEngine::Update(float Time)
 				if (!strcmp(xmlEntry->Name, "StarSystem")) {
 					if (xmlDoc->GetEntryAttribute(xmlEntry, "system") != nullptr) {
 						int SystemNum = xmlDoc->iGetEntryAttribute(xmlEntry, "system");
-						VECTOR3D TmpBaseRotation(0.0f, 0.0f, 0.0f);
+						sVECTOR3D TmpBaseRotation(0.0f, 0.0f, 0.0f);
 						if (xmlDoc->GetEntryAttribute(xmlEntry, "anglex") != nullptr)
 							TmpBaseRotation.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglex");
 						if (xmlDoc->GetEntryAttribute(xmlEntry, "angley") != nullptr)
@@ -349,7 +349,7 @@ bool ScriptEngine::Update(float Time)
 					} else
 						// CreatePlanet
 						if (!strcmp(xmlEntry->Name, "CreatePlanet")) {
-							CPlanet *Planet = new CPlanet;
+							cPlanet *Planet = new cPlanet;
 							if (xmlDoc->GetEntryAttribute(xmlEntry, "type") != nullptr) {
 								Planet->Create(xmlDoc->iGetEntryAttribute(xmlEntry, "type"));
 								SetRotation(Planet, xmlEntry, xmlDoc);
@@ -384,8 +384,8 @@ bool ScriptEngine::Update(float Time)
 							} else
 								// Light
 								if (!strcmp(xmlEntry->Name, "Light")) {
-									eLight *NewLight;
-									NewLight = new eLight;
+									sLight *NewLight;
+									NewLight = new sLight;
 
 									NewLight->LightType = 0; // по умолчанию, солнце
 									if (xmlDoc->GetEntryAttribute(xmlEntry, "type") != nullptr)
@@ -430,7 +430,7 @@ bool ScriptEngine::Update(float Time)
 									if (xmlDoc->GetEntryAttribute(xmlEntry, "ambia") != nullptr)
 										NewLight->Ambient[3] = xmlDoc->fGetEntryAttribute(xmlEntry, "ambia");
 
-									NewLight->Direction = VECTOR3D(0.0f,0.0f,1.0f);
+									NewLight->Direction = sVECTOR3D(0.0f,0.0f,1.0f);
 									if (xmlDoc->GetEntryAttribute(xmlEntry, "dirx") != nullptr)
 										NewLight->Direction.x = xmlDoc->fGetEntryAttribute(xmlEntry, "dirx");
 									if (xmlDoc->GetEntryAttribute(xmlEntry, "diry") != nullptr)
@@ -439,7 +439,7 @@ bool ScriptEngine::Update(float Time)
 										NewLight->Direction.z = xmlDoc->fGetEntryAttribute(xmlEntry, "dirz");
 									NewLight->Direction.Normalize();
 
-									NewLight->Location = VECTOR3D(0.0f,0.0f,0.0f);
+									NewLight->Location = sVECTOR3D(0.0f,0.0f,0.0f);
 									if (xmlDoc->GetEntryAttribute(xmlEntry, "posx") != nullptr)
 										NewLight->Location.x = xmlDoc->fGetEntryAttribute(xmlEntry, "posx");
 									if (xmlDoc->GetEntryAttribute(xmlEntry, "posy") != nullptr)
@@ -512,8 +512,8 @@ bool ScriptEngine::Update(float Time)
 												} else
 													// Text
 													if (!strcmp(xmlEntry->Name, "Text")) {
-														CGameLvlText *NewText;
-														NewText = new CGameLvlText;
+														cGameLvlText *NewText;
+														NewText = new cGameLvlText;
 
 
 														NewText->Lifetime = -1.0f;
@@ -557,7 +557,7 @@ bool ScriptEngine::Update(float Time)
 //-----------------------------------------------------------------------------
 // проверяем скрипт дополнительно для TimeLine
 //-----------------------------------------------------------------------------
-void ScriptEngine::UpdateTimeLine()
+void cScriptEngine::UpdateTimeLine()
 {
 	// получаем первый тэг
 	cXMLEntry *TL = xmlEntry->FirstChild;
@@ -566,8 +566,8 @@ void ScriptEngine::UpdateTimeLine()
 
 		// EarthFighter
 		if (!strcmp(TL->Name, "EarthFighter")) {
-			CEarthSpaceFighter *Fighter = nullptr;
-			Fighter = new CEarthSpaceFighter;
+			cEarthSpaceFighter *Fighter = nullptr;
+			Fighter = new cEarthSpaceFighter;
 			if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
 				Fighter->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 			else {
@@ -630,8 +630,8 @@ void ScriptEngine::UpdateTimeLine()
 			while (TLEarthFighter) {
 				if (!strcmp(TLEarthFighter->Name, "TimeSheet")) {
 					// собираем новый элемент
-					CTimeSheet *TimeSheet;
-					TimeSheet = new CTimeSheet;
+					sTimeSheet *TimeSheet;
+					TimeSheet = new sTimeSheet;
 					Fighter->AttachTimeSheet(TimeSheet);
 
 					if (xmlDoc->GetEntryAttribute(TLEarthFighter, "aimode") != nullptr) {
@@ -654,8 +654,8 @@ void ScriptEngine::UpdateTimeLine()
 						TimeSheet->AccelerByCamLR = 1.0f;//0-1
 						TimeSheet->SpeedByCamUD = 0.0f;
 						TimeSheet->AccelerByCamUD = 1.0f;//0-1
-						TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
-						TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
+						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 						TimeSheet->Fire = false;
 						TimeSheet->BossFire = false;
 						TimeSheet->Targeting = false;
@@ -723,7 +723,7 @@ void ScriptEngine::UpdateTimeLine()
 						vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
 
-						TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
+						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "rotx") != nullptr)
 							TimeSheet->Rotation.x = xmlDoc->fGetEntryAttribute(TLEarthFighter, "rotx");
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "roty") != nullptr)
@@ -731,7 +731,7 @@ void ScriptEngine::UpdateTimeLine()
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "rotz") != nullptr)
 							TimeSheet->Rotation.z = xmlDoc->fGetEntryAttribute(TLEarthFighter, "rotz");
 
-						TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "rotacx") != nullptr)
 							TimeSheet->RotationAcceler.x = xmlDoc->fGetEntryAttribute(TLEarthFighter, "rotacx");
 						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "rotacy") != nullptr)
@@ -758,7 +758,7 @@ void ScriptEngine::UpdateTimeLine()
 		} else
 			// AlienFighter
 			if (!strcmp(TL->Name, "AlienFighter")) {
-				CAlienSpaceFighter *Fighter = new CAlienSpaceFighter;
+				cAlienSpaceFighter *Fighter = new cAlienSpaceFighter;
 				if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
 					Fighter->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 				else {
@@ -805,8 +805,8 @@ void ScriptEngine::UpdateTimeLine()
 				while (TLAlienFighter) {
 					if (!strcmp(TLAlienFighter->Name, "TimeSheet")) {
 						// собираем новый элемент
-						CTimeSheet *TimeSheet;
-						TimeSheet = new CTimeSheet;
+						sTimeSheet *TimeSheet;
+						TimeSheet = new sTimeSheet;
 						Fighter->AttachTimeSheet(TimeSheet);
 
 						if (xmlDoc->GetEntryAttribute(TLAlienFighter, "aimode") != nullptr) {
@@ -828,8 +828,8 @@ void ScriptEngine::UpdateTimeLine()
 							TimeSheet->AccelerByCamLR = 1.0f;//0-1
 							TimeSheet->SpeedByCamUD = 0.0f;
 							TimeSheet->AccelerByCamUD = 1.0f;//0-1
-							TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
-							TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+							TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
+							TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 							TimeSheet->Fire = false;
 							TimeSheet->BossFire = false;
 							TimeSheet->Targeting = false;
@@ -895,7 +895,7 @@ void ScriptEngine::UpdateTimeLine()
 								TimeSheet->AccelerByCamUD = xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerbycamud");
 							vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
-							TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
+							TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "rotx") != nullptr)
 								TimeSheet->Rotation.x = xmlDoc->fGetEntryAttribute(TLAlienFighter, "rotx");
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "roty") != nullptr)
@@ -903,7 +903,7 @@ void ScriptEngine::UpdateTimeLine()
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "rotz") != nullptr)
 								TimeSheet->Rotation.z = xmlDoc->fGetEntryAttribute(TLAlienFighter, "rotz");
 
-							TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+							TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "rotacx") != nullptr)
 								TimeSheet->RotationAcceler.x = xmlDoc->fGetEntryAttribute(TLAlienFighter, "rotacx");
 							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "rotacy") != nullptr)
@@ -931,7 +931,7 @@ void ScriptEngine::UpdateTimeLine()
 			} else
 				// AlienMotherShip
 				if (!strcmp(TL->Name, "AlienMotherShip")) {
-					CAlienSpaceMotherShip *Fighter = new CAlienSpaceMotherShip;
+					cAlienSpaceMotherShip *Fighter = new cAlienSpaceMotherShip;
 					if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
 						Fighter->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 					else {
@@ -978,8 +978,8 @@ void ScriptEngine::UpdateTimeLine()
 					while (TLAlienMotherShip) {
 						if (!strcmp(TLAlienMotherShip->Name, "TimeSheet")) {
 							// собираем новый элемент
-							CTimeSheet *TimeSheet;
-							TimeSheet = new CTimeSheet;
+							sTimeSheet *TimeSheet;
+							TimeSheet = new sTimeSheet;
 							Fighter->AttachTimeSheet(TimeSheet);
 
 							if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "aimode") != nullptr) {
@@ -1001,8 +1001,8 @@ void ScriptEngine::UpdateTimeLine()
 								TimeSheet->AccelerByCamLR = 1.0f;//0-1
 								TimeSheet->SpeedByCamUD = 0.0f;
 								TimeSheet->AccelerByCamUD = 1.0f;//0-1
-								TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
-								TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+								TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
+								TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 								TimeSheet->Fire = false;
 								TimeSheet->BossFire = false;
 								TimeSheet->Targeting = false;
@@ -1068,7 +1068,7 @@ void ScriptEngine::UpdateTimeLine()
 									TimeSheet->AccelerByCamUD = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerbycamud");
 								vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
-								TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
+								TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "rotx") != nullptr)
 									TimeSheet->Rotation.x = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "rotx");
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "roty") != nullptr)
@@ -1076,7 +1076,7 @@ void ScriptEngine::UpdateTimeLine()
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "rotz") != nullptr)
 									TimeSheet->Rotation.z = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "rotz");
 
-								TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+								TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "rotacx") != nullptr)
 									TimeSheet->RotationAcceler.x = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "rotacx");
 								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "rotacy") != nullptr)
@@ -1107,7 +1107,7 @@ void ScriptEngine::UpdateTimeLine()
 				} else
 					// PirateShip
 					if (!strcmp(TL->Name, "PirateShip")) {
-						CPirateShip *Fighter = new CPirateShip;
+						cPirateShip *Fighter = new cPirateShip;
 						if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
 							Fighter->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 						else {
@@ -1154,8 +1154,8 @@ void ScriptEngine::UpdateTimeLine()
 						while (TLPirateShip) {
 							if (!strcmp(TLPirateShip->Name, "TimeSheet")) {
 								// собираем новый элемент
-								CTimeSheet *TimeSheet;
-								TimeSheet = new CTimeSheet;
+								sTimeSheet *TimeSheet;
+								TimeSheet = new sTimeSheet;
 								Fighter->AttachTimeSheet(TimeSheet);
 
 								if (xmlDoc->GetEntryAttribute(TLPirateShip, "aimode") != nullptr) {
@@ -1177,8 +1177,8 @@ void ScriptEngine::UpdateTimeLine()
 									TimeSheet->AccelerByCamLR = 1.0f;//0-1
 									TimeSheet->SpeedByCamUD = 0.0f;
 									TimeSheet->AccelerByCamUD = 1.0f;//0-1
-									TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
-									TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+									TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
+									TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 									TimeSheet->Fire = false;
 									TimeSheet->BossFire = false;
 									TimeSheet->Targeting = false;
@@ -1244,7 +1244,7 @@ void ScriptEngine::UpdateTimeLine()
 										TimeSheet->AccelerByCamUD = xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerbycamud");
 									vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
-									TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
+									TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "rotx") != nullptr)
 										TimeSheet->Rotation.x = xmlDoc->fGetEntryAttribute(TLPirateShip, "rotx");
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "roty") != nullptr)
@@ -1252,7 +1252,7 @@ void ScriptEngine::UpdateTimeLine()
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "rotz") != nullptr)
 										TimeSheet->Rotation.z = xmlDoc->fGetEntryAttribute(TLPirateShip, "rotz");
 
-									TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+									TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "rotacx") != nullptr)
 										TimeSheet->RotationAcceler.x = xmlDoc->fGetEntryAttribute(TLPirateShip, "rotacx");
 									if (xmlDoc->GetEntryAttribute(TLPirateShip, "rotacy") != nullptr)
@@ -1284,7 +1284,7 @@ void ScriptEngine::UpdateTimeLine()
 					} else
 						// CreateAsteroid
 						if (!strcmp(TL->Name, "CreateAsteroid")) {
-							CAsteroid *Asteroid = new CAsteroid;
+							cAsteroid *Asteroid = new cAsteroid;
 
 							// тип сейчас не задействован, всегда ставим 1
 							Asteroid->Create(1);
@@ -1307,7 +1307,7 @@ void ScriptEngine::UpdateTimeLine()
 						} else
 							// CreateBasePart
 							if (!strcmp(TL->Name, "CreateBasePart")) {
-								CBasePart *BasePart = new CBasePart;
+								cBasePart *BasePart = new cBasePart;
 
 								// тип части
 								if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
@@ -1329,7 +1329,7 @@ void ScriptEngine::UpdateTimeLine()
 							} else
 								// CreateBigAsteroid
 								if (!strcmp(TL->Name, "CreateBigAsteroid")) {
-									CBigAsteroid *BigAsteroid = new CBigAsteroid;
+									cBigAsteroid *BigAsteroid = new cBigAsteroid;
 
 									// тип части
 									if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
@@ -1351,7 +1351,7 @@ void ScriptEngine::UpdateTimeLine()
 								} else
 									// CreateMBuilding
 									if (!strcmp(TL->Name, "CreateMBuilding")) {
-										CMilitaryBuilding *GroundObject = new CMilitaryBuilding;
+										cMilitaryBuilding *GroundObject = new cMilitaryBuilding;
 
 										// тип части
 										if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
@@ -1374,8 +1374,8 @@ void ScriptEngine::UpdateTimeLine()
 										while (TLGroundObject) {
 											if (!strcmp(TLGroundObject->Name, "TimeSheet")) {
 												// собираем новый элемент
-												CTimeSheet *TimeSheet;
-												TimeSheet = new CTimeSheet;
+												sTimeSheet *TimeSheet;
+												TimeSheet = new sTimeSheet;
 												GroundObject->AttachTimeSheet(TimeSheet);
 
 												if (xmlDoc->GetEntryAttribute(TLGroundObject, "aimode") != nullptr) {
@@ -1397,8 +1397,8 @@ void ScriptEngine::UpdateTimeLine()
 													TimeSheet->AccelerByCamLR = 1.0f;//0-1
 													TimeSheet->SpeedByCamUD = 0.0f;
 													TimeSheet->AccelerByCamUD = 1.0f;//0-1
-													TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
-													TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+													TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
+													TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 													TimeSheet->Fire = false;
 													TimeSheet->BossFire = false;
 													TimeSheet->Targeting = false;
@@ -1422,8 +1422,8 @@ void ScriptEngine::UpdateTimeLine()
 													TimeSheet->AccelerByCamLR = 1.0f;//0-1
 													TimeSheet->SpeedByCamUD = 0.0f;
 													TimeSheet->AccelerByCamUD = 1.0f;//0-1
-													TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
-													TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+													TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
+													TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 
 													TimeSheet->Fire = false;
 													if (xmlDoc->GetEntryAttribute(TLGroundObject, "fire") != nullptr)
@@ -1445,7 +1445,7 @@ void ScriptEngine::UpdateTimeLine()
 									} else
 										// CreateBuilding
 										if (!strcmp(TL->Name, "CreateBuilding")) {
-											CBuilding *GroundObject = new CBuilding;
+											cBuilding *GroundObject = new cBuilding;
 											if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
 												GroundObject->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 											else {
@@ -1462,7 +1462,7 @@ void ScriptEngine::UpdateTimeLine()
 										} else
 											// CreateMine
 											if (!strcmp(TL->Name, "CreateMine")) {
-												CProjectile *Mine = new CProjectile;
+												cProjectile *Mine = new cProjectile;
 												// т.к. мины у нас с 214-217, делаем +213
 												if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr) {
 													int MineType = xmlDoc->iGetEntryAttribute(TL, "type")+213;
@@ -1500,7 +1500,7 @@ void ScriptEngine::UpdateTimeLine()
 											} else
 												// CreateTracked
 												if (!strcmp(TL->Name, "CreateTracked")) {
-													CTracked *GroundObject = new CTracked;
+													cTracked *GroundObject = new cTracked;
 													if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
 														GroundObject->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 													else {
@@ -1525,8 +1525,8 @@ void ScriptEngine::UpdateTimeLine()
 													while (TLGroundObject) {
 														if (!strcmp(TLGroundObject->Name, "TimeSheet")) {
 															// собираем новый элемент
-															CTimeSheet *TimeSheet;
-															TimeSheet = new CTimeSheet;
+															sTimeSheet *TimeSheet;
+															TimeSheet = new sTimeSheet;
 															GroundObject->AttachTimeSheet(TimeSheet);
 
 															if (xmlDoc->GetEntryAttribute(TLGroundObject, "aimode") != nullptr) {
@@ -1548,8 +1548,8 @@ void ScriptEngine::UpdateTimeLine()
 																TimeSheet->AccelerByCamLR = 1.0f;//0-1
 																TimeSheet->SpeedByCamUD = 0.0f;
 																TimeSheet->AccelerByCamUD = 1.0f;//0-1
-																TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
-																TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+																TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
+																TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 																TimeSheet->Fire = false;
 																TimeSheet->BossFire = false;
 																TimeSheet->Targeting = false;
@@ -1581,7 +1581,7 @@ void ScriptEngine::UpdateTimeLine()
 																TimeSheet->SpeedByCamUD = 0.0f;
 																TimeSheet->AccelerByCamUD = 1.0f;//0-1
 
-																TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
+																TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
 																if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotx") != nullptr)
 																	TimeSheet->Rotation.x = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotx");
 																if (xmlDoc->GetEntryAttribute(TLGroundObject, "roty") != nullptr)
@@ -1589,7 +1589,7 @@ void ScriptEngine::UpdateTimeLine()
 																if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotz") != nullptr)
 																	TimeSheet->Rotation.z = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotz");
 
-																TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+																TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 																if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotacx") != nullptr)
 																	TimeSheet->RotationAcceler.x = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacx");
 																if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotacy") != nullptr)
@@ -1621,7 +1621,7 @@ void ScriptEngine::UpdateTimeLine()
 												} else
 													// CreateWheeled
 													if (!strcmp(TL->Name, "CreateWheeled")) {
-														CWheeled *GroundObject = new CWheeled;
+														cWheeled *GroundObject = new cWheeled;
 														if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
 															GroundObject->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 														else {
@@ -1646,8 +1646,8 @@ void ScriptEngine::UpdateTimeLine()
 														while (TLGroundObject) {
 															if (!strcmp(TLGroundObject->Name, "TimeSheet")) {
 																// собираем новый элемент
-																CTimeSheet *TimeSheet;
-																TimeSheet = new CTimeSheet;
+																sTimeSheet *TimeSheet;
+																TimeSheet = new sTimeSheet;
 																GroundObject->AttachTimeSheet(TimeSheet);
 
 																if (xmlDoc->GetEntryAttribute(TLGroundObject, "aimode") != nullptr) {
@@ -1669,8 +1669,8 @@ void ScriptEngine::UpdateTimeLine()
 																	TimeSheet->AccelerByCamLR = 1.0f;//0-1
 																	TimeSheet->SpeedByCamUD = 0.0f;
 																	TimeSheet->AccelerByCamUD = 1.0f;//0-1
-																	TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
-																	TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+																	TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
+																	TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 																	TimeSheet->Fire = false;
 																	TimeSheet->BossFire = false;
 																	TimeSheet->Targeting = false;
@@ -1703,7 +1703,7 @@ void ScriptEngine::UpdateTimeLine()
 																	TimeSheet->SpeedByCamUD = 0.0f;
 																	TimeSheet->AccelerByCamUD = 1.0f;//0-1
 
-																	TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
+																	TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
 																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotx") != nullptr)
 																		TimeSheet->Rotation.x = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotx");
 																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "roty") != nullptr)
@@ -1711,7 +1711,7 @@ void ScriptEngine::UpdateTimeLine()
 																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotz") != nullptr)
 																		TimeSheet->Rotation.z = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotz");
 
-																	TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+																	TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotacx") != nullptr)
 																		TimeSheet->RotationAcceler.x = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacx");
 																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotacy") != nullptr)

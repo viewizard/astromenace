@@ -32,20 +32,20 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс eLight
+// Класс sLight
 //-----------------------------------------------------------------------------
-struct eLight {
+struct sLight {
 
 	// конструктор и деструктор
-	eLight();
-	~eLight();
+	sLight();
+	~sLight();
 
 	// установка источника света
 	bool		Activate(int CurrentLightNum, float Matrix[16]);
 	// выключить этот источник света
 	void		DeActivate();
 	// перенос источника (если это не направленный) в нужное место
-	void		SetLocation(VECTOR3D NewLocation);
+	void		SetLocation(sVECTOR3D NewLocation);
 
 	// все характеристики источника света
 
@@ -69,10 +69,10 @@ struct eLight {
 	float		tmpAttenuation{-1.0f};
 
 	// направление
-	VECTOR3D	Direction{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Direction{0.0f, 0.0f, 0.0f};
 
 	// положение в мировых координатах, если нужно (не направленный свет)
-	VECTOR3D	Location{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Location{0.0f, 0.0f, 0.0f};
 
 	// включен-выключен источник света
 	bool		On{true};
@@ -82,24 +82,24 @@ struct eLight {
 	int		RealLightNum{-1};
 
 	// указатели на цепь источников света
-	eLight *Next{nullptr};
-	eLight *Prev{nullptr};
+	sLight *Next{nullptr};
+	sLight *Prev{nullptr};
 };
 
 
 
 //-----------------------------------------------------------------------------
-// Менеджер eLight
+// Менеджер sLight
 //-----------------------------------------------------------------------------
 
 // Включаем в список
-void	vw_AttachLight(eLight * NewLight);
+void	vw_AttachLight(sLight * NewLight);
 // Исключаем из списка
-void	vw_DetachLight(eLight * OldLight);
+void	vw_DetachLight(sLight * OldLight);
 // включаем нужные источники света + освещение
-int	vw_CheckAndActivateAllLights(int *Type1, int *Type2, VECTOR3D Location, float Radius2, int DirLimit, int PointLimit, float Matrix[16]);
+int	vw_CheckAndActivateAllLights(int *Type1, int *Type2, sVECTOR3D Location, float Radius2, int DirLimit, int PointLimit, float Matrix[16]);
 // находим кол-во точечных источников
-int	vw_CheckAllPointLights(VECTOR3D Location, float Radius2);
+int	vw_CheckAllPointLights(sVECTOR3D Location, float Radius2);
 // включаем источники и освещение
 void	vw_DeActivateAllLights();
 // Удаляем все источники в списке
@@ -107,13 +107,13 @@ void	vw_ReleaseAllLights();
 
 
 // Создаем точечный источник света
-eLight 	*vw_CreatPointLight(VECTOR3D Location, float R, float G, float B, float Linear, float Quadratic);
+sLight 	*vw_CreatPointLight(sVECTOR3D Location, float R, float G, float B, float Linear, float Quadratic);
 // Удаляем источник света
-void 	vw_ReleaseLight(eLight *Light);
+void 	vw_ReleaseLight(sLight *Light);
 
 
 // находим первый (основной) источник направленного света
-eLight 	*vw_GetMainDirectLight();
+sLight 	*vw_GetMainDirectLight();
 
 
 #endif // LIGHT_H

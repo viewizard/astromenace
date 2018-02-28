@@ -34,13 +34,13 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CPirateShip
+// Класс cPirateShip
 //-----------------------------------------------------------------------------
-class CPirateShip : public CSpaceShip
+class cPirateShip : public cSpaceShip
 {
 public:
 
-	virtual ~CPirateShip() {};
+	virtual ~cPirateShip() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int	PirateShipNum);
@@ -51,11 +51,11 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Дополнительные функции для CPirateShip
+// Дополнительные функции для cPirateShip
 //-----------------------------------------------------------------------------
 
 // Создание двигателя
-void SetPirateShipEngine(eParticleSystem *ParticleSystem, int EngineType);
+void SetPirateShipEngine(cParticleSystem *ParticleSystem, int EngineType);
 
 
 

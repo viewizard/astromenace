@@ -52,7 +52,7 @@
 // Create alpha channel by less Alpha color
 #define TX_ALPHA_LESS		0x0026
 
-struct eTexture {
+struct sTexture {
 	char*	Name;			// File name
 
 	uint8_t	ARed;			// Alpha channel red color
@@ -68,19 +68,19 @@ struct eTexture {
 
 	GLuint	TextureID;		// Номер текстуры
 
-	eTexture*	Prev;		// Pointer to the previous loaded Texture in the memory
-	eTexture*	Next;		// Pointer to the next loaded Texture in the memory
+	sTexture	*Prev;		// Pointer to the previous loaded Texture in the memory
+	sTexture	*Next;		// Pointer to the next loaded Texture in the memory
 	int			Num;		// ID number
 };
 
 
-// eTexture functions
+// sTexture functions
 // Load texture from file
-eTexture*	vw_LoadTexture(const char *TextureName, const char *RememberAsName, int CompressionType, int LoadAs=AUTO_FILE, int NeedResizeW=0, int NeedResizeH=0);
+sTexture *vw_LoadTexture(const char *TextureName, const char *RememberAsName, int CompressionType, int LoadAs=AUTO_FILE, int NeedResizeW=0, int NeedResizeH=0);
 // Create texture from memory
-eTexture*	vw_CreateTextureFromMemory(const char *TextureName, uint8_t *DIB, int DWidth, int DHeight, int DChanels, int CompressionType, int NeedResizeW=0, int NeedResizeH=0, bool NeedDuplicateCheck=true);
+sTexture *vw_CreateTextureFromMemory(const char *TextureName, uint8_t *DIB, int DWidth, int DHeight, int DChanels, int CompressionType, int NeedResizeW=0, int NeedResizeH=0, bool NeedDuplicateCheck=true);
 // Release texture
-void		vw_ReleaseTexture(eTexture* Texture);
+void vw_ReleaseTexture(sTexture* Texture);
 
 
 // Texture manager functions
@@ -93,9 +93,9 @@ void		vw_SetTextureProp(int nFiltering, int nAddress_Mode, bool nAlpha = false, 
 void		vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue);
 
 // Find texture by name
-eTexture*	vw_FindTextureByName(const char *Name);
+sTexture *vw_FindTextureByName(const char *Name);
 // Find texture by ID
-eTexture*	vw_FindTextureByNum(int Num);
+sTexture *vw_FindTextureByNum(int Num);
 
 
 // Convert supported image file to VW2D format

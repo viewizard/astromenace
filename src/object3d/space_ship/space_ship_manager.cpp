@@ -31,8 +31,8 @@
 
 
 // Указатели на начальный и конечный объект в списке
-CSpaceShip *StartSpaceShip = nullptr;
-CSpaceShip *EndSpaceShip = nullptr;
+cSpaceShip *StartSpaceShip = nullptr;
+cSpaceShip *EndSpaceShip = nullptr;
 
 
 
@@ -41,7 +41,7 @@ CSpaceShip *EndSpaceShip = nullptr;
 //-----------------------------------------------------------------------------
 // Включаем в список
 //-----------------------------------------------------------------------------
-void AttachSpaceShip(CSpaceShip* SpaceShip)
+void AttachSpaceShip(cSpaceShip* SpaceShip)
 {
 	if (SpaceShip == nullptr)
 		return;
@@ -67,7 +67,7 @@ void AttachSpaceShip(CSpaceShip* SpaceShip)
 //-----------------------------------------------------------------------------
 // Исключаем из списка
 //-----------------------------------------------------------------------------
-void DetachSpaceShip(CSpaceShip* SpaceShip)
+void DetachSpaceShip(cSpaceShip* SpaceShip)
 {
 	if (SpaceShip == nullptr)
 		return;
@@ -98,11 +98,11 @@ void DetachSpaceShip(CSpaceShip* SpaceShip)
 //-----------------------------------------------------------------------------
 // Находим нужный объекты по ID
 //-----------------------------------------------------------------------------
-CSpaceShip *FindSpaceShipByID(int ID)
+cSpaceShip *FindSpaceShipByID(int ID)
 {
-	CSpaceShip *tmp = StartSpaceShip;
+	cSpaceShip *tmp = StartSpaceShip;
 	while (tmp != nullptr) {
-		CSpaceShip *tmp2 = tmp->Next;
+		cSpaceShip *tmp2 = tmp->Next;
 		if (tmp->ID == ID) return tmp;
 		tmp = tmp2;
 	}
@@ -119,9 +119,9 @@ CSpaceShip *FindSpaceShipByID(int ID)
 //-----------------------------------------------------------------------------
 void UpdateAllSpaceShip(float Time)
 {
-	CSpaceShip *tmp = StartSpaceShip;
+	cSpaceShip *tmp = StartSpaceShip;
 	while (tmp != nullptr) {
-		CSpaceShip *tmp2 = tmp->Next;
+		cSpaceShip *tmp2 = tmp->Next;
 		// делаем обновление данных по объекту
 		if (!tmp->Update(Time))
 			// если его нужно уничтожить - делаем это
@@ -139,9 +139,9 @@ void UpdateAllSpaceShip(float Time)
 void DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap, int DrawOnlyType)
 {
 
-	CSpaceShip *tmp = StartSpaceShip;
+	cSpaceShip *tmp = StartSpaceShip;
 	while (tmp != nullptr) {
-		CSpaceShip *tmp2 = tmp->Next;
+		cSpaceShip *tmp2 = tmp->Next;
 
 		if (DrawOnlyType != -1) {
 			// если нужно прорисовать только определенный тип
@@ -164,9 +164,9 @@ void DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap, int DrawOnlyT
 //-----------------------------------------------------------------------------
 void ReleaseAllSpaceShip()
 {
-	CSpaceShip *tmp = StartSpaceShip;
+	cSpaceShip *tmp = StartSpaceShip;
 	while (tmp != nullptr) {
-		CSpaceShip *tmp2 = tmp->Next;
+		cSpaceShip *tmp2 = tmp->Next;
 		delete tmp;
 		tmp = tmp2;
 	}

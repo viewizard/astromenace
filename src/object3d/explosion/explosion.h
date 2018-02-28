@@ -37,11 +37,11 @@
 
 
 //-----------------------------------------------------------------------------
-// Структура CExplosionPiece
+// Структура sExplosionPiece
 //-----------------------------------------------------------------------------
-struct CExplosionPiece {
+struct sExplosionPiece {
 	// вектор направления движения частицы (скорости включены)
-	VECTOR3D	Velocity;
+	sVECTOR3D	Velocity;
 	// оставшееся время жизни частицы
 	float		Life;
 };
@@ -54,14 +54,14 @@ struct CExplosionPiece {
 
 
 //-----------------------------------------------------------------------------
-// Класс CExplosion
+// Класс cExplosion
 //-----------------------------------------------------------------------------
-class CExplosion : public CObject3D
+class cExplosion : public cObject3D
 {
 public:
 	// базовые конструктор и деструктор объекта
-	CExplosion();
-	virtual ~CExplosion();
+	cExplosion();
+	virtual ~cExplosion();
 
 	// Обновление данных объектa
 	virtual bool	Update(float Time);
@@ -70,11 +70,11 @@ public:
 	int		ExplosionTypeByClass{0};
 
 	// набор управления частицами
-	CExplosionPiece	*ExplosionPieceData{nullptr};
+	sExplosionPiece	*ExplosionPieceData{nullptr};
 
 	float	ExplosionGeometryMoveLastTime{-1}; // последнее время изменения геометрии, нет смысла постоянно менять геометрию, делаем это 30 раз в секунду только
 
-	VECTOR3D	VelocityOrientation{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	VelocityOrientation{0.0f, 0.0f, 0.0f};
 	float		OldSpeed{0.0f};
 	bool		NeedStop{true};
 
@@ -83,11 +83,11 @@ public:
 
 	// для прорисовки графических эффектов
 	int			GraphicFXQuantity{0};
-	eParticleSystem		**GraphicFX{nullptr};
+	cParticleSystem		**GraphicFX{nullptr};
 
 	// для собственного списка
-	CExplosion	*Next{nullptr};
-	CExplosion	*Prev{nullptr};
+	cExplosion	*Next{nullptr};
+	cExplosion	*Prev{nullptr};
 };
 
 
@@ -103,9 +103,9 @@ public:
 //-----------------------------------------------------------------------------
 
 // Включаем в список
-void	AttachExplosion(CExplosion* Explosion);
+void	AttachExplosion(cExplosion* Explosion);
 // Исключаем из списка
-void	DetachExplosion(CExplosion* Explosion);
+void	DetachExplosion(cExplosion* Explosion);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllExplosion(float Time);
 // Прорисовываем все объекты
@@ -119,7 +119,7 @@ void	ReleaseAllExplosion();
 //-----------------------------------------------------------------------------
 // Дополнительные функции
 //-----------------------------------------------------------------------------
-void SetExplosionGFX(eParticleSystem *ParticleSystem, int GFXNum);
+void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum);
 
 
 

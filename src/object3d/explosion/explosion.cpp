@@ -33,7 +33,7 @@
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-CExplosion::CExplosion(void)
+cExplosion::cExplosion(void)
 {
 
 	// ставим тот, что нужно... т.е. того кого взорвали
@@ -55,7 +55,7 @@ CExplosion::CExplosion(void)
 //-----------------------------------------------------------------------------
 // Деструктор
 //-----------------------------------------------------------------------------
-CExplosion::~CExplosion(void)
+cExplosion::~cExplosion(void)
 {
 	if (ExplosionPieceData != nullptr) {
 		delete [] ExplosionPieceData;
@@ -86,11 +86,11 @@ CExplosion::~CExplosion(void)
 //-----------------------------------------------------------------------------
 // Обновление данных объектa
 //-----------------------------------------------------------------------------
-bool CExplosion::Update(float Time)
+bool cExplosion::Update(float Time)
 {
 	// вызываем родительскую функцию
 	// если там передали удалить - выходим
-	if (!::CObject3D::Update(Time)) {
+	if (!::cObject3D::Update(Time)) {
 		// делаем правильную остановку частиц...
 		if (GraphicFX != nullptr) {
 			for (int i=0; i<GraphicFXQuantity; i++) {
@@ -179,7 +179,7 @@ bool CExplosion::Update(float Time)
 
 			// расчет физики для каждой частицы
 			if (DrawObjectList != nullptr) {
-				VECTOR3D TMP;
+				sVECTOR3D TMP;
 				int Count = 0;
 
 				for (int j = 0; j < DrawObjectQuantity; j++) {
@@ -310,14 +310,14 @@ bool CExplosion::Update(float Time)
 		float MinZ = AABB[6].z - AABBSpeedTmp;
 		float MaxZ = AABB[0].z + AABBSpeedTmp;
 
-		AABB[0] = VECTOR3D(MaxX, MaxY, MaxZ);
-		AABB[1] = VECTOR3D(MinX, MaxY, MaxZ);
-		AABB[2] = VECTOR3D(MinX, MaxY, MinZ);
-		AABB[3] = VECTOR3D(MaxX, MaxY, MinZ);
-		AABB[4] = VECTOR3D(MaxX, MinY, MaxZ);
-		AABB[5] = VECTOR3D(MinX, MinY, MaxZ);
-		AABB[6] = VECTOR3D(MinX, MinY, MinZ);
-		AABB[7] = VECTOR3D(MaxX, MinY, MinZ);
+		AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+		AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+		AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
+		AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+		AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+		AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
+		AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
+		AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
 	}
 
 
@@ -327,14 +327,14 @@ bool CExplosion::Update(float Time)
 
 
 
-	VECTOR3D TMP2 = VelocityOrientation^(OldSpeed*TimeDelta);
+	sVECTOR3D TMP2 = VelocityOrientation^(OldSpeed*TimeDelta);
 
 
 	// перемещаем эффекты
 	if (GraphicFX != nullptr) {
 		for (int i = 0; i < GraphicFXQuantity; i++) {
 			if (GraphicFX[i] != nullptr) {
-				VECTOR3D Loc;
+				sVECTOR3D Loc;
 				GraphicFX[i]->GetLocation(&Loc);
 
 				// взрыв пришельцев

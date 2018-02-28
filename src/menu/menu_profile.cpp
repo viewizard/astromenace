@@ -289,7 +289,7 @@ void ProfileInputText()
 
 	// находим положения ввода
 	int Size = vw_FontSize(NewProfileName);
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 	SetRect(&SrcRect,0,0,2,2);
 	SetRect(&DstRect,X1+Size+2,Y1-2,X1+26+Size,Y1+24);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"),
@@ -324,7 +324,7 @@ void ProfileInputText()
 void ProfileMenu()
 {
 
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 	SetRect(&SrcRect,2,2,863-2,484-2);
 	SetRect(&DstRect,Setup.iAspectRatioWidth/2-427,175-15,Setup.iAspectRatioWidth/2-427+863-4,175-15+484-4);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);

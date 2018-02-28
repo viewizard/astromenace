@@ -33,13 +33,13 @@
  On VFS file open, VFS entries list generated with all available in this VFS
  files data. Could be opened multiple VFS files, in this case VFS entries list
  will contain all available in all opened VFS files data.
- On eFILE open, all requested data will be copied into memory buffer (eFILE->Data).
- Opened eFILE is not connected to VFS file or VFS entries list in any way.
+ On sFILE open, all requested data will be copied into memory buffer (sFILE->Data).
+ Opened sFILE is not connected to VFS file or VFS entries list in any way.
 
- Caller should hold eFILE open as long, as it need memory buffer (eFILE->Data).
- In order to code simplicity, read and write direct access to eFILE data allowed.
- Caller could reset() memory buffer with different size (eFILE->Data), but should
- care about eFILE->Size and eFILE->Pos field (access by fseek()).
+ Caller should hold sFILE open as long, as it need memory buffer (sFILE->Data).
+ In order to code simplicity, read and write direct access to sFILE data allowed.
+ Caller could reset() memory buffer with different size (sFILE->Data), but should
+ care about sFILE->Size and sFILE->Pos field (access by fseek()).
 
  Game data VFS v1.6 structure.
 
@@ -61,20 +61,20 @@
 #include "vfs.h"
 #include <limits> // need this one for UINT16_MAX only
 
-enum file_location {
+enum eFileLocation {
 	FILE_NOT_FOUND	= -1,
 	FILE_IN_VFS	=  1,	// File present in the VFS.
 	FILE_IN_FS	=  2	// File present in the File System.
 };
 
-struct eVFS {
+struct sVFS {
 	std::string FileName;
 	SDL_RWops *File{nullptr};
 
-	eVFS(const std::string &_FileName) :
+	sVFS(const std::string &_FileName) :
 		FileName{_FileName}
 	{}
-	~eVFS()
+	~sVFS()
 	{
 		// not sure, if libSDL close SDL_RWops on "out of scope"
 		if (File != nullptr)
@@ -82,30 +82,30 @@ struct eVFS {
 	}
 };
 
-struct eVFS_Entry {
+struct sVFS_Entry {
 	uint32_t Offset{0};
 	uint32_t Size{0};
-	eVFS *Parent{nullptr};
+	sVFS *Parent{nullptr};
 
-	eVFS_Entry(eVFS *_Parent) :
+	sVFS_Entry(sVFS *_Parent) :
 		Parent{_Parent}
 	{}
 };
 
 namespace {
 // List with connected VFS.
-std::forward_list<std::unique_ptr<eVFS>> VFS_List;
+std::forward_list<std::unique_ptr<sVFS>> VFS_List;
 // Map with file's entries in VFS.
-std::unordered_map<std::string, std::unique_ptr<eVFS_Entry>> VFSEntries_Map;
+std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> VFSEntries_Map;
 }
 
 
 /*
  * Write data from memory into VFS file.
  */
-static int WriteIntoVFSfromMemory(eVFS *WritableVFS, const std::string &Name, const std::unique_ptr<uint8_t[]> &Data,
+static int WriteIntoVFSfromMemory(sVFS *WritableVFS, const std::string &Name, const std::unique_ptr<uint8_t[]> &Data,
 				  uint32_t DataSize, uint32_t *HeaderLengthVFS, uint32_t *HeaderOffsetVFS, uint32_t *DataStartOffsetVFS,
-				  std::unordered_map<std::string, std::unique_ptr<eVFS_Entry>> &WritableVFSEntries_Map)
+				  std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> &WritableVFSEntries_Map)
 {
 	if ((WritableVFS == nullptr) || Name.empty() || (Data.get() == nullptr) ||
 	    (DataSize <= 0) || (HeaderLengthVFS == nullptr) ||
@@ -114,7 +114,7 @@ static int WriteIntoVFSfromMemory(eVFS *WritableVFS, const std::string &Name, co
 		return ERR_PARAMETERS;
 
 	// push VFS entry to map
-	WritableVFSEntries_Map[Name] = std::unique_ptr<eVFS_Entry>(new eVFS_Entry(WritableVFS));
+	WritableVFSEntries_Map[Name] = std::unique_ptr<sVFS_Entry>(new sVFS_Entry(WritableVFS));
 	auto tmpVFSEntry = WritableVFSEntries_Map[Name].get();
 
 	// add new data to VFS file, in this case we could use
@@ -151,9 +151,9 @@ static int WriteIntoVFSfromMemory(eVFS *WritableVFS, const std::string &Name, co
 /*
  * Write data from file into VFS file.
  */
-static int WriteIntoVFSfromFile(eVFS *WritableVFS, const std::string &SrcName, const std::string &DstName,
+static int WriteIntoVFSfromFile(sVFS *WritableVFS, const std::string &SrcName, const std::string &DstName,
 				uint32_t *HeaderLengthVFS, uint32_t *HeaderOffsetVFS, uint32_t *DataStartOffsetVFS,
-				std::unordered_map<std::string, std::unique_ptr<eVFS_Entry>> &WritableVFSEntries_Map)
+				std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> &WritableVFSEntries_Map)
 {
 	if ((WritableVFS == nullptr) || SrcName.empty() || DstName.empty() ||
 	    (HeaderLengthVFS == nullptr) || (HeaderOffsetVFS == nullptr) ||
@@ -197,7 +197,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 	if (Name.empty())
 		return ERR_PARAMETERS;
 
-	std::unique_ptr<eVFS> TempVFS(new eVFS(Name));
+	std::unique_ptr<sVFS> TempVFS(new sVFS(Name));
 
 	TempVFS->File = SDL_RWFromFile(Name.c_str(), "wb");
 	if (TempVFS->File == nullptr) {
@@ -219,7 +219,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 	SDL_RWwrite(TempVFS->File, &HeaderLengthVFS, 4, 1);
 
 	// we need separate VFS entries map
-	std::unordered_map<std::string, std::unique_ptr<eVFS_Entry>> WritableVFSEntries_Map;
+	std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> WritableVFSEntries_Map;
 
 	// add model pack files into VFS
 	if (!ModelsPack.empty()) {
@@ -237,7 +237,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 
 		// copy all files from pack into new VFS
 		for (const auto &TmpVFSEntry : VFSEntries_Map) {
-			std::unique_ptr<eFILE> tmpFile = vw_fopen(TmpVFSEntry.first);
+			std::unique_ptr<sFILE> tmpFile = vw_fopen(TmpVFSEntry.first);
 			if (tmpFile == nullptr)
 				return ERR_FILE_NOT_FOUND;
 			rc = WriteIntoVFSfromMemory(TempVFS.get(), TmpVFSEntry.first, tmpFile->Data, tmpFile->Size,
@@ -287,7 +287,7 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 
 	// since we can't move unique_ptr into std::forward_list with push_front(),
 	// forced to explicitly create the std::unique_ptr in the list
-	VFS_List.push_front(std::unique_ptr<eVFS>(new eVFS(Name)));
+	VFS_List.push_front(std::unique_ptr<sVFS>(new sVFS(Name)));
 
 	VFS_List.front()->File = SDL_RWFromFile(Name.c_str(), "rb");
 	if (VFS_List.front()->File == nullptr)
@@ -341,7 +341,7 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 		SDL_RWread(VFS_List.front()->File, &tmpName[0], tmpNameSize, 1);
 
 		// push VFS entry to map
-		VFSEntries_Map[tmpName] = std::unique_ptr<eVFS_Entry>(new eVFS_Entry(VFS_List.front().get()));
+		VFSEntries_Map[tmpName] = std::unique_ptr<sVFS_Entry>(new sVFS_Entry(VFS_List.front().get()));
 		auto tmpVFSEntry = VFSEntries_Map[tmpName].get();
 
 		SDL_RWread(VFS_List.front()->File, &(tmpVFSEntry->Offset), sizeof(tmpVFSEntry->Offset), 1);
@@ -369,7 +369,7 @@ void vw_ShutdownVFS()
 /*
  * Detect file location.
  */
-static file_location DetectFileLocation(const std::string &FileName)
+static eFileLocation DetectFileLocation(const std::string &FileName)
 {
 	if (FileName.empty())
 		return FILE_NOT_FOUND;
@@ -388,14 +388,14 @@ static file_location DetectFileLocation(const std::string &FileName)
 }
 
 /*
- * Open the eFILE.
+ * Open the sFILE.
  */
-std::unique_ptr<eFILE> vw_fopen(const std::string &FileName)
+std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
 {
 	if (FileName.empty())
 		return nullptr;
 
-	file_location Location = DetectFileLocation(FileName);
+	eFileLocation Location = DetectFileLocation(FileName);
 
 	if (Location == FILE_NOT_FOUND) {
 		fprintf(stderr, "Can't find the file %s\n", FileName.c_str());
@@ -403,7 +403,7 @@ std::unique_ptr<eFILE> vw_fopen(const std::string &FileName)
 	}
 
 	// initial memory allocation and setup
-	std::unique_ptr<eFILE> File(new eFILE(0, 0));
+	std::unique_ptr<sFILE> File(new sFILE(0, 0));
 
 	if (Location == FILE_IN_VFS) {
 		// find file in VFS by name
@@ -435,7 +435,7 @@ std::unique_ptr<eFILE> vw_fopen(const std::string &FileName)
  * You could call vw fclose() if you should release memory in particular
  * part of code. Otherwise, it will be deleted automatically (see. unique_ptr).
  */
-int vw_fclose(std::unique_ptr<eFILE> &stream)
+int vw_fclose(std::unique_ptr<sFILE> &stream)
 {
 	if (stream.get() == nullptr)
 		return ERR_PARAMETERS;
@@ -450,7 +450,7 @@ int vw_fclose(std::unique_ptr<eFILE> &stream)
  * Reads an array of count elements, each one with a size of size bytes,
  * from the stream and stores them in the block of memory specified by buffer.
  */
-int eFILE::fread(void *buffer, size_t size, size_t count)
+int sFILE::fread(void *buffer, size_t size, size_t count)
 {
 	int CopyCount{0};
 
@@ -464,7 +464,7 @@ int eFILE::fread(void *buffer, size_t size, size_t count)
 			Pos += size;
 			CopyCount++;
 		} else
-			break; // end of eFILE
+			break; // end of sFILE
 	}
 
 	return CopyCount;
@@ -473,7 +473,7 @@ int eFILE::fread(void *buffer, size_t size, size_t count)
 /*
  * Sets the position indicator associated with the stream to a new position.
  */
-int eFILE::fseek(long offset, int origin)
+int sFILE::fseek(long offset, int origin)
 {
 	switch (origin) {
 	case SEEK_CUR:
@@ -506,7 +506,7 @@ int eFILE::fseek(long offset, int origin)
 /*
  * Returns the current value of the position indicator of the stream.
  */
-long eFILE::ftell()
+long sFILE::ftell()
 {
 	return Pos;
 }

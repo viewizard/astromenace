@@ -31,7 +31,7 @@
 extern float CurrentAlert2;
 extern float CurrentAlert3;
 
-extern CEarthSpaceFighter *PlayerFighter;
+extern cEarthSpaceFighter *PlayerFighter;
 int RightDrawLevelPos = 1;
 int LeftDrawLevelPos = 1;
 
@@ -44,7 +44,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 	if (PlayerFighter->Weapon[WeaponNum] == nullptr)
 		return;
 
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 	int Xpos = 0;
 	int Ypos = 150;
@@ -238,7 +238,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 	if (PlayerFighter->Weapon[WeaponNum] == nullptr)
 		return;
 
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 	int Xpos = Setup.iAspectRatioWidth-152;
 	int Ypos = 80;

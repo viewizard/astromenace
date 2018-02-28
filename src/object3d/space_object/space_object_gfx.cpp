@@ -35,11 +35,11 @@
 //-----------------------------------------------------------------------------
 // Создание эффектов для космических объектов (двигатели для базы)
 //-----------------------------------------------------------------------------
-void SetSpaceObjectGFX(eParticleSystem *ParticleSystem, int GFXType)
+void SetSpaceObjectGFX(cParticleSystem *ParticleSystem, int GFXType)
 {
 
 	ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-	ParticleSystem->Direction = VECTOR3D(0.0f, -1.0f, 0.0f);
+	ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
 
 	switch(GFXType) {
 	// двигатели на базе пиратов
@@ -62,10 +62,10 @@ void SetSpaceObjectGFX(eParticleSystem *ParticleSystem, int GFXType)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(0.8f,0.1f,0.8f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.8f,0.1f,0.8f);
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Direction = VECTOR3D(0.0f, -1.0f, 0.0f);
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.025f);
+		ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.025f);
 		break;
 	case 2:
 		ParticleSystem->ColorStart.r = 0.60f;
@@ -86,8 +86,8 @@ void SetSpaceObjectGFX(eParticleSystem *ParticleSystem, int GFXType)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Direction = VECTOR3D(0.0f, 1.0f, 0.0f);
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.3f);
+		ParticleSystem->Direction = sVECTOR3D(0.0f, 1.0f, 0.0f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.3f);
 		break;
 
 	default:

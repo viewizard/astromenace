@@ -30,15 +30,15 @@
 
 
 
-eLight * StartLight = nullptr;
-eLight * EndLight = nullptr;
+sLight * StartLight = nullptr;
+sLight * EndLight = nullptr;
 
 
 
 //-----------------------------------------------------------------------------
-//	Присоеденяем eLight к списку
+//	Присоеденяем sLight к списку
 //-----------------------------------------------------------------------------
-void vw_AttachLight(eLight * NewLight)
+void vw_AttachLight(sLight * NewLight)
 {
 	if (NewLight == nullptr)
 		return;
@@ -61,9 +61,9 @@ void vw_AttachLight(eLight * NewLight)
 
 
 //-----------------------------------------------------------------------------
-//	Удаляем eLight из списка
+//	Удаляем sLight из списка
 //-----------------------------------------------------------------------------
-void vw_DetachLight(eLight * OldLight)
+void vw_DetachLight(sLight * OldLight)
 {
 	if (OldLight == nullptr)
 		return;
@@ -91,7 +91,7 @@ void vw_DetachLight(eLight * OldLight)
 //-----------------------------------------------------------------------------
 // находим кол-во точечных источников
 //-----------------------------------------------------------------------------
-int	vw_CheckAllPointLights(VECTOR3D Location, float Radius2)
+int	vw_CheckAllPointLights(sVECTOR3D Location, float Radius2)
 {
 	float AttLimit = 10.0f; // граница, после которой источник уже не воспринимаем
 
@@ -99,13 +99,13 @@ int	vw_CheckAllPointLights(VECTOR3D Location, float Radius2)
 
 
 	// вычисляем воздействие
-	eLight *tmp = StartLight;
+	sLight *tmp = StartLight;
 	while (tmp != nullptr) {
-		eLight *tmp2 = tmp->Next;
+		sLight *tmp2 = tmp->Next;
 
 		if ((tmp->LightType == 1) && tmp->On) { // только включенный!
 			// находим квадрат расстояния от центра до источника
-			VECTOR3D DistV = Location - tmp->Location;
+			sVECTOR3D DistV = Location - tmp->Location;
 			float Dist2 = DistV.x*DistV.x + DistV.y*DistV.y + DistV.z*DistV.z;
 			// учитываем радиус объекта
 			if (Dist2 > Radius2) Dist2 -= Radius2;
@@ -141,7 +141,7 @@ int	vw_CheckAllPointLights(VECTOR3D Location, float Radius2)
 //-----------------------------------------------------------------------------
 //	Включаем нужное освещение
 //-----------------------------------------------------------------------------
-int vw_CheckAndActivateAllLights(int *Type1, int *Type2, VECTOR3D Location, float Radius2, int DirLimit, int PointLimit, float Matrix[16])
+int vw_CheckAndActivateAllLights(int *Type1, int *Type2, sVECTOR3D Location, float Radius2, int DirLimit, int PointLimit, float Matrix[16])
 {
 	// текущий источник света
 	int CurrentLight = 0;
@@ -150,9 +150,9 @@ int vw_CheckAndActivateAllLights(int *Type1, int *Type2, VECTOR3D Location, floa
 	*Type1 = 0;
 
 	// всегда первыми ставим источники типа солнца (направленный свет)
-	eLight *tmp = StartLight;
+	sLight *tmp = StartLight;
 	while (tmp != nullptr) {
-		eLight *tmp2 = tmp->Next;
+		sLight *tmp2 = tmp->Next;
 
 		if ((tmp->LightType == 0) && tmp->Activate(CurrentLight, Matrix)) {
 			CurrentLight++;
@@ -176,10 +176,10 @@ int vw_CheckAndActivateAllLights(int *Type1, int *Type2, VECTOR3D Location, floa
 		// вычисляем воздействие
 		tmp = StartLight;
 		while (tmp != nullptr) {
-			eLight *tmp2 = tmp->Next;
+			sLight *tmp2 = tmp->Next;
 			if ((tmp->LightType == 1) && tmp->On) { // только включенный!
 				// находим квадрат расстояния от центра до источника
-				VECTOR3D DistV = Location - tmp->Location;
+				sVECTOR3D DistV = Location - tmp->Location;
 				float Dist2 = DistV.x*DistV.x + DistV.y*DistV.y + DistV.z*DistV.z;
 				// учитываем радиус объекта
 				if (Dist2 > Radius2)
@@ -214,10 +214,10 @@ int vw_CheckAndActivateAllLights(int *Type1, int *Type2, VECTOR3D Location, floa
 		// находим те, которые максимально воздействуют на объект
 		// делаем перебор по списку нужное кол-во раз
 		for (int i=0; i<PointLimit; i++) {
-			eLight *tmpCurrent = nullptr; // текущая минимальная
+			sLight *tmpCurrent = nullptr; // текущая минимальная
 			tmp = StartLight;
 			while (tmp != nullptr) {
-				eLight *tmp2 = tmp->Next;
+				sLight *tmp2 = tmp->Next;
 
 				if ((tmp->LightType == 1) && tmp->On) { // только включенный!
 					if (tmpCurrent == nullptr) {
@@ -266,9 +266,9 @@ onlight:
 void vw_DeActivateAllLights()
 {
 	// для всех Light
-	eLight *tmp = StartLight;
+	sLight *tmp = StartLight;
 	while (tmp != nullptr) {
-		eLight *tmp2 = tmp->Next;
+		sLight *tmp2 = tmp->Next;
 		tmp->DeActivate();
 		tmp = tmp2;
 	}
@@ -283,7 +283,7 @@ void vw_DeActivateAllLights()
 //-----------------------------------------------------------------------------
 // Удаляем источник света
 //-----------------------------------------------------------------------------
-void vw_ReleaseLight(eLight *Light)
+void vw_ReleaseLight(sLight *Light)
 {
 	if (Light != nullptr)
 		delete Light;
@@ -291,14 +291,14 @@ void vw_ReleaseLight(eLight *Light)
 
 
 //-----------------------------------------------------------------------------
-//	Удаляем все eLight в списке
+//	Удаляем все sLight в списке
 //-----------------------------------------------------------------------------
 void vw_ReleaseAllLights()
 {
 	// для всех Light
-	eLight *tmp = StartLight;
+	sLight *tmp = StartLight;
 	while (tmp != nullptr) {
-		eLight *tmp2 = tmp->Next;
+		sLight *tmp2 = tmp->Next;
 		vw_ReleaseLight(tmp);
 		tmp = tmp2;
 	}
@@ -316,10 +316,10 @@ void vw_ReleaseAllLights()
 //-----------------------------------------------------------------------------
 // Создаем точечный источник света
 //-----------------------------------------------------------------------------
-eLight *vw_CreatPointLight(VECTOR3D Location, float R, float G, float B, float Linear, float Quadratic)
+sLight *vw_CreatPointLight(sVECTOR3D Location, float R, float G, float B, float Linear, float Quadratic)
 {
 	// создаем источник
-	eLight *Light = new eLight;
+	sLight *Light = new sLight;
 
 	// заполняем данными
 
@@ -345,12 +345,12 @@ eLight *vw_CreatPointLight(VECTOR3D Location, float R, float G, float B, float L
 //-----------------------------------------------------------------------------
 // Создаем точечный источник света
 //-----------------------------------------------------------------------------
-eLight 	*vw_GetMainDirectLight()
+sLight 	*vw_GetMainDirectLight()
 {
 	// перебираем все по порядку
-	eLight *tmp = StartLight;
+	sLight *tmp = StartLight;
 	while (tmp != nullptr) {
-		eLight *tmp2 = tmp->Next;
+		sLight *tmp2 = tmp->Next;
 		if (tmp->LightType == 0)
 			// первый в списке всегда "основной"
 			return tmp;

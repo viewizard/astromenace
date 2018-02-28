@@ -34,12 +34,12 @@
 /*
  * All ground objects explosions.
  */
-class CGroundExplosion : public CExplosion
+class cGroundExplosion : public cExplosion
 {
 public:
-	CGroundExplosion(CGroundObject *Object, int ExplType, const VECTOR3D &ExplLocation,
+	cGroundExplosion(cGroundObject *Object, int ExplType, const sVECTOR3D &ExplLocation,
 			 int ObjectPieceNum, bool NeedExplosionSFX=true);
-	virtual ~CGroundExplosion() {};
+	virtual ~cGroundExplosion() {};
 };
 
 #endif // GROUNDEXPLOSION_H

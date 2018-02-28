@@ -29,11 +29,11 @@
 
 
 
-extern CEarthSpaceFighter *WorkshopFighterGame;
+extern cEarthSpaceFighter *WorkshopFighterGame;
 extern float CurrentAlert2;
 extern float CurrentAlert3;
 
-void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode);
+void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode);
 
 float GetShipEngineSystemEnergyUse(int Num);
 float GetShipProtectionSystemEnergyUse(int Num);
@@ -157,7 +157,7 @@ const char *GetSystemName(int Num)
 
 
 
-eTexture *GetSystemIcon(int Num)
+sTexture *GetSystemIcon(int Num)
 {
 	switch (Num) {
 	case -4:
@@ -381,7 +381,7 @@ int NeedPlayWorkshopOnButtonSoundY = 0;
 //------------------------------------------------------------------------------------
 void Workshop_Workshop()
 {
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 
 	SetRect(&SrcRect,0,0,256,256);

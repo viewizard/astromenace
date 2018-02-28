@@ -33,16 +33,16 @@
 //------------------------------------------------------------------------------------
 // переменные
 //------------------------------------------------------------------------------------
-CEarthSpaceFighter *WorkshopFighterGame = nullptr;
-CEarthSpaceFighter *WorkshopNewFighter = nullptr;
-CWeapon *WorkshopNewWeapon = nullptr;
+cEarthSpaceFighter *WorkshopFighterGame = nullptr;
+cEarthSpaceFighter *WorkshopNewFighter = nullptr;
+cWeapon *WorkshopNewWeapon = nullptr;
 int	CurrentWorkshopNewFighter = 1;
 int	CurrentWorkshopNewWeapon = 1;
 
 
-VECTOR3D WorkShopPointCamera;
-void WorkshopDrawShip(CEarthSpaceFighter *WorkshopFighter, int Mode);
-void WorkshopDrawWeapon(CWeapon *Weapon);
+sVECTOR3D WorkShopPointCamera;
+void WorkshopDrawShip(cEarthSpaceFighter *WorkshopFighter, int Mode);
+void WorkshopDrawWeapon(cWeapon *Weapon);
 int CurrentWorkshop = 3;
 
 
@@ -86,7 +86,7 @@ void WorkshopCreateShip(int Num)
 	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
 	GameNPCArmorPenalty = 1;
 
-	WorkshopFighterGame = new CEarthSpaceFighter;
+	WorkshopFighterGame = new cEarthSpaceFighter;
 	WorkshopFighterGame->Create(Setup.Profile[CurrentProfile].Ship);
 	WorkshopFighterGame->DeviationOn = true;
 
@@ -112,7 +112,7 @@ void WorkshopCreateShip(int Num)
 				WorkshopFighterGame->Weapon[i]->Ammo = Setup.Profile[CurrentProfile].WeaponAmmo[i];
 				WorkshopFighterGame->WeaponYAngle[i] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[i];
 
-				VECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
+				sVECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
 				NeedAngle.y += WorkshopFighterGame->WeaponYAngle[i];
 				WorkshopFighterGame->Weapon[i]->SetRotation(NeedAngle);
 			}
@@ -128,14 +128,14 @@ void WorkshopCreateShip(int Num)
 		SetEarthSpaceFighterArmour(WorkshopFighterGame, Setup.Profile[CurrentProfile].ShipHullUpgrade-1);
 
 	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
-	WorkshopFighterGame->SetLocation(VECTOR3D(1000,-1000-(WorkshopFighterGame->Height/2.0f + WorkshopFighterGame->AABB[6].y), -(WorkshopFighterGame->Length/2.0f + WorkshopFighterGame->AABB[6].z)));
+	WorkshopFighterGame->SetLocation(sVECTOR3D(1000,-1000-(WorkshopFighterGame->Height/2.0f + WorkshopFighterGame->AABB[6].y), -(WorkshopFighterGame->Length/2.0f + WorkshopFighterGame->AABB[6].z)));
 
 	if (Num == 1)
-		WorkshopFighterGame->SetRotation(VECTOR3D(0.0f,150.0f,0.0f));
+		WorkshopFighterGame->SetRotation(sVECTOR3D(0.0f,150.0f,0.0f));
 	if (Num == 2)
-		WorkshopFighterGame->SetRotation(VECTOR3D(0.0f,170.0f,0.0f));
+		WorkshopFighterGame->SetRotation(sVECTOR3D(0.0f,170.0f,0.0f));
 	if (Num == 3)
-		WorkshopFighterGame->SetRotation(VECTOR3D(0.0f,180.0f,0.0f));
+		WorkshopFighterGame->SetRotation(sVECTOR3D(0.0f,180.0f,0.0f));
 }
 
 
@@ -157,7 +157,7 @@ void WorkshopCreateNewShip()
 	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
 	GameNPCArmorPenalty = 1;
 
-	WorkshopNewFighter = new CEarthSpaceFighter;
+	WorkshopNewFighter = new cEarthSpaceFighter;
 	WorkshopNewFighter->Create(CurrentWorkshopNewFighter);
 	WorkshopNewFighter->DeviationOn = true;
 
@@ -165,9 +165,9 @@ void WorkshopCreateNewShip()
 	WorkshopNewFighter->EngineDestroyType = true;
 
 	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
-	WorkshopNewFighter->SetLocation(VECTOR3D(2000,-2000-(WorkshopNewFighter->Height/2.0f + WorkshopNewFighter->AABB[6].y), -(WorkshopNewFighter->Length/2.0f + WorkshopNewFighter->AABB[6].z)));
+	WorkshopNewFighter->SetLocation(sVECTOR3D(2000,-2000-(WorkshopNewFighter->Height/2.0f + WorkshopNewFighter->AABB[6].y), -(WorkshopNewFighter->Length/2.0f + WorkshopNewFighter->AABB[6].z)));
 
-	WorkshopNewFighter->SetRotation(VECTOR3D(0.0f,-45.0f,0.0f));
+	WorkshopNewFighter->SetRotation(sVECTOR3D(0.0f,-45.0f,0.0f));
 }
 
 
@@ -187,17 +187,17 @@ void WorkshopCreateNewWeapon()
 	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
 	GameNPCArmorPenalty = 1;
 
-	WorkshopNewWeapon = new CWeapon;
+	WorkshopNewWeapon = new cWeapon;
 	WorkshopNewWeapon->Create(CurrentWorkshopNewWeapon);
 
 	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
 
-	VECTOR3D Ptmp = VECTOR3D(0,-(WorkshopNewWeapon->Height/2.0f + WorkshopNewWeapon->AABB[6].y), -(WorkshopNewWeapon->Length/2.0f + WorkshopNewWeapon->AABB[6].z)-0.5f);
-	vw_RotatePoint(&Ptmp, VECTOR3D(0.0f, -45.0f, 0.0f));
+	sVECTOR3D Ptmp = sVECTOR3D(0,-(WorkshopNewWeapon->Height/2.0f + WorkshopNewWeapon->AABB[6].y), -(WorkshopNewWeapon->Length/2.0f + WorkshopNewWeapon->AABB[6].z)-0.5f);
+	vw_RotatePoint(&Ptmp, sVECTOR3D(0.0f, -45.0f, 0.0f));
 
-	WorkshopNewWeapon->SetLocation(VECTOR3D(3000+Ptmp.x, -3000+Ptmp.y, Ptmp.z));
+	WorkshopNewWeapon->SetLocation(sVECTOR3D(3000+Ptmp.x, -3000+Ptmp.y, Ptmp.z));
 
-	WorkshopNewWeapon->SetRotation(VECTOR3D(0.0f,-45.0f,0.0f));
+	WorkshopNewWeapon->SetRotation(sVECTOR3D(0.0f,-45.0f,0.0f));
 
 	// убираем источник света
 	if ((WorkshopNewWeapon->Fire != nullptr) &&
@@ -453,7 +453,7 @@ void WorkshopMenu()
 //------------------------------------------------------------------------------------
 // Прорисовка 3д части
 //------------------------------------------------------------------------------------
-void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
+void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 {
 	if (!CanDrawWorkshop || (SpaceFighter == nullptr))
 		return;
@@ -469,17 +469,17 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 
 
 	if (Mode == 1) {
-		WorkShopPointCamera = VECTOR3D(0.0f, 4.0f, -32.0f);
-		SpaceFighter->SetRotation(VECTOR3D(0.0f, 0.0f, CurentDeviation));
-		SpaceFighter->SetRotation(VECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
+		WorkShopPointCamera = sVECTOR3D(0.0f, 4.0f, -32.0f);
+		SpaceFighter->SetRotation(sVECTOR3D(0.0f, 0.0f, CurentDeviation));
+		SpaceFighter->SetRotation(sVECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
 
 		vw_SetViewport((int)((Setup.iAspectRatioWidth/2-512)/(AW/AWw)), 0, (int)(1024/(AW/AWw)), (int)(768/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
 		vw_ResizeScene(45.0f, 1024.0f/768.0f, 1.0f, 2000.0f);
 		vw_Clear(RI_DEPTH_BUFFER);
 
 		vw_LoadIdentity();
-		vw_SetCameraLocation(VECTOR3D(1000+WorkShopPointCamera.x,-1000+WorkShopPointCamera.y,WorkShopPointCamera.z));
-		vw_SetCameraMoveAroundPoint(VECTOR3D(1000,-1000-6.0f,0), 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
+		vw_SetCameraLocation(sVECTOR3D(1000+WorkShopPointCamera.x,-1000+WorkShopPointCamera.y,WorkShopPointCamera.z));
+		vw_SetCameraMoveAroundPoint(sVECTOR3D(1000,-1000-6.0f,0), 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
 		vw_CameraLookAt();
 
 
@@ -487,7 +487,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 
 		if (Setup.ShadowMap > 0) {
 			float EffectiveDistance = 20.0f;
-			ShadowMap_StartRenderToFBO(VECTOR3D(0,5,0), EffectiveDistance, EffectiveDistance*2);
+			ShadowMap_StartRenderToFBO(sVECTOR3D(0,5,0), EffectiveDistance, EffectiveDistance*2);
 
 			SpaceFighter->Draw(true);
 			if (SpaceFighter->Weapon != nullptr)
@@ -515,7 +515,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(SpaceFighter->Engine, SpaceFighter->EngineQuantity);
 
-		vw_SetCameraLocation(VECTOR3D(-50,30,-50));
+		vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
 		vw_SetViewport(x, y, width, height, 0.0f, 1.0f);
 		vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 		return;
@@ -524,14 +524,14 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 
 
 	if (Mode == 4) {
-		WorkShopPointCamera = VECTOR3D(0.0f, 35.0f, -0.01f);
-		SpaceFighter->SetRotation(VECTOR3D(0.0f, 0.0f, CurentDeviation));
+		WorkShopPointCamera = sVECTOR3D(0.0f, 35.0f, -0.01f);
+		SpaceFighter->SetRotation(sVECTOR3D(0.0f, 0.0f, CurentDeviation));
 		vw_SetViewport((int)((Setup.iAspectRatioWidth/2)/(AW/AWw)), 30, (int)(512/(AW/AWw)), (int)(638/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
 		vw_ResizeScene(45.0f, 512.0f/608.0f, 1.0f, 2000.0f);
 		vw_Clear(RI_DEPTH_BUFFER);
 		vw_LoadIdentity();
-		vw_SetCameraLocation(VECTOR3D(1000+WorkShopPointCamera.x,-1000+WorkShopPointCamera.y,WorkShopPointCamera.z));
-		vw_SetCameraMoveAroundPoint(VECTOR3D(1000,-1000, 0.0f), 0.0f, VECTOR3D(0.0f, 180.0f, 0.0f));
+		vw_SetCameraLocation(sVECTOR3D(1000+WorkShopPointCamera.x,-1000+WorkShopPointCamera.y,WorkShopPointCamera.z));
+		vw_SetCameraMoveAroundPoint(sVECTOR3D(1000,-1000, 0.0f), 0.0f, sVECTOR3D(0.0f, 180.0f, 0.0f));
 		vw_CameraLookAt();
 
 
@@ -539,7 +539,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 
 		if (Setup.ShadowMap > 0) {
 			float EffectiveDistance = 20.0f;
-			ShadowMap_StartRenderToFBO(VECTOR3D(0,0,0), EffectiveDistance, EffectiveDistance*2);
+			ShadowMap_StartRenderToFBO(sVECTOR3D(0,0,0), EffectiveDistance, EffectiveDistance*2);
 
 			SpaceFighter->Draw(true);
 			if (SpaceFighter->Weapon != nullptr)
@@ -567,7 +567,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(SpaceFighter->Engine, SpaceFighter->EngineQuantity);
 
-		vw_SetCameraLocation(VECTOR3D(-50,30,-50));
+		vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
 		vw_SetViewport(x, y, width, height, 0.0f, 1.0f);
 		vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 		return;
@@ -579,26 +579,26 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 
 
 	if (Mode == 3) {
-		WorkShopPointCamera = VECTOR3D(0.0f, 10.0f, -34.0f);
-		SpaceFighter->SetRotation(VECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
+		WorkShopPointCamera = sVECTOR3D(0.0f, 10.0f, -34.0f);
+		SpaceFighter->SetRotation(sVECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
 		vw_SetViewport((int)((Setup.iAspectRatioWidth/2)/(AW/AWw)), (int)(0/(AH/AHw)), (int)(512/(AW/AWw)), (int)(512/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
 		vw_ResizeScene(45.0f, 512.0f/512.0f, 1.0f, 2000.0f);
 		vw_Clear(RI_DEPTH_BUFFER);
 		vw_LoadIdentity();
-		vw_SetCameraLocation(VECTOR3D(1000+WorkShopPointCamera.x/1.2f,-1000+WorkShopPointCamera.y/1.2f,WorkShopPointCamera.z/1.2f));
-		vw_SetCameraMoveAroundPoint(VECTOR3D(1000,-1000-SpaceFighter->AABB[6].y-SpaceFighter->Height/3,0), 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
+		vw_SetCameraLocation(sVECTOR3D(1000+WorkShopPointCamera.x/1.2f,-1000+WorkShopPointCamera.y/1.2f,WorkShopPointCamera.z/1.2f));
+		vw_SetCameraMoveAroundPoint(sVECTOR3D(1000,-1000-SpaceFighter->AABB[6].y-SpaceFighter->Height/3,0), 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
 	}
 	if (Mode == 2) {
-		WorkShopPointCamera = VECTOR3D(0.0f, 10.0f, -34.0f);
-		VECTOR3D PointCameraTMP = WorkShopPointCamera;
-		vw_RotatePoint(&PointCameraTMP, VECTOR3D(0.0f, -90.0f, 0.0f));
-		SpaceFighter->SetRotation(VECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
+		WorkShopPointCamera = sVECTOR3D(0.0f, 10.0f, -34.0f);
+		sVECTOR3D PointCameraTMP = WorkShopPointCamera;
+		vw_RotatePoint(&PointCameraTMP, sVECTOR3D(0.0f, -90.0f, 0.0f));
+		SpaceFighter->SetRotation(sVECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
 		vw_SetViewport((int)((Setup.iAspectRatioWidth/2-512)/(AW/AWw)), (int)(0/(AH/AHw)), (int)(512/(AW/AWw)), (int)(512/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
 		vw_ResizeScene(45.0f, 512.0f/512.0f, 1.0f, 2000.0f);
 		vw_Clear(RI_DEPTH_BUFFER);
 		vw_LoadIdentity();
-		vw_SetCameraLocation(VECTOR3D(2000+PointCameraTMP.x/1.2f,-2000+PointCameraTMP.y/1.2f,PointCameraTMP.z/1.2f));
-		vw_SetCameraMoveAroundPoint(VECTOR3D(2000,-2000-SpaceFighter->AABB[6].y-SpaceFighter->Height/3,0), 0.0f, VECTOR3D(0.0f, 170.0f, 0.0f));
+		vw_SetCameraLocation(sVECTOR3D(2000+PointCameraTMP.x/1.2f,-2000+PointCameraTMP.y/1.2f,PointCameraTMP.z/1.2f));
+		vw_SetCameraMoveAroundPoint(sVECTOR3D(2000,-2000-SpaceFighter->AABB[6].y-SpaceFighter->Height/3,0), 0.0f, sVECTOR3D(0.0f, 170.0f, 0.0f));
 	}
 	vw_CameraLookAt();
 
@@ -607,7 +607,7 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 
 	if (Setup.ShadowMap > 0) {
 		float EffectiveDistance = 20.0f;
-		ShadowMap_StartRenderToFBO(VECTOR3D(0,-2,0), EffectiveDistance, EffectiveDistance*2);
+		ShadowMap_StartRenderToFBO(sVECTOR3D(0,-2,0), EffectiveDistance, EffectiveDistance*2);
 
 		SpaceFighter->Draw(true);
 		if (SpaceFighter->Weapon != nullptr)
@@ -636,14 +636,14 @@ void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode)
 	// рисуем эффекты двигателей только для этой модели
 	vw_DrawParticleSystems(SpaceFighter->Engine, SpaceFighter->EngineQuantity);
 
-	vw_SetCameraLocation(VECTOR3D(-50,30,-50));
+	vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
 	vw_SetViewport(x, y, width, height, 0.0f, 1.0f);
 	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 
 }
 
 
-void WorkshopDrawWeapon(CWeapon *Weapon)
+void WorkshopDrawWeapon(cWeapon *Weapon)
 {
 	if (!CanDrawWorkshop || (Weapon == nullptr))
 		return;
@@ -660,25 +660,25 @@ void WorkshopDrawWeapon(CWeapon *Weapon)
 
 	// удаление относительно размеров оружия
 	if (Weapon->ObjectCreationType == 18 || Weapon->ObjectCreationType == 19)
-		WorkShopPointCamera = VECTOR3D(0.0f, 1.25f, -5.0f);
+		WorkShopPointCamera = sVECTOR3D(0.0f, 1.25f, -5.0f);
 	else
-		WorkShopPointCamera = VECTOR3D(0.0f, 1.0f, -4.0f);
+		WorkShopPointCamera = sVECTOR3D(0.0f, 1.0f, -4.0f);
 
-	VECTOR3D PointCameraTMP = WorkShopPointCamera;
-	vw_RotatePoint(&PointCameraTMP, VECTOR3D(0.0f, -90.0f, 0.0f));
+	sVECTOR3D PointCameraTMP = WorkShopPointCamera;
+	vw_RotatePoint(&PointCameraTMP, sVECTOR3D(0.0f, -90.0f, 0.0f));
 
-	Weapon->SetRotation(VECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
+	Weapon->SetRotation(sVECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
 	vw_SetViewport((int)((Setup.iAspectRatioWidth/2-448)/(AW/AWw)), (int)(105/(AH/AHw)), (int)(384/(AW/AWw)), (int)(350/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
 	vw_ResizeScene(45.0f, 384.0f/350.0f, 1.0f, 2000.0f);
 	vw_Clear(RI_DEPTH_BUFFER);
 	vw_LoadIdentity();
-	vw_SetCameraLocation(VECTOR3D(3000+PointCameraTMP.x,-3000+PointCameraTMP.y,PointCameraTMP.z));
-	vw_SetCameraMoveAroundPoint(VECTOR3D(3000,-3000,0), 0.0f, VECTOR3D(0.0f, 170.0f, 0.0f));
+	vw_SetCameraLocation(sVECTOR3D(3000+PointCameraTMP.x,-3000+PointCameraTMP.y,PointCameraTMP.z));
+	vw_SetCameraMoveAroundPoint(sVECTOR3D(3000,-3000,0), 0.0f, sVECTOR3D(0.0f, 170.0f, 0.0f));
 	vw_CameraLookAt();
 
 	Weapon->Draw(false);
 
-	vw_SetCameraLocation(VECTOR3D(-50,30,-50));
+	vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
 	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 	vw_SetViewport(x, y, width, height, 0.0f, 1.0f);
 }

@@ -240,14 +240,14 @@ float vw_sqrtf(float x)
 }
 
 /*
- * VECTOR3D Vector
+ * sVECTOR3D Vector
  */
-float VECTOR3D::Length()
+float sVECTOR3D::Length()
 {
 	return vw_sqrtf(x * x + y * y + z * z);
 }
 
-void VECTOR3D::Normalize()
+void sVECTOR3D::Normalize()
 {
 	float L_squared, one_over_L;
 	L_squared = (x * x) + (y * y) + (z * z);
@@ -257,7 +257,7 @@ void VECTOR3D::Normalize()
 	z = z * one_over_L;
 }
 
-void VECTOR3D::NormalizeHi()
+void sVECTOR3D::NormalizeHi()
 {
 	float Length;
 	Length = sqrtf((x * x) + (y * y) + (z * z));
@@ -267,7 +267,7 @@ void VECTOR3D::NormalizeHi()
 	z = z / Length;
 }
 
-void VECTOR3D::Multiply(const VECTOR3D &A)
+void sVECTOR3D::Multiply(const sVECTOR3D &A)
 {
 	float tV[3]{y * A.z - z * A.y,
 		    z * A.x - x * A.z,
@@ -281,7 +281,7 @@ void VECTOR3D::Multiply(const VECTOR3D &A)
  * Calculates the plane equation given three points.
  */
 int vw_GetPlaneABCD(float *A, float *B, float *C, float *D,
-		  const VECTOR3D &Point1, const VECTOR3D &Point2, const VECTOR3D &Point3)
+		  const sVECTOR3D &Point1, const sVECTOR3D &Point2, const sVECTOR3D &Point3)
 {
 	if ((A == nullptr) || (B == nullptr) ||
 	    (C == nullptr) || (D == nullptr))
@@ -303,7 +303,7 @@ int vw_GetPlaneABCD(float *A, float *B, float *C, float *D,
 /*
  * Calculate point rotation.
  */
-int vw_RotatePoint(VECTOR3D *Point, const VECTOR3D &Angle)
+int vw_RotatePoint(sVECTOR3D *Point, const sVECTOR3D &Angle)
 {
 	if (Point == nullptr)
 		return ERR_PARAMETERS;
@@ -349,7 +349,7 @@ int vw_RotatePoint(VECTOR3D *Point, const VECTOR3D &Angle)
 /*
  * Calculate point inverse rotation.
  */
-int vw_RotatePointInv(VECTOR3D *Point, const VECTOR3D &Angle)
+int vw_RotatePointInv(sVECTOR3D *Point, const sVECTOR3D &Angle)
 {
 	if (Point == nullptr)
 		return ERR_PARAMETERS;

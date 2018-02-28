@@ -30,8 +30,8 @@
 
 
 
-CGameLvlText * StartText = nullptr;
-CGameLvlText * EndText = nullptr;
+cGameLvlText * StartText = nullptr;
+cGameLvlText * EndText = nullptr;
 
 
 
@@ -39,7 +39,7 @@ CGameLvlText * EndText = nullptr;
 //-----------------------------------------------------------------------------
 //	Присоеденяем Text к списку
 //-----------------------------------------------------------------------------
-void AttachGameLvlText(CGameLvlText * NewText)
+void AttachGameLvlText(cGameLvlText * NewText)
 {
 	if (NewText == nullptr)
 		return;
@@ -65,7 +65,7 @@ void AttachGameLvlText(CGameLvlText * NewText)
 //-----------------------------------------------------------------------------
 //	Удаляем Text из списка
 //-----------------------------------------------------------------------------
-void DetachGameLvlText(CGameLvlText * OldText)
+void DetachGameLvlText(cGameLvlText * OldText)
 {
 	if (OldText == nullptr)
 		return;
@@ -96,9 +96,9 @@ void DetachGameLvlText(CGameLvlText * OldText)
 void ReleaseAllGameLvlText()
 {
 	// для всех Text
-	CGameLvlText *tmp = StartText;
+	cGameLvlText *tmp = StartText;
 	while (tmp != nullptr) {
-		CGameLvlText *tmp2 = tmp->Next;
+		cGameLvlText *tmp2 = tmp->Next;
 		// удаляем и очищаем всю память, в релизе стоит DetachShip
 		delete tmp;
 		tmp = tmp2;
@@ -124,9 +124,9 @@ void ReleaseAllGameLvlText()
 void DrawAllGameLvlText()
 {
 	// для всех
-	CGameLvlText *tmp = StartText;
+	cGameLvlText *tmp = StartText;
 	while (tmp != nullptr) {
-		CGameLvlText *tmp2 = tmp->Next;
+		cGameLvlText *tmp2 = tmp->Next;
 		tmp->Draw();
 		tmp = tmp2;
 	}
@@ -142,9 +142,9 @@ void DrawAllGameLvlText()
 void UpdateAllGameLvlText(float Time)
 {
 	// для всех
-	CGameLvlText *tmp = StartText;
+	cGameLvlText *tmp = StartText;
 	while (tmp != nullptr) {
-		CGameLvlText *tmp2 = tmp->Next;
+		cGameLvlText *tmp2 = tmp->Next;
 		if (!tmp->Update(Time)) delete tmp;
 		tmp = tmp2;
 	}

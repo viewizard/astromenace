@@ -33,12 +33,12 @@
 /*
  * All bullets/rockets explosions.
  */
-class CBulletExplosion : public CExplosion
+class cBulletExplosion : public cExplosion
 {
 public:
-	CBulletExplosion(CObject3D *Object, CProjectile *Projectile, int ExplType,
-			 const VECTOR3D &ExplLocation, float Speed, bool NeedExplosionSFX = true);
-	virtual ~CBulletExplosion() {};
+	cBulletExplosion(cObject3D *Object, cProjectile *Projectile, int ExplType,
+			 const sVECTOR3D &ExplLocation, float Speed, bool NeedExplosionSFX = true);
+	virtual ~cBulletExplosion() {};
 };
 
 #endif // BULLETEXPLOSION_H

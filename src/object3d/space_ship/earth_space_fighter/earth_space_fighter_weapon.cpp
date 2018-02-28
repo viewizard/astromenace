@@ -35,7 +35,7 @@
 //-----------------------------------------------------------------------------
 // Установка оружия на корабль
 //-----------------------------------------------------------------------------
-bool SetEarthSpaceFighterWeapon(CEarthSpaceFighter *SpaceShip, int WeaponSlot, int WeaponNum)
+bool SetEarthSpaceFighterWeapon(cEarthSpaceFighter *SpaceShip, int WeaponSlot, int WeaponNum)
 {
 
 	// проверяем, можно ли вообще ставить в этот слот оружие
@@ -50,7 +50,7 @@ bool SetEarthSpaceFighterWeapon(CEarthSpaceFighter *SpaceShip, int WeaponSlot, i
 	}
 
 	// создаем нужное оружие
-	SpaceShip->Weapon[WeaponSlot-1] = new CWeapon;
+	SpaceShip->Weapon[WeaponSlot-1] = new cWeapon;
 	if (SpaceShip->Weapon[WeaponSlot-1] == nullptr)
 		return false;
 	SpaceShip->Weapon[WeaponSlot-1]->Create(WeaponNum);

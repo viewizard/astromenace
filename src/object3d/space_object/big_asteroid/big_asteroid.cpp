@@ -34,7 +34,7 @@
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void CBigAsteroid::Create(int AsteroidNum)
+void cBigAsteroid::Create(int AsteroidNum)
 {
 	ObjectStatus = 1; // чужой
 	ObjectType = 15;
@@ -109,7 +109,7 @@ case10next:
 
 
 	// находим все данные по геометрии
-	::CObject3D::InitByDrawObjectList();
+	::cObject3D::InitByDrawObjectList();
 }
 
 

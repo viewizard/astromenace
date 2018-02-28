@@ -31,8 +31,8 @@ ALboolean CheckALError();
 ALboolean CheckALUTError();
 
 
-eBuffer *StartBufferMan = nullptr;
-eBuffer *EndBufferMan = nullptr;
+sBuffer *StartBufferMan = nullptr;
+sBuffer *EndBufferMan = nullptr;
 
 
 
@@ -45,12 +45,12 @@ eBuffer *EndBufferMan = nullptr;
 size_t VorbisReadSFX(void *ptr, size_t byteSize, size_t sizeToRead, void *datasource)
 {
 	// нужно возвращать кол-во прочитаных byteSize
-	eFILE* vorbisData = (eFILE*)datasource;
+	sFILE* vorbisData = (sFILE*)datasource;
 	return vorbisData->fread(ptr, byteSize, sizeToRead);
 }
 int VorbisSeekSFX(void *datasource, ogg_int64_t offset, int whence)
 {
-	eFILE* vorbisData = (eFILE*)datasource;
+	sFILE* vorbisData = (sFILE*)datasource;
 	return vorbisData->fseek(offset, whence);
 }
 int VorbisCloseSFX(void *UNUSED(datasource))
@@ -60,7 +60,7 @@ int VorbisCloseSFX(void *UNUSED(datasource))
 }
 long VorbisTellSFX(void *datasource)
 {
-	eFILE*	vorbisData = (eFILE*)datasource;
+	sFILE*	vorbisData = (sFILE*)datasource;
 	return vorbisData->ftell();
 }
 
@@ -112,7 +112,7 @@ ALuint vw_CreateSoundBufferFromOGG(const char *Name)
 {
 	ALuint Buffer;
 
-	std::unique_ptr<eFILE> file = vw_fopen(Name);
+	std::unique_ptr<sFILE> file = vw_fopen(Name);
 	if (file == nullptr)
 		return 0;
 
@@ -152,7 +152,7 @@ ALuint vw_CreateSoundBufferFromOGG(const char *Name)
 
 	// вот теперь создаем объект
 	if (Buffer != 0) {
-		eBuffer *TMPBuffer = new eBuffer;
+		sBuffer *TMPBuffer = new sBuffer;
 		vw_AttachBuffer(TMPBuffer);
 
 		TMPBuffer->Name = new char[strlen(Name)+1];
@@ -180,7 +180,7 @@ ALuint vw_CreateSoundBufferFromWAV(const char *Name)
 {
 	ALuint Buffer;
 
-	std::unique_ptr<eFILE> file = vw_fopen(Name);
+	std::unique_ptr<sFILE> file = vw_fopen(Name);
 	if (file == nullptr)
 		return 0;
 
@@ -193,7 +193,7 @@ ALuint vw_CreateSoundBufferFromWAV(const char *Name)
 
 	// вот теперь создаем объект
 	if (Buffer != 0) {
-		eBuffer *TMPBuffer = new eBuffer;
+		sBuffer *TMPBuffer = new sBuffer;
 		vw_AttachBuffer(TMPBuffer);
 
 		TMPBuffer->Name = new char[strlen(Name) + 1];
@@ -208,7 +208,7 @@ ALuint vw_CreateSoundBufferFromWAV(const char *Name)
 //------------------------------------------------------------------------------------
 // Удаляем буфер
 //------------------------------------------------------------------------------------
-void vw_ReleaseBuffer(eBuffer *Buffer)
+void vw_ReleaseBuffer(sBuffer *Buffer)
 {
 	if (Buffer == nullptr)
 		return;
@@ -231,12 +231,12 @@ void vw_ReleaseBuffer(eBuffer *Buffer)
 
 
 
-eBuffer *vw_FindBufferByName(const char *Name)
+sBuffer *vw_FindBufferByName(const char *Name)
 {
-	eBuffer *Tmp = StartBufferMan;
+	sBuffer *Tmp = StartBufferMan;
 
 	while (Tmp != nullptr) {
-		eBuffer *Tmp1 = Tmp->Next;
+		sBuffer *Tmp1 = Tmp->Next;
 		if(strcmp(Tmp->Name, Name) == 0) return Tmp;
 		Tmp = Tmp1;
 	}
@@ -246,10 +246,10 @@ eBuffer *vw_FindBufferByName(const char *Name)
 
 ALuint vw_FindBufferIDByName(const char *Name)
 {
-	eBuffer *Tmp = StartBufferMan;
+	sBuffer *Tmp = StartBufferMan;
 
 	while (Tmp != nullptr) {
-		eBuffer *Tmp1 = Tmp->Next;
+		sBuffer *Tmp1 = Tmp->Next;
 		if(strcmp(Tmp->Name, Name) == 0) return Tmp->Buffer;
 		Tmp = Tmp1;
 	}
@@ -260,9 +260,9 @@ ALuint vw_FindBufferIDByName(const char *Name)
 void vw_ReleaseAllBuffers()
 {
 	// Чистка памяти...
-	eBuffer *Tmp = StartBufferMan;
+	sBuffer *Tmp = StartBufferMan;
 	while (Tmp != nullptr) {
-		eBuffer *Tmp1 = Tmp->Next;
+		sBuffer *Tmp1 = Tmp->Next;
 		vw_ReleaseBuffer(Tmp);
 		Tmp = Tmp1;
 	}
@@ -271,7 +271,7 @@ void vw_ReleaseAllBuffers()
 	EndBufferMan = nullptr;
 }
 
-void vw_AttachBuffer(eBuffer* Buffer)
+void vw_AttachBuffer(sBuffer* Buffer)
 {
 	if (Buffer == nullptr)
 		return;
@@ -290,7 +290,7 @@ void vw_AttachBuffer(eBuffer* Buffer)
 	}
 }
 
-void vw_DetachBuffer(eBuffer* Buffer)
+void vw_DetachBuffer(sBuffer* Buffer)
 {
 	if (Buffer == nullptr)
 		return;

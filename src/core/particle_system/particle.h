@@ -33,7 +33,7 @@
 //-----------------------------------------------------------------------------
 // Структура цвета
 //-----------------------------------------------------------------------------
-struct COLORVALUE3D {
+struct sCOLORVALUE3D {
 	float r;
 	float g;
 	float b;
@@ -42,27 +42,27 @@ struct COLORVALUE3D {
 
 
 //-----------------------------------------------------------------------------
-// Класс eParticle
+// Класс sParticle
 //--------------------------------------------z---------------------------------
-struct eParticle {
+struct sParticle {
 	// конструктор и деструктор
-	eParticle() {};
-	~eParticle() {};
+	sParticle() {};
+	~sParticle() {};
 
 	// обновление информации в частице
-	bool Update(float TimeDelta, VECTOR3D ParentLocation = VECTOR3D{0.0f,0.0f,0.0f}, bool Attractive = false, float AttractiveValue = 25.0f);
+	bool Update(float TimeDelta, sVECTOR3D ParentLocation = sVECTOR3D{0.0f,0.0f,0.0f}, bool Attractive = false, float AttractiveValue = 25.0f);
 	// текущее место расположения частицы
-	VECTOR3D	Location{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Location{0.0f, 0.0f, 0.0f};
 	// текущая скорость частицы
-	VECTOR3D	Velocity{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Velocity{0.0f, 0.0f, 0.0f};
 
 	// texture number
 	int		TextureNum{0};
 
 	// текущий цвет частицы
-	COLORVALUE3D	Color{1.0f, 0.0f, 0.0f, 0.5f};
+	sCOLORVALUE3D	Color{1.0f, 0.0f, 0.0f, 0.5f};
 	// значение приращение цвета
-	COLORVALUE3D	ColorDelta{0.0f, 0.0f, 0.0f, 0.0f};
+	sCOLORVALUE3D	ColorDelta{0.0f, 0.0f, 0.0f, 0.0f};
 
 	// время жизни частицы в секундах
 	float		Age{0.0f};
@@ -90,8 +90,8 @@ struct eParticle {
 	bool		NeedStop{false};
 
 	// указатели на цепь частиц
-	eParticle	*Next{nullptr};
-	eParticle	*Prev{nullptr};
+	sParticle	*Next{nullptr};
+	sParticle	*Prev{nullptr};
 };
 
 #endif // PARTICLE_H

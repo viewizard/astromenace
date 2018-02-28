@@ -33,7 +33,7 @@
 //------------------------------------------------------------------------------------
 // переменные...
 //------------------------------------------------------------------------------------
-eDevCaps OpenGL_DevCaps;
+sDevCaps OpenGL_DevCaps;
 
 float fClearRedGL = 0.0f;
 float fClearGreenGL = 0.0f;
@@ -92,8 +92,8 @@ bool vw_Internal_InitializationIndexBufferData();
 void vw_Internal_ReleaseIndexBufferData();
 // FBO
 bool vw_Internal_InitializationFBO();
-eFBO MainFBO; // основной FBO, для прорисовки со сглаживанием
-eFBO ResolveFBO; // FBO для вывода основного
+sFBO MainFBO; // основной FBO, для прорисовки со сглаживанием
+sFBO ResolveFBO; // FBO для вывода основного
 
 
 
@@ -495,7 +495,7 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 //------------------------------------------------------------------------------------
 // получение возможностей железа...
 //------------------------------------------------------------------------------------
-eDevCaps *vw_GetDevCaps()
+sDevCaps *vw_GetDevCaps()
 {
 	return &OpenGL_DevCaps;
 }

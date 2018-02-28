@@ -26,8 +26,8 @@
 
 
 #include "../game.h"
-extern CSpaceObject *StartSpaceObject;
-extern eParticleSystem *psSpace;
+extern cSpaceObject *StartSpaceObject;
+extern cParticleSystem *psSpace;
 
 //-----------------------------------------------------------------------------
 // local/protected variables
@@ -37,7 +37,7 @@ extern eParticleSystem *psSpace;
 bool	StarSystem_InitedAll = false;
 bool	StarSystem_Inited = false;
 // StarSystem rotation
-VECTOR3D StarSystem_BaseRotation(0.0f,0.0f,0.0f);
+sVECTOR3D StarSystem_BaseRotation(0.0f,0.0f,0.0f);
 
 // для прорисовки подложки с тайловой анимацией
 float StarsTile=0.0f;
@@ -55,7 +55,7 @@ float StarsTileEndTransparentLayer2 = 0.0f;
 //------------------------------------------------------------------------------------
 // StarSystem initialiation
 //------------------------------------------------------------------------------------
-void StarSystemInit(int Num, VECTOR3D SetBaseRotation)
+void StarSystemInit(int Num, sVECTOR3D SetBaseRotation)
 {
 	// SkyBox setup
 	switch (Num) {
@@ -94,7 +94,7 @@ void StarSystemInit(int Num, VECTOR3D SetBaseRotation)
 		delete psSpaceStatic;
 		psSpaceStatic = nullptr;
 	}
-	psSpaceStatic = new CSpaceStars;
+	psSpaceStatic = new cSpaceStars;
 }
 
 
@@ -131,7 +131,7 @@ void StarSystemDraw(int DrawType)
 	if (!StarSystem_InitedAll) return;
 
 	// current camera location
-	VECTOR3D CurrentCameraLocation;
+	sVECTOR3D CurrentCameraLocation;
 	vw_GetCameraLocation(&CurrentCameraLocation);
 
 	vw_DepthTest(false, -1);
@@ -159,15 +159,15 @@ void StarSystemDraw(int DrawType)
 
 	// космические объекты
 	// рисуем планеты и большие астероиды _до_ тайловой анимации
-	CSpaceObject *tmp1 = StartSpaceObject;
+	cSpaceObject *tmp1 = StartSpaceObject;
 	while (tmp1 != nullptr) {
-		CSpaceObject *tmp2 = tmp1->Next;
+		cSpaceObject *tmp2 = tmp1->Next;
 
 		// если это планета на заднем фоне
 		if (tmp1->ObjectType == 14) {
 			if (DrawType == 2) {
 				vw_PushMatrix();
-				vw_Translate(VECTOR3D(CurrentCameraLocation.x*0.90f-GameCameraGetDeviation()*4.0f, GameCameraGetDeviation()*2.0f,0.0f));
+				vw_Translate(sVECTOR3D(CurrentCameraLocation.x*0.90f-GameCameraGetDeviation()*4.0f, GameCameraGetDeviation()*2.0f,0.0f));
 			}
 			tmp1->Draw(false);
 			if (DrawType == 2)
@@ -177,7 +177,7 @@ void StarSystemDraw(int DrawType)
 			if (tmp1->ObjectType == 15 && (tmp1->ObjectCreationType>10 && tmp1->ObjectCreationType<20)) {
 				if (DrawType == 2) {
 					vw_PushMatrix();
-					vw_Translate(VECTOR3D(CurrentCameraLocation.x*0.70f-GameCameraGetDeviation()*4.0f, GameCameraGetDeviation()*2.0f,0.0f));
+					vw_Translate(sVECTOR3D(CurrentCameraLocation.x*0.70f-GameCameraGetDeviation()*4.0f, GameCameraGetDeviation()*2.0f,0.0f));
 				}
 				tmp1->Draw(false);
 				if (DrawType == 2)
@@ -278,7 +278,7 @@ void StarSystemDraw(int DrawType)
 		if (StarsTile < -3.0f) StarsTile += 3.0f;
 
 
-		eTexture *TileTexture = vw_FindTextureByName("skybox/tile_back.tga");
+		sTexture *TileTexture = vw_FindTextureByName("skybox/tile_back.tga");
 		vw_SetTexture(0, TileTexture);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
@@ -364,10 +364,10 @@ void StarSystemDraw(int DrawType)
 
 	// корректируем положение частиц "космической пыли", если в игре и камера движется
 	if (DrawType == 2) {
-		VECTOR3D TMPpsSpace;
+		sVECTOR3D TMPpsSpace;
 		psSpace->GetLocation(&TMPpsSpace);
 		psSpace->SetStartLocation(TMPpsSpace);
-		psSpace->MoveSystemLocation(VECTOR3D(0,10,250)+GamePoint);
+		psSpace->MoveSystemLocation(sVECTOR3D(0,10,250)+GamePoint);
 	}
 }
 
@@ -399,7 +399,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 			width_2 = length_2 = 175.0f;
 			heigh_2 = 0.0f;
 
-			VECTOR3D CurrentCameraLocation;
+			sVECTOR3D CurrentCameraLocation;
 			vw_GetCameraLocation(&CurrentCameraLocation);
 
 			x = GamePoint.x+GameCameraGetDeviation()*2.0f + CurrentCameraLocation.x*0.5f;
@@ -463,7 +463,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 		if (StarsTile2 < -3.0f) StarsTile2 += 3.0f;
 
 
-		eTexture *TileTexture = vw_FindTextureByName("skybox/tile_stars.tga");
+		sTexture *TileTexture = vw_FindTextureByName("skybox/tile_stars.tga");
 		vw_SetTexture(0, TileTexture);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную

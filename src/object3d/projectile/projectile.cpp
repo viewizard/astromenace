@@ -31,7 +31,7 @@
 
 
 
-struct ProjectileData {
+struct sProjectileData {
 	float	Radius;
 	float	DamageHull;
 	float	DamageSystems;
@@ -46,7 +46,7 @@ struct ProjectileData {
 
 
 // снаряды для оружия землян 1-99
-static ProjectileData PresetEarthProjectileData[] = {
+static sProjectileData PresetEarthProjectileData[] = {
 	// Kinetic
 	{0.3f, 5, 0, 	0, 50, 4, 1},
 	{0.6f, 20, 0, 	0, 45, 4, 1},
@@ -81,7 +81,7 @@ static ProjectileData PresetEarthProjectileData[] = {
 
 
 // снаряды для оружия пришельцев 101-199
-static ProjectileData PresetAlienProjectileData[] = {
+static sProjectileData PresetAlienProjectileData[] = {
 	// как Kinetic1
 	{0.3f, 5, 0, 	0, 70, 4, 1},
 	// с наведением, как Kinetic2
@@ -109,7 +109,7 @@ static ProjectileData PresetAlienProjectileData[] = {
 
 
 // снаряды для оружия пиратов 201-299
-static ProjectileData PresetPirateProjectileData[] = {
+static sProjectileData PresetPirateProjectileData[] = {
 	// стрельба турели 1
 	{0.3f, 5, 0, 	0, 60, 4, 1},
 	// стрельба турели 2
@@ -229,7 +229,7 @@ float GetProjectileSpeed(int Num)
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-CProjectile::CProjectile(void)
+cProjectile::cProjectile(void)
 {
 	// друг
 	ObjectStatus = 2;
@@ -248,19 +248,19 @@ CProjectile::CProjectile(void)
 //-----------------------------------------------------------------------------
 // выполнение действий
 //-----------------------------------------------------------------------------
-void CProjectile::Create(int ProjectileNum)
+void cProjectile::Create(int ProjectileNum)
 {
 	if (ProjectileNum <= 0) {
-		fprintf(stderr, "!!! Couldn't init CProjectile object with Number %i.\n", ProjectileNum);
+		fprintf(stderr, "!!! Couldn't init cProjectile object with Number %i.\n", ProjectileNum);
 		return;
 	} else if ((ProjectileNum >= 1 && ProjectileNum <= 99) && ((unsigned int)ProjectileNum > PresetEarthProjectileDataCount)) {
-		fprintf(stderr, "!!! Couldn't init CProjectile(1) object with Number %i.\n", ProjectileNum);
+		fprintf(stderr, "!!! Couldn't init cProjectile(1) object with Number %i.\n", ProjectileNum);
 		return;
 	} else if ((ProjectileNum >= 101 && ProjectileNum <= 199) && ((unsigned int)ProjectileNum-100 > PresetAlienProjectileDataCount)) {
-		fprintf(stderr, "!!! Couldn't init CProjectile(2) object with Number %i.\n", ProjectileNum);
+		fprintf(stderr, "!!! Couldn't init cProjectile(2) object with Number %i.\n", ProjectileNum);
 		return;
 	} else if ((ProjectileNum >= 201 && ProjectileNum <= 299) && ((unsigned int)ProjectileNum-200 > PresetPirateProjectileDataCount)) {
-		fprintf(stderr, "!!! Couldn't init CProjectile(3) object with Number %i.\n", ProjectileNum);
+		fprintf(stderr, "!!! Couldn't init cProjectile(3) object with Number %i.\n", ProjectileNum);
 		return;
 	}
 
@@ -302,10 +302,10 @@ void CProjectile::Create(int ProjectileNum)
 
 
 	// начальные установки
-	GraphicFXLocation = new VECTOR3D[GraphicFXQuantity];
-	GraphicFX = new eParticleSystem*[GraphicFXQuantity];
+	GraphicFXLocation = new sVECTOR3D[GraphicFXQuantity];
+	GraphicFX = new cParticleSystem*[GraphicFXQuantity];
 	for (int i=0; i<GraphicFXQuantity; i++) {
-		GraphicFXLocation[i] = VECTOR3D(0.0f, 0.0f, 0.0f);
+		GraphicFXLocation[i] = sVECTOR3D(0.0f, 0.0f, 0.0f);
 		GraphicFX[i] = nullptr;
 	}
 
@@ -319,67 +319,67 @@ void CProjectile::Create(int ProjectileNum)
 
 	// Kinetic
 	case 1:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 1);
 		break;
 	case 2:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 2);
 		break;
 	case 3:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 3);
 		break;
 	case 4:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 4);
 		break;
 	// Ion
 	case 5:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 5);
 		break;
 	case 6:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 6);
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 5);
-		GraphicFX[1]->CreationSize = VECTOR3D(2.5f,2.5f,0.5f);
+		GraphicFX[1]->CreationSize = sVECTOR3D(2.5f,2.5f,0.5f);
 		GraphicFX[1]->DeadZone = 1.9f;
 		break;
 	case 7:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 12);
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 5);
 		break;
 	// Plasma
 	case 8:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 7);
 		break;
 	case 9:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 10);
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 8);
-		GraphicFX[2] = new eParticleSystem;
+		GraphicFX[2] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[2], 9);
 		break;
 	case 10:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 8);
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 9);
-		GraphicFX[2] = new eParticleSystem;
+		GraphicFX[2] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[2], 11);
 		break;
 	// Maser
 	case 11:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 17);
-		GraphicFX[0]->CreationSize = VECTOR3D(0.8f,0.8f,100.0f);
-		ProjectileCenter = VECTOR3D(0.0f,0.0f,50.0f);
+		GraphicFX[0]->CreationSize = sVECTOR3D(0.8f,0.8f,100.0f);
+		ProjectileCenter = sVECTOR3D(0.0f,0.0f,50.0f);
 		NeedStopPartic = true;
 		{
 			float MinX = -GraphicFX[0]->CreationSize.x/2;
@@ -389,28 +389,28 @@ void CProjectile::Create(int ProjectileNum)
 			float MinZ = -GraphicFX[0]->CreationSize.z/2;
 			float MaxZ = GraphicFX[0]->CreationSize.z/2;
 			// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-			OBB[0] = AABB[0] = VECTOR3D(MaxX, MaxY, MaxZ);
-			OBB[1] = AABB[1] = VECTOR3D(MinX, MaxY, MaxZ);
-			OBB[2] = AABB[2] = VECTOR3D(MinX, MaxY, MinZ);
-			OBB[3] = AABB[3] = VECTOR3D(MaxX, MaxY, MinZ);
-			OBB[4] = AABB[4] = VECTOR3D(MaxX, MinY, MaxZ);
-			OBB[5] = AABB[5] = VECTOR3D(MinX, MinY, MaxZ);
-			OBB[6] = AABB[6] = VECTOR3D(MinX, MinY, MinZ);
-			OBB[7] = AABB[7] = VECTOR3D(MaxX, MinY, MinZ);
-			OBBLocation = VECTOR3D(0,0,0);
+			OBB[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+			OBB[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+			OBB[2] = AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
+			OBB[3] = AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+			OBB[4] = AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+			OBB[5] = AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
+			OBB[6] = AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
+			OBB[7] = AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
+			OBBLocation = sVECTOR3D(0,0,0);
 			Width = fabsf(MaxX-MinX);
 			Height = fabsf(MaxY-MinY);
 			Length = fabsf(MaxZ-MinZ);
 		}
 		break;
 	case 12:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 17);
-		GraphicFX[0]->CreationSize = VECTOR3D(0.8f,0.8f,110.0f);
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[0]->CreationSize = sVECTOR3D(0.8f,0.8f,110.0f);
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 18);
-		GraphicFX[1]->CreationSize = VECTOR3D(1.6f,1.6f,110.0f);
-		ProjectileCenter = VECTOR3D(0.0f,0.0f,55.0f);
+		GraphicFX[1]->CreationSize = sVECTOR3D(1.6f,1.6f,110.0f);
+		ProjectileCenter = sVECTOR3D(0.0f,0.0f,55.0f);
 		NeedStopPartic = true;
 		{
 			float MinX = -GraphicFX[0]->CreationSize.x/2;
@@ -420,15 +420,15 @@ void CProjectile::Create(int ProjectileNum)
 			float MinZ = -GraphicFX[0]->CreationSize.z/2;
 			float MaxZ = GraphicFX[0]->CreationSize.z/2;
 			// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-			OBB[0] = AABB[0] = VECTOR3D(MaxX, MaxY, MaxZ);
-			OBB[1] = AABB[1] = VECTOR3D(MinX, MaxY, MaxZ);
-			OBB[2] = AABB[2] = VECTOR3D(MinX, MaxY, MinZ);
-			OBB[3] = AABB[3] = VECTOR3D(MaxX, MaxY, MinZ);
-			OBB[4] = AABB[4] = VECTOR3D(MaxX, MinY, MaxZ);
-			OBB[5] = AABB[5] = VECTOR3D(MinX, MinY, MaxZ);
-			OBB[6] = AABB[6] = VECTOR3D(MinX, MinY, MinZ);
-			OBB[7] = AABB[7] = VECTOR3D(MaxX, MinY, MinZ);
-			OBBLocation = VECTOR3D(0,0,0);
+			OBB[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+			OBB[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+			OBB[2] = AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
+			OBB[3] = AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+			OBB[4] = AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+			OBB[5] = AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
+			OBB[6] = AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
+			OBB[7] = AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
+			OBBLocation = sVECTOR3D(0,0,0);
 			Width = fabsf(MaxX-MinX);
 			Height = fabsf(MaxY-MinY);
 			Length = fabsf(MaxZ-MinZ);
@@ -436,15 +436,15 @@ void CProjectile::Create(int ProjectileNum)
 		break;
 	// Antimatter
 	case 13:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 19);
 		break;
 	// Laser
 	case 14:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 20);
-		GraphicFX[0]->CreationSize = VECTOR3D(0.4f,0.4f,120.0f);
-		ProjectileCenter = VECTOR3D(0.0f,0.0f,60.0f);
+		GraphicFX[0]->CreationSize = sVECTOR3D(0.4f,0.4f,120.0f);
+		ProjectileCenter = sVECTOR3D(0.0f,0.0f,60.0f);
 		NeedStopPartic = true;
 		{
 			float MinX = -GraphicFX[0]->CreationSize.x/2;
@@ -454,15 +454,15 @@ void CProjectile::Create(int ProjectileNum)
 			float MinZ = -GraphicFX[0]->CreationSize.z/2;
 			float MaxZ = GraphicFX[0]->CreationSize.z/2;
 			// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-			OBB[0] = AABB[0] = VECTOR3D(MaxX, MaxY, MaxZ);
-			OBB[1] = AABB[1] = VECTOR3D(MinX, MaxY, MaxZ);
-			OBB[2] = AABB[2] = VECTOR3D(MinX, MaxY, MinZ);
-			OBB[3] = AABB[3] = VECTOR3D(MaxX, MaxY, MinZ);
-			OBB[4] = AABB[4] = VECTOR3D(MaxX, MinY, MaxZ);
-			OBB[5] = AABB[5] = VECTOR3D(MinX, MinY, MaxZ);
-			OBB[6] = AABB[6] = VECTOR3D(MinX, MinY, MinZ);
-			OBB[7] = AABB[7] = VECTOR3D(MaxX, MinY, MinZ);
-			OBBLocation = VECTOR3D(0,0,0);
+			OBB[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+			OBB[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+			OBB[2] = AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
+			OBB[3] = AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+			OBB[4] = AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+			OBB[5] = AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
+			OBB[6] = AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
+			OBB[7] = AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
+			OBBLocation = sVECTOR3D(0,0,0);
 			Width = fabsf(MaxX-MinX);
 			Height = fabsf(MaxY-MinY);
 			Length = fabsf(MaxZ-MinZ);
@@ -470,20 +470,20 @@ void CProjectile::Create(int ProjectileNum)
 		break;
 	// Gauss
 	case 15:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 21);
 		break;
 	// ракета
 	case 16:
 		LoadObjectData("models/earthfighter/missile.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::CObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new eParticleSystem;
+		::cObject3D::InitByDrawObjectList();
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 13);
-		GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
@@ -491,13 +491,13 @@ void CProjectile::Create(int ProjectileNum)
 	case 17:
 		LoadObjectData("models/earthfighter/swarm.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::CObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new eParticleSystem;
+		::cObject3D::InitByDrawObjectList();
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 16);
-		GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		GraphicFX[1]->Life = 1.00f; // у роя слишком много ракет, если делать долгий шлейф - может просесть фпс
@@ -506,13 +506,13 @@ void CProjectile::Create(int ProjectileNum)
 	case 18:
 		LoadObjectData("models/earthfighter/torpedo.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::CObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new eParticleSystem;
+		::cObject3D::InitByDrawObjectList();
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 14);
-		GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
@@ -520,13 +520,13 @@ void CProjectile::Create(int ProjectileNum)
 	case 19:
 		LoadObjectData("models/earthfighter/nuke.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::CObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new eParticleSystem;
+		::cObject3D::InitByDrawObjectList();
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 15);
-		GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
@@ -542,71 +542,71 @@ void CProjectile::Create(int ProjectileNum)
 
 	// как Kinetic1
 	case 101:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 22);
 		break;
 	// с наведением, как Kinetic2
 	case 102:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 23);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 102);
 		break;
 	// как Kinetic3
 	case 103:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 24);
 		break;
 	// с наведением, как Kinetic3
 	case 104:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 24);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 102);
 		break;
 	// как Kinetic2
 	case 105:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 23);
 		break;
 	// энергетическая мина (1-й тип)
 	case 106:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 36);
 		break;
 	// энергетическая мина (2-й тип)
 	case 107:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 37);
 		break;
 	// как Plasma3
 	case 108:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 8);
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 9);
-		GraphicFX[2] = new eParticleSystem;
+		GraphicFX[2] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[2], 11);
 		break;
 	// как Plasma2
 	case 109:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 10);
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 8);
-		GraphicFX[2] = new eParticleSystem;
+		GraphicFX[2] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[2], 9);
 		break;
 	// как Laser
 	case 110:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 38);
-		GraphicFX[0]->CreationSize = VECTOR3D(2.0f,2.0f,110.0f);
-		ProjectileCenter = VECTOR3D(0.0f,0.0f,55.0f);
+		GraphicFX[0]->CreationSize = sVECTOR3D(2.0f,2.0f,110.0f);
+		ProjectileCenter = sVECTOR3D(0.0f,0.0f,55.0f);
 		NeedStopPartic = true;
 		{
 			float MinX = -GraphicFX[0]->CreationSize.x/2;
@@ -616,15 +616,15 @@ void CProjectile::Create(int ProjectileNum)
 			float MinZ = -GraphicFX[0]->CreationSize.z/2;
 			float MaxZ = GraphicFX[0]->CreationSize.z/2;
 			// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-			OBB[0] = AABB[0] = VECTOR3D(MaxX, MaxY, MaxZ);
-			OBB[1] = AABB[1] = VECTOR3D(MinX, MaxY, MaxZ);
-			OBB[2] = AABB[2] = VECTOR3D(MinX, MaxY, MinZ);
-			OBB[3] = AABB[3] = VECTOR3D(MaxX, MaxY, MinZ);
-			OBB[4] = AABB[4] = VECTOR3D(MaxX, MinY, MaxZ);
-			OBB[5] = AABB[5] = VECTOR3D(MinX, MinY, MaxZ);
-			OBB[6] = AABB[6] = VECTOR3D(MinX, MinY, MinZ);
-			OBB[7] = AABB[7] = VECTOR3D(MaxX, MinY, MinZ);
-			OBBLocation = VECTOR3D(0,0,0);
+			OBB[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+			OBB[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+			OBB[2] = AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
+			OBB[3] = AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+			OBB[4] = AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+			OBB[5] = AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
+			OBB[6] = AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
+			OBB[7] = AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
+			OBBLocation = sVECTOR3D(0,0,0);
 			Width = fabsf(MaxX-MinX);
 			Height = fabsf(MaxY-MinY);
 			Length = fabsf(MaxZ-MinZ);
@@ -639,37 +639,37 @@ void CProjectile::Create(int ProjectileNum)
 
 	// стрельба турели 1
 	case 201:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 26);
 		break;
 	// стрельба турели 2
 	case 202:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 34);
 		break;
 	// фларес
 	case 203:
 		// смотрит вверх
-		Orientation = VECTOR3D(0.0f, 0.5f, 0.5f);
-		GraphicFX[0] = new eParticleSystem;
+		Orientation = sVECTOR3D(0.0f, 0.5f, 0.5f);
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 25);
 		break;
 	// как Kinetic1
 	case 204:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 26);
 		break;
 	// как Missile1
 	case 205:
 		LoadObjectData("models/earthfighter/missile.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::CObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new eParticleSystem;
+		::cObject3D::InitByDrawObjectList();
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 27);
-		GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
@@ -677,41 +677,41 @@ void CProjectile::Create(int ProjectileNum)
 	case 206:
 		LoadObjectData("models/earthfighter/swarm.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::CObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new eParticleSystem;
+		::cObject3D::InitByDrawObjectList();
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 31);
-		GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
 	// как Ion2
 	case 207:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 6);
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 5);
-		GraphicFX[1]->CreationSize = VECTOR3D(2.5f,2.5f,0.5f);
+		GraphicFX[1]->CreationSize = sVECTOR3D(2.5f,2.5f,0.5f);
 		GraphicFX[1]->DeadZone = 1.9f;
 		break;
 	// как Antimatter
 	case 208:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 19);
 		break;
 	// как торпеда
 	case 209:
 		LoadObjectData("models/earthfighter/torpedo.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::CObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new eParticleSystem;
+		::cObject3D::InitByDrawObjectList();
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 32);
-		GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
@@ -719,33 +719,33 @@ void CProjectile::Create(int ProjectileNum)
 	case 210:
 		LoadObjectData("models/earthfighter/nuke.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::CObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new eParticleSystem;
+		::cObject3D::InitByDrawObjectList();
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 33);
-		GraphicFXLocation[0] = VECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
 	// как Kinetic2
 	case 211:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 34);
 		break;
 	// как Kinetic3
 	case 212:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 35);
 		break;
 	// как Plasma2
 	case 213:
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 10);
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[1], 8);
-		GraphicFX[2] = new eParticleSystem;
+		GraphicFX[2] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[2], 9);
 		break;
 
@@ -758,7 +758,7 @@ void CProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/mine/mine-01.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/mine/mine1.tga");
 		TextureIllum[0] = vw_FindTextureByName("models/mine/mine1i.tga");
-		::CObject3D::InitByDrawObjectList();
+		::cObject3D::InitByDrawObjectList();
 		break;
 	// мина2 (наведение по высоте + приближение)
 	case 215:
@@ -767,11 +767,11 @@ void CProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/mine/mine-02.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/mine/mine2.tga");
 		TextureIllum[0] = vw_FindTextureByName("models/mine/mine2i.tga");
-		::CObject3D::InitByDrawObjectList();
+		::cObject3D::InitByDrawObjectList();
 
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 28);
-		GraphicFXLocation[0] = VECTOR3D(0.0f, -0.8f, 0.0f);
+		GraphicFXLocation[0] = sVECTOR3D(0.0f, -0.8f, 0.0f);
 		NeedStopPartic = true;
 		break;
 	// мина3 (наведение по высоте + стрельба снарядами)
@@ -782,11 +782,11 @@ void CProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/mine/mine-03.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/mine/mine3.tga");
 		TextureIllum[0] = vw_FindTextureByName("models/mine/mine3i.tga");
-		::CObject3D::InitByDrawObjectList();
+		::cObject3D::InitByDrawObjectList();
 
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 29);
-		GraphicFXLocation[0] = VECTOR3D(0.0f, -2.5f, 0.0f);
+		GraphicFXLocation[0] = sVECTOR3D(0.0f, -2.5f, 0.0f);
 		NeedStopPartic = true;
 		break;
 	// мина4 (наведение по высоте + стрельба ракетами)
@@ -797,11 +797,11 @@ void CProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/mine/mine-04.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/mine/mine4.tga");
 		TextureIllum[0] = vw_FindTextureByName("models/mine/mine4i.tga");
-		::CObject3D::InitByDrawObjectList();
+		::cObject3D::InitByDrawObjectList();
 
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetProjectileGFX(GraphicFX[0], 30);
-		GraphicFXLocation[0] = VECTOR3D(0.0f, -0.7f, 0.0f);
+		GraphicFXLocation[0] = sVECTOR3D(0.0f, -0.7f, 0.0f);
 		NeedStopPartic = true;
 		break;
 
@@ -830,7 +830,7 @@ void CProjectile::Create(int ProjectileNum)
 //-----------------------------------------------------------------------------
 // Деструктор
 //-----------------------------------------------------------------------------
-CProjectile::~CProjectile(void)
+cProjectile::~cProjectile(void)
 {
 	if (GraphicFXLocation != nullptr) {
 		delete [] GraphicFXLocation;
@@ -896,15 +896,15 @@ CProjectile::~CProjectile(void)
 		case 206:
 		case 209:
 		case 210:
-			eParticle *tmp = GraphicFX[i]->Start;
+			sParticle *tmp = GraphicFX[i]->Start;
 			while (tmp != nullptr) {
-				VECTOR3D Dist2 = tmp->Location - Location;
+				sVECTOR3D Dist2 = tmp->Location - Location;
 				float fDist2 = Dist2.x*Dist2.x + Dist2.y*Dist2.y + Dist2.z*Dist2.z;
 				if (fDist2 < 1.0f)
 					fDist2 = 3.0f;
 
 				if (fDist2 < effective_dist2) {
-					tmp->Velocity = VECTOR3D(Dist2.x+10.0f*vw_Randf0, Dist2.y+10.0f*vw_Randf0, Dist2.z+10.0f*vw_Randf0);
+					tmp->Velocity = sVECTOR3D(Dist2.x+10.0f*vw_Randf0, Dist2.y+10.0f*vw_Randf0, Dist2.z+10.0f*vw_Randf0);
 					tmp->Velocity.Normalize();
 					tmp->Velocity = tmp->Velocity^(effective_dist2/fDist2);
 					tmp->NeedStop = true;
@@ -933,11 +933,11 @@ CProjectile::~CProjectile(void)
 //-----------------------------------------------------------------------------
 // Установка положения
 //-----------------------------------------------------------------------------
-void CProjectile::SetRotation(VECTOR3D NewRotation)
+void cProjectile::SetRotation(sVECTOR3D NewRotation)
 {
 
 	// вызываем родительскую функцию
-	::CObject3D::SetRotation(NewRotation);
+	::cObject3D::SetRotation(NewRotation);
 
 
 	if (GraphicFX != nullptr)
@@ -964,10 +964,10 @@ void CProjectile::SetRotation(VECTOR3D NewRotation)
 //-----------------------------------------------------------------------------
 // Установка положения
 //-----------------------------------------------------------------------------
-void CProjectile::SetLocation(VECTOR3D NewLocation)
+void cProjectile::SetLocation(sVECTOR3D NewLocation)
 {
 	// вызываем родительскую функцию
-	::CObject3D::SetLocation(NewLocation);
+	::cObject3D::SetLocation(NewLocation);
 
 	if (GraphicFX != nullptr)
 		for (int i = 0; i < GraphicFXQuantity; i++) {
@@ -1244,17 +1244,17 @@ void CProjectile::SetLocation(VECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 // выполнение действий
 //-----------------------------------------------------------------------------
-bool CProjectile::Update(float Time)
+bool cProjectile::Update(float Time)
 {
 	// вызываем родительскую функцию
 	// если там передали удалить - выходим
-	if (!::CObject3D::Update(Time)) {
+	if (!::cObject3D::Update(Time)) {
 		// если лучевое оружие, никогда не уничтожаем его!!!
 		// это сделаем в пушке...
 		if (ProjectileType == 2)
 			return true;
 		// передаем на самоуничтожение... там все сделаем правильно
-		new CBulletExplosion(nullptr, this, -Num, Location, Speed);
+		new cBulletExplosion(nullptr, this, -Num, Location, Speed);
 		return false;
 	}
 
@@ -1270,7 +1270,7 @@ bool CProjectile::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Общее перемещение снаряда...
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	VECTOR3D Velocity = Orientation^(Speed*TimeDelta);
+	sVECTOR3D Velocity = Orientation^(Speed*TimeDelta);
 	SetLocation(Location+Velocity);
 
 
@@ -1296,32 +1296,32 @@ bool CProjectile::Update(float Time)
 	// Plasma
 	case 9:
 	case 109:
-		GraphicFX[1]->RotateSystemAndParticlesByAngle(VECTOR3D(GraphicFX[1]->Angle.x-360.0f*TimeDelta,GraphicFX[1]->Angle.y,GraphicFX[1]->Angle.z));
-		GraphicFX[2]->RotateSystemAndParticlesByAngle(VECTOR3D(GraphicFX[2]->Angle.x-360.0f*TimeDelta,GraphicFX[2]->Angle.y,GraphicFX[2]->Angle.z));
+		GraphicFX[1]->RotateSystemAndParticlesByAngle(sVECTOR3D(GraphicFX[1]->Angle.x-360.0f*TimeDelta,GraphicFX[1]->Angle.y,GraphicFX[1]->Angle.z));
+		GraphicFX[2]->RotateSystemAndParticlesByAngle(sVECTOR3D(GraphicFX[2]->Angle.x-360.0f*TimeDelta,GraphicFX[2]->Angle.y,GraphicFX[2]->Angle.z));
 		break;
 	case 10:
 	case 108:
 	case 213:
-		GraphicFX[0]->RotateSystemAndParticlesByAngle(VECTOR3D(GraphicFX[0]->Angle.x-360.0f*TimeDelta,GraphicFX[0]->Angle.y,GraphicFX[0]->Angle.z));
-		GraphicFX[1]->RotateSystemAndParticlesByAngle(VECTOR3D(GraphicFX[1]->Angle.x-360.0f*TimeDelta,GraphicFX[1]->Angle.y,GraphicFX[1]->Angle.z));
+		GraphicFX[0]->RotateSystemAndParticlesByAngle(sVECTOR3D(GraphicFX[0]->Angle.x-360.0f*TimeDelta,GraphicFX[0]->Angle.y,GraphicFX[0]->Angle.z));
+		GraphicFX[1]->RotateSystemAndParticlesByAngle(sVECTOR3D(GraphicFX[1]->Angle.x-360.0f*TimeDelta,GraphicFX[1]->Angle.y,GraphicFX[1]->Angle.z));
 		break;
 
 	// Maser
 	case 11:
-		GraphicFX[0]->RotateParticlesByAngle(VECTOR3D(0.0f,	0.0f, 360.0f*TimeDelta*3.0f));
+		GraphicFX[0]->RotateParticlesByAngle(sVECTOR3D(0.0f,	0.0f, 360.0f*TimeDelta*3.0f));
 		if (Lifetime <= GraphicFX[0]->Life/1.5f) GraphicFX[0]->IsSuppressed = true;
 		break;
 	case 12:
-		GraphicFX[0]->RotateParticlesByAngle(VECTOR3D(0.0f,0.0f,360.0f*TimeDelta*4.0f));
+		GraphicFX[0]->RotateParticlesByAngle(sVECTOR3D(0.0f,0.0f,360.0f*TimeDelta*4.0f));
 		if (Lifetime <= GraphicFX[0]->Life/1.5f) GraphicFX[0]->IsSuppressed = true;
-		GraphicFX[1]->RotateParticlesByAngle(VECTOR3D(0.0f,0.0f,-360.0f*TimeDelta*2.0f));
+		GraphicFX[1]->RotateParticlesByAngle(sVECTOR3D(0.0f,0.0f,-360.0f*TimeDelta*2.0f));
 		if (Lifetime <= GraphicFX[1]->Life/1.5f) GraphicFX[1]->IsSuppressed = true;
 		break;
 
 	// Antimatter
 	case 13:
 	case 208:
-		GraphicFX[0]->RotateSystemAndParticlesByAngle(VECTOR3D(GraphicFX[0]->Angle.x,GraphicFX[0]->Angle.y-360.0f*TimeDelta*2.0f,GraphicFX[0]->Angle.z));
+		GraphicFX[0]->RotateSystemAndParticlesByAngle(sVECTOR3D(GraphicFX[0]->Angle.x,GraphicFX[0]->Angle.y-360.0f*TimeDelta*2.0f,GraphicFX[0]->Angle.z));
 		break;
 
 	// Laser
@@ -1332,7 +1332,7 @@ bool CProjectile::Update(float Time)
 
 	// Gauss
 	case 15:
-		GraphicFX[0]->RotateParticlesByAngle(VECTOR3D(0.0f,0.0f,360.0f*TimeDelta*6.0f));
+		GraphicFX[0]->RotateParticlesByAngle(sVECTOR3D(0.0f,0.0f,360.0f*TimeDelta*6.0f));
 		break;
 
 
@@ -1376,7 +1376,7 @@ bool CProjectile::Update(float Time)
 		RotationSpeed = 10.0f;
 		{
 missile:
-			VECTOR3D NeedAngle = Rotation;
+			sVECTOR3D NeedAngle = Rotation;
 
 			float EffectiveRange = 1000000.0f;
 			// только для ракет игрока учитываем максимальную дальность полета
@@ -1427,7 +1427,7 @@ missile:
 			}
 
 
-			VECTOR3D TTT = NeedAngle-Rotation;
+			sVECTOR3D TTT = NeedAngle-Rotation;
 			SetRotation(TTT);
 
 		}
@@ -1454,7 +1454,7 @@ missile:
 	// мина пришельцев, энергетическая (1-й тип)
 	case 106: {
 		// получаем положение ближайшего врага
-		CObject3D *tmpTarget = GetCloserTargetPosition(ObjectStatus, Location);
+		cObject3D *tmpTarget = GetCloserTargetPosition(ObjectStatus, Location);
 
 		// !!! упращенно, не учитываем положение плоскости
 		if (tmpTarget != nullptr) {
@@ -1467,7 +1467,7 @@ missile:
 				// находим направление (если нужно вниз, меняем знак)
 				if (Location.y > tmpTarget->Location.y) SpeedTmp *= -1.0f;
 
-				VECTOR3D VelocityUp = VECTOR3D(0.0f,SpeedTmp,0.0f);
+				sVECTOR3D VelocityUp = sVECTOR3D(0.0f,SpeedTmp,0.0f);
 				SetLocation(Location+VelocityUp);
 			}
 		}
@@ -1497,7 +1497,7 @@ missile:
 	case 107:
 		RotationSpeed = 180.0f;
 		{
-			VECTOR3D NeedAngle = Rotation;
+			sVECTOR3D NeedAngle = Rotation;
 			// устанавливаем в Target на что наведен этот снаряд
 			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, 1000000);
 
@@ -1518,7 +1518,7 @@ missile:
 			NeedAngle.z = Rotation.z;
 			NeedAngle.x = Rotation.x;
 
-			VECTOR3D TTT = NeedAngle-Rotation;
+			sVECTOR3D TTT = NeedAngle-Rotation;
 			SetRotation(TTT);
 
 
@@ -1527,7 +1527,7 @@ missile:
 				float MineSpeed = 5.0f;
 
 				// получаем положение ближайшего врага
-				VECTOR3D NeedPoint = Target->Location;
+				sVECTOR3D NeedPoint = Target->Location;
 
 				// !!! упращенно, не учитываем положение плоскости
 
@@ -1539,7 +1539,7 @@ missile:
 					// находим направление (если нужно вниз, меняем знак)
 					if (Location.y > NeedPoint.y) SpeedTmp *= -1.0f;
 
-					VECTOR3D VelocityUp = VECTOR3D(0.0f,SpeedTmp,0.0f);
+					sVECTOR3D VelocityUp = sVECTOR3D(0.0f,SpeedTmp,0.0f);
 					SetLocation(Location+VelocityUp);
 				}
 			}
@@ -1569,7 +1569,7 @@ missile:
 
 		RotationSpeed = 180.0f;
 		{
-			VECTOR3D NeedAngle = Rotation;
+			sVECTOR3D NeedAngle = Rotation;
 			// устанавливаем в Target на что наведен этот снаряд
 			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, 1000000);
 
@@ -1590,7 +1590,7 @@ missile:
 			NeedAngle.z = Rotation.z;
 			NeedAngle.x = Rotation.x;
 
-			VECTOR3D TTT = NeedAngle-Rotation;
+			sVECTOR3D TTT = NeedAngle-Rotation;
 			SetRotation(TTT);
 
 
@@ -1599,7 +1599,7 @@ missile:
 				float MineSpeed = 5.0f;
 
 				// получаем положение ближайшего врага
-				VECTOR3D NeedPoint = Target->Location;
+				sVECTOR3D NeedPoint = Target->Location;
 
 				// !!! упращенно, не учитываем положение плоскости
 
@@ -1610,7 +1610,7 @@ missile:
 					// находим направление (если нужно вниз, меняем знак)
 					if (Location.y-2.0f > NeedPoint.y) SpeedTmp *= -1.0f;
 
-					VECTOR3D VelocityUp = VECTOR3D(0.0f,SpeedTmp,0.0f);
+					sVECTOR3D VelocityUp = sVECTOR3D(0.0f,SpeedTmp,0.0f);
 					SetLocation(Location+VelocityUp);
 				}
 
@@ -1618,9 +1618,9 @@ missile:
 				MineNextFireTime -= TimeDelta;
 				if (MineNextFireTime <= 0.0f) {
 					// создаем снаряд
-					CProjectile *Projectile = new CProjectile;
+					cProjectile *Projectile = new cProjectile;
 					Projectile->Create(204);
-					Projectile->SetLocation(Location+VECTOR3D(0.0f, -2.0f, 0.0f));
+					Projectile->SetLocation(Location + sVECTOR3D(0.0f, -2.0f, 0.0f));
 
 					Projectile->SetRotation(Rotation);
 					for (int i=0; i<Projectile->GraphicFXQuantity; i++) {
@@ -1666,7 +1666,7 @@ missile:
 
 		RotationSpeed = 180.0f;
 		{
-			VECTOR3D NeedAngle = Rotation;
+			sVECTOR3D NeedAngle = Rotation;
 			// устанавливаем в Target на что наведен этот снаряд
 			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, 1000000);
 
@@ -1687,7 +1687,7 @@ missile:
 			NeedAngle.z = Rotation.z;
 			NeedAngle.x = Rotation.x;
 
-			VECTOR3D TTT = NeedAngle-Rotation;
+			sVECTOR3D TTT = NeedAngle-Rotation;
 			SetRotation(TTT);
 
 
@@ -1696,7 +1696,7 @@ missile:
 				float MineSpeed = 5.0f;
 
 				// получаем положение ближайшего врага
-				VECTOR3D NeedPoint = Target->Location;
+				sVECTOR3D NeedPoint = Target->Location;
 
 				// !!! упращенно, не учитываем положение плоскости
 
@@ -1707,7 +1707,7 @@ missile:
 					// находим направление (если нужно вниз, меняем знак)
 					if (Location.y+2.0f > NeedPoint.y) SpeedTmp *= -1.0f;
 
-					VECTOR3D VelocityUp = VECTOR3D(0.0f,SpeedTmp,0.0f);
+					sVECTOR3D VelocityUp = sVECTOR3D(0.0f,SpeedTmp,0.0f);
 					SetLocation(Location+VelocityUp);
 				}
 
@@ -1715,9 +1715,9 @@ missile:
 				MineNextFireTime -= TimeDelta;
 				if (MineNextFireTime <= 0.0f) {
 					// создаем снаряд
-					CProjectile *Projectile = new CProjectile;
+					cProjectile *Projectile = new cProjectile;
 					Projectile->Create(206);
-					Projectile->SetLocation(Location+VECTOR3D(0.0f, 0.0f, 0.0f));
+					Projectile->SetLocation(Location + sVECTOR3D(0.0f, 0.0f, 0.0f));
 
 					Projectile->SetRotation(Rotation);
 					for (int i=0; i<Projectile->GraphicFXQuantity; i++) {

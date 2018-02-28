@@ -63,7 +63,7 @@ void GameSetMissionTitleData(float ShowTime, int Num)
 //------------------------------------------------------------------------------------
 int CheckMissionTitleNum(const char *Num)
 {
-	RECT SrcRect;
+	sRECT SrcRect;
 	SetRect(&SrcRect,0,0,0,0);
 	int XSum = 0;
 
@@ -120,7 +120,7 @@ void DrawMissionTitleNum(int X, int Y, const char *Num, float Transp)
 	// здесь X - крайняя левая(!!!) точка
 	// Y - крайняя верхняя точка (т.е. как и везде)
 
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 	int XStart = X;
 
 
@@ -187,7 +187,7 @@ void GameDrawMissionTitle()
 	MissionTitleLifeTime -= TimeDelta;
 
 
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 	// преобразовываем число в строку
 	std::string buffer{std::to_string(MissionTitleNum)};
@@ -257,7 +257,7 @@ void GameDrawMissionFailed()
 		ExitGame();
 	}
 
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 	// вывод надписи Mission
 	SetRect(&SrcRect,0,0,512,84);

@@ -36,7 +36,7 @@
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void CAsteroid::Create(int SpaceObjectNum)
+void cAsteroid::Create(int SpaceObjectNum)
 {
 	ObjectType = 7;
 	ObjectCreationType = SpaceObjectNum;
@@ -56,7 +56,7 @@ void CAsteroid::Create(int SpaceObjectNum)
 
 	LoadObjectData(NameTMP, this, 0, -1.0f);
 	// находим все данные по геометрии
-	::CObject3D::InitByDrawObjectList();
+	::cObject3D::InitByDrawObjectList();
 
 
 	delete [] NameTMP;

@@ -40,7 +40,7 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber);
 // Shutdown VFS.
 void vw_ShutdownVFS();
 
-struct eFILE {
+struct sFILE {
 	uint32_t Size{0};
 	std::unique_ptr<uint8_t[]> Data{};
 
@@ -48,7 +48,7 @@ struct eFILE {
 	int fseek(long offset, int origin);
 	long ftell();
 
-	eFILE(unsigned int _Size, long _Pos) :
+	sFILE(unsigned int _Size, long _Pos) :
 		Size{_Size},
 		Pos{_Pos}
 	{}
@@ -57,10 +57,10 @@ private:
 	long Pos{0};
 };
 
-// Open the eFILE.
-std::unique_ptr<eFILE> vw_fopen(const std::string &FileName);
+// Open the sFILE.
+std::unique_ptr<sFILE> vw_fopen(const std::string &FileName);
 // You could call vw fclose() if you should release memory in particular
 // part of code. Otherwise, it will be deleted automatically (see. unique_ptr).
-int vw_fclose(std::unique_ptr<eFILE> &stream);
+int vw_fclose(std::unique_ptr<sFILE> &stream);
 
 #endif // VFS_H

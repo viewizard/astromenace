@@ -31,20 +31,20 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CProjectile
+// Класс cProjectile
 //-----------------------------------------------------------------------------
-class CProjectile : public CObject3D
+class cProjectile : public cObject3D
 {
 public:
-	CProjectile();
-	virtual ~CProjectile();
+	cProjectile();
+	virtual ~cProjectile();
 
 	// Обновление данных объектa
 	virtual bool	Update(float Time);
 	// Установка углов поворота
-	virtual void	SetRotation(VECTOR3D NewRotation);
+	virtual void	SetRotation(sVECTOR3D NewRotation);
 	// Установка положения
-	virtual void	SetLocation(VECTOR3D NewLocation);
+	virtual void	SetLocation(sVECTOR3D NewLocation);
 	// Создание нужного объекта
 	virtual void	Create(int ProjectileNum);
 
@@ -63,12 +63,12 @@ public:
 	int		ProjectileType{0};
 
 	// для ракет, тянем на кого навелись... чтобы цель могла принять действия
-	CObject3D	*Target{nullptr};
+	cObject3D	*Target{nullptr};
 
 	// данные для 2-го класса (лучевого снаряда)
 	// эти данные меняем только в объекте-орудии!!!
 	// точка центра снаряда
-	VECTOR3D	ProjectileCenter{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	ProjectileCenter{0.0f, 0.0f, 0.0f};
 
 	// скорость снаряда
 	float		Speed{0.0f};
@@ -92,33 +92,33 @@ public:
 	int		GraphicFXQuantity{0};
 	// тип, как будем удалять -сразу, или глушить
 	bool		GraphicFXDestroyType{false};
-	VECTOR3D	*GraphicFXLocation{nullptr};
-	eParticleSystem	**GraphicFX{nullptr};
+	sVECTOR3D	*GraphicFXLocation{nullptr};
+	cParticleSystem	**GraphicFX{nullptr};
 
 	bool		NeedStopPartic{false};
 
-	CProjectile *Next{nullptr};
-	CProjectile *Prev{nullptr};
+	cProjectile *Next{nullptr};
+	cProjectile *Prev{nullptr};
 };
 
 
 //-----------------------------------------------------------------------------
-// Дополнительные функции для CProjectile
+// Дополнительные функции для cProjectile
 //-----------------------------------------------------------------------------
 
 // Установка нужных данных для вспышки возле ствола
-void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum);
+void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum);
 // получаем время жизни снаряда
 float GetProjectileRange(int Num);
 
 //-----------------------------------------------------------------------------
-// Менеджер CSpaceShipWeapon, дополнительный
+// Менеджер cSpaceShipWeapon, дополнительный
 //-----------------------------------------------------------------------------
 
 // Включаем в список
-void	AttachProjectile(CProjectile* Projectile);
+void	AttachProjectile(cProjectile* Projectile);
 // Исключаем из списка
-void	DetachProjectile(CProjectile* Projectile);
+void	DetachProjectile(cProjectile* Projectile);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllProjectile(float Time);
 // Прорисовываем все объекты

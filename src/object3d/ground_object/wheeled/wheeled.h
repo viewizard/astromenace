@@ -34,13 +34,13 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CWheeled
+// Класс cWheeled
 //-----------------------------------------------------------------------------
-class CWheeled : public CGroundObject
+class cWheeled : public cGroundObject
 {
 public:
 
-	virtual ~CWheeled() {};
+	virtual ~cWheeled() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int	WheeledNum);

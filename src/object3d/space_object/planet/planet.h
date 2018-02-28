@@ -35,13 +35,13 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CPlanet
+// Класс cPlanet
 //-----------------------------------------------------------------------------
-class CPlanet : public CSpaceObject
+class cPlanet : public cSpaceObject
 {
 public:
 
-	virtual ~CPlanet() {};
+	virtual ~cPlanet() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int PlanetNum);

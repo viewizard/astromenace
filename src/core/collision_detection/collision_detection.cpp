@@ -29,14 +29,14 @@
 /*
  * Check, is point belong triangle.
  */
-static bool PointInTriangle(const VECTOR3D &point, const VECTOR3D &pa,
-			    const VECTOR3D &pb, const VECTOR3D &pc)
+static bool PointInTriangle(const sVECTOR3D &point, const sVECTOR3D &pa,
+			    const sVECTOR3D &pb, const sVECTOR3D &pc)
 {
 	float TotalAngle{0.0f};
 
-	VECTOR3D V1{point.x - pa.x, point.y - pa.y, point.z - pa.z};
-	VECTOR3D V2{point.x - pb.x, point.y - pb.y, point.z - pb.z};
-	VECTOR3D V3{point.x - pc.x, point.y - pc.y, point.z - pc.z};
+	sVECTOR3D V1{point.x - pa.x, point.y - pa.y, point.z - pa.z};
+	sVECTOR3D V2{point.x - pb.x, point.y - pb.y, point.z - pb.z};
+	sVECTOR3D V3{point.x - pc.x, point.y - pc.y, point.z - pc.z};
 
 	V1.NormalizeHi();
 	V2.NormalizeHi();
@@ -54,8 +54,8 @@ static bool PointInTriangle(const VECTOR3D &point, const VECTOR3D &pa,
 /*
  * AABB-AABB collision detection.
  */
-bool vw_AABBAABBCollision(const VECTOR3D Object1AABB[8], const VECTOR3D &Object1Location,
-			  const VECTOR3D Object2AABB[8], const VECTOR3D &Object2Location)
+bool vw_AABBAABBCollision(const sVECTOR3D Object1AABB[8], const sVECTOR3D &Object1Location,
+			  const sVECTOR3D Object2AABB[8], const sVECTOR3D &Object2Location)
 {
 	// check projection's collisions
 	if (fabsf(Object1Location.x - Object2Location.x) > fabsf(Object1AABB[0].x + Object2AABB[0].x))
@@ -71,8 +71,8 @@ bool vw_AABBAABBCollision(const VECTOR3D Object1AABB[8], const VECTOR3D &Object1
 /*
  * OBB-OBB collision detection.
  */
-bool vw_OBBOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation, VECTOR3D Object1Location, float Object1RotationMatrix[9],
-			VECTOR3D Object2OBB[8], VECTOR3D Object2OBBLocation, VECTOR3D Object2Location, float Object2RotationMatrix[9])
+bool vw_OBBOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation, sVECTOR3D Object1Location, float Object1RotationMatrix[9],
+			sVECTOR3D Object2OBB[8], sVECTOR3D Object2OBBLocation, sVECTOR3D Object2Location, float Object2RotationMatrix[9])
 {
 	// calcuate rotation matrix
 	float TMPInvObject1RotationMatrix[9]{Object1RotationMatrix[0], Object1RotationMatrix[1], Object1RotationMatrix[2],
@@ -80,7 +80,7 @@ bool vw_OBBOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation, VEC
 					     Object1RotationMatrix[6], Object1RotationMatrix[7], Object1RotationMatrix[8]};
 	vw_Matrix33InverseRotate(TMPInvObject1RotationMatrix);
 	// calcuate first box size
-	VECTOR3D a{(Object1OBB[0] - Object1OBB[6])^0.5f};
+	sVECTOR3D a{(Object1OBB[0] - Object1OBB[6])^0.5f};
 	vw_Matrix33CalcPoint(&a, TMPInvObject1RotationMatrix);
 	// calcuate inverse rotation matrix
 	float TMPInvObject2RotationMatrix[9]{Object2RotationMatrix[0], Object2RotationMatrix[1], Object2RotationMatrix[2],
@@ -88,10 +88,10 @@ bool vw_OBBOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation, VEC
 					     Object2RotationMatrix[6], Object2RotationMatrix[7], Object2RotationMatrix[8]};
 	vw_Matrix33InverseRotate(TMPInvObject2RotationMatrix);
 	// calcuate second box size
-	VECTOR3D b{(Object2OBB[0] - Object2OBB[6])^0.5f};
+	sVECTOR3D b{(Object2OBB[0] - Object2OBB[6])^0.5f};
 	vw_Matrix33CalcPoint(&b, TMPInvObject2RotationMatrix);
 	// calcuate offset in global coordinate systems
-	VECTOR3D T{(Object2Location + Object2OBBLocation) -
+	sVECTOR3D T{(Object2Location + Object2OBBLocation) -
 		   (Object1Location + Object1OBBLocation)};
 	vw_Matrix33CalcPoint(&T, TMPInvObject1RotationMatrix);
 	// calcuate transformation matrix
@@ -166,13 +166,13 @@ bool vw_OBBOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation, VEC
 /*
  * Sphere-Sphere collision detection.
  */
-bool vw_SphereSphereCollision(float Object1Radius, const VECTOR3D &Object1Location,
-			      float Object2Radius, const VECTOR3D &Object2Location,
-			      const VECTOR3D &Object2PrevLocation)
+bool vw_SphereSphereCollision(float Object1Radius, const sVECTOR3D &Object1Location,
+			      float Object2Radius, const sVECTOR3D &Object2Location,
+			      const sVECTOR3D &Object2PrevLocation)
 {
 	bool Result{true};
 
-	VECTOR3D Object1m2Location{Object1Location.x - Object2Location.x,
+	sVECTOR3D Object1m2Location{Object1Location.x - Object2Location.x,
 				   Object1Location.y - Object2Location.y,
 				   Object1Location.z - Object2Location.z};
 	float Object1p1Radius{Object1Radius + Object2Radius};
@@ -200,7 +200,7 @@ bool vw_SphereSphereCollision(float Object1Radius, const VECTOR3D &Object1Locati
 
 	// check for distance from point to line (ray)
 	if (!Result) {
-		VECTOR3D Ray{Object2Location.x - Object2PrevLocation.x,
+		sVECTOR3D Ray{Object2Location.x - Object2PrevLocation.x,
 			     Object2Location.y - Object2PrevLocation.y,
 			     Object2Location.z - Object2PrevLocation.z};
 		Ray.Normalize();
@@ -213,7 +213,7 @@ bool vw_SphereSphereCollision(float Object1Radius, const VECTOR3D &Object1Locati
 						      Ray.z*Object2PrevLocation.z};
 
 		// calculate closest point on line segment
-		VECTOR3D IntercPoint{Object2PrevLocation.x*Point,
+		sVECTOR3D IntercPoint{Object2PrevLocation.x*Point,
 				     Object2PrevLocation.y*Point,
 				     Object2PrevLocation.z*Point};
 
@@ -239,8 +239,8 @@ bool vw_SphereSphereCollision(float Object1Radius, const VECTOR3D &Object1Locati
 /*
  * Sphere-AABB collision detection.
  */
-bool vw_SphereAABBCollision(VECTOR3D Object1AABB[8], VECTOR3D Object1Location,
-			    float Object2Radius, VECTOR3D Object2Location, VECTOR3D Object2PrevLocation)
+bool vw_SphereAABBCollision(sVECTOR3D Object1AABB[8], sVECTOR3D Object1Location,
+			    float Object2Radius, sVECTOR3D Object2Location, sVECTOR3D Object2PrevLocation)
 {
 	bool Result{true};
 
@@ -253,14 +253,14 @@ bool vw_SphereAABBCollision(VECTOR3D Object1AABB[8], VECTOR3D Object1Location,
 	// check for distance to line (ray)
 	if (!Result) {
 		// middle point
-		VECTOR3D mid{(Object2Location + Object2PrevLocation) / 2.0f};
+		sVECTOR3D mid{(Object2Location + Object2PrevLocation) / 2.0f};
 		// line (ray) direction
-		VECTOR3D dir{Object2Location - Object2PrevLocation};
+		sVECTOR3D dir{Object2Location - Object2PrevLocation};
 		// half of line
 		float hl{dir.Length() / 2.0f};
 		dir.Normalize();
 
-		VECTOR3D T{Object1Location - mid};
+		sVECTOR3D T{Object1Location - mid};
 
 		// check axis
 		if ((fabs(T.x) > Object1AABB[0].x + hl*fabs(dir.x)) ||
@@ -293,14 +293,14 @@ bool vw_SphereAABBCollision(VECTOR3D Object1AABB[8], VECTOR3D Object1Location,
 /*
  * Sphere-OBB collision detection.
  */
-bool vw_SphereOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation,
-			   VECTOR3D Object1Location, float Object1RotationMatrix[9],
-			   float Object2Radius, VECTOR3D Object2Location, VECTOR3D Object2PrevLocation)
+bool vw_SphereOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation,
+			   sVECTOR3D Object1Location, float Object1RotationMatrix[9],
+			   float Object2Radius, sVECTOR3D Object2Location, sVECTOR3D Object2PrevLocation)
 {
-	VECTOR3D TMPMax{Object1OBB[0]};
-	VECTOR3D TMPMin{Object1OBB[6]};
-	VECTOR3D TMPPoint1{Object2Location - (Object1Location + Object1OBBLocation)};
-	VECTOR3D TMPPoint2{Object2PrevLocation - (Object1Location + Object1OBBLocation)};
+	sVECTOR3D TMPMax{Object1OBB[0]};
+	sVECTOR3D TMPMin{Object1OBB[6]};
+	sVECTOR3D TMPPoint1{Object2Location - (Object1Location + Object1OBBLocation)};
+	sVECTOR3D TMPPoint2{Object2PrevLocation - (Object1Location + Object1OBBLocation)};
 
 	// calculate rotation matrix
 	float TMPInvRotationMatrix[9]{Object1RotationMatrix[0], Object1RotationMatrix[1], Object1RotationMatrix[2],
@@ -326,14 +326,14 @@ bool vw_SphereOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation,
 	// check for distance to line (ray)
 	if (!Result) {
 		// middle point
-		VECTOR3D mid{(Object2Location + Object2PrevLocation) / 2.0f};
+		sVECTOR3D mid{(Object2Location + Object2PrevLocation) / 2.0f};
 		// line (ray) direction
-		VECTOR3D dir{Object2Location - Object2PrevLocation};
+		sVECTOR3D dir{Object2Location - Object2PrevLocation};
 		// half of line
 		float hl{dir.Length() / 2.0f};
 		dir.Normalize();
 
-		VECTOR3D T{Object1Location - mid};
+		sVECTOR3D T{Object1Location - mid};
 
 		// check axis
 		if ( (fabs(T.x) > TMPMax.x + hl*fabs(dir.x)) ||
@@ -366,9 +366,9 @@ bool vw_SphereOBBCollision(VECTOR3D Object1OBB[8], VECTOR3D Object1OBBLocation,
 /*
  * Sphere-Mesh collision detection.
  */
-bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawObjectList, float Object1RotationMatrix[9],
-			    float Object2Radius, VECTOR3D Object2Location, VECTOR3D Object2PrevLocation,
-			    VECTOR3D *CollisionLocation)
+bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1DrawObjectList, float Object1RotationMatrix[9],
+			    float Object2Radius, sVECTOR3D Object2Location, sVECTOR3D Object2PrevLocation,
+			    sVECTOR3D *CollisionLocation)
 {
 	if (Object1DrawObjectList == nullptr)
 		return false;
@@ -380,7 +380,7 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 			   Object1Location.x, Object1Location.y, Object1Location.z, 1.0f};
 
 	// calculate local position
-	VECTOR3D LocalLocation{Object1DrawObjectList->Location};
+	sVECTOR3D LocalLocation{Object1DrawObjectList->Location};
 	vw_Matrix33CalcPoint(&LocalLocation, Object1RotationMatrix);
 
 	// care about rotation and generate final translation matrix
@@ -405,7 +405,7 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 			j2 = (Object1DrawObjectList->RangeStart+i)*Object1DrawObjectList->VertexStride;
 
 		// translate triangle's vertices in proper coordinates for collision detection
-		VECTOR3D Point1{Object1DrawObjectList->VertexBuffer[j2],
+		sVECTOR3D Point1{Object1DrawObjectList->VertexBuffer[j2],
 				Object1DrawObjectList->VertexBuffer[j2 + 1],
 				Object1DrawObjectList->VertexBuffer[j2 + 2]};
 		vw_Matrix44CalcPoint(&Point1, TransMat);
@@ -415,7 +415,7 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 		else
 			j2 = (Object1DrawObjectList->RangeStart + i + 1)*Object1DrawObjectList->VertexStride;
 
-		VECTOR3D Point2{Object1DrawObjectList->VertexBuffer[j2],
+		sVECTOR3D Point2{Object1DrawObjectList->VertexBuffer[j2],
 				Object1DrawObjectList->VertexBuffer[j2 + 1],
 				Object1DrawObjectList->VertexBuffer[j2 + 2]};
 		vw_Matrix44CalcPoint(&Point2, TransMat);
@@ -425,17 +425,17 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 		else
 			j2 = (Object1DrawObjectList->RangeStart + i + 2)*Object1DrawObjectList->VertexStride;
 
-		VECTOR3D Point3{Object1DrawObjectList->VertexBuffer[j2],
+		sVECTOR3D Point3{Object1DrawObjectList->VertexBuffer[j2],
 				Object1DrawObjectList->VertexBuffer[j2 + 1],
 				Object1DrawObjectList->VertexBuffer[j2 + 2]};
 		vw_Matrix44CalcPoint(&Point3, TransMat);
 
 		// calculate 2 vectors for plane
-		VECTOR3D PlaneVector1{Point2 - Point1};
-		VECTOR3D PlaneVector2{Point3 - Point1};
+		sVECTOR3D PlaneVector1{Point2 - Point1};
+		sVECTOR3D PlaneVector2{Point3 - Point1};
 
 		// calculate normal for plane
-		VECTOR3D NormalVector{PlaneVector1};
+		sVECTOR3D NormalVector{PlaneVector1};
 		NormalVector.Multiply(PlaneVector2);
 		NormalVector.Normalize();
 
@@ -445,7 +445,7 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 		// point close enough to plane for check collision with plane (triangle)
 		if (fabsf(Distance) <= Object2Radius) {
 			// calculate collision point on plane for ray
-			VECTOR3D IntercPoint{Object2Location - (NormalVector^Distance)};
+			sVECTOR3D IntercPoint{Object2Location - (NormalVector^Distance)};
 
 			// return the point data if point belongs to triangle (not just plane)
 			if (PointInTriangle(IntercPoint, Point1, Point2, Point3)) {
@@ -459,7 +459,7 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 		float Object2Radius2{Object2Radius*Object2Radius};
 
 		// check distance to point1
-		VECTOR3D DistancePoint1{Object2Location - Point1};
+		sVECTOR3D DistancePoint1{Object2Location - Point1};
 		float Distance2Point1{DistancePoint1.x*DistancePoint1.x +
 				      DistancePoint1.y*DistancePoint1.y +
 				      DistancePoint1.z*DistancePoint1.z};
@@ -469,7 +469,7 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 		}
 
 		// check distance to point2
-		VECTOR3D DistancePoint2{Object2Location - Point2};
+		sVECTOR3D DistancePoint2{Object2Location - Point2};
 		float Distance2Point2{DistancePoint2.x*DistancePoint2.x +
 				      DistancePoint2.y*DistancePoint2.y +
 				      DistancePoint2.z*DistancePoint2.z};
@@ -479,7 +479,7 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 		}
 
 		// check distance to point3
-		VECTOR3D DistancePoint3{Object2Location - Point3};
+		sVECTOR3D DistancePoint3{Object2Location - Point3};
 		float Distance2Point3{DistancePoint3.x*DistancePoint3.x +
 				      DistancePoint3.y*DistancePoint3.y +
 				      DistancePoint3.z*DistancePoint3.z};
@@ -492,13 +492,13 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 		// make sure we don't slipped through object (low FPS, fast object, etc)
 
 		// check that this is "front" for triangle, and skip triangles with "back" sided to ray start point
-		VECTOR3D vDir1{Point1 - Object2PrevLocation};
+		sVECTOR3D vDir1{Point1 - Object2PrevLocation};
 		float d1{vDir1*NormalVector};
 		if (d1 <= 0.001f) {
 			// calculate distance from point to plane
 			float originDistance{NormalVector*Point1};
 
-			VECTOR3D vLineDir{Object2Location - Object2PrevLocation};
+			sVECTOR3D vLineDir{Object2Location - Object2PrevLocation};
 
 			// Use the plane equation with the normal and the ray
 			float Numerator{ -(NormalVector.x * Object2PrevLocation.x +
@@ -510,7 +510,7 @@ bool vw_SphereMeshCollision(VECTOR3D Object1Location, eObjectBlock *Object1DrawO
 				float dist{Numerator / Denominator};
 
 				// calculate collision point on plane for ray
-				VECTOR3D IntercPoint{Object2PrevLocation + (vLineDir ^ dist)};
+				sVECTOR3D IntercPoint{Object2PrevLocation + (vLineDir ^ dist)};
 
 				// check, do line (not ray here) cross the plane
 				if (((Object2PrevLocation - IntercPoint)*(Object2Location - IntercPoint) < 0.0f) &&

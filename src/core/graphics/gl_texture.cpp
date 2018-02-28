@@ -153,7 +153,7 @@ void vw_DeleteTexture(GLuint TextureID)
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_SetTexture(uint32_t Stage, eTexture *Texture)
+void vw_SetTexture(uint32_t Stage, sTexture *Texture)
 {
 	if (Texture == nullptr)
 		return;
@@ -477,7 +477,7 @@ void vw_SetTextureBlend(bool Flag, int Src, int Dst)
 //------------------------------------------------------------------------------------
 // получение GL_RGBA-GL_RGB набора из текстуры...
 //------------------------------------------------------------------------------------
-void vw_GetTextureImage(eTexture *Texture, void *bits, int BPP)
+void vw_GetTextureImage(sTexture *Texture, void *bits, int BPP)
 {
 	if (Texture == nullptr)
 		return;

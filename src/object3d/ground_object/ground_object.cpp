@@ -33,7 +33,7 @@
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-CGroundObject::CGroundObject(void)
+cGroundObject::cGroundObject(void)
 {
 	ObjectStatus = 1; // чужой
 
@@ -47,7 +47,7 @@ CGroundObject::CGroundObject(void)
 //-----------------------------------------------------------------------------
 // Деструктор
 //-----------------------------------------------------------------------------
-CGroundObject::~CGroundObject(void)
+cGroundObject::~cGroundObject(void)
 {
 	if (WheelObjectsNum != nullptr) {
 		delete [] WheelObjectsNum;
@@ -91,10 +91,10 @@ CGroundObject::~CGroundObject(void)
 //-----------------------------------------------------------------------------
 // Установка положения объекта
 //-----------------------------------------------------------------------------
-void CGroundObject::SetLocation(VECTOR3D NewLocation)
+void cGroundObject::SetLocation(sVECTOR3D NewLocation)
 {
 	// вызываем родительскую функцию
-	::CObject3D::SetLocation(NewLocation);
+	::cObject3D::SetLocation(NewLocation);
 
 	// если оружие вообще есть
 	if (Weapon != nullptr)
@@ -110,23 +110,23 @@ void CGroundObject::SetLocation(VECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 // Установка углов поворота объекта
 //-----------------------------------------------------------------------------
-void CGroundObject::SetRotation(VECTOR3D NewRotation)
+void cGroundObject::SetRotation(sVECTOR3D NewRotation)
 {
 	// вызываем родительскую функцию
-	::CObject3D::SetRotation(NewRotation);
+	::cObject3D::SetRotation(NewRotation);
 
 	// оружие
-	VECTOR3D RotationBase = Rotation;
-	VECTOR3D BaseBoundTMP = BaseBound;
+	sVECTOR3D RotationBase = Rotation;
+	sVECTOR3D BaseBoundTMP = BaseBound;
 	vw_RotatePoint(&BaseBoundTMP, RotationBase);
 
-	VECTOR3D RotationMiddle = Rotation;
-	VECTOR3D MiddleBoundTMP = MiddleBound;
+	sVECTOR3D RotationMiddle = Rotation;
+	sVECTOR3D MiddleBoundTMP = MiddleBound;
 	if (TargetHorizObject != nullptr)
 		RotationMiddle = DrawObjectList[TargetHorizObject[0]].Rotation + Rotation;
 	vw_RotatePoint(&MiddleBoundTMP, RotationMiddle);
 
-	VECTOR3D RotationWeapon = Rotation;
+	sVECTOR3D RotationWeapon = Rotation;
 	if (TargetVertObject != nullptr)
 		RotationWeapon = DrawObjectList[TargetVertObject[0]].Rotation + Rotation;
 
@@ -134,7 +134,7 @@ void CGroundObject::SetRotation(VECTOR3D NewRotation)
 	if (Weapon != nullptr)
 		for (int i = 0; i < WeaponQuantity; i++)
 			if (Weapon[i] != nullptr) {
-				VECTOR3D WeaponBoundTMP = WeaponBound[i];
+				sVECTOR3D WeaponBoundTMP = WeaponBound[i];
 				vw_RotatePoint(&WeaponBoundTMP, RotationWeapon);
 
 				WeaponLocation[i] = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
@@ -144,7 +144,7 @@ void CGroundObject::SetRotation(VECTOR3D NewRotation)
 				if ((TargetHorizObject == nullptr) &&
 				    (TargetVertObject == nullptr) &&
 				    !DoNotCalculateRotation) // и если нужно считать...
-					RotationWeapon = VECTOR3D(TargetVertObjectNeedAngle, TargetHorizObjectNeedAngle, 0.0f) + Rotation;
+					RotationWeapon = sVECTOR3D(TargetVertObjectNeedAngle, TargetHorizObjectNeedAngle, 0.0f) + Rotation;
 				Weapon[i]->SetRotation(Weapon[i]->Rotation^(-1.0f));
 				Weapon[i]->SetRotation(RotationWeapon);
 
@@ -163,11 +163,11 @@ void CGroundObject::SetRotation(VECTOR3D NewRotation)
 //-----------------------------------------------------------------------------
 // Обновление данных объектa Object3D
 //-----------------------------------------------------------------------------
-bool CGroundObject::Update(float Time)
+bool cGroundObject::Update(float Time)
 {
 	// вызываем родительскую функцию
 	// если там передали удалить - выходим
-	if (!::CObject3D::Update(Time))
+	if (!::cObject3D::Update(Time))
 		return false;
 	// быстро вызвали еще раз... время не изменилось, или почти не изменилось
 	if (TimeDelta == 0.0f)
@@ -218,7 +218,7 @@ bool CGroundObject::Update(float Time)
 
 		// находимся в начальном состоянии поворота ствола
 		int WeapNum = 204; // номер самого простого из пиратского оружия
-		VECTOR3D FirePos(0.0f,0.0f,0.0f);
+		sVECTOR3D FirePos(0.0f,0.0f,0.0f);
 		if (Weapon != nullptr) {
 			if (Weapon[0] != nullptr)
 				WeapNum = Weapon[0]->ObjectCreationType;
@@ -232,7 +232,7 @@ bool CGroundObject::Update(float Time)
 			}
 			FirePos = FirePos^(1.0f/Count);
 		}
-		VECTOR3D NeedAngle(TargetVertObjectNeedAngle,TargetHorizObjectNeedAngle,0);
+		sVECTOR3D NeedAngle(TargetVertObjectNeedAngle,TargetHorizObjectNeedAngle,0);
 		if (GetTurretOnTargetOrientateion(ObjectStatus, Location+FirePos, Rotation,
 						  CurrentRotationMat,	&NeedAngle, WeapNum)) {
 			// наводим на цель
@@ -283,11 +283,11 @@ bool CGroundObject::Update(float Time)
 			// поворачиваем все объекты
 			for (int i=0; i<TargetHorizObjectQuantity; i++) {
 
-				VECTOR3D tmp = DrawObjectList[TargetHorizObject[i]].Location-DrawObjectList[TargetHorizObject[0]].Location;
+				sVECTOR3D tmp = DrawObjectList[TargetHorizObject[i]].Location-DrawObjectList[TargetHorizObject[0]].Location;
 
 				vw_RotatePointInv(&tmp, DrawObjectList[TargetHorizObject[i]].Rotation^(-1.0f));
 
-				SetObjectRotation(VECTOR3D(DrawObjectList[TargetHorizObject[i]].Rotation.x,
+				SetObjectRotation(sVECTOR3D(DrawObjectList[TargetHorizObject[i]].Rotation.x,
 							   -NeedRotateCalculation,
 							   DrawObjectList[TargetHorizObject[i]].Rotation.z), TargetHorizObject[i]);
 
@@ -329,11 +329,11 @@ bool CGroundObject::Update(float Time)
 			// поворачиваем все объекты
 			for (int i = 0; i < TargetVertObjectQuantity; i++) {
 
-				VECTOR3D tmp = DrawObjectList[TargetVertObject[i]].Location-DrawObjectList[TargetVertObject[0]].Location;
+				sVECTOR3D tmp = DrawObjectList[TargetVertObject[i]].Location-DrawObjectList[TargetVertObject[0]].Location;
 
 				vw_RotatePointInv(&tmp, DrawObjectList[TargetVertObject[i]].Rotation^(-1.0f));
 
-				SetObjectRotation(VECTOR3D(-NeedRotateCalculation,
+				SetObjectRotation(sVECTOR3D(-NeedRotateCalculation,
 							   DrawObjectList[TargetVertObject[i]].Rotation.y,
 							   DrawObjectList[TargetVertObject[i]].Rotation.z), TargetVertObject[i]);
 
@@ -351,17 +351,17 @@ bool CGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// находим точку стрельбы и учитываем направление
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	VECTOR3D RotationBase = Rotation;
-	VECTOR3D BaseBoundTMP = BaseBound;
+	sVECTOR3D RotationBase = Rotation;
+	sVECTOR3D BaseBoundTMP = BaseBound;
 	vw_RotatePoint(&BaseBoundTMP, RotationBase);
 
-	VECTOR3D RotationMiddle = Rotation;
-	VECTOR3D MiddleBoundTMP = MiddleBound;
+	sVECTOR3D RotationMiddle = Rotation;
+	sVECTOR3D MiddleBoundTMP = MiddleBound;
 	if (TargetHorizObject != nullptr)
 		RotationMiddle = DrawObjectList[TargetHorizObject[0]].Rotation + Rotation;
 	vw_RotatePoint(&MiddleBoundTMP, RotationMiddle);
 
-	VECTOR3D RotationWeapon = Rotation;
+	sVECTOR3D RotationWeapon = Rotation;
 	if (TargetVertObject != nullptr)
 		RotationWeapon = DrawObjectList[TargetVertObject[0]].Rotation + Rotation;
 
@@ -369,7 +369,7 @@ bool CGroundObject::Update(float Time)
 	if (Weapon != nullptr)
 		for (int i = 0; i < WeaponQuantity; i++)
 			if (Weapon[i] != nullptr) {
-				VECTOR3D WeaponBoundTMP = WeaponBound[i];
+				sVECTOR3D WeaponBoundTMP = WeaponBound[i];
 				vw_RotatePoint(&WeaponBoundTMP, RotationWeapon);
 
 				WeaponLocation[i] = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
@@ -378,7 +378,7 @@ bool CGroundObject::Update(float Time)
 				if ((TargetHorizObject == nullptr) &&
 				    (TargetVertObject == nullptr) &&
 				    !DoNotCalculateRotation) // и если нужно считать...
-					RotationWeapon = Rotation - VECTOR3D(TargetVertObjectNeedAngle, TargetHorizObjectNeedAngle, 0.0f);
+					RotationWeapon = Rotation - sVECTOR3D(TargetVertObjectNeedAngle, TargetHorizObjectNeedAngle, 0.0f);
 
 
 				Weapon[i]->SetRotation(Weapon[i]->Rotation^(-1.0f));
@@ -527,7 +527,7 @@ bool CGroundObject::Update(float Time)
 	    (BarrelObject != nullptr)) {
 		for (int i = 0; i < BarrelObjectQuantity; i++) {
 			DrawObjectList[BarrelObject[i]].NeedGeometryAnimation = true;
-			DrawObjectList[BarrelObject[i]].GeometryAnimation += VECTOR3D(0.0f,0.0f,500.0f*TimeDelta);
+			DrawObjectList[BarrelObject[i]].GeometryAnimation += sVECTOR3D(0.0f,0.0f,500.0f*TimeDelta);
 			if (DrawObjectList[BarrelObject[i]].GeometryAnimation.z > 360.0f)
 				DrawObjectList[BarrelObject[i]].GeometryAnimation.z -= 360.0f;
 		}
@@ -571,7 +571,7 @@ bool CGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (NeedRotate.x != 0.0f || NeedRotate.y != 0.0f || NeedRotate.z != 0.0f) {
 		// Находим допустимый поворот по углу
-		VECTOR3D tmpRotate(0.0f, 0.0f, 0.0f);
+		sVECTOR3D tmpRotate(0.0f, 0.0f, 0.0f);
 
 		// угол по x
 		if (NeedRotate.x != 0.0f) {
@@ -670,7 +670,7 @@ bool CGroundObject::Update(float Time)
 					NeedRotateY = -MaxWheelRotateAngle;
 
 
-				SetObjectRotation(VECTOR3D(DrawObjectList[WheelRotateObjectsNum[i]].Rotation.x,
+				SetObjectRotation(sVECTOR3D(DrawObjectList[WheelRotateObjectsNum[i]].Rotation.x,
 							   NeedRotateY,
 							   DrawObjectList[WheelRotateObjectsNum[i]].Rotation.z), WheelRotateObjectsNum[i]);
 
@@ -766,7 +766,7 @@ bool CGroundObject::Update(float Time)
 				} else CurentDeviationSum[i] += CurentDeviation[i];
 			}
 
-			VECTOR3D Tmp = Deviation[i]^CurentDeviation[i];
+			sVECTOR3D Tmp = Deviation[i]^CurentDeviation[i];
 			SetObjectLocation(DrawObjectList[DeviationObjNum[i]].Location + Tmp, DeviationObjNum[i]);
 		}
 
@@ -782,8 +782,8 @@ bool CGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// считаем вектор движения
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	//VECTOR3D Velocity = (Orientation^(Speed*TimeDelta))+(VECTOR3D(0.0f,0.0f,10.0f)^TimeDelta);
-	VECTOR3D Velocity = (Orientation^(Speed*TimeDelta));
+	//VECTOR3D Velocity = (Orientation^(Speed*TimeDelta))+(sVECTOR3D(0.0f,0.0f,10.0f)^TimeDelta);
+	sVECTOR3D Velocity = (Orientation^(Speed*TimeDelta));
 
 	// перемещение объекта, если нужно
 	if (Velocity.x != 0.0f || Velocity.y != 0.0f  || Velocity.z != 0.0f ) {

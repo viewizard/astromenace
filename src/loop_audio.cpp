@@ -31,7 +31,7 @@
 //------------------------------------------------------------------------------------
 // локальная структура данных 3D sfx
 //------------------------------------------------------------------------------------
-struct GameSoundData {
+struct sGameSoundData {
 	// имя звукового файла
 	const	char *FileName;
 	// корректировка громкости
@@ -52,7 +52,7 @@ struct GameSoundData {
 
 
 // перечень имен файлов игровых звуков
-static GameSoundData GameSoundList[] = {
+static sGameSoundData GameSoundList[] = {
 
 	{"sfx/weapon1probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, механическое оружие (Kinetic)
 	{"sfx/weapon2probl.wav", 1.0f, 1, 8, 1, 2, 10},	// оружие повреждено или нечем стрелять, "слабое" энергетическое оружие (Ion, Plasma)
@@ -102,7 +102,7 @@ static GameSoundData GameSoundList[] = {
 //------------------------------------------------------------------------------------
 // локальная структура данных 2D sfx
 //------------------------------------------------------------------------------------
-struct Sound2dData {
+struct sSound2DData {
 	// имя звукового файла
 	const	char *FileName;
 	// корректировка громкости
@@ -112,7 +112,7 @@ struct Sound2dData {
 };
 
 // перечень имен файлов звуков для меню
-static Sound2dData MenuSoundNames[] = {
+static sSound2DData MenuSoundNames[] = {
 	{"sfx/menu_onbutton.wav", 0.4f, false},		// навели на кнопку
 	{"sfx/menu_click.wav", 0.6f, false},		// нажали на кнопку
 	{"sfx/menu_new.wav", 1.0f, true},		// меняем меню
@@ -134,7 +134,7 @@ static Sound2dData MenuSoundNames[] = {
 
 
 // перечень имен файлов звуков для меню
-static Sound2dData VoiceNames[] = {
+static sSound2DData VoiceNames[] = {
 	{"13_Attention.wav", 1.0f, true},
 	{"13_EngineMalfunction.wav", 1.0f, true},
 	{"13_MissileDetected.wav", 1.0f, true},//++
@@ -276,8 +276,8 @@ void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime)
 
 
 		// создаем новый источник и проигрываем его
-		eMusic *Music;
-		Music = new eMusic;
+		sMusic *Music;
+		Music = new sMusic;
 		vw_AttachMusic(Music);
 		MusicList[CurrentPlayingMusic] = Music->Num;
 
@@ -305,7 +305,7 @@ void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime)
 void Audio_SetSound2DMainVolume(float NewMainVolume)
 {
 	for (unsigned int i=0; i<MenuSoundQuantity; i++) {
-		eSound* Tmp = vw_FindSoundByName(MenuSoundNames[i].FileName);
+		cSound* Tmp = vw_FindSoundByName(MenuSoundNames[i].FileName);
 		if (Tmp != nullptr)
 			Tmp->SetMainVolume(NewMainVolume);
 	}
@@ -314,7 +314,7 @@ void Audio_SetSound2DMainVolume(float NewMainVolume)
 void Audio_SetVoiceMainVolume(float NewMainVolume)
 {
 	for (unsigned int i=0; i<VoiceQuantity; i++) {
-		eSound* Tmp = vw_FindSoundByName(vw_GetText(VoiceNames[i].FileName, Setup.VoiceLanguage));
+		cSound* Tmp = vw_FindSoundByName(vw_GetText(VoiceNames[i].FileName, Setup.VoiceLanguage));
 		if (Tmp != nullptr)
 			Tmp->SetMainVolume(NewMainVolume);
 	}
@@ -339,7 +339,7 @@ int Audio_PlaySound2D(unsigned int SoundID, float fVol, bool Loop)
 	fVol = fVol*MenuSoundNames[SoundID].VolumeCorrection;
 
 	// если это звук меню и мы его игрываем, его надо перезапустить
-	eSound* Tmp = vw_FindSoundByName(MenuSoundNames[SoundID].FileName);
+	cSound* Tmp = vw_FindSoundByName(MenuSoundNames[SoundID].FileName);
 	if (Tmp != nullptr) {
 		Tmp->Replay();
 		return Tmp->Num;
@@ -347,7 +347,7 @@ int Audio_PlaySound2D(unsigned int SoundID, float fVol, bool Loop)
 
 
 	// создаем новый источник и проигрываем его
-	eSound *Sound = new eSound;
+	cSound *Sound = new cSound;
 	vw_AttachSound(Sound);
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
@@ -385,7 +385,7 @@ int Audio_PlayVoice(unsigned int VoiceID, float fVol, bool Loop)
 	fVol = fVol*VoiceNames[VoiceID].VolumeCorrection;
 
 	// создаем новый источник и проигрываем его
-	eSound *Sound = new eSound;
+	cSound *Sound = new cSound;
 	vw_AttachSound(Sound);
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
@@ -403,7 +403,7 @@ int Audio_PlayVoice(unsigned int VoiceID, float fVol, bool Loop)
 //------------------------------------------------------------------------------------
 // Проигрываем 3д звуки
 //------------------------------------------------------------------------------------
-int Audio_PlaySound3D(int SoundID, float fVol, VECTOR3D Location, bool Loop, int AtType)
+int Audio_PlaySound3D(int SoundID, float fVol, sVECTOR3D Location, bool Loop, int AtType)
 {
 	if (!Setup.Sound_check ||
 	    !Setup.SoundSw)
@@ -421,7 +421,7 @@ int Audio_PlaySound3D(int SoundID, float fVol, VECTOR3D Location, bool Loop, int
 
 
 	// создаем новый источник и проигрываем его
-	eSound *Sound = new eSound;
+	cSound *Sound = new cSound;
 	vw_AttachSound(Sound);
 	if (!Sound->Play(GameSoundList[SoundID].FileName, fVol, Setup.SoundSw/10.0f, Location.x, Location.y, Location.z, false, Loop, true, AtType)) {
 		vw_ReleaseSound(Sound);
@@ -451,14 +451,14 @@ void Audio_LoopProc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// получаем текущее положение камеры
-	VECTOR3D CurrentCameraLocation;
+	sVECTOR3D CurrentCameraLocation;
 	vw_GetCameraLocation(&CurrentCameraLocation);
-	VECTOR3D CurrentCameraRotation;
+	sVECTOR3D CurrentCameraRotation;
 	vw_GetCameraRotation(&CurrentCameraRotation);
 
-	VECTOR3D ListenerOriV1(0.0f, 0.0f, -1.0f);
+	sVECTOR3D ListenerOriV1(0.0f, 0.0f, -1.0f);
 	vw_RotatePoint(&ListenerOriV1, CurrentCameraRotation);
-	VECTOR3D ListenerOriV2(0.0f, 1.0f, 0.0f);
+	sVECTOR3D ListenerOriV2(0.0f, 1.0f, 0.0f);
 	vw_RotatePoint(&ListenerOriV2, CurrentCameraRotation);
 
 	// Position of the Listener.
@@ -493,8 +493,8 @@ void Audio_LoopProc()
 		    (CurrentPlayingMusic != -1) && // если установлен номер
 		    (vw_FindMusicByNum(MusicList[CurrentPlayingMusic]) == nullptr)) { // если это еще не играем
 			// создаем новый источник и проигрываем его
-			eMusic *Music;
-			Music = new eMusic;
+			sMusic *Music;
+			Music = new sMusic;
 			vw_AttachMusic(Music);
 			MusicList[CurrentPlayingMusic] = Music->Num;
 

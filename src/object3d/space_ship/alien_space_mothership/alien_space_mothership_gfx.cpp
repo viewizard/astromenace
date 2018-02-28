@@ -36,11 +36,11 @@
 //-----------------------------------------------------------------------------
 // Создание двигателя
 //-----------------------------------------------------------------------------
-void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineType)
+void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 {
 
 	ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-	ParticleSystem->Direction = VECTOR3D(0.0f, 0.0f, -1.0f);
+	ParticleSystem->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 
 	switch(EngineType) {
 	// красно-желтые
@@ -63,9 +63,9 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(2.4f,2.4f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(2.4f,2.4f,0.1f);
 		ParticleSystem->IsAttractive = true;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.65f, 0.15f, 0.0f, 0.05f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.65f, 0.15f, 0.0f, 0.05f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 2:
@@ -87,7 +87,7 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(1.2f,1.2f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(1.2f,1.2f,0.1f);
 		ParticleSystem->IsAttractive = true;
 		break;
 	case 3:
@@ -109,7 +109,7 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 400;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(15.0f,15.0f,3.0f);
+		ParticleSystem->CreationSize = sVECTOR3D(15.0f,15.0f,3.0f);
 		ParticleSystem->DeadZone = 14.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsAttractive = true;
@@ -134,7 +134,7 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 80;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(15.0f,15.0f,3.0f);
+		ParticleSystem->CreationSize = sVECTOR3D(15.0f,15.0f,3.0f);
 		ParticleSystem->DeadZone = 14.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsAttractive = true;
@@ -159,7 +159,7 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(9.0f,9.0f,2.0f);
+		ParticleSystem->CreationSize = sVECTOR3D(9.0f,9.0f,2.0f);
 		ParticleSystem->DeadZone = 8.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsAttractive = true;
@@ -184,7 +184,7 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(9.0f,9.0f,2.0f);
+		ParticleSystem->CreationSize = sVECTOR3D(9.0f,9.0f,2.0f);
 		ParticleSystem->DeadZone = 8.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsAttractive = true;
@@ -216,7 +216,7 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(0.5f,0.5f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.5f,0.5f,0.1f);
 		ParticleSystem->IsAttractive = true;
 		break;
 	case 10:
@@ -238,7 +238,7 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(0.8f,0.8f,0.8f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.8f,0.8f,0.8f);
 		ParticleSystem->IsAttractive = true;
 		break;
 	case 11:
@@ -260,7 +260,7 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(1.4f,1.4f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(1.4f,1.4f,0.1f);
 		ParticleSystem->IsAttractive = true;
 		ParticleSystem->AttractiveValue = 13.0f;
 		break;
@@ -283,9 +283,9 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(2.4f,2.4f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(2.4f,2.4f,0.1f);
 		ParticleSystem->IsAttractive = true;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.03f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.03f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 13:
@@ -307,12 +307,12 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 0.70f;
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(14.0f,5.0f,10.0f);
+		ParticleSystem->CreationSize = sVECTOR3D(14.0f,5.0f,10.0f);
 		ParticleSystem->DeadZone = 4.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsAttractive = true;
 		ParticleSystem->AttractiveValue = 15.0f;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.01f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 
@@ -341,10 +341,10 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 1.50f;
 		ParticleSystem->ParticlesPerSec = 150;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(5.0f,3.0f,3.0f);
+		ParticleSystem->CreationSize = sVECTOR3D(5.0f,3.0f,3.0f);
 		ParticleSystem->IsAttractive = true;
 		ParticleSystem->AttractiveValue = 30.0f;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 16:
@@ -366,9 +366,9 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(1.2f,1.2f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(1.2f,1.2f,0.1f);
 		ParticleSystem->IsAttractive = true;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.05f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.05f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 17:
@@ -390,7 +390,7 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 400;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(14.0f,1.0f,14.0f);
+		ParticleSystem->CreationSize = sVECTOR3D(14.0f,1.0f,14.0f);
 		ParticleSystem->DeadZone = 13.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsAttractive = true;
@@ -415,7 +415,7 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 80;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(14.0f,1.0f,14.0f);
+		ParticleSystem->CreationSize = sVECTOR3D(14.0f,1.0f,14.0f);
 		ParticleSystem->DeadZone = 13.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsAttractive = true;
@@ -440,7 +440,7 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->IsAttractive = true;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 20:
@@ -462,9 +462,9 @@ void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(2.0f,2.0f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(2.0f,2.0f,0.1f);
 		ParticleSystem->IsAttractive = true;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 

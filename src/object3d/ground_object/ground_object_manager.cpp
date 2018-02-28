@@ -31,8 +31,8 @@
 
 
 // Указатели на начальный и конечный объект в списке
-CGroundObject *StartGroundObject = nullptr;
-CGroundObject *EndGroundObject = nullptr;
+cGroundObject *StartGroundObject = nullptr;
+cGroundObject *EndGroundObject = nullptr;
 
 
 
@@ -41,7 +41,7 @@ CGroundObject *EndGroundObject = nullptr;
 //-----------------------------------------------------------------------------
 // Включаем в список
 //-----------------------------------------------------------------------------
-void AttachGroundObject(CGroundObject* GroundObject)
+void AttachGroundObject(cGroundObject* GroundObject)
 {
 	if (GroundObject == nullptr)
 		return;
@@ -67,7 +67,7 @@ void AttachGroundObject(CGroundObject* GroundObject)
 //-----------------------------------------------------------------------------
 // Исключаем из списка
 //-----------------------------------------------------------------------------
-void DetachGroundObject(CGroundObject* GroundObject)
+void DetachGroundObject(cGroundObject* GroundObject)
 {
 	if (GroundObject == nullptr) return;
 
@@ -97,9 +97,9 @@ void DetachGroundObject(CGroundObject* GroundObject)
 //-----------------------------------------------------------------------------
 void UpdateAllGroundObject(float Time)
 {
-	CGroundObject *tmp = StartGroundObject;
+	cGroundObject *tmp = StartGroundObject;
 	while (tmp != nullptr) {
-		CGroundObject *tmp2 = tmp->Next;
+		cGroundObject *tmp2 = tmp->Next;
 		// делаем обновление данных по объекту
 		if (!tmp->Update(Time))
 			// если его нужно уничтожить - делаем это
@@ -117,9 +117,9 @@ void UpdateAllGroundObject(float Time)
 void DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 
-	CGroundObject *tmp = StartGroundObject;
+	cGroundObject *tmp = StartGroundObject;
 	while (tmp != nullptr) {
-		CGroundObject *tmp2 = tmp->Next;
+		cGroundObject *tmp2 = tmp->Next;
 		tmp->Draw(VertexOnlyPass, ShadowMap);
 		tmp = tmp2;
 	}
@@ -135,9 +135,9 @@ void DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap)
 //-----------------------------------------------------------------------------
 void ReleaseAllGroundObject()
 {
-	CGroundObject *tmp = StartGroundObject;
+	cGroundObject *tmp = StartGroundObject;
 	while (tmp != nullptr) {
-		CGroundObject *tmp2 = tmp->Next;
+		cGroundObject *tmp2 = tmp->Next;
 		delete tmp;
 		tmp = tmp2;
 	}

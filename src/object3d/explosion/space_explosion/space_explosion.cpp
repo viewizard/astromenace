@@ -31,7 +31,7 @@
 //-----------------------------------------------------------------------------
 // Создание взрыва из частей объекта
 //-----------------------------------------------------------------------------
-CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D &ExplLocation,
+cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3D &ExplLocation,
 				 float Speed, int ObjectPieceNum, bool NeedExplosionSFX)
 {
 	// если ObjectPieceNum==-1 полный взрыв... не частями
@@ -71,14 +71,14 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 
 		// эффект
 		GraphicFXQuantity = 1;
-		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
+		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
 		for (int i=0; i<GraphicFXQuantity; i++) {
 			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
 		float tRadius = Object->Radius/2.0f;
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[0], 1);
 		GraphicFX[0]->Speed = 1.5f*Object->Radius;
 		GraphicFX[0]->SpeedVar   = vw_Randf0;
@@ -86,19 +86,19 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 		GraphicFX[0]->ParticlesPerSec = (int)(10*Object->Radius);
 		GraphicFX[0]->Direction = Object->Orientation;
 		GraphicFX[0]->CreationType = 2;
-		GraphicFX[0]->CreationSize = VECTOR3D(tRadius,tRadius,tRadius);
+		GraphicFX[0]->CreationSize = sVECTOR3D(tRadius,tRadius,tRadius);
 		GraphicFX[0]->Life       = 1.5f;
 		GraphicFX[0]->SizeStart  = tRadius/1.5f;
 
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(3*Object->Radius) + (int)(vw_Randf0*3*Object->Radius);
 		for (int i=0; i<ttt; i++) {
-			CProjectile *Projectile  = new CProjectile;
+			cProjectile *Projectile  = new cProjectile;
 			Projectile->Create(1);
 			Projectile->SetLocation(Location);
 
-			Projectile->SetRotation(VECTOR3D(360.0f*vw_Randf0, 360.0f*vw_Randf0, 360.0f*vw_Randf0));
-			VECTOR3D TM1 = Object->Orientation^Speed;
+			Projectile->SetRotation(sVECTOR3D(360.0f*vw_Randf0, 360.0f*vw_Randf0, 360.0f*vw_Randf0));
+			sVECTOR3D TM1 = Object->Orientation^Speed;
 			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius*6.0f));
 			Projectile->Orientation.Normalize();
 
@@ -137,20 +137,20 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 
 		// эффект
 		GraphicFXQuantity = 3;
-		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
+		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
 		for (int i=0; i<GraphicFXQuantity; i++) {
 			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[1], 3);
 		GraphicFX[1]->MoveSystem(Object->Location);
 		GraphicFX[1]->ParticlesPerSec = (int)(2.5f*Object->Radius);
 		GraphicFX[1]->Direction = Object->Orientation;
-		GraphicFX[1]->CreationSize = VECTOR3D(Object->Radius/4,Object->Radius/4,Object->Radius/4);
+		GraphicFX[1]->CreationSize = sVECTOR3D(Object->Radius/4,Object->Radius/4,Object->Radius/4);
 
-		GraphicFX[2] = new eParticleSystem;
+		GraphicFX[2] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[2], 4);
 		GraphicFX[2]->Speed = Object->Radius/3.0f;
 		GraphicFX[2]->SpeedVar   = 1.0f*vw_Randf0;
@@ -160,7 +160,7 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 		GraphicFX[2]->Direction = Object->Orientation;
 		GraphicFX[2]->NeedStop = false;
 
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[0], 2);
 		GraphicFX[0]->Speed = Object->Radius*1.2f;
 		GraphicFX[0]->SpeedVar   = 1.0f*vw_Randf0;
@@ -172,12 +172,12 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(Object->Radius) + (int)(vw_Randf0*Object->Radius);
 		for (int i=0; i<ttt; i++) {
-			CProjectile *Projectile  = new CProjectile;
+			cProjectile *Projectile  = new cProjectile;
 			Projectile->Create(1);
 			Projectile->SetLocation(Location);
 
-			Projectile->SetRotation(VECTOR3D(360.0f*vw_Randf0, 360.0f*vw_Randf0, 360.0f*vw_Randf0));
-			VECTOR3D TM1 = Object->Orientation^Speed;
+			Projectile->SetRotation(sVECTOR3D(360.0f*vw_Randf0, 360.0f*vw_Randf0, 360.0f*vw_Randf0));
+			sVECTOR3D TM1 = Object->Orientation^Speed;
 			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius/4.0f));
 			Projectile->Orientation.Normalize();
 
@@ -230,13 +230,13 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 
 		// эффект
 		GraphicFXQuantity = 2;
-		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
+		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
 		for (int i=0; i<GraphicFXQuantity; i++) {
 			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[1], 6);
 		GraphicFX[1]->Speed = Object->Radius/1.4f;
 		GraphicFX[1]->SpeedVar   = 1.0f*vw_Randf0;
@@ -245,7 +245,7 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 		GraphicFX[1]->ParticlesPerSec = (int)(7*Object->Radius);
 		GraphicFX[1]->Direction = Object->Orientation;
 
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[0], 5);
 		GraphicFX[0]->Speed = Object->Radius*1.1f;
 		GraphicFX[0]->SpeedVar   = 1.0f*vw_Randf0;
@@ -279,13 +279,13 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 
 		// эффект
 		GraphicFXQuantity = 2;
-		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
+		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
 		for (int i=0; i<GraphicFXQuantity; i++) {
 			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[1], 12);
 		GraphicFX[1]->Speed = Object->Radius/1.4f;
 		GraphicFX[1]->SpeedVar   = 1.0f*vw_Randf0;
@@ -294,7 +294,7 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 		GraphicFX[1]->ParticlesPerSec = (int)(7*Object->Radius);
 		GraphicFX[1]->Direction = Object->Orientation;
 
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[0], 11);
 		GraphicFX[0]->Speed = Object->Radius*1.1f;
 		GraphicFX[0]->SpeedVar   = 1.0f*vw_Randf0;
@@ -319,13 +319,13 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 
 		// эффект
 		GraphicFXQuantity = 2;
-		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
+		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
 		for (int i=0; i<GraphicFXQuantity; i++) {
 			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[1], 6);
 		GraphicFX[1]->Speed = Object->Radius/1.3f;
 		GraphicFX[1]->SpeedVar   = 1.0f*vw_Randf0;
@@ -334,7 +334,7 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 		GraphicFX[1]->ParticlesPerSec = (int)(7*Object->Radius);
 		GraphicFX[1]->Direction = Object->Orientation;
 
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[0], 5);
 		GraphicFX[0]->Speed = Object->Radius*1.1f;
 		GraphicFX[0]->SpeedVar   = 1.0f*vw_Randf0;
@@ -346,12 +346,12 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(0.5f*Object->Radius) + (int)(vw_Randf0*Object->Radius);
 		for (int i=0; i<ttt; i++) {
-			CProjectile *Projectile = new CProjectile;
+			cProjectile *Projectile = new cProjectile;
 			Projectile->Create(1);
 			Projectile->SetLocation(Location);
 
-			Projectile->SetRotation(VECTOR3D(360.0f*vw_Randf0, 360.0f*vw_Randf0, 360.0f*vw_Randf0));
-			VECTOR3D TM1 = Object->Orientation^Speed;
+			Projectile->SetRotation(sVECTOR3D(360.0f*vw_Randf0, 360.0f*vw_Randf0, 360.0f*vw_Randf0));
+			sVECTOR3D TM1 = Object->Orientation^Speed;
 			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius/2.0f));
 			Projectile->Orientation.Normalize();
 
@@ -412,23 +412,23 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 			// могут быть пустые группы, убираем их и идем смотрим на следующую группу
 			if (Object->DrawObjectList[i].VertexCount == 0) continue;
 
-			CShipPart *ShipPart;
-			ShipPart = new CShipPart;
+			cShipPart *ShipPart;
+			ShipPart = new cShipPart;
 			ShipPart->ObjectType = 8;
 			ShipPart->ShowDeleteOnHide = 0;
 
 			// только одна текстура (!) 2-ю для подстветки не тянем
-			ShipPart->Texture = new eTexture*[1];
+			ShipPart->Texture = new sTexture*[1];
 			ShipPart->Texture[0] = Object->Texture[i];
 			if (Object->NormalMap != nullptr)
 				if (Object->NormalMap[i] != nullptr) {
-					ShipPart->NormalMap = new eTexture*[1];
+					ShipPart->NormalMap = new sTexture*[1];
 					ShipPart->NormalMap[0] = Object->NormalMap[i];
 				}
 
 			// берем то, что нужно
 			ShipPart->DrawObjectQuantity = 1;
-			ShipPart->DrawObjectList = new eObjectBlock[ShipPart->DrawObjectQuantity];
+			ShipPart->DrawObjectList = new sObjectBlock[ShipPart->DrawObjectQuantity];
 			// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
 			memcpy(&(ShipPart->DrawObjectList[0]), &(Object->DrawObjectList[i]), sizeof(Object->DrawObjectList[0]));
 			// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
@@ -438,17 +438,17 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 			}
 
 			// резервируем память для HitBB
-			ShipPart->HitBBLocation = new VECTOR3D[ShipPart->DrawObjectQuantity];
+			ShipPart->HitBBLocation = new sVECTOR3D[ShipPart->DrawObjectQuantity];
 			ShipPart->HitBBRadius2 = new float[ShipPart->DrawObjectQuantity];
-			ShipPart->HitBBSize = new VECTOR3D[ShipPart->DrawObjectQuantity];
-			ShipPart->HitBB = new VECTOR3D*[ShipPart->DrawObjectQuantity];
+			ShipPart->HitBBSize = new sVECTOR3D[ShipPart->DrawObjectQuantity];
+			ShipPart->HitBB = new sVECTOR3D*[ShipPart->DrawObjectQuantity];
 			for (int i1=0; i1<ShipPart->DrawObjectQuantity; i1++) {
-				ShipPart->HitBB[i1] = new VECTOR3D[8];
+				ShipPart->HitBB[i1] = new sVECTOR3D[8];
 			}
 
 
 			// находим точку локального положения объекта в моделе
-			VECTOR3D LocalLocation = Object->DrawObjectList[i].Location;
+			sVECTOR3D LocalLocation = Object->DrawObjectList[i].Location;
 			vw_Matrix33CalcPoint(&LocalLocation, Object->CurrentRotationMat);
 			LocalLocation = Object->HitBBLocation[i]-LocalLocation;
 			vw_Matrix33CalcPoint(&LocalLocation, InvRotationMat);
@@ -487,7 +487,7 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 			}
 			if (ObjectPieceNum != -1)
 				if (ObjectPieceNum == i) {
-					new CSpaceExplosion(ShipPart, NeedExplosionType, ShipPart->Location, ShipPart->Speed, -1);
+					new cSpaceExplosion(ShipPart, NeedExplosionType, ShipPart->Location, ShipPart->Speed, -1);
 					delete ShipPart;
 				}
 		}
@@ -524,8 +524,8 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 
 		// создаем последовательность
 		DrawObjectQuantity = Object->DrawObjectQuantity;
-		Texture = new eTexture*[DrawObjectQuantity];
-		DrawObjectList = new eObjectBlock[DrawObjectQuantity];
+		Texture = new sTexture*[DrawObjectQuantity];
+		DrawObjectList = new sObjectBlock[DrawObjectQuantity];
 
 		// смотрим по настройкам сколько пропускать
 		int NeedIn = Setup.VisualEffectsQuality;
@@ -590,7 +590,7 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 			vw_Matrix33Mult(TransMatTMPNorm, Object->CurrentRotationMat);
 
 
-			VECTOR3D TMP;
+			sVECTOR3D TMP;
 			for (int j=0; j<Object->DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount; j++) {
 				if (NeedInCur <= 0) {
 					int j1 = k*DrawObjectList[i].VertexStride;
@@ -636,8 +636,8 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 
 
 
-			DrawObjectList[i].Location = VECTOR3D(0.0f,0.0f,0.0f);
-			DrawObjectList[i].Rotation = VECTOR3D(0.0f,0.0f,0.0f);
+			DrawObjectList[i].Location = sVECTOR3D(0.0f,0.0f,0.0f);
+			DrawObjectList[i].Rotation = sVECTOR3D(0.0f,0.0f,0.0f);
 
 			TotalCount += DrawObjectList[i].VertexCount;
 		}
@@ -648,8 +648,8 @@ CSpaceExplosion::CSpaceExplosion(CObject3D *Object, int ExplType, const VECTOR3D
 
 		// для каждого треугольника - свои данные
 		int Count = 0;
-		VECTOR3D TMP;
-		ExplosionPieceData = new CExplosionPiece[TotalCount/3];
+		sVECTOR3D TMP;
+		ExplosionPieceData = new sExplosionPiece[TotalCount/3];
 		for (int j=0; j<DrawObjectQuantity; j++) {
 			for (int i=0; i<DrawObjectList[j].VertexCount; i+=3) {
 				ExplosionPieceData[Count].Velocity.x = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i];

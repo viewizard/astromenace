@@ -34,13 +34,13 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CAlienSpaceFighter
+// Класс cAlienSpaceFighter
 //-----------------------------------------------------------------------------
-class CAlienSpaceFighter : public CSpaceShip
+class cAlienSpaceFighter : public cSpaceShip
 {
 public:
 
-	virtual ~CAlienSpaceFighter() {};
+	virtual ~cAlienSpaceFighter() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int	SpaceShipNum);
@@ -51,11 +51,11 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Дополнительные функции для CAlienSpaceFighter
+// Дополнительные функции для cAlienSpaceFighter
 //-----------------------------------------------------------------------------
 
 // Создание двигателя
-void SetAlienSpaceFighterEngine(eParticleSystem *ParticleSystem, int EngineType);
+void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType);
 
 
 

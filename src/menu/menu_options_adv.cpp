@@ -36,7 +36,7 @@ int Options_CSAA;
 int Options_ShadowMap;
 int Options_TexturesQuality;
 
-extern CSpaceStars *psSpaceStatic;
+extern cSpaceStars *psSpaceStatic;
 
 const char *ButtonQuality[3] = {
 	"3_High",
@@ -117,7 +117,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 {
 
 
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 	SetRect(&SrcRect,0,0,2,2);
 	SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);
@@ -147,7 +147,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 			delete psSpaceStatic;
 			psSpaceStatic = nullptr;
 		}
-		psSpaceStatic = new CSpaceStars;
+		psSpaceStatic = new cSpaceStars;
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.VisualEffectsQuality==0)) {
 		Setup.VisualEffectsQuality--;
@@ -159,7 +159,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 			delete psSpaceStatic;
 			psSpaceStatic = nullptr;
 		}
-		psSpaceStatic = new CSpaceStars;
+		psSpaceStatic = new cSpaceStars;
 	}
 	int Size = vw_FontSize(vw_GetText(ButtonQuality[Setup.VisualEffectsQuality]));
 	int SizeI = (170-Size)/2;//High, Medium, Low

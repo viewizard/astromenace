@@ -31,8 +31,8 @@
 
 
 // Указатели на начальный и конечный объект в списке
-CSpaceObject *StartSpaceObject = nullptr;
-CSpaceObject *EndSpaceObject = nullptr;
+cSpaceObject *StartSpaceObject = nullptr;
+cSpaceObject *EndSpaceObject = nullptr;
 
 
 
@@ -41,7 +41,7 @@ CSpaceObject *EndSpaceObject = nullptr;
 //-----------------------------------------------------------------------------
 // Включаем в список
 //-----------------------------------------------------------------------------
-void AttachSpaceObject(CSpaceObject* SpaceObject)
+void AttachSpaceObject(cSpaceObject* SpaceObject)
 {
 	if (SpaceObject == nullptr)
 		return;
@@ -66,7 +66,7 @@ void AttachSpaceObject(CSpaceObject* SpaceObject)
 //-----------------------------------------------------------------------------
 // Исключаем из списка
 //-----------------------------------------------------------------------------
-void DetachSpaceObject(CSpaceObject* SpaceObject)
+void DetachSpaceObject(cSpaceObject* SpaceObject)
 {
 	if (SpaceObject == nullptr)
 		return;
@@ -97,9 +97,9 @@ void DetachSpaceObject(CSpaceObject* SpaceObject)
 //-----------------------------------------------------------------------------
 void UpdateAllSpaceObject(float Time)
 {
-	CSpaceObject *tmp = StartSpaceObject;
+	cSpaceObject *tmp = StartSpaceObject;
 	while (tmp != nullptr) {
-		CSpaceObject *tmp2 = tmp->Next;
+		cSpaceObject *tmp2 = tmp->Next;
 		// делаем обновление данных по объекту
 		if (!tmp->Update(Time))
 			delete tmp;
@@ -116,9 +116,9 @@ void UpdateAllSpaceObject(float Time)
 void DrawAllSpaceObject(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 
-	CSpaceObject *tmp = StartSpaceObject;
+	cSpaceObject *tmp = StartSpaceObject;
 	while (tmp != nullptr) {
-		CSpaceObject *tmp2 = tmp->Next;
+		cSpaceObject *tmp2 = tmp->Next;
 
 		// планеты и астероиды рисуем до тайловой анимации в игре!!!
 		if ((tmp->ObjectType != 14) &&
@@ -133,9 +133,9 @@ int DrawAllSpaceObjectCount(int DrawOnlyType)
 {
 	int Count = 0;
 
-	CSpaceObject *tmp = StartSpaceObject;
+	cSpaceObject *tmp = StartSpaceObject;
 	while (tmp != nullptr) {
-		CSpaceObject *tmp2 = tmp->Next;
+		cSpaceObject *tmp2 = tmp->Next;
 
 		if (DrawOnlyType != -1) {
 			// если нужно прорисовать только определенный тип
@@ -165,9 +165,9 @@ int DrawAllSpaceObjectCount(int DrawOnlyType)
 //-----------------------------------------------------------------------------
 void ReleaseAllSpaceObject()
 {
-	CSpaceObject *tmp = StartSpaceObject;
+	cSpaceObject *tmp = StartSpaceObject;
 	while (tmp != nullptr) {
-		CSpaceObject *tmp2 = tmp->Next;
+		cSpaceObject *tmp2 = tmp->Next;
 		delete tmp;
 		tmp = tmp2;
 	}

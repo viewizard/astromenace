@@ -35,7 +35,7 @@
 //-----------------------------------------------------------------------------
 
 // SkyBox textures
-eTexture *SkyBox_Texture[6] = {nullptr,nullptr,nullptr,nullptr,nullptr,nullptr};
+sTexture *SkyBox_Texture[6] = {nullptr,nullptr,nullptr,nullptr,nullptr,nullptr};
 // SkyBox location
 float SkyBox_x = 0.0f;
 float SkyBox_y = 0.0f;
@@ -285,7 +285,7 @@ void SkyBoxDraw(void)
 //-----------------------------------------------------------------------------
 // Setup texture for each SkyBox side
 //-----------------------------------------------------------------------------
-void SkyBoxSetTexture(eTexture *nTexture, int Side)
+void SkyBoxSetTexture(sTexture *nTexture, int Side)
 {
 	SkyBox_Texture[Side] = nTexture;
 }

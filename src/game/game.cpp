@@ -29,8 +29,8 @@
 #include <stdarg.h> // va_start
 
 
-ScriptEngine *Script = nullptr;
-extern eParticleSystem *psSpace;
+cScriptEngine *Script = nullptr;
+extern cParticleSystem *psSpace;
 
 
 
@@ -80,7 +80,7 @@ bool GameMissionCompleteStatus = false;
 bool GameMissionCompleteStatusShowDialog = false;
 
 // собственно сам файтер
-CEarthSpaceFighter *PlayerFighter = nullptr;
+cEarthSpaceFighter *PlayerFighter = nullptr;
 
 
 
@@ -108,10 +108,10 @@ extern float CurrentAlert3;
 extern float CurentTime;
 
 // прорисовка эмблем энергии и жизни
-eParticleSystem2D *EnergyParticleSystem2D = nullptr;
-eParticleSystem2D *LifeParticleSystem2D = nullptr;
-eParticleSystem2D *Life2ParticleSystem2D = nullptr;
-eParticleSystem2D *Life3ParticleSystem2D = nullptr;
+cParticleSystem2D *EnergyParticleSystem2D = nullptr;
+cParticleSystem2D *LifeParticleSystem2D = nullptr;
+cParticleSystem2D *Life2ParticleSystem2D = nullptr;
+cParticleSystem2D *Life3ParticleSystem2D = nullptr;
 
 
 // работа с кораблем игрока
@@ -130,8 +130,8 @@ float CurrentDrawLifeNumFull;
 
 
 // щит или дефлектор
-extern eParticleSystem *Shild1;
-extern eParticleSystem *Shild2;
+extern cParticleSystem *Shild1;
+extern cParticleSystem *Shild2;
 
 // для звука открытия-закрытия меню в игре
 int SoundShowHideMenu = 0;
@@ -161,7 +161,7 @@ float LastGameTime;
 //------------------------------------------------------------------------------------
 // данные фонта
 //------------------------------------------------------------------------------------
-void GetGameNumFontData(char Char, RECT *SrcRect)
+void GetGameNumFontData(char Char, sRECT *SrcRect)
 {
 	switch (Char) {
 	case '0':
@@ -218,11 +218,11 @@ void GetGameNumFontData(char Char, RECT *SrcRect)
 void DrawGameExpMoney(int Exp, int Money)
 {
 
-	RECT DstRect, SrcRect;
+	sRECT DstRect, SrcRect;
 	SetRect(&SrcRect, 0, 0, 0, 0);
 	int Ystart;
 	float Xstart;
-	eTexture *Tex = vw_FindTextureByName("game/game_num.tga");
+	sTexture *Tex = vw_FindTextureByName("game/game_num.tga");
 	if (Tex == nullptr)
 		return;
 
@@ -601,7 +601,7 @@ void InitGame()
 
 	if (Script != nullptr)
 		delete Script;
-	Script = new ScriptEngine;
+	Script = new cScriptEngine;
 
 	if (Script != nullptr) {
 		if (GetMissionFileName() != nullptr) {
@@ -624,7 +624,7 @@ void InitGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// активные частицы космоса
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	psSpace = new eParticleSystem;
+	psSpace = new cParticleSystem;
 	psSpace->ColorStart.r = 0.80f;
 	psSpace->ColorStart.g = 0.80f;
 	psSpace->ColorStart.b = 1.00f;
@@ -641,11 +641,11 @@ void InitGame()
 	psSpace->Life       = 14.00f;
 	psSpace->LifeVar    = 0.00f;
 	psSpace->CreationType = 1;
-	psSpace->CreationSize = VECTOR3D(200.0f,30.0f,10.0f);
+	psSpace->CreationSize = sVECTOR3D(200.0f,30.0f,10.0f);
 	psSpace->ParticlesPerSec = 100;
 	psSpace->Texture[0] = vw_FindTextureByName("gfx/flare3.tga");
-	psSpace->Direction = VECTOR3D(0.0f, 0.0f, -1.0f);
-	psSpace->SetStartLocation(VECTOR3D(0,10,250));//поправь ниже, на переносе если изменил!!!
+	psSpace->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+	psSpace->SetStartLocation(sVECTOR3D(0,10,250));//поправь ниже, на переносе если изменил!!!
 
 
 
@@ -653,8 +653,8 @@ void InitGame()
 	// немного "прокручиваем", чтобы сразу по появлению было заполнено
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
-	vw_SetCameraLocation(VECTOR3D(0,65,-100+10));
-	vw_SetCameraMoveAroundPoint(VECTOR3D(0,0,10), 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
+	vw_SetCameraLocation(sVECTOR3D(0,65,-100+10));
+	vw_SetCameraMoveAroundPoint(sVECTOR3D(0,0,10), 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
 
 
 	float Time = psSpace->TimeLastUpdate;
@@ -670,7 +670,7 @@ void InitGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (EnergyParticleSystem2D != nullptr)
 		delete EnergyParticleSystem2D;
-	EnergyParticleSystem2D = new eParticleSystem2D;
+	EnergyParticleSystem2D = new cParticleSystem2D;
 	EnergyParticleSystem2D->ColorStart.r = 0.70f;
 	EnergyParticleSystem2D->ColorStart.g = 0.80f;
 	EnergyParticleSystem2D->ColorStart.b = 1.00f;
@@ -691,11 +691,11 @@ void InitGame()
 	EnergyParticleSystem2D->IsAttractive = true;
 	EnergyParticleSystem2D->AttractiveValue = 150.0f;
 	EnergyParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
-	EnergyParticleSystem2D->MoveSystem(VECTOR3D(33.0f,29.0f,0.0f));
+	EnergyParticleSystem2D->MoveSystem(sVECTOR3D(33.0f,29.0f,0.0f));
 
 	if (LifeParticleSystem2D != nullptr)
 		delete LifeParticleSystem2D;
-	LifeParticleSystem2D = new eParticleSystem2D;
+	LifeParticleSystem2D = new cParticleSystem2D;
 	LifeParticleSystem2D->ColorStart.r = 1.00f;
 	LifeParticleSystem2D->ColorStart.g = 0.60f;
 	LifeParticleSystem2D->ColorStart.b = 0.20f;
@@ -714,19 +714,19 @@ void InitGame()
 	LifeParticleSystem2D->Life       = 1.50f;
 	LifeParticleSystem2D->LifeVar       = 0.05f;
 	LifeParticleSystem2D->ParticlesPerSec = 70;
-	LifeParticleSystem2D->Direction = VECTOR3D(1.0f, 0.0f, 0.0f);
+	LifeParticleSystem2D->Direction = sVECTOR3D(1.0f, 0.0f, 0.0f);
 	LifeParticleSystem2D->CreationType = 2;
-	LifeParticleSystem2D->CreationSize = VECTOR3D(25.0f, 25.0f, 0.0f);
+	LifeParticleSystem2D->CreationSize = sVECTOR3D(25.0f, 25.0f, 0.0f);
 	LifeParticleSystem2D->DeadZone = 24.0f;
 	LifeParticleSystem2D->IsAttractive = true;
 	LifeParticleSystem2D->AttractiveValue = 25.0f;
 	LifeParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare.tga");
-	LifeParticleSystem2D->MoveSystem(VECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));
-	LifeParticleSystem2D->SetRotation(VECTOR3D(0.0f, 0.0f, 90.0f));
+	LifeParticleSystem2D->MoveSystem(sVECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));
+	LifeParticleSystem2D->SetRotation(sVECTOR3D(0.0f, 0.0f, 90.0f));
 
 	if (Life2ParticleSystem2D != nullptr)
 		delete Life2ParticleSystem2D;
-	Life2ParticleSystem2D = new eParticleSystem2D;
+	Life2ParticleSystem2D = new cParticleSystem2D;
 	Life2ParticleSystem2D->ColorStart.r = 1.00f;
 	Life2ParticleSystem2D->ColorStart.g = 0.40f;
 	Life2ParticleSystem2D->ColorStart.b = 0.10f;
@@ -746,14 +746,14 @@ void InitGame()
 	Life2ParticleSystem2D->LifeVar       = 0.05f;
 	Life2ParticleSystem2D->ParticlesPerSec = 50;
 	Life2ParticleSystem2D->CreationType = 1;
-	Life2ParticleSystem2D->CreationSize = VECTOR3D(18.0f, 1.0f, 0.0f);
+	Life2ParticleSystem2D->CreationSize = sVECTOR3D(18.0f, 1.0f, 0.0f);
 	Life2ParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
-	Life2ParticleSystem2D->MoveSystem(VECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));
+	Life2ParticleSystem2D->MoveSystem(sVECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));
 
 
 	if (Life3ParticleSystem2D != nullptr)
 		delete Life3ParticleSystem2D;
-	Life3ParticleSystem2D = new eParticleSystem2D;
+	Life3ParticleSystem2D = new cParticleSystem2D;
 	Life3ParticleSystem2D->ColorStart.r = 1.00f;
 	Life3ParticleSystem2D->ColorStart.g = 0.40f;
 	Life3ParticleSystem2D->ColorStart.b = 0.10f;
@@ -773,9 +773,9 @@ void InitGame()
 	Life3ParticleSystem2D->LifeVar       = 0.05f;
 	Life3ParticleSystem2D->ParticlesPerSec = 50;
 	Life3ParticleSystem2D->CreationType = 1;
-	Life3ParticleSystem2D->CreationSize = VECTOR3D(1.0f, 18.0f, 0.0f);
+	Life3ParticleSystem2D->CreationSize = sVECTOR3D(1.0f, 18.0f, 0.0f);
 	Life3ParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
-	Life3ParticleSystem2D->MoveSystem(VECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));
+	Life3ParticleSystem2D->MoveSystem(sVECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));
 
 
 
@@ -1071,7 +1071,7 @@ void DrawGame()
 	// 2д часть
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_Start2DMode(-1,1);
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 
 
@@ -1216,7 +1216,7 @@ void DrawGame()
 			float G=1.0f;
 			float B=1.0f;
 
-			eTexture *Tex = vw_FindTextureByName("game/game_panel_el.tga");
+			sTexture *Tex = vw_FindTextureByName("game/game_panel_el.tga");
 			if (Tex == nullptr)
 				return;
 

@@ -68,7 +68,7 @@ void	vw_ResetWheelStatus();
 int		vw_GetWheelStatus();
 void	vw_SetMousePos(int X, int Y);
 void 	vw_SetMousePosRel(int X, int Y);
-bool	vw_OnRect(RECT *MDetect);
+bool	vw_OnRect(sRECT *MDetect);
 
 
 

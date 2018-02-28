@@ -35,13 +35,13 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CShipPart
+// Класс cShipPart
 //-----------------------------------------------------------------------------
-class CShipPart : public CSpaceObject
+class cShipPart : public cSpaceObject
 {
 public:
 
-	virtual ~CShipPart() {};
+	virtual ~cShipPart() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int ShipPartNum);

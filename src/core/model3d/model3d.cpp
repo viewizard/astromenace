@@ -34,7 +34,7 @@
 //-----------------------------------------------------------------------------
 // Деструктор
 //-----------------------------------------------------------------------------
-eObjectBlock::~eObjectBlock(void)
+sObjectBlock::~sObjectBlock(void)
 {
 	// если нужно, удаляем с блоком
 	if (NeedDestroyDataInObjectBlock) {
@@ -69,7 +69,7 @@ eObjectBlock::~eObjectBlock(void)
 //-----------------------------------------------------------------------------
 // Конструктор
 //-----------------------------------------------------------------------------
-eModel3D::eModel3D(void)
+cModel3D::cModel3D(void)
 {
 	vw_AttachModel3D(this);
 }
@@ -78,7 +78,7 @@ eModel3D::eModel3D(void)
 //-----------------------------------------------------------------------------
 // Деструктор
 //-----------------------------------------------------------------------------
-eModel3D::~eModel3D(void)
+cModel3D::~cModel3D(void)
 {
 	if (Name != nullptr)
 		delete [] Name;
@@ -138,7 +138,7 @@ eModel3D::~eModel3D(void)
 //-----------------------------------------------------------------------------
 // создание вертекс и индекс буферов для каждого блока модели
 //-----------------------------------------------------------------------------
-void eModel3D::CreateObjectsBuffers()
+void cModel3D::CreateObjectsBuffers()
 {
 	for (int i=0; i<DrawObjectCount; i++) {
 		// создаем вертексный буфер блока
@@ -164,7 +164,7 @@ void eModel3D::CreateObjectsBuffers()
 //-----------------------------------------------------------------------------
 // создаем все поддерживаемые буферы (VAO, VBO, IBO)
 //-----------------------------------------------------------------------------
-void eModel3D::CreateHardwareBuffers()
+void cModel3D::CreateHardwareBuffers()
 {
 	// делаем общее VBO
 	GlobalVBO = new unsigned int;
@@ -388,7 +388,7 @@ void RecursiveBufferLimitedBySizeTrianglesGenerate(float Point1[8], float Point2
 		return;
 	}
 }
-void eModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
+void cModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 {
 	// если преобразования делать не требуется - устанавливаем ссылку на обуфер блока и выходим
 	if (TriangleSizeLimit <= 0.0f) {
@@ -499,7 +499,7 @@ void eModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 //-----------------------------------------------------------------------------
 // пересоздаем буфер вертексов, для работы с нормал меппингом в шейдерах, добавляем тангент и бинормаль
 //-----------------------------------------------------------------------------
-void eModel3D::CreateTangentAndBinormal()
+void cModel3D::CreateTangentAndBinormal()
 {
 	// пересоздаем глобальный вертексный буфер, (!) работаем с фиксированным типом,
 	// на входе у нас всегда RI_3f_XYZ | RI_3f_NORMAL | RI_2f_TEX
@@ -527,25 +527,25 @@ void eModel3D::CreateTangentAndBinormal()
 	// создаем тангенты и бинормали, сохраняем их в 2 и 3 текстурных координатах
 	for (unsigned int j=0; j<GlobalVertexCount-2; j+=3) {
 
-		VECTOR3D Point1(GlobalVertexBuffer[New_VertexStride*j],
+		sVECTOR3D Point1(GlobalVertexBuffer[New_VertexStride*j],
 				GlobalVertexBuffer[New_VertexStride*j+1],
 				GlobalVertexBuffer[New_VertexStride*j+2]);
 
-		VECTOR3D Point2(GlobalVertexBuffer[New_VertexStride*(j+1)],
+		sVECTOR3D Point2(GlobalVertexBuffer[New_VertexStride*(j+1)],
 				GlobalVertexBuffer[New_VertexStride*(j+1)+1],
 				GlobalVertexBuffer[New_VertexStride*(j+1)+2]);
 
-		VECTOR3D Point3(GlobalVertexBuffer[New_VertexStride*(j+2)],
+		sVECTOR3D Point3(GlobalVertexBuffer[New_VertexStride*(j+2)],
 				GlobalVertexBuffer[New_VertexStride*(j+2)+1],
 				GlobalVertexBuffer[New_VertexStride*(j+2)+2]);
 
 		// находим 2 вектора, образующих плоскость
-		VECTOR3D PlaneVector1 = Point2 - Point1;
-		VECTOR3D PlaneVector2 = Point3 - Point1;
+		sVECTOR3D PlaneVector1 = Point2 - Point1;
+		sVECTOR3D PlaneVector2 = Point3 - Point1;
 		// находим нормаль плоскости
 		PlaneVector1.Multiply(PlaneVector2);
 		PlaneVector1.NormalizeHi();
-		VECTOR3D PlaneNormal = PlaneVector1;
+		sVECTOR3D PlaneNormal = PlaneVector1;
 
 
 		// нормаль получили (нужна будет для проверки зеркалирования), можем идти дальше
@@ -560,15 +560,15 @@ void eModel3D::CreateTangentAndBinormal()
 		float delta_V_0 = GlobalVertexBuffer[New_VertexStride*j+7] - GlobalVertexBuffer[New_VertexStride*(j+1)+7];
 		float delta_V_1 = GlobalVertexBuffer[New_VertexStride*(j+2)+7] - GlobalVertexBuffer[New_VertexStride*(j+1)+7];
 
-		VECTOR3D Tangent = ((PlaneVector1 ^ delta_V_1) - (PlaneVector2 ^ delta_V_0));
+		sVECTOR3D Tangent = ((PlaneVector1 ^ delta_V_1) - (PlaneVector2 ^ delta_V_0));
 		Tangent.NormalizeHi();
 		float TangentW = 1.0f;
-		VECTOR3D BiNormal = ((PlaneVector1 ^ delta_U_1) - (PlaneVector2 ^ delta_U_0));
+		sVECTOR3D BiNormal = ((PlaneVector1 ^ delta_U_1) - (PlaneVector2 ^ delta_U_0));
 		BiNormal.NormalizeHi();
 
 
 		// проверка на зеркалирование нормал мепа
-		VECTOR3D TBCross = Tangent;
+		sVECTOR3D TBCross = Tangent;
 		TBCross.Multiply(BiNormal);
 		if( (TBCross * PlaneNormal) < 0 ) {
 			// вот тут, нормал меп "перевернут"

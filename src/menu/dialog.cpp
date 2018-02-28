@@ -24,18 +24,16 @@
 
 *************************************************************************************/
 
-
 #include "../game.h"
 
+// TODO fix all this mess with numbers (CurrentDialogBox), use 'enum' instead
+
+namespace {
+int CurrentDialogBox = -1; // current dialog box
+//eDIALOGBOX CurrentDialogBox{DIALOGBOX_NONE}; // current dialog box
+} // unnamed namespace
 
 
-
-//------------------------------------------------------------------------------------
-// переменные...
-//------------------------------------------------------------------------------------
-
-// текущий приросовываемый диалог
-int CurrentDialogBox = -1;
 
 extern float CurrentAlert3;
 
@@ -47,13 +45,13 @@ float StartHideTransp = 1.0f;
 
 
 // что рисовать в диалоге 6,7,8
-CSpaceShip *DialogSpaceShip = nullptr;
-extern CEarthSpaceFighter *WorkshopFighterGame; // корабль игрока в меню шипярд
+cSpaceShip *DialogSpaceShip = nullptr;
+extern cEarthSpaceFighter *WorkshopFighterGame; // корабль игрока в меню шипярд
 char *GetShipGroupTitle(int Num);
 char *GetWorkshopShipName(int Num);
 float GetShipArmor(int SpaceShipNum);
 
-CWeapon *DialogWeapon = nullptr;
+cWeapon *DialogWeapon = nullptr;
 char *GetWeaponName(int Num);
 char *GetWeaponGroupTitle(int Num);
 int GetWeaponHullDamage(int Num);
@@ -94,7 +92,7 @@ int NeedPlayDialogOnButtonSoundY = 0;
 //------------------------------------------------------------------------------------
 bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 {
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 	bool ON = false;
 	bool CanClick = false;
 
@@ -182,7 +180,7 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 //------------------------------------------------------------------------------------
 bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 {
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 	bool ON = false;
 	bool CanClick = false;
 
@@ -269,7 +267,7 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 //------------------------------------------------------------------------------------
 void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float Transp)
 {
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 	// получаем длину текста
 	int Size = vw_FontSize(Text);
@@ -459,7 +457,7 @@ void DrawDialogBox()
 
 
 
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 	int WTitle = 234;
 
 	int W = 512;

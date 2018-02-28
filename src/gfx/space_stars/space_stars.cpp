@@ -34,7 +34,7 @@
 //-----------------------------------------------------------------------------
 // инициализация класса
 //-----------------------------------------------------------------------------
-CSpaceStars::CSpaceStars()
+cSpaceStars::cSpaceStars()
 {
 	Texture = vw_FindTextureByName("gfx/flare1.tga");
 
@@ -49,7 +49,7 @@ CSpaceStars::CSpaceStars()
 	// пока не создадим все необходимые частицы
 	while (ParticlesCreated > 0) {
 		// создаем новую частицу
-		CStar *NewParticle = new CStar;
+		sStar *NewParticle = new sStar;
 
 
 		// считаем значение альфы
@@ -63,7 +63,7 @@ CSpaceStars::CSpaceStars()
 
 		// выпускаем частицу возле места нахождения системы
 		// в сфере
-		VECTOR3D tmp;
+		sVECTOR3D tmp;
 		float minDist = CreationSize.x*CreationSize.x+CreationSize.y*CreationSize.y+CreationSize.z*CreationSize.z;
 		// если зона больше чем радиус излучения - выключаем ее
 		if (minDist <= DeadZone*DeadZone) DeadZone = 0.0f;
@@ -76,14 +76,14 @@ CSpaceStars::CSpaceStars()
 		while (ParticleDist > minDist || ParticleDist < DeadZone*DeadZone) {
 			if (ParticleDist > minDist) {
 				// ум. радиус
-				VECTOR3D tmp1 = tmp;
+				sVECTOR3D tmp1 = tmp;
 				tmp1.Normalize();
 				tmp1 = tmp1^(1/100.0f);
 				tmp = tmp - tmp1;
 			}
 			if ( ParticleDist < DeadZone*DeadZone) {
 				// ув. радиус
-				VECTOR3D tmp1 = tmp;
+				sVECTOR3D tmp1 = tmp;
 				tmp1.Normalize();
 				tmp1 = tmp1^(1/100.0f);
 				tmp = tmp + tmp1;
@@ -123,12 +123,12 @@ CSpaceStars::CSpaceStars()
 //-----------------------------------------------------------------------------
 //	При разрушении класса
 //-----------------------------------------------------------------------------
-CSpaceStars::~CSpaceStars()
+cSpaceStars::~cSpaceStars()
 {
 	// полностью освобождаем память от всех частиц в системе
-	CStar *tmp = Start;
+	sStar *tmp = Start;
 	while (tmp != nullptr) {
-		CStar *tmp2 = tmp->Next;
+		sStar *tmp2 = tmp->Next;
 		Detach(tmp);
 		delete tmp;
 		tmp = tmp2;
@@ -153,7 +153,7 @@ CSpaceStars::~CSpaceStars()
 //-----------------------------------------------------------------------------
 //	подключить частицу к системе
 //-----------------------------------------------------------------------------
-void CSpaceStars::Attach(CStar * NewParticle)
+void cSpaceStars::Attach(sStar * NewParticle)
 {
 	if (NewParticle == nullptr)
 		return;
@@ -177,7 +177,7 @@ void CSpaceStars::Attach(CStar * NewParticle)
 //-----------------------------------------------------------------------------
 //	отключить ее от системы
 //-----------------------------------------------------------------------------
-void CSpaceStars::Detach(CStar * OldParticle)
+void cSpaceStars::Detach(sStar * OldParticle)
 {
 	if (OldParticle == nullptr)
 		return;
@@ -206,7 +206,7 @@ void CSpaceStars::Detach(CStar * OldParticle)
 //-----------------------------------------------------------------------------
 // обновление системы
 //-----------------------------------------------------------------------------
-bool CSpaceStars::Update(float Time)
+bool cSpaceStars::Update(float Time)
 {
 	// первый раз... просто берем время
 	if (TimeLastUpdate == -1.0f) {
@@ -226,9 +226,9 @@ bool CSpaceStars::Update(float Time)
 	// эти расчеты делаем в шейдере, они нам не нужны
 	if (!Setup.UseGLSL) {
 		// для всех частиц
-		CStar *tmp = Start;
+		sStar *tmp = Start;
 		while (tmp != nullptr) {
-			CStar *tmp2 = tmp->Next;
+			sStar *tmp2 = tmp->Next;
 			// функция вернет false, если частица уже мертва
 			if (!tmp->Update(TimeDelta)) {
 				Detach(tmp);
@@ -271,14 +271,14 @@ bool CSpaceStars::Update(float Time)
 //-----------------------------------------------------------------------------
 // прорисовка системы
 //-----------------------------------------------------------------------------
-void CSpaceStars::Draw()
+void cSpaceStars::Draw()
 {
 
 	// загрузка текстуры, уже должна быть подключена
 	if (Texture == nullptr)
 		return;
 
-	VECTOR3D CurrentCameraRotation;
+	sVECTOR3D CurrentCameraRotation;
 	vw_GetCameraRotation(&CurrentCameraRotation);
 
 
@@ -303,7 +303,7 @@ void CSpaceStars::Draw()
 		}
 
 		// находим реальное кол-во частиц на прорисовку
-		CStar *tmp = Start;
+		sStar *tmp = Start;
 		PrimitCount = 0;
 
 		// сохраняем данные
@@ -312,12 +312,12 @@ void CSpaceStars::Draw()
 		LastCameraAngleZ = CurrentCameraRotation.z;
 
 		// получаем текущее положение камеры
-		VECTOR3D CurrentCameraLocation;
+		sVECTOR3D CurrentCameraLocation;
 		vw_GetCameraLocation(&CurrentCameraLocation);
 
 
 		while (tmp != nullptr) {
-			CStar *tmp2 = tmp->Next;
+			sStar *tmp2 = tmp->Next;
 			// небольшая оптимизация, если попадает в сферу - рисуем, нет - значит не видно
 			if (vw_SphereInFrustum(tmp->Location + CurrentCameraLocation, Size))
 				PrimitCount++;
@@ -328,7 +328,7 @@ void CSpaceStars::Draw()
 		if (PrimitCount == 0) return;
 
 		// список, в котором они будут упорядочены
-		list = new CStar*[PrimitCount];
+		list = new sStar*[PrimitCount];
 		if (list == nullptr)
 			return;
 		int LenCount = 0;
@@ -336,7 +336,7 @@ void CSpaceStars::Draw()
 
 		tmp = Start;
 		while (tmp != nullptr) {
-			CStar *tmp2 = tmp->Next;
+			sStar *tmp2 = tmp->Next;
 			// небольшая оптимизация, если попадает в сферу - рисуем, нет - значит не видно
 			if (vw_SphereInFrustum(tmp->Location + CurrentCameraLocation, Size)) {
 				list[LenCount] = tmp;
@@ -360,26 +360,26 @@ void CSpaceStars::Draw()
 
 			for (int i=0; i<PrimitCount; i++) {
 				// находим вектор камера-точка
-				VECTOR3D nnTmp;
+				sVECTOR3D nnTmp;
 				// смотрим, если есть не нужно поворачивать, работаем с направлением
 				nnTmp = list[i]->Location^(-1.0f);
 				nnTmp.Normalize();
 				// находим перпендикуляр к вектору nnTmp
-				VECTOR3D nnTmp2;
+				sVECTOR3D nnTmp2;
 				nnTmp2.x = 1.0f;
 				nnTmp2.y = 1.0f;
 				nnTmp2.z = -(nnTmp.x + nnTmp.y)/nnTmp.z;
 				nnTmp2.Normalize();
 				// находим перпендикуляр к векторам nnTmp и nnTmp2
 				// файтически - a x b = ( aybz - byaz , azbx - bzax , axby - bxay );
-				VECTOR3D nnTmp3;
+				sVECTOR3D nnTmp3;
 				nnTmp3.x = nnTmp.y*nnTmp2.z - nnTmp2.y*nnTmp.z;
 				nnTmp3.y = nnTmp.z*nnTmp2.x - nnTmp2.z*nnTmp.x;
 				nnTmp3.z = nnTmp.x*nnTmp2.y - nnTmp2.x*nnTmp.y;
 				nnTmp3.Normalize();
 
 				// находим
-				VECTOR3D tmpAngle1,tmpAngle2,tmpAngle3,tmpAngle4;
+				sVECTOR3D tmpAngle1,tmpAngle2,tmpAngle3,tmpAngle4;
 
 				tmpAngle1 = nnTmp3^(Size*1.5f);
 				tmpAngle3 = nnTmp3^(-Size*1.5f);
@@ -448,26 +448,26 @@ void CSpaceStars::Draw()
 
 			for (int i=0; i<PrimitCount; i++) {
 				// находим вектор камера-точка
-				VECTOR3D nnTmp;
+				sVECTOR3D nnTmp;
 				// смотрим, если есть не нужно поворачивать, работаем с направлением
 				nnTmp = list[i]->Location^(-1.0f);
 				nnTmp.Normalize();
 				// находим перпендикуляр к вектору nnTmp
-				VECTOR3D nnTmp2;
+				sVECTOR3D nnTmp2;
 				nnTmp2.x = 1.0f;
 				nnTmp2.y = 1.0f;
 				nnTmp2.z = -(nnTmp.x + nnTmp.y)/nnTmp.z;
 				nnTmp2.Normalize();
 				// находим перпендикуляр к векторам nnTmp и nnTmp2
 				// файтически - a x b = ( aybz - byaz , azbx - bzax , axby - bxay );
-				VECTOR3D nnTmp3;
+				sVECTOR3D nnTmp3;
 				nnTmp3.x = nnTmp.y*nnTmp2.z - nnTmp2.y*nnTmp.z;
 				nnTmp3.y = nnTmp.z*nnTmp2.x - nnTmp2.z*nnTmp.x;
 				nnTmp3.z = nnTmp.x*nnTmp2.y - nnTmp2.x*nnTmp.y;
 				nnTmp3.Normalize();
 
 				// находим
-				VECTOR3D tmpAngle1,tmpAngle2,tmpAngle3,tmpAngle4;
+				sVECTOR3D tmpAngle1,tmpAngle2,tmpAngle3,tmpAngle4;
 
 				tmpAngle1 = nnTmp3^(Size*1.5f);
 				tmpAngle3 = nnTmp3^(-Size*1.5f);
@@ -547,9 +547,9 @@ void CSpaceStars::Draw()
 
 
 		// получаем текущее положение камеры
-		VECTOR3D CurrentCameraLocation;
+		sVECTOR3D CurrentCameraLocation;
 		vw_GetCameraLocation(&CurrentCameraLocation);
-		CurrentCameraLocation += VECTOR3D(GameCameraGetDeviation()*0.9,-GameCameraGetDeviation()*0.5f,0.0f);
+		CurrentCameraLocation += sVECTOR3D(GameCameraGetDeviation()*0.9,-GameCameraGetDeviation()*0.5f,0.0f);
 
 
 		vw_PushMatrix();

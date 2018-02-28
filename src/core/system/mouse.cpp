@@ -196,7 +196,7 @@ int vw_GetMousePos(int *X, int *Y)
 //------------------------------------------------------------------------------------
 // находится мышка в области или нет
 //------------------------------------------------------------------------------------
-bool vw_OnRect(RECT *MDetect)
+bool vw_OnRect(sRECT *MDetect)
 {
 	int MouseXOnRect, MouseYOnRect;
 	vw_GetMousePos(&MouseXOnRect, &MouseYOnRect);

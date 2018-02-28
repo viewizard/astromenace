@@ -35,7 +35,7 @@
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void CShipPart::Create(int ShipPartNum)
+void cShipPart::Create(int ShipPartNum)
 {
 	ObjectType = 8;
 	ObjectCreationType = ShipPartNum;

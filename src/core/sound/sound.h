@@ -54,13 +54,13 @@
 //------------------------------------------------------------------------------------
 // Структура звука
 //------------------------------------------------------------------------------------
-class eSound
+class cSound
 {
 public:
 
-	eSound()
+	cSound()
 	{};
-	~eSound()
+	~cSound()
 	{
 		if (FileName != nullptr)
 			delete [] FileName;
@@ -100,8 +100,8 @@ public:
 	float	DestroyTime{0.0f};
 	float	DestroyTimeStart{0.0f};
 
-	eSound*	Prev{nullptr};	// Pointer to the previous loaded Sound in the memory
-	eSound*	Next{nullptr};	// Pointer to the next loaded Sound in the memory
+	cSound *Prev{nullptr};	// Pointer to the previous loaded Sound in the memory
+	cSound *Next{nullptr};	// Pointer to the next loaded Sound in the memory
 	int	Num{0};		// ID number
 };
 
@@ -111,7 +111,7 @@ public:
 //------------------------------------------------------------------------------------
 // Структура музыки
 //------------------------------------------------------------------------------------
-struct eMusic {
+struct sMusic {
 	// проигрывание музыки
 	bool Play(const char * Name, float fVol, float fMainVol, bool Loop, const char *LoopFileName);
 	char LoopPart[MAX_PATH];
@@ -134,7 +134,7 @@ struct eMusic {
 	ALuint 		Buffers[NUM_OF_DYNBUF];		// у музыки свой собственный буфер
 	bool		Looped;		// запоминаем, нужно ли зацикливание
 
-	std::unique_ptr<eFILE>	MusicFile; // файл, для потока
+	std::unique_ptr<sFILE>	MusicFile; // файл, для потока
 
 	ALsizei		Rate; // OAL specific
 	ALenum		Format;	 // OAL specific
@@ -151,8 +151,8 @@ struct eMusic {
 	float		FadeAge;
 	float		LastTime;
 
-	eMusic*		Prev;		// Pointer to the previous loaded Sound in the memory
-	eMusic*		Next;		// Pointer to the next loaded Sound in the memory
+	sMusic*		Prev;		// Pointer to the previous loaded Sound in the memory
+	sMusic*		Next;		// Pointer to the next loaded Sound in the memory
 	int			Num;		// ID number
 };
 
@@ -170,16 +170,16 @@ void vw_Listener(float ListenerPos[3], float ListenerVel[3], float ListenerOri[6
 //------------------------------------------------------------------------------------
 // Функции для работы с SFX
 //------------------------------------------------------------------------------------
-eSound* vw_FindSoundByNum(int Num);
-eSound* vw_FindSoundByName(const char *Name);
+cSound* vw_FindSoundByNum(int Num);
+cSound* vw_FindSoundByName(const char *Name);
 void vw_SetSoundMainVolume(float NewMainVolume);
 void vw_UpdateSound();
 bool vw_CheckCanPlaySound(int Group, int GroupCount, int SubGroup, int SubGroupCount, int Priority);
 
-void vw_ReleaseSound(eSound* Sound);
+void vw_ReleaseSound(cSound *Sound);
 void vw_ReleaseAllSounds(int ReleaseType);
-void vw_AttachSound(eSound* Sound);
-void vw_DetachSound(eSound* Sound);
+void vw_AttachSound(cSound *Sound);
+void vw_DetachSound(cSound *Sound);
 
 
 
@@ -189,12 +189,12 @@ void vw_DetachSound(eSound* Sound);
 void vw_SetMusicMainVolume(float NewMainVolume);
 bool vw_GetMusicIsPlaying();
 void vw_UpdateMusic();
-eMusic* vw_FindMusicByNum(int Num);
+sMusic* vw_FindMusicByNum(int Num);
 
-void vw_ReleaseMusic(eMusic* Music);
+void vw_ReleaseMusic(sMusic* Music);
 void vw_ReleaseAllMusic();
-void vw_AttachMusic(eMusic* Music);
-void vw_DetachMusic(eMusic* Music);
+void vw_AttachMusic(sMusic* Music);
+void vw_DetachMusic(sMusic* Music);
 
 
 

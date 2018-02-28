@@ -29,16 +29,16 @@
 
 namespace {
 float Frustum[6][4];
-}
+} // unnamed namespace
 
-enum PlaneData {
+enum ePlaneData {
 	A = 0,		// The X value of the plane's normal.
 	B = 1,		// The Y value of the plane's normal.
 	C = 2,		// The Z value of the plane's normal.
 	D = 3		// The distance the plane is from the origin.
 };
 
-enum Side {
+enum eSide {
 	RIGHT	= 0,	// The RIGHT side.
 	LEFT	= 1,	// The LEFT side.
 	BOTTOM	= 2,	// The BOTTOM side.
@@ -149,7 +149,7 @@ void vw_CalculateFrustum()
 /*
  * This takes a 3D point and a radius and returns TRUE if the sphere is inside of the frustum
  */
-bool vw_SphereInFrustum(const VECTOR3D &Point, float Radius)
+bool vw_SphereInFrustum(const sVECTOR3D &Point, float Radius)
 {
 	// go through all the sides of the frustum
 	for (int i = 0; i < 6; i++) {
@@ -165,7 +165,7 @@ bool vw_SphereInFrustum(const VECTOR3D &Point, float Radius)
 /*
  * This checks if a box is in the frustum.
  */
-bool vw_BoxInFrustum(const VECTOR3D &MinPoint, const VECTOR3D &MaxPoint)
+bool vw_BoxInFrustum(const sVECTOR3D &MinPoint, const sVECTOR3D &MaxPoint)
 {
 	// Go through all of the corners of the box and check then again each plane
 	// in the frustum.  If all of them are behind one of the planes, then it most

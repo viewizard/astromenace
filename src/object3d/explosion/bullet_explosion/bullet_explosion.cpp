@@ -26,10 +26,10 @@
 
 #include "bullet_explosion.h"
 #include "../../../game.h"
-void DestroyRadiusCollisionAllObject3D(CObject3D *DontTouchObject, VECTOR3D Point, float Radius, float Damage, int ObjectStatus);
+void DestroyRadiusCollisionAllObject3D(cObject3D *DontTouchObject, sVECTOR3D Point, float Radius, float Damage, int ObjectStatus);
 
 
-void PlayBulletExplosion(VECTOR3D Location, bool NeedExplosionSFX, int ExplType)
+void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType)
 {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// звуковые спец эффекты
@@ -191,8 +191,8 @@ void PlayBulletExplosion(VECTOR3D Location, bool NeedExplosionSFX, int ExplType)
 //-----------------------------------------------------------------------------
 // Создание взрыва из частей объекта
 //-----------------------------------------------------------------------------
-CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, int ExplType,
-				   const VECTOR3D &ExplLocation, float Speed, bool NeedExplosionSFX)
+cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, int ExplType,
+				   const sVECTOR3D &ExplLocation, float Speed, bool NeedExplosionSFX)
 {
 	TimeLastUpdate = Projectile->TimeLastUpdate;
 	ExplosionTypeByClass = 2;
@@ -258,13 +258,13 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 
 		// эффект
 		GraphicFXQuantity = 1;
-		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
+		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
 		for (int i=0; i<GraphicFXQuantity; i++) {
 			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[0], 1);
 
 		GraphicFX[0]->Speed = 0.5f*Projectile->Radius;
@@ -273,20 +273,20 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 		if (Projectile->Speed!=0) GraphicFX[0]->Theta = 360.00f;
 		GraphicFX[0]->ParticlesPerSec = (int)(30*Projectile->Radius);
 		GraphicFX[0]->CreationType = 1;
-		GraphicFX[0]->CreationSize = VECTOR3D(AABB[0].x, AABB[0].y, AABB[0].z);
+		GraphicFX[0]->CreationSize = sVECTOR3D(AABB[0].x, AABB[0].y, AABB[0].z);
 		// разварачиваем взрыв по объекту
 		GraphicFX[0]->RotateSystemAndParticlesByAngle(Projectile->Rotation);
 
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(3*Projectile->Radius) + (int)(vw_Randf0*3*Projectile->Radius);
 		for (int i=0; i<ttt; i++) {
-			CProjectile *ProjectileTMP  = nullptr;
-			ProjectileTMP  = new CProjectile;
+			cProjectile *ProjectileTMP  = nullptr;
+			ProjectileTMP  = new cProjectile;
 			ProjectileTMP->Create(1);
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(VECTOR3D(360.0f*vw_Randf0, 360.0f*vw_Randf0, 360.0f*vw_Randf0));
-			VECTOR3D TM1 = Projectile->Orientation^Projectile->Speed;
+			ProjectileTMP->SetRotation(sVECTOR3D(360.0f*vw_Randf0, 360.0f*vw_Randf0, 360.0f*vw_Randf0));
+			sVECTOR3D TM1 = Projectile->Orientation^Projectile->Speed;
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*6.0f));
 			ProjectileTMP->Orientation.Normalize();
 
@@ -353,7 +353,7 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 
 		// просто делаем вспышку нужного цвета
 		GraphicFXQuantity = 1;
-		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
+		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
 		for (int i=0; i<GraphicFXQuantity; i++) {
 			GraphicFX[i] = nullptr;
 		}
@@ -361,12 +361,12 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 		// установка эффекта вспышки в месте попадания
 		if (Projectile->GraphicFX != nullptr)
 			if (Projectile->GraphicFX[0] != nullptr) {
-				GraphicFX[0] = new eParticleSystem;
+				GraphicFX[0] = new cParticleSystem;
 				SetExplosionGFX(GraphicFX[0], 0);
 				float Rexpl = (Projectile->GraphicFX[0]->ColorStart.r + Projectile->GraphicFX[0]->ColorEnd.r)/2.0f;
 				float Gexpl = (Projectile->GraphicFX[0]->ColorStart.g + Projectile->GraphicFX[0]->ColorEnd.g)/2.0f;
 				float Bexpl = (Projectile->GraphicFX[0]->ColorStart.b + Projectile->GraphicFX[0]->ColorEnd.b)/2.0f;
-				GraphicFX[0]->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
+				GraphicFX[0]->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
 
 				GraphicFX[0]->ColorStart.r = Projectile->GraphicFX[0]->ColorStart.r;
 				GraphicFX[0]->ColorStart.g = Projectile->GraphicFX[0]->ColorStart.g;
@@ -415,7 +415,7 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 
 		// просто делаем вспышку нужного цвета
 		GraphicFXQuantity = 1;
-		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
+		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
 		for (int i = 0; i < GraphicFXQuantity; i++) {
 			GraphicFX[i] = nullptr;
 		}
@@ -423,12 +423,12 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 		// установка эффекта вспышки в месте попадания
 		if (Projectile->GraphicFX != nullptr)
 			if (Projectile->GraphicFX[0] != nullptr) {
-				GraphicFX[0] = new eParticleSystem;
+				GraphicFX[0] = new cParticleSystem;
 				SetExplosionGFX(GraphicFX[0], 0);
 				float Rexpl = (Projectile->GraphicFX[0]->ColorStart.r + Projectile->GraphicFX[0]->ColorEnd.r)/2.0f;
 				float Gexpl = (Projectile->GraphicFX[0]->ColorStart.g + Projectile->GraphicFX[0]->ColorEnd.g)/2.0f;
 				float Bexpl = (Projectile->GraphicFX[0]->ColorStart.b + Projectile->GraphicFX[0]->ColorEnd.b)/2.0f;
-				GraphicFX[0]->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
+				GraphicFX[0]->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
 
 				GraphicFX[0]->ColorStart.r = Projectile->GraphicFX[0]->ColorStart.r;
 				GraphicFX[0]->ColorStart.g = Projectile->GraphicFX[0]->ColorStart.g;
@@ -476,25 +476,25 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 
 		// эффект
 		GraphicFXQuantity = 1;
-		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
+		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
 		for (int i = 0; i < GraphicFXQuantity; i++) {
 			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[0], 10);
 		GraphicFX[0]->SetStartLocation(Projectile->Location);
 
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(3*Projectile->Radius) + (int)(vw_Randf1*1*Projectile->Radius);
 		for (int i = 0; i < ttt; i++) {
-			CProjectile *ProjectileTMP = new CProjectile;
+			cProjectile *ProjectileTMP = new cProjectile;
 			ProjectileTMP->Create(1);
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(VECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
-			VECTOR3D TM1 = Projectile->Orientation;
+			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			sVECTOR3D TM1 = Projectile->Orientation;
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 			ProjectileTMP->Orientation.Normalize();
 
@@ -524,28 +524,28 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 
 		// эффект
 		GraphicFXQuantity = 1;
-		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
+		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
 		for (int i = 0; i < GraphicFXQuantity; i++) {
 			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[0], 10);
 		GraphicFX[0]->ParticlesPerSec = 30;
-		GraphicFX[0]->CreationSize = VECTOR3D(2.0f,0.3f,2.0f);
+		GraphicFX[0]->CreationSize = sVECTOR3D(2.0f,0.3f,2.0f);
 		GraphicFX[0]->SetStartLocation(Projectile->Location);
 
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(1*Projectile->Radius) + (int)(vw_Randf1*1*Projectile->Radius);
 		//vw_LogMessage(LOG_MESS_INF, "%i", ttt);
 		for (int i = 0; i < ttt; i++) {
-			CProjectile *ProjectileTMP = new CProjectile;
+			cProjectile *ProjectileTMP = new cProjectile;
 			ProjectileTMP->Create(1);
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(VECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
-			VECTOR3D TM1 = Projectile->Orientation;//^Speed;
+			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			sVECTOR3D TM1 = Projectile->Orientation;//^Speed;
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 			ProjectileTMP->Orientation.Normalize();
 
@@ -578,26 +578,26 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 
 		// эффект
 		GraphicFXQuantity = 1;
-		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
+		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
 		for (int i = 0; i < GraphicFXQuantity; i++) {
 			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[0], 8);
 		GraphicFX[0]->SetStartLocation(Projectile->Location);
 
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(2*Projectile->Radius) + (int)(vw_Randf1*1*Projectile->Radius);
 		for (int i=0; i<ttt; i++) {
-			CProjectile *ProjectileTMP = new CProjectile;
+			cProjectile *ProjectileTMP = new cProjectile;
 			ProjectileTMP->Create(2);
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(VECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
-			VECTOR3D TM1 = Projectile->Orientation;//^Speed;
+			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			sVECTOR3D TM1 = Projectile->Orientation;//^Speed;
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 			ProjectileTMP->Orientation.Normalize();
 
@@ -631,29 +631,29 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 
 		// эффект
 		GraphicFXQuantity = 2;
-		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
+		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
 		for (int i=0; i<GraphicFXQuantity; i++) {
 			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[0], 7);
 		GraphicFX[0]->SetStartLocation(Projectile->Location);
 
-		GraphicFX[1] = new eParticleSystem;
+		GraphicFX[1] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[1], 9);
 		GraphicFX[1]->SetStartLocation(Projectile->Location);
 
 		// создаем немного разлетающихся кусков-снарядов
 		for (int i=0; i<4; i++) {
-			CProjectile *ProjectileTMP = new CProjectile;
+			cProjectile *ProjectileTMP = new cProjectile;
 			ProjectileTMP->Create(3);
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(VECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
-			VECTOR3D TM1 = Projectile->Orientation;
+			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			sVECTOR3D TM1 = Projectile->Orientation;
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*4.0f));
 			ProjectileTMP->Orientation.Normalize();
 
@@ -670,12 +670,12 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(3*Projectile->Radius) + (int)(vw_Randf1*1*Projectile->Radius);
 		for (int i=0; i<ttt; i++) {
-			CProjectile *ProjectileTMP = new CProjectile;
+			cProjectile *ProjectileTMP = new cProjectile;
 			ProjectileTMP->Create(2);
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(VECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
 			for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++) {
 				ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
 				ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
@@ -689,12 +689,12 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 		// создаем немного разлетающихся кусков-снарядов
 		ttt = (int)(3*Projectile->Radius) + (int)(vw_Randf1*1*Projectile->Radius);
 		for (int i=0; i<ttt; i++) {
-			CProjectile *ProjectileTMP = new CProjectile;
+			cProjectile *ProjectileTMP = new cProjectile;
 			ProjectileTMP->Create(3);
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(VECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
 			for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++) {
 				ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
 				ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
@@ -708,11 +708,11 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 
 		ttt = (int)(3*Projectile->Radius) + (int)(vw_Randf1*5*Projectile->Radius);
 		for (int i=0; i<ttt; i++) {
-			CProjectile *ProjectileTMP = new CProjectile;
+			cProjectile *ProjectileTMP = new cProjectile;
 			ProjectileTMP->Create(1);
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(VECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
 			for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++) {
 				ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
 				ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
@@ -727,12 +727,12 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 		// создаем немного разлетающихся кусков-снарядов
 		ttt = (int)(5*Projectile->Radius) + (int)(vw_Randf1*3*Projectile->Radius);
 		for (int i=0; i<ttt; i++) {
-			CProjectile *ProjectileTMP = new CProjectile;
+			cProjectile *ProjectileTMP = new cProjectile;
 			ProjectileTMP->Create(5);
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(VECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
 			for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++) {
 				ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
 				ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
@@ -759,13 +759,13 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 
 		// эффект
 		GraphicFXQuantity = 1;
-		GraphicFX = new eParticleSystem*[GraphicFXQuantity];
+		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
 		for (int i=0; i<GraphicFXQuantity; i++) {
 			GraphicFX[i] = nullptr;
 		}
 
 		// установка эффекта
-		GraphicFX[0] = new eParticleSystem;
+		GraphicFX[0] = new cParticleSystem;
 		SetExplosionGFX(GraphicFX[0], 10);
 		GraphicFX[0]->SetStartLocation(Projectile->Location);
 
@@ -804,8 +804,8 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 		// создаем новые данные, переносим туда
 		// объекты малы, по этому не применяем сдесь настройки качества взрыва, делаем со всей геометрией
 		DrawObjectQuantity = Projectile->DrawObjectQuantity;
-		Texture = new eTexture*[DrawObjectQuantity];
-		DrawObjectList = new eObjectBlock[DrawObjectQuantity];
+		Texture = new sTexture*[DrawObjectQuantity];
+		DrawObjectList = new sObjectBlock[DrawObjectQuantity];
 
 		for (int i=0; i<DrawObjectQuantity; i++) {
 			Texture[i] = Projectile->Texture[i];
@@ -830,7 +830,7 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 			DrawObjectList[i].VertexBuffer = new float[DrawObjectList[i].VertexStride*DrawObjectList[i].VertexCount];
 
 			// делаем поворот геометрии объекта чтобы правильно сделать разлет частиц
-			VECTOR3D TMP;
+			sVECTOR3D TMP;
 			for (int j = 0; j < DrawObjectList[i].VertexCount; j++) {
 				int j1 = j*DrawObjectList[i].VertexStride;
 				int j2;
@@ -862,7 +862,7 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 			}
 
 
-			DrawObjectList[i].Location = VECTOR3D(0.0f,0.0f,0.0f);
+			DrawObjectList[i].Location = sVECTOR3D(0.0f,0.0f,0.0f);
 
 
 			// копируем индексный буфер блока
@@ -875,7 +875,7 @@ CBulletExplosion::CBulletExplosion(CObject3D *Object, CProjectile *Projectile, i
 
 		// для каждого треугольника - свои данные (фактически, у нас 1 объект, с ним и работаем)
 		int Count = 0;
-		ExplosionPieceData = new CExplosionPiece[DrawObjectList[0].VertexCount/3];
+		ExplosionPieceData = new sExplosionPiece[DrawObjectList[0].VertexCount/3];
 		for (int i=0; i<DrawObjectList[0].VertexCount; i+=3) {
 			ExplosionPieceData[Count].Velocity.x = DrawObjectList[0].VertexBuffer[i*DrawObjectList[0].VertexStride];
 			ExplosionPieceData[Count].Velocity.y = DrawObjectList[0].VertexBuffer[i*DrawObjectList[0].VertexStride+1];

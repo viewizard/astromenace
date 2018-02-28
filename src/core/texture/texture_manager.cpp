@@ -33,8 +33,8 @@
 //------------------------------------------------------------------------------------
 // переменные
 //------------------------------------------------------------------------------------
-eTexture *StartTexMan = nullptr;// Указатель на первую текстуру в списке...
-eTexture *EndTexMan = nullptr;	// Указатель на последнюю текстуру в списке...
+sTexture *StartTexMan = nullptr;// Указатель на первую текстуру в списке...
+sTexture *EndTexMan = nullptr;	// Указатель на последнюю текстуру в списке...
 int NumTexMan = 0;		// Последний использов. уникальный номер
 // Ключ прорисовки текстуры (near, linear, ... )
 int FilteringTexMan = RI_MAGFILTER_POINT | RI_MINFILTER_POINT | RI_MIPFILTER_POINT;
@@ -64,9 +64,9 @@ bool MipMap = true;
 void vw_ReleaseAllTextures()
 {
 	// Чистка памяти...
-	eTexture *Tmp = StartTexMan;
+	sTexture *Tmp = StartTexMan;
 	while (Tmp != nullptr) {
-		eTexture *Tmp1 = Tmp->Next;
+		sTexture *Tmp1 = Tmp->Next;
 		vw_ReleaseTexture(Tmp);
 		Tmp = Tmp1;
 	}
@@ -90,7 +90,7 @@ void vw_ReleaseAllTextures()
 //------------------------------------------------------------------------------------
 // подключение текстуры к менеджеру текстур
 //------------------------------------------------------------------------------------
-void vw_AttachTexture(eTexture* Texture)
+void vw_AttachTexture(sTexture *Texture)
 {
 	if (Texture == nullptr)
 		return;
@@ -120,7 +120,7 @@ void vw_AttachTexture(eTexture* Texture)
 //------------------------------------------------------------------------------------
 // отключение текстуры от менеджера текстур
 //------------------------------------------------------------------------------------
-void vw_DetachTexture(eTexture* Texture)
+void vw_DetachTexture(sTexture *Texture)
 {
 	if (Texture == nullptr)
 		return;
@@ -189,12 +189,12 @@ void vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue)
 //------------------------------------------------------------------------------------
 // Нахождение текстуры по уникальному номеру...
 //------------------------------------------------------------------------------------
-eTexture* vw_FindTextureByNum(int Num)
+sTexture *vw_FindTextureByNum(int Num)
 {
-	eTexture *Tmp = StartTexMan;
+	sTexture *Tmp = StartTexMan;
 
 	while (Tmp != nullptr) {
-		eTexture *Tmp1 = Tmp->Next;
+		sTexture *Tmp1 = Tmp->Next;
 		if (Tmp->Num == Num)
 			return Tmp;
 		Tmp = Tmp1;
@@ -211,12 +211,12 @@ eTexture* vw_FindTextureByNum(int Num)
 //------------------------------------------------------------------------------------
 // Нахождение текстуры по имени...
 //------------------------------------------------------------------------------------
-eTexture* vw_FindTextureByName(const char *Name)
+sTexture *vw_FindTextureByName(const char *Name)
 {
-	eTexture *Tmp = StartTexMan;
+	sTexture *Tmp = StartTexMan;
 
 	while (Tmp != nullptr) {
-		eTexture *Tmp1 = Tmp->Next;
+		sTexture *Tmp1 = Tmp->Next;
 		if(strcmp(Tmp->Name, Name) == 0)
 			return Tmp;
 		Tmp = Tmp1;

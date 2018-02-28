@@ -71,7 +71,7 @@ void InitGameAI(const char *FileName)
 // Установка нового (добавление) TimeSheet в нужное место
 // !!! эта процедура заменяет вызов AttachTimeSheet
 //-----------------------------------------------------------------------------
-void AddNewTimeSheetToPos(CObject3D *Object, CTimeSheet *TimeSheet, CTimeSheet *AfterThisTimeSheet)
+void AddNewTimeSheetToPos(cObject3D *Object, sTimeSheet *TimeSheet, sTimeSheet *AfterThisTimeSheet)
 {
 //	if (TimeSheet == 0) return;
 	// никогда быть нулем не может!!! т.к. если что добавляем к первому
@@ -94,7 +94,7 @@ void AddNewTimeSheetToPos(CObject3D *Object, CTimeSheet *TimeSheet, CTimeSheet *
 //-----------------------------------------------------------------------------
 // Замена маркера действия набором действий
 //-----------------------------------------------------------------------------
-void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
+void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheetMain)
 {
 	// 1 нужно проверить время общее и время последовательности
 
@@ -105,7 +105,7 @@ void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
 
 
 	// берем отдельно указатель, т.к. потом будем его менять
-	CTimeSheet *AddAfter = TimeSheetMain;
+	sTimeSheet *AddAfter = TimeSheetMain;
 
 	cXMLEntry *xmlEntry  = xmlAI->FindFirstChildEntryByName(xmlAI->RootXMLEntry, "AI");
 
@@ -120,8 +120,8 @@ void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
 				while (TChildEntry) {
 					if (!strcmp(TChildEntry->Name, "TimeSheet")) {
 						// собираем новый элемент
-						CTimeSheet *TimeSheet;
-						TimeSheet = new CTimeSheet;
+						sTimeSheet *TimeSheet;
+						TimeSheet = new sTimeSheet;
 						AddNewTimeSheetToPos(Object, TimeSheet, AddAfter);
 						AddAfter = TimeSheet;
 
@@ -145,8 +145,8 @@ void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
 							TimeSheet->AccelerByCamLR = 1.0f;//0-1
 							TimeSheet->SpeedByCamUD = 0.0f;
 							TimeSheet->AccelerByCamUD = 1.0f;//0-1
-							TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
-							TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+							TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
+							TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 							TimeSheet->Fire = false;
 							TimeSheet->BossFire = false;
 						} else {
@@ -210,7 +210,7 @@ void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
 
 
 
-							TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
+							TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
 							if (xmlAI->GetEntryAttribute(TChildEntry, "rotx") != nullptr)
 								TimeSheet->Rotation.x = xmlAI->fGetEntryAttribute(TChildEntry, "rotx");
 							if (xmlAI->GetEntryAttribute(TChildEntry, "roty") != nullptr)
@@ -218,7 +218,7 @@ void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
 							if (xmlAI->GetEntryAttribute(TChildEntry, "rotz") != nullptr)
 								TimeSheet->Rotation.z = xmlAI->fGetEntryAttribute(TChildEntry, "rotz");
 
-							TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+							TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 							if (xmlAI->GetEntryAttribute(TChildEntry, "rotacx") != nullptr)
 								TimeSheet->RotationAcceler.x = xmlAI->fGetEntryAttribute(TChildEntry, "rotacx");
 							if (xmlAI->GetEntryAttribute(TChildEntry, "rotacy") != nullptr)
@@ -249,8 +249,8 @@ void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
 				// ставим последним такой же
 				if (TimeSheetMain->Time == -1) {
 					// собираем новый элемент
-					CTimeSheet *TimeSheet;
-					TimeSheet = new CTimeSheet;
+					sTimeSheet *TimeSheet;
+					TimeSheet = new sTimeSheet;
 					AddNewTimeSheetToPos(Object, TimeSheet, AddAfter);
 
 					TimeSheet->AI_Mode = TimeSheetMain->AI_Mode;
@@ -259,8 +259,8 @@ void InterAIMode(CObject3D *Object, CTimeSheet *TimeSheetMain)
 
 					TimeSheet->Speed = 0.0f;
 					TimeSheet->Acceler = 1.0f;//0-1
-					TimeSheet->Rotation = VECTOR3D(0.0f, 0.0f, 0.0f);
-					TimeSheet->RotationAcceler = VECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+					TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
+					TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 					TimeSheet->Fire = false;
 					TimeSheet->BossFire = false;
 				}

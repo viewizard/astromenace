@@ -31,8 +31,8 @@
 
 
 // Указатели на начальный и конечный объект в списке
-CProjectile *StartProjectile = nullptr;
-CProjectile *EndProjectile = nullptr;
+cProjectile *StartProjectile = nullptr;
+cProjectile *EndProjectile = nullptr;
 
 
 
@@ -41,7 +41,7 @@ CProjectile *EndProjectile = nullptr;
 //-----------------------------------------------------------------------------
 // Включаем в список
 //-----------------------------------------------------------------------------
-void AttachProjectile(CProjectile* Projectile)
+void AttachProjectile(cProjectile* Projectile)
 {
 	if (Projectile == nullptr)
 		return;
@@ -67,7 +67,7 @@ void AttachProjectile(CProjectile* Projectile)
 //-----------------------------------------------------------------------------
 // Исключаем из списка
 //-----------------------------------------------------------------------------
-void DetachProjectile(CProjectile* Projectile)
+void DetachProjectile(cProjectile* Projectile)
 {
 	if (Projectile == nullptr)
 		return;
@@ -100,9 +100,9 @@ void DetachProjectile(CProjectile* Projectile)
 //-----------------------------------------------------------------------------
 void UpdateAllProjectile(float Time)
 {
-	CProjectile *tmp = StartProjectile;
+	cProjectile *tmp = StartProjectile;
 	while (tmp != nullptr) {
-		CProjectile *tmp2 = tmp->Next;
+		cProjectile *tmp2 = tmp->Next;
 		// делаем обновление данных по объекту
 		if (!tmp->Update(Time))
 			delete tmp;
@@ -119,9 +119,9 @@ void UpdateAllProjectile(float Time)
 void DrawAllProjectile(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 
-	CProjectile *tmp = StartProjectile;
+	cProjectile *tmp = StartProjectile;
 	while (tmp != nullptr) {
-		CProjectile *tmp2 = tmp->Next;
+		cProjectile *tmp2 = tmp->Next;
 		tmp->Draw(VertexOnlyPass, ShadowMap);
 		tmp = tmp2;
 	}
@@ -137,9 +137,9 @@ void DrawAllProjectile(bool VertexOnlyPass, unsigned int ShadowMap)
 //-----------------------------------------------------------------------------
 void ReleaseAllProjectile()
 {
-	CProjectile *tmp = StartProjectile;
+	cProjectile *tmp = StartProjectile;
 	while (tmp != nullptr) {
-		CProjectile *tmp2 = tmp->Next;
+		cProjectile *tmp2 = tmp->Next;
 		delete tmp;
 		tmp = tmp2;
 	}

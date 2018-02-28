@@ -34,17 +34,17 @@
 //-----------------------------------------------------------------------------
 // Класс CStar
 //-----------------------------------------------------------------------------
-struct CStar {
+struct sStar {
 	// конструктор и деструктор
-	CStar() {};
-	~CStar() {};
+	sStar() {};
+	~sStar() {};
 
 	// обновление информации в частице
 	bool	Update(float TimeDelta);
 	// переносим положение частицы на указаное растояние
-	void	Move(VECTOR3D NewLocationDelta);
+	void	Move(sVECTOR3D NewLocationDelta);
 	// текущее место расположения частицы
-	VECTOR3D	Location{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Location{0.0f, 0.0f, 0.0f};
 
 	// прозрачность
 	float	Alpha{1.0f};
@@ -55,8 +55,8 @@ struct CStar {
 	bool	Show{true};
 
 	// указатели на цепь частиц
-	CStar	*Next{nullptr};
-	CStar	*Prev{nullptr};
+	sStar	*Next{nullptr};
+	sStar	*Prev{nullptr};
 };
 
 #endif // STAR_H

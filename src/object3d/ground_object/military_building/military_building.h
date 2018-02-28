@@ -34,13 +34,13 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CMilitaryBuilding
+// Класс cMilitaryBuilding
 //-----------------------------------------------------------------------------
-class CMilitaryBuilding : public CGroundObject
+class cMilitaryBuilding : public cGroundObject
 {
 public:
 
-	virtual ~CMilitaryBuilding() {};
+	virtual ~cMilitaryBuilding() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int	MilitaryBuildingNum);

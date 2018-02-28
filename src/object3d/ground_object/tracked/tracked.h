@@ -34,13 +34,13 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CTracked
+// Класс cTracked
 //-----------------------------------------------------------------------------
-class CTracked : public CGroundObject
+class cTracked : public cGroundObject
 {
 public:
 
-	virtual ~CTracked() {};
+	virtual ~cTracked() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int	TrackedNum);

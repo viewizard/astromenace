@@ -105,7 +105,7 @@ float GetEngineRotatePower(int EngineType)
 //-----------------------------------------------------------------------------
 // Создание двигателя
 //-----------------------------------------------------------------------------
-void CreateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType)
+void CreateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 {
 	switch(EngineType) {
 	case 1:
@@ -127,7 +127,7 @@ void CreateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.07f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 2:
@@ -149,7 +149,7 @@ void CreateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.4f, 0.75f, 0.15f, 0.0f, 0.07f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.4f, 0.75f, 0.15f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 3:
@@ -171,7 +171,7 @@ void CreateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 80;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.25f, 0.25f, 1.0f, 0.0f, 0.07f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.25f, 0.25f, 1.0f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 4:
@@ -192,11 +192,11 @@ void CreateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(0.6f,0.6f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.6f,0.6f,0.1f);
 		ParticleSystem->IsAttractive = true;
 		ParticleSystem->AttractiveValue = 50.0f;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.0f, 0.7f, 1.0f, 0.0f, 0.07f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.0f, 0.7f, 1.0f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 
@@ -211,7 +211,7 @@ void CreateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 //-----------------------------------------------------------------------------
 // Создание двигателя
 //-----------------------------------------------------------------------------
-void CreateRotateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType)
+void CreateRotateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 {
 	switch(EngineType) {
 	case 1:
@@ -233,7 +233,7 @@ void CreateRotateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 2:
@@ -255,7 +255,7 @@ void CreateRotateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.4f, 0.75f, 0.15f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.4f, 0.75f, 0.15f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 3:
@@ -277,7 +277,7 @@ void CreateRotateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.25f, 0.25f, 1.0f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.25f, 0.25f, 1.0f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 4:
@@ -299,7 +299,7 @@ void CreateRotateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 
@@ -319,7 +319,7 @@ void CreateRotateSpaceShipEngine(eParticleSystem *ParticleSystem, int EngineType
 //-----------------------------------------------------------------------------
 // Установка системы двигателей
 //-----------------------------------------------------------------------------
-void SetEarthSpaceFighterEngine(CEarthSpaceFighter *SpaceShip, int EngineType)
+void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 {
 	// если нужен сброс установки двигателя
 	if (EngineType == 0) {
@@ -353,11 +353,11 @@ void SetEarthSpaceFighterEngine(CEarthSpaceFighter *SpaceShip, int EngineType)
 			delete SpaceShip->Engine[i];
 			SpaceShip->Engine[i] = nullptr;
 		}
-		SpaceShip->Engine[i] = new eParticleSystem;
+		SpaceShip->Engine[i] = new cParticleSystem;
 
 		CreateSpaceShipEngine(SpaceShip->Engine[i], EngineType);
 		SpaceShip->Engine[i]->SetStartLocation(SpaceShip->EngineLocation[i]);
-		SpaceShip->Engine[i]->Direction = VECTOR3D(0.0f, 0.0f, -1.0f);
+		SpaceShip->Engine[i]->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 	}
 
 
@@ -366,11 +366,11 @@ void SetEarthSpaceFighterEngine(CEarthSpaceFighter *SpaceShip, int EngineType)
 			delete SpaceShip->EngineLeft[i];
 			SpaceShip->EngineLeft[i] = nullptr;
 		}
-		SpaceShip->EngineLeft[i] = new eParticleSystem;
+		SpaceShip->EngineLeft[i] = new cParticleSystem;
 
 		CreateRotateSpaceShipEngine(SpaceShip->EngineLeft[i], EngineType);
 		SpaceShip->EngineLeft[i]->SetStartLocation(SpaceShip->EngineLeftLocation[i]);
-		SpaceShip->EngineLeft[i]->Direction = VECTOR3D(1.0f, 0.0f, 0.6f);
+		SpaceShip->EngineLeft[i]->Direction = sVECTOR3D(1.0f, 0.0f, 0.6f);
 		SpaceShip->EngineLeft[i]->IsSuppressed = true;
 	}
 
@@ -380,11 +380,11 @@ void SetEarthSpaceFighterEngine(CEarthSpaceFighter *SpaceShip, int EngineType)
 			delete SpaceShip->EngineRight[i];
 			SpaceShip->EngineRight[i] = nullptr;
 		}
-		SpaceShip->EngineRight[i] = new eParticleSystem;
+		SpaceShip->EngineRight[i] = new cParticleSystem;
 
 		CreateRotateSpaceShipEngine(SpaceShip->EngineRight[i], EngineType);
 		SpaceShip->EngineRight[i]->SetStartLocation(SpaceShip->EngineRightLocation[i]);
-		SpaceShip->EngineRight[i]->Direction = VECTOR3D(-1.0f, 0.0f, 0.6f);
+		SpaceShip->EngineRight[i]->Direction = sVECTOR3D(-1.0f, 0.0f, 0.6f);
 		SpaceShip->EngineRight[i]->IsSuppressed = true;
 	}
 

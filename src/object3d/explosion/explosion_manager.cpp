@@ -31,8 +31,8 @@
 
 
 // Указатели на начальный и конечный объект в списке
-CExplosion *StartExplosion = nullptr;
-CExplosion *EndExplosion = nullptr;
+cExplosion *StartExplosion = nullptr;
+cExplosion *EndExplosion = nullptr;
 
 
 
@@ -40,7 +40,7 @@ CExplosion *EndExplosion = nullptr;
 //-----------------------------------------------------------------------------
 // Включаем в список
 //-----------------------------------------------------------------------------
-void AttachExplosion(CExplosion* Explosion)
+void AttachExplosion(cExplosion* Explosion)
 {
 	if (Explosion == nullptr)
 		return;
@@ -65,7 +65,7 @@ void AttachExplosion(CExplosion* Explosion)
 //-----------------------------------------------------------------------------
 // Исключаем из списка
 //-----------------------------------------------------------------------------
-void DetachExplosion(CExplosion* Explosion)
+void DetachExplosion(cExplosion* Explosion)
 {
 	if (Explosion == nullptr)
 		return;
@@ -95,9 +95,9 @@ void DetachExplosion(CExplosion* Explosion)
 //-----------------------------------------------------------------------------
 void UpdateAllExplosion(float Time)
 {
-	CExplosion *tmp = StartExplosion;
+	cExplosion *tmp = StartExplosion;
 	while (tmp != nullptr) {
-		CExplosion *tmp2 = tmp->Next;
+		cExplosion *tmp2 = tmp->Next;
 		// делаем обновление данных по объекту
 		if (!tmp->Update(Time))
 			delete tmp;
@@ -114,9 +114,9 @@ void UpdateAllExplosion(float Time)
 void DrawAllExplosion(bool VertexOnlyPass)
 {
 
-	CExplosion *tmp = StartExplosion;
+	cExplosion *tmp = StartExplosion;
 	while (tmp != nullptr) {
-		CExplosion *tmp2 = tmp->Next;
+		cExplosion *tmp2 = tmp->Next;
 		tmp->Draw(VertexOnlyPass);
 		tmp = tmp2;
 	}
@@ -132,9 +132,9 @@ void DrawAllExplosion(bool VertexOnlyPass)
 //-----------------------------------------------------------------------------
 void ReleaseAllExplosion()
 {
-	CExplosion *tmp = StartExplosion;
+	cExplosion *tmp = StartExplosion;
 	while (tmp != nullptr) {
-		CExplosion *tmp2 = tmp->Next;
+		cExplosion *tmp2 = tmp->Next;
 		delete tmp;
 		tmp = tmp2;
 	}

@@ -33,12 +33,12 @@
 //-----------------------------------------------------------------------------
 // aimode
 //-----------------------------------------------------------------------------
-void SetAIMode(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
+void SetAIMode(cObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
 	if (xmlDoc->GetEntryAttribute(xmlEntry, "aimode") != nullptr) {
 		// собираем новый элемент
-		CTimeSheet *TimeSheet;
-		TimeSheet = new CTimeSheet;
+		sTimeSheet *TimeSheet;
+		TimeSheet = new sTimeSheet;
 		Object->AttachTimeSheet(TimeSheet);
 
 		TimeSheet->Time = -1;
@@ -51,7 +51,7 @@ void SetAIMode(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 //-----------------------------------------------------------------------------
 //  ID
 //-----------------------------------------------------------------------------
-void SetID(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
+void SetID(cObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
 	if (xmlDoc->GetEntryAttribute(xmlEntry, "id") != nullptr)
 		Object->ID = xmlDoc->iGetEntryAttribute(xmlEntry, "id");
@@ -62,9 +62,9 @@ void SetID(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 //-----------------------------------------------------------------------------
 // Location
 //-----------------------------------------------------------------------------
-void SetShipLocation(CSpaceShip *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag)
+void SetShipLocation(cSpaceShip *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag)
 {
-	VECTOR3D POS(0.0f, 0.0f, 0.0f);
+	sVECTOR3D POS(0.0f, 0.0f, 0.0f);
 
 	// абсолютные координаты
 	if (xmlDoc->GetEntryAttribute(xmlEntry, "posax") != nullptr)
@@ -75,7 +75,7 @@ void SetShipLocation(CSpaceShip *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlD
 		POS.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posaz");
 
 	// относительные координаты
-	VECTOR3D PosWithLag(0.0f,0.0f,0.0f);
+	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
 	if (xmlDoc->GetEntryAttribute(xmlEntry, "posx") != nullptr)
@@ -87,9 +87,9 @@ void SetShipLocation(CSpaceShip *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlD
 
 	Object->SetLocation(POS);
 }
-void SetProjectileLocation(CProjectile *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag)
+void SetProjectileLocation(cProjectile *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag)
 {
-	VECTOR3D POS(0.0f, 0.0f, 0.0f);
+	sVECTOR3D POS(0.0f, 0.0f, 0.0f);
 
 	// абсолютные координаты
 	if (xmlDoc->GetEntryAttribute(xmlEntry, "posax") != nullptr)
@@ -100,7 +100,7 @@ void SetProjectileLocation(CProjectile *Object, cXMLEntry *xmlEntry, cXMLDocumen
 		POS.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posaz");
 
 	// относительные координаты
-	VECTOR3D PosWithLag(0.0f,0.0f,0.0f);
+	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
 	if (xmlDoc->GetEntryAttribute(xmlEntry, "posx") != nullptr)
@@ -112,9 +112,9 @@ void SetProjectileLocation(CProjectile *Object, cXMLEntry *xmlEntry, cXMLDocumen
 
 	Object->SetLocation(POS);
 }
-void SetLocation(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag)
+void SetLocation(cObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag)
 {
-	VECTOR3D POS(0.0f, 0.0f, 0.0f);
+	sVECTOR3D POS(0.0f, 0.0f, 0.0f);
 
 	// абсолютные координаты
 	if (xmlDoc->GetEntryAttribute(xmlEntry, "posax") != nullptr)
@@ -125,7 +125,7 @@ void SetLocation(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, f
 		POS.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posaz");
 
 	// относительные координаты
-	VECTOR3D PosWithLag(0.0f,0.0f,0.0f);
+	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
 	if (xmlDoc->GetEntryAttribute(xmlEntry, "posx") != nullptr)
@@ -145,9 +145,9 @@ void SetLocation(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, f
 //-----------------------------------------------------------------------------
 // Rotation
 //-----------------------------------------------------------------------------
-void SetShipRotation(CSpaceShip *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
+void SetShipRotation(cSpaceShip *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
-	VECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
+	sVECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
 	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglax") != nullptr)
 		ANGLE.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglax");
 	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglay") != nullptr)
@@ -165,9 +165,9 @@ void SetShipRotation(CSpaceShip *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlD
 
 	Object->SetRotation(ANGLE);
 }
-void SetProjectileRotation(CProjectile *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
+void SetProjectileRotation(cProjectile *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
-	VECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
+	sVECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
 	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglax") != nullptr)
 		ANGLE.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglax");
 	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglay") != nullptr)
@@ -185,9 +185,9 @@ void SetProjectileRotation(CProjectile *Object, cXMLEntry *xmlEntry, cXMLDocumen
 
 	Object->SetRotation(ANGLE);
 }
-void SetRotation(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
+void SetRotation(cObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
-	VECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
+	sVECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
 	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglax") != nullptr)
 		ANGLE.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglax");
 	if (xmlDoc->GetEntryAttribute(xmlEntry, "anglay") != nullptr)
@@ -212,7 +212,7 @@ void SetRotation(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 //-----------------------------------------------------------------------------
 // DeleteOnHide
 //-----------------------------------------------------------------------------
-void SetShowDeleteOnHide(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
+void SetShowDeleteOnHide(cObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
 	Object->ShowDeleteOnHide = 0;
 	if (xmlDoc->GetEntryAttribute(xmlEntry, "onhide") != nullptr)
@@ -226,9 +226,9 @@ void SetShowDeleteOnHide(CObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *x
 // DebugInformation
 //-----------------------------------------------------------------------------
 #ifndef gamedebug
-void SetDebugInformation(CObject3D *UNUSED(Object), cXMLEntry *UNUSED(xmlEntry))
+void SetDebugInformation(cObject3D *UNUSED(Object), cXMLEntry *UNUSED(xmlEntry))
 #else
-void SetDebugInformation(CObject3D *Object, cXMLEntry *xmlEntry)
+void SetDebugInformation(cObject3D *Object, cXMLEntry *xmlEntry)
 #endif //gamedebug
 {
 	// не нужно ничего устанавливать, выходим

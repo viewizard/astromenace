@@ -29,21 +29,21 @@
 
 
 
-extern CEarthSpaceFighter *WorkshopFighterGame;
-extern CEarthSpaceFighter *WorkshopNewFighter;
+extern cEarthSpaceFighter *WorkshopFighterGame;
+extern cEarthSpaceFighter *WorkshopNewFighter;
 extern int	CurrentWorkshopNewFighter;
 extern int	CurrentWorkshopNewWeapon;
 extern float CurrentAlert2;
 extern float CurrentAlert3;
 
-void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode);
+void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode);
 void WorkshopCreateNewShip();
 int GetSystemCost(int Num);
 int GetWeaponCost(int Num, int Ammo, int AmmoStart);
 int GetWeaponBaseCost(int Num);
 
 // что рисовать в диалоге 6,7,8
-extern CSpaceShip *DialogSpaceShip;
+extern cSpaceShip *DialogSpaceShip;
 
 
 
@@ -220,7 +220,7 @@ int GetWorkshopShipCost(int Num)
 
 
 
-int GetWorkshopShipRepairCost(int Num, CEarthSpaceFighter *Fighter)
+int GetWorkshopShipRepairCost(int Num, cEarthSpaceFighter *Fighter)
 {
 	int ShipCost = GetWorkshopShipCost(Num)*Setup.Profile[CurrentProfile].ShipHullUpgrade;
 	// расчет стоимости ремонта корабля
@@ -232,7 +232,7 @@ int GetWorkshopShipRepairCost(int Num, CEarthSpaceFighter *Fighter)
 
 
 
-int GetWorkshopShipFullCost(int Num, CEarthSpaceFighter *Fighter)
+int GetWorkshopShipFullCost(int Num, cEarthSpaceFighter *Fighter)
 {
 	// полная стоимость корпуса корабля с повреждениями корабля
 	int ShipCost = GetWorkshopShipCost(Num)* Setup.Profile[CurrentProfile].ShipHullUpgrade -
@@ -331,7 +331,7 @@ void WorkshopCreateBuyShip()
 	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
 	GameNPCArmorPenalty = 1;
 
-	WorkshopFighterGame = new CEarthSpaceFighter;
+	WorkshopFighterGame = new cEarthSpaceFighter;
 	WorkshopFighterGame->Create(Setup.Profile[CurrentProfile].Ship);
 	WorkshopFighterGame->ID = 1000;
 	WorkshopFighterGame->EngineDestroyType = true;
@@ -415,11 +415,11 @@ void WorkshopCreateBuyShip()
 		SetEarthSpaceFighterArmour(WorkshopFighterGame, Setup.Profile[CurrentProfile].ShipHullUpgrade-1);
 
 	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
-	WorkshopFighterGame->SetLocation(VECTOR3D(1000,-1000-(WorkshopFighterGame->Height/2.0f + WorkshopFighterGame->AABB[6].y), -(WorkshopFighterGame->Length/2.0f + WorkshopFighterGame->AABB[6].z)));
+	WorkshopFighterGame->SetLocation(sVECTOR3D(1000,-1000-(WorkshopFighterGame->Height/2.0f + WorkshopFighterGame->AABB[6].y), -(WorkshopFighterGame->Length/2.0f + WorkshopFighterGame->AABB[6].z)));
 	// чтобы оружие заняло свое место...
 	WorkshopFighterGame->Update(vw_GetTime());
 
-	WorkshopFighterGame->SetRotation(VECTOR3D(0.0f,150.0f,0.0f));
+	WorkshopFighterGame->SetRotation(sVECTOR3D(0.0f,150.0f,0.0f));
 }
 
 
@@ -529,7 +529,7 @@ void Workshop_Shipyard()
 
 	// затемнение при выводе
 	int SizeI;
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 
 	// затемнение

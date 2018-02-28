@@ -33,7 +33,7 @@
 //-----------------------------------------------------------------------------
 // Структура цвета
 //-----------------------------------------------------------------------------
-struct COLORVALUE2D {
+struct sCOLORVALUE2D {
 	float r;
 	float g;
 	float b;
@@ -42,24 +42,24 @@ struct COLORVALUE2D {
 
 
 //-----------------------------------------------------------------------------
-// Класс eParticle2D
+// Класс sParticle2D
 //-----------------------------------------------------------------------------
-struct eParticle2D {
+struct sParticle2D {
 	// конструктор и деструктор
-	eParticle2D() {};
-	~eParticle2D() {};
+	sParticle2D() {};
+	~sParticle2D() {};
 
 	// обновление информации в частице
-	bool Update(float TimeDelta, VECTOR3D ParentLocation = VECTOR3D(0.0f,0.0f,0.0f), bool Attractive = false, float AttractiveValue = 25.0f);
+	bool Update(float TimeDelta, sVECTOR3D ParentLocation = sVECTOR3D(0.0f,0.0f,0.0f), bool Attractive = false, float AttractiveValue = 25.0f);
 	// текущее место расположения частицы
-	VECTOR3D	Location{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Location{0.0f, 0.0f, 0.0f};
 	// текущая скорость частицы
-	VECTOR3D	Velocity{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Velocity{0.0f, 0.0f, 0.0f};
 
 	// текущий цвет частицы
-	COLORVALUE2D	Color{1.0f, 0.0f, 0.0f, 0.5f};
+	sCOLORVALUE2D	Color{1.0f, 0.0f, 0.0f, 0.5f};
 	// значение приращение цвета
-	COLORVALUE2D	ColorDelta{0.0f, 0.0f, 0.0f, 0.0f};
+	sCOLORVALUE2D	ColorDelta{0.0f, 0.0f, 0.0f, 0.0f};
 
 	// время жизни частицы в секундах
 	float		Age{0.0f};
@@ -79,8 +79,8 @@ struct eParticle2D {
 	bool		NeedStop{false};
 
 	// указатели на цепь частиц
-	eParticle2D	*Next{nullptr};
-	eParticle2D	*Prev{nullptr};
+	sParticle2D	*Next{nullptr};
+	sParticle2D	*Prev{nullptr};
 };
 
 #endif // PARTICLE2D_H

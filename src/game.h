@@ -67,13 +67,13 @@
 //------------------------------------------------------------------------------------
 // Main.cpp
 //------------------------------------------------------------------------------------
-extern GameSetup Setup;
+extern sGameSetup Setup;
 extern eGameStatus GameStatus;
 extern SDL_Joystick *Joystick;
-extern eParticleSystem2D *CursorParticleSystem2D;
-extern CSpaceStars *psSpaceStatic;
-extern VECTOR3D GamePoint;
-extern VECTOR3D GameCameraMovement;
+extern cParticleSystem2D *CursorParticleSystem2D;
+extern cSpaceStars *psSpaceStatic;
+extern sVECTOR3D GamePoint;
+extern sVECTOR3D GameCameraMovement;
 
 extern sVideoModes *VideoModes;
 extern int VideoModesNum;
@@ -170,7 +170,7 @@ void SaveXMLSetupFile();
 //------------------------------------------------------------------------------------
 // loop_proc.cpp
 //------------------------------------------------------------------------------------
-extern ScriptEngine *Script;
+extern cScriptEngine *Script;
 
 extern int ComBuffer;
 extern int CurrentCursorStatus;
@@ -225,7 +225,7 @@ void GameCameraUpdate(float Time);
 void InitGameCamera();
 float GameCameraGetDeviation();
 float GameCameraGetSpeed();
-void GameCameraSetExplosion(VECTOR3D Location, float Power);
+void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 
 
 
@@ -235,7 +235,7 @@ void GameCameraSetExplosion(VECTOR3D Location, float Power);
 //------------------------------------------------------------------------------------
 // SkyBox.cpp
 //------------------------------------------------------------------------------------
-void SkyBoxSetTexture(eTexture *nTexture, int Side);
+void SkyBoxSetTexture(sTexture *nTexture, int Side);
 void SkyBoxCreate(float nx, float ny, float nz, float nwidth, float nheight, float nlength);
 void SkyBoxDraw(void);
 
@@ -247,7 +247,7 @@ void SkyBoxDraw(void);
 //------------------------------------------------------------------------------------
 // StarSystem.cpp
 //------------------------------------------------------------------------------------
-void StarSystemInit(int Num, VECTOR3D SetBaseRotation);
+void StarSystemInit(int Num, sVECTOR3D SetBaseRotation);
 void StarSystemDraw(int DrawType); // 1- меню, 2- игра
 void StarSystemDrawSecondLayer(int DrawType);
 void StarSystemUpdate();
@@ -262,7 +262,7 @@ void StarSystemRelease();
 //------------------------------------------------------------------------------------
 bool ShadowMap_Init(int Width, int Height);
 void ShadowMap_Release();
-void ShadowMap_StartRenderToFBO(VECTOR3D FocusPointCorrection, float Distance, float fFarClip);
+void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, float fFarClip);
 void ShadowMap_EndRenderToFBO();
 void ShadowMap_StartFinalRender();
 void ShadowMap_EndFinalRender();
@@ -330,7 +330,7 @@ void InitMenu();
 void SetOptionsMenu(eGameStatus Menu);
 void SetMenu(eGameStatus Menu);
 void DrawMenu();
-void DrawTransparent(RECT *DstRect, RECT *SrcRect, eTexture *Tex, eTexture *Tex2, bool Alpha, float Transp, float RotateAngle, int DrawCorner, float R, float G, float B);
+void DrawTransparent(sRECT *DstRect, sRECT *SrcRect, sTexture *Tex, sTexture *Tex2, bool Alpha, float Transp, float RotateAngle, int DrawCorner, float R, float G, float B);
 void MainMenu();
 
 
@@ -535,7 +535,7 @@ const char *GetWeaponIconName(int Num);
 //------------------------------------------------------------------------------------
 // game.cpp
 //------------------------------------------------------------------------------------
-extern CEarthSpaceFighter *PlayerFighter;
+extern cEarthSpaceFighter *PlayerFighter;
 
 extern int GameNPCWeaponPenalty;
 extern int GameNPCArmorPenalty;
@@ -579,6 +579,9 @@ void SetGameMissionComplete();
 //------------------------------------------------------------------------------------
 // Dialog.cpp
 //------------------------------------------------------------------------------------
+enum eDialogBox {
+	DIALOGBOX_NONE	= -1
+};
 void SetCurrentDialogBox(int DialogBox);
 bool isDialogBoxDrawing();
 void DrawDialogBox();

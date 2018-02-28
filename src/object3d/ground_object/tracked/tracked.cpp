@@ -30,7 +30,7 @@
 
 
 
-struct TrackedData {
+struct sTrackedData {
 	float	Strength;
 	int		WeaponQuantity;
 	float	SpeedToRotate;
@@ -38,7 +38,7 @@ struct TrackedData {
 	const	char *TextureName;
 };
 
-static TrackedData PresetTrackedData[] = {
+static sTrackedData PresetTrackedData[] = {
 	{250, 1,	60.0f,	"models/tracked/tank-01.vw3d",	"models/gr-01.vw2d"},
 	{200, 2,	45.0f,	"models/tracked/tank-03.vw3d",	"models/gr-01.vw2d"},
 	{300, 1,	45.0f,	"models/tracked/tank-05.vw3d",	"models/gr-06.vw2d"},
@@ -61,10 +61,10 @@ static TrackedData PresetTrackedData[] = {
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void CTracked::Create(int TrackedNum)
+void cTracked::Create(int TrackedNum)
 {
 	if ((TrackedNum <= 0) || ((unsigned int)TrackedNum > PresetTrackedDataCount)) {
-		fprintf(stderr, "!!! Couldn't init CTracked object with Number %i.\n", TrackedNum);
+		fprintf(stderr, "!!! Couldn't init cTracked object with Number %i.\n", TrackedNum);
 		return;
 	}
 
@@ -94,9 +94,9 @@ void CTracked::Create(int TrackedNum)
 	WeaponQuantity = PresetTrackedData[TrackedNum-1].WeaponQuantity;
 	// начальные установки для оружия
 	WeaponSetFire = new bool[WeaponQuantity];
-	WeaponLocation = new VECTOR3D[WeaponQuantity];
-	Weapon = new CWeapon*[WeaponQuantity];
-	WeaponBound = new VECTOR3D[WeaponQuantity];
+	WeaponLocation = new sVECTOR3D[WeaponQuantity];
+	Weapon = new cWeapon*[WeaponQuantity];
+	WeaponBound = new sVECTOR3D[WeaponQuantity];
 	for (int i = 0; i < WeaponQuantity; i++) {
 		WeaponSetFire[i] = false;
 		Weapon[i] = nullptr;
@@ -106,8 +106,8 @@ void CTracked::Create(int TrackedNum)
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (TrackedNum) {
 	case 1:
-		WeaponLocation[0] = VECTOR3D(0.0f, 5.5f, 9.0f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.0f, 5.5f, 9.0f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(211);
 
 		WheelQuantity = 16;
@@ -145,11 +145,11 @@ void CTracked::Create(int TrackedNum)
 
 
 	case 2:
-		WeaponLocation[0] = VECTOR3D(0.1f, 6.1f, -0.4f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.1f, 6.1f, -0.4f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(204);
-		WeaponLocation[1] = VECTOR3D(-0.1f, 6.1f, -0.4f);
-		Weapon[1] = new CWeapon;
+		WeaponLocation[1] = sVECTOR3D(-0.1f, 6.1f, -0.4f);
+		Weapon[1] = new cWeapon;
 		Weapon[1]->Create(204);
 		WeaponFireType = 2;
 
@@ -182,8 +182,8 @@ void CTracked::Create(int TrackedNum)
 
 
 	case 3:
-		WeaponLocation[0] = VECTOR3D(0.0f, 5.2f, 3.7f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.0f, 5.2f, 3.7f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(213);
 
 		WheelQuantity = 14;
@@ -218,8 +218,8 @@ void CTracked::Create(int TrackedNum)
 		break;
 
 	case 4:
-		WeaponLocation[0] = VECTOR3D(0.0f, 5.3f, 6.5f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.0f, 5.3f, 6.5f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(208);
 
 		WheelQuantity = 16;
@@ -260,8 +260,8 @@ void CTracked::Create(int TrackedNum)
 		break;
 
 	case 5:
-		WeaponLocation[0] = VECTOR3D(0.0f, 5.8f, 4.5f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.0f, 5.8f, 4.5f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(208);
 
 		WheelQuantity = 14;
@@ -296,8 +296,8 @@ void CTracked::Create(int TrackedNum)
 		break;
 
 	case 6:
-		WeaponLocation[0] = VECTOR3D(0.0f, 4.9f, 4.0f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.0f, 4.9f, 4.0f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(211);
 
 		WheelQuantity = 16;
@@ -334,8 +334,8 @@ void CTracked::Create(int TrackedNum)
 		break;
 
 	case 7:
-		WeaponLocation[0] = VECTOR3D(0.0f, 7.6f, 5.5f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.0f, 7.6f, 5.5f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(212);
 
 		WheelQuantity = 22;
@@ -378,8 +378,8 @@ void CTracked::Create(int TrackedNum)
 		break;
 
 	case 8:
-		WeaponLocation[0] = VECTOR3D(0.0f, 7.0f, 8.5f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.0f, 7.0f, 8.5f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(208);
 
 		WheelQuantity = 16;
@@ -416,8 +416,8 @@ void CTracked::Create(int TrackedNum)
 		break;
 
 	case 9:
-		WeaponLocation[0] = VECTOR3D(0.0f, 6.7f, 6.8f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.0f, 6.7f, 6.8f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(211);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
 
@@ -455,8 +455,8 @@ void CTracked::Create(int TrackedNum)
 		break;
 
 	case 10:
-		WeaponLocation[0] = VECTOR3D(0.0f, 6.1f, 0.5f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.0f, 6.1f, 0.5f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(204);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
 
@@ -494,11 +494,11 @@ void CTracked::Create(int TrackedNum)
 		break;
 
 	case 11:
-		WeaponLocation[0] = VECTOR3D(2.2f, 5.4f, 7.0f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(2.2f, 5.4f, 7.0f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(209);
-		WeaponLocation[1] = VECTOR3D(-2.2f, 5.4f, 7.0f);
-		Weapon[1] = new CWeapon;
+		WeaponLocation[1] = sVECTOR3D(-2.2f, 5.4f, 7.0f);
+		Weapon[1] = new cWeapon;
 		Weapon[1]->Create(209);
 		WeaponFireType = 3;
 
@@ -531,20 +531,20 @@ void CTracked::Create(int TrackedNum)
 		break;
 
 	case 12:
-		WeaponLocation[0] = VECTOR3D(0.55f, 5.0f, 2.0f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.55f, 5.0f, 2.0f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(206);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
-		WeaponLocation[1] = VECTOR3D(-0.55f, 5.0f, 2.0f);
-		Weapon[1] = new CWeapon;
+		WeaponLocation[1] = sVECTOR3D(-0.55f, 5.0f, 2.0f);
+		Weapon[1] = new cWeapon;
 		Weapon[1]->Create(206);
 		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 2.0f;
-		WeaponLocation[2] = VECTOR3D(1.65f, 5.0f, 2.0f);
-		Weapon[2] = new CWeapon;
+		WeaponLocation[2] = sVECTOR3D(1.65f, 5.0f, 2.0f);
+		Weapon[2] = new cWeapon;
 		Weapon[2]->Create(206);
 		Weapon[2]->NextFireTime = Weapon[2]->NextFireTime / 2.0f;
-		WeaponLocation[3] = VECTOR3D(-1.65f, 5.0f, 2.0f);
-		Weapon[3] = new CWeapon;
+		WeaponLocation[3] = sVECTOR3D(-1.65f, 5.0f, 2.0f);
+		Weapon[3] = new cWeapon;
 		Weapon[3]->Create(206);
 		Weapon[3]->NextFireTime = Weapon[3]->NextFireTime / 2.0f;
 		WeaponFireType = 3;
@@ -580,12 +580,12 @@ void CTracked::Create(int TrackedNum)
 		break;
 
 	case 13:
-		WeaponLocation[0] = VECTOR3D(1.4f, 5.0f, 0.4f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(1.4f, 5.0f, 0.4f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(206);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
-		WeaponLocation[1] = VECTOR3D(-1.4f, 5.0f, 0.4f);
-		Weapon[1] = new CWeapon;
+		WeaponLocation[1] = sVECTOR3D(-1.4f, 5.0f, 0.4f);
+		Weapon[1] = new cWeapon;
 		Weapon[1]->Create(206);
 		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 2.0f;
 		WeaponFireType = 3;
@@ -622,7 +622,7 @@ void CTracked::Create(int TrackedNum)
 		break;
 
 	case 14:
-		WeaponLocation[0] = VECTOR3D(0.0f, 0.0f, 0.0f);
+		WeaponLocation[0] = sVECTOR3D(0.0f, 0.0f, 0.0f);
 
 		WheelQuantity = 8;
 		WheelObjectsNum = new int[8];
@@ -644,20 +644,20 @@ void CTracked::Create(int TrackedNum)
 
 
 	// находим все данные по геометрии
-	::CObject3D::InitByDrawObjectList();
+	::cObject3D::InitByDrawObjectList();
 
 
 	// установка остальных параметров девиации
 	DeviationOn = false;
 	DeviationObjQuantity = WheelQuantity;
-	Deviation = new VECTOR3D[DeviationObjQuantity];
+	Deviation = new sVECTOR3D[DeviationObjQuantity];
 	NeedDeviation = new float[DeviationObjQuantity];
 	CurentDeviation = new float[DeviationObjQuantity];
 	CurentDeviationSum = new float[DeviationObjQuantity];
 	DeviationObjNum = new int[DeviationObjQuantity];
 
 	for (int i=0; i<DeviationObjQuantity; i++) {
-		Deviation[i] = VECTOR3D(0.0f, 1.0f, 0.0f);
+		Deviation[i] = sVECTOR3D(0.0f, 1.0f, 0.0f);
 		NeedDeviation[i] = vw_Randf0*0.1f;
 		CurentDeviation[i] = CurentDeviationSum[i] = 0.0f;
 		DeviationObjNum[i] = WheelObjectsNum[i];

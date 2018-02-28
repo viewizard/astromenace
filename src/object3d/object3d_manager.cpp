@@ -70,11 +70,11 @@ void DrawAllObject3D(int DrawType)
 		switch (DrawType) {
 		// меню
 		case 1:
-			ShadowMap_StartRenderToFBO(VECTOR3D(50,-5,-120), 120.0f, 500.0f);
+			ShadowMap_StartRenderToFBO(sVECTOR3D(50,-5,-120), 120.0f, 500.0f);
 			break;
 		// игра
 		case 2:
-			ShadowMap_StartRenderToFBO(VECTOR3D(0,0,160), 600.0f, 800.0f);
+			ShadowMap_StartRenderToFBO(sVECTOR3D(0,0,160), 600.0f, 800.0f);
 			break;
 		}
 
@@ -153,7 +153,7 @@ void DrawAllObject3D(int DrawType)
 		buff[k++] = 1.0f;
 
 
-		eTexture *TileTexture = vw_FindTextureByName("menu/whitepoint.tga");
+		sTexture *TileTexture = vw_FindTextureByName("menu/whitepoint.tga");
 		vw_SetTexture(0, TileTexture);
 
 		float BrightnessF = 1.0f + (Setup.Brightness - 5)/5.0f;

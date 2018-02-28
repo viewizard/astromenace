@@ -34,13 +34,13 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CAlienSpaceMotherShip
+// Класс cAlienSpaceMotherShip
 //-----------------------------------------------------------------------------
-class CAlienSpaceMotherShip : public CSpaceShip
+class cAlienSpaceMotherShip : public cSpaceShip
 {
 public:
 
-	virtual ~CAlienSpaceMotherShip() {};
+	virtual ~cAlienSpaceMotherShip() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int	SpaceShipNum);
@@ -51,11 +51,11 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Дополнительные функции для CAlienSpaceMotherShip
+// Дополнительные функции для cAlienSpaceMotherShip
 //-----------------------------------------------------------------------------
 
 // Создание двигателя
-void SetAlienSpaceMotherShipEngine(eParticleSystem *ParticleSystem, int EngineType);
+void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineType);
 
 
 

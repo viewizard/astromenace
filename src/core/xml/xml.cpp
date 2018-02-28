@@ -24,16 +24,10 @@
 
 *************************************************************************************/
 
-
 #include "xml.h"
 #include "../vfs/vfs.h"
 
-
-
-
-
-
-
+// TODO translate comments
 
 // ищем первое вхождение подстроки в строку, передаем позицию, или -1 если не найдена
 int FindSubString(char *String, const char *SubString)
@@ -87,18 +81,6 @@ char *CreateSubString(char *String, unsigned int StartPos, unsigned int EndPos)
 
 	return Result;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // Включаем в список
@@ -204,18 +186,9 @@ void cXMLDocument::DetachXMLAttribute(cXMLEntry *XMLEntry, cXMLAttribute *XMLAtt
 		XMLAttribute->Next->Prev = nullptr;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
+/*
+ *
+ */
 bool cXMLDocument::ParseTagLine(char *OriginBuffer, unsigned int StartPosition, char *Buffer, cXMLEntry *XMLEntry)
 {
 	// 1 - получаем имя тэга (начинается сразу после символа <, а заканчивается пробелом, >, />, или символом таб)
@@ -273,8 +246,9 @@ bool cXMLDocument::ParseTagLine(char *OriginBuffer, unsigned int StartPosition, 
 	return true;
 }
 
-
-
+/*
+ *
+ */
 bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPosition, char *Buffer, cXMLEntry *ParentXMLEntry)
 {
 	// проверяем наличие вложенных тэгов
@@ -382,20 +356,8 @@ bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPositio
 		}
 	}
 
-
 	return false;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // Загрузка
@@ -408,7 +370,7 @@ bool cXMLDocument::Load(const char *XMLFileName)
 	ReleaseXMLDocument();
 
 	// читаем данные
-	std::unique_ptr<eFILE> XMLFile = vw_fopen(XMLFileName);
+	std::unique_ptr<sFILE> XMLFile = vw_fopen(XMLFileName);
 
 	if (XMLFile == nullptr) {
 		fprintf(stderr, "XML file not found: %s\n", XMLFileName);
@@ -424,7 +386,6 @@ bool cXMLDocument::Load(const char *XMLFileName)
 	XMLFile->fread(Buffer, DataLength, 1);
 	vw_fclose(XMLFile);
 
-
 	// проверяем заголовок
 	if (FindSubString(Buffer, "<?xml") == -1) {
 		fprintf(stderr, "XML file corrupted: %s\n", XMLFileName);
@@ -434,7 +395,6 @@ bool cXMLDocument::Load(const char *XMLFileName)
 		fprintf(stderr, "XML file corrupted: %s\n", XMLFileName);
 		return false;
 	}
-
 
 	// идем на рекурсивную обработку
 	if (!ParseTagContent(Buffer, FindSubString(Buffer, "?>")+strlen("?>"), Buffer+FindSubString(Buffer, "?>")+strlen("?>"), nullptr)) {
@@ -452,14 +412,6 @@ bool cXMLDocument::Load(const char *XMLFileName)
 	delete [] Buffer;
 	return true;
 }
-
-
-
-
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // Сохранение
@@ -496,7 +448,6 @@ void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 			SDL_RWwrite(File, " ", strlen(" "), 1);
 		}
 
-
 		// пишем данные
 		if ((XMLEntry->FirstChild != nullptr) || (XMLEntry->Content != nullptr)) {
 			if (XMLEntry->Content != nullptr) {
@@ -522,6 +473,10 @@ void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 		}
 	}
 }
+
+/*
+ *
+ */
 bool cXMLDocument::Save(const char *XMLFileName)
 {
 	printf("Save XML file: %s\n", XMLFileName);
@@ -531,7 +486,6 @@ bool cXMLDocument::Save(const char *XMLFileName)
 		fprintf(stderr, "Can't open XML file for write %s\n", XMLFileName);
 		return false;
 	}
-
 
 	// пишем заголовок
 	SDL_RWwrite(File, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n", strlen("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n"), 1);

@@ -284,7 +284,7 @@ void MissionsListInit()
 		} else
 			// проверяем музыку, возможно есть необходимость что-то заменить
 			if (!strcmp(xmlEntry->Name, "GameMainMusic")) {
-				std::unique_ptr<eFILE> file = vw_fopen(xmlEntry->Content);
+				std::unique_ptr<sFILE> file = vw_fopen(xmlEntry->Content);
 				if (file != nullptr) {
 					strcpy(GameMainMusic, xmlEntry->Content);
 					GameMainMusicSet = true;
@@ -293,7 +293,7 @@ void MissionsListInit()
 				} else
 					fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
 			} else if (!strcmp(xmlEntry->Name, "GameBossMusic")) {
-				std::unique_ptr<eFILE> file = vw_fopen(xmlEntry->Content);
+				std::unique_ptr<sFILE> file = vw_fopen(xmlEntry->Content);
 				if (file != nullptr) {
 					strcpy(GameBossMusic, xmlEntry->Content);
 					GameBossMusicSet = true;
@@ -302,7 +302,7 @@ void MissionsListInit()
 				} else
 					fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
 			} else if (!strcmp(xmlEntry->Name, "GameDeathMusic")) {
-				std::unique_ptr<eFILE> file = vw_fopen(xmlEntry->Content);
+				std::unique_ptr<sFILE> file = vw_fopen(xmlEntry->Content);
 				if (file != nullptr) {
 					strcpy(GameDeathMusic, xmlEntry->Content);
 					GameDeathMusicSet = true;
@@ -423,7 +423,7 @@ void MissionMenu()
 
 
 
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 	SetRect(&SrcRect,2,2,863-2,484-2);
 	SetRect(&DstRect,Setup.iAspectRatioWidth/2-427,175-15,Setup.iAspectRatioWidth/2-427+863-4,175-15+484-4);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
@@ -652,7 +652,7 @@ void MissionMenu()
 		Audio_PlaySound2D(2,1.0f);
 	}
 	// если ползунок был захвачен, но уже не над секцией где его можно перетягивать или отпустили мышку - отпускаем
-	RECT DstRect2;
+	sRECT DstRect2;
 	SetRect(&DstRect2,X1+750-32+4,Y1+32,X1+750-4,Y1+32+(320.0f-64));
 	if ((SliderUnderMouseControl && (!vw_OnRect(&DstRect2) || !vw_GetWindowLBMouse(false))) || isDialogBoxDrawing()) {
 		SliderUnderMouseControl = false;

@@ -30,7 +30,7 @@
 
 
 
-struct WheeledData {
+struct sWheeledData {
 	float	Strength;
 	int		WeaponQuantity;
 	float 	SpeedToRotate;
@@ -38,7 +38,7 @@ struct WheeledData {
 	const	char *TextureName;
 };
 
-static WheeledData PresetWheeledData[] = {
+static sWheeledData PresetWheeledData[] = {
 	{120, 4,	50.0f,	"models/wheeled/jeep-01.vw3d",	"models/gr-02.vw2d"},
 	{70, 2,		50.0f,	"models/wheeled/jeep-02.vw3d",	"models/gr-02.vw2d"},
 	{100, 2,	50.0f,	"models/wheeled/jeep-03.vw3d",	"models/gr-02.vw2d"},
@@ -55,10 +55,10 @@ static WheeledData PresetWheeledData[] = {
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void CWheeled::Create(int WheeledNum)
+void cWheeled::Create(int WheeledNum)
 {
 	if ((WheeledNum <= 0) || ((unsigned int)WheeledNum > PresetWheeledDataCount)) {
-		fprintf(stderr, "!!! Couldn't init CWheeled object with Number %i.\n", WheeledNum);
+		fprintf(stderr, "!!! Couldn't init cWheeled object with Number %i.\n", WheeledNum);
 		return;
 	}
 
@@ -85,9 +85,9 @@ void CWheeled::Create(int WheeledNum)
 	WeaponQuantity = PresetWheeledData[WheeledNum-1].WeaponQuantity;
 	// начальные установки для оружия
 	WeaponSetFire = new bool[WeaponQuantity];
-	WeaponLocation = new VECTOR3D[WeaponQuantity];
-	Weapon = new CWeapon*[WeaponQuantity];
-	WeaponBound = new VECTOR3D[WeaponQuantity];
+	WeaponLocation = new sVECTOR3D[WeaponQuantity];
+	Weapon = new cWeapon*[WeaponQuantity];
+	WeaponBound = new sVECTOR3D[WeaponQuantity];
 	for (int i=0; i<WeaponQuantity; i++) {
 		WeaponSetFire[i] = false;
 		Weapon[i] = nullptr;
@@ -98,17 +98,17 @@ void CWheeled::Create(int WheeledNum)
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (WheeledNum) {
 	case 1:
-		WeaponLocation[0] = VECTOR3D(0.3f, 4.5f, -1.5f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.3f, 4.5f, -1.5f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(206);
-		WeaponLocation[1] = VECTOR3D(-0.3f, 4.5f, -1.5f);
-		Weapon[1] = new CWeapon;
+		WeaponLocation[1] = sVECTOR3D(-0.3f, 4.5f, -1.5f);
+		Weapon[1] = new cWeapon;
 		Weapon[1]->Create(206);
-		WeaponLocation[2] = VECTOR3D(0.9f, 4.5f, -1.5f);
-		Weapon[2] = new CWeapon;
+		WeaponLocation[2] = sVECTOR3D(0.9f, 4.5f, -1.5f);
+		Weapon[2] = new cWeapon;
 		Weapon[2]->Create(206);
-		WeaponLocation[3] = VECTOR3D(-0.9f, 4.5f, -1.5f);
-		Weapon[3] = new CWeapon;
+		WeaponLocation[3] = sVECTOR3D(-0.9f, 4.5f, -1.5f);
+		Weapon[3] = new cWeapon;
 		Weapon[3]->Create(206);
 		WeaponFireType = 3;
 
@@ -132,11 +132,11 @@ void CWheeled::Create(int WheeledNum)
 		break;
 
 	case 2:
-		WeaponLocation[0] = VECTOR3D(1.3f, 3.5f, -1.5f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(1.3f, 3.5f, -1.5f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(206);
-		WeaponLocation[1] = VECTOR3D(-1.3f, 3.5f, -1.5f);
-		Weapon[1] = new CWeapon;
+		WeaponLocation[1] = sVECTOR3D(-1.3f, 3.5f, -1.5f);
+		Weapon[1] = new cWeapon;
 		Weapon[1]->Create(206);
 		WeaponFireType = 3;
 		DoNotCalculateRotation = true;
@@ -156,11 +156,11 @@ void CWheeled::Create(int WheeledNum)
 		break;
 
 	case 3:
-		WeaponLocation[0] = VECTOR3D(0.8f, 4.2f, -1.0f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.8f, 4.2f, -1.0f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(204);
-		WeaponLocation[1] = VECTOR3D(-0.8f, 4.2f, -1.0f);
-		Weapon[1] = new CWeapon;
+		WeaponLocation[1] = sVECTOR3D(-0.8f, 4.2f, -1.0f);
+		Weapon[1] = new cWeapon;
 		Weapon[1]->Create(204);
 		WeaponFireType = 2;
 
@@ -189,8 +189,8 @@ void CWheeled::Create(int WheeledNum)
 		break;
 
 	case 4:
-		WeaponLocation[0] = VECTOR3D(0.0f, 4.5f, -4.0f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.0f, 4.5f, -4.0f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(207);
 
 		WheelQuantity = 4;
@@ -208,8 +208,8 @@ void CWheeled::Create(int WheeledNum)
 		break;
 
 	case 5:
-		WeaponLocation[0] = VECTOR3D(0.0f, 4.5f, -4.0f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.0f, 4.5f, -4.0f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(208);
 
 		WheelQuantity = 4;
@@ -227,8 +227,8 @@ void CWheeled::Create(int WheeledNum)
 		break;
 
 	case 6:
-		WeaponLocation[0] = VECTOR3D(0.0f, 6.0f, -3.0f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.0f, 6.0f, -3.0f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(204);
 
 		WheelQuantity = 4;
@@ -256,11 +256,11 @@ void CWheeled::Create(int WheeledNum)
 		break;
 
 	case 7:
-		WeaponLocation[0] = VECTOR3D(0.1f, 5.0f, -1.0f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(0.1f, 5.0f, -1.0f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(204);
-		WeaponLocation[1] = VECTOR3D(-0.1f, 5.0f, -1.0f);
-		Weapon[1] = new CWeapon;
+		WeaponLocation[1] = sVECTOR3D(-0.1f, 5.0f, -1.0f);
+		Weapon[1] = new cWeapon;
 		Weapon[1]->Create(204);
 		WeaponFireType = 2;
 
@@ -289,11 +289,11 @@ void CWheeled::Create(int WheeledNum)
 		break;
 
 	case 8:
-		WeaponLocation[0] = VECTOR3D(1.5f, 5.2f, 7.0f);
-		Weapon[0] = new CWeapon;
+		WeaponLocation[0] = sVECTOR3D(1.5f, 5.2f, 7.0f);
+		Weapon[0] = new cWeapon;
 		Weapon[0]->Create(210);
-		WeaponLocation[1] = VECTOR3D(-1.5f, 5.2f, 7.0f);
-		Weapon[1] = new CWeapon;
+		WeaponLocation[1] = sVECTOR3D(-1.5f, 5.2f, 7.0f);
+		Weapon[1] = new cWeapon;
 		Weapon[1]->Create(210);
 		WeaponFireType = 3;
 
@@ -325,20 +325,20 @@ void CWheeled::Create(int WheeledNum)
 
 
 	// находим все данные по геометрии
-	::CObject3D::InitByDrawObjectList();
+	::cObject3D::InitByDrawObjectList();
 
 
 	// установка остальных параметров девиации
 	DeviationOn = false;
 	DeviationObjQuantity = WheelQuantity;
-	Deviation = new VECTOR3D[DeviationObjQuantity];
+	Deviation = new sVECTOR3D[DeviationObjQuantity];
 	NeedDeviation = new float[DeviationObjQuantity];
 	CurentDeviation = new float[DeviationObjQuantity];
 	CurentDeviationSum = new float[DeviationObjQuantity];
 	DeviationObjNum = new int[DeviationObjQuantity];
 
 	for (int i=0; i<DeviationObjQuantity; i++) {
-		Deviation[i] = VECTOR3D(0.0f, 1.0f, 0.0f);
+		Deviation[i] = sVECTOR3D(0.0f, 1.0f, 0.0f);
 		NeedDeviation[i] = vw_Randf0*0.1f;
 		CurentDeviation[i] = CurentDeviationSum[i] = 0.0f;
 		DeviationObjNum[i] = WheelObjectsNum[i];

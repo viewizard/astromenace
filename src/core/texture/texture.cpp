@@ -31,7 +31,7 @@
 
 
 
-extern eTexture *StartTexMan;
+extern sTexture *StartTexMan;
 extern int FilteringTexMan;
 extern int Address_ModeTexMan;
 extern uint8_t ARedTexMan;
@@ -41,17 +41,17 @@ extern uint8_t ABlueTexMan;
 extern bool MipMap;
 extern int  AFlagTexMan;
 extern bool AlphaTexMan;
-void vw_AttachTexture(eTexture* Texture);
-void vw_DetachTexture(eTexture* Texture);
+void vw_AttachTexture(sTexture *Texture);
+void vw_DetachTexture(sTexture *Texture);
 
 
-int ReadTGA(uint8_t **DIB, eFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
+int ReadTGA(uint8_t **DIB, sFILE *pFile, int *DWidth, int *DHeight, int *DChanels);
 
 
 //------------------------------------------------------------------------------------
 // Освобождение памяти и удаление текстуры
 //------------------------------------------------------------------------------------
-void vw_ReleaseTexture(eTexture* Texture)
+void vw_ReleaseTexture(sTexture *Texture)
 {
 	// проверка входящих данных
 	if (Texture == nullptr)
@@ -84,7 +84,7 @@ static int power_of_two(int Num)
 	}
 	return value;
 }
-void Resize(uint8_t **DIB, eTexture *Texture)
+void Resize(uint8_t **DIB, sTexture *Texture)
 {
 	// берем размеры к которым нужно "подгонять"
 	int powWidth = power_of_two(Texture->Width);
@@ -143,7 +143,7 @@ void Resize(uint8_t **DIB, eTexture *Texture)
 //------------------------------------------------------------------------------------
 // Растягивание картинки, нужно устанавливать дополнительно...
 //------------------------------------------------------------------------------------
-void ResizeImage(int width, int height, uint8_t **DIB, eTexture *Texture)
+void ResizeImage(int width, int height, uint8_t **DIB, sTexture *Texture)
 {
 	if (width == Texture->Width && height == Texture->Height) return;
 
@@ -190,7 +190,7 @@ void ResizeImage(int width, int height, uint8_t **DIB, eTexture *Texture)
 //------------------------------------------------------------------------------------
 // Создание альфа канала
 //------------------------------------------------------------------------------------
-void CreateAlpha(uint8_t **DIBRESULT, eTexture *Texture, int AlphaFlag)
+void CreateAlpha(uint8_t **DIBRESULT, sTexture *Texture, int AlphaFlag)
 {
 	// находим отступ между строчками
 	int stride = Texture->Width * 3;
@@ -302,7 +302,7 @@ void CreateAlpha(uint8_t **DIBRESULT, eTexture *Texture, int AlphaFlag)
 //------------------------------------------------------------------------------------
 // Удаляем альфа канал
 //------------------------------------------------------------------------------------
-void DeleteAlpha(uint8_t **DIBRESULT, eTexture *Texture)
+void DeleteAlpha(uint8_t **DIBRESULT, sTexture *Texture)
 {
 
 	// находим отступ между строчками
@@ -357,7 +357,7 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Открываем файл
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	std::unique_ptr<eFILE> pFile = vw_fopen(SrcName);
+	std::unique_ptr<sFILE> pFile = vw_fopen(SrcName);
 	if (pFile == nullptr) {
 		fprintf(stderr, "Unable to found %s\n", SrcName);
 		return;
@@ -435,7 +435,7 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 //------------------------------------------------------------------------------------
 // загрузка текстуры из файла и подключение к менеджеру текстур
 //------------------------------------------------------------------------------------
-eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int CompressionType, int LoadAs, int NeedResizeW, int NeedResizeH)
+sTexture *vw_LoadTexture(const char *nName, const char *RememberAsName, int CompressionType, int LoadAs, int NeedResizeW, int NeedResizeH)
 {
 	int DWidth = 0;
 	int DHeight = 0;
@@ -445,7 +445,7 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Открываем файл
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	std::unique_ptr<eFILE> pFile = vw_fopen(nName);
+	std::unique_ptr<sFILE> pFile = vw_fopen(nName);
 	if (pFile == nullptr) {
 		fprintf(stderr, "Unable to found %s\n", nName);
 		return nullptr;
@@ -508,7 +508,7 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Сохраняем имя текстуры
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	eTexture *Result = nullptr;
+	sTexture *Result = nullptr;
 
 	if (RememberAsName == nullptr) {
 		Result = vw_CreateTextureFromMemory(nName, tmp_image, DWidth, DHeight, DChanels, CompressionType, NeedResizeW, NeedResizeH);
@@ -535,13 +535,13 @@ eTexture* vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 //------------------------------------------------------------------------------------
 // создание текстуры из памяти
 //------------------------------------------------------------------------------------
-eTexture* vw_CreateTextureFromMemory(const char *TextureName, uint8_t *DIB, int DWidth, int DHeight, int DChanels, int CompressionType, int NeedResizeW, int NeedResizeH, bool NeedDuplicateCheck)
+sTexture *vw_CreateTextureFromMemory(const char *TextureName, uint8_t *DIB, int DWidth, int DHeight, int DChanels, int CompressionType, int NeedResizeW, int NeedResizeH, bool NeedDuplicateCheck)
 {
 	// проверяем в списке, если уже создавали ее - просто возвращаем указатель
 	if (NeedDuplicateCheck) {
-		eTexture *Tmp = StartTexMan;
+		sTexture *Tmp = StartTexMan;
 		while (Tmp != nullptr) {
-			eTexture *Tmp1 = Tmp->Next;
+			sTexture *Tmp1 = Tmp->Next;
 			if(strcmp(Tmp->Name, TextureName) == 0) {
 				printf("Texture already loaded: %s\n", TextureName);
 				return Tmp;
@@ -558,7 +558,7 @@ eTexture* vw_CreateTextureFromMemory(const char *TextureName, uint8_t *DIB, int 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Cоздаем объект
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	eTexture *Texture = new eTexture;
+	sTexture *Texture = new sTexture;
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -30,30 +30,30 @@
 #include "star.h"
 
 
-class CSpaceStars
+class cSpaceStars
 {
 public:
-	CSpaceStars();
-	~CSpaceStars();
+	cSpaceStars();
+	~cSpaceStars();
 
 	// обновить все частицы в этой системе, по времени
 	bool	Update(float Time);
 	// прорисовка всех частиц
 	void	Draw();
 	// базовая текстура частиц
-	eTexture	*Texture{nullptr};
+	sTexture *Texture{nullptr};
 
 	// работа с шейдерами
-	eGLSL 	*GLSL{nullptr};
+	sGLSL 	*GLSL{nullptr};
 	int	UniformLocations[10];
 
 	// текущее положение частиц в пространстве
-	VECTOR3D	Location{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Location{0.0f, 0.0f, 0.0f};
 
 	// размер частиц в мировых координатах
 	float		Size{0.003f};
 
-	VECTOR3D	CreationSize{5.21f,5.21f,5.21f};
+	sVECTOR3D	CreationSize{5.21f,5.21f,5.21f};
 
 	// если нужно - корректировка размера частицы при создании относительно камеры
 	// мертвая зона (радиус, где вообще не рисуем)
@@ -74,13 +74,13 @@ public:
 				     0.0f, 0.0f, 1.0f};
 
 	// подвязка к динамическому массиву
-	CStar	*Start{nullptr};
-	CStar	*End{nullptr};
-	void	Attach(CStar * NewParticle);
-	void	Detach(CStar * OldParticle);
+	sStar	*Start{nullptr};
+	sStar	*End{nullptr};
+	void	Attach(sStar *NewParticle);
+	void	Detach(sStar *OldParticle);
 
 	// данные, храним их, чтобы каждый раз не пересчитывать
-	CStar	**list{nullptr};
+	sStar	**list{nullptr};
 	float	*tmpDATA{nullptr};
 	unsigned int	*VBO{nullptr}; // указатель на номер VBO массива
 	int	PrimitCount{0};

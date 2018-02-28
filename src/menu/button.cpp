@@ -51,7 +51,7 @@ int NeedPlayOnButtonSoundY = 0;
 //------------------------------------------------------------------------------------
 bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTransp, float *Update)
 {
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 	bool ON = false;
 	bool CanClick = false;
 	float IntTransp = Transp;
@@ -166,7 +166,7 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 //------------------------------------------------------------------------------------
 bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTransp, float *Update, bool Off)
 {
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 
 	if (Off || DragWeapon) {
@@ -307,7 +307,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 //------------------------------------------------------------------------------------
 bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 {
-	RECT SrcRect, DstRect, MouseRect;
+	sRECT SrcRect, DstRect, MouseRect;
 	SetRect(&SrcRect,2,2,230-2,64-2);
 	SetRect(&DstRect,X-14+2,Y-14+2,X+230-14-2,Y+64-14-2);
 	SetRect(&MouseRect,X,Y,X+204,Y+35);
@@ -407,7 +407,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 //------------------------------------------------------------------------------------
 bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, bool SoundClick)
 {
-	RECT SrcRect, DstRect, MouseRect;
+	sRECT SrcRect, DstRect, MouseRect;
 	SetRect(&SrcRect,2,2,158-2,64-2);
 	SetRect(&DstRect,X-14+2,Y-14+2,X+158-14-2,Y+64-14-2);
 	SetRect(&MouseRect,X,Y,X+132,Y+35);
@@ -518,7 +518,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 //------------------------------------------------------------------------------------
 void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Transp)
 {
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 	// получаем длину текста
 	int Size = vw_FontSize(Text);
@@ -583,7 +583,7 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 //------------------------------------------------------------------------------------
 bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 {
-	RECT SrcRect, DstRect, MouseRect;
+	sRECT SrcRect, DstRect, MouseRect;
 	SetRect(&SrcRect,0,0,32,32);
 	SetRect(&DstRect,X,Y,X+32,Y+32);
 	SetRect(&MouseRect,X,Y,X+32,Y+32);
@@ -668,7 +668,7 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 //------------------------------------------------------------------------------------
 bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 {
-	RECT SrcRect, DstRect, MouseRect;
+	sRECT SrcRect, DstRect, MouseRect;
 	SetRect(&SrcRect,0,0,32,32);
 	SetRect(&DstRect,X,Y,X+32,Y+32);
 	SetRect(&MouseRect,X,Y,X+32,Y+32);

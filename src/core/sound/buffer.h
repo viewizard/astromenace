@@ -34,13 +34,13 @@
 //------------------------------------------------------------------------------------
 // Структура буфера звука
 //------------------------------------------------------------------------------------
-struct eBuffer {
+struct sBuffer {
 	char 		*Name;		// фактически имя файла из которого сделали буфер
 
 	ALuint 		Buffer;
 
-	eBuffer*	Prev;		// Pointer to the previous loaded Sound in the memory
-	eBuffer*	Next;		// Pointer to the next loaded Sound in the memory
+	sBuffer*	Prev;		// Pointer to the previous loaded Sound in the memory
+	sBuffer*	Next;		// Pointer to the next loaded Sound in the memory
 };
 
 
@@ -49,14 +49,14 @@ struct eBuffer {
 //------------------------------------------------------------------------------------
 ALuint vw_CreateSoundBufferFromWAV(const char *Name);
 ALuint vw_CreateSoundBufferFromOGG(const char *Name);
-void vw_ReleaseBuffer(eBuffer *Buffer);
+void vw_ReleaseBuffer(sBuffer *Buffer);
 
-eBuffer *vw_FindBufferByName(const char *Name);
+sBuffer *vw_FindBufferByName(const char *Name);
 ALuint vw_FindBufferIDByName(const char *Name);
 
 void vw_ReleaseAllBuffers();
-void vw_AttachBuffer(eBuffer* Buffer);
-void vw_DetachBuffer(eBuffer* Buffer);
+void vw_AttachBuffer(sBuffer* Buffer);
+void vw_DetachBuffer(sBuffer* Buffer);
 
 
 

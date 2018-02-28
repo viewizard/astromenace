@@ -78,8 +78,8 @@ PFNGLGETATTRIBLOCATIONARBPROC glGetAttribLocationARB = nullptr;
 
 
 // для менеджера
-eGLSL *StartGLSLMan = nullptr;
-eGLSL *EndGLSLMan = nullptr;
+sGLSL *StartGLSLMan = nullptr;
+sGLSL *EndGLSLMan = nullptr;
 int NumGLSLMan = 0;
 
 
@@ -303,7 +303,7 @@ void vw_PrintProgramInfoLog(GLhandleARB program)
 //------------------------------------------------------------------------------------
 // освобождаем память
 //------------------------------------------------------------------------------------
-void vw_ReleaseShader(eGLSL *GLSL)
+void vw_ReleaseShader(sGLSL *GLSL)
 {
 	if ((GLSL == nullptr) ||
 	    (glDetachObjectARB == nullptr) ||
@@ -344,9 +344,9 @@ void vw_ReleaseShader(eGLSL *GLSL)
 void vw_ReleaseAllShaders()
 {
 	// Чистка памяти...
-	eGLSL *Tmp = StartGLSLMan;
+	sGLSL *Tmp = StartGLSLMan;
 	while (Tmp != nullptr) {
-		eGLSL *Tmp1 = Tmp->Next;
+		sGLSL *Tmp1 = Tmp->Next;
 		vw_ReleaseShader(Tmp);
 		Tmp = Tmp1;
 	}
@@ -365,7 +365,7 @@ void vw_ReleaseAllShaders()
 //------------------------------------------------------------------------------------
 // подключение к менеджеру
 //------------------------------------------------------------------------------------
-void vw_AttachShader(eGLSL* GLSL)
+void vw_AttachShader(sGLSL* GLSL)
 {
 	if (GLSL == nullptr)
 		return;
@@ -395,7 +395,7 @@ void vw_AttachShader(eGLSL* GLSL)
 //------------------------------------------------------------------------------------
 // отключение от менеджера
 //------------------------------------------------------------------------------------
-void vw_DetachShader(eGLSL* GLSL)
+void vw_DetachShader(sGLSL* GLSL)
 {
 	if (GLSL == nullptr)
 		return;
@@ -424,12 +424,12 @@ void vw_DetachShader(eGLSL* GLSL)
 //------------------------------------------------------------------------------------
 // Нахождение по уникальному номеру...
 //------------------------------------------------------------------------------------
-eGLSL* vw_FindShaderByNum(int Num)
+sGLSL* vw_FindShaderByNum(int Num)
 {
-	eGLSL *Tmp = StartGLSLMan;
+	sGLSL *Tmp = StartGLSLMan;
 
 	while (Tmp != nullptr) {
-		eGLSL *Tmp1 = Tmp->Next;
+		sGLSL *Tmp1 = Tmp->Next;
 		if (Tmp->Num == Num)
 			return Tmp;
 		Tmp = Tmp1;
@@ -446,12 +446,12 @@ eGLSL* vw_FindShaderByNum(int Num)
 //------------------------------------------------------------------------------------
 // Нахождение по имени...
 //------------------------------------------------------------------------------------
-eGLSL* vw_FindShaderByName(const char *Name)
+sGLSL* vw_FindShaderByName(const char *Name)
 {
-	eGLSL *Tmp = StartGLSLMan;
+	sGLSL *Tmp = StartGLSLMan;
 
 	while (Tmp != nullptr) {
-		eGLSL *Tmp1 = Tmp->Next;
+		sGLSL *Tmp1 = Tmp->Next;
 		if (strcmp(Tmp->Name, Name) == 0)
 			return Tmp;
 		Tmp = Tmp1;
@@ -488,7 +488,7 @@ eGLSL* vw_FindShaderByName(const char *Name)
 //------------------------------------------------------------------------------------
 // создаем шейдерную программу
 //------------------------------------------------------------------------------------
-eGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName, const char *FragmentShaderFileName)
+sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName, const char *FragmentShaderFileName)
 {
 	if ((glCreateShaderObjectARB == nullptr) ||
 	    (glShaderSourceARB == nullptr) ||
@@ -503,7 +503,7 @@ eGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 	GLint	vertCompiled, fragCompiled;    // status values
 
 	// создаем структуру в памяти
-	eGLSL *GLSLtmp = new eGLSL;
+	sGLSL *GLSLtmp = new sGLSL;
 
 	// создаем пустые объекты и получаем хидеры на них
 	GLSLtmp->VertexShader = glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
@@ -515,7 +515,7 @@ eGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 	// вертекстный шейдер
 	GLSLtmp->VertexShaderUse = false;
 	if (VertexShaderFileName != nullptr) {
-		std::unique_ptr<eFILE> VertexFile = vw_fopen(VertexShaderFileName);
+		std::unique_ptr<sFILE> VertexFile = vw_fopen(VertexShaderFileName);
 
 		if (VertexFile != nullptr) {
 			const GLcharARB *TmpGLcharARB = (const GLcharARB *)VertexFile->Data.get();
@@ -528,7 +528,7 @@ eGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 	// фрагментный шейдер
 	GLSLtmp->FragmentShaderUse = false;
 	if (FragmentShaderFileName != nullptr) {
-		std::unique_ptr<eFILE> FragmentFile = vw_fopen(FragmentShaderFileName);
+		std::unique_ptr<sFILE> FragmentFile = vw_fopen(FragmentShaderFileName);
 
 		if (FragmentFile != nullptr) {
 			const GLcharARB *TmpGLcharARB = (const GLcharARB *)FragmentFile->Data.get();
@@ -597,7 +597,7 @@ eGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 //------------------------------------------------------------------------------------
 // линкуем программу, с учетом отбинденных данных
 //------------------------------------------------------------------------------------
-bool vw_LinkShaderProgram(eGLSL *GLSL)
+bool vw_LinkShaderProgram(sGLSL *GLSL)
 {
 	if ((GLSL == nullptr) ||
 	    (glLinkProgramARB == nullptr) ||
@@ -624,7 +624,7 @@ bool vw_LinkShaderProgram(eGLSL *GLSL)
 //------------------------------------------------------------------------------------
 // запускаем шейдер на исполнение
 //------------------------------------------------------------------------------------
-bool vw_UseShaderProgram(eGLSL *GLSL)
+bool vw_UseShaderProgram(sGLSL *GLSL)
 {
 	if ((GLSL == nullptr) || (glUseProgramObjectARB == nullptr))
 		return false;
@@ -663,7 +663,7 @@ bool vw_StopShaderProgram()
 //------------------------------------------------------------------------------------
 // Get the location of a uniform variable
 //------------------------------------------------------------------------------------
-int vw_GetUniformLocation(eGLSL *GLSL, const char *name)
+int vw_GetUniformLocation(sGLSL *GLSL, const char *name)
 {
 	if (glGetUniformLocationARB == nullptr) return -1;
 
@@ -684,7 +684,7 @@ int vw_GetUniformLocation(eGLSL *GLSL, const char *name)
 //------------------------------------------------------------------------------------
 // установка значения параметра
 //------------------------------------------------------------------------------------
-bool vw_Uniform1i(eGLSL *GLSL, int UniformLocation, int data)
+bool vw_Uniform1i(sGLSL *GLSL, int UniformLocation, int data)
 {
 	if ((GLSL == nullptr) || (glUniform1iARB == nullptr))
 		return false;
@@ -695,7 +695,7 @@ bool vw_Uniform1i(eGLSL *GLSL, int UniformLocation, int data)
 
 	return true;
 }
-bool vw_Uniform1i(eGLSL *GLSL, const char *name, int data)
+bool vw_Uniform1i(sGLSL *GLSL, const char *name, int data)
 {
 	if ((GLSL == nullptr) || (name == nullptr))
 		return false;
@@ -708,7 +708,7 @@ bool vw_Uniform1i(eGLSL *GLSL, const char *name, int data)
 }
 
 
-bool vw_Uniform1f(eGLSL *GLSL, int UniformLocation, float data)
+bool vw_Uniform1f(sGLSL *GLSL, int UniformLocation, float data)
 {
 	if ((GLSL == nullptr) || (glUniform3fARB == nullptr))
 		return false;
@@ -719,7 +719,7 @@ bool vw_Uniform1f(eGLSL *GLSL, int UniformLocation, float data)
 
 	return true;
 }
-bool vw_Uniform1f(eGLSL *GLSL, const char *name, float data)
+bool vw_Uniform1f(sGLSL *GLSL, const char *name, float data)
 {
 	if ((GLSL == nullptr) || (name == nullptr))
 		return false;
@@ -732,7 +732,7 @@ bool vw_Uniform1f(eGLSL *GLSL, const char *name, float data)
 }
 
 
-bool vw_Uniform3f(eGLSL *GLSL, int UniformLocation, float data1, float data2, float data3)
+bool vw_Uniform3f(sGLSL *GLSL, int UniformLocation, float data1, float data2, float data3)
 {
 	if ((GLSL == nullptr) || (glUniform3fARB == nullptr))
 		return false;
@@ -743,7 +743,7 @@ bool vw_Uniform3f(eGLSL *GLSL, int UniformLocation, float data1, float data2, fl
 
 	return true;
 }
-bool vw_Uniform3f(eGLSL *GLSL, const char *name, float data1, float data2, float data3)
+bool vw_Uniform3f(sGLSL *GLSL, const char *name, float data1, float data2, float data3)
 {
 	if ((GLSL == nullptr) || (name == nullptr))
 		return false;
@@ -756,7 +756,7 @@ bool vw_Uniform3f(eGLSL *GLSL, const char *name, float data1, float data2, float
 }
 
 
-bool vw_Uniform1fv(eGLSL *GLSL, int UniformLocation, int count, float *data)
+bool vw_Uniform1fv(sGLSL *GLSL, int UniformLocation, int count, float *data)
 {
 	if ((GLSL == nullptr) || (glUniform1fvARB == nullptr))
 		return false;
@@ -767,7 +767,7 @@ bool vw_Uniform1fv(eGLSL *GLSL, int UniformLocation, int count, float *data)
 
 	return true;
 }
-bool vw_Uniform1fv(eGLSL *GLSL, const char *name, int count, float *data)
+bool vw_Uniform1fv(sGLSL *GLSL, const char *name, int count, float *data)
 {
 	if ((GLSL == nullptr) || (name == nullptr))
 		return false;
@@ -780,7 +780,7 @@ bool vw_Uniform1fv(eGLSL *GLSL, const char *name, int count, float *data)
 }
 
 
-bool vw_Uniform4fv(eGLSL *GLSL, int UniformLocation, int count, float *data)
+bool vw_Uniform4fv(sGLSL *GLSL, int UniformLocation, int count, float *data)
 {
 	if ((GLSL == nullptr) || (glUniform4fvARB == nullptr))
 		return false;
@@ -791,7 +791,7 @@ bool vw_Uniform4fv(eGLSL *GLSL, int UniformLocation, int count, float *data)
 
 	return true;
 }
-bool vw_Uniform4fv(eGLSL *GLSL, const char *name, int count, float *data)
+bool vw_Uniform4fv(sGLSL *GLSL, const char *name, int count, float *data)
 {
 	if ((GLSL == nullptr) || (name == nullptr))
 		return false;
@@ -804,7 +804,7 @@ bool vw_Uniform4fv(eGLSL *GLSL, const char *name, int count, float *data)
 }
 
 
-bool vw_UniformMatrix4fv(eGLSL *GLSL, int UniformLocation, bool transpose, int count, float *data)
+bool vw_UniformMatrix4fv(sGLSL *GLSL, int UniformLocation, bool transpose, int count, float *data)
 {
 	if ((GLSL == nullptr) || (glUniformMatrix4fvARB == nullptr))
 		return false;
@@ -815,7 +815,7 @@ bool vw_UniformMatrix4fv(eGLSL *GLSL, int UniformLocation, bool transpose, int c
 
 	return true;
 }
-bool vw_UniformMatrix4fv(eGLSL *GLSL, const char *name, bool transpose, int count, float *data)
+bool vw_UniformMatrix4fv(sGLSL *GLSL, const char *name, bool transpose, int count, float *data)
 {
 	if ((GLSL == nullptr) || (name == nullptr))
 		return false;

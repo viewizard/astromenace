@@ -62,7 +62,7 @@ float   GameCameraDeviationAge = 0.0f;
 //-----------------------------------------------------------------------------
 void InitGameCamera()
 {
-	GamePoint = VECTOR3D(0.0f, 0.0f, 0.0f);
+	GamePoint = sVECTOR3D(0.0f, 0.0f, 0.0f);
 	GameCameraLastUpdate = vw_GetTime(1);
 
 	GameCameraDeviation = 0.0f;
@@ -71,7 +71,7 @@ void InitGameCamera()
 	GameCameraDeviationPower = 0.0f;
 	GameCameraNeedStartDeviation = 0.0f;
 	GameCameraDeviationAge = 0.0f;
-	vw_SetCameraDeviation(VECTOR3D(0,0,0));
+	vw_SetCameraDeviation(sVECTOR3D(0,0,0));
 }
 
 
@@ -83,7 +83,7 @@ void InitGameCamera()
 //-----------------------------------------------------------------------------
 // установка взрыва
 //-----------------------------------------------------------------------------
-void GameCameraSetExplosion(VECTOR3D Location, float Power)
+void GameCameraSetExplosion(sVECTOR3D Location, float Power)
 {
 	// если корабля нет, нам тут делать нечего
 	if (PlayerFighter == nullptr)
@@ -134,7 +134,7 @@ void GameCameraUpdate(float Time)
 	float TimeDelta = Time - GameCameraLastUpdate;
 	GameCameraLastUpdate = Time;
 
-	VECTOR3D TmpNeedPos = GameCameraMovement^(GameCameraSpeed*TimeDelta);
+	sVECTOR3D TmpNeedPos = GameCameraMovement^(GameCameraSpeed*TimeDelta);
 
 	// обновляем данные камеры (+ устанавливаем флаг, чтобы обновить фруструм)
 	vw_IncCameraLocation(TmpNeedPos);
@@ -196,7 +196,7 @@ void GameCameraUpdate(float Time)
 		}
 
 
-	vw_SetCameraDeviation(VECTOR3D(GameCameraDeviation,GameCameraDeviation/(-2.0f),0.0f));
+	vw_SetCameraDeviation(sVECTOR3D(GameCameraDeviation,GameCameraDeviation/(-2.0f),0.0f));
 
 
 	// если поворачиваем
@@ -205,7 +205,7 @@ void GameCameraUpdate(float Time)
 
 
 	GamePoint - делаем учет
-	!!! - учесть поворот в скрипте!!!void SetRotation(CObject3D *Object, TiXmlElement *Element)
+	!!! - учесть поворот в скрипте!!!void SetRotation(cObject3D *Object, TiXmlElement *Element)
 	*/
 
 

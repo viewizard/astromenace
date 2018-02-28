@@ -32,23 +32,23 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CWeapon
+// Класс cWeapon
 //-----------------------------------------------------------------------------
-class CWeapon : public CObject3D
+class cWeapon : public cObject3D
 {
 public:
 
-	CWeapon();
-	virtual ~CWeapon();
+	cWeapon();
+	virtual ~cWeapon();
 
 	// Обновление данных объектa
 	virtual bool	Update(float Time);
 	// Выстрел
 	virtual bool	WeaponFire(float Time);
 	// Установка углов поворота
-	virtual void	SetRotation(VECTOR3D NewRotation);
+	virtual void	SetRotation(sVECTOR3D NewRotation);
 	// Установка положения
-	virtual void	SetLocation(VECTOR3D NewLocation);
+	virtual void	SetLocation(sVECTOR3D NewLocation);
 	// Создание нужного объекта
 	virtual void	Create(int WeaponNum);
 
@@ -78,16 +78,16 @@ public:
 
 	// лучевое оружие
 	// собственно объект=снаряд
-	CProjectile	*LaserMaser{nullptr};
+	cProjectile	*LaserMaser{nullptr};
 	// номер проигрываемого звука, чтобы была возможность выключить при уничтожении
 	int	LaserMaserSoundNum{0};
 	// флаг, это турель
 	bool	WeaponTurret{false};
 
 	// для просчета положения точки стрельбы, считаем как кости
-	VECTOR3D	BaseBound{0.0f, 0.0f, 0.0f};
-	VECTOR3D	MiddleBound{0.0f, 0.0f, 0.0f};
-	VECTOR3D	WeaponBound{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	BaseBound{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	MiddleBound{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	WeaponBound{0.0f, 0.0f, 0.0f};
 
 	// набор указателей на номера объектов, которыми нацеливаемся по горизонтале
 	int	TargetHorizObject{-1};
@@ -101,36 +101,36 @@ public:
 	float	TargetVertObjectNeedAngle{0.0f};
 
 	// выстрел - вылет частиц (засветка возле ствола)
-	eParticleSystem	*Fire{nullptr};
-	VECTOR3D	FireLocation{0.0f, 0.0f, 0.0f};
+	cParticleSystem	*Fire{nullptr};
+	sVECTOR3D	FireLocation{0.0f, 0.0f, 0.0f};
 	int		SoundNum{0}; // нужный номер
 
 	// если оружие уничтожено, делаем вырывающийся огонь
-	eParticleSystem	*DestroyedFire{nullptr};
-	eParticleSystem	*DestroyedSmoke{nullptr};
-	VECTOR3D	DestroyedFireLocation{0.0f, 0.0f, 0.0f};
+	cParticleSystem	*DestroyedFire{nullptr};
+	cParticleSystem	*DestroyedSmoke{nullptr};
+	sVECTOR3D	DestroyedFireLocation{0.0f, 0.0f, 0.0f};
 
-	CWeapon	*Next{nullptr};
-	CWeapon	*Prev{nullptr};
+	cWeapon	*Next{nullptr};
+	cWeapon	*Prev{nullptr};
 };
 
 
 //-----------------------------------------------------------------------------
-// Дополнительные функции для CWeapon
+// Дополнительные функции для cWeapon
 //-----------------------------------------------------------------------------
 
 // Установка нужных данных для вспышки возле ствола
-void SetWeaponFire(eParticleSystem *ParticleSystem, int WeaponNum);
+void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum);
 
 
 //-----------------------------------------------------------------------------
-// Менеджер CWeapon, дополнительный
+// Менеджер cWeapon, дополнительный
 //-----------------------------------------------------------------------------
 
 // Включаем в список
-void	AttachWeapon(CWeapon* Weapon);
+void	AttachWeapon(cWeapon* Weapon);
 // Исключаем из списка
-void	DetachWeapon(CWeapon* Weapon);
+void	DetachWeapon(cWeapon* Weapon);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllWeapon(float Time);
 // Прорисовываем все объекты

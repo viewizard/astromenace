@@ -35,7 +35,7 @@
 //-----------------------------------------------------------------------------
 // Создание графического эффекта
 //-----------------------------------------------------------------------------
-void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
+void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 {
 
 	ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
@@ -59,7 +59,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 0.15f;
 		ParticleSystem->ParticlesPerSec = 300;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
 		break;
 	case 2:	// Kinetic
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -78,7 +78,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 200;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.15f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.15f);
 		break;
 	case 3:	// Kinetic
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -97,7 +97,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 200;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.1f);
 		break;
 	case 4:	// Kinetic
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -116,7 +116,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 0.20f;
 		ParticleSystem->ParticlesPerSec = 300;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.17f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.17f);
 		break;
 	case 5:	// Ion
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -136,12 +136,12 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 60;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(2.0f,2.0f,0.5f);
+		ParticleSystem->CreationSize = sVECTOR3D(2.0f,2.0f,0.5f);
 		ParticleSystem->DeadZone = 1.5f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsAttractive = true;
 		ParticleSystem->AttractiveValue = 25.0f;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.5f, 0.35f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.5f, 0.35f, 0.0f, 0.1f);
 		break;
 	case 6:	// Ion
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -183,7 +183,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->IsAttractive = true;
 		ParticleSystem->NeedStop = true;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.15f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.15f);
 		break;
 	case 8:	// Plasma
 		ParticleSystem->ColorStart.r = 0.00f;
@@ -202,7 +202,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 0.80f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(1.3f,1.3f,0.2f);
+		ParticleSystem->CreationSize = sVECTOR3D(1.3f,1.3f,0.2f);
 		ParticleSystem->DeadZone = 1.2f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsAttractive = true;
@@ -225,7 +225,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 0.80f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(1.3f,0.2f,1.3f);
+		ParticleSystem->CreationSize = sVECTOR3D(1.3f,0.2f,1.3f);
 		ParticleSystem->DeadZone = 1.2f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsAttractive = true;
@@ -247,7 +247,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 30;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.10f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.10f);
 		break;
 	case 11:	// Plasma
 		ParticleSystem->ColorStart.r = 0.00f;
@@ -266,7 +266,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.20f;
 		ParticleSystem->ParticlesPerSec = 150;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.08f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.08f);
 		break;
 	case 12:	// Ion
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -305,7 +305,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->ParticlesPerSec = 250;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.1f);
 		break;
 	case 14:	// Torpedo
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -324,7 +324,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 250;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 1.0f, 0.15f, 0.0f, 0.075f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 1.0f, 0.15f, 0.0f, 0.075f);
 		break;
 	case 15:	// Nuke
 		ParticleSystem->ColorStart.r = 0.30f;
@@ -343,7 +343,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 250;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.15f, 0.35f, 1.0f, 0.0f, 0.05f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.15f, 0.35f, 1.0f, 0.0f, 0.05f);
 		break;
 	case 16:	// Swarm
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -362,7 +362,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 250;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
 		break;
 
 
@@ -384,7 +384,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 600;
 		ParticleSystem->CreationType = 11;
-		ParticleSystem->CreationSize = VECTOR3D(0.4f,0.4f,0.2f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.4f,0.4f,0.2f);
 		ParticleSystem->AlphaShowHide = true;
 		break;
 	case 18:	// maser2
@@ -404,7 +404,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 400;
 		ParticleSystem->CreationType = 11;
-		ParticleSystem->CreationSize = VECTOR3D(0.8f,0.8f,0.2f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.8f,0.8f,0.2f);
 		ParticleSystem->AlphaShowHide = true;
 		break;
 	case 19:	// Antimatter
@@ -424,11 +424,11 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(0.8f,0.1f,0.8f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.8f,0.1f,0.8f);
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsAttractive = true;
 		ParticleSystem->AttractiveValue = -20.0f;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.5f, 1.0f, 0.0f, 0.0f, 0.05f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 1.0f, 0.0f, 0.0f, 0.05f);
 		break;
 	case 20:	// Laser
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -447,7 +447,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 0.20f;
 		ParticleSystem->ParticlesPerSec = 3000;
 		ParticleSystem->CreationType = 11;
-		ParticleSystem->CreationSize = VECTOR3D(0.2f,0.2f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.2f,0.2f,0.1f);
 		break;
 	case 21:	// Antimatter
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -466,7 +466,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 150;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(1.0f,1.0f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(1.0f,1.0f,0.1f);
 		ParticleSystem->IsAttractive = true;
 		ParticleSystem->AttractiveValue = -40.0f;
 		break;
@@ -490,7 +490,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 0.15f;
 		ParticleSystem->ParticlesPerSec = 300;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.2f);
 		break;
 	case 23:	// Оружие пришельцев 2
 		ParticleSystem->ColorStart.r = 0.00f;
@@ -509,7 +509,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 200;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.1f);
 		break;
 	case 24:	// Оружие пришельцев 2
 		ParticleSystem->ColorStart.r = 0.00f;
@@ -528,7 +528,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 200;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.1f);
 		break;
 
 	case 25:	// фларес
@@ -549,9 +549,9 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(4.0f,4.0f,4.0f);
+		ParticleSystem->CreationSize = sVECTOR3D(4.0f,4.0f,4.0f);
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare.tga");
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.25f, 0.05f, 0.0f, 0.05f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.25f, 0.05f, 0.0f, 0.05f);
 		break;
 	case 26:	// стрельба 1-го пирата Kinetic
 		ParticleSystem->ColorStart.r = 0.60f;
@@ -570,7 +570,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 0.15f;
 		ParticleSystem->ParticlesPerSec = 300;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.2f);
 		break;
 	case 27:	// стрельба 2-го пирата Missile
 		ParticleSystem->ColorStart.r = 0.60f;
@@ -589,7 +589,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->ParticlesPerSec = 250;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
 		break;
 
 
@@ -612,8 +612,8 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Direction = VECTOR3D(0.0f, -1.0f, 0.0f);
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
+		ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
 		break;
 	case 29:	// 3-я мина
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -634,8 +634,8 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Direction = VECTOR3D(0.0f, -1.0f, 0.0f);
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.15f);
+		ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.15f);
 		break;
 	case 30:	// 4-я мина
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -657,9 +657,9 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->ParticlesPerSec = 150;
 		ParticleSystem->AlphaShowHide= true;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(1.5f,0.1f,1.5f);
-		ParticleSystem->Direction = VECTOR3D(0.0f, -1.0f, 0.0f);
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(1.5f,0.1f,1.5f);
+		ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.1f);
 		break;
 	case 31:	// Swarm для пиратов
 		ParticleSystem->ColorStart.r = 0.60f;
@@ -678,7 +678,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 250;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.2f);
 		break;
 	case 32:	// Torpedo пиратов
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -697,7 +697,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 250;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 1.0f, 0.15f, 0.0f, 0.075f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 1.0f, 0.15f, 0.0f, 0.075f);
 		break;
 	case 33:	// Nuke пиратов
 		ParticleSystem->ColorStart.r = 0.30f;
@@ -716,7 +716,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 250;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.15f, 0.35f, 1.0f, 0.0f, 0.05f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.15f, 0.35f, 1.0f, 0.0f, 0.05f);
 		break;
 	case 34:	// Kinetic2 пиратов
 		ParticleSystem->ColorStart.r = 0.60f;
@@ -735,7 +735,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 200;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.15f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.15f);
 		break;
 	case 35:	// Kinetic3 пиратов
 		ParticleSystem->ColorStart.r = 0.60f;
@@ -754,7 +754,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 200;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
 		break;
 
 	case 36:	// Оружие пришельцев, мина 1 тип
@@ -775,11 +775,11 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(2.0,2.0f,2.0f);
+		ParticleSystem->CreationSize = sVECTOR3D(2.0,2.0f,2.0f);
 		ParticleSystem->DeadZone = 1.9f;
 		ParticleSystem->IsAttractive = true;
 		ParticleSystem->AttractiveValue = 25.0f;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.1f);
 		break;
 
 	case 37:	// Оружие пришельцев, мина 2 тип
@@ -800,11 +800,11 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->CreationType = 2;
-		ParticleSystem->CreationSize = VECTOR3D(2.0,0.2f,2.0f);
+		ParticleSystem->CreationSize = sVECTOR3D(2.0,0.2f,2.0f);
 		ParticleSystem->DeadZone = 1.9f;
 		ParticleSystem->IsAttractive = true;
 		ParticleSystem->AttractiveValue = 2.0f;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.2f, 0.2f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.2f, 0.2f, 0.0f, 0.1f);
 		break;
 	case 38:	// Оружие пришельцев, Laser
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -823,7 +823,7 @@ void SetProjectileGFX(eParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 0.20f;
 		ParticleSystem->ParticlesPerSec = 9000;
 		ParticleSystem->CreationType = 11;
-		ParticleSystem->CreationSize = VECTOR3D(0.2f,0.2f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.2f,0.2f,0.1f);
 		ParticleSystem->AlphaShowHide = true;
 		break;
 

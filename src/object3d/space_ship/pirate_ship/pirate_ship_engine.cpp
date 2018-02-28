@@ -36,11 +36,11 @@
 //-----------------------------------------------------------------------------
 // Создание двигателя
 //-----------------------------------------------------------------------------
-void SetPirateShipEngine(eParticleSystem *ParticleSystem, int EngineType)
+void SetPirateShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 {
 
 	ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-	ParticleSystem->Direction = VECTOR3D(0.0f, 0.0f, -1.0f);
+	ParticleSystem->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 
 	switch(EngineType) {
 	case 1:
@@ -62,9 +62,9 @@ void SetPirateShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(0.4f,0.4f,0.4f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.4f,0.4f,0.4f);
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 2:
@@ -86,9 +86,9 @@ void SetPirateShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(0.6f,0.6f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D(0.6f,0.6f,0.1f);
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 3:
@@ -110,10 +110,10 @@ void SetPirateShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(1.0f,0.1f,1.0f);
+		ParticleSystem->CreationSize = sVECTOR3D(1.0f,0.1f,1.0f);
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Direction = VECTOR3D(0.0f, -1.0f, 0.0f);
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.05f);
+		ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.05f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 4:
@@ -135,8 +135,8 @@ void SetPirateShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Direction = VECTOR3D(0.0f, 1.0f, 0.0f);
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
+		ParticleSystem->Direction = sVECTOR3D(0.0f, 1.0f, 0.0f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 5:
@@ -158,9 +158,9 @@ void SetPirateShipEngine(eParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = 1;
-		ParticleSystem->CreationSize = VECTOR3D(1.0f,1.0f,1.0f);
+		ParticleSystem->CreationSize = sVECTOR3D(1.0f,1.0f,1.0f);
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Light = vw_CreatPointLight(VECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.05f);
+		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.05f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 

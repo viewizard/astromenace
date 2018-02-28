@@ -96,7 +96,7 @@ float GetSystemsResistance(int ArmourType)
 //-----------------------------------------------------------------------------
 // Тестура для брони
 //-----------------------------------------------------------------------------
-eTexture *GetArmourTexture(int ArmourType)
+sTexture *GetArmourTexture(int ArmourType)
 {
 	switch(ArmourType) {
 	// фактически - брони нет, только стальной корпус
@@ -131,7 +131,7 @@ eTexture *GetArmourTexture(int ArmourType)
 
 	return nullptr;
 }
-eTexture *GetArmourIllumTexture(int ArmourType)
+sTexture *GetArmourIllumTexture(int ArmourType)
 {
 	switch(ArmourType) {
 	// фактически - брони нет, только стальной корпус
@@ -172,7 +172,7 @@ eTexture *GetArmourIllumTexture(int ArmourType)
 //-----------------------------------------------------------------------------
 // Установка брони для кораблей землян
 //-----------------------------------------------------------------------------
-void SetEarthSpaceFighterArmour(CEarthSpaceFighter *SpaceShip, int ArmourType)
+void SetEarthSpaceFighterArmour(cEarthSpaceFighter *SpaceShip, int ArmourType)
 {
 	SpaceShip->ResistanceHull = GetHullResistance(ArmourType);
 	SpaceShip->ResistanceSystems = GetSystemsResistance(ArmourType);

@@ -30,11 +30,11 @@
 #include "../../core/core.h"
 
 
-class CGameLvlText
+class cGameLvlText
 {
 public:
-	CGameLvlText();
-	~CGameLvlText();
+	cGameLvlText();
+	~cGameLvlText();
 
 	// обновить
 	bool	Update(float Time);
@@ -55,8 +55,8 @@ public:
 	// последнее время обновления системы
 	float	TimeLastUpdate{-1.0f};
 
-	CGameLvlText	*Next{nullptr};
-	CGameLvlText	*Prev{nullptr};
+	cGameLvlText	*Next{nullptr};
+	cGameLvlText	*Prev{nullptr};
 };
 
 
@@ -65,9 +65,9 @@ public:
 //-----------------------------------------------------------------------------
 
 // Включаем в список
-void	AttachGameLvlText(CGameLvlText * NewText);
+void	AttachGameLvlText(cGameLvlText * NewText);
 // Исключаем из списка
-void	DetachGameLvlText(CGameLvlText * OldText);
+void	DetachGameLvlText(cGameLvlText * OldText);
 // Удаляем все объекты в списке
 void	ReleaseAllGameLvlText();
 // Прорисовываем все объекты

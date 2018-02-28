@@ -52,7 +52,7 @@ static const char *LoadingHints[] = {
 //------------------------------------------------------------------------------------
 // локальная структура данных загрузки
 //------------------------------------------------------------------------------------
-struct LoadList {
+struct sLoadList {
 	// имя файла
 	char	FileName[MAX_PATH];
 	// тип файла (0-2д текстура, 1-текстура, 2-VW3D, 3-music, 4-sfx)
@@ -84,7 +84,7 @@ struct LoadList {
 
 
 // подключаем список загрузки
-LoadList *CurrentList = nullptr;
+sLoadList *CurrentList = nullptr;
 unsigned int CurrentListCount = 0;
 
 
@@ -98,9 +98,9 @@ unsigned int CurrentListCount = 0;
 //------------------------------------------------------------------------------------
 // данные загрузки шейдеров
 //------------------------------------------------------------------------------------
-eGLSL 	*GLSLShaderType1 = nullptr;
-eGLSL 	*GLSLShaderType2 = nullptr;
-eGLSL 	*GLSLShaderType3 = nullptr;
+sGLSL 	*GLSLShaderType1 = nullptr;
+sGLSL 	*GLSLShaderType2 = nullptr;
+sGLSL 	*GLSLShaderType3 = nullptr;
 int 	UniformLocations[100];
 
 struct sGLSLLoadList {
@@ -131,7 +131,7 @@ static sGLSLLoadList GLSLLoadList[] = {
 #define TEXTURE_NO_MIPMAP	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE
 
 // лист загрузки меню
-static LoadList MenuLoadList[] = {
+static sLoadList MenuLoadList[] = {
 // текстуры меню... кнопки, диалоги, название игры
 	{"menu/astromenace.tga",	0, 512, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 	{"menu/button384_back.tga",	0, 192, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
@@ -366,7 +366,7 @@ static LoadList MenuLoadList[] = {
 
 
 
-static LoadList GameLevelsLoadList[] = {
+static sLoadList GameLevelsLoadList[] = {
 // 2д часть
 	{"menu/cursor.tga",			0, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 	{"menu/cursor_shadow.tga",		0, 16, true,  0,0,0, TX_ALPHA_EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
@@ -539,7 +539,7 @@ static LoadList GameLevelsLoadList[] = {
 
 
 
-static LoadList AlienFighterLoadList[] = {
+static sLoadList AlienFighterLoadList[] = {
 // AlienFighter – load alien fighters textures.
 	{"models/alienfighter/al-text04.vw2d",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 	{"models/alienfighter/al-illum04.vw2d",	1, 1024, true, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -567,7 +567,7 @@ static LoadList AlienFighterLoadList[] = {
 
 
 
-static LoadList PirateLoadList[] = {
+static sLoadList PirateLoadList[] = {
 // Pirate – load all pirate data (vehicles, military buildings, ships...) testures.
 	{"models/gr-01.vw2d",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 	{"models/gr-02.vw2d",			1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -630,7 +630,7 @@ static LoadList PirateLoadList[] = {
 
 
 
-static LoadList BasePartLoadList[] = {
+static sLoadList BasePartLoadList[] = {
 // BasePart – load pirate base textures.
 	{"models/spacebase/allalpha.tga",	1, 768, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 	{"models/spacebase/metal.tga",		1, 1024, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false, -1.0f, false},
@@ -666,7 +666,7 @@ static LoadList BasePartLoadList[] = {
 
 
 
-static LoadList AsteroidLoadList[] = {
+static sLoadList AsteroidLoadList[] = {
 // Asteroid – load asteroids (for AsteroidField) textures.
 	{"models/space/asteroid-01.tga",	1, 96, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 // большие астероиды
@@ -704,7 +704,7 @@ static LoadList AsteroidLoadList[] = {
 
 
 
-static LoadList PlanetLoadList[] = {
+static sLoadList PlanetLoadList[] = {
 // Planet – load planets textures.
 	{"models/planet/asteroid.tga",			1, 512, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 	{"models/planet/clouds.tga",			1, 1024, true, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, false, -1.0f, false},
@@ -729,7 +729,7 @@ static LoadList PlanetLoadList[] = {
 
 
 
-static LoadList AlienMotherShipLoadList[] = {
+static sLoadList AlienMotherShipLoadList[] = {
 // AlienMotherShip – load alien motherships textures.
 	{"models/alienmothership/alm-text02.vw2d",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 	{"models/alienmothership/alm-text03.vw2d",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -754,7 +754,7 @@ static LoadList AlienMotherShipLoadList[] = {
 
 
 
-static LoadList BuildingLoadList[] = {
+static sLoadList BuildingLoadList[] = {
 // Building – load buildings textures.
 	{"models/building/bld.vw2d",		1, 768, false, 0,0,0, TX_ALPHA_GREYSC, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
 	{"models/normalmap/buildings_nm.tga",	1, 768, false, 0,0,0, TX_ALPHA_EQUAL, RI_WRAP_U | RI_WRAP_V, RI_TEXTURE_TRILINEAR, true, true, -1.0f, false},
@@ -776,7 +776,7 @@ static LoadList BuildingLoadList[] = {
 
 
 
-static LoadList StarSystem1LoadList[] = {
+static sLoadList StarSystem1LoadList[] = {
 // StarSystem1 – load StarSystem 1 SkyBox textures.
 	{"skybox/1/skybox_back6.tga",	1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 	{"skybox/1/skybox_bottom4.tga",	1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
@@ -789,7 +789,7 @@ static LoadList StarSystem1LoadList[] = {
 
 
 
-static LoadList StarSystem2LoadList[] = {
+static sLoadList StarSystem2LoadList[] = {
 //StarSystem2 – load StarSystem 2 SkyBox textures.
 	{"skybox/2/skybox_back6.tga",	1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 	{"skybox/2/skybox_bottom4.tga",	1, 3072/2, false,  0,0,0, TX_ALPHA_GREYSC, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
@@ -818,7 +818,7 @@ static LoadList StarSystem2LoadList[] = {
 //------------------------------------------------------------------------------------
 // процедура прорисовки логотипа
 //------------------------------------------------------------------------------------
-void DrawViewizardLogo(eTexture *ViewizardLogoTexture)
+void DrawViewizardLogo(sTexture *ViewizardLogoTexture)
 {
 	int		ShowLogoTime = 6000; // сколько нужно показывать логотип
 	int		ShowLogoLife = ShowLogoTime; // сколько осталось показывать
@@ -827,7 +827,7 @@ void DrawViewizardLogo(eTexture *ViewizardLogoTexture)
 	vw_SetClearColor(1.0f,1.0f,1.0f,1.0f);
 
 	while (ShowLogoLife > 0) {
-		RECT SrcRect,DstRect;
+		sRECT SrcRect,DstRect;
 		SetRect(&SrcRect, 1,1,511,511);
 		int StartX = (Setup.iAspectRatioWidth-510)/2;
 		int EndX = StartX+510;
@@ -904,7 +904,7 @@ void DrawViewizardLogo(eTexture *ViewizardLogoTexture)
 //------------------------------------------------------------------------------------
 // процедура прорисовки процента загрузки данных
 //------------------------------------------------------------------------------------
-void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, eTexture *LoadImageTexture)
+void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, sTexture *LoadImageTexture)
 {
 	// слишком часто не рисуем
 	if ((Current != AllDrawLoading) && // последний (полный) рисуем всегда
@@ -914,7 +914,7 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, eTexture 
 	vw_BeginRendering(RI_COLOR_BUFFER | RI_DEPTH_BUFFER);
 	vw_Start2DMode(-1,1);
 
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 	// выводим картинку
 	SetRect(&SrcRect, 0,0,1024,512);
@@ -1045,7 +1045,7 @@ void LoadGameData(int LoadType)
 	// 1...10 - загрузка 1...10 уровня
 
 
-	eTexture *LoadImageTexture = nullptr;
+	sTexture *LoadImageTexture = nullptr;
 	int RealLoadedTextures = 0;
 	bool NeedLoadShaders = false;
 	int AllDrawLoading = 0;
@@ -1209,7 +1209,7 @@ void LoadGameData(int LoadType)
 			CurrentListCount += PirateLoadListCount;
 
 		// выделяем память
-		CurrentList = new LoadList[CurrentListCount];
+		CurrentList = new sLoadList[CurrentListCount];
 
 		// составляем список загрузки
 
@@ -1333,7 +1333,7 @@ void LoadGameData(int LoadType)
 	if (LoadType == -1) {
 		// выводим логотип Viewizard
 		vw_SetTextureProp(TEXTURE_NO_MIPMAP, RI_CLAMP_TO_EDGE, false, TX_ALPHA_EQUAL, false);
-		eTexture *ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga", nullptr, 0);
+		sTexture *ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga", nullptr, 0);
 
 		DrawViewizardLogo(ViewizardLogoTexture);
 
@@ -1382,7 +1382,7 @@ void LoadGameData(int LoadType)
 		for (unsigned int i=0; i<GLSLLoadListCount; i++) {
 			if (Setup.UseGLSL) {
 
-				eGLSL *Program = nullptr;
+				sGLSL *Program = nullptr;
 				Program = vw_CreateShader(GLSLLoadList[i].Name, GLSLLoadList[i].VertexShaderFileName, GLSLLoadList[i].FragmentShaderFileName);
 
 				if (Program != nullptr) {

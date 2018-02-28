@@ -69,7 +69,7 @@ void vw_Matrix33Mult(float DstMatrix33[9], float SrcMatrix33[9])
 /*
  * Create rotation matrix.
  */
-void vw_Matrix33CreateRotate(float Matrix33[9], const VECTOR3D &Angle)
+void vw_Matrix33CreateRotate(float Matrix33[9], const sVECTOR3D &Angle)
 {
 	const float p180 = 0.0174532925f;
 
@@ -152,9 +152,9 @@ void vw_Matrix33InverseRotate(float Matrix33[9])
 /*
  * Calculate point position by transformation matrix.
  */
-void vw_Matrix33CalcPoint(VECTOR3D *Point, float Matrix33[9])
+void vw_Matrix33CalcPoint(sVECTOR3D *Point, float Matrix33[9])
 {
-	VECTOR3D TmpPoint = *Point;
+	sVECTOR3D TmpPoint = *Point;
 	Point->x = Matrix33[0]*TmpPoint.x + Matrix33[3]*TmpPoint.y + Matrix33[6]*TmpPoint.z;
 	Point->y = Matrix33[1]*TmpPoint.x + Matrix33[4]*TmpPoint.y + Matrix33[7]*TmpPoint.z;
 	Point->z = Matrix33[2]*TmpPoint.x + Matrix33[5]*TmpPoint.y + Matrix33[8]*TmpPoint.z;

@@ -99,7 +99,7 @@ void vw_End2DMode()
 //------------------------------------------------------------------------------------
 // Прорисовка в 2д
 //------------------------------------------------------------------------------------
-void vw_Draw(int X, int Y, RECT *SrcRect, eTexture *Tex, bool Alpha, float RotateAngle, int DrawCorner)
+void vw_Draw(int X, int Y, sRECT *SrcRect, sTexture *Tex, bool Alpha, float RotateAngle, int DrawCorner)
 {
 	if (Tex == nullptr)
 		return;
@@ -181,7 +181,7 @@ void vw_Draw(int X, int Y, RECT *SrcRect, eTexture *Tex, bool Alpha, float Rotat
 //------------------------------------------------------------------------------------
 // Прорисовка в 2д с прозрачностью
 //------------------------------------------------------------------------------------
-void vw_DrawTransparent(RECT *DstRect, RECT *SrcRect, eTexture *Tex, bool Alpha, float Transp, float RotateAngle, int DrawCorner, float R, float G, float B)
+void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, sTexture *Tex, bool Alpha, float Transp, float RotateAngle, int DrawCorner, float R, float G, float B)
 {
 
 	if ((Tex == nullptr) || (Transp <= 0.0f))

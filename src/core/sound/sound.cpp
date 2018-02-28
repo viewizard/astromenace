@@ -40,7 +40,7 @@ ALboolean CheckALUTError();
 //------------------------------------------------------------------------------------
 // Проигрывание звука
 //------------------------------------------------------------------------------------
-bool eSound::Play(const char *Name, float fVol, float fMainVol, float x, float y, float z, bool Relative, bool Loop, bool NeedReleaseStatus, int AtType)
+bool cSound::Play(const char *Name, float fVol, float fMainVol, float x, float y, float z, bool Relative, bool Loop, bool NeedReleaseStatus, int AtType)
 {
 	Source = 0;
 	Age = 0.0f;
@@ -124,7 +124,7 @@ bool eSound::Play(const char *Name, float fVol, float fMainVol, float x, float y
 //------------------------------------------------------------------------------------
 // перезапуск
 //------------------------------------------------------------------------------------
-void eSound::Replay()
+void cSound::Replay()
 {
 	// если это не источник, уходим
 	if (!alIsSource(Source)) return;
@@ -139,7 +139,7 @@ void eSound::Replay()
 //------------------------------------------------------------------------------------
 // остановка
 //------------------------------------------------------------------------------------
-void eSound::Stop(float StopDelay)
+void cSound::Stop(float StopDelay)
 {
 	// если это не источник, уходим
 	if (!alIsSource(Source)) return;
@@ -160,7 +160,7 @@ void eSound::Stop(float StopDelay)
 //------------------------------------------------------------------------------------
 // для 3д звука установка положения (баланса)
 //------------------------------------------------------------------------------------
-void eSound::SetLocation(float x, float y, float z)
+void cSound::SetLocation(float x, float y, float z)
 {
 	// если это не источник, уходим
 	if (!alIsSource(Source)) return;
@@ -175,7 +175,7 @@ void eSound::SetLocation(float x, float y, float z)
 //------------------------------------------------------------------------------------
 // установка громкости
 //------------------------------------------------------------------------------------
-void eSound::SetMainVolume(float NewMainVolume)
+void cSound::SetMainVolume(float NewMainVolume)
 {
 	// если это не источник, уходим
 	if (!alIsSource(Source)) return;
@@ -189,7 +189,7 @@ void eSound::SetMainVolume(float NewMainVolume)
 //------------------------------------------------------------------------------------
 // установка информации о звуке
 //------------------------------------------------------------------------------------
-void eSound::SetInfo(int NewGroup, int NewGroupCount, int NewSubGroup, int NewSubGroupCount, int NewPriority)
+void cSound::SetInfo(int NewGroup, int NewGroupCount, int NewSubGroup, int NewSubGroupCount, int NewPriority)
 {
 	Group = NewGroup;
 	GroupCount = NewGroupCount;

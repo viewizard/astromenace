@@ -35,7 +35,7 @@
 //-----------------------------------------------------------------------------
 // Проверяем, нужно ли для данного объекта проверка коллизии и наведение на него
 //-----------------------------------------------------------------------------
-bool NeedCheckCollision(CObject3D* Object3D)
+bool NeedCheckCollision(cObject3D* Object3D)
 {
 	// по типу
 	switch (Object3D->ObjectType) {
@@ -112,10 +112,10 @@ bool NeedCheckCollision(CObject3D* Object3D)
 //-----------------------------------------------------------------------------
 // Загрузка в модель нужной геометрии
 //-----------------------------------------------------------------------------
-void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum, float TriangleSizeLimit, bool NeedTangentAndBinormal)
+void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
 	// получение геометрии модели
-	eModel3D  *Model;
+	cModel3D  *Model;
 	Model = vw_LoadModel3D(Name, TriangleSizeLimit, NeedTangentAndBinormal);
 
 
@@ -128,7 +128,7 @@ void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum, float 
 		Object3D->GlobalIndexBuffer = Model->GlobalIndexBuffer;
 		Object3D->GlobalIBO = Model->GlobalIBO;
 		Object3D->GlobalVAO = Model->GlobalVAO;
-		Object3D->DrawObjectList = new eObjectBlock[Object3D->DrawObjectQuantity];
+		Object3D->DrawObjectList = new sObjectBlock[Object3D->DrawObjectQuantity];
 		// копируем все данные
 		memcpy(Object3D->DrawObjectList, Model->DrawObjectList, sizeof(Model->DrawObjectList[0])*Object3D->DrawObjectQuantity);
 	} else {
@@ -141,27 +141,27 @@ void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum, float 
 		Object3D->GlobalIndexBuffer = Model->DrawObjectList[ObjectNum-1].IndexBuffer;
 		Object3D->GlobalIBO = Model->DrawObjectList[ObjectNum-1].IBO;
 		Object3D->GlobalVAO = Model->DrawObjectList[ObjectNum-1].VAO;
-		Object3D->DrawObjectList = new eObjectBlock[Object3D->DrawObjectQuantity];
+		Object3D->DrawObjectList = new sObjectBlock[Object3D->DrawObjectQuantity];
 		// копируем данные нужного объекта
 		memcpy(Object3D->DrawObjectList, &(Model->DrawObjectList[ObjectNum-1]), sizeof(Model->DrawObjectList[0]));
 	}
 
 	// резервируем память для текстур
-	Object3D->Texture = new eTexture*[Object3D->DrawObjectQuantity];
-	Object3D->TextureIllum = new eTexture*[Object3D->DrawObjectQuantity];
-	Object3D->NormalMap = new eTexture*[Object3D->DrawObjectQuantity];
+	Object3D->Texture = new sTexture*[Object3D->DrawObjectQuantity];
+	Object3D->TextureIllum = new sTexture*[Object3D->DrawObjectQuantity];
+	Object3D->NormalMap = new sTexture*[Object3D->DrawObjectQuantity];
 
 	// резервируем память для HitBB
-	Object3D->HitBBLocation = new VECTOR3D[Object3D->DrawObjectQuantity];
+	Object3D->HitBBLocation = new sVECTOR3D[Object3D->DrawObjectQuantity];
 	Object3D->HitBBRadius2 = new float[Object3D->DrawObjectQuantity];
-	Object3D->HitBBSize = new VECTOR3D[Object3D->DrawObjectQuantity];
-	Object3D->HitBB = new VECTOR3D*[Object3D->DrawObjectQuantity];
+	Object3D->HitBBSize = new sVECTOR3D[Object3D->DrawObjectQuantity];
+	Object3D->HitBB = new sVECTOR3D*[Object3D->DrawObjectQuantity];
 
 	for (int i = 0; i < Object3D->DrawObjectQuantity; i++) {
 		Object3D->Texture[i] = nullptr;
 		Object3D->TextureIllum[i] = nullptr;
 		Object3D->NormalMap[i] = nullptr;
-		Object3D->HitBB[i] = new VECTOR3D[8];
+		Object3D->HitBB[i] = new sVECTOR3D[8];
 	}
 }
 
@@ -179,18 +179,18 @@ void LoadObjectData(const char *Name, CObject3D* Object3D, int ObjectNum, float 
 #include "projectile/projectile.h"
 #include "space_object/space_object.h"
 
-extern CSpaceShip *StartSpaceShip;
-extern CSpaceShip *EndSpaceShip;
-extern CProjectile *StartProjectile;
-extern CProjectile *EndProjectile;
-extern CGroundObject *StartGroundObject;
-extern CGroundObject *EndGroundObject;
-extern CSpaceObject *StartSpaceObject;
-extern CSpaceObject *EndSpaceObject;
+extern cSpaceShip *StartSpaceShip;
+extern cSpaceShip *EndSpaceShip;
+extern cProjectile *StartProjectile;
+extern cProjectile *EndProjectile;
+extern cGroundObject *StartGroundObject;
+extern cGroundObject *EndGroundObject;
+extern cSpaceObject *StartSpaceObject;
+extern cSpaceObject *EndSpaceObject;
 float GetProjectileSpeed(int Num);
 
 // направление движения камеры
-extern VECTOR3D	GameCameraMovement;
+extern sVECTOR3D GameCameraMovement;
 // скорость движения камеры
 float GameCameraGetSpeed();
 
@@ -200,23 +200,23 @@ float GameCameraGetSpeed();
 //-----------------------------------------------------------------------------
 void GetShipOnTargetOrientateion(
 	int			ObjectStatus, // статус объекта, который целится
-	VECTOR3D	Location, // положение точки относительно которой будем наводить
-	VECTOR3D	CurrentObjectRotation, // текущие углы объекта
+	sVECTOR3D	Location, // положение точки относительно которой будем наводить
+	sVECTOR3D	CurrentObjectRotation, // текущие углы объекта
 	float		MinDistance, // минимальное расстояние, с которого начинаем прицеливание
 	float		RotationMatrix[9], // матрица вращения объекта
-	VECTOR3D	*NeedAngle,// нужные углы, чтобы получить нужное направление
+	sVECTOR3D	*NeedAngle,// нужные углы, чтобы получить нужное направление
 	float		Width,		// ширина объекта
 	bool		NeedCenterOrientation, // нужен доворот на центр
 	bool		NeedByWeaponOrientation, // нужно делать доворот с учетом положения орудия
-	VECTOR3D	WeponLocation,
+	sVECTOR3D	WeponLocation,
 	int         WeaponType) 	// тип орудия орудия
 {
 	// получаем точки для создания плоскости
-	VECTOR3D Orientation(0.0f, 0.0f, 1.0f);
+	sVECTOR3D Orientation(0.0f, 0.0f, 1.0f);
 	vw_Matrix33CalcPoint(&Orientation, RotationMatrix);
-	VECTOR3D PointUp(0.0f, 1.0f, 0.0f);
+	sVECTOR3D PointUp(0.0f, 1.0f, 0.0f);
 	vw_Matrix33CalcPoint(&PointUp, RotationMatrix);
-	VECTOR3D PointRight = VECTOR3D(1.0f, 0.0f, 0.0f);
+	sVECTOR3D PointRight = sVECTOR3D(1.0f, 0.0f, 0.0f);
 	vw_Matrix33CalcPoint(&PointRight, RotationMatrix);
 
 	// находим плоскость, вертикальную
@@ -229,8 +229,8 @@ void GetShipOnTargetOrientateion(
 	vw_GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+PointRight, Location+PointUp);
 
 	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
-	VECTOR3D TargetLocation = Location;
-	VECTOR3D TargetAngle(0.0f,0.0f,0.0f);
+	sVECTOR3D TargetLocation = Location;
+	sVECTOR3D TargetAngle(0.0f,0.0f,0.0f);
 	//float TargetAngleYMin = 180.0f;
 	float Tdist = 1000.0f*1000.0f;
 
@@ -243,9 +243,9 @@ void GetShipOnTargetOrientateion(
 	float Width2 = Width/2.0f;
 
 
-	CSpaceShip *tmp = StartSpaceShip;
+	cSpaceShip *tmp = StartSpaceShip;
 	while (tmp != nullptr) {
-		CSpaceShip *tmpShip2 = tmp->Next;
+		cSpaceShip *tmpShip2 = tmp->Next;
 		// проверка, чтобы не считать свой корабль
 		if (tmp->ID != 111111)
 			// если по этому надо стрелять
@@ -256,9 +256,9 @@ void GetShipOnTargetOrientateion(
 
 				{
 					// находим настоящую точку попадания с учетом скорости объекта и пули... если надо
-					VECTOR3D tmpLocation = tmp->GeometryCenterLocation;
+					sVECTOR3D tmpLocation = tmp->GeometryCenterLocation;
 					vw_Matrix33CalcPoint(&tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
-					VECTOR3D RealLocation = tmp->Location + tmpLocation;
+					sVECTOR3D RealLocation = tmp->Location + tmpLocation;
 
 					if (tmp->Speed != 0.0f)
 						if (WeaponType != 0 &&
@@ -268,13 +268,13 @@ void GetShipOnTargetOrientateion(
 						    WeaponType != 16 && WeaponType != 17 && WeaponType != 18 && WeaponType != 19) {
 
 							// находим, за какое время снаряд долетит до объекта сейчас
-							VECTOR3D TTT = WeponLocation-RealLocation;
+							sVECTOR3D TTT = WeponLocation-RealLocation;
 							float ProjectileSpeed = GetProjectileSpeed(WeaponType);
 							float CurrentDist = TTT.Length();
 							float ObjCurrentTime = CurrentDist/ProjectileSpeed;
 
 							// находим где будет объект, когда пройдет это время
-							VECTOR3D FutureLocation = tmp->Orientation^(tmp->Speed*ObjCurrentTime);
+							sVECTOR3D FutureLocation = tmp->Orientation^(tmp->Speed*ObjCurrentTime);
 
 							// находи точку по середине... это нам и надо... туда целимся...
 							RealLocation = RealLocation + FutureLocation;
@@ -318,7 +318,7 @@ void GetShipOnTargetOrientateion(
 								// выбираем объект, так, чтобы он был наиболее длижайшим,
 								// идущим по нашему курсу...
 
-								VECTOR3D TargetAngleTMP;
+								sVECTOR3D TargetAngleTMP;
 								TargetLocation = RealLocation;
 
 								// находим угол между плоскостью и прямой
@@ -379,9 +379,9 @@ void GetShipOnTargetOrientateion(
 	// не стрелять по "мирным" постойкам
 	// !!! ВАЖНО
 	// у всех наземных объектов ноль на уровне пола...
-	CGroundObject *tmpG = StartGroundObject;
+	cGroundObject *tmpG = StartGroundObject;
 	while (tmpG != nullptr) {
-		CGroundObject *tmpGround2 = tmpG->Next;
+		cGroundObject *tmpGround2 = tmpG->Next;
 
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpG))
@@ -389,9 +389,9 @@ void GetShipOnTargetOrientateion(
 			if ((ObjectStatus == 1 && tmpG->ObjectStatus>1) ||
 			    (ObjectStatus > 1 && tmpG->ObjectStatus==1)) {
 
-				VECTOR3D tmpLocation = tmpG->GeometryCenterLocation;
+				sVECTOR3D tmpLocation = tmpG->GeometryCenterLocation;
 				vw_Matrix33CalcPoint(&tmpLocation, tmpG->CurrentRotationMat); // поворачиваем в плоскость объекта
-				VECTOR3D RealLocation = tmpG->Location + tmpLocation;
+				sVECTOR3D RealLocation = tmpG->Location + tmpLocation;
 
 				if (tmpG->Speed != 0.0f)
 					if (WeaponType != 0 &&
@@ -401,13 +401,13 @@ void GetShipOnTargetOrientateion(
 					    WeaponType != 16 && WeaponType != 17 && WeaponType != 18 && WeaponType != 19) {
 
 						// находим, за какое время снаряд долетит до объекта сейчас
-						VECTOR3D TTT = WeponLocation-RealLocation;
+						sVECTOR3D TTT = WeponLocation-RealLocation;
 						float ProjectileSpeed = GetProjectileSpeed(WeaponType);
 						float CurrentDist = TTT.Length();
 						float ObjCurrentTime = CurrentDist/ProjectileSpeed;
 
 						// находим где будет объект, когда пройдет это время (+ сразу половину считаем!)
-						VECTOR3D FutureLocation = tmpG->Orientation^(tmpG->Speed*ObjCurrentTime);
+						sVECTOR3D FutureLocation = tmpG->Orientation^(tmpG->Speed*ObjCurrentTime);
 
 						// находи точку по середине... это нам и надо... туда целимся...
 						RealLocation = RealLocation + FutureLocation;
@@ -448,7 +448,7 @@ void GetShipOnTargetOrientateion(
 						if (MinDistance<TargetDist2TMP) {
 							// выбираем объект, так, чтобы он был наиболее длижайшим,
 							// идущим по нашему курсу...
-							VECTOR3D TargetAngleTMP;
+							sVECTOR3D TargetAngleTMP;
 							TargetLocation = RealLocation;
 
 							// находим угол между плоскостью и прямой
@@ -515,9 +515,9 @@ void GetShipOnTargetOrientateion(
 
 
 	// проверка по космическим объектам
-	CSpaceObject *tmpS = StartSpaceObject;
+	cSpaceObject *tmpS = StartSpaceObject;
 	while (tmpS != nullptr) {
-		CSpaceObject *tmpSpace2 = tmpS->Next;
+		cSpaceObject *tmpSpace2 = tmpS->Next;
 
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpS))
@@ -525,9 +525,9 @@ void GetShipOnTargetOrientateion(
 			if ((ObjectStatus == 1 && tmpS->ObjectStatus>1) ||
 			    (ObjectStatus > 1 && tmpS->ObjectStatus==1)) {
 
-				VECTOR3D tmpLocation = tmpS->GeometryCenterLocation;
+				sVECTOR3D tmpLocation = tmpS->GeometryCenterLocation;
 				vw_Matrix33CalcPoint(&tmpLocation, tmpS->CurrentRotationMat); // поворачиваем в плоскость объекта
-				VECTOR3D RealLocation = tmpS->Location + tmpLocation;
+				sVECTOR3D RealLocation = tmpS->Location + tmpLocation;
 
 				// если нужно проверить
 				if (tmpS->Speed != 0.0f)
@@ -538,13 +538,13 @@ void GetShipOnTargetOrientateion(
 					    WeaponType != 16 && WeaponType != 17 && WeaponType != 18 && WeaponType != 19) {
 
 						// находим, за какое время снаряд долетит до объекта сейчас
-						VECTOR3D TTT = WeponLocation-RealLocation;
+						sVECTOR3D TTT = WeponLocation-RealLocation;
 						float ProjectileSpeed = GetProjectileSpeed(WeaponType);
 						float CurrentDist = TTT.Length();
 						float ObjCurrentTime = CurrentDist/ProjectileSpeed;
 
 						// находим где будет объект, когда пройдет это время (+ сразу половину считаем!)
-						VECTOR3D FutureLocation = tmpS->Orientation^(tmpS->Speed*ObjCurrentTime);
+						sVECTOR3D FutureLocation = tmpS->Orientation^(tmpS->Speed*ObjCurrentTime);
 
 						// находи точку по середине... это нам и надо... туда целимся...
 						RealLocation = RealLocation + FutureLocation;
@@ -586,7 +586,7 @@ void GetShipOnTargetOrientateion(
 						if (MinDistance<TargetDist2TMP) {
 							// выбираем объект, так, чтобы он был наиболее длижайшим,
 							// идущим по нашему курсу...
-							VECTOR3D TargetAngleTMP;
+							sVECTOR3D TargetAngleTMP;
 							TargetLocation = RealLocation;
 
 							// находим угол между плоскостью и прямой
@@ -673,20 +673,20 @@ void GetShipOnTargetOrientateion(
 //-----------------------------------------------------------------------------
 void GetEnemyShipOnTargetOrientateion(
 	int			ObjectStatus, // статус объекта, который целится
-	VECTOR3D	Location, // положение точки относительно которой будем наводить
-	VECTOR3D	CurrentObjectRotation, // текущие углы объекта
+	sVECTOR3D	Location, // положение точки относительно которой будем наводить
+	sVECTOR3D	CurrentObjectRotation, // текущие углы объекта
 	float		RotationMatrix[9], // матрица вращения объекта
-	VECTOR3D	*NeedAngle, // нужные углы, чтобы получить нужное направление
+	sVECTOR3D	*NeedAngle, // нужные углы, чтобы получить нужное направление
 	int			WeaponType) // номер оружия
 {
 
 
 	// получаем точки для создания плоскости
-	VECTOR3D Orientation(0.0f, 0.0f, 1.0f);
+	sVECTOR3D Orientation(0.0f, 0.0f, 1.0f);
 	vw_Matrix33CalcPoint(&Orientation, RotationMatrix);
-	VECTOR3D PointRight(1.0f, 0.0f, 0.0f);
+	sVECTOR3D PointRight(1.0f, 0.0f, 0.0f);
 	vw_Matrix33CalcPoint(&PointRight, RotationMatrix);
-	VECTOR3D PointUp(0.0f, 1.0f, 0.0f);
+	sVECTOR3D PointUp(0.0f, 1.0f, 0.0f);
 	vw_Matrix33CalcPoint(&PointUp, RotationMatrix);
 
 	// находим плоскость, горизонтальную
@@ -695,43 +695,43 @@ void GetEnemyShipOnTargetOrientateion(
 
 
 	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
-	VECTOR3D TargetLocation = Location;
+	sVECTOR3D TargetLocation = Location;
 	float TargetDist2 = 1000000.0f;
 	bool TargetLocked = false;
 
 
 
 
-	CSpaceShip *tmp = StartSpaceShip;
+	cSpaceShip *tmp = StartSpaceShip;
 	while (tmp != nullptr) {
-		CSpaceShip *tmpShip2 = tmp->Next;
+		cSpaceShip *tmpShip2 = tmp->Next;
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmp))
 			// выбираем врага, по своим не целимся
 			if ((ObjectStatus == 1 && tmp->ObjectStatus>1) ||
 			    (ObjectStatus > 1 && tmp->ObjectStatus==1)) {
 
-				VECTOR3D tmpLocation = tmp->GeometryCenterLocation;
+				sVECTOR3D tmpLocation = tmp->GeometryCenterLocation;
 				vw_Matrix33CalcPoint(&tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
-				VECTOR3D RealLocation = tmp->Location + tmpLocation;
+				sVECTOR3D RealLocation = tmp->Location + tmpLocation;
 
 				// учитываем, если лазер - наводить не надо
 				if (WeaponType != 110) {
 					// находим, за какое время снаряд долетит до объекта сейчас
-					VECTOR3D TTT = Location - RealLocation;
+					sVECTOR3D TTT = Location - RealLocation;
 					float ProjectileSpeed = GetProjectileSpeed(WeaponType);
 					if (ObjectStatus!=3) ProjectileSpeed = ProjectileSpeed/GameNPCWeaponPenalty;
 					float CurrentDist = TTT.Length();
 					float ObjCurrentTime = CurrentDist/ProjectileSpeed;
 
 					// находим где будет объект, когда пройдет это время (+ сразу половину считаем!)
-					VECTOR3D FutureLocation = tmp->Orientation^(tmp->Speed*ObjCurrentTime);
+					sVECTOR3D FutureLocation = tmp->Orientation^(tmp->Speed*ObjCurrentTime);
 					// учитываем камеру...
-					VECTOR3D CamPosTTT(0.0f,0.0f,0.0f);
+					sVECTOR3D CamPosTTT(0.0f,0.0f,0.0f);
 					if (tmp->ObjectStatus==3) CamPosTTT = GameCameraMovement^(GameCameraGetSpeed()*ObjCurrentTime);
 
 					// находи точку по середине... это нам и надо... туда целимся...
-					VECTOR3D PossibleRealLocation = RealLocation + FutureLocation + CamPosTTT;
+					sVECTOR3D PossibleRealLocation = RealLocation + FutureLocation + CamPosTTT;
 
 					TTT = Location - PossibleRealLocation;
 					float PossibleDist = TTT.Length();
@@ -739,7 +739,7 @@ void GetEnemyShipOnTargetOrientateion(
 
 					FutureLocation = tmp->Orientation^(tmp->Speed*PoprTime);
 					// учитываем камеру...
-					CamPosTTT = VECTOR3D(0.0f,0.0f,0.0f);
+					CamPosTTT = sVECTOR3D(0.0f,0.0f,0.0f);
 					if (tmp->ObjectStatus==3) CamPosTTT = GameCameraMovement^(GameCameraGetSpeed()*PoprTime);
 
 					RealLocation = RealLocation + FutureLocation + CamPosTTT;
@@ -855,20 +855,20 @@ void GetEnemyShipOnTargetOrientateion(
 //-----------------------------------------------------------------------------
 bool GetTurretOnTargetOrientateion(
 	int			ObjectStatus, // статус объекта, который целится
-	VECTOR3D	Location, // положение точки относительно которой будем наводить
-	VECTOR3D	CurrentObjectRotation, // текущие углы объекта
+	sVECTOR3D	Location, // положение точки относительно которой будем наводить
+	sVECTOR3D	CurrentObjectRotation, // текущие углы объекта
 	float		RotationMatrix[9], // матрица вращения объекта
-	VECTOR3D	*NeedAngle, // нужные углы, чтобы получить нужное направление
+	sVECTOR3D	*NeedAngle, // нужные углы, чтобы получить нужное направление
 	int			WeaponType) // номер оружия
 {
 
 
 	// получаем точки для создания плоскости
-	VECTOR3D Orientation(0.0f, 0.0f, 1.0f);
+	sVECTOR3D Orientation(0.0f, 0.0f, 1.0f);
 	vw_Matrix33CalcPoint(&Orientation, RotationMatrix);
-	VECTOR3D PointRight(1.0f, 0.0f, 0.0f);
+	sVECTOR3D PointRight(1.0f, 0.0f, 0.0f);
 	vw_Matrix33CalcPoint(&PointRight, RotationMatrix);
-	VECTOR3D PointUp(0.0f, 1.0f, 0.0f);
+	sVECTOR3D PointUp(0.0f, 1.0f, 0.0f);
 	vw_Matrix33CalcPoint(&PointUp, RotationMatrix);
 
 	// находим плоскость, горизонтальную
@@ -877,16 +877,16 @@ bool GetTurretOnTargetOrientateion(
 
 
 	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
-	VECTOR3D TargetLocation = Location;
+	sVECTOR3D TargetLocation = Location;
 	float TargetDist2 = 1000000.0f;
 	bool TargetLocked = false;
 
 
 
 
-	CSpaceShip *tmp = StartSpaceShip;
+	cSpaceShip *tmp = StartSpaceShip;
 	while (tmp != nullptr) {
-		CSpaceShip *tmpShip2 = tmp->Next;
+		cSpaceShip *tmpShip2 = tmp->Next;
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmp))
 			// выбираем врага, по своим не целимся
@@ -894,26 +894,26 @@ bool GetTurretOnTargetOrientateion(
 			    (ObjectStatus > 1 && tmp->ObjectStatus==1)) {
 
 
-				VECTOR3D tmpLocation = tmp->GeometryCenterLocation;
+				sVECTOR3D tmpLocation = tmp->GeometryCenterLocation;
 				vw_Matrix33CalcPoint(&tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
-				VECTOR3D RealLocation = tmp->Location + tmpLocation;
+				sVECTOR3D RealLocation = tmp->Location + tmpLocation;
 
 
 				// находим, за какое время снаряд долетит до объекта сейчас
-				VECTOR3D TTT = Location - RealLocation;
+				sVECTOR3D TTT = Location - RealLocation;
 				float ProjectileSpeed = GetProjectileSpeed(WeaponType);
 				if (ObjectStatus!=3) ProjectileSpeed = ProjectileSpeed/GameNPCWeaponPenalty;
 				float CurrentDist = TTT.Length();
 				float ObjCurrentTime = CurrentDist/ProjectileSpeed;
 
 				// находим где будет объект, когда пройдет это время (+ сразу половину считаем!)
-				VECTOR3D FutureLocation = tmp->Orientation^(tmp->Speed*ObjCurrentTime);
+				sVECTOR3D FutureLocation = tmp->Orientation^(tmp->Speed*ObjCurrentTime);
 				// учитываем камеру...
-				VECTOR3D CamPosTTT(0.0f,0.0f,0.0f);
+				sVECTOR3D CamPosTTT(0.0f,0.0f,0.0f);
 				if (tmp->ObjectStatus==3) CamPosTTT = GameCameraMovement^(GameCameraGetSpeed()*ObjCurrentTime);
 
 				// находи точку по середине... это нам и надо... туда целимся...
-				VECTOR3D PossibleRealLocation = RealLocation + FutureLocation + CamPosTTT;
+				sVECTOR3D PossibleRealLocation = RealLocation + FutureLocation + CamPosTTT;
 
 				TTT = Location - PossibleRealLocation;
 				float PossibleDist = TTT.Length();
@@ -921,7 +921,7 @@ bool GetTurretOnTargetOrientateion(
 
 				FutureLocation = tmp->Orientation^(tmp->Speed*PoprTime);
 				// учитываем камеру...
-				CamPosTTT = VECTOR3D(0.0f,0.0f,0.0f);
+				CamPosTTT = sVECTOR3D(0.0f,0.0f,0.0f);
 				if (tmp->ObjectStatus==3) CamPosTTT = GameCameraMovement^(GameCameraGetSpeed()*PoprTime);
 
 				RealLocation = RealLocation + FutureLocation + CamPosTTT;
@@ -1047,20 +1047,20 @@ bool GetTurretOnTargetOrientateion(
 //-----------------------------------------------------------------------------
 // Получение угла поворота ракеты, торпеды или бомбы
 //-----------------------------------------------------------------------------
-CObject3D *GetMissileOnTargetOrientateion(
+cObject3D *GetMissileOnTargetOrientateion(
 	int			ObjectStatus, // статус объекта, который целится
-	VECTOR3D	Location, // положение точки относительно которой будем наводить
-	VECTOR3D	CurrentObjectRotation, // текущие углы объекта
+	sVECTOR3D	Location, // положение точки относительно которой будем наводить
+	sVECTOR3D	CurrentObjectRotation, // текущие углы объекта
 	float		RotationMatrix[9], // матрица вращения объекта
-	VECTOR3D	*NeedAngle, // нужные углы, чтобы получить нужное направление
+	sVECTOR3D	*NeedAngle, // нужные углы, чтобы получить нужное направление
 	float		MaxDistance) // максимальная дистанция, на которую может лететь снаряд
 {
 	// получаем точки для создания плоскости
-	VECTOR3D Orientation(0.0f, 0.0f, 1.0f);
+	sVECTOR3D Orientation(0.0f, 0.0f, 1.0f);
 	vw_Matrix33CalcPoint(&Orientation, RotationMatrix);
-	VECTOR3D PointUp(0.0f, 1.0f, 0.0f);
+	sVECTOR3D PointUp(0.0f, 1.0f, 0.0f);
 	vw_Matrix33CalcPoint(&PointUp, RotationMatrix);
-	VECTOR3D PointRight = VECTOR3D(1.0f, 0.0f, 0.0f);
+	sVECTOR3D PointRight = sVECTOR3D(1.0f, 0.0f, 0.0f);
 	vw_Matrix33CalcPoint(&PointRight, RotationMatrix);
 
 	// находим плоскость, вертикальную
@@ -1073,8 +1073,8 @@ CObject3D *GetMissileOnTargetOrientateion(
 	vw_GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+PointRight, Location+PointUp);
 
 	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
-	VECTOR3D TargetLocation = Location;
-	VECTOR3D TargetAngle = CurrentObjectRotation;
+	sVECTOR3D TargetLocation = Location;
+	sVECTOR3D TargetAngle = CurrentObjectRotation;
 	float Tdist = 1000.0f*1000.0f;
 
 	// тип, кто заблокировал... чтобы не сбить с активных
@@ -1087,7 +1087,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 
 
 	// цель
-	CObject3D *Target = nullptr;
+	cObject3D *Target = nullptr;
 
 
 
@@ -1096,9 +1096,9 @@ CObject3D *GetMissileOnTargetOrientateion(
 
 
 	// проверка по снарядам, фларес
-	CProjectile *tmpProjectile = StartProjectile;
+	cProjectile *tmpProjectile = StartProjectile;
 	while (tmpProjectile != nullptr) {
-		CProjectile *tmpProjectile2 = tmpProjectile->Next;
+		cProjectile *tmpProjectile2 = tmpProjectile->Next;
 		// только фларес
 		if (tmpProjectile->ProjectileType == 3)
 			// если по этому надо стрелять
@@ -1118,7 +1118,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 							// выбираем объект, так, чтобы он был наиболее длижайшим,
 							// идущим по нашему курсу...
 
-							VECTOR3D TargetAngleTMP;
+							sVECTOR3D TargetAngleTMP;
 							TargetLocation = tmpProjectile->Location;
 
 							// находим угол между плоскостью и прямой
@@ -1171,15 +1171,15 @@ CObject3D *GetMissileOnTargetOrientateion(
 
 	// проверка по наземным объектам
 	// не стрелять по "мирным" постойкам
-	CGroundObject *tmpG = StartGroundObject;
+	cGroundObject *tmpG = StartGroundObject;
 	while (tmpG != nullptr) {
-		CGroundObject *tmpGround2 = tmpG->Next;
+		cGroundObject *tmpGround2 = tmpG->Next;
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpG))
 			// выбираем врага, по своим не целимся
 			if ((ObjectStatus == 1 && tmpG->ObjectStatus>1) ||
 			    (ObjectStatus > 1 && tmpG->ObjectStatus==1)) {
-				VECTOR3D tmpLocation = tmpG->GeometryCenterLocation;
+				sVECTOR3D tmpLocation = tmpG->GeometryCenterLocation;
 				vw_Matrix33CalcPoint(&tmpLocation, tmpG->CurrentRotationMat); // поворачиваем в плоскость объекта
 				TargetLocation = tmpG->Location + tmpLocation;
 
@@ -1193,7 +1193,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 					if (MinDistance<TargetDist2TMP && MaxDistance>TargetDist2TMP) {
 						// выбираем объект, так, чтобы он был наиболее длижайшим,
 						// идущим по нашему курсу...
-						VECTOR3D TargetAngleTMP;
+						sVECTOR3D TargetAngleTMP;
 
 						// находим угол между плоскостью и прямой
 						float A3, B3, C3, D3;
@@ -1253,9 +1253,9 @@ CObject3D *GetMissileOnTargetOrientateion(
 
 
 
-	CSpaceShip *tmp = StartSpaceShip;
+	cSpaceShip *tmp = StartSpaceShip;
 	while (tmp != nullptr) {
-		CSpaceShip *tmpShip2 = tmp->Next;
+		cSpaceShip *tmpShip2 = tmp->Next;
 		// проверка, чтобы не считать свой корабль
 		if (tmp->ID != 111111)
 			// если по этому надо стрелять
@@ -1275,7 +1275,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 							// выбираем объект, так, чтобы он был наиболее длижайшим,
 							// идущим по нашему курсу...
 
-							VECTOR3D TargetAngleTMP;
+							sVECTOR3D TargetAngleTMP;
 							TargetLocation = tmp->Location;
 
 							// находим угол между плоскостью и прямой
@@ -1338,9 +1338,9 @@ CObject3D *GetMissileOnTargetOrientateion(
 
 
 	// проверка по космическим объектам
-	CSpaceObject *tmpS = StartSpaceObject;
+	cSpaceObject *tmpS = StartSpaceObject;
 	while (tmpS != nullptr) {
-		CSpaceObject *tmpSpace2 = tmpS->Next;
+		cSpaceObject *tmpSpace2 = tmpS->Next;
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpS))
 			// выбираем врага, по своим не целимся
@@ -1357,7 +1357,7 @@ CObject3D *GetMissileOnTargetOrientateion(
 						if (MinDistance<TargetDist2TMP && MaxDistance>TargetDist2TMP) {
 							// выбираем объект, так, чтобы он был наиболее длижайшим,
 							// идущим по нашему курсу...
-							VECTOR3D TargetAngleTMP;
+							sVECTOR3D TargetAngleTMP;
 							TargetLocation = tmpS->Location;
 
 							// находим угол между плоскостью и прямой
@@ -1433,18 +1433,18 @@ CObject3D *GetMissileOnTargetOrientateion(
 // Получаем углы поворота для ракеты наведенной на цель
 //-----------------------------------------------------------------------------
 bool GetMissileOnTargetOrientateion(
-	VECTOR3D	Location, // положение точки относительно которой будем наводить
-	VECTOR3D	CurrentObjectRotation, // текущие углы объекта
+	sVECTOR3D	Location, // положение точки относительно которой будем наводить
+	sVECTOR3D	CurrentObjectRotation, // текущие углы объекта
 	float		RotationMatrix[9], // матрица вращения объекта
-	CObject3D	*TargetObject, // объект на который прицеливаемся
-	VECTOR3D	*NeedAngle)// нужные углы, чтобы получить нужное направление
+	cObject3D	*TargetObject, // объект на который прицеливаемся
+	sVECTOR3D	*NeedAngle)// нужные углы, чтобы получить нужное направление
 {
 	// получаем точки для создания плоскости
-	VECTOR3D Orientation(0.0f, 0.0f, 1.0f);
+	sVECTOR3D Orientation(0.0f, 0.0f, 1.0f);
 	vw_Matrix33CalcPoint(&Orientation, RotationMatrix);
-	VECTOR3D PointUp(0.0f, 1.0f, 0.0f);
+	sVECTOR3D PointUp(0.0f, 1.0f, 0.0f);
 	vw_Matrix33CalcPoint(&PointUp, RotationMatrix);
-	VECTOR3D PointRight = VECTOR3D(1.0f, 0.0f, 0.0f);
+	sVECTOR3D PointRight = sVECTOR3D(1.0f, 0.0f, 0.0f);
 	vw_Matrix33CalcPoint(&PointRight, RotationMatrix);
 
 	// находим плоскость, вертикальную
@@ -1457,7 +1457,7 @@ bool GetMissileOnTargetOrientateion(
 	vw_GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+PointRight, Location+PointUp);
 
 	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
-	VECTOR3D TargetLocation = Location;
+	sVECTOR3D TargetLocation = Location;
 	*NeedAngle = CurrentObjectRotation;
 
 
@@ -1465,7 +1465,7 @@ bool GetMissileOnTargetOrientateion(
 	float tmp1 = A2 * (TargetObject->Location.x)  + B2 * (TargetObject->Location.y)  + C2 * (TargetObject->Location.z)  + D2;
 	if (tmp1>0.0f) {
 
-		VECTOR3D tmpLocation = TargetObject->GeometryCenterLocation;
+		sVECTOR3D tmpLocation = TargetObject->GeometryCenterLocation;
 		vw_Matrix33CalcPoint(&tmpLocation, TargetObject->CurrentRotationMat); // поворачиваем в плоскость объекта
 		TargetLocation = TargetObject->Location + tmpLocation;
 
@@ -1507,15 +1507,15 @@ bool GetMissileOnTargetOrientateion(
 //-----------------------------------------------------------------------------
 // Проверяем где по отношению ракеты находится объект
 //-----------------------------------------------------------------------------
-bool GetMissileTargetPosition(CObject3D	*TargetObject,
-			      VECTOR3D	Location, // положение точки относительно которой будем наводить
-			      float		RotationMatrix[9]) // матрица вращения объекта
+bool GetMissileTargetPosition(cObject3D *TargetObject,
+			      sVECTOR3D Location, // положение точки относительно которой будем наводить
+			      float RotationMatrix[9]) // матрица вращения объекта
 {
 	// (!) TargetObject должен существовать, до вызова этой функции проверять это, в этой функции проверки не делаем
 
-	VECTOR3D PointUp(0.0f, 1.0f, 0.0f);
+	sVECTOR3D PointUp(0.0f, 1.0f, 0.0f);
 	vw_Matrix33CalcPoint(&PointUp, RotationMatrix);
-	VECTOR3D PointRight(1.0f, 0.0f, 0.0f);
+	sVECTOR3D PointRight(1.0f, 0.0f, 0.0f);
 	vw_Matrix33CalcPoint(&PointRight, RotationMatrix);
 
 	// получаем вертикальную плоскость (отсечения перед-зад)
@@ -1532,37 +1532,37 @@ bool GetMissileTargetPosition(CObject3D	*TargetObject,
 //-----------------------------------------------------------------------------
 // Проверяем статус цели для ракет, жива она еще или нет, и где по отношению ракеты находится
 //-----------------------------------------------------------------------------
-bool GetMissileTargetStatus(CObject3D *TargetObject,
-			    VECTOR3D Location, // положение точки относительно которой будем наводить
+bool GetMissileTargetStatus(cObject3D *TargetObject,
+			    sVECTOR3D Location, // положение точки относительно которой будем наводить
 			    float RotationMatrix[9]) // матрица вращения объекта
 {
-	CProjectile *tmpProjectile = StartProjectile;
+	cProjectile *tmpProjectile = StartProjectile;
 	while (tmpProjectile != nullptr) {
-		CProjectile *tmpProjectile2 = tmpProjectile->Next;
+		cProjectile *tmpProjectile2 = tmpProjectile->Next;
 		if (tmpProjectile == TargetObject)
 			return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
 		tmpProjectile = tmpProjectile2;
 	}
 
-	CGroundObject *tmpG = StartGroundObject;
+	cGroundObject *tmpG = StartGroundObject;
 	while (tmpG != nullptr) {
-		CGroundObject *tmpGround2 = tmpG->Next;
+		cGroundObject *tmpGround2 = tmpG->Next;
 		if (tmpG == TargetObject)
 			return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
 		tmpG = tmpGround2;
 	}
 
-	CSpaceShip *tmp = StartSpaceShip;
+	cSpaceShip *tmp = StartSpaceShip;
 	while (tmp != nullptr) {
-		CSpaceShip *tmpShip2 = tmp->Next;
+		cSpaceShip *tmpShip2 = tmp->Next;
 		if (tmp == TargetObject)
 			return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
 		tmp = tmpShip2;
 	}
 
-	CSpaceObject *tmpS = StartSpaceObject;
+	cSpaceObject *tmpS = StartSpaceObject;
 	while (tmpS != nullptr) {
-		CSpaceObject *tmpSpace2 = tmpS->Next;
+		cSpaceObject *tmpSpace2 = tmpS->Next;
 		if (tmpS == TargetObject)
 			return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
 		tmpS = tmpSpace2;
@@ -1579,22 +1579,22 @@ bool GetMissileTargetStatus(CObject3D *TargetObject,
 //-----------------------------------------------------------------------------
 // Получение положения ближайшего врага, для мин
 //-----------------------------------------------------------------------------
-CObject3D *GetCloserTargetPosition(
+cObject3D *GetCloserTargetPosition(
 	int			ObjectStatus, // статус объекта, который целится
-	VECTOR3D	Location) // положение точки относительно которой будем наводить
+	sVECTOR3D	Location) // положение точки относительно которой будем наводить
 {
 
 	// результат
-	CObject3D *Res = nullptr;
+	cObject3D *Res = nullptr;
 	// пока ставим отрицательный, т.е. вообще ничего нет
 	float MinRatius2 = -1.0f;
 
 
 
 	// перебираем только корабли...
-	CSpaceShip *tmp = StartSpaceShip;
+	cSpaceShip *tmp = StartSpaceShip;
 	while (tmp != nullptr) {
-		CSpaceShip *tmpShip2 = tmp->Next;
+		cSpaceShip *tmpShip2 = tmp->Next;
 
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmp))

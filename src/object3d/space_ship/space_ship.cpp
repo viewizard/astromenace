@@ -32,19 +32,19 @@
 
 extern bool PlayerFighterLeftEng;
 extern bool PlayerFighterRightEng;
-extern CProjectile *StartProjectile;
-extern CProjectile *EndProjectile;
+extern cProjectile *StartProjectile;
+extern cProjectile *EndProjectile;
 
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-CSpaceShip::CSpaceShip(void)
+cSpaceShip::cSpaceShip(void)
 {
 	// болтание объекта, в случае кораблей болтаем всю модель
 	DeviationOn = false;
 	DeviationObjQuantity = 1;
-	Deviation = new VECTOR3D[DeviationObjQuantity];
+	Deviation = new sVECTOR3D[DeviationObjQuantity];
 	NeedDeviation = new float[DeviationObjQuantity];
 	CurentDeviation = new float[DeviationObjQuantity];
 	CurentDeviationSum = new float[DeviationObjQuantity];
@@ -62,7 +62,7 @@ CSpaceShip::CSpaceShip(void)
 //-----------------------------------------------------------------------------
 // Деструктор
 //-----------------------------------------------------------------------------
-CSpaceShip::~CSpaceShip(void)
+cSpaceShip::~cSpaceShip(void)
 {
 
 
@@ -197,10 +197,10 @@ CSpaceShip::~CSpaceShip(void)
 //-----------------------------------------------------------------------------
 // Установка положения объекта
 //-----------------------------------------------------------------------------
-void CSpaceShip::SetLocation(VECTOR3D NewLocation)
+void cSpaceShip::SetLocation(sVECTOR3D NewLocation)
 {
 	// вызываем родительскую функцию
-	::CObject3D::SetLocation(NewLocation);
+	::cObject3D::SetLocation(NewLocation);
 
 
 	// если оружие вообще есть
@@ -248,10 +248,10 @@ void CSpaceShip::SetLocation(VECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 // Установка положения объекта, для аркадного режима
 //-----------------------------------------------------------------------------
-void CSpaceShip::SetLocationArcadePlayer(VECTOR3D NewLocation)
+void cSpaceShip::SetLocationArcadePlayer(sVECTOR3D NewLocation)
 {
 	// вызываем родительскую функцию
-	::CObject3D::SetLocation(NewLocation);
+	::cObject3D::SetLocation(NewLocation);
 
 
 	// если оружие вообще есть
@@ -297,10 +297,10 @@ void CSpaceShip::SetLocationArcadePlayer(VECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 // Установка углов поворота объекта
 //-----------------------------------------------------------------------------
-void CSpaceShip::SetRotation(VECTOR3D NewRotation)
+void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 {
 	// вызываем родительскую функцию
-	::CObject3D::SetRotation(NewRotation);
+	::cObject3D::SetRotation(NewRotation);
 
 
 
@@ -390,11 +390,11 @@ void CSpaceShip::SetRotation(VECTOR3D NewRotation)
 //-----------------------------------------------------------------------------
 // Обновление данных объектa Object3D
 //-----------------------------------------------------------------------------
-bool CSpaceShip::Update(float Time)
+bool cSpaceShip::Update(float Time)
 {
 	// вызываем родительскую функцию
 	// если там передали удалить - выходим
-	if (!::CObject3D::Update(Time)) return false;
+	if (!::cObject3D::Update(Time)) return false;
 	// быстро вызвали еще раз... время не изменилось, или почти не изменилось
 	if (TimeDelta == 0.0f) return true;
 
@@ -448,9 +448,9 @@ bool CSpaceShip::Update(float Time)
 	if (WeaponFlare != nullptr) {
 		// проверка, есть ли вражеские ракеты?
 		bool NeedFlare = false;
-		CProjectile *tmpProjectile = StartProjectile;
+		cProjectile *tmpProjectile = StartProjectile;
 		while (!NeedFlare && (tmpProjectile != nullptr)) {
-			CProjectile *tmpProjectile2 = tmpProjectile->Next;
+			cProjectile *tmpProjectile2 = tmpProjectile->Next;
 
 			if ((((ObjectStatus == 1) && (tmpProjectile->ObjectStatus > 1)) ||
 			     // снаряды врагов - с союзниками или игроком
@@ -467,7 +467,7 @@ bool CSpaceShip::Update(float Time)
 		tmpProjectile = StartProjectile;
 		if (NeedFlare)
 			while (tmpProjectile != nullptr) {
-				CProjectile *tmpProjectile2 = tmpProjectile->Next;
+				cProjectile *tmpProjectile2 = tmpProjectile->Next;
 				// если навелись на этот объект ракетой
 				// т.к. только у ракеты тут не ноль
 				if (tmpProjectile->Target == this) {
@@ -528,7 +528,7 @@ bool CSpaceShip::Update(float Time)
 	if ( !(ObjectStatus == 3) ) {
 		if (NeedRotate.x != 0.0f || NeedRotate.y != 0.0f || NeedRotate.z != 0.0f) {
 			// Находим допустимый поворот по углу
-			VECTOR3D tmpRotate(0.0f, 0.0f, 0.0f);
+			sVECTOR3D tmpRotate(0.0f, 0.0f, 0.0f);
 
 			// угол по x
 			if (NeedRotate.x != 0.0f) {
@@ -1152,29 +1152,29 @@ bool CSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	Velocity = Orientation^(Speed*TimeDelta);
 	if (fabs(SpeedLR) > 0.01f) {
-		VECTOR3D tmp(SpeedLR*TimeDelta,0.0f,0.0f);
+		sVECTOR3D tmp(SpeedLR*TimeDelta,0.0f,0.0f);
 		vw_Matrix33CalcPoint(&tmp, CurrentRotationMat);
 		Velocity += tmp;
 	}
 	if (fabs(SpeedUD) > 0.01f) {
-		VECTOR3D tmp(0.0f,SpeedUD*TimeDelta,0.0f);
+		sVECTOR3D tmp(0.0f,SpeedUD*TimeDelta,0.0f);
 		vw_Matrix33CalcPoint(&tmp, CurrentRotationMat);
 		Velocity += tmp;
 	}
 
 
 	if (fabs(SpeedByCamFB) > 0.01f) {
-		VECTOR3D tmp = GameCameraMovement^(SpeedByCamFB*TimeDelta);
+		sVECTOR3D tmp = GameCameraMovement^(SpeedByCamFB*TimeDelta);
 		Velocity += tmp;
 	}
 	if (fabs(SpeedByCamLR) > 0.01f) {
-		VECTOR3D tmp = GameCameraMovement^(SpeedByCamLR*TimeDelta);
-		vw_RotatePoint(&tmp, VECTOR3D(0.0,-90.0f,0.0f));
+		sVECTOR3D tmp = GameCameraMovement^(SpeedByCamLR*TimeDelta);
+		vw_RotatePoint(&tmp, sVECTOR3D(0.0,-90.0f,0.0f));
 		Velocity += tmp;
 	}
 	if (fabs(SpeedByCamUD) > 0.01f) {
-		VECTOR3D tmp = GameCameraMovement^(SpeedByCamUD*TimeDelta);
-		vw_RotatePoint(&tmp, VECTOR3D(90.0f,0.0f,0.0f));
+		sVECTOR3D tmp = GameCameraMovement^(SpeedByCamUD*TimeDelta);
+		vw_RotatePoint(&tmp, sVECTOR3D(90.0f,0.0f,0.0f));
 		Velocity += tmp;
 	}
 
@@ -1242,14 +1242,14 @@ bool CSpaceShip::Update(float Time)
 
 	// если не игрок игрок и есть режим действия - нужно "искать" противника
 	if (ObjectStatus == 1 && NeedFire) {
-		VECTOR3D NeedAngle = Rotation;
+		sVECTOR3D NeedAngle = Rotation;
 
 		// используем ID как маркер, чтобы не обрабатывать этот объект в процедуре
 		int tmpID = ID;
 		ID = 111111;
 
 		// находим среднюю точку положение оружия
-		VECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
+		sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
 		int UsedWeaponQunt = 0;
 		if (Weapon != nullptr) {
 			for (int i = 0; i < WeaponQuantity; i++) {
@@ -1266,7 +1266,7 @@ bool CSpaceShip::Update(float Time)
 
 
 		int WeapNum = -1;
-		VECTOR3D	FirePos(0.0f,0.0f,0.0f);
+		sVECTOR3D	FirePos(0.0f,0.0f,0.0f);
 		if (Weapon != nullptr) {
 			// находим номер
 			for (int i = 0; i < WeaponQuantity; i++) {
@@ -1311,14 +1311,14 @@ bool CSpaceShip::Update(float Time)
 		ID = tmpID;
 	}
 	if ((ObjectStatus == 1) && NeedBossFire) {
-		VECTOR3D NeedAngle = Rotation;
+		sVECTOR3D NeedAngle = Rotation;
 
 		// используем ID как маркер, чтобы не обрабатывать этот объект в процедуре
 		int tmpID = ID;
 		ID = 111111;
 
 		// находим среднюю точку положение оружия
-		VECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
+		sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
 		int UsedWeaponQunt = 0;
 		if (BossWeapon != nullptr) {
 			for (int i=0; i<BossWeaponQuantity; i++) {
@@ -1334,7 +1334,7 @@ bool CSpaceShip::Update(float Time)
 		WeaponAvLocation.z = WeaponAvLocation.z / UsedWeaponQunt;
 
 		int WeapNum = -1;
-		VECTOR3D FirePos(0.0f,0.0f,0.0f);
+		sVECTOR3D FirePos(0.0f,0.0f,0.0f);
 		if (BossWeapon != nullptr) {
 			// находим номер
 			for (int i = 0; i < BossWeaponQuantity; i++) {
@@ -1392,7 +1392,7 @@ bool CSpaceShip::Update(float Time)
 			ID = 111111;
 
 			// находим среднюю точку положение оружия
-			VECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
+			sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
 			int UsedWeaponQunt = 0;
 			if (Weapon != nullptr) {
 				for (int i=0; i<WeaponQuantity; i++) {
@@ -1407,7 +1407,7 @@ bool CSpaceShip::Update(float Time)
 			WeaponAvLocation.z = WeaponAvLocation.z / UsedWeaponQunt;
 
 
-			VECTOR3D NeedAngle = Rotation;
+			sVECTOR3D NeedAngle = Rotation;
 
 			// всему оружию ставим нужную ориентацию
 			if (Weapon != nullptr) {
@@ -1425,7 +1425,7 @@ bool CSpaceShip::Update(float Time)
 									    Length, CurrentRotationMat, &NeedAngle, Width, true, true,
 									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->ObjectCreationType);
 
-						VECTOR3D NeedAngleTmp = NeedAngle;
+						sVECTOR3D NeedAngleTmp = NeedAngle;
 
 						// учитываем скорость поворота по вертикали
 						if (Weapon[i]->Rotation.x < NeedAngle.x) {
@@ -1498,7 +1498,7 @@ bool CSpaceShip::Update(float Time)
 		float TargetingSpeed = GameTargetingMechanicSystem*1.0f;
 
 		// находим среднюю точку положение оружия
-		VECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
+		sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
 		int UsedWeaponQunt = 0;
 		if (Weapon != nullptr) {
 			for (int i = 0; i < WeaponQuantity; i++) {
@@ -1513,7 +1513,7 @@ bool CSpaceShip::Update(float Time)
 		WeaponAvLocation.z = WeaponAvLocation.z / UsedWeaponQunt;
 
 
-		VECTOR3D NeedAngle = Rotation;
+		sVECTOR3D NeedAngle = Rotation;
 
 
 
@@ -1532,7 +1532,7 @@ bool CSpaceShip::Update(float Time)
 		// т.к. у нас включена девиация, нужно принять меры
 		float RotationMat2[9];
 		memcpy(RotationMat2, CurrentRotationMat, sizeof(CurrentRotationMat[0])*9);
-		VECTOR3D Rotation2 = Rotation;
+		sVECTOR3D Rotation2 = Rotation;
 
 		if (DeviationOn) {
 			Rotation2 = Rotation - (Deviation[0]^(CurentDeviation[0]*50.0f));
@@ -1569,14 +1569,14 @@ bool CSpaceShip::Update(float Time)
 						break;
 					case 4:
 						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation,
-									    VECTOR3D(Weapon[i]->Rotation.x,0,Weapon[i]->Rotation.z)+VECTOR3D(0,WeaponYAngle[i],0),
+									    sVECTOR3D(Weapon[i]->Rotation.x, 0 , Weapon[i]->Rotation.z) + sVECTOR3D(0,WeaponYAngle[i],0),
 									    Length,Weapon[i]->CurrentRotationMat, &NeedAngle, Width, false, true,
 									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->ObjectCreationType);
 						break;
 					}
 
 
-					VECTOR3D NeedAngleTmp = NeedAngle;
+					sVECTOR3D NeedAngleTmp = NeedAngle;
 
 					// учитываем скорость поворота по вертикали
 					if (Weapon[i]->Rotation.x < NeedAngle.x) {

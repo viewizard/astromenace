@@ -299,7 +299,7 @@ void SaveXMLSetupFile()
 	// упаковка профайлов
 
 
-	int ProfileDataSize = sizeof(GameProfile)*5;
+	int ProfileDataSize = sizeof(sGameProfile)*5;
 	unsigned char *ProfileData = new unsigned char[ProfileDataSize];
 	memcpy(ProfileData, Setup.Profile, ProfileDataSize);
 

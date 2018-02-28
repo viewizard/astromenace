@@ -35,7 +35,7 @@
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void CPlanet::Create(int PlanetNum)
+void cPlanet::Create(int PlanetNum)
 {
 	ObjectType = 14;
 	ObjectStatus = 1; // чужой
@@ -111,7 +111,7 @@ void CPlanet::Create(int PlanetNum)
 
 
 	// находим все данные по геометрии
-	::CObject3D::InitByDrawObjectList();
+	::cObject3D::InitByDrawObjectList();
 
 }
 

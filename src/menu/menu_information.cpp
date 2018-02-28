@@ -35,16 +35,16 @@
 //------------------------------------------------------------------------------------
 // переменные
 //------------------------------------------------------------------------------------
-CEarthSpaceFighter *InfoFighter = nullptr;
-CWeapon *InfoWeapon = nullptr;
-CProjectile *InfoMine = nullptr;
-CAlienSpaceFighter *InfoAlien = nullptr;
-CAlienSpaceMotherShip *InfoAlienMotherShip = nullptr;
-CPirateShip *InfoPirateShip = nullptr;
-CBuilding *InfoBuilding = nullptr;
-CMilitaryBuilding *InfoMilitaryBuilding = nullptr;
-CWheeled *InfoWheeled = nullptr;
-CTracked *InfoTracked = nullptr;
+cEarthSpaceFighter *InfoFighter = nullptr;
+cWeapon *InfoWeapon = nullptr;
+cProjectile *InfoMine = nullptr;
+cAlienSpaceFighter *InfoAlien = nullptr;
+cAlienSpaceMotherShip *InfoAlienMotherShip = nullptr;
+cPirateShip *InfoPirateShip = nullptr;
+cBuilding *InfoBuilding = nullptr;
+cMilitaryBuilding *InfoMilitaryBuilding = nullptr;
+cWheeled *InfoWheeled = nullptr;
+cTracked *InfoTracked = nullptr;
 
 
 int GetWeaponHullDamage(int Num);
@@ -58,9 +58,9 @@ char *GetWorkshopShipName(int Num);
 
 
 float		LastRotateInfoObject = 0.0f;
-VECTOR3D	PointCamera;
-VECTOR3D	Point(1000,-1000,0);
-VECTOR3D	ObjectBaseLocation(0,0,0);
+sVECTOR3D	PointCamera;
+sVECTOR3D	Point(1000,-1000,0);
+sVECTOR3D	ObjectBaseLocation(0,0,0);
 int			CreateNum = 1;
 float		RotationSumY =0.0f;
 float		RotationSumX =0.0f;
@@ -315,20 +315,20 @@ void CreateInfoObject()
 	RotationSumY = 140;
 	RotationSumX = 0;
 
-	Point = VECTOR3D(1000,-1000,0);
+	Point = sVECTOR3D(1000,-1000,0);
 
 	if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant) {
 		int tmpCreateNum = CreateNum-InfoFighterStart+1;
-		InfoFighter = new CEarthSpaceFighter;
+		InfoFighter = new cEarthSpaceFighter;
 		InfoFighter->Create(tmpCreateNum);
 		InfoFighter->ID = 1000;
 		InfoFighter->EngineDestroyType = true;
-		InfoFighter->SetLocation(VECTOR3D(1000,-1000-InfoFighter->AABB[6].y, 0));
-		ObjectBaseLocation = InfoFighter->Location - VECTOR3D(1000,-1000,0);
+		InfoFighter->SetLocation(sVECTOR3D(1000,-1000-InfoFighter->AABB[6].y, 0));
+		ObjectBaseLocation = InfoFighter->Location - sVECTOR3D(1000,-1000,0);
 
-		Point = VECTOR3D(1000,-1000+InfoFighter->Height/3.0f,0);
+		Point = sVECTOR3D(1000,-1000+InfoFighter->Height/3.0f,0);
 
-		PointCamera = VECTOR3D(0.0f,(InfoFighter->Length
+		PointCamera = sVECTOR3D(0.0f,(InfoFighter->Length
 					     +InfoFighter->Width+
 					     InfoFighter->Height)*0.24f +InfoFighter->Height*0.3f,
 				       -(InfoFighter->Length
@@ -348,18 +348,18 @@ void CreateInfoObject()
 			}
 		}
 
-		InfoFighter->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoFighter->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant) {
 		int tmpCreateNum = CreateNum-InfoWeaponStart+1;
-		InfoWeapon = new CWeapon;
+		InfoWeapon = new cWeapon;
 		InfoWeapon->Create(tmpCreateNum);
 		InfoWeapon->ID = 1000;
-		ObjectBaseLocation = VECTOR3D(0.0f,-InfoWeapon->AABB[6].y, -(InfoWeapon->Length/2.0f + InfoWeapon->AABB[6].z));
+		ObjectBaseLocation = sVECTOR3D(0.0f,-InfoWeapon->AABB[6].y, -(InfoWeapon->Length/2.0f + InfoWeapon->AABB[6].z));
 
-		Point = VECTOR3D(1000,-1000+InfoWeapon->Height/3.0f,0);
+		Point = sVECTOR3D(1000,-1000+InfoWeapon->Height/3.0f,0);
 
-		PointCamera = VECTOR3D(0.0f,(InfoWeapon->Length
+		PointCamera = sVECTOR3D(0.0f,(InfoWeapon->Length
 					     +InfoWeapon->Width+
 					     InfoWeapon->Height)*0.3f +InfoWeapon->Height*0.3f,
 				       -(InfoWeapon->Length
@@ -370,7 +370,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoWeapon->Height;
 		InfoObjectStrength = InfoWeapon->StrengthStart;
 
-		InfoWeapon->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoWeapon->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
 
 		InfoObjectEnergyUse = InfoWeapon->EnergyUse;
 		InfoObjectAmmo = InfoWeapon->AmmoStart;
@@ -385,18 +385,18 @@ void CreateInfoObject()
 	}
 	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant) {
 		int tmpCreateNum = CreateNum-InfoMineStart+1;
-		InfoMine = new CProjectile;
+		InfoMine = new cProjectile;
 		InfoMine->Create(213+tmpCreateNum);
 		InfoMine->ID = 1000;
 		InfoMine->ObjectStatus = -1; // чтобы не наводилось
 		InfoMine->SpeedStart = InfoMine->SpeedEnd = InfoMine->Speed = 0.0f;
 		InfoMine->GraphicFXDestroyType = true;
-		InfoMine->SetLocation(VECTOR3D(1000,-1000-InfoMine->AABB[6].y, 0));
-		ObjectBaseLocation = InfoMine->Location - VECTOR3D(1000,-1000,0);
+		InfoMine->SetLocation(sVECTOR3D(1000,-1000-InfoMine->AABB[6].y, 0));
+		ObjectBaseLocation = InfoMine->Location - sVECTOR3D(1000,-1000,0);
 
-		Point = VECTOR3D(1000,-1000+InfoMine->Height/2.0f,0);
+		Point = sVECTOR3D(1000,-1000+InfoMine->Height/2.0f,0);
 
-		PointCamera = VECTOR3D(0.0f,(InfoMine->Length
+		PointCamera = sVECTOR3D(0.0f,(InfoMine->Length
 					     +InfoMine->Width+
 					     InfoMine->Height)*0.3f +InfoMine->Height*0.3f,
 				       -(InfoMine->Length
@@ -408,20 +408,20 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoMine->Height;
 		InfoObjectStrength = InfoMine->StrengthStart;
 
-		InfoMine->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoMine->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant) {
 		int tmpCreateNum = CreateNum-InfoAlienStart+1;
-		InfoAlien = new CAlienSpaceFighter;
+		InfoAlien = new cAlienSpaceFighter;
 		InfoAlien->Create(tmpCreateNum);
 		InfoAlien->ID = 1000;
 		InfoAlien->EngineDestroyType = true;
-		InfoAlien->SetLocation(VECTOR3D(1000,-1000-InfoAlien->AABB[6].y, 0));
-		ObjectBaseLocation = InfoAlien->Location - VECTOR3D(1000,-1000,0);
+		InfoAlien->SetLocation(sVECTOR3D(1000,-1000-InfoAlien->AABB[6].y, 0));
+		ObjectBaseLocation = InfoAlien->Location - sVECTOR3D(1000,-1000,0);
 
-		Point = VECTOR3D(1000,-1000+InfoAlien->Height/3.0f,0);
+		Point = sVECTOR3D(1000,-1000+InfoAlien->Height/3.0f,0);
 
-		PointCamera = VECTOR3D(0.0f,(InfoAlien->Length
+		PointCamera = sVECTOR3D(0.0f,(InfoAlien->Length
 					     +InfoAlien->Width+
 					     InfoAlien->Height)*0.24f +InfoAlien->Height*0.3f,
 				       -(InfoAlien->Length
@@ -440,20 +440,20 @@ void CreateInfoObject()
 			}
 		}
 
-		InfoAlien->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoAlien->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant) {
 		int tmpCreateNum = CreateNum-InfoAlienMotherShipStart+1;
-		InfoAlienMotherShip = new CAlienSpaceMotherShip;
+		InfoAlienMotherShip = new cAlienSpaceMotherShip;
 		InfoAlienMotherShip->Create(tmpCreateNum);
 		InfoAlienMotherShip->ID = 1000;
 		InfoAlienMotherShip->EngineDestroyType = true;
-		InfoAlienMotherShip->SetLocation(VECTOR3D(1000,-1000-InfoAlienMotherShip->AABB[6].y, 0));
-		ObjectBaseLocation = InfoAlienMotherShip->Location - VECTOR3D(1000,-1000,0);
+		InfoAlienMotherShip->SetLocation(sVECTOR3D(1000,-1000-InfoAlienMotherShip->AABB[6].y, 0));
+		ObjectBaseLocation = InfoAlienMotherShip->Location - sVECTOR3D(1000,-1000,0);
 
-		Point = VECTOR3D(1000,-1000+InfoAlienMotherShip->Height/3.0f,0);
+		Point = sVECTOR3D(1000,-1000+InfoAlienMotherShip->Height/3.0f,0);
 
-		PointCamera = VECTOR3D(0.0f,(InfoAlienMotherShip->Length
+		PointCamera = sVECTOR3D(0.0f,(InfoAlienMotherShip->Length
 					     +InfoAlienMotherShip->Width+
 					     InfoAlienMotherShip->Height)*0.24f +InfoAlienMotherShip->Height*0.3f,
 				       -(InfoAlienMotherShip->Length
@@ -471,20 +471,20 @@ void CreateInfoObject()
 			}
 		}
 
-		InfoAlienMotherShip->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoAlienMotherShip->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant) {
 		int tmpCreateNum = CreateNum-InfoPirateShipStart+1;
-		InfoPirateShip = new CPirateShip;
+		InfoPirateShip = new cPirateShip;
 		InfoPirateShip->Create(tmpCreateNum);
 		InfoPirateShip->ID = 1000;
 		InfoPirateShip->EngineDestroyType = true;
-		InfoPirateShip->SetLocation(VECTOR3D(1000,-1000-InfoPirateShip->AABB[6].y, 0));
-		ObjectBaseLocation = InfoPirateShip->Location - VECTOR3D(1000,-1000,0);
+		InfoPirateShip->SetLocation(sVECTOR3D(1000,-1000-InfoPirateShip->AABB[6].y, 0));
+		ObjectBaseLocation = InfoPirateShip->Location - sVECTOR3D(1000,-1000,0);
 
-		Point = VECTOR3D(1000,-1000+InfoPirateShip->Height/3.0f,0);
+		Point = sVECTOR3D(1000,-1000+InfoPirateShip->Height/3.0f,0);
 
-		PointCamera = VECTOR3D(0.0f,(InfoPirateShip->Length
+		PointCamera = sVECTOR3D(0.0f,(InfoPirateShip->Length
 					     +InfoPirateShip->Width+
 					     InfoPirateShip->Height)*0.24f +InfoPirateShip->Height*0.3f,
 				       -(InfoPirateShip->Length
@@ -506,25 +506,25 @@ void CreateInfoObject()
 		if (InfoPirateShip->Weapon != nullptr) {
 			for (int i = 0; i < InfoPirateShip->WeaponQuantity; i++) {
 				if (InfoPirateShip->Weapon[i] != nullptr)
-					InfoPirateShip->Weapon[i]->SetRotation(VECTOR3D(-InfoPirateShip->Weapon[i]->Rotation.x,
+					InfoPirateShip->Weapon[i]->SetRotation(sVECTOR3D(-InfoPirateShip->Weapon[i]->Rotation.x,
 											-InfoPirateShip->Weapon[i]->Rotation.y,
 											-InfoPirateShip->Weapon[i]->Rotation.z));
 			}
 		}
 
-		InfoPirateShip->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoPirateShip->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant) {
 		int tmpCreateNum = CreateNum-InfoBuildingStart+1;
-		InfoBuilding = new CBuilding;
+		InfoBuilding = new cBuilding;
 		InfoBuilding->Create(tmpCreateNum);
 		InfoBuilding->ID = 1000;
-		InfoBuilding->SetLocation(VECTOR3D(1000,-1000-InfoBuilding->AABB[6].y, 0));
-		ObjectBaseLocation = InfoBuilding->Location - VECTOR3D(1000,-1000,0);
+		InfoBuilding->SetLocation(sVECTOR3D(1000,-1000-InfoBuilding->AABB[6].y, 0));
+		ObjectBaseLocation = InfoBuilding->Location - sVECTOR3D(1000,-1000,0);
 
-		Point = VECTOR3D(1000,-1000+InfoBuilding->Height/3.0f,0);
+		Point = sVECTOR3D(1000,-1000+InfoBuilding->Height/3.0f,0);
 
-		PointCamera = VECTOR3D(0.0f,(InfoBuilding->Length
+		PointCamera = sVECTOR3D(0.0f,(InfoBuilding->Length
 					     +InfoBuilding->Width+
 					     InfoBuilding->Height)*0.16f +InfoBuilding->Height*0.3f,
 				       -(InfoBuilding->Length
@@ -535,19 +535,19 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoBuilding->Height;
 		InfoObjectStrength = InfoBuilding->StrengthStart;
 
-		InfoBuilding->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoBuilding->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant) {
 		int tmpCreateNum = CreateNum-InfoMilitaryBuildingStart+1;
-		InfoMilitaryBuilding = new CMilitaryBuilding;
+		InfoMilitaryBuilding = new cMilitaryBuilding;
 		InfoMilitaryBuilding->Create(tmpCreateNum);
 		InfoMilitaryBuilding->ID = 1000;
-		InfoMilitaryBuilding->SetLocation(VECTOR3D(1000,-1000-InfoMilitaryBuilding->AABB[6].y, 0));
-		ObjectBaseLocation = InfoMilitaryBuilding->Location - VECTOR3D(1000,-1000,0);
+		InfoMilitaryBuilding->SetLocation(sVECTOR3D(1000,-1000-InfoMilitaryBuilding->AABB[6].y, 0));
+		ObjectBaseLocation = InfoMilitaryBuilding->Location - sVECTOR3D(1000,-1000,0);
 
-		Point = VECTOR3D(1000,-1000+InfoMilitaryBuilding->Height/3.0f,0);
+		Point = sVECTOR3D(1000,-1000+InfoMilitaryBuilding->Height/3.0f,0);
 
-		PointCamera = VECTOR3D(0.0f,(InfoMilitaryBuilding->Length
+		PointCamera = sVECTOR3D(0.0f,(InfoMilitaryBuilding->Length
 					     +InfoMilitaryBuilding->Width+
 					     InfoMilitaryBuilding->Height)*0.24f +InfoMilitaryBuilding->Height*0.3f,
 				       -(InfoMilitaryBuilding->Length
@@ -558,21 +558,21 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoMilitaryBuilding->Height;
 		InfoObjectStrength = InfoMilitaryBuilding->StrengthStart;
 
-		InfoMilitaryBuilding->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoMilitaryBuilding->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoWheeledStart && CreateNum<InfoWheeledStart+InfoWheeledQuant) {
 		int tmpCreateNum = CreateNum-InfoWheeledStart+1;
-		InfoWheeled = new CWheeled;
+		InfoWheeled = new cWheeled;
 		InfoWheeled->Create(tmpCreateNum);
 		InfoWheeled->DeviationOn = true;
 		InfoWheeled->ID = 1000;
-		InfoWheeled->SetLocation(VECTOR3D(1000,-1000-InfoWheeled->AABB[6].y, 0));
-		ObjectBaseLocation = InfoWheeled->Location - VECTOR3D(1000,-1000,0);
+		InfoWheeled->SetLocation(sVECTOR3D(1000,-1000-InfoWheeled->AABB[6].y, 0));
+		ObjectBaseLocation = InfoWheeled->Location - sVECTOR3D(1000,-1000,0);
 		InfoWheeled->WheelTrackSpeed = 350.0f;
 
-		Point = VECTOR3D(1000,-1000+InfoWheeled->Height/3.0f,0);
+		Point = sVECTOR3D(1000,-1000+InfoWheeled->Height/3.0f,0);
 
-		PointCamera = VECTOR3D(0.0f,(InfoWheeled->Length
+		PointCamera = sVECTOR3D(0.0f,(InfoWheeled->Length
 					     +InfoWheeled->Width+
 					     InfoWheeled->Height)*0.24f +InfoWheeled->Height*0.3f,
 				       -(InfoWheeled->Length
@@ -583,21 +583,21 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoWheeled->Height;
 		InfoObjectStrength = InfoWheeled->StrengthStart;
 
-		InfoWheeled->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoWheeled->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 	if (CreateNum>=InfoTrackedStart && CreateNum<InfoTrackedStart+InfoTrackedQuant) {
 		int tmpCreateNum = CreateNum-InfoTrackedStart+1;
-		InfoTracked = new CTracked;
+		InfoTracked = new cTracked;
 		InfoTracked->Create(tmpCreateNum);
 		InfoTracked->DeviationOn = true;
 		InfoTracked->ID = 1000;
-		InfoTracked->SetLocation(VECTOR3D(1000,-1000-InfoTracked->AABB[6].y, 0));
-		ObjectBaseLocation = InfoTracked->Location - VECTOR3D(1000,-1000,0);
+		InfoTracked->SetLocation(sVECTOR3D(1000,-1000-InfoTracked->AABB[6].y, 0));
+		ObjectBaseLocation = InfoTracked->Location - sVECTOR3D(1000,-1000,0);
 		InfoTracked->WheelTrackSpeed = 350.0f;
 
-		Point = VECTOR3D(1000,-1000+InfoTracked->Height/3.0f,0);
+		Point = sVECTOR3D(1000,-1000+InfoTracked->Height/3.0f,0);
 
-		PointCamera = VECTOR3D(0.0f,(InfoTracked->Length
+		PointCamera = sVECTOR3D(0.0f,(InfoTracked->Length
 					     +InfoTracked->Width+
 					     InfoTracked->Height)*0.24f +InfoTracked->Height*0.3f,
 				       -(InfoTracked->Length
@@ -608,7 +608,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoTracked->Height;
 		InfoObjectStrength = InfoTracked->StrengthStart;
 
-		InfoTracked->SetRotation(VECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoTracked->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
 	}
 
 	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
@@ -1623,7 +1623,7 @@ void InformationObject3DText(int ObjectNum)
 void InformationMenu()
 {
 
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 	SetRect(&SrcRect,0,0,2,2);
 	SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
@@ -1761,8 +1761,8 @@ void InformationDrawObject()
 
 
 	vw_LoadIdentity();
-	vw_SetCameraLocation(VECTOR3D(1000+PointCamera.x,-1000+PointCamera.y,PointCamera.z));
-	vw_SetCameraMoveAroundPoint(Point, 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
+	vw_SetCameraLocation(sVECTOR3D(1000+PointCamera.x,-1000+PointCamera.y,PointCamera.z));
+	vw_SetCameraMoveAroundPoint(Point, 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
 	vw_CameraLookAt();
 
 
@@ -1777,7 +1777,7 @@ void InformationDrawObject()
 	float RotateInfoObjectX = 0;
 	LastRotateInfoObject = vw_GetTime();
 
-	RECT DstRectLeft, DstRectRight, DstRectUp, DstRectDown;
+	sRECT DstRectLeft, DstRectRight, DstRectUp, DstRectDown;
 	float fLeft, fRight, fUp, fDown;
 	fLeft = fRight = fUp = fDown = 0.15f;
 
@@ -1800,7 +1800,7 @@ void InformationDrawObject()
 		80+32+10);
 
 	// для вращения объекта, только если мышка стоит над выводом 3д модели
-	RECT DstRect;
+	sRECT DstRect;
 	SetRect(&DstRect,(Setup.iAspectRatioWidth/2-432),
 		80,
 		(Setup.iAspectRatioWidth/2-432)+444,
@@ -1856,11 +1856,11 @@ void InformationDrawObject()
 
 
 	// корректируем положение (у нас объекты стоят не в нулевой точке, а со смещением
-	VECTOR3D TMPLocation = ObjectBaseLocation;
+	sVECTOR3D TMPLocation = ObjectBaseLocation;
 	float tmp_matrix[33];
-	vw_Matrix33CreateRotate(tmp_matrix, VECTOR3D(RotationSumX, RotationSumY, 0));
+	vw_Matrix33CreateRotate(tmp_matrix, sVECTOR3D(RotationSumX, RotationSumY, 0));
 	vw_Matrix33CalcPoint(&TMPLocation, tmp_matrix);
-	TMPLocation += VECTOR3D(1000,-1000,0);
+	TMPLocation += sVECTOR3D(1000,-1000,0);
 
 
 
@@ -1887,7 +1887,7 @@ void InformationDrawObject()
 	vw_PushMatrix();
 	vw_CullFace(RI_NONE);
 
-	vw_Translate(VECTOR3D(1000.0f, -1000.0f, 0.0f));
+	vw_Translate(sVECTOR3D(1000.0f, -1000.0f, 0.0f));
 	vw_Rotate(RotationSumY, 0.0f, 1.0f, 0.0f);
 	vw_Rotate(RotationSumX, 1.0f, 0.0f, 0.0f);
 
@@ -1971,7 +1971,7 @@ void InformationDrawObject()
 
 	if (Setup.ShadowMap > 0) {
 		float EffectiveDistance = PointCamera.Length();
-		ShadowMap_StartRenderToFBO(VECTOR3D(0,0,0), EffectiveDistance, EffectiveDistance*2);
+		ShadowMap_StartRenderToFBO(sVECTOR3D(0,0,0), EffectiveDistance, EffectiveDistance*2);
 
 		// т.к. модели у нас не были расчитаны на шадов меппинг (не замкнутые контуры, внутренние грани и т.п.)
 		// на некоторых моделях нужно делать тень и по лицевым частям тоже, т.е. вообще выключать cull face
@@ -2043,40 +2043,40 @@ void InformationDrawObject()
 
 	if (InfoFighter != nullptr) {
 		InfoFighter->SetLocation(TMPLocation);
-		InfoFighter->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+		InfoFighter->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoFighter->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoFighter->Engine, InfoFighter->EngineQuantity);
 	}
 	if (InfoWeapon != nullptr) {
 		InfoWeapon->SetLocation(TMPLocation);
-		InfoWeapon->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+		InfoWeapon->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoWeapon->Draw(false, ShadowMap);
 	}
 	if (InfoMine != nullptr) {
 		InfoMine->SetLocation(TMPLocation);
-		InfoMine->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+		InfoMine->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoMine->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoMine->GraphicFX, InfoMine->GraphicFXQuantity);
 	}
 	if (InfoAlien != nullptr) {
 		InfoAlien->SetLocation(TMPLocation);
-		InfoAlien->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+		InfoAlien->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoAlien->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoAlien->Engine, InfoAlien->EngineQuantity);
 	}
 	if (InfoAlienMotherShip != nullptr) {
 		InfoAlienMotherShip->SetLocation(TMPLocation);
-		InfoAlienMotherShip->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+		InfoAlienMotherShip->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoAlienMotherShip->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoAlienMotherShip->Engine, InfoAlienMotherShip->EngineQuantity);
 	}
 	if (InfoPirateShip != nullptr) {
 		InfoPirateShip->SetLocation(TMPLocation);
-		InfoPirateShip->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+		InfoPirateShip->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoPirateShip->Draw(false, ShadowMap);
 		// рисуем оружие
 		if (InfoPirateShip->Weapon != nullptr) {
@@ -2090,22 +2090,22 @@ void InformationDrawObject()
 	}
 	if (InfoBuilding != nullptr) {
 		InfoBuilding->SetLocation(TMPLocation);
-		InfoBuilding->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+		InfoBuilding->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoBuilding->Draw(false, ShadowMap);
 	}
 	if (InfoMilitaryBuilding != nullptr) {
 		InfoMilitaryBuilding->SetLocation(TMPLocation);
-		InfoMilitaryBuilding->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+		InfoMilitaryBuilding->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoMilitaryBuilding->Draw(false, ShadowMap);
 	}
 	if (InfoWheeled != nullptr) {
 		InfoWheeled->SetLocation(TMPLocation);
-		InfoWheeled->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+		InfoWheeled->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoWheeled->Draw(false, ShadowMap);
 	}
 	if (InfoTracked != nullptr) {
 		InfoTracked->SetLocation(TMPLocation);
-		InfoTracked->SetRotation(VECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+		InfoTracked->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoTracked->Draw(false, ShadowMap);
 	}
 
@@ -2118,14 +2118,14 @@ void InformationDrawObject()
 
 
 
-	vw_SetCameraLocation(VECTOR3D(-50,30,-50));
+	vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
 	vw_SetViewport(x, y, width, height, 0.0f, 1.0f);
 	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 
 
 	// бордюр с тенью
 	vw_Start2DMode(-1,1);
-	RECT SrcRect;
+	sRECT SrcRect;
 	SetRect(&SrcRect,2,2,482,371);
 	SetRect(&DstRect,Setup.iAspectRatioWidth/2-450,80-18,Setup.iAspectRatioWidth/2+30,80+351);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/panel444_333_border.tga"), true, 1.0f*MenuContentTransp);

@@ -42,14 +42,14 @@ ALboolean CheckALUTError();
 size_t VorbisRead(void *ptr, size_t byteSize, size_t sizeToRead, void *datasource)
 {
 	// нужно возвращать кол-во прочитаных byteSize
-	eFILE* vorbisData = (eFILE*)datasource;
+	sFILE* vorbisData = (sFILE*)datasource;
 	return vorbisData->fread(ptr, byteSize, sizeToRead);
 }
 
 
 int VorbisSeek(void *datasource, ogg_int64_t offset, int whence)
 {
-	eFILE* vorbisData = (eFILE*)datasource;
+	sFILE* vorbisData = (sFILE*)datasource;
 	return vorbisData->fseek(offset, whence);
 }
 
@@ -63,7 +63,7 @@ int VorbisClose(void *UNUSED(datasource))
 
 long VorbisTell(void *datasource)
 {
-	eFILE*	vorbisData = (eFILE*)datasource;
+	sFILE*	vorbisData = (sFILE*)datasource;
 	return vorbisData->ftell();
 }
 
@@ -74,7 +74,7 @@ long VorbisTell(void *datasource)
 //------------------------------------------------------------------------------------
 // Читаем фрагмент ogg файла
 //------------------------------------------------------------------------------------
-bool eMusic::ReadOggBlock(ALuint BufID, size_t Size)
+bool sMusic::ReadOggBlock(ALuint BufID, size_t Size)
 {
 	// vars
 	int			current_section;
@@ -114,7 +114,7 @@ bool eMusic::ReadOggBlock(ALuint BufID, size_t Size)
 //------------------------------------------------------------------------------------
 // Проигрывание звука
 //------------------------------------------------------------------------------------
-bool eMusic::Play(const char *Name, float fVol, float fMainVol, bool Loop, const char *LoopFileName)
+bool sMusic::Play(const char *Name, float fVol, float fMainVol, bool Loop, const char *LoopFileName)
 {
 	if (Name == nullptr)
 		return false;
@@ -225,7 +225,7 @@ bool eMusic::Play(const char *Name, float fVol, float fMainVol, bool Loop, const
 //------------------------------------------------------------------------------------
 // обновление потока
 //------------------------------------------------------------------------------------
-bool eMusic::Update()
+bool sMusic::Update()
 {
 	int Processed = 0;
 
@@ -333,7 +333,7 @@ bool eMusic::Update()
 //------------------------------------------------------------------------------------
 // установка громкости
 //------------------------------------------------------------------------------------
-void eMusic::SetMainVolume(float NewMainVolume)
+void sMusic::SetMainVolume(float NewMainVolume)
 {
 	// если это не источник, уходим
 	if (!alIsSource(Source)) return;
@@ -347,7 +347,7 @@ void eMusic::SetMainVolume(float NewMainVolume)
 //------------------------------------------------------------------------------------
 // плавное появление
 //------------------------------------------------------------------------------------
-void eMusic::FadeIn(float EndVol, float Time)
+void sMusic::FadeIn(float EndVol, float Time)
 {
 	FadeInSw = true;
 	FadeOutSw = false;
@@ -362,7 +362,7 @@ void eMusic::FadeIn(float EndVol, float Time)
 //------------------------------------------------------------------------------------
 // плавное уход на 0 с текущего
 //------------------------------------------------------------------------------------
-void eMusic::FadeOut(float Time)
+void sMusic::FadeOut(float Time)
 {
 	FadeOutSw = true;
 	FadeInSw = false;

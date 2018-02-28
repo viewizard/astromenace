@@ -28,24 +28,24 @@
 #include "../game.h"
 
 
-extern CEarthSpaceFighter *WorkshopFighterGame;
-extern CWeapon *WorkshopNewWeapon;
+extern cEarthSpaceFighter *WorkshopFighterGame;
+extern cWeapon *WorkshopNewWeapon;
 extern int	CurrentWorkshopNewWeapon;
 extern float CurentDeviationSum;
-extern VECTOR3D WorkShopPointCamera;
+extern sVECTOR3D WorkShopPointCamera;
 extern float CurrentAlert2;
 extern float CurrentAlert3;
 
 void WorkshopCreateNewWeapon();
-void WorkshopDrawShip(CEarthSpaceFighter *SpaceFighter, int Mode);
-void WorkshopDrawWeapon(CWeapon *Weapon);
+void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode);
+void WorkshopDrawWeapon(cWeapon *Weapon);
 
 char *GetWeaponGroupTitle(int Num);
 int GetWeaponHullDamage(int Num);
 int GetWeaponSystemsDamage(int Num);
 
 // что рисовать в диалоге 6,7,8
-extern CWeapon *DialogWeapon;
+extern cWeapon *DialogWeapon;
 
 
 // флаг-тянем
@@ -311,7 +311,7 @@ const char *GetWeaponIconName(int Num)
 // вся работа с еденичным слотом
 void ShipSlotWeapon(int SlotNum, int X, int Y)
 {
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 	SetRect(&SrcRect,0,0,220,128);
 	int Xpos = X-45;
@@ -434,7 +434,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 				// если не ракетная установка
 				if (DragWeaponNum < 16) {
 					WorkshopFighterGame->WeaponYAngle[SlotNum] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
-					VECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
+					sVECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
 					NeedAngle.y += WorkshopFighterGame->WeaponYAngle[SlotNum];
 					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(NeedAngle);
 				} else
@@ -583,7 +583,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 void ShipSlotSetupWeapon(int Slot)
 {
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 	// проверяем, нужно ли вытягивать что-то или нет...
 	CheckMouseKeybJState();
@@ -743,7 +743,7 @@ void ShipSlotSetupWeapon(int Slot)
 					WorkshopFighterGame->WeaponYAngle[Slot] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot];
 
 					WorkshopFighterGame->Weapon[Slot]->SetRotation(WorkshopFighterGame->Weapon[Slot]->Rotation^(-1));
-					VECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
+					sVECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
 					NeedAngle.y += WorkshopFighterGame->WeaponYAngle[Slot];
 					WorkshopFighterGame->Weapon[Slot]->SetRotation(NeedAngle);
 				}
@@ -752,7 +752,7 @@ void ShipSlotSetupWeapon(int Slot)
 					WorkshopFighterGame->WeaponYAngle[Slot] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[Slot];
 
 					WorkshopFighterGame->Weapon[Slot]->SetRotation(WorkshopFighterGame->Weapon[Slot]->Rotation^(-1));
-					VECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
+					sVECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
 					NeedAngle.y += WorkshopFighterGame->WeaponYAngle[Slot];
 					WorkshopFighterGame->Weapon[Slot]->SetRotation(NeedAngle);
 				}
@@ -820,7 +820,7 @@ void ShipSlotSetupWeapon(int Slot)
 				// если не ракетная установка
 				if (DragWeaponNum < 16) {
 					WorkshopFighterGame->WeaponYAngle[SlotNum] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
-					VECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
+					sVECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
 					NeedAngle.y += WorkshopFighterGame->WeaponYAngle[SlotNum];
 					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(NeedAngle);
 				} else
@@ -1041,7 +1041,7 @@ void DrawDragingWeaponIcon(int X, int Y)
 	if (!DragWeapon) return;
 
 	// в х и у - положение точки курсора
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 	SetRect(&SrcRect,0,0,128,64);
 	SetRect(&DstRect,X-64,Y-32,X+64,Y+32);
@@ -1072,7 +1072,7 @@ void DrawDragingWeaponIcon(int X, int Y)
 //------------------------------------------------------------------------------------
 void Workshop_Weaponry()
 {
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 
 
 

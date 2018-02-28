@@ -34,7 +34,7 @@
 //-----------------------------------------------------------------------------
 //	обновление информации частицы
 //-----------------------------------------------------------------------------
-bool eParticle::Update(float TimeDelta, VECTOR3D ParentLocation, bool Attractive, float AttractiveValue)
+bool sParticle::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractive, float AttractiveValue)
 {
 
 	// Если частица уже мертва, ее нужно отключить - передаем в систему эти данные
@@ -55,10 +55,10 @@ bool eParticle::Update(float TimeDelta, VECTOR3D ParentLocation, bool Attractive
 
 		// если есть притяжение системы, просчитываем воздействие
 		if ( Attractive ) {
-			VECTOR3D AttractLocation = ParentLocation;
+			sVECTOR3D AttractLocation = ParentLocation;
 
 			// рассчитывае вектор взаимодействия между частицей и точкой притяжения
-			VECTOR3D AttractDir = AttractLocation - Location;
+			sVECTOR3D AttractDir = AttractLocation - Location;
 
 			// если нужно использовать притяжения, считаем перемещение
 			if (NeedStop)

@@ -35,13 +35,13 @@
 
 
 
-struct eCoverageModes {
+struct sCoverageModes {
 	int ColorSamples;
 	int CoverageSamples;
 };
 
 
-struct eDevCaps {
+struct sDevCaps {
 	// версия OpenGL
 	int OpenGLmajorVersion;
 	int OpenGLminorVersion;
@@ -58,7 +58,7 @@ struct eDevCaps {
 	// макс. уровень антиалиасинга, 0-нет, 2+ - есть
 	int MaxSamples; // MSAA
 	int MaxMultisampleCoverageModes; // кол-во профайлов антиалиасинга с CSAA+MSAA
-	eCoverageModes MultisampleCoverageModes[32]; // собственно сам список режимов CSAA+MSAA, ставим просто 32 штуки, чтобы не заморачиваться с освобождением памяти
+	sCoverageModes MultisampleCoverageModes[32]; // собственно сам список режимов CSAA+MSAA, ставим просто 32 штуки, чтобы не заморачиваться с освобождением памяти
 	// есть ли возможность включить сжатие текстур
 	bool TexturesCompression;
 	// поддержка GL_ARB_texture_compression_bptc
@@ -292,7 +292,7 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA);
 // Shutdown renderer dll
 void vw_ShutdownRenderer(void);
 // Get device capability
-eDevCaps *vw_GetDevCaps();
+sDevCaps *vw_GetDevCaps();
 
 void vw_SetAspectRatio(float nWidth, float nHeight, bool Value);
 bool vw_GetAspectWH(float *ARWidth, float *ARHeight);
@@ -362,9 +362,9 @@ void vw_SetTextureCompare(int MODE, int FUNC);
 // Set texture depth mode
 void vw_SetTextureDepthMode(int MODE);
 // Set texture by pointer
-void vw_SetTexture(uint32_t Stage, eTexture *Texture);
+void vw_SetTexture(uint32_t Stage, sTexture *Texture);
 // Get texture image bitmap (RGBA) by void pointer
-void vw_GetTextureImage(eTexture *Texture, void *bits, int BPP);
+void vw_GetTextureImage(sTexture *Texture, void *bits, int BPP);
 // Set texture priority
 void vw_SetPrioritizeTextures(GLuint TextureID, float Prior);
 // Get texture priority
@@ -398,7 +398,7 @@ void vw_PolygonOffset(bool enable, float factor, float units);
 // Loads identity in the current matrix
 void vw_LoadIdentity(void);
 // Determines the product of the current matrix and the computed translation matrix determined by the given factors
-void vw_Translate(VECTOR3D Location);
+void vw_Translate(sVECTOR3D Location);
 // Determines the product of the current matrix and the computed rotation matrix
 void vw_Rotate(float fAngle, float fX, float fY, float fZ);
 // Determines the product of the current matrix and the computed scale matrix composed from the given point
@@ -481,7 +481,7 @@ void vw_DeleteVAO(unsigned int VAO);
 // FBO
 
 // структура FBO
-struct eFBO {
+struct sFBO {
 	unsigned int 	ColorBuffer;
 	unsigned int 	DepthBuffer;
 	unsigned int 	ColorTexture;
@@ -493,18 +493,18 @@ struct eFBO {
 };
 
 // создаем (FBO - уже заранее подготовленный объект, в функции память не выделяем)
-bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor,
+bool vw_BuildFBO(sFBO *FBO, int Width, int Height, bool NeedColor,
 		 bool NeedDepth, int MSAA = 0, int *CSAA = nullptr);
 // устанавливаем
-void vw_BindFBO(eFBO *FBO);
+void vw_BindFBO(sFBO *FBO);
 // получаем текущий установленный FBO, 0 - если фрейм буфер
-eFBO *vw_GetCurrentFBO();
+sFBO *vw_GetCurrentFBO();
 // блит цветовой составляющей фбо источника в фбо приемник (нужно для вывода фбо с мультисемплами)
-void vw_BlitFBO(eFBO *SourceFBO, eFBO *TargetFBO);
+void vw_BlitFBO(sFBO *SourceFBO, sFBO *TargetFBO);
 // рисуем цветовую текстуру источника, на весь приемник, если 0 - во фрейм буфер
-void vw_DrawColorFBO(eFBO *SourceFBO, eFBO *TargetFBO);
+void vw_DrawColorFBO(sFBO *SourceFBO, sFBO *TargetFBO);
 // удаление данных в структуре
-void vw_DeleteFBO(eFBO *FBO);
+void vw_DeleteFBO(sFBO *FBO);
 
 
 
@@ -515,7 +515,7 @@ void vw_DeleteFBO(eFBO *FBO);
 // шейдеры GLSL
 
 // структура шейдера
-struct eGLSL {
+struct sGLSL {
 	// хендлы
 	GLhandleARB Program;
 	GLhandleARB VertexShader;
@@ -525,38 +525,38 @@ struct eGLSL {
 
 	// для менеждера
 	char*	Name;
-	eGLSL*	Prev;
-	eGLSL*	Next;
+	sGLSL*	Prev;
+	sGLSL*	Next;
 	int		Num;
 };
 
 void vw_ReleaseAllShaders();
-void vw_AttachShader(eGLSL* GLSL);
-void vw_DetachShader(eGLSL* GLSL);
-eGLSL* vw_FindShaderByNum(int Num);
-eGLSL* vw_FindShaderByName(const char *Name);
+void vw_AttachShader(sGLSL* GLSL);
+void vw_DetachShader(sGLSL* GLSL);
+sGLSL* vw_FindShaderByNum(int Num);
+sGLSL* vw_FindShaderByName(const char *Name);
 
-void vw_ReleaseShader(eGLSL *GLSL);
+void vw_ReleaseShader(sGLSL *GLSL);
 
-eGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName, const char *FragmentShaderFileName);
-bool vw_LinkShaderProgram(eGLSL *GLSL);
-bool vw_UseShaderProgram(eGLSL *GLSL);
+sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName, const char *FragmentShaderFileName);
+bool vw_LinkShaderProgram(sGLSL *GLSL);
+bool vw_UseShaderProgram(sGLSL *GLSL);
 bool vw_StopShaderProgram();
 
-int vw_GetUniformLocation(eGLSL *GLSL, const char *name);
+int vw_GetUniformLocation(sGLSL *GLSL, const char *name);
 
-bool vw_Uniform1i(eGLSL *GLSL, int UniformLocation, int data);
-bool vw_Uniform1i(eGLSL *GLSL, const char *name, int data);
-bool vw_Uniform1fv(eGLSL *GLSL, int UniformLocation, int count, float *data);
-bool vw_Uniform1fv(eGLSL *GLSL, const char *name, int count, float *data);
-bool vw_Uniform1f(eGLSL *GLSL, int UniformLocation, float data);
-bool vw_Uniform1f(eGLSL *GLSL, const char *name, float data);
-bool vw_Uniform3f(eGLSL *GLSL, int UniformLocation, float data1, float data2, float data3);
-bool vw_Uniform3f(eGLSL *GLSL, const char *name, float data1, float data2, float data3);
-bool vw_Uniform4fv(eGLSL *GLSL, int UniformLocation, int count, float *data);
-bool vw_Uniform4fv(eGLSL *GLSL, const char *name, int count, float *data);
-bool vw_UniformMatrix4fv(eGLSL *GLSL, int UniformLocation, bool transpose, int count, float *data);
-bool vw_UniformMatrix4fv(eGLSL *GLSL, const char *name, bool transpose, int count, float *data);
+bool vw_Uniform1i(sGLSL *GLSL, int UniformLocation, int data);
+bool vw_Uniform1i(sGLSL *GLSL, const char *name, int data);
+bool vw_Uniform1fv(sGLSL *GLSL, int UniformLocation, int count, float *data);
+bool vw_Uniform1fv(sGLSL *GLSL, const char *name, int count, float *data);
+bool vw_Uniform1f(sGLSL *GLSL, int UniformLocation, float data);
+bool vw_Uniform1f(sGLSL *GLSL, const char *name, float data);
+bool vw_Uniform3f(sGLSL *GLSL, int UniformLocation, float data1, float data2, float data3);
+bool vw_Uniform3f(sGLSL *GLSL, const char *name, float data1, float data2, float data3);
+bool vw_Uniform4fv(sGLSL *GLSL, int UniformLocation, int count, float *data);
+bool vw_Uniform4fv(sGLSL *GLSL, const char *name, int count, float *data);
+bool vw_UniformMatrix4fv(sGLSL *GLSL, int UniformLocation, bool transpose, int count, float *data);
+bool vw_UniformMatrix4fv(sGLSL *GLSL, const char *name, bool transpose, int count, float *data);
 
 
 
@@ -582,9 +582,9 @@ void vw_GetGammaRamp(float *Gamma, float *Contrast, float *Brightness);
 // 2D rendering functions
 
 // Draw
-void vw_Draw(int X, int Y, RECT *SrcRect, eTexture *Tex, bool Alpha, float RotateAngle=0, int DrawCorner = RI_UL_CORNER);
+void vw_Draw(int X, int Y, sRECT *SrcRect, sTexture *Tex, bool Alpha, float RotateAngle=0, int DrawCorner = RI_UL_CORNER);
 // Draw transparent
-void vw_DrawTransparent(RECT *DstRect, RECT *SrcRect, eTexture *Tex, bool Alpha, float Transp, float RotateAngle=0, int DrawCorner = RI_UL_CORNER, float R=1.0f, float G=1.0f, float B=1.0f);
+void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, sTexture *Tex, bool Alpha, float Transp, float RotateAngle=0, int DrawCorner = RI_UL_CORNER, float R=1.0f, float G=1.0f, float B=1.0f);
 
 
 

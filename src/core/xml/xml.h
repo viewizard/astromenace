@@ -27,24 +27,25 @@
 #ifndef XML_H
 #define XML_H
 
+// TODO translate comments
+
 #include "../base.h"
 
-
-// реализация всех необходимых игре функций по считыванию/записи XML файла
-// (!) это не полноценный парсер XML, а ограниченный по функционалу код (+ по ряду причин не самый быстрый)
-// исключительно для работы с файлом конфигурации игры и прочими текстовыми данным (фиксированными), где скорость не играет большого значения
-
-// основные отличия:
-// 1) не используем std string
-// 2) связываем номер строки в документе с открывающим тэгом (нам это нужно для отладки уровней и вывода информации об ошибках хмл)
-// (!) для получения номера строки необходимо раскоментрировать #define gamedebug в config.h (для увеличения скорости парсинга не включаем)
-// 3) проверяем структуру xml документа
-
-// особенности работы:
-// 1) игнорируем комментарии при загрузке файла
-// 2) работаем только с utf8 (и ascii), особенности других кодировок не учитываем
-// 3) тэги не должны разбиваться на несколько строк (c < до > все должно быть на одной строке)
-// 4) не работаем с CDATA
+/*
+ * This is not a full featured XML parser, only features AstoMenace needs are supported.
+ * This is not the fast one XML parser, we don't use this code for time-critical parts.
+ * The main reason for this XML parser code - reduce external dependencies and avoid
+ * license-related issues for included code.
+ *
+ * Limitations:
+ * 1. Only utf8 and ascii are supported.
+ * 2. Tags between '<' and '>' characters could not be wrapped.
+ * 3. CDATA are not supported.
+ *
+ * Special features:
+ * 1. For game scripts debug, XML will care about lines numbers and open tag.
+ * 2. Test XML file structure (in the way we need).
+ */
 
 class cXMLAttribute
 {
@@ -198,8 +199,10 @@ public:
 	};
 	void AddEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName, bool AttributeData)
 	{
-		if (AttributeData) AddEntryAttribute(XMLEntry, AttributeName, "on");
-		else AddEntryAttribute(XMLEntry, AttributeName, "off");
+		if (AttributeData)
+			AddEntryAttribute(XMLEntry, AttributeName, "on");
+		else
+			AddEntryAttribute(XMLEntry, AttributeName, "off");
 	};
 
 	void AddComment(cXMLEntry *ParentXMLEntry, const char *Text)
@@ -218,7 +221,8 @@ public:
 			return nullptr;
 		cXMLEntry *TmpEntry = ParentXMLEntry->FirstChild;
 		while (TmpEntry != nullptr) {
-			if (!strcmp(Name, TmpEntry->Name)) return TmpEntry;
+			if (!strcmp(Name, TmpEntry->Name))
+				return TmpEntry;
 			TmpEntry = TmpEntry->Next;
 		}
 		return nullptr;
@@ -226,10 +230,12 @@ public:
 
 	char *GetEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName)
 	{
-		if (XMLEntry == nullptr) return nullptr;
+		if (XMLEntry == nullptr)
+			return nullptr;
 		cXMLAttribute *TmpAttribute = XMLEntry->FirstAttribute;
 		while (TmpAttribute != nullptr) {
-			if (!strcmp(AttributeName, TmpAttribute->Name)) return TmpAttribute->Data;
+			if (!strcmp(AttributeName, TmpAttribute->Name))
+				return TmpAttribute->Data;
 			TmpAttribute = TmpAttribute->Next;
 		}
 		return nullptr;
@@ -237,31 +243,40 @@ public:
 
 	int iGetEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName)
 	{
-		if (XMLEntry == nullptr) return 0;
+		if (XMLEntry == nullptr)
+			return 0;
 		return atoi(GetEntryAttribute(XMLEntry, AttributeName));
 	};
 
 	float fGetEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName)
 	{
-		if (XMLEntry == nullptr) return 0.0f;
+		if (XMLEntry == nullptr)
+			return 0.0f;
 		return (float)atof(GetEntryAttribute(XMLEntry, AttributeName));
 	};
 
 	bool bGetEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName)
 	{
-		if (XMLEntry == nullptr) return false;
+		if (XMLEntry == nullptr)
+			return false;
 		char *Data = GetEntryAttribute(XMLEntry, AttributeName);
-		if ((!strcmp(Data, "on")) || (!strcmp(Data, "true")) || (!strcmp(Data, "yes")) || (!strcmp(Data, "1"))) return true;
+		if ((!strcmp(Data, "on")) ||
+		    (!strcmp(Data, "true")) ||
+		    (!strcmp(Data, "yes")) ||
+		    (!strcmp(Data, "1")))
+			return true;
 		return false;
 	};
 
 	cXMLEntry *FindFirstChildEntryByName(cXMLEntry *ParentXMLEntry, const char *ChildEntryName)
 	{
-		if (ParentXMLEntry == nullptr) return nullptr;
+		if (ParentXMLEntry == nullptr)
+			return nullptr;
 
 		cXMLEntry *TmpEntry = ParentXMLEntry->FirstChild;
 		while (TmpEntry != nullptr) {
-			if (!strcmp(ChildEntryName, TmpEntry->Name)) return TmpEntry;
+			if (!strcmp(ChildEntryName, TmpEntry->Name))
+				return TmpEntry;
 			TmpEntry = TmpEntry->Next;
 		}
 		return nullptr;
@@ -272,6 +287,5 @@ public:
 	void AttachXMLAttribute(cXMLEntry *XMLEntry, cXMLAttribute *XMLAttribute);
 	void DetachXMLAttribute(cXMLEntry *XMLEntry, cXMLAttribute *XMLAttribute);
 };
-
 
 #endif // XML_H

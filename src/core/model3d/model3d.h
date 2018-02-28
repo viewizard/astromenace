@@ -35,9 +35,9 @@
 //-----------------------------------------------------------------------------
 // структура блока объектов
 //-----------------------------------------------------------------------------
-struct eObjectBlock {
-	eObjectBlock(void) {};
-	~eObjectBlock(void);
+struct sObjectBlock {
+	sObjectBlock(void) {};
+	~sObjectBlock(void);
 
 	int	VertexFormat{0};	// формат вертексов данных
 	int	VertexStride{0};	// отступ в (байтах*4, т.е. во float или uint32_t) до начала данных следующей точки
@@ -54,16 +54,16 @@ struct eObjectBlock {
 				       0, 0, 0, 0, 0, 0, 0, 0};
 
 	// положение локальной системы координат
-	VECTOR3D	Location{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Location{0.0f, 0.0f, 0.0f};
 	// поворот модели в локальной системе координат
-	VECTOR3D	Rotation{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Rotation{0.0f, 0.0f, 0.0f};
 
 	// анимация геометрией (вращение)
 	bool		NeedGeometryAnimation{false};
-	VECTOR3D	GeometryAnimation{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	GeometryAnimation{0.0f, 0.0f, 0.0f};
 	// анимация текстуры (тайловая анимация)
 	bool		NeedTextureAnimation{false};
-	VECTOR3D	TextureAnimation{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	TextureAnimation{0.0f, 0.0f, 0.0f};
 
 	bool		NeedDestroyDataInObjectBlock{false}; // если данные были не общие, а созданные для этого ObjectBlock, нужно их удалить в деструкторе
 	// вертексный буфер
@@ -82,19 +82,19 @@ struct eObjectBlock {
 
 
 //-----------------------------------------------------------------------------
-// Класс eModel3D
+// Класс cModel3D
 //-----------------------------------------------------------------------------
-class eModel3D
+class cModel3D
 {
 public:
-	eModel3D(void);
-	virtual ~eModel3D(void);
+	cModel3D(void);
+	virtual ~cModel3D(void);
 
 	// имя объекта (путь к файлу)
 	char		*Name{nullptr};
 
 	// лист объектов, из которых состоит модель
-	eObjectBlock	*DrawObjectList{nullptr};
+	sObjectBlock	*DrawObjectList{nullptr};
 	int		DrawObjectCount{0};
 	unsigned int	GlobalVertexCount{0};	// фактическое кол-во вертексов в буфере
 	unsigned int	GlobalIndexCount{0};	// фактическое кол-во индексов в буфере
@@ -120,8 +120,8 @@ public:
 	unsigned int	*GlobalVAO{nullptr};
 
 	// указатели на цепь моделей
-	eModel3D	*Next{nullptr};
-	eModel3D	*Prev{nullptr};
+	cModel3D	*Next{nullptr};
+	cModel3D	*Prev{nullptr};
 };
 
 
@@ -131,11 +131,11 @@ public:
 
 // Предварительная загрузка геометрии модели, если нужно создания доп. буфера с треугольниками не более TriangleSizeLimit
 // если не нужно, передаем отрицательное значение
-eModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal);
+cModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal);
 // Присоеденяем Model3D к списку
-void vw_AttachModel3D(eModel3D * NewModel3D);
+void vw_AttachModel3D(cModel3D *NewModel3D);
 // Удаляем Model3D из списка
-void vw_DetachModel3D(eModel3D * OldModel3D);
+void vw_DetachModel3D(cModel3D *OldModel3D);
 // Удаляем все Model3D в списке
 void vw_ReleaseAllModel3D();
 

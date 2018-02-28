@@ -31,34 +31,34 @@
 #include "../texture/texture.h"
 
 
-class eParticleSystem2D
+class cParticleSystem2D
 {
 public:
-	eParticleSystem2D() {};
-	~eParticleSystem2D();
+	cParticleSystem2D() {};
+	~cParticleSystem2D();
 
 	// обновить все частицы в этой системе, по времени
 	bool	Update(float Time);
 	// прорисовка всех частиц
 	void	Draw();
 	// базовая текстура частиц
-	eTexture	*Texture{nullptr};
+	sTexture *Texture{nullptr};
 
 	// передвинуть все частици на указаное значение
-	void		MoveSystem(VECTOR3D NewLocation);
+	void		MoveSystem(sVECTOR3D NewLocation);
 	// сдвинуть только центр системы
-	void		MoveSystemLocation(VECTOR3D NewLocation);
+	void		MoveSystemLocation(sVECTOR3D NewLocation);
 
 	// кол-во создаваемых частиц в секунду
 	unsigned int	ParticlesPerSec{100};
 
 	// текущее положение частиц в пространстве
-	VECTOR3D	Location{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Location{0.0f, 0.0f, 0.0f};
 	// текущее направление системы (используется для создания частиц+некоторые вариации)
-	VECTOR3D	Direction{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Direction{0.0f, 0.0f, 0.0f};
 	// угол поворота системы
-	VECTOR3D	Angle{0.0f, 0.0f, 0.0f};
-	void 		SetRotation(VECTOR3D NewAngle);
+	sVECTOR3D	Angle{0.0f, 0.0f, 0.0f};
+	void 		SetRotation(sVECTOR3D NewAngle);
 
 	// текущая матрица вращения
 	float	RotationMatrix[9]{1.0f, 0.0f, 0.0f,
@@ -77,9 +77,9 @@ public:
 
 	// Цвет частиц при старте и завершении
 	// линейно интерполируется
-	COLORVALUE2D	ColorStart{1.0f, 1.0f, 1.0f, 1.0f};
-	COLORVALUE2D	ColorVar{0.0f, 0.0f, 0.0f, 0.0f};
-	COLORVALUE2D	ColorEnd{1.0f, 1.0f, 1.0f, 1.0f};
+	sCOLORVALUE2D	ColorStart{1.0f, 1.0f, 1.0f, 1.0f};
+	sCOLORVALUE2D	ColorVar{0.0f, 0.0f, 0.0f, 0.0f};
+	sCOLORVALUE2D	ColorEnd{1.0f, 1.0f, 1.0f, 1.0f};
 
 	// Скалярная скорость, с вектором направления получаем вектор движения
 	float	Speed{1.0f};
@@ -89,7 +89,7 @@ public:
 
 	// тип создания... 0-точка, 1-квадрат, 2-окружность
 	int		CreationType{0};
-	VECTOR3D	CreationSize{0.05f,0.05f,0.05f};
+	sVECTOR3D	CreationSize{0.05f,0.05f,0.05f};
 
 	// если нужно - корректировка размера частицы при создании относительно камеры
 	// мертвая зона (радиус, где вообще не рисуем)
@@ -120,11 +120,11 @@ public:
 	float	EmissionResidue{0.0f};
 
 	// подвязка к динамическому массиву
-	eParticle2D	*Start{nullptr};
-	eParticle2D	*End{nullptr};
+	sParticle2D	*Start{nullptr};
+	sParticle2D	*End{nullptr};
 	int	ParticlesCount{0};
-	void	Attach(eParticle2D *NewParticle);
-	void	Detach(eParticle2D *OldParticle);
+	void	Attach(sParticle2D *NewParticle);
+	void	Detach(sParticle2D *OldParticle);
 };
 
 #endif //PARTICLESYSTEM2D_H

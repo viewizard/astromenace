@@ -28,7 +28,7 @@
 #include "graphics.h"
 
 // текущий работающий буфер, если 0 - фрейм буфер
-eFBO *CurrentFBO = nullptr;
+sFBO *CurrentFBO = nullptr;
 
 // указатели на функии
 PFNGLGENRENDERBUFFERSEXTPROC				glGenRenderbuffersEXT = nullptr;
@@ -140,7 +140,7 @@ bool vw_Internal_InitializationFBO()
 //------------------------------------------------------------------------------------
 // Создаем FBO с заданными параметрами (FBO - уже заранее подготовленный объект, в функции память не выделяем)
 //------------------------------------------------------------------------------------
-bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDepth, int MSAA, int *CSAA)
+bool vw_BuildFBO(sFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDepth, int MSAA, int *CSAA)
 {
 	if ((FBO == nullptr) ||
 	    (glGenRenderbuffersEXT == nullptr) ||
@@ -265,7 +265,7 @@ bool vw_BuildFBO(eFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 //------------------------------------------------------------------------------------
 // Установка FBO
 //------------------------------------------------------------------------------------
-void vw_BindFBO(eFBO *FBO)
+void vw_BindFBO(sFBO *FBO)
 {
 	if ((glBindFramebufferEXT == nullptr) ||
 	    ((FBO != nullptr) && (FBO->FrameBufferObject == 0)))
@@ -297,7 +297,7 @@ void vw_BindFBO(eFBO *FBO)
 //------------------------------------------------------------------------------------
 // получаем текущий установленный FBO, 0 - если фрейм буфер
 //------------------------------------------------------------------------------------
-eFBO *vw_GetCurrentFBO()
+sFBO *vw_GetCurrentFBO()
 {
 	return CurrentFBO;
 }
@@ -312,7 +312,7 @@ eFBO *vw_GetCurrentFBO()
 //------------------------------------------------------------------------------------
 // Блит FBO
 //------------------------------------------------------------------------------------
-void vw_BlitFBO(eFBO *SourceFBO, eFBO *TargetFBO)
+void vw_BlitFBO(sFBO *SourceFBO, sFBO *TargetFBO)
 {
 	if ((SourceFBO == nullptr) || (TargetFBO == nullptr) ||
 	    (glBindFramebufferEXT == nullptr) || (glBlitFramebufferEXT == nullptr) ||
@@ -338,7 +338,7 @@ void vw_BlitFBO(eFBO *SourceFBO, eFBO *TargetFBO)
 //------------------------------------------------------------------------------------
 // Рисуем FBO в указанный FBO
 //------------------------------------------------------------------------------------
-void vw_DrawColorFBO(eFBO *SourceFBO, eFBO *TargetFBO)
+void vw_DrawColorFBO(sFBO *SourceFBO, sFBO *TargetFBO)
 {
 	if ((SourceFBO == nullptr) || (SourceFBO->ColorTexture == 0))
 		return;
@@ -427,7 +427,7 @@ void vw_DrawColorFBO(eFBO *SourceFBO, eFBO *TargetFBO)
 //------------------------------------------------------------------------------------
 // Удаление данных FBO
 //------------------------------------------------------------------------------------
-void vw_DeleteFBO(eFBO *FBO)
+void vw_DeleteFBO(sFBO *FBO)
 {
 	if ((FBO == nullptr) ||
 	    (glDeleteRenderbuffersEXT == nullptr) ||

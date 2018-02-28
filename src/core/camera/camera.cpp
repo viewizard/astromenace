@@ -31,20 +31,20 @@ namespace {
 // Camera update flag (need for frustum calculation on camera update).
 bool CameraUpdated{true};
 // Camera location.
-VECTOR3D CameraLocation{0.0f, 0.0f, 0.0f};
+sVECTOR3D CameraLocation{0.0f, 0.0f, 0.0f};
 // Camera rotation angles.
-VECTOR3D CameraRotation{0.0f, 0.0f, 0.0f};
+sVECTOR3D CameraRotation{0.0f, 0.0f, 0.0f};
 // Camera deviation (need for camera shake effect).
-VECTOR3D CameraDeviation{0.0f, 0.0f, 0.0f};
+sVECTOR3D CameraDeviation{0.0f, 0.0f, 0.0f};
 // Camera focus point (anchor).
-VECTOR3D CameraFocusPoint{0.0f, 0.0f, 0.0f};
+sVECTOR3D CameraFocusPoint{0.0f, 0.0f, 0.0f};
 }
 
 
 /*
  * Set camera location.
  */
-void vw_SetCameraLocation(const VECTOR3D &NewLocation)
+void vw_SetCameraLocation(const sVECTOR3D &NewLocation)
 {
 	CameraLocation = NewLocation;
 	CameraUpdated = true;
@@ -53,7 +53,7 @@ void vw_SetCameraLocation(const VECTOR3D &NewLocation)
 /*
  * Increment camera location by vector.
  */
-void vw_IncCameraLocation(const VECTOR3D &IncLocation)
+void vw_IncCameraLocation(const sVECTOR3D &IncLocation)
 {
 	CameraLocation += IncLocation;
 	CameraFocusPoint += IncLocation;
@@ -63,7 +63,7 @@ void vw_IncCameraLocation(const VECTOR3D &IncLocation)
 /*
  * Get camera location.
  */
-VECTOR3D vw_GetCameraLocation(VECTOR3D *CurrentLocation)
+sVECTOR3D vw_GetCameraLocation(sVECTOR3D *CurrentLocation)
 {
 	if (CurrentLocation != nullptr)
 		*CurrentLocation = CameraLocation;
@@ -73,7 +73,7 @@ VECTOR3D vw_GetCameraLocation(VECTOR3D *CurrentLocation)
 /*
  * Get camera rotation angles.
  */
-VECTOR3D vw_GetCameraRotation(VECTOR3D *CurrentRotation)
+sVECTOR3D vw_GetCameraRotation(sVECTOR3D *CurrentRotation)
 {
 	if (CurrentRotation != nullptr)
 		*CurrentRotation = CameraRotation;
@@ -83,7 +83,7 @@ VECTOR3D vw_GetCameraRotation(VECTOR3D *CurrentRotation)
 /*
  * Get camera focus point (anchor).
  */
-VECTOR3D vw_GetCameraFocusPoint()
+sVECTOR3D vw_GetCameraFocusPoint()
 {
 	return CameraFocusPoint;
 }
@@ -91,7 +91,7 @@ VECTOR3D vw_GetCameraFocusPoint()
 /*
  * Move camera by direction.
  */
-void vw_SetCameraMove(const VECTOR3D &NewRotation, float ChangeDistance, const VECTOR3D &Point)
+void vw_SetCameraMove(const sVECTOR3D &NewRotation, float ChangeDistance, const sVECTOR3D &Point)
 {
 	// revert back all movements
 	CameraLocation -= Point;
@@ -109,15 +109,15 @@ void vw_SetCameraMove(const VECTOR3D &NewRotation, float ChangeDistance, const V
 /*
  * Move camera around point (anchor).
  */
-void vw_SetCameraMoveAroundPoint(const VECTOR3D &Point, float ChangeDistance, const VECTOR3D &ChangeRotation)
+void vw_SetCameraMoveAroundPoint(const sVECTOR3D &Point, float ChangeDistance, const sVECTOR3D &ChangeRotation)
 {
 	CameraFocusPoint = Point;
 	// initial camera move
 	vw_SetCameraMove(ChangeRotation, ChangeDistance, Point);
 
 	// rotate camera to the point
-	VECTOR3D exV{0.0f, 0.0f, 0.0f};
-	VECTOR3D V{Point.x - CameraLocation.x,
+	sVECTOR3D exV{0.0f, 0.0f, 0.0f};
+	sVECTOR3D V{Point.x - CameraLocation.x,
 		   Point.y - CameraLocation.y,
 		   Point.z - CameraLocation.z};
 	V.Normalize();
@@ -151,7 +151,7 @@ void vw_SetCameraMoveAroundPoint(const VECTOR3D &Point, float ChangeDistance, co
 /*
  * Camera deviation setup (need for camera shake effect).
  */
-void vw_SetCameraDeviation(const VECTOR3D &NewCameraDeviation)
+void vw_SetCameraDeviation(const sVECTOR3D &NewCameraDeviation)
 {
 	CameraDeviation = NewCameraDeviation;
 }

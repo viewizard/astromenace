@@ -31,7 +31,7 @@
 //-----------------------------------------------------------------------------
 // Создание взрыва из частей объекта
 //-----------------------------------------------------------------------------
-CGroundExplosion::CGroundExplosion(CGroundObject *Object, int ExplType, const VECTOR3D &ExplLocation,
+cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sVECTOR3D &ExplLocation,
 				   int ObjectPieceNum, bool NeedExplosionSFX)
 {
 	TimeLastUpdate = Object->TimeLastUpdate;
@@ -86,22 +86,22 @@ CGroundExplosion::CGroundExplosion(CGroundObject *Object, int ExplType, const VE
 				continue;
 			} else {
 				// создаем часть
-				CShipPart *ShipPart;
-				ShipPart = new CShipPart;
+				cShipPart *ShipPart;
+				ShipPart = new cShipPart;
 				ShipPart->ObjectType = 8;
 				ShipPart->ShowDeleteOnHide = 0;
 
 				// только одна текстура (!) 2-ю для подстветки не тянем
-				ShipPart->Texture = new eTexture*[1];
+				ShipPart->Texture = new sTexture*[1];
 				ShipPart->Texture[0] = Object->Texture[i];
 				if ((Object->NormalMap != nullptr) && (Object->NormalMap[i] != nullptr)) {
-					ShipPart->NormalMap = new eTexture*[1];
+					ShipPart->NormalMap = new sTexture*[1];
 					ShipPart->NormalMap[0] = Object->NormalMap[i];
 				}
 
 				// берем то, что нужно
 				ShipPart->DrawObjectQuantity = 1;
-				ShipPart->DrawObjectList = new eObjectBlock[ShipPart->DrawObjectQuantity];
+				ShipPart->DrawObjectList = new sObjectBlock[ShipPart->DrawObjectQuantity];
 				// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
 				memcpy(&(ShipPart->DrawObjectList[0]), &(Object->DrawObjectList[i]), sizeof(Object->DrawObjectList[0]));
 				// берем стандартные шейдеры
@@ -113,17 +113,17 @@ CGroundExplosion::CGroundExplosion(CGroundObject *Object, int ExplType, const VE
 				}
 
 				// резервируем память для HitBB
-				ShipPart->HitBBLocation = new VECTOR3D[ShipPart->DrawObjectQuantity];
+				ShipPart->HitBBLocation = new sVECTOR3D[ShipPart->DrawObjectQuantity];
 				ShipPart->HitBBRadius2 = new float[ShipPart->DrawObjectQuantity];
-				ShipPart->HitBBSize = new VECTOR3D[ShipPart->DrawObjectQuantity];
-				ShipPart->HitBB = new VECTOR3D*[ShipPart->DrawObjectQuantity];
+				ShipPart->HitBBSize = new sVECTOR3D[ShipPart->DrawObjectQuantity];
+				ShipPart->HitBB = new sVECTOR3D*[ShipPart->DrawObjectQuantity];
 				for (int i1=0; i1<ShipPart->DrawObjectQuantity; i1++) {
-					ShipPart->HitBB[i1] = new VECTOR3D[8];
+					ShipPart->HitBB[i1] = new sVECTOR3D[8];
 				}
 
 
 				// находим точку локального положения объекта в моделе
-				VECTOR3D LocalLocation = Object->DrawObjectList[i].Location;
+				sVECTOR3D LocalLocation = Object->DrawObjectList[i].Location;
 				vw_Matrix33CalcPoint(&LocalLocation, Object->CurrentRotationMat);
 				LocalLocation = Object->HitBBLocation[i]-LocalLocation;
 				vw_Matrix33CalcPoint(&LocalLocation, InvRotationMat);
@@ -140,7 +140,7 @@ CGroundExplosion::CGroundExplosion(CGroundObject *Object, int ExplType, const VE
 
 				if (ExplType == 1) {
 					ShipPart->Speed = 0.0f;
-					VECTOR3D VelocityTMP = ShipPart->Location - ExplLocation;
+					sVECTOR3D VelocityTMP = ShipPart->Location - ExplLocation;
 					if (ShipPart->Radius != 0) ShipPart->Velocity = VelocityTMP^(1.0f/ShipPart->Radius);
 					else ShipPart->Velocity = VelocityTMP^(1.0f+5.0f*vw_Randf1);
 
@@ -156,9 +156,9 @@ CGroundExplosion::CGroundExplosion(CGroundObject *Object, int ExplType, const VE
 
 					if (Wheel) {
 						//if(ShipPart->Speed != 0.0f) Speed-2*vw_Randf1;
-						VECTOR3D VelocityTMP = ShipPart->Location - Object->Location;
+						sVECTOR3D VelocityTMP = ShipPart->Location - Object->Location;
 						// делаем небольшой случайный доворот
-						vw_RotatePoint(&VelocityTMP, VECTOR3D(-5.0f-15.0f*vw_Randf1, 10.0f*vw_Randf0, 0.0f));
+						vw_RotatePoint(&VelocityTMP, sVECTOR3D(-5.0f-15.0f*vw_Randf1, 10.0f*vw_Randf0, 0.0f));
 						if(ShipPart->Radius != 0.0f) ShipPart->Velocity = VelocityTMP^((1.0f+5.0f*vw_Randf1)/ShipPart->Radius);
 						else ShipPart->Velocity = VelocityTMP^(1.0f+5.0f*vw_Randf1);
 
@@ -167,7 +167,7 @@ CGroundExplosion::CGroundExplosion(CGroundObject *Object, int ExplType, const VE
 						ShipPart->RotationSpeed.z = 40.0f+80.0f*vw_Randf0;
 					} else {
 						//if(ShipPart->Speed != 0.0f) Speed-2*vw_Randf1;
-						VECTOR3D VelocityTMP = ShipPart->Location - Object->Location;
+						sVECTOR3D VelocityTMP = ShipPart->Location - Object->Location;
 						if(ShipPart->Radius != 0.0f) ShipPart->Velocity = VelocityTMP^(5.0f/ShipPart->Radius);
 						else ShipPart->Velocity = VelocityTMP^(1.0f+5.0f*vw_Randf1);
 
@@ -186,7 +186,7 @@ CGroundExplosion::CGroundExplosion(CGroundObject *Object, int ExplType, const VE
 				if (ObjectPieceNum != -1)
 					if (ObjectPieceNum == i) {
 						// а теперь взрываем ту, в которую попали...
-						new CSpaceExplosion(ShipPart, 32, ShipPart->Location, ShipPart->Speed, -1);
+						new cSpaceExplosion(ShipPart, 32, ShipPart->Location, ShipPart->Speed, -1);
 						delete ShipPart;
 					}
 			}

@@ -33,7 +33,7 @@
 //-----------------------------------------------------------------------------
 // local/protected variables
 //-----------------------------------------------------------------------------
-eFBO *ShadowMapFBO = nullptr;
+sFBO *ShadowMapFBO = nullptr;
 float ShadowMap_LightProjectionMatrix[16];
 float ShadowMap_LightModelViewMatrix[16];
 
@@ -49,7 +49,7 @@ float ShadowMap_Get_yPixelOffset()
 }
 
 
-eFBO *CurrentSystemFBO = nullptr;
+sFBO *CurrentSystemFBO = nullptr;
 int ShadowMapViewPort_x, ShadowMapViewPort_y, ShadowMapViewPort_width, ShadowMapViewPort_height;
 
 
@@ -68,7 +68,7 @@ bool ShadowMap_Init(int Width, int Height)
 	xPixelOffset = 1.0f/(Setup.Width * ((Width*1.0f)/Setup.Width));
 	yPixelOffset = 1.0f/(Setup.Height * ((Height*1.0f)/Setup.Height));
 
-	ShadowMapFBO = new eFBO;
+	ShadowMapFBO = new sFBO;
 
 	// для нормальной работы нам нужно 24 бита или больше, проверяем это
 	//if (vw_BuildFBO(ShadowMapFBO, Width, Height, true, true)) // тест, для вывода цветовой составляющей на экран
@@ -105,7 +105,7 @@ void ShadowMap_Release()
 //-----------------------------------------------------------------------------
 // подготовка рендеринга в шадовмеп фбо
 //-----------------------------------------------------------------------------
-void ShadowMap_StartRenderToFBO(VECTOR3D FocusPointCorrection, float Distance, float fFarClip)
+void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, float fFarClip)
 {
 	if ((ShadowMapFBO == nullptr) ||
 	    (ShadowMapFBO->DepthTexture == 0))
@@ -139,12 +139,12 @@ void ShadowMap_StartRenderToFBO(VECTOR3D FocusPointCorrection, float Distance, f
 
 
 	// получаем данные направленного источника света
-	eLight 	*CurrentDirectLight = vw_GetMainDirectLight();
-	VECTOR3D LightPosition = CurrentDirectLight->Direction;
+	sLight 	*CurrentDirectLight = vw_GetMainDirectLight();
+	sVECTOR3D LightPosition = CurrentDirectLight->Direction;
 	LightPosition.Normalize();
 	LightPosition = LightPosition^(-Distance);
 
-	VECTOR3D CurrentCameraFocusPoint = vw_GetCameraFocusPoint();
+	sVECTOR3D CurrentCameraFocusPoint = vw_GetCameraFocusPoint();
 	CurrentCameraFocusPoint += FocusPointCorrection;
 	// т.к. у нас направленный свет, надо смещаться относительно точки куда светим
 	LightPosition += CurrentCameraFocusPoint;
@@ -215,7 +215,7 @@ void ShadowMap_StartFinalRender()
 
 	vw_MatrixMode(RI_TEXTURE_MATRIX);
 	vw_LoadIdentity();
-	vw_Translate(VECTOR3D(0.5f, 0.5f, 0.5f)); // remap from [-1,1]^2 to [0,1]^2
+	vw_Translate(sVECTOR3D(0.5f, 0.5f, 0.5f)); // remap from [-1,1]^2 to [0,1]^2
 	vw_Scale(0.5f, 0.5f, 0.5f);
 
 	vw_MultMatrix(ShadowMap_LightProjectionMatrix);

@@ -33,11 +33,11 @@
 //-----------------------------------------------------------------------------
 // Основной класс сценария
 //-----------------------------------------------------------------------------
-class ScriptEngine
+class cScriptEngine
 {
 public:
-	ScriptEngine();
-	~ScriptEngine();
+	cScriptEngine();
+	~cScriptEngine();
 
 	// запустить скрипт на выполнение
 	bool	RunScript(const char *FileName, float InitTime);

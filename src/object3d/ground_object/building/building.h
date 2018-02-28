@@ -34,13 +34,13 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CBuilding
+// Класс cBuilding
 //-----------------------------------------------------------------------------
-class CBuilding : public CGroundObject
+class cBuilding : public cGroundObject
 {
 public:
 
-	virtual ~CBuilding() {};
+	virtual ~cBuilding() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int	BuildingNum);

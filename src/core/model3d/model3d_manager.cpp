@@ -29,8 +29,8 @@
 #include "../system/system.h"
 
 
-eModel3D *StartModel3D = nullptr;
-eModel3D *EndModel3D = nullptr;
+cModel3D *StartModel3D = nullptr;
+cModel3D *EndModel3D = nullptr;
 
 
 
@@ -42,22 +42,22 @@ eModel3D *EndModel3D = nullptr;
 //-----------------------------------------------------------------------------
 // Нахождение геометрии, или ее загрузка
 //-----------------------------------------------------------------------------
-eModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
+cModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
 	if (FileName == nullptr)
 		return nullptr;
 
 	// сначала пытаемся найти уже сущ.
-	eModel3D *tmp = StartModel3D;
+	cModel3D *tmp = StartModel3D;
 	while (tmp != nullptr) {
-		eModel3D *tmp2 = tmp->Next;
+		cModel3D *tmp2 = tmp->Next;
 		if(!strcmp(tmp->Name, FileName))
 			return tmp;
 		tmp = tmp2;
 	}
 
 	// если ничего нет, значит нужно загрузить
-	eModel3D * Model = new eModel3D;
+	cModel3D * Model = new cModel3D;
 
 	// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
 	const char *file_ext = strrchr(FileName, '.');
@@ -101,7 +101,7 @@ eModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool Nee
 //-----------------------------------------------------------------------------
 //	Присоеденяем Model3D к списку
 //-----------------------------------------------------------------------------
-void vw_AttachModel3D(eModel3D * NewModel3D)
+void vw_AttachModel3D(cModel3D * NewModel3D)
 {
 	if (NewModel3D == nullptr)
 		return;
@@ -125,7 +125,7 @@ void vw_AttachModel3D(eModel3D * NewModel3D)
 //-----------------------------------------------------------------------------
 //	Удаляем Model3D из списка
 //-----------------------------------------------------------------------------
-void vw_DetachModel3D(eModel3D * OldModel3D)
+void vw_DetachModel3D(cModel3D * OldModel3D)
 {
 	if (OldModel3D == nullptr)
 		return;
@@ -154,9 +154,9 @@ void vw_DetachModel3D(eModel3D * OldModel3D)
 //-----------------------------------------------------------------------------
 void vw_ReleaseAllModel3D()
 {
-	eModel3D *tmp = StartModel3D;
+	cModel3D *tmp = StartModel3D;
 	while (tmp != nullptr) {
-		eModel3D *tmp2 = tmp->Next;
+		cModel3D *tmp2 = tmp->Next;
 		delete tmp;
 		tmp = tmp2;
 	}

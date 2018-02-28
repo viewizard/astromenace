@@ -45,7 +45,7 @@ float CurrentCursorFlash = 1.0f;
 float CurrentCursorFlashLastTime = -1.0f;
 bool DrawGameCursor = true;
 
-extern eParticleSystem2D *CursorParticleSystem2D;
+extern cParticleSystem2D *CursorParticleSystem2D;
 void DrawDragingWeaponIcon(int X, int Y);
 
 extern float CurrentGameSpeedShowTime;
@@ -59,7 +59,7 @@ extern bool NeedOffMenu;
 void CreateCursor()
 {
 	// курсор
-	CursorParticleSystem2D = new eParticleSystem2D;
+	CursorParticleSystem2D = new cParticleSystem2D;
 	CursorParticleSystem2D->ColorStart.r = 1.00f;
 	CursorParticleSystem2D->ColorStart.g = 1.00f;
 	CursorParticleSystem2D->ColorStart.b = 0.30f;
@@ -78,8 +78,8 @@ void CreateCursor()
 	CursorParticleSystem2D->Life       = 0.40f;
 	CursorParticleSystem2D->LifeVar       = 0.05f;
 	CursorParticleSystem2D->ParticlesPerSec = 50;
-	CursorParticleSystem2D->Direction = VECTOR3D(0.0f, 1.0f, 0.0f);
-	CursorParticleSystem2D->SetRotation(VECTOR3D(0.0f, 0.0f, -45.0f));
+	CursorParticleSystem2D->Direction = sVECTOR3D(0.0f, 1.0f, 0.0f);
+	CursorParticleSystem2D->SetRotation(sVECTOR3D(0.0f, 0.0f, -45.0f));
 	CursorParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
 
 }
@@ -166,7 +166,7 @@ void Loop_Proc()
 	// рисуем курсор
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (DrawGameCursor) {
-		RECT SrcRect, DstRect;
+		sRECT SrcRect, DstRect;
 		int mX,mY;
 		vw_GetMousePos(&mX,&mY);
 
@@ -175,7 +175,7 @@ void Loop_Proc()
 			DrawDragingWeaponIcon(mX, mY);
 
 
-		CursorParticleSystem2D->MoveSystem(VECTOR3D(mX*1.0f+23,mY*1.0f+19,0.0f));
+		CursorParticleSystem2D->MoveSystem(sVECTOR3D(mX*1.0f+23,mY*1.0f+19,0.0f));
 		CursorParticleSystem2D->Update(vw_GetTime());
 		CursorParticleSystem2D->Draw();
 

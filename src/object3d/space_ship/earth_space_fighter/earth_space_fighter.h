@@ -34,13 +34,13 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CEarthSpaceFighter
+// Класс cEarthSpaceFighter
 //-----------------------------------------------------------------------------
-class CEarthSpaceFighter : public CSpaceShip
+class cEarthSpaceFighter : public cSpaceShip
 {
 public:
 
-	virtual ~CEarthSpaceFighter() {};
+	virtual ~cEarthSpaceFighter() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int	SpaceShipNum);
@@ -52,15 +52,15 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Дополнительные функции для CEarthSpaceFighter
+// Дополнительные функции для cEarthSpaceFighter
 //-----------------------------------------------------------------------------
 
 // Установка системы двигателей
-void SetEarthSpaceFighterEngine(CEarthSpaceFighter *SpaceShip, int EngineType);
+void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType);
 // Установка брони для кораблей землян
-void SetEarthSpaceFighterArmour(CEarthSpaceFighter *SpaceShip, int ArmourType);
+void SetEarthSpaceFighterArmour(cEarthSpaceFighter *SpaceShip, int ArmourType);
 // Установка оружия на корабль
-bool SetEarthSpaceFighterWeapon(CEarthSpaceFighter *SpaceShip, int WeaponSlot, int WeaponNum);
+bool SetEarthSpaceFighterWeapon(cEarthSpaceFighter *SpaceShip, int WeaponSlot, int WeaponNum);
 // Получаем возможный поворот орудия в данном слоте
 void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max);
 

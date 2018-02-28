@@ -35,13 +35,13 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CBasePart
+// Класс cBasePart
 //-----------------------------------------------------------------------------
-class CBasePart : public CSpaceObject
+class cBasePart : public cSpaceObject
 {
 public:
 
-	virtual ~CBasePart() {};
+	virtual ~cBasePart() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int BasePartNum);

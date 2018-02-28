@@ -35,7 +35,7 @@
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-CSpaceObject::CSpaceObject(void)
+cSpaceObject::cSpaceObject(void)
 {
 
 	ObjectStatus = 1; // чужой
@@ -53,7 +53,7 @@ CSpaceObject::CSpaceObject(void)
 //-----------------------------------------------------------------------------
 // Деструктор
 //-----------------------------------------------------------------------------
-CSpaceObject::~CSpaceObject(void)
+cSpaceObject::~cSpaceObject(void)
 {
 	if (GFXLocation != nullptr) {
 		delete [] GFXLocation;
@@ -84,10 +84,10 @@ CSpaceObject::~CSpaceObject(void)
 //-----------------------------------------------------------------------------
 // Установка положения объекта
 //-----------------------------------------------------------------------------
-void CSpaceObject::SetLocation(VECTOR3D NewLocation)
+void cSpaceObject::SetLocation(sVECTOR3D NewLocation)
 {
 	// вызываем родительскую функцию
-	::CObject3D::SetLocation(NewLocation);
+	::cObject3D::SetLocation(NewLocation);
 
 
 	if (GFX != nullptr)
@@ -105,10 +105,10 @@ void CSpaceObject::SetLocation(VECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 // Установка углов поворота объекта
 //-----------------------------------------------------------------------------
-void CSpaceObject::SetRotation(VECTOR3D NewRotation)
+void cSpaceObject::SetRotation(sVECTOR3D NewRotation)
 {
 	// вызываем родительскую функцию
-	::CObject3D::SetRotation(NewRotation);
+	::cObject3D::SetRotation(NewRotation);
 
 
 	if (GFX != nullptr)
@@ -140,18 +140,18 @@ void CSpaceObject::SetRotation(VECTOR3D NewRotation)
 //-----------------------------------------------------------------------------
 // Обновление данных объектa
 //-----------------------------------------------------------------------------
-bool CSpaceObject::Update(float Time)
+bool cSpaceObject::Update(float Time)
 {
 	// вызываем родительскую функцию
 	// если там передали удалить - выходим
-	if (!::CObject3D::Update(Time)) return false;
+	if (!::cObject3D::Update(Time)) return false;
 
 	// если это часть корабля босса, взрываем через время
 	if (BossPartCountDown > -1.0f) {
 		BossPartCountDown -= TimeDelta;
 
 		if (BossPartCountDown<=0.0f) {
-			new CSpaceExplosion(this, 34, Location, Speed, -1);
+			new cSpaceExplosion(this, 34, Location, Speed, -1);
 			return false;
 		}
 	}
@@ -161,7 +161,7 @@ bool CSpaceObject::Update(float Time)
 	if (ObjectType == 7 || ObjectType == 15) {
 		// если большие астероиды летящие сверху
 		if (ObjectType == 15 && (ObjectCreationType>20 && ObjectCreationType<30)) {
-			SetRotation(VECTOR3D(RotationSpeed.x*TimeDelta, RotationSpeed.y*TimeDelta, 0.0f));
+			SetRotation(sVECTOR3D(RotationSpeed.x*TimeDelta, RotationSpeed.y*TimeDelta, 0.0f));
 		} else {
 			if (RotationSpeed.x != 0.0f) {
 				Rotation.x -= RotationSpeed.x*TimeDelta;
@@ -190,15 +190,15 @@ bool CSpaceObject::Update(float Time)
 		}
 
 		if (RotationSpeed.x != 0.0f) {
-			SetRotation(VECTOR3D(-RotationSpeed.x*TimeDelta,0.0f,0.0f));
+			SetRotation(sVECTOR3D(-RotationSpeed.x*TimeDelta,0.0f,0.0f));
 			RotationSpeed.x -= (RotationSpeed.x/4.0f)*TimeDelta;
 		}
 		if (RotationSpeed.y != 0.0f) {
-			SetRotation(VECTOR3D(0.0f,-RotationSpeed.y*TimeDelta,0.0f));
+			SetRotation(sVECTOR3D(0.0f,-RotationSpeed.y*TimeDelta,0.0f));
 			RotationSpeed.y -= (RotationSpeed.y/4.0f)*TimeDelta;
 		}
 		if (RotationSpeed.z != 0.0f) {
-			SetRotation(VECTOR3D(0.0f,0.0f,-RotationSpeed.z*TimeDelta));
+			SetRotation(sVECTOR3D(0.0f,0.0f,-RotationSpeed.z*TimeDelta));
 			RotationSpeed.z -= (RotationSpeed.z/4.0f)*TimeDelta;
 		}
 	}
@@ -208,10 +208,10 @@ bool CSpaceObject::Update(float Time)
 
 	// если планеты, должны учесть положение камеры т.е. ее смещение
 	if (ObjectType == 14 ||	ObjectType == 15) {
-		VECTOR3D Temp = GamePoint - LastCameraPoint;
+		sVECTOR3D Temp = GamePoint - LastCameraPoint;
 
 		// у планет особое движение... они немного могут двигаться на камеру...
-		VECTOR3D OrientTTT = Temp^(-1);
+		sVECTOR3D OrientTTT = Temp^(-1);
 		OrientTTT.Normalize();
 		SetLocation(Location + (OrientTTT^(Speed*TimeDelta)) + Temp);
 		LastCameraPoint = GamePoint;

@@ -35,13 +35,13 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CAsteroid
+// Класс cAsteroid
 //-----------------------------------------------------------------------------
-class CAsteroid : public CSpaceObject
+class cAsteroid : public cSpaceObject
 {
 public:
 
-	virtual ~CAsteroid() {};
+	virtual ~cAsteroid() {};
 
 	// Создание нужного объекта
 	virtual void	Create(int AsteroidNum);

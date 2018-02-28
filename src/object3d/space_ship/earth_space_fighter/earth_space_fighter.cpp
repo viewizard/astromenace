@@ -464,7 +464,7 @@ void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max)
 
 
 
-struct EarthSpaceFighterData {
+struct sEarthSpaceFighterData {
 	float	Weight;
 	float	Strength;
 	int		WeaponQuantity;
@@ -472,7 +472,7 @@ struct EarthSpaceFighterData {
 	const char *Name;
 };
 
-static EarthSpaceFighterData PresetEarthSpaceFighterData[] = {
+static sEarthSpaceFighterData PresetEarthSpaceFighterData[] = {
 	{5000,	30,	5,	2,	"models/earthfighter/sf-01.vw3d"},
 	{8000,	40,	4,	4,	"models/earthfighter/sf-02.vw3d"},
 	{10000,	60,	3,	4,	"models/earthfighter/sf-03.vw3d"},
@@ -510,10 +510,10 @@ float GetShipArmor(int SpaceShipNum)
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void CEarthSpaceFighter::Create(int	SpaceShipNum)
+void cEarthSpaceFighter::Create(int	SpaceShipNum)
 {
 	if ((SpaceShipNum <= 0) || ((unsigned int)SpaceShipNum > PresetEarthSpaceFighterDataCount)) {
-		fprintf(stderr, "!!! Couldn't init CEarthSpaceFighter object with Number %i.\n", SpaceShipNum);
+		fprintf(stderr, "!!! Couldn't init cEarthSpaceFighter object with Number %i.\n", SpaceShipNum);
 		return;
 	}
 
@@ -534,9 +534,9 @@ void CEarthSpaceFighter::Create(int	SpaceShipNum)
 
 	// начальные установки для оружия
 	WeaponSetFire = new bool[WeaponQuantity];
-	WeaponLocation = new VECTOR3D[WeaponQuantity];
+	WeaponLocation = new sVECTOR3D[WeaponQuantity];
 	WeaponType = new int[WeaponQuantity];
-	Weapon = new CWeapon*[WeaponQuantity];
+	Weapon = new cWeapon*[WeaponQuantity];
 	WeaponYAngle = new float[WeaponQuantity];
 	for (int i=0; i<WeaponQuantity; i++) {
 		WeaponSetFire[i] = false;
@@ -548,18 +548,18 @@ void CEarthSpaceFighter::Create(int	SpaceShipNum)
 
 	// начальные установки для двигателей
 
-	EngineLocation = new VECTOR3D[EngineQuantity];
-	Engine = new eParticleSystem*[EngineQuantity];
+	EngineLocation = new sVECTOR3D[EngineQuantity];
+	Engine = new cParticleSystem*[EngineQuantity];
 	for (int i = 0; i < EngineQuantity; i++)
 		Engine[i] = nullptr;
 
-	EngineLeftLocation = new VECTOR3D[EngineLeftQuantity];
-	EngineLeft = new eParticleSystem*[EngineLeftQuantity];
+	EngineLeftLocation = new sVECTOR3D[EngineLeftQuantity];
+	EngineLeft = new cParticleSystem*[EngineLeftQuantity];
 	for (int i = 0; i < EngineLeftQuantity; i++)
 		EngineLeft[i] = nullptr;
 
-	EngineRightLocation = new VECTOR3D[EngineRightQuantity];
-	EngineRight = new eParticleSystem*[EngineRightQuantity];
+	EngineRightLocation = new sVECTOR3D[EngineRightQuantity];
+	EngineRight = new cParticleSystem*[EngineRightQuantity];
 	for (int i = 0; i < EngineRightQuantity; i++)
 		EngineRight[i] = nullptr;
 
@@ -570,357 +570,357 @@ void CEarthSpaceFighter::Create(int	SpaceShipNum)
 	switch (SpaceShipNum) {
 	case 1:
 		WeaponType[0] = 1;
-		WeaponLocation[0] = VECTOR3D(4.4f, -0.1f, -6.0f);
+		WeaponLocation[0] = sVECTOR3D(4.4f, -0.1f, -6.0f);
 		WeaponType[1] = 1;
-		WeaponLocation[1] = VECTOR3D(-4.4f, -0.1f, -6.0f);
+		WeaponLocation[1] = sVECTOR3D(-4.4f, -0.1f, -6.0f);
 		WeaponType[2] = 1;
-		WeaponLocation[2] = VECTOR3D(1.9f, -1.25f, 6.5f);
+		WeaponLocation[2] = sVECTOR3D(1.9f, -1.25f, 6.5f);
 		WeaponType[3] = 1;
-		WeaponLocation[3] = VECTOR3D(-1.9f, -1.25f, 6.5f);
+		WeaponLocation[3] = sVECTOR3D(-1.9f, -1.25f, 6.5f);
 		WeaponType[4] = 4;
-		WeaponLocation[4] = VECTOR3D(0.0f, -1.20f, 1.0f);
+		WeaponLocation[4] = sVECTOR3D(0.0f, -1.20f, 1.0f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(3.0f, -1.2f, -4.7f);
-		EngineLocation[1] = VECTOR3D(-3.0f, -1.2f, -4.7f);
+		EngineLocation[0] = sVECTOR3D(3.0f, -1.2f, -4.7f);
+		EngineLocation[1] = sVECTOR3D(-3.0f, -1.2f, -4.7f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.0f, -0.7f, 3.7f);
-		EngineRightLocation[0] = VECTOR3D(-1.0f, -0.7f, 3.7f);
+		EngineLeftLocation[0] = sVECTOR3D(1.0f, -0.7f, 3.7f);
+		EngineRightLocation[0] = sVECTOR3D(-1.0f, -0.7f, 3.7f);
 		break;
 	case 2:
 		WeaponType[0] = 1;
-		WeaponLocation[0] = VECTOR3D(3.45f, 1.03f, -8.5f);
+		WeaponLocation[0] = sVECTOR3D(3.45f, 1.03f, -8.5f);
 		WeaponType[1] = 1;
-		WeaponLocation[1] = VECTOR3D(-3.45f, 1.03f, -8.5f);
+		WeaponLocation[1] = sVECTOR3D(-3.45f, 1.03f, -8.5f);
 		WeaponType[2] = 1;
-		WeaponLocation[2] = VECTOR3D(1.7f, -1.03f, 3.9f);
+		WeaponLocation[2] = sVECTOR3D(1.7f, -1.03f, 3.9f);
 		WeaponType[3] = 1;
-		WeaponLocation[3] = VECTOR3D(-1.7f, -1.03f, 3.9f);
+		WeaponLocation[3] = sVECTOR3D(-1.7f, -1.03f, 3.9f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(4.9f, -1.1f, -8.9f);
-		EngineLocation[1] = VECTOR3D(-4.9f, -1.1f, -8.9f);
-		EngineLocation[2] = VECTOR3D(0.75f, 0.7f, -9.6f);
-		EngineLocation[3] = VECTOR3D(-0.75f, 0.7f, -9.6f);
+		EngineLocation[0] = sVECTOR3D(4.9f, -1.1f, -8.9f);
+		EngineLocation[1] = sVECTOR3D(-4.9f, -1.1f, -8.9f);
+		EngineLocation[2] = sVECTOR3D(0.75f, 0.7f, -9.6f);
+		EngineLocation[3] = sVECTOR3D(-0.75f, 0.7f, -9.6f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.0f, -0.7f, 5.7f);
-		EngineRightLocation[0] = VECTOR3D(-1.0f, -0.7f, 5.7f);
+		EngineLeftLocation[0] = sVECTOR3D(1.0f, -0.7f, 5.7f);
+		EngineRightLocation[0] = sVECTOR3D(-1.0f, -0.7f, 5.7f);
 		break;
 	case 3:
 		WeaponType[0] = 5;
-		WeaponLocation[0] = VECTOR3D(0.0f, -1.75f, 3.5f);
+		WeaponLocation[0] = sVECTOR3D(0.0f, -1.75f, 3.5f);
 		WeaponType[1] = 1;
-		WeaponLocation[1] = VECTOR3D(7.15f, -0.38f, -4.4f);
+		WeaponLocation[1] = sVECTOR3D(7.15f, -0.38f, -4.4f);
 		WeaponType[2] = 1;
-		WeaponLocation[2] = VECTOR3D(-7.15f, -0.38f, -4.4f);
+		WeaponLocation[2] = sVECTOR3D(-7.15f, -0.38f, -4.4f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(4.4f, -3.0f, -9.7f);
-		EngineLocation[1] = VECTOR3D(-4.4f, -3.0f, -9.7f);
-		EngineLocation[2] = VECTOR3D(4.4f, 3.0f, -9.7f);
-		EngineLocation[3] = VECTOR3D(-4.4f, 3.0f, -9.7f);
+		EngineLocation[0] = sVECTOR3D(4.4f, -3.0f, -9.7f);
+		EngineLocation[1] = sVECTOR3D(-4.4f, -3.0f, -9.7f);
+		EngineLocation[2] = sVECTOR3D(4.4f, 3.0f, -9.7f);
+		EngineLocation[3] = sVECTOR3D(-4.4f, 3.0f, -9.7f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(0.8f, -1.6f, 8.7f);
-		EngineRightLocation[0] = VECTOR3D(-0.8f, -1.6f, 8.7f);
+		EngineLeftLocation[0] = sVECTOR3D(0.8f, -1.6f, 8.7f);
+		EngineRightLocation[0] = sVECTOR3D(-0.8f, -1.6f, 8.7f);
 		break;
 	case 4:
 		WeaponType[0] = 1;
-		WeaponLocation[0] = VECTOR3D(4.10f, 1.4f, -2.5f);
+		WeaponLocation[0] = sVECTOR3D(4.10f, 1.4f, -2.5f);
 		WeaponType[1] = 1;
-		WeaponLocation[1] = VECTOR3D(-4.10f, 1.4f, -2.5f);
+		WeaponLocation[1] = sVECTOR3D(-4.10f, 1.4f, -2.5f);
 		WeaponType[2] = 1;
-		WeaponLocation[2] = VECTOR3D(5.10f, -1.2f, -2.5f);
+		WeaponLocation[2] = sVECTOR3D(5.10f, -1.2f, -2.5f);
 		WeaponType[3] = 1;
-		WeaponLocation[3] = VECTOR3D(-5.10f, -1.2f, -2.5f);
+		WeaponLocation[3] = sVECTOR3D(-5.10f, -1.2f, -2.5f);
 		WeaponType[4] = 4;
-		WeaponLocation[4] = VECTOR3D(0.0f, -1.5f, 5.3f);
+		WeaponLocation[4] = sVECTOR3D(0.0f, -1.5f, 5.3f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(0.8f, 0.1f, -9.6f);
-		EngineLocation[1] = VECTOR3D(-0.8f, 0.1f, -9.6f);
+		EngineLocation[0] = sVECTOR3D(0.8f, 0.1f, -9.6f);
+		EngineLocation[1] = sVECTOR3D(-0.8f, 0.1f, -9.6f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.6f, -0.9f, 5.7f);
-		EngineRightLocation[0] = VECTOR3D(-1.6f, -0.9f, 5.7f);
+		EngineLeftLocation[0] = sVECTOR3D(1.6f, -0.9f, 5.7f);
+		EngineRightLocation[0] = sVECTOR3D(-1.6f, -0.9f, 5.7f);
 		break;
 	case 5:
 		WeaponType[0] = 2;
-		WeaponLocation[0] = VECTOR3D(4.0f, -0.5f, 1.0f);
+		WeaponLocation[0] = sVECTOR3D(4.0f, -0.5f, 1.0f);
 		WeaponType[1] = 2;
-		WeaponLocation[1] = VECTOR3D(-4.0f, -0.5f, 1.0f);
+		WeaponLocation[1] = sVECTOR3D(-4.0f, -0.5f, 1.0f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(6.72f, -0.28f, -7.98f);
-		EngineLocation[1] = VECTOR3D(-6.72f, -0.28f, -7.98f);
-		EngineLocation[2] = VECTOR3D(6.72f, -1.96f, -7.28f);
-		EngineLocation[3] = VECTOR3D(-6.72f, -1.96f, -7.28f);
+		EngineLocation[0] = sVECTOR3D(6.72f, -0.28f, -7.98f);
+		EngineLocation[1] = sVECTOR3D(-6.72f, -0.28f, -7.98f);
+		EngineLocation[2] = sVECTOR3D(6.72f, -1.96f, -7.28f);
+		EngineLocation[3] = sVECTOR3D(-6.72f, -1.96f, -7.28f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.4f, 0.0f, 3.92f);
-		EngineRightLocation[0] = VECTOR3D(-1.4f, 0.0f, 3.92f);
+		EngineLeftLocation[0] = sVECTOR3D(1.4f, 0.0f, 3.92f);
+		EngineRightLocation[0] = sVECTOR3D(-1.4f, 0.0f, 3.92f);
 		break;
 	case 6:
 		WeaponType[0] = 2;
-		WeaponLocation[0] = VECTOR3D(2.80f, 0.25f, -7.0f);
+		WeaponLocation[0] = sVECTOR3D(2.80f, 0.25f, -7.0f);
 		WeaponType[1] = 2;
-		WeaponLocation[1] = VECTOR3D(-2.80f, 0.25f, -7.0f);
+		WeaponLocation[1] = sVECTOR3D(-2.80f, 0.25f, -7.0f);
 		WeaponType[2] = 1;
-		WeaponLocation[2] = VECTOR3D(5.20f, 0.6f, -6.0f);
+		WeaponLocation[2] = sVECTOR3D(5.20f, 0.6f, -6.0f);
 		WeaponType[3] = 1;
-		WeaponLocation[3] = VECTOR3D(-5.20f, 0.6f, -6.0f);
+		WeaponLocation[3] = sVECTOR3D(-5.20f, 0.6f, -6.0f);
 		WeaponType[4] = 4;
-		WeaponLocation[4] = VECTOR3D(0.0f, -1.3f, 2.6f);
+		WeaponLocation[4] = sVECTOR3D(0.0f, -1.3f, 2.6f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(0.6f, 0.45f, -9.9f);
-		EngineLocation[1] = VECTOR3D(-0.6f, 0.45f, -9.9f);
+		EngineLocation[0] = sVECTOR3D(0.6f, 0.45f, -9.9f);
+		EngineLocation[1] = sVECTOR3D(-0.6f, 0.45f, -9.9f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.6f, -0.9f, 4.7f);
-		EngineRightLocation[0] = VECTOR3D(-1.6f, -0.9f, 4.7f);
+		EngineLeftLocation[0] = sVECTOR3D(1.6f, -0.9f, 4.7f);
+		EngineRightLocation[0] = sVECTOR3D(-1.6f, -0.9f, 4.7f);
 		break;
 	case 7:
 		WeaponType[0] = 5;
-		WeaponLocation[0] = VECTOR3D(0.0f, -0.2f, 0.0f);
+		WeaponLocation[0] = sVECTOR3D(0.0f, -0.2f, 0.0f);
 		WeaponType[1] = 1;
-		WeaponLocation[1] = VECTOR3D(4.3f, -1.25f, -1.4f);
+		WeaponLocation[1] = sVECTOR3D(4.3f, -1.25f, -1.4f);
 		WeaponType[2] = 1;
-		WeaponLocation[2] = VECTOR3D(-4.3f, -1.25f, -1.4f);
+		WeaponLocation[2] = sVECTOR3D(-4.3f, -1.25f, -1.4f);
 		WeaponType[3] = 1;
-		WeaponLocation[3] = VECTOR3D(8.2f, -0.75f, -3.6f);
+		WeaponLocation[3] = sVECTOR3D(8.2f, -0.75f, -3.6f);
 		WeaponType[4] = 1;
-		WeaponLocation[4] = VECTOR3D(-8.2f, -0.75f, -3.6f);
+		WeaponLocation[4] = sVECTOR3D(-8.2f, -0.75f, -3.6f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(3.75f, -0.5f, -10.9f);
-		EngineLocation[1] = VECTOR3D(0.0f, 0.4f, -8.3f);
-		EngineLocation[2] = VECTOR3D(-3.75f, -0.5f, -10.9f);
+		EngineLocation[0] = sVECTOR3D(3.75f, -0.5f, -10.9f);
+		EngineLocation[1] = sVECTOR3D(0.0f, 0.4f, -8.3f);
+		EngineLocation[2] = sVECTOR3D(-3.75f, -0.5f, -10.9f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.4f, 0.1f, 1.1f);
-		EngineRightLocation[0] = VECTOR3D(-1.4f, 0.1f, 1.1f);
+		EngineLeftLocation[0] = sVECTOR3D(1.4f, 0.1f, 1.1f);
+		EngineRightLocation[0] = sVECTOR3D(-1.4f, 0.1f, 1.1f);
 		break;
 	case 8:
 		WeaponType[0] = 1;
-		WeaponLocation[0] = VECTOR3D(1.0f, -0.3f, 0.4f);
+		WeaponLocation[0] = sVECTOR3D(1.0f, -0.3f, 0.4f);
 		WeaponType[1] = 1;
-		WeaponLocation[1] = VECTOR3D(-1.0f, -0.3f, 0.4f);
+		WeaponLocation[1] = sVECTOR3D(-1.0f, -0.3f, 0.4f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(3.5f, 1.4f, -7.4f);
-		EngineLocation[1] = VECTOR3D(-3.5f, 1.4f, -7.4f);
-		EngineLocation[2] = VECTOR3D(3.65f, 0.5f, -7.9f);
-		EngineLocation[3] = VECTOR3D(-3.65f, 0.5f, -7.9f);
+		EngineLocation[0] = sVECTOR3D(3.5f, 1.4f, -7.4f);
+		EngineLocation[1] = sVECTOR3D(-3.5f, 1.4f, -7.4f);
+		EngineLocation[2] = sVECTOR3D(3.65f, 0.5f, -7.9f);
+		EngineLocation[3] = sVECTOR3D(-3.65f, 0.5f, -7.9f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.0f, 0.0f, 2.4f);
-		EngineRightLocation[0] = VECTOR3D(-1.0f, 0.0f, 2.4f);
+		EngineLeftLocation[0] = sVECTOR3D(1.0f, 0.0f, 2.4f);
+		EngineRightLocation[0] = sVECTOR3D(-1.0f, 0.0f, 2.4f);
 		break;
 	case 9:
 		WeaponType[0] = 2;
-		WeaponLocation[0] = VECTOR3D(1.2f, 0.2f, 1.6f);
+		WeaponLocation[0] = sVECTOR3D(1.2f, 0.2f, 1.6f);
 		WeaponType[1] = 2;
-		WeaponLocation[1] = VECTOR3D(-1.2f, 0.2f, 1.6f);
+		WeaponLocation[1] = sVECTOR3D(-1.2f, 0.2f, 1.6f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(3.30f, -1.20f, -0.7f);
-		EngineLocation[1] = VECTOR3D(-3.30f, -1.20f, -0.7f);
+		EngineLocation[0] = sVECTOR3D(3.30f, -1.20f, -0.7f);
+		EngineLocation[1] = sVECTOR3D(-3.30f, -1.20f, -0.7f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.0f, 0.2f, 2.2f);
-		EngineRightLocation[0] = VECTOR3D(-1.0f, 0.2f, 2.2f);
+		EngineLeftLocation[0] = sVECTOR3D(1.0f, 0.2f, 2.2f);
+		EngineRightLocation[0] = sVECTOR3D(-1.0f, 0.2f, 2.2f);
 		break;
 	case 10:
 		WeaponType[0] = 2;
-		WeaponLocation[0] = VECTOR3D(5.05f, -1.8f, -1.7f);
+		WeaponLocation[0] = sVECTOR3D(5.05f, -1.8f, -1.7f);
 		WeaponType[1] = 2;
-		WeaponLocation[1] = VECTOR3D(-5.05f, -1.8f, -1.7f);
+		WeaponLocation[1] = sVECTOR3D(-5.05f, -1.8f, -1.7f);
 		WeaponType[2] = 2;
-		WeaponLocation[2] = VECTOR3D(2.55f, -0.7f, -0.7f);
+		WeaponLocation[2] = sVECTOR3D(2.55f, -0.7f, -0.7f);
 		WeaponType[3] = 2;
-		WeaponLocation[3] = VECTOR3D(-2.55f, -0.7f, -0.7f);
+		WeaponLocation[3] = sVECTOR3D(-2.55f, -0.7f, -0.7f);
 		WeaponType[4] = 4;
-		WeaponLocation[4] = VECTOR3D(0.0f, -0.9f, 6.1f);
+		WeaponLocation[4] = sVECTOR3D(0.0f, -0.9f, 6.1f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(0.8f, 0.55f, -9.9f);
-		EngineLocation[1] = VECTOR3D(-0.8f, 0.55f, -9.9f);
+		EngineLocation[0] = sVECTOR3D(0.8f, 0.55f, -9.9f);
+		EngineLocation[1] = sVECTOR3D(-0.8f, 0.55f, -9.9f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.6f, -0.4f, 5.3f);
-		EngineRightLocation[0] = VECTOR3D(-1.6f, -0.4f, 5.3f);
+		EngineLeftLocation[0] = sVECTOR3D(1.6f, -0.4f, 5.3f);
+		EngineRightLocation[0] = sVECTOR3D(-1.6f, -0.4f, 5.3f);
 		break;
 	case 11:
 		WeaponType[0] = 2;
-		WeaponLocation[0] = VECTOR3D(2.0f, -0.55f, -2.2f);
+		WeaponLocation[0] = sVECTOR3D(2.0f, -0.55f, -2.2f);
 		WeaponType[1] = 2;
-		WeaponLocation[1] = VECTOR3D(-2.0f, -0.55f, -2.2f);
+		WeaponLocation[1] = sVECTOR3D(-2.0f, -0.55f, -2.2f);
 		WeaponType[2] = 1;
-		WeaponLocation[2] = VECTOR3D(0.0f, -0.7f, 2.2f);
+		WeaponLocation[2] = sVECTOR3D(0.0f, -0.7f, 2.2f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(4.35f, -0.35f, -4.4f);
-		EngineLocation[1] = VECTOR3D(-4.35f, -0.35f, -4.4f);
+		EngineLocation[0] = sVECTOR3D(4.35f, -0.35f, -4.4f);
+		EngineLocation[1] = sVECTOR3D(-4.35f, -0.35f, -4.4f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.5f, -0.6f, 2.0f);
-		EngineRightLocation[0] = VECTOR3D(-1.5f, -0.6f, 2.0f);
+		EngineLeftLocation[0] = sVECTOR3D(1.5f, -0.6f, 2.0f);
+		EngineRightLocation[0] = sVECTOR3D(-1.5f, -0.6f, 2.0f);
 		break;
 	case 12:
 		WeaponType[0] = 2;
-		WeaponLocation[0] = VECTOR3D(2.25f, -0.85f, 3.3f);
+		WeaponLocation[0] = sVECTOR3D(2.25f, -0.85f, 3.3f);
 		WeaponType[1] = 2;
-		WeaponLocation[1] = VECTOR3D(-2.25f, -0.85f, 3.3f);
+		WeaponLocation[1] = sVECTOR3D(-2.25f, -0.85f, 3.3f);
 		WeaponType[2] = 4;
-		WeaponLocation[2] = VECTOR3D(0.0f, -0.35f, 2.8f);
+		WeaponLocation[2] = sVECTOR3D(0.0f, -0.35f, 2.8f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(4.8f, -1.2f, -2.8f);
-		EngineLocation[1] = VECTOR3D(-4.8f, -1.2f, -2.8f);
+		EngineLocation[0] = sVECTOR3D(4.8f, -1.2f, -2.8f);
+		EngineLocation[1] = sVECTOR3D(-4.8f, -1.2f, -2.8f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.2f, -0.2f, 6.3f);
-		EngineRightLocation[0] = VECTOR3D(-1.2f, -0.2f, 6.3f);
+		EngineLeftLocation[0] = sVECTOR3D(1.2f, -0.2f, 6.3f);
+		EngineRightLocation[0] = sVECTOR3D(-1.2f, -0.2f, 6.3f);
 		break;
 	case 13:
 		WeaponType[0] = 5;
-		WeaponLocation[0] = VECTOR3D(0.0f, -2.15f, -4.4f);
+		WeaponLocation[0] = sVECTOR3D(0.0f, -2.15f, -4.4f);
 		WeaponType[1] = 4;
-		WeaponLocation[1] = VECTOR3D(7.2f, 1.85f, -5.6f);
+		WeaponLocation[1] = sVECTOR3D(7.2f, 1.85f, -5.6f);
 		WeaponType[2] = 4;
-		WeaponLocation[2] = VECTOR3D(-7.2f, 1.85f, -5.6f);
+		WeaponLocation[2] = sVECTOR3D(-7.2f, 1.85f, -5.6f);
 		WeaponType[3] = 1;
-		WeaponLocation[3] = VECTOR3D(3.05f, -1.95f, -0.4f);
+		WeaponLocation[3] = sVECTOR3D(3.05f, -1.95f, -0.4f);
 		WeaponType[4] = 1;
-		WeaponLocation[4] = VECTOR3D(-3.05f, -1.95f, -0.4f);
+		WeaponLocation[4] = sVECTOR3D(-3.05f, -1.95f, -0.4f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(2.2f, -1.35f, -9.8f);
-		EngineLocation[1] = VECTOR3D(-2.2f, -1.35f, -9.8f);
-		EngineLocation[2] = VECTOR3D(1.1f, -1.0f, -9.8f);
-		EngineLocation[3] = VECTOR3D(-1.1f, -1.0f, -9.8f);
+		EngineLocation[0] = sVECTOR3D(2.2f, -1.35f, -9.8f);
+		EngineLocation[1] = sVECTOR3D(-2.2f, -1.35f, -9.8f);
+		EngineLocation[2] = sVECTOR3D(1.1f, -1.0f, -9.8f);
+		EngineLocation[3] = sVECTOR3D(-1.1f, -1.0f, -9.8f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.4f, -0.1f, 0.5f);
-		EngineRightLocation[0] = VECTOR3D(-1.4f, -0.1f, 0.5f);
+		EngineLeftLocation[0] = sVECTOR3D(1.4f, -0.1f, 0.5f);
+		EngineRightLocation[0] = sVECTOR3D(-1.4f, -0.1f, 0.5f);
 		break;
 	case 14:
 		WeaponType[0] = 2;
-		WeaponLocation[0] = VECTOR3D(1.70f, -1.1f, 5.5f);
+		WeaponLocation[0] = sVECTOR3D(1.70f, -1.1f, 5.5f);
 		WeaponType[1] = 2;
-		WeaponLocation[1] = VECTOR3D(-1.70f, -1.1f, 5.5f);
+		WeaponLocation[1] = sVECTOR3D(-1.70f, -1.1f, 5.5f);
 		WeaponType[2] = 2;
-		WeaponLocation[2] = VECTOR3D(4.1f, 0.2f, -6.3f);
+		WeaponLocation[2] = sVECTOR3D(4.1f, 0.2f, -6.3f);
 		WeaponType[3] = 2;
-		WeaponLocation[3] = VECTOR3D(-4.1f, 0.2f, -6.3f);
+		WeaponLocation[3] = sVECTOR3D(-4.1f, 0.2f, -6.3f);
 		WeaponType[4] = 4;
-		WeaponLocation[4] = VECTOR3D(0.0f, -0.9f, 3.3f);
+		WeaponLocation[4] = sVECTOR3D(0.0f, -0.9f, 3.3f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(0.85f, 0.1f, -8.1f);
-		EngineLocation[1] = VECTOR3D(-0.85f, 0.1f, -8.1f);
+		EngineLocation[0] = sVECTOR3D(0.85f, 0.1f, -8.1f);
+		EngineLocation[1] = sVECTOR3D(-0.85f, 0.1f, -8.1f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.3f, -0.7f, 6.3f);
-		EngineRightLocation[0] = VECTOR3D(-1.3f, -0.7f, 6.3f);
+		EngineLeftLocation[0] = sVECTOR3D(1.3f, -0.7f, 6.3f);
+		EngineRightLocation[0] = sVECTOR3D(-1.3f, -0.7f, 6.3f);
 		break;
 	case 15:
 		WeaponType[0] = 4;
-		WeaponLocation[0] = VECTOR3D(0.0f, -0.7f, 1.3f);
+		WeaponLocation[0] = sVECTOR3D(0.0f, -0.7f, 1.3f);
 		WeaponType[1] = 3;
-		WeaponLocation[1] = VECTOR3D(7.1f, -0.2f, -5.8f);
+		WeaponLocation[1] = sVECTOR3D(7.1f, -0.2f, -5.8f);
 		WeaponType[2] = 3;
-		WeaponLocation[2] = VECTOR3D(-7.1f, -0.2f, -5.8f);
+		WeaponLocation[2] = sVECTOR3D(-7.1f, -0.2f, -5.8f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(4.75f, -0.5f, -7.2f);
-		EngineLocation[1] = VECTOR3D(-4.75f, -0.5f, -7.2f);
+		EngineLocation[0] = sVECTOR3D(4.75f, -0.5f, -7.2f);
+		EngineLocation[1] = sVECTOR3D(-4.75f, -0.5f, -7.2f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.0f, -0.6f, 6.25f);
-		EngineRightLocation[0] = VECTOR3D(-1.0f, -0.6f, 6.25f);
+		EngineLeftLocation[0] = sVECTOR3D(1.0f, -0.6f, 6.25f);
+		EngineRightLocation[0] = sVECTOR3D(-1.0f, -0.6f, 6.25f);
 		break;
 	case 16:
 		WeaponType[0] = 3;
-		WeaponLocation[0] = VECTOR3D(0.0f, -1.2f, 7.7f);
+		WeaponLocation[0] = sVECTOR3D(0.0f, -1.2f, 7.7f);
 		WeaponType[1] = 4;
-		WeaponLocation[1] = VECTOR3D(2.0f, -1.05f, 0.4f);
+		WeaponLocation[1] = sVECTOR3D(2.0f, -1.05f, 0.4f);
 		WeaponType[2] = 4;
-		WeaponLocation[2] = VECTOR3D(-2.0f, -1.05f, 0.4f);
+		WeaponLocation[2] = sVECTOR3D(-2.0f, -1.05f, 0.4f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(3.8f, -0.75f, -11.4f);
-		EngineLocation[1] = VECTOR3D(-3.8f, -0.75f, -11.4f);
-		EngineLocation[2] = VECTOR3D(3.5f, 0.85f, -10.85f);
-		EngineLocation[3] = VECTOR3D(-3.5f, 0.85f, -10.85f);
+		EngineLocation[0] = sVECTOR3D(3.8f, -0.75f, -11.4f);
+		EngineLocation[1] = sVECTOR3D(-3.8f, -0.75f, -11.4f);
+		EngineLocation[2] = sVECTOR3D(3.5f, 0.85f, -10.85f);
+		EngineLocation[3] = sVECTOR3D(-3.5f, 0.85f, -10.85f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.6f, -0.6f, 6.25f);
-		EngineRightLocation[0] = VECTOR3D(-1.6f, -0.6f, 6.25f);
+		EngineLeftLocation[0] = sVECTOR3D(1.6f, -0.6f, 6.25f);
+		EngineRightLocation[0] = sVECTOR3D(-1.6f, -0.6f, 6.25f);
 		break;
 	case 17:
 		WeaponType[0] = 3;
-		WeaponLocation[0] = VECTOR3D(3.10f, 0.2f, -4.6f);
+		WeaponLocation[0] = sVECTOR3D(3.10f, 0.2f, -4.6f);
 		WeaponType[1] = 3;
-		WeaponLocation[1] = VECTOR3D(-3.10f, 0.2f, -4.6f);
+		WeaponLocation[1] = sVECTOR3D(-3.10f, 0.2f, -4.6f);
 		WeaponType[2] = 2;
-		WeaponLocation[2] = VECTOR3D(5.85f, -0.5f, -5.6f);
+		WeaponLocation[2] = sVECTOR3D(5.85f, -0.5f, -5.6f);
 		WeaponType[3] = 2;
-		WeaponLocation[3] = VECTOR3D(-5.85f, -0.5f, -5.6f);
+		WeaponLocation[3] = sVECTOR3D(-5.85f, -0.5f, -5.6f);
 		WeaponType[4] = 4;
-		WeaponLocation[4] = VECTOR3D(0.0f, -0.5f, -0.5f);
+		WeaponLocation[4] = sVECTOR3D(0.0f, -0.5f, -0.5f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(0.65f, 0.2f, -8.2f);
-		EngineLocation[1] = VECTOR3D(-0.65f, 0.2f, -8.2f);
+		EngineLocation[0] = sVECTOR3D(0.65f, 0.2f, -8.2f);
+		EngineLocation[1] = sVECTOR3D(-0.65f, 0.2f, -8.2f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.4f, -0.5f, 6.25f);
-		EngineRightLocation[0] = VECTOR3D(-1.4f, -0.5f, 6.25f);
+		EngineLeftLocation[0] = sVECTOR3D(1.4f, -0.5f, 6.25f);
+		EngineRightLocation[0] = sVECTOR3D(-1.4f, -0.5f, 6.25f);
 		break;
 	case 18:
 		WeaponType[0] = 5;
-		WeaponLocation[0] = VECTOR3D(1.7f, -2.5f, -4.4f);
+		WeaponLocation[0] = sVECTOR3D(1.7f, -2.5f, -4.4f);
 		WeaponType[1] = 5;
-		WeaponLocation[1] = VECTOR3D(-1.7f, -2.5f, -4.4f);
+		WeaponLocation[1] = sVECTOR3D(-1.7f, -2.5f, -4.4f);
 		WeaponType[2] = 3;
-		WeaponLocation[2] = VECTOR3D(5.1f, -1.0f, -5.4f);
+		WeaponLocation[2] = sVECTOR3D(5.1f, -1.0f, -5.4f);
 		WeaponType[3] = 3;
-		WeaponLocation[3] = VECTOR3D(-5.1f, -1.0f, -5.4f);
+		WeaponLocation[3] = sVECTOR3D(-5.1f, -1.0f, -5.4f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(7.5f, 0.15f, -9.1f);
-		EngineLocation[1] = VECTOR3D(-7.5f, 0.15f, -9.1f);
-		EngineLocation[2] = VECTOR3D(7.7f, -1.15f, -9.6f);
-		EngineLocation[3] = VECTOR3D(-7.7f, -1.15f, -9.6f);
+		EngineLocation[0] = sVECTOR3D(7.5f, 0.15f, -9.1f);
+		EngineLocation[1] = sVECTOR3D(-7.5f, 0.15f, -9.1f);
+		EngineLocation[2] = sVECTOR3D(7.7f, -1.15f, -9.6f);
+		EngineLocation[3] = sVECTOR3D(-7.7f, -1.15f, -9.6f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.9f, -1.6f, 6.25f);
-		EngineRightLocation[0] = VECTOR3D(-1.9f, -1.6f, 6.25f);
+		EngineLeftLocation[0] = sVECTOR3D(1.9f, -1.6f, 6.25f);
+		EngineRightLocation[0] = sVECTOR3D(-1.9f, -1.6f, 6.25f);
 		break;
 	case 19:
 		WeaponType[0] = 2;
-		WeaponLocation[0] = VECTOR3D(0.0f, -0.75f, 0.0f);
+		WeaponLocation[0] = sVECTOR3D(0.0f, -0.75f, 0.0f);
 		WeaponType[1] = 2;
-		WeaponLocation[1] = VECTOR3D(4.7f, -0.4f, -5.0f);
+		WeaponLocation[1] = sVECTOR3D(4.7f, -0.4f, -5.0f);
 		WeaponType[2] = 2;
-		WeaponLocation[2] = VECTOR3D(-4.7f, -0.4f, -5.0f);
+		WeaponLocation[2] = sVECTOR3D(-4.7f, -0.4f, -5.0f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(6.3f, 0.60f, -8.1f);
-		EngineLocation[1] = VECTOR3D(-6.3f, 0.60f, -8.1f);
-		EngineLocation[2] = VECTOR3D(6.7f, -0.60f, -8.8f);
-		EngineLocation[3] = VECTOR3D(-6.7f, -0.60f, -8.8f);
+		EngineLocation[0] = sVECTOR3D(6.3f, 0.60f, -8.1f);
+		EngineLocation[1] = sVECTOR3D(-6.3f, 0.60f, -8.1f);
+		EngineLocation[2] = sVECTOR3D(6.7f, -0.60f, -8.8f);
+		EngineLocation[3] = sVECTOR3D(-6.7f, -0.60f, -8.8f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.45f, 0.05f, 5.0f);
-		EngineRightLocation[0] = VECTOR3D(-1.45f, 0.05f, 5.0f);
+		EngineLeftLocation[0] = sVECTOR3D(1.45f, 0.05f, 5.0f);
+		EngineRightLocation[0] = sVECTOR3D(-1.45f, 0.05f, 5.0f);
 		break;
 	case 20:
 		WeaponType[0] = 3;
-		WeaponLocation[0] = VECTOR3D(0.80f, -0.8f, -2.3f);
+		WeaponLocation[0] = sVECTOR3D(0.80f, -0.8f, -2.3f);
 		WeaponType[1] = 3;
-		WeaponLocation[1] = VECTOR3D(-0.80f, -0.8f, -2.3f);
+		WeaponLocation[1] = sVECTOR3D(-0.80f, -0.8f, -2.3f);
 		WeaponType[2] = 4;
-		WeaponLocation[2] = VECTOR3D(3.9f, -1.25f, -3.2f);
+		WeaponLocation[2] = sVECTOR3D(3.9f, -1.25f, -3.2f);
 		WeaponType[3] = 4;
-		WeaponLocation[3] = VECTOR3D(-3.9f, -1.25f, -3.2f);
+		WeaponLocation[3] = sVECTOR3D(-3.9f, -1.25f, -3.2f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(3.45f, -0.3f, -7.3f);
-		EngineLocation[1] = VECTOR3D(-3.45f, -0.3f, -7.3f);
-		EngineLocation[2] = VECTOR3D(4.55f, -0.5f, -7.0f);
-		EngineLocation[3] = VECTOR3D(-4.55f, -0.5f, -7.0f);
+		EngineLocation[0] = sVECTOR3D(3.45f, -0.3f, -7.3f);
+		EngineLocation[1] = sVECTOR3D(-3.45f, -0.3f, -7.3f);
+		EngineLocation[2] = sVECTOR3D(4.55f, -0.5f, -7.0f);
+		EngineLocation[3] = sVECTOR3D(-4.55f, -0.5f, -7.0f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.0f, -0.4f, 1.45f);
-		EngineRightLocation[0] = VECTOR3D(-1.0f, -0.4f, 1.45f);
+		EngineLeftLocation[0] = sVECTOR3D(1.0f, -0.4f, 1.45f);
+		EngineRightLocation[0] = sVECTOR3D(-1.0f, -0.4f, 1.45f);
 		break;
 	case 21:
 		WeaponType[0] = 2;
-		WeaponLocation[0] = VECTOR3D(2.05f, -0.22f, -1.2f);
+		WeaponLocation[0] = sVECTOR3D(2.05f, -0.22f, -1.2f);
 		WeaponType[1] = 2;
-		WeaponLocation[1] = VECTOR3D(-2.05f, -0.22f, -1.2f);
+		WeaponLocation[1] = sVECTOR3D(-2.05f, -0.22f, -1.2f);
 		WeaponType[2] = 2;
-		WeaponLocation[2] = VECTOR3D(0.0f, -0.5f, 0.5f);
+		WeaponLocation[2] = sVECTOR3D(0.0f, -0.5f, 0.5f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(0.7f, 0.0f, -4.4f);
-		EngineLocation[1] = VECTOR3D(-0.7f, 0.0f, -4.4f);
+		EngineLocation[0] = sVECTOR3D(0.7f, 0.0f, -4.4f);
+		EngineLocation[1] = sVECTOR3D(-0.7f, 0.0f, -4.4f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.0f, -0.4f, 3.0f);
-		EngineRightLocation[0] = VECTOR3D(-1.0f, -0.4f, 3.0f);
+		EngineLeftLocation[0] = sVECTOR3D(1.0f, -0.4f, 3.0f);
+		EngineRightLocation[0] = sVECTOR3D(-1.0f, -0.4f, 3.0f);
 		break;
 	case 22:
 		WeaponType[0] = 3;
-		WeaponLocation[0] = VECTOR3D(0.0f, 0.05f, 3.6f);
+		WeaponLocation[0] = sVECTOR3D(0.0f, 0.05f, 3.6f);
 		// двигатели, маршевые
-		EngineLocation[0] = VECTOR3D(0.0f, 0.3f, -5.2f);
+		EngineLocation[0] = sVECTOR3D(0.0f, 0.3f, -5.2f);
 		// маневровые
-		EngineLeftLocation[0] = VECTOR3D(1.9f, -0.3f, 2.6f);
-		EngineRightLocation[0] = VECTOR3D(-1.9f, -0.3f, 2.6f);
+		EngineLeftLocation[0] = sVECTOR3D(1.9f, -0.3f, 2.6f);
+		EngineRightLocation[0] = sVECTOR3D(-1.9f, -0.3f, 2.6f);
 		break;
 
 	default:
@@ -941,7 +941,7 @@ void CEarthSpaceFighter::Create(int	SpaceShipNum)
 	}
 
 	// находим все данные по геометрии
-	::CObject3D::InitByDrawObjectList();
+	::cObject3D::InitByDrawObjectList();
 
 
 	// делаем предварительную уснановку брони-текстур

@@ -35,12 +35,12 @@
 //-----------------------------------------------------------------------------
 //	При разрушении класса
 //-----------------------------------------------------------------------------
-eParticleSystem2D::~eParticleSystem2D()
+cParticleSystem2D::~cParticleSystem2D()
 {
 	// полностью освобождаем память от всех частиц в системе
-	eParticle2D *tmp = Start;
+	sParticle2D *tmp = Start;
 	while (tmp != nullptr) {
-		eParticle2D *tmp2 = tmp->Next;
+		sParticle2D *tmp2 = tmp->Next;
 		Detach(tmp);
 		delete tmp;
 		tmp = tmp2;
@@ -51,7 +51,7 @@ eParticleSystem2D::~eParticleSystem2D()
 //-----------------------------------------------------------------------------
 //	подключить частицу к системе
 //-----------------------------------------------------------------------------
-void eParticleSystem2D::Attach(eParticle2D * NewParticle)
+void cParticleSystem2D::Attach(sParticle2D * NewParticle)
 {
 	if (NewParticle == nullptr)
 		return;
@@ -75,7 +75,7 @@ void eParticleSystem2D::Attach(eParticle2D * NewParticle)
 //-----------------------------------------------------------------------------
 //	отключить ее от системы
 //-----------------------------------------------------------------------------
-void eParticleSystem2D::Detach(eParticle2D * OldParticle)
+void cParticleSystem2D::Detach(sParticle2D * OldParticle)
 {
 	if (OldParticle == nullptr)
 		return;
@@ -105,7 +105,7 @@ void eParticleSystem2D::Detach(eParticle2D * OldParticle)
 //-----------------------------------------------------------------------------
 // обновление системы
 //-----------------------------------------------------------------------------
-bool eParticleSystem2D::Update(float Time)
+bool cParticleSystem2D::Update(float Time)
 {
 	// первый раз... просто берем время
 	if (TimeLastUpdate == -1.0f) {
@@ -122,10 +122,10 @@ bool eParticleSystem2D::Update(float Time)
 
 
 	// для всех частиц
-	eParticle2D *Particle2DTmp = Start;
+	sParticle2D *Particle2DTmp = Start;
 
 	while (Particle2DTmp != nullptr) {
-		eParticle2D *Particle2DTmp2 = Particle2DTmp->Next;
+		sParticle2D *Particle2DTmp2 = Particle2DTmp->Next;
 		// функция вернет false, если частица уже мертва
 		if (!Particle2DTmp->Update(TimeDelta, Location, IsAttractive, AttractiveValue)) {
 			Detach(Particle2DTmp);
@@ -160,7 +160,7 @@ bool eParticleSystem2D::Update(float Time)
 		// пока не создадим все необходимые частицы
 		while (ParticlesCreated > 0) {
 			// создаем новую частицу
-			eParticle2D *NewParticle = new eParticle2D;
+			sParticle2D *NewParticle = new sParticle2D;
 
 			// установка жизни новой частици и проверка, что не выходит из диапахона
 			NewParticle->Age = 0.0f;
@@ -192,10 +192,10 @@ bool eParticleSystem2D::Update(float Time)
 
 			// выпускаем частицу возле места нахождения системы
 			if (CreationType == 0) // точка
-				NewParticle->Location = Location + VECTOR3D(vw_Randf0 * CreationSize.x, vw_Randf0 * CreationSize.y, vw_Randf0 * CreationSize.z);
+				NewParticle->Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x, vw_Randf0 * CreationSize.y, vw_Randf0 * CreationSize.z);
 			if (CreationType == 1) {
 				// в квадрате
-				VECTOR3D tmp;
+				sVECTOR3D tmp;
 				if (DeadZone != 0.0f) {
 					float minDist = CreationSize.x*CreationSize.x+CreationSize.y*CreationSize.y+CreationSize.z*CreationSize.z;
 					// если зона больше чем радиус излучения - выключаем ее
@@ -207,7 +207,7 @@ bool eParticleSystem2D::Update(float Time)
 				tmp.z = (1.0f-vw_Randf1*2) * CreationSize.z;
 				while (tmp.x*tmp.x + tmp.y*tmp.y + tmp.z*tmp.z < DeadZone*DeadZone) {
 					// ув. радиус
-					VECTOR3D tmp1 = tmp;
+					sVECTOR3D tmp1 = tmp;
 					tmp1.Normalize();
 					tmp1 = tmp1^(1/100.0f);
 					tmp = tmp + tmp1;
@@ -217,7 +217,7 @@ bool eParticleSystem2D::Update(float Time)
 			}
 			if (CreationType == 2) {
 				// в окружности
-				VECTOR3D tmp;
+				sVECTOR3D tmp;
 				float minDist = CreationSize.x*CreationSize.x+CreationSize.y*CreationSize.y+CreationSize.z*CreationSize.z;
 				// если зона больше чем радиус излучения - выключаем ее
 				if (minDist <= DeadZone*DeadZone) DeadZone = 0.0f;
@@ -229,14 +229,14 @@ bool eParticleSystem2D::Update(float Time)
 				while (ParticleDist > minDist || ParticleDist < DeadZone*DeadZone) {
 					if (ParticleDist > minDist) {
 						// ум. радиус
-						VECTOR3D tmp1 = tmp;
+						sVECTOR3D tmp1 = tmp;
 						tmp1.Normalize();
 						tmp1 = tmp1^(1/100.0f);
 						tmp = tmp - tmp1;
 					}
 					if ( ParticleDist < DeadZone*DeadZone) {
 						// ув. радиус
-						VECTOR3D tmp1 = tmp;
+						sVECTOR3D tmp1 = tmp;
 						tmp1.Normalize();
 						tmp1 = tmp1^(1/100.0f);
 						tmp = tmp + tmp1;
@@ -335,14 +335,14 @@ bool eParticleSystem2D::Update(float Time)
 //-----------------------------------------------------------------------------
 // прорисовка системы
 //-----------------------------------------------------------------------------
-void eParticleSystem2D::Draw()
+void cParticleSystem2D::Draw()
 {
 
 	// загрузка текстуры, уже должна быть подключена
 	if ((Texture == nullptr) || (ParticlesCount == 0))
 		return;
 
-	RECT SrcRect, DestRect;
+	sRECT SrcRect, DestRect;
 
 	SetRect(&SrcRect,0,0,64,64);
 
@@ -376,7 +376,7 @@ void eParticleSystem2D::Draw()
 
 
 	// для всех частиц
-	eParticle2D *tmp1 = Start;
+	sParticle2D *tmp1 = Start;
 
 	while (tmp1 != nullptr) {
 		SetRect(&DestRect,(int)(tmp1->Location.x - tmp1->Size/2),
@@ -448,13 +448,13 @@ void eParticleSystem2D::Draw()
 //-----------------------------------------------------------------------------
 // перемещение всех частиц и центра
 //-----------------------------------------------------------------------------
-void eParticleSystem2D::MoveSystem(VECTOR3D NewLocation)
+void cParticleSystem2D::MoveSystem(sVECTOR3D NewLocation)
 {
-	VECTOR3D PrevLocation = Location;
+	sVECTOR3D PrevLocation = Location;
 	Location = NewLocation;
 
 
-	eParticle2D *tmp = Start;
+	sParticle2D *tmp = Start;
 	while (tmp != nullptr) {
 		// меняем каждой частице
 		tmp->Location += NewLocation-PrevLocation;
@@ -466,7 +466,7 @@ void eParticleSystem2D::MoveSystem(VECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 // перемещение центра
 //-----------------------------------------------------------------------------
-void eParticleSystem2D::MoveSystemLocation(VECTOR3D NewLocation)
+void cParticleSystem2D::MoveSystemLocation(sVECTOR3D NewLocation)
 {
 	Location = NewLocation;
 }
@@ -476,7 +476,7 @@ void eParticleSystem2D::MoveSystemLocation(VECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void eParticleSystem2D::SetRotation(VECTOR3D NewAngle)
+void cParticleSystem2D::SetRotation(sVECTOR3D NewAngle)
 {
 	vw_Matrix33CreateRotate(RotationMatrix, Angle^-1);
 	vw_Matrix33CreateRotate(RotationMatrix, NewAngle);

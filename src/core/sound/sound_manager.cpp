@@ -35,12 +35,12 @@
 //------------------------------------------------------------------------------------
 // переменные
 //------------------------------------------------------------------------------------
-eSound *StartSoundMan = nullptr;
-eSound *EndSoundMan = nullptr;
+cSound *StartSoundMan = nullptr;
+cSound *EndSoundMan = nullptr;
 int NumSoundMan = 0;
 
-eMusic *StartMusicMan = nullptr;
-eMusic *EndMusicMan = nullptr;
+sMusic *StartMusicMan = nullptr;
+sMusic *EndMusicMan = nullptr;
 int NumMusicMan = 0;
 
 
@@ -248,7 +248,7 @@ void vw_Listener(float ListenerPos[3], float ListenerVel[3], float ListenerOri[6
 //------------------------------------------------------------------------------------
 // Освобождение памяти и удаление
 //------------------------------------------------------------------------------------
-void vw_ReleaseSound(eSound* Sound)
+void vw_ReleaseSound(cSound* Sound)
 {
 	// проверка входящих данных
 	if (Sound == nullptr)
@@ -285,9 +285,9 @@ void vw_ReleaseAllSounds(int ReleaseType)
 {
 	if (ReleaseType == 0) {
 		// Чистка памяти...
-		eSound *Tmp = StartSoundMan;
+		cSound *Tmp = StartSoundMan;
 		while (Tmp != nullptr) {
-			eSound *Tmp1 = Tmp->Next;
+			cSound *Tmp1 = Tmp->Next;
 			vw_ReleaseSound(Tmp);
 			Tmp = Tmp1;
 		}
@@ -296,9 +296,9 @@ void vw_ReleaseAllSounds(int ReleaseType)
 		EndSoundMan = nullptr;
 	} else {
 
-		eSound *Tmp = StartSoundMan;
+		cSound *Tmp = StartSoundMan;
 		while (Tmp != nullptr) {
-			eSound *Tmp1 = Tmp->Next;
+			cSound *Tmp1 = Tmp->Next;
 			if (Tmp->NeedRelease) vw_ReleaseSound(Tmp);
 			Tmp = Tmp1;
 		}
@@ -310,7 +310,7 @@ void vw_ReleaseAllSounds(int ReleaseType)
 //------------------------------------------------------------------------------------
 // подключение звука к менеджеру
 //------------------------------------------------------------------------------------
-void vw_AttachSound(eSound* Sound)
+void vw_AttachSound(cSound *Sound)
 {
 	if (Sound == nullptr)
 		return;
@@ -337,7 +337,7 @@ void vw_AttachSound(eSound* Sound)
 //------------------------------------------------------------------------------------
 // отключение от менеджера
 //------------------------------------------------------------------------------------
-void vw_DetachSound(eSound* Sound)
+void vw_DetachSound(cSound *Sound)
 {
 	if (Sound == nullptr)
 		return;
@@ -363,11 +363,11 @@ void vw_DetachSound(eSound* Sound)
 //------------------------------------------------------------------------------------
 // Нахождение по уникальному номеру
 //------------------------------------------------------------------------------------
-eSound* vw_FindSoundByNum(int Num)
+cSound *vw_FindSoundByNum(int Num)
 {
-	eSound *Tmp = StartSoundMan;
+	cSound *Tmp = StartSoundMan;
 	while (Tmp != nullptr) {
-		eSound *Tmp1 = Tmp->Next;
+		cSound *Tmp1 = Tmp->Next;
 		if (Tmp->Num == Num) return Tmp;
 		Tmp = Tmp1;
 	}
@@ -378,14 +378,14 @@ eSound* vw_FindSoundByNum(int Num)
 //------------------------------------------------------------------------------------
 // Нахождение по имени
 //------------------------------------------------------------------------------------
-eSound* vw_FindSoundByName(const char *Name)
+cSound *vw_FindSoundByName(const char *Name)
 {
 	if (Name == nullptr)
 		return nullptr;
 
-	eSound *Tmp = StartSoundMan;
+	cSound *Tmp = StartSoundMan;
 	while (Tmp != nullptr) {
-		eSound *Tmp1 = Tmp->Next;
+		cSound *Tmp1 = Tmp->Next;
 		if ((Tmp->FileName != nullptr) &&
 		    (!strcmp(Tmp->FileName, Name)))
 			return Tmp;
@@ -399,12 +399,12 @@ eSound* vw_FindSoundByName(const char *Name)
 //------------------------------------------------------------------------------------
 void vw_UpdateSound()
 {
-	eSound *Tmp = StartSoundMan;
+	cSound *Tmp = StartSoundMan;
 
 	float CurrentGetTime = vw_GetTime();
 
 	while (Tmp != nullptr) {
-		eSound *Tmp1 = Tmp->Next;
+		cSound *Tmp1 = Tmp->Next;
 
 		// считаем сколько играем этот эффект
 		float DeltaTime = CurrentGetTime - Tmp->LastUpdateTime;
@@ -446,10 +446,10 @@ void vw_UpdateSound()
 //------------------------------------------------------------------------------------
 void vw_SetSoundMainVolume(float NewMainVolume)
 {
-	eSound *Tmp = StartSoundMan;
+	cSound *Tmp = StartSoundMan;
 
 	while (Tmp != nullptr) {
-		eSound *Tmp1 = Tmp->Next;
+		cSound *Tmp1 = Tmp->Next;
 		Tmp->SetMainVolume(NewMainVolume);
 		Tmp = Tmp1;
 	}
@@ -467,14 +467,14 @@ bool vw_CheckCanPlaySound(int Group, int GroupCount, int SubGroup, int SubGroupC
 	// находим кол-во звуков в подгруппе
 	int SubGroupCurrentCount = 0;
 	// находим звук, из этой группы с наименьшим приоритетом + самый старый
-	eSound *GroupCanStop = nullptr;
+	cSound *GroupCanStop = nullptr;
 	// находим звук, из этой подгруппы с меньшим или равным приоритетом + самый старый
-	eSound *SubGroupCanStop = nullptr;
+	cSound *SubGroupCanStop = nullptr;
 
 
-	eSound *Tmp = StartSoundMan;
+	cSound *Tmp = StartSoundMan;
 	while (Tmp != nullptr) {
-		eSound *Tmp1 = Tmp->Next;
+		cSound *Tmp1 = Tmp->Next;
 
 		if ((Tmp->DestroyTimeStart == -1.0f) &&
 		    (Tmp->Group == Group)) {
@@ -554,10 +554,10 @@ bool vw_CheckCanPlaySound(int Group, int GroupCount, int SubGroup, int SubGroupC
 //------------------------------------------------------------------------------------
 bool vw_GetMusicIsPlaying()
 {
-	eMusic *Tmp = StartMusicMan;
+	sMusic *Tmp = StartMusicMan;
 
 	while (Tmp != nullptr) {
-		eMusic *Tmp1 = Tmp->Next;
+		sMusic *Tmp1 = Tmp->Next;
 		// смотрим, если играем что-то, передаем...
 		if (alIsSource(Tmp->Source)) {
 			ALint TMPS;
@@ -576,7 +576,7 @@ bool vw_GetMusicIsPlaying()
 //------------------------------------------------------------------------------------
 // Освобождение памяти и удаление
 //------------------------------------------------------------------------------------
-void vw_ReleaseMusic(eMusic* Music)
+void vw_ReleaseMusic(sMusic* Music)
 {
 	// проверка входящих данных
 	if (Music == nullptr)
@@ -632,9 +632,9 @@ void vw_ReleaseMusic(eMusic* Music)
 void vw_ReleaseAllMusic()
 {
 	// Чистка памяти...
-	eMusic *Tmp = StartMusicMan;
+	sMusic *Tmp = StartMusicMan;
 	while (Tmp != nullptr) {
-		eMusic *Tmp1 = Tmp->Next;
+		sMusic *Tmp1 = Tmp->Next;
 		vw_ReleaseMusic(Tmp);
 		Tmp = Tmp1;
 	}
@@ -647,7 +647,7 @@ void vw_ReleaseAllMusic()
 //------------------------------------------------------------------------------------
 // подключение звука к менеджеру
 //------------------------------------------------------------------------------------
-void vw_AttachMusic(eMusic* Music)
+void vw_AttachMusic(sMusic* Music)
 {
 	if (Music == nullptr)
 		return;
@@ -674,7 +674,7 @@ void vw_AttachMusic(eMusic* Music)
 //------------------------------------------------------------------------------------
 // отключение от менеджера
 //------------------------------------------------------------------------------------
-void vw_DetachMusic(eMusic* Music)
+void vw_DetachMusic(sMusic* Music)
 {
 	if (Music == nullptr) return;
 
@@ -702,10 +702,10 @@ void vw_DetachMusic(eMusic* Music)
 //------------------------------------------------------------------------------------
 void vw_UpdateMusic()
 {
-	eMusic *Tmp = StartMusicMan;
+	sMusic *Tmp = StartMusicMan;
 
 	while (Tmp != nullptr) {
-		eMusic *Tmp1 = Tmp->Next;
+		sMusic *Tmp1 = Tmp->Next;
 		if (!Tmp->Update()) vw_ReleaseMusic(Tmp);
 		Tmp = Tmp1;
 	}
@@ -717,10 +717,10 @@ void vw_UpdateMusic()
 //------------------------------------------------------------------------------------
 void vw_SetMusicMainVolume(float NewMainVolume)
 {
-	eMusic *Tmp = StartMusicMan;
+	sMusic *Tmp = StartMusicMan;
 
 	while (Tmp != nullptr) {
-		eMusic *Tmp1 = Tmp->Next;
+		sMusic *Tmp1 = Tmp->Next;
 		Tmp->SetMainVolume(NewMainVolume);
 		Tmp = Tmp1;
 	}
@@ -730,11 +730,11 @@ void vw_SetMusicMainVolume(float NewMainVolume)
 //------------------------------------------------------------------------------------
 // Нахождение по уникальному номеру...
 //------------------------------------------------------------------------------------
-eMusic* vw_FindMusicByNum(int Num)
+sMusic* vw_FindMusicByNum(int Num)
 {
-	eMusic *Tmp = StartMusicMan;
+	sMusic *Tmp = StartMusicMan;
 	while (Tmp != nullptr) {
-		eMusic *Tmp1 = Tmp->Next;
+		sMusic *Tmp1 = Tmp->Next;
 		if (Tmp->Num == Num) return Tmp;
 		Tmp = Tmp1;
 	}

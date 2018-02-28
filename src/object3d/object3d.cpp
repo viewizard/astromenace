@@ -34,16 +34,16 @@
 int NeedShowBB = 0;
 
 
-extern eGLSL	*GLSLShaderType1;
-extern eGLSL	*GLSLShaderType2;
-extern eGLSL	*GLSLShaderType3;
+extern sGLSL	*GLSLShaderType1;
+extern sGLSL	*GLSLShaderType2;
+extern sGLSL	*GLSLShaderType3;
 extern int	UniformLocations[100];
 
 
 //-----------------------------------------------------------------------------
 // Деструктор
 //-----------------------------------------------------------------------------
-CObject3D::~CObject3D(void)
+cObject3D::~cObject3D(void)
 {
 	// освобождаем память, выделенную для геометрии
 	if (DrawObjectList != nullptr)
@@ -100,7 +100,7 @@ CObject3D::~CObject3D(void)
 //-----------------------------------------------------------------------------
 // Установка AABB, OBB и габаритов по геометрии объекта
 //-----------------------------------------------------------------------------
-void CObject3D::InitByDrawObjectList()
+void cObject3D::InitByDrawObjectList()
 {
 	// нет самой геометрии, работать не можем
 	if (DrawObjectList == nullptr)
@@ -126,7 +126,7 @@ void CObject3D::InitByDrawObjectList()
 			else
 				j2 = (DrawObjectList[i].RangeStart+j)*DrawObjectList[i].VertexStride;
 
-			VECTOR3D tmp;
+			sVECTOR3D tmp;
 			tmp.x = DrawObjectList[i].VertexBuffer[j2 + 0];
 			tmp.y = DrawObjectList[i].VertexBuffer[j2 + 1];
 			tmp.z = DrawObjectList[i].VertexBuffer[j2 + 2];
@@ -148,7 +148,7 @@ void CObject3D::InitByDrawObjectList()
 			else
 				j2 = (DrawObjectList[i].RangeStart+j)*DrawObjectList[i].VertexStride;
 
-			VECTOR3D v;
+			sVECTOR3D v;
 			v.x = DrawObjectList[i].VertexBuffer[j2];
 			v.y = DrawObjectList[i].VertexBuffer[j2+1];
 			v.z = DrawObjectList[i].VertexBuffer[j2+2];
@@ -162,14 +162,14 @@ void CObject3D::InitByDrawObjectList()
 		}
 
 		// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-		HitBB[i][0] = VECTOR3D(MaxX, MaxY, MaxZ);
-		HitBB[i][1] = VECTOR3D(MinX, MaxY, MaxZ);
-		HitBB[i][2] = VECTOR3D(MinX, MaxY, MinZ);
-		HitBB[i][3] = VECTOR3D(MaxX, MaxY, MinZ);
-		HitBB[i][4] = VECTOR3D(MaxX, MinY, MaxZ);
-		HitBB[i][5] = VECTOR3D(MinX, MinY, MaxZ);
-		HitBB[i][6] = VECTOR3D(MinX, MinY, MinZ);
-		HitBB[i][7] = VECTOR3D(MaxX, MinY, MinZ);
+		HitBB[i][0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+		HitBB[i][1] = sVECTOR3D(MinX, MaxY, MaxZ);
+		HitBB[i][2] = sVECTOR3D(MinX, MaxY, MinZ);
+		HitBB[i][3] = sVECTOR3D(MaxX, MaxY, MinZ);
+		HitBB[i][4] = sVECTOR3D(MaxX, MinY, MaxZ);
+		HitBB[i][5] = sVECTOR3D(MinX, MinY, MaxZ);
+		HitBB[i][6] = sVECTOR3D(MinX, MinY, MinZ);
+		HitBB[i][7] = sVECTOR3D(MaxX, MinY, MinZ);
 
 		// находим координаты центра HitBB относительно координат модели
 		HitBBLocation[i].x = (MaxX + MinX)/2.0f;
@@ -216,14 +216,14 @@ void CObject3D::InitByDrawObjectList()
 	}
 
 	// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-	OBB[0] = AABB[0] = VECTOR3D(MaxX, MaxY, MaxZ);
-	OBB[1] = AABB[1] = VECTOR3D(MinX, MaxY, MaxZ);
-	OBB[2] = AABB[2] = VECTOR3D(MinX, MaxY, MinZ);
-	OBB[3] = AABB[3] = VECTOR3D(MaxX, MaxY, MinZ);
-	OBB[4] = AABB[4] = VECTOR3D(MaxX, MinY, MaxZ);
-	OBB[5] = AABB[5] = VECTOR3D(MinX, MinY, MaxZ);
-	OBB[6] = AABB[6] = VECTOR3D(MinX, MinY, MinZ);
-	OBB[7] = AABB[7] = VECTOR3D(MaxX, MinY, MinZ);
+	OBB[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+	OBB[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+	OBB[2] = AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
+	OBB[3] = AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+	OBB[4] = AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+	OBB[5] = AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
+	OBB[6] = AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
+	OBB[7] = AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
 
 	// находим координаты центра OBB относительно координат модели
 	OBBLocation.x = (MaxX + MinX)/2.0f;
@@ -253,7 +253,7 @@ void CObject3D::InitByDrawObjectList()
 	for (int i=0; i<DrawObjectQuantity; i++)
 		for (int j=0; j<DrawObjectList[i].VertexCount; j++) {
 			AllVertexCounted++;
-			GeometryCenterLocation += DrawObjectList[i].Location + VECTOR3D(DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*j],
+			GeometryCenterLocation += DrawObjectList[i].Location + sVECTOR3D(DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*j],
 						  DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*j+1],
 						  DrawObjectList[i].VertexBuffer[DrawObjectList[i].VertexStride*j+2]);
 		}
@@ -268,7 +268,7 @@ void CObject3D::InitByDrawObjectList()
 //-----------------------------------------------------------------------------
 // Установка положения 1 объекта модели
 //-----------------------------------------------------------------------------
-void CObject3D::SetObjectLocation(VECTOR3D NewLocation, int ObjectNum)
+void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 {
 
 	// пересчет HitBB
@@ -311,14 +311,14 @@ void CObject3D::SetObjectLocation(VECTOR3D NewLocation, int ObjectNum)
 		}
 
 		// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-		OBB[0] = VECTOR3D(MaxX, MaxY, MaxZ);
-		OBB[1] = VECTOR3D(MinX, MaxY, MaxZ);
-		OBB[2] = VECTOR3D(MinX, MaxY, MinZ);
-		OBB[3] = VECTOR3D(MaxX, MaxY, MinZ);
-		OBB[4] = VECTOR3D(MaxX, MinY, MaxZ);
-		OBB[5] = VECTOR3D(MinX, MinY, MaxZ);
-		OBB[6] = VECTOR3D(MinX, MinY, MinZ);
-		OBB[7] = VECTOR3D(MaxX, MinY, MinZ);
+		OBB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+		OBB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+		OBB[2] = sVECTOR3D(MinX, MaxY, MinZ);
+		OBB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+		OBB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+		OBB[5] = sVECTOR3D(MinX, MinY, MaxZ);
+		OBB[6] = sVECTOR3D(MinX, MinY, MinZ);
+		OBB[7] = sVECTOR3D(MaxX, MinY, MinZ);
 
 
 		// габариты, пересчет именно тут, т.к. нужны данные OBB
@@ -358,14 +358,14 @@ void CObject3D::SetObjectLocation(VECTOR3D NewLocation, int ObjectNum)
 			if (MaxY < OBB[j].y + OBBLocation.y) MaxY = OBB[j].y + OBBLocation.y;
 			if (MaxZ < OBB[j].z + OBBLocation.z) MaxZ = OBB[j].z + OBBLocation.z;
 		}
-		AABB[0] = VECTOR3D(MaxX, MaxY, MaxZ);
-		AABB[1] = VECTOR3D(MinX, MaxY, MaxZ);
-		AABB[2] = VECTOR3D(MinX, MaxY, MinZ);
-		AABB[3] = VECTOR3D(MaxX, MaxY, MinZ);
-		AABB[4] = VECTOR3D(MaxX, MinY, MaxZ);
-		AABB[5] = VECTOR3D(MinX, MinY, MaxZ);
-		AABB[6] = VECTOR3D(MinX, MinY, MinZ);
-		AABB[7] = VECTOR3D(MaxX, MinY, MinZ);
+		AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+		AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+		AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
+		AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+		AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+		AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
+		AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
+		AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
 	}
 
 	// собственно меняем данные в геометрии
@@ -378,7 +378,7 @@ void CObject3D::SetObjectLocation(VECTOR3D NewLocation, int ObjectNum)
 //-----------------------------------------------------------------------------
 // Установка углов поворота 1 объекта модели
 //-----------------------------------------------------------------------------
-void CObject3D::SetObjectRotation(VECTOR3D NewRotation, int ObjectNum)
+void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
 {
 	// пересчет HitBB
 	if (HitBB != nullptr) {
@@ -439,14 +439,14 @@ void CObject3D::SetObjectRotation(VECTOR3D NewRotation, int ObjectNum)
 		}
 
 		// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-		OBB[0] = VECTOR3D(MaxX, MaxY, MaxZ);
-		OBB[1] = VECTOR3D(MinX, MaxY, MaxZ);
-		OBB[2] = VECTOR3D(MinX, MaxY, MinZ);
-		OBB[3] = VECTOR3D(MaxX, MaxY, MinZ);
-		OBB[4] = VECTOR3D(MaxX, MinY, MaxZ);
-		OBB[5] = VECTOR3D(MinX, MinY, MaxZ);
-		OBB[6] = VECTOR3D(MinX, MinY, MinZ);
-		OBB[7] = VECTOR3D(MaxX, MinY, MinZ);
+		OBB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+		OBB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+		OBB[2] = sVECTOR3D(MinX, MaxY, MinZ);
+		OBB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+		OBB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+		OBB[5] = sVECTOR3D(MinX, MinY, MaxZ);
+		OBB[6] = sVECTOR3D(MinX, MinY, MinZ);
+		OBB[7] = sVECTOR3D(MaxX, MinY, MinZ);
 
 
 		// габариты, пересчет именно тут, т.к. нужны данные OBB
@@ -486,14 +486,14 @@ void CObject3D::SetObjectRotation(VECTOR3D NewRotation, int ObjectNum)
 			if (MaxY < OBB[j].y + OBBLocation.y) MaxY = OBB[j].y + OBBLocation.y;
 			if (MaxZ < OBB[j].z + OBBLocation.z) MaxZ = OBB[j].z + OBBLocation.z;
 		}
-		AABB[0] = VECTOR3D(MaxX, MaxY, MaxZ);
-		AABB[1] = VECTOR3D(MinX, MaxY, MaxZ);
-		AABB[2] = VECTOR3D(MinX, MaxY, MinZ);
-		AABB[3] = VECTOR3D(MaxX, MaxY, MinZ);
-		AABB[4] = VECTOR3D(MaxX, MinY, MaxZ);
-		AABB[5] = VECTOR3D(MinX, MinY, MaxZ);
-		AABB[6] = VECTOR3D(MinX, MinY, MinZ);
-		AABB[7] = VECTOR3D(MaxX, MinY, MinZ);
+		AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+		AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+		AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
+		AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+		AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+		AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
+		AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
+		AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
 	}
 
 
@@ -509,7 +509,7 @@ void CObject3D::SetObjectRotation(VECTOR3D NewRotation, int ObjectNum)
 //-----------------------------------------------------------------------------
 // Установка положения модели
 //-----------------------------------------------------------------------------
-void CObject3D::SetLocation(VECTOR3D NewLocation)
+void cObject3D::SetLocation(sVECTOR3D NewLocation)
 {
 	PrevLocation = Location;
 	// новое положение объекта
@@ -522,10 +522,10 @@ void CObject3D::SetLocation(VECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 // Установка углов поворота модели
 //-----------------------------------------------------------------------------
-void CObject3D::SetRotation(VECTOR3D NewRotation)
+void cObject3D::SetRotation(sVECTOR3D NewRotation)
 {
 	// Записываем данные в Rotation
-	OldRotationInv = VECTOR3D(-Rotation.x,-Rotation.y,-Rotation.z);
+	OldRotationInv = sVECTOR3D(-Rotation.x,-Rotation.y,-Rotation.z);
 	Rotation += NewRotation;
 
 
@@ -579,14 +579,14 @@ void CObject3D::SetRotation(VECTOR3D NewRotation)
 		if (MaxY < OBB[j].y + OBBLocation.y) MaxY = OBB[j].y + OBBLocation.y;
 		if (MaxZ < OBB[j].z + OBBLocation.z) MaxZ = OBB[j].z + OBBLocation.z;
 	}
-	AABB[0] = VECTOR3D(MaxX, MaxY, MaxZ);
-	AABB[1] = VECTOR3D(MinX, MaxY, MaxZ);
-	AABB[2] = VECTOR3D(MinX, MaxY, MinZ);
-	AABB[3] = VECTOR3D(MaxX, MaxY, MinZ);
-	AABB[4] = VECTOR3D(MaxX, MinY, MaxZ);
-	AABB[5] = VECTOR3D(MinX, MinY, MaxZ);
-	AABB[6] = VECTOR3D(MinX, MinY, MinZ);
-	AABB[7] = VECTOR3D(MaxX, MinY, MinZ);
+	AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+	AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+	AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
+	AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+	AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+	AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
+	AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
+	AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
 
 }
 
@@ -600,7 +600,7 @@ void CObject3D::SetRotation(VECTOR3D NewRotation)
 //-----------------------------------------------------------------------------
 // Прорисовка одной линии
 //-----------------------------------------------------------------------------
-void DrawLine(VECTOR3D Point1, VECTOR3D Point2, float ColorR, float ColorG, float ColorB, float ColorA)
+void DrawLine(sVECTOR3D Point1, sVECTOR3D Point2, float ColorR, float ColorG, float ColorB, float ColorA)
 {
 	// буфер для последовательности RI_LINES
 	// войдет RI_3f_XYZ | RI_4f_COLOR
@@ -631,7 +631,7 @@ void DrawLine(VECTOR3D Point1, VECTOR3D Point2, float ColorR, float ColorG, floa
 //-----------------------------------------------------------------------------
 // Прорисовка сетки бокса
 //-----------------------------------------------------------------------------
-void DrawBoxLines(VECTOR3D Point[8], VECTOR3D LocalLocation, float ColorR, float ColorG, float ColorB, float ColorA)
+void DrawBoxLines(sVECTOR3D Point[8], sVECTOR3D LocalLocation, float ColorR, float ColorG, float ColorB, float ColorA)
 {
 	vw_PushMatrix();
 	vw_Translate(LocalLocation);
@@ -668,7 +668,7 @@ void DrawBoxLines(VECTOR3D Point[8], VECTOR3D LocalLocation, float ColorR, float
 //-----------------------------------------------------------------------------
 // Прорисовка объектa Object3D
 //-----------------------------------------------------------------------------
-void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
+void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 {
 	// если нечего рисовать - выходим
 	if (DrawObjectList == nullptr)
@@ -679,7 +679,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	// прорисовка модели "полностью", "одним куском" (только то что без "составных" частей - колес, стволов и т.п.)
 	bool NeedOnePieceDraw = false;
 	if (PromptDrawDist2 >= 0.0f) {
-		VECTOR3D CurrentCameraLocation;
+		sVECTOR3D CurrentCameraLocation;
 		vw_GetCameraLocation(&CurrentCameraLocation);
 		float PromptDrawRealDist2 = (Location.x-CurrentCameraLocation.x)*(Location.x-CurrentCameraLocation.x)+(Location.y-CurrentCameraLocation.y)*(Location.y-CurrentCameraLocation.y)+(Location.z-CurrentCameraLocation.z)*(Location.z-CurrentCameraLocation.z);
 
@@ -796,9 +796,9 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 	// у модели может быть нормал меппинг только на отдельные объекты
-	eTexture *CurrentNormalMap = nullptr;
+	sTexture *CurrentNormalMap = nullptr;
 	// текущий шейдер, чтобы не ставить лишний раз
-	eGLSL *CurrentGLSL = nullptr;
+	sGLSL *CurrentGLSL = nullptr;
 	int NeedNormalMapping = 0;
 	// получаем матрицу, до всех преобразований
 	float Matrix[16];
@@ -894,7 +894,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
 
 		if (Setup.UseGLSL && DrawObjectList[0].ShaderType >= 0) {
-			eGLSL *CurrentObject3DGLSL = nullptr;
+			sGLSL *CurrentObject3DGLSL = nullptr;
 
 			// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
 			if ((DrawObjectList[0].ShaderType == 1) && ShadowMap) DrawObjectList[0].ShaderType = 3;
@@ -997,14 +997,14 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	} else {
 
 		// текущая текстура, чтобы не переставлять по 10 раз одно и то же
-		eTexture *CurrentText = nullptr;
+		sTexture *CurrentText = nullptr;
 
 		// установка текстур и подхотовка к прорисовке
 		for (int i = 0; i < DrawObjectQuantity; i++) {
 
 			// небольшая проверка для конкретной части
 			if ((HitBB != nullptr) && (HitBBLocation != nullptr)) {
-				VECTOR3D Min, Max;
+				sVECTOR3D Min, Max;
 				Min.x = Max.x = HitBB[i][0].x + HitBBLocation[i].x;
 				Min.y = Max.y = HitBB[i][0].y + HitBBLocation[i].y;
 				Min.z = Max.z = HitBB[i][0].z + HitBBLocation[i].z;
@@ -1118,7 +1118,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 			if (Setup.UseGLSL &&
 			    (DrawObjectList[i].ShaderType >= 0)) {
-				eGLSL *CurrentObject3DGLSL = nullptr;
+				sGLSL *CurrentObject3DGLSL = nullptr;
 
 				// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
 				if ((DrawObjectList[i].ShaderType == 1) && ShadowMap) DrawObjectList[i].ShaderType = 3;
@@ -1352,10 +1352,10 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 	vw_PushMatrix();
-	VECTOR3D CurrentCameraRotation;
+	sVECTOR3D CurrentCameraRotation;
 	vw_GetCameraRotation(&CurrentCameraRotation);
 	// поднимаем
-	vw_Translate(VECTOR3D(Location.x, Location.y+AABB[0].y+SizeY*2.0f, Location.z));
+	vw_Translate(sVECTOR3D(Location.x, Location.y+AABB[0].y+SizeY*2.0f, Location.z));
 	// поворачиваем к камере
 	vw_Rotate(-180+CurrentCameraRotation.y, 0.0f, 1.0f, 0.0f);
 	vw_Rotate(-CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
@@ -1461,7 +1461,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 		vw_PushMatrix();
 		// поднимаем
-		vw_Translate(VECTOR3D(Location.x, Location.y+AABB[0].y+SizeY*5.0f, Location.z));
+		vw_Translate(sVECTOR3D(Location.x, Location.y+AABB[0].y+SizeY*5.0f, Location.z));
 		// поворачиваем к камере
 		vw_Rotate(-180+CurrentCameraRotation.y, 0.0f, 1.0f, 0.0f);
 		vw_Rotate(-CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
@@ -1531,7 +1531,7 @@ void CObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 //-----------------------------------------------------------------------------
 // Обновление данных объектa Object3D
 //-----------------------------------------------------------------------------
-bool CObject3D::Update(float Time)
+bool cObject3D::Update(float Time)
 {
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1594,7 +1594,7 @@ bool CObject3D::Update(float Time)
 				if (StartTimeSheet->Time < 0.0f)
 					TimeDelta -= StartTimeSheet->Time;
 
-				CTimeSheet* TmpTimeSheet = StartTimeSheet;
+				sTimeSheet* TmpTimeSheet = StartTimeSheet;
 				// отсоединяем от списка
 				DetachTimeSheet(StartTimeSheet);
 				// удаляем
@@ -1610,7 +1610,7 @@ bool CObject3D::Update(float Time)
 			// передаем на распаковку
 			InterAIMode(this, StartTimeSheet);
 			// удаляем эту запись, мы ее уже распаковали
-			CTimeSheet* TmpTimeSheet = StartTimeSheet;
+			sTimeSheet* TmpTimeSheet = StartTimeSheet;
 			DetachTimeSheet(StartTimeSheet);
 			delete TmpTimeSheet;
 			TmpTimeSheet = nullptr;
@@ -1632,7 +1632,7 @@ bool CObject3D::Update(float Time)
 //-----------------------------------------------------------------------------
 // Включаем в список
 //-----------------------------------------------------------------------------
-void CObject3D::AttachTimeSheet(CTimeSheet* TimeSheet)
+void cObject3D::AttachTimeSheet(sTimeSheet* TimeSheet)
 {
 	if (TimeSheet == nullptr)
 		return;
@@ -1658,7 +1658,7 @@ void CObject3D::AttachTimeSheet(CTimeSheet* TimeSheet)
 //-----------------------------------------------------------------------------
 // Исключаем из списка
 //-----------------------------------------------------------------------------
-void CObject3D::DetachTimeSheet(CTimeSheet* TimeSheet)
+void cObject3D::DetachTimeSheet(sTimeSheet* TimeSheet)
 {
 	if (TimeSheet == nullptr)
 		return;

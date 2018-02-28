@@ -33,7 +33,7 @@
 // переменные
 //------------------------------------------------------------------------------------
 
-eParticleSystem *psSpace = nullptr;
+cParticleSystem *psSpace = nullptr;
 
 float LastMenuUpdateTime = 0.0f;
 float MenuContentTransp = 0.0f;
@@ -143,15 +143,15 @@ void InitMenu()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
 	InitGameCamera();
-	vw_SetCameraLocation(VECTOR3D(-50,30,-50));
-	vw_SetCameraMoveAroundPoint(VECTOR3D(0,0,0), 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
+	vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
+	vw_SetCameraMoveAroundPoint(sVECTOR3D(0,0,0), 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
 
 
 	if (Script != nullptr) {
 		delete Script;
 		Script = nullptr;
 	}
-	Script = new ScriptEngine;
+	Script = new cScriptEngine;
 
 	if (Setup.MenuScript > 2) Setup.MenuScript = 0;
 	switch (Setup.MenuScript) {
@@ -185,7 +185,7 @@ void InitMenu()
 
 
 	// активные частицы космоса
-	psSpace = new eParticleSystem;
+	psSpace = new cParticleSystem;
 	psSpace->ColorStart.r = 0.80f;
 	psSpace->ColorStart.g = 0.80f;
 	psSpace->ColorStart.b = 1.00f;
@@ -203,12 +203,12 @@ void InitMenu()
 	psSpace->Life       = 10.00f;
 	psSpace->LifeVar    = 0.00f;
 	psSpace->CreationType = 1;
-	psSpace->CreationSize = VECTOR3D(2.0f,50.0f,30.0f);
+	psSpace->CreationSize = sVECTOR3D(2.0f,50.0f,30.0f);
 	psSpace->ParticlesPerSec = 140;
 	psSpace->Texture[0] = vw_FindTextureByName("gfx/flare3.tga");
-	psSpace->Direction = VECTOR3D(1.0f, 0.0f, 0.0f);
+	psSpace->Direction = sVECTOR3D(1.0f, 0.0f, 0.0f);
 	psSpace->Resize = 0.1f;
-	psSpace->SetStartLocation(VECTOR3D(-50,10,-20));
+	psSpace->SetStartLocation(sVECTOR3D(-50,10,-20));
 
 	// немного "прокручиваем", чтобы сразу по появлению было заполнено
 	float Time = psSpace->TimeLastUpdate;
@@ -454,7 +454,7 @@ void DrawMenu()
 	}
 
 
-	vw_SetCameraMoveAroundPoint(VECTOR3D(0,0,0), 0.0f, VECTOR3D(0.0f, 0.0f, 0.0f));
+	vw_SetCameraMoveAroundPoint(sVECTOR3D(0,0,0), 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
 	vw_CameraLookAt();
 
 
@@ -470,7 +470,7 @@ void DrawMenu()
 	// рисуем название игры, чтобы звезды и корабли пролетали перед ним
 	vw_Start2DMode(-1,1);
 	// надпись AstroMenace
-	RECT SrcRect, DstRect;
+	sRECT SrcRect, DstRect;
 	SetRect(&SrcRect,0,0,863,128 );
 	int StartX = (Setup.iAspectRatioWidth - 863)/2;
 	SetRect(&DstRect,StartX,10,StartX+863,10+128);

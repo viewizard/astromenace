@@ -36,31 +36,31 @@
 
 
 //-----------------------------------------------------------------------------
-// Класс CSpaceShip
+// Класс cSpaceShip
 //-----------------------------------------------------------------------------
-class CSpaceShip : public CObject3D
+class cSpaceShip : public cObject3D
 {
 public:
 	// базовые конструктор и деструктор объекта
-	CSpaceShip();
-	virtual ~CSpaceShip();
+	cSpaceShip();
+	virtual ~cSpaceShip();
 
 	// Обновление данных объектa
 	virtual bool	Update(float Time);
 	// Установка положения объекта
-	virtual void	SetLocation(VECTOR3D NewLocation);
-	virtual void	SetLocationArcadePlayer(VECTOR3D NewLocation);
+	virtual void	SetLocation(sVECTOR3D NewLocation);
+	virtual void	SetLocationArcadePlayer(sVECTOR3D NewLocation);
 	// Установка углов поворота объекта
-	virtual void	SetRotation(VECTOR3D NewRotation);
+	virtual void	SetRotation(sVECTOR3D NewRotation);
 
 	// текущей вектор движения корабля
-	VECTOR3D	Velocity{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	Velocity{0.0f, 0.0f, 0.0f};
 
 	// нужно повернуть (пересчитать мэш) при следующем проходе
 	// Update + учесть эти данные в Rotation
-	VECTOR3D	NeedRotate{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	NeedRotate{0.0f, 0.0f, 0.0f};
 	// скорость поворота по каждому раправлению
-	VECTOR3D	RotationSpeed{1.0f, 1.0f, 1.0f};
+	sVECTOR3D	RotationSpeed{1.0f, 1.0f, 1.0f};
 
 	// максимальная скорость units/sec, зависит от двигателя
 	float	MaxSpeed{0.0f};
@@ -143,9 +143,9 @@ public:
 	// выстрел из оружия, т.е. передача команды "стрелять" оружию при сделующем Update'е
 	bool		*WeaponSetFire{nullptr};
 	// указатель на массив оружия
-	CWeapon		**Weapon{nullptr};
+	cWeapon		**Weapon{nullptr};
 	// расположение оружия на коробле (относительное)
-	VECTOR3D	*WeaponLocation{nullptr};
+	sVECTOR3D	*WeaponLocation{nullptr};
 	// тип оружия по мощьности, для определенных слотов
 	int		*WeaponType{nullptr};
 	// первоначальный доворот оружия для корабля (будем использовать только для игрка, для остальных он ноль)
@@ -162,9 +162,9 @@ public:
 	// выстрел из оружия, т.е. передача команды "стрелять" оружию при сделующем Update'е
 	bool		*BossWeaponSetFire{nullptr};
 	// указатель на массив оружия
-	CWeapon		**BossWeapon{nullptr};
+	cWeapon		**BossWeapon{nullptr};
 	// расположение оружия на коробле (относительное)
-	VECTOR3D	*BossWeaponLocation{nullptr};
+	sVECTOR3D	*BossWeaponLocation{nullptr};
 	// тип оружия по мощьности, для определенных слотов
 	int		*BossWeaponType{nullptr};
 	// первоначальный доворот оружия для корабля (будем использовать только для игрка, для остальных он ноль)
@@ -177,48 +177,48 @@ public:
 	// выстрел из оружия-фларес, т.е. передача команды "стрелять" оружию при сделующем Update'е
 	bool		WeaponFlareSetFire{false};
 	// указатель на оружие-фларе
-	CWeapon		*WeaponFlare{nullptr};
+	cWeapon		*WeaponFlare{nullptr};
 	// расположение оружия на коробле (относительное)
-	VECTOR3D	WeaponFlareLocation{0.0f, 0.0f, 0.0f};
+	sVECTOR3D	WeaponFlareLocation{0.0f, 0.0f, 0.0f};
 
 	// кол-во двигателей
 	int		EngineQuantity{0};
 	// тип, как будем удалять двигатели -сразу, или глушить
 	bool		EngineDestroyType{false};
 	// двигатели
-	eParticleSystem	**Engine{nullptr};
+	cParticleSystem	**Engine{nullptr};
 	// положение двигателей
-	VECTOR3D	*EngineLocation{nullptr};
+	sVECTOR3D	*EngineLocation{nullptr};
 
 	// вкл. двигатели торможения при повороте
 	bool	NeedStopRotation{false};
 
 	// двигатели поворотов, левый
 	int		EngineLeftQuantity{0}; // кол-во двигателей
-	eParticleSystem	**EngineLeft{nullptr}; // двигатели
-	VECTOR3D	*EngineLeftLocation{nullptr}; // положение двигателей
+	cParticleSystem	**EngineLeft{nullptr}; // двигатели
+	sVECTOR3D	*EngineLeftLocation{nullptr}; // положение двигателей
 
 	// двигатели поворотов, правый
 	int		EngineRightQuantity{0}; // кол-во двигателей
-	eParticleSystem	**EngineRight{nullptr}; // двигатели
-	VECTOR3D	*EngineRightLocation{nullptr}; // положение двигателей
+	cParticleSystem	**EngineRight{nullptr}; // двигатели
+	sVECTOR3D	*EngineRightLocation{nullptr}; // положение двигателей
 
 	// для собственного списка
-	CSpaceShip	*Next{nullptr};
-	CSpaceShip	*Prev{nullptr};
+	cSpaceShip	*Next{nullptr};
+	cSpaceShip	*Prev{nullptr};
 };
 
 
 //-----------------------------------------------------------------------------
-// Менеджер CSpaceShip, дополнительный
+// Менеджер cSpaceShip, дополнительный
 //-----------------------------------------------------------------------------
 
 // Включаем в список
-void	AttachSpaceShip(CSpaceShip* SpaceShip);
+void	AttachSpaceShip(cSpaceShip* SpaceShip);
 // Исключаем из списка
-void	DetachSpaceShip(CSpaceShip* SpaceShip);
+void	DetachSpaceShip(cSpaceShip* SpaceShip);
 // Находим нужный по ID
-CSpaceShip *FindSpaceShipByID(int ID);
+cSpaceShip *FindSpaceShipByID(int ID);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllSpaceShip(float Time);
 // Прорисовываем все объекты
