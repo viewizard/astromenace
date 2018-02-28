@@ -59,8 +59,7 @@
 */
 
 #include "vfs.h"
-#include <unordered_map>
-#include <limits>
+#include <limits> // need this one for UINT16_MAX only
 
 enum file_location {
 	FILE_NOT_FOUND	= -1,

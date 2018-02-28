@@ -26,8 +26,6 @@
 
 #include "font.h"
 #include <stdarg.h> // va_start
-#include <forward_list>
-#include <vector>
 
 // TODO move to std::string, all utf8<->utf32 stuff must be revised first
 

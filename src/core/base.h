@@ -27,33 +27,33 @@
 #ifndef Base_H
 #define Base_H
 
-/* TODO should not be connected to core in this way */
+// TODO should not be connected to core in this way
 #include "../config.h"
 
 #ifdef WIN32
 #define WIN32_LEAN_AND_MEAN
-#define _CRT_SECURE_NO_DEPRECATE /* suppress warnings */
+#define _CRT_SECURE_NO_DEPRECATE // suppress warnings
 #include <windows.h>
 #include <shellapi.h>
 #include <stdio.h>
 #endif
 
 #if defined(__APPLE__) && defined(__MACH__)
-#define __glext_h_	/* Don't let gl.h include glext.h */
-#include <OpenGL/gl.h>	/* Header File For The OpenGL Library */
-#include <OpenGL/glu.h>	/* Header File For The GLu Library */
+#define __glext_h_	// Don't let gl.h include glext.h
+#include <OpenGL/gl.h>	// Header File For The OpenGL Library
+#include <OpenGL/glu.h>	// Header File For The GLu Library
 #undef __glext_h_
 #else
-#define __glext_h_	/* Don't let gl.h include glext.h */
-#include <GL/gl.h>	/* Header File For The OpenGL Library */
-#include <GL/glu.h>	/* Header File For The GLu Library */
+#define __glext_h_	// Don't let gl.h include glext.h
+#include <GL/gl.h>	// Header File For The OpenGL Library
+#include <GL/glu.h>	// Header File For The GLu Library
 #undef __glext_h_
 #endif
 
 #include "graphics/glext.h"
 #include "SDL2/SDL.h"
 
-/* suppress warnings about unused variables, when we need to */
+// suppress warnings about unused variables, when we need to
 #ifdef __GNUC__
 #  define UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
 #else
@@ -69,6 +69,14 @@
 #endif /* unix */
 
 
+// STL
+// only includes that really should being used in different parts of code
+#include <unordered_map>
+#include <forward_list>
+#include <vector>
+#include <string>
+
+
 // error codes
 #define ERR_PARAMETERS		-1	// function's parameters related issue
 #define ERR_FILE_NOT_FOUND	-2	// file not found
@@ -78,4 +86,4 @@
 #define ERR_MEM			-6	// memory allocation related issue
 
 
-#endif /* Base_H */
+#endif // Base_H
