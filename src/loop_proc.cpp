@@ -450,28 +450,4 @@ void Loop_Proc()
 
 	}
 
-
-
-
-	// делаем принудительный выход из игры
-#if defined(__APPLE__) && defined(__MACH__)
-	if ((vw_GetKeys(SDLK_LSUPER) || vw_GetKeys(SDLK_RSUPER)) && vw_GetKeys(SDLK_q))
-#else
-	if (((vw_GetKeys(SDLK_LALT) || vw_GetKeys(SDLK_RALT)) && vw_GetKeys(SDLK_F4)) ||
-	    ((vw_GetKeys(SDLK_LCTRL) || vw_GetKeys(SDLK_RCTRL)) && vw_GetKeys(SDLK_q)))
-#endif // defined(__APPLE__) && defined(__MACH__)
-	{
-		CanQuit = true;
-		Quit = true;
-
-		vw_SetKeys(SDLK_LALT, false);
-		vw_SetKeys(SDLK_RALT, false);
-		vw_SetKeys(SDLK_F4, false);
-		vw_SetKeys(SDLK_q, false);
-	}
-
-
-
-
-
 }
