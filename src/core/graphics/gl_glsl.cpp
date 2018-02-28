@@ -228,7 +228,7 @@ int CheckOGLError()
 
 	glErr = glGetError();
 	while (glErr != GL_NO_ERROR) {
-		fprintf(stderr, "glError 0x%x %s\n", glErr, gluErrorString(glErr));
+		fprintf(stderr, "glError 0x%x\n", glErr);
 		retCode = 1;
 		glErr = glGetError();
 	}
@@ -239,7 +239,7 @@ int CheckOGLError()
 //------------------------------------------------------------------------------------
 // Print out the information log for a shader object
 //------------------------------------------------------------------------------------
-void vw_PrintShaderInfoLog(GLuint shader, const char *ShaderName)
+void vw_PrintShaderInfoLog(GLhandleARB shader, const char *ShaderName)
 {
 	if (glGetObjectParameterivARB == nullptr) return;
 	if (glGetInfoLogARB == nullptr) return;
@@ -268,7 +268,7 @@ void vw_PrintShaderInfoLog(GLuint shader, const char *ShaderName)
 }
 
 
-void vw_PrintProgramInfoLog(GLuint program)
+void vw_PrintProgramInfoLog(GLhandleARB program)
 {
 	if (glGetObjectParameterivARB == nullptr) return;
 	if (glGetInfoLogARB == nullptr) return;
@@ -646,7 +646,11 @@ bool vw_StopShaderProgram()
 {
 	if (glUseProgramObjectARB == nullptr) return false;
 
-	glUseProgramObjectARB(0);
+#ifdef __APPLE__
+	glUseProgramObjectARB(nullptr);	// typedef void *GLhandleARB; - see glext.h for more declaration
+#else
+	glUseProgramObjectARB(0);	// typedef unsigned int GLhandleARB; - see glext.h for more declaration
+#endif
 	CheckOGLError();
 
 	return true;
