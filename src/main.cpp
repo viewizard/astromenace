@@ -26,7 +26,7 @@
 
 
 #include "game.h"
-#include <sys/stat.h> /* stat */
+#include <sys/stat.h> // stat
 
 
 #if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
@@ -1189,8 +1189,8 @@ ReCreate:
 	}
 
 
-
-	// если первый запуск игры - предлогаем выбор языка
+	// TODO check std::locale first
+	// show dialog with language setup during first game launch
 	if (FirstStart)
 		SetCurrentDialogBox(16);
 

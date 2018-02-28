@@ -73,8 +73,10 @@
 // only includes that really should being used in different parts of code
 #include <unordered_map>
 #include <forward_list>
+#include <memory>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 
 // error codes

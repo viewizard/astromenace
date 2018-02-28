@@ -27,7 +27,6 @@
 
 /// подключаем нужные файлы
 #include "object3d.h"
-#include <algorithm>
 
 
 

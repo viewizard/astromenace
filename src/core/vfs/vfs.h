@@ -28,8 +28,6 @@
 #define VFS_H
 
 #include "../base.h"
-#include <forward_list>
-#include <memory>
 
 #define VFS_VER "v1.6"
 

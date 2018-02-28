@@ -26,7 +26,7 @@
 
 
 #include "../game.h"
-#include <stdarg.h> /* va_start */
+#include <stdarg.h> // va_start
 
 
 ScriptEngine *Script = nullptr;

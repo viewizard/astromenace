@@ -375,19 +375,12 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 
 
 #ifdef gamedebug
-	// получаем и выводим все поддерживаемые расширения
-	char *extensions_tmp = (char *)glGetString(GL_EXTENSIONS);
-	if (extensions_tmp != 0) {
-		char *extensions = 0;
-		size_t len = strlen(extensions_tmp);
-		extensions = new char[len+1];
-		if (extensions != 0) {
-			strcpy(extensions, extensions_tmp);
-			for (unsigned int i=0; i<len; i++) // меняем разделитель
-				if (extensions[i]==' ') extensions[i]='\n';
-
-			printf("Supported OpenGL extensions:\n%s\n", extensions);
-			delete [] extensions;
+	// print all supported OpenGL extensions (one per line)
+	if (glGetString(GL_EXTENSIONS) != nullptr) {
+		std::string extensions{(char *)glGetString(GL_EXTENSIONS)};
+		if (!extensions.empty()) {
+			std::replace(extensions.begin(), extensions.end(), ' ', '\n'); // replace all ' ' to '\n'
+			printf("Supported OpenGL extensions:\n%s\n", extensions.c_str());
 		}
 	}
 #endif // gamedebug

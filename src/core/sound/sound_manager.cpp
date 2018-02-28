@@ -155,19 +155,12 @@ bool vw_InitSound()
 	printf("ALut ver   : %i.%i\n", alutGetMajorVersion(), alutGetMinorVersion());
 
 #ifdef gamedebug
-	// получаем и выводим все поддерживаемые расширения
-	char *extensions_tmp = (char *)alGetString(AL_EXTENSIONS);
-	if (extensions_tmp != 0) {
-		char *extensions = 0;
-		size_t len = strlen(extensions_tmp);
-		extensions = new char[len+1];
-		if (extensions != 0) {
-			strcpy(extensions, extensions_tmp);
-			for (unsigned int i=0; i<len; i++) // меняем разделитель
-				if (extensions[i]==' ') extensions[i]='\n';
-
-			printf("Supported OpenAL extensions:\n%s\n", extensions);
-			delete [] extensions;
+	// print all supported OpenAL extensions (one per line)
+	if (alGetString(AL_EXTENSIONS) != nullptr) {
+		std::string extensions{(char *)alGetString(AL_EXTENSIONS)};
+		if (!extensions.empty()) {
+			std::replace(extensions.begin(), extensions.end(), ' ', '\n'); // replace all ' ' to '\n'
+			printf("Supported OpenAL extensions:\n%s\n", extensions.c_str());
 		}
 	}
 #endif // gamedebug
