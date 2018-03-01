@@ -29,7 +29,13 @@
 
 namespace {
 
-float Frustum[6][4];
+//Frustum[6][4]
+std::array<std::array<float, 4>, 6> Frustum = {{{{0, 0, 0, 0}},
+						{{0, 0, 0, 0}},
+						{{0, 0, 0, 0}},
+						{{0, 0, 0, 0}},
+						{{0, 0, 0, 0}},
+						{{0, 0, 0, 0}}}};
 
 enum ePlaneData {
 	A = 0,		// The X value of the plane's normal.
@@ -74,17 +80,17 @@ static void NormalizePlane(int Side)
  */
 void vw_CalculateFrustum()
 {
-	float proj[16]; // This will hold our projection matrix.
-	float modl[16]; // This will hold our modelview matrix.
-	float clip[16]; // This will hold the clipping planes.
+	std::array<float, 16> proj; // This will hold our projection matrix.
+	std::array<float, 16> modl; // This will hold our modelview matrix.
+	std::array<float, 16> clip; // This will hold the clipping planes.
 
 	// Below, we pass in RI_PROJECTION_MATRIX to abstract our projection matrix.
 	// It then stores the matrix into an array of [16].
-	vw_GetMatrix(RI_PROJECTION_MATRIX, proj);
+	vw_GetMatrix(RI_PROJECTION_MATRIX, proj.data());
 
 	// By passing in RI_MODELVIEW_MATRIX, we can abstract our model view matrix.
 	// This also stores it in an array of [16].
-	vw_GetMatrix(RI_MODELVIEW_MATRIX, modl);
+	vw_GetMatrix(RI_MODELVIEW_MATRIX, modl.data());
 
 	// Now that we have our modelview and projection matrix, if we combine these 2 matrices,
 	// it will give us our clipping planes.  To combine 2 matrices, we multiply them.
@@ -108,43 +114,20 @@ void vw_CalculateFrustum()
 	clip[14] = modl[12] * proj[ 2] + modl[13] * proj[ 6] + modl[14] * proj[10] + modl[15] * proj[14];
 	clip[15] = modl[12] * proj[ 3] + modl[13] * proj[ 7] + modl[14] * proj[11] + modl[15] * proj[15];
 
-	// Now we actually want to get the sides of the frustum.  To do this we take
-	// the clipping planes we received above and extract the sides from them.
-	Frustum[RIGHT][A] = clip[ 3] - clip[ 0];
-	Frustum[RIGHT][B] = clip[ 7] - clip[ 4];
-	Frustum[RIGHT][C] = clip[11] - clip[ 8];
-	Frustum[RIGHT][D] = clip[15] - clip[12];
-	NormalizePlane(RIGHT);
+	auto CalculateFrustumSide = [clip] (eSide Side) {
+		Frustum[Side][A] = clip[ 3] - clip[ 0];
+		Frustum[Side][B] = clip[ 7] - clip[ 4];
+		Frustum[Side][C] = clip[11] - clip[ 8];
+		Frustum[Side][D] = clip[15] - clip[12];
+		NormalizePlane(Side);
+	};
 
-	Frustum[LEFT][A] = clip[ 3] + clip[ 0];
-	Frustum[LEFT][B] = clip[ 7] + clip[ 4];
-	Frustum[LEFT][C] = clip[11] + clip[ 8];
-	Frustum[LEFT][D] = clip[15] + clip[12];
-	NormalizePlane(LEFT);
-
-	Frustum[BOTTOM][A] = clip[ 3] + clip[ 1];
-	Frustum[BOTTOM][B] = clip[ 7] + clip[ 5];
-	Frustum[BOTTOM][C] = clip[11] + clip[ 9];
-	Frustum[BOTTOM][D] = clip[15] + clip[13];
-	NormalizePlane(BOTTOM);
-
-	Frustum[TOP][A] = clip[ 3] - clip[ 1];
-	Frustum[TOP][B] = clip[ 7] - clip[ 5];
-	Frustum[TOP][C] = clip[11] - clip[ 9];
-	Frustum[TOP][D] = clip[15] - clip[13];
-	NormalizePlane(TOP);
-
-	Frustum[BACK][A] = clip[ 3] - clip[ 2];
-	Frustum[BACK][B] = clip[ 7] - clip[ 6];
-	Frustum[BACK][C] = clip[11] - clip[10];
-	Frustum[BACK][D] = clip[15] - clip[14];
-	NormalizePlane(BACK);
-
-	Frustum[FRONT][A] = clip[ 3] + clip[ 2];
-	Frustum[FRONT][B] = clip[ 7] + clip[ 6];
-	Frustum[FRONT][C] = clip[11] + clip[10];
-	Frustum[FRONT][D] = clip[15] + clip[14];
-	NormalizePlane(FRONT);
+	CalculateFrustumSide(RIGHT);
+	CalculateFrustumSide(LEFT);
+	CalculateFrustumSide(BOTTOM);
+	CalculateFrustumSide(TOP);
+	CalculateFrustumSide(BACK);
+	CalculateFrustumSide(FRONT);
 }
 
 /*
