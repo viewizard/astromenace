@@ -9,13 +9,18 @@ script:
   - make
   - ./astromenace --pack --rawdata=./gamedata
 compiler:
-  - clang
   - gcc
 before_install:
-  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get -qq update; fi
-  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get -qq install libegl1-mesa-dev; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then eval "CC=gcc-7 && CXX=g++-7"; fi
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get -qq install cmake make libsdl2-dev libogg-dev libvorbis-dev libopenal-dev libalut-dev libfreetype6-dev libfontconfig1-dev; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install sdl2 libogg libvorbis freealut freetype; fi
 notifications:
   email: true
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-7
+    - libegl1-mesa-dev

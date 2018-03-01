@@ -105,7 +105,7 @@ std::vector<float> DrawBuffer{};
 // utf8 -> utf32 converter
 std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> ConvUTF8toUTF32;
 // space character utf32 code
-const char32_t SpaceUTF32{32};
+constexpr char32_t SpaceUTF32{32};
 
 } // unnamed namespace
 

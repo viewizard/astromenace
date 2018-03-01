@@ -192,8 +192,6 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 		 const std::string &RawDataDir, const std::string &ModelsPack,
 		 const std::string GameData[], unsigned int GameDataCount)
 {
-	int rc;
-
 	if (Name.empty())
 		return ERR_PARAMETERS;
 
@@ -206,7 +204,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 	}
 
 	// write VFS sign "VFS_", version and build number
-	char Sign[4]{'V','F','S','_'};
+	constexpr char Sign[4]{'V','F','S','_'};
 	SDL_RWwrite(TempVFS->File, Sign, 4, 1);
 	SDL_RWwrite(TempVFS->File, VFS_VER, 4, 1);
 	SDL_RWwrite(TempVFS->File, &BuildNumber, 4, 1);
@@ -229,7 +227,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 			vw_ShutdownVFS();
 		}
 
-		rc = vw_OpenVFS(RawDataDir + ModelsPack, 0);
+		int rc = vw_OpenVFS(RawDataDir + ModelsPack, 0);
 		if (rc != 0) {
 			fprintf(stderr, "%s file not found or corrupted.\n", (RawDataDir + ModelsPack).c_str());
 			return rc;
@@ -257,7 +255,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 	// add real files into VFS
 	if (GameDataCount > 0) {
 		for (unsigned int i = 0; i < GameDataCount; i++) {
-			rc = WriteIntoVFSfromFile(TempVFS.get(), RawDataDir + GameData[i], GameData[i],
+			int rc = WriteIntoVFSfromFile(TempVFS.get(), RawDataDir + GameData[i], GameData[i],
 						  HeaderLengthVFS, HeaderOffsetVFS, DataStartOffsetVFS,
 						  WritableVFSEntries_Map);
 			if (rc != 0) {

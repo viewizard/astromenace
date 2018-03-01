@@ -32,8 +32,6 @@
 static bool PointInTriangle(const sVECTOR3D &point, const sVECTOR3D &pa,
 			    const sVECTOR3D &pb, const sVECTOR3D &pc)
 {
-	float TotalAngle{0.0f};
-
 	sVECTOR3D V1{point.x - pa.x, point.y - pa.y, point.z - pa.z};
 	sVECTOR3D V2{point.x - pb.x, point.y - pb.y, point.z - pb.z};
 	sVECTOR3D V3{point.x - pc.x, point.y - pc.y, point.z - pc.z};
@@ -42,11 +40,9 @@ static bool PointInTriangle(const sVECTOR3D &point, const sVECTOR3D &pa,
 	V2.NormalizeHi();
 	V3.NormalizeHi();
 
-	TotalAngle += acosf(V1 * V2);
-	TotalAngle += acosf(V2 * V3);
-	TotalAngle += acosf(V3 * V1);
-
-	if (fabsf(TotalAngle - 2 * 3.14159265f /* PI */) <= 0.005f /* allowable deviation */) return true;
+	float TotalAngle{acosf(V1 * V2) + acosf(V2 * V3) + acosf(V3 * V1)};
+	if (fabsf(TotalAngle - 2 * 3.14159265f /* PI */) <= 0.005f /* allowable deviation */)
+		return true;
 
 	return false;
 }

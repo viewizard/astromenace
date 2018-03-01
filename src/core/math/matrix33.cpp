@@ -71,7 +71,7 @@ void vw_Matrix33Mult(float DstMatrix33[9], const float SrcMatrix33[9])
  */
 void vw_Matrix33CreateRotate(float Matrix33[9], const sVECTOR3D &Angle)
 {
-	const float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
+	constexpr float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
 
 	if ((Angle.z != 0.0f) && (Angle.x == 0.0f) && (Angle.y == 0.0f)) {
 		float a = -Angle.z * DegToRadFactor;

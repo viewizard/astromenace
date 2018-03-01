@@ -30,7 +30,7 @@
  * Cosine Tab
  */
 namespace {
-const double Cos[360] =
+constexpr double Cos[360] =
 		  {1.000000,0.999848,0.999391,0.998630,0.997564,0.996195,0.994522,
 		   0.992546,0.990268,0.987688,0.984808,0.981627,0.978148,0.974370,
 		   0.970296,0.965926,0.961262,0.956305,0.951057,0.945519,0.939693,
@@ -102,7 +102,7 @@ double vw_dcos(int Angle)
  * Sine Tab
  */
 namespace {
-const double Sin[360] =
+constexpr double Sin[360] =
 		  {0.000000,0.017452,0.034899,0.052336,0.069756,0.087156,
 		   0.104528,0.121869,0.139173,0.156434,0.173648,0.190809,0.207912,
 		   0.224951,0.241922,0.258819,0.275637,0.292372,0.309017,0.325568,
@@ -289,7 +289,8 @@ void sVECTOR3D::NormalizeHi()
 {
 	float Length;
 	Length = sqrtf((x * x) + (y * y) + (z * z));
-	if (Length < 0.001f) return; // если все координаты очень маленькие
+	if (Length < 0.001f)
+		return;
 	x = x / Length;
 	y = y / Length;
 	z = z / Length;
@@ -327,7 +328,7 @@ void vw_GetPlaneABCD(float &A, float &B, float &C, float &D,
  */
 void vw_RotatePoint(sVECTOR3D &Point, const sVECTOR3D &Angle)
 {
-	const float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
+	constexpr float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
 	float xTMP = Point.x;
 	float yTMP = Point.y;
 	float zTMP = Point.z;
@@ -368,7 +369,7 @@ void vw_RotatePoint(sVECTOR3D &Point, const sVECTOR3D &Angle)
  */
 void vw_RotatePointInv(sVECTOR3D &Point, const sVECTOR3D &Angle)
 {
-	const float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
+	constexpr float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
 	float xTMP = Point.x;
 	float yTMP = Point.y;
 	float zTMP = Point.z;

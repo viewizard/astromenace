@@ -113,7 +113,7 @@ void vw_SetCameraMove(const sVECTOR3D &NewRotation, float ChangeDistance, const 
  */
 void vw_SetCameraMoveAroundPoint(const sVECTOR3D &Point, float ChangeDistance, const sVECTOR3D &ChangeRotation)
 {
-	const float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
+	constexpr float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
 	CameraFocusPoint = Point;
 	// initial camera move
 	vw_SetCameraMove(ChangeRotation, ChangeDistance, Point);

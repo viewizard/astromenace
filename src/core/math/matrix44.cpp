@@ -96,7 +96,7 @@ void vw_Matrix44Translate(float Matrix44[16], const sVECTOR3D &Location)
  */
 void vw_Matrix44CreateRotate(float Matrix44[16], const sVECTOR3D &Angle)
 {
-	const float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
+	constexpr float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
 
 	if ((Angle.z != 0.0f) && (Angle.x == 0.0f) && (Angle.y == 0.0f)) {
 		float a = -Angle.z * DegToRadFactor;
