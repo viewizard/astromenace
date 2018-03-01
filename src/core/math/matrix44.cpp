@@ -96,10 +96,10 @@ void vw_Matrix44Translate(float Matrix44[16], const sVECTOR3D &Location)
  */
 void vw_Matrix44CreateRotate(float Matrix44[16], const sVECTOR3D &Angle)
 {
-	const float p180 = 0.0174532925f;
+	const float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
 
 	if ((Angle.z != 0.0f) && (Angle.x == 0.0f) && (Angle.y == 0.0f)) {
-		float a = -Angle.z*p180;
+		float a = -Angle.z * DegToRadFactor;
 		float c = cosf(a);
 		float s = sinf(a);
 		Matrix44[0] = c;
@@ -110,7 +110,7 @@ void vw_Matrix44CreateRotate(float Matrix44[16], const sVECTOR3D &Angle)
 		Matrix44[11] = Matrix44[12] = Matrix44[13] = Matrix44[14] = 0.0f;
 		Matrix44[15] = Matrix44[10] = 1.0f;
 	} else if (Angle.y != 0.0f && Angle.x == 0.0f && Angle.z == 0.0f) {
-		float a = -Angle.y*p180;
+		float a = -Angle.y * DegToRadFactor;
 		float c = cosf(a);
 		float s = sinf(a);
 		Matrix44[0] = c;
@@ -121,7 +121,7 @@ void vw_Matrix44CreateRotate(float Matrix44[16], const sVECTOR3D &Angle)
 		Matrix44[9] = Matrix44[11] = Matrix44[12] = Matrix44[13] = Matrix44[14] = 0.0f;
 		Matrix44[15] = Matrix44[5] = 1.0f;
 	} else if (Angle.x != 0.0f && Angle.y == 0.0f && Angle.z == 0.0f) {
-		float a = -Angle.x*p180;
+		float a = -Angle.x * DegToRadFactor;
 		float c = cosf(a);
 		float s = sinf(a);
 		Matrix44[5] = c;
@@ -133,13 +133,13 @@ void vw_Matrix44CreateRotate(float Matrix44[16], const sVECTOR3D &Angle)
 		Matrix44[0] = Matrix44[15] = 1.0f;
 	} else {
 		// if we need 2 or more angles
-		float a = -Angle.x*p180;
+		float a = -Angle.x * DegToRadFactor;
 		float A = cosf(a);
 		float B = sinf(a);
-		a = -Angle.y*p180;
+		a = -Angle.y * DegToRadFactor;
 		float C = cosf(a);
 		float D = sinf(a);
-		a = -Angle.z*p180;
+		a = -Angle.z * DegToRadFactor;
 		float E = cosf(a);
 		float F = sinf(a);
 		float AD = A * D;

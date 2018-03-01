@@ -28,6 +28,7 @@
 #include "camera.h"
 
 namespace {
+
 // Camera update flag (need for frustum calculation on camera update).
 bool CameraUpdated{true};
 // Camera location.
@@ -38,7 +39,8 @@ sVECTOR3D CameraRotation{0.0f, 0.0f, 0.0f};
 sVECTOR3D CameraDeviation{0.0f, 0.0f, 0.0f};
 // Camera focus point (anchor).
 sVECTOR3D CameraFocusPoint{0.0f, 0.0f, 0.0f};
-}
+
+} // unnamed namespace
 
 
 /*
@@ -101,7 +103,7 @@ void vw_SetCameraMove(const sVECTOR3D &NewRotation, float ChangeDistance, const 
 	// change rotation angles
 	CameraRotation += NewRotation;
 	// apply corrected distance and angles to camera
-	vw_RotatePoint(CameraLocation, CameraRotation^(-1.0f));
+	vw_RotatePoint(CameraLocation, CameraRotation ^ (-1.0f));
 	CameraLocation += Point;
 	CameraUpdated = true;
 }
@@ -111,6 +113,7 @@ void vw_SetCameraMove(const sVECTOR3D &NewRotation, float ChangeDistance, const 
  */
 void vw_SetCameraMoveAroundPoint(const sVECTOR3D &Point, float ChangeDistance, const sVECTOR3D &ChangeRotation)
 {
+	const float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
 	CameraFocusPoint = Point;
 	// initial camera move
 	vw_SetCameraMove(ChangeRotation, ChangeDistance, Point);
@@ -121,24 +124,25 @@ void vw_SetCameraMoveAroundPoint(const sVECTOR3D &Point, float ChangeDistance, c
 		   Point.y - CameraLocation.y,
 		   Point.z - CameraLocation.z};
 	V.Normalize();
-	if (V.x*V.x + V.y*V.y + V.z*V.z != 0) exV = V;
+	if (V.x * V.x + V.y * V.y + V.z * V.z != 0)
+		exV = V;
 
 	float newrotY{0.0f};
 	if (exV.z != 0.0f) {
 		if (((0.0f > exV.x) && (0.0f > -exV.z)) || ((0.0f < exV.x) && (0.0f < -exV.z)))
-			newrotY = (atanf(fabsf(exV.x) / fabsf(exV.z))) / 0.0174532925f;
+			newrotY = (atanf(fabsf(exV.x) / fabsf(exV.z))) / DegToRadFactor;
 		else
-			newrotY = -(atanf(fabsf(exV.x) / fabsf(exV.z))) / 0.0174532925f;
+			newrotY = -(atanf(fabsf(exV.x) / fabsf(exV.z))) / DegToRadFactor;
 	}
 
 	float newrotX{0.0f};
-	float kat{(exV.z)*(exV.z) + (exV.x)*(exV.x)};
+	float kat{(exV.z) * (exV.z) + (exV.x) * (exV.x)};
 	if (kat != 0.0f) {
 		kat = sqrtf(kat);
 		if (0 < exV.y)
-			newrotX=-(atanf(fabsf(exV.y)/kat))/0.0174532925f;
+			newrotX = -(atanf(fabsf(exV.y) / kat)) / DegToRadFactor;
 		else
-			newrotX=(atanf(fabsf(exV.y)/kat))/0.0174532925f;
+			newrotX = (atanf(fabsf(exV.y) / kat)) / DegToRadFactor;
 	}
 	if (0 > -exV.z)
 		newrotY += 180;

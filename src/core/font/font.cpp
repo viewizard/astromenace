@@ -24,14 +24,16 @@
 
 *************************************************************************************/
 
-#include "font.h"
-#include <stdarg.h> // va_start
-
 // TODO move to std::string, all utf8<->utf32 stuff must be revised first
 
 // TODO provide static vw_DrawFont(), dynamic realization we have now,
 // static should create array with text blocks as key and VBO/VAO/IBO (and other data)
 // as value for fast rendering.
+
+// TODO in future, use make_unique() to make unique_ptr-s (C++14)
+
+#include "font.h"
+#include <stdarg.h> // va_start
 
 namespace {
 // FreeType related stuff.

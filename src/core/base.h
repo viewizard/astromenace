@@ -24,10 +24,11 @@
 
 *************************************************************************************/
 
+// TODO should not be connected to core in this way
+
 #ifndef Base_H
 #define Base_H
 
-// TODO should not be connected to core in this way
 #include "../config.h"
 
 #ifdef WIN32

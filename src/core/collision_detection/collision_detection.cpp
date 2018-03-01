@@ -42,11 +42,11 @@ static bool PointInTriangle(const sVECTOR3D &point, const sVECTOR3D &pa,
 	V2.NormalizeHi();
 	V3.NormalizeHi();
 
-	TotalAngle += acosf(V1*V2);
-	TotalAngle += acosf(V2*V3);
-	TotalAngle += acosf(V3*V1);
+	TotalAngle += acosf(V1 * V2);
+	TotalAngle += acosf(V2 * V3);
+	TotalAngle += acosf(V3 * V1);
 
-	if (fabsf(TotalAngle - 2*3.14159265f) <= 0.005f) return true;
+	if (fabsf(TotalAngle - 2 * 3.14159265f /* PI */) <= 0.005f /* allowable deviation */) return true;
 
 	return false;
 }
@@ -80,7 +80,7 @@ bool vw_OBBOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation, s
 					     Object1RotationMatrix[6], Object1RotationMatrix[7], Object1RotationMatrix[8]};
 	vw_Matrix33InverseRotate(TMPInvObject1RotationMatrix);
 	// calcuate first box size
-	sVECTOR3D a{(Object1OBB[0] - Object1OBB[6])^0.5f};
+	sVECTOR3D a{(Object1OBB[0] - Object1OBB[6]) ^ 0.5f};
 	vw_Matrix33CalcPoint(a, TMPInvObject1RotationMatrix);
 	// calcuate inverse rotation matrix
 	float TMPInvObject2RotationMatrix[9]{Object2RotationMatrix[0], Object2RotationMatrix[1], Object2RotationMatrix[2],
@@ -88,7 +88,7 @@ bool vw_OBBOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation, s
 					     Object2RotationMatrix[6], Object2RotationMatrix[7], Object2RotationMatrix[8]};
 	vw_Matrix33InverseRotate(TMPInvObject2RotationMatrix);
 	// calcuate second box size
-	sVECTOR3D b{(Object2OBB[0] - Object2OBB[6])^0.5f};
+	sVECTOR3D b{(Object2OBB[0] - Object2OBB[6]) ^ 0.5f};
 	vw_Matrix33CalcPoint(b, TMPInvObject2RotationMatrix);
 	// calcuate offset in global coordinate systems
 	sVECTOR3D T{(Object2Location + Object2OBBLocation) -
@@ -111,53 +111,53 @@ bool vw_OBBOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation, s
 		return false;
 
 	// 4 (Rb)x
-	if(fabsf(T.x*R[0][0] + T.y*R[1][0] + T.z*R[2][0]) >
-	    (b.x + a.x*fabsf(R[0][0]) + a.y * fabsf(R[1][0]) + a.z*fabsf(R[2][0])))
+	if(fabsf(T.x * R[0][0] + T.y * R[1][0] + T.z * R[2][0]) >
+	   (b.x + a.x * fabsf(R[0][0]) + a.y * fabsf(R[1][0]) + a. z * fabsf(R[2][0])))
 		return false;
 	// 5 (Rb)y
-	if(fabsf(T.x*R[0][1] + T.y*R[1][1] + T.z*R[2][1]) >
-	    (b.y + a.x*fabsf(R[0][1]) + a.y * fabsf(R[1][1]) + a.z*fabsf(R[2][1])))
+	if(fabsf(T.x * R[0][1] + T.y * R[1][1] + T.z * R[2][1]) >
+	   (b.y + a.x * fabsf(R[0][1]) + a.y * fabsf(R[1][1]) + a.z * fabsf(R[2][1])))
 		return false;
 	// 6 (Rb)z
-	if(fabsf(T.x*R[0][2] + T.y*R[1][2] + T.z*R[2][2]) >
-	    (b.z + a.x*fabsf(R[0][2]) + a.y * fabsf(R[1][2]) + a.z*fabsf(R[2][2])))
+	if(fabsf(T.x * R[0][2] + T.y * R[1][2] + T.z * R[2][2]) >
+	   (b.z + a.x * fabsf(R[0][2]) + a.y * fabsf(R[1][2]) + a.z * fabsf(R[2][2])))
 		return false;
 
 	// 7 (Ra)x X (Rb)x
-	if(fabsf(T.z*R[1][0] - T.y*R[2][0]) >
-	    a.y*fabsf(R[2][0]) + a.z*fabsf(R[1][0]) + b.y*fabsf(R[0][2]) + b.z*fabsf(R[0][1]))
+	if(fabsf(T.z * R[1][0] - T.y * R[2][0]) >
+	   a.y * fabsf(R[2][0]) + a.z * fabsf(R[1][0]) + b.y * fabsf(R[0][2]) + b.z * fabsf(R[0][1]))
 		return false;
 	// 8 (Ra)x X (Rb)y
-	if(fabsf(T.z*R[1][1] - T.y*R[2][1]) >
-	    a.y*fabsf(R[2][1]) + a.z*fabsf(R[1][1]) + b.x*fabsf(R[0][2]) + b.z*fabsf(R[0][0]))
+	if(fabsf(T.z * R[1][1] - T.y * R[2][1]) >
+	   a.y * fabsf(R[2][1]) + a.z * fabsf(R[1][1]) + b.x * fabsf(R[0][2]) + b.z * fabsf(R[0][0]))
 		return false;
 	// 9 (Ra)x X (Rb)z
-	if(fabsf(T.z*R[1][2]-T.y*R[2][2]) >
-	    a.y*fabsf(R[2][2]) + a.z*fabsf(R[1][2]) + b.x*fabsf(R[0][1]) + b.y*fabsf(R[0][0]))
+	if(fabsf(T.z * R[1][2]-T.y * R[2][2]) >
+	   a.y * fabsf(R[2][2]) + a.z * fabsf(R[1][2]) + b.x * fabsf(R[0][1]) + b.y * fabsf(R[0][0]))
 		return false;
 	// 10 (Ra)y X (Rb)x
-	if(fabsf(T.x*R[2][0]-T.z*R[0][0]) >
-	    a.x*fabsf(R[2][0]) + a.z*fabsf(R[0][0]) + b.y*fabsf(R[1][2]) + b.z*fabsf(R[1][1]))
+	if(fabsf(T.x * R[2][0]-T.z * R[0][0]) >
+	   a.x * fabsf(R[2][0]) + a.z * fabsf(R[0][0]) + b.y * fabsf(R[1][2]) + b.z * fabsf(R[1][1]))
 		return false;
 	// 11 (Ra)y X (Rb)y
-	if(fabsf(T.x*R[2][1]-T.z*R[0][1]) >
-	    a.x*fabsf(R[2][1]) + a.z*fabsf(R[0][1]) + b.x*fabsf(R[1][2]) + b.z*fabsf(R[1][0]))
+	if(fabsf(T.x * R[2][1]-T.z * R[0][1]) >
+	   a.x * fabsf(R[2][1]) + a.z * fabsf(R[0][1]) + b.x * fabsf(R[1][2]) + b.z * fabsf(R[1][0]))
 		return false;
 	// 12 (Ra)y X (Rb)z
 	if(fabsf(T.x*R[2][2]-T.z*R[0][2]) >
-	    a.x*fabsf(R[2][2]) + a.z*fabsf(R[0][2]) + b.x*fabsf(R[1][1]) + b.y*fabsf(R[1][0]))
+	   a.x * fabsf(R[2][2]) + a.z * fabsf(R[0][2]) + b.x * fabsf(R[1][1]) + b.y * fabsf(R[1][0]))
 		return false;
 	// 13 (Ra)z X (Rb)x
-	if(fabsf(T.y*R[0][0]-T.x*R[1][0]) >
-	    a.x*fabsf(R[1][0]) + a.y*fabsf(R[0][0]) + b.y*fabsf(R[2][2]) + b.z*fabsf(R[2][1]))
+	if(fabsf(T.y * R[0][0]-T.x * R[1][0]) >
+	   a.x * fabsf(R[1][0]) + a.y * fabsf(R[0][0]) + b.y * fabsf(R[2][2]) + b.z * fabsf(R[2][1]))
 		return false;
 	// 14 (Ra)z X (Rb)y
-	if(fabsf(T.y*R[0][1]-T.x*R[1][1]) >
-	    a.x*fabsf(R[1][1]) + a.y*fabsf(R[0][1]) + b.x*fabsf(R[2][2]) + b.z*fabsf(R[2][0]))
+	if(fabsf(T.y * R[0][1]-T.x * R[1][1]) >
+	   a.x * fabsf(R[1][1]) + a.y * fabsf(R[0][1]) + b.x * fabsf(R[2][2]) + b.z * fabsf(R[2][0]))
 		return false;
 	// 15 (Ra)z X (Rb)z
-	if(fabsf(T.y*R[0][2]-T.x*R[1][2]) >
-	    a.x*fabsf(R[1][2]) + a.y*fabsf(R[0][2]) + b.x*fabsf(R[2][1]) + b.y*fabsf(R[2][0]))
+	if(fabsf(T.y * R[0][2]-T.x * R[1][2]) >
+	   a.x * fabsf(R[1][2]) + a.y * fabsf(R[0][2]) + b.x * fabsf(R[2][1]) + b.y * fabsf(R[2][0]))
 		return false;
 
 	return true;
@@ -186,12 +186,12 @@ bool vw_SphereSphereCollision(float Object1Radius, const sVECTOR3D &Object1Locat
 	// fast check for sphere collision
 	if (Result) {
 		// power of 2 for distance, no reason in sqrt here
-		float Dist2{Object1m2Location.x*Object1m2Location.x +
-			    Object1m2Location.y*Object1m2Location.y +
-			    Object1m2Location.z*Object1m2Location.z};
+		float Dist2{Object1m2Location.x * Object1m2Location.x +
+			    Object1m2Location.y * Object1m2Location.y +
+			    Object1m2Location.z * Object1m2Location.z};
 
 		// power of 2 for minimal distance
-		float NeedDist2{Object1p1Radius*Object1p1Radius};
+		float NeedDist2{Object1p1Radius * Object1p1Radius};
 
 		// if distance less or equal - collision detected
 		if (Dist2 <= NeedDist2)
@@ -206,29 +206,29 @@ bool vw_SphereSphereCollision(float Object1Radius, const sVECTOR3D &Object1Locat
 		Ray.Normalize();
 
 		// calculate closest point on ray
-		float Point{Ray.x*Object1Location.x +
-			    Ray.y*Object1Location.y +
-			    Ray.z*Object1Location.z - Ray.x*Object2PrevLocation.x +
-						      Ray.y*Object2PrevLocation.y +
-						      Ray.z*Object2PrevLocation.z};
+		float Point{Ray.x * Object1Location.x +
+			    Ray.y * Object1Location.y +
+			    Ray.z * Object1Location.z - Ray.x * Object2PrevLocation.x +
+							Ray.y * Object2PrevLocation.y +
+							Ray.z * Object2PrevLocation.z};
 
 		// calculate closest point on line segment
-		sVECTOR3D IntercPoint{Object2PrevLocation.x*Point,
-				     Object2PrevLocation.y*Point,
-				     Object2PrevLocation.z*Point};
+		sVECTOR3D IntercPoint{Object2PrevLocation.x * Point,
+				      Object2PrevLocation.y * Point,
+				      Object2PrevLocation.z * Point};
 
 		// out of our line segment
-		if ((Object2PrevLocation.x - IntercPoint.x)*(Object2Location.x - IntercPoint.x) +
-		    (Object2PrevLocation.y - IntercPoint.y)*(Object2Location.y - IntercPoint.y) +
-		    (Object2PrevLocation.z - IntercPoint.z)*(Object2Location.z - IntercPoint.z) >= 0.0f)
+		if ((Object2PrevLocation.x - IntercPoint.x) * (Object2Location.x - IntercPoint.x) +
+		    (Object2PrevLocation.y - IntercPoint.y) * (Object2Location.y - IntercPoint.y) +
+		    (Object2PrevLocation.z - IntercPoint.z) * (Object2Location.z - IntercPoint.z) >= 0.0f)
 			return false;
 
 		// check distance, same idea with power of 2 as above
-		float NewDist2{(IntercPoint.x - Object1Location.x)*(IntercPoint.x - Object1Location.x)+
-			       (IntercPoint.y - Object1Location.y)*(IntercPoint.y - Object1Location.y)+
-			       (IntercPoint.z - Object1Location.z)*(IntercPoint.z - Object1Location.z)};
+		float NewDist2{(IntercPoint.x - Object1Location.x) * (IntercPoint.x - Object1Location.x) +
+			       (IntercPoint.y - Object1Location.y) * (IntercPoint.y - Object1Location.y) +
+			       (IntercPoint.z - Object1Location.z) * (IntercPoint.z - Object1Location.z)};
 
-		if (NewDist2 <= Object1Radius*Object1Radius)
+		if (NewDist2 <= Object1Radius * Object1Radius)
 			return true;
 	}
 
@@ -263,24 +263,24 @@ bool vw_SphereAABBCollision(sVECTOR3D Object1AABB[8], sVECTOR3D Object1Location,
 		sVECTOR3D T{Object1Location - mid};
 
 		// check axis
-		if ((fabs(T.x) > Object1AABB[0].x + hl*fabs(dir.x)) ||
-		    (fabs(T.y) > Object1AABB[0].y + hl*fabs(dir.y)) ||
-		    (fabs(T.z) > Object1AABB[0].z + hl*fabs(dir.z)))
+		if ((fabs(T.x) > Object1AABB[0].x + hl * fabs(dir.x)) ||
+		    (fabs(T.y) > Object1AABB[0].y + hl * fabs(dir.y)) ||
+		    (fabs(T.z) > Object1AABB[0].z + hl * fabs(dir.z)))
 			return false;
 
 		// check X ^ dir
-		double r{Object1AABB[0].y*fabs(dir.z) + Object1AABB[0].z*fabs(dir.y)};
-		if (fabs(T.y*dir.z - T.z*dir.y) > r)
+		double r{Object1AABB[0].y * fabs(dir.z) + Object1AABB[0].z * fabs(dir.y)};
+		if (fabs(T.y * dir.z - T.z * dir.y) > r)
 			return false;
 
 		// check  Y ^ dir
-		r = Object1AABB[0].x*fabs(dir.z) + Object1AABB[0].z*fabs(dir.x);
-		if (fabs(T.z*dir.x - T.x*dir.z) > r)
+		r = Object1AABB[0].x * fabs(dir.z) + Object1AABB[0].z * fabs(dir.x);
+		if (fabs(T.z * dir.x - T.x * dir.z) > r)
 			return false;
 
 		// check  Z ^ dir
-		r = Object1AABB[0].x*fabs(dir.y) + Object1AABB[0].y*fabs(dir.x);
-		if (fabs(T.x*dir.y - T.y*dir.x) > r)
+		r = Object1AABB[0].x * fabs(dir.y) + Object1AABB[0].y * fabs(dir.x);
+		if (fabs(T.x * dir.y - T.y * dir.x) > r)
 			return false;
 
 		// collision detected
@@ -336,24 +336,24 @@ bool vw_SphereOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation
 		sVECTOR3D T{Object1Location - mid};
 
 		// check axis
-		if ( (fabs(T.x) > TMPMax.x + hl*fabs(dir.x)) ||
-		     (fabs(T.y) > TMPMax.y + hl*fabs(dir.y)) ||
-		     (fabs(T.z) > TMPMax.z + hl*fabs(dir.z)) )
+		if ( (fabs(T.x) > TMPMax.x + hl * fabs(dir.x)) ||
+		     (fabs(T.y) > TMPMax.y + hl * fabs(dir.y)) ||
+		     (fabs(T.z) > TMPMax.z + hl * fabs(dir.z)) )
 			return false;
 
 		// check X ^ dir
-		double r{TMPMax.y*fabs(dir.z) + TMPMax.z*fabs(dir.y)};
-		if ( fabs(T.y*dir.z - T.z*dir.y) > r )
+		double r{TMPMax.y * fabs(dir.z) + TMPMax.z * fabs(dir.y)};
+		if ( fabs(T.y * dir.z - T.z * dir.y) > r )
 			return false;
 
 		// check  Y ^ dir
-		r = TMPMax.x*fabs(dir.z) + TMPMax.z*fabs(dir.x);
-		if ( fabs(T.z*dir.x - T.x*dir.z) > r )
+		r = TMPMax.x * fabs(dir.z) + TMPMax.z * fabs(dir.x);
+		if ( fabs(T.z * dir.x - T.x * dir.z) > r )
 			return false;
 
 		// check  Z ^ dir
-		r = TMPMax.x*fabs(dir.y) + TMPMax.y*fabs(dir.x);
-		if ( fabs(T.x*dir.y - T.y*dir.x) > r )
+		r = TMPMax.x * fabs(dir.y) + TMPMax.y * fabs(dir.x);
+		if ( fabs(T.x * dir.y - T.y * dir.x) > r )
 			return false;
 
 		// collision detected
@@ -400,9 +400,9 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 		// we use index buffer here in order to find triangle's vertices in mesh
 		int j2{0};
 		if (Object1DrawObjectList->IndexBuffer != nullptr)
-			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart+i]*Object1DrawObjectList->VertexStride;
+			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart + i] * Object1DrawObjectList->VertexStride;
 		else
-			j2 = (Object1DrawObjectList->RangeStart+i)*Object1DrawObjectList->VertexStride;
+			j2 = (Object1DrawObjectList->RangeStart + i) * Object1DrawObjectList->VertexStride;
 
 		// translate triangle's vertices in proper coordinates for collision detection
 		sVECTOR3D Point1{Object1DrawObjectList->VertexBuffer[j2],
@@ -411,9 +411,9 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 		vw_Matrix44CalcPoint(Point1, TransMat);
 
 		if (Object1DrawObjectList->IndexBuffer != nullptr)
-			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart + i + 1]*Object1DrawObjectList->VertexStride;
+			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart + i + 1] * Object1DrawObjectList->VertexStride;
 		else
-			j2 = (Object1DrawObjectList->RangeStart + i + 1)*Object1DrawObjectList->VertexStride;
+			j2 = (Object1DrawObjectList->RangeStart + i + 1) * Object1DrawObjectList->VertexStride;
 
 		sVECTOR3D Point2{Object1DrawObjectList->VertexBuffer[j2],
 				Object1DrawObjectList->VertexBuffer[j2 + 1],
@@ -421,9 +421,9 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 		vw_Matrix44CalcPoint(Point2, TransMat);
 
 		if (Object1DrawObjectList->IndexBuffer != nullptr)
-			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart + i + 2]*Object1DrawObjectList->VertexStride;
+			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart + i + 2] * Object1DrawObjectList->VertexStride;
 		else
-			j2 = (Object1DrawObjectList->RangeStart + i + 2)*Object1DrawObjectList->VertexStride;
+			j2 = (Object1DrawObjectList->RangeStart + i + 2) * Object1DrawObjectList->VertexStride;
 
 		sVECTOR3D Point3{Object1DrawObjectList->VertexBuffer[j2],
 				Object1DrawObjectList->VertexBuffer[j2 + 1],
@@ -440,12 +440,12 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 		NormalVector.Normalize();
 
 		// calculate distance from point to plane
-		float Distance{(Object2Location - Point1)*NormalVector};
+		float Distance{(Object2Location - Point1) * NormalVector};
 
 		// point close enough to plane for check collision with plane (triangle)
 		if (fabsf(Distance) <= Object2Radius) {
 			// calculate collision point on plane for ray
-			sVECTOR3D IntercPoint{Object2Location - (NormalVector^Distance)};
+			sVECTOR3D IntercPoint{Object2Location - (NormalVector ^ Distance)};
 
 			// return the point data if point belongs to triangle (not just plane)
 			if (PointInTriangle(IntercPoint, Point1, Point2, Point3)) {
@@ -456,13 +456,13 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 
 		// check for distance, do we really close enough
 		// note, we use ^2 and don't calculate the real distance
-		float Object2Radius2{Object2Radius*Object2Radius};
+		float Object2Radius2{Object2Radius * Object2Radius};
 
 		// check distance to point1
 		sVECTOR3D DistancePoint1{Object2Location - Point1};
-		float Distance2Point1{DistancePoint1.x*DistancePoint1.x +
-				      DistancePoint1.y*DistancePoint1.y +
-				      DistancePoint1.z*DistancePoint1.z};
+		float Distance2Point1{DistancePoint1.x * DistancePoint1.x +
+				      DistancePoint1.y * DistancePoint1.y +
+				      DistancePoint1.z * DistancePoint1.z};
 		if (Distance2Point1 <= Object2Radius2) {
 			*CollisionLocation = Point1;
 			return true;
@@ -470,9 +470,9 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 
 		// check distance to point2
 		sVECTOR3D DistancePoint2{Object2Location - Point2};
-		float Distance2Point2{DistancePoint2.x*DistancePoint2.x +
-				      DistancePoint2.y*DistancePoint2.y +
-				      DistancePoint2.z*DistancePoint2.z};
+		float Distance2Point2{DistancePoint2.x * DistancePoint2.x +
+				      DistancePoint2.y * DistancePoint2.y +
+				      DistancePoint2.z * DistancePoint2.z};
 		if (Distance2Point2 <= Object2Radius2) {
 			*CollisionLocation = Point2;
 			return true;
@@ -480,9 +480,9 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 
 		// check distance to point3
 		sVECTOR3D DistancePoint3{Object2Location - Point3};
-		float Distance2Point3{DistancePoint3.x*DistancePoint3.x +
-				      DistancePoint3.y*DistancePoint3.y +
-				      DistancePoint3.z*DistancePoint3.z};
+		float Distance2Point3{DistancePoint3.x * DistancePoint3.x +
+				      DistancePoint3.y * DistancePoint3.y +
+				      DistancePoint3.z * DistancePoint3.z};
 		if (Distance2Point3 <= Object2Radius2) {
 			*CollisionLocation = Point3;
 			return true;
@@ -493,10 +493,10 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 
 		// check that this is "front" for triangle, and skip triangles with "back" sided to ray start point
 		sVECTOR3D vDir1{Point1 - Object2PrevLocation};
-		float d1{vDir1*NormalVector};
-		if (d1 <= 0.001f) {
+		float d1{vDir1 * NormalVector};
+		if (d1 <= 0.001f /* allowable deviation */) {
 			// calculate distance from point to plane
-			float originDistance{NormalVector*Point1};
+			float originDistance{NormalVector * Point1};
 
 			sVECTOR3D vLineDir{Object2Location - Object2PrevLocation};
 
@@ -505,7 +505,7 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 					   NormalVector.y * Object2PrevLocation.y +
 					   NormalVector.z * Object2PrevLocation.z - originDistance)};
 
-			float Denominator{NormalVector*vLineDir};
+			float Denominator{NormalVector * vLineDir};
 			if(Denominator != 0.0f) {
 				float dist{Numerator / Denominator};
 
@@ -513,7 +513,7 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 				sVECTOR3D IntercPoint{Object2PrevLocation + (vLineDir ^ dist)};
 
 				// check, do line (not ray here) cross the plane
-				if (((Object2PrevLocation - IntercPoint)*(Object2Location - IntercPoint) < 0.0f) &&
+				if (((Object2PrevLocation - IntercPoint) * (Object2Location - IntercPoint) < 0.0f) &&
 				    (PointInTriangle(IntercPoint, Point1, Point2, Point3))) {
 					*CollisionLocation = IntercPoint;
 					return true;

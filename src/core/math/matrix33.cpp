@@ -71,10 +71,10 @@ void vw_Matrix33Mult(float DstMatrix33[9], const float SrcMatrix33[9])
  */
 void vw_Matrix33CreateRotate(float Matrix33[9], const sVECTOR3D &Angle)
 {
-	const float p180 = 0.0174532925f;
+	const float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
 
 	if ((Angle.z != 0.0f) && (Angle.x == 0.0f) && (Angle.y == 0.0f)) {
-		float a = -Angle.z*p180;
+		float a = -Angle.z * DegToRadFactor;
 		float c = cosf(a);
 		float s = sinf(a);
 		Matrix33[0] = c;
@@ -84,7 +84,7 @@ void vw_Matrix33CreateRotate(float Matrix33[9], const sVECTOR3D &Angle)
 		Matrix33[2] = Matrix33[5] = Matrix33[6] = Matrix33[7] = 0.0f;
 		Matrix33[8] = 1.0f;
 	} else if ((Angle.y != 0.0f) && (Angle.x == 0.0f) && (Angle.z == 0.0f)) {
-		float a = -Angle.y*p180;
+		float a = -Angle.y * DegToRadFactor;
 		float c = cosf(a);
 		float s = sinf(a);
 		Matrix33[0] = c;
@@ -94,7 +94,7 @@ void vw_Matrix33CreateRotate(float Matrix33[9], const sVECTOR3D &Angle)
 		Matrix33[1] = Matrix33[3] = Matrix33[5] = Matrix33[7] = 0.0f;
 		Matrix33[4] = 1.0f;
 	} else if ((Angle.x != 0.0f) && (Angle.y == 0.0f) && (Angle.z == 0.0f)) {
-		float a = -Angle.x*p180;
+		float a = -Angle.x * DegToRadFactor;
 		float c = cosf(a);
 		float s = sinf(a);
 		Matrix33[4] = c;
@@ -105,13 +105,13 @@ void vw_Matrix33CreateRotate(float Matrix33[9], const sVECTOR3D &Angle)
 		Matrix33[0] = 1.0f;
 	} else {
 		// if we need 2 or more angles
-		float a = -Angle.x*p180;
+		float a = -Angle.x * DegToRadFactor;
 		float A = cosf(a);
 		float B = sinf(a);
-		a = -Angle.y*p180;
+		a = -Angle.y * DegToRadFactor;
 		float C = cosf(a);
 		float D = sinf(a);
-		a = -Angle.z*p180;
+		a = -Angle.z * DegToRadFactor;
 		float E = cosf(a);
 		float F = sinf(a);
 		float AD = A * D;

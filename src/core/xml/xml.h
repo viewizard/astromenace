@@ -24,10 +24,10 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #ifndef XML_H
 #define XML_H
-
-// TODO translate comments
 
 #include "../base.h"
 

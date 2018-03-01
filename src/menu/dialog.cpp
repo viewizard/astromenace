@@ -26,8 +26,6 @@
 
 #include "../game.h"
 
-// TODO fix all this mess with numbers (CurrentDialogBox), use 'enum' instead
-
 namespace {
 
 eDialogBox CurrentDialogBox{eDialogBox::None}; // current dialog box

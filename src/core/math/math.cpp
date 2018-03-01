@@ -283,15 +283,15 @@ void sVECTOR3D::Multiply(const sVECTOR3D &A)
 void vw_GetPlaneABCD(float &A, float &B, float &C, float &D,
 		  const sVECTOR3D &Point1, const sVECTOR3D &Point2, const sVECTOR3D &Point3)
 {
-	A = (Point2.y-Point1.y)*(Point3.z-Point1.z)-(Point2.z-Point1.z)*(Point3.y-Point1.y);
-	B = (Point2.z-Point1.z)*(Point3.x-Point1.x)-(Point2.x-Point1.x)*(Point3.z-Point1.z);
-	C = (Point2.x-Point1.x)*(Point3.y-Point1.y)-(Point2.y-Point1.y)*(Point3.x-Point1.x);
-	D = -Point1.x*(Point2.y-Point1.y)*(Point3.z-Point1.z)
-	    -Point1.y*(Point2.z-Point1.z)*(Point3.x-Point1.x)
-	    -Point1.z*(Point2.x-Point1.x)*(Point3.y-Point1.y)
-	    +Point1.z*(Point2.y-Point1.y)*(Point3.x-Point1.x)
-	    +Point1.y*(Point2.x-Point1.x)*(Point3.z-Point1.z)
-	    +Point1.x*(Point2.z-Point1.z)*(Point3.y-Point1.y);
+	A = (Point2.y - Point1.y) * (Point3.z - Point1.z) - (Point2.z - Point1.z) * (Point3.y - Point1.y);
+	B = (Point2.z - Point1.z) * (Point3.x - Point1.x) - (Point2.x - Point1.x) * (Point3.z - Point1.z);
+	C = (Point2.x - Point1.x) * (Point3.y - Point1.y) - (Point2.y - Point1.y) * (Point3.x - Point1.x);
+	D = - Point1.x * (Point2.y - Point1.y) * (Point3.z - Point1.z)
+	    - Point1.y * (Point2.z - Point1.z) * (Point3.x - Point1.x)
+	    - Point1.z * (Point2.x - Point1.x) * (Point3.y - Point1.y)
+	    + Point1.z * (Point2.y - Point1.y) * (Point3.x - Point1.x)
+	    + Point1.y * (Point2.x - Point1.x) * (Point3.z - Point1.z)
+	    + Point1.x * (Point2.z - Point1.z) * (Point3.y - Point1.y);
 }
 
 /*
@@ -299,39 +299,39 @@ void vw_GetPlaneABCD(float &A, float &B, float &C, float &D,
  */
 void vw_RotatePoint(sVECTOR3D &Point, const sVECTOR3D &Angle)
 {
-	const float p180 = 0.0174532925f;
+	const float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
 	float xTMP = Point.x;
 	float yTMP = Point.y;
 	float zTMP = Point.z;
 
 	// X
 	if (Angle.x != 0) {
-		float a = -Angle.x*p180;
+		float a = -Angle.x * DegToRadFactor;
 		float c = cosf(a);
 		float s = sinf(a);
-		Point.y = yTMP*c + zTMP*s;
-		Point.z = -yTMP*s + zTMP*c;
+		Point.y = yTMP * c + zTMP * s;
+		Point.z = -yTMP * s + zTMP * c;
 		xTMP = Point.x;
 		yTMP = Point.y;
 		zTMP = Point.z;
 	}
 	// Y
 	if (Angle.y != 0) {
-		float a = Angle.y*p180;
+		float a = Angle.y * DegToRadFactor;
 		float c = cosf(a);
 		float s = sinf(a);
-		Point.x = xTMP*c + zTMP*s;
-		Point.z = -xTMP*s + zTMP*c;
+		Point.x = xTMP*c + zTMP * s;
+		Point.z = -xTMP*s + zTMP * c;
 		xTMP = Point.x;
 		yTMP = Point.y;
 	}
 	// Z
 	if (Angle.z != 0) {
-		float a = -Angle.z*p180;
+		float a = -Angle.z * DegToRadFactor;
 		float c = cosf(a);
 		float s = sinf(a);
-		Point.x = xTMP*c + yTMP*s;
-		Point.y = -xTMP*s + yTMP*c;
+		Point.x = xTMP * c + yTMP * s;
+		Point.y = -xTMP * s + yTMP * c;
 	}
 }
 
@@ -340,38 +340,38 @@ void vw_RotatePoint(sVECTOR3D &Point, const sVECTOR3D &Angle)
  */
 void vw_RotatePointInv(sVECTOR3D &Point, const sVECTOR3D &Angle)
 {
-	const float p180 = 0.0174532925f;
+	const float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
 	float xTMP = Point.x;
 	float yTMP = Point.y;
 	float zTMP = Point.z;
 
 	// Z
 	if (Angle.z != 0) {
-		float a = -Angle.z*p180;
+		float a = -Angle.z * DegToRadFactor;
 		float c = cosf(a);
 		float s = sinf(a);
-		Point.x = xTMP*c + yTMP*s;
-		Point.y = -xTMP*s + yTMP*c;
+		Point.x = xTMP * c + yTMP * s;
+		Point.y = -xTMP * s + yTMP * c;
 		xTMP = Point.x;
 		yTMP = Point.y;
 		zTMP = Point.z;
 	}
 	// Y
 	if (Angle.y != 0) {
-		float a = Angle.y*p180;
+		float a = Angle.y * DegToRadFactor;
 		float c = cosf(a);
 		float s = sinf(a);
-		Point.x = xTMP*c + zTMP*s;
-		Point.z = -xTMP*s + zTMP*c;
+		Point.x = xTMP * c + zTMP * s;
+		Point.z = -xTMP * s + zTMP * c;
 		yTMP = Point.y;
 		zTMP = Point.z;
 	}
 	// X
 	if (Angle.x != 0) {
-		float a = -Angle.x*p180;
+		float a = -Angle.x * DegToRadFactor;
 		float c = cosf(a);
 		float s = sinf(a);
-		Point.y = yTMP*c + zTMP*s;
-		Point.z = -yTMP*s + zTMP*c;
+		Point.y = yTMP * c + zTMP * s;
+		Point.z = -yTMP * s + zTMP * c;
 	}
 }

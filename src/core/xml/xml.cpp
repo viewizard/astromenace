@@ -24,10 +24,10 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "xml.h"
 #include "../vfs/vfs.h"
-
-// TODO translate comments
 
 // ищем первое вхождение подстроки в строку, передаем позицию, или -1 если не найдена
 int FindSubString(char *String, const char *SubString)
