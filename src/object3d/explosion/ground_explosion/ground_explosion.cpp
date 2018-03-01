@@ -124,9 +124,9 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 
 				// находим точку локального положения объекта в моделе
 				sVECTOR3D LocalLocation = Object->DrawObjectList[i].Location;
-				vw_Matrix33CalcPoint(&LocalLocation, Object->CurrentRotationMat);
+				vw_Matrix33CalcPoint(LocalLocation, Object->CurrentRotationMat);
 				LocalLocation = Object->HitBBLocation[i]-LocalLocation;
-				vw_Matrix33CalcPoint(&LocalLocation, InvRotationMat);
+				vw_Matrix33CalcPoint(LocalLocation, InvRotationMat);
 				// и меняем внутрее положение
 				ShipPart->DrawObjectList[0].Location = LocalLocation^(-1.0f);
 
@@ -158,7 +158,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 						//if(ShipPart->Speed != 0.0f) Speed-2*vw_Randf1;
 						sVECTOR3D VelocityTMP = ShipPart->Location - Object->Location;
 						// делаем небольшой случайный доворот
-						vw_RotatePoint(&VelocityTMP, sVECTOR3D(-5.0f-15.0f*vw_Randf1, 10.0f*vw_Randf0, 0.0f));
+						vw_RotatePoint(VelocityTMP, sVECTOR3D(-5.0f-15.0f*vw_Randf1, 10.0f*vw_Randf0, 0.0f));
 						if(ShipPart->Radius != 0.0f) ShipPart->Velocity = VelocityTMP^((1.0f+5.0f*vw_Randf1)/ShipPart->Radius);
 						else ShipPart->Velocity = VelocityTMP^(1.0f+5.0f*vw_Randf1);
 

@@ -108,7 +108,7 @@ cSpaceStars::cSpaceStars()
 			ParticleDist = tmp.x*tmp.x + tmp.y*tmp.y + tmp.z*tmp.z;
 		}
 
-		vw_Matrix33CalcPoint(&tmp, CurrentRotationMat);
+		vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
 		NewParticle->Location = Location + tmp;
 
 		// подключаем частицу к системе

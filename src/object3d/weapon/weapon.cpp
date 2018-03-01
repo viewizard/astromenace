@@ -622,7 +622,7 @@ bool cWeapon::Update(float Time)
 					FireLocation = sVECTOR3D(0.2f, -0.3f, 2.6f);
 					break;
 				}
-				vw_Matrix33CalcPoint(&FireLocation, CurrentRotationMat);
+				vw_Matrix33CalcPoint(FireLocation, CurrentRotationMat);
 
 				// создаем снаряд
 				cProjectile *Projectile = new cProjectile;
@@ -778,11 +778,11 @@ bool cWeapon::Update(float Time)
 				for (int i=0; i<DrawObjectQuantity; i++) {
 					sVECTOR3D tmp = DrawObjectList[i].Location-DrawObjectList[TargetHorizObject].Location;
 
-					vw_RotatePointInv(&tmp, DrawObjectList[i].Rotation^(-1.0f));
+					vw_RotatePointInv(tmp, DrawObjectList[i].Rotation^(-1.0f));
 
 					DrawObjectList[i].Rotation.y = -NeedRotate;
 
-					vw_RotatePoint(&tmp, DrawObjectList[i].Rotation);
+					vw_RotatePoint(tmp, DrawObjectList[i].Rotation);
 
 					DrawObjectList[i].Location = tmp+DrawObjectList[TargetHorizObject].Location;
 				}
@@ -817,11 +817,11 @@ bool cWeapon::Update(float Time)
 				// поворачиваем все объекты
 				sVECTOR3D tmp = DrawObjectList[TargetVertObject].Location-DrawObjectList[TargetVertObject].Location;
 
-				vw_RotatePointInv(&tmp, DrawObjectList[TargetVertObject].Rotation^(-1.0f));
+				vw_RotatePointInv(tmp, DrawObjectList[TargetVertObject].Rotation^(-1.0f));
 
 				DrawObjectList[TargetVertObject].Rotation.x = -NeedRotate;
 
-				vw_RotatePoint(&tmp, DrawObjectList[TargetVertObject].Rotation);
+				vw_RotatePoint(tmp, DrawObjectList[TargetVertObject].Rotation);
 
 				DrawObjectList[TargetVertObject].Location = tmp+DrawObjectList[TargetVertObject].Location;
 			}
@@ -830,14 +830,14 @@ bool cWeapon::Update(float Time)
 		// турель
 		sVECTOR3D RotationBase = Rotation;
 		sVECTOR3D BaseBoundTMP = BaseBound;
-		vw_RotatePoint(&BaseBoundTMP, RotationBase);
+		vw_RotatePoint(BaseBoundTMP, RotationBase);
 
 		sVECTOR3D RotationMiddle = Rotation;
 		sVECTOR3D MiddleBoundTMP = MiddleBound;
 		if (TargetHorizObject != -1) {
 			RotationMiddle = DrawObjectList[TargetHorizObject].Rotation+Rotation;
 		}
-		vw_RotatePoint(&MiddleBoundTMP, RotationMiddle);
+		vw_RotatePoint(MiddleBoundTMP, RotationMiddle);
 
 		sVECTOR3D RotationWeapon = Rotation;
 		if (TargetVertObject != -1) {
@@ -845,7 +845,7 @@ bool cWeapon::Update(float Time)
 		}
 
 		sVECTOR3D WeaponBoundTMP = WeaponBound;
-		vw_RotatePoint(&WeaponBoundTMP, RotationWeapon);
+		vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
 
 		FireLocation = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
@@ -856,7 +856,7 @@ bool cWeapon::Update(float Time)
 		}
 
 		Orientation = sVECTOR3D(0.0f, 0.0f, 1.0f);
-		vw_RotatePoint(&Orientation, RotationWeapon);
+		vw_RotatePoint(Orientation, RotationWeapon);
 	}
 
 
@@ -891,8 +891,8 @@ void cWeapon::SetRotation(sVECTOR3D NewRotation)
 
 	if (!WeaponTurret) {
 		// положение точки выстрела
-		vw_Matrix33CalcPoint(&FireLocation, OldInvRotationMat);
-		vw_Matrix33CalcPoint(&FireLocation, CurrentRotationMat);
+		vw_Matrix33CalcPoint(FireLocation, OldInvRotationMat);
+		vw_Matrix33CalcPoint(FireLocation, CurrentRotationMat);
 
 		if (Fire != nullptr) {
 			Fire->MoveSystem(Location + FireLocation);
@@ -903,20 +903,20 @@ void cWeapon::SetRotation(sVECTOR3D NewRotation)
 		// турель
 		sVECTOR3D RotationBase = Rotation;
 		sVECTOR3D BaseBoundTMP = BaseBound;
-		vw_RotatePoint(&BaseBoundTMP, RotationBase);
+		vw_RotatePoint(BaseBoundTMP, RotationBase);
 
 		sVECTOR3D RotationMiddle = Rotation;
 		sVECTOR3D MiddleBoundTMP = MiddleBound;
 		if (TargetHorizObject != -1)
 			RotationMiddle = DrawObjectList[TargetHorizObject].Rotation + Rotation;
-		vw_RotatePoint(&MiddleBoundTMP, RotationMiddle);
+		vw_RotatePoint(MiddleBoundTMP, RotationMiddle);
 
 		sVECTOR3D RotationWeapon = Rotation;
 		if (TargetVertObject != -1)
 			RotationWeapon = DrawObjectList[TargetVertObject].Rotation + Rotation;
 
 		sVECTOR3D WeaponBoundTMP = WeaponBound;
-		vw_RotatePoint(&WeaponBoundTMP, RotationWeapon);
+		vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
 
 		FireLocation = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
@@ -925,15 +925,15 @@ void cWeapon::SetRotation(sVECTOR3D NewRotation)
 			RotationWeapon = sVECTOR3D(TargetVertObjectNeedAngle, TargetHorizObjectNeedAngle, 0.0f)+Rotation;
 
 		Orientation = sVECTOR3D(0.0f, 0.0f, 1.0f);
-		vw_RotatePoint(&Orientation, RotationWeapon);
+		vw_RotatePoint(Orientation, RotationWeapon);
 	}
 
 
 
 
 	if (DestroyedFire != nullptr) {
-		vw_Matrix33CalcPoint(&DestroyedFireLocation, OldInvRotationMat);
-		vw_Matrix33CalcPoint(&DestroyedFireLocation, CurrentRotationMat);
+		vw_Matrix33CalcPoint(DestroyedFireLocation, OldInvRotationMat);
+		vw_Matrix33CalcPoint(DestroyedFireLocation, CurrentRotationMat);
 		DestroyedFire->MoveSystem(Location + DestroyedFireLocation);
 		DestroyedFire->SetStartLocation(Location + DestroyedFireLocation);
 		DestroyedFire->RotateSystemByAngle(Rotation);
@@ -945,8 +945,8 @@ void cWeapon::SetRotation(sVECTOR3D NewRotation)
 	}
 	// если лучевое оружие
 	if (LaserMaser != nullptr) {
-		vw_Matrix33CalcPoint(&LaserMaser->ProjectileCenter, OldInvRotationMat);
-		vw_Matrix33CalcPoint(&LaserMaser->ProjectileCenter, CurrentRotationMat);
+		vw_Matrix33CalcPoint(LaserMaser->ProjectileCenter, OldInvRotationMat);
+		vw_Matrix33CalcPoint(LaserMaser->ProjectileCenter, CurrentRotationMat);
 		LaserMaser->SetLocation(Location+FireLocation+LaserMaser->ProjectileCenter);
 		LaserMaser->SetRotation(NewRotation);
 	}
@@ -1126,21 +1126,21 @@ bool cWeapon::WeaponFire(float Time)
 		// турель
 		sVECTOR3D RotationBase = Rotation;
 		sVECTOR3D BaseBoundTMP = BaseBound;
-		vw_RotatePoint(&BaseBoundTMP, RotationBase);
+		vw_RotatePoint(BaseBoundTMP, RotationBase);
 
 		sVECTOR3D RotationMiddle = Rotation;
 		sVECTOR3D MiddleBoundTMP = MiddleBound;
 		if (TargetHorizObject != -1) {
 			RotationMiddle = DrawObjectList[TargetHorizObject].Rotation + Rotation;
 		}
-		vw_RotatePoint(&MiddleBoundTMP, RotationMiddle);
+		vw_RotatePoint(MiddleBoundTMP, RotationMiddle);
 
 		if (TargetVertObject != -1) {
 			RotationWeapon = DrawObjectList[TargetVertObject].Rotation + Rotation;
 		}
 
 		sVECTOR3D WeaponBoundTMP = WeaponBound;
-		vw_RotatePoint(&WeaponBoundTMP, RotationWeapon);
+		vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
 
 		FireLocation = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
@@ -1173,14 +1173,14 @@ bool cWeapon::WeaponFire(float Time)
 			LaserMaser = nullptr;
 		}
 		LaserMaser = Projectile;
-		vw_Matrix33CalcPoint(&LaserMaser->ProjectileCenter, CurrentRotationMat);
+		vw_Matrix33CalcPoint(LaserMaser->ProjectileCenter, CurrentRotationMat);
 		LaserMaser->SetLocation(Location+FireLocation+LaserMaser->ProjectileCenter);
 	} else { // если это снаряд, его нужно немного вынести, так лучше смотрится
 		if (Projectile->ProjectileType == 0) {
 			sVECTOR3D ADDPOS(0,0,4.0f);
 			if (WeaponTurret) ADDPOS = sVECTOR3D(0,0,2.0f);
 
-			vw_RotatePoint(&ADDPOS, RotationWeapon);
+			vw_RotatePoint(ADDPOS, RotationWeapon);
 
 			Projectile->SetLocation(Location+FireLocation+ADDPOS);
 		} else // для ракет и мин все без изменения

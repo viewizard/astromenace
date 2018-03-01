@@ -301,7 +301,7 @@ bool cParticleSystem2D::Update(float Time)
 					NewParticle->Velocity.x += Direction.z * sinf(RandomPitch) * cosf(RandomYaw);
 					NewParticle->Velocity.z += Direction.z * cosf(RandomPitch);
 
-					vw_Matrix33CalcPoint(&NewParticle->Velocity, RotationMatrix);
+					vw_Matrix33CalcPoint(NewParticle->Velocity, RotationMatrix);
 				}
 			} else {
 				// без направления, излучаем во все стороны
@@ -342,10 +342,7 @@ void cParticleSystem2D::Draw()
 	if ((Texture == nullptr) || (ParticlesCount == 0))
 		return;
 
-	sRECT SrcRect, DestRect;
-
-	SetRect(&SrcRect,0,0,64,64);
-
+	sRECT SrcRect(0,0,64,64), DestRect;
 
 	float AW;
 	float AH;
@@ -379,10 +376,10 @@ void cParticleSystem2D::Draw()
 	sParticle2D *tmp1 = Start;
 
 	while (tmp1 != nullptr) {
-		SetRect(&DestRect,(int)(tmp1->Location.x - tmp1->Size/2),
-			(int)(tmp1->Location.y - tmp1->Size/2),
-			(int)(tmp1->Location.x + tmp1->Size/2),
-			(int)(tmp1->Location.y + tmp1->Size/2));
+		DestRect((int)(tmp1->Location.x - tmp1->Size/2),
+			 (int)(tmp1->Location.y - tmp1->Size/2),
+			 (int)(tmp1->Location.x + tmp1->Size/2),
+			 (int)(tmp1->Location.y + tmp1->Size/2));
 
 		if (ASpresent) tmpPosY = (AH - DestRect.top - DestRect.top - (DestRect.bottom - DestRect.top));
 		else tmpPosY = (AHw - DestRect.top - DestRect.top - (DestRect.bottom - DestRect.top));

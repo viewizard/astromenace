@@ -42,9 +42,8 @@ const char *ArcadeSim[2] = {
 
 void DifficultyMenu()
 {
-	sRECT SrcRect, DstRect;
-	SetRect(&SrcRect,2,2,863-2,484-2);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-427,175-15,Setup.iAspectRatioWidth/2-427+863-4,175-15+484-4);
+	sRECT SrcRect(2, 2, 861, 482);
+	sRECT DstRect(Setup.iAspectRatioWidth / 2 - 427, 160, Setup.iAspectRatioWidth / 2 + 432, 160 + 480);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
 
 	int X1 = Setup.iAspectRatioWidth/2 - 372;

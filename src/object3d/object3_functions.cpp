@@ -213,20 +213,20 @@ void GetShipOnTargetOrientateion(
 {
 	// получаем точки для создания плоскости
 	sVECTOR3D Orientation(0.0f, 0.0f, 1.0f);
-	vw_Matrix33CalcPoint(&Orientation, RotationMatrix);
+	vw_Matrix33CalcPoint(Orientation, RotationMatrix);
 	sVECTOR3D PointUp(0.0f, 1.0f, 0.0f);
-	vw_Matrix33CalcPoint(&PointUp, RotationMatrix);
+	vw_Matrix33CalcPoint(PointUp, RotationMatrix);
 	sVECTOR3D PointRight = sVECTOR3D(1.0f, 0.0f, 0.0f);
-	vw_Matrix33CalcPoint(&PointRight, RotationMatrix);
+	vw_Matrix33CalcPoint(PointRight, RotationMatrix);
 
 	// находим плоскость, вертикальную
 	float A, B, C, D;
-	vw_GetPlaneABCD(&A, &B, &C, &D, Location, Location+Orientation, Location+PointUp);
+	vw_GetPlaneABCD(A, B, C, D, Location, Location+Orientation, Location+PointUp);
 
 
 	// получаем вертикальную плоскость 2 (отсечения перед-зад)
 	float A2, B2, C2, D2;
-	vw_GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+PointRight, Location+PointUp);
+	vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location+PointRight, Location+PointUp);
 
 	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
 	sVECTOR3D TargetLocation = Location;
@@ -257,7 +257,7 @@ void GetShipOnTargetOrientateion(
 				{
 					// находим настоящую точку попадания с учетом скорости объекта и пули... если надо
 					sVECTOR3D tmpLocation = tmp->GeometryCenterLocation;
-					vw_Matrix33CalcPoint(&tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
+					vw_Matrix33CalcPoint(tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
 					sVECTOR3D RealLocation = tmp->Location + tmpLocation;
 
 					if (tmp->Speed != 0.0f)
@@ -323,7 +323,7 @@ void GetShipOnTargetOrientateion(
 
 								// находим угол между плоскостью и прямой
 								float A3, B3, C3, D3;
-								vw_GetPlaneABCD(&A3, &B3, &C3, &D3, Location, Location+Orientation, Location+PointRight);
+								vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location+Orientation, Location+PointRight);
 
 								float m = TargetLocation.x-Location.x;
 								float n = TargetLocation.y-Location.y;
@@ -390,7 +390,7 @@ void GetShipOnTargetOrientateion(
 			    (ObjectStatus > 1 && tmpG->ObjectStatus==1)) {
 
 				sVECTOR3D tmpLocation = tmpG->GeometryCenterLocation;
-				vw_Matrix33CalcPoint(&tmpLocation, tmpG->CurrentRotationMat); // поворачиваем в плоскость объекта
+				vw_Matrix33CalcPoint(tmpLocation, tmpG->CurrentRotationMat); // поворачиваем в плоскость объекта
 				sVECTOR3D RealLocation = tmpG->Location + tmpLocation;
 
 				if (tmpG->Speed != 0.0f)
@@ -453,7 +453,7 @@ void GetShipOnTargetOrientateion(
 
 							// находим угол между плоскостью и прямой
 							float A3, B3, C3, D3;
-							vw_GetPlaneABCD(&A3, &B3, &C3, &D3, Location, Location+Orientation, Location+PointRight);
+							vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location+Orientation, Location+PointRight);
 
 							float m = TargetLocation.x-Location.x;
 							float n = TargetLocation.y-Location.y;
@@ -526,7 +526,7 @@ void GetShipOnTargetOrientateion(
 			    (ObjectStatus > 1 && tmpS->ObjectStatus==1)) {
 
 				sVECTOR3D tmpLocation = tmpS->GeometryCenterLocation;
-				vw_Matrix33CalcPoint(&tmpLocation, tmpS->CurrentRotationMat); // поворачиваем в плоскость объекта
+				vw_Matrix33CalcPoint(tmpLocation, tmpS->CurrentRotationMat); // поворачиваем в плоскость объекта
 				sVECTOR3D RealLocation = tmpS->Location + tmpLocation;
 
 				// если нужно проверить
@@ -591,7 +591,7 @@ void GetShipOnTargetOrientateion(
 
 							// находим угол между плоскостью и прямой
 							float A3, B3, C3, D3;
-							vw_GetPlaneABCD(&A3, &B3, &C3, &D3, Location, Location+Orientation, Location+PointRight);
+							vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location+Orientation, Location+PointRight);
 
 							float m = TargetLocation.x-Location.x;
 							float n = TargetLocation.y-Location.y;
@@ -683,15 +683,15 @@ void GetEnemyShipOnTargetOrientateion(
 
 	// получаем точки для создания плоскости
 	sVECTOR3D Orientation(0.0f, 0.0f, 1.0f);
-	vw_Matrix33CalcPoint(&Orientation, RotationMatrix);
+	vw_Matrix33CalcPoint(Orientation, RotationMatrix);
 	sVECTOR3D PointRight(1.0f, 0.0f, 0.0f);
-	vw_Matrix33CalcPoint(&PointRight, RotationMatrix);
+	vw_Matrix33CalcPoint(PointRight, RotationMatrix);
 	sVECTOR3D PointUp(0.0f, 1.0f, 0.0f);
-	vw_Matrix33CalcPoint(&PointUp, RotationMatrix);
+	vw_Matrix33CalcPoint(PointUp, RotationMatrix);
 
 	// находим плоскость, горизонтальную
 	float A, B, C, D;
-	vw_GetPlaneABCD(&A, &B, &C, &D, Location, Location+Orientation, Location+PointRight);
+	vw_GetPlaneABCD(A, B, C, D, Location, Location+Orientation, Location+PointRight);
 
 
 	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
@@ -712,7 +712,7 @@ void GetEnemyShipOnTargetOrientateion(
 			    (ObjectStatus > 1 && tmp->ObjectStatus==1)) {
 
 				sVECTOR3D tmpLocation = tmp->GeometryCenterLocation;
-				vw_Matrix33CalcPoint(&tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
+				vw_Matrix33CalcPoint(tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
 				sVECTOR3D RealLocation = tmp->Location + tmpLocation;
 
 				// учитываем, если лазер - наводить не надо
@@ -808,11 +808,11 @@ void GetEnemyShipOnTargetOrientateion(
 
 			// находим плоскость, вертикальную
 			float A2, B2, C2, D2;
-			vw_GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+PointUp, Location+PointRight);
+			vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location+PointUp, Location+PointRight);
 
 			// смотрим в какой полуплоскости
 			float tmp1_1 = A2 * TargetLocation.x + B2 * TargetLocation.y + C2 * TargetLocation.z + D2;
-			vw_GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+Orientation, Location+PointUp);
+			vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location+Orientation, Location+PointUp);
 
 			if (tmp1_1 >= 0.0f) {
 				// находим угол поворота
@@ -865,15 +865,15 @@ bool GetTurretOnTargetOrientateion(
 
 	// получаем точки для создания плоскости
 	sVECTOR3D Orientation(0.0f, 0.0f, 1.0f);
-	vw_Matrix33CalcPoint(&Orientation, RotationMatrix);
+	vw_Matrix33CalcPoint(Orientation, RotationMatrix);
 	sVECTOR3D PointRight(1.0f, 0.0f, 0.0f);
-	vw_Matrix33CalcPoint(&PointRight, RotationMatrix);
+	vw_Matrix33CalcPoint(PointRight, RotationMatrix);
 	sVECTOR3D PointUp(0.0f, 1.0f, 0.0f);
-	vw_Matrix33CalcPoint(&PointUp, RotationMatrix);
+	vw_Matrix33CalcPoint(PointUp, RotationMatrix);
 
 	// находим плоскость, горизонтальную
 	float A, B, C, D;
-	vw_GetPlaneABCD(&A, &B, &C, &D, Location, Location+Orientation, Location+PointRight);
+	vw_GetPlaneABCD(A, B, C, D, Location, Location+Orientation, Location+PointRight);
 
 
 	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
@@ -895,7 +895,7 @@ bool GetTurretOnTargetOrientateion(
 
 
 				sVECTOR3D tmpLocation = tmp->GeometryCenterLocation;
-				vw_Matrix33CalcPoint(&tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
+				vw_Matrix33CalcPoint(tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
 				sVECTOR3D RealLocation = tmp->Location + tmpLocation;
 
 
@@ -1002,11 +1002,11 @@ bool GetTurretOnTargetOrientateion(
 
 			// находим плоскость, вертикальную
 			float A2, B2, C2, D2;
-			vw_GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+PointUp, Location+PointRight);
+			vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location+PointUp, Location+PointRight);
 
 			// смотрим в какой полуплоскости
 			float tmp1_1 = A2 * TargetLocation.x + B2 * TargetLocation.y + C2 * TargetLocation.z + D2;
-			vw_GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+Orientation, Location+PointUp);
+			vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location+Orientation, Location+PointUp);
 
 			if (tmp1_1 >= 0.0f) {
 				// находим угол поворота
@@ -1057,20 +1057,20 @@ cObject3D *GetMissileOnTargetOrientateion(
 {
 	// получаем точки для создания плоскости
 	sVECTOR3D Orientation(0.0f, 0.0f, 1.0f);
-	vw_Matrix33CalcPoint(&Orientation, RotationMatrix);
+	vw_Matrix33CalcPoint(Orientation, RotationMatrix);
 	sVECTOR3D PointUp(0.0f, 1.0f, 0.0f);
-	vw_Matrix33CalcPoint(&PointUp, RotationMatrix);
+	vw_Matrix33CalcPoint(PointUp, RotationMatrix);
 	sVECTOR3D PointRight = sVECTOR3D(1.0f, 0.0f, 0.0f);
-	vw_Matrix33CalcPoint(&PointRight, RotationMatrix);
+	vw_Matrix33CalcPoint(PointRight, RotationMatrix);
 
 	// находим плоскость, вертикальную
 	float A, B, C, D;
-	vw_GetPlaneABCD(&A, &B, &C, &D, Location, Location+Orientation, Location+PointUp);
+	vw_GetPlaneABCD(A, B, C, D, Location, Location+Orientation, Location+PointUp);
 
 
 	// получаем вертикальную плоскость 2 (отсечения перед-зад)
 	float A2, B2, C2, D2;
-	vw_GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+PointRight, Location+PointUp);
+	vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location+PointRight, Location+PointUp);
 
 	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
 	sVECTOR3D TargetLocation = Location;
@@ -1123,7 +1123,7 @@ cObject3D *GetMissileOnTargetOrientateion(
 
 							// находим угол между плоскостью и прямой
 							float A3, B3, C3, D3;
-							vw_GetPlaneABCD(&A3, &B3, &C3, &D3, Location, Location+Orientation, Location+PointRight);
+							vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location+Orientation, Location+PointRight);
 
 							float m = TargetLocation.x-Location.x;
 							float n = TargetLocation.y-Location.y;
@@ -1180,7 +1180,7 @@ cObject3D *GetMissileOnTargetOrientateion(
 			if ((ObjectStatus == 1 && tmpG->ObjectStatus>1) ||
 			    (ObjectStatus > 1 && tmpG->ObjectStatus==1)) {
 				sVECTOR3D tmpLocation = tmpG->GeometryCenterLocation;
-				vw_Matrix33CalcPoint(&tmpLocation, tmpG->CurrentRotationMat); // поворачиваем в плоскость объекта
+				vw_Matrix33CalcPoint(tmpLocation, tmpG->CurrentRotationMat); // поворачиваем в плоскость объекта
 				TargetLocation = tmpG->Location + tmpLocation;
 
 				// проверяем, спереди или сзади стоит противник
@@ -1197,7 +1197,7 @@ cObject3D *GetMissileOnTargetOrientateion(
 
 						// находим угол между плоскостью и прямой
 						float A3, B3, C3, D3;
-						vw_GetPlaneABCD(&A3, &B3, &C3, &D3, Location, Location+Orientation, Location+PointRight);
+						vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location+Orientation, Location+PointRight);
 
 						float m = TargetLocation.x-Location.x;
 						float n = TargetLocation.y-Location.y;
@@ -1280,7 +1280,7 @@ cObject3D *GetMissileOnTargetOrientateion(
 
 							// находим угол между плоскостью и прямой
 							float A3, B3, C3, D3;
-							vw_GetPlaneABCD(&A3, &B3, &C3, &D3, Location, Location+Orientation, Location+PointRight);
+							vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location+Orientation, Location+PointRight);
 
 							float m = TargetLocation.x-Location.x;
 							float n = TargetLocation.y-Location.y;
@@ -1362,7 +1362,7 @@ cObject3D *GetMissileOnTargetOrientateion(
 
 							// находим угол между плоскостью и прямой
 							float A3, B3, C3, D3;
-							vw_GetPlaneABCD(&A3, &B3, &C3, &D3, Location, Location+Orientation, Location+PointRight);
+							vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location+Orientation, Location+PointRight);
 
 							float m = TargetLocation.x-Location.x;
 							float n = TargetLocation.y-Location.y;
@@ -1441,20 +1441,20 @@ bool GetMissileOnTargetOrientateion(
 {
 	// получаем точки для создания плоскости
 	sVECTOR3D Orientation(0.0f, 0.0f, 1.0f);
-	vw_Matrix33CalcPoint(&Orientation, RotationMatrix);
+	vw_Matrix33CalcPoint(Orientation, RotationMatrix);
 	sVECTOR3D PointUp(0.0f, 1.0f, 0.0f);
-	vw_Matrix33CalcPoint(&PointUp, RotationMatrix);
+	vw_Matrix33CalcPoint(PointUp, RotationMatrix);
 	sVECTOR3D PointRight = sVECTOR3D(1.0f, 0.0f, 0.0f);
-	vw_Matrix33CalcPoint(&PointRight, RotationMatrix);
+	vw_Matrix33CalcPoint(PointRight, RotationMatrix);
 
 	// находим плоскость, вертикальную
 	float A, B, C, D;
-	vw_GetPlaneABCD(&A, &B, &C, &D, Location, Location+Orientation, Location+PointUp);
+	vw_GetPlaneABCD(A, B, C, D, Location, Location+Orientation, Location+PointUp);
 
 
 	// получаем вертикальную плоскость 2 (отсечения перед-зад)
 	float A2, B2, C2, D2;
-	vw_GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+PointRight, Location+PointUp);
+	vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location+PointRight, Location+PointUp);
 
 	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
 	sVECTOR3D TargetLocation = Location;
@@ -1466,12 +1466,12 @@ bool GetMissileOnTargetOrientateion(
 	if (tmp1>0.0f) {
 
 		sVECTOR3D tmpLocation = TargetObject->GeometryCenterLocation;
-		vw_Matrix33CalcPoint(&tmpLocation, TargetObject->CurrentRotationMat); // поворачиваем в плоскость объекта
+		vw_Matrix33CalcPoint(tmpLocation, TargetObject->CurrentRotationMat); // поворачиваем в плоскость объекта
 		TargetLocation = TargetObject->Location + tmpLocation;
 
 		// находим угол между плоскостью и прямой
 		float A3, B3, C3, D3;
-		vw_GetPlaneABCD(&A3, &B3, &C3, &D3, Location, Location+Orientation, Location+PointRight);
+		vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location+Orientation, Location+PointRight);
 
 		float m = TargetLocation.x-Location.x;
 		float n = TargetLocation.y-Location.y;
@@ -1514,13 +1514,13 @@ bool GetMissileTargetPosition(cObject3D *TargetObject,
 	// (!) TargetObject должен существовать, до вызова этой функции проверять это, в этой функции проверки не делаем
 
 	sVECTOR3D PointUp(0.0f, 1.0f, 0.0f);
-	vw_Matrix33CalcPoint(&PointUp, RotationMatrix);
+	vw_Matrix33CalcPoint(PointUp, RotationMatrix);
 	sVECTOR3D PointRight(1.0f, 0.0f, 0.0f);
-	vw_Matrix33CalcPoint(&PointRight, RotationMatrix);
+	vw_Matrix33CalcPoint(PointRight, RotationMatrix);
 
 	// получаем вертикальную плоскость (отсечения перед-зад)
 	float A2, B2, C2, D2;
-	vw_GetPlaneABCD(&A2, &B2, &C2, &D2, Location, Location+PointRight, Location+PointUp);
+	vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location+PointRight, Location+PointUp);
 
 	float tmp1 = A2 * (TargetObject->Location.x)  + B2 * (TargetObject->Location.y)  + C2 * (TargetObject->Location.z)  + D2;
 	if (tmp1>0.0f) {

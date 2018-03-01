@@ -75,6 +75,13 @@ struct sVECTOR3D {
 		return sVECTOR3D(x/C, y/C, z/C);
 	};
 
+	void operator () (const float _x, const float _y, const float _z)
+	{
+		x = _x;
+		y = _y;
+		z = _z;
+	};
+
 	void operator *= (float C)
 	{
 		x *= C;
@@ -115,20 +122,26 @@ struct sVECTOR3D {
  * Misc functions.
  */
 
+// Note, we use left-top as starting point, this is why sRECT
+// keeps together pairs "left-top" and "right-bottom".
 struct sRECT {
-	int left;
-	int top;
-	int right;
-	int bottom;
-};
+	int right{0}, top{0}, left{0}, bottom{0};
 
-inline void SetRect(sRECT *rect, int left, int top, int right, int bottom)
-{
-	rect->right = right;
-	rect->top = top;
-	rect->left = left;
-	rect->bottom =bottom;
-}
+	sRECT () {};
+	sRECT (const int _left, const int _top, const int _right, const int _bottom) :
+		right{_right},
+		top{_top},
+		left{_left},
+		bottom{_bottom}
+	{};
+	void operator () (const int _left, const int _top, const int _right, const int _bottom)
+	{
+		right = _right;
+		top = _top;
+		left = _left;
+		bottom = _bottom;
+	};
+};
 
 // Convert utf8 into utf32 code.
 const char *vw_UTF8toUTF32(const char *utf8, unsigned *utf32);
@@ -149,11 +162,11 @@ inline void vw_Clamp(T &value, T low, T high)
 }
 
 // Calculate point rotation.
-int vw_RotatePoint(sVECTOR3D *Point, const sVECTOR3D &Angle);
+void vw_RotatePoint(sVECTOR3D &Point, const sVECTOR3D &Angle);
 // Calculate point inverse rotation.
-int vw_RotatePointInv(sVECTOR3D *Point, const sVECTOR3D &Angle);
+void vw_RotatePointInv(sVECTOR3D &Point, const sVECTOR3D &Angle);
 // Calculates the plane equation given three points.
-int vw_GetPlaneABCD(float *A, float *B, float *C, float *D,
+void vw_GetPlaneABCD(float &A, float &B, float &C, float &D,
 		     const sVECTOR3D &Point1, const sVECTOR3D &Point2, const sVECTOR3D &Point3);
 
 /*
@@ -183,7 +196,7 @@ int vw_iRandNum(int Max);
 // Setup matrix identity.
 void vw_Matrix44Identity(float Matrix44[16]);
 // Matrix multiplication.
-void vw_Matrix44Mult(float DstMatrix44[16], float SrcMatrix44[16]);
+void vw_Matrix44Mult(float DstMatrix44[16], const float SrcMatrix44[16]);
 // Calculate translation matrix by new location point.
 void vw_Matrix44Translate(float Matrix44[16], const sVECTOR3D &Location);
 // Create rotation matrix.
@@ -191,7 +204,7 @@ void vw_Matrix44CreateRotate(float Matrix44[16], const sVECTOR3D &Angle);
 // Create inverted rotation matrix.
 void vw_Matrix44InverseRotate(float Matrix44[16]);
 // Calculate point position by transformation matrix.
-void vw_Matrix44CalcPoint(sVECTOR3D *Point, float Matrix44[16]);
+void vw_Matrix44CalcPoint(sVECTOR3D &Point, const float Matrix44[16]);
 
 /*
  * 3x3 matrix, float Matrix[9]:
@@ -205,12 +218,12 @@ void vw_Matrix44CalcPoint(sVECTOR3D *Point, float Matrix44[16]);
 // Setup matrix identity.
 void vw_Matrix33Identity(float Matrix33[9]);
 // Matrix multiplication.
-void vw_Matrix33Mult(float DstMatrix33[9], float SrcMatrix33[9]);
+void vw_Matrix33Mult(float DstMatrix33[9], const float SrcMatrix33[9]);
 // Create rotation matrix.
 void vw_Matrix33CreateRotate(float Matrix33[9], const sVECTOR3D &Angle);
 // Create inverted rotation matrix.
 void vw_Matrix33InverseRotate(float Matrix33[9]);
 // Calculate point position by transformation matrix.
-void vw_Matrix33CalcPoint(sVECTOR3D *Point, float Matrix33[9]);
+void vw_Matrix33CalcPoint(sVECTOR3D &Point, const float Matrix33[9]);
 
 #endif // CoreMath_H

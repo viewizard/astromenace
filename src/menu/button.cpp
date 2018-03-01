@@ -68,8 +68,8 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 
-	SetRect(&DstRect,X+2,Y+1,X+384,Y+63);
-	if  ((vw_OnRect(&DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing() && DrawGameCursor) {
+	DstRect(X+2,Y+1,X+384,Y+63);
+	if  ((vw_OnRect(DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -102,15 +102,15 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 	// размер задней тени
-	SetRect(&SrcRect,2,2,512-2,96-2 );
+	SrcRect(2,2,512-2,96-2 );
 	// рисуем тень
-	SetRect(&DstRect,X-64+2,Y-17+2,X-64+512-2,Y-17+96-2);
+	DstRect(X-64+2,Y-17+2,X-64+512-2,Y-17+96-2);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/button384_back.tga"),
 			   true, IntTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 
-	SetRect(&SrcRect,0,0,384,64 );
+	SrcRect(0,0,384,64 );
 	// рисуем кнопку
-	SetRect(&DstRect,X,Y,X+384,Y+64);
+	DstRect(X,Y,X+384,Y+64);
 	if (!ON)
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/button384_out.tga"), true, Transp);
 	else
@@ -171,13 +171,13 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 	if (Off || DragWeapon) {
 
-		SetRect(&SrcRect,2,2,512-2,96-2 );
-		SetRect(&DstRect,X-125+2,Y-16+2,X-125+512-2,Y-16+96-2);
+		SrcRect(2,2,512-2,96-2 );
+		DstRect(X-125+2,Y-16+2,X-125+512-2,Y-16+96-2);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/button256_back.tga"),
 				   true, Transp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 
-		SetRect(&SrcRect,0,0,256,64 );
-		SetRect(&DstRect,X,Y,X+256,Y+64);
+		SrcRect(0,0,256,64 );
+		DstRect(X,Y,X+256,Y+64);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/button256_off.tga"), true, Transp);
 
 
@@ -185,8 +185,8 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 		int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
 		vw_DrawFont(SizeI, Y+21, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 
-		SetRect(&DstRect,X+2,Y+1,X+256,Y+63);
-		if  (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
+		DstRect(X+2,Y+1,X+256,Y+63);
+		if  (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
 				CurrentCursorStatus = 2;
 				if (vw_GetWindowLBMouse(true))
@@ -215,8 +215,8 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 
-	SetRect(&DstRect,X+2,Y+1,X+256,Y+63);
-	if  ((vw_OnRect(&DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing() && DrawGameCursor) {
+	DstRect(X+2,Y+1,X+256,Y+63);
+	if  ((vw_OnRect(DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -252,15 +252,15 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 	// размер задней тени
-	SetRect(&SrcRect,2,2,512-2,96-2 );
+	SrcRect(2,2,512-2,96-2 );
 	// рисуем тень
-	SetRect(&DstRect,X-125+2,Y-16+2,X-125+512-2,Y-16+96-2);
+	DstRect(X-125+2,Y-16+2,X-125+512-2,Y-16+96-2);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/button256_back.tga"),
 			   true, IntTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 
-	SetRect(&SrcRect,0,0,256,64 );
+	SrcRect(0,0,256,64 );
 	// рисуем кнопку
-	SetRect(&DstRect,X,Y,X+256,Y+64);
+	DstRect(X,Y,X+256,Y+64);
 	if (!ON)
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/button256_out.tga"), true, Transp);
 	else
@@ -308,9 +308,9 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 {
 	sRECT SrcRect, DstRect, MouseRect;
-	SetRect(&SrcRect,2,2,230-2,64-2);
-	SetRect(&DstRect,X-14+2,Y-14+2,X+230-14-2,Y+64-14-2);
-	SetRect(&MouseRect,X,Y,X+204,Y+35);
+	SrcRect(2,2,230-2,64-2);
+	DstRect(X-14+2,Y-14+2,X+230-14-2,Y+64-14-2);
+	MouseRect(X,Y,X+204,Y+35);
 
 	// получаем длину текста
 	int Size = vw_FontSize(Text);
@@ -329,8 +329,8 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 
-		SetRect(&DstRect,X,Y,X+204,Y+35);
-		if  (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
+		DstRect(X,Y,X+204,Y+35);
+		if  (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
 				CurrentCursorStatus = 2;
 				if (vw_GetWindowLBMouse(true))
@@ -356,7 +356,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 	}
 
 
-	if  ((vw_OnRect(&MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_OnRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -408,9 +408,9 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, bool SoundClick)
 {
 	sRECT SrcRect, DstRect, MouseRect;
-	SetRect(&SrcRect,2,2,158-2,64-2);
-	SetRect(&DstRect,X-14+2,Y-14+2,X+158-14-2,Y+64-14-2);
-	SetRect(&MouseRect,X,Y,X+132,Y+35);
+	SrcRect(2,2,158-2,64-2);
+	DstRect(X-14+2,Y-14+2,X+158-14-2,Y+64-14-2);
+	MouseRect(X,Y,X+132,Y+35);
 
 	// получаем длину текста
 	int Size = vw_FontSize(Text);
@@ -431,8 +431,8 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 
-		SetRect(&DstRect,X,Y,X+132,Y+35);
-		if  (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
+		DstRect(X,Y,X+132,Y+35);
+		if  (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
 				CurrentCursorStatus = 2;
 				if (vw_GetWindowLBMouse(true))
@@ -459,7 +459,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 	}
 
 
-	if  ((vw_OnRect(&MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_OnRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -538,8 +538,8 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 
 
 	// 20 - расстояние между текстом
-	SetRect(&DstRect,X+4,Y+4,X+40+20+Size,Y+40-4);
-	if  ((vw_OnRect(&DstRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
+	DstRect(X+4,Y+4,X+40+20+Size,Y+40-4);
+	if  ((vw_OnRect(DstRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -551,8 +551,8 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 
 
 	// рисуем
-	SetRect(&SrcRect,0,0,40,38);
-	SetRect(&DstRect,X,Y,X+40,Y+38);
+	SrcRect(0,0,40,38);
+	DstRect(X,Y,X+40,Y+38);
 	if (!ON || DragWeapon)
 		vw_DrawFont(X+40+20, Y+8, 0, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 	else
@@ -584,16 +584,16 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 {
 	sRECT SrcRect, DstRect, MouseRect;
-	SetRect(&SrcRect,0,0,32,32);
-	SetRect(&DstRect,X,Y,X+32,Y+32);
-	SetRect(&MouseRect,X,Y,X+32,Y+32);
+	SrcRect(0,0,32,32);
+	DstRect(X,Y,X+32,Y+32);
+	MouseRect(X,Y,X+32,Y+32);
 
 
 	if (Off || DragWeapon) {
-		SetRect(&DstRect,X+2,Y+2,X+32-2,Y+32-2);
+		DstRect(X+2,Y+2,X+32-2,Y+32-2);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/arrow_list_up.tga"), true, 0.3f*Transp);
 
-		if  (vw_OnRect(&MouseRect) && !isDialogBoxDrawing()) {
+		if  (vw_OnRect(MouseRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
 				CurrentCursorStatus = 2;
 				if (vw_GetWindowLBMouse(true))
@@ -620,7 +620,7 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 	}
 
 
-	if  ((vw_OnRect(&MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_OnRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -642,7 +642,7 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 
 
 	if (!ON) {
-		SetRect(&DstRect,X+2,Y+2,X+32-2,Y+32-2);
+		DstRect(X+2,Y+2,X+32-2,Y+32-2);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/arrow_list_up.tga"), true, 0.3f*Transp);
 	} else
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/arrow_list_up.tga"), true, Transp);
@@ -669,16 +669,16 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 {
 	sRECT SrcRect, DstRect, MouseRect;
-	SetRect(&SrcRect,0,0,32,32);
-	SetRect(&DstRect,X,Y,X+32,Y+32);
-	SetRect(&MouseRect,X,Y,X+32,Y+32);
+	SrcRect(0,0,32,32);
+	DstRect(X,Y,X+32,Y+32);
+	MouseRect(X,Y,X+32,Y+32);
 
 
 	if (Off || DragWeapon) {
-		SetRect(&DstRect,X+2,Y+2,X+32-2,Y+32-2);
+		DstRect(X+2,Y+2,X+32-2,Y+32-2);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/arrow_list_down.tga"), true, 0.3f*Transp);
 
-		if  (vw_OnRect(&MouseRect) && !isDialogBoxDrawing()) {
+		if  (vw_OnRect(MouseRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
 				CurrentCursorStatus = 2;
 				if (vw_GetWindowLBMouse(true))
@@ -705,7 +705,7 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 	}
 
 
-	if  ((vw_OnRect(&MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_OnRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -727,7 +727,7 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 
 
 	if (!ON) {
-		SetRect(&DstRect,X+2,Y+2,X+32-2,Y+32-2);
+		DstRect(X+2,Y+2,X+32-2,Y+32-2);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/arrow_list_down.tga"), true, 0.3f*Transp);
 	} else
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/arrow_list_down.tga"), true, Transp);

@@ -81,7 +81,7 @@ bool vw_OBBOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation, s
 	vw_Matrix33InverseRotate(TMPInvObject1RotationMatrix);
 	// calcuate first box size
 	sVECTOR3D a{(Object1OBB[0] - Object1OBB[6])^0.5f};
-	vw_Matrix33CalcPoint(&a, TMPInvObject1RotationMatrix);
+	vw_Matrix33CalcPoint(a, TMPInvObject1RotationMatrix);
 	// calcuate inverse rotation matrix
 	float TMPInvObject2RotationMatrix[9]{Object2RotationMatrix[0], Object2RotationMatrix[1], Object2RotationMatrix[2],
 					     Object2RotationMatrix[3], Object2RotationMatrix[4], Object2RotationMatrix[5],
@@ -89,11 +89,11 @@ bool vw_OBBOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation, s
 	vw_Matrix33InverseRotate(TMPInvObject2RotationMatrix);
 	// calcuate second box size
 	sVECTOR3D b{(Object2OBB[0] - Object2OBB[6])^0.5f};
-	vw_Matrix33CalcPoint(&b, TMPInvObject2RotationMatrix);
+	vw_Matrix33CalcPoint(b, TMPInvObject2RotationMatrix);
 	// calcuate offset in global coordinate systems
 	sVECTOR3D T{(Object2Location + Object2OBBLocation) -
 		   (Object1Location + Object1OBBLocation)};
-	vw_Matrix33CalcPoint(&T, TMPInvObject1RotationMatrix);
+	vw_Matrix33CalcPoint(T, TMPInvObject1RotationMatrix);
 	// calcuate transformation matrix
 	vw_Matrix33Mult(TMPInvObject1RotationMatrix, Object2RotationMatrix);
 	float R[3][3]{{TMPInvObject1RotationMatrix[0], TMPInvObject1RotationMatrix[3], TMPInvObject1RotationMatrix[6]},
@@ -308,10 +308,10 @@ bool vw_SphereOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation
 				      Object1RotationMatrix[6], Object1RotationMatrix[7], Object1RotationMatrix[8]};
 	vw_Matrix33InverseRotate(TMPInvRotationMatrix);
 	// move it to coordinates
-	vw_Matrix33CalcPoint(&TMPMax, TMPInvRotationMatrix);
-	vw_Matrix33CalcPoint(&TMPMin, TMPInvRotationMatrix);
-	vw_Matrix33CalcPoint(&TMPPoint1, TMPInvRotationMatrix);
-	vw_Matrix33CalcPoint(&TMPPoint2, TMPInvRotationMatrix);
+	vw_Matrix33CalcPoint(TMPMax, TMPInvRotationMatrix);
+	vw_Matrix33CalcPoint(TMPMin, TMPInvRotationMatrix);
+	vw_Matrix33CalcPoint(TMPPoint1, TMPInvRotationMatrix);
+	vw_Matrix33CalcPoint(TMPPoint2, TMPInvRotationMatrix);
 
 	// same idea as for Sphere-AABB collision detection
 	bool Result{true};
@@ -381,7 +381,7 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 
 	// calculate local position
 	sVECTOR3D LocalLocation{Object1DrawObjectList->Location};
-	vw_Matrix33CalcPoint(&LocalLocation, Object1RotationMatrix);
+	vw_Matrix33CalcPoint(LocalLocation, Object1RotationMatrix);
 
 	// care about rotation and generate final translation matrix
 	if ((Object1DrawObjectList->Rotation.x != 0.0f) ||
@@ -408,7 +408,7 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 		sVECTOR3D Point1{Object1DrawObjectList->VertexBuffer[j2],
 				Object1DrawObjectList->VertexBuffer[j2 + 1],
 				Object1DrawObjectList->VertexBuffer[j2 + 2]};
-		vw_Matrix44CalcPoint(&Point1, TransMat);
+		vw_Matrix44CalcPoint(Point1, TransMat);
 
 		if (Object1DrawObjectList->IndexBuffer != nullptr)
 			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart + i + 1]*Object1DrawObjectList->VertexStride;
@@ -418,7 +418,7 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 		sVECTOR3D Point2{Object1DrawObjectList->VertexBuffer[j2],
 				Object1DrawObjectList->VertexBuffer[j2 + 1],
 				Object1DrawObjectList->VertexBuffer[j2 + 2]};
-		vw_Matrix44CalcPoint(&Point2, TransMat);
+		vw_Matrix44CalcPoint(Point2, TransMat);
 
 		if (Object1DrawObjectList->IndexBuffer != nullptr)
 			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart + i + 2]*Object1DrawObjectList->VertexStride;
@@ -428,7 +428,7 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 		sVECTOR3D Point3{Object1DrawObjectList->VertexBuffer[j2],
 				Object1DrawObjectList->VertexBuffer[j2 + 1],
 				Object1DrawObjectList->VertexBuffer[j2 + 2]};
-		vw_Matrix44CalcPoint(&Point3, TransMat);
+		vw_Matrix44CalcPoint(Point3, TransMat);
 
 		// calculate 2 vectors for plane
 		sVECTOR3D PlaneVector1{Point2 - Point1};

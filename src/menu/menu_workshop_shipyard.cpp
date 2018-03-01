@@ -533,10 +533,10 @@ void Workshop_Shipyard()
 
 
 	// затемнение
-	SetRect(&SrcRect,0,0,256,256 );
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-480,100-32,Setup.iAspectRatioWidth/2-32,450+32);
+	SrcRect(0,0,256,256 );
+	DstRect(Setup.iAspectRatioWidth/2-480,100-32,Setup.iAspectRatioWidth/2-32,450+32);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/back_spot2.tga"), true, 0.45f*MenuContentTransp);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2+32,100-32,Setup.iAspectRatioWidth/2+480,450+32);
+	DstRect(Setup.iAspectRatioWidth/2+32,100-32,Setup.iAspectRatioWidth/2+480,450+32);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/back_spot2.tga"), true, 0.45f*MenuContentTransp);
 
 
@@ -590,18 +590,18 @@ void Workshop_Shipyard()
 
 
 	// рамки
-	SetRect(&SrcRect,0,0,400,35 );
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-457,100-11,Setup.iAspectRatioWidth/2-57,100+35-11);
+	SrcRect(0,0,400,35 );
+	DstRect(Setup.iAspectRatioWidth/2-457,100-11,Setup.iAspectRatioWidth/2-57,100+35-11);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/workshop_panel4.tga"), true, MenuContentTransp);
 
-	SetRect(&SrcRect,0,0,400,173 );
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-457,450-13,Setup.iAspectRatioWidth/2-57,450+173-13);
+	SrcRect(0,0,400,173 );
+	DstRect(Setup.iAspectRatioWidth/2-457,450-13,Setup.iAspectRatioWidth/2-57,450+173-13);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/workshop_panel1.tga"), true, MenuContentTransp);
 
 
 	// проверяем колесо мышки
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-457,100+35-11,Setup.iAspectRatioWidth/2-57,450-13);
-	if (vw_OnRect(&DstRect)) {
+	DstRect(Setup.iAspectRatioWidth/2-457,100+35-11,Setup.iAspectRatioWidth/2-57,450-13);
+	if (vw_OnRect(DstRect)) {
 		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing()) {
 			CurrentWorkshopNewFighter += vw_GetWheelStatus();
 
@@ -705,12 +705,12 @@ void Workshop_Shipyard()
 
 
 	// рамки
-	SetRect(&SrcRect,0,0,400,35 );
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2+57,100-11,Setup.iAspectRatioWidth/2+457,100+35-11);
+	SrcRect(0,0,400,35 );
+	DstRect(Setup.iAspectRatioWidth/2+57,100-11,Setup.iAspectRatioWidth/2+457,100+35-11);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/workshop_panel4.tga"), true, MenuContentTransp);
 
-	SetRect(&SrcRect,0,0,400,173 );
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2+57,450-13,Setup.iAspectRatioWidth/2+457,450+173-13);
+	SrcRect(0,0,400,173 );
+	DstRect(Setup.iAspectRatioWidth/2+57,450-13,Setup.iAspectRatioWidth/2+457,450+173-13);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/workshop_panel1+.tga"), true, MenuContentTransp);
 
 

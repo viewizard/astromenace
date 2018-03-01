@@ -1125,11 +1125,11 @@ exitN2:
 						    (tmpS->ObjectType == 8 && tmpCollisionSpace1->ObjectType == 13)) {
 							if (tmpS->ObjectType == 8) {
 								//tmpS->SetRotation(sVECTOR3D(0.0f,180.0f,0.0f));
-								vw_RotatePoint(&tmpS->Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
+								vw_RotatePoint(tmpS->Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
 							}
 							if (tmpCollisionSpace1->ObjectType == 8) {
 								//tmpCollisionSpace1->SetRotation(sVECTOR3D(0.0f,180.0f,0.0f));
-								vw_RotatePoint(&tmpCollisionSpace1->Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
+								vw_RotatePoint(tmpCollisionSpace1->Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
 							}
 
 							goto exitN4;

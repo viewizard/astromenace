@@ -470,9 +470,9 @@ void DrawMenu()
 	vw_Start2DMode(-1,1);
 	// надпись AstroMenace
 	sRECT SrcRect, DstRect;
-	SetRect(&SrcRect,0,0,863,128 );
+	SrcRect(0,0,863,128 );
 	int StartX = (Setup.iAspectRatioWidth - 863)/2;
-	SetRect(&DstRect,StartX,10,StartX+863,10+128);
+	DstRect(StartX,10,StartX+863,10+128);
 
 	if ((MenuStatus != eMenuStatus::WORKSHOP) &&
 	    (MenuStatus != eMenuStatus::INFORMATION) &&
@@ -611,8 +611,8 @@ void DrawMenu()
 
 		vw_Start2DMode(-1,1);
 
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
+		SrcRect(0,0,2,2);
+		DstRect(0,0,Setup.iAspectRatioWidth,768);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, MenuBlackTransp);
 
 		vw_End2DMode();
@@ -631,8 +631,8 @@ void DrawMenu()
 
 		vw_Start2DMode(-1,1);
 
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
+		SrcRect(0,0,2,2);
+		DstRect(0,0,Setup.iAspectRatioWidth,768);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, MenuBlackTransp);
 
 		vw_End2DMode();

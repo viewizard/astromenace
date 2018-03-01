@@ -115,11 +115,8 @@ const char *ButtonTexturesQuality[3] = {
 
 void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1, float *ButtonTransp2, float *LastButtonUpdateTime2)
 {
-
-
-	sRECT SrcRect, DstRect;
-	SetRect(&SrcRect,0,0,2,2);
-	SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
+	sRECT SrcRect{0, 0, 2, 2};
+	sRECT DstRect{0, 0, Setup.iAspectRatioWidth, 768};
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);
 
 

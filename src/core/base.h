@@ -75,6 +75,7 @@
 #include <forward_list>
 #include <memory>
 #include <vector>
+#include <array>
 #include <string>
 #include <algorithm>
 

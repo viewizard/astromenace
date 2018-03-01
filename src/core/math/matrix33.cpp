@@ -47,7 +47,7 @@ void vw_Matrix33Identity(float Matrix33[9])
 /*
  * Matrix multiplication.
  */
-void vw_Matrix33Mult(float DstMatrix33[9], float SrcMatrix33[9])
+void vw_Matrix33Mult(float DstMatrix33[9], const float SrcMatrix33[9])
 {
 	float tmp[9]{DstMatrix33[0], DstMatrix33[1], DstMatrix33[2],
 		     DstMatrix33[3], DstMatrix33[4], DstMatrix33[5],
@@ -73,7 +73,7 @@ void vw_Matrix33CreateRotate(float Matrix33[9], const sVECTOR3D &Angle)
 {
 	const float p180 = 0.0174532925f;
 
-	if (Angle.z != 0.0f && Angle.x == 0.0f && Angle.y == 0.0f) {
+	if ((Angle.z != 0.0f) && (Angle.x == 0.0f) && (Angle.y == 0.0f)) {
 		float a = -Angle.z*p180;
 		float c = cosf(a);
 		float s = sinf(a);
@@ -83,7 +83,7 @@ void vw_Matrix33CreateRotate(float Matrix33[9], const sVECTOR3D &Angle)
 		Matrix33[4] = c;
 		Matrix33[2] = Matrix33[5] = Matrix33[6] = Matrix33[7] = 0.0f;
 		Matrix33[8] = 1.0f;
-	} else if (Angle.y != 0.0f && Angle.x == 0.0f && Angle.z == 0.0f) {
+	} else if ((Angle.y != 0.0f) && (Angle.x == 0.0f) && (Angle.z == 0.0f)) {
 		float a = -Angle.y*p180;
 		float c = cosf(a);
 		float s = sinf(a);
@@ -93,7 +93,7 @@ void vw_Matrix33CreateRotate(float Matrix33[9], const sVECTOR3D &Angle)
 		Matrix33[8] = c;
 		Matrix33[1] = Matrix33[3] = Matrix33[5] = Matrix33[7] = 0.0f;
 		Matrix33[4] = 1.0f;
-	} else if (Angle.x != 0.0f && Angle.y == 0.0f && Angle.z == 0.0f) {
+	} else if ((Angle.x != 0.0f) && (Angle.y == 0.0f) && (Angle.z == 0.0f)) {
 		float a = -Angle.x*p180;
 		float c = cosf(a);
 		float s = sinf(a);
@@ -133,8 +133,9 @@ void vw_Matrix33CreateRotate(float Matrix33[9], const sVECTOR3D &Angle)
  */
 void vw_Matrix33InverseRotate(float Matrix33[9])
 {
-	float tmp[9];
-	memcpy(tmp, Matrix33, 9*sizeof(Matrix33[0]));
+	float tmp[9]{Matrix33[0], Matrix33[1], Matrix33[2],
+		     Matrix33[3], Matrix33[4], Matrix33[5],
+		     Matrix33[6], Matrix33[7], Matrix33[8]};
 
 	Matrix33[0] = tmp[0];
 	Matrix33[1] = tmp[3];
@@ -152,10 +153,9 @@ void vw_Matrix33InverseRotate(float Matrix33[9])
 /*
  * Calculate point position by transformation matrix.
  */
-void vw_Matrix33CalcPoint(sVECTOR3D *Point, float Matrix33[9])
+void vw_Matrix33CalcPoint(sVECTOR3D &Point, const float Matrix33[9])
 {
-	sVECTOR3D TmpPoint = *Point;
-	Point->x = Matrix33[0]*TmpPoint.x + Matrix33[3]*TmpPoint.y + Matrix33[6]*TmpPoint.z;
-	Point->y = Matrix33[1]*TmpPoint.x + Matrix33[4]*TmpPoint.y + Matrix33[7]*TmpPoint.z;
-	Point->z = Matrix33[2]*TmpPoint.x + Matrix33[5]*TmpPoint.y + Matrix33[8]*TmpPoint.z;
+	Point(Matrix33[0]*Point.x + Matrix33[3]*Point.y + Matrix33[6]*Point.z,
+	      Matrix33[1]*Point.x + Matrix33[4]*Point.y + Matrix33[7]*Point.z,
+	      Matrix33[2]*Point.x + Matrix33[5]*Point.y + Matrix33[8]*Point.z);
 }

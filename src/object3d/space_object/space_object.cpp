@@ -113,8 +113,8 @@ void cSpaceObject::SetRotation(sVECTOR3D NewRotation)
 
 	if (GFX != nullptr)
 		for (int i = 0; i < GFXQuantity; i++) {
-			vw_Matrix33CalcPoint(&(GFXLocation[i]), OldInvRotationMat);
-			vw_Matrix33CalcPoint(&(GFXLocation[i]), CurrentRotationMat);
+			vw_Matrix33CalcPoint(GFXLocation[i], OldInvRotationMat);
+			vw_Matrix33CalcPoint(GFXLocation[i], CurrentRotationMat);
 
 			if (GFX[i] != nullptr) {
 				if (GFX[i]->SpeedOnCreation == -1.0f) {

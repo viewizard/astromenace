@@ -611,8 +611,8 @@ void CreditsMenu()
 	// SDL
 	Y1 += Offset1-20;
 	Y2 += Offset1-20;
-	SetRect(&SrcRect,0,0,128,64);
-	SetRect(&DstRect,LogoX,Y2,LogoX+128,Y2+64);
+	SrcRect(0,0,128,64);
+	DstRect(LogoX,Y2,LogoX+128,Y2+64);
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
 		if (ttt > 1.0f) ttt = 1.0f;
@@ -645,8 +645,8 @@ void CreditsMenu()
 	// OpenGL
 	Y1 += Offset1+20;
 	Y2 += Offset1+20;
-	SetRect(&SrcRect,0,0,128,64);
-	SetRect(&DstRect,LogoX,Y2,LogoX+128,Y2+64);
+	SrcRect(0,0,128,64);
+	DstRect(LogoX,Y2,LogoX+128,Y2+64);
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
 		if (ttt > 1.0f) ttt = 1.0f;
@@ -679,8 +679,8 @@ void CreditsMenu()
 	// OpenAL
 	Y1 += Offset1+20;
 	Y2 += Offset1+20;
-	SetRect(&SrcRect,0,0,128,64);
-	SetRect(&DstRect,LogoX,Y2,LogoX+128,Y2+64);
+	SrcRect(0,0,128,64);
+	DstRect(LogoX,Y2,LogoX+128,Y2+64);
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
 		if (ttt > 1.0f) ttt = 1.0f;
@@ -714,8 +714,8 @@ void CreditsMenu()
 	// FreeType
 	Y1 += Offset1+20;
 	Y2 += Offset1+20;
-	SetRect(&SrcRect,0,0,128,64);
-	SetRect(&DstRect,LogoX,Y2,LogoX+128,Y2+64);
+	SrcRect(0,0,128,64);
+	DstRect(LogoX,Y2,LogoX+128,Y2+64);
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
 		if (ttt > 1.0f) ttt = 1.0f;
@@ -748,8 +748,8 @@ void CreditsMenu()
 	// ogg vorbis
 	Y1 += Offset1+20;
 	Y2 += Offset1+20;
-	SetRect(&SrcRect,0,0,64,64);
-	SetRect(&DstRect,LogoX+32,Y2,LogoX+32+64,Y2+64);
+	SrcRect(0,0,64,64);
+	DstRect(LogoX+32,Y2,LogoX+32+64,Y2+64);
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
 		if (ttt > 1.0f) ttt = 1.0f;
@@ -823,8 +823,8 @@ void CreditsMenu()
 
 	// Code::Blocks
 	Y2 += Offset1-20;
-	SetRect(&SrcRect,0,0,64,64);
-	SetRect(&DstRect,LogoX+32,Y2,LogoX+32+64,Y2+64);
+	SrcRect(0,0,64,64);
+	DstRect(LogoX+32,Y2,LogoX+32+64,Y2+64);
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
 		if (ttt > 1.0f) ttt = 1.0f;
@@ -854,8 +854,8 @@ void CreditsMenu()
 
 	// gcc
 	Y2 += Offset1+20;
-	SetRect(&SrcRect,0,0,64,64);
-	SetRect(&DstRect,LogoX+32,Y2,LogoX+32+64,Y2+64);
+	SrcRect(0,0,64,64);
+	DstRect(LogoX+32,Y2,LogoX+32+64,Y2+64);
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
 		if (ttt > 1.0f) ttt = 1.0f;
@@ -886,8 +886,8 @@ void CreditsMenu()
 
 	// git
 	Y2 += Offset1+20;
-	SetRect(&SrcRect,0,0,64,64);
-	SetRect(&DstRect,LogoX+32,Y2,LogoX+32+64,Y2+64);
+	SrcRect(0,0,64,64);
+	DstRect(LogoX+32,Y2,LogoX+32+64,Y2+64);
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
 		if (ttt > 1.0f) ttt = 1.0f;
@@ -918,8 +918,8 @@ void CreditsMenu()
 
 	// gentoo
 	Y2 += Offset1+20;
-	SetRect(&SrcRect,0,0,64,64);
-	SetRect(&DstRect,LogoX+32,Y2,LogoX+32+64,Y2+64);
+	SrcRect(0,0,64,64);
+	DstRect(LogoX+32,Y2,LogoX+32+64,Y2+64);
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
 		if (ttt > 1.0f) ttt = 1.0f;
@@ -950,8 +950,8 @@ void CreditsMenu()
 
 	// gimp
 	Y2 += Offset1+20;
-	SetRect(&SrcRect,0,0,64,64);
-	SetRect(&DstRect,LogoX+32,Y2,LogoX+32+64,Y2+64);
+	SrcRect(0,0,64,64);
+	DstRect(LogoX+32,Y2,LogoX+32+64,Y2+64);
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
 		if (ttt > 1.0f) ttt = 1.0f;

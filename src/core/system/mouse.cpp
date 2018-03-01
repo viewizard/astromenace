@@ -196,23 +196,16 @@ int vw_GetMousePos(int *X, int *Y)
 //------------------------------------------------------------------------------------
 // находится мышка в области или нет
 //------------------------------------------------------------------------------------
-bool vw_OnRect(sRECT *MDetect)
+bool vw_OnRect(const sRECT &MDetect)
 {
 	int MouseXOnRect, MouseYOnRect;
 	vw_GetMousePos(&MouseXOnRect, &MouseYOnRect);
 
-
-	if  (((MDetect->right  >= MouseXOnRect) &&
-	      (MDetect->left <= MouseXOnRect) &&
-	      (MDetect->bottom >= MouseYOnRect) &&
-	      (MDetect->top <= MouseYOnRect))) {
+	if  ((MDetect.right  >= MouseXOnRect) &&
+	     (MDetect.left <= MouseXOnRect) &&
+	     (MDetect.bottom >= MouseYOnRect) &&
+	     (MDetect.top <= MouseYOnRect))
 		return true;
-	}
 
 	return false;
 }
-
-
-
-
-

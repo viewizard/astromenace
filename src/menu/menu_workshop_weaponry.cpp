@@ -311,12 +311,10 @@ const char *GetWeaponIconName(int Num)
 // вся работа с еденичным слотом
 void ShipSlotWeapon(int SlotNum, int X, int Y)
 {
-	sRECT SrcRect, DstRect;
-
-	SetRect(&SrcRect,0,0,220,128);
+	sRECT SrcRect(0, 0, 220, 128);
 	int Xpos = X-45;
 	int Ypos = Y-36;
-	SetRect(&DstRect,Xpos,Ypos,Xpos+220,Ypos+128);
+	sRECT DstRect(Xpos, Ypos, Xpos + 220, Ypos + 128);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/workshop_panel3.tga"), true, MenuContentTransp);
 
 
@@ -330,8 +328,8 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		if (AmmoShow < 0)
 			AmmoShow = 0;
 
-		SetRect(&SrcRect,0,AmmoShow,18,56);
-		SetRect(&DstRect,Xpos+23,Ypos+40+AmmoShow,Xpos+18+23,Ypos+56+40);
+		SrcRect(0,AmmoShow,18,56);
+		DstRect(Xpos+23,Ypos+40+AmmoShow,Xpos+18+23,Ypos+56+40);
 		if (AmmoShow > 0)
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/ammo.tga"), true, CurrentAlert3*MenuContentTransp);
 		else
@@ -360,8 +358,8 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		}
 	}
 
-	SetRect(&SrcRect,0,0,18,56);
-	SetRect(&DstRect,Xpos+23+154,Ypos+40,Xpos+18+23+154,Ypos+56+40);
+	SrcRect(0,0,18,56);
+	DstRect(Xpos+23+154,Ypos+40,Xpos+18+23+154,Ypos+56+40);
 	if  ((((DstRect.right  >= MouseX) &&
 	       (DstRect.left<= MouseX) &&
 	       (DstRect.bottom >= MouseY) &&
@@ -382,8 +380,8 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 
 	// обработка перетягивания
-	SetRect(&DstRect,X,Y,X+128,Y+64);
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
+	DstRect(X,Y,X+128,Y+64);
+	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
 
 		int Money = Setup.Profile[CurrentProfile].Money;
 		if (WorkshopFighterGame->Weapon[SlotNum] != nullptr)
@@ -511,8 +509,8 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	if (DragWeapon && (WorkshopFighterGame->WeaponType[SlotNum] >= DragWeaponLevel)) CanOn = true;
 	if (!DragWeapon && (WorkshopFighterGame->WeaponType[SlotNum] >= WorkshopNewWeapon->WeaponLevel)) CanOn = true;
 
-	SetRect(&SrcRect,0,0,128,64);
-	SetRect(&DstRect,X,Y,X+128,Y+64);
+	SrcRect(0,0,128,64);
+	DstRect(X,Y,X+128,Y+64);
 
 	if (CanOn) {
 		if (!WeaponAmmoOut) {
@@ -545,7 +543,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	if (WorkshopFighterGame->Weapon[SlotNum] == nullptr) {
 		// пустой слот, рисуем его
 
-		SetRect(&DstRect,X,Y,X+128,Y+64);
+		DstRect(X,Y,X+128,Y+64);
 
 		int Size = vw_FontSize(vw_GetText("3_EMPTY"));
 		float WScale = 0;
@@ -567,8 +565,8 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		return;
 	}
 
-	SetRect(&SrcRect,0,0,128,64);
-	SetRect(&DstRect,X,Y,X+128,Y+64);
+	SrcRect(0,0,128,64);
+	DstRect(X,Y,X+128,Y+64);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType)), true, MenuContentTransp);
 
 
@@ -588,10 +586,10 @@ void ShipSlotSetupWeapon(int Slot)
 	// проверяем, нужно ли вытягивать что-то или нет...
 	CheckMouseKeybJState();
 
-	SetRect(&SrcRect,0,0,404,570);
+	SrcRect(0,0,404,570);
 	int Xpos = Setup.iAspectRatioWidth/2+55;
 	int Ypos = 50-10;
-	SetRect(&DstRect,Xpos,Ypos,Xpos+404,Ypos+570);
+	DstRect(Xpos,Ypos,Xpos+404,Ypos+570);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/workshop_panel5.tga"), true, MenuContentTransp);
 
 
@@ -600,8 +598,8 @@ void ShipSlotSetupWeapon(int Slot)
 		Xpos += 74;
 		Ypos += 128;
 		// пустой слот, рисуем его
-		SetRect(&SrcRect,0,0,256,256);
-		SetRect(&DstRect,Xpos,Ypos,Xpos+256,Ypos+256);
+		SrcRect(0,0,256,256);
+		DstRect(Xpos,Ypos,Xpos+256,Ypos+256);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_empty_icon.tga"), true, MenuContentTransp);
 
 		int Size = vw_FontSize(vw_GetText("3_Empty_Weapon_Slot"));
@@ -768,8 +766,8 @@ void ShipSlotSetupWeapon(int Slot)
 	int SlotNum = Slot;
 	Xpos = Setup.iAspectRatioWidth/2+55;
 	Ypos = 50-10;
-	SetRect(&DstRect,Xpos+10,Ypos+10,Xpos+404-10,Ypos+570-10);
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
+	DstRect(Xpos+10,Ypos+10,Xpos+404-10,Ypos+570-10);
+	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
 
 		int Money = Setup.Profile[CurrentProfile].Money;
 		if (WorkshopFighterGame->Weapon[SlotNum] != nullptr)
@@ -1041,10 +1039,8 @@ void DrawDragingWeaponIcon(int X, int Y)
 	if (!DragWeapon) return;
 
 	// в х и у - положение точки курсора
-	sRECT SrcRect, DstRect;
-
-	SetRect(&SrcRect,0,0,128,64);
-	SetRect(&DstRect,X-64,Y-32,X+64,Y+32);
+	sRECT SrcRect(0, 0, 128, 64);
+	sRECT DstRect(X - 64, Y - 32, X + 64, Y + 32);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(DragWeaponNum)), true, MenuContentTransp);
 }
 
@@ -1077,8 +1073,8 @@ void Workshop_Weaponry()
 
 
 	// если нажали - установка и тянем
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-416,100+32,Setup.iAspectRatioWidth/2-96,450-32);
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing())
+	DstRect(Setup.iAspectRatioWidth/2-416,100+32,Setup.iAspectRatioWidth/2-96,450-32);
+	if (vw_OnRect(DstRect) && !isDialogBoxDrawing())
 		if (!DragWeapon) {
 			CurrentCursorStatus = 1;
 
@@ -1103,10 +1099,10 @@ void Workshop_Weaponry()
 
 
 	// затемнение
-	SetRect(&SrcRect,0,0,256,256);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-480,100-32,Setup.iAspectRatioWidth/2-32,450+32);
+	SrcRect(0,0,256,256);
+	DstRect(Setup.iAspectRatioWidth/2-480,100-32,Setup.iAspectRatioWidth/2-32,450+32);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/back_spot2.tga"), true, 0.45f*MenuContentTransp);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2,0,Setup.iAspectRatioWidth/2+512,622);
+	DstRect(Setup.iAspectRatioWidth/2,0,Setup.iAspectRatioWidth/2+512,622);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/back_spot.tga"), true, 0.35f*MenuContentTransp);
 
 
@@ -1168,12 +1164,12 @@ void Workshop_Weaponry()
 
 
 	// рамки
-	SetRect(&SrcRect,0,0,400,35 );
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-457,100-11,Setup.iAspectRatioWidth/2-57,100+35-11);
+	SrcRect(0,0,400,35 );
+	DstRect(Setup.iAspectRatioWidth/2-457,100-11,Setup.iAspectRatioWidth/2-57,100+35-11);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/workshop_panel4.tga"), true, MenuContentTransp);
 
-	SetRect(&SrcRect,0,0,400,173 );
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-457,450-13,Setup.iAspectRatioWidth/2-57,450+173-13);
+	SrcRect(0,0,400,173 );
+	DstRect(Setup.iAspectRatioWidth/2-457,450-13,Setup.iAspectRatioWidth/2-57,450+173-13);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/workshop_panel1.tga"), true, MenuContentTransp);
 
 
@@ -1181,8 +1177,8 @@ void Workshop_Weaponry()
 
 
 	// проверяем колесо мышки
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-457,100+35-11,Setup.iAspectRatioWidth/2-57,450-13);
-	if (vw_OnRect(&DstRect)) {
+	DstRect(Setup.iAspectRatioWidth/2-457,100+35-11,Setup.iAspectRatioWidth/2-57,450-13);
+	if (vw_OnRect(DstRect)) {
 		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing()) {
 			CurrentWorkshopNewWeapon += vw_GetWheelStatus();
 

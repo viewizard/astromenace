@@ -178,8 +178,8 @@ void Loop_Proc()
 		CursorParticleSystem2D->Update(vw_GetTime());
 		CursorParticleSystem2D->Draw();
 
-		SetRect(&SrcRect,0,0,64,64 );
-		SetRect(&DstRect,mX-13,mY-13,mX+64-13,mY+64-13 );
+		SrcRect(0,0,64,64 );
+		DstRect(mX-13,mY-13,mX+64-13,mY+64-13 );
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/cursor_shadow.tga"), true, 1.0f);
 		switch (CurrentCursorStatus) {
 		case 0:

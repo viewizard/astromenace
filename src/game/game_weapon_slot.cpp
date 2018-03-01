@@ -63,21 +63,21 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 
 	if (Setup.GameWeaponInfoType == 1) {
 		// выводим подложку меню - общую
-		SetRect(&SrcRect,0,0,164,88);
-		SetRect(&DstRect,Xpos,Ypos,Xpos+164,Ypos+88);
+		SrcRect(0, 0, 164, 88);
+		DstRect(Xpos, Ypos, Xpos+164, Ypos+88);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/weapon_panel_left.tga"), true, 1.0f);
 
 
 		// подложка-состояния
-		SetRect(&SrcRect,0,0,128,64);
-		SetRect(&DstRect,Xpos+24,Ypos+12,Xpos+24+128,Ypos+64+12);
+		SrcRect(0, 0, 128, 64);
+		DstRect(Xpos+24, Ypos+12, Xpos+24+128, Ypos+64+12);
 		// пушка работает или нет?
 		if (PlayerFighter->Weapon[WeaponNum]->Strength <= 0.0f) {
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, RI_UL_CORNER, 1.0f, 0.0f, 0.0f);
 
 			// иконка оружия
-			SetRect(&SrcRect,0,0,128,64);
-			SetRect(&DstRect,Xpos+24,Ypos+12,Xpos+24+128,Ypos+64+12);
+			SrcRect(0, 0, 128, 64);
+			DstRect(Xpos + 24, Ypos + 12, Xpos + 24 + 128, Ypos + 64 + 12);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->ObjectCreationType)), true, 1.0f);
 		} else {
 			if (PlayerFighter->Weapon[WeaponNum]->CurrentEnergyAccumulated < PlayerFighter->Weapon[WeaponNum]->EnergyUse)
@@ -90,8 +90,8 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			}
 
 			// иконка оружия
-			SetRect(&SrcRect,0,0,128,64);
-			SetRect(&DstRect,Xpos+24,Ypos+12,Xpos+24+128,Ypos+64+12);
+			SrcRect(0, 0, 128, 64);
+			DstRect(Xpos+24, Ypos+12, Xpos+24+128, Ypos+64+12);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->ObjectCreationType)), true, 1.0f);
 
 			// боекомплект
@@ -99,8 +99,8 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
 			if (AmmoShow < 0) AmmoShow = 0;
 
-			SetRect(&SrcRect,0,AmmoShow,8,56);
-			SetRect(&DstRect,Xpos+2,Ypos+16+AmmoShow,Xpos+8+2,Ypos+56+16);
+			SrcRect(0, AmmoShow, 8, 56);
+			DstRect(Xpos+2, Ypos+16+AmmoShow, Xpos+8+2, Ypos+56+16);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/weapon_ammo.tga"), true, 1.0f);
 
 			// перезарядка
@@ -108,43 +108,43 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			// особый случай, рой ракет
 			if (PlayerFighter->Weapon[WeaponNum]->ObjectCreationType == 17 && PlayerFighter->Weapon[WeaponNum]->SwampNum > 0) ReloadShow = 56;
 			if (ReloadShow<0) ReloadShow = 0;
-			SetRect(&SrcRect,0,ReloadShow,8,56);
-			SetRect(&DstRect,Xpos+12,Ypos+16+ReloadShow,Xpos+12+8,Ypos+56+16);
+			SrcRect(0,ReloadShow,8,56);
+			DstRect(Xpos+12,Ypos+16+ReloadShow,Xpos+12+8,Ypos+56+16);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/weapon_energy.tga"), true, 1.0f);
 		}
 	}
 	if (Setup.GameWeaponInfoType == 2) {
 		// выводим подложку меню - общую
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,Xpos,Ypos,Xpos+128+18+6,Ypos+64+4);
+		SrcRect(0,0,2,2);
+		DstRect(Xpos,Ypos,Xpos+128+18+6,Ypos+64+4);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.2f);
 
 		// выводим подложку меню - под иконку
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,Xpos+23,Ypos+1,Xpos+23+128,Ypos+64+3);
+		SrcRect(0,0,2,2);
+		DstRect(Xpos+23,Ypos+1,Xpos+23+128,Ypos+64+3);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f);
 
 		// выводим подложку меню - под боекомплект
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,Xpos+1,Ypos+1,Xpos+8+3,Ypos+64+3);
+		SrcRect(0,0,2,2);
+		DstRect(Xpos+1,Ypos+1,Xpos+8+3,Ypos+64+3);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f);
 
 		// выводим подложку меню - под перезарядка
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,Xpos+12,Ypos+1,Xpos+12+8+2,Ypos+64+3);
+		SrcRect(0,0,2,2);
+		DstRect(Xpos+12,Ypos+1,Xpos+12+8+2,Ypos+64+3);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f);
 
 		// подложка-состояния
-		SetRect(&SrcRect,0,0,128,64);
-		SetRect(&DstRect,Xpos+23,Ypos+2,Xpos+23+128,Ypos+64+2);
+		SrcRect(0,0,128,64);
+		DstRect(Xpos+23,Ypos+2,Xpos+23+128,Ypos+64+2);
 
 		// пушка работает или нет?
 		if (PlayerFighter->Weapon[WeaponNum]->Strength <= 0.0f) {
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, RI_UL_CORNER, 1.0f, 0.0f, 0.0f);
 
 			// иконка оружия
-			SetRect(&SrcRect,0,0,128,64);
-			SetRect(&DstRect,Xpos+23,Ypos+2,Xpos+23+128,Ypos+64+2);
+			SrcRect(0,0,128,64);
+			DstRect(Xpos+23,Ypos+2,Xpos+23+128,Ypos+64+2);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->ObjectCreationType)), true, 1.0f);
 		} else {
 			if (PlayerFighter->Weapon[WeaponNum]->CurrentEnergyAccumulated < PlayerFighter->Weapon[WeaponNum]->EnergyUse)
@@ -156,8 +156,8 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, 1.0f, 0, RI_UL_CORNER, 0.0f, 1.0f, 0.0f);
 			}
 			// иконка оружия
-			SetRect(&SrcRect,0,0,128,64);
-			SetRect(&DstRect,Xpos+23,Ypos+2,Xpos+23+128,Ypos+64+2);
+			SrcRect(0,0,128,64);
+			DstRect(Xpos+23,Ypos+2,Xpos+23+128,Ypos+64+2);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->ObjectCreationType)), true, 1.0f);
 
 			// боекомплект
@@ -165,8 +165,8 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
 			if (AmmoShow < 0) AmmoShow = 0;
 
-			SetRect(&SrcRect,0,AmmoShow,8,64);
-			SetRect(&DstRect,Xpos+2,Ypos+2+AmmoShow,Xpos+8+2,Ypos+64+2);
+			SrcRect(0, AmmoShow, 8, 64);
+			DstRect(Xpos+2, Ypos+2+AmmoShow, Xpos+8+2, Ypos+64+2);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
@@ -174,24 +174,24 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			// особый случай, рой ракет
 			if (PlayerFighter->Weapon[WeaponNum]->ObjectCreationType == 17 && PlayerFighter->Weapon[WeaponNum]->SwampNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
-			SetRect(&SrcRect,0,ReloadShow,8,64);
-			SetRect(&DstRect,Xpos+12+1,Ypos+2+ReloadShow,Xpos+12+8+1,Ypos+64+2);
+			SrcRect(0,ReloadShow,8,64);
+			DstRect(Xpos+12+1,Ypos+2+ReloadShow,Xpos+12+8+1,Ypos+64+2);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/energy.tga"), true, 1.0f);
 		}
 	}
 	if (Setup.GameWeaponInfoType == 3) {
 		// выводим подложку меню - общую
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,Xpos,Ypos,Xpos+18+5,Ypos+64+4);
+		SrcRect(0,0,2,2);
+		DstRect(Xpos,Ypos,Xpos+18+5,Ypos+64+4);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.2f);
 
 		// выводим подложку меню - под боекомплект
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,Xpos+1,Ypos+1,Xpos+8+3,Ypos+64+3);
+		SrcRect(0,0,2,2);
+		DstRect(Xpos+1,Ypos+1,Xpos+8+3,Ypos+64+3);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f);
 		// выводим подложку меню - под перезарядка
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,Xpos+12,Ypos+1,Xpos+12+8+2,Ypos+64+3);
+		SrcRect(0,0,2,2);
+		DstRect(Xpos+12,Ypos+1,Xpos+12+8+2,Ypos+64+3);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f);
 
 		// пушка работает или нет?
@@ -203,8 +203,8 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
 			if (AmmoShow < 0) AmmoShow = 0;
 
-			SetRect(&SrcRect,0,AmmoShow,8,64);
-			SetRect(&DstRect,Xpos+2,Ypos+2+AmmoShow,Xpos+8+2,Ypos+64+2);
+			SrcRect(0,AmmoShow,8,64);
+			DstRect(Xpos+2,Ypos+2+AmmoShow,Xpos+8+2,Ypos+64+2);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
@@ -212,8 +212,8 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			// особый случай, рой ракет
 			if (PlayerFighter->Weapon[WeaponNum]->ObjectCreationType == 17 && PlayerFighter->Weapon[WeaponNum]->SwampNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
-			SetRect(&SrcRect,0,ReloadShow,8,64);
-			SetRect(&DstRect,Xpos+12+1,Ypos+2+ReloadShow,Xpos+12+8+1,Ypos+64+2);
+			SrcRect(0,ReloadShow,8,64);
+			DstRect(Xpos+12+1,Ypos+2+ReloadShow,Xpos+12+8+1,Ypos+64+2);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/energy.tga"), true, 1.0f);
 		}
 	}
@@ -260,20 +260,20 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 
 	if (Setup.GameWeaponInfoType == 1) {
 		// выводим подложку меню - общую
-		SetRect(&SrcRect,0,0,164,88);
-		SetRect(&DstRect,Xpos,Ypos,Xpos+164,Ypos+88);
+		SrcRect(0,0,164,88);
+		DstRect(Xpos,Ypos,Xpos+164,Ypos+88);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/weapon_panel_right.tga"), true, 1.0f);
 
 		// подложка-состояния
-		SetRect(&SrcRect,0,0,128,64);
-		SetRect(&DstRect,Xpos+12,Ypos+12,Xpos+12+128,Ypos+64+12);
+		SrcRect(0,0,128,64);
+		DstRect(Xpos+12,Ypos+12,Xpos+12+128,Ypos+64+12);
 		// пушка работает или нет?
 		if (PlayerFighter->Weapon[WeaponNum]->Strength <= 0.0f) {
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, RI_UL_CORNER, 1.0f, 0.0f, 0.0f);
 
 			// иконка оружия
-			SetRect(&SrcRect,0,0,128,64);
-			SetRect(&DstRect,Xpos+12,Ypos+12,Xpos+12+128,Ypos+64+12);
+			SrcRect(0,0,128,64);
+			DstRect(Xpos+12,Ypos+12,Xpos+12+128,Ypos+64+12);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->ObjectCreationType)), true, 1.0f);
 		} else {
 			if (PlayerFighter->Weapon[WeaponNum]->CurrentEnergyAccumulated < PlayerFighter->Weapon[WeaponNum]->EnergyUse)
@@ -285,8 +285,8 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, 1.0f, 0, RI_UL_CORNER, 0.0f, 1.0f, 0.0f);
 			}
 			// иконка оружия
-			SetRect(&SrcRect,0,0,128,64);
-			SetRect(&DstRect,Xpos+12,Ypos+12,Xpos+12+128,Ypos+64+12);
+			SrcRect(0,0,128,64);
+			DstRect(Xpos+12,Ypos+12,Xpos+12+128,Ypos+64+12);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->ObjectCreationType)), true, 1.0f);
 
 			// боекомплект
@@ -294,8 +294,8 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
 			if (AmmoShow < 0) AmmoShow = 0;
 
-			SetRect(&SrcRect,0,AmmoShow,8,56);
-			SetRect(&DstRect,Xpos+154,Ypos+16+AmmoShow,Xpos+8+154,Ypos+56+16);
+			SrcRect(0,AmmoShow,8,56);
+			DstRect(Xpos+154,Ypos+16+AmmoShow,Xpos+8+154,Ypos+56+16);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/weapon_ammo.tga"), true, 1.0f);
 
 			// перезарядка
@@ -303,42 +303,42 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			// особый случай, рой ракет
 			if (PlayerFighter->Weapon[WeaponNum]->ObjectCreationType == 17 && PlayerFighter->Weapon[WeaponNum]->SwampNum > 0) ReloadShow = 56;
 			if (ReloadShow<0) ReloadShow = 0;
-			SetRect(&SrcRect,0,ReloadShow,8,56);
-			SetRect(&DstRect,Xpos+144,Ypos+16+ReloadShow,Xpos+144+8,Ypos+56+16);
+			SrcRect(0,ReloadShow,8,56);
+			DstRect(Xpos+144,Ypos+16+ReloadShow,Xpos+144+8,Ypos+56+16);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/weapon_energy.tga"), true, 1.0f);
 		}
 	}
 	if (Setup.GameWeaponInfoType == 2) {
 		// выводим подложку меню - общую
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,Xpos,Ypos,Xpos+128+18+6,Ypos+64+4);
+		SrcRect(0,0,2,2);
+		DstRect(Xpos,Ypos,Xpos+128+18+6,Ypos+64+4);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.2f);
 
 		// выводим подложку меню - под иконку
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,Xpos+1,Ypos+1,Xpos+1+128,Ypos+64+3);
+		SrcRect(0,0,2,2);
+		DstRect(Xpos+1,Ypos+1,Xpos+1+128,Ypos+64+3);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f);
 
 		// выводим подложку меню - под боекомплект
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,Xpos+13+128,Ypos+1,Xpos+13+8+2+128,Ypos+64+3);
+		SrcRect(0,0,2,2);
+		DstRect(Xpos+13+128,Ypos+1,Xpos+13+8+2+128,Ypos+64+3);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f);
 
 		// выводим подложку меню - под перезарядка
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,Xpos+2+128,Ypos+1,Xpos+8+4+128,Ypos+64+3);
+		SrcRect(0,0,2,2);
+		DstRect(Xpos+2+128,Ypos+1,Xpos+8+4+128,Ypos+64+3);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f);
 
 		// подложка-состояния
-		SetRect(&SrcRect,0,0,128,64);
-		SetRect(&DstRect,Xpos+1,Ypos+2,Xpos+1+128,Ypos+64+2);
+		SrcRect(0,0,128,64);
+		DstRect(Xpos+1,Ypos+2,Xpos+1+128,Ypos+64+2);
 		// пушка работает или нет?
 		if (PlayerFighter->Weapon[WeaponNum]->Strength <= 0.0f) {
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, RI_UL_CORNER, 1.0f, 0.0f, 0.0f);
 
 			// иконка оружия
-			SetRect(&SrcRect,0,0,128,64);
-			SetRect(&DstRect,Xpos+1,Ypos+2,Xpos+1+128,Ypos+64+2);
+			SrcRect(0,0,128,64);
+			DstRect(Xpos+1,Ypos+2,Xpos+1+128,Ypos+64+2);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->ObjectCreationType)), true, 1.0f);
 		} else {
 			if (PlayerFighter->Weapon[WeaponNum]->CurrentEnergyAccumulated < PlayerFighter->Weapon[WeaponNum]->EnergyUse)
@@ -350,8 +350,8 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, 1.0f, 0, RI_UL_CORNER, 0.0f, 1.0f, 0.0f);
 			}
 			// иконка оружия
-			SetRect(&SrcRect,0,0,128,64);
-			SetRect(&DstRect,Xpos+1,Ypos+2,Xpos+1+128,Ypos+64+2);
+			SrcRect(0,0,128,64);
+			DstRect(Xpos+1,Ypos+2,Xpos+1+128,Ypos+64+2);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->ObjectCreationType)), true, 1.0f);
 
 			// боекомплект
@@ -359,8 +359,8 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
 			if (AmmoShow < 0) AmmoShow = 0;
 
-			SetRect(&SrcRect,0,AmmoShow,8,64);
-			SetRect(&DstRect,Xpos+12+2+128,Ypos+2+AmmoShow,Xpos+12+8+2+128,Ypos+64+2);
+			SrcRect(0,AmmoShow,8,64);
+			DstRect(Xpos+12+2+128,Ypos+2+AmmoShow,Xpos+12+8+2+128,Ypos+64+2);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
@@ -368,25 +368,25 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			// особый случай, рой ракет
 			if (PlayerFighter->Weapon[WeaponNum]->ObjectCreationType == 17 && PlayerFighter->Weapon[WeaponNum]->SwampNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
-			SetRect(&SrcRect,0,ReloadShow,8,64);
-			SetRect(&DstRect,Xpos+3+128,Ypos+2+ReloadShow,Xpos+8+3+128,Ypos+64+2);
+			SrcRect(0,ReloadShow,8,64);
+			DstRect(Xpos+3+128,Ypos+2+ReloadShow,Xpos+8+3+128,Ypos+64+2);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/energy.tga"), true, 1.0f);
 		}
 	}
 	if (Setup.GameWeaponInfoType == 3) {
 		// выводим подложку меню - общую
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,Xpos+128+1,Ypos,Xpos+128+18+6,Ypos+64+4);
+		SrcRect(0,0,2,2);
+		DstRect(Xpos+128+1,Ypos,Xpos+128+18+6,Ypos+64+4);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.2f);
 
 		// выводим подложку меню - под боекомплект
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,Xpos+13+128,Ypos+1,Xpos+13+8+2+128,Ypos+64+3);
+		SrcRect(0,0,2,2);
+		DstRect(Xpos+13+128,Ypos+1,Xpos+13+8+2+128,Ypos+64+3);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f);
 
 		// выводим подложку меню - под перезарядка
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,Xpos+2+128,Ypos+1,Xpos+8+4+128,Ypos+64+3);
+		SrcRect(0,0,2,2);
+		DstRect(Xpos+2+128,Ypos+1,Xpos+8+4+128,Ypos+64+3);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f);
 
 		// пушка работает или нет?
@@ -398,8 +398,8 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
 			if (AmmoShow < 0) AmmoShow = 0;
 
-			SetRect(&SrcRect,0,AmmoShow,8,64);
-			SetRect(&DstRect,Xpos+12+2+128,Ypos+2+AmmoShow,Xpos+12+8+2+128,Ypos+64+2);
+			SrcRect(0,AmmoShow,8,64);
+			DstRect(Xpos+12+2+128,Ypos+2+AmmoShow,Xpos+12+8+2+128,Ypos+64+2);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
@@ -407,8 +407,8 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			// особый случай, рой ракет
 			if (PlayerFighter->Weapon[WeaponNum]->ObjectCreationType == 17 && PlayerFighter->Weapon[WeaponNum]->SwampNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
-			SetRect(&SrcRect,0,ReloadShow,8,64);
-			SetRect(&DstRect,Xpos+3+128,Ypos+2+ReloadShow,Xpos+8+3+128,Ypos+64+2);
+			SrcRect(0,ReloadShow,8,64);
+			DstRect(Xpos+3+128,Ypos+2+ReloadShow,Xpos+8+3+128,Ypos+64+2);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/energy.tga"), true, 1.0f);
 		}
 	}

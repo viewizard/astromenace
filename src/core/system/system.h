@@ -24,53 +24,45 @@
 
 *************************************************************************************/
 
-
 #ifndef CoreSystem_H
 #define CoreSystem_H
 
 #include "../base.h"
 #include "../math/math.h"
 
-
-
 // работа со временем
-void 	vw_InitTime();
-void 	vw_InitTimeNum(int Num);
-float 	vw_GetTime(int TimeThread = 0);
-void 	vw_StopTime();
-void 	vw_StartTime();
-void 	vw_SetTimeThreadSpeed(int TimeThread=0, float NewSpeed=1.0f);
-float 	vw_GetTimeThreadSpeed(int TimeThread=0);
-
-
+void vw_InitTime();
+void vw_InitTimeNum(int Num);
+float vw_GetTime(int TimeThread = 0);
+void vw_StopTime();
+void vw_StartTime();
+void vw_SetTimeThreadSpeed(int TimeThread = 0, float NewSpeed = 1.0f);
+float vw_GetTimeThreadSpeed(int TimeThread = 0);
 
 // работа с клавиатурой
-bool	vw_GetKeys(int Num);
-void	vw_SetKeys(int Num, bool NewKeyStatus);
-int 	GetMaxKeys();
-const char* 	vw_VirtualCodeName(const char *LanguageCode, int Num);
-const char* 	vw_KeyboardCodeName(int Num);
-int 	vw_KeyboardNameCode(const char * Name);
+bool vw_GetKeys(int Num);
+void vw_SetKeys(int Num, bool NewKeyStatus);
+int GetMaxKeys();
+const char *vw_VirtualCodeName(const char *LanguageCode, int Num);
+const char *vw_KeyboardCodeName(int Num);
+int vw_KeyboardNameCode(const char * Name);
 // установка-получение юникода текущей нажатой клавиши
-void 	vw_SetCurrentUnicodeChar(char *NewUnicodeChar);
-char* 	vw_GetCurrentUnicodeChar();
+void vw_SetCurrentUnicodeChar(char *NewUnicodeChar);
+char *vw_GetCurrentUnicodeChar();
 
 // работа с мышкой
-int		vw_GetMousePos(int *X, int *Y);
-bool	vw_GetWindowLBMouse(bool ResetStatus);
-bool	vw_GetWindowRBMouse(bool ResetStatus);
-void	vw_SetWindowLBMouse(bool NewStatus);
-void	vw_SetWindowRBMouse(bool NewStatus);
-void 	vw_SetWindowLBDoubleMouse(bool NewStatus);
-bool 	vw_GetWindowLBDoubleMouse(bool ResetStatus);
-void	vw_ChangeWheelStatus(int Value);
-void	vw_ResetWheelStatus();
-int		vw_GetWheelStatus();
-void	vw_SetMousePos(int X, int Y);
-void 	vw_SetMousePosRel(int X, int Y);
-bool	vw_OnRect(sRECT *MDetect);
-
-
-
+int vw_GetMousePos(int *X, int *Y);
+bool vw_GetWindowLBMouse(bool ResetStatus);
+bool vw_GetWindowRBMouse(bool ResetStatus);
+void vw_SetWindowLBMouse(bool NewStatus);
+void vw_SetWindowRBMouse(bool NewStatus);
+void vw_SetWindowLBDoubleMouse(bool NewStatus);
+bool vw_GetWindowLBDoubleMouse(bool ResetStatus);
+void vw_ChangeWheelStatus(int Value);
+void vw_ResetWheelStatus();
+int vw_GetWheelStatus();
+void vw_SetMousePos(int X, int Y);
+void vw_SetMousePosRel(int X, int Y);
+bool vw_OnRect(const sRECT &MDetect);
 
 #endif // CoreSystem_H

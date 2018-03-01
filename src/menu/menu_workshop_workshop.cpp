@@ -381,11 +381,8 @@ int NeedPlayWorkshopOnButtonSoundY = 0;
 //------------------------------------------------------------------------------------
 void Workshop_Workshop()
 {
-	sRECT SrcRect, DstRect;
-
-
-	SetRect(&SrcRect,0,0,256,256);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-256,0,Setup.iAspectRatioWidth/2-256+512,412);
+	sRECT SrcRect(0, 0, 256, 256);
+	sRECT DstRect(Setup.iAspectRatioWidth / 2 - 256, 0, Setup.iAspectRatioWidth / 2 - 256 + 512, 412);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/back_spot.tga"), true, 0.35f*MenuContentTransp);
 
 
@@ -395,8 +392,8 @@ void Workshop_Workshop()
 	vw_Start2DMode(-1,1);
 
 
-	SetRect(&SrcRect,0,0,210,600);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-492,50-10,Setup.iAspectRatioWidth/2-492+210,50+600-10);
+	SrcRect(0,0,210,600);
+	DstRect(Setup.iAspectRatioWidth/2-492,50-10,Setup.iAspectRatioWidth/2-492+210,50+600-10);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/workshop_panel2.tga"), true, MenuContentTransp);
 
 
@@ -405,9 +402,9 @@ void Workshop_Workshop()
 
 	float Current = 0.4f;
 
-	SetRect(&SrcRect,0,0,128,128);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-451,60,Setup.iAspectRatioWidth/2-451+128,60+128);
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
+	SrcRect(0,0,128,128);
+	DstRect(Setup.iAspectRatioWidth/2-451,60,Setup.iAspectRatioWidth/2-451+128,60+128);
+	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -444,9 +441,9 @@ void Workshop_Workshop()
 
 	Current = 0.4f;
 
-	SetRect(&SrcRect,0,0,128,128);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-451,200,Setup.iAspectRatioWidth/2-451+128,200+128);
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
+	SrcRect(0,0,128,128);
+	DstRect(Setup.iAspectRatioWidth/2-451,200,Setup.iAspectRatioWidth/2-451+128,200+128);
+	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -483,9 +480,9 @@ void Workshop_Workshop()
 
 	Current = 0.4f;
 
-	SetRect(&SrcRect,0,0,128,128);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-451,340,Setup.iAspectRatioWidth/2-451+128,340+128);
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
+	SrcRect(0,0,128,128);
+	DstRect(Setup.iAspectRatioWidth/2-451,340,Setup.iAspectRatioWidth/2-451+128,340+128);
+	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -522,9 +519,9 @@ void Workshop_Workshop()
 
 	Current = 0.4f;
 
-	SetRect(&SrcRect,0,0,128,128);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-451,610-128,Setup.iAspectRatioWidth/2-451+128,610);
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
+	SrcRect(0,0,128,128);
+	DstRect(Setup.iAspectRatioWidth/2-451,610-128,Setup.iAspectRatioWidth/2-451+128,610);
+	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -575,8 +572,8 @@ void Workshop_Workshop()
 
 
 
-	SetRect(&SrcRect,0,0,210,600);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2+282,50-10,Setup.iAspectRatioWidth/2+492,50+600-10);
+	SrcRect(0,0,210,600);
+	DstRect(Setup.iAspectRatioWidth/2+282,50-10,Setup.iAspectRatioWidth/2+492,50+600-10);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/workshop_panel2+.tga"), true, MenuContentTransp);
 
 
@@ -635,7 +632,7 @@ void Workshop_Workshop()
 	bool CanBuy = true;
 
 	// Engine
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2+337,70,Setup.iAspectRatioWidth/2+437,70+100);
+	DstRect(Setup.iAspectRatioWidth/2+337,70,Setup.iAspectRatioWidth/2+437,70+100);
 
 	if (CurrentSystemStockNum>=1 && CurrentSystemStockNum<=4) {
 		if (Setup.Profile[CurrentProfile].EngineSystem != 0) {
@@ -651,7 +648,7 @@ void Workshop_Workshop()
 
 
 	// Power
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2+337,180,Setup.iAspectRatioWidth/2+437,180+100);
+	DstRect(Setup.iAspectRatioWidth/2+337,180,Setup.iAspectRatioWidth/2+437,180+100);
 
 	if (CurrentSystemStockNum>=5 && CurrentSystemStockNum<=8) {
 		if (Setup.Profile[CurrentProfile].PowerSystem != 0) {
@@ -666,7 +663,7 @@ void Workshop_Workshop()
 	}
 
 	// Target
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2+337,290,Setup.iAspectRatioWidth/2+437,290+100);
+	DstRect(Setup.iAspectRatioWidth/2+337,290,Setup.iAspectRatioWidth/2+437,290+100);
 
 	if (CurrentSystemStockNum>=9 && CurrentSystemStockNum<=12) {
 		if (Setup.Profile[CurrentProfile].TargetingSystem != 0) {
@@ -682,7 +679,7 @@ void Workshop_Workshop()
 
 
 	// Mech
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2+337,400,Setup.iAspectRatioWidth/2+437,400+100);
+	DstRect(Setup.iAspectRatioWidth/2+337,400,Setup.iAspectRatioWidth/2+437,400+100);
 	if (CurrentSystemStockNum>=13 && CurrentSystemStockNum<=16) {
 		if (Setup.Profile[CurrentProfile].TargetingMechanicSystem != 0) {
 			CanSell = true;
@@ -696,7 +693,7 @@ void Workshop_Workshop()
 	}
 
 	// Protect
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2+337,510,Setup.iAspectRatioWidth/2+437,510+100);
+	DstRect(Setup.iAspectRatioWidth/2+337,510,Setup.iAspectRatioWidth/2+437,510+100);
 	if (CurrentSystemStockNum>=17 && CurrentSystemStockNum<=20) {
 		if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem != 0) {
 			CanSell = true;
@@ -715,8 +712,8 @@ void Workshop_Workshop()
 
 
 	// Engine
-	SetRect(&SrcRect,0,0,128,128);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2+337,70,Setup.iAspectRatioWidth/2+437,70+100);
+	SrcRect(0,0,128,128);
+	DstRect(Setup.iAspectRatioWidth/2+337,70,Setup.iAspectRatioWidth/2+437,70+100);
 	Current = 0.5f;
 	float ColorR, ColorG, ColorB;
 	ColorR = ColorG = ColorB = 1.0f;
@@ -746,7 +743,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 	}
 
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
+	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -797,7 +794,7 @@ void Workshop_Workshop()
 
 
 	// Power
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2+337,180,Setup.iAspectRatioWidth/2+437,180+100);
+	DstRect(Setup.iAspectRatioWidth/2+337,180,Setup.iAspectRatioWidth/2+437,180+100);
 	ColorR = ColorG = ColorB = 1.0f;
 
 	if (NeedMoreEnergy) {
@@ -822,7 +819,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 	}
 
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
+	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -875,7 +872,7 @@ void Workshop_Workshop()
 
 
 	// Target
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2+337,290,Setup.iAspectRatioWidth/2+437,290+100);
+	DstRect(Setup.iAspectRatioWidth/2+337,290,Setup.iAspectRatioWidth/2+437,290+100);
 	ColorR = ColorG = ColorB = 1.0f;
 
 	Current = 0.5f;
@@ -892,7 +889,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 	}
 
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
+	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -945,7 +942,7 @@ void Workshop_Workshop()
 
 
 	// Mech
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2+337,400,Setup.iAspectRatioWidth/2+437,400+100);
+	DstRect(Setup.iAspectRatioWidth/2+337,400,Setup.iAspectRatioWidth/2+437,400+100);
 	ColorR = ColorG = ColorB = 1.0f;
 
 	Current = 0.5f;
@@ -962,7 +959,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 	}
 
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
+	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -1015,7 +1012,7 @@ void Workshop_Workshop()
 
 
 	// Protect
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2+337,510,Setup.iAspectRatioWidth/2+437,510+100);
+	DstRect(Setup.iAspectRatioWidth/2+337,510,Setup.iAspectRatioWidth/2+437,510+100);
 	ColorR = ColorG = ColorB = 1.0f;
 
 	if (NeedMoreEnergy && Setup.Profile[CurrentProfile].AdvancedProtectionSystem != 0) {
@@ -1040,7 +1037,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 	}
 
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing()) {
+	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -1138,8 +1135,8 @@ void Workshop_Workshop()
 		BuyCurrentSystem();
 	}
 	// покупка, если 2 раза кликнули на иконку текущей системы
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-451,55+128+20,Setup.iAspectRatioWidth/2-451+128,55+128+128+20);
-	if (vw_OnRect(&DstRect) && !isDialogBoxDrawing() && CanBuy)
+	DstRect(Setup.iAspectRatioWidth/2-451,55+128+20,Setup.iAspectRatioWidth/2-451+128,55+128+128+20);
+	if (vw_OnRect(DstRect) && !isDialogBoxDrawing() && CanBuy)
 		if (vw_GetWindowLBDoubleMouse(true))
 			BuyCurrentSystem();
 

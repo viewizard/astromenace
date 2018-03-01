@@ -62,8 +62,8 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 {
 
 	sRECT SrcRect, DstRect;
-	SetRect(&SrcRect,0,0,2,2);
-	SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
+	SrcRect(0,0,2,2);
+	DstRect(0,0,Setup.iAspectRatioWidth,768);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);
 
 
@@ -90,8 +90,8 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_Not_available"));
 	} else {
 		for (int i=0; i<10; i++) {
-			SetRect(&SrcRect,0,0,16,32);
-			SetRect(&DstRect,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
+			SrcRect(0,0,16,32);
+			DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 			if (Setup.MusicSw>i)
 				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 			else
@@ -123,8 +123,8 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_Not_available"));
 	} else {
 		for (int i=0; i<10; i++) {
-			SetRect(&SrcRect,0,0,16,32);
-			SetRect(&DstRect,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
+			SrcRect(0,0,16,32);
+			DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 			if (Setup.VoiceSw>i)
 				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 			else
@@ -153,8 +153,8 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_Not_available"));
 	} else {
 		for (int i=0; i<10; i++) {
-			SetRect(&SrcRect,0,0,16,32);
-			SetRect(&DstRect,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
+			SrcRect(0,0,16,32);
+			DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 			if (Setup.SoundSw>i)
 				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 			else
@@ -348,8 +348,8 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		if (Setup.Brightness >= 10) Setup.Brightness = 10;
 	}
 	for (int i=0; i<10; i++) {
-		SetRect(&SrcRect,0,0,16,32);
-		SetRect(&DstRect,X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
+		SrcRect(0,0,16,32);
+		DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 		if (Setup.Brightness>i)
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 		else

@@ -64,7 +64,6 @@ void GameSetMissionTitleData(float ShowTime, int Num)
 int CheckMissionTitleNum(const char *Num)
 {
 	sRECT SrcRect;
-	SetRect(&SrcRect,0,0,0,0);
 	int XSum = 0;
 
 	// считаем
@@ -73,34 +72,34 @@ int CheckMissionTitleNum(const char *Num)
 
 		switch (Char) {
 		case '1':
-			SetRect(&SrcRect,15,1,48,63);
+			SrcRect(15, 1, 48, 63);
 			break;
 		case '2':
-			SetRect(&SrcRect,48,1,86,63);
+			SrcRect(48, 1, 86, 63);
 			break;
 		case '3':
-			SetRect(&SrcRect,86,1,124,63);
+			SrcRect(86, 1, 124, 63);
 			break;
 		case '4':
-			SetRect(&SrcRect,124,1,160,63);
+			SrcRect(124, 1, 160, 63);
 			break;
 		case '5':
-			SetRect(&SrcRect,161,1,200,63);
+			SrcRect(161, 1, 200, 63);
 			break;
 		case '6':
-			SetRect(&SrcRect,200,1,238,63);
+			SrcRect(200, 1, 238, 63);
 			break;
 		case '7':
-			SetRect(&SrcRect,239,1,275,63);
+			SrcRect(239, 1, 275, 63);
 			break;
 		case '8':
-			SetRect(&SrcRect,276,1,315,63);
+			SrcRect(276, 1, 315, 63);
 			break;
 		case '9':
-			SetRect(&SrcRect,319,1,385,63);
+			SrcRect(319, 1, 385, 63);
 			break;
 		case '0':
-			SetRect(&SrcRect,360,1,399,63);
+			SrcRect(360, 1, 399, 63);
 			break;
 		}
 
@@ -130,39 +129,39 @@ void DrawMissionTitleNum(int X, int Y, const char *Num, float Transp)
 
 		switch (Char) {
 		case '1':
-			SetRect(&SrcRect,15,1,48,63);
+			SrcRect(15,1,48,63);
 			break;
 		case '2':
-			SetRect(&SrcRect,48,1,86,63);
+			SrcRect(48,1,86,63);
 			break;
 		case '3':
-			SetRect(&SrcRect,86,1,124,63);
+			SrcRect(86,1,124,63);
 			break;
 		case '4':
-			SetRect(&SrcRect,124,1,160,63);
+			SrcRect(124,1,160,63);
 			break;
 		case '5':
-			SetRect(&SrcRect,161,1,200,63);
+			SrcRect(161,1,200,63);
 			break;
 		case '6':
-			SetRect(&SrcRect,200,1,238,63);
+			SrcRect(200,1,238,63);
 			break;
 		case '7':
-			SetRect(&SrcRect,239,1,275,63);
+			SrcRect(239,1,275,63);
 			break;
 		case '8':
-			SetRect(&SrcRect,276,1,315,63);
+			SrcRect(276,1,315,63);
 			break;
 		case '9':
-			SetRect(&SrcRect,319,1,355,63);
+			SrcRect(319,1,355,63);
 			break;
 		case '0':
-			SetRect(&SrcRect,360,1,399,63);
+			SrcRect(360,1,399,63);
 			break;
 		}
 
 
-		SetRect(&DstRect,XStart,Y,XStart+(SrcRect.right - SrcRect.left),Y+(SrcRect.bottom - SrcRect.top));
+		DstRect(XStart,Y,XStart+(SrcRect.right - SrcRect.left),Y+(SrcRect.bottom - SrcRect.top));
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/nums.tga"), true, Transp);
 		XStart += SrcRect.right - SrcRect.left;
 	}
@@ -199,8 +198,8 @@ void GameDrawMissionTitle()
 	// находим откуда начинать рисовать
 	int XStart = (Setup.iAspectRatioWidth-TotalW)/2;
 
-	SetRect(&SrcRect,0,0,226,64);
-	SetRect(&DstRect,XStart,352,XStart+226,352+64);
+	SrcRect(0,0,226,64);
+	DstRect(XStart,352,XStart+226,352+64);
 
 	if (MissionTitleLifeTime >= 1.0f) {
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_mission.tga")),
@@ -260,8 +259,8 @@ void GameDrawMissionFailed()
 	sRECT SrcRect, DstRect;
 
 	// вывод надписи Mission
-	SetRect(&SrcRect,0,0,512,84);
-	SetRect(&DstRect,Setup.iAspectRatioWidth/2-256,342,Setup.iAspectRatioWidth/2+256,342+84);
+	SrcRect(0,0,512,84);
+	DstRect(Setup.iAspectRatioWidth/2-256,342,Setup.iAspectRatioWidth/2+256,342+84);
 
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_missionfailed.tga")),
 			   true, 1.0f, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);

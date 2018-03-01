@@ -843,7 +843,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 				TMP.x = Projectile->DrawObjectList[i].VertexBuffer[j2] + DrawObjectList[i].Location.x;
 				TMP.y = Projectile->DrawObjectList[i].VertexBuffer[j2+1] + DrawObjectList[i].Location.y;
 				TMP.z = Projectile->DrawObjectList[i].VertexBuffer[j2+2] + DrawObjectList[i].Location.z;
-				vw_Matrix33CalcPoint(&TMP, Projectile->CurrentRotationMat);
+				vw_Matrix33CalcPoint(TMP, Projectile->CurrentRotationMat);
 				// координаты
 				DrawObjectList[i].VertexBuffer[j1] = TMP.x;
 				DrawObjectList[i].VertexBuffer[j1+1] = TMP.y;
@@ -852,7 +852,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 				TMP.x = Projectile->DrawObjectList[i].VertexBuffer[j2+3];
 				TMP.y = Projectile->DrawObjectList[i].VertexBuffer[j2+4];
 				TMP.z = Projectile->DrawObjectList[i].VertexBuffer[j2+5];
-				vw_Matrix33CalcPoint(&TMP, Projectile->CurrentRotationMat);
+				vw_Matrix33CalcPoint(TMP, Projectile->CurrentRotationMat);
 				DrawObjectList[i].VertexBuffer[j1+3] = TMP.x;
 				DrawObjectList[i].VertexBuffer[j1+4] = TMP.y;
 				DrawObjectList[i].VertexBuffer[j1+5] = TMP.z;

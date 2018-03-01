@@ -56,10 +56,12 @@ void vw_Matrix44Identity(float Matrix44[16])
 /*
  * Matrix multiplication.
  */
-void vw_Matrix44Mult(float DstMatrix44[16], float SrcMatrix44[16])
+void vw_Matrix44Mult(float DstMatrix44[16], const float SrcMatrix44[16])
 {
-	float tmp[16];
-	memcpy(tmp, DstMatrix44, 16*sizeof(DstMatrix44[0]));
+	float tmp[16]{DstMatrix44[0],  DstMatrix44[1],  DstMatrix44[2],  DstMatrix44[3],
+		      DstMatrix44[4],  DstMatrix44[5],  DstMatrix44[6],  DstMatrix44[7],
+		      DstMatrix44[8],  DstMatrix44[9],  DstMatrix44[10], DstMatrix44[11],
+		      DstMatrix44[12], DstMatrix44[13], DstMatrix44[14], DstMatrix44[15]};
 
 	DstMatrix44[0] = SrcMatrix44[0]*tmp[0] + SrcMatrix44[1]*tmp[4] + SrcMatrix44[2]*tmp[8] + SrcMatrix44[3]*tmp[12];
 	DstMatrix44[1] = SrcMatrix44[0]*tmp[1] + SrcMatrix44[1]*tmp[5] + SrcMatrix44[2]*tmp[9] + SrcMatrix44[3]*tmp[13];
@@ -96,7 +98,7 @@ void vw_Matrix44CreateRotate(float Matrix44[16], const sVECTOR3D &Angle)
 {
 	const float p180 = 0.0174532925f;
 
-	if (Angle.z != 0.0f && Angle.x == 0.0f && Angle.y == 0.0f) {
+	if ((Angle.z != 0.0f) && (Angle.x == 0.0f) && (Angle.y == 0.0f)) {
 		float a = -Angle.z*p180;
 		float c = cosf(a);
 		float s = sinf(a);
@@ -187,10 +189,9 @@ void vw_Matrix44InverseRotate(float Matrix44[16])
 /*
  * Calculate point position by transformation matrix.
  */
-void vw_Matrix44CalcPoint(sVECTOR3D *Point, float Matrix44[16])
+void vw_Matrix44CalcPoint(sVECTOR3D &Point, const float Matrix44[16])
 {
-	sVECTOR3D TmpPoint = *Point;
-	Point->x = Matrix44[0]*TmpPoint.x + Matrix44[4]*TmpPoint.y + Matrix44[8]*TmpPoint.z + Matrix44[12];
-	Point->y = Matrix44[1]*TmpPoint.x + Matrix44[5]*TmpPoint.y + Matrix44[9]*TmpPoint.z + Matrix44[13];
-	Point->z = Matrix44[2]*TmpPoint.x + Matrix44[6]*TmpPoint.y + Matrix44[10]*TmpPoint.z + Matrix44[14];
+	Point(Matrix44[0]*Point.x + Matrix44[4]*Point.y + Matrix44[8]*Point.z + Matrix44[12],
+	      Matrix44[1]*Point.x + Matrix44[5]*Point.y + Matrix44[9]*Point.z + Matrix44[13],
+	      Matrix44[2]*Point.x + Matrix44[6]*Point.y + Matrix44[10]*Point.z + Matrix44[14]);
 }

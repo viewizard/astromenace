@@ -243,7 +243,7 @@ bool cParticleSystem::Update(float Time)
 					tmp = tmp + tmp1;
 				}
 
-				vw_Matrix33CalcPoint(&tmp, CurrentRotationMat);
+				vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
 				NewParticle->Location = Location + tmp;
 			}
 			// тип 11 только !!! для лазеров-мазеров
@@ -286,7 +286,7 @@ bool cParticleSystem::Update(float Time)
 					if (tmp.z < -CreationSizeText.z) tmp.z = -CreationSizeText.z;
 				}
 
-				vw_Matrix33CalcPoint(&tmp, CurrentRotationMat);
+				vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
 				NewParticle->Location = Location + tmp;
 			}
 			if (CreationType == 2) {
@@ -337,7 +337,7 @@ bool cParticleSystem::Update(float Time)
 					ParticleDist = tmp.x*tmp.x + tmp.y*tmp.y + tmp.z*tmp.z;
 				}
 
-				vw_Matrix33CalcPoint(&tmp, CurrentRotationMat);
+				vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
 				NewParticle->Location = Location + tmp;
 			}
 
@@ -389,7 +389,7 @@ bool cParticleSystem::Update(float Time)
 			} else {
 
 				NewParticle->Velocity = Direction;
-				vw_RotatePoint(&NewParticle->Velocity, sVECTOR3D(Theta*vw_Randf0/2.0f, Theta*vw_Randf0/2.0f, 0.0f));
+				vw_RotatePoint(NewParticle->Velocity, sVECTOR3D(Theta*vw_Randf0/2.0f, Theta*vw_Randf0/2.0f, 0.0f));
 			}
 
 
@@ -814,8 +814,8 @@ void cParticleSystem::RotateSystemByAngle(sVECTOR3D NewAngle)
 	vw_Matrix33InverseRotate(OldInvRotationMat);
 	vw_Matrix33CreateRotate(CurrentRotationMat, Angle);
 
-	vw_Matrix33CalcPoint(&Direction, OldInvRotationMat);
-	vw_Matrix33CalcPoint(&Direction, CurrentRotationMat);
+	vw_Matrix33CalcPoint(Direction, OldInvRotationMat);
+	vw_Matrix33CalcPoint(Direction, CurrentRotationMat);
 }
 
 
@@ -833,16 +833,16 @@ void cParticleSystem::RotateSystemAndParticlesByAngle(sVECTOR3D NewAngle)
 	vw_Matrix33InverseRotate(OldInvRotationMat);
 	vw_Matrix33CreateRotate(CurrentRotationMat, Angle);
 
-	vw_Matrix33CalcPoint(&Direction, OldInvRotationMat);
-	vw_Matrix33CalcPoint(&Direction, CurrentRotationMat);
+	vw_Matrix33CalcPoint(Direction, OldInvRotationMat);
+	vw_Matrix33CalcPoint(Direction, CurrentRotationMat);
 
 
 	sParticle *tmp = Start;
 	while (tmp != nullptr) {
 		// меняем каждой частице
 		sVECTOR3D TMP = tmp->Location - Location;
-		vw_Matrix33CalcPoint(&TMP, OldInvRotationMat);
-		vw_Matrix33CalcPoint(&TMP, CurrentRotationMat);
+		vw_Matrix33CalcPoint(TMP, OldInvRotationMat);
+		vw_Matrix33CalcPoint(TMP, CurrentRotationMat);
 		tmp->Location = TMP + Location;
 		tmp = tmp->Next;
 	}
@@ -870,10 +870,10 @@ void cParticleSystem::RotateParticlesByAngle(sVECTOR3D NewAngle)
 	while (tmp != nullptr) {
 		// меняем каждой частице
 		sVECTOR3D TMP = tmp->Location - Location;
-		vw_Matrix33CalcPoint(&TMP, TmpOldInvRotationMat);
+		vw_Matrix33CalcPoint(TMP, TmpOldInvRotationMat);
 		// поворачиваем каждую точку
-		vw_Matrix33CalcPoint(&TMP, TmpRotationMat);
-		vw_Matrix33CalcPoint(&TMP, CurrentRotationMat);
+		vw_Matrix33CalcPoint(TMP, TmpRotationMat);
+		vw_Matrix33CalcPoint(TMP, CurrentRotationMat);
 		tmp->Location = TMP + Location;
 		tmp = tmp->Next;
 	}

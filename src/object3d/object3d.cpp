@@ -130,7 +130,7 @@ void cObject3D::InitByDrawObjectList()
 			tmp.x = DrawObjectList[i].VertexBuffer[j2 + 0];
 			tmp.y = DrawObjectList[i].VertexBuffer[j2 + 1];
 			tmp.z = DrawObjectList[i].VertexBuffer[j2 + 2];
-			vw_Matrix33CalcPoint(&tmp, Matrix);
+			vw_Matrix33CalcPoint(tmp, Matrix);
 			MinX = MaxX = tmp.x;
 			MinY = MaxY = tmp.y;
 			MinZ = MaxZ = tmp.z;
@@ -152,7 +152,7 @@ void cObject3D::InitByDrawObjectList()
 			v.x = DrawObjectList[i].VertexBuffer[j2];
 			v.y = DrawObjectList[i].VertexBuffer[j2+1];
 			v.z = DrawObjectList[i].VertexBuffer[j2+2];
-			vw_Matrix33CalcPoint(&v, Matrix);
+			vw_Matrix33CalcPoint(v, Matrix);
 			if (MinX > v.x) MinX = v.x;
 			if (MinY > v.y) MinY = v.y;
 			if (MinZ > v.z) MinZ = v.z;
@@ -278,9 +278,9 @@ void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 		memcpy(OldInvRotationMatTmp, CurrentRotationMat, 9*sizeof(CurrentRotationMat[0]));
 		vw_Matrix33InverseRotate(OldInvRotationMatTmp);
 
-		vw_Matrix33CalcPoint(&HitBBLocation[ObjectNum], OldInvRotationMatTmp);
+		vw_Matrix33CalcPoint(HitBBLocation[ObjectNum], OldInvRotationMatTmp);
 		HitBBLocation[ObjectNum] -= DrawObjectList[ObjectNum].Location - NewLocation;
-		vw_Matrix33CalcPoint(&HitBBLocation[ObjectNum], CurrentRotationMat);
+		vw_Matrix33CalcPoint(HitBBLocation[ObjectNum], CurrentRotationMat);
 
 		// нужно подкорректировать OBB и ABB
 
@@ -293,10 +293,10 @@ void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 
 		// проверяем данные
 		for (int i=0; i<DrawObjectQuantity; i++) {
-			vw_Matrix33CalcPoint(&HitBBLocation[i], OldInvRotationMatTmp);
+			vw_Matrix33CalcPoint(HitBBLocation[i], OldInvRotationMatTmp);
 
 			for (int j=0; j<8; j++) {
-				vw_Matrix33CalcPoint(&HitBB[i][j], OldInvRotationMatTmp);
+				vw_Matrix33CalcPoint(HitBB[i][j], OldInvRotationMatTmp);
 
 				if (MinX > HitBB[i][j].x + HitBBLocation[i].x) MinX = HitBB[i][j].x + HitBBLocation[i].x;
 				if (MaxX < HitBB[i][j].x + HitBBLocation[i].x) MaxX = HitBB[i][j].x + HitBBLocation[i].x;
@@ -305,9 +305,9 @@ void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 				if (MinZ > HitBB[i][j].z + HitBBLocation[i].z) MinZ = HitBB[i][j].z + HitBBLocation[i].z;
 				if (MaxZ < HitBB[i][j].z + HitBBLocation[i].z) MaxZ = HitBB[i][j].z + HitBBLocation[i].z;
 
-				vw_Matrix33CalcPoint(&HitBB[i][j], CurrentRotationMat);
+				vw_Matrix33CalcPoint(HitBB[i][j], CurrentRotationMat);
 			}
-			vw_Matrix33CalcPoint(&HitBBLocation[i], CurrentRotationMat);
+			vw_Matrix33CalcPoint(HitBBLocation[i], CurrentRotationMat);
 		}
 
 		// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
@@ -341,9 +341,9 @@ void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 		// переносим данные OBB чтобы центр стал центром
 		for (int k=0; k<8; k++) {
 			OBB[k] -= OBBLocation;
-			vw_Matrix33CalcPoint(&OBB[k], CurrentRotationMat);
+			vw_Matrix33CalcPoint(OBB[k], CurrentRotationMat);
 		}
-		vw_Matrix33CalcPoint(&OBBLocation, CurrentRotationMat);
+		vw_Matrix33CalcPoint(OBBLocation, CurrentRotationMat);
 
 		// по OBB находим AABB, это не совсем AABB (он будет больше), но зато быстро
 		MinX = MaxX = OBB[0].x + OBBLocation.x;
@@ -396,17 +396,17 @@ void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
 		vw_Matrix33InverseRotate(OldInvRotationMatTmp);
 
 		// собственно меняем данные в геометрии
-		vw_Matrix33CalcPoint(&HitBBLocation[ObjectNum], OldInvRotationMatTmp);
+		vw_Matrix33CalcPoint(HitBBLocation[ObjectNum], OldInvRotationMatTmp);
 		HitBBLocation[ObjectNum] -= DrawObjectList[ObjectNum].Location;
-		vw_Matrix33CalcPoint(&HitBBLocation[ObjectNum], OldInvRotationMatTmp2);
-		vw_Matrix33CalcPoint(&HitBBLocation[ObjectNum], CurrentRotationMatTmp2);
+		vw_Matrix33CalcPoint(HitBBLocation[ObjectNum], OldInvRotationMatTmp2);
+		vw_Matrix33CalcPoint(HitBBLocation[ObjectNum], CurrentRotationMatTmp2);
 		HitBBLocation[ObjectNum] += DrawObjectList[ObjectNum].Location;
-		vw_Matrix33CalcPoint(&HitBBLocation[ObjectNum], CurrentRotationMat);
+		vw_Matrix33CalcPoint(HitBBLocation[ObjectNum], CurrentRotationMat);
 		for (int j=0; j<8; j++) {
-			vw_Matrix33CalcPoint(&HitBB[ObjectNum][j], OldInvRotationMatTmp);
-			vw_Matrix33CalcPoint(&HitBB[ObjectNum][j], OldInvRotationMatTmp2);
-			vw_Matrix33CalcPoint(&HitBB[ObjectNum][j], CurrentRotationMatTmp2);
-			vw_Matrix33CalcPoint(&HitBB[ObjectNum][j], CurrentRotationMat);
+			vw_Matrix33CalcPoint(HitBB[ObjectNum][j], OldInvRotationMatTmp);
+			vw_Matrix33CalcPoint(HitBB[ObjectNum][j], OldInvRotationMatTmp2);
+			vw_Matrix33CalcPoint(HitBB[ObjectNum][j], CurrentRotationMatTmp2);
+			vw_Matrix33CalcPoint(HitBB[ObjectNum][j], CurrentRotationMat);
 		}
 
 
@@ -421,10 +421,10 @@ void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
 
 		// проверяем данные
 		for (int i=0; i<DrawObjectQuantity; i++) {
-			vw_Matrix33CalcPoint(&HitBBLocation[i], OldInvRotationMatTmp);
+			vw_Matrix33CalcPoint(HitBBLocation[i], OldInvRotationMatTmp);
 
 			for (int j=0; j<8; j++) {
-				vw_Matrix33CalcPoint(&HitBB[i][j], OldInvRotationMatTmp);
+				vw_Matrix33CalcPoint(HitBB[i][j], OldInvRotationMatTmp);
 
 				if (MinX > HitBB[i][j].x + HitBBLocation[i].x) MinX = HitBB[i][j].x + HitBBLocation[i].x;
 				if (MaxX < HitBB[i][j].x + HitBBLocation[i].x) MaxX = HitBB[i][j].x + HitBBLocation[i].x;
@@ -433,9 +433,9 @@ void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
 				if (MinZ > HitBB[i][j].z + HitBBLocation[i].z) MinZ = HitBB[i][j].z + HitBBLocation[i].z;
 				if (MaxZ < HitBB[i][j].z + HitBBLocation[i].z) MaxZ = HitBB[i][j].z + HitBBLocation[i].z;
 
-				vw_Matrix33CalcPoint(&HitBB[i][j], CurrentRotationMat);
+				vw_Matrix33CalcPoint(HitBB[i][j], CurrentRotationMat);
 			}
-			vw_Matrix33CalcPoint(&HitBBLocation[i], CurrentRotationMat);
+			vw_Matrix33CalcPoint(HitBBLocation[i], CurrentRotationMat);
 		}
 
 		// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
@@ -469,9 +469,9 @@ void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
 		// переносим данные OBB чтобы центр стал центром
 		for (int k=0; k<8; k++) {
 			OBB[k] -= OBBLocation;
-			vw_Matrix33CalcPoint(&OBB[k], CurrentRotationMat);
+			vw_Matrix33CalcPoint(OBB[k], CurrentRotationMat);
 		}
-		vw_Matrix33CalcPoint(&OBBLocation, CurrentRotationMat);
+		vw_Matrix33CalcPoint(OBBLocation, CurrentRotationMat);
 
 		// по OBB находим AABB, это не совсем AABB (он будет больше), но зато быстро
 		MinX = MaxX = OBB[0].x + OBBLocation.x;
@@ -538,28 +538,28 @@ void cObject3D::SetRotation(sVECTOR3D NewRotation)
 
 
 	// По углам находим новые значения вектора Orientation
-	vw_Matrix33CalcPoint(&Orientation, OldInvRotationMat);
-	vw_Matrix33CalcPoint(&Orientation, CurrentRotationMat);
+	vw_Matrix33CalcPoint(Orientation, OldInvRotationMat);
+	vw_Matrix33CalcPoint(Orientation, CurrentRotationMat);
 
 
 	// пересчет HitBB
 	if (HitBB != nullptr)
 		for (int i = 0; i < DrawObjectQuantity; i++) {
-			vw_Matrix33CalcPoint(&HitBBLocation[i], OldInvRotationMat);
-			vw_Matrix33CalcPoint(&HitBBLocation[i], CurrentRotationMat);
+			vw_Matrix33CalcPoint(HitBBLocation[i], OldInvRotationMat);
+			vw_Matrix33CalcPoint(HitBBLocation[i], CurrentRotationMat);
 
 			for (int j = 0; j < 8; j++) {
-				vw_Matrix33CalcPoint(&HitBB[i][j], OldInvRotationMat);
-				vw_Matrix33CalcPoint(&HitBB[i][j], CurrentRotationMat);
+				vw_Matrix33CalcPoint(HitBB[i][j], OldInvRotationMat);
+				vw_Matrix33CalcPoint(HitBB[i][j], CurrentRotationMat);
 			}
 		}
 
 	// Пересчитываем OBB, просто поворачиваем его как и модель
-	vw_Matrix33CalcPoint(&OBBLocation, OldInvRotationMat);
-	vw_Matrix33CalcPoint(&OBBLocation, CurrentRotationMat);
+	vw_Matrix33CalcPoint(OBBLocation, OldInvRotationMat);
+	vw_Matrix33CalcPoint(OBBLocation, CurrentRotationMat);
 	for (int j = 0; j < 8; j++) {
-		vw_Matrix33CalcPoint(&OBB[j], OldInvRotationMat);
-		vw_Matrix33CalcPoint(&OBB[j], CurrentRotationMat);
+		vw_Matrix33CalcPoint(OBB[j], OldInvRotationMat);
+		vw_Matrix33CalcPoint(OBB[j], CurrentRotationMat);
 	}
 
 

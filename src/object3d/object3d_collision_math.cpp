@@ -150,7 +150,7 @@ bool CheckHitBBHitBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, i
 
 					sVECTOR3D vPosB = (Object2->Location + Object2->HitBBLocation[j])
 							 - (Object1->Location + Object1->HitBBLocation[i]);
-					vw_Matrix33CalcPoint(&vPosB, TMPOldInvRotationMat);
+					vw_Matrix33CalcPoint(vPosB, TMPOldInvRotationMat);
 
 
 					sVECTOR3D XAxis(matB[0],matB[3],matB[6]);
@@ -279,7 +279,7 @@ bool CheckHitBBOBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, int
 
 
 			sVECTOR3D vPosB = (Object1->Location + Object1->HitBBLocation[i])-(Object2->Location + Object2->OBBLocation);
-			vw_Matrix33CalcPoint(&vPosB, TMPOldInvRotationMat);
+			vw_Matrix33CalcPoint(vPosB, TMPOldInvRotationMat);
 
 
 			sVECTOR3D XAxis(matB[0],matB[3],matB[6]);
@@ -430,12 +430,12 @@ bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, in
 			vw_Matrix33InverseRotate(TMPOldInvRotationMat);
 
 			// перемещаем в общие координаты, теперь это как-бы крайние точки аабб
-			vw_Matrix33CalcPoint(&TMPMax, TMPOldInvRotationMat);
-			vw_Matrix33CalcPoint(&TMPMin, TMPOldInvRotationMat);
+			vw_Matrix33CalcPoint(TMPMax, TMPOldInvRotationMat);
+			vw_Matrix33CalcPoint(TMPMin, TMPOldInvRotationMat);
 
 
 			sVECTOR3D Center = Object1->HitBBLocation[i] + Object1->Location;
-			vw_Matrix33CalcPoint(&Center, TMPOldInvRotationMat);
+			vw_Matrix33CalcPoint(Center, TMPOldInvRotationMat);
 
 
 			sVECTOR3D TMPMax2;
@@ -454,7 +454,7 @@ bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, in
 
 					// находим точку локального положения объекта в моделе
 					sVECTOR3D LocalLocation(Object2->DrawObjectList[j].Location);
-					vw_Matrix33CalcPoint(&LocalLocation, Object2->CurrentRotationMat);
+					vw_Matrix33CalcPoint(LocalLocation, Object2->CurrentRotationMat);
 
 					// делаем временную матрицу для объекта, т.к. портить основную нельзя
 					float ObjTransMat[16];
@@ -493,7 +493,7 @@ bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, in
 						Point1.x = Object2->DrawObjectList[j].VertexBuffer[j2];
 						Point1.y = Object2->DrawObjectList[j].VertexBuffer[j2+1];
 						Point1.z = Object2->DrawObjectList[j].VertexBuffer[j2+2];
-						vw_Matrix44CalcPoint(&Point1, ObjTransMat);
+						vw_Matrix44CalcPoint(Point1, ObjTransMat);
 
 						if (Object2->DrawObjectList[j].IndexBuffer != nullptr)
 							j2 = Object2->DrawObjectList[j].IndexBuffer[Object2->DrawObjectList[j].RangeStart+k+1]*Object2->DrawObjectList[j].VertexStride;
@@ -503,7 +503,7 @@ bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, in
 						Point2.x = Object2->DrawObjectList[j].VertexBuffer[j2];
 						Point2.y = Object2->DrawObjectList[j].VertexBuffer[j2+1];
 						Point2.z = Object2->DrawObjectList[j].VertexBuffer[j2+2];
-						vw_Matrix44CalcPoint(&Point2, ObjTransMat);
+						vw_Matrix44CalcPoint(Point2, ObjTransMat);
 
 						if (Object2->DrawObjectList[j].IndexBuffer != nullptr)
 							j2 = Object2->DrawObjectList[j].IndexBuffer[Object2->DrawObjectList[j].RangeStart+k+2]*Object2->DrawObjectList[j].VertexStride;
@@ -513,15 +513,15 @@ bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, in
 						Point3.x = Object2->DrawObjectList[j].VertexBuffer[j2];
 						Point3.y = Object2->DrawObjectList[j].VertexBuffer[j2+1];
 						Point3.z = Object2->DrawObjectList[j].VertexBuffer[j2+2];
-						vw_Matrix44CalcPoint(&Point3, ObjTransMat);
+						vw_Matrix44CalcPoint(Point3, ObjTransMat);
 
 
 
 						// преобразуем все точки в систему первого объекта
 
-						vw_Matrix33CalcPoint(&Point1, TMPOldInvRotationMat);
-						vw_Matrix33CalcPoint(&Point2, TMPOldInvRotationMat);
-						vw_Matrix33CalcPoint(&Point3, TMPOldInvRotationMat);
+						vw_Matrix33CalcPoint(Point1, TMPOldInvRotationMat);
+						vw_Matrix33CalcPoint(Point2, TMPOldInvRotationMat);
+						vw_Matrix33CalcPoint(Point3, TMPOldInvRotationMat);
 
 
 						// сразу ставим номер

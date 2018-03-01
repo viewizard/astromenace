@@ -457,9 +457,9 @@ void Audio_LoopProc()
 	vw_GetCameraRotation(&CurrentCameraRotation);
 
 	sVECTOR3D ListenerOriV1(0.0f, 0.0f, -1.0f);
-	vw_RotatePoint(&ListenerOriV1, CurrentCameraRotation);
+	vw_RotatePoint(ListenerOriV1, CurrentCameraRotation);
 	sVECTOR3D ListenerOriV2(0.0f, 1.0f, 0.0f);
-	vw_RotatePoint(&ListenerOriV2, CurrentCameraRotation);
+	vw_RotatePoint(ListenerOriV2, CurrentCameraRotation);
 
 	// Position of the Listener.
 	ALfloat ListenerPos[3] = { CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z };

@@ -449,9 +449,9 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 			// находим точку локального положения объекта в моделе
 			sVECTOR3D LocalLocation = Object->DrawObjectList[i].Location;
-			vw_Matrix33CalcPoint(&LocalLocation, Object->CurrentRotationMat);
+			vw_Matrix33CalcPoint(LocalLocation, Object->CurrentRotationMat);
 			LocalLocation = Object->HitBBLocation[i]-LocalLocation;
-			vw_Matrix33CalcPoint(&LocalLocation, InvRotationMat);
+			vw_Matrix33CalcPoint(LocalLocation, InvRotationMat);
 			// и меняем внутрее положение
 			ShipPart->DrawObjectList[0].Location = LocalLocation^(-1.0f);
 
@@ -599,8 +599,8 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 					TMP.x = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2];
 					TMP.y = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+1];
 					TMP.z = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+2];
-					vw_Matrix44CalcPoint(&TMP, TransMatTMP);
-					vw_Matrix33CalcPoint(&TMP, Object->CurrentRotationMat);
+					vw_Matrix44CalcPoint(TMP, TransMatTMP);
+					vw_Matrix33CalcPoint(TMP, Object->CurrentRotationMat);
 					// координаты
 					DrawObjectList[i].VertexBuffer[j1] = TMP.x;
 					DrawObjectList[i].VertexBuffer[j1+1] = TMP.y;
@@ -609,7 +609,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 					TMP.x = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+3];
 					TMP.y = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+4];
 					TMP.z = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+5];
-					vw_Matrix33CalcPoint(&TMP, TransMatTMPNorm);
+					vw_Matrix33CalcPoint(TMP, TransMatTMPNorm);
 					DrawObjectList[i].VertexBuffer[j1+3] = TMP.x;
 					DrawObjectList[i].VertexBuffer[j1+4] = TMP.y;
 					DrawObjectList[i].VertexBuffer[j1+5] = TMP.z;

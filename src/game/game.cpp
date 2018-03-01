@@ -161,52 +161,52 @@ float LastGameTime;
 //------------------------------------------------------------------------------------
 // данные фонта
 //------------------------------------------------------------------------------------
-void GetGameNumFontData(char Char, sRECT *SrcRect)
+static void GetGameNumFontData(char Char, sRECT &SrcRect)
 {
 	switch (Char) {
 	case '0':
-		SetRect(SrcRect,232,4,245,25);
+		SrcRect(232,4,245,25);
 		break;
 	case '1':
-		SetRect(SrcRect,71,4,84,25);
+		SrcRect(71,4,84,25);
 		break;
 	case '2':
-		SetRect(SrcRect,88,4,101,25);
+		SrcRect(88,4,101,25);
 		break;
 	case '3':
-		SetRect(SrcRect,106,4,119,25);
+		SrcRect(106,4,119,25);
 		break;
 	case '4':
-		SetRect(SrcRect,124,4,137,25);
+		SrcRect(124,4,137,25);
 		break;
 	case '5':
-		SetRect(SrcRect,142,4,155,25);
+		SrcRect(142,4,155,25);
 		break;
 	case '6':
-		SetRect(SrcRect,160,4,173,25);
+		SrcRect(160,4,173,25);
 		break;
 	case '7':
-		SetRect(SrcRect,178,4,191,25);
+		SrcRect(178,4,191,25);
 		break;
 	case '8':
-		SetRect(SrcRect,196,4,209,25);
+		SrcRect(196,4,209,25);
 		break;
 	case '9':
-		SetRect(SrcRect,214,4,227,25);
+		SrcRect(214,4,227,25);
 		break;
 
 	case 'E':
-		SetRect(SrcRect,47,4,66,25);
+		SrcRect(47,4,66,25);
 		break;
 	case 'S':
-		SetRect(SrcRect,4,4,21,25);
+		SrcRect(4,4,21,25);
 		break;
 	case '$':
-		SetRect(SrcRect,25,4,41,25);
+		SrcRect(25,4,41,25);
 		break;
 
 	case ' ':
-		SetRect(SrcRect,0,0,13,0);
+		SrcRect(0,0,13,0);
 		break;
 	}
 
@@ -219,7 +219,6 @@ void DrawGameExpMoney(int Exp, int Money)
 {
 
 	sRECT DstRect, SrcRect;
-	SetRect(&SrcRect, 0, 0, 0, 0);
 	int Ystart;
 	float Xstart;
 	sTexture *Tex = vw_FindTextureByName("game/game_num.tga");
@@ -262,9 +261,8 @@ void DrawGameExpMoney(int Exp, int Money)
 
 	Xstart = Setup.iAspectRatioWidth/2-57.0f;
 	Ystart = 5;
-	GetGameNumFontData('E', &SrcRect);
-	SetRect(&DstRect, (int)Xstart,	Ystart,
-		(int)Xstart+SrcRect.right-SrcRect.left, Ystart+SrcRect.bottom-SrcRect.top);
+	GetGameNumFontData('E', SrcRect);
+	DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right - SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
 
 	if (ASpresent) tmpPosY = (AH - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
 	else tmpPosY = (AHw - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
@@ -313,9 +311,8 @@ void DrawGameExpMoney(int Exp, int Money)
 
 	Xstart = Setup.iAspectRatioWidth/2-56.0f;
 	Ystart = 31;
-	GetGameNumFontData('$', &SrcRect);
-	SetRect(&DstRect, (int)Xstart,	Ystart,
-		(int)Xstart+SrcRect.right-SrcRect.left, Ystart+SrcRect.bottom-SrcRect.top);
+	GetGameNumFontData('$', SrcRect);
+	DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right - SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
 
 	if (ASpresent) tmpPosY = (AH - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
 	else tmpPosY = (AHw - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
@@ -375,14 +372,12 @@ void DrawGameExpMoney(int Exp, int Money)
 	for (unsigned int i=0; i<7; i++) {
 		if (7-i > strlen(buffer)) {
 			Transp = 0.2f;
-			GetGameNumFontData('0', &SrcRect);
+			GetGameNumFontData('0', SrcRect);
 		} else {
 			Transp = 1.0f;
-			GetGameNumFontData(buffer[i+strlen(buffer)-7], &SrcRect);
+			GetGameNumFontData(buffer[i+strlen(buffer)-7], SrcRect);
 		}
-		SetRect(&DstRect, (int)Xstart,	Ystart,
-			(int)Xstart+SrcRect.right-SrcRect.left, Ystart+SrcRect.bottom-SrcRect.top);
-
+		DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right - SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
 
 
 		if (ASpresent) tmpPosY = (AH - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
@@ -445,13 +440,12 @@ void DrawGameExpMoney(int Exp, int Money)
 	for (unsigned int i=0; i<7; i++) {
 		if (7-i > strlen(buffer)) {
 			Transp = 0.2f;
-			GetGameNumFontData('0', &SrcRect);
+			GetGameNumFontData('0', SrcRect);
 		} else {
 			Transp = 1.0f;
-			GetGameNumFontData(buffer[i+strlen(buffer)-7], &SrcRect);
+			GetGameNumFontData(buffer[i+strlen(buffer)-7], SrcRect);
 		}
-		SetRect(&DstRect, (int)Xstart,	Ystart,
-			(int)Xstart+SrcRect.right-SrcRect.left, Ystart+SrcRect.bottom-SrcRect.top);
+		DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right-SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
 
 
 
@@ -1088,23 +1082,23 @@ void DrawGame()
 	// Выводим верхнюю информационную панель
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (Setup.iAspectRatioWidth == 1024) {
-		SetRect(&SrcRect,0,0,1024,74);
-		SetRect(&DstRect,0,0,1024,74);
+		SrcRect(0, 0, 1024, 74);
+		DstRect(0, 0, 1024, 74);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/game_panel.tga"), true, 1.0f);
 	}
 	if (Setup.iAspectRatioWidth == 1228) {
-		SetRect(&SrcRect,0,0,466,73);
-		SetRect(&DstRect,0,0,466,73);
+		SrcRect(0, 0, 466, 73);
+		DstRect(0, 0, 466, 73);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/game_panel2.tga"), true, 1.0f);
 
 
-		SetRect(&SrcRect,1,74,150,145);
-		SetRect(&DstRect,540,0,540+149,71);
+		SrcRect(1, 74, 150, 145);
+		DstRect(540, 0, 540+149, 71);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/game_panel2.tga"), true, 1.0f);
 
 
-		SetRect(&SrcRect,150,74,610,145);
-		SetRect(&DstRect,768,0,768+460,71);
+		SrcRect(150, 74, 610, 145);
+		DstRect(768, 0, 768+460, 71);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/game_panel2.tga"), true, 1.0f);
 	}
 
@@ -1249,7 +1243,7 @@ void DrawGame()
 			// прорисовываем все элементы
 			for (int i=0; i<DrawEnergNum; i++) {
 				// получаем данные текущего фрагмента
-				SetRect(&SrcRect,67+i*20,0,85+i*20,64);
+				SrcRect(67+i*20, 0, 85+i*20, 64);
 				DstRect = SrcRect;
 				// находим прозначность
 				float Transp = (CurrentDrawEnergNumFull * 19) - i;
@@ -1307,13 +1301,12 @@ void DrawGame()
 			// прорисовываем все элементы
 			for (int i=0; i<DrawLifeNum; i++) {
 				// получаем данные текущего фрагмента
-				SetRect(&SrcRect,582+i*20,0,599+i*20,64);
+				SrcRect(582 + i * 20, 0, 599 + i * 20, 64);
 				if (Setup.iAspectRatioWidth == 1024) {
 					DstRect = SrcRect;
 				}
 				if (Setup.iAspectRatioWidth == 1228) {
-					//SetRect(&DstRect,Setup.iAspectRatioWidth-446+i*20,0,Setup.iAspectRatioWidth-425+i*20,64);
-					SetRect(&DstRect,204+582+i*20,0,204+599+i*20,64);
+					DstRect(204 + 582 + i * 20, 0, 204 + 599 + i * 20, 64);
 				}
 				// находим прозначность
 				float Transp = (CurrentDrawLifeNumFull * 19) - i;
@@ -1489,8 +1482,8 @@ void DrawGame()
 	if (GameContentTransp > 0.0f) {
 		if (GameMissionCompleteStatus) {
 			// выводим подложку меню
-			SetRect(&SrcRect,2,2,564-2,564-2);
-			SetRect(&DstRect,Setup.iAspectRatioWidth/2-256+4-30,128+2-30,Setup.iAspectRatioWidth/2-256+564-30,128+564-2-30);
+			SrcRect(2, 2, 564-2, 564-2);
+			DstRect(Setup.iAspectRatioWidth / 2 - 256 - 26, 128 - 28, Setup.iAspectRatioWidth / 2 - 256 + 534, 128 + 532);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
 					   true, 1.0f*GameContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 			// название меню
@@ -1570,8 +1563,8 @@ void DrawGame()
 			// основное меню игры
 			case eGameMenuStatus::GAME_MENU: {
 				// выводим подложку меню
-				SetRect(&SrcRect,2,2,564-2,564-2);
-				SetRect(&DstRect,Setup.iAspectRatioWidth/2-256+4-30,128+2-30,Setup.iAspectRatioWidth/2-256+564-30,128+564-2-30);
+				SrcRect(2,2,564-2,564-2);
+				DstRect(Setup.iAspectRatioWidth/2-256+4-30,128+2-30,Setup.iAspectRatioWidth/2-256+564-30,128+564-2-30);
 				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
 						   true, GameContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
 				// название меню
@@ -1654,8 +1647,8 @@ void DrawGame()
 
 
 			// вывод надписи пауза
-			SetRect(&SrcRect,0,0,256,64);
-			SetRect(&DstRect,Setup.iAspectRatioWidth-256+60,768-64+10,Setup.iAspectRatioWidth+60,768+10);
+			SrcRect(0, 0, 256, 64);
+			DstRect(Setup.iAspectRatioWidth - 256 + 60, 768 - 54, Setup.iAspectRatioWidth + 60, 768+10);
 			if (GameContentTransp == 1.0f)
 				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_pause.tga")), true, CurrentAlert2*GameContentTransp);
 			else
@@ -1738,8 +1731,8 @@ void DrawGame()
 			NeedOnGame = false;
 		}
 
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
+		SrcRect(0,0,2,2);
+		DstRect(0,0,Setup.iAspectRatioWidth,768);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, GameBlackTransp);
 	}
 
@@ -1755,8 +1748,8 @@ void DrawGame()
 			ComBuffer = NewComBuffer;
 		}
 
-		SetRect(&SrcRect,0,0,2,2);
-		SetRect(&DstRect,0,0,Setup.iAspectRatioWidth,768);
+		SrcRect(0,0,2,2);
+		DstRect(0,0,Setup.iAspectRatioWidth,768);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, GameBlackTransp);
 	}
 

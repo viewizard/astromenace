@@ -307,8 +307,8 @@ void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 	// оружие
 	if (Weapon != nullptr)
 		for (int i = 0; i < WeaponQuantity; i++) {
-			vw_Matrix33CalcPoint(&(WeaponLocation[i]), OldInvRotationMat);
-			vw_Matrix33CalcPoint(&(WeaponLocation[i]), CurrentRotationMat);
+			vw_Matrix33CalcPoint(WeaponLocation[i], OldInvRotationMat);
+			vw_Matrix33CalcPoint(WeaponLocation[i], CurrentRotationMat);
 
 			if (Weapon[i] != nullptr)
 				// если нужно поворачивать, или не нужно и в этом оружие наведение не используем (ракетная система)
@@ -319,8 +319,8 @@ void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 		}
 	if (BossWeapon != nullptr)
 		for (int i = 0; i < BossWeaponQuantity; i++) {
-			vw_Matrix33CalcPoint(&(BossWeaponLocation[i]), OldInvRotationMat);
-			vw_Matrix33CalcPoint(&(BossWeaponLocation[i]), CurrentRotationMat);
+			vw_Matrix33CalcPoint(BossWeaponLocation[i], OldInvRotationMat);
+			vw_Matrix33CalcPoint(BossWeaponLocation[i], CurrentRotationMat);
 
 			if (BossWeapon[i] != nullptr)
 				// если нужно поворачивать, или не нужно и в этом оружие наведение не используем (ракетная система)
@@ -330,8 +330,8 @@ void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 				}
 		}
 	if (WeaponFlare != nullptr) {
-		vw_Matrix33CalcPoint(&WeaponFlareLocation, OldInvRotationMat);
-		vw_Matrix33CalcPoint(&WeaponFlareLocation, CurrentRotationMat);
+		vw_Matrix33CalcPoint(WeaponFlareLocation, OldInvRotationMat);
+		vw_Matrix33CalcPoint(WeaponFlareLocation, CurrentRotationMat);
 		WeaponFlare->SetRotation(NewRotation);
 		WeaponFlare->SetLocation(Location + WeaponFlareLocation);
 	}
@@ -342,8 +342,8 @@ void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 	// двигатели
 	if (Engine != nullptr)
 		for (int i = 0; i < EngineQuantity; i++) {
-			vw_Matrix33CalcPoint(&(EngineLocation[i]), OldInvRotationMat);
-			vw_Matrix33CalcPoint(&(EngineLocation[i]), CurrentRotationMat);
+			vw_Matrix33CalcPoint(EngineLocation[i], OldInvRotationMat);
+			vw_Matrix33CalcPoint(EngineLocation[i], CurrentRotationMat);
 
 			if (Engine[i] != nullptr) {
 				if (Engine[i]->SpeedOnCreation == -1.0f) {
@@ -358,8 +358,8 @@ void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 		}
 	if (EngineLeft != nullptr)
 		for (int i = 0; i < EngineLeftQuantity; i++) {
-			vw_Matrix33CalcPoint(&(EngineLeftLocation[i]), OldInvRotationMat);
-			vw_Matrix33CalcPoint(&(EngineLeftLocation[i]), CurrentRotationMat);
+			vw_Matrix33CalcPoint(EngineLeftLocation[i], OldInvRotationMat);
+			vw_Matrix33CalcPoint(EngineLeftLocation[i], CurrentRotationMat);
 
 			if (EngineLeft[i] != nullptr) {
 				EngineLeft[i]->MoveSystemLocation(EngineLeftLocation[i] + Location);
@@ -369,8 +369,8 @@ void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 		}
 	if (EngineRight != nullptr)
 		for (int i = 0; i < EngineRightQuantity; i++) {
-			vw_Matrix33CalcPoint(&(EngineRightLocation[i]), OldInvRotationMat);
-			vw_Matrix33CalcPoint(&(EngineRightLocation[i]), CurrentRotationMat);
+			vw_Matrix33CalcPoint(EngineRightLocation[i], OldInvRotationMat);
+			vw_Matrix33CalcPoint(EngineRightLocation[i], CurrentRotationMat);
 
 			if (EngineRight[i] != nullptr) {
 				EngineRight[i]->MoveSystemLocation(EngineRightLocation[i] + Location);
@@ -1153,12 +1153,12 @@ bool cSpaceShip::Update(float Time)
 	Velocity = Orientation^(Speed*TimeDelta);
 	if (fabs(SpeedLR) > 0.01f) {
 		sVECTOR3D tmp(SpeedLR*TimeDelta,0.0f,0.0f);
-		vw_Matrix33CalcPoint(&tmp, CurrentRotationMat);
+		vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
 		Velocity += tmp;
 	}
 	if (fabs(SpeedUD) > 0.01f) {
 		sVECTOR3D tmp(0.0f,SpeedUD*TimeDelta,0.0f);
-		vw_Matrix33CalcPoint(&tmp, CurrentRotationMat);
+		vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
 		Velocity += tmp;
 	}
 
@@ -1169,12 +1169,12 @@ bool cSpaceShip::Update(float Time)
 	}
 	if (fabs(SpeedByCamLR) > 0.01f) {
 		sVECTOR3D tmp = GameCameraMovement^(SpeedByCamLR*TimeDelta);
-		vw_RotatePoint(&tmp, sVECTOR3D(0.0,-90.0f,0.0f));
+		vw_RotatePoint(tmp, sVECTOR3D(0.0,-90.0f,0.0f));
 		Velocity += tmp;
 	}
 	if (fabs(SpeedByCamUD) > 0.01f) {
 		sVECTOR3D tmp = GameCameraMovement^(SpeedByCamUD*TimeDelta);
-		vw_RotatePoint(&tmp, sVECTOR3D(90.0f,0.0f,0.0f));
+		vw_RotatePoint(tmp, sVECTOR3D(90.0f,0.0f,0.0f));
 		Velocity += tmp;
 	}
 
