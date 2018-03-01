@@ -209,6 +209,34 @@ const char *vw_UTF8toUTF32(const char *utf8, unsigned *utf32)
 }
 
 /*
+ * Convert utf8 into utf32 code.
+ */
+namespace {
+// utf8 -> utf32 converter
+std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> ConvUTF8toUTF32;
+} // unnamed namespace
+std::u32string vw_UTF8toUTF32(const std::string &utf8)
+{
+	return ConvUTF8toUTF32.from_bytes(utf8);
+}
+
+/*
+ * Convert utf8 into utf32 code with variadic arguments
+ */
+std::u32string vw_UTF8VAtoUTF32(const std::string &utf8, ...)
+{
+	va_list ap;
+	va_start(ap, utf8);
+	std::vector<char> buffer(1 + std::vsnprintf(nullptr, 0, utf8.data(), ap));
+	va_end(ap);
+	// get data into buffer
+	va_start(ap, utf8);
+	std::vsnprintf(buffer.data(), buffer.size(), utf8.data(), ap);
+	va_end(ap);
+	return ConvUTF8toUTF32.from_bytes(buffer.data());
+}
+
+/*
  * Fast root (without sqrtf)
  */
 #ifdef WIN32

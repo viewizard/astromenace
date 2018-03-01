@@ -79,6 +79,8 @@
 #include <array>
 #include <string>
 #include <algorithm>
+#include <locale>
+#include <codecvt>
 
 
 // error codes
