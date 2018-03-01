@@ -114,20 +114,43 @@ void vw_CalculateFrustum()
 	clip[14] = modl[12] * proj[ 2] + modl[13] * proj[ 6] + modl[14] * proj[10] + modl[15] * proj[14];
 	clip[15] = modl[12] * proj[ 3] + modl[13] * proj[ 7] + modl[14] * proj[11] + modl[15] * proj[15];
 
-	auto CalculateFrustumSide = [clip] (eSide Side) {
-		Frustum[Side][A] = clip[ 3] - clip[ 0];
-		Frustum[Side][B] = clip[ 7] - clip[ 4];
-		Frustum[Side][C] = clip[11] - clip[ 8];
-		Frustum[Side][D] = clip[15] - clip[12];
-		NormalizePlane(Side);
-	};
+	// Now we actually want to get the sides of the frustum.  To do this we take
+	// the clipping planes we received above and extract the sides from them.
+	Frustum[RIGHT][A] = clip[ 3] - clip[ 0];
+	Frustum[RIGHT][B] = clip[ 7] - clip[ 4];
+	Frustum[RIGHT][C] = clip[11] - clip[ 8];
+	Frustum[RIGHT][D] = clip[15] - clip[12];
+	NormalizePlane(RIGHT);
 
-	CalculateFrustumSide(RIGHT);
-	CalculateFrustumSide(LEFT);
-	CalculateFrustumSide(BOTTOM);
-	CalculateFrustumSide(TOP);
-	CalculateFrustumSide(BACK);
-	CalculateFrustumSide(FRONT);
+	Frustum[LEFT][A] = clip[ 3] + clip[ 0];
+	Frustum[LEFT][B] = clip[ 7] + clip[ 4];
+	Frustum[LEFT][C] = clip[11] + clip[ 8];
+	Frustum[LEFT][D] = clip[15] + clip[12];
+	NormalizePlane(LEFT);
+
+	Frustum[BOTTOM][A] = clip[ 3] + clip[ 1];
+	Frustum[BOTTOM][B] = clip[ 7] + clip[ 5];
+	Frustum[BOTTOM][C] = clip[11] + clip[ 9];
+	Frustum[BOTTOM][D] = clip[15] + clip[13];
+	NormalizePlane(BOTTOM);
+
+	Frustum[TOP][A] = clip[ 3] - clip[ 1];
+	Frustum[TOP][B] = clip[ 7] - clip[ 5];
+	Frustum[TOP][C] = clip[11] - clip[ 9];
+	Frustum[TOP][D] = clip[15] - clip[13];
+	NormalizePlane(TOP);
+
+	Frustum[BACK][A] = clip[ 3] - clip[ 2];
+	Frustum[BACK][B] = clip[ 7] - clip[ 6];
+	Frustum[BACK][C] = clip[11] - clip[10];
+	Frustum[BACK][D] = clip[15] - clip[14];
+	NormalizePlane(BACK);
+
+	Frustum[FRONT][A] = clip[ 3] + clip[ 2];
+	Frustum[FRONT][B] = clip[ 7] + clip[ 6];
+	Frustum[FRONT][C] = clip[11] + clip[10];
+	Frustum[FRONT][D] = clip[15] + clip[14];
+	NormalizePlane(FRONT);
 }
 
 /*
