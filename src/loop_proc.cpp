@@ -326,7 +326,8 @@ void Loop_Proc()
 		eFPS = eCurrentFrames * (FPSTime - LastSecond);
 		eCurrentFrames = 0;
 		LastSecond = FPSTime;
-	}
+	} else if (FPSTime - LastSecond < 0) // game was restarted, vw_GetTime() re-initialized
+		LastSecond = FPSTime;
 	++eCurrentFrames;
 
 
