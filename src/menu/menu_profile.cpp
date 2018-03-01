@@ -227,23 +227,16 @@ void ProfileInputText()
 	if ((NewProfileNamePos < 124) &&
 	    (vw_FontSize(NewProfileName) < 540) &&
 	    (vw_GetCurrentUnicodeChar() != nullptr)) { // если тут не ноль, а юникод - значит нажали
-
-		if (vw_GetCurrentUnicodeChar()[0] == 0x25) { // для символа % используем перевод в 2 байта (чтобы не добавлять второй %), иначе некорректно будет прорисовываться из-за va_list в vw_DrawFont
-			NewProfileName[NewProfileNamePos] = (char)(0xC0 | (vw_GetCurrentUnicodeChar()[0] >> 6));
-			NewProfileNamePos++;
-			NewProfileName[NewProfileNamePos] = (char)(0x80 | (vw_GetCurrentUnicodeChar()[0] & 0x3F));
-			NewProfileNamePos++;
-			NewProfileName[NewProfileNamePos+1] = '\0';
-		} else {
+		// TODO fix this, when all text will be moved to UTF32 with separate (without variadic support) text draw function
+		if (vw_GetCurrentUnicodeChar()[0] != 0x25) { // символ % печатать не даем, т.к. работаем с variadic аргументами через общую функцию печати
 			strcat(NewProfileName, vw_GetCurrentUnicodeChar());
 			NewProfileNamePos += strlen(vw_GetCurrentUnicodeChar());
+
+			if (vw_FindSoundByNum(SoundTaping) != nullptr)
+				vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
+			SoundTaping = Audio_PlaySound2D(4,1.0f);
 		}
 		vw_SetCurrentUnicodeChar(nullptr); // сразу сбрасываем данные
-
-		if (vw_FindSoundByNum(SoundTaping) != nullptr)
-			vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
-
-		SoundTaping = Audio_PlaySound2D(4,1.0f);
 	}
 
 

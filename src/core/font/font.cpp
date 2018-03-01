@@ -24,7 +24,10 @@
 
 *************************************************************************************/
 
-// TODO move to std::string, all utf8<->utf32 stuff must be revised first
+// TODO move to std::string, probably, we need move directly to std::u32string (utf32)
+// for all text rendering and text input (profile names)
+
+// TODO remove va_start, use variadic templates instead (?)
 
 // TODO provide static vw_DrawFont(), dynamic realization we have now,
 // static should create array with text blocks as key and VBO/VAO/IBO (and other data)
@@ -36,6 +39,7 @@
 #include <stdarg.h> // va_start
 
 namespace {
+
 // FreeType related stuff.
 FT_Library InternalLibrary;
 FT_Face InternalFace;
@@ -45,7 +49,7 @@ int InternalFontSize{0};
 int GlobalFontOffsetY{0};
 
 struct sFontChar {
-	unsigned UTF32; // key element 1 (UTF32 code)
+	char32_t UTF32; // key element 1 (UTF32 code)
 	int FontSize; // key element 2 (character generated size)
 
 	sTexture *Texture; // font character texture
@@ -62,7 +66,7 @@ struct sFontChar {
 	float AdvanceX;
 
 	// constructor
-	sFontChar(unsigned _UTF32, int _FontSize, sTexture *_Texture,
+	sFontChar(char32_t _UTF32, int _FontSize, sTexture *_Texture,
 		  int _TexturePositionLeft, int _TexturePositionRight,
 		  int _TexturePositionTop, int _TexturePositionBottom,
 		  int _Width, int _Height, int _Left, int _Top, float _AdvanceX) :
@@ -80,7 +84,7 @@ struct sFontChar {
 		AdvanceX{_AdvanceX}
 	{};
 	// trick for forward_list<unique_ptr<T>> work with iterator
-	bool CheckUTF32andSize(unsigned _UTF32)
+	bool CheckUTF32andSize(char32_t _UTF32)
 	{
 		return ((UTF32 == _UTF32) &&
 			(FontSize == InternalFontSize));
@@ -98,6 +102,11 @@ std::forward_list<std::unique_ptr<sFontChar>> FontChars_List;
 // required size only one time per game execution.
 // Never use reset(), only clear() for this buffer.
 std::vector<float> DrawBuffer{};
+// utf8 -> utf32 converter
+std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> ConvUTF8toUTF32;
+// space character utf32 code
+const char32_t SpaceUTF32{32};
+
 } // unnamed namespace
 
 
@@ -160,11 +169,11 @@ void vw_SetFontOffsetY(int NewOffsetY)
 /*
  * Find font by UTF32 code.
  */
-static sFontChar* FindFontCharByUTF32(unsigned UTF32)
+static sFontChar *FindFontCharByUTF32(char32_t UTF32)
 {
 	// a bit tricky, since we can't work with iterator for
 	// forward_list<unique_ptr<T>> in usual way
-	for (auto&& Tmp : FontChars_List) {
+	for (auto &&Tmp : FontChars_List) {
 		if (Tmp->CheckUTF32andSize(UTF32))
 			return Tmp.get();
 	}
@@ -175,7 +184,7 @@ static sFontChar* FindFontCharByUTF32(unsigned UTF32)
 /*
  * Check font character by UTF32 code.
  */
-bool vw_CheckFontCharByUTF32(unsigned UTF32)
+bool vw_CheckFontCharByUTF32(char32_t UTF32)
 {
 	return (FindFontCharByUTF32(UTF32) != nullptr);
 }
@@ -197,7 +206,7 @@ void vw_ReleaseAllFontChars()
 			sTexture *Texture = FontChars_List.front()->Texture;
 			// a bit tricky, since we can't work with iterator for
 			// forward_list<unique_ptr<T>> in usual way
-			for (auto&& Tmp : FontChars_List) {
+			for (auto &&Tmp : FontChars_List) {
 				Tmp->CheckTexture(Texture);
 			}
 			vw_ReleaseTexture(Texture);
@@ -220,7 +229,7 @@ void vw_ShutdownFont()
 /*
  * Load data and generate font character.
  */
-static sFontChar* LoadFontChar(unsigned UTF32)
+static sFontChar *LoadFontChar(char32_t UTF32)
 {
 	// setup parameters
 	if (FT_Set_Char_Size(InternalFace, InternalFontSize << 6, InternalFontSize << 6, 96, 96)) {
@@ -272,20 +281,18 @@ static sFontChar* LoadFontChar(unsigned UTF32)
 /*
  * Generate font characters by list.
  */
-int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const char *CharsList)
+int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std::string &CharsList)
 {
-	if (CharsList ==nullptr)
+	if (CharsList.empty())
 		return ERR_PARAMETERS;
 
 	printf("Font characters generation start.\n");
 
-	// fake texture file name based on CharsList
-	const char *TextureName{CharsList};
 	// buffer for RGBA, data for font characters texture
-	std::unique_ptr<uint8_t[]> DIB{new uint8_t[FontTextureWidth*FontTextureHeight * 4]};
+	std::unique_ptr<uint8_t[]> DIB{new uint8_t[FontTextureWidth * FontTextureHeight * 4]};
 	// make sure, DIB filled by black and alpha set to zero,
 	// or we will have white borders on each character
-	memset(DIB.get(), 0, FontTextureWidth*FontTextureHeight * 4);
+	memset(DIB.get(), 0, FontTextureWidth * FontTextureHeight * 4);
 
 	// initial setup
 	if (FT_Set_Char_Size(InternalFace, InternalFontSize << 6, InternalFontSize << 6, 96, 96)) {
@@ -293,17 +300,15 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const char
 		return ERR_EXT_RES;
 	}
 
+	// convert from utf8 into utf32
+	const std::u32string UTF32String{ConvUTF8toUTF32.from_bytes(CharsList)};
+
 	// create one large bitmap with all font characters from list
 	int CurrentDIBX{0};
 	int CurrentDIBY{0};
 	int EdgingSpace{2};
 	int MaxHeightInCurrentLine{0};
-	const char *CharsList2{CharsList};
-	while (strlen(CharsList) > 0) {
-		unsigned CurrentChar;
-		// convert into UTF32 code
-		CharsList = vw_UTF8toUTF32(CharsList, &CurrentChar);
-
+	for (const auto &CurrentChar : UTF32String) {
 		// load glyph
 		if (FT_Load_Char(InternalFace, CurrentChar, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT)) {
 			fprintf(stderr, "Can't load Char: %u\n", CurrentChar);
@@ -353,16 +358,14 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const char
 
 	// create texture from bitmap
 	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
-	sTexture *FontTexture = vw_CreateTextureFromMemory(TextureName, DIB.get(), FontTextureWidth, FontTextureHeight, 4, 0);
+	sTexture *FontTexture = vw_CreateTextureFromMemory(CharsList.c_str() /*texture name*/, DIB.get(), FontTextureWidth, FontTextureHeight, 4, 0);
 	if (FontTexture == nullptr) {
 		fprintf(stderr, "Can't create font texture.\n");
 		return ERR_MEM;
 	}
 
 	// setup texture to all font characters from list
-	while (strlen(CharsList2) > 0) {
-		unsigned CurrentChar;
-		CharsList2 = vw_UTF8toUTF32(CharsList2, &CurrentChar);
+	for (const auto &CurrentChar : UTF32String) {
 		sFontChar *TMPChar = FindFontCharByUTF32(CurrentChar);
 		if (TMPChar != nullptr)
 			TMPChar->Texture = FontTexture;
@@ -386,25 +389,24 @@ static inline void AddToDrawBuffer(float FirstX, float FirstY, float SecondX, fl
 /*
  * Calculate width factors.
  */
-static void CalculateWidthFactors(const char *Text, const float StrictWidth, float *SpaceWidthFactor, float *FontWidthFactor)
+static void CalculateWidthFactors(const std::u32string &Text, const float StrictWidth,
+				  float &SpaceWidthFactor, float &FontWidthFactor)
 {
 	float LineWidth1{0}; // for StrictWidth > 0
 	float LineWidth2{0}; // for StrictWidth < 0
 	int SpaceCount{0};
 
-	while (strlen(Text) > 0) {
-		unsigned UTF32;
-		Text = vw_UTF8toUTF32(Text, &UTF32);
+	for (const auto &UTF32 : Text) {
 		sFontChar *DrawChar = FindFontCharByUTF32(UTF32);
 		if (DrawChar == nullptr)
 			DrawChar = LoadFontChar(UTF32);
 
 		// calculate space characters count in text
-		if (UTF32 == 0x020) {
+		if (UTF32 == SpaceUTF32) {
 			if (StrictWidth > 0)
 				SpaceCount++;
 			else
-				LineWidth2 += *SpaceWidthFactor;
+				LineWidth2 += SpaceWidthFactor;
 		} else {
 			if (StrictWidth > 0)
 				LineWidth1 += DrawChar->AdvanceX;
@@ -417,11 +419,79 @@ static void CalculateWidthFactors(const char *Text, const float StrictWidth, flo
 	if (StrictWidth > 0) {
 		if ((StrictWidth > LineWidth1) &&
 		    (SpaceCount != 0))
-			*SpaceWidthFactor = (StrictWidth - LineWidth1)/SpaceCount;
+			SpaceWidthFactor = (StrictWidth - LineWidth1) / SpaceCount;
 	} else {
 		if (StrictWidth * (-1.0f) < LineWidth2)
-			*FontWidthFactor = StrictWidth/LineWidth2 * (-1.0f);
+			FontWidthFactor = StrictWidth / LineWidth2 * (-1.0f);
 	}
+}
+
+/*
+ * Calculate default space width.
+ */
+static void CalculateDefaultSpaceWidth(float &SpaceWidthFactor, float FontScale)
+{
+	if (FindFontCharByUTF32(SpaceUTF32) == nullptr)
+		LoadFontChar(SpaceUTF32);
+	SpaceWidthFactor = FindFontCharByUTF32(SpaceUTF32)->AdvanceX * FontScale;
+	// width factor for for space charecter, make sure, we have space width at least 65% of current font size
+	if (SpaceWidthFactor < (InternalFontSize * 0.65f))
+		SpaceWidthFactor = InternalFontSize * 0.65f;
+}
+
+/*
+ * Draw buffer on texture change.
+ * Caller should care about pointers. nullptr not allowed.
+ */
+static void DrawBufferOnTextureChange(sTexture **CurrentTexture, const sFontChar *DrawChar)
+{
+	// draw all we have in buffer with current texture
+	if (!DrawBuffer.empty()) {
+		vw_SetTexture(0, *CurrentTexture);
+		vw_SendVertices(RI_TRIANGLES, DrawBuffer.size() / sizeof(DrawBuffer.data()[0]),
+				RI_2f_XY | RI_1_TEX, DrawBuffer.data(), 4 * sizeof(DrawBuffer.data()[0]));
+		DrawBuffer.clear();
+	}
+	// setup new texture
+	*CurrentTexture = DrawChar->Texture;
+}
+
+/*
+ * Draw buffer on text end.
+ */
+static void DrawBufferOnTextEnd(sTexture *CurrentTexture)
+{
+	if (DrawBuffer.empty())
+		return;
+
+	vw_SetTexture(0, CurrentTexture);
+	vw_SendVertices(RI_TRIANGLES, DrawBuffer.size() / sizeof(DrawBuffer.data()[0]),
+			RI_2f_XY | RI_1_TEX, DrawBuffer.data(), 4 * sizeof(DrawBuffer.data()[0]));
+	DrawBuffer.clear();
+}
+
+/*
+ * vw_DrawFontUTF32 wrapper with variadic arguments and conversion into utf32.
+ */
+int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
+		 float R, float G, float B, float Transp, const char *Text, ...)
+{
+	if (Text == nullptr)
+		return ERR_PARAMETERS;
+	// get string with variadic arguments
+	// allocate buffer
+	va_list ap;
+	va_start(ap, Text);
+	std::vector<char> buffer(1 + std::vsnprintf(nullptr, 0, Text, ap));
+	va_end(ap);
+	// get data into buffer
+	va_start(ap, Text);
+	std::vsnprintf(buffer.data(), buffer.size(), Text, ap);
+	va_end(ap);
+	// convert from utf8 into utf32
+	const std::u32string UTF32String{ConvUTF8toUTF32.from_bytes(buffer.data())};
+
+	return vw_DrawFontUTF32(X, Y, StrictWidth, ExpandWidth, FontScale, R, G, B, Transp, UTF32String);
 }
 
 /*
@@ -432,10 +502,10 @@ static void CalculateWidthFactors(const char *Text, const float StrictWidth, flo
  *      if StrictWidth < 0, reduce all font character's width
  * ExpandWidth - expand width to provided parameter
  */
-int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
-		 float R, float G, float B, float Transp, const char *Text, ...)
+int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
+		     float R, float G, float B, float Transp, const std::u32string &Text)
 {
-	if (Text == nullptr)
+	if (Text.empty())
 		return ERR_PARAMETERS;
 	if (Transp >= 1.0f)
 		Transp = 1.0f;
@@ -459,30 +529,17 @@ int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontSc
 	if (Y + InternalFontSize * FontScale < 0)
 		return 0; // it's ok, we work in proper way here
 
-	// get string with variable arguments
-	char text[1024];
-	va_list ap;
-	va_start(ap, Text);
-	vsprintf(text, Text, ap);
-	va_end(ap);
-	if (strlen(text) == 0)
-		return ERR_PARAMETERS; // error, the idea was render text, but we don't have text
-
 	// start position on X axis for character
 	float Xstart{X * 1.0f};
-	// calculate default space width, 0x020 - utf8 code for space character
-	if (FindFontCharByUTF32(0x020) == nullptr)
-		LoadFontChar(0x020);
-	float SpaceWidthFactor = FindFontCharByUTF32(0x020)->AdvanceX*FontScale;
-	// width factor for for space charecter, make sure, we have space width at least 65% of current font size
-	if (SpaceWidthFactor < (InternalFontSize * 0.65f))
-		SpaceWidthFactor = InternalFontSize * 0.65f;
+	// calculate default space width
+	float SpaceWidthFactor{0};
+	CalculateDefaultSpaceWidth(SpaceWidthFactor, FontScale);
 	// width factor for characters
 	float FontWidthFactor{1.0f};
 
 	// calculate width factors
 	if (StrictWidth != 0)
-		CalculateWidthFactors(text, StrictWidth, &SpaceWidthFactor, &FontWidthFactor);
+		CalculateWidthFactors(Text, StrictWidth, SpaceWidthFactor, FontWidthFactor);
 
 	// calculate text width, all characters that we already rendered
 	float LineWidth{0};
@@ -494,12 +551,8 @@ int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontSc
 	// combine calculated width factor and global width scale
 	FontWidthFactor = FontScale*FontWidthFactor;
 
-	// store pointer on first character in text
-	const char *textdraw{text};
 	// draw all characters in text by blocks grouped by texture id
-	while (strlen(textdraw) > 0) {
-		unsigned UTF32;
-		textdraw = vw_UTF8toUTF32(textdraw, &UTF32);
+	for (const auto &UTF32 : Text) {
 		// find current character
 		sFontChar *DrawChar = FindFontCharByUTF32(UTF32);
 		if (DrawChar == nullptr)
@@ -509,20 +562,11 @@ int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontSc
 			CurrentTexture = DrawChar->Texture;
 
 		// looks like texture should be changed
-		if (CurrentTexture != DrawChar->Texture) {
-			// draw all we have in buffer with current texture
-			if (!DrawBuffer.empty()) {
-				vw_SetTexture(0, CurrentTexture);
-				vw_SendVertices(RI_TRIANGLES, DrawBuffer.size() / sizeof(DrawBuffer.data()[0]),
-						RI_2f_XY | RI_1_TEX, DrawBuffer.data(), 4 * sizeof(DrawBuffer.data()[0]));
-				DrawBuffer.clear();
-			}
-			// setup new texture
-			CurrentTexture = DrawChar->Texture;
-		}
+		if (CurrentTexture != DrawChar->Texture)
+			DrawBufferOnTextureChange(&CurrentTexture, DrawChar);
 
 		// put into draw buffer all characters data, except spaces
-		if (UTF32 != 0x020) {
+		if (UTF32 != SpaceUTF32) {
 			float DrawX{Xstart + DrawChar->Left * FontWidthFactor};
 			float DrawY{Y + GlobalFontOffsetY + (InternalFontSize - DrawChar->Top) * FontScale};
 
@@ -566,12 +610,7 @@ int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontSc
 	}
 
 	// text is over, draw all we have in buffer
-	if (!DrawBuffer.empty()) {
-		vw_SetTexture(0, CurrentTexture);
-		vw_SendVertices(RI_TRIANGLES, DrawBuffer.size() / sizeof(DrawBuffer.data()[0]),
-				RI_2f_XY | RI_1_TEX, DrawBuffer.data(), 4 * sizeof(DrawBuffer.data()[0]));
-		DrawBuffer.clear();
-	}
+	DrawBufferOnTextEnd(CurrentTexture);
 
 	// reset rendering states
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -581,42 +620,50 @@ int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontSc
 }
 
 /*
- * Get string size with current font size.
+ * vw_FontSizeUTF32 wrapper with variadic arguments and conversion into utf32.
  */
 int vw_FontSize(const char *Text, ...)
 {
 	if (Text == nullptr)
 		return ERR_PARAMETERS;
 
-	// get string with variable arguments
-	char text[1024];
+	// get string with variadic arguments
+	// allocate buffer
 	va_list ap;
 	va_start(ap, Text);
-	vsprintf(text, Text, ap);
+	std::vector<char> buffer(1 + std::vsnprintf(nullptr, 0, Text, ap));
 	va_end(ap);
-	if (strlen(text) == 0)
+	// get data into buffer
+	va_start(ap, Text);
+	std::vsnprintf(buffer.data(), buffer.size(), Text, ap);
+	va_end(ap);
+	// convert from utf8 into utf32
+	const std::u32string UTF32String{ConvUTF8toUTF32.from_bytes(buffer.data())};
+
+	return vw_FontSizeUTF32(UTF32String);
+}
+
+/*
+ * Get string size with current font size.
+ */
+int vw_FontSizeUTF32(const std::u32string &Text)
+{
+	if (Text.empty())
 		return ERR_PARAMETERS;
 
-	const char *textdraw{text};
 	// calculate default space width
-	if (FindFontCharByUTF32(0x020) == nullptr)
-		LoadFontChar(0x020);
-	float SpaceWidth = FindFontCharByUTF32(0x020)->AdvanceX;
-	// make sure, we have space width at least 65% of current font size
-	if (SpaceWidth < (InternalFontSize * 0.65f))
-		SpaceWidth = InternalFontSize * 0.65f;
+	float SpaceWidth{0};
+	CalculateDefaultSpaceWidth(SpaceWidth, 1.0f /* don't scale */);
 
 	float LineWidth{0.0f};
-	while (strlen(textdraw) > 0) {
-		unsigned UTF32;
-		textdraw = vw_UTF8toUTF32(textdraw, &UTF32);
+	for (const auto &UTF32 : Text) {
 		// find current character
 		sFontChar *DrawChar = FindFontCharByUTF32(UTF32);
 		if (DrawChar == nullptr)
 			DrawChar = LoadFontChar(UTF32);
 
 		// calculate space characters count in text
-		if (UTF32 == 0x020)
+		if (UTF32 == SpaceUTF32)
 			LineWidth += SpaceWidth;
 		else
 			LineWidth += DrawChar->AdvanceX;
@@ -626,29 +673,42 @@ int vw_FontSize(const char *Text, ...)
 }
 
 /*
- * Draw 3D text with current font.
+ * vw_DrawFont3DUTF32 wrapper with variadic arguments and conversion into utf32.
  */
 int vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 {
 	if (Text == nullptr)
 		return ERR_PARAMETERS;
 
-	// get string with variable arguments
-	char text[1024];
+	// get string with variadic arguments
+	// allocate buffer
 	va_list ap;
 	va_start(ap, Text);
-	vsprintf(text, Text, ap);
+	std::vector<char> buffer(1 + std::vsnprintf(nullptr, 0, Text, ap));
 	va_end(ap);
-	if (strlen(text) == 0)
+	// get data into buffer
+	va_start(ap, Text);
+	std::vsnprintf(buffer.data(), buffer.size(), Text, ap);
+	va_end(ap);
+	// convert from utf8 into utf32
+	const std::u32string UTF32String{ConvUTF8toUTF32.from_bytes(buffer.data())};
+
+	return vw_DrawFont3DUTF32(X, Y, Z, UTF32String);
+}
+
+/*
+ * Draw 3D text with current font.
+ */
+int vw_DrawFont3DUTF32(float X, float Y, float Z, const std::u32string &Text)
+{
+	if (Text.empty())
 		return ERR_PARAMETERS;
 
 	// start position on X axis for character
 	float Xstart{0.0f};
-	// calculate default space width, 0x020 - utf8 code for space character
-	float SpaceWidth = FindFontCharByUTF32(0x020)->AdvanceX;
-	// make sure, we have space width at least 65% of current font size
-	if (SpaceWidth < (InternalFontSize * 0.65f))
-		SpaceWidth = InternalFontSize * 0.65f;
+	// calculate default space width
+	float SpaceWidth{0};
+	CalculateDefaultSpaceWidth(SpaceWidth, 1.0f /* don't scale */);
 
 	sTexture *CurrentTexture{nullptr};
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
@@ -663,12 +723,8 @@ int vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 	vw_Rotate(CurrentCameraRotation.y, 0.0f, 1.0f, 0.0f);
 	vw_Rotate(CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
 
-	// store pointer on first character in text
-	const char *textdraw{text};
 	// draw all characters in text by blocks grouped by texture id
-	while (strlen(textdraw) > 0) {
-		unsigned UTF32;
-		textdraw = vw_UTF8toUTF32(textdraw, &UTF32);
+	for (const auto &UTF32 : Text) {
 		// find current character
 		sFontChar *DrawChar = FindFontCharByUTF32(UTF32);
 		if (DrawChar == nullptr)
@@ -678,20 +734,11 @@ int vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 			CurrentTexture = DrawChar->Texture;
 
 		// looks like texture should be changed
-		if (CurrentTexture != DrawChar->Texture) {
-			// draw all we have in buffer with current texture
-			if (!DrawBuffer.empty()) {
-				vw_SetTexture(0, CurrentTexture);
-				vw_SendVertices(RI_TRIANGLES, DrawBuffer.size() / sizeof(DrawBuffer.data()[0]),
-						RI_2f_XY | RI_1_TEX, DrawBuffer.data(), 4 * sizeof(DrawBuffer.data()[0]));
-				DrawBuffer.clear();
-			}
-			// setup new texture
-			CurrentTexture = DrawChar->Texture;
-		}
+		if (CurrentTexture != DrawChar->Texture)
+			DrawBufferOnTextureChange(&CurrentTexture, DrawChar);
 
 		// put into draw buffer all characters data, except spaces
-		if (UTF32 != 0x020) {
+		if (UTF32 != SpaceUTF32) {
 			float DrawX{Xstart + DrawChar->Left};
 			float DrawY{(InternalFontSize - DrawChar->Top) * 1.0f};
 
@@ -719,12 +766,7 @@ int vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 	}
 
 	// text is over, draw all we have in buffer
-	if (!DrawBuffer.empty()) {
-		vw_SetTexture(0, CurrentTexture);
-		vw_SendVertices(RI_TRIANGLES, DrawBuffer.size() / sizeof(DrawBuffer.data()[0]),
-				RI_2f_XY | RI_1_TEX, DrawBuffer.data(), 4 * sizeof(DrawBuffer.data()[0]));
-		DrawBuffer.clear();
-	}
+	DrawBufferOnTextEnd(CurrentTexture);
 
 	// reset rendering states
 	vw_PopMatrix();
