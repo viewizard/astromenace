@@ -279,9 +279,9 @@ struct sGameSetup {
 	int BuildVersion;
 
 	// язык меню
-	int	MenuLanguage; // 1-en, 2-de, 3-ru
+	unsigned int MenuLanguage; // 1-en, 2-de, 3-ru
 	// язык голосовых сообщений
-	int	VoiceLanguage; // 1-en, 2-de, 3-ru
+	unsigned int VoiceLanguage; // 1-en, 2-de, 3-ru
 	// номер шрифта
 	int	FontNumber;
 	// имя шрифта для fontconfig

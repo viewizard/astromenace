@@ -693,7 +693,7 @@ void ShipSlotSetupWeapon(int Slot)
 			}
 			if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] != 0) {
 				if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] == 1)
-					TextTmp = vw_VirtualCodeName(vw_GetLanguageList()[Setup.MenuLanguage-1].code, Setup.Profile[CurrentProfile].WeaponAltControlData[Slot]);
+					TextTmp = vw_VirtualCodeName(vw_GetText("0_code", Setup.MenuLanguage), Setup.Profile[CurrentProfile].WeaponAltControlData[Slot]);
 				if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] == 2)
 					TextTmp = MouseCodeName(Setup.Profile[CurrentProfile].WeaponAltControlData[Slot]);
 				if (Setup.Profile[CurrentProfile].WeaponAltControl[Slot] == 3)

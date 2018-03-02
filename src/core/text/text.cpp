@@ -24,336 +24,127 @@
 
 *************************************************************************************/
 
+// TODO add UTF32 support
 
 #include "text.h"
 
+namespace {
 
-struct sCSVRow {
-	char **CellData;
-	int Columns;
+// Map of Maps with all sorted language data in utf8.
+std::unordered_map<unsigned int, std::unordered_map<std::string, std::string>> TextTable;
+// Current default language.
+unsigned int CurrentLanguage = 0;
 
-	sCSVRow *Next;
-	sCSVRow *Prev;
-};
-
-
-sCSVRow *StartCSVRow;
-sCSVRow *EndCSVRow;
-
-// буфер со всем текстом
-char *TextBuffer = nullptr;
-
-// указатель на таблицу данных по языкам
-sLanguageList *LanguageList = nullptr;
-sLanguageList *vw_GetLanguageList()
-{
-	return LanguageList;
-};
-// кол-во языков
-int LanguageListCount = 0;
-int vw_GetLanguageListCount()
-{
-	return LanguageListCount;
-};
-// текущий язык
-int CurrentLanguage = 0;
+} // unnamed namespace
 
 
-
-
-// присоединяем к списку
-void vw_AttachCSVRow(sCSVRow* CSVRow)
-{
-	if (CSVRow == nullptr)
-		return;
-
-	// первый в списке...
-	if (EndCSVRow == nullptr) {
-		CSVRow->Prev = nullptr;
-		CSVRow->Next = nullptr;
-		StartCSVRow = CSVRow;
-		EndCSVRow = CSVRow;
-	} else { // продолжаем заполнение...
-		CSVRow->Prev = EndCSVRow;
-		CSVRow->Next = nullptr;
-		EndCSVRow->Next = CSVRow;
-		EndCSVRow = CSVRow;
-	}
-}
-// удаляем из списка
-void vw_DetachCSVRow(sCSVRow* CSVRow)
-{
-	if (CSVRow == nullptr)
-		return;
-
-	// переустанавливаем указатели...
-	if (StartCSVRow == CSVRow)
-		StartCSVRow = CSVRow->Next;
-	if (EndCSVRow == CSVRow)
-		EndCSVRow = CSVRow->Prev;
-
-	if (CSVRow->Next != nullptr)
-		CSVRow->Next->Prev = CSVRow->Prev;
-	else if (CSVRow->Prev != nullptr)
-		CSVRow->Prev->Next = nullptr;
-
-	if (CSVRow->Prev != nullptr)
-		CSVRow->Prev->Next = CSVRow->Next;
-	else if (CSVRow->Next != nullptr)
-		CSVRow->Next->Prev = nullptr;
-}
-// переприсоединяем как первый в списке
-void vw_ReAttachCSVRowAsFirst(sCSVRow* CSVRow)
-{
-	if (CSVRow == nullptr)
-		return;
-
-	vw_DetachCSVRow(CSVRow);
-
-	// если список пустой - просто присоединяем к списку и все
-	if (StartCSVRow == nullptr) {
-		vw_AttachCSVRow(CSVRow);
-	} else {
-		CSVRow->Next = StartCSVRow;
-		CSVRow->Prev = nullptr;
-		StartCSVRow->Prev = CSVRow;
-		StartCSVRow = CSVRow;
-	}
-}
-
-
-
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// освобождаем данные
-//-----------------------------------------------------------------------------
-void vw_ReleaseText()
-{
-	// Чистка памяти...
-	sCSVRow *Tmp = StartCSVRow;
-	while (Tmp != nullptr) {
-		sCSVRow *Tmp1 = Tmp->Next;
-		if (Tmp->CellData != nullptr)
-			delete [] Tmp->CellData;
-		delete Tmp;
-		Tmp = Tmp1;
-	}
-
-	StartCSVRow = nullptr;
-	EndCSVRow = nullptr;
-
-	if (TextBuffer != nullptr) {
-		delete [] TextBuffer;
-		TextBuffer = nullptr;
-	}
-
-	CurrentLanguage = 0;
-	LanguageListCount = 0;
-	delete [] LanguageList;
-	LanguageList = nullptr;
-}
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// устанавливаем язык
-//-----------------------------------------------------------------------------
-void vw_SetTextLanguage(int Language)
+/*
+ * Set default language.
+ */
+void vw_SetTextLanguage(unsigned int Language)
 {
 	CurrentLanguage = Language;
 }
 
+/*
+ * Get available languages count.
+ */
+unsigned int vw_GetLanguageListCount() {
+	if (TextTable.empty() || (TextTable.size() < 1))
+		return 0;
 
+	return TextTable.size() - 1 /*first column contain index, not data, don't count it*/;
+}
 
+/*
+ * Release data.
+ */
+void vw_ReleaseText()
+{
+	TextTable.clear();
+	CurrentLanguage = 0;
+}
 
-
-//-----------------------------------------------------------------------------
-// загружаем текстовый .csv
-//-----------------------------------------------------------------------------
+/*
+ * Initialization. Load file with translation in .csv format (supported by LibreOffice Calc).
+ */
 int vw_InitText(const char *FileName, const char SymbolSeparator, const char SymbolEndOfLine)
 {
 	vw_ReleaseText();
 
-	// читаем данные
-	std::unique_ptr<sFILE> TempF = vw_fopen(FileName);
+	// open and don't call vw_fclose(), use tmpFile->Data directly
+	std::unique_ptr<sFILE> tmpFile = vw_fopen(FileName);
+	if (!tmpFile)
+		return ERR_FILE_NOT_FOUND;
 
-	if (TempF == nullptr) return -1;
-
-	TempF->fseek(0, SEEK_END);
-	int DataLength = TempF->ftell();
-	TempF->fseek(0, SEEK_SET);
-	TextBuffer = new char[DataLength];
-	TempF->fread(TextBuffer, DataLength, 1);
-	vw_fclose(TempF);
-
-
-	// парсим формат .csv (табличный формат, поддерживаемый офисными редакторами)
-	// не делаем проверок формата на наличие в файле повреждений структуры
-	// вся работа строится на TextBuffer, другой памяти не выделяем - только ссылаемся указателями
-	// на данные в этом буфере (предварительно поставив 0 для разграничения текста в ячейках)
-	// ! важно - в конце файла должен быть перевод на новую строку, чтобы поставить ноль и сформировать конец строки, заменив символ SymbolEndOfLine
-
-	char *Buffer = TextBuffer;
-
-	// по первой строче считаем сколько у нас в файле столбцов
-	int ColumnsCount = 0;
-	while(Buffer[0] != SymbolEndOfLine) {
-		if (Buffer[0] == SymbolSeparator) ColumnsCount++;
-		Buffer++;
-	}
-	ColumnsCount++; // для последнего столбца конечный символ - SymbolEndOfLine, который мы получили в цикле
-
-	// если столбцов менее 2-х - данных недостаточно для работы
-	if (ColumnsCount < 2) return -1;
-
-	Buffer = TextBuffer; // восстанавливаем указатель
-
-	// крутим пока не обработали все строки
-	while(DataLength > ColumnsCount-1) {
-		// создаем строку
-		sCSVRow *NewCSVRow;
-		NewCSVRow = new sCSVRow;
-
-		NewCSVRow->Columns = ColumnsCount;
-		NewCSVRow->CellData = new char*[NewCSVRow->Columns];
-
-		for (int i=0; i<NewCSVRow->Columns; i++) {
-			NewCSVRow->CellData[i] = Buffer;
-			// ищем маркер следующего столбца или конца строки
-			while((Buffer[0] != SymbolEndOfLine) && (Buffer[0] != SymbolSeparator)) {
-				Buffer++;
-				DataLength--;
+	// plain .csv file format parser
+	// parse data by each byte, in order to use string as RowCode - build
+	// RowCode first, only after that, initialize new TextTable row
+	bool NeedBuildCurrentRowCode = true;
+	std::string CurrentRowCode;
+	unsigned int CurrentColumnCode{0};
+	for (unsigned int i = 0; i < tmpFile->Size; i++) {
+		// parse each row
+		for (; (tmpFile->Data[i] != SymbolEndOfLine) && (i < tmpFile->Size); i++) {
+			// parse each row for blocks, separated by 1.SymbolSeparator, 2.SymbolEndOfLine, 3.EOF
+			for (; (tmpFile->Data[i] != SymbolSeparator) && (tmpFile->Data[i] != SymbolEndOfLine) && (i < tmpFile->Size); i++) {
+				if (NeedBuildCurrentRowCode)
+					CurrentRowCode += tmpFile->Data[i];
+				else
+					TextTable[CurrentColumnCode][CurrentRowCode] += tmpFile->Data[i];
 			}
-			// нашли, ставим туда ноль, чтобы ноль-терминальная строка была завершенной
-			Buffer[0] = 0;
-			Buffer++;
-			DataLength--;
+			// RowCode built, next blocks in this row contain data
+			NeedBuildCurrentRowCode = false;
+			CurrentColumnCode++;
+			TextTable[CurrentColumnCode][CurrentRowCode].clear(); // initialize string before "+=" usage
+			// we found SymbolEndOfLine in previous cycle, in order to prevent "i" changes, break cycle
+			if (tmpFile->Data[i] == SymbolEndOfLine)
+				break;
 		}
-
-		vw_AttachCSVRow(NewCSVRow);
-	}
-
-
-	// для работы с языками, создаем таблицу
-	LanguageListCount = ColumnsCount-1;
-	LanguageList = new sLanguageList[LanguageListCount];
-
-	for (int i = 0; i < LanguageListCount; i++) {
-		LanguageList[i].code = vw_GetText("0_code", i+1);
-		if (LanguageList[i].code == nullptr)
-			return -2;
-		LanguageList[i].title = vw_GetText("0_title", i+1);
-		if (LanguageList[i].title == nullptr)
-			return -2;
+		// move to next row
+		CurrentColumnCode = 0;
+		NeedBuildCurrentRowCode = true;
+		CurrentRowCode.clear();
 	}
 
 	return 0;
 }
 
-
-
-
-// проверяем только цифры
-int strcmpIdNum(const char *a, const char *b)
+/*
+ * Get text for particular language.
+ */
+const char *vw_GetText(const char *ItemID, unsigned int Language)
 {
-	// если первые 2 символа одинаковые - значит по номеру 100% совпадают
-	if ((a[0] == b[0]) && (a[1] == b[1])) return 0;
-
-	return 1;
-}
-
-
-
-
-//-----------------------------------------------------------------------------
-// получаем текст из файла
-//-----------------------------------------------------------------------------
-const char *vw_GetText(const char *ItemID, int Language)
-{
-	if ((TextBuffer == nullptr) ||
-	    (ItemID == nullptr))
+	if (!ItemID || TextTable.empty())
 		return nullptr;
 
-	if (Language < 1 || Language > LanguageListCount)
+	if (Language > vw_GetLanguageListCount())
 		Language = CurrentLanguage;
 
-	sCSVRow *Tmp = StartCSVRow;
-	while (Tmp != nullptr) {
-		sCSVRow *Tmp1 = Tmp->Next;
-
-		// в первом столбце у нас записан идентификатор текста с 1 или 2-х значным номером
-		// не работаем со строками без идентификатора
-		if (Tmp->CellData[0][0] != 0)
-			if (!strcmpIdNum(Tmp->CellData[0], ItemID))
-				if (strcmp(ItemID, Tmp->CellData[0]) == 0) {
-					// перемещаем его на первое место в списке для ускорения поиска в след. проходах
-					vw_ReAttachCSVRowAsFirst(Tmp);
-
-					// возвращаем указатель на нужный столбец
-					return Tmp->CellData[Language];
-				}
-
-		Tmp = Tmp1;
-	}
-
-	fprintf(stderr, "Text not found, ID: %s\n", ItemID);
-	return nullptr;
+	return TextTable[Language][ItemID].c_str();
 }
 
-
-
-
-//-----------------------------------------------------------------------------
-// проверяем, есть ли символ в фонте, перебираем по тексту всех языков
-//-----------------------------------------------------------------------------
+/*
+ * Detect what characters was not generated (need for testing purposes).
+ */
 int vw_CheckFontCharsInText()
 {
-	if (TextBuffer == nullptr)
-		return -1;
-
+	if (TextTable.empty())
+		return ERR_PARAMETERS;
 
 	printf("Font characters detection start.\n");
 
-
-	sCSVRow *Tmp = StartCSVRow;
-	while (Tmp != nullptr) {
-		sCSVRow *Tmp1 = Tmp->Next;
-
-		for (int i = 0; i < Tmp->Columns; i++) {
-			const char *CharsList = Tmp->CellData[i];
-
-			if (CharsList != nullptr) {
-				// перебираем всю строку
-				while (strlen(CharsList) > 0) {
-					unsigned CurrentChar;
-					// преобразуем в утф32 и "сдвигаемся" на следующий символ в строке
-					CharsList = vw_UTF8toUTF32(CharsList, &CurrentChar);
-					// проверяем, что загружен символ и все необходимые данные для него
-					if (!vw_CheckFontCharByUTF32(CurrentChar)) {
-						printf("!!! FontChar was not created, Unicode: " );
-						if ( CurrentChar < 0x80 && CurrentChar > 0 ) {
-							printf( "%c (0x%04X)\n", (char)CurrentChar, CurrentChar );
-						} else {
-							printf( "? (0x%04X)\n", CurrentChar );
-						}
-					}
-				}
+	// note, i = 1 - first column contain index, not data, start from second
+	for (unsigned int i = 1; i < TextTable[i].size(); i++) {
+		for (auto tmpData : TextTable[i]) {
+			std::u32string tmpDataUTF32 = vw_UTF8toUTF32(tmpData.second);
+			for (auto UTF32 : tmpDataUTF32) {
+				if (!vw_CheckFontCharByUTF32(UTF32))
+					printf("!!! FontChar was not created, Unicode: (0x%04X)\n", UTF32);
 			}
 		}
-
-
-		Tmp = Tmp1;
 	}
 
-
-
 	printf("Font characters detection end.\n\n");
-
 	return 0;
 }

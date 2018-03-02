@@ -24,38 +24,24 @@
 
 *************************************************************************************/
 
-
 #ifndef TEXT_H
 #define TEXT_H
-
 
 #include "../base.h"
 #include "../font/font.h"
 #include "../vfs/vfs.h"
 
-
-
-
-struct sLanguageList {
-	const char *code;
-	const char *title;
-};
-sLanguageList *vw_GetLanguageList();
-int vw_GetLanguageListCount();
-
-
-// загружаем текстовый .csv
+// Initialization. Load file with translation in .csv format (supported by LibreOffice Calc).
 int vw_InitText(const char *FileName, const char SymbolSeparator, const char SymbolEndOfLine);
-// устанавливаем язык
-void vw_SetTextLanguage(int Language);
-// получаем текст из файлы, Language=-1 - будет использован язык, установленный через vw_SetTextLanguage
-const char *vw_GetText(const char *ItemID, int Language=-1);
-// проверяем, есть ли символ в фонте, перебираем по тексту всех языков
+// Set default language.
+void vw_SetTextLanguage(unsigned int Language);
+// Get text for particular language.
+const char *vw_GetText(const char *ItemID, unsigned int Language = 999999 /*should be greater than loaded languages*/);
+// Detect what characters was not generated (need for testing purposes).
 int vw_CheckFontCharsInText();
-// освобождаем данные
+// Release data.
 void vw_ReleaseText();
-
-
+// Get available languages count.
+unsigned int vw_GetLanguageListCount();
 
 #endif // TEXT_H
-

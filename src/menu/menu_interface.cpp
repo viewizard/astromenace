@@ -70,9 +70,9 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	}
 
 	int Size, SizeI;
-	Size = vw_FontSize(vw_GetLanguageList()[Setup.MenuLanguage-1].title);
+	Size = vw_FontSize(vw_GetText("0_title", Setup.MenuLanguage));
 	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetLanguageList()[Setup.MenuLanguage-1].title);
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("0_title", Setup.MenuLanguage));
 
 
 
@@ -89,9 +89,9 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		if (Setup.VoiceLanguage > vw_GetLanguageListCount()) Setup.VoiceLanguage = 1;
 	}
 
-	Size = vw_FontSize(vw_GetLanguageList()[Setup.VoiceLanguage-1].title);
+	Size = vw_FontSize(vw_GetText("0_title", Setup.VoiceLanguage));
 	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetLanguageList()[Setup.VoiceLanguage-1].title);
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("0_title", Setup.VoiceLanguage));
 
 
 

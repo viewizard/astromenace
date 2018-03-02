@@ -159,8 +159,8 @@ void SaveXMLSetupFile()
 
 
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "GAME_BUILD"), "value", GAME_BUILD);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MenuLanguage"), "value", vw_GetLanguageList()[Setup.MenuLanguage-1].code);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceLanguage"), "value", vw_GetLanguageList()[Setup.VoiceLanguage-1].code);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MenuLanguage"), "value", vw_GetText("0_code", Setup.MenuLanguage));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VoiceLanguage"), "value", vw_GetText("0_code", Setup.VoiceLanguage));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "FontNumber"), "value", Setup.FontNumber);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "FontName"), "value", Setup.FontName);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "FontSize"), "value", Setup.FontSize);
@@ -396,8 +396,8 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage") != nullptr) {
 		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value") != nullptr) {
-			for (int i=0; i<vw_GetLanguageListCount(); i++) {
-				if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), vw_GetLanguageList()[i].code)) {
+			for (unsigned int i=0; i<vw_GetLanguageListCount(); i++) {
+				if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value"), vw_GetText("0_code", i + 1/*first column contain index, not data*/))) {
 					Setup.MenuLanguage = i+1;
 					break;
 				}
@@ -406,8 +406,8 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	}
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage") != nullptr) {
 		if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value") != nullptr) {
-			for (int i=0; i<vw_GetLanguageListCount(); i++) {
-				if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), vw_GetLanguageList()[i].code)) {
+			for (unsigned int i=0; i<vw_GetLanguageListCount(); i++) {
+				if (!strcmp(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value"), vw_GetText("0_code", i + 1/*first column contain index, not data*/))) {
 					Setup.VoiceLanguage = i+1;
 					break;
 				}

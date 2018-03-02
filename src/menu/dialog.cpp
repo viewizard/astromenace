@@ -1553,12 +1553,12 @@ Dialogs with default type:
 
 		vw_SetFontSize(24);
 		int Size;
-		Size = vw_FontSize(vw_GetLanguageList()[Setup.MenuLanguage-1].title);
+		Size = vw_FontSize(vw_GetText("0_title", Setup.MenuLanguage));
 		SizeI = (170-Size)/2;
 		if (Size > 170)
-			vw_DrawFont(X+138+34, Y+ButtonOffset-71, -170, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetLanguageList()[Setup.MenuLanguage-1].title);
+			vw_DrawFont(X+138+34, Y+ButtonOffset-71, -170, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("0_title", Setup.MenuLanguage));
 		else
-			vw_DrawFont(X+138+34+SizeI, Y+ButtonOffset-71, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetLanguageList()[Setup.MenuLanguage-1].title);
+			vw_DrawFont(X+138+34+SizeI, Y+ButtonOffset-71, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("0_title", Setup.MenuLanguage));
 		vw_SetFontSize(Setup.FontSize);
 
 		if (DrawDialogButton200(X+128+64-72/2, Y+ButtonOffset, vw_GetText("1_OK"), DialogContentTransp)) {
