@@ -49,7 +49,6 @@
   4b - 'v1.6' (VFS_VER)
   4b - VFS build number (GAME_BUILD)
   4b - file table offset
-  4b - file table size
   ?b - data (file data one by one)
 
   - File table structure
@@ -79,7 +78,7 @@ struct sVFS {
 	~sVFS()
 	{
 		// not sure, if libSDL close SDL_RWops on "out of scope"
-		if (File != nullptr)
+		if (File)
 			SDL_RWclose(File);
 	}
 };
@@ -96,10 +95,12 @@ struct sVFS_Entry {
 
 namespace {
 
-// List with connected VFS.
-std::forward_list<std::unique_ptr<sVFS>> VFS_List;
-// Map with file's entries in VFS.
-std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> VFSEntries_Map;
+// List with all opened VFS.
+std::forward_list<std::unique_ptr<sVFS>> VFSList;
+// Map with file's entries in all opened VFS.
+std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> VFSEntriesMap;
+
+constexpr unsigned int FixedHeaderPartSize = 4 + 4 + 4; /*VFS_ + ver + build*/
 
 } // unnamed namespace
 
@@ -107,44 +108,38 @@ std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> VFSEntries_Map;
 /*
  * Write data from memory into VFS file.
  */
-static int WriteIntoVFSfromMemory(sVFS *WritableVFS, const std::string &Name, const std::unique_ptr<uint8_t[]> &Data,
-				  uint32_t DataSize, uint32_t &HeaderLengthVFS, uint32_t &HeaderOffsetVFS, uint32_t &DataStartOffsetVFS,
-				  std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> &WritableVFSEntries_Map)
+static int WriteIntoVFSfromMemory(sVFS *WritableVFS, const std::string &Name, const uint8_t *DataBuffer,
+				  uint32_t DataSize, uint32_t &FileTableOffset,
+				  std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> &WritableVFSEntriesMap)
 {
-	if ((WritableVFS == nullptr) || Name.empty() || (Data.get() == nullptr) ||
+	if (!WritableVFS || Name.empty() || !DataBuffer ||
 	    (DataSize <= 0) || (Name.size() > UINT16_MAX)) // UINT16_MAX - we should store string size in uint16_t variable
 		return ERR_PARAMETERS;
 
-	// push VFS entry to map
-	WritableVFSEntries_Map[Name] = std::unique_ptr<sVFS_Entry>(new sVFS_Entry(WritableVFS));
-	auto tmpVFSEntry = WritableVFSEntries_Map[Name].get();
+	// push VFS entry into the map
+	WritableVFSEntriesMap[Name] = std::unique_ptr<sVFS_Entry>(new sVFS_Entry(WritableVFS));
 
 	// add new data to VFS file, in this case we could use
-	// HeaderOffsetVFS, since this is the end of data part
-	tmpVFSEntry->Offset = HeaderOffsetVFS;
-	tmpVFSEntry->Size = DataSize;
-	SDL_RWseek(WritableVFS->File, tmpVFSEntry->Offset, SEEK_SET);
-	SDL_RWwrite(WritableVFS->File, Data.get(), tmpVFSEntry->Size, 1);
+	// FileTableOffset, since this is the end of data part
+	WritableVFSEntriesMap[Name]->Offset = FileTableOffset;
+	WritableVFSEntriesMap[Name]->Size = DataSize;
+	SDL_RWseek(WritableVFS->File, WritableVFSEntriesMap[Name]->Offset, SEEK_SET);
+	SDL_RWwrite(WritableVFS->File, DataBuffer, WritableVFSEntriesMap[Name]->Size, 1);
 
 	// write all entries belong to this VFS file
-	for (const auto &tmpEntry : WritableVFSEntries_Map) {
+	for (const auto &tmpEntry : WritableVFSEntriesMap) {
 		if (tmpEntry.second->Parent == WritableVFS) {
 			uint16_t tmpNameSize{(uint16_t)(tmpEntry.first.size())};
-			SDL_RWwrite(WritableVFS->File, &tmpNameSize, 2, 1);
+			SDL_RWwrite(WritableVFS->File, &tmpNameSize, sizeof(tmpNameSize), 1);
 			SDL_RWwrite(WritableVFS->File, tmpEntry.first.c_str(), tmpEntry.first.size(), 1);
-			SDL_RWwrite(WritableVFS->File, &tmpEntry.second->Offset, 4, 1);
-			SDL_RWwrite(WritableVFS->File, &tmpEntry.second->Size, 4, 1);
+			SDL_RWwrite(WritableVFS->File, &tmpEntry.second->Offset, sizeof(tmpEntry.second->Offset), 1);
+			SDL_RWwrite(WritableVFS->File, &tmpEntry.second->Size, sizeof(tmpEntry.second->Size), 1);
 		}
 	}
 
-	// correct table offset and size
-	HeaderOffsetVFS += DataSize;
-	HeaderLengthVFS += 1 + 2 + Name.size() + 4 + 4 + 4;
-
-	// rewrite table offset and size
-	SDL_RWseek(WritableVFS->File, DataStartOffsetVFS, SEEK_SET);
-	SDL_RWwrite(WritableVFS->File, &HeaderOffsetVFS, 4, 1);
-	SDL_RWwrite(WritableVFS->File, &HeaderLengthVFS, 4, 1);
+	SDL_RWseek(WritableVFS->File, FixedHeaderPartSize, SEEK_SET);
+	FileTableOffset += DataSize;
+	SDL_RWwrite(WritableVFS->File, &FileTableOffset, sizeof(FileTableOffset), 1);
 
 	printf("%s file added to VFS.\n", Name.c_str());
 	return 0;
@@ -154,35 +149,34 @@ static int WriteIntoVFSfromMemory(sVFS *WritableVFS, const std::string &Name, co
  * Write data from file into VFS file.
  */
 static int WriteIntoVFSfromFile(sVFS *WritableVFS, const std::string &SrcName, const std::string &DstName,
-				uint32_t &HeaderLengthVFS, uint32_t &HeaderOffsetVFS, uint32_t &DataStartOffsetVFS,
-				std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> &WritableVFSEntries_Map)
+				uint32_t &FileTableOffset,
+				std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> &WritableVFSEntriesMap)
 {
-	if ((WritableVFS == nullptr) || SrcName.empty() || DstName.empty())
+	if (!WritableVFS || SrcName.empty() || DstName.empty())
 		return ERR_PARAMETERS;
 
-	SDL_RWops *Ftmp = SDL_RWFromFile(SrcName.c_str(), "rb");
-	if (Ftmp == nullptr) {
+	SDL_RWops *tmpFile = SDL_RWFromFile(SrcName.c_str(), "rb");
+	if (!tmpFile) {
 		fprintf(stderr, "Can't find file %s\n", SrcName.c_str());
 		return ERR_FILE_NOT_FOUND;
 	}
 
-	SDL_RWseek(Ftmp, 0, SEEK_END);
-	int tmpSize = SDL_RWtell(Ftmp);
-	SDL_RWseek(Ftmp, 0, SEEK_SET);
+	SDL_RWseek(tmpFile, 0, SEEK_END);
+	int tmpFileSize = SDL_RWtell(tmpFile);
+	SDL_RWseek(tmpFile, 0, SEEK_SET);
 
-	// copy data to tmp buffer
-	std::unique_ptr<uint8_t[]> tmpBuffer(new uint8_t[tmpSize]);
-	SDL_RWread(Ftmp, tmpBuffer.get(), tmpSize, 1);
-	SDL_RWclose(Ftmp);
+	// std::unique_ptr, we need only memory allocation without container's features
+	// don't use std::vector here, since it allocates AND value-initializes
+	std::unique_ptr<uint8_t[]> tmpBuffer(new uint8_t[tmpFileSize]);
+	SDL_RWread(tmpFile, tmpBuffer.get(), tmpFileSize, 1);
+	SDL_RWclose(tmpFile);
 
-	// write into VFS
-	int rc = WriteIntoVFSfromMemory(WritableVFS, DstName, tmpBuffer, tmpSize,
-					HeaderLengthVFS, HeaderOffsetVFS, DataStartOffsetVFS,
-					WritableVFSEntries_Map);
-	if (rc != 0)
+	int err = WriteIntoVFSfromMemory(WritableVFS, DstName, tmpBuffer.get(), tmpFileSize,
+					 FileTableOffset, WritableVFSEntriesMap);
+	if (err)
 		fprintf(stderr, "Can't write into VFS from memory %s\n", DstName.c_str());
 
-	return rc;
+	return err;
 }
 
 /*
@@ -198,52 +192,48 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 	std::unique_ptr<sVFS> TempVFS(new sVFS(Name));
 
 	TempVFS->File = SDL_RWFromFile(Name.c_str(), "wb");
-	if (TempVFS->File == nullptr) {
+	if (!TempVFS->File) {
 		fprintf(stderr, "Can't open VFS file for write %s\n", Name.c_str());
 		return ERR_FILE_NOT_FOUND;
 	}
 
 	// write VFS sign "VFS_", version and build number
 	constexpr char Sign[4]{'V','F','S','_'};
-	SDL_RWwrite(TempVFS->File, Sign, 4, 1);
-	SDL_RWwrite(TempVFS->File, VFS_VER, 4, 1);
-	SDL_RWwrite(TempVFS->File, &BuildNumber, 4, 1);
+	SDL_RWwrite(TempVFS->File, Sign, 4 /*fixed 4 bites size*/, 1);
+	SDL_RWwrite(TempVFS->File, VFS_VER, 4 /*fixed 4 bites size*/, 1);
+	SDL_RWwrite(TempVFS->File, &BuildNumber, 4 /*fixed 4 bites size*/, 1);
 
-	// write new table offset and size
-	uint32_t HeaderOffsetVFS{4 + 4 + 4 + 4 + 4}; // VFS_ + ver + build + offset + size
-	uint32_t HeaderLengthVFS{0};
-	uint32_t DataStartOffsetVFS{4 + 4 + 4}; // VFS_ + ver + build
-	SDL_RWwrite(TempVFS->File, &HeaderOffsetVFS, 4, 1);
-	SDL_RWwrite(TempVFS->File, &HeaderLengthVFS, 4, 1);
+	// new file table offset
+	uint32_t FileTableOffset{FixedHeaderPartSize + sizeof(FileTableOffset)};
+	SDL_RWwrite(TempVFS->File, &FileTableOffset, sizeof(FileTableOffset), 1);
 
 	// we need separate VFS entries map
-	std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> WritableVFSEntries_Map;
+	std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> WritableVFSEntriesMap;
 
 	// add model pack files into VFS
 	if (!ModelsPack.empty()) {
 		// close opened VFS, we need empty VFS related lists
-		if (!VFS_List.empty()) {
+		if (!VFSList.empty()) {
 			fprintf(stderr, "Detected open VFS, close it now.\n");
 			vw_ShutdownVFS();
 		}
 
-		int rc = vw_OpenVFS(RawDataDir + ModelsPack, 0);
-		if (rc != 0) {
+		int err = vw_OpenVFS(RawDataDir + ModelsPack, 0);
+		if (err) {
 			fprintf(stderr, "%s file not found or corrupted.\n", (RawDataDir + ModelsPack).c_str());
-			return rc;
+			return err;
 		}
 
 		// copy all files from pack into new VFS
-		for (const auto &TmpVFSEntry : VFSEntries_Map) {
-			std::unique_ptr<sFILE> tmpFile = vw_fopen(TmpVFSEntry.first);
-			if (tmpFile == nullptr)
+		for (const auto &tmpVFSEntry : VFSEntriesMap) {
+			std::unique_ptr<sFILE> tmpFile = vw_fopen(tmpVFSEntry.first);
+			if (!tmpFile)
 				return ERR_FILE_NOT_FOUND;
-			rc = WriteIntoVFSfromMemory(TempVFS.get(), TmpVFSEntry.first, tmpFile->Data, tmpFile->Size,
-						    HeaderLengthVFS, HeaderOffsetVFS, DataStartOffsetVFS,
-						    WritableVFSEntries_Map);
-			if (rc != 0) {
+			err = WriteIntoVFSfromMemory(TempVFS.get(), tmpVFSEntry.first, tmpFile->Data.get(),
+						     tmpFile->Size, FileTableOffset, WritableVFSEntriesMap);
+			if (err) {
 				fprintf(stderr, "VFS compilation process aborted!\n");
-				return rc;
+				return err;
 			}
 			vw_fclose(tmpFile);
 		}
@@ -255,12 +245,11 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 	// add real files into VFS
 	if (GameDataCount > 0) {
 		for (unsigned int i = 0; i < GameDataCount; i++) {
-			int rc = WriteIntoVFSfromFile(TempVFS.get(), RawDataDir + GameData[i], GameData[i],
-						  HeaderLengthVFS, HeaderOffsetVFS, DataStartOffsetVFS,
-						  WritableVFSEntries_Map);
-			if (rc != 0) {
+			int err = WriteIntoVFSfromFile(TempVFS.get(), RawDataDir + GameData[i], GameData[i],
+						       FileTableOffset, WritableVFSEntriesMap);
+			if (err) {
 				fprintf(stderr, "VFS compilation process aborted!\n");
-				return rc;
+				return err;
 			}
 		}
 	}
@@ -276,28 +265,28 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 {
 	// small trick for replace 'goto' statement usage (for release
 	// memory on errors) to named Lambda function
-	auto errPrintWithVFSListPop = [&Name] (const std::string &Text, int rc)
+	auto errPrintWithVFSListPop = [&Name] (const std::string &Text, int err)
 	{
 		fprintf(stderr, "%s %s\n", Text.c_str(), Name.c_str());
-		VFS_List.pop_front();
-		return rc;
+		VFSList.pop_front();
+		return err;
 	};
 
 	// since we can't move unique_ptr into std::forward_list with push_front(),
 	// forced to explicitly create the std::unique_ptr in the list
-	VFS_List.push_front(std::unique_ptr<sVFS>(new sVFS(Name)));
+	VFSList.push_front(std::unique_ptr<sVFS>(new sVFS(Name)));
 
-	VFS_List.front()->File = SDL_RWFromFile(Name.c_str(), "rb");
-	if (VFS_List.front()->File == nullptr)
+	VFSList.front()->File = SDL_RWFromFile(Name.c_str(), "rb");
+	if (!VFSList.front()->File)
 		return errPrintWithVFSListPop("Can't find VFS file", ERR_FILE_NOT_FOUND);
 
-	SDL_RWseek(VFS_List.front()->File,0,SEEK_END);
-	int VFS_FileSize = SDL_RWtell(VFS_List.front()->File);
-	SDL_RWseek(VFS_List.front()->File,0,SEEK_SET);
+	SDL_RWseek(VFSList.front()->File,0,SEEK_END);
+	int VFS_FileSize = SDL_RWtell(VFSList.front()->File);
+	SDL_RWseek(VFSList.front()->File,0,SEEK_SET);
 
 	// check VFS file sign "VFS_"
 	char Sign[4];
-	if(SDL_RWread(VFS_List.front()->File, &Sign, 4, 1) == 0)
+	if(!SDL_RWread(VFSList.front()->File, &Sign, 4 /*fixed 4 bites size*/, 1))
 		return errPrintWithVFSListPop("VFS file size error", ERR_FILE_IO);
 	// Sign don't contain null-terminated string, strncmp() should be used
 	if (strncmp(Sign, "VFS_", 4) != 0)
@@ -305,7 +294,7 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 
 	// check VFS file version
 	char Version[4];
-	if(SDL_RWread(VFS_List.front()->File, &Version, 4, 1) == 0)
+	if(!SDL_RWread(VFSList.front()->File, &Version, 4 /*fixed 4 bites size*/, 1))
 		return errPrintWithVFSListPop("VFS file corrupted:", ERR_FILE_IO);
 	// Version don't contain null-terminated string, strncmp() should be used
 	if (strncmp(Version, VFS_VER, 4) != 0)
@@ -313,37 +302,33 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 
 	// check VFS file build number
 	unsigned int vfsBuildNumber;
-	if(SDL_RWread(VFS_List.front()->File, &vfsBuildNumber, 4, 1) == 0)
+	if(!SDL_RWread(VFSList.front()->File, &vfsBuildNumber, 4 /*fixed 4 bites size*/, 1))
 		return errPrintWithVFSListPop("VFS file corrupted:", ERR_FILE_IO);
-	if (BuildNumber != 0) {
-		if (vfsBuildNumber == 0) {
-			return errPrintWithVFSListPop("VFS file build number was not set", ERR_VFS_BUILD);
-		} else {
+	if (BuildNumber) {
+		if (vfsBuildNumber) {
 			if (BuildNumber != vfsBuildNumber)
 				return errPrintWithVFSListPop("VFS file has wrong build number", ERR_VFS_BUILD);
-		}
+		} else
+			return errPrintWithVFSListPop("VFS file build number was not set", ERR_VFS_BUILD);
 	}
 
-	uint32_t HeaderOffsetVFS;
-	uint32_t HeaderLengthVFS;
-	SDL_RWread(VFS_List.front()->File, &HeaderOffsetVFS, sizeof(HeaderOffsetVFS), 1);
-	SDL_RWread(VFS_List.front()->File, &HeaderLengthVFS, sizeof(HeaderLengthVFS), 1);
-	SDL_RWseek(VFS_List.front()->File, HeaderOffsetVFS, SEEK_SET);
+	uint32_t FileTableOffset;
+	SDL_RWread(VFSList.front()->File, &FileTableOffset, sizeof(FileTableOffset), 1);
+	SDL_RWseek(VFSList.front()->File, FileTableOffset, SEEK_SET);
 
 	// add entries from new connected VFS file
-	uint16_t tmpNameSize{0};
-	std::string tmpName;
-	while (VFS_FileSize != SDL_RWtell(VFS_List.front()->File)) {
-		SDL_RWread(VFS_List.front()->File, &tmpNameSize, 2, 1);
+	while (VFS_FileSize != SDL_RWtell(VFSList.front()->File)) {
+		uint16_t tmpNameSize;
+		SDL_RWread(VFSList.front()->File, &tmpNameSize, sizeof(tmpNameSize), 1);
+
+		std::string tmpName;
 		tmpName.resize(tmpNameSize); // make sure, that we have enough allocated memory for string before SDL_RWread
-		SDL_RWread(VFS_List.front()->File, &tmpName[0], tmpNameSize, 1);
+		SDL_RWread(VFSList.front()->File, &tmpName[0], tmpNameSize, 1);
 
-		// push VFS entry to map
-		VFSEntries_Map[tmpName] = std::unique_ptr<sVFS_Entry>(new sVFS_Entry(VFS_List.front().get()));
-		auto tmpVFSEntry = VFSEntries_Map[tmpName].get();
+		VFSEntriesMap[tmpName] = std::unique_ptr<sVFS_Entry>(new sVFS_Entry(VFSList.front().get()));
 
-		SDL_RWread(VFS_List.front()->File, &(tmpVFSEntry->Offset), sizeof(tmpVFSEntry->Offset), 1);
-		SDL_RWread(VFS_List.front()->File, &(tmpVFSEntry->Size), sizeof(tmpVFSEntry->Size), 1);
+		SDL_RWread(VFSList.front()->File, &(VFSEntriesMap[tmpName]->Offset), sizeof(VFSEntriesMap[tmpName]->Offset), 1);
+		SDL_RWread(VFSList.front()->File, &(VFSEntriesMap[tmpName]->Size), sizeof(VFSEntriesMap[tmpName]->Size), 1);
 	}
 
 	printf("VFS file was opened %s\n", Name.c_str());
@@ -356,10 +341,10 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 void vw_ShutdownVFS()
 {
 	// release all VFS entries
-	VFSEntries_Map.clear();
+	VFSEntriesMap.clear();
 
 	// release all VFS
-	VFS_List.clear();
+	VFSList.clear();
 
 	printf("All VFS files closed.\n");
 }
@@ -372,12 +357,12 @@ static eFileLocation DetectFileLocation(const std::string &FileName)
 	if (FileName.empty())
 		return eFileLocation::Unknown;
 
-	if (VFSEntries_Map.find(FileName) != VFSEntries_Map.end())
+	if (VFSEntriesMap.find(FileName) != VFSEntriesMap.end())
 		return eFileLocation::VFS;
 
 	// trying to open real file in file system
 	SDL_RWops *File = SDL_RWFromFile(FileName.c_str(), "rb");
-	if (File != nullptr) {
+	if (File) {
 		SDL_RWclose(File);
 		return eFileLocation::FS;
 	}
@@ -387,15 +372,16 @@ static eFileLocation DetectFileLocation(const std::string &FileName)
 
 /*
  * Open the sFILE.
+ * Return std::unique_ptr, provide smart pointer connected to caller's scope.
  */
 std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
 {
 	if (FileName.empty())
 		return nullptr;
 
-	eFileLocation Location = DetectFileLocation(FileName);
+	eFileLocation FileLocation = DetectFileLocation(FileName);
 
-	if (Location == eFileLocation::Unknown) {
+	if (FileLocation == eFileLocation::Unknown) {
 		fprintf(stderr, "Can't find file %s\n", FileName.c_str());
 		return nullptr;
 	}
@@ -403,17 +389,15 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
 	// initial memory allocation and setup
 	std::unique_ptr<sFILE> File(new sFILE(0, 0));
 
-	if (Location == eFileLocation::VFS) {
-		// find file in VFS by name
-		auto FileInVFS = VFSEntries_Map.find(FileName);
+	if (FileLocation == eFileLocation::VFS) {
+		auto FileInVFS = VFSEntriesMap.find(FileName);
 
 		File->Data.reset(new uint8_t[FileInVFS->second->Size]);
 		File->Size = FileInVFS->second->Size;
 
 		SDL_RWseek(FileInVFS->second->Parent->File, FileInVFS->second->Offset, SEEK_SET);
 		SDL_RWread(FileInVFS->second->Parent->File, File->Data.get(), FileInVFS->second->Size, 1);
-	} else if (Location == eFileLocation::FS) {
-		// open real file in file system
+	} else if (FileLocation == eFileLocation::FS) {
 		SDL_RWops *fTEMP = SDL_RWFromFile(FileName.c_str(), "rb");
 
 		SDL_RWseek(fTEMP, 0, SEEK_END);
@@ -435,7 +419,7 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
  */
 int vw_fclose(std::unique_ptr<sFILE> &stream)
 {
-	if (stream.get() == nullptr)
+	if (!stream.get())
 		return ERR_PARAMETERS;
 
 	// release allocated memory
@@ -452,7 +436,7 @@ int sFILE::fread(void *buffer, size_t size, size_t count)
 {
 	int CopyCount{0};
 
-	if ((buffer == nullptr) || (Data == nullptr))
+	if (!buffer || !Data)
 		return ERR_PARAMETERS;
 
 	// read data

@@ -43,6 +43,8 @@ namespace {
 // FreeType related stuff.
 FT_Library InternalLibrary;
 FT_Face InternalFace;
+// std::unique_ptr, we need only memory allocation without container's features
+// don't use std::vector here, since it allocates AND value-initializes
 std::unique_ptr<uint8_t[]> InternalFontBuffer{};
 // Font settings.
 int InternalFontSize{0};
@@ -97,7 +99,7 @@ struct sFontChar {
 };
 
 // List with connected font characters.
-std::forward_list<std::unique_ptr<sFontChar>> FontChars_List;
+std::forward_list<std::unique_ptr<sFontChar>> FontCharsList;
 // Local draw buffer, that dynamically allocate memory at maximum
 // required size only one time per game execution.
 // Never use reset(), only clear() for this buffer.
@@ -123,11 +125,11 @@ int vw_InitFont(const std::string &FontName)
 		return ERR_EXT_RES;
 	}
 
-	if (InternalFontBuffer.get() != nullptr)
+	if (InternalFontBuffer.get())
 		InternalFontBuffer.reset();
 
 	std::unique_ptr<sFILE> FontFile = vw_fopen(FontName);
-	if (FontFile == nullptr) {
+	if (!FontFile) {
 		fprintf(stderr, "Can't open font file: %s\n", FontName.c_str());
 		return ERR_FILE_NOT_FOUND;
 	}
@@ -173,9 +175,9 @@ static sFontChar *FindFontCharByUTF32(char32_t UTF32)
 {
 	// a bit tricky, since we can't work with iterator for
 	// forward_list<unique_ptr<T>> in usual way
-	for (auto &&Tmp : FontChars_List) {
-		if (Tmp->CheckUTF32andSize(UTF32))
-			return Tmp.get();
+	for (auto &&tmpChar : FontCharsList) {
+		if (tmpChar->CheckUTF32andSize(UTF32))
+			return tmpChar.get();
 	}
 
 	return nullptr;
@@ -195,26 +197,26 @@ bool vw_CheckFontCharByUTF32(char32_t UTF32)
 void vw_ReleaseAllFontChars()
 {
 	// release all font characters
-	while (!FontChars_List.empty()) {
+	while (!FontCharsList.empty()) {
 
 		// TODO this should be fixed in "texture" subsystem, this part is ugly
 
 		// release texture, created to this character
-		if (FontChars_List.front()->Texture != nullptr) {
+		if (FontCharsList.front()->Texture) {
 			// one texture could be used by many characters
 			// make sure, we don't release one texture twice
-			sTexture *Texture = FontChars_List.front()->Texture;
+			sTexture *Texture = FontCharsList.front()->Texture;
 			// a bit tricky, since we can't work with iterator for
 			// forward_list<unique_ptr<T>> in usual way
-			for (auto &&Tmp : FontChars_List) {
-				Tmp->CheckTexture(Texture);
+			for (auto &&tmpChar : FontCharsList) {
+				tmpChar->CheckTexture(Texture);
 			}
 			vw_ReleaseTexture(Texture);
 		}
-		FontChars_List.pop_front();
+		FontCharsList.pop_front();
 	}
 	// reset list
-	FontChars_List.clear();
+	FontCharsList.clear();
 }
 
 /*
@@ -222,7 +224,7 @@ void vw_ReleaseAllFontChars()
  */
 void vw_ShutdownFont()
 {
-	if (InternalFontBuffer.get() != nullptr)
+	if (InternalFontBuffer.get())
 		InternalFontBuffer.reset();
 }
 
@@ -243,24 +245,22 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 	}
 
 	// create new character
-	FontChars_List.push_front(std::unique_ptr<sFontChar>(new sFontChar(UTF32, InternalFontSize, nullptr,
+	FontCharsList.push_front(std::unique_ptr<sFontChar>(new sFontChar(UTF32, InternalFontSize, nullptr,
 							     0, InternalFace->glyph->bitmap.width, 0, InternalFace->glyph->bitmap.rows,
 							     InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
 							     InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
 							     InternalFace->glyph->advance.x / 64.0f)));
 
-	if ((FontChars_List.front()->Width > 0) && (FontChars_List.front()->Height > 0)) {
-		// buffer for RGBA, data for font characters texture
-		std::unique_ptr<uint8_t[]> tmpPixels{new uint8_t[FontChars_List.front()->Width * FontChars_List.front()->Height * 4]};
-		// white color for RGBA, alpha channel will be corrected later
-		memset(tmpPixels.get(), 255, FontChars_List.front()->Width * FontChars_List.front()->Height * 4);
+	if ((FontCharsList.front()->Width > 0) && (FontCharsList.front()->Height > 0)) {
+		// buffer for RGBA, data for font characters texture, initialize it with white color (255)
+		std::vector<uint8_t> tmpPixels(FontCharsList.front()->Width * FontCharsList.front()->Height * 4, 255 /*white*/);
 		// convert greyscale to RGB+Alpha (32bits), now we need correct only alpha channel
-		for (int j = 0; j < FontChars_List.front()->Height; j++) {
-			int StrideSrc = j * FontChars_List.front()->Width * 4;
-			int StrideDst = (FontChars_List.front()->Height - j - 1) * FontChars_List.front()->Width;
-			for (int i = 0; i < FontChars_List.front()->Width; i++) {
+		for (int j = 0; j < FontCharsList.front()->Height; j++) {
+			int StrideSrc = j * FontCharsList.front()->Width * 4;
+			int StrideDst = (FontCharsList.front()->Height - j - 1) * FontCharsList.front()->Width;
+			for (int i = 0; i < FontCharsList.front()->Width; i++) {
 				// alpha channel
-				memcpy(tmpPixels.get() + StrideSrc + i * 4 + 3, InternalFace->glyph->bitmap.buffer + StrideDst + i, 1);
+				memcpy(tmpPixels.data() + StrideSrc + i * 4 + 3, InternalFace->glyph->bitmap.buffer + StrideDst + i, 1);
 			}
 		}
 
@@ -270,12 +270,12 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 
 		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE,
 				  RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
-		FontChars_List.front()->Texture = vw_CreateTextureFromMemory(FakeTExtureFileName, tmpPixels.get(),
-									     FontChars_List.front()->Width, FontChars_List.front()->Height,
+		FontCharsList.front()->Texture = vw_CreateTextureFromMemory(FakeTExtureFileName, tmpPixels.data(),
+									     FontCharsList.front()->Width, FontCharsList.front()->Height,
 									     4, 0, 0, 0, false);
 	}
 
-	return FontChars_List.front().get();
+	return FontCharsList.front().get();
 }
 
 /*
@@ -289,10 +289,8 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 	printf("Font characters generation start.\n");
 
 	// buffer for RGBA, data for font characters texture
-	std::unique_ptr<uint8_t[]> DIB{new uint8_t[FontTextureWidth * FontTextureHeight * 4]};
-	// make sure, DIB filled by black and alpha set to zero,
-	// or we will have white borders on each character
-	memset(DIB.get(), 0, FontTextureWidth * FontTextureHeight * 4);
+	// make sure, DIB filled by black and alpha set to zero (0), or we will have white borders on each character
+	std::vector<uint8_t> DIB(FontTextureWidth * FontTextureHeight * 4, 0 /*black + transparent*/);
 
 	// initial setup
 	if (FT_Set_Char_Size(InternalFace, InternalFontSize << 6, InternalFontSize << 6, 96, 96)) {
@@ -315,60 +313,60 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 			return ERR_EXT_RES;
 		}
 
-		FontChars_List.push_front(std::unique_ptr<sFontChar>(new sFontChar(CurrentChar, InternalFontSize, nullptr,
+		FontCharsList.push_front(std::unique_ptr<sFontChar>(new sFontChar(CurrentChar, InternalFontSize, nullptr,
 								     0, 0, 0, 0,
 								     InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
 								     InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
 								     InternalFace->glyph->advance.x / 64.0f)));
 
 		// move to next line in bitmap if not enough space
-		if (CurrentDIBX + FontChars_List.front()->Width > FontTextureWidth) {
+		if (CurrentDIBX + FontCharsList.front()->Width > FontTextureWidth) {
 			CurrentDIBX = 0;
 			CurrentDIBY += MaxHeightInCurrentLine + EdgingSpace;
 			MaxHeightInCurrentLine = 0;
 		}
 		// looks like no more space left at all, fail
-		if (CurrentDIBY + FontChars_List.front()->Height > FontTextureHeight) {
+		if (CurrentDIBY + FontCharsList.front()->Height > FontTextureHeight) {
 			fprintf(stderr, "Can't generate all font chars in one texture. Too many chars or too small texture size!\n");
 			break;
 		}
 
 		// copy glyph into bitmap
 		uint8_t ColorRGB[3] = {255, 255, 255};
-		for (int j = 0; j < FontChars_List.front()->Height; j++) {
-			for (int i = 0; i < FontChars_List.front()->Width; i++) {
-				memcpy(DIB.get() + (FontTextureHeight - CurrentDIBY - j - 1) * FontTextureWidth * 4 + (CurrentDIBX + i) * 4,
+		for (int j = 0; j < FontCharsList.front()->Height; j++) {
+			for (int i = 0; i < FontCharsList.front()->Width; i++) {
+				memcpy(DIB.data() + (FontTextureHeight - CurrentDIBY - j - 1) * FontTextureWidth * 4 + (CurrentDIBX + i) * 4,
 				       ColorRGB, 3);
-				memcpy(DIB.get() + (FontTextureHeight - CurrentDIBY - j - 1) * FontTextureWidth * 4 + (CurrentDIBX + i) * 4 + 3,
-				       InternalFace->glyph->bitmap.buffer + j * FontChars_List.front()->Width + i, 1);
+				memcpy(DIB.data() + (FontTextureHeight - CurrentDIBY - j - 1) * FontTextureWidth * 4 + (CurrentDIBX + i) * 4 + 3,
+				       InternalFace->glyph->bitmap.buffer + j * FontCharsList.front()->Width + i, 1);
 			}
 		}
 
 		// setup new character
-		FontChars_List.front()->TexturePositionLeft = CurrentDIBX;
-		FontChars_List.front()->TexturePositionRight = CurrentDIBX + FontChars_List.front()->Width;
-		FontChars_List.front()->TexturePositionTop = CurrentDIBY;
-		FontChars_List.front()->TexturePositionBottom = CurrentDIBY + FontChars_List.front()->Height;
+		FontCharsList.front()->TexturePositionLeft = CurrentDIBX;
+		FontCharsList.front()->TexturePositionRight = CurrentDIBX + FontCharsList.front()->Width;
+		FontCharsList.front()->TexturePositionTop = CurrentDIBY;
+		FontCharsList.front()->TexturePositionBottom = CurrentDIBY + FontCharsList.front()->Height;
 
 		// detect new line position by height
-		if (MaxHeightInCurrentLine < FontChars_List.front()->Height)
-			MaxHeightInCurrentLine = FontChars_List.front()->Height;
-		CurrentDIBX += FontChars_List.front()->Width + EdgingSpace;
+		if (MaxHeightInCurrentLine < FontCharsList.front()->Height)
+			MaxHeightInCurrentLine = FontCharsList.front()->Height;
+		CurrentDIBX += FontCharsList.front()->Width + EdgingSpace;
 	}
 
 	// create texture from bitmap
 	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
-	sTexture *FontTexture = vw_CreateTextureFromMemory(CharsList.c_str() /*texture name*/, DIB.get(), FontTextureWidth, FontTextureHeight, 4, 0);
-	if (FontTexture == nullptr) {
+	sTexture *FontTexture = vw_CreateTextureFromMemory(CharsList.c_str() /*texture name*/, DIB.data(), FontTextureWidth, FontTextureHeight, 4, 0);
+	if (!FontTexture) {
 		fprintf(stderr, "Can't create font texture.\n");
 		return ERR_MEM;
 	}
 
 	// setup texture to all font characters from list
 	for (const auto &CurrentChar : UTF32String) {
-		sFontChar *TMPChar = FindFontCharByUTF32(CurrentChar);
-		if (TMPChar != nullptr)
-			TMPChar->Texture = FontTexture;
+		sFontChar *tmpChar = FindFontCharByUTF32(CurrentChar);
+		if (tmpChar)
+			tmpChar->Texture = FontTexture;
 	}
 
 	printf("Font characters generation end.\n\n");
@@ -398,7 +396,7 @@ static void CalculateWidthFactors(const std::u32string &Text, const float Strict
 
 	for (const auto &UTF32 : Text) {
 		sFontChar *DrawChar = FindFontCharByUTF32(UTF32);
-		if (DrawChar == nullptr)
+		if (!DrawChar)
 			DrawChar = LoadFontChar(UTF32);
 
 		// calculate space characters count in text
@@ -417,8 +415,7 @@ static void CalculateWidthFactors(const std::u32string &Text, const float Strict
 
 	// correction for factors in both cases
 	if (StrictWidth > 0) {
-		if ((StrictWidth > LineWidth1) &&
-		    (SpaceCount != 0))
+		if ((StrictWidth > LineWidth1) && SpaceCount)
 			SpaceWidthFactor = (StrictWidth - LineWidth1) / SpaceCount;
 	} else {
 		if (StrictWidth * (-1.0f) < LineWidth2)
@@ -431,7 +428,7 @@ static void CalculateWidthFactors(const std::u32string &Text, const float Strict
  */
 static void CalculateDefaultSpaceWidth(float &SpaceWidthFactor, float FontScale)
 {
-	if (FindFontCharByUTF32(SpaceUTF32) == nullptr)
+	if (!FindFontCharByUTF32(SpaceUTF32))
 		LoadFontChar(SpaceUTF32);
 	SpaceWidthFactor = FindFontCharByUTF32(SpaceUTF32)->AdvanceX * FontScale;
 	// width factor for for space charecter, make sure, we have space width at least 65% of current font size
@@ -476,7 +473,7 @@ static void DrawBufferOnTextEnd(sTexture *CurrentTexture)
 int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
 		 float R, float G, float B, float Transp, const char *Text, ...)
 {
-	if (Text == nullptr)
+	if (!Text)
 		return ERR_PARAMETERS;
 	// get string with variadic arguments
 	// allocate buffer
@@ -538,7 +535,7 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 	float FontWidthFactor{1.0f};
 
 	// calculate width factors
-	if (StrictWidth != 0)
+	if (StrictWidth)
 		CalculateWidthFactors(Text, StrictWidth, SpaceWidthFactor, FontWidthFactor);
 
 	// calculate text width, all characters that we already rendered
@@ -555,10 +552,10 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 	for (const auto &UTF32 : Text) {
 		// find current character
 		sFontChar *DrawChar = FindFontCharByUTF32(UTF32);
-		if (DrawChar == nullptr)
+		if (!DrawChar)
 			DrawChar = LoadFontChar(UTF32);
 		// for first character in text - setup texture by first character
-		if (CurrentTexture == nullptr)
+		if (!CurrentTexture)
 			CurrentTexture = DrawChar->Texture;
 
 		// looks like texture should be changed
@@ -624,7 +621,7 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
  */
 int vw_FontSize(const char *Text, ...)
 {
-	if (Text == nullptr)
+	if (!Text)
 		return ERR_PARAMETERS;
 
 	// get string with variadic arguments
@@ -659,7 +656,7 @@ int vw_FontSizeUTF32(const std::u32string &Text)
 	for (const auto &UTF32 : Text) {
 		// find current character
 		sFontChar *DrawChar = FindFontCharByUTF32(UTF32);
-		if (DrawChar == nullptr)
+		if (!DrawChar)
 			DrawChar = LoadFontChar(UTF32);
 
 		// calculate space characters count in text
@@ -677,7 +674,7 @@ int vw_FontSizeUTF32(const std::u32string &Text)
  */
 int vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 {
-	if (Text == nullptr)
+	if (!Text)
 		return ERR_PARAMETERS;
 
 	// get string with variadic arguments
@@ -727,10 +724,10 @@ int vw_DrawFont3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 	for (const auto &UTF32 : Text) {
 		// find current character
 		sFontChar *DrawChar = FindFontCharByUTF32(UTF32);
-		if (DrawChar == nullptr)
+		if (!DrawChar)
 			DrawChar = LoadFontChar(UTF32);
 		// for first character in text - setup texture by first character
-		if (CurrentTexture == nullptr)
+		if (!CurrentTexture)
 			CurrentTexture = DrawChar->Texture;
 
 		// looks like texture should be changed

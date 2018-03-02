@@ -366,7 +366,7 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 			    float Object2Radius, sVECTOR3D Object2Location, sVECTOR3D Object2PrevLocation,
 			    sVECTOR3D *CollisionLocation)
 {
-	if (Object1DrawObjectList == nullptr)
+	if (!Object1DrawObjectList)
 		return false;
 
 	// translation matrix
@@ -395,7 +395,7 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 	for (int i = 0; i < Object1DrawObjectList->VertexCount; i += 3) {
 		// we use index buffer here in order to find triangle's vertices in mesh
 		int j2{0};
-		if (Object1DrawObjectList->IndexBuffer != nullptr)
+		if (Object1DrawObjectList->IndexBuffer)
 			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart + i] * Object1DrawObjectList->VertexStride;
 		else
 			j2 = (Object1DrawObjectList->RangeStart + i) * Object1DrawObjectList->VertexStride;
@@ -406,7 +406,7 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 				Object1DrawObjectList->VertexBuffer[j2 + 2]};
 		vw_Matrix44CalcPoint(Point1, TransMat);
 
-		if (Object1DrawObjectList->IndexBuffer != nullptr)
+		if (Object1DrawObjectList->IndexBuffer)
 			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart + i + 1] * Object1DrawObjectList->VertexStride;
 		else
 			j2 = (Object1DrawObjectList->RangeStart + i + 1) * Object1DrawObjectList->VertexStride;
@@ -416,7 +416,7 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 				Object1DrawObjectList->VertexBuffer[j2 + 2]};
 		vw_Matrix44CalcPoint(Point2, TransMat);
 
-		if (Object1DrawObjectList->IndexBuffer != nullptr)
+		if (Object1DrawObjectList->IndexBuffer)
 			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart + i + 2] * Object1DrawObjectList->VertexStride;
 		else
 			j2 = (Object1DrawObjectList->RangeStart + i + 2) * Object1DrawObjectList->VertexStride;

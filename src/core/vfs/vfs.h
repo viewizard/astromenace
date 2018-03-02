@@ -42,6 +42,8 @@ void vw_ShutdownVFS();
 
 struct sFILE {
 	uint32_t Size{0};
+	// std::unique_ptr, we need only memory allocation without container's features
+	// don't use std::vector here, since it allocates AND value-initializes
 	std::unique_ptr<uint8_t[]> Data{};
 
 	int fread(void *buffer, size_t size, size_t count);
@@ -58,6 +60,7 @@ private:
 };
 
 // Open the sFILE.
+// Return std::unique_ptr, provide smart pointer connected to caller's scope.
 std::unique_ptr<sFILE> vw_fopen(const std::string &FileName);
 // You could call vw_fclose() if you should release memory in particular
 // part of code. Otherwise, it will be deleted automatically (see. unique_ptr).

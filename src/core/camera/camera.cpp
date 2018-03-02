@@ -67,7 +67,7 @@ void vw_IncCameraLocation(const sVECTOR3D &IncLocation)
  */
 sVECTOR3D vw_GetCameraLocation(sVECTOR3D *CurrentLocation)
 {
-	if (CurrentLocation != nullptr)
+	if (CurrentLocation)
 		*CurrentLocation = CameraLocation;
 	return CameraLocation;
 }
@@ -77,7 +77,7 @@ sVECTOR3D vw_GetCameraLocation(sVECTOR3D *CurrentLocation)
  */
 sVECTOR3D vw_GetCameraRotation(sVECTOR3D *CurrentRotation)
 {
-	if (CurrentRotation != nullptr)
+	if (CurrentRotation)
 		*CurrentRotation = CameraRotation;
 	return CameraRotation;
 }
