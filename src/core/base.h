@@ -24,12 +24,8 @@
 
 *************************************************************************************/
 
-// TODO should not be connected to core in this way
-
 #ifndef Base_H
 #define Base_H
-
-#include "../config.h"
 
 #ifdef WIN32
 #define WIN32_LEAN_AND_MEAN

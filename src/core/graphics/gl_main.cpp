@@ -215,62 +215,48 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	}
 
 	// проверем поддержку VBO
-#ifdef use_Vertex_Buffer_Objects
 	if (ExtensionSupported("GL_ARB_vertex_buffer_object")) {
 		OpenGL_DevCaps.VBOSupported = true;
 		printf("Vertex Buffer support enabled.\n");
 	}
-#endif
 
 	// проверем поддержку VAO
-#ifdef use_Vertex_Array_Objects
 	if (ExtensionSupported("GL_ARB_vertex_array_object")) {
 		OpenGL_DevCaps.VAOSupported = true;
 		printf("Vertex Array support enabled.\n");
 	}
-#endif
 
 	// проверем поддержку non_power_of_two генерацию текстур
-#ifdef use_NPOT_Texture
 	if (ExtensionSupported("GL_ARB_texture_non_power_of_two"))
 		OpenGL_DevCaps.TextureNPOTSupported = true;
-#endif
 
 	// проверяем, есть ли поддержка компрессии текстур
 	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_EXT_texture_compression_s3tc")) {
 		OpenGL_DevCaps.TexturesCompression = true;
 		printf("Textures S3TC compression support enabled.\n");
 	}
-#ifdef use_BPTC_Texture_Compression
 	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_ARB_texture_compression_bptc")) {
 		OpenGL_DevCaps.TexturesCompressionBPTC = true;
 		printf("Textures BPTC compression support enabled.\n");
 	}
-#endif
 
 	// проверяем, есть ли поддержка SGIS_generate_mipmap (хардварная генерация мипмеп уровней)
-#ifdef use_Automatic_Mipmap_Generation
 	if (ExtensionSupported("SGIS_generate_mipmap")) {
 		OpenGL_DevCaps.HardwareMipMapGeneration = true;
 	}
-#endif
 
 	// проверяем, есть ли поддержка GL_ARB_framebuffer_object (GL_EXT_framebuffer_object+GL_EXT_framebuffer_multisample+GL_EXT_framebuffer_blit)
-#ifdef use_Framebuffer_Objects
 	if (ExtensionSupported("GL_ARB_framebuffer_object") ||
 	    (ExtensionSupported("GL_EXT_framebuffer_blit") && ExtensionSupported("GL_EXT_framebuffer_multisample") && ExtensionSupported("GL_EXT_framebuffer_object"))) {
 		OpenGL_DevCaps.FramebufferObject = true;
 		printf("Frame Buffer Object support enabled.\n");
 	}
-#endif
 
 	// проверяем, есть ли поддержка GL_ARB_texture_storage или GL_EXT_texture_storage
-#ifdef use_Texture_Storage
 	if (ExtensionSupported("GL_ARB_texture_storage") || ExtensionSupported("GL_EXT_texture_storage")) {
 		OpenGL_DevCaps.TextureStorage = true;
 		printf("Texture Storage support enabled.\n");
 	}
-#endif
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -278,14 +264,12 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// проверяем, есть ли поддержка шейдеров GLSL версии 1.00
-#ifdef use_Shading_Language
 	if (ExtensionSupported("GL_ARB_shader_objects") &&
 	    ExtensionSupported("GL_ARB_vertex_shader") &&
 	    ExtensionSupported("GL_ARB_fragment_shader") &&
 	    ExtensionSupported("GL_ARB_shading_language_100")) {
 		OpenGL_DevCaps.GLSL100Supported = true;
 	}
-#endif
 
 	// определяем какую версию шейдеров поддерживаем в железе.
 	// т.к. это может пригодиться для определения как работает GLSL,

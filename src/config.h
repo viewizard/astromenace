@@ -28,25 +28,9 @@
 #define CONFIG_H
 
 #define GAME_VERSION		"1.9.9 git"
-#define GAME_BUILD		180302
+#define GAME_BUILD		180304
 
 
-
-
-// You can disable some OpenGL features during compilation to avoid some drivers issues.
-// OpenGL 4.2+
-#define use_Texture_Storage
-#define use_BPTC_Texture_Compression
-// OpenGL 3.0+
-#define use_Vertex_Array_Objects
-#define use_Framebuffer_Objects
-// OpenGL 2.0+
-#define use_Shading_Language
-#define use_NPOT_Texture
-// OpenGL 1.5+
-#define use_Vertex_Buffer_Objects
-// OpenGL 1.4+
-#define use_Automatic_Mipmap_Generation
 
 // joystick support, required SDL compilled with "joystick" flag
 #define joystick
