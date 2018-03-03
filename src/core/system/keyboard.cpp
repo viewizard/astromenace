@@ -210,21 +210,24 @@ int vw_KeyboardNameCode(const char * Name)
 
 
 
+namespace {
 
 // текущий юникод нажатой клавиши
-char CurrentUnicodeChar[8] = {0,0,0,0,0,0,0,0};
+std::u32string CurrentUnicodeChar;
+
+} // unnamed namespace
+
 // установка
 void vw_SetCurrentUnicodeChar(char *NewUnicodeChar)
 {
 	if (NewUnicodeChar != nullptr)
-		strcpy(CurrentUnicodeChar, NewUnicodeChar);
+		CurrentUnicodeChar = vw_UTF8toUTF32(NewUnicodeChar);
 	else
-		CurrentUnicodeChar[0] = 0;
+		CurrentUnicodeChar.clear();
 }
+
 // получение
-char *vw_GetCurrentUnicodeChar()
+const std::u32string &vw_GetCurrentUnicodeChar()
 {
-	if (CurrentUnicodeChar[0] != 0)
-		return CurrentUnicodeChar;
-	return nullptr;
+	return CurrentUnicodeChar;
 }

@@ -143,12 +143,14 @@ struct sRECT {
 	};
 };
 
-// Convert utf8 into utf32 code.
+// Convert utf8 to utf32 code. Return pointer on next utf8 character in string.
 const char *vw_UTF8toUTF32(const char *utf8, unsigned *utf32);
-// Convert utf8 into utf32 code.
-std::u32string vw_UTF8toUTF32(const std::string &utf8);
-// Convert utf8 into utf32 code with variadic arguments.
-std::u32string vw_UTF8VAtoUTF32(const std::string &utf8, ...);
+// Convert utf8 to utf32 code.
+std::u32string vw_UTF8toUTF32(const char *utf8);
+// Convert utf32 to utf8 code.
+std::string vw_UTF32toUTF8(const std::u32string &utf32);
+// Convert utf8 to utf32 code with variadic arguments.
+std::u32string vw_UTF8VAtoUTF32(const char *utf8, ...);
 
 // Fast cosine function.
 double vw_dcos(int Angle);

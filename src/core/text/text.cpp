@@ -24,16 +24,18 @@
 
 *************************************************************************************/
 
-// TODO add UTF32 support
-
 #include "text.h"
 
 namespace {
 
 // Map of Maps with all sorted language data in utf8.
 std::unordered_map<unsigned int, std::unordered_map<std::string, std::string>> TextTable;
+// Map of Maps with all sorted language data in utf32.
+std::unordered_map<unsigned int, std::unordered_map<std::string, std::u32string>> TextTableUTF32;
 // Current default language.
-unsigned int CurrentLanguage = 0;
+unsigned int CurrentLanguage{0};
+// Error text for UTF32, if we can't use TextTableUTF32 by some reason
+const std::u32string TextTableUTF32Error{vw_UTF8toUTF32("vw_GetTextUTF32() Error")};
 
 } // unnamed namespace
 
@@ -62,7 +64,25 @@ unsigned int vw_GetLanguageListCount() {
 void vw_ReleaseText()
 {
 	TextTable.clear();
+	TextTableUTF32.clear();
 	CurrentLanguage = 0;
+}
+
+/*
+ * Create text table with utf32 data (convert TextTable data for utf8 to utf32).
+ */
+static void CreateTextTableUTF32()
+{
+	for (unsigned int i = 0; i < TextTable.size(); i++) {
+		for (auto tmpData : TextTable[i]) {
+			TextTableUTF32[i][tmpData.first] = vw_UTF8toUTF32(tmpData.second.c_str());
+		}
+	}
+	// unconditional rehash, at this line we have not rehashed map
+	TextTableUTF32.rehash(0);
+	for (unsigned int i = 0; i < TextTableUTF32.size(); i++) {
+		TextTableUTF32[i].rehash(0);
+	}
 }
 
 /*
@@ -82,7 +102,7 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 	// RowCode first, only after that, initialize new TextTable row
 	bool NeedBuildCurrentRowCode = true;
 	std::string CurrentRowCode;
-	unsigned int CurrentColumnCode{0};
+	unsigned int CurrentColumnNumber{0};
 	for (unsigned int i = 0; i < tmpFile->Size; i++) {
 		// parse each row
 		for (; (tmpFile->Data[i] != SymbolEndOfLine) && (i < tmpFile->Size); i++) {
@@ -91,27 +111,39 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 				if (NeedBuildCurrentRowCode)
 					CurrentRowCode += tmpFile->Data[i];
 				else
-					TextTable[CurrentColumnCode][CurrentRowCode] += tmpFile->Data[i];
+					TextTable[CurrentColumnNumber][CurrentRowCode] += tmpFile->Data[i];
 			}
 			// RowCode built, next blocks in this row contain data
 			NeedBuildCurrentRowCode = false;
-			CurrentColumnCode++;
-			TextTable[CurrentColumnCode][CurrentRowCode].clear(); // initialize string before "+=" usage
+			CurrentColumnNumber++;
 			// we found SymbolEndOfLine in previous cycle, in order to prevent "i" changes, break cycle
 			if (tmpFile->Data[i] == SymbolEndOfLine)
 				break;
 		}
 		// move to next row
-		CurrentColumnCode = 0;
+		CurrentColumnNumber = 0;
 		NeedBuildCurrentRowCode = true;
 		CurrentRowCode.clear();
 	}
+	// unconditional rehash, at this line we have not rehashed map
+	TextTable.rehash(0);
+	for (unsigned int i = 0; i < TextTable.size(); i++) {
+		TextTable[i].rehash(0);
+	}
 
+	CreateTextTableUTF32();
+
+	std::cout << "Parsed .csv file " << FileName << "\n";
+	std::cout << "Detected " << vw_GetLanguageListCount() << " languages:";
+	for (unsigned int i = 1; i < TextTable.size(); i++) {
+		std::cout << " " << vw_GetText("0_code", i);
+	}
+	std::cout << "\n\n";
 	return 0;
 }
 
 /*
- * Get text for particular language.
+ * Get UTF8 text for particular language.
  */
 const char *vw_GetText(const char *ItemID, unsigned int Language)
 {
@@ -125,26 +157,40 @@ const char *vw_GetText(const char *ItemID, unsigned int Language)
 }
 
 /*
+ * Get UTF32 text for particular language.
+ */
+const std::u32string &vw_GetTextUTF32(const char *ItemID, unsigned int Language)
+{
+	if (!ItemID || TextTableUTF32.empty())
+		return TextTableUTF32Error;
+
+	if (Language > vw_GetLanguageListCount())
+		Language = CurrentLanguage;
+
+	return TextTableUTF32[Language][ItemID];
+}
+
+
+/*
  * Detect what characters was not generated (need for testing purposes).
  */
 int vw_CheckFontCharsInText()
 {
-	if (TextTable.empty())
+	if (TextTableUTF32.empty())
 		return ERR_PARAMETERS;
 
-	printf("Font characters detection start.\n");
+	std::cout << "Font characters detection start.\n";
 
 	// note, i = 1 - first column contain index, not data, start from second
-	for (unsigned int i = 1; i < TextTable[i].size(); i++) {
-		for (auto tmpData : TextTable[i]) {
-			std::u32string tmpDataUTF32 = vw_UTF8toUTF32(tmpData.second);
-			for (auto UTF32 : tmpDataUTF32) {
+	for (unsigned int i = 0; i < TextTableUTF32.size(); i++) {	// cycle by all columns
+		for (auto tmpDataUTF32 : TextTableUTF32[i]) {		// cycle by all words
+			for (auto UTF32 : tmpDataUTF32.first) {		// cycle by all chars
 				if (!vw_CheckFontCharByUTF32(UTF32))
-					printf("!!! FontChar was not created, Unicode: (0x%04X)\n", UTF32);
+					std::cout << "!!! FontChar was not created, Unicode: " << UTF32 << "\n";
 			}
 		}
 	}
 
-	printf("Font characters detection end.\n\n");
+	std::cout << "Font characters detection end.\n\n";
 	return 0;
 }

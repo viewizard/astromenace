@@ -26,10 +26,8 @@
 
 #include "math.h"
 
-/*
- * Cosine Tab
- */
 namespace {
+
 constexpr double Cos[360] =
 		  {1.000000,0.999848,0.999391,0.998630,0.997564,0.996195,0.994522,
 		   0.992546,0.990268,0.987688,0.984808,0.981627,0.978148,0.974370,
@@ -88,20 +86,7 @@ constexpr double Cos[360] =
 		   0.974370,0.978148,0.981627,0.984808,0.987688,0.990268,0.992546,
 		   0.994522,0.996195,0.997564,0.998630,0.999391,0.999848
 		  };
-} // unnamed namespace
 
-/*
- * Fast cosine function.
- */
-double vw_dcos(int Angle)
-{
-	return Cos[Angle];
-}
-
-/*
- * Sine Tab
- */
-namespace {
 constexpr double Sin[360] =
 		  {0.000000,0.017452,0.034899,0.052336,0.069756,0.087156,
 		   0.104528,0.121869,0.139173,0.156434,0.173648,0.190809,0.207912,
@@ -160,7 +145,27 @@ constexpr double Sin[360] =
 		   -0.190809,-0.173648,-0.156434,-0.139173,-0.121869,-0.104528,
 		   -0.087156,-0.069756,-0.052336,-0.034899,-0.017452
 		  };
+
+// utility wrapper to adapt locale-bound facets for wstring/wbuffer convert
+template<class Facet>
+struct deletable_facet : Facet
+{
+    template<class ...Args>
+    deletable_facet(Args&& ...args) : Facet(std::forward<Args>(args)...) {}
+    ~deletable_facet() {}
+};
+// utf8 <=> utf32 converter
+std::wstring_convert<deletable_facet<std::codecvt<char32_t, char, std::mbstate_t>>, char32_t> ConvUTF8_UTF32;
+
 } // unnamed namespace
+
+/*
+ * Fast cosine function.
+ */
+double vw_dcos(int Angle)
+{
+	return Cos[Angle];
+}
 
 /*
  * Fast sine function.
@@ -171,7 +176,7 @@ double vw_dsin(int Angle)
 }
 
 /*
- * Convert utf8 into utf32 code.
+ * Convert utf8 to utf32 code. Return pointer on next utf8 character in string.
  */
 const char *vw_UTF8toUTF32(const char *utf8, unsigned *utf32)
 {
@@ -206,31 +211,35 @@ const char *vw_UTF8toUTF32(const char *utf8, unsigned *utf32)
 }
 
 /*
- * Convert utf8 into utf32 code.
+ * Convert utf8 to utf32 code.
  */
-namespace {
-// utf8 -> utf32 converter
-std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> ConvUTF8toUTF32;
-} // unnamed namespace
-std::u32string vw_UTF8toUTF32(const std::string &utf8)
+std::u32string vw_UTF8toUTF32(const char *utf8)
 {
-	return ConvUTF8toUTF32.from_bytes(utf8);
+	return ConvUTF8_UTF32.from_bytes(utf8);
 }
 
 /*
- * Convert utf8 into utf32 code with variadic arguments
+ * Convert utf32 to utf8 code.
  */
-std::u32string vw_UTF8VAtoUTF32(const std::string &utf8, ...)
+std::string vw_UTF32toUTF8(const std::u32string &utf32)
+{
+	return ConvUTF8_UTF32.to_bytes(utf32);
+}
+
+/*
+ * Convert utf8 to utf32 code with variadic arguments
+ */
+std::u32string vw_UTF8VAtoUTF32(const char *utf8, ...)
 {
 	va_list ap;
 	va_start(ap, utf8);
-	std::vector<char> buffer(1 + std::vsnprintf(nullptr, 0, utf8.data(), ap));
+	std::vector<char> buffer(1 + std::vsnprintf(nullptr, 0, utf8, ap));
 	va_end(ap);
 	// get data into buffer
 	va_start(ap, utf8);
-	std::vsnprintf(buffer.data(), buffer.size(), utf8.data(), ap);
+	std::vsnprintf(buffer.data(), buffer.size(), utf8, ap);
 	va_end(ap);
-	return ConvUTF8toUTF32.from_bytes(buffer.data());
+	return ConvUTF8_UTF32.from_bytes(buffer.data());
 }
 
 /*

@@ -48,7 +48,7 @@ const char *vw_KeyboardCodeName(int Num);
 int vw_KeyboardNameCode(const char * Name);
 // установка-получение юникода текущей нажатой клавиши
 void vw_SetCurrentUnicodeChar(char *NewUnicodeChar);
-char *vw_GetCurrentUnicodeChar();
+const std::u32string &vw_GetCurrentUnicodeChar();
 
 // работа с мышкой
 int vw_GetMousePos(int *X, int *Y);
