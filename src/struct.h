@@ -27,7 +27,8 @@
 #ifndef STRUCT_H
 #define STRUCT_H
 
-
+// Profile name size
+#define PROFILE_NAME_SIZE 1024
 
 
 //------------------------------------------------------------------------------------
@@ -123,9 +124,7 @@ enum class eCommand {
 
 
 
-// -1 - загрузка меню с логотипом
-// 0 - загрузка меню без логотипа
-// 1 - загрузка игры
+// TODO we should not specify numbers here
 enum class eLoading {
 	InitialValue	= -2,	// initial value for variables (some fake, not used loading trigger)
 	MenuWithLogo	= -1,	// loading menu with logo at game launch
@@ -136,7 +135,7 @@ enum class eLoading {
 
 
 
-
+// TODO we should not specify numbers here
 enum class eDialogBox {
 	None			= -1,	// none
 	QuitFromGame		=  0,	// хотим выйти или нет?
@@ -186,10 +185,12 @@ struct sVideoModes {
 //------------------------------------------------------------------------------------
 // структура данных профайла игрока
 //------------------------------------------------------------------------------------
+// This structure should be POD, since we "pack" it into the game config file
+// as memory block. Don't use std::string or any containers here.
 struct sGameProfile {
 	bool	Used;
 
-	char	Name[128];
+	char	Name[PROFILE_NAME_SIZE];
 	// замедление снарядов NPC ... 1-3...
 	uint8_t	NPCWeaponPenalty;
 	// ум. защиты NPC объектов
@@ -263,8 +264,10 @@ struct sGameProfile {
 //------------------------------------------------------------------------------------
 // структура лучших результатов
 //------------------------------------------------------------------------------------
+// This structure should be POD, since we "pack" it into the game config file
+// as memory block. Don't use std::string or any containers here.
 struct sTopScores {
-	char	Name[128];
+	char	Name[PROFILE_NAME_SIZE];
 	int	Score;
 };
 

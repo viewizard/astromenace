@@ -286,8 +286,7 @@ void SetMenu(eMenuStatus Menu)
 
 	switch (Menu) {
 	case eMenuStatus::PROFILE:
-		NewProfileNamePos = 0;
-		memset(NewProfileName, 0, sizeof(NewProfileName));
+		NewProfileName.clear();
 		vw_SetCurrentUnicodeChar(nullptr);
 		break;
 

@@ -431,8 +431,7 @@ void SaveOptionsAdvMenuTmpData();
 // Menu_Profile.cpp
 //------------------------------------------------------------------------------------
 extern int CurrentProfile;
-extern char NewProfileName[128];
-extern int NewProfileNamePos;
+extern std::u32string NewProfileName;
 
 void ProfileMenu();
 void DeleteRecord();
@@ -465,11 +464,11 @@ void DestroyInfoObject();
 //------------------------------------------------------------------------------------
 // Menu_TopScores.cpp
 //------------------------------------------------------------------------------------
-extern char GameName[10][128];
+extern char GameName[10][PROFILE_NAME_SIZE];
 extern int GameScore[10];
 
 void TopScoresMenu();
-void AddTopScores(int Score, char Name[128], bool Type);
+void AddTopScores(int Score, char Name[PROFILE_NAME_SIZE], bool Type);
 
 
 

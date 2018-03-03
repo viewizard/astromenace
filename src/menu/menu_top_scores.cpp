@@ -30,19 +30,19 @@
 
 
 // информация о победителях, для вывода
-char	GameName[10][128];
-int		GameScore[10];
+char	GameName[10][PROFILE_NAME_SIZE];
+int	GameScore[10];
 
 
 
 
 
 
-void AddTopScores(int Score, char Name[128], bool Type)
+void AddTopScores(int Score, char Name[PROFILE_NAME_SIZE], bool Type)
 {
 	// данные буфера
 	int ScoreBuffer = Score;
-	char NameBuffer[128];
+	char NameBuffer[PROFILE_NAME_SIZE];
 	strcpy(NameBuffer, Name);
 
 	// сдвигаем...
@@ -52,7 +52,7 @@ void AddTopScores(int Score, char Name[128], bool Type)
 			else {
 				// сохраняем данные текущей строки
 				int ScoreBuffer2 = GameScore[i];
-				char NameBuffer2[128];
+				char NameBuffer2[PROFILE_NAME_SIZE];
 				strcpy(NameBuffer2, GameName[i]);
 
 				// записываем данные из буфера...
@@ -71,7 +71,7 @@ void AddTopScores(int Score, char Name[128], bool Type)
 			else {
 				// сохраняем данные текущей строки
 				int ScoreBuffer2 = Setup.TopScores[i].Score;
-				char NameBuffer2[128];
+				char NameBuffer2[PROFILE_NAME_SIZE];
 				strcpy(NameBuffer2, Setup.TopScores[i].Name);
 
 				// записываем данные из буфера...

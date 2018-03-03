@@ -32,8 +32,7 @@
 int	CurrentProfile=-1;
 
 
-char NewProfileName[128] = "";
-int NewProfileNamePos = 0;
+std::u32string NewProfileName;
 float LastProfileNameTime = 0.0f;
 float CurrentProfileNameTransp = 0.9f;
 int	SoundOnProfileID = -1;
@@ -59,13 +58,14 @@ void NewRecord()
 		return;
 	}
 
-	if (strlen(NewProfileName)<=0) return;
+	if (NewProfileName.empty())
+		return;
 
 
 	// пишем данные в профайл
 
 	Setup.Profile[ProfileNum].Used = true;
-	strcpy(Setup.Profile[ProfileNum].Name, NewProfileName);
+	strcpy(Setup.Profile[ProfileNum].Name, vw_UTF32toUTF8(NewProfileName).c_str());
 
 	Setup.Profile[ProfileNum].NPCWeaponPenalty = 3;
 	Setup.Profile[ProfileNum].NPCArmorPenalty = 2;
@@ -128,8 +128,7 @@ void NewRecord()
 
 
 	// подготавливаем, для новой записи
-	NewProfileNamePos = 0;
-	memset(NewProfileName, 0, sizeof(NewProfileName));
+	NewProfileName.clear();
 
 
 	CurrentProfile = ProfileNum;
@@ -223,14 +222,11 @@ void DeleteRecord()
 void ProfileInputText()
 {
 
-	// пишем букву, если можем (т.к. у нас утф8 юникод, нужно как минимум 3 байта + 1 байт под \0 в конце строки)
-	if ((NewProfileNamePos < 124) &&
-	    (vw_FontSize(NewProfileName) < 540) &&
-	    (vw_GetCurrentUnicodeChar() != nullptr)) { // если тут не ноль, а юникод - значит нажали
-		// TODO fix this, when all text will be moved to UTF32 with separate (without variadic support) text draw function
-		if (vw_GetCurrentUnicodeChar()[0] != 0x25) { // символ % печатать не даем, т.к. работаем с variadic аргументами через общую функцию печати
-			strcat(NewProfileName, vw_GetCurrentUnicodeChar());
-			NewProfileNamePos += strlen(vw_GetCurrentUnicodeChar());
+	if (!vw_GetCurrentUnicodeChar().empty()) {// если тут не ноль, а юникод - значит нажали
+		if ((vw_FontSizeUTF32(NewProfileName) < 540) &&
+		    // TODO fix this, when all text will be moved to UTF32 with separate (without variadic support) text draw function
+		    (vw_GetCurrentUnicodeChar()[0] != 0x25)) { // символ % печатать не даем, т.к. работаем с variadic аргументами через общую функцию печати
+			NewProfileName += vw_GetCurrentUnicodeChar();
 
 			if (vw_FindSoundByNum(SoundTaping) != nullptr)
 				vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
@@ -243,21 +239,8 @@ void ProfileInputText()
 
 	// проверяем, может спец-код
 	if (vw_GetKeys(SDLK_BACKSPACE))
-		if (NewProfileNamePos>0) {
-			// кривое решение на "пока", перебираем в поисках предпоследнего символа
-			const char *ReversePoint = NewProfileName;
-			const char *ReversePointPrevious = nullptr;
-			while (strlen(ReversePoint) > 0) {
-				unsigned CurrentChar;
-				ReversePointPrevious = ReversePoint;
-				ReversePoint = vw_UTF8toUTF32(ReversePoint, &CurrentChar);
-			}
-			while (ReversePointPrevious != ReversePoint) {
-				NewProfileName[NewProfileNamePos] = 0;
-				NewProfileNamePos--;
-				ReversePointPrevious++;
-			}
-			NewProfileName[NewProfileNamePos] = 0;
+		if (!NewProfileName.empty()) {
+			NewProfileName.pop_back();
 
 			if (vw_FindSoundByNum(SoundTaping) != nullptr)
 				vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
@@ -268,7 +251,7 @@ void ProfileInputText()
 
 	// ввод названия
 	if (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN))
-		if (NewProfileNamePos>0) {
+		if (!NewProfileName.empty()) {
 			NewRecord();
 			//Audio_PlayMenuSound(4,1.0f);
 			vw_SetKeys(SDLK_KP_ENTER, false);
@@ -281,7 +264,7 @@ void ProfileInputText()
 	int Y1 = 230;
 
 	// находим положения ввода
-	int Size = vw_FontSize(NewProfileName);
+	int Size = vw_FontSizeUTF32(NewProfileName);
 	sRECT SrcRect{0, 0, 2, 2};
 	sRECT DstRect{X1 + Size + 2, Y1 - 2, X1 + 26 + Size, Y1 + 24};
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"),
@@ -336,7 +319,8 @@ void ProfileMenu()
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
 	// кнопка, создания новой записи
 	bool Off = false;
-	if (strlen(NewProfileName)<=0) Off = true;
+	if (NewProfileName.empty())
+		Off = true;
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Create"), MenuContentTransp, Off)) {
 		NewRecord();
 	}
@@ -345,7 +329,7 @@ void ProfileMenu()
 	if (!isDialogBoxDrawing())
 		if (MenuContentTransp == 1.0f) ProfileInputText();
 
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, NewProfileName);
+	vw_DrawFontUTF32(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, NewProfileName);
 
 	Y1 += Prir1;
 
