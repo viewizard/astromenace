@@ -242,6 +242,9 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 		vw_ShutdownVFS();
 	}
 
+	// unconditional rehash, at this line we have not rehashed map
+	WritableVFSEntriesMap.rehash(0);
+
 	// add real files into VFS
 	if (GameDataCount > 0) {
 		for (unsigned int i = 0; i < GameDataCount; i++) {
@@ -330,6 +333,9 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 		SDL_RWread(VFSList.front()->File, &(VFSEntriesMap[tmpName]->Offset), sizeof(VFSEntriesMap[tmpName]->Offset), 1);
 		SDL_RWread(VFSList.front()->File, &(VFSEntriesMap[tmpName]->Size), sizeof(VFSEntriesMap[tmpName]->Size), 1);
 	}
+
+	// unconditional rehash, at this line we have not rehashed map
+	VFSEntriesMap.rehash(0);
 
 	printf("VFS file was opened %s\n", Name.c_str());
 	return 0;
