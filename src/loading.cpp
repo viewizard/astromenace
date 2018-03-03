@@ -993,36 +993,21 @@ bool ReleaseGameData(eLoading LoadType)
 	// если это не переход меню-игра, снимаем звук
 	vw_ReleaseAllSounds(1);
 
-	// если не менее 128 мб видео памяти - выгружать текстуры вообще не нужно
-	if (!Setup.EqualOrMore128MBVideoRAM) {
-		// если выбрали миссию, и была миссия (т.е. рестарт миссии) - ничего не удаляем-чистим
-		if (CurretnLoadedData == LoadType && CurretnLoadedData == eLoading::Game) {
-			// эту миссию уже загружали
-			CurretnLoadedData = LoadType;
+	// нужно понять, мы конкретно это загружали или нет
+	if ((LoadType == eLoading::Menu) || (LoadType == eLoading::MenuWithLogo)) { // menu
+		if (LoadedTypes[0])
 			return true;
-		} else {
-			vw_ReleaseAllFontChars(); /* call before vw_ReleaseAllTextures() */
-			vw_ReleaseAllTextures();
-			CurretnLoadedData = LoadType;
+		else {
+			LoadedTypes[0] = true;
 			return false;
 		}
-	} else {
-		// нужно понять, мы конкретно это загружали или нет
-		if (LoadType <= eLoading::Menu) { // это меню
-			if (LoadedTypes[0])
+	} else { // mission
+		if (CurrentMission >= 0) {
+			if (LoadedTypes[CurrentMission+1])
 				return true;
 			else {
-				LoadedTypes[0] = true;
+				LoadedTypes[CurrentMission+1] = true;
 				return false;
-			}
-		} else { // это миссия
-			if (CurrentMission >= 0) {
-				if (LoadedTypes[CurrentMission+1])
-					return true;
-				else {
-					LoadedTypes[CurrentMission+1] = true;
-					return false;
-				}
 			}
 		}
 	}
@@ -1312,7 +1297,7 @@ void LoadGameData(eLoading LoadType)
 
 	// в самом начале () до прорисовки подложки загрузки - генерируем все возможные символы для меню (чтобы в процессе прорисовки меньше подгружать)
 	// если памяти мало, мы очищаем текстуры, надо перегенерировать шрифт и создать новые текстуры
-	if ((LoadType == eLoading::MenuWithLogo) || (!Setup.EqualOrMore128MBVideoRAM)) {
+	if (LoadType == eLoading::MenuWithLogo) {
 		// задаем размеры текстуры (всегда степерь 2 ставим, чтобы избежать проблем со старым железом)
 		vw_GenerateFontChars(Setup.FontSize > 16 ? 512 : 256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
 #ifdef gamedebug

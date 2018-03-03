@@ -24,147 +24,91 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #ifndef STRUCT_H
 #define STRUCT_H
 
-// Profile name size
+// Profile name size (changes make previous game configuration file incompatible)
 #define PROFILE_NAME_SIZE 1024
 
-
-//------------------------------------------------------------------------------------
-// возможные состояния... для прорисовки и обхода
-//------------------------------------------------------------------------------------
 enum class eMenuStatus {
-	// основное меню
-	MAIN_MENU = 1,
-
-	// игра, рассматриваем как еще одно "меню"
-	GAME,
-
-	// лучшие результаты
+	MAIN_MENU,		// main menu
+	GAME,			// game
+	// submenus
 	TOP_SCORES,
-	// настройка интерфейса
-	INTERFACE,
-	// настройка
+	INTERFACE,		// accessible from options menu
 	OPTIONS,
-	// настройка управления
-	CONFCONTROL,
-	// настройки быстродействия
-	OPTIONS_ADVANCED,
-	// информация об игре и т.п.
+	CONFCONTROL,		// accessible from options menu
+	OPTIONS_ADVANCED,	// accessible from options menu
 	INFORMATION,
-	// кто делал игру
 	CREDITS,
-	// профайл
-	PROFILE,
-	// настройка сложности
-	DIFFICULTY,
-	// выбор миссии
-	MISSION,
-	// мастерская покупка-усовершенствование корабля
-	WORKSHOP
+	PROFILE,		// accessible from mission list
+	DIFFICULTY,		// accessible from profile menu
+	MISSION,		// mission list
+	WORKSHOP		// shipyard/workshop/weaponry
 };
 
-
-// меню настроек в игре (когда уже запустили прохождение миссии)
+// in-game menu (accessible during mission)
 enum class eGameMenuStatus {
-	// основное меню игры
-	GAME_MENU = 1,
-	// основное меню настроек
+	GAME_MENU,
 	OPTIONS,
-	// меню продвинутых настроек
 	OPTIONS_ADVANCED,
-	// меню настройки интерфейса
 	INTERFACE,
-	// меню настройки управления
 	CONFCONTROL
 };
 
-
 // commands, that should be executed after rendering cycle
 enum class eCommand {
-	DO_NOTHING = 0,
-
-	// основное меню
-	SWITCH_TO_MAIN_MENU = 1,
-
-	// игра
+	DO_NOTHING,
+	SWITCH_TO_MAIN_MENU,
 	SWITCH_TO_GAME,
-
-	// лучшие результаты
 	SWITCH_TO_TOP_SCORES,
-	// настройка интерфейса
 	SWITCH_TO_INTERFACE,
-	// настройка
 	SWITCH_TO_OPTIONS,
-	// настройка управления
 	SWITCH_TO_CONFCONTROL,
-	// настройки быстродействия
 	SWITCH_TO_OPTIONS_ADVANCED,
-	// информация об игре и т.п.
 	SWITCH_TO_INFORMATION,
-	// кто делал игру
 	SWITCH_TO_CREDITS,
-	// профайл
 	SWITCH_TO_PROFILE,
-	// настройка сложности
 	SWITCH_TO_DIFFICULTY,
-	// выбор миссии
 	SWITCH_TO_MISSION,
-	// мастерская покупка-усовершенствование корабля
 	SWITCH_TO_WORKSHOP,
-
-	// выключаем воркшоп (готовимся к переходу на игру) (ранее 99)
-	TURN_OFF_WORKSHOP_MENU,
-	// переход игра-меню (выбор миссии) (ранее 100)
+	TURN_OFF_WORKSHOP_MENU, // preparing for switch to mission
 	SWITCH_FROM_GAME_TO_MISSION_MENU,
-	// переход игра-главное меню (ранее 101)
 	SWITCH_FROM_GAME_TO_MAIN_MENU
 };
 
-
-
-// TODO we should not specify numbers here
 enum class eLoading {
-	InitialValue	= -2,	// initial value for variables (some fake, not used loading trigger)
-	MenuWithLogo	= -1,	// loading menu with logo at game launch
-	Menu		=  0,
-	Game		=  1
+	InitialValue,	// initial value for variables
+	MenuWithLogo,	// loading menu with logo at game launch
+	Menu,
+	Game
 };
 
 
-
-
-// TODO we should not specify numbers here
 enum class eDialogBox {
-	None			= -1,	// none
-	QuitFromGame		=  0,	// хотим выйти или нет?
-	ProfileCreationError	=  1,	// в профайле все занято, не можем создать новую запись
-	DeleteProfile		=  2,	// удаление профайла - запрос
-	RepairShip		=  3,	// неполный ремонт (не достаточно денег)
-	QuitNoSave		=  4,	// хотим выйти или нет?, с предупреждением, что не все сохраним
-	QuiToMenuNoSave		=  41,	// выход из игры в меню (основное) с предупреждением, что не все сохраним
-	RestartLevelNoSave	=  5,	// хотим рестарт игры?, с предупреждением, что не все сохраним
-	ShowShipInfo		=  6,	// вывод данных по кораблю
-	ShowWeaponsInfo		=  7,	// вывод данных по оружию
-	ShowSystemsInfo		=  8,	// вывод данных по системам
-	ProfileTipsAndTricks	=  9,	// подсказки на меню профилей
-	ShipyardTipsAndTricks	= 10,	// подсказки на меню шипъярд
-	SystemsTipsAndTricks	= 11,	// подсказки на меню системы
-	WeaponryTipsAndTricks	= 12,	// подсказки на меню оружейная
-	ShortkeyTipsAndTricks	= 13,	// подсказки на горячие клавиши в игре
-	StartMissionSecondTime	= 14,	// подсказка, если пытаемся по второму разу пройти миссию
-	ChoseLanguage		= 16,	// спрашиваем какой язык при первом старте игры
-	RestartOnOptionsChanged	= 17,	// при изменении настроек в самой игре спрашиваем, с предупреждением, что не все сохраним
-	RestartOnAdvOptChanged	= 18	// при изменении продвинутых настроек в самой игре, с предупреждением, что не все сохраним
+	None,
+	QuitFromGame,			// quit from menu, exit from the game
+	ProfileCreationError,		// can't create new profile
+	DeleteProfile,			// ask for before delete profile
+	RepairShip,			// don't have money for full repair
+	QuitNoSave,			// quit with warning that progress will be lost
+	QuiToMenuNoSave,		// quit to main menu with warning that progress will be lost
+	RestartLevelNoSave,		// mission restart with warning that progress will be lost
+	ShowShipInfo,			// ship info
+	ShowWeaponsInfo,		// weapon info
+	ShowSystemsInfo,		// system info
+	ProfileTipsAndTricks,		// tips&tricks in profile menu
+	ShipyardTipsAndTricks,		// tips&tricks in shipyard menu
+	SystemsTipsAndTricks,		// tips&tricks in system menu
+	WeaponryTipsAndTricks,		// tips&tricks in weaponry menu
+	ShortkeyTipsAndTricks,		// tips&tricks about short keys on mission start
+	StartMissionSecondTime,		// warning, if finished mission start second time
+	ChoseLanguage,			// language choice on first game start
+	RestartOnOptionsChanged,	// on mission (in-game menu), restart game on option changes, warning that progress will be lost
+	RestartOnAdvOptChanged		// on mission (in-game menu), restart game on adv-option changes, warning that progress will be lost
 };
-
-
-
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // для выбора в списке режимов разрешения
@@ -178,88 +122,76 @@ struct sVideoModes {
 	int BPP;
 };
 
-
-
-
-
 //------------------------------------------------------------------------------------
 // структура данных профайла игрока
 //------------------------------------------------------------------------------------
 // This structure should be POD, since we "pack" it into the game config file
 // as memory block. Don't use std::string or any containers here.
 struct sGameProfile {
-	bool	Used;
+	bool Used;
 
-	char	Name[PROFILE_NAME_SIZE];
+	char Name[PROFILE_NAME_SIZE];
 	// замедление снарядов NPC ... 1-3...
-	uint8_t	NPCWeaponPenalty;
+	uint8_t NPCWeaponPenalty;
 	// ум. защиты NPC объектов
-	uint8_t	NPCArmorPenalty;
+	uint8_t NPCArmorPenalty;
 	// "замедление" наведения NPC ... 1-4
-	uint8_t	NPCTargetingSpeedPenalty;
+	uint8_t NPCTargetingSpeedPenalty;
 	// 0-ограничено, 1-нет
-	uint8_t	LimitedAmmo;
+	uint8_t LimitedAmmo;
 	// 0-может быть уничтожено, 1-нет
-	uint8_t	DestroyableWeapon;
+	uint8_t DestroyableWeapon;
 	// 1-аркада, 0-симулятор
-	uint8_t	WeaponTargetingMode;
+	uint8_t WeaponTargetingMode;
 	// 1-аркада, 0-симулятор
-	uint8_t	SpaceShipControlMode;
+	uint8_t SpaceShipControlMode;
 
+	uint8_t Ship;
+	uint8_t ShipHullUpgrade;
+	float ShipHullCurrentStrength;
 
-	uint8_t	Ship;
-	uint8_t	ShipHullUpgrade;
-	float	ShipHullCurrentStrength;
-
-	uint8_t	Weapon[6];
-	int	WeaponAmmo[6];
+	uint8_t Weapon[6];
+	int WeaponAmmo[6];
 	// для каждого
 	// 1-только примари, 2 только секондари, 3 оба
-	uint8_t	WeaponControl[6];
+	uint8_t WeaponControl[6];
 	// доп. управление, 0-нет, 1-клава,2-мышка,3-джойст
-	uint8_t	WeaponAltControl[6];
-	uint8_t	WeaponAltControlData[6];
+	uint8_t WeaponAltControl[6];
+	uint8_t WeaponAltControlData[6];
 	// для каждого слота - текущее положение оружия
-	float	WeaponSlotYAngle[6];
+	float WeaponSlotYAngle[6];
 
+	uint8_t EngineSystem;
+	uint8_t TargetingSystem;
+	uint8_t AdvancedProtectionSystem;
+	uint8_t PowerSystem;
+	uint8_t TargetingMechanicSystem;
 
+	uint8_t Difficulty;
 
-	uint8_t	EngineSystem;
-	uint8_t	TargetingSystem;
-	uint8_t	AdvancedProtectionSystem;
-	uint8_t	PowerSystem;
-	uint8_t	TargetingMechanicSystem;
-
-	uint8_t	Difficulty;
-
-	int	Money;
-	int	Experience;
-
+	int Money;
+	int Experience;
 
 	// как стрелять // 1 - как и раньше, все вместе... 2 - поочереди
-	uint8_t	PrimaryWeaponFireMode;
-	uint8_t	SecondaryWeaponFireMode;
+	uint8_t PrimaryWeaponFireMode;
+	uint8_t SecondaryWeaponFireMode;
 
 	// последний открытый уровень для данной записи
-	uint8_t	OpenLevelNum; // uint8_t - 255, у нас макс 100
+	uint8_t OpenLevelNum; // uint8_t - 255, у нас макс 100
 	// последняя выбранная миссия
-	uint8_t	LastMission; // uint8_t - 255, у нас макс 100
+	uint8_t LastMission; // uint8_t - 255, у нас макс 100
 
 	// опыт за каждую миссию
-	int	ByMissionExperience[100]; // ставим 100, на максимум миссий
+	int ByMissionExperience[100]; // ставим 100, на максимум миссий
 	// кол-во раз которое играли в миссию
-	int	MissionReplayCount[100]; // ставим 100, на максимум миссий
-
-
+	int MissionReplayCount[100]; // ставим 100, на максимум миссий
 
 	// резерв
-	int 	i[3];
-	uint8_t	c[3];
-	bool	b[3];
-	float	f[3];
+	int  i[3];
+	uint8_t c[3];
+	bool b[3];
+	float f[3];
 };
-
-
 
 //------------------------------------------------------------------------------------
 // структура лучших результатов
@@ -267,12 +199,9 @@ struct sGameProfile {
 // This structure should be POD, since we "pack" it into the game config file
 // as memory block. Don't use std::string or any containers here.
 struct sTopScores {
-	char	Name[PROFILE_NAME_SIZE];
-	int	Score;
+	char Name[PROFILE_NAME_SIZE];
+	int Score;
 };
-
-
-
 
 //------------------------------------------------------------------------------------
 // структура данных настройки игры
@@ -286,135 +215,119 @@ struct sGameSetup {
 	// язык голосовых сообщений
 	unsigned int VoiceLanguage; // 1-en, 2-de, 3-ru
 	// номер шрифта
-	int	FontNumber;
+	int FontNumber;
 	// имя шрифта для fontconfig
-	char	FontName[1024];
+	char FontName[1024];
 	// размер шрифта
-	int	FontSize;
+	int FontSize;
 
 	// вкл/откл музыки
-	int	MusicSw;
-	bool	Music_check; // вообще можем-не можем играть музыку
+	int MusicSw;
+	bool Music_check; // вообще можем-не можем играть музыку
 	// вкл/откл SFX
-	int	SoundSw;
-	int	VoiceSw;
-	bool	Sound_check; // вообще можем-не можем играть sfx
+	int SoundSw;
+	int VoiceSw;
+	bool Sound_check; // вообще можем-не можем играть sfx
 	// режим отображения игры
-	int	Width;
-	int	Height;
-	int	BPP;
-	float	fAspectRatioWidth;
-	float	fAspectRatioHeight;
-	int	iAspectRatioWidth;
-	int	iAspectRatioHeight;
+	int Width;
+	int Height;
+	int BPP;
+	float fAspectRatioWidth;
+	float fAspectRatioHeight;
+	int iAspectRatioWidth;
+	int iAspectRatioHeight;
 	// поведение камеры при стандартном отношении (перемещать-не перемешать)
-	int 	CameraModeWithStandardAspectRatio;
+	int CameraModeWithStandardAspectRatio;
 
 	// синхронизация
-	int	VSync;
+	int VSync;
 	// яркость
-	int	Brightness;
+	int Brightness;
 	// режим фильтра текстур
-	int	TextureFilteringMode;
+	int TextureFilteringMode;
 	// режим качества прорисовки текстур
-	int	TexturesQuality;
+	int TexturesQuality;
 	// мультисэмпл антиалиасинг
-	int	MSAA;
-	int	CSAA;
-
+	int MSAA;
+	int CSAA;
 
 	// качество визуальных эффектов (тайловая подложка, взрывы, системы частиц)  //0-2
-	int	VisualEffectsQuality;
+	int VisualEffectsQuality;
 	// уровень анизотропии при фильтрации текстур
-	int 	AnisotropyLevel;
+	int AnisotropyLevel;
 	// компрессия текстур 0-выкл, 1-S3TC, 2-BPTC
-	int	TexturesCompressionType;
+	int TexturesCompressionType;
 	// использование шейдеров
-	bool	UseGLSL;
+	bool UseGLSL;
 	// использование шадовмеп
-	int	ShadowMap;
+	int ShadowMap;
 	// кол-во точечных источников света на 1 объект
-	int	MaxPointLights;
-
-
+	int MaxPointLights;
 
 	// информация о победителях
-	sTopScores	TopScores[10];
+	sTopScores TopScores[10];
 
-
-
-
-	int	KeyboardDecreaseGameSpeed;
-	int	KeyboardResetGameSpeed;
-	int	KeyboardIncreaseGameSpeed;
-	int	KeyboardGameWeaponInfoType;
-	int	KeyboardPrimaryWeaponFireMode;
-	int	KeyboardSecondaryWeaponFireMode;
+	int KeyboardDecreaseGameSpeed;
+	int KeyboardResetGameSpeed;
+	int KeyboardIncreaseGameSpeed;
+	int KeyboardGameWeaponInfoType;
+	int KeyboardPrimaryWeaponFireMode;
+	int KeyboardSecondaryWeaponFireMode;
 	// управление в игре
 	// клавиатура
-	int	KeyBoardLeft;
-	int	KeyBoardRight;
-	int	KeyBoardUp;
-	int	KeyBoardDown;
-	int	KeyBoardPrimary;
-	int	KeyBoardSecondary;
+	int KeyBoardLeft;
+	int KeyBoardRight;
+	int KeyBoardUp;
+	int KeyBoardDown;
+	int KeyBoardPrimary;
+	int KeyBoardSecondary;
 	// мышка
-	int	MousePrimary;
-	int	MouseSecondary;
+	int MousePrimary;
+	int MouseSecondary;
 	// джойстик
-	int	JoystickPrimary;
-	int	JoystickSecondary;
+	int JoystickPrimary;
+	int JoystickSecondary;
 	// номер джойстика (может их несколько)
-	int	JoystickNum;
+	int JoystickNum;
 	// мертвая зона хода ручки джойстика
-	int	JoystickDeadZone;
-
-
+	int JoystickDeadZone;
 
 	// задействовать мышку
-	bool	MouseControl;
+	bool MouseControl;
 	// чуствительность мышки
-	int	ControlSensivity;
+	int ControlSensivity;
 
 	// скорость времени в игре
-	float 	GameSpeed;
+	float GameSpeed;
 
 	// показывать fps + треугольники
-	bool	ShowFPS;
+	bool ShowFPS;
 
 	// тип отображения панелей информации оружия в игре
-	int 	GameWeaponInfoType;
+	int GameWeaponInfoType;
 
 	// профайлы игроков
-	sGameProfile	Profile[5];
+	sGameProfile Profile[5];
 
 	// последняя выбранный профайл
-	int	LastProfile;
+	int LastProfile;
 
 	// показываемые хинты в загрузке
-	int	LoadingHint;
+	int LoadingHint;
 
 	// флаги, показывать-нет подсказки на меню
 	// ставим 10, чтобы было с запасом
-	bool	NeedShowHint[10];
+	bool NeedShowHint[10];
 
 	// номер скрипта подложки меню
-	int	MenuScript;
-
-
+	int MenuScript;
 
 	// параметры управление движком игры
-	int	VBOCoreMode;
-	int	VAOCoreMode;
-	int	FBOCoreMode;
-	// тип работы с видео памятью, больше или нет 128 мегабайт
-	bool	EqualOrMore128MBVideoRAM;
+	int VBOCoreMode;
+	int VAOCoreMode;
+	int FBOCoreMode;
 	// работа с хардварной генерацией мипмеп уровней
-	bool	HardwareMipMapGeneration;
+	bool HardwareMipMapGeneration;
 };
-
-
-
-
 
 #endif // STRUCT_H

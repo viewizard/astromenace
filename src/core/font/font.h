@@ -58,7 +58,7 @@ int vw_DrawFont3DUTF32(float X, float Y, float Z, const std::u32string &Text);
 int vw_FontSize(const char *Text, ...);
 // Draw text with current font with variadic arguments.
 int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
-		 float R, float G, float B, float Transp, const char *Text, ...);
+		float R, float G, float B, float Transp, const char *Text, ...);
 // Draw 3D text with current font with variadic arguments.
 int vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...);
 

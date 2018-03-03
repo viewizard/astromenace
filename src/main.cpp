@@ -1029,11 +1029,6 @@ ReCreate:
 
 	// анализ системы только если это первый запуск
 	if (FirstStart) {
-		// если шейдерная модель 3-я или выше
-		if (vw_GetDevCaps()->ShaderModel >= 3.0f) {
-			// памяти достаточно, включаем другой режим загрузки
-			Setup.EqualOrMore128MBVideoRAM = true;
-		}
 		// если шейдерная модель 4-я или выше
 		if (vw_GetDevCaps()->ShaderModel >= 4.0f) {
 			// 100% держит наши шейдеры
