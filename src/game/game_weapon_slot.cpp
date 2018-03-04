@@ -24,8 +24,8 @@
 
 *************************************************************************************/
 
-
 #include "../game.h"
+#include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
 // работа с морганием вывода
 extern float CurrentAlert2;

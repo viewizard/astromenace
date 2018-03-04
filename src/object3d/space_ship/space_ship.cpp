@@ -24,10 +24,9 @@
 
 *************************************************************************************/
 
-
-/// подключаем нужные файлы
 #include "space_ship.h"
 #include "../../game.h"
+#include "earth_space_fighter/earth_space_fighter.h"
 
 
 extern bool PlayerFighterLeftEng;

@@ -24,15 +24,10 @@
 
 *************************************************************************************/
 
-
 #ifndef Texture_H
 #define Texture_H
 
-
 #include "../base.h"
-#include "../vfs/vfs.h"
-
-
 
 // File types (for LoadAs parametre)
 #define AUTO_FILE			0	// Detect by file extension
@@ -66,7 +61,7 @@ struct sTexture {
 
 	int		Bytes;			// Bytes Per Pixel
 
-	GLuint	TextureID;		// Номер текстуры
+	unsigned	TextureID;		// Номер текстуры
 
 	sTexture	*Prev;		// Pointer to the previous loaded Texture in the memory
 	sTexture	*Next;		// Pointer to the next loaded Texture in the memory

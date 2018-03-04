@@ -24,6 +24,9 @@
 
 *************************************************************************************/
 
+#include "../math/math.h"
+#include "../vfs/vfs.h"
+#include "../font/font.h"
 #include "text.h"
 
 namespace {

@@ -28,7 +28,8 @@
 #define CAMERA_H
 
 #include "../base.h"
-#include "../math/math.h"
+
+struct sVECTOR3D;
 
 /* Camera related function. */
 

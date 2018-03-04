@@ -35,7 +35,14 @@
 
 // TODO in future, use make_unique() to make unique_ptr-s (C++14)
 
-#include "font.h"
+#include "../texture/texture.h"
+#include "../graphics/graphics.h"
+#include "../font/font.h"
+#include "../camera/camera.h"
+#include "../math/math.h"
+#include "../vfs/vfs.h"
+#include <ft2build.h>
+#include FT_FREETYPE_H
 #include <stdarg.h> // va_start
 
 namespace {

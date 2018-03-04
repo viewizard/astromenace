@@ -24,10 +24,9 @@
 
 *************************************************************************************/
 
-
-#include "light.h"
 #include "../graphics/graphics.h"
-
+#include "../math/math.h"
+#include "light.h"
 
 
 sLight * StartLight = nullptr;

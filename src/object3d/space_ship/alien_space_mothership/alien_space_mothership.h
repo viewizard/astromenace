@@ -24,10 +24,8 @@
 
 *************************************************************************************/
 
-
 #ifndef ALIENSPACEMOTHERSHIP_H
 #define ALIENSPACEMOTHERSHIP_H
-
 
 #include "../space_ship.h"
 

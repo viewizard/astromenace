@@ -24,10 +24,8 @@
 
 *************************************************************************************/
 
-
 #ifndef PIRATESHIP_H
 #define PIRATESHIP_H
-
 
 #include "../space_ship.h"
 

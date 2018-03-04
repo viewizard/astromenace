@@ -25,6 +25,7 @@
 *************************************************************************************/
 
 #include "../graphics/graphics.h"
+#include "../math/math.h"
 #include "camera.h"
 
 namespace {

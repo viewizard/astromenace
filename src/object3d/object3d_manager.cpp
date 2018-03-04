@@ -24,11 +24,11 @@
 
 *************************************************************************************/
 
-
-/// подключаем нужные файлы
-#include "object3d.h"
 #include "../game.h"
-
+#include "space_ship/space_ship.h"
+#include "ground_object/ground_object.h"
+#include "space_object/space_object.h"
+#include "object3d.h"
 
 
 //-----------------------------------------------------------------------------

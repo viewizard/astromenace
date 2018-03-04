@@ -34,19 +34,6 @@
 #include <shellapi.h>
 #endif
 
-#if defined(__APPLE__) && defined(__MACH__)
-#define __glext_h_	// Don't let gl.h include glext.h
-#include <OpenGL/gl.h>	// Header File For The OpenGL Library
-#include <OpenGL/glu.h>	// Header File For The GLu Library
-#undef __glext_h_
-#else
-#define __glext_h_	// Don't let gl.h include glext.h
-#include <GL/gl.h>	// Header File For The OpenGL Library
-#include <GL/glu.h>	// Header File For The GLu Library
-#undef __glext_h_
-#endif
-
-#include "graphics/glext.h"
 #include "SDL2/SDL.h"
 
 // suppress warnings about unused variables, when we need to
@@ -57,13 +44,10 @@
 #endif
 
 #if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
-
 #ifndef MAX_PATH
 #define MAX_PATH 1024
-#endif /* MAX_PATH */
-
-#endif /* unix */
-
+#endif // MAX_PATH
+#endif // unix
 
 // STL
 // only includes that really should being used in different parts of code
@@ -78,7 +62,6 @@
 #include <codecvt>
 #include <iostream>
 
-
 // error codes
 #define ERR_PARAMETERS		-1	// function's parameters related issue
 #define ERR_FILE_NOT_FOUND	-2	// file not found
@@ -86,6 +69,5 @@
 #define ERR_VFS_BUILD		-4	// VFS build number issue
 #define ERR_EXT_RES		-5	// issue with external resources
 #define ERR_MEM			-6	// memory allocation related issue
-
 
 #endif // Base_H

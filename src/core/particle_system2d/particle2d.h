@@ -28,7 +28,8 @@
 #define PARTICLE2D_H
 
 #include "../base.h"
-#include "../math/math.h"
+
+struct sVECTOR3D;
 
 //-----------------------------------------------------------------------------
 // Структура цвета

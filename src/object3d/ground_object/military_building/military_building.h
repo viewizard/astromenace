@@ -24,10 +24,8 @@
 
 *************************************************************************************/
 
-
 #ifndef MILITARYBUILDING_H
 #define MILITARYBUILDING_H
-
 
 #include "../ground_object.h"
 

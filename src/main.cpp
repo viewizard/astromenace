@@ -24,8 +24,11 @@
 
 *************************************************************************************/
 
-
 #include "game.h"
+#include "script_engine/script.h"
+#include "gfx/space_stars/space_stars.h"
+#include "object3d/object3d.h"
+#include "gfx/game_level_text/game_level_text.h"
 #include <sys/stat.h> // stat
 
 

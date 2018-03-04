@@ -27,9 +27,7 @@
 #ifndef FONT_H
 #define FONT_H
 
-#include "../core.h"
-#include <ft2build.h>
-#include FT_FREETYPE_H
+#include "../base.h"
 
 // Font initialization by font name (path to file).
 int vw_InitFont(const std::string &FontName);

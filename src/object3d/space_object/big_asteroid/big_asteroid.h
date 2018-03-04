@@ -24,10 +24,8 @@
 
 *************************************************************************************/
 
-
 #ifndef BIGASTEROID_H
 #define BIGASTEROID_H
-
 
 #include "../space_object.h"
 

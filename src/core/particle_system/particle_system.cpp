@@ -24,12 +24,11 @@
 
 *************************************************************************************/
 
-
-#include "particle_system.h"
 #include "../camera/camera.h"
 #include "../graphics/graphics.h"
-
-
+#include "../math/math.h"
+#include "../light/light.h"
+#include "particle_system.h"
 
 extern bool ParticleSystemUseGLSL;
 extern float ParticleSystemQuality;

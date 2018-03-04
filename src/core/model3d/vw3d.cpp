@@ -24,10 +24,10 @@
 
 *************************************************************************************/
 
-
-#include "model3d.h"
 #include "../graphics/graphics.h"
-
+#include "../math/math.h"
+#include "../vfs/vfs.h"
+#include "model3d.h"
 
 
 

@@ -24,10 +24,8 @@
 
 *************************************************************************************/
 
-
-#include "sound.h"
-#include "buffer.h"
 #include "../system/system.h"
+#include "sound.h"
 
 
 ALboolean CheckALError();

@@ -24,8 +24,6 @@
 
 *************************************************************************************/
 
-
-/// подключаем нужные файлы
 #include "projectile.h"
 #include "../explosion/bullet_explosion/bullet_explosion.h"
 

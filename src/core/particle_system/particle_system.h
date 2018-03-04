@@ -27,9 +27,11 @@
 #ifndef PARTICLESYSTEM_H
 #define PARTICLESYSTEM_H
 
+#include "../base.h"
 #include "particle.h"
-#include "../light/light.h"
-#include "../texture/texture.h"
+
+struct sVECTOR3D;
+struct sLight;
 
 
 class cParticleSystem

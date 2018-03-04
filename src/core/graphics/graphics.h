@@ -24,15 +24,28 @@
 
 *************************************************************************************/
 
-
 #ifndef RendererInterface_H
 #define RendererInterface_H
 
-
 #include "../base.h"
-#include "../math/math.h"
-#include "../texture/texture.h"
 
+#if defined(__APPLE__) && defined(__MACH__)
+#define __glext_h_ // don't let gl.h include glext.h
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#undef __glext_h_
+#else
+#define __glext_h_ // don't let gl.h include glext.h
+#include <GL/gl.h>
+#include <GL/glu.h>
+#undef __glext_h_
+#endif
+
+#include "glext.h" // provide glext.h version we need
+
+struct sRECT;
+struct sVECTOR3D;
+struct sTexture;
 
 
 struct sCoverageModes {

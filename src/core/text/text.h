@@ -28,8 +28,6 @@
 #define TEXT_H
 
 #include "../base.h"
-#include "../font/font.h"
-#include "../vfs/vfs.h"
 
 // Initialization. Load file with translation in .csv format (supported by LibreOffice Calc).
 int vw_InitText(const char *FileName, const char SymbolSeparator, const char SymbolEndOfLine);

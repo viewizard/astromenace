@@ -24,7 +24,6 @@
 
 *************************************************************************************/
 
-
 #include "object3d.h"
 #include "space_ship/space_ship.h"
 #include "ground_object/ground_object.h"

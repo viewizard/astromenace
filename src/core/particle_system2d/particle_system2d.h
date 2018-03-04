@@ -27,9 +27,8 @@
 #ifndef PARTICLESYSTEM2D_H
 #define PARTICLESYSTEM2D_H
 
+#include "../base.h"
 #include "particle2d.h"
-#include "../texture/texture.h"
-
 
 class cParticleSystem2D
 {

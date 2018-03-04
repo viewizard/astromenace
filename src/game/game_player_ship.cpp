@@ -24,10 +24,11 @@
 
 *************************************************************************************/
 
-
 #include "../game.h"
 #include "../object3d/explosion/space_explosion/space_explosion.h"
-
+#include "../object3d/space_object/space_object.h"
+#include "../object3d/ground_object/ground_object.h"
+#include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
 extern cProjectile *StartProjectile;
 extern cProjectile *EndProjectile;

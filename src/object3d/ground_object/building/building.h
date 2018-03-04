@@ -24,10 +24,8 @@
 
 *************************************************************************************/
 
-
 #ifndef BUILDING_H
 #define BUILDING_H
-
 
 #include "../ground_object.h"
 

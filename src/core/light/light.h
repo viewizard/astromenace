@@ -28,7 +28,8 @@
 #define LIGHT_H
 
 #include "../base.h"
-#include "../math/math.h"
+
+struct sVECTOR3D;
 
 
 //-----------------------------------------------------------------------------
@@ -93,7 +94,7 @@ struct sLight {
 //-----------------------------------------------------------------------------
 
 // Включаем в список
-void	vw_AttachLight(sLight * NewLight);
+void	vw_AttachLight(sLight *NewLight);
 // Исключаем из списка
 void	vw_DetachLight(sLight * OldLight);
 // включаем нужные источники света + освещение

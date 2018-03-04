@@ -24,12 +24,10 @@
 
 *************************************************************************************/
 
-
-#include "system.h"
-
+#include "../base.h"
 
 // максимальное кол-во отслеживаемых веток времени
-#define MAX_TIMETHREAD_COUNT	10
+#define MAX_TIMETHREAD_COUNT 10
 
 
 // текущий статус счета времени - считаем-нет
@@ -135,6 +133,3 @@ float vw_GetTimeThreadSpeed(int TimeThread)
 {
 	return TimeThreadSpeed[TimeThread];
 }
-
-
-

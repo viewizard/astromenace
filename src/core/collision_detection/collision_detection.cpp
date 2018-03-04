@@ -24,7 +24,8 @@
 
 *************************************************************************************/
 
-#include "collision_detection.h"
+#include "../math/math.h"
+#include "../model3d/model3d.h"
 
 /*
  * Check, is point belong triangle.

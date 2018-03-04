@@ -24,10 +24,8 @@
 
 *************************************************************************************/
 
-
 #ifndef EARTHSPACEFIGHTER_H
 #define EARTHSPACEFIGHTER_H
-
 
 #include "../space_ship.h"
 

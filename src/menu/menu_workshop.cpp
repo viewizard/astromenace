@@ -24,10 +24,9 @@
 
 *************************************************************************************/
 
-
 #include "../game.h"
-
-
+#include "../object3d/weapon/weapon.h"
+#include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
 
 //------------------------------------------------------------------------------------

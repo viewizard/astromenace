@@ -27,7 +27,6 @@
 #ifndef Core_H
 #define Core_H
 
-#include "base.h"
 #include "math/math.h"
 #include "texture/texture.h"
 #include "light/light.h"

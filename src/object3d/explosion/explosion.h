@@ -24,10 +24,8 @@
 
 *************************************************************************************/
 
-
 #ifndef EXPLOSION_H
 #define EXPLOSION_H
-
 
 #include "../object3d.h"
 #include "../projectile/projectile.h"

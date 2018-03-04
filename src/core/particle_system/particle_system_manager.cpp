@@ -24,11 +24,10 @@
 
 *************************************************************************************/
 
-
-#include "particle_system.h"
 #include "../camera/camera.h"
 #include "../graphics/graphics.h"
-
+#include "../math/math.h"
+#include "particle_system.h"
 
 cParticleSystem * StartParticleSystem = nullptr;
 cParticleSystem * EndParticleSystem = nullptr;

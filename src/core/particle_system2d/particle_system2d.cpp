@@ -24,10 +24,10 @@
 
 *************************************************************************************/
 
-
-#include "particle_system2d.h"
+#include "../math/math.h"
 #include "../graphics/graphics.h"
-
+#include "../texture/texture.h"
+#include "particle_system2d.h"
 
 
 

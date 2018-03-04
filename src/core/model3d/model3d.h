@@ -28,8 +28,8 @@
 #define MODEL3D_H
 
 #include "../base.h"
-#include "../math/math.h"
-#include "../vfs/vfs.h"
+
+struct sVECTOR3D;
 
 
 //-----------------------------------------------------------------------------

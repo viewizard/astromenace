@@ -24,11 +24,9 @@
 
 *************************************************************************************/
 
-
-#include "texture.h"
-#include "../system/system.h"
 #include "../graphics/graphics.h"
-
+#include "../vfs/vfs.h"
+#include "texture.h"
 
 
 extern sTexture *StartTexMan;

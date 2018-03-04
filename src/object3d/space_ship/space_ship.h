@@ -24,10 +24,8 @@
 
 *************************************************************************************/
 
-
 #ifndef SPACESHIP_H
 #define SPACESHIP_H
-
 
 #include "../object3d.h"
 #include "../weapon/weapon.h"

@@ -24,6 +24,8 @@
 
 *************************************************************************************/
 
+// TODO this is really wrong, all this mess should be sorted to headers
+
 #ifndef GAME_H
 #define GAME_H
 
@@ -31,32 +33,9 @@
 #include "struct.h"
 #include "config.h"
 
-
-// скриптовый движок
-#include "script_engine/script.h"
-// эффекты
-#include "gfx/space_stars/space_stars.h"
-#include "gfx/game_level_text/game_level_text.h"
-// модели и все объекты
-#include "object3d/object3d.h"
-#include "object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
-#include "object3d/space_ship/alien_space_fighter/alien_space_fighter.h"
-#include "object3d/space_ship/alien_space_mothership/alien_space_mothership.h"
-#include "object3d/space_ship/pirate_ship/pirate_ship.h"
-#include "object3d/ground_object/building/building.h"
-#include "object3d/ground_object/military_building/military_building.h"
-#include "object3d/ground_object/wheeled/wheeled.h"
-#include "object3d/ground_object/tracked/tracked.h"
-#include "object3d/space_object/asteroid/asteroid.h"
-#include "object3d/space_object/big_asteroid/big_asteroid.h"
-#include "object3d/space_object/base_part/base_part.h"
-#include "object3d/space_object/ship_part/ship_part.h"
-#include "object3d/space_object/planet/planet.h"
-
-
-
-
-
+class cSpaceStars;
+class cScriptEngine;
+class cEarthSpaceFighter;
 
 
 

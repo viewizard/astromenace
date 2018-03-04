@@ -29,6 +29,8 @@
 #ifndef STRUCT_H
 #define STRUCT_H
 
+#include "core/base.h"
+
 // Profile name size (changes make previous game configuration file incompatible)
 #define PROFILE_NAME_SIZE 1024
 

@@ -24,8 +24,10 @@
 
 *************************************************************************************/
 
-
 #include "../game.h"
+#include "../object3d/space_object/space_object.h"
+#include "../gfx/space_stars/space_stars.h"
+
 extern cSpaceObject *StartSpaceObject;
 extern cParticleSystem *psSpace;
 

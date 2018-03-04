@@ -27,9 +27,6 @@
 #ifndef GAMELVLTEXT_H
 #define GAMELVLTEXT_H
 
-#include "../../core/core.h"
-
-
 class cGameLvlText
 {
 public:

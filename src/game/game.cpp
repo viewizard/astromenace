@@ -24,8 +24,11 @@
 
 *************************************************************************************/
 
-
+#include "../core/core.h"
 #include "../game.h"
+#include "../script_engine/script.h"
+#include "../gfx/game_level_text/game_level_text.h"
+#include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 #include <stdarg.h> // va_start
 
 

@@ -24,8 +24,7 @@
 
 *************************************************************************************/
 
-
-#include "texture.h"
+#include "../vfs/vfs.h"
 
 #define TGA_RGB		 2	/* normal RGB (BGR) file */
 #define TGA_A		 3	/* ALPHA file */

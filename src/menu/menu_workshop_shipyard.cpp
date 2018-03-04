@@ -24,9 +24,9 @@
 
 *************************************************************************************/
 
-
 #include "../game.h"
-
+#include "../object3d/space_ship/space_ship.h"
+#include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
 
 extern cEarthSpaceFighter *WorkshopFighterGame;

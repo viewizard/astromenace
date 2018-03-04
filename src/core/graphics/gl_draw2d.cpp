@@ -24,7 +24,8 @@
 
 *************************************************************************************/
 
-
+#include "../math/math.h"
+#include "../texture/texture.h"
 #include "graphics.h"
 
 

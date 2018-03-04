@@ -25,7 +25,9 @@
 *************************************************************************************/
 
 #include "space_explosion.h"
-#include "../../../game.h"
+#include "../../space_object/ship_part/ship_part.h"
+
+void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 
 
 //-----------------------------------------------------------------------------

@@ -24,10 +24,9 @@
 
 *************************************************************************************/
 
-
-#include "sound.h"
+#include "../vfs/vfs.h"
 #include "../system/system.h"
-
+#include "sound.h"
 
 
 ALboolean CheckALError();

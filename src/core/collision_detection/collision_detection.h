@@ -28,9 +28,8 @@
 #define COLLISIONDETECTION_H
 
 #include "../base.h"
-#include "../math/math.h"
-#include "../model3d/model3d.h"
 
+struct sObjectBlock;
 
 // AABB-AABB collision detection.
 bool vw_AABBAABBCollision(const sVECTOR3D Object1AABB[8], const sVECTOR3D &Object1Location,

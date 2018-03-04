@@ -28,7 +28,8 @@
 #define CoreSystem_H
 
 #include "../base.h"
-#include "../math/math.h"
+
+struct sRECT;
 
 // работа со временем
 void vw_InitTime();
