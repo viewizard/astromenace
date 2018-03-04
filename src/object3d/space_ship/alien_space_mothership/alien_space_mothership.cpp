@@ -63,7 +63,7 @@ static sAlienSpaceMotherShipData PresetAlienSpaceMotherShipData[] = {
 void cAlienSpaceMotherShip::Create(int	SpaceShipNum)
 {
 	if ((SpaceShipNum <= 0) || ((unsigned int)SpaceShipNum > PresetAlienSpaceMotherShipDataCount)) {
-		fprintf(stderr, "!!! Couldn't init cAlienSpaceMotherShip object with Number %i.\n", SpaceShipNum);
+		std::cerr << "Could not init cAlienSpaceMotherShip object with Number " << SpaceShipNum << "\n";
 		return;
 	}
 
@@ -855,7 +855,7 @@ void cAlienSpaceMotherShip::Create(int	SpaceShipNum)
 
 
 	default:
-		fprintf(stderr, "Wrong SpaceShipNum!");
+		std::cerr << "Wrong SpaceShipNum!\n";
 		return;
 	}
 

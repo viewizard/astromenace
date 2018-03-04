@@ -566,7 +566,7 @@ void DrawGameWeaponSlots()
 		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
 		break;
 	default:
-		fprintf(stderr, "Error in DrawGameWeaponSlots function call, wrong Ship.\n");
+		std::cerr << "Error in DrawGameWeaponSlots function call, wrong Ship.\n";
 		break;
 	}
 

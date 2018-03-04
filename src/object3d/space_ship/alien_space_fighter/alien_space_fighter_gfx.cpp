@@ -203,7 +203,7 @@ void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType)
 		break;
 
 	default:
-		fprintf(stderr, "Error in SetAlienSpaceFighterEngine function call, wrong EngineType.\n");
+		std::cerr << "Error in SetAlienSpaceFighterEngine function call, wrong EngineType.\n";
 		break;
 	}
 

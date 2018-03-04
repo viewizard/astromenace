@@ -359,7 +359,7 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	std::unique_ptr<sFILE> pFile = vw_fopen(SrcName);
 	if (pFile == nullptr) {
-		fprintf(stderr, "Unable to found %s\n", SrcName);
+		std::cerr << "Unable to found " << SrcName << "\n";
 		return;
 	}
 
@@ -373,7 +373,7 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 		if (!strcasecmp(".tga", file_ext))
 			LoadAs = TGA_FILE;
 		else
-			fprintf(stderr, "Format not supported %s\n", SrcName);
+			std::cerr << "Format not supported " << SrcName << "\n";
 	}
 
 
@@ -386,12 +386,12 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 		break;
 
 	default:
-		fprintf(stderr, "Unable to load %s\n", SrcName);
+		std::cerr << "Unable to load " << SrcName << "\n";
 		return;
 	}
 
 	if (tmp_image == nullptr) {
-		fprintf(stderr, "Unable to load %s\n", SrcName);
+		std::cerr << "Unable to load " << SrcName << "\n";
 		return;
 	}
 
@@ -406,7 +406,7 @@ void vw_ConvertImageToVW2D(const char *SrcName, const char *DestName)
 	FileVW2D = SDL_RWFromFile(DestName, "wb");
 	// если не можем создать файл на запись - уходим
 	if (FileVW2D == nullptr) {
-		fprintf(stderr, "Can't create %s file on disk.\n", DestName);
+		std::cerr << "Can't create " << DestName << " file on disk.\n";
 		return;
 	}
 
@@ -447,7 +447,7 @@ sTexture *vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	std::unique_ptr<sFILE> pFile = vw_fopen(nName);
 	if (pFile == nullptr) {
-		fprintf(stderr, "Unable to found %s\n", nName);
+		std::cerr << "Unable to found " << nName << "\n";
 		return nullptr;
 	}
 
@@ -464,7 +464,7 @@ sTexture *vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 			else if (!strcasecmp(".vw2d", file_ext))
 				LoadAs = VW2D_FILE;
 			else
-				fprintf(stderr, "Format not supported %s\n", nName);
+				std::cerr << "Format not supported " << nName << "\n";
 		}
 	}
 
@@ -496,7 +496,7 @@ sTexture *vw_LoadTexture(const char *nName, const char *RememberAsName, int Comp
 	}
 
 	if (tmp_image == nullptr) {
-		fprintf(stderr, "Unable to load %s\n", nName);
+		std::cerr << "Unable to load " << nName << "\n";
 		return nullptr;
 	}
 
@@ -543,7 +543,7 @@ sTexture *vw_CreateTextureFromMemory(const char *TextureName, uint8_t *DIB, int 
 		while (Tmp != nullptr) {
 			sTexture *Tmp1 = Tmp->Next;
 			if(strcmp(Tmp->Name, TextureName) == 0) {
-				printf("Texture already loaded: %s\n", TextureName);
+				std::cout << "Texture already loaded: " << TextureName << "\n";
 				return Tmp;
 			}
 			Tmp = Tmp1;
@@ -638,7 +638,7 @@ sTexture *vw_CreateTextureFromMemory(const char *TextureName, uint8_t *DIB, int 
 
 	// присоединяем текстуру к менеджеру текстур
 	vw_AttachTexture(Texture);
-	printf("Texture created from memory: %s\n", TextureName);
+	std::cout << "Texture created from memory: " << TextureName << "\n";
 	return Texture;
 }
 

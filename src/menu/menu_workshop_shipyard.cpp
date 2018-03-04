@@ -102,7 +102,7 @@ const char *GetWorkshopShipName(int Num)
 		return "7_ship22";
 
 	default:
-		fprintf(stderr, "Error in GetWorkshopShipName function call, wrong Num.\n");
+		std::cerr << "Error in GetWorkshopShipName function call, wrong Num.\n";
 		break;
 	}
 
@@ -147,7 +147,7 @@ const char *GetShipGroupTitle(int Num)
 		return "4_Scout";
 
 	default:
-		fprintf(stderr, "Error in GetShipGroupTitle function call, wrong Num.\n");
+		std::cerr << "Error in GetShipGroupTitle function call, wrong Num.\n";
 		break;
 	}
 
@@ -208,7 +208,7 @@ int GetWorkshopShipCost(int Num)
 		return 8000;
 
 	default:
-		fprintf(stderr, "Error in GetWorkshopShipCost function call, wrong Num.\n");
+		std::cerr << "Error in GetWorkshopShipCost function call, wrong Num.\n";
 		break;
 	}
 

@@ -136,7 +136,7 @@ int InitFontConfig()
 	FcLangSet *langset;
 
 	if (!FcInit()) {
-		fprintf(stderr, "Couldn't init FontConfig.\n");
+		std::cerr << "Couldn't init FontConfig.\n";
 		return -1;
 	}
 	config = FcConfigGetCurrent();
@@ -146,7 +146,7 @@ int InitFontConfig()
 	os = FcObjectSetBuild(FC_FAMILY, FC_STYLE, FC_LANG, FC_FILE, FC_FONTFORMAT, (char *) 0);
 	fs = FcFontList(config, pat, os);
 
-	printf("\nTotal fonts installed: %d\n", fs->nfont);
+	std::cout << "\nTotal fonts installed: " << fs->nfont << "\n";
 	int AppropriateFontsCount = 0;
 
 	// первый проход, считаем кол-во подходящих шрифтов
@@ -192,15 +192,15 @@ int InitFontConfig()
 
 		AppropriateFontsCount++;
 	}
-	printf("Appropriate fonts detected: %i\n\n", AppropriateFontsCount);
+	std::cout << "Appropriate fonts detected: " << AppropriateFontsCount << "\n\n";
 	if (AppropriateFontsCount == 0) {
-		fprintf(stderr, "Couldn't find any appropriate fonts installed in your system.\n");
-		fprintf(stderr, "Please, check your fonts or install TrueType, bold style font\n");
-		fprintf(stderr, "with ");
+		std::cerr << "Couldn't find any appropriate fonts installed in your system.\n"
+			  << "Please, check your fonts or install TrueType, bold style font\n"
+			  << "with ";
 		for (int i = 0; i < vw_GetLanguageListCount()-1; i++) {
-			fprintf(stderr, "%s, ", vw_GetLanguageList()[i].code);
+			std::cerr << vw_GetLanguageList()[i].code << " ";
 		}
-		fprintf(stderr, "and %s languages support.\n", vw_GetLanguageList()[vw_GetLanguageListCount()-1].code);
+		std::cerr << "and " << vw_GetLanguageList()[vw_GetLanguageListCount()-1].code << " languages support.\n";
 		return -1;
 	}
 
@@ -254,17 +254,17 @@ int InitFontConfig()
 		if (FcPatternGetString(font, FC_FAMILY, 0, &data) == FcResultMatch) {
 			FontList[FontQuantity].FontTitle = new char[strlen((const char*)data)+1];
 			strcpy(FontList[FontQuantity].FontTitle, (const char *)data);
-			printf("Family: %s\n", FontList[FontQuantity].FontTitle);
+			std::cout << "Family: " << FontList[FontQuantity].FontTitle << "\n";
 		}
 		if (FcPatternGetString(font, FC_FILE, 0, &data) == FcResultMatch) {
 			FontList[FontQuantity].FontFileName = new char[strlen((const char*)data)+1];
 			strcpy(FontList[FontQuantity].FontFileName, (const char *)data);
-			printf(" Font Filename: %s\n", FontList[FontQuantity].FontFileName);
+			std::cout << " Font Filename: " << FontList[FontQuantity].FontFileName << "\n";
 		}
 
 		FontQuantity++;
 	}
-	printf("\n");
+	std::cout << "\n";
 
 
 
@@ -338,7 +338,6 @@ void ReleaseFontConfig()
 //------------------------------------------------------------------------------------
 int main( int argc, char **argv )
 {
-
 	// флаг отображать ли системный курсор
 	bool NeedShowSystemCursor = false;
 	// флаг нужно ли сбрасывать настройки игры при старте
@@ -349,15 +348,13 @@ int main( int argc, char **argv )
 	for (int i=1; i<argc; i++) {
 		// проверка ключа "--help"
 		if (!strcmp(argv[i], "--help")) {
-			printf("AstroMenace launch options:\n\n");
-
-			printf("--dir=/game/data/folder/ - folder with gamedata.vfs file (Linux only)\n");
-			printf("--mouse - launch the game without system cursor hiding.\n");
-			printf("--safe-mode - reset all settings not connected to Pilots Profiles at the game launch.\n");
-			printf("--pack - pack data to gamedata.vfs file\n");
-			printf("--rawdata=/game/rawdata/folder/ - folder with game raw data for gamedata.vfs.\n");
-			printf("--help - info about all game launch options.\n");
-
+			std::cout << "AstroMenace launch options:\n\n"
+				  << "--dir=/game/data/folder/ - folder with gamedata.vfs file (Linux only);\n"
+				  << "--mouse - launch the game without system cursor hiding;\n"
+				  << "--safe-mode - reset all settings except Pilots Profiles at the game launch;\n"
+				  << "--pack - pack data to gamedata.vfs file;\n"
+				  << "--rawdata=/game/rawdata/folder/ - folder with game raw data for gamedata.vfs;\n"
+				  << "--help - info about all game launch options.\n";
 			return 0;
 		}
 
@@ -449,12 +446,13 @@ int main( int argc, char **argv )
 
 	const char* HomeEnv = getenv("HOME");
 	if (HomeEnv == nullptr) {
-		fprintf(stderr, "$HOME is not set, will use getpwuid() and getuid() for home folder detection.\n");
+		std::cerr << "$HOME is not set, will use getpwuid() and getuid() for home folder detection.\n";
 		struct passwd *pw = getpwuid(getuid());
 		if (pw != nullptr)
 			HomeEnv = pw->pw_dir;
 		else
-			fprintf(stderr, "Can't detect home folder. Note, this could occur segfault issue, if yours distro don't support XDG Base Directory Specification.\n");
+			std::cerr << "Can't detect home folder. Note, this could occur segfault issue,\n"
+				  << "if yours distro don't support XDG Base Directory Specification.\n";
 	}
 
 	bool dirpresent = false;
@@ -537,7 +535,7 @@ int main( int argc, char **argv )
 
 
 	// версия
-	printf("AstroMenace %s %i\n\n", GAME_VERSION, GAME_BUILD);
+	std::cout << "AstroMenace " << GAME_VERSION << " " << GAME_BUILD << "\n\n";
 
 
 
@@ -547,9 +545,12 @@ int main( int argc, char **argv )
 
 	SDL_VERSION(&compiled);
 	SDL_GetVersion(&linked);
-	printf("Compiled against SDL version %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
-	printf("Linking against SDL version %d.%d.%d\n\n", linked.major, linked.minor, linked.patch);
-
+	std::cout << "Compiled against SDL version "
+		  << (int)compiled.major << "." << (int)compiled.minor << "." << (int)compiled.patch
+		  << "\n";
+	std::cout << "Linking against SDL version "
+		  << (int)linked.major << "." << (int)linked.minor << "." << (int)linked.patch
+		  << "\n";
 
 
 
@@ -591,7 +592,7 @@ int main( int argc, char **argv )
 			}
 		}
 
-		printf("Source Raw Folder: %s\n", RawDataDir);
+		std::cout << "Source Raw Folder: " << RawDataDir << "\n";
 		return ConvertFS2VFS(RawDataDir, VFSFileNamePath);
 	}
 
@@ -609,15 +610,15 @@ int main( int argc, char **argv )
 	// подключаем VFS
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (vw_OpenVFS(VFSFileNamePath, GAME_BUILD) != 0) {
-		fprintf(stderr, "gamedata.vfs file not found or corrupted.\n");
+		std::cerr << "gamedata.vfs file not found or corrupted.\n";
 		return 0;
 	}
-	printf("\n");
+	std::cout << "\n";
 
 
 	// загружаем все текстовые данные до инициализации шрифтов, т.к. нам нужен перечень языков в процессе инициализации fontconfig
 	if (vw_InitText("lang/text.csv", ';', '\n') != 0) {
-		fprintf(stderr, "lang/text.csv file not found or corrupted.\n");
+		std::cerr << "lang/text.csv file not found or corrupted.\n";
 		return 0;
 	}
 
@@ -647,8 +648,8 @@ int main( int argc, char **argv )
 	if (!InitAudio()) {
 		Setup.Music_check = false;
 		Setup.Sound_check = false;
-		fprintf(stderr, "Unable to open audio!\n");
-		printf("\n");
+		std::cerr << "Unable to open audio!\n";
+		std::cout << "\n";
 	}
 
 
@@ -666,7 +667,7 @@ ReCreate:
 	// это нужно сделать сразу, чтобы правильно поставить разрешение
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (SDL_Init(SDL_INIT_VIDEO) == -1) {
-		fprintf(stderr, "Couldn't init SDL: %s\n", SDL_GetError());
+		std::cerr << "Couldn't init SDL: " << SDL_GetError() << "\n";
 		return 1;
 	}
 
@@ -705,13 +706,15 @@ ReCreate:
 	CurrentVideoMode.BPP = SDL_BITSPERPIXEL(CurrentDisplayMode.format);
 	CurrentVideoMode.W = CurrentDisplayMode.w;
 	CurrentVideoMode.H = CurrentDisplayMode.h;
-	printf("Current Video Mode: %ix%i %ibit \n", CurrentVideoMode.W, CurrentVideoMode.H, CurrentVideoMode.BPP);
+	std::cout << "Current Video Mode: "
+		  << CurrentVideoMode.W << "x" << CurrentVideoMode.H << " "
+		  << CurrentVideoMode.BPP << "bit \n";
 
-	printf("Screen count: %i\n", SDL_GetNumVideoDisplays());
+	std::cout << "Screen count: " << SDL_GetNumVideoDisplays() << "\n";
 	for (int i = 0; i < SDL_GetNumVideoDisplays(); i++) {
 		SDL_DisplayMode testDisplayMode;
 		SDL_GetDesktopDisplayMode(i, &testDisplayMode);
-		printf("Screen #%i: %i x %i\n", i, testDisplayMode.w, testDisplayMode.h);
+		std::cout << "Screen #" << i << ": " << testDisplayMode.w << " x " << testDisplayMode.h << "\n";
 	}
 
 
@@ -871,12 +874,11 @@ ReCreate:
 				}
 			}
 		// выводим список поддерживаемых разрешений
-		printf("\n");
-		printf("Supported resolutions list:\n");
+		std::cout << "\nSupported resolutions list:\n";
 		for(int i = 0; i < VideoModesNum; i++) {
-			printf("%ix%i %ibit \n", VideoModes[i].W, VideoModes[i].H, VideoModes[i].BPP);
+			std::cout << VideoModes[i].W << " " << VideoModes[i].H << " " << VideoModes[i].BPP << "bit \n";
 		}
-		printf("\n");
+		std::cout << "\n";
 
 	}
 
@@ -934,25 +936,25 @@ ReCreate:
 #ifdef joystick
 	if (SDL_InitSubSystem(SDL_INIT_JOYSTICK) == 0) {
 		if (SDL_NumJoysticks()>0) {
-			printf("Found Joystick(s):\n");
+			std::cout << "Found Joystick(s):\n";
 			for (int i=0; i<SDL_NumJoysticks(); i++) {
-				printf("Joystick Name %i: %s\n", i, SDL_JoystickNameForIndex(i));
+				std::cout << "Joystick Name " << i << ": " << SDL_JoystickNameForIndex(i) << "\n";
 			}
 
 			Joystick = SDL_JoystickOpen(Setup.JoystickNum);
 
 			if(Joystick) {
-				printf("Opened Joystick %i\n", Setup.JoystickNum);
-				printf("Joystick Name: %s\n", SDL_JoystickNameForIndex(Setup.JoystickNum));
-				printf("Joystick Number of Axes: %d\n", SDL_JoystickNumAxes(Joystick));
-				printf("Joystick Number of Buttons: %d\n", SDL_JoystickNumButtons(Joystick));
-				printf("Joystick Number of Balls: %d\n\n", SDL_JoystickNumBalls(Joystick));
+				std::cout << "Opened Joystick " << Setup.JoystickNum << "\n"
+					  << "Joystick Name: " << SDL_JoystickNameForIndex(Setup.JoystickNum) << "\n"
+					  << "Joystick Number of Axes: " << SDL_JoystickNumAxes(Joystick) << "\n"
+					  << "Joystick Number of Buttons: " << SDL_JoystickNumButtons(Joystick) << "\n"
+					  << "Joystick Number of Balls: " << SDL_JoystickNumBalls(Joystick) << "\n\n";
 			} else {
-				fprintf(stderr, "Couldn't open Joystick 0\n\n");
+				std::cout << "Couldn't open Joystick 0\n\n";
 			}
 		}
 	} else {
-		fprintf(stderr, "Can't init Joystick, SDL Error: %s\n", SDL_GetError());
+		std::cerr << "Can't init Joystick, SDL Error: " << SDL_GetError() << "\n";
 	}
 #endif
 
@@ -987,12 +989,12 @@ ReCreate:
 			goto ReCreate;
 		}
 
-		fprintf(stderr, "Wrong resolution. Fatal error.\n");
+		std::cerr << "Wrong resolution. Fatal error.\n";
 #ifdef WIN32
 		MessageBox(nullptr,"Wrong resolution. Please, install the newest video drivers from your video card vendor.", "Render system - Fatal Error", MB_OK|MB_APPLMODAL|MB_ICONERROR);
 #endif // WIN32
 		SDL_Quit();
-		return 0;									// Quit If Window Was Not Created
+		return 0; // Quit If Window Was Not Created
 	}
 	if (!Fullscreen)
 		Setup.BPP = 0;
@@ -1123,7 +1125,7 @@ ReCreate:
 	// если не поддерживаем как минимум 2 текстуры, железо очень слабое - не запустимся
 	if (vw_GetDevCaps()->MaxMultTextures < 2) {
 		SDL_Quit();
-		fprintf(stderr, "The Multi Textures feature unsupported by hardware. Fatal error.\n");
+		std::cerr << "The Multi Textures feature not supported by hardware. Fatal error.\n";
 #ifdef WIN32
 		MessageBox(nullptr,"OpenGL 1.3 required. Please, install the newest video drivers from your video card vendor.", "Render system - Fatal Error", MB_OK|MB_APPLMODAL|MB_ICONERROR);
 #endif // WIN32
@@ -1279,7 +1281,7 @@ loop:
 				// устанавливаем текущий юникод нажатой клавиши
 				vw_SetCurrentUnicodeChar(event.text.text);
 #ifdef gamedebug
-				printf("TextInput, Unicode: %s \n", event.text.text);
+				std::cout << "TextInput, Unicode: " << event.text.text << "\n";
 #endif // gamedebug
 				break;
 			default:

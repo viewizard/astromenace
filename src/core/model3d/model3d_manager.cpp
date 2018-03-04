@@ -64,17 +64,17 @@ cModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool Nee
 	if (file_ext != nullptr) {
 		if (!strcasecmp(".vw3d", file_ext)) {
 			if (!Model->ReadVW3D(FileName)) {
-				printf("Can't load file ... %s\n", FileName);
+				std::cout << "Can't load file ... " << FileName << "\n";
 				delete Model;
 				return nullptr;
 			}
 		} else {
-			printf("Format not supported ... %s\n", FileName);
+			std::cout << "Format not supported ... " << FileName << "\n";
 			delete Model;
 			return nullptr;
 		}
 	} else {
-		printf("Format not supported ... %s\n", FileName);
+		std::cout << "Format not supported ... " << FileName << "\n";
 		delete Model;
 		return nullptr;
 	}
@@ -91,7 +91,7 @@ cModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool Nee
 	// с которой работают взрывы в игре, не делаем универсальную (нет необходимости)
 	Model->CreateVertexBufferLimitedBySizeTriangles(TriangleSizeLimit);
 
-	printf("Loaded ... %s\n", FileName);
+	std::cout << "Loaded ... " << FileName << "\n";
 
 	return Model;
 }

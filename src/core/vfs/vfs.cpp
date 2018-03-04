@@ -141,7 +141,7 @@ static int WriteIntoVFSfromMemory(sVFS *WritableVFS, const std::string &Name, co
 	FileTableOffset += DataSize;
 	SDL_RWwrite(WritableVFS->File, &FileTableOffset, sizeof(FileTableOffset), 1);
 
-	printf("%s file added to VFS.\n", Name.c_str());
+	std::cout << Name << " file added to VFS.\n";
 	return 0;
 }
 
@@ -157,7 +157,7 @@ static int WriteIntoVFSfromFile(sVFS *WritableVFS, const std::string &SrcName, c
 
 	SDL_RWops *tmpFile = SDL_RWFromFile(SrcName.c_str(), "rb");
 	if (!tmpFile) {
-		fprintf(stderr, "Can't find file %s\n", SrcName.c_str());
+		std::cerr << "Can't find file " << SrcName << "\n";
 		return ERR_FILE_NOT_FOUND;
 	}
 
@@ -174,7 +174,7 @@ static int WriteIntoVFSfromFile(sVFS *WritableVFS, const std::string &SrcName, c
 	int err = WriteIntoVFSfromMemory(WritableVFS, DstName, tmpBuffer.get(), tmpFileSize,
 					 FileTableOffset, WritableVFSEntriesMap);
 	if (err)
-		fprintf(stderr, "Can't write into VFS from memory %s\n", DstName.c_str());
+		std::cerr << "Can't write into VFS from memory " << DstName << "\n";
 
 	return err;
 }
@@ -193,7 +193,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 
 	TempVFS->File = SDL_RWFromFile(Name.c_str(), "wb");
 	if (!TempVFS->File) {
-		fprintf(stderr, "Can't open VFS file for write %s\n", Name.c_str());
+		std::cerr << "Can't open VFS file for write " << Name << "\n";
 		return ERR_FILE_NOT_FOUND;
 	}
 
@@ -214,13 +214,13 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 	if (!ModelsPack.empty()) {
 		// close opened VFS, we need empty VFS related lists
 		if (!VFSList.empty()) {
-			fprintf(stderr, "Detected open VFS, close it now.\n");
+			std::cerr << "Detected open VFS, close it now.\n";
 			vw_ShutdownVFS();
 		}
 
 		int err = vw_OpenVFS(RawDataDir + ModelsPack, 0);
 		if (err) {
-			fprintf(stderr, "%s file not found or corrupted.\n", (RawDataDir + ModelsPack).c_str());
+			std::cerr << RawDataDir + ModelsPack << " file not found or corrupted.\n";
 			return err;
 		}
 
@@ -232,7 +232,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 			err = WriteIntoVFSfromMemory(TempVFS.get(), tmpVFSEntry.first, tmpFile->Data.get(),
 						     tmpFile->Size, FileTableOffset, WritableVFSEntriesMap);
 			if (err) {
-				fprintf(stderr, "VFS compilation process aborted!\n");
+				std::cerr << "VFS compilation process aborted!\n";
 				return err;
 			}
 			vw_fclose(tmpFile);
@@ -251,13 +251,13 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 			int err = WriteIntoVFSfromFile(TempVFS.get(), RawDataDir + GameData[i], GameData[i],
 						       FileTableOffset, WritableVFSEntriesMap);
 			if (err) {
-				fprintf(stderr, "VFS compilation process aborted!\n");
+				std::cerr << "VFS compilation process aborted!\n";
 				return err;
 			}
 		}
 	}
 
-	printf("VFS file was created %s\n", Name.c_str());
+	std::cout << "VFS file was created " << Name << "\n";
 	return 0;
 }
 
@@ -270,7 +270,7 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 	// memory on errors) to named Lambda function
 	auto errPrintWithVFSListPop = [&Name] (const std::string &Text, int err)
 	{
-		fprintf(stderr, "%s %s\n", Text.c_str(), Name.c_str());
+		std::cerr << Text << " " << Name << "\n";
 		VFSList.pop_front();
 		return err;
 	};
@@ -337,7 +337,7 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 	// unconditional rehash, at this line we have not rehashed map
 	VFSEntriesMap.rehash(0);
 
-	printf("VFS file was opened %s\n", Name.c_str());
+	std::cout << "VFS file was opened " << Name << "\n";
 	return 0;
 }
 
@@ -352,7 +352,7 @@ void vw_ShutdownVFS()
 	// release all VFS
 	VFSList.clear();
 
-	printf("All VFS files closed.\n");
+	std::cout << "All VFS files closed.\n";
 }
 
 /*
@@ -388,7 +388,7 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
 	eFileLocation FileLocation = DetectFileLocation(FileName);
 
 	if (FileLocation == eFileLocation::Unknown) {
-		fprintf(stderr, "Can't find file %s\n", FileName.c_str());
+		std::cerr << "Can't find file " << FileName << "\n";
 		return nullptr;
 	}
 
@@ -483,7 +483,7 @@ int sFILE::fseek(long offset, int origin)
 		break;
 
 	default:
-		fprintf(stderr, "Error in fseek function call, wrong origin.\n");
+		std::cerr << "Error in fseek function call, wrong origin.\n";
 		return ERR_PARAMETERS;
 		break;
 	}

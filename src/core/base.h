@@ -32,7 +32,6 @@
 #define _CRT_SECURE_NO_DEPRECATE // suppress warnings
 #include <windows.h>
 #include <shellapi.h>
-#include <stdio.h>
 #endif
 
 #if defined(__APPLE__) && defined(__MACH__)

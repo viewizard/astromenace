@@ -121,7 +121,7 @@ int vw_InitFont(const std::string &FontName)
 		return ERR_PARAMETERS;
 
 	if (FT_Init_FreeType(&InternalLibrary)) {
-		fprintf(stderr, "Can't initialize library, font: %s\n", FontName.c_str());
+		std::cerr << "Can't initialize library, font: " << FontName << "\n";
 		return ERR_EXT_RES;
 	}
 
@@ -130,7 +130,7 @@ int vw_InitFont(const std::string &FontName)
 
 	std::unique_ptr<sFILE> FontFile = vw_fopen(FontName);
 	if (!FontFile) {
-		fprintf(stderr, "Can't open font file: %s\n", FontName.c_str());
+		std::cerr << "Can't open font file: " << FontName << "\n";
 		return ERR_FILE_NOT_FOUND;
 	}
 
@@ -144,11 +144,11 @@ int vw_InitFont(const std::string &FontName)
 	vw_fclose(FontFile);
 
 	if (FT_New_Memory_Face(InternalLibrary, InternalFontBuffer.get(), FontBufferSize, 0, &InternalFace)) {
-		fprintf(stderr, "Can't create font face from memory, font: %s\n", FontName.c_str());
+		std::cerr << "Can't create font face from memory, font: " << FontName << "\n";
 		return ERR_EXT_RES;
 	}
 
-	printf("Font initialized: %s\n\n", FontName.c_str());
+	std::cout << "Font initialized: " << FontName << "\n\n";
 	return 0;
 }
 
@@ -235,12 +235,12 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 {
 	// setup parameters
 	if (FT_Set_Char_Size(InternalFace, InternalFontSize << 6, InternalFontSize << 6, 96, 96)) {
-		fprintf(stderr, "Can't set char size %i.", InternalFontSize);
+		std::cerr << "Can't set char size " << InternalFontSize << "\n";
 		return nullptr;
 	}
 	// load glyph
 	if (FT_Load_Char( InternalFace, UTF32, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT)) {
-		fprintf(stderr, "Can't load glyph: %u\n", UTF32);
+		std::cerr << "Can't load glyph: " << UTF32 << "\n";
 		return nullptr;
 	}
 
@@ -286,7 +286,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 	if (CharsList.empty())
 		return ERR_PARAMETERS;
 
-	printf("Font characters generation start.\n");
+	std::cout << "Font characters generation start.\n";
 
 	// buffer for RGBA, data for font characters texture
 	// make sure, DIB filled by black and alpha set to zero (0), or we will have white borders on each character
@@ -294,7 +294,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 
 	// initial setup
 	if (FT_Set_Char_Size(InternalFace, InternalFontSize << 6, InternalFontSize << 6, 96, 96)) {
-		fprintf(stderr, "Can't set char size %i.", InternalFontSize);
+		std::cerr << "Can't set char size " << InternalFontSize << "\n";
 		return ERR_EXT_RES;
 	}
 
@@ -309,7 +309,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 	for (const auto &CurrentChar : UTF32String) {
 		// load glyph
 		if (FT_Load_Char(InternalFace, CurrentChar, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT)) {
-			fprintf(stderr, "Can't load Char: %u\n", CurrentChar);
+			std::cerr << "Can't load Char: " << CurrentChar << "\n";
 			return ERR_EXT_RES;
 		}
 
@@ -327,7 +327,8 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 		}
 		// looks like no more space left at all, fail
 		if (CurrentDIBY + FontCharsList.front()->Height > FontTextureHeight) {
-			fprintf(stderr, "Can't generate all font chars in one texture. Too many chars or too small texture size!\n");
+			std::cerr << "Can't generate all font chars in one texture.\n"
+				  << "Too many chars or too small texture size!\n";
 			break;
 		}
 
@@ -358,7 +359,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
 	sTexture *FontTexture = vw_CreateTextureFromMemory(CharsList.c_str() /*texture name*/, DIB.data(), FontTextureWidth, FontTextureHeight, 4, 0);
 	if (!FontTexture) {
-		fprintf(stderr, "Can't create font texture.\n");
+		std::cerr <<  "Can't create font texture.\n";
 		return ERR_MEM;
 	}
 
@@ -369,7 +370,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 			tmpChar->Texture = FontTexture;
 	}
 
-	printf("Font characters generation end.\n\n");
+	std::cout << "Font characters generation end.\n\n";
 	return 0;
 }
 

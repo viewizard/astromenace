@@ -165,7 +165,7 @@ void SetPirateShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 		break;
 
 	default:
-		fprintf(stderr, "Error in SetPirateShipEngine function call, wrong EngineType.\n");
+		std::cerr << "Error in SetPirateShipEngine function call, wrong EngineType.\n";
 		break;
 	}
 

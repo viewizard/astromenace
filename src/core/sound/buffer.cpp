@@ -159,7 +159,7 @@ ALuint vw_CreateSoundBufferFromOGG(const char *Name)
 		strcpy(TMPBuffer->Name, Name);
 		TMPBuffer->Buffer = Buffer;
 
-		printf("Buffer ... %s\n", Name);
+		std::cout << "Buffer ... " << Name << "\n";
 	}
 
 	return Buffer;
@@ -200,7 +200,7 @@ ALuint vw_CreateSoundBufferFromWAV(const char *Name)
 		strcpy(TMPBuffer->Name, Name);
 		TMPBuffer->Buffer = Buffer;
 
-		printf("Buffer ... %s\n", Name);
+		std::cout << "Buffer ... " << Name << "\n";
 	}
 
 	return Buffer;

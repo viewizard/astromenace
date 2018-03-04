@@ -80,7 +80,7 @@ void StarSystemInit(int Num, sVECTOR3D SetBaseRotation)
 		StarSystem_Inited = true;
 		break;
 	default:
-		fprintf(stderr, "Error in StarSystemInit function call, wrong Num.\n");
+		std::cerr << "Error in StarSystemInit function call, wrong Num.\n";
 		break;
 	}
 

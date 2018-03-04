@@ -235,7 +235,8 @@ void SetDebugInformation(cObject3D *Object, cXMLEntry *xmlEntry)
 	if (!Script->ShowDebugModeLine) return;
 
 #ifndef gamedebug
-	printf("XML don't count lines, uncomment \"#define gamedebug\" line in config.h file and re-compile game first.\n");
+	std::cerr << "XML don't count lines, uncomment \"#define gamedebug\"\n"
+		  << "line in config.h file and re-compile game first.\n";
 	return;
 #else
 	// преобразовываем число в строку

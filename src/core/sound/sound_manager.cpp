@@ -55,13 +55,8 @@ int NumMusicMan = 0;
 ALboolean CheckALCError(ALCdevice *Device)
 {
 	ALenum ErrCode;
-	char Err[1024];
-	strcpy(Err, "ALC error: ");
-
 	if ((ErrCode = alcGetError(Device)) != ALC_NO_ERROR) {
-		strcat(Err, alcGetString(Device, ErrCode));
-		strcat(Err, "\n");
-		fprintf(stderr, "%s", Err);
+		std::cerr << "ALC error: " << alcGetString(Device, ErrCode) << "\n";
 		return AL_FALSE;
 	}
 	return AL_TRUE;
@@ -69,13 +64,8 @@ ALboolean CheckALCError(ALCdevice *Device)
 ALboolean CheckALError()
 {
 	ALenum ErrCode;
-	char Err[1024];
-	strcpy(Err, "OpenAL error: ");
-
 	if ((ErrCode = alGetError()) != AL_NO_ERROR) {
-		strcat(Err, alGetString(ErrCode));
-		strcat(Err, "\n");
-		fprintf(stderr, "%s", Err);
+		std::cerr << "OpenAL error: " << alGetString(ErrCode) << "\n";
 		return AL_FALSE;
 	}
 	return AL_TRUE;
@@ -83,13 +73,8 @@ ALboolean CheckALError()
 ALboolean CheckALUTError()
 {
 	ALenum ErrCode;
-	char Err[1024];
-	strcpy(Err, "OpenAL alut error: ");
-
 	if ((ErrCode = alutGetError()) != ALUT_ERROR_NO_ERROR) {
-		strcat(Err, alutGetErrorString(ErrCode));
-		strcat(Err, "\n");
-		fprintf(stderr, "%s", Err);
+		std::cerr << "OpenAL alut error: " << alutGetErrorString(ErrCode) << "\n";
 		return AL_FALSE;
 	}
 	return AL_TRUE;
@@ -124,7 +109,7 @@ bool vw_InitSound()
 	Device = alcOpenDevice(nullptr); // "Generic Software"
 	// Check for errors
 	if (!Device) {
-		fprintf(stderr, "Default sound device not present!\n");
+		std::cerr << "Default sound device not found.\n";
 		return false;
 	}
 
@@ -149,10 +134,10 @@ bool vw_InitSound()
 	alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 
 
-	printf("Vendor     : %s\n", alGetString(AL_VENDOR));
-	printf("Renderer   : %s\n", alGetString(AL_RENDERER));
-	printf("Version    : %s\n", alGetString(AL_VERSION));
-	printf("ALut ver   : %i.%i\n", alutGetMajorVersion(), alutGetMinorVersion());
+	std::cout << "Vendor     : " << alGetString(AL_VENDOR) << "\n";
+	std::cout << "Renderer   : " << alGetString(AL_RENDERER) << "\n";
+	std::cout << "Version    : " << alGetString(AL_VERSION) << "\n";
+	std::cout << "ALut ver   : " << alutGetMajorVersion() << "." << alutGetMinorVersion() << "\n";
 
 #ifdef gamedebug
 	// print all supported OpenAL extensions (one per line)
@@ -160,12 +145,12 @@ bool vw_InitSound()
 		std::string extensions{(char *)alGetString(AL_EXTENSIONS)};
 		if (!extensions.empty()) {
 			std::replace(extensions.begin(), extensions.end(), ' ', '\n'); // replace all ' ' to '\n'
-			printf("Supported OpenAL extensions:\n%s\n", extensions.c_str());
+			std::cout << "Supported OpenAL extensions:\n" << extensions.c_str() << "\n";
 		}
 	}
 #endif // gamedebug
 
-	printf("\n");
+	std::cout << "\n";
 
 	// сброс ошибок
 

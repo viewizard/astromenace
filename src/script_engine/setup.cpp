@@ -313,7 +313,6 @@ void SaveXMLSetupFile()
 		// в первую - десятки, во вторую - еденицы
 		ProfileDataXORCode[k2] = 97 + (unsigned char)(ProfileDataXORCode[k2+1]/10.0f);
 		ProfileDataXORCode[k2+1] = 97 + (ProfileDataXORCode[k2+1] - (ProfileDataXORCode[k2]-97)*10);
-		//fprintf(stderr, "--%i %i %i %i\n", ProfileDataXORCode[k], ProfileDataXORCode[k+1],ProfileDataXORCode[k+2],ProfileDataXORCode[k+3]);
 	}
 
 
@@ -369,7 +368,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 
 	// дополнительная проверка на содержимое конфигурационного файла
 	if (RootXMLEntry == nullptr) {
-		fprintf(stderr, "Game configuration file corrupted: %s\n", ConfigFileName);
+		std::cerr << "Game configuration file corrupted: " << ConfigFileName << "\n";
 		// файл поврежден, надо завершить работу с ним
 		delete XMLdoc;
 		// сохранить дефолтные настройки, перезаписав файл
@@ -378,7 +377,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		return true;
 	}
 	if (strcmp("AstroMenaceSettings", RootXMLEntry->Name)) {
-		fprintf(stderr, "Game configuration file corrupted: %s\n", ConfigFileName);
+		std::cerr << "Game configuration file corrupted: " << ConfigFileName << "\n";
 		// файл поврежден, надо завершить работу с ним
 		delete XMLdoc;
 		// сохранить дефолтные настройки, перезаписав файл

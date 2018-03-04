@@ -58,7 +58,7 @@ static sWheeledData PresetWheeledData[] = {
 void cWheeled::Create(int WheeledNum)
 {
 	if ((WheeledNum <= 0) || ((unsigned int)WheeledNum > PresetWheeledDataCount)) {
-		fprintf(stderr, "!!! Couldn't init cWheeled object with Number %i.\n", WheeledNum);
+		std::cerr << "Could not init cWheeled object with Number " << WheeledNum << "\n";
 		return;
 	}
 

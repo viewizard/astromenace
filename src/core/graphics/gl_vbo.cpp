@@ -136,7 +136,7 @@ void vw_BindVBO(int target, unsigned int VBO)
 		glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, VBO);
 		break;
 	default:
-		fprintf(stderr, "Error in vw_BindVBO function call, wrong target.\n");
+		std::cerr << "Error in vw_BindVBO function call, wrong target.\n";
 		break;
 	}
 }

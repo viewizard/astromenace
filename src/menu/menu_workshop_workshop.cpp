@@ -89,7 +89,7 @@ int GetCurrentSustemStockNumBase()
 		return 17;
 
 	default:
-		fprintf(stderr, "Error in GetCurrentSustemStockNumBase function call, wrong CurrentSystemStockNum.\n");
+		std::cerr << "Error in GetCurrentSustemStockNumBase function call, wrong CurrentSystemStockNum.\n";
 		break;
 	}
 
@@ -147,7 +147,7 @@ const char *GetSystemName(int Num)
 		return "7_system20";
 
 	default:
-		fprintf(stderr, "Error in GetSystemName function call, wrong Num.\n");
+		std::cerr << "Error in GetSystemName function call, wrong Num.\n";
 		break;
 	}
 
@@ -217,7 +217,7 @@ sTexture *GetSystemIcon(int Num)
 		return vw_FindTextureByName("menu/system_protect4.tga");
 
 	default:
-		fprintf(stderr, "Error in GetSystemIcon function call, wrong Num.\n");
+		std::cerr << "Error in GetSystemIcon function call, wrong Num.\n";
 		break;
 	}
 
@@ -275,7 +275,7 @@ int GetSystemCost(int Num)
 		return 15000;
 
 	default:
-		fprintf(stderr, "Error in GetSystemCost function call, wrong Num.\n");
+		std::cerr << "Error in GetSystemCost function call, wrong Num.\n";
 		break;
 	}
 

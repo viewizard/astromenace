@@ -120,7 +120,7 @@ float GetShipMaxEnergy(int Num)
 		return 800.0f;
 
 	default:
-		fprintf(stderr, "Error in GetShipMaxEnergy function call, wrong Num.\n");
+		std::cerr << "Error in GetShipMaxEnergy function call, wrong Num.\n";
 		break;
 	}
 
@@ -146,7 +146,7 @@ float GetShipRechargeEnergy(int Num)
 		return 250.0f;
 
 	default:
-		fprintf(stderr, "Error in GetShipRechargeEnergy function call, wrong Num.\n");
+		std::cerr << "Error in GetShipRechargeEnergy function call, wrong Num.\n";
 		break;
 	}
 
@@ -172,7 +172,7 @@ float GetShipProtectionSystemEnergyUse(int Num)
 		return 100.0f;
 
 	default:
-		fprintf(stderr, "Error in GetShipProtectionSystemEnergyUse function call, wrong Num.\n");
+		std::cerr << "Error in GetShipProtectionSystemEnergyUse function call, wrong Num.\n";
 		break;
 	}
 
@@ -198,7 +198,7 @@ float GetShipEngineSystemEnergyUse(int Num)
 		return 60.0f;
 
 	default:
-		fprintf(stderr, "Error in GetShipEngineSystemEnergyUse function call, wrong Num.\n");
+		std::cerr << "Error in GetShipEngineSystemEnergyUse function call, wrong Num.\n";
 		break;
 	}
 
@@ -230,7 +230,8 @@ void InitGamePlayerShip()
 	GameNPCArmorPenalty = 1;
 
 	// если не создано, здесь будет ноль скорее всего
-	if (Setup.Profile[CurrentProfile].Ship == 0) fprintf(stderr, "!!!Pilot Profile has been not created!!!\n");
+	if (Setup.Profile[CurrentProfile].Ship == 0)
+		std::cerr << "Error, Pilot Profile not created.\n";
 
 	PlayerFighter = new cEarthSpaceFighter;
 	PlayerFighter->Create(Setup.Profile[CurrentProfile].Ship);

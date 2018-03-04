@@ -122,7 +122,7 @@ bool cScriptEngine::RunScript(const char *FileName, float InitTime)
 
 	// иним скрипт
 	if (!xmlDoc->Load(FileName)) {
-		fprintf(stderr, "Can't find script file or file corrupted: %s\n", FileName);
+		std::cerr << "Can't find script file or file corrupted: " << FileName << "\n";
 		delete xmlDoc;
 		xmlDoc = nullptr;
 		return false;
@@ -131,7 +131,7 @@ bool cScriptEngine::RunScript(const char *FileName, float InitTime)
 
 	// проверяем корневой элемент
 	if (strcmp("AstroMenaceScript", xmlDoc->RootXMLEntry->Name)) {
-		fprintf(stderr, "Can't find AstroMenaceScript element in the: %s\n", FileName);
+		std::cerr << "Can't find AstroMenaceScript element in the: " << FileName << "\n";
 		delete xmlDoc;
 		xmlDoc = nullptr;
 		return false;
@@ -141,7 +141,7 @@ bool cScriptEngine::RunScript(const char *FileName, float InitTime)
 	// переходим на действия
 	xmlEntry  = xmlDoc->FindFirstChildEntryByName(xmlDoc->RootXMLEntry, "Action");
 	if (xmlEntry == nullptr) {
-		fprintf(stderr, "Can't find Action element in the: %s\n", FileName);
+		std::cerr << "Can't find Action element in the: " << FileName << "\n";
 		delete xmlDoc;
 		xmlDoc = nullptr;
 		return false;
@@ -149,7 +149,7 @@ bool cScriptEngine::RunScript(const char *FileName, float InitTime)
 
 	xmlEntry = xmlEntry->FirstChild;
 	if (xmlEntry == nullptr) {
-		fprintf(stderr, "Can't find Action element in the: %s\n", FileName);
+		std::cerr << "Can't find Action element in the: " << FileName << "\n";
 		delete xmlDoc;
 		xmlDoc = nullptr;
 		return false;
@@ -535,7 +535,8 @@ bool cScriptEngine::Update(float Time)
 															NewText->Color = xmlDoc->iGetEntryAttribute(xmlEntry, "color");
 													} else {
 														// если тут - значит не нашли директиву, или произошла ошибка
-														fprintf(stderr, "ScriptEngine: tag %s not found, line %i.", xmlEntry->Name, xmlEntry->LineNumber);
+														std::cerr << "ScriptEngine: tag " << xmlEntry->Name
+															  << " not found, line " << xmlEntry->LineNumber << "\n";
 													}
 
 		// берем следующий элемент по порядку
@@ -1741,7 +1742,8 @@ void cScriptEngine::UpdateTimeLine()
 														}
 													} else {
 														// если тут - значит не нашли директиву, или произошла ошибка
-														fprintf(stderr, "ScriptEngine: tag %s not found, line %i.", TL->Name, TL->LineNumber);
+														std::cerr << "ScriptEngine: tag " << TL->Name
+															  << " not found, line " << TL->LineNumber << "\n";
 													}
 
 

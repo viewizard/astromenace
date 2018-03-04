@@ -71,7 +71,7 @@ static sPirateShipData PresetPirateShipData[] = {
 void cPirateShip::Create(int PirateShipNum)
 {
 	if ((PirateShipNum <= 0) || ((unsigned int)PirateShipNum > PresetPirateShipDataCount)) {
-		fprintf(stderr, "!!! Couldn't init cPirateShip object with Number %i.\n", PirateShipNum);
+		std::cerr << "Could not init cPirateShip object with Number " << PirateShipNum << "\n";
 		return;
 	}
 
@@ -652,7 +652,7 @@ void cPirateShip::Create(int PirateShipNum)
 
 
 	default:
-		fprintf(stderr, "Wrong PirateShipNum!");
+		std::cerr << "Wrong PirateShipNum!\n";
 		return;
 	}
 

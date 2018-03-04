@@ -94,9 +94,11 @@ void MissionsListInit()
 	// по скрипту, смотрим что загружать + считаем сколько позиций
 	cXMLDocument *xmlDoc = new cXMLDocument;
 
+	std::string ScriptName{"script/list.xml"};
+
 	// читаем данные
-	if (!xmlDoc->Load("script/list.xml")) {
-		fprintf(stderr, "Can't find script file: %s\n", "script/list.xml");
+	if (!xmlDoc->Load(ScriptName.c_str())) {
+		std::cerr << "Can't find script file: " << ScriptName << "\n";
 		delete xmlDoc;
 		return;
 	}
@@ -104,7 +106,7 @@ void MissionsListInit()
 
 	// проверяем корневой элемент
 	if (strcmp("AstroMenaceMissionsList", xmlDoc->RootXMLEntry->Name)) {
-		fprintf(stderr, "Can't find AstroMenaceMissionsList element in the: %s\n", "script/list.xml");
+		std::cerr << "Can't find AstroMenaceMissionsList element in the: " << ScriptName << "\n";
 		delete xmlDoc;
 		return;
 	}
@@ -289,27 +291,27 @@ void MissionsListInit()
 					strcpy(GameMainMusic, xmlEntry->Content);
 					GameMainMusicSet = true;
 					vw_fclose(file);
-					fprintf(stderr, "New GameMainMusic music file %s\n", xmlEntry->Content);
+					std::cerr << "New GameMainMusic music file " << xmlEntry->Content << "\n";
 				} else
-					fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
+					std::cerr << "Unable to find music file %s\n" << xmlEntry->Content << "\n";
 			} else if (!strcmp(xmlEntry->Name, "GameBossMusic")) {
 				std::unique_ptr<sFILE> file = vw_fopen(xmlEntry->Content);
 				if (file != nullptr) {
 					strcpy(GameBossMusic, xmlEntry->Content);
 					GameBossMusicSet = true;
 					vw_fclose(file);
-					fprintf(stderr, "New GameBossMusic music file %s\n", xmlEntry->Content);
+					std::cerr << "New GameBossMusic music file %s\n" << xmlEntry->Content << "\n";
 				} else
-					fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
+					std::cerr << "Unable to find music file %s\n" << xmlEntry->Content << "\n";
 			} else if (!strcmp(xmlEntry->Name, "GameDeathMusic")) {
 				std::unique_ptr<sFILE> file = vw_fopen(xmlEntry->Content);
 				if (file != nullptr) {
 					strcpy(GameDeathMusic, xmlEntry->Content);
 					GameDeathMusicSet = true;
 					vw_fclose(file);
-					fprintf(stderr, "New GameDeathMusic music file %s\n", xmlEntry->Content);
+					std::cerr << "New GameDeathMusic music file %s\n" << xmlEntry->Content << "\n";
 				} else
-					fprintf(stderr, "Unable to find music file %s\n", xmlEntry->Content);
+					std::cerr << "Unable to find music file %s\n" << xmlEntry->Content << "\n";
 			}
 
 

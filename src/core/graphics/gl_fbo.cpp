@@ -171,7 +171,8 @@ bool vw_BuildFBO(sFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 	FBO->FrameBufferObject = 0;
 	FBO->DepthSize = 0;
 
-	printf("Frame Buffer Object creation start with parameters %i %i %i %i %i %i\n", Width, Height, NeedColor, NeedDepth, MSAA, InternalCSAA);
+	std::cout << "Frame Buffer Object creation start with parameters ";
+	std::cout << Width << " " << Height << " " << NeedColor << " " << NeedDepth << " " << MSAA << " " << InternalCSAA << "\n";
 
 	glGenFramebuffersEXT(1, &FBO->FrameBufferObject);
 	glBindFramebufferEXT(GL_FRAMEBUFFER, FBO->FrameBufferObject);
@@ -188,7 +189,7 @@ bool vw_BuildFBO(sFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 				glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, InternalCSAA, MSAA, GL_RGBA, FBO->Width, FBO->Height);
 			glFramebufferRenderbufferEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, FBO->ColorBuffer);
 			if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-				fprintf(stderr, "Can't create FRAMEBUFFER.\n\n");
+				std::cerr << "Can't create FRAMEBUFFER.\n\n";
 				return false;
 			}
 		} else {
@@ -201,7 +202,7 @@ bool vw_BuildFBO(sFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, FBO->Width, FBO->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 			glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, FBO->ColorTexture, 0);
 			if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-				fprintf(stderr, "Can't create FRAMEBUFFER.\n\n");
+				std::cerr << "Can't create FRAMEBUFFER.\n\n";
 				return false;
 			}
 		}
@@ -223,7 +224,7 @@ bool vw_BuildFBO(sFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 			// получаем назначенную драйвером глубину depth буфера
 			glGetFramebufferAttachmentParameterivEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &FBO->DepthSize);
 			if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-				fprintf(stderr, "Can't create FRAMEBUFFER.\n\n");
+				std::cerr << "Can't create FRAMEBUFFER.\n\n";
 				return false;
 			}
 		} else {
@@ -239,7 +240,7 @@ bool vw_BuildFBO(sFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 			// получаем назначенную драйвером глубину depth буфера
 			glGetFramebufferAttachmentParameterivEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &FBO->DepthSize);
 			if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-				fprintf(stderr, "Can't create FRAMEBUFFER.\n\n");
+				std::cerr << "Can't create FRAMEBUFFER.\n\n";
 				return false;
 			}
 		}
@@ -248,7 +249,7 @@ bool vw_BuildFBO(sFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 
 	glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
 
-	printf("Frame Buffer Object created. Depth Size: %i\n", FBO->DepthSize);
+	std::cout << "Frame Buffer Object created. Depth Size: " << FBO->DepthSize << "\n";
 
 	// запоминаем максимальные полученные данные по буферу глубины
 	if (vw_GetDevCaps()->FramebufferObjectDepthSize < FBO->DepthSize) vw_GetDevCaps()->FramebufferObjectDepthSize = FBO->DepthSize;

@@ -204,7 +204,7 @@ bool cXMLDocument::ParseTagLine(char *OriginBuffer, unsigned int StartPosition, 
 		// пропускаем все пробелы и табы
 		while ((((Buffer+i)[0] == ' ') || ((Buffer+i)[0] == '\t')) && ((Buffer+i)[0] != '\0')) i++;
 		if ((Buffer+i)[0] == '\0') {
-			fprintf(stderr, "XML file corrupted, line: %i.", GetLineNumber(OriginBuffer, StartPosition));
+			std::cerr << "XML file corrupted, line: " << GetLineNumber(OriginBuffer, StartPosition) << "\n";
 			break;
 		}
 		// еще раз проверяем, возможно завершение тэга ставили через пробел или таб
@@ -214,7 +214,7 @@ bool cXMLDocument::ParseTagLine(char *OriginBuffer, unsigned int StartPosition, 
 		unsigned int AttribNameStart = i;
 		while (((Buffer+i)[0] != '=') && ((Buffer+i)[0] != '\0')) i++;
 		if ((Buffer+i)[0] == '\0') {
-			fprintf(stderr, "XML file corrupted, line: %i.", GetLineNumber(OriginBuffer, StartPosition));
+			std::cerr << "XML file corrupted, line: " << GetLineNumber(OriginBuffer, StartPosition) << "\n";
 			break;
 		}
 		unsigned int AttribNameEnd = i;
@@ -223,7 +223,7 @@ bool cXMLDocument::ParseTagLine(char *OriginBuffer, unsigned int StartPosition, 
 		unsigned int AttribDataStart = i;
 		while ((((Buffer+i)[0] != '\'') && ((Buffer+i)[0] != '\"')) && ((Buffer+i)[0] != '\0')) i++;
 		if ((Buffer+i)[0] == '\0') {
-			fprintf(stderr, "XML file corrupted, line: %i.", GetLineNumber(OriginBuffer, StartPosition));
+			std::cerr << "XML file corrupted, line: " << GetLineNumber(OriginBuffer, StartPosition) << "\n";
 			break;
 		}
 		unsigned int AttribDataEnd = i;
@@ -291,7 +291,9 @@ bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPositio
 				// ищем завершающую часть, и сразу перемещаемся к ней
 				int DetectCommentCloseSymbol = FindSubString(Buffer, "-->");
 				if (DetectCommentCloseSymbol == -1) {
-					fprintf(stderr, "XML file corrupted, can't find comment end in line %i.\n", GetLineNumber(OriginBuffer, StartPosition+DetectTagOpenSymbol+CurrentBufferPosition));
+					std::cerr << "XML file corrupted, can't find comment end in line "
+						  << GetLineNumber(OriginBuffer, StartPosition+DetectTagOpenSymbol+CurrentBufferPosition)
+						  << "\n";
 					return false;
 				}
 				Buffer += DetectCommentCloseSymbol + strlen("-->");
@@ -304,7 +306,9 @@ bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPositio
 			int DetectTagCloseSymbol = FindSubString(Buffer, ">");
 			// если был открывающий символ, но нет закрывающего - это ошибка структуры документа
 			if (DetectTagCloseSymbol == -1) {
-				fprintf(stderr, "XML file corrupted, can't find element end for element in line %i.\n", GetLineNumber(OriginBuffer, StartPosition+DetectTagOpenSymbol+CurrentBufferPosition));
+				std::cerr << "XML file corrupted, can't find element end for element in line "
+					  << GetLineNumber(OriginBuffer, StartPosition+DetectTagOpenSymbol+CurrentBufferPosition)
+					  << "\n";
 				return false;
 			}
 			DetectTagCloseSymbol += strlen(">");
@@ -335,7 +339,11 @@ bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPositio
 			delete [] CloseElement;
 			// если закрывающего элемента нет - значит файл поврежден
 			if (CloseElementPosition == -1) {
-				fprintf(stderr, "XML file corrupted, can't find element end: %s in line: %i\n", XMLEntry->Name, GetLineNumber(OriginBuffer, StartPosition+DetectTagOpenSymbol+CurrentBufferPosition));
+				std::cerr << "XML file corrupted, can't find element end: "
+					  << XMLEntry->Name
+					  << " in line: "
+					  << GetLineNumber(OriginBuffer, StartPosition+DetectTagOpenSymbol+CurrentBufferPosition)
+					  << "\n";
 				return false;
 			}
 
@@ -364,7 +372,7 @@ bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPositio
 //-----------------------------------------------------------------------------
 bool cXMLDocument::Load(const char *XMLFileName)
 {
-	printf("Open XML file: %s\n", XMLFileName);
+	std::cout << "Open XML file: " << XMLFileName << "\n";
 
 	// если что-то было загружено ранее - освобождаем
 	ReleaseXMLDocument();
@@ -373,7 +381,7 @@ bool cXMLDocument::Load(const char *XMLFileName)
 	std::unique_ptr<sFILE> XMLFile = vw_fopen(XMLFileName);
 
 	if (XMLFile == nullptr) {
-		fprintf(stderr, "XML file not found: %s\n", XMLFileName);
+		std::cerr << "XML file not found: " << XMLFileName << "\n";
 		return false;
 	}
 
@@ -388,23 +396,23 @@ bool cXMLDocument::Load(const char *XMLFileName)
 
 	// проверяем заголовок
 	if (FindSubString(Buffer, "<?xml") == -1) {
-		fprintf(stderr, "XML file corrupted: %s\n", XMLFileName);
+		std::cerr << "XML file corrupted: " << XMLFileName << "\n";
 		return false;
 	}
 	if (FindSubString(Buffer, "?>") == -1) {
-		fprintf(stderr, "XML file corrupted: %s\n", XMLFileName);
+		std::cerr << "XML file corrupted: " << XMLFileName << "\n";
 		return false;
 	}
 
 	// идем на рекурсивную обработку
 	if (!ParseTagContent(Buffer, FindSubString(Buffer, "?>")+strlen("?>"), Buffer+FindSubString(Buffer, "?>")+strlen("?>"), nullptr)) {
-		fprintf(stderr, "XML file corrupted: %s\n", XMLFileName);
+		std::cerr << "XML file corrupted: " << XMLFileName << "\n";
 		delete [] Buffer;
 		return false;
 	}
 
 	if (RootXMLEntry == nullptr) {
-		fprintf(stderr, "XML file corrupted, root element not found: %s\n", XMLFileName);
+		std::cerr << "XML file corrupted, root element not found: " << XMLFileName << "\n";
 		delete [] Buffer;
 		return false;
 	}
@@ -479,11 +487,11 @@ void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
  */
 bool cXMLDocument::Save(const char *XMLFileName)
 {
-	printf("Save XML file: %s\n", XMLFileName);
+	std::cout << "Save XML file: " << XMLFileName << "\n";
 
 	SDL_RWops *File = SDL_RWFromFile(XMLFileName, "wb");
 	if (File == nullptr) {
-		fprintf(stderr, "Can't open XML file for write %s\n", XMLFileName);
+		std::cerr << "Can't open XML file for write " << XMLFileName << "\n";
 		return false;
 	}
 

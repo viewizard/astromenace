@@ -58,7 +58,7 @@ static sBuildingData PresetBuildingData[] = {
 void cBuilding::Create(int	BuildingNum)
 {
 	if ((BuildingNum <= 0) || ((unsigned int)BuildingNum > PresetBuildingDataCount)) {
-		fprintf(stderr, "!!! Couldn't init cBuilding object with Number %i.\n", BuildingNum);
+		std::cerr << "Could not init cBuilding object with Number " << BuildingNum << "\n";
 		return;
 	}
 

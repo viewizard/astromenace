@@ -399,7 +399,7 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 		break;
 
 	default:
-		fprintf(stderr, "Error in vw_SendVertices function call, wrong PrimitiveType.\n");
+		std::cerr << "Error in vw_SendVertices function call, wrong PrimitiveType.\n";
 		return;
 	}
 

@@ -228,7 +228,7 @@ int CheckOGLError()
 
 	glErr = glGetError();
 	while (glErr != GL_NO_ERROR) {
-		fprintf(stderr, "glError 0x%x\n", glErr);
+		std::cerr << "glError " << glErr << "\n";
 		retCode = 1;
 		glErr = glGetError();
 	}
@@ -256,12 +256,12 @@ void vw_PrintShaderInfoLog(GLhandleARB shader, const char *ShaderName)
 	if (infologLength > 0) {
 		GLchar *infoLog = (GLchar *)malloc(infologLength);
 		if (infoLog == nullptr) {
-			fprintf(stderr, "ERROR: Could not allocate InfoLog buffer\n");
+			std::cerr << "Could not allocate InfoLog buffer.\n";
 			return;
 		}
 		glGetInfoLogARB(shader, infologLength, &charsWritten, infoLog);
 		if (strlen(infoLog) >1)
-			printf("Shader InfoLog %s:\n%s\n\n", ShaderName, infoLog);
+			std::cout << "Shader InfoLog " << ShaderName << ":\n" << infoLog << "\n\n";
 		free(infoLog);
 	}
 	CheckOGLError();  // Check for OpenGL errors
@@ -285,12 +285,12 @@ void vw_PrintProgramInfoLog(GLhandleARB program)
 	if (infologLength > 0) {
 		GLchar *infoLog = (GLchar *)malloc(infologLength);
 		if (infoLog == nullptr) {
-			printf("ERROR: Could not allocate InfoLog buffer\n");
-			exit(1);
+			std::cerr << "Could not allocate InfoLog buffer.\n";
+			return;
 		}
 		glGetInfoLogARB(program, infologLength, &charsWritten, infoLog);
 		if (strlen(infoLog) >1)
-			printf("Program InfoLog:\n%s\n\n", infoLog);
+			std::cout << "Program InfoLog:\n" << infoLog << "\n\n";
 		free(infoLog);
 	}
 	CheckOGLError();  // Check for OpenGL errors
@@ -569,11 +569,11 @@ sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 
 
 	if (VertexShaderFileName == nullptr)
-		printf("Shader ... %s\n", FragmentShaderFileName);
+		std::cout << "Shader ... " <<  FragmentShaderFileName << "\n";
 	else if (FragmentShaderFileName == nullptr)
-		printf("Shader ... %s\n", VertexShaderFileName);
+		std::cout <<"Shader ... " << VertexShaderFileName << "\n";
 	else
-		printf("Shader ... %s %s\n", VertexShaderFileName, FragmentShaderFileName);
+		std::cout <<"Shader ... " << VertexShaderFileName << " " << FragmentShaderFileName << "\n";
 
 
 	if (ShaderName != nullptr) {
@@ -672,7 +672,7 @@ int vw_GetUniformLocation(sGLSL *GLSL, const char *name)
 	loc = glGetUniformLocationARB(GLSL->Program, name);
 
 	if (loc == -1)
-		fprintf(stderr, "No such uniform named \"%s\"\n", name);
+		std::cerr << "No such uniform named: " << name << "\n";
 
 	CheckOGLError();  // Check for OpenGL errors
 	return loc;

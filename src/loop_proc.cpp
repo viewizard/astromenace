@@ -309,7 +309,7 @@ void Loop_Proc()
 			break;
 
 		default:
-			fprintf(stderr, "ComBuffer = %i... error!", (int)ComBuffer);
+			std::cerr << "ComBuffer = " << (int)ComBuffer << " ... error!\n";
 			break;
 
 		}

@@ -48,7 +48,7 @@ float GetEnginePower(int EngineType)
 	case 4:
 		return 22.0f;
 	default:
-		fprintf(stderr, "Error in GetEnginePower function call, wrong EngineType.\n");
+		std::cerr << "Error in GetEnginePower function call, wrong EngineType.\n";
 		break;
 	}
 
@@ -69,7 +69,7 @@ float GetEngineAcceleration(int EngineType)
 	case 4:
 		return 28.0f;
 	default:
-		fprintf(stderr, "Error in GetEngineAcceleration function call, wrong EngineType.\n");
+		std::cerr << "Error in GetEngineAcceleration function call, wrong EngineType.\n";
 		break;
 	}
 
@@ -90,7 +90,7 @@ float GetEngineRotatePower(int EngineType)
 	case 4:
 		return 23.0f;
 	default:
-		fprintf(stderr, "Error in GetEngineRotatePower function call, wrong EngineType.\n");
+		std::cerr << "Error in GetEngineRotatePower function call, wrong EngineType.\n";
 		break;
 	}
 
@@ -201,7 +201,7 @@ void CreateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 		break;
 
 	default:
-		fprintf(stderr, "Error in CreateSpaceShipEngine function call, wrong EngineType.\n");
+		std::cerr << "Error in CreateSpaceShipEngine function call, wrong EngineType.\n";
 		break;
 	}
 }
@@ -304,7 +304,7 @@ void CreateRotateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType
 		break;
 
 	default:
-		fprintf(stderr, "Error in CreateRotateSpaceShipEngine function call, wrong EngineType.\n");
+		std::cerr << "Error in CreateRotateSpaceShipEngine function call, wrong EngineType.\n";
 		break;
 	}
 }

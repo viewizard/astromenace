@@ -134,8 +134,8 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 
 	window_SDL2 = SDL_CreateWindow(Title, CurrentVideoModeX, CurrentVideoModeY, Width, Height, Flags);
 	if (window_SDL2 == nullptr) {
-		fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
-		fprintf(stderr, "Can't set video mode %i x %i\n\n", Width, Height);
+		std::cerr << "SDL Error: " << SDL_GetError() << "\n";
+		std::cerr << "Can't set video mode " <<  Width << " x " << Height << "\n\n";
 		return 1;
 	}
 	SDL_GL_CreateContext(window_SDL2);
@@ -144,7 +144,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 
 	UserDisplayRampStatus = SDL_GetWindowGammaRamp(window_SDL2, UserDisplayRamp, UserDisplayRamp+256, UserDisplayRamp+512);
 
-	printf("Set video mode: %i x %i x %i\n\n", Width, Height, *Bits);
+	std::cout << "Set video mode: " << Width << " x " << Height << " x " << *Bits << "\n\n";
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -175,22 +175,21 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// получаем возможности железа
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	printf("Vendor     : %s\n", glGetString(GL_VENDOR));
-	printf("Renderer   : %s\n", glGetString(GL_RENDERER));
-	printf("Version    : %s\n", glGetString(GL_VERSION));
+	std::cout << "Vendor     : " << glGetString(GL_VENDOR) << "\n";
+	std::cout << "Renderer   : " << glGetString(GL_RENDERER) << "\n";
+	std::cout << "Version    : " << glGetString(GL_VERSION) << "\n";
 	glGetIntegerv(GL_MAJOR_VERSION, &OpenGL_DevCaps.OpenGLmajorVersion);
 	glGetIntegerv(GL_MINOR_VERSION, &OpenGL_DevCaps.OpenGLminorVersion);
 	// после GL_MAJOR_VERSION и GL_MINOR_VERSION сбрасываем ошибку, т.к. тут можем получить
 	// 0x500 GL_INVALID_ENUM
 	glGetError();
-	printf("OpenGL Version    : %i.%i\n", OpenGL_DevCaps.OpenGLmajorVersion, OpenGL_DevCaps.OpenGLminorVersion);
-	printf("\n");
+	std::cout << "OpenGL Version    : " << OpenGL_DevCaps.OpenGLmajorVersion << "." << OpenGL_DevCaps.OpenGLminorVersion << "\n\n";
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &OpenGL_DevCaps.MaxTextureHeight);
-	printf("Max texture height: %i \n", OpenGL_DevCaps.MaxTextureHeight);
+	std::cout << "Max texture height: " << OpenGL_DevCaps.MaxTextureHeight << "\n";
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &OpenGL_DevCaps.MaxTextureWidth);
-	printf("Max texture width: %i \n", OpenGL_DevCaps.MaxTextureWidth);
+	std::cout << "Max texture width: " << OpenGL_DevCaps.MaxTextureWidth << "\n";
 	glGetIntegerv(GL_MAX_LIGHTS, &OpenGL_DevCaps.MaxActiveLights);
-	printf("Max lights: %i \n", OpenGL_DevCaps.MaxActiveLights);
+	std::cout << "Max lights: " << OpenGL_DevCaps.MaxActiveLights << "\n";
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -199,7 +198,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 
 	// проверяем поддержку мультитекстуры
 	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &OpenGL_DevCaps.MaxMultTextures);
-	printf("Max multitexture supported: %i textures.\n", OpenGL_DevCaps.MaxMultTextures);
+	std::cout << "Max multitexture supported: " << OpenGL_DevCaps.MaxMultTextures << " textures.\n";
 	// shader-based GL 2.0 and above programs should use GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS only
 
 
@@ -211,19 +210,19 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	if (ExtensionSupported("GL_EXT_texture_filter_anisotropic")) {
 		// получим максимально доступный угол анизотропии...
 		glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT,&OpenGL_DevCaps.MaxAnisotropyLevel);
-		printf("Max anisotropy: %i\n", OpenGL_DevCaps.MaxAnisotropyLevel);
+		std::cout << "Max anisotropy: " << OpenGL_DevCaps.MaxAnisotropyLevel << "\n";
 	}
 
 	// проверем поддержку VBO
 	if (ExtensionSupported("GL_ARB_vertex_buffer_object")) {
 		OpenGL_DevCaps.VBOSupported = true;
-		printf("Vertex Buffer support enabled.\n");
+		std::cout << "Vertex Buffer support enabled.\n";
 	}
 
 	// проверем поддержку VAO
 	if (ExtensionSupported("GL_ARB_vertex_array_object")) {
 		OpenGL_DevCaps.VAOSupported = true;
-		printf("Vertex Array support enabled.\n");
+		std::cout << "Vertex Array support enabled.\n";
 	}
 
 	// проверем поддержку non_power_of_two генерацию текстур
@@ -233,11 +232,11 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	// проверяем, есть ли поддержка компрессии текстур
 	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_EXT_texture_compression_s3tc")) {
 		OpenGL_DevCaps.TexturesCompression = true;
-		printf("Textures S3TC compression support enabled.\n");
+		std::cout << "Textures S3TC compression support enabled.\n";
 	}
 	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_ARB_texture_compression_bptc")) {
 		OpenGL_DevCaps.TexturesCompressionBPTC = true;
-		printf("Textures BPTC compression support enabled.\n");
+		std::cout << "Textures BPTC compression support enabled.\n";
 	}
 
 	// проверяем, есть ли поддержка SGIS_generate_mipmap (хардварная генерация мипмеп уровней)
@@ -249,13 +248,13 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	if (ExtensionSupported("GL_ARB_framebuffer_object") ||
 	    (ExtensionSupported("GL_EXT_framebuffer_blit") && ExtensionSupported("GL_EXT_framebuffer_multisample") && ExtensionSupported("GL_EXT_framebuffer_object"))) {
 		OpenGL_DevCaps.FramebufferObject = true;
-		printf("Frame Buffer Object support enabled.\n");
+		std::cout << "Frame Buffer Object support enabled.\n";
 	}
 
 	// проверяем, есть ли поддержка GL_ARB_texture_storage или GL_EXT_texture_storage
 	if (ExtensionSupported("GL_ARB_texture_storage") || ExtensionSupported("GL_EXT_texture_storage")) {
 		OpenGL_DevCaps.TextureStorage = true;
-		printf("Texture Storage support enabled.\n");
+		std::cout << "Texture Storage support enabled.\n";
 	}
 
 
@@ -306,14 +305,16 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 		if (OpenGL_DevCaps.ShaderModel < OpenGLVersion) OpenGL_DevCaps.ShaderModel = OpenGLVersion;
 
 	// выводим эти данные
-	if (OpenGL_DevCaps.ShaderModel == 0.0f) printf("Shaders unsupported.\n");
-	else printf("Shader Model: %.1f\n", OpenGL_DevCaps.ShaderModel);
+	if (OpenGL_DevCaps.ShaderModel == 0.0f)
+		std::cout << "Shaders unsupported.\n";
+	else
+		std::cout << "Shader Model: " << OpenGL_DevCaps.ShaderModel << "\n";
 
 
 	// если есть полная поддержка FBO, значит можем работать с семплами
 	if (OpenGL_DevCaps.FramebufferObject) {
 		glGetIntegerv(GL_MAX_SAMPLES_EXT, &OpenGL_DevCaps.MaxSamples);
-		printf("Max Samples: %i\n", OpenGL_DevCaps.MaxSamples);
+		std::cout << "Max Samples: " << OpenGL_DevCaps.MaxSamples << "\n";
 
 		// дальше может и не быть GL_NV_framebuffer_multisample_coverage, потому делаем список сглаживаний
 		int TestSample = 2;
@@ -328,7 +329,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 		// проверяем, есть ли поддержка CSAA
 		if (ExtensionSupported("GL_NV_framebuffer_multisample_coverage")) {
 			glGetIntegerv( GL_MAX_MULTISAMPLE_COVERAGE_MODES_NV, &OpenGL_DevCaps.MaxMultisampleCoverageModes);
-			printf("Max Multisample coverage modes: %i\n", OpenGL_DevCaps.MaxMultisampleCoverageModes);
+			std::cout << "Max Multisample coverage modes: " << OpenGL_DevCaps.MaxMultisampleCoverageModes << "\n";
 			int *coverageConfigs = nullptr;
 			coverageConfigs = new int[OpenGL_DevCaps.MaxMultisampleCoverageModes * 2 + 4];
 			glGetIntegerv( GL_MULTISAMPLE_COVERAGE_MODES_NV, coverageConfigs);
@@ -341,11 +342,12 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 
 				if (OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples == OpenGL_DevCaps.MultisampleCoverageModes[kk].CoverageSamples) {
 					// если ковередж и глубина/цвет одинаковые - это обычный MSAA
-					printf( " - %d MSAA\n", OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples);
+					std::cout << " - " << OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples << " MSAA\n";
 					if (MaxMultiSampleTypeTest2 < OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples) MaxMultiSampleTypeTest2 = OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples;
 				} else {
 					// CSAA
-					printf( " - %d/%d CSAA\n", OpenGL_DevCaps.MultisampleCoverageModes[kk].CoverageSamples, OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples);
+					std::cout << " - " <<  OpenGL_DevCaps.MultisampleCoverageModes[kk].CoverageSamples << "/"
+						  << OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples << " CSAA\n";
 				}
 			}
 			// GL_MAX_SAMPLES_EXT может нести в себе общий макс. семпл, а не MSAA, если есть поддержка CSAA
@@ -364,12 +366,12 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 		std::string extensions{(char *)glGetString(GL_EXTENSIONS)};
 		if (!extensions.empty()) {
 			std::replace(extensions.begin(), extensions.end(), ' ', '\n'); // replace all ' ' to '\n'
-			printf("Supported OpenGL extensions:\n%s\n", extensions.c_str());
+			std::cout << "Supported OpenGL extensions:\n" << extensions.c_str() << "\n";
 		}
 	}
 #endif // gamedebug
 
-	printf("\n");
+	std::cout << "\n";
 
 	return 0;
 }
@@ -414,7 +416,7 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 		glClientActiveTexture_ARB = (PFNGLCLIENTACTIVETEXTUREARBPROC) SDL_GL_GetProcAddress("glClientActiveTexture");
 		if (glActiveTexture_ARB == nullptr || glClientActiveTexture_ARB == nullptr) {
 			OpenGL_DevCaps.MaxMultTextures = 1;
-			fprintf(stderr, "Can't get proc address for glActiveTexture or glClientActiveTexture.\n\n");
+			std::cerr << "Can't get proc address for glActiveTexture or glClientActiveTexture.\n\n";
 		}
 	}
 
@@ -423,7 +425,7 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 		if (glTexStorage2DEXT == nullptr) glTexStorage2DEXT = (PFNGLTEXSTORAGE2DPROC) SDL_GL_GetProcAddress("glTexStorage2DEXT");
 		if (glTexStorage2DEXT == nullptr) {
 			OpenGL_DevCaps.TextureStorage = false;
-			fprintf(stderr, "Can't get proc address for glTexStorage2DEXT.\n\n");
+			std::cerr << "Can't get proc address for glTexStorage2DEXT.\n\n";
 		}
 	}
 
@@ -803,7 +805,7 @@ void vw_PolygonMode(int mode)
 		break;
 
 	default:
-		fprintf(stderr, "Error in vw_PolygonMode function call, wrong mode.\n");
+		std::cerr << "Error in vw_PolygonMode function call, wrong mode.\n";
 		break;
 	}
 }
@@ -830,7 +832,7 @@ void vw_CullFace(int face)
 		break;
 
 	default:
-		fprintf(stderr, "Error in vw_CullFace function call, wrong face.\n");
+		std::cerr << "Error in vw_CullFace function call, wrong face.\n";
 		break;
 	}
 }
@@ -936,7 +938,7 @@ void vw_DepthTest(bool mode, int funct)
 			fun = GL_ALWAYS;
 			break;
 		default:
-			fprintf(stderr, "Error in vw_DepthTest function call, wrong funct.\n");
+			std::cerr << "Error in vw_DepthTest function call, wrong funct.\n";
 			return;
 		}
 		glDepthFunc(fun);
