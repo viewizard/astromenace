@@ -89,6 +89,20 @@ static void CreateTextTableUTF32()
 }
 
 /*
+ * Detect duplication in TextTable.
+ */
+static bool DetectDuplicateInTextTable(unsigned int CurrentColumnNumber, std::string &CurrentRowCode)
+{
+	if (TextTable.find(CurrentColumnNumber) == TextTable.end())
+		return false;
+
+	if (TextTable[CurrentColumnNumber].find(CurrentRowCode) == TextTable[CurrentColumnNumber].end())
+		return false;
+
+	return true;
+}
+
+/*
  * Initialization. Load file with translation in .csv format (supported by LibreOffice Calc).
  */
 int vw_InitText(const char *FileName, const char SymbolSeparator, const char SymbolEndOfLine)
@@ -99,6 +113,7 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 	std::unique_ptr<sFILE> tmpFile = vw_fopen(FileName);
 	if (!tmpFile)
 		return ERR_FILE_NOT_FOUND;
+	std::cout << "Load and parse .csv file " << FileName << "\n";
 
 	// plain .csv file format parser
 	// parse data by each byte, in order to use string as RowCode - build
@@ -106,6 +121,7 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 	bool NeedBuildCurrentRowCode = true;
 	std::string CurrentRowCode;
 	unsigned int CurrentColumnNumber{0};
+	unsigned int LineNumber{1}; // line number for error message
 	for (unsigned int i = 0; i < tmpFile->Size; i++) {
 		// parse each row
 		for (; (tmpFile->Data[i] != SymbolEndOfLine) && (i < tmpFile->Size); i++) {
@@ -119,6 +135,11 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 			// RowCode built, next blocks in this row contain data
 			NeedBuildCurrentRowCode = false;
 			CurrentColumnNumber++;
+			// detect and skip duplicate line
+			if (DetectDuplicateInTextTable(CurrentColumnNumber, CurrentRowCode)) {
+				std::cerr << "* Duplicate line detected, line number " << LineNumber << "\n";
+				for (; (tmpFile->Data[i] != SymbolEndOfLine) && (i < tmpFile->Size); i++) {}
+			}
 			// we found SymbolEndOfLine in previous cycle, in order to prevent "i" changes, break cycle
 			if (tmpFile->Data[i] == SymbolEndOfLine)
 				break;
@@ -127,6 +148,7 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 		CurrentColumnNumber = 0;
 		NeedBuildCurrentRowCode = true;
 		CurrentRowCode.clear();
+		LineNumber++;
 	}
 	// unconditional rehash, at this line we have not rehashed map
 	TextTable.rehash(0);
@@ -136,7 +158,6 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 
 	CreateTextTableUTF32();
 
-	std::cout << "Parsed .csv file " << FileName << "\n";
 	std::cout << "Detected " << vw_GetLanguageListCount() << " languages:";
 	for (unsigned int i = 1; i < TextTable.size(); i++) {
 		std::cout << " " << vw_GetText("0_code", i);
@@ -187,9 +208,10 @@ int vw_CheckFontCharsInText()
 	// note, i = 1 - first column contain index, not data, start from second
 	for (unsigned int i = 0; i < TextTableUTF32.size(); i++) {	// cycle by all columns
 		for (auto tmpDataUTF32 : TextTableUTF32[i]) {		// cycle by all words
-			for (auto UTF32 : tmpDataUTF32.first) {		// cycle by all chars
+			for (auto UTF32 : tmpDataUTF32.second) {	// cycle by all chars
 				if (!vw_CheckFontCharByUTF32(UTF32))
-					std::cout << "!!! FontChar was not created, Unicode: " << UTF32 << "\n";
+					std::cout << "!!! FontChar was not created, Unicode: "
+						  << "0x" << std::uppercase << std::hex << UTF32 << "\n";
 			}
 		}
 	}
