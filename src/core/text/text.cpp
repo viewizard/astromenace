@@ -38,10 +38,31 @@ std::unordered_map<unsigned int, std::unordered_map<std::string, std::u32string>
 // Current default language.
 unsigned int CurrentLanguage{0};
 // Error text for UTF32, if we can't use TextTableUTF32 by some reason
-const std::u32string TextTableUTF32Error{vw_UTF8toUTF32("vw_GetTextUTF32() Error")};
+const std::u32string TextTableUTF32Error{vw_UTF8toUTF32("Error")};
 
 } // unnamed namespace
 
+/*
+ * Detect element in std::unordered_map<std::unordered_map<>>.
+ */
+template <typename T, typename C, typename R>
+static bool isElementPresentInTable(T &Table, C Column, R &Row)
+{
+	return ((Table.find(Column) != Table.end()) &&
+		(Table[Column].find(Row) != Table[Column].end()));
+}
+
+/*
+ * Unconditional rehash for std::unordered_map<std::unordered_map<>>.
+ */
+template <typename T>
+static void UnconditionalRehash(T &Table)
+{
+	Table.rehash(0);
+	for (auto &tmpColumn : Table) {
+		tmpColumn.second.rehash(0);
+	}
+}
 
 /*
  * Set default language.
@@ -77,29 +98,12 @@ void vw_ReleaseText()
 static void CreateTextTableUTF32()
 {
 	for (unsigned int i = 0; i < TextTable.size(); i++) {
-		for (auto tmpData : TextTable[i]) {
+		for (const auto tmpData : TextTable[i]) {
 			TextTableUTF32[i][tmpData.first] = vw_UTF8toUTF32(tmpData.second.c_str());
 		}
 	}
 	// unconditional rehash, at this line we have not rehashed map
-	TextTableUTF32.rehash(0);
-	for (unsigned int i = 0; i < TextTableUTF32.size(); i++) {
-		TextTableUTF32[i].rehash(0);
-	}
-}
-
-/*
- * Detect duplication in TextTable.
- */
-static bool DetectDuplicateInTextTable(unsigned int CurrentColumnNumber, std::string &CurrentRowCode)
-{
-	if (TextTable.find(CurrentColumnNumber) == TextTable.end())
-		return false;
-
-	if (TextTable[CurrentColumnNumber].find(CurrentRowCode) == TextTable[CurrentColumnNumber].end())
-		return false;
-
-	return true;
+	UnconditionalRehash(TextTableUTF32);
 }
 
 /*
@@ -135,8 +139,8 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 			// RowCode built, next blocks in this row contain data
 			NeedBuildCurrentRowCode = false;
 			CurrentColumnNumber++;
-			// detect and skip duplicate line
-			if (DetectDuplicateInTextTable(CurrentColumnNumber, CurrentRowCode)) {
+			// detect and skip duplicate line (if we already have this element created => this is duplicate)
+			if (isElementPresentInTable(TextTable, CurrentColumnNumber, CurrentRowCode)) {
 				std::cerr << "* Duplicate line detected, line number " << LineNumber << "\n";
 				for (; (tmpFile->Data[i] != SymbolEndOfLine) && (i < tmpFile->Size); i++) {}
 			}
@@ -151,10 +155,7 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 		LineNumber++;
 	}
 	// unconditional rehash, at this line we have not rehashed map
-	TextTable.rehash(0);
-	for (unsigned int i = 0; i < TextTable.size(); i++) {
-		TextTable[i].rehash(0);
-	}
+	UnconditionalRehash(TextTable);
 
 	CreateTextTableUTF32();
 
@@ -194,7 +195,6 @@ const std::u32string &vw_GetTextUTF32(const char *ItemID, unsigned int Language)
 	return TextTableUTF32[Language][ItemID];
 }
 
-
 /*
  * Detect what characters was not generated (need for testing purposes).
  */
@@ -206,9 +206,9 @@ int vw_CheckFontCharsInText()
 	std::cout << "Font characters detection start.\n";
 
 	// note, i = 1 - first column contain index, not data, start from second
-	for (unsigned int i = 0; i < TextTableUTF32.size(); i++) {	// cycle by all columns
-		for (auto tmpDataUTF32 : TextTableUTF32[i]) {		// cycle by all words
-			for (auto UTF32 : tmpDataUTF32.second) {	// cycle by all chars
+	for (const auto &tmpColumn : TextTableUTF32) {				// cycle by all columns
+		for (const auto &tmpWords : tmpColumn.second) {			// cycle by all words
+			for (const auto &UTF32 : tmpWords.second) {		// cycle by all chars
 				if (!vw_CheckFontCharByUTF32(UTF32))
 					std::cout << "!!! FontChar was not created, Unicode: "
 						  << "0x" << std::uppercase << std::hex << UTF32 << "\n";

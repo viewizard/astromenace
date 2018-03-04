@@ -32,7 +32,7 @@
 struct sVECTOR3D {
 	float x{0.0f}, y{0.0f}, z{0.0f};
 
-	sVECTOR3D() {};
+	sVECTOR3D() = default;
 	sVECTOR3D(float _x, float _y, float _z) :
 		x{_x},
 		y{_y},
@@ -127,7 +127,7 @@ struct sVECTOR3D {
 struct sRECT {
 	int right{0}, top{0}, left{0}, bottom{0};
 
-	sRECT () {};
+	sRECT () = default;
 	sRECT (const int _left, const int _top, const int _right, const int _bottom) :
 		right{_right},
 		top{_top},

@@ -28,9 +28,11 @@
 #include <random> // this one should not being used in other parts of code
 
 namespace {
+
 std::random_device rd;
 std::mt19937 gen(rd());
-}
+
+} // unnamed namespace
 
 /*
  * Generate random float between 0.0f and 1.0f.

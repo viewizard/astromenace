@@ -182,7 +182,7 @@ static sFontChar *FindFontCharByUTF32(char32_t UTF32)
 {
 	// a bit tricky, since we can't work with iterator for
 	// forward_list<unique_ptr<T>> in usual way
-	for (auto &&tmpChar : FontCharsList) {
+	for (const auto &tmpChar : FontCharsList) {
 		if (tmpChar->CheckUTF32andSize(UTF32))
 			return tmpChar.get();
 	}
@@ -215,7 +215,7 @@ void vw_ReleaseAllFontChars()
 			sTexture *Texture = FontCharsList.front()->Texture;
 			// a bit tricky, since we can't work with iterator for
 			// forward_list<unique_ptr<T>> in usual way
-			for (auto &&tmpChar : FontCharsList) {
+			for (const auto &tmpChar : FontCharsList) {
 				tmpChar->CheckTexture(Texture);
 			}
 			vw_ReleaseTexture(Texture);
