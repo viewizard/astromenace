@@ -90,21 +90,13 @@ char *GetMissionFileName()
 //------------------------------------------------------------------------------------
 void MissionsListInit()
 {
-	// по скрипту, смотрим что загружать + считаем сколько позиций
-	cXMLDocument *xmlDoc = new cXMLDocument;
-
 	std::string ScriptName{"script/list.xml"};
 
-	// читаем данные
-	if (!xmlDoc->Load(ScriptName.c_str())) {
-		std::cerr << "Can't find script file: " << ScriptName << "\n";
-		delete xmlDoc;
-		return;
-	}
-
+	// по скрипту, смотрим что загружать + считаем сколько позиций
+	cXMLDocument *xmlDoc = new cXMLDocument(ScriptName.c_str());
 
 	// проверяем корневой элемент
-	if (strcmp("AstroMenaceMissionsList", xmlDoc->RootXMLEntry->Name)) {
+	if (!xmlDoc->RootXMLEntry || ("AstroMenaceMissionsList" != xmlDoc->RootXMLEntry->Name)) {
 		std::cerr << "Can't find AstroMenaceMissionsList element in the: " << ScriptName << "\n";
 		delete xmlDoc;
 		return;
@@ -115,7 +107,8 @@ void MissionsListInit()
 	cXMLEntry *xmlEntry = xmlDoc->RootXMLEntry->FirstChild;
 	while (xmlEntry) {
 		// считаем, сколько миссий в файле
-		if (!strcmp(xmlEntry->Name, "Mission")) AllMission++;
+		if (xmlEntry->Name == "Mission")
+			AllMission++;
 
 		// берем следующий элемент по порядку
 		xmlEntry = xmlEntry->Next;
@@ -160,12 +153,12 @@ void MissionsListInit()
 	int i = 0;
 	while (xmlEntry) {
 		// берем каждую миссию и смотрим настройки
-		if (!strcmp(xmlEntry->Name, "Mission")) {
+		if (xmlEntry->Name == "Mission") {
 			cXMLEntry *TMission = xmlEntry->FirstChild;
 			while (TMission) {
 				// тайтл миссии
-				if (!strcmp(TMission->Name, "Title")) {
-					if (xmlDoc->GetEntryAttribute(TMission, "color") != nullptr) {
+				if (TMission->Name == "Title") {
+					if (xmlDoc->TestEntryAttribute(TMission, "color")) {
 						switch (xmlDoc->iGetEntryAttribute(TMission, "color")) {
 						default: // белый
 							MissionTitleColorR[i]=1.0f;
@@ -204,17 +197,17 @@ void MissionsListInit()
 							break;
 						}
 					}
-					if (xmlDoc->GetEntryAttribute(TMission, "type") != nullptr)
+					if (xmlDoc->TestEntryAttribute(TMission, "type"))
 						MissionTitleType[i] = xmlDoc->iGetEntryAttribute(TMission, "type");
 
-					if (TMission->Content != nullptr) {
-						MissionTitle[i] = new char[strlen(TMission->Content)+1];
-						strcpy(MissionTitle[i], TMission->Content);
+					if (!TMission->Content.empty()) {
+						MissionTitle[i] = new char[TMission->Content.size() + 1];
+						strcpy(MissionTitle[i], TMission->Content.c_str());
 					}
 				} else
 					// описание миссии
-					if (!strcmp(TMission->Name, "Descr")) {
-						if (xmlDoc->GetEntryAttribute(TMission, "color") != nullptr) {
+					if (TMission->Name == "Descr") {
+						if (xmlDoc->TestEntryAttribute(TMission, "color")) {
 							switch (xmlDoc->iGetEntryAttribute(TMission, "color")) {
 							default: // белый
 								MissionDescrColorR[i]=1.0f;
@@ -253,26 +246,26 @@ void MissionsListInit()
 								break;
 							}
 						}
-						if (xmlDoc->GetEntryAttribute(TMission, "type") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TMission, "type"))
 							MissionDescrType[i] = xmlDoc->iGetEntryAttribute(TMission, "type");
 
-						if (TMission->Content != nullptr) {
-							MissionDescr[i] = new char[strlen(TMission->Content)+1];
-							strcpy(MissionDescr[i], TMission->Content);
+						if (!TMission->Content.empty()) {
+							MissionDescr[i] = new char[TMission->Content.size() + 1];
+							strcpy(MissionDescr[i], TMission->Content.c_str());
 						}
 					} else
 						// иконка миссии
-						if (!strcmp(TMission->Name, "Icon")) {
-							if (TMission->Content != nullptr) {
-								MissionIcon[i] = new char[strlen(TMission->Content)+1];
-								strcpy(MissionIcon[i], TMission->Content);
+						if (TMission->Name == "Icon") {
+							if (!TMission->Content.empty()) {
+								MissionIcon[i] = new char[TMission->Content.size() + 1];
+								strcpy(MissionIcon[i], TMission->Content.c_str());
 							}
 						} else
 							// файл миссии
-							if (!strcmp(TMission->Name, "File")) {
-								if (TMission->Content != nullptr) {
-									MissionFile[i] = new char[strlen(TMission->Content)+1];
-									strcpy(MissionFile[i], TMission->Content);
+							if (TMission->Name == "File") {
+								if (!TMission->Content.empty()) {
+									MissionFile[i] = new char[TMission->Content.size() + 1];
+									strcpy(MissionFile[i], TMission->Content.c_str());
 								}
 							}
 
@@ -284,28 +277,28 @@ void MissionsListInit()
 			i++;
 		} else
 			// проверяем музыку, возможно есть необходимость что-то заменить
-			if (!strcmp(xmlEntry->Name, "GameMainMusic")) {
+			if (xmlEntry->Name == "GameMainMusic") {
 				std::unique_ptr<sFILE> file = vw_fopen(xmlEntry->Content);
 				if (file != nullptr) {
-					strcpy(GameMainMusic, xmlEntry->Content);
+					strcpy(GameMainMusic, xmlEntry->Content.c_str());
 					GameMainMusicSet = true;
 					vw_fclose(file);
 					std::cerr << "New GameMainMusic music file " << xmlEntry->Content << "\n";
 				} else
 					std::cerr << "Unable to find music file %s\n" << xmlEntry->Content << "\n";
-			} else if (!strcmp(xmlEntry->Name, "GameBossMusic")) {
+			} else if (xmlEntry->Name == "GameBossMusic") {
 				std::unique_ptr<sFILE> file = vw_fopen(xmlEntry->Content);
 				if (file != nullptr) {
-					strcpy(GameBossMusic, xmlEntry->Content);
+					strcpy(GameBossMusic, xmlEntry->Content.c_str());
 					GameBossMusicSet = true;
 					vw_fclose(file);
 					std::cerr << "New GameBossMusic music file %s\n" << xmlEntry->Content << "\n";
 				} else
 					std::cerr << "Unable to find music file %s\n" << xmlEntry->Content << "\n";
-			} else if (!strcmp(xmlEntry->Name, "GameDeathMusic")) {
+			} else if (xmlEntry->Name == "GameDeathMusic") {
 				std::unique_ptr<sFILE> file = vw_fopen(xmlEntry->Content);
 				if (file != nullptr) {
-					strcpy(GameDeathMusic, xmlEntry->Content);
+					strcpy(GameDeathMusic, xmlEntry->Content.c_str());
 					GameDeathMusicSet = true;
 					vw_fclose(file);
 					std::cerr << "New GameDeathMusic music file %s\n" << xmlEntry->Content << "\n";

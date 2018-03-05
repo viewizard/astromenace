@@ -50,9 +50,9 @@ void ReleaseGameAI()
 //-----------------------------------------------------------------------------
 void InitGameAI(const char *FileName)
 {
-	xmlAI = new cXMLDocument;
+	xmlAI = new cXMLDocument(FileName);
 	// иним скрипт
-	if (!xmlAI->Load(FileName)) {
+	if (!xmlAI->RootXMLEntry) {
 		ReleaseGameAI();
 		return;
 	}
@@ -111,23 +111,23 @@ void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheetMain)
 
 	while (xmlEntry) {
 		// если находим нужный, приступаем к его интеграции
-		if (xmlAI->GetEntryAttribute(xmlEntry, "num") != nullptr)
+		if (xmlAI->TestEntryAttribute(xmlEntry, "num"))
 			if (xmlAI->iGetEntryAttribute(xmlEntry, "num") == TimeSheetMain->AI_Mode) {
 
 				// дальше смотрим, что нужно сделать...
 				cXMLEntry *TChildEntry = xmlEntry->FirstChild;
 				while (TChildEntry) {
-					if (!strcmp(TChildEntry->Name, "TimeSheet")) {
+					if (TChildEntry->Name == "TimeSheet") {
 						// собираем новый элемент
 						sTimeSheet *TimeSheet;
 						TimeSheet = new sTimeSheet;
 						AddNewTimeSheetToPos(Object, TimeSheet, AddAfter);
 						AddAfter = TimeSheet;
 
-						if (xmlAI->GetEntryAttribute(TChildEntry, "aimode") != nullptr) {
+						if (xmlAI->TestEntryAttribute(TChildEntry, "aimode")) {
 							TimeSheet->AI_Mode = xmlAI->iGetEntryAttribute(TChildEntry, "aimode");
 							TimeSheet->Time = 0.0f;
-							if (xmlAI->GetEntryAttribute(TChildEntry, "time") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "time"))
 								TimeSheet->Time = xmlAI->fGetEntryAttribute(TChildEntry, "time");
 
 							TimeSheet->InUse = false;
@@ -151,89 +151,89 @@ void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheetMain)
 						} else {
 							TimeSheet->AI_Mode = 0;
 							TimeSheet->Time = 0.0f;
-							if (xmlAI->GetEntryAttribute(TChildEntry, "time") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "time"))
 								TimeSheet->Time = xmlAI->fGetEntryAttribute(TChildEntry, "time");
 
 							TimeSheet->InUse = false;
 
 							TimeSheet->Speed = 0.0f;
-							if (xmlAI->GetEntryAttribute(TChildEntry, "speed") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "speed"))
 								TimeSheet->Speed = xmlAI->fGetEntryAttribute(TChildEntry, "speed");
 
 							TimeSheet->Acceler = 1.0f;//0-1
-							if (xmlAI->GetEntryAttribute(TChildEntry, "acceler") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "acceler"))
 								TimeSheet->Acceler = xmlAI->fGetEntryAttribute(TChildEntry, "acceler");
 							vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
 							TimeSheet->SpeedLR = 0.0f;
-							if (xmlAI->GetEntryAttribute(TChildEntry, "speedlr") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "speedlr"))
 								TimeSheet->SpeedLR = xmlAI->fGetEntryAttribute(TChildEntry, "speedlr");
 
 							TimeSheet->AccelerLR = 1.0f;//0-1
-							if (xmlAI->GetEntryAttribute(TChildEntry, "accelerlr") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "accelerlr"))
 								TimeSheet->AccelerLR = xmlAI->fGetEntryAttribute(TChildEntry, "accelerlr");
 							vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
 
 							TimeSheet->SpeedUD = 0.0f;
-							if (xmlAI->GetEntryAttribute(TChildEntry, "speedud") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "speedud"))
 								TimeSheet->SpeedUD = xmlAI->fGetEntryAttribute(TChildEntry, "speedud");
 
 
 
 							TimeSheet->SpeedByCamFB = 0.0f;
-							if (xmlAI->GetEntryAttribute(TChildEntry, "speedbycamfb") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "speedbycamfb"))
 								TimeSheet->SpeedByCamFB = xmlAI->fGetEntryAttribute(TChildEntry, "speedbycamfb");
 
 							TimeSheet->AccelerByCamFB = 1.0f;//0-1
-							if (xmlAI->GetEntryAttribute(TChildEntry, "accelerbycamfb") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "accelerbycamfb"))
 								TimeSheet->AccelerByCamFB = xmlAI->fGetEntryAttribute(TChildEntry, "accelerbycamfb");
 							vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
 
 							TimeSheet->SpeedByCamLR = 0.0f;
-							if (xmlAI->GetEntryAttribute(TChildEntry, "speedbycamlr") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "speedbycamlr"))
 								TimeSheet->SpeedByCamLR = xmlAI->fGetEntryAttribute(TChildEntry, "speedbycamlr");
 
 							TimeSheet->AccelerByCamLR = 1.0f;//0-1
-							if (xmlAI->GetEntryAttribute(TChildEntry, "accelerbycamlr") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "accelerbycamlr"))
 								TimeSheet->AccelerByCamLR = xmlAI->fGetEntryAttribute(TChildEntry, "accelerbycamlr");
 							vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
 
 							TimeSheet->SpeedByCamUD = 0.0f;
-							if (xmlAI->GetEntryAttribute(TChildEntry, "speedbycamud") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "speedbycamud"))
 								TimeSheet->SpeedByCamUD = xmlAI->fGetEntryAttribute(TChildEntry, "speedbycamud");
 
 							TimeSheet->AccelerByCamUD = 1.0f;//0-1
-							if (xmlAI->GetEntryAttribute(TChildEntry, "accelerbycamud") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "accelerbycamud"))
 								TimeSheet->SpeedByCamUD = xmlAI->fGetEntryAttribute(TChildEntry, "accelerbycamud");
 							vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
 
 
 							TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-							if (xmlAI->GetEntryAttribute(TChildEntry, "rotx") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "rotx"))
 								TimeSheet->Rotation.x = xmlAI->fGetEntryAttribute(TChildEntry, "rotx");
-							if (xmlAI->GetEntryAttribute(TChildEntry, "roty") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "roty"))
 								TimeSheet->Rotation.y = xmlAI->fGetEntryAttribute(TChildEntry, "roty");
-							if (xmlAI->GetEntryAttribute(TChildEntry, "rotz") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "rotz"))
 								TimeSheet->Rotation.z = xmlAI->fGetEntryAttribute(TChildEntry, "rotz");
 
 							TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-							if (xmlAI->GetEntryAttribute(TChildEntry, "rotacx") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "rotacx"))
 								TimeSheet->RotationAcceler.x = xmlAI->fGetEntryAttribute(TChildEntry, "rotacx");
-							if (xmlAI->GetEntryAttribute(TChildEntry, "rotacy") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "rotacy"))
 								TimeSheet->RotationAcceler.y = xmlAI->fGetEntryAttribute(TChildEntry, "rotacy");
-							if (xmlAI->GetEntryAttribute(TChildEntry, "rotacz") != nullptr)
+							if (xmlAI->TestEntryAttribute(TChildEntry, "rotacz"))
 								TimeSheet->RotationAcceler.z = xmlAI->fGetEntryAttribute(TChildEntry, "rotacz");
 							vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
 							vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
 							vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 							TimeSheet->Fire = false;
-							if ((xmlAI->GetEntryAttribute(TChildEntry, "fire") != nullptr) &&
+							if ((xmlAI->TestEntryAttribute(TChildEntry, "fire")) &&
 							    (xmlAI->iGetEntryAttribute(TChildEntry, "fire") > 0))
 									TimeSheet->Fire = true;
 							TimeSheet->BossFire = false;
-							if ((xmlAI->GetEntryAttribute(TChildEntry, "bossfire") != nullptr) &&
+							if ((xmlAI->TestEntryAttribute(TChildEntry, "bossfire")) &&
 							    (xmlAI->iGetEntryAttribute(TChildEntry, "bossfire") > 0))
 									TimeSheet->BossFire = true;
 						}

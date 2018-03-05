@@ -137,54 +137,9 @@ void cXMLDocument::DetachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *XML
 		XMLChildEntry->Next->Prev = nullptr;
 }
 
-//-----------------------------------------------------------------------------
-// Включаем в список атрибут
-//-----------------------------------------------------------------------------
-void cXMLDocument::AttachXMLAttribute(cXMLEntry *XMLEntry, cXMLAttribute *XMLAttribute)
-{
-	if ((XMLEntry == nullptr) ||
-	    (XMLAttribute == nullptr))
-		return;
 
-	// первый в списке...
-	if (XMLEntry->LastAttribute == nullptr) {
-		XMLAttribute->Prev = nullptr;
-		XMLAttribute->Next = nullptr;
-		XMLEntry->FirstAttribute = XMLAttribute;
-		XMLEntry->LastAttribute = XMLAttribute;
-	} else { // продолжаем заполнение...
-		XMLAttribute->Prev = XMLEntry->LastAttribute;
-		XMLAttribute->Next = nullptr;
-		XMLEntry->LastAttribute->Next = XMLAttribute;
-		XMLEntry->LastAttribute = XMLAttribute;
-	}
-}
 
-//-----------------------------------------------------------------------------
-// Исключаем из списка атрибут
-//-----------------------------------------------------------------------------
-void cXMLDocument::DetachXMLAttribute(cXMLEntry *XMLEntry, cXMLAttribute *XMLAttribute)
-{
-	if ((XMLEntry == nullptr) ||
-	    (XMLAttribute == nullptr))
-		return;
 
-	// переустанавливаем указатели...
-	if (XMLEntry->FirstAttribute == XMLAttribute)
-		XMLEntry->FirstAttribute = XMLAttribute->Next;
-	if (XMLEntry->LastAttribute == XMLAttribute)
-		XMLEntry->LastAttribute = XMLAttribute->Prev;
-
-	if (XMLAttribute->Next != nullptr)
-		XMLAttribute->Next->Prev = XMLAttribute->Prev;
-	else if (XMLAttribute->Prev != nullptr)
-		XMLAttribute->Prev->Next = nullptr;
-
-	if (XMLAttribute->Prev != nullptr)
-		XMLAttribute->Prev->Next = XMLAttribute->Next;
-	else if (XMLAttribute->Next != nullptr)
-		XMLAttribute->Next->Prev = nullptr;
-}
 
 /*
  *
@@ -230,10 +185,7 @@ bool cXMLDocument::ParseTagLine(char *OriginBuffer, unsigned int StartPosition, 
 		i++;
 
 		// собираем новый атрибут и подключаем его к элементу
-		cXMLAttribute *XMLAttribute = new cXMLAttribute;
-		AttachXMLAttribute(XMLEntry, XMLAttribute);
-		XMLAttribute->Name = CreateSubString(Buffer, AttribNameStart, AttribNameEnd);
-		XMLAttribute->Data = CreateSubString(Buffer, AttribDataStart, AttribDataEnd);
+		XMLEntry->Attributes[CreateSubString(Buffer, AttribNameStart, AttribNameEnd)] = CreateSubString(Buffer, AttribDataStart, AttribDataEnd);
 	}
 
 
@@ -330,11 +282,11 @@ bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPositio
 			}
 
 			// если тэг открытый - ищем завершающий тэг </имя>
-			char *CloseElement = new char[strlen("</>")+strlen(XMLEntry->Name)+1];
+			char *CloseElement = new char[strlen("</>") + XMLEntry->Name.size() + 1];
 			strcpy(CloseElement, "</");
-			strcat(CloseElement, XMLEntry->Name);
+			strcat(CloseElement, XMLEntry->Name.c_str());
 			strcat(CloseElement, ">");
-			CloseElement[strlen("</>")+strlen(XMLEntry->Name)] = 0;
+			CloseElement[strlen("</>") + XMLEntry->Name.size()] = 0;
 			int CloseElementPosition = FindSubString(Buffer, CloseElement);
 			delete [] CloseElement;
 			// если закрывающего элемента нет - значит файл поврежден
@@ -359,8 +311,8 @@ bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPositio
 			}
 
 			// смещаем буфер
-			Buffer += CloseElementPosition + strlen(XMLEntry->Name) + strlen("</>");
-			CurrentBufferPosition += CloseElementPosition + strlen(XMLEntry->Name) + strlen("</>");
+			Buffer += CloseElementPosition + XMLEntry->Name.size() + strlen("</>");
+			CurrentBufferPosition += CloseElementPosition + XMLEntry->Name.size() + strlen("</>");
 		}
 	}
 
@@ -370,19 +322,19 @@ bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPositio
 //-----------------------------------------------------------------------------
 // Загрузка
 //-----------------------------------------------------------------------------
-bool cXMLDocument::Load(const char *XMLFileName)
+cXMLDocument::cXMLDocument(const char *XMLFileName)
 {
 	std::cout << "Open XML file: " << XMLFileName << "\n";
 
 	// если что-то было загружено ранее - освобождаем
-	ReleaseXMLDocument();
+	this->~cXMLDocument();
 
 	// читаем данные
 	std::unique_ptr<sFILE> XMLFile = vw_fopen(XMLFileName);
 
 	if (XMLFile == nullptr) {
 		std::cerr << "XML file not found: " << XMLFileName << "\n";
-		return false;
+		return;
 	}
 
 	// читаем все данные в буфер
@@ -397,28 +349,28 @@ bool cXMLDocument::Load(const char *XMLFileName)
 	// проверяем заголовок
 	if (FindSubString(Buffer, "<?xml") == -1) {
 		std::cerr << "XML file corrupted: " << XMLFileName << "\n";
-		return false;
+		return;
 	}
 	if (FindSubString(Buffer, "?>") == -1) {
 		std::cerr << "XML file corrupted: " << XMLFileName << "\n";
-		return false;
+		return;
 	}
 
 	// идем на рекурсивную обработку
 	if (!ParseTagContent(Buffer, FindSubString(Buffer, "?>")+strlen("?>"), Buffer+FindSubString(Buffer, "?>")+strlen("?>"), nullptr)) {
 		std::cerr << "XML file corrupted: " << XMLFileName << "\n";
 		delete [] Buffer;
-		return false;
+		return;
 	}
 
 	if (RootXMLEntry == nullptr) {
 		std::cerr << "XML file corrupted, root element not found: " << XMLFileName << "\n";
 		delete [] Buffer;
-		return false;
+		return;
 	}
 
 	delete [] Buffer;
-	return true;
+	return;
 }
 
 //-----------------------------------------------------------------------------
@@ -432,7 +384,7 @@ void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 			SDL_RWwrite(File, "    ", strlen("    "), 1);
 		}
 		SDL_RWwrite(File, "<!--", strlen("<!--"), 1);
-		SDL_RWwrite(File, XMLEntry->Name, strlen(XMLEntry->Name), 1);
+		SDL_RWwrite(File, XMLEntry->Name.data(), XMLEntry->Name.size(), 1);
 		SDL_RWwrite(File, "-->\r\n", strlen("-->\r\n"), 1);
 	} else {
 		// пишем имя
@@ -440,29 +392,27 @@ void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 			SDL_RWwrite(File, "    ", strlen("    "), 1);
 		}
 		SDL_RWwrite(File, "<", strlen("<"), 1);
-		SDL_RWwrite(File, XMLEntry->Name, strlen(XMLEntry->Name), 1);
+		SDL_RWwrite(File, XMLEntry->Name.data(), XMLEntry->Name.size(), 1);
 
 		// пишем атрибуты
-		if (XMLEntry->FirstAttribute != nullptr) {
-			cXMLAttribute *TmpAttrib = XMLEntry->FirstAttribute;
-			while (TmpAttrib != nullptr) {
+		if (!XMLEntry->Attributes.empty()) {
+			for (const auto &TmpAttrib : XMLEntry->Attributes) {
 				SDL_RWwrite(File, " ", strlen(" "), 1);
-				SDL_RWwrite(File, TmpAttrib->Name, strlen(TmpAttrib->Name), 1);
+				SDL_RWwrite(File, TmpAttrib.first.data(), TmpAttrib.first.size(), 1);
 				SDL_RWwrite(File, "=\"", strlen("=\""), 1);
-				SDL_RWwrite(File, TmpAttrib->Data, strlen(TmpAttrib->Data), 1);
+				SDL_RWwrite(File, TmpAttrib.second.data(), TmpAttrib.second.size(), 1);
 				SDL_RWwrite(File, "\"", strlen("\""), 1);
-				TmpAttrib = TmpAttrib->Next;
 			}
 			SDL_RWwrite(File, " ", strlen(" "), 1);
 		}
 
 		// пишем данные
-		if ((XMLEntry->FirstChild != nullptr) || (XMLEntry->Content != nullptr)) {
-			if (XMLEntry->Content != nullptr) {
+		if ((XMLEntry->FirstChild != nullptr) || (!XMLEntry->Content.empty())) {
+			if (!XMLEntry->Content.empty()) {
 				SDL_RWwrite(File, ">", strlen(">"), 1);
-				SDL_RWwrite(File, XMLEntry->Content, strlen(XMLEntry->Content), 1);
+				SDL_RWwrite(File, XMLEntry->Content.data(), XMLEntry->Content.size(), 1);
 				SDL_RWwrite(File, "</", strlen("</"), 1);
-				SDL_RWwrite(File, XMLEntry->Name, strlen(XMLEntry->Name), 1);
+				SDL_RWwrite(File, XMLEntry->Name.data(), XMLEntry->Name.size(), 1);
 				SDL_RWwrite(File, ">\r\n", strlen(">\r\n"), 1);
 			} else {
 				SDL_RWwrite(File, ">\r\n", strlen(">\r\n"), 1);
@@ -473,7 +423,7 @@ void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 				}
 				for (unsigned int i=0; i<Level; i++) SDL_RWwrite(File, "    ", strlen("    "), 1);
 				SDL_RWwrite(File, "</", strlen("</"), 1);
-				SDL_RWwrite(File, XMLEntry->Name, strlen(XMLEntry->Name), 1);
+				SDL_RWwrite(File, XMLEntry->Name.data(), XMLEntry->Name.size(), 1);
 				SDL_RWwrite(File, ">\r\n", strlen(">\r\n"), 1);
 			}
 		} else {

@@ -47,48 +47,13 @@
  * 2. Test XML file structure (in the way we need).
  */
 
-class cXMLAttribute
-{
-public:
-
-	cXMLAttribute()
-	{};
-	~cXMLAttribute()
-	{
-		if (Name != nullptr)
-			delete [] Name;
-		if (Data != nullptr)
-			delete [] Data;
-	};
-
-	// данные атрибута
-	char *Name{nullptr};
-	char *Data{nullptr};
-
-	// указатели на массив атрибутов
-	cXMLAttribute *Next{nullptr};
-	cXMLAttribute *Prev{nullptr};
-};
-
 class cXMLEntry
 {
 public:
 
-	cXMLEntry() {};
+	cXMLEntry() = default;
 	~cXMLEntry()
 	{
-		if (Name != nullptr)
-			delete [] Name;
-		if (Content != nullptr)
-			delete [] Content;
-
-		cXMLAttribute *TmpAttribute = FirstAttribute;
-		while (TmpAttribute != nullptr) {
-			cXMLAttribute *TmpAttribute1 = TmpAttribute->Next;
-			delete TmpAttribute;
-			TmpAttribute = TmpAttribute1;
-		}
-
 		cXMLEntry *TmpEntry = FirstChild;
 		while (TmpEntry != nullptr) {
 			cXMLEntry *TmpEntry1 = TmpEntry->Next;
@@ -100,16 +65,15 @@ public:
 	// тип записи 0-обычная, 1-коментарий
 	int EntryType{0};
 	// имя элемента (если коментарий - текст)
-	char *Name{nullptr};
+	std::string Name;
 	// содержимое элемента
-	char *Content{nullptr};
+	std::string Content;
 	// номер строки в документе (если читаем из документа, если создаем - всегда ноль)
 	int LineNumber{0};
 
 
-	// указатели на динамический массив атрибутов данной записи
-	cXMLAttribute *FirstAttribute{nullptr};
-	cXMLAttribute *LastAttribute{nullptr};
+	// массив атрибутов данной записи
+	std::unordered_map<std::string, std::string> Attributes;
 
 	// указатели на массив дочерних элементов
 	cXMLEntry *FirstChild{nullptr};
@@ -124,12 +88,9 @@ class cXMLDocument
 {
 public:
 
-	cXMLDocument() {};
+	cXMLDocument() = default;
+	cXMLDocument(const char *XMLFileName);
 	~cXMLDocument()
-	{
-		ReleaseXMLDocument();
-	};
-	void ReleaseXMLDocument()
 	{
 		if (RootXMLEntry != nullptr)
 			delete RootXMLEntry;
@@ -139,61 +100,59 @@ public:
 	// указатель на корневой элемент
 	cXMLEntry *RootXMLEntry{nullptr};
 
-	bool Load(const char *XMLFileName);
 	bool ParseTagLine(char *OriginBuffer, unsigned int StartPosition, char *Buffer, cXMLEntry *XMLEntry);
 	bool ParseTagContent(char *OriginBuffer, unsigned int StartPosition, char *Buffer, cXMLEntry *ParentXMLEntry);
 
 	bool Save(const char *XMLFileName);
 	void SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned int Level);
 
-	cXMLEntry *AddEntry(cXMLEntry *ParentXMLEntry, const char *EntryName)
+	cXMLEntry *AddEntry(cXMLEntry *ParentXMLEntry, const std::string &EntryName)
 	{
 		if (ParentXMLEntry == nullptr) {
 			RootXMLEntry = new cXMLEntry;
-			RootXMLEntry->Name = new char[strlen(EntryName)+1];
-			strcpy(RootXMLEntry->Name, EntryName);
-			RootXMLEntry->Name[strlen(EntryName)] = 0;
+			RootXMLEntry->Name = EntryName;
 			return RootXMLEntry;
 		} else {
 			cXMLEntry *NewXMLEntry = new cXMLEntry;
-			NewXMLEntry->Name = new char[strlen(EntryName)+1];
-			strcpy(NewXMLEntry->Name, EntryName);
-			NewXMLEntry->Name[strlen(EntryName)] = 0;
+			NewXMLEntry->Name = EntryName;
 			AttachXMLChildEntry(ParentXMLEntry, NewXMLEntry);
 			return NewXMLEntry;
 		}
 	};
 
-	void AddEntryContent(cXMLEntry *XMLEntry, char *EntryData)
+	void AddEntryContent(cXMLEntry *XMLEntry, const std::string &EntryData)
 	{
-		XMLEntry->Content = new char[strlen(EntryData)+1];
-		strcpy(XMLEntry->Content, EntryData);
-		XMLEntry->Content[strlen(EntryData)] = 0;
+		XMLEntry->Content = EntryData;
 	};
 
-	void AddEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName, const char *AttributeData)
+	void AddEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName, const std::string &AttributeData)
 	{
-		cXMLAttribute *NewXMLAttribute = new cXMLAttribute;
+		if (!XMLEntry)
+			return;
 
-		NewXMLAttribute->Name = new char[strlen(AttributeName)+1];
-		strcpy(NewXMLAttribute->Name, AttributeName);
-		NewXMLAttribute->Name[strlen(AttributeName)] = 0;
-
-		NewXMLAttribute->Data = new char[strlen(AttributeData)+1];
-		strcpy(NewXMLAttribute->Data, AttributeData);
-		NewXMLAttribute->Data[strlen(AttributeData)] = 0;
-
-		AttachXMLAttribute(XMLEntry, NewXMLAttribute);
+		XMLEntry->Attributes[AttributeName] = AttributeData;
 	};
-	void AddEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName, int AttributeData)
+
+	// string literal matches bool overload instead of "std::string&", forced to use "const char*" here too
+	void AddEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName, const char *AttributeData)
 	{
-		AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData).c_str());
+		if (!XMLEntry || !AttributeData)
+			return;
+
+		XMLEntry->Attributes[AttributeName] = AttributeData;
 	};
-	void AddEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName, float AttributeData)
+
+	void AddEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName, int AttributeData)
 	{
-		AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData).c_str());
+		AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
 	};
-	void AddEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName, bool AttributeData)
+
+	void AddEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName, float AttributeData)
+	{
+		AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
+	};
+
+	void AddEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName, bool AttributeData)
 	{
 		if (AttributeData)
 			AddEntryAttribute(XMLEntry, AttributeName, "on");
@@ -201,77 +160,75 @@ public:
 			AddEntryAttribute(XMLEntry, AttributeName, "off");
 	};
 
-	void AddComment(cXMLEntry *ParentXMLEntry, const char *Text)
+	void AddComment(cXMLEntry *ParentXMLEntry, const std::string &Text)
 	{
 		cXMLEntry *NewXMLEntry = new cXMLEntry;
 		NewXMLEntry->EntryType = 1;
-		NewXMLEntry->Name = new char[strlen(Text)+1];
-		strcpy(NewXMLEntry->Name, Text);
-		NewXMLEntry->Name[strlen(Text)] = 0;
+		NewXMLEntry->Name = Text;
 		AttachXMLChildEntry(ParentXMLEntry, NewXMLEntry);
 	};
 
-	cXMLEntry *FindEntryByName(cXMLEntry *ParentXMLEntry, const char *Name)
+	cXMLEntry *FindEntryByName(cXMLEntry *ParentXMLEntry, const std::string &Name)
 	{
 		if (ParentXMLEntry == nullptr)
 			return nullptr;
 		cXMLEntry *TmpEntry = ParentXMLEntry->FirstChild;
 		while (TmpEntry != nullptr) {
-			if (!strcmp(Name, TmpEntry->Name))
+			if (Name == TmpEntry->Name)
 				return TmpEntry;
 			TmpEntry = TmpEntry->Next;
 		}
 		return nullptr;
 	};
 
-	char *GetEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName)
+	bool TestEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName)
 	{
-		if (XMLEntry == nullptr)
-			return nullptr;
-		cXMLAttribute *TmpAttribute = XMLEntry->FirstAttribute;
-		while (TmpAttribute != nullptr) {
-			if (!strcmp(AttributeName, TmpAttribute->Name))
-				return TmpAttribute->Data;
-			TmpAttribute = TmpAttribute->Next;
-		}
-		return nullptr;
+		if (XMLEntry->Attributes.find(AttributeName) != XMLEntry->Attributes.end())
+			return true;
+
+		return false;
 	};
 
-	int iGetEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName)
+	const std::string &GetEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName)
+	{
+		return XMLEntry->Attributes[AttributeName];
+	};
+
+	int iGetEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName)
 	{
 		if (XMLEntry == nullptr)
 			return 0;
-		return atoi(GetEntryAttribute(XMLEntry, AttributeName));
+		return atoi(GetEntryAttribute(XMLEntry, AttributeName).c_str());
 	};
 
-	float fGetEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName)
+	float fGetEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName)
 	{
 		if (XMLEntry == nullptr)
 			return 0.0f;
-		return (float)atof(GetEntryAttribute(XMLEntry, AttributeName));
+		return (float)atof(GetEntryAttribute(XMLEntry, AttributeName).c_str());
 	};
 
-	bool bGetEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName)
+	bool bGetEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName)
 	{
 		if (XMLEntry == nullptr)
 			return false;
-		char *Data = GetEntryAttribute(XMLEntry, AttributeName);
-		if ((!strcmp(Data, "on")) ||
-		    (!strcmp(Data, "true")) ||
-		    (!strcmp(Data, "yes")) ||
-		    (!strcmp(Data, "1")))
+		std::string Data = GetEntryAttribute(XMLEntry, AttributeName);
+		if ((Data == "on") ||
+		    (Data == "true") ||
+		    (Data == "yes") ||
+		    (Data == "1"))
 			return true;
 		return false;
 	};
 
-	cXMLEntry *FindFirstChildEntryByName(cXMLEntry *ParentXMLEntry, const char *ChildEntryName)
+	cXMLEntry *FindFirstChildEntryByName(cXMLEntry *ParentXMLEntry, const std::string &ChildEntryName)
 	{
 		if (ParentXMLEntry == nullptr)
 			return nullptr;
 
 		cXMLEntry *TmpEntry = ParentXMLEntry->FirstChild;
 		while (TmpEntry != nullptr) {
-			if (!strcmp(ChildEntryName, TmpEntry->Name))
+			if (ChildEntryName == TmpEntry->Name)
 				return TmpEntry;
 			TmpEntry = TmpEntry->Next;
 		}
@@ -280,8 +237,6 @@ public:
 
 	void AttachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *ChildXMLEntry);
 	void DetachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *ChildXMLEntry);
-	void AttachXMLAttribute(cXMLEntry *XMLEntry, cXMLAttribute *XMLAttribute);
-	void DetachXMLAttribute(cXMLEntry *XMLEntry, cXMLAttribute *XMLAttribute);
 };
 
 #endif // XML_H

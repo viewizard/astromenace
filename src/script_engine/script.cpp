@@ -133,19 +133,10 @@ bool cScriptEngine::RunScript(const char *FileName, float InitTime)
 		delete xmlDoc;
 		xmlDoc = nullptr;
 	}
-	xmlDoc = new cXMLDocument;
-
-	// иним скрипт
-	if (!xmlDoc->Load(FileName)) {
-		std::cerr << "Can't find script file or file corrupted: " << FileName << "\n";
-		delete xmlDoc;
-		xmlDoc = nullptr;
-		return false;
-	}
-
+	xmlDoc = new cXMLDocument(FileName);
 
 	// проверяем корневой элемент
-	if (strcmp("AstroMenaceScript", xmlDoc->RootXMLEntry->Name)) {
+	if (!xmlDoc->RootXMLEntry || ("AstroMenaceScript" != xmlDoc->RootXMLEntry->Name)) {
 		std::cerr << "Can't find AstroMenaceScript element in the: " << FileName << "\n";
 		delete xmlDoc;
 		xmlDoc = nullptr;
@@ -297,9 +288,9 @@ bool cScriptEngine::Update(float Time)
 
 	while (xmlEntry) {
 		// TimeLine
-		if (!strcmp(xmlEntry->Name, "TimeLine")) {
+		if (xmlEntry->Name == "TimeLine") {
 			float onTime = 0.0f;
-			if (xmlDoc->GetEntryAttribute(xmlEntry, "value") != nullptr)
+			if (xmlDoc->TestEntryAttribute(xmlEntry, "value"))
 				onTime = xmlDoc->fGetEntryAttribute(xmlEntry, "value");
 
 			// если еще не время выполнять... нужно уйти из процедуры
@@ -315,45 +306,45 @@ bool cScriptEngine::Update(float Time)
 			TimeDelta = TimeOpLag;//Time - TimeLastOp;
 		} else
 			// Debug
-			if (!strcmp(xmlEntry->Name, "Debug")) {
+			if (xmlEntry->Name == "Debug") {
 				ShowDebugModeLine = false;
-				if (xmlDoc->GetEntryAttribute(xmlEntry, "showline") != nullptr)
+				if (xmlDoc->TestEntryAttribute(xmlEntry, "showline"))
 					ShowDebugModeLine = xmlDoc->bGetEntryAttribute(xmlEntry, "showline");
 
 				NeedShowBB = 0;
-				if (xmlDoc->GetEntryAttribute(xmlEntry, "showbb") != nullptr)
+				if (xmlDoc->TestEntryAttribute(xmlEntry, "showbb"))
 					NeedShowBB = xmlDoc->iGetEntryAttribute(xmlEntry, "showbb");
 
 				UndeadDebugMode = false;
-				if (xmlDoc->GetEntryAttribute(xmlEntry, "undead") != nullptr)
+				if (xmlDoc->TestEntryAttribute(xmlEntry, "undead"))
 					UndeadDebugMode = xmlDoc->bGetEntryAttribute(xmlEntry, "undead");
 
 				ShowGameTime = false;
-				if (xmlDoc->GetEntryAttribute(xmlEntry, "time") != nullptr)
+				if (xmlDoc->TestEntryAttribute(xmlEntry, "time"))
 					ShowGameTime = xmlDoc->bGetEntryAttribute(xmlEntry, "time");
 
 			} else
 				// StarSystem
-				if (!strcmp(xmlEntry->Name, "StarSystem")) {
-					if (xmlDoc->GetEntryAttribute(xmlEntry, "system") != nullptr) {
+				if (xmlEntry->Name == "StarSystem") {
+					if (xmlDoc->TestEntryAttribute(xmlEntry, "system")) {
 						int SystemNum = xmlDoc->iGetEntryAttribute(xmlEntry, "system");
 						sVECTOR3D TmpBaseRotation(0.0f, 0.0f, 0.0f);
-						if (xmlDoc->GetEntryAttribute(xmlEntry, "anglex") != nullptr)
+						if (xmlDoc->TestEntryAttribute(xmlEntry, "anglex"))
 							TmpBaseRotation.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglex");
-						if (xmlDoc->GetEntryAttribute(xmlEntry, "angley") != nullptr)
+						if (xmlDoc->TestEntryAttribute(xmlEntry, "angley"))
 							TmpBaseRotation.y = xmlDoc->fGetEntryAttribute(xmlEntry, "angley");
-						if (xmlDoc->GetEntryAttribute(xmlEntry, "anglez") != nullptr)
+						if (xmlDoc->TestEntryAttribute(xmlEntry, "anglez"))
 							TmpBaseRotation.z = xmlDoc->fGetEntryAttribute(xmlEntry, "anglez");
 						StarSystemInit(SystemNum, TmpBaseRotation);
 					}
 				} else
 					// Music
-					if (!strcmp(xmlEntry->Name, "Music")) {
+					if (xmlEntry->Name == "Music") {
 						// если корабль игрока уничтожен - не меняем уже музыку в игре вообще,
 						// должна проигрываться только музыка поражения
 						if (PlayerFighter != nullptr)
 							if (PlayerFighter->Strength > 0.0f) {
-								if (xmlDoc->GetEntryAttribute(xmlEntry, "theme") != nullptr) {
+								if (xmlDoc->TestEntryAttribute(xmlEntry, "theme")) {
 									int Theme = xmlDoc->iGetEntryAttribute(xmlEntry, "theme");
 									if (Theme == 1)
 										StartMusicWithFade(2, 2.0f, 2.0f);
@@ -363,128 +354,128 @@ bool cScriptEngine::Update(float Time)
 							}
 					} else
 						// CreatePlanet
-						if (!strcmp(xmlEntry->Name, "CreatePlanet")) {
+						if (xmlEntry->Name == "CreatePlanet") {
 							cPlanet *Planet = new cPlanet;
-							if (xmlDoc->GetEntryAttribute(xmlEntry, "type") != nullptr) {
+							if (xmlDoc->TestEntryAttribute(xmlEntry, "type")) {
 								Planet->Create(xmlDoc->iGetEntryAttribute(xmlEntry, "type"));
 								SetRotation(Planet, xmlEntry, xmlDoc);
 								SetLocation(Planet, xmlEntry, xmlDoc, 0.0f);
 								Planet->ShowDeleteOnHide = 0;
 
-								if (xmlDoc->GetEntryAttribute(xmlEntry, "speed") != nullptr)
+								if (xmlDoc->TestEntryAttribute(xmlEntry, "speed"))
 									Planet->Speed = xmlDoc->fGetEntryAttribute(xmlEntry, "speed");
 							}
 						} else
 							// AsteroidField
-							if (!strcmp(xmlEntry->Name, "AsteroidField")) {
-								if (xmlDoc->GetEntryAttribute(xmlEntry, "status") != nullptr) {
+							if (xmlEntry->Name == "AsteroidField") {
+								if (xmlDoc->TestEntryAttribute(xmlEntry, "status")) {
 									AsterOn = xmlDoc->bGetEntryAttribute(xmlEntry, "status");
 								}
-								if (xmlDoc->GetEntryAttribute(xmlEntry, "persec") != nullptr)
+								if (xmlDoc->TestEntryAttribute(xmlEntry, "persec"))
 									AsterQuant = xmlDoc->fGetEntryAttribute(xmlEntry, "persec");
-								if (xmlDoc->GetEntryAttribute(xmlEntry, "w") != nullptr)
+								if (xmlDoc->TestEntryAttribute(xmlEntry, "w"))
 									AsterW = xmlDoc->fGetEntryAttribute(xmlEntry, "w");
-								if (xmlDoc->GetEntryAttribute(xmlEntry, "h") != nullptr)
+								if (xmlDoc->TestEntryAttribute(xmlEntry, "h"))
 									AsterH = xmlDoc->fGetEntryAttribute(xmlEntry, "h");
-								if (xmlDoc->GetEntryAttribute(xmlEntry, "posx") != nullptr)
+								if (xmlDoc->TestEntryAttribute(xmlEntry, "posx"))
 									AsterXPos = xmlDoc->fGetEntryAttribute(xmlEntry, "posx");
-								if (xmlDoc->GetEntryAttribute(xmlEntry, "posy") != nullptr)
+								if (xmlDoc->TestEntryAttribute(xmlEntry, "posy"))
 									AsterYPos = xmlDoc->fGetEntryAttribute(xmlEntry, "posy");
-								if (xmlDoc->GetEntryAttribute(xmlEntry, "posz") != nullptr)
+								if (xmlDoc->TestEntryAttribute(xmlEntry, "posz"))
 									AsterZPos = xmlDoc->fGetEntryAttribute(xmlEntry, "posz");
-								if (xmlDoc->GetEntryAttribute(xmlEntry, "slow") != nullptr)
+								if (xmlDoc->TestEntryAttribute(xmlEntry, "slow"))
 									AsterMaxSpeed = xmlDoc->fGetEntryAttribute(xmlEntry, "slow");
-								if (xmlDoc->GetEntryAttribute(xmlEntry, "fast") != nullptr)
+								if (xmlDoc->TestEntryAttribute(xmlEntry, "fast"))
 									AsterMinFastSpeed = xmlDoc->fGetEntryAttribute(xmlEntry, "fast");
 							} else
 								// Light
-								if (!strcmp(xmlEntry->Name, "Light")) {
+								if (xmlEntry->Name == "Light") {
 									sLight *NewLight;
 									NewLight = new sLight;
 
 									NewLight->LightType = 0; // по умолчанию, солнце
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "type") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "type"))
 										NewLight->LightType = xmlDoc->iGetEntryAttribute(xmlEntry, "type");
 
 									NewLight->Diffuse[0] = 0.0f;
 									NewLight->Diffuse[1] = 0.0f;
 									NewLight->Diffuse[2] = 0.0f;
 									NewLight->Diffuse[3] = 1.0f;
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "diffr") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "diffr"))
 										NewLight->Diffuse[0] = xmlDoc->fGetEntryAttribute(xmlEntry, "diffr");
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "diffg") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "diffg"))
 										NewLight->Diffuse[1] = xmlDoc->fGetEntryAttribute(xmlEntry, "diffg");
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "diffb") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "diffb"))
 										NewLight->Diffuse[2] = xmlDoc->fGetEntryAttribute(xmlEntry, "diffb");
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "diffa") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "diffa"))
 										NewLight->Diffuse[3] = xmlDoc->fGetEntryAttribute(xmlEntry, "diffa");
 
 									NewLight->Specular[0] = 0.0f;
 									NewLight->Specular[1] = 0.0f;
 									NewLight->Specular[2] = 0.0f;
 									NewLight->Specular[3] = 1.0f;
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "specr") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "specr"))
 										NewLight->Specular[0] = xmlDoc->fGetEntryAttribute(xmlEntry, "specr");
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "specg") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "specg"))
 										NewLight->Specular[1] = xmlDoc->fGetEntryAttribute(xmlEntry, "specg");
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "specb") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "specb"))
 										NewLight->Specular[2] = xmlDoc->fGetEntryAttribute(xmlEntry, "specb");
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "speca") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "speca"))
 										NewLight->Specular[3] = xmlDoc->fGetEntryAttribute(xmlEntry, "speca");
 
 									NewLight->Ambient[0] = 0.0f;
 									NewLight->Ambient[1] = 0.0f;
 									NewLight->Ambient[2] = 0.0f;
 									NewLight->Ambient[3] = 1.0f;
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "ambir") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "ambir"))
 										NewLight->Ambient[0] = xmlDoc->fGetEntryAttribute(xmlEntry, "ambir");
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "ambig") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "ambig"))
 										NewLight->Ambient[1] = xmlDoc->fGetEntryAttribute(xmlEntry, "ambig");
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "ambib") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "ambib"))
 										NewLight->Ambient[2] = xmlDoc->fGetEntryAttribute(xmlEntry, "ambib");
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "ambia") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "ambia"))
 										NewLight->Ambient[3] = xmlDoc->fGetEntryAttribute(xmlEntry, "ambia");
 
 									NewLight->Direction = sVECTOR3D(0.0f,0.0f,1.0f);
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "dirx") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "dirx"))
 										NewLight->Direction.x = xmlDoc->fGetEntryAttribute(xmlEntry, "dirx");
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "diry") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "diry"))
 										NewLight->Direction.y = xmlDoc->fGetEntryAttribute(xmlEntry, "diry");
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "dirz") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "dirz"))
 										NewLight->Direction.z = xmlDoc->fGetEntryAttribute(xmlEntry, "dirz");
 									NewLight->Direction.Normalize();
 
 									NewLight->Location = sVECTOR3D(0.0f,0.0f,0.0f);
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "posx") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "posx"))
 										NewLight->Location.x = xmlDoc->fGetEntryAttribute(xmlEntry, "posx");
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "posy") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "posy"))
 										NewLight->Location.y = xmlDoc->fGetEntryAttribute(xmlEntry, "posy");
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "posz") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "posz"))
 										NewLight->Location.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posz");
 
 
 									NewLight->On = true;
-									if (xmlDoc->GetEntryAttribute(xmlEntry, "status") != nullptr)
+									if (xmlDoc->TestEntryAttribute(xmlEntry, "status"))
 										NewLight->On = xmlDoc->bGetEntryAttribute(xmlEntry, "status");
 								} else
 									// Label
-									if (!strcmp(xmlEntry->Name, "Label")) {
+									if (xmlEntry->Name == "Label") {
 										// ничего не делаем
 										xmlEntry = xmlEntry->Next;
 										continue;
 									} else
 										// Goto
-										if (!strcmp(xmlEntry->Name, "Goto")) {
+										if (xmlEntry->Name == "Goto") {
 											// если есть указатель на метку
-											if (xmlDoc->GetEntryAttribute(xmlEntry, "label") != nullptr) {
+											if (xmlDoc->TestEntryAttribute(xmlEntry, "label")) {
 												// нужно перебрать все метки и остановится на нужной
 												cXMLEntry *tmpEntry = xmlDoc->FindFirstChildEntryByName(xmlDoc->FindFirstChildEntryByName(xmlDoc->RootXMLEntry, "Action"), "Label");
 
 												// перебор по всем меткам
 												while (tmpEntry) {
 													//	if (!strcmp(tmpEntry->Name, "Label"))
-													if (xmlDoc->GetEntryAttribute(tmpEntry, "name") != nullptr)
-														if (!strcmp(xmlDoc->GetEntryAttribute(tmpEntry, "name"), xmlDoc->GetEntryAttribute(xmlEntry, "label"))) {
+													if (xmlDoc->TestEntryAttribute(tmpEntry, "name"))
+														if (xmlDoc->GetEntryAttribute(tmpEntry, "name") == xmlDoc->GetEntryAttribute(xmlEntry, "label")) {
 															// ставим новый указатель
 															xmlEntry = tmpEntry;
 															return true;
@@ -495,24 +486,24 @@ bool cScriptEngine::Update(float Time)
 											}
 										} else
 											// MissionComplete
-											if (!strcmp(xmlEntry->Name, "MissionComplete")) {
+											if (xmlEntry->Name == "MissionComplete") {
 												SetGameMissionComplete();
 											} else
 												// MissionCompleteAtNoEnemy
-												if (!strcmp(xmlEntry->Name, "MissionCompleteAtNoEnemy")) {
+												if (xmlEntry->Name == "MissionCompleteAtNoEnemy") {
 													bool SetGameMissionFlag = false;
 													NeedCheckSpaceShip = false;
-													if (xmlDoc->GetEntryAttribute(xmlEntry, "ships") != nullptr) {
+													if (xmlDoc->TestEntryAttribute(xmlEntry, "ships")) {
 														NeedCheckSpaceShip = xmlDoc->bGetEntryAttribute(xmlEntry, "ships");
 														SetGameMissionFlag = true;
 													};
 													NeedCheckGroundObject = false;
-													if (xmlDoc->GetEntryAttribute(xmlEntry, "grounds") != nullptr) {
+													if (xmlDoc->TestEntryAttribute(xmlEntry, "grounds")) {
 														NeedCheckGroundObject = xmlDoc->bGetEntryAttribute(xmlEntry, "grounds");
 														SetGameMissionFlag = true;
 													};
 													EndDelayMissionComplete = 0.0f;
-													if (xmlDoc->GetEntryAttribute(xmlEntry, "delay") != nullptr) {
+													if (xmlDoc->TestEntryAttribute(xmlEntry, "delay")) {
 														EndDelayMissionComplete = xmlDoc->fGetEntryAttribute(xmlEntry, "delay");
 														SetGameMissionFlag = true;
 													};
@@ -526,27 +517,27 @@ bool cScriptEngine::Update(float Time)
 													}
 												} else
 													// Text
-													if (!strcmp(xmlEntry->Name, "Text")) {
+													if (xmlEntry->Name == "Text") {
 														cGameLvlText *NewText;
 														NewText = new cGameLvlText;
 
 
 														NewText->Lifetime = -1.0f;
-														if (xmlDoc->GetEntryAttribute(xmlEntry, "life") != nullptr)
+														if (xmlDoc->TestEntryAttribute(xmlEntry, "life"))
 															NewText->Lifetime = xmlDoc->fGetEntryAttribute(xmlEntry, "life");
 
-														if (xmlDoc->GetEntryAttribute(xmlEntry, "text") != nullptr) {
-															NewText->DrawText = new char[strlen(xmlDoc->GetEntryAttribute(xmlEntry, "text"))+1];
-															strcpy(NewText->DrawText, xmlDoc->GetEntryAttribute(xmlEntry, "text"));
+														if (xmlDoc->TestEntryAttribute(xmlEntry, "text")) {
+															NewText->DrawText = new char[xmlDoc->GetEntryAttribute(xmlEntry, "text").size() + 1];
+															strcpy(NewText->DrawText, xmlDoc->GetEntryAttribute(xmlEntry, "text").c_str());
 														}
 
-														if (xmlDoc->GetEntryAttribute(xmlEntry, "posx") != nullptr)
+														if (xmlDoc->TestEntryAttribute(xmlEntry, "posx"))
 															NewText->PosX = xmlDoc->iGetEntryAttribute(xmlEntry, "posx");
-														if (xmlDoc->GetEntryAttribute(xmlEntry, "posy") != nullptr)
+														if (xmlDoc->TestEntryAttribute(xmlEntry, "posy"))
 															NewText->PosY = xmlDoc->iGetEntryAttribute(xmlEntry, "posy");
 
 														NewText->Color = 0;
-														if (xmlDoc->GetEntryAttribute(xmlEntry, "color") != nullptr)
+														if (xmlDoc->TestEntryAttribute(xmlEntry, "color"))
 															NewText->Color = xmlDoc->iGetEntryAttribute(xmlEntry, "color");
 													} else {
 														// если тут - значит не нашли директиву, или произошла ошибка
@@ -581,10 +572,10 @@ void cScriptEngine::UpdateTimeLine()
 	while (TL) {
 
 		// EarthFighter
-		if (!strcmp(TL->Name, "EarthFighter")) {
+		if (TL->Name == "EarthFighter") {
 			cEarthSpaceFighter *Fighter = nullptr;
 			Fighter = new cEarthSpaceFighter;
-			if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
+			if (xmlDoc->TestEntryAttribute(TL, "type"))
 				Fighter->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 			else {
 				TL = TL->Next;
@@ -594,46 +585,46 @@ void cScriptEngine::UpdateTimeLine()
 			SetID(Fighter, TL, xmlDoc);
 			if (ShowDebugModeLine) SetDebugInformation(Fighter, TL);
 
-			if (xmlDoc->GetEntryAttribute(TL, "speed") != nullptr) {
+			if (xmlDoc->TestEntryAttribute(TL, "speed")) {
 				Fighter->NeedSpeed = xmlDoc->fGetEntryAttribute(TL, "speed");
 				Fighter->Speed = Fighter->NeedSpeed;
 			}
-			if (xmlDoc->GetEntryAttribute(TL, "speedlr") != nullptr) {
+			if (xmlDoc->TestEntryAttribute(TL, "speedlr")) {
 				Fighter->NeedSpeedLR = xmlDoc->fGetEntryAttribute(TL, "speedlr");
 				Fighter->SpeedLR = Fighter->NeedSpeedLR;
 			}
-			if (xmlDoc->GetEntryAttribute(TL, "speedud") != nullptr) {
+			if (xmlDoc->TestEntryAttribute(TL, "speedud")) {
 				Fighter->NeedSpeedUD = xmlDoc->fGetEntryAttribute(TL, "speedud");
 				Fighter->SpeedUD = Fighter->NeedSpeedUD;
 			}
 
-			if (xmlDoc->GetEntryAttribute(TL, "speedbycamfb") != nullptr) {
+			if (xmlDoc->TestEntryAttribute(TL, "speedbycamfb")) {
 				Fighter->NeedSpeedByCamFB = xmlDoc->fGetEntryAttribute(TL, "speedbycamfb");
 				Fighter->SpeedByCamFB = Fighter->NeedSpeedByCamFB;
 			}
-			if (xmlDoc->GetEntryAttribute(TL, "speedbycamlr") != nullptr) {
+			if (xmlDoc->TestEntryAttribute(TL, "speedbycamlr")) {
 				Fighter->NeedSpeedByCamLR = xmlDoc->fGetEntryAttribute(TL, "speedbycamlr");
 				Fighter->SpeedByCamLR = Fighter->NeedSpeedByCamLR;
 			}
-			if (xmlDoc->GetEntryAttribute(TL, "speedbycamud") != nullptr) {
+			if (xmlDoc->TestEntryAttribute(TL, "speedbycamud")) {
 				Fighter->NeedSpeedByCamUD = xmlDoc->fGetEntryAttribute(TL, "speedbycamud");
 				Fighter->SpeedByCamUD = Fighter->NeedSpeedByCamUD;
 			}
 
 
-			if (xmlDoc->GetEntryAttribute(TL, "armour") != nullptr)
+			if (xmlDoc->TestEntryAttribute(TL, "armour"))
 				SetEarthSpaceFighterArmour(Fighter, xmlDoc->iGetEntryAttribute(TL, "armour"));
-			if (xmlDoc->GetEntryAttribute(TL, "weapon1") != nullptr)
+			if (xmlDoc->TestEntryAttribute(TL, "weapon1"))
 				SetEarthSpaceFighterWeapon(Fighter, 1, xmlDoc->iGetEntryAttribute(TL, "weapon1"));
-			if (xmlDoc->GetEntryAttribute(TL, "weapon2") != nullptr)
+			if (xmlDoc->TestEntryAttribute(TL, "weapon2"))
 				SetEarthSpaceFighterWeapon(Fighter, 2, xmlDoc->iGetEntryAttribute(TL, "weapon2"));
-			if (xmlDoc->GetEntryAttribute(TL, "weapon3") != nullptr)
+			if (xmlDoc->TestEntryAttribute(TL, "weapon3"))
 				SetEarthSpaceFighterWeapon(Fighter, 3, xmlDoc->iGetEntryAttribute(TL, "weapon3"));
-			if (xmlDoc->GetEntryAttribute(TL, "weapon4") != nullptr)
+			if (xmlDoc->TestEntryAttribute(TL, "weapon4"))
 				SetEarthSpaceFighterWeapon(Fighter, 4, xmlDoc->iGetEntryAttribute(TL, "weapon4"));
-			if (xmlDoc->GetEntryAttribute(TL, "weapon5") != nullptr)
+			if (xmlDoc->TestEntryAttribute(TL, "weapon5"))
 				SetEarthSpaceFighterWeapon(Fighter, 5, xmlDoc->iGetEntryAttribute(TL, "weapon5"));
-			if (xmlDoc->GetEntryAttribute(TL, "weapon6") != nullptr)
+			if (xmlDoc->TestEntryAttribute(TL, "weapon6"))
 				SetEarthSpaceFighterWeapon(Fighter, 6, xmlDoc->iGetEntryAttribute(TL, "weapon6"));
 
 			SetShowDeleteOnHide(Fighter, TL, xmlDoc);
@@ -644,16 +635,16 @@ void cScriptEngine::UpdateTimeLine()
 			// дальше смотрим, что нужно сделать...
 			cXMLEntry *TLEarthFighter = TL->FirstChild;
 			while (TLEarthFighter) {
-				if (!strcmp(TLEarthFighter->Name, "TimeSheet")) {
+				if (TLEarthFighter->Name == "TimeSheet") {
 					// собираем новый элемент
 					sTimeSheet *TimeSheet;
 					TimeSheet = new sTimeSheet;
 					Fighter->AttachTimeSheet(TimeSheet);
 
-					if (xmlDoc->GetEntryAttribute(TLEarthFighter, "aimode") != nullptr) {
+					if (xmlDoc->TestEntryAttribute(TLEarthFighter, "aimode")) {
 						TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(TLEarthFighter, "aimode");
 						TimeSheet->Time = 0.0f;
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "time") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "time"))
 							TimeSheet->Time = xmlDoc->fGetEntryAttribute(TLEarthFighter, "time");
 
 						TimeSheet->InUse = false;
@@ -679,87 +670,87 @@ void cScriptEngine::UpdateTimeLine()
 						TimeSheet->AI_Mode = 0;
 
 						TimeSheet->Time = 0.0f;
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "time") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "time"))
 							TimeSheet->Time = xmlDoc->fGetEntryAttribute(TLEarthFighter, "time");
 						TimeSheet->InUse = false;
 
 						TimeSheet->Speed = 0.0f;
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "speed") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "speed"))
 							TimeSheet->Speed = xmlDoc->fGetEntryAttribute(TLEarthFighter, "speed");
 
 						TimeSheet->Acceler = 1.0f;//0-1
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "acceler") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "acceler"))
 							TimeSheet->Acceler = xmlDoc->fGetEntryAttribute(TLEarthFighter, "acceler");
 						vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
 						TimeSheet->SpeedLR = 0.0f;
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "speedlr") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "speedlr"))
 							TimeSheet->SpeedLR = xmlDoc->fGetEntryAttribute(TLEarthFighter, "speedlr");
 
 						TimeSheet->AccelerLR = 1.0f;//0-1
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "accelerlr") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "accelerlr"))
 							TimeSheet->AccelerLR = xmlDoc->fGetEntryAttribute(TLEarthFighter, "accelerlr");
 						vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
 
 						TimeSheet->SpeedUD = 0.0f;
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "speedud") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "speedud"))
 							TimeSheet->SpeedUD = xmlDoc->fGetEntryAttribute(TLEarthFighter, "speedud");
 
 						TimeSheet->AccelerUD = 1.0f;//0-1
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "accelerud") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "accelerud"))
 							TimeSheet->AccelerUD = xmlDoc->fGetEntryAttribute(TLEarthFighter, "accelerud");
 						vw_Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
 
 
 						TimeSheet->SpeedByCamFB = 0.0f;
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "speedbycamfb") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "speedbycamfb"))
 							TimeSheet->SpeedByCamFB = xmlDoc->fGetEntryAttribute(TLEarthFighter, "speedbycamfb");
 
 						TimeSheet->AccelerByCamFB = 1.0f;//0-1
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "accelerbycamfb") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "accelerbycamfb"))
 							TimeSheet->AccelerByCamFB = xmlDoc->fGetEntryAttribute(TLEarthFighter, "accelerbycamfb");
 						vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
 
 						TimeSheet->SpeedByCamLR = 0.0f;
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "speedbycamlr") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "speedbycamlr"))
 							TimeSheet->SpeedByCamLR = xmlDoc->fGetEntryAttribute(TLEarthFighter, "speedbycamlr");
 
 						TimeSheet->AccelerByCamLR = 1.0f;//0-1
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "accelerbycamlr") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "accelerbycamlr"))
 							TimeSheet->AccelerByCamLR = xmlDoc->fGetEntryAttribute(TLEarthFighter, "accelerbycamlr");
 						vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
 
 						TimeSheet->SpeedByCamUD = 0.0f;
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "speedbycamud") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "speedbycamud"))
 							TimeSheet->SpeedByCamUD = xmlDoc->fGetEntryAttribute(TLEarthFighter, "speedbycamud");
 
 						TimeSheet->AccelerByCamUD = 1.0f;//0-1
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "accelerbycamud") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "accelerbycamud"))
 							TimeSheet->AccelerByCamUD = xmlDoc->fGetEntryAttribute(TLEarthFighter, "accelerbycamud");
 						vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
 
 						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "rotx") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "rotx"))
 							TimeSheet->Rotation.x = xmlDoc->fGetEntryAttribute(TLEarthFighter, "rotx");
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "roty") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "roty"))
 							TimeSheet->Rotation.y = xmlDoc->fGetEntryAttribute(TLEarthFighter, "roty");
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "rotz") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "rotz"))
 							TimeSheet->Rotation.z = xmlDoc->fGetEntryAttribute(TLEarthFighter, "rotz");
 
 						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "rotacx") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "rotacx"))
 							TimeSheet->RotationAcceler.x = xmlDoc->fGetEntryAttribute(TLEarthFighter, "rotacx");
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "rotacy") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "rotacy"))
 							TimeSheet->RotationAcceler.y = xmlDoc->fGetEntryAttribute(TLEarthFighter, "rotacy");
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "rotacz") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "rotacz"))
 							TimeSheet->RotationAcceler.z = xmlDoc->fGetEntryAttribute(TLEarthFighter, "rotacz");
 						vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
 						vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
 						vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 						TimeSheet->Fire = false;
-						if (xmlDoc->GetEntryAttribute(TLEarthFighter, "fire") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "fire"))
 							if (xmlDoc->iGetEntryAttribute(TLEarthFighter, "fire") > 0)
 								TimeSheet->Fire = true;
 						TimeSheet->BossFire = false;
@@ -773,9 +764,9 @@ void cScriptEngine::UpdateTimeLine()
 			}
 		} else
 			// AlienFighter
-			if (!strcmp(TL->Name, "AlienFighter")) {
+			if (TL->Name == "AlienFighter") {
 				cAlienSpaceFighter *Fighter = new cAlienSpaceFighter;
-				if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
+				if (xmlDoc->TestEntryAttribute(TL, "type"))
 					Fighter->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 				else {
 					TL = TL->Next;
@@ -785,28 +776,28 @@ void cScriptEngine::UpdateTimeLine()
 				SetID(Fighter, TL, xmlDoc);
 				if (ShowDebugModeLine) SetDebugInformation(Fighter, TL);
 
-				if (xmlDoc->GetEntryAttribute(TL, "speed") != nullptr) {
+				if (xmlDoc->TestEntryAttribute(TL, "speed")) {
 					Fighter->NeedSpeed = xmlDoc->fGetEntryAttribute(TL, "speed");
 					Fighter->Speed = Fighter->NeedSpeed;
 				}
-				if (xmlDoc->GetEntryAttribute(TL, "speedlr") != nullptr) {
+				if (xmlDoc->TestEntryAttribute(TL, "speedlr")) {
 					Fighter->NeedSpeedLR = xmlDoc->fGetEntryAttribute(TL, "speedlr");
 					Fighter->SpeedLR = Fighter->NeedSpeedLR;
 				}
-				if (xmlDoc->GetEntryAttribute(TL, "speedud") != nullptr) {
+				if (xmlDoc->TestEntryAttribute(TL, "speedud")) {
 					Fighter->NeedSpeedUD = xmlDoc->fGetEntryAttribute(TL, "speedud");
 					Fighter->SpeedUD = Fighter->NeedSpeedUD;
 				}
 
-				if (xmlDoc->GetEntryAttribute(TL, "speedbycamfb") != nullptr) {
+				if (xmlDoc->TestEntryAttribute(TL, "speedbycamfb")) {
 					Fighter->NeedSpeedByCamFB = xmlDoc->fGetEntryAttribute(TL, "speedbycamfb");
 					Fighter->SpeedByCamFB = Fighter->NeedSpeedByCamFB;
 				}
-				if (xmlDoc->GetEntryAttribute(TL, "speedbycamlr") != nullptr) {
+				if (xmlDoc->TestEntryAttribute(TL, "speedbycamlr")) {
 					Fighter->NeedSpeedByCamLR = xmlDoc->fGetEntryAttribute(TL, "speedbycamlr");
 					Fighter->SpeedByCamLR = Fighter->NeedSpeedByCamLR;
 				}
-				if (xmlDoc->GetEntryAttribute(TL, "speedbycamud") != nullptr) {
+				if (xmlDoc->TestEntryAttribute(TL, "speedbycamud")) {
 					Fighter->NeedSpeedByCamUD = xmlDoc->fGetEntryAttribute(TL, "speedbycamud");
 					Fighter->SpeedByCamUD = Fighter->NeedSpeedByCamUD;
 				}
@@ -819,16 +810,16 @@ void cScriptEngine::UpdateTimeLine()
 				// дальше смотрим, что нужно сделать...
 				cXMLEntry *TLAlienFighter = TL->FirstChild;
 				while (TLAlienFighter) {
-					if (!strcmp(TLAlienFighter->Name, "TimeSheet")) {
+					if (TLAlienFighter->Name == "TimeSheet") {
 						// собираем новый элемент
 						sTimeSheet *TimeSheet;
 						TimeSheet = new sTimeSheet;
 						Fighter->AttachTimeSheet(TimeSheet);
 
-						if (xmlDoc->GetEntryAttribute(TLAlienFighter, "aimode") != nullptr) {
+						if (xmlDoc->TestEntryAttribute(TLAlienFighter, "aimode")) {
 							TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(TLAlienFighter, "aimode");
 							TimeSheet->Time = 0.0f;
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "time") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "time"))
 								TimeSheet->Time = xmlDoc->fGetEntryAttribute(TLAlienFighter, "time");
 							TimeSheet->InUse = false;
 
@@ -853,85 +844,85 @@ void cScriptEngine::UpdateTimeLine()
 							TimeSheet->AI_Mode = 0;
 
 							TimeSheet->Time = 0.0f;
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "time") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "time"))
 								TimeSheet->Time = xmlDoc->fGetEntryAttribute(TLAlienFighter, "time");
 							TimeSheet->InUse = false;
 
 							TimeSheet->Speed = 0.0f;
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "speed") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "speed"))
 								TimeSheet->Speed = xmlDoc->fGetEntryAttribute(TLAlienFighter, "speed");
 
 							TimeSheet->Acceler = 1.0f;//0-1
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "acceler") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "acceler"))
 								TimeSheet->Acceler = xmlDoc->fGetEntryAttribute(TLAlienFighter, "acceler");
 							vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
 							TimeSheet->SpeedLR = 0.0f;
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "speedlr") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "speedlr"))
 								TimeSheet->SpeedLR = xmlDoc->fGetEntryAttribute(TLAlienFighter, "speedlr");
 
 							TimeSheet->AccelerLR = 1.0f;//0-1
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "accelerlr") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "accelerlr"))
 								TimeSheet->AccelerLR = xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerlr");
 							vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
 
 							TimeSheet->SpeedUD = 0.0f;
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "speedud") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "speedud"))
 								TimeSheet->SpeedUD = xmlDoc->fGetEntryAttribute(TLAlienFighter, "speedud");
 
 							TimeSheet->AccelerUD = 1.0f;//0-1
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "accelerud") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "accelerud"))
 								TimeSheet->AccelerUD = xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerud");
 							vw_Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
 
 							TimeSheet->SpeedByCamFB = 0.0f;
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "speedbycamfb") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "speedbycamfb"))
 								TimeSheet->SpeedByCamFB = xmlDoc->fGetEntryAttribute(TLAlienFighter, "speedbycamfb");
 
 							TimeSheet->AccelerByCamFB = 1.0f;//0-1
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "accelerbycamfb") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "accelerbycamfb"))
 								TimeSheet->AccelerByCamFB = xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerbycamfb");
 							vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
 
 							TimeSheet->SpeedByCamLR = 0.0f;
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "speedbycamlr") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "speedbycamlr"))
 								TimeSheet->SpeedByCamLR = xmlDoc->fGetEntryAttribute(TLAlienFighter, "speedbycamlr");
 
 							TimeSheet->AccelerByCamLR = 1.0f;//0-1
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "accelerbycamlr") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "accelerbycamlr"))
 								TimeSheet->AccelerByCamLR = xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerbycamlr");
 							vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
 
 							TimeSheet->SpeedByCamUD = 0.0f;
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "speedbycamud") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "speedbycamud"))
 								TimeSheet->SpeedByCamUD = xmlDoc->fGetEntryAttribute(TLAlienFighter, "speedbycamud");
 
 							TimeSheet->AccelerByCamUD = 1.0f;//0-1
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "accelerbycamud") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "accelerbycamud"))
 								TimeSheet->AccelerByCamUD = xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerbycamud");
 							vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
 							TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "rotx") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "rotx"))
 								TimeSheet->Rotation.x = xmlDoc->fGetEntryAttribute(TLAlienFighter, "rotx");
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "roty") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "roty"))
 								TimeSheet->Rotation.y = xmlDoc->fGetEntryAttribute(TLAlienFighter, "roty");
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "rotz") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "rotz"))
 								TimeSheet->Rotation.z = xmlDoc->fGetEntryAttribute(TLAlienFighter, "rotz");
 
 							TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "rotacx") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "rotacx"))
 								TimeSheet->RotationAcceler.x = xmlDoc->fGetEntryAttribute(TLAlienFighter, "rotacx");
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "rotacy") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "rotacy"))
 								TimeSheet->RotationAcceler.y = xmlDoc->fGetEntryAttribute(TLAlienFighter, "rotacy");
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "rotacz") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "rotacz"))
 								TimeSheet->RotationAcceler.z = xmlDoc->fGetEntryAttribute(TLAlienFighter, "rotacz");
 							vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
 							vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
 							vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 							TimeSheet->Fire = false;
-							if (xmlDoc->GetEntryAttribute(TLAlienFighter, "fire") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "fire"))
 								if (xmlDoc->iGetEntryAttribute(TLAlienFighter, "fire") > 0)
 									TimeSheet->Fire = true;
 							TimeSheet->BossFire = false;
@@ -946,9 +937,9 @@ void cScriptEngine::UpdateTimeLine()
 				}
 			} else
 				// AlienMotherShip
-				if (!strcmp(TL->Name, "AlienMotherShip")) {
+				if (TL->Name == "AlienMotherShip") {
 					cAlienSpaceMotherShip *Fighter = new cAlienSpaceMotherShip;
-					if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
+					if (xmlDoc->TestEntryAttribute(TL, "type"))
 						Fighter->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 					else {
 						TL = TL->Next;
@@ -958,28 +949,28 @@ void cScriptEngine::UpdateTimeLine()
 					SetID(Fighter, TL, xmlDoc);
 					if (ShowDebugModeLine) SetDebugInformation(Fighter, TL);
 
-					if (xmlDoc->GetEntryAttribute(TL, "speed") != nullptr) {
+					if (xmlDoc->TestEntryAttribute(TL, "speed")) {
 						Fighter->NeedSpeed = xmlDoc->fGetEntryAttribute(TL, "speed");
 						Fighter->Speed = Fighter->NeedSpeed;
 					}
-					if (xmlDoc->GetEntryAttribute(TL, "speedlr") != nullptr) {
+					if (xmlDoc->TestEntryAttribute(TL, "speedlr")) {
 						Fighter->NeedSpeedLR = xmlDoc->fGetEntryAttribute(TL, "speedlr");
 						Fighter->SpeedLR = Fighter->NeedSpeedLR;
 					}
-					if (xmlDoc->GetEntryAttribute(TL, "speedud") != nullptr) {
+					if (xmlDoc->TestEntryAttribute(TL, "speedud")) {
 						Fighter->NeedSpeedUD = xmlDoc->fGetEntryAttribute(TL, "speedud");
 						Fighter->SpeedUD = Fighter->NeedSpeedUD;
 					}
 
-					if (xmlDoc->GetEntryAttribute(TL, "speedbycamfb") != nullptr) {
+					if (xmlDoc->TestEntryAttribute(TL, "speedbycamfb")) {
 						Fighter->NeedSpeedByCamFB = xmlDoc->fGetEntryAttribute(TL, "speedbycamfb");
 						Fighter->SpeedByCamFB = Fighter->NeedSpeedByCamFB;
 					}
-					if (xmlDoc->GetEntryAttribute(TL, "speedbycamlr") != nullptr) {
+					if (xmlDoc->TestEntryAttribute(TL, "speedbycamlr")) {
 						Fighter->NeedSpeedByCamLR = xmlDoc->fGetEntryAttribute(TL, "speedbycamlr");
 						Fighter->SpeedByCamLR = Fighter->NeedSpeedByCamLR;
 					}
-					if (xmlDoc->GetEntryAttribute(TL, "speedbycamud") != nullptr) {
+					if (xmlDoc->TestEntryAttribute(TL, "speedbycamud")) {
 						Fighter->NeedSpeedByCamUD = xmlDoc->fGetEntryAttribute(TL, "speedbycamud");
 						Fighter->SpeedByCamUD = Fighter->NeedSpeedByCamUD;
 					}
@@ -992,16 +983,16 @@ void cScriptEngine::UpdateTimeLine()
 					// дальше смотрим, что нужно сделать...
 					cXMLEntry *TLAlienMotherShip = TL->FirstChild;
 					while (TLAlienMotherShip) {
-						if (!strcmp(TLAlienMotherShip->Name, "TimeSheet")) {
+						if (TLAlienMotherShip->Name == "TimeSheet") {
 							// собираем новый элемент
 							sTimeSheet *TimeSheet;
 							TimeSheet = new sTimeSheet;
 							Fighter->AttachTimeSheet(TimeSheet);
 
-							if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "aimode") != nullptr) {
+							if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "aimode")) {
 								TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(TLAlienMotherShip, "aimode");
 								TimeSheet->Time = 0.0f;
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "time") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "time"))
 									TimeSheet->Time = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "time");
 								TimeSheet->InUse = false;
 
@@ -1026,89 +1017,89 @@ void cScriptEngine::UpdateTimeLine()
 								TimeSheet->AI_Mode = 0;
 
 								TimeSheet->Time = 0.0f;
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "time") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "time"))
 									TimeSheet->Time = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "time");
 								TimeSheet->InUse = false;
 
 								TimeSheet->Speed = 0.0f;
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "speed") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "speed"))
 									TimeSheet->Speed = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "speed");
 
 								TimeSheet->Acceler = 1.0f;//0-1
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "acceler") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "acceler"))
 									TimeSheet->Acceler = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "acceler");
 								vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
 								TimeSheet->SpeedLR = 0.0f;
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "speedlr") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "speedlr"))
 									TimeSheet->SpeedLR = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "speedlr");
 
 								TimeSheet->AccelerLR = 1.0f;//0-1
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "accelerlr") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "accelerlr"))
 									TimeSheet->AccelerLR = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerlr");
 								vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
 
 								TimeSheet->SpeedUD = 0.0f;
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "speedud") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "speedud"))
 									TimeSheet->SpeedUD = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "speedud");
 
 								TimeSheet->AccelerUD = 1.0f;//0-1
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "accelerud") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "accelerud"))
 									TimeSheet->AccelerUD = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerud");
 								vw_Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
 
 								TimeSheet->SpeedByCamFB = 0.0f;
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "speedbycamfb") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "speedbycamfb"))
 									TimeSheet->SpeedByCamFB = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "speedbycamfb");
 
 								TimeSheet->AccelerByCamFB = 1.0f;//0-1
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "accelerbycamfb") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "accelerbycamfb"))
 									TimeSheet->AccelerByCamFB = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerbycamfb");
 								vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
 
 								TimeSheet->SpeedByCamLR = 0.0f;
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "speedbycamlr") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "speedbycamlr"))
 									TimeSheet->SpeedByCamLR = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "speedbycamlr");
 
 								TimeSheet->AccelerByCamLR = 1.0f;//0-1
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "accelerbycamlr") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "accelerbycamlr"))
 									TimeSheet->AccelerByCamLR = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerbycamlr");
 								vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
 
 								TimeSheet->SpeedByCamUD = 0.0f;
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "speedbycamud") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "speedbycamud"))
 									TimeSheet->SpeedByCamUD = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "speedbycamud");
 
 								TimeSheet->AccelerByCamUD = 1.0f;//0-1
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "accelerbycamud") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "accelerbycamud"))
 									TimeSheet->AccelerByCamUD = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerbycamud");
 								vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
 								TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "rotx") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "rotx"))
 									TimeSheet->Rotation.x = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "rotx");
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "roty") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "roty"))
 									TimeSheet->Rotation.y = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "roty");
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "rotz") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "rotz"))
 									TimeSheet->Rotation.z = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "rotz");
 
 								TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "rotacx") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "rotacx"))
 									TimeSheet->RotationAcceler.x = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "rotacx");
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "rotacy") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "rotacy"))
 									TimeSheet->RotationAcceler.y = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "rotacy");
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "rotacz") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "rotacz"))
 									TimeSheet->RotationAcceler.z = xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "rotacz");
 								vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
 								vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
 								vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 								TimeSheet->Fire = false;
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "fire") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "fire"))
 									if (xmlDoc->iGetEntryAttribute(TLAlienMotherShip, "fire") > 0)
 										TimeSheet->Fire = true;
 								TimeSheet->BossFire = false;
-								if (xmlDoc->GetEntryAttribute(TLAlienMotherShip, "bossfire") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "bossfire"))
 									if (xmlDoc->iGetEntryAttribute(TLAlienMotherShip, "bossfire") > 0)
 										TimeSheet->BossFire = true;
 
@@ -1122,9 +1113,9 @@ void cScriptEngine::UpdateTimeLine()
 					}
 				} else
 					// PirateShip
-					if (!strcmp(TL->Name, "PirateShip")) {
+					if (TL->Name == "PirateShip") {
 						cPirateShip *Fighter = new cPirateShip;
-						if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
+						if (xmlDoc->TestEntryAttribute(TL, "type"))
 							Fighter->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 						else {
 							TL = TL->Next;
@@ -1134,28 +1125,28 @@ void cScriptEngine::UpdateTimeLine()
 						SetID(Fighter, TL, xmlDoc);
 						if (ShowDebugModeLine) SetDebugInformation(Fighter, TL);
 
-						if (xmlDoc->GetEntryAttribute(TL, "speed") != nullptr) {
+						if (xmlDoc->TestEntryAttribute(TL, "speed")) {
 							Fighter->NeedSpeed = xmlDoc->fGetEntryAttribute(TL, "speed");
 							Fighter->Speed = Fighter->NeedSpeed;
 						}
-						if (xmlDoc->GetEntryAttribute(TL, "speedlr") != nullptr) {
+						if (xmlDoc->TestEntryAttribute(TL, "speedlr")) {
 							Fighter->NeedSpeedLR = xmlDoc->fGetEntryAttribute(TL, "speedlr");
 							Fighter->SpeedLR = Fighter->NeedSpeedLR;
 						}
-						if (xmlDoc->GetEntryAttribute(TL, "speedud") != nullptr) {
+						if (xmlDoc->TestEntryAttribute(TL, "speedud")) {
 							Fighter->NeedSpeedUD = xmlDoc->fGetEntryAttribute(TL, "speedud");
 							Fighter->SpeedUD = Fighter->NeedSpeedUD;
 						}
 
-						if (xmlDoc->GetEntryAttribute(TL, "speedbycamfb") != nullptr) {
+						if (xmlDoc->TestEntryAttribute(TL, "speedbycamfb")) {
 							Fighter->NeedSpeedByCamFB = xmlDoc->fGetEntryAttribute(TL, "speedbycamfb");
 							Fighter->SpeedByCamFB = Fighter->NeedSpeedByCamFB;
 						}
-						if (xmlDoc->GetEntryAttribute(TL, "speedbycamlr") != nullptr) {
+						if (xmlDoc->TestEntryAttribute(TL, "speedbycamlr")) {
 							Fighter->NeedSpeedByCamLR = xmlDoc->fGetEntryAttribute(TL, "speedbycamlr");
 							Fighter->SpeedByCamLR = Fighter->NeedSpeedByCamLR;
 						}
-						if (xmlDoc->GetEntryAttribute(TL, "speedbycamud") != nullptr) {
+						if (xmlDoc->TestEntryAttribute(TL, "speedbycamud")) {
 							Fighter->NeedSpeedByCamUD = xmlDoc->fGetEntryAttribute(TL, "speedbycamud");
 							Fighter->SpeedByCamUD = Fighter->NeedSpeedByCamUD;
 						}
@@ -1168,16 +1159,16 @@ void cScriptEngine::UpdateTimeLine()
 						// дальше смотрим, что нужно сделать...
 						cXMLEntry *TLPirateShip = TL->FirstChild;
 						while (TLPirateShip) {
-							if (!strcmp(TLPirateShip->Name, "TimeSheet")) {
+							if (TLPirateShip->Name == "TimeSheet") {
 								// собираем новый элемент
 								sTimeSheet *TimeSheet;
 								TimeSheet = new sTimeSheet;
 								Fighter->AttachTimeSheet(TimeSheet);
 
-								if (xmlDoc->GetEntryAttribute(TLPirateShip, "aimode") != nullptr) {
+								if (xmlDoc->TestEntryAttribute(TLPirateShip, "aimode")) {
 									TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(TLPirateShip, "aimode");
 									TimeSheet->Time = 0.0f;
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "time") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "time"))
 										TimeSheet->Time = xmlDoc->fGetEntryAttribute(TLPirateShip, "time");
 									TimeSheet->InUse = false;
 
@@ -1202,90 +1193,90 @@ void cScriptEngine::UpdateTimeLine()
 									TimeSheet->AI_Mode = 0;
 
 									TimeSheet->Time = 0.0f;
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "time") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "time"))
 										TimeSheet->Time = xmlDoc->fGetEntryAttribute(TLPirateShip, "time");
 									TimeSheet->InUse = false;
 
 									TimeSheet->Speed = 0.0f;
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "speed") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "speed"))
 										TimeSheet->Speed = xmlDoc->fGetEntryAttribute(TLPirateShip, "speed");
 
 									TimeSheet->Acceler = 1.0f;//0-1
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "acceler") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "acceler"))
 										TimeSheet->Acceler = xmlDoc->fGetEntryAttribute(TLPirateShip, "acceler");
 									vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
 									TimeSheet->SpeedLR = 0.0f;
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "speedlr") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "speedlr"))
 										TimeSheet->SpeedLR = xmlDoc->fGetEntryAttribute(TLPirateShip, "speedlr");
 
 									TimeSheet->AccelerLR = 1.0f;//0-1
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "accelerlr") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "accelerlr"))
 										TimeSheet->AccelerLR = xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerlr");
 									vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
 
 									TimeSheet->SpeedUD = 0.0f;
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "speedud") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "speedud"))
 										TimeSheet->SpeedUD = xmlDoc->fGetEntryAttribute(TLPirateShip, "speedud");
 
 									TimeSheet->AccelerUD = 1.0f;//0-1
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "accelerud") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "accelerud"))
 										TimeSheet->AccelerUD = xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerud");
 									vw_Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
 
 									TimeSheet->SpeedByCamFB = 0.0f;
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "speedbycamfb") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "speedbycamfb"))
 										TimeSheet->SpeedByCamFB = xmlDoc->fGetEntryAttribute(TLPirateShip, "speedbycamfb");
 
 									TimeSheet->AccelerByCamFB = 1.0f;//0-1
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "accelerbycamfb") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "accelerbycamfb"))
 										TimeSheet->AccelerByCamFB = xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerbycamfb");
 									vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
 
 									TimeSheet->SpeedByCamLR = 0.0f;
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "speedbycamlr") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "speedbycamlr"))
 										TimeSheet->SpeedByCamLR = xmlDoc->fGetEntryAttribute(TLPirateShip, "speedbycamlr");
 
 									TimeSheet->AccelerByCamLR = 1.0f;//0-1
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "accelerbycamlr") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "accelerbycamlr"))
 										TimeSheet->AccelerByCamLR = xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerbycamlr");
 									vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
 
 									TimeSheet->SpeedByCamUD = 0.0f;
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "speedbycamud") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "speedbycamud"))
 										TimeSheet->SpeedByCamUD = xmlDoc->fGetEntryAttribute(TLPirateShip, "speedbycamud");
 
 									TimeSheet->AccelerByCamUD = 1.0f;//0-1
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "accelerbycamud") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "accelerbycamud"))
 										TimeSheet->AccelerByCamUD = xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerbycamud");
 									vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
 									TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "rotx") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "rotx"))
 										TimeSheet->Rotation.x = xmlDoc->fGetEntryAttribute(TLPirateShip, "rotx");
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "roty") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "roty"))
 										TimeSheet->Rotation.y = xmlDoc->fGetEntryAttribute(TLPirateShip, "roty");
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "rotz") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "rotz"))
 										TimeSheet->Rotation.z = xmlDoc->fGetEntryAttribute(TLPirateShip, "rotz");
 
 									TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "rotacx") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "rotacx"))
 										TimeSheet->RotationAcceler.x = xmlDoc->fGetEntryAttribute(TLPirateShip, "rotacx");
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "rotacy") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "rotacy"))
 										TimeSheet->RotationAcceler.y = xmlDoc->fGetEntryAttribute(TLPirateShip, "rotacy");
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "rotacz") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "rotacz"))
 										TimeSheet->RotationAcceler.z = xmlDoc->fGetEntryAttribute(TLPirateShip, "rotacz");
 									vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
 									vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
 									vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 									TimeSheet->Fire = false;
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "fire") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "fire"))
 										if (xmlDoc->iGetEntryAttribute(TLPirateShip, "fire") > 0)
 											TimeSheet->Fire = true;
 
 									TimeSheet->BossFire = false;
-									if (xmlDoc->GetEntryAttribute(TLPirateShip, "bossfire") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TLPirateShip, "bossfire"))
 										if (xmlDoc->iGetEntryAttribute(TLPirateShip, "bossfire") > 0)
 											TimeSheet->BossFire = true;
 
@@ -1299,7 +1290,7 @@ void cScriptEngine::UpdateTimeLine()
 						}
 					} else
 						// CreateAsteroid
-						if (!strcmp(TL->Name, "CreateAsteroid")) {
+						if (TL->Name == "CreateAsteroid") {
 							cAsteroid *Asteroid = new cAsteroid;
 
 							// тип сейчас не задействован, всегда ставим 1
@@ -1307,33 +1298,33 @@ void cScriptEngine::UpdateTimeLine()
 
 							SetID(Asteroid, TL, xmlDoc);
 							if (ShowDebugModeLine) SetDebugInformation(Asteroid, TL);
-							if (xmlDoc->GetEntryAttribute(TL, "speed") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TL, "speed"))
 								Asteroid->Speed = xmlDoc->fGetEntryAttribute(TL, "speed");
 							SetShowDeleteOnHide(Asteroid, TL, xmlDoc);
 
 							SetRotation(Asteroid, TL, xmlDoc);
 							SetLocation(Asteroid, TL, xmlDoc, TimeOpLag);
 
-							if (xmlDoc->GetEntryAttribute(TL, "rotx") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TL, "rotx"))
 								Asteroid->RotationSpeed.x = xmlDoc->fGetEntryAttribute(TL, "rotx");
-							if (xmlDoc->GetEntryAttribute(TL, "roty") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TL, "roty"))
 								Asteroid->RotationSpeed.y = xmlDoc->fGetEntryAttribute(TL, "roty");
-							if (xmlDoc->GetEntryAttribute(TL, "rotz") != nullptr)
+							if (xmlDoc->TestEntryAttribute(TL, "rotz"))
 								Asteroid->RotationSpeed.z = xmlDoc->fGetEntryAttribute(TL, "rotz");
 						} else
 							// CreateBasePart
-							if (!strcmp(TL->Name, "CreateBasePart")) {
+							if (TL->Name == "CreateBasePart") {
 								cBasePart *BasePart = new cBasePart;
 
 								// тип части
-								if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TL, "type"))
 									BasePart->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 								else {
 									TL = TL->Next;
 									continue;
 								}
 
-								if (xmlDoc->GetEntryAttribute(TL, "speed") != nullptr)
+								if (xmlDoc->TestEntryAttribute(TL, "speed"))
 									BasePart->Speed = xmlDoc->fGetEntryAttribute(TL, "speed");
 
 								SetID(BasePart, TL, xmlDoc);
@@ -1344,18 +1335,18 @@ void cScriptEngine::UpdateTimeLine()
 								SetLocation(BasePart, TL, xmlDoc, TimeOpLag);
 							} else
 								// CreateBigAsteroid
-								if (!strcmp(TL->Name, "CreateBigAsteroid")) {
+								if (TL->Name == "CreateBigAsteroid") {
 									cBigAsteroid *BigAsteroid = new cBigAsteroid;
 
 									// тип части
-									if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TL, "type"))
 										BigAsteroid->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 									else {
 										TL = TL->Next;
 										continue;
 									}
 
-									if (xmlDoc->GetEntryAttribute(TL, "speed") != nullptr)
+									if (xmlDoc->TestEntryAttribute(TL, "speed"))
 										BigAsteroid->Speed = xmlDoc->fGetEntryAttribute(TL, "speed");
 
 									SetID(BigAsteroid, TL, xmlDoc);
@@ -1366,11 +1357,11 @@ void cScriptEngine::UpdateTimeLine()
 									SetLocation(BigAsteroid, TL, xmlDoc, TimeOpLag);
 								} else
 									// CreateMBuilding
-									if (!strcmp(TL->Name, "CreateMBuilding")) {
+									if (TL->Name == "CreateMBuilding") {
 										cMilitaryBuilding *GroundObject = new cMilitaryBuilding;
 
 										// тип части
-										if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
+										if (xmlDoc->TestEntryAttribute(TL, "type"))
 											GroundObject->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 										else {
 											TL = TL->Next;
@@ -1388,16 +1379,16 @@ void cScriptEngine::UpdateTimeLine()
 										// дальше смотрим, что нужно сделать...
 										cXMLEntry *TLGroundObject = TL->FirstChild;
 										while (TLGroundObject) {
-											if (!strcmp(TLGroundObject->Name, "TimeSheet")) {
+											if (TLGroundObject->Name == "TimeSheet") {
 												// собираем новый элемент
 												sTimeSheet *TimeSheet;
 												TimeSheet = new sTimeSheet;
 												GroundObject->AttachTimeSheet(TimeSheet);
 
-												if (xmlDoc->GetEntryAttribute(TLGroundObject, "aimode") != nullptr) {
+												if (xmlDoc->TestEntryAttribute(TLGroundObject, "aimode")) {
 													TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(TLGroundObject, "aimode");
 													TimeSheet->Time = 0.0f;
-													if (xmlDoc->GetEntryAttribute(TLGroundObject, "time") != nullptr)
+													if (xmlDoc->TestEntryAttribute(TLGroundObject, "time"))
 														TimeSheet->Time = xmlDoc->fGetEntryAttribute(TLGroundObject, "time");
 													TimeSheet->InUse = false;
 
@@ -1422,7 +1413,7 @@ void cScriptEngine::UpdateTimeLine()
 													TimeSheet->AI_Mode = 0;
 
 													TimeSheet->Time = 0.0f;
-													if (xmlDoc->GetEntryAttribute(TLGroundObject, "time") != nullptr)
+													if (xmlDoc->TestEntryAttribute(TLGroundObject, "time"))
 														TimeSheet->Time = xmlDoc->fGetEntryAttribute(TLGroundObject, "time");
 													TimeSheet->InUse = false;
 
@@ -1442,14 +1433,14 @@ void cScriptEngine::UpdateTimeLine()
 													TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 
 													TimeSheet->Fire = false;
-													if (xmlDoc->GetEntryAttribute(TLGroundObject, "fire") != nullptr)
+													if (xmlDoc->TestEntryAttribute(TLGroundObject, "fire"))
 														if (xmlDoc->iGetEntryAttribute(TLGroundObject, "fire") > 0)
 															TimeSheet->Fire = true;
 
 													TimeSheet->BossFire = false;
 
 													TimeSheet->Targeting = false;
-													if (xmlDoc->GetEntryAttribute(TLGroundObject, "targeting") != nullptr)
+													if (xmlDoc->TestEntryAttribute(TLGroundObject, "targeting"))
 														if (xmlDoc->iGetEntryAttribute(TLGroundObject, "targeting") != 0) TimeSheet->Targeting = true;
 												}
 
@@ -1460,9 +1451,9 @@ void cScriptEngine::UpdateTimeLine()
 										}
 									} else
 										// CreateBuilding
-										if (!strcmp(TL->Name, "CreateBuilding")) {
+										if (TL->Name == "CreateBuilding") {
 											cBuilding *GroundObject = new cBuilding;
-											if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
+											if (xmlDoc->TestEntryAttribute(TL, "type"))
 												GroundObject->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 											else {
 												TL = TL->Next;
@@ -1477,10 +1468,10 @@ void cScriptEngine::UpdateTimeLine()
 											SetLocation(GroundObject, TL, xmlDoc, TimeOpLag);
 										} else
 											// CreateMine
-											if (!strcmp(TL->Name, "CreateMine")) {
+											if (TL->Name == "CreateMine") {
 												cProjectile *Mine = new cProjectile;
 												// т.к. мины у нас с 214-217, делаем +213
-												if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr) {
+												if (xmlDoc->TestEntryAttribute(TL, "type")) {
 													int MineType = xmlDoc->iGetEntryAttribute(TL, "type")+213;
 													if (MineType < 214) MineType = 214;
 													if (MineType > 217) MineType = 217;
@@ -1494,7 +1485,7 @@ void cScriptEngine::UpdateTimeLine()
 
 												// по умолчанию враг
 												Mine->ObjectStatus = 1;
-												if (xmlDoc->GetEntryAttribute(TL, "status") != nullptr)
+												if (xmlDoc->TestEntryAttribute(TL, "status"))
 													Mine->ObjectStatus = xmlDoc->iGetEntryAttribute(TL, "status");
 
 												// общий - пенальти, если не игрок
@@ -1515,9 +1506,9 @@ void cScriptEngine::UpdateTimeLine()
 												SetProjectileLocation(Mine, TL, xmlDoc, TimeOpLag);
 											} else
 												// CreateTracked
-												if (!strcmp(TL->Name, "CreateTracked")) {
+												if (TL->Name == "CreateTracked") {
 													cTracked *GroundObject = new cTracked;
-													if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
+													if (xmlDoc->TestEntryAttribute(TL, "type"))
 														GroundObject->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 													else {
 														TL = TL->Next;
@@ -1526,7 +1517,7 @@ void cScriptEngine::UpdateTimeLine()
 
 													SetID(GroundObject, TL, xmlDoc);
 													if (ShowDebugModeLine) SetDebugInformation(GroundObject, TL);
-													if (xmlDoc->GetEntryAttribute(TL, "speed") != nullptr) {
+													if (xmlDoc->TestEntryAttribute(TL, "speed")) {
 														GroundObject->NeedSpeed = xmlDoc->fGetEntryAttribute(TL, "speed");
 														GroundObject->Speed = GroundObject->NeedSpeed;
 													}
@@ -1539,16 +1530,16 @@ void cScriptEngine::UpdateTimeLine()
 													// дальше смотрим, что нужно сделать...
 													cXMLEntry *TLGroundObject = TL->FirstChild;
 													while (TLGroundObject) {
-														if (!strcmp(TLGroundObject->Name, "TimeSheet")) {
+														if (TLGroundObject->Name == "TimeSheet") {
 															// собираем новый элемент
 															sTimeSheet *TimeSheet;
 															TimeSheet = new sTimeSheet;
 															GroundObject->AttachTimeSheet(TimeSheet);
 
-															if (xmlDoc->GetEntryAttribute(TLGroundObject, "aimode") != nullptr) {
+															if (xmlDoc->TestEntryAttribute(TLGroundObject, "aimode")) {
 																TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(TLGroundObject, "aimode");
 																TimeSheet->Time = 0.0f;
-																if (xmlDoc->GetEntryAttribute(TLGroundObject, "time") != nullptr)
+																if (xmlDoc->TestEntryAttribute(TLGroundObject, "time"))
 																	TimeSheet->Time = xmlDoc->fGetEntryAttribute(TLGroundObject, "time");
 																TimeSheet->InUse = false;
 
@@ -1573,16 +1564,16 @@ void cScriptEngine::UpdateTimeLine()
 																TimeSheet->AI_Mode = 0;
 
 																TimeSheet->Time = 0.0f;
-																if (xmlDoc->GetEntryAttribute(TLGroundObject, "time") != nullptr)
+																if (xmlDoc->TestEntryAttribute(TLGroundObject, "time"))
 																	TimeSheet->Time = xmlDoc->fGetEntryAttribute(TLGroundObject, "time");
 																TimeSheet->InUse = false;
 
 																TimeSheet->Speed = 0.0f;
-																if (xmlDoc->GetEntryAttribute(TLGroundObject, "speed") != nullptr)
+																if (xmlDoc->TestEntryAttribute(TLGroundObject, "speed"))
 																	TimeSheet->Speed = xmlDoc->fGetEntryAttribute(TLGroundObject, "speed");
 
 																TimeSheet->Acceler = 1.0f;//0-1
-																if (xmlDoc->GetEntryAttribute(TLGroundObject, "acceler") != nullptr)
+																if (xmlDoc->TestEntryAttribute(TLGroundObject, "acceler"))
 																	TimeSheet->Acceler = xmlDoc->fGetEntryAttribute(TLGroundObject, "acceler");
 																vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
@@ -1598,33 +1589,33 @@ void cScriptEngine::UpdateTimeLine()
 																TimeSheet->AccelerByCamUD = 1.0f;//0-1
 
 																TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-																if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotx") != nullptr)
+																if (xmlDoc->TestEntryAttribute(TLGroundObject, "rotx"))
 																	TimeSheet->Rotation.x = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotx");
-																if (xmlDoc->GetEntryAttribute(TLGroundObject, "roty") != nullptr)
+																if (xmlDoc->TestEntryAttribute(TLGroundObject, "roty"))
 																	TimeSheet->Rotation.y = xmlDoc->fGetEntryAttribute(TLGroundObject, "roty");
-																if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotz") != nullptr)
+																if (xmlDoc->TestEntryAttribute(TLGroundObject, "rotz"))
 																	TimeSheet->Rotation.z = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotz");
 
 																TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-																if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotacx") != nullptr)
+																if (xmlDoc->TestEntryAttribute(TLGroundObject, "rotacx"))
 																	TimeSheet->RotationAcceler.x = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacx");
-																if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotacy") != nullptr)
+																if (xmlDoc->TestEntryAttribute(TLGroundObject, "rotacy"))
 																	TimeSheet->RotationAcceler.y = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacy");
-																if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotacz") != nullptr)
+																if (xmlDoc->TestEntryAttribute(TLGroundObject, "rotacz"))
 																	TimeSheet->RotationAcceler.z = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacz");
 																vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
 																vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
 																vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 																TimeSheet->Fire = false;
-																if (xmlDoc->GetEntryAttribute(TLGroundObject, "fire") != nullptr)
+																if (xmlDoc->TestEntryAttribute(TLGroundObject, "fire"))
 																	if (xmlDoc->iGetEntryAttribute(TLGroundObject, "fire") > 0)
 																		TimeSheet->Fire = true;
 
 																TimeSheet->BossFire = false;
 
 																TimeSheet->Targeting = false;
-																if (xmlDoc->GetEntryAttribute(TLGroundObject, "targeting") != nullptr)
+																if (xmlDoc->TestEntryAttribute(TLGroundObject, "targeting"))
 																	if (xmlDoc->iGetEntryAttribute(TLGroundObject, "targeting") > 0)
 																		TimeSheet->Targeting = true;
 															}
@@ -1636,9 +1627,9 @@ void cScriptEngine::UpdateTimeLine()
 													}
 												} else
 													// CreateWheeled
-													if (!strcmp(TL->Name, "CreateWheeled")) {
+													if (TL->Name == "CreateWheeled") {
 														cWheeled *GroundObject = new cWheeled;
-														if (xmlDoc->GetEntryAttribute(TL, "type") != nullptr)
+														if (xmlDoc->TestEntryAttribute(TL, "type"))
 															GroundObject->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
 														else {
 															TL = TL->Next;
@@ -1647,7 +1638,7 @@ void cScriptEngine::UpdateTimeLine()
 
 														SetID(GroundObject, TL, xmlDoc);
 														if (ShowDebugModeLine) SetDebugInformation(GroundObject, TL);
-														if (xmlDoc->GetEntryAttribute(TL, "speed") != nullptr) {
+														if (xmlDoc->TestEntryAttribute(TL, "speed")) {
 															GroundObject->NeedSpeed = xmlDoc->fGetEntryAttribute(TL, "speed");
 															GroundObject->Speed = GroundObject->NeedSpeed;
 														}
@@ -1660,16 +1651,16 @@ void cScriptEngine::UpdateTimeLine()
 														// дальше смотрим, что нужно сделать...
 														cXMLEntry *TLGroundObject = TL->FirstChild;
 														while (TLGroundObject) {
-															if (!strcmp(TLGroundObject->Name, "TimeSheet")) {
+															if (TLGroundObject->Name == "TimeSheet") {
 																// собираем новый элемент
 																sTimeSheet *TimeSheet;
 																TimeSheet = new sTimeSheet;
 																GroundObject->AttachTimeSheet(TimeSheet);
 
-																if (xmlDoc->GetEntryAttribute(TLGroundObject, "aimode") != nullptr) {
+																if (xmlDoc->TestEntryAttribute(TLGroundObject, "aimode")) {
 																	TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(TLGroundObject, "aimode");
 																	TimeSheet->Time = 0.0f;
-																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "time") != nullptr)
+																	if (xmlDoc->TestEntryAttribute(TLGroundObject, "time"))
 																		TimeSheet->Time = xmlDoc->fGetEntryAttribute(TLGroundObject, "time");
 																	TimeSheet->InUse = false;
 
@@ -1694,17 +1685,17 @@ void cScriptEngine::UpdateTimeLine()
 																	TimeSheet->AI_Mode = 0;
 
 																	TimeSheet->Time = 0.0f;
-																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "time") != nullptr)
+																	if (xmlDoc->TestEntryAttribute(TLGroundObject, "time"))
 																		TimeSheet->Time = xmlDoc->fGetEntryAttribute(TLGroundObject, "time");
 																	TimeSheet->InUse = false;
 
 																	TimeSheet->Speed = 0.0f;
-																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "speed") != nullptr)
+																	if (xmlDoc->TestEntryAttribute(TLGroundObject, "speed"))
 																		TimeSheet->Speed = xmlDoc->fGetEntryAttribute(TLGroundObject, "speed");
 
 
 																	TimeSheet->Acceler = 1.0f;//0-1
-																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "acceler") != nullptr)
+																	if (xmlDoc->TestEntryAttribute(TLGroundObject, "acceler"))
 																		TimeSheet->Acceler = xmlDoc->fGetEntryAttribute(TLGroundObject, "acceler");
 																	vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
@@ -1720,33 +1711,33 @@ void cScriptEngine::UpdateTimeLine()
 																	TimeSheet->AccelerByCamUD = 1.0f;//0-1
 
 																	TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotx") != nullptr)
+																	if (xmlDoc->TestEntryAttribute(TLGroundObject, "rotx"))
 																		TimeSheet->Rotation.x = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotx");
-																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "roty") != nullptr)
+																	if (xmlDoc->TestEntryAttribute(TLGroundObject, "roty"))
 																		TimeSheet->Rotation.y = xmlDoc->fGetEntryAttribute(TLGroundObject, "roty");
-																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotz") != nullptr)
+																	if (xmlDoc->TestEntryAttribute(TLGroundObject, "rotz"))
 																		TimeSheet->Rotation.z = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotz");
 
 																	TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotacx") != nullptr)
+																	if (xmlDoc->TestEntryAttribute(TLGroundObject, "rotacx"))
 																		TimeSheet->RotationAcceler.x = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacx");
-																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotacy") != nullptr)
+																	if (xmlDoc->TestEntryAttribute(TLGroundObject, "rotacy"))
 																		TimeSheet->RotationAcceler.y = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacy");
-																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "rotacz") != nullptr)
+																	if (xmlDoc->TestEntryAttribute(TLGroundObject, "rotacz"))
 																		TimeSheet->RotationAcceler.z = xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacz");
 																	vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
 																	vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
 																	vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 																	TimeSheet->Fire = false;
-																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "fire") != nullptr)
+																	if (xmlDoc->TestEntryAttribute(TLGroundObject, "fire"))
 																		if (xmlDoc->iGetEntryAttribute(TLGroundObject, "fire") > 0)
 																			TimeSheet->Fire = true;
 
 																	TimeSheet->BossFire = false;
 
 																	TimeSheet->Targeting = false;
-																	if (xmlDoc->GetEntryAttribute(TLGroundObject, "targeting") != nullptr)
+																	if (xmlDoc->TestEntryAttribute(TLGroundObject, "targeting"))
 																		if (xmlDoc->iGetEntryAttribute(TLGroundObject, "targeting") != 0) TimeSheet->Targeting = true;
 																}
 
