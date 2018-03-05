@@ -56,6 +56,7 @@
 #include <memory>
 #include <vector>
 #include <array>
+#include <set>
 #include <string>
 #include <algorithm>
 #include <locale>

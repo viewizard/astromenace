@@ -38,7 +38,7 @@ std::unordered_map<unsigned int, std::unordered_map<std::string, std::u32string>
 // Current default language.
 unsigned int CurrentLanguage{0};
 // Error text for UTF32, if we can't use TextTableUTF32 by some reason
-const std::u32string TextTableUTF32Error{vw_UTF8toUTF32("Error")};
+const std::u32string TextTableUTF32Error{ConvertUTF8.from_bytes("Error")};
 
 } // unnamed namespace
 
@@ -99,7 +99,7 @@ static void CreateTextTableUTF32()
 {
 	for (unsigned int i = 0; i < TextTable.size(); i++) {
 		for (const auto tmpData : TextTable[i]) {
-			TextTableUTF32[i][tmpData.first] = vw_UTF8toUTF32(tmpData.second.c_str());
+			TextTableUTF32[i][tmpData.first] = ConvertUTF8.from_bytes(tmpData.second.c_str());
 		}
 	}
 	// unconditional rehash, at this line we have not rehashed map
@@ -205,14 +205,24 @@ int vw_CheckFontCharsInText()
 
 	std::cout << "Font characters detection start.\n";
 
-	// note, i = 1 - first column contain index, not data, start from second
+	// find all characters not generated in fonts
+	std::set<char32_t> MissedCharacters;
 	for (const auto &tmpColumn : TextTableUTF32) {				// cycle by all columns
 		for (const auto &tmpWords : tmpColumn.second) {			// cycle by all words
 			for (const auto &UTF32 : tmpWords.second) {		// cycle by all chars
-				if (!vw_CheckFontCharByUTF32(UTF32))
-					std::cout << "!!! FontChar was not created, Unicode: "
-						  << "0x" << std::uppercase << std::hex << UTF32 << "\n";
+				if (!vw_CheckFontCharByUTF32(UTF32)) {
+					MissedCharacters.insert(UTF32);
+				}
 			}
+		}
+	}
+	// print all characters not generated in fonts
+	if (!MissedCharacters.empty()) {
+		for (const auto &UTF32 : MissedCharacters) {
+			std::cout << "* FontChar was not created:  "
+				  << ConvertUTF8.to_bytes(UTF32) << "  "
+				  << "0x" << std::uppercase << std::hex << UTF32 << "\n";
+
 		}
 	}
 
