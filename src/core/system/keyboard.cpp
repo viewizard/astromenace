@@ -221,7 +221,7 @@ std::u32string CurrentUnicodeChar;
 void vw_SetCurrentUnicodeChar(char *NewUnicodeChar)
 {
 	if (NewUnicodeChar != nullptr)
-		CurrentUnicodeChar = vw_UTF8toUTF32(NewUnicodeChar);
+		CurrentUnicodeChar = ConvertUTF8.from_bytes(NewUnicodeChar);
 	else
 		CurrentUnicodeChar.clear();
 }

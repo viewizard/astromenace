@@ -64,7 +64,7 @@ void NewRecord()
 	// пишем данные в профайл
 
 	Setup.Profile[ProfileNum].Used = true;
-	strcpy(Setup.Profile[ProfileNum].Name, vw_UTF32toUTF8(NewProfileName).c_str());
+	strcpy(Setup.Profile[ProfileNum].Name, ConvertUTF8.to_bytes(NewProfileName).c_str());
 
 	Setup.Profile[ProfileNum].NPCWeaponPenalty = 3;
 	Setup.Profile[ProfileNum].NPCArmorPenalty = 2;

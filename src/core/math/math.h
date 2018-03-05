@@ -143,14 +143,17 @@ struct sRECT {
 	};
 };
 
-// Convert utf8 to utf32 code. Return pointer on next utf8 character in string.
-const char *vw_UTF8toUTF32(const char *utf8, unsigned *utf32);
-// Convert utf8 to utf32 code.
-std::u32string vw_UTF8toUTF32(const char *utf8);
-// Convert utf32 to utf8 code.
-std::string vw_UTF32toUTF8(const std::u32string &utf32);
-// Convert utf8 to utf32 code with variadic arguments.
-std::u32string vw_UTF8VAtoUTF32(const char *utf8, ...);
+// utility wrapper to adapt locale-bound facets for wstring/wbuffer convert
+template <class Facet>
+struct deletable_facet : Facet
+{
+    template<class ...Args>
+    deletable_facet(Args&& ...args) : Facet(std::forward<Args>(args)...) {}
+    ~deletable_facet() {}
+};
+// Convert utf8 to utf32: ConvertUTF8.from_bytes(utf8)
+// Convert utf32 to utf8: ConvertUTF8.to_bytes(utf32)
+extern std::wstring_convert<deletable_facet<std::codecvt<char32_t, char, std::mbstate_t>>, char32_t> ConvertUTF8;
 
 // Fast cosine function.
 double vw_dcos(int Angle);

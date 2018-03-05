@@ -26,6 +26,9 @@
 
 #include "math.h"
 
+// utf8 <=> utf32 converter
+std::wstring_convert<deletable_facet<std::codecvt<char32_t, char, std::mbstate_t>>, char32_t> ConvertUTF8;
+
 namespace {
 
 constexpr double Cos[360] =
@@ -146,17 +149,6 @@ constexpr double Sin[360] =
 		   -0.087156,-0.069756,-0.052336,-0.034899,-0.017452
 		  };
 
-// utility wrapper to adapt locale-bound facets for wstring/wbuffer convert
-template<class Facet>
-struct deletable_facet : Facet
-{
-    template<class ...Args>
-    deletable_facet(Args&& ...args) : Facet(std::forward<Args>(args)...) {}
-    ~deletable_facet() {}
-};
-// utf8 <=> utf32 converter
-std::wstring_convert<deletable_facet<std::codecvt<char32_t, char, std::mbstate_t>>, char32_t> ConvUTF8_UTF32;
-
 } // unnamed namespace
 
 /*
@@ -173,73 +165,6 @@ double vw_dcos(int Angle)
 double vw_dsin(int Angle)
 {
 	return Sin[Angle];
-}
-
-/*
- * Convert utf8 to utf32 code. Return pointer on next utf8 character in string.
- */
-const char *vw_UTF8toUTF32(const char *utf8, unsigned *utf32)
-{
-	if (!utf8 || !utf32)
-		return nullptr;
-
-	unsigned char *u_utf8 = (unsigned char*)utf8;
-	unsigned char b = *u_utf8++;
-
-	if (!(b & 0x80)) {
-		*utf32 = b;
-		return utf8 + 1;
-	}
-
-	unsigned len = 0;
-	while (b & 0x80) {
-		b <<= 1;
-		++len;
-	}
-
-	unsigned c = b;
-	unsigned shift = 6 - len;
-
-	while (--len) {
-		c <<= shift;
-		c |= (*u_utf8++) & 0x3f;
-		shift = 6;
-	}
-
-	*utf32 = c;
-	return (char*)u_utf8;
-}
-
-/*
- * Convert utf8 to utf32 code.
- */
-std::u32string vw_UTF8toUTF32(const char *utf8)
-{
-	return ConvUTF8_UTF32.from_bytes(utf8);
-}
-
-/*
- * Convert utf32 to utf8 code.
- */
-std::string vw_UTF32toUTF8(const std::u32string &utf32)
-{
-	return ConvUTF8_UTF32.to_bytes(utf32);
-}
-
-/*
- * Convert utf8 to utf32 code with variadic arguments
- */
-std::u32string vw_UTF8VAtoUTF32(const char *utf8, ...)
-{
-	va_list ap;
-	va_start(ap, utf8);
-	std::vector<char> buffer(1 + std::vsnprintf(nullptr, 0, utf8, ap));
-	va_end(ap);
-	// get data into buffer
-	va_start(ap, utf8);
-	std::vsnprintf(buffer.data(), buffer.size(), utf8, ap);
-	va_end(ap);
-	return ConvUTF8_UTF32.from_bytes(buffer.data());
 }
 
 /*
