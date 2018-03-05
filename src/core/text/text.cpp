@@ -39,6 +39,8 @@ std::unordered_map<unsigned int, std::unordered_map<std::string, std::u32string>
 unsigned int CurrentLanguage{0};
 // Error text for UTF32, if we can't use TextTableUTF32 by some reason
 const std::u32string TextTableUTF32Error{ConvertUTF8.from_bytes("Error")};
+// all characters used in text for current language
+std::unordered_set<char32_t> CharsSetForLanguage;
 
 } // unnamed namespace
 
@@ -196,36 +198,30 @@ const std::u32string &vw_GetTextUTF32(const char *ItemID, unsigned int Language)
 }
 
 /*
- * Detect what characters was not generated (need for testing purposes).
+ * Find all used in text characters for current language.
  */
-int vw_CheckFontCharsInText()
+std::unordered_set<char32_t> &vw_FindFontCharsForLanguage()
 {
-	if (TextTableUTF32.empty())
-		return ERR_PARAMETERS;
+	CharsSetForLanguage.clear();
 
-	std::cout << "Font characters detection start.\n";
+	if (TextTableUTF32.empty() || !CurrentLanguage)
+		return CharsSetForLanguage;
 
-	// find all characters not generated in fonts
-	std::set<char32_t> MissedCharacters;
-	for (const auto &tmpColumn : TextTableUTF32) {				// cycle by all columns
-		for (const auto &tmpWords : tmpColumn.second) {			// cycle by all words
-			for (const auto &UTF32 : tmpWords.second) {		// cycle by all chars
-				if (!vw_CheckFontCharByUTF32(UTF32)) {
-					MissedCharacters.insert(UTF32);
-				}
-			}
+	for (const auto &tmpWords : TextTableUTF32[CurrentLanguage]) {
+		for (const auto &UTF32 : tmpWords.second) {
+			CharsSetForLanguage.insert(UTF32);
 		}
 	}
-	// print all characters not generated in fonts
-	if (!MissedCharacters.empty()) {
-		for (const auto &UTF32 : MissedCharacters) {
-			std::cout << "* FontChar was not created:  "
-				  << ConvertUTF8.to_bytes(UTF32) << "  "
-				  << "0x" << std::uppercase << std::hex << UTF32 << "\n";
+	// unconditional rehash, at this line we have not rehashed set
+	CharsSetForLanguage.rehash(0);
 
-		}
+#ifdef gamedebug
+	for (const auto UTF32 : CharsSetForLanguage) {
+		std::cout << "Detected character:  "
+			  << ConvertUTF8.to_bytes(UTF32) << "  "
+			  << "0x" << std::uppercase << std::hex << UTF32 << "\n";
 	}
+#endif // gamedebug
 
-	std::cout << "Font characters detection end.\n\n";
-	return 0;
+	return CharsSetForLanguage;
 }

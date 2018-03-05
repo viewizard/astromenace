@@ -60,12 +60,18 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		if (Setup.MenuLanguage < 1) Setup.MenuLanguage = vw_GetLanguageListCount();
 
 		vw_SetTextLanguage(Setup.MenuLanguage);
+		// forced to regenerate textures (base texture connected to language-related characters set)
+		vw_ReleaseAllFontChars();
+		vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, false)) {
 		Setup.MenuLanguage++;
 		if (Setup.MenuLanguage > vw_GetLanguageListCount()) Setup.MenuLanguage = 1;
 
 		vw_SetTextLanguage(Setup.MenuLanguage);
+		// forced to regenerate textures (base texture connected to language-related characters set)
+		vw_ReleaseAllFontChars();
+		vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
 	}
 
 	int Size, SizeI;
@@ -102,26 +108,24 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		if (Setup.FontNumber < 0) Setup.FontNumber = 0;
 		strcpy(Setup.FontName, FontList[Setup.FontNumber].FontTitle);
 
-		// удаляем все символы и их текстуры
+		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
 		vw_ReleaseAllFontChars();
-		// инициализируем новый шрифт, вызывать vw_ShutdownFont не нужно
 		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
 		vw_SetFontSize(Setup.FontSize);
 		vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
-		vw_GenerateFontChars(Setup.FontSize > 16 ? 512 : 256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
+		vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.FontNumber >= FontQuantity-1)) {
 		Setup.FontNumber ++;
 		if (Setup.FontNumber > FontQuantity-1) Setup.FontNumber = FontQuantity-1;
 		strcpy(Setup.FontName, FontList[Setup.FontNumber].FontTitle);
 
-		// удаляем все символы и их текстуры
+		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
 		vw_ReleaseAllFontChars();
-		// инициализируем новый шрифт, вызывать vw_ShutdownFont не нужно
 		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
 		vw_SetFontSize(Setup.FontSize);
 		vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
-		vw_GenerateFontChars(Setup.FontSize > 16 ? 512 : 256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
+		vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
 	}
 	int Scale = 0;
 	Size = vw_FontSize(FontList[Setup.FontNumber].FontTitle);
@@ -142,25 +146,23 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		Setup.FontSize --;
 		if (Setup.FontSize < 14) Setup.FontSize = 14;
 
-		// удаляем все символы и их текстуры
+		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
 		vw_ReleaseAllFontChars();
-		// инициализируем новый шрифт, вызывать vw_ShutdownFont не нужно
 		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
 		vw_SetFontSize(Setup.FontSize);
 		vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
-		vw_GenerateFontChars(Setup.FontSize > 16 ? 512 : 256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
+		vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.FontSize >= 18)) {
 		Setup.FontSize ++;
 		if (Setup.FontSize > 18) Setup.FontSize = 18;
 
-		// удаляем все символы и их текстуры
+		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
 		vw_ReleaseAllFontChars();
-		// инициализируем новый шрифт, вызывать vw_ShutdownFont не нужно
 		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
 		vw_SetFontSize(Setup.FontSize);
 		vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
-		vw_GenerateFontChars(Setup.FontSize > 16 ? 512 : 256, 256, " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧЦШЩЪЫЬЭЮЯ©®ÄÖÜäöüß°§/");
+		vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
 	}
 	Scale = 0;
 	Size = vw_FontSize("%i", Setup.FontSize);

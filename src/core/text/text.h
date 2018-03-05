@@ -37,8 +37,8 @@ void vw_SetTextLanguage(unsigned int Language);
 const char *vw_GetText(const char *ItemID, unsigned int Language = 999999 /*should be greater than loaded languages number*/);
 // Get UTF32 text for particular language.
 const std::u32string &vw_GetTextUTF32(const char *ItemID, unsigned int Language = 999999 /*should be greater than loaded languages number*/);
-// Detect what characters was not generated (need for testing purposes).
-int vw_CheckFontCharsInText();
+// Find all used in text characters for current language.
+std::unordered_set<char32_t> &vw_FindFontCharsForLanguage();
 // Release data.
 void vw_ReleaseText();
 // Get available languages count.

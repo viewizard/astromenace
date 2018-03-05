@@ -36,7 +36,7 @@ void vw_SetFontSize(int FontSize);
 // Set font offset.
 void vw_SetFontOffsetY(int NewOffsetY);
 // Generate font characters by list.
-int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std::string &CharsList);
+int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std::unordered_set<char32_t> &CharsSetUTF32);
 // Check font character by UTF32 code.
 bool vw_CheckFontCharByUTF32(char32_t UTF32);
 // Release all font characters and created for this characters textures.

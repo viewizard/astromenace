@@ -1545,12 +1545,18 @@ Dialogs with default type:
 			if (Setup.MenuLanguage < 1) Setup.MenuLanguage = vw_GetLanguageListCount();
 
 			vw_SetTextLanguage(Setup.MenuLanguage);
+			// forced to regenerate textures (base texture connected to language-related characters set)
+			vw_ReleaseAllFontChars();
+			vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
 		}
 		if (DrawDialogButton128(X+316+34, Y+ButtonOffset-73, vw_GetText("1_Next"), DialogContentTransp)) {
 			Setup.MenuLanguage++;
 			if (Setup.MenuLanguage > vw_GetLanguageListCount()) Setup.MenuLanguage = 1;
 
 			vw_SetTextLanguage(Setup.MenuLanguage);
+			// forced to regenerate textures (base texture connected to language-related characters set)
+			vw_ReleaseAllFontChars();
+			vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
 		}
 
 		vw_SetFontSize(24);

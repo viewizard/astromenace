@@ -293,9 +293,9 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 /*
  * Generate font characters by list.
  */
-int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std::string &CharsList)
+int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std::unordered_set<char32_t> &CharsSetUTF32)
 {
-	if (CharsList.empty())
+	if (CharsSetUTF32.empty())
 		return ERR_PARAMETERS;
 
 	std::cout << "Font characters generation start.\n";
@@ -310,15 +310,12 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 		return ERR_EXT_RES;
 	}
 
-	// convert from utf8 into utf32
-	const std::u32string UTF32String{ConvUTF8toUTF32.from_bytes(CharsList)};
-
 	// create one large bitmap with all font characters from list
 	int CurrentDIBX{0};
 	int CurrentDIBY{0};
 	int EdgingSpace{2};
 	int MaxHeightInCurrentLine{0};
-	for (const auto &CurrentChar : UTF32String) {
+	for (const auto &CurrentChar : CharsSetUTF32) {
 		// load glyph
 		if (FT_Load_Char(InternalFace, CurrentChar, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT)) {
 			std::cerr << "Can't load Char: " << CurrentChar << "\n";
@@ -369,14 +366,14 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 
 	// create texture from bitmap
 	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
-	sTexture *FontTexture = vw_CreateTextureFromMemory(CharsList.c_str() /*texture name*/, DIB.data(), FontTextureWidth, FontTextureHeight, 4, 0);
+	sTexture *FontTexture = vw_CreateTextureFromMemory("auto_generated_texture_for_fonts", DIB.data(), FontTextureWidth, FontTextureHeight, 4, 0);
 	if (!FontTexture) {
 		std::cerr <<  "Can't create font texture.\n";
 		return ERR_MEM;
 	}
 
 	// setup texture to all font characters from list
-	for (const auto &CurrentChar : UTF32String) {
+	for (const auto &CurrentChar : CharsSetUTF32) {
 		sFontChar *tmpChar = FindFontCharByUTF32(CurrentChar);
 		if (tmpChar)
 			tmpChar->Texture = FontTexture;
