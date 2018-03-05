@@ -379,17 +379,11 @@ void Loop_Proc()
 
 	// делаем на рабочем столе бмп скриншоты
 	if (vw_GetKeys(SDLK_PRINTSCREEN) || vw_GetKeys(SDLK_F12)) {
-		char SaveFileName[MAX_PATH];
+		std::time_t RawTime = std::time(nullptr);
+		std::array<char, 128> tmpBuffer;
+		std::strftime(tmpBuffer.data(), tmpBuffer.size(), "/AstroMenaceScreenshot%Y-%m-%d_%H:%M:%S.bmp", std::localtime(&RawTime));
 
-		strcpy(SaveFileName, ScreenshotDir);
-		strcat(SaveFileName, "/AstroMenaceScreenshot");
-
-		char res[128];
-		sprintf(res,"%4.1f",SDL_GetTicks()/1000.0f);
-		strcat(SaveFileName, res);
-		strcat(SaveFileName, ".bmp");
-
-		vw_Screenshot(Setup.Width, Setup.Height, SaveFileName);
+		vw_Screenshot(Setup.Width, Setup.Height, ScreenshotDir + std::string{tmpBuffer.data()});
 		vw_SetKeys(SDLK_PRINTSCREEN, false);
 		vw_SetKeys(SDLK_F12, false);
 	}

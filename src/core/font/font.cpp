@@ -271,16 +271,21 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 			}
 		}
 
-		// fake texture file name based on UTF32 code
-		char FakeTExtureFileName[MAX_PATH];
-		sprintf(FakeTExtureFileName, "fontsize_%i_character_%u", InternalFontSize, UTF32);
+		// fake texture file name based on font's size and UTF32 code
+		std::string FakeTextureFileName{"fontsize_" + std::to_string(InternalFontSize) +
+						"_character_" + std::to_string(UTF32)};
 
 		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE,
 				  RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
-		FontCharsList.front()->Texture = vw_CreateTextureFromMemory(FakeTExtureFileName, tmpPixels.data(),
-									     FontCharsList.front()->Width, FontCharsList.front()->Height,
-									     4, 0, 0, 0, false);
+		FontCharsList.front()->Texture = vw_CreateTextureFromMemory(FakeTextureFileName.c_str(), tmpPixels.data(),
+									    FontCharsList.front()->Width, FontCharsList.front()->Height,
+									    4, 0, 0, 0, false);
 	}
+
+	std::cout << "Font character was created for size: "
+		  << InternalFontSize << ",  char: '"
+		  << ConvertUTF8.to_bytes(UTF32) << "',  code: "
+		  << "0x" << std::uppercase << std::hex << UTF32 << "\n";
 
 	return FontCharsList.front().get();
 }

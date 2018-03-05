@@ -231,9 +231,8 @@ void SaveXMLSetupFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MenuScript"), "value", Setup.MenuScript);
 
 	for(int i=0; i<10; i++) {
-		char Name[128];
-		sprintf(Name, "HintStatus%i", i+1);
-		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, Name), "value", Setup.NeedShowHint[i]);
+		std::string tmpString{"HintStatus" + std::to_string(i + 1)};
+		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, tmpString.c_str()), "value", Setup.NeedShowHint[i]);
 	}
 
 
@@ -592,11 +591,10 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 			Setup.MenuScript = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuScript"), "value");
 
 	for(int i=0; i<10; i++) {
-		char Name[128];
-		sprintf(Name, "HintStatus%i", i+1);
-		if (XMLdoc->FindEntryByName(RootXMLEntry, Name) != nullptr)
-			if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, Name), "value") != nullptr)
-				Setup.NeedShowHint[i] = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, Name), "value");
+		std::string tmpString{"HintStatus" + std::to_string(i + 1)};
+		if (XMLdoc->FindEntryByName(RootXMLEntry, tmpString.c_str()) != nullptr)
+			if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, tmpString.c_str()), "value") != nullptr)
+				Setup.NeedShowHint[i] = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, tmpString.c_str()), "value");
 	}
 
 	//

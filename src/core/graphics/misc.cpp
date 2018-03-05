@@ -27,41 +27,37 @@
 #include "graphics.h"
 
 
-
-
-
-
-//------------------------------------------------------------------------------------
-// делаем скриншот
-//------------------------------------------------------------------------------------
-int vw_Screenshot(int w, int h, char *filename)
+/*
+ * Create screenshot from current OpenGL surface.
+ */
+int vw_Screenshot(int Width, int Height, const std::string &FileName)
 {
-	SDL_Surface *temp;
-	unsigned char *pixels;
+	// fixed for BMP format, supported by libSDL
+	constexpr uint8_t BitsPerPixels = 24;
+	constexpr uint8_t ChannelsNumber = 3;
 
-	temp = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 24,
+	SDL_Surface *tmpSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, Width, Height, BitsPerPixels,
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
-				    0x000000FF, 0x0000FF00, 0x00FF0000, 0
+							0x000000FF, 0x0000FF00, 0x00FF0000, 0
 #else
-				    0x00FF0000, 0x0000FF00, 0x000000FF, 0
+							0x00FF0000, 0x0000FF00, 0x000000FF, 0
 #endif
-				   );
-	if (temp == nullptr) return -1;
+							);
+	if (tmpSurface == nullptr)
+		return ERR_MEM;
 
-	pixels = (unsigned char *)malloc(3 * w * h);
-	if (pixels == nullptr) {
-		SDL_FreeSurface(temp);
-		return -1;
+	std::vector<uint8_t> Pixels(ChannelsNumber * Width * Height);
+
+	glReadPixels(0, 0, Width, Height, GL_RGB, GL_UNSIGNED_BYTE, Pixels.data());
+
+	// flip pixels in proper order
+	for (int i = 0; i < Height; i++) {
+		memcpy((uint8_t *)tmpSurface->pixels + tmpSurface->pitch * i,
+		       Pixels.data() + ChannelsNumber * Width * (Height - i - 1),
+		       Width * ChannelsNumber);
 	}
 
-	glReadPixels(0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, pixels);
-
-	for (int i=0; i<h; i++)
-		memcpy(((char *) temp->pixels) + temp->pitch * i, pixels + 3*w * (h-i-1), w*3);
-
-	free(pixels);
-
-	SDL_SaveBMP(temp, filename);
-	SDL_FreeSurface(temp);
+	SDL_SaveBMP(tmpSurface, FileName.c_str());
+	SDL_FreeSurface(tmpSurface);
 	return 0;
 }

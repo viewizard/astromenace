@@ -282,15 +282,14 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			Options_iAspectRatioWidth = 1228;
 	}
 
-	char VideoModeTitle[32];
+	std::string VideoModeTitle{std::to_string(VideoModes[CurrentListNum].W) + "x" +
+				   std::to_string(VideoModes[CurrentListNum].H)};
 	if (VideoModes[CurrentListNum].BPP != 0)
-		sprintf(VideoModeTitle, "%ix%i %ibit", VideoModes[CurrentListNum].W, VideoModes[CurrentListNum].H, VideoModes[CurrentListNum].BPP);
-	else
-		sprintf(VideoModeTitle, "%ix%i", VideoModes[CurrentListNum].W, VideoModes[CurrentListNum].H);
+		VideoModeTitle += " " + std::to_string(VideoModes[CurrentListNum].BPP) + "bit";
 
-	Size = vw_FontSize(VideoModeTitle);
+	Size = vw_FontSize(VideoModeTitle.c_str());
 	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, VideoModeTitle);
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, VideoModeTitle.c_str());
 
 
 

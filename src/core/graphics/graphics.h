@@ -603,20 +603,11 @@ void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, sTexture *Tex, bool Alph
 
 
 
+/*
+ * Misc
+ */
 
-// Дополнительные функции
-
-// Создание скриншота
-int vw_Screenshot(int w, int h, char *filename);
-
-
-
-
-
-
-
-
-
-
+// Create screenshot from current OpenGL surface.
+int vw_Screenshot(int Width, int Height, const std::string &FileName);
 
 #endif // RendererInterface_H

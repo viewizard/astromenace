@@ -368,17 +368,17 @@ void DrawGameExpMoney(int Exp, int Money)
 
 	Xstart = Setup.iAspectRatioWidth/2-57+23.0f;
 	Ystart = 5;
-	char buffer[10];
-	if (Exp < 0) Exp = 0;
-	sprintf(buffer,"%i",Exp);
+	if (Exp < 0)
+		Exp = 0;
+	std::string tmpString{std::to_string(Exp)};
 
 	for (unsigned int i=0; i<7; i++) {
-		if (7-i > strlen(buffer)) {
+		if ((7 - i) > tmpString.size()) {
 			Transp = 0.2f;
 			GetGameNumFontData('0', SrcRect);
 		} else {
 			Transp = 1.0f;
-			GetGameNumFontData(buffer[i+strlen(buffer)-7], SrcRect);
+			GetGameNumFontData(tmpString[i + tmpString.size() - 7], SrcRect);
 		}
 		DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right - SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
 
@@ -437,16 +437,17 @@ void DrawGameExpMoney(int Exp, int Money)
 
 	Xstart = Setup.iAspectRatioWidth/2-57+23.0f;
 	Ystart = 31;
-	if (Money < 0) Money = 0;
-	sprintf(buffer,"%i",Money);
+	if (Money < 0)
+		Money = 0;
+	tmpString = std::to_string(Money);
 
 	for (unsigned int i=0; i<7; i++) {
-		if (7-i > strlen(buffer)) {
+		if ((7 - i) > tmpString.size()) {
 			Transp = 0.2f;
 			GetGameNumFontData('0', SrcRect);
 		} else {
 			Transp = 1.0f;
-			GetGameNumFontData(buffer[i+strlen(buffer)-7], SrcRect);
+			GetGameNumFontData(tmpString[i + tmpString.size() - 7], SrcRect);
 		}
 		DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right-SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
 

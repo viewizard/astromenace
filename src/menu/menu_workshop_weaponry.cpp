@@ -1234,10 +1234,9 @@ void Workshop_Weaponry()
 								  WorkshopFighterGame->Weapon[i]->Ammo,
 								  WorkshopFighterGame->Weapon[i]->AmmoStart);
 		}
-		char ButtonName[1024];
-		sprintf(ButtonName, "%s: %i", vw_GetText("1_Reload_All"), ReloadCost);
+		std::string ButtonName{std::string(vw_GetText("1_Reload_All")) + ": " + std::to_string(ReloadCost)};
 
-		if (DrawButton200_2(Setup.iAspectRatioWidth/2+153, 50, ButtonName, MenuContentTransp, ReloadCost==0 || Setup.Profile[CurrentProfile].Money<ReloadCost)) {
+		if (DrawButton200_2(Setup.iAspectRatioWidth/2+153, 50, ButtonName.c_str(), MenuContentTransp, ReloadCost==0 || Setup.Profile[CurrentProfile].Money<ReloadCost)) {
 			for (int i = 0; i < WorkshopFighterGame->WeaponQuantity; i++) {
 				if (WorkshopFighterGame->Weapon[i] != nullptr) {
 					WorkshopFighterGame->Weapon[i]->Ammo = WorkshopFighterGame->Weapon[i]->AmmoStart;

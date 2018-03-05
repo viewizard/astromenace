@@ -187,15 +187,11 @@ public:
 	};
 	void AddEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName, int AttributeData)
 	{
-		char buffer[1024];
-		sprintf(buffer, "%i", AttributeData);
-		AddEntryAttribute(XMLEntry, AttributeName, buffer);
+		AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData).c_str());
 	};
 	void AddEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName, float AttributeData)
 	{
-		char buffer[1024];
-		sprintf(buffer, "%f", AttributeData);
-		AddEntryAttribute(XMLEntry, AttributeName, buffer);
+		AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData).c_str());
 	};
 	void AddEntryAttribute(cXMLEntry *XMLEntry, const char *AttributeName, bool AttributeData)
 	{

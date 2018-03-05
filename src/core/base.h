@@ -62,6 +62,7 @@
 #include <locale>
 #include <codecvt>
 #include <iostream>
+#include <ctime>
 
 // error codes
 #define ERR_PARAMETERS		-1	// function's parameters related issue

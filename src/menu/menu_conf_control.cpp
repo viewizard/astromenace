@@ -80,15 +80,16 @@ const char * MouseCodeName(char Num)
 
 
 
-char JoystickCodeNameText[12];/*"JoystickXXX"*/
-const char * JoystickCodeName(int Num)
+std::string JoystickCodeNameText; /*"JoystickXXX"*/
+const char *JoystickCodeName(int Num)
 {
 	// кнопки еще нет
-	if (Num == -1) return "?";
+	if (Num == -1)
+		return "?";
 
 	// Num+1 т.к. начинается счет с 0
-	sprintf(JoystickCodeNameText,"Joystick%i",Num+1);
-	return JoystickCodeNameText;
+	JoystickCodeNameText = "Joystick" + std::to_string(Num + 1);
+	return JoystickCodeNameText.c_str();
 }
 
 
