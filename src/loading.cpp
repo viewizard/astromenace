@@ -30,24 +30,6 @@
 
 
 
-//------------------------------------------------------------------------------------
-// локальные переменные
-//------------------------------------------------------------------------------------
-
-// прорисовка хинтов во время загрузки
-bool NeedShowHint = false;
-static const char *LoadingHints[] = {
-	"9_16Line1",
-	"9_16Line2",
-	"9_16Line3",
-	"9_16Line4",
-	"9_16Line5",
-	"9_16Line6"
-};
-#define LoadingHintsCount (int)(sizeof(LoadingHints)/sizeof(LoadingHints[0]))
-
-
-
 
 //------------------------------------------------------------------------------------
 // локальная структура данных загрузки
@@ -935,12 +917,6 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, sTexture 
 	vw_Draw(StartX, 768-64-1 -32, &SrcRect, vw_FindTextureByName("loading/loading_line.tga"), true);
 
 
-	// выводим хинт при загрузке
-	if (NeedShowHint) {
-		int Size = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText(LoadingHints[Setup.LoadingHint])))/2;
-		vw_DrawFont(Size, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, vw_GetText(LoadingHints[Setup.LoadingHint]));
-	}
-
 	vw_End2DMode();
 	vw_EndRendering();
 
@@ -1052,7 +1028,6 @@ void LoadGameData(eLoading LoadType)
 	case eLoading::MenuWithLogo:
 		CurrentList = MenuLoadList;
 		CurrentListCount = MenuLoadListCount;
-		NeedShowHint = false;
 		break;
 
 	// переход игра-меню
@@ -1060,14 +1035,12 @@ void LoadGameData(eLoading LoadType)
 		SaveXMLSetupFile();
 		CurrentList = MenuLoadList;
 		CurrentListCount = MenuLoadListCount;
-		NeedShowHint = true;
 		break;
 
 	// уровни игры
 	case eLoading::Game: {
 		SaveXMLSetupFile();
 		CurrentListCount = GameLevelsLoadListCount;
-		NeedShowHint = true;
 
 		// флаги нужно загружать или нет...
 		bool StarSystem1 = false;
@@ -1590,9 +1563,6 @@ AllDataLoaded:
 	case eLoading::Menu:
 		InitMenu();
 		MenuStatus = eMenuStatus::MISSION; // чтобы не было перехода с основного меню в мисии
-		Setup.LoadingHint++;
-		if (Setup.LoadingHint >= LoadingHintsCount)
-			Setup.LoadingHint = 0;
 		break;
 
 	// уровни игры
@@ -1606,9 +1576,6 @@ AllDataLoaded:
 		StartMusicWithFade(2, 2.0f, 2.0f);
 		// приготовиться к действию (речь)
 		Audio_PlayVoice(5, 1.0f);
-		Setup.LoadingHint++;
-		if (Setup.LoadingHint >= LoadingHintsCount)
-			Setup.LoadingHint = 0;
 		break;
 
 	default:

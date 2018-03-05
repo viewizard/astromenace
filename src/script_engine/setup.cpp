@@ -74,7 +74,6 @@ void InitSetup()
 	Setup.ShowFPS = false;
 	Setup.GameWeaponInfoType = 1;
 	Setup.GameSpeed = 1.5f;
-	Setup.LoadingHint = 0;
 
 
 	Setup.KeyboardDecreaseGameSpeed = SDLK_F5;
@@ -202,7 +201,6 @@ void SaveXMLSetupFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "ShowFPS"), "value", Setup.ShowFPS);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "GameWeaponInfoType"), "value", Setup.GameWeaponInfoType);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "GameSpeed"), "value", Setup.GameSpeed);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "LoadingHint"), "value", Setup.LoadingHint);
 
 
 	XMLdoc->AddComment(RootXMLEntry, " Control settings ");
@@ -513,9 +511,6 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed") != nullptr)
 		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed"), "value"))
 			Setup.GameSpeed = XMLdoc->fGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "LoadingHint") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LoadingHint"), "value"))
-			Setup.LoadingHint = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LoadingHint"), "value");
 
 
 
