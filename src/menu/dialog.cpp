@@ -1547,7 +1547,7 @@ Dialogs with default type:
 			vw_SetTextLanguage(Setup.MenuLanguage);
 			// forced to regenerate textures (base texture connected to language-related characters set)
 			vw_ReleaseAllFontChars();
-			vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
+			vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
 		}
 		if (DrawDialogButton128(X+316+34, Y+ButtonOffset-73, vw_GetText("1_Next"), DialogContentTransp)) {
 			Setup.MenuLanguage++;
@@ -1556,7 +1556,7 @@ Dialogs with default type:
 			vw_SetTextLanguage(Setup.MenuLanguage);
 			// forced to regenerate textures (base texture connected to language-related characters set)
 			vw_ReleaseAllFontChars();
-			vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
+			vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
 		}
 
 		vw_SetFontSize(24);

@@ -62,7 +62,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		vw_SetTextLanguage(Setup.MenuLanguage);
 		// forced to regenerate textures (base texture connected to language-related characters set)
 		vw_ReleaseAllFontChars();
-		vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
+		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, false)) {
 		Setup.MenuLanguage++;
@@ -71,7 +71,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		vw_SetTextLanguage(Setup.MenuLanguage);
 		// forced to regenerate textures (base texture connected to language-related characters set)
 		vw_ReleaseAllFontChars();
-		vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
+		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
 	}
 
 	int Size, SizeI;
@@ -113,7 +113,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
 		vw_SetFontSize(Setup.FontSize);
 		vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
-		vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
+		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.FontNumber >= FontQuantity-1)) {
 		Setup.FontNumber ++;
@@ -125,7 +125,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
 		vw_SetFontSize(Setup.FontSize);
 		vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
-		vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
+		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
 	}
 	int Scale = 0;
 	Size = vw_FontSize(FontList[Setup.FontNumber].FontTitle);
@@ -151,7 +151,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
 		vw_SetFontSize(Setup.FontSize);
 		vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
-		vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
+		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.FontSize >= 18)) {
 		Setup.FontSize ++;
@@ -162,7 +162,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
 		vw_SetFontSize(Setup.FontSize);
 		vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
-		vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
+		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
 	}
 	Scale = 0;
 	Size = vw_FontSize("%i", Setup.FontSize);

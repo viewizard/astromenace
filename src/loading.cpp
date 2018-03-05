@@ -1298,7 +1298,7 @@ void LoadGameData(eLoading LoadType)
 
 	// generate texture for all used characters in text
 	if (LoadType == eLoading::MenuWithLogo)
-		vw_GenerateFontChars(256, 256, vw_FindFontCharsForLanguage());
+		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
 
 
 

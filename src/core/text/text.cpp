@@ -200,7 +200,7 @@ const std::u32string &vw_GetTextUTF32(const char *ItemID, unsigned int Language)
 /*
  * Find all used in text characters for current language.
  */
-std::unordered_set<char32_t> &vw_FindFontCharsForLanguage()
+std::unordered_set<char32_t> &vw_FindCharsSetForLanguage()
 {
 	CharsSetForLanguage.clear();
 

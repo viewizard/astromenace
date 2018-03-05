@@ -52,12 +52,11 @@
 // STL
 // only includes that really should being used in different parts of code
 #include <unordered_map>
+#include <unordered_set>
 #include <forward_list>
 #include <memory>
 #include <vector>
 #include <array>
-#include <set>
-#include <unordered_set>
 #include <string>
 #include <algorithm>
 #include <locale>
