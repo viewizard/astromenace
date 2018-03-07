@@ -30,7 +30,7 @@
 #include "xml.h"
 
 // ищем первое вхождение подстроки в строку, передаем позицию, или -1 если не найдена
-int FindSubString(char *String, const char *SubString)
+static int FindSubString(const char *String, const char *SubString)
 {
 	unsigned int lenght = strlen(SubString);
 	for (int i = 0; (String+i)[0] != '\0'; i++) {
@@ -39,18 +39,9 @@ int FindSubString(char *String, const char *SubString)
 	return -1;
 }
 
-// замена данных, с сохранением перевода на новую строку
-void EraseSubString(char *String, unsigned int StartPos, unsigned int EndPos)
-{
-	// проверяем, если не символы конце строки \r или \n - меняем на пробелы
-	for (unsigned int i=StartPos; i<EndPos; i++) {
-		if ((String[i] != '\r') && (String[i] != '\n')) String[i] = ' ';
-	}
-}
-
 // считаем кол-во строк до текущего положения буфера
 #ifdef gamedebug
-unsigned int GetLineNumber(char *String, unsigned int Pos)
+static unsigned int GetLineNumber(const char *String, unsigned int Pos)
 {
 	unsigned int LineNumber = 1;
 	unsigned int CurrentPos = 0;
@@ -63,14 +54,14 @@ unsigned int GetLineNumber(char *String, unsigned int Pos)
 	return LineNumber;
 }
 #else
-unsigned int GetLineNumber(char *UNUSED(String), unsigned int UNUSED(Pos))
+static unsigned int GetLineNumber(const char *UNUSED(String), unsigned int UNUSED(Pos))
 {
 	return 0;
 }
 #endif // gamedebug
 
 // создаем подстроку из строки с выделением памяти
-char *CreateSubString(char *String, unsigned int StartPos, unsigned int EndPos)
+static char *CreateSubString(const char *String, unsigned int StartPos, unsigned int EndPos)
 {
 	if (EndPos <= StartPos)
 		return nullptr;
@@ -144,7 +135,7 @@ void cXMLDocument::DetachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *XML
 /*
  *
  */
-bool cXMLDocument::ParseTagLine(char *OriginBuffer, unsigned int StartPosition, char *Buffer, cXMLEntry *XMLEntry)
+bool cXMLDocument::ParseTagLine(const char *OriginBuffer, unsigned int StartPosition, const char *Buffer, cXMLEntry *XMLEntry)
 {
 	// 1 - получаем имя тэга (начинается сразу после символа <, а заканчивается пробелом, >, />, или символом таб)
 	int TagNameEnd = FindSubString(Buffer, " ");
@@ -201,7 +192,7 @@ bool cXMLDocument::ParseTagLine(char *OriginBuffer, unsigned int StartPosition, 
 /*
  *
  */
-bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPosition, char *Buffer, cXMLEntry *ParentXMLEntry)
+bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartPosition, const char *Buffer, cXMLEntry *ParentXMLEntry)
 {
 	// проверяем наличие вложенных тэгов
 	bool ChildsFound = true;
@@ -282,13 +273,8 @@ bool cXMLDocument::ParseTagContent(char *OriginBuffer, unsigned int StartPositio
 			}
 
 			// если тэг открытый - ищем завершающий тэг </имя>
-			char *CloseElement = new char[strlen("</>") + XMLEntry->Name.size() + 1];
-			strcpy(CloseElement, "</");
-			strcat(CloseElement, XMLEntry->Name.c_str());
-			strcat(CloseElement, ">");
-			CloseElement[strlen("</>") + XMLEntry->Name.size()] = 0;
-			int CloseElementPosition = FindSubString(Buffer, CloseElement);
-			delete [] CloseElement;
+			std::string CloseElement{"</" + XMLEntry->Name + ">"};
+			int CloseElementPosition = FindSubString(Buffer, CloseElement.c_str());
 			// если закрывающего элемента нет - значит файл поврежден
 			if (CloseElementPosition == -1) {
 				std::cerr << "XML file corrupted, can't find element end: "
@@ -330,71 +316,60 @@ cXMLDocument::cXMLDocument(const char *XMLFileName)
 	this->~cXMLDocument();
 
 	// читаем данные
-	std::unique_ptr<sFILE> XMLFile = vw_fopen(XMLFileName);
-
-	if (XMLFile == nullptr) {
+	std::string Buffer;
+	if (vw_VFStoBuffer(XMLFileName, Buffer)) {
 		std::cerr << "XML file not found: " << XMLFileName << "\n";
 		return;
 	}
 
-	// читаем все данные в буфер
-	XMLFile->fseek(0, SEEK_END);
-	unsigned int DataLength = XMLFile->ftell();
-	XMLFile->fseek(0, SEEK_SET);
-	char *Buffer = new char[DataLength+1];
-	Buffer[DataLength] = 0;
-	XMLFile->fread(Buffer, DataLength, 1);
-	vw_fclose(XMLFile);
-
 	// проверяем заголовок
-	if (FindSubString(Buffer, "<?xml") == -1) {
+	if (Buffer.find_first_of("<?xml") == std::string::npos) {
 		std::cerr << "XML file corrupted: " << XMLFileName << "\n";
 		return;
 	}
-	if (FindSubString(Buffer, "?>") == -1) {
+	if (Buffer.find_first_of("?>") == std::string::npos) {
 		std::cerr << "XML file corrupted: " << XMLFileName << "\n";
 		return;
 	}
 
 	// идем на рекурсивную обработку
-	if (!ParseTagContent(Buffer, FindSubString(Buffer, "?>")+strlen("?>"), Buffer+FindSubString(Buffer, "?>")+strlen("?>"), nullptr)) {
+	if (!ParseTagContent(Buffer.c_str(), FindSubString(Buffer.c_str(), "?>")+strlen("?>"), Buffer.c_str()+FindSubString(Buffer.c_str(), "?>")+strlen("?>"), nullptr)) {
 		std::cerr << "XML file corrupted: " << XMLFileName << "\n";
-		delete [] Buffer;
 		return;
 	}
 
 	if (RootXMLEntry == nullptr) {
 		std::cerr << "XML file corrupted, root element not found: " << XMLFileName << "\n";
-		delete [] Buffer;
 		return;
 	}
 
-	delete [] Buffer;
 	return;
 }
 
-//-----------------------------------------------------------------------------
-// Сохранение
-//-----------------------------------------------------------------------------
+/*
+ * Save XML elements to file recursively.
+ */
 void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned int Level)
 {
-	// если это комментарий
-	if (XMLEntry->EntryType == 1) {
-		for (unsigned int i=0; i<Level; i++) {
+	if (XMLEntry->EntryType == eEntryType::Comment) {
+		// comment
+		for (unsigned int i = 0; i < Level; i++) {
 			SDL_RWwrite(File, "    ", strlen("    "), 1);
 		}
 		SDL_RWwrite(File, "<!--", strlen("<!--"), 1);
 		SDL_RWwrite(File, XMLEntry->Name.data(), XMLEntry->Name.size(), 1);
 		SDL_RWwrite(File, "-->\r\n", strlen("-->\r\n"), 1);
 	} else {
-		// пишем имя
-		for (unsigned int i=0; i<Level; i++) {
+		// regular element
+
+		// name
+		for (unsigned int i = 0; i < Level; i++) {
 			SDL_RWwrite(File, "    ", strlen("    "), 1);
 		}
 		SDL_RWwrite(File, "<", strlen("<"), 1);
 		SDL_RWwrite(File, XMLEntry->Name.data(), XMLEntry->Name.size(), 1);
 
-		// пишем атрибуты
+		// attributes
 		if (!XMLEntry->Attributes.empty()) {
 			for (const auto &TmpAttrib : XMLEntry->Attributes) {
 				SDL_RWwrite(File, " ", strlen(" "), 1);
@@ -406,7 +381,7 @@ void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 			SDL_RWwrite(File, " ", strlen(" "), 1);
 		}
 
-		// пишем данные
+		// data
 		if ((XMLEntry->FirstChild != nullptr) || (!XMLEntry->Content.empty())) {
 			if (!XMLEntry->Content.empty()) {
 				SDL_RWwrite(File, ">", strlen(">"), 1);
@@ -418,10 +393,10 @@ void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 				SDL_RWwrite(File, ">\r\n", strlen(">\r\n"), 1);
 				cXMLEntry *Tmp = XMLEntry->FirstChild;
 				while (Tmp != nullptr) {
-					SaveRecursive(Tmp, File, Level+1);
+					SaveRecursive(Tmp, File, Level + 1);
 					Tmp = Tmp->Next;
 				}
-				for (unsigned int i=0; i<Level; i++) SDL_RWwrite(File, "    ", strlen("    "), 1);
+				for (unsigned int i = 0; i < Level; i++) SDL_RWwrite(File, "    ", strlen("    "), 1);
 				SDL_RWwrite(File, "</", strlen("</"), 1);
 				SDL_RWwrite(File, XMLEntry->Name.data(), XMLEntry->Name.size(), 1);
 				SDL_RWwrite(File, ">\r\n", strlen(">\r\n"), 1);
@@ -433,27 +408,28 @@ void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 }
 
 /*
- *
+ * Save XML to file (libSDL RWops).
  */
-bool cXMLDocument::Save(const char *XMLFileName)
+bool cXMLDocument::Save(const std::string &XMLFileName)
 {
 	std::cout << "Save XML file: " << XMLFileName << "\n";
 
-	SDL_RWops *File = SDL_RWFromFile(XMLFileName, "wb");
+	SDL_RWops *File = SDL_RWFromFile(XMLFileName.c_str(), "wb");
 	if (File == nullptr) {
 		std::cerr << "Can't open XML file for write " << XMLFileName << "\n";
 		return false;
 	}
 
-	// пишем заголовок
-	SDL_RWwrite(File, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n", strlen("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n"), 1);
+	// XML header
+	const std::string tmpXMLHeader{"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n"};
+	SDL_RWwrite(File, tmpXMLHeader.data(), tmpXMLHeader.size(), 1);
 
 	if (RootXMLEntry == nullptr) {
 		SDL_RWclose(File);
 		return true;
 	}
 
-	// рекурсивно пишем все данные
+	// save all data recursively
 	SaveRecursive(RootXMLEntry, File, 0);
 
 	SDL_RWclose(File);

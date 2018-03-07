@@ -47,6 +47,11 @@
  * 2. Test XML file structure (in the way we need).
  */
 
+enum class eEntryType {
+	Regular,	// regular, could contain attributes and sub-entries
+	Comment		// <--! comment -->
+};
+
 class cXMLEntry
 {
 public:
@@ -63,7 +68,7 @@ public:
 	};
 
 	// тип записи 0-обычная, 1-коментарий
-	int EntryType{0};
+	eEntryType EntryType{eEntryType::Regular};
 	// имя элемента (если коментарий - текст)
 	std::string Name;
 	// содержимое элемента
@@ -100,11 +105,11 @@ public:
 	// указатель на корневой элемент
 	cXMLEntry *RootXMLEntry{nullptr};
 
-	bool ParseTagLine(char *OriginBuffer, unsigned int StartPosition, char *Buffer, cXMLEntry *XMLEntry);
-	bool ParseTagContent(char *OriginBuffer, unsigned int StartPosition, char *Buffer, cXMLEntry *ParentXMLEntry);
+	bool ParseTagLine(const char *OriginBuffer, unsigned int StartPosition, const char *Buffer, cXMLEntry *XMLEntry);
+	bool ParseTagContent(const char *OriginBuffer, unsigned int StartPosition, const char *Buffer, cXMLEntry *ParentXMLEntry);
 
-	bool Save(const char *XMLFileName);
-	void SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned int Level);
+	// Save XML to file (libSDL RWops).
+	bool Save(const std::string &XMLFileName);
 
 	cXMLEntry *AddEntry(cXMLEntry *ParentXMLEntry, const std::string &EntryName)
 	{
@@ -163,7 +168,7 @@ public:
 	void AddComment(cXMLEntry *ParentXMLEntry, const std::string &Text)
 	{
 		cXMLEntry *NewXMLEntry = new cXMLEntry;
-		NewXMLEntry->EntryType = 1;
+		NewXMLEntry->EntryType = eEntryType::Comment;
 		NewXMLEntry->Name = Text;
 		AttachXMLChildEntry(ParentXMLEntry, NewXMLEntry);
 	};
@@ -237,6 +242,10 @@ public:
 
 	void AttachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *ChildXMLEntry);
 	void DetachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *ChildXMLEntry);
+
+private:
+	// Save XML elements to file recursively.
+	void SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned int Level);
 };
 
 #endif // XML_H
