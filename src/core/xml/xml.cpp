@@ -29,16 +29,6 @@
 #include "../vfs/vfs.h"
 #include "xml.h"
 
-// ищем первое вхождение подстроки в строку, передаем позицию, или -1 если не найдена
-static int FindSubString(const char *String, const char *SubString)
-{
-	unsigned int lenght = strlen(SubString);
-	for (int i = 0; (String+i)[0] != '\0'; i++) {
-		if (!strncmp(String+i, SubString, lenght)) return i;
-	}
-	return -1;
-}
-
 // считаем кол-во строк до текущего положения буфера
 #ifdef gamedebug
 static unsigned int GetLineNumber(const char *String, unsigned int Pos)
@@ -59,19 +49,6 @@ static unsigned int GetLineNumber(const char *UNUSED(String), unsigned int UNUSE
 	return 0;
 }
 #endif // gamedebug
-
-// создаем подстроку из строки с выделением памяти
-static char *CreateSubString(const char *String, unsigned int StartPos, unsigned int EndPos)
-{
-	if (EndPos <= StartPos)
-		return nullptr;
-
-	char * Result = new char[EndPos-StartPos+1];
-	strncpy(Result, String+StartPos, EndPos-StartPos);
-	Result[EndPos-StartPos] = 0;
-
-	return Result;
-}
 
 //-----------------------------------------------------------------------------
 // Включаем в список
@@ -138,11 +115,18 @@ void cXMLDocument::DetachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *XML
 bool cXMLDocument::ParseTagLine(const char *OriginBuffer, unsigned int StartPosition, const char *Buffer, cXMLEntry *XMLEntry)
 {
 	// 1 - получаем имя тэга (начинается сразу после символа <, а заканчивается пробелом, >, />, или символом таб)
-	int TagNameEnd = FindSubString(Buffer, " ");
-	if (TagNameEnd == -1 || (FindSubString(Buffer, "\t") != -1 && TagNameEnd > FindSubString(Buffer, "\t"))) TagNameEnd = FindSubString(Buffer, "\t");
-	if (TagNameEnd == -1 || (FindSubString(Buffer, ">") != -1 && TagNameEnd > FindSubString(Buffer, ">"))) TagNameEnd = FindSubString(Buffer, ">");
-	if (TagNameEnd == -1 || (FindSubString(Buffer, "/>") != -1 && TagNameEnd > FindSubString(Buffer, "/>"))) TagNameEnd = FindSubString(Buffer, "/>");
-	XMLEntry->Name = CreateSubString(Buffer, 1, TagNameEnd);
+	auto TagNameEnd = std::string(Buffer).find(" ");
+	if ((TagNameEnd == std::string::npos) ||
+	    ((std::string(Buffer).find("\t") != std::string::npos) && (TagNameEnd > std::string(Buffer).find("\t"))))
+		TagNameEnd = std::string(Buffer).find("\t");
+	if ((TagNameEnd == std::string::npos) ||
+	    ((std::string(Buffer).find(">") != std::string::npos) && (TagNameEnd > std::string(Buffer).find(">"))))
+		TagNameEnd = std::string(Buffer).find(">");
+	if ((TagNameEnd == std::string::npos) ||
+	    ((std::string(Buffer).find("/>") != std::string::npos) && (TagNameEnd > std::string(Buffer).find("/>"))))
+		TagNameEnd = std::string(Buffer).find("/>");
+
+	XMLEntry->Name = std::string(Buffer).substr(1, TagNameEnd - 1);
 
 	// 2 - проверяем наличие атрибутов и заносим их в динамический массив
 	unsigned int i = TagNameEnd;
@@ -176,16 +160,17 @@ bool cXMLDocument::ParseTagLine(const char *OriginBuffer, unsigned int StartPosi
 		i++;
 
 		// собираем новый атрибут и подключаем его к элементу
-		XMLEntry->Attributes[CreateSubString(Buffer, AttribNameStart, AttribNameEnd)] = CreateSubString(Buffer, AttribDataStart, AttribDataEnd);
+		std::string tmpAttrIndex = std::string(Buffer).substr(AttribNameStart, AttribNameEnd - AttribNameStart);
+		XMLEntry->Attributes[tmpAttrIndex] = std::string(Buffer).substr(AttribDataStart, AttribDataEnd - AttribDataStart);
 	}
 
 
 	// 3 - определяем и номер строки
 	XMLEntry->LineNumber = GetLineNumber(OriginBuffer, StartPosition);
 
-
 	// 4 - определить есть ли в ней атрибут закрытия '/', или у нас есть еще и контент и закрывающий тэг
-	if (FindSubString(Buffer, "/>") != -1) return false;
+	if (std::string(Buffer).find("/>") != std::string::npos)
+		return false;
 	return true;
 }
 
@@ -196,10 +181,10 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 {
 	// проверяем наличие вложенных тэгов
 	bool ChildsFound = true;
-	int DetectTagOpenSymbol = FindSubString(Buffer, "<");
+	auto DetectTagOpenSymbol = std::string(Buffer).find("<");
 	// если символа открытия в строке нет - это просто данные, иначе проверяем, что стоит до этого символа
-	if (DetectTagOpenSymbol > 0) {
-		int CurrentPos = 0;
+	if (DetectTagOpenSymbol != std::string::npos) {
+		unsigned int CurrentPos = 0;
 		while(CurrentPos != DetectTagOpenSymbol) {
 			// если до открывающего тэга идут не " ", "\t", "\r", "\n", значит у нас просто данные
 			if (((Buffer+CurrentPos)[0] != ' ') &&
@@ -218,7 +203,7 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 
 	// 1 - это просто контент, заносим данные и выходи из рекурсии
 	if (!ChildsFound) {
-		ParentXMLEntry->Content = CreateSubString(Buffer, 0, strlen(Buffer));
+		ParentXMLEntry->Content = std::string(Buffer).substr(0, strlen(Buffer) - 0);
 		return true;
 	}
 	// 2 - если в строке нашли открывающий символ тэга - идем на рекурсивную обработку строки с хмл данными
@@ -227,13 +212,13 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 		unsigned int CurrentBufferPosition = 0;
 		while(strlen(Buffer) > 0) {
 			// находим положение открывающего тэг символа и закрывающего
-			DetectTagOpenSymbol = FindSubString(Buffer, "<");
+			DetectTagOpenSymbol = std::string(Buffer).find("<");
 
 			// это может быть комментарий, проверяем
 			if (!strncmp(Buffer+DetectTagOpenSymbol, "<!--", strlen("<!--"))) {
 				// ищем завершающую часть, и сразу перемещаемся к ней
-				int DetectCommentCloseSymbol = FindSubString(Buffer, "-->");
-				if (DetectCommentCloseSymbol == -1) {
+				auto DetectCommentCloseSymbol = std::string(Buffer).find("-->");
+				if (DetectCommentCloseSymbol == std::string::npos) {
 					std::cerr << "XML file corrupted, can't find comment end in line "
 						  << GetLineNumber(OriginBuffer, StartPosition+DetectTagOpenSymbol+CurrentBufferPosition)
 						  << "\n";
@@ -245,10 +230,11 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 			}
 
 			// если в строке уже нет открывающих символов - просто выходим, все проверили
-			if (DetectTagOpenSymbol == -1) return true;
-			int DetectTagCloseSymbol = FindSubString(Buffer, ">");
+			if (DetectTagOpenSymbol == std::string::npos)
+				return true;
+			auto DetectTagCloseSymbol = std::string(Buffer).find(">");
 			// если был открывающий символ, но нет закрывающего - это ошибка структуры документа
-			if (DetectTagCloseSymbol == -1) {
+			if (DetectTagCloseSymbol == std::string::npos) {
 				std::cerr << "XML file corrupted, can't find element end for element in line "
 					  << GetLineNumber(OriginBuffer, StartPosition+DetectTagOpenSymbol+CurrentBufferPosition)
 					  << "\n";
@@ -261,9 +247,8 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 			AttachXMLChildEntry(ParentXMLEntry, XMLEntry);
 
 			// полученные данные передаем на обработку и анализ строки элемента
-			char *TagString = CreateSubString(Buffer, DetectTagOpenSymbol, DetectTagCloseSymbol);
-			bool ElementHaveContent = ParseTagLine(OriginBuffer, StartPosition+DetectTagOpenSymbol+CurrentBufferPosition, TagString, XMLEntry);
-			delete [] TagString;
+			std::string TagString = std::string(Buffer).substr(DetectTagOpenSymbol, DetectTagCloseSymbol - DetectTagOpenSymbol);
+			bool ElementHaveContent = ParseTagLine(OriginBuffer, StartPosition+DetectTagOpenSymbol+CurrentBufferPosition, TagString.c_str(), XMLEntry);
 
 			// если у нас закрытый тэг - с этим элементом закончили, идем искать дальше
 			if (!ElementHaveContent) {
@@ -274,9 +259,9 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 
 			// если тэг открытый - ищем завершающий тэг </имя>
 			std::string CloseElement{"</" + XMLEntry->Name + ">"};
-			int CloseElementPosition = FindSubString(Buffer, CloseElement.c_str());
+			auto CloseElementPosition = std::string(Buffer).find(CloseElement);
 			// если закрывающего элемента нет - значит файл поврежден
-			if (CloseElementPosition == -1) {
+			if (CloseElementPosition == std::string::npos) {
 				std::cerr << "XML file corrupted, can't find element end: "
 					  << XMLEntry->Name
 					  << " in line: "
@@ -287,13 +272,11 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 
 			// передаем данные на рекурсивную обработку (если закрывающий тэг не стоит сразу после открывающего)
 			if (DetectTagCloseSymbol < CloseElementPosition) {
-				char *ElementContent = CreateSubString(Buffer, DetectTagCloseSymbol, CloseElementPosition);
-				if (!ParseTagContent(OriginBuffer, DetectTagCloseSymbol+StartPosition+CurrentBufferPosition, ElementContent, XMLEntry)) {
+				std::string ElementContent = std::string(Buffer).substr(DetectTagCloseSymbol, CloseElementPosition - DetectTagCloseSymbol);
+				if (!ParseTagContent(OriginBuffer, DetectTagCloseSymbol+StartPosition+CurrentBufferPosition, ElementContent.c_str(), XMLEntry)) {
 					// вернули с ошибкой, выходим
-					delete [] ElementContent;
 					return false;
 				}
-				delete [] ElementContent;
 			}
 
 			// смещаем буфер
@@ -323,17 +306,17 @@ cXMLDocument::cXMLDocument(const char *XMLFileName)
 	}
 
 	// проверяем заголовок
-	if (Buffer.find_first_of("<?xml") == std::string::npos) {
+	if (Buffer.find("<?xml") == std::string::npos) {
 		std::cerr << "XML file corrupted: " << XMLFileName << "\n";
 		return;
 	}
-	if (Buffer.find_first_of("?>") == std::string::npos) {
+	if (Buffer.find("?>") == std::string::npos) {
 		std::cerr << "XML file corrupted: " << XMLFileName << "\n";
 		return;
 	}
 
 	// идем на рекурсивную обработку
-	if (!ParseTagContent(Buffer.c_str(), FindSubString(Buffer.c_str(), "?>")+strlen("?>"), Buffer.c_str()+FindSubString(Buffer.c_str(), "?>")+strlen("?>"), nullptr)) {
+	if (!ParseTagContent(Buffer.c_str(), Buffer.find("?>")+strlen("?>"), Buffer.c_str()+Buffer.find("?>")+strlen("?>"), nullptr)) {
 		std::cerr << "XML file corrupted: " << XMLFileName << "\n";
 		return;
 	}

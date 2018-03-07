@@ -81,6 +81,7 @@ public:
 	std::unordered_map<std::string, std::string> Attributes;
 
 	// указатели на массив дочерних элементов
+	// Children;
 	cXMLEntry *FirstChild{nullptr};
 	cXMLEntry *LastChild{nullptr};
 
