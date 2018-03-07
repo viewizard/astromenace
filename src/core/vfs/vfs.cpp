@@ -62,12 +62,6 @@
 #include "vfs.h"
 #include <limits> // need this one for UINT16_MAX only
 
-enum class eFileLocation {
-	Unknown		= -1,
-	VFS		=  1,	// File present in the VFS.
-	FS		=  2	// File present in the File System.
-};
-
 struct sVFS {
 	std::string FileName;
 	SDL_RWops *File{nullptr};
@@ -342,6 +336,27 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 }
 
 /*
+ * Get internal VFS state for data extraction.
+ */
+int vw_GetInternalDataStateInVFS(const std::string &FileName, SDL_RWops **VFSFile,
+				 uint32_t &DataOffset, uint32_t &DataSize)
+{
+	if (FileName.empty() || !VFSFile)
+		return ERR_PARAMETERS;
+
+	auto FileInVFS = VFSEntriesMap.find(FileName);
+
+	if (FileInVFS == VFSEntriesMap.end())
+		return ERR_FILE_NOT_FOUND;
+
+	*VFSFile = FileInVFS->second->Parent->File;
+	DataOffset = FileInVFS->second->Offset;
+	DataSize = FileInVFS->second->Size;
+
+	return 0;
+}
+
+/*
  * Shutdown VFS.
  */
 void vw_ShutdownVFS()
@@ -358,7 +373,7 @@ void vw_ShutdownVFS()
 /*
  * Detect file location.
  */
-static eFileLocation DetectFileLocation(const std::string &FileName)
+eFileLocation vw_DetectFileLocation(const std::string &FileName)
 {
 	if (FileName.empty())
 		return eFileLocation::Unknown;
@@ -385,35 +400,41 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
 	if (FileName.empty())
 		return nullptr;
 
-	eFileLocation FileLocation = DetectFileLocation(FileName);
-
-	if (FileLocation == eFileLocation::Unknown) {
-		std::cerr << "Can't find file " << FileName << "\n";
-		return nullptr;
-	}
-
 	// initial memory allocation and setup
+	SDL_RWops *tmpFile{nullptr};
+	uint32_t DataOffset{0}, DataSize{0};
 	std::unique_ptr<sFILE> File(new sFILE(0, 0));
 
-	if (FileLocation == eFileLocation::VFS) {
-		auto FileInVFS = VFSEntriesMap.find(FileName);
+	switch (vw_DetectFileLocation(FileName)) {
+	case eFileLocation::VFS:
+		if (vw_GetInternalDataStateInVFS(FileName, &tmpFile, DataOffset, DataSize))
+			return nullptr;
 
-		File->Data.reset(new uint8_t[FileInVFS->second->Size]);
-		File->Size = FileInVFS->second->Size;
+		File->Size = DataSize;
+		File->Data.reset(new uint8_t[File->Size]);
+		SDL_RWseek(tmpFile, DataOffset, SEEK_SET);
+		SDL_RWread(tmpFile, File->Data.get(), File->Size, 1);
+		break;
 
-		SDL_RWseek(FileInVFS->second->Parent->File, FileInVFS->second->Offset, SEEK_SET);
-		SDL_RWread(FileInVFS->second->Parent->File, File->Data.get(), FileInVFS->second->Size, 1);
-	} else if (FileLocation == eFileLocation::FS) {
-		SDL_RWops *fTEMP = SDL_RWFromFile(FileName.c_str(), "rb");
+	case eFileLocation::FS:
+		tmpFile = SDL_RWFromFile(FileName.c_str(), "rb");
+		if (!tmpFile)
+			return nullptr;
 
-		SDL_RWseek(fTEMP, 0, SEEK_END);
-		File->Size = SDL_RWtell(fTEMP);
-		SDL_RWseek(fTEMP, 0, SEEK_SET);
+		SDL_RWseek(tmpFile, 0, SEEK_END);
+		File->Size = SDL_RWtell(tmpFile);
+		SDL_RWseek(tmpFile, 0, SEEK_SET);
 
 		File->Data.reset(new uint8_t[File->Size]);
 
-		SDL_RWread(fTEMP, File->Data.get(), File->Size, 1);
-		SDL_RWclose(fTEMP);
+		SDL_RWread(tmpFile, File->Data.get(), File->Size, 1);
+		SDL_RWclose(tmpFile);
+		break;
+
+	case eFileLocation::Unknown:
+		std::cerr << "Can't find file " << FileName << "\n";
+		return nullptr;
+		break;
 	}
 
 	return File;
