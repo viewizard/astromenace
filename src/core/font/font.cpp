@@ -33,7 +33,10 @@
 // static should create array with text blocks as key and VBO/VAO/IBO (and other data)
 // as value for fast rendering.
 
-// TODO in future, use make_unique() to make unique_ptr-s (C++14)
+// TODO in future, use make_unique() to make unique_ptr-s (since C++14)
+
+// TODO switch to std::unordered_multimap from std::forward_list
+// that will allow fast access and we could manually check second key (FontSize)
 
 #include "../texture/texture.h"
 #include "../graphics/graphics.h"

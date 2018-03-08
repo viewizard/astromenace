@@ -203,7 +203,7 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 
 	// 1 - это просто контент, заносим данные и выходи из рекурсии
 	if (!ChildsFound) {
-		ParentXMLEntry->Content = std::string(Buffer).substr(0, strlen(Buffer) - 0);
+		ParentXMLEntry->Content = std::string(Buffer).substr(0, strlen(Buffer));
 		return true;
 	}
 	// 2 - если в строке нашли открывающий символ тэга - идем на рекурсивную обработку строки с хмл данными

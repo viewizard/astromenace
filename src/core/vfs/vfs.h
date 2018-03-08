@@ -137,7 +137,7 @@ private:
 // Return std::unique_ptr, provide smart pointer connected to caller's scope.
 std::unique_ptr<sFILE> vw_fopen(const std::string &FileName);
 // You could call vw_fclose() if you should release memory in particular
-// part of code. Otherwise, it will be deleted automatically (see. unique_ptr).
+// part of code. Otherwise, it will be released automatically (see. unique_ptr).
 int vw_fclose(std::unique_ptr<sFILE> &stream);
 
 #endif // VFS_H
