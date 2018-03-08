@@ -63,11 +63,12 @@ struct sTexture {
 };
 
 // Load texture from file.
+// Note, in case of resize, we should provide width and height (but not just one of them).
 sTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
 			 int LoadAs = AUTO_FILE, int NeedResizeW = 0, int NeedResizeH = 0);
 // Create texture from memory.
-sTexture *vw_CreateTextureFromMemory(const std::string &TextureName, uint8_t *DIB, int DWidth,
-				     int DHeight, int DChanels, int CompressionType, int NeedResizeW = 0,
+sTexture *vw_CreateTextureFromMemory(const std::string &TextureName, std::vector<uint8_t> &DIB, int DIBWidth,
+				     int DIBHeight, int DIBChanels, int CompressionType, int NeedResizeW = 0,
 				     int NeedResizeH = 0, bool NeedDuplicateCheck = true);
 // Release texture.
 void vw_ReleaseTexture(sTexture* Texture);

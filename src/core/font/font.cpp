@@ -278,7 +278,7 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 
 		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE,
 				  RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
-		FontCharsList.front()->Texture = vw_CreateTextureFromMemory(FakeTextureFileName, tmpPixels.data(),
+		FontCharsList.front()->Texture = vw_CreateTextureFromMemory(FakeTextureFileName, tmpPixels,
 									    FontCharsList.front()->Width, FontCharsList.front()->Height,
 									    4, 0, 0, 0, false);
 	}
@@ -367,7 +367,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 
 	// create texture from bitmap
 	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
-	sTexture *FontTexture = vw_CreateTextureFromMemory("auto_generated_texture_for_fonts", DIB.data(), FontTextureWidth, FontTextureHeight, 4, 0);
+	sTexture *FontTexture = vw_CreateTextureFromMemory("auto_generated_texture_for_fonts", DIB, FontTextureWidth, FontTextureHeight, 4, 0);
 	if (!FontTexture) {
 		std::cerr <<  "Can't create font texture.\n";
 		return ERR_MEM;

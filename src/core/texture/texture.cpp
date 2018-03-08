@@ -24,8 +24,19 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-// TODO move to std::vector and std::array usage
+/*
+Note, all texture code aimed to 1 byte texture alignment.
+Plus, OpenGL preset for 1 byte alignment:
+glPixelStorei(GL_PACK_ALIGNMENT, 1);
+glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+Code will work with VW2D and TGA image format without any issues.
+But, for example, BMP (that provide 4 byte dib alignment), will not
+(at least for 24 bits per pixel images).
+
+This mean, if you add one more image format support, make sure you
+care about byte alignment.
+*/
 
 #include "../graphics/graphics.h"
 #include "../vfs/vfs.h"
@@ -33,19 +44,20 @@
 
 namespace {
 
-// Ключ прорисовки текстуры (near, linear, ... )
-int FilteringTexMan{RI_MAGFILTER_POINT | RI_MINFILTER_POINT | RI_MIPFILTER_POINT};
-// Ключ прорисовки текстуры (wrap, clamp ... )
-int Address_ModeTexMan{RI_WRAP_U | RI_WRAP_V};
-// указывает, что канал есть...(или нужно создать по цвету...)
-bool AlphaTexMan{false};
-// цвет прозрачности для создания Alpha канала...
-uint8_t ARedTexMan{0};
-uint8_t AGreenTexMan{0};
-uint8_t ABlueTexMan{0};
-int AFlagTexMan{TX_ALPHA_EQUAL};
-// mip mapping
-bool MipMap{true};
+// Default filtering type (near, linear, ... ).
+int FilteringTex{RI_MAGFILTER_POINT | RI_MINFILTER_POINT | RI_MIPFILTER_POINT};
+// Default address mode (wrap, clamp ... ).
+int Address_ModeTex{RI_WRAP_U | RI_WRAP_V};
+// Default alpha channel status (should we create if don't have it, or remove if have it).
+bool AlphaTex{false};
+// Alpha channel default color (used for alpha channel generation).
+uint8_t ARedTex{0};
+uint8_t AGreenTex{0};
+uint8_t ABlueTex{0};
+// Alpha channel default algorithm (used for alpha channel generation).
+int AFlagTex{TX_ALPHA_EQUAL};
+// Default mip mapping type.
+bool MipMapTex{true};
 // Map with all loaded textures.
 std::unordered_map<std::string, sTexture> TexturesMap;
 
@@ -61,11 +73,11 @@ int ReadTGA(std::vector<uint8_t> &DIB, sFILE *pFile, int &DWidth, int &DHeight, 
  */
 void vw_SetTextureProp(int nFiltering, int nAddress_Mode, bool nAlpha, int nAFlag, bool nMipMap)
 {
-	FilteringTexMan = nFiltering;
-	Address_ModeTexMan = nAddress_Mode;
-	AlphaTexMan = nAlpha;
-	AFlagTexMan = nAFlag;
-	MipMap = nMipMap;
+	FilteringTex = nFiltering;
+	Address_ModeTex = nAddress_Mode;
+	AlphaTex = nAlpha;
+	AFlagTex = nAFlag;
+	MipMapTex = nMipMap;
 }
 
 /*
@@ -73,9 +85,9 @@ void vw_SetTextureProp(int nFiltering, int nAddress_Mode, bool nAlpha, int nAFla
  */
 void vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue)
 {
-	ARedTexMan = nARed;
-	AGreenTexMan = nAGreen;
-	ABlueTexMan = nABlue;
+	ARedTex = nARed;
+	AGreenTex = nAGreen;
+	ABlueTex = nABlue;
 }
 
 /*
@@ -122,160 +134,127 @@ void vw_ReleaseAllTextures()
 	}
 	TexturesMap.clear();
 
-	FilteringTexMan = RI_MAGFILTER_POINT | RI_MINFILTER_POINT | RI_MIPFILTER_POINT;
-	Address_ModeTexMan = RI_WRAP_U | RI_WRAP_V;
-	AlphaTexMan = false;
+	FilteringTex = RI_MAGFILTER_POINT | RI_MINFILTER_POINT | RI_MIPFILTER_POINT;
+	Address_ModeTex = RI_WRAP_U | RI_WRAP_V;
+	AlphaTex = false;
 }
 
 /*
  * Calculate power of two.
  */
-static int power_of_two(int Num)
+static int PowerOfTwo(int Num)
 {
-	int value = 1;
+	int tmpValue = 1;
 
-	while (value < Num) {
-		value <<= 1;
+	while (tmpValue < Num) {
+		tmpValue <<= 1;
 	}
-	return value;
+	return tmpValue;
 }
 
 /*
  * Resize image to closest power of two size.
  */
-static void Resize(uint8_t **DIB, sTexture *Texture)
+static void Resize(std::vector<uint8_t> &DIB, sTexture &Texture)
 {
-	if (!DIB || !Texture)
+	if (DIB.empty())
 		return;
 
-	// берем размеры к которым нужно "подгонять"
-	int powWidth = power_of_two(Texture->Width);
-	int powHeight = power_of_two(Texture->Height);
+	// calculate closest power of two texture size
+	int potWidth = PowerOfTwo(Texture.Width);
+	int potHeight = PowerOfTwo(Texture.Height);
 
-	// нужно ли обрабатывать вообще?
-	if ((powWidth == Texture->Width) &&
-	    (powHeight == Texture->Height))
+	if ((potWidth == Texture.Width) &&
+	    (potHeight == Texture.Height))
 		return;
 
-	uint8_t *DIBtemp = *DIB;
-	*DIB = new uint8_t[powWidth * powHeight * Texture->Bytes];
+	// don't copy DIB, but move, since we need resize it on next step
+	std::vector<uint8_t> tmpDIB{std::move(DIB)};
+	DIB.resize(potWidth * potHeight * Texture.Bytes);
 
-	// делаем все по цвету-прозначности + ставим все прозрачным
-	uint8_t ColorF[4]{Texture->ARed,
-			  Texture->AGreen,
-			  Texture->ABlue,
-			  0}; //если Texture->Bytes == 4, его возьмем
-	for (int i = 0; i < powWidth * powHeight * Texture->Bytes; i += Texture->Bytes) {
-		memcpy(*DIB+i, ColorF, Texture->Bytes);
+	// fill new buffer with default color and alpha
+	std::array<uint8_t, 4> ColorF{Texture.ARed, Texture.AGreen, Texture.ABlue, 0};
+	for (int i = 0; i < potWidth * potHeight * Texture.Bytes; i += Texture.Bytes) {
+		memcpy(DIB.data() + i, ColorF.data(), Texture.Bytes);
 	}
 
-	// находим отступ между строчками
-	int stride = Texture->Width * Texture->Bytes;
-	// должен быть приведен к кратности 4 байта построчно (чтобы не было проблем с нечетными данными)
-	while((stride % 4) != 0) {
-		stride++;
+	// calculate stride for new size
+	int tmpStride = Texture.Width * Texture.Bytes;
+
+	// copy pixels line by line
+	for (int y = 0; y < Texture.Height; y++) {
+		int st1 = ((y + potHeight - Texture.Height) * potWidth) * Texture.Bytes;
+		int st2 = (y * tmpStride);
+		memcpy(DIB.data() + st1, tmpDIB.data() + st2, tmpStride);
 	}
 
-	// вставляем исходный рисунок
-	for (int y = 0; y < Texture->Height; y++) {
-		int st1 = ((y + powHeight - Texture->Height) * powWidth) * Texture->Bytes;
-		int st2 = (y * stride);
-		memcpy(*DIB + st1, DIBtemp + st2, stride);
-	}
-
-	// меняем значения текстуры
-	Texture->Width = powWidth;
-	Texture->Height = powHeight;
-	// освобождаем память
-	if (DIBtemp)
-		delete [] DIBtemp;
+	// store new width and height
+	Texture.Width = potWidth;
+	Texture.Height = potHeight;
 }
 
 /*
  * Resize image to custom size.
  */
-static void ResizeImage(int width, int height, uint8_t **DIB, sTexture *Texture)
+static void ResizeImage(int newWidth, int newHeight, std::vector<uint8_t> &DIB, sTexture &Texture)
 {
-	if (!DIB || !Texture ||
-	    ((width == Texture->Width) && (height == Texture->Height)))
+	if (DIB.empty() || ((newWidth == Texture.Width) && (newHeight == Texture.Height)))
 		return;
 
-	// переносим во временный массив данные...
-	uint8_t *src = *DIB;
-	uint8_t *dst = new uint8_t[width * height * Texture->Bytes];
+	// don't copy DIB, but move, since we need resize it on next step
+	std::vector<uint8_t> tmpDIB{std::move(DIB)};
+	DIB.resize(newWidth * newHeight * Texture.Bytes);
 
-	// растягиваем исходный массив (или сжимаем)
-	for (int j = 0; j < height; j++) {
-		int y = (j * Texture->Height) / height;
-		int offset_y = y * Texture->Width;
-
-		for (int i = 0; i < width; i++) {
-			int x = (i * Texture->Width) / width;
-			int offset_x = (offset_y + x) * Texture->Bytes;
-
-			dst[(i + j * width) * Texture->Bytes] = src[offset_x];
-			dst[(i + j * width) * Texture->Bytes + 1] = src[offset_x + 1];
-			dst[(i + j * width) * Texture->Bytes + 2] = src[offset_x + 2];
-			if (Texture->Bytes == 4)
-				dst[(i + j * width) * Texture->Bytes + 3] = src[offset_x + 3];
+	// change size with nearest neighbor resizing algorithm for speed
+	for (int j = 0; j < newHeight; j++) {
+		int tmpOffsetY = ((j * Texture.Height) / newHeight) * Texture.Width;
+		for (int i = 0; i < newWidth; i++) {
+			// at this line we have only 3 or 4 bytes per pixel buffers
+			memcpy(DIB.data() + (i + j * newWidth) * Texture.Bytes,
+			       tmpDIB.data() + (tmpOffsetY + i * Texture.Width / newWidth) * Texture.Bytes,
+			       sizeof(DIB[0]) * Texture.Bytes);
 		}
 	}
 
 	// меняем значения текстуры
-	Texture->Width = width;
-	Texture->Height = height;
-	// освобождаем память
-	if (src)
-		delete [] src;
-
-	// устанавливаем указатель на новый блок памяти
-	*DIB = dst;
+	Texture.Width = newWidth;
+	Texture.Height = newHeight;
 }
 
 /*
  * Create alpha channel.
  */
-static void CreateAlpha(uint8_t **DIBRESULT, sTexture *Texture, int AlphaFlag)
+static void CreateAlpha(std::vector<uint8_t> &DIB, sTexture &Texture, int AlphaFlag)
 {
-	if (!DIBRESULT || !Texture)
+	if (DIB.empty())
 		return;
 
-	// находим отступ между строчками
-	int stride = Texture->Width * 3;
-	if (Texture->Width != 2 && Texture->Width != 1) {
-		while((stride % 4) != 0) {
-			stride++;
-		}
-	}
-	int stride2 = Texture->Width * 4;
-	while((stride2 % 4) != 0) {
-		stride2++;
-	}
+	// calculate stride for 3 bytes per pixel buffer
+	int tmpStride3 = Texture.Width * 3;
+	// calculate stride for 4 bytes per pixel buffer
+	int tmpStride4 = Texture.Width * 4;
 
-	// сохраняем во временном указателе
-	uint8_t *DIBtemp = *DIBRESULT;
-	uint8_t *DIB = new uint8_t[stride2 * Texture->Height];
+	// don't copy DIB, but move, since we need resize it on next step
+	std::vector<uint8_t> tmpDIB{std::move(DIB)};
+	DIB.resize(tmpStride4 * Texture.Height);
 
-	// Формируем данные по цветам...
-	uint8_t GreyRedC = (uint8_t)(((float)Texture->ARed / 255) * 76);
-	uint8_t GreyGreenC = (uint8_t)(((float)Texture->AGreen / 255) * 150);
-	uint8_t GreyBlueC = (uint8_t)(((float)Texture->ABlue / 255) * 28);
+	// generate alpha channel
+	uint8_t GreyRedC = (uint8_t)(((float)Texture.ARed / 255) * 76);
+	uint8_t GreyGreenC = (uint8_t)(((float)Texture.AGreen / 255) * 150);
+	uint8_t GreyBlueC = (uint8_t)(((float)Texture.ABlue / 255) * 28);
 	uint8_t GreyC = GreyBlueC + GreyGreenC + GreyRedC;
 
-	for(int j1 = 0; j1 < Texture->Height; j1++) {
-		int k1 = stride * j1;// делаем правильное смещение при переходе
-		int k2 = stride2 * j1;
+	for(int i = 0; i < Texture.Height; i++) {
+		int k1 = tmpStride3 * i;
+		int k2 = tmpStride4 * i;
 
-		for(int j2 = 0; j2 < Texture->Width; j2++) {
-			DIB[k2] = DIBtemp[k1];
-			DIB[k2 + 1] = DIBtemp[k1 + 1];
-			DIB[k2 + 2] = DIBtemp[k1 + 2];
+		for(int j2 = 0; j2 < Texture.Width; j2++) {
+			memcpy(DIB.data() + k2, tmpDIB.data() + k1, sizeof(DIB[0]) * 3);
 
 			uint8_t GreyRed, GreyGreen, GreyBlue, Grey;
 
 			switch(AlphaFlag) {
 			case TX_ALPHA_GREYSC:
-				// Формируем данные по цветам...
 				GreyRed = (uint8_t)(((float)DIB[k2 + 2] / 255) * 76);
 				GreyGreen = (uint8_t)(((float)DIB[k2 + 1] / 255) * 150);
 				GreyBlue = (uint8_t)(((float)DIB[k2] / 255) * 28);
@@ -283,62 +262,58 @@ static void CreateAlpha(uint8_t **DIBRESULT, sTexture *Texture, int AlphaFlag)
 				break;
 
 			case TX_ALPHA_EQUAL:
-				if ((Texture->ABlue == DIB[k2]) &&
-				    (Texture->AGreen == DIB[k2 + 1]) &&
-				    (Texture->ARed == DIB[k2 + 2]))
-					DIB[k2 + 3] = 0;//Alpha
+				if ((Texture.ABlue == DIB[k2]) &&
+				    (Texture.AGreen == DIB[k2 + 1]) &&
+				    (Texture.ARed == DIB[k2 + 2]))
+					DIB[k2 + 3] = 0;
 				else
 					DIB[k2 + 3] = 255;
 				break;
 
 			case TX_ALPHA_GEQUAL:
-				// Формируем данные по цветам...
 				GreyRed = (uint8_t)(((float)DIB[k2 + 2] / 255) * 76);
 				GreyGreen = (uint8_t)(((float)DIB[k2 + 1] / 255) * 150);
 				GreyBlue = (uint8_t)(((float)DIB[k2] / 255) * 28);
 				Grey = GreyBlue + GreyGreen + GreyRed;
 
 				if (GreyC >= Grey)
-					DIB[k2+3] = 0;//Alpha
+					DIB[k2 + 3] = 0;
 				else
 					DIB[k2 + 3] = 255;
 				break;
 
 			case TX_ALPHA_LEQUAL:
-				// Формируем данные по цветам...
 				GreyRed = (uint8_t)(((float)DIB[k2 + 2] / 255) * 76);
 				GreyGreen = (uint8_t)(((float)DIB[k2 + 1] / 255) * 150);
 				GreyBlue = (uint8_t)(((float)DIB[k2] / 255) * 28);
 				Grey = GreyBlue + GreyGreen + GreyRed;
 
 				if (GreyC <= Grey)
-					DIB[k2+3] = 0;//Alpha
+					DIB[k2 + 3] = 0;
 				else
 					DIB[k2 + 3] = 255;
 				break;
 
 			case TX_ALPHA_GREAT:
-				// Формируем данные по цветам...
 				GreyRed = (uint8_t)(((float)DIB[k2 + 2] / 255) * 76);
 				GreyGreen = (uint8_t)(((float)DIB[k2 + 1] / 255) * 150);
 				GreyBlue = (uint8_t)(((float)DIB[k2] / 255) * 28);
 				Grey = GreyBlue + GreyGreen + GreyRed;
 
 				if (GreyC > Grey)
-					DIB[k2 + 3] = 0;//Alpha
+					DIB[k2 + 3] = 0;
 				else
 					DIB[k2 + 3] = 255;
 				break;
 
 			case TX_ALPHA_LESS:
-				// Формируем данные по цветам...
 				GreyRed = (uint8_t)(((float)DIB[k2 + 2] / 255) * 76);
 				GreyGreen = (uint8_t)(((float)DIB[k2 + 1] / 255) * 150);
 				GreyBlue = (uint8_t)(((float)DIB[k2] / 255) * 28);
 				Grey = GreyBlue + GreyGreen + GreyRed;
 
 				if (GreyC < Grey)
-					DIB[k2+3] = 0;//Alpha
+					DIB[k2 + 3] = 0;
 				else
 					DIB[k2 + 3] = 255;
 				break;
@@ -353,49 +328,41 @@ static void CreateAlpha(uint8_t **DIBRESULT, sTexture *Texture, int AlphaFlag)
 		}
 	}
 
-	if (DIBtemp)
-		delete [] DIBtemp;
-	*DIBRESULT = DIB;
-	Texture->Bytes = 4;
+	// store new bytes per pixel
+	Texture.Bytes = 4;
 }
 
 /*
  * Remove alpha channel.
  */
-static void RemoveAlpha(uint8_t **DIBRESULT, sTexture *Texture)
+static void RemoveAlpha(std::vector<uint8_t> &DIB, sTexture &Texture)
 {
-	// находим отступ между строчками
-	int stride = Texture->Width * 3;
-	while ((stride % 4) != 0) {
-		stride++;
-	}
-	int stride2 = Texture->Width * 4;
-	while ((stride2 % 4) != 0) {
-		stride2++;
-	}
+	if (DIB.empty())
+		return;
 
-	// сохраняем во временном указателе
-	uint8_t *DIBtemp  = *DIBRESULT;
-	uint8_t *DIB = new uint8_t[stride * Texture->Height];
+	// calculate stride for 3 bytes per pixel buffer
+	int tmpStride3 = Texture.Width * 3;
+	// calculate stride for 4 bytes per pixel buffer
+	int tmpStride4 = Texture.Width * 4;
 
-	for(int j1 = 0; j1 < Texture->Height; j1++) {
-		int k1 = stride * j1;
-		int k2 = stride2 * j1;
+	// don't copy DIB, but move, since we need resize it on next step
+	std::vector<uint8_t> tmpDIB{std::move(DIB)};
+	DIB.resize(tmpStride3 * Texture.Height);
 
-		for(int j2 = 0; j2 < Texture->Width; j2++) {
-			DIB[k1] = DIBtemp[k2];
-			DIB[k1 + 1] = DIBtemp[k2 + 1];
-			DIB[k1 + 2] = DIBtemp[k2 + 2];
+	for(int i = 0; i < Texture.Height; i++) {
+		int k1 = tmpStride3 * i;
+		int k2 = tmpStride4 * i;
+
+		for(int j = 0; j < Texture.Width; j++) {
+			memcpy(DIB.data() + k1, tmpDIB.data() + k2, sizeof(DIB[0]) * 3);
 
 			k2 += 4;
 			k1 += 3;
 		}
 	}
 
-	if (DIBtemp)
-		delete [] DIBtemp;
-	*DIBRESULT = DIB;
-	Texture->Bytes = 3;
+	// store new bytes per pixel
+	Texture.Bytes = 3;
 }
 
 /*
@@ -406,33 +373,30 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 	if (SrcName.empty() || DestName.empty())
 		return;
 
-	int DWidth{0};
-	int DHeight{0};
-	int DChanels{0};
+	int tmpWidth{0};
+	int tmpHeight{0};
+	int tmpChanels{0};
 	std::vector<uint8_t> tmpImage{};
 	int LoadAs{TGA_FILE};
 
-	// Открываем файл
 	std::unique_ptr<sFILE> pFile = vw_fopen(SrcName);
 	if (pFile == nullptr) {
 		std::cerr << "Unable to found " << SrcName << "\n";
 		return;
 	}
 
-	// Ищем как грузить по расширению
-	// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
-	const char *file_ext = strrchr(SrcName.c_str(), '.');
-	if (file_ext) {
-		if (!strcasecmp(".tga", file_ext))
+	// check extension
+	const char *FileExt = strrchr(SrcName.c_str(), '.');
+	if (FileExt) {
+		if (!strcasecmp(".tga", FileExt))
 			LoadAs = TGA_FILE;
 		else
 			std::cerr << "Format not supported " << SrcName << "\n";
 	}
 
-	// Загружаем
 	switch (LoadAs) {
 	case TGA_FILE:
-		texture::ReadTGA(tmpImage, pFile.get(), DWidth, DHeight, DChanels);
+		texture::ReadTGA(tmpImage, pFile.get(), tmpWidth, tmpHeight, tmpChanels);
 		break;
 
 	default:
@@ -445,26 +409,23 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 		return;
 	}
 
-	// все, файл нам больше не нужен
 	vw_fclose(pFile);
 
-	// записываем данные на диск
+	// write data to disk
 	SDL_RWops *FileVW2D;
 	FileVW2D = SDL_RWFromFile(DestName.c_str(), "wb");
-	// если не можем создать файл на запись - уходим
 	if (!FileVW2D) {
 		std::cerr << "Can't create " << DestName << " file on disk.\n";
 		return;
 	}
 
-	// маркер файла 4 байта
 	char tmpSign[4]{'V','W','2','D'};
 	SDL_RWwrite(FileVW2D, tmpSign, 4, 1);
 
-	SDL_RWwrite(FileVW2D, &DWidth, sizeof(DWidth), 1);
-	SDL_RWwrite(FileVW2D, &DHeight, sizeof(DHeight), 1);
-	SDL_RWwrite(FileVW2D, &DChanels, sizeof(DChanels), 1);
-	SDL_RWwrite(FileVW2D, tmpImage.data(), DWidth * DHeight * DChanels, 1);
+	SDL_RWwrite(FileVW2D, &tmpWidth, sizeof(tmpWidth), 1);
+	SDL_RWwrite(FileVW2D, &tmpHeight, sizeof(tmpHeight), 1);
+	SDL_RWwrite(FileVW2D, &tmpChanels, sizeof(tmpChanels), 1);
+	SDL_RWwrite(FileVW2D, tmpImage.data(), tmpWidth * tmpHeight * tmpChanels, 1);
 
 	SDL_RWclose(FileVW2D);
 }
@@ -472,9 +433,10 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 /*
  * Load texture from file.
  */
-sTexture *vw_LoadTexture(const std::string &nName, int CompressionType, int LoadAs, int NeedResizeW, int NeedResizeH)
+sTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
+			 int LoadAs, int NeedResizeW, int NeedResizeH)
 {
-	if (nName.empty())
+	if (TextureName.empty())
 		return nullptr;
 
 	int DWidth{0};
@@ -482,45 +444,37 @@ sTexture *vw_LoadTexture(const std::string &nName, int CompressionType, int Load
 	int DChanels{0};
 	std::vector<uint8_t> tmpImage{};
 
-	// Открываем файл
-	std::unique_ptr<sFILE> pFile = vw_fopen(nName);
+	std::unique_ptr<sFILE> pFile = vw_fopen(TextureName);
 	if (!pFile) {
-		std::cerr << "Unable to found " << nName << "\n";
+		std::cerr << "Unable to found " << TextureName << "\n";
 		return nullptr;
 	}
 
-	// Ищем как грузить текстуру по расширению
+	// check extension
 	if (LoadAs == AUTO_FILE) {
-		// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
-		const char *file_ext = strrchr(nName.c_str(), '.');
-		if (file_ext) {
-			if (!strcasecmp(".tga", file_ext))
+		const char *FileExt = strrchr(TextureName.c_str(), '.');
+		if (FileExt) {
+			if (!strcasecmp(".tga", FileExt))
 				LoadAs = TGA_FILE;
-			else if (!strcasecmp(".vw2d", file_ext))
+			else if (!strcasecmp(".vw2d", FileExt))
 				LoadAs = VW2D_FILE;
 			else
-				std::cerr << "Format not supported " << nName << "\n";
+				std::cerr << "Format not supported " << TextureName << "\n";
 		}
 	}
 
-	// Загружаем текстуру
+	// load texture
 	switch(LoadAs) {
 	case TGA_FILE:
 		texture::ReadTGA(tmpImage, pFile.get(), DWidth, DHeight, DChanels);
 		break;
 
 	case VW2D_FILE:
-		// пропускаем заголовок "VW2D"
-		pFile->fseek(4, SEEK_SET);
-		// считываем ширину
+		pFile->fseek(4, SEEK_SET); // skip sign "VW2D"
 		pFile->fread(&DWidth, sizeof(DWidth), 1);
-		// считываем высоту
 		pFile->fread(&DHeight, sizeof(DHeight), 1);
-		// считываем кол-во каналов
 		pFile->fread(&DChanels, sizeof(DChanels), 1);
-		// резервируем память
 		tmpImage.resize(DWidth * DHeight * DChanels);
-		// считываем уже готовый к созданию текстуры массив
 		pFile->fread(tmpImage.data(), DWidth * DHeight * DChanels, 1);
 		break;
 
@@ -529,28 +483,27 @@ sTexture *vw_LoadTexture(const std::string &nName, int CompressionType, int Load
 	}
 
 	if (tmpImage.empty()) {
-		std::cerr << "Unable to load " << nName << "\n";
+		std::cerr << "Unable to load " << TextureName << "\n";
 		return nullptr;
 	}
 
-	// все, файл нам больше не нужен
 	vw_fclose(pFile);
 
-	return vw_CreateTextureFromMemory(nName, tmpImage.data(), DWidth, DHeight, DChanels,
+	return vw_CreateTextureFromMemory(TextureName, tmpImage, DWidth, DHeight, DChanels,
 					  CompressionType, NeedResizeW, NeedResizeH);
 }
 
 /*
  * Create texture from memory.
  */
-sTexture *vw_CreateTextureFromMemory(const std::string &TextureName, uint8_t *DIB, int DWidth,
-				     int DHeight, int DChanels, int CompressionType, int NeedResizeW,
+sTexture *vw_CreateTextureFromMemory(const std::string &TextureName, std::vector<uint8_t> &DIB, int DIBWidth,
+				     int DIBHeight, int DIBChanels, int CompressionType, int NeedResizeW,
 				     int NeedResizeH, bool NeedDuplicateCheck)
 {
-	if (TextureName.empty() || !DIB || (DWidth <= 0) || (DHeight <= 0))
+	if (TextureName.empty() || DIB.empty() || (DIBWidth <= 0) || (DIBHeight <= 0))
 		return nullptr;
 
-	// проверяем в списке, если уже создавали ее - просто возвращаем указатель
+	// check for availability, probably, we already have it loaded
 	if (NeedDuplicateCheck) {
 		sTexture *tmpTexture = vw_FindTextureByName(TextureName);
 		if (tmpTexture) {
@@ -559,53 +512,42 @@ sTexture *vw_CreateTextureFromMemory(const std::string &TextureName, uint8_t *DI
 		}
 	}
 
-	// Начальные установки текстуры
-	TexturesMap[TextureName].ARed = ARedTexMan;
-	TexturesMap[TextureName].AGreen = AGreenTexMan;
-	TexturesMap[TextureName].ABlue = ABlueTexMan;
+	TexturesMap[TextureName].ARed = ARedTex;
+	TexturesMap[TextureName].AGreen = AGreenTex;
+	TexturesMap[TextureName].ABlue = ABlueTex;
 	TexturesMap[TextureName].TextureID = 0;
-	TexturesMap[TextureName].Width = DWidth;
-	TexturesMap[TextureName].Height = DHeight;
-	TexturesMap[TextureName].Bytes = DChanels;
+	TexturesMap[TextureName].Width = DIBWidth;
+	TexturesMap[TextureName].Height = DIBHeight;
+	TexturesMap[TextureName].Bytes = DIBChanels;
 
-	// временный массив данных
-	uint8_t *tmp_image = new uint8_t[DWidth * DHeight * DChanels];
-	memcpy(tmp_image, DIB, DWidth * DHeight * DChanels);
+	// if we have alpha channel, but don't need them - remove
+	if ((TexturesMap[TextureName].Bytes == 4) && !AlphaTex)
+		RemoveAlpha(DIB, TexturesMap[TextureName]);
+	// if we don't have alpha channel, but need them - create
+	else if ((TexturesMap[TextureName].Bytes == 3) && (AlphaTex))
+		CreateAlpha(DIB, TexturesMap[TextureName], AFlagTex);
 
-	// Делаем альфа канал
-	if (TexturesMap[TextureName].Bytes == 4) {
-		if (!AlphaTexMan)
-			RemoveAlpha(&tmp_image, &TexturesMap[TextureName]);
-	} else if ((TexturesMap[TextureName].Bytes == 3) && (AlphaTexMan))
-		CreateAlpha(&tmp_image, &TexturesMap[TextureName], AFlagTexMan);
+	// Note, in case of resize, we should provide width and height (but not just one of them).
+	if (NeedResizeW && NeedResizeH)
+		ResizeImage(NeedResizeW, NeedResizeH, DIB, TexturesMap[TextureName]);
 
-	// Растягиваем, если есть запрос
-	if ((NeedResizeW != 0) && (NeedResizeH != 0))
-		ResizeImage(NeedResizeW, NeedResizeH, &tmp_image, &TexturesMap[TextureName]);
-
-	// Сохраняем размеры картинки
+	// in case we change size, it is important to store "source" (initial) size
+	// that need for 2D rendering calculation, when we operate with pixels
+	// and don't count on NPOT resize
 	TexturesMap[TextureName].SrcWidth = TexturesMap[TextureName].Width;
 	TexturesMap[TextureName].SrcHeight = TexturesMap[TextureName].Height;
 
-	// Делаем подгонку по размерам, с учетом необходимости железа
-	if (!vw_GetDevCaps()->TextureNPOTSupported) // если не поддерживаем - берем и сами растягиваем до степени двойки
-		Resize(&tmp_image, &TexturesMap[TextureName]);
+	// if hardware don't support NPOT textures, forced to resize them manually
+	if (!vw_GetDevCaps()->TextureNPOTSupported)
+		Resize(DIB, TexturesMap[TextureName]);
 
-	// Создаем текстуру
-	TexturesMap[TextureName].TextureID = vw_BuildTexture(tmp_image, TexturesMap[TextureName].Width,
-							     TexturesMap[TextureName].Height, MipMap,
+	TexturesMap[TextureName].TextureID = vw_BuildTexture(DIB.data(), TexturesMap[TextureName].Width,
+							     TexturesMap[TextureName].Height, MipMapTex,
 							     TexturesMap[TextureName].Bytes, CompressionType);
-	// устанавливаем параметры
-	vw_SetTextureFiltering(FilteringTexMan);
-	vw_SetTextureAddressMode(Address_ModeTexMan);
-	// анбиндим
+	vw_SetTextureFiltering(FilteringTex);
+	vw_SetTextureAddressMode(Address_ModeTex);
 	vw_BindTexture(0, 0);
 
-	// освобождаем память
-	if (tmp_image)
-		delete [] tmp_image;
-
-	// присоединяем текстуру к менеджеру текстур
 	std::cout << "Texture created from memory: " << TextureName << "\n";
 	return &TexturesMap[TextureName];
 }
