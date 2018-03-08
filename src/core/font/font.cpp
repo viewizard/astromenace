@@ -114,8 +114,6 @@ std::forward_list<std::unique_ptr<sFontChar>> FontCharsList;
 // required size only one time per game execution.
 // Never use reset(), only clear() for this buffer.
 std::vector<float> DrawBuffer{};
-// utf8 -> utf32 converter
-std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> ConvUTF8toUTF32;
 // space character utf32 code
 constexpr char32_t SpaceUTF32{32};
 
@@ -499,7 +497,7 @@ int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontSc
 	std::vsnprintf(buffer.data(), buffer.size(), Text, ap);
 	va_end(ap);
 	// convert from utf8 into utf32
-	const std::u32string UTF32String{ConvUTF8toUTF32.from_bytes(buffer.data())};
+	const std::u32string UTF32String{ConvertUTF8.from_bytes(buffer.data())};
 
 	return vw_DrawFontUTF32(X, Y, StrictWidth, ExpandWidth, FontScale, R, G, B, Transp, UTF32String);
 }
@@ -648,7 +646,7 @@ int vw_FontSize(const char *Text, ...)
 	std::vsnprintf(buffer.data(), buffer.size(), Text, ap);
 	va_end(ap);
 	// convert from utf8 into utf32
-	const std::u32string UTF32String{ConvUTF8toUTF32.from_bytes(buffer.data())};
+	const std::u32string UTF32String{ConvertUTF8.from_bytes(buffer.data())};
 
 	return vw_FontSizeUTF32(UTF32String);
 }
@@ -701,7 +699,7 @@ int vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 	std::vsnprintf(buffer.data(), buffer.size(), Text, ap);
 	va_end(ap);
 	// convert from utf8 into utf32
-	const std::u32string UTF32String{ConvUTF8toUTF32.from_bytes(buffer.data())};
+	const std::u32string UTF32String{ConvertUTF8.from_bytes(buffer.data())};
 
 	return vw_DrawFont3DUTF32(X, Y, Z, UTF32String);
 }
