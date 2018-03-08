@@ -1273,7 +1273,7 @@ void LoadGameData(eLoading LoadType)
 	if (LoadType == eLoading::MenuWithLogo) {
 		// выводим логотип Viewizard
 		vw_SetTextureProp(TEXTURE_NO_MIPMAP, RI_CLAMP_TO_EDGE, false, TX_ALPHA_EQUAL, false);
-		sTexture *ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga", nullptr, 0);
+		sTexture *ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga", 0);
 
 		DrawViewizardLogo(ViewizardLogoTexture);
 
@@ -1289,28 +1289,28 @@ void LoadGameData(eLoading LoadType)
 	// загружаем картинки вывода загрузки
 	vw_SetTextureAlpha(0, 0, 0);
 	vw_SetTextureProp(TEXTURE_NO_MIPMAP, RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
-	vw_LoadTexture("loading/loading_line.tga", nullptr, 0);
-	vw_LoadTexture("loading/loading_back.tga", nullptr, 0);
+	vw_LoadTexture("loading/loading_line.tga", 0);
+	vw_LoadTexture("loading/loading_back.tga", 0);
 	vw_SetTextureProp(TEXTURE_NO_MIPMAP, RI_CLAMP_TO_EDGE, false, TX_ALPHA_GREYSC, false);
 
 	LoadImageTexture = nullptr;
 
 	switch (1+vw_iRandNum(3)) {
 	case 1:
-		LoadImageTexture = vw_LoadTexture("loading/loading01.tga", nullptr, 0);
+		LoadImageTexture = vw_LoadTexture("loading/loading01.tga", 0);
 		break;
 	case 2:
-		LoadImageTexture = vw_LoadTexture("loading/loading02.tga", nullptr, 0);
+		LoadImageTexture = vw_LoadTexture("loading/loading02.tga", 0);
 		break;
 	case 3:
-		LoadImageTexture = vw_LoadTexture("loading/loading03.tga", nullptr, 0);
+		LoadImageTexture = vw_LoadTexture("loading/loading03.tga", 0);
 		break;
 	case 4:
-		LoadImageTexture = vw_LoadTexture("loading/loading04.tga", nullptr, 0);
+		LoadImageTexture = vw_LoadTexture("loading/loading04.tga", 0);
 		break;
 	// на всякий случай
 	default:
-		LoadImageTexture = vw_LoadTexture("loading/loading01.tga", nullptr, 0);
+		LoadImageTexture = vw_LoadTexture("loading/loading01.tga", 0);
 		break;
 	}
 
@@ -1392,7 +1392,7 @@ void LoadGameData(eLoading LoadType)
 				vw_SetTextureProp(CurrentList[i].TextFiltr, CurrentList[i].TextWrap,
 						  CurrentList[i].Alpha, CurrentList[i].AlphaMode, CurrentList[i].MipMap);
 
-				vw_LoadTexture(CurrentList[i].FileName, nullptr, CurrentList[i].NeedCompression ? Setup.TexturesCompressionType : 0);
+				vw_LoadTexture(CurrentList[i].FileName, CurrentList[i].NeedCompression ? Setup.TexturesCompressionType : 0);
 			}
 			break;
 
@@ -1459,7 +1459,7 @@ void LoadGameData(eLoading LoadType)
 				    !strncmp("models/NORMALMAP", CurrentList[i].FileName, strlen("models/NORMALMAP")))
 					break;
 
-				vw_LoadTexture(CurrentList[i].FileName, nullptr, CurrentList[i].NeedCompression ? Setup.TexturesCompressionType : 0, AUTO_FILE, W, H);
+				vw_LoadTexture(CurrentList[i].FileName, CurrentList[i].NeedCompression ? Setup.TexturesCompressionType : 0, AUTO_FILE, W, H);
 			}
 			break;
 

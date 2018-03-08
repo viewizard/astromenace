@@ -71,5 +71,6 @@
 #define ERR_VFS_BUILD		-4	// VFS build number issue
 #define ERR_EXT_RES		-5	// issue with external resources
 #define ERR_MEM			-6	// memory allocation related issue
+#define ERR_NOT_SUPPORTED	-7	// file format not supported
 
 #endif // Base_H

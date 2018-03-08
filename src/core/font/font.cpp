@@ -278,7 +278,7 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 
 		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE,
 				  RI_CLAMP_TO_EDGE, true, TX_ALPHA_GREYSC, false);
-		FontCharsList.front()->Texture = vw_CreateTextureFromMemory(FakeTextureFileName.c_str(), tmpPixels.data(),
+		FontCharsList.front()->Texture = vw_CreateTextureFromMemory(FakeTextureFileName, tmpPixels.data(),
 									    FontCharsList.front()->Width, FontCharsList.front()->Height,
 									    4, 0, 0, 0, false);
 	}

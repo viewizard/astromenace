@@ -29,10 +29,10 @@
 
 #include "../base.h"
 
-// File types (for LoadAs parametre)
-#define AUTO_FILE			0	// Detect by file extension
-#define VW2D_FILE			1	// VW2D file
-#define TGA_FILE			2	// TGA file
+// File types (for LoadAs parameter)
+#define AUTO_FILE	0	// Detect by file extension
+#define VW2D_FILE	1	// VW2D file
+#define TGA_FILE	2	// TGA file
 
 // Create alpha channel by image greyscale color
 #define TX_ALPHA_GREYSC		0x0021
@@ -48,53 +48,39 @@
 #define TX_ALPHA_LESS		0x0026
 
 struct sTexture {
-	char*	Name;			// File name
+	uint8_t ARed;		// Alpha channel red color
+	uint8_t AGreen;		// Alpha channel green color
+	uint8_t ABlue;		// Alpha channel blue color
 
-	uint8_t	ARed;			// Alpha channel red color
-	uint8_t	AGreen;			// Alpha channel green color
-	uint8_t	ABlue;			// Alpha channel blue color
+	int Width;		// Texture width
+	int Height;		// Texture height
+	int SrcWidth;		// Source image width
+	int SrcHeight;		// Source image height
 
-	int		Width;			// Texture width
-	int		Height;			// Texture height
-	int		SrcWidth;		// Source image width
-	int		SrcHeight;		// Source image height
+	int Bytes;		// Bytes per pixel (not bits!)
 
-	int		Bytes;			// Bytes Per Pixel
-
-	unsigned	TextureID;		// Номер текстуры
-
-	sTexture	*Prev;		// Pointer to the previous loaded Texture in the memory
-	sTexture	*Next;		// Pointer to the next loaded Texture in the memory
-	int			Num;		// ID number
+	unsigned TextureID;	// Texture ID (OpenGL related)
 };
 
-
-// sTexture functions
-// Load texture from file
-sTexture *vw_LoadTexture(const char *TextureName, const char *RememberAsName, int CompressionType, int LoadAs=AUTO_FILE, int NeedResizeW=0, int NeedResizeH=0);
-// Create texture from memory
-sTexture *vw_CreateTextureFromMemory(const char *TextureName, uint8_t *DIB, int DWidth, int DHeight, int DChanels, int CompressionType, int NeedResizeW=0, int NeedResizeH=0, bool NeedDuplicateCheck=true);
-// Release texture
+// Load texture from file.
+sTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
+			 int LoadAs = AUTO_FILE, int NeedResizeW = 0, int NeedResizeH = 0);
+// Create texture from memory.
+sTexture *vw_CreateTextureFromMemory(const std::string &TextureName, uint8_t *DIB, int DWidth,
+				     int DHeight, int DChanels, int CompressionType, int NeedResizeW = 0,
+				     int NeedResizeH = 0, bool NeedDuplicateCheck = true);
+// Release texture.
 void vw_ReleaseTexture(sTexture* Texture);
-
-
-// Texture manager functions
-
-// Release all textures
-void		vw_ReleaseAllTextures();
-// Set textures properties
-void		vw_SetTextureProp(int nFiltering, int nAddress_Mode, bool nAlpha = false, int nAFlag = TX_ALPHA_EQUAL, bool nMipMap = true);
-// Set textures alpha color
-void		vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue);
-
-// Find texture by name
-sTexture *vw_FindTextureByName(const char *Name);
-// Find texture by ID
-sTexture *vw_FindTextureByNum(int Num);
-
-
-// Convert supported image file to VW2D format
-void 		vw_ConvertImageToVW2D(const char *SrcName, const char *DestName);
-
+// Release all textures.
+void vw_ReleaseAllTextures();
+// Set textures properties.
+void vw_SetTextureProp(int nFiltering, int nAddress_Mode, bool nAlpha = false,
+		       int nAFlag = TX_ALPHA_EQUAL, bool nMipMap = true);
+// Set textures alpha color.
+void vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue);
+// Find texture by name.
+sTexture *vw_FindTextureByName(const std::string &Name);
+// Convert supported image file format to VW2D format.
+void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestName);
 
 #endif // Texture_H

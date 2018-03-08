@@ -196,7 +196,6 @@
 		<Unit filename="src/core/text/text.h" />
 		<Unit filename="src/core/texture/texture.cpp" />
 		<Unit filename="src/core/texture/texture.h" />
-		<Unit filename="src/core/texture/texture_manager.cpp" />
 		<Unit filename="src/core/texture/texture_tga.cpp" />
 		<Unit filename="src/core/vfs/vfs.cpp" />
 		<Unit filename="src/core/vfs/vfs.h" />
