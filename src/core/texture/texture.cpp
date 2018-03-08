@@ -111,12 +111,11 @@ void vw_ReleaseTexture(sTexture *Texture)
 	if (!Texture)
 		return;
 
-	vw_DeleteTexture(Texture->TextureID);
-
 	// we are forced to check them all in cycle, since our key is texture's name
 	for (const auto &tmpTexture : TexturesMap) {
 		// TextureID should be unique, as texture name
 		if (tmpTexture.second.TextureID == Texture->TextureID) {
+			vw_DeleteTexture(Texture->TextureID);
 			TexturesMap.erase(tmpTexture.first);
 			// forced to leave - current iterator invalidated by erase()
 			break;

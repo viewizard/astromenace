@@ -101,11 +101,6 @@ struct sFontChar {
 		return ((UTF32 == _UTF32) &&
 			(FontSize == InternalFontSize));
 	}
-	void CheckTexture(sTexture *_Texture)
-	{
-		if (Texture == _Texture)
-			Texture = nullptr;
-	}
 };
 
 // List with connected font characters.
@@ -206,21 +201,7 @@ void vw_ReleaseAllFontChars()
 {
 	// release all font characters
 	while (!FontCharsList.empty()) {
-
-		// TODO this should be fixed in "texture" subsystem, this part is ugly
-
-		// release texture, created to this character
-		if (FontCharsList.front()->Texture) {
-			// one texture could be used by many characters
-			// make sure, we don't release one texture twice
-			sTexture *Texture = FontCharsList.front()->Texture;
-			// a bit tricky, since we can't work with iterator for
-			// forward_list<unique_ptr<T>> in usual way
-			for (const auto &tmpChar : FontCharsList) {
-				tmpChar->CheckTexture(Texture);
-			}
-			vw_ReleaseTexture(Texture);
-		}
+		vw_ReleaseTexture(FontCharsList.front()->Texture);
 		FontCharsList.pop_front();
 	}
 	// reset list
