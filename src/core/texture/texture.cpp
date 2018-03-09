@@ -154,7 +154,7 @@ static int PowerOfTwo(int Num)
 /*
  * Resize image to closest power of two size.
  */
-static void Resize(std::vector<uint8_t> &DIB, sTexture &Texture)
+static void ResizeToPOT(std::vector<uint8_t> &DIB, sTexture &Texture)
 {
 	if (DIB.empty())
 		return;
@@ -171,20 +171,20 @@ static void Resize(std::vector<uint8_t> &DIB, sTexture &Texture)
 	std::vector<uint8_t> tmpDIB{std::move(DIB)};
 	DIB.resize(potWidth * potHeight * Texture.Bytes);
 
-	// fill new buffer with default color and alpha
+	// fill new buffer with default color and alpha (if we have alpha channel)
 	std::array<uint8_t, 4> ColorF{Texture.ARed, Texture.AGreen, Texture.ABlue, 0};
 	for (int i = 0; i < potWidth * potHeight * Texture.Bytes; i += Texture.Bytes) {
 		memcpy(DIB.data() + i, ColorF.data(), Texture.Bytes);
 	}
 
-	// calculate stride for new size
+	// calculate stride
 	int tmpStride = Texture.Width * Texture.Bytes;
 
 	// copy pixels line by line
 	for (int y = 0; y < Texture.Height; y++) {
-		int st1 = ((y + potHeight - Texture.Height) * potWidth) * Texture.Bytes;
-		int st2 = (y * tmpStride);
-		memcpy(DIB.data() + st1, tmpDIB.data() + st2, tmpStride);
+		int tmpOffsetDst = (y + potHeight - Texture.Height) * potWidth * Texture.Bytes;
+		int tmpOffsetSrc = y * tmpStride;
+		memcpy(DIB.data() + tmpOffsetDst, tmpDIB.data() + tmpOffsetSrc, tmpStride);
 	}
 
 	// store new width and height
@@ -206,11 +206,10 @@ static void ResizeImage(int newWidth, int newHeight, std::vector<uint8_t> &DIB, 
 
 	// change size with nearest neighbor resizing algorithm for speed
 	for (int j = 0; j < newHeight; j++) {
-		int tmpOffsetY = ((j * Texture.Height) / newHeight) * Texture.Width;
+		int tmpOffset = ((j * Texture.Height) / newHeight) * Texture.Width;
 		for (int i = 0; i < newWidth; i++) {
-			// at this line we have only 3 or 4 bytes per pixel buffers
 			memcpy(DIB.data() + (i + j * newWidth) * Texture.Bytes,
-			       tmpDIB.data() + (tmpOffsetY + i * Texture.Width / newWidth) * Texture.Bytes,
+			       tmpDIB.data() + (tmpOffset + i * Texture.Width / newWidth) * Texture.Bytes,
 			       sizeof(DIB[0]) * Texture.Bytes);
 		}
 	}
@@ -228,45 +227,42 @@ static void CreateAlpha(std::vector<uint8_t> &DIB, sTexture &Texture, int AlphaF
 	if (DIB.empty())
 		return;
 
-	// calculate stride for 3 bytes per pixel buffer
-	int tmpStride3 = Texture.Width * 3;
-	// calculate stride for 4 bytes per pixel buffer
-	int tmpStride4 = Texture.Width * 4;
-
 	// don't copy DIB, but move, since we need resize it on next step
 	std::vector<uint8_t> tmpDIB{std::move(DIB)};
-	DIB.resize(tmpStride4 * Texture.Height);
+	DIB.resize(Texture.Width * Texture.Height * 4);
 
 	for(int i = 0; i < Texture.Height; i++) {
-		int k1 = tmpStride3 * i;
-		int k2 = tmpStride4 * i;
+		int tmpOffsetDst = Texture.Width * 4 * i;
+		int tmpOffsetSrc = Texture.Width * 3 * i;
 
 		for(int j2 = 0; j2 < Texture.Width; j2++) {
-			memcpy(DIB.data() + k2, tmpDIB.data() + k1, sizeof(DIB[0]) * 3);
+			// copy color
+			memcpy(DIB.data() + tmpOffsetDst, tmpDIB.data() + tmpOffsetSrc, sizeof(DIB[0]) * 3);
 
+			// create alpha
 			switch(AlphaFlag) {
 			case TX_ALPHA_GREYSC:
-				DIB[k2 + 3] = (uint8_t)(((float)DIB[k2] / 255) * 28) +
-					      (uint8_t)(((float)DIB[k2 + 1] / 255) * 150) +
-					      (uint8_t)(((float)DIB[k2 + 2] / 255) * 76);
+				DIB[tmpOffsetDst + 3] = (uint8_t)(((float)DIB[tmpOffsetDst] / 255) * 28) +
+							(uint8_t)(((float)DIB[tmpOffsetDst + 1] / 255) * 150) +
+							(uint8_t)(((float)DIB[tmpOffsetDst + 2] / 255) * 76);
 				break;
 
 			case TX_ALPHA_EQUAL:
-				if ((Texture.ABlue == DIB[k2]) &&
-				    (Texture.AGreen == DIB[k2 + 1]) &&
-				    (Texture.ARed == DIB[k2 + 2]))
-					DIB[k2 + 3] = 0;
+				if ((Texture.ABlue == DIB[tmpOffsetDst]) &&
+				    (Texture.AGreen == DIB[tmpOffsetDst + 1]) &&
+				    (Texture.ARed == DIB[tmpOffsetDst + 2]))
+					DIB[tmpOffsetDst + 3] = 0;
 				else
-					DIB[k2 + 3] = 255;
+					DIB[tmpOffsetDst + 3] = 255;
 				break;
 
 			default:
-				DIB[k2 + 3] = 255;
+				DIB[tmpOffsetDst + 3] = 255;
 				break;
 			}
 
-			k2 += 4;
-			k1 += 3;
+			tmpOffsetDst += 4;
+			tmpOffsetSrc += 3;
 		}
 	}
 
@@ -282,24 +278,19 @@ static void RemoveAlpha(std::vector<uint8_t> &DIB, sTexture &Texture)
 	if (DIB.empty())
 		return;
 
-	// calculate stride for 3 bytes per pixel buffer
-	int tmpStride3 = Texture.Width * 3;
-	// calculate stride for 4 bytes per pixel buffer
-	int tmpStride4 = Texture.Width * 4;
-
 	// don't copy DIB, but move, since we need resize it on next step
 	std::vector<uint8_t> tmpDIB{std::move(DIB)};
-	DIB.resize(tmpStride3 * Texture.Height);
+	DIB.resize(Texture.Width * Texture.Height * 3);
 
 	for(int i = 0; i < Texture.Height; i++) {
-		int k1 = tmpStride3 * i;
-		int k2 = tmpStride4 * i;
+		int tmpOffsetDst = Texture.Width * 3 * i;
+		int tmpOffsetSrc = Texture.Width * 4 * i;
 
 		for(int j = 0; j < Texture.Width; j++) {
-			memcpy(DIB.data() + k1, tmpDIB.data() + k2, sizeof(DIB[0]) * 3);
+			memcpy(DIB.data() + tmpOffsetDst, tmpDIB.data() + tmpOffsetSrc, sizeof(DIB[0]) * 3);
 
-			k2 += 4;
-			k1 += 3;
+			tmpOffsetDst += 3;
+			tmpOffsetSrc += 4;
 		}
 	}
 
@@ -481,7 +472,7 @@ sTexture *vw_CreateTextureFromMemory(const std::string &TextureName, std::vector
 
 	// if hardware don't support NPOT textures, forced to resize them manually
 	if (!vw_GetDevCaps()->TextureNPOTSupported)
-		Resize(DIB, TexturesMap[TextureName]);
+		ResizeToPOT(DIB, TexturesMap[TextureName]);
 
 	TexturesMap[TextureName].TextureID = vw_BuildTexture(DIB.data(), TexturesMap[TextureName].Width,
 							     TexturesMap[TextureName].Height, MipMapTex,
