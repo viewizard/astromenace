@@ -62,7 +62,7 @@ float   GameCameraDeviationAge = 0.0f;
 void InitGameCamera()
 {
 	GamePoint = sVECTOR3D(0.0f, 0.0f, 0.0f);
-	GameCameraLastUpdate = vw_GetTime(1);
+	GameCameraLastUpdate = vw_GetTimeThread(1);
 
 	GameCameraDeviation = 0.0f;
 	GameCameraDeviationTime = 0.0f;

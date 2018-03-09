@@ -155,23 +155,23 @@ void InitMenu()
 	if (Setup.MenuScript > 2) Setup.MenuScript = 0;
 	switch (Setup.MenuScript) {
 	case 0:
-		Script->RunScript("script/menu1.xml", vw_GetTime());
+		Script->RunScript("script/menu1.xml", vw_GetTimeThread());
 		break;
 	case 1:
-		Script->RunScript("script/menu2.xml", vw_GetTime());
+		Script->RunScript("script/menu2.xml", vw_GetTimeThread());
 		break;
 	case 2:
-		Script->RunScript("script/menu3.xml", vw_GetTime());
+		Script->RunScript("script/menu3.xml", vw_GetTimeThread());
 		break;
 	// на всякий случай
 	default:
-		Script->RunScript("script/menu1.xml", vw_GetTime());
+		Script->RunScript("script/menu1.xml", vw_GetTimeThread());
 		break;
 	}
 	Setup.MenuScript ++;
 
 	// немного прокручиваем скрипт
-	float Time1 = vw_GetTime();
+	float Time1 = vw_GetTimeThread();
 	Script->StartTime = Time1-30;
 	Script->TimeLastOp = Time1-30;
 	for (float i=Time1-30; i<Time1; i+=1.0f) {
@@ -217,10 +217,10 @@ void InitMenu()
 	psSpace->TimeLastUpdate = Time;
 
 
-	LastMenuUpdateTime = vw_GetTime();
+	LastMenuUpdateTime = vw_GetTimeThread();
 	NeedShowMenu = true;
 	NeedHideMenu = false;
-	LastMenuOnOffUpdateTime = vw_GetTime();
+	LastMenuOnOffUpdateTime = vw_GetTimeThread();
 	MenuBlackTransp = 1.0f;
 	NeedOnMenu = true;
 	// подстраховка, если не укажем меню, перейдем в основное
@@ -228,8 +228,8 @@ void InitMenu()
 
 	DrawGameCursor = true;
 
-	StarsTileUpdateTime = vw_GetTime();
-	StarsTileUpdateTime2 = vw_GetTime();
+	StarsTileUpdateTime = vw_GetTimeThread();
+	StarsTileUpdateTime2 = vw_GetTimeThread();
 }
 
 
@@ -335,7 +335,7 @@ void SetMenu(eMenuStatus Menu)
 
 	case eMenuStatus::CREDITS:
 		CreditsCurrentPos = 0.0f;
-		LastCreditsCurrentPosUpdateTime = vw_GetTime();
+		LastCreditsCurrentPosUpdateTime = vw_GetTimeThread();
 		break;
 
 	default:
@@ -348,7 +348,7 @@ void SetMenu(eMenuStatus Menu)
 	// прячем текущее меню
 	NeedShowMenu = false;
 	NeedHideMenu = true;
-	LastMenuUpdateTime = vw_GetTime();
+	LastMenuUpdateTime = vw_GetTimeThread();
 
 
 
@@ -375,7 +375,7 @@ void SetMenu2(eMenuStatus Menu)
 	PrevMenu = MenuStatus;
 	MenuStatus = Menu;
 
-	float Time = vw_GetTime();
+	float Time = vw_GetTimeThread();
 	Button1Transp = 1.0f;
 	LastButton1UpdateTime = Time;
 	Button2Transp = 1.0f;
@@ -419,11 +419,11 @@ void DrawMenu()
 
 	// делаем плавное появление меню
 	if (NeedShowMenu) {
-		MenuContentTransp = 2.4f*(vw_GetTime()-LastMenuUpdateTime);
+		MenuContentTransp = 2.4f*(vw_GetTimeThread()-LastMenuUpdateTime);
 		if (MenuContentTransp >= 1.0f) {
 			MenuContentTransp = 1.0f;
 			NeedShowMenu = false;
-			LastMenuUpdateTime = vw_GetTime();
+			LastMenuUpdateTime = vw_GetTimeThread();
 
 			// выводим подсказку, если нужно
 			if (MenuStatus == eMenuStatus::PROFILE)
@@ -441,11 +441,11 @@ void DrawMenu()
 
 	// делаем полавное угасание меню
 	if (NeedHideMenu) {
-		MenuContentTransp = 1.0f - 2.4f*(vw_GetTime() - LastMenuUpdateTime);
+		MenuContentTransp = 1.0f - 2.4f*(vw_GetTimeThread() - LastMenuUpdateTime);
 		if (MenuContentTransp <= 0.0f) {
 			MenuContentTransp = 0.0f;
 			SetMenu2(NextMenu);
-			LastMenuUpdateTime = vw_GetTime();
+			LastMenuUpdateTime = vw_GetTimeThread();
 			NeedShowMenu = true;
 			NeedHideMenu = false;
 		}
@@ -493,8 +493,8 @@ void DrawMenu()
 
 
 	// после полной прорисовки делаем обновление данных
-	UpdateAllObject3D(vw_GetTime());
-	vw_UpdateAllParticleSystems(vw_GetTime());
+	UpdateAllObject3D(vw_GetTimeThread());
+	vw_UpdateAllParticleSystems(vw_GetTimeThread());
 
 
 
@@ -503,7 +503,7 @@ void DrawMenu()
 	// работаем со скриптом, пока он есть
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if ((Script != nullptr) &&
-	    (!Script->Update(vw_GetTime()))) {
+	    (!Script->Update(vw_GetTimeThread()))) {
 		// удаляем скрипт
 		delete Script;
 		Script = nullptr;
@@ -601,11 +601,11 @@ void DrawMenu()
 
 	// черное затемнение, если нужно
 	if (NeedOnMenu) {
-		MenuBlackTransp = 1.0f - 2.4f*(vw_GetTime() - LastMenuOnOffUpdateTime);
+		MenuBlackTransp = 1.0f - 2.4f*(vw_GetTimeThread() - LastMenuOnOffUpdateTime);
 		if (MenuBlackTransp <= 0.0f) {
 			MenuBlackTransp = 0.0f;
 			NeedOnMenu = false;
-			LastMenuOnOffUpdateTime = vw_GetTime();
+			LastMenuOnOffUpdateTime = vw_GetTimeThread();
 		}
 
 		vw_Start2DMode(-1,1);
@@ -619,10 +619,10 @@ void DrawMenu()
 
 	// черное затемнение, выключаем воркшоп (готовимся к переходу на игру)
 	if (ComBuffer == eCommand::TURN_OFF_WORKSHOP_MENU) {
-		MenuBlackTransp = 2.4f*(vw_GetTime() - LastMenuOnOffUpdateTime);
+		MenuBlackTransp = 2.4f*(vw_GetTimeThread() - LastMenuOnOffUpdateTime);
 		if (MenuBlackTransp >= 1.0f) {
 			MenuBlackTransp = 1.0f;
-			LastMenuOnOffUpdateTime = vw_GetTime();
+			LastMenuOnOffUpdateTime = vw_GetTimeThread();
 			// переход на игру
 			WorkshopDestroyData();
 			ComBuffer = eCommand::SWITCH_TO_GAME;

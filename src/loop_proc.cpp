@@ -99,12 +99,12 @@ void Loop_Proc()
 	// начальная установка
 	CurrentCursorStatus = 0;
 	if (CurrentCursorFlashLastTime == -1.0f) {
-		CurrentCursorFlashLastTime = vw_GetTime();
+		CurrentCursorFlashLastTime = vw_GetTimeThread();
 	} else {
-		CurrentCursorFlash -= vw_GetTime() - CurrentCursorFlashLastTime;
+		CurrentCursorFlash -= vw_GetTimeThread() - CurrentCursorFlashLastTime;
 		if (CurrentCursorFlash < 0.3f)
 			CurrentCursorFlash = 1.0f;
-		CurrentCursorFlashLastTime = vw_GetTime();
+		CurrentCursorFlashLastTime = vw_GetTimeThread();
 	}
 
 
@@ -174,7 +174,7 @@ void Loop_Proc()
 
 
 		CursorParticleSystem2D->MoveSystem(sVECTOR3D(mX*1.0f+23,mY*1.0f+19,0.0f));
-		CursorParticleSystem2D->Update(vw_GetTime());
+		CursorParticleSystem2D->Update(vw_GetTimeThread());
 		CursorParticleSystem2D->Draw();
 
 		SrcRect(0,0,64,64 );
@@ -320,12 +320,12 @@ void Loop_Proc()
 
 
 	// самым последним - просчет фпс
-	float FPSTime = vw_GetTime();
+	float FPSTime = vw_GetTimeThread();
 	if (FPSTime - LastSecond > UPDATE_SPEED_MS) {
 		eFPS = eCurrentFrames * (FPSTime - LastSecond);
 		eCurrentFrames = 0;
 		LastSecond = FPSTime;
-	} else if (FPSTime - LastSecond < 0) // game was restarted, vw_GetTime() re-initialized
+	} else if (FPSTime - LastSecond < 0) // game was restarted, vw_GetTimeThread() re-initialized
 		LastSecond = FPSTime;
 	++eCurrentFrames;
 

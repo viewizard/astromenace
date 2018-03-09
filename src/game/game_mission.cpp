@@ -46,12 +46,12 @@ extern float CurrentAlert3;
 void GameSetMissionTitleData(float ShowTime, int Num)
 {
 	MissionTitleLifeTime = ShowTime;
-	LastMissionTitleUpdateTime = vw_GetTime();
+	LastMissionTitleUpdateTime = vw_GetTimeThread();
 	MissionTitleNum = Num;
 
 	// пока ничего не показываем
 	MissionFailedLifeTime = 0.0f;
-	LastMissionFailedUpdateTime = vw_GetTime();
+	LastMissionFailedUpdateTime = vw_GetTimeThread();
 }
 
 
@@ -179,8 +179,8 @@ void GameDrawMissionTitle()
 	// нам тут делать нечего
 	if (MissionTitleLifeTime <= 0.0f) return;
 
-	float TimeDelta = vw_GetTime() - LastMissionTitleUpdateTime;
-	LastMissionTitleUpdateTime = vw_GetTime();
+	float TimeDelta = vw_GetTimeThread() - LastMissionTitleUpdateTime;
+	LastMissionTitleUpdateTime = vw_GetTimeThread();
 
 	MissionTitleLifeTime -= TimeDelta;
 
@@ -226,7 +226,7 @@ void GameDrawMissionTitle()
 void GameSetMissionFailedData(float ShowTime)
 {
 	MissionFailedLifeTime = ShowTime;
-	LastMissionFailedUpdateTime = vw_GetTime();
+	LastMissionFailedUpdateTime = vw_GetTimeThread();
 	// выводим курсор
 	DrawGameCursor = true;
 	// сброс кнопки мышки, чтобы случайно не нажали
@@ -242,8 +242,8 @@ void GameDrawMissionFailed()
 	// нам тут делать нечего
 	if (MissionFailedLifeTime <= 0.0f) return;
 
-	float TimeDelta = vw_GetTime() - LastMissionFailedUpdateTime;
-	LastMissionFailedUpdateTime = vw_GetTime();
+	float TimeDelta = vw_GetTimeThread() - LastMissionFailedUpdateTime;
+	LastMissionFailedUpdateTime = vw_GetTimeThread();
 
 	// считаем только если не отображается меню
 	if (GameContentTransp <= 0.0f)

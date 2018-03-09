@@ -39,8 +39,8 @@ void CreditsMenu()
 {
 
 	// делаем движение
-	CreditsCurrentPos -= 40.0f*(vw_GetTime() - LastCreditsCurrentPosUpdateTime);
-	LastCreditsCurrentPosUpdateTime = vw_GetTime();
+	CreditsCurrentPos -= 40.0f*(vw_GetTimeThread() - LastCreditsCurrentPosUpdateTime);
+	LastCreditsCurrentPosUpdateTime = vw_GetTimeThread();
 
 	// зацикливание
 	if (CreditsCurrentPos <= -3335) CreditsCurrentPos = 0.0f;

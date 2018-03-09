@@ -188,7 +188,7 @@
 		<Unit filename="src/core/system/keyboard.cpp" />
 		<Unit filename="src/core/system/mouse.cpp" />
 		<Unit filename="src/core/system/system.h" />
-		<Unit filename="src/core/system/timer.cpp" />
+		<Unit filename="src/core/system/time_threads.cpp" />
 		<Unit filename="src/core/text/text.cpp" />
 		<Unit filename="src/core/text/text.h" />
 		<Unit filename="src/core/texture/texture.cpp" />

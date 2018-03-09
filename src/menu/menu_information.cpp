@@ -619,7 +619,7 @@ void CreateInfoObject()
 
 	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
 
-	LastRotateInfoObject = vw_GetTime();
+	LastRotateInfoObject = vw_GetTimeThread();
 }
 
 
@@ -1776,10 +1776,10 @@ void InformationDrawObject()
 
 	// вращение объекта
 
-	float RotateInfoObjectY = 15.0f*(vw_GetTime() - LastRotateInfoObject);
-	float tmpRotateInfoObjectX = 15.0f*(vw_GetTime() - LastRotateInfoObject);
+	float RotateInfoObjectY = 15.0f*(vw_GetTimeThread() - LastRotateInfoObject);
+	float tmpRotateInfoObjectX = 15.0f*(vw_GetTimeThread() - LastRotateInfoObject);
 	float RotateInfoObjectX = 0;
-	LastRotateInfoObject = vw_GetTime();
+	LastRotateInfoObject = vw_GetTimeThread();
 
 	sRECT DstRectLeft, DstRectRight, DstRectUp, DstRectDown;
 	float fLeft, fRight, fUp, fDown;

@@ -890,7 +890,7 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, sTexture 
 {
 	// слишком часто не рисуем
 	if ((Current != AllDrawLoading) && // последний (полный) рисуем всегда
-	    ((*LastDrawTime) + 0.035 >= vw_GetTime()))
+	    ((*LastDrawTime) + 0.035 >= vw_GetTimeThread()))
 		return;
 
 	vw_BeginRendering(RI_COLOR_BUFFER | RI_DEPTH_BUFFER);
@@ -936,7 +936,7 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, sTexture 
 	// ставим и сюда, иначе не сможем играть во время загрузки
 	Audio_LoopProc();
 
-	(*LastDrawTime) = vw_GetTime();
+	(*LastDrawTime) = vw_GetTimeThread();
 }
 
 
@@ -1013,8 +1013,8 @@ void LoadGameData(eLoading LoadType)
 
 
 	// ставим время последней прорисовки
-	vw_StartTime();
-	float LastDrawTime = vw_GetTime();
+	vw_StartTimeThreads();
+	float LastDrawTime = vw_GetTimeThread();
 
 
 	NeedLoadShaders = false;

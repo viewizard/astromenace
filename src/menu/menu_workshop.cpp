@@ -284,11 +284,11 @@ void WorkshopMenu()
 {
 
 	// небольшое качение... девиация
-	float TimeDelta = vw_GetTime() - CurentTime;
+	float TimeDelta = vw_GetTimeThread() - CurentTime;
 	if (CurentTime==0.0f) {
-		CurentTime = vw_GetTime();
+		CurentTime = vw_GetTimeThread();
 	} else {
-		CurentTime = vw_GetTime();
+		CurentTime = vw_GetTimeThread();
 		float Sign = 1.0f;
 		// нужно двигать
 		if (NeedDeviation < 0.0f) Sign = -1.0f;
@@ -435,7 +435,7 @@ void WorkshopMenu()
 			DragWeapon = false;
 			WeaponSetupSlot = -1;
 			//
-			LastMenuOnOffUpdateTime = vw_GetTime();
+			LastMenuOnOffUpdateTime = vw_GetTimeThread();
 			ComBuffer = eCommand::TURN_OFF_WORKSHOP_MENU;
 		}
 	}
