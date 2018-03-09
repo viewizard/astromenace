@@ -166,7 +166,7 @@ void Loop_Proc()
 	if (DrawGameCursor) {
 		sRECT SrcRect, DstRect;
 		int mX,mY;
-		vw_GetMousePos(&mX,&mY);
+		vw_GetMousePos(mX,mY);
 
 		// если нужно, рисуем перетягиваемое оружие
 		if (MenuStatus == eMenuStatus::WORKSHOP)

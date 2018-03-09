@@ -601,7 +601,7 @@ void Workshop_Shipyard()
 
 	// проверяем колесо мышки
 	DstRect(Setup.iAspectRatioWidth/2-457,100+35-11,Setup.iAspectRatioWidth/2-57,450-13);
-	if (vw_OnRect(DstRect)) {
+	if (vw_MouseOverRect(DstRect)) {
 		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing()) {
 			CurrentWorkshopNewFighter += vw_GetWheelStatus();
 

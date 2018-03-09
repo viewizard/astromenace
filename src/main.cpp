@@ -1244,30 +1244,28 @@ loop:
 			// обрабатываем кнопки мыши
 			case SDL_MOUSEBUTTONDOWN:
 				if (event.button.button == SDL_BUTTON_LEFT) {
-					vw_SetWindowLBMouse(true);
-					vw_SetWindowLBDoubleMouse(true);
+					vw_SetMouseLeftClick(true);
 				}
 				if (event.button.button ==  SDL_BUTTON_RIGHT)
-					vw_SetWindowRBMouse(true);
+					vw_SetMouseRightClick(true);
 				if (event.button.button < 8) // на всякий случай небольшая проверка
 					SDL_MouseCurrentStatus[event.button.button] = true;
 				break;
 			case SDL_JOYBUTTONDOWN:
-				vw_SetWindowLBMouse(true);
-				vw_SetWindowLBDoubleMouse(true);
+				vw_SetMouseLeftClick(true);
 				JoysticButtons[event.jbutton.button] = true;
 				break;
 
 			case SDL_MOUSEBUTTONUP:
 				if (event.button.button ==  SDL_BUTTON_LEFT)
-					vw_SetWindowLBMouse(false);
+					vw_SetMouseLeftClick(false);
 				if (event.button.button ==  SDL_BUTTON_RIGHT)
-					vw_SetWindowRBMouse(false);
+					vw_SetMouseRightClick(false);
 				if (event.button.button < 8) // на всякий случай небольшая проверка
 					SDL_MouseCurrentStatus[event.button.button] = false;
 				break;
 			case SDL_JOYBUTTONUP:
-				vw_SetWindowLBMouse(false);
+				vw_SetMouseLeftClick(false);
 				JoysticButtons[event.jbutton.button] = false;
 				break;
 			case SDL_WINDOWEVENT:

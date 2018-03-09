@@ -509,7 +509,7 @@ void MissionMenu()
 				}
 
 
-				if ((vw_OnRect(DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing()) {
+				if ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing()) {
 					TMPSoundOnMissionID = i;
 					CurrentCursorStatus = 1;
 					// если только встали - нужно звуком это показать
@@ -542,7 +542,7 @@ void MissionMenu()
 						DstRect(X1+64,Y1+1,X1+709,Y1+63);
 						vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
 					}
-					if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
+					if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 
 						CurrentMission = i;
 						Setup.Profile[CurrentProfile].LastMission = CurrentMission;
@@ -553,7 +553,7 @@ void MissionMenu()
 						}
 					}
 
-					if (vw_GetWindowLBDoubleMouse(true)) {
+					if (vw_GetMouseLeftDoubleClick(true)) {
 						CurrentMission = i;
 						Setup.Profile[CurrentProfile].LastMission = CurrentMission;
 						// если уже играли в эту миссию
@@ -614,7 +614,7 @@ void MissionMenu()
 	}
 	// проверяем колесико мышки, если курсор находится над активной частью
 	DstRect(X1,Y1,X1+750,Y1+320);
-	if (vw_OnRect(DstRect)) {
+	if (vw_MouseOverRect(DstRect)) {
 		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing()) {
 			StartMission += vw_GetWheelStatus();
 			EndMission += vw_GetWheelStatus();
@@ -641,28 +641,28 @@ void MissionMenu()
 
 	// обработка перетягивания ползунка отображения позиции списка
 	// если стоим на ползунком и нажали кнопку мышки - "захватываем"
-	if (!SliderUnderMouseControl && vw_OnRect(DstRect) && vw_GetWindowLBMouse(false) && !isDialogBoxDrawing()) {
+	if (!SliderUnderMouseControl && vw_MouseOverRect(DstRect) && vw_GetMouseLeftClick(false) && !isDialogBoxDrawing()) {
 		SliderUnderMouseControl = true;
 		Audio_PlaySound2D(2,1.0f);
 	}
 	// если ползунок был захвачен, но уже не над секцией где его можно перетягивать или отпустили мышку - отпускаем
 	sRECT DstRect2;
 	DstRect2(X1+750-32+4,Y1+32,X1+750-4,Y1+32+(320.0f-64));
-	if ((SliderUnderMouseControl && (!vw_OnRect(DstRect2) || !vw_GetWindowLBMouse(false))) || isDialogBoxDrawing()) {
+	if ((SliderUnderMouseControl && (!vw_MouseOverRect(DstRect2) || !vw_GetMouseLeftClick(false))) || isDialogBoxDrawing()) {
 		SliderUnderMouseControl = false;
 	}
 	// просто кликнули на зону перетягивания, не на ползунок
-	if (!vw_OnRect(DstRect) && vw_OnRect(DstRect2) && vw_GetWindowLBMouse(false) && !isDialogBoxDrawing()) {
+	if (!vw_MouseOverRect(DstRect) && vw_MouseOverRect(DstRect2) && vw_GetMouseLeftClick(false) && !isDialogBoxDrawing()) {
 		SliderUnderMouseControl = true;
 		Audio_PlaySound2D(2,1.0f);
-		vw_SetWindowLBMouse(false);
+		vw_SetMouseLeftClick(false);
 	}
 	// отображаем курсором, что можно кликать на полосе прокрутки
-	if (vw_OnRect(DstRect2)) CurrentCursorStatus = 1;
+	if (vw_MouseOverRect(DstRect2)) CurrentCursorStatus = 1;
 	// корректируем его положение ползунка согласно положению мышки
 	if (SliderUnderMouseControl) {
 		int MouseX, MouseY;
-		vw_GetMousePos(&MouseX, &MouseY);
+		vw_GetMousePos(MouseX, MouseY);
 		int SliderNewPosition = (MouseY - Y1-32)/((320.0f-64)/AllMission);
 
 		StartMission = 0;

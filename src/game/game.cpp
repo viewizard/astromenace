@@ -1693,7 +1693,7 @@ void DrawGame()
 					if (NeedPlaySfx)
 						SoundShowHideMenu = Audio_PlaySound2D(12, 1.0f);
 					// сброс кнопки мышки, чтобы случайно не нажали
-					vw_GetWindowLBMouse(true);
+					vw_GetMouseLeftClick(true);
 				} else if (!GameMenu && !GameMissionCompleteStatus) { // открыто меню с выводом результата миссии, нельзя давать его закрывать
 					NeedShowGameMenu = false;
 					NeedHideGameMenu = true;

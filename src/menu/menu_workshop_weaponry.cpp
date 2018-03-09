@@ -348,7 +348,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 	// кнопка Setup
 	int MouseX, MouseY;
-	vw_GetMousePos(&MouseX, &MouseY);
+	vw_GetMousePos(MouseX, MouseY);
 
 	// работаем с клавиатурой
 	if ((MenuContentTransp >= 0.99f) && !isDialogBoxDrawing() && !DragWeapon) CurrentActiveMenuElement++;
@@ -367,7 +367,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	       (DstRect.top<= MouseY)) || InFocusByKeyboard) && !isDialogBoxDrawing() && !DragWeapon) {
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_button_weaponry_in.tga")), true, MenuContentTransp);
 		CurrentCursorStatus = 1;
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
+		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			WeaponSetupSlot = SlotNum;
 			if (InFocusByKeyboard) {
@@ -382,7 +382,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 	// обработка перетягивания
 	DstRect(X,Y,X+128,Y+64);
-	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
+	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 
 		int Money = Setup.Profile[CurrentProfile].Money;
 		if (WorkshopFighterGame->Weapon[SlotNum] != nullptr)
@@ -391,7 +391,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 					       WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
 
 		// если отпустили тут
-		if (!vw_GetWindowLBMouse(false) && DragWeapon) {
+		if (!vw_GetMouseLeftClick(false) && DragWeapon) {
 			// есть уровень слота соотв. уровню оружия
 			if ((WorkshopFighterGame->WeaponType[SlotNum] >= DragWeaponLevel) &&
 			    // если стоимость меньше чем есть денег + стоимость оружия
@@ -470,7 +470,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 		// взяли оружие из слота, чтобы тащить - фактически продали его
 		if ((WorkshopFighterGame->Weapon[SlotNum] != nullptr) &&
-		    vw_GetWindowLBMouse(false) &&
+		    vw_GetMouseLeftClick(false) &&
 		    !DragWeapon) {
 			// звук снятия оружия из слота
 			Audio_PlaySound2D(9, 1.0f);
@@ -768,7 +768,7 @@ void ShipSlotSetupWeapon(int Slot)
 	Xpos = Setup.iAspectRatioWidth/2+55;
 	Ypos = 50-10;
 	DstRect(Xpos+10,Ypos+10,Xpos+404-10,Ypos+570-10);
-	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
+	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 
 		int Money = Setup.Profile[CurrentProfile].Money;
 		if (WorkshopFighterGame->Weapon[SlotNum] != nullptr)
@@ -777,7 +777,7 @@ void ShipSlotSetupWeapon(int Slot)
 					       WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
 
 		// если отпустили тут
-		if (!vw_GetWindowLBMouse(false) && DragWeapon) {
+		if (!vw_GetMouseLeftClick(false) && DragWeapon) {
 			// есть уровень слота соотв. уровню оружия
 			if ((WorkshopFighterGame->WeaponType[SlotNum] >= DragWeaponLevel) &&
 			    // если стоимость меньше чем есть денег + стоимость оружия
@@ -1075,11 +1075,11 @@ void Workshop_Weaponry()
 
 	// если нажали - установка и тянем
 	DstRect(Setup.iAspectRatioWidth/2-416,100+32,Setup.iAspectRatioWidth/2-96,450-32);
-	if (vw_OnRect(DstRect) && !isDialogBoxDrawing())
+	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing())
 		if (!DragWeapon) {
 			CurrentCursorStatus = 1;
 
-			if (vw_GetWindowLBMouse(false)) {
+			if (vw_GetMouseLeftClick(false)) {
 				// звук взяли оружие
 				Audio_PlaySound2D(9,1.0f);
 
@@ -1179,7 +1179,7 @@ void Workshop_Weaponry()
 
 	// проверяем колесо мышки
 	DstRect(Setup.iAspectRatioWidth/2-457,100+35-11,Setup.iAspectRatioWidth/2-57,450-13);
-	if (vw_OnRect(DstRect)) {
+	if (vw_MouseOverRect(DstRect)) {
 		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing()) {
 			CurrentWorkshopNewWeapon += vw_GetWheelStatus();
 
@@ -1266,7 +1266,7 @@ void Workshop_Weaponry()
 
 
 	// проверяем состояние, если тянули и отжали, и сюда пришли - значит никто не перехватил, нужно сделать сброс
-	if (!vw_GetWindowLBMouse(false) && DragWeapon) {
+	if (!vw_GetMouseLeftClick(false) && DragWeapon) {
 		// звук пропадающего оружия
 		Audio_PlaySound2D(11,1.0f);
 

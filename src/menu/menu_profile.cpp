@@ -416,7 +416,7 @@ void ProfileMenu()
 			SrcRect(0,0,2,2);
 			DstRect(X1,Y1-233+46*i,X1+750,Y1-234+46+46*i);
 			if (!isDialogBoxDrawing())
-				if (vw_OnRect(DstRect) || InFocusByKeyboard) {
+				if (vw_MouseOverRect(DstRect) || InFocusByKeyboard) {
 					TMPSoundOnProfileID = i;
 					CurrentCursorStatus = 1;
 					// если только встали - нужно звуком это показать
@@ -426,7 +426,7 @@ void ProfileMenu()
 						if (CurrentKeyboardSelectMenuElement == 0) Audio_PlaySound2D(5,1.0f);
 					}
 
-					if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
+					if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 						// если другой - нужно сбросить миссию...
 						if (CurrentProfile != i) CurrentMission = Setup.Profile[i].LastMission;
 						CurrentProfile = i;
@@ -441,7 +441,7 @@ void ProfileMenu()
 
 					if (CurrentProfile != i) {
 						// переход по 2-му клику
-						if (vw_GetWindowLBDoubleMouse(true)) {
+						if (vw_GetMouseLeftDoubleClick(true)) {
 							CurrentProfile = i;
 							Setup.LastProfile = CurrentProfile;
 							// если другой - нужно сбросить миссию...
@@ -455,7 +455,7 @@ void ProfileMenu()
 							vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
 					} else {
 						// переход по 2-му клику
-						if (vw_GetWindowLBDoubleMouse(true)) {
+						if (vw_GetMouseLeftDoubleClick(true)) {
 							ComBuffer = eCommand::SWITCH_TO_MISSION;
 						}
 					}

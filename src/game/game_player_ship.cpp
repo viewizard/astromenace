@@ -592,7 +592,7 @@ void GamePlayerShip()
 			SDL_GetMouseState(&LastMouseXR, &LastMouseYR);
 
 			int X, Y;
-			vw_GetMousePos(&X, &Y);
+			vw_GetMousePos(X, Y);
 			if (LastMouseX == -1 && LastMouseY == -1) {
 				LastMouseX = X;
 				LastMouseY = Y;

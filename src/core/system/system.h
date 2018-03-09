@@ -69,18 +69,29 @@ const std::u32string &vw_GetCurrentUnicodeChar();
  * Mouse.
  */
 
-int vw_GetMousePos(int *X, int *Y);
-bool vw_GetWindowLBMouse(bool ResetStatus);
-bool vw_GetWindowRBMouse(bool ResetStatus);
-void vw_SetWindowLBMouse(bool NewStatus);
-void vw_SetWindowRBMouse(bool NewStatus);
-void vw_SetWindowLBDoubleMouse(bool NewStatus);
-bool vw_GetWindowLBDoubleMouse(bool ResetStatus);
+// Get left mouse button status.
+bool vw_GetMouseLeftClick(bool ResetStatus);
+// Get right mouse button status.
+bool vw_GetMouseRightClick(bool ResetStatus);
+// Set left mouse button status.
+void vw_SetMouseLeftClick(bool NewStatus);
+// Set right mouse button status.
+void vw_SetMouseRightClick(bool NewStatus);
+// Get left mouse button double click status.
+bool vw_GetMouseLeftDoubleClick(bool ResetStatus);
+// Change mouse wheel status.
 void vw_ChangeWheelStatus(int Value);
+// Reset mouse wheel status.
 void vw_ResetWheelStatus();
+// Get mouse wheel status.
 int vw_GetWheelStatus();
+// Set mouse position in absolute coordinates.
 void vw_SetMousePos(int X, int Y);
+// Set mouse position in relative coordinates.
 void vw_SetMousePosRel(int X, int Y);
-bool vw_OnRect(const sRECT &MDetect);
+// Get mouse position.
+void vw_GetMousePos(int &X, int &Y);
+// Check mouse position over rectangle.
+bool vw_MouseOverRect(const sRECT &MDetect);
 
 #endif // CoreSystem_H

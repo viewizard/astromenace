@@ -68,7 +68,7 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 	DstRect(X+2,Y+1,X+384,Y+63);
-	if  ((vw_OnRect(DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -139,7 +139,7 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) ||
+		if (vw_GetMouseLeftClick(true) ||
 		    (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
@@ -186,10 +186,10 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 		vw_DrawFont(SizeI, Y+21, 0, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 
 		DstRect(X+2,Y+1,X+256,Y+63);
-		if  (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
+		if  (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
 				CurrentCursorStatus = 2;
-				if (vw_GetWindowLBMouse(true))
+				if (vw_GetMouseLeftClick(true))
 					Audio_PlaySound2D(7,1.0f);
 			}
 		}
@@ -216,7 +216,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 	DstRect(X+2,Y+1,X+256,Y+63);
-	if  ((vw_OnRect(DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -286,7 +286,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 		vw_DrawFont(SizeI, Y+21, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
+		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
@@ -330,10 +330,10 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 
 		DstRect(X,Y,X+204,Y+35);
-		if  (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
+		if  (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
 				CurrentCursorStatus = 2;
-				if (vw_GetWindowLBMouse(true))
+				if (vw_GetMouseLeftClick(true))
 					Audio_PlaySound2D(7,1.0f);
 			}
 		}
@@ -356,7 +356,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 	}
 
 
-	if  ((vw_OnRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -389,7 +389,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
+		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
@@ -432,10 +432,10 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, (0.7f*Transp)/2.0f, Text);
 
 		DstRect(X,Y,X+132,Y+35);
-		if  (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
+		if  (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
 				CurrentCursorStatus = 2;
-				if (vw_GetWindowLBMouse(true))
+				if (vw_GetMouseLeftClick(true))
 					Audio_PlaySound2D(7,1.0f);
 			}
 		}
@@ -459,7 +459,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 	}
 
 
-	if  ((vw_OnRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -492,7 +492,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
+		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			if (SoundClick) Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
@@ -539,7 +539,7 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 
 	// 20 - расстояние между текстом
 	DstRect(X+4,Y+4,X+40+20+Size,Y+40-4);
-	if  ((vw_OnRect(DstRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -564,7 +564,7 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 
 
 	if (CanClick && !DragWeapon)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
+		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			*CheckBoxStatus = !(*CheckBoxStatus);
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
@@ -593,10 +593,10 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 		DstRect(X+2,Y+2,X+32-2,Y+32-2);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/arrow_list_up.tga"), true, 0.3f*Transp);
 
-		if  (vw_OnRect(MouseRect) && !isDialogBoxDrawing()) {
+		if  (vw_MouseOverRect(MouseRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
 				CurrentCursorStatus = 2;
-				if (vw_GetWindowLBMouse(true))
+				if (vw_GetMouseLeftClick(true))
 					Audio_PlaySound2D(7,1.0f);
 			}
 		}
@@ -620,7 +620,7 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 	}
 
 
-	if  ((vw_OnRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -649,7 +649,7 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
+		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
@@ -678,10 +678,10 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 		DstRect(X+2,Y+2,X+32-2,Y+32-2);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/arrow_list_down.tga"), true, 0.3f*Transp);
 
-		if  (vw_OnRect(MouseRect) && !isDialogBoxDrawing()) {
+		if  (vw_MouseOverRect(MouseRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
 				CurrentCursorStatus = 2;
-				if (vw_GetWindowLBMouse(true))
+				if (vw_GetMouseLeftClick(true))
 					Audio_PlaySound2D(7,1.0f);
 			}
 		}
@@ -705,7 +705,7 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 	}
 
 
-	if  ((vw_OnRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -734,7 +734,7 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
+		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);

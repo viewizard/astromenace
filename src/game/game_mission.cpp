@@ -230,7 +230,7 @@ void GameSetMissionFailedData(float ShowTime)
 	// выводим курсор
 	DrawGameCursor = true;
 	// сброс кнопки мышки, чтобы случайно не нажали
-	vw_GetWindowLBMouse(true);
+	vw_GetMouseLeftClick(true);
 }
 
 

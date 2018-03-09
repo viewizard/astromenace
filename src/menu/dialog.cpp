@@ -113,7 +113,7 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 
 
 	DstRect(X,Y,X+204,Y+35);
-	if  (vw_OnRect(DstRect) || InFocusByKeyboard) {
+	if  (vw_MouseOverRect(DstRect) || InFocusByKeyboard) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -161,7 +161,7 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
+		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
@@ -201,7 +201,7 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 
 
 	DstRect(X,Y,X+132,Y+35);
-	if  (vw_OnRect(DstRect) || InFocusByKeyboard) {
+	if  (vw_MouseOverRect(DstRect) || InFocusByKeyboard) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -248,7 +248,7 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
+		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
@@ -293,7 +293,7 @@ void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float 
 
 	// 20 - расстояние между текстом
 	DstRect(X+4,Y+4,X+40+20+Size,Y+40-4);
-	if  ((vw_OnRect(DstRect) || InFocusByKeyboard)  && DrawGameCursor) {
+	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard)  && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp==1.0f) {
@@ -318,7 +318,7 @@ void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float 
 
 
 	if (CanClick && !DragWeapon)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
+		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			*CheckBoxStatus = !(*CheckBoxStatus);
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
@@ -364,7 +364,7 @@ void SetCurrentDialogBox(eDialogBox DialogBox)
 	// сброс если было перетягивание
 	DragWeapon = false;
 	DragWeaponNum = 0;
-	vw_GetWindowLBMouse(true);
+	vw_GetMouseLeftClick(true);
 }
 
 
@@ -858,7 +858,7 @@ Dialogs with default type:
 		}
 
 		// закрываем...
-		if (vw_GetWindowLBMouse(true) || vw_GetWindowRBMouse(true)) CloseDialog();
+		if (vw_GetMouseLeftClick(true) || vw_GetMouseRightClick(true)) CloseDialog();
 	}
 	break;
 
@@ -933,7 +933,7 @@ Dialogs with default type:
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetProjectileRange(DialogWeapon->ObjectCreationType), vw_GetText("4_units"));
 
 		// закрываем...
-		if (vw_GetWindowLBMouse(true) || vw_GetWindowRBMouse(true)) CloseDialog();
+		if (vw_GetMouseLeftClick(true) || vw_GetMouseRightClick(true)) CloseDialog();
 	}
 	break;
 
@@ -1268,7 +1268,7 @@ Dialogs with default type:
 
 
 		// закрываем...
-		if (vw_GetWindowLBMouse(true) || vw_GetWindowRBMouse(true)) CloseDialog();
+		if (vw_GetMouseLeftClick(true) || vw_GetMouseRightClick(true)) CloseDialog();
 	}
 	break;
 

@@ -165,7 +165,7 @@ void CheckMouseKeybJState()
 							break;
 						}
 						NeedCheck = 0;
-						vw_GetWindowLBMouse(true);
+						vw_GetMouseLeftClick(true);
 					}
 			}
 
@@ -190,7 +190,7 @@ void CheckMouseKeybJState()
 							}
 							NeedCheck = 0;
 							JoysticButtons[i] = false;
-							vw_GetWindowLBMouse(true);
+							vw_GetMouseLeftClick(true);
 						}
 				}
 #endif

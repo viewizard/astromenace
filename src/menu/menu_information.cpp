@@ -1659,7 +1659,7 @@ void InformationMenu()
 
 	// проверяем колесо мышки
 	DstRect((int)(Setup.iAspectRatioWidth/2-440),80,(int)(Setup.iAspectRatioWidth/2+440),590);
-	if (vw_OnRect(DstRect)) {
+	if (vw_MouseOverRect(DstRect)) {
 		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing()) {
 			CreateNum += vw_GetWheelStatus();
 
@@ -1746,7 +1746,7 @@ void InformationDrawObject()
 {
 
 	int MouseX, MouseY;
-	vw_GetMousePos(&MouseX, &MouseY);
+	vw_GetMousePos(MouseX, MouseY);
 
 	int x, y, width, height;
 	vw_GetViewport(&x, &y, &width, &height);
@@ -1844,7 +1844,7 @@ void InformationDrawObject()
 		} else
 			RotateInfoObjectY = 0;
 
-		if (vw_GetWindowLBMouse(true)) {
+		if (vw_GetMouseLeftClick(true)) {
 			RotateInfoObjectY = -RotationSumY+140; // 140 -базовый угол разворота при создании
 			RotateInfoObjectX = -RotationSumX;
 		}

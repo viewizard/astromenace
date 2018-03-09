@@ -403,7 +403,7 @@ void Workshop_Workshop()
 
 	SrcRect(0,0,128,128);
 	DstRect(Setup.iAspectRatioWidth/2-451,60,Setup.iAspectRatioWidth/2-451+128,60+128);
-	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
+	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -411,7 +411,7 @@ void Workshop_Workshop()
 		}
 
 		CurrentCursorStatus = 1;
-		if (vw_GetWindowLBMouse(true)) {
+		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = GetCurrentSustemStockNumBase();
 			Audio_PlaySound2D(2,1.0f);
 		}
@@ -442,7 +442,7 @@ void Workshop_Workshop()
 
 	SrcRect(0,0,128,128);
 	DstRect(Setup.iAspectRatioWidth/2-451,200,Setup.iAspectRatioWidth/2-451+128,200+128);
-	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
+	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -450,7 +450,7 @@ void Workshop_Workshop()
 		}
 
 		CurrentCursorStatus = 1;
-		if (vw_GetWindowLBMouse(true)) {
+		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = GetCurrentSustemStockNumBase()+1;
 			Audio_PlaySound2D(2,1.0f);
 		}
@@ -481,7 +481,7 @@ void Workshop_Workshop()
 
 	SrcRect(0,0,128,128);
 	DstRect(Setup.iAspectRatioWidth/2-451,340,Setup.iAspectRatioWidth/2-451+128,340+128);
-	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
+	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -489,7 +489,7 @@ void Workshop_Workshop()
 		}
 
 		CurrentCursorStatus = 1;
-		if (vw_GetWindowLBMouse(true)) {
+		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = GetCurrentSustemStockNumBase()+2;
 			Audio_PlaySound2D(2,1.0f);
 		}
@@ -520,7 +520,7 @@ void Workshop_Workshop()
 
 	SrcRect(0,0,128,128);
 	DstRect(Setup.iAspectRatioWidth/2-451,610-128,Setup.iAspectRatioWidth/2-451+128,610);
-	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
+	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -528,7 +528,7 @@ void Workshop_Workshop()
 		}
 
 		CurrentCursorStatus = 1;
-		if (vw_GetWindowLBMouse(true)) {
+		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = GetCurrentSustemStockNumBase()+3;
 			Audio_PlaySound2D(2,1.0f);
 		}
@@ -742,7 +742,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 	}
 
-	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
+	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -751,7 +751,7 @@ void Workshop_Workshop()
 
 		Current = 1.0f;
 		CurrentCursorStatus = 1;
-		if (vw_GetWindowLBMouse(true)) {
+		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = 1;
 			Audio_PlaySound2D(2,1.0f);
 		}
@@ -818,7 +818,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 	}
 
-	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
+	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -827,7 +827,7 @@ void Workshop_Workshop()
 
 		Current = 1.0f;
 		CurrentCursorStatus = 1;
-		if (vw_GetWindowLBMouse(true)) {
+		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = 5;
 			Audio_PlaySound2D(2,1.0f);
 		}
@@ -888,7 +888,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 	}
 
-	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
+	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -897,7 +897,7 @@ void Workshop_Workshop()
 
 		Current = 1.0f;
 		CurrentCursorStatus = 1;
-		if (vw_GetWindowLBMouse(true)) {
+		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = 9;
 			Audio_PlaySound2D(2,1.0f);
 		}
@@ -958,7 +958,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 	}
 
-	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
+	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -967,7 +967,7 @@ void Workshop_Workshop()
 
 		Current = 1.0f;
 		CurrentCursorStatus = 1;
-		if (vw_GetWindowLBMouse(true)) {
+		if (vw_GetMouseLeftClick(true)) {
 			Audio_PlaySound2D(2,1.0f);
 			CurrentSystemStockNum = 13;
 		}
@@ -1036,7 +1036,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 	}
 
-	if (vw_OnRect(DstRect) && !isDialogBoxDrawing()) {
+	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
@@ -1045,7 +1045,7 @@ void Workshop_Workshop()
 
 		Current = 1.0f;
 		CurrentCursorStatus = 1;
-		if (vw_GetWindowLBMouse(true)) {
+		if (vw_GetMouseLeftClick(true)) {
 			Audio_PlaySound2D(2,1.0f);
 			CurrentSystemStockNum = 17;
 		}
@@ -1135,8 +1135,8 @@ void Workshop_Workshop()
 	}
 	// покупка, если 2 раза кликнули на иконку текущей системы
 	DstRect(Setup.iAspectRatioWidth/2-451,55+128+20,Setup.iAspectRatioWidth/2-451+128,55+128+128+20);
-	if (vw_OnRect(DstRect) && !isDialogBoxDrawing() && CanBuy)
-		if (vw_GetWindowLBDoubleMouse(true))
+	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing() && CanBuy)
+		if (vw_GetMouseLeftDoubleClick(true))
 			BuyCurrentSystem();
 
 
