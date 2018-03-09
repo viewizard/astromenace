@@ -41,10 +41,15 @@ should be preferred over then vw_GetTimeThread().
 namespace {
 
 #define MAX_TIMETHREAD_COUNT 10
-bool TimeCurrentStatus[MAX_TIMETHREAD_COUNT];
+// current time thread status (active/paused)
+bool TimeThreadStatus[MAX_TIMETHREAD_COUNT];
+// last ticks, in order to care about time thread pause
 uint32_t LastGetTicks[MAX_TIMETHREAD_COUNT];
+// "time point", ticks of last speed change
 uint32_t DiffGetTicks[MAX_TIMETHREAD_COUNT];
+// current time thread speed
 float TimeThreadSpeed[MAX_TIMETHREAD_COUNT];
+// all "previous time" on last speed change
 float TimeThreadBuffer[MAX_TIMETHREAD_COUNT];
 
 } // unnamed namespace
@@ -55,7 +60,7 @@ float TimeThreadBuffer[MAX_TIMETHREAD_COUNT];
  */
 void vw_InitTimeThread(int Num)
 {
-	TimeCurrentStatus[Num] = true;
+	TimeThreadStatus[Num] = true;
 	LastGetTicks[Num] = 0;
 	DiffGetTicks[Num] = 0;
 	TimeThreadSpeed[Num] = 1.0f;
@@ -77,11 +82,11 @@ void vw_InitTimeThreads()
  */
 float vw_GetTimeThread(int TimeThread)
 {
-	// если скорость не 1.0, нужно учитывать поправку
+	// time manipulations
 	if (TimeThreadSpeed[TimeThread] != 1.0f) {
-		// находим время с учетом скорости
+		// calculate time from "time point" (DiffGetTicks), when speed was changed last time, till now
 		float RealTimeThread = ((SDL_GetTicks() - DiffGetTicks[TimeThread]) * TimeThreadSpeed[TimeThread]) / 1000.0f;
-		// выдаем уже правильные данные
+		// add "previous time" from time buffer
 		return RealTimeThread + TimeThreadBuffer[TimeThread];
 	}
 
@@ -94,9 +99,9 @@ float vw_GetTimeThread(int TimeThread)
 void vw_StartTimeThreads()
 {
 	for (int i = 0; i < MAX_TIMETHREAD_COUNT; i++) {
-		if (!TimeCurrentStatus[i]) {
+		if (!TimeThreadStatus[i]) {
 			DiffGetTicks[i] += SDL_GetTicks() - LastGetTicks[i];
-			TimeCurrentStatus[i] = true;
+			TimeThreadStatus[i] = true;
 		}
 	}
 }
@@ -107,9 +112,9 @@ void vw_StartTimeThreads()
 void vw_StopTimeThreads()
 {
 	for (int i=0; i<MAX_TIMETHREAD_COUNT; i++) {
-		if (TimeCurrentStatus[i]) {
+		if (TimeThreadStatus[i]) {
 			LastGetTicks[i] = SDL_GetTicks();
-			TimeCurrentStatus[i] = false;
+			TimeThreadStatus[i] = false;
 		}
 	}
 }
@@ -121,8 +126,9 @@ void vw_SetTimeThreadSpeed(int TimeThread, float NewSpeed)
 {
 	vw_Clamp(NewSpeed, 0.0f, 2.0f);
 
-	// правка данных, чтобы все сходилось
+	// store "previous time" in the time buffer
 	TimeThreadBuffer[TimeThread] += ((SDL_GetTicks() - DiffGetTicks[TimeThread]) * TimeThreadSpeed[TimeThread]) / 1000.0f;
+	// store "time point", when speed was changed
 	DiffGetTicks[TimeThread] = SDL_GetTicks();
 	TimeThreadSpeed[TimeThread] = NewSpeed;
 }
