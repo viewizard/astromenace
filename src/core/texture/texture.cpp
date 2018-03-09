@@ -25,14 +25,14 @@
 *************************************************************************************/
 
 /*
-Note, all texture code aimed to 1 byte texture alignment.
-Plus, OpenGL preset for 1 byte alignment:
+Note, all texture-related code aimed to 1 byte texture alignment.
+Plus, default OpenGL setup also aimed for 1 byte alignment:
 glPixelStorei(GL_PACK_ALIGNMENT, 1);
 glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-Code will work with VW2D and TGA image format without any issues.
-But, for example, BMP (that provide 4 byte dib alignment), will not
-(at least for 24 bits per pixel images).
+Code work with VW2D and TGA images format without any issues.
+But, for example, BMP image format (that provide 4 byte dib alignment),
+could have an issues (at least for 24 bits per pixel images).
 
 This mean, if you add one more image format support, make sure you
 care about byte alignment.
@@ -215,7 +215,7 @@ static void ResizeImage(int newWidth, int newHeight, std::vector<uint8_t> &DIB, 
 		}
 	}
 
-	// меняем значения текстуры
+	// store new width and height
 	Texture.Width = newWidth;
 	Texture.Height = newHeight;
 }
@@ -237,12 +237,6 @@ static void CreateAlpha(std::vector<uint8_t> &DIB, sTexture &Texture, int AlphaF
 	std::vector<uint8_t> tmpDIB{std::move(DIB)};
 	DIB.resize(tmpStride4 * Texture.Height);
 
-	// generate alpha channel
-	uint8_t GreyRedC = (uint8_t)(((float)Texture.ARed / 255) * 76);
-	uint8_t GreyGreenC = (uint8_t)(((float)Texture.AGreen / 255) * 150);
-	uint8_t GreyBlueC = (uint8_t)(((float)Texture.ABlue / 255) * 28);
-	uint8_t GreyC = GreyBlueC + GreyGreenC + GreyRedC;
-
 	for(int i = 0; i < Texture.Height; i++) {
 		int k1 = tmpStride3 * i;
 		int k2 = tmpStride4 * i;
@@ -250,68 +244,17 @@ static void CreateAlpha(std::vector<uint8_t> &DIB, sTexture &Texture, int AlphaF
 		for(int j2 = 0; j2 < Texture.Width; j2++) {
 			memcpy(DIB.data() + k2, tmpDIB.data() + k1, sizeof(DIB[0]) * 3);
 
-			uint8_t GreyRed, GreyGreen, GreyBlue, Grey;
-
 			switch(AlphaFlag) {
 			case TX_ALPHA_GREYSC:
-				GreyRed = (uint8_t)(((float)DIB[k2 + 2] / 255) * 76);
-				GreyGreen = (uint8_t)(((float)DIB[k2 + 1] / 255) * 150);
-				GreyBlue = (uint8_t)(((float)DIB[k2] / 255) * 28);
-				DIB[k2 + 3] = GreyBlue + GreyGreen + GreyRed;
+				DIB[k2 + 3] = (uint8_t)(((float)DIB[k2] / 255) * 28) +
+					      (uint8_t)(((float)DIB[k2 + 1] / 255) * 150) +
+					      (uint8_t)(((float)DIB[k2 + 2] / 255) * 76);
 				break;
 
 			case TX_ALPHA_EQUAL:
 				if ((Texture.ABlue == DIB[k2]) &&
 				    (Texture.AGreen == DIB[k2 + 1]) &&
 				    (Texture.ARed == DIB[k2 + 2]))
-					DIB[k2 + 3] = 0;
-				else
-					DIB[k2 + 3] = 255;
-				break;
-
-			case TX_ALPHA_GEQUAL:
-				GreyRed = (uint8_t)(((float)DIB[k2 + 2] / 255) * 76);
-				GreyGreen = (uint8_t)(((float)DIB[k2 + 1] / 255) * 150);
-				GreyBlue = (uint8_t)(((float)DIB[k2] / 255) * 28);
-				Grey = GreyBlue + GreyGreen + GreyRed;
-
-				if (GreyC >= Grey)
-					DIB[k2 + 3] = 0;
-				else
-					DIB[k2 + 3] = 255;
-				break;
-
-			case TX_ALPHA_LEQUAL:
-				GreyRed = (uint8_t)(((float)DIB[k2 + 2] / 255) * 76);
-				GreyGreen = (uint8_t)(((float)DIB[k2 + 1] / 255) * 150);
-				GreyBlue = (uint8_t)(((float)DIB[k2] / 255) * 28);
-				Grey = GreyBlue + GreyGreen + GreyRed;
-
-				if (GreyC <= Grey)
-					DIB[k2 + 3] = 0;
-				else
-					DIB[k2 + 3] = 255;
-				break;
-
-			case TX_ALPHA_GREAT:
-				GreyRed = (uint8_t)(((float)DIB[k2 + 2] / 255) * 76);
-				GreyGreen = (uint8_t)(((float)DIB[k2 + 1] / 255) * 150);
-				GreyBlue = (uint8_t)(((float)DIB[k2] / 255) * 28);
-				Grey = GreyBlue + GreyGreen + GreyRed;
-
-				if (GreyC > Grey)
-					DIB[k2 + 3] = 0;
-				else
-					DIB[k2 + 3] = 255;
-				break;
-
-			case TX_ALPHA_LESS:
-				GreyRed = (uint8_t)(((float)DIB[k2 + 2] / 255) * 76);
-				GreyGreen = (uint8_t)(((float)DIB[k2 + 1] / 255) * 150);
-				GreyBlue = (uint8_t)(((float)DIB[k2] / 255) * 28);
-				Grey = GreyBlue + GreyGreen + GreyRed;
-
-				if (GreyC < Grey)
 					DIB[k2 + 3] = 0;
 				else
 					DIB[k2 + 3] = 255;

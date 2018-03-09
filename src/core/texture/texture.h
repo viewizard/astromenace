@@ -38,14 +38,6 @@
 #define TX_ALPHA_GREYSC		0x0021
 // Create alpha channel by equal Alpha color
 #define TX_ALPHA_EQUAL		0x0022
-// Create alpha channel by great or equal than Alpha color
-#define TX_ALPHA_GEQUAL		0x0023
-// Create alpha channel by less or equal Alpha color
-#define TX_ALPHA_LEQUAL		0x0024
-// Create alpha channel by great than Alpha color
-#define TX_ALPHA_GREAT		0x0025
-// Create alpha channel by less Alpha color
-#define TX_ALPHA_LESS		0x0026
 
 struct sTexture {
 	uint8_t ARed;		// Alpha channel red color
