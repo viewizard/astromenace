@@ -186,9 +186,6 @@
 		<Unit filename="src/core/sound/sound.h" />
 		<Unit filename="src/core/sound/sound_manager.cpp" />
 		<Unit filename="src/core/system/keyboard.cpp" />
-		<Unit filename="src/core/system/languages/de.cpp" />
-		<Unit filename="src/core/system/languages/en.cpp" />
-		<Unit filename="src/core/system/languages/ru.cpp" />
 		<Unit filename="src/core/system/mouse.cpp" />
 		<Unit filename="src/core/system/system.h" />
 		<Unit filename="src/core/system/timer.cpp" />

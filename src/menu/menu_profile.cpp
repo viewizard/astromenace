@@ -237,7 +237,7 @@ void ProfileInputText()
 
 
 	// проверяем, может спец-код
-	if (vw_GetKeys(SDLK_BACKSPACE))
+	if (vw_GetKeyStatus(SDLK_BACKSPACE))
 		if (!NewProfileName.empty()) {
 			NewProfileName.pop_back();
 
@@ -245,16 +245,16 @@ void ProfileInputText()
 				vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
 			SoundTaping = Audio_PlaySound2D(4,1.0f);
 
-			vw_SetKeys(SDLK_BACKSPACE, false);
+			vw_SetKeyStatus(SDLK_BACKSPACE, false);
 		}
 
 	// ввод названия
-	if (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN))
+	if (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))
 		if (!NewProfileName.empty()) {
 			NewRecord();
 			//Audio_PlayMenuSound(4,1.0f);
-			vw_SetKeys(SDLK_KP_ENTER, false);
-			vw_SetKeys(SDLK_RETURN, false);
+			vw_SetKeyStatus(SDLK_KP_ENTER, false);
+			vw_SetKeyStatus(SDLK_RETURN, false);
 		}
 
 
@@ -426,7 +426,7 @@ void ProfileMenu()
 						if (CurrentKeyboardSelectMenuElement == 0) Audio_PlaySound2D(5,1.0f);
 					}
 
-					if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN)))) {
+					if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 						// если другой - нужно сбросить миссию...
 						if (CurrentProfile != i) CurrentMission = Setup.Profile[i].LastMission;
 						CurrentProfile = i;
@@ -434,8 +434,8 @@ void ProfileMenu()
 						// играем звук выбора
 						Audio_PlaySound2D(6,1.0f);
 						if (InFocusByKeyboard) {
-							vw_SetKeys(SDLK_KP_ENTER, false);
-							vw_SetKeys(SDLK_RETURN, false);
+							vw_SetKeyStatus(SDLK_KP_ENTER, false);
+							vw_SetKeyStatus(SDLK_RETURN, false);
 						}
 					}
 

@@ -1673,7 +1673,7 @@ void DrawGame()
 	// если в игре - меню, если в меню - выход
 	if (!isDialogBoxDrawing()) {
 		if (PlayerFighter != nullptr) { // если не убили
-			if (vw_GetKeys(SDLK_ESCAPE) || GameMissionCompleteStatusShowDialog) {
+			if (vw_GetKeyStatus(SDLK_ESCAPE) || GameMissionCompleteStatusShowDialog) {
 				bool NeedPlaySfx = true;
 				if (GameMissionCompleteStatusShowDialog) {
 					// если уже было открыто меню и появляется меню окончания миссии, не проигрываем sfx
@@ -1712,14 +1712,14 @@ void DrawGame()
 				if (GameMissionCompleteStatus && !GameMissionCompleteStatusShowDialog) // в процессе вывода результатов разрешаем только выход в основное меню (отображение диалога)
 					SetCurrentDialogBox(eDialogBox::QuiToMenuNoSave);
 				GameMissionCompleteStatusShowDialog = false;
-				vw_SetKeys(SDLK_ESCAPE, false);
+				vw_SetKeyStatus(SDLK_ESCAPE, false);
 			}
 		} else {
-			if (vw_GetKeys(SDLK_ESCAPE)) {
+			if (vw_GetKeyStatus(SDLK_ESCAPE)) {
 				ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU;
 				ExitGame();
 
-				vw_SetKeys(SDLK_ESCAPE, false);
+				vw_SetKeyStatus(SDLK_ESCAPE, false);
 			}
 		}
 	}

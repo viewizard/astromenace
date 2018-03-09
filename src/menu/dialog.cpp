@@ -161,11 +161,11 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN)))) {
+		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
-				vw_SetKeys(SDLK_KP_ENTER, false);
-				vw_SetKeys(SDLK_RETURN, false);
+				vw_SetKeyStatus(SDLK_KP_ENTER, false);
+				vw_SetKeyStatus(SDLK_RETURN, false);
 			}
 			return true;
 		}
@@ -248,11 +248,11 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN)))) {
+		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
-				vw_SetKeys(SDLK_KP_ENTER, false);
-				vw_SetKeys(SDLK_RETURN, false);
+				vw_SetKeyStatus(SDLK_KP_ENTER, false);
+				vw_SetKeyStatus(SDLK_RETURN, false);
 			}
 			return true;
 		}
@@ -318,12 +318,12 @@ void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float 
 
 
 	if (CanClick && !DragWeapon)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN)))) {
+		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			*CheckBoxStatus = !(*CheckBoxStatus);
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
-				vw_SetKeys(SDLK_KP_ENTER, false);
-				vw_SetKeys(SDLK_RETURN, false);
+				vw_SetKeyStatus(SDLK_KP_ENTER, false);
+				vw_SetKeyStatus(SDLK_RETURN, false);
 			}
 		}
 }
@@ -1654,8 +1654,8 @@ Dialogs with default type:
 
 
 	// если можно - снимаем диалог
-	if (vw_GetKeys(SDLK_ESCAPE)) {
+	if (vw_GetKeyStatus(SDLK_ESCAPE)) {
 		CloseDialog();
-		vw_SetKeys(SDLK_ESCAPE, false);
+		vw_SetKeyStatus(SDLK_ESCAPE, false);
 	}
 }

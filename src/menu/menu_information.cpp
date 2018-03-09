@@ -1690,11 +1690,11 @@ void InformationMenu()
 		if (CreateNum<1) CreateNum = InfoEnd;
 		CreateInfoObject();
 	}
-	if (vw_GetKeys(SDLK_PAGEUP)) {
+	if (vw_GetKeyStatus(SDLK_PAGEUP)) {
 		CreateNum --;
 		if (CreateNum<1) CreateNum = InfoEnd;
 		CreateInfoObject();
-		vw_SetKeys(SDLK_PAGEUP, false);
+		vw_SetKeyStatus(SDLK_PAGEUP, false);
 	}
 
 	X = Setup.iAspectRatioWidth/2 + 9;
@@ -1703,11 +1703,11 @@ void InformationMenu()
 		if (CreateNum>InfoEnd) CreateNum = 1;
 		CreateInfoObject();
 	}
-	if (vw_GetKeys(SDLK_PAGEDOWN)) {
+	if (vw_GetKeyStatus(SDLK_PAGEDOWN)) {
 		CreateNum ++;
 		if (CreateNum>InfoEnd) CreateNum = 1;
 		CreateInfoObject();
-		vw_SetKeys(SDLK_PAGEDOWN, false);
+		vw_SetKeyStatus(SDLK_PAGEDOWN, false);
 	}
 
 

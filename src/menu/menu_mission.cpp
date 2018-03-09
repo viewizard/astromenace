@@ -542,14 +542,14 @@ void MissionMenu()
 						DstRect(X1+64,Y1+1,X1+709,Y1+63);
 						vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
 					}
-					if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN)))) {
+					if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 
 						CurrentMission = i;
 						Setup.Profile[CurrentProfile].LastMission = CurrentMission;
 						Audio_PlaySound2D(6,1.0f);
 						if (InFocusByKeyboard) {
-							vw_SetKeys(SDLK_KP_ENTER, false);
-							vw_SetKeys(SDLK_RETURN, false);
+							vw_SetKeyStatus(SDLK_KP_ENTER, false);
+							vw_SetKeyStatus(SDLK_RETURN, false);
 						}
 					}
 

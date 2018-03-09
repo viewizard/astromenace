@@ -26,207 +26,62 @@
 
 #include "../math/math.h"
 
-
-
-
-
-int MaxKeyCount = 0;
-
-
-//------------------------------------------------------------------------------------
-// установка-получение статуса нажатых кнопок на клавиатуре
-//------------------------------------------------------------------------------------
-bool vw_GetKeys(int Num)
-{
-	const Uint8 *keystate = SDL_GetKeyboardState(&MaxKeyCount);
-	if (keystate[SDL_GetScancodeFromKey(Num)]) return true;
-	return false;
-}
-void vw_SetKeys(int Num, bool NewKeyStatus)
-{
-	Uint8 *keystate = (Uint8 *)SDL_GetKeyboardState(&MaxKeyCount);
-	keystate[SDL_GetScancodeFromKey(Num)] = NewKeyStatus;
-}
-
-int GetMaxKeys()
-{
-	return MaxKeyCount;
-}
-
-
-
-
-
-
-
-
-// название кнопок
-const char * vw_VirtualCodeNameEN(int Num);
-const char * vw_VirtualCodeNameDE(int Num);
-const char * vw_VirtualCodeNameRU(int Num);
-
-
-const char * vw_VirtualCodeName(const char *LanguageCode, int Num)
-{
-	if (!strcmp(LanguageCode, "ru")) return vw_VirtualCodeNameRU(Num);
-	else if (!strcmp(LanguageCode, "de")) return vw_VirtualCodeNameDE(Num);
-
-	return vw_VirtualCodeNameEN(Num);
-}
-
-
-
-
-
-
-
-
-struct sKeyboardCodeName {
-	int Code;
-	char Name[32];
-};
-
-const int KeyboardCodeNameDataCount = 99;
-sKeyboardCodeName KeyboardCodeNameData[KeyboardCodeNameDataCount] = {
-	{SDLK_F1, "SDLK_F1"},
-	{SDLK_F2, "SDLK_F2"},
-	{SDLK_F3, "SDLK_F3"},
-	{SDLK_F4, "SDLK_F4"},
-	{SDLK_F5, "SDLK_F5"},
-	{SDLK_F6, "SDLK_F6"},
-	{SDLK_F7, "SDLK_F7"},
-	{SDLK_F8, "SDLK_F8"},
-	{SDLK_F9, "SDLK_F9"},
-	{SDLK_F10, "SDLK_F10"},
-	{SDLK_F11, "SDLK_F11"},
-	{SDLK_F12, "SDLK_F12"},
-	{SDLK_1, "SDLK_1"},
-	{SDLK_2, "SDLK_2"},
-	{SDLK_3, "SDLK_3"},
-	{SDLK_4, "SDLK_4"},
-	{SDLK_5, "SDLK_5"},
-	{SDLK_6, "SDLK_6"},
-	{SDLK_7, "SDLK_7"},
-	{SDLK_8, "SDLK_8"},
-	{SDLK_9, "SDLK_9"},
-	{SDLK_MINUS, "SDLK_MINUS"},
-	{SDLK_EQUALS, "SDLK_EQUALS"},
-	{SDLK_BACKSPACE, "SDLK_BACKSPACE"},
-	{SDLK_TAB, "SDLK_TAB"},
-	{SDLK_q, "SDLK_q"},
-	{SDLK_w, "SDLK_w"},
-	{SDLK_e, "SDLK_e"},
-	{SDLK_r, "SDLK_r"},
-	{SDLK_t, "SDLK_t"},
-	{SDLK_y, "SDLK_y"},
-	{SDLK_u, "SDLK_u"},
-	{SDLK_i, "SDLK_i"},
-	{SDLK_o, "SDLK_o"},
-	{SDLK_p, "SDLK_p"},
-	{SDLK_LEFTBRACKET, "SDLK_LEFTBRACKET"},
-	{SDLK_RIGHTBRACKET, "SDLK_RIGHTBRACKET"},
-	{SDLK_RETURN, "SDLK_RETURN"},
-	{SDLK_LCTRL, "SDLK_LCTRL"},
-	{SDLK_a, "SDLK_a"},
-	{SDLK_s, "SDLK_s"},
-	{SDLK_d, "SDLK_d"},
-	{SDLK_f, "SDLK_f"},
-	{SDLK_g, "SDLK_g"},
-	{SDLK_h, "SDLK_h"},
-	{SDLK_j, "SDLK_j"},
-	{SDLK_k, "SDLK_k"},
-	{SDLK_l, "SDLK_l"},
-	{SDLK_SEMICOLON, "SDLK_SEMICOLON"},
-	{SDLK_QUOTE, "SDLK_QUOTE"},
-	{SDLK_QUOTEDBL, "SDLK_QUOTEDBL"},
-	{SDLK_BACKQUOTE, "SDLK_BACKQUOTE"},
-	{SDLK_LSHIFT, "SDLK_LSHIFT"},
-	{SDLK_BACKSLASH, "SDLK_BACKSLASH"},
-	{SDLK_z, "SDLK_z"},
-	{SDLK_x, "SDLK_x"},
-	{SDLK_c, "SDLK_c"},
-	{SDLK_v, "SDLK_v"},
-	{SDLK_b, "SDLK_b"},
-	{SDLK_n, "SDLK_n"},
-	{SDLK_m, "SDLK_m"},
-	{SDLK_COMMA, "SDLK_COMMA"},
-	{SDLK_PERIOD, "SDLK_PERIOD"},
-	{SDLK_SLASH, "SDLK_SLASH"},
-	{SDLK_RSHIFT, "SDLK_RSHIFT"},
-	{SDLK_ASTERISK, "SDLK_ASTERISK"},
-	{SDLK_LALT, "SDLK_LALT"},
-	{SDLK_SPACE, "SDLK_SPACE"},
-	{SDLK_KP_MINUS, "SDLK_KP_MINUS"},
-	{SDLK_KP_MULTIPLY, "SDLK_KP_MULTIPLY"},
-	{SDLK_KP_PLUS, "SDLK_KP_PLUS"},
-	{SDLK_KP_PERIOD, "SDLK_KP_PERIOD"},
-	{SDLK_KP_ENTER, "SDLK_KP_ENTER"},
-	{SDLK_RCTRL, "SDLK_RCTRL"},
-	{SDLK_KP_DIVIDE, "SDLK_KP_DIVIDE"},
-	{SDLK_RALT, "SDLK_RALT"},
-	{SDLK_PAUSE, "SDLK_PAUSE"},
-	{SDLK_HOME, "SDLK_HOME"},
-	{SDLK_UP, "SDLK_UP"},
-	{SDLK_PAGEUP, "SDLK_PAGEUP"},
-	{SDLK_LEFT, "SDLK_LEFT"},
-	{SDLK_RIGHT, "SDLK_RIGHT"},
-	{SDLK_END, "SDLK_END"},
-	{SDLK_DOWN, "SDLK_DOWN"},
-	{SDLK_PAGEDOWN, "SDLK_PAGEDOWN"},
-	{SDLK_INSERT, "SDLK_INSERT"},
-	{SDLK_DELETE, "SDLK_DELETE"},
-	{SDLK_KP_7, "SDLK_KP7"},
-	{SDLK_KP_8, "SDLK_KP8"},
-	{SDLK_KP_9, "SDLK_KP9"},
-	{SDLK_KP_4, "SDLK_KP4"},
-	{SDLK_KP_5, "SDLK_KP5"},
-	{SDLK_KP_6, "SDLK_KP6"},
-	{SDLK_KP_1, "SDLK_KP1"},
-	{SDLK_KP_2, "SDLK_KP2"},
-	{SDLK_KP_3, "SDLK_KP3"},
-	{SDLK_KP_0, "SDLK_KP0"},
-	{SDLK_LGUI, "SDLK_LSUPER"},
-	{SDLK_RGUI, "SDLK_RSUPER"},
-};
-
-
-
-// название кнопок
-const char * vw_KeyboardCodeName(int Num)
-{
-	for (int i=0; i<KeyboardCodeNameDataCount; i++)
-		if (KeyboardCodeNameData[i].Code == Num) return KeyboardCodeNameData[i].Name;
-
-	return "?";
-}
-// номер кнопок
-int vw_KeyboardNameCode(const char * Name)
-{
-	for (int i=0; i<KeyboardCodeNameDataCount; i++)
-		if (!strcmp(KeyboardCodeNameData[i].Name, Name)) return KeyboardCodeNameData[i].Code;
-
-	return -1;
-}
-
-
-
 namespace {
 
-// текущий юникод нажатой клавиши
+// libSDL2 keystate array size
+int KeyStateArraySize{0};
+// unicode character for current pressed button
 std::u32string CurrentUnicodeChar;
 
 } // unnamed namespace
 
-// установка
-void vw_SetCurrentUnicodeChar(char *NewUnicodeChar)
+
+/*
+ * Get key status (pressed or not).
+ */
+bool vw_GetKeyStatus(int Key)
 {
-	if (NewUnicodeChar != nullptr)
+	const uint8_t *KeyState = SDL_GetKeyboardState(&KeyStateArraySize);
+	if (KeyState[SDL_GetScancodeFromKey(Key)])
+		return true;
+
+	return false;
+}
+
+/*
+ * Set key status (pressed or released).
+ */
+void vw_SetKeyStatus(int Key, bool NewKeyStatus)
+{
+	uint8_t *KeyState = (uint8_t *)SDL_GetKeyboardState(&KeyStateArraySize);
+	KeyState[SDL_GetScancodeFromKey(Key)] = NewKeyStatus;
+}
+
+/*
+ * Get libSDL2 keystate array size.
+ */
+int vw_GetKeyStateArraySize()
+{
+	if (!KeyStateArraySize)
+		SDL_GetKeyboardState(&KeyStateArraySize);
+
+	return KeyStateArraySize;
+}
+
+/*
+ * Set current unicode (UTF8) character.
+ */
+void vw_SetCurrentUnicodeChar(const char *NewUnicodeChar)
+{
+	if (NewUnicodeChar)
 		CurrentUnicodeChar = ConvertUTF8.from_bytes(NewUnicodeChar);
 	else
 		CurrentUnicodeChar.clear();
 }
 
-// получение
+/*
+ * Get current unicode (UTF32) character.
+ */
 const std::u32string &vw_GetCurrentUnicodeChar()
 {
 	return CurrentUnicodeChar;

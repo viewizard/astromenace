@@ -139,11 +139,12 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN)))) {
+		if (vw_GetWindowLBMouse(true) ||
+		    (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
-				vw_SetKeys(SDLK_KP_ENTER, false);
-				vw_SetKeys(SDLK_RETURN, false);
+				vw_SetKeyStatus(SDLK_KP_ENTER, false);
+				vw_SetKeyStatus(SDLK_RETURN, false);
 			}
 			return true;
 		}
@@ -285,11 +286,11 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 		vw_DrawFont(SizeI, Y+21, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN)))) {
+		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
-				vw_SetKeys(SDLK_KP_ENTER, false);
-				vw_SetKeys(SDLK_RETURN, false);
+				vw_SetKeyStatus(SDLK_KP_ENTER, false);
+				vw_SetKeyStatus(SDLK_RETURN, false);
 			}
 			return true;
 		}
@@ -388,11 +389,11 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN)))) {
+		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
-				vw_SetKeys(SDLK_KP_ENTER, false);
-				vw_SetKeys(SDLK_RETURN, false);
+				vw_SetKeyStatus(SDLK_KP_ENTER, false);
+				vw_SetKeyStatus(SDLK_RETURN, false);
 			}
 			return true;
 		}
@@ -491,11 +492,11 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 		vw_DrawFont(SizeI, Y+6, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, Transp, Text);
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN)))) {
+		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			if (SoundClick) Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
-				vw_SetKeys(SDLK_KP_ENTER, false);
-				vw_SetKeys(SDLK_RETURN, false);
+				vw_SetKeyStatus(SDLK_KP_ENTER, false);
+				vw_SetKeyStatus(SDLK_RETURN, false);
 			}
 			return true;
 		}
@@ -563,12 +564,12 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 
 
 	if (CanClick && !DragWeapon)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN)))) {
+		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			*CheckBoxStatus = !(*CheckBoxStatus);
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
-				vw_SetKeys(SDLK_KP_ENTER, false);
-				vw_SetKeys(SDLK_RETURN, false);
+				vw_SetKeyStatus(SDLK_KP_ENTER, false);
+				vw_SetKeyStatus(SDLK_RETURN, false);
 			}
 		}
 }
@@ -648,11 +649,11 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN)))) {
+		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
-				vw_SetKeys(SDLK_KP_ENTER, false);
-				vw_SetKeys(SDLK_RETURN, false);
+				vw_SetKeyStatus(SDLK_KP_ENTER, false);
+				vw_SetKeyStatus(SDLK_RETURN, false);
 			}
 			return true;
 		}
@@ -733,11 +734,11 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 
 
 	if (CanClick)
-		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeys(SDLK_KP_ENTER) || vw_GetKeys(SDLK_RETURN)))) {
+		if (vw_GetWindowLBMouse(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			Audio_PlaySound2D(2,1.0f);
 			if (InFocusByKeyboard) {
-				vw_SetKeys(SDLK_KP_ENTER, false);
-				vw_SetKeys(SDLK_RETURN, false);
+				vw_SetKeyStatus(SDLK_KP_ENTER, false);
+				vw_SetKeyStatus(SDLK_RETURN, false);
 			}
 			return true;
 		}

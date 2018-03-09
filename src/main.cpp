@@ -24,6 +24,8 @@
 
 *************************************************************************************/
 
+// TODO move to SDL_GetBasePath(), SDL_GetPrefPath() + SDL_free() usage (libSDL2)
+
 #include "game.h"
 #include "script_engine/script.h"
 #include "gfx/space_stars/space_stars.h"

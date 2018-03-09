@@ -79,7 +79,7 @@ const char * MouseCodeName(char Num)
 
 
 
-
+// can't use SDL_JoystickName() or SDL_JoystickNameForIndex(), too long names
 std::string JoystickCodeNameText; /*"JoystickXXX"*/
 const char *JoystickCodeName(int Num)
 {
@@ -113,10 +113,10 @@ void CheckMouseKeybJState()
 
 			// клавиатура
 			if ((NeedCheck > 0 && NeedCheck <= 6) || NeedCheck == 100)
-				for (int k=0; k<GetMaxKeys(); k++) {
+				for (int k = 0; k < vw_GetKeyStateArraySize(); k++) {
 					int i = SDL_GetKeyFromScancode((SDL_Scancode)k);
-					if (vw_GetKeys(i))
-						if (vw_VirtualCodeName(vw_GetText("0_code", Setup.MenuLanguage), i) != nullptr) { // если мы играем с этой кнопкой
+					if (vw_GetKeyStatus(i))
+						if (SDL_GetKeyName(i)) { // если мы играем с этой кнопкой
 							switch(NeedCheck) {
 							case 1:
 								Setup.KeyBoardUp = i;
@@ -142,7 +142,7 @@ void CheckMouseKeybJState()
 								break;
 							}
 
-							vw_SetKeys(i, false);
+							vw_SetKeyStatus(i, false);
 							NeedCheck = 0;
 						}
 				}
@@ -197,8 +197,8 @@ void CheckMouseKeybJState()
 
 
 			// если нажали Esc - возвращаем старые настройки выбора текущей кнопки
-			if (vw_GetKeys(SDLK_ESCAPE)) {
-				vw_SetKeys(SDLK_ESCAPE, false);
+			if (vw_GetKeyStatus(SDLK_ESCAPE)) {
+				vw_SetKeyStatus(SDLK_ESCAPE, false);
 				NeedCheck = 0;
 			}
 		}
@@ -339,7 +339,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 	Transp = 1.0f;
 	Off = false;
-	ButtonName = vw_VirtualCodeName(vw_GetText("0_code", Setup.MenuLanguage), Setup.KeyBoardPrimary);
+	ButtonName = SDL_GetKeyName(Setup.KeyBoardPrimary);
 	if (NeedCheck == 5) {
 		Transp = But[4];
 		Off = true;
@@ -382,7 +382,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 	Transp = 1.0f;
 	Off = false;
-	ButtonName = vw_VirtualCodeName(vw_GetText("0_code", Setup.MenuLanguage), Setup.KeyBoardSecondary);
+	ButtonName = SDL_GetKeyName(Setup.KeyBoardSecondary);
 	if (NeedCheck == 6) {
 		Transp = But[5];
 		Off = true;
@@ -412,7 +412,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Move_Forward"));
 	Transp = 1.0f;
 	Off = false;
-	ButtonName = vw_VirtualCodeName(vw_GetText("0_code", Setup.MenuLanguage), Setup.KeyBoardUp);
+	ButtonName = SDL_GetKeyName(Setup.KeyBoardUp);
 	if (NeedCheck == 1) {
 		Transp = But[0];
 		Off = true;
@@ -425,7 +425,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Move_Backward"));
 	Transp = 1.0f;
 	Off = false;
-	ButtonName = vw_VirtualCodeName(vw_GetText("0_code", Setup.MenuLanguage), Setup.KeyBoardDown);
+	ButtonName = SDL_GetKeyName(Setup.KeyBoardDown);
 	if (NeedCheck == 2) {
 		Transp = But[1];
 		Off = true;
@@ -438,7 +438,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Move_Left"));
 	Transp = 1.0f;
 	Off = false;
-	ButtonName = vw_VirtualCodeName(vw_GetText("0_code", Setup.MenuLanguage), Setup.KeyBoardLeft);
+	ButtonName = SDL_GetKeyName( Setup.KeyBoardLeft);
 	if (NeedCheck == 3) {
 		Transp = But[2];
 		Off = true;
@@ -451,7 +451,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	vw_DrawFont(X1, Y1, -280, 0,1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Move_Right"));
 	Transp = 1.0f;
 	Off = false;
-	ButtonName = vw_VirtualCodeName(vw_GetText("0_code", Setup.MenuLanguage), Setup.KeyBoardRight);
+	ButtonName = SDL_GetKeyName(Setup.KeyBoardRight);
 	if (NeedCheck == 4) {
 		Transp = But[3];
 		Off = true;

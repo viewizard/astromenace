@@ -31,7 +31,10 @@
 
 struct sRECT;
 
-// работа со временем
+/*
+ * Time.
+ */
+
 void vw_InitTime();
 void vw_InitTimeNum(int Num);
 float vw_GetTime(int TimeThread = 0);
@@ -40,18 +43,25 @@ void vw_StartTime();
 void vw_SetTimeThreadSpeed(int TimeThread = 0, float NewSpeed = 1.0f);
 float vw_GetTimeThreadSpeed(int TimeThread = 0);
 
-// работа с клавиатурой
-bool vw_GetKeys(int Num);
-void vw_SetKeys(int Num, bool NewKeyStatus);
-int GetMaxKeys();
-const char *vw_VirtualCodeName(const char *LanguageCode, int Num);
-const char *vw_KeyboardCodeName(int Num);
-int vw_KeyboardNameCode(const char * Name);
-// установка-получение юникода текущей нажатой клавиши
-void vw_SetCurrentUnicodeChar(char *NewUnicodeChar);
+/*
+ * Keyboard.
+ */
+
+// Get key status (pressed or not).
+bool vw_GetKeyStatus(int Key);
+// Set key status (pressed or released).
+void vw_SetKeyStatus(int Key, bool NewKeyStatus);
+// Get libSDL2 keystate array size.
+int vw_GetKeyStateArraySize();
+// Set current unicode (UTF8) character.
+void vw_SetCurrentUnicodeChar(const char *NewUnicodeChar);
+// Get current unicode (UTF32) character.
 const std::u32string &vw_GetCurrentUnicodeChar();
 
-// работа с мышкой
+/*
+ * Mouse.
+ */
+
 int vw_GetMousePos(int *X, int *Y);
 bool vw_GetWindowLBMouse(bool ResetStatus);
 bool vw_GetWindowRBMouse(bool ResetStatus);

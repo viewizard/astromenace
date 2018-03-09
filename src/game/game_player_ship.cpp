@@ -657,10 +657,10 @@ void GamePlayerShip()
 
 		// клавиатура
 		if (!NeedSkip) {
-			if (vw_GetKeys(Setup.KeyBoardDown)) MoveFB -= 2.0f*(Setup.ControlSensivity/10.0f)*PlayerFighter->TimeDelta;
-			if (vw_GetKeys(Setup.KeyBoardUp)) MoveFB += 2.0f*(Setup.ControlSensivity/10.0f)*PlayerFighter->TimeDelta;
-			if (vw_GetKeys(Setup.KeyBoardLeft)) MoveLR -= 2.0f*(Setup.ControlSensivity/10.0f)*PlayerFighter->TimeDelta;
-			if (vw_GetKeys(Setup.KeyBoardRight)) MoveLR += 2.0f*(Setup.ControlSensivity/10.0f)*PlayerFighter->TimeDelta;
+			if (vw_GetKeyStatus(Setup.KeyBoardDown)) MoveFB -= 2.0f*(Setup.ControlSensivity/10.0f)*PlayerFighter->TimeDelta;
+			if (vw_GetKeyStatus(Setup.KeyBoardUp)) MoveFB += 2.0f*(Setup.ControlSensivity/10.0f)*PlayerFighter->TimeDelta;
+			if (vw_GetKeyStatus(Setup.KeyBoardLeft)) MoveLR -= 2.0f*(Setup.ControlSensivity/10.0f)*PlayerFighter->TimeDelta;
+			if (vw_GetKeyStatus(Setup.KeyBoardRight)) MoveLR += 2.0f*(Setup.ControlSensivity/10.0f)*PlayerFighter->TimeDelta;
 		}
 
 
@@ -959,7 +959,7 @@ void GamePlayerShip()
 
 					// primary fire
 					if (primary_fire)
-						if (vw_GetKeys(Setup.KeyBoardPrimary)) {
+						if (vw_GetKeyStatus(Setup.KeyBoardPrimary)) {
 							if (Setup.Profile[CurrentProfile].PrimaryWeaponFireMode == 1) {
 								PlayerFighter->WeaponSetFire[i] = true;
 							} else {
@@ -976,7 +976,7 @@ void GamePlayerShip()
 
 					// secondary fire
 					if (secondary_fire)
-						if (vw_GetKeys(Setup.KeyBoardSecondary)) {
+						if (vw_GetKeyStatus(Setup.KeyBoardSecondary)) {
 							if (Setup.Profile[CurrentProfile].SecondaryWeaponFireMode == 1) {
 								PlayerFighter->WeaponSetFire[i] = true;
 							} else {
@@ -993,7 +993,7 @@ void GamePlayerShip()
 
 					// альтернативное управление
 					if (Setup.Profile[CurrentProfile].WeaponAltControl[i] == 1)
-						if (vw_GetKeys(Setup.Profile[CurrentProfile].WeaponAltControlData[i]))
+						if (vw_GetKeyStatus(Setup.Profile[CurrentProfile].WeaponAltControlData[i]))
 							PlayerFighter->WeaponSetFire[i] = true;
 
 				}
