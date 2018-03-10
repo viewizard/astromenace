@@ -608,7 +608,7 @@ int main( int argc, char **argv )
 
 
 	// инициализация счета времени
-	vw_InitTimeThreads();
+	vw_InitTimeThread(0);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1209,7 +1209,7 @@ loop:
 	// начальные установки джойстика
 	JoystickAxisX = 0;
 	JoystickAxisY = 0;
-	float JoystickCurentTime = vw_GetTimeThread();
+	float JoystickCurentTime = vw_GetTimeThread(0);
 	float JoystickTimeDelta = 0.0f;
 #ifdef joystick
 	if (Joystick != nullptr) {
@@ -1294,8 +1294,8 @@ loop:
 
 		// если есть джойстик, считаем для него время
 		if (Joystick != nullptr) {
-			JoystickTimeDelta = vw_GetTimeThread() - JoystickCurentTime;
-			JoystickCurentTime = vw_GetTimeThread();
+			JoystickTimeDelta = vw_GetTimeThread(0) - JoystickCurentTime;
+			JoystickCurentTime = vw_GetTimeThread(0);
 		}
 
 		// если окно видемое - рисуем

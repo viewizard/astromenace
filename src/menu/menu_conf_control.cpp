@@ -204,12 +204,12 @@ void CheckMouseKeybJState()
 		}
 
 	// мерцание кнопок, ставим сюда, чтобы не тягать его везде
-	float Delta = vw_GetTimeThread() - LastTimeBut;
+	float Delta = vw_GetTimeThread(0) - LastTimeBut;
 	for (int i=0; i<ButQuant; i++) {
 		if (But[i] > 0.3f) But[i] -= 2.0f*Delta;
 		if (But[i] < 0.3f) But[i] = 1.0f;
 	}
-	LastTimeBut = vw_GetTimeThread();
+	LastTimeBut = vw_GetTimeThread(0);
 }
 
 

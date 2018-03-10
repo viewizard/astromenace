@@ -355,7 +355,7 @@ void SetCurrentDialogBox(eDialogBox DialogBox)
 	CurrentDialogBox = DialogBox;
 
 
-	LastDialogUpdateTime = vw_GetTimeThread();
+	LastDialogUpdateTime = vw_GetTimeThread(0);
 	DialogContentTransp = 0.0f;
 	NeedShowDialog = true;
 	NeedHideDialog = false;
@@ -380,7 +380,7 @@ void CloseDialog()
 	StartHideTransp = DialogContentTransp;
 	NeedShowDialog = false;
 	NeedHideDialog = true;
-	LastDialogUpdateTime = vw_GetTimeThread();
+	LastDialogUpdateTime = vw_GetTimeThread(0);
 }
 
 
@@ -394,19 +394,19 @@ void DrawDialogBox()
 {
 
 	if (NeedHideDialog) {
-		DialogContentTransp = StartHideTransp - 3.0f*(vw_GetTimeThread() - LastDialogUpdateTime);
+		DialogContentTransp = StartHideTransp - 3.0f*(vw_GetTimeThread(0) - LastDialogUpdateTime);
 
 		if (DialogContentTransp <= 0.0f)
 			CurrentDialogBox = eDialogBox::None;
 	}
 
 	if (NeedShowDialog && DialogContentTransp < 1.0f) {
-		DialogContentTransp = 3.0f*(vw_GetTimeThread()-LastDialogUpdateTime);
+		DialogContentTransp = 3.0f*(vw_GetTimeThread(0)-LastDialogUpdateTime);
 
 		if (DialogContentTransp >= 1.0f) {
 			DialogContentTransp = 1.0f;
 			NeedShowDialog = false;
-			LastDialogUpdateTime = vw_GetTimeThread();
+			LastDialogUpdateTime = vw_GetTimeThread(0);
 		}
 	}
 
@@ -1483,7 +1483,7 @@ Dialogs with default type:
 			DragWeapon = false;
 			WeaponSetupSlot = -1;
 			//
-			LastMenuOnOffUpdateTime = vw_GetTimeThread();
+			LastMenuOnOffUpdateTime = vw_GetTimeThread(0);
 			ComBuffer = eCommand::TURN_OFF_WORKSHOP_MENU;
 			CloseDialog();
 		}

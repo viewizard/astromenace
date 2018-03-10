@@ -270,8 +270,8 @@ void StarSystemDraw(int DrawType)
 
 
 		if (DrawType == 1) {
-			StarsTile -= 0.015f*(vw_GetTimeThread() - StarsTileUpdateTime);
-			StarsTileUpdateTime = vw_GetTimeThread();
+			StarsTile -= 0.015f*(vw_GetTimeThread(0) - StarsTileUpdateTime);
+			StarsTileUpdateTime = vw_GetTimeThread(0);
 		} else {
 			StarsTile -= 0.035f*(vw_GetTimeThread(1) - StarsTileUpdateTime);
 			StarsTileUpdateTime = vw_GetTimeThread(1);
@@ -456,8 +456,8 @@ void StarSystemDrawSecondLayer(int DrawType)
 		buff[k++] = 3.0f+StarsTile2;
 
 		if (DrawType == 1) {
-			StarsTile2 -= 0.04f*(vw_GetTimeThread() - StarsTileUpdateTime2);
-			StarsTileUpdateTime2 = vw_GetTimeThread();
+			StarsTile2 -= 0.04f*(vw_GetTimeThread(0) - StarsTileUpdateTime2);
+			StarsTileUpdateTime2 = vw_GetTimeThread(0);
 		} else {
 			StarsTile2 -= 0.12f*(vw_GetTimeThread(1) - StarsTileUpdateTime2);
 			StarsTileUpdateTime2 = vw_GetTimeThread(1);
@@ -508,5 +508,5 @@ void StarSystemUpdate()
 
 	// static space stars
 	if (psSpaceStatic != nullptr)
-		psSpaceStatic->Update(vw_GetTimeThread());
+		psSpaceStatic->Update(vw_GetTimeThread(0));
 }

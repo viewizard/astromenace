@@ -79,20 +79,20 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 		if (*ButTransp == 1.0f) {
 			Audio_PlaySound2D(1,1.0f);
-			*Update = vw_GetTimeThread();
+			*Update = vw_GetTimeThread(0);
 			*ButTransp = 0.99f;
 		}
 
-		(*ButTransp) -= 3.0f*(vw_GetTimeThread() - (*Update));
+		(*ButTransp) -= 3.0f*(vw_GetTimeThread(0) - (*Update));
 		if (*ButTransp < 0.60f) *ButTransp = 0.60f;
-		*Update = vw_GetTimeThread();
+		*Update = vw_GetTimeThread(0);
 
 		IntTransp = (*ButTransp) * Transp;
 	} else {
 		if (*ButTransp < 1.0f) {
-			(*ButTransp) += 3.0f*(vw_GetTimeThread() - (*Update));
+			(*ButTransp) += 3.0f*(vw_GetTimeThread(0) - (*Update));
 			if (*ButTransp > 1.0f) *ButTransp =1.0f;
-			*Update = vw_GetTimeThread();
+			*Update = vw_GetTimeThread(0);
 		}
 
 		IntTransp = (*ButTransp) * Transp;
@@ -226,20 +226,20 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 		if (*ButTransp == 1.0f) {
 			Audio_PlaySound2D(1,1.0f);
-			*Update = vw_GetTimeThread();
+			*Update = vw_GetTimeThread(0);
 			*ButTransp = 0.98f;
 		}
 
-		(*ButTransp) -= 3.0f*(vw_GetTimeThread() - (*Update));
+		(*ButTransp) -= 3.0f*(vw_GetTimeThread(0) - (*Update));
 		if (*ButTransp < 0.60f) *ButTransp = 0.60f;
-		*Update = vw_GetTimeThread();
+		*Update = vw_GetTimeThread(0);
 
 		IntTransp = (*ButTransp) * Transp;
 	} else {
 		if (*ButTransp < 1.0f) {
-			(*ButTransp) += 3.0f*(vw_GetTimeThread() - (*Update));
+			(*ButTransp) += 3.0f*(vw_GetTimeThread(0) - (*Update));
 			if (*ButTransp > 1.0f) *ButTransp =1.0f;
-			*Update = vw_GetTimeThread();
+			*Update = vw_GetTimeThread(0);
 		}
 
 		IntTransp = (*ButTransp) * Transp;

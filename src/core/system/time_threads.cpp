@@ -31,8 +31,8 @@ we could "pause" game by stop the time flowing, or just "slowdown" some objects.
 This code provide "time threads" mechanism that allow manipulate time inside time
 thread or even "stop" time inside time thread.
 
-In common cases, if time manipulations feature not a goal, SDL_GetTicks()
-should be preferred over then vw_GetTimeThread().
+In common cases, if time manipulations feature not a goal, SDL_GetTicks() provide
+same functionality.
 */
 
 #include "../base.h"
@@ -40,41 +40,37 @@ should be preferred over then vw_GetTimeThread().
 
 namespace {
 
-#define MAX_TIMETHREAD_COUNT 10
-// current time thread status (active/paused)
-bool TimeThreadStatus[MAX_TIMETHREAD_COUNT];
-// last ticks, in order to care about time thread pause
-uint32_t LastGetTicks[MAX_TIMETHREAD_COUNT];
-// "time point", ticks of last speed change
-uint32_t DiffGetTicks[MAX_TIMETHREAD_COUNT];
-// current time thread speed
-float TimeThreadSpeed[MAX_TIMETHREAD_COUNT];
-// all "previous time" on last speed change
-float TimeThreadBuffer[MAX_TIMETHREAD_COUNT];
+struct sTimeThread {
+	// current time thread status (active/paused)
+	bool Status{false};
+	// last ticks, in order to care about time thread pause
+	uint32_t LastGetTicks{0};
+	// "time point", ticks of last speed change
+	uint32_t DiffGetTicks{0};
+	// current time thread speed
+	float Speed{1.0f};
+	// all "previous time" on last speed change
+	float Buffer{0.0f};
+};
+
+// std::unordered_map - caller could use any integer thread number (negative also
+// allowed), we need container with operator [], that create new element on access
+// and could use any integer number as index.
+std::unordered_map<int, sTimeThread> TimeThreadsMap;
 
 } // unnamed namespace
 
 
 /*
- * Initialize time for particular thread.
+ * Initialize or re-initialize time for particular thread.
  */
-void vw_InitTimeThread(int Num)
+void vw_InitTimeThread(int TimeThread)
 {
-	TimeThreadStatus[Num] = true;
-	LastGetTicks[Num] = 0;
-	DiffGetTicks[Num] = 0;
-	TimeThreadSpeed[Num] = 1.0f;
-	TimeThreadBuffer[Num] = 0.0f;
-}
-
-/*
- * Initialize time threads.
- */
-void vw_InitTimeThreads()
-{
-	for (int i = 0; i < MAX_TIMETHREAD_COUNT; i++) {
-		vw_InitTimeThread(i);
-	}
+	TimeThreadsMap[TimeThread].Status = true;
+	TimeThreadsMap[TimeThread].LastGetTicks = 0;
+	TimeThreadsMap[TimeThread].DiffGetTicks = 0;
+	TimeThreadsMap[TimeThread].Speed = 1.0f;
+	TimeThreadsMap[TimeThread].Buffer = 0.0f;
 }
 
 /*
@@ -82,15 +78,20 @@ void vw_InitTimeThreads()
  */
 float vw_GetTimeThread(int TimeThread)
 {
-	// time manipulations
-	if (TimeThreadSpeed[TimeThread] != 1.0f) {
-		// calculate time from "time point" (DiffGetTicks), when speed was changed last time, till now
-		float RealTimeThread = ((SDL_GetTicks() - DiffGetTicks[TimeThread]) * TimeThreadSpeed[TimeThread]) / 1000.0f;
-		// add "previous time" from time buffer
-		return RealTimeThread + TimeThreadBuffer[TimeThread];
+	if (TimeThreadsMap.find(TimeThread) == TimeThreadsMap.end()) {
+		std::cerr << "TimeThread was not initialized: " << TimeThread << "\n";
+		return 0.0f;
 	}
 
-	return TimeThreadBuffer[TimeThread] + (SDL_GetTicks() - DiffGetTicks[TimeThread]) / 1000.0f;
+	// time manipulations
+	if (TimeThreadsMap[TimeThread].Speed != 1.0f) {
+		// calculate time from "time point" (DiffGetTicks), when speed was changed last time, till now
+		float RealTimeThread = ((SDL_GetTicks() - TimeThreadsMap[TimeThread].DiffGetTicks) * TimeThreadsMap[TimeThread].Speed) / 1000.0f;
+		// add "previous time" from time buffer
+		return RealTimeThread + TimeThreadsMap[TimeThread].Buffer;
+	}
+
+	return TimeThreadsMap[TimeThread].Buffer + (SDL_GetTicks() - TimeThreadsMap[TimeThread].DiffGetTicks) / 1000.0f;
 }
 
 /*
@@ -98,10 +99,10 @@ float vw_GetTimeThread(int TimeThread)
  */
 void vw_StartTimeThreads()
 {
-	for (int i = 0; i < MAX_TIMETHREAD_COUNT; i++) {
-		if (!TimeThreadStatus[i]) {
-			DiffGetTicks[i] += SDL_GetTicks() - LastGetTicks[i];
-			TimeThreadStatus[i] = true;
+	for (auto &TimeThread : TimeThreadsMap) {
+		if (!TimeThread.second.Status) {
+			TimeThread.second.DiffGetTicks += SDL_GetTicks() - TimeThread.second.LastGetTicks;
+			TimeThread.second.Status = true;
 		}
 	}
 }
@@ -111,10 +112,10 @@ void vw_StartTimeThreads()
  */
 void vw_StopTimeThreads()
 {
-	for (int i=0; i<MAX_TIMETHREAD_COUNT; i++) {
-		if (TimeThreadStatus[i]) {
-			LastGetTicks[i] = SDL_GetTicks();
-			TimeThreadStatus[i] = false;
+	for (auto &TimeThread : TimeThreadsMap) {
+		if (TimeThread.second.Status) {
+			TimeThread.second.LastGetTicks = SDL_GetTicks();
+			TimeThread.second.Status = false;
 		}
 	}
 }
@@ -124,13 +125,18 @@ void vw_StopTimeThreads()
  */
 void vw_SetTimeThreadSpeed(int TimeThread, float NewSpeed)
 {
+	if (TimeThreadsMap.find(TimeThread) == TimeThreadsMap.end()) {
+		std::cerr << "TimeThread was not initialized: " << TimeThread << "\n";
+		return;
+	}
+
 	vw_Clamp(NewSpeed, 0.0f, 2.0f);
 
 	// store "previous time" in the time buffer
-	TimeThreadBuffer[TimeThread] += ((SDL_GetTicks() - DiffGetTicks[TimeThread]) * TimeThreadSpeed[TimeThread]) / 1000.0f;
+	TimeThreadsMap[TimeThread].Buffer += ((SDL_GetTicks() - TimeThreadsMap[TimeThread].DiffGetTicks) * TimeThreadsMap[TimeThread].Speed) / 1000.0f;
 	// store "time point", when speed was changed
-	DiffGetTicks[TimeThread] = SDL_GetTicks();
-	TimeThreadSpeed[TimeThread] = NewSpeed;
+	TimeThreadsMap[TimeThread].DiffGetTicks = SDL_GetTicks();
+	TimeThreadsMap[TimeThread].Speed = NewSpeed;
 }
 
 /*
@@ -138,5 +144,10 @@ void vw_SetTimeThreadSpeed(int TimeThread, float NewSpeed)
  */
 float vw_GetTimeThreadSpeed(int TimeThread)
 {
-	return TimeThreadSpeed[TimeThread];
+	if (TimeThreadsMap.find(TimeThread) == TimeThreadsMap.end()) {
+		std::cerr << "TimeThread was not initialized: " << TimeThread << "\n";
+		return 0.0f;
+	}
+
+	return TimeThreadsMap[TimeThread].Speed;
 }

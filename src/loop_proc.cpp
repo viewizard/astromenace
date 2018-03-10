@@ -99,12 +99,12 @@ void Loop_Proc()
 	// начальная установка
 	CurrentCursorStatus = 0;
 	if (CurrentCursorFlashLastTime == -1.0f) {
-		CurrentCursorFlashLastTime = vw_GetTimeThread();
+		CurrentCursorFlashLastTime = vw_GetTimeThread(0);
 	} else {
-		CurrentCursorFlash -= vw_GetTimeThread() - CurrentCursorFlashLastTime;
+		CurrentCursorFlash -= vw_GetTimeThread(0) - CurrentCursorFlashLastTime;
 		if (CurrentCursorFlash < 0.3f)
 			CurrentCursorFlash = 1.0f;
-		CurrentCursorFlashLastTime = vw_GetTimeThread();
+		CurrentCursorFlashLastTime = vw_GetTimeThread(0);
 	}
 
 
@@ -174,7 +174,7 @@ void Loop_Proc()
 
 
 		CursorParticleSystem2D->MoveSystem(sVECTOR3D(mX*1.0f+23,mY*1.0f+19,0.0f));
-		CursorParticleSystem2D->Update(vw_GetTimeThread());
+		CursorParticleSystem2D->Update(vw_GetTimeThread(0));
 		CursorParticleSystem2D->Draw();
 
 		SrcRect(0,0,64,64 );
@@ -320,7 +320,7 @@ void Loop_Proc()
 
 
 	// самым последним - просчет фпс
-	float FPSTime = vw_GetTimeThread();
+	float FPSTime = vw_GetTimeThread(0);
 	if (FPSTime - LastSecond > UPDATE_SPEED_MS) {
 		eFPS = eCurrentFrames * (FPSTime - LastSecond);
 		eCurrentFrames = 0;

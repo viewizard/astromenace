@@ -269,8 +269,8 @@ void ProfileInputText()
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"),
 			   true, CurrentProfileNameTransp*MenuContentTransp);
 
-	float DeltaTime = vw_GetTimeThread() - LastProfileNameTime;
-	LastProfileNameTime = vw_GetTimeThread();
+	float DeltaTime = vw_GetTimeThread(0) - LastProfileNameTime;
+	LastProfileNameTime = vw_GetTimeThread(0);
 	CurrentProfileNameTransp -= 2.0f*DeltaTime;
 	if (CurrentProfileNameTransp < 0.2f) CurrentProfileNameTransp = 0.9f;
 

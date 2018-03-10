@@ -35,20 +35,18 @@ struct sRECT;
  * Time threads.
  */
 
-// Initialize time threads.
-void vw_InitTimeThreads();
-// Initialize time for particular thread.
-void vw_InitTimeThread(int Num);
+// Initialize or re-initialize time for particular thread.
+void vw_InitTimeThread(int TimeThread);
 // Get time for particular thread.
-float vw_GetTimeThread(int TimeThread = 0);
+float vw_GetTimeThread(int TimeThread);
 // Start all time threads.
 void vw_StartTimeThreads();
 // Stop all time threads.
 void vw_StopTimeThreads();
 // Set time thread speed for particular thread.
-void vw_SetTimeThreadSpeed(int TimeThread = 0, float NewSpeed = 1.0f);
+void vw_SetTimeThreadSpeed(int TimeThread, float NewSpeed = 1.0f);
 // Get time thread speed for particular thread.
-float vw_GetTimeThreadSpeed(int TimeThread = 0);
+float vw_GetTimeThreadSpeed(int TimeThread);
 
 /*
  * Keyboard.

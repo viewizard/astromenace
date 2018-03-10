@@ -132,7 +132,7 @@ bool sMusic::Play(const char *Name, float fVol, float fMainVol, bool Loop, const
 	FadeOutSw = false;
 	FadeTime = 0.0f;
 	FadeAge = 0.0f;
-	LastTime = vw_GetTimeThread();
+	LastTime = vw_GetTimeThread(0);
 	mVF = nullptr;
 
 	// Position of the source sound.
@@ -293,7 +293,7 @@ bool sMusic::Update()
 
 
 	// обрабатываем эффекты
-	float TimeDelta = vw_GetTimeThread() - LastTime;
+	float TimeDelta = vw_GetTimeThread(0) - LastTime;
 
 	if (FadeInSw &&
 	    (Volume < FadeInEndVol)) {
@@ -312,7 +312,7 @@ bool sMusic::Update()
 		if (Volume <= 0.0f) return false;
 	}
 
-	LastTime = vw_GetTimeThread();
+	LastTime = vw_GetTimeThread(0);
 
 
 
@@ -353,7 +353,7 @@ void sMusic::FadeIn(float EndVol, float Time)
 	FadeInEndVol = EndVol;
 	FadeTime = 0.0f; // начинаем с нуля!
 	FadeAge = Time;
-	LastTime = vw_GetTimeThread();
+	LastTime = vw_GetTimeThread(0);
 }
 
 
@@ -368,7 +368,7 @@ void sMusic::FadeOut(float Time)
 	FadeInStartVol = Volume;
 	FadeTime = 0.0f; // начинаем с нуля!
 	FadeAge = Time;
-	LastTime = vw_GetTimeThread();
+	LastTime = vw_GetTimeThread(0);
 }
 
 

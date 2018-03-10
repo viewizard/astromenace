@@ -42,7 +42,7 @@ bool cSound::Play(const char *Name, float fVol, float fMainVol, float x, float y
 {
 	Source = 0;
 	Age = 0.0f;
-	LastUpdateTime = vw_GetTimeThread();
+	LastUpdateTime = vw_GetTimeThread(0);
 	Group = 0;
 	GroupCount = 0;
 	SubGroup = 0;

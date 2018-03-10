@@ -783,7 +783,7 @@ void InitGame()
 	// инициализация игрового меню
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	GameContentTransp = 0.0f;
-	LastGameUpdateTime = vw_GetTimeThread();
+	LastGameUpdateTime = vw_GetTimeThread(0);
 	GameButton1Transp = 1.0f;
 	LastGameButton1UpdateTime = 0.0f;
 	GameButton2Transp = 1.0f;
@@ -815,7 +815,7 @@ void InitGame()
 	if (GamePowerSystem == 0) CurrentDrawEnergNumFull = 0.0f;
 	CurrentDrawLifeNumFull = PlayerFighter->Strength/PlayerFighter->StrengthStart;
 
-	CurentTime = vw_GetTimeThread();
+	CurentTime = vw_GetTimeThread(0);
 	CurrentAlert2 = 1.0f;
 	CurrentAlert3 = 1.0f;
 
@@ -831,12 +831,12 @@ void InitGame()
 	StarsTileUpdateTime2 = vw_GetTimeThread(1);
 
 
-	LastGameOnOffUpdateTime = vw_GetTimeThread();
+	LastGameOnOffUpdateTime = vw_GetTimeThread(0);
 	GameBlackTransp = 1.0f;
 	NeedOnGame = true;
 
 	GameTime = 0.0f;
-	LastGameTime = vw_GetTimeThread();
+	LastGameTime = vw_GetTimeThread(0);
 }
 
 
@@ -854,7 +854,7 @@ void ExitGame()
 	NewComBuffer = ComBuffer;
 	ComBuffer = eCommand::DO_NOTHING; // пока сбрасываем в ноль, чтобы не переключилось до затухания
 	NeedOffGame = true;
-	LastGameOnOffUpdateTime = vw_GetTimeThread();
+	LastGameOnOffUpdateTime = vw_GetTimeThread(0);
 
 	// убираем меню
 	if (GameMenu) {
@@ -1002,13 +1002,13 @@ void SetGameMissionComplete()
 void DrawGame()
 {
 
-	float TimeDelta = vw_GetTimeThread() - CurentTime;
-	CurentTime = vw_GetTimeThread();
+	float TimeDelta = vw_GetTimeThread(0) - CurentTime;
+	CurentTime = vw_GetTimeThread(0);
 
 
 	// если не в меню - считаем время
-	if (GameContentTransp == 0.0f) GameTime += vw_GetTimeThread() - LastGameTime;
-	LastGameTime = vw_GetTimeThread();
+	if (GameContentTransp == 0.0f) GameTime += vw_GetTimeThread(0) - LastGameTime;
+	LastGameTime = vw_GetTimeThread(0);
 
 
 
@@ -1108,7 +1108,7 @@ void DrawGame()
 
 
 	// эмблема энергии
-	EnergyParticleSystem2D->Update(vw_GetTimeThread());
+	EnergyParticleSystem2D->Update(vw_GetTimeThread(0));
 	EnergyParticleSystem2D->Draw();
 	{
 		// учитываем в эмблеме энергии, сколько у нас ее (визуально меняем вид эмблемы)
@@ -1116,11 +1116,11 @@ void DrawGame()
 		if (EnergyParticleSystem2D->ParticlesPerSec == 0) EnergyParticleSystem2D->ParticlesPerSec = 1;
 	}
 	// эмблема жизни
-	LifeParticleSystem2D->Update(vw_GetTimeThread());
+	LifeParticleSystem2D->Update(vw_GetTimeThread(0));
 	LifeParticleSystem2D->Draw();
-	Life2ParticleSystem2D->Update(vw_GetTimeThread());
+	Life2ParticleSystem2D->Update(vw_GetTimeThread(0));
 	Life2ParticleSystem2D->Draw();
-	Life3ParticleSystem2D->Update(vw_GetTimeThread());
+	Life3ParticleSystem2D->Update(vw_GetTimeThread(0));
 	Life3ParticleSystem2D->Draw();
 	if (PlayerFighter != nullptr) {
 
@@ -1185,11 +1185,11 @@ void DrawGame()
 
 		// находим правильное отображение
 		if (NeedDrawEnergNumFull > CurrentDrawEnergNumFull) {
-			CurrentDrawEnergNumFull += GamePowerSystem*0.5f*(vw_GetTimeThread() - LastGameUpdateTime);
+			CurrentDrawEnergNumFull += GamePowerSystem*0.5f*(vw_GetTimeThread(0) - LastGameUpdateTime);
 			if (CurrentDrawEnergNumFull > NeedDrawEnergNumFull) CurrentDrawEnergNumFull = NeedDrawEnergNumFull;
 		} else {
 			if (NeedDrawEnergNumFull < CurrentDrawEnergNumFull) {
-				CurrentDrawEnergNumFull -= GamePowerSystem*0.5f*(vw_GetTimeThread() - LastGameUpdateTime);
+				CurrentDrawEnergNumFull -= GamePowerSystem*0.5f*(vw_GetTimeThread(0) - LastGameUpdateTime);
 				if (CurrentDrawEnergNumFull < NeedDrawEnergNumFull) CurrentDrawEnergNumFull = NeedDrawEnergNumFull;
 			}
 		}
@@ -1198,11 +1198,11 @@ void DrawGame()
 
 		// находим правильное отображение
 		if (NeedDrawLifeNumFull > CurrentDrawLifeNumFull) {
-			CurrentDrawLifeNumFull += 0.3f*(vw_GetTimeThread() - LastGameUpdateTime);
+			CurrentDrawLifeNumFull += 0.3f*(vw_GetTimeThread(0) - LastGameUpdateTime);
 			if (CurrentDrawLifeNumFull > NeedDrawLifeNumFull) CurrentDrawLifeNumFull = NeedDrawLifeNumFull;
 		} else {
 			if (NeedDrawLifeNumFull < CurrentDrawLifeNumFull) {
-				CurrentDrawLifeNumFull -= 0.3f*(vw_GetTimeThread() - LastGameUpdateTime);
+				CurrentDrawLifeNumFull -= 0.3f*(vw_GetTimeThread(0) - LastGameUpdateTime);
 				if (CurrentDrawLifeNumFull < NeedDrawLifeNumFull) CurrentDrawLifeNumFull = NeedDrawLifeNumFull;
 			}
 		}
@@ -1451,7 +1451,7 @@ void DrawGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// делаем плавное появление меню
 	if (NeedShowGameMenu) {
-		GameContentTransp += 2.0f*(vw_GetTimeThread()-LastGameUpdateTime);
+		GameContentTransp += 2.0f*(vw_GetTimeThread(0)-LastGameUpdateTime);
 		if (GameContentTransp >= 1.0f) {
 			GameContentTransp = 1.0f;
 			NeedShowGameMenu = false;
@@ -1467,7 +1467,7 @@ void DrawGame()
 	}
 	// делаем полавное угасание меню
 	if (NeedHideGameMenu) {
-		GameContentTransp -= 1.0f*(vw_GetTimeThread() - LastGameUpdateTime);
+		GameContentTransp -= 1.0f*(vw_GetTimeThread(0) - LastGameUpdateTime);
 		if (GameContentTransp <= 0.0f) {
 			GameContentTransp = 0.0f;
 			NeedHideGameMenu = false;
@@ -1480,7 +1480,7 @@ void DrawGame()
 		// останавливаем игру
 		vw_SetTimeThreadSpeed(1, (1.0f - GameContentTransp)*Setup.GameSpeed);
 	}
-	LastGameUpdateTime = vw_GetTimeThread();
+	LastGameUpdateTime = vw_GetTimeThread(0);
 
 	// если можем - рисуем игровое меню
 	if (GameContentTransp > 0.0f) {
@@ -1729,7 +1729,7 @@ void DrawGame()
 
 	// черное затемнение, если нужно
 	if (NeedOnGame) {
-		GameBlackTransp = 1.0f - 2.4f*(vw_GetTimeThread() - LastGameOnOffUpdateTime);
+		GameBlackTransp = 1.0f - 2.4f*(vw_GetTimeThread(0) - LastGameOnOffUpdateTime);
 		if (GameBlackTransp <= 0.0f) {
 			GameBlackTransp = 0.0f;
 			NeedOnGame = false;
@@ -1742,7 +1742,7 @@ void DrawGame()
 
 	// черное затемнение, если нужно
 	if (NeedOffGame) {
-		GameBlackTransp = 2.4f*(vw_GetTimeThread() - LastGameOnOffUpdateTime);
+		GameBlackTransp = 2.4f*(vw_GetTimeThread(0) - LastGameOnOffUpdateTime);
 		if (GameBlackTransp >= 1.0f) {
 			GameBlackTransp = 1.0f;
 			NeedOffGame = false;

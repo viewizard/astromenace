@@ -384,7 +384,7 @@ void vw_UpdateSound()
 {
 	cSound *Tmp = StartSoundMan;
 
-	float CurrentGetTime = vw_GetTimeThread();
+	float CurrentGetTime = vw_GetTimeThread(0);
 
 	while (Tmp != nullptr) {
 		cSound *Tmp1 = Tmp->Next;

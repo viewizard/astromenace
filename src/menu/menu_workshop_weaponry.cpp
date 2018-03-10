@@ -440,7 +440,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 					Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] = 0.0f;
 
 				// чтобы оружие заняло свое место...
-				WorkshopFighterGame->Update(vw_GetTimeThread());
+				WorkshopFighterGame->Update(vw_GetTimeThread(0));
 
 				// сброс
 				DragWeapon = false;
@@ -826,7 +826,7 @@ void ShipSlotSetupWeapon(int Slot)
 					Setup.Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] = 0.0f;
 
 				// чтобы оружие заняло свое место...
-				WorkshopFighterGame->Update(vw_GetTimeThread());
+				WorkshopFighterGame->Update(vw_GetTimeThread(0));
 
 				// сброс
 				DragWeapon = false;
