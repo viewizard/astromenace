@@ -26,7 +26,6 @@
 
 #include "../graphics/graphics.h"
 #include "../math/math.h"
-#include "system.h"
 
 namespace {
 
@@ -55,6 +54,26 @@ int LastTimeLeftDoubleClickY{-1};
 
 } // unnamed namespace
 
+
+/*
+ * Get mouse position.
+ */
+void vw_GetMousePos(int &X, int &Y)
+{
+	int W, H;
+	vw_GetViewport(nullptr, nullptr, &W, &H);
+
+	float ARWidth, ARHeight;
+	bool ARFLAG = vw_GetAspectWH(&ARWidth, &ARHeight);
+
+	if (ARFLAG) {
+		X = (int)(MouseX * ARWidth * 1.0f / W);
+		Y = (int)(MouseY * ARHeight * 1.0f / H);
+	} else {
+		X = MouseX;
+		Y = MouseY;
+	}
+}
 
 /*
  * Set left mouse button double click status.
@@ -187,26 +206,6 @@ void vw_SetMousePos(int X, int Y)
 
 	MouseX = X;
 	MouseY = Y;
-}
-
-/*
- * Get mouse position.
- */
-void vw_GetMousePos(int &X, int &Y)
-{
-	int W, H;
-	vw_GetViewport(nullptr, nullptr, &W, &H);
-
-	float ARWidth, ARHeight;
-	bool ARFLAG = vw_GetAspectWH(&ARWidth, &ARHeight);
-
-	if (ARFLAG) {
-		X = (int)(MouseX * ARWidth * 1.0f / W);
-		Y = (int)(MouseY * ARHeight * 1.0f / H);
-	} else {
-		X = MouseX;
-		Y = MouseY;
-	}
 }
 
 /*
