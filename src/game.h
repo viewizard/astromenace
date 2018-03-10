@@ -198,6 +198,7 @@ void LoadGameData(eLoading LoadType);
 //------------------------------------------------------------------------------------
 void GameCameraUpdate(float Time);
 void InitGameCamera();
+void ResetGameCamera();
 float GameCameraGetDeviation();
 float GameCameraGetSpeed();
 void GameCameraSetExplosion(sVECTOR3D Location, float Power);

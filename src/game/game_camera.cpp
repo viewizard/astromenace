@@ -55,14 +55,10 @@ float   GameCameraDeviationAge = 0.0f;
 
 
 
-
-//-----------------------------------------------------------------------------
-// инициализация переменных камеры для игры
-//-----------------------------------------------------------------------------
-void InitGameCamera()
+void ResetGameCamera()
 {
 	GamePoint = sVECTOR3D(0.0f, 0.0f, 0.0f);
-	GameCameraLastUpdate = vw_GetTimeThread(1);
+	GameCameraLastUpdate = 0.0f;
 
 	GameCameraDeviation = 0.0f;
 	GameCameraDeviationTime = 0.0f;
@@ -71,6 +67,16 @@ void InitGameCamera()
 	GameCameraNeedStartDeviation = 0.0f;
 	GameCameraDeviationAge = 0.0f;
 	vw_SetCameraDeviation(sVECTOR3D(0,0,0));
+}
+
+
+//-----------------------------------------------------------------------------
+// инициализация переменных камеры для игры
+//-----------------------------------------------------------------------------
+void InitGameCamera()
+{
+	ResetGameCamera();
+	GameCameraLastUpdate = vw_GetTimeThread(1);
 }
 
 

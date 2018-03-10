@@ -144,6 +144,9 @@ void InitMenu()
 	vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
 	vw_SetCameraMoveAroundPoint(sVECTOR3D(0,0,0), 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
 
+	// since we use scripts with background animation in the same way as
+	// games levels do, we should reset game camera first
+	ResetGameCamera();
 
 	if (Script != nullptr) {
 		delete Script;
