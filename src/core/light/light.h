@@ -31,10 +31,13 @@
 
 struct sVECTOR3D;
 
-enum class eLightType {
-	Directional,	// located far (sun, stars, etc)
-	Point		// located close (engines, weapon flashes, etc)
-};
+// We can't use "enum class" as std::unordered_multimap key,
+// OS X AppleClang 8.1.0.8020042 don't like this:
+// error: implicit instantiation of undefined template 'std::__1::hash<eLightType>'
+// This is sad, since Linux GCC and Clang works well.
+constexpr int LightType_Directional{0};	// located far (sun, stars, etc)
+constexpr int LightType_Point{1};	// located close (engines, weapon flashes, etc)
+
 
 struct sLight {
 	// Activate and setup for proper light type (OpenGL-related).
@@ -80,7 +83,7 @@ void vw_ReleaseLight(sLight *Light);
 // Release all lights.
 void vw_ReleaseAllLights();
 // Create light.
-sLight *vw_CreateLight(eLightType Type);
+sLight *vw_CreateLight(int Type);
 // Create point light with initialization.
 sLight *vw_CreatePointLight(sVECTOR3D Location, float R, float G, float B, float Linear, float Quadratic);
 // Get main direct light. Usually, first one is the main.

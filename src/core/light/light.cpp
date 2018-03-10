@@ -33,7 +33,7 @@ namespace {
 // no point to calculate attenuation for all scene, limit it by 10
 constexpr float AttenuationLimit = 10.0f;
 // all lights, indexed by light's type
-std::unordered_multimap<eLightType, sLight> LightsMap;
+std::unordered_multimap<int, sLight> LightsMap;
 
 } // unnamed namespace
 
@@ -46,7 +46,7 @@ int vw_CalculateAllPointLightsAttenuation(sVECTOR3D Location, float Radius2, std
 	int AffectedLightsCount = 0;
 
 	for (auto &tmpLight : LightsMap) {
-		if ((tmpLight.first == eLightType::Point) && tmpLight.second.On) {
+		if ((tmpLight.first == LightType_Point) && tmpLight.second.On) {
 			// care about distance to object
 			sVECTOR3D DistV = Location - tmpLight.second.Location;
 			float Dist2 = DistV.x * DistV.x + DistV.y * DistV.y + DistV.z * DistV.z;
@@ -88,9 +88,9 @@ int vw_CheckAndActivateAllLights(int &Type1, int &Type2, sVECTOR3D Location, flo
 	Type2 = 0; // counter for point light
 
 	// directional light should be first, since this is the main scene light
-	auto range = LightsMap.equal_range(eLightType::Directional);
+	auto range = LightsMap.equal_range(LightType_Directional);
 	for_each(range.first, range.second,
-		[&Type1, &DirLimit, &Matrix](std::unordered_multimap<eLightType, sLight>::value_type &tmpLight){
+		[&Type1, &DirLimit, &Matrix](std::unordered_multimap<int, sLight>::value_type &tmpLight){
 			if ((Type1 < DirLimit) &&
 			    (Type1 < vw_GetDevCaps()->MaxActiveLights) &&
 			    tmpLight.second.Activate(Type1, Matrix))
@@ -155,7 +155,7 @@ void vw_ReleaseAllLights()
 /*
  * Create light.
  */
-sLight *vw_CreateLight(eLightType Type)
+sLight *vw_CreateLight(int Type)
 {
 	sLight tmpLight;
 	auto Light = LightsMap.emplace(Type, tmpLight);
@@ -167,7 +167,7 @@ sLight *vw_CreateLight(eLightType Type)
  */
 sLight *vw_CreatePointLight(sVECTOR3D Location, float R, float G, float B, float Linear, float Quadratic)
 {
-	sLight *Light = vw_CreateLight(eLightType::Point);
+	sLight *Light = vw_CreateLight(LightType_Point);
 
 	Light->Diffuse[0] = Light->Specular[0] = R;
 	Light->Diffuse[1] = Light->Specular[1] = G;
@@ -185,7 +185,7 @@ sLight *vw_CreatePointLight(sVECTOR3D Location, float R, float G, float B, float
  */
 sLight *vw_GetMainDirectLight()
 {
-	auto tmpLight = LightsMap.find(eLightType::Directional);
+	auto tmpLight = LightsMap.find(LightType_Directional);
 	if(tmpLight != LightsMap.end())
 		return &tmpLight->second;
 
@@ -195,16 +195,16 @@ sLight *vw_GetMainDirectLight()
 /*
  * Get light type from light map.
  */
-static eLightType GetLightType(sLight *Light)
+static int GetLightType(sLight *Light)
 {
-	// struct sLight don't have eLightType field, since we have it in LightsMap (as index),
-	// usually, we have only 1-2 directional lights, so, this is short extremely cycle
-	eLightType LightType = eLightType::Point;
-	auto range = LightsMap.equal_range(eLightType::Directional);
+	// structure sLight don't have LightType field, since we have it in LightsMap (as key),
+	// usually, we have only 1-2 directional lights, so, this is extremely short cycle
+	int LightType = LightType_Point;
+	auto range = LightsMap.equal_range(LightType_Directional);
 	for_each(range.first, range.second,
-		[Light, &LightType](std::unordered_multimap<eLightType, sLight>::value_type &tmpLight){
+		[Light, &LightType](std::unordered_multimap<int, sLight>::value_type &tmpLight){
 			if (&tmpLight.second == Light)
-				LightType = eLightType::Directional;
+				LightType = LightType_Directional;
 		}
 	);
 
@@ -224,7 +224,7 @@ bool sLight::Activate(int CurrentLightNum, float Matrix[16])
 	vw_LoadIdentity();
 	vw_SetMatrix(Matrix);
 
-	if (GetLightType(this) == eLightType::Directional) {
+	if (GetLightType(this) == LightType_Directional) {
 		float RenderDirection[4]{-Direction.x, -Direction.y, -Direction.z, 0.0f};
 		float RenderLocation[4]{-Direction.x, -Direction.y, -Direction.z, 0.0f};
 
@@ -274,6 +274,6 @@ void sLight::DeActivate()
  */
 void sLight::SetLocation(sVECTOR3D NewLocation)
 {
-	if (GetLightType(this) != eLightType::Directional)
+	if (GetLightType(this) != LightType_Directional)
 		Location = NewLocation;
 }
