@@ -125,7 +125,7 @@ void CreateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.07f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 2:
@@ -147,7 +147,7 @@ void CreateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.4f, 0.75f, 0.15f, 0.0f, 0.07f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.4f, 0.75f, 0.15f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 3:
@@ -169,7 +169,7 @@ void CreateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 80;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.25f, 0.25f, 1.0f, 0.0f, 0.07f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.25f, 0.25f, 1.0f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 4:
@@ -194,7 +194,7 @@ void CreateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->IsAttractive = true;
 		ParticleSystem->AttractiveValue = 50.0f;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.0f, 0.7f, 1.0f, 0.0f, 0.07f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.0f, 0.7f, 1.0f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 
@@ -231,7 +231,7 @@ void CreateRotateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 2:
@@ -253,7 +253,7 @@ void CreateRotateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.4f, 0.75f, 0.15f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.4f, 0.75f, 0.15f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 3:
@@ -275,7 +275,7 @@ void CreateRotateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.25f, 0.25f, 1.0f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.25f, 0.25f, 1.0f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 4:
@@ -297,7 +297,7 @@ void CreateRotateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 

@@ -160,7 +160,6 @@
 		<Unit filename="src/core/graphics/misc.cpp" />
 		<Unit filename="src/core/light/light.cpp" />
 		<Unit filename="src/core/light/light.h" />
-		<Unit filename="src/core/light/light_manager.cpp" />
 		<Unit filename="src/core/math/math.cpp" />
 		<Unit filename="src/core/math/math.h" />
 		<Unit filename="src/core/math/matrix33.cpp" />

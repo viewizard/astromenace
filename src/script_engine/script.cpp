@@ -390,12 +390,12 @@ bool cScriptEngine::Update(float Time)
 							} else
 								// Light
 								if (xmlEntry->Name == "Light") {
-									sLight *NewLight;
-									NewLight = new sLight;
-
-									NewLight->LightType = 0; // по умолчанию, солнце
+									eLightType LightType = eLightType::Directional; // по умолчанию, солнце
 									if (xmlDoc->TestEntryAttribute(xmlEntry, "type"))
-										NewLight->LightType = xmlDoc->iGetEntryAttribute(xmlEntry, "type");
+										if (xmlDoc->iGetEntryAttribute(xmlEntry, "type") == 1)
+											LightType = eLightType::Point;
+
+									sLight *NewLight = vw_CreateLight(LightType);
 
 									NewLight->Diffuse[0] = 0.0f;
 									NewLight->Diffuse[1] = 0.0f;

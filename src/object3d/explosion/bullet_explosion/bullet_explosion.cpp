@@ -367,7 +367,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 				float Rexpl = (Projectile->GraphicFX[0]->ColorStart.r + Projectile->GraphicFX[0]->ColorEnd.r)/2.0f;
 				float Gexpl = (Projectile->GraphicFX[0]->ColorStart.g + Projectile->GraphicFX[0]->ColorEnd.g)/2.0f;
 				float Bexpl = (Projectile->GraphicFX[0]->ColorStart.b + Projectile->GraphicFX[0]->ColorEnd.b)/2.0f;
-				GraphicFX[0]->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
+				GraphicFX[0]->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
 
 				GraphicFX[0]->ColorStart.r = Projectile->GraphicFX[0]->ColorStart.r;
 				GraphicFX[0]->ColorStart.g = Projectile->GraphicFX[0]->ColorStart.g;
@@ -429,7 +429,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 				float Rexpl = (Projectile->GraphicFX[0]->ColorStart.r + Projectile->GraphicFX[0]->ColorEnd.r)/2.0f;
 				float Gexpl = (Projectile->GraphicFX[0]->ColorStart.g + Projectile->GraphicFX[0]->ColorEnd.g)/2.0f;
 				float Bexpl = (Projectile->GraphicFX[0]->ColorStart.b + Projectile->GraphicFX[0]->ColorEnd.b)/2.0f;
-				GraphicFX[0]->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
+				GraphicFX[0]->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
 
 				GraphicFX[0]->ColorStart.r = Projectile->GraphicFX[0]->ColorStart.r;
 				GraphicFX[0]->ColorStart.g = Projectile->GraphicFX[0]->ColorStart.g;

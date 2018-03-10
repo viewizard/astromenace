@@ -81,7 +81,7 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->NeedStop = true;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.005f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.005f);
 		break;
 	case 2:	// средний взрыв, пришельцы
 		ParticleSystem->TimeLastUpdate = 1;// чтобы сделать один проход
@@ -147,7 +147,7 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->NeedStop = true;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.05f, 0.85f, 1.0f, 0.0f, 0.002f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.05f, 0.85f, 1.0f, 0.0f, 0.002f);
 		break;
 	case 5:	// средний взрыв, земляне
 		ParticleSystem->TimeLastUpdate = 1;// чтобы сделать один проход
@@ -169,7 +169,7 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->NeedStop = true;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.003f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.003f);
 		break;
 	case 6:	// средний взрыв, земляне
 		ParticleSystem->TimeLastUpdate = 1;// чтобы сделать один проход
@@ -215,7 +215,7 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsAttractive = true;
 		ParticleSystem->AttractiveValue = -2.5f;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.15f, 0.35f, 1.0f, 0.0f, 0.0001f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.15f, 0.35f, 1.0f, 0.0f, 0.0001f);
 		break;
 	case 8: // torpedo
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -240,7 +240,7 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsAttractive = true;
 		ParticleSystem->AttractiveValue = -2.5f;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 1.0f, 0.15f, 0.0f, 0.0005f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 1.0f, 0.15f, 0.0f, 0.0005f);
 		break;
 	case 9: // nuke
 		ParticleSystem->ColorStart.r = 0.30f;
@@ -289,7 +289,7 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->AlphaShowHide = false;
 		ParticleSystem->IsAttractive = true;
 		ParticleSystem->AttractiveValue = -2.5f;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.005f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.005f);
 		break;
 
 
@@ -313,7 +313,7 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->NeedStop = true;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.05f, 0.85f, 1.0f, 0.0f, 0.001f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.05f, 0.85f, 1.0f, 0.0f, 0.001f);
 		break;
 	case 12:	// взрыв осколка босса, как средний взрыв, земляне
 		ParticleSystem->TimeLastUpdate = 1;// чтобы сделать один проход

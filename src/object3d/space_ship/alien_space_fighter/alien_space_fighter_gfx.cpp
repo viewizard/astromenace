@@ -62,7 +62,7 @@ void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->CreationType = 2;
 		ParticleSystem->CreationSize = sVECTOR3D(0.8f,0.8f,0.8f);
 		ParticleSystem->IsAttractive = true;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.1f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 2:
@@ -86,7 +86,7 @@ void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->CreationType = 1;
 		ParticleSystem->CreationSize = sVECTOR3D(0.4f,0.7f,0.1f);
 		ParticleSystem->IsAttractive = true;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.3f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.3f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 3:
@@ -150,7 +150,7 @@ void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Life       = 1.50f;
 		ParticleSystem->ParticlesPerSec = 40;
 		ParticleSystem->IsAttractive = true;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.0f, 0.55f, 1.0f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.0f, 0.55f, 1.0f, 0.0f, 0.1f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 6:
@@ -174,7 +174,7 @@ void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->CreationType = 1;
 		ParticleSystem->CreationSize = sVECTOR3D(0.5f,0.5f,0.1f);
 		ParticleSystem->IsAttractive = true;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.3f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.3f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 7:

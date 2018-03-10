@@ -682,7 +682,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		float PromptDrawRealDist2 = (Location.x-CurrentCameraLocation.x)*(Location.x-CurrentCameraLocation.x)+(Location.y-CurrentCameraLocation.y)*(Location.y-CurrentCameraLocation.y)+(Location.z-CurrentCameraLocation.z)*(Location.z-CurrentCameraLocation.z);
 
 		// получаем кол-во точечных источников, воздействующих на объект
-		int LightsCount = vw_CheckAllPointLights(Location, Radius*Radius);
+		int LightsCount = vw_CalculateAllPointLightsAttenuation(Location, Radius*Radius, nullptr);
 
 		// если дальше - смотрим сколько воздействует источников света
 		if (PromptDrawRealDist2 > PromptDrawDist2) {
@@ -889,7 +889,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 		int LightType1, LightType2;
 		// включаем источники света
-		vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
+		vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
 
 		if (Setup.UseGLSL && DrawObjectList[0].ShaderType >= 0) {
 			sGLSL *CurrentObject3DGLSL = nullptr;
@@ -1098,9 +1098,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			int LightType1, LightType2;
 			// включаем источники света
 			if (HitBB != nullptr)
-				vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location + HitBBLocation[i], HitBBRadius2[i], 2, Setup.MaxPointLights, Matrix);
+				vw_CheckAndActivateAllLights(LightType1, LightType2, Location + HitBBLocation[i], HitBBRadius2[i], 2, Setup.MaxPointLights, Matrix);
 			else
-				vw_CheckAndActivateAllLights(&LightType1, &LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
+				vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
 
 
 			// если нужно рисовать прозрачным

@@ -53,7 +53,7 @@ void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 30.00f;
 		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.7f, 0.15f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.7f, 0.15f, 0.0f, 0.02f);
 		break;
 	case 2:
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -71,7 +71,7 @@ void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 40.00f;
 		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.5f, 0.05f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.5f, 0.05f, 0.0f, 0.02f);
 		break;
 	case 3:
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -89,7 +89,7 @@ void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 50.00f;
 		ParticleSystem->Life       = 0.50f;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.5f, 0.05f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.5f, 0.05f, 0.0f, 0.02f);
 		break;
 	case 4:
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -107,7 +107,7 @@ void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 30.00f;
 		ParticleSystem->Life       = 0.50f;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.7f, 0.15f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.7f, 0.15f, 0.0f, 0.02f);
 		break;
 	case 5:
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -124,7 +124,7 @@ void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
 		ParticleSystem->SpeedVar   = 1.00f;
 		ParticleSystem->Theta      = 10.00f;
 		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
 		break;
 	case 6:
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -141,7 +141,7 @@ void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
 		ParticleSystem->SpeedVar   = 1.00f;
 		ParticleSystem->Theta      = 20.00f;
 		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
 		break;
 	case 7:
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -158,7 +158,7 @@ void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
 		ParticleSystem->SpeedVar   = 1.00f;
 		ParticleSystem->Theta      = 10.00f;
 		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
 		break;
 	case 8:
 		ParticleSystem->ColorStart.r = 0.00f;
@@ -178,7 +178,7 @@ void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->CreationType       = 1;
 		ParticleSystem->CreationSize       = sVECTOR3D(0.4f,0.4f,0.4f);
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
 		break;
 	case 9:
 		ParticleSystem->ColorStart.r = 0.00f;
@@ -198,7 +198,7 @@ void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->CreationType       = 1;
 		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.3f,0.3f);
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
 		break;
 	case 10:
 		ParticleSystem->ColorStart.r = 0.00f;
@@ -218,7 +218,7 @@ void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->CreationType       = 1;
 		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.3f,0.3f);
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
 		break;
 
 
@@ -281,7 +281,7 @@ void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 30.00f;
 		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.7f, 1.0f, 0.0f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.7f, 1.0f, 0.0f, 0.0f, 0.02f);
 		break;
 	case 14:
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -319,7 +319,7 @@ void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 30.00f;
 		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.5f, 0.0f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.5f, 0.0f, 0.0f, 0.02f);
 		break;
 	case 16:
 		ParticleSystem->ColorStart.r = 1.00f;

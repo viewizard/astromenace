@@ -55,6 +55,7 @@
 #include <unordered_set>
 #include <forward_list>
 #include <memory>
+#include <map>
 #include <vector>
 #include <array>
 #include <string>

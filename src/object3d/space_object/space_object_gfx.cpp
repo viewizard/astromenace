@@ -63,7 +63,7 @@ void SetSpaceObjectGFX(cParticleSystem *ParticleSystem, int GFXType)
 		ParticleSystem->CreationSize = sVECTOR3D(0.8f,0.1f,0.8f);
 		ParticleSystem->AlphaShowHide= true;
 		ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.025f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.025f);
 		break;
 	case 2:
 		ParticleSystem->ColorStart.r = 0.60f;
@@ -85,7 +85,7 @@ void SetSpaceObjectGFX(cParticleSystem *ParticleSystem, int GFXType)
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->AlphaShowHide= true;
 		ParticleSystem->Direction = sVECTOR3D(0.0f, 1.0f, 0.0f);
-		ParticleSystem->Light = vw_CreatPointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.3f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.3f);
 		break;
 
 	default:
