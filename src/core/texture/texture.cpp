@@ -171,7 +171,7 @@ static void ResizeToPOT(std::vector<uint8_t> &DIB, sTexture &Texture)
 	DIB.resize(potWidth * potHeight * Texture.Bytes);
 
 	// fill new buffer with default color and alpha (if we have alpha channel)
-	std::array<uint8_t, 4> ColorF{Texture.ARed, Texture.AGreen, Texture.ABlue, 0};
+	std::array<uint8_t, 4> ColorF{{Texture.ARed, Texture.AGreen, Texture.ABlue, 0}};
 	for (int i = 0; i < potWidth * potHeight * Texture.Bytes; i += Texture.Bytes) {
 		memcpy(DIB.data() + i, ColorF.data(), Texture.Bytes);
 	}
