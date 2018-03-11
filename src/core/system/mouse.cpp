@@ -213,13 +213,13 @@ void vw_SetMousePos(int X, int Y)
  */
 bool vw_MouseOverRect(const sRECT &MDetect)
 {
-	int MouseX, MouseY;
-	vw_GetMousePos(MouseX, MouseY);
+	int tmpMouseX, tmpMouseY;
+	vw_GetMousePos(tmpMouseX, tmpMouseY);
 
-	if  ((MDetect.right >= MouseX) &&
-	     (MDetect.left <= MouseX) &&
-	     (MDetect.bottom >= MouseY) &&
-	     (MDetect.top <= MouseY))
+	if  ((MDetect.right >= tmpMouseX) &&
+	     (MDetect.left <= tmpMouseX) &&
+	     (MDetect.bottom >= tmpMouseY) &&
+	     (MDetect.top <= tmpMouseY))
 		return true;
 
 	return false;
