@@ -41,7 +41,7 @@ constexpr int LightType_Point{1};	// located close (engines, weapon flashes, etc
 
 struct sLight {
 	// Activate and setup for proper light type (OpenGL-related).
-	bool Activate(int CurrentLightNum, float Matrix[16]);
+	bool Activate(int CurrentLightNum, const std::array<float, 16> &Matrix);
 	// Deactivate (OpenGL-related).
 	void DeActivate();
 	// Set location.
@@ -73,9 +73,11 @@ struct sLight {
 
 
 // Activate proper lights for particular object (presented by location and radius^2).
-int vw_CheckAndActivateAllLights(int &Type1, int &Type2, sVECTOR3D Location, float Radius2, int DirLimit, int PointLimit, float Matrix[16]);
-// Calculate affected lights count and create sorted map with affected lights.
-int vw_CalculateAllPointLightsAttenuation(sVECTOR3D Location, float Radius2, std::map<float, sLight*> *SortedMap);
+int vw_CheckAndActivateAllLights(int &Type1, int &Type2, const sVECTOR3D &Location, float Radius2,
+				 int DirLimit, int PointLimit, const std::array<float, 16> &Matrix);
+// Calculate affected lights counter and create sorted map with affected lights.
+int vw_CalculateAllPointLightsAttenuation(const sVECTOR3D &Location, float Radius2,
+					  std::multimap<float, sLight*> *AffectedLightsMap);
 // Deactivate all lights.
 void vw_DeActivateAllLights();
 // Release light.
@@ -85,7 +87,7 @@ void vw_ReleaseAllLights();
 // Create light.
 sLight *vw_CreateLight(int Type);
 // Create point light with initialization.
-sLight *vw_CreatePointLight(sVECTOR3D Location, float R, float G, float B, float Linear, float Quadratic);
+sLight *vw_CreatePointLight(const sVECTOR3D &Location, float R, float G, float B, float Linear, float Quadratic);
 // Get main direct light. Usually, first one is the main.
 sLight *vw_GetMainDirectLight();
 

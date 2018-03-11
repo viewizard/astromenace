@@ -95,7 +95,7 @@ void vw_GetMatrix(int pname, float *params)
 		break;
 	}
 }
-void vw_SetMatrix(float *params)
+void vw_SetMatrix(const float *params)
 {
 	glLoadMatrixf(params);
 }

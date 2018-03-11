@@ -39,9 +39,12 @@ std::unordered_multimap<int, sLight> LightsMap;
 
 
 /*
- * Calculate affected lights count and create sorted map with affected lights.
+ * Calculate affected lights counter and create sorted map with affected lights.
+ * Note, all attenuation-related calculations not involved in real rendering by OpenGL,
+ * and need for internal use only in order to activate (via OpenGL) proper lights.
  */
-int vw_CalculateAllPointLightsAttenuation(sVECTOR3D Location, float Radius2, std::map<float, sLight*> *AffectedLightsMap)
+int vw_CalculateAllPointLightsAttenuation(const sVECTOR3D &Location, float Radius2,
+					  std::multimap<float, sLight*> *AffectedLightsMap)
 {
 	int AffectedLightsCount = 0;
 
@@ -49,30 +52,27 @@ int vw_CalculateAllPointLightsAttenuation(sVECTOR3D Location, float Radius2, std
 	for (; range.first != range.second; ++range.first) {
 		auto &tmpLight = *range.first;
 		if (tmpLight.second.On) {
-			// care about distance to object
-			sVECTOR3D DistV = Location - tmpLight.second.Location;
-			float Dist2 = DistV.x * DistV.x + DistV.y * DistV.y + DistV.z * DistV.z;
-			if (Dist2 > Radius2)
-				Dist2 -= Radius2;
-			else
-				Dist2 = 0.0f;
-			// only Constant and Quadratic (this is all about sqrt(), that we need for Linear)
-			float tmpAttenuation = tmpLight.second.ConstantAttenuation + tmpLight.second.QuadraticAttenuation*Dist2;
+			float tmpAttenuation = tmpLight.second.ConstantAttenuation;
 
-			auto AddAffectedLight = [&] () {
+			// care about distance to object
+			sVECTOR3D DistV{Location.x - tmpLight.second.Location.x,
+					Location.y - tmpLight.second.Location.y,
+					Location.z - tmpLight.second.Location.z};
+			float Dist2 = DistV.x * DistV.x + DistV.y * DistV.y + DistV.z * DistV.z;
+			if (Dist2 > Radius2) {
+				Dist2 -= Radius2;
+				// Constant and Quadratic first (this is all about sqrt(), that we need for Linear)
+				tmpAttenuation += tmpLight.second.QuadraticAttenuation * Dist2;
+
+				if ((tmpAttenuation < AttenuationLimit) &&
+				    (tmpLight.second.LinearAttenuation > 0.0f))
+					tmpAttenuation += tmpLight.second.LinearAttenuation * vw_sqrtf(Dist2);
+			}
+
+			if (tmpAttenuation <= AttenuationLimit) {
 				AffectedLightsCount++;
 				if (AffectedLightsMap)
 					AffectedLightsMap->emplace(tmpAttenuation, &tmpLight.second);
-			};
-
-			if (tmpAttenuation <= AttenuationLimit) {
-				if (tmpLight.second.LinearAttenuation != 0.0f) {
-					float Dist = vw_sqrtf(Dist2);
-					tmpAttenuation += tmpLight.second.LinearAttenuation*Dist;
-					if (tmpAttenuation <= AttenuationLimit)
-						AddAffectedLight();
-				} else
-					AddAffectedLight();
 			}
 		}
 	}
@@ -83,7 +83,8 @@ int vw_CalculateAllPointLightsAttenuation(sVECTOR3D Location, float Radius2, std
 /*
  * Activate proper lights for particular object (presented by location and radius^2).
  */
-int vw_CheckAndActivateAllLights(int &Type1, int &Type2, sVECTOR3D Location, float Radius2, int DirLimit, int PointLimit, float Matrix[16])
+int vw_CheckAndActivateAllLights(int &Type1, int &Type2, const sVECTOR3D &Location, float Radius2,
+				 int DirLimit, int PointLimit, const std::array<float, 16> &Matrix)
 {
 	Type1 = 0; // counter for directional light
 	Type2 = 0; // counter for point light
@@ -100,7 +101,7 @@ int vw_CheckAndActivateAllLights(int &Type1, int &Type2, sVECTOR3D Location, flo
 
 	// point lights
 	if (PointLimit > 0) {
-		std::map<float, sLight*> AffectedLightsMap;
+		std::multimap<float, sLight*> AffectedLightsMap;
 		// call for std::map calculation with sorted by attenuation affected lights
 		vw_CalculateAllPointLightsAttenuation(Location, Radius2, &AffectedLightsMap);
 
@@ -168,7 +169,7 @@ sLight *vw_CreateLight(int Type)
 /*
  * Create point light with initialization.
  */
-sLight *vw_CreatePointLight(sVECTOR3D Location, float R, float G, float B, float Linear, float Quadratic)
+sLight *vw_CreatePointLight(const sVECTOR3D &Location, float R, float G, float B, float Linear, float Quadratic)
 {
 	sLight *Light = vw_CreateLight(LightType_Point);
 
@@ -218,7 +219,7 @@ static int GetLightType(sLight *Light)
 /*
  * Activate and setup for proper light type (OpenGL-related).
  */
-bool sLight::Activate(int CurrentLightNum, float Matrix[16])
+bool sLight::Activate(int CurrentLightNum, const std::array<float, 16> &Matrix)
 {
 	if (!On)
 		return false;
@@ -226,7 +227,7 @@ bool sLight::Activate(int CurrentLightNum, float Matrix[16])
 
 	vw_PushMatrix();
 	vw_LoadIdentity();
-	vw_SetMatrix(Matrix);
+	vw_SetMatrix(Matrix.data());
 
 	if (GetLightType(this) == LightType_Directional) {
 		float RenderDirection[4]{-Direction.x, -Direction.y, -Direction.z, 0.0f};

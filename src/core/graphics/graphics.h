@@ -422,7 +422,7 @@ void vw_PushMatrix(void);
 void vw_PopMatrix(void);
 // Get matrix
 void vw_GetMatrix(int pname, float *params);
-void vw_SetMatrix(float *params);
+void vw_SetMatrix(const float *params);
 // Set Matrix Mode
 void vw_MatrixMode(int pname);
 // Mult matrix

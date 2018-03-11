@@ -799,8 +799,8 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	sGLSL *CurrentGLSL = nullptr;
 	int NeedNormalMapping = 0;
 	// получаем матрицу, до всех преобразований
-	float Matrix[16];
-	vw_GetMatrix(RI_MODELVIEW_MATRIX, Matrix);
+	std::array<float, 16> Matrix;
+	vw_GetMatrix(RI_MODELVIEW_MATRIX, Matrix.data());
 
 	vw_PushMatrix();
 
