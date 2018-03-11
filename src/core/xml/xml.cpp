@@ -25,6 +25,8 @@
 *************************************************************************************/
 
 // TODO translate comments
+// TODO should be revised in order to use std::string
+// TODO entry's children management should use some container (std::list?)
 
 #include "../vfs/vfs.h"
 #include "xml.h"
