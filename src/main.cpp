@@ -1012,27 +1012,10 @@ ReCreate:
 	// проверяем возможности железа
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	// если нужно, устанавливаем перерытие значений внутри движка, може только выключить - включить то чего нет нельзя
-	if (Setup.VBOCoreMode == 0)
-		vw_GetDevCaps()->VBOSupported = false;
-
-	// работаем только если есть VBO
-	if ((Setup.VAOCoreMode == 0) ||
-	    (Setup.VBOCoreMode == 0) ||
-	    (!vw_GetDevCaps()->VBOSupported))
-		vw_GetDevCaps()->VAOSupported = false;
-
-	if (Setup.FBOCoreMode == 0)
-		vw_GetDevCaps()->FramebufferObject = false;
-
 	// проверка поддержки шейдеров (нужна 100% поддержка GLSL 1.0)
 	if (Setup.UseGLSL &&
 	    (!vw_GetDevCaps()->GLSL100Supported || vw_GetDevCaps()->ShaderModel < 3.0f))
 		Setup.UseGLSL = false;
-
-	// управление генерации мипмеп уровней- можем только выключить, нельзя включить если его нет
-	if (!Setup.HardwareMipMapGeneration)
-		vw_GetDevCaps()->HardwareMipMapGeneration = false;
 
 	// анализ системы только если это первый запуск
 	if (FirstStart) {

@@ -47,6 +47,7 @@ PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC		glGetFramebufferAttachmentParam
 // GL_NV_framebuffer_multisample_coverage, не обязательный
 PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC	glRenderbufferStorageMultisampleCoverageNV = nullptr;
 
+extern sDevCaps OpenGL_DevCaps;
 
 
 
@@ -251,7 +252,7 @@ bool vw_BuildFBO(sFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 	std::cout << "Frame Buffer Object created. Depth Size: " << FBO->DepthSize << "\n";
 
 	// запоминаем максимальные полученные данные по буферу глубины
-	if (vw_GetDevCaps()->FramebufferObjectDepthSize < FBO->DepthSize) vw_GetDevCaps()->FramebufferObjectDepthSize = FBO->DepthSize;
+	if (vw_GetDevCaps()->FramebufferObjectDepthSize < FBO->DepthSize) OpenGL_DevCaps.FramebufferObjectDepthSize = FBO->DepthSize;
 
 	return true;
 }

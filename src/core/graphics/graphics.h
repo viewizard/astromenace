@@ -305,7 +305,7 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA);
 // Shutdown renderer dll
 void vw_ShutdownRenderer(void);
 // Get device capability
-sDevCaps *vw_GetDevCaps();
+const sDevCaps *vw_GetDevCaps();
 
 void vw_SetAspectRatio(float nWidth, float nHeight, bool Value);
 bool vw_GetAspectWH(float *ARWidth, float *ARHeight);

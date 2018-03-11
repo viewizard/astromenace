@@ -130,15 +130,6 @@ void InitSetup()
 	// сбрасываем хинты в тру, чтобы показывать
 	for(int i=0; i<10; i++)
 		Setup.NeedShowHint[i] = true;
-
-
-	// всегда включен по умолчанию, если что железо само поймет что ему надо
-	Setup.VBOCoreMode = 1;
-	Setup.FBOCoreMode = 1;
-	// по умолчанию выключаем VAO из-за проблем у пользователей некоторых видео карт AMD и Intel
-	Setup.VAOCoreMode = 0;
-	// по умолчанию генерируем в видео карте (после иниц. окна поставим правильное), по крайней мере в виндовс немного быстрее
-	Setup.HardwareMipMapGeneration = true;
 }
 
 
@@ -173,14 +164,6 @@ void SaveXMLSetupFile()
 	else
 		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "AspectRatio"), "value", "16:10");
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value", Setup.CameraModeWithStandardAspectRatio);
-
-	XMLdoc->AddComment(RootXMLEntry, " Don't change this setting unless you know what you are doing ");
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VBOCoreMode"), "value", Setup.VBOCoreMode);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "VAOCoreMode"), "value", Setup.VAOCoreMode);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "FBOCoreMode"), "value", Setup.FBOCoreMode);
-	XMLdoc->AddComment(RootXMLEntry, " Don't change this setting unless you know what you are doing ");
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "HardwareMipMapGeneration"), "value", Setup.HardwareMipMapGeneration);
-
 
 	XMLdoc->AddComment(RootXMLEntry, " Common settings ");
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "TextureFilteringMode"), "value", Setup.TextureFilteringMode);
@@ -292,7 +275,7 @@ void SaveXMLSetupFile()
 	// упаковка профайлов
 
 
-	int ProfileDataSize = sizeof(sGameProfile)*5;
+	int ProfileDataSize = sizeof(sPilotProfile)*5;
 	unsigned char *ProfileData = new unsigned char[ProfileDataSize];
 	memcpy(ProfileData, Setup.Profile, ProfileDataSize);
 
@@ -443,19 +426,6 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio") != nullptr)
 		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value"))
 			Setup.CameraModeWithStandardAspectRatio = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value");
-
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "VBOCoreMode") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VBOCoreMode"), "value"))
-			Setup.VBOCoreMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VBOCoreMode"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "VAOCoreMode") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VAOCoreMode"), "value"))
-			Setup.VAOCoreMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VAOCoreMode"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "FBOCoreMode") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FBOCoreMode"), "value"))
-			Setup.FBOCoreMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FBOCoreMode"), "value");
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "HardwareMipMapGeneration") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "HardwareMipMapGeneration"), "value"))
-			Setup.HardwareMipMapGeneration = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "HardwareMipMapGeneration"), "value");
 
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode") != nullptr)
 		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode"), "value"))

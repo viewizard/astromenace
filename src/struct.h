@@ -33,6 +33,8 @@
 
 // Profile name size (changes make previous game configuration file incompatible)
 #define PROFILE_NAME_SIZE 1024
+// Maximum possible missions number for arrays in pilot profile (changes make previous game configuration file incompatible)
+#define MAXIMUM_GAME_MISSIONS 100
 
 enum class eMenuStatus {
 	MAIN_MENU,		// main menu
@@ -129,7 +131,7 @@ struct sVideoModes {
 //------------------------------------------------------------------------------------
 // This structure should be POD, since we "pack" it into the game config file
 // as memory block. Don't use std::string or any containers here.
-struct sGameProfile {
+struct sPilotProfile {
 	bool Used;
 
 	char Name[PROFILE_NAME_SIZE];
@@ -179,20 +181,14 @@ struct sGameProfile {
 	uint8_t SecondaryWeaponFireMode;
 
 	// последний открытый уровень для данной записи
-	uint8_t OpenLevelNum; // uint8_t - 255, у нас макс 100
+	int OpenLevelNum;
 	// последняя выбранная миссия
-	uint8_t LastMission; // uint8_t - 255, у нас макс 100
+	int LastMission;
 
 	// опыт за каждую миссию
-	int ByMissionExperience[100]; // ставим 100, на максимум миссий
+	int ByMissionExperience[MAXIMUM_GAME_MISSIONS];
 	// кол-во раз которое играли в миссию
-	int MissionReplayCount[100]; // ставим 100, на максимум миссий
-
-	// резерв
-	int  i[3];
-	uint8_t c[3];
-	bool b[3];
-	float f[3];
+	int MissionReplayCount[MAXIMUM_GAME_MISSIONS];
 };
 
 //------------------------------------------------------------------------------------
@@ -309,7 +305,7 @@ struct sGameSetup {
 	int GameWeaponInfoType;
 
 	// профайлы игроков
-	sGameProfile Profile[5];
+	sPilotProfile Profile[5];
 
 	// последняя выбранный профайл
 	int LastProfile;
@@ -320,13 +316,6 @@ struct sGameSetup {
 
 	// номер скрипта подложки меню
 	int MenuScript;
-
-	// параметры управление движком игры
-	int VBOCoreMode;
-	int VAOCoreMode;
-	int FBOCoreMode;
-	// работа с хардварной генерацией мипмеп уровней
-	bool HardwareMipMapGeneration;
 };
 
 #endif // STRUCT_H

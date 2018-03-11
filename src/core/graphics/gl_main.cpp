@@ -480,7 +480,7 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 //------------------------------------------------------------------------------------
 // получение возможностей железа...
 //------------------------------------------------------------------------------------
-sDevCaps *vw_GetDevCaps()
+const sDevCaps *vw_GetDevCaps()
 {
 	return &OpenGL_DevCaps;
 }
