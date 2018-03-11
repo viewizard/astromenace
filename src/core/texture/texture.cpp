@@ -55,7 +55,7 @@ uint8_t ARedTex{0};
 uint8_t AGreenTex{0};
 uint8_t ABlueTex{0};
 // Alpha channel default algorithm (used for alpha channel generation).
-int AFlagTex{TX_ALPHA_EQUAL};
+eAlphaCreateMode AFlagTex{eAlphaCreateMode::EQUAL};
 // Default mip mapping type.
 bool MipMapTex{true};
 // Map with all loaded textures.
@@ -71,7 +71,7 @@ int ReadTGA(std::vector<uint8_t> &DIB, sFILE *pFile, int &DWidth, int &DHeight, 
 /*
  * Set textures properties.
  */
-void vw_SetTextureProp(int nFiltering, int nAddress_Mode, bool nAlpha, int nAFlag, bool nMipMap)
+void vw_SetTextureProp(int nFiltering, int nAddress_Mode, bool nAlpha, eAlphaCreateMode nAFlag, bool nMipMap)
 {
 	FilteringTex = nFiltering;
 	Address_ModeTex = nAddress_Mode;
@@ -221,7 +221,7 @@ static void ResizeImage(int newWidth, int newHeight, std::vector<uint8_t> &DIB, 
 /*
  * Create alpha channel.
  */
-static void CreateAlpha(std::vector<uint8_t> &DIB, sTexture &Texture, int AlphaFlag)
+static void CreateAlpha(std::vector<uint8_t> &DIB, sTexture &Texture, eAlphaCreateMode AlphaFlag)
 {
 	if (DIB.empty())
 		return;
@@ -240,13 +240,13 @@ static void CreateAlpha(std::vector<uint8_t> &DIB, sTexture &Texture, int AlphaF
 
 			// create alpha
 			switch(AlphaFlag) {
-			case TX_ALPHA_GREYSC:
+			case eAlphaCreateMode::GREYSC:
 				DIB[tmpOffsetDst + 3] = (uint8_t)(((float)DIB[tmpOffsetDst] / 255) * 28) +
 							(uint8_t)(((float)DIB[tmpOffsetDst + 1] / 255) * 150) +
 							(uint8_t)(((float)DIB[tmpOffsetDst + 2] / 255) * 76);
 				break;
 
-			case TX_ALPHA_EQUAL:
+			case eAlphaCreateMode::EQUAL:
 				if ((Texture.ABlue == DIB[tmpOffsetDst]) &&
 				    (Texture.AGreen == DIB[tmpOffsetDst + 1]) &&
 				    (Texture.ARed == DIB[tmpOffsetDst + 2]))
@@ -309,7 +309,7 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 	int tmpHeight{0};
 	int tmpChanels{0};
 	std::vector<uint8_t> tmpImage{};
-	int LoadAs{TGA_FILE};
+	eLoadTextureAs LoadAs{eLoadTextureAs::TGA};
 
 	std::unique_ptr<sFILE> pFile = vw_fopen(SrcName);
 	if (pFile == nullptr) {
@@ -321,13 +321,13 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 	const char *FileExt = strrchr(SrcName.c_str(), '.');
 	if (FileExt) {
 		if (!strcasecmp(".tga", FileExt))
-			LoadAs = TGA_FILE;
+			LoadAs = eLoadTextureAs::TGA;
 		else
 			std::cerr << "Format not supported " << SrcName << "\n";
 	}
 
 	switch (LoadAs) {
-	case TGA_FILE:
+	case eLoadTextureAs::TGA:
 		texture::ReadTGA(tmpImage, pFile.get(), tmpWidth, tmpHeight, tmpChanels);
 		break;
 
@@ -366,7 +366,7 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
  * Load texture from file.
  */
 sTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
-			 int LoadAs, int NeedResizeW, int NeedResizeH)
+			 eLoadTextureAs LoadAs, int NeedResizeW, int NeedResizeH)
 {
 	if (TextureName.empty())
 		return nullptr;
@@ -383,13 +383,13 @@ sTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
 	}
 
 	// check extension
-	if (LoadAs == AUTO_FILE) {
+	if (LoadAs == eLoadTextureAs::AUTO) {
 		const char *FileExt = strrchr(TextureName.c_str(), '.');
 		if (FileExt) {
 			if (!strcasecmp(".tga", FileExt))
-				LoadAs = TGA_FILE;
+				LoadAs = eLoadTextureAs::TGA;
 			else if (!strcasecmp(".vw2d", FileExt))
-				LoadAs = VW2D_FILE;
+				LoadAs = eLoadTextureAs::VW2D;
 			else
 				std::cerr << "Format not supported " << TextureName << "\n";
 		}
@@ -397,11 +397,11 @@ sTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
 
 	// load texture
 	switch(LoadAs) {
-	case TGA_FILE:
+	case eLoadTextureAs::TGA:
 		texture::ReadTGA(tmpImage, pFile.get(), DWidth, DHeight, DChanels);
 		break;
 
-	case VW2D_FILE:
+	case eLoadTextureAs::VW2D:
 		pFile->fseek(4, SEEK_SET); // skip sign "VW2D"
 		pFile->fread(&DWidth, sizeof(DWidth), 1);
 		pFile->fread(&DHeight, sizeof(DHeight), 1);

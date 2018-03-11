@@ -29,15 +29,17 @@
 
 #include "../base.h"
 
-// File types (for LoadAs parameter)
-#define AUTO_FILE	0	// Detect by file extension
-#define VW2D_FILE	1	// VW2D file
-#define TGA_FILE	2	// TGA file
+enum class eLoadTextureAs {
+	AUTO,	// Detect by file extension
+	VW2D,	// VW2D file
+	TGA	// TGA file
+};
 
-// Create alpha channel by image greyscale color
-#define TX_ALPHA_GREYSC		0x0021
-// Create alpha channel by equal Alpha color
-#define TX_ALPHA_EQUAL		0x0022
+enum class eAlphaCreateMode {
+	NONE,	// Fill alpha channel with 255
+	GREYSC,	// Create alpha channel by image greyscale color
+	EQUAL	// Create alpha channel by equal Alpha color
+};
 
 struct sTexture {
 	uint8_t ARed;		// Alpha channel red color
@@ -57,7 +59,8 @@ struct sTexture {
 // Load texture from file.
 // Note, in case of resize, we should provide width and height (but not just one of them).
 sTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
-			 int LoadAs = AUTO_FILE, int NeedResizeW = 0, int NeedResizeH = 0);
+			 eLoadTextureAs LoadAs = eLoadTextureAs::AUTO,
+			 int NeedResizeW = 0, int NeedResizeH = 0);
 // Create texture from memory.
 sTexture *vw_CreateTextureFromMemory(const std::string &TextureName, std::vector<uint8_t> &DIB, int DIBWidth,
 				     int DIBHeight, int DIBChanels, int CompressionType, int NeedResizeW = 0,
@@ -68,7 +71,7 @@ void vw_ReleaseTexture(sTexture* Texture);
 void vw_ReleaseAllTextures();
 // Set textures properties.
 void vw_SetTextureProp(int nFiltering, int nAddress_Mode, bool nAlpha = false,
-		       int nAFlag = TX_ALPHA_EQUAL, bool nMipMap = true);
+		       eAlphaCreateMode nAFlag = eAlphaCreateMode::EQUAL, bool nMipMap = true);
 // Set textures alpha color.
 void vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue);
 // Find texture by name.
