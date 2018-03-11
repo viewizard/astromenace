@@ -45,8 +45,10 @@ int vw_CalculateAllPointLightsAttenuation(sVECTOR3D Location, float Radius2, std
 {
 	int AffectedLightsCount = 0;
 
-	for (auto &tmpLight : LightsMap) {
-		if ((tmpLight.first == LightType_Point) && tmpLight.second.On) {
+	auto range = LightsMap.equal_range(LightType_Point);
+	for (; range.first != range.second; ++range.first) {
+		auto &tmpLight = *range.first;
+		if (tmpLight.second.On) {
 			// care about distance to object
 			sVECTOR3D DistV = Location - tmpLight.second.Location;
 			float Dist2 = DistV.x * DistV.x + DistV.y * DistV.y + DistV.z * DistV.z;
@@ -57,21 +59,20 @@ int vw_CalculateAllPointLightsAttenuation(sVECTOR3D Location, float Radius2, std
 			// only Constant and Quadratic (this is all about sqrt(), that we need for Linear)
 			float tmpAttenuation = tmpLight.second.ConstantAttenuation + tmpLight.second.QuadraticAttenuation*Dist2;
 
+			auto AddAffectedLight = [&] () {
+				AffectedLightsCount++;
+				if (AffectedLightsMap)
+					AffectedLightsMap->emplace(tmpAttenuation, &tmpLight.second);
+			};
+
 			if (tmpAttenuation <= AttenuationLimit) {
 				if (tmpLight.second.LinearAttenuation != 0.0f) {
 					float Dist = vw_sqrtf(Dist2);
 					tmpAttenuation += tmpLight.second.LinearAttenuation*Dist;
-
-					if (tmpAttenuation <= AttenuationLimit) {
-						AffectedLightsCount++;
-						if (AffectedLightsMap)
-							AffectedLightsMap->emplace(tmpAttenuation, &tmpLight.second);
-					}
-				} else if (tmpAttenuation <= AttenuationLimit) {
-					AffectedLightsCount++;
-					if (AffectedLightsMap)
-						AffectedLightsMap->emplace(tmpAttenuation, &tmpLight.second);
-				}
+					if (tmpAttenuation <= AttenuationLimit)
+						AddAffectedLight();
+				} else
+					AddAffectedLight();
 			}
 		}
 	}
@@ -89,14 +90,13 @@ int vw_CheckAndActivateAllLights(int &Type1, int &Type2, sVECTOR3D Location, flo
 
 	// directional light should be first, since this is the main scene light
 	auto range = LightsMap.equal_range(LightType_Directional);
-	for_each(range.first, range.second,
-		[&Type1, &DirLimit, &Matrix](std::unordered_multimap<int, sLight>::value_type &tmpLight){
-			if ((Type1 < DirLimit) &&
-			    (Type1 < vw_GetDevCaps()->MaxActiveLights) &&
-			    tmpLight.second.Activate(Type1, Matrix))
-				Type1++;
-		}
-	);
+	for (; (range.first != range.second) &&
+	       (Type1 < DirLimit) &&
+	       (Type1 < vw_GetDevCaps()->MaxActiveLights); ++range.first) {
+		auto &tmpLight = *range.first;
+		if (tmpLight.second.Activate(Type1, Matrix))
+			Type1++;
+	}
 
 	// point lights
 	if (PointLimit > 0) {
@@ -106,7 +106,10 @@ int vw_CheckAndActivateAllLights(int &Type1, int &Type2, sVECTOR3D Location, flo
 
 		// enable lights with less attenuation first
 		for (auto &tmp : AffectedLightsMap) {
-			if ((Type2 < PointLimit) && tmp.second->Activate(Type1 + Type2, Matrix))
+			if ((Type2 >= PointLimit) ||
+			    (Type1 + Type2 >= vw_GetDevCaps()->MaxActiveLights))
+				break;
+			if (tmp.second->Activate(Type1 + Type2, Matrix))
 				Type2++;
 		}
 	}
@@ -186,7 +189,7 @@ sLight *vw_CreatePointLight(sVECTOR3D Location, float R, float G, float B, float
 sLight *vw_GetMainDirectLight()
 {
 	auto tmpLight = LightsMap.find(LightType_Directional);
-	if(tmpLight != LightsMap.end())
+	if (tmpLight != LightsMap.end())
 		return &tmpLight->second;
 
 	return nullptr;
@@ -201,12 +204,13 @@ static int GetLightType(sLight *Light)
 	// usually, we have only 1-2 directional lights, so, this is extremely short cycle
 	int LightType = LightType_Point;
 	auto range = LightsMap.equal_range(LightType_Directional);
-	for_each(range.first, range.second,
-		[Light, &LightType](std::unordered_multimap<int, sLight>::value_type &tmpLight){
-			if (&tmpLight.second == Light)
-				LightType = LightType_Directional;
+	for (; range.first != range.second; ++range.first) {
+		auto &tmpLight = *range.first;
+		if (&tmpLight.second == Light) {
+			LightType = LightType_Directional;
+			break;
 		}
-	);
+	}
 
 	return LightType;
 }
