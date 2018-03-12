@@ -175,7 +175,7 @@ void vw_ShutdownSound()
 	vw_ReleaseAllSounds(0);
 	vw_ReleaseAllMusic();
 	// убираем все буферы
-	vw_ReleaseAllBuffers();
+	vw_ReleaseAllSoundBuffers();
 
 
 

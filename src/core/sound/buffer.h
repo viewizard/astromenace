@@ -45,35 +45,13 @@
 #define DYNBUF_SIZE	16384	// Buffer size
 
 
-//------------------------------------------------------------------------------------
-// Структура буфера звука
-//------------------------------------------------------------------------------------
-struct sBuffer {
-	char 		*Name;		// фактически имя файла из которого сделали буфер
-
-	ALuint 		Buffer;
-
-	sBuffer*	Prev;		// Pointer to the previous loaded Sound in the memory
-	sBuffer*	Next;		// Pointer to the next loaded Sound in the memory
-};
-
-
-//------------------------------------------------------------------------------------
-// Функции для работы с буфером
-//------------------------------------------------------------------------------------
-ALuint vw_CreateSoundBufferFromWAV(const char *Name);
-ALuint vw_CreateSoundBufferFromOGG(const char *Name);
-void vw_ReleaseBuffer(sBuffer *Buffer);
-
-sBuffer *vw_FindBufferByName(const char *Name);
-ALuint vw_FindBufferIDByName(const char *Name);
-
-void vw_ReleaseAllBuffers();
-void vw_AttachBuffer(sBuffer* Buffer);
-void vw_DetachBuffer(sBuffer* Buffer);
-
-
-
-
+// Create sound buffer from OGG file.
+ALuint vw_CreateSoundBufferFromWAV(const std::string &Name);
+// Create sound buffer from WAV file.
+ALuint vw_CreateSoundBufferFromOGG(const std::string &Name);
+// Find sound buffer by name.
+ALuint vw_FindSoundBufferIDByName(const std::string &Name);
+// Release all sound buffers.
+void vw_ReleaseAllSoundBuffers();
 
 #endif // Buffer_H

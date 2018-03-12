@@ -57,18 +57,14 @@ bool cSound::Play(const char *Name, float fVol, float fMainVol, float x, float y
 
 	NeedRelease = NeedReleaseStatus;
 
-
-	// находим существующий или делаем новый буфер
-	ALuint Buffer = vw_FindBufferIDByName(Name);
-	// у нас еще нет такого буфера, его надо попытаться создать
-	if (Buffer == 0) {
-		// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
-		const char *file_ext = strrchr(Name, '.');
-		if (file_ext) {
-			if (!strcasecmp(".wav", file_ext)) Buffer = vw_CreateSoundBufferFromWAV(Name);
-			else if (!strcasecmp(".ogg", file_ext)) Buffer = vw_CreateSoundBufferFromOGG(Name);
-
-		}
+	ALuint Buffer{0};
+	// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
+	const char *file_ext = strrchr(Name, '.');
+	if (file_ext) {
+		if (!strcasecmp(".wav", file_ext))
+			Buffer = vw_CreateSoundBufferFromWAV(Name);
+		else if (!strcasecmp(".ogg", file_ext))
+			Buffer = vw_CreateSoundBufferFromOGG(Name);
 	}
 
 	if (Buffer == 0) return AL_FALSE;

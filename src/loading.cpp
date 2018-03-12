@@ -1472,7 +1472,7 @@ void LoadGameData(eLoading LoadType)
 		case 4:
 			// если вообще можем играть звуки
 			if (Setup.Sound_check &&
-			    (vw_FindBufferIDByName(CurrentList[i].FileName) == 0)) { // если еще не загрузили этот звук
+			    (vw_FindSoundBufferIDByName(CurrentList[i].FileName) == 0)) { // если еще не загрузили этот звук
 				// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
 				const char *file_ext = strrchr(CurrentList[i].FileName, '.');
 				if (file_ext) {
