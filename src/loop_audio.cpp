@@ -152,24 +152,24 @@ static sSound2DData VoiceNames[] = {
 
 
 // перечень имен файлов музыки
-const char *GameMusicNames[] = {
-	"music/menu.ogg",			// музыка в меню
-	"music/intro.ogg",			// музыка в заставках перед миссиями
-	"music/game.ogg",			// музыка в игре
+const std::string GameMusicNames[] = {
+	"music/menu.ogg",		// музыка в меню
+	"music/intro.ogg",		// музыка в заставках перед миссиями
+	"music/game.ogg",		// музыка в игре
 	"music/boss-loop.ogg",		// музыка в игре, когда подходим к опастному участку
 	"music/missionfailed.ogg",	// музыка в игре, когда убили (20 секунд, зацикленная!!!)
 // вставки для тем
-	"music/boss-intro.ogg",	// музыка в игре, когда подходим к опастному участку
+	"music/boss-intro.ogg",		// музыка в игре, когда подходим к опастному участку
 
 };
 #define MusicQuantity sizeof(GameMusicNames)/sizeof(GameMusicNames[0])
 // для перекрытия музыки
 bool GameMainMusicSet = false;
-char GameMainMusic[MAX_PATH];
+std::string GameMainMusic;
 bool GameBossMusicSet = false;
-char GameBossMusic[MAX_PATH];
+std::string GameBossMusic;
 bool GameDeathMusicSet = false;
-char GameDeathMusic[MAX_PATH];
+std::string GameDeathMusic;
 
 
 
@@ -229,8 +229,8 @@ void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime)
 	// в начале проигрывания, а потом вызывать луп часть
 
 	bool MusicLoop = true;
-	const char *LoopFileName = nullptr;
-	const char *CurrentPlayingMusicName = GameMusicNames[CurrentPlayingMusic];
+	std::string LoopFileName;
+	std::string CurrentPlayingMusicName = GameMusicNames[CurrentPlayingMusic];
 	float MusicCorrection = 1.0f;
 
 
@@ -497,7 +497,7 @@ void Audio_LoopProc()
 			vw_AttachMusic(Music);
 			MusicList[CurrentPlayingMusic] = Music->Num;
 
-			if (!Music->Play(GameMusicNames[CurrentPlayingMusic], 1.0f, Setup.MusicSw/10.0f, true, nullptr)) {
+			if (!Music->Play(GameMusicNames[CurrentPlayingMusic], 1.0f, Setup.MusicSw/10.0f, true, "")) {
 				vw_ReleaseMusic(Music);
 				MusicList[CurrentPlayingMusic] = -1;
 				CurrentPlayingMusic = -1;

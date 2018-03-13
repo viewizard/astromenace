@@ -26,7 +26,7 @@
 
 // TODO in future, use make_unique() to make unique_ptr-s (C++14)
 // TODO CheckALError() and CheckALUTError() should be braced by namespace
-// TODO remove code duplication (vorbis callback functions) in buffer/music
+// TODO all this returns on errors should be more helpful, add more std::cerr output
 
 #include "../vfs/vfs.h"
 #include "buffer.h"
@@ -34,6 +34,7 @@
 namespace {
 
 std::unordered_map<std::string, ALuint> SoundBuffersMap;
+std::unordered_map<std::string, sStreamBuffer> StreamBuffersMap;
 
 } // unnamed namespace
 
@@ -67,7 +68,7 @@ static long VorbisTell(void *datasource)
 /*
  * Read OGG block.
  */
-static bool ReadOggBlockSFX(ALuint BufID, size_t Size, OggVorbis_File *mVF, ALsizei Rate, ALenum Format)
+static bool ReadOggBlock(ALuint BufID, size_t Size, OggVorbis_File *mVF, ALsizei Rate, ALenum Format)
 {
 	if (!mVF || !Size)
 		return false;
@@ -96,15 +97,179 @@ static bool ReadOggBlockSFX(ALuint BufID, size_t Size, OggVorbis_File *mVF, ALsi
 }
 
 /*
+ * Find stream buffer by name.
+ */
+static sStreamBuffer *FindStreamBufferByName(const std::string &Name)
+{
+	auto tmpBuffers = StreamBuffersMap.find(Name);
+	if (tmpBuffers != StreamBuffersMap.end())
+		return &tmpBuffers->second;
+
+	return nullptr;
+}
+
+/*
+ * Reset queued stream buffers by stream source.
+ */
+static sStreamBuffer *ResetStreamBuffers(sStreamBuffer *StreamBuffer)
+{
+	// set current position to 0
+	ov_pcm_seek(StreamBuffer->mVF.get(), 0);
+	// fill all buffers with proper data
+	for (int i = 0; i < NUM_OF_DYNBUF; i++) {
+		ReadOggBlock(StreamBuffer->Buffers[i], DYNBUF_SIZE,
+			     StreamBuffer->mVF.get(), StreamBuffer->mInfo->rate,
+			     (StreamBuffer->mInfo->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16);
+		if (!CheckALError())
+			return nullptr;
+	}
+	return StreamBuffer;
+}
+
+/*
+ * Set stream buffer source.
+ */
+static bool SetStreamBufferSource(sStreamBuffer *StreamBuffer, const std::string &FileName)
+{
+	vw_fclose(StreamBuffer->File);
+
+	StreamBuffer->File = vw_fopen(FileName);
+	if (!StreamBuffer->File)
+		return false;
+
+	// OggVorbis specific structures
+	ov_callbacks cb;
+	// fill cb struct
+	cb.close_func = VorbisClose;
+	cb.read_func = VorbisRead;
+	cb.seek_func = VorbisSeek;
+	cb.tell_func = VorbisTell;
+	// generate local buffers
+	if (ov_open_callbacks(StreamBuffer->File.get(), StreamBuffer->mVF.get(), nullptr, 0, cb) < 0)
+		return false; // this is not ogg bitstream
+
+	return true;
+}
+
+/*
+ * Create stream buffers from OGG file.
+ */
+sStreamBuffer *vw_CreateStreamBufferFromOGG(const std::string &Name, const std::string &LoopFileName)
+{
+	sStreamBuffer *StreamBuffer = FindStreamBufferByName(Name);
+	if (StreamBuffer) {
+		// we could have an issue, if stream switched to 'loop' part
+		// so, if call have a LoopFileName, reset stream source just in case
+		if (!LoopFileName.empty())
+			SetStreamBufferSource(StreamBuffer, Name);
+		// caller wait from us new stream buffer, that start playing from 0
+		return ResetStreamBuffers(StreamBuffer);
+	}
+
+	if (!SetStreamBufferSource(&StreamBuffersMap[Name], Name)) { // create entry on first access
+		StreamBuffersMap.erase(Name);
+		return nullptr;
+	}
+
+	// return vorbis_info structures
+	StreamBuffersMap[Name].mInfo = ov_info(StreamBuffersMap[Name].mVF.get(), -1);
+
+	// create buffers
+	alGenBuffers(NUM_OF_DYNBUF, StreamBuffersMap[Name].Buffers.data());
+	if (!CheckALError()) {
+		ov_clear(StreamBuffersMap[Name].mVF.get());
+		StreamBuffersMap.erase(Name);
+		return nullptr;
+	}
+
+	for (int i = 0; i < NUM_OF_DYNBUF; i++) {
+		ReadOggBlock(StreamBuffersMap[Name].Buffers[i], DYNBUF_SIZE,
+			     StreamBuffersMap[Name].mVF.get(), StreamBuffersMap[Name].mInfo->rate,
+			     (StreamBuffersMap[Name].mInfo->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16);
+		if (!CheckALError()) {
+			ov_clear(StreamBuffersMap[Name].mVF.get());
+			StreamBuffersMap.erase(Name);
+			return nullptr;
+		}
+	}
+
+	return &StreamBuffersMap[Name];
+}
+
+/*
+ * Read and queue stream buffer.
+ */
+static bool ReadAndQueueStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source, ALuint bufferID)
+{
+	if (ReadOggBlock(bufferID, DYNBUF_SIZE, StreamBuffer->mVF.get(), StreamBuffer->mInfo->rate,
+			 (StreamBuffer->mInfo->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16)) {
+		alSourceQueueBuffers(Source, 1, &bufferID);
+		CheckALError();
+		return true;
+	}
+
+	return false;
+}
+
+/*
+ * Update stream buffer.
+ */
+void vw_UpdateStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source, bool &Looped, std::string &LoopPart)
+{
+	// get info, how many buffers were used and should be refilled now
+	int Processed{0};
+	alGetSourcei(Source, AL_BUFFERS_PROCESSED, &Processed);
+
+	while (Processed--) {
+		// re-use previous buffers
+		ALuint bufferID;
+		alSourceUnqueueBuffers(Source, 1, &bufferID);
+		if (!CheckALError())
+			return;
+
+		if (!ReadAndQueueStreamBuffer(StreamBuffer, Source, bufferID)) {
+			// we don't have data from our stream source to fill buffers any more,
+			// for looped music - change the current stream source position to 0
+			if (Looped) {
+				ov_pcm_seek(StreamBuffer->mVF.get(), 0);
+				// we unqueued buffer, should one again read and queue it
+				if (!ReadAndQueueStreamBuffer(StreamBuffer, Source, bufferID))
+					return;
+			} else if (!LoopPart.empty()) {
+				// if we have "main" part and "loop" part of music (2 files) -
+				// switch to "loop" part and make it looped
+				SetStreamBufferSource(StreamBuffer, LoopPart);
+				Looped = true; // "loop" part always looped
+				LoopPart.clear(); // from now "loop" part is current
+				// we unqueued buffer, should one again read and queue it
+				if (!ReadAndQueueStreamBuffer(StreamBuffer, Source, bufferID))
+					return;
+			}
+		}
+	}
+}
+
+/*
+ * Release all stream buffers.
+ */
+void vw_ReleaseAllStreamBuffers()
+{
+	for (auto &tmpStream : StreamBuffersMap) {
+		ov_clear(tmpStream.second.mVF.get());
+		alDeleteBuffers(NUM_OF_DYNBUF, tmpStream.second.Buffers.data());
+	}
+	StreamBuffersMap.clear();
+	alGetError(); // reset errors
+}
+
+/*
  * Create sound buffer from OGG file.
  */
 ALuint vw_CreateSoundBufferFromOGG(const std::string &Name)
 {
 	ALuint Buffer = vw_FindSoundBufferIDByName(Name);
-	if (Buffer) {
-		std::cout << "Buffer already created ... " << Name << "\n";
+	if (Buffer)
 		return Buffer;
-	}
 
 	std::unique_ptr<sFILE> file = vw_fopen(Name);
 	if (!file)
@@ -129,19 +294,22 @@ ALuint vw_CreateSoundBufferFromOGG(const std::string &Name)
 
 	// create buffers
 	alGenBuffers(1, &Buffer);
-	if (!CheckALError())
+	if (!CheckALError()) {
+		ov_clear(mVF.get());
 		return 0;
+	}
 
 	// read all data into buffer
 	int BlockSize = ov_pcm_total(mVF.get(), -1) * 4;
-	ReadOggBlockSFX(Buffer, BlockSize, mVF.get(), mInfo->rate,
-			(mInfo->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16);
-	if (!CheckALError())
+	ReadOggBlock(Buffer, BlockSize, mVF.get(), mInfo->rate,
+		     (mInfo->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16);
+	if (!CheckALError()) {
+		ov_clear(mVF.get());
 		return 0;
+	}
 
 	vw_fclose(file);
-	if (!mVF.get())
-		ov_clear(mVF.get());
+	ov_clear(mVF.get());
 
 	if (Buffer) {
 		SoundBuffersMap.emplace(Name, Buffer);
@@ -157,10 +325,8 @@ ALuint vw_CreateSoundBufferFromOGG(const std::string &Name)
 ALuint vw_CreateSoundBufferFromWAV(const std::string &Name)
 {
 	ALuint Buffer = vw_FindSoundBufferIDByName(Name);
-	if (Buffer) {
-		std::cout << "Buffer already created ... " << Name << "\n";
+	if (Buffer)
 		return Buffer;
-	}
 
 	std::unique_ptr<sFILE> file = vw_fopen(Name);
 	if (!file)

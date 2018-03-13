@@ -95,8 +95,8 @@ public:
 //------------------------------------------------------------------------------------
 struct sMusic {
 	// проигрывание музыки
-	bool Play(const char * Name, float fVol, float fMainVol, bool Loop, const char *LoopFileName);
-	char LoopPart[MAX_PATH];
+	bool Play(const std::string &Name, float fVol, float fMainVol, bool Loop, const std::string &LoopFileName);
+	std::string LoopPart;
 	// плавное появление
 	void FadeIn(float EndVol, float Time);
 	// плавное уход на 0 с текущего
@@ -104,38 +104,28 @@ struct sMusic {
 
 	// обновление данных потока
 	bool Update();
-	// читаем фрагмент огг файла
-	bool ReadOggBlock(ALuint BufID, size_t Size);
 
 	// установка или изменение общей громкости
 	void SetMainVolume(float NewMainVolume);
 
-	ALuint		Source;		// источник
-	float		Volume;		// громкость, внутренняя... для данного источника (чтобы была возможность корректировки общей громкости)
-	float		MainVolume;
-	ALuint 		Buffers[NUM_OF_DYNBUF];		// у музыки свой собственный буфер
-	bool		Looped;		// запоминаем, нужно ли зацикливание
+	sStreamBuffer *Stream{nullptr};
 
-	std::unique_ptr<sFILE>	MusicFile; // файл, для потока
+	ALuint Source;			// источник
+	float Volume;			// громкость, внутренняя... для данного источника (чтобы была возможность корректировки общей громкости)
+	float MainVolume;
+	bool Looped;			// запоминаем, нужно ли зацикливание
 
-	ALsizei		Rate; // OAL specific
-	ALenum		Format;	 // OAL specific
-	// vorbisfile specific vars
-	OggVorbis_File	*mVF;
-	vorbis_comment	*mComment;
-	vorbis_info		*mInfo;
+	bool FadeInSw;
+	float FadeInEndVol;
+	float FadeInStartVol;
+	bool FadeOutSw;
+	float FadeTime;
+	float FadeAge;
+	float LastTime;
 
-	bool		FadeInSw;
-	float		FadeInEndVol;
-	float		FadeInStartVol;
-	bool		FadeOutSw;
-	float		FadeTime;
-	float		FadeAge;
-	float		LastTime;
-
-	sMusic*		Prev;		// Pointer to the previous loaded Sound in the memory
-	sMusic*		Next;		// Pointer to the next loaded Sound in the memory
-	int			Num;		// ID number
+	sMusic *Prev;		// Pointer to the previous loaded Sound in the memory
+	sMusic *Next;		// Pointer to the next loaded Sound in the memory
+	int Num;		// ID number
 };
 
 

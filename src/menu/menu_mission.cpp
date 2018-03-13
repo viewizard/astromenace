@@ -280,7 +280,7 @@ void MissionsListInit()
 			if (xmlEntry->Name == "GameMainMusic") {
 				std::unique_ptr<sFILE> file = vw_fopen(xmlEntry->Content);
 				if (file != nullptr) {
-					strcpy(GameMainMusic, xmlEntry->Content.c_str());
+					GameMainMusic = xmlEntry->Content;
 					GameMainMusicSet = true;
 					vw_fclose(file);
 					std::cerr << "New GameMainMusic music file " << xmlEntry->Content << "\n";
@@ -289,7 +289,7 @@ void MissionsListInit()
 			} else if (xmlEntry->Name == "GameBossMusic") {
 				std::unique_ptr<sFILE> file = vw_fopen(xmlEntry->Content);
 				if (file != nullptr) {
-					strcpy(GameBossMusic, xmlEntry->Content.c_str());
+					GameBossMusic = xmlEntry->Content;
 					GameBossMusicSet = true;
 					vw_fclose(file);
 					std::cerr << "New GameBossMusic music file %s\n" << xmlEntry->Content << "\n";
@@ -298,7 +298,7 @@ void MissionsListInit()
 			} else if (xmlEntry->Name == "GameDeathMusic") {
 				std::unique_ptr<sFILE> file = vw_fopen(xmlEntry->Content);
 				if (file != nullptr) {
-					strcpy(GameDeathMusic, xmlEntry->Content.c_str());
+					GameDeathMusic = xmlEntry->Content;
 					GameDeathMusicSet = true;
 					vw_fclose(file);
 					std::cerr << "New GameDeathMusic music file %s\n" << xmlEntry->Content << "\n";

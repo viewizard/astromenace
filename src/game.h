@@ -165,11 +165,11 @@ void CreateCursor();
 // loop_audio.cpp
 //------------------------------------------------------------------------------------
 extern bool GameMainMusicSet;
-extern char GameMainMusic[MAX_PATH];
+extern std::string GameMainMusic;
 extern bool GameBossMusicSet;
-extern char GameBossMusic[MAX_PATH];
+extern std::string GameBossMusic;
 extern bool GameDeathMusicSet;
-extern char GameDeathMusic[MAX_PATH];
+extern std::string GameDeathMusic;
 
 int Audio_PlaySound2D(unsigned int SoundID, float fVol, bool Loop = false);
 int Audio_PlayVoice(unsigned int VoiceID, float fVol, bool Loop = false);

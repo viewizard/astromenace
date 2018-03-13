@@ -41,9 +41,25 @@
 #include "vorbis/vorbisfile.h"
 #include "ogg/ogg.h"
 
-#define NUM_OF_DYNBUF	20	// num buffers in queue
-#define DYNBUF_SIZE	16384	// Buffer size
 
+#define NUM_OF_DYNBUF	20	// (stream) num buffers in queue
+#define DYNBUF_SIZE	16384	// (stream) buffer size
+
+struct sFILE;
+
+struct sStreamBuffer {
+	std::array<ALuint, NUM_OF_DYNBUF> Buffers;
+	std::unique_ptr<sFILE> File;
+	std::unique_ptr<OggVorbis_File> mVF{new OggVorbis_File};
+	vorbis_info *mInfo{nullptr};
+};
+
+// Create stream buffer from OGG file.
+sStreamBuffer *vw_CreateStreamBufferFromOGG(const std::string &Name, const std::string &LoopFileName);
+// Release all stream buffers.
+void vw_UpdateStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source, bool &Looped, std::string &LoopPart);
+// Release all stream buffers.
+void vw_ReleaseAllStreamBuffers();
 
 // Create sound buffer from OGG file.
 ALuint vw_CreateSoundBufferFromWAV(const std::string &Name);

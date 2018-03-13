@@ -175,6 +175,7 @@ void vw_ShutdownSound()
 	vw_ReleaseAllSounds(0);
 	vw_ReleaseAllMusic();
 	// убираем все буферы
+	vw_ReleaseAllStreamBuffers();
 	vw_ReleaseAllSoundBuffers();
 
 
@@ -587,21 +588,6 @@ void vw_ReleaseMusic(sMusic* Music)
 		Music->Source = 0;
 		alGetError(); // сброс ошибок
 	}
-
-
-	// удаляем буфер (для музыки именно тут)
-	alDeleteBuffers(NUM_OF_DYNBUF, Music->Buffers);
-	alGetError(); // сброс ошибок
-
-	if (Music->mVF != nullptr) {
-		ov_clear(Music->mVF);
-		delete Music->mVF;
-		Music->mVF = nullptr;
-	}
-
-
-	if (Music->MusicFile != nullptr)
-		vw_fclose(Music->MusicFile);
 
 	// освобождаем память
 	if (Music != nullptr)
