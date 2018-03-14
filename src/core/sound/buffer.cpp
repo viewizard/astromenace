@@ -25,7 +25,6 @@
 *************************************************************************************/
 
 // TODO CheckALError() and CheckALUTError() should be braced by namespace
-// TODO all this returns on errors should be more helpful, add more std::cerr output
 
 #include "../vfs/vfs.h"
 #include "buffer.h"
@@ -37,8 +36,9 @@ std::unordered_map<std::string, sStreamBuffer> StreamBuffersMap;
 
 } // unnamed namespace
 
-ALboolean CheckALError();
-ALboolean CheckALUTError();
+
+ALboolean CheckALError(const char *FunctionName);
+ALboolean CheckALUTError(const char *FunctionName);
 
 
 /*
@@ -67,10 +67,12 @@ static long VorbisTell(void *datasource)
 /*
  * Read OGG block.
  */
-static bool ReadOggBlock(ALuint BufID, size_t Size, OggVorbis_File *mVF, ALsizei Rate, ALenum Format)
+static bool ReadOggBlock(ALuint BufID, size_t Size, OggVorbis_File &mVF, ALsizei Rate, ALenum Format)
 {
-	if (!mVF || !Size)
+	if (!Size) {
+		std::cerr << __func__ << "(): " << "wrong Size parameter" << "\n";
 		return false;
+	}
 
 	std::vector<char> PCM(Size);
 	int current_section;
@@ -78,7 +80,7 @@ static bool ReadOggBlock(ALuint BufID, size_t Size, OggVorbis_File *mVF, ALsizei
 	long ret{0};
 	// read loop
 	while (TotalRet < Size) {
-		ret = ov_read(mVF, PCM.data() + TotalRet, Size - TotalRet, 0, 2, 1, &current_section);
+		ret = ov_read(&mVF, PCM.data() + TotalRet, Size - TotalRet, 0, 2, 1, &current_section);
 
 		// if end of file or read limit exceeded
 		if (ret == 0)
@@ -89,7 +91,7 @@ static bool ReadOggBlock(ALuint BufID, size_t Size, OggVorbis_File *mVF, ALsizei
 
 	if (TotalRet > 0) {
 		alBufferData(BufID, Format, PCM.data(), TotalRet, Rate);
-		CheckALError(); // reset errors
+		CheckALError(__func__); // reset errors
 	}
 
 	return (ret > 0);
@@ -100,6 +102,11 @@ static bool ReadOggBlock(ALuint BufID, size_t Size, OggVorbis_File *mVF, ALsizei
  */
 static sStreamBuffer *FindStreamBufferByName(const std::string &Name)
 {
+	if (Name.empty()) {
+		std::cerr << __func__ << "(): " << "empty Name parameter" << "\n";
+		return nullptr;
+	}
+
 	auto tmpBuffers = StreamBuffersMap.find(Name);
 	if (tmpBuffers != StreamBuffersMap.end())
 		return &tmpBuffers->second;
@@ -112,14 +119,19 @@ static sStreamBuffer *FindStreamBufferByName(const std::string &Name)
  */
 static sStreamBuffer *ResetStreamBuffers(sStreamBuffer *StreamBuffer)
 {
+	if (!StreamBuffer) {
+		std::cerr << __func__ << "(): " << "nullptr StreamBuffer parameter" << "\n";
+		return nullptr;
+	}
+
 	// set current position to 0
 	ov_pcm_seek(&StreamBuffer->mVF, 0);
 	// fill all buffers with proper data
 	for (int i = 0; i < NUM_OF_DYNBUF; i++) {
 		ReadOggBlock(StreamBuffer->Buffers[i], DYNBUF_SIZE,
-			     &StreamBuffer->mVF, StreamBuffer->mInfo->rate,
+			     StreamBuffer->mVF, StreamBuffer->mInfo->rate,
 			     (StreamBuffer->mInfo->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16);
-		if (!CheckALError())
+		if (!CheckALError(__func__))
 			return nullptr;
 	}
 	return StreamBuffer;
@@ -130,6 +142,11 @@ static sStreamBuffer *ResetStreamBuffers(sStreamBuffer *StreamBuffer)
  */
 static bool SetStreamBufferSource(sStreamBuffer *StreamBuffer, const std::string &FileName)
 {
+	if (!StreamBuffer || FileName.empty()) {
+		std::cerr << __func__ << "(): " << "wrong parameters" << "\n";
+		return false;
+	}
+
 	vw_fclose(StreamBuffer->File);
 
 	StreamBuffer->File = vw_fopen(FileName);
@@ -155,6 +172,11 @@ static bool SetStreamBufferSource(sStreamBuffer *StreamBuffer, const std::string
  */
 sStreamBuffer *vw_CreateStreamBufferFromOGG(const std::string &Name, const std::string &LoopFileName)
 {
+	if (Name.empty()) { // LoopFileName could be empty
+		std::cerr << __func__ << "(): " << "empty Name parameter" << "\n";
+		return nullptr;
+	}
+
 	sStreamBuffer *StreamBuffer = FindStreamBufferByName(Name);
 	if (StreamBuffer) {
 		// we could have an issue, if stream switched to 'loop' part
@@ -175,7 +197,7 @@ sStreamBuffer *vw_CreateStreamBufferFromOGG(const std::string &Name, const std::
 
 	// create buffers
 	alGenBuffers(NUM_OF_DYNBUF, StreamBuffersMap[Name].Buffers.data());
-	if (!CheckALError()) {
+	if (!CheckALError(__func__)) {
 		ov_clear(&StreamBuffersMap[Name].mVF);
 		StreamBuffersMap.erase(Name);
 		return nullptr;
@@ -183,9 +205,9 @@ sStreamBuffer *vw_CreateStreamBufferFromOGG(const std::string &Name, const std::
 
 	for (int i = 0; i < NUM_OF_DYNBUF; i++) {
 		ReadOggBlock(StreamBuffersMap[Name].Buffers[i], DYNBUF_SIZE,
-			     &StreamBuffersMap[Name].mVF, StreamBuffersMap[Name].mInfo->rate,
+			     StreamBuffersMap[Name].mVF, StreamBuffersMap[Name].mInfo->rate,
 			     (StreamBuffersMap[Name].mInfo->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16);
-		if (!CheckALError()) {
+		if (!CheckALError(__func__)) {
 			ov_clear(&StreamBuffersMap[Name].mVF);
 			StreamBuffersMap.erase(Name);
 			return nullptr;
@@ -200,10 +222,15 @@ sStreamBuffer *vw_CreateStreamBufferFromOGG(const std::string &Name, const std::
  */
 static bool ReadAndQueueStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source, ALuint bufferID)
 {
-	if (ReadOggBlock(bufferID, DYNBUF_SIZE, &StreamBuffer->mVF, StreamBuffer->mInfo->rate,
+	if (!StreamBuffer) {
+		std::cerr << __func__ << "(): " << "nullptr StreamBuffer parameter" << "\n";
+		return false;
+	}
+
+	if (ReadOggBlock(bufferID, DYNBUF_SIZE, StreamBuffer->mVF, StreamBuffer->mInfo->rate,
 			 (StreamBuffer->mInfo->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16)) {
 		alSourceQueueBuffers(Source, 1, &bufferID);
-		CheckALError();
+		CheckALError(__func__);
 		return true;
 	}
 
@@ -215,6 +242,11 @@ static bool ReadAndQueueStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source,
  */
 void vw_UpdateStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source, bool &Looped, std::string &LoopPart)
 {
+	if (!StreamBuffer) {
+		std::cerr << __func__ << "(): " << "nullptr StreamBuffer parameter" << "\n";
+		return;
+	}
+
 	// get info, how many buffers were used and should be refilled now
 	int Processed{0};
 	alGetSourcei(Source, AL_BUFFERS_PROCESSED, &Processed);
@@ -223,7 +255,7 @@ void vw_UpdateStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source, bool &Loo
 		// re-use previous buffers
 		ALuint bufferID;
 		alSourceUnqueueBuffers(Source, 1, &bufferID);
-		if (!CheckALError())
+		if (!CheckALError(__func__))
 			return;
 
 		if (!ReadAndQueueStreamBuffer(StreamBuffer, Source, bufferID)) {
@@ -266,6 +298,11 @@ void vw_ReleaseAllStreamBuffers()
  */
 ALuint vw_CreateSoundBufferFromOGG(const std::string &Name)
 {
+	if (Name.empty()) {
+		std::cerr << __func__ << "(): " << "empty Name parameter" << "\n";
+		return 0;
+	}
+
 	ALuint Buffer = vw_FindSoundBufferIDByName(Name);
 	if (Buffer)
 		return Buffer;
@@ -292,16 +329,16 @@ ALuint vw_CreateSoundBufferFromOGG(const std::string &Name)
 
 	// create buffers
 	alGenBuffers(1, &Buffer);
-	if (!CheckALError()) {
+	if (!CheckALError(__func__)) {
 		ov_clear(&mVF);
 		return 0;
 	}
 
 	// read all data into buffer
 	int BlockSize = ov_pcm_total(&mVF, -1) * 4;
-	ReadOggBlock(Buffer, BlockSize, &mVF, mInfo->rate,
+	ReadOggBlock(Buffer, BlockSize, mVF, mInfo->rate,
 		     (mInfo->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16);
-	if (!CheckALError()) {
+	if (!CheckALError(__func__)) {
 		ov_clear(&mVF);
 		return 0;
 	}
@@ -322,6 +359,11 @@ ALuint vw_CreateSoundBufferFromOGG(const std::string &Name)
  */
 ALuint vw_CreateSoundBufferFromWAV(const std::string &Name)
 {
+	if (Name.empty()) {
+		std::cerr << __func__ << "(): " << "empty Name parameter" << "\n";
+		return 0;
+	}
+
 	ALuint Buffer = vw_FindSoundBufferIDByName(Name);
 	if (Buffer)
 		return Buffer;
@@ -331,7 +373,7 @@ ALuint vw_CreateSoundBufferFromWAV(const std::string &Name)
 		return 0;
 
 	Buffer = alutCreateBufferFromFileImage(file->Data.get(), file->Size);
-	if (!CheckALUTError())
+	if (!CheckALUTError(__func__))
 		return 0;
 
 	vw_fclose(file);
@@ -349,6 +391,11 @@ ALuint vw_CreateSoundBufferFromWAV(const std::string &Name)
  */
 ALuint vw_FindSoundBufferIDByName(const std::string &Name)
 {
+	if (Name.empty()) {
+		std::cerr << __func__ << "(): " << "empty Name parameter" << "\n";
+		return 0;
+	}
+
 	auto tmpBuffer = SoundBuffersMap.find(Name);
 	if (tmpBuffer != SoundBuffersMap.end())
 		return tmpBuffer->second;

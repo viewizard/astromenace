@@ -56,7 +56,7 @@ struct sStreamBuffer {
 
 // Create stream buffer from OGG file.
 sStreamBuffer *vw_CreateStreamBufferFromOGG(const std::string &Name, const std::string &LoopFileName);
-// Release all stream buffers.
+// Update all stream buffers.
 void vw_UpdateStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source, bool &Looped, std::string &LoopPart);
 // Release all stream buffers.
 void vw_ReleaseAllStreamBuffers();

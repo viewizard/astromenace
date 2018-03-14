@@ -28,8 +28,8 @@
 #include "sound.h"
 
 
-ALboolean CheckALError();
-ALboolean CheckALUTError();
+ALboolean CheckALError(const char *FunctionName);
+ALboolean CheckALUTError(const char *FunctionName);
 
 
 
@@ -79,7 +79,8 @@ bool cSound::Play(const char *Name, float fVol, float fMainVol, float x, float y
 
 	// Bind the buffer with the source.
 	alGenSources(1, &Source);
-	if(!CheckALError())return AL_FALSE;
+	if(!CheckALError(__func__))
+		return AL_FALSE;
 
 	alSourcei (Source, AL_BUFFER,   Buffer   );
 
@@ -108,7 +109,8 @@ bool cSound::Play(const char *Name, float fVol, float fMainVol, float x, float y
 
 
 	alSourcePlay(Source);
-	if(!CheckALError()) return AL_FALSE;
+	if(!CheckALError(__func__))
+		return AL_FALSE;
 
 	return AL_TRUE;
 }

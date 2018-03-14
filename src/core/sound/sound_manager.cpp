@@ -50,29 +50,30 @@ int NumMusicMan = 0;
 //------------------------------------------------------------------------------------
 // Получение ошибок
 //------------------------------------------------------------------------------------
-ALboolean CheckALCError(ALCdevice *Device)
+ALboolean CheckALCError(ALCdevice *Device, const char *FunctionName)
 {
 	ALenum ErrCode;
 	if ((ErrCode = alcGetError(Device)) != ALC_NO_ERROR) {
-		std::cerr << "ALC error: " << alcGetString(Device, ErrCode) << "\n";
+		std::cerr << FunctionName << "(): " << "ALC error: " << alcGetString(Device, ErrCode) << "\n";
 		return AL_FALSE;
 	}
 	return AL_TRUE;
 }
-ALboolean CheckALError()
+ALboolean CheckALError(const char *FunctionName)
 {
 	ALenum ErrCode;
 	if ((ErrCode = alGetError()) != AL_NO_ERROR) {
-		std::cerr << "OpenAL error: " << alGetString(ErrCode) << "\n";
+		std::cerr << FunctionName << "(): " << "OpenAL error: " << alGetString(ErrCode) << "\n";
 		return AL_FALSE;
 	}
 	return AL_TRUE;
 }
-ALboolean CheckALUTError()
+
+ALboolean CheckALUTError(const char *FunctionName)
 {
 	ALenum ErrCode;
 	if ((ErrCode = alutGetError()) != ALUT_ERROR_NO_ERROR) {
-		std::cerr << "OpenAL alut error: " << alutGetErrorString(ErrCode) << "\n";
+		std::cerr << FunctionName << "(): " << "OpenAL alut error: " << alutGetErrorString(ErrCode) << "\n";
 		return AL_FALSE;
 	}
 	return AL_TRUE;
@@ -97,7 +98,7 @@ bool vw_InitSound()
 
 
 	alutInitWithoutContext(nullptr, nullptr);
-	if (!CheckALUTError())
+	if (!CheckALUTError(__func__))
 		return false;
 
 	ALCcontext *Context = nullptr;
@@ -113,11 +114,11 @@ bool vw_InitSound()
 
 	// Creating rendering context
 	Context = alcCreateContext(Device, nullptr);
-	if (!CheckALCError(Device))
+	if (!CheckALCError(Device, __func__))
 		return false;
 
 	alcMakeContextCurrent(Context);
-	if (!CheckALCError(Device))
+	if (!CheckALCError(Device, __func__))
 		return false;
 
 	// сброс ошибок
@@ -206,7 +207,7 @@ void vw_ShutdownSound()
 
 
 	alutExit();
-	CheckALUTError();
+	CheckALUTError(__func__);
 }
 
 

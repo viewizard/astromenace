@@ -29,8 +29,8 @@
 #include "sound.h"
 
 
-ALboolean CheckALError();
-ALboolean CheckALUTError();
+ALboolean CheckALError(const char *FunctionName);
+ALboolean CheckALUTError(const char *FunctionName);
 
 
 //------------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ bool sMusic::Play(const std::string &Name, float fVol, float fMainVol, bool Loop
 	ALfloat SourceVel[] = {0.0f, 0.0f, 0.0f};
 
 	alGenSources(1, &Source);
-	if(!CheckALError())
+	if(!CheckALError(__func__))
 		return false;
 
 	alSourcef (Source, AL_PITCH, 1.0); // 1.0 only!!!
@@ -78,12 +78,12 @@ bool sMusic::Play(const std::string &Name, float fVol, float fMainVol, bool Loop
 
 	for (int i = 0; i < NUM_OF_DYNBUF; i++) {
 		alSourceQueueBuffers(Source, 1, Stream->Buffers.data() + i);
-		if (!CheckALError())
+		if (!CheckALError(__func__))
 			return false;
 	}
 
 	alSourcePlay(Source);
-	if(!CheckALError())
+	if(!CheckALError(__func__))
 		return false;
 
 	return true;
