@@ -1315,7 +1315,8 @@ loop:
 			// всегда выключаем счет времени и считаем новый лаг
 			vw_StopTimeThreads();
 			// выключаем музыку
-			if (vw_GetMusicIsPlaying()) vw_ReleaseAllMusic();
+			if (vw_IsMusicPlaying())
+				vw_ReleaseAllMusic();
 
 			// если в игре, ставим паузу, т.е. открываем меню мгновенно
 			if ((MenuStatus == eMenuStatus::GAME) && (GameContentTransp < 1.0f)) {

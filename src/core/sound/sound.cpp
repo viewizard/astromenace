@@ -24,21 +24,25 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+// TODO switch from vw_GetTimeThread() to SDL_GetTicks() usage
+
 #include "../system/system.h"
 #include "sound.h"
 
+cSound *StartSoundMan = nullptr;
+cSound *EndSoundMan = nullptr;
+int NumSoundMan = 0;
 
 ALboolean CheckALError(const char *FunctionName);
 ALboolean CheckALUTError(const char *FunctionName);
 
 
-
-
-
 //------------------------------------------------------------------------------------
 // Проигрывание звука
 //------------------------------------------------------------------------------------
-bool cSound::Play(const char *Name, float fVol, float fMainVol, float x, float y, float z, bool Relative, bool Loop, bool NeedReleaseStatus, int AtType)
+bool cSound::Play(const char *Name, float fVol, float fMainVol, float x, float y, float z,
+		  bool Relative, bool Loop, bool NeedReleaseStatus, int AtType)
 {
 	Source = 0;
 	Age = 0.0f;
@@ -67,31 +71,30 @@ bool cSound::Play(const char *Name, float fVol, float fMainVol, float x, float y
 			Buffer = vw_CreateSoundBufferFromOGG(Name);
 	}
 
-	if (Buffer == 0) return AL_FALSE;
+	if (!Buffer)
+		return false;
 
 	Volume = fVol;
 	MainVolume = fMainVol;
 
 	// Position of the source sound.
-	ALfloat SourcePos[] = { x, y, z }; // -1.0 1.0 по иксам это баланс
+	ALfloat SourcePos[] = {x, y, z}; // -1.0 1.0 по иксам это баланс
 	// Velocity of the source sound.
-	ALfloat SourceVel[] = { 0.0f, 0.0f, 0.0f };
+	ALfloat SourceVel[] = {0.0f, 0.0f, 0.0f};
 
 	// Bind the buffer with the source.
 	alGenSources(1, &Source);
 	if(!CheckALError(__func__))
-		return AL_FALSE;
+		return false;
 
-	alSourcei (Source, AL_BUFFER,   Buffer   );
+	alSourcei (Source, AL_BUFFER, Buffer);
 
-	alSourcef (Source, AL_GAIN,     fVol*fMainVol	 ); // фактически громкость
+	alSourcef (Source, AL_GAIN, fVol*fMainVol); // фактически громкость
 	alSourcefv(Source, AL_POSITION, SourcePos);
 	alSourcefv(Source, AL_VELOCITY, SourceVel);
-	alSourcei (Source, AL_LOOPING,  Loop     );
+	alSourcei (Source, AL_LOOPING, Loop);
 	alSourcei (Source, AL_SOURCE_RELATIVE, Relative);
 	alGetError(); // сброс ошибок
-
-
 
 	// параметры затухания сигнала от источника
 	if (AtType == 1) {
@@ -106,30 +109,24 @@ bool cSound::Play(const char *Name, float fVol, float fMainVol, float x, float y
 		alGetError(); // сброс ошибок
 	}
 
-
-
 	alSourcePlay(Source);
 	if(!CheckALError(__func__))
-		return AL_FALSE;
+		return false;
 
-	return AL_TRUE;
+	return true;
 }
-
-
 
 //------------------------------------------------------------------------------------
 // перезапуск
 //------------------------------------------------------------------------------------
 void cSound::Replay()
 {
-	// если это не источник, уходим
-	if (!alIsSource(Source)) return;
+	if (!alIsSource(Source))
+		return;
 
 	alSourceRewind(Source);
 	alSourcePlay(Source);
 }
-
-
 
 
 //------------------------------------------------------------------------------------
@@ -137,10 +134,11 @@ void cSound::Replay()
 //------------------------------------------------------------------------------------
 void cSound::Stop(float StopDelay)
 {
-	// если это не источник, уходим
-	if (!alIsSource(Source)) return;
+	if (!alIsSource(Source))
+		return;
 
-	if (StopDelay < 0.0f) StopDelay = 0.0f;
+	if (StopDelay < 0.0f)
+		StopDelay = 0.0f;
 
 	if (StopDelay == 0.0f) {
 		alSourceStop(Source);
@@ -150,37 +148,32 @@ void cSound::Stop(float StopDelay)
 	}
 }
 
-
-
-
 //------------------------------------------------------------------------------------
 // для 3д звука установка положения (баланса)
 //------------------------------------------------------------------------------------
 void cSound::SetLocation(float x, float y, float z)
 {
 	// если это не источник, уходим
-	if (!alIsSource(Source)) return;
+	if (!alIsSource(Source))
+		return;
 
-	ALfloat SourcePos[] = { x, y, z };
+	ALfloat SourcePos[] = {x, y, z};
 	alSourcefv(Source, AL_POSITION, SourcePos);
 	alGetError(); // сброс ошибок
 }
-
-
 
 //------------------------------------------------------------------------------------
 // установка громкости
 //------------------------------------------------------------------------------------
 void cSound::SetMainVolume(float NewMainVolume)
 {
-	// если это не источник, уходим
-	if (!alIsSource(Source)) return;
+	if (!alIsSource(Source))
+		return;
+
 	MainVolume = NewMainVolume;
-	alSourcef (Source, AL_GAIN,     MainVolume*Volume );
+	alSourcef(Source, AL_GAIN, MainVolume*Volume );
 	alGetError(); // сброс ошибок
 }
-
-
 
 //------------------------------------------------------------------------------------
 // установка информации о звуке
@@ -192,4 +185,285 @@ void cSound::SetInfo(int NewGroup, int NewGroupCount, int NewSubGroup, int NewSu
 	SubGroup = NewSubGroup;
 	SubGroupCount = NewSubGroupCount;
 	Priority = NewPriority;
+}
+
+//------------------------------------------------------------------------------------
+// Освобождение памяти и удаление
+//------------------------------------------------------------------------------------
+void vw_ReleaseSound(cSound* Sound)
+{
+	// проверка входящих данных
+	if (!Sound)
+		return;
+
+	// отключаем от менерджера
+	vw_DetachSound(Sound);
+
+	if (alIsSource(Sound->Source)) {
+		// если останавливать играющий звук, возможен щелчек (и в линуксе и в виндовсе)
+		alSourceStop(Sound->Source);
+		alGetError(); // сброс ошибок
+
+		// освобождаем собственно сам источник
+		alDeleteSources(1, &Sound->Source);
+		Sound->Source = 0;
+		alGetError(); // сброс ошибок
+	}
+
+	// освобождаем память
+	if (Sound)
+		delete Sound;
+}
+
+//------------------------------------------------------------------------------------
+// освобождаем все подключенные к менеджеру
+//------------------------------------------------------------------------------------
+void vw_ReleaseAllSounds(int ReleaseType)
+{
+	if (ReleaseType == 0) {
+		// Чистка памяти...
+		cSound *Tmp = StartSoundMan;
+		while (Tmp) {
+			cSound *Tmp1 = Tmp->Next;
+			vw_ReleaseSound(Tmp);
+			Tmp = Tmp1;
+		}
+
+		StartSoundMan = nullptr;
+		EndSoundMan = nullptr;
+	} else {
+		cSound *Tmp = StartSoundMan;
+		while (Tmp) {
+			cSound *Tmp1 = Tmp->Next;
+			if (Tmp->NeedRelease) vw_ReleaseSound(Tmp);
+			Tmp = Tmp1;
+		}
+
+	}
+}
+
+//------------------------------------------------------------------------------------
+// подключение звука к менеджеру
+//------------------------------------------------------------------------------------
+void vw_AttachSound(cSound *Sound)
+{
+	if (!Sound)
+		return;
+
+	// первый в списке...
+	if (EndSoundMan == nullptr) {
+		Sound->Prev = nullptr;
+		Sound->Next = nullptr;
+		NumSoundMan += 1;
+		Sound->Num = NumSoundMan;
+		StartSoundMan = Sound;
+		EndSoundMan = Sound;
+	} else { // продолжаем заполнение...
+		Sound->Prev = EndSoundMan;
+		Sound->Next = nullptr;
+		EndSoundMan->Next = Sound;
+		NumSoundMan += 1;
+		Sound->Num = NumSoundMan;
+		EndSoundMan = Sound;
+	}
+}
+
+
+//------------------------------------------------------------------------------------
+// отключение от менеджера
+//------------------------------------------------------------------------------------
+void vw_DetachSound(cSound *Sound)
+{
+	if (!Sound)
+		return;
+
+	// переустанавливаем указатели...
+	if (StartSoundMan == Sound)
+		StartSoundMan = Sound->Next;
+	if (EndSoundMan == Sound)
+		EndSoundMan = Sound->Prev;
+
+	if (Sound->Next != nullptr)
+		Sound->Next->Prev = Sound->Prev;
+	else if (Sound->Prev != nullptr)
+		Sound->Prev->Next = nullptr;
+
+	if (Sound->Prev != nullptr)
+		Sound->Prev->Next = Sound->Next;
+	else if (Sound->Next != nullptr)
+		Sound->Next->Prev = nullptr;
+}
+
+
+//------------------------------------------------------------------------------------
+// Нахождение по уникальному номеру
+//------------------------------------------------------------------------------------
+cSound *vw_FindSoundByNum(int Num)
+{
+	cSound *Tmp = StartSoundMan;
+	while (Tmp) {
+		cSound *Tmp1 = Tmp->Next;
+		if (Tmp->Num == Num)
+			return Tmp;
+		Tmp = Tmp1;
+	}
+	return nullptr;
+}
+
+
+//------------------------------------------------------------------------------------
+// Нахождение по имени
+//------------------------------------------------------------------------------------
+cSound *vw_FindSoundByName(const char *Name)
+{
+	if (!Name)
+		return nullptr;
+
+	cSound *Tmp = StartSoundMan;
+	while (Tmp) {
+		cSound *Tmp1 = Tmp->Next;
+		if ((Tmp->FileName != nullptr) &&
+		    (!strcmp(Tmp->FileName, Name)))
+			return Tmp;
+		Tmp = Tmp1;
+	}
+	return nullptr;
+}
+
+//------------------------------------------------------------------------------------
+// Обновляем данные в менеджере
+//------------------------------------------------------------------------------------
+void vw_UpdateSound()
+{
+	cSound *Tmp = StartSoundMan;
+
+	float CurrentGetTime = vw_GetTimeThread(0);
+
+	while (Tmp) {
+		cSound *Tmp1 = Tmp->Next;
+
+		// считаем сколько играем этот эффект
+		float DeltaTime = CurrentGetTime - Tmp->LastUpdateTime;
+		Tmp->Age += DeltaTime;
+		Tmp->LastUpdateTime = CurrentGetTime;
+
+		if ((alIsSource(Tmp->Source)) &&
+		    (Tmp->DestroyTimeStart > 0.0f)) {
+			if (Tmp->DestroyTime > 0.0f) {
+				Tmp->DestroyTime -= DeltaTime;
+				if (Tmp->DestroyTime < 0.0f)
+					Tmp->DestroyTime = 0.0f;
+				alSourcef (Tmp->Source, AL_GAIN, Tmp->MainVolume*Tmp->Volume*(Tmp->DestroyTime/Tmp->DestroyTimeStart));
+				alGetError(); // сброс ошибок
+			} else {
+				// уже нулевая громкость, можем удалять
+				vw_ReleaseSound(Tmp);
+				Tmp = nullptr;
+			}
+		}
+
+		// смотрим, если уже не играем - надо удалить
+		if (Tmp && (alIsSource(Tmp->Source))) {
+			ALint TMPS;
+			alGetSourcei(Tmp->Source, AL_SOURCE_STATE, &TMPS);
+			alGetError(); // сброс ошибок
+
+			if (TMPS == AL_STOPPED)
+				vw_ReleaseSound(Tmp);
+		}
+
+		Tmp = Tmp1;
+	}
+}
+
+//------------------------------------------------------------------------------------
+// Установка громкости всем SFX
+//------------------------------------------------------------------------------------
+void vw_SetSoundMainVolume(float NewMainVolume)
+{
+	cSound *Tmp = StartSoundMan;
+	while (Tmp) {
+		cSound *Tmp1 = Tmp->Next;
+		Tmp->SetMainVolume(NewMainVolume);
+		Tmp = Tmp1;
+	}
+}
+
+//------------------------------------------------------------------------------------
+// Проверяем, можем ли мы играть звук с данными параметрами
+//------------------------------------------------------------------------------------
+bool vw_CheckCanPlaySound(int Group, int GroupCount, int SubGroup, int SubGroupCount, int Priority)
+{
+	// находим кол-во звуков в группе
+	int GroupCurrentCount = 0;
+	// находим кол-во звуков в подгруппе
+	int SubGroupCurrentCount = 0;
+	// находим звук, из этой группы с наименьшим приоритетом + самый старый
+	cSound *GroupCanStop = nullptr;
+	// находим звук, из этой подгруппы с меньшим или равным приоритетом + самый старый
+	cSound *SubGroupCanStop = nullptr;
+
+	cSound *Tmp = StartSoundMan;
+	while (Tmp) {
+		cSound *Tmp1 = Tmp->Next;
+
+		if ((Tmp->DestroyTimeStart == -1.0f) &&
+		    (Tmp->Group == Group)) {
+			if (Tmp->SubGroup == SubGroup) {
+				SubGroupCurrentCount++;
+
+				// если приоритет выше или такой же, можем его останавливать
+				if (Priority <= Tmp->Priority) {
+					if (SubGroupCanStop == nullptr)
+						SubGroupCanStop = Tmp;// если ничего еще нет, ставим этот
+					else {
+						if (SubGroupCanStop->Priority < Tmp->Priority)
+							SubGroupCanStop = Tmp;	// если этот с меньшим приоритетом - берем сразу
+						else if (SubGroupCanStop->Age < Tmp->Age)
+							SubGroupCanStop = Tmp;	// меняем на более старый
+					}
+				}
+			}
+
+			GroupCurrentCount++;
+			// если приоритет выше или такой же, можем его останавливать
+			if (Priority <= Tmp->Priority) {
+				if (!GroupCanStop)
+					GroupCanStop = Tmp;// если ничего еще нет, ставим этот
+				else {
+					if (GroupCanStop->Priority < Tmp->Priority)
+						GroupCanStop = Tmp;	// если этот с меньшим приоритетом - берем сразу
+					else if (GroupCanStop->Age < Tmp->Age)
+						GroupCanStop = Tmp;	// меняем на более старый
+				}
+			}
+		}
+
+		Tmp = Tmp1;
+	}
+
+	// если в подгруппе нет места - останавливаем звук из подгруппы
+	if (SubGroupCount <= SubGroupCurrentCount) {
+		if (SubGroupCanStop) {
+			SubGroupCanStop->Stop(0.15f);
+			GroupCurrentCount--;
+			SubGroupCurrentCount--;
+		}
+	} else { // если уже удалили, само собой в группе будет пустое место
+		// если в группе нет места - останавливаем звук из группы
+		if ((GroupCount <= GroupCurrentCount) &&
+		    (GroupCanStop)) {
+			GroupCanStop->Stop(0.15f);
+			GroupCurrentCount--;
+		}
+	}
+
+	// проверяем, если есть место в подгруппе и в группе - говорим, что все ок, можно запускать
+	// иначе - выходим и не запускаем новый звук с этими настройками
+	if ((SubGroupCount > SubGroupCurrentCount) &&
+	    (GroupCount > GroupCurrentCount))
+		return true;
+
+	// иначе играть не можем
+	return false;
 }

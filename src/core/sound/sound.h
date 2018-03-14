@@ -24,6 +24,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #ifndef Sound_H
 #define Sound_H
 
@@ -60,76 +62,81 @@ public:
 	// установка или изменение общей громкости
 	void SetMainVolume(float NewMainVolume);
 
+	char *FileName{nullptr};
 
-	char*	FileName{nullptr};
-
-	ALuint	Source{0};		// источник
-	float	Volume{0.0f};		// громкость, внутренняя... для данного источника (чтобы была возможность корректировки общей громкости)
-	float	MainVolume{0.0f};
-	bool	NeedRelease{false};	// для 2-х типов релиза...
+	ALuint Source{0};		// источник
+	float Volume{0.0f};		// громкость, внутренняя... для данного источника (чтобы была возможность корректировки общей громкости)
+	float MainVolume{0.0f};
+	bool NeedRelease{false};	// для 2-х типов релиза...
 
 	// установка информации о звуке
 	void SetInfo(int NewGroup, int NewGroupCount, int NewSubGroup, int NewSubGroupCount, int NewPriority);
-	int	Group{0}; 			// номер группы
-	int	GroupCount{0}; 		// макс. кол-во одновременно проигрываемых звуков в группе
-	int	SubGroup{0};		// номер подгруппы
-	int	SubGroupCount{0};	// макс. кол-во одновременно проигрываемых звуков в подгруппы
-	int	Priority{0};		// приоритет звука в группе от 1 до ... (1-самый высокий)
-	float 	Age{0.0f};		// время, в течении которого проигрываем звук (для остановки более старого звука)
-	float	LastUpdateTime{0.0f};	// тянем тут, т.к. глобальный может быть не корректный (если была остановка игры)
+	int Group{0}; 			// номер группы
+	int GroupCount{0}; 		// макс. кол-во одновременно проигрываемых звуков в группе
+	int SubGroup{0};		// номер подгруппы
+	int SubGroupCount{0};		// макс. кол-во одновременно проигрываемых звуков в подгруппы
+	int Priority{0};		// приоритет звука в группе от 1 до ... (1-самый высокий)
+	float Age{0.0f};		// время, в течении которого проигрываем звук (для остановки более старого звука)
+	float LastUpdateTime{0.0f};	// тянем тут, т.к. глобальный может быть не корректный (если была остановка игры)
 
-
-	float	DestroyTime{0.0f};
-	float	DestroyTimeStart{0.0f};
+	float DestroyTime{0.0f};
+	float DestroyTimeStart{0.0f};
 
 	cSound *Prev{nullptr};	// Pointer to the previous loaded Sound in the memory
 	cSound *Next{nullptr};	// Pointer to the next loaded Sound in the memory
-	int	Num{0};		// ID number
+	int Num{0};		// ID number
 };
-
-
-
 
 //------------------------------------------------------------------------------------
 // Структура музыки
 //------------------------------------------------------------------------------------
 struct sMusic {
+
+	~sMusic()
+	{
+		// обязательно остановить!!!
+		if (!alIsSource(Source))
+			return;
+		alSourceStop(Source);
+		// открепляем все буферы от источника
+		if (Stream)
+			vw_UnqueueStreamBuffer(Stream, Source);
+		// освобождаем собственно сам источник
+		alDeleteSources(1, &Source);
+		alGetError(); // сброс ошибок
+	};
+
 	// проигрывание музыки
 	bool Play(const std::string &Name, float fVol, float fMainVol, bool Loop, const std::string &LoopFileName);
-	std::string LoopPart;
 	// плавное появление
 	void FadeIn(float EndVol, float Time);
 	// плавное уход на 0 с текущего
 	void FadeOut(float Time);
-
 	// обновление данных потока
 	bool Update();
-
 	// установка или изменение общей громкости
 	void SetMainVolume(float NewMainVolume);
 
 	sStreamBuffer *Stream{nullptr};
 
-	ALuint Source;			// источник
-	float Volume;			// громкость, внутренняя... для данного источника (чтобы была возможность корректировки общей громкости)
+	ALuint Source;		// источник
+	float Volume;		// громкость, внутренняя... для данного источника (чтобы была возможность корректировки общей громкости)
 	float MainVolume;
-	bool Looped;			// запоминаем, нужно ли зацикливание
+	bool Looped;		// запоминаем, нужно ли зацикливание
+	std::string LoopPart;
 
-	bool FadeInSw;
+	bool FadeInSw{false};
 	float FadeInEndVol;
 	float FadeInStartVol;
-	bool FadeOutSw;
-	float FadeTime;
-	float FadeAge;
+	bool FadeOutSw{false};
+	float FadeTime{0.0f};
+	float FadeAge{0.0f};
 	float LastTime;
 
 	sMusic *Prev;		// Pointer to the previous loaded Sound in the memory
 	sMusic *Next;		// Pointer to the next loaded Sound in the memory
 	int Num;		// ID number
 };
-
-
-
 
 //------------------------------------------------------------------------------------
 // Функции для работы со звуком
@@ -138,12 +145,11 @@ bool vw_InitSound();
 void vw_ShutdownSound();
 void vw_Listener(float ListenerPos[3], float ListenerVel[3], float ListenerOri[6]);
 
-
 //------------------------------------------------------------------------------------
 // Функции для работы с SFX
 //------------------------------------------------------------------------------------
-cSound* vw_FindSoundByNum(int Num);
-cSound* vw_FindSoundByName(const char *Name);
+cSound *vw_FindSoundByNum(int Num);
+cSound *vw_FindSoundByName(const char *Name);
 void vw_SetSoundMainVolume(float NewMainVolume);
 void vw_UpdateSound();
 bool vw_CheckCanPlaySound(int Group, int GroupCount, int SubGroup, int SubGroupCount, int Priority);
@@ -153,23 +159,17 @@ void vw_ReleaseAllSounds(int ReleaseType);
 void vw_AttachSound(cSound *Sound);
 void vw_DetachSound(cSound *Sound);
 
-
-
 //------------------------------------------------------------------------------------
 // Функции для работы с музыкой
 //------------------------------------------------------------------------------------
 void vw_SetMusicMainVolume(float NewMainVolume);
-bool vw_GetMusicIsPlaying();
+bool vw_IsMusicPlaying();
 void vw_UpdateMusic();
-sMusic* vw_FindMusicByNum(int Num);
+sMusic *vw_FindMusicByNum(int Num);
 
-void vw_ReleaseMusic(sMusic* Music);
+void vw_ReleaseMusic(sMusic *Music);
 void vw_ReleaseAllMusic();
-void vw_AttachMusic(sMusic* Music);
-void vw_DetachMusic(sMusic* Music);
-
-
-
-
+void vw_AttachMusic(sMusic *Music);
+void vw_DetachMusic(sMusic *Music);
 
 #endif // Sound_H

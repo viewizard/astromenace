@@ -26,6 +26,13 @@
 
 // TODO CheckALError() and CheckALUTError() should be braced by namespace
 
+/*
+Note, stream buffers have limitation of usage and can't be used
+more than one time simultaneously.
+From one side, we don't need more then one stream for same source, from another
+side, in this way we can reuse already created stream buffers.
+*/
+
 #include "../vfs/vfs.h"
 #include "buffer.h"
 
@@ -235,6 +242,47 @@ static bool ReadAndQueueStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source,
 	}
 
 	return false;
+}
+
+/*
+ * Queue stream buffer.
+ */
+bool vw_QueueStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source)
+{
+	if (!StreamBuffer) {
+		std::cerr << __func__ << "(): " << "nullptr StreamBuffer parameter" << "\n";
+		return false;
+	}
+
+	for (int i = 0; i < NUM_OF_DYNBUF; i++) {
+		alSourceQueueBuffers(Source, 1, StreamBuffer->Buffers.data() + i);
+		if (!CheckALError(__func__))
+			return false;
+	}
+
+	return true;
+}
+
+/*
+ * Unqueue stream buffer.
+ */
+bool vw_UnqueueStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source)
+{
+	if (!StreamBuffer) {
+		std::cerr << __func__ << "(): " << "nullptr StreamBuffer parameter" << "\n";
+		return false;
+	}
+
+	int Queued;
+	alGetSourcei(Source, AL_BUFFERS_QUEUED, &Queued);
+	alGetError(); // reset errors
+	while (Queued--) {
+		ALuint tmpBuffer;
+		alSourceUnqueueBuffers(Source, 1, &tmpBuffer);
+		alGetError(); // reset errors
+	}
+
+	return true;
 }
 
 /*

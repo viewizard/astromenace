@@ -24,10 +24,24 @@
 
 *************************************************************************************/
 
-#include "../vfs/vfs.h"
+// TODO translate comments
+// TODO switch from vw_GetTimeThread() to SDL_GetTicks() usage
+
+/*
+In the case of music we based on several main principles:
+1. All music connected to its name, so, name is the key (index).
+   If music have 'loop' part, only main part (its file name) taken into account.
+2. Music can be played simultaneously only in one stream.
+   This is connected not only to p.1, but also to our stream buffers realization,
+   that will not allow create more then one stream buffer for same source.
+*/
+
 #include "../system/system.h"
 #include "sound.h"
 
+sMusic *StartMusicMan = nullptr;
+sMusic *EndMusicMan = nullptr;
+int NumMusicMan = 0;
 
 ALboolean CheckALError(const char *FunctionName);
 ALboolean CheckALUTError(const char *FunctionName);
@@ -38,20 +52,14 @@ ALboolean CheckALUTError(const char *FunctionName);
 //------------------------------------------------------------------------------------
 bool sMusic::Play(const std::string &Name, float fVol, float fMainVol, bool Loop, const std::string &LoopFileName)
 {
-	if (Name.empty())
+	if (Name.empty()) // LoopFileName could be empty
 		return false;
 
 	Volume = fVol;
 	MainVolume = fMainVol;
-
 	LoopPart = LoopFileName;
-
-	FadeInSw = false;
 	FadeInStartVol = Volume;
 	FadeInEndVol = Volume;
-	FadeOutSw = false;
-	FadeTime = 0.0f;
-	FadeAge = 0.0f;
 	LastTime = vw_GetTimeThread(0);
 
 	// Position of the source sound.
@@ -76,11 +84,8 @@ bool sMusic::Play(const std::string &Name, float fVol, float fMainVol, bool Loop
 	if (!Stream)
 		return false;
 
-	for (int i = 0; i < NUM_OF_DYNBUF; i++) {
-		alSourceQueueBuffers(Source, 1, Stream->Buffers.data() + i);
-		if (!CheckALError(__func__))
-			return false;
-	}
+	if (!vw_QueueStreamBuffer(Stream, Source))
+		return false;
 
 	alSourcePlay(Source);
 	if(!CheckALError(__func__))
@@ -163,4 +168,154 @@ void sMusic::FadeOut(float Time)
 	FadeTime = 0.0f;
 	FadeAge = Time;
 	LastTime = vw_GetTimeThread(0);
+}
+
+//------------------------------------------------------------------------------------
+// Возвращаем, если играется хотя бы одна музыка
+//------------------------------------------------------------------------------------
+bool vw_IsMusicPlaying()
+{
+	sMusic *Tmp = StartMusicMan;
+	while (Tmp) {
+		sMusic *Tmp1 = Tmp->Next;
+		// смотрим, если играем что-то, передаем...
+		if (alIsSource(Tmp->Source)) {
+			ALint TMPS;
+			alGetSourcei(Tmp->Source, AL_SOURCE_STATE, &TMPS);
+			alGetError(); // сброс ошибок
+			if (TMPS == AL_PLAYING)
+				return true;
+		}
+		Tmp = Tmp1;
+	}
+
+	return false;
+}
+
+//------------------------------------------------------------------------------------
+// Освобождение памяти и удаление
+//------------------------------------------------------------------------------------
+void vw_ReleaseMusic(sMusic *Music)
+{
+	// проверка входящих данных
+	if (!Music)
+		return;
+
+	// отключаем от менерджера
+	vw_DetachMusic(Music);
+
+	// освобождаем память
+	if (Music)
+		delete Music;
+}
+
+//------------------------------------------------------------------------------------
+// освобождаем все подключенные к менеджеру
+//------------------------------------------------------------------------------------
+void vw_ReleaseAllMusic()
+{
+	// Чистка памяти...
+	sMusic *Tmp = StartMusicMan;
+	while (Tmp) {
+		sMusic *Tmp1 = Tmp->Next;
+		delete Tmp;
+		Tmp = Tmp1;
+	}
+
+	StartMusicMan = nullptr;
+	EndMusicMan = nullptr;
+}
+
+//------------------------------------------------------------------------------------
+// подключение звука к менеджеру
+//------------------------------------------------------------------------------------
+void vw_AttachMusic(sMusic *Music)
+{
+	if (!Music)
+		return;
+
+	// первый в списке...
+	if (EndMusicMan == nullptr) {
+		Music->Prev = nullptr;
+		Music->Next = nullptr;
+		NumMusicMan += 1;
+		Music->Num = NumMusicMan;
+		StartMusicMan = Music;
+		EndMusicMan = Music;
+	} else { // продолжаем заполнение...
+		Music->Prev = EndMusicMan;
+		Music->Next = nullptr;
+		EndMusicMan->Next = Music;
+		NumMusicMan += 1;
+		Music->Num = NumMusicMan;
+		EndMusicMan = Music;
+	}
+}
+
+
+//------------------------------------------------------------------------------------
+// отключение от менеджера
+//------------------------------------------------------------------------------------
+void vw_DetachMusic(sMusic *Music)
+{
+	if (!Music)
+		return;
+
+	// переустанавливаем указатели...
+	if (StartMusicMan == Music)
+		StartMusicMan = Music->Next;
+	if (EndMusicMan == Music)
+		EndMusicMan = Music->Prev;
+
+	if (Music->Next != nullptr)
+		Music->Next->Prev = Music->Prev;
+	else if (Music->Prev != nullptr)
+		Music->Prev->Next = nullptr;
+
+	if (Music->Prev != nullptr)
+		Music->Prev->Next = Music->Next;
+	else if (Music->Next != nullptr)
+		Music->Next->Prev = nullptr;
+}
+
+//------------------------------------------------------------------------------------
+// Обновляем данные в менеджере
+//------------------------------------------------------------------------------------
+void vw_UpdateMusic()
+{
+	sMusic *Tmp = StartMusicMan;
+	while (Tmp) {
+		sMusic *Tmp1 = Tmp->Next;
+		if (!Tmp->Update())
+			vw_ReleaseMusic(Tmp);
+		Tmp = Tmp1;
+	}
+}
+
+//------------------------------------------------------------------------------------
+// Установка громкости у всех
+//------------------------------------------------------------------------------------
+void vw_SetMusicMainVolume(float NewMainVolume)
+{
+	sMusic *Tmp = StartMusicMan;
+	while (Tmp) {
+		sMusic *Tmp1 = Tmp->Next;
+		Tmp->SetMainVolume(NewMainVolume);
+		Tmp = Tmp1;
+	}
+}
+
+//------------------------------------------------------------------------------------
+// Нахождение по уникальному номеру...
+//------------------------------------------------------------------------------------
+sMusic* vw_FindMusicByNum(int Num)
+{
+	sMusic *Tmp = StartMusicMan;
+	while (Tmp) {
+		sMusic *Tmp1 = Tmp->Next;
+		if (Tmp->Num == Num)
+			return Tmp;
+		Tmp = Tmp1;
+	}
+	return nullptr;
 }

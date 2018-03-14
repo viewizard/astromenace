@@ -58,6 +58,10 @@ struct sStreamBuffer {
 sStreamBuffer *vw_CreateStreamBufferFromOGG(const std::string &Name, const std::string &LoopFileName);
 // Update all stream buffers.
 void vw_UpdateStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source, bool &Looped, std::string &LoopPart);
+// Queue stream buffer.
+bool vw_QueueStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source);
+// Unqueue stream buffer.
+bool vw_UnqueueStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source);
 // Release all stream buffers.
 void vw_ReleaseAllStreamBuffers();
 

@@ -264,7 +264,7 @@ void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime)
 	    (vw_FindMusicByNum(MusicList[CurrentPlayingMusic]) == nullptr)) { // если это еще не играем
 
 		// если что-то играем, нужно поставить чтобы уходило по громкости
-		if (vw_GetMusicIsPlaying()) {
+		if (vw_IsMusicPlaying()) {
 			for (unsigned int i = 0; i < MusicQuantity; i++) {
 				if (vw_FindMusicByNum(MusicList[i]) != nullptr) {
 					vw_FindMusicByNum(MusicList[i])->FadeOut(FadeOutTime);
@@ -486,7 +486,7 @@ void Audio_LoopProc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// запускаем нужную музыку... только включили громкость или выключили
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (!vw_GetMusicIsPlaying()) {
+	if (!vw_IsMusicPlaying()) {
 		if (Setup.MusicSw && // если громкость не нулевая
 		    Setup.Music_check && // если можно вообще играть
 		    (CurrentPlayingMusic != -1) && // если установлен номер
