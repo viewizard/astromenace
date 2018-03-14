@@ -90,6 +90,15 @@ enum class eLoading {
 	Game
 };
 
+// music
+enum class eMusicTheme {
+	NONE,
+	MENU,
+	GAME,
+	BOSS,
+	FAILED,
+	CREDITS
+};
 
 enum class eDialogBox {
 	None,

@@ -94,9 +94,9 @@ struct sMusic {
 
 	~sMusic()
 	{
-		// обязательно остановить!!!
 		if (!alIsSource(Source))
 			return;
+		// обязательно остановить!!!
 		alSourceStop(Source);
 		// открепляем все буферы от источника
 		if (Stream)
@@ -123,6 +123,7 @@ struct sMusic {
 	float Volume;		// громкость, внутренняя... для данного источника (чтобы была возможность корректировки общей громкости)
 	float MainVolume;
 	bool Looped;		// запоминаем, нужно ли зацикливание
+	std::string MainPart;
 	std::string LoopPart;
 
 	bool FadeInSw{false};
@@ -164,8 +165,9 @@ void vw_DetachSound(cSound *Sound);
 //------------------------------------------------------------------------------------
 void vw_SetMusicMainVolume(float NewMainVolume);
 bool vw_IsMusicPlaying();
+void vw_FadeOutAllIfMusicPlaying(float Time);
 void vw_UpdateMusic();
-sMusic *vw_FindMusicByNum(int Num);
+sMusic *vw_FindMusicByName(const std::string &Name);
 
 void vw_ReleaseMusic(sMusic *Music);
 void vw_ReleaseAllMusic();

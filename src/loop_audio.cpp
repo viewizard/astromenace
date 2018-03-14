@@ -26,6 +26,12 @@
 
 #include "game.h"
 
+namespace {
+
+std::string CurrentPlayingMusicName;
+
+} // unnamed namespace
+
 
 //------------------------------------------------------------------------------------
 // локальная структура данных 3D sfx
@@ -151,36 +157,6 @@ static sSound2DData VoiceNames[] = {
 
 
 
-// перечень имен файлов музыки
-const std::string GameMusicNames[] = {
-	"music/menu.ogg",		// музыка в меню
-	"music/intro.ogg",		// музыка в заставках перед миссиями
-	"music/game.ogg",		// музыка в игре
-	"music/boss-loop.ogg",		// музыка в игре, когда подходим к опастному участку
-	"music/missionfailed.ogg",	// музыка в игре, когда убили (20 секунд, зацикленная!!!)
-// вставки для тем
-	"music/boss-intro.ogg",		// музыка в игре, когда подходим к опастному участку
-
-};
-#define MusicQuantity sizeof(GameMusicNames)/sizeof(GameMusicNames[0])
-// для перекрытия музыки
-bool GameMainMusicSet = false;
-std::string GameMainMusic;
-bool GameBossMusicSet = false;
-std::string GameBossMusic;
-bool GameDeathMusicSet = false;
-std::string GameDeathMusic;
-
-
-
-// массив указателей на музыку, точнее на ее идентификаторы
-int MusicList[MusicQuantity];
-int CurrentPlayingMusic = -1; //если вулючаем громкость с нуля, нужно знать что запускать
-
-
-
-
-
 
 
 
@@ -192,9 +168,6 @@ bool InitAudio()
 {
 	if (!vw_InitSound())
 		return false;
-
-	for (unsigned int i=0; i<MusicQuantity; i++)
-		MusicList[i] = -1;
 
 	return true;
 }
@@ -215,86 +188,63 @@ void ShutdownAudio()
 //------------------------------------------------------------------------------------
 // Запуск нужной музыки
 //------------------------------------------------------------------------------------
-void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime)
+void StartMusicWithFade(eMusicTheme StartMusic, float FadeInTime, float FadeOutTime)
 {
-	CurrentPlayingMusic = StartMusic;
-
-	// 0 menu музыка в меню
-	// 1 intro музыка в заставках перед миссиями
-	// 2 game музыка в игре
-	// 3 boss музыка в игре, когда подходим к опастному участку
-	// 4 missionfailed музыка в игре, когда убили (20 секунд, зацикленная!!!)
-
-	// нужно запустить вставку (не зацикленную), интро
-	// в начале проигрывания, а потом вызывать луп часть
-
 	bool MusicLoop = true;
 	std::string LoopFileName;
-	std::string CurrentPlayingMusicName = GameMusicNames[CurrentPlayingMusic];
 	float MusicCorrection = 1.0f;
 
-
 	switch (StartMusic) {
-	case 2:
-		if (GameMainMusicSet)
-			CurrentPlayingMusicName = GameMainMusic;
+	case eMusicTheme::NONE:
+		CurrentPlayingMusicName.clear();
 		break;
-	case 3:
-		if (GameBossMusicSet) {
-			CurrentPlayingMusicName = GameBossMusic;
-		} else {
-			CurrentPlayingMusic = 5;
-			MusicLoop = false;
-			LoopFileName = GameMusicNames[StartMusic];
-		}
+	case eMusicTheme::MENU:
+		CurrentPlayingMusicName = "music/menu.ogg";
 		break;
-	case 4:
-		if (GameDeathMusicSet)
-			CurrentPlayingMusicName = GameDeathMusic;
-		else
-			MusicCorrection = 0.7f;
+	case eMusicTheme::GAME:
+		CurrentPlayingMusicName = "music/game.ogg";
+		// during in-game mission restart we need "restart" music as well
+		// so, if this music already playing - release it, and start it again (see code below)
+		vw_ReleaseMusic(vw_FindMusicByName(CurrentPlayingMusicName));
+		break;
+	case eMusicTheme::BOSS:
+		CurrentPlayingMusicName = "music/boss-loop.ogg";
+		break;
+	case eMusicTheme::FAILED:
+		CurrentPlayingMusicName = "music/missionfailed.ogg";
+		MusicCorrection = 0.7f;
+		break;
+	case eMusicTheme::CREDITS:
+		CurrentPlayingMusicName = "music/boss-intro.ogg";
+		MusicLoop = false;
+		LoopFileName = "music/boss-loop.ogg";
 		break;
 	}
-
-
-
 
 	if (Setup.Music_check && //если можно играть
 	    Setup.MusicSw && // и громкость не нулевая
-	    (vw_FindMusicByNum(MusicList[CurrentPlayingMusic]) == nullptr)) { // если это еще не играем
+	    !CurrentPlayingMusicName.empty()) {
 
-		// если что-то играем, нужно поставить чтобы уходило по громкости
-		if (vw_IsMusicPlaying()) {
-			for (unsigned int i = 0; i < MusicQuantity; i++) {
-				if (vw_FindMusicByNum(MusicList[i]) != nullptr) {
-					vw_FindMusicByNum(MusicList[i])->FadeOut(FadeOutTime);
-					MusicList[i] = -1;
-				}
-			}
-		}
+		// FadeOut all music themes, if we need something, we FadeIn it in code below
+		vw_FadeOutAllIfMusicPlaying(FadeOutTime);
 
+		if (!vw_FindMusicByName(CurrentPlayingMusicName)) {
 
-		// создаем новый источник и проигрываем его
-		sMusic *Music;
-		Music = new sMusic;
-		vw_AttachMusic(Music);
-		MusicList[CurrentPlayingMusic] = Music->Num;
+			// создаем новый источник и проигрываем его
+			sMusic *Music;
+			Music = new sMusic;
+			vw_AttachMusic(Music);
 
-		// пытаемся загрузить и играть
-		if (!Music->Play(CurrentPlayingMusicName, 0.0f, MusicCorrection*(Setup.MusicSw/10.0f),
-				 MusicLoop, LoopFileName)) {
-			vw_ReleaseMusic(Music);
-			MusicList[CurrentPlayingMusic] = -1;
-			CurrentPlayingMusic = -1;
-		} else {
-			// играем, ставим плавное появление громкости
-			Music->FadeIn(1.0f, FadeInTime);
-		}
+			// пытаемся загрузить и играть
+			if (!Music->Play(CurrentPlayingMusicName, 0.0f, MusicCorrection*(Setup.MusicSw/10.0f),
+					 MusicLoop, LoopFileName)) {
+				vw_ReleaseMusic(Music);
+				CurrentPlayingMusicName.clear();
+			} else // we are playing new music theme, FadeIn it
+				Music->FadeIn(1.0f, FadeInTime);
+		} else // if we already playing this one - FadeIn it (rest will continue FadeOut, see code above)
+			vw_FindMusicByName(CurrentPlayingMusicName)->FadeIn(1.0f, FadeInTime);
 	}
-
-
-	// повторно ставим (могли изменить, если отдельно интро и луп части)
-	CurrentPlayingMusic = StartMusic;
 }
 
 
@@ -489,18 +439,16 @@ void Audio_LoopProc()
 	if (!vw_IsMusicPlaying()) {
 		if (Setup.MusicSw && // если громкость не нулевая
 		    Setup.Music_check && // если можно вообще играть
-		    (CurrentPlayingMusic != -1) && // если установлен номер
-		    (vw_FindMusicByNum(MusicList[CurrentPlayingMusic]) == nullptr)) { // если это еще не играем
+		    (!CurrentPlayingMusicName.empty()) && // если установлен
+		    (!vw_FindMusicByName(CurrentPlayingMusicName))) { // если это еще не играем
 			// создаем новый источник и проигрываем его
 			sMusic *Music;
 			Music = new sMusic;
 			vw_AttachMusic(Music);
-			MusicList[CurrentPlayingMusic] = Music->Num;
 
-			if (!Music->Play(GameMusicNames[CurrentPlayingMusic], 1.0f, Setup.MusicSw/10.0f, true, "")) {
+			if (!Music->Play(CurrentPlayingMusicName, 1.0f, Setup.MusicSw/10.0f, true, "")) {
 				vw_ReleaseMusic(Music);
-				MusicList[CurrentPlayingMusic] = -1;
-				CurrentPlayingMusic = -1;
+				CurrentPlayingMusicName.clear();
 			}
 		}
 	} else {
@@ -508,9 +456,6 @@ void Audio_LoopProc()
 		if (!Setup.MusicSw && // если громкость нулевая
 		    Setup.Music_check) { // но играть можно
 			vw_ReleaseAllMusic();
-			for (unsigned int i=0; i<MusicQuantity; i++) {
-				MusicList[i] = -1;
-			}
 		}
 	}
 

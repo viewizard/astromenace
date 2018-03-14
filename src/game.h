@@ -164,19 +164,12 @@ void CreateCursor();
 //------------------------------------------------------------------------------------
 // loop_audio.cpp
 //------------------------------------------------------------------------------------
-extern bool GameMainMusicSet;
-extern std::string GameMainMusic;
-extern bool GameBossMusicSet;
-extern std::string GameBossMusic;
-extern bool GameDeathMusicSet;
-extern std::string GameDeathMusic;
-
 int Audio_PlaySound2D(unsigned int SoundID, float fVol, bool Loop = false);
 int Audio_PlayVoice(unsigned int VoiceID, float fVol, bool Loop = false);
 void Audio_LoopProc();
 bool InitAudio();
 void ShutdownAudio();
-void StartMusicWithFade(int StartMusic, float FadeInTime, float FadeOutTime);
+void StartMusicWithFade(eMusicTheme StartMusic, float FadeInTime, float FadeOutTime);
 void Audio_SetSound2DMainVolume(float NewMainVolume);
 void Audio_SetVoiceMainVolume(float NewMainVolume);
 

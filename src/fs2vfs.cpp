@@ -342,7 +342,6 @@ const std::string GameData[] = {
 	"music/boss-loop.ogg",
 	"music/game.ogg",
 	"music/missionfailed.ogg",
-	"music/intro.ogg",
 	"script/mission6.xml",
 	"script/list.xml",
 	"script/mission14.xml",

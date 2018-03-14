@@ -55,6 +55,7 @@ bool sMusic::Play(const std::string &Name, float fVol, float fMainVol, bool Loop
 	if (Name.empty()) // LoopFileName could be empty
 		return false;
 
+	MainPart = Name;
 	Volume = fVol;
 	MainVolume = fMainVol;
 	LoopPart = LoopFileName;
@@ -141,7 +142,7 @@ void sMusic::SetMainVolume(float NewMainVolume)
 		return;
 
 	MainVolume = NewMainVolume;
-	alSourcef(Source, AL_GAIN,     MainVolume*Volume );
+	alSourcef(Source, AL_GAIN, MainVolume*Volume);
 }
 
 //------------------------------------------------------------------------------------
@@ -168,6 +169,22 @@ void sMusic::FadeOut(float Time)
 	FadeTime = 0.0f;
 	FadeAge = Time;
 	LastTime = vw_GetTimeThread(0);
+}
+
+void vw_FadeOutAllIfMusicPlaying(float Time) {
+	sMusic *Tmp = StartMusicMan;
+	while (Tmp) {
+		sMusic *Tmp1 = Tmp->Next;
+		// смотрим, если играем что-то, передаем...
+		if (alIsSource(Tmp->Source)) {
+			ALint TMPS;
+			alGetSourcei(Tmp->Source, AL_SOURCE_STATE, &TMPS);
+			alGetError(); // сброс ошибок
+			if (TMPS == AL_PLAYING)
+				Tmp->FadeOut(Time);
+		}
+		Tmp = Tmp1;
+	}
 }
 
 //------------------------------------------------------------------------------------
@@ -308,12 +325,12 @@ void vw_SetMusicMainVolume(float NewMainVolume)
 //------------------------------------------------------------------------------------
 // Нахождение по уникальному номеру...
 //------------------------------------------------------------------------------------
-sMusic* vw_FindMusicByNum(int Num)
+sMusic* vw_FindMusicByName(const std::string &Name)
 {
 	sMusic *Tmp = StartMusicMan;
 	while (Tmp) {
 		sMusic *Tmp1 = Tmp->Next;
-		if (Tmp->Num == Num)
+		if (Tmp->MainPart == Name)
 			return Tmp;
 		Tmp = Tmp1;
 	}

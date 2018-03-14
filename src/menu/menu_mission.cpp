@@ -275,37 +275,7 @@ void MissionsListInit()
 			}
 
 			i++;
-		} else
-			// проверяем музыку, возможно есть необходимость что-то заменить
-			if (xmlEntry->Name == "GameMainMusic") {
-				std::unique_ptr<sFILE> file = vw_fopen(xmlEntry->Content);
-				if (file != nullptr) {
-					GameMainMusic = xmlEntry->Content;
-					GameMainMusicSet = true;
-					vw_fclose(file);
-					std::cerr << "New GameMainMusic music file " << xmlEntry->Content << "\n";
-				} else
-					std::cerr << "Unable to find music file %s\n" << xmlEntry->Content << "\n";
-			} else if (xmlEntry->Name == "GameBossMusic") {
-				std::unique_ptr<sFILE> file = vw_fopen(xmlEntry->Content);
-				if (file != nullptr) {
-					GameBossMusic = xmlEntry->Content;
-					GameBossMusicSet = true;
-					vw_fclose(file);
-					std::cerr << "New GameBossMusic music file %s\n" << xmlEntry->Content << "\n";
-				} else
-					std::cerr << "Unable to find music file %s\n" << xmlEntry->Content << "\n";
-			} else if (xmlEntry->Name == "GameDeathMusic") {
-				std::unique_ptr<sFILE> file = vw_fopen(xmlEntry->Content);
-				if (file != nullptr) {
-					GameDeathMusic = xmlEntry->Content;
-					GameDeathMusicSet = true;
-					vw_fclose(file);
-					std::cerr << "New GameDeathMusic music file %s\n" << xmlEntry->Content << "\n";
-				} else
-					std::cerr << "Unable to find music file %s\n" << xmlEntry->Content << "\n";
-			}
-
+		}
 
 		// берем следующий элемент по порядку
 		xmlEntry = xmlEntry->Next;
