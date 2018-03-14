@@ -6,7 +6,7 @@ os:
   - osx
 script:
   - cmake ./
-  - make
+  - make -j8
   - ./astromenace --pack --rawdata=./gamedata
 compiler:
   - gcc
