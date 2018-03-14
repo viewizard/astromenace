@@ -50,7 +50,7 @@ struct sFILE;
 struct sStreamBuffer {
 	std::array<ALuint, NUM_OF_DYNBUF> Buffers;
 	std::unique_ptr<sFILE> File;
-	std::unique_ptr<OggVorbis_File> mVF{new OggVorbis_File};
+	OggVorbis_File mVF;
 	vorbis_info *mInfo{nullptr};
 };
 
