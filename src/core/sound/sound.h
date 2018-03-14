@@ -32,9 +32,6 @@
 #include "../base.h"
 #include "buffer.h"
 
-struct sFILE;
-
-
 //------------------------------------------------------------------------------------
 // Структура звука
 //------------------------------------------------------------------------------------
@@ -88,58 +85,6 @@ public:
 };
 
 //------------------------------------------------------------------------------------
-// Структура музыки
-//------------------------------------------------------------------------------------
-struct sMusic {
-
-	~sMusic()
-	{
-		if (!alIsSource(Source))
-			return;
-		// обязательно остановить!!!
-		alSourceStop(Source);
-		// открепляем все буферы от источника
-		if (Stream)
-			vw_UnqueueStreamBuffer(Stream, Source);
-		// освобождаем собственно сам источник
-		alDeleteSources(1, &Source);
-		alGetError(); // сброс ошибок
-	};
-
-	// проигрывание музыки
-	bool Play(const std::string &Name, float fVol, float fMainVol, bool Loop, const std::string &LoopFileName);
-	// плавное появление
-	void FadeIn(float EndVol, float Time);
-	// плавное уход на 0 с текущего
-	void FadeOut(float Time);
-	// обновление данных потока
-	bool Update();
-	// установка или изменение общей громкости
-	void SetMainVolume(float NewMainVolume);
-
-	sStreamBuffer *Stream{nullptr};
-
-	ALuint Source;		// источник
-	float Volume;		// громкость, внутренняя... для данного источника (чтобы была возможность корректировки общей громкости)
-	float MainVolume;
-	bool Looped;		// запоминаем, нужно ли зацикливание
-	std::string MainPart;
-	std::string LoopPart;
-
-	bool FadeInSw{false};
-	float FadeInEndVol;
-	float FadeInStartVol;
-	bool FadeOutSw{false};
-	float FadeTime{0.0f};
-	float FadeAge{0.0f};
-	float LastTime;
-
-	sMusic *Prev;		// Pointer to the previous loaded Sound in the memory
-	sMusic *Next;		// Pointer to the next loaded Sound in the memory
-	int Num;		// ID number
-};
-
-//------------------------------------------------------------------------------------
 // Функции для работы со звуком
 //------------------------------------------------------------------------------------
 bool vw_InitSound();
@@ -160,18 +105,17 @@ void vw_ReleaseAllSounds(int ReleaseType);
 void vw_AttachSound(cSound *Sound);
 void vw_DetachSound(cSound *Sound);
 
-//------------------------------------------------------------------------------------
-// Функции для работы с музыкой
-//------------------------------------------------------------------------------------
+/*
+ * Music.
+ */
+bool vw_PlayMusic(const std::string &Name, float fVol, float fMainVol, bool Loop, const std::string &LoopFileName);
 void vw_SetMusicMainVolume(float NewMainVolume);
 bool vw_IsMusicPlaying();
-void vw_FadeOutAllIfMusicPlaying(float Time);
+void vw_FadeOutIfMusicPlaying(float Time);
+void vw_SetMusicFadeIn(const std::string &Name, float EndVol, float Time);
 void vw_UpdateMusic();
-sMusic *vw_FindMusicByName(const std::string &Name);
-
-void vw_ReleaseMusic(sMusic *Music);
+bool vw_CheckMusicAvailabilityByName(const std::string &Name);
+void vw_ReleaseMusic(const std::string &Name);
 void vw_ReleaseAllMusic();
-void vw_AttachMusic(sMusic *Music);
-void vw_DetachMusic(sMusic *Music);
 
 #endif // Sound_H

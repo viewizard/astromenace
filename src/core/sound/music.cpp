@@ -37,11 +37,55 @@ In the case of music we based on several main principles:
 */
 
 #include "../system/system.h"
-#include "sound.h"
+#include "buffer.h"
 
-sMusic *StartMusicMan = nullptr;
-sMusic *EndMusicMan = nullptr;
-int NumMusicMan = 0;
+namespace {
+
+struct sMusic {
+
+	~sMusic()
+	{
+		if (!alIsSource(Source))
+			return;
+		// обязательно остановить!!!
+		alSourceStop(Source);
+		// открепляем все буферы от источника
+		if (Stream)
+			vw_UnqueueStreamBuffer(Stream, Source);
+		// освобождаем собственно сам источник
+		alDeleteSources(1, &Source);
+		alGetError(); // сброс ошибок
+	};
+
+	// плавное появление
+	void FadeIn(float EndVol, float Time);
+	// плавное уход на 0 с текущего
+	void FadeOut(float Time);
+	// обновление данных потока
+	bool Update();
+	// установка или изменение общей громкости
+	void SetMainVolume(float NewMainVolume);
+
+	sStreamBuffer *Stream{nullptr};
+
+	ALuint Source;		// источник
+	float Volume;		// громкость, внутренняя... для данного источника (чтобы была возможность корректировки общей громкости)
+	float MainVolume;
+	bool Looped;		// запоминаем, нужно ли зацикливание
+	std::string LoopPart;
+
+	bool FadeInSw{false};
+	float FadeInEndVol;
+	float FadeInStartVol;
+	bool FadeOutSw{false};
+	float FadeTime{0.0f};
+	float FadeAge{0.0f};
+	float LastTime;
+};
+
+std::unordered_map<std::string, sMusic> MusicMap;
+
+} // unnamed namespace
 
 ALboolean CheckALError(const char *FunctionName);
 ALboolean CheckALUTError(const char *FunctionName);
@@ -50,49 +94,56 @@ ALboolean CheckALUTError(const char *FunctionName);
 //------------------------------------------------------------------------------------
 // Проигрывание звука
 //------------------------------------------------------------------------------------
-bool sMusic::Play(const std::string &Name, float fVol, float fMainVol, bool Loop, const std::string &LoopFileName)
+bool vw_PlayMusic(const std::string &Name, float fVol, float fMainVol, bool Loop, const std::string &LoopFileName)
 {
 	if (Name.empty()) // LoopFileName could be empty
 		return false;
 
-	MainPart = Name;
-	Volume = fVol;
-	MainVolume = fMainVol;
-	LoopPart = LoopFileName;
-	FadeInStartVol = Volume;
-	FadeInEndVol = Volume;
-	LastTime = vw_GetTimeThread(0);
+	MusicMap[Name].Volume = fVol; // create entry on first access
+	MusicMap[Name].MainVolume = fMainVol;
+	MusicMap[Name].LoopPart = LoopFileName;
+	MusicMap[Name].FadeInStartVol = fVol;
+	MusicMap[Name].FadeInEndVol = fVol;
+	MusicMap[Name].LastTime = vw_GetTimeThread(0);
 
 	// Position of the source sound.
 	ALfloat SourcePos[] = {0.0f, 0.0f, 0.0f}; // -1.0 1.0 по иксам это баланс
 	// Velocity of the source sound.
 	ALfloat SourceVel[] = {0.0f, 0.0f, 0.0f};
 
-	alGenSources(1, &Source);
+	alGenSources(1, &MusicMap[Name].Source);
 	if(!CheckALError(__func__))
 		return false;
 
-	alSourcef (Source, AL_PITCH, 1.0); // 1.0 only!!!
-	alSourcef (Source, AL_GAIN, fVol*fMainVol); // фактически громкость
-	alSourcefv(Source, AL_POSITION, SourcePos);
-	alSourcefv(Source, AL_VELOCITY, SourceVel);
-	alSourcei (Source, AL_SOURCE_RELATIVE, AL_TRUE);
-	alSourcei(Source, AL_LOOPING, AL_FALSE);
+	alSourcef(MusicMap[Name].Source, AL_PITCH, 1.0); // 1.0 only!!!
+	alSourcef(MusicMap[Name].Source, AL_GAIN, fVol*fMainVol); // фактически громкость
+	alSourcefv(MusicMap[Name].Source, AL_POSITION, SourcePos);
+	alSourcefv(MusicMap[Name].Source, AL_VELOCITY, SourceVel);
+	alSourcei(MusicMap[Name].Source, AL_SOURCE_RELATIVE, AL_TRUE);
+	alSourcei(MusicMap[Name].Source, AL_LOOPING, AL_FALSE);
 	alGetError(); // сброс ошибок
-	Looped = Loop;
+	MusicMap[Name].Looped = Loop;
 
-	Stream = vw_CreateStreamBufferFromOGG(Name, LoopPart);
-	if (!Stream)
+	MusicMap[Name].Stream = vw_CreateStreamBufferFromOGG(Name, LoopFileName);
+	if (!MusicMap[Name].Stream)
 		return false;
 
-	if (!vw_QueueStreamBuffer(Stream, Source))
+	if (!vw_QueueStreamBuffer(MusicMap[Name].Stream, MusicMap[Name].Source))
 		return false;
 
-	alSourcePlay(Source);
+	alSourcePlay(MusicMap[Name].Source);
 	if(!CheckALError(__func__))
 		return false;
 
 	return true;
+}
+
+static bool CheckSourceState(ALuint Source, ALint State)
+{
+	ALint tmpState;
+	alGetSourcei(Source, AL_SOURCE_STATE, &tmpState);
+	alGetError(); // сброс ошибок
+	return (tmpState == State);
 }
 
 //------------------------------------------------------------------------------------
@@ -124,10 +175,7 @@ bool sMusic::Update()
 	LastTime = vw_GetTimeThread(0);
 
 	// если по какой-то причине перестали играть...
-	ALint TMPS;
-	alGetSourcei(Source, AL_SOURCE_STATE, &TMPS);
-	alGetError(); // сброс ошибок
-	if (TMPS == AL_STOPPED)
+	if (CheckSourceState(Source, AL_STOPPED))
 		return false;
 
 	return true;
@@ -171,19 +219,12 @@ void sMusic::FadeOut(float Time)
 	LastTime = vw_GetTimeThread(0);
 }
 
-void vw_FadeOutAllIfMusicPlaying(float Time) {
-	sMusic *Tmp = StartMusicMan;
-	while (Tmp) {
-		sMusic *Tmp1 = Tmp->Next;
-		// смотрим, если играем что-то, передаем...
-		if (alIsSource(Tmp->Source)) {
-			ALint TMPS;
-			alGetSourcei(Tmp->Source, AL_SOURCE_STATE, &TMPS);
-			alGetError(); // сброс ошибок
-			if (TMPS == AL_PLAYING)
-				Tmp->FadeOut(Time);
-		}
-		Tmp = Tmp1;
+void vw_FadeOutIfMusicPlaying(float Time)
+{
+	for (auto &tmpMusic : MusicMap) {
+		if (alIsSource(tmpMusic.second.Source) &&
+		    CheckSourceState(tmpMusic.second.Source, AL_PLAYING))
+			tmpMusic.second.FadeOut(Time);
 	}
 }
 
@@ -192,18 +233,9 @@ void vw_FadeOutAllIfMusicPlaying(float Time) {
 //------------------------------------------------------------------------------------
 bool vw_IsMusicPlaying()
 {
-	sMusic *Tmp = StartMusicMan;
-	while (Tmp) {
-		sMusic *Tmp1 = Tmp->Next;
-		// смотрим, если играем что-то, передаем...
-		if (alIsSource(Tmp->Source)) {
-			ALint TMPS;
-			alGetSourcei(Tmp->Source, AL_SOURCE_STATE, &TMPS);
-			alGetError(); // сброс ошибок
-			if (TMPS == AL_PLAYING)
-				return true;
-		}
-		Tmp = Tmp1;
+	for (auto &tmpMusic : MusicMap) {
+		return alIsSource(tmpMusic.second.Source) &&
+		       CheckSourceState(tmpMusic.second.Source, AL_PLAYING);
 	}
 
 	return false;
@@ -212,101 +244,40 @@ bool vw_IsMusicPlaying()
 //------------------------------------------------------------------------------------
 // Освобождение памяти и удаление
 //------------------------------------------------------------------------------------
-void vw_ReleaseMusic(sMusic *Music)
+void vw_ReleaseMusic(const std::string &Name)
 {
-	// проверка входящих данных
-	if (!Music)
+	if (Name.empty())
 		return;
 
-	// отключаем от менерджера
-	vw_DetachMusic(Music);
-
-	// освобождаем память
-	if (Music)
-		delete Music;
+	MusicMap.erase(Name);
 }
 
 //------------------------------------------------------------------------------------
-// освобождаем все подключенные к менеджеру
+// освобождаем все подключенные
 //------------------------------------------------------------------------------------
 void vw_ReleaseAllMusic()
 {
-	// Чистка памяти...
-	sMusic *Tmp = StartMusicMan;
-	while (Tmp) {
-		sMusic *Tmp1 = Tmp->Next;
-		delete Tmp;
-		Tmp = Tmp1;
-	}
-
-	StartMusicMan = nullptr;
-	EndMusicMan = nullptr;
+	MusicMap.clear();
 }
 
 //------------------------------------------------------------------------------------
-// подключение звука к менеджеру
-//------------------------------------------------------------------------------------
-void vw_AttachMusic(sMusic *Music)
-{
-	if (!Music)
-		return;
-
-	// первый в списке...
-	if (EndMusicMan == nullptr) {
-		Music->Prev = nullptr;
-		Music->Next = nullptr;
-		NumMusicMan += 1;
-		Music->Num = NumMusicMan;
-		StartMusicMan = Music;
-		EndMusicMan = Music;
-	} else { // продолжаем заполнение...
-		Music->Prev = EndMusicMan;
-		Music->Next = nullptr;
-		EndMusicMan->Next = Music;
-		NumMusicMan += 1;
-		Music->Num = NumMusicMan;
-		EndMusicMan = Music;
-	}
-}
-
-
-//------------------------------------------------------------------------------------
-// отключение от менеджера
-//------------------------------------------------------------------------------------
-void vw_DetachMusic(sMusic *Music)
-{
-	if (!Music)
-		return;
-
-	// переустанавливаем указатели...
-	if (StartMusicMan == Music)
-		StartMusicMan = Music->Next;
-	if (EndMusicMan == Music)
-		EndMusicMan = Music->Prev;
-
-	if (Music->Next != nullptr)
-		Music->Next->Prev = Music->Prev;
-	else if (Music->Prev != nullptr)
-		Music->Prev->Next = nullptr;
-
-	if (Music->Prev != nullptr)
-		Music->Prev->Next = Music->Next;
-	else if (Music->Next != nullptr)
-		Music->Next->Prev = nullptr;
-}
-
-//------------------------------------------------------------------------------------
-// Обновляем данные в менеджере
+// Обновляем данные
 //------------------------------------------------------------------------------------
 void vw_UpdateMusic()
 {
-	sMusic *Tmp = StartMusicMan;
-	while (Tmp) {
-		sMusic *Tmp1 = Tmp->Next;
-		if (!Tmp->Update())
-			vw_ReleaseMusic(Tmp);
-		Tmp = Tmp1;
+	for (auto iter = MusicMap.begin(); iter != MusicMap.end();) {
+		if(!iter->second.Update()) {
+			iter = MusicMap.erase(iter);
+		} else
+			++iter;
 	}
+}
+
+void vw_SetMusicFadeIn(const std::string &Name, float EndVol, float Time)
+{
+	auto tmpMusic = MusicMap.find(Name);
+	if (tmpMusic != MusicMap.end())
+		tmpMusic->second.FadeIn(EndVol, Time);
 }
 
 //------------------------------------------------------------------------------------
@@ -314,25 +285,19 @@ void vw_UpdateMusic()
 //------------------------------------------------------------------------------------
 void vw_SetMusicMainVolume(float NewMainVolume)
 {
-	sMusic *Tmp = StartMusicMan;
-	while (Tmp) {
-		sMusic *Tmp1 = Tmp->Next;
-		Tmp->SetMainVolume(NewMainVolume);
-		Tmp = Tmp1;
+	for (auto & tmpMusic : MusicMap) {
+		tmpMusic.second.SetMainVolume(NewMainVolume);
 	}
 }
 
 //------------------------------------------------------------------------------------
-// Нахождение по уникальному номеру...
+// Проверка наличия по имени
 //------------------------------------------------------------------------------------
-sMusic* vw_FindMusicByName(const std::string &Name)
+bool vw_CheckMusicAvailabilityByName(const std::string &Name)
 {
-	sMusic *Tmp = StartMusicMan;
-	while (Tmp) {
-		sMusic *Tmp1 = Tmp->Next;
-		if (Tmp->MainPart == Name)
-			return Tmp;
-		Tmp = Tmp1;
-	}
-	return nullptr;
+	auto tmpMusic = MusicMap.find(Name);
+	if (tmpMusic != MusicMap.end())
+		return true;
+
+	return false;
 }

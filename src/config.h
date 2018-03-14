@@ -28,7 +28,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION		"1.9.9 git"
-#define GAME_BUILD		180311
+#define GAME_BUILD		180315
 
 
 

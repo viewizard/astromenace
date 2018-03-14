@@ -205,7 +205,7 @@ void StartMusicWithFade(eMusicTheme StartMusic, float FadeInTime, float FadeOutT
 		CurrentPlayingMusicName = "music/game.ogg";
 		// during in-game mission restart we need "restart" music as well
 		// so, if this music already playing - release it, and start it again (see code below)
-		vw_ReleaseMusic(vw_FindMusicByName(CurrentPlayingMusicName));
+		vw_ReleaseMusic(CurrentPlayingMusicName);
 		break;
 	case eMusicTheme::BOSS:
 		CurrentPlayingMusicName = "music/boss-loop.ogg";
@@ -226,24 +226,18 @@ void StartMusicWithFade(eMusicTheme StartMusic, float FadeInTime, float FadeOutT
 	    !CurrentPlayingMusicName.empty()) {
 
 		// FadeOut all music themes, if we need something, we FadeIn it in code below
-		vw_FadeOutAllIfMusicPlaying(FadeOutTime);
+		vw_FadeOutIfMusicPlaying(FadeOutTime);
 
-		if (!vw_FindMusicByName(CurrentPlayingMusicName)) {
-
-			// создаем новый источник и проигрываем его
-			sMusic *Music;
-			Music = new sMusic;
-			vw_AttachMusic(Music);
-
+		if (!vw_CheckMusicAvailabilityByName(CurrentPlayingMusicName)) {
 			// пытаемся загрузить и играть
-			if (!Music->Play(CurrentPlayingMusicName, 0.0f, MusicCorrection*(Setup.MusicSw/10.0f),
-					 MusicLoop, LoopFileName)) {
-				vw_ReleaseMusic(Music);
+			if (!vw_PlayMusic(CurrentPlayingMusicName, 0.0f, MusicCorrection*(Setup.MusicSw/10.0f),
+					  MusicLoop, LoopFileName)) {
+				vw_ReleaseMusic(CurrentPlayingMusicName);
 				CurrentPlayingMusicName.clear();
 			} else // we are playing new music theme, FadeIn it
-				Music->FadeIn(1.0f, FadeInTime);
+				vw_SetMusicFadeIn(CurrentPlayingMusicName, 1.0f, FadeInTime);
 		} else // if we already playing this one - FadeIn it (rest will continue FadeOut, see code above)
-			vw_FindMusicByName(CurrentPlayingMusicName)->FadeIn(1.0f, FadeInTime);
+			vw_SetMusicFadeIn(CurrentPlayingMusicName, 1.0f, FadeInTime);
 	}
 }
 
@@ -440,16 +434,13 @@ void Audio_LoopProc()
 		if (Setup.MusicSw && // если громкость не нулевая
 		    Setup.Music_check && // если можно вообще играть
 		    (!CurrentPlayingMusicName.empty()) && // если установлен
-		    (!vw_FindMusicByName(CurrentPlayingMusicName))) { // если это еще не играем
-			// создаем новый источник и проигрываем его
-			sMusic *Music;
-			Music = new sMusic;
-			vw_AttachMusic(Music);
-
-			if (!Music->Play(CurrentPlayingMusicName, 1.0f, Setup.MusicSw/10.0f, true, "")) {
-				vw_ReleaseMusic(Music);
+		    (!vw_CheckMusicAvailabilityByName(CurrentPlayingMusicName))) { // если это еще не играем
+			// пытаемся загрузить и проиграть
+			if (!vw_PlayMusic(CurrentPlayingMusicName, 1.0f, Setup.MusicSw/10.0f, true, "")) {
+				vw_ReleaseMusic(CurrentPlayingMusicName);
 				CurrentPlayingMusicName.clear();
-			}
+			} else // we are playing new music theme, FadeIn it
+				vw_SetMusicFadeIn(CurrentPlayingMusicName, 0.0f, 2.0f);
 		}
 	} else {
 		// если что-то играем, но звук уже выключен, нужно все убрать...
