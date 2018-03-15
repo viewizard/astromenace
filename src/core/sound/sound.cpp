@@ -41,13 +41,12 @@ ALboolean CheckALUTError(const char *FunctionName);
 //------------------------------------------------------------------------------------
 // Проигрывание звука
 //------------------------------------------------------------------------------------
-bool cSound::Play(const char *Name, float _LocalVolume, float _GlobalVolume, float x, float y, float z,
+bool cSound::Play(const std::string &Name, float _LocalVolume, float _GlobalVolume, float x, float y, float z,
 		  bool Relative, bool Loop, bool AllowStop, int AtType)
 {
 	Source = 0;
 	LastUpdateTime = vw_GetTimeThread(0);
-	FileName = new char[strlen(Name)+1];
-	strcpy(FileName,Name);
+	FileName = Name;
 
 
 	DestroyTime = -1.0f;
@@ -57,7 +56,7 @@ bool cSound::Play(const char *Name, float _LocalVolume, float _GlobalVolume, flo
 
 	ALuint Buffer{0};
 	// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
-	const char *file_ext = strrchr(Name, '.');
+	const char *file_ext = strrchr(Name.c_str(), '.');
 	if (file_ext) {
 		if (!strcasecmp(".wav", file_ext))
 			Buffer = vw_CreateSoundBufferFromWAV(Name);
@@ -298,16 +297,15 @@ cSound *vw_FindSoundByNum(int Num)
 //------------------------------------------------------------------------------------
 // Нахождение по имени
 //------------------------------------------------------------------------------------
-cSound *vw_FindSoundByName(const char *Name)
+cSound *vw_FindSoundByName(const std::string &Name)
 {
-	if (!Name)
+	if (Name.empty())
 		return nullptr;
 
 	cSound *Tmp = StartSoundMan;
 	while (Tmp) {
 		cSound *Tmp1 = Tmp->Next;
-		if ((Tmp->FileName != nullptr) &&
-		    (!strcmp(Tmp->FileName, Name)))
+		if (Tmp->FileName == Name)
 			return Tmp;
 		Tmp = Tmp1;
 	}

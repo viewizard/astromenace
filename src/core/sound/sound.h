@@ -42,14 +42,11 @@ public:
 	cSound()
 	{};
 	~cSound()
-	{
-		if (FileName != nullptr)
-			delete [] FileName;
-	};
+	{};
 
 	// проигрывание звука
 	// нельзя разделять пока на отдельную загрузку и проигрывание... т.к. удаляем по остановке!!!
-	bool Play(const char *Name, float _LocalVolume, float _GlobalVolume, float x, float y, float z, bool Relative, bool Loop, bool AllowStop, int AtType);
+	bool Play(const std::string &Name, float _LocalVolume, float _GlobalVolume, float x, float y, float z, bool Relative, bool Loop, bool AllowStop, int AtType);
 	// перезапуск воспроизведения
 	void Replay();
 	// остановка звука (0.0f - остановить сразу)
@@ -59,7 +56,7 @@ public:
 	// установка или изменение общей громкости
 	void SetGlobalVolume(float NewMainVolume);
 
-	char *FileName{nullptr};
+	std::string FileName;
 
 	ALuint Source{0};		// источник
 	float LocalVolume{0.0f};
@@ -81,7 +78,7 @@ public:
  */
 
 cSound *vw_FindSoundByNum(int Num);
-cSound *vw_FindSoundByName(const char *Name);
+cSound *vw_FindSoundByName(const std::string &Name);
 void vw_SetSoundGlobalVolume(float NewGlobalVolume);
 void vw_UpdateSound();
 
