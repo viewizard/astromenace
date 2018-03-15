@@ -77,6 +77,8 @@ public:
  * Sound FX.
  */
 
+// Load sound buffer data according to file extension.
+unsigned int vw_LoadSoundBuffer(const std::string &Name);
 cSound *vw_FindSoundByNum(int Num);
 cSound *vw_FindSoundByName(const std::string &Name);
 void vw_SetSoundGlobalVolume(float NewGlobalVolume);

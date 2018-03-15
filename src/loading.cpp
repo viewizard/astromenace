@@ -1471,21 +1471,9 @@ void LoadGameData(eLoading LoadType)
 		// загрузка sfx
 		case 4:
 			// если вообще можем играть звуки
-			if (Setup.Sound_check &&
-			    (vw_FindSoundBufferIDByName(CurrentList[i].FileName) == 0)) { // если еще не загрузили этот звук
-				// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
-				// TODO change to vw_CheckFileExtension() usage
-				const char *file_ext = strrchr(CurrentList[i].FileName, '.');
-				if (file_ext) {
-					if (!strcasecmp(".wav", file_ext))
-						vw_CreateSoundBufferFromWAV(CurrentList[i].FileName);
-					else if (!strcasecmp(".ogg", file_ext))
-						vw_CreateSoundBufferFromOGG(CurrentList[i].FileName);
-				}
-			}
+			if (Setup.Sound_check)
+				vw_LoadSoundBuffer(CurrentList[i].FileName);
 			break;
-
-
 		}
 
 

@@ -39,6 +39,19 @@ ALboolean CheckALError(const char *FunctionName);
 ALboolean CheckALUTError(const char *FunctionName);
 
 
+/*
+ * Load sound buffer data according to file extension.
+ */
+unsigned int vw_LoadSoundBuffer(const std::string &Name)
+{
+	if (vw_CheckFileExtension(Name, ".wav"))
+		return vw_CreateSoundBufferFromWAV(Name);
+	else if (vw_CheckFileExtension(Name, ".ogg"))
+		return vw_CreateSoundBufferFromOGG(Name);
+
+	return 0;
+}
+
 //------------------------------------------------------------------------------------
 // Проигрывание звука
 //------------------------------------------------------------------------------------
@@ -49,19 +62,12 @@ bool cSound::Play(const std::string &Name, float _LocalVolume, float _GlobalVolu
 	LastUpdateTime = vw_GetTimeThread(0);
 	FileName = Name;
 
-
 	DestroyTime = -1.0f;
 	DestroyTimeStart = -1.0f;
 
 	AllowedStop = AllowStop;
 
-	ALuint Buffer{0};
-	// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
-	if (vw_CheckFileExtension(Name, ".wav"))
-		Buffer = vw_CreateSoundBufferFromWAV(Name);
-	else if (vw_CheckFileExtension(Name, ".ogg"))
-		Buffer = vw_CreateSoundBufferFromOGG(Name);
-
+	ALuint Buffer = vw_LoadSoundBuffer(Name);
 	if (!Buffer)
 		return false;
 
