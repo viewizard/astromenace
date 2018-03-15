@@ -108,13 +108,13 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), ContentTransp, !Setup.Sound_check || Setup.VoiceSw==0, false)) {
 		Setup.VoiceSw--;
 		if (Setup.VoiceSw<0) Setup.VoiceSw = 0;
-		Audio_SetVoiceMainVolume(Setup.VoiceSw/10.0f);
+		Audio_SetVoiceGlobalVolume(Setup.VoiceSw/10.0f);
 		Audio_PlayVoice(1, 1.0f);
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), ContentTransp, !Setup.Sound_check || Setup.VoiceSw==10, false)) {
 		Setup.VoiceSw++;
 		if (Setup.VoiceSw>10) Setup.VoiceSw = 10;
-		Audio_SetVoiceMainVolume(Setup.VoiceSw/10.0f);
+		Audio_SetVoiceGlobalVolume(Setup.VoiceSw/10.0f);
 		Audio_PlayVoice(1, 1.0f);
 	}
 	if (!Setup.Sound_check) {
@@ -140,12 +140,12 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), ContentTransp, !Setup.Sound_check || Setup.SoundSw==0)) {
 		Setup.SoundSw--;
 		if (Setup.SoundSw<0) Setup.SoundSw = 0;
-		Audio_SetSound2DMainVolume(Setup.SoundSw/10.0f);
+		Audio_SetSound2DGlobalVolume(Setup.SoundSw/10.0f);
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), ContentTransp, !Setup.Sound_check || Setup.SoundSw==10)) {
 		Setup.SoundSw++;
 		if (Setup.SoundSw>10) Setup.SoundSw = 10;
-		Audio_SetSound2DMainVolume(Setup.SoundSw/10.0f);
+		Audio_SetSound2DGlobalVolume(Setup.SoundSw/10.0f);
 	}
 	if (!Setup.Sound_check) {
 		int SizeI = (170-vw_FontSize(vw_GetText("3_Not_available")))/2;

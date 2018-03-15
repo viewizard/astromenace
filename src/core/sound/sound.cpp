@@ -41,17 +41,11 @@ ALboolean CheckALUTError(const char *FunctionName);
 //------------------------------------------------------------------------------------
 // Проигрывание звука
 //------------------------------------------------------------------------------------
-bool cSound::Play(const char *Name, float fVol, float fMainVol, float x, float y, float z,
+bool cSound::Play(const char *Name, float _LocalVolume, float _GlobalVolume, float x, float y, float z,
 		  bool Relative, bool Loop, bool NeedReleaseStatus, int AtType)
 {
 	Source = 0;
-	Age = 0.0f;
 	LastUpdateTime = vw_GetTimeThread(0);
-	Group = 0;
-	GroupCount = 0;
-	SubGroup = 0;
-	SubGroupCount = 0;
-	Priority = 0;
 	FileName = new char[strlen(Name)+1];
 	strcpy(FileName,Name);
 
@@ -74,8 +68,8 @@ bool cSound::Play(const char *Name, float fVol, float fMainVol, float x, float y
 	if (!Buffer)
 		return false;
 
-	Volume = fVol;
-	MainVolume = fMainVol;
+	LocalVolume = _LocalVolume;
+	GlobalVolume = _GlobalVolume;
 
 	// Position of the source sound.
 	ALfloat SourcePos[] = {x, y, z}; // -1.0 1.0 по иксам это баланс
@@ -89,7 +83,7 @@ bool cSound::Play(const char *Name, float fVol, float fMainVol, float x, float y
 
 	alSourcei (Source, AL_BUFFER, Buffer);
 
-	alSourcef (Source, AL_GAIN, fVol*fMainVol); // фактически громкость
+	alSourcef (Source, AL_GAIN, _GlobalVolume * _LocalVolume);
 	alSourcefv(Source, AL_POSITION, SourcePos);
 	alSourcefv(Source, AL_VELOCITY, SourceVel);
 	alSourcei (Source, AL_LOOPING, Loop);
@@ -98,14 +92,14 @@ bool cSound::Play(const char *Name, float fVol, float fMainVol, float x, float y
 
 	// параметры затухания сигнала от источника
 	if (AtType == 1) {
-		alSourcef (Source, AL_REFERENCE_DISTANCE,  30.0f     );
-		alSourcef (Source, AL_MAX_DISTANCE,  250.0f     );
-		alSourcef (Source, AL_ROLLOFF_FACTOR,  0.5f     );
+		alSourcef(Source, AL_REFERENCE_DISTANCE, 30.0f);
+		alSourcef(Source, AL_MAX_DISTANCE, 250.0f);
+		alSourcef(Source, AL_ROLLOFF_FACTOR, 0.5f);
 		alGetError(); // сброс ошибок
 	} else if (AtType == 2) {
-		alSourcef (Source, AL_REFERENCE_DISTANCE,  150.0f     );
-		alSourcef (Source, AL_MAX_DISTANCE,  600.0f     );
-		alSourcef (Source, AL_ROLLOFF_FACTOR,  0.2f     );
+		alSourcef(Source, AL_REFERENCE_DISTANCE, 150.0f);
+		alSourcef(Source, AL_MAX_DISTANCE, 600.0f);
+		alSourcef(Source, AL_ROLLOFF_FACTOR, 0.2f);
 		alGetError(); // сброс ошибок
 	}
 
@@ -165,26 +159,14 @@ void cSound::SetLocation(float x, float y, float z)
 //------------------------------------------------------------------------------------
 // установка громкости
 //------------------------------------------------------------------------------------
-void cSound::SetMainVolume(float NewMainVolume)
+void cSound::SetGlobalVolume(float NewGlobalVolume)
 {
 	if (!alIsSource(Source))
 		return;
 
-	MainVolume = NewMainVolume;
-	alSourcef(Source, AL_GAIN, MainVolume*Volume );
+	GlobalVolume = NewGlobalVolume;
+	alSourcef(Source, AL_GAIN, GlobalVolume * LocalVolume );
 	alGetError(); // сброс ошибок
-}
-
-//------------------------------------------------------------------------------------
-// установка информации о звуке
-//------------------------------------------------------------------------------------
-void cSound::SetInfo(int NewGroup, int NewGroupCount, int NewSubGroup, int NewSubGroupCount, int NewPriority)
-{
-	Group = NewGroup;
-	GroupCount = NewGroupCount;
-	SubGroup = NewSubGroup;
-	SubGroupCount = NewSubGroupCount;
-	Priority = NewPriority;
 }
 
 //------------------------------------------------------------------------------------
@@ -344,7 +326,6 @@ void vw_UpdateSound()
 
 		// считаем сколько играем этот эффект
 		float DeltaTime = CurrentGetTime - Tmp->LastUpdateTime;
-		Tmp->Age += DeltaTime;
 		Tmp->LastUpdateTime = CurrentGetTime;
 
 		if ((alIsSource(Tmp->Source)) &&
@@ -353,7 +334,7 @@ void vw_UpdateSound()
 				Tmp->DestroyTime -= DeltaTime;
 				if (Tmp->DestroyTime < 0.0f)
 					Tmp->DestroyTime = 0.0f;
-				alSourcef (Tmp->Source, AL_GAIN, Tmp->MainVolume*Tmp->Volume*(Tmp->DestroyTime/Tmp->DestroyTimeStart));
+				alSourcef (Tmp->Source, AL_GAIN, Tmp->GlobalVolume * Tmp->LocalVolume * (Tmp->DestroyTime / Tmp->DestroyTimeStart));
 				alGetError(); // сброс ошибок
 			} else {
 				// уже нулевая громкость, можем удалять
@@ -379,91 +360,12 @@ void vw_UpdateSound()
 //------------------------------------------------------------------------------------
 // Установка громкости всем SFX
 //------------------------------------------------------------------------------------
-void vw_SetSoundMainVolume(float NewMainVolume)
+void vw_SetSoundGlobalVolume(float NewGlobalVolume)
 {
 	cSound *Tmp = StartSoundMan;
 	while (Tmp) {
 		cSound *Tmp1 = Tmp->Next;
-		Tmp->SetMainVolume(NewMainVolume);
+		Tmp->SetGlobalVolume(NewGlobalVolume);
 		Tmp = Tmp1;
 	}
-}
-
-//------------------------------------------------------------------------------------
-// Проверяем, можем ли мы играть звук с данными параметрами
-//------------------------------------------------------------------------------------
-bool vw_CheckCanPlaySound(int Group, int GroupCount, int SubGroup, int SubGroupCount, int Priority)
-{
-	// находим кол-во звуков в группе
-	int GroupCurrentCount = 0;
-	// находим кол-во звуков в подгруппе
-	int SubGroupCurrentCount = 0;
-	// находим звук, из этой группы с наименьшим приоритетом + самый старый
-	cSound *GroupCanStop = nullptr;
-	// находим звук, из этой подгруппы с меньшим или равным приоритетом + самый старый
-	cSound *SubGroupCanStop = nullptr;
-
-	cSound *Tmp = StartSoundMan;
-	while (Tmp) {
-		cSound *Tmp1 = Tmp->Next;
-
-		if ((Tmp->DestroyTimeStart == -1.0f) &&
-		    (Tmp->Group == Group)) {
-			if (Tmp->SubGroup == SubGroup) {
-				SubGroupCurrentCount++;
-
-				// если приоритет выше или такой же, можем его останавливать
-				if (Priority <= Tmp->Priority) {
-					if (SubGroupCanStop == nullptr)
-						SubGroupCanStop = Tmp;// если ничего еще нет, ставим этот
-					else {
-						if (SubGroupCanStop->Priority < Tmp->Priority)
-							SubGroupCanStop = Tmp;	// если этот с меньшим приоритетом - берем сразу
-						else if (SubGroupCanStop->Age < Tmp->Age)
-							SubGroupCanStop = Tmp;	// меняем на более старый
-					}
-				}
-			}
-
-			GroupCurrentCount++;
-			// если приоритет выше или такой же, можем его останавливать
-			if (Priority <= Tmp->Priority) {
-				if (!GroupCanStop)
-					GroupCanStop = Tmp;// если ничего еще нет, ставим этот
-				else {
-					if (GroupCanStop->Priority < Tmp->Priority)
-						GroupCanStop = Tmp;	// если этот с меньшим приоритетом - берем сразу
-					else if (GroupCanStop->Age < Tmp->Age)
-						GroupCanStop = Tmp;	// меняем на более старый
-				}
-			}
-		}
-
-		Tmp = Tmp1;
-	}
-
-	// если в подгруппе нет места - останавливаем звук из подгруппы
-	if (SubGroupCount <= SubGroupCurrentCount) {
-		if (SubGroupCanStop) {
-			SubGroupCanStop->Stop(0.15f);
-			GroupCurrentCount--;
-			SubGroupCurrentCount--;
-		}
-	} else { // если уже удалили, само собой в группе будет пустое место
-		// если в группе нет места - останавливаем звук из группы
-		if ((GroupCount <= GroupCurrentCount) &&
-		    (GroupCanStop)) {
-			GroupCanStop->Stop(0.15f);
-			GroupCurrentCount--;
-		}
-	}
-
-	// проверяем, если есть место в подгруппе и в группе - говорим, что все ок, можно запускать
-	// иначе - выходим и не запускаем новый звук с этими настройками
-	if ((SubGroupCount > SubGroupCurrentCount) &&
-	    (GroupCount > GroupCurrentCount))
-		return true;
-
-	// иначе играть не можем
-	return false;
 }

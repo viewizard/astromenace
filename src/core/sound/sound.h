@@ -49,7 +49,7 @@ public:
 
 	// проигрывание звука
 	// нельзя разделять пока на отдельную загрузку и проигрывание... т.к. удаляем по остановке!!!
-	bool Play(const char *Name, float fVol, float fMainVol, float x, float y, float z, bool Relative, bool Loop, bool NeedReleaseStatus, int AtType);
+	bool Play(const char *Name, float _LocalVolume, float _GlobalVolume, float x, float y, float z, bool Relative, bool Loop, bool NeedReleaseStatus, int AtType);
 	// перезапуск воспроизведения
 	void Replay();
 	// остановка звука (0.0f - остановить сразу)
@@ -57,23 +57,15 @@ public:
 	// для 3д звука установка положения (баланса)
 	void SetLocation(float x, float y, float z);
 	// установка или изменение общей громкости
-	void SetMainVolume(float NewMainVolume);
+	void SetGlobalVolume(float NewMainVolume);
 
 	char *FileName{nullptr};
 
 	ALuint Source{0};		// источник
-	float Volume{0.0f};		// громкость, внутренняя... для данного источника (чтобы была возможность корректировки общей громкости)
-	float MainVolume{0.0f};
+	float LocalVolume{0.0f};
+	float GlobalVolume{0.0f};
 	bool NeedRelease{false};	// для 2-х типов релиза...
 
-	// установка информации о звуке
-	void SetInfo(int NewGroup, int NewGroupCount, int NewSubGroup, int NewSubGroupCount, int NewPriority);
-	int Group{0}; 			// номер группы
-	int GroupCount{0}; 		// макс. кол-во одновременно проигрываемых звуков в группе
-	int SubGroup{0};		// номер подгруппы
-	int SubGroupCount{0};		// макс. кол-во одновременно проигрываемых звуков в подгруппы
-	int Priority{0};		// приоритет звука в группе от 1 до ... (1-самый высокий)
-	float Age{0.0f};		// время, в течении которого проигрываем звук (для остановки более старого звука)
 	float LastUpdateTime{0.0f};	// тянем тут, т.к. глобальный может быть не корректный (если была остановка игры)
 
 	float DestroyTime{0.0f};
@@ -84,21 +76,14 @@ public:
 	int Num{0};		// ID number
 };
 
-//------------------------------------------------------------------------------------
-// Функции для работы со звуком
-//------------------------------------------------------------------------------------
-bool vw_InitSound();
-void vw_ShutdownSound();
-void vw_Listener(float ListenerPos[3], float ListenerVel[3], float ListenerOri[6]);
+/*
+ * Sound FX.
+ */
 
-//------------------------------------------------------------------------------------
-// Функции для работы с SFX
-//------------------------------------------------------------------------------------
 cSound *vw_FindSoundByNum(int Num);
 cSound *vw_FindSoundByName(const char *Name);
-void vw_SetSoundMainVolume(float NewMainVolume);
+void vw_SetSoundGlobalVolume(float NewGlobalVolume);
 void vw_UpdateSound();
-bool vw_CheckCanPlaySound(int Group, int GroupCount, int SubGroup, int SubGroupCount, int Priority);
 
 void vw_ReleaseSound(cSound *Sound);
 void vw_ReleaseAllSounds(int ReleaseType);
@@ -110,7 +95,8 @@ void vw_DetachSound(cSound *Sound);
  */
 
 // Create and play music.
-bool vw_PlayMusic(const std::string &Name, float fVol, float fMainVol, bool Loop, const std::string &LoopFileName);
+bool vw_PlayMusic(const std::string &Name, float LocalVolume, float GlobalVolume,
+		  bool Loop, const std::string &LoopFileName);
 // Set global music volume.
 void vw_SetMusicGlobalVolume(float NewGlobalVolume);
 // Check, is any music theme playing.
@@ -125,5 +111,13 @@ void vw_UpdateMusic();
 void vw_ReleaseMusic(const std::string &Name);
 // Release all music. Also could be used for "stop" playing all music themes.
 void vw_ReleaseAllMusic();
+
+/*
+ * Misc.
+ */
+
+bool vw_InitSound();
+void vw_ShutdownSound();
+void vw_Listener(float ListenerPos[3], float ListenerVel[3], float ListenerOri[6]);
 
 #endif // Sound_H

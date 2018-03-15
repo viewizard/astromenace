@@ -117,7 +117,7 @@ bool vw_PlayMusic(const std::string &Name, float _LocalVolume, float _GlobalVolu
 	ALfloat SourceVel[] = {0.0f, 0.0f, 0.0f};
 
 	alSourcef(MusicMap[Name].Source, AL_PITCH, 1.0);
-	alSourcef(MusicMap[Name].Source, AL_GAIN, _LocalVolume * _GlobalVolume);
+	alSourcef(MusicMap[Name].Source, AL_GAIN, _GlobalVolume * _LocalVolume);
 	alSourcefv(MusicMap[Name].Source, AL_POSITION, SourcePos);
 	alSourcefv(MusicMap[Name].Source, AL_VELOCITY, SourceVel);
 	alSourcei(MusicMap[Name].Source, AL_SOURCE_RELATIVE, AL_TRUE);

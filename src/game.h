@@ -170,8 +170,8 @@ void Audio_LoopProc();
 bool InitAudio();
 void ShutdownAudio();
 void StartMusicWithFade(eMusicTheme StartMusic, float FadeInTime, float FadeOutTime);
-void Audio_SetSound2DMainVolume(float NewMainVolume);
-void Audio_SetVoiceMainVolume(float NewMainVolume);
+void Audio_SetSound2DGlobalVolume(float NewGlobalVolume);
+void Audio_SetVoiceGlobalVolume(float NewGlobalVolume);
 
 
 
