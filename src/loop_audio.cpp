@@ -196,9 +196,7 @@ void StartMusicWithFade(eMusicTheme StartMusic, float FadeInTime, float FadeOutT
 void Audio_SetSound2DGlobalVolume(float NewGlobalVolume)
 {
 	for (unsigned int i = 0; i < MenuSoundQuantity; i++) {
-		cSound *Tmp = vw_FindSoundByName(MenuSoundNames[i].FileName);
-		if (Tmp != nullptr)
-			Tmp->SetGlobalVolume(NewGlobalVolume);
+		vw_SetSoundGlobalVolume(MenuSoundNames[i].FileName, NewGlobalVolume);
 	}
 }
 
@@ -206,9 +204,7 @@ void Audio_SetSound2DGlobalVolume(float NewGlobalVolume)
 void Audio_SetVoiceGlobalVolume(float NewGlobalVolume)
 {
 	for (unsigned int i = 0; i < VoiceQuantity; i++) {
-		cSound *Tmp = vw_FindSoundByName(vw_GetText(VoiceNames[i].FileName, Setup.VoiceLanguage));
-		if (Tmp != nullptr)
-			Tmp->SetGlobalVolume(NewGlobalVolume);
+		vw_SetSoundGlobalVolume(vw_GetText(VoiceNames[i].FileName, Setup.VoiceLanguage), NewGlobalVolume);
 	}
 }
 
@@ -227,12 +223,10 @@ int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume, bool Loop)
 
 	LocalVolume = LocalVolume * MenuSoundNames[SoundID].VolumeCorrection;
 
-	// если это звук меню и мы его игрываем, его надо перезапустить
-	cSound *Tmp = vw_FindSoundByName(MenuSoundNames[SoundID].FileName);
-	if (Tmp != nullptr) {
-		Tmp->Replay();
-		return Tmp->Num;
-	}
+	// если это звук меню и мы его уже проигрываем, его надо перезапустить
+	int ret = vw_ReplaySound(MenuSoundNames[SoundID].FileName);
+	if (ret)
+		return ret;
 
 	// создаем новый источник и проигрываем его
 	cSound *Sound = new cSound;

@@ -297,23 +297,22 @@ cSound *vw_FindSoundByNum(int Num)
 	return nullptr;
 }
 
-
-//------------------------------------------------------------------------------------
-// Нахождение по имени
-//------------------------------------------------------------------------------------
-cSound *vw_FindSoundByName(const std::string &Name)
+int vw_ReplaySound(const std::string &Name)
 {
 	if (Name.empty())
-		return nullptr;
+		return 0;
 
 	cSound *Tmp = StartSoundMan;
 	while (Tmp) {
 		cSound *Tmp1 = Tmp->Next;
-		if (Tmp->FileName == Name)
-			return Tmp;
+		if (Tmp->FileName == Name) {
+			Tmp->Replay();
+			return Tmp->Num;
+		}
 		Tmp = Tmp1;
 	}
-	return nullptr;
+
+	return 0;
 }
 
 //------------------------------------------------------------------------------------
@@ -361,15 +360,15 @@ void vw_UpdateSound()
 	}
 }
 
-//------------------------------------------------------------------------------------
-// Установка громкости всем SFX
-//------------------------------------------------------------------------------------
-void vw_SetSoundGlobalVolume(float NewGlobalVolume)
+void vw_SetSoundGlobalVolume(const std::string &Name, float NewGlobalVolume)
 {
 	cSound *Tmp = StartSoundMan;
 	while (Tmp) {
 		cSound *Tmp1 = Tmp->Next;
-		Tmp->SetGlobalVolume(NewGlobalVolume);
+		if (Tmp->FileName == Name) {
+			Tmp->SetGlobalVolume(NewGlobalVolume);
+			break;
+		}
 		Tmp = Tmp1;
 	}
 }
