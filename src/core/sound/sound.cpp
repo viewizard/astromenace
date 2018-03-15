@@ -28,6 +28,7 @@
 // TODO switch from vw_GetTimeThread() to SDL_GetTicks() usage
 
 #include "../system/system.h"
+#include "../math/math.h"
 #include "sound.h"
 
 cSound *StartSoundMan = nullptr;
@@ -56,13 +57,10 @@ bool cSound::Play(const std::string &Name, float _LocalVolume, float _GlobalVolu
 
 	ALuint Buffer{0};
 	// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
-	const char *file_ext = strrchr(Name.c_str(), '.');
-	if (file_ext) {
-		if (!strcasecmp(".wav", file_ext))
-			Buffer = vw_CreateSoundBufferFromWAV(Name);
-		else if (!strcasecmp(".ogg", file_ext))
-			Buffer = vw_CreateSoundBufferFromOGG(Name);
-	}
+	if (vw_CheckFileExtension(Name, ".wav"))
+		Buffer = vw_CreateSoundBufferFromWAV(Name);
+	else if (vw_CheckFileExtension(Name, ".ogg"))
+		Buffer = vw_CreateSoundBufferFromOGG(Name);
 
 	if (!Buffer)
 		return false;

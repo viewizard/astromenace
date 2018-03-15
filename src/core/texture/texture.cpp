@@ -40,6 +40,7 @@ care about byte alignment.
 
 #include "../graphics/graphics.h"
 #include "../vfs/vfs.h"
+#include "../math/math.h"
 #include "texture.h"
 
 namespace {
@@ -318,13 +319,10 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 	}
 
 	// check extension
-	const char *FileExt = strrchr(SrcName.c_str(), '.');
-	if (FileExt) {
-		if (!strcasecmp(".tga", FileExt))
-			LoadAs = eLoadTextureAs::TGA;
-		else
-			std::cerr << "Format not supported " << SrcName << "\n";
-	}
+	if (vw_CheckFileExtension(SrcName, ".tga"))
+		LoadAs = eLoadTextureAs::TGA;
+	else
+		std::cerr << "Format not supported " << SrcName << "\n";
 
 	switch (LoadAs) {
 	case eLoadTextureAs::TGA:
@@ -384,15 +382,12 @@ sTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
 
 	// check extension
 	if (LoadAs == eLoadTextureAs::AUTO) {
-		const char *FileExt = strrchr(TextureName.c_str(), '.');
-		if (FileExt) {
-			if (!strcasecmp(".tga", FileExt))
-				LoadAs = eLoadTextureAs::TGA;
-			else if (!strcasecmp(".vw2d", FileExt))
-				LoadAs = eLoadTextureAs::VW2D;
-			else
-				std::cerr << "Format not supported " << TextureName << "\n";
-		}
+		if (vw_CheckFileExtension(TextureName, ".tga"))
+			LoadAs = eLoadTextureAs::TGA;
+		else if (vw_CheckFileExtension(TextureName, ".vw2d"))
+			LoadAs = eLoadTextureAs::VW2D;
+		else
+			std::cerr << "Format not supported " << TextureName << "\n";
 	}
 
 	// load texture

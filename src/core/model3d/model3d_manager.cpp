@@ -59,6 +59,7 @@ cModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool Nee
 	cModel3D * Model = new cModel3D;
 
 	// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
+	// TODO change to vw_CheckFileExtension() usage
 	const char *file_ext = strrchr(FileName, '.');
 	if (file_ext != nullptr) {
 		if (!strcasecmp(".vw3d", file_ext)) {

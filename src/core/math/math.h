@@ -178,6 +178,21 @@ void vw_RotatePointInv(sVECTOR3D &Point, const sVECTOR3D &Angle);
 void vw_GetPlaneABCD(float &A, float &B, float &C, float &D,
 		     const sVECTOR3D &Point1, const sVECTOR3D &Point2, const sVECTOR3D &Point3);
 
+// Check file extension (for extensions with ASCII characters).
+inline bool vw_CheckFileExtension(const std::string &FileName, const std::string &Extension)
+{
+	if (Extension.size() > FileName.size())
+		return false;
+
+	auto predicate = [] (unsigned char a, unsigned char b) {
+		return (std::tolower(a) == std::tolower(b));
+	};
+
+	std::string FileExt = FileName.substr(FileName.size() - Extension.size());
+
+	return std::equal(FileExt.begin(), FileExt.end(), Extension.begin(), predicate);
+}
+
 /*
  * Random number generator.
  */
