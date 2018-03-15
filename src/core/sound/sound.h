@@ -49,7 +49,7 @@ public:
 
 	// проигрывание звука
 	// нельзя разделять пока на отдельную загрузку и проигрывание... т.к. удаляем по остановке!!!
-	bool Play(const char *Name, float _LocalVolume, float _GlobalVolume, float x, float y, float z, bool Relative, bool Loop, bool NeedReleaseStatus, int AtType);
+	bool Play(const char *Name, float _LocalVolume, float _GlobalVolume, float x, float y, float z, bool Relative, bool Loop, bool AllowStop, int AtType);
 	// перезапуск воспроизведения
 	void Replay();
 	// остановка звука (0.0f - остановить сразу)
@@ -64,7 +64,7 @@ public:
 	ALuint Source{0};		// источник
 	float LocalVolume{0.0f};
 	float GlobalVolume{0.0f};
-	bool NeedRelease{false};	// для 2-х типов релиза...
+	bool AllowedStop{false};	// allowed stop during vw_StopAllSoundsIfAllowed() call
 
 	float LastUpdateTime{0.0f};	// тянем тут, т.к. глобальный может быть не корректный (если была остановка игры)
 
@@ -86,7 +86,8 @@ void vw_SetSoundGlobalVolume(float NewGlobalVolume);
 void vw_UpdateSound();
 
 void vw_ReleaseSound(cSound *Sound);
-void vw_ReleaseAllSounds(int ReleaseType);
+void vw_ReleaseAllSounds();
+void vw_StopAllSoundsIfAllowed();
 void vw_AttachSound(cSound *Sound);
 void vw_DetachSound(cSound *Sound);
 

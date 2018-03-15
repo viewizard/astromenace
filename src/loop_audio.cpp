@@ -24,90 +24,66 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "game.h"
 
 namespace {
 
 std::string CurrentPlayingMusicName;
 
-} // unnamed namespace
-
-
-//------------------------------------------------------------------------------------
-// локальная структура данных 3D sfx
-//------------------------------------------------------------------------------------
-struct sGameSoundData {
-	// имя звукового файла
-	const	char *FileName;
-	// корректировка громкости
-	float	VolumeCorrection;
+struct sSoundData {
+	const char *FileName; // file name
+	float VolumeCorrection; // sound volume correction
+	bool AllowStop; // allow stop during vw_StopAllSoundsIfAllowed() call
 };
 
-
-
-
 // перечень имен файлов игровых звуков
-static sGameSoundData GameSoundList[] = {
+static sSoundData GameSoundList[] = {
 
-	{"sfx/weapon1probl.wav", 1.0f},		// оружие повреждено или нечем стрелять, механическое оружие (Kinetic)
-	{"sfx/weapon2probl.wav", 1.0f},		// оружие повреждено или нечем стрелять, "слабое" энергетическое оружие (Ion, Plasma)
-	{"sfx/weapon3probl.wav", 1.0f},		// оружие повреждено или нечем стрелять, "лучевое/среднее" энергетическое оружие (Maser, Laser)
-	{"sfx/weapon4probl.wav", 1.0f},		// оружие повреждено или нечем стрелять, "мощьное" энергетическое оружие (Antimatter, Gauss)
-	{"sfx/weapon5probl.wav", 1.0f},		// оружие повреждено или нечем стрелять, пусковые установки (ракеты, торпеды, бомбы)
+	{"sfx/weapon1probl.wav", 1.0f, true},		// оружие повреждено или нечем стрелять, механическое оружие (Kinetic)
+	{"sfx/weapon2probl.wav", 1.0f, true},		// оружие повреждено или нечем стрелять, "слабое" энергетическое оружие (Ion, Plasma)
+	{"sfx/weapon3probl.wav", 1.0f, true},		// оружие повреждено или нечем стрелять, "лучевое/среднее" энергетическое оружие (Maser, Laser)
+	{"sfx/weapon4probl.wav", 1.0f, true},		// оружие повреждено или нечем стрелять, "мощьное" энергетическое оружие (Antimatter, Gauss)
+	{"sfx/weapon5probl.wav", 1.0f, true},		// оружие повреждено или нечем стрелять, пусковые установки (ракеты, торпеды, бомбы)
 
-	{"sfx/explosion1.wav", 1.0f},		// малый взрыв: ракеты
-	{"sfx/explosion2.wav", 1.0f},		// взрыв (обычный): торпеды, истребители землян и пиратов
-	{"sfx/explosion3.wav", 1.0f},		// взрыв (энергетический): ядерные бомбы, корабли пришельцев
+	{"sfx/explosion1.wav", 1.0f, true},		// малый взрыв: ракеты
+	{"sfx/explosion2.wav", 1.0f, true},		// взрыв (обычный): торпеды, истребители землян и пиратов
+	{"sfx/explosion3.wav", 1.0f, true},		// взрыв (энергетический): ядерные бомбы, корабли пришельцев
 
-	{"sfx/weaponfire1.wav", 0.7f},		// выстрел, Kinetic 1
-	{"sfx/weaponfire2.wav", 0.65f},		// выстрел, Kinetic 2
-	{"sfx/weaponfire3.wav", 0.7f},		// выстрел, Kinetic 3
-	{"sfx/weaponfire4.wav", 1.0f},		// выстрел, Kinetic 4
-	{"sfx/weaponfire5.wav", 1.0f},		// выстрел, Ion 1
-	{"sfx/weaponfire6.wav", 1.0f},		// выстрел, Ion 2
-	{"sfx/weaponfire7.wav", 0.7f},		// выстрел, Ion 3
-	{"sfx/weaponfire8.wav", 0.85f},		// выстрел, Plasma 1
-	{"sfx/weaponfire9.wav", 0.95f},		// выстрел, Plasma 2
-	{"sfx/weaponfire10.wav", 0.9f},		// выстрел, Plasma 3
-	{"sfx/weaponfire11.wav", 0.6f},		// выстрел, Maser 1 - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
-	{"sfx/weaponfire12.wav", 0.55f},	// выстрел, Maser 2 - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
-	{"sfx/weaponfire13.wav", 0.9f},		// выстрел, Antimatter
-	{"sfx/weaponfire14.wav", 0.8f},		// выстрел, Laser - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
-	{"sfx/weaponfire15.wav", 0.8f},		// выстрел, Gauss
-	{"sfx/weaponfire16.wav", 1.0f},		// выстрел, одиночная ракета; приоритет выше, не красиво если снимаем "хвост" эффекта
-	{"sfx/weaponfire17.wav", 1.0f},		// выстрел, одна ракета из группы; приоритет выше, не красиво если снимаем "хвост" эффекта
-	{"sfx/weaponfire18.wav", 1.0f},		// выстрел, торпеда; приоритет выше, не красиво если снимаем "хвост" эффекта
-	{"sfx/weaponfire19.wav", 1.0f},		// выстрел, бомба; приоритет выше, не красиво если снимаем "хвост" эффекта
+	{"sfx/weaponfire1.wav", 0.7f, true},		// выстрел, Kinetic 1
+	{"sfx/weaponfire2.wav", 0.65f, true},		// выстрел, Kinetic 2
+	{"sfx/weaponfire3.wav", 0.7f, true},		// выстрел, Kinetic 3
+	{"sfx/weaponfire4.wav", 1.0f, true},		// выстрел, Kinetic 4
+	{"sfx/weaponfire5.wav", 1.0f, true},		// выстрел, Ion 1
+	{"sfx/weaponfire6.wav", 1.0f, true},		// выстрел, Ion 2
+	{"sfx/weaponfire7.wav", 0.7f, true},		// выстрел, Ion 3
+	{"sfx/weaponfire8.wav", 0.85f, true},		// выстрел, Plasma 1
+	{"sfx/weaponfire9.wav", 0.95f, true},		// выстрел, Plasma 2
+	{"sfx/weaponfire10.wav", 0.9f, true},		// выстрел, Plasma 3
+	{"sfx/weaponfire11.wav", 0.6f, true},		// выстрел, Maser 1 - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
+	{"sfx/weaponfire12.wav", 0.55f, true},		// выстрел, Maser 2 - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
+	{"sfx/weaponfire13.wav", 0.9f, true},		// выстрел, Antimatter
+	{"sfx/weaponfire14.wav", 0.8f, true},		// выстрел, Laser - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
+	{"sfx/weaponfire15.wav", 0.8f, true},		// выстрел, Gauss
+	{"sfx/weaponfire16.wav", 1.0f, true},		// выстрел, одиночная ракета; приоритет выше, не красиво если снимаем "хвост" эффекта
+	{"sfx/weaponfire17.wav", 1.0f, true},		// выстрел, одна ракета из группы; приоритет выше, не красиво если снимаем "хвост" эффекта
+	{"sfx/weaponfire18.wav", 1.0f, true},		// выстрел, торпеда; приоритет выше, не красиво если снимаем "хвост" эффекта
+	{"sfx/weaponfire19.wav", 1.0f, true},		// выстрел, бомба; приоритет выше, не красиво если снимаем "хвост" эффекта
 
+	{"sfx/kinetichit.wav", 1.0f, true},		// попадание и "разваливание" снаряда о корпус объекта, для Kinetic снарядов
+	{"sfx/ionhit.wav", 1.0f, true},			// попадание и "разваливание" снаряда о корпус объекта, для Ion снарядов
+	{"sfx/plasmahit.wav", 1.0f, true},		// попадание и "разваливание" снаряда о корпус объекта, для Plasma снарядов
+	{"sfx/antimaterhit.wav", 1.0f, true},		// попадание и "разваливание" снаряда о корпус объекта, для Antimatter снарядов
+	{"sfx/gausshit.wav", 1.0f, true},		// попадание и "разваливание" снаряда о корпус объекта, для Gauss снарядов
 
-	{"sfx/kinetichit.wav", 1.0f},		// попадание и "разваливание" снаряда о корпус объекта, для Kinetic снарядов
-	{"sfx/ionhit.wav", 1.0f},		// попадание и "разваливание" снаряда о корпус объекта, для Ion снарядов
-	{"sfx/plasmahit.wav", 1.0f},		// попадание и "разваливание" снаряда о корпус объекта, для Plasma снарядов
-	{"sfx/antimaterhit.wav",1.0f},		// попадание и "разваливание" снаряда о корпус объекта, для Antimatter снарядов
-	{"sfx/gausshit.wav", 1.0f},		// попадание и "разваливание" снаряда о корпус объекта, для Gauss снарядов
-
-	{"sfx/explosion4.wav", 1.0f},		// малый взрыв: астероиды
+	{"sfx/explosion4.wav", 1.0f, true},		// малый взрыв: астероиды
 
 };
 #define GameSoundQuantity sizeof(GameSoundList)/sizeof(GameSoundList[0])
 
-
-
-
-//------------------------------------------------------------------------------------
-// локальная структура данных 2D sfx
-//------------------------------------------------------------------------------------
-struct sSound2DData {
-	// имя звукового файла
-	const	char *FileName;
-	// корректировка громкости
-	float	VolumeCorrection;
-	// нужно релизить при загрузке
-	bool	NeedRelease;
-};
-
 // перечень имен файлов звуков для меню
-static sSound2DData MenuSoundNames[] = {
+static sSoundData MenuSoundNames[] = {
 	{"sfx/menu_onbutton.wav", 0.4f, false},		// навели на кнопку
 	{"sfx/menu_click.wav", 0.6f, false},		// нажали на кнопку
 	{"sfx/menu_new.wav", 1.0f, true},		// меняем меню
@@ -126,10 +102,8 @@ static sSound2DData MenuSoundNames[] = {
 };
 #define MenuSoundQuantity sizeof(MenuSoundNames)/sizeof(MenuSoundNames[0])
 
-
-
 // перечень имен файлов звуков для меню
-static sSound2DData VoiceNames[] = {
+static sSoundData VoiceNames[] = {
 	{"13_Attention.wav", 1.0f, true},
 	{"13_EngineMalfunction.wav", 1.0f, true},
 	{"13_MissileDetected.wav", 1.0f, true},//++
@@ -143,12 +117,7 @@ static sSound2DData VoiceNames[] = {
 };
 #define VoiceQuantity sizeof(VoiceNames)/sizeof(VoiceNames[0])
 
-
-
-
-
-
-
+} // unnamed namespace
 
 
 //------------------------------------------------------------------------------------
@@ -162,9 +131,6 @@ bool InitAudio()
 	return true;
 }
 
-
-
-
 //------------------------------------------------------------------------------------
 // Завершение работы со звуком
 //------------------------------------------------------------------------------------
@@ -172,8 +138,6 @@ void ShutdownAudio()
 {
 	vw_ShutdownSound();
 }
-
-
 
 //------------------------------------------------------------------------------------
 // Запуск нужной музыки
@@ -219,7 +183,7 @@ void StartMusicWithFade(eMusicTheme StartMusic, float FadeInTime, float FadeOutT
 		vw_FadeOutIfMusicPlaying(FadeOutTime);
 
 		// пытаемся загрузить и играть
-		if (!vw_PlayMusic(CurrentPlayingMusicName, 0.0f, MusicCorrection*(Setup.MusicSw/10.0f),
+		if (!vw_PlayMusic(CurrentPlayingMusicName, 0.0f, MusicCorrection * (Setup.MusicSw / 10.0f),
 				  MusicLoop, LoopFileName)) {
 			vw_ReleaseMusic(CurrentPlayingMusicName);
 			CurrentPlayingMusicName.clear();
@@ -228,35 +192,30 @@ void StartMusicWithFade(eMusicTheme StartMusic, float FadeInTime, float FadeOutT
 	}
 }
 
-
-
-
 // установка громкости на все 2д звуки
 void Audio_SetSound2DGlobalVolume(float NewGlobalVolume)
 {
-	for (unsigned int i=0; i<MenuSoundQuantity; i++) {
-		cSound* Tmp = vw_FindSoundByName(MenuSoundNames[i].FileName);
+	for (unsigned int i = 0; i < MenuSoundQuantity; i++) {
+		cSound *Tmp = vw_FindSoundByName(MenuSoundNames[i].FileName);
 		if (Tmp != nullptr)
 			Tmp->SetGlobalVolume(NewGlobalVolume);
 	}
 }
+
 // установка громкости на все голосовые звуки
 void Audio_SetVoiceGlobalVolume(float NewGlobalVolume)
 {
-	for (unsigned int i=0; i<VoiceQuantity; i++) {
-		cSound* Tmp = vw_FindSoundByName(vw_GetText(VoiceNames[i].FileName, Setup.VoiceLanguage));
+	for (unsigned int i = 0; i < VoiceQuantity; i++) {
+		cSound *Tmp = vw_FindSoundByName(vw_GetText(VoiceNames[i].FileName, Setup.VoiceLanguage));
 		if (Tmp != nullptr)
 			Tmp->SetGlobalVolume(NewGlobalVolume);
 	}
 }
-
-
-
 
 //------------------------------------------------------------------------------------
 // Проигрываем звук в меню, или другие 2д звуки
 //------------------------------------------------------------------------------------
-int Audio_PlaySound2D(unsigned int SoundID, float fVol, bool Loop)
+int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume, bool Loop)
 {
 	if (!Setup.Sound_check ||
 	    !Setup.SoundSw ||
@@ -266,10 +225,10 @@ int Audio_PlaySound2D(unsigned int SoundID, float fVol, bool Loop)
 	// т.к. у нас со смещением же в 1 идет
 	SoundID --;
 
-	fVol = fVol*MenuSoundNames[SoundID].VolumeCorrection;
+	LocalVolume = LocalVolume * MenuSoundNames[SoundID].VolumeCorrection;
 
 	// если это звук меню и мы его игрываем, его надо перезапустить
-	cSound* Tmp = vw_FindSoundByName(MenuSoundNames[SoundID].FileName);
+	cSound *Tmp = vw_FindSoundByName(MenuSoundNames[SoundID].FileName);
 	if (Tmp != nullptr) {
 		Tmp->Replay();
 		return Tmp->Num;
@@ -280,8 +239,9 @@ int Audio_PlaySound2D(unsigned int SoundID, float fVol, bool Loop)
 	vw_AttachSound(Sound);
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
-	if (!Sound->Play(MenuSoundNames[SoundID].FileName, fVol, Setup.SoundSw/10.0f, 0.0f, 0.0f, 0.0f,
-			 true, Loop, MenuSoundNames[SoundID].NeedRelease, 1)) {
+	if (!Sound->Play(MenuSoundNames[SoundID].FileName,
+			 LocalVolume, Setup.SoundSw / 10.0f, 0.0f, 0.0f, 0.0f,
+			 true, Loop, MenuSoundNames[SoundID].AllowStop, 1)) {
 		vw_ReleaseSound(Sound);
 		return 0;
 	}
@@ -289,15 +249,10 @@ int Audio_PlaySound2D(unsigned int SoundID, float fVol, bool Loop)
 	return Sound->Num;
 }
 
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // Проигрываем голос
 //------------------------------------------------------------------------------------
-int Audio_PlayVoice(unsigned int VoiceID, float fVol, bool Loop)
+int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume, bool Loop)
 {
 	if (!Setup.Sound_check ||
 	    !Setup.SoundSw ||
@@ -309,17 +264,19 @@ int Audio_PlayVoice(unsigned int VoiceID, float fVol, bool Loop)
 
 	// TODO should be connected to language code, not column number, that could be changed
 	// русский голос делаем немного тише
-	if (Setup.VoiceLanguage==3)
+	if (Setup.VoiceLanguage == 3)
 		VoiceNames[VoiceID].VolumeCorrection = 0.6f;
 
-	fVol = fVol*VoiceNames[VoiceID].VolumeCorrection;
+	LocalVolume = LocalVolume * VoiceNames[VoiceID].VolumeCorrection;
 
 	// создаем новый источник и проигрываем его
 	cSound *Sound = new cSound;
 	vw_AttachSound(Sound);
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
-	if (!Sound->Play(vw_GetText(VoiceNames[VoiceID].FileName, Setup.VoiceLanguage), fVol, Setup.VoiceSw/10.0f, 0.0f, 0.0f, 0.0f, true, Loop, VoiceNames[VoiceID].NeedRelease, 1)) {
+	if (!Sound->Play(vw_GetText(VoiceNames[VoiceID].FileName, Setup.VoiceLanguage),
+			 LocalVolume, Setup.VoiceSw / 10.0f, 0.0f, 0.0f, 0.0f,
+			 true, Loop, VoiceNames[VoiceID].AllowStop, 1)) {
 		vw_ReleaseSound(Sound);
 		return 0;
 	}
@@ -327,19 +284,16 @@ int Audio_PlayVoice(unsigned int VoiceID, float fVol, bool Loop)
 	return Sound->Num;
 }
 
-
-
-
 //------------------------------------------------------------------------------------
 // Проигрываем 3д звуки
 //------------------------------------------------------------------------------------
-int Audio_PlaySound3D(int SoundID, float fVol, sVECTOR3D Location, bool Loop, int AtType)
+int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, bool Loop, int AtType)
 {
 	if (!Setup.Sound_check ||
 	    !Setup.SoundSw)
 		return 0;
 
-	fVol = fVol*GameSoundList[SoundID-1].VolumeCorrection;
+	LocalVolume = LocalVolume * GameSoundList[SoundID-1].VolumeCorrection;
 
 	// т.к. у нас со смещением же в 1 идет
 	SoundID --;
@@ -347,19 +301,15 @@ int Audio_PlaySound3D(int SoundID, float fVol, sVECTOR3D Location, bool Loop, in
 	// создаем новый источник и проигрываем его
 	cSound *Sound = new cSound;
 	vw_AttachSound(Sound);
-	if (!Sound->Play(GameSoundList[SoundID].FileName, fVol, Setup.SoundSw/10.0f, Location.x, Location.y, Location.z, false, Loop, true, AtType)) {
+	if (!Sound->Play(GameSoundList[SoundID].FileName,
+			 LocalVolume, Setup.SoundSw / 10.0f, Location.x, Location.y, Location.z,
+			 false, Loop, GameSoundList[SoundID].AllowStop, AtType)) {
 		vw_ReleaseSound(Sound);
 		return 0;
 	}
 
 	return Sound->Num;
 }
-
-
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // Цикл звука
@@ -382,18 +332,15 @@ void Audio_LoopProc()
 	vw_RotatePoint(ListenerOriV2, CurrentCameraRotation);
 
 	// Position of the Listener.
-	ALfloat ListenerPos[3] = { CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z };
+	ALfloat ListenerPos[3] = {CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z};
 	// Velocity of the Listener.
-	ALfloat ListenerVel[3] = { 0.0f, 0.0f, 0.0f };
+	ALfloat ListenerVel[3] = {0.0f, 0.0f, 0.0f};
 	// Orientation of the Listener. (first 3 elements are "at", second 3 are "up")
 	// Also note that these should be units of '1'.
-	ALfloat ListenerOri[6] = { ListenerOriV1.x, ListenerOriV1.y, ListenerOriV1.z,
-				   ListenerOriV2.x, ListenerOriV2.y, ListenerOriV2.z
-				 };
+	ALfloat ListenerOri[6] = {ListenerOriV1.x, ListenerOriV1.y, ListenerOriV1.z,
+				  ListenerOriV2.x, ListenerOriV2.y, ListenerOriV2.z};
 
 	vw_Listener(ListenerPos, ListenerVel, ListenerOri);
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// передаем управление, чтобы внутри ядра все сделали
@@ -401,18 +348,15 @@ void Audio_LoopProc()
 	vw_UpdateSound();
 	vw_UpdateMusic();
 
-
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// запускаем нужную музыку... только включили громкость или выключили
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!vw_IsAnyMusicPlaying()) {
 		if (Setup.MusicSw && // если громкость не нулевая
 		    Setup.Music_check && // если можно вообще играть
-		    (!CurrentPlayingMusicName.empty())) { // если установлен
+		    !CurrentPlayingMusicName.empty()) { // если установлен
 			// пытаемся загрузить и проиграть
-			if (!vw_PlayMusic(CurrentPlayingMusicName, 1.0f, Setup.MusicSw/10.0f, true, "")) {
+			if (!vw_PlayMusic(CurrentPlayingMusicName, 1.0f, Setup.MusicSw / 10.0f, true, "")) {
 				vw_ReleaseMusic(CurrentPlayingMusicName);
 				CurrentPlayingMusicName.clear();
 			} else // we are playing new music theme, FadeIn it
@@ -425,6 +369,5 @@ void Audio_LoopProc()
 			vw_ReleaseAllMusic();
 		}
 	}
-
 
 }

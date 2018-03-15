@@ -967,7 +967,7 @@ bool ReleaseGameData(eLoading LoadType)
 	StarSystemRelease();
 
 	// если это не переход меню-игра, снимаем звук
-	vw_ReleaseAllSounds(1);
+	vw_StopAllSoundsIfAllowed();
 
 	// нужно понять, мы конкретно это загружали или нет
 	if ((LoadType == eLoading::Menu) || (LoadType == eLoading::MenuWithLogo)) { // menu

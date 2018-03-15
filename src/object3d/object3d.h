@@ -45,7 +45,7 @@ extern int GameAdvancedProtectionSystem;
 extern int GamePowerSystem;
 extern int GameTargetingMechanicSystem;
 
-int Audio_PlaySound3D(int SoundID, float fVol, sVECTOR3D Location, bool Loop, int AtType=1);
+int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, bool Loop, int AtType=1);
 
 
 //-----------------------------------------------------------------------------

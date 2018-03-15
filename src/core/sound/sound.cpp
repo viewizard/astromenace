@@ -42,7 +42,7 @@ ALboolean CheckALUTError(const char *FunctionName);
 // Проигрывание звука
 //------------------------------------------------------------------------------------
 bool cSound::Play(const char *Name, float _LocalVolume, float _GlobalVolume, float x, float y, float z,
-		  bool Relative, bool Loop, bool NeedReleaseStatus, int AtType)
+		  bool Relative, bool Loop, bool AllowStop, int AtType)
 {
 	Source = 0;
 	LastUpdateTime = vw_GetTimeThread(0);
@@ -53,7 +53,7 @@ bool cSound::Play(const char *Name, float _LocalVolume, float _GlobalVolume, flo
 	DestroyTime = -1.0f;
 	DestroyTimeStart = -1.0f;
 
-	NeedRelease = NeedReleaseStatus;
+	AllowedStop = AllowStop;
 
 	ALuint Buffer{0};
 	// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
@@ -200,27 +200,29 @@ void vw_ReleaseSound(cSound* Sound)
 //------------------------------------------------------------------------------------
 // освобождаем все подключенные к менеджеру
 //------------------------------------------------------------------------------------
-void vw_ReleaseAllSounds(int ReleaseType)
+void vw_ReleaseAllSounds()
 {
-	if (ReleaseType == 0) {
-		// Чистка памяти...
-		cSound *Tmp = StartSoundMan;
-		while (Tmp) {
-			cSound *Tmp1 = Tmp->Next;
+	// Чистка памяти...
+	cSound *Tmp = StartSoundMan;
+	while (Tmp) {
+		cSound *Tmp1 = Tmp->Next;
+		vw_ReleaseSound(Tmp);
+		Tmp = Tmp1;
+	}
+
+	StartSoundMan = nullptr;
+	EndSoundMan = nullptr;
+}
+
+
+void vw_StopAllSoundsIfAllowed()
+{
+	cSound *Tmp = StartSoundMan;
+	while (Tmp) {
+		cSound *Tmp1 = Tmp->Next;
+		if (Tmp->AllowedStop)
 			vw_ReleaseSound(Tmp);
-			Tmp = Tmp1;
-		}
-
-		StartSoundMan = nullptr;
-		EndSoundMan = nullptr;
-	} else {
-		cSound *Tmp = StartSoundMan;
-		while (Tmp) {
-			cSound *Tmp1 = Tmp->Next;
-			if (Tmp->NeedRelease) vw_ReleaseSound(Tmp);
-			Tmp = Tmp1;
-		}
-
+		Tmp = Tmp1;
 	}
 }
 

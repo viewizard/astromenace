@@ -141,7 +141,7 @@ bool vw_InitSound()
 void vw_ShutdownSound()
 {
 	// освобождаем все источники звука
-	vw_ReleaseAllSounds(0);
+	vw_ReleaseAllSounds();
 	vw_ReleaseAllMusic();
 	// убираем все буферы
 	vw_ReleaseAllStreamBuffers();
