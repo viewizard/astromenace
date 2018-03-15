@@ -228,15 +228,12 @@ void StartMusicWithFade(eMusicTheme StartMusic, float FadeInTime, float FadeOutT
 		// FadeOut all music themes, if we need something, we FadeIn it in code below
 		vw_FadeOutIfMusicPlaying(FadeOutTime);
 
-		if (!vw_CheckMusicAvailabilityByName(CurrentPlayingMusicName)) {
-			// пытаемся загрузить и играть
-			if (!vw_PlayMusic(CurrentPlayingMusicName, 0.0f, MusicCorrection*(Setup.MusicSw/10.0f),
-					  MusicLoop, LoopFileName)) {
-				vw_ReleaseMusic(CurrentPlayingMusicName);
-				CurrentPlayingMusicName.clear();
-			} else // we are playing new music theme, FadeIn it
-				vw_SetMusicFadeIn(CurrentPlayingMusicName, 1.0f, FadeInTime);
-		} else // if we already playing this one - FadeIn it (rest will continue FadeOut, see code above)
+		// пытаемся загрузить и играть
+		if (!vw_PlayMusic(CurrentPlayingMusicName, 0.0f, MusicCorrection*(Setup.MusicSw/10.0f),
+				  MusicLoop, LoopFileName)) {
+			vw_ReleaseMusic(CurrentPlayingMusicName);
+			CurrentPlayingMusicName.clear();
+		} else // we are playing new music theme, FadeIn it
 			vw_SetMusicFadeIn(CurrentPlayingMusicName, 1.0f, FadeInTime);
 	}
 }
@@ -430,11 +427,10 @@ void Audio_LoopProc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// запускаем нужную музыку... только включили громкость или выключили
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (!vw_IsMusicPlaying()) {
+	if (!vw_IsAnyMusicPlaying()) {
 		if (Setup.MusicSw && // если громкость не нулевая
 		    Setup.Music_check && // если можно вообще играть
-		    (!CurrentPlayingMusicName.empty()) && // если установлен
-		    (!vw_CheckMusicAvailabilityByName(CurrentPlayingMusicName))) { // если это еще не играем
+		    (!CurrentPlayingMusicName.empty())) { // если установлен
 			// пытаемся загрузить и проиграть
 			if (!vw_PlayMusic(CurrentPlayingMusicName, 1.0f, Setup.MusicSw/10.0f, true, "")) {
 				vw_ReleaseMusic(CurrentPlayingMusicName);

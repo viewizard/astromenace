@@ -77,12 +77,12 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), ContentTransp, !Setup.Music_check || Setup.MusicSw==0)) {
 		Setup.MusicSw--;
 		if (Setup.MusicSw<0) Setup.MusicSw = 0;
-		vw_SetMusicMainVolume(Setup.MusicSw/10.0f);
+		vw_SetMusicGlobalVolume(Setup.MusicSw/10.0f);
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), ContentTransp, !Setup.Music_check || Setup.MusicSw==10)) {
 		Setup.MusicSw++;
 		if (Setup.MusicSw>10) Setup.MusicSw = 10;
-		vw_SetMusicMainVolume(Setup.MusicSw/10.0f);
+		vw_SetMusicGlobalVolume(Setup.MusicSw/10.0f);
 	}
 	if (!Setup.Music_check) {
 		int SizeI = (170-vw_FontSize(vw_GetText("3_Not_available")))/2;

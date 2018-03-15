@@ -108,14 +108,22 @@ void vw_DetachSound(cSound *Sound);
 /*
  * Music.
  */
+
+// Create and play music.
 bool vw_PlayMusic(const std::string &Name, float fVol, float fMainVol, bool Loop, const std::string &LoopFileName);
-void vw_SetMusicMainVolume(float NewMainVolume);
-bool vw_IsMusicPlaying();
+// Set global music volume.
+void vw_SetMusicGlobalVolume(float NewGlobalVolume);
+// Check, is any music theme playing.
+bool vw_IsAnyMusicPlaying();
+// Set all music fade-out, if playing.
 void vw_FadeOutIfMusicPlaying(float Time);
+// Set music fade-in.
 void vw_SetMusicFadeIn(const std::string &Name, float EndVol, float Time);
+// Update all music themes status and calculate effects.
 void vw_UpdateMusic();
-bool vw_CheckMusicAvailabilityByName(const std::string &Name);
+// Release particular music theme by name. Also could be used for "stop" playing.
 void vw_ReleaseMusic(const std::string &Name);
+// Release all music. Also could be used for "stop" playing all music themes.
 void vw_ReleaseAllMusic();
 
 #endif // Sound_H

@@ -24,16 +24,20 @@
 
 *************************************************************************************/
 
-// TODO translate comments
 // TODO switch from vw_GetTimeThread() to SDL_GetTicks() usage
 
 /*
 In the case of music we based on several main principles:
-1. All music connected to its name, so, name is the key (index).
-   If music have 'loop' part, only main part (its file name) taken into account.
-2. Music can be played simultaneously only in one stream.
+1. All music connected to its name, so, name is the key (for map).
+   If music have a 'loop' part, only main part (its file name) taken into account
+   and used as key, 'loop' part file name will be ignored.
+2. Only one copy of music can be played simultaneously.
    This is connected not only to p.1, but also to our stream buffers realization,
-   that will not allow create more then one stream buffer for same source.
+   that will not allow create more then one stream buffer for same source (file name).
+
+Try to avoid call music-related functions in loop (all the time, frequently),
+in theory, we should call music-related functions for actions and only
+vw_UpdateMusic() and vw_IsAnyMusicPlaying() designed to be called in loop.
 */
 
 #include "../system/system.h"
@@ -47,37 +51,31 @@ struct sMusic {
 	{
 		if (!alIsSource(Source))
 			return;
-		// обязательно остановить!!!
+		// stop playing before other actions
 		alSourceStop(Source);
-		// открепляем все буферы от источника
 		if (Stream)
 			vw_UnqueueStreamBuffer(Stream, Source);
-		// освобождаем собственно сам источник
 		alDeleteSources(1, &Source);
-		alGetError(); // сброс ошибок
+		alGetError(); // reset errors
 	};
 
-	// плавное появление
 	void FadeIn(float EndVol, float Time);
-	// плавное уход на 0 с текущего
 	void FadeOut(float Time);
-	// обновление данных потока
 	bool Update();
-	// установка или изменение общей громкости
-	void SetMainVolume(float NewMainVolume);
+	void SetGlobalVolume(float NewGlobalVolume);
 
 	sStreamBuffer *Stream{nullptr};
-
-	ALuint Source;		// источник
-	float Volume;		// громкость, внутренняя... для данного источника (чтобы была возможность корректировки общей громкости)
-	float MainVolume;
-	bool Looped;		// запоминаем, нужно ли зацикливание
+	ALuint Source;
+	float LocalVolume;
+	float GlobalVolume;
+	bool Looped;
 	std::string LoopPart;
 
-	bool FadeInSw{false};
+	// effects-related variables
+	bool FadeInSwitch{false};
 	float FadeInEndVol;
 	float FadeInStartVol;
-	bool FadeOutSw{false};
+	bool FadeOutSwitch{false};
 	float FadeTime{0.0f};
 	float FadeAge{0.0f};
 	float LastTime;
@@ -91,37 +89,40 @@ ALboolean CheckALError(const char *FunctionName);
 ALboolean CheckALUTError(const char *FunctionName);
 
 
-//------------------------------------------------------------------------------------
-// Проигрывание звука
-//------------------------------------------------------------------------------------
-bool vw_PlayMusic(const std::string &Name, float fVol, float fMainVol, bool Loop, const std::string &LoopFileName)
+/*
+ * Create and play music.
+ */
+bool vw_PlayMusic(const std::string &Name, float _LocalVolume, float _GlobalVolume, bool Loop, const std::string &LoopFileName)
 {
 	if (Name.empty()) // LoopFileName could be empty
 		return false;
 
-	MusicMap[Name].Volume = fVol; // create entry on first access
-	MusicMap[Name].MainVolume = fMainVol;
-	MusicMap[Name].LoopPart = LoopFileName;
-	MusicMap[Name].FadeInStartVol = fVol;
-	MusicMap[Name].FadeInEndVol = fVol;
-	MusicMap[Name].LastTime = vw_GetTimeThread(0);
+	auto tmpMusic = MusicMap.find(Name); // check, did we already create or not
+	if (tmpMusic != MusicMap.end())
+		return true;
 
-	// Position of the source sound.
-	ALfloat SourcePos[] = {0.0f, 0.0f, 0.0f}; // -1.0 1.0 по иксам это баланс
-	// Velocity of the source sound.
-	ALfloat SourceVel[] = {0.0f, 0.0f, 0.0f};
-
-	alGenSources(1, &MusicMap[Name].Source);
+	alGenSources(1, &MusicMap[Name].Source); // create entry on first access
 	if(!CheckALError(__func__))
 		return false;
 
-	alSourcef(MusicMap[Name].Source, AL_PITCH, 1.0); // 1.0 only!!!
-	alSourcef(MusicMap[Name].Source, AL_GAIN, fVol*fMainVol); // фактически громкость
+	MusicMap[Name].LocalVolume = _LocalVolume;
+	MusicMap[Name].GlobalVolume = _GlobalVolume;
+	MusicMap[Name].LoopPart = LoopFileName;
+	MusicMap[Name].FadeInStartVol = _LocalVolume;
+	MusicMap[Name].FadeInEndVol = _LocalVolume;
+	MusicMap[Name].LastTime = vw_GetTimeThread(0);
+
+	// we don't use position and velocity for music
+	ALfloat SourcePos[] = {0.0f, 0.0f, 0.0f};
+	ALfloat SourceVel[] = {0.0f, 0.0f, 0.0f};
+
+	alSourcef(MusicMap[Name].Source, AL_PITCH, 1.0);
+	alSourcef(MusicMap[Name].Source, AL_GAIN, _LocalVolume * _GlobalVolume);
 	alSourcefv(MusicMap[Name].Source, AL_POSITION, SourcePos);
 	alSourcefv(MusicMap[Name].Source, AL_VELOCITY, SourceVel);
 	alSourcei(MusicMap[Name].Source, AL_SOURCE_RELATIVE, AL_TRUE);
 	alSourcei(MusicMap[Name].Source, AL_LOOPING, AL_FALSE);
-	alGetError(); // сброс ошибок
+	alGetError(); // reset errors
 	MusicMap[Name].Looped = Loop;
 
 	MusicMap[Name].Stream = vw_CreateStreamBufferFromOGG(Name, LoopFileName);
@@ -138,87 +139,91 @@ bool vw_PlayMusic(const std::string &Name, float fVol, float fMainVol, bool Loop
 	return true;
 }
 
+/*
+ * Check music status.
+ */
 static bool CheckSourceState(ALuint Source, ALint State)
 {
 	ALint tmpState;
 	alGetSourcei(Source, AL_SOURCE_STATE, &tmpState);
-	alGetError(); // сброс ошибок
+	alGetError(); // reset errors
 	return (tmpState == State);
 }
 
-//------------------------------------------------------------------------------------
-// обновление потока
-//------------------------------------------------------------------------------------
+/*
+ * Update music status and calculate effects.
+ */
 bool sMusic::Update()
 {
 	vw_UpdateStreamBuffer(Stream, Source, Looped, LoopPart);
 
-	// обрабатываем эффекты
 	float TimeDelta = vw_GetTimeThread(0) - LastTime;
 
-	if (FadeInSw && (Volume < FadeInEndVol)) {
+	if (FadeInSwitch && (LocalVolume < FadeInEndVol)) {
 		FadeTime += TimeDelta;
-		Volume = FadeInEndVol*(FadeTime/FadeAge);
-		alSourcef(Source, AL_GAIN, MainVolume*Volume );
-		alGetError(); // сброс ошибок
+		LocalVolume = FadeInEndVol * (FadeTime / FadeAge);
+		alSourcef(Source, AL_GAIN, GlobalVolume * LocalVolume );
+		alGetError(); // reset errors
 	}
 
-	if (FadeOutSw && (Volume > 0.0f)) {
+	if (FadeOutSwitch && (LocalVolume > 0.0f)) {
 		FadeTime += TimeDelta;
-		Volume = FadeInStartVol*((FadeAge-FadeTime)/FadeAge);
-		alSourcef(Source, AL_GAIN, MainVolume*Volume);
-		alGetError(); // сброс ошибок
-		if (Volume <= 0.0f)
+		LocalVolume = FadeInStartVol * ((FadeAge - FadeTime) / FadeAge);
+		alSourcef(Source, AL_GAIN, GlobalVolume * LocalVolume);
+		alGetError(); // reset errors
+		if (LocalVolume <= 0.0f)
 			return false;
 	}
 
 	LastTime = vw_GetTimeThread(0);
 
-	// если по какой-то причине перестали играть...
 	if (CheckSourceState(Source, AL_STOPPED))
 		return false;
 
 	return true;
 }
 
-//------------------------------------------------------------------------------------
-// установка громкости
-//------------------------------------------------------------------------------------
-void sMusic::SetMainVolume(float NewMainVolume)
+/*
+ * Set global volume.
+ */
+void sMusic::SetGlobalVolume(float NewGlobalVolume)
 {
 	if (!alIsSource(Source))
 		return;
 
-	MainVolume = NewMainVolume;
-	alSourcef(Source, AL_GAIN, MainVolume*Volume);
+	GlobalVolume = NewGlobalVolume;
+	alSourcef(Source, AL_GAIN, GlobalVolume * LocalVolume);
 }
 
-//------------------------------------------------------------------------------------
-// плавное появление
-//------------------------------------------------------------------------------------
+/*
+ * Music fade-in setup.
+ */
 void sMusic::FadeIn(float EndVol, float Time)
 {
-	FadeInSw = true;
-	FadeOutSw = false;
+	FadeInSwitch = true;
+	FadeOutSwitch = false;
 	FadeInEndVol = EndVol;
 	FadeTime = 0.0f;
 	FadeAge = Time;
 	LastTime = vw_GetTimeThread(0);
 }
 
-//------------------------------------------------------------------------------------
-// плавное уход на 0 с текущего
-//------------------------------------------------------------------------------------
+/*
+ * Music fade-out setup.
+ */
 void sMusic::FadeOut(float Time)
 {
-	FadeOutSw = true;
-	FadeInSw = false;
-	FadeInStartVol = Volume;
+	FadeOutSwitch = true;
+	FadeInSwitch = false;
+	FadeInStartVol = LocalVolume;
 	FadeTime = 0.0f;
 	FadeAge = Time;
 	LastTime = vw_GetTimeThread(0);
 }
 
+/*
+ * Set all music fade-out, if playing.
+ */
 void vw_FadeOutIfMusicPlaying(float Time)
 {
 	for (auto &tmpMusic : MusicMap) {
@@ -228,10 +233,10 @@ void vw_FadeOutIfMusicPlaying(float Time)
 	}
 }
 
-//------------------------------------------------------------------------------------
-// Возвращаем, если играется хотя бы одна музыка
-//------------------------------------------------------------------------------------
-bool vw_IsMusicPlaying()
+/*
+ * Check, is any music theme playing.
+ */
+bool vw_IsAnyMusicPlaying()
 {
 	for (auto &tmpMusic : MusicMap) {
 		return alIsSource(tmpMusic.second.Source) &&
@@ -241,9 +246,9 @@ bool vw_IsMusicPlaying()
 	return false;
 }
 
-//------------------------------------------------------------------------------------
-// Освобождение памяти и удаление
-//------------------------------------------------------------------------------------
+/*
+ * Release particular music theme by name. Also could be used for "stop" playing.
+ */
 void vw_ReleaseMusic(const std::string &Name)
 {
 	if (Name.empty())
@@ -252,17 +257,17 @@ void vw_ReleaseMusic(const std::string &Name)
 	MusicMap.erase(Name);
 }
 
-//------------------------------------------------------------------------------------
-// освобождаем все подключенные
-//------------------------------------------------------------------------------------
+/*
+ * Release all music. Also could be used for "stop" playing all music themes.
+ */
 void vw_ReleaseAllMusic()
 {
 	MusicMap.clear();
 }
 
-//------------------------------------------------------------------------------------
-// Обновляем данные
-//------------------------------------------------------------------------------------
+/*
+ * Update all music themes status and calculate effects.
+ */
 void vw_UpdateMusic()
 {
 	for (auto iter = MusicMap.begin(); iter != MusicMap.end();) {
@@ -273,6 +278,9 @@ void vw_UpdateMusic()
 	}
 }
 
+/*
+ * Set music fade-in.
+ */
 void vw_SetMusicFadeIn(const std::string &Name, float EndVol, float Time)
 {
 	auto tmpMusic = MusicMap.find(Name);
@@ -280,24 +288,12 @@ void vw_SetMusicFadeIn(const std::string &Name, float EndVol, float Time)
 		tmpMusic->second.FadeIn(EndVol, Time);
 }
 
-//------------------------------------------------------------------------------------
-// Установка громкости у всех
-//------------------------------------------------------------------------------------
-void vw_SetMusicMainVolume(float NewMainVolume)
+/*
+ * Set global music volume.
+ */
+void vw_SetMusicGlobalVolume(float NewGlobalVolume)
 {
 	for (auto & tmpMusic : MusicMap) {
-		tmpMusic.second.SetMainVolume(NewMainVolume);
+		tmpMusic.second.SetGlobalVolume(NewGlobalVolume);
 	}
-}
-
-//------------------------------------------------------------------------------------
-// Проверка наличия по имени
-//------------------------------------------------------------------------------------
-bool vw_CheckMusicAvailabilityByName(const std::string &Name)
-{
-	auto tmpMusic = MusicMap.find(Name);
-	if (tmpMusic != MusicMap.end())
-		return true;
-
-	return false;
 }

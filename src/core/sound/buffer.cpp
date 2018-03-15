@@ -27,10 +27,10 @@
 // TODO CheckALError() and CheckALUTError() should be braced by namespace
 
 /*
-Note, stream buffers have limitation of usage and can't be used
-more than one time simultaneously.
-From one side, we don't need more then one stream for same source, from another
-side, in this way we can reuse already created stream buffers.
+Note, stream buffers have limitation of usage and can't be used more than one time
+simultaneously.
+From one side, we don't need more then one stream for same source (file name), from
+another side, in this way we can reuse already created stream buffers.
 */
 
 #include "../vfs/vfs.h"
