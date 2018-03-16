@@ -118,7 +118,7 @@ void vw_ReleaseTexture(sTexture *Texture)
 			vw_DeleteTexture(Texture->TextureID);
 			TexturesMap.erase(tmpTexture.first);
 			// forced to leave - current iterator invalidated by erase()
-			break;
+			return;
 		}
 	}
 }

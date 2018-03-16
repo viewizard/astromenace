@@ -143,7 +143,7 @@ void vw_ReleaseLight(sLight *Light)
 		if (&itr->second == Light) {
 			LightsMap.erase(itr);
 			// forced to leave - current iterator invalidated by erase()
-			break;
+			return;
 		}
 	}
 }
