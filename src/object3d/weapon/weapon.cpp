@@ -649,7 +649,7 @@ bool cWeapon::Update(float Time)
 				// звук...
 				if (SoundNum != 0) {
 					float fVol = 1.0f;
-					Audio_PlaySound3D(SoundNum, fVol, Projectile->Location, false);
+					Audio_PlaySound3D(SoundNum, fVol, Projectile->Location);
 				}
 
 
@@ -702,7 +702,7 @@ bool cWeapon::Update(float Time)
 				// звук...
 				if (SoundNum != 0) {
 					float fVol = 1.0f;
-					Audio_PlaySound3D(SoundNum, fVol, Projectile->Location, false);
+					Audio_PlaySound3D(SoundNum, fVol, Projectile->Location);
 				}
 
 				SwampNum--;
@@ -1045,7 +1045,7 @@ bool cWeapon::WeaponFire(float Time)
 			case 2:
 			case 3:
 			case 4:
-				Audio_PlaySound3D(1, fVol, Location, false);
+				Audio_PlaySound3D(1, fVol, Location);
 				break;
 
 			// Ion
@@ -1056,7 +1056,7 @@ bool cWeapon::WeaponFire(float Time)
 			case 8:
 			case 9:
 			case 10:
-				Audio_PlaySound3D(2, fVol, Location, false);
+				Audio_PlaySound3D(2, fVol, Location);
 				break;
 
 			// Maser
@@ -1064,14 +1064,14 @@ bool cWeapon::WeaponFire(float Time)
 			case 12:
 			// Laser
 			case 14:
-				Audio_PlaySound3D(3, fVol, Location, false);
+				Audio_PlaySound3D(3, fVol, Location);
 
 				break;
 			// Antimatter
 			case 13:
 			// Gauss
 			case 15:
-				Audio_PlaySound3D(4, fVol, Location, false);
+				Audio_PlaySound3D(4, fVol, Location);
 				break;
 
 			// ракета
@@ -1082,7 +1082,7 @@ bool cWeapon::WeaponFire(float Time)
 			case 18:
 			// бомба
 			case 19:
-				Audio_PlaySound3D(5, fVol, Location, false);
+				Audio_PlaySound3D(5, fVol, Location);
 				break;
 			}
 
@@ -1237,7 +1237,7 @@ bool cWeapon::WeaponFire(float Time)
 	// звук...
 	if (SoundNum != 0) {
 		float fVol = 1.0f;
-		LaserMaserSoundNum = Audio_PlaySound3D(SoundNum, fVol, Location+FireLocation, false);
+		LaserMaserSoundNum = Audio_PlaySound3D(SoundNum, fVol, Location+FireLocation);
 		// если не надо сохранять
 		if (LaserMaser == nullptr)
 			LaserMaserSoundNum = 0;

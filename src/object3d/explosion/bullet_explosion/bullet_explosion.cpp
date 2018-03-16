@@ -58,7 +58,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		case -216:
 		case -217:
 			// просто малый взрыв
-			Audio_PlaySound3D(6, fVol, Location, false);
+			Audio_PlaySound3D(6, fVol, Location);
 			break;
 
 
@@ -78,7 +78,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		case 211:
 		case 212:
 			// разваливание снарядов
-			Audio_PlaySound3D(28, fVol, Location, false);
+			Audio_PlaySound3D(28, fVol, Location);
 			break;
 
 
@@ -91,7 +91,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		// пираты (как Ion2)
 		case 207:
 			// разваливание снарядов
-			Audio_PlaySound3D(29, fVol, Location, false);
+			Audio_PlaySound3D(29, fVol, Location);
 			break;
 
 		// Plasma
@@ -109,7 +109,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		// пираты (как Plasma2)
 		case 213:
 			// разваливание снарядов
-			Audio_PlaySound3D(30, fVol, Location, false);
+			Audio_PlaySound3D(30, fVol, Location);
 			break;
 
 
@@ -129,7 +129,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		// пираты (как Antimatter)
 		case 208:
 			// разваливание снарядов
-			Audio_PlaySound3D(31, fVol, Location, false);
+			Audio_PlaySound3D(31, fVol, Location);
 			break;
 
 		// Laser - у него луч, тут не учитываем
@@ -139,7 +139,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		// Gauss
 		case 15:
 			// разваливание снарядов
-			Audio_PlaySound3D(32, fVol, Location, false);
+			Audio_PlaySound3D(32, fVol, Location);
 			break;
 
 		// ракета
