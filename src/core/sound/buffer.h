@@ -28,19 +28,7 @@
 #define Buffer_H
 
 #include "../base.h"
-
-#if defined(__APPLE__) && defined(__MACH__)
-#include "OpenAL/al.h"
-#include "OpenAL/alc.h"
-#else // defined(__APPLE__) && defined(__MACH__)
-#include "AL/al.h"
-#include "AL/alc.h"
-#endif // defined(__APPLE__) && defined(__MACH__)
-#include "AL/alut.h"
-
-#include "vorbis/vorbisfile.h"
-#include "ogg/ogg.h"
-
+#include "al_util.h"
 
 #define NUM_OF_DYNBUF	20	// (stream) num buffers in queue
 #define DYNBUF_SIZE	16384	// (stream) buffer size

@@ -44,10 +44,6 @@ std::unordered_map<std::string, sStreamBuffer> StreamBuffersMap;
 } // unnamed namespace
 
 
-ALboolean CheckALError(const char *FunctionName);
-ALboolean CheckALUTError(const char *FunctionName);
-
-
 /*
  * Vorbis callback functions
  */

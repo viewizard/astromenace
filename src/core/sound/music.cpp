@@ -85,10 +85,6 @@ std::unordered_map<std::string, sMusic> MusicMap;
 
 } // unnamed namespace
 
-ALboolean CheckALError(const char *FunctionName);
-ALboolean CheckALUTError(const char *FunctionName);
-bool CheckALSourceState(ALuint Source, ALint State);
-
 
 /*
  * Create and play music.

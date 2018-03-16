@@ -29,46 +29,6 @@
 #include "sound.h"
 
 
-ALboolean CheckALCError(ALCdevice *Device, const char *FunctionName)
-{
-	ALenum ErrCode;
-	if ((ErrCode = alcGetError(Device)) != ALC_NO_ERROR) {
-		std::cerr << FunctionName << "(): " << "ALC error: " << alcGetString(Device, ErrCode) << "\n";
-		return AL_FALSE;
-	}
-	return AL_TRUE;
-}
-ALboolean CheckALError(const char *FunctionName)
-{
-	ALenum ErrCode;
-	if ((ErrCode = alGetError()) != AL_NO_ERROR) {
-		std::cerr << FunctionName << "(): " << "OpenAL error: " << alGetString(ErrCode) << "\n";
-		return AL_FALSE;
-	}
-	return AL_TRUE;
-}
-
-ALboolean CheckALUTError(const char *FunctionName)
-{
-	ALenum ErrCode;
-	if ((ErrCode = alutGetError()) != ALUT_ERROR_NO_ERROR) {
-		std::cerr << FunctionName << "(): " << "OpenAL alut error: " << alutGetErrorString(ErrCode) << "\n";
-		return AL_FALSE;
-	}
-	return AL_TRUE;
-}
-
-/*
- * Check OpenAL source status.
- */
-bool CheckALSourceState(ALuint Source, ALint State)
-{
-	ALint tmpState;
-	alGetSourcei(Source, AL_SOURCE_STATE, &tmpState);
-	alGetError(); // reset errors
-	return (tmpState == State);
-}
-
 /*
  * Initialize sound system.
  */

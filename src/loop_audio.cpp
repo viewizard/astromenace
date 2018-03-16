@@ -245,7 +245,7 @@ unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume)
 		return 0;
 
 	// т.к. у нас со смещением же в 1 идет
-	VoiceID --;
+	VoiceID--;
 
 	// TODO should be connected to language code, not column number, that could be changed
 	// русский голос делаем немного тише
@@ -272,7 +272,7 @@ unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Locatio
 	LocalVolume = LocalVolume * GameSoundList[SoundID-1].VolumeCorrection;
 
 	// т.к. у нас со смещением же в 1 идет
-	SoundID --;
+	SoundID--;
 
 	return vw_PlaySound(GameSoundList[SoundID].FileName,
 			    LocalVolume, Setup.SoundSw / 10.0f, Location.x, Location.y, Location.z,

@@ -68,10 +68,6 @@ std::unordered_map<unsigned int, sSound> SoundsMap;
 
 } // unnamed namespace
 
-ALboolean CheckALError(const char *FunctionName);
-ALboolean CheckALUTError(const char *FunctionName);
-bool CheckALSourceState(ALuint Source, ALint State);
-
 
 /*
  * Generate new unique sound ID. Returned number should be non zero,
