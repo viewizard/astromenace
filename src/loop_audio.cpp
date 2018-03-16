@@ -228,19 +228,10 @@ int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume, bool Loop)
 	if (ret)
 		return ret;
 
-	// создаем новый источник и проигрываем его
-	cSound *Sound = new cSound;
-	vw_AttachSound(Sound);
-
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
-	if (!Sound->Play(MenuSoundNames[SoundID].FileName,
-			 LocalVolume, Setup.SoundSw / 10.0f, 0.0f, 0.0f, 0.0f,
-			 true, Loop, MenuSoundNames[SoundID].AllowStop, 1)) {
-		vw_ReleaseSound(Sound);
-		return 0;
-	}
-
-	return Sound->Num;
+	return vw_PlaySound(MenuSoundNames[SoundID].FileName,
+			    LocalVolume, Setup.SoundSw / 10.0f, 0.0f, 0.0f, 0.0f,
+			    true, Loop, MenuSoundNames[SoundID].AllowStop, 1);
 }
 
 //------------------------------------------------------------------------------------
@@ -263,19 +254,10 @@ int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume, bool Loop)
 
 	LocalVolume = LocalVolume * VoiceNames[VoiceID].VolumeCorrection;
 
-	// создаем новый источник и проигрываем его
-	cSound *Sound = new cSound;
-	vw_AttachSound(Sound);
-
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
-	if (!Sound->Play(vw_GetText(VoiceNames[VoiceID].FileName, Setup.VoiceLanguage),
-			 LocalVolume, Setup.VoiceSw / 10.0f, 0.0f, 0.0f, 0.0f,
-			 true, Loop, VoiceNames[VoiceID].AllowStop, 1)) {
-		vw_ReleaseSound(Sound);
-		return 0;
-	}
-
-	return Sound->Num;
+	return vw_PlaySound(vw_GetText(VoiceNames[VoiceID].FileName, Setup.VoiceLanguage),
+			    LocalVolume, Setup.VoiceSw / 10.0f, 0.0f, 0.0f, 0.0f,
+			    true, Loop, VoiceNames[VoiceID].AllowStop, 1);
 }
 
 //------------------------------------------------------------------------------------
@@ -292,17 +274,9 @@ int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, bool L
 	// т.к. у нас со смещением же в 1 идет
 	SoundID --;
 
-	// создаем новый источник и проигрываем его
-	cSound *Sound = new cSound;
-	vw_AttachSound(Sound);
-	if (!Sound->Play(GameSoundList[SoundID].FileName,
-			 LocalVolume, Setup.SoundSw / 10.0f, Location.x, Location.y, Location.z,
-			 false, Loop, GameSoundList[SoundID].AllowStop, AtType)) {
-		vw_ReleaseSound(Sound);
-		return 0;
-	}
-
-	return Sound->Num;
+	return vw_PlaySound(GameSoundList[SoundID].FileName,
+			    LocalVolume, Setup.SoundSw / 10.0f, Location.x, Location.y, Location.z,
+			    false, Loop, GameSoundList[SoundID].AllowStop, AtType);
 }
 
 //------------------------------------------------------------------------------------

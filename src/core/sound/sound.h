@@ -42,11 +42,16 @@ public:
 	cSound()
 	{};
 	~cSound()
-	{};
+	{
+		if (!alIsSource(Source))
+			return;
+		// если останавливать играющий звук, возможен щелчек (и в линуксе и в виндовсе)
+		alSourceStop(Source);
+		// освобождаем собственно сам источник
+		alDeleteSources(1, &Source);
+		alGetError(); // сброс ошибок
+	};
 
-	// проигрывание звука
-	// нельзя разделять пока на отдельную загрузку и проигрывание... т.к. удаляем по остановке!!!
-	bool Play(const std::string &Name, float _LocalVolume, float _GlobalVolume, float x, float y, float z, bool Relative, bool Loop, bool AllowStop, int AtType);
 	// перезапуск воспроизведения
 	void Replay();
 	// остановка звука (0.0f - остановить сразу)
@@ -77,6 +82,9 @@ public:
  * Sound FX.
  */
 
+// проигрывание звука
+unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _GlobalVolume,
+			  float x, float y, float z, bool Relative, bool Loop, bool AllowStop, int AtType);
 // Load sound buffer data according to file extension.
 unsigned int vw_LoadSoundBuffer(const std::string &Name);
 cSound *vw_FindSoundByNum(int Num);

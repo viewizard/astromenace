@@ -55,24 +55,29 @@ unsigned int vw_LoadSoundBuffer(const std::string &Name)
 //------------------------------------------------------------------------------------
 // Проигрывание звука
 //------------------------------------------------------------------------------------
-bool cSound::Play(const std::string &Name, float _LocalVolume, float _GlobalVolume, float x, float y, float z,
-		  bool Relative, bool Loop, bool AllowStop, int AtType)
+unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _GlobalVolume,
+			  float x, float y, float z, bool Relative, bool Loop, bool AllowStop, int AtType)
 {
-	Source = 0;
-	LastUpdateTime = vw_GetTimeThread(0);
-	FileName = Name;
+	cSound *Sound = new cSound;
+	vw_AttachSound(Sound);
 
-	DestroyTime = -1.0f;
-	DestroyTimeStart = -1.0f;
+	Sound->Source = 0;
+	Sound->LastUpdateTime = vw_GetTimeThread(0);
+	Sound->FileName = Name;
 
-	AllowedStop = AllowStop;
+	Sound->DestroyTime = -1.0f;
+	Sound->DestroyTimeStart = -1.0f;
+
+	Sound->AllowedStop = AllowStop;
 
 	ALuint Buffer = vw_LoadSoundBuffer(Name);
-	if (!Buffer)
-		return false;
+	if (!Buffer) {
+		vw_ReleaseSound(Sound);
+		return 0;
+	}
 
-	LocalVolume = _LocalVolume;
-	GlobalVolume = _GlobalVolume;
+	Sound->LocalVolume = _LocalVolume;
+	Sound->GlobalVolume = _GlobalVolume;
 
 	// Position of the source sound.
 	ALfloat SourcePos[] = {x, y, z}; // -1.0 1.0 по иксам это баланс
@@ -80,37 +85,41 @@ bool cSound::Play(const std::string &Name, float _LocalVolume, float _GlobalVolu
 	ALfloat SourceVel[] = {0.0f, 0.0f, 0.0f};
 
 	// Bind the buffer with the source.
-	alGenSources(1, &Source);
-	if(!CheckALError(__func__))
-		return false;
+	alGenSources(1, &Sound->Source);
+	if(!CheckALError(__func__)) {
+		vw_ReleaseSound(Sound);
+		return 0;
+	}
 
-	alSourcei (Source, AL_BUFFER, Buffer);
+	alSourcei(Sound->Source, AL_BUFFER, Buffer);
 
-	alSourcef (Source, AL_GAIN, _GlobalVolume * _LocalVolume);
-	alSourcefv(Source, AL_POSITION, SourcePos);
-	alSourcefv(Source, AL_VELOCITY, SourceVel);
-	alSourcei (Source, AL_LOOPING, Loop);
-	alSourcei (Source, AL_SOURCE_RELATIVE, Relative);
+	alSourcef(Sound->Source, AL_GAIN, _GlobalVolume * _LocalVolume);
+	alSourcefv(Sound->Source, AL_POSITION, SourcePos);
+	alSourcefv(Sound->Source, AL_VELOCITY, SourceVel);
+	alSourcei(Sound->Source, AL_LOOPING, Loop);
+	alSourcei(Sound->Source, AL_SOURCE_RELATIVE, Relative);
 	alGetError(); // сброс ошибок
 
 	// параметры затухания сигнала от источника
 	if (AtType == 1) {
-		alSourcef(Source, AL_REFERENCE_DISTANCE, 30.0f);
-		alSourcef(Source, AL_MAX_DISTANCE, 250.0f);
-		alSourcef(Source, AL_ROLLOFF_FACTOR, 0.5f);
+		alSourcef(Sound->Source, AL_REFERENCE_DISTANCE, 30.0f);
+		alSourcef(Sound->Source, AL_MAX_DISTANCE, 250.0f);
+		alSourcef(Sound->Source, AL_ROLLOFF_FACTOR, 0.5f);
 		alGetError(); // сброс ошибок
 	} else if (AtType == 2) {
-		alSourcef(Source, AL_REFERENCE_DISTANCE, 150.0f);
-		alSourcef(Source, AL_MAX_DISTANCE, 600.0f);
-		alSourcef(Source, AL_ROLLOFF_FACTOR, 0.2f);
+		alSourcef(Sound->Source, AL_REFERENCE_DISTANCE, 150.0f);
+		alSourcef(Sound->Source, AL_MAX_DISTANCE, 600.0f);
+		alSourcef(Sound->Source, AL_ROLLOFF_FACTOR, 0.2f);
 		alGetError(); // сброс ошибок
 	}
 
-	alSourcePlay(Source);
-	if(!CheckALError(__func__))
-		return false;
+	alSourcePlay(Sound->Source);
+	if(!CheckALError(__func__)) {
+		vw_ReleaseSound(Sound);
+		return 0;
+	}
 
-	return true;
+	return Sound->Num;
 }
 
 //------------------------------------------------------------------------------------
@@ -184,17 +193,6 @@ void vw_ReleaseSound(cSound* Sound)
 	// отключаем от менерджера
 	vw_DetachSound(Sound);
 
-	if (alIsSource(Sound->Source)) {
-		// если останавливать играющий звук, возможен щелчек (и в линуксе и в виндовсе)
-		alSourceStop(Sound->Source);
-		alGetError(); // сброс ошибок
-
-		// освобождаем собственно сам источник
-		alDeleteSources(1, &Sound->Source);
-		Sound->Source = 0;
-		alGetError(); // сброс ошибок
-	}
-
 	// освобождаем память
 	if (Sound)
 		delete Sound;
@@ -209,7 +207,7 @@ void vw_ReleaseAllSounds()
 	cSound *Tmp = StartSoundMan;
 	while (Tmp) {
 		cSound *Tmp1 = Tmp->Next;
-		vw_ReleaseSound(Tmp);
+		delete Tmp;
 		Tmp = Tmp1;
 	}
 
