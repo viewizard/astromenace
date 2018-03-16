@@ -36,7 +36,7 @@ float LastProfileNameTime = 0.0f;
 float CurrentProfileNameTransp = 0.9f;
 int	SoundOnProfileID = -1;
 
-int SoundTaping = 0;
+unsigned int SoundTaping{0};
 
 
 

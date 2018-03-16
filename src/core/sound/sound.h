@@ -39,12 +39,12 @@ unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _Gl
 			  float x, float y, float z, bool Relative, bool Loop, bool AllowStop, int AtType);
 // Load sound buffer data according to file extension.
 unsigned int vw_LoadSoundBuffer(const std::string &Name);
-bool vw_IsSoundAvailable(int Num);
+bool vw_IsSoundAvailable(unsigned int ID);
 // Replay from the beginning first sound, found by name.
-int vw_ReplayFirstFoundSound(const std::string &Name);
+unsigned int vw_ReplayFirstFoundSound(const std::string &Name);
 void vw_SetSoundGlobalVolume(const std::string &Name, float NewGlobalVolume);
-void vw_SetSoundLocation(int Num, float x, float y, float z);
-void vw_StopSound(int Num, float StopDelay);
+void vw_SetSoundLocation(unsigned int ID, float x, float y, float z);
+void vw_StopSound(unsigned int ID, float StopDelay);
 void vw_UpdateSound();
 void vw_ReleaseAllSounds();
 void vw_StopAllSoundsIfAllowed();

@@ -69,16 +69,16 @@ float ShildEnergyStatus;
 float ShildStartHitStatus;
 
 // голос с ворнингом, если столкнулись с несбиваемой частью
-int VoiceWarningCollisionDetected = 0;
+unsigned int VoiceWarningCollisionDetected{0};
 
 // Номер, для проигрывания голосового сообщения об обнаружении ракеты
-int VoiceMissileDetected = 0;
-bool VoiceMissileDetectedStatus = false;
+unsigned int VoiceMissileDetected{0};
+bool VoiceMissileDetectedStatus{false};
 // номер, для проигрывания голосового сообщения о проблемах в орудии
 // Номер, для проигрывания голосового сообщения об отсутствии снарядов в боекомплекте
-int VoiceWeaponMalfunction = 0;
+unsigned int VoiceWeaponMalfunction{0};
 // для звука - мало жизни
-int SoundLowLife = 0;
+unsigned int SoundLowLife{0};
 
 
 // тут храним какая часть взорвалась на корабле игрока

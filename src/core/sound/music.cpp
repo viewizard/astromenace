@@ -87,6 +87,7 @@ std::unordered_map<std::string, sMusic> MusicMap;
 
 ALboolean CheckALError(const char *FunctionName);
 ALboolean CheckALUTError(const char *FunctionName);
+bool CheckALSourceState(ALuint Source, ALint State);
 
 
 /*
@@ -140,17 +141,6 @@ bool vw_PlayMusic(const std::string &Name, float _LocalVolume, float _GlobalVolu
 }
 
 /*
- * Check music status.
- */
-static bool CheckSourceState(ALuint Source, ALint State)
-{
-	ALint tmpState;
-	alGetSourcei(Source, AL_SOURCE_STATE, &tmpState);
-	alGetError(); // reset errors
-	return (tmpState == State);
-}
-
-/*
  * Update music status and calculate effects.
  */
 bool sMusic::Update()
@@ -177,7 +167,7 @@ bool sMusic::Update()
 
 	LastTime = vw_GetTimeThread(0);
 
-	if (CheckSourceState(Source, AL_STOPPED))
+	if (CheckALSourceState(Source, AL_STOPPED))
 		return false;
 
 	return true;
@@ -228,7 +218,7 @@ void vw_FadeOutIfMusicPlaying(float Time)
 {
 	for (auto &tmpMusic : MusicMap) {
 		if (alIsSource(tmpMusic.second.Source) &&
-		    CheckSourceState(tmpMusic.second.Source, AL_PLAYING))
+		    CheckALSourceState(tmpMusic.second.Source, AL_PLAYING))
 			tmpMusic.second.FadeOut(Time);
 	}
 }
@@ -240,7 +230,7 @@ bool vw_IsAnyMusicPlaying()
 {
 	for (auto &tmpMusic : MusicMap) {
 		return alIsSource(tmpMusic.second.Source) &&
-		       CheckSourceState(tmpMusic.second.Source, AL_PLAYING);
+		       CheckALSourceState(tmpMusic.second.Source, AL_PLAYING);
 	}
 
 	return false;
@@ -271,7 +261,7 @@ void vw_ReleaseAllMusic()
 void vw_UpdateMusic()
 {
 	for (auto iter = MusicMap.begin(); iter != MusicMap.end();) {
-		if(!iter->second.Update()) {
+		if (!iter->second.Update()) {
 			iter = MusicMap.erase(iter);
 		} else
 			++iter;

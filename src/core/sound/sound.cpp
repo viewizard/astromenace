@@ -26,6 +26,8 @@
 
 // TODO translate comments
 // TODO switch from vw_GetTimeThread() to SDL_GetTicks() usage
+// TODO fix mess with vw_PlaySound() AtType parameter (enum?)
+// TODO check, do we really need Loop in vw_PlaySound()
 
 #include "../system/system.h"
 #include "../math/math.h"
@@ -33,8 +35,8 @@
 
 namespace {
 
-struct sSound
-{
+struct sSound {
+
 	~sSound()
 	{
 		if (!alIsSource(Source))
@@ -66,24 +68,35 @@ struct sSound
 
 	float DestroyTime{0.0f};
 	float DestroyTimeStart{0.0f};
-
-	sSound *Prev{nullptr};	// Pointer to the previous loaded Sound in the memory
-	sSound *Next{nullptr};	// Pointer to the next loaded Sound in the memory
-	int Num{0};		// ID number
 };
+
+std::unordered_map<unsigned int, sSound> SoundsMap;
 
 } // unnamed namespace
 
-sSound *StartSoundMan = nullptr;
-sSound *EndSoundMan = nullptr;
-int NumSoundMan = 0;
-void vw_ReleaseSound(sSound *Sound);
-void vw_AttachSound(sSound *Sound);
-void vw_DetachSound(sSound *Sound);
-
 ALboolean CheckALError(const char *FunctionName);
 ALboolean CheckALUTError(const char *FunctionName);
+bool CheckALSourceState(ALuint Source, ALint State);
 
+
+/*
+ * Generate new unique sound ID. Returned number should be non zero,
+ * and sounds map should not have an element with this key.
+ */
+static unsigned int GenerateUniqueSoundID()
+{
+	static unsigned int LastSoundID{0};
+
+	LastSoundID++;
+
+	// since we could reach the "unsigned int" maximum (4294967295) and back to 0 again
+	while (!LastSoundID &&
+	       (SoundsMap.find(LastSoundID) != SoundsMap.end())) {
+		LastSoundID++;
+	}
+
+	return LastSoundID;
+}
 
 /*
  * Load sound buffer data according to file extension.
@@ -104,26 +117,26 @@ unsigned int vw_LoadSoundBuffer(const std::string &Name)
 unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _GlobalVolume,
 			  float x, float y, float z, bool Relative, bool Loop, bool AllowStop, int AtType)
 {
-	sSound *Sound = new sSound;
-	vw_AttachSound(Sound);
+	if (Name.empty())
+		return 0;
 
-	Sound->Source = 0;
-	Sound->LastUpdateTime = vw_GetTimeThread(0);
-	Sound->FileName = Name;
+	unsigned int tmpSoundID = GenerateUniqueSoundID();
 
-	Sound->DestroyTime = -1.0f;
-	Sound->DestroyTimeStart = -1.0f;
-
-	Sound->AllowedStop = AllowStop;
+	SoundsMap[tmpSoundID].Source = 0; // create entry on first access
+	SoundsMap[tmpSoundID].LastUpdateTime = vw_GetTimeThread(0);
+	SoundsMap[tmpSoundID].FileName = Name;
+	SoundsMap[tmpSoundID].DestroyTime = -1.0f;
+	SoundsMap[tmpSoundID].DestroyTimeStart = -1.0f;
+	SoundsMap[tmpSoundID].AllowedStop = AllowStop;
 
 	ALuint Buffer = vw_LoadSoundBuffer(Name);
 	if (!Buffer) {
-		vw_ReleaseSound(Sound);
+		SoundsMap.erase(tmpSoundID);
 		return 0;
 	}
 
-	Sound->LocalVolume = _LocalVolume;
-	Sound->GlobalVolume = _GlobalVolume;
+	SoundsMap[tmpSoundID].LocalVolume = _LocalVolume;
+	SoundsMap[tmpSoundID].GlobalVolume = _GlobalVolume;
 
 	// Position of the source sound.
 	ALfloat SourcePos[] = {x, y, z}; // -1.0 1.0 по иксам это баланс
@@ -131,41 +144,41 @@ unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _Gl
 	ALfloat SourceVel[] = {0.0f, 0.0f, 0.0f};
 
 	// Bind the buffer with the source.
-	alGenSources(1, &Sound->Source);
+	alGenSources(1, &SoundsMap[tmpSoundID].Source);
 	if(!CheckALError(__func__)) {
-		vw_ReleaseSound(Sound);
+		SoundsMap.erase(tmpSoundID);
 		return 0;
 	}
 
-	alSourcei(Sound->Source, AL_BUFFER, Buffer);
+	alSourcei(SoundsMap[tmpSoundID].Source, AL_BUFFER, Buffer);
 
-	alSourcef(Sound->Source, AL_GAIN, _GlobalVolume * _LocalVolume);
-	alSourcefv(Sound->Source, AL_POSITION, SourcePos);
-	alSourcefv(Sound->Source, AL_VELOCITY, SourceVel);
-	alSourcei(Sound->Source, AL_LOOPING, Loop);
-	alSourcei(Sound->Source, AL_SOURCE_RELATIVE, Relative);
+	alSourcef(SoundsMap[tmpSoundID].Source, AL_GAIN, _GlobalVolume * _LocalVolume);
+	alSourcefv(SoundsMap[tmpSoundID].Source, AL_POSITION, SourcePos);
+	alSourcefv(SoundsMap[tmpSoundID].Source, AL_VELOCITY, SourceVel);
+	alSourcei(SoundsMap[tmpSoundID].Source, AL_LOOPING, Loop);
+	alSourcei(SoundsMap[tmpSoundID].Source, AL_SOURCE_RELATIVE, Relative);
 	alGetError(); // сброс ошибок
 
 	// параметры затухания сигнала от источника
 	if (AtType == 1) {
-		alSourcef(Sound->Source, AL_REFERENCE_DISTANCE, 30.0f);
-		alSourcef(Sound->Source, AL_MAX_DISTANCE, 250.0f);
-		alSourcef(Sound->Source, AL_ROLLOFF_FACTOR, 0.5f);
+		alSourcef(SoundsMap[tmpSoundID].Source, AL_REFERENCE_DISTANCE, 30.0f);
+		alSourcef(SoundsMap[tmpSoundID].Source, AL_MAX_DISTANCE, 250.0f);
+		alSourcef(SoundsMap[tmpSoundID].Source, AL_ROLLOFF_FACTOR, 0.5f);
 		alGetError(); // сброс ошибок
 	} else if (AtType == 2) {
-		alSourcef(Sound->Source, AL_REFERENCE_DISTANCE, 150.0f);
-		alSourcef(Sound->Source, AL_MAX_DISTANCE, 600.0f);
-		alSourcef(Sound->Source, AL_ROLLOFF_FACTOR, 0.2f);
+		alSourcef(SoundsMap[tmpSoundID].Source, AL_REFERENCE_DISTANCE, 150.0f);
+		alSourcef(SoundsMap[tmpSoundID].Source, AL_MAX_DISTANCE, 600.0f);
+		alSourcef(SoundsMap[tmpSoundID].Source, AL_ROLLOFF_FACTOR, 0.2f);
 		alGetError(); // сброс ошибок
 	}
 
-	alSourcePlay(Sound->Source);
+	alSourcePlay(SoundsMap[tmpSoundID].Source);
 	if(!CheckALError(__func__)) {
-		vw_ReleaseSound(Sound);
+		SoundsMap.erase(tmpSoundID);
 		return 0;
 	}
 
-	return Sound->Num;
+	return tmpSoundID;
 }
 
 //------------------------------------------------------------------------------------
@@ -179,7 +192,6 @@ void sSound::Replay()
 	alSourceRewind(Source);
 	alSourcePlay(Source);
 }
-
 
 //------------------------------------------------------------------------------------
 // остановка
@@ -223,25 +235,8 @@ void sSound::SetGlobalVolume(float NewGlobalVolume)
 		return;
 
 	GlobalVolume = NewGlobalVolume;
-	alSourcef(Source, AL_GAIN, GlobalVolume * LocalVolume );
+	alSourcef(Source, AL_GAIN, GlobalVolume * LocalVolume);
 	alGetError(); // сброс ошибок
-}
-
-//------------------------------------------------------------------------------------
-// Освобождение памяти и удаление
-//------------------------------------------------------------------------------------
-void vw_ReleaseSound(sSound* Sound)
-{
-	// проверка входящих данных
-	if (!Sound)
-		return;
-
-	// отключаем от менерджера
-	vw_DetachSound(Sound);
-
-	// освобождаем память
-	if (Sound)
-		delete Sound;
 }
 
 //------------------------------------------------------------------------------------
@@ -249,115 +244,46 @@ void vw_ReleaseSound(sSound* Sound)
 //------------------------------------------------------------------------------------
 void vw_ReleaseAllSounds()
 {
-	// Чистка памяти...
-	sSound *Tmp = StartSoundMan;
-	while (Tmp) {
-		sSound *Tmp1 = Tmp->Next;
-		delete Tmp;
-		Tmp = Tmp1;
-	}
-
-	StartSoundMan = nullptr;
-	EndSoundMan = nullptr;
+	SoundsMap.clear();
 }
-
 
 void vw_StopAllSoundsIfAllowed()
 {
-	sSound *Tmp = StartSoundMan;
-	while (Tmp) {
-		sSound *Tmp1 = Tmp->Next;
-		if (Tmp->AllowedStop)
+	for (auto iter = SoundsMap.begin(); iter != SoundsMap.end();) {
+		if (iter->second.AllowedStop) {
 			// stopped sound will be released on update() call,
 			// so, no reason stop sound, release it right now
-			vw_ReleaseSound(Tmp);
-		Tmp = Tmp1;
+			iter = SoundsMap.erase(iter);
+		} else
+			++iter;
 	}
 }
 
-//------------------------------------------------------------------------------------
-// подключение звука к менеджеру
-//------------------------------------------------------------------------------------
-void vw_AttachSound(sSound *Sound)
+bool vw_IsSoundAvailable(unsigned int ID)
 {
-	if (!Sound)
-		return;
-
-	// первый в списке...
-	if (EndSoundMan == nullptr) {
-		Sound->Prev = nullptr;
-		Sound->Next = nullptr;
-		NumSoundMan += 1;
-		Sound->Num = NumSoundMan;
-		StartSoundMan = Sound;
-		EndSoundMan = Sound;
-	} else { // продолжаем заполнение...
-		Sound->Prev = EndSoundMan;
-		Sound->Next = nullptr;
-		EndSoundMan->Next = Sound;
-		NumSoundMan += 1;
-		Sound->Num = NumSoundMan;
-		EndSoundMan = Sound;
-	}
-}
-
-
-//------------------------------------------------------------------------------------
-// отключение от менеджера
-//------------------------------------------------------------------------------------
-void vw_DetachSound(sSound *Sound)
-{
-	if (!Sound)
-		return;
-
-	// переустанавливаем указатели...
-	if (StartSoundMan == Sound)
-		StartSoundMan = Sound->Next;
-	if (EndSoundMan == Sound)
-		EndSoundMan = Sound->Prev;
-
-	if (Sound->Next != nullptr)
-		Sound->Next->Prev = Sound->Prev;
-	else if (Sound->Prev != nullptr)
-		Sound->Prev->Next = nullptr;
-
-	if (Sound->Prev != nullptr)
-		Sound->Prev->Next = Sound->Next;
-	else if (Sound->Next != nullptr)
-		Sound->Next->Prev = nullptr;
-}
-
-bool vw_IsSoundAvailable(int Num)
-{
-	if (!Num)
+	if (!ID)
 		return false;
 
-	sSound *Tmp = StartSoundMan;
-	while (Tmp) {
-		sSound *Tmp1 = Tmp->Next;
-		if (Tmp->Num == Num)
-			return true;
-		Tmp = Tmp1;
-	}
+	auto tmpSound = SoundsMap.find(ID);
+	if (tmpSound != SoundsMap.end())
+		return true;
+
 	return false;
 }
 
 /*
  * Replay from the beginning first sound, found by name.
  */
-int vw_ReplayFirstFoundSound(const std::string &Name)
+unsigned int vw_ReplayFirstFoundSound(const std::string &Name)
 {
 	if (Name.empty())
 		return 0;
 
-	sSound *Tmp = StartSoundMan;
-	while (Tmp) {
-		sSound *Tmp1 = Tmp->Next;
-		if (Tmp->FileName == Name) {
-			Tmp->Replay();
-			return Tmp->Num;
+	for (auto &tmpSound : SoundsMap) {
+		if (tmpSound.second.FileName == Name) {
+			tmpSound.second.Replay();
+			return tmpSound.first;
 		}
-		Tmp = Tmp1;
 	}
 
 	return 0;
@@ -368,81 +294,70 @@ int vw_ReplayFirstFoundSound(const std::string &Name)
 //------------------------------------------------------------------------------------
 void vw_UpdateSound()
 {
-	sSound *Tmp = StartSoundMan;
-
 	float CurrentGetTime = vw_GetTimeThread(0);
 
-	while (Tmp) {
-		sSound *Tmp1 = Tmp->Next;
-
+	for (auto iter = SoundsMap.begin(); iter != SoundsMap.end();) {
 		// считаем сколько играем этот эффект
-		float DeltaTime = CurrentGetTime - Tmp->LastUpdateTime;
-		Tmp->LastUpdateTime = CurrentGetTime;
+		float DeltaTime = CurrentGetTime - iter->second.LastUpdateTime;
+		iter->second.LastUpdateTime = CurrentGetTime;
+		bool NeedRelease{false};
 
-		if ((alIsSource(Tmp->Source)) &&
-		    (Tmp->DestroyTimeStart > 0.0f)) {
-			if (Tmp->DestroyTime > 0.0f) {
-				Tmp->DestroyTime -= DeltaTime;
-				if (Tmp->DestroyTime < 0.0f)
-					Tmp->DestroyTime = 0.0f;
-				alSourcef (Tmp->Source, AL_GAIN, Tmp->GlobalVolume * Tmp->LocalVolume * (Tmp->DestroyTime / Tmp->DestroyTimeStart));
+		if ((alIsSource(iter->second.Source)) &&
+		    (iter->second.DestroyTimeStart > 0.0f)) {
+			if (iter->second.DestroyTime > 0.0f) {
+				iter->second.DestroyTime -= DeltaTime;
+				if (iter->second.DestroyTime < 0.0f)
+					iter->second.DestroyTime = 0.0f;
+				alSourcef (iter->second.Source, AL_GAIN, iter->second.GlobalVolume * iter->second.LocalVolume *
+									 (iter->second.DestroyTime / iter->second.DestroyTimeStart));
 				alGetError(); // сброс ошибок
 			} else {
 				// уже нулевая громкость, можем удалять
-				vw_ReleaseSound(Tmp);
-				Tmp = nullptr;
+				NeedRelease = true;
 			}
 		}
 
 		// смотрим, если уже не играем - надо удалить
-		if (Tmp && (alIsSource(Tmp->Source))) {
-			ALint TMPS;
-			alGetSourcei(Tmp->Source, AL_SOURCE_STATE, &TMPS);
-			alGetError(); // сброс ошибок
+		if (alIsSource(iter->second.Source) &&
+		    CheckALSourceState(iter->second.Source, AL_STOPPED))
+			NeedRelease = true;
 
-			if (TMPS == AL_STOPPED)
-				vw_ReleaseSound(Tmp);
-		}
-
-		Tmp = Tmp1;
+		if (NeedRelease)
+			iter = SoundsMap.erase(iter);
+		else
+			++iter;
 	}
 }
 
 void vw_SetSoundGlobalVolume(const std::string &Name, float NewGlobalVolume)
 {
-	sSound *Tmp = StartSoundMan;
-	while (Tmp) {
-		sSound *Tmp1 = Tmp->Next;
-		if (Tmp->FileName == Name) {
-			Tmp->SetGlobalVolume(NewGlobalVolume);
-			break;
+	if (Name.empty())
+		return;
+
+	for (auto &tmpSound : SoundsMap) {
+		if (tmpSound.second.FileName == Name) {
+			tmpSound.second.SetGlobalVolume(NewGlobalVolume);
+			return;
 		}
-		Tmp = Tmp1;
 	}
 }
 
-void vw_SetSoundLocation(int Num, float x, float y, float z)
+void vw_SetSoundLocation(unsigned int ID, float x, float y, float z)
 {
-	sSound *Tmp = StartSoundMan;
-	while (Tmp) {
-		sSound *Tmp1 = Tmp->Next;
-		if (Tmp->Num == Num) {
-			Tmp->SetLocation(x, y, z);
-			break;
-		}
-		Tmp = Tmp1;
-	}
+	if (!ID)
+		return;
+
+	auto tmpSound = SoundsMap.find(ID);
+	if (tmpSound != SoundsMap.end())
+		tmpSound->second.SetLocation(x, y, z);
 }
 
-void vw_StopSound(int Num, float StopDelay)
+void vw_StopSound(unsigned int ID, float StopDelay)
 {
-	sSound *Tmp = StartSoundMan;
-	while (Tmp) {
-		sSound *Tmp1 = Tmp->Next;
-		if (Tmp->Num == Num) {
-			Tmp->Stop(StopDelay);
-			break;
-		}
-		Tmp = Tmp1;
-	}
+	if (!ID)
+		return;
+
+	auto tmpSound = SoundsMap.find(ID);
+	if (tmpSound != SoundsMap.end())
+		tmpSound->second.Stop(StopDelay);
 }

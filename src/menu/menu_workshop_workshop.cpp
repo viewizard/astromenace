@@ -42,7 +42,7 @@ float GetShipRechargeEnergy(int Num);
 // проблемы с энергией
 extern bool NeedMoreEnergyDialog;
 // Номер, для проигрывания голосового сообщения об проблемы с энергией
-int VoiceNeedMoreEnergy = 0;
+unsigned int VoiceNeedMoreEnergy{0};
 
 
 // что рисовать в диалоге 6,7,8

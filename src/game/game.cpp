@@ -137,7 +137,7 @@ extern cParticleSystem *Shild1;
 extern cParticleSystem *Shild2;
 
 // для звука открытия-закрытия меню в игре
-int SoundShowHideMenu = 0;
+unsigned int SoundShowHideMenu{0};
 
 // для прорисовки подложки с тайловой анимацией
 extern float StarsTileUpdateTime;

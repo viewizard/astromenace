@@ -211,7 +211,7 @@ void Audio_SetVoiceGlobalVolume(float NewGlobalVolume)
 //------------------------------------------------------------------------------------
 // Проигрываем звук в меню, или другие 2д звуки
 //------------------------------------------------------------------------------------
-int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume, bool Loop)
+unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume, bool Loop)
 {
 	if (!Setup.Sound_check ||
 	    !Setup.SoundSw ||
@@ -219,7 +219,7 @@ int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume, bool Loop)
 		return 0;
 
 	// т.к. у нас со смещением же в 1 идет
-	SoundID --;
+	SoundID--;
 
 	LocalVolume = LocalVolume * MenuSoundNames[SoundID].VolumeCorrection;
 
@@ -237,7 +237,7 @@ int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume, bool Loop)
 //------------------------------------------------------------------------------------
 // Проигрываем голос
 //------------------------------------------------------------------------------------
-int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume, bool Loop)
+unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume, bool Loop)
 {
 	if (!Setup.Sound_check ||
 	    !Setup.SoundSw ||
@@ -263,7 +263,7 @@ int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume, bool Loop)
 //------------------------------------------------------------------------------------
 // Проигрываем 3д звуки
 //------------------------------------------------------------------------------------
-int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, bool Loop, int AtType)
+unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, bool Loop, int AtType)
 {
 	if (!Setup.Sound_check ||
 	    !Setup.SoundSw)

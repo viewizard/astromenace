@@ -63,6 +63,17 @@ ALboolean CheckALUTError(const char *FunctionName)
 	return AL_TRUE;
 }
 
+/*
+ * Check OpenAL source status.
+ */
+bool CheckALSourceState(ALuint Source, ALint State)
+{
+	ALint tmpState;
+	alGetSourcei(Source, AL_SOURCE_STATE, &tmpState);
+	alGetError(); // reset errors
+	return (tmpState == State);
+}
+
 //------------------------------------------------------------------------------------
 // Инициализация звука
 //------------------------------------------------------------------------------------

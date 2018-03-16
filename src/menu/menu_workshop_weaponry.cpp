@@ -76,7 +76,7 @@ int	NewWeaponControlTypeData = 0;
 int WeaponSetupSlot = -1;
 
 // Номер, для проигрывания голосового сообщения об отсутствии снарядов в боекомплекте
-int VoiceAmmoOut = 0;
+unsigned int VoiceAmmoOut{0};
 
 
 

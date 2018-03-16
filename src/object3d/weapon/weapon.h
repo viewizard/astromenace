@@ -80,7 +80,7 @@ public:
 	// собственно объект=снаряд
 	cProjectile	*LaserMaser{nullptr};
 	// номер проигрываемого звука, чтобы была возможность выключить при уничтожении
-	int	LaserMaserSoundNum{0};
+	unsigned int LaserMaserSoundNum{0};
 	// флаг, это турель
 	bool	WeaponTurret{false};
 
