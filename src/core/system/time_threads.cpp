@@ -138,8 +138,6 @@ void vw_SetTimeThreadSpeed(int TimeThread, float NewSpeed)
 		return;
 	}
 
-	vw_Clamp(NewSpeed, 0.0f, 2.0f);
-
 	// store "previous time" in the time buffer
 	TimeThreadsMap[TimeThread].Buffer += ((SDL_GetTicks() - TimeThreadsMap[TimeThread].DiffGetTicks) * TimeThreadsMap[TimeThread].Speed) / 1000.0f;
 	// store "time point", when speed was changed
