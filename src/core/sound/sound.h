@@ -24,8 +24,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #ifndef Sound_H
 #define Sound_H
 
@@ -35,18 +33,26 @@
  * Sound FX.
  */
 
+// Play sound.
 unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _GlobalVolume,
 			  float x, float y, float z, bool Relative, bool AllowStop, int AtType);
 // Load sound buffer data according to file extension.
 unsigned int vw_LoadSoundBuffer(const std::string &Name);
+// Check, is sound available (created) or not.
 bool vw_IsSoundAvailable(unsigned int ID);
 // Replay from the beginning first sound, found by name.
 unsigned int vw_ReplayFirstFoundSound(const std::string &Name);
+// Set sound global volume.
 void vw_SetSoundGlobalVolume(const std::string &Name, float NewGlobalVolume);
+// Set sound location.
 void vw_SetSoundLocation(unsigned int ID, float x, float y, float z);
+// Stop sound with delay.
 void vw_StopSound(unsigned int ID, float StopDelay);
+// Update all sounds.
 void vw_UpdateSound();
+// Release all sounds.
 void vw_ReleaseAllSounds();
+// Stop (release) only allowed sounds.
 void vw_StopAllSoundsIfAllowed();
 
 /*

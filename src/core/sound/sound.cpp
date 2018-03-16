@@ -24,7 +24,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
 // TODO switch from vw_GetTimeThread() to SDL_GetTicks() usage
 // TODO fix mess with vw_PlaySound() AtType parameter, probably, we need setup this
 // by additional function call instead of hard code it
@@ -41,20 +40,15 @@ struct sSound {
 	{
 		if (!alIsSource(Source))
 			return;
-		// если останавливать играющий звук, возможен щелчек (и в линуксе и в виндовсе)
+		// stop playing before other actions
 		alSourceStop(Source);
-		// освобождаем собственно сам источник
 		alDeleteSources(1, &Source);
-		alGetError(); // сброс ошибок
+		alGetError(); // reset errors
 	};
 
-	// перезапуск воспроизведения
 	void Replay();
-	// остановка звука (0.0f - остановить сразу)
 	void Stop(float StopDelay);
-	// для 3д звука установка положения (баланса)
 	void SetLocation(float x, float y, float z);
-	// установка или изменение общей громкости
 	void SetGlobalVolume(float NewMainVolume);
 
 	std::string FileName;
@@ -62,7 +56,7 @@ struct sSound {
 	ALuint Source{0};
 	float LocalVolume{0.0f};
 	float GlobalVolume{0.0f};
-	bool AllowedStop{false};	// allowed stop during vw_StopAllSoundsIfAllowed() call
+	bool AllowedStop{false}; // allowed stop during vw_StopAllSoundsIfAllowed() call
 
 	float LastUpdateTime{0.0f};
 
@@ -111,9 +105,9 @@ unsigned int vw_LoadSoundBuffer(const std::string &Name)
 	return 0;
 }
 
-//------------------------------------------------------------------------------------
-// Проигрывание звука
-//------------------------------------------------------------------------------------
+/*
+ * Play sound.
+ */
 unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _GlobalVolume,
 			  float x, float y, float z, bool Relative, bool AllowStop, int AtType)
 {
@@ -138,12 +132,12 @@ unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _Gl
 	SoundsMap[tmpSoundID].LocalVolume = _LocalVolume;
 	SoundsMap[tmpSoundID].GlobalVolume = _GlobalVolume;
 
-	// Position of the source sound.
-	ALfloat SourcePos[] = {x, y, z}; // -1.0 1.0 по иксам это баланс
-	// Velocity of the source sound.
+	// position of the source sound
+	ALfloat SourcePos[] = {x, y, z};
+	// velocity of the source sound
 	ALfloat SourceVel[] = {0.0f, 0.0f, 0.0f};
 
-	// Bind the buffer with the source.
+	// bind the buffer with the source
 	alGenSources(1, &SoundsMap[tmpSoundID].Source);
 	if(!CheckALError(__func__)) {
 		SoundsMap.erase(tmpSoundID);
@@ -157,19 +151,19 @@ unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _Gl
 	alSourcefv(SoundsMap[tmpSoundID].Source, AL_VELOCITY, SourceVel);
 	alSourcei(SoundsMap[tmpSoundID].Source, AL_LOOPING, false);
 	alSourcei(SoundsMap[tmpSoundID].Source, AL_SOURCE_RELATIVE, Relative);
-	alGetError(); // сброс ошибок
+	alGetError(); // reset errors
 
-	// параметры затухания сигнала от источника
+	// attenuation-related factors
 	if (AtType == 1) {
 		alSourcef(SoundsMap[tmpSoundID].Source, AL_REFERENCE_DISTANCE, 30.0f);
 		alSourcef(SoundsMap[tmpSoundID].Source, AL_MAX_DISTANCE, 250.0f);
 		alSourcef(SoundsMap[tmpSoundID].Source, AL_ROLLOFF_FACTOR, 0.5f);
-		alGetError(); // сброс ошибок
+		alGetError(); // reset errors
 	} else if (AtType == 2) {
 		alSourcef(SoundsMap[tmpSoundID].Source, AL_REFERENCE_DISTANCE, 150.0f);
 		alSourcef(SoundsMap[tmpSoundID].Source, AL_MAX_DISTANCE, 600.0f);
 		alSourcef(SoundsMap[tmpSoundID].Source, AL_ROLLOFF_FACTOR, 0.2f);
-		alGetError(); // сброс ошибок
+		alGetError(); // reset errors
 	}
 
 	alSourcePlay(SoundsMap[tmpSoundID].Source);
@@ -181,9 +175,9 @@ unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _Gl
 	return tmpSoundID;
 }
 
-//------------------------------------------------------------------------------------
-// перезапуск
-//------------------------------------------------------------------------------------
+/*
+ * Replay sound.
+ */
 void sSound::Replay()
 {
 	if (!alIsSource(Source))
@@ -193,9 +187,11 @@ void sSound::Replay()
 	alSourcePlay(Source);
 }
 
-//------------------------------------------------------------------------------------
-// остановка
-//------------------------------------------------------------------------------------
+/*
+ * Stop sound.
+ * Note, that in this method we stop the sound, but it will be released in Update()
+ * call if nothing happens (replay(), for example).
+ */
 void sSound::Stop(float StopDelay)
 {
 	if (!alIsSource(Source))
@@ -206,29 +202,28 @@ void sSound::Stop(float StopDelay)
 
 	if (StopDelay == 0.0f) {
 		alSourceStop(Source);
-		alGetError(); // сброс ошибок
+		alGetError(); // reset errors
 	} else {
 		DestroyTimeStart = DestroyTime = StopDelay;
 	}
 }
 
-//------------------------------------------------------------------------------------
-// для 3д звука установка положения (баланса)
-//------------------------------------------------------------------------------------
+/*
+ * Set source location.
+ */
 void sSound::SetLocation(float x, float y, float z)
 {
-	// если это не источник, уходим
 	if (!alIsSource(Source))
 		return;
 
 	ALfloat SourcePos[] = {x, y, z};
 	alSourcefv(Source, AL_POSITION, SourcePos);
-	alGetError(); // сброс ошибок
+	alGetError(); // reset errors
 }
 
-//------------------------------------------------------------------------------------
-// установка громкости
-//------------------------------------------------------------------------------------
+/*
+ * Set global volume.
+ */
 void sSound::SetGlobalVolume(float NewGlobalVolume)
 {
 	if (!alIsSource(Source))
@@ -236,17 +231,20 @@ void sSound::SetGlobalVolume(float NewGlobalVolume)
 
 	GlobalVolume = NewGlobalVolume;
 	alSourcef(Source, AL_GAIN, GlobalVolume * LocalVolume);
-	alGetError(); // сброс ошибок
+	alGetError(); // reset errors
 }
 
-//------------------------------------------------------------------------------------
-// освобождаем все подключенные к менеджеру
-//------------------------------------------------------------------------------------
+/*
+ * Release all sounds.
+ */
 void vw_ReleaseAllSounds()
 {
 	SoundsMap.clear();
 }
 
+/*
+ * Stop (release) only allowed sounds.
+ */
 void vw_StopAllSoundsIfAllowed()
 {
 	for (auto iter = SoundsMap.begin(); iter != SoundsMap.end();) {
@@ -259,6 +257,9 @@ void vw_StopAllSoundsIfAllowed()
 	}
 }
 
+/*
+ * Check, is sound available (created) or not.
+ */
 bool vw_IsSoundAvailable(unsigned int ID)
 {
 	if (!ID)
@@ -289,18 +290,18 @@ unsigned int vw_ReplayFirstFoundSound(const std::string &Name)
 	return 0;
 }
 
-//------------------------------------------------------------------------------------
-// Обновляем данные в менеджере
-//------------------------------------------------------------------------------------
+/*
+ * Update all sounds.
+ */
 void vw_UpdateSound()
 {
 	float CurrentGetTime = vw_GetTimeThread(0);
 
 	for (auto iter = SoundsMap.begin(); iter != SoundsMap.end();) {
-		// считаем сколько играем этот эффект
+		bool NeedRelease{false};
+		// calculate, how long we are playing this sound
 		float DeltaTime = CurrentGetTime - iter->second.LastUpdateTime;
 		iter->second.LastUpdateTime = CurrentGetTime;
-		bool NeedRelease{false};
 
 		if ((alIsSource(iter->second.Source)) &&
 		    (iter->second.DestroyTimeStart > 0.0f)) {
@@ -310,14 +311,14 @@ void vw_UpdateSound()
 					iter->second.DestroyTime = 0.0f;
 				alSourcef (iter->second.Source, AL_GAIN, iter->second.GlobalVolume * iter->second.LocalVolume *
 									 (iter->second.DestroyTime / iter->second.DestroyTimeStart));
-				alGetError(); // сброс ошибок
+				alGetError(); // reset errors
 			} else {
-				// уже нулевая громкость, можем удалять
+				// release, volume less or equal zero
 				NeedRelease = true;
 			}
 		}
 
-		// смотрим, если уже не играем - надо удалить
+		// release, if it is stopped (we don't reuse sound, no reason leave it)
 		if (alIsSource(iter->second.Source) &&
 		    CheckALSourceState(iter->second.Source, AL_STOPPED))
 			NeedRelease = true;
@@ -329,6 +330,9 @@ void vw_UpdateSound()
 	}
 }
 
+/*
+ * Set sound global volume.
+ */
 void vw_SetSoundGlobalVolume(const std::string &Name, float NewGlobalVolume)
 {
 	if (Name.empty())
@@ -342,6 +346,9 @@ void vw_SetSoundGlobalVolume(const std::string &Name, float NewGlobalVolume)
 	}
 }
 
+/*
+ * Set sound location.
+ */
 void vw_SetSoundLocation(unsigned int ID, float x, float y, float z)
 {
 	if (!ID)
@@ -352,6 +359,9 @@ void vw_SetSoundLocation(unsigned int ID, float x, float y, float z)
 		tmpSound->second.SetLocation(x, y, z);
 }
 
+/*
+ * Stop sound with delay.
+ */
 void vw_StopSound(unsigned int ID, float StopDelay)
 {
 	if (!ID)
