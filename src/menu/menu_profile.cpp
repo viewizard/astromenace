@@ -227,7 +227,7 @@ void ProfileInputText()
 		    (vw_GetCurrentUnicodeChar()[0] != 0x25)) { // символ % печатать не даем, т.к. работаем с variadic аргументами через общую функцию печати
 			NewProfileName += vw_GetCurrentUnicodeChar();
 
-			if (vw_FindSoundByNum(SoundTaping) != nullptr)
+			if (vw_IsSoundAvailable(SoundTaping))
 				vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
 			SoundTaping = Audio_PlaySound2D(4,1.0f);
 		}
@@ -241,7 +241,7 @@ void ProfileInputText()
 		if (!NewProfileName.empty()) {
 			NewProfileName.pop_back();
 
-			if (vw_FindSoundByNum(SoundTaping) != nullptr)
+			if (vw_IsSoundAvailable(SoundTaping))
 				vw_FindSoundByNum(SoundTaping)->Stop(0.0f);
 			SoundTaping = Audio_PlaySound2D(4,1.0f);
 

@@ -448,7 +448,7 @@ cWeapon::~cWeapon(void)
 		delete LaserMaser;
 		LaserMaser = nullptr;
 		// убираем звук выстрела
-		if (vw_FindSoundByNum(LaserMaserSoundNum) != nullptr)
+		if (vw_IsSoundAvailable(LaserMaserSoundNum))
 			vw_FindSoundByNum(LaserMaserSoundNum)->Stop(0.15f);
 	}
 
@@ -983,8 +983,7 @@ void cWeapon::SetLocation(sVECTOR3D NewLocation)
 
 
 	// звук... для мазеров-лазеров нужно учитывать перемещение
-	if ((LaserMaserSoundNum != 0) &&
-	    (vw_FindSoundByNum(LaserMaserSoundNum) != nullptr))  // уже играем, нужно изменить данные
+	if (vw_IsSoundAvailable(LaserMaserSoundNum))  // уже играем, нужно изменить данные
 		vw_FindSoundByNum(LaserMaserSoundNum)->SetLocation(Location.x, Location.y, Location.z);
 
 }

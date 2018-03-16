@@ -39,8 +39,6 @@ class cSound
 {
 public:
 
-	cSound()
-	{};
 	~cSound()
 	{
 		if (!alIsSource(Source))
@@ -88,7 +86,9 @@ unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _Gl
 // Load sound buffer data according to file extension.
 unsigned int vw_LoadSoundBuffer(const std::string &Name);
 cSound *vw_FindSoundByNum(int Num);
-int vw_ReplaySound(const std::string &Name);
+bool vw_IsSoundAvailable(int Num);
+// Replay from the beginning first sound, found by name.
+int vw_ReplayFirstFoundSound(const std::string &Name);
 void vw_SetSoundGlobalVolume(const std::string &Name, float NewGlobalVolume);
 void vw_UpdateSound();
 

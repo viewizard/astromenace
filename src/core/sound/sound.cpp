@@ -295,7 +295,25 @@ cSound *vw_FindSoundByNum(int Num)
 	return nullptr;
 }
 
-int vw_ReplaySound(const std::string &Name)
+bool vw_IsSoundAvailable(int Num)
+{
+	if (!Num)
+		return false;
+
+	cSound *Tmp = StartSoundMan;
+	while (Tmp) {
+		cSound *Tmp1 = Tmp->Next;
+		if (Tmp->Num == Num)
+			return true;
+		Tmp = Tmp1;
+	}
+	return false;
+}
+
+/*
+ * Replay from the beginning first sound, found by name.
+ */
+int vw_ReplayFirstFoundSound(const std::string &Name)
 {
 	if (Name.empty())
 		return 0;

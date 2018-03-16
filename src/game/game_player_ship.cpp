@@ -453,7 +453,7 @@ void GamePlayerShip()
 
 		if (CheckStatus) {
 			// проверяем, действительно еще играем (играем только 1 раз!)
-			if ((vw_FindSoundByNum(VoiceMissileDetected) == nullptr) &&
+			if (!vw_IsSoundAvailable(VoiceMissileDetected) &&
 			    !VoiceMissileDetectedStatus) {
 				// уже не играем, нужно запустить опять
 				VoiceMissileDetected = Audio_PlayVoice(3, 1.0f);
@@ -526,7 +526,7 @@ void GamePlayerShip()
 		if (CollisionDetected) {
 			// голос, ворнинг, можем столкнуться с объектом
 			// проверяем, действительно еще играем
-			if (vw_FindSoundByNum(VoiceWarningCollisionDetected) == nullptr) {
+			if (!vw_IsSoundAvailable(VoiceWarningCollisionDetected)) {
 				// уже не играем, нужно запустить опять
 				VoiceWarningCollisionDetected = Audio_PlayVoice(7, 1.0f);
 			}
@@ -555,7 +555,7 @@ void GamePlayerShip()
 				    (PlayerFighter->WeaponSetFire[i]) &&
 				    (PlayerFighter->Weapon[i]->Ammo <= 0)) {
 					// проверяем, действительно еще играем
-					if (vw_FindSoundByNum(VoiceWeaponMalfunction) == nullptr) {
+					if (!vw_IsSoundAvailable(VoiceWeaponMalfunction)) {
 						// уже не играем, нужно запустить опять
 						VoiceWeaponMalfunction = Audio_PlayVoice(10, 1.0f);
 					}
@@ -570,7 +570,7 @@ void GamePlayerShip()
 		// если меньше 10% нужно бить тревогу
 		if (PlayerFighter->Strength < PlayerFighter->StrengthStart/10.0f) {
 			// если не играем, запускаем звук сирены
-			if (vw_FindSoundByNum(SoundLowLife) == nullptr)
+			if (!vw_IsSoundAvailable(SoundLowLife))
 				SoundLowLife = Audio_PlaySound2D(14, 1.0f);
 		}
 	}

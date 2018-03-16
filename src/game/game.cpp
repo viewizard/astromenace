@@ -1591,8 +1591,7 @@ void DrawGame()
 					// установка в последюю точку указателя
 					SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
 
-					if ((SoundShowHideMenu != 0) &&
-					    (vw_FindSoundByNum(SoundShowHideMenu) != nullptr))
+					if (vw_IsSoundAvailable(SoundShowHideMenu))
 						vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
 					SoundShowHideMenu = Audio_PlaySound2D(13, 1.0f);
 				}
@@ -1687,8 +1686,7 @@ void DrawGame()
 				if (GameMenu && (!GameMissionCompleteStatus || GameMissionCompleteStatusShowDialog)) { // открытываем меню с результатом миссии и больше не даем ничего открывать, после завершения миссии
 					NeedShowGameMenu = true;
 					NeedHideGameMenu = false;
-					if ((NeedPlaySfx && SoundShowHideMenu != 0) &&
-					    (vw_FindSoundByNum(SoundShowHideMenu) != nullptr))
+					if (NeedPlaySfx && vw_IsSoundAvailable(SoundShowHideMenu))
 						vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
 					if (NeedPlaySfx)
 						SoundShowHideMenu = Audio_PlaySound2D(12, 1.0f);
@@ -1700,9 +1698,7 @@ void DrawGame()
 					// установка в последюю точку указателя
 					SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
 
-					if (NeedPlaySfx &&
-					    (SoundShowHideMenu != 0) &&
-					    (vw_FindSoundByNum(SoundShowHideMenu) != nullptr))
+					if (NeedPlaySfx && vw_IsSoundAvailable(SoundShowHideMenu))
 						vw_FindSoundByNum(SoundShowHideMenu)->Stop(0.15f);
 					if (NeedPlaySfx)
 						SoundShowHideMenu = Audio_PlaySound2D(13, 1.0f);

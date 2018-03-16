@@ -224,7 +224,7 @@ int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume, bool Loop)
 	LocalVolume = LocalVolume * MenuSoundNames[SoundID].VolumeCorrection;
 
 	// если это звук меню и мы его уже проигрываем, его надо перезапустить
-	int ret = vw_ReplaySound(MenuSoundNames[SoundID].FileName);
+	int ret = vw_ReplayFirstFoundSound(MenuSoundNames[SoundID].FileName);
 	if (ret)
 		return ret;
 

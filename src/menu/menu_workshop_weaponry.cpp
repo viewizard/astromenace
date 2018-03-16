@@ -341,8 +341,8 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	}
 
 	// запускаем голос...
-	if ((WeaponAmmoOut) &&
-	    (vw_FindSoundByNum(VoiceAmmoOut) == nullptr)) // уже не играем, нужно запустить опять
+	if (WeaponAmmoOut &&
+	    !vw_IsSoundAvailable(VoiceAmmoOut)) // уже не играем, нужно запустить опять
 		VoiceAmmoOut = Audio_PlayVoice(10, 1.0f);
 
 
