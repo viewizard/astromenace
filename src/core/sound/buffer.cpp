@@ -24,8 +24,6 @@
 
 *************************************************************************************/
 
-// TODO CheckALError() and CheckALUTError() should be braced by namespace
-
 /*
 Note, stream buffers have limitation of usage and can't be used more than one time
 simultaneously.

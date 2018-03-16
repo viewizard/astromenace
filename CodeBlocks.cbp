@@ -178,12 +178,13 @@
 		<Unit filename="src/core/particle_system2d/particle2d.h" />
 		<Unit filename="src/core/particle_system2d/particle_system2d.cpp" />
 		<Unit filename="src/core/particle_system2d/particle_system2d.h" />
+		<Unit filename="src/core/sound/al_util.h" />
 		<Unit filename="src/core/sound/buffer.cpp" />
 		<Unit filename="src/core/sound/buffer.h" />
+		<Unit filename="src/core/sound/misc.cpp" />
 		<Unit filename="src/core/sound/music.cpp" />
 		<Unit filename="src/core/sound/sound.cpp" />
 		<Unit filename="src/core/sound/sound.h" />
-		<Unit filename="src/core/sound/sound_manager.cpp" />
 		<Unit filename="src/core/system/keyboard.cpp" />
 		<Unit filename="src/core/system/mouse.cpp" />
 		<Unit filename="src/core/system/system.h" />

@@ -24,6 +24,11 @@
 
 *************************************************************************************/
 
+/*
+Should be used for 'sound' system internal purposes only. Don't include into other
+sources, you are free to change or add methods to sound.h header file instead.
+*/
+
 #ifndef al_util_H
 #define al_util_H
 
