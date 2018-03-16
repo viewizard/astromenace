@@ -30,73 +30,24 @@
 #define Sound_H
 
 #include "../base.h"
-#include "buffer.h"
-
-//------------------------------------------------------------------------------------
-// Структура звука
-//------------------------------------------------------------------------------------
-class cSound
-{
-public:
-
-	~cSound()
-	{
-		if (!alIsSource(Source))
-			return;
-		// если останавливать играющий звук, возможен щелчек (и в линуксе и в виндовсе)
-		alSourceStop(Source);
-		// освобождаем собственно сам источник
-		alDeleteSources(1, &Source);
-		alGetError(); // сброс ошибок
-	};
-
-	// перезапуск воспроизведения
-	void Replay();
-	// остановка звука (0.0f - остановить сразу)
-	void Stop(float StopDelay);
-	// для 3д звука установка положения (баланса)
-	void SetLocation(float x, float y, float z);
-	// установка или изменение общей громкости
-	void SetGlobalVolume(float NewMainVolume);
-
-	std::string FileName;
-
-	ALuint Source{0};		// источник
-	float LocalVolume{0.0f};
-	float GlobalVolume{0.0f};
-	bool AllowedStop{false};	// allowed stop during vw_StopAllSoundsIfAllowed() call
-
-	float LastUpdateTime{0.0f};	// тянем тут, т.к. глобальный может быть не корректный (если была остановка игры)
-
-	float DestroyTime{0.0f};
-	float DestroyTimeStart{0.0f};
-
-	cSound *Prev{nullptr};	// Pointer to the previous loaded Sound in the memory
-	cSound *Next{nullptr};	// Pointer to the next loaded Sound in the memory
-	int Num{0};		// ID number
-};
 
 /*
  * Sound FX.
  */
 
-// проигрывание звука
 unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _GlobalVolume,
 			  float x, float y, float z, bool Relative, bool Loop, bool AllowStop, int AtType);
 // Load sound buffer data according to file extension.
 unsigned int vw_LoadSoundBuffer(const std::string &Name);
-cSound *vw_FindSoundByNum(int Num);
 bool vw_IsSoundAvailable(int Num);
 // Replay from the beginning first sound, found by name.
 int vw_ReplayFirstFoundSound(const std::string &Name);
 void vw_SetSoundGlobalVolume(const std::string &Name, float NewGlobalVolume);
+void vw_SetSoundLocation(int Num, float x, float y, float z);
+void vw_StopSound(int Num, float StopDelay);
 void vw_UpdateSound();
-
-void vw_ReleaseSound(cSound *Sound);
 void vw_ReleaseAllSounds();
 void vw_StopAllSoundsIfAllowed();
-void vw_AttachSound(cSound *Sound);
-void vw_DetachSound(cSound *Sound);
 
 /*
  * Music.

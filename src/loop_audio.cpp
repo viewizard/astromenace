@@ -300,13 +300,13 @@ void Audio_LoopProc()
 	vw_RotatePoint(ListenerOriV2, CurrentCameraRotation);
 
 	// Position of the Listener.
-	ALfloat ListenerPos[3] = {CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z};
+	float ListenerPos[3] = {CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z};
 	// Velocity of the Listener.
-	ALfloat ListenerVel[3] = {0.0f, 0.0f, 0.0f};
+	float ListenerVel[3] = {0.0f, 0.0f, 0.0f};
 	// Orientation of the Listener. (first 3 elements are "at", second 3 are "up")
 	// Also note that these should be units of '1'.
-	ALfloat ListenerOri[6] = {ListenerOriV1.x, ListenerOriV1.y, ListenerOriV1.z,
-				  ListenerOriV2.x, ListenerOriV2.y, ListenerOriV2.z};
+	float ListenerOri[6] = {ListenerOriV1.x, ListenerOriV1.y, ListenerOriV1.z,
+				ListenerOriV2.x, ListenerOriV2.y, ListenerOriV2.z};
 
 	vw_Listener(ListenerPos, ListenerVel, ListenerOri);
 

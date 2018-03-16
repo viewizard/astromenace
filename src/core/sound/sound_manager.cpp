@@ -27,6 +27,7 @@
 // TODO translate comments
 
 #include "../system/system.h"
+#include "buffer.h"
 #include "sound.h"
 
 

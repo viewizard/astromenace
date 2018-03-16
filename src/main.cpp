@@ -1392,10 +1392,6 @@ GotoQuit:
 	if (NeedReCreate) {
 		FirstStart = false;
 
-		// убираем все голосовые файлы и звуки (для изменения языка голоса)
-		// при vw_ShutdownSound освободим все, сейчас только речевые, музыка должна играть
-		vw_ReleaseAllSoundBuffers();
-
 		// пересоздаем окно
 		goto ReCreate;
 	}

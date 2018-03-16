@@ -29,11 +29,57 @@
 
 #include "../system/system.h"
 #include "../math/math.h"
-#include "sound.h"
+#include "buffer.h"
 
-cSound *StartSoundMan = nullptr;
-cSound *EndSoundMan = nullptr;
+namespace {
+
+struct sSound
+{
+	~sSound()
+	{
+		if (!alIsSource(Source))
+			return;
+		// если останавливать играющий звук, возможен щелчек (и в линуксе и в виндовсе)
+		alSourceStop(Source);
+		// освобождаем собственно сам источник
+		alDeleteSources(1, &Source);
+		alGetError(); // сброс ошибок
+	};
+
+	// перезапуск воспроизведения
+	void Replay();
+	// остановка звука (0.0f - остановить сразу)
+	void Stop(float StopDelay);
+	// для 3д звука установка положения (баланса)
+	void SetLocation(float x, float y, float z);
+	// установка или изменение общей громкости
+	void SetGlobalVolume(float NewMainVolume);
+
+	std::string FileName;
+
+	ALuint Source{0};
+	float LocalVolume{0.0f};
+	float GlobalVolume{0.0f};
+	bool AllowedStop{false};	// allowed stop during vw_StopAllSoundsIfAllowed() call
+
+	float LastUpdateTime{0.0f};
+
+	float DestroyTime{0.0f};
+	float DestroyTimeStart{0.0f};
+
+	sSound *Prev{nullptr};	// Pointer to the previous loaded Sound in the memory
+	sSound *Next{nullptr};	// Pointer to the next loaded Sound in the memory
+	int Num{0};		// ID number
+};
+
+} // unnamed namespace
+
+sSound *StartSoundMan = nullptr;
+sSound *EndSoundMan = nullptr;
 int NumSoundMan = 0;
+void vw_ReleaseSound(sSound *Sound);
+void vw_AttachSound(sSound *Sound);
+void vw_DetachSound(sSound *Sound);
 
 ALboolean CheckALError(const char *FunctionName);
 ALboolean CheckALUTError(const char *FunctionName);
@@ -58,7 +104,7 @@ unsigned int vw_LoadSoundBuffer(const std::string &Name)
 unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _GlobalVolume,
 			  float x, float y, float z, bool Relative, bool Loop, bool AllowStop, int AtType)
 {
-	cSound *Sound = new cSound;
+	sSound *Sound = new sSound;
 	vw_AttachSound(Sound);
 
 	Sound->Source = 0;
@@ -125,7 +171,7 @@ unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _Gl
 //------------------------------------------------------------------------------------
 // перезапуск
 //------------------------------------------------------------------------------------
-void cSound::Replay()
+void sSound::Replay()
 {
 	if (!alIsSource(Source))
 		return;
@@ -138,7 +184,7 @@ void cSound::Replay()
 //------------------------------------------------------------------------------------
 // остановка
 //------------------------------------------------------------------------------------
-void cSound::Stop(float StopDelay)
+void sSound::Stop(float StopDelay)
 {
 	if (!alIsSource(Source))
 		return;
@@ -157,7 +203,7 @@ void cSound::Stop(float StopDelay)
 //------------------------------------------------------------------------------------
 // для 3д звука установка положения (баланса)
 //------------------------------------------------------------------------------------
-void cSound::SetLocation(float x, float y, float z)
+void sSound::SetLocation(float x, float y, float z)
 {
 	// если это не источник, уходим
 	if (!alIsSource(Source))
@@ -171,7 +217,7 @@ void cSound::SetLocation(float x, float y, float z)
 //------------------------------------------------------------------------------------
 // установка громкости
 //------------------------------------------------------------------------------------
-void cSound::SetGlobalVolume(float NewGlobalVolume)
+void sSound::SetGlobalVolume(float NewGlobalVolume)
 {
 	if (!alIsSource(Source))
 		return;
@@ -184,7 +230,7 @@ void cSound::SetGlobalVolume(float NewGlobalVolume)
 //------------------------------------------------------------------------------------
 // Освобождение памяти и удаление
 //------------------------------------------------------------------------------------
-void vw_ReleaseSound(cSound* Sound)
+void vw_ReleaseSound(sSound* Sound)
 {
 	// проверка входящих данных
 	if (!Sound)
@@ -204,9 +250,9 @@ void vw_ReleaseSound(cSound* Sound)
 void vw_ReleaseAllSounds()
 {
 	// Чистка памяти...
-	cSound *Tmp = StartSoundMan;
+	sSound *Tmp = StartSoundMan;
 	while (Tmp) {
-		cSound *Tmp1 = Tmp->Next;
+		sSound *Tmp1 = Tmp->Next;
 		delete Tmp;
 		Tmp = Tmp1;
 	}
@@ -218,10 +264,12 @@ void vw_ReleaseAllSounds()
 
 void vw_StopAllSoundsIfAllowed()
 {
-	cSound *Tmp = StartSoundMan;
+	sSound *Tmp = StartSoundMan;
 	while (Tmp) {
-		cSound *Tmp1 = Tmp->Next;
+		sSound *Tmp1 = Tmp->Next;
 		if (Tmp->AllowedStop)
+			// stopped sound will be released on update() call,
+			// so, no reason stop sound, release it right now
 			vw_ReleaseSound(Tmp);
 		Tmp = Tmp1;
 	}
@@ -230,7 +278,7 @@ void vw_StopAllSoundsIfAllowed()
 //------------------------------------------------------------------------------------
 // подключение звука к менеджеру
 //------------------------------------------------------------------------------------
-void vw_AttachSound(cSound *Sound)
+void vw_AttachSound(sSound *Sound)
 {
 	if (!Sound)
 		return;
@@ -257,7 +305,7 @@ void vw_AttachSound(cSound *Sound)
 //------------------------------------------------------------------------------------
 // отключение от менеджера
 //------------------------------------------------------------------------------------
-void vw_DetachSound(cSound *Sound)
+void vw_DetachSound(sSound *Sound)
 {
 	if (!Sound)
 		return;
@@ -279,30 +327,14 @@ void vw_DetachSound(cSound *Sound)
 		Sound->Next->Prev = nullptr;
 }
 
-
-//------------------------------------------------------------------------------------
-// Нахождение по уникальному номеру
-//------------------------------------------------------------------------------------
-cSound *vw_FindSoundByNum(int Num)
-{
-	cSound *Tmp = StartSoundMan;
-	while (Tmp) {
-		cSound *Tmp1 = Tmp->Next;
-		if (Tmp->Num == Num)
-			return Tmp;
-		Tmp = Tmp1;
-	}
-	return nullptr;
-}
-
 bool vw_IsSoundAvailable(int Num)
 {
 	if (!Num)
 		return false;
 
-	cSound *Tmp = StartSoundMan;
+	sSound *Tmp = StartSoundMan;
 	while (Tmp) {
-		cSound *Tmp1 = Tmp->Next;
+		sSound *Tmp1 = Tmp->Next;
 		if (Tmp->Num == Num)
 			return true;
 		Tmp = Tmp1;
@@ -318,9 +350,9 @@ int vw_ReplayFirstFoundSound(const std::string &Name)
 	if (Name.empty())
 		return 0;
 
-	cSound *Tmp = StartSoundMan;
+	sSound *Tmp = StartSoundMan;
 	while (Tmp) {
-		cSound *Tmp1 = Tmp->Next;
+		sSound *Tmp1 = Tmp->Next;
 		if (Tmp->FileName == Name) {
 			Tmp->Replay();
 			return Tmp->Num;
@@ -336,12 +368,12 @@ int vw_ReplayFirstFoundSound(const std::string &Name)
 //------------------------------------------------------------------------------------
 void vw_UpdateSound()
 {
-	cSound *Tmp = StartSoundMan;
+	sSound *Tmp = StartSoundMan;
 
 	float CurrentGetTime = vw_GetTimeThread(0);
 
 	while (Tmp) {
-		cSound *Tmp1 = Tmp->Next;
+		sSound *Tmp1 = Tmp->Next;
 
 		// считаем сколько играем этот эффект
 		float DeltaTime = CurrentGetTime - Tmp->LastUpdateTime;
@@ -378,11 +410,37 @@ void vw_UpdateSound()
 
 void vw_SetSoundGlobalVolume(const std::string &Name, float NewGlobalVolume)
 {
-	cSound *Tmp = StartSoundMan;
+	sSound *Tmp = StartSoundMan;
 	while (Tmp) {
-		cSound *Tmp1 = Tmp->Next;
+		sSound *Tmp1 = Tmp->Next;
 		if (Tmp->FileName == Name) {
 			Tmp->SetGlobalVolume(NewGlobalVolume);
+			break;
+		}
+		Tmp = Tmp1;
+	}
+}
+
+void vw_SetSoundLocation(int Num, float x, float y, float z)
+{
+	sSound *Tmp = StartSoundMan;
+	while (Tmp) {
+		sSound *Tmp1 = Tmp->Next;
+		if (Tmp->Num == Num) {
+			Tmp->SetLocation(x, y, z);
+			break;
+		}
+		Tmp = Tmp1;
+	}
+}
+
+void vw_StopSound(int Num, float StopDelay)
+{
+	sSound *Tmp = StartSoundMan;
+	while (Tmp) {
+		sSound *Tmp1 = Tmp->Next;
+		if (Tmp->Num == Num) {
+			Tmp->Stop(StopDelay);
 			break;
 		}
 		Tmp = Tmp1;
