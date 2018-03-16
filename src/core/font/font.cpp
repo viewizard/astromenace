@@ -267,7 +267,7 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 	std::cout << "Font character was created for size: "
 		  << InternalFontSize << ",  char: '"
 		  << ConvertUTF8.to_bytes(UTF32) << "',  code: "
-		  << "0x" << std::uppercase << std::hex << UTF32 << "\n";
+		  << "0x" << std::uppercase << std::hex << UTF32 << std::dec << "\n";
 
 	return FontCharsList.front().get();
 }
