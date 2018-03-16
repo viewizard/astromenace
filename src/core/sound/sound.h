@@ -81,8 +81,11 @@ void vw_ReleaseAllMusic();
  * Misc.
  */
 
+// Initialize sound system.
 bool vw_InitSound();
+// Shutdown sound system.
 void vw_ShutdownSound();
+// Setup listener in 3D space.
 void vw_Listener(float ListenerPos[3], float ListenerVel[3], float ListenerOri[6]);
 
 #endif // Sound_H

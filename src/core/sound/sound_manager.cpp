@@ -24,16 +24,11 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #include "../system/system.h"
 #include "buffer.h"
 #include "sound.h"
 
 
-//------------------------------------------------------------------------------------
-// Получение ошибок
-//------------------------------------------------------------------------------------
 ALboolean CheckALCError(ALCdevice *Device, const char *FunctionName)
 {
 	ALenum ErrCode;
@@ -74,17 +69,17 @@ bool CheckALSourceState(ALuint Source, ALint State)
 	return (tmpState == State);
 }
 
-//------------------------------------------------------------------------------------
-// Инициализация звука
-//------------------------------------------------------------------------------------
+/*
+ * Initialize sound system.
+ */
 bool vw_InitSound()
 {
-	// Position of the Listener.
+	// position of the Listener
 	ALfloat ListenerPos[] = {0.0f, 0.0f, 0.0f};
-	// Velocity of the Listener.
+	// velocity of the Listener
 	ALfloat ListenerVel[] = {0.0f, 0.0f, 0.0f};
-	// Orientation of the Listener. (first 3 elements are "at", second 3 are "up")
-	// Also note that these should be units of '1'.
+	// orientation of the Listener (first 3 elements are "at", second 3 are "up")
+	// note, that these should be units of '1'
 	ALfloat ListenerOri[] = {0.0f, 0.0f, -1.0f,  0.0f, 1.0f, 0.0f};
 
 	alutInitWithoutContext(nullptr, nullptr);
@@ -94,15 +89,15 @@ bool vw_InitSound()
 	ALCcontext *Context{nullptr};
 	ALCdevice *Device{nullptr};
 
-	// Open default sound device
-	Device = alcOpenDevice(nullptr); // "Generic Software"
-	// Check for errors
+	// open default sound device
+	Device = alcOpenDevice(nullptr);
+	// check for errors
 	if (!Device) {
 		std::cerr << "Default sound device not found.\n";
 		return false;
 	}
 
-	// Creating rendering context
+	// creating rendering context
 	Context = alcCreateContext(Device, nullptr);
 	if (!CheckALCError(Device, __func__))
 		return false;
@@ -111,15 +106,14 @@ bool vw_InitSound()
 	if (!CheckALCError(Device, __func__))
 		return false;
 
-	// сброс ошибок
+	// reset errors
 	alGetError();
 	alcGetError(Device);
 
-	// Set listener properties
+	// set listener properties
 	alListenerfv(AL_POSITION,    ListenerPos);
 	alListenerfv(AL_VELOCITY,    ListenerVel);
 	alListenerfv(AL_ORIENTATION, ListenerOri);
-	// затухание звука
 	alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 
 	std::cout << "Vendor     : " << alGetString(AL_VENDOR) << "\n";
@@ -129,7 +123,7 @@ bool vw_InitSound()
 
 #ifdef gamedebug
 	// print all supported OpenAL extensions (one per line)
-	if (alGetString(AL_EXTENSIONS) != nullptr) {
+	if (alGetString(AL_EXTENSIONS)) {
 		std::string extensions{(char *)alGetString(AL_EXTENSIONS)};
 		if (!extensions.empty()) {
 			std::replace(extensions.begin(), extensions.end(), ' ', '\n'); // replace all ' ' to '\n'
@@ -140,43 +134,41 @@ bool vw_InitSound()
 
 	std::cout << "\n";
 
-	// сброс ошибок
+	// reset errors
 	alGetError();
 	alcGetError(Device);
 
 	return true;
 }
 
-//------------------------------------------------------------------------------------
-// Полностью заканчиваем работу
-//------------------------------------------------------------------------------------
+/*
+ * Shutdown sound system.
+ */
 void vw_ShutdownSound()
 {
-	// освобождаем все источники звука
 	vw_ReleaseAllSounds();
 	vw_ReleaseAllMusic();
-	// убираем все буферы
 	vw_ReleaseAllStreamBuffers();
 	vw_ReleaseAllSoundBuffers();
 
 	ALCcontext *Context{nullptr};
 	ALCdevice *Device{nullptr};
 
-	//Get active context
+	// get active context
 	Context = alcGetCurrentContext();
-	//Get device for active context
+	// get device for active context
 	Device = alcGetContextsDevice(Context);
 
-	// Если можем убрать Context, чтобы он не был текущим
+	// change current context (remove our context)
 	if (alcMakeContextCurrent(nullptr)) {
 		alcGetError(Device);
 
-		// Destroy context
+		// destroy context
 		if (Context && (alcGetCurrentContext() != Context))
 			alcDestroyContext(Context);
 		alcGetError(Device);
 
-		// Close sound device
+		// close sound device
 		if (Device)
 			alcCloseDevice(Device);
 	}
@@ -185,13 +177,13 @@ void vw_ShutdownSound()
 	CheckALUTError(__func__);
 }
 
-//------------------------------------------------------------------------------------
-// установка параметров слушателя
-//------------------------------------------------------------------------------------
+/*
+ * Setup listener in 3D space.
+ */
 void vw_Listener(float ListenerPos[3], float ListenerVel[3], float ListenerOri[6])
 {
-	alListenerfv(AL_POSITION,    ListenerPos);
-	alListenerfv(AL_VELOCITY,    ListenerVel);
+	alListenerfv(AL_POSITION, ListenerPos);
+	alListenerfv(AL_VELOCITY, ListenerVel);
 	alListenerfv(AL_ORIENTATION, ListenerOri);
-	alGetError(); // сброс ошибок
+	alGetError(); // reset errors
 }
