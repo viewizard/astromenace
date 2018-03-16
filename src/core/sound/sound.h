@@ -36,7 +36,7 @@
  */
 
 unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _GlobalVolume,
-			  float x, float y, float z, bool Relative, bool Loop, bool AllowStop, int AtType);
+			  float x, float y, float z, bool Relative, bool AllowStop, int AtType);
 // Load sound buffer data according to file extension.
 unsigned int vw_LoadSoundBuffer(const std::string &Name);
 bool vw_IsSoundAvailable(unsigned int ID);

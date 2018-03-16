@@ -26,8 +26,8 @@
 
 // TODO translate comments
 // TODO switch from vw_GetTimeThread() to SDL_GetTicks() usage
-// TODO fix mess with vw_PlaySound() AtType parameter (enum?)
-// TODO check, do we really need Loop in vw_PlaySound()
+// TODO fix mess with vw_PlaySound() AtType parameter, probably, we need setup this
+// by additional function call instead of hard code it
 
 #include "../system/system.h"
 #include "../math/math.h"
@@ -115,7 +115,7 @@ unsigned int vw_LoadSoundBuffer(const std::string &Name)
 // Проигрывание звука
 //------------------------------------------------------------------------------------
 unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _GlobalVolume,
-			  float x, float y, float z, bool Relative, bool Loop, bool AllowStop, int AtType)
+			  float x, float y, float z, bool Relative, bool AllowStop, int AtType)
 {
 	if (Name.empty())
 		return 0;
@@ -155,7 +155,7 @@ unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _Gl
 	alSourcef(SoundsMap[tmpSoundID].Source, AL_GAIN, _GlobalVolume * _LocalVolume);
 	alSourcefv(SoundsMap[tmpSoundID].Source, AL_POSITION, SourcePos);
 	alSourcefv(SoundsMap[tmpSoundID].Source, AL_VELOCITY, SourceVel);
-	alSourcei(SoundsMap[tmpSoundID].Source, AL_LOOPING, Loop);
+	alSourcei(SoundsMap[tmpSoundID].Source, AL_LOOPING, false);
 	alSourcei(SoundsMap[tmpSoundID].Source, AL_SOURCE_RELATIVE, Relative);
 	alGetError(); // сброс ошибок
 

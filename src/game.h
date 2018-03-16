@@ -164,8 +164,8 @@ void CreateCursor();
 //------------------------------------------------------------------------------------
 // loop_audio.cpp
 //------------------------------------------------------------------------------------
-unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume, bool Loop = false);
-unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume, bool Loop = false);
+unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume);
+unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume);
 void Audio_LoopProc();
 bool InitAudio();
 void ShutdownAudio();

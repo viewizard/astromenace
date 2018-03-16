@@ -211,7 +211,7 @@ void Audio_SetVoiceGlobalVolume(float NewGlobalVolume)
 //------------------------------------------------------------------------------------
 // Проигрываем звук в меню, или другие 2д звуки
 //------------------------------------------------------------------------------------
-unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume, bool Loop)
+unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume)
 {
 	if (!Setup.Sound_check ||
 	    !Setup.SoundSw ||
@@ -231,13 +231,13 @@ unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume, bool Loo
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
 	return vw_PlaySound(MenuSoundNames[SoundID].FileName,
 			    LocalVolume, Setup.SoundSw / 10.0f, 0.0f, 0.0f, 0.0f,
-			    true, Loop, MenuSoundNames[SoundID].AllowStop, 1);
+			    true, MenuSoundNames[SoundID].AllowStop, 1);
 }
 
 //------------------------------------------------------------------------------------
 // Проигрываем голос
 //------------------------------------------------------------------------------------
-unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume, bool Loop)
+unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume)
 {
 	if (!Setup.Sound_check ||
 	    !Setup.SoundSw ||
@@ -257,13 +257,13 @@ unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume, bool Loop)
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
 	return vw_PlaySound(vw_GetText(VoiceNames[VoiceID].FileName, Setup.VoiceLanguage),
 			    LocalVolume, Setup.VoiceSw / 10.0f, 0.0f, 0.0f, 0.0f,
-			    true, Loop, VoiceNames[VoiceID].AllowStop, 1);
+			    true, VoiceNames[VoiceID].AllowStop, 1);
 }
 
 //------------------------------------------------------------------------------------
 // Проигрываем 3д звуки
 //------------------------------------------------------------------------------------
-unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, bool Loop, int AtType)
+unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, int AtType)
 {
 	if (!Setup.Sound_check ||
 	    !Setup.SoundSw)
@@ -276,7 +276,7 @@ unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Locatio
 
 	return vw_PlaySound(GameSoundList[SoundID].FileName,
 			    LocalVolume, Setup.SoundSw / 10.0f, Location.x, Location.y, Location.z,
-			    false, Loop, GameSoundList[SoundID].AllowStop, AtType);
+			    false, GameSoundList[SoundID].AllowStop, AtType);
 }
 
 //------------------------------------------------------------------------------------

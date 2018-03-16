@@ -152,7 +152,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		case 216:
 		case 217:
 			// малый взрыв
-			Audio_PlaySound3D(6, fVol, Location, false);
+			Audio_PlaySound3D(6, fVol, Location);
 			break;
 
 		// рой
@@ -160,7 +160,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		// ракеты пиратов
 		case 206:
 			// малый взрыв
-			Audio_PlaySound3D(6, fVol, Location, false);
+			Audio_PlaySound3D(6, fVol, Location);
 			break;
 
 		// торпеда
@@ -168,7 +168,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		// торпеда пиратов
 		case 209:
 			// средний взрыв
-			Audio_PlaySound3D(7, fVol, Location, false, 2);
+			Audio_PlaySound3D(7, fVol, Location, 2);
 			break;
 
 		// бомба
@@ -176,7 +176,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		// бомба пиратов
 		case 210:
 			// большой взрыв
-			Audio_PlaySound3D(8, fVol, Location, false, 2);
+			Audio_PlaySound3D(8, fVol, Location, 2);
 			break;
 
 

@@ -218,7 +218,8 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 	if (ExplType == 1 || ExplType == 2) {
 		// постройки, транспорт
 		GameCameraSetExplosion(ExplLocation, 0.5f); // делаем сотрясание камеры, если нужно
-		if (NeedExplosionSFX) Audio_PlaySound3D(8, 1.0f, ExplLocation, false, 2);
+		if (NeedExplosionSFX)
+			Audio_PlaySound3D(8, 1.0f, ExplLocation, 2);
 	}
 
 
