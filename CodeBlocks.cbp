@@ -181,8 +181,6 @@
 		<Unit filename="src/core/particle_system/particle_system.cpp" />
 		<Unit filename="src/core/particle_system/particle_system.h" />
 		<Unit filename="src/core/particle_system/particle_system_manager.cpp" />
-		<Unit filename="src/core/particle_system2d/particle2d.cpp" />
-		<Unit filename="src/core/particle_system2d/particle2d.h" />
 		<Unit filename="src/core/particle_system2d/particle_system2d.cpp" />
 		<Unit filename="src/core/particle_system2d/particle_system2d.h" />
 		<Unit filename="src/core/system/keyboard.cpp" />

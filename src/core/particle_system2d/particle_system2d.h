@@ -24,106 +24,88 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #ifndef PARTICLESYSTEM2D_H
 #define PARTICLESYSTEM2D_H
 
 #include "../base.h"
-#include "particle2d.h"
+
+struct sParticle2D;
+
+struct sCOLORVALUE2D {
+	float r;
+	float g;
+	float b;
+	float a;
+};
 
 class cParticleSystem2D
 {
 public:
-	cParticleSystem2D() {};
 	~cParticleSystem2D();
 
-	// обновить все частицы в этой системе, по времени
-	bool	Update(float Time);
-	// прорисовка всех частиц
-	void	Draw();
+	bool Update(float Time);
+	void Draw();
+	void SetRotation(sVECTOR3D NewAngle);
+	// передвинуть все частици на указаное значение
+	void MoveSystem(sVECTOR3D NewLocation);
+	// сдвинуть только центр системы
+	void MoveSystemLocation(sVECTOR3D NewLocation);
+
+	// кол-во создаваемых частиц в секунду
+	unsigned int ParticlesPerSec{100};
+
 	// базовая текстура частиц
 	sTexture *Texture{nullptr};
 
-	// передвинуть все частици на указаное значение
-	void		MoveSystem(sVECTOR3D NewLocation);
-	// сдвинуть только центр системы
-	void		MoveSystemLocation(sVECTOR3D NewLocation);
-
-	// кол-во создаваемых частиц в секунду
-	unsigned int	ParticlesPerSec{100};
-
-	// текущее положение частиц в пространстве
-	sVECTOR3D	Location{0.0f, 0.0f, 0.0f};
-	// текущее направление системы (используется для создания частиц+некоторые вариации)
-	sVECTOR3D	Direction{0.0f, 0.0f, 0.0f};
-	// угол поворота системы
-	sVECTOR3D	Angle{0.0f, 0.0f, 0.0f};
-	void 		SetRotation(sVECTOR3D NewAngle);
+	sVECTOR3D Location{0.0f, 0.0f, 0.0f};	// текущее положение частиц в пространстве
+	sVECTOR3D Direction{0.0f, 0.0f, 0.0f};	// текущее направление системы (используется для создания частиц+некоторые вариации)
+	sVECTOR3D Angle{0.0f, 0.0f, 0.0f};	// угол поворота системы
 
 	// текущая матрица вращения
-	float	RotationMatrix[9]{1.0f, 0.0f, 0.0f,
-				  0.0f, 1.0f, 0.0f,
-				  0.0f, 0.0f, 1.0f};
+	float RotationMatrix[9]{1.0f, 0.0f, 0.0f,
+				0.0f, 1.0f, 0.0f,
+				0.0f, 0.0f, 1.0f};
 
-	// размер частиц в мировых координатах
-	float	SizeStart{1.0f};
-	float	SizeVar{0.0f};
-	float	SizeEnd{1.0f};
+	float SizeStart{1.0f};		// размер частиц в мировых координатах
+	float SizeVar{0.0f};
+	float SizeEnd{1.0f};
 
-	// Прозрачность частиц. Alpha 0 = невидем, Alpha 1 = видемость 100%
-	float	AlphaStart{1.0f};
-	float	AlphaVar{0.0f};
-	float	AlphaEnd{1.0f};
+	float AlphaStart{1.0f};		// Прозрачность частиц. Alpha 0 = невидем, Alpha 1 = видемость 100%
+	float AlphaVar{0.0f};
+	float AlphaEnd{1.0f};
 
-	// Цвет частиц при старте и завершении
-	// линейно интерполируется
-	sCOLORVALUE2D	ColorStart{1.0f, 1.0f, 1.0f, 1.0f};
-	sCOLORVALUE2D	ColorVar{0.0f, 0.0f, 0.0f, 0.0f};
-	sCOLORVALUE2D	ColorEnd{1.0f, 1.0f, 1.0f, 1.0f};
+	sCOLORVALUE2D ColorStart{1.0f, 1.0f, 1.0f, 1.0f}; // Цвет частиц при старте и завершении линейно интерполируется
+	sCOLORVALUE2D ColorVar{0.0f, 0.0f, 0.0f, 0.0f};
+	sCOLORVALUE2D ColorEnd{1.0f, 1.0f, 1.0f, 1.0f};
 
-	// Скалярная скорость, с вектором направления получаем вектор движения
-	float	Speed{1.0f};
-	float	SpeedVar{1.0f};
-	// Скорость при создании, сохраняем, если будут менять скорость в процессе
-	float	SpeedOnCreation{1.0f};
+	float Speed{1.0f};		// Скалярная скорость, с вектором направления получаем вектор движения
+	float SpeedVar{1.0f};
+	float SpeedOnCreation{1.0f};	// Скорость при создании, сохраняем, если будут менять скорость в процессе
 
-	// тип создания... 0-точка, 1-квадрат, 2-окружность
-	int		CreationType{0};
-	sVECTOR3D	CreationSize{0.05f,0.05f,0.05f};
+	int CreationType{0};		// тип создания... 0-точка, 1-квадрат, 2-окружность
+	sVECTOR3D CreationSize{0.05f, 0.05f, 0.05f};
 
-	// если нужно - корректировка размера частицы при создании относительно камеры
-	// мертвая зона (радиус, где вообще не рисуем)
-	float	DeadZone{0.0f};
+	float Life{1.0f};		// жизнь частицы в секундах
+	float LifeVar{0.0f};
 
-	// жизнь частицы в секундах
-	float	Life{1.0f};
-	float	LifeVar{0.0f};
+	bool IsAttractive{false};	// система притягивает частицы или нет
+	float AttractiveValue{25.0f};	// если притягивает, с каким коэф.
 
-	// показывает, насколько отличным будет выбор направления у создаваемой частицы
-	// с направлением системы
-	float	Theta{1.0f};
-
-	// система притягивает частицы или нет
-	bool	IsAttractive{false};
-	float	AttractiveValue{25.0f};
-
-	// можем ли мы создавать частицы или нет
-	bool	IsSuppressed{false};
-
-	// возраст системы в секундах
-	float	Age{0.0f};
-
-	// последнее время обновления системы
-	float	TimeLastUpdate{-1.0f};
-
-	// остаток создания частицы (если к примеру 0.5 частиц в секунду стоит)
-	float	EmissionResidue{0.0f};
+	float DeadZone{0.0f};		// мертвая зона (радиус, где вообще не рисуем)
+	float Theta{1.0f};		// показывает, насколько отличным будет выбор направления у создаваемой частицы с направлением системы
+	bool IsSuppressed{false};	// можем ли мы создавать частицы или нет
+	float Age{0.0f};		// возраст системы в секундах
+	float TimeLastUpdate{-1.0f};	// последнее время обновления системы
+	float EmissionResidue{0.0f};	// остаток создания частицы (если к примеру 0.5 частиц в секунду стоит)
 
 	// подвязка к динамическому массиву
-	sParticle2D	*Start{nullptr};
-	sParticle2D	*End{nullptr};
-	int	ParticlesCount{0};
-	void	Attach(sParticle2D *NewParticle);
-	void	Detach(sParticle2D *OldParticle);
+	sParticle2D *Start{nullptr};
+	sParticle2D *End{nullptr};
+	int ParticlesCount{0};
+	void Attach(sParticle2D *NewParticle);
+	void Detach(sParticle2D *OldParticle);
 };
 
 #endif //PARTICLESYSTEM2D_H
