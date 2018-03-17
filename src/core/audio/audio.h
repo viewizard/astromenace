@@ -47,9 +47,9 @@ void vw_SetSoundGlobalVolume(const std::string &Name, float NewGlobalVolume);
 // Set sound location.
 void vw_SetSoundLocation(unsigned int ID, float x, float y, float z);
 // Stop sound with delay.
-void vw_StopSound(unsigned int ID, float StopDelay);
+void vw_StopSound(unsigned int ID, uint32_t StopDelayTicks);
 // Update all sounds.
-void vw_UpdateSound();
+void vw_UpdateSound(uint32_t CurrentTick);
 // Release all sounds.
 void vw_ReleaseAllSounds();
 // Stop (release) only allowed sounds.

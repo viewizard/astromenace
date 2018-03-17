@@ -1592,7 +1592,7 @@ void DrawGame()
 					SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
 
 					if (vw_IsSoundAvailable(SoundShowHideMenu))
-						vw_StopSound(SoundShowHideMenu, 0.15f);
+						vw_StopSound(SoundShowHideMenu, 150);
 					SoundShowHideMenu = Audio_PlaySound2D(13, 1.0f);
 				}
 
@@ -1687,7 +1687,7 @@ void DrawGame()
 					NeedShowGameMenu = true;
 					NeedHideGameMenu = false;
 					if (NeedPlaySfx && vw_IsSoundAvailable(SoundShowHideMenu))
-						vw_StopSound(SoundShowHideMenu, 0.15f);
+						vw_StopSound(SoundShowHideMenu, 150);
 					if (NeedPlaySfx)
 						SoundShowHideMenu = Audio_PlaySound2D(12, 1.0f);
 					// сброс кнопки мышки, чтобы случайно не нажали
@@ -1699,7 +1699,7 @@ void DrawGame()
 					SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
 
 					if (NeedPlaySfx && vw_IsSoundAvailable(SoundShowHideMenu))
-						vw_StopSound(SoundShowHideMenu, 0.15f);
+						vw_StopSound(SoundShowHideMenu, 150);
 					if (NeedPlaySfx)
 						SoundShowHideMenu = Audio_PlaySound2D(13, 1.0f);
 					DrawGameCursor = false;

@@ -24,7 +24,6 @@
 
 *************************************************************************************/
 
-// TODO switch from vw_GetTimeThread() to SDL_GetTicks() usage
 // TODO fix mess with vw_PlaySound() AtType parameter, probably, we need setup this
 // by additional function call instead of hard code it
 
@@ -47,7 +46,7 @@ struct sSound {
 	};
 
 	void Replay();
-	void Stop(float StopDelay);
+	void Stop(uint32_t StopDelayTicks);
 	void SetLocation(float x, float y, float z);
 	void SetGlobalVolume(float NewMainVolume);
 
@@ -58,10 +57,10 @@ struct sSound {
 	float GlobalVolume{0.0f};
 	bool AllowedStop{false}; // allowed stop during vw_StopAllSoundsIfAllowed() call
 
-	float LastUpdateTime{0.0f};
+	uint32_t LastUpdateTick{0};
 
-	float DestroyTime{0.0f};
-	float DestroyTimeStart{0.0f};
+	uint32_t DestroyPeriod{0};
+	uint32_t DestroyTicks{0};
 };
 
 std::unordered_map<unsigned int, sSound> SoundsMap;
@@ -113,10 +112,10 @@ unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _Gl
 	unsigned int tmpSoundID = GenerateUniqueSoundID();
 
 	SoundsMap[tmpSoundID].Source = 0; // create entry on first access
-	SoundsMap[tmpSoundID].LastUpdateTime = vw_GetTimeThread(0);
+	SoundsMap[tmpSoundID].LastUpdateTick = SDL_GetTicks();
 	SoundsMap[tmpSoundID].FileName = Name;
-	SoundsMap[tmpSoundID].DestroyTime = -1.0f;
-	SoundsMap[tmpSoundID].DestroyTimeStart = -1.0f;
+	SoundsMap[tmpSoundID].DestroyPeriod = 0;
+	SoundsMap[tmpSoundID].DestroyTicks = 0;
 	SoundsMap[tmpSoundID].AllowedStop = AllowStop;
 
 	ALuint Buffer = vw_LoadSoundBuffer(Name);
@@ -188,19 +187,17 @@ void sSound::Replay()
  * Note, that in this method we stop the sound, but it will be released in Update()
  * call if nothing happens (replay(), for example).
  */
-void sSound::Stop(float StopDelay)
+void sSound::Stop(uint32_t StopDelayTicks)
 {
 	if (!alIsSource(Source))
 		return;
 
-	if (StopDelay < 0.0f)
-		StopDelay = 0.0f;
-
-	if (StopDelay == 0.0f) {
+	if (!StopDelayTicks) {
 		alSourceStop(Source);
 		alGetError(); // reset errors
 	} else {
-		DestroyTimeStart = DestroyTime = StopDelay;
+		DestroyPeriod = StopDelayTicks;
+		DestroyTicks = 0;
 	}
 }
 
@@ -289,24 +286,21 @@ unsigned int vw_ReplayFirstFoundSound(const std::string &Name)
 /*
  * Update all sounds.
  */
-void vw_UpdateSound()
+void vw_UpdateSound(uint32_t CurrentTick)
 {
-	float CurrentGetTime = vw_GetTimeThread(0);
-
 	for (auto iter = SoundsMap.begin(); iter != SoundsMap.end();) {
 		bool NeedRelease{false};
 		// calculate, how long we are playing this sound
-		float DeltaTime = CurrentGetTime - iter->second.LastUpdateTime;
-		iter->second.LastUpdateTime = CurrentGetTime;
+		uint32_t DeltaTicks = CurrentTick - iter->second.LastUpdateTick;
+		iter->second.LastUpdateTick = CurrentTick;
 
 		if ((alIsSource(iter->second.Source)) &&
-		    (iter->second.DestroyTimeStart > 0.0f)) {
-			if (iter->second.DestroyTime > 0.0f) {
-				iter->second.DestroyTime -= DeltaTime;
-				if (iter->second.DestroyTime < 0.0f)
-					iter->second.DestroyTime = 0.0f;
-				alSourcef (iter->second.Source, AL_GAIN, iter->second.GlobalVolume * iter->second.LocalVolume *
-									 (iter->second.DestroyTime / iter->second.DestroyTimeStart));
+		    (iter->second.DestroyPeriod > 0)) {
+			iter->second.DestroyTicks += DeltaTicks;
+
+			if (iter->second.DestroyTicks < iter->second.DestroyPeriod) {
+				alSourcef(iter->second.Source, AL_GAIN, iter->second.GlobalVolume * iter->second.LocalVolume *
+									(1.0f - iter->second.DestroyTicks / iter->second.DestroyPeriod));
 				alGetError(); // reset errors
 			} else {
 				// release, volume less or equal zero
@@ -358,12 +352,12 @@ void vw_SetSoundLocation(unsigned int ID, float x, float y, float z)
 /*
  * Stop sound with delay.
  */
-void vw_StopSound(unsigned int ID, float StopDelay)
+void vw_StopSound(unsigned int ID, uint32_t StopDelayTicks)
 {
 	if (!ID)
 		return;
 
 	auto tmpSound = SoundsMap.find(ID);
 	if (tmpSound != SoundsMap.end())
-		tmpSound->second.Stop(StopDelay);
+		tmpSound->second.Stop(StopDelayTicks);
 }

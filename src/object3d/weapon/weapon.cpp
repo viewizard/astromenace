@@ -449,7 +449,7 @@ cWeapon::~cWeapon(void)
 		LaserMaser = nullptr;
 		// убираем звук выстрела
 		if (vw_IsSoundAvailable(LaserMaserSoundNum))
-			vw_StopSound(LaserMaserSoundNum, 0.15f);
+			vw_StopSound(LaserMaserSoundNum, 150);
 	}
 
 	DetachWeapon(this);

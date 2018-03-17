@@ -228,7 +228,7 @@ void ProfileInputText()
 			NewProfileName += vw_GetCurrentUnicodeChar();
 
 			if (vw_IsSoundAvailable(SoundTaping))
-				vw_StopSound(SoundTaping, 0.0f);
+				vw_StopSound(SoundTaping, 0);
 			SoundTaping = Audio_PlaySound2D(4,1.0f);
 		}
 		vw_SetCurrentUnicodeChar(nullptr); // сразу сбрасываем данные
@@ -242,7 +242,7 @@ void ProfileInputText()
 			NewProfileName.pop_back();
 
 			if (vw_IsSoundAvailable(SoundTaping))
-				vw_StopSound(SoundTaping, 0.0f);
+				vw_StopSound(SoundTaping, 0);
 			SoundTaping = Audio_PlaySound2D(4,1.0f);
 
 			vw_SetKeyStatus(SDLK_BACKSPACE, false);
