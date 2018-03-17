@@ -412,7 +412,7 @@ void GamePlayerShip()
 			new cSpaceExplosion(PlayerFighter, 31, PlayerFighter->Location, PlayerFighter->Speed+10.0f, PlayerDeadObjectPieceNum);
 
 			// включаем музыку и отображение "миссия провалена"
-			StartMusicWithFade(eMusicTheme::FAILED, 2.0f, 2.0f);
+			StartMusicWithFade(eMusicTheme::FAILED, 2000, 2000);
 
 			// удаляем и уходим отсюда
 			delete PlayerFighter;

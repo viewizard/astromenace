@@ -347,9 +347,9 @@ bool cScriptEngine::Update(float Time)
 								if (xmlDoc->TestEntryAttribute(xmlEntry, "theme")) {
 									int Theme = xmlDoc->iGetEntryAttribute(xmlEntry, "theme");
 									if (Theme == 1)
-										StartMusicWithFade(eMusicTheme::GAME, 2.0f, 2.0f);
+										StartMusicWithFade(eMusicTheme::GAME, 2000, 2000);
 									if (Theme == 2)
-										StartMusicWithFade(eMusicTheme::BOSS, 1.5f, 2.0f);
+										StartMusicWithFade(eMusicTheme::BOSS, 1500, 2000);
 								}
 							}
 					} else

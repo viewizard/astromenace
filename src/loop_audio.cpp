@@ -124,7 +124,7 @@ static sSoundData VoiceNames[] = {
 //------------------------------------------------------------------------------------
 // Запуск нужной музыки
 //------------------------------------------------------------------------------------
-void StartMusicWithFade(eMusicTheme StartMusic, float FadeInTime, float FadeOutTime)
+void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t FadeOutTicks)
 {
 	bool MusicLoop = true;
 	std::string LoopFileName;
@@ -162,7 +162,7 @@ void StartMusicWithFade(eMusicTheme StartMusic, float FadeInTime, float FadeOutT
 	    !CurrentPlayingMusicName.empty()) {
 
 		// FadeOut all music themes, if we need something, we FadeIn it in code below
-		vw_FadeOutIfMusicPlaying(FadeOutTime);
+		vw_FadeOutIfMusicPlaying(FadeOutTicks);
 
 		// пытаемся загрузить и играть
 		if (!vw_PlayMusic(CurrentPlayingMusicName, 0.0f, MusicCorrection * (Setup.MusicSw / 10.0f),
@@ -170,7 +170,7 @@ void StartMusicWithFade(eMusicTheme StartMusic, float FadeInTime, float FadeOutT
 			vw_ReleaseMusic(CurrentPlayingMusicName);
 			CurrentPlayingMusicName.clear();
 		} else // we are playing new music theme, FadeIn it
-			vw_SetMusicFadeIn(CurrentPlayingMusicName, 1.0f, FadeInTime);
+			vw_SetMusicFadeIn(CurrentPlayingMusicName, 1.0f, FadeInTicks);
 	}
 }
 
@@ -296,7 +296,7 @@ void Audio_LoopProc()
 	// передаем управление, чтобы внутри ядра все сделали
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_UpdateSound();
-	vw_UpdateMusic();
+	vw_UpdateMusic(SDL_GetTicks());
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// запускаем нужную музыку... только включили громкость или выключили
@@ -310,7 +310,7 @@ void Audio_LoopProc()
 				vw_ReleaseMusic(CurrentPlayingMusicName);
 				CurrentPlayingMusicName.clear();
 			} else // we are playing new music theme, FadeIn it
-				vw_SetMusicFadeIn(CurrentPlayingMusicName, 0.0f, 2.0f);
+				vw_SetMusicFadeIn(CurrentPlayingMusicName, 0.0f, 2000);
 		}
 	} else {
 		// если что-то играем, но звук уже выключен, нужно все убрать...

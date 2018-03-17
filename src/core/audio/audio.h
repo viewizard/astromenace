@@ -67,11 +67,11 @@ void vw_SetMusicGlobalVolume(float NewGlobalVolume);
 // Check, is any music theme playing.
 bool vw_IsAnyMusicPlaying();
 // Set all music fade-out, if playing.
-void vw_FadeOutIfMusicPlaying(float Time);
+void vw_FadeOutIfMusicPlaying(uint32_t Ticks);
 // Set music fade-in.
-void vw_SetMusicFadeIn(const std::string &Name, float EndVol, float Time);
+void vw_SetMusicFadeIn(const std::string &Name, float EndVol, uint32_t Ticks);
 // Update all music themes status and calculate effects.
-void vw_UpdateMusic();
+void vw_UpdateMusic(uint32_t CurrentTick);
 // Release particular music theme by name. Also could be used for "stop" playing.
 void vw_ReleaseMusic(const std::string &Name);
 // Release all music. Also could be used for "stop" playing all music themes.

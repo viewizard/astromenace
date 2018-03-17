@@ -24,8 +24,6 @@
 
 *************************************************************************************/
 
-// TODO switch from vw_GetTimeThread() to SDL_GetTicks() usage
-
 /*
 In the case of music we based on several main principles:
 1. All music connected to its name, so, name is the key (for map).
@@ -59,9 +57,9 @@ struct sMusic {
 		alGetError(); // reset errors
 	};
 
-	void FadeIn(float EndVol, float Time);
-	void FadeOut(float Time);
-	bool Update();
+	void FadeIn(float EndVol, uint32_t Ticks);
+	void FadeOut(uint32_t Ticks);
+	bool Update(uint32_t CurrentTick);
 	void SetGlobalVolume(float NewGlobalVolume);
 
 	sStreamBuffer *Stream{nullptr};
@@ -73,12 +71,12 @@ struct sMusic {
 
 	// effects-related variables
 	bool FadeInSwitch{false};
-	float FadeInEndVol;
-	float FadeInStartVol;
+	float FadeEndVol;
+	float FadeStartVol;
 	bool FadeOutSwitch{false};
-	float FadeTime{0.0f};
-	float FadeAge{0.0f};
-	float LastTime;
+	uint32_t FadeTicks{0};
+	uint32_t FadePeriod{0};
+	uint32_t LastTick{0};
 };
 
 std::unordered_map<std::string, sMusic> MusicMap;
@@ -105,9 +103,9 @@ bool vw_PlayMusic(const std::string &Name, float _LocalVolume, float _GlobalVolu
 	MusicMap[Name].LocalVolume = _LocalVolume;
 	MusicMap[Name].GlobalVolume = _GlobalVolume;
 	MusicMap[Name].LoopPart = LoopFileName;
-	MusicMap[Name].FadeInStartVol = _LocalVolume;
-	MusicMap[Name].FadeInEndVol = _LocalVolume;
-	MusicMap[Name].LastTime = vw_GetTimeThread(0);
+	MusicMap[Name].FadeStartVol = _LocalVolume;
+	MusicMap[Name].FadeEndVol = _LocalVolume;
+	MusicMap[Name].LastTick = SDL_GetTicks();
 
 	// we don't use position and velocity for music
 	ALfloat SourcePos[] = {0.0f, 0.0f, 0.0f};
@@ -139,29 +137,29 @@ bool vw_PlayMusic(const std::string &Name, float _LocalVolume, float _GlobalVolu
 /*
  * Update music status and calculate effects.
  */
-bool sMusic::Update()
+bool sMusic::Update(uint32_t CurrentTick)
 {
 	vw_UpdateStreamBuffer(Stream, Source, Looped, LoopPart);
 
-	float TimeDelta = vw_GetTimeThread(0) - LastTime;
+	uint32_t TicksDelta = CurrentTick - LastTick;
 
-	if (FadeInSwitch && (LocalVolume < FadeInEndVol)) {
-		FadeTime += TimeDelta;
-		LocalVolume = FadeInEndVol * (FadeTime / FadeAge);
+	if (FadeInSwitch && (LocalVolume < FadeEndVol)) {
+		FadeTicks += TicksDelta;
+		LocalVolume = FadeEndVol * FadeTicks / FadePeriod;
 		alSourcef(Source, AL_GAIN, GlobalVolume * LocalVolume );
 		alGetError(); // reset errors
 	}
 
 	if (FadeOutSwitch && (LocalVolume > 0.0f)) {
-		FadeTime += TimeDelta;
-		LocalVolume = FadeInStartVol * ((FadeAge - FadeTime) / FadeAge);
+		FadeTicks += TicksDelta;
+		LocalVolume = 1.0f - FadeStartVol * FadeTicks / FadePeriod;
 		alSourcef(Source, AL_GAIN, GlobalVolume * LocalVolume);
 		alGetError(); // reset errors
 		if (LocalVolume <= 0.0f)
 			return false;
 	}
 
-	LastTime = vw_GetTimeThread(0);
+	LastTick = CurrentTick;
 
 	if (CheckALSourceState(Source, AL_STOPPED))
 		return false;
@@ -184,38 +182,38 @@ void sMusic::SetGlobalVolume(float NewGlobalVolume)
 /*
  * Music fade-in setup.
  */
-void sMusic::FadeIn(float EndVol, float Time)
+void sMusic::FadeIn(float EndVol, uint32_t Ticks)
 {
 	FadeInSwitch = true;
 	FadeOutSwitch = false;
-	FadeInEndVol = EndVol;
-	FadeTime = 0.0f;
-	FadeAge = Time;
-	LastTime = vw_GetTimeThread(0);
+	FadeEndVol = EndVol;
+	FadeTicks = 0;
+	FadePeriod = Ticks;
+	LastTick = SDL_GetTicks();
 }
 
 /*
  * Music fade-out setup.
  */
-void sMusic::FadeOut(float Time)
+void sMusic::FadeOut(uint32_t Ticks)
 {
 	FadeOutSwitch = true;
 	FadeInSwitch = false;
-	FadeInStartVol = LocalVolume;
-	FadeTime = 0.0f;
-	FadeAge = Time;
-	LastTime = vw_GetTimeThread(0);
+	FadeStartVol = LocalVolume;
+	FadeTicks = 0;
+	FadePeriod = Ticks;
+	LastTick = SDL_GetTicks();
 }
 
 /*
  * Set all music fade-out, if playing.
  */
-void vw_FadeOutIfMusicPlaying(float Time)
+void vw_FadeOutIfMusicPlaying(uint32_t Ticks)
 {
 	for (auto &tmpMusic : MusicMap) {
 		if (alIsSource(tmpMusic.second.Source) &&
 		    CheckALSourceState(tmpMusic.second.Source, AL_PLAYING))
-			tmpMusic.second.FadeOut(Time);
+			tmpMusic.second.FadeOut(Ticks);
 	}
 }
 
@@ -255,10 +253,10 @@ void vw_ReleaseAllMusic()
 /*
  * Update all music themes status and calculate effects.
  */
-void vw_UpdateMusic()
+void vw_UpdateMusic(uint32_t CurrentTick)
 {
 	for (auto iter = MusicMap.begin(); iter != MusicMap.end();) {
-		if (!iter->second.Update()) {
+		if (!iter->second.Update(CurrentTick)) {
 			iter = MusicMap.erase(iter);
 		} else
 			++iter;
@@ -268,11 +266,11 @@ void vw_UpdateMusic()
 /*
  * Set music fade-in.
  */
-void vw_SetMusicFadeIn(const std::string &Name, float EndVol, float Time)
+void vw_SetMusicFadeIn(const std::string &Name, float EndVol, uint32_t Ticks)
 {
 	auto tmpMusic = MusicMap.find(Name);
 	if (tmpMusic != MusicMap.end())
-		tmpMusic->second.FadeIn(EndVol, Time);
+		tmpMusic->second.FadeIn(EndVol, Ticks);
 }
 
 /*

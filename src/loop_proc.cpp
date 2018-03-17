@@ -255,7 +255,7 @@ void Loop_Proc()
 
 		switch(ComBuffer) {
 		case eCommand::SWITCH_TO_MAIN_MENU:
-			StartMusicWithFade(eMusicTheme::MENU, 2.0f, 2.0f);
+			StartMusicWithFade(eMusicTheme::MENU, 2000, 2000);
 			SetMenu(eMenuStatus::MAIN_MENU);
 			break;
 		case eCommand::SWITCH_TO_TOP_SCORES:
@@ -274,7 +274,7 @@ void Loop_Proc()
 			SetMenu(eMenuStatus::INFORMATION);
 			break;
 		case eCommand::SWITCH_TO_CREDITS:
-			StartMusicWithFade(eMusicTheme::CREDITS, 2.0f, 2.0f);
+			StartMusicWithFade(eMusicTheme::CREDITS, 2000, 2000);
 			SetMenu(eMenuStatus::CREDITS);
 			break;
 		case eCommand::SWITCH_TO_CONFCONTROL:

@@ -1216,12 +1216,12 @@ void LoadGameData(eLoading LoadType)
 	case eLoading::MenuWithLogo:
 		MenuStatus = eMenuStatus::MAIN_MENU;
 		Audio_LoopProc();
-		StartMusicWithFade(eMusicTheme::MENU, 4.0f, 4.0f);
+		StartMusicWithFade(eMusicTheme::MENU, 4000, 4000);
 		break;
 	// переход игра-меню
 	case eLoading::Menu:
 		MenuStatus = eMenuStatus::MISSION;
-		StartMusicWithFade(eMusicTheme::MENU, 2.0f, 2.0f);
+		StartMusicWithFade(eMusicTheme::MENU, 2000, 2000);
 		break;
 	default:
 		break;
@@ -1562,7 +1562,7 @@ AllDataLoaded:
 			CurrentList = nullptr;
 		}
 		InitGame();
-		StartMusicWithFade(eMusicTheme::GAME, 2.0f, 2.0f);
+		StartMusicWithFade(eMusicTheme::GAME, 2000, 2000);
 		// приготовиться к действию (речь)
 		Audio_PlayVoice(5, 1.0f);
 		break;
