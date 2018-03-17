@@ -1672,6 +1672,10 @@ void DrawGame()
 	// если в игре - меню, если в меню - выход
 	if (!isDialogBoxDrawing()) {
 		if (PlayerFighter != nullptr) { // если не убили
+			// don't change (reset) process, if we already start open/close process for menu
+			if (NeedShowGameMenu || NeedHideGameMenu)
+				vw_SetKeyStatus(SDLK_ESCAPE, false);
+
 			if (vw_GetKeyStatus(SDLK_ESCAPE) || GameMissionCompleteStatusShowDialog) {
 				bool NeedPlaySfx = true;
 				if (GameMissionCompleteStatusShowDialog) {

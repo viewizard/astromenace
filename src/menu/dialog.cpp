@@ -375,6 +375,10 @@ void SetCurrentDialogBox(eDialogBox DialogBox)
 // закрываем диалог
 void CloseDialog()
 {
+	// don't close dialog during open process
+	if (NeedShowDialog)
+		return;
+
 	NeedMoreEnergyDialog = false;
 
 	StartHideTransp = DialogContentTransp;

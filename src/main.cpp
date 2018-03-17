@@ -1220,7 +1220,6 @@ loop:
 				// если есть перемещение мышкой - сразу убираем управление клавиатурой
 				CurrentKeyboardSelectMenuElement = 0;
 				break;
-
 			case SDL_MOUSEWHEEL:
 				vw_ChangeWheelStatus(-1*event.wheel.y);
 				break;
@@ -1234,11 +1233,6 @@ loop:
 				if (event.button.button < 8) // на всякий случай небольшая проверка
 					SDL_MouseCurrentStatus[event.button.button] = true;
 				break;
-			case SDL_JOYBUTTONDOWN:
-				vw_SetMouseLeftClick(true);
-				JoysticButtons[event.jbutton.button] = true;
-				break;
-
 			case SDL_MOUSEBUTTONUP:
 				if (event.button.button ==  SDL_BUTTON_LEFT)
 					vw_SetMouseLeftClick(false);
@@ -1247,10 +1241,16 @@ loop:
 				if (event.button.button < 8) // на всякий случай небольшая проверка
 					SDL_MouseCurrentStatus[event.button.button] = false;
 				break;
+
+			case SDL_JOYBUTTONDOWN:
+				vw_SetMouseLeftClick(true);
+				JoysticButtons[event.jbutton.button] = true;
+				break;
 			case SDL_JOYBUTTONUP:
 				vw_SetMouseLeftClick(false);
 				JoysticButtons[event.jbutton.button] = false;
 				break;
+
 			case SDL_WINDOWEVENT:
 				switch (event.window.event) {
 				case SDL_WINDOWEVENT_FOCUS_LOST:
@@ -1263,6 +1263,7 @@ loop:
 					break;
 				}
 				break;
+
 			case SDL_TEXTINPUT:
 				// устанавливаем текущий юникод нажатой клавиши
 				vw_SetCurrentUnicodeChar(event.text.text);
