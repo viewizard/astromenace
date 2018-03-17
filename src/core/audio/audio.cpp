@@ -26,13 +26,13 @@
 
 #include "../system/system.h"
 #include "buffer.h"
-#include "sound.h"
+#include "audio.h"
 
 
 /*
- * Initialize sound system.
+ * Initialize audio.
  */
-bool vw_InitSound()
+bool vw_InitAudio()
 {
 	// position of the Listener
 	ALfloat ListenerPos[] = {0.0f, 0.0f, 0.0f};
@@ -102,9 +102,9 @@ bool vw_InitSound()
 }
 
 /*
- * Shutdown sound system.
+ * Shutdown audio.
  */
-void vw_ShutdownSound()
+void vw_ShutdownAudio()
 {
 	vw_ReleaseAllSounds();
 	vw_ReleaseAllMusic();

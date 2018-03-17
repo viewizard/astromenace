@@ -38,7 +38,7 @@
 #include "collision_detection/collision_detection.h"
 #include "vfs/vfs.h"
 #include "graphics/graphics.h"
-#include "sound/sound.h"
+#include "audio/audio.h"
 #include "camera/camera.h"
 #include "model3d/model3d.h"
 #include "xml/xml.h"

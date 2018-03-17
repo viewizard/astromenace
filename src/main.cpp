@@ -650,7 +650,7 @@ int main( int argc, char **argv )
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// установка звука, всегда до LoadGameData
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (!InitAudio()) {
+	if (!vw_InitAudio()) {
 		Setup.Music_check = false;
 		Setup.Sound_check = false;
 		std::cerr << "Unable to open audio!\n";
@@ -1408,7 +1408,8 @@ GotoQuit:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// завершаем работу со звуком
-	if (Setup.Music_check || Setup.Sound_check) ShutdownAudio();
+	if (Setup.Music_check || Setup.Sound_check)
+		vw_ShutdownAudio();
 	// освобождаем память выделенную под ттф шрифт
 	vw_ShutdownFont();
 	// освобождаем весь подготовленный текст из языкового файла

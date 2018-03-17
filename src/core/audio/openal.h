@@ -29,8 +29,8 @@ Should be used for 'sound' system internal purposes only. Don't include into oth
 sources, you are free to change or add methods to sound.h header file instead.
 */
 
-#ifndef al_util_H
-#define al_util_H
+#ifndef openal_H
+#define openal_H
 
 #include "../base.h"
 
@@ -42,9 +42,6 @@ sources, you are free to change or add methods to sound.h header file instead.
 #include "AL/alc.h"
 #endif // defined(__APPLE__) && defined(__MACH__)
 #include "AL/alut.h"
-
-#include "vorbis/vorbisfile.h"
-#include "ogg/ogg.h"
 
 
 /*
@@ -97,4 +94,4 @@ inline bool CheckALSourceState(ALuint Source, ALint State)
 	return (tmpState == State);
 }
 
-#endif // al_util_H
+#endif // openal_H

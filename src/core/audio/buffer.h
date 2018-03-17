@@ -33,7 +33,9 @@ sources, you are free to change or add methods to sound.h header file instead.
 #define Buffer_H
 
 #include "../base.h"
-#include "al_util.h"
+#include "openal.h"
+#include "vorbis/vorbisfile.h"
+#include "ogg/ogg.h"
 
 #define NUM_OF_DYNBUF	20	// (stream) num buffers in queue
 #define DYNBUF_SIZE	16384	// (stream) buffer size

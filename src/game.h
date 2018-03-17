@@ -167,8 +167,6 @@ void CreateCursor();
 unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume);
 unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume);
 void Audio_LoopProc();
-bool InitAudio();
-void ShutdownAudio();
 void StartMusicWithFade(eMusicTheme StartMusic, float FadeInTime, float FadeOutTime);
 void Audio_SetSound2DGlobalVolume(float NewGlobalVolume);
 void Audio_SetVoiceGlobalVolume(float NewGlobalVolume);

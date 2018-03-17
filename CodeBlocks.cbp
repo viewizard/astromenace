@@ -136,6 +136,13 @@
 			</Target>
 		</Build>
 		<Unit filename="src/config.h" />
+		<Unit filename="src/core/audio/audio.cpp" />
+		<Unit filename="src/core/audio/audio.h" />
+		<Unit filename="src/core/audio/buffer.cpp" />
+		<Unit filename="src/core/audio/buffer.h" />
+		<Unit filename="src/core/audio/music.cpp" />
+		<Unit filename="src/core/audio/openal.h" />
+		<Unit filename="src/core/audio/sound.cpp" />
 		<Unit filename="src/core/base.h" />
 		<Unit filename="src/core/camera/camera.cpp" />
 		<Unit filename="src/core/camera/camera.h" />
@@ -178,13 +185,6 @@
 		<Unit filename="src/core/particle_system2d/particle2d.h" />
 		<Unit filename="src/core/particle_system2d/particle_system2d.cpp" />
 		<Unit filename="src/core/particle_system2d/particle_system2d.h" />
-		<Unit filename="src/core/sound/al_util.h" />
-		<Unit filename="src/core/sound/buffer.cpp" />
-		<Unit filename="src/core/sound/buffer.h" />
-		<Unit filename="src/core/sound/misc.cpp" />
-		<Unit filename="src/core/sound/music.cpp" />
-		<Unit filename="src/core/sound/sound.cpp" />
-		<Unit filename="src/core/sound/sound.h" />
 		<Unit filename="src/core/system/keyboard.cpp" />
 		<Unit filename="src/core/system/mouse.cpp" />
 		<Unit filename="src/core/system/system.h" />

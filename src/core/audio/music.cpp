@@ -225,8 +225,9 @@ void vw_FadeOutIfMusicPlaying(float Time)
 bool vw_IsAnyMusicPlaying()
 {
 	for (auto &tmpMusic : MusicMap) {
-		return alIsSource(tmpMusic.second.Source) &&
-		       CheckALSourceState(tmpMusic.second.Source, AL_PLAYING);
+		if (alIsSource(tmpMusic.second.Source) &&
+		    CheckALSourceState(tmpMusic.second.Source, AL_PLAYING))
+			return true;
 	}
 
 	return false;

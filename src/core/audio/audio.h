@@ -24,8 +24,8 @@
 
 *************************************************************************************/
 
-#ifndef Sound_H
-#define Sound_H
+#ifndef Audio_H
+#define Audio_H
 
 #include "../base.h"
 
@@ -78,14 +78,14 @@ void vw_ReleaseMusic(const std::string &Name);
 void vw_ReleaseAllMusic();
 
 /*
- * Misc.
+ * Audio.
  */
 
-// Initialize sound system.
-bool vw_InitSound();
-// Shutdown sound system.
-void vw_ShutdownSound();
+// Initialize audio.
+bool vw_InitAudio();
+// Shutdown audio.
+void vw_ShutdownAudio();
 // Setup listener in 3D space.
 void vw_Listener(float ListenerPos[3], float ListenerVel[3], float ListenerOri[6]);
 
-#endif // Sound_H
+#endif // Audio_H
