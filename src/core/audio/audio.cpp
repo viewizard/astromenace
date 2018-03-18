@@ -86,7 +86,8 @@ bool vw_InitAudio()
 	if (alGetString(AL_EXTENSIONS)) {
 		std::string extensions{(char *)alGetString(AL_EXTENSIONS)};
 		if (!extensions.empty()) {
-			std::replace(extensions.begin(), extensions.end(), ' ', '\n'); // replace all ' ' to '\n'
+			// replace all ' ' to '\n'
+			std::replace(extensions.begin(), extensions.end(), ' ', '\n');
 			std::cout << "Supported OpenAL extensions:\n" << extensions.c_str() << "\n";
 		}
 	}

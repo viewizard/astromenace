@@ -235,10 +235,10 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 
 	// create new character
 	FontCharsList.push_front(std::unique_ptr<sFontChar>(new sFontChar(UTF32, InternalFontSize, nullptr,
-							     0, InternalFace->glyph->bitmap.width, 0, InternalFace->glyph->bitmap.rows,
-							     InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
-							     InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
-							     InternalFace->glyph->advance.x / 64.0f)));
+							    0, InternalFace->glyph->bitmap.width, 0, InternalFace->glyph->bitmap.rows,
+							    InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
+							    InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
+							    InternalFace->glyph->advance.x / 64.0f)));
 
 	if ((FontCharsList.front()->Width > 0) && (FontCharsList.front()->Height > 0)) {
 		// buffer for RGBA, data for font characters texture, initialize it with white color (255)
@@ -305,10 +305,10 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 		}
 
 		FontCharsList.push_front(std::unique_ptr<sFontChar>(new sFontChar(CurrentChar, InternalFontSize, nullptr,
-								     0, 0, 0, 0,
-								     InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
-								     InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
-								     InternalFace->glyph->advance.x / 64.0f)));
+								    0, 0, 0, 0,
+								    InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
+								    InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
+								    InternalFace->glyph->advance.x / 64.0f)));
 
 		// move to next line in bitmap if not enough space
 		if (CurrentDIBX + FontCharsList.front()->Width > FontTextureWidth) {

@@ -53,17 +53,17 @@ void vw_Matrix33Mult(float DstMatrix33[9], const float SrcMatrix33[9])
 		     DstMatrix33[3], DstMatrix33[4], DstMatrix33[5],
 		     DstMatrix33[6], DstMatrix33[7], DstMatrix33[8]};
 
-	DstMatrix33[0] = SrcMatrix33[0]*tmp[0] + SrcMatrix33[1]*tmp[3] + SrcMatrix33[2]*tmp[6];
-	DstMatrix33[1] = SrcMatrix33[0]*tmp[1] + SrcMatrix33[1]*tmp[4] + SrcMatrix33[2]*tmp[7];
-	DstMatrix33[2] = SrcMatrix33[0]*tmp[2] + SrcMatrix33[1]*tmp[5] + SrcMatrix33[2]*tmp[8];
+	DstMatrix33[0] = SrcMatrix33[0] * tmp[0] + SrcMatrix33[1] * tmp[3] + SrcMatrix33[2] * tmp[6];
+	DstMatrix33[1] = SrcMatrix33[0] * tmp[1] + SrcMatrix33[1] * tmp[4] + SrcMatrix33[2] * tmp[7];
+	DstMatrix33[2] = SrcMatrix33[0] * tmp[2] + SrcMatrix33[1] * tmp[5] + SrcMatrix33[2] * tmp[8];
 
-	DstMatrix33[3] = SrcMatrix33[3]*tmp[0] + SrcMatrix33[4]*tmp[3] + SrcMatrix33[5]*tmp[6];
-	DstMatrix33[4] = SrcMatrix33[3]*tmp[1] + SrcMatrix33[4]*tmp[4] + SrcMatrix33[5]*tmp[7];
-	DstMatrix33[5] = SrcMatrix33[3]*tmp[2] + SrcMatrix33[4]*tmp[5] + SrcMatrix33[5]*tmp[8];
+	DstMatrix33[3] = SrcMatrix33[3] * tmp[0] + SrcMatrix33[4] * tmp[3] + SrcMatrix33[5] * tmp[6];
+	DstMatrix33[4] = SrcMatrix33[3] * tmp[1] + SrcMatrix33[4] * tmp[4] + SrcMatrix33[5] * tmp[7];
+	DstMatrix33[5] = SrcMatrix33[3] * tmp[2] + SrcMatrix33[4] * tmp[5] + SrcMatrix33[5] * tmp[8];
 
-	DstMatrix33[6] = SrcMatrix33[6]*tmp[0] + SrcMatrix33[7]*tmp[3] + SrcMatrix33[8]*tmp[6];
-	DstMatrix33[7] = SrcMatrix33[6]*tmp[1] + SrcMatrix33[7]*tmp[4] + SrcMatrix33[8]*tmp[7];
-	DstMatrix33[8] = SrcMatrix33[6]*tmp[2] + SrcMatrix33[7]*tmp[5] + SrcMatrix33[8]*tmp[8];
+	DstMatrix33[6] = SrcMatrix33[6] * tmp[0] + SrcMatrix33[7] * tmp[3] + SrcMatrix33[8] * tmp[6];
+	DstMatrix33[7] = SrcMatrix33[6] * tmp[1] + SrcMatrix33[7] * tmp[4] + SrcMatrix33[8] * tmp[7];
+	DstMatrix33[8] = SrcMatrix33[6] * tmp[2] + SrcMatrix33[7] * tmp[5] + SrcMatrix33[8] * tmp[8];
 }
 
 /*
@@ -155,7 +155,7 @@ void vw_Matrix33InverseRotate(float Matrix33[9])
  */
 void vw_Matrix33CalcPoint(sVECTOR3D &Point, const float Matrix33[9])
 {
-	Point(Matrix33[0]*Point.x + Matrix33[3]*Point.y + Matrix33[6]*Point.z,
-	      Matrix33[1]*Point.x + Matrix33[4]*Point.y + Matrix33[7]*Point.z,
-	      Matrix33[2]*Point.x + Matrix33[5]*Point.y + Matrix33[8]*Point.z);
+	Point(Matrix33[0] * Point.x + Matrix33[3] * Point.y + Matrix33[6] * Point.z,
+	      Matrix33[1] * Point.x + Matrix33[4] * Point.y + Matrix33[7] * Point.z,
+	      Matrix33[2] * Point.x + Matrix33[5] * Point.y + Matrix33[8] * Point.z);
 }

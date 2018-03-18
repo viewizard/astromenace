@@ -40,7 +40,8 @@
 
 struct sParticle2D {
 	// обновление информации в частице
-	bool Update(float TimeDelta, sVECTOR3D ParentLocation = sVECTOR3D(0.0f,0.0f,0.0f), bool Attractive = false, float AttractiveValue = 25.0f)
+	bool Update(float TimeDelta, sVECTOR3D ParentLocation = sVECTOR3D(0.0f,0.0f,0.0f),
+		    bool Attractive = false, float AttractiveValue = 25.0f)
 	{
 		// Если частица уже мертва, ее нужно отключить - передаем в систему эти данные
 		if (Age + TimeDelta >= Lifetime) {
@@ -261,12 +262,16 @@ bool cParticleSystem2D::Update(float Time)
 
 			// выпускаем частицу возле места нахождения системы
 			if (CreationType == 0) // точка
-				NewParticle->Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x, vw_Randf0 * CreationSize.y, vw_Randf0 * CreationSize.z);
+				NewParticle->Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x,
+									     vw_Randf0 * CreationSize.y,
+									     vw_Randf0 * CreationSize.z);
 			else if (CreationType == 1) {
 				// в квадрате
 				sVECTOR3D tmp;
 				if (DeadZone != 0.0f) {
-					float minDist = CreationSize.x * CreationSize.x + CreationSize.y * CreationSize.y + CreationSize.z * CreationSize.z;
+					float minDist = CreationSize.x * CreationSize.x +
+							CreationSize.y * CreationSize.y +
+							CreationSize.z * CreationSize.z;
 					// если зона больше чем радиус излучения - выключаем ее
 					if (minDist <= (DeadZone * DeadZone))
 						DeadZone = 0.0f;
@@ -287,7 +292,9 @@ bool cParticleSystem2D::Update(float Time)
 			} else if (CreationType == 2) {
 				// в окружности
 				sVECTOR3D tmp;
-				float minDist = CreationSize.x * CreationSize.x + CreationSize.y * CreationSize.y + CreationSize.z * CreationSize.z;
+				float minDist = CreationSize.x * CreationSize.x +
+						CreationSize.y * CreationSize.y +
+						CreationSize.z * CreationSize.z;
 				// если зона больше чем радиус излучения - выключаем ее
 				if (minDist <= (DeadZone * DeadZone))
 					DeadZone = 0.0f;

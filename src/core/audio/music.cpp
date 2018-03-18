@@ -87,7 +87,8 @@ std::unordered_map<std::string, sMusic> MusicMap;
 /*
  * Create and play music.
  */
-bool vw_PlayMusic(const std::string &Name, float _LocalVolume, float _GlobalVolume, bool Loop, const std::string &LoopFileName)
+bool vw_PlayMusic(const std::string &Name, float _LocalVolume, float _GlobalVolume,
+		  bool Loop, const std::string &LoopFileName)
 {
 	if (Name.empty()) // LoopFileName could be empty
 		return false;

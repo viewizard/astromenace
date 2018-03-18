@@ -103,8 +103,8 @@ constexpr unsigned int FixedHeaderPartSize = 4 + 4 + 4; /*VFS_ + ver + build*/
  * Write data from memory into VFS file.
  */
 static int WriteIntoVFSfromMemory(sVFS *WritableVFS, const std::string &Name, const uint8_t *DataBuffer,
-				  uint32_t DataSize, uint32_t &FileTableOffset,
-				  std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> &WritableVFSEntriesMap)
+				  uint32_t DataSize, uint32_t &FileTableOffset, std::unordered_map<std::string,
+				  std::unique_ptr<sVFS_Entry>> &WritableVFSEntriesMap)
 {
 	if (!WritableVFS || Name.empty() || !DataBuffer ||
 	    (DataSize <= 0) || (Name.size() > UINT16_MAX)) // UINT16_MAX - we should store string size in uint16_t variable
@@ -143,8 +143,8 @@ static int WriteIntoVFSfromMemory(sVFS *WritableVFS, const std::string &Name, co
  * Write data from file into VFS file.
  */
 static int WriteIntoVFSfromFile(sVFS *WritableVFS, const std::string &SrcName, const std::string &DstName,
-				uint32_t &FileTableOffset,
-				std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> &WritableVFSEntriesMap)
+				uint32_t &FileTableOffset, std::unordered_map<std::string,
+				std::unique_ptr<sVFS_Entry>> &WritableVFSEntriesMap)
 {
 	if (!WritableVFS || SrcName.empty() || DstName.empty())
 		return ERR_PARAMETERS;

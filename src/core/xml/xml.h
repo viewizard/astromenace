@@ -106,8 +106,10 @@ public:
 	// указатель на корневой элемент
 	cXMLEntry *RootXMLEntry{nullptr};
 
-	bool ParseTagLine(const char *OriginBuffer, unsigned int StartPosition, const char *Buffer, cXMLEntry *XMLEntry);
-	bool ParseTagContent(const char *OriginBuffer, unsigned int StartPosition, const char *Buffer, cXMLEntry *ParentXMLEntry);
+	bool ParseTagLine(const char *OriginBuffer, unsigned int StartPosition,
+			  const char *Buffer, cXMLEntry *XMLEntry);
+	bool ParseTagContent(const char *OriginBuffer, unsigned int StartPosition,
+			     const char *Buffer, cXMLEntry *ParentXMLEntry);
 
 	// Save XML to file (libSDL RWops).
 	bool Save(const std::string &XMLFileName);

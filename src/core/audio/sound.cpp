@@ -299,8 +299,9 @@ void vw_UpdateSound(uint32_t CurrentTick)
 			iter->second.DestroyTicks += DeltaTicks;
 
 			if (iter->second.DestroyTicks < iter->second.DestroyPeriod) {
-				alSourcef(iter->second.Source, AL_GAIN, iter->second.GlobalVolume * iter->second.LocalVolume *
-									(1.0f - iter->second.DestroyTicks / iter->second.DestroyPeriod));
+				alSourcef(iter->second.Source, AL_GAIN,
+					  1.0f - iter->second.GlobalVolume * iter->second.LocalVolume *
+					  iter->second.DestroyTicks / iter->second.DestroyPeriod);
 				alGetError(); // reset errors
 			} else {
 				// release, volume less or equal zero
