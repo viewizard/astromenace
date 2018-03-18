@@ -25,7 +25,6 @@
 *************************************************************************************/
 
 // TODO translate comments
-// TODO move to std::list usage in code for sParticle2D
 // TODO revise code in order to use RI_TRIANGLES instead of RI_QUADS for rendering
 // TODO cParticleSystem2D::Update looks fat, should be revised
 // TODO probably, cParticleSystem2D should be struct instead of class, we don't use private section
@@ -38,140 +37,49 @@
 #include "particle_system2d.h"
 
 
-struct sParticle2D {
-	// обновление информации в частице
-	bool Update(float TimeDelta, sVECTOR3D ParentLocation = sVECTOR3D(0.0f,0.0f,0.0f),
-		    bool Attractive = false, float AttractiveValue = 25.0f)
-	{
-		// Если частица уже мертва, ее нужно отключить - передаем в систему эти данные
-		if (Age + TimeDelta >= Lifetime) {
-			Age = -1.0f;
-			return false;
-		}
+// обновление информации в частице
+bool sParticle2D::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractive, float AttractiveValue)
+{
+	// Если частица уже мертва, ее нужно отключить - передаем в систему эти данные
+	if (Age + TimeDelta >= Lifetime) {
+		Age = -1.0f;
+		return false;
+	}
 
-		// увеличиваем возраст частицы
-		Age += TimeDelta;
+	// увеличиваем возраст частицы
+	Age += TimeDelta;
 
-		// перемещаем частицу на нужное значение
-		Location += Velocity ^ TimeDelta;
+	// перемещаем частицу на нужное значение
+	Location += Velocity ^ TimeDelta;
 
+	if (NeedStop)
+		Velocity -= Velocity ^ TimeDelta;
+
+	// если есть притяжение системы, просчитываем воздействие
+	if (Attractive) {
+		sVECTOR3D AttractLocation = ParentLocation;
+		// рассчитывае вектор взаимодействия между частицей и точкой притяжения
+		sVECTOR3D AttractDir = AttractLocation - Location;
+
+		// если нужно использовать притяжения, считаем перемещение
 		if (NeedStop)
-			Velocity -= Velocity ^ TimeDelta;
+			AttractiveValue -= AttractiveValue * TimeDelta;
 
-		// если есть притяжение системы, просчитываем воздействие
-		if (Attractive) {
-			sVECTOR3D AttractLocation = ParentLocation;
-			// рассчитывае вектор взаимодействия между частицей и точкой притяжения
-			sVECTOR3D AttractDir = AttractLocation - Location;
+		AttractDir.Normalize();
+		Velocity += AttractDir ^ (AttractiveValue * TimeDelta);
 
-			// если нужно использовать притяжения, считаем перемещение
-			if (NeedStop)
-				AttractiveValue -= AttractiveValue * TimeDelta;
-
-			AttractDir.Normalize();
-			Velocity += AttractDir ^ (AttractiveValue * TimeDelta);
-
-		}
-
-		// просчитываем текущий цвет частицы
-		Color.r += ColorDelta.r * TimeDelta;
-		Color.g += ColorDelta.g * TimeDelta;
-		Color.b += ColorDelta.b * TimeDelta;
-
-		// текущий размер частицы
-		Size += SizeDelta * TimeDelta;
-
-		// если пришли сюда - значит все хорошо и частица работает
-		return true;
 	}
 
-	// текущее место расположения частицы
-	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
-	// текущая скорость частицы
-	sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};
+	// просчитываем текущий цвет частицы
+	Color.r += ColorDelta.r * TimeDelta;
+	Color.g += ColorDelta.g * TimeDelta;
+	Color.b += ColorDelta.b * TimeDelta;
 
-	// текущий цвет частицы
-	sCOLORVALUE2D Color{1.0f, 0.0f, 0.0f, 0.5f};
-	// значение приращение цвета
-	sCOLORVALUE2D ColorDelta{0.0f, 0.0f, 0.0f, 0.0f};
+	// текущий размер частицы
+	Size += SizeDelta * TimeDelta;
 
-	float Age{0.0f};	// время жизни частицы в секундах
-	float Lifetime{0.0f};	// оставщееся время жизни частицы
-
-	float Size{1.0f};	// размер частицы
-	float SizeDelta{0.0f};	// значение изменения размера
-
-	float Alpha{1.0f};	// прозрачность
-	bool NeedStop{false};	// если нужно замедлять и остановить
-
-	// указатели на цепь частиц
-	sParticle2D *Next{nullptr};
-	sParticle2D *Prev{nullptr};
-};
-
-
-//-----------------------------------------------------------------------------
-//	При разрушении класса
-//-----------------------------------------------------------------------------
-cParticleSystem2D::~cParticleSystem2D()
-{
-	// полностью освобождаем память от всех частиц в системе
-	sParticle2D *tmp = Start;
-	while (tmp) {
-		sParticle2D *tmp2 = tmp->Next;
-		Detach(tmp);
-		delete tmp;
-		tmp = tmp2;
-	}
-}
-
-//-----------------------------------------------------------------------------
-//	подключить частицу к системе
-//-----------------------------------------------------------------------------
-void cParticleSystem2D::Attach(sParticle2D *NewParticle)
-{
-	if (NewParticle == nullptr)
-		return;
-
-	if (End == nullptr) {
-		NewParticle->Prev = nullptr;
-		NewParticle->Next = nullptr;
-		Start = NewParticle;
-		End = NewParticle;
-	} else {
-		NewParticle->Prev = End;
-		NewParticle->Next = nullptr;
-		End->Next = NewParticle;
-		End = NewParticle;
-	}
-
-	ParticlesCount++;
-}
-
-//-----------------------------------------------------------------------------
-//	отключить ее от системы
-//-----------------------------------------------------------------------------
-void cParticleSystem2D::Detach(sParticle2D *OldParticle)
-{
-	if (OldParticle == nullptr)
-		return;
-
-	if (Start == OldParticle)
-		Start = OldParticle->Next;
-	if (End == OldParticle)
-		End = OldParticle->Prev;
-
-	if (OldParticle->Next != nullptr)
-		OldParticle->Next->Prev = OldParticle->Prev;
-	else if (OldParticle->Prev != nullptr)
-		OldParticle->Prev->Next = nullptr;
-
-	if (OldParticle->Prev != nullptr)
-		OldParticle->Prev->Next = OldParticle->Next;
-	else if (OldParticle->Next != nullptr)
-		OldParticle->Next->Prev = nullptr;
-
-	ParticlesCount--;
+	// если пришли сюда - значит все хорошо и частица работает
+	return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -194,16 +102,11 @@ bool cParticleSystem2D::Update(float Time)
 	TimeLastUpdate = Time;
 
 	// для всех частиц
-	sParticle2D *Particle2DTmp = Start;
-
-	while (Particle2DTmp) {
-		sParticle2D *Particle2DTmp2 = Particle2DTmp->Next;
-		// функция вернет false, если частица уже мертва
-		if (!Particle2DTmp->Update(TimeDelta, Location, IsAttractive, AttractiveValue)) {
-			Detach(Particle2DTmp);
-			delete Particle2DTmp;
-		}
-		Particle2DTmp = Particle2DTmp2;
+	for (auto iter = ParticlesList.begin(); iter != ParticlesList.end();) {
+		if (!iter->Update(TimeDelta, Location, IsAttractive, AttractiveValue))
+			iter = ParticlesList.erase(iter);
+		else
+			++iter;
 	}
 
 	// подсчитываем, как много частиц нам нужно создать из ParticlesPerSec
@@ -230,39 +133,40 @@ bool cParticleSystem2D::Update(float Time)
 		// пока не создадим все необходимые частицы
 		while (ParticlesCreated > 0) {
 			// создаем новую частицу
-			sParticle2D *NewParticle = new sParticle2D;
+			ParticlesList.emplace_back();
+			sParticle2D &NewParticle = ParticlesList.back();
 
 			// установка жизни новой частици и проверка, что не выходит из диапахона
-			NewParticle->Age = 0.0f;
-			NewParticle->Lifetime = Life + vw_Randf0 * LifeVar;
-			if (NewParticle->Lifetime < 0.0f)
-				NewParticle->Lifetime = 0.0f;
+			NewParticle.Age = 0.0f;
+			NewParticle.Lifetime = Life + vw_Randf0 * LifeVar;
+			if (NewParticle.Lifetime < 0.0f)
+				NewParticle.Lifetime = 0.0f;
 
 			// стартовый цвет
-			NewParticle->Color.r = ColorStart.r + vw_Randf0 * ColorVar.r;
-			NewParticle->Color.g = ColorStart.g + vw_Randf0 * ColorVar.g;
-			NewParticle->Color.b = ColorStart.b + vw_Randf0 * ColorVar.b;
+			NewParticle.Color.r = ColorStart.r + vw_Randf0 * ColorVar.r;
+			NewParticle.Color.g = ColorStart.g + vw_Randf0 * ColorVar.g;
+			NewParticle.Color.b = ColorStart.b + vw_Randf0 * ColorVar.b;
 			// мы не используем альфа цвет тут
-			NewParticle->Color.a = 1.0f;
+			NewParticle.Color.a = 1.0f;
 
 			// проверяем, чтобы не было переполнения цвета
-			vw_Clamp(NewParticle->Color.r, 0.0f, 1.0f);
-			vw_Clamp(NewParticle->Color.g, 0.0f, 1.0f);
-			vw_Clamp(NewParticle->Color.b, 0.0f, 1.0f);
+			vw_Clamp(NewParticle.Color.r, 0.0f, 1.0f);
+			vw_Clamp(NewParticle.Color.g, 0.0f, 1.0f);
+			vw_Clamp(NewParticle.Color.b, 0.0f, 1.0f);
 
 			// считаем delta относительно жизни частицы
-			NewParticle->ColorDelta.r = (ColorEnd.r - NewParticle->Color.r) / NewParticle->Lifetime;
-			NewParticle->ColorDelta.g = (ColorEnd.g - NewParticle->Color.g) / NewParticle->Lifetime;
-			NewParticle->ColorDelta.b = (ColorEnd.b - NewParticle->Color.b) / NewParticle->Lifetime;
+			NewParticle.ColorDelta.r = (ColorEnd.r - NewParticle.Color.r) / NewParticle.Lifetime;
+			NewParticle.ColorDelta.g = (ColorEnd.g - NewParticle.Color.g) / NewParticle.Lifetime;
+			NewParticle.ColorDelta.b = (ColorEnd.b - NewParticle.Color.b) / NewParticle.Lifetime;
 
 			// считаем значение альфы
-			NewParticle->Alpha = AlphaStart + vw_Randf0 * AlphaVar;
+			NewParticle.Alpha = AlphaStart + vw_Randf0 * AlphaVar;
 			// убираем переполнение
-			vw_Clamp(NewParticle->Alpha, 0.0f, 1.0f);
+			vw_Clamp(NewParticle.Alpha, 0.0f, 1.0f);
 
 			// выпускаем частицу возле места нахождения системы
 			if (CreationType == 0) // точка
-				NewParticle->Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x,
+				NewParticle.Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x,
 									     vw_Randf0 * CreationSize.y,
 									     vw_Randf0 * CreationSize.z);
 			else if (CreationType == 1) {
@@ -288,7 +192,7 @@ bool cParticleSystem2D::Update(float Time)
 					tmp = tmp + tmp1;
 				}
 
-				NewParticle->Location = Location + tmp;
+				NewParticle.Location = Location + tmp;
 			} else if (CreationType == 2) {
 				// в окружности
 				sVECTOR3D tmp;
@@ -346,14 +250,14 @@ bool cParticleSystem2D::Update(float Time)
 					ParticleDist = tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z;
 				}
 
-				NewParticle->Location = Location + tmp;
+				NewParticle.Location = Location + tmp;
 			}
 
 			// считаем размер частицы
-			NewParticle->Size = SizeStart + vw_Randf0 * SizeVar;
-			if (NewParticle->Size < 0.0f)
-				NewParticle->Size = 0.0f;
-			NewParticle->SizeDelta = (SizeEnd - NewParticle->Size) / NewParticle->Lifetime;
+			NewParticle.Size = SizeStart + vw_Randf0 * SizeVar;
+			if (NewParticle.Size < 0.0f)
+				NewParticle.Size = 0.0f;
+			NewParticle.SizeDelta = (SizeEnd - NewParticle.Size) / NewParticle.Lifetime;
 
 			// испускатель имеет направление. этот код немного добавляет случайности
 			float RandomYaw = vw_Randf0 * 3.14159f * 2.0f;
@@ -362,39 +266,36 @@ bool cParticleSystem2D::Update(float Time)
 			// учитываем нужное нам направление, вектор Direction
 			if (((Direction.x != 0.0f) || (Direction.y != 0.0f) || (Direction.z != 0.0f)) && (360.00f != Theta)) {
 				if (Theta == 0.0f) {
-					NewParticle->Velocity = Direction;
+					NewParticle.Velocity = Direction;
 				} else {
 					// y
-					NewParticle->Velocity.y = Direction.y * cosf(RandomPitch);
-					NewParticle->Velocity.x = Direction.y * sinf(RandomPitch) * cosf(RandomYaw);
-					NewParticle->Velocity.z = Direction.y * sinf(RandomPitch) * sinf(RandomYaw);
+					NewParticle.Velocity.y = Direction.y * cosf(RandomPitch);
+					NewParticle.Velocity.x = Direction.y * sinf(RandomPitch) * cosf(RandomYaw);
+					NewParticle.Velocity.z = Direction.y * sinf(RandomPitch) * sinf(RandomYaw);
 					// x
-					NewParticle->Velocity.y += Direction.x * sinf(RandomPitch) * cosf(RandomYaw);
-					NewParticle->Velocity.x += Direction.x * cosf(RandomPitch);
-					NewParticle->Velocity.z += Direction.x * sinf(RandomPitch) * sinf(RandomYaw);
+					NewParticle.Velocity.y += Direction.x * sinf(RandomPitch) * cosf(RandomYaw);
+					NewParticle.Velocity.x += Direction.x * cosf(RandomPitch);
+					NewParticle.Velocity.z += Direction.x * sinf(RandomPitch) * sinf(RandomYaw);
 					// z
-					NewParticle->Velocity.y += Direction.z * sinf(RandomPitch) * sinf(RandomYaw);
-					NewParticle->Velocity.x += Direction.z * sinf(RandomPitch) * cosf(RandomYaw);
-					NewParticle->Velocity.z += Direction.z * cosf(RandomPitch);
+					NewParticle.Velocity.y += Direction.z * sinf(RandomPitch) * sinf(RandomYaw);
+					NewParticle.Velocity.x += Direction.z * sinf(RandomPitch) * cosf(RandomYaw);
+					NewParticle.Velocity.z += Direction.z * cosf(RandomPitch);
 
-					vw_Matrix33CalcPoint(NewParticle->Velocity, RotationMatrix);
+					vw_Matrix33CalcPoint(NewParticle.Velocity, RotationMatrix);
 				}
 			} else {
 				// без направления, излучаем во все стороны
-				NewParticle->Velocity.y = vw_Randf0 * Theta / 360.0f;
-				NewParticle->Velocity.x = vw_Randf0 * Theta / 360.0f;
-				NewParticle->Velocity.z = vw_Randf0 * Theta / 360.0f;
-				NewParticle->Velocity.Normalize();
+				NewParticle.Velocity.y = vw_Randf0 * Theta / 360.0f;
+				NewParticle.Velocity.x = vw_Randf0 * Theta / 360.0f;
+				NewParticle.Velocity.z = vw_Randf0 * Theta / 360.0f;
+				NewParticle.Velocity.Normalize();
 			}
 
 			// находим перемещение
 			float NewSpeed = Speed + vw_Randf0 * SpeedVar;
 			if (NewSpeed < 0.0f)
 				NewSpeed = 0.0f;
-			NewParticle->Velocity *= NewSpeed ;
-
-			// подключаем частицу к системе
-			Attach(NewParticle);
+			NewParticle.Velocity *= NewSpeed ;
 
 			// уменьшаем необходимое количество частиц
 			ParticlesCreated--;
@@ -410,7 +311,7 @@ bool cParticleSystem2D::Update(float Time)
 void cParticleSystem2D::Draw()
 {
 	// загрузка текстуры, уже должна быть подключена
-	if (!Texture || !ParticlesCount)
+	if (!Texture || ParticlesList.empty())
 		return;
 
 	sRECT SrcRect{0, 0, 64, 64}, DestRect;
@@ -436,18 +337,16 @@ void cParticleSystem2D::Draw()
 	// выделяем память
 	// буфер для последовательности RI_TRIANGLE_STRIP
 	// войдет RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR
-	float *tmp = new float[(2 + 2 + 4) * 4 * ParticlesCount];
+	float *tmp = new float[(2 + 2 + 4) * 4 * ParticlesList.size()];
 
 	int k = 0;
 
 	// для всех частиц
-	sParticle2D *tmp1 = Start;
-
-	while (tmp1 != nullptr) {
-		DestRect((int)(tmp1->Location.x - tmp1->Size / 2),
-			 (int)(tmp1->Location.y - tmp1->Size / 2),
-			 (int)(tmp1->Location.x + tmp1->Size / 2),
-			 (int)(tmp1->Location.y + tmp1->Size / 2));
+	for (auto &tmpParticle : ParticlesList) {
+		DestRect((int)(tmpParticle.Location.x - tmpParticle.Size / 2),
+			 (int)(tmpParticle.Location.y - tmpParticle.Size / 2),
+			 (int)(tmpParticle.Location.x + tmpParticle.Size / 2),
+			 (int)(tmpParticle.Location.y + tmpParticle.Size / 2));
 
 		if (ASpresent) tmpPosY = (AH - DestRect.top - DestRect.top - (DestRect.bottom - DestRect.top));
 		else tmpPosY = (AHw - DestRect.top - DestRect.top - (DestRect.bottom - DestRect.top));
@@ -460,44 +359,42 @@ void cParticleSystem2D::Draw()
 
 		tmp[k++] = DestRect.left;
 		tmp[k++] = DestRect.top + tmpPosY + (DestRect.bottom - DestRect.top);
-		tmp[k++] = tmp1->Color.r;
-		tmp[k++] = tmp1->Color.g;
-		tmp[k++] = tmp1->Color.b;
-		tmp[k++] = tmp1->Alpha;
+		tmp[k++] = tmpParticle.Color.r;
+		tmp[k++] = tmpParticle.Color.g;
+		tmp[k++] = tmpParticle.Color.b;
+		tmp[k++] = tmpParticle.Alpha;
 		tmp[k++] = Xst;
 		tmp[k++] = 1.0f - Yst;
 
 		tmp[k++] = DestRect.left;
 		tmp[k++] = DestRect.top + tmpPosY;
-		tmp[k++] = tmp1->Color.r;
-		tmp[k++] = tmp1->Color.g;
-		tmp[k++] = tmp1->Color.b;
-		tmp[k++] = tmp1->Alpha;
+		tmp[k++] = tmpParticle.Color.r;
+		tmp[k++] = tmpParticle.Color.g;
+		tmp[k++] = tmpParticle.Color.b;
+		tmp[k++] = tmpParticle.Alpha;
 		tmp[k++] = Xst;
 		tmp[k++] = 1.0f - FrameHeight;
 
 		tmp[k++] = DestRect.left + (DestRect.right - DestRect.left);
 		tmp[k++] = DestRect.top + tmpPosY;
-		tmp[k++] = tmp1->Color.r;
-		tmp[k++] = tmp1->Color.g;
-		tmp[k++] = tmp1->Color.b;
-		tmp[k++] = tmp1->Alpha;
+		tmp[k++] = tmpParticle.Color.r;
+		tmp[k++] = tmpParticle.Color.g;
+		tmp[k++] = tmpParticle.Color.b;
+		tmp[k++] = tmpParticle.Alpha;
 		tmp[k++] = FrameWidth;
 		tmp[k++] = 1.0f - FrameHeight;
 
 		tmp[k++] = DestRect.left + (DestRect.right - DestRect.left);
 		tmp[k++] = DestRect.top + tmpPosY + (DestRect.bottom - DestRect.top);
-		tmp[k++] = tmp1->Color.r;
-		tmp[k++] = tmp1->Color.g;
-		tmp[k++] = tmp1->Color.b;
-		tmp[k++] = tmp1->Alpha;
+		tmp[k++] = tmpParticle.Color.r;
+		tmp[k++] = tmpParticle.Color.g;
+		tmp[k++] = tmpParticle.Color.b;
+		tmp[k++] = tmpParticle.Alpha;
 		tmp[k++] = FrameWidth;
 		tmp[k++] = 1.0f - Yst;
-
-		tmp1 = tmp1->Next;
 	}
 
-	vw_SendVertices(RI_QUADS, 4 * ParticlesCount, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8 * sizeof(tmp[0]));
+	vw_SendVertices(RI_QUADS, 4 * ParticlesList.size(), RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8 * sizeof(tmp[0]));
 
 	if (tmp)
 		delete [] tmp;
@@ -515,11 +412,9 @@ void cParticleSystem2D::MoveSystem(sVECTOR3D NewLocation)
 	sVECTOR3D PrevLocation = Location;
 	Location = NewLocation;
 
-	sParticle2D *tmp = Start;
-	while (tmp) {
+	for (auto &tmpParticle : ParticlesList) {
 		// меняем каждой частице
-		tmp->Location += NewLocation-PrevLocation;
-		tmp = tmp->Next;
+		tmpParticle.Location += NewLocation - PrevLocation;
 	}
 }
 

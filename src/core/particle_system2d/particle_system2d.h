@@ -31,8 +31,6 @@
 
 #include "../base.h"
 
-struct sParticle2D;
-
 struct sCOLORVALUE2D {
 	float r;
 	float g;
@@ -40,11 +38,34 @@ struct sCOLORVALUE2D {
 	float a;
 };
 
+struct sParticle2D {
+	// обновление информации в частице
+	bool Update(float TimeDelta, sVECTOR3D ParentLocation = sVECTOR3D(0.0f,0.0f,0.0f),
+		    bool Attractive = false, float AttractiveValue = 25.0f);
+
+	// текущее место расположения частицы
+	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
+	// текущая скорость частицы
+	sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};
+
+	// текущий цвет частицы
+	sCOLORVALUE2D Color{1.0f, 0.0f, 0.0f, 0.5f};
+	// значение приращение цвета
+	sCOLORVALUE2D ColorDelta{0.0f, 0.0f, 0.0f, 0.0f};
+
+	float Age{0.0f};	// время жизни частицы в секундах
+	float Lifetime{0.0f};	// оставщееся время жизни частицы
+
+	float Size{1.0f};	// размер частицы
+	float SizeDelta{0.0f};	// значение изменения размера
+
+	float Alpha{1.0f};	// прозрачность
+	bool NeedStop{false};	// если нужно замедлять и остановить
+};
+
 class cParticleSystem2D
 {
 public:
-	~cParticleSystem2D();
-
 	bool Update(float Time);
 	void Draw();
 	void SetRotation(sVECTOR3D NewAngle);
@@ -100,12 +121,7 @@ public:
 	float TimeLastUpdate{-1.0f};	// последнее время обновления системы
 	float EmissionResidue{0.0f};	// остаток создания частицы (если к примеру 0.5 частиц в секунду стоит)
 
-	// подвязка к динамическому массиву
-	sParticle2D *Start{nullptr};
-	sParticle2D *End{nullptr};
-	int ParticlesCount{0};
-	void Attach(sParticle2D *NewParticle);
-	void Detach(sParticle2D *OldParticle);
+	std::list<sParticle2D> ParticlesList;
 };
 
 #endif //PARTICLESYSTEM2D_H
