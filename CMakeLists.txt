@@ -205,10 +205,15 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wcast-align")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Winline")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunreachable-code")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-include-dirs")
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wzero-as-null-pointer-constant")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmain")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+
+#  AppleClang 8.1.0.8020042 don't support this flag
+IF (NOT (APPLE AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")))
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wzero-as-null-pointer-constant")
+ENDIF (NOT (APPLE AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")))
+
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Weffc++")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-declarations")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wundef")
@@ -217,7 +222,7 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wswitch-enum")
 
 # the compiler flags for compiling C++ sources
-MESSAGE( STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
+MESSAGE(STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
 
 
 # sources
