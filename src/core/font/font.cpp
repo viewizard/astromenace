@@ -376,12 +376,12 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 /*
  * Add data to local draw buffer.
  */
-static inline void AddToDrawBuffer(float FirstX, float FirstY, float SecondX, float SecondY)
+static inline void AddToDrawBuffer(float CoordX, float CoordY, float TextureU, float TextureV)
 {
-	DrawBuffer.push_back(FirstX);
-	DrawBuffer.push_back(FirstY);
-	DrawBuffer.push_back(SecondX);
-	DrawBuffer.push_back(SecondY);
+	DrawBuffer.push_back(CoordX);
+	DrawBuffer.push_back(CoordY);
+	DrawBuffer.push_back(TextureU);
+	DrawBuffer.push_back(TextureV);
 }
 
 /*
