@@ -30,7 +30,7 @@ Only [Smart Pointers] are allowed. Manual memory management are prohibited. Even
 
 ## AstroMenace Coding Style
 
-AstroMenace coding style based on **[Linux kernel coding style](https://www.kernel.org/doc/html/latest/process/coding-style.html)** and **[Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)** (K&R coding style derivatives) with one major difference - line of text in code could be up to 150 characters long.
+AstroMenace coding style based on **[Linux kernel coding style](https://www.kernel.org/doc/html/latest/process/coding-style.html)** and **[Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)** (K&R coding style derivatives) with one major difference - line of text in code could be up to 130 characters long.
 
 <!-- Markdown links -->
 [ISO/IEC/C++11]: http://www.iso.org/iso/catalogue_detail.htm?csnumber=50372

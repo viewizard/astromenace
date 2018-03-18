@@ -235,10 +235,10 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 
 	// create new character
 	FontCharsList.push_front(std::unique_ptr<sFontChar>(new sFontChar(UTF32, InternalFontSize, nullptr,
-							    0, InternalFace->glyph->bitmap.width, 0, InternalFace->glyph->bitmap.rows,
-							    InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
-							    InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
-							    InternalFace->glyph->advance.x / 64.0f)));
+				 0, InternalFace->glyph->bitmap.width, 0, InternalFace->glyph->bitmap.rows,
+				 InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
+				 InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
+				 InternalFace->glyph->advance.x / 64.0f)));
 
 	if ((FontCharsList.front()->Width > 0) && (FontCharsList.front()->Height > 0)) {
 		// buffer for RGBA, data for font characters texture, initialize it with white color (255)
@@ -249,7 +249,9 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 			int StrideDst = (FontCharsList.front()->Height - j - 1) * FontCharsList.front()->Width;
 			for (int i = 0; i < FontCharsList.front()->Width; i++) {
 				// alpha channel
-				memcpy(tmpPixels.data() + StrideSrc + i * 4 + 3, InternalFace->glyph->bitmap.buffer + StrideDst + i, 1);
+				memcpy(tmpPixels.data() + StrideSrc + i * 4 + 3,
+				       InternalFace->glyph->bitmap.buffer + StrideDst + i,
+				       1);
 			}
 		}
 
@@ -260,7 +262,8 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 		vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE,
 				  RI_CLAMP_TO_EDGE, true, eAlphaCreateMode::GREYSC, false);
 		FontCharsList.front()->Texture = vw_CreateTextureFromMemory(FakeTextureFileName, tmpPixels,
-									    FontCharsList.front()->Width, FontCharsList.front()->Height,
+									    FontCharsList.front()->Width,
+									    FontCharsList.front()->Height,
 									    4, 0, 0, 0, false);
 	}
 
@@ -305,10 +308,10 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 		}
 
 		FontCharsList.push_front(std::unique_ptr<sFontChar>(new sFontChar(CurrentChar, InternalFontSize, nullptr,
-								    0, 0, 0, 0,
-								    InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
-								    InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
-								    InternalFace->glyph->advance.x / 64.0f)));
+					 0, 0, 0, 0,
+					 InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
+					 InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
+					 InternalFace->glyph->advance.x / 64.0f)));
 
 		// move to next line in bitmap if not enough space
 		if (CurrentDIBX + FontCharsList.front()->Width > FontTextureWidth) {
@@ -326,11 +329,14 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 		// copy glyph into bitmap
 		uint8_t ColorRGB[3] = {255, 255, 255};
 		for (int j = 0; j < FontCharsList.front()->Height; j++) {
+			unsigned int tmpOffset = (FontTextureHeight - CurrentDIBY - j - 1) * FontTextureWidth * 4;
 			for (int i = 0; i < FontCharsList.front()->Width; i++) {
-				memcpy(DIB.data() + (FontTextureHeight - CurrentDIBY - j - 1) * FontTextureWidth * 4 + (CurrentDIBX + i) * 4,
-				       ColorRGB, 3);
-				memcpy(DIB.data() + (FontTextureHeight - CurrentDIBY - j - 1) * FontTextureWidth * 4 + (CurrentDIBX + i) * 4 + 3,
-				       InternalFace->glyph->bitmap.buffer + j * FontCharsList.front()->Width + i, 1);
+				memcpy(DIB.data() + tmpOffset + (CurrentDIBX + i) * 4,
+				       ColorRGB,
+				       3);
+				memcpy(DIB.data() + tmpOffset + (CurrentDIBX + i) * 4 + 3,
+				       InternalFace->glyph->bitmap.buffer + j * FontCharsList.front()->Width + i,
+				       1);
 			}
 		}
 
@@ -347,8 +353,10 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 	}
 
 	// create texture from bitmap
-	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE, RI_CLAMP_TO_EDGE, true, eAlphaCreateMode::GREYSC, false);
-	sTexture *FontTexture = vw_CreateTextureFromMemory("auto_generated_texture_for_fonts", DIB, FontTextureWidth, FontTextureHeight, 4, 0);
+	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE,
+			  RI_CLAMP_TO_EDGE, true, eAlphaCreateMode::GREYSC, false);
+	sTexture *FontTexture = vw_CreateTextureFromMemory("auto_generated_texture_for_fonts", DIB,
+							   FontTextureWidth, FontTextureHeight, 4, 0);
 	if (!FontTexture) {
 		std::cerr <<  "Can't create font texture.\n";
 		return ERR_MEM;
@@ -579,11 +587,14 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 			// first triangle
 			AddToDrawBuffer(DrawX, DrawY + tmpPosY + DrawChar->Height * FontScale, Xst, 1.0f - Yst);
 			AddToDrawBuffer(DrawX, DrawY + tmpPosY, Xst, 1.0f - FrameHeight);
-			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY + tmpPosY, FrameWidth, 1.0f - FrameHeight);
+			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY + tmpPosY,
+					FrameWidth, 1.0f - FrameHeight);
 			// second triangle
 			AddToDrawBuffer(DrawX, DrawY + tmpPosY + DrawChar->Height * FontScale, Xst, 1.0f - Yst);
-			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY + tmpPosY, FrameWidth, 1.0f - FrameHeight);
-			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY + tmpPosY + DrawChar->Height * FontScale, FrameWidth, 1.0f - Yst);
+			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY + tmpPosY,
+					FrameWidth, 1.0f - FrameHeight);
+			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY + tmpPosY + DrawChar->Height * FontScale,
+					FrameWidth, 1.0f - Yst);
 
 			Xstart += DrawChar->AdvanceX * FontWidthFactor;
 			LineWidth += DrawChar->AdvanceX * FontWidthFactor;
@@ -747,7 +758,8 @@ int vw_DrawFont3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 			// second triangle
 			AddToDrawBuffer(DrawX / 10.0f, (DrawY + DrawChar->Height) / 10.0f, Xst, 1.0f - Yst);
 			AddToDrawBuffer((DrawX + DrawChar->Width) / 10.0f, DrawY / 10.0f, FrameWidth, 1.0f - FrameHeight);
-			AddToDrawBuffer((DrawX + DrawChar->Width) / 10.0f, (DrawY + DrawChar->Height) / 10.0f, FrameWidth, 1.0f - Yst);
+			AddToDrawBuffer((DrawX + DrawChar->Width) / 10.0f, (DrawY + DrawChar->Height) / 10.0f,
+					FrameWidth, 1.0f - Yst);
 
 			Xstart += DrawChar->AdvanceX;
 		} else

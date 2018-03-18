@@ -62,25 +62,41 @@ void vw_Matrix44Mult(float DstMatrix44[16], const float SrcMatrix44[16])
 		      DstMatrix44[8 ], DstMatrix44[9 ], DstMatrix44[10], DstMatrix44[11],
 		      DstMatrix44[12], DstMatrix44[13], DstMatrix44[14], DstMatrix44[15]};
 
-	DstMatrix44[0 ] = SrcMatrix44[0 ] * tmp[0] + SrcMatrix44[1 ] * tmp[4] + SrcMatrix44[2 ] * tmp[8 ] + SrcMatrix44[3 ] * tmp[12];
-	DstMatrix44[1 ] = SrcMatrix44[0 ] * tmp[1] + SrcMatrix44[1 ] * tmp[5] + SrcMatrix44[2 ] * tmp[9 ] + SrcMatrix44[3 ] * tmp[13];
-	DstMatrix44[2 ] = SrcMatrix44[0 ] * tmp[2] + SrcMatrix44[1 ] * tmp[6] + SrcMatrix44[2 ] * tmp[10] + SrcMatrix44[3 ] * tmp[14];
-	DstMatrix44[3 ] = SrcMatrix44[0 ] * tmp[3] + SrcMatrix44[1 ] * tmp[7] + SrcMatrix44[2 ] * tmp[11] + SrcMatrix44[3 ] * tmp[15];
+	DstMatrix44[0 ] = SrcMatrix44[0 ] * tmp[0] + SrcMatrix44[1 ] * tmp[4] +
+			  SrcMatrix44[2 ] * tmp[8 ] + SrcMatrix44[3 ] * tmp[12];
+	DstMatrix44[1 ] = SrcMatrix44[0 ] * tmp[1] + SrcMatrix44[1 ] * tmp[5] +
+			  SrcMatrix44[2 ] * tmp[9 ] + SrcMatrix44[3 ] * tmp[13];
+	DstMatrix44[2 ] = SrcMatrix44[0 ] * tmp[2] + SrcMatrix44[1 ] * tmp[6] +
+			  SrcMatrix44[2 ] * tmp[10] + SrcMatrix44[3 ] * tmp[14];
+	DstMatrix44[3 ] = SrcMatrix44[0 ] * tmp[3] + SrcMatrix44[1 ] * tmp[7] +
+			  SrcMatrix44[2 ] * tmp[11] + SrcMatrix44[3 ] * tmp[15];
 
-	DstMatrix44[4 ] = SrcMatrix44[4 ] * tmp[0] + SrcMatrix44[5 ] * tmp[4] + SrcMatrix44[6 ] * tmp[8 ] + SrcMatrix44[7 ] * tmp[12];
-	DstMatrix44[5 ] = SrcMatrix44[4 ] * tmp[1] + SrcMatrix44[5 ] * tmp[5] + SrcMatrix44[6 ] * tmp[9 ] + SrcMatrix44[7 ] * tmp[13];
-	DstMatrix44[6 ] = SrcMatrix44[4 ] * tmp[2] + SrcMatrix44[5 ] * tmp[6] + SrcMatrix44[6 ] * tmp[10] + SrcMatrix44[7 ] * tmp[14];
-	DstMatrix44[7 ] = SrcMatrix44[4 ] * tmp[3] + SrcMatrix44[5 ] * tmp[7] + SrcMatrix44[6 ] * tmp[11] + SrcMatrix44[7 ] * tmp[15];
+	DstMatrix44[4 ] = SrcMatrix44[4 ] * tmp[0] + SrcMatrix44[5 ] * tmp[4] +
+			  SrcMatrix44[6 ] * tmp[8 ] + SrcMatrix44[7 ] * tmp[12];
+	DstMatrix44[5 ] = SrcMatrix44[4 ] * tmp[1] + SrcMatrix44[5 ] * tmp[5] +
+			  SrcMatrix44[6 ] * tmp[9 ] + SrcMatrix44[7 ] * tmp[13];
+	DstMatrix44[6 ] = SrcMatrix44[4 ] * tmp[2] + SrcMatrix44[5 ] * tmp[6] +
+			  SrcMatrix44[6 ] * tmp[10] + SrcMatrix44[7 ] * tmp[14];
+	DstMatrix44[7 ] = SrcMatrix44[4 ] * tmp[3] + SrcMatrix44[5 ] * tmp[7] +
+			  SrcMatrix44[6 ] * tmp[11] + SrcMatrix44[7 ] * tmp[15];
 
-	DstMatrix44[8 ] = SrcMatrix44[8 ] * tmp[0] + SrcMatrix44[9 ] * tmp[4] + SrcMatrix44[10] * tmp[8 ] + SrcMatrix44[11] * tmp[12];
-	DstMatrix44[9 ] = SrcMatrix44[8 ] * tmp[1] + SrcMatrix44[9 ] * tmp[5] + SrcMatrix44[10] * tmp[9 ] + SrcMatrix44[11] * tmp[13];
-	DstMatrix44[10] = SrcMatrix44[8 ] * tmp[2] + SrcMatrix44[9 ] * tmp[6] + SrcMatrix44[10] * tmp[10] + SrcMatrix44[11] * tmp[14];
-	DstMatrix44[11] = SrcMatrix44[8 ] * tmp[3] + SrcMatrix44[9 ] * tmp[7] + SrcMatrix44[10] * tmp[11] + SrcMatrix44[11] * tmp[15];
+	DstMatrix44[8 ] = SrcMatrix44[8 ] * tmp[0] + SrcMatrix44[9 ] * tmp[4] +
+			  SrcMatrix44[10] * tmp[8 ] + SrcMatrix44[11] * tmp[12];
+	DstMatrix44[9 ] = SrcMatrix44[8 ] * tmp[1] + SrcMatrix44[9 ] * tmp[5] +
+			  SrcMatrix44[10] * tmp[9 ] + SrcMatrix44[11] * tmp[13];
+	DstMatrix44[10] = SrcMatrix44[8 ] * tmp[2] + SrcMatrix44[9 ] * tmp[6] +
+			  SrcMatrix44[10] * tmp[10] + SrcMatrix44[11] * tmp[14];
+	DstMatrix44[11] = SrcMatrix44[8 ] * tmp[3] + SrcMatrix44[9 ] * tmp[7] +
+			  SrcMatrix44[10] * tmp[11] + SrcMatrix44[11] * tmp[15];
 
-	DstMatrix44[12] = SrcMatrix44[12] * tmp[0] + SrcMatrix44[13] * tmp[4] + SrcMatrix44[14] * tmp[8 ] + SrcMatrix44[15] * tmp[12];
-	DstMatrix44[13] = SrcMatrix44[12] * tmp[1] + SrcMatrix44[13] * tmp[5] + SrcMatrix44[14] * tmp[9 ] + SrcMatrix44[15] * tmp[13];
-	DstMatrix44[14] = SrcMatrix44[12] * tmp[2] + SrcMatrix44[13] * tmp[6] + SrcMatrix44[14] * tmp[10] + SrcMatrix44[15] * tmp[14];
-	DstMatrix44[15] = SrcMatrix44[12] * tmp[3] + SrcMatrix44[13] * tmp[7] + SrcMatrix44[14] * tmp[11] + SrcMatrix44[15] * tmp[15];
+	DstMatrix44[12] = SrcMatrix44[12] * tmp[0] + SrcMatrix44[13] * tmp[4] +
+			  SrcMatrix44[14] * tmp[8 ] + SrcMatrix44[15] * tmp[12];
+	DstMatrix44[13] = SrcMatrix44[12] * tmp[1] + SrcMatrix44[13] * tmp[5] +
+			  SrcMatrix44[14] * tmp[9 ] + SrcMatrix44[15] * tmp[13];
+	DstMatrix44[14] = SrcMatrix44[12] * tmp[2] + SrcMatrix44[13] * tmp[6] +
+			  SrcMatrix44[14] * tmp[10] + SrcMatrix44[15] * tmp[14];
+	DstMatrix44[15] = SrcMatrix44[12] * tmp[3] + SrcMatrix44[13] * tmp[7] +
+			  SrcMatrix44[14] * tmp[11] + SrcMatrix44[15] * tmp[15];
 }
 
 /*

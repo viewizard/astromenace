@@ -35,8 +35,9 @@ struct sObjectBlock;
 bool vw_AABBAABBCollision(const sVECTOR3D Object1AABB[8], const sVECTOR3D &Object1Location,
 			  const sVECTOR3D Object2AABB[8], const sVECTOR3D &Object2Location);
 // OBB-OBB collision detection.
-bool vw_OBBOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation, sVECTOR3D Object1Location, float Object1RotationMatrix[9],
-			sVECTOR3D Object2OBB[8], sVECTOR3D Object2OBBLocation, sVECTOR3D Object2Location, float Object2RotationMatrix[9]);
+bool vw_OBBOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation, sVECTOR3D Object1Location,
+			float Object1RotationMatrix[9], sVECTOR3D Object2OBB[8], sVECTOR3D Object2OBBLocation,
+			sVECTOR3D Object2Location, float Object2RotationMatrix[9]);
 // Sphere-Sphere collision detection.
 bool vw_SphereSphereCollision(float Object1Radius, const sVECTOR3D &Object1Location,
 			      float Object2Radius, const sVECTOR3D &Object2Location,

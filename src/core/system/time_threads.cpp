@@ -99,7 +99,8 @@ float vw_GetTimeThread(int TimeThread)
 	// time manipulations
 	if (TimeThreadsMap[TimeThread].Speed != 1.0f) {
 		// calculate time from "time point" (DiffGetTicks), when speed was changed last time, till now
-		float RealTimeThread = ((SDL_GetTicks() - TimeThreadsMap[TimeThread].DiffGetTicks) * TimeThreadsMap[TimeThread].Speed) / 1000.0f;
+		float RealTimeThread = ((SDL_GetTicks() - TimeThreadsMap[TimeThread].DiffGetTicks) *
+					TimeThreadsMap[TimeThread].Speed) / 1000.0f;
 		// add "previous time" from time buffer
 		return RealTimeThread + TimeThreadsMap[TimeThread].Buffer;
 	}
@@ -144,7 +145,8 @@ void vw_SetTimeThreadSpeed(int TimeThread, float NewSpeed)
 	}
 
 	// store "previous time" in the time buffer
-	TimeThreadsMap[TimeThread].Buffer += ((SDL_GetTicks() - TimeThreadsMap[TimeThread].DiffGetTicks) * TimeThreadsMap[TimeThread].Speed) / 1000.0f;
+	TimeThreadsMap[TimeThread].Buffer += ((SDL_GetTicks() - TimeThreadsMap[TimeThread].DiffGetTicks) *
+					      TimeThreadsMap[TimeThread].Speed) / 1000.0f;
 	// store "time point", when speed was changed
 	TimeThreadsMap[TimeThread].DiffGetTicks = SDL_GetTicks();
 	TimeThreadsMap[TimeThread].Speed = NewSpeed;

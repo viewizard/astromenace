@@ -132,7 +132,9 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 		// parse each row
 		for (; (tmpFile->Data[i] != SymbolEndOfLine) && (i < tmpFile->Size); i++) {
 			// parse each row for blocks, separated by 1.SymbolSeparator, 2.SymbolEndOfLine, 3.EOF
-			for (; (tmpFile->Data[i] != SymbolSeparator) && (tmpFile->Data[i] != SymbolEndOfLine) && (i < tmpFile->Size); i++) {
+			for (; (tmpFile->Data[i] != SymbolSeparator) &&
+			       (tmpFile->Data[i] != SymbolEndOfLine) &&
+			       (i < tmpFile->Size); i++) {
 				if (NeedBuildCurrentRowCode)
 					CurrentRowCode += tmpFile->Data[i];
 				else

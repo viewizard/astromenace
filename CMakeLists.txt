@@ -201,7 +201,7 @@ MESSAGE( STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
 
 
 # sources
-FILE(GLOB_RECURSE astromenace_SRCS src/*.cpp)
+FILE(GLOB_RECURSE astromenace_SRCS src/*.cpp src/*.h)
 
 # targets
 IF(DATADIR)

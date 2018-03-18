@@ -68,8 +68,9 @@ bool vw_AABBAABBCollision(const sVECTOR3D Object1AABB[8], const sVECTOR3D &Objec
 /*
  * OBB-OBB collision detection.
  */
-bool vw_OBBOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation, sVECTOR3D Object1Location, float Object1RotationMatrix[9],
-			sVECTOR3D Object2OBB[8], sVECTOR3D Object2OBBLocation, sVECTOR3D Object2Location, float Object2RotationMatrix[9])
+bool vw_OBBOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation, sVECTOR3D Object1Location,
+			float Object1RotationMatrix[9], sVECTOR3D Object2OBB[8], sVECTOR3D Object2OBBLocation,
+			sVECTOR3D Object2Location, float Object2RotationMatrix[9])
 {
 	// calcuate rotation matrix
 	float TMPInvObject1RotationMatrix[9]{Object1RotationMatrix[0], Object1RotationMatrix[1], Object1RotationMatrix[2],
@@ -395,36 +396,37 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 	// detect collision with mesh triangles
 	for (int i = 0; i < Object1DrawObjectList->VertexCount; i += 3) {
 		// we use index buffer here in order to find triangle's vertices in mesh
-		int j2{0};
+		unsigned int IndexPos = Object1DrawObjectList->RangeStart + i; // index buffer position
+		unsigned int VertexPos{0}; // vertex buffer position
 		if (Object1DrawObjectList->IndexBuffer)
-			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart + i] * Object1DrawObjectList->VertexStride;
+			VertexPos = Object1DrawObjectList->IndexBuffer[IndexPos] * Object1DrawObjectList->VertexStride;
 		else
-			j2 = (Object1DrawObjectList->RangeStart + i) * Object1DrawObjectList->VertexStride;
+			VertexPos = (IndexPos) * Object1DrawObjectList->VertexStride;
 
 		// translate triangle's vertices in proper coordinates for collision detection
-		sVECTOR3D Point1{Object1DrawObjectList->VertexBuffer[j2],
-				Object1DrawObjectList->VertexBuffer[j2 + 1],
-				Object1DrawObjectList->VertexBuffer[j2 + 2]};
+		sVECTOR3D Point1{Object1DrawObjectList->VertexBuffer[VertexPos],
+				Object1DrawObjectList->VertexBuffer[VertexPos + 1],
+				Object1DrawObjectList->VertexBuffer[VertexPos + 2]};
 		vw_Matrix44CalcPoint(Point1, TransMat);
 
 		if (Object1DrawObjectList->IndexBuffer)
-			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart + i + 1] * Object1DrawObjectList->VertexStride;
+			VertexPos = Object1DrawObjectList->IndexBuffer[IndexPos + 1] * Object1DrawObjectList->VertexStride;
 		else
-			j2 = (Object1DrawObjectList->RangeStart + i + 1) * Object1DrawObjectList->VertexStride;
+			VertexPos = (IndexPos + 1) * Object1DrawObjectList->VertexStride;
 
-		sVECTOR3D Point2{Object1DrawObjectList->VertexBuffer[j2],
-				Object1DrawObjectList->VertexBuffer[j2 + 1],
-				Object1DrawObjectList->VertexBuffer[j2 + 2]};
+		sVECTOR3D Point2{Object1DrawObjectList->VertexBuffer[VertexPos],
+				Object1DrawObjectList->VertexBuffer[VertexPos + 1],
+				Object1DrawObjectList->VertexBuffer[VertexPos + 2]};
 		vw_Matrix44CalcPoint(Point2, TransMat);
 
 		if (Object1DrawObjectList->IndexBuffer)
-			j2 = Object1DrawObjectList->IndexBuffer[Object1DrawObjectList->RangeStart + i + 2] * Object1DrawObjectList->VertexStride;
+			VertexPos = Object1DrawObjectList->IndexBuffer[IndexPos + 2] * Object1DrawObjectList->VertexStride;
 		else
-			j2 = (Object1DrawObjectList->RangeStart + i + 2) * Object1DrawObjectList->VertexStride;
+			VertexPos = (IndexPos + 2) * Object1DrawObjectList->VertexStride;
 
-		sVECTOR3D Point3{Object1DrawObjectList->VertexBuffer[j2],
-				Object1DrawObjectList->VertexBuffer[j2 + 1],
-				Object1DrawObjectList->VertexBuffer[j2 + 2]};
+		sVECTOR3D Point3{Object1DrawObjectList->VertexBuffer[VertexPos],
+				Object1DrawObjectList->VertexBuffer[VertexPos + 1],
+				Object1DrawObjectList->VertexBuffer[VertexPos + 2]};
 		vw_Matrix44CalcPoint(Point3, TransMat);
 
 		// calculate 2 vectors for plane

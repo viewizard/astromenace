@@ -134,6 +134,9 @@ bool sParticleSystem2D::Update(float Time)
 		while (ParticlesCreated > 0) {
 			// создаем новую частицу
 			ParticlesList.emplace_back();
+			// TODO emplace_back() return reference to the inserted element (since C++17)
+			//      this line could be combined with previous line, we could use
+			//      ParticlesList.back() directly, but "NewParticle" usage make code more clear
 			sParticle2D &NewParticle = ParticlesList.back();
 
 			// установка жизни новой частици и проверка, что не выходит из диапахона
