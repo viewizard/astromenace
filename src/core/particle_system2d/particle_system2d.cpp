@@ -26,9 +26,9 @@
 
 // TODO translate comments
 // TODO revise code in order to use RI_TRIANGLES instead of RI_QUADS for rendering
-// TODO cParticleSystem2D::Update looks fat, should be revised
-// TODO probably, cParticleSystem2D should be struct instead of class, we don't use private section
-// TODO (?) cParticleSystem2D should be managed globally, caller should receive ID (object ID),
+// TODO use one local buffer for rendering (std::vector), don't allocate/release memory all the time
+// TODO sParticleSystem2D::Update looks fat, should be revised
+// TODO (?) sParticleSystem2D should be managed globally, caller should receive ID (object ID),
 //      instead of allocate new memory for object and care about it
 
 #include "../math/math.h"
@@ -85,7 +85,7 @@ bool sParticle2D::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attract
 //-----------------------------------------------------------------------------
 // обновление системы
 //-----------------------------------------------------------------------------
-bool cParticleSystem2D::Update(float Time)
+bool sParticleSystem2D::Update(float Time)
 {
 	// первый раз... просто берем время
 	if (TimeLastUpdate == -1.0f) {
@@ -308,7 +308,7 @@ bool cParticleSystem2D::Update(float Time)
 //-----------------------------------------------------------------------------
 // прорисовка системы
 //-----------------------------------------------------------------------------
-void cParticleSystem2D::Draw()
+void sParticleSystem2D::Draw()
 {
 	// загрузка текстуры, уже должна быть подключена
 	if (!Texture || ParticlesList.empty())
@@ -407,7 +407,7 @@ void cParticleSystem2D::Draw()
 //-----------------------------------------------------------------------------
 // перемещение всех частиц и центра
 //-----------------------------------------------------------------------------
-void cParticleSystem2D::MoveSystem(sVECTOR3D NewLocation)
+void sParticleSystem2D::MoveSystem(sVECTOR3D NewLocation)
 {
 	sVECTOR3D PrevLocation = Location;
 	Location = NewLocation;
@@ -421,7 +421,7 @@ void cParticleSystem2D::MoveSystem(sVECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 // перемещение центра
 //-----------------------------------------------------------------------------
-void cParticleSystem2D::MoveSystemLocation(sVECTOR3D NewLocation)
+void sParticleSystem2D::MoveSystemLocation(sVECTOR3D NewLocation)
 {
 	Location = NewLocation;
 }
@@ -429,7 +429,7 @@ void cParticleSystem2D::MoveSystemLocation(sVECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void cParticleSystem2D::SetRotation(sVECTOR3D NewAngle)
+void sParticleSystem2D::SetRotation(sVECTOR3D NewAngle)
 {
 	vw_Matrix33CreateRotate(RotationMatrix, Angle ^ -1);
 	vw_Matrix33CreateRotate(RotationMatrix, NewAngle);

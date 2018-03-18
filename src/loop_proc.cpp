@@ -44,7 +44,7 @@ float CurrentCursorFlash = 1.0f;
 float CurrentCursorFlashLastTime = -1.0f;
 bool DrawGameCursor = true;
 
-extern cParticleSystem2D *CursorParticleSystem2D;
+extern sParticleSystem2D *CursorParticleSystem2D;
 void DrawDragingWeaponIcon(int X, int Y);
 
 extern float CurrentGameSpeedShowTime;
@@ -57,7 +57,7 @@ extern float CurrentGameSpeedShowTime;
 void CreateCursor()
 {
 	// курсор
-	CursorParticleSystem2D = new cParticleSystem2D;
+	CursorParticleSystem2D = new sParticleSystem2D;
 	CursorParticleSystem2D->ColorStart.r = 1.00f;
 	CursorParticleSystem2D->ColorStart.g = 1.00f;
 	CursorParticleSystem2D->ColorStart.b = 0.30f;

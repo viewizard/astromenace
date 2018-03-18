@@ -63,9 +63,8 @@ struct sParticle2D {
 	bool NeedStop{false};	// если нужно замедлять и остановить
 };
 
-class cParticleSystem2D
+struct sParticleSystem2D
 {
-public:
 	bool Update(float Time);
 	void Draw();
 	void SetRotation(sVECTOR3D NewAngle);
