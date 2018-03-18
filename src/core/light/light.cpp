@@ -139,9 +139,9 @@ void vw_ReleaseLight(sLight *Light)
 	if (!Light)
 		return;
 
-	for (auto itr = LightsMap.begin(); itr != LightsMap.end(); ++itr) {
-		if (&itr->second == Light) {
-			LightsMap.erase(itr);
+	for (auto iter = LightsMap.begin(); iter != LightsMap.end(); ++iter) {
+		if (&iter->second == Light) {
+			LightsMap.erase(iter);
 			// forced to leave - current iterator invalidated by erase()
 			return;
 		}
