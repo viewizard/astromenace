@@ -713,7 +713,7 @@ void InitGame()
 	LifeParticleSystem2D->LifeVar       = 0.05f;
 	LifeParticleSystem2D->ParticlesPerSec = 70;
 	LifeParticleSystem2D->Direction = sVECTOR3D(1.0f, 0.0f, 0.0f);
-	LifeParticleSystem2D->CreationType = 2;
+	LifeParticleSystem2D->CreationType = eParticle2DCreationType::Circle;
 	LifeParticleSystem2D->CreationSize = sVECTOR3D(25.0f, 25.0f, 0.0f);
 	LifeParticleSystem2D->DeadZone = 24.0f;
 	LifeParticleSystem2D->IsMagnet = true;
@@ -743,7 +743,7 @@ void InitGame()
 	Life2ParticleSystem2D->Life       = 2.00f;
 	Life2ParticleSystem2D->LifeVar       = 0.05f;
 	Life2ParticleSystem2D->ParticlesPerSec = 50;
-	Life2ParticleSystem2D->CreationType = 1;
+	Life2ParticleSystem2D->CreationType = eParticle2DCreationType::Quad;
 	Life2ParticleSystem2D->CreationSize = sVECTOR3D(18.0f, 1.0f, 0.0f);
 	Life2ParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
 	Life2ParticleSystem2D->MoveSystem(sVECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));
@@ -770,7 +770,7 @@ void InitGame()
 	Life3ParticleSystem2D->Life       = 2.00f;
 	Life3ParticleSystem2D->LifeVar       = 0.05f;
 	Life3ParticleSystem2D->ParticlesPerSec = 50;
-	Life3ParticleSystem2D->CreationType = 1;
+	Life3ParticleSystem2D->CreationType = eParticle2DCreationType::Quad;
 	Life3ParticleSystem2D->CreationSize = sVECTOR3D(1.0f, 18.0f, 0.0f);
 	Life3ParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
 	Life3ParticleSystem2D->MoveSystem(sVECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));

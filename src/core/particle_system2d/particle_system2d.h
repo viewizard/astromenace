@@ -37,6 +37,7 @@ struct sCOLORVALUE2D {
 };
 
 struct sParticle2D {
+	// Update particle.
 	bool Update(float TimeDelta, sVECTOR3D ParentLocation = sVECTOR3D(0.0f,0.0f,0.0f),
 		    bool Attractive = false, float MagnetFactor = 25.0f);
 
@@ -56,17 +57,25 @@ struct sParticle2D {
 	bool NeedStop{false};
 };
 
-struct sParticleSystem2D
-{
+enum class eParticle2DCreationType {
+	Point,
+	Quad,
+	Circle
+};
+
+struct sParticleSystem2D {
+	// Update all particles.
 	bool Update(float Time);
+	// Draw all particles.
 	void Draw();
+	// Set rotation.
 	void SetRotation(sVECTOR3D NewAngle);
-	// move center of particle system and all particles
+	// Move center of particle system and all particles.
 	void MoveSystem(sVECTOR3D NewLocation);
-	// move center of particle system
+	// Move center of particle system.
 	void MoveSystemLocation(sVECTOR3D NewLocation);
 
-	unsigned int ParticlesPerSec{100};	// emit rate (particles per second)
+	unsigned int ParticlesPerSec{100};	// emission rate (particles per second)
 
 	sTexture *Texture{nullptr};
 
@@ -95,7 +104,7 @@ struct sParticleSystem2D
 	float SpeedOnCreation{1.0f};
 
 	// TODO probably, should be moved to enum
-	int CreationType{0};		// creation type: 0 - point, 1 - quad, 2 - circle
+	eParticle2DCreationType CreationType{eParticle2DCreationType::Point};
 	sVECTOR3D CreationSize{0.05f, 0.05f, 0.05f};
 
 	float Life{1.0f};
