@@ -36,7 +36,6 @@ struct sVECTOR3D;
 // структура блока объектов
 //-----------------------------------------------------------------------------
 struct sObjectBlock {
-	sObjectBlock(void) {};
 	~sObjectBlock(void);
 
 	int	VertexFormat{0};	// формат вертексов данных
@@ -79,7 +78,6 @@ struct sObjectBlock {
 	float 		*VertexBufferLimitedBySizeTriangles{nullptr};
 	int 		VertexBufferLimitedBySizeTrianglesCount{0}; // кол-во вертексов в нем
 };
-
 
 //-----------------------------------------------------------------------------
 // Класс cModel3D

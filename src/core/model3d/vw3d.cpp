@@ -30,19 +30,16 @@
 #include "model3d.h"
 
 
-
-
-
 //-----------------------------------------------------------------------------
 // загрузка "родного" формата
 //-----------------------------------------------------------------------------
 bool cModel3D::ReadVW3D(const char *FileName)
 {
 	std::unique_ptr<sFILE> file = vw_fopen(FileName);
-	if (file == nullptr)
+	if (!file)
 		return false;
 
-	size_t SizeB = strlen(FileName)+1;
+	size_t SizeB = strlen(FileName) + 1;
 	Name = new char[SizeB];
 	strcpy(Name, FileName);
 
@@ -56,23 +53,22 @@ bool cModel3D::ReadVW3D(const char *FileName)
 
 	GlobalIndexCount = 0;
 
-
 	// для каждого объекта
-	for (int i=0; i<DrawObjectCount; i++) {
+	for (int i = 0; i < DrawObjectCount; i++) {
 		DrawObjectList[i].RangeStart = GlobalIndexCount;
 
 		// VertexFormat
-		file->fread(&(DrawObjectList[i].VertexFormat),sizeof(DrawObjectList[0].VertexFormat),1);
+		file->fread(&(DrawObjectList[i].VertexFormat), sizeof(DrawObjectList[0].VertexFormat), 1);
 		// VertexStride
-		file->fread(&(DrawObjectList[i].VertexStride),sizeof(DrawObjectList[0].VertexStride),1);
+		file->fread(&(DrawObjectList[i].VertexStride), sizeof(DrawObjectList[0].VertexStride), 1);
 		// VertexCount на самом деле, это кол-во индексов на объект
-		file->fread(&(DrawObjectList[i].VertexCount),sizeof(DrawObjectList[0].VertexCount),1);
+		file->fread(&(DrawObjectList[i].VertexCount), sizeof(DrawObjectList[0].VertexCount), 1);
 		GlobalIndexCount += DrawObjectList[i].VertexCount;
 
 		// Location
-		file->fread(&(DrawObjectList[i].Location),sizeof(DrawObjectList[0].Location.x)*3,1);
+		file->fread(&(DrawObjectList[i].Location), sizeof(DrawObjectList[0].Location.x) * 3, 1);
 		// Rotation
-		file->fread(&(DrawObjectList[i].Rotation),sizeof(DrawObjectList[0].Rotation.x)*3,1);
+		file->fread(&(DrawObjectList[i].Rotation), sizeof(DrawObjectList[0].Rotation.x) * 3, 1);
 
 		// рисуем нормально, не прозрачным
 		DrawObjectList[i].DrawType = 0;
@@ -89,18 +85,18 @@ bool cModel3D::ReadVW3D(const char *FileName)
 	}
 
 	// получаем сколько всего вертексов
-	file->fread(&GlobalVertexCount,sizeof(GlobalVertexCount),1);
+	file->fread(&GlobalVertexCount, sizeof(GlobalVertexCount), 1);
 
 	// собственно данные (берем смещение нулевого объекта, т.к. смещение одинаковое на весь объект)
-	GlobalVertexBuffer = new float[GlobalVertexCount*DrawObjectList[0].VertexStride];
-	file->fread(GlobalVertexBuffer,	GlobalVertexCount*DrawObjectList[0].VertexStride*sizeof(GlobalVertexBuffer[0]),1);
+	GlobalVertexBuffer = new float[GlobalVertexCount * DrawObjectList[0].VertexStride];
+	file->fread(GlobalVertexBuffer,	GlobalVertexCount * DrawObjectList[0].VertexStride * sizeof(GlobalVertexBuffer[0]), 1);
 
 	// индекс буфер
 	GlobalIndexBuffer = new unsigned int[GlobalIndexCount];
-	file->fread(GlobalIndexBuffer, GlobalIndexCount*sizeof(GlobalIndexBuffer[0]),1);
+	file->fread(GlobalIndexBuffer, GlobalIndexCount * sizeof(GlobalIndexBuffer[0]), 1);
 
 	// т.к. наши объекты используют глобальные буферы, надо поставить указатели
-	for (int i=0; i<DrawObjectCount; i++) {
+	for (int i = 0; i < DrawObjectCount; i++) {
 		DrawObjectList[i].VertexBuffer = GlobalVertexBuffer;
 		DrawObjectList[i].IndexBuffer = GlobalIndexBuffer;
 	}
@@ -110,27 +106,21 @@ bool cModel3D::ReadVW3D(const char *FileName)
 	return true;
 }
 
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // запись "родного" формата на диск
 //-----------------------------------------------------------------------------
 bool cModel3D::WriteVW3D(const char *FileName)
 {
 	// небольшие проверки
-	if ((GlobalVertexBuffer == nullptr) || (GlobalIndexBuffer == nullptr) || (DrawObjectList == nullptr)) {
+	if (!GlobalVertexBuffer || !GlobalIndexBuffer || !DrawObjectList) {
 		std::cerr << "Can't create " << FileName << " file for empty Model3D.\n";
 		return false;
 	}
 
-
 	SDL_RWops *FileVW3D;
 	FileVW3D = SDL_RWFromFile(FileName, "wb");
 	// если не можем создать файл на запись - уходим
-	if (FileVW3D == nullptr) {
+	if (!FileVW3D) {
 		std::cerr << "Can't create " << FileName << " file on disk.\n";
 		return false;
 	}
@@ -143,7 +133,7 @@ bool cModel3D::WriteVW3D(const char *FileName)
 	SDL_RWwrite(FileVW3D, &DrawObjectCount, sizeof(DrawObjectCount), 1);
 
 	// для каждого объекта в моделе
-	for (int i=0; i<DrawObjectCount; i++) {
+	for (int i = 0; i < DrawObjectCount; i++) {
 		// VertexFormat
 		SDL_RWwrite(FileVW3D, &DrawObjectList[i].VertexFormat, sizeof(DrawObjectList[0].VertexFormat), 1);
 		// VertexStride
@@ -161,10 +151,11 @@ bool cModel3D::WriteVW3D(const char *FileName)
 	SDL_RWwrite(FileVW3D, &GlobalVertexCount, sizeof(GlobalVertexCount), 1);
 
 	// данные, вертексы (берем смещение нулевого объекта, т.к. смещение одинаковое на весь объект)
-	SDL_RWwrite(FileVW3D, GlobalVertexBuffer, DrawObjectList[0].VertexStride*GlobalVertexCount*sizeof(GlobalVertexBuffer[0]), 1);
+	SDL_RWwrite(FileVW3D, GlobalVertexBuffer,
+		    DrawObjectList[0].VertexStride * GlobalVertexCount * sizeof(GlobalVertexBuffer[0]), 1);
 
 	// данные, индексный буфер
-	SDL_RWwrite(FileVW3D, GlobalIndexBuffer, GlobalIndexCount*sizeof(GlobalIndexBuffer[0]), 1);
+	SDL_RWwrite(FileVW3D, GlobalIndexBuffer, GlobalIndexCount * sizeof(GlobalIndexBuffer[0]), 1);
 
 	// закрываем файл
 	SDL_RWclose(FileVW3D);

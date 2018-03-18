@@ -37,69 +37,69 @@ struct sVECTOR3D {
 		x{_x},
 		y{_y},
 		z{_z}
-	{};
+	{}
 	void Set(float _x, float _y, float _z)
 	{
 		x = _x;
 		y = _y;
 		z = _z;
-	};
-	~sVECTOR3D() {};
+	}
+
 	// Equal
 	bool operator == (const sVECTOR3D &A)
 	{
 		return (A.x == x &&
 			A.y == y &&
 			A.z == z);
-	};
+	}
 	// Not equal
 	bool operator != (const sVECTOR3D &A)
 	{
 		return (A.x != x ||
 			A.y != y ||
 			A.z != z);
-	};
+	}
 	// Multiply
 	friend float operator * (const sVECTOR3D &A, const sVECTOR3D &B)
 	{
 		return A.x * B.x + A.y * B.y + A.z * B.z;
-	};
+	}
 
 	sVECTOR3D operator ^ (const float C)
 	{
 		return sVECTOR3D(x*C, y*C, z*C);
-	};
+	}
 
 	sVECTOR3D operator / (const float C)
 	{
 		return sVECTOR3D(x/C, y/C, z/C);
-	};
+	}
 
 	void operator () (const float _x, const float _y, const float _z)
 	{
 		x = _x;
 		y = _y;
 		z = _z;
-	};
+	}
 
 	void operator *= (float C)
 	{
 		x *= C;
 		y *= C;
 		z *= C;
-	};
+	}
 
 	// Add
 	sVECTOR3D operator + (const sVECTOR3D &A)
 	{
 		return sVECTOR3D(x + A.x, y + A.y, z + A.z);
-	};
+	}
 	void operator += (const sVECTOR3D &A)
 	{
 		x += A.x;
 		y += A.y;
 		z += A.z;
-	};
+	}
 	// Subtract
 	sVECTOR3D operator - (const sVECTOR3D &A)
 	{
@@ -110,7 +110,7 @@ struct sVECTOR3D {
 		x -= A.x;
 		y -= A.y;
 		z -= A.z;
-	};
+	}
 
 	float Length();
 	void Normalize();
@@ -133,7 +133,7 @@ struct sRECT {
 		top{_top},
 		left{_left},
 		bottom{_bottom}
-	{};
+	{}
 	void operator () (const int _left, const int _top, const int _right, const int _bottom)
 	{
 		right = _right;

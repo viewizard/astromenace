@@ -65,7 +65,7 @@ public:
 			delete TmpEntry;
 			TmpEntry = TmpEntry1;
 		}
-	};
+	}
 
 	// тип записи 0-обычная, 1-коментарий
 	eEntryType EntryType{eEntryType::Regular};
@@ -101,7 +101,7 @@ public:
 		if (RootXMLEntry != nullptr)
 			delete RootXMLEntry;
 		RootXMLEntry = nullptr;
-	};
+	}
 
 	// указатель на корневой элемент
 	cXMLEntry *RootXMLEntry{nullptr};
@@ -126,12 +126,12 @@ public:
 			AttachXMLChildEntry(ParentXMLEntry, NewXMLEntry);
 			return NewXMLEntry;
 		}
-	};
+	}
 
 	void AddEntryContent(cXMLEntry *XMLEntry, const std::string &EntryData)
 	{
 		XMLEntry->Content = EntryData;
-	};
+	}
 
 	void AddEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName, const std::string &AttributeData)
 	{
@@ -139,7 +139,7 @@ public:
 			return;
 
 		XMLEntry->Attributes[AttributeName] = AttributeData;
-	};
+	}
 
 	// string literal matches bool overload instead of "std::string&", forced to use "const char*" here too
 	void AddEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName, const char *AttributeData)
@@ -148,17 +148,17 @@ public:
 			return;
 
 		XMLEntry->Attributes[AttributeName] = AttributeData;
-	};
+	}
 
 	void AddEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName, int AttributeData)
 	{
 		AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
-	};
+	}
 
 	void AddEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName, float AttributeData)
 	{
 		AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
-	};
+	}
 
 	void AddEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName, bool AttributeData)
 	{
@@ -166,7 +166,7 @@ public:
 			AddEntryAttribute(XMLEntry, AttributeName, "on");
 		else
 			AddEntryAttribute(XMLEntry, AttributeName, "off");
-	};
+	}
 
 	void AddComment(cXMLEntry *ParentXMLEntry, const std::string &Text)
 	{
@@ -174,7 +174,7 @@ public:
 		NewXMLEntry->EntryType = eEntryType::Comment;
 		NewXMLEntry->Name = Text;
 		AttachXMLChildEntry(ParentXMLEntry, NewXMLEntry);
-	};
+	}
 
 	cXMLEntry *FindEntryByName(cXMLEntry *ParentXMLEntry, const std::string &Name)
 	{
@@ -187,7 +187,7 @@ public:
 			TmpEntry = TmpEntry->Next;
 		}
 		return nullptr;
-	};
+	}
 
 	bool TestEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName)
 	{
@@ -195,26 +195,26 @@ public:
 			return true;
 
 		return false;
-	};
+	}
 
 	const std::string &GetEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName)
 	{
 		return XMLEntry->Attributes[AttributeName];
-	};
+	}
 
 	int iGetEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName)
 	{
 		if (XMLEntry == nullptr)
 			return 0;
 		return atoi(GetEntryAttribute(XMLEntry, AttributeName).c_str());
-	};
+	}
 
 	float fGetEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName)
 	{
 		if (XMLEntry == nullptr)
 			return 0.0f;
 		return (float)atof(GetEntryAttribute(XMLEntry, AttributeName).c_str());
-	};
+	}
 
 	bool bGetEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName)
 	{
@@ -227,7 +227,7 @@ public:
 		    (Data == "1"))
 			return true;
 		return false;
-	};
+	}
 
 	cXMLEntry *FindFirstChildEntryByName(cXMLEntry *ParentXMLEntry, const std::string &ChildEntryName)
 	{

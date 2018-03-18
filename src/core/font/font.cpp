@@ -94,7 +94,7 @@ struct sFontChar {
 		Left{_Left},
 		Top{_Top},
 		AdvanceX{_AdvanceX}
-	{};
+	{}
 	// trick for forward_list<unique_ptr<T>> work with iterator
 	bool CheckUTF32andSize(char32_t _UTF32)
 	{

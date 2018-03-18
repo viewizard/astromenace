@@ -32,18 +32,12 @@ cModel3D *StartModel3D = nullptr;
 cModel3D *EndModel3D = nullptr;
 
 
-
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // Нахождение геометрии, или ее загрузка
 //-----------------------------------------------------------------------------
 cModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
-	if (FileName == nullptr)
+	if (!FileName)
 		return nullptr;
 
 	// сначала пытаемся найти уже сущ.
@@ -96,12 +90,10 @@ cModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool Nee
 	return Model;
 }
 
-
-
 //-----------------------------------------------------------------------------
 //	Присоеденяем Model3D к списку
 //-----------------------------------------------------------------------------
-void vw_AttachModel3D(cModel3D * NewModel3D)
+void vw_AttachModel3D(cModel3D *NewModel3D)
 {
 	if (NewModel3D == nullptr)
 		return;
@@ -119,13 +111,10 @@ void vw_AttachModel3D(cModel3D * NewModel3D)
 	}
 }
 
-
-
-
 //-----------------------------------------------------------------------------
 //	Удаляем Model3D из списка
 //-----------------------------------------------------------------------------
-void vw_DetachModel3D(cModel3D * OldModel3D)
+void vw_DetachModel3D(cModel3D *OldModel3D)
 {
 	if (OldModel3D == nullptr)
 		return;
@@ -146,9 +135,6 @@ void vw_DetachModel3D(cModel3D * OldModel3D)
 		OldModel3D->Next->Prev = nullptr;
 }
 
-
-
-
 //-----------------------------------------------------------------------------
 //	Удаляем все Model3D в списке
 //-----------------------------------------------------------------------------
@@ -164,4 +150,3 @@ void vw_ReleaseAllModel3D()
 	StartModel3D = nullptr;
 	EndModel3D = nullptr;
 }
-

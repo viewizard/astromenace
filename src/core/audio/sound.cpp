@@ -43,7 +43,7 @@ struct sSound {
 		alSourceStop(Source);
 		alDeleteSources(1, &Source);
 		alGetError(); // reset errors
-	};
+	}
 
 	void Replay();
 	void Stop(uint32_t StopDelayTicks);

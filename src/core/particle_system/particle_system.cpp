@@ -34,9 +34,6 @@ extern bool ParticleSystemUseGLSL;
 extern float ParticleSystemQuality;
 
 
-
-
-
 cParticleSystem::cParticleSystem()
 {
 	// начальные установки для мартиц поворотов
@@ -85,7 +82,6 @@ void cParticleSystem::Attach(sParticle * NewParticle)
 	ParticlesCount++;
 }
 
-
 //-----------------------------------------------------------------------------
 //	отключить ее от системы
 //-----------------------------------------------------------------------------
@@ -112,10 +108,6 @@ void cParticleSystem::Detach(sParticle * OldParticle)
 	ParticlesCount--;
 }
 
-
-
-
-
 //-----------------------------------------------------------------------------
 // обновление системы
 //-----------------------------------------------------------------------------
@@ -134,8 +126,6 @@ bool cParticleSystem::Update(float Time)
 
 	TimeLastUpdate = Time;
 
-
-
 	// для всех частиц вызываем их собственный апдейт
 	sParticle *ParticleTmp = Start;
 	while (ParticleTmp != nullptr) {
@@ -148,10 +138,6 @@ bool cParticleSystem::Update(float Time)
 		}
 		ParticleTmp = ParticleTmp2;
 	}
-
-
-
-
 
 	// подсчитываем, как много частиц нам нужно создать из ParticlesPerSec
 	float ParticlesNeeded = (ParticlesPerSec/ParticleSystemQuality) * TimeDelta + EmissionResidue;
@@ -217,7 +203,6 @@ bool cParticleSystem::Update(float Time)
 				NewParticle->AlphaDelta = (2.0f-AlphaEnd*2.0f) / NewParticle->Lifetime;
 				NewParticle->Alpha = AlphaEnd;
 			}
-
 
 			// выпускаем частицу возле места нахождения системы
 			if (CreationType == 0) // точка
@@ -340,13 +325,9 @@ bool cParticleSystem::Update(float Time)
 				NewParticle->Location = Location + tmp;
 			}
 
-
 			// учитываем перемещение системы, генерируем частицы равномерно
 			sVECTOR3D L = (Location - PrevLocation)^((ParticlesNeeded-ParticlesCreated)/ParticlesNeeded);
 			NewParticle->Location = NewParticle->Location - L;
-
-
-
 
 			// считаем размер частицы
 			NewParticle->Size = SizeStart + vw_Randf0 * SizeVar;
@@ -379,9 +360,6 @@ bool cParticleSystem::Update(float Time)
 
 			}
 
-
-
-
 			// испускатель имеет направление. этот код немного добавляет случайности
 			if (Theta == 0.0f) {
 				NewParticle->Velocity = Direction;
@@ -391,10 +369,7 @@ bool cParticleSystem::Update(float Time)
 				vw_RotatePoint(NewParticle->Velocity, sVECTOR3D(Theta*vw_Randf0/2.0f, Theta*vw_Randf0/2.0f, 0.0f));
 			}
 
-
-
 			NewParticle->NeedStop = NeedStop;
-
 
 			// находим перемещение
 			float NewSpeed = Speed + vw_Randf0 * SpeedVar;
@@ -409,15 +384,12 @@ bool cParticleSystem::Update(float Time)
 		}
 	}
 
-
 	// если уже ничего нет и нужно выйти - выходим
 	if (DestroyIfNoParticles)
 		if (ParticlesCount == 0) {
 			NeedDestroy = true;
 			return false;
 		}
-
-
 
 	// работа с источником света (если он есть)
 	if (Light != nullptr) {
@@ -465,7 +437,6 @@ bool cParticleSystem::Update(float Time)
 		else Light->On = true;
 	}
 
-
 	// находим новые данные AABB
 
 	// предварительная инициализация
@@ -480,7 +451,6 @@ bool cParticleSystem::Update(float Time)
 		MinY = MaxY = ParticleTmp->Location.y;
 		MinZ = MaxZ = ParticleTmp->Location.z;
 	}
-
 
 	while (ParticleTmp != nullptr) {
 		// строим AABB
@@ -517,15 +487,8 @@ bool cParticleSystem::Update(float Time)
 	AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
 	AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
 
-
-
 	return true;
 }
-
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // прорисовка системы
@@ -533,8 +496,8 @@ bool cParticleSystem::Update(float Time)
 void cParticleSystem::Draw(sTexture **CurrentTexture)
 {
 	// если не входит в фуструм - рисовать не нужно
-	if (!vw_BoxInFrustum(AABB[6], AABB[0])) return;
-
+	if (!vw_BoxInFrustum(AABB[6], AABB[0]))
+		return;
 
 	// т.к. у нас может быть набор текстур, обходим все текстуры по порядку
 	for (int i=0; i<TextureQuantity; i++) {
@@ -546,7 +509,6 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 			ParticleTmp = ParticleTmp->Next;
 		}
 
-
 		// если есть живые - рисуем их
 		if (DrawCount > 0) {
 			if (tmpDATA != nullptr) {
@@ -557,7 +519,6 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 			GLubyte *tmpDATAub = nullptr;
 			// номер float'а в последовательности
 			int k=0;
-
 
 			// делаем массив для всех элементов
 			// RI_3f_XYZ | RI_2f_TEX | RI_4ub_COLOR
@@ -723,28 +684,23 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 			}
 		}
 
-
 		if (DrawCount > 0) {
-
 			if (*CurrentTexture != Texture[i]) {
 				vw_SetTexture(0, Texture[i]);
 				*CurrentTexture = Texture[i];
 			}
 
+			if (BlendType == 1)
+				vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
-			if (BlendType == 1) vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+			vw_SendVertices(RI_QUADS, 4 * DrawCount, RI_3f_XYZ | RI_4ub_COLOR | RI_1_TEX,
+					tmpDATA, 6 * sizeof(tmpDATA[0]));
 
-			vw_SendVertices(RI_QUADS, 4*DrawCount, RI_3f_XYZ | RI_4ub_COLOR | RI_1_TEX, tmpDATA, 6*sizeof(tmpDATA[0]));
-
-			if (BlendType != 0) vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-
+			if (BlendType != 0)
+				vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 		}
 	}
 }
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // поставить правильный полет частиц, т.е. учет внешней скорости
@@ -754,11 +710,9 @@ void cParticleSystem::SetStartLocation(sVECTOR3D NewLocation)
 	PrevLocation = NewLocation;
 	Location = NewLocation;
 
-	if (Light != nullptr)
+	if (Light)
 		Light->SetLocation(Location);
 }
-
-
 
 //-----------------------------------------------------------------------------
 // перемещение всех частиц и центра
@@ -778,11 +732,9 @@ void cParticleSystem::MoveSystem(sVECTOR3D NewLocation)
 		tmp = tmp->Next;
 	}
 
-
-	if (Light != nullptr)
+	if (Light)
 		Light->SetLocation(Location);
 }
-
 
 //-----------------------------------------------------------------------------
 // перемещение центра
@@ -798,7 +750,6 @@ void cParticleSystem::MoveSystemLocation(sVECTOR3D NewLocation)
 	if (Light != nullptr)
 		Light->SetLocation(Location);
 }
-
 
 //-----------------------------------------------------------------------------
 // установка направления "движения" системы
@@ -816,8 +767,6 @@ void cParticleSystem::RotateSystemByAngle(sVECTOR3D NewAngle)
 	vw_Matrix33CalcPoint(Direction, OldInvRotationMat);
 	vw_Matrix33CalcPoint(Direction, CurrentRotationMat);
 }
-
-
 
 //-----------------------------------------------------------------------------
 // установка направления "движения" системы + перенос всех частиц
@@ -847,9 +796,6 @@ void cParticleSystem::RotateSystemAndParticlesByAngle(sVECTOR3D NewAngle)
 	}
 }
 
-
-
-
 //-----------------------------------------------------------------------------
 // поворот частиц на угол без поворота системы
 //-----------------------------------------------------------------------------
@@ -864,7 +810,6 @@ void cParticleSystem::RotateParticlesByAngle(sVECTOR3D NewAngle)
 	float TmpRotationMat[9];
 	vw_Matrix33CreateRotate(TmpRotationMat, NewAngle);
 
-
 	sParticle *tmp = Start;
 	while (tmp != nullptr) {
 		// меняем каждой частице
@@ -876,12 +821,7 @@ void cParticleSystem::RotateParticlesByAngle(sVECTOR3D NewAngle)
 		tmp->Location = TMP + Location;
 		tmp = tmp->Next;
 	}
-
 }
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // остановить все частицы в системе
@@ -898,9 +838,6 @@ void cParticleSystem::StopAllParticles()
 		tmp = tmp->Next;
 	}
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 // поставить правильный полет частиц, т.е. учет внешней скорости

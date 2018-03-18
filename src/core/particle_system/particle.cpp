@@ -28,9 +28,6 @@
 #include "particle.h"
 
 
-
-
-
 //-----------------------------------------------------------------------------
 //	обновление информации частицы
 //-----------------------------------------------------------------------------
@@ -66,7 +63,6 @@ bool sParticle::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractiv
 
 			AttractDir.Normalize();
 			Velocity += AttractDir ^ (MagnetFactor * TimeDelta);
-
 		}
 
 		// просчитываем текущий цвет частицы
@@ -90,14 +86,11 @@ bool sParticle::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractiv
 			vw_Clamp( Alpha, 0.0f, 1.0f );
 		}
 
-
 		// текущий размер частицы
 		Size += SizeDelta * TimeDelta;
-
 
 	}
 
 	// если пришли сюда - значит все хорошо и частица работает
 	return true;
-
 }
