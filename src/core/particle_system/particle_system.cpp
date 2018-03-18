@@ -141,7 +141,7 @@ bool cParticleSystem::Update(float Time)
 	while (ParticleTmp != nullptr) {
 		sParticle *ParticleTmp2 = ParticleTmp->Next;
 		// функция вернет false, если частица уже мертва
-		if (!ParticleTmp->Update(TimeDelta, Location, IsAttractive, AttractiveValue)) {
+		if (!ParticleTmp->Update(TimeDelta, Location, IsMagnet, MagnetFactor)) {
 			Detach(ParticleTmp);
 			delete ParticleTmp;
 			ParticleTmp = nullptr;
@@ -889,7 +889,7 @@ void cParticleSystem::RotateParticlesByAngle(sVECTOR3D NewAngle)
 void cParticleSystem::StopAllParticles()
 {
 	Speed = 0.0f;
-	IsAttractive = false;
+	IsMagnet = false;
 
 	sParticle *tmp = Start;
 	while (tmp != nullptr) {

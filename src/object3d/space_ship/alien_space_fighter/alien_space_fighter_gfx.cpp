@@ -61,7 +61,7 @@ void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 2;
 		ParticleSystem->CreationSize = sVECTOR3D(0.8f,0.8f,0.8f);
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.1f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -85,7 +85,7 @@ void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
 		ParticleSystem->CreationSize = sVECTOR3D(0.4f,0.7f,0.1f);
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.3f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -107,7 +107,7 @@ void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.0f;
 		ParticleSystem->ParticlesPerSec = 15;
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		break;
 	case 4:
 		// кабина - высокая, двойная
@@ -127,7 +127,7 @@ void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.0f;
 		ParticleSystem->ParticlesPerSec = 20;
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		ParticleSystem->CreationType = 1;
 		ParticleSystem->CreationSize = sVECTOR3D(0.1f,0.9f,0.1f);
 		break;
@@ -149,7 +149,7 @@ void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.50f;
 		ParticleSystem->ParticlesPerSec = 40;
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.0f, 0.55f, 1.0f, 0.0f, 0.1f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -173,7 +173,7 @@ void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
 		ParticleSystem->CreationSize = sVECTOR3D(0.5f,0.5f,0.1f);
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.3f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -197,7 +197,7 @@ void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->ParticlesPerSec = 20;
 		ParticleSystem->CreationType = 1;
 		ParticleSystem->CreationSize = sVECTOR3D(0.1f,0.2f,0.1f);
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		break;
 
 	default:

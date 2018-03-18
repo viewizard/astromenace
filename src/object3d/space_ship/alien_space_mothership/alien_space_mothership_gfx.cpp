@@ -62,7 +62,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
 		ParticleSystem->CreationSize = sVECTOR3D(2.4f,2.4f,0.1f);
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.65f, 0.15f, 0.0f, 0.05f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -86,7 +86,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
 		ParticleSystem->CreationSize = sVECTOR3D(1.2f,1.2f,0.1f);
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		break;
 	case 3:
 		// внутренности
@@ -110,8 +110,8 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->CreationSize = sVECTOR3D(15.0f,15.0f,3.0f);
 		ParticleSystem->DeadZone = 14.9f;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = -2.5f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = -2.5f;
 		break;
 	case 4:
 		// внутренности2
@@ -135,8 +135,8 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->CreationSize = sVECTOR3D(15.0f,15.0f,3.0f);
 		ParticleSystem->DeadZone = 14.9f;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = 15.0f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 15.0f;
 		break;
 	case 5:
 		// внутренности3
@@ -160,8 +160,8 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->CreationSize = sVECTOR3D(9.0f,9.0f,2.0f);
 		ParticleSystem->DeadZone = 8.9f;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = -2.5f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = -2.5f;
 		break;
 	case 6:
 		// внутренности4
@@ -185,8 +185,8 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->CreationSize = sVECTOR3D(9.0f,9.0f,2.0f);
 		ParticleSystem->DeadZone = 8.9f;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = 15.0f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 15.0f;
 		break;
 
 
@@ -215,7 +215,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
 		ParticleSystem->CreationSize = sVECTOR3D(0.5f,0.5f,0.1f);
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		break;
 	case 10:
 		// двигатель
@@ -237,7 +237,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 2;
 		ParticleSystem->CreationSize = sVECTOR3D(0.8f,0.8f,0.8f);
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		break;
 	case 11:
 		// большой двигатель
@@ -259,8 +259,8 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
 		ParticleSystem->CreationSize = sVECTOR3D(1.4f,1.4f,0.1f);
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = 13.0f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 13.0f;
 		break;
 	case 12:
 		// большой двигатель
@@ -282,7 +282,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
 		ParticleSystem->CreationSize = sVECTOR3D(2.4f,2.4f,0.1f);
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.03f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -308,8 +308,8 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->CreationSize = sVECTOR3D(14.0f,5.0f,10.0f);
 		ParticleSystem->DeadZone = 4.9f;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = 15.0f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 15.0f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -340,8 +340,8 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->ParticlesPerSec = 150;
 		ParticleSystem->CreationType = 1;
 		ParticleSystem->CreationSize = sVECTOR3D(5.0f,3.0f,3.0f);
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = 30.0f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 30.0f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -365,7 +365,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
 		ParticleSystem->CreationSize = sVECTOR3D(1.2f,1.2f,0.1f);
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.05f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -391,8 +391,8 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->CreationSize = sVECTOR3D(14.0f,1.0f,14.0f);
 		ParticleSystem->DeadZone = 13.9f;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = -2.5f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = -2.5f;
 		break;
 	case 18:
 		// внутренности2
@@ -416,8 +416,8 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->CreationSize = sVECTOR3D(14.0f,1.0f,14.0f);
 		ParticleSystem->DeadZone = 13.9f;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = 20.0f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 20.0f;
 		break;
 	case 19:
 		// внутренности
@@ -437,7 +437,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -461,7 +461,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = 1;
 		ParticleSystem->CreationSize = sVECTOR3D(2.0f,2.0f,0.1f);
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;

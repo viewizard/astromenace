@@ -1628,7 +1628,7 @@ missile:
 
 						Projectile->GraphicFX[i]->Speed = Projectile->GraphicFX[i]->Speed/CurrentPenalty;
 						Projectile->GraphicFX[i]->Life = Projectile->GraphicFX[i]->Life*CurrentPenalty;
-						Projectile->GraphicFX[i]->AttractiveValue = Projectile->GraphicFX[i]->AttractiveValue/(CurrentPenalty*CurrentPenalty);
+						Projectile->GraphicFX[i]->MagnetFactor = Projectile->GraphicFX[i]->MagnetFactor/(CurrentPenalty*CurrentPenalty);
 					}
 					Projectile->ObjectStatus = ObjectStatus;
 					// учитываем пенальти для снаряда
@@ -1725,7 +1725,7 @@ missile:
 
 						Projectile->GraphicFX[i]->Speed = Projectile->GraphicFX[i]->Speed/CurrentPenalty;
 						Projectile->GraphicFX[i]->Life = Projectile->GraphicFX[i]->Life*CurrentPenalty;
-						Projectile->GraphicFX[i]->AttractiveValue = Projectile->GraphicFX[i]->AttractiveValue/(CurrentPenalty*CurrentPenalty);
+						Projectile->GraphicFX[i]->MagnetFactor = Projectile->GraphicFX[i]->MagnetFactor/(CurrentPenalty*CurrentPenalty);
 					}
 					Projectile->ObjectStatus = ObjectStatus;
 					// учитываем пенальти для снаряда

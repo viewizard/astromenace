@@ -115,7 +115,7 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 							Projectile->GraphicFX[i]->ParticlesPerSec = (int)(Projectile->GraphicFX[i]->ParticlesPerSec*GameNPCWeaponPenalty);
 							Projectile->GraphicFX[i]->Speed = Projectile->GraphicFX[i]->Speed*GameNPCWeaponPenalty;
 							Projectile->GraphicFX[i]->Life = Projectile->GraphicFX[i]->Life/GameNPCWeaponPenalty;
-							Projectile->GraphicFX[i]->AttractiveValue = Projectile->GraphicFX[i]->AttractiveValue*(GameNPCWeaponPenalty*GameNPCWeaponPenalty);
+							Projectile->GraphicFX[i]->MagnetFactor = Projectile->GraphicFX[i]->MagnetFactor*(GameNPCWeaponPenalty*GameNPCWeaponPenalty);
 						}
 						Projectile->SpeedStart = Projectile->Speed*GameNPCWeaponPenalty;
 						Projectile->SpeedEnd = (Projectile->Speed*GameNPCWeaponPenalty)/4.0f;

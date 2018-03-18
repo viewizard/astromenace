@@ -213,8 +213,8 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->CreationSize = sVECTOR3D(2.0f,0.3f,2.0f);
 		ParticleSystem->DeadZone = 1.9f;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = -2.5f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = -2.5f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.15f, 0.35f, 1.0f, 0.0f, 0.0001f);
 		break;
 	case 8: // torpedo
@@ -238,8 +238,8 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->CreationSize = sVECTOR3D(3.0f,0.3f,3.0f);
 		ParticleSystem->DeadZone = 0.9f;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = -2.5f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = -2.5f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 1.0f, 0.15f, 0.0f, 0.0005f);
 		break;
 	case 9: // nuke
@@ -263,8 +263,8 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->CreationSize = sVECTOR3D(3.0f,0.3f,3.0f);
 		ParticleSystem->DeadZone = 0.9f;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = -2.5f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = -2.5f;
 		break;
 	case 10: // missile, swamp
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -287,8 +287,8 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->CreationSize = sVECTOR3D(3.0f,0.3f,3.0f);
 		ParticleSystem->DeadZone = 0.9f;
 		ParticleSystem->AlphaShowHide = false;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = -2.5f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = -2.5f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.005f);
 		break;
 

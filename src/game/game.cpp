@@ -686,8 +686,8 @@ void InitGame()
 	EnergyParticleSystem2D->Life       = 2.10f;
 	EnergyParticleSystem2D->LifeVar       = 0.05f;
 	EnergyParticleSystem2D->ParticlesPerSec = 50;
-	EnergyParticleSystem2D->IsAttractive = true;
-	EnergyParticleSystem2D->AttractiveValue = 150.0f;
+	EnergyParticleSystem2D->IsMagnet = true;
+	EnergyParticleSystem2D->MagnetFactor = 150.0f;
 	EnergyParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
 	EnergyParticleSystem2D->MoveSystem(sVECTOR3D(33.0f,29.0f,0.0f));
 
@@ -716,8 +716,8 @@ void InitGame()
 	LifeParticleSystem2D->CreationType = 2;
 	LifeParticleSystem2D->CreationSize = sVECTOR3D(25.0f, 25.0f, 0.0f);
 	LifeParticleSystem2D->DeadZone = 24.0f;
-	LifeParticleSystem2D->IsAttractive = true;
-	LifeParticleSystem2D->AttractiveValue = 25.0f;
+	LifeParticleSystem2D->IsMagnet = true;
+	LifeParticleSystem2D->MagnetFactor = 25.0f;
 	LifeParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare.tga");
 	LifeParticleSystem2D->MoveSystem(sVECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));
 	LifeParticleSystem2D->SetRotation(sVECTOR3D(0.0f, 0.0f, 90.0f));

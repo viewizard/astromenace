@@ -24,8 +24,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #ifndef PARTICLESYSTEM2D_H
 #define PARTICLESYSTEM2D_H
 
@@ -39,28 +37,23 @@ struct sCOLORVALUE2D {
 };
 
 struct sParticle2D {
-	// обновление информации в частице
 	bool Update(float TimeDelta, sVECTOR3D ParentLocation = sVECTOR3D(0.0f,0.0f,0.0f),
-		    bool Attractive = false, float AttractiveValue = 25.0f);
+		    bool Attractive = false, float MagnetFactor = 25.0f);
 
-	// текущее место расположения частицы
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
-	// текущая скорость частицы
 	sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};
 
-	// текущий цвет частицы
 	sCOLORVALUE2D Color{1.0f, 0.0f, 0.0f, 0.5f};
-	// значение приращение цвета
 	sCOLORVALUE2D ColorDelta{0.0f, 0.0f, 0.0f, 0.0f};
 
-	float Age{0.0f};	// время жизни частицы в секундах
-	float Lifetime{0.0f};	// оставщееся время жизни частицы
+	float Age{0.0f};
+	float Lifetime{0.0f};
 
-	float Size{1.0f};	// размер частицы
-	float SizeDelta{0.0f};	// значение изменения размера
+	float Size{1.0f};
+	float SizeDelta{0.0f};
 
-	float Alpha{1.0f};	// прозрачность
-	bool NeedStop{false};	// если нужно замедлять и остановить
+	float Alpha{1.0f};
+	bool NeedStop{false};
 };
 
 struct sParticleSystem2D
@@ -68,57 +61,55 @@ struct sParticleSystem2D
 	bool Update(float Time);
 	void Draw();
 	void SetRotation(sVECTOR3D NewAngle);
-	// передвинуть все частици на указаное значение
+	// move center of particle system and all particles
 	void MoveSystem(sVECTOR3D NewLocation);
-	// сдвинуть только центр системы
+	// move center of particle system
 	void MoveSystemLocation(sVECTOR3D NewLocation);
 
-	// кол-во создаваемых частиц в секунду
-	unsigned int ParticlesPerSec{100};
+	unsigned int ParticlesPerSec{100};	// emit rate (particles per second)
 
-	// базовая текстура частиц
 	sTexture *Texture{nullptr};
 
-	sVECTOR3D Location{0.0f, 0.0f, 0.0f};	// текущее положение частиц в пространстве
-	sVECTOR3D Direction{0.0f, 0.0f, 0.0f};	// текущее направление системы (используется для создания частиц+некоторые вариации)
-	sVECTOR3D Angle{0.0f, 0.0f, 0.0f};	// угол поворота системы
+	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
+	sVECTOR3D Direction{0.0f, 0.0f, 0.0f};
+	sVECTOR3D Angle{0.0f, 0.0f, 0.0f};
 
-	// текущая матрица вращения
-	float RotationMatrix[9]{1.0f, 0.0f, 0.0f,
+	float RotationMatrix[9]{1.0f, 0.0f, 0.0f, // current rotation matrix
 				0.0f, 1.0f, 0.0f,
 				0.0f, 0.0f, 1.0f};
 
-	float SizeStart{1.0f};		// размер частиц в мировых координатах
+	float SizeStart{1.0f};
 	float SizeVar{0.0f};
 	float SizeEnd{1.0f};
 
-	float AlphaStart{1.0f};		// Прозрачность частиц. Alpha 0 = невидем, Alpha 1 = видемость 100%
+	float AlphaStart{1.0f};
 	float AlphaVar{0.0f};
 	float AlphaEnd{1.0f};
 
-	sCOLORVALUE2D ColorStart{1.0f, 1.0f, 1.0f, 1.0f}; // Цвет частиц при старте и завершении линейно интерполируется
+	sCOLORVALUE2D ColorStart{1.0f, 1.0f, 1.0f, 1.0f};
 	sCOLORVALUE2D ColorVar{0.0f, 0.0f, 0.0f, 0.0f};
 	sCOLORVALUE2D ColorEnd{1.0f, 1.0f, 1.0f, 1.0f};
 
-	float Speed{1.0f};		// Скалярная скорость, с вектором направления получаем вектор движения
+	float Speed{1.0f};
 	float SpeedVar{1.0f};
-	float SpeedOnCreation{1.0f};	// Скорость при создании, сохраняем, если будут менять скорость в процессе
+	float SpeedOnCreation{1.0f};
 
-	int CreationType{0};		// тип создания... 0-точка, 1-квадрат, 2-окружность
+	// TODO probably, should be moved to enum
+	int CreationType{0};		// creation type: 0 - point, 1 - quad, 2 - circle
 	sVECTOR3D CreationSize{0.05f, 0.05f, 0.05f};
 
-	float Life{1.0f};		// жизнь частицы в секундах
+	float Life{1.0f};
 	float LifeVar{0.0f};
 
-	bool IsAttractive{false};	// система притягивает частицы или нет
-	float AttractiveValue{25.0f};	// если притягивает, с каким коэф.
+	bool IsMagnet{false};		// is particle system have magnet effect?
+	float MagnetFactor{25.0f};	// magnet factor
 
-	float DeadZone{0.0f};		// мертвая зона (радиус, где вообще не рисуем)
-	float Theta{1.0f};		// показывает, насколько отличным будет выбор направления у создаваемой частицы с направлением системы
-	bool IsSuppressed{false};	// можем ли мы создавать частицы или нет
-	float Age{0.0f};		// возраст системы в секундах
-	float TimeLastUpdate{-1.0f};	// последнее время обновления системы
-	float EmissionResidue{0.0f};	// остаток создания частицы (если к примеру 0.5 частиц в секунду стоит)
+	float DeadZone{0.0f};		// dead zone
+	float Theta{1.0f};		// direction deviation for new created particles
+	bool IsSuppressed{false};	// if suppressed, particle system can't emit new particles
+	float Age{0.0f};
+	float TimeLastUpdate{-1.0f};
+	float EmissionResidue{0.0f};	// emission residue, for next update cycle
 
 	std::list<sParticle2D> ParticlesList;
 };

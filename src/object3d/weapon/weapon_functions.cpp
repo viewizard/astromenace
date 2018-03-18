@@ -239,7 +239,7 @@ void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 30.00f;
 		ParticleSystem->Life       = 0.30f;
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		ParticleSystem->ParticlesPerSec = 20;
 		ParticleSystem->CreationType       = 1;
 		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.2f,0.3f);
@@ -260,7 +260,7 @@ void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 30.00f;
 		ParticleSystem->Life       = 0.30f;
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		ParticleSystem->ParticlesPerSec = 20;
 		ParticleSystem->CreationType       = 1;
 		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.2f,0.3f);

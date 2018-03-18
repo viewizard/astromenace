@@ -130,8 +130,8 @@ public:
 	float	Theta{1.0f};
 
 	// система притягивает частицы или нет
-	bool	IsAttractive{0};
-	float	AttractiveValue{25.0f};
+	bool	IsMagnet{0};
+	float	MagnetFactor{25.0f};
 
 	// можем ли мы создавать частицы или нет
 	bool	IsSuppressed{false};

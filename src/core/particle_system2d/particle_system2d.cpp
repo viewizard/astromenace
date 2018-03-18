@@ -38,7 +38,7 @@
 
 
 // обновление информации в частице
-bool sParticle2D::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractive, float AttractiveValue)
+bool sParticle2D::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractive, float MagnetFactor)
 {
 	// Если частица уже мертва, ее нужно отключить - передаем в систему эти данные
 	if (Age + TimeDelta >= Lifetime) {
@@ -63,10 +63,10 @@ bool sParticle2D::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attract
 
 		// если нужно использовать притяжения, считаем перемещение
 		if (NeedStop)
-			AttractiveValue -= AttractiveValue * TimeDelta;
+			MagnetFactor -= MagnetFactor * TimeDelta;
 
 		AttractDir.Normalize();
-		Velocity += AttractDir ^ (AttractiveValue * TimeDelta);
+		Velocity += AttractDir ^ (MagnetFactor * TimeDelta);
 
 	}
 
@@ -103,7 +103,7 @@ bool sParticleSystem2D::Update(float Time)
 
 	// для всех частиц
 	for (auto iter = ParticlesList.begin(); iter != ParticlesList.end();) {
-		if (!iter->Update(TimeDelta, Location, IsAttractive, AttractiveValue))
+		if (!iter->Update(TimeDelta, Location, IsMagnet, MagnetFactor))
 			iter = ParticlesList.erase(iter);
 		else
 			++iter;

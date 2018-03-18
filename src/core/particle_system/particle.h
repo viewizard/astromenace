@@ -51,7 +51,7 @@ struct sParticle {
 	~sParticle() {};
 
 	// обновление информации в частице
-	bool Update(float TimeDelta, sVECTOR3D ParentLocation = sVECTOR3D{0.0f,0.0f,0.0f}, bool Attractive = false, float AttractiveValue = 25.0f);
+	bool Update(float TimeDelta, sVECTOR3D ParentLocation = sVECTOR3D{0.0f,0.0f,0.0f}, bool Attractive = false, float MagnetFactor = 25.0f);
 	// текущее место расположения частицы
 	sVECTOR3D	Location{0.0f, 0.0f, 0.0f};
 	// текущая скорость частицы

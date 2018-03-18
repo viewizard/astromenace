@@ -191,8 +191,8 @@ void CreateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = 1;
 		ParticleSystem->CreationSize = sVECTOR3D(0.6f,0.6f,0.1f);
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = 50.0f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 50.0f;
 		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.0f, 0.7f, 1.0f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;

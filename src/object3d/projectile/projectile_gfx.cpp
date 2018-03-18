@@ -137,8 +137,8 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->CreationSize = sVECTOR3D(2.0f,2.0f,0.5f);
 		ParticleSystem->DeadZone = 1.5f;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = 25.0f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 25.0f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.5f, 0.35f, 0.0f, 0.1f);
 		break;
 	case 6:	// Ion
@@ -158,8 +158,8 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 30;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = -20.0f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = -20.0f;
 		break;
 	case 7:	// Plasma
 		ParticleSystem->ColorStart.r = 0.00f;
@@ -178,7 +178,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
+		ParticleSystem->IsMagnet = true;
 		ParticleSystem->NeedStop = true;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.15f);
@@ -203,8 +203,8 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->CreationSize = sVECTOR3D(1.3f,1.3f,0.2f);
 		ParticleSystem->DeadZone = 1.2f;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = 2.0f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 2.0f;
 		break;
 	case 9:	// Plasma
 		ParticleSystem->ColorStart.r = 0.00f;
@@ -226,8 +226,8 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->CreationSize = sVECTOR3D(1.3f,0.2f,1.3f);
 		ParticleSystem->DeadZone = 1.2f;
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = 2.0f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 2.0f;
 		break;
 	case 10:	// Plasma
 		ParticleSystem->ColorStart.r = 0.00f;
@@ -424,8 +424,8 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->CreationType = 2;
 		ParticleSystem->CreationSize = sVECTOR3D(0.8f,0.1f,0.8f);
 		ParticleSystem->AlphaShowHide = true;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = -20.0f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = -20.0f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 1.0f, 0.0f, 0.0f, 0.05f);
 		break;
 	case 20:	// Laser
@@ -465,8 +465,8 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->ParticlesPerSec = 150;
 		ParticleSystem->CreationType = 2;
 		ParticleSystem->CreationSize = sVECTOR3D(1.0f,1.0f,0.1f);
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = -40.0f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = -40.0f;
 		break;
 
 
@@ -775,8 +775,8 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->CreationType = 2;
 		ParticleSystem->CreationSize = sVECTOR3D(2.0,2.0f,2.0f);
 		ParticleSystem->DeadZone = 1.9f;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = 25.0f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 25.0f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.1f);
 		break;
 
@@ -800,8 +800,8 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->CreationType = 2;
 		ParticleSystem->CreationSize = sVECTOR3D(2.0,0.2f,2.0f);
 		ParticleSystem->DeadZone = 1.9f;
-		ParticleSystem->IsAttractive = true;
-		ParticleSystem->AttractiveValue = 2.0f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 2.0f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.2f, 0.2f, 0.0f, 0.1f);
 		break;
 	case 38:	// Оружие пришельцев, Laser
