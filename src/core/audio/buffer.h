@@ -33,6 +33,7 @@ sources, you are free to change or add methods to sound.h header file instead.
 #define Buffer_H
 
 #include "../base.h"
+#include "../vfs/vfs.h"
 #include "openal.h"
 #include "vorbis/vorbisfile.h"
 #include "ogg/ogg.h"
@@ -40,12 +41,11 @@ sources, you are free to change or add methods to sound.h header file instead.
 #define NUM_OF_DYNBUF	20	// (stream) num buffers in queue
 #define DYNBUF_SIZE	16384	// (stream) buffer size
 
-struct sFILE;
 
 struct sStreamBuffer {
-	std::array<ALuint, NUM_OF_DYNBUF> Buffers;
-	std::unique_ptr<sFILE> File;
-	OggVorbis_File mVF;
+	std::array<ALuint, NUM_OF_DYNBUF> Buffers{};
+	std::unique_ptr<sFILE> File{};
+	OggVorbis_File mVF{};
 	vorbis_info *mInfo{nullptr};
 };
 

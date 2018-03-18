@@ -63,16 +63,16 @@ struct sMusic {
 	void SetGlobalVolume(float NewGlobalVolume);
 
 	sStreamBuffer *Stream{nullptr};
-	ALuint Source;
-	float LocalVolume;
-	float GlobalVolume;
-	bool Looped;
-	std::string LoopPart;
+	ALuint Source{0};
+	float LocalVolume{0.0f};
+	float GlobalVolume{0.0f};
+	bool Looped{false};
+	std::string LoopPart{};
 
 	// effects-related variables
 	bool FadeInSwitch{false};
-	float FadeEndVol;
-	float FadeStartVol;
+	float FadeEndVol{0.0f};
+	float FadeStartVol{0.0f};
 	bool FadeOutSwitch{false};
 	uint32_t FadeTicks{0};
 	uint32_t FadePeriod{0};

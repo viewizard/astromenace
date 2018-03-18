@@ -31,7 +31,6 @@ From one side, we don't need more then one stream for same source (file name), f
 another side, in this way we can reuse already created stream buffers.
 */
 
-#include "../vfs/vfs.h"
 #include "buffer.h"
 
 namespace {

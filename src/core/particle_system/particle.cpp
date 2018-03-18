@@ -34,7 +34,7 @@
 //-----------------------------------------------------------------------------
 //	обновление информации частицы
 //-----------------------------------------------------------------------------
-bool sParticle::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractive, float AttractiveValue)
+bool sParticle::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractive, float MagnetFactor)
 {
 
 	// Если частица уже мертва, ее нужно отключить - передаем в систему эти данные
@@ -62,10 +62,10 @@ bool sParticle::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractiv
 
 			// если нужно использовать притяжения, считаем перемещение
 			if (NeedStop)
-				AttractiveValue -= AttractiveValue*TimeDelta;
+				MagnetFactor -= MagnetFactor*TimeDelta;
 
 			AttractDir.Normalize();
-			Velocity += AttractDir ^ (AttractiveValue * TimeDelta);
+			Velocity += AttractDir ^ (MagnetFactor * TimeDelta);
 
 		}
 

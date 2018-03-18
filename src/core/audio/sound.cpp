@@ -50,7 +50,7 @@ struct sSound {
 	void SetLocation(float x, float y, float z);
 	void SetGlobalVolume(float NewMainVolume);
 
-	std::string FileName;
+	std::string FileName{};
 
 	ALuint Source{0};
 	float LocalVolume{0.0f};
