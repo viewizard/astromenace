@@ -97,7 +97,7 @@ void MissionsListInit()
 
 	// проверяем корневой элемент
 	if (!xmlDoc->RootXMLEntry || ("AstroMenaceMissionsList" != xmlDoc->RootXMLEntry->Name)) {
-		std::cerr << "Can't find AstroMenaceMissionsList element in the: " << ScriptName << "\n";
+		std::cerr << __func__ << "(): " << "Can't find AstroMenaceMissionsList element in the: " << ScriptName << "\n";
 		delete xmlDoc;
 		return;
 	}

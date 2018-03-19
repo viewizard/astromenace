@@ -124,7 +124,7 @@ int vw_InitFont(const std::string &FontName)
 		return ERR_PARAMETERS;
 
 	if (FT_Init_FreeType(&InternalLibrary)) {
-		std::cerr << "Can't initialize library, font: " << FontName << "\n";
+		std::cerr << __func__ << "(): " << "Can't initialize library, font: " << FontName << "\n";
 		return ERR_EXT_RES;
 	}
 
@@ -133,7 +133,7 @@ int vw_InitFont(const std::string &FontName)
 
 	std::unique_ptr<sFILE> FontFile = vw_fopen(FontName);
 	if (!FontFile) {
-		std::cerr << "Can't open font file: " << FontName << "\n";
+		std::cerr << __func__ << "(): " << "Can't open font file: " << FontName << "\n";
 		return ERR_FILE_NOT_FOUND;
 	}
 
@@ -147,7 +147,7 @@ int vw_InitFont(const std::string &FontName)
 	vw_fclose(FontFile);
 
 	if (FT_New_Memory_Face(InternalLibrary, InternalFontBuffer.get(), FontBufferSize, 0, &InternalFace)) {
-		std::cerr << "Can't create font face from memory, font: " << FontName << "\n";
+		std::cerr << __func__ << "(): " << "Can't create font face from memory, font: " << FontName << "\n";
 		return ERR_EXT_RES;
 	}
 
@@ -224,12 +224,12 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 {
 	// setup parameters
 	if (FT_Set_Char_Size(InternalFace, InternalFontSize << 6, InternalFontSize << 6, 96, 96)) {
-		std::cerr << "Can't set char size " << InternalFontSize << "\n";
+		std::cerr << __func__ << "(): " << "Can't set char size " << InternalFontSize << "\n";
 		return nullptr;
 	}
 	// load glyph
 	if (FT_Load_Char( InternalFace, UTF32, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT)) {
-		std::cerr << "Can't load glyph: " << UTF32 << "\n";
+		std::cerr << __func__ << "(): " << "Can't load glyph: " << UTF32 << "\n";
 		return nullptr;
 	}
 
@@ -291,7 +291,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 
 	// initial setup
 	if (FT_Set_Char_Size(InternalFace, InternalFontSize << 6, InternalFontSize << 6, 96, 96)) {
-		std::cerr << "Can't set char size " << InternalFontSize << "\n";
+		std::cerr << __func__ << "(): " << "Can't set char size " << InternalFontSize << "\n";
 		return ERR_EXT_RES;
 	}
 
@@ -303,7 +303,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 	for (const auto &CurrentChar : CharsSetUTF32) {
 		// load glyph
 		if (FT_Load_Char(InternalFace, CurrentChar, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT)) {
-			std::cerr << "Can't load Char: " << CurrentChar << "\n";
+			std::cerr << __func__ << "(): " << "Can't load Char: " << CurrentChar << "\n";
 			return ERR_EXT_RES;
 		}
 
@@ -321,7 +321,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 		}
 		// looks like no more space left at all, fail
 		if (CurrentDIBY + FontCharsList.front()->Height > FontTextureHeight) {
-			std::cerr << "Can't generate all font chars in one texture.\n"
+			std::cerr << __func__ << "(): " << "Can't generate all font chars in one texture.\n"
 				  << "Too many chars or too small texture size!\n";
 			break;
 		}
@@ -358,7 +358,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 	sTexture *FontTexture = vw_CreateTextureFromMemory("auto_generated_texture_for_fonts", DIB,
 							   FontTextureWidth, FontTextureHeight, 4, 0);
 	if (!FontTexture) {
-		std::cerr <<  "Can't create font texture.\n";
+		std::cerr << __func__ << "(): " << "Can't create font texture.\n";
 		return ERR_MEM;
 	}
 

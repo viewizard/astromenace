@@ -56,7 +56,7 @@ float GetHullResistance(int ArmourType)
 	case 7:
 		return 4.0f;
 	default:
-		std::cerr << "Error in GetHullResistance function call, wrong ArmourType.\n";
+		std::cerr << __func__ << "(): " << "wrong ArmourType.\n";
 		break;
 	}
 
@@ -85,7 +85,7 @@ float GetSystemsResistance(int ArmourType)
 	case 7:
 		return 5.0f;
 	default:
-		std::cerr << "Error in GetSystemsResistance function call, wrong ArmourType.\n";
+		std::cerr << __func__ << "(): " << "wrong ArmourType.\n";
 		break;
 	}
 
@@ -123,7 +123,7 @@ sTexture *GetArmourTexture(int ArmourType)
 		return vw_FindTextureByName("models/earthfighter/sf-text06.vw2d");
 
 	default:
-		std::cerr << "Error in GetArmourTexture function call, wrong ArmourType.\n";
+		std::cerr << __func__ << "(): " << "wrong ArmourType.\n";
 		break;
 	}
 
@@ -158,7 +158,7 @@ sTexture *GetArmourIllumTexture(int ArmourType)
 		return vw_FindTextureByName("models/earthfighter/sf-illum03.vw2d");
 
 	default:
-		std::cerr << "Error in GetArmourIllumTexture function call, wrong ArmourType.\n";
+		std::cerr << __func__ << "(): " << "wrong ArmourType.\n";
 		break;
 	}
 

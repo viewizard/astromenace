@@ -1056,7 +1056,8 @@ void LoadGameData(eLoading LoadType)
 		// по скрипту, смотрим что загружать + считаем сколько позиций
 		char *FileName = GetMissionFileName();
 		if (FileName == nullptr) {
-			std::cerr << "Critical error. Can't find this mission script file or mission list file.\n"
+			std::cerr << __func__ << "(): "
+				  << "Critical error. Can't find this mission script file or mission list file.\n"
 				  << "Please, check your ./script/ folder for xml files (aimode, list, missions).\n";
 			exit(0);
 		}
@@ -1065,7 +1066,8 @@ void LoadGameData(eLoading LoadType)
 
 		// проверяем корневой элемент
 		if (!xmlDoc->RootXMLEntry || ("AstroMenaceScript" != xmlDoc->RootXMLEntry->Name)) {
-			std::cerr << "Can't find AstroMenaceScript element in the: " << FileName << "\n";
+			std::cerr << __func__ << "(): "
+				  << "Can't find AstroMenaceScript element in the: " << FileName << "\n";
 			delete xmlDoc;
 			exit(0);
 		}
@@ -1073,14 +1075,14 @@ void LoadGameData(eLoading LoadType)
 		// переходим на загрузку
 		cXMLEntry *xmlEntry = xmlDoc->FindFirstChildEntryByName(xmlDoc->RootXMLEntry, "Load");
 		if (xmlEntry == nullptr) {
-			std::cerr << "Can't find Load element in the: " << FileName << "\n";
+			std::cerr << __func__ << "(): " << "Can't find Load element in the: " << FileName << "\n";
 			delete xmlDoc;
 			exit(0);
 		}
 
 		xmlEntry = xmlEntry->FirstChild;
 		if (xmlEntry == nullptr) {
-			std::cerr << "Can't find Load element in the: " << FileName << "\n";
+			std::cerr << __func__ << "(): " << "Can't find Load element in the: " << FileName << "\n";
 			delete xmlDoc;
 			exit(0);
 		}

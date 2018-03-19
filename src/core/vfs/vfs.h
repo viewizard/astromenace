@@ -107,7 +107,7 @@ inline int vw_VFStoBuffer(const std::string &FileName, T &Buffer)
 		break;
 
 	case eFileLocation::Unknown:
-		std::cerr << "Can't find file " << FileName << "\n";
+		std::cerr << __func__ << "(): " << "Can't find file " << FileName << "\n";
 		return ERR_FILE_NOT_FOUND;
 		break;
 	}

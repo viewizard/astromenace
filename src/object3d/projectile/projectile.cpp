@@ -249,16 +249,16 @@ cProjectile::cProjectile(void)
 void cProjectile::Create(int ProjectileNum)
 {
 	if (ProjectileNum <= 0) {
-		std::cerr << "Could not init cProjectile object with Number " << ProjectileNum << "\n";
+		std::cerr << __func__ << "(): " << "Could not init cProjectile object with Number " << ProjectileNum << "\n";
 		return;
 	} else if ((ProjectileNum >= 1 && ProjectileNum <= 99) && ((unsigned int)ProjectileNum > PresetEarthProjectileDataCount)) {
-		std::cerr << "Could not init cProjectile(1) object with Number " << ProjectileNum << "\n";
+		std::cerr << __func__ << "(): " << "Could not init cProjectile(1) object with Number " << ProjectileNum << "\n";
 		return;
 	} else if ((ProjectileNum >= 101 && ProjectileNum <= 199) && ((unsigned int)ProjectileNum-100 > PresetAlienProjectileDataCount)) {
-		std::cerr << "Could not init cProjectile(2) object with Number " << ProjectileNum << "\n";
+		std::cerr << __func__ << "(): " << "Could not init cProjectile(2) object with Number " << ProjectileNum << "\n";
 		return;
 	} else if ((ProjectileNum >= 201 && ProjectileNum <= 299) && ((unsigned int)ProjectileNum-200 > PresetPirateProjectileDataCount)) {
-		std::cerr << "Could not init cProjectile(3) object with Number " << ProjectileNum << "\n";
+		std::cerr << __func__ << "(): " << "Could not init cProjectile(3) object with Number " << ProjectileNum << "\n";
 		return;
 	}
 
@@ -808,7 +808,7 @@ void cProjectile::Create(int ProjectileNum)
 
 
 	default:
-		std::cerr << "Wrong ProjectileNum!\n";
+		std::cerr << __func__ << "(): " << "wrong ProjectileNum.\n";
 	}
 
 

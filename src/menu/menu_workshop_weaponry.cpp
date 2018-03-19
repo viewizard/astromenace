@@ -246,7 +246,7 @@ const char *GetWeaponName(int Num)
 		return "7_weapon19";
 
 	default:
-		std::cerr << "Error in GetWeaponName function call, wrong Num.\n";
+		std::cerr << __func__ << "(): " << "wrong Num.\n";
 		break;
 	}
 
@@ -300,7 +300,7 @@ const char *GetWeaponIconName(int Num)
 		return "menu/weapon19_icon.tga";
 
 	default:
-		std::cerr << "Error in GetWeaponIconName function call, wrong Num.\n";
+		std::cerr << __func__ << "(): " << "wrong Num.\n";
 		break;
 	}
 	return nullptr;

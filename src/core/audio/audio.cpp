@@ -53,7 +53,7 @@ bool vw_InitAudio()
 	Device = alcOpenDevice(nullptr);
 	// check for errors
 	if (!Device) {
-		std::cerr << "Default sound device not found.\n";
+		std::cerr << __func__ << "(): " << "Default sound device not found.\n";
 		return false;
 	}
 

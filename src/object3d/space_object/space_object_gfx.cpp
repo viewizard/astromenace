@@ -89,7 +89,7 @@ void SetSpaceObjectGFX(cParticleSystem *ParticleSystem, int GFXType)
 		break;
 
 	default:
-		std::cerr << "Error in SetSpaceObjectGFX function call, wrong GFXType.\n";
+		std::cerr << __func__ << "(): " << "wrong GFXType.\n";
 		break;
 	}
 

@@ -62,7 +62,7 @@ static sTrackedData PresetTrackedData[] = {
 void cTracked::Create(int TrackedNum)
 {
 	if ((TrackedNum <= 0) || ((unsigned int)TrackedNum > PresetTrackedDataCount)) {
-		std::cerr << "Could not init cTracked object with Number " << TrackedNum << "\n";
+		std::cerr << __func__ << "(): " << "Could not init cTracked object with Number " << TrackedNum << "\n";
 		return;
 	}
 

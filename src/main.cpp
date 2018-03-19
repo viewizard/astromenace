@@ -141,7 +141,7 @@ int InitFontConfig()
 	FcLangSet *langset;
 
 	if (!FcInit()) {
-		std::cerr << "Couldn't init FontConfig.\n";
+		std::cerr << __func__ << "(): " << "Couldn't init FontConfig.\n";
 		return -1;
 	}
 	config = FcConfigGetCurrent();
@@ -199,13 +199,13 @@ int InitFontConfig()
 	}
 	std::cout << "Appropriate fonts detected: " << AppropriateFontsCount << "\n\n";
 	if (AppropriateFontsCount == 0) {
-		std::cerr << "Couldn't find any appropriate fonts installed in your system.\n"
+		std::cout << "Couldn't find any appropriate fonts installed in your system.\n"
 			  << "Please, check your fonts or install TrueType, bold style font\n"
 			  << "with ";
 		for (int i = 0; i < vw_GetLanguageListCount()-1; i++) {
-			std::cerr << vw_GetLanguageList()[i].code << " ";
+			std::cout << vw_GetLanguageList()[i].code << " ";
 		}
-		std::cerr << "and " << vw_GetLanguageList()[vw_GetLanguageListCount()-1].code << " languages support.\n";
+		std::cout << "and " << vw_GetLanguageList()[vw_GetLanguageListCount()-1].code << " languages support.\n";
 		return -1;
 	}
 
@@ -451,12 +451,14 @@ int main( int argc, char **argv )
 
 	const char* HomeEnv = getenv("HOME");
 	if (HomeEnv == nullptr) {
-		std::cerr << "$HOME is not set, will use getpwuid() and getuid() for home folder detection.\n";
+		std::cerr << __func__ << "(): "
+			  << "$HOME is not set, will use getpwuid() and getuid() for home folder detection.\n";
 		struct passwd *pw = getpwuid(getuid());
 		if (pw != nullptr)
 			HomeEnv = pw->pw_dir;
 		else
-			std::cerr << "Can't detect home folder. Note, this could occur segfault issue,\n"
+			std::cerr << __func__ << "(): "
+				  << "Can't detect home folder. Note, this could occur segfault issue,\n"
 				  << "if yours distro don't support XDG Base Directory Specification.\n";
 	}
 
@@ -615,7 +617,7 @@ int main( int argc, char **argv )
 	// подключаем VFS
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (vw_OpenVFS(VFSFileNamePath, GAME_BUILD) != 0) {
-		std::cerr << "gamedata.vfs file not found or corrupted.\n";
+		std::cerr << __func__ << "(): " << "gamedata.vfs file not found or corrupted.\n";
 		return 0;
 	}
 	std::cout << "\n";
@@ -623,7 +625,7 @@ int main( int argc, char **argv )
 
 	// загружаем все текстовые данные до инициализации шрифтов, т.к. нам нужен перечень языков в процессе инициализации fontconfig
 	if (vw_InitText("lang/text.csv", ';', '\n') != 0) {
-		std::cerr << "lang/text.csv file not found or corrupted.\n";
+		std::cerr << __func__ << "(): " << "lang/text.csv file not found or corrupted.\n";
 		return 0;
 	}
 
@@ -653,8 +655,7 @@ int main( int argc, char **argv )
 	if (!vw_InitAudio()) {
 		Setup.Music_check = false;
 		Setup.Sound_check = false;
-		std::cerr << "Unable to open audio!\n";
-		std::cout << "\n";
+		std::cerr << __func__ << "(): " << "Unable to open audio.\n\n";
 	}
 
 
@@ -672,7 +673,7 @@ ReCreate:
 	// это нужно сделать сразу, чтобы правильно поставить разрешение
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (SDL_Init(SDL_INIT_VIDEO) == -1) {
-		std::cerr << "Couldn't init SDL: " << SDL_GetError() << "\n";
+		std::cerr << __func__ << "(): " << "Couldn't init SDL: " << SDL_GetError() << "\n";
 		return 1;
 	}
 
@@ -959,7 +960,7 @@ ReCreate:
 			}
 		}
 	} else {
-		std::cerr << "Can't init Joystick, SDL Error: " << SDL_GetError() << "\n";
+		std::cerr << __func__ << "(): " << "Can't init Joystick, SDL Error: " << SDL_GetError() << "\n";
 	}
 #endif
 
@@ -994,9 +995,10 @@ ReCreate:
 			goto ReCreate;
 		}
 
-		std::cerr << "Wrong resolution. Fatal error.\n";
+		std::cerr << __func__ << "(): " << "Wrong resolution. Fatal error.\n";
 #ifdef WIN32
-		MessageBox(nullptr,"Wrong resolution. Please, install the newest video drivers from your video card vendor.", "Render system - Fatal Error", MB_OK|MB_APPLMODAL|MB_ICONERROR);
+		MessageBox(nullptr, "Wrong resolution. Please, install the newest video drivers from your video card vendor.",
+			   "Render system - Fatal Error", MB_OK | MB_APPLMODAL | MB_ICONERROR);
 #endif // WIN32
 		SDL_Quit();
 		return 0; // Quit If Window Was Not Created
@@ -1113,9 +1115,10 @@ ReCreate:
 	// если не поддерживаем как минимум 2 текстуры, железо очень слабое - не запустимся
 	if (vw_GetDevCaps()->MaxMultTextures < 2) {
 		SDL_Quit();
-		std::cerr << "The Multi Textures feature not supported by hardware. Fatal error.\n";
+		std::cerr << __func__ << "(): " << "The Multi Textures feature not supported by hardware. Fatal error.\n";
 #ifdef WIN32
-		MessageBox(nullptr,"OpenGL 1.3 required. Please, install the newest video drivers from your video card vendor.", "Render system - Fatal Error", MB_OK|MB_APPLMODAL|MB_ICONERROR);
+		MessageBox(nullptr, "OpenGL 1.3 required. Please, install the newest video drivers from your video card vendor.",
+			   "Render system - Fatal Error", MB_OK | MB_APPLMODAL | MB_ICONERROR);
 #endif // WIN32
 		return 0;
 	}

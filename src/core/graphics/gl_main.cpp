@@ -133,8 +133,8 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 
 	window_SDL2 = SDL_CreateWindow(Title, CurrentVideoModeX, CurrentVideoModeY, Width, Height, Flags);
 	if (window_SDL2 == nullptr) {
-		std::cerr << "SDL Error: " << SDL_GetError() << "\n";
-		std::cerr << "Can't set video mode " <<  Width << " x " << Height << "\n\n";
+		std::cerr << __func__ << "(): " << "SDL Error: " << SDL_GetError() << "\n";
+		std::cerr << __func__ << "(): " << "Can't set video mode " <<  Width << " x " << Height << "\n\n";
 		return 1;
 	}
 	SDL_GL_CreateContext(window_SDL2);
@@ -415,7 +415,8 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 		glClientActiveTexture_ARB = (PFNGLCLIENTACTIVETEXTUREARBPROC) SDL_GL_GetProcAddress("glClientActiveTexture");
 		if (glActiveTexture_ARB == nullptr || glClientActiveTexture_ARB == nullptr) {
 			OpenGL_DevCaps.MaxMultTextures = 1;
-			std::cerr << "Can't get proc address for glActiveTexture or glClientActiveTexture.\n\n";
+			std::cerr << __func__ << "(): "
+				  << "Can't get proc address for glActiveTexture or glClientActiveTexture.\n\n";
 		}
 	}
 
@@ -424,7 +425,7 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 		if (glTexStorage2DEXT == nullptr) glTexStorage2DEXT = (PFNGLTEXSTORAGE2DPROC) SDL_GL_GetProcAddress("glTexStorage2DEXT");
 		if (glTexStorage2DEXT == nullptr) {
 			OpenGL_DevCaps.TextureStorage = false;
-			std::cerr << "Can't get proc address for glTexStorage2DEXT.\n\n";
+			std::cerr << __func__ << "(): " << "Can't get proc address for glTexStorage2DEXT.\n\n";
 		}
 	}
 
@@ -804,7 +805,7 @@ void vw_PolygonMode(int mode)
 		break;
 
 	default:
-		std::cerr << "Error in vw_PolygonMode function call, wrong mode.\n";
+		std::cerr << __func__ << "(): " << "wrong mode.\n";
 		break;
 	}
 }
@@ -831,7 +832,7 @@ void vw_CullFace(int face)
 		break;
 
 	default:
-		std::cerr << "Error in vw_CullFace function call, wrong face.\n";
+		std::cerr << __func__ << "(): " << "wrong face.\n";
 		break;
 	}
 }
@@ -937,7 +938,7 @@ void vw_DepthTest(bool mode, int funct)
 			fun = GL_ALWAYS;
 			break;
 		default:
-			std::cerr << "Error in vw_DepthTest function call, wrong funct.\n";
+			std::cerr << __func__ << "(): " << "wrong funct.\n";
 			return;
 		}
 		glDepthFunc(fun);

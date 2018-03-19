@@ -198,7 +198,7 @@ void vw_SetTextureBlendMode(int pname, int param)
 		break;
 
 	default:
-		std::cerr << "Error in vw_SetTextureBlendMode function call, wrong pname.\n";
+		std::cerr << __func__ << "(): " << "wrong pname.\n";
 		return;
 	}
 
@@ -256,7 +256,7 @@ void vw_SetTextureBlendMode(int pname, int param)
 		break;
 
 	default:
-		std::cerr << "Error in vw_SetTextureBlendMode function call, wrong param.\n";
+		std::cerr << __func__ << "(): " << "wrong param.\n";
 		return;
 	}
 
@@ -310,7 +310,7 @@ void vw_SetTextureFiltering(int nFiltering)
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		break;
 	default:
-		std::cerr << "Error in vw_SetTextureFiltering function call, wrong nFiltering.\n";
+		std::cerr << __func__ << "(): " << "wrong nFiltering.\n";
 		return;
 	}
 

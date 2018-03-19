@@ -145,7 +145,8 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 			CurrentColumnNumber++;
 			// detect and skip duplicate line (if we already have this element created => this is duplicate)
 			if (isElementPresentInTable(TextTable, CurrentColumnNumber, CurrentRowCode)) {
-				std::cerr << "* Duplicate line detected, line number " << LineNumber << "\n";
+				std::cerr << __func__ << "(): " << "* Duplicate line detected, line number "
+					  << LineNumber << "\n";
 				for (; (tmpFile->Data[i] != SymbolEndOfLine) && (i < tmpFile->Size); i++) {}
 			}
 			// we found SymbolEndOfLine in previous cycle, in order to prevent "i" changes, break cycle

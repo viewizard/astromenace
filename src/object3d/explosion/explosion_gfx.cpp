@@ -338,7 +338,7 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		break;
 
 	default:
-		std::cerr << "Error in SetExplosionGFX function call, wrong GFXNum.\n";
+		std::cerr << __func__ << "(): " << "wrong GFXNum.\n";
 		break;
 	}
 }

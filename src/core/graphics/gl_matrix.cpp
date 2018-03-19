@@ -91,7 +91,7 @@ void vw_GetMatrix(int pname, float *params)
 		glGetFloatv(GL_TEXTURE, params);
 		break;
 	default:
-		std::cerr << "Error in vw_GetMatrix function call, wrong pname.\n";
+		std::cerr << __func__ << "(): " << "wrong pname.\n";
 		break;
 	}
 }
@@ -120,7 +120,7 @@ void vw_MatrixMode(int pname)
 		glMatrixMode(GL_TEXTURE);
 		break;
 	default:
-		std::cerr << "Error in vw_MatrixMode function call, wrong pname.\n";
+		std::cerr << __func__ << "(): " << "wrong pname.\n";
 		break;
 	}
 }

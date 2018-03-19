@@ -66,7 +66,7 @@ int ReadTGA(std::vector<uint8_t> &DIB, sFILE *pFile, int &DWidth, int &DHeight, 
 				pFile->fread(pLine, tmpStride, 1);
 			}
 		} else {
-			std::cerr << "16 bits TGA images are not supported.\n";
+			std::cerr << __func__ << "(): " << "16 bits TGA images are not supported.\n";
 			return ERR_NOT_SUPPORTED;
 		}
 	} else if (tmpTGAImageType == TGA_RLE) {
@@ -112,7 +112,7 @@ int ReadTGA(std::vector<uint8_t> &DIB, sFILE *pFile, int &DWidth, int &DHeight, 
 			}
 		}
 	} else {
-		std::cerr << "Not supported TGA images type.\n";
+		std::cerr << __func__ << "(): " << "Not supported TGA images type.\n";
 		return ERR_NOT_SUPPORTED;
 	}
 

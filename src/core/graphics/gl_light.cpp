@@ -107,7 +107,7 @@ void vw_SetLight(int light, int pname, float param)
 		break;
 
 	default:
-		std::cerr << "Error in vw_SetLight function call, wrong pname.\n";
+		std::cerr << __func__ << "(): " << "wrong pname.\n";
 		return;
 	}
 
@@ -165,7 +165,7 @@ void vw_SetLightV(int light, int pname, const float *param)
 		break;
 
 	default:
-		std::cerr << "Error in vw_SetLightV function call, wrong pname.\n";
+		std::cerr << __func__ << "(): " << "wrong pname.\n";
 		return;
 	}
 
@@ -223,7 +223,7 @@ void vw_GetLightV(int light, int pname, float *param)
 		break;
 
 	default:
-		std::cerr << "Error in vw_GetLightV function call, wrong pname.\n";
+		std::cerr << __func__ << "(): " << "wrong pname.\n";
 		return;
 	}
 
@@ -263,7 +263,7 @@ void vw_MaterialV(int pname, const float *param)
 		break;
 
 	default:
-		std::cerr << "Error in vw_MaterialV function call, wrong pname.\n";
+		std::cerr << __func__ << "(): " << "wrong pname.\n";
 		return;
 	}
 
@@ -301,7 +301,7 @@ void vw_GetMaterialV(int pname, float *param)
 		break;
 
 	default:
-		std::cerr << "Error in vw_GetMaterialV function call, wrong pname.\n";
+		std::cerr << __func__ << "(): " << "wrong pname.\n";
 		return;
 	}
 

@@ -447,7 +447,7 @@ void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max)
 		break;
 
 	default:
-		std::cerr << "Error in GetShipWeaponSlotAngle function call, wrong ShipNum.\n";
+		std::cerr << __func__ << "(): " << "wrong ShipNum.\n";
 		break;
 	}
 }
@@ -511,7 +511,8 @@ float GetShipArmor(int SpaceShipNum)
 void cEarthSpaceFighter::Create(int	SpaceShipNum)
 {
 	if ((SpaceShipNum <= 0) || ((unsigned int)SpaceShipNum > PresetEarthSpaceFighterDataCount)) {
-		std::cerr << "Could not init cEarthSpaceFighter object with Number " << SpaceShipNum << "\n";
+		std::cerr << __func__ << "(): "
+			  << "Could not init cEarthSpaceFighter object with Number " << SpaceShipNum << "\n";
 		return;
 	}
 
@@ -922,7 +923,7 @@ void cEarthSpaceFighter::Create(int	SpaceShipNum)
 		break;
 
 	default:
-		std::cerr << "Wrong SpaceShipNum!\n";
+		std::cerr << __func__ << "(): " << "wrong SpaceShipNum.\n";
 		return;
 	}
 

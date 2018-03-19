@@ -62,7 +62,7 @@ const char *GetWeaponGroupTitle(int Num)
 		return "4_Propelled";
 
 	default:
-		std::cerr << "Error in GetWeaponGroupTitle function call, wrong Num.\n";
+		std::cerr << __func__ << "(): " << "wrong Num.\n";
 		break;
 	}
 	return nullptr;
@@ -254,16 +254,16 @@ cWeapon::cWeapon(void)
 void cWeapon::Create(int WeaponNum)
 {
 	if (WeaponNum <= 0) {
-		std::cerr << "Couldn't init cWeapon object with Number " << WeaponNum << "\n";
+		std::cerr << __func__ << "(): " << "Couldn't init cWeapon object with Number " << WeaponNum << "\n";
 		return;
 	} else if ((WeaponNum >= 1 && WeaponNum <= 99) && ((unsigned int)WeaponNum > PresetEarthWeaponDataCount)) {
-		std::cerr << "Couldn't init cWeapon(1) object with Number " << WeaponNum << "\n";
+		std::cerr << __func__ << "(): " << "Couldn't init cWeapon(1) object with Number " << WeaponNum << "\n";
 		return;
 	} else if ((WeaponNum >= 101 && WeaponNum <= 199) && ((unsigned int)WeaponNum-100 > PresetAlienWeaponDataCount)) {
-		std::cerr << "Couldn't init cWeapon(2) object with Number " << WeaponNum << "\n";
+		std::cerr << __func__ << "(): " << "Couldn't init cWeapon(2) object with Number " << WeaponNum << "\n";
 		return;
 	} else if ((WeaponNum >= 201 && WeaponNum <= 299) && ((unsigned int)WeaponNum-200 > PresetPirateWeaponDataCount)) {
-		std::cerr << "Couldn't init cWeapon(3) object with Number " << WeaponNum << "\n";
+		std::cerr << __func__ << "(): " << "Couldn't init cWeapon(3) object with Number " << WeaponNum << "\n";
 		return;
 	}
 

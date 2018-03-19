@@ -220,7 +220,7 @@ bool vw_Internal_InitializationGLSL()
 //------------------------------------------------------------------------------------
 // ошибка
 //------------------------------------------------------------------------------------
-int CheckOGLError()
+int CheckOGLError(const char *FunctionName)
 {
 	// Returns 1 if an OpenGL error occurred, 0 otherwise.
 	GLenum glErr;
@@ -228,7 +228,7 @@ int CheckOGLError()
 
 	glErr = glGetError();
 	while (glErr != GL_NO_ERROR) {
-		std::cerr << "glError " << glErr << "\n";
+		std::cerr << FunctionName << "(): " << "glError " << glErr << "\n";
 		retCode = 1;
 		glErr = glGetError();
 	}
@@ -247,16 +247,16 @@ void vw_PrintShaderInfoLog(GLhandleARB shader, const char *ShaderName)
 	int infologLength = 0;
 	int charsWritten  = 0;
 
-	CheckOGLError();  // Check for OpenGL errors
+	CheckOGLError(__func__);  // Check for OpenGL errors
 
 	glGetObjectParameterivARB(shader, GL_INFO_LOG_LENGTH, &infologLength);
 
-	CheckOGLError();  // Check for OpenGL errors
+	CheckOGLError(__func__);  // Check for OpenGL errors
 
 	if (infologLength > 0) {
 		GLchar *infoLog = (GLchar *)malloc(infologLength);
 		if (infoLog == nullptr) {
-			std::cerr << "Could not allocate InfoLog buffer.\n";
+			std::cerr << __func__ << "(): " << "Could not allocate InfoLog buffer.\n";
 			return;
 		}
 		glGetInfoLogARB(shader, infologLength, &charsWritten, infoLog);
@@ -264,7 +264,7 @@ void vw_PrintShaderInfoLog(GLhandleARB shader, const char *ShaderName)
 			std::cout << "Shader InfoLog " << ShaderName << ":\n" << infoLog << "\n\n";
 		free(infoLog);
 	}
-	CheckOGLError();  // Check for OpenGL errors
+	CheckOGLError(__func__);  // Check for OpenGL errors
 }
 
 
@@ -276,16 +276,16 @@ void vw_PrintProgramInfoLog(GLhandleARB program)
 	int infologLength = 0;
 	int charsWritten  = 0;
 
-	CheckOGLError();  // Check for OpenGL errors
+	CheckOGLError(__func__);  // Check for OpenGL errors
 
 	glGetObjectParameterivARB(program, GL_INFO_LOG_LENGTH, &infologLength);
 
-	CheckOGLError();  // Check for OpenGL errors
+	CheckOGLError(__func__);  // Check for OpenGL errors
 
 	if (infologLength > 0) {
 		GLchar *infoLog = (GLchar *)malloc(infologLength);
 		if (infoLog == nullptr) {
-			std::cerr << "Could not allocate InfoLog buffer.\n";
+			std::cerr << __func__ << "(): " << "Could not allocate InfoLog buffer.\n";
 			return;
 		}
 		glGetInfoLogARB(program, infologLength, &charsWritten, infoLog);
@@ -293,7 +293,7 @@ void vw_PrintProgramInfoLog(GLhandleARB program)
 			std::cout << "Program InfoLog:\n" << infoLog << "\n\n";
 		free(infoLog);
 	}
-	CheckOGLError();  // Check for OpenGL errors
+	CheckOGLError(__func__);  // Check for OpenGL errors
 }
 
 
@@ -544,7 +544,7 @@ sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 
 	if (GLSLtmp->VertexShaderUse) {
 		glCompileShaderARB(GLSLtmp->VertexShader);
-		CheckOGLError();  // Check for OpenGL errors
+		CheckOGLError(__func__);  // Check for OpenGL errors
 		glGetObjectParameterivARB(GLSLtmp->VertexShader, GL_COMPILE_STATUS, &vertCompiled);
 		vw_PrintShaderInfoLog(GLSLtmp->VertexShader, VertexShaderFileName);
 
@@ -553,7 +553,7 @@ sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 	}
 	if (GLSLtmp->FragmentShaderUse) {
 		glCompileShaderARB(GLSLtmp->FragmentShader);
-		CheckOGLError();  // Check for OpenGL errors
+		CheckOGLError(__func__);  // Check for OpenGL errors
 		glGetObjectParameterivARB(GLSLtmp->FragmentShader, GL_COMPILE_STATUS, &fragCompiled);
 		vw_PrintShaderInfoLog(GLSLtmp->FragmentShader, FragmentShaderFileName);
 
@@ -607,7 +607,7 @@ bool vw_LinkShaderProgram(sGLSL *GLSL)
 	GLint linked;
 
 	glLinkProgramARB(GLSL->Program);
-	CheckOGLError();  // Check for OpenGL errors
+	CheckOGLError(__func__);  // Check for OpenGL errors
 	glGetObjectParameterivARB(GLSL->Program, GL_LINK_STATUS, &linked);
 	vw_PrintProgramInfoLog(GLSL->Program);
 
@@ -630,7 +630,7 @@ bool vw_UseShaderProgram(sGLSL *GLSL)
 		return false;
 
 	glUseProgramObjectARB(GLSL->Program);
-	CheckOGLError();
+	CheckOGLError(__func__);
 
 	return true;
 }
@@ -651,7 +651,7 @@ bool vw_StopShaderProgram()
 #else
 	glUseProgramObjectARB(0);	// typedef unsigned int GLhandleARB; - see glext.h for more declaration
 #endif
-	CheckOGLError();
+	CheckOGLError(__func__);
 
 	return true;
 }
@@ -672,9 +672,9 @@ int vw_GetUniformLocation(sGLSL *GLSL, const char *name)
 	loc = glGetUniformLocationARB(GLSL->Program, name);
 
 	if (loc == -1)
-		std::cerr << "No such uniform named: " << name << "\n";
+		std::cerr << __func__ << "(): " << "No such uniform named: " << name << "\n";
 
-	CheckOGLError();  // Check for OpenGL errors
+	CheckOGLError(__func__);  // Check for OpenGL errors
 	return loc;
 }
 
@@ -691,7 +691,7 @@ bool vw_Uniform1i(sGLSL *GLSL, int UniformLocation, int data)
 
 	glUniform1iARB(UniformLocation, data);
 
-	CheckOGLError();  // Check for OpenGL errors
+	CheckOGLError(__func__);  // Check for OpenGL errors
 
 	return true;
 }
@@ -715,7 +715,7 @@ bool vw_Uniform1f(sGLSL *GLSL, int UniformLocation, float data)
 
 	glUniform1fARB(UniformLocation, data);
 
-	CheckOGLError();  // Check for OpenGL errors
+	CheckOGLError(__func__);  // Check for OpenGL errors
 
 	return true;
 }
@@ -739,7 +739,7 @@ bool vw_Uniform3f(sGLSL *GLSL, int UniformLocation, float data1, float data2, fl
 
 	glUniform3fARB(UniformLocation, data1, data2, data3);
 
-	CheckOGLError();  // Check for OpenGL errors
+	CheckOGLError(__func__);  // Check for OpenGL errors
 
 	return true;
 }
@@ -763,7 +763,7 @@ bool vw_Uniform1fv(sGLSL *GLSL, int UniformLocation, int count, float *data)
 
 	glUniform1fvARB(UniformLocation, count, data);
 
-	CheckOGLError();  // Check for OpenGL errors
+	CheckOGLError(__func__);  // Check for OpenGL errors
 
 	return true;
 }
@@ -787,7 +787,7 @@ bool vw_Uniform4fv(sGLSL *GLSL, int UniformLocation, int count, float *data)
 
 	glUniform4fvARB(UniformLocation, count, data);
 
-	CheckOGLError();  // Check for OpenGL errors
+	CheckOGLError(__func__);  // Check for OpenGL errors
 
 	return true;
 }
@@ -811,7 +811,7 @@ bool vw_UniformMatrix4fv(sGLSL *GLSL, int UniformLocation, bool transpose, int c
 
 	glUniformMatrix4fvARB(UniformLocation, count, transpose, data);
 
-	CheckOGLError();  // Check for OpenGL errors
+	CheckOGLError(__func__);  // Check for OpenGL errors
 
 	return true;
 }

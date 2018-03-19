@@ -347,7 +347,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 
 	// дополнительная проверка на содержимое конфигурационного файла
 	if (RootXMLEntry == nullptr) {
-		std::cerr << "Game configuration file corrupted: " << ConfigFileName << "\n";
+		std::cerr << __func__ << "(): " << "Game configuration file corrupted: " << ConfigFileName << "\n";
 		// файл поврежден, надо завершить работу с ним
 		delete XMLdoc;
 		// сохранить дефолтные настройки, перезаписав файл
@@ -356,7 +356,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		return true;
 	}
 	if ("AstroMenaceSettings" != RootXMLEntry->Name) {
-		std::cerr << "Game configuration file corrupted: " << ConfigFileName << "\n";
+		std::cerr << __func__ << "(): " << "Game configuration file corrupted: " << ConfigFileName << "\n";
 		// файл поврежден, надо завершить работу с ним
 		delete XMLdoc;
 		// сохранить дефолтные настройки, перезаписав файл

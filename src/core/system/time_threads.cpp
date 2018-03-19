@@ -92,7 +92,7 @@ void vw_InitTimeThread(int TimeThread)
 float vw_GetTimeThread(int TimeThread)
 {
 	if (TimeThreadsMap.find(TimeThread) == TimeThreadsMap.end()) {
-		std::cerr << "TimeThread was not initialized: " << TimeThread << "\n";
+		std::cerr << __func__ << "(): " << "TimeThread was not initialized: " << TimeThread << "\n";
 		return 0.0f;
 	}
 
@@ -140,7 +140,7 @@ void vw_StopTimeThreads()
 void vw_SetTimeThreadSpeed(int TimeThread, float NewSpeed)
 {
 	if (TimeThreadsMap.find(TimeThread) == TimeThreadsMap.end()) {
-		std::cerr << "TimeThread was not initialized: " << TimeThread << "\n";
+		std::cerr << __func__ << "(): " << "TimeThread was not initialized: " << TimeThread << "\n";
 		return;
 	}
 
@@ -158,7 +158,7 @@ void vw_SetTimeThreadSpeed(int TimeThread, float NewSpeed)
 float vw_GetTimeThreadSpeed(int TimeThread)
 {
 	if (TimeThreadsMap.find(TimeThread) == TimeThreadsMap.end()) {
-		std::cerr << "TimeThread was not initialized: " << TimeThread << "\n";
+		std::cerr << __func__ << "(): " << "TimeThread was not initialized: " << TimeThread << "\n";
 		return 0.0f;
 	}
 

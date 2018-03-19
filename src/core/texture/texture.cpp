@@ -314,7 +314,7 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 
 	std::unique_ptr<sFILE> pFile = vw_fopen(SrcName);
 	if (pFile == nullptr) {
-		std::cerr << "Unable to found " << SrcName << "\n";
+		std::cerr << __func__ << "(): " << "Unable to found " << SrcName << "\n";
 		return;
 	}
 
@@ -322,7 +322,7 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 	if (vw_CheckFileExtension(SrcName, ".tga"))
 		LoadAs = eLoadTextureAs::TGA;
 	else
-		std::cerr << "Format not supported " << SrcName << "\n";
+		std::cerr << __func__ << "(): " << "Format not supported " << SrcName << "\n";
 
 	switch (LoadAs) {
 	case eLoadTextureAs::TGA:
@@ -330,12 +330,12 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 		break;
 
 	default:
-		std::cerr << "Unable to load " << SrcName << "\n";
+		std::cerr << __func__ << "(): " << "Unable to load " << SrcName << "\n";
 		return;
 	}
 
 	if (tmpImage.empty()) {
-		std::cerr << "Unable to load " << SrcName << "\n";
+		std::cerr << __func__ << "(): " << "Unable to load " << SrcName << "\n";
 		return;
 	}
 
@@ -345,7 +345,7 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 	SDL_RWops *FileVW2D;
 	FileVW2D = SDL_RWFromFile(DestName.c_str(), "wb");
 	if (!FileVW2D) {
-		std::cerr << "Can't create " << DestName << " file on disk.\n";
+		std::cerr << __func__ << "(): " << "Can't create " << DestName << " file on disk.\n";
 		return;
 	}
 
@@ -376,7 +376,7 @@ sTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
 
 	std::unique_ptr<sFILE> pFile = vw_fopen(TextureName);
 	if (!pFile) {
-		std::cerr << "Unable to found " << TextureName << "\n";
+		std::cerr << __func__ << "(): " << "Unable to found " << TextureName << "\n";
 		return nullptr;
 	}
 
@@ -387,7 +387,7 @@ sTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
 		else if (vw_CheckFileExtension(TextureName, ".vw2d"))
 			LoadAs = eLoadTextureAs::VW2D;
 		else
-			std::cerr << "Format not supported " << TextureName << "\n";
+			std::cerr << __func__ << "(): " << "Format not supported " << TextureName << "\n";
 	}
 
 	// load texture
@@ -410,7 +410,7 @@ sTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
 	}
 
 	if (tmpImage.empty()) {
-		std::cerr << "Unable to load " << TextureName << "\n";
+		std::cerr << __func__ << "(): " << "Unable to load " << TextureName << "\n";
 		return nullptr;
 	}
 

@@ -113,7 +113,7 @@ bool cModel3D::WriteVW3D(const char *FileName)
 {
 	// небольшие проверки
 	if (!GlobalVertexBuffer || !GlobalIndexBuffer || !DrawObjectList) {
-		std::cerr << "Can't create " << FileName << " file for empty Model3D.\n";
+		std::cerr << __func__ << "(): " << "Can't create " << FileName << " file for empty Model3D.\n";
 		return false;
 	}
 
@@ -121,7 +121,7 @@ bool cModel3D::WriteVW3D(const char *FileName)
 	FileVW3D = SDL_RWFromFile(FileName, "wb");
 	// если не можем создать файл на запись - уходим
 	if (!FileVW3D) {
-		std::cerr << "Can't create " << FileName << " file on disk.\n";
+		std::cerr << __func__ << "(): " << "Can't create " << FileName << " file on disk.\n";
 		return false;
 	}
 

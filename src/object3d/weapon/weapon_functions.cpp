@@ -391,7 +391,7 @@ void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
 		break;
 
 	default:
-		std::cerr << "Error in SetWeaponFire function call, wrong WeaponNum.\n";
+		std::cerr << __func__ << "(): " << "wrong WeaponNum.\n";
 		break;
 	}
 

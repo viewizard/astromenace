@@ -468,7 +468,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 
 
 	default:
-		std::cerr << "Error in SetAlienSpaceMotherShipEngine function call, wrong EngineType.\n";
+		std::cerr << __func__ << "(): " << "wrong EngineType.\n";
 		break;
 	}
 

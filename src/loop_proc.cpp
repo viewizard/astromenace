@@ -310,7 +310,7 @@ void Loop_Proc()
 			break;
 
 		default:
-			std::cerr << "ComBuffer = " << (int)ComBuffer << " ... error!\n";
+			std::cerr << __func__ << "(): " << "ComBuffer = " << (int)ComBuffer << " ... error!\n";
 			break;
 
 		}

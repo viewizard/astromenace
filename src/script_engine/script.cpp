@@ -137,7 +137,7 @@ bool cScriptEngine::RunScript(const char *FileName, float InitTime)
 
 	// проверяем корневой элемент
 	if (!xmlDoc->RootXMLEntry || ("AstroMenaceScript" != xmlDoc->RootXMLEntry->Name)) {
-		std::cerr << "Can't find AstroMenaceScript element in the: " << FileName << "\n";
+		std::cerr << __func__ << "(): " << "Can't find AstroMenaceScript element in the: " << FileName << "\n";
 		delete xmlDoc;
 		xmlDoc = nullptr;
 		return false;
@@ -147,7 +147,7 @@ bool cScriptEngine::RunScript(const char *FileName, float InitTime)
 	// переходим на действия
 	xmlEntry  = xmlDoc->FindFirstChildEntryByName(xmlDoc->RootXMLEntry, "Action");
 	if (xmlEntry == nullptr) {
-		std::cerr << "Can't find Action element in the: " << FileName << "\n";
+		std::cerr << __func__ << "(): " << "Can't find Action element in the: " << FileName << "\n";
 		delete xmlDoc;
 		xmlDoc = nullptr;
 		return false;
@@ -155,7 +155,7 @@ bool cScriptEngine::RunScript(const char *FileName, float InitTime)
 
 	xmlEntry = xmlEntry->FirstChild;
 	if (xmlEntry == nullptr) {
-		std::cerr << "Can't find Action element in the: " << FileName << "\n";
+		std::cerr << __func__ << "(): " << "Can't find Action element in the: " << FileName << "\n";
 		delete xmlDoc;
 		xmlDoc = nullptr;
 		return false;
@@ -541,7 +541,7 @@ bool cScriptEngine::Update(float Time)
 															NewText->Color = xmlDoc->iGetEntryAttribute(xmlEntry, "color");
 													} else {
 														// если тут - значит не нашли директиву, или произошла ошибка
-														std::cerr << "ScriptEngine: tag " << xmlEntry->Name
+														std::cerr << __func__ << "(): " << "ScriptEngine: tag " << xmlEntry->Name
 															  << " not found, line " << xmlEntry->LineNumber << "\n";
 													}
 
@@ -1748,7 +1748,7 @@ void cScriptEngine::UpdateTimeLine()
 														}
 													} else {
 														// если тут - значит не нашли директиву, или произошла ошибка
-														std::cerr << "ScriptEngine: tag " << TL->Name
+														std::cerr << __func__ << "(): " << "ScriptEngine: tag " << TL->Name
 															  << " not found, line " << TL->LineNumber << "\n";
 													}
 

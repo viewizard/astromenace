@@ -151,7 +151,7 @@ static int WriteIntoVFSfromFile(sVFS *WritableVFS, const std::string &SrcName, c
 
 	SDL_RWops *tmpFile = SDL_RWFromFile(SrcName.c_str(), "rb");
 	if (!tmpFile) {
-		std::cerr << "Can't find file " << SrcName << "\n";
+		std::cerr << __func__ << "(): " << "Can't find file " << SrcName << "\n";
 		return ERR_FILE_NOT_FOUND;
 	}
 
@@ -168,7 +168,7 @@ static int WriteIntoVFSfromFile(sVFS *WritableVFS, const std::string &SrcName, c
 	int err = WriteIntoVFSfromMemory(WritableVFS, DstName, tmpBuffer.get(), tmpFileSize,
 					 FileTableOffset, WritableVFSEntriesMap);
 	if (err)
-		std::cerr << "Can't write into VFS from memory " << DstName << "\n";
+		std::cerr << __func__ << "(): " << "Can't write into VFS from memory " << DstName << "\n";
 
 	return err;
 }
@@ -187,7 +187,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 
 	TempVFS->File = SDL_RWFromFile(Name.c_str(), "wb");
 	if (!TempVFS->File) {
-		std::cerr << "Can't open VFS file for write " << Name << "\n";
+		std::cerr << __func__ << "(): " << "Can't open VFS file for write " << Name << "\n";
 		return ERR_FILE_NOT_FOUND;
 	}
 
@@ -208,13 +208,13 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 	if (!ModelsPack.empty()) {
 		// close opened VFS, we need empty VFS related lists
 		if (!VFSList.empty()) {
-			std::cerr << "Detected open VFS, close it now.\n";
+			std::cerr << __func__ << "(): " << "Detected open VFS, close it now.\n";
 			vw_ShutdownVFS();
 		}
 
 		int err = vw_OpenVFS(RawDataDir + ModelsPack, 0);
 		if (err) {
-			std::cerr << RawDataDir + ModelsPack << " file not found or corrupted.\n";
+			std::cerr << __func__ << "(): " << RawDataDir + ModelsPack << " file not found or corrupted.\n";
 			return err;
 		}
 
@@ -226,7 +226,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 			err = WriteIntoVFSfromMemory(TempVFS.get(), tmpVFSEntry.first, tmpFile->Data.get(),
 						     tmpFile->Size, FileTableOffset, WritableVFSEntriesMap);
 			if (err) {
-				std::cerr << "VFS compilation process aborted!\n";
+				std::cerr << __func__ << "(): " << "VFS compilation process aborted!\n";
 				return err;
 			}
 			vw_fclose(tmpFile);
@@ -245,7 +245,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 			int err = WriteIntoVFSfromFile(TempVFS.get(), RawDataDir + GameData[i], GameData[i],
 						       FileTableOffset, WritableVFSEntriesMap);
 			if (err) {
-				std::cerr << "VFS compilation process aborted!\n";
+				std::cerr << __func__ << "(): " << "VFS compilation process aborted!\n";
 				return err;
 			}
 		}
@@ -264,7 +264,7 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 	// memory on errors) to named Lambda function
 	auto errPrintWithVFSListPop = [&Name] (const std::string &Text, int err)
 	{
-		std::cerr << Text << " " << Name << "\n";
+		std::cerr << "vw_OpenVFS(): " << Text << " " << Name << "\n";
 		VFSList.pop_front();
 		return err;
 	};
@@ -432,7 +432,7 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
 		break;
 
 	case eFileLocation::Unknown:
-		std::cerr << "Can't find file " << FileName << "\n";
+		std::cerr << __func__ << "(): " << "Can't find file " << FileName << "\n";
 		return nullptr;
 		break;
 	}
@@ -504,7 +504,7 @@ int sFILE::fseek(long offset, int origin)
 		break;
 
 	default:
-		std::cerr << "Error in fseek function call, wrong origin.\n";
+		std::cerr << __func__ << "(): " << "Error in fseek function call, wrong origin.\n";
 		return ERR_PARAMETERS;
 		break;
 	}

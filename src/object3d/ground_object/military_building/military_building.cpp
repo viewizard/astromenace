@@ -54,7 +54,8 @@ static sMilitaryBuildingData PresetMilitaryBuildingData[] = {
 void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 {
 	if ((MilitaryBuildingNum <= 0) || ((unsigned int)MilitaryBuildingNum > PresetMilitaryBuildingDataCount)) {
-		std::cerr << "Could not init cMilitaryBuilding object with Number " << MilitaryBuildingNum << "\n";
+		std::cerr << __func__ << "(): "
+			  << "Could not init cMilitaryBuilding object with Number " << MilitaryBuildingNum << "\n";
 		return;
 	}
 

@@ -76,7 +76,7 @@ bool ShadowMap_Init(int Width, int Height)
 
 	// если неудачно создали, или недостаточная точность буфера глубины - уходим
 	ShadowMap_Release();
-	std::cerr << "\nYou need at least 24 bits Depth Size for Shadow Mapping support.\n\n";
+	std::cout << "\nYou need at least 24 bits Depth Size for Shadow Mapping support.\n\n";
 	return false;
 }
 

@@ -894,7 +894,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 
 
 	default:
-		std::cerr << "Error in SetProjectileGFX function call, wrong GFXNum.\n";
+		std::cerr << __func__ << "(): " << "wrong GFXNum.\n";
 		break;
 	}
 }
