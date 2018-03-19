@@ -326,15 +326,15 @@ void cParticleSystem2D::SetupNewParticleDirection(cParticle2D &NewParticle)
  * Add data to local draw buffer.
  */
 static inline void AddToDrawBuffer(float CoordX, float CoordY,
-				   float R, float G, float B, float A,
+				   const sCOLORVALUE2D &Color, float Alpha,
 				   float TextureU, float TextureV)
 {
 	DrawBuffer.push_back(CoordX);
 	DrawBuffer.push_back(CoordY);
-	DrawBuffer.push_back(R);
-	DrawBuffer.push_back(G);
-	DrawBuffer.push_back(B);
-	DrawBuffer.push_back(A);
+	DrawBuffer.push_back(Color.r);
+	DrawBuffer.push_back(Color.g);
+	DrawBuffer.push_back(Color.b);
+	DrawBuffer.push_back(Alpha);
 	DrawBuffer.push_back(TextureU);
 	DrawBuffer.push_back(TextureV);
 }
@@ -370,26 +370,20 @@ void cParticleSystem2D::Draw()
 
 		// first triangle
 		AddToDrawBuffer(DestRect.left, DestRect.top + tmpPosY + (DestRect.bottom - DestRect.top),
-				tmpParticle.Color.r, tmpParticle.Color.g, tmpParticle.Color.b, tmpParticle.Alpha,
-				0.0f, 1.0f);
+				tmpParticle.Color, tmpParticle.Alpha, 0.0f, 1.0f);
 		AddToDrawBuffer(DestRect.left, DestRect.top + tmpPosY,
-				tmpParticle.Color.r, tmpParticle.Color.g, tmpParticle.Color.b, tmpParticle.Alpha,
-				0.0f, 0.0f);
+				tmpParticle.Color, tmpParticle.Alpha, 0.0f, 0.0f);
 		AddToDrawBuffer(DestRect.left + (DestRect.right - DestRect.left), DestRect.top + tmpPosY,
-				tmpParticle.Color.r, tmpParticle.Color.g, tmpParticle.Color.b, tmpParticle.Alpha,
-				1.0f, 0.0f);
+				tmpParticle.Color, tmpParticle.Alpha, 1.0f, 0.0f);
 
 		// second triangle
 		AddToDrawBuffer(DestRect.left + (DestRect.right - DestRect.left), DestRect.top + tmpPosY,
-				tmpParticle.Color.r, tmpParticle.Color.g, tmpParticle.Color.b, tmpParticle.Alpha,
-				1.0f, 0.0f);
+				tmpParticle.Color, tmpParticle.Alpha, 1.0f, 0.0f);
 		AddToDrawBuffer(DestRect.left + (DestRect.right - DestRect.left),
 				DestRect.top + tmpPosY + (DestRect.bottom - DestRect.top),
-				tmpParticle.Color.r, tmpParticle.Color.g, tmpParticle.Color.b, tmpParticle.Alpha,
-				1.0f, 1.0f);
+				tmpParticle.Color, tmpParticle.Alpha, 1.0f, 1.0f);
 		AddToDrawBuffer(DestRect.left, DestRect.top + tmpPosY + (DestRect.bottom - DestRect.top),
-				tmpParticle.Color.r, tmpParticle.Color.g, tmpParticle.Color.b, tmpParticle.Alpha,
-				0.0f, 1.0f);
+				tmpParticle.Color, tmpParticle.Alpha, 0.0f, 1.0f);
 	}
 
 	// texture setup
