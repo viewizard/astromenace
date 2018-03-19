@@ -227,6 +227,8 @@ MESSAGE(STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
 
 # sources
 FILE(GLOB_RECURSE astromenace_SRCS src/*.cpp src/*.h)
+SET(astromenace_DATA "${CMAKE_CURRENT_LIST_DIR}/gamedata/")
+MESSAGE("Game data dir: ${astromenace_DATA}")
 
 # targets
 IF(DATADIR)
@@ -239,3 +241,10 @@ ENDIF(FONTCONFIG_LIBRARY AND FONTCONFIG_INCLUDE_DIR_fontconfig)
 ADD_DEFINITIONS("-O2")
 ADD_EXECUTABLE(astromenace ${astromenace_SRCS})
 TARGET_LINK_LIBRARIES(astromenace ${ALL_LIBRARIES})
+
+# generate game data file (gamedata.vfs)
+ADD_CUSTOM_COMMAND(
+	TARGET astromenace
+	POST_BUILD
+	COMMAND ${CMAKE_BINARY_DIR}/astromenace --pack --rawdata=${astromenace_DATA}
+)
