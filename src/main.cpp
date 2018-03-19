@@ -1358,12 +1358,9 @@ GotoQuit:
 		Script = nullptr;
 	}
 
-	RealExitGame();// удаляем объекты, они могут быть...
+	RealExitGame();// удаляем объекты, они могут быть... проверить и сделать нормальное удаление
 	MissionsListRelease();
-	if (CursorParticleSystem2D != nullptr) {
-		delete CursorParticleSystem2D;
-		CursorParticleSystem2D = nullptr;
-	}
+	vw_ReleaseAllParticleSystems2D();
 	DestroyInfoObject();
 	WorkshopDestroyData();
 

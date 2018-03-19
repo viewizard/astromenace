@@ -57,7 +57,7 @@ extern float CurrentGameSpeedShowTime;
 void CreateCursor()
 {
 	// курсор
-	CursorParticleSystem2D = new cParticleSystem2D;
+	CursorParticleSystem2D = vw_CreateParticleSystem2D();
 	CursorParticleSystem2D->ColorStart.r = 1.00f;
 	CursorParticleSystem2D->ColorStart.g = 1.00f;
 	CursorParticleSystem2D->ColorStart.b = 0.30f;

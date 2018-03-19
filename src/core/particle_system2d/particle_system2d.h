@@ -83,9 +83,7 @@ public:
 
 	sTexture *Texture{nullptr};
 
-	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 	sVECTOR3D Direction{0.0f, 0.0f, 0.0f};
-	sVECTOR3D Angle{0.0f, 0.0f, 0.0f};
 
 	float SizeStart{1.0f};
 	float SizeVar{0.0f};
@@ -132,10 +130,19 @@ private:
 				0.0f, 1.0f, 0.0f,
 				0.0f, 0.0f, 1.0f};
 
+	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
+	sVECTOR3D Angle{0.0f, 0.0f, 0.0f};
+
 	float TimeLastUpdate{-1.0f};
 	float EmissionResidue{0.0f};	// emission residue, for next update cycle
 
 	std::list<cParticle2D> ParticlesList;
 };
+
+
+// Create new particle system 2D.
+cParticleSystem2D *vw_CreateParticleSystem2D();
+// Release all particle systems 2D.
+void vw_ReleaseAllParticleSystems2D();
 
 #endif //PARTICLESYSTEM2D_H

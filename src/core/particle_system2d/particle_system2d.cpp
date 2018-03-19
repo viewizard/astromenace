@@ -24,9 +24,6 @@
 
 *************************************************************************************/
 
-// TODO (?) cParticleSystem2D should be managed globally, caller should receive ID,
-//      instead of allocate new memory for object and care about it
-
 #include "../math/math.h"
 #include "../graphics/graphics.h"
 #include "../texture/texture.h"
@@ -38,6 +35,10 @@ namespace {
 // required size only one time per game execution.
 // Never use reset(), only clear() for this buffer.
 std::vector<float> DrawBuffer{};
+
+// std::forward_list, since we operate directly via pointers and
+// don't really care about erase/access to particular element
+std::forward_list<cParticleSystem2D> ParticleSystemsList;
 
 } // unnamed namespace
 
@@ -438,3 +439,21 @@ void cParticleSystem2D::SetRotation(const sVECTOR3D &NewAngle)
 	vw_Matrix33CreateRotate(RotationMatrix, NewAngle);
 	Angle = NewAngle;
 }
+
+/*
+ * Create new particle system 2D.
+ */
+cParticleSystem2D *vw_CreateParticleSystem2D()
+{
+	ParticleSystemsList.emplace_front();
+	return &ParticleSystemsList.front();
+}
+
+/*
+ * Release all particle systems 2D.
+ */
+void vw_ReleaseAllParticleSystems2D()
+{
+	ParticleSystemsList.clear();
+}
+

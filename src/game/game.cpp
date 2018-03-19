@@ -590,8 +590,6 @@ void InitGame()
 	InitGamePlayerShip();
 
 
-	CreateCursor();
-
 
 	// !!! пока загрузка идет полная на уровень, и наверно так и нужно оставить
 	// иначе нужно выносить перечень загружаемого в скрипт (менять не смогут уровни)
@@ -666,9 +664,11 @@ void InitGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// иним 2д часть, эмблемы
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (EnergyParticleSystem2D != nullptr)
-		delete EnergyParticleSystem2D;
-	EnergyParticleSystem2D = new cParticleSystem2D;
+	vw_ReleaseAllParticleSystems2D();
+
+	CreateCursor();
+
+	EnergyParticleSystem2D = vw_CreateParticleSystem2D();
 	EnergyParticleSystem2D->ColorStart.r = 0.70f;
 	EnergyParticleSystem2D->ColorStart.g = 0.80f;
 	EnergyParticleSystem2D->ColorStart.b = 1.00f;
@@ -691,9 +691,7 @@ void InitGame()
 	EnergyParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
 	EnergyParticleSystem2D->MoveSystem(sVECTOR3D(33.0f,29.0f,0.0f));
 
-	if (LifeParticleSystem2D != nullptr)
-		delete LifeParticleSystem2D;
-	LifeParticleSystem2D = new cParticleSystem2D;
+	LifeParticleSystem2D = vw_CreateParticleSystem2D();
 	LifeParticleSystem2D->ColorStart.r = 1.00f;
 	LifeParticleSystem2D->ColorStart.g = 0.60f;
 	LifeParticleSystem2D->ColorStart.b = 0.20f;
@@ -722,9 +720,7 @@ void InitGame()
 	LifeParticleSystem2D->MoveSystem(sVECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));
 	LifeParticleSystem2D->SetRotation(sVECTOR3D(0.0f, 0.0f, 90.0f));
 
-	if (Life2ParticleSystem2D != nullptr)
-		delete Life2ParticleSystem2D;
-	Life2ParticleSystem2D = new cParticleSystem2D;
+	Life2ParticleSystem2D = vw_CreateParticleSystem2D();
 	Life2ParticleSystem2D->ColorStart.r = 1.00f;
 	Life2ParticleSystem2D->ColorStart.g = 0.40f;
 	Life2ParticleSystem2D->ColorStart.b = 0.10f;
@@ -748,10 +744,7 @@ void InitGame()
 	Life2ParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
 	Life2ParticleSystem2D->MoveSystem(sVECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));
 
-
-	if (Life3ParticleSystem2D != nullptr)
-		delete Life3ParticleSystem2D;
-	Life3ParticleSystem2D = new cParticleSystem2D;
+	Life3ParticleSystem2D = vw_CreateParticleSystem2D();
 	Life3ParticleSystem2D->ColorStart.r = 1.00f;
 	Life3ParticleSystem2D->ColorStart.g = 0.40f;
 	Life3ParticleSystem2D->ColorStart.b = 0.10f;
@@ -874,22 +867,7 @@ void RealExitGame()
 		PlayerFighter = nullptr;
 	}
 
-	if (EnergyParticleSystem2D != nullptr) {
-		delete EnergyParticleSystem2D;
-		EnergyParticleSystem2D = nullptr;
-	}
-	if (LifeParticleSystem2D != nullptr) {
-		delete LifeParticleSystem2D;
-		LifeParticleSystem2D = nullptr;
-	}
-	if (Life2ParticleSystem2D != nullptr) {
-		delete Life2ParticleSystem2D;
-		Life2ParticleSystem2D = nullptr;
-	}
-	if (Life3ParticleSystem2D != nullptr) {
-		delete Life3ParticleSystem2D;
-		Life3ParticleSystem2D = nullptr;
-	}
+	vw_ReleaseAllParticleSystems2D();
 
 	if (Shild1 != nullptr) {
 		delete Shild1;
