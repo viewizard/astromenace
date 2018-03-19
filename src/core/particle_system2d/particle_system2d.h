@@ -48,8 +48,7 @@ class cParticle2D {
 
 private:
 	// Update particle.
-	bool Update(float TimeDelta, sVECTOR3D ParentLocation = sVECTOR3D(0.0f,0.0f,0.0f),
-		    bool Attractive = false, float MagnetFactor = 25.0f);
+	bool Update(float TimeDelta, const sVECTOR3D &ParentLocation, bool Magnet = false, float MagnetFactor = 25.0f);
 
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 	sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};
@@ -74,11 +73,11 @@ public:
 	// Draw all particles.
 	void Draw();
 	// Set rotation.
-	void SetRotation(sVECTOR3D NewAngle);
+	void SetRotation(const sVECTOR3D &NewAngle);
 	// Move center of particle system and all particles.
-	void MoveSystem(sVECTOR3D NewLocation);
+	void MoveSystem(const sVECTOR3D &NewLocation);
 	// Move center of particle system.
-	void MoveSystemLocation(sVECTOR3D NewLocation);
+	void MoveSystemLocation(const sVECTOR3D &NewLocation);
 
 	unsigned int ParticlesPerSec{100};	// emission rate (particles per second)
 
@@ -114,7 +113,7 @@ public:
 	float MagnetFactor{25.0f};	// magnet factor
 
 	float DeadZone{0.0f};		// dead zone
-	float Theta{1.0f};		// direction deviation for new created particles
+	float Theta{1.0f};		// direction deviation (in degrees) for new created particles
 	bool IsSuppressed{false};	// if suppressed, particle system can't emit new particles
 
 private:
@@ -122,6 +121,12 @@ private:
 	void EmitParticles(unsigned int Quantity);
 	// Setup new particle direction.
 	void SetupNewParticleDirection(cParticle2D &NewParticle);
+	// Generate location for new particle (point type).
+	void GenerateLocationPointType(cParticle2D &NewParticle);
+	// Generate location for new particle (quad type).
+	void GenerateLocationQuadType(cParticle2D &NewParticle);
+	// Generate location for new particle (circle type).
+	void GenerateLocationCircleType(cParticle2D &NewParticle);
 
 	float RotationMatrix[9]{1.0f, 0.0f, 0.0f, // current rotation matrix
 				0.0f, 1.0f, 0.0f,

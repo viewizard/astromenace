@@ -24,8 +24,7 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-// TODO (?) cParticleSystem2D should be managed globally, caller should receive ID (object ID),
+// TODO (?) cParticleSystem2D should be managed globally, caller should receive ID,
 //      instead of allocate new memory for object and care about it
 
 #include "../math/math.h"
@@ -46,47 +45,35 @@ std::vector<float> DrawBuffer{};
 /*
  * Update particle.
  */
-bool cParticle2D::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractive, float MagnetFactor)
+bool cParticle2D::Update(float TimeDelta, const sVECTOR3D &ParentLocation, bool Magnet, float MagnetFactor)
 {
-	// Если частица уже мертва, ее нужно отключить - передаем в систему эти данные
-	if (Age + TimeDelta >= Lifetime) {
-		Age = -1.0f;
+	if (Age + TimeDelta >= Lifetime)
 		return false;
-	}
 
-	// увеличиваем возраст частицы
 	Age += TimeDelta;
 
-	// перемещаем частицу на нужное значение
 	Location += Velocity ^ TimeDelta;
 
 	if (NeedStop)
 		Velocity -= Velocity ^ TimeDelta;
 
-	// если есть притяжение системы, просчитываем воздействие
-	if (Attractive) {
-		sVECTOR3D AttractLocation = ParentLocation;
-		// рассчитывае вектор взаимодействия между частицей и точкой притяжения
-		sVECTOR3D AttractDir = AttractLocation - Location;
+	if (Magnet) {
+		sVECTOR3D tmpDirection{ParentLocation};
+		tmpDirection -= Location;
+		tmpDirection.Normalize();
 
-		// если нужно использовать притяжения, считаем перемещение
 		if (NeedStop)
 			MagnetFactor -= MagnetFactor * TimeDelta;
 
-		AttractDir.Normalize();
-		Velocity += AttractDir ^ (MagnetFactor * TimeDelta);
-
+		Velocity += tmpDirection ^ (MagnetFactor * TimeDelta);
 	}
 
-	// просчитываем текущий цвет частицы
 	Color.r += ColorDelta.r * TimeDelta;
 	Color.g += ColorDelta.g * TimeDelta;
 	Color.b += ColorDelta.b * TimeDelta;
 
-	// текущий размер частицы
 	Size += SizeDelta * TimeDelta;
 
-	// если пришли сюда - значит все хорошо и частица работает
 	return true;
 }
 
@@ -145,142 +132,55 @@ void cParticleSystem2D::Update(float Time)
  */
 void cParticleSystem2D::EmitParticles(unsigned int Quantity)
 {
-	// пока не создадим все необходимые частицы
 	while (Quantity > 0) {
-		// создаем новую частицу
+		// create new particle
 		ParticlesList.emplace_back();
 		// TODO emplace_back() return reference to the inserted element (since C++17)
 		//      this line could be combined with previous line, we could use
 		//      ParticlesList.back() directly, but "NewParticle" usage make code more clear
 		cParticle2D &NewParticle = ParticlesList.back();
 
-		// установка жизни новой частици и проверка, что не выходит из диапахона
 		NewParticle.Age = 0.0f;
 		NewParticle.Lifetime = Life + vw_Randf0 * LifeVar;
 		if (NewParticle.Lifetime < 0.0f)
 			NewParticle.Lifetime = 0.0f;
 
-		// стартовый цвет
+		// generate color
 		NewParticle.Color.r = ColorStart.r + vw_Randf0 * ColorVar.r;
 		NewParticle.Color.g = ColorStart.g + vw_Randf0 * ColorVar.g;
 		NewParticle.Color.b = ColorStart.b + vw_Randf0 * ColorVar.b;
-
-		// проверяем, чтобы не было переполнения цвета
 		vw_Clamp(NewParticle.Color.r, 0.0f, 1.0f);
 		vw_Clamp(NewParticle.Color.g, 0.0f, 1.0f);
 		vw_Clamp(NewParticle.Color.b, 0.0f, 1.0f);
 
-		// считаем delta относительно жизни частицы
+		// calculate delta
 		NewParticle.ColorDelta.r = (ColorEnd.r - NewParticle.Color.r) / NewParticle.Lifetime;
 		NewParticle.ColorDelta.g = (ColorEnd.g - NewParticle.Color.g) / NewParticle.Lifetime;
 		NewParticle.ColorDelta.b = (ColorEnd.b - NewParticle.Color.b) / NewParticle.Lifetime;
 
-		// считаем значение альфы
+		// generate alpha
 		NewParticle.Alpha = AlphaStart + vw_Randf0 * AlphaVar;
-		// убираем переполнение
 		vw_Clamp(NewParticle.Alpha, 0.0f, 1.0f);
 
 		switch (CreationType) {
 		case eParticle2DCreationType::Point:
-			NewParticle.Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x,
-								    vw_Randf0 * CreationSize.y,
-								    vw_Randf0 * CreationSize.z);
+			GenerateLocationPointType(NewParticle);
 			break;
 
-		case eParticle2DCreationType::Quad: {
-			// в квадрате
-			sVECTOR3D tmp;
-			if (DeadZone != 0.0f) {
-				float minDist = CreationSize.x * CreationSize.x +
-						CreationSize.y * CreationSize.y +
-						CreationSize.z * CreationSize.z;
-				// если зона больше чем радиус излучения - выключаем ее
-				if (minDist <= (DeadZone * DeadZone))
-					DeadZone = 0.0f;
-			}
-
-			tmp.x = (1.0f - vw_Randf1 * 2) * CreationSize.x;
-			tmp.y = (1.0f - vw_Randf1 * 2) * CreationSize.y;
-			tmp.z = (1.0f - vw_Randf1 * 2) * CreationSize.z;
-			while ((tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z) < (DeadZone * DeadZone)) {
-				// ув. радиус
-				sVECTOR3D tmp1 = tmp;
-				tmp1.Normalize();
-				tmp1 = tmp1 ^ (1 / 100.0f);
-				tmp = tmp + tmp1;
-			}
-
-			NewParticle.Location = Location + tmp;
-			}
+		case eParticle2DCreationType::Quad:
+			GenerateLocationQuadType(NewParticle);
 			break;
 
-		case eParticle2DCreationType::Circle: {
-			// в окружности
-			sVECTOR3D tmp;
-			float minDist = CreationSize.x * CreationSize.x +
-					CreationSize.y * CreationSize.y +
-					CreationSize.z * CreationSize.z;
-			// если зона больше чем радиус излучения - выключаем ее
-			if (minDist <= (DeadZone * DeadZone))
-				DeadZone = 0.0f;
-
-			tmp.x = vw_Randf0 * CreationSize.x;
-			tmp.y = vw_Randf0 * CreationSize.y;
-			tmp.z = vw_Randf0 * CreationSize.z;
-			float ParticleDist = tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z;
-			while ((ParticleDist > minDist) || (ParticleDist < (DeadZone * DeadZone))) {
-				if (ParticleDist > minDist) {
-					// ум. радиус
-					sVECTOR3D tmp1 = tmp;
-					tmp1.Normalize();
-					tmp1 = tmp1 ^ (1 / 100.0f);
-					tmp = tmp - tmp1;
-				}
-				if (ParticleDist < DeadZone * DeadZone) {
-					// ув. радиус
-					sVECTOR3D tmp1 = tmp;
-					tmp1.Normalize();
-					tmp1 = tmp1 ^ (1 / 100.0f);
-					tmp = tmp + tmp1;
-
-					if (tmp.x > 0.0f) {
-						if (tmp.x > CreationSize.x)
-							tmp.x = CreationSize.x;
-					} else {
-						if (tmp.x < -CreationSize.x)
-							tmp.x = -CreationSize.x;
-					}
-
-					if (tmp.y > 0.0f) {
-						if (tmp.y > CreationSize.y)
-							tmp.y = CreationSize.y;
-					} else {
-						if (tmp.y < -CreationSize.y)
-							tmp.y = -CreationSize.y;
-					}
-
-					if (tmp.z > 0.0f) {
-						if (tmp.z > CreationSize.z)
-							tmp.z = CreationSize.z;
-					} else {
-						if (tmp.z < -CreationSize.z)
-							tmp.z = -CreationSize.z;
-					}
-				}
-				ParticleDist = tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z;
-			}
-			NewParticle.Location = Location + tmp;
-			}
+		case eParticle2DCreationType::Circle:
+			GenerateLocationCircleType(NewParticle);
 			break;
 		}
 
-		// считаем размер частицы
 		NewParticle.Size = SizeStart + vw_Randf0 * SizeVar;
 		if (NewParticle.Size < 0.0f)
 			NewParticle.Size = 0.0f;
 		NewParticle.SizeDelta = (SizeEnd - NewParticle.Size) / NewParticle.Lifetime;
 
-		// calculate new particle direction
 		SetupNewParticleDirection(NewParticle);
 
 		// calculate velocity
@@ -291,6 +191,94 @@ void cParticleSystem2D::EmitParticles(unsigned int Quantity)
 
 		Quantity--;
 	}
+}
+
+/*
+ * Generate location for new particle (point type).
+ */
+void cParticleSystem2D::GenerateLocationPointType(cParticle2D &NewParticle)
+{
+	NewParticle.Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x,
+						    vw_Randf0 * CreationSize.y,
+						    vw_Randf0 * CreationSize.z);
+}
+
+/*
+ * Generate location for new particle (quad type).
+ */
+void cParticleSystem2D::GenerateLocationQuadType(cParticle2D &NewParticle)
+{
+	sVECTOR3D CreationPos{(1.0f - vw_Randf1 * 2) * CreationSize.x,
+			      (1.0f - vw_Randf1 * 2) * CreationSize.y,
+			      (1.0f - vw_Randf1 * 2) * CreationSize.z};
+
+	if (DeadZone != 0.0f) {
+		float tmpDist2 = CreationSize.x * CreationSize.x +
+				 CreationSize.y * CreationSize.y +
+				 CreationSize.z * CreationSize.z;
+		// if DeadZone^2 more then CreationSize^2, disable DeadZone
+		float DeadZone2 = DeadZone * DeadZone;
+		if (tmpDist2 <= DeadZone2)
+			DeadZone = 0.0f;
+		else {
+			while ((CreationPos.x * CreationPos.x +
+				CreationPos.y * CreationPos.y +
+				CreationPos.z * CreationPos.z) < DeadZone2) {
+				// increase distance
+				sVECTOR3D tmpPosInc = CreationPos;
+				tmpPosInc.Normalize();
+				tmpPosInc = tmpPosInc ^ (1 / 100.0f); // increase distance on 1%
+				CreationPos += tmpPosInc;
+			}
+		}
+	}
+
+	NewParticle.Location = Location + CreationPos;
+}
+
+/*
+ * Generate location for new particle (circle type).
+ */
+void cParticleSystem2D::GenerateLocationCircleType(cParticle2D &NewParticle)
+{
+	float tmpDist2 = CreationSize.x * CreationSize.x +
+			 CreationSize.y * CreationSize.y +
+			 CreationSize.z * CreationSize.z;
+	// if DeadZone^2 more then CreationSize^2, disable DeadZone
+	float DeadZone2 = DeadZone * DeadZone;
+	if (tmpDist2 <= DeadZone2)
+		DeadZone = 0.0f;
+
+	sVECTOR3D CreationPos{vw_Randf0 * CreationSize.x,
+			      vw_Randf0 * CreationSize.y,
+			      vw_Randf0 * CreationSize.z};
+	float ParticleDist2 = CreationPos.x * CreationPos.x +
+			      CreationPos.y * CreationPos.y +
+			      CreationPos.z * CreationPos.z;
+	while ((ParticleDist2 > tmpDist2) || (ParticleDist2 < DeadZone2)) {
+		if (ParticleDist2 > tmpDist2) {
+			// decrease radius
+			sVECTOR3D tmpPosDec = CreationPos;
+			tmpPosDec.Normalize();
+			tmpPosDec = tmpPosDec ^ (1 / 100.0f); // decrease distance on 1%
+			CreationPos -= tmpPosDec;
+		}
+		if (ParticleDist2 < DeadZone2) {
+			// increase radius
+			sVECTOR3D tmpPosInc = CreationPos;
+			tmpPosInc.Normalize();
+			tmpPosInc = tmpPosInc ^ (1 / 100.0f); // increase distance on 1%
+			CreationPos += tmpPosInc;
+
+			vw_Clamp(CreationPos.x, -CreationSize.x, CreationSize.x);
+			vw_Clamp(CreationPos.y, -CreationSize.y, CreationSize.y);
+			vw_Clamp(CreationPos.z, -CreationSize.z, CreationSize.z);
+		}
+		ParticleDist2 = CreationPos.x * CreationPos.x +
+				CreationPos.y * CreationPos.y +
+				CreationPos.z * CreationPos.z;
+	}
+	NewParticle.Location = Location + CreationPos;
 }
 
 /*
@@ -305,9 +293,9 @@ void cParticleSystem2D::SetupNewParticleDirection(cParticle2D &NewParticle)
 			return;
 		}
 
-		// emit in the same direction as particle system with deviation
-		float RandomYaw = vw_Randf0 * 3.14159f * 2.0f;
-		float RandomPitch = vw_Randf0 * Theta * 3.14159f / 180.0f ;
+		// emit with deviation
+		float RandomYaw = vw_Randf0 * 3.14159f * 2.0f; // 2π = 360°
+		float RandomPitch = vw_Randf0 * Theta * 3.14159f / 180.0f ; // convert Theta to radians (1° = π/180°)
 
 		// y
 		NewParticle.Velocity.y = Direction.y * cosf(RandomPitch);
@@ -421,20 +409,22 @@ void cParticleSystem2D::Draw()
 /*
  * Move center of particle system and all particles.
  */
-void cParticleSystem2D::MoveSystem(sVECTOR3D NewLocation)
+void cParticleSystem2D::MoveSystem(const sVECTOR3D &NewLocation)
 {
-	sVECTOR3D PrevLocation = Location;
-	Location = NewLocation;
-
 	for (auto &tmpParticle : ParticlesList) {
-		tmpParticle.Location += NewLocation - PrevLocation;
+		// this increment should looks like: "+= NewLocation - Location"
+		// but, in order to avoid temporary variable creation we do it in
+		// two steps, see "struct sVECTOR3D" for more info
+		tmpParticle.Location += NewLocation;
+		tmpParticle.Location -= Location;
 	}
+	Location = NewLocation;
 }
 
 /*
  * Move center of particle system.
  */
-void cParticleSystem2D::MoveSystemLocation(sVECTOR3D NewLocation)
+void cParticleSystem2D::MoveSystemLocation(const sVECTOR3D &NewLocation)
 {
 	Location = NewLocation;
 }
@@ -442,7 +432,7 @@ void cParticleSystem2D::MoveSystemLocation(sVECTOR3D NewLocation)
 /*
  * Set rotation.
  */
-void cParticleSystem2D::SetRotation(sVECTOR3D NewAngle)
+void cParticleSystem2D::SetRotation(const sVECTOR3D &NewAngle)
 {
 	vw_Matrix33CreateRotate(RotationMatrix, Angle ^ -1);
 	vw_Matrix33CreateRotate(RotationMatrix, NewAngle);
