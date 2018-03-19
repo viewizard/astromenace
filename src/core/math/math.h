@@ -48,16 +48,16 @@ struct sVECTOR3D {
 	// Equal
 	bool operator == (const sVECTOR3D &A)
 	{
-		return (A.x == x &&
-			A.y == y &&
-			A.z == z);
+		return ((A.x == x) &&
+			(A.y == y) &&
+			(A.z == z));
 	}
 	// Not equal
 	bool operator != (const sVECTOR3D &A)
 	{
-		return (A.x != x ||
-			A.y != y ||
-			A.z != z);
+		return ((A.x != x) ||
+			(A.y != y) ||
+			(A.z != z));
 	}
 	// Multiply
 	friend float operator * (const sVECTOR3D &A, const sVECTOR3D &B)
