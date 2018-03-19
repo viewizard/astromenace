@@ -1264,6 +1264,10 @@ loop:
 				}
 				break;
 
+			case SDL_KEYUP:
+				vw_KeyStatusUpdate(event.key.keysym.sym);
+			break;
+
 			case SDL_TEXTINPUT:
 				// устанавливаем текущий юникод нажатой клавиши
 				vw_SetCurrentUnicodeChar(event.text.text);
