@@ -45,7 +45,7 @@ class cEarthSpaceFighter;
 extern sGameSetup Setup;
 extern eMenuStatus MenuStatus;
 extern SDL_Joystick *Joystick;
-extern sParticleSystem2D *CursorParticleSystem2D;
+extern cParticleSystem2D *CursorParticleSystem2D;
 extern cSpaceStars *psSpaceStatic;
 extern sVECTOR3D GamePoint;
 extern sVECTOR3D GameCameraMovement;

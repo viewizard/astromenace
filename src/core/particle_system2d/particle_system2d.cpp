@@ -25,8 +25,7 @@
 *************************************************************************************/
 
 // TODO translate comments
-// TODO sParticleSystem2D::Update looks fat, should be revised
-// TODO (?) sParticleSystem2D should be managed globally, caller should receive ID (object ID),
+// TODO (?) cParticleSystem2D should be managed globally, caller should receive ID (object ID),
 //      instead of allocate new memory for object and care about it
 
 #include "../math/math.h"
@@ -94,23 +93,18 @@ bool sParticle2D::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attract
 /*
  * Update all particles.
  */
-bool sParticleSystem2D::Update(float Time)
+void cParticleSystem2D::Update(float Time)
 {
-	// первый раз... просто берем время
+	// on first update, only change TimeLastUpdate value
 	if (TimeLastUpdate == -1.0f) {
 		TimeLastUpdate = Time;
-		return true;
+		return;
 	}
 
-	// Time - это абсолютное время, вычисляем дельту
 	float TimeDelta = Time - TimeLastUpdate;
-	// быстро вызвали еще раз... время не изменилось, или почти не изменилось
-	if (TimeDelta == 0.0f)
-		return true;
-
 	TimeLastUpdate = Time;
 
-	// для всех частиц
+	// update and remove (erase) dead particles
 	for (auto iter = ParticlesList.begin(); iter != ParticlesList.end();) {
 		if (!iter->Update(TimeDelta, Location, IsMagnet, MagnetFactor))
 			iter = ParticlesList.erase(iter);
@@ -118,31 +112,41 @@ bool sParticleSystem2D::Update(float Time)
 			++iter;
 	}
 
-	// подсчитываем, как много частиц нам нужно создать из ParticlesPerSec
+	// calculate, how many particles we should emit
 	float ParticlesNeeded = ParticlesPerSec * TimeDelta + EmissionResidue;
 
-	// переводим в целочисленные значения
+	// convert to integer (we can't emit 0.2 particle)
 	unsigned int ParticlesCreated = (unsigned int)ParticlesNeeded;
-
-	if (!IsSuppressed) {
-		// запоминаем разницу между тем сколько нужно и сколько создадим
+	// store emission residue for future Update() calls
+	if (!IsSuppressed)
 		EmissionResidue = ParticlesNeeded - ParticlesCreated;
-	} else {
-		// ничего создавать не нужно
+	else {
 		EmissionResidue = ParticlesNeeded;
 		ParticlesCreated = 0;
 	}
 
 	// nothing to do
-	if (ParticlesCreated <= 0)
-		return true;
+	if (ParticlesCreated < 1)
+		return;
 
-	// если пытаемся создать за один раз больше чем можем в секунду
-	// убираем этот "глюк", видно компьютер тормозит
+	// prevent 'time's lags' issue, when we need emit huge number of particles
+	// that more than our ParticlesPerSec value
 	if (ParticlesCreated > ParticlesPerSec)
 		ParticlesCreated = ParticlesPerSec;
+
+	// emit particles
+	EmitParticles(ParticlesCreated);
+
+	return;
+}
+
+/*
+ * Emit particles.
+ */
+void cParticleSystem2D::EmitParticles(unsigned int Quantity)
+{
 	// пока не создадим все необходимые частицы
-	while (ParticlesCreated > 0) {
+	while (Quantity > 0) {
 		// создаем новую частицу
 		ParticlesList.emplace_back();
 		// TODO emplace_back() return reference to the inserted element (since C++17)
@@ -160,8 +164,6 @@ bool sParticleSystem2D::Update(float Time)
 		NewParticle.Color.r = ColorStart.r + vw_Randf0 * ColorVar.r;
 		NewParticle.Color.g = ColorStart.g + vw_Randf0 * ColorVar.g;
 		NewParticle.Color.b = ColorStart.b + vw_Randf0 * ColorVar.b;
-		// мы не используем альфа цвет тут
-		NewParticle.Color.a = 1.0f;
 
 		// проверяем, чтобы не было переполнения цвета
 		vw_Clamp(NewParticle.Color.r, 0.0f, 1.0f);
@@ -278,49 +280,57 @@ bool sParticleSystem2D::Update(float Time)
 			NewParticle.Size = 0.0f;
 		NewParticle.SizeDelta = (SizeEnd - NewParticle.Size) / NewParticle.Lifetime;
 
-		// испускатель имеет направление. этот код немного добавляет случайности
-		float RandomYaw = vw_Randf0 * 3.14159f * 2.0f;
-		float RandomPitch = vw_Randf0 * Theta * 3.14159f / 180.0f ;
+		// calculate new particle direction
+		SetupNewParticleDirection(NewParticle);
 
-		// учитываем нужное нам направление, вектор Direction
-		if (((Direction.x != 0.0f) || (Direction.y != 0.0f) || (Direction.z != 0.0f)) && (360.00f != Theta)) {
-			if (Theta == 0.0f)
-				NewParticle.Velocity = Direction;
-			else {
-				// y
-				NewParticle.Velocity.y = Direction.y * cosf(RandomPitch);
-				NewParticle.Velocity.x = Direction.y * sinf(RandomPitch) * cosf(RandomYaw);
-				NewParticle.Velocity.z = Direction.y * sinf(RandomPitch) * sinf(RandomYaw);
-				// x
-				NewParticle.Velocity.y += Direction.x * sinf(RandomPitch) * cosf(RandomYaw);
-				NewParticle.Velocity.x += Direction.x * cosf(RandomPitch);
-				NewParticle.Velocity.z += Direction.x * sinf(RandomPitch) * sinf(RandomYaw);
-				// z
-				NewParticle.Velocity.y += Direction.z * sinf(RandomPitch) * sinf(RandomYaw);
-				NewParticle.Velocity.x += Direction.z * sinf(RandomPitch) * cosf(RandomYaw);
-				NewParticle.Velocity.z += Direction.z * cosf(RandomPitch);
-
-				vw_Matrix33CalcPoint(NewParticle.Velocity, RotationMatrix);
-			}
-		} else {
-			// без направления, излучаем во все стороны
-			NewParticle.Velocity.y = vw_Randf0 * Theta / 360.0f;
-			NewParticle.Velocity.x = vw_Randf0 * Theta / 360.0f;
-			NewParticle.Velocity.z = vw_Randf0 * Theta / 360.0f;
-			NewParticle.Velocity.Normalize();
-		}
-
-		// находим перемещение
+		// calculate velocity
 		float NewSpeed = Speed + vw_Randf0 * SpeedVar;
 		if (NewSpeed < 0.0f)
 			NewSpeed = 0.0f;
 		NewParticle.Velocity *= NewSpeed;
 
-		// уменьшаем необходимое количество частиц
-		ParticlesCreated--;
+		Quantity--;
+	}
+}
+
+/*
+ * Setup new particle direction.
+ */
+void cParticleSystem2D::SetupNewParticleDirection(sParticle2D &NewParticle)
+{
+	if ((Direction != sVECTOR3D{0.0f, 0.0f, 0.0f}) && (360.00f != Theta)) {
+		if (Theta == 0.0f) {
+			// emit in the same direction as particle system
+			NewParticle.Velocity = Direction;
+			return;
+		}
+
+		// emit in the same direction as particle system with deviation
+		float RandomYaw = vw_Randf0 * 3.14159f * 2.0f;
+		float RandomPitch = vw_Randf0 * Theta * 3.14159f / 180.0f ;
+
+		// y
+		NewParticle.Velocity.y = Direction.y * cosf(RandomPitch);
+		NewParticle.Velocity.x = Direction.y * sinf(RandomPitch) * cosf(RandomYaw);
+		NewParticle.Velocity.z = Direction.y * sinf(RandomPitch) * sinf(RandomYaw);
+		// x
+		NewParticle.Velocity.y += Direction.x * sinf(RandomPitch) * cosf(RandomYaw);
+		NewParticle.Velocity.x += Direction.x * cosf(RandomPitch);
+		NewParticle.Velocity.z += Direction.x * sinf(RandomPitch) * sinf(RandomYaw);
+		// z
+		NewParticle.Velocity.y += Direction.z * sinf(RandomPitch) * sinf(RandomYaw);
+		NewParticle.Velocity.x += Direction.z * sinf(RandomPitch) * cosf(RandomYaw);
+		NewParticle.Velocity.z += Direction.z * cosf(RandomPitch);
+
+		vw_Matrix33CalcPoint(NewParticle.Velocity, RotationMatrix);
+		return;
 	}
 
-	return true;
+	// emit in random direction
+	NewParticle.Velocity.y = vw_Randf0 * Theta / 360.0f;
+	NewParticle.Velocity.x = vw_Randf0 * Theta / 360.0f;
+	NewParticle.Velocity.z = vw_Randf0 * Theta / 360.0f;
+	NewParticle.Velocity.Normalize();
 }
 
 /*
@@ -343,7 +353,7 @@ static inline void AddToDrawBuffer(float CoordX, float CoordY,
 /*
  * Draw all particles.
  */
-void sParticleSystem2D::Draw()
+void cParticleSystem2D::Draw()
 {
 	if (!Texture || ParticlesList.empty())
 		return;
@@ -411,7 +421,7 @@ void sParticleSystem2D::Draw()
 /*
  * Move center of particle system and all particles.
  */
-void sParticleSystem2D::MoveSystem(sVECTOR3D NewLocation)
+void cParticleSystem2D::MoveSystem(sVECTOR3D NewLocation)
 {
 	sVECTOR3D PrevLocation = Location;
 	Location = NewLocation;
@@ -424,7 +434,7 @@ void sParticleSystem2D::MoveSystem(sVECTOR3D NewLocation)
 /*
  * Move center of particle system.
  */
-void sParticleSystem2D::MoveSystemLocation(sVECTOR3D NewLocation)
+void cParticleSystem2D::MoveSystemLocation(sVECTOR3D NewLocation)
 {
 	Location = NewLocation;
 }
@@ -432,7 +442,7 @@ void sParticleSystem2D::MoveSystemLocation(sVECTOR3D NewLocation)
 /*
  * Set rotation.
  */
-void sParticleSystem2D::SetRotation(sVECTOR3D NewAngle)
+void cParticleSystem2D::SetRotation(sVECTOR3D NewAngle)
 {
 	vw_Matrix33CreateRotate(RotationMatrix, Angle ^ -1);
 	vw_Matrix33CreateRotate(RotationMatrix, NewAngle);

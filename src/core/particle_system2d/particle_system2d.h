@@ -33,7 +33,6 @@ struct sCOLORVALUE2D {
 	float r;
 	float g;
 	float b;
-	float a;
 };
 
 struct sParticle2D {
@@ -44,8 +43,8 @@ struct sParticle2D {
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 	sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};
 
-	sCOLORVALUE2D Color{1.0f, 0.0f, 0.0f, 0.5f};
-	sCOLORVALUE2D ColorDelta{0.0f, 0.0f, 0.0f, 0.0f};
+	sCOLORVALUE2D Color{1.0f, 0.0f, 0.0f};
+	sCOLORVALUE2D ColorDelta{0.0f, 0.0f, 0.0f};
 
 	float Age{0.0f};
 	float Lifetime{0.0f};
@@ -63,9 +62,10 @@ enum class eParticle2DCreationType {
 	Circle
 };
 
-struct sParticleSystem2D {
+class cParticleSystem2D {
+public:
 	// Update all particles.
-	bool Update(float Time);
+	void Update(float Time);
 	// Draw all particles.
 	void Draw();
 	// Set rotation.
@@ -83,10 +83,6 @@ struct sParticleSystem2D {
 	sVECTOR3D Direction{0.0f, 0.0f, 0.0f};
 	sVECTOR3D Angle{0.0f, 0.0f, 0.0f};
 
-	float RotationMatrix[9]{1.0f, 0.0f, 0.0f, // current rotation matrix
-				0.0f, 1.0f, 0.0f,
-				0.0f, 0.0f, 1.0f};
-
 	float SizeStart{1.0f};
 	float SizeVar{0.0f};
 	float SizeEnd{1.0f};
@@ -95,15 +91,14 @@ struct sParticleSystem2D {
 	float AlphaVar{0.0f};
 	float AlphaEnd{1.0f};
 
-	sCOLORVALUE2D ColorStart{1.0f, 1.0f, 1.0f, 1.0f};
-	sCOLORVALUE2D ColorVar{0.0f, 0.0f, 0.0f, 0.0f};
-	sCOLORVALUE2D ColorEnd{1.0f, 1.0f, 1.0f, 1.0f};
+	sCOLORVALUE2D ColorStart{1.0f, 1.0f, 1.0f};
+	sCOLORVALUE2D ColorVar{0.0f, 0.0f, 0.0f};
+	sCOLORVALUE2D ColorEnd{1.0f, 1.0f, 1.0f};
 
 	float Speed{1.0f};
 	float SpeedVar{1.0f};
 	float SpeedOnCreation{1.0f};
 
-	// TODO probably, should be moved to enum
 	eParticle2DCreationType CreationType{eParticle2DCreationType::Point};
 	sVECTOR3D CreationSize{0.05f, 0.05f, 0.05f};
 
@@ -116,7 +111,17 @@ struct sParticleSystem2D {
 	float DeadZone{0.0f};		// dead zone
 	float Theta{1.0f};		// direction deviation for new created particles
 	bool IsSuppressed{false};	// if suppressed, particle system can't emit new particles
-	float Age{0.0f};
+
+private:
+	// Emit particles.
+	void EmitParticles(unsigned int Quantity);
+	// Setup new particle direction.
+	void SetupNewParticleDirection(sParticle2D &NewParticle);
+
+	float RotationMatrix[9]{1.0f, 0.0f, 0.0f, // current rotation matrix
+				0.0f, 1.0f, 0.0f,
+				0.0f, 0.0f, 1.0f};
+
 	float TimeLastUpdate{-1.0f};
 	float EmissionResidue{0.0f};	// emission residue, for next update cycle
 

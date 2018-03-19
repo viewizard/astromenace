@@ -111,10 +111,10 @@ extern float CurrentAlert3;
 extern float CurentTime;
 
 // прорисовка эмблем энергии и жизни
-sParticleSystem2D *EnergyParticleSystem2D = nullptr;
-sParticleSystem2D *LifeParticleSystem2D = nullptr;
-sParticleSystem2D *Life2ParticleSystem2D = nullptr;
-sParticleSystem2D *Life3ParticleSystem2D = nullptr;
+cParticleSystem2D *EnergyParticleSystem2D = nullptr;
+cParticleSystem2D *LifeParticleSystem2D = nullptr;
+cParticleSystem2D *Life2ParticleSystem2D = nullptr;
+cParticleSystem2D *Life3ParticleSystem2D = nullptr;
 
 
 // работа с кораблем игрока
@@ -668,7 +668,7 @@ void InitGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (EnergyParticleSystem2D != nullptr)
 		delete EnergyParticleSystem2D;
-	EnergyParticleSystem2D = new sParticleSystem2D;
+	EnergyParticleSystem2D = new cParticleSystem2D;
 	EnergyParticleSystem2D->ColorStart.r = 0.70f;
 	EnergyParticleSystem2D->ColorStart.g = 0.80f;
 	EnergyParticleSystem2D->ColorStart.b = 1.00f;
@@ -693,7 +693,7 @@ void InitGame()
 
 	if (LifeParticleSystem2D != nullptr)
 		delete LifeParticleSystem2D;
-	LifeParticleSystem2D = new sParticleSystem2D;
+	LifeParticleSystem2D = new cParticleSystem2D;
 	LifeParticleSystem2D->ColorStart.r = 1.00f;
 	LifeParticleSystem2D->ColorStart.g = 0.60f;
 	LifeParticleSystem2D->ColorStart.b = 0.20f;
@@ -724,7 +724,7 @@ void InitGame()
 
 	if (Life2ParticleSystem2D != nullptr)
 		delete Life2ParticleSystem2D;
-	Life2ParticleSystem2D = new sParticleSystem2D;
+	Life2ParticleSystem2D = new cParticleSystem2D;
 	Life2ParticleSystem2D->ColorStart.r = 1.00f;
 	Life2ParticleSystem2D->ColorStart.g = 0.40f;
 	Life2ParticleSystem2D->ColorStart.b = 0.10f;
@@ -751,7 +751,7 @@ void InitGame()
 
 	if (Life3ParticleSystem2D != nullptr)
 		delete Life3ParticleSystem2D;
-	Life3ParticleSystem2D = new sParticleSystem2D;
+	Life3ParticleSystem2D = new cParticleSystem2D;
 	Life3ParticleSystem2D->ColorStart.r = 1.00f;
 	Life3ParticleSystem2D->ColorStart.g = 0.40f;
 	Life3ParticleSystem2D->ColorStart.b = 0.10f;

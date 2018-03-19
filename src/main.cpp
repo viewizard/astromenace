@@ -114,7 +114,7 @@ sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
 // графическая часть
 //------------------------------------------------------------------------------------
 // прорисовка динамической части курсора
-sParticleSystem2D *CursorParticleSystem2D = nullptr;
+cParticleSystem2D *CursorParticleSystem2D = nullptr;
 // статические частицы - звезды на скайбоксе
 cSpaceStars *psSpaceStatic = nullptr;
 
