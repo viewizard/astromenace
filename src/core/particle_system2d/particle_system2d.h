@@ -29,13 +29,24 @@
 
 #include "../base.h"
 
+class cParticleSystem2D;
+
 struct sCOLORVALUE2D {
 	float r;
 	float g;
 	float b;
 };
 
-struct sParticle2D {
+enum class eParticle2DCreationType {
+	Point,
+	Quad,
+	Circle
+};
+
+class cParticle2D {
+	friend class cParticleSystem2D;
+
+private:
 	// Update particle.
 	bool Update(float TimeDelta, sVECTOR3D ParentLocation = sVECTOR3D(0.0f,0.0f,0.0f),
 		    bool Attractive = false, float MagnetFactor = 25.0f);
@@ -54,12 +65,6 @@ struct sParticle2D {
 
 	float Alpha{1.0f};
 	bool NeedStop{false};
-};
-
-enum class eParticle2DCreationType {
-	Point,
-	Quad,
-	Circle
 };
 
 class cParticleSystem2D {
@@ -116,7 +121,7 @@ private:
 	// Emit particles.
 	void EmitParticles(unsigned int Quantity);
 	// Setup new particle direction.
-	void SetupNewParticleDirection(sParticle2D &NewParticle);
+	void SetupNewParticleDirection(cParticle2D &NewParticle);
 
 	float RotationMatrix[9]{1.0f, 0.0f, 0.0f, // current rotation matrix
 				0.0f, 1.0f, 0.0f,
@@ -125,7 +130,7 @@ private:
 	float TimeLastUpdate{-1.0f};
 	float EmissionResidue{0.0f};	// emission residue, for next update cycle
 
-	std::list<sParticle2D> ParticlesList;
+	std::list<cParticle2D> ParticlesList;
 };
 
 #endif //PARTICLESYSTEM2D_H

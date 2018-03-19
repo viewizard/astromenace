@@ -46,7 +46,7 @@ std::vector<float> DrawBuffer{};
 /*
  * Update particle.
  */
-bool sParticle2D::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractive, float MagnetFactor)
+bool cParticle2D::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractive, float MagnetFactor)
 {
 	// Если частица уже мертва, ее нужно отключить - передаем в систему эти данные
 	if (Age + TimeDelta >= Lifetime) {
@@ -152,7 +152,7 @@ void cParticleSystem2D::EmitParticles(unsigned int Quantity)
 		// TODO emplace_back() return reference to the inserted element (since C++17)
 		//      this line could be combined with previous line, we could use
 		//      ParticlesList.back() directly, but "NewParticle" usage make code more clear
-		sParticle2D &NewParticle = ParticlesList.back();
+		cParticle2D &NewParticle = ParticlesList.back();
 
 		// установка жизни новой частици и проверка, что не выходит из диапахона
 		NewParticle.Age = 0.0f;
@@ -296,7 +296,7 @@ void cParticleSystem2D::EmitParticles(unsigned int Quantity)
 /*
  * Setup new particle direction.
  */
-void cParticleSystem2D::SetupNewParticleDirection(sParticle2D &NewParticle)
+void cParticleSystem2D::SetupNewParticleDirection(cParticle2D &NewParticle)
 {
 	if ((Direction != sVECTOR3D{0.0f, 0.0f, 0.0f}) && (360.00f != Theta)) {
 		if (Theta == 0.0f) {
