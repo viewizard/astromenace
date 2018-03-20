@@ -183,7 +183,15 @@ const char *vw_GetText(const char *ItemID, unsigned int Language)
 	if (Language > vw_GetLanguageListCount())
 		Language = CurrentLanguage;
 
-	return TextTable[Language][ItemID].c_str();
+	auto tmpText = TextTable[Language].find(ItemID);
+	if (tmpText != TextTable[Language].end())
+		return tmpText->second.c_str();
+
+	// FIXME we should revise this behaviour, ItemID should be added to
+	//       TextTable for all languages, and we should return pointer to this
+	//       new entry, but not return ItemID, that could be released next door
+
+	return ItemID;
 }
 
 /*
@@ -197,7 +205,15 @@ const std::u32string &vw_GetTextUTF32(const char *ItemID, unsigned int Language)
 	if (Language > vw_GetLanguageListCount())
 		Language = CurrentLanguage;
 
-	return TextTableUTF32[Language][ItemID];
+	auto tmpText = TextTableUTF32[Language].find(ItemID);
+	if (tmpText != TextTableUTF32[Language].end())
+		return tmpText->second;
+
+	// FIXME we should revise this behaviour, ItemID should be converted to
+	//       UTF32 and added to TextTableUTF32 for all languages, and we should
+	//       return pointer to this new entry, but not return TextTableUTF32Error
+
+	return TextTableUTF32Error;
 }
 
 /*
