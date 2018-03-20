@@ -878,7 +878,7 @@ void RealExitGame()
 
 	// отдаем управление
 	if (Setup.BPP == 0)
-		SDL_SetWindowGrab(vw_GetSDL2Windows(),SDL_FALSE);
+		SDL_SetWindowGrab(vw_GetSDL2Windows(), SDL_FALSE);
 
 	// выгружаем AI файл
 	ReleaseGameAI();

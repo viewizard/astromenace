@@ -528,7 +528,6 @@ extern float StarsTileEndTransparentLayer2;
 void InitGame();
 void DrawGame();
 void ExitGame();
-void RealExitGame();
 void ExitGameWithSave();
 void SetGameMissionComplete();
 

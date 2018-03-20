@@ -1356,9 +1356,8 @@ GotoQuit:
 		Script = nullptr;
 	}
 
-	RealExitGame();// удаляем объекты, они могут быть... проверить и сделать нормальное удаление
+	ReleaseGameAI();
 	MissionsListRelease();
-	vw_ReleaseAllParticleSystems2D();
 	DestroyInfoObject();
 	WorkshopDestroyData();
 
@@ -1369,6 +1368,7 @@ GotoQuit:
 
 	ReleaseAllObject3D();
 	vw_ReleaseAllModel3D();
+	vw_ReleaseAllParticleSystems2D();
 	vw_ReleaseAllParticleSystems();
 	vw_ReleaseAllLights();
 	ReleaseAllGameLvlText();
