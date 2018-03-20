@@ -7,7 +7,6 @@ os:
 script:
   - cmake ./
   - make -j8
-  - ./astromenace --pack --rawdata=./gamedata
 compiler:
   - gcc
 before_install:

@@ -100,19 +100,14 @@ $ cd ~/
 $ git clone https://github.com/viewizard/astromenace.git astromenace
 ```
 
-### 3) Compile game binary
+### 3) Compile game binary (game data file will be created automatically)
 ```bash
 $ cd ~/astromenace
 $ cmake ./
 $ make
 ```
 
-### 4) Create game VFS data file
-```bash
-$ ./astromenace --pack --rawdata=./gamedata
-```
-
-### 5) Create desktop shortcut or start AstroMenace
+### 4) Create desktop shortcut or start AstroMenace
 ```bash
 $ ~/astromenace/astromenace
 ```
