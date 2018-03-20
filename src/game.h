@@ -45,7 +45,6 @@ class cEarthSpaceFighter;
 extern sGameSetup Setup;
 extern eMenuStatus MenuStatus;
 extern SDL_Joystick *Joystick;
-extern cParticleSystem2D *CursorParticleSystem2D;
 extern cSpaceStars *psSpaceStatic;
 extern sVECTOR3D GamePoint;
 extern sVECTOR3D GameCameraMovement;
@@ -152,7 +151,6 @@ extern int CurrentCursorStatus;
 extern bool DrawGameCursor;
 
 void Loop_Proc();
-void CreateCursor();
 
 
 

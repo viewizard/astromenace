@@ -44,47 +44,9 @@ float CurrentCursorFlash = 1.0f;
 float CurrentCursorFlashLastTime = -1.0f;
 bool DrawGameCursor = true;
 
-extern cParticleSystem2D *CursorParticleSystem2D;
 void DrawDragingWeaponIcon(int X, int Y);
 
 extern float CurrentGameSpeedShowTime;
-
-
-
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
-void CreateCursor()
-{
-	// курсор
-	CursorParticleSystem2D = vw_CreateParticleSystem2D();
-	CursorParticleSystem2D->ColorStart.r = 1.00f;
-	CursorParticleSystem2D->ColorStart.g = 1.00f;
-	CursorParticleSystem2D->ColorStart.b = 0.30f;
-	CursorParticleSystem2D->ColorEnd.r = 1.00f;
-	CursorParticleSystem2D->ColorEnd.g = 0.00f;
-	CursorParticleSystem2D->ColorEnd.b = 0.00f;
-	CursorParticleSystem2D->AlphaStart = 0.50f;
-	CursorParticleSystem2D->AlphaEnd   = 0.00f;
-	CursorParticleSystem2D->SizeStart  = 28.00f;
-	CursorParticleSystem2D->SizeVar    = 2.50f;
-	CursorParticleSystem2D->SizeEnd    = 00.00f;
-	CursorParticleSystem2D->Speed      = 100.00f;
-	CursorParticleSystem2D->SpeedOnCreation	   = 8.00f;
-	CursorParticleSystem2D->SpeedVar   = 20.00f;
-	CursorParticleSystem2D->Theta      = 15.00f;
-	CursorParticleSystem2D->Life       = 0.40f;
-	CursorParticleSystem2D->LifeVar       = 0.05f;
-	CursorParticleSystem2D->ParticlesPerSec = 50;
-	CursorParticleSystem2D->Direction = sVECTOR3D(0.0f, 1.0f, 0.0f);
-	CursorParticleSystem2D->SetRotation(sVECTOR3D(0.0f, 0.0f, -45.0f));
-	CursorParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
-
-}
-
-
-
-
 
 
 //------------------------------------------------------------------------------------
@@ -171,11 +133,6 @@ void Loop_Proc()
 		// если нужно, рисуем перетягиваемое оружие
 		if (MenuStatus == eMenuStatus::WORKSHOP)
 			DrawDragingWeaponIcon(mX, mY);
-
-
-		CursorParticleSystem2D->MoveSystem(sVECTOR3D(mX*1.0f+23,mY*1.0f+19,0.0f));
-		CursorParticleSystem2D->Update(vw_GetTimeThread(0));
-		CursorParticleSystem2D->Draw();
 
 		SrcRect(0,0,64,64 );
 		DstRect(mX-13,mY-13,mX+64-13,mY+64-13 );
