@@ -130,18 +130,6 @@ static sLoadList MenuLoadList[] = {
 	{"menu/perc_none.tga",		0, 2, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 	{"menu/checkbox_main.tga",	0, 5, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
 	{"menu/checkbox_in.tga",	0, 5, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, false, -1.0f, false},
-// иконки для отображения в меню credits
-	{"credits/sdl.tga",		0, 32, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-	{"credits/git.tga",		0, 16, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-	{"credits/opengl.tga",		0, 32, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-	{"credits/openal.tga",		0, 32, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-	{"credits/qtcreator.tga",	0, 16, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-	{"credits/gnugcc.tga",		0, 16, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-	{"credits/clang.tga",		0, 16, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-	{"credits/gentoo.tga",		0, 16, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-	{"credits/freetype.tga",	0, 16, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-	{"credits/oggvorbis.tga",	0, 32, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
-	{"credits/gimp.tga",		0, 32, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 // панельки и кнопки вывода информации в меню модернизации корабля
 	{"menu/workshop_panel1.tga",			0, 270, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
 	{"menu/workshop_panel1+.tga",			0, 270, true, 0,0,0, eAlphaCreateMode::EQUAL, RI_CLAMP_TO_EDGE, TEXTURE_NO_MIPMAP, false, true, -1.0f, false},
