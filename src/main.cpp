@@ -349,8 +349,6 @@ int main( int argc, char **argv )
 	bool NeedSafeMode = false;
 	// флаг перевода игры в режим упаковки gamedata.vfs файла
 	bool NeedPack = false;
-	// forced rebuild gamedata.vfs
-	bool ForcedRebuild = false;
 
 	for (int i=1; i<argc; i++) {
 		// проверка ключа "--help"
@@ -360,7 +358,6 @@ int main( int argc, char **argv )
 				  << "--mouse - launch the game without system cursor hiding;\n"
 				  << "--safe-mode - reset all settings except Pilots Profiles at the game launch;\n"
 				  << "--pack - pack data to gamedata.vfs file;\n"
-				  << "--forced - forced rebuild gamedata.vfs file;\n"
 				  << "--rawdata=/game/rawdata/folder/ - folder with game raw data for gamedata.vfs;\n"
 				  << "--help - info about all game launch options.\n";
 			return 0;
@@ -377,10 +374,6 @@ int main( int argc, char **argv )
 		// проверка ключа "--pack"
 		if (!strcmp(argv[i], "--pack"))
 			NeedPack = true;
-
-		// проверка ключа "--forced"
-		if (!strcmp(argv[i], "--forced"))
-			ForcedRebuild = true;
 	}
 
 
@@ -607,7 +600,7 @@ int main( int argc, char **argv )
 		}
 
 		std::cout << "Source Raw Folder: " << RawDataDir << "\n";
-		return ConvertFS2VFS(RawDataDir, VFSFileNamePath, ForcedRebuild);
+		return ConvertFS2VFS(RawDataDir, VFSFileNamePath);
 	}
 
 

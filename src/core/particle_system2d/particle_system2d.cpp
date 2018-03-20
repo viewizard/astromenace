@@ -450,4 +450,3 @@ void vw_ReleaseAllParticleSystems2D()
 {
 	ParticleSystemsList.clear();
 }
-

@@ -425,26 +425,8 @@ const std::string GameData[] = {
 /*
  * Create game data VFS file (convert FS to VFS).
  */
-int ConvertFS2VFS(const std::string RawDataDir, const std::string VFSFileNamePath, bool ForcedRebuild)
+int ConvertFS2VFS(const std::string RawDataDir, const std::string VFSFileNamePath)
 {
-	if (!ForcedRebuild) {
-		// if we already have proper file, no reason generate it one more time
-		int rc = vw_OpenVFS(VFSFileNamePath, GAME_BUILD);
-		if (!rc) {
-			// check all files from the list
-			for (unsigned long i = 0; i < GameDataCount; i++) {
-				std::unique_ptr<sFILE> file = vw_fopen(GameData[i]);
-				if (!file) {
-					rc = ERR_FILE_NOT_FOUND;
-					break;
-				}
-			}
-			vw_ShutdownVFS();
-			if (!rc)
-				return rc;
-		}
-	}
-
 	return vw_CreateVFS(VFSFileNamePath, GAME_BUILD,
 			    RawDataDir, "models/models.pack",
 			    GameData, GameDataCount);
