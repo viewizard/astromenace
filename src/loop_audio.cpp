@@ -31,6 +31,7 @@
 namespace {
 
 std::string CurrentPlayingMusicName;
+std::string CurrentPlayingMusicLoopPart;
 
 struct sSoundData {
 	const char *FileName; // file name
@@ -78,7 +79,6 @@ static sSoundData GameSoundList[] = {
 	{"sfx/gausshit.wav", 1.0f, true},		// попадание и "разваливание" снаряда о корпус объекта, для Gauss снарядов
 
 	{"sfx/explosion4.wav", 1.0f, true},		// малый взрыв: астероиды
-
 };
 #define GameSoundQuantity sizeof(GameSoundList)/sizeof(GameSoundList[0])
 
@@ -120,14 +120,12 @@ static sSoundData VoiceNames[] = {
 } // unnamed namespace
 
 
-
 //------------------------------------------------------------------------------------
 // Запуск нужной музыки
 //------------------------------------------------------------------------------------
 void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t FadeOutTicks)
 {
-	bool MusicLoop = true;
-	std::string LoopFileName;
+	CurrentPlayingMusicLoopPart.clear();
 	float MusicCorrection = 1.0f;
 
 	switch (StartMusic) {
@@ -152,8 +150,7 @@ void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t F
 		break;
 	case eMusicTheme::CREDITS:
 		CurrentPlayingMusicName = "music/boss-intro.ogg";
-		MusicLoop = false;
-		LoopFileName = "music/boss-loop.ogg";
+		CurrentPlayingMusicLoopPart = "music/boss-loop.ogg";
 		break;
 	}
 
@@ -166,7 +163,7 @@ void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t F
 
 		// пытаемся загрузить и играть
 		if (!vw_PlayMusic(CurrentPlayingMusicName, 0.0f, MusicCorrection * (Setup.MusicSw / 10.0f),
-				  MusicLoop, LoopFileName)) {
+				  CurrentPlayingMusicLoopPart.empty(), CurrentPlayingMusicLoopPart)) {
 			vw_ReleaseMusic(CurrentPlayingMusicName);
 			CurrentPlayingMusicName.clear();
 		} else // we are playing new music theme, FadeIn it
@@ -266,10 +263,7 @@ unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Locatio
 //------------------------------------------------------------------------------------
 void Audio_LoopProc()
 {
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// делаем установку слушателя (он в точке камеры)
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 	// получаем текущее положение камеры
 	sVECTOR3D CurrentCameraLocation;
 	vw_GetCameraLocation(&CurrentCameraLocation);
@@ -292,21 +286,18 @@ void Audio_LoopProc()
 
 	vw_Listener(ListenerPos, ListenerVel, ListenerOri);
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// передаем управление, чтобы внутри ядра все сделали
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_UpdateSound(SDL_GetTicks());
 	vw_UpdateMusic(SDL_GetTicks());
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// запускаем нужную музыку... только включили громкость или выключили
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!vw_IsAnyMusicPlaying()) {
 		if (Setup.MusicSw && // если громкость не нулевая
 		    Setup.Music_check && // если можно вообще играть
 		    !CurrentPlayingMusicName.empty()) { // если установлен
 			// пытаемся загрузить и проиграть
-			if (!vw_PlayMusic(CurrentPlayingMusicName, 1.0f, Setup.MusicSw / 10.0f, true, "")) {
+			if (!vw_PlayMusic(CurrentPlayingMusicName, 1.0f, Setup.MusicSw / 10.0f,
+					  CurrentPlayingMusicLoopPart.empty(), CurrentPlayingMusicLoopPart)) {
 				vw_ReleaseMusic(CurrentPlayingMusicName);
 				CurrentPlayingMusicName.clear();
 			} else // we are playing new music theme, FadeIn it
@@ -319,5 +310,4 @@ void Audio_LoopProc()
 			vw_ReleaseAllMusic();
 		}
 	}
-
 }
