@@ -334,8 +334,7 @@ void SetMenu(eMenuStatus Menu)
 		break;
 
 	case eMenuStatus::CREDITS:
-		CreditsCurrentPos = 0.0f;
-		LastCreditsCurrentPosUpdateTime = vw_GetTimeThread(0);
+		InitCreditsMenu(vw_GetTimeThread(0));
 		break;
 
 	default:

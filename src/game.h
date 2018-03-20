@@ -310,9 +310,7 @@ void MainMenu();
 //------------------------------------------------------------------------------------
 // Menu_Credits.cpp
 //------------------------------------------------------------------------------------
-extern float CreditsCurrentPos;
-extern float LastCreditsCurrentPosUpdateTime;
-
+void InitCreditsMenu(float Time);
 void CreditsMenu();
 
 
