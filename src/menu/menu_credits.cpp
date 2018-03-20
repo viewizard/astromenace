@@ -43,7 +43,7 @@ void CreditsMenu()
 	LastCreditsCurrentPosUpdateTime = vw_GetTimeThread(0);
 
 	// зацикливание
-	if (CreditsCurrentPos <= -3335) CreditsCurrentPos = 0.0f;
+	if (CreditsCurrentPos <= -3435) CreditsCurrentPos = 0.0f;
 
 
 
@@ -554,7 +554,7 @@ void CreditsMenu()
 
 	Y1 += Offset1;
 	Y2 += Offset1;
-	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Linux Libertine (http://www.linuxlibertine.org)"))/2;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Linux Libertine (http://libertine-fonts.org)"))/2;
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
 		if (ttt > 1.0f) ttt = 1.0f;
@@ -562,11 +562,11 @@ void CreditsMenu()
 		ttt = (Y2 - 100) /100.0f;
 		if (ttt < 0.0f) ttt = 0.0f;
 	}
-	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Linux Libertine (http://www.linuxlibertine.org)");
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Linux Libertine (http://libertine-fonts.org)");
 
 	Y1 += Offset1+15;
 	Y2 += Offset1+15;
-	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("GNU FreeFont (http://www.gnu.org/software/freefont)"))/2;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("GNU FreeFont (https://www.gnu.org/software/freefont)"))/2;
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
 		if (ttt > 1.0f) ttt = 1.0f;
@@ -574,11 +574,11 @@ void CreditsMenu()
 		ttt = (Y2 - 100) /100.0f;
 		if (ttt < 0.0f) ttt = 0.0f;
 	}
-	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "GNU FreeFont (http://www.gnu.org/software/freefont)");
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "GNU FreeFont (https://www.gnu.org/software/freefont)");
 
 	Y1 += Offset1+15;
 	Y2 += Offset1+15;
-	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Liberation (https://fedorahosted.org/liberation-fonts)"))/2;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("Liberation (https://pagure.io/liberation-fonts)"))/2;
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
 		if (ttt > 1.0f) ttt = 1.0f;
@@ -586,7 +586,7 @@ void CreditsMenu()
 		ttt = (Y2 - 100) /100.0f;
 		if (ttt < 0.0f) ttt = 0.0f;
 	}
-	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Liberation (https://fedorahosted.org/liberation-fonts)");
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Liberation (https://pagure.io/liberation-fonts)");
 #endif // fontconfig
 
 
@@ -638,7 +638,7 @@ void CreditsMenu()
 		ttt = (Y2 - 100) /100.0f;
 		if (ttt < 0.0f) ttt = 0.0f;
 	}
-	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://www.libsdl.org");
+	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "https://www.libsdl.org");
 
 
 	// OpenGL
@@ -672,7 +672,7 @@ void CreditsMenu()
 		ttt = (Y2 - 100) /100.0f;
 		if (ttt < 0.0f) ttt = 0.0f;
 	}
-	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://www.opengl.org");
+	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "https://www.opengl.org");
 
 
 	// OpenAL
@@ -706,7 +706,7 @@ void CreditsMenu()
 		ttt = (Y2 - 100) /100.0f;
 		if (ttt < 0.0f) ttt = 0.0f;
 	}
-	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://www.openal.org");
+	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "https://www.openal.org");
 
 
 
@@ -741,7 +741,7 @@ void CreditsMenu()
 		ttt = (Y2 - 100) /100.0f;
 		if (ttt < 0.0f) ttt = 0.0f;
 	}
-	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://www.freetype.org");
+	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "https://www.freetype.org");
 
 
 	// ogg vorbis
@@ -775,7 +775,7 @@ void CreditsMenu()
 		ttt = (Y2 - 100) /100.0f;
 		if (ttt < 0.0f) ttt = 0.0f;
 	}
-	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://www.vorbis.com");
+	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "https://xiph.org/vorbis");
 
 
 #ifdef fontconfig
@@ -820,7 +820,7 @@ void CreditsMenu()
 	}
 	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, ttt*MenuContentTransp, vw_GetText("10_DEVELOPING_WITH"));
 
-	// Code::Blocks
+	// Qt Creator
 	Y2 += Offset1-20;
 	SrcRect(0,0,64,64);
 	DstRect(LogoX+32,Y2,LogoX+32+64,Y2+64);
@@ -831,7 +831,7 @@ void CreditsMenu()
 		ttt = (Y2 - 100) /100.0f;
 		if (ttt < 0.0f) ttt = 0.0f;
 	}
-	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("credits/codeblocks.tga"), true, ttt*MenuContentTransp);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("credits/qtcreator.tga"), true, ttt*MenuContentTransp);
 
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
@@ -840,7 +840,7 @@ void CreditsMenu()
 		ttt = (Y2 - 100) /100.0f;
 		if (ttt < 0.0f) ttt = 0.0f;
 	}
-	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Code::Blocks IDE");
+	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Qt Creator IDE");
 	Y2 += Offset1;
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
@@ -849,7 +849,7 @@ void CreditsMenu()
 		ttt = (Y2 - 100) /100.0f;
 		if (ttt < 0.0f) ttt = 0.0f;
 	}
-	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://www.codeblocks.org");
+	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "https://www.qt.io");
 
 	// gcc
 	Y2 += Offset1+20;
@@ -880,8 +880,38 @@ void CreditsMenu()
 		ttt = (Y2 - 100) /100.0f;
 		if (ttt < 0.0f) ttt = 0.0f;
 	}
-	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://gcc.gnu.org");
+	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "https://gcc.gnu.org");
 
+	// clang
+	Y2 += Offset1+20;
+	SrcRect(0,0,64,64);
+	DstRect(LogoX+32,Y2,LogoX+32+64,Y2+64);
+	if (Y2 > 300) {
+		ttt = (650 - Y2) /100.0f;
+		if (ttt > 1.0f) ttt = 1.0f;
+	} else {
+		ttt = (Y2 - 100) /100.0f;
+		if (ttt < 0.0f) ttt = 0.0f;
+	}
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("credits/clang.tga"), true, ttt*MenuContentTransp);
+
+	if (Y2 > 300) {
+		ttt = (650 - Y2) /100.0f;
+		if (ttt > 1.0f) ttt = 1.0f;
+	} else {
+		ttt = (Y2 - 100) /100.0f;
+		if (ttt < 0.0f) ttt = 0.0f;
+	}
+	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Clang, frontend for LLVM");
+	Y2 += Offset1;
+	if (Y2 > 300) {
+		ttt = (650 - Y2) /100.0f;
+		if (ttt > 1.0f) ttt = 1.0f;
+	} else {
+		ttt = (Y2 - 100) /100.0f;
+		if (ttt < 0.0f) ttt = 0.0f;
+	}
+	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://clang.llvm.org");
 
 	// git
 	Y2 += Offset1+20;
@@ -944,7 +974,7 @@ void CreditsMenu()
 		ttt = (Y2 - 100) /100.0f;
 		if (ttt < 0.0f) ttt = 0.0f;
 	}
-	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://www.gentoo.org");
+	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "https://www.gentoo.org");
 
 
 	// gimp
@@ -976,7 +1006,7 @@ void CreditsMenu()
 		ttt = (Y2 - 100) /100.0f;
 		if (ttt < 0.0f) ttt = 0.0f;
 	}
-	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://www.gimp.org");
+	vw_DrawFont(LogoTextX, Y2+5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "https://www.gimp.org");
 
 
 
@@ -1016,7 +1046,7 @@ void CreditsMenu()
 	}
 	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "Spacescape");
 	Y2 += Offset1;
-	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("http://sourceforge.net/projects/spacescape"))/2;
+	SizeI = (Setup.iAspectRatioWidth-vw_FontSize("https://sourceforge.net/projects/spacescape"))/2;
 	if (Y2 > 300) {
 		ttt = (650 - Y2) /100.0f;
 		if (ttt > 1.0f) ttt = 1.0f;
@@ -1024,7 +1054,7 @@ void CreditsMenu()
 		ttt = (Y2 - 100) /100.0f;
 		if (ttt < 0.0f) ttt = 0.0f;
 	}
-	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "http://sourceforge.net/projects/spacescape");
+	vw_DrawFont(SizeI, Y2, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ttt*MenuContentTransp, "https://sourceforge.net/projects/spacescape");
 
 
 
