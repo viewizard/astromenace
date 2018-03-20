@@ -30,10 +30,17 @@
 
 namespace {
 
+struct sEnumHash {
+	template <typename T>
+	std::size_t operator()(T t) const {
+		return static_cast<std::size_t>(t);
+	}
+};
+
 // no point to calculate attenuation for all scene, limit it by 10
 constexpr float AttenuationLimit = 10.0f;
 // all lights, indexed by light's type
-std::unordered_multimap<int, sLight> LightsMap;
+std::unordered_multimap<eLightType, sLight, sEnumHash> LightsMap;
 
 } // unnamed namespace
 
@@ -48,7 +55,7 @@ int vw_CalculateAllPointLightsAttenuation(const sVECTOR3D &Location, float Radiu
 {
 	int AffectedLightsCount = 0;
 
-	auto range = LightsMap.equal_range(LightType_Point);
+	auto range = LightsMap.equal_range(eLightType::Point);
 	for (; range.first != range.second; ++range.first) {
 		auto &tmpLight = *range.first;
 		if (tmpLight.second.On) {
@@ -90,7 +97,7 @@ int vw_CheckAndActivateAllLights(int &Type1, int &Type2, const sVECTOR3D &Locati
 	Type2 = 0; // counter for point light
 
 	// directional light should be first, since this is the main scene light
-	auto range = LightsMap.equal_range(LightType_Directional);
+	auto range = LightsMap.equal_range(eLightType::Directional);
 	for (; (range.first != range.second) &&
 	       (Type1 < DirLimit) &&
 	       (Type1 < vw_GetDevCaps()->MaxActiveLights); ++range.first) {
@@ -159,7 +166,7 @@ void vw_ReleaseAllLights()
 /*
  * Create light.
  */
-sLight *vw_CreateLight(int Type)
+sLight *vw_CreateLight(eLightType Type)
 {
 	sLight tmpLight;
 	auto Light = LightsMap.emplace(Type, tmpLight);
@@ -171,7 +178,7 @@ sLight *vw_CreateLight(int Type)
  */
 sLight *vw_CreatePointLight(const sVECTOR3D &Location, float R, float G, float B, float Linear, float Quadratic)
 {
-	sLight *Light = vw_CreateLight(LightType_Point);
+	sLight *Light = vw_CreateLight(eLightType::Point);
 
 	Light->Diffuse[0] = Light->Specular[0] = R;
 	Light->Diffuse[1] = Light->Specular[1] = G;
@@ -189,7 +196,7 @@ sLight *vw_CreatePointLight(const sVECTOR3D &Location, float R, float G, float B
  */
 sLight *vw_GetMainDirectLight()
 {
-	auto tmpLight = LightsMap.find(LightType_Directional);
+	auto tmpLight = LightsMap.find(eLightType::Directional);
 	if (tmpLight != LightsMap.end())
 		return &tmpLight->second;
 
@@ -199,16 +206,16 @@ sLight *vw_GetMainDirectLight()
 /*
  * Get light type from light map.
  */
-static int GetLightType(sLight *Light)
+static eLightType GetLightType(sLight *Light)
 {
 	// structure sLight don't have LightType field, since we have it in LightsMap (as key),
 	// usually, we have only 1-2 directional lights, so, this is extremely short cycle
-	int LightType = LightType_Point;
-	auto range = LightsMap.equal_range(LightType_Directional);
+	eLightType LightType = eLightType::Point;
+	auto range = LightsMap.equal_range(eLightType::Directional);
 	for (; range.first != range.second; ++range.first) {
 		auto &tmpLight = *range.first;
 		if (&tmpLight.second == Light) {
-			LightType = LightType_Directional;
+			LightType = eLightType::Directional;
 			break;
 		}
 	}
@@ -229,7 +236,7 @@ bool sLight::Activate(int CurrentLightNum, const std::array<float, 16> &Matrix)
 	vw_LoadIdentity();
 	vw_SetMatrix(Matrix.data());
 
-	if (GetLightType(this) == LightType_Directional) {
+	if (GetLightType(this) == eLightType::Directional) {
 		float RenderDirection[4]{-Direction.x, -Direction.y, -Direction.z, 0.0f};
 		float RenderLocation[4]{-Direction.x, -Direction.y, -Direction.z, 0.0f};
 
@@ -279,6 +286,6 @@ void sLight::DeActivate()
  */
 void sLight::SetLocation(sVECTOR3D NewLocation)
 {
-	if (GetLightType(this) != LightType_Directional)
+	if (GetLightType(this) != eLightType::Directional)
 		Location = NewLocation;
 }
