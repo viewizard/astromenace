@@ -25,7 +25,7 @@
 *************************************************************************************/
 
 // TODO translate comments
-// TODO move to local rendering buffer (std::vector), do not allocate/release memory all the time
+
 // TODO since we use RI_TRIANGLES, use 4 vertices + index buffer for vw_SendVertices()
 //      instead of 6 vertices, so, we send 4 vertices and index buffer for 6 elements,
 //      something like {1, 2, 3, 3, 4, 1}
@@ -37,6 +37,16 @@
 #include "../math/math.h"
 #include "../light/light.h"
 #include "particle_system.h"
+
+namespace {
+
+// Local draw buffer, that dynamically allocate memory at maximum
+// required size only one time per game execution.
+std::unique_ptr<float []> DrawBuffer{};
+unsigned int DrawBufferCurrentPosition{0};
+unsigned int DrawBufferSize{0};
+
+} // unnamed namespace
 
 extern bool ParticleSystemUseGLSL;
 extern float ParticleSystemQuality;
@@ -62,8 +72,6 @@ cParticleSystem::~cParticleSystem()
 	}
 	if (Light)
 		vw_ReleaseLight(Light);
-	if (tmpDATA)
-		delete [] tmpDATA;
 	vw_DetachParticleSystem(this);
 }
 
@@ -375,11 +383,11 @@ bool cParticleSystem::Update(float Time)
 				vw_GetCameraLocation(&CurrentCameraLocation);
 				// находим расстояние от центра системы до камеры
 				float SystDist = (CurrentCameraLocation.x - Location.x - CreationSize.x) *
-						 (CurrentCameraLocation.x-Location.x - CreationSize.x) +
+						 (CurrentCameraLocation.x - Location.x - CreationSize.x) +
 						 (CurrentCameraLocation.y - Location.y - CreationSize.y) *
-						 (CurrentCameraLocation.y-Location.y - CreationSize.y) +
+						 (CurrentCameraLocation.y - Location.y - CreationSize.y) +
 						 (CurrentCameraLocation.z - Location.z - CreationSize.z) *
-						 (CurrentCameraLocation.z-Location.z - CreationSize.z);
+						 (CurrentCameraLocation.z - Location.z - CreationSize.z);
 
 				float ParticleDist = (CurrentCameraLocation.x - NewParticle->Location.x) *
 						     (CurrentCameraLocation.x - NewParticle->Location.x) +
@@ -541,6 +549,26 @@ bool cParticleSystem::Update(float Time)
 	return true;
 }
 
+/*
+ * Add data to local draw buffer.
+ * Note, in case of GLSL, we use TextureU_or_GLSL and TextureV_or_GLSL
+ * not for texture coordinates, but for GLSL program parameters.
+ */
+static inline void AddToDrawBuffer(float CoordX, float CoordY, float CoordZ,
+				   const sCOLORVALUE3D &Color, float Alpha,
+				   float TextureU_or_GLSL, float TextureV_or_GLSL)
+{
+	DrawBuffer[DrawBufferCurrentPosition++] = CoordX;
+	DrawBuffer[DrawBufferCurrentPosition++] = CoordY;
+	DrawBuffer[DrawBufferCurrentPosition++] = CoordZ;
+	DrawBuffer[DrawBufferCurrentPosition++] = Color.r;
+	DrawBuffer[DrawBufferCurrentPosition++] = Color.g;
+	DrawBuffer[DrawBufferCurrentPosition++] = Color.b;
+	DrawBuffer[DrawBufferCurrentPosition++] = Alpha;
+	DrawBuffer[DrawBufferCurrentPosition++] = TextureU_or_GLSL;
+	DrawBuffer[DrawBufferCurrentPosition++] = TextureV_or_GLSL;
+}
+
 //-----------------------------------------------------------------------------
 // прорисовка системы
 //-----------------------------------------------------------------------------
@@ -562,15 +590,13 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 
 		// если есть живые - рисуем их
 		if (DrawCount > 0) {
-			if (tmpDATA)
-				delete [] tmpDATA;
-
-			// номер float'а в последовательности
-			int k = 0;
-
-			// делаем массив для всех элементов
-			// RI_3f_XYZ | RI_2f_TEX | RI_4f_COLOR
-			tmpDATA = new float[6 * (3 + 2 + 4) * DrawCount];
+			// RI_TRIANGLES * (RI_3f_XYZ + RI_2f_TEX + RI_4f_COLOR) * DrawCount
+			unsigned int tmpDrawBufferSize = 6 * (3 + 2 + 4) * DrawCount;
+			if (tmpDrawBufferSize > DrawBufferSize) {
+				DrawBufferSize = tmpDrawBufferSize;
+				DrawBuffer.reset(new float[DrawBufferSize]);
+			}
+			DrawBufferCurrentPosition = 0;
 
 			// шейдеры не поддерживаются - рисуем по старинке
 			if (!ParticleSystemUseGLSL) {
@@ -606,66 +632,39 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 					sVECTOR3D tmpAngle4 = nnTmp2 ^ (-tmp->Size * 1.5f);
 
 					// first triangle
-					tmpDATA[k++] = tmp->Location.x+tmpAngle3.x;
-					tmpDATA[k++] = tmp->Location.y+tmpAngle3.y;
-					tmpDATA[k++] = tmp->Location.z+tmpAngle3.z;
-					tmpDATA[k++] = tmp->Color.r;
-					tmpDATA[k++] = tmp->Color.g;
-					tmpDATA[k++] = tmp->Color.b;
-					tmpDATA[k++] = tmp->Alpha;
-					tmpDATA[k++] = 0.0f;
-					tmpDATA[k++] = 1.0f;
+					AddToDrawBuffer(tmp->Location.x + tmpAngle3.x,
+							tmp->Location.y + tmpAngle3.y,
+							tmp->Location.z + tmpAngle3.z,
+							tmp->Color, tmp->Alpha,
+							0.0f, 1.0f);
+					AddToDrawBuffer(tmp->Location.x + tmpAngle2.x,
+							tmp->Location.y + tmpAngle2.y,
+							tmp->Location.z + tmpAngle2.z,
+							tmp->Color, tmp->Alpha,
+							0.0f, 0.0f);
 
-					tmpDATA[k++] = tmp->Location.x+tmpAngle2.x;
-					tmpDATA[k++] = tmp->Location.y+tmpAngle2.y;
-					tmpDATA[k++] = tmp->Location.z+tmpAngle2.z;
-					tmpDATA[k++] = tmp->Color.r;
-					tmpDATA[k++] = tmp->Color.g;
-					tmpDATA[k++] = tmp->Color.b;
-					tmpDATA[k++] = tmp->Alpha;
-					tmpDATA[k++] = 0.0f;
-					tmpDATA[k++] = 0.0f;
-
-					tmpDATA[k++] = tmp->Location.x+tmpAngle1.x;
-					tmpDATA[k++] = tmp->Location.y+tmpAngle1.y;
-					tmpDATA[k++] = tmp->Location.z+tmpAngle1.z;
-					tmpDATA[k++] = tmp->Color.r;
-					tmpDATA[k++] = tmp->Color.g;
-					tmpDATA[k++] = tmp->Color.b;
-					tmpDATA[k++] = tmp->Alpha;
-					tmpDATA[k++] = 1.0f;
-					tmpDATA[k++] = 0.0f;
+					AddToDrawBuffer(tmp->Location.x + tmpAngle1.x,
+							tmp->Location.y + tmpAngle1.y,
+							tmp->Location.z + tmpAngle1.z,
+							tmp->Color, tmp->Alpha,
+							1.0f, 0.0f);
 
 					//second triangle
-					tmpDATA[k++] = tmp->Location.x+tmpAngle1.x;
-					tmpDATA[k++] = tmp->Location.y+tmpAngle1.y;
-					tmpDATA[k++] = tmp->Location.z+tmpAngle1.z;
-					tmpDATA[k++] = tmp->Color.r;
-					tmpDATA[k++] = tmp->Color.g;
-					tmpDATA[k++] = tmp->Color.b;
-					tmpDATA[k++] = tmp->Alpha;
-					tmpDATA[k++] = 1.0f;
-					tmpDATA[k++] = 0.0f;
-
-					tmpDATA[k++] = tmp->Location.x+tmpAngle4.x;
-					tmpDATA[k++] = tmp->Location.y+tmpAngle4.y;
-					tmpDATA[k++] = tmp->Location.z+tmpAngle4.z;
-					tmpDATA[k++] = tmp->Color.r;
-					tmpDATA[k++] = tmp->Color.g;
-					tmpDATA[k++] = tmp->Color.b;
-					tmpDATA[k++] = tmp->Alpha;
-					tmpDATA[k++] = 1.0f;
-					tmpDATA[k++] = 1.0f;
-
-					tmpDATA[k++] = tmp->Location.x+tmpAngle3.x;
-					tmpDATA[k++] = tmp->Location.y+tmpAngle3.y;
-					tmpDATA[k++] = tmp->Location.z+tmpAngle3.z;
-					tmpDATA[k++] = tmp->Color.r;
-					tmpDATA[k++] = tmp->Color.g;
-					tmpDATA[k++] = tmp->Color.b;
-					tmpDATA[k++] = tmp->Alpha;
-					tmpDATA[k++] = 0.0f;
-					tmpDATA[k++] = 1.0f;
+					AddToDrawBuffer(tmp->Location.x + tmpAngle1.x,
+							tmp->Location.y + tmpAngle1.y,
+							tmp->Location.z + tmpAngle1.z,
+							tmp->Color, tmp->Alpha,
+							1.0f, 0.0f);
+					AddToDrawBuffer(tmp->Location.x + tmpAngle4.x,
+							tmp->Location.y + tmpAngle4.y,
+							tmp->Location.z + tmpAngle4.z,
+							tmp->Color, tmp->Alpha,
+							1.0f, 1.0f);
+					AddToDrawBuffer(tmp->Location.x + tmpAngle3.x,
+							tmp->Location.y + tmpAngle3.y,
+							tmp->Location.z + tmpAngle3.z,
+							tmp->Color, tmp->Alpha,
+							0.0f, 1.0f);
 
 					tmp = tmp->Next;
 				}
@@ -678,66 +677,26 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 					}
 
 					// first triangle
-					tmpDATA[k++] = tmp->Location.x;
-					tmpDATA[k++] = tmp->Location.y;
-					tmpDATA[k++] = tmp->Location.z;
-					tmpDATA[k++] = tmp->Color.r;
-					tmpDATA[k++] = tmp->Color.g;
-					tmpDATA[k++] = tmp->Color.b;
-					tmpDATA[k++] = tmp->Alpha;
-					tmpDATA[k++] = 1.0f;
-					tmpDATA[k++] = tmp->Size;
-
-					tmpDATA[k++] = tmp->Location.x;
-					tmpDATA[k++] = tmp->Location.y;
-					tmpDATA[k++] = tmp->Location.z;
-					tmpDATA[k++] = tmp->Color.r;
-					tmpDATA[k++] = tmp->Color.g;
-					tmpDATA[k++] = tmp->Color.b;
-					tmpDATA[k++] = tmp->Alpha;
-					tmpDATA[k++] = 2.0f;
-					tmpDATA[k++] = tmp->Size;
-
-					tmpDATA[k++] = tmp->Location.x;
-					tmpDATA[k++] = tmp->Location.y;
-					tmpDATA[k++] = tmp->Location.z;
-					tmpDATA[k++] = tmp->Color.r;
-					tmpDATA[k++] = tmp->Color.g;
-					tmpDATA[k++] = tmp->Color.b;
-					tmpDATA[k++] = tmp->Alpha;
-					tmpDATA[k++] = 3.0f;
-					tmpDATA[k++] = tmp->Size;
+					AddToDrawBuffer(tmp->Location.x, tmp->Location.y, tmp->Location.z,
+							tmp->Color, tmp->Alpha,
+							1.0f, tmp->Size);
+					AddToDrawBuffer(tmp->Location.x, tmp->Location.y, tmp->Location.z,
+							tmp->Color, tmp->Alpha,
+							2.0f, tmp->Size);
+					AddToDrawBuffer(tmp->Location.x, tmp->Location.y, tmp->Location.z,
+							tmp->Color, tmp->Alpha,
+							3.0f, tmp->Size);
 
 					//second triangle
-					tmpDATA[k++] = tmp->Location.x;
-					tmpDATA[k++] = tmp->Location.y;
-					tmpDATA[k++] = tmp->Location.z;
-					tmpDATA[k++] = tmp->Color.r;
-					tmpDATA[k++] = tmp->Color.g;
-					tmpDATA[k++] = tmp->Color.b;
-					tmpDATA[k++] = tmp->Alpha;
-					tmpDATA[k++] = 3.0f;
-					tmpDATA[k++] = tmp->Size;
-
-					tmpDATA[k++] = tmp->Location.x;
-					tmpDATA[k++] = tmp->Location.y;
-					tmpDATA[k++] = tmp->Location.z;
-					tmpDATA[k++] = tmp->Color.r;
-					tmpDATA[k++] = tmp->Color.g;
-					tmpDATA[k++] = tmp->Color.b;
-					tmpDATA[k++] = tmp->Alpha;
-					tmpDATA[k++] = 4.0f;
-					tmpDATA[k++] = tmp->Size;
-
-					tmpDATA[k++] = tmp->Location.x;
-					tmpDATA[k++] = tmp->Location.y;
-					tmpDATA[k++] = tmp->Location.z;
-					tmpDATA[k++] = tmp->Color.r;
-					tmpDATA[k++] = tmp->Color.g;
-					tmpDATA[k++] = tmp->Color.b;
-					tmpDATA[k++] = tmp->Alpha;
-					tmpDATA[k++] = 1.0f;
-					tmpDATA[k++] = tmp->Size;
+					AddToDrawBuffer(tmp->Location.x, tmp->Location.y, tmp->Location.z,
+							tmp->Color,  tmp->Alpha,
+							3.0f, tmp->Size);
+					AddToDrawBuffer(tmp->Location.x, tmp->Location.y, tmp->Location.z,
+							tmp->Color, tmp->Alpha,
+							4.0f, tmp->Size);
+					AddToDrawBuffer(tmp->Location.x, tmp->Location.y, tmp->Location.z,
+							tmp->Color, tmp->Alpha,
+							1.0f, tmp->Size);
 
 					tmp = tmp->Next;
 				}
@@ -754,7 +713,7 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 				vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
 			vw_SendVertices(RI_TRIANGLES, 6 * DrawCount, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX,
-					tmpDATA, 9 * sizeof(tmpDATA[0]));
+					DrawBuffer.get(), 9 * sizeof(DrawBuffer.get()[0]));
 
 			if (BlendType != 0)
 				vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
