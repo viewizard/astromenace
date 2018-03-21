@@ -664,8 +664,6 @@ void InitGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// иним 2д часть, эмблемы
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	vw_ReleaseAllParticleSystems2D();
-
 	EnergyParticleSystem2D = vw_CreateParticleSystem2D();
 	EnergyParticleSystem2D->ColorStart.r = 0.70f;
 	EnergyParticleSystem2D->ColorStart.g = 0.80f;
