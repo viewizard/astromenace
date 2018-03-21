@@ -24,6 +24,12 @@
 
 *************************************************************************************/
 
+// TODO since we use RI_TRIANGLES, use 4 vertices + index buffer for vw_SendVertices()
+//      instead of 6 vertices, so, we send 4 vertices and index buffer for 6 elements,
+//      something like {1, 2, 3, 3, 4, 1}
+//                               ^  ^  ^ second triangle indexes
+//                      ^  ^  ^ first triangle indexes
+
 #include "../math/math.h"
 #include "../graphics/graphics.h"
 #include "../texture/texture.h"

@@ -38,6 +38,12 @@
 // TODO switch to std::unordered_multimap from std::forward_list
 // that will allow fast access and we could manually check second key (FontSize)
 
+// TODO since we use RI_TRIANGLES, use 4 vertices + index buffer for vw_SendVertices()
+//      instead of 6 vertices, so, we send 4 vertices and index buffer for 6 elements,
+//      something like {1, 2, 3, 3, 4, 1}
+//                               ^  ^  ^ second triangle indexes
+//                      ^  ^  ^ first triangle indexes
+
 #include "../texture/texture.h"
 #include "../graphics/graphics.h"
 #include "../font/font.h"

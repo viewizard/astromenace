@@ -26,7 +26,11 @@
 
 // TODO translate comments
 // TODO move to local rendering buffer (std::vector), do not allocate/release memory all the time
-// TODO switch from RI_QUADS to RI_TRIANGLES
+// TODO since we use RI_TRIANGLES, use 4 vertices + index buffer for vw_SendVertices()
+//      instead of 6 vertices, so, we send 4 vertices and index buffer for 6 elements,
+//      something like {1, 2, 3, 3, 4, 1}
+//                               ^  ^  ^ second triangle indexes
+//                      ^  ^  ^ first triangle indexes
 
 #include "../camera/camera.h"
 #include "../graphics/graphics.h"
@@ -566,13 +570,12 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 
 			// делаем массив для всех элементов
 			// RI_3f_XYZ | RI_2f_TEX | RI_4f_COLOR
-			tmpDATA = new float[4 * (3 + 2 + 4) * DrawCount];
+			tmpDATA = new float[6 * (3 + 2 + 4) * DrawCount];
 
 			// шейдеры не поддерживаются - рисуем по старинке
 			if (!ParticleSystemUseGLSL) {
 				// получаем текущее положение камеры
-				sVECTOR3D CurrentCameraLocation;
-				vw_GetCameraLocation(&CurrentCameraLocation);
+				sVECTOR3D CurrentCameraLocation{vw_GetCameraLocation(nullptr)};
 
 				cParticle *tmp = Start;
 				while (tmp) {
@@ -582,34 +585,27 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 					}
 
 					// находим вектор камера-точка
-					sVECTOR3D nnTmp;
-					nnTmp = CurrentCameraLocation - tmp->Location;
+					sVECTOR3D nnTmp{CurrentCameraLocation - tmp->Location};
 					//nnTmp.Normalize();// - это тут не нужно, нам нужны только пропорции
 
 					// находим перпендикуляр к вектору nnTmp
-					sVECTOR3D nnTmp2;
-					nnTmp2.x = 1.0f;
-					nnTmp2.y = 1.0f;
-					nnTmp2.z = -(nnTmp.x + nnTmp.y) / nnTmp.z;
+					sVECTOR3D nnTmp2{1.0f, 1.0f, -(nnTmp.x + nnTmp.y) / nnTmp.z};
 					nnTmp2.Normalize();
 
 					// находим перпендикуляр к векторам nnTmp и nnTmp2
 					// файтически - a x b = ( aybz - byaz , azbx - bzax , axby - bxay );
-					sVECTOR3D nnTmp3;
-					nnTmp3.x = nnTmp.y * nnTmp2.z - nnTmp2.y * nnTmp.z;
-					nnTmp3.y = nnTmp.z * nnTmp2.x - nnTmp2.z * nnTmp.x;
-					nnTmp3.z = nnTmp.x * nnTmp2.y - nnTmp2.x * nnTmp.y;
+					sVECTOR3D nnTmp3{nnTmp.y * nnTmp2.z - nnTmp2.y * nnTmp.z,
+							 nnTmp.z * nnTmp2.x - nnTmp2.z * nnTmp.x,
+							 nnTmp.x * nnTmp2.y - nnTmp2.x * nnTmp.y};
 					nnTmp3.Normalize();
 
 					// находим
-					sVECTOR3D tmpAngle1, tmpAngle2, tmpAngle3, tmpAngle4;
+					sVECTOR3D tmpAngle1 = nnTmp3 ^ (tmp->Size * 1.5f);
+					sVECTOR3D tmpAngle3 = nnTmp3 ^ (-tmp->Size * 1.5f);
+					sVECTOR3D tmpAngle2 = nnTmp2 ^ (tmp->Size * 1.5f);
+					sVECTOR3D tmpAngle4 = nnTmp2 ^ (-tmp->Size * 1.5f);
 
-					tmpAngle1 = nnTmp3 ^ (tmp->Size * 1.5f);
-					tmpAngle3 = nnTmp3 ^ (-tmp->Size * 1.5f);
-					tmpAngle2 = nnTmp2 ^ (tmp->Size * 1.5f);
-					tmpAngle4 = nnTmp2 ^ (-tmp->Size * 1.5f);
-
-					// собираем квадраты
+					// first triangle
 					tmpDATA[k++] = tmp->Location.x+tmpAngle3.x;
 					tmpDATA[k++] = tmp->Location.y+tmpAngle3.y;
 					tmpDATA[k++] = tmp->Location.z+tmpAngle3.z;
@@ -640,6 +636,17 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 					tmpDATA[k++] = 1.0f;
 					tmpDATA[k++] = 0.0f;
 
+					//second triangle
+					tmpDATA[k++] = tmp->Location.x+tmpAngle1.x;
+					tmpDATA[k++] = tmp->Location.y+tmpAngle1.y;
+					tmpDATA[k++] = tmp->Location.z+tmpAngle1.z;
+					tmpDATA[k++] = tmp->Color.r;
+					tmpDATA[k++] = tmp->Color.g;
+					tmpDATA[k++] = tmp->Color.b;
+					tmpDATA[k++] = tmp->Alpha;
+					tmpDATA[k++] = 1.0f;
+					tmpDATA[k++] = 0.0f;
+
 					tmpDATA[k++] = tmp->Location.x+tmpAngle4.x;
 					tmpDATA[k++] = tmp->Location.y+tmpAngle4.y;
 					tmpDATA[k++] = tmp->Location.z+tmpAngle4.z;
@@ -648,6 +655,16 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 					tmpDATA[k++] = tmp->Color.b;
 					tmpDATA[k++] = tmp->Alpha;
 					tmpDATA[k++] = 1.0f;
+					tmpDATA[k++] = 1.0f;
+
+					tmpDATA[k++] = tmp->Location.x+tmpAngle3.x;
+					tmpDATA[k++] = tmp->Location.y+tmpAngle3.y;
+					tmpDATA[k++] = tmp->Location.z+tmpAngle3.z;
+					tmpDATA[k++] = tmp->Color.r;
+					tmpDATA[k++] = tmp->Color.g;
+					tmpDATA[k++] = tmp->Color.b;
+					tmpDATA[k++] = tmp->Alpha;
+					tmpDATA[k++] = 0.0f;
 					tmpDATA[k++] = 1.0f;
 
 					tmp = tmp->Next;
@@ -660,7 +677,7 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 						continue;
 					}
 
-					// собираем квадраты
+					// first triangle
 					tmpDATA[k++] = tmp->Location.x;
 					tmpDATA[k++] = tmp->Location.y;
 					tmpDATA[k++] = tmp->Location.z;
@@ -691,6 +708,17 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 					tmpDATA[k++] = 3.0f;
 					tmpDATA[k++] = tmp->Size;
 
+					//second triangle
+					tmpDATA[k++] = tmp->Location.x;
+					tmpDATA[k++] = tmp->Location.y;
+					tmpDATA[k++] = tmp->Location.z;
+					tmpDATA[k++] = tmp->Color.r;
+					tmpDATA[k++] = tmp->Color.g;
+					tmpDATA[k++] = tmp->Color.b;
+					tmpDATA[k++] = tmp->Alpha;
+					tmpDATA[k++] = 3.0f;
+					tmpDATA[k++] = tmp->Size;
+
 					tmpDATA[k++] = tmp->Location.x;
 					tmpDATA[k++] = tmp->Location.y;
 					tmpDATA[k++] = tmp->Location.z;
@@ -699,6 +727,16 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 					tmpDATA[k++] = tmp->Color.b;
 					tmpDATA[k++] = tmp->Alpha;
 					tmpDATA[k++] = 4.0f;
+					tmpDATA[k++] = tmp->Size;
+
+					tmpDATA[k++] = tmp->Location.x;
+					tmpDATA[k++] = tmp->Location.y;
+					tmpDATA[k++] = tmp->Location.z;
+					tmpDATA[k++] = tmp->Color.r;
+					tmpDATA[k++] = tmp->Color.g;
+					tmpDATA[k++] = tmp->Color.b;
+					tmpDATA[k++] = tmp->Alpha;
+					tmpDATA[k++] = 1.0f;
 					tmpDATA[k++] = tmp->Size;
 
 					tmp = tmp->Next;
@@ -715,7 +753,7 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 			if (BlendType == 1)
 				vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
-			vw_SendVertices(RI_QUADS, 4 * DrawCount, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX,
+			vw_SendVertices(RI_TRIANGLES, 6 * DrawCount, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX,
 					tmpDATA, 9 * sizeof(tmpDATA[0]));
 
 			if (BlendType != 0)
