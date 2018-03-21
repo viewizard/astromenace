@@ -24,7 +24,7 @@
 
 *************************************************************************************/
 
-// TODO this is really wrong, all this mess should be sorted to headers
+// FIXME this is really wrong, all this mess should be sorted to headers
 
 #ifndef GAME_H
 #define GAME_H

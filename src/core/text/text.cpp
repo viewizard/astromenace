@@ -236,14 +236,14 @@ std::unordered_set<char32_t> &vw_FindCharsSetForLanguage()
 	CharsSetForLanguage.clear();
 
 // TODO provide additional sort by character's use frequency in text
-// We need this, since vw_GenerateFontChars() generate texture limited by size. Some
-// characters could be skipped and will use personal texture. In this way we will
-// forced to switch textures and draw small vertex buffers all the time (if character
-// frequently used in text and use personal texture for rendering).
+//      We need this, since vw_GenerateFontChars() generate texture limited by size. Some
+//      characters could be skipped and will use personal texture. In this way we will
+//      forced to switch textures and draw small vertex buffers all the time (if character
+//      frequently used in text and use personal texture for rendering).
 
 // TODO languages names and special characters should be included
-// We also need all characters for languages names (second row in the TextTableUTF32)
-// and copyright symbol.
+//      We also need all characters for languages names (second row in the TextTableUTF32)
+//      and copyright symbol.
 
 	if (TextTableUTF32.empty() || !CurrentLanguage)
 		return CharsSetForLanguage;

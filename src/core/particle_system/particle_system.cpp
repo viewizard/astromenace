@@ -32,6 +32,8 @@
 //                               ^  ^  ^ second triangle indexes
 //                      ^  ^  ^ first triangle indexes
 
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
+
 #include "../camera/camera.h"
 #include "../graphics/graphics.h"
 #include "../math/math.h"
@@ -40,8 +42,9 @@
 
 namespace {
 
-// Local draw buffer, that dynamically allocate memory at maximum
-// required size only one time per game execution.
+// Local draw buffer, that dynamically allocate memory at maximum required
+// size only one time per game execution. Don't use std::vector here,
+// since it have poor performance compared to std::unique_ptr.
 std::unique_ptr<float []> DrawBuffer{};
 unsigned int DrawBufferCurrentPosition{0};
 unsigned int DrawBufferSize{0};

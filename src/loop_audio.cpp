@@ -226,7 +226,7 @@ unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume)
 	// т.к. у нас со смещением же в 1 идет
 	VoiceID--;
 
-	// TODO should be connected to language code, not column number, that could be changed
+	// FIXME should be connected to language code, not column number, that could be changed
 	// русский голос делаем немного тише
 	if (Setup.VoiceLanguage == 3)
 		VoiceNames[VoiceID].VolumeCorrection = 0.6f;

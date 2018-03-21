@@ -36,17 +36,17 @@ same functionality.
 */
 
 // TODO the main idea of time calculation should be revised for discrete time
-// Since we don't know how expensive SDL_GetTicks() is (on different platforms),
-// no reason call SDL_GetTicks() all the time for animation/gfx. One time update
-// for thread peer loop cycle should be enough.
-// * see UpdateAllObject3D() - we already use this idea for all objects update.
-// (!) make sure, all vw_GetTimeThread() usage changed to SDL_GetTicks() where
-// it is necessary.
+//      Since we don't know how expensive SDL_GetTicks() is (on different platforms),
+//      no reason call SDL_GetTicks() all the time for animation/gfx. One time update
+//      for thread peer loop cycle should be enough.
+//      * see UpdateAllObject3D() - we already use this idea for all objects update.
+//      (!) make sure, all vw_GetTimeThread() usage changed to SDL_GetTicks() where
+//      it is necessary.
 
-// TODO (?) change concept of TimeThreads from 'time' in float to 'ticks' in uint32_t,
-// so, this will looks like SDL_GetTicks() work, but with time manipulations. From one side,
-// we don't need float at all (with specific accuracy and other float-related issues),
-// from another side, ticks in milliseconds that all we really need.
+// TODO (?) change concept of TimeThreads from 'time' in float to 'ticks' in uint32_t, so,
+//      this will looks like SDL_GetTicks() work, but with time manipulations. From one side,
+//      we don't need float at all (with specific accuracy and other float-related issues),
+//      from another side, ticks in milliseconds that all we really need.
 
 #include "../base.h"
 #include "../math/math.h"

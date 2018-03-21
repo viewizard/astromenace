@@ -25,24 +25,24 @@
 *************************************************************************************/
 
 // TODO move to std::string, probably, we need move directly to std::u32string (utf32)
-// for all text rendering and text input (profile names)
+//      for all text rendering and text input (profile names)
 
 // TODO remove va_start, use variadic templates instead (?)
 
 // TODO provide static vw_DrawFont(), dynamic realization we have now,
-// static should create array with text blocks as key and VBO/VAO/IBO (and other data)
-// as value for fast rendering.
-
-// TODO in future, use make_unique() to make unique_ptr-s (since C++14)
+//      static should create array with text blocks as key and VBO/VAO/IBO (and other data)
+//      as value for fast rendering.
 
 // TODO switch to std::unordered_multimap from std::forward_list
-// that will allow fast access and we could manually check second key (FontSize)
+//      that will allow fast access and we could manually check second key (FontSize)
 
 // TODO since we use RI_TRIANGLES, use 4 vertices + index buffer for vw_SendVertices()
 //      instead of 6 vertices, so, we send 4 vertices and index buffer for 6 elements,
 //      something like {1, 2, 3, 3, 4, 1}
 //                               ^  ^  ^ second triangle indexes
 //                      ^  ^  ^ first triangle indexes
+
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../texture/texture.h"
 #include "../graphics/graphics.h"
@@ -111,8 +111,9 @@ struct sFontChar {
 
 // List with connected font characters.
 std::forward_list<std::unique_ptr<sFontChar>> FontCharsList;
-// Local draw buffer, that dynamically allocate memory at maximum
-// required size only one time per game execution.
+// Local draw buffer, that dynamically allocate memory at maximum required
+// size only one time per game execution. Don't use std::vector here,
+// since it have poor performance compared to std::unique_ptr.
 std::unique_ptr<float []> DrawBuffer{};
 unsigned int DrawBufferCurrentPosition{0};
 unsigned int DrawBufferSize{0};

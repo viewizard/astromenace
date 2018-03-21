@@ -223,7 +223,7 @@ void ProfileInputText()
 
 	if (!vw_GetCurrentUnicodeChar().empty()) {// если тут не ноль, а юникод - значит нажали
 		if ((vw_FontSizeUTF32(NewProfileName) < 540) &&
-		    // TODO fix this, when all text will be moved to UTF32 with separate (without variadic support) text draw function
+		    // FIXME fix this, when all text will be moved to UTF32 with separate (without variadic support) text draw function
 		    (vw_GetCurrentUnicodeChar()[0] != 0x25)) { // символ % печатать не даем, т.к. работаем с variadic аргументами через общую функцию печати
 			NewProfileName += vw_GetCurrentUnicodeChar();
 

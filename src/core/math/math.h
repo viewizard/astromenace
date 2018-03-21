@@ -164,7 +164,7 @@ float vw_sqrtf(float x);
 
 // Reference to low if value is less than low, reference to high if high is less than value,
 // otherwise reference to value.
-// TODO in future, move to std::clamp (C++17) implementation
+// NOTE in future, move to std::clamp (since C++17) implementation
 template <typename T>
 inline void vw_Clamp(T &value, T low, T high)
 {

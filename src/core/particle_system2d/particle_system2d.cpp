@@ -30,6 +30,8 @@
 //                               ^  ^  ^ second triangle indexes
 //                      ^  ^  ^ first triangle indexes
 
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
+
 #include "../math/math.h"
 #include "../graphics/graphics.h"
 #include "../texture/texture.h"
@@ -37,8 +39,9 @@
 
 namespace {
 
-// Local draw buffer, that dynamically allocate memory at maximum
-// required size only one time per game execution.
+// Local draw buffer, that dynamically allocate memory at maximum required
+// size only one time per game execution. Don't use std::vector here,
+// since it have poor performance compared to std::unique_ptr.
 std::unique_ptr<float []> DrawBuffer{};
 unsigned int DrawBufferCurrentPosition{0};
 unsigned int DrawBufferSize{0};
@@ -143,7 +146,7 @@ void cParticleSystem2D::EmitParticles(unsigned int Quantity)
 	while (Quantity > 0) {
 		// create new particle
 		ParticlesList.emplace_back();
-		// TODO emplace_back() return reference to the inserted element (since C++17)
+		// NOTE emplace_back() return reference to the inserted element (since C++17)
 		//      this line could be combined with previous line, we could use
 		//      ParticlesList.back() directly, but "NewParticle" usage make code more clear
 		cParticle2D &NewParticle = ParticlesList.back();

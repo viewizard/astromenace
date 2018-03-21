@@ -24,8 +24,8 @@
 
 *************************************************************************************/
 
-// TODO fix mess with vw_PlaySound() AtType parameter, probably, we need setup this
-// by additional function call instead of hard code it
+// FIXME fix mess with vw_PlaySound() AtType parameter, probably, we need setup this
+//       by additional function call instead of hard code it
 
 #include "../system/system.h"
 #include "../math/math.h"

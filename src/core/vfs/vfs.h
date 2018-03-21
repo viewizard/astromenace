@@ -63,7 +63,6 @@ inline int vw_VFStoBuffer(const std::string &FileName, T &Buffer)
 	uint32_t DataOffset{0}, DataSize{0};
 	int err{0};
 
-	// since C++11
 	// The array should be null-terminated, data() and c_str() perform the same function.
 	bool isString = std::is_same<T, std::string>::value;
 
@@ -78,7 +77,7 @@ inline int vw_VFStoBuffer(const std::string &FileName, T &Buffer)
 		// don't remove .data() usage, we need .data() and .resize()
 		// member functions in order to detect allowed container's
 		// type for template
-		// TODO remove (void*) in future, (since C++17) "CharT* data();" also added.
+		// NOTE remove (void*) in future, (since C++17) "CharT* data();" also added.
 		SDL_RWread(tmpFile, (void *)Buffer.data(), DataSize, 1);
 
 		if (isString)
@@ -98,7 +97,7 @@ inline int vw_VFStoBuffer(const std::string &FileName, T &Buffer)
 		// don't remove .data() usage, we need .data() and .resize()
 		// member functions in order to detect allowed container's
 		// type for template
-		// TODO remove (void*) in future, (since C++17) "CharT* data();" also added.
+		// NOTE remove (void*) in future, (since C++17) "CharT* data();" also added.
 		SDL_RWread(tmpFile, (void *)Buffer.data(), DataSize, 1);
 		SDL_RWclose(tmpFile);
 

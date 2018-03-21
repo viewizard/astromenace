@@ -24,7 +24,7 @@
 
 *************************************************************************************/
 
-// TODO in future, use make_unique() to make unique_ptr-s (C++14)
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 /*
  The main VFS concept:
