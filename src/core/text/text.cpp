@@ -24,6 +24,9 @@
 
 *************************************************************************************/
 
+// TODO since we use std::unordered_map with hashes now, work with text should be revised -
+//      TextID should be removed, and English text should be used as ID and "default" text
+
 #include "../math/math.h"
 #include "../vfs/vfs.h"
 #include "../font/font.h"
@@ -187,11 +190,15 @@ const char *vw_GetText(const char *ItemID, unsigned int Language)
 	if (tmpText != TextTable[Language].end())
 		return tmpText->second.c_str();
 
-	// FIXME we should revise this behaviour, ItemID should be added to
-	//       TextTable for all languages, and we should return pointer to this
-	//       new entry, but not return ItemID, that could be released next door
+	// ItemID should be added to TextTable for key and all languages, and
+	// we should return pointer to this new entry, but not ItemID
+	for (unsigned int i = 0; i < TextTable.size(); i++) {
+		TextTable[i][ItemID] = ItemID;
+	}
 
-	return ItemID;
+	std::cout << "Added to text table for all languages: \"" << ItemID << "\"\n";
+
+	return TextTable[Language][ItemID].c_str();
 }
 
 /*
@@ -209,11 +216,16 @@ const std::u32string &vw_GetTextUTF32(const char *ItemID, unsigned int Language)
 	if (tmpText != TextTableUTF32[Language].end())
 		return tmpText->second;
 
-	// FIXME we should revise this behaviour, ItemID should be converted to
-	//       UTF32 and added to TextTableUTF32 for all languages, and we should
-	//       return pointer to this new entry, but not return TextTableUTF32Error
+	// ItemID should be converted to UTF32 and added to TextTableUTF32 for all languages,
+	// and we should return pointer to this new entry, but not TextTableUTF32Error
+	std::u32string tmpTextUTF32 = ConvertUTF8.from_bytes(ItemID);
+	for (unsigned int i = 0; i < TextTableUTF32.size(); i++) {
+		TextTableUTF32[i][ItemID] = tmpTextUTF32;
+	}
 
-	return TextTableUTF32Error;
+	std::cout << "Added to text table for all languages: \"" << ItemID << "\"\n";
+
+	return TextTableUTF32[Language][ItemID];
 }
 
 /*
