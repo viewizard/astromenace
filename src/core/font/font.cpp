@@ -113,8 +113,9 @@ struct sFontChar {
 std::forward_list<std::unique_ptr<sFontChar>> FontCharsList;
 // Local draw buffer, that dynamically allocate memory at maximum
 // required size only one time per game execution.
-// Never use reset(), only clear() for this buffer.
-std::vector<float> DrawBuffer{};
+std::unique_ptr<float []> DrawBuffer{};
+unsigned int DrawBufferCurrentPosition{0};
+unsigned int DrawBufferSize{0};
 // space character utf32 code
 constexpr char32_t SpaceUTF32{32};
 
@@ -384,10 +385,10 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
  */
 static inline void AddToDrawBuffer(float CoordX, float CoordY, float TextureU, float TextureV)
 {
-	DrawBuffer.push_back(CoordX);
-	DrawBuffer.push_back(CoordY);
-	DrawBuffer.push_back(TextureU);
-	DrawBuffer.push_back(TextureV);
+	DrawBuffer[DrawBufferCurrentPosition++] = CoordX;
+	DrawBuffer[DrawBufferCurrentPosition++] = CoordY;
+	DrawBuffer[DrawBufferCurrentPosition++] = TextureU;
+	DrawBuffer[DrawBufferCurrentPosition++] = TextureV;
 }
 
 /*
@@ -449,11 +450,11 @@ static void CalculateDefaultSpaceWidth(float &SpaceWidthFactor, float FontScale)
 static void DrawBufferOnTextureChange(sTexture **CurrentTexture, const sFontChar *DrawChar)
 {
 	// draw all we have in buffer with current texture
-	if (!DrawBuffer.empty()) {
+	if (DrawBufferCurrentPosition) {
 		vw_SetTexture(0, *CurrentTexture);
-		vw_SendVertices(RI_TRIANGLES, DrawBuffer.size() / sizeof(DrawBuffer.data()[0]),
-				RI_2f_XY | RI_1_TEX, DrawBuffer.data(), 4 * sizeof(DrawBuffer.data()[0]));
-		DrawBuffer.clear();
+		vw_SendVertices(RI_TRIANGLES, DrawBufferCurrentPosition / sizeof(DrawBuffer.get()[0]),
+				RI_2f_XY | RI_1_TEX, DrawBuffer.get(), 4 * sizeof(DrawBuffer.get()[0]));
+		DrawBufferCurrentPosition = 0;
 	}
 	// setup new texture
 	*CurrentTexture = DrawChar->Texture;
@@ -464,13 +465,13 @@ static void DrawBufferOnTextureChange(sTexture **CurrentTexture, const sFontChar
  */
 static void DrawBufferOnTextEnd(sTexture *CurrentTexture)
 {
-	if (DrawBuffer.empty())
+	if (!DrawBufferCurrentPosition)
 		return;
 
 	vw_SetTexture(0, CurrentTexture);
-	vw_SendVertices(RI_TRIANGLES, DrawBuffer.size() / sizeof(DrawBuffer.data()[0]),
-			RI_2f_XY | RI_1_TEX, DrawBuffer.data(), 4 * sizeof(DrawBuffer.data()[0]));
-	DrawBuffer.clear();
+	vw_SendVertices(RI_TRIANGLES, DrawBufferCurrentPosition / sizeof(DrawBuffer.get()[0]),
+			RI_2f_XY | RI_1_TEX, DrawBuffer.get(), 4 * sizeof(DrawBuffer.get()[0]));
+	DrawBufferCurrentPosition = 0;
 }
 
 /*
@@ -553,6 +554,14 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 
 	// combine calculated width factor and global width scale
 	FontWidthFactor = FontScale*FontWidthFactor;
+
+	// RI_TRIANGLES * (RI_2f_XYZ + RI_2f_TEX) * Text.size()
+	unsigned int tmpDrawBufferSize = 6 * (2 + 2) * Text.size();
+	if (tmpDrawBufferSize > DrawBufferSize) {
+		DrawBufferSize = tmpDrawBufferSize;
+		DrawBuffer.reset(new float[DrawBufferSize]);
+	}
+	DrawBufferCurrentPosition = 0;
 
 	// draw all characters in text by blocks grouped by texture id
 	for (const auto &UTF32 : Text) {

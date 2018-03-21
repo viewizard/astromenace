@@ -39,8 +39,9 @@ namespace {
 
 // Local draw buffer, that dynamically allocate memory at maximum
 // required size only one time per game execution.
-// Never use reset(), only clear() for this buffer.
-std::vector<float> DrawBuffer{};
+std::unique_ptr<float []> DrawBuffer{};
+unsigned int DrawBufferCurrentPosition{0};
+unsigned int DrawBufferSize{0};
 
 // std::forward_list, since we operate directly via pointers and
 // don't really care about erase/access to particular element
@@ -335,14 +336,14 @@ static inline void AddToDrawBuffer(float CoordX, float CoordY,
 				   const sCOLORVALUE2D &Color, float Alpha,
 				   float TextureU, float TextureV)
 {
-	DrawBuffer.push_back(CoordX);
-	DrawBuffer.push_back(CoordY);
-	DrawBuffer.push_back(Color.r);
-	DrawBuffer.push_back(Color.g);
-	DrawBuffer.push_back(Color.b);
-	DrawBuffer.push_back(Alpha);
-	DrawBuffer.push_back(TextureU);
-	DrawBuffer.push_back(TextureV);
+	DrawBuffer[DrawBufferCurrentPosition++] = CoordX;
+	DrawBuffer[DrawBufferCurrentPosition++] = CoordY;
+	DrawBuffer[DrawBufferCurrentPosition++] = Color.r;
+	DrawBuffer[DrawBufferCurrentPosition++] = Color.g;
+	DrawBuffer[DrawBufferCurrentPosition++] = Color.b;
+	DrawBuffer[DrawBufferCurrentPosition++] = Alpha;
+	DrawBuffer[DrawBufferCurrentPosition++] = TextureU;
+	DrawBuffer[DrawBufferCurrentPosition++] = TextureV;
 }
 
 /*
@@ -360,6 +361,14 @@ void cParticleSystem2D::Draw()
 	int W, H;
 	vw_GetViewport(nullptr, nullptr, &W, &H);
 	float AHw = H * 1.0f;
+
+	// RI_TRIANGLES * (RI_2f_XYZ + RI_2f_TEX + RI_4f_COLOR) * ParticlesList.size()
+	unsigned int tmpDrawBufferSize = 6 * (2 + 2 + 4) * ParticlesList.size();
+	if (tmpDrawBufferSize > DrawBufferSize) {
+		DrawBufferSize = tmpDrawBufferSize;
+		DrawBuffer.reset(new float[DrawBufferSize]);
+	}
+	DrawBufferCurrentPosition = 0;
 
 	// prepare draw buffer
 	for (auto &tmpParticle : ParticlesList) {
@@ -398,8 +407,7 @@ void cParticleSystem2D::Draw()
 
 	// rendering
 	vw_SendVertices(RI_TRIANGLES, 6 * ParticlesList.size(), RI_2f_XY | RI_1_TEX | RI_4f_COLOR,
-			DrawBuffer.data(), 8 * sizeof(DrawBuffer.data()[0]));
-	DrawBuffer.clear();
+			DrawBuffer.get(), 8 * sizeof(DrawBuffer.get()[0]));
 
 	// reset rendering states
 	vw_SetTextureBlend(false, 0, 0);
