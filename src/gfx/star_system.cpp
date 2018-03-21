@@ -366,9 +366,7 @@ void StarSystemDraw(int DrawType)
 
 	// корректируем положение частиц "космической пыли", если в игре и камера движется
 	if (DrawType == 2) {
-		sVECTOR3D TMPpsSpace;
-		psSpace->GetLocation(&TMPpsSpace);
-		psSpace->SetStartLocation(TMPpsSpace);
+		psSpace->SetStartLocation(psSpace->GetLocation());
 		psSpace->MoveSystemLocation(sVECTOR3D(0,10,250)+GamePoint);
 	}
 }

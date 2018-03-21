@@ -24,6 +24,9 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+// TODO particle and particle system sources should be merged
+
 #include "../math/math.h"
 #include "particle.h"
 
@@ -31,15 +34,14 @@
 //-----------------------------------------------------------------------------
 //	обновление информации частицы
 //-----------------------------------------------------------------------------
-bool sParticle::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractive, float MagnetFactor)
+bool cParticle::Update(float TimeDelta, const sVECTOR3D &ParentLocation,
+		       bool Attractive, float MagnetFactor)
 {
-
 	// Если частица уже мертва, ее нужно отключить - передаем в систему эти данные
-	if ( Age + TimeDelta >= Lifetime ) {
+	if (Age + TimeDelta >= Lifetime) {
 		Age = -1.0f;
 		return false;
 	} else {
-
 		// увеличиваем возраст частицы
 		Age += TimeDelta;
 
@@ -47,19 +49,17 @@ bool sParticle::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractiv
 		Location += Velocity ^ TimeDelta;
 
 		if (NeedStop)
-			Velocity -= Velocity^TimeDelta;
-
+			Velocity -= Velocity ^ TimeDelta;
 
 		// если есть притяжение системы, просчитываем воздействие
-		if ( Attractive ) {
-			sVECTOR3D AttractLocation = ParentLocation;
-
+		if (Attractive) {
 			// рассчитывае вектор взаимодействия между частицей и точкой притяжения
-			sVECTOR3D AttractDir = AttractLocation - Location;
+			sVECTOR3D AttractDir = ParentLocation;
+			AttractDir -= Location;
 
 			// если нужно использовать притяжения, считаем перемещение
 			if (NeedStop)
-				MagnetFactor -= MagnetFactor*TimeDelta;
+				MagnetFactor -= MagnetFactor * TimeDelta;
 
 			AttractDir.Normalize();
 			Velocity += AttractDir ^ (MagnetFactor * TimeDelta);
@@ -71,9 +71,9 @@ bool sParticle::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractiv
 		Color.b += ColorDelta.b * TimeDelta;
 
 		// просчитываем текущую прозрачность
-		if (!AlphaShowHide) {
+		if (!AlphaShowHide)
 			Alpha += AlphaDelta * TimeDelta;
-		} else {
+		else {
 			if (Show) {
 				Alpha += AlphaDelta * TimeDelta;
 				if (Alpha >= 1.0f) {
@@ -88,7 +88,6 @@ bool sParticle::Update(float TimeDelta, sVECTOR3D ParentLocation, bool Attractiv
 
 		// текущий размер частицы
 		Size += SizeDelta * TimeDelta;
-
 	}
 
 	// если пришли сюда - значит все хорошо и частица работает

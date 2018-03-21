@@ -331,20 +331,20 @@ bool cExplosion::Update(float Time)
 	if (GraphicFX != nullptr) {
 		for (int i = 0; i < GraphicFXQuantity; i++) {
 			if (GraphicFX[i] != nullptr) {
-				sVECTOR3D Loc;
-				GraphicFX[i]->GetLocation(&Loc);
+				sVECTOR3D tmpLocation{GraphicFX[i]->GetLocation()};
+				tmpLocation += TMP2;
 
 				// взрыв пришельцев
 				if ((ExplosionTypeByClass == 1) && (ExplosionType == 2)) {
 					if (i==1)
-						GraphicFX[i]->MoveSystemLocation(Loc + TMP2);
+						GraphicFX[i]->MoveSystemLocation(tmpLocation);
 					else
-						GraphicFX[i]->MoveSystem(Loc + TMP2);
+						GraphicFX[i]->MoveSystem(tmpLocation);
 				} else
-					GraphicFX[i]->MoveSystem(Loc + TMP2);
+					GraphicFX[i]->MoveSystem(tmpLocation);
 
 				// всегда подтягиваем данные
-				GraphicFX[i]->SetStartLocation(Loc + TMP2);
+				GraphicFX[i]->SetStartLocation(tmpLocation);
 			}
 		}
 	}

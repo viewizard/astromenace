@@ -894,7 +894,7 @@ cProjectile::~cProjectile(void)
 		case 206:
 		case 209:
 		case 210:
-			sParticle *tmp = GraphicFX[i]->Start;
+			cParticle *tmp = GraphicFX[i]->Start;
 			while (tmp != nullptr) {
 				sVECTOR3D Dist2 = tmp->Location - Location;
 				float fDist2 = Dist2.x*Dist2.x + Dist2.y*Dist2.y + Dist2.z*Dist2.z;

@@ -24,18 +24,27 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+// TODO particle system and particle system manager sources should be merged,
+//      make sure, that all local scope variables moved under unnamed namespace
+
 #include "../camera/camera.h"
 #include "../graphics/graphics.h"
 #include "../math/math.h"
 #include "particle_system.h"
 
-cParticleSystem * StartParticleSystem = nullptr;
-cParticleSystem * EndParticleSystem = nullptr;
+namespace {
 
-bool ParticleSystemUseGLSL = false;
-float ParticleSystemQuality = 1.0f;
-sGLSL *ParticleSystemGLSL = nullptr;
+cParticleSystem *StartParticleSystem{nullptr};
+cParticleSystem *EndParticleSystem{nullptr};
+
+sGLSL *ParticleSystemGLSL{nullptr};
 int ParticleSystemUniformLocations[10];
+
+} // unnamed namespace
+
+bool ParticleSystemUseGLSL{false};
+float ParticleSystemQuality{1.0f};
 
 
 //-----------------------------------------------------------------------------
@@ -57,7 +66,7 @@ void vw_InitParticleSystems(bool UseGLSL, float Quality)
 //-----------------------------------------------------------------------------
 //	Присоеденяем ParticleSystem к списку
 //-----------------------------------------------------------------------------
-void vw_AttachParticleSystem(cParticleSystem * NewParticleSystem)
+void vw_AttachParticleSystem(cParticleSystem *NewParticleSystem)
 {
 	if (NewParticleSystem == nullptr)
 		return;
@@ -79,7 +88,7 @@ void vw_AttachParticleSystem(cParticleSystem * NewParticleSystem)
 //-----------------------------------------------------------------------------
 //	Удаляем ParticleSystem из списка
 //-----------------------------------------------------------------------------
-void vw_DetachParticleSystem(cParticleSystem * OldParticleSystem)
+void vw_DetachParticleSystem(cParticleSystem *OldParticleSystem)
 {
 	if (OldParticleSystem == nullptr)
 		return;
@@ -108,7 +117,7 @@ void vw_ReleaseAllParticleSystems()
 {
 	// для всех ParticleSystem
 	cParticleSystem *tmp = StartParticleSystem;
-	while (tmp != nullptr) {
+	while (tmp) {
 		cParticleSystem *tmp2 = tmp->Next;
 		// удаляем и очищаем всю память, в релизе стоит DetachShip
 		delete tmp;
@@ -129,7 +138,7 @@ void vw_ReleaseAllParticleSystems()
 void vw_DrawAllParticleSystems()
 {
 	// текущая текстура
-	sTexture *CurrentTexture = nullptr;
+	sTexture *CurrentTexture{nullptr};
 
 	// делаем все предустановки для прорисовки частиц, чтобы не менять каждый раз
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
@@ -149,7 +158,7 @@ void vw_DrawAllParticleSystems()
 
 	// для всех
 	cParticleSystem *tmp = StartParticleSystem;
-	while (tmp != nullptr) {
+	while (tmp) {
 		cParticleSystem *tmp2 = tmp->Next;
 
 		if (CurrentTexture != tmp->Texture[0]) {
@@ -199,7 +208,7 @@ void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
 	// выключаем изменение буфера глубины
 	glDepthMask(GL_FALSE);
 
-	for (int i = 0; i < Quantity; i++)
+	for (int i = 0; i < Quantity; i++) {
 		if (DrawParticleSystem[i]) {
 			if (CurrentTexture != DrawParticleSystem[i]->Texture[0]) {
 				vw_SetTexture(0, DrawParticleSystem[i]->Texture[0]);
@@ -207,6 +216,7 @@ void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
 			}
 			DrawParticleSystem[i]->Draw(&CurrentTexture);
 		}
+	}
 
 	// включаем запись в буфер глубины
 	glDepthMask(GL_TRUE);
@@ -226,7 +236,7 @@ void vw_UpdateAllParticleSystems(float Time)
 {
 	// для всех
 	cParticleSystem *tmp = StartParticleSystem;
-	while (tmp != nullptr) {
+	while (tmp) {
 		cParticleSystem *tmp2 = tmp->Next;
 		if (!tmp->Update(Time))
 			delete tmp;

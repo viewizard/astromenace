@@ -24,12 +24,15 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #ifndef PARTICLE_H
 #define PARTICLE_H
 
 #include "../base.h"
 
 struct sVECTOR3D;
+class cParticleSystem;
 
 //-----------------------------------------------------------------------------
 // Структура цвета
@@ -42,54 +45,58 @@ struct sCOLORVALUE3D {
 };
 
 //-----------------------------------------------------------------------------
-// Класс sParticle
+// Класс cParticle
 //-----------------------------------------------------------------------------
-struct sParticle {
+class cParticle {
+	friend class cParticleSystem;
 
-	// обновление информации в частице
-	bool Update(float TimeDelta, sVECTOR3D ParentLocation = sVECTOR3D{0.0f,0.0f,0.0f},
-		    bool Attractive = false, float MagnetFactor = 25.0f);
+	// FIXME remove from public access (revise code that demand direct access)
+public:
 	// текущее место расположения частицы
-	sVECTOR3D	Location{0.0f, 0.0f, 0.0f};
+	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 	// текущая скорость частицы
-	sVECTOR3D	Velocity{0.0f, 0.0f, 0.0f};
-
-	// texture number
-	int		TextureNum{0};
-
-	// текущий цвет частицы
-	sCOLORVALUE3D	Color{1.0f, 0.0f, 0.0f, 0.5f};
-	// значение приращение цвета
-	sCOLORVALUE3D	ColorDelta{0.0f, 0.0f, 0.0f, 0.0f};
-
-	// время жизни частицы в секундах
-	float		Age{0.0f};
-
-	// оставщееся время жизни частицы
-	float		Lifetime{0.0f};
-
-	// размер частицы
-	float		Size{1.0f};
-	// значение изменения размера
-	float		SizeDelta{0.0f};
-
-	// прозрачность
-	float		Alpha{1.0f};
-	// изменение прозрачности
-	float		AlphaDelta{0.0f};
-
-
-	// сначало ув. альфу, потом уменьшаем
-	bool		AlphaShowHide{false};
-	// какой цикл - затухаем, или только появляемся
-	bool		Show{true};
+	sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};
 
 	// если нужно замедлять и остановить
-	bool		NeedStop{false};
+	bool NeedStop{false};
 
 	// указатели на цепь частиц
-	sParticle	*Next{nullptr};
-	sParticle	*Prev{nullptr};
+	cParticle *Next{nullptr};
+	cParticle *Prev{nullptr};
+
+private:
+	// обновление информации в частице
+	bool Update(float TimeDelta, const sVECTOR3D &ParentLocation = sVECTOR3D{0.0f, 0.0f, 0.0f},
+		    bool Attractive = false, float MagnetFactor = 25.0f);
+
+	// texture number
+	int TextureNum{0};
+
+	// текущий цвет частицы
+	sCOLORVALUE3D Color{1.0f, 0.0f, 0.0f, 0.5f};
+	// значение приращение цвета
+	sCOLORVALUE3D ColorDelta{0.0f, 0.0f, 0.0f, 0.0f};
+
+	// время жизни частицы в секундах
+	float Age{0.0f};
+
+	// оставщееся время жизни частицы
+	float Lifetime{0.0f};
+
+	// размер частицы
+	float Size{1.0f};
+	// значение изменения размера
+	float SizeDelta{0.0f};
+
+	// прозрачность
+	float Alpha{1.0f};
+	// изменение прозрачности
+	float AlphaDelta{0.0f};
+
+	// сначало ув. альфу, потом уменьшаем
+	bool AlphaShowHide{false};
+	// какой цикл - затухаем, или только появляемся
+	bool Show{true};
 };
 
 #endif // PARTICLE_H
