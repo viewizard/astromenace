@@ -26,7 +26,6 @@
 
 // TODO translate comments
 // TODO move to local rendering buffer (std::vector), do not allocate/release memory all the time
-// TODO switch from RI_4ub_COLOR to RI_4f_COLOR, I really doubt, that we increase speed significally about this
 // TODO switch from RI_QUADS to RI_TRIANGLES
 
 #include "../camera/camera.h"
@@ -559,22 +558,15 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 
 		// если есть живые - рисуем их
 		if (DrawCount > 0) {
-			if (tmpDATA) {
+			if (tmpDATA)
 				delete [] tmpDATA;
-				tmpDATA = nullptr;
-			}
 
-			GLubyte *tmpDATAub{nullptr};
 			// номер float'а в последовательности
 			int k = 0;
 
 			// делаем массив для всех элементов
-			// RI_3f_XYZ | RI_2f_TEX | RI_4ub_COLOR
-			tmpDATA = new float[4 * (3 + 2 + 1) * DrawCount];
-			tmpDATAub = (GLubyte *)tmpDATA;
-
-
-			GLubyte R,G,B,A;
+			// RI_3f_XYZ | RI_2f_TEX | RI_4f_COLOR
+			tmpDATA = new float[4 * (3 + 2 + 4) * DrawCount];
 
 			// шейдеры не поддерживаются - рисуем по старинке
 			if (!ParticleSystemUseGLSL) {
@@ -618,52 +610,43 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 					tmpAngle4 = nnTmp2 ^ (-tmp->Size * 1.5f);
 
 					// собираем квадраты
-					R = (GLubyte)(tmp->Color.r * 255);
-					G = (GLubyte)(tmp->Color.g * 255);
-					B = (GLubyte)(tmp->Color.b * 255);
-					A = (GLubyte)(tmp->Alpha * 255);
-
 					tmpDATA[k++] = tmp->Location.x+tmpAngle3.x;
 					tmpDATA[k++] = tmp->Location.y+tmpAngle3.y;
 					tmpDATA[k++] = tmp->Location.z+tmpAngle3.z;
-					tmpDATAub[k*sizeof(float)] = R;
-					tmpDATAub[k*sizeof(float)+1] = G;
-					tmpDATAub[k*sizeof(float)+2] = B;
-					tmpDATAub[k*sizeof(float)+3] = A;
-					k++;
+					tmpDATA[k++] = tmp->Color.r;
+					tmpDATA[k++] = tmp->Color.g;
+					tmpDATA[k++] = tmp->Color.b;
+					tmpDATA[k++] = tmp->Alpha;
 					tmpDATA[k++] = 0.0f;
 					tmpDATA[k++] = 1.0f;
 
 					tmpDATA[k++] = tmp->Location.x+tmpAngle2.x;
 					tmpDATA[k++] = tmp->Location.y+tmpAngle2.y;
 					tmpDATA[k++] = tmp->Location.z+tmpAngle2.z;
-					tmpDATAub[k*sizeof(float)] = R;
-					tmpDATAub[k*sizeof(float)+1] = G;
-					tmpDATAub[k*sizeof(float)+2] = B;
-					tmpDATAub[k*sizeof(float)+3] = A;
-					k++;
+					tmpDATA[k++] = tmp->Color.r;
+					tmpDATA[k++] = tmp->Color.g;
+					tmpDATA[k++] = tmp->Color.b;
+					tmpDATA[k++] = tmp->Alpha;
 					tmpDATA[k++] = 0.0f;
 					tmpDATA[k++] = 0.0f;
 
 					tmpDATA[k++] = tmp->Location.x+tmpAngle1.x;
 					tmpDATA[k++] = tmp->Location.y+tmpAngle1.y;
 					tmpDATA[k++] = tmp->Location.z+tmpAngle1.z;
-					tmpDATAub[k*sizeof(float)] = R;
-					tmpDATAub[k*sizeof(float)+1] = G;
-					tmpDATAub[k*sizeof(float)+2] = B;
-					tmpDATAub[k*sizeof(float)+3] = A;
-					k++;
+					tmpDATA[k++] = tmp->Color.r;
+					tmpDATA[k++] = tmp->Color.g;
+					tmpDATA[k++] = tmp->Color.b;
+					tmpDATA[k++] = tmp->Alpha;
 					tmpDATA[k++] = 1.0f;
 					tmpDATA[k++] = 0.0f;
 
 					tmpDATA[k++] = tmp->Location.x+tmpAngle4.x;
 					tmpDATA[k++] = tmp->Location.y+tmpAngle4.y;
 					tmpDATA[k++] = tmp->Location.z+tmpAngle4.z;
-					tmpDATAub[k*sizeof(float)] = R;
-					tmpDATAub[k*sizeof(float)+1] = G;
-					tmpDATAub[k*sizeof(float)+2] = B;
-					tmpDATAub[k*sizeof(float)+3] = A;
-					k++;
+					tmpDATA[k++] = tmp->Color.r;
+					tmpDATA[k++] = tmp->Color.g;
+					tmpDATA[k++] = tmp->Color.b;
+					tmpDATA[k++] = tmp->Alpha;
 					tmpDATA[k++] = 1.0f;
 					tmpDATA[k++] = 1.0f;
 
@@ -678,52 +661,43 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 					}
 
 					// собираем квадраты
-					R = (GLubyte)(tmp->Color.r*255);
-					G = (GLubyte)(tmp->Color.g*255);
-					B = (GLubyte)(tmp->Color.b*255);
-					A = (GLubyte)(tmp->Alpha*255);
-
 					tmpDATA[k++] = tmp->Location.x;
 					tmpDATA[k++] = tmp->Location.y;
 					tmpDATA[k++] = tmp->Location.z;
-					tmpDATAub[k*sizeof(float)] = R;
-					tmpDATAub[k*sizeof(float)+1] = G;
-					tmpDATAub[k*sizeof(float)+2] = B;
-					tmpDATAub[k*sizeof(float)+3] = A;
-					k++;
+					tmpDATA[k++] = tmp->Color.r;
+					tmpDATA[k++] = tmp->Color.g;
+					tmpDATA[k++] = tmp->Color.b;
+					tmpDATA[k++] = tmp->Alpha;
 					tmpDATA[k++] = 1.0f;
 					tmpDATA[k++] = tmp->Size;
 
 					tmpDATA[k++] = tmp->Location.x;
 					tmpDATA[k++] = tmp->Location.y;
 					tmpDATA[k++] = tmp->Location.z;
-					tmpDATAub[k*sizeof(float)] = R;
-					tmpDATAub[k*sizeof(float)+1] = G;
-					tmpDATAub[k*sizeof(float)+2] = B;
-					tmpDATAub[k*sizeof(float)+3] = A;
-					k++;
+					tmpDATA[k++] = tmp->Color.r;
+					tmpDATA[k++] = tmp->Color.g;
+					tmpDATA[k++] = tmp->Color.b;
+					tmpDATA[k++] = tmp->Alpha;
 					tmpDATA[k++] = 2.0f;
 					tmpDATA[k++] = tmp->Size;
 
 					tmpDATA[k++] = tmp->Location.x;
 					tmpDATA[k++] = tmp->Location.y;
 					tmpDATA[k++] = tmp->Location.z;
-					tmpDATAub[k*sizeof(float)] = R;
-					tmpDATAub[k*sizeof(float)+1] = G;
-					tmpDATAub[k*sizeof(float)+2] = B;
-					tmpDATAub[k*sizeof(float)+3] = A;
-					k++;
+					tmpDATA[k++] = tmp->Color.r;
+					tmpDATA[k++] = tmp->Color.g;
+					tmpDATA[k++] = tmp->Color.b;
+					tmpDATA[k++] = tmp->Alpha;
 					tmpDATA[k++] = 3.0f;
 					tmpDATA[k++] = tmp->Size;
 
 					tmpDATA[k++] = tmp->Location.x;
 					tmpDATA[k++] = tmp->Location.y;
 					tmpDATA[k++] = tmp->Location.z;
-					tmpDATAub[k*sizeof(float)] = R;
-					tmpDATAub[k*sizeof(float)+1] = G;
-					tmpDATAub[k*sizeof(float)+2] = B;
-					tmpDATAub[k*sizeof(float)+3] = A;
-					k++;
+					tmpDATA[k++] = tmp->Color.r;
+					tmpDATA[k++] = tmp->Color.g;
+					tmpDATA[k++] = tmp->Color.b;
+					tmpDATA[k++] = tmp->Alpha;
 					tmpDATA[k++] = 4.0f;
 					tmpDATA[k++] = tmp->Size;
 
@@ -741,8 +715,8 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 			if (BlendType == 1)
 				vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
-			vw_SendVertices(RI_QUADS, 4 * DrawCount, RI_3f_XYZ | RI_4ub_COLOR | RI_1_TEX,
-					tmpDATA, 6 * sizeof(tmpDATA[0]));
+			vw_SendVertices(RI_QUADS, 4 * DrawCount, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX,
+					tmpDATA, 9 * sizeof(tmpDATA[0]));
 
 			if (BlendType != 0)
 				vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
