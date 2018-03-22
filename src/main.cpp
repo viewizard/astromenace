@@ -82,8 +82,8 @@ SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = 0;
 char ProgrammDir[MAX_PATH];
 std::string VFSFileNamePath;
 // полное имя для файла конфигурации игры
-char ConfigName[] = "config.xml";
-char ConfigFileName[MAX_PATH];
+const std::string ConfigName{"config.xml"};
+std::string ConfigFileName;
 // для сохранения скриншотов
 char ScreenshotDir[MAX_PATH];
 
@@ -386,7 +386,6 @@ int main( int argc, char **argv )
 	const char *Fi = "\\";
 	strcat( ProgrammDir, Fi );
 
-	ZeroMemory(ConfigFileName, sizeof(ConfigFileName));
 	ZeroMemory(VFSFileNamePath, sizeof(VFSFileNamePath));
 	ZeroMemory(ScreenshotDir, sizeof(ScreenshotDir));
 
@@ -407,8 +406,7 @@ int main( int argc, char **argv )
 				strcat(UserPath, "\\AstroMenace\\");
 				CreateDirectory(UserPath, nullptr);
 
-				strcpy(ConfigFileName, UserPath);
-				strcat(ConfigFileName, ConfigName);
+				ConfigFileName = std::string(UserPath) + ConfigName;
 
 				// уже проинили, дальше не нужно
 				InitWithoutDLL = false;
@@ -434,8 +432,7 @@ int main( int argc, char **argv )
 
 	// иним, если старая винда, или была ошибка
 	if (InitWithoutDLL) {
-		strcpy(ConfigFileName, ProgrammDir);
-		strcat(ConfigFileName, ConfigName);
+		ConfigFileName = std::string(ProgrammDir) + ConfigName;
 	}
 	if (InitScrWithoutDLL) {
 		strcpy(ScreenshotDir, ProgrammDir);
@@ -509,34 +506,28 @@ int main( int argc, char **argv )
 		// first at all we need check XDG_CONFIG_HOME environment variable
 		const char* ConfigHomeEnv = getenv("XDG_CONFIG_HOME");
 		if (ConfigHomeEnv != nullptr) {
-			strcpy(ConfigFileName, ConfigHomeEnv);
-			strcat(ConfigFileName, "/astromenace");
+			ConfigFileName = std::string(ConfigHomeEnv) + "/astromenace";
 		} else {
 			// game config file will be stored in "~/.config/astromenace" folder
 			// if system have "~/.config" folder, otherwise in "~/.astromenace" folder
-			strcpy(ConfigFileName, HomeEnv);
-			char ConfigDirCheck[MAX_PATH];
-			strcpy(ConfigDirCheck, HomeEnv);
-			strcat(ConfigDirCheck, "/.config");
+			ConfigFileName = HomeEnv;
+			std::string ConfigDirCheck{std::string(HomeEnv) + "/.config"};
 			struct stat tmpStat;
-			if (stat(ConfigDirCheck, &tmpStat) == 0)
-				strcat(ConfigFileName, "/.config/astromenace");
+			if (stat(ConfigDirCheck.c_str(), &tmpStat) == 0)
+				ConfigFileName += "/.config/astromenace";
 			else
-				strcat(ConfigFileName, "/.astromenace");
+				ConfigFileName += "/.astromenace";
 		}
 
-		mkdir(ConfigFileName, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
-		strcat(ConfigFileName, "/");
-		strcat(ConfigFileName, ConfigName);
+		mkdir(ConfigFileName.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+		ConfigFileName += "/" + ConfigName;
 	}
 
 #endif // unix
 
 
 #ifdef portable
-	strcpy(ConfigFileName, ProgrammDir);
-	strcat(ConfigFileName, "/");
-	strcat(ConfigFileName, ConfigName);
+	ConfigFileName = std::string(ProgrammDir) + "/" + ConfigName;
 #endif // portable
 
 
