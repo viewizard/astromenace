@@ -37,7 +37,7 @@
 void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType)
 {
 
-	ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
+	ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");
 	ParticleSystem->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 
 	switch(EngineType) {

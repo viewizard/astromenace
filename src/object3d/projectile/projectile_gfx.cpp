@@ -36,7 +36,8 @@
 void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 {
 
-	ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
+	ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");
+	std::string tmpTextureName{};
 
 
 	switch(GFXNum) {
@@ -548,7 +549,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->CreationType = 2;
 		ParticleSystem->CreationSize = sVECTOR3D(4.0f,4.0f,4.0f);
-		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare.tga");
+		ParticleSystem->Texture = vw_FindTextureByName("gfx/flare.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.25f, 0.05f, 0.0f, 0.05f);
 		break;
 	case 26:	// стрельба 1-го пирата Kinetic
@@ -836,12 +837,9 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 
 	case 101:	// шлейф ракеты землян и пиратов
 
-		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/trail1.tga");
-		ParticleSystem->Texture[1] = vw_FindTextureByName("gfx/trail2.tga");
-		ParticleSystem->Texture[2] = vw_FindTextureByName("gfx/trail3.tga");
-		ParticleSystem->Texture[3] = vw_FindTextureByName("gfx/trail4.tga");
-		ParticleSystem->Texture[4] = vw_FindTextureByName("gfx/trail5.tga");
-		ParticleSystem->TextureQuantity = 5;
+		// "gfx/trail1.tga" ... "gfx/trail5.tga"
+		tmpTextureName = "gfx/trail" + std::to_string(1 + vw_iRandNum(4)) + ".tga";
+		ParticleSystem->Texture = vw_FindTextureByName(tmpTextureName);
 
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 1.00f;
@@ -865,12 +863,9 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 
 	case 102:	// шлейф ракет пришельцев
 
-		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/trail1.tga");
-		ParticleSystem->Texture[1] = vw_FindTextureByName("gfx/trail2.tga");
-		ParticleSystem->Texture[2] = vw_FindTextureByName("gfx/trail3.tga");
-		ParticleSystem->Texture[3] = vw_FindTextureByName("gfx/trail4.tga");
-		ParticleSystem->Texture[4] = vw_FindTextureByName("gfx/trail5.tga");
-		ParticleSystem->TextureQuantity = 5;
+		// "gfx/trail1.tga" ... "gfx/trail5.tga"
+		tmpTextureName = "gfx/trail" + std::to_string(1 + vw_iRandNum(4)) + ".tga";
+		ParticleSystem->Texture = vw_FindTextureByName(tmpTextureName);
 
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.70f;

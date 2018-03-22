@@ -129,11 +129,6 @@ bool cParticleSystem::Update(float Time)
 			//      ParticlesList.front() directly, but "NewParticle" usage make code more clear
 			cParticle &NewParticle = ParticlesList.front();
 
-			// устанавливаем номер текстуры (если нужно, случайным образом выбираем из набора текстур)
-			NewParticle.TextureNum = 0;
-			if (TextureQuantity > 1)
-				NewParticle.TextureNum = vw_iRandNum(TextureQuantity -1);
-
 			// установка жизни новой частици и проверка, что не выходит из диапахона
 			NewParticle.Age = 0.0f;
 			NewParticle.Lifetime = Life + vw_Randf0 * LifeVar;
@@ -518,11 +513,10 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 		return;
 
 	// т.к. у нас может быть набор текстур, обходим все текстуры по порядку
-	for (int i = 0; i < TextureQuantity; i++) {
+	/*for (int i = 0; i < TextureQuantity; i++)*/ {
 		int DrawCount = 0;
 		for (auto &tmpParticle : ParticlesList) {
-			if (tmpParticle.TextureNum == i)
-				DrawCount++;
+			DrawCount++;
 		}
 
 		// если есть живые - рисуем их
@@ -541,9 +535,6 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 				sVECTOR3D CurrentCameraLocation{vw_GetCameraLocation(nullptr)};
 
 				for (auto &tmpParticle : ParticlesList) {
-					if (tmpParticle.TextureNum != i)
-						continue;
-
 					// находим вектор камера-точка
 					sVECTOR3D nnTmp{CurrentCameraLocation - tmpParticle.Location};
 					//nnTmp.Normalize();// - это тут не нужно, нам нужны только пропорции
@@ -602,9 +593,6 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 				}
 			} else { // иначе работаем с шейдерами, в них правильно развернем билборд
 				for (auto &tmpParticle : ParticlesList) {
-					if (tmpParticle.TextureNum != i)
-						continue;
-
 					// first triangle
 					AddToDrawBuffer(tmpParticle.Location.x, tmpParticle.Location.y, tmpParticle.Location.z,
 							tmpParticle.Color, tmpParticle.Alpha,
@@ -631,9 +619,9 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 		}
 
 		if (DrawCount > 0) {
-			if (*CurrentTexture != Texture[i]) {
-				vw_SetTexture(0, Texture[i]);
-				*CurrentTexture = Texture[i];
+			if (*CurrentTexture != Texture) {
+				vw_SetTexture(0, Texture);
+				*CurrentTexture = Texture;
 			}
 
 			if (BlendType == 1)

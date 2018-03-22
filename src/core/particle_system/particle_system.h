@@ -50,8 +50,7 @@ public:
 	// прорисовка всех частиц
 	void Draw(sTexture **CurrentTexture);
 	// базовая текстура частиц
-	sTexture *Texture[5]{nullptr, nullptr, nullptr, nullptr, nullptr};
-	int TextureQuantity{1};
+	sTexture *Texture{nullptr};
 
 	// тип смешивания
 	int BlendType{0};

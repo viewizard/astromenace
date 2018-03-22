@@ -520,7 +520,7 @@ bool cWeapon::Update(float Time)
 		DestroyedFire->Theta      = 5.00f;
 		DestroyedFire->Life       = 0.50f*Length/3.0f;
 		DestroyedFire->ParticlesPerSec = 70;
-		DestroyedFire->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
+		DestroyedFire->Texture = vw_FindTextureByName("gfx/flare1.tga");
 		DestroyedFire->CreationType = 1;
 		DestroyedFire->CreationSize = sVECTOR3D(Width/2.0f,Width/2.0f,0.1f);
 		DestroyedFire->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
@@ -564,7 +564,7 @@ bool cWeapon::Update(float Time)
 		DestroyedSmoke->Theta      = 35.00f;
 		DestroyedSmoke->Life       = 2.00f*Length/3.0f;
 		DestroyedSmoke->ParticlesPerSec = 300;
-		DestroyedSmoke->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
+		DestroyedSmoke->Texture = vw_FindTextureByName("gfx/flare1.tga");
 		DestroyedSmoke->CreationType = 0;
 		DestroyedSmoke->CreationSize = sVECTOR3D(Width/2.5f,Width/2.5f,0.1f);
 		DestroyedSmoke->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);

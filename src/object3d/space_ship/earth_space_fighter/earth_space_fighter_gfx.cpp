@@ -124,7 +124,7 @@ void CreateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Theta      = 30.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
-		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
+		ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -146,7 +146,7 @@ void CreateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Theta      = 12.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
-		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
+		ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.4f, 0.75f, 0.15f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -168,7 +168,7 @@ void CreateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Theta      = 3.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 80;
-		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
+		ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.25f, 0.25f, 1.0f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -193,7 +193,7 @@ void CreateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->CreationSize = sVECTOR3D(0.6f,0.6f,0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 50.0f;
-		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
+		ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.0f, 0.7f, 1.0f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -230,7 +230,7 @@ void CreateRotateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
+		ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -252,7 +252,7 @@ void CreateRotateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
+		ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.4f, 0.75f, 0.15f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -274,7 +274,7 @@ void CreateRotateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
+		ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.25f, 0.25f, 1.0f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -296,7 +296,7 @@ void CreateRotateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
+		ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;

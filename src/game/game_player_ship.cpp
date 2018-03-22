@@ -300,7 +300,7 @@ void InitGamePlayerShip()
 		Shild1->AlphaShowHide = true;
 		Shild1->IsMagnet = true;
 		Shild1->MagnetFactor = -3.0f;
-		Shild1->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
+		Shild1->Texture = vw_FindTextureByName("gfx/flare1.tga");
 		Shild1->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 		Shild1->SetStartLocation(PlayerFighter->Location+PlayerFighter->OBBLocation);
 
@@ -331,7 +331,7 @@ void InitGamePlayerShip()
 		Shild1->IsMagnet = true;
 		Shild1->AlphaShowHide = true;
 		Shild1->MagnetFactor = 2.5f;
-		Shild1->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
+		Shild1->Texture = vw_FindTextureByName("gfx/flare1.tga");
 		Shild1->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 		Shild1->SetStartLocation(PlayerFighter->Location+PlayerFighter->OBBLocation);
 
@@ -357,7 +357,7 @@ void InitGamePlayerShip()
 		Shild2->DeadZone = ShildRadius-0.05;
 		Shild2->IsMagnet = true;
 		Shild2->MagnetFactor = 20.0f;
-		Shild2->Texture[0] = vw_FindTextureByName("gfx/flare1.tga");
+		Shild2->Texture = vw_FindTextureByName("gfx/flare1.tga");
 		Shild2->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 
 		ShildStartHitStatus = 150.0f;

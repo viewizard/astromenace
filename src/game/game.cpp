@@ -639,7 +639,7 @@ void InitGame()
 	psSpace->CreationType = 1;
 	psSpace->CreationSize = sVECTOR3D(200.0f,30.0f,10.0f);
 	psSpace->ParticlesPerSec = 100;
-	psSpace->Texture[0] = vw_FindTextureByName("gfx/flare3.tga");
+	psSpace->Texture = vw_FindTextureByName("gfx/flare3.tga");
 	psSpace->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 	psSpace->SetStartLocation(sVECTOR3D(0,10,250));//поправь ниже, на переносе если изменил!!!
 
