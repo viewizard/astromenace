@@ -82,6 +82,7 @@ SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = 0;
 char ProgrammDir[MAX_PATH];
 std::string VFSFileNamePath;
 // полное имя для файла конфигурации игры
+char ConfigName[] = "config.xml";
 char ConfigFileName[MAX_PATH];
 // для сохранения скриншотов
 char ScreenshotDir[MAX_PATH];
@@ -407,7 +408,7 @@ int main( int argc, char **argv )
 				CreateDirectory(UserPath, nullptr);
 
 				strcpy(ConfigFileName, UserPath);
-				strcat(ConfigFileName, "amconfig.xml");
+				strcat(ConfigFileName, ConfigName);
 
 				// уже проинили, дальше не нужно
 				InitWithoutDLL = false;
@@ -434,7 +435,7 @@ int main( int argc, char **argv )
 	// иним, если старая винда, или была ошибка
 	if (InitWithoutDLL) {
 		strcpy(ConfigFileName, ProgrammDir);
-		strcat(ConfigFileName, "amconfig.xml");
+		strcat(ConfigFileName, ConfigName);
 	}
 	if (InitScrWithoutDLL) {
 		strcpy(ScreenshotDir, ProgrammDir);
@@ -525,7 +526,8 @@ int main( int argc, char **argv )
 		}
 
 		mkdir(ConfigFileName, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
-		strcat(ConfigFileName, "/amconfig.xml");
+		strcat(ConfigFileName, "/");
+		strcat(ConfigFileName, ConfigName);
 	}
 
 #endif // unix
@@ -533,7 +535,8 @@ int main( int argc, char **argv )
 
 #ifdef portable
 	strcpy(ConfigFileName, ProgrammDir);
-	strcat(ConfigFileName, "/amconfig.xml");
+	strcat(ConfigFileName, "/");
+	strcat(ConfigFileName, ConfigName);
 #endif // portable
 
 
