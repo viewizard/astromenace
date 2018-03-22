@@ -162,9 +162,9 @@ public:
 	}
 
 	// cycle for each particle in list, for external manipulations directly with particles data
-	void ForEachParticle(std::function<void (sVECTOR3D &Location,
-						 sVECTOR3D &Velocity,
-						 bool &NeedStop)> function)
+	void ForEachParticle(std::function<void (sVECTOR3D &pLocation,
+						 sVECTOR3D &pVelocity,
+						 bool &pNeedStop)> function)
 	{
 		for (auto &tmpParticle : ParticlesList) {
 			function(tmpParticle.Location,

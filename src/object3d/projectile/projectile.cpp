@@ -897,21 +897,21 @@ cProjectile::~cProjectile(void)
 			// on missile impact and explosion we should calculate "shock wave", that
 			// should scatter missile's trails and make scene looks more "realistic",
 			// since particles data are private, we call ForEachParticle() with lambda
-			GraphicFX[i]->ForEachParticle([this, effective_dist2](sVECTOR3D &Location,
-									      sVECTOR3D &Velocity,
-									      bool &NeedStop){
-				sVECTOR3D Dist2 = Location - this->Location;
+			GraphicFX[i]->ForEachParticle([this, effective_dist2](sVECTOR3D &pLocation,
+									      sVECTOR3D &pVelocity,
+									      bool &pNeedStop){
+				sVECTOR3D Dist2 = pLocation - this->Location;
 				float fDist2 = Dist2.x * Dist2.x + Dist2.y * Dist2.y + Dist2.z * Dist2.z;
 				if (fDist2 < 1.0f)
 					fDist2 = 3.0f;
 
 				if (fDist2 < effective_dist2) {
-					Velocity = sVECTOR3D(Dist2.x + 10.0f * vw_Randf0,
+					pVelocity = sVECTOR3D(Dist2.x + 10.0f * vw_Randf0,
 							     Dist2.y + 10.0f * vw_Randf0,
 							     Dist2.z + 10.0f * vw_Randf0);
-					Velocity.Normalize();
-					Velocity = Velocity ^ (effective_dist2 / fDist2);
-					NeedStop = true;
+					pVelocity.Normalize();
+					pVelocity = pVelocity ^ (effective_dist2 / fDist2);
+					pNeedStop = true;
 				}
 			});
 			break;
