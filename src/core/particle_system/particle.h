@@ -60,10 +60,6 @@ public:
 	// если нужно замедлять и остановить
 	bool NeedStop{false};
 
-	// указатели на цепь частиц
-	cParticle *Next{nullptr};
-	cParticle *Prev{nullptr};
-
 private:
 	// обновление информации в частице
 	bool Update(float TimeDelta, const sVECTOR3D &ParentLocation = sVECTOR3D{0.0f, 0.0f, 0.0f},

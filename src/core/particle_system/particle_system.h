@@ -160,12 +160,9 @@ public:
 			  {-1000000.0f, 1000000.0f, -1000000.0f},
 			  {-1000000.0f, 1000000.0f, -1000000.0f}};
 
-	// подвязка к динамическому массиву
-	cParticle *Start{nullptr};
-	cParticle *End{nullptr};
-	int ParticlesCount{0};
-	void Attach(cParticle *NewParticle);
-	void Detach(cParticle *OldParticle);
+	// particles
+	std::forward_list<cParticle> ParticlesList{};
+
 	// указатели на цепь систем, для менеджера
 	cParticleSystem *Next{nullptr};
 	cParticleSystem *Prev{nullptr};
