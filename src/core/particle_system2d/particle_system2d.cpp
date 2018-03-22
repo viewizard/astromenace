@@ -456,6 +456,8 @@ void cParticleSystem2D::SetRotation(const sVECTOR3D &NewAngle)
  */
 cParticleSystem2D *vw_CreateParticleSystem2D()
 {
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
 	ParticleSystemsList.emplace_front();
 	return &ParticleSystemsList.front();
 }
