@@ -869,11 +869,11 @@ cProjectile::~cProjectile(void)
 			continue;
 
 		// для разных типов ракет делаем разную "ударную волну"
-		float effective_dist2 = 100;
+		float effective_dist2 = 300;
 		switch(Num) {
 		case 16:
 		case 205:
-			effective_dist2 = 200.0f;
+			effective_dist2 = 500.0f;
 			break;
 		case 18:
 		case 209:
@@ -894,22 +894,26 @@ cProjectile::~cProjectile(void)
 		case 206:
 		case 209:
 		case 210:
-			// FIXME this code should be moved into particle system + particle variables should be private
-			for (auto &tmpParticle : GraphicFX[i]->ParticlesList) {
-				sVECTOR3D Dist2 = tmpParticle.Location - Location;
+			// on missile impact and explosion we should calculate "shock wave", that
+			// should scatter missile's trails and make scene looks more "realistic",
+			// since particles data are private, we call ForEachParticle() with lambda
+			GraphicFX[i]->ForEachParticle([this, effective_dist2](sVECTOR3D &Location,
+									      sVECTOR3D &Velocity,
+									      bool &NeedStop){
+				sVECTOR3D Dist2 = Location - this->Location;
 				float fDist2 = Dist2.x * Dist2.x + Dist2.y * Dist2.y + Dist2.z * Dist2.z;
 				if (fDist2 < 1.0f)
 					fDist2 = 3.0f;
 
 				if (fDist2 < effective_dist2) {
-					tmpParticle.Velocity = sVECTOR3D(Dist2.x + 10.0f * vw_Randf0,
-									 Dist2.y + 10.0f * vw_Randf0,
-									 Dist2.z + 10.0f * vw_Randf0);
-					tmpParticle.Velocity.Normalize();
-					tmpParticle.Velocity = tmpParticle.Velocity ^ (effective_dist2 / fDist2);
-					tmpParticle.NeedStop = true;
+					Velocity = sVECTOR3D(Dist2.x + 10.0f * vw_Randf0,
+							     Dist2.y + 10.0f * vw_Randf0,
+							     Dist2.z + 10.0f * vw_Randf0);
+					Velocity.Normalize();
+					Velocity = Velocity ^ (effective_dist2 / fDist2);
+					NeedStop = true;
 				}
-			}
+			});
 			break;
 		}
 	}

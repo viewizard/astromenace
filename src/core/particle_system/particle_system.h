@@ -144,6 +144,41 @@ public:
 	// остаток создания частицы (если к примеру 0.5 частиц в секунду стоит)
 	float EmissionResidue{0.0f};
 
+	// указатели на цепь систем, для менеджера
+	cParticleSystem *Next{nullptr};
+	cParticleSystem *Prev{nullptr};
+
+	// источник света, если он нужен
+	sLight *Light{nullptr};
+	bool LightNeedDeviation{false};
+	float LightDeviation{100.0f};
+	float NextLightDeviation{0.7f + 0.3f * vw_Randf1};
+	float LightDeviationSpeed{3.5f + 3.5f * vw_Randf1};
+
+	// доступ к private данным
+	const sVECTOR3D &GetLocation()
+	{
+		return Location;
+	}
+
+	// cycle for each particle in list, for external manipulations directly with particles data
+	void ForEachParticle(std::function<void (sVECTOR3D &Location,
+						 sVECTOR3D &Velocity,
+						 bool &NeedStop)> function)
+	{
+		for (auto &tmpParticle : ParticlesList) {
+			function(tmpParticle.Location,
+				 tmpParticle.Velocity,
+				 tmpParticle.NeedStop);
+		}
+	}
+
+private:
+	// последнее положение системы (для интерполяции)
+	sVECTOR3D PrevLocation{0.0f, 0.0f, 0.0f};
+	// текущее положение частиц в пространстве
+	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
+
 	// для проверки вхождения в видимую область
 	// начальныя установка коробок
 	// ставим тут очень большие параметры, вне зоны прорисовки, т.к. в партиклах на функциях перемещения
@@ -163,29 +198,6 @@ public:
 	std::forward_list<cParticle> ParticlesList{};
 	// we could use std::list with size(), but we don't need doubly-linked list here
 	unsigned int ParticlesCountInList{0};
-
-	// указатели на цепь систем, для менеджера
-	cParticleSystem *Next{nullptr};
-	cParticleSystem *Prev{nullptr};
-
-	// источник света, если он нужен
-	sLight *Light{nullptr};
-	bool LightNeedDeviation{false};
-	float LightDeviation{100.0f};
-	float NextLightDeviation{0.7f + 0.3f * vw_Randf1};
-	float LightDeviationSpeed{3.5f + 3.5f * vw_Randf1};
-
-	// доступ к private данным
-	const sVECTOR3D &GetLocation()
-	{
-		return Location;
-	};
-
-private:
-	// последнее положение системы (для интерполяции)
-	sVECTOR3D PrevLocation{0.0f, 0.0f, 0.0f};
-	// текущее положение частиц в пространстве
-	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 
 	// матрицы поворота, для оптимизации просчетов
 	float CurrentRotationMat[9];

@@ -50,16 +50,6 @@ struct sCOLORVALUE3D {
 class cParticle {
 	friend class cParticleSystem;
 
-	// FIXME remove from public access (revise code that demand direct access)
-public:
-	// текущее место расположения частицы
-	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
-	// текущая скорость частицы
-	sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};
-
-	// если нужно замедлять и остановить
-	bool NeedStop{false};
-
 private:
 	// обновление информации в частице
 	bool Update(float TimeDelta, const sVECTOR3D &ParentLocation = sVECTOR3D{0.0f, 0.0f, 0.0f},
@@ -67,6 +57,14 @@ private:
 
 	// texture number
 	int TextureNum{0};
+
+	// текущее место расположения частицы
+	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
+	// текущая скорость частицы
+	sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};
+
+	// если нужно замедлять и остановить
+	bool NeedStop{false};
 
 	// текущий цвет частицы
 	sCOLORVALUE3D Color{1.0f, 0.0f, 0.0f, 0.5f};
