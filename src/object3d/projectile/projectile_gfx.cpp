@@ -26,7 +26,15 @@
 
 #include "projectile.h"
 
+namespace {
 
+std::string MissileTrailTextures[]{{"gfx/trail1.tga"},
+				   {"gfx/trail2.tga"},
+				   {"gfx/trail3.tga"},
+				   {"gfx/trail4.tga"},
+				   {"gfx/trail5.tga"}};
+
+} // unnamed namespace
 
 
 
@@ -837,10 +845,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 
 	case 101:	// шлейф ракеты землян и пиратов
 
-		// "gfx/trail1.tga" ... "gfx/trail5.tga"
-		tmpTextureName = "gfx/trail" + std::to_string(1 + vw_iRandNum(4)) + ".tga";
-		ParticleSystem->Texture = vw_FindTextureByName(tmpTextureName);
-
+		ParticleSystem->Texture = vw_FindTextureByName(MissileTrailTextures[vw_iRandNum(4)]);
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -863,10 +868,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 
 	case 102:	// шлейф ракет пришельцев
 
-		// "gfx/trail1.tga" ... "gfx/trail5.tga"
-		tmpTextureName = "gfx/trail" + std::to_string(1 + vw_iRandNum(4)) + ".tga";
-		ParticleSystem->Texture = vw_FindTextureByName(tmpTextureName);
-
+		ParticleSystem->Texture = vw_FindTextureByName(MissileTrailTextures[vw_iRandNum(4)]);
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
