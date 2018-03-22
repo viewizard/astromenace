@@ -303,7 +303,7 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 //-----------------------------------------------------------------------------
 // Загрузка
 //-----------------------------------------------------------------------------
-cXMLDocument::cXMLDocument(const char *XMLFileName)
+cXMLDocument::cXMLDocument(const std::string &XMLFileName)
 {
 	std::cout << "Open XML file: " << XMLFileName << "\n";
 

@@ -95,7 +95,7 @@ class cXMLDocument
 public:
 
 	cXMLDocument() = default;
-	cXMLDocument(const char *XMLFileName);
+	cXMLDocument(const std::string &XMLFileName);
 	~cXMLDocument()
 	{
 		if (RootXMLEntry != nullptr)
