@@ -38,7 +38,7 @@ enum class eLightType {
 
 struct sLight {
 	// Activate and setup for proper light type (OpenGL-related).
-	bool Activate(int CurrentLightNum, const std::array<float, 16> &Matrix);
+	bool Activate(int CurrentLightNum, const float (&Matrix)[16]);
 	// Deactivate (OpenGL-related).
 	void DeActivate();
 	// Set location.
@@ -71,7 +71,7 @@ struct sLight {
 
 // Activate proper lights for particular object (presented by location and radius^2).
 int vw_CheckAndActivateAllLights(int &Type1, int &Type2, const sVECTOR3D &Location, float Radius2,
-				 int DirLimit, int PointLimit, const std::array<float, 16> &Matrix);
+				 int DirLimit, int PointLimit, const float (&Matrix)[16]);
 // Calculate affected lights counter and create sorted map with affected lights.
 int vw_CalculateAllPointLightsAttenuation(const sVECTOR3D &Location, float Radius2,
 					  std::multimap<float, sLight*> *AffectedLightsMap);

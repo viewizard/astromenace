@@ -30,12 +30,12 @@
 namespace {
 
 //Frustum[6][4]
-std::array<std::array<float, 4>, 6> Frustum = {{{{0, 0, 0, 0}},
-						{{0, 0, 0, 0}},
-						{{0, 0, 0, 0}},
-						{{0, 0, 0, 0}},
-						{{0, 0, 0, 0}},
-						{{0, 0, 0, 0}}}};
+float Frustum[6][4]{{0, 0, 0, 0},
+		    {0, 0, 0, 0},
+		    {0, 0, 0, 0},
+		    {0, 0, 0, 0},
+		    {0, 0, 0, 0},
+		    {0, 0, 0, 0}};
 
 enum ePlaneData {
 	A = 0,		// The X value of the plane's normal.
@@ -80,17 +80,17 @@ static void NormalizePlane(int Side)
  */
 void vw_CalculateFrustum()
 {
-	std::array<float, 16> proj; // This will hold our projection matrix.
-	std::array<float, 16> modl; // This will hold our modelview matrix.
-	std::array<float, 16> clip; // This will hold the clipping planes.
+	float proj[16]; // This will hold our projection matrix.
+	float modl[16]; // This will hold our modelview matrix.
+	float clip[16]; // This will hold the clipping planes.
 
 	// Below, we pass in RI_PROJECTION_MATRIX to abstract our projection matrix.
 	// It then stores the matrix into an array of [16].
-	vw_GetMatrix(RI_PROJECTION_MATRIX, proj.data());
+	vw_GetMatrix(RI_PROJECTION_MATRIX, proj);
 
 	// By passing in RI_MODELVIEW_MATRIX, we can abstract our model view matrix.
 	// This also stores it in an array of [16].
-	vw_GetMatrix(RI_MODELVIEW_MATRIX, modl.data());
+	vw_GetMatrix(RI_MODELVIEW_MATRIX, modl);
 
 	// Now that we have our modelview and projection matrix, if we combine these 2 matrices,
 	// it will give us our clipping planes.  To combine 2 matrices, we multiply them.

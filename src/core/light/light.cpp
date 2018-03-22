@@ -91,7 +91,7 @@ int vw_CalculateAllPointLightsAttenuation(const sVECTOR3D &Location, float Radiu
  * Activate proper lights for particular object (presented by location and radius^2).
  */
 int vw_CheckAndActivateAllLights(int &Type1, int &Type2, const sVECTOR3D &Location, float Radius2,
-				 int DirLimit, int PointLimit, const std::array<float, 16> &Matrix)
+				 int DirLimit, int PointLimit, const float (&Matrix)[16])
 {
 	Type1 = 0; // counter for directional light
 	Type2 = 0; // counter for point light
@@ -226,7 +226,7 @@ static eLightType GetLightType(sLight *Light)
 /*
  * Activate and setup for proper light type (OpenGL-related).
  */
-bool sLight::Activate(int CurrentLightNum, const std::array<float, 16> &Matrix)
+bool sLight::Activate(int CurrentLightNum, const float (&Matrix)[16])
 {
 	if (!On)
 		return false;
@@ -234,7 +234,7 @@ bool sLight::Activate(int CurrentLightNum, const std::array<float, 16> &Matrix)
 
 	vw_PushMatrix();
 	vw_LoadIdentity();
-	vw_SetMatrix(Matrix.data());
+	vw_SetMatrix(Matrix);
 
 	if (GetLightType(this) == eLightType::Directional) {
 		float RenderDirection[4]{-Direction.x, -Direction.y, -Direction.z, 0.0f};
