@@ -28,11 +28,11 @@
 
 namespace {
 
-std::string MissileTrailTextures[]{{"gfx/trail1.tga"},
-				   {"gfx/trail2.tga"},
-				   {"gfx/trail3.tga"},
-				   {"gfx/trail4.tga"},
-				   {"gfx/trail5.tga"}};
+const std::string MissileTrailTextures[]{{"gfx/trail1.tga"},
+					 {"gfx/trail2.tga"},
+					 {"gfx/trail3.tga"},
+					 {"gfx/trail4.tga"},
+					 {"gfx/trail5.tga"}};
 
 } // unnamed namespace
 
