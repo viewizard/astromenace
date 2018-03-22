@@ -161,6 +161,8 @@ public:
 
 	// particles
 	std::forward_list<cParticle> ParticlesList{};
+	// we could use std::list with size(), but we don't need doubly-linked list here
+	unsigned int ParticlesCountInList{0};
 
 	// указатели на цепь систем, для менеджера
 	cParticleSystem *Next{nullptr};

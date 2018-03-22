@@ -90,11 +90,12 @@ bool cParticleSystem::Update(float Time)
 	TimeLastUpdate = Time;
 
 	// для всех частиц вызываем их собственный апдейт
-	auto prev_iter =  ParticlesList.before_begin();
+	auto prev_iter = ParticlesList.before_begin();
 	for (auto iter = ParticlesList.begin(); iter != ParticlesList.end();) {
-		if (!iter->Update(TimeDelta, Location, IsMagnet, MagnetFactor))
+		if (!iter->Update(TimeDelta, Location, IsMagnet, MagnetFactor)) {
 			iter = ParticlesList.erase_after(prev_iter);
-		else {
+			ParticlesCountInList--;
+		} else {
 			prev_iter = iter;
 			++iter;
 		}
@@ -128,6 +129,7 @@ bool cParticleSystem::Update(float Time)
 			//      this line could be combined with previous line, we could use
 			//      ParticlesList.front() directly, but "NewParticle" usage make code more clear
 			cParticle &NewParticle = ParticlesList.front();
+			ParticlesCountInList++;
 
 			// установка жизни новой частици и проверка, что не выходит из диапахона
 			NewParticle.Age = 0.0f;
@@ -508,132 +510,119 @@ static inline void AddToDrawBuffer(float CoordX, float CoordY, float CoordZ,
 //-----------------------------------------------------------------------------
 void cParticleSystem::Draw(sTexture **CurrentTexture)
 {
-	// если не входит в фуструм - рисовать не нужно
-	if (!vw_BoxInFrustum(AABB[6], AABB[0]))
+	if (!vw_BoxInFrustum(AABB[6], AABB[0]) ||
+	    ParticlesList.empty())
 		return;
 
-	// т.к. у нас может быть набор текстур, обходим все текстуры по порядку
-	/*for (int i = 0; i < TextureQuantity; i++)*/ {
-		int DrawCount = 0;
+	// RI_TRIANGLES * (RI_3f_XYZ + RI_2f_TEX + RI_4f_COLOR) * ParticlesCount
+	unsigned int tmpDrawBufferSize = 6 * (3 + 2 + 4) * ParticlesCountInList;
+	if (tmpDrawBufferSize > DrawBufferSize) {
+		DrawBufferSize = tmpDrawBufferSize;
+		DrawBuffer.reset(new float[DrawBufferSize]);
+	}
+	DrawBufferCurrentPosition = 0;
+
+	// шейдеры не поддерживаются - рисуем по старинке
+	if (!ParticleSystemUseGLSL) {
+		// получаем текущее положение камеры
+		sVECTOR3D CurrentCameraLocation{vw_GetCameraLocation(nullptr)};
+
 		for (auto &tmpParticle : ParticlesList) {
-			DrawCount++;
+			// находим вектор камера-точка
+			sVECTOR3D nnTmp{CurrentCameraLocation - tmpParticle.Location};
+			//nnTmp.Normalize();// - это тут не нужно, нам нужны только пропорции
+
+			// находим перпендикуляр к вектору nnTmp
+			sVECTOR3D nnTmp2{1.0f, 1.0f, -(nnTmp.x + nnTmp.y) / nnTmp.z};
+			nnTmp2.Normalize();
+
+			// находим перпендикуляр к векторам nnTmp и nnTmp2
+			// файтически - a x b = ( aybz - byaz , azbx - bzax , axby - bxay );
+			sVECTOR3D nnTmp3{nnTmp.y * nnTmp2.z - nnTmp2.y * nnTmp.z,
+					 nnTmp.z * nnTmp2.x - nnTmp2.z * nnTmp.x,
+					 nnTmp.x * nnTmp2.y - nnTmp2.x * nnTmp.y};
+			nnTmp3.Normalize();
+
+			// находим
+			sVECTOR3D tmpAngle1 = nnTmp3 ^ (tmpParticle.Size * 1.5f);
+			sVECTOR3D tmpAngle3 = nnTmp3 ^ (-tmpParticle.Size * 1.5f);
+			sVECTOR3D tmpAngle2 = nnTmp2 ^ (tmpParticle.Size * 1.5f);
+			sVECTOR3D tmpAngle4 = nnTmp2 ^ (-tmpParticle.Size * 1.5f);
+
+			// first triangle
+			AddToDrawBuffer(tmpParticle.Location.x + tmpAngle3.x,
+					tmpParticle.Location.y + tmpAngle3.y,
+					tmpParticle.Location.z + tmpAngle3.z,
+					tmpParticle.Color, tmpParticle.Alpha,
+					0.0f, 1.0f);
+			AddToDrawBuffer(tmpParticle.Location.x + tmpAngle2.x,
+					tmpParticle.Location.y + tmpAngle2.y,
+					tmpParticle.Location.z + tmpAngle2.z,
+					tmpParticle.Color, tmpParticle.Alpha,
+					0.0f, 0.0f);
+			AddToDrawBuffer(tmpParticle.Location.x + tmpAngle1.x,
+					tmpParticle.Location.y + tmpAngle1.y,
+					tmpParticle.Location.z + tmpAngle1.z,
+					tmpParticle.Color, tmpParticle.Alpha,
+					1.0f, 0.0f);
+
+			//second triangle
+			AddToDrawBuffer(tmpParticle.Location.x + tmpAngle1.x,
+					tmpParticle.Location.y + tmpAngle1.y,
+					tmpParticle.Location.z + tmpAngle1.z,
+					tmpParticle.Color, tmpParticle.Alpha,
+					1.0f, 0.0f);
+			AddToDrawBuffer(tmpParticle.Location.x + tmpAngle4.x,
+					tmpParticle.Location.y + tmpAngle4.y,
+					tmpParticle.Location.z + tmpAngle4.z,
+					tmpParticle.Color, tmpParticle.Alpha,
+					1.0f, 1.0f);
+			AddToDrawBuffer(tmpParticle.Location.x + tmpAngle3.x,
+					tmpParticle.Location.y + tmpAngle3.y,
+					tmpParticle.Location.z + tmpAngle3.z,
+					tmpParticle.Color, tmpParticle.Alpha,
+					0.0f, 1.0f);
 		}
+	} else { // иначе работаем с шейдерами, в них правильно развернем билборд
+		for (auto &tmpParticle : ParticlesList) {
+			// first triangle
+			AddToDrawBuffer(tmpParticle.Location.x, tmpParticle.Location.y, tmpParticle.Location.z,
+					tmpParticle.Color, tmpParticle.Alpha,
+					1.0f, tmpParticle.Size);
+			AddToDrawBuffer(tmpParticle.Location.x, tmpParticle.Location.y, tmpParticle.Location.z,
+					tmpParticle.Color, tmpParticle.Alpha,
+					2.0f, tmpParticle.Size);
+			AddToDrawBuffer(tmpParticle.Location.x, tmpParticle.Location.y, tmpParticle.Location.z,
+					tmpParticle.Color, tmpParticle.Alpha,
+					3.0f, tmpParticle.Size);
 
-		// если есть живые - рисуем их
-		if (DrawCount > 0) {
-			// RI_TRIANGLES * (RI_3f_XYZ + RI_2f_TEX + RI_4f_COLOR) * DrawCount
-			unsigned int tmpDrawBufferSize = 6 * (3 + 2 + 4) * DrawCount;
-			if (tmpDrawBufferSize > DrawBufferSize) {
-				DrawBufferSize = tmpDrawBufferSize;
-				DrawBuffer.reset(new float[DrawBufferSize]);
-			}
-			DrawBufferCurrentPosition = 0;
-
-			// шейдеры не поддерживаются - рисуем по старинке
-			if (!ParticleSystemUseGLSL) {
-				// получаем текущее положение камеры
-				sVECTOR3D CurrentCameraLocation{vw_GetCameraLocation(nullptr)};
-
-				for (auto &tmpParticle : ParticlesList) {
-					// находим вектор камера-точка
-					sVECTOR3D nnTmp{CurrentCameraLocation - tmpParticle.Location};
-					//nnTmp.Normalize();// - это тут не нужно, нам нужны только пропорции
-
-					// находим перпендикуляр к вектору nnTmp
-					sVECTOR3D nnTmp2{1.0f, 1.0f, -(nnTmp.x + nnTmp.y) / nnTmp.z};
-					nnTmp2.Normalize();
-
-					// находим перпендикуляр к векторам nnTmp и nnTmp2
-					// файтически - a x b = ( aybz - byaz , azbx - bzax , axby - bxay );
-					sVECTOR3D nnTmp3{nnTmp.y * nnTmp2.z - nnTmp2.y * nnTmp.z,
-							 nnTmp.z * nnTmp2.x - nnTmp2.z * nnTmp.x,
-							 nnTmp.x * nnTmp2.y - nnTmp2.x * nnTmp.y};
-					nnTmp3.Normalize();
-
-					// находим
-					sVECTOR3D tmpAngle1 = nnTmp3 ^ (tmpParticle.Size * 1.5f);
-					sVECTOR3D tmpAngle3 = nnTmp3 ^ (-tmpParticle.Size * 1.5f);
-					sVECTOR3D tmpAngle2 = nnTmp2 ^ (tmpParticle.Size * 1.5f);
-					sVECTOR3D tmpAngle4 = nnTmp2 ^ (-tmpParticle.Size * 1.5f);
-
-					// first triangle
-					AddToDrawBuffer(tmpParticle.Location.x + tmpAngle3.x,
-							tmpParticle.Location.y + tmpAngle3.y,
-							tmpParticle.Location.z + tmpAngle3.z,
-							tmpParticle.Color, tmpParticle.Alpha,
-							0.0f, 1.0f);
-					AddToDrawBuffer(tmpParticle.Location.x + tmpAngle2.x,
-							tmpParticle.Location.y + tmpAngle2.y,
-							tmpParticle.Location.z + tmpAngle2.z,
-							tmpParticle.Color, tmpParticle.Alpha,
-							0.0f, 0.0f);
-
-					AddToDrawBuffer(tmpParticle.Location.x + tmpAngle1.x,
-							tmpParticle.Location.y + tmpAngle1.y,
-							tmpParticle.Location.z + tmpAngle1.z,
-							tmpParticle.Color, tmpParticle.Alpha,
-							1.0f, 0.0f);
-
-					//second triangle
-					AddToDrawBuffer(tmpParticle.Location.x + tmpAngle1.x,
-							tmpParticle.Location.y + tmpAngle1.y,
-							tmpParticle.Location.z + tmpAngle1.z,
-							tmpParticle.Color, tmpParticle.Alpha,
-							1.0f, 0.0f);
-					AddToDrawBuffer(tmpParticle.Location.x + tmpAngle4.x,
-							tmpParticle.Location.y + tmpAngle4.y,
-							tmpParticle.Location.z + tmpAngle4.z,
-							tmpParticle.Color, tmpParticle.Alpha,
-							1.0f, 1.0f);
-					AddToDrawBuffer(tmpParticle.Location.x + tmpAngle3.x,
-							tmpParticle.Location.y + tmpAngle3.y,
-							tmpParticle.Location.z + tmpAngle3.z,
-							tmpParticle.Color, tmpParticle.Alpha,
-							0.0f, 1.0f);
-				}
-			} else { // иначе работаем с шейдерами, в них правильно развернем билборд
-				for (auto &tmpParticle : ParticlesList) {
-					// first triangle
-					AddToDrawBuffer(tmpParticle.Location.x, tmpParticle.Location.y, tmpParticle.Location.z,
-							tmpParticle.Color, tmpParticle.Alpha,
-							1.0f, tmpParticle.Size);
-					AddToDrawBuffer(tmpParticle.Location.x, tmpParticle.Location.y, tmpParticle.Location.z,
-							tmpParticle.Color, tmpParticle.Alpha,
-							2.0f, tmpParticle.Size);
-					AddToDrawBuffer(tmpParticle.Location.x, tmpParticle.Location.y, tmpParticle.Location.z,
-							tmpParticle.Color, tmpParticle.Alpha,
-							3.0f, tmpParticle.Size);
-
-					//second triangle
-					AddToDrawBuffer(tmpParticle.Location.x, tmpParticle.Location.y, tmpParticle.Location.z,
-							tmpParticle.Color,  tmpParticle.Alpha,
-							3.0f, tmpParticle.Size);
-					AddToDrawBuffer(tmpParticle.Location.x, tmpParticle.Location.y, tmpParticle.Location.z,
-							tmpParticle.Color, tmpParticle.Alpha,
-							4.0f, tmpParticle.Size);
-					AddToDrawBuffer(tmpParticle.Location.x, tmpParticle.Location.y, tmpParticle.Location.z,
-							tmpParticle.Color, tmpParticle.Alpha,
-							1.0f, tmpParticle.Size);
-				}
-			}
-		}
-
-		if (DrawCount > 0) {
-			if (*CurrentTexture != Texture) {
-				vw_SetTexture(0, Texture);
-				*CurrentTexture = Texture;
-			}
-
-			if (BlendType == 1)
-				vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
-
-			vw_SendVertices(RI_TRIANGLES, 6 * DrawCount, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX,
-					DrawBuffer.get(), 9 * sizeof(DrawBuffer.get()[0]));
-
-			if (BlendType != 0)
-				vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+			//second triangle
+			AddToDrawBuffer(tmpParticle.Location.x, tmpParticle.Location.y, tmpParticle.Location.z,
+					tmpParticle.Color,  tmpParticle.Alpha,
+					3.0f, tmpParticle.Size);
+			AddToDrawBuffer(tmpParticle.Location.x, tmpParticle.Location.y, tmpParticle.Location.z,
+					tmpParticle.Color, tmpParticle.Alpha,
+					4.0f, tmpParticle.Size);
+			AddToDrawBuffer(tmpParticle.Location.x, tmpParticle.Location.y, tmpParticle.Location.z,
+					tmpParticle.Color, tmpParticle.Alpha,
+					1.0f, tmpParticle.Size);
 		}
 	}
+
+	// if we already setup this texture in previous rendered particle system, no need to change it
+	if (*CurrentTexture != Texture) {
+		vw_SetTexture(0, Texture);
+		*CurrentTexture = Texture;
+	}
+
+	if (BlendType == 1)
+		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+
+	vw_SendVertices(RI_TRIANGLES, 6 * ParticlesCountInList, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX,
+			DrawBuffer.get(), 9 * sizeof(DrawBuffer.get()[0]));
+
+	if (BlendType != 0)
+		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 }
 
 //-----------------------------------------------------------------------------
