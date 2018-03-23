@@ -219,17 +219,17 @@ int vw_iRandNum(int Max);
  */
 
 // Setup matrix identity.
-void vw_Matrix44Identity(float Matrix44[16]);
+void vw_Matrix44Identity(float (&Matrix44)[16]);
 // Matrix multiplication.
-void vw_Matrix44Mult(float DstMatrix44[16], const float SrcMatrix44[16]);
+void vw_Matrix44Mult(float (&DstMatrix44)[16], const float (&SrcMatrix44)[16]);
 // Calculate translation matrix by new location point.
-void vw_Matrix44Translate(float Matrix44[16], const sVECTOR3D &Location);
+void vw_Matrix44Translate(float (&Matrix44)[16], const sVECTOR3D &Location);
 // Create rotation matrix.
-void vw_Matrix44CreateRotate(float Matrix44[16], const sVECTOR3D &Angle);
+void vw_Matrix44CreateRotate(float (&Matrix44)[16], const sVECTOR3D &Angle);
 // Create inverted rotation matrix.
-void vw_Matrix44InverseRotate(float Matrix44[16]);
+void vw_Matrix44InverseRotate(float (&Matrix44)[16]);
 // Calculate point position by transformation matrix.
-void vw_Matrix44CalcPoint(sVECTOR3D &Point, const float Matrix44[16]);
+void vw_Matrix44CalcPoint(sVECTOR3D &Point, const float (&Matrix44)[16]);
 
 /*
  * 3x3 matrix, float Matrix[9]:
@@ -241,14 +241,14 @@ void vw_Matrix44CalcPoint(sVECTOR3D &Point, const float Matrix44[16]);
  */
 
 // Setup matrix identity.
-void vw_Matrix33Identity(float Matrix33[9]);
+void vw_Matrix33Identity(float (&Matrix33)[9]);
 // Matrix multiplication.
-void vw_Matrix33Mult(float DstMatrix33[9], const float SrcMatrix33[9]);
+void vw_Matrix33Mult(float (&DstMatrix33)[9], const float (&SrcMatrix33)[9]);
 // Create rotation matrix.
-void vw_Matrix33CreateRotate(float Matrix33[9], const sVECTOR3D &Angle);
+void vw_Matrix33CreateRotate(float (&Matrix33)[9], const sVECTOR3D &Angle);
 // Create inverted rotation matrix.
-void vw_Matrix33InverseRotate(float Matrix33[9]);
+void vw_Matrix33InverseRotate(float (&Matrix33)[9]);
 // Calculate point position by transformation matrix.
-void vw_Matrix33CalcPoint(sVECTOR3D &Point, const float Matrix33[9]);
+void vw_Matrix33CalcPoint(sVECTOR3D &Point, const float (&Matrix33)[9]);
 
 #endif // CoreMath_H

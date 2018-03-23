@@ -35,9 +35,9 @@ struct sObjectBlock;
 bool vw_AABBAABBCollision(const sVECTOR3D Object1AABB[8], const sVECTOR3D &Object1Location,
 			  const sVECTOR3D Object2AABB[8], const sVECTOR3D &Object2Location);
 // OBB-OBB collision detection.
-bool vw_OBBOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation, sVECTOR3D Object1Location,
-			float Object1RotationMatrix[9], sVECTOR3D Object2OBB[8], sVECTOR3D Object2OBBLocation,
-			sVECTOR3D Object2Location, float Object2RotationMatrix[9]);
+bool vw_OBBOBBCollision(sVECTOR3D (&Object1OBB)[8], sVECTOR3D Object1OBBLocation, sVECTOR3D Object1Location,
+			float (&Object1RotationMatrix)[9], sVECTOR3D (&Object2OBB)[8], sVECTOR3D Object2OBBLocation,
+			sVECTOR3D Object2Location, float (&Object2RotationMatrix)[9]);
 // Sphere-Sphere collision detection.
 bool vw_SphereSphereCollision(float Object1Radius, const sVECTOR3D &Object1Location,
 			      float Object2Radius, const sVECTOR3D &Object2Location,
@@ -46,11 +46,11 @@ bool vw_SphereSphereCollision(float Object1Radius, const sVECTOR3D &Object1Locat
 bool vw_SphereAABBCollision(sVECTOR3D Object1AABB[8], sVECTOR3D Object1Location,
 			    float Object2Radius, sVECTOR3D Object2Location, sVECTOR3D Object2PrevLocation);
 // Sphere-OBB collision detection.
-bool vw_SphereOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation,
-			   sVECTOR3D Object1Location, float Object1RotationMatrix[9],
+bool vw_SphereOBBCollision(sVECTOR3D (&Object1OBB)[8], sVECTOR3D Object1OBBLocation,
+			   sVECTOR3D Object1Location, float (&Object1RotationMatrix)[9],
 			   float Object2Radius, sVECTOR3D Object2Location, sVECTOR3D Object2PrevLocation);
 // Sphere-Mesh collision detection.
-bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1DrawObjectList, float Object1RotationMatrix[9],
+bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1DrawObjectList, float (&Object1RotationMatrix)[9],
 			    float Object2Radius, sVECTOR3D Object2Location, sVECTOR3D Object2PrevLocation,
 			    sVECTOR3D *CollisionLocation);
 

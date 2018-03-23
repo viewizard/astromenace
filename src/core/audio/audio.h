@@ -86,6 +86,6 @@ bool vw_InitAudio();
 // Shutdown audio.
 void vw_ShutdownAudio();
 // Setup listener in 3D space.
-void vw_Listener(float ListenerPos[3], float ListenerVel[3], float ListenerOri[6]);
+void vw_Listener(float (&ListenerPos)[3], float (&ListenerVel)[3], float (&ListenerOri)[6]);
 
 #endif // Audio_H

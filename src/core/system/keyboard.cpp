@@ -38,7 +38,7 @@ int KeyStateArraySize{0};
 // KeyStatus[N] == false - we locked "key released" manually by vw_SetKeyStatus() call
 std::vector<bool> KeyStatus{};
 // unicode character for current pressed button
-std::u32string CurrentUnicodeChar;
+std::u32string CurrentUnicodeChar{};
 
 } // unnamed namespace
 

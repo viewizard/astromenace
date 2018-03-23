@@ -49,9 +49,6 @@ private:
 	bool Update(float TimeDelta, const sVECTOR3D &ParentLocation = sVECTOR3D{0.0f, 0.0f, 0.0f},
 		    bool Magnet = false, float MagnetFactor = 25.0f);
 
-	// texture number
-	int TextureNum{0};
-
 	// текущее место расположения частицы
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 	// текущая скорость частицы

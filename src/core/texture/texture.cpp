@@ -143,7 +143,7 @@ void vw_ReleaseAllTextures()
  */
 static int PowerOfTwo(int Num)
 {
-	int tmpValue = 1;
+	int tmpValue{1};
 
 	while (tmpValue < Num) {
 		tmpValue <<= 1;

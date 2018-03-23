@@ -197,17 +197,17 @@ float GameCameraGetSpeed();
 // Получение угла поворота оружия на врага для космических кораблей
 //-----------------------------------------------------------------------------
 void GetShipOnTargetOrientateion(
-	int			ObjectStatus, // статус объекта, который целится
+	int		ObjectStatus, // статус объекта, который целится
 	sVECTOR3D	Location, // положение точки относительно которой будем наводить
 	sVECTOR3D	CurrentObjectRotation, // текущие углы объекта
 	float		MinDistance, // минимальное расстояние, с которого начинаем прицеливание
-	float		RotationMatrix[9], // матрица вращения объекта
+	float		(&RotationMatrix)[9], // матрица вращения объекта
 	sVECTOR3D	*NeedAngle,// нужные углы, чтобы получить нужное направление
 	float		Width,		// ширина объекта
 	bool		NeedCenterOrientation, // нужен доворот на центр
 	bool		NeedByWeaponOrientation, // нужно делать доворот с учетом положения орудия
 	sVECTOR3D	WeponLocation,
-	int         WeaponType) 	// тип орудия орудия
+	int		WeaponType) 	// тип орудия орудия
 {
 	// получаем точки для создания плоскости
 	sVECTOR3D Orientation(0.0f, 0.0f, 1.0f);
@@ -670,12 +670,12 @@ void GetShipOnTargetOrientateion(
 // !! почти полная копия как наведение на у турелей, но без учета выше-ниже противника
 //-----------------------------------------------------------------------------
 void GetEnemyShipOnTargetOrientateion(
-	int			ObjectStatus, // статус объекта, который целится
+	int		ObjectStatus, // статус объекта, который целится
 	sVECTOR3D	Location, // положение точки относительно которой будем наводить
 	sVECTOR3D	CurrentObjectRotation, // текущие углы объекта
-	float		RotationMatrix[9], // матрица вращения объекта
+	float		(&RotationMatrix)[9], // матрица вращения объекта
 	sVECTOR3D	*NeedAngle, // нужные углы, чтобы получить нужное направление
-	int			WeaponType) // номер оружия
+	int		WeaponType) // номер оружия
 {
 
 
@@ -852,12 +852,12 @@ void GetEnemyShipOnTargetOrientateion(
 // Получение угла поворота оружия на врага для турелей наземных объектов
 //-----------------------------------------------------------------------------
 bool GetTurretOnTargetOrientateion(
-	int			ObjectStatus, // статус объекта, который целится
+	int		ObjectStatus, // статус объекта, который целится
 	sVECTOR3D	Location, // положение точки относительно которой будем наводить
 	sVECTOR3D	CurrentObjectRotation, // текущие углы объекта
-	float		RotationMatrix[9], // матрица вращения объекта
+	float		(&RotationMatrix)[9], // матрица вращения объекта
 	sVECTOR3D	*NeedAngle, // нужные углы, чтобы получить нужное направление
-	int			WeaponType) // номер оружия
+	int		WeaponType) // номер оружия
 {
 
 
@@ -1046,10 +1046,10 @@ bool GetTurretOnTargetOrientateion(
 // Получение угла поворота ракеты, торпеды или бомбы
 //-----------------------------------------------------------------------------
 cObject3D *GetMissileOnTargetOrientateion(
-	int			ObjectStatus, // статус объекта, который целится
+	int		ObjectStatus, // статус объекта, который целится
 	sVECTOR3D	Location, // положение точки относительно которой будем наводить
 	sVECTOR3D	CurrentObjectRotation, // текущие углы объекта
-	float		RotationMatrix[9], // матрица вращения объекта
+	float		(&RotationMatrix)[9], // матрица вращения объекта
 	sVECTOR3D	*NeedAngle, // нужные углы, чтобы получить нужное направление
 	float		MaxDistance) // максимальная дистанция, на которую может лететь снаряд
 {
@@ -1430,10 +1430,9 @@ cObject3D *GetMissileOnTargetOrientateion(
 //-----------------------------------------------------------------------------
 // Получаем углы поворота для ракеты наведенной на цель
 //-----------------------------------------------------------------------------
-bool GetMissileOnTargetOrientateion(
-	sVECTOR3D	Location, // положение точки относительно которой будем наводить
+bool GetMissileOnTargetOrientateion(sVECTOR3D	Location, // положение точки относительно которой будем наводить
 	sVECTOR3D	CurrentObjectRotation, // текущие углы объекта
-	float		RotationMatrix[9], // матрица вращения объекта
+	float		(&RotationMatrix)[9], // матрица вращения объекта
 	cObject3D	*TargetObject, // объект на который прицеливаемся
 	sVECTOR3D	*NeedAngle)// нужные углы, чтобы получить нужное направление
 {
@@ -1505,9 +1504,9 @@ bool GetMissileOnTargetOrientateion(
 //-----------------------------------------------------------------------------
 // Проверяем где по отношению ракеты находится объект
 //-----------------------------------------------------------------------------
-bool GetMissileTargetPosition(cObject3D *TargetObject,
-			      sVECTOR3D Location, // положение точки относительно которой будем наводить
-			      float RotationMatrix[9]) // матрица вращения объекта
+static bool GetMissileTargetPosition(cObject3D *TargetObject,
+				     sVECTOR3D Location, // положение точки относительно которой будем наводить
+				     float (&RotationMatrix)[9]) // матрица вращения объекта
 {
 	// (!) TargetObject должен существовать, до вызова этой функции проверять это, в этой функции проверки не делаем
 
@@ -1532,7 +1531,7 @@ bool GetMissileTargetPosition(cObject3D *TargetObject,
 //-----------------------------------------------------------------------------
 bool GetMissileTargetStatus(cObject3D *TargetObject,
 			    sVECTOR3D Location, // положение точки относительно которой будем наводить
-			    float RotationMatrix[9]) // матрица вращения объекта
+			    float (&RotationMatrix)[9]) // матрица вращения объекта
 {
 	cProjectile *tmpProjectile = StartProjectile;
 	while (tmpProjectile != nullptr) {

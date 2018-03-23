@@ -68,9 +68,9 @@ bool vw_AABBAABBCollision(const sVECTOR3D Object1AABB[8], const sVECTOR3D &Objec
 /*
  * OBB-OBB collision detection.
  */
-bool vw_OBBOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation, sVECTOR3D Object1Location,
-			float Object1RotationMatrix[9], sVECTOR3D Object2OBB[8], sVECTOR3D Object2OBBLocation,
-			sVECTOR3D Object2Location, float Object2RotationMatrix[9])
+bool vw_OBBOBBCollision(sVECTOR3D (&Object1OBB)[8], sVECTOR3D Object1OBBLocation, sVECTOR3D Object1Location,
+			float (&Object1RotationMatrix)[9], sVECTOR3D (&Object2OBB)[8], sVECTOR3D Object2OBBLocation,
+			sVECTOR3D Object2Location, float (&Object2RotationMatrix)[9])
 {
 	// calcuate rotation matrix
 	float TMPInvObject1RotationMatrix[9]{Object1RotationMatrix[0], Object1RotationMatrix[1], Object1RotationMatrix[2],
@@ -291,8 +291,8 @@ bool vw_SphereAABBCollision(sVECTOR3D Object1AABB[8], sVECTOR3D Object1Location,
 /*
  * Sphere-OBB collision detection.
  */
-bool vw_SphereOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation,
-			   sVECTOR3D Object1Location, float Object1RotationMatrix[9],
+bool vw_SphereOBBCollision(sVECTOR3D (&Object1OBB)[8], sVECTOR3D Object1OBBLocation,
+			   sVECTOR3D Object1Location, float (&Object1RotationMatrix)[9],
 			   float Object2Radius, sVECTOR3D Object2Location, sVECTOR3D Object2PrevLocation)
 {
 	sVECTOR3D TMPMax{Object1OBB[0]};
@@ -364,7 +364,7 @@ bool vw_SphereOBBCollision(sVECTOR3D Object1OBB[8], sVECTOR3D Object1OBBLocation
 /*
  * Sphere-Mesh collision detection.
  */
-bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1DrawObjectList, float Object1RotationMatrix[9],
+bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1DrawObjectList, float (&Object1RotationMatrix)[9],
 			    float Object2Radius, sVECTOR3D Object2Location, sVECTOR3D Object2PrevLocation,
 			    sVECTOR3D *CollisionLocation)
 {

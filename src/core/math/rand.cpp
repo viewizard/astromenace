@@ -47,7 +47,7 @@ float vw_fRand()
  */
 float vw_fRandNum(float Max)
 {
-	return vw_fRand()*Max;
+	return vw_fRand() * Max;
 }
 
 /*
@@ -55,5 +55,5 @@ float vw_fRandNum(float Max)
  */
 int vw_iRandNum(int Max)
 {
-	return floor(vw_fRand()*(Max + 1));
+	return floor(vw_fRand() * (Max + 1));
 }

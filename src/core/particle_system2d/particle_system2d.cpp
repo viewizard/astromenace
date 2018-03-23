@@ -252,9 +252,9 @@ void cParticleSystem2D::GenerateLocationQuadType(cParticle2D &NewParticle)
  */
 void cParticleSystem2D::GenerateLocationCircleType(cParticle2D &NewParticle)
 {
-	float tmpDist2 = CreationSize.x * CreationSize.x +
-			 CreationSize.y * CreationSize.y +
-			 CreationSize.z * CreationSize.z;
+	float tmpDist2{CreationSize.x * CreationSize.x +
+		       CreationSize.y * CreationSize.y +
+		       CreationSize.z * CreationSize.z};
 	// if DeadZone^2 more then CreationSize^2, disable DeadZone
 	float DeadZone2 = DeadZone * DeadZone;
 	if (tmpDist2 <= DeadZone2)
@@ -306,7 +306,7 @@ void cParticleSystem2D::SetupNewParticleDirection(cParticle2D &NewParticle)
 
 		// emit with deviation
 		float RandomYaw = vw_Randf0 * 3.14159f * 2.0f; // 2π = 360°
-		float RandomPitch = vw_Randf0 * Theta * 3.14159f / 180.0f ; // convert Theta to radians (1° = π/180°)
+		float RandomPitch = vw_Randf0 * Theta * 3.14159f / 180.0f; // convert Theta to radians (1° = π/180°)
 
 		// y
 		NewParticle.Velocity.y = Direction.y * cosf(RandomPitch);

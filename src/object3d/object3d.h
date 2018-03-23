@@ -299,22 +299,26 @@ void UpdateAllObject3D(float Time);
 // Проверяем, нужно ли для данного объекта проверка коллизии и наведение на него
 bool NeedCheckCollision(cObject3D* Object3D);
 // Загрузка в модель нужной геометрии
-void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float TriangleSizeLimit, bool NeedTangentAndBinormal=false);
+void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum,
+		    float TriangleSizeLimit, bool NeedTangentAndBinormal=false);
 // Получение угла поворота оружия на врага
 void GetShipOnTargetOrientateion(int ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
-				 float MinDistance, float RotationMatrix[9], sVECTOR3D *NeedAngle, float ObjectWidth, bool NeedCenterOrientation,
+				 float MinDistance, float (&RotationMatrix)[9], sVECTOR3D *NeedAngle,
+				 float ObjectWidth, bool NeedCenterOrientation,
 				 bool NeedByWeaponOrientation, sVECTOR3D WeponLocation, int WeaponType);
 // Получение угла поворота оружия на врага для противника
 void GetEnemyShipOnTargetOrientateion(int ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
-				      float RotationMatrix[9], sVECTOR3D *NeedAngle, int WeaponType);
+				      float (&RotationMatrix)[9], sVECTOR3D *NeedAngle, int WeaponType);
 // Получение угла поворота турели на врага
 bool GetTurretOnTargetOrientateion(int ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
-				   float RotationMatrix[9], sVECTOR3D *NeedAngle, int WeaponType);
+				   float (&RotationMatrix)[9], sVECTOR3D *NeedAngle, int WeaponType);
 // Получение данных для наведение ракет
 cObject3D *GetMissileOnTargetOrientateion(int ObjectStatus, sVECTOR3D Location,
-		sVECTOR3D CurrentObjectRotation, float RotationMatrix[9], sVECTOR3D *NeedAngle, float MaxDistance);
-bool GetMissileOnTargetOrientateion(sVECTOR3D Location, sVECTOR3D CurrentObjectRotation, float RotationMatrix[9], cObject3D *TargetObject, sVECTOR3D *NeedAngle);
-bool GetMissileTargetStatus(cObject3D *TargetObject, sVECTOR3D Location, float RotationMatrix[9]);
+					  sVECTOR3D CurrentObjectRotation, float (&RotationMatrix)[9],
+					  sVECTOR3D *NeedAngle, float MaxDistance);
+bool GetMissileOnTargetOrientateion(sVECTOR3D Location, sVECTOR3D CurrentObjectRotation, float (&RotationMatrix)[9],
+				    cObject3D *TargetObject, sVECTOR3D *NeedAngle);
+bool GetMissileTargetStatus(cObject3D *TargetObject, sVECTOR3D Location, float (&RotationMatrix)[9]);
 // Получение положения ближайшего врага, для мин
 cObject3D *GetCloserTargetPosition(int ObjectStatus, sVECTOR3D Location);
 

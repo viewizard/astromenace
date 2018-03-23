@@ -29,7 +29,6 @@
 
 namespace {
 
-//Frustum[6][4]
 float Frustum[6][4]{{0, 0, 0, 0},
 		    {0, 0, 0, 0},
 		    {0, 0, 0, 0},

@@ -35,12 +35,12 @@
 bool vw_InitAudio()
 {
 	// position of the Listener
-	ALfloat ListenerPos[] = {0.0f, 0.0f, 0.0f};
+	constexpr ALfloat ListenerPos[]{0.0f, 0.0f, 0.0f};
 	// velocity of the Listener
-	ALfloat ListenerVel[] = {0.0f, 0.0f, 0.0f};
+	constexpr ALfloat ListenerVel[]{0.0f, 0.0f, 0.0f};
 	// orientation of the Listener (first 3 elements are "at", second 3 are "up")
 	// note, that these should be units of '1'
-	ALfloat ListenerOri[] = {0.0f, 0.0f, -1.0f,  0.0f, 1.0f, 0.0f};
+	constexpr ALfloat ListenerOri[]{0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f};
 
 	alutInitWithoutContext(nullptr, nullptr);
 	if (!CheckALUTError(__func__))
@@ -71,8 +71,8 @@ bool vw_InitAudio()
 	alcGetError(Device);
 
 	// set listener properties
-	alListenerfv(AL_POSITION,    ListenerPos);
-	alListenerfv(AL_VELOCITY,    ListenerVel);
+	alListenerfv(AL_POSITION, ListenerPos);
+	alListenerfv(AL_VELOCITY, ListenerVel);
 	alListenerfv(AL_ORIENTATION, ListenerOri);
 	alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 
@@ -141,7 +141,7 @@ void vw_ShutdownAudio()
 /*
  * Setup listener in 3D space.
  */
-void vw_Listener(float ListenerPos[3], float ListenerVel[3], float ListenerOri[6])
+void vw_Listener(float (&ListenerPos)[3], float (&ListenerVel)[3], float (&ListenerOri)[6])
 {
 	alListenerfv(AL_POSITION, ListenerPos);
 	alListenerfv(AL_VELOCITY, ListenerVel);

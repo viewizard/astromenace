@@ -38,7 +38,7 @@ struct sEnumHash {
 };
 
 // no point to calculate attenuation for all scene, limit it by 10
-constexpr float AttenuationLimit = 10.0f;
+constexpr float AttenuationLimit{10.0f};
 // all lights, indexed by light's type
 std::unordered_multimap<eLightType, sLight, sEnumHash> LightsMap;
 
@@ -53,7 +53,7 @@ std::unordered_multimap<eLightType, sLight, sEnumHash> LightsMap;
 int vw_CalculateAllPointLightsAttenuation(const sVECTOR3D &Location, float Radius2,
 					  std::multimap<float, sLight*> *AffectedLightsMap)
 {
-	int AffectedLightsCount = 0;
+	int AffectedLightsCount{0};
 
 	auto range = LightsMap.equal_range(eLightType::Point);
 	for (; range.first != range.second; ++range.first) {

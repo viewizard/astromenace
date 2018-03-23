@@ -29,7 +29,7 @@
 /*
  * Setup matrix identity.
  */
-void vw_Matrix44Identity(float Matrix44[16])
+void vw_Matrix44Identity(float (&Matrix44)[16])
 {
 	Matrix44[0 ] = 1.0f;
 	Matrix44[1 ] = 0.0f;
@@ -55,7 +55,7 @@ void vw_Matrix44Identity(float Matrix44[16])
 /*
  * Matrix multiplication.
  */
-void vw_Matrix44Mult(float DstMatrix44[16], const float SrcMatrix44[16])
+void vw_Matrix44Mult(float (&DstMatrix44)[16], const float (&SrcMatrix44)[16])
 {
 	float tmp[16]{DstMatrix44[0 ], DstMatrix44[1 ], DstMatrix44[2 ], DstMatrix44[3 ],
 		      DstMatrix44[4 ], DstMatrix44[5 ], DstMatrix44[6 ], DstMatrix44[7 ],
@@ -102,7 +102,7 @@ void vw_Matrix44Mult(float DstMatrix44[16], const float SrcMatrix44[16])
 /*
  * Calculate translation matrix by new location point.
  */
-void vw_Matrix44Translate(float Matrix44[16], const sVECTOR3D &Location)
+void vw_Matrix44Translate(float (&Matrix44)[16], const sVECTOR3D &Location)
 {
 	Matrix44[12] += Location.x;
 	Matrix44[13] += Location.y;
@@ -112,7 +112,7 @@ void vw_Matrix44Translate(float Matrix44[16], const sVECTOR3D &Location)
 /*
  * Create rotation matrix.
  */
-void vw_Matrix44CreateRotate(float Matrix44[16], const sVECTOR3D &Angle)
+void vw_Matrix44CreateRotate(float (&Matrix44)[16], const sVECTOR3D &Angle)
 {
 	constexpr float DegToRadFactor = 0.0174532925f; // conversion factor to convert degrees to radians
 
@@ -179,7 +179,7 @@ void vw_Matrix44CreateRotate(float Matrix44[16], const sVECTOR3D &Angle)
 /*
  * Create inverted rotation matrix.
  */
-void vw_Matrix44InverseRotate(float Matrix44[16])
+void vw_Matrix44InverseRotate(float (&Matrix44)[16])
 {
 	float tmp[16]{Matrix44[0 ], Matrix44[1 ], Matrix44[2 ], Matrix44[3 ],
 		      Matrix44[4 ], Matrix44[5 ], Matrix44[6 ], Matrix44[7 ],
@@ -207,7 +207,7 @@ void vw_Matrix44InverseRotate(float Matrix44[16])
 /*
  * Calculate point position by transformation matrix.
  */
-void vw_Matrix44CalcPoint(sVECTOR3D &Point, const float Matrix44[16])
+void vw_Matrix44CalcPoint(sVECTOR3D &Point, const float (&Matrix44)[16])
 {
 	Point(Matrix44[0] * Point.x + Matrix44[4] * Point.y + Matrix44[8 ] * Point.z + Matrix44[12],
 	      Matrix44[1] * Point.x + Matrix44[5] * Point.y + Matrix44[9 ] * Point.z + Matrix44[13],

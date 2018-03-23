@@ -109,8 +109,8 @@ bool vw_PlayMusic(const std::string &Name, float _LocalVolume, float _GlobalVolu
 	MusicMap[Name].LastTick = SDL_GetTicks();
 
 	// we don't use position and velocity for music
-	ALfloat SourcePos[] = {0.0f, 0.0f, 0.0f};
-	ALfloat SourceVel[] = {0.0f, 0.0f, 0.0f};
+	constexpr ALfloat SourcePos[]{0.0f, 0.0f, 0.0f};
+	constexpr ALfloat SourceVel[]{0.0f, 0.0f, 0.0f};
 
 	alSourcef(MusicMap[Name].Source, AL_PITCH, 1.0);
 	alSourcef(MusicMap[Name].Source, AL_GAIN, _GlobalVolume * _LocalVolume);

@@ -128,9 +128,9 @@ unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _Gl
 	SoundsMap[tmpSoundID].GlobalVolume = _GlobalVolume;
 
 	// position of the source sound
-	ALfloat SourcePos[] = {x, y, z};
+	ALfloat SourcePos[]{x, y, z};
 	// velocity of the source sound
-	ALfloat SourceVel[] = {0.0f, 0.0f, 0.0f};
+	constexpr ALfloat SourceVel[]{0.0f, 0.0f, 0.0f};
 
 	// bind the buffer with the source
 	alGenSources(1, &SoundsMap[tmpSoundID].Source);
