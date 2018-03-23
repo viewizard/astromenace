@@ -34,8 +34,6 @@
 
 // TODO (?) move to std::forward_list for particle systems management
 
-// TODO revise work with GLSL
-
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../camera/camera.h"
@@ -53,14 +51,21 @@ std::unique_ptr<float []> DrawBuffer{};
 unsigned int DrawBufferCurrentPosition{0};
 unsigned int DrawBufferSize{0};
 
+// Particle system's quality (for all particle systems).
+float ParticleSystemQuality{1.0f};
+
+// Particle system's GLSL use switch (for all particle systems).
+bool ParticleSystemUseGLSL{false};
+
+// Particle system's shader (for all particle systems).
+sGLSL *ParticleSystemGLSL{nullptr};
+
+// Uniform locations in particle system's shader (for all particle systems).
+int UniformLocationParticleTexture{0};
+int UniformLocationCameraPoint{0};
+
 cParticleSystem *StartParticleSystem{nullptr};
 cParticleSystem *EndParticleSystem{nullptr};
-
-sGLSL *ParticleSystemGLSL{nullptr};
-int ParticleSystemUniformLocations[10];
-
-bool ParticleSystemUseGLSL{false};
-float ParticleSystemQuality{1.0f};
 
 } // unnamed namespace
 
@@ -845,8 +850,8 @@ void vw_InitParticleSystems(bool UseGLSL, float Quality)
 	// при первом присоединении устанавливаем шейдер
 	if (ParticleSystemUseGLSL) {
 		ParticleSystemGLSL = vw_FindShaderByName("ParticleSystem");
-		ParticleSystemUniformLocations[0] = vw_GetUniformLocation(ParticleSystemGLSL, "ParticleTexture");
-		ParticleSystemUniformLocations[1] = vw_GetUniformLocation(ParticleSystemGLSL, "CameraPoint");
+		UniformLocationParticleTexture = vw_GetUniformLocation(ParticleSystemGLSL, "ParticleTexture");
+		UniformLocationCameraPoint = vw_GetUniformLocation(ParticleSystemGLSL, "CameraPoint");
 	}
 }
 
@@ -936,8 +941,8 @@ void vw_DrawAllParticleSystems()
 		vw_GetCameraLocation(&CurrentCameraLocation);
 
 		vw_UseShaderProgram(ParticleSystemGLSL);
-		vw_Uniform1i(ParticleSystemGLSL, ParticleSystemUniformLocations[0], 0);
-		vw_Uniform3f(ParticleSystemGLSL, ParticleSystemUniformLocations[1],
+		vw_Uniform1i(ParticleSystemGLSL, UniformLocationParticleTexture, 0);
+		vw_Uniform3f(ParticleSystemGLSL, UniformLocationCameraPoint,
 			     CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z);
 	}
 	// выключаем изменение буфера глубины
@@ -982,8 +987,8 @@ void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
 		vw_GetCameraLocation(&CurrentCameraLocation);
 
 		vw_UseShaderProgram(ParticleSystemGLSL);
-		vw_Uniform1i(ParticleSystemGLSL, ParticleSystemUniformLocations[0], 0);
-		vw_Uniform3f(ParticleSystemGLSL, ParticleSystemUniformLocations[1],
+		vw_Uniform1i(ParticleSystemGLSL, UniformLocationParticleTexture, 0);
+		vw_Uniform3f(ParticleSystemGLSL, UniformLocationCameraPoint,
 			     CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z);
 	}
 	// выключаем изменение буфера глубины

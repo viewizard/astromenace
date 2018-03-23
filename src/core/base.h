@@ -55,8 +55,7 @@ struct sRGBCOLOR {
 	float b;
 };
 
-// STL
-// only includes that really should being used in different parts of code
+// STL (only includes what's really used)
 #include <unordered_map>
 #include <unordered_set>
 #include <forward_list>
