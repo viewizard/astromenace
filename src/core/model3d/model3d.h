@@ -86,7 +86,7 @@ public:
 	virtual ~cModel3D(void);
 
 	// имя объекта (путь к файлу)
-	char *Name{nullptr};
+	std::string Name{};
 
 	// лист объектов, из которых состоит модель
 	sObjectBlock *DrawObjectList{nullptr};
@@ -95,8 +95,8 @@ public:
 	unsigned int GlobalIndexCount{0};	// фактическое кол-во индексов в буфере
 
 	// читаем-пишем форматы 3д моделей
-	bool ReadVW3D(const char *FileName);
-	bool WriteVW3D(const char *FileName);
+	bool ReadVW3D(const std::string &FileName);
+	bool WriteVW3D(const std::string &FileName);
 
 	// пересоздаем вертексный буфер, добавляем тангент и бинормаль в 2 и 3 текстурные координаты
 	void CreateTangentAndBinormal();
@@ -122,7 +122,7 @@ public:
 
 // Предварительная загрузка геометрии модели, если нужно создания доп. буфера с треугольниками не более TriangleSizeLimit
 // если не нужно, передаем отрицательное значение
-cModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal);
+cModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal);
 // Удаляем все Model3D в списке
 void vw_ReleaseAllModel3D();
 

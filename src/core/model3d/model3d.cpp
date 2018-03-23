@@ -42,16 +42,16 @@ cModel3D *EndModel3D = nullptr;
 //-----------------------------------------------------------------------------
 // Нахождение геометрии, или ее загрузка
 //-----------------------------------------------------------------------------
-cModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
+cModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
-	if (!FileName)
+	if (FileName.empty())
 		return nullptr;
 
 	// сначала пытаемся найти уже сущ.
 	cModel3D *tmp = StartModel3D;
 	while (tmp) {
 		cModel3D *tmp2 = tmp->Next;
-		if(!strcmp(tmp->Name, FileName))
+		if (tmp->Name == FileName)
 			return tmp;
 		tmp = tmp2;
 	}
@@ -59,23 +59,15 @@ cModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool Nee
 	// если ничего нет, значит нужно загрузить
 	cModel3D * Model = new cModel3D;
 
-	// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
-	// TODO change to vw_CheckFileExtension() usage
-	const char *file_ext = strrchr(FileName, '.');
-	if (file_ext) {
-		if (!strcasecmp(".vw3d", file_ext)) {
-			if (!Model->ReadVW3D(FileName)) {
-				std::cout << "Can't load file ... " << FileName << "\n";
-				delete Model;
-				return nullptr;
-			}
-		} else {
-			std::cout << "Format not supported ... " << FileName << "\n";
+	// check extension
+	if (vw_CheckFileExtension(FileName, ".vw3d")) {
+		if (!Model->ReadVW3D(FileName)) {
+			std::cout << "Can't load file ... " << FileName << "\n";
 			delete Model;
 			return nullptr;
 		}
 	} else {
-		std::cout << "Format not supported ... " << FileName << "\n";
+		std::cerr << __func__ << "(): " << "Format not supported " << FileName << "\n";
 		delete Model;
 		return nullptr;
 	}
@@ -200,9 +192,6 @@ cModel3D::cModel3D(void)
 //-----------------------------------------------------------------------------
 cModel3D::~cModel3D(void)
 {
-	if (Name)
-		delete [] Name;
-
 	if (DrawObjectList) {
 		for (int i = 0; i < DrawObjectCount; i++) {
 			// удаляем только если это не ссылка на вертекс буфер блока
@@ -713,18 +702,23 @@ void cModel3D::CreateTangentAndBinormal()
 //-----------------------------------------------------------------------------
 // загрузка "родного" формата
 //-----------------------------------------------------------------------------
-bool cModel3D::ReadVW3D(const char *FileName)
+bool cModel3D::ReadVW3D(const std::string &FileName)
 {
+	if (FileName.empty())
+		return false;
+
 	std::unique_ptr<sFILE> file = vw_fopen(FileName);
 	if (!file)
 		return false;
 
-	size_t SizeB = strlen(FileName) + 1;
-	Name = new char[SizeB];
-	strcpy(Name, FileName);
+	Name = FileName;
 
-	// "пропускаем" заголовок "VW3D"
-	file->fread(&DrawObjectCount, 4, 1);
+	// check "VW3D" sign
+	char Sign[4];
+	file->fread(&Sign, 4, 1);
+	// Sign don't contain null-terminated string, strncmp() should be used
+	if (strncmp(Sign, "VW3D", 4) != 0)
+		return false;
 
 	// читаем, сколько объектов
 	file->fread(&DrawObjectCount, sizeof(DrawObjectCount), 1);
@@ -789,7 +783,7 @@ bool cModel3D::ReadVW3D(const char *FileName)
 //-----------------------------------------------------------------------------
 // запись "родного" формата на диск
 //-----------------------------------------------------------------------------
-bool cModel3D::WriteVW3D(const char *FileName)
+bool cModel3D::WriteVW3D(const std::string &FileName)
 {
 	// небольшие проверки
 	if (!GlobalVertexBuffer || !GlobalIndexBuffer || !DrawObjectList) {
@@ -798,7 +792,7 @@ bool cModel3D::WriteVW3D(const char *FileName)
 	}
 
 	SDL_RWops *FileVW3D;
-	FileVW3D = SDL_RWFromFile(FileName, "wb");
+	FileVW3D = SDL_RWFromFile(FileName.c_str(), "wb");
 	// если не можем создать файл на запись - уходим
 	if (!FileVW3D) {
 		std::cerr << __func__ << "(): " << "Can't create " << FileName << " file on disk.\n";
@@ -806,8 +800,8 @@ bool cModel3D::WriteVW3D(const char *FileName)
 	}
 
 	// маркер файла 4 байта
-	char tmp1[5] = "VW3D";
-	SDL_RWwrite(FileVW3D, tmp1, 4, 1);
+	constexpr char Sign[4]{'V','W','3','D'};
+	SDL_RWwrite(FileVW3D, Sign, 4, 1);
 
 	// общее кол-во объектов в моделе - 4 байта (int)
 	SDL_RWwrite(FileVW3D, &DrawObjectCount, sizeof(DrawObjectCount), 1);
