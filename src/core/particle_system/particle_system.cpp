@@ -55,14 +55,75 @@ extern bool ParticleSystemUseGLSL;
 extern float ParticleSystemQuality;
 
 
+//-----------------------------------------------------------------------------
+//	обновление информации частицы
+//-----------------------------------------------------------------------------
+bool cParticle::Update(float TimeDelta, const sVECTOR3D &ParentLocation,
+		       bool Magnet, float MagnetFactor)
+{
+	// Если частица уже мертва, ее нужно отключить - передаем в систему эти данные
+	if (Age + TimeDelta >= Lifetime) {
+		Age = -1.0f;
+		return false;
+	} else {
+		// увеличиваем возраст частицы
+		Age += TimeDelta;
+
+		// перемещаем частицу на нужное значение
+		Location += Velocity ^ TimeDelta;
+
+		if (NeedStop)
+			Velocity -= Velocity ^ TimeDelta;
+
+		// если есть притяжение системы, просчитываем воздействие
+		if (Magnet) {
+			// рассчитывае вектор взаимодействия между частицей и точкой притяжения
+			sVECTOR3D MagnetDir = ParentLocation;
+			MagnetDir -= Location;
+
+			// если нужно использовать притяжения, считаем перемещение
+			if (NeedStop)
+				MagnetFactor -= MagnetFactor * TimeDelta;
+
+			MagnetDir.Normalize();
+			Velocity += MagnetDir ^ (MagnetFactor * TimeDelta);
+		}
+
+		// просчитываем текущий цвет частицы
+		Color.r += ColorDelta.r * TimeDelta;
+		Color.g += ColorDelta.g * TimeDelta;
+		Color.b += ColorDelta.b * TimeDelta;
+
+		// просчитываем текущую прозрачность
+		if (!AlphaShowHide)
+			Alpha += AlphaDelta * TimeDelta;
+		else {
+			if (Show) {
+				Alpha += AlphaDelta * TimeDelta;
+				if (Alpha >= 1.0f) {
+					Alpha = 1.0f;
+					Show = false;
+				}
+			} else
+				Alpha -= AlphaDelta * TimeDelta;
+
+			vw_Clamp( Alpha, 0.0f, 1.0f );
+		}
+
+		// текущий размер частицы
+		Size += SizeDelta * TimeDelta;
+	}
+
+	// если пришли сюда - значит все хорошо и частица работает
+	return true;
+}
+
 cParticleSystem::cParticleSystem()
 {
-	// начальные установки для мартиц поворотов
-	vw_Matrix33Identity(CurrentRotationMat);
-	vw_Matrix33Identity(OldInvRotationMat);
 	// настройка массива
 	vw_AttachParticleSystem(this);
 }
+
 cParticleSystem::~cParticleSystem()
 {
 	if (Light)

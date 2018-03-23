@@ -30,11 +30,62 @@
 #define PARTICLESYSTEM_H
 
 #include "../base.h"
-#include "particle.h"
 
 struct sVECTOR3D;
 struct sLight;
 
+struct sCOLORVALUE3D {
+	float r;
+	float g;
+	float b;
+	float a;
+};
+
+class cParticle {
+	friend class cParticleSystem;
+
+private:
+	// обновление информации в частице
+	bool Update(float TimeDelta, const sVECTOR3D &ParentLocation = sVECTOR3D{0.0f, 0.0f, 0.0f},
+		    bool Magnet = false, float MagnetFactor = 25.0f);
+
+	// texture number
+	int TextureNum{0};
+
+	// текущее место расположения частицы
+	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
+	// текущая скорость частицы
+	sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};
+
+	// если нужно замедлять и остановить
+	bool NeedStop{false};
+
+	// текущий цвет частицы
+	sCOLORVALUE3D Color{1.0f, 0.0f, 0.0f, 0.5f};
+	// значение приращение цвета
+	sCOLORVALUE3D ColorDelta{0.0f, 0.0f, 0.0f, 0.0f};
+
+	// время жизни частицы в секундах
+	float Age{0.0f};
+
+	// оставщееся время жизни частицы
+	float Lifetime{0.0f};
+
+	// размер частицы
+	float Size{1.0f};
+	// значение изменения размера
+	float SizeDelta{0.0f};
+
+	// прозрачность
+	float Alpha{1.0f};
+	// изменение прозрачности
+	float AlphaDelta{0.0f};
+
+	// сначало ув. альфу, потом уменьшаем
+	bool AlphaShowHide{false};
+	// какой цикл - затухаем, или только появляемся
+	bool Show{true};
+};
 
 class cParticleSystem
 {
@@ -74,9 +125,9 @@ public:
 	void ChangeSpeed(const sVECTOR3D &Vel);
 
 	// текущее направление системы (используется для создания частиц+некоторые вариации)
-	sVECTOR3D Direction{0, 0, 0};
+	sVECTOR3D Direction{0.0f, 0.0f, 0.0f};
 	// угол поворота системы
-	sVECTOR3D Angle{0, 0, 0};
+	sVECTOR3D Angle{0.0f, 0.0f, 0.0f};
 
 	// кол-во создаваемых частиц в секунду
 	int ParticlesPerSec{100};
@@ -199,25 +250,30 @@ private:
 	// we could use std::list with size(), but we don't need doubly-linked list here
 	unsigned int ParticlesCountInList{0};
 
-	// матрицы поворота, для оптимизации просчетов
-	float CurrentRotationMat[9];
-	float OldInvRotationMat[9];
+	// current rotation matrix for fast calculations
+	float CurrentRotationMat[9]{1.0f, 0.0f, 0.0f,
+				    0.0f, 1.0f, 0.0f,
+				    0.0f, 0.0f, 1.0f};
+	// old inversed rotation matrix for fast calculations
+	float OldInvRotationMat[9]{1.0f, 0.0f, 0.0f,
+				   0.0f, 1.0f, 0.0f,
+				   0.0f, 0.0f, 1.0f};
 };
 
 
 // Инициализация менеджера частиц
-void	vw_InitParticleSystems(bool UseGLSL, float Quality);
+void vw_InitParticleSystems(bool UseGLSL, float Quality);
 // Включаем в список
-void	vw_AttachParticleSystem(cParticleSystem *NewParticleSystem);
+void vw_AttachParticleSystem(cParticleSystem *NewParticleSystem);
 // Исключаем из списка
-void	vw_DetachParticleSystem(cParticleSystem *OldParticleSystem);
+void vw_DetachParticleSystem(cParticleSystem *OldParticleSystem);
 // Удаляем все объекты в списке
-void	vw_ReleaseAllParticleSystems();
+void vw_ReleaseAllParticleSystems();
 // Прорисовываем все системы
-void	vw_DrawAllParticleSystems();
-//	Прорисовываем блок ParticleSystems
-void	vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity);
+void vw_DrawAllParticleSystems();
+// Прорисовываем блок ParticleSystems
+void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity);
 // Проверяем все объекты, обновляем данные
-void	vw_UpdateAllParticleSystems(float Time);
+void vw_UpdateAllParticleSystems(float Time);
 
 #endif //PARTICLESYSTEM_H
