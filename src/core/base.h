@@ -49,6 +49,12 @@
 #endif // MAX_PATH
 #endif // unix
 
+struct sRGBCOLOR {
+	float r;
+	float g;
+	float b;
+};
+
 // STL
 // only includes that really should being used in different parts of code
 #include <unordered_map>

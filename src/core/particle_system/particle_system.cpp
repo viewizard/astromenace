@@ -560,7 +560,7 @@ bool cParticleSystem::Update(float Time)
  * not for texture coordinates, but for GLSL program parameters.
  */
 static inline void AddToDrawBuffer(float CoordX, float CoordY, float CoordZ,
-				   const sCOLORVALUE3D &Color, float Alpha,
+				   const sRGBCOLOR &Color, float Alpha,
 				   float TextureU_or_GLSL, float TextureV_or_GLSL)
 {
 	DrawBuffer[DrawBufferCurrentPosition++] = CoordX;

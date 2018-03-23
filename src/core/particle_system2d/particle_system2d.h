@@ -31,12 +31,6 @@
 
 class cParticleSystem2D;
 
-struct sCOLORVALUE2D {
-	float r;
-	float g;
-	float b;
-};
-
 enum class eParticle2DCreationType {
 	Point,
 	Quad,
@@ -53,8 +47,8 @@ private:
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 	sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};
 
-	sCOLORVALUE2D Color{1.0f, 0.0f, 0.0f};
-	sCOLORVALUE2D ColorDelta{0.0f, 0.0f, 0.0f};
+	sRGBCOLOR Color{1.0f, 0.0f, 0.0f};
+	sRGBCOLOR ColorDelta{0.0f, 0.0f, 0.0f};
 
 	float Age{0.0f};
 	float Lifetime{0.0f};
@@ -93,9 +87,9 @@ public:
 	float AlphaVar{0.0f};
 	float AlphaEnd{1.0f};
 
-	sCOLORVALUE2D ColorStart{1.0f, 1.0f, 1.0f};
-	sCOLORVALUE2D ColorVar{0.0f, 0.0f, 0.0f};
-	sCOLORVALUE2D ColorEnd{1.0f, 1.0f, 1.0f};
+	sRGBCOLOR ColorStart{1.0f, 1.0f, 1.0f};
+	sRGBCOLOR ColorVar{0.0f, 0.0f, 0.0f};
+	sRGBCOLOR ColorEnd{1.0f, 1.0f, 1.0f};
 
 	float Speed{1.0f};
 	float SpeedVar{1.0f};

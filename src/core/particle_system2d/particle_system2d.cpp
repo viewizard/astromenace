@@ -336,7 +336,7 @@ void cParticleSystem2D::SetupNewParticleDirection(cParticle2D &NewParticle)
  * Add data to local draw buffer.
  */
 static inline void AddToDrawBuffer(float CoordX, float CoordY,
-				   const sCOLORVALUE2D &Color, float Alpha,
+				   const sRGBCOLOR &Color, float Alpha,
 				   float TextureU, float TextureV)
 {
 	DrawBuffer[DrawBufferCurrentPosition++] = CoordX;
