@@ -49,10 +49,16 @@ std::unique_ptr<float []> DrawBuffer{};
 unsigned int DrawBufferCurrentPosition{0};
 unsigned int DrawBufferSize{0};
 
-} // unnamed namespace
+cParticleSystem *StartParticleSystem{nullptr};
+cParticleSystem *EndParticleSystem{nullptr};
 
-extern bool ParticleSystemUseGLSL;
-extern float ParticleSystemQuality;
+sGLSL *ParticleSystemGLSL{nullptr};
+int ParticleSystemUniformLocations[10];
+
+bool ParticleSystemUseGLSL{false};
+float ParticleSystemQuality{1.0f};
+
+} // unnamed namespace
 
 
 //-----------------------------------------------------------------------------
@@ -823,5 +829,191 @@ void cParticleSystem::ChangeSpeed(const sVECTOR3D &Vel)
 	for (auto &tmpParticle : ParticlesList) {
 		// меняем каждой частице
 		tmpParticle.Velocity += Vel;
+	}
+}
+
+//-----------------------------------------------------------------------------
+//	Установка общих состояний
+//-----------------------------------------------------------------------------
+void vw_InitParticleSystems(bool UseGLSL, float Quality)
+{
+	ParticleSystemUseGLSL = UseGLSL;
+	ParticleSystemQuality = Quality;
+
+	// при первом присоединении устанавливаем шейдер
+	if (ParticleSystemUseGLSL) {
+		ParticleSystemGLSL = vw_FindShaderByName("ParticleSystem");
+		ParticleSystemUniformLocations[0] = vw_GetUniformLocation(ParticleSystemGLSL, "ParticleTexture");
+		ParticleSystemUniformLocations[1] = vw_GetUniformLocation(ParticleSystemGLSL, "CameraPoint");
+	}
+}
+
+//-----------------------------------------------------------------------------
+//	Присоеденяем ParticleSystem к списку
+//-----------------------------------------------------------------------------
+void vw_AttachParticleSystem(cParticleSystem *NewParticleSystem)
+{
+	if (NewParticleSystem == nullptr)
+		return;
+
+	// первый в списке...
+	if (EndParticleSystem == nullptr) {
+		NewParticleSystem->Prev = nullptr;
+		NewParticleSystem->Next = nullptr;
+		StartParticleSystem = NewParticleSystem;
+		EndParticleSystem = NewParticleSystem;
+	} else { // продолжаем заполнение...
+		NewParticleSystem->Prev = EndParticleSystem;
+		NewParticleSystem->Next = nullptr;
+		EndParticleSystem->Next = NewParticleSystem;
+		EndParticleSystem = NewParticleSystem;
+	}
+}
+
+//-----------------------------------------------------------------------------
+//	Удаляем ParticleSystem из списка
+//-----------------------------------------------------------------------------
+void vw_DetachParticleSystem(cParticleSystem *OldParticleSystem)
+{
+	if (OldParticleSystem == nullptr)
+		return;
+
+	// переустанавливаем указатели...
+	if (StartParticleSystem == OldParticleSystem)
+		StartParticleSystem = OldParticleSystem->Next;
+	if (EndParticleSystem == OldParticleSystem)
+		EndParticleSystem = OldParticleSystem->Prev;
+
+	if (OldParticleSystem->Next != nullptr)
+		OldParticleSystem->Next->Prev = OldParticleSystem->Prev;
+	else if (OldParticleSystem->Prev != nullptr)
+		OldParticleSystem->Prev->Next = nullptr;
+
+	if (OldParticleSystem->Prev != nullptr)
+		OldParticleSystem->Prev->Next = OldParticleSystem->Next;
+	else if (OldParticleSystem->Next != nullptr)
+		OldParticleSystem->Next->Prev = nullptr;
+}
+
+//-----------------------------------------------------------------------------
+//	Удаляем все ParticleSystem в списке
+//-----------------------------------------------------------------------------
+void vw_ReleaseAllParticleSystems()
+{
+	// для всех ParticleSystem
+	cParticleSystem *tmp = StartParticleSystem;
+	while (tmp) {
+		cParticleSystem *tmp2 = tmp->Next;
+		// удаляем и очищаем всю память, в релизе стоит DetachShip
+		delete tmp;
+		tmp = tmp2;
+	}
+
+	StartParticleSystem = nullptr;
+	EndParticleSystem = nullptr;
+
+	ParticleSystemUseGLSL = false;
+	ParticleSystemQuality = 1.0f;
+	ParticleSystemGLSL = nullptr;
+}
+
+//-----------------------------------------------------------------------------
+//	Прорисовываем все ParticleSystems
+//-----------------------------------------------------------------------------
+void vw_DrawAllParticleSystems()
+{
+	// текущая текстура
+	sTexture *CurrentTexture{nullptr};
+
+	// делаем все предустановки для прорисовки частиц, чтобы не менять каждый раз
+	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+	// включаем шейдер, если есть возможность
+	if (ParticleSystemUseGLSL && ParticleSystemGLSL) {
+		// получаем текущее положение камеры
+		sVECTOR3D CurrentCameraLocation;
+		vw_GetCameraLocation(&CurrentCameraLocation);
+
+		vw_UseShaderProgram(ParticleSystemGLSL);
+		vw_Uniform1i(ParticleSystemGLSL, ParticleSystemUniformLocations[0], 0);
+		vw_Uniform3f(ParticleSystemGLSL, ParticleSystemUniformLocations[1],
+			     CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z);
+	}
+	// выключаем изменение буфера глубины
+	glDepthMask(GL_FALSE);
+
+	// для всех
+	cParticleSystem *tmp = StartParticleSystem;
+	while (tmp) {
+		cParticleSystem *tmp2 = tmp->Next;
+		tmp->Draw(&CurrentTexture);
+		tmp = tmp2;
+	}
+
+	// включаем запись в буфер глубины
+	glDepthMask(GL_TRUE);
+	// выключаем шейдер
+	if (ParticleSystemUseGLSL)
+		vw_StopShaderProgram();
+
+	vw_SetTextureBlend(false, 0, 0);
+	// анбиндим текстуру
+	vw_BindTexture(0, 0);
+}
+
+//-----------------------------------------------------------------------------
+//	Прорисовываем блок ParticleSystems
+//-----------------------------------------------------------------------------
+void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
+{
+	if (!DrawParticleSystem)
+		return;
+
+	// текущая текстура
+	sTexture *CurrentTexture{nullptr};
+
+	// делаем все предустановки для прорисовки частиц, чтобы не менять каждый раз
+	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+	// включаем шейдер, если есть возможность
+	if (ParticleSystemUseGLSL && ParticleSystemGLSL) {
+		// получаем текущее положение камеры
+		sVECTOR3D CurrentCameraLocation;
+		vw_GetCameraLocation(&CurrentCameraLocation);
+
+		vw_UseShaderProgram(ParticleSystemGLSL);
+		vw_Uniform1i(ParticleSystemGLSL, ParticleSystemUniformLocations[0], 0);
+		vw_Uniform3f(ParticleSystemGLSL, ParticleSystemUniformLocations[1],
+			     CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z);
+	}
+	// выключаем изменение буфера глубины
+	glDepthMask(GL_FALSE);
+
+	for (int i = 0; i < Quantity; i++) {
+		if (DrawParticleSystem[i])
+			DrawParticleSystem[i]->Draw(&CurrentTexture);
+	}
+
+	// включаем запись в буфер глубины
+	glDepthMask(GL_TRUE);
+	// выключаем шейдер
+	if (ParticleSystemUseGLSL)
+		vw_StopShaderProgram();
+
+	vw_SetTextureBlend(false, 0, 0);
+	// анбиндим текстуру
+	vw_BindTexture(0, 0);
+}
+
+//-----------------------------------------------------------------------------
+//	Апдейтим все ParticleSystems
+//-----------------------------------------------------------------------------
+void vw_UpdateAllParticleSystems(float Time)
+{
+	// для всех
+	cParticleSystem *tmp = StartParticleSystem;
+	while (tmp) {
+		cParticleSystem *tmp2 = tmp->Next;
+		if (!tmp->Update(Time))
+			delete tmp;
+		tmp = tmp2;
 	}
 }
