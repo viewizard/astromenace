@@ -38,7 +38,6 @@ struct sCOLORVALUE3D {
 	float r;
 	float g;
 	float b;
-	float a;
 };
 
 class cParticle {
@@ -58,9 +57,9 @@ private:
 	bool NeedStop{false};
 
 	// текущий цвет частицы
-	sCOLORVALUE3D Color{1.0f, 0.0f, 0.0f, 0.5f};
+	sCOLORVALUE3D Color{1.0f, 0.0f, 0.0f};
 	// значение приращение цвета
-	sCOLORVALUE3D ColorDelta{0.0f, 0.0f, 0.0f, 0.0f};
+	sCOLORVALUE3D ColorDelta{0.0f, 0.0f, 0.0f};
 
 	// время жизни частицы в секундах
 	float Age{0.0f};
@@ -147,9 +146,9 @@ public:
 
 	// Цвет частиц при старте и завершении
 	// линейно интерполируется
-	sCOLORVALUE3D ColorStart{1.0f, 1.0f, 1.0f, 1.0f};
-	sCOLORVALUE3D ColorVar{0.0f, 0.0f, 0.0f, 0.0f};
-	sCOLORVALUE3D ColorEnd{1.0f, 1.0f, 1.0f, 1.0f};
+	sCOLORVALUE3D ColorStart{1.0f, 1.0f, 1.0f};
+	sCOLORVALUE3D ColorVar{0.0f, 0.0f, 0.0f};
+	sCOLORVALUE3D ColorEnd{1.0f, 1.0f, 1.0f};
 
 	// Скалярная скорость, с вектором направления получаем вектор движения
 	float Speed{1.0f};

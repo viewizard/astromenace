@@ -32,6 +32,10 @@
 //                               ^  ^  ^ second triangle indexes
 //                      ^  ^  ^ first triangle indexes
 
+// TODO (?) move to std::forward_list for particle systems management
+
+// TODO revise work with GLSL
+
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../camera/camera.h"
@@ -208,8 +212,6 @@ bool cParticleSystem::Update(float Time)
 			NewParticle.Color.r = ColorStart.r + vw_Randf0 * ColorVar.r;
 			NewParticle.Color.g = ColorStart.g + vw_Randf0 * ColorVar.g;
 			NewParticle.Color.b = ColorStart.b + vw_Randf0 * ColorVar.b;
-			// мы не используем альфа цвет тут
-			NewParticle.Color.a = 1.0f;
 
 			// проверяем, чтобы не было переполнения цвета
 			vw_Clamp(NewParticle.Color.r, 0.0f, 1.0f);
@@ -904,7 +906,7 @@ void vw_ReleaseAllParticleSystems()
 	cParticleSystem *tmp = StartParticleSystem;
 	while (tmp) {
 		cParticleSystem *tmp2 = tmp->Next;
-		// удаляем и очищаем всю память, в релизе стоит DetachShip
+		// удаляем и очищаем всю память, в деструкторе стоит DetachShip
 		delete tmp;
 		tmp = tmp2;
 	}
