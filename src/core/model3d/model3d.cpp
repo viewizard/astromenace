@@ -24,10 +24,139 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "../graphics/graphics.h"
 #include "../math/math.h"
+#include "../vfs/vfs.h"
 #include "model3d.h"
 
+namespace {
+
+cModel3D *StartModel3D = nullptr;
+cModel3D *EndModel3D = nullptr;
+
+} // unnamed namespace
+
+
+//-----------------------------------------------------------------------------
+// Нахождение геометрии, или ее загрузка
+//-----------------------------------------------------------------------------
+cModel3D *vw_LoadModel3D(const char *FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
+{
+	if (!FileName)
+		return nullptr;
+
+	// сначала пытаемся найти уже сущ.
+	cModel3D *tmp = StartModel3D;
+	while (tmp) {
+		cModel3D *tmp2 = tmp->Next;
+		if(!strcmp(tmp->Name, FileName))
+			return tmp;
+		tmp = tmp2;
+	}
+
+	// если ничего нет, значит нужно загрузить
+	cModel3D * Model = new cModel3D;
+
+	// проверяем, вообще есть расширение или нет, плюс, получаем указатель на последнюю точку
+	// TODO change to vw_CheckFileExtension() usage
+	const char *file_ext = strrchr(FileName, '.');
+	if (file_ext) {
+		if (!strcasecmp(".vw3d", file_ext)) {
+			if (!Model->ReadVW3D(FileName)) {
+				std::cout << "Can't load file ... " << FileName << "\n";
+				delete Model;
+				return nullptr;
+			}
+		} else {
+			std::cout << "Format not supported ... " << FileName << "\n";
+			delete Model;
+			return nullptr;
+		}
+	} else {
+		std::cout << "Format not supported ... " << FileName << "\n";
+		delete Model;
+		return nullptr;
+	}
+
+	// пересоздаем буфер вертексов, для работы с нормал меппингом в шейдерах, добавляем тангент и бинормаль
+	if (NeedTangentAndBinormal) Model->CreateTangentAndBinormal();
+	// создаем вертексные и индексные буферы для каждого блока
+	Model->CreateObjectsBuffers();
+	// создаем все поддерживаемые буферы (VAO, VBO, IBO)
+	Model->CreateHardwareBuffers();
+
+	// делаем спец буфер для разрушаемых объектов
+	// (!) используем фиксированную последовательность RI_3f_XYZ | RI_3f_NORMAL | RI_2f_TEX
+	// с которой работают взрывы в игре, не делаем универсальную (нет необходимости)
+	Model->CreateVertexBufferLimitedBySizeTriangles(TriangleSizeLimit);
+
+	std::cout << "Loaded ... " << FileName << "\n";
+
+	return Model;
+}
+
+//-----------------------------------------------------------------------------
+//	Присоеденяем Model3D к списку
+//-----------------------------------------------------------------------------
+static void AttachModel3D(cModel3D *NewModel3D)
+{
+	if (NewModel3D == nullptr)
+		return;
+
+	if (EndModel3D == nullptr) {
+		NewModel3D->Prev = nullptr;
+		NewModel3D->Next = nullptr;
+		StartModel3D = NewModel3D;
+		EndModel3D = NewModel3D;
+	} else {
+		NewModel3D->Prev = EndModel3D;
+		NewModel3D->Next = nullptr;
+		EndModel3D->Next = NewModel3D;
+		EndModel3D = NewModel3D;
+	}
+}
+
+//-----------------------------------------------------------------------------
+//	Удаляем Model3D из списка
+//-----------------------------------------------------------------------------
+static void DetachModel3D(cModel3D *OldModel3D)
+{
+	if (OldModel3D == nullptr)
+		return;
+
+	if (StartModel3D == OldModel3D)
+		StartModel3D = OldModel3D->Next;
+	if (EndModel3D == OldModel3D)
+		EndModel3D = OldModel3D->Prev;
+
+	if (OldModel3D->Next != nullptr)
+		OldModel3D->Next->Prev = OldModel3D->Prev;
+	else if (OldModel3D->Prev != nullptr)
+		OldModel3D->Prev->Next = nullptr;
+
+	if (OldModel3D->Prev != nullptr)
+		OldModel3D->Prev->Next = OldModel3D->Next;
+	else if (OldModel3D->Next != nullptr)
+		OldModel3D->Next->Prev = nullptr;
+}
+
+//-----------------------------------------------------------------------------
+//	Удаляем все Model3D в списке
+//-----------------------------------------------------------------------------
+void vw_ReleaseAllModel3D()
+{
+	cModel3D *tmp = StartModel3D;
+	while (tmp) {
+		cModel3D *tmp2 = tmp->Next;
+		delete tmp;
+		tmp = tmp2;
+	}
+
+	StartModel3D = nullptr;
+	EndModel3D = nullptr;
+}
 
 //-----------------------------------------------------------------------------
 // Деструктор
@@ -63,7 +192,7 @@ sObjectBlock::~sObjectBlock(void)
 //-----------------------------------------------------------------------------
 cModel3D::cModel3D(void)
 {
-	vw_AttachModel3D(this);
+	AttachModel3D(this);
 }
 
 //-----------------------------------------------------------------------------
@@ -119,7 +248,7 @@ cModel3D::~cModel3D(void)
 	}
 
 	DrawObjectCount = 0;
-	vw_DetachModel3D(this);
+	DetachModel3D(this);
 }
 
 //-----------------------------------------------------------------------------
@@ -168,13 +297,13 @@ void cModel3D::CreateHardwareBuffers()
 
 	GlobalVAO = new unsigned int;
 	if (!vw_BuildVAO(GlobalVAO, GlobalIndexCount, DrawObjectList[0].VertexFormat, GlobalVertexBuffer,
-			 DrawObjectList[0].VertexStride*sizeof(float), GlobalVBO, 0, GlobalIndexBuffer, GlobalIBO)) {
+			 DrawObjectList[0].VertexStride * sizeof(float), GlobalVBO, 0, GlobalIndexBuffer, GlobalIBO)) {
 		delete GlobalVAO;
 		GlobalVAO = nullptr;
 	}
 
 	// создаем буферы для каждого объекта
-	for (int i=0; i<DrawObjectCount; i++) {
+	for (int i = 0; i < DrawObjectCount; i++) {
 		// делаем VBO
 		DrawObjectList[i].VBO = new unsigned int;
 		if (!vw_BuildVBO(DrawObjectList[i].VertexCount, DrawObjectList[i].VertexBuffer,
@@ -194,7 +323,7 @@ void cModel3D::CreateHardwareBuffers()
 		// делаем VAO
 		DrawObjectList[i].VAO = new unsigned int;
 		if (!vw_BuildVAO(DrawObjectList[i].VAO, DrawObjectList[i].VertexCount, DrawObjectList[i].VertexFormat,
-				 DrawObjectList[i].VertexBuffer, DrawObjectList[i].VertexStride*sizeof(float),
+				 DrawObjectList[i].VertexBuffer, DrawObjectList[i].VertexStride * sizeof(float),
 				 DrawObjectList[i].VBO, DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer,
 				 DrawObjectList[i].IBO)) {
 			delete DrawObjectList[i].VAO;
@@ -206,77 +335,72 @@ void cModel3D::CreateHardwareBuffers()
 //-----------------------------------------------------------------------------
 // рекурсивно просчитываем кол-во VertexBufferLimitedBySizeTriangles
 //-----------------------------------------------------------------------------
-int RecursiveBufferLimitedBySizeTrianglesCalculate(float Point1[8], float Point2[8], float Point3[8],
-		int Stride, float *VertexBuffer, int *CurrentPosition,
-		float TriangleSizeLimit)
+static int RecursiveBufferLimitedBySizeTrianglesCalculate(float Point1[8], float Point2[8], float Point3[8],
+							  int Stride, float *VertexBuffer, int *CurrentPosition,
+							  float TriangleSizeLimit)
 {
 	// подсчитываем длину сторон, если они меньше чем необходимый минимум - выходим с 1
-	float Dist1 = sqrtf((Point1[0]-Point2[0])*(Point1[0]-Point2[0]) +
-			    (Point1[1]-Point2[1])*(Point1[1]-Point2[1]) +
-			    (Point1[2]-Point2[2])*(Point1[2]-Point2[2]));
-	float Dist2 = sqrtf((Point2[0]-Point3[0])*(Point2[0]-Point3[0]) +
-			    (Point2[1]-Point3[1])*(Point2[1]-Point3[1]) +
-			    (Point2[2]-Point3[2])*(Point2[2]-Point3[2]));
-	float Dist3 = sqrtf((Point3[0]-Point1[0])*(Point3[0]-Point1[0]) +
-			    (Point3[1]-Point1[1])*(Point3[1]-Point1[1]) +
-			    (Point3[2]-Point1[2])*(Point3[2]-Point1[2]));
+	float Dist1 = sqrtf((Point1[0] - Point2[0]) * (Point1[0] - Point2[0]) +
+			    (Point1[1] - Point2[1]) * (Point1[1] - Point2[1]) +
+			    (Point1[2] - Point2[2]) * (Point1[2] - Point2[2]));
+	float Dist2 = sqrtf((Point2[0] - Point3[0]) * (Point2[0] - Point3[0]) +
+			    (Point2[1] - Point3[1]) * (Point2[1] - Point3[1]) +
+			    (Point2[2] - Point3[2]) * (Point2[2] - Point3[2]));
+	float Dist3 = sqrtf((Point3[0] - Point1[0]) * (Point3[0] - Point1[0]) +
+			    (Point3[1] - Point1[1]) * (Point3[1] - Point1[1]) +
+			    (Point3[2] - Point1[2]) * (Point3[2] - Point1[2]));
 
-	if ((Dist1<=TriangleSizeLimit) && (Dist2<=TriangleSizeLimit) && (Dist3<=TriangleSizeLimit)) {
+	if ((Dist1 <= TriangleSizeLimit) && (Dist2 <= TriangleSizeLimit) && (Dist3 <= TriangleSizeLimit)) {
 		// добавляем в новую последовательность треугольник
 		if (VertexBuffer && CurrentPosition) {
-			memcpy(VertexBuffer+(*CurrentPosition), Point1, sizeof(Point1[0])*8);
+			memcpy(VertexBuffer + (*CurrentPosition), Point1, sizeof(Point1[0]) * 8);
 			*CurrentPosition += Stride;
-			memcpy(VertexBuffer+(*CurrentPosition), Point2, sizeof(Point2[0])*8);
+			memcpy(VertexBuffer + (*CurrentPosition), Point2, sizeof(Point2[0]) * 8);
 			*CurrentPosition += Stride;
-			memcpy(VertexBuffer+(*CurrentPosition), Point3, sizeof(Point3[0])*8);
+			memcpy(VertexBuffer + (*CurrentPosition), Point3, sizeof(Point3[0]) * 8);
 			*CurrentPosition += Stride;
 		}
-
 		return 1;
 	}
 
 	// одна из сторон больше, ищем наибольшую, делим ее пополам и идем дальше в рекурсию
-
 	if ((Dist1 > Dist2) && (Dist1 > Dist3)) {
-		float Point_A[8]= {(Point1[0]+Point2[0])/2.0f,
-				   (Point1[1]+Point2[1])/2.0f,
-				   (Point1[2]+Point2[2])/2.0f,
-				   (Point1[3]+Point2[3])/2.0f,
-				   (Point1[4]+Point2[4])/2.0f,
-				   (Point1[5]+Point2[5])/2.0f,
-				   (Point1[6]+Point2[6])/2.0f,
-				   (Point1[7]+Point2[7])/2.0f
-				  };
+		float Point_A[8]= {(Point1[0] + Point2[0]) / 2.0f,
+				   (Point1[1] + Point2[1]) / 2.0f,
+				   (Point1[2] + Point2[2]) / 2.0f,
+				   (Point1[3] + Point2[3]) / 2.0f,
+				   (Point1[4] + Point2[4]) / 2.0f,
+				   (Point1[5] + Point2[5]) / 2.0f,
+				   (Point1[6] + Point2[6]) / 2.0f,
+				   (Point1[7] + Point2[7]) / 2.0f};
 
 		return RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point_A, Point3,
 				Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit) +
 		       RecursiveBufferLimitedBySizeTrianglesCalculate(Point_A, Point2, Point3,
 				       Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
 	} else if ((Dist2 > Dist1) && (Dist2 > Dist3)) {
-		float Point_A[8]= {(Point2[0]+Point3[0])/2.0f,
-				   (Point2[1]+Point3[1])/2.0f,
-				   (Point2[2]+Point3[2])/2.0f,
-				   (Point2[3]+Point3[3])/2.0f,
-				   (Point2[4]+Point3[4])/2.0f,
-				   (Point2[5]+Point3[5])/2.0f,
-				   (Point2[6]+Point3[6])/2.0f,
-				   (Point2[7]+Point3[7])/2.0f
-				  };
+		float Point_A[8]= {(Point2[0] + Point3[0]) / 2.0f,
+				   (Point2[1] + Point3[1]) / 2.0f,
+				   (Point2[2] + Point3[2]) / 2.0f,
+				   (Point2[3] + Point3[3]) / 2.0f,
+				   (Point2[4] + Point3[4]) / 2.0f,
+				   (Point2[5] + Point3[5]) / 2.0f,
+				   (Point2[6] + Point3[6]) / 2.0f,
+				   (Point2[7] + Point3[7]) / 2.0f};
 
 		return RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point2, Point_A,
 				Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit) +
 		       RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point_A, Point3,
 				       Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
 	} else {
-		float Point_A[8]= {(Point3[0]+Point1[0])/2.0f,
-				   (Point3[1]+Point1[1])/2.0f,
-				   (Point3[2]+Point1[2])/2.0f,
-				   (Point3[3]+Point1[3])/2.0f,
-				   (Point3[4]+Point1[4])/2.0f,
-				   (Point3[5]+Point1[5])/2.0f,
-				   (Point3[6]+Point1[6])/2.0f,
-				   (Point3[7]+Point1[7])/2.0f
-				  };
+		float Point_A[8]= {(Point3[0] + Point1[0]) / 2.0f,
+				   (Point3[1] + Point1[1]) / 2.0f,
+				   (Point3[2] + Point1[2]) / 2.0f,
+				   (Point3[3] + Point1[3]) / 2.0f,
+				   (Point3[4] + Point1[4]) / 2.0f,
+				   (Point3[5] + Point1[5]) / 2.0f,
+				   (Point3[6] + Point1[6]) / 2.0f,
+				   (Point3[7] + Point1[7]) / 2.0f};
 
 		return RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point2, Point_A,
 				Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit) +
@@ -318,7 +442,6 @@ void RecursiveBufferLimitedBySizeTrianglesGenerate(float Point1[8], float Point2
 	}
 
 	// одна из сторон больше, ищем наибольшую, делим ее пополам и идем дальше в рекурсию
-
 	if ((Dist1 > Dist2) && (Dist1 > Dist3)) {
 		float Point_A[8]= {(Point1[0] + Point2[0]) / 2.0f,
 				   (Point1[1] + Point2[1]) / 2.0f,
@@ -420,8 +543,8 @@ void cModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 
 			// идем на рекурсивную функцию считать кол-во треугольников
 			DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount +=
-					RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point2, Point3, 0,
-										       nullptr, nullptr, TriangleSizeLimit) * 3;
+				RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point2, Point3, 0,
+									       nullptr, nullptr, TriangleSizeLimit) * 3;
 		}
 	}
 
@@ -533,7 +656,6 @@ void cModel3D::CreateTangentAndBinormal()
 
 		// нормаль получили (нужна будет для проверки зеркалирования), можем идти дальше
 		// делаем просчет тангента и бинормали
-
 		PlaneVector1 = Point1 - Point2;
 		PlaneVector2 = Point3 - Point2;
 
@@ -586,4 +708,138 @@ void cModel3D::CreateTangentAndBinormal()
 		DrawObjectList[i].VertexFormat = New_VertexFormat;
 		DrawObjectList[i].VertexStride = New_VertexStride;
 	}
+}
+
+//-----------------------------------------------------------------------------
+// загрузка "родного" формата
+//-----------------------------------------------------------------------------
+bool cModel3D::ReadVW3D(const char *FileName)
+{
+	std::unique_ptr<sFILE> file = vw_fopen(FileName);
+	if (!file)
+		return false;
+
+	size_t SizeB = strlen(FileName) + 1;
+	Name = new char[SizeB];
+	strcpy(Name, FileName);
+
+	// "пропускаем" заголовок "VW3D"
+	file->fread(&DrawObjectCount, 4, 1);
+
+	// читаем, сколько объектов
+	file->fread(&DrawObjectCount, sizeof(DrawObjectCount), 1);
+
+	DrawObjectList = new sObjectBlock[DrawObjectCount];
+
+	GlobalIndexCount = 0;
+
+	// для каждого объекта
+	for (int i = 0; i < DrawObjectCount; i++) {
+		DrawObjectList[i].RangeStart = GlobalIndexCount;
+
+		// VertexFormat
+		file->fread(&(DrawObjectList[i].VertexFormat), sizeof(DrawObjectList[0].VertexFormat), 1);
+		// VertexStride
+		file->fread(&(DrawObjectList[i].VertexStride), sizeof(DrawObjectList[0].VertexStride), 1);
+		// VertexCount на самом деле, это кол-во индексов на объект
+		file->fread(&(DrawObjectList[i].VertexCount), sizeof(DrawObjectList[0].VertexCount), 1);
+		GlobalIndexCount += DrawObjectList[i].VertexCount;
+
+		// Location
+		file->fread(&(DrawObjectList[i].Location), sizeof(DrawObjectList[0].Location.x) * 3, 1);
+		// Rotation
+		file->fread(&(DrawObjectList[i].Rotation), sizeof(DrawObjectList[0].Rotation.x) * 3, 1);
+
+		// рисуем нормально, не прозрачным
+		DrawObjectList[i].DrawType = 0;
+
+		// вертексный буфер
+		DrawObjectList[i].NeedDestroyDataInObjectBlock = false;
+		DrawObjectList[i].VertexBuffer = nullptr;
+		DrawObjectList[i].VBO = nullptr;
+		// индексный буфер
+		DrawObjectList[i].IndexBuffer = nullptr;
+		DrawObjectList[i].IBO = nullptr;
+		// vao
+		DrawObjectList[i].VAO = nullptr;
+	}
+
+	// получаем сколько всего вертексов
+	file->fread(&GlobalVertexCount, sizeof(GlobalVertexCount), 1);
+
+	// собственно данные (берем смещение нулевого объекта, т.к. смещение одинаковое на весь объект)
+	GlobalVertexBuffer = new float[GlobalVertexCount * DrawObjectList[0].VertexStride];
+	file->fread(GlobalVertexBuffer,	GlobalVertexCount * DrawObjectList[0].VertexStride * sizeof(GlobalVertexBuffer[0]), 1);
+
+	// индекс буфер
+	GlobalIndexBuffer = new unsigned int[GlobalIndexCount];
+	file->fread(GlobalIndexBuffer, GlobalIndexCount * sizeof(GlobalIndexBuffer[0]), 1);
+
+	// т.к. наши объекты используют глобальные буферы, надо поставить указатели
+	for (int i = 0; i < DrawObjectCount; i++) {
+		DrawObjectList[i].VertexBuffer = GlobalVertexBuffer;
+		DrawObjectList[i].IndexBuffer = GlobalIndexBuffer;
+	}
+
+	vw_fclose(file);
+
+	return true;
+}
+
+//-----------------------------------------------------------------------------
+// запись "родного" формата на диск
+//-----------------------------------------------------------------------------
+bool cModel3D::WriteVW3D(const char *FileName)
+{
+	// небольшие проверки
+	if (!GlobalVertexBuffer || !GlobalIndexBuffer || !DrawObjectList) {
+		std::cerr << __func__ << "(): " << "Can't create " << FileName << " file for empty Model3D.\n";
+		return false;
+	}
+
+	SDL_RWops *FileVW3D;
+	FileVW3D = SDL_RWFromFile(FileName, "wb");
+	// если не можем создать файл на запись - уходим
+	if (!FileVW3D) {
+		std::cerr << __func__ << "(): " << "Can't create " << FileName << " file on disk.\n";
+		return false;
+	}
+
+	// маркер файла 4 байта
+	char tmp1[5] = "VW3D";
+	SDL_RWwrite(FileVW3D, tmp1, 4, 1);
+
+	// общее кол-во объектов в моделе - 4 байта (int)
+	SDL_RWwrite(FileVW3D, &DrawObjectCount, sizeof(DrawObjectCount), 1);
+
+	// для каждого объекта в моделе
+	for (int i = 0; i < DrawObjectCount; i++) {
+		// VertexFormat
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].VertexFormat, sizeof(DrawObjectList[0].VertexFormat), 1);
+		// VertexStride
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].VertexStride, sizeof(DrawObjectList[0].VertexStride), 1);
+		// VertexCount
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].VertexCount, sizeof(DrawObjectList[0].VertexCount), 1);
+
+		// Location
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].Location, sizeof(DrawObjectList[0].Location.x) * 3, 1);
+		// Rotation
+		SDL_RWwrite(FileVW3D, &DrawObjectList[i].Rotation, sizeof(DrawObjectList[0].Rotation.x) * 3, 1);
+	}
+
+	// записываем реальное кол-во вертексов в общем вертекс буфере, мы их посчитали заранее
+	SDL_RWwrite(FileVW3D, &GlobalVertexCount, sizeof(GlobalVertexCount), 1);
+
+	// данные, вертексы (берем смещение нулевого объекта, т.к. смещение одинаковое на весь объект)
+	SDL_RWwrite(FileVW3D, GlobalVertexBuffer,
+		    DrawObjectList[0].VertexStride * GlobalVertexCount * sizeof(GlobalVertexBuffer[0]), 1);
+
+	// данные, индексный буфер
+	SDL_RWwrite(FileVW3D, GlobalIndexBuffer, GlobalIndexCount * sizeof(GlobalIndexBuffer[0]), 1);
+
+	// закрываем файл
+	SDL_RWclose(FileVW3D);
+
+	std::cout << "VW3D Write: " << FileName << "\n";
+	return true;
 }
