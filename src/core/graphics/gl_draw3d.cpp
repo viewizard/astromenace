@@ -26,47 +26,43 @@
 
 #include "graphics.h"
 
+namespace {
+
+// local index array count
+unsigned int LocalIndexArrayCount{0};
+// local index array
+GLuint *LocalIndexArray{nullptr};
+// local index buffer object
+GLuint LocalIndexBO{0};
+
+} // unnamed namespace
+
+extern int tmpPrimCountGL;
+extern PFNGLCLIENTACTIVETEXTUREARBPROC glClientActiveTexture_ARB;
 
 
-extern	int tmpPrimCountGL;
-extern	PFNGLCLIENTACTIVETEXTUREARBPROC	glClientActiveTexture_ARB;
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// данный для индекс буфера
-//------------------------------------------------------------------------------------
-int VertexIndexCount = 0;
-GLuint *VertexIndex = nullptr;
-GLuint *IndexVBO = nullptr;
 
 //------------------------------------------------------------------------------------
 // Инициализация данных индекс буфера
 //------------------------------------------------------------------------------------
-void vw_Internal_InitializationIndexBufferData()
+void Internal_InitializationLocalIndexData()
 {
-	VertexIndexCount = 0;
-	VertexIndex = nullptr;
-	IndexVBO = nullptr;
+	LocalIndexArrayCount = 0;
+	LocalIndexArray = nullptr;
+	LocalIndexBO = 0;
 }
 //------------------------------------------------------------------------------------
 // Чистка памяти данных индекс буфера
 //------------------------------------------------------------------------------------
-void vw_Internal_ReleaseIndexBufferData()
+void Internal_ReleaseLocalIndexData()
 {
-	if (VertexIndex != nullptr) {
-		delete [] VertexIndex;
-		VertexIndex = nullptr;
+	if (LocalIndexArray) {
+		delete [] LocalIndexArray;
+		LocalIndexArray = nullptr;
 	}
-	VertexIndexCount = 0;
-	if (IndexVBO != nullptr) {
-		vw_DeleteVBO(*IndexVBO);
-		delete IndexVBO;
-		IndexVBO = nullptr;
-	}
+	LocalIndexArrayCount = 0;
+	if (LocalIndexBO)
+		vw_DeleteBufferObject(LocalIndexBO);
 }
 
 
@@ -76,15 +72,16 @@ void vw_Internal_ReleaseIndexBufferData()
 //------------------------------------------------------------------------------------
 // устанавливаем указатели, готовимся к прорисовке
 //------------------------------------------------------------------------------------
-GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO, unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO)
+GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *Data, int Stride, unsigned int VertexBO,
+						unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO)
 {
 	// если ничего не передали
-	if ((Data == nullptr) && (VBO == nullptr))
+	if (!Data && !VertexBO)
 		return nullptr;
 
 	// флаг нужно ли с вбо делать
 	bool NeedVBO = vw_GetDevCaps()->VBOSupported;
-	if (VBO == nullptr)
+	if (!VertexBO)
 		NeedVBO = false;
 
 
@@ -130,7 +127,8 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 		break;
 	}
 
-	if (NeedVBO) vw_BindVBO(RI_ARRAY_BUFFER, *VBO);
+	if (NeedVBO)
+		vw_BindBufferObject(RI_ARRAY_BUFFER, VertexBO);
 
 
 	// делаем установку поинтеров + ставим смещения для прорисовки
@@ -236,48 +234,43 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 	// указатель на смещение (в случае вбо) или на массив индексов
 	GLuint *VertexIndexPointer = nullptr;
 	// если нет своего, ставим общей массив индексов
-	if ((DataIndexVBO == nullptr) && (DataIndex == nullptr)) {
+	if (!IndexBO && !IndexArray) {
 		// собираем если нужно массив индексов
-		if ((unsigned int)VertexIndexCount < (unsigned int)(NumVertices+RangeStart)) {
-			if (VertexIndex != nullptr)
-				delete [] VertexIndex;
-			VertexIndexCount = 0;
+		if (LocalIndexArrayCount < (unsigned int)(NumVertices + RangeStart)) {
+			LocalIndexArrayCount = NumVertices + RangeStart;
+			if (LocalIndexArray)
+				delete [] LocalIndexArray;
 
-			VertexIndex = new GLuint[NumVertices+RangeStart];
-
-			VertexIndexCount = NumVertices+RangeStart;
-			for (unsigned int i=0; i<NumVertices+RangeStart; i++) VertexIndex[i] = i;
+			LocalIndexArray = new GLuint[LocalIndexArrayCount];
+			for (unsigned int i = 0; i < LocalIndexArrayCount; i++) {
+				LocalIndexArray[i] = i;
+			}
 
 			// если держим VBO, все это один раз сразу запихиваем в видео память
 			if (vw_GetDevCaps()->VBOSupported) {
 				// прежде всего удаляем старый буфер, если он был
-				if (IndexVBO != nullptr) {
-					vw_DeleteVBO(*IndexVBO);
-					delete IndexVBO;
-				}
+				if (LocalIndexBO)
+					vw_DeleteBufferObject(LocalIndexBO);
 				// создаем новый
-				IndexVBO = new GLuint;
-				if (!vw_BuildIBO(VertexIndexCount, VertexIndex, IndexVBO)) {
-					delete IndexVBO;
-					IndexVBO = nullptr;
-				}
+				if (!vw_BuildIndexBufferObject(LocalIndexArrayCount, LocalIndexArray, LocalIndexBO))
+					LocalIndexBO = 0;
 			}
 		}
 
-		VertexIndexPointer = VertexIndex+RangeStart;
+		VertexIndexPointer = LocalIndexArray + RangeStart;
 
 		// собственно включаем индекс-вбо
-		if (vw_GetDevCaps()->VBOSupported && (IndexVBO != nullptr)) {
-			vw_BindVBO(RI_ELEMENT_ARRAY_BUFFER, *IndexVBO);
+		if (vw_GetDevCaps()->VBOSupported && LocalIndexBO) {
+			vw_BindBufferObject(RI_ELEMENT_ARRAY_BUFFER, LocalIndexBO);
 			VertexIndexPointer = nullptr;
 			VertexIndexPointer = VertexIndexPointer + RangeStart;
 		}
 	} else {	// если массив или вбо индексов передали, просто подключаем их
-		VertexIndexPointer = DataIndex+RangeStart;
+		VertexIndexPointer = IndexArray + RangeStart;
 
 		// собственно включаем индекс-вбо
-		if (vw_GetDevCaps()->VBOSupported && (DataIndexVBO != nullptr)) {
-			vw_BindVBO(RI_ELEMENT_ARRAY_BUFFER, *DataIndexVBO);
+		if (vw_GetDevCaps()->VBOSupported && IndexBO) {
+			vw_BindBufferObject(RI_ELEMENT_ARRAY_BUFFER, IndexBO);
 			VertexIndexPointer = nullptr;
 			VertexIndexPointer = VertexIndexPointer+RangeStart;
 		}
@@ -294,7 +287,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 //------------------------------------------------------------------------------------
 // выключаем все после прорисовки
 //------------------------------------------------------------------------------------
-void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int *VBO, unsigned int *VAO)
+void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, unsigned int *VAO)
 {
 	// флаг нужно ли с вaо делать
 	bool NeedVAO = vw_GetDevCaps()->VAOSupported;
@@ -306,7 +299,7 @@ void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int *VBO,
 	} else {
 		// флаг нужно ли с вбо делать
 		bool NeedVBO = vw_GetDevCaps()->VBOSupported;
-		if (VBO == nullptr)
+		if (!VBO)
 			NeedVBO = false;
 
 
@@ -324,10 +317,10 @@ void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int *VBO,
 
 
 		// сбрасываем индексный и вертексный буфера, если они были установлены
-		if (IndexVBO != nullptr)
-			vw_BindVBO(RI_ELEMENT_ARRAY_BUFFER, 0);
+		if (LocalIndexBO)
+			vw_BindBufferObject(RI_ELEMENT_ARRAY_BUFFER, 0);
 		if (NeedVBO)
-			vw_BindVBO(RI_ARRAY_BUFFER, 0);
+			vw_BindBufferObject(RI_ARRAY_BUFFER, 0);
 	}
 }
 
@@ -339,26 +332,25 @@ void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int *VBO,
 //------------------------------------------------------------------------------------
 // Процедура передачи последовательности вертексов для прорисовки
 //------------------------------------------------------------------------------------
-void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO,
-		     unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO, unsigned int *VAO)
+void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int VertexBO,
+		     unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO, unsigned int *VAO)
 {
 	// если ничего не передали
-	if ((Data == nullptr) && (VBO == nullptr) && (VAO == nullptr))
+	if (!Data && !VertexBO && !VAO)
 		return;
 	// флаг нужно ли с вaо делать
 	bool NeedVAO = vw_GetDevCaps()->VAOSupported;
-	if (VAO == nullptr)
+	if (!VAO)
 		NeedVAO = false;
 
 
 	// устанавливаем все необходимые указатели для прорисовки и получаем индексы
 	GLuint *VertexIndexPointer = nullptr;
-	if (NeedVAO) {
+	if (NeedVAO)
 		vw_BindVAO(*VAO);
-	} else {
-		VertexIndexPointer = vw_SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, Data, Stride, VBO,
-				     RangeStart, DataIndex, DataIndexVBO);
-	}
+	else
+		VertexIndexPointer = vw_SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, Data, Stride,
+									     VertexBO, RangeStart, IndexArray, IndexBO);
 
 // 1) Нельзя использовать short индексы (глючит в линуксе на картах нвидия, проверял на 97.55 драйвере)
 // 2) Нельзя рисовать через glBegin-glEnd и glDrawArray - проблемы в линуксе у ati драйверов (на glDrawArray вообще сегфолтит)
@@ -404,6 +396,6 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 
 
 	// выключаем все что включали
-	vw_SendVertices_DisableStatesAndPointers(DataFormat, VBO, VAO);
+	vw_SendVertices_DisableStatesAndPointers(DataFormat, VertexBO, VAO);
 
 }

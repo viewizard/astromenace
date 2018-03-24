@@ -132,11 +132,8 @@ cSpaceStars::~cSpaceStars()
 		tmp = tmp2;
 	}
 
-	if (VBO != nullptr) {
-		vw_DeleteVBO(*VBO);
-		delete VBO;
-		VBO = nullptr;
-	}
+	if (VBO)
+		vw_DeleteBufferObject(VBO);
 	if (tmpDATA != nullptr) {
 		delete [] tmpDATA;
 		tmpDATA = nullptr;
@@ -281,7 +278,7 @@ void cSpaceStars::Draw()
 
 
 	// если еще нет последовательности, или камеру повернули - надо пересчитать прорисовку
-	if (((tmpDATA == nullptr) && (VBO == nullptr)) ||
+	if ((!tmpDATA && !VBO) ||
 	    (CurrentCameraRotation.x != LastCameraAngleX) ||
 	    (CurrentCameraRotation.y != LastCameraAngleY) ||
 	    (CurrentCameraRotation.z != LastCameraAngleZ)) {
@@ -294,11 +291,8 @@ void cSpaceStars::Draw()
 			delete [] tmpDATA;
 			tmpDATA = nullptr;
 		}
-		if (VBO != nullptr) {
-			vw_DeleteVBO(*VBO);
-			delete VBO;
-			VBO = nullptr;
-		}
+		if (VBO)
+			vw_DeleteBufferObject(VBO);
 
 		// находим реальное кол-во частиц на прорисовку
 		sStar *tmp = Start;
@@ -513,11 +507,9 @@ void cSpaceStars::Draw()
 			}
 
 			if (vw_GetDevCaps()->VBOSupported) {
-				VBO = new unsigned int;
-				if (!vw_BuildVBO(4*PrimitCount, tmpDATA, 8, VBO)) {
-					delete VBO;
-					VBO = nullptr;
-				} else if (tmpDATA != nullptr) { // только если поддерживае вбо, иначе им рисуем
+				if (!vw_BuildVertexBufferObject(4 * PrimitCount, tmpDATA, 8, VBO)) {
+					VBO = 0;
+				} else if (tmpDATA) { // только если поддерживае вбо, иначе им рисуем
 					delete [] tmpDATA;
 					tmpDATA = nullptr;
 				}

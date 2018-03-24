@@ -26,38 +26,31 @@
 
 #include "graphics.h"
 
+PFNGLGENBUFFERSARBPROC glGenBuffersARB = nullptr;
+PFNGLBINDBUFFERARBPROC glBindBufferARB = nullptr;
+PFNGLBUFFERDATAARBPROC glBufferDataARB = nullptr;
+PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB = nullptr;
+PFNGLISBUFFERARBPROC glIsBufferARB = nullptr;
 
-// VBO Extension Function Pointers
-PFNGLGENBUFFERSARBPROC 		glGenBuffersARB = nullptr;		// VBO Name Generation Procedure
-PFNGLBINDBUFFERARBPROC 		glBindBufferARB = nullptr;		// VBO Bind Procedure
-PFNGLBUFFERDATAARBPROC 		glBufferDataARB = nullptr;		// VBO Data Loading Procedure
-PFNGLDELETEBUFFERSARBPROC 	glDeleteBuffersARB = nullptr;	// VBO Deletion Procedure
-PFNGLISBUFFERARBPROC 		glIsBufferARB = nullptr;
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Инициализация работы с VBO
-//------------------------------------------------------------------------------------
-bool vw_Internal_InitializationVBO()
+/*
+ * Internal initialization for buffer objects.
+ */
+bool Internal_InitializationBufferObjects()
 {
-	// Get Pointers To The GL Functions
+	// get pointers to the GL functions
 	glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) SDL_GL_GetProcAddress("glGenBuffersARB");
 	glBindBufferARB = (PFNGLBINDBUFFERARBPROC) SDL_GL_GetProcAddress("glBindBufferARB");
 	glBufferDataARB = (PFNGLBUFFERDATAARBPROC) SDL_GL_GetProcAddress("glBufferDataARB");
 	glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) SDL_GL_GetProcAddress("glDeleteBuffersARB");
 	glIsBufferARB = (PFNGLISBUFFERARBPROC) SDL_GL_GetProcAddress("glIsBufferARB");
 
-	if (glGenBuffersARB == nullptr || glBindBufferARB == nullptr || glBufferDataARB == nullptr ||
-	    glDeleteBuffersARB == nullptr || glIsBufferARB == nullptr) {
-		glGenBuffersARB 	= nullptr;
-		glBindBufferARB 	= nullptr;
-		glBufferDataARB 	= nullptr;
-		glDeleteBuffersARB 	= nullptr;
-		glIsBufferARB 		= nullptr;
+	if (!glGenBuffersARB || !glBindBufferARB || !glBufferDataARB ||
+	    !glDeleteBuffersARB || !glIsBufferARB) {
+		glGenBuffersARB = nullptr;
+		glBindBufferARB = nullptr;
+		glBufferDataARB = nullptr;
+		glDeleteBuffersARB = nullptr;
+		glIsBufferARB = nullptr;
 
 		return false;
 	}
@@ -65,74 +58,64 @@ bool vw_Internal_InitializationVBO()
 	return true;
 }
 
-
-
-
-//------------------------------------------------------------------------------------
-// Процедура генерации буферов
-//------------------------------------------------------------------------------------
-bool vw_BuildVBO(int NumVertices, void *Data, int Stride, unsigned int *VBO)
+/*
+ * Build vertex buffer object.
+ */
+bool vw_BuildVertexBufferObject(int NumVertices, void *Data, int Stride, unsigned int &Buffer)
 {
-	if ((Data == nullptr) || (VBO == nullptr) ||
-	    (glGenBuffersARB == nullptr) ||
-	    (glBindBufferARB == nullptr) ||
-	    (glBufferDataARB == nullptr) ||
-	    (glIsBufferARB == nullptr))
+	if (!Data || !glGenBuffersARB || !glBindBufferARB ||
+	    !glBufferDataARB || !glIsBufferARB)
 		return false;
 
-	glGenBuffersARB(1, VBO);			// Get A Valid Name
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, *VBO);	// Bind The Buffer
-	// Load The Data
-	glBufferDataARB(GL_ARRAY_BUFFER_ARB, NumVertices*Stride*sizeof(float), Data, GL_STATIC_DRAW_ARB);
-	// убираем буфер
+	glGenBuffersARB(1, &Buffer);			// get a valid name
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB, Buffer);	// bind the buffer
+	// load the data
+	glBufferDataARB(GL_ARRAY_BUFFER_ARB, NumVertices * Stride * sizeof(float), Data, GL_STATIC_DRAW_ARB);
+	// disable buffer (bind buffer 0)
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 
-	if (!glIsBufferARB(*VBO))
+	if (!glIsBufferARB(Buffer))
 		return false;
 
 	return true;
 }
 
-
-//------------------------------------------------------------------------------------
-// Процедура генерации индекс буферов
-//------------------------------------------------------------------------------------
-bool vw_BuildIBO(int NumIndex, void *Data, unsigned int *IBO)
+/*
+ * Build index buffer object.
+ */
+bool vw_BuildIndexBufferObject(int NumIndex, void *Data, unsigned int &Buffer)
 {
-	if ((Data == nullptr) || (IBO == nullptr) ||
-	    (glGenBuffersARB == nullptr) ||
-	    (glBindBufferARB == nullptr) ||
-	    (glBufferDataARB == nullptr) ||
-	    (glIsBufferARB == nullptr))
+	if (!Data || !glGenBuffersARB || !glBindBufferARB ||
+	    !glBufferDataARB || !glIsBufferARB)
 		return false;
 
-	glGenBuffersARB(1, IBO);				// Get A Valid Name
-	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, *IBO);	// Bind The Buffer
-	// Load The Data
-	glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, NumIndex*sizeof(unsigned int), Data, GL_STATIC_DRAW_ARB);
-	// убираем буфер
+	glGenBuffersARB(1, &Buffer);				// get a valid name
+	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, Buffer);	// bind the buffer
+	// load the data
+	glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, NumIndex * sizeof(unsigned int), Data, GL_STATIC_DRAW_ARB);
+	// disable buffer (bind buffer 0)
 	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
 
-	if (!glIsBufferARB(*IBO))
+	if (!glIsBufferARB(Buffer))
 		return false;
 
 	return true;
 }
 
-
-//------------------------------------------------------------------------------------
-// Установка текущего буфера
-//------------------------------------------------------------------------------------
-void vw_BindVBO(int target, unsigned int VBO)
+/*
+ * Bind buffer object.
+ */
+void vw_BindBufferObject(int target, unsigned int Buffer)
 {
-	if (glBindBufferARB == nullptr) return;
+	if (!glBindBufferARB)
+		return;
 
 	switch (target) {
 	case RI_ARRAY_BUFFER:
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, VBO);
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, Buffer);
 		break;
 	case RI_ELEMENT_ARRAY_BUFFER:
-		glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, VBO);
+		glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, Buffer);
 		break;
 	default:
 		std::cerr << __func__ << "(): " << "wrong target.\n";
@@ -140,18 +123,14 @@ void vw_BindVBO(int target, unsigned int VBO)
 	}
 }
 
-
-
-
-
-//------------------------------------------------------------------------------------
-// Процедура удаления буфера
-//------------------------------------------------------------------------------------
-void vw_DeleteVBO(unsigned int VBO)
+/*
+ * Delete buffer object.
+ */
+void vw_DeleteBufferObject(unsigned int &Buffer)
 {
-	if (glIsBufferARB == nullptr) return;
-	if (glDeleteBuffersARB == nullptr) return;
+	if (!glIsBufferARB || !glDeleteBuffersARB || !glIsBufferARB(Buffer))
+		return;
 
-	if (glIsBufferARB(VBO))	glDeleteBuffersARB(1, &VBO);
+	glDeleteBuffersARB(1, &Buffer);
+	Buffer = 0;
 }
-

@@ -64,10 +64,10 @@ struct sObjectBlock {
 	bool NeedDestroyDataInObjectBlock{false}; // если данные были не общие, а созданные для этого ObjectBlock, нужно их удалить в деструкторе
 	// вертексный буфер
 	float *VertexBuffer{nullptr};		// указатель на структуру данных
-	unsigned int *VBO{nullptr};		// номер VBO
+	unsigned int VBO{0};			// номер VBO
 	// индексный буфер
 	unsigned int *IndexBuffer{nullptr};	// указатель на структуру данных
-	unsigned int *IBO{nullptr};		// номер IBO
+	unsigned int IBO{0};			// номер IBO
 	// VAO
 	unsigned int *VAO{nullptr};		// номер VAO
 	// указатель на буфер, с мешем приведенным к опеределнному размеру треугольников (для взрывов)
@@ -109,9 +109,9 @@ public:
 
 	// буферы
 	float *GlobalVertexBuffer{nullptr};
-	unsigned int *GlobalVBO{nullptr};
+	unsigned int GlobalVBO{0};
 	unsigned int *GlobalIndexBuffer{nullptr};
-	unsigned int *GlobalIBO{nullptr};
+	unsigned int GlobalIBO{0};
 	unsigned int *GlobalVAO{nullptr};
 
 	// указатели на цепь моделей

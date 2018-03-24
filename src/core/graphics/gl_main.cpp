@@ -83,12 +83,12 @@ int UserDisplayRampStatus = -1; // не использовать, была ош�
 // инициализация GLSL
 bool vw_Internal_InitializationGLSL();
 // инициализация VBO
-bool vw_Internal_InitializationVBO();
+bool Internal_InitializationBufferObjects();
 // инициализация VAO
 bool vw_Internal_InitializationVAO();
-// индекс буфера
-bool vw_Internal_InitializationIndexBufferData();
-void vw_Internal_ReleaseIndexBufferData();
+// индекс буфера (внутренний буфер)
+bool Internal_InitializationLocalIndexData();
+void Internal_ReleaseLocalIndexData();
 // FBO
 bool vw_Internal_InitializationFBO();
 sFBO MainFBO; // основной FBO, для прорисовки со сглаживанием
@@ -430,11 +430,12 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	}
 
 	// инициализация индекс буфера
-	vw_Internal_InitializationIndexBufferData();
+	Internal_InitializationLocalIndexData();
 	// иним шейдеры
 	if (OpenGL_DevCaps.GLSL100Supported) OpenGL_DevCaps.GLSL100Supported = vw_Internal_InitializationGLSL();
 	// иним вбо
-	if (OpenGL_DevCaps.VBOSupported) OpenGL_DevCaps.VBOSupported = vw_Internal_InitializationVBO();
+	if (OpenGL_DevCaps.VBOSupported)
+		OpenGL_DevCaps.VBOSupported = Internal_InitializationBufferObjects();
 	// иним вaо
 	if (OpenGL_DevCaps.VAOSupported) OpenGL_DevCaps.VAOSupported = vw_Internal_InitializationVAO();
 	// инициализируем FBO
@@ -517,7 +518,7 @@ void vw_ShutdownRenderer()
 
 	vw_ReleaseAllShaders();
 
-	vw_Internal_ReleaseIndexBufferData();
+	Internal_ReleaseLocalIndexData();
 	vw_DeleteFBO(&MainFBO);
 	vw_DeleteFBO(&ResolveFBO);
 }

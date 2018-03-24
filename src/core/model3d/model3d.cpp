@@ -57,7 +57,7 @@ cModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, b
 	}
 
 	// если ничего нет, значит нужно загрузить
-	cModel3D * Model = new cModel3D;
+	cModel3D *Model = new cModel3D;
 
 	// check extension
 	if (vw_CheckFileExtension(FileName, ".vw3d")) {
@@ -73,7 +73,8 @@ cModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, b
 	}
 
 	// пересоздаем буфер вертексов, для работы с нормал меппингом в шейдерах, добавляем тангент и бинормаль
-	if (NeedTangentAndBinormal) Model->CreateTangentAndBinormal();
+	if (NeedTangentAndBinormal)
+		Model->CreateTangentAndBinormal();
 	// создаем вертексные и индексные буферы для каждого блока
 	Model->CreateObjectsBuffers();
 	// создаем все поддерживаемые буферы (VAO, VBO, IBO)
@@ -159,16 +160,12 @@ sObjectBlock::~sObjectBlock(void)
 	if (NeedDestroyDataInObjectBlock) {
 		if (VertexBuffer)
 			delete [] VertexBuffer;
-		if (VBO) {
-			vw_DeleteVBO(*VBO);
-			delete VBO;
-		}
+		if (VBO)
+			vw_DeleteBufferObject(VBO);
 		if (IndexBuffer)
 			delete [] IndexBuffer;
-		if (IBO) {
-			vw_DeleteVBO(*IBO);
-			delete IBO;
-		}
+		if (IBO)
+			vw_DeleteBufferObject(IBO);
 		if (VAO) {
 			vw_DeleteVAO(*VAO);
 			delete VAO;
@@ -204,14 +201,10 @@ cModel3D::~cModel3D(void)
 			if (DrawObjectList[i].IndexBuffer &&
 			    (DrawObjectList[i].IndexBuffer != GlobalIndexBuffer))
 				delete [] DrawObjectList[i].IndexBuffer;
-			if (DrawObjectList[i].VBO && (DrawObjectList[i].VBO != GlobalVBO)) {
-				vw_DeleteVBO(*DrawObjectList[i].VBO);
-				delete DrawObjectList[i].VBO;
-			}
-			if (DrawObjectList[i].IBO && (DrawObjectList[i].IBO != GlobalIBO)) {
-				vw_DeleteVBO(*DrawObjectList[i].IBO);
-				delete DrawObjectList[i].IBO;
-			}
+			if (DrawObjectList[i].VBO && (DrawObjectList[i].VBO != GlobalVBO))
+				vw_DeleteBufferObject(DrawObjectList[i].VBO);
+			if (DrawObjectList[i].IBO && (DrawObjectList[i].IBO != GlobalIBO))
+				vw_DeleteBufferObject(DrawObjectList[i].IBO);
 			if (DrawObjectList[i].VAO && (DrawObjectList[i].VAO != GlobalVAO)) {
 				vw_DeleteVAO(*DrawObjectList[i].VAO);
 				delete DrawObjectList[i].VAO;
@@ -221,16 +214,12 @@ cModel3D::~cModel3D(void)
 	}
 	if (GlobalVertexBuffer)
 		delete [] GlobalVertexBuffer;
-	if (GlobalVBO != nullptr) {
-		vw_DeleteVBO(*GlobalVBO);
-		delete GlobalVBO;
-	}
+	if (GlobalVBO)
+		vw_DeleteBufferObject(GlobalVBO);
 	if (GlobalIndexBuffer)
 		delete [] GlobalIndexBuffer;
-	if (GlobalIBO) {
-		vw_DeleteVBO(*GlobalIBO);
-		delete GlobalIBO;
-	}
+	if (GlobalIBO)
+		vw_DeleteBufferObject(GlobalIBO);
 	if (GlobalVAO) {
 		vw_DeleteVAO(*GlobalVAO);
 		delete GlobalVAO;
@@ -271,18 +260,12 @@ void cModel3D::CreateObjectsBuffers()
 void cModel3D::CreateHardwareBuffers()
 {
 	// делаем общее VBO
-	GlobalVBO = new unsigned int;
-	if (!vw_BuildVBO(GlobalVertexCount, GlobalVertexBuffer, DrawObjectList[0].VertexStride, GlobalVBO)) {
-		delete GlobalVBO;
-		GlobalVBO = nullptr;
-	}
+	if (!vw_BuildVertexBufferObject(GlobalVertexCount, GlobalVertexBuffer, DrawObjectList[0].VertexStride, GlobalVBO))
+		GlobalVBO = 0;
 
 	// делаем общий IBO
-	GlobalIBO = new unsigned int;
-	if (!vw_BuildIBO(GlobalIndexCount, GlobalIndexBuffer, GlobalIBO)) {
-		delete GlobalIBO;
-		GlobalIBO = nullptr;
-	}
+	if (!vw_BuildIndexBufferObject(GlobalIndexCount, GlobalIndexBuffer, GlobalIBO))
+		GlobalIBO = 0;
 
 	GlobalVAO = new unsigned int;
 	if (!vw_BuildVAO(GlobalVAO, GlobalIndexCount, DrawObjectList[0].VertexFormat, GlobalVertexBuffer,
@@ -294,20 +277,14 @@ void cModel3D::CreateHardwareBuffers()
 	// создаем буферы для каждого объекта
 	for (int i = 0; i < DrawObjectCount; i++) {
 		// делаем VBO
-		DrawObjectList[i].VBO = new unsigned int;
-		if (!vw_BuildVBO(DrawObjectList[i].VertexCount, DrawObjectList[i].VertexBuffer,
-				 DrawObjectList[i].VertexStride, DrawObjectList[i].VBO)) {
-			delete DrawObjectList[i].VBO;
-			DrawObjectList[i].VBO = nullptr;
-		}
+		if (!vw_BuildVertexBufferObject(DrawObjectList[i].VertexCount, DrawObjectList[i].VertexBuffer,
+						DrawObjectList[i].VertexStride, DrawObjectList[i].VBO))
+			DrawObjectList[i].VBO = 0;
 
 		// делаем IBO
-		DrawObjectList[i].IBO = new unsigned int;
-		if (!vw_BuildIBO(DrawObjectList[i].VertexCount, DrawObjectList[i].IndexBuffer,
-				 DrawObjectList[i].IBO)) {
-			delete DrawObjectList[i].IBO;
-			DrawObjectList[i].IBO = nullptr;
-		}
+		if (!vw_BuildIndexBufferObject(DrawObjectList[i].VertexCount, DrawObjectList[i].IndexBuffer,
+					       DrawObjectList[i].IBO))
+			DrawObjectList[i].IBO = 0;
 
 		// делаем VAO
 		DrawObjectList[i].VAO = new unsigned int;
@@ -324,7 +301,7 @@ void cModel3D::CreateHardwareBuffers()
 //-----------------------------------------------------------------------------
 // рекурсивно просчитываем кол-во VertexBufferLimitedBySizeTriangles
 //-----------------------------------------------------------------------------
-static int RecursiveBufferLimitedBySizeTrianglesCalculate(float Point1[8], float Point2[8], float Point3[8],
+static int RecursiveBufferLimitedBySizeTrianglesCalculate(float (&Point1)[8], float (&Point2)[8], float (&Point3)[8],
 							  int Stride, float *VertexBuffer, int *CurrentPosition,
 							  float TriangleSizeLimit)
 {
@@ -402,8 +379,7 @@ static int RecursiveBufferLimitedBySizeTrianglesCalculate(float Point1[8], float
 // рекурсивно создаем VertexBufferLimitedBySizeTriangles
 //-----------------------------------------------------------------------------
 void RecursiveBufferLimitedBySizeTrianglesGenerate(float Point1[8], float Point2[8], float Point3[8],
-		int Stride, float *VertexBuffer, int *CurrentPosition,
-		float TriangleSizeLimit)
+		int Stride, float *VertexBuffer, int *CurrentPosition, float TriangleSizeLimit)
 {
 	// подсчитываем длину сторон, если они меньше чем необходимый минимум - выходим с 1
 	float Dist1 = sqrtf((Point1[0] - Point2[0]) * (Point1[0] - Point2[0]) +
@@ -507,8 +483,7 @@ void cModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 					   DrawObjectList[i].VertexBuffer[tmpOffset0 + 4],
 					   DrawObjectList[i].VertexBuffer[tmpOffset0 + 5],
 					   DrawObjectList[i].VertexBuffer[tmpOffset0 + 6],
-					   DrawObjectList[i].VertexBuffer[tmpOffset0 + 7]
-					  };
+					   DrawObjectList[i].VertexBuffer[tmpOffset0 + 7]};
 
 			float Point2[8] = {DrawObjectList[i].VertexBuffer[tmpOffset1],
 					   DrawObjectList[i].VertexBuffer[tmpOffset1 + 1],
@@ -517,8 +492,7 @@ void cModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 					   DrawObjectList[i].VertexBuffer[tmpOffset1 + 4],
 					   DrawObjectList[i].VertexBuffer[tmpOffset1 + 5],
 					   DrawObjectList[i].VertexBuffer[tmpOffset1 + 6],
-					   DrawObjectList[i].VertexBuffer[tmpOffset1 + 7]
-					  };
+					   DrawObjectList[i].VertexBuffer[tmpOffset1 + 7]};
 
 			float Point3[8] = {DrawObjectList[i].VertexBuffer[tmpOffset2],
 					   DrawObjectList[i].VertexBuffer[tmpOffset2 + 1],
@@ -527,8 +501,7 @@ void cModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 					   DrawObjectList[i].VertexBuffer[tmpOffset2 + 4],
 					   DrawObjectList[i].VertexBuffer[tmpOffset2 + 5],
 					   DrawObjectList[i].VertexBuffer[tmpOffset2 + 6],
-					   DrawObjectList[i].VertexBuffer[tmpOffset2 + 7]
-					  };
+					   DrawObjectList[i].VertexBuffer[tmpOffset2 + 7]};
 
 			// идем на рекурсивную функцию считать кол-во треугольников
 			DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount +=
@@ -562,8 +535,7 @@ void cModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 						   DrawObjectList[i].VertexBuffer[tmpOffset0 + 4],
 						   DrawObjectList[i].VertexBuffer[tmpOffset0 + 5],
 						   DrawObjectList[i].VertexBuffer[tmpOffset0 + 6],
-						   DrawObjectList[i].VertexBuffer[tmpOffset0 + 7]
-						  };
+						   DrawObjectList[i].VertexBuffer[tmpOffset0 + 7]};
 
 				float Point2[8] = {DrawObjectList[i].VertexBuffer[tmpOffset1],
 						   DrawObjectList[i].VertexBuffer[tmpOffset1 + 1],
@@ -572,8 +544,7 @@ void cModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 						   DrawObjectList[i].VertexBuffer[tmpOffset1 + 4],
 						   DrawObjectList[i].VertexBuffer[tmpOffset1 + 5],
 						   DrawObjectList[i].VertexBuffer[tmpOffset1 + 6],
-						   DrawObjectList[i].VertexBuffer[tmpOffset1 + 7]
-						  };
+						   DrawObjectList[i].VertexBuffer[tmpOffset1 + 7]};
 
 				float Point3[8] = {DrawObjectList[i].VertexBuffer[tmpOffset2],
 						   DrawObjectList[i].VertexBuffer[tmpOffset2 + 1],
@@ -582,8 +553,7 @@ void cModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 						   DrawObjectList[i].VertexBuffer[tmpOffset2 + 4],
 						   DrawObjectList[i].VertexBuffer[tmpOffset2 + 5],
 						   DrawObjectList[i].VertexBuffer[tmpOffset2 + 6],
-						   DrawObjectList[i].VertexBuffer[tmpOffset2 + 7]
-						  };
+						   DrawObjectList[i].VertexBuffer[tmpOffset2 + 7]};
 
 				// идем на рекурсивную функцию
 				RecursiveBufferLimitedBySizeTrianglesGenerate(Point1, Point2, Point3,
@@ -707,21 +677,21 @@ bool cModel3D::ReadVW3D(const std::string &FileName)
 	if (FileName.empty())
 		return false;
 
-	std::unique_ptr<sFILE> file = vw_fopen(FileName);
-	if (!file)
+	std::unique_ptr<sFILE> File = vw_fopen(FileName);
+	if (!File)
 		return false;
 
 	Name = FileName;
 
 	// check "VW3D" sign
 	char Sign[4];
-	file->fread(&Sign, 4, 1);
+	File->fread(&Sign, 4, 1);
 	// Sign don't contain null-terminated string, strncmp() should be used
 	if (strncmp(Sign, "VW3D", 4) != 0)
 		return false;
 
 	// читаем, сколько объектов
-	file->fread(&DrawObjectCount, sizeof(DrawObjectCount), 1);
+	File->fread(&DrawObjectCount, sizeof(DrawObjectCount), 1);
 
 	DrawObjectList = new sObjectBlock[DrawObjectCount];
 
@@ -732,17 +702,17 @@ bool cModel3D::ReadVW3D(const std::string &FileName)
 		DrawObjectList[i].RangeStart = GlobalIndexCount;
 
 		// VertexFormat
-		file->fread(&(DrawObjectList[i].VertexFormat), sizeof(DrawObjectList[0].VertexFormat), 1);
+		File->fread(&(DrawObjectList[i].VertexFormat), sizeof(DrawObjectList[0].VertexFormat), 1);
 		// VertexStride
-		file->fread(&(DrawObjectList[i].VertexStride), sizeof(DrawObjectList[0].VertexStride), 1);
+		File->fread(&(DrawObjectList[i].VertexStride), sizeof(DrawObjectList[0].VertexStride), 1);
 		// VertexCount на самом деле, это кол-во индексов на объект
-		file->fread(&(DrawObjectList[i].VertexCount), sizeof(DrawObjectList[0].VertexCount), 1);
+		File->fread(&(DrawObjectList[i].VertexCount), sizeof(DrawObjectList[0].VertexCount), 1);
 		GlobalIndexCount += DrawObjectList[i].VertexCount;
 
 		// Location
-		file->fread(&(DrawObjectList[i].Location), sizeof(DrawObjectList[0].Location.x) * 3, 1);
+		File->fread(&(DrawObjectList[i].Location), sizeof(DrawObjectList[0].Location.x) * 3, 1);
 		// Rotation
-		file->fread(&(DrawObjectList[i].Rotation), sizeof(DrawObjectList[0].Rotation.x) * 3, 1);
+		File->fread(&(DrawObjectList[i].Rotation), sizeof(DrawObjectList[0].Rotation.x) * 3, 1);
 
 		// рисуем нормально, не прозрачным
 		DrawObjectList[i].DrawType = 0;
@@ -750,24 +720,24 @@ bool cModel3D::ReadVW3D(const std::string &FileName)
 		// вертексный буфер
 		DrawObjectList[i].NeedDestroyDataInObjectBlock = false;
 		DrawObjectList[i].VertexBuffer = nullptr;
-		DrawObjectList[i].VBO = nullptr;
+		DrawObjectList[i].VBO = 0;
 		// индексный буфер
 		DrawObjectList[i].IndexBuffer = nullptr;
-		DrawObjectList[i].IBO = nullptr;
+		DrawObjectList[i].IBO = 0;
 		// vao
 		DrawObjectList[i].VAO = nullptr;
 	}
 
 	// получаем сколько всего вертексов
-	file->fread(&GlobalVertexCount, sizeof(GlobalVertexCount), 1);
+	File->fread(&GlobalVertexCount, sizeof(GlobalVertexCount), 1);
 
 	// собственно данные (берем смещение нулевого объекта, т.к. смещение одинаковое на весь объект)
 	GlobalVertexBuffer = new float[GlobalVertexCount * DrawObjectList[0].VertexStride];
-	file->fread(GlobalVertexBuffer,	GlobalVertexCount * DrawObjectList[0].VertexStride * sizeof(GlobalVertexBuffer[0]), 1);
+	File->fread(GlobalVertexBuffer,	GlobalVertexCount * DrawObjectList[0].VertexStride * sizeof(GlobalVertexBuffer[0]), 1);
 
 	// индекс буфер
 	GlobalIndexBuffer = new unsigned int[GlobalIndexCount];
-	file->fread(GlobalIndexBuffer, GlobalIndexCount * sizeof(GlobalIndexBuffer[0]), 1);
+	File->fread(GlobalIndexBuffer, GlobalIndexCount * sizeof(GlobalIndexBuffer[0]), 1);
 
 	// т.к. наши объекты используют глобальные буферы, надо поставить указатели
 	for (int i = 0; i < DrawObjectCount; i++) {
@@ -775,7 +745,7 @@ bool cModel3D::ReadVW3D(const std::string &FileName)
 		DrawObjectList[i].IndexBuffer = GlobalIndexBuffer;
 	}
 
-	vw_fclose(file);
+	vw_fclose(File);
 
 	return true;
 }

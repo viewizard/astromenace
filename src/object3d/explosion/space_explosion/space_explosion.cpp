@@ -538,9 +538,9 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			// копируем данные
 			memcpy(&(DrawObjectList[i]), &(Object->DrawObjectList[i]), sizeof(Object->DrawObjectList[0]));
 			// делаем изменения
-			DrawObjectList[i].VBO = nullptr;
+			DrawObjectList[i].VBO = 0;
 			DrawObjectList[i].VertexBuffer = nullptr;
-			DrawObjectList[i].IBO = nullptr;
+			DrawObjectList[i].IBO = 0;
 			DrawObjectList[i].IndexBuffer = nullptr;
 			DrawObjectList[i].VAO = nullptr;
 			DrawObjectList[i].NeedDestroyDataInObjectBlock = true; // удалять в объекте
@@ -729,11 +729,8 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			// удаляем старые буферы, если они есть, создаем новые
 			// ! индексный буфер не трогаем, его не надо пересоздавать вообще
 
-			if (DrawObjectList[j].VBO != nullptr) {
-				vw_DeleteVBO(*DrawObjectList[j].VBO);
-				delete DrawObjectList[j].VBO;
-				DrawObjectList[j].VBO = nullptr;
-			}
+			if (DrawObjectList[j].VBO)
+				vw_DeleteBufferObject(DrawObjectList[j].VBO);
 			if (DrawObjectList[j].VAO != nullptr) {
 				vw_DeleteVAO(*DrawObjectList[j].VAO);
 				delete DrawObjectList[j].VAO;
@@ -741,19 +738,13 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			}
 
 			// делаем VBO
-			DrawObjectList[j].VBO = new unsigned int;
-			if (!vw_BuildVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].VertexStride, DrawObjectList[j].VBO)) {
-				delete DrawObjectList[j].VBO;
-				DrawObjectList[j].VBO = nullptr;
-			}
+			if (!vw_BuildVertexBufferObject(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].VertexStride, DrawObjectList[j].VBO))
+				DrawObjectList[j].VBO = 0;
 
 			// делаем IBO, создаем его один раз, если его нет
-			if (DrawObjectList[j].IBO == nullptr) {
-				DrawObjectList[j].IBO = new unsigned int;
-				if (!vw_BuildIBO(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO)) {
-					delete DrawObjectList[j].IBO;
-					DrawObjectList[j].IBO = nullptr;
-				}
+			if (!DrawObjectList[j].IBO) {
+				if (!vw_BuildIndexBufferObject(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO))
+					DrawObjectList[j].IBO = 0;
 			}
 
 			// делаем VAO

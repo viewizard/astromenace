@@ -241,11 +241,8 @@ bool cExplosion::Update(float Time)
 					// удаляем старые буферы, если они есть, создаем новые
 					// ! индексный буфер не трогаем, его не надо пересоздавать вообще
 
-					if (DrawObjectList[j].VBO != nullptr) {
-						vw_DeleteVBO(*DrawObjectList[j].VBO);
-						delete DrawObjectList[j].VBO;
-						DrawObjectList[j].VBO = nullptr;
-					}
+					if (DrawObjectList[j].VBO)
+						vw_DeleteBufferObject(DrawObjectList[j].VBO);
 					if (DrawObjectList[j].VAO != nullptr) {
 						vw_DeleteVAO(*DrawObjectList[j].VAO);
 						delete DrawObjectList[j].VAO;
@@ -254,19 +251,13 @@ bool cExplosion::Update(float Time)
 
 
 					// делаем VBO
-					DrawObjectList[j].VBO = new unsigned int;
-					if (!vw_BuildVBO(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].VertexStride, DrawObjectList[j].VBO)) {
-						delete DrawObjectList[j].VBO;
-						DrawObjectList[j].VBO = nullptr;
-					}
+					if (!vw_BuildVertexBufferObject(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].VertexStride, DrawObjectList[j].VBO))
+						DrawObjectList[j].VBO = 0;
 
 					// делаем IBO, создаем его один раз, если его нет
-					if (DrawObjectList[j].IBO == nullptr) {
-						DrawObjectList[j].IBO = new unsigned int;
-						if (!vw_BuildIBO(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO)) {
-							delete DrawObjectList[j].IBO;
-							DrawObjectList[j].IBO = nullptr;
-						}
+					if (DrawObjectList[j].IBO) {
+						if (!vw_BuildIndexBufferObject(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO))
+							DrawObjectList[j].IBO = 0;
 					}
 
 					// делаем VAO

@@ -209,9 +209,9 @@ public:
 	// список с геометрией модели, объекты для прорисовки
 	sObjectBlock	*DrawObjectList{nullptr};
 	float		*GlobalVertexBuffer{nullptr};
-	unsigned int	*GlobalVBO{nullptr};
+	unsigned int	GlobalVBO{0};
 	unsigned int	*GlobalIndexBuffer{nullptr};
-	unsigned int	*GlobalIBO{nullptr};
+	unsigned int	GlobalIBO{0};
 	unsigned int	*GlobalVAO{nullptr};
 	// кол-во объектов в списке
 	int		DrawObjectQuantity{0};

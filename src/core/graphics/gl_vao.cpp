@@ -24,19 +24,21 @@
 
 *************************************************************************************/
 
+// NOTE ARB_vertex_attrib_binding (since OpenGL 4.3)
+//      specify the attribute format and the attribute data separately
+// NOTE ARB_direct_state_access (since OpenGL 4.5)
+//      no longer need to call glBindBuffer() or glBindVertexArray()
+
 #include "graphics.h"
 
+PFNGLGENVERTEXARRAYSPROC 	glGenVertexArraysARB = nullptr;		// VAO Name Generation Procedure
+PFNGLBINDVERTEXARRAYPROC 	glBindVertexArrayARB = nullptr;		// VAO Bind Procedure
+PFNGLDELETEVERTEXARRAYSPROC	glDeleteVertexArraysARB = nullptr;	// VAO Deletion Procedure
+PFNGLISVERTEXARRAYPROC 		glIsVertexArrayARB = nullptr;
 
-// VAO Extension Function Pointers
-PFNGLGENVERTEXARRAYSPROC 		glGenVertexArraysARB = nullptr;		// VAO Name Generation Procedure
-PFNGLBINDVERTEXARRAYPROC 		glBindVertexArrayARB = nullptr;		// VAO Bind Procedure
-PFNGLDELETEVERTEXARRAYSPROC 	glDeleteVertexArraysARB = nullptr;		// VAO Deletion Procedure
-PFNGLISVERTEXARRAYPROC 			glIsVertexArrayARB = nullptr;
-
-
-void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int *VBO, unsigned int *VAO);
-GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO, unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO);
-
+GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *Data, int Stride, unsigned int VertexBO,
+						unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO);
+void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, unsigned int *VAO);
 
 
 //------------------------------------------------------------------------------------
@@ -63,29 +65,24 @@ bool vw_Internal_InitializationVAO()
 	return true;
 }
 
-
-
-
 //------------------------------------------------------------------------------------
 // Процедура генерации буферов
 //------------------------------------------------------------------------------------
-bool vw_BuildVAO(unsigned int *VAO, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int *VBO,
-		 unsigned int RangeStart, unsigned int *DataIndex, unsigned int *DataIndexVBO)
+bool vw_BuildVAO(unsigned int *VAO, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int VBO,
+		 unsigned int RangeStart, unsigned int *DataIndex, unsigned int DataIndexVBO)
 {
-	if ((VAO == nullptr) ||
-	    (glGenVertexArraysARB == nullptr) ||
-	    (glIsVertexArrayARB == nullptr))
+	if (!VAO ||
+	    !glGenVertexArraysARB ||
+	    !glIsVertexArrayARB)
 		return false;
 
 	glGenVertexArraysARB(1, VAO);
 
 	vw_BindVAO(*VAO);
-
 	vw_SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, Data, Stride, VBO,
 						RangeStart, DataIndex, DataIndexVBO);
 
 	vw_BindVAO(0);
-
 	vw_SendVertices_DisableStatesAndPointers(DataFormat, VBO, nullptr);
 
 	if (!glIsVertexArrayARB(*VAO))
@@ -94,31 +91,26 @@ bool vw_BuildVAO(unsigned int *VAO, int NumVertices, int DataFormat, void *Data,
 	return true;
 }
 
-
-
-
 //------------------------------------------------------------------------------------
 // Установка текущего буфера
 //------------------------------------------------------------------------------------
 void vw_BindVAO(unsigned int VAO)
 {
-	if (glBindVertexArrayARB == nullptr) return;
+	if (!glBindVertexArrayARB)
+		return;
 
 	glBindVertexArrayARB(VAO);
 }
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // Процедура удаления буфера
 //------------------------------------------------------------------------------------
 void vw_DeleteVAO(unsigned int VAO)
 {
-	if (glIsVertexArrayARB == nullptr) return;
-	if (glDeleteVertexArraysARB == nullptr) return;
+	if (!glIsVertexArrayARB ||
+	    !glDeleteVertexArraysARB ||
+	    !glIsVertexArrayARB(VAO))
+		return;
 
-	if (glIsVertexArrayARB(VAO)) glDeleteVertexArraysARB(1, &VAO);
+	glDeleteVertexArraysARB(1, &VAO);
 }
-

@@ -82,7 +82,7 @@ public:
 	// данные, храним их, чтобы каждый раз не пересчитывать
 	sStar	**list{nullptr};
 	float	*tmpDATA{nullptr};
-	unsigned int	*VBO{nullptr}; // указатель на номер VBO массива
+	unsigned int VBO{0};
 	int	PrimitCount{0};
 	float	LastCameraAngleX{0.0f}, LastCameraAngleY{0.0f}, LastCameraAngleZ{0.0f};
 };
