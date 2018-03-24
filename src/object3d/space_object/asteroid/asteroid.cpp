@@ -60,7 +60,7 @@ void cAsteroid::Create(int SpaceObjectNum)
 	delete [] NameTMP;
 
 	// всегда только эти текстуры и 1 объект
-	for (int i=0; i<DrawObjectQuantity; i++) {
+	for (int i = 0; i < ObjectsListCount; i++) {
 		Texture[i] = vw_FindTextureByName("models/space/asteroid-01.tga");
 	}
 

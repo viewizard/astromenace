@@ -394,7 +394,7 @@ void vw_GetPrioritizeTextures(GLuint TextureID, float *Prior);
 // 3D rendering functions
 
 // Send (draw) vertices
-void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride,
+void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *VertexArray, int Stride,
 		     unsigned int VertexBO = 0, unsigned int RangeStart = 0, unsigned int *IndexArray = nullptr,
 		     unsigned int IndexBO = 0, unsigned int VAO = 0);
 // Set color
@@ -482,7 +482,7 @@ void vw_DeleteBufferObject(unsigned int &Buffer);
  */
 
 // Build vertex array object.
-bool vw_BuildVAO(unsigned int &VAO, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int VBO,
+bool vw_BuildVAO(unsigned int &VAO, int NumVertices, int DataFormat, void *VertexArray, int Stride, unsigned int VBO,
 		 unsigned int RangeStart, unsigned int *DataIndex, unsigned int DataIndexVBO);
 // Bind vertex array object.
 void vw_BindVAO(unsigned int VAO);

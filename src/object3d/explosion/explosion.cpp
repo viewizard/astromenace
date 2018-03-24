@@ -175,12 +175,12 @@ bool cExplosion::Update(float Time)
 
 
 			// расчет физики для каждой частицы
-			if (DrawObjectList != nullptr) {
+			if (ObjectsList != nullptr) {
 				sVECTOR3D TMP;
 				int Count = 0;
 
-				for (int j = 0; j < DrawObjectQuantity; j++) {
-					for (int i = 0; i < DrawObjectList[j].VertexCount; i+=3) {
+				for (int j = 0; j < ObjectsListCount; j++) {
+					for (int i = 0; i < ObjectsList[j].VertexCount; i+=3) {
 						if (ExplosionPieceData[Count].Life > 0.0f) {
 							// получаем текущий вектор движения данного треугольника
 							TMP = ExplosionPieceData[Count].Velocity^ExplosionGeometryMove;
@@ -193,42 +193,42 @@ bool cExplosion::Update(float Time)
 							if (ExplosionPieceData[Count].Life<=0.001f) {
 								ExplosionPieceData[Count].Life = 0.0f;
 
-								DrawObjectList[j].VertexArray[(i+1)*DrawObjectList[j].VertexStride] = DrawObjectList[j].VertexArray[i*DrawObjectList[j].VertexStride];
-								DrawObjectList[j].VertexArray[(i+1)*DrawObjectList[j].VertexStride+1] = DrawObjectList[j].VertexArray[i*DrawObjectList[j].VertexStride+1];
-								DrawObjectList[j].VertexArray[(i+1)*DrawObjectList[j].VertexStride+2] = DrawObjectList[j].VertexArray[i*DrawObjectList[j].VertexStride+2];
+								ObjectsList[j].VertexArray[(i + 1) * ObjectsList[j].VertexStride] = ObjectsList[j].VertexArray[i*ObjectsList[j].VertexStride];
+								ObjectsList[j].VertexArray[(i + 1) * ObjectsList[j].VertexStride + 1] = ObjectsList[j].VertexArray[i * ObjectsList[j].VertexStride + 1];
+								ObjectsList[j].VertexArray[(i + 1) * ObjectsList[j].VertexStride + 2] = ObjectsList[j].VertexArray[i * ObjectsList[j].VertexStride + 2];
 
-								DrawObjectList[j].VertexArray[(i+2)*DrawObjectList[j].VertexStride] = DrawObjectList[j].VertexArray[i*DrawObjectList[j].VertexStride];
-								DrawObjectList[j].VertexArray[(i+2)*DrawObjectList[j].VertexStride+1] = DrawObjectList[j].VertexArray[i*DrawObjectList[j].VertexStride+1];
-								DrawObjectList[j].VertexArray[(i+2)*DrawObjectList[j].VertexStride+2] = DrawObjectList[j].VertexArray[i*DrawObjectList[j].VertexStride+2];
+								ObjectsList[j].VertexArray[(i+2)*ObjectsList[j].VertexStride] = ObjectsList[j].VertexArray[i * ObjectsList[j].VertexStride];
+								ObjectsList[j].VertexArray[(i+2)*ObjectsList[j].VertexStride + 1] = ObjectsList[j].VertexArray[i * ObjectsList[j].VertexStride + 1];
+								ObjectsList[j].VertexArray[(i+2)*ObjectsList[j].VertexStride + 2] = ObjectsList[j].VertexArray[i * ObjectsList[j].VertexStride + 2];
 							} else {
 								// уменьшаем частицу, перебираем размер и текстурные координаты
 								{
-									float tmp = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*(i+1)] -DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*i];
-									DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*(i+1)] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
-									tmp = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*(i+1)+1] - DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*i+1];
-									DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*(i+1)+1] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
-									tmp = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*(i+1)+2] - DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*i+2];
-									DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*(i+1)+2] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+									float tmp = ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 1)] - ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * i];
+									ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 1)] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
+									tmp = ObjectsList[j].VertexArray[ObjectsList[j].VertexStride*(i + 1) + 1] - ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * i + 1];
+									ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 1) + 1] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+									tmp = ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 1) + 2] - ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * i + 2];
+									ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 1) + 2] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
 
-									tmp = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*(i+2)] - DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*i];
-									DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*(i+2)] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
-									tmp = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*(i+2)+1] - DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*i+1];
-									DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*(i+2)+1] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
-									tmp = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*(i+2)+2] - DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*i+2];
-									DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride*(i+2)+2] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+									tmp = ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 2)] - ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * i];
+									ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 2)] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
+									tmp = ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 2) + 1] - ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * i + 1];
+									ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 2) + 1] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
+									tmp = ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 2) + 2] - ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * i + 2];
+									ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 2) + 2] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
 								}
 
-								DrawObjectList[j].VertexArray[i * DrawObjectList[j].VertexStride] += TMP.x;
-								DrawObjectList[j].VertexArray[i * DrawObjectList[j].VertexStride + 1] += TMP.y;
-								DrawObjectList[j].VertexArray[i * DrawObjectList[j].VertexStride + 2] += TMP.z;
+								ObjectsList[j].VertexArray[i * ObjectsList[j].VertexStride] += TMP.x;
+								ObjectsList[j].VertexArray[i * ObjectsList[j].VertexStride + 1] += TMP.y;
+								ObjectsList[j].VertexArray[i * ObjectsList[j].VertexStride + 2] += TMP.z;
 
-								DrawObjectList[j].VertexArray[(i + 1) * DrawObjectList[j].VertexStride] += TMP.x;
-								DrawObjectList[j].VertexArray[(i + 1) * DrawObjectList[j].VertexStride + 1] += TMP.y;
-								DrawObjectList[j].VertexArray[(i + 1) * DrawObjectList[j].VertexStride + 2] += TMP.z;
+								ObjectsList[j].VertexArray[(i + 1) * ObjectsList[j].VertexStride] += TMP.x;
+								ObjectsList[j].VertexArray[(i + 1) * ObjectsList[j].VertexStride + 1] += TMP.y;
+								ObjectsList[j].VertexArray[(i + 1) * ObjectsList[j].VertexStride + 2] += TMP.z;
 
-								DrawObjectList[j].VertexArray[(i + 2) * DrawObjectList[j].VertexStride] += TMP.x;
-								DrawObjectList[j].VertexArray[(i + 2) * DrawObjectList[j].VertexStride + 1] += TMP.y;
-								DrawObjectList[j].VertexArray[(i + 2) * DrawObjectList[j].VertexStride + 2] += TMP.z;
+								ObjectsList[j].VertexArray[(i + 2) * ObjectsList[j].VertexStride] += TMP.x;
+								ObjectsList[j].VertexArray[(i + 2) * ObjectsList[j].VertexStride + 1] += TMP.y;
+								ObjectsList[j].VertexArray[(i + 2) * ObjectsList[j].VertexStride + 2] += TMP.z;
 							}
 
 						}
@@ -241,37 +241,37 @@ bool cExplosion::Update(float Time)
 					// удаляем старые буферы, если они есть, создаем новые
 					// ! индексный буфер не трогаем, его не надо пересоздавать вообще
 
-					if (DrawObjectList[j].VBO)
-						vw_DeleteBufferObject(DrawObjectList[j].VBO);
-					if (DrawObjectList[j].VAO)
-						vw_DeleteVAO(DrawObjectList[j].VAO);
+					if (ObjectsList[j].VBO)
+						vw_DeleteBufferObject(ObjectsList[j].VBO);
+					if (ObjectsList[j].VAO)
+						vw_DeleteVAO(ObjectsList[j].VAO);
 
 
 					// делаем VBO
-					if (!vw_BuildVertexBufferObject(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexArray, DrawObjectList[j].VertexStride, DrawObjectList[j].VBO))
-						DrawObjectList[j].VBO = 0;
+					if (!vw_BuildVertexBufferObject(ObjectsList[j].VertexCount, ObjectsList[j].VertexArray, ObjectsList[j].VertexStride, ObjectsList[j].VBO))
+						ObjectsList[j].VBO = 0;
 
 					// делаем IBO, создаем его один раз, если его нет
-					if (DrawObjectList[j].IBO) {
-						if (!vw_BuildIndexBufferObject(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexArray, DrawObjectList[j].IBO))
-							DrawObjectList[j].IBO = 0;
+					if (ObjectsList[j].IBO) {
+						if (!vw_BuildIndexBufferObject(ObjectsList[j].VertexCount, ObjectsList[j].IndexArray, ObjectsList[j].IBO))
+							ObjectsList[j].IBO = 0;
 					}
 
 					// делаем VAO
-					if (!vw_BuildVAO(DrawObjectList[j].VAO, DrawObjectList[j].VertexCount, DrawObjectList[j].VertexFormat, DrawObjectList[j].VertexArray,
-							 DrawObjectList[j].VertexStride * sizeof(float), DrawObjectList[j].VBO,
-							 DrawObjectList[j].RangeStart, DrawObjectList[j].IndexArray, DrawObjectList[j].IBO))
-						DrawObjectList[j].VAO = 0;
+					if (!vw_BuildVAO(ObjectsList[j].VAO, ObjectsList[j].VertexCount, ObjectsList[j].VertexFormat, ObjectsList[j].VertexArray,
+							 ObjectsList[j].VertexStride * sizeof(float), ObjectsList[j].VBO,
+							 ObjectsList[j].RangeStart, ObjectsList[j].IndexArray, ObjectsList[j].IBO))
+						ObjectsList[j].VAO = 0;
 				}
 			}
 		}
 	} else {
 		// меняем данные глобальные для шейдера, тут делаем столько столько позволяет, а не 30 раз как с изменением геометрии
-		for (int j=0; j<DrawObjectQuantity; j++) {
+		for (int j = 0; j < ObjectsListCount; j++) {
 			// общий коэф. расстояния
-			DrawObjectList[j].ShaderData[1] += DrawObjectList[j].ShaderData[0]*TimeDelta;
+			ObjectsList[j].ShaderData[1] += ObjectsList[j].ShaderData[0]*TimeDelta;
 			// дельта скорости
-			DrawObjectList[j].ShaderData[0] -= DrawObjectList[j].ShaderData[0]*TimeDelta;
+			ObjectsList[j].ShaderData[0] -= ObjectsList[j].ShaderData[0]*TimeDelta;
 		}
 	}
 
@@ -283,7 +283,7 @@ bool cExplosion::Update(float Time)
 	// делаем AABB по упращенной схеме, главное для нас - скорость
 	float AABBSpeedTmp = AABBSpeed*TimeDelta;
 	AABBSpeed -= AABBSpeedTmp;
-	if (DrawObjectList != nullptr) {
+	if (ObjectsList) {
 		float MinX = AABB[6].x - AABBSpeedTmp;
 		float MaxX = AABB[0].x + AABBSpeedTmp;
 		float MinY = AABB[6].y - AABBSpeedTmp;

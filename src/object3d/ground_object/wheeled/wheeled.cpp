@@ -69,7 +69,7 @@ void cWheeled::Create(int WheeledNum)
 
 	LoadObjectData(PresetWheeledData[WheeledNum-1].Name, this, 0, 2.0f);
 
-	for (int i=0; i<DrawObjectQuantity; i++) {
+	for (int i=0; i<ObjectsListCount; i++) {
 		Texture[i] = vw_FindTextureByName(PresetWheeledData[WheeledNum-1].TextureName);
 	}
 	ResistanceHull = 1.0f;
@@ -344,28 +344,28 @@ void cWheeled::Create(int WheeledNum)
 
 	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
 	for (int i=0; i<WheelQuantity; i++)
-		DrawObjectList[WheelObjectsNum[i]].Rotation.x = vw_fRandNum(360.0f);
+		ObjectsList[WheelObjectsNum[i]].Rotation.x = vw_fRandNum(360.0f);
 
 
 
 	// вычисляем данные для нахождения точки стрельбы
 	if (TargetHorizObject != nullptr)
-		BaseBound = DrawObjectList[TargetHorizObject[0]].Location;
+		BaseBound = ObjectsList[TargetHorizObject[0]].Location;
 
 	if (TargetVertObject != nullptr) {
 		if (TargetHorizObject != nullptr) {
-			MiddleBound = DrawObjectList[TargetVertObject[0]].Location - DrawObjectList[TargetHorizObject[0]].Location;
+			MiddleBound = ObjectsList[TargetVertObject[0]].Location - ObjectsList[TargetHorizObject[0]].Location;
 		} else {
-			MiddleBound = DrawObjectList[TargetVertObject[0]].Location;
+			MiddleBound = ObjectsList[TargetVertObject[0]].Location;
 		}
 	}
 
 	if (WeaponBound != nullptr) {
 		for (int i = 0; i < WeaponQuantity; i++) {
 			if (TargetVertObject != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - DrawObjectList[TargetVertObject[0]].Location;
+				WeaponBound[i] = WeaponLocation[i] - ObjectsList[TargetVertObject[0]].Location;
 			else if (TargetHorizObject != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - DrawObjectList[TargetHorizObject[0]].Location;
+				WeaponBound[i] = WeaponLocation[i] - ObjectsList[TargetHorizObject[0]].Location;
 			else
 				WeaponBound[i] = WeaponLocation[i];
 		}

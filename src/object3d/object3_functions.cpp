@@ -120,42 +120,42 @@ void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float 
 	// т.е. нужны все объекты
 	if (ObjectNum == 0) {
 		// берем то, что нужно
-		Object3D->DrawObjectQuantity = Model->DrawObjectCount;
+		Object3D->ObjectsListCount = Model->ObjectsListCount;
 		Object3D->GlobalVertexArray = Model->GlobalVertexArray ;
 		Object3D->GlobalVBO = Model->GlobalVBO;
 		Object3D->GlobalIndexArray = Model->GlobalIndexArray;
 		Object3D->GlobalIBO = Model->GlobalIBO;
 		Object3D->GlobalVAO = Model->GlobalVAO;
-		Object3D->DrawObjectList = new sObjectBlock[Object3D->DrawObjectQuantity];
+		Object3D->ObjectsList = new sObjectBlock[Object3D->ObjectsListCount];
 		// копируем все данные
-		memcpy(Object3D->DrawObjectList, Model->DrawObjectList, sizeof(Model->DrawObjectList[0])*Object3D->DrawObjectQuantity);
+		memcpy(Object3D->ObjectsList, Model->ObjectsList, sizeof(Model->ObjectsList[0])*Object3D->ObjectsListCount);
 	} else {
 		// работаем только с одним объектом ( так работаем с оружием для кораблей землян )
 
 		// берем то, что нужно
-		Object3D->DrawObjectQuantity = 1;
-		Object3D->GlobalVertexArray = Model->DrawObjectList[ObjectNum - 1].VertexArray;
-		Object3D->GlobalVBO = Model->DrawObjectList[ObjectNum - 1].VBO;
-		Object3D->GlobalIndexArray = Model->DrawObjectList[ObjectNum - 1].IndexArray;
-		Object3D->GlobalIBO = Model->DrawObjectList[ObjectNum - 1].IBO;
-		Object3D->GlobalVAO = Model->DrawObjectList[ObjectNum - 1].VAO;
-		Object3D->DrawObjectList = new sObjectBlock[Object3D->DrawObjectQuantity];
+		Object3D->ObjectsListCount = 1;
+		Object3D->GlobalVertexArray = Model->ObjectsList[ObjectNum - 1].VertexArray;
+		Object3D->GlobalVBO = Model->ObjectsList[ObjectNum - 1].VBO;
+		Object3D->GlobalIndexArray = Model->ObjectsList[ObjectNum - 1].IndexArray;
+		Object3D->GlobalIBO = Model->ObjectsList[ObjectNum - 1].IBO;
+		Object3D->GlobalVAO = Model->ObjectsList[ObjectNum - 1].VAO;
+		Object3D->ObjectsList = new sObjectBlock[Object3D->ObjectsListCount];
 		// копируем данные нужного объекта
-		memcpy(Object3D->DrawObjectList, &(Model->DrawObjectList[ObjectNum - 1]), sizeof(Model->DrawObjectList[0]));
+		memcpy(Object3D->ObjectsList, &(Model->ObjectsList[ObjectNum - 1]), sizeof(Model->ObjectsList[0]));
 	}
 
 	// резервируем память для текстур
-	Object3D->Texture = new sTexture*[Object3D->DrawObjectQuantity];
-	Object3D->TextureIllum = new sTexture*[Object3D->DrawObjectQuantity];
-	Object3D->NormalMap = new sTexture*[Object3D->DrawObjectQuantity];
+	Object3D->Texture = new sTexture*[Object3D->ObjectsListCount];
+	Object3D->TextureIllum = new sTexture*[Object3D->ObjectsListCount];
+	Object3D->NormalMap = new sTexture*[Object3D->ObjectsListCount];
 
 	// резервируем память для HitBB
-	Object3D->HitBBLocation = new sVECTOR3D[Object3D->DrawObjectQuantity];
-	Object3D->HitBBRadius2 = new float[Object3D->DrawObjectQuantity];
-	Object3D->HitBBSize = new sVECTOR3D[Object3D->DrawObjectQuantity];
-	Object3D->HitBB = new sVECTOR3D*[Object3D->DrawObjectQuantity];
+	Object3D->HitBBLocation = new sVECTOR3D[Object3D->ObjectsListCount];
+	Object3D->HitBBRadius2 = new float[Object3D->ObjectsListCount];
+	Object3D->HitBBSize = new sVECTOR3D[Object3D->ObjectsListCount];
+	Object3D->HitBB = new sVECTOR3D*[Object3D->ObjectsListCount];
 
-	for (int i = 0; i < Object3D->DrawObjectQuantity; i++) {
+	for (int i = 0; i < Object3D->ObjectsListCount; i++) {
 		Object3D->Texture[i] = nullptr;
 		Object3D->TextureIllum[i] = nullptr;
 		Object3D->NormalMap[i] = nullptr;

@@ -207,14 +207,14 @@ public:
 	sTexture	**NormalMap{nullptr};
 
 	// список с геометрией модели, объекты для прорисовки
-	sObjectBlock	*DrawObjectList{nullptr};
+	sObjectBlock	*ObjectsList{nullptr};
 	float		*GlobalVertexArray{nullptr};
 	unsigned int	GlobalVBO{0};
 	unsigned int	*GlobalIndexArray{nullptr};
 	unsigned int	GlobalIBO{0};
 	unsigned int	GlobalVAO{0};
 	// кол-во объектов в списке
-	int		DrawObjectQuantity{0};
+	int		ObjectsListCount{0};
 	// минимальное расстояние (квадрат) с которого надо рисовать пообъектно, если -1 всегда рисовать только пообъектно
 	float		PromptDrawDist2{-1.0f};
 	int		InternalLights{0}; // кол-во внутренних источников света

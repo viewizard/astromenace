@@ -72,11 +72,11 @@ void Internal_ReleaseLocalIndexData()
 //------------------------------------------------------------------------------------
 // устанавливаем указатели, готовимся к прорисовке
 //------------------------------------------------------------------------------------
-GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *Data, int Stride, unsigned int VertexBO,
+GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *VertexArray, int Stride, unsigned int VertexBO,
 						unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO)
 {
 	// если ничего не передали
-	if (!Data && !VertexBO)
+	if (!VertexArray && !VertexBO)
 		return nullptr;
 
 	// флаг нужно ли с вбо делать
@@ -86,7 +86,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 
 
 	// обязательно в байты, т.к. делаем смещение в байтах!
-	uint8_t *TMP = (uint8_t *)Data;
+	uint8_t *TMP = (uint8_t *)VertexArray;
 
 	// чтобы знать сколько отступать, кол-во ед. элементов, в нашем случае float
 	intptr_t AddStride = 0;
@@ -332,24 +332,24 @@ void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, 
 //------------------------------------------------------------------------------------
 // Процедура передачи последовательности вертексов для прорисовки
 //------------------------------------------------------------------------------------
-void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int VertexBO,
+void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *VertexArray, int Stride, unsigned int VertexBO,
 		     unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO, unsigned int VAO)
 {
 	// если ничего не передали
-	if (!Data && !VertexBO && !VAO)
+	if (!VertexArray && !VertexBO)
 		return;
+
 	// флаг нужно ли с вaо делать
 	bool NeedVAO = vw_GetDevCaps()->VAOSupported;
 	if (!VAO)
 		NeedVAO = false;
-
 
 	// устанавливаем все необходимые указатели для прорисовки и получаем индексы
 	GLuint *VertexIndexPointer = nullptr;
 	if (NeedVAO)
 		vw_BindVAO(VAO);
 	else
-		VertexIndexPointer = vw_SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, Data, Stride,
+		VertexIndexPointer = vw_SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, VertexArray, Stride,
 									     VertexBO, RangeStart, IndexArray, IndexBO);
 
 // 1) Нельзя использовать short индексы (глючит в линуксе на картах нвидия, проверял на 97.55 драйвере)

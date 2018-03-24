@@ -36,8 +36,9 @@ PFNGLBINDVERTEXARRAYPROC glBindVertexArrayARB = nullptr;
 PFNGLDELETEVERTEXARRAYSPROC glDeleteVertexArraysARB = nullptr;
 PFNGLISVERTEXARRAYPROC glIsVertexArrayARB = nullptr;
 
-GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *Data, int Stride, unsigned int VertexBO,
-						unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO);
+GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *VertexArray,
+						int Stride, unsigned int VertexBO, unsigned int RangeStart,
+						unsigned int *IndexArray, unsigned int IndexBO);
 void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, unsigned int VAO);
 
 
@@ -68,7 +69,7 @@ bool vw_Internal_InitializationVAO()
 /*
  * Build vertex array object.
  */
-bool vw_BuildVAO(unsigned int &VAO, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int VBO,
+bool vw_BuildVAO(unsigned int &VAO, int NumVertices, int DataFormat, void *VertexArray, int Stride, unsigned int VBO,
 		 unsigned int RangeStart, unsigned int *DataIndex, unsigned int DataIndexVBO)
 {
 	if (!VAO ||
@@ -79,7 +80,7 @@ bool vw_BuildVAO(unsigned int &VAO, int NumVertices, int DataFormat, void *Data,
 	glGenVertexArraysARB(1, &VAO);
 
 	vw_BindVAO(VAO);
-	vw_SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, Data, Stride, VBO,
+	vw_SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, VertexArray, Stride, VBO,
 						RangeStart, DataIndex, DataIndexVBO);
 
 	vw_BindVAO(0);

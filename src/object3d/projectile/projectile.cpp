@@ -1451,8 +1451,10 @@ missile:
 				TextureIllum[0] = nullptr;
 			MineIData = 0.0f;
 		}
-		DrawObjectList[0].Rotation.y += 90.0f*TimeDelta;
-		while (DrawObjectList[0].Rotation.y > 360.0f) DrawObjectList[0].Rotation.y -= 360.0f;
+		ObjectsList[0].Rotation.y += 90.0f*TimeDelta;
+		while (ObjectsList[0].Rotation.y > 360.0f) {
+			ObjectsList[0].Rotation.y -= 360.0f;
+		}
 	// мина пришельцев, энергетическая (1-й тип)
 	case 106: {
 		// получаем положение ближайшего врага
@@ -1493,8 +1495,10 @@ missile:
 				TextureIllum[0] = nullptr;
 			MineIData = 0.0f;
 		}
-		DrawObjectList[0].Rotation.y += 90.0f*TimeDelta;
-		while (DrawObjectList[0].Rotation.y > 360.0f) DrawObjectList[0].Rotation.y -= 360.0f;
+		ObjectsList[0].Rotation.y += 90.0f * TimeDelta;
+		while (ObjectsList[0].Rotation.y > 360.0f) {
+			ObjectsList[0].Rotation.y -= 360.0f;
+		}
 	// мина пришельцев, энергетическая (2-й тип)
 	case 107:
 		RotationSpeed = 180.0f;
@@ -1566,8 +1570,10 @@ missile:
 				TextureIllum[0] = nullptr;
 			MineIData = 0.0f;
 		}
-		DrawObjectList[0].Rotation.y += 120.0f*TimeDelta;
-		while (DrawObjectList[0].Rotation.y > 360.0f) DrawObjectList[0].Rotation.y -= 360.0f;
+		ObjectsList[0].Rotation.y += 120.0f * TimeDelta;
+		while (ObjectsList[0].Rotation.y > 360.0f) {
+			ObjectsList[0].Rotation.y -= 360.0f;
+		}
 
 		RotationSpeed = 180.0f;
 		{
@@ -1663,8 +1669,10 @@ missile:
 				TextureIllum[0] = nullptr;
 			MineIData = 0.0f;
 		}
-		DrawObjectList[0].Rotation.y += 90.0f*TimeDelta;
-		while (DrawObjectList[0].Rotation.y > 360.0f) DrawObjectList[0].Rotation.y -= 360.0f;
+		ObjectsList[0].Rotation.y += 90.0f * TimeDelta;
+		while (ObjectsList[0].Rotation.y > 360.0f) {
+			ObjectsList[0].Rotation.y -= 360.0f;
+		}
 
 		RotationSpeed = 180.0f;
 		{

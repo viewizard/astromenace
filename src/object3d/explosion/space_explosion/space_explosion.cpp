@@ -410,9 +410,10 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
-		for (int i=0; i<Object->DrawObjectQuantity; i++) {
+		for (int i = 0; i < Object->ObjectsListCount; i++) {
 			// могут быть пустые группы, убираем их и идем смотрим на следующую группу
-			if (Object->DrawObjectList[i].VertexCount == 0) continue;
+			if (Object->ObjectsList[i].VertexCount == 0)
+				continue;
 
 			cShipPart *ShipPart;
 			ShipPart = new cShipPart;
@@ -429,33 +430,33 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 				}
 
 			// берем то, что нужно
-			ShipPart->DrawObjectQuantity = 1;
-			ShipPart->DrawObjectList = new sObjectBlock[ShipPart->DrawObjectQuantity];
+			ShipPart->ObjectsListCount = 1;
+			ShipPart->ObjectsList = new sObjectBlock[ShipPart->ObjectsListCount];
 			// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
-			memcpy(&(ShipPart->DrawObjectList[0]), &(Object->DrawObjectList[i]), sizeof(Object->DrawObjectList[0]));
+			memcpy(&(ShipPart->ObjectsList[0]), &(Object->ObjectsList[i]), sizeof(Object->ObjectsList[0]));
 			// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
-			if (Object->DrawObjectList[i].NeedDestroyDataInObjectBlock) {
-				Object->DrawObjectList[i].NeedDestroyDataInObjectBlock = false;
-				ShipPart->DrawObjectList[0].NeedDestroyDataInObjectBlock = true;
+			if (Object->ObjectsList[i].NeedDestroyDataInObjectBlock) {
+				Object->ObjectsList[i].NeedDestroyDataInObjectBlock = false;
+				ShipPart->ObjectsList[0].NeedDestroyDataInObjectBlock = true;
 			}
 
 			// резервируем память для HitBB
-			ShipPart->HitBBLocation = new sVECTOR3D[ShipPart->DrawObjectQuantity];
-			ShipPart->HitBBRadius2 = new float[ShipPart->DrawObjectQuantity];
-			ShipPart->HitBBSize = new sVECTOR3D[ShipPart->DrawObjectQuantity];
-			ShipPart->HitBB = new sVECTOR3D*[ShipPart->DrawObjectQuantity];
-			for (int i1=0; i1<ShipPart->DrawObjectQuantity; i1++) {
+			ShipPart->HitBBLocation = new sVECTOR3D[ShipPart->ObjectsListCount];
+			ShipPart->HitBBRadius2 = new float[ShipPart->ObjectsListCount];
+			ShipPart->HitBBSize = new sVECTOR3D[ShipPart->ObjectsListCount];
+			ShipPart->HitBB = new sVECTOR3D*[ShipPart->ObjectsListCount];
+			for (int i1 = 0; i1 < ShipPart->ObjectsListCount; i1++) {
 				ShipPart->HitBB[i1] = new sVECTOR3D[8];
 			}
 
 
 			// находим точку локального положения объекта в моделе
-			sVECTOR3D LocalLocation = Object->DrawObjectList[i].Location;
+			sVECTOR3D LocalLocation = Object->ObjectsList[i].Location;
 			vw_Matrix33CalcPoint(LocalLocation, Object->CurrentRotationMat);
 			LocalLocation = Object->HitBBLocation[i]-LocalLocation;
 			vw_Matrix33CalcPoint(LocalLocation, InvRotationMat);
 			// и меняем внутрее положение
-			ShipPart->DrawObjectList[0].Location = LocalLocation^(-1.0f);
+			ShipPart->ObjectsList[0].Location = LocalLocation^(-1.0f);
 
 			// находим все данные по геометрии
 			ShipPart->InitByDrawObjectList();
@@ -525,54 +526,54 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		int TotalCount = 0;
 
 		// создаем последовательность
-		DrawObjectQuantity = Object->DrawObjectQuantity;
-		Texture = new sTexture*[DrawObjectQuantity];
-		DrawObjectList = new sObjectBlock[DrawObjectQuantity];
+		ObjectsListCount = Object->ObjectsListCount;
+		Texture = new sTexture*[ObjectsListCount];
+		ObjectsList = new sObjectBlock[ObjectsListCount];
 
 		// смотрим по настройкам сколько пропускать
 		int NeedIn = Setup.VisualEffectsQuality;
 
 		// составляем данные для взрыва
-		for (int i=0; i<DrawObjectQuantity; i++) {
+		for (int i = 0; i < ObjectsListCount; i++) {
 			Texture[i] = Object->Texture[i];
 			// копируем данные
-			memcpy(&(DrawObjectList[i]), &(Object->DrawObjectList[i]), sizeof(Object->DrawObjectList[0]));
+			memcpy(&(ObjectsList[i]), &(Object->ObjectsList[i]), sizeof(Object->ObjectsList[0]));
 			// делаем изменения
-			DrawObjectList[i].VBO = 0;
-			DrawObjectList[i].VertexArray = nullptr;
-			DrawObjectList[i].IBO = 0;
-			DrawObjectList[i].IndexArray = nullptr;
-			DrawObjectList[i].VAO = 0;
-			DrawObjectList[i].NeedDestroyDataInObjectBlock = true; // удалять в объекте
-			DrawObjectList[i].RangeStart = 0;
-			DrawObjectList[i].VertexBufferLimitedBySizeTriangles = nullptr;
-			DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount = 0;
+			ObjectsList[i].VBO = 0;
+			ObjectsList[i].VertexArray = nullptr;
+			ObjectsList[i].IBO = 0;
+			ObjectsList[i].IndexArray = nullptr;
+			ObjectsList[i].VAO = 0;
+			ObjectsList[i].NeedDestroyDataInObjectBlock = true; // удалять в объекте
+			ObjectsList[i].RangeStart = 0;
+			ObjectsList[i].VertexArrayWithSmallTriangles = nullptr;
+			ObjectsList[i].VertexArrayWithSmallTrianglesCount = 0;
 
 			// делаем поворот геометрии объекта чтобы правильно сделать разлет частиц
-			DrawObjectList[i].VertexCount = 0;
+			ObjectsList[i].VertexCount = 0;
 			int k = 0;
 			int NeedInCur = NeedIn;
 
 			int tricount = 0;
 
 			// если 2 текстурных координаты, нужно убрать 2-ю...
-			if ((Object->DrawObjectList[i].VertexFormat & 0x000000F) >= 2) {
-				DrawObjectList[i].VertexFormat = (Object->DrawObjectList[i].VertexFormat & 0xFFFFFF0) | RI_1_TEX;
+			if ((Object->ObjectsList[i].VertexFormat & 0x000000F) >= 2) {
+				ObjectsList[i].VertexFormat = (Object->ObjectsList[i].VertexFormat & 0xFFFFFF0) | RI_1_TEX;
 			} else {
-				DrawObjectList[i].VertexFormat = Object->DrawObjectList[i].VertexFormat;
+				ObjectsList[i].VertexFormat = Object->ObjectsList[i].VertexFormat;
 			}
-			DrawObjectList[i].VertexStride = Object->DrawObjectList[i].VertexStride;
+			ObjectsList[i].VertexStride = Object->ObjectsList[i].VertexStride;
 
 
 			// если у нас включены и работают шейдеры, надо приготовить место для данных + изменить формат и шаг
 			if (Setup.UseGLSL) {
-				DrawObjectList[i].VertexStride = 3+3+6;
-				DrawObjectList[i].VertexFormat = RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX;
+				ObjectsList[i].VertexStride = 3 + 3 + 6;
+				ObjectsList[i].VertexFormat = RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX;
 			}
 
 			// выделяем память для данных
 			// в отличии от снарядов - тут работаем с VertexBufferLimitedBySizeTriangles, чтобы сделать более красивый взрыв из мелких треугольников
-			DrawObjectList[i].VertexArray = new float[DrawObjectList[i].VertexStride * Object->DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount];
+			ObjectsList[i].VertexArray = new float[ObjectsList[i].VertexStride * Object->ObjectsList[i].VertexArrayWithSmallTrianglesCount];
 
 
 
@@ -582,44 +583,44 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			float TransMatTMPNorm[9];
 			vw_Matrix33Identity(TransMatTMPNorm);
 			// если нужно - создаем матрицу, иначе - копируем ее
-			if (Object->DrawObjectList[i].Rotation.x != 0.0f ||
-			    Object->DrawObjectList[i].Rotation.y != 0.0f ||
-			    Object->DrawObjectList[i].Rotation.z != 0.0f) {
-				vw_Matrix44CreateRotate(TransMatTMP, Object->DrawObjectList[i].Rotation);
-				vw_Matrix33CreateRotate(TransMatTMPNorm, Object->DrawObjectList[i].Rotation);
+			if (Object->ObjectsList[i].Rotation.x != 0.0f ||
+			    Object->ObjectsList[i].Rotation.y != 0.0f ||
+			    Object->ObjectsList[i].Rotation.z != 0.0f) {
+				vw_Matrix44CreateRotate(TransMatTMP, Object->ObjectsList[i].Rotation);
+				vw_Matrix33CreateRotate(TransMatTMPNorm, Object->ObjectsList[i].Rotation);
 			}
-			vw_Matrix44Translate(TransMatTMP, DrawObjectList[i].Location);
+			vw_Matrix44Translate(TransMatTMP, ObjectsList[i].Location);
 			vw_Matrix33Mult(TransMatTMPNorm, Object->CurrentRotationMat);
 
 
 			sVECTOR3D TMP;
-			for (int j=0; j<Object->DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount; j++) {
+			for (int j=0; j<Object->ObjectsList[i].VertexArrayWithSmallTrianglesCount; j++) {
 				if (NeedInCur <= 0) {
-					int j1 = k*DrawObjectList[i].VertexStride;
-					int j2 = j*Object->DrawObjectList[i].VertexStride;
+					int j1 = k*ObjectsList[i].VertexStride;
+					int j2 = j*Object->ObjectsList[i].VertexStride;
 
-					TMP.x = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2];
-					TMP.y = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+1];
-					TMP.z = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+2];
+					TMP.x = Object->ObjectsList[i].VertexArrayWithSmallTriangles[j2];
+					TMP.y = Object->ObjectsList[i].VertexArrayWithSmallTriangles[j2 + 1];
+					TMP.z = Object->ObjectsList[i].VertexArrayWithSmallTriangles[j2 + 2];
 					vw_Matrix44CalcPoint(TMP, TransMatTMP);
 					vw_Matrix33CalcPoint(TMP, Object->CurrentRotationMat);
 					// координаты
-					DrawObjectList[i].VertexArray[j1] = TMP.x;
-					DrawObjectList[i].VertexArray[j1 + 1] = TMP.y;
-					DrawObjectList[i].VertexArray[j1 + 2] = TMP.z;
+					ObjectsList[i].VertexArray[j1] = TMP.x;
+					ObjectsList[i].VertexArray[j1 + 1] = TMP.y;
+					ObjectsList[i].VertexArray[j1 + 2] = TMP.z;
 					// нормали
-					TMP.x = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+3];
-					TMP.y = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+4];
-					TMP.z = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+5];
+					TMP.x = Object->ObjectsList[i].VertexArrayWithSmallTriangles[j2 + 3];
+					TMP.y = Object->ObjectsList[i].VertexArrayWithSmallTriangles[j2 + 4];
+					TMP.z = Object->ObjectsList[i].VertexArrayWithSmallTriangles[j2 + 5];
 					vw_Matrix33CalcPoint(TMP, TransMatTMPNorm);
-					DrawObjectList[i].VertexArray[j1 + 3] = TMP.x;
-					DrawObjectList[i].VertexArray[j1 + 4] = TMP.y;
-					DrawObjectList[i].VertexArray[j1 + 5] = TMP.z;
+					ObjectsList[i].VertexArray[j1 + 3] = TMP.x;
+					ObjectsList[i].VertexArray[j1 + 4] = TMP.y;
+					ObjectsList[i].VertexArray[j1 + 5] = TMP.z;
 					// текстура
-					DrawObjectList[i].VertexArray[j1 + 6] = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2 + 6];
-					DrawObjectList[i].VertexArray[j1 + 7] = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2 + 7];
+					ObjectsList[i].VertexArray[j1 + 6] = Object->ObjectsList[i].VertexArrayWithSmallTriangles[j2 + 6];
+					ObjectsList[i].VertexArray[j1 + 7] = Object->ObjectsList[i].VertexArrayWithSmallTriangles[j2 + 7];
 
-					DrawObjectList[i].VertexCount++;
+					ObjectsList[i].VertexCount++;
 					k++;
 
 					if (tricount == 2) NeedInCur = NeedIn;
@@ -633,15 +634,16 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 
 			// создаем индексный буфер блока
-			DrawObjectList[i].IndexArray = new unsigned int[DrawObjectList[i].VertexCount];
-			for (int j=0; j<DrawObjectList[i].VertexCount; j++) DrawObjectList[i].IndexArray[j] = j;
+			ObjectsList[i].IndexArray = new unsigned int[ObjectsList[i].VertexCount];
+			for (int j = 0; j < ObjectsList[i].VertexCount; j++) {
+				ObjectsList[i].IndexArray[j] = j;
+			}
 
 
+			ObjectsList[i].Location = sVECTOR3D(0.0f,0.0f,0.0f);
+			ObjectsList[i].Rotation = sVECTOR3D(0.0f,0.0f,0.0f);
 
-			DrawObjectList[i].Location = sVECTOR3D(0.0f,0.0f,0.0f);
-			DrawObjectList[i].Rotation = sVECTOR3D(0.0f,0.0f,0.0f);
-
-			TotalCount += DrawObjectList[i].VertexCount;
+			TotalCount += ObjectsList[i].VertexCount;
 		}
 
 		// расстояние от центра до крайней точки
@@ -652,19 +654,19 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		int Count = 0;
 		sVECTOR3D TMP;
 		ExplosionPieceData = new sExplosionPiece[TotalCount/3];
-		for (int j=0; j<DrawObjectQuantity; j++) {
-			for (int i=0; i<DrawObjectList[j].VertexCount; i+=3) {
-				ExplosionPieceData[Count].Velocity.x = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride *  i];
-				ExplosionPieceData[Count].Velocity.x += DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride *(i + 1)];
-				ExplosionPieceData[Count].Velocity.x += DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2)];
+		for (int j = 0; j < ObjectsListCount; j++) {
+			for (int i = 0; i < ObjectsList[j].VertexCount; i+=3) {
+				ExplosionPieceData[Count].Velocity.x = ObjectsList[j].VertexArray[ObjectsList[j].VertexStride *  i];
+				ExplosionPieceData[Count].Velocity.x += ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 1)];
+				ExplosionPieceData[Count].Velocity.x += ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 2)];
 				ExplosionPieceData[Count].Velocity.x = ExplosionPieceData[Count].Velocity.x / 3.0f;
-				ExplosionPieceData[Count].Velocity.y = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 1];
-				ExplosionPieceData[Count].Velocity.y += DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 1) + 1];
-				ExplosionPieceData[Count].Velocity.y += DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2) + 1];
+				ExplosionPieceData[Count].Velocity.y = ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * i + 1];
+				ExplosionPieceData[Count].Velocity.y += ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 1) + 1];
+				ExplosionPieceData[Count].Velocity.y += ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 2) + 1];
 				ExplosionPieceData[Count].Velocity.y = ExplosionPieceData[Count].Velocity.y / 3.0f;
-				ExplosionPieceData[Count].Velocity.z = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 2];
-				ExplosionPieceData[Count].Velocity.z += DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 1) + 2];
-				ExplosionPieceData[Count].Velocity.z += DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2) + 2];
+				ExplosionPieceData[Count].Velocity.z = ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * i + 2];
+				ExplosionPieceData[Count].Velocity.z += ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 1) + 2];
+				ExplosionPieceData[Count].Velocity.z += ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 2) + 2];
 				ExplosionPieceData[Count].Velocity.z = ExplosionPieceData[Count].Velocity.z / 3.0f;
 
 				// находим расстояние, чтобы включить его
@@ -681,24 +683,24 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 				// записываем центр треугольника, оно же базовое ускорение + цент UV, для передачи шейдеру
 				if (Setup.UseGLSL) {
 					// Velocity/центр треугольника
-					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 8] = ExplosionPieceData[Count].Velocity.x;
-					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 9] = ExplosionPieceData[Count].Velocity.y;
-					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 10] = ExplosionPieceData[Count].Velocity.z;
-					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 1) + 8] = ExplosionPieceData[Count].Velocity.x;
-					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 1) + 9] = ExplosionPieceData[Count].Velocity.y;
-					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 1) + 10] = ExplosionPieceData[Count].Velocity.z;
-					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2) + 8] = ExplosionPieceData[Count].Velocity.x;
-					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2) + 9] = ExplosionPieceData[Count].Velocity.y;
-					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2) + 10] = ExplosionPieceData[Count].Velocity.z;
+					ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * i + 8] = ExplosionPieceData[Count].Velocity.x;
+					ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * i + 9] = ExplosionPieceData[Count].Velocity.y;
+					ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * i + 10] = ExplosionPieceData[Count].Velocity.z;
+					ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 1) + 8] = ExplosionPieceData[Count].Velocity.x;
+					ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 1) + 9] = ExplosionPieceData[Count].Velocity.y;
+					ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 1) + 10] = ExplosionPieceData[Count].Velocity.z;
+					ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 2) + 8] = ExplosionPieceData[Count].Velocity.x;
+					ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 2) + 9] = ExplosionPieceData[Count].Velocity.y;
+					ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 2) + 10] = ExplosionPieceData[Count].Velocity.z;
 					// acc
 					if (dist/Diag < 0.01f) {
-						DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 11] = Acc + 4.0f * vw_Randf0;
-						DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 1) + 11] = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 11];
-						DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2) + 11] = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 11];
+						ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * i + 11] = Acc + 4.0f * vw_Randf0;
+						ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 1) + 11] = ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * i + 11];
+						ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 2) + 11] = ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * i + 11];
 					} else {
-						DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 11] = Acc;
-						DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 1) + 11] = Acc;
-						DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2) + 11] = Acc;
+						ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * i + 11] = Acc;
+						ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 1) + 11] = Acc;
+						ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 2) + 11] = Acc;
 					}
 
 				}
@@ -729,34 +731,34 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			// удаляем старые буферы, если они есть, создаем новые
 			// ! индексный буфер не трогаем, его не надо пересоздавать вообще
 
-			if (DrawObjectList[j].VBO)
-				vw_DeleteBufferObject(DrawObjectList[j].VBO);
-			if (DrawObjectList[j].VAO)
-				vw_DeleteVAO(DrawObjectList[j].VAO);
+			if (ObjectsList[j].VBO)
+				vw_DeleteBufferObject(ObjectsList[j].VBO);
+			if (ObjectsList[j].VAO)
+				vw_DeleteVAO(ObjectsList[j].VAO);
 			// делаем VBO
-			if (!vw_BuildVertexBufferObject(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexArray, DrawObjectList[j].VertexStride, DrawObjectList[j].VBO))
-				DrawObjectList[j].VBO = 0;
+			if (!vw_BuildVertexBufferObject(ObjectsList[j].VertexCount, ObjectsList[j].VertexArray, ObjectsList[j].VertexStride, ObjectsList[j].VBO))
+				ObjectsList[j].VBO = 0;
 
 			// делаем IBO, создаем его один раз, если его нет
-			if (!DrawObjectList[j].IBO) {
-				if (!vw_BuildIndexBufferObject(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexArray, DrawObjectList[j].IBO))
-					DrawObjectList[j].IBO = 0;
+			if (!ObjectsList[j].IBO) {
+				if (!vw_BuildIndexBufferObject(ObjectsList[j].VertexCount, ObjectsList[j].IndexArray, ObjectsList[j].IBO))
+					ObjectsList[j].IBO = 0;
 			}
 
 			// делаем VAO
-			if (!vw_BuildVAO(DrawObjectList[j].VAO, DrawObjectList[j].VertexCount, DrawObjectList[j].VertexFormat, DrawObjectList[j].VertexArray,
-					 DrawObjectList[j].VertexStride * sizeof(float), DrawObjectList[j].VBO,
-					 DrawObjectList[j].RangeStart, DrawObjectList[j].IndexArray, DrawObjectList[j].IBO))
-				DrawObjectList[j].VAO = 0;
+			if (!vw_BuildVAO(ObjectsList[j].VAO, ObjectsList[j].VertexCount, ObjectsList[j].VertexFormat, ObjectsList[j].VertexArray,
+					 ObjectsList[j].VertexStride * sizeof(float), ObjectsList[j].VBO,
+					 ObjectsList[j].RangeStart, ObjectsList[j].IndexArray, ObjectsList[j].IBO))
+				ObjectsList[j].VAO = 0;
 
 
 			// установки по шейдеру для объекта
 			if (Setup.UseGLSL) {
-				DrawObjectList[j].ShaderType = 2;
+				ObjectsList[j].ShaderType = 2;
 				// дельта скорости
-				DrawObjectList[j].ShaderData[0] = 1.0f;
+				ObjectsList[j].ShaderData[0] = 1.0f;
 				// общий коэф расстояния
-				DrawObjectList[j].ShaderData[1] = 0.0f;
+				ObjectsList[j].ShaderData[1] = 0.0f;
 			}
 
 		}

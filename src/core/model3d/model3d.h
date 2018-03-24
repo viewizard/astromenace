@@ -68,10 +68,11 @@ struct sObjectBlock {
 	unsigned int IBO{0};			// номер IBO
 	// VAO
 	unsigned int VAO{0};			// номер VAO
-	// указатель на буфер, с мешем приведенным к опеределнному размеру треугольников (для взрывов)
-	// для него никогда не делаем VBO, буфер исключительно для работы внутри программы
-	float *VertexBufferLimitedBySizeTriangles{nullptr};
-	int VertexBufferLimitedBySizeTrianglesCount{0}; // кол-во вертексов в нем
+	// for explosion we need pre-generated vertex array with small triangles,
+	// in this case, we could create cool looking effects, when enemies disintegrate
+	// into 'dust' pieces during explosion
+	float *VertexArrayWithSmallTriangles{nullptr};
+	int VertexArrayWithSmallTrianglesCount{0};
 };
 
 //-----------------------------------------------------------------------------
@@ -87,10 +88,8 @@ public:
 	std::string Name{};
 
 	// лист объектов, из которых состоит модель
-	sObjectBlock *DrawObjectList{nullptr};
-	int DrawObjectCount{0};
-	unsigned int GlobalVertexCount{0};	// фактическое кол-во вертексов в буфере
-	unsigned int GlobalIndexCount{0};	// фактическое кол-во индексов в буфере
+	sObjectBlock *ObjectsList{nullptr};
+	int ObjectsListCount{0};
 
 	// читаем-пишем форматы 3д моделей
 	bool ReadVW3D(const std::string &FileName);
@@ -105,11 +104,17 @@ public:
 	// создаем буфер для разрушаемых объектов с ограничением по размеру треугольников
 	void CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit);
 
-	// буферы
+	// vertex-related
 	float *GlobalVertexArray{nullptr};
+	unsigned int GlobalVertexArrayCount{0};
 	unsigned int GlobalVBO{0};
+
+	// index-related
 	unsigned int *GlobalIndexArray{nullptr};
+	unsigned int GlobalIndexArrayCount{0};
 	unsigned int GlobalIBO{0};
+
+	// vao
 	unsigned int GlobalVAO{0};
 
 	// указатели на цепь моделей

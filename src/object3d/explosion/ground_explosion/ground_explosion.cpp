@@ -81,10 +81,10 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
-		for (int i=0; i<Object->DrawObjectQuantity; i++) {
+		for (int i = 0; i < Object->ObjectsListCount; i++) {
 			// могут быть пустые группы, убираем их и идем смотрим на следующую группу
 			// или это гусеница, тоже ее пропускаем
-			if (Object->DrawObjectList[i].VertexCount == 0 || Object->TrackObjectNum == i) {
+			if (Object->ObjectsList[i].VertexCount == 0 || Object->TrackObjectNum == i) {
 				continue;
 			} else {
 				// создаем часть
@@ -102,35 +102,35 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 				}
 
 				// берем то, что нужно
-				ShipPart->DrawObjectQuantity = 1;
-				ShipPart->DrawObjectList = new sObjectBlock[ShipPart->DrawObjectQuantity];
+				ShipPart->ObjectsListCount = 1;
+				ShipPart->ObjectsList = new sObjectBlock[ShipPart->ObjectsListCount];
 				// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
-				memcpy(&(ShipPart->DrawObjectList[0]), &(Object->DrawObjectList[i]), sizeof(Object->DrawObjectList[0]));
+				memcpy(&(ShipPart->ObjectsList[0]), &(Object->ObjectsList[i]), sizeof(Object->ObjectsList[0]));
 				// берем стандартные шейдеры
-				ShipPart->DrawObjectList[0].ShaderType = 1;
+				ShipPart->ObjectsList[0].ShaderType = 1;
 				// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
-				if (Object->DrawObjectList[i].NeedDestroyDataInObjectBlock) {
-					Object->DrawObjectList[i].NeedDestroyDataInObjectBlock = false;
-					ShipPart->DrawObjectList[0].NeedDestroyDataInObjectBlock = true;
+				if (Object->ObjectsList[i].NeedDestroyDataInObjectBlock) {
+					Object->ObjectsList[i].NeedDestroyDataInObjectBlock = false;
+					ShipPart->ObjectsList[0].NeedDestroyDataInObjectBlock = true;
 				}
 
 				// резервируем память для HitBB
-				ShipPart->HitBBLocation = new sVECTOR3D[ShipPart->DrawObjectQuantity];
-				ShipPart->HitBBRadius2 = new float[ShipPart->DrawObjectQuantity];
-				ShipPart->HitBBSize = new sVECTOR3D[ShipPart->DrawObjectQuantity];
-				ShipPart->HitBB = new sVECTOR3D*[ShipPart->DrawObjectQuantity];
-				for (int i1=0; i1<ShipPart->DrawObjectQuantity; i1++) {
+				ShipPart->HitBBLocation = new sVECTOR3D[ShipPart->ObjectsListCount];
+				ShipPart->HitBBRadius2 = new float[ShipPart->ObjectsListCount];
+				ShipPart->HitBBSize = new sVECTOR3D[ShipPart->ObjectsListCount];
+				ShipPart->HitBB = new sVECTOR3D*[ShipPart->ObjectsListCount];
+				for (int i1 = 0; i1 < ShipPart->ObjectsListCount; i1++) {
 					ShipPart->HitBB[i1] = new sVECTOR3D[8];
 				}
 
 
 				// находим точку локального положения объекта в моделе
-				sVECTOR3D LocalLocation = Object->DrawObjectList[i].Location;
+				sVECTOR3D LocalLocation = Object->ObjectsList[i].Location;
 				vw_Matrix33CalcPoint(LocalLocation, Object->CurrentRotationMat);
 				LocalLocation = Object->HitBBLocation[i]-LocalLocation;
 				vw_Matrix33CalcPoint(LocalLocation, InvRotationMat);
 				// и меняем внутрее положение
-				ShipPart->DrawObjectList[0].Location = LocalLocation^(-1.0f);
+				ShipPart->ObjectsList[0].Location = LocalLocation^(-1.0f);
 
 				// находим все данные по геометрии
 				ShipPart->InitByDrawObjectList();

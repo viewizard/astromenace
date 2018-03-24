@@ -219,42 +219,47 @@ bool cSpaceObject::Update(float Time)
 			switch (ObjectCreationType) {
 			// планета с астероидным кольцом
 			case 1:
-				DrawObjectList[0].Rotation.y += 0.5f*TimeDelta;
+				ObjectsList[0].Rotation.y += 0.5f * TimeDelta;
 				// кольца
-				DrawObjectList[1].Rotation.y += 0.7f*TimeDelta;
-				DrawObjectList[2].Rotation.y += 0.8f*TimeDelta;
-				DrawObjectList[3].Rotation.y += 0.9f*TimeDelta;
+				ObjectsList[1].Rotation.y += 0.7f * TimeDelta;
+				ObjectsList[2].Rotation.y += 0.8f * TimeDelta;
+				ObjectsList[3].Rotation.y += 0.9f * TimeDelta;
 				break;
 			// полу разрушенная планета
 			case 2:
-				Rotation.y += 0.5f*TimeDelta;
-				if (Rotation.y >= 360.0f) Rotation.y -= 360.0f;
+				Rotation.y += 0.5f * TimeDelta;
+				if (Rotation.y >= 360.0f)
+					Rotation.y -= 360.0f;
 				break;
 			// планета с атмосферой
 			case 3:
-				DrawObjectList[0].Rotation.y += 0.5f*TimeDelta;
+				ObjectsList[0].Rotation.y += 0.5f * TimeDelta;
 				// атмосфера
-				DrawObjectList[1].Rotation.y -= 0.7*TimeDelta;
+				ObjectsList[1].Rotation.y -= 0.7 * TimeDelta;
 				break;
 			// луна
 			case 4:
-				DrawObjectList[0].Rotation.y += 1.0f*TimeDelta;
+				ObjectsList[0].Rotation.y += 1.0f * TimeDelta;
 				break;
 			// планета пришельцев, с подсветкой
 			case 5:
-				DrawObjectList[0].Rotation.y += 0.5f*TimeDelta;
+				ObjectsList[0].Rotation.y += 0.5f * TimeDelta;
 				break;
 			// планета пришельцев
 			case 6:
-				DrawObjectList[0].Rotation.y += 0.5f*TimeDelta;
+				ObjectsList[0].Rotation.y += 0.5f * TimeDelta;
 				break;
 			}
 
-			for (int i=0; i<DrawObjectQuantity; i++) {
-				if (DrawObjectList[i].Rotation.x >= 360.0f) DrawObjectList[i].Rotation.x -= 360.0f;
-				if (DrawObjectList[i].Rotation.x <= -360.0f) DrawObjectList[i].Rotation.x += 360.0f;
-				if (DrawObjectList[i].Rotation.y >= 360.0f) DrawObjectList[i].Rotation.y -= 360.0f;
-				if (DrawObjectList[i].Rotation.y <= -360.0f) DrawObjectList[i].Rotation.y += 360.0f;
+			for (int i = 0; i < ObjectsListCount; i++) {
+				if (ObjectsList[i].Rotation.x >= 360.0f)
+					ObjectsList[i].Rotation.x -= 360.0f;
+				if (ObjectsList[i].Rotation.x <= -360.0f)
+					ObjectsList[i].Rotation.x += 360.0f;
+				if (ObjectsList[i].Rotation.y >= 360.0f)
+					ObjectsList[i].Rotation.y -= 360.0f;
+				if (ObjectsList[i].Rotation.y <= -360.0f)
+					ObjectsList[i].Rotation.y += 360.0f;
 			}
 		}
 

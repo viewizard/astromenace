@@ -66,7 +66,7 @@ void cPlanet::Create(int PlanetNum)
 	case 2:
 		PromptDrawDist2 = 100.0f; // только для этой планеты ставим такое !!!
 		LoadObjectData("models/planet/dplanet.vw3d", this, 0, -1.0f, Setup.UseGLSL);
-		for (int i=0; i<DrawObjectQuantity; i++) {
+		for (int i = 0; i < ObjectsListCount; i++) {
 			Texture[i] = vw_FindTextureByName("models/planet/d_class3.tga");
 			TextureIllum[i] = nullptr;
 			NormalMap[i] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
@@ -82,7 +82,7 @@ void cPlanet::Create(int PlanetNum)
 
 		Texture[1] = vw_FindTextureByName("models/planet/clouds.tga");
 		TextureIllum[1] = nullptr;
-		DrawObjectList[1].DrawType = 1; // рисуем прозрачным
+		ObjectsList[1].DrawType = 1; // рисуем прозрачным
 		break;
 	// "красная" планета
 	case 4:

@@ -96,7 +96,7 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	LoadObjectData(PresetAlienSpaceFighterData[SpaceShipNum-1].Name, this, 0, 2.0f);
 
 	// всегда только эти текстуры и 1 объект
-	for (int i=0; i<DrawObjectQuantity; i++) {
+	for (int i = 0; i < ObjectsListCount; i++) {
 		Texture[i] = vw_FindTextureByName("models/alienfighter/al-text04.vw2d");
 		TextureIllum[i] = vw_FindTextureByName("models/alienfighter/al-illum04.vw2d");
 	}
