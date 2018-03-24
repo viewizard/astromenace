@@ -396,7 +396,7 @@ void vw_GetPrioritizeTextures(GLuint TextureID, float *Prior);
 // Send (draw) vertices
 void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride,
 		     unsigned int VertexBO = 0, unsigned int RangeStart = 0, unsigned int *IndexArray = nullptr,
-		     unsigned int IndexBO = 0, unsigned int *VAO = nullptr);
+		     unsigned int IndexBO = 0, unsigned int VAO = 0);
 // Set color
 void vw_SetColor(float nRed, float nGreen, float nBlue, float nAlpha);
 // Set polygon rasterization mode
@@ -477,15 +477,17 @@ void vw_DeleteBufferObject(unsigned int &Buffer);
 
 
 
-// VAO
+/*
+ * Vertex array objects.
+ */
 
-// создаем
-bool vw_BuildVAO(unsigned int *VAO, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int VBO,
+// Build vertex array object.
+bool vw_BuildVAO(unsigned int &VAO, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int VBO,
 		 unsigned int RangeStart, unsigned int *DataIndex, unsigned int DataIndexVBO);
-// устанавливаем
+// Bind vertex array object.
 void vw_BindVAO(unsigned int VAO);
-// удаляем
-void vw_DeleteVAO(unsigned int VAO);
+// Delete vertex array object.
+void vw_DeleteVAO(unsigned int &VAO);
 
 
 

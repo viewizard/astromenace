@@ -121,9 +121,9 @@ void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float 
 	if (ObjectNum == 0) {
 		// берем то, что нужно
 		Object3D->DrawObjectQuantity = Model->DrawObjectCount;
-		Object3D->GlobalVertexBuffer = Model->GlobalVertexBuffer ;
+		Object3D->GlobalVertexArray = Model->GlobalVertexArray ;
 		Object3D->GlobalVBO = Model->GlobalVBO;
-		Object3D->GlobalIndexBuffer = Model->GlobalIndexBuffer;
+		Object3D->GlobalIndexArray = Model->GlobalIndexArray;
 		Object3D->GlobalIBO = Model->GlobalIBO;
 		Object3D->GlobalVAO = Model->GlobalVAO;
 		Object3D->DrawObjectList = new sObjectBlock[Object3D->DrawObjectQuantity];
@@ -134,14 +134,14 @@ void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float 
 
 		// берем то, что нужно
 		Object3D->DrawObjectQuantity = 1;
-		Object3D->GlobalVertexBuffer = Model->DrawObjectList[ObjectNum-1].VertexBuffer ;
-		Object3D->GlobalVBO = Model->DrawObjectList[ObjectNum-1].VBO;
-		Object3D->GlobalIndexBuffer = Model->DrawObjectList[ObjectNum-1].IndexBuffer;
-		Object3D->GlobalIBO = Model->DrawObjectList[ObjectNum-1].IBO;
-		Object3D->GlobalVAO = Model->DrawObjectList[ObjectNum-1].VAO;
+		Object3D->GlobalVertexArray = Model->DrawObjectList[ObjectNum - 1].VertexArray;
+		Object3D->GlobalVBO = Model->DrawObjectList[ObjectNum - 1].VBO;
+		Object3D->GlobalIndexArray = Model->DrawObjectList[ObjectNum - 1].IndexArray;
+		Object3D->GlobalIBO = Model->DrawObjectList[ObjectNum - 1].IBO;
+		Object3D->GlobalVAO = Model->DrawObjectList[ObjectNum - 1].VAO;
 		Object3D->DrawObjectList = new sObjectBlock[Object3D->DrawObjectQuantity];
 		// копируем данные нужного объекта
-		memcpy(Object3D->DrawObjectList, &(Model->DrawObjectList[ObjectNum-1]), sizeof(Model->DrawObjectList[0]));
+		memcpy(Object3D->DrawObjectList, &(Model->DrawObjectList[ObjectNum - 1]), sizeof(Model->DrawObjectList[0]));
 	}
 
 	// резервируем память для текстур

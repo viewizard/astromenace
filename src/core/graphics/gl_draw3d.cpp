@@ -287,11 +287,11 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 //------------------------------------------------------------------------------------
 // выключаем все после прорисовки
 //------------------------------------------------------------------------------------
-void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, unsigned int *VAO)
+void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, unsigned int VAO)
 {
 	// флаг нужно ли с вaо делать
 	bool NeedVAO = vw_GetDevCaps()->VAOSupported;
-	if (VAO == nullptr)
+	if (!VAO)
 		NeedVAO = false;
 
 	if (NeedVAO) {
@@ -333,7 +333,7 @@ void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, 
 // Процедура передачи последовательности вертексов для прорисовки
 //------------------------------------------------------------------------------------
 void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int VertexBO,
-		     unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO, unsigned int *VAO)
+		     unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO, unsigned int VAO)
 {
 	// если ничего не передали
 	if (!Data && !VertexBO && !VAO)
@@ -347,7 +347,7 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *D
 	// устанавливаем все необходимые указатели для прорисовки и получаем индексы
 	GLuint *VertexIndexPointer = nullptr;
 	if (NeedVAO)
-		vw_BindVAO(*VAO);
+		vw_BindVAO(VAO);
 	else
 		VertexIndexPointer = vw_SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, Data, Stride,
 									     VertexBO, RangeStart, IndexArray, IndexBO);

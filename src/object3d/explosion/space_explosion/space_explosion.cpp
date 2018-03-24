@@ -539,10 +539,10 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			memcpy(&(DrawObjectList[i]), &(Object->DrawObjectList[i]), sizeof(Object->DrawObjectList[0]));
 			// делаем изменения
 			DrawObjectList[i].VBO = 0;
-			DrawObjectList[i].VertexBuffer = nullptr;
+			DrawObjectList[i].VertexArray = nullptr;
 			DrawObjectList[i].IBO = 0;
-			DrawObjectList[i].IndexBuffer = nullptr;
-			DrawObjectList[i].VAO = nullptr;
+			DrawObjectList[i].IndexArray = nullptr;
+			DrawObjectList[i].VAO = 0;
 			DrawObjectList[i].NeedDestroyDataInObjectBlock = true; // удалять в объекте
 			DrawObjectList[i].RangeStart = 0;
 			DrawObjectList[i].VertexBufferLimitedBySizeTriangles = nullptr;
@@ -572,7 +572,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 			// выделяем память для данных
 			// в отличии от снарядов - тут работаем с VertexBufferLimitedBySizeTriangles, чтобы сделать более красивый взрыв из мелких треугольников
-			DrawObjectList[i].VertexBuffer = new float[DrawObjectList[i].VertexStride*Object->DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount];
+			DrawObjectList[i].VertexArray = new float[DrawObjectList[i].VertexStride * Object->DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount];
 
 
 
@@ -604,22 +604,22 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 					vw_Matrix44CalcPoint(TMP, TransMatTMP);
 					vw_Matrix33CalcPoint(TMP, Object->CurrentRotationMat);
 					// координаты
-					DrawObjectList[i].VertexBuffer[j1] = TMP.x;
-					DrawObjectList[i].VertexBuffer[j1+1] = TMP.y;
-					DrawObjectList[i].VertexBuffer[j1+2] = TMP.z;
+					DrawObjectList[i].VertexArray[j1] = TMP.x;
+					DrawObjectList[i].VertexArray[j1 + 1] = TMP.y;
+					DrawObjectList[i].VertexArray[j1 + 2] = TMP.z;
 					// нормали
 					TMP.x = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+3];
 					TMP.y = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+4];
 					TMP.z = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+5];
 					vw_Matrix33CalcPoint(TMP, TransMatTMPNorm);
-					DrawObjectList[i].VertexBuffer[j1+3] = TMP.x;
-					DrawObjectList[i].VertexBuffer[j1+4] = TMP.y;
-					DrawObjectList[i].VertexBuffer[j1+5] = TMP.z;
+					DrawObjectList[i].VertexArray[j1 + 3] = TMP.x;
+					DrawObjectList[i].VertexArray[j1 + 4] = TMP.y;
+					DrawObjectList[i].VertexArray[j1 + 5] = TMP.z;
 					// текстура
-					DrawObjectList[i].VertexBuffer[j1+6] = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+6];
-					DrawObjectList[i].VertexBuffer[j1+7] = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2+7];
+					DrawObjectList[i].VertexArray[j1 + 6] = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2 + 6];
+					DrawObjectList[i].VertexArray[j1 + 7] = Object->DrawObjectList[i].VertexBufferLimitedBySizeTriangles[j2 + 7];
 
-					DrawObjectList[i].VertexCount ++;
+					DrawObjectList[i].VertexCount++;
 					k++;
 
 					if (tricount == 2) NeedInCur = NeedIn;
@@ -633,8 +633,8 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 
 			// создаем индексный буфер блока
-			DrawObjectList[i].IndexBuffer = new unsigned int[DrawObjectList[i].VertexCount];
-			for (int j=0; j<DrawObjectList[i].VertexCount; j++) DrawObjectList[i].IndexBuffer[j] = j;
+			DrawObjectList[i].IndexArray = new unsigned int[DrawObjectList[i].VertexCount];
+			for (int j=0; j<DrawObjectList[i].VertexCount; j++) DrawObjectList[i].IndexArray[j] = j;
 
 
 
@@ -654,23 +654,23 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		ExplosionPieceData = new sExplosionPiece[TotalCount/3];
 		for (int j=0; j<DrawObjectQuantity; j++) {
 			for (int i=0; i<DrawObjectList[j].VertexCount; i+=3) {
-				ExplosionPieceData[Count].Velocity.x = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i];
-				ExplosionPieceData[Count].Velocity.x += DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)];
-				ExplosionPieceData[Count].Velocity.x += DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)];
-				ExplosionPieceData[Count].Velocity.x = ExplosionPieceData[Count].Velocity.x/3.0f;
-				ExplosionPieceData[Count].Velocity.y = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+1];
-				ExplosionPieceData[Count].Velocity.y += DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)+1];
-				ExplosionPieceData[Count].Velocity.y += DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)+1];
-				ExplosionPieceData[Count].Velocity.y = ExplosionPieceData[Count].Velocity.y/3.0f;
-				ExplosionPieceData[Count].Velocity.z = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+2];
-				ExplosionPieceData[Count].Velocity.z += DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)+2];
-				ExplosionPieceData[Count].Velocity.z += DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)+2];
-				ExplosionPieceData[Count].Velocity.z = ExplosionPieceData[Count].Velocity.z/3.0f;
+				ExplosionPieceData[Count].Velocity.x = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride *  i];
+				ExplosionPieceData[Count].Velocity.x += DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride *(i + 1)];
+				ExplosionPieceData[Count].Velocity.x += DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2)];
+				ExplosionPieceData[Count].Velocity.x = ExplosionPieceData[Count].Velocity.x / 3.0f;
+				ExplosionPieceData[Count].Velocity.y = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 1];
+				ExplosionPieceData[Count].Velocity.y += DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 1) + 1];
+				ExplosionPieceData[Count].Velocity.y += DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2) + 1];
+				ExplosionPieceData[Count].Velocity.y = ExplosionPieceData[Count].Velocity.y / 3.0f;
+				ExplosionPieceData[Count].Velocity.z = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 2];
+				ExplosionPieceData[Count].Velocity.z += DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 1) + 2];
+				ExplosionPieceData[Count].Velocity.z += DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2) + 2];
+				ExplosionPieceData[Count].Velocity.z = ExplosionPieceData[Count].Velocity.z / 3.0f;
 
 				// находим расстояние, чтобы включить его
-				float dist = ExplosionPieceData[Count].Velocity.x*ExplosionPieceData[Count].Velocity.x +
-					     ExplosionPieceData[Count].Velocity.y*ExplosionPieceData[Count].Velocity.y+
-					     ExplosionPieceData[Count].Velocity.z*ExplosionPieceData[Count].Velocity.z + vw_Randf0;
+				float dist = ExplosionPieceData[Count].Velocity.x * ExplosionPieceData[Count].Velocity.x +
+					     ExplosionPieceData[Count].Velocity.y * ExplosionPieceData[Count].Velocity.y +
+					     ExplosionPieceData[Count].Velocity.z * ExplosionPieceData[Count].Velocity.z + vw_Randf0;
 
 
 				float Acc = (MeshAcc/1000.0f)*(Diag/dist)*(MeshAcc/Object->Radius);
@@ -681,24 +681,24 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 				// записываем центр треугольника, оно же базовое ускорение + цент UV, для передачи шейдеру
 				if (Setup.UseGLSL) {
 					// Velocity/центр треугольника
-					DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+8] = ExplosionPieceData[Count].Velocity.x;
-					DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+9] = ExplosionPieceData[Count].Velocity.y;
-					DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+10] = ExplosionPieceData[Count].Velocity.z;
-					DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)+8] = ExplosionPieceData[Count].Velocity.x;
-					DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)+9] = ExplosionPieceData[Count].Velocity.y;
-					DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)+10] = ExplosionPieceData[Count].Velocity.z;
-					DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)+8] = ExplosionPieceData[Count].Velocity.x;
-					DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)+9] = ExplosionPieceData[Count].Velocity.y;
-					DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)+10] = ExplosionPieceData[Count].Velocity.z;
+					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 8] = ExplosionPieceData[Count].Velocity.x;
+					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 9] = ExplosionPieceData[Count].Velocity.y;
+					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 10] = ExplosionPieceData[Count].Velocity.z;
+					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 1) + 8] = ExplosionPieceData[Count].Velocity.x;
+					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 1) + 9] = ExplosionPieceData[Count].Velocity.y;
+					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 1) + 10] = ExplosionPieceData[Count].Velocity.z;
+					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2) + 8] = ExplosionPieceData[Count].Velocity.x;
+					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2) + 9] = ExplosionPieceData[Count].Velocity.y;
+					DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2) + 10] = ExplosionPieceData[Count].Velocity.z;
 					// acc
 					if (dist/Diag < 0.01f) {
-						DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+11] = Acc+4.0f*vw_Randf0;
-						DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)+11] = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+11];
-						DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)+11] = DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+11];
+						DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 11] = Acc + 4.0f * vw_Randf0;
+						DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 1) + 11] = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 11];
+						DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2) + 11] = DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 11];
 					} else {
-						DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*i+11] = Acc;
-						DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+1)+11] = Acc;
-						DrawObjectList[j].VertexBuffer[DrawObjectList[j].VertexStride*(i+2)+11] = Acc;
+						DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * i + 11] = Acc;
+						DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 1) + 11] = Acc;
+						DrawObjectList[j].VertexArray[DrawObjectList[j].VertexStride * (i + 2) + 11] = Acc;
 					}
 
 				}
@@ -731,30 +731,23 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 			if (DrawObjectList[j].VBO)
 				vw_DeleteBufferObject(DrawObjectList[j].VBO);
-			if (DrawObjectList[j].VAO != nullptr) {
-				vw_DeleteVAO(*DrawObjectList[j].VAO);
-				delete DrawObjectList[j].VAO;
-				DrawObjectList[j].VAO = nullptr;
-			}
-
+			if (DrawObjectList[j].VAO)
+				vw_DeleteVAO(DrawObjectList[j].VAO);
 			// делаем VBO
-			if (!vw_BuildVertexBufferObject(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexBuffer, DrawObjectList[j].VertexStride, DrawObjectList[j].VBO))
+			if (!vw_BuildVertexBufferObject(DrawObjectList[j].VertexCount, DrawObjectList[j].VertexArray, DrawObjectList[j].VertexStride, DrawObjectList[j].VBO))
 				DrawObjectList[j].VBO = 0;
 
 			// делаем IBO, создаем его один раз, если его нет
 			if (!DrawObjectList[j].IBO) {
-				if (!vw_BuildIndexBufferObject(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO))
+				if (!vw_BuildIndexBufferObject(DrawObjectList[j].VertexCount, DrawObjectList[j].IndexArray, DrawObjectList[j].IBO))
 					DrawObjectList[j].IBO = 0;
 			}
 
 			// делаем VAO
-			DrawObjectList[j].VAO = new unsigned int;
-			if (!vw_BuildVAO(DrawObjectList[j].VAO, DrawObjectList[j].VertexCount, DrawObjectList[j].VertexFormat, DrawObjectList[j].VertexBuffer,
-					 DrawObjectList[j].VertexStride*sizeof(float), DrawObjectList[j].VBO,
-					 DrawObjectList[j].RangeStart, DrawObjectList[j].IndexBuffer, DrawObjectList[j].IBO)) {
-				delete DrawObjectList[j].VAO;
-				DrawObjectList[j].VAO = nullptr;
-			}
+			if (!vw_BuildVAO(DrawObjectList[j].VAO, DrawObjectList[j].VertexCount, DrawObjectList[j].VertexFormat, DrawObjectList[j].VertexArray,
+					 DrawObjectList[j].VertexStride * sizeof(float), DrawObjectList[j].VBO,
+					 DrawObjectList[j].RangeStart, DrawObjectList[j].IndexArray, DrawObjectList[j].IBO))
+				DrawObjectList[j].VAO = 0;
 
 
 			// установки по шейдеру для объекта

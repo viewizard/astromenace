@@ -158,18 +158,16 @@ sObjectBlock::~sObjectBlock(void)
 {
 	// если нужно, удаляем с блоком
 	if (NeedDestroyDataInObjectBlock) {
-		if (VertexBuffer)
-			delete [] VertexBuffer;
+		if (VertexArray)
+			delete [] VertexArray;
 		if (VBO)
 			vw_DeleteBufferObject(VBO);
-		if (IndexBuffer)
-			delete [] IndexBuffer;
+		if (IndexArray)
+			delete [] IndexArray;
 		if (IBO)
 			vw_DeleteBufferObject(IBO);
-		if (VAO) {
-			vw_DeleteVAO(*VAO);
-			delete VAO;
-		}
+		if (VAO)
+			vw_DeleteVAO(VAO);
 
 		// память для VertexBufferLimitedBySizeTriangles никогда не должена быть выделена в конкретном объекте,
 		// только в моделе его удаляем только в деструкторе eModel3D, т.к. он там создается
@@ -193,37 +191,33 @@ cModel3D::~cModel3D(void)
 		for (int i = 0; i < DrawObjectCount; i++) {
 			// удаляем только если это не ссылка на вертекс буфер блока
 			if (DrawObjectList[i].VertexBufferLimitedBySizeTriangles &&
-			    (DrawObjectList[i].VertexBufferLimitedBySizeTriangles != DrawObjectList[i].VertexBuffer))
+			    (DrawObjectList[i].VertexBufferLimitedBySizeTriangles != DrawObjectList[i].VertexArray))
 				delete [] DrawObjectList[i].VertexBufferLimitedBySizeTriangles;
-			if (DrawObjectList[i].VertexBuffer &&
-			    (DrawObjectList[i].VertexBuffer != GlobalVertexBuffer))
-				delete [] DrawObjectList[i].VertexBuffer;
-			if (DrawObjectList[i].IndexBuffer &&
-			    (DrawObjectList[i].IndexBuffer != GlobalIndexBuffer))
-				delete [] DrawObjectList[i].IndexBuffer;
+			if (DrawObjectList[i].VertexArray &&
+			    (DrawObjectList[i].VertexArray != GlobalVertexArray))
+				delete [] DrawObjectList[i].VertexArray;
+			if (DrawObjectList[i].IndexArray &&
+			    (DrawObjectList[i].IndexArray != GlobalIndexArray))
+				delete [] DrawObjectList[i].IndexArray;
 			if (DrawObjectList[i].VBO && (DrawObjectList[i].VBO != GlobalVBO))
 				vw_DeleteBufferObject(DrawObjectList[i].VBO);
 			if (DrawObjectList[i].IBO && (DrawObjectList[i].IBO != GlobalIBO))
 				vw_DeleteBufferObject(DrawObjectList[i].IBO);
-			if (DrawObjectList[i].VAO && (DrawObjectList[i].VAO != GlobalVAO)) {
-				vw_DeleteVAO(*DrawObjectList[i].VAO);
-				delete DrawObjectList[i].VAO;
-			}
+			if (DrawObjectList[i].VAO && (DrawObjectList[i].VAO != GlobalVAO))
+				vw_DeleteVAO(DrawObjectList[i].VAO);
 		}
 		delete [] DrawObjectList;
 	}
-	if (GlobalVertexBuffer)
-		delete [] GlobalVertexBuffer;
+	if (GlobalVertexArray)
+		delete [] GlobalVertexArray;
 	if (GlobalVBO)
 		vw_DeleteBufferObject(GlobalVBO);
-	if (GlobalIndexBuffer)
-		delete [] GlobalIndexBuffer;
+	if (GlobalIndexArray)
+		delete [] GlobalIndexArray;
 	if (GlobalIBO)
 		vw_DeleteBufferObject(GlobalIBO);
-	if (GlobalVAO) {
-		vw_DeleteVAO(*GlobalVAO);
-		delete GlobalVAO;
-	}
+	if (GlobalVAO)
+		vw_DeleteVAO(GlobalVAO);
 
 	DrawObjectCount = 0;
 	DetachModel3D(this);
@@ -236,17 +230,17 @@ void cModel3D::CreateObjectsBuffers()
 {
 	for (int i = 0; i < DrawObjectCount; i++) {
 		// создаем вертексный буфер блока
-		DrawObjectList[i].VertexBuffer = new float[DrawObjectList[i].VertexStride * DrawObjectList[i].VertexCount];
+		DrawObjectList[i].VertexArray = new float[DrawObjectList[i].VertexStride * DrawObjectList[i].VertexCount];
 		for (int j = 0; j < DrawObjectList[i].VertexCount; j++) {
-			memcpy(DrawObjectList[i].VertexBuffer+DrawObjectList[i].VertexStride * j,
-			       GlobalVertexBuffer + GlobalIndexBuffer[DrawObjectList[i].RangeStart + j] * DrawObjectList[i].VertexStride,
-			       DrawObjectList[i].VertexStride * sizeof(float));
+			memcpy(DrawObjectList[i].VertexArray + DrawObjectList[i].VertexStride * j,
+			       GlobalVertexArray + GlobalIndexArray[DrawObjectList[i].RangeStart + j] * DrawObjectList[i].VertexStride,
+			       DrawObjectList[i].VertexStride * sizeof(DrawObjectList[i].VertexArray[0]));
 		}
 
 		// создаем индексный буфер блока
-		DrawObjectList[i].IndexBuffer = new unsigned int[DrawObjectList[i].VertexCount];
+		DrawObjectList[i].IndexArray = new unsigned int[DrawObjectList[i].VertexCount];
 		for (int j = 0; j < DrawObjectList[i].VertexCount; j++) {
-			DrawObjectList[i].IndexBuffer[j] = j;
+			DrawObjectList[i].IndexArray[j] = j;
 		}
 
 		// т.к. у нас отдельные буферы, то начало идет с нуля теперь
@@ -260,41 +254,35 @@ void cModel3D::CreateObjectsBuffers()
 void cModel3D::CreateHardwareBuffers()
 {
 	// делаем общее VBO
-	if (!vw_BuildVertexBufferObject(GlobalVertexCount, GlobalVertexBuffer, DrawObjectList[0].VertexStride, GlobalVBO))
+	if (!vw_BuildVertexBufferObject(GlobalVertexCount, GlobalVertexArray, DrawObjectList[0].VertexStride, GlobalVBO))
 		GlobalVBO = 0;
 
 	// делаем общий IBO
-	if (!vw_BuildIndexBufferObject(GlobalIndexCount, GlobalIndexBuffer, GlobalIBO))
+	if (!vw_BuildIndexBufferObject(GlobalIndexCount, GlobalIndexArray, GlobalIBO))
 		GlobalIBO = 0;
 
-	GlobalVAO = new unsigned int;
-	if (!vw_BuildVAO(GlobalVAO, GlobalIndexCount, DrawObjectList[0].VertexFormat, GlobalVertexBuffer,
-			 DrawObjectList[0].VertexStride * sizeof(float), GlobalVBO, 0, GlobalIndexBuffer, GlobalIBO)) {
-		delete GlobalVAO;
-		GlobalVAO = nullptr;
-	}
+	if (!vw_BuildVAO(GlobalVAO, GlobalIndexCount, DrawObjectList[0].VertexFormat, GlobalVertexArray,
+			 DrawObjectList[0].VertexStride * sizeof(float), GlobalVBO, 0, GlobalIndexArray, GlobalIBO))
+		GlobalVAO = 0;
 
 	// создаем буферы для каждого объекта
 	for (int i = 0; i < DrawObjectCount; i++) {
 		// делаем VBO
-		if (!vw_BuildVertexBufferObject(DrawObjectList[i].VertexCount, DrawObjectList[i].VertexBuffer,
+		if (!vw_BuildVertexBufferObject(DrawObjectList[i].VertexCount, DrawObjectList[i].VertexArray,
 						DrawObjectList[i].VertexStride, DrawObjectList[i].VBO))
 			DrawObjectList[i].VBO = 0;
 
 		// делаем IBO
-		if (!vw_BuildIndexBufferObject(DrawObjectList[i].VertexCount, DrawObjectList[i].IndexBuffer,
+		if (!vw_BuildIndexBufferObject(DrawObjectList[i].VertexCount, DrawObjectList[i].IndexArray,
 					       DrawObjectList[i].IBO))
 			DrawObjectList[i].IBO = 0;
 
 		// делаем VAO
-		DrawObjectList[i].VAO = new unsigned int;
 		if (!vw_BuildVAO(DrawObjectList[i].VAO, DrawObjectList[i].VertexCount, DrawObjectList[i].VertexFormat,
-				 DrawObjectList[i].VertexBuffer, DrawObjectList[i].VertexStride * sizeof(float),
-				 DrawObjectList[i].VBO, DrawObjectList[i].RangeStart, DrawObjectList[i].IndexBuffer,
-				 DrawObjectList[i].IBO)) {
-			delete DrawObjectList[i].VAO;
-			DrawObjectList[i].VAO = nullptr;
-		}
+				 DrawObjectList[i].VertexArray, DrawObjectList[i].VertexStride * sizeof(DrawObjectList[i].VertexArray[0]),
+				 DrawObjectList[i].VBO, DrawObjectList[i].RangeStart, DrawObjectList[i].IndexArray,
+				 DrawObjectList[i].IBO))
+			DrawObjectList[i].VAO = 0;
 	}
 }
 
@@ -461,7 +449,7 @@ void cModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 	if (TriangleSizeLimit <= 0.0f) {
 		for (int i = 0; i < DrawObjectCount; i++) {
 			DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount = DrawObjectList[i].VertexCount;
-			DrawObjectList[i].VertexBufferLimitedBySizeTriangles = DrawObjectList[i].VertexBuffer;
+			DrawObjectList[i].VertexBufferLimitedBySizeTriangles = DrawObjectList[i].VertexArray;
 		}
 		return;
 	}
@@ -476,32 +464,32 @@ void cModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 			unsigned int tmpOffset1 = tmpOffset0 + DrawObjectList[i].VertexStride;	// j + 1
 			unsigned int tmpOffset2 = tmpOffset1 + DrawObjectList[i].VertexStride;	// j + 2
 
-			float Point1[8] = {DrawObjectList[i].VertexBuffer[tmpOffset0],
-					   DrawObjectList[i].VertexBuffer[tmpOffset0 + 1],
-					   DrawObjectList[i].VertexBuffer[tmpOffset0 + 2],
-					   DrawObjectList[i].VertexBuffer[tmpOffset0 + 3],
-					   DrawObjectList[i].VertexBuffer[tmpOffset0 + 4],
-					   DrawObjectList[i].VertexBuffer[tmpOffset0 + 5],
-					   DrawObjectList[i].VertexBuffer[tmpOffset0 + 6],
-					   DrawObjectList[i].VertexBuffer[tmpOffset0 + 7]};
+			float Point1[8] = {DrawObjectList[i].VertexArray[tmpOffset0],
+					   DrawObjectList[i].VertexArray[tmpOffset0 + 1],
+					   DrawObjectList[i].VertexArray[tmpOffset0 + 2],
+					   DrawObjectList[i].VertexArray[tmpOffset0 + 3],
+					   DrawObjectList[i].VertexArray[tmpOffset0 + 4],
+					   DrawObjectList[i].VertexArray[tmpOffset0 + 5],
+					   DrawObjectList[i].VertexArray[tmpOffset0 + 6],
+					   DrawObjectList[i].VertexArray[tmpOffset0 + 7]};
 
-			float Point2[8] = {DrawObjectList[i].VertexBuffer[tmpOffset1],
-					   DrawObjectList[i].VertexBuffer[tmpOffset1 + 1],
-					   DrawObjectList[i].VertexBuffer[tmpOffset1 + 2],
-					   DrawObjectList[i].VertexBuffer[tmpOffset1 + 3],
-					   DrawObjectList[i].VertexBuffer[tmpOffset1 + 4],
-					   DrawObjectList[i].VertexBuffer[tmpOffset1 + 5],
-					   DrawObjectList[i].VertexBuffer[tmpOffset1 + 6],
-					   DrawObjectList[i].VertexBuffer[tmpOffset1 + 7]};
+			float Point2[8] = {DrawObjectList[i].VertexArray[tmpOffset1],
+					   DrawObjectList[i].VertexArray[tmpOffset1 + 1],
+					   DrawObjectList[i].VertexArray[tmpOffset1 + 2],
+					   DrawObjectList[i].VertexArray[tmpOffset1 + 3],
+					   DrawObjectList[i].VertexArray[tmpOffset1 + 4],
+					   DrawObjectList[i].VertexArray[tmpOffset1 + 5],
+					   DrawObjectList[i].VertexArray[tmpOffset1 + 6],
+					   DrawObjectList[i].VertexArray[tmpOffset1 + 7]};
 
-			float Point3[8] = {DrawObjectList[i].VertexBuffer[tmpOffset2],
-					   DrawObjectList[i].VertexBuffer[tmpOffset2 + 1],
-					   DrawObjectList[i].VertexBuffer[tmpOffset2 + 2],
-					   DrawObjectList[i].VertexBuffer[tmpOffset2 + 3],
-					   DrawObjectList[i].VertexBuffer[tmpOffset2 + 4],
-					   DrawObjectList[i].VertexBuffer[tmpOffset2 + 5],
-					   DrawObjectList[i].VertexBuffer[tmpOffset2 + 6],
-					   DrawObjectList[i].VertexBuffer[tmpOffset2 + 7]};
+			float Point3[8] = {DrawObjectList[i].VertexArray[tmpOffset2],
+					   DrawObjectList[i].VertexArray[tmpOffset2 + 1],
+					   DrawObjectList[i].VertexArray[tmpOffset2 + 2],
+					   DrawObjectList[i].VertexArray[tmpOffset2 + 3],
+					   DrawObjectList[i].VertexArray[tmpOffset2 + 4],
+					   DrawObjectList[i].VertexArray[tmpOffset2 + 5],
+					   DrawObjectList[i].VertexArray[tmpOffset2 + 6],
+					   DrawObjectList[i].VertexArray[tmpOffset2 + 7]};
 
 			// идем на рекурсивную функцию считать кол-во треугольников
 			DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount +=
@@ -514,7 +502,7 @@ void cModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 	for (int i = 0; i < DrawObjectCount; i++) {
 		// если кол-во получилось как в текущем вертекс буфере - корректировок не требуется, просто копируем данные
 		if (DrawObjectList[i].VertexBufferLimitedBySizeTrianglesCount == DrawObjectList[i].VertexCount)
-			DrawObjectList[i].VertexBufferLimitedBySizeTriangles = DrawObjectList[i].VertexBuffer;
+			DrawObjectList[i].VertexBufferLimitedBySizeTriangles = DrawObjectList[i].VertexArray;
 		else {
 			// выделяем память
 			DrawObjectList[i].VertexBufferLimitedBySizeTriangles =
@@ -528,32 +516,32 @@ void cModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
 				unsigned int tmpOffset1 = tmpOffset0 + DrawObjectList[i].VertexStride;	// j + 1
 				unsigned int tmpOffset2 = tmpOffset1 + DrawObjectList[i].VertexStride;	// j + 2
 
-				float Point1[8] = {DrawObjectList[i].VertexBuffer[tmpOffset0],
-						   DrawObjectList[i].VertexBuffer[tmpOffset0 + 1],
-						   DrawObjectList[i].VertexBuffer[tmpOffset0 + 2],
-						   DrawObjectList[i].VertexBuffer[tmpOffset0 + 3],
-						   DrawObjectList[i].VertexBuffer[tmpOffset0 + 4],
-						   DrawObjectList[i].VertexBuffer[tmpOffset0 + 5],
-						   DrawObjectList[i].VertexBuffer[tmpOffset0 + 6],
-						   DrawObjectList[i].VertexBuffer[tmpOffset0 + 7]};
+				float Point1[8] = {DrawObjectList[i].VertexArray[tmpOffset0],
+						   DrawObjectList[i].VertexArray[tmpOffset0 + 1],
+						   DrawObjectList[i].VertexArray[tmpOffset0 + 2],
+						   DrawObjectList[i].VertexArray[tmpOffset0 + 3],
+						   DrawObjectList[i].VertexArray[tmpOffset0 + 4],
+						   DrawObjectList[i].VertexArray[tmpOffset0 + 5],
+						   DrawObjectList[i].VertexArray[tmpOffset0 + 6],
+						   DrawObjectList[i].VertexArray[tmpOffset0 + 7]};
 
-				float Point2[8] = {DrawObjectList[i].VertexBuffer[tmpOffset1],
-						   DrawObjectList[i].VertexBuffer[tmpOffset1 + 1],
-						   DrawObjectList[i].VertexBuffer[tmpOffset1 + 2],
-						   DrawObjectList[i].VertexBuffer[tmpOffset1 + 3],
-						   DrawObjectList[i].VertexBuffer[tmpOffset1 + 4],
-						   DrawObjectList[i].VertexBuffer[tmpOffset1 + 5],
-						   DrawObjectList[i].VertexBuffer[tmpOffset1 + 6],
-						   DrawObjectList[i].VertexBuffer[tmpOffset1 + 7]};
+				float Point2[8] = {DrawObjectList[i].VertexArray[tmpOffset1],
+						   DrawObjectList[i].VertexArray[tmpOffset1 + 1],
+						   DrawObjectList[i].VertexArray[tmpOffset1 + 2],
+						   DrawObjectList[i].VertexArray[tmpOffset1 + 3],
+						   DrawObjectList[i].VertexArray[tmpOffset1 + 4],
+						   DrawObjectList[i].VertexArray[tmpOffset1 + 5],
+						   DrawObjectList[i].VertexArray[tmpOffset1 + 6],
+						   DrawObjectList[i].VertexArray[tmpOffset1 + 7]};
 
-				float Point3[8] = {DrawObjectList[i].VertexBuffer[tmpOffset2],
-						   DrawObjectList[i].VertexBuffer[tmpOffset2 + 1],
-						   DrawObjectList[i].VertexBuffer[tmpOffset2 + 2],
-						   DrawObjectList[i].VertexBuffer[tmpOffset2 + 3],
-						   DrawObjectList[i].VertexBuffer[tmpOffset2 + 4],
-						   DrawObjectList[i].VertexBuffer[tmpOffset2 + 5],
-						   DrawObjectList[i].VertexBuffer[tmpOffset2 + 6],
-						   DrawObjectList[i].VertexBuffer[tmpOffset2 + 7]};
+				float Point3[8] = {DrawObjectList[i].VertexArray[tmpOffset2],
+						   DrawObjectList[i].VertexArray[tmpOffset2 + 1],
+						   DrawObjectList[i].VertexArray[tmpOffset2 + 2],
+						   DrawObjectList[i].VertexArray[tmpOffset2 + 3],
+						   DrawObjectList[i].VertexArray[tmpOffset2 + 4],
+						   DrawObjectList[i].VertexArray[tmpOffset2 + 5],
+						   DrawObjectList[i].VertexArray[tmpOffset2 + 6],
+						   DrawObjectList[i].VertexArray[tmpOffset2 + 7]};
 
 				// идем на рекурсивную функцию
 				RecursiveBufferLimitedBySizeTrianglesGenerate(Point1, Point2, Point3,
@@ -577,14 +565,14 @@ void cModel3D::CreateTangentAndBinormal()
 
 	for (unsigned int j = 0; j < GlobalIndexCount; j++) {
 		memcpy(New_VertexBuffer + New_VertexStride * j,
-		       GlobalVertexBuffer + GlobalIndexBuffer[j] * DrawObjectList[0].VertexStride,
+		       GlobalVertexArray + GlobalIndexArray[j] * DrawObjectList[0].VertexStride,
 		       DrawObjectList[0].VertexStride * sizeof(float));
 	}
 
 	// удаляем указатели на старый буфер
-	delete [] GlobalVertexBuffer;
+	delete [] GlobalVertexArray;
 	// присваиваем новые значения
-	GlobalVertexBuffer = New_VertexBuffer;
+	GlobalVertexArray = New_VertexBuffer;
 	GlobalVertexCount = GlobalIndexCount;
 
 	// создаем тангенты и бинормали, сохраняем их в 2 и 3 текстурных координатах
@@ -593,17 +581,17 @@ void cModel3D::CreateTangentAndBinormal()
 		unsigned int tmpOffset1 = tmpOffset0 + New_VertexStride;	// j + 1
 		unsigned int tmpOffset2 = tmpOffset1 + New_VertexStride;	// j + 2
 
-		sVECTOR3D Point1(GlobalVertexBuffer[tmpOffset0],
-				 GlobalVertexBuffer[tmpOffset0 + 1],
-				 GlobalVertexBuffer[tmpOffset0 + 2]);
+		sVECTOR3D Point1(GlobalVertexArray[tmpOffset0],
+				 GlobalVertexArray[tmpOffset0 + 1],
+				 GlobalVertexArray[tmpOffset0 + 2]);
 
-		sVECTOR3D Point2(GlobalVertexBuffer[tmpOffset1],
-				 GlobalVertexBuffer[tmpOffset1 + 1],
-				 GlobalVertexBuffer[tmpOffset1 + 2]);
+		sVECTOR3D Point2(GlobalVertexArray[tmpOffset1],
+				 GlobalVertexArray[tmpOffset1 + 1],
+				 GlobalVertexArray[tmpOffset1 + 2]);
 
-		sVECTOR3D Point3(GlobalVertexBuffer[tmpOffset2],
-				 GlobalVertexBuffer[tmpOffset2 + 1],
-				 GlobalVertexBuffer[tmpOffset2 + 2]);
+		sVECTOR3D Point3(GlobalVertexArray[tmpOffset2],
+				 GlobalVertexArray[tmpOffset2 + 1],
+				 GlobalVertexArray[tmpOffset2 + 2]);
 
 		// находим 2 вектора, образующих плоскость
 		sVECTOR3D PlaneVector1 = Point2 - Point1;
@@ -618,15 +606,15 @@ void cModel3D::CreateTangentAndBinormal()
 		PlaneVector1 = Point1 - Point2;
 		PlaneVector2 = Point3 - Point2;
 
-		float delta_U_0 = GlobalVertexBuffer[tmpOffset0 + 6] -
-				  GlobalVertexBuffer[tmpOffset1 + 6];
-		float delta_U_1 = GlobalVertexBuffer[tmpOffset2 + 6] -
-				  GlobalVertexBuffer[tmpOffset1 + 6];
+		float delta_U_0 = GlobalVertexArray[tmpOffset0 + 6] -
+				  GlobalVertexArray[tmpOffset1 + 6];
+		float delta_U_1 = GlobalVertexArray[tmpOffset2 + 6] -
+				  GlobalVertexArray[tmpOffset1 + 6];
 
-		float delta_V_0 = GlobalVertexBuffer[tmpOffset0 + 7] -
-				  GlobalVertexBuffer[tmpOffset1 + 7];
-		float delta_V_1 = GlobalVertexBuffer[tmpOffset2 + 7] -
-				  GlobalVertexBuffer[tmpOffset1 + 7];
+		float delta_V_0 = GlobalVertexArray[tmpOffset0 + 7] -
+				  GlobalVertexArray[tmpOffset1 + 7];
+		float delta_V_1 = GlobalVertexArray[tmpOffset2 + 7] -
+				  GlobalVertexArray[tmpOffset1 + 7];
 
 		sVECTOR3D Tangent = ((PlaneVector1 ^ delta_V_1) - (PlaneVector2 ^ delta_V_0));
 		Tangent.NormalizeHi();
@@ -646,24 +634,24 @@ void cModel3D::CreateTangentAndBinormal()
 		}
 
 		// тангент
-		GlobalVertexBuffer[tmpOffset0 + 8] =
-				GlobalVertexBuffer[tmpOffset1 + 8] = GlobalVertexBuffer[tmpOffset2 + 8] = Tangent.x;
-		GlobalVertexBuffer[tmpOffset0 + 9] =
-				GlobalVertexBuffer[tmpOffset1 + 9] = GlobalVertexBuffer[tmpOffset2 + 9] = Tangent.y;
-		GlobalVertexBuffer[tmpOffset0 + 10] =
-				GlobalVertexBuffer[tmpOffset1 + 10] = GlobalVertexBuffer[tmpOffset2 + 10] = Tangent.z;
-		GlobalVertexBuffer[tmpOffset0 + 11] =
-				GlobalVertexBuffer[tmpOffset1 + 11] = GlobalVertexBuffer[tmpOffset2 + 11] = TangentW;
+		GlobalVertexArray[tmpOffset0 + 8] =
+				GlobalVertexArray[tmpOffset1 + 8] = GlobalVertexArray[tmpOffset2 + 8] = Tangent.x;
+		GlobalVertexArray[tmpOffset0 + 9] =
+				GlobalVertexArray[tmpOffset1 + 9] = GlobalVertexArray[tmpOffset2 + 9] = Tangent.y;
+		GlobalVertexArray[tmpOffset0 + 10] =
+				GlobalVertexArray[tmpOffset1 + 10] = GlobalVertexArray[tmpOffset2 + 10] = Tangent.z;
+		GlobalVertexArray[tmpOffset0 + 11] =
+				GlobalVertexArray[tmpOffset1 + 11] = GlobalVertexArray[tmpOffset2 + 11] = TangentW;
 	}
 
 	// меняем данные в глобальном индекс буфере, они теперь идут по порядку
 	for (unsigned int i = 0; i < GlobalIndexCount; i++) {
-		GlobalIndexBuffer[i] = i;
+		GlobalIndexArray[i] = i;
 	}
 
 	// меняем указатели на вертексный буфер, шаг и формат
 	for (int i = 0; i < DrawObjectCount; i++) {
-		DrawObjectList[i].VertexBuffer = GlobalVertexBuffer;
+		DrawObjectList[i].VertexArray = GlobalVertexArray;
 		DrawObjectList[i].VertexFormat = New_VertexFormat;
 		DrawObjectList[i].VertexStride = New_VertexStride;
 	}
@@ -719,30 +707,30 @@ bool cModel3D::ReadVW3D(const std::string &FileName)
 
 		// вертексный буфер
 		DrawObjectList[i].NeedDestroyDataInObjectBlock = false;
-		DrawObjectList[i].VertexBuffer = nullptr;
+		DrawObjectList[i].VertexArray = nullptr;
 		DrawObjectList[i].VBO = 0;
 		// индексный буфер
-		DrawObjectList[i].IndexBuffer = nullptr;
+		DrawObjectList[i].IndexArray = nullptr;
 		DrawObjectList[i].IBO = 0;
 		// vao
-		DrawObjectList[i].VAO = nullptr;
+		DrawObjectList[i].VAO = 0;
 	}
 
 	// получаем сколько всего вертексов
 	File->fread(&GlobalVertexCount, sizeof(GlobalVertexCount), 1);
 
 	// собственно данные (берем смещение нулевого объекта, т.к. смещение одинаковое на весь объект)
-	GlobalVertexBuffer = new float[GlobalVertexCount * DrawObjectList[0].VertexStride];
-	File->fread(GlobalVertexBuffer,	GlobalVertexCount * DrawObjectList[0].VertexStride * sizeof(GlobalVertexBuffer[0]), 1);
+	GlobalVertexArray = new float[GlobalVertexCount * DrawObjectList[0].VertexStride];
+	File->fread(GlobalVertexArray,	GlobalVertexCount * DrawObjectList[0].VertexStride * sizeof(GlobalVertexArray[0]), 1);
 
 	// индекс буфер
-	GlobalIndexBuffer = new unsigned int[GlobalIndexCount];
-	File->fread(GlobalIndexBuffer, GlobalIndexCount * sizeof(GlobalIndexBuffer[0]), 1);
+	GlobalIndexArray = new unsigned int[GlobalIndexCount];
+	File->fread(GlobalIndexArray, GlobalIndexCount * sizeof(GlobalIndexArray[0]), 1);
 
 	// т.к. наши объекты используют глобальные буферы, надо поставить указатели
 	for (int i = 0; i < DrawObjectCount; i++) {
-		DrawObjectList[i].VertexBuffer = GlobalVertexBuffer;
-		DrawObjectList[i].IndexBuffer = GlobalIndexBuffer;
+		DrawObjectList[i].VertexArray = GlobalVertexArray;
+		DrawObjectList[i].IndexArray = GlobalIndexArray;
 	}
 
 	vw_fclose(File);
@@ -756,7 +744,7 @@ bool cModel3D::ReadVW3D(const std::string &FileName)
 bool cModel3D::WriteVW3D(const std::string &FileName)
 {
 	// небольшие проверки
-	if (!GlobalVertexBuffer || !GlobalIndexBuffer || !DrawObjectList) {
+	if (!GlobalVertexArray || !GlobalIndexArray || !DrawObjectList) {
 		std::cerr << __func__ << "(): " << "Can't create " << FileName << " file for empty Model3D.\n";
 		return false;
 	}
@@ -795,11 +783,11 @@ bool cModel3D::WriteVW3D(const std::string &FileName)
 	SDL_RWwrite(FileVW3D, &GlobalVertexCount, sizeof(GlobalVertexCount), 1);
 
 	// данные, вертексы (берем смещение нулевого объекта, т.к. смещение одинаковое на весь объект)
-	SDL_RWwrite(FileVW3D, GlobalVertexBuffer,
-		    DrawObjectList[0].VertexStride * GlobalVertexCount * sizeof(GlobalVertexBuffer[0]), 1);
+	SDL_RWwrite(FileVW3D, GlobalVertexArray,
+		    DrawObjectList[0].VertexStride * GlobalVertexCount * sizeof(GlobalVertexArray[0]), 1);
 
 	// данные, индексный буфер
-	SDL_RWwrite(FileVW3D, GlobalIndexBuffer, GlobalIndexCount * sizeof(GlobalIndexBuffer[0]), 1);
+	SDL_RWwrite(FileVW3D, GlobalIndexArray, GlobalIndexCount * sizeof(GlobalIndexArray[0]), 1);
 
 	// закрываем файл
 	SDL_RWclose(FileVW3D);

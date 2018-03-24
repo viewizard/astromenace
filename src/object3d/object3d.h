@@ -208,11 +208,11 @@ public:
 
 	// список с геометрией модели, объекты для прорисовки
 	sObjectBlock	*DrawObjectList{nullptr};
-	float		*GlobalVertexBuffer{nullptr};
+	float		*GlobalVertexArray{nullptr};
 	unsigned int	GlobalVBO{0};
-	unsigned int	*GlobalIndexBuffer{nullptr};
+	unsigned int	*GlobalIndexArray{nullptr};
 	unsigned int	GlobalIBO{0};
-	unsigned int	*GlobalVAO{nullptr};
+	unsigned int	GlobalVAO{0};
 	// кол-во объектов в списке
 	int		DrawObjectQuantity{0};
 	// минимальное расстояние (квадрат) с которого надо рисовать пообъектно, если -1 всегда рисовать только пообъектно

@@ -31,19 +31,19 @@
 
 #include "graphics.h"
 
-PFNGLGENVERTEXARRAYSPROC 	glGenVertexArraysARB = nullptr;		// VAO Name Generation Procedure
-PFNGLBINDVERTEXARRAYPROC 	glBindVertexArrayARB = nullptr;		// VAO Bind Procedure
-PFNGLDELETEVERTEXARRAYSPROC	glDeleteVertexArraysARB = nullptr;	// VAO Deletion Procedure
-PFNGLISVERTEXARRAYPROC 		glIsVertexArrayARB = nullptr;
+PFNGLGENVERTEXARRAYSPROC glGenVertexArraysARB = nullptr;
+PFNGLBINDVERTEXARRAYPROC glBindVertexArrayARB = nullptr;
+PFNGLDELETEVERTEXARRAYSPROC glDeleteVertexArraysARB = nullptr;
+PFNGLISVERTEXARRAYPROC glIsVertexArrayARB = nullptr;
 
 GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *Data, int Stride, unsigned int VertexBO,
 						unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO);
-void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, unsigned int *VAO);
+void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, unsigned int VAO);
 
 
-//------------------------------------------------------------------------------------
-// Инициализация работы с VAO
-//------------------------------------------------------------------------------------
+/*
+ * Internal initialization for vertex array objects.
+ */
 bool vw_Internal_InitializationVAO()
 {
 	// Get Pointers To The GL Functions
@@ -65,10 +65,10 @@ bool vw_Internal_InitializationVAO()
 	return true;
 }
 
-//------------------------------------------------------------------------------------
-// Процедура генерации буферов
-//------------------------------------------------------------------------------------
-bool vw_BuildVAO(unsigned int *VAO, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int VBO,
+/*
+ * Build vertex array object.
+ */
+bool vw_BuildVAO(unsigned int &VAO, int NumVertices, int DataFormat, void *Data, int Stride, unsigned int VBO,
 		 unsigned int RangeStart, unsigned int *DataIndex, unsigned int DataIndexVBO)
 {
 	if (!VAO ||
@@ -76,24 +76,24 @@ bool vw_BuildVAO(unsigned int *VAO, int NumVertices, int DataFormat, void *Data,
 	    !glIsVertexArrayARB)
 		return false;
 
-	glGenVertexArraysARB(1, VAO);
+	glGenVertexArraysARB(1, &VAO);
 
-	vw_BindVAO(*VAO);
+	vw_BindVAO(VAO);
 	vw_SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, Data, Stride, VBO,
 						RangeStart, DataIndex, DataIndexVBO);
 
 	vw_BindVAO(0);
-	vw_SendVertices_DisableStatesAndPointers(DataFormat, VBO, nullptr);
+	vw_SendVertices_DisableStatesAndPointers(DataFormat, VBO, 0);
 
-	if (!glIsVertexArrayARB(*VAO))
+	if (!glIsVertexArrayARB(VAO))
 		return false;
 
 	return true;
 }
 
-//------------------------------------------------------------------------------------
-// Установка текущего буфера
-//------------------------------------------------------------------------------------
+/*
+ * Bind vertex array object.
+ */
 void vw_BindVAO(unsigned int VAO)
 {
 	if (!glBindVertexArrayARB)
@@ -102,10 +102,10 @@ void vw_BindVAO(unsigned int VAO)
 	glBindVertexArrayARB(VAO);
 }
 
-//------------------------------------------------------------------------------------
-// Процедура удаления буфера
-//------------------------------------------------------------------------------------
-void vw_DeleteVAO(unsigned int VAO)
+/*
+ * Delete vertex array object.
+ */
+void vw_DeleteVAO(unsigned int &VAO)
 {
 	if (!glIsVertexArrayARB ||
 	    !glDeleteVertexArraysARB ||
@@ -113,4 +113,5 @@ void vw_DeleteVAO(unsigned int VAO)
 		return;
 
 	glDeleteVertexArraysARB(1, &VAO);
+	VAO = 0;
 }

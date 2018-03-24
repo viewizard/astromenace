@@ -62,14 +62,12 @@ struct sObjectBlock {
 	sVECTOR3D TextureAnimation{0.0f, 0.0f, 0.0f};
 
 	bool NeedDestroyDataInObjectBlock{false}; // если данные были не общие, а созданные для этого ObjectBlock, нужно их удалить в деструкторе
-	// вертексный буфер
-	float *VertexBuffer{nullptr};		// указатель на структуру данных
+	float *VertexArray{nullptr};		// массив вертексов
 	unsigned int VBO{0};			// номер VBO
-	// индексный буфер
-	unsigned int *IndexBuffer{nullptr};	// указатель на структуру данных
+	unsigned int *IndexArray{nullptr};	// массив индексов
 	unsigned int IBO{0};			// номер IBO
 	// VAO
-	unsigned int *VAO{nullptr};		// номер VAO
+	unsigned int VAO{0};			// номер VAO
 	// указатель на буфер, с мешем приведенным к опеределнному размеру треугольников (для взрывов)
 	// для него никогда не делаем VBO, буфер исключительно для работы внутри программы
 	float *VertexBufferLimitedBySizeTriangles{nullptr};
@@ -108,11 +106,11 @@ public:
 	void CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit);
 
 	// буферы
-	float *GlobalVertexBuffer{nullptr};
+	float *GlobalVertexArray{nullptr};
 	unsigned int GlobalVBO{0};
-	unsigned int *GlobalIndexBuffer{nullptr};
+	unsigned int *GlobalIndexArray{nullptr};
 	unsigned int GlobalIBO{0};
-	unsigned int *GlobalVAO{nullptr};
+	unsigned int GlobalVAO{0};
 
 	// указатели на цепь моделей
 	cModel3D *Next{nullptr};
