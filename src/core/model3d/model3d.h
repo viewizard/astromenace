@@ -24,8 +24,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #ifndef MODEL3D_H
 #define MODEL3D_H
 
@@ -36,38 +34,44 @@ struct sVECTOR3D;
 struct sObjectBlock {
 	~sObjectBlock(void);
 
-	int VertexFormat{0};	// формат вертексов данных
-	int VertexStride{0};	// отступ в (байтах*4, т.е. во float или uint32_t) до начала данных следующей точки
-	int VertexCount{0};	// кол-во прорисовываемых вертексов (кол-во обрабатываемых индексов)
-	uint8_t DrawType{0};	// тип прорисовки, 0- нормальный, 1-blend т.е. с прозрачностью
-
-	// начальный номер индекса в буфере (в случае использования глобальных буферов)
-	// если индексных данных нет - номер вертекса
-	unsigned int RangeStart{0};
-
-	// шейдер (зарезервированные переменные для работы внешнего блока кода)
+	// GLSL-related
 	int ShaderType{1};
 	float ShaderData[16]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-	// положение локальной системы координат
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
-	// поворот модели в локальной системе координат
 	sVECTOR3D Rotation{0.0f, 0.0f, 0.0f};
 
-	// анимация геометрией (вращение)
+	// animation (rotation)
 	bool NeedGeometryAnimation{false};
 	sVECTOR3D GeometryAnimation{0.0f, 0.0f, 0.0f};
-	// анимация текстуры (тайловая анимация)
+
+	// animation (tile animation)
 	bool NeedTextureAnimation{false};
 	sVECTOR3D TextureAnimation{0.0f, 0.0f, 0.0f};
 
-	bool NeedDestroyDataInObjectBlock{false}; // если данные были не общие, а созданные для этого ObjectBlock, нужно их удалить в деструкторе
-	float *VertexArray{nullptr};		// массив вертексов
-	unsigned int VBO{0};			// номер VBO
-	unsigned int *IndexArray{nullptr};	// массив индексов
-	unsigned int IBO{0};			// номер IBO
-	// VAO
-	unsigned int VAO{0};			// номер VAO
+	// TODO (?) use enumeration instead
+	uint8_t DrawType{0};	// draw type, 0 - normal, 1 - with blend (for planet's sky)
+
+	// initial index in global/local index array/indexbo, if we don't have
+	// indexes at all, initial vertex in global/local vertex array/vertexbo
+	unsigned int RangeStart{0};
+
+	bool NeedDestroyDataInObjectBlock{false}; // 'special' vertex array with small triangles
+
+	// vertex-related
+	float *VertexArray{nullptr};
+	int VertexFormat{0};
+	int VertexStride{0};	// in bytes
+	int VertexCount{0};
+	unsigned int VBO{0};
+
+	// index-related
+	unsigned int *IndexArray{nullptr};
+	unsigned int IBO{0};
+
+	// vao
+	unsigned int VAO{0};
+
 	// for explosion we need pre-generated vertex array with small triangles,
 	// in this case, we could create cool looking effects, when enemies disintegrate
 	// into 'dust' pieces during explosion
@@ -75,34 +79,23 @@ struct sObjectBlock {
 	int VertexArrayWithSmallTrianglesCount{0};
 };
 
-//-----------------------------------------------------------------------------
-// Класс cModel3D
-//-----------------------------------------------------------------------------
 class cModel3D
 {
 public:
 	cModel3D(void);
 	virtual ~cModel3D(void);
 
-	// имя объекта (путь к файлу)
+	// Load VW3D 3D models format.
+	bool LoadVW3D(const std::string &FileName);
+	// Save VW3D 3D models format.
+	bool SaveVW3D(const std::string &FileName);
+
+	// name (file name)
 	std::string Name{};
 
-	// лист объектов, из которых состоит модель
+	// attached objects
 	sObjectBlock *ObjectsList{nullptr};
 	int ObjectsListCount{0};
-
-	// читаем-пишем форматы 3д моделей
-	bool ReadVW3D(const std::string &FileName);
-	bool WriteVW3D(const std::string &FileName);
-
-	// пересоздаем вертексный буфер, добавляем тангент и бинормаль в 2 и 3 текстурные координаты
-	void CreateTangentAndBinormal();
-	// создание вертекс и индекс буферов для каждого блока модели
-	void CreateObjectsBuffers();
-	// создание всех поддерживаемых буферов (VAO, VBO, IBO)
-	void CreateHardwareBuffers();
-	// создаем буфер для разрушаемых объектов с ограничением по размеру треугольников
-	void CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit);
 
 	// vertex-related
 	float *GlobalVertexArray{nullptr};
@@ -117,16 +110,15 @@ public:
 	// vao
 	unsigned int GlobalVAO{0};
 
-	// указатели на цепь моделей
+	// list
 	cModel3D *Next{nullptr};
 	cModel3D *Prev{nullptr};
 };
 
 
-// Предварительная загрузка геометрии модели, если нужно создания доп. буфера с треугольниками не более TriangleSizeLimit
-// если не нужно, передаем отрицательное значение
+// Load 3D model.
 cModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal);
-// Удаляем все Model3D в списке
+// Release all 3D models.
 void vw_ReleaseAllModel3D();
 
 #endif // MODEL3D_H

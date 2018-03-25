@@ -24,7 +24,8 @@
 
 *************************************************************************************/
 
-// TODO translate comments
+// TODO move objects management on STL container
+// TODO move models management on STL container
 
 #include "../graphics/graphics.h"
 #include "../math/math.h"
@@ -39,15 +40,397 @@ cModel3D *EndModel3D = nullptr;
 } // unnamed namespace
 
 
-//-----------------------------------------------------------------------------
-// Нахождение геометрии, или ее загрузка
-//-----------------------------------------------------------------------------
+/*
+ * Create tangent and binormal for all vertex arrays.
+ * In case of GLSL usage, we use second and third textures coordinates in order
+ * to store tangent, that we need for normal mapping.
+ *
+ * Note, we expect fixed vertex format for input vertex arrays: RI_3f_XYZ | RI_3f_NORMAL | RI_2f_TEX
+ * make sure, you have proper vertex array, before you call this function.
+ *
+ * Return vertex array with fixed vertex format: RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX | RI_SEPARATE_TEX_COORD
+ */
+static void CreateTangentAndBinormal(cModel3D *Model)
+{
+	int New_VertexFormat = RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX | RI_SEPARATE_TEX_COORD;
+	int New_VertexStride = 3 + 3 + 6;
+	float *New_VertexBuffer = new float[New_VertexStride * Model->GlobalIndexArrayCount];
+
+	// for vertex array with new size (we need 4 more floats for each vertex), copy
+	// data with proper stride, we fill second and third textures coordinates later
+	for (unsigned int j = 0; j < Model->GlobalIndexArrayCount; j++) {
+		memcpy(New_VertexBuffer + New_VertexStride * j,
+		       Model->GlobalVertexArray + Model->GlobalIndexArray[j] * Model->ObjectsList[0].VertexStride,
+		       Model->ObjectsList[0].VertexStride * sizeof(float));
+	}
+	delete [] Model->GlobalVertexArray;
+	Model->GlobalVertexArray = New_VertexBuffer;
+	Model->GlobalVertexArrayCount = Model->GlobalIndexArrayCount;
+
+	// calculate tangent and binormal
+	for (unsigned int j = 0; j < Model->GlobalVertexArrayCount - 2; j += 3) {
+		unsigned int tmpOffset0 = New_VertexStride * j;			// j
+		unsigned int tmpOffset1 = tmpOffset0 + New_VertexStride;	// j + 1
+		unsigned int tmpOffset2 = tmpOffset1 + New_VertexStride;	// j + 2
+
+		sVECTOR3D Point1(Model->GlobalVertexArray[tmpOffset0],
+				 Model->GlobalVertexArray[tmpOffset0 + 1],
+				 Model->GlobalVertexArray[tmpOffset0 + 2]);
+
+		sVECTOR3D Point2(Model->GlobalVertexArray[tmpOffset1],
+				 Model->GlobalVertexArray[tmpOffset1 + 1],
+				 Model->GlobalVertexArray[tmpOffset1 + 2]);
+
+		sVECTOR3D Point3(Model->GlobalVertexArray[tmpOffset2],
+				 Model->GlobalVertexArray[tmpOffset2 + 1],
+				 Model->GlobalVertexArray[tmpOffset2 + 2]);
+
+		// 2 vectors for plane
+		sVECTOR3D PlaneVector1 = Point2 - Point1;
+		sVECTOR3D PlaneVector2 = Point3 - Point1;
+		// plane normal
+		PlaneVector1.Multiply(PlaneVector2);
+		PlaneVector1.NormalizeHi();
+		sVECTOR3D PlaneNormal = PlaneVector1;
+
+		PlaneVector1 = Point1 - Point2;
+		PlaneVector2 = Point3 - Point2;
+
+		float delta_U_0 = Model->GlobalVertexArray[tmpOffset0 + 6] -
+				  Model->GlobalVertexArray[tmpOffset1 + 6];
+		float delta_U_1 = Model->GlobalVertexArray[tmpOffset2 + 6] -
+				  Model->GlobalVertexArray[tmpOffset1 + 6];
+
+		float delta_V_0 = Model->GlobalVertexArray[tmpOffset0 + 7] -
+				  Model->GlobalVertexArray[tmpOffset1 + 7];
+		float delta_V_1 = Model->GlobalVertexArray[tmpOffset2 + 7] -
+				  Model->GlobalVertexArray[tmpOffset1 + 7];
+
+		// tangent and binormal
+		sVECTOR3D Tangent = ((PlaneVector1 ^ delta_V_1) - (PlaneVector2 ^ delta_V_0));
+		Tangent.NormalizeHi();
+		float TangentW = 1.0f;
+		sVECTOR3D BiNormal = ((PlaneVector1 ^ delta_U_1) - (PlaneVector2 ^ delta_U_0));
+		BiNormal.NormalizeHi();
+
+		// check, is normalmap mirrored or not
+		sVECTOR3D TBCross = Tangent;
+		TBCross.Multiply(BiNormal);
+		if( (TBCross * PlaneNormal) < 0 ) {
+			// care about mirrored normalmap
+			Tangent = ((PlaneVector1 ^ (-delta_V_1)) - (PlaneVector2 ^ (-delta_V_0)));
+			Tangent.NormalizeHi();
+			TangentW = -1.0f;
+		}
+
+		// fill second and third textures coordinates with tangent
+		Model->GlobalVertexArray[tmpOffset0 + 8] =
+				Model->GlobalVertexArray[tmpOffset1 + 8] =
+				Model->GlobalVertexArray[tmpOffset2 + 8] = Tangent.x;
+		Model->GlobalVertexArray[tmpOffset0 + 9] =
+				Model->GlobalVertexArray[tmpOffset1 + 9] =
+				Model->GlobalVertexArray[tmpOffset2 + 9] = Tangent.y;
+		Model->GlobalVertexArray[tmpOffset0 + 10] =
+				Model->GlobalVertexArray[tmpOffset1 + 10] =
+				Model->GlobalVertexArray[tmpOffset2 + 10] = Tangent.z;
+		Model->GlobalVertexArray[tmpOffset0 + 11] =
+				Model->GlobalVertexArray[tmpOffset1 + 11] =
+				Model->GlobalVertexArray[tmpOffset2 + 11] = TangentW;
+	}
+
+	// re-generate index array
+	for (unsigned int i = 0; i < Model->GlobalIndexArrayCount; i++) {
+		Model->GlobalIndexArray[i] = i;
+	}
+
+	// store new vertex data
+	for (int i = 0; i < Model->ObjectsListCount; i++) {
+		Model->ObjectsList[i].VertexArray = Model->GlobalVertexArray;
+		Model->ObjectsList[i].VertexFormat = New_VertexFormat;
+		Model->ObjectsList[i].VertexStride = New_VertexStride;
+	}
+}
+
+/*
+ * Create vertex and index arrays for all objects.
+ */
+static void CreateObjectsBuffers(cModel3D *Model)
+{
+	for (int i = 0; i < Model->ObjectsListCount; i++) {
+		// vertex array
+		Model->ObjectsList[i].VertexArray = new float[Model->ObjectsList[i].VertexStride *
+							      Model->ObjectsList[i].VertexCount];
+		for (int j = 0; j < Model->ObjectsList[i].VertexCount; j++) {
+			memcpy(Model->ObjectsList[i].VertexArray + Model->ObjectsList[i].VertexStride * j,
+			       Model->GlobalVertexArray + Model->GlobalIndexArray[Model->ObjectsList[i].RangeStart + j] *
+							  Model->ObjectsList[i].VertexStride,
+			       Model->ObjectsList[i].VertexStride * sizeof(Model->ObjectsList[i].VertexArray[0]));
+		}
+
+		// index array
+		Model->ObjectsList[i].IndexArray = new unsigned int[Model->ObjectsList[i].VertexCount];
+		for (int j = 0; j < Model->ObjectsList[i].VertexCount; j++) {
+			Model->ObjectsList[i].IndexArray[j] = j;
+		}
+		Model->ObjectsList[i].RangeStart = 0;
+	}
+}
+
+/*
+ * Create all OpenGL-related hardware buffers.
+ */
+static void CreateHardwareBuffers(cModel3D *Model)
+{
+	// global vertex buffer object
+	if (!vw_BuildVertexBufferObject(Model->GlobalVertexArrayCount, Model->GlobalVertexArray,
+					Model->ObjectsList[0].VertexStride, Model->GlobalVBO))
+		Model->GlobalVBO = 0;
+
+	// global index buffer object
+	if (!vw_BuildIndexBufferObject(Model->GlobalIndexArrayCount, Model->GlobalIndexArray, Model->GlobalIBO))
+		Model->GlobalIBO = 0;
+
+	// global vertex array object
+	if (!vw_BuildVAO(Model->GlobalVAO, Model->GlobalIndexArrayCount, Model->ObjectsList[0].VertexFormat,
+			 Model->GlobalVertexArray, Model->ObjectsList[0].VertexStride * sizeof(float),
+			 Model->GlobalVBO, 0, Model->GlobalIndexArray, Model->GlobalIBO))
+		Model->GlobalVAO = 0;
+
+	// and same for all objects
+	for (int i = 0; i < Model->ObjectsListCount; i++) {
+		// vertex buffer object
+		if (!vw_BuildVertexBufferObject(Model->ObjectsList[i].VertexCount, Model->ObjectsList[i].VertexArray,
+						Model->ObjectsList[i].VertexStride, Model->ObjectsList[i].VBO))
+			Model->ObjectsList[i].VBO = 0;
+
+		// index buffer object
+		if (!vw_BuildIndexBufferObject(Model->ObjectsList[i].VertexCount, Model->ObjectsList[i].IndexArray,
+					       Model->ObjectsList[i].IBO))
+			Model->ObjectsList[i].IBO = 0;
+
+		// vertex array object
+		if (!vw_BuildVAO(Model->ObjectsList[i].VAO, Model->ObjectsList[i].VertexCount,
+				 Model->ObjectsList[i].VertexFormat, Model->ObjectsList[i].VertexArray,
+				 Model->ObjectsList[i].VertexStride * sizeof(Model->ObjectsList[i].VertexArray[0]),
+				 Model->ObjectsList[i].VBO, Model->ObjectsList[i].RangeStart,
+				 Model->ObjectsList[i].IndexArray, Model-> ObjectsList[i].IBO))
+			Model->ObjectsList[i].VAO = 0;
+	}
+}
+
+/*
+ * Recursively generate/calculate limited by size triangles.
+ *
+ * For result, we don't use tangent (second and third textures coordinates).
+ * This is why we operate with Point[8], but not Point[12].
+ */
+static int RecursiveTrianglesLimitedBySize(float (&Point1)[8], float (&Point2)[8], float (&Point3)[8],
+					   int Stride, float *VertexBuffer, int *CurrentPosition,
+					   float TriangleSizeLimit)
+{
+	// calculate size for all triangle's side
+	float Dist1 = sqrtf((Point1[0] - Point2[0]) * (Point1[0] - Point2[0]) +
+			    (Point1[1] - Point2[1]) * (Point1[1] - Point2[1]) +
+			    (Point1[2] - Point2[2]) * (Point1[2] - Point2[2]));
+	float Dist2 = sqrtf((Point2[0] - Point3[0]) * (Point2[0] - Point3[0]) +
+			    (Point2[1] - Point3[1]) * (Point2[1] - Point3[1]) +
+			    (Point2[2] - Point3[2]) * (Point2[2] - Point3[2]));
+	float Dist3 = sqrtf((Point3[0] - Point1[0]) * (Point3[0] - Point1[0]) +
+			    (Point3[1] - Point1[1]) * (Point3[1] - Point1[1]) +
+			    (Point3[2] - Point1[2]) * (Point3[2] - Point1[2]));
+
+	if ((Dist1 <= TriangleSizeLimit) && (Dist2 <= TriangleSizeLimit) && (Dist3 <= TriangleSizeLimit)) {
+		// nothing to do, leave
+		if (VertexBuffer && CurrentPosition) {
+			memcpy(VertexBuffer + (*CurrentPosition), Point1, sizeof(Point1[0]) * 8);
+			*CurrentPosition += Stride;
+			memcpy(VertexBuffer + (*CurrentPosition), Point2, sizeof(Point2[0]) * 8);
+			*CurrentPosition += Stride;
+			memcpy(VertexBuffer + (*CurrentPosition), Point3, sizeof(Point3[0]) * 8);
+			*CurrentPosition += Stride;
+		}
+		return 1;
+	}
+
+	// find largest side and split it, so, we will have 2 triangles with smaller size
+	if ((Dist1 > Dist2) && (Dist1 > Dist3)) {
+		float Point_A[8]= {(Point1[0] + Point2[0]) / 2.0f,
+				   (Point1[1] + Point2[1]) / 2.0f,
+				   (Point1[2] + Point2[2]) / 2.0f,
+				   (Point1[3] + Point2[3]) / 2.0f,
+				   (Point1[4] + Point2[4]) / 2.0f,
+				   (Point1[5] + Point2[5]) / 2.0f,
+				   (Point1[6] + Point2[6]) / 2.0f,
+				   (Point1[7] + Point2[7]) / 2.0f};
+
+		return RecursiveTrianglesLimitedBySize(Point1, Point_A, Point3, Stride, VertexBuffer,
+						       CurrentPosition, TriangleSizeLimit) +
+		       RecursiveTrianglesLimitedBySize(Point_A, Point2, Point3, Stride, VertexBuffer,
+						       CurrentPosition, TriangleSizeLimit);
+	} else if ((Dist2 > Dist1) && (Dist2 > Dist3)) {
+		float Point_A[8]= {(Point2[0] + Point3[0]) / 2.0f,
+				   (Point2[1] + Point3[1]) / 2.0f,
+				   (Point2[2] + Point3[2]) / 2.0f,
+				   (Point2[3] + Point3[3]) / 2.0f,
+				   (Point2[4] + Point3[4]) / 2.0f,
+				   (Point2[5] + Point3[5]) / 2.0f,
+				   (Point2[6] + Point3[6]) / 2.0f,
+				   (Point2[7] + Point3[7]) / 2.0f};
+
+		return RecursiveTrianglesLimitedBySize(Point1, Point2, Point_A, Stride, VertexBuffer,
+						       CurrentPosition, TriangleSizeLimit) +
+		       RecursiveTrianglesLimitedBySize(Point1, Point_A, Point3, Stride, VertexBuffer,
+						       CurrentPosition, TriangleSizeLimit);
+	} else {
+		float Point_A[8]= {(Point3[0] + Point1[0]) / 2.0f,
+				   (Point3[1] + Point1[1]) / 2.0f,
+				   (Point3[2] + Point1[2]) / 2.0f,
+				   (Point3[3] + Point1[3]) / 2.0f,
+				   (Point3[4] + Point1[4]) / 2.0f,
+				   (Point3[5] + Point1[5]) / 2.0f,
+				   (Point3[6] + Point1[6]) / 2.0f,
+				   (Point3[7] + Point1[7]) / 2.0f};
+
+		return RecursiveTrianglesLimitedBySize(Point1, Point2, Point_A, Stride, VertexBuffer,
+						       CurrentPosition, TriangleSizeLimit) +
+		       RecursiveTrianglesLimitedBySize(Point_A, Point2, Point3, Stride, VertexBuffer,
+						       CurrentPosition, TriangleSizeLimit);
+	}
+}
+
+/*
+ * Create vertex array with limited by size triangles.
+ * The idea is - split triangles recursively till they larger than size limit.
+ *
+ * For explosion we need pre-generated vertex array (VertexArrayWithSmallTriangles)
+ * with small triangles, in this case, we could create cool looking effects, when
+ * enemies disintegrate into 'dust' pieces during explosion.
+ *
+ * For result, we don't copy tangent (second and third textures coordinates).
+ * This is why we operate with Point[8], but not Point[12].
+ *
+ * Note, as for now, VertexArrayWithSmallTriangles use VertexFormat and VertexStride, so,
+ * it use 8 floats per vertex, but allocate 12 floats per vertex. In the same time, we
+ * could point to VertexArray and don't allocate memory in case array have all triangles with
+ * proper size.
+ */
+static void CreateVertexArrayLimitedBySizeTriangles(cModel3D *Model, float TriangleSizeLimit)
+{
+	if (TriangleSizeLimit <= 0.0f) {
+		for (int i = 0; i < Model->ObjectsListCount; i++) {
+			Model->ObjectsList[i].VertexArrayWithSmallTrianglesCount = Model->ObjectsList[i].VertexCount;
+			Model->ObjectsList[i].VertexArrayWithSmallTriangles = Model->ObjectsList[i].VertexArray;
+		}
+		return;
+	}
+
+	// calculate, how many memory we need for new vertex array
+	for (int i = 0; i < Model->ObjectsListCount; i++) {
+		Model->ObjectsList[i].VertexArrayWithSmallTrianglesCount = 0;
+
+		// prepare 3 points (triangle)
+		for (int j = 0; j < Model->ObjectsList[i].VertexCount - 2; j += 3) {
+			unsigned int tmpOffset0 = Model->ObjectsList[i].VertexStride * j;		// j
+			unsigned int tmpOffset1 = tmpOffset0 + Model->ObjectsList[i].VertexStride;	// j + 1
+			unsigned int tmpOffset2 = tmpOffset1 + Model->ObjectsList[i].VertexStride;	// j + 2
+
+			float Point1[8] = {Model->ObjectsList[i].VertexArray[tmpOffset0],
+					   Model->ObjectsList[i].VertexArray[tmpOffset0 + 1],
+					   Model->ObjectsList[i].VertexArray[tmpOffset0 + 2],
+					   Model->ObjectsList[i].VertexArray[tmpOffset0 + 3],
+					   Model->ObjectsList[i].VertexArray[tmpOffset0 + 4],
+					   Model->ObjectsList[i].VertexArray[tmpOffset0 + 5],
+					   Model->ObjectsList[i].VertexArray[tmpOffset0 + 6],
+					   Model->ObjectsList[i].VertexArray[tmpOffset0 + 7]};
+
+			float Point2[8] = {Model->ObjectsList[i].VertexArray[tmpOffset1],
+					   Model->ObjectsList[i].VertexArray[tmpOffset1 + 1],
+					   Model->ObjectsList[i].VertexArray[tmpOffset1 + 2],
+					   Model->ObjectsList[i].VertexArray[tmpOffset1 + 3],
+					   Model->ObjectsList[i].VertexArray[tmpOffset1 + 4],
+					   Model->ObjectsList[i].VertexArray[tmpOffset1 + 5],
+					   Model->ObjectsList[i].VertexArray[tmpOffset1 + 6],
+					   Model->ObjectsList[i].VertexArray[tmpOffset1 + 7]};
+
+			float Point3[8] = {Model->ObjectsList[i].VertexArray[tmpOffset2],
+					   Model->ObjectsList[i].VertexArray[tmpOffset2 + 1],
+					   Model->ObjectsList[i].VertexArray[tmpOffset2 + 2],
+					   Model->ObjectsList[i].VertexArray[tmpOffset2 + 3],
+					   Model->ObjectsList[i].VertexArray[tmpOffset2 + 4],
+					   Model->ObjectsList[i].VertexArray[tmpOffset2 + 5],
+					   Model->ObjectsList[i].VertexArray[tmpOffset2 + 6],
+					   Model->ObjectsList[i].VertexArray[tmpOffset2 + 7]};
+
+			// recursively check, how many triangles we could receive
+			Model->ObjectsList[i].VertexArrayWithSmallTrianglesCount +=
+				RecursiveTrianglesLimitedBySize(Point1, Point2, Point3, 0,
+								nullptr, nullptr, TriangleSizeLimit) * 3;
+		}
+	}
+
+	// generate VertexArrayWithSmallTriangles
+	for (int i = 0; i < Model->ObjectsListCount; i++) {
+		// nothing to do
+		if (Model->ObjectsList[i].VertexArrayWithSmallTrianglesCount == Model->ObjectsList[i].VertexCount)
+			Model->ObjectsList[i].VertexArrayWithSmallTriangles = Model->ObjectsList[i].VertexArray;
+		else {
+			// allocate memory
+			Model->ObjectsList[i].VertexArrayWithSmallTriangles =
+					new float[Model->ObjectsList[i].VertexArrayWithSmallTrianglesCount *
+						  Model->ObjectsList[i].VertexStride];
+			int CurrentPosition = 0;
+
+			// prepare 3 points (triangle)
+			for (int j = 0; j < Model->ObjectsList[i].VertexCount - 2; j += 3) {
+				unsigned int tmpOffset0 = Model->ObjectsList[i].VertexStride * j;		// j
+				unsigned int tmpOffset1 = tmpOffset0 + Model->ObjectsList[i].VertexStride;	// j + 1
+				unsigned int tmpOffset2 = tmpOffset1 + Model->ObjectsList[i].VertexStride;	// j + 2
+
+				float Point1[8] = {Model->ObjectsList[i].VertexArray[tmpOffset0],
+						   Model->ObjectsList[i].VertexArray[tmpOffset0 + 1],
+						   Model->ObjectsList[i].VertexArray[tmpOffset0 + 2],
+						   Model->ObjectsList[i].VertexArray[tmpOffset0 + 3],
+						   Model->ObjectsList[i].VertexArray[tmpOffset0 + 4],
+						   Model->ObjectsList[i].VertexArray[tmpOffset0 + 5],
+						   Model->ObjectsList[i].VertexArray[tmpOffset0 + 6],
+						   Model->ObjectsList[i].VertexArray[tmpOffset0 + 7]};
+
+				float Point2[8] = {Model->ObjectsList[i].VertexArray[tmpOffset1],
+						   Model->ObjectsList[i].VertexArray[tmpOffset1 + 1],
+						   Model->ObjectsList[i].VertexArray[tmpOffset1 + 2],
+						   Model->ObjectsList[i].VertexArray[tmpOffset1 + 3],
+						   Model->ObjectsList[i].VertexArray[tmpOffset1 + 4],
+						   Model->ObjectsList[i].VertexArray[tmpOffset1 + 5],
+						   Model->ObjectsList[i].VertexArray[tmpOffset1 + 6],
+						   Model->ObjectsList[i].VertexArray[tmpOffset1 + 7]};
+
+				float Point3[8] = {Model->ObjectsList[i].VertexArray[tmpOffset2],
+						   Model->ObjectsList[i].VertexArray[tmpOffset2 + 1],
+						   Model->ObjectsList[i].VertexArray[tmpOffset2 + 2],
+						   Model->ObjectsList[i].VertexArray[tmpOffset2 + 3],
+						   Model->ObjectsList[i].VertexArray[tmpOffset2 + 4],
+						   Model->ObjectsList[i].VertexArray[tmpOffset2 + 5],
+						   Model->ObjectsList[i].VertexArray[tmpOffset2 + 6],
+						   Model->ObjectsList[i].VertexArray[tmpOffset2 + 7]};
+
+				// recursively generate VertexArrayWithSmallTriangles
+				RecursiveTrianglesLimitedBySize(Point1, Point2, Point3, Model->ObjectsList[i].VertexStride,
+								Model->ObjectsList[i].VertexArrayWithSmallTriangles,
+								&CurrentPosition, TriangleSizeLimit);
+			}
+		}
+	}
+}
+
+/*
+ * Load 3D model.
+ */
 cModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
 	if (FileName.empty())
 		return nullptr;
 
-	// сначала пытаемся найти уже сущ.
+	// if we already have it, just return a pointer.
 	cModel3D *tmp = StartModel3D;
 	while (tmp) {
 		cModel3D *tmp2 = tmp->Next;
@@ -56,12 +439,11 @@ cModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, b
 		tmp = tmp2;
 	}
 
-	// если ничего нет, значит нужно загрузить
 	cModel3D *Model = new cModel3D;
 
 	// check extension
 	if (vw_CheckFileExtension(FileName, ".vw3d")) {
-		if (!Model->ReadVW3D(FileName)) {
+		if (!Model->LoadVW3D(FileName)) {
 			std::cout << "Can't load file ... " << FileName << "\n";
 			delete Model;
 			return nullptr;
@@ -72,27 +454,20 @@ cModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, b
 		return nullptr;
 	}
 
-	// пересоздаем буфер вертексов, для работы с нормал меппингом в шейдерах, добавляем тангент и бинормаль
 	if (NeedTangentAndBinormal)
-		Model->CreateTangentAndBinormal();
-	// создаем вертексные и индексные буферы для каждого блока
-	Model->CreateObjectsBuffers();
-	// создаем все поддерживаемые буферы (VAO, VBO, IBO)
-	Model->CreateHardwareBuffers();
-
-	// делаем спец буфер для разрушаемых объектов
-	// (!) используем фиксированную последовательность RI_3f_XYZ | RI_3f_NORMAL | RI_2f_TEX
-	// с которой работают взрывы в игре, не делаем универсальную (нет необходимости)
-	Model->CreateVertexBufferLimitedBySizeTriangles(TriangleSizeLimit);
+		CreateTangentAndBinormal(Model);
+	CreateObjectsBuffers(Model);
+	CreateHardwareBuffers(Model);
+	CreateVertexArrayLimitedBySizeTriangles(Model, TriangleSizeLimit);
 
 	std::cout << "Loaded ... " << FileName << "\n";
 
 	return Model;
 }
 
-//-----------------------------------------------------------------------------
-//	Присоеденяем Model3D к списку
-//-----------------------------------------------------------------------------
+/*
+ * Attach.
+ */
 static void AttachModel3D(cModel3D *NewModel3D)
 {
 	if (NewModel3D == nullptr)
@@ -111,9 +486,9 @@ static void AttachModel3D(cModel3D *NewModel3D)
 	}
 }
 
-//-----------------------------------------------------------------------------
-//	Удаляем Model3D из списка
-//-----------------------------------------------------------------------------
+/*
+ * Detach.
+ */
 static void DetachModel3D(cModel3D *OldModel3D)
 {
 	if (OldModel3D == nullptr)
@@ -135,9 +510,9 @@ static void DetachModel3D(cModel3D *OldModel3D)
 		OldModel3D->Next->Prev = nullptr;
 }
 
-//-----------------------------------------------------------------------------
-//	Удаляем все Model3D в списке
-//-----------------------------------------------------------------------------
+/*
+ * Release all 3D models.
+ */
 void vw_ReleaseAllModel3D()
 {
 	cModel3D *tmp = StartModel3D;
@@ -151,12 +526,11 @@ void vw_ReleaseAllModel3D()
 	EndModel3D = nullptr;
 }
 
-//-----------------------------------------------------------------------------
-// Деструктор
-//-----------------------------------------------------------------------------
+/*
+ * Destructor sObjectBlock.
+ */
 sObjectBlock::~sObjectBlock(void)
 {
-	// если нужно, удаляем с блоком
 	if (NeedDestroyDataInObjectBlock) {
 		if (VertexArray)
 			delete [] VertexArray;
@@ -169,27 +543,27 @@ sObjectBlock::~sObjectBlock(void)
 		if (VAO)
 			vw_DeleteVAO(VAO);
 
-		// память для VertexBufferLimitedBySizeTriangles никогда не должена быть выделена в конкретном объекте,
-		// только в моделе его удаляем только в деструкторе eModel3D, т.к. он там создается
+		// note, we don't release VertexBufferLimitedBySizeTriangles, it should be
+		// released in cModel3D
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Конструктор
-//-----------------------------------------------------------------------------
+/*
+ * Constructor cModel3D.
+ */
 cModel3D::cModel3D(void)
 {
 	AttachModel3D(this);
 }
 
-//-----------------------------------------------------------------------------
-// Деструктор
-//-----------------------------------------------------------------------------
+/*
+ * Destructor cModel3D.
+ */
 cModel3D::~cModel3D(void)
 {
 	if (ObjectsList) {
 		for (int i = 0; i < ObjectsListCount; i++) {
-			// удаляем только если это не ссылка на вертекс буфер блока
+			// release only if we don't point to VertexArray
 			if (ObjectsList[i].VertexArrayWithSmallTriangles &&
 			    (ObjectsList[i].VertexArrayWithSmallTriangles != ObjectsList[i].VertexArray))
 				delete [] ObjectsList[i].VertexArrayWithSmallTriangles;
@@ -223,444 +597,10 @@ cModel3D::~cModel3D(void)
 	DetachModel3D(this);
 }
 
-//-----------------------------------------------------------------------------
-// создание вертекс и индекс буферов для каждого блока модели
-//-----------------------------------------------------------------------------
-void cModel3D::CreateObjectsBuffers()
-{
-	for (int i = 0; i < ObjectsListCount; i++) {
-		// создаем вертексный буфер блока
-		ObjectsList[i].VertexArray = new float[ObjectsList[i].VertexStride * ObjectsList[i].VertexCount];
-		for (int j = 0; j < ObjectsList[i].VertexCount; j++) {
-			memcpy(ObjectsList[i].VertexArray + ObjectsList[i].VertexStride * j,
-			       GlobalVertexArray + GlobalIndexArray[ObjectsList[i].RangeStart + j] * ObjectsList[i].VertexStride,
-			       ObjectsList[i].VertexStride * sizeof(ObjectsList[i].VertexArray[0]));
-		}
-
-		// создаем индексный буфер блока
-		ObjectsList[i].IndexArray = new unsigned int[ObjectsList[i].VertexCount];
-		for (int j = 0; j < ObjectsList[i].VertexCount; j++) {
-			ObjectsList[i].IndexArray[j] = j;
-		}
-
-		// т.к. у нас отдельные буферы, то начало идет с нуля теперь
-		ObjectsList[i].RangeStart = 0;
-	}
-}
-
-//-----------------------------------------------------------------------------
-// создаем все поддерживаемые буферы (VAO, VBO, IBO)
-//-----------------------------------------------------------------------------
-void cModel3D::CreateHardwareBuffers()
-{
-	// делаем общее VBO
-	if (!vw_BuildVertexBufferObject(GlobalVertexArrayCount, GlobalVertexArray, ObjectsList[0].VertexStride, GlobalVBO))
-		GlobalVBO = 0;
-
-	// делаем общий IBO
-	if (!vw_BuildIndexBufferObject(GlobalIndexArrayCount, GlobalIndexArray, GlobalIBO))
-		GlobalIBO = 0;
-
-	if (!vw_BuildVAO(GlobalVAO, GlobalIndexArrayCount, ObjectsList[0].VertexFormat, GlobalVertexArray,
-			 ObjectsList[0].VertexStride * sizeof(float), GlobalVBO, 0, GlobalIndexArray, GlobalIBO))
-		GlobalVAO = 0;
-
-	// создаем буферы для каждого объекта
-	for (int i = 0; i < ObjectsListCount; i++) {
-		// делаем VBO
-		if (!vw_BuildVertexBufferObject(ObjectsList[i].VertexCount, ObjectsList[i].VertexArray,
-						ObjectsList[i].VertexStride, ObjectsList[i].VBO))
-			ObjectsList[i].VBO = 0;
-
-		// делаем IBO
-		if (!vw_BuildIndexBufferObject(ObjectsList[i].VertexCount, ObjectsList[i].IndexArray,
-					       ObjectsList[i].IBO))
-			ObjectsList[i].IBO = 0;
-
-		// делаем VAO
-		if (!vw_BuildVAO(ObjectsList[i].VAO, ObjectsList[i].VertexCount, ObjectsList[i].VertexFormat,
-				 ObjectsList[i].VertexArray, ObjectsList[i].VertexStride * sizeof(ObjectsList[i].VertexArray[0]),
-				 ObjectsList[i].VBO, ObjectsList[i].RangeStart, ObjectsList[i].IndexArray,
-				 ObjectsList[i].IBO))
-			ObjectsList[i].VAO = 0;
-	}
-}
-
-//-----------------------------------------------------------------------------
-// рекурсивно просчитываем кол-во VertexBufferLimitedBySizeTriangles
-//-----------------------------------------------------------------------------
-static int RecursiveBufferLimitedBySizeTrianglesCalculate(float (&Point1)[8], float (&Point2)[8], float (&Point3)[8],
-							  int Stride, float *VertexBuffer, int *CurrentPosition,
-							  float TriangleSizeLimit)
-{
-	// подсчитываем длину сторон, если они меньше чем необходимый минимум - выходим с 1
-	float Dist1 = sqrtf((Point1[0] - Point2[0]) * (Point1[0] - Point2[0]) +
-			    (Point1[1] - Point2[1]) * (Point1[1] - Point2[1]) +
-			    (Point1[2] - Point2[2]) * (Point1[2] - Point2[2]));
-	float Dist2 = sqrtf((Point2[0] - Point3[0]) * (Point2[0] - Point3[0]) +
-			    (Point2[1] - Point3[1]) * (Point2[1] - Point3[1]) +
-			    (Point2[2] - Point3[2]) * (Point2[2] - Point3[2]));
-	float Dist3 = sqrtf((Point3[0] - Point1[0]) * (Point3[0] - Point1[0]) +
-			    (Point3[1] - Point1[1]) * (Point3[1] - Point1[1]) +
-			    (Point3[2] - Point1[2]) * (Point3[2] - Point1[2]));
-
-	if ((Dist1 <= TriangleSizeLimit) && (Dist2 <= TriangleSizeLimit) && (Dist3 <= TriangleSizeLimit)) {
-		// добавляем в новую последовательность треугольник
-		if (VertexBuffer && CurrentPosition) {
-			memcpy(VertexBuffer + (*CurrentPosition), Point1, sizeof(Point1[0]) * 8);
-			*CurrentPosition += Stride;
-			memcpy(VertexBuffer + (*CurrentPosition), Point2, sizeof(Point2[0]) * 8);
-			*CurrentPosition += Stride;
-			memcpy(VertexBuffer + (*CurrentPosition), Point3, sizeof(Point3[0]) * 8);
-			*CurrentPosition += Stride;
-		}
-		return 1;
-	}
-
-	// одна из сторон больше, ищем наибольшую, делим ее пополам и идем дальше в рекурсию
-	if ((Dist1 > Dist2) && (Dist1 > Dist3)) {
-		float Point_A[8]= {(Point1[0] + Point2[0]) / 2.0f,
-				   (Point1[1] + Point2[1]) / 2.0f,
-				   (Point1[2] + Point2[2]) / 2.0f,
-				   (Point1[3] + Point2[3]) / 2.0f,
-				   (Point1[4] + Point2[4]) / 2.0f,
-				   (Point1[5] + Point2[5]) / 2.0f,
-				   (Point1[6] + Point2[6]) / 2.0f,
-				   (Point1[7] + Point2[7]) / 2.0f};
-
-		return RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point_A, Point3,
-				Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit) +
-		       RecursiveBufferLimitedBySizeTrianglesCalculate(Point_A, Point2, Point3,
-				       Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
-	} else if ((Dist2 > Dist1) && (Dist2 > Dist3)) {
-		float Point_A[8]= {(Point2[0] + Point3[0]) / 2.0f,
-				   (Point2[1] + Point3[1]) / 2.0f,
-				   (Point2[2] + Point3[2]) / 2.0f,
-				   (Point2[3] + Point3[3]) / 2.0f,
-				   (Point2[4] + Point3[4]) / 2.0f,
-				   (Point2[5] + Point3[5]) / 2.0f,
-				   (Point2[6] + Point3[6]) / 2.0f,
-				   (Point2[7] + Point3[7]) / 2.0f};
-
-		return RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point2, Point_A,
-				Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit) +
-		       RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point_A, Point3,
-				       Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
-	} else {
-		float Point_A[8]= {(Point3[0] + Point1[0]) / 2.0f,
-				   (Point3[1] + Point1[1]) / 2.0f,
-				   (Point3[2] + Point1[2]) / 2.0f,
-				   (Point3[3] + Point1[3]) / 2.0f,
-				   (Point3[4] + Point1[4]) / 2.0f,
-				   (Point3[5] + Point1[5]) / 2.0f,
-				   (Point3[6] + Point1[6]) / 2.0f,
-				   (Point3[7] + Point1[7]) / 2.0f};
-
-		return RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point2, Point_A,
-				Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit) +
-		       RecursiveBufferLimitedBySizeTrianglesCalculate(Point_A, Point2, Point3,
-				       Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
-	}
-}
-
-//-----------------------------------------------------------------------------
-// рекурсивно создаем VertexBufferLimitedBySizeTriangles
-//-----------------------------------------------------------------------------
-void RecursiveBufferLimitedBySizeTrianglesGenerate(float Point1[8], float Point2[8], float Point3[8],
-		int Stride, float *VertexBuffer, int *CurrentPosition, float TriangleSizeLimit)
-{
-	// подсчитываем длину сторон, если они меньше чем необходимый минимум - выходим с 1
-	float Dist1 = sqrtf((Point1[0] - Point2[0]) * (Point1[0] - Point2[0]) +
-			    (Point1[1] - Point2[1]) * (Point1[1] - Point2[1]) +
-			    (Point1[2] - Point2[2]) * (Point1[2] - Point2[2]));
-	float Dist2 = sqrtf((Point2[0] - Point3[0]) * (Point2[0] - Point3[0]) +
-			    (Point2[1] - Point3[1]) * (Point2[1] - Point3[1]) +
-			    (Point2[2] - Point3[2]) * (Point2[2] - Point3[2]));
-	float Dist3 = sqrtf((Point3[0] - Point1[0]) * (Point3[0] - Point1[0]) +
-			    (Point3[1] - Point1[1]) * (Point3[1] - Point1[1]) +
-			    (Point3[2] - Point1[2]) * (Point3[2] - Point1[2]));
-
-	if ((Dist1 <= TriangleSizeLimit) && (Dist2 <= TriangleSizeLimit) && (Dist3 <= TriangleSizeLimit)) {
-		// добавляем в новую последовательность треугольник
-		if (VertexBuffer && CurrentPosition) {
-			memcpy(VertexBuffer + (*CurrentPosition), Point1, sizeof(Point1[0]) * 8);
-			*CurrentPosition += Stride;
-			memcpy(VertexBuffer + (*CurrentPosition), Point2, sizeof(Point2[0]) * 8);
-			*CurrentPosition += Stride;
-			memcpy(VertexBuffer + (*CurrentPosition), Point3, sizeof(Point3[0]) * 8);
-			*CurrentPosition += Stride;
-		}
-
-		return;
-	}
-
-	// одна из сторон больше, ищем наибольшую, делим ее пополам и идем дальше в рекурсию
-	if ((Dist1 > Dist2) && (Dist1 > Dist3)) {
-		float Point_A[8]= {(Point1[0] + Point2[0]) / 2.0f,
-				   (Point1[1] + Point2[1]) / 2.0f,
-				   (Point1[2] + Point2[2]) / 2.0f,
-				   (Point1[3] + Point2[3]) / 2.0f,
-				   (Point1[4] + Point2[4]) / 2.0f,
-				   (Point1[5] + Point2[5]) / 2.0f,
-				   (Point1[6] + Point2[6]) / 2.0f,
-				   (Point1[7] + Point2[7]) / 2.0f};
-
-		RecursiveBufferLimitedBySizeTrianglesGenerate(Point1, Point_A, Point3,
-				Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
-		RecursiveBufferLimitedBySizeTrianglesGenerate(Point_A, Point2, Point3,
-				Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
-		return;
-	} else if ((Dist2 > Dist1) && (Dist2 > Dist3)) {
-		float Point_A[8]= {(Point2[0] + Point3[0]) / 2.0f,
-				   (Point2[1] + Point3[1]) / 2.0f,
-				   (Point2[2] + Point3[2]) / 2.0f,
-				   (Point2[3] + Point3[3]) / 2.0f,
-				   (Point2[4] + Point3[4]) / 2.0f,
-				   (Point2[5] + Point3[5]) / 2.0f,
-				   (Point2[6] + Point3[6]) / 2.0f,
-				   (Point2[7] + Point3[7]) / 2.0f};
-
-		RecursiveBufferLimitedBySizeTrianglesGenerate(Point1, Point2, Point_A,
-				Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
-		RecursiveBufferLimitedBySizeTrianglesGenerate(Point1, Point_A, Point3,
-				Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
-		return;
-	} else {
-		float Point_A[8]= {(Point3[0] + Point1[0]) / 2.0f,
-				   (Point3[1] + Point1[1]) / 2.0f,
-				   (Point3[2] + Point1[2]) / 2.0f,
-				   (Point3[3] + Point1[3]) / 2.0f,
-				   (Point3[4] + Point1[4]) / 2.0f,
-				   (Point3[5] + Point1[5]) / 2.0f,
-				   (Point3[6] + Point1[6]) / 2.0f,
-				   (Point3[7] + Point1[7]) / 2.0f};
-
-		RecursiveBufferLimitedBySizeTrianglesGenerate(Point1, Point2, Point_A,
-				Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
-		RecursiveBufferLimitedBySizeTrianglesGenerate(Point_A, Point2, Point3,
-				Stride, VertexBuffer, CurrentPosition, TriangleSizeLimit);
-		return;
-	}
-}
-
-void cModel3D::CreateVertexBufferLimitedBySizeTriangles(float TriangleSizeLimit)
-{
-	// если преобразования делать не требуется - устанавливаем ссылку на обуфер блока и выходим
-	if (TriangleSizeLimit <= 0.0f) {
-		for (int i = 0; i < ObjectsListCount; i++) {
-			ObjectsList[i].VertexArrayWithSmallTrianglesCount = ObjectsList[i].VertexCount;
-			ObjectsList[i].VertexArrayWithSmallTriangles = ObjectsList[i].VertexArray;
-		}
-		return;
-	}
-
-	// первый вызов - считаем кол-во точек, для выделения памяти на новый буфер
-	for (int i = 0; i < ObjectsListCount; i++) {
-		ObjectsList[i].VertexArrayWithSmallTrianglesCount = 0;
-
-		// перебираем по треугольникам (3 точки)
-		for (int j = 0; j < ObjectsList[i].VertexCount - 2; j += 3) {
-			unsigned int tmpOffset0 = ObjectsList[i].VertexStride * j;		// j
-			unsigned int tmpOffset1 = tmpOffset0 + ObjectsList[i].VertexStride;	// j + 1
-			unsigned int tmpOffset2 = tmpOffset1 + ObjectsList[i].VertexStride;	// j + 2
-
-			float Point1[8] = {ObjectsList[i].VertexArray[tmpOffset0],
-					   ObjectsList[i].VertexArray[tmpOffset0 + 1],
-					   ObjectsList[i].VertexArray[tmpOffset0 + 2],
-					   ObjectsList[i].VertexArray[tmpOffset0 + 3],
-					   ObjectsList[i].VertexArray[tmpOffset0 + 4],
-					   ObjectsList[i].VertexArray[tmpOffset0 + 5],
-					   ObjectsList[i].VertexArray[tmpOffset0 + 6],
-					   ObjectsList[i].VertexArray[tmpOffset0 + 7]};
-
-			float Point2[8] = {ObjectsList[i].VertexArray[tmpOffset1],
-					   ObjectsList[i].VertexArray[tmpOffset1 + 1],
-					   ObjectsList[i].VertexArray[tmpOffset1 + 2],
-					   ObjectsList[i].VertexArray[tmpOffset1 + 3],
-					   ObjectsList[i].VertexArray[tmpOffset1 + 4],
-					   ObjectsList[i].VertexArray[tmpOffset1 + 5],
-					   ObjectsList[i].VertexArray[tmpOffset1 + 6],
-					   ObjectsList[i].VertexArray[tmpOffset1 + 7]};
-
-			float Point3[8] = {ObjectsList[i].VertexArray[tmpOffset2],
-					   ObjectsList[i].VertexArray[tmpOffset2 + 1],
-					   ObjectsList[i].VertexArray[tmpOffset2 + 2],
-					   ObjectsList[i].VertexArray[tmpOffset2 + 3],
-					   ObjectsList[i].VertexArray[tmpOffset2 + 4],
-					   ObjectsList[i].VertexArray[tmpOffset2 + 5],
-					   ObjectsList[i].VertexArray[tmpOffset2 + 6],
-					   ObjectsList[i].VertexArray[tmpOffset2 + 7]};
-
-			// идем на рекурсивную функцию считать кол-во треугольников
-			ObjectsList[i].VertexArrayWithSmallTrianglesCount +=
-				RecursiveBufferLimitedBySizeTrianglesCalculate(Point1, Point2, Point3, 0,
-									       nullptr, nullptr, TriangleSizeLimit) * 3;
-		}
-	}
-
-	// второй проход
-	for (int i = 0; i < ObjectsListCount; i++) {
-		// если кол-во получилось как в текущем вертекс буфере - корректировок не требуется, просто копируем данные
-		if (ObjectsList[i].VertexArrayWithSmallTrianglesCount == ObjectsList[i].VertexCount)
-			ObjectsList[i].VertexArrayWithSmallTriangles = ObjectsList[i].VertexArray;
-		else {
-			// выделяем память
-			ObjectsList[i].VertexArrayWithSmallTriangles =
-					new float[ObjectsList[i].VertexArrayWithSmallTrianglesCount *
-						  ObjectsList[i].VertexStride];
-			int CurrentPosition = 0;
-
-			// перебираем по треугольникам (3 точки)
-			for (int j = 0; j < ObjectsList[i].VertexCount - 2; j += 3) {
-				unsigned int tmpOffset0 = ObjectsList[i].VertexStride * j;		// j
-				unsigned int tmpOffset1 = tmpOffset0 + ObjectsList[i].VertexStride;	// j + 1
-				unsigned int tmpOffset2 = tmpOffset1 + ObjectsList[i].VertexStride;	// j + 2
-
-				float Point1[8] = {ObjectsList[i].VertexArray[tmpOffset0],
-						   ObjectsList[i].VertexArray[tmpOffset0 + 1],
-						   ObjectsList[i].VertexArray[tmpOffset0 + 2],
-						   ObjectsList[i].VertexArray[tmpOffset0 + 3],
-						   ObjectsList[i].VertexArray[tmpOffset0 + 4],
-						   ObjectsList[i].VertexArray[tmpOffset0 + 5],
-						   ObjectsList[i].VertexArray[tmpOffset0 + 6],
-						   ObjectsList[i].VertexArray[tmpOffset0 + 7]};
-
-				float Point2[8] = {ObjectsList[i].VertexArray[tmpOffset1],
-						   ObjectsList[i].VertexArray[tmpOffset1 + 1],
-						   ObjectsList[i].VertexArray[tmpOffset1 + 2],
-						   ObjectsList[i].VertexArray[tmpOffset1 + 3],
-						   ObjectsList[i].VertexArray[tmpOffset1 + 4],
-						   ObjectsList[i].VertexArray[tmpOffset1 + 5],
-						   ObjectsList[i].VertexArray[tmpOffset1 + 6],
-						   ObjectsList[i].VertexArray[tmpOffset1 + 7]};
-
-				float Point3[8] = {ObjectsList[i].VertexArray[tmpOffset2],
-						   ObjectsList[i].VertexArray[tmpOffset2 + 1],
-						   ObjectsList[i].VertexArray[tmpOffset2 + 2],
-						   ObjectsList[i].VertexArray[tmpOffset2 + 3],
-						   ObjectsList[i].VertexArray[tmpOffset2 + 4],
-						   ObjectsList[i].VertexArray[tmpOffset2 + 5],
-						   ObjectsList[i].VertexArray[tmpOffset2 + 6],
-						   ObjectsList[i].VertexArray[tmpOffset2 + 7]};
-
-				// идем на рекурсивную функцию
-				RecursiveBufferLimitedBySizeTrianglesGenerate(Point1, Point2, Point3,
-					ObjectsList[i].VertexStride, ObjectsList[i].VertexArrayWithSmallTriangles,
-					&CurrentPosition, TriangleSizeLimit);
-			}
-		}
-	}
-}
-
-//-----------------------------------------------------------------------------
-// пересоздаем буфер вертексов, для работы с нормал меппингом в шейдерах, добавляем тангент и бинормаль
-//-----------------------------------------------------------------------------
-void cModel3D::CreateTangentAndBinormal()
-{
-	// пересоздаем глобальный вертексный буфер, (!) работаем с фиксированным типом,
-	// на входе у нас всегда RI_3f_XYZ | RI_3f_NORMAL | RI_2f_TEX
-	int New_VertexFormat = RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX | RI_SEPARATE_TEX_COORD;
-	int New_VertexStride = 3 + 3 + 6;
-	float *New_VertexBuffer = new float[New_VertexStride * GlobalIndexArrayCount];
-
-	for (unsigned int j = 0; j < GlobalIndexArrayCount; j++) {
-		memcpy(New_VertexBuffer + New_VertexStride * j,
-		       GlobalVertexArray + GlobalIndexArray[j] * ObjectsList[0].VertexStride,
-		       ObjectsList[0].VertexStride * sizeof(float));
-	}
-
-	// удаляем указатели на старый буфер
-	delete [] GlobalVertexArray;
-	// присваиваем новые значения
-	GlobalVertexArray = New_VertexBuffer;
-	GlobalVertexArrayCount = GlobalIndexArrayCount;
-
-	// создаем тангенты и бинормали, сохраняем их в 2 и 3 текстурных координатах
-	for (unsigned int j = 0; j < GlobalVertexArrayCount - 2; j += 3) {
-		unsigned int tmpOffset0 = New_VertexStride * j;			// j
-		unsigned int tmpOffset1 = tmpOffset0 + New_VertexStride;	// j + 1
-		unsigned int tmpOffset2 = tmpOffset1 + New_VertexStride;	// j + 2
-
-		sVECTOR3D Point1(GlobalVertexArray[tmpOffset0],
-				 GlobalVertexArray[tmpOffset0 + 1],
-				 GlobalVertexArray[tmpOffset0 + 2]);
-
-		sVECTOR3D Point2(GlobalVertexArray[tmpOffset1],
-				 GlobalVertexArray[tmpOffset1 + 1],
-				 GlobalVertexArray[tmpOffset1 + 2]);
-
-		sVECTOR3D Point3(GlobalVertexArray[tmpOffset2],
-				 GlobalVertexArray[tmpOffset2 + 1],
-				 GlobalVertexArray[tmpOffset2 + 2]);
-
-		// находим 2 вектора, образующих плоскость
-		sVECTOR3D PlaneVector1 = Point2 - Point1;
-		sVECTOR3D PlaneVector2 = Point3 - Point1;
-		// находим нормаль плоскости
-		PlaneVector1.Multiply(PlaneVector2);
-		PlaneVector1.NormalizeHi();
-		sVECTOR3D PlaneNormal = PlaneVector1;
-
-		// нормаль получили (нужна будет для проверки зеркалирования), можем идти дальше
-		// делаем просчет тангента и бинормали
-		PlaneVector1 = Point1 - Point2;
-		PlaneVector2 = Point3 - Point2;
-
-		float delta_U_0 = GlobalVertexArray[tmpOffset0 + 6] -
-				  GlobalVertexArray[tmpOffset1 + 6];
-		float delta_U_1 = GlobalVertexArray[tmpOffset2 + 6] -
-				  GlobalVertexArray[tmpOffset1 + 6];
-
-		float delta_V_0 = GlobalVertexArray[tmpOffset0 + 7] -
-				  GlobalVertexArray[tmpOffset1 + 7];
-		float delta_V_1 = GlobalVertexArray[tmpOffset2 + 7] -
-				  GlobalVertexArray[tmpOffset1 + 7];
-
-		sVECTOR3D Tangent = ((PlaneVector1 ^ delta_V_1) - (PlaneVector2 ^ delta_V_0));
-		Tangent.NormalizeHi();
-		float TangentW = 1.0f;
-		sVECTOR3D BiNormal = ((PlaneVector1 ^ delta_U_1) - (PlaneVector2 ^ delta_U_0));
-		BiNormal.NormalizeHi();
-
-		// проверка на зеркалирование нормал мепа
-		sVECTOR3D TBCross = Tangent;
-		TBCross.Multiply(BiNormal);
-		if( (TBCross * PlaneNormal) < 0 ) {
-			// вот тут, нормал меп "перевернут"
-			// надо это учесть
-			Tangent = ((PlaneVector1 ^ (-delta_V_1)) - (PlaneVector2 ^ (-delta_V_0)));
-			Tangent.NormalizeHi();
-			TangentW = -1.0f;
-		}
-
-		// тангент
-		GlobalVertexArray[tmpOffset0 + 8] =
-				GlobalVertexArray[tmpOffset1 + 8] = GlobalVertexArray[tmpOffset2 + 8] = Tangent.x;
-		GlobalVertexArray[tmpOffset0 + 9] =
-				GlobalVertexArray[tmpOffset1 + 9] = GlobalVertexArray[tmpOffset2 + 9] = Tangent.y;
-		GlobalVertexArray[tmpOffset0 + 10] =
-				GlobalVertexArray[tmpOffset1 + 10] = GlobalVertexArray[tmpOffset2 + 10] = Tangent.z;
-		GlobalVertexArray[tmpOffset0 + 11] =
-				GlobalVertexArray[tmpOffset1 + 11] = GlobalVertexArray[tmpOffset2 + 11] = TangentW;
-	}
-
-	// меняем данные в глобальном индекс буфере, они теперь идут по порядку
-	for (unsigned int i = 0; i < GlobalIndexArrayCount; i++) {
-		GlobalIndexArray[i] = i;
-	}
-
-	// меняем указатели на вертексный буфер, шаг и формат
-	for (int i = 0; i < ObjectsListCount; i++) {
-		ObjectsList[i].VertexArray = GlobalVertexArray;
-		ObjectsList[i].VertexFormat = New_VertexFormat;
-		ObjectsList[i].VertexStride = New_VertexStride;
-	}
-}
-
-//-----------------------------------------------------------------------------
-// загрузка "родного" формата
-//-----------------------------------------------------------------------------
-bool cModel3D::ReadVW3D(const std::string &FileName)
+/*
+ * Load VW3D 3D models format.
+ */
+bool cModel3D::LoadVW3D(const std::string &FileName)
 {
 	if (FileName.empty())
 		return false;
@@ -678,14 +618,11 @@ bool cModel3D::ReadVW3D(const std::string &FileName)
 	if (strncmp(Sign, "VW3D", 4) != 0)
 		return false;
 
-	// читаем, сколько объектов
 	File->fread(&ObjectsListCount, sizeof(ObjectsListCount), 1);
 
 	ObjectsList = new sObjectBlock[ObjectsListCount];
-
 	GlobalIndexArrayCount = 0;
 
-	// для каждого объекта
 	for (int i = 0; i < ObjectsListCount; i++) {
 		ObjectsList[i].RangeStart = GlobalIndexArrayCount;
 
@@ -693,7 +630,7 @@ bool cModel3D::ReadVW3D(const std::string &FileName)
 		File->fread(&(ObjectsList[i].VertexFormat), sizeof(ObjectsList[0].VertexFormat), 1);
 		// VertexStride
 		File->fread(&(ObjectsList[i].VertexStride), sizeof(ObjectsList[0].VertexStride), 1);
-		// VertexCount на самом деле, это кол-во индексов на объект
+		// VertexCount
 		File->fread(&(ObjectsList[i].VertexCount), sizeof(ObjectsList[0].VertexCount), 1);
 		GlobalIndexArrayCount += ObjectsList[i].VertexCount;
 
@@ -702,32 +639,28 @@ bool cModel3D::ReadVW3D(const std::string &FileName)
 		// Rotation
 		File->fread(&(ObjectsList[i].Rotation), sizeof(ObjectsList[0].Rotation.x) * 3, 1);
 
-		// рисуем нормально, не прозрачным
 		ObjectsList[i].DrawType = 0;
-
-		// вертексный буфер
+		// vertex array-related
 		ObjectsList[i].NeedDestroyDataInObjectBlock = false;
 		ObjectsList[i].VertexArray = nullptr;
 		ObjectsList[i].VBO = 0;
-		// индексный буфер
+		// index array-related
 		ObjectsList[i].IndexArray = nullptr;
 		ObjectsList[i].IBO = 0;
 		// vao
 		ObjectsList[i].VAO = 0;
 	}
 
-	// получаем сколько всего вертексов
 	File->fread(&GlobalVertexArrayCount, sizeof(GlobalVertexArrayCount), 1);
 
-	// собственно данные (берем смещение нулевого объекта, т.к. смещение одинаковое на весь объект)
 	GlobalVertexArray = new float[GlobalVertexArrayCount * ObjectsList[0].VertexStride];
 	File->fread(GlobalVertexArray, GlobalVertexArrayCount * ObjectsList[0].VertexStride * sizeof(GlobalVertexArray[0]), 1);
 
-	// индекс буфер
+	// index array
 	GlobalIndexArray = new unsigned int[GlobalIndexArrayCount];
 	File->fread(GlobalIndexArray, GlobalIndexArrayCount * sizeof(GlobalIndexArray[0]), 1);
 
-	// т.к. наши объекты используют глобальные буферы, надо поставить указатели
+	// setup points to global arrays
 	for (int i = 0; i < ObjectsListCount; i++) {
 		ObjectsList[i].VertexArray = GlobalVertexArray;
 		ObjectsList[i].IndexArray = GlobalIndexArray;
@@ -738,12 +671,11 @@ bool cModel3D::ReadVW3D(const std::string &FileName)
 	return true;
 }
 
-//-----------------------------------------------------------------------------
-// запись "родного" формата на диск
-//-----------------------------------------------------------------------------
-bool cModel3D::WriteVW3D(const std::string &FileName)
+/*
+ * Save VW3D 3D models format.
+ */
+bool cModel3D::SaveVW3D(const std::string &FileName)
 {
-	// небольшие проверки
 	if (!GlobalVertexArray || !GlobalIndexArray || !ObjectsList) {
 		std::cerr << __func__ << "(): " << "Can't create " << FileName << " file for empty Model3D.\n";
 		return false;
@@ -751,20 +683,17 @@ bool cModel3D::WriteVW3D(const std::string &FileName)
 
 	SDL_RWops *FileVW3D;
 	FileVW3D = SDL_RWFromFile(FileName.c_str(), "wb");
-	// если не можем создать файл на запись - уходим
 	if (!FileVW3D) {
 		std::cerr << __func__ << "(): " << "Can't create " << FileName << " file on disk.\n";
 		return false;
 	}
 
-	// маркер файла 4 байта
+	// Sign for VW3D file format (magic number)
 	constexpr char Sign[4]{'V','W','3','D'};
 	SDL_RWwrite(FileVW3D, Sign, 4, 1);
 
-	// общее кол-во объектов в моделе - 4 байта (int)
 	SDL_RWwrite(FileVW3D, &ObjectsListCount, sizeof(ObjectsListCount), 1);
 
-	// для каждого объекта в моделе
 	for (int i = 0; i < ObjectsListCount; i++) {
 		// VertexFormat
 		SDL_RWwrite(FileVW3D, &ObjectsList[i].VertexFormat, sizeof(ObjectsList[0].VertexFormat), 1);
@@ -772,24 +701,16 @@ bool cModel3D::WriteVW3D(const std::string &FileName)
 		SDL_RWwrite(FileVW3D, &ObjectsList[i].VertexStride, sizeof(ObjectsList[0].VertexStride), 1);
 		// VertexCount
 		SDL_RWwrite(FileVW3D, &ObjectsList[i].VertexCount, sizeof(ObjectsList[0].VertexCount), 1);
-
 		// Location
 		SDL_RWwrite(FileVW3D, &ObjectsList[i].Location, sizeof(ObjectsList[0].Location.x) * 3, 1);
 		// Rotation
 		SDL_RWwrite(FileVW3D, &ObjectsList[i].Rotation, sizeof(ObjectsList[0].Rotation.x) * 3, 1);
 	}
 
-	// записываем реальное кол-во вертексов в общем вертекс буфере, мы их посчитали заранее
 	SDL_RWwrite(FileVW3D, &GlobalVertexArrayCount, sizeof(GlobalVertexArrayCount), 1);
-
-	// данные, вертексы (берем смещение нулевого объекта, т.к. смещение одинаковое на весь объект)
 	SDL_RWwrite(FileVW3D, GlobalVertexArray,
 		    ObjectsList[0].VertexStride * GlobalVertexArrayCount * sizeof(GlobalVertexArray[0]), 1);
-
-	// данные, индексный буфер
 	SDL_RWwrite(FileVW3D, GlobalIndexArray, GlobalIndexArrayCount * sizeof(GlobalIndexArray[0]), 1);
-
-	// закрываем файл
 	SDL_RWclose(FileVW3D);
 
 	std::cout << "VW3D Write: " << FileName << "\n";
