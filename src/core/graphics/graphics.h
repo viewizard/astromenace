@@ -303,7 +303,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 SDL_Window *vw_GetSDL2Windows();
 void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA);
 // Shutdown renderer dll
-void vw_ShutdownRenderer(void);
+void vw_ShutdownRenderer();
 // Get device capability
 const sDevCaps *vw_GetDevCaps();
 
@@ -332,13 +332,13 @@ void vw_OnChangeSize(int nWidth, int nHeight);
 // Begin rendering
 void vw_BeginRendering(int  mask);
 // End rendering
-void vw_EndRendering(void);
+void vw_EndRendering();
 // Clear buffer
 void vw_Clear(int mask);
 // Start 2D rendering mode
 void vw_Start2DMode(float nZ1, float nZ2);
 // End 2D rendering mode
-void vw_End2DMode(void);
+void vw_End2DMode();
 // Set scene clear color
 void vw_SetClearColor(float nRed, float nGreen, float nBlue, float nAlpha);
 // Set scene color mask
@@ -409,7 +409,7 @@ void vw_DepthTest(bool mode, int funct);
 void vw_PolygonOffset(bool enable, float factor, float units);
 
 // Loads identity in the current matrix
-void vw_LoadIdentity(void);
+void vw_LoadIdentity();
 // Determines the product of the current matrix and the computed translation matrix determined by the given factors
 void vw_Translate(sVECTOR3D Location);
 // Determines the product of the current matrix and the computed rotation matrix
@@ -417,9 +417,9 @@ void vw_Rotate(float fAngle, float fX, float fY, float fZ);
 // Determines the product of the current matrix and the computed scale matrix composed from the given point
 void vw_Scale(float fX, float fY, float fZ);
 // Adds a matrix to the stack
-void vw_PushMatrix(void);
+void vw_PushMatrix();
 // Removes the current matrix from the top of the stack
-void vw_PopMatrix(void);
+void vw_PopMatrix();
 // Get matrix
 void vw_GetMatrix(int pname, float *params);
 void vw_SetMatrix(const float *params);
@@ -437,7 +437,7 @@ void vw_MultMatrix(float *params);
 // Set lighting status
 void vw_Lighting(bool param);
 // Get lighting status
-bool vw_GetLighting(void);
+bool vw_GetLighting();
 // Enable light
 void vw_LightEnable(int light, bool param);
 // Get light status
@@ -582,7 +582,7 @@ bool vw_UniformMatrix4fv(sGLSL *GLSL, const char *name, bool transpose, int coun
 
 
 // Get rendered primitives count
-int vw_GetPrimCount(void);
+int vw_GetPrimCount();
 
 // Set gamma ramp
 void vw_SetGammaRamp(float Gamma, float Contrast, float Brightness);

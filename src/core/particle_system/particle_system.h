@@ -77,8 +77,7 @@ private:
 	bool Show{true};
 };
 
-class cParticleSystem
-{
+class cParticleSystem {
 public:
 	cParticleSystem();
 	~cParticleSystem();

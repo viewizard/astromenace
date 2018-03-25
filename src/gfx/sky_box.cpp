@@ -63,7 +63,7 @@ float SkyBox_length_2 = 100.0f;
 //-----------------------------------------------------------------------------
 // Draw all SkyBox sides
 //-----------------------------------------------------------------------------
-void SkyBoxDraw(void)
+void SkyBoxDraw()
 {
 	int VFV = RI_3f_XYZ | RI_2_TEX | RI_DUBLICATE_TEX_COORD;
 	float *buff = new float[5*4];

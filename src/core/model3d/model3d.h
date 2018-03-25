@@ -32,7 +32,7 @@
 struct sVECTOR3D;
 
 struct sObjectBlock {
-	~sObjectBlock(void);
+	~sObjectBlock();
 
 	// GLSL-related
 	int ShaderType{1};
@@ -56,7 +56,8 @@ struct sObjectBlock {
 	// indexes at all, initial vertex in global/local vertex array/vertexbo
 	unsigned int RangeStart{0};
 
-	bool NeedDestroyDataInObjectBlock{false}; // 'special' vertex array with small triangles
+	// if we allocate memory, bind vbo/ibo/vao personally for this object - release/delete this resources
+	bool NeedDestroyDataInObjectBlock{false};
 
 	// vertex-related
 	float *VertexArray{nullptr};
@@ -79,11 +80,9 @@ struct sObjectBlock {
 	int VertexArrayWithSmallTrianglesCount{0};
 };
 
-class cModel3D
-{
-public:
-	cModel3D(void);
-	virtual ~cModel3D(void);
+struct sModel3D {
+	sModel3D();
+	virtual ~sModel3D();
 
 	// Load VW3D 3D models format.
 	bool LoadVW3D(const std::string &FileName);
@@ -111,13 +110,13 @@ public:
 	unsigned int GlobalVAO{0};
 
 	// list
-	cModel3D *Next{nullptr};
-	cModel3D *Prev{nullptr};
+	sModel3D *Next{nullptr};
+	sModel3D *Prev{nullptr};
 };
 
 
 // Load 3D model.
-cModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal);
+sModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal);
 // Release all 3D models.
 void vw_ReleaseAllModel3D();
 

@@ -113,7 +113,7 @@ bool NeedCheckCollision(cObject3D* Object3D)
 void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
 	// получение геометрии модели
-	cModel3D  *Model;
+	sModel3D *Model;
 	Model = vw_LoadModel3D(Name, TriangleSizeLimit, NeedTangentAndBinormal);
 
 

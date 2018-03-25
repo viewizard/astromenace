@@ -227,7 +227,7 @@ float GetProjectileSpeed(int Num)
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cProjectile::cProjectile(void)
+cProjectile::cProjectile()
 {
 	// друг
 	ObjectStatus = 2;
@@ -828,7 +828,7 @@ void cProjectile::Create(int ProjectileNum)
 //-----------------------------------------------------------------------------
 // Деструктор
 //-----------------------------------------------------------------------------
-cProjectile::~cProjectile(void)
+cProjectile::~cProjectile()
 {
 	if (GraphicFXLocation != nullptr) {
 		delete [] GraphicFXLocation;

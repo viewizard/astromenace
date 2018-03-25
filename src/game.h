@@ -202,7 +202,7 @@ void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 //------------------------------------------------------------------------------------
 void SkyBoxSetTexture(sTexture *nTexture, int Side);
 void SkyBoxCreate(float nx, float ny, float nz, float nwidth, float nheight, float nlength);
-void SkyBoxDraw(void);
+void SkyBoxDraw();
 
 
 

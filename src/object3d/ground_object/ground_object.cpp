@@ -30,7 +30,7 @@
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cGroundObject::cGroundObject(void)
+cGroundObject::cGroundObject()
 {
 	ObjectStatus = 1; // чужой
 
@@ -44,7 +44,7 @@ cGroundObject::cGroundObject(void)
 //-----------------------------------------------------------------------------
 // Деструктор
 //-----------------------------------------------------------------------------
-cGroundObject::~cGroundObject(void)
+cGroundObject::~cGroundObject()
 {
 	if (WheelObjectsNum != nullptr) {
 		delete [] WheelObjectsNum;

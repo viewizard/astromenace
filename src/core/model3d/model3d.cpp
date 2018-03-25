@@ -26,6 +26,7 @@
 
 // TODO move objects management on STL container
 // TODO move models management on STL container
+// TODO use std::shared_ptr for memory management
 
 #include "../graphics/graphics.h"
 #include "../math/math.h"
@@ -34,8 +35,8 @@
 
 namespace {
 
-cModel3D *StartModel3D = nullptr;
-cModel3D *EndModel3D = nullptr;
+sModel3D *StartModel3D = nullptr;
+sModel3D *EndModel3D = nullptr;
 
 } // unnamed namespace
 
@@ -50,7 +51,7 @@ cModel3D *EndModel3D = nullptr;
  *
  * Return vertex array with fixed vertex format: RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX | RI_SEPARATE_TEX_COORD
  */
-static void CreateTangentAndBinormal(cModel3D *Model)
+static void CreateTangentAndBinormal(sModel3D *Model)
 {
 	int New_VertexFormat = RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX | RI_SEPARATE_TEX_COORD;
 	int New_VertexStride = 3 + 3 + 6;
@@ -154,7 +155,7 @@ static void CreateTangentAndBinormal(cModel3D *Model)
 /*
  * Create vertex and index arrays for all objects.
  */
-static void CreateObjectsBuffers(cModel3D *Model)
+static void CreateObjectsBuffers(sModel3D *Model)
 {
 	for (int i = 0; i < Model->ObjectsListCount; i++) {
 		// vertex array
@@ -179,7 +180,7 @@ static void CreateObjectsBuffers(cModel3D *Model)
 /*
  * Create all OpenGL-related hardware buffers.
  */
-static void CreateHardwareBuffers(cModel3D *Model)
+static void CreateHardwareBuffers(sModel3D *Model)
 {
 	// global vertex buffer object
 	if (!vw_BuildVertexBufferObject(Model->GlobalVertexArrayCount, Model->GlobalVertexArray,
@@ -314,7 +315,7 @@ static int RecursiveTrianglesLimitedBySize(float (&Point1)[8], float (&Point2)[8
  * could point to VertexArray and don't allocate memory in case array have all triangles with
  * proper size.
  */
-static void CreateVertexArrayLimitedBySizeTriangles(cModel3D *Model, float TriangleSizeLimit)
+static void CreateVertexArrayLimitedBySizeTriangles(sModel3D *Model, float TriangleSizeLimit)
 {
 	if (TriangleSizeLimit <= 0.0f) {
 		for (int i = 0; i < Model->ObjectsListCount; i++) {
@@ -425,21 +426,21 @@ static void CreateVertexArrayLimitedBySizeTriangles(cModel3D *Model, float Trian
 /*
  * Load 3D model.
  */
-cModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
+sModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
 	if (FileName.empty())
 		return nullptr;
 
 	// if we already have it, just return a pointer.
-	cModel3D *tmp = StartModel3D;
+	sModel3D *tmp = StartModel3D;
 	while (tmp) {
-		cModel3D *tmp2 = tmp->Next;
+		sModel3D *tmp2 = tmp->Next;
 		if (tmp->Name == FileName)
 			return tmp;
 		tmp = tmp2;
 	}
 
-	cModel3D *Model = new cModel3D;
+	sModel3D *Model = new sModel3D;
 
 	// check extension
 	if (vw_CheckFileExtension(FileName, ".vw3d")) {
@@ -468,7 +469,7 @@ cModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, b
 /*
  * Attach.
  */
-static void AttachModel3D(cModel3D *NewModel3D)
+static void AttachModel3D(sModel3D *NewModel3D)
 {
 	if (NewModel3D == nullptr)
 		return;
@@ -489,7 +490,7 @@ static void AttachModel3D(cModel3D *NewModel3D)
 /*
  * Detach.
  */
-static void DetachModel3D(cModel3D *OldModel3D)
+static void DetachModel3D(sModel3D *OldModel3D)
 {
 	if (OldModel3D == nullptr)
 		return;
@@ -515,9 +516,9 @@ static void DetachModel3D(cModel3D *OldModel3D)
  */
 void vw_ReleaseAllModel3D()
 {
-	cModel3D *tmp = StartModel3D;
+	sModel3D *tmp = StartModel3D;
 	while (tmp) {
-		cModel3D *tmp2 = tmp->Next;
+		sModel3D *tmp2 = tmp->Next;
 		delete tmp;
 		tmp = tmp2;
 	}
@@ -529,7 +530,7 @@ void vw_ReleaseAllModel3D()
 /*
  * Destructor sObjectBlock.
  */
-sObjectBlock::~sObjectBlock(void)
+sObjectBlock::~sObjectBlock()
 {
 	if (NeedDestroyDataInObjectBlock) {
 		if (VertexArray)
@@ -544,22 +545,22 @@ sObjectBlock::~sObjectBlock(void)
 			vw_DeleteVAO(VAO);
 
 		// note, we don't release VertexBufferLimitedBySizeTriangles, it should be
-		// released in cModel3D
+		// released in sModel3D
 	}
 }
 
 /*
- * Constructor cModel3D.
+ * Constructor sModel3D.
  */
-cModel3D::cModel3D(void)
+sModel3D::sModel3D()
 {
 	AttachModel3D(this);
 }
 
 /*
- * Destructor cModel3D.
+ * Destructor sModel3D.
  */
-cModel3D::~cModel3D(void)
+sModel3D::~sModel3D()
 {
 	if (ObjectsList) {
 		for (int i = 0; i < ObjectsListCount; i++) {
@@ -600,7 +601,7 @@ cModel3D::~cModel3D(void)
 /*
  * Load VW3D 3D models format.
  */
-bool cModel3D::LoadVW3D(const std::string &FileName)
+bool sModel3D::LoadVW3D(const std::string &FileName)
 {
 	if (FileName.empty())
 		return false;
@@ -674,7 +675,7 @@ bool cModel3D::LoadVW3D(const std::string &FileName)
 /*
  * Save VW3D 3D models format.
  */
-bool cModel3D::SaveVW3D(const std::string &FileName)
+bool sModel3D::SaveVW3D(const std::string &FileName)
 {
 	if (!GlobalVertexArray || !GlobalIndexArray || !ObjectsList) {
 		std::cerr << __func__ << "(): " << "Can't create " << FileName << " file for empty Model3D.\n";

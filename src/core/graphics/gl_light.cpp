@@ -48,7 +48,7 @@ void vw_Lighting(bool param)
 //------------------------------------------------------------------------------------
 // Получение состояния
 //------------------------------------------------------------------------------------
-bool vw_GetLighting(void)
+bool vw_GetLighting()
 {
 	if (glIsEnabled(GL_LIGHTING)) return true;
 	return false;
