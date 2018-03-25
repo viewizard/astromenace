@@ -640,7 +640,7 @@ bool sModel3D::LoadVW3D(const std::string &FileName)
 		// Rotation
 		File->fread(&(ObjectsList[i].Rotation), sizeof(ObjectsList[0].Rotation.x) * 3, 1);
 
-		ObjectsList[i].DrawType = 0;
+		ObjectsList[i].DrawType = ObjectDrawType::Normal;
 		// vertex array-related
 		ObjectsList[i].NeedDestroyDataInObjectBlock = false;
 		ObjectsList[i].VertexArray = nullptr;

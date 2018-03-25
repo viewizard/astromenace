@@ -814,7 +814,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	// для корректной прорисовки на всех видеокартах атмосферы планеты ...
 	bool N1 = false;
 	for (int i = 0; i < ObjectsListCount; i++) {
-		if (ObjectsList[i].DrawType == 1)
+		if (ObjectsList[i].DrawType == ObjectDrawType::Blend)
 			N1 = true;
 	}
 
@@ -1111,7 +1111,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			if (N1) {
 				vw_PolygonOffset(true, 2.0f, 2.0f);
 			}
-			if (ObjectsList[i].DrawType == 1) {
+			if (ObjectsList[i].DrawType == ObjectDrawType::Blend) {
 				vw_SetTextureAlphaTest(true, 0.01f);
 				vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 				vw_PolygonOffset(true, 1.0f, 1.0f);
@@ -1217,7 +1217,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 
-			if (ObjectsList[i].DrawType == 1) {
+			if (ObjectsList[i].DrawType == ObjectDrawType::Blend) {
 				vw_SetTextureAlphaTest(false, 0.01f);
 				vw_SetTextureBlend(false, 0, 0);
 				vw_PolygonOffset(false, 0.0f, 0.0f);
