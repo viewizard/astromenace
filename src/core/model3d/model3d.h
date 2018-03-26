@@ -85,16 +85,12 @@ struct sObjectBlock {
 };
 
 struct sModel3D {
-	sModel3D();
 	virtual ~sModel3D();
 
 	// Load VW3D 3D models format.
 	bool LoadVW3D(const std::string &FileName);
 	// Save VW3D 3D models format.
 	bool SaveVW3D(const std::string &FileName);
-
-	// name (file name)
-	std::string Name{};
 
 	// attached objects
 	sObjectBlock *ObjectsList{nullptr};

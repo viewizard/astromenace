@@ -25,8 +25,10 @@
 *************************************************************************************/
 
 // TODO move objects management on STL container
-// TODO move models management on STL container
 // TODO use std::shared_ptr for memory management
+//      std::shared_ptr should be used with arrays and proper deleter, for example:
+//      std::shared_ptr<float> array(new float[10], std::default_delete<float[]>());
+//      cObject3D should be revised, in order to proper copy struct with containers
 
 #include "../graphics/graphics.h"
 #include "../math/math.h"
@@ -35,8 +37,9 @@
 
 namespace {
 
-sModel3D *StartModel3D = nullptr;
-sModel3D *EndModel3D = nullptr;
+// All loaded models.
+std::unordered_map<std::string, sModel3D> ModelsMap;
+
 
 } // unnamed namespace
 
@@ -224,6 +227,7 @@ static void CreateHardwareBuffers(sModel3D *Model)
  *
  * For result, we don't use tangent (second and third textures coordinates).
  * This is why we operate with Point[8], but not Point[12].
+ * We use second and third textures coordinates for explosion shader in game code.
  */
 static int RecursiveTrianglesLimitedBySize(float (&Point1)[8], float (&Point2)[8], float (&Point3)[8],
 					   int Stride, float *VertexBuffer, int *CurrentPosition,
@@ -309,6 +313,7 @@ static int RecursiveTrianglesLimitedBySize(float (&Point1)[8], float (&Point2)[8
  *
  * For result, we don't copy tangent (second and third textures coordinates).
  * This is why we operate with Point[8], but not Point[12].
+ * We use second and third textures coordinates for explosion shader in game code.
  *
  * Note, as for now, VertexArrayWithSmallTriangles use VertexFormat and VertexStride, so,
  * it use 8 floats per vertex, but allocate 12 floats per vertex. In the same time, we
@@ -432,83 +437,31 @@ sModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, b
 		return nullptr;
 
 	// if we already have it, just return a pointer.
-	sModel3D *tmp = StartModel3D;
-	while (tmp) {
-		sModel3D *tmp2 = tmp->Next;
-		if (tmp->Name == FileName)
-			return tmp;
-		tmp = tmp2;
-	}
-
-	sModel3D *Model = new sModel3D;
+	auto FoundModel = ModelsMap.find(FileName);
+	if (FoundModel != ModelsMap.end())
+		return &FoundModel->second;
 
 	// check extension
 	if (vw_CheckFileExtension(FileName, ".vw3d")) {
-		if (!Model->LoadVW3D(FileName)) {
+		if (!ModelsMap[FileName].LoadVW3D(FileName)) { // create ModelsMap entry on first access
 			std::cout << "Can't load file ... " << FileName << "\n";
-			delete Model;
+			ModelsMap.erase(FileName);
 			return nullptr;
 		}
 	} else {
 		std::cerr << __func__ << "(): " << "Format not supported " << FileName << "\n";
-		delete Model;
 		return nullptr;
 	}
 
 	if (NeedTangentAndBinormal)
-		CreateTangentAndBinormal(Model);
-	CreateObjectsBuffers(Model);
-	CreateHardwareBuffers(Model);
-	CreateVertexArrayLimitedBySizeTriangles(Model, TriangleSizeLimit);
+		CreateTangentAndBinormal(&ModelsMap[FileName]);
+	CreateObjectsBuffers(&ModelsMap[FileName]);
+	CreateHardwareBuffers(&ModelsMap[FileName]);
+	CreateVertexArrayLimitedBySizeTriangles(&ModelsMap[FileName], TriangleSizeLimit);
 
 	std::cout << "Loaded ... " << FileName << "\n";
 
-	return Model;
-}
-
-/*
- * Attach.
- */
-static void AttachModel3D(sModel3D *NewModel3D)
-{
-	if (NewModel3D == nullptr)
-		return;
-
-	if (EndModel3D == nullptr) {
-		NewModel3D->Prev = nullptr;
-		NewModel3D->Next = nullptr;
-		StartModel3D = NewModel3D;
-		EndModel3D = NewModel3D;
-	} else {
-		NewModel3D->Prev = EndModel3D;
-		NewModel3D->Next = nullptr;
-		EndModel3D->Next = NewModel3D;
-		EndModel3D = NewModel3D;
-	}
-}
-
-/*
- * Detach.
- */
-static void DetachModel3D(sModel3D *OldModel3D)
-{
-	if (OldModel3D == nullptr)
-		return;
-
-	if (StartModel3D == OldModel3D)
-		StartModel3D = OldModel3D->Next;
-	if (EndModel3D == OldModel3D)
-		EndModel3D = OldModel3D->Prev;
-
-	if (OldModel3D->Next != nullptr)
-		OldModel3D->Next->Prev = OldModel3D->Prev;
-	else if (OldModel3D->Prev != nullptr)
-		OldModel3D->Prev->Next = nullptr;
-
-	if (OldModel3D->Prev != nullptr)
-		OldModel3D->Prev->Next = OldModel3D->Next;
-	else if (OldModel3D->Next != nullptr)
-		OldModel3D->Next->Prev = nullptr;
+	return &ModelsMap[FileName];
 }
 
 /*
@@ -516,15 +469,7 @@ static void DetachModel3D(sModel3D *OldModel3D)
  */
 void vw_ReleaseAllModel3D()
 {
-	sModel3D *tmp = StartModel3D;
-	while (tmp) {
-		sModel3D *tmp2 = tmp->Next;
-		delete tmp;
-		tmp = tmp2;
-	}
-
-	StartModel3D = nullptr;
-	EndModel3D = nullptr;
+	ModelsMap.clear();
 }
 
 /*
@@ -547,14 +492,6 @@ sObjectBlock::~sObjectBlock()
 		// note, we don't release VertexBufferLimitedBySizeTriangles, it should be
 		// released in sModel3D
 	}
-}
-
-/*
- * Constructor sModel3D.
- */
-sModel3D::sModel3D()
-{
-	AttachModel3D(this);
 }
 
 /*
@@ -593,9 +530,6 @@ sModel3D::~sModel3D()
 		vw_DeleteBufferObject(GlobalIBO);
 	if (GlobalVAO)
 		vw_DeleteVAO(GlobalVAO);
-
-	ObjectsListCount = 0;
-	DetachModel3D(this);
 }
 
 /*
@@ -609,8 +543,6 @@ bool sModel3D::LoadVW3D(const std::string &FileName)
 	std::unique_ptr<sFILE> File = vw_fopen(FileName);
 	if (!File)
 		return false;
-
-	Name = FileName;
 
 	// check "VW3D" sign
 	char Sign[4];
