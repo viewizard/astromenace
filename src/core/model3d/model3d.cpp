@@ -40,19 +40,20 @@ namespace {
 // All loaded models.
 std::unordered_map<std::string, sModel3D> ModelsMap;
 
-
 } // unnamed namespace
 
 
 /*
  * Create tangent and binormal for all vertex arrays.
  * In case of GLSL usage, we use second and third textures coordinates in order
- * to store tangent, that we need for normal mapping.
+ * to store tangent, that we need for normal mapping shader.
  *
- * Note, we expect fixed vertex format for input vertex arrays: RI_3f_XYZ | RI_3f_NORMAL | RI_2f_TEX
+ * Note, function expect fixed vertex format for input vertex arrays:
+ * RI_3f_XYZ | RI_3f_NORMAL | RI_2f_TEX
  * make sure, you have proper vertex array, before you call this function.
  *
- * Return vertex array with fixed vertex format: RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX | RI_SEPARATE_TEX_COORD
+ * Return vertex array with fixed vertex format:
+ * RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX | RI_SEPARATE_TEX_COORD
  */
 static void CreateTangentAndBinormal(sModel3D *Model)
 {
@@ -259,42 +260,42 @@ static int RecursiveTrianglesLimitedBySize(float (&Point1)[8], float (&Point2)[8
 
 	// find largest side and split it, so, we will have 2 triangles with smaller size
 	if ((Dist1 > Dist2) && (Dist1 > Dist3)) {
-		float Point_A[8]= {(Point1[0] + Point2[0]) / 2.0f,
-				   (Point1[1] + Point2[1]) / 2.0f,
-				   (Point1[2] + Point2[2]) / 2.0f,
-				   (Point1[3] + Point2[3]) / 2.0f,
-				   (Point1[4] + Point2[4]) / 2.0f,
-				   (Point1[5] + Point2[5]) / 2.0f,
-				   (Point1[6] + Point2[6]) / 2.0f,
-				   (Point1[7] + Point2[7]) / 2.0f};
+		float Point_A[8]{(Point1[0] + Point2[0]) / 2.0f,
+				 (Point1[1] + Point2[1]) / 2.0f,
+				 (Point1[2] + Point2[2]) / 2.0f,
+				 (Point1[3] + Point2[3]) / 2.0f,
+				 (Point1[4] + Point2[4]) / 2.0f,
+				 (Point1[5] + Point2[5]) / 2.0f,
+				 (Point1[6] + Point2[6]) / 2.0f,
+				 (Point1[7] + Point2[7]) / 2.0f};
 
 		return RecursiveTrianglesLimitedBySize(Point1, Point_A, Point3, Stride, VertexBuffer,
 						       CurrentPosition, TriangleSizeLimit) +
 		       RecursiveTrianglesLimitedBySize(Point_A, Point2, Point3, Stride, VertexBuffer,
 						       CurrentPosition, TriangleSizeLimit);
 	} else if ((Dist2 > Dist1) && (Dist2 > Dist3)) {
-		float Point_A[8]= {(Point2[0] + Point3[0]) / 2.0f,
-				   (Point2[1] + Point3[1]) / 2.0f,
-				   (Point2[2] + Point3[2]) / 2.0f,
-				   (Point2[3] + Point3[3]) / 2.0f,
-				   (Point2[4] + Point3[4]) / 2.0f,
-				   (Point2[5] + Point3[5]) / 2.0f,
-				   (Point2[6] + Point3[6]) / 2.0f,
-				   (Point2[7] + Point3[7]) / 2.0f};
+		float Point_A[8]{(Point2[0] + Point3[0]) / 2.0f,
+				 (Point2[1] + Point3[1]) / 2.0f,
+				 (Point2[2] + Point3[2]) / 2.0f,
+				 (Point2[3] + Point3[3]) / 2.0f,
+				 (Point2[4] + Point3[4]) / 2.0f,
+				 (Point2[5] + Point3[5]) / 2.0f,
+				 (Point2[6] + Point3[6]) / 2.0f,
+				 (Point2[7] + Point3[7]) / 2.0f};
 
 		return RecursiveTrianglesLimitedBySize(Point1, Point2, Point_A, Stride, VertexBuffer,
 						       CurrentPosition, TriangleSizeLimit) +
 		       RecursiveTrianglesLimitedBySize(Point1, Point_A, Point3, Stride, VertexBuffer,
 						       CurrentPosition, TriangleSizeLimit);
 	} else {
-		float Point_A[8]= {(Point3[0] + Point1[0]) / 2.0f,
-				   (Point3[1] + Point1[1]) / 2.0f,
-				   (Point3[2] + Point1[2]) / 2.0f,
-				   (Point3[3] + Point1[3]) / 2.0f,
-				   (Point3[4] + Point1[4]) / 2.0f,
-				   (Point3[5] + Point1[5]) / 2.0f,
-				   (Point3[6] + Point1[6]) / 2.0f,
-				   (Point3[7] + Point1[7]) / 2.0f};
+		float Point_A[8]{(Point3[0] + Point1[0]) / 2.0f,
+				 (Point3[1] + Point1[1]) / 2.0f,
+				 (Point3[2] + Point1[2]) / 2.0f,
+				 (Point3[3] + Point1[3]) / 2.0f,
+				 (Point3[4] + Point1[4]) / 2.0f,
+				 (Point3[5] + Point1[5]) / 2.0f,
+				 (Point3[6] + Point1[6]) / 2.0f,
+				 (Point3[7] + Point1[7]) / 2.0f};
 
 		return RecursiveTrianglesLimitedBySize(Point1, Point2, Point_A, Stride, VertexBuffer,
 						       CurrentPosition, TriangleSizeLimit) +
@@ -313,12 +314,8 @@ static int RecursiveTrianglesLimitedBySize(float (&Point1)[8], float (&Point2)[8
  *
  * For result, we don't copy tangent (second and third textures coordinates).
  * This is why we operate with Point[8], but not Point[12].
- * We use second and third textures coordinates for explosion shader in game code.
- *
- * Note, as for now, VertexArrayWithSmallTriangles use VertexFormat and VertexStride, so,
- * it use 8 floats per vertex, but allocate 12 floats per vertex. In the same time, we
- * could point to VertexArray and don't allocate memory in case array have all triangles with
- * proper size.
+ * We use second and third textures coordinates for explosion shader in game code, so,
+ * we stay with VertexFormat and VertexStride and could point to object's VertexArray.
  */
 static void CreateVertexArrayLimitedBySizeTriangles(sModel3D *Model, float TriangleSizeLimit)
 {
@@ -340,32 +337,32 @@ static void CreateVertexArrayLimitedBySizeTriangles(sModel3D *Model, float Trian
 			unsigned int tmpOffset1 = tmpOffset0 + Model->ObjectsList[i].VertexStride;	// j + 1
 			unsigned int tmpOffset2 = tmpOffset1 + Model->ObjectsList[i].VertexStride;	// j + 2
 
-			float Point1[8] = {Model->ObjectsList[i].VertexArray[tmpOffset0],
-					   Model->ObjectsList[i].VertexArray[tmpOffset0 + 1],
-					   Model->ObjectsList[i].VertexArray[tmpOffset0 + 2],
-					   Model->ObjectsList[i].VertexArray[tmpOffset0 + 3],
-					   Model->ObjectsList[i].VertexArray[tmpOffset0 + 4],
-					   Model->ObjectsList[i].VertexArray[tmpOffset0 + 5],
-					   Model->ObjectsList[i].VertexArray[tmpOffset0 + 6],
-					   Model->ObjectsList[i].VertexArray[tmpOffset0 + 7]};
+			float Point1[8]{Model->ObjectsList[i].VertexArray[tmpOffset0],
+					Model->ObjectsList[i].VertexArray[tmpOffset0 + 1],
+					Model->ObjectsList[i].VertexArray[tmpOffset0 + 2],
+					Model->ObjectsList[i].VertexArray[tmpOffset0 + 3],
+					Model->ObjectsList[i].VertexArray[tmpOffset0 + 4],
+					Model->ObjectsList[i].VertexArray[tmpOffset0 + 5],
+					Model->ObjectsList[i].VertexArray[tmpOffset0 + 6],
+					Model->ObjectsList[i].VertexArray[tmpOffset0 + 7]};
 
-			float Point2[8] = {Model->ObjectsList[i].VertexArray[tmpOffset1],
-					   Model->ObjectsList[i].VertexArray[tmpOffset1 + 1],
-					   Model->ObjectsList[i].VertexArray[tmpOffset1 + 2],
-					   Model->ObjectsList[i].VertexArray[tmpOffset1 + 3],
-					   Model->ObjectsList[i].VertexArray[tmpOffset1 + 4],
-					   Model->ObjectsList[i].VertexArray[tmpOffset1 + 5],
-					   Model->ObjectsList[i].VertexArray[tmpOffset1 + 6],
-					   Model->ObjectsList[i].VertexArray[tmpOffset1 + 7]};
+			float Point2[8]{Model->ObjectsList[i].VertexArray[tmpOffset1],
+					Model->ObjectsList[i].VertexArray[tmpOffset1 + 1],
+					Model->ObjectsList[i].VertexArray[tmpOffset1 + 2],
+					Model->ObjectsList[i].VertexArray[tmpOffset1 + 3],
+					Model->ObjectsList[i].VertexArray[tmpOffset1 + 4],
+					Model->ObjectsList[i].VertexArray[tmpOffset1 + 5],
+					Model->ObjectsList[i].VertexArray[tmpOffset1 + 6],
+					Model->ObjectsList[i].VertexArray[tmpOffset1 + 7]};
 
-			float Point3[8] = {Model->ObjectsList[i].VertexArray[tmpOffset2],
-					   Model->ObjectsList[i].VertexArray[tmpOffset2 + 1],
-					   Model->ObjectsList[i].VertexArray[tmpOffset2 + 2],
-					   Model->ObjectsList[i].VertexArray[tmpOffset2 + 3],
-					   Model->ObjectsList[i].VertexArray[tmpOffset2 + 4],
-					   Model->ObjectsList[i].VertexArray[tmpOffset2 + 5],
-					   Model->ObjectsList[i].VertexArray[tmpOffset2 + 6],
-					   Model->ObjectsList[i].VertexArray[tmpOffset2 + 7]};
+			float Point3[8]{Model->ObjectsList[i].VertexArray[tmpOffset2],
+					Model->ObjectsList[i].VertexArray[tmpOffset2 + 1],
+					Model->ObjectsList[i].VertexArray[tmpOffset2 + 2],
+					Model->ObjectsList[i].VertexArray[tmpOffset2 + 3],
+					Model->ObjectsList[i].VertexArray[tmpOffset2 + 4],
+					Model->ObjectsList[i].VertexArray[tmpOffset2 + 5],
+					Model->ObjectsList[i].VertexArray[tmpOffset2 + 6],
+					Model->ObjectsList[i].VertexArray[tmpOffset2 + 7]};
 
 			// recursively check, how many triangles we could receive
 			Model->ObjectsList[i].VertexArrayWithSmallTrianglesCount +=
@@ -392,32 +389,32 @@ static void CreateVertexArrayLimitedBySizeTriangles(sModel3D *Model, float Trian
 				unsigned int tmpOffset1 = tmpOffset0 + Model->ObjectsList[i].VertexStride;	// j + 1
 				unsigned int tmpOffset2 = tmpOffset1 + Model->ObjectsList[i].VertexStride;	// j + 2
 
-				float Point1[8] = {Model->ObjectsList[i].VertexArray[tmpOffset0],
-						   Model->ObjectsList[i].VertexArray[tmpOffset0 + 1],
-						   Model->ObjectsList[i].VertexArray[tmpOffset0 + 2],
-						   Model->ObjectsList[i].VertexArray[tmpOffset0 + 3],
-						   Model->ObjectsList[i].VertexArray[tmpOffset0 + 4],
-						   Model->ObjectsList[i].VertexArray[tmpOffset0 + 5],
-						   Model->ObjectsList[i].VertexArray[tmpOffset0 + 6],
-						   Model->ObjectsList[i].VertexArray[tmpOffset0 + 7]};
+				float Point1[8]{Model->ObjectsList[i].VertexArray[tmpOffset0],
+						Model->ObjectsList[i].VertexArray[tmpOffset0 + 1],
+						Model->ObjectsList[i].VertexArray[tmpOffset0 + 2],
+						Model->ObjectsList[i].VertexArray[tmpOffset0 + 3],
+						Model->ObjectsList[i].VertexArray[tmpOffset0 + 4],
+						Model->ObjectsList[i].VertexArray[tmpOffset0 + 5],
+						Model->ObjectsList[i].VertexArray[tmpOffset0 + 6],
+						Model->ObjectsList[i].VertexArray[tmpOffset0 + 7]};
 
-				float Point2[8] = {Model->ObjectsList[i].VertexArray[tmpOffset1],
-						   Model->ObjectsList[i].VertexArray[tmpOffset1 + 1],
-						   Model->ObjectsList[i].VertexArray[tmpOffset1 + 2],
-						   Model->ObjectsList[i].VertexArray[tmpOffset1 + 3],
-						   Model->ObjectsList[i].VertexArray[tmpOffset1 + 4],
-						   Model->ObjectsList[i].VertexArray[tmpOffset1 + 5],
-						   Model->ObjectsList[i].VertexArray[tmpOffset1 + 6],
-						   Model->ObjectsList[i].VertexArray[tmpOffset1 + 7]};
+				float Point2[8]{Model->ObjectsList[i].VertexArray[tmpOffset1],
+						Model->ObjectsList[i].VertexArray[tmpOffset1 + 1],
+						Model->ObjectsList[i].VertexArray[tmpOffset1 + 2],
+						Model->ObjectsList[i].VertexArray[tmpOffset1 + 3],
+						Model->ObjectsList[i].VertexArray[tmpOffset1 + 4],
+						Model->ObjectsList[i].VertexArray[tmpOffset1 + 5],
+						Model->ObjectsList[i].VertexArray[tmpOffset1 + 6],
+						Model->ObjectsList[i].VertexArray[tmpOffset1 + 7]};
 
-				float Point3[8] = {Model->ObjectsList[i].VertexArray[tmpOffset2],
-						   Model->ObjectsList[i].VertexArray[tmpOffset2 + 1],
-						   Model->ObjectsList[i].VertexArray[tmpOffset2 + 2],
-						   Model->ObjectsList[i].VertexArray[tmpOffset2 + 3],
-						   Model->ObjectsList[i].VertexArray[tmpOffset2 + 4],
-						   Model->ObjectsList[i].VertexArray[tmpOffset2 + 5],
-						   Model->ObjectsList[i].VertexArray[tmpOffset2 + 6],
-						   Model->ObjectsList[i].VertexArray[tmpOffset2 + 7]};
+				float Point3[8]{Model->ObjectsList[i].VertexArray[tmpOffset2],
+						Model->ObjectsList[i].VertexArray[tmpOffset2 + 1],
+						Model->ObjectsList[i].VertexArray[tmpOffset2 + 2],
+						Model->ObjectsList[i].VertexArray[tmpOffset2 + 3],
+						Model->ObjectsList[i].VertexArray[tmpOffset2 + 4],
+						Model->ObjectsList[i].VertexArray[tmpOffset2 + 5],
+						Model->ObjectsList[i].VertexArray[tmpOffset2 + 6],
+						Model->ObjectsList[i].VertexArray[tmpOffset2 + 7]};
 
 				// recursively generate VertexArrayWithSmallTriangles
 				RecursiveTrianglesLimitedBySize(Point1, Point2, Point3, Model->ObjectsList[i].VertexStride,
