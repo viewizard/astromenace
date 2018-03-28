@@ -24,17 +24,14 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "../texture/texture.h"
 #include "graphics.h"
 
-
-extern	PFNGLACTIVETEXTUREARBPROC glActiveTexture_ARB;
-extern	PFNGLGENERATEMIPMAPPROC glGenerateMipmapEXT;
-extern	PFNGLTEXSTORAGE2DPROC glTexStorage2DEXT;
-
-
-
-
+extern PFNGLACTIVETEXTUREARBPROC glActiveTexture_ARB;
+extern PFNGLGENERATEMIPMAPPROC glGenerateMipmapEXT;
+extern PFNGLTEXSTORAGE2DPROC glTexStorage2DEXT;
 
 
 //------------------------------------------------------------------------------------
@@ -42,18 +39,16 @@ extern	PFNGLTEXSTORAGE2DPROC glTexStorage2DEXT;
 //------------------------------------------------------------------------------------
 GLuint vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int Bytes, int CompressionType)
 {
-	// ничего не передали
-	if (ustDIB == nullptr)
+	if (!ustDIB)
 		return 0;
 
-	GLuint TextureID = 0;
+	GLuint TextureID{0};
 
 	glGenTextures(1, &TextureID);
 	vw_BindTexture(0, TextureID);
 
 	int Format;
 	int InternalFormat;
-
 
 	if (vw_GetDevCaps()->TexturesCompression && (CompressionType > 0)) {
 		if (Bytes == 4) {
@@ -80,52 +75,42 @@ GLuint vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int 
 		}
 	}
 
-
 	if (MipMap) {
 		// используем по порядку наиболее новые решения при генерации мипмепов
-		if ((glGenerateMipmapEXT != nullptr) && (glTexStorage2DEXT != nullptr)) {
+		if (glGenerateMipmapEXT && glTexStorage2DEXT) {
 			// считаем сколько нужно создавать мипмапов
 			int NeedMipMapLvls = floor(log2(Width>Height?Width:Height)) + 1;
 			glTexStorage2DEXT(GL_TEXTURE_2D, NeedMipMapLvls, InternalFormat, Width, Height);
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Format, GL_UNSIGNED_BYTE, ustDIB);
 			glGenerateMipmapEXT(GL_TEXTURE_2D);
-		} else if (glGenerateMipmapEXT != nullptr) {
+		} else if (glGenerateMipmapEXT) {
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format, GL_UNSIGNED_BYTE, ustDIB);
 			glGenerateMipmapEXT(GL_TEXTURE_2D);
 		} else if (vw_GetDevCaps()->HardwareMipMapGeneration) {
 			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format, GL_UNSIGNED_BYTE, ustDIB);
-		} else {
-			// делаем через glu...
+		} else
 			gluBuild2DMipmaps(GL_TEXTURE_2D, InternalFormat, Width, Height, Format, GL_UNSIGNED_BYTE, ustDIB);
-		}
 	} else { // без мипмепов
-		if (glTexStorage2DEXT != nullptr) {
+		if (glTexStorage2DEXT) {
 			glTexStorage2DEXT(GL_TEXTURE_2D, 1, InternalFormat, Width, Height);
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Format, GL_UNSIGNED_BYTE, ustDIB);
-		} else {
+		} else
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format, GL_UNSIGNED_BYTE, ustDIB);
-		}
 	}
-
 
 	return TextureID;
 }
-
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // Bind
 //------------------------------------------------------------------------------------
 void vw_BindTexture(uint32_t Stage, GLuint TextureID)
 {
-	if (glActiveTexture_ARB != nullptr)
+	if (glActiveTexture_ARB)
 		glActiveTexture_ARB(GL_TEXTURE0 + Stage);
 
-	if (TextureID != 0) {
+	if (TextureID) {
 		glBindTexture(GL_TEXTURE_2D, TextureID);
 		glEnable(GL_TEXTURE_2D);
 	} else {
@@ -134,34 +119,25 @@ void vw_BindTexture(uint32_t Stage, GLuint TextureID)
 	}
 }
 
-
-
-
-
 //------------------------------------------------------------------------------------
 // Delete
 //------------------------------------------------------------------------------------
 void vw_DeleteTexture(GLuint TextureID)
 {
-	if (TextureID != 0) glDeleteTextures(1, &TextureID);
+	if (TextureID)
+		glDeleteTextures(1, &TextureID);
 }
-
-
-
-
 
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
 void vw_SetTexture(uint32_t Stage, sTexture *Texture)
 {
-	if (Texture == nullptr)
+	if (!Texture)
 		return;
 
 	vw_BindTexture(Stage, Texture->TextureID);
 }
-
-
 
 //------------------------------------------------------------------------------------
 //
@@ -196,7 +172,6 @@ void vw_SetTextureBlendMode(int pname, int param)
 	case RI_TBLEND_COLORARG3:
 		cmd = GL_SOURCE2_RGB;
 		break;
-
 	default:
 		std::cerr << __func__ << "(): " << "wrong pname.\n";
 		return;
@@ -238,7 +213,6 @@ void vw_SetTextureBlendMode(int pname, int param)
 	case RI_TBLEND_DOTPRODUCT:
 		arg = GL_DOT3_RGB;
 		break;
-
 	case RI_TBLEND_CURRENT:
 		arg = GL_PREVIOUS;
 		break;
@@ -251,15 +225,13 @@ void vw_SetTextureBlendMode(int pname, int param)
 	case RI_TBLEND_DIFFUSE:
 		arg = GL_PRIMARY_COLOR;
 		break;
-	case RI_TBLEND_SPECULAR: // ---
+	case RI_TBLEND_SPECULAR:
 		arg = 0;
 		break;
-
 	default:
 		std::cerr << __func__ << "(): " << "wrong param.\n";
 		return;
 	}
-
 
 	// работаем с MODULATE
 	switch (param) {
@@ -277,12 +249,8 @@ void vw_SetTextureBlendMode(int pname, int param)
 		break;
 	}
 
-
 	glTexEnvi(GL_TEXTURE_ENV, cmd, arg);
 }
-
-
-
 
 //------------------------------------------------------------------------------------
 //
@@ -290,23 +258,23 @@ void vw_SetTextureBlendMode(int pname, int param)
 void vw_SetTextureFiltering(int nFiltering)
 {
 	// перебираем по мип-меп фильтру
-	switch (nFiltering & 0x00000F) {
-	case 0: // RI_MIPFILTER_NONE
-		if ((nFiltering & 0x1030F0) == RI_MINFILTER_POINT)
+	switch (nFiltering & RI_MIPFILTER) {
+	case RI_MIPFILTER_NONE:
+		if ((nFiltering & RI_MINFILTER) == RI_MINFILTER_POINT)
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		if ((nFiltering & 0x1030F0) == RI_MINFILTER_LINEAR)
+		if ((nFiltering & RI_MINFILTER) == RI_MINFILTER_LINEAR)
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		break;
-	case 1: // RI_MIPFILTER_POINT
-		if ((nFiltering & 0x1030F0) == RI_MINFILTER_POINT)
+	case RI_MIPFILTER_POINT:
+		if ((nFiltering & RI_MINFILTER) == RI_MINFILTER_POINT)
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-		if ((nFiltering & 0x1030F0) == RI_MINFILTER_LINEAR)
+		if ((nFiltering & RI_MINFILTER) == RI_MINFILTER_LINEAR)
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 		break;
-	case 2: // RI_MIPFILTER_LINEAR
-		if ((nFiltering & 0x1030F0) == RI_MINFILTER_POINT)
+	case RI_MIPFILTER_LINEAR:
+		if ((nFiltering & RI_MINFILTER) == RI_MINFILTER_POINT)
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-		if ((nFiltering & 0x1030F0) == RI_MINFILTER_LINEAR)
+		if ((nFiltering & RI_MINFILTER) == RI_MINFILTER_LINEAR)
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		break;
 	default:
@@ -315,13 +283,11 @@ void vw_SetTextureFiltering(int nFiltering)
 	}
 
 	// ставим MAG фильтр
-	if ((nFiltering & 0x103F00) == RI_MAGFILTER_POINT)
+	if ((nFiltering & RI_MAGFILTER) == RI_MAGFILTER_POINT)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	if ((nFiltering & 0x103F00) == RI_MAGFILTER_LINEAR)
+	if ((nFiltering & RI_MAGFILTER) == RI_MAGFILTER_LINEAR)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
-
-
 
 //------------------------------------------------------------------------------------
 //
@@ -329,33 +295,29 @@ void vw_SetTextureFiltering(int nFiltering)
 void vw_SetTextureAnisotropy(int AnisotropyLevel)
 {
 	// ставим ANISOTROPY
-	if (AnisotropyLevel > 1) {
-		if (vw_GetDevCaps()->MaxAnisotropyLevel > 1) {
-			if (AnisotropyLevel > vw_GetDevCaps()->MaxAnisotropyLevel) AnisotropyLevel = vw_GetDevCaps()->MaxAnisotropyLevel;
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, AnisotropyLevel);
-		}
+	if ((AnisotropyLevel > 1) &&
+	    (vw_GetDevCaps()->MaxAnisotropyLevel > 1)) {
+		if (AnisotropyLevel > vw_GetDevCaps()->MaxAnisotropyLevel)
+			AnisotropyLevel = vw_GetDevCaps()->MaxAnisotropyLevel;
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, AnisotropyLevel);
 	}
 }
-
-
 
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
 void vw_SetTextureAddressMode(int nAddressMode)
 {
-	if ((nAddressMode & 0x10410) == RI_WRAP_U)
+	if ((nAddressMode & RI_WRAP_U) == RI_WRAP_U)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	else
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // не ставить просто GL_CLAMP, нвидия все равно ставит GL_CLAMP_TO_EDGE
 
-	if ((nAddressMode & 0x10401) == RI_WRAP_V)
+	if ((nAddressMode & RI_WRAP_V) == RI_WRAP_V)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	else
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // не ставить просто GL_CLAMP, нвидия все равно ставит GL_CLAMP_TO_EDGE
 }
-
-
 
 //------------------------------------------------------------------------------------
 // Ставим-убираем альфа тест
@@ -370,8 +332,6 @@ void vw_SetTextureAlphaTest(bool Flag, float Value)
 		glDisable(GL_ALPHA_TEST);
 	}
 }
-
-
 
 //------------------------------------------------------------------------------------
 // Режим прозрачности
@@ -424,6 +384,7 @@ void vw_SetTextureBlend(bool Flag, int Src, int Dst)
 		tmpSRC = GL_ONE;
 		break;
 	}
+
 	switch(Dst) {
 	case RI_BLEND_ZERO:
 		tmpDST = GL_ZERO;
@@ -467,64 +428,11 @@ void vw_SetTextureBlend(bool Flag, int Src, int Dst)
 	glBlendFunc(tmpSRC, tmpDST);
 }
 
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// получение GL_RGBA-GL_RGB набора из текстуры...
-//------------------------------------------------------------------------------------
-void vw_GetTextureImage(sTexture *Texture, void *bits, int BPP)
-{
-	if (Texture == nullptr)
-		return;
-
-	vw_BindTexture(0, Texture->TextureID);
-
-	if (BPP == 4)
-		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, bits);
-	else
-		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, bits);
-}
-
-
-
-//------------------------------------------------------------------------------------
-// установка приоритета текстуры 0-1
-//------------------------------------------------------------------------------------
-void vw_SetPrioritizeTextures(GLuint TextureID, float Prior)
-{
-	glPrioritizeTextures( 1, &TextureID, &Prior);
-}
-
-
-
-//------------------------------------------------------------------------------------
-// получение текущего приоритета
-//------------------------------------------------------------------------------------
-void vw_GetPrioritizeTextures(GLuint TextureID, float *Prior)
-{
-	vw_BindTexture(0, TextureID);
-	glGetTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, Prior);
-	vw_BindTexture(0, 0);
-}
-
-
-
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // установка режима и функции сравнения
 //------------------------------------------------------------------------------------
 void vw_SetTextureCompare(int MODE, int FUNC)
 {
-
 	switch(MODE) {
 	case RI_COMPARE_R_TO_TEXTURE:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
@@ -562,11 +470,7 @@ void vw_SetTextureCompare(int MODE, int FUNC)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_NEVER);
 		break;
 	}
-
 }
-
-
-
 
 //------------------------------------------------------------------------------------
 // установка режима работы с компонентом глубины
@@ -587,15 +491,12 @@ void vw_SetTextureDepthMode(int MODE)
 	}
 }
 
-
-
-
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_SetTextureEnvMode(int param)
+void vw_SetTextureEnvMode(int MODE)
 {
-	switch (param) {
+	switch (MODE) {
 	case RI_TENV_DECAL:
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 		break;
@@ -611,10 +512,9 @@ void vw_SetTextureEnvMode(int param)
 	case RI_TENV_COMBINE:
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 		break;
-	default:
 	case RI_TENV_MODULATE:
+	default:
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		break;
 	}
-
 }
