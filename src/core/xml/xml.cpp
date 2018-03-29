@@ -31,6 +31,15 @@
 #include "../vfs/vfs.h"
 #include "xml.h"
 
+namespace {
+
+// For more compatibility, we use 'Windows' end line symbols
+// in saved XML files.
+const std::string EndLine{"\r\n"};
+
+} // unnamed namespace
+
+
 // считаем кол-во строк до текущего положения буфера
 #ifdef gamedebug
 static unsigned int GetLineNumber(const char *String, unsigned int Pos)
@@ -358,7 +367,8 @@ void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 		}
 		SDL_RWwrite(File, "<!--", strlen("<!--"), 1);
 		SDL_RWwrite(File, XMLEntry->Name.data(), XMLEntry->Name.size(), 1);
-		SDL_RWwrite(File, "-->\r\n", strlen("-->\r\n"), 1);
+		SDL_RWwrite(File, "-->", strlen("-->"), 1);
+		SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
 	} else {
 		// regular element
 
@@ -388,9 +398,11 @@ void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 				SDL_RWwrite(File, XMLEntry->Content.data(), XMLEntry->Content.size(), 1);
 				SDL_RWwrite(File, "</", strlen("</"), 1);
 				SDL_RWwrite(File, XMLEntry->Name.data(), XMLEntry->Name.size(), 1);
-				SDL_RWwrite(File, ">\r\n", strlen(">\r\n"), 1);
+				SDL_RWwrite(File, ">", strlen(">"), 1);
+				SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
 			} else {
-				SDL_RWwrite(File, ">\r\n", strlen(">\r\n"), 1);
+				SDL_RWwrite(File, ">", strlen(">"), 1);
+				SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
 				cXMLEntry *Tmp = XMLEntry->FirstChild;
 				while (Tmp) {
 					SaveRecursive(Tmp, File, Level + 1);
@@ -401,10 +413,13 @@ void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 				}
 				SDL_RWwrite(File, "</", strlen("</"), 1);
 				SDL_RWwrite(File, XMLEntry->Name.data(), XMLEntry->Name.size(), 1);
-				SDL_RWwrite(File, ">\r\n", strlen(">\r\n"), 1);
+				SDL_RWwrite(File, ">", strlen(">"), 1);
+				SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
 			}
-		} else
-			SDL_RWwrite(File, "/>\r\n", strlen("/>\r\n"), 1);
+		} else {
+			SDL_RWwrite(File, "/>", strlen("/>"), 1);
+			SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
+		}
 	}
 }
 
@@ -422,8 +437,9 @@ bool cXMLDocument::Save(const std::string &XMLFileName)
 	}
 
 	// XML header
-	const std::string tmpXMLHeader{"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n"};
+	const std::string tmpXMLHeader{"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"};
 	SDL_RWwrite(File, tmpXMLHeader.data(), tmpXMLHeader.size(), 1);
+	SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
 
 	if (!RootXMLEntry) {
 		SDL_RWclose(File);
