@@ -343,7 +343,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	}
 
 	// берем первый элемент в скрипте
-	cXMLEntry *RootXMLEntry = XMLdoc->RootXMLEntry;
+	cXMLEntry *RootXMLEntry = XMLdoc->RootXMLEntry.get();
 
 	// дополнительная проверка на содержимое конфигурационного файла
 	if (RootXMLEntry == nullptr) {

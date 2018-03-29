@@ -66,14 +66,7 @@ static unsigned int GetLineNumber(const char *UNUSED(String), unsigned int UNUSE
 //-----------------------------------------------------------------------------
 void cXMLDocument::AttachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *ChildXMLEntry)
 {
-	if ((RootXMLEntry == nullptr) &&
-	    (ParentXMLEntry == nullptr)) {
-		RootXMLEntry = ChildXMLEntry;
-		return;
-	}
-
-	if ((ParentXMLEntry == nullptr) ||
-	    (ChildXMLEntry == nullptr))
+	if (!ParentXMLEntry || !ChildXMLEntry)
 		return;
 
 	// первый в списке...
@@ -95,8 +88,7 @@ void cXMLDocument::AttachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *Chi
 //-----------------------------------------------------------------------------
 void cXMLDocument::DetachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *XMLChildEntry)
 {
-	if ((ParentXMLEntry == nullptr) ||
-	    (XMLChildEntry == nullptr))
+	if (!ParentXMLEntry || !XMLChildEntry)
 		return;
 
 	// переустанавливаем указатели...
@@ -265,8 +257,14 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 		DetectTagCloseSymbol += strlen(">");
 
 		// создаем новый элемент и подключаем его к родительскому
-		cXMLEntry *XMLEntry = new cXMLEntry;
-		AttachXMLChildEntry(ParentXMLEntry, XMLEntry);
+		cXMLEntry *XMLEntry{nullptr};
+		if (!RootXMLEntry.get() && !ParentXMLEntry) {
+			RootXMLEntry.reset(new cXMLEntry);
+			XMLEntry = RootXMLEntry.get();
+		} else {
+			XMLEntry = new cXMLEntry;
+			AttachXMLChildEntry(ParentXMLEntry, XMLEntry);
+		}
 
 		// полученные данные передаем на обработку и анализ строки элемента
 		std::string TagString = std::string(Buffer).substr(DetectTagOpenSymbol,
@@ -352,7 +350,7 @@ cXMLDocument::cXMLDocument(const std::string &XMLFileName)
 		return;
 	}
 
-	if (!RootXMLEntry)
+	if (!RootXMLEntry.get())
 		std::cerr << __func__ << "(): " << "XML file corrupted, root element not found: " << XMLFileName << "\n";
 }
 
@@ -442,13 +440,13 @@ bool cXMLDocument::Save(const std::string &XMLFileName)
 	SDL_RWwrite(File, tmpXMLHeader.data(), tmpXMLHeader.size(), 1);
 	SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
 
-	if (!RootXMLEntry) {
+	if (!RootXMLEntry.get()) {
 		SDL_RWclose(File);
 		return true;
 	}
 
 	// save all data recursively
-	SaveRecursive(RootXMLEntry, File, 0);
+	SaveRecursive(RootXMLEntry.get(), File, 0);
 
 	SDL_RWclose(File);
 	return true;

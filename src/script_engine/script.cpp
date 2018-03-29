@@ -145,7 +145,7 @@ bool cScriptEngine::RunScript(const char *FileName, float InitTime)
 
 
 	// переходим на действия
-	xmlEntry  = xmlDoc->FindFirstChildEntryByName(xmlDoc->RootXMLEntry, "Action");
+	xmlEntry  = xmlDoc->FindFirstChildEntryByName(xmlDoc->RootXMLEntry.get(), "Action");
 	if (xmlEntry == nullptr) {
 		std::cerr << __func__ << "(): " << "Can't find Action element in the: " << FileName << "\n";
 		delete xmlDoc;
@@ -469,7 +469,7 @@ bool cScriptEngine::Update(float Time)
 											// если есть указатель на метку
 											if (xmlDoc->TestEntryAttribute(xmlEntry, "label")) {
 												// нужно перебрать все метки и остановится на нужной
-												cXMLEntry *tmpEntry = xmlDoc->FindFirstChildEntryByName(xmlDoc->FindFirstChildEntryByName(xmlDoc->RootXMLEntry, "Action"), "Label");
+												cXMLEntry *tmpEntry = xmlDoc->FindFirstChildEntryByName(xmlDoc->FindFirstChildEntryByName(xmlDoc->RootXMLEntry.get(), "Action"), "Label");
 
 												// перебор по всем меткам
 												while (tmpEntry) {

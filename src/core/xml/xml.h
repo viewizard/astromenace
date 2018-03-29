@@ -25,6 +25,7 @@
 *************************************************************************************/
 
 // TODO translate comments
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #ifndef XML_H
 #define XML_H
@@ -96,15 +97,9 @@ public:
 
 	cXMLDocument() = default;
 	cXMLDocument(const std::string &XMLFileName);
-	~cXMLDocument()
-	{
-		if (RootXMLEntry != nullptr)
-			delete RootXMLEntry;
-		RootXMLEntry = nullptr;
-	}
 
 	// указатель на корневой элемент
-	cXMLEntry *RootXMLEntry{nullptr};
+	std::unique_ptr<cXMLEntry> RootXMLEntry{};
 
 	bool ParseTagLine(const char *OriginBuffer, unsigned int StartPosition,
 			  const char *Buffer, cXMLEntry *XMLEntry);
@@ -117,9 +112,9 @@ public:
 	cXMLEntry *AddEntry(cXMLEntry *ParentXMLEntry, const std::string &EntryName)
 	{
 		if (ParentXMLEntry == nullptr) {
-			RootXMLEntry = new cXMLEntry;
+			RootXMLEntry.reset(new cXMLEntry);
 			RootXMLEntry->Name = EntryName;
-			return RootXMLEntry;
+			return RootXMLEntry.get();
 		} else {
 			cXMLEntry *NewXMLEntry = new cXMLEntry;
 			NewXMLEntry->Name = EntryName;
