@@ -154,7 +154,7 @@ bool vw_BuildFBO(sFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 	    !glCheckFramebufferStatusEXT)
 		return false;
 
-	// if hardware don't support coverage, switch to CSAA
+	// if hardware don't support coverage, switch to MSAA
 	if (!glRenderbufferStorageMultisampleCoverageNV && CSAA)
 		*CSAA = MSAA;
 
