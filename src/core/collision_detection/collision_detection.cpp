@@ -334,24 +334,24 @@ bool vw_SphereOBBCollision(sVECTOR3D (&Object1OBB)[8], sVECTOR3D Object1OBBLocat
 		sVECTOR3D T{Object1Location - mid};
 
 		// check axis
-		if ( (fabs(T.x) > TMPMax.x + hl * fabs(dir.x)) ||
-		     (fabs(T.y) > TMPMax.y + hl * fabs(dir.y)) ||
-		     (fabs(T.z) > TMPMax.z + hl * fabs(dir.z)) )
+		if ((fabs(T.x) > TMPMax.x + hl * fabs(dir.x)) ||
+		    (fabs(T.y) > TMPMax.y + hl * fabs(dir.y)) ||
+		    (fabs(T.z) > TMPMax.z + hl * fabs(dir.z)))
 			return false;
 
 		// check X ^ dir
 		double r{TMPMax.y * fabs(dir.z) + TMPMax.z * fabs(dir.y)};
-		if ( fabs(T.y * dir.z - T.z * dir.y) > r )
+		if (fabs(T.y * dir.z - T.z * dir.y) > r)
 			return false;
 
 		// check  Y ^ dir
 		r = TMPMax.x * fabs(dir.z) + TMPMax.z * fabs(dir.x);
-		if ( fabs(T.z * dir.x - T.x * dir.z) > r )
+		if (fabs(T.z * dir.x - T.x * dir.z) > r)
 			return false;
 
 		// check  Z ^ dir
 		r = TMPMax.x * fabs(dir.y) + TMPMax.y * fabs(dir.x);
-		if ( fabs(T.x * dir.y - T.y * dir.x) > r )
+		if (fabs(T.x * dir.y - T.y * dir.x) > r)
 			return false;
 
 		// collision detected

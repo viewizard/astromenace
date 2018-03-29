@@ -257,9 +257,9 @@ void vw_ReleaseAllMusic()
 void vw_UpdateMusic(uint32_t CurrentTick)
 {
 	for (auto iter = MusicMap.begin(); iter != MusicMap.end();) {
-		if (!iter->second.Update(CurrentTick)) {
+		if (!iter->second.Update(CurrentTick))
 			iter = MusicMap.erase(iter);
-		} else
+		else
 			++iter;
 	}
 }

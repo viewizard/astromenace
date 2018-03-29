@@ -335,7 +335,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 		}
 
 		// copy glyph into bitmap
-		uint8_t ColorRGB[3] = {255, 255, 255};
+		uint8_t ColorRGB[3]{255, 255, 255};
 		for (int j = 0; j < FontCharsList.front()->Height; j++) {
 			unsigned int tmpOffset = (FontTextureHeight - CurrentDIBY - j - 1) * FontTextureWidth * 4;
 			for (int i = 0; i < FontCharsList.front()->Width; i++) {

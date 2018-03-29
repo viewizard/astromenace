@@ -97,7 +97,6 @@ void vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue)
 sTexture *vw_FindTextureByName(const std::string &Name)
 {
 	auto tmpTexture = TexturesMap.find(Name);
-
 	if (tmpTexture != TexturesMap.end())
 		return &tmpTexture->second;
 

@@ -279,6 +279,7 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 		if (!ElementHaveContent) {
 			Buffer += DetectTagCloseSymbol;
 			CurrentBufferPosition += DetectTagCloseSymbol;
+			// FIXME continue in the middle of the cycle
 			continue;
 		}
 

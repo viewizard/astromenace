@@ -134,7 +134,7 @@ unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _Gl
 
 	// bind the buffer with the source
 	alGenSources(1, &SoundsMap[tmpSoundID].Source);
-	if(!CheckALError(__func__)) {
+	if (!CheckALError(__func__)) {
 		SoundsMap.erase(tmpSoundID);
 		return 0;
 	}
@@ -162,7 +162,7 @@ unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _Gl
 	}
 
 	alSourcePlay(SoundsMap[tmpSoundID].Source);
-	if(!CheckALError(__func__)) {
+	if (!CheckALError(__func__)) {
 		SoundsMap.erase(tmpSoundID);
 		return 0;
 	}

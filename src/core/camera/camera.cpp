@@ -122,8 +122,8 @@ void vw_SetCameraMoveAroundPoint(const sVECTOR3D &Point, float ChangeDistance, c
 	// rotate camera to the point
 	sVECTOR3D exV{0.0f, 0.0f, 0.0f};
 	sVECTOR3D V{Point.x - CameraLocation.x,
-		   Point.y - CameraLocation.y,
-		   Point.z - CameraLocation.z};
+		    Point.y - CameraLocation.y,
+		    Point.z - CameraLocation.z};
 	V.Normalize();
 	if (V.x * V.x + V.y * V.y + V.z * V.z != 0)
 		exV = V;

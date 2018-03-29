@@ -54,6 +54,7 @@ enum eSide {
 
 } // unnamed namespace
 
+
 /*
  * This normalizes a plane (A side) from a given frustum.
  */

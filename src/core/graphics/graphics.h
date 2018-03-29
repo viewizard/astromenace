@@ -183,6 +183,7 @@ struct sDevCaps {
 #define RI_TBLEND_CONSTANT		0x103082
 #define RI_TBLEND_DIFFUSE		0x103083
 #define RI_TBLEND_SPECULAR		0x103084
+
 // vw_SetTextureEnvMode() MODE
 #define RI_TENV_DECAL			1
 #define RI_TENV_BLEND			2
