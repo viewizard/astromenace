@@ -460,7 +460,6 @@ void vw_DeleteVAO(unsigned int &VAO);
  * FBO.
  */
 
-// структура FBO
 struct sFBO {
 	unsigned int ColorBuffer;
 	unsigned int DepthBuffer;
@@ -472,18 +471,18 @@ struct sFBO {
 	unsigned int Height;
 };
 
-// создаем (FBO - уже заранее подготовленный объект, в функции память не выделяем)
+// Build FBO. Caller should allocate mamory (FBO).
 bool vw_BuildFBO(sFBO *FBO, int Width, int Height, bool NeedColor,
 		 bool NeedDepth, int MSAA = 0, int *CSAA = nullptr);
-// устанавливаем
+// Bind FBO.
 void vw_BindFBO(sFBO *FBO);
-// получаем текущий установленный FBO, 0 - если фрейм буфер
+// Get current FBO (null if FrameBuffer).
 sFBO *vw_GetCurrentFBO();
-// блит цветовой составляющей фбо источника в фбо приемник (нужно для вывода фбо с мультисемплами)
+// Blit color part of source FBO to target FBO (need this one in order to work with multi samples).
 void vw_BlitFBO(sFBO *SourceFBO, sFBO *TargetFBO);
-// рисуем цветовую текстуру источника, на весь приемник, если 0 - во фрейм буфер
+// Draw source FBO (color texture) to target FBO (if null, to FrameBuffer).
 void vw_DrawColorFBO(sFBO *SourceFBO, sFBO *TargetFBO);
-// удаление данных в структуре
+// Delete FBO.
 void vw_DeleteFBO(sFBO *FBO);
 
 /*
