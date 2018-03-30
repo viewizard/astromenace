@@ -53,16 +53,12 @@ enum class eEntryType {
 	Comment		// <--! comment -->
 };
 
-class cXMLEntry
-{
-public:
-
-	cXMLEntry() = default;
-	~cXMLEntry()
+struct sXMLEntry {
+	~sXMLEntry()
 	{
-		cXMLEntry *TmpEntry = FirstChild;
+		sXMLEntry *TmpEntry = FirstChild;
 		while (TmpEntry != nullptr) {
-			cXMLEntry *TmpEntry1 = TmpEntry->Next;
+			sXMLEntry *TmpEntry1 = TmpEntry->Next;
 			delete TmpEntry;
 			TmpEntry = TmpEntry1;
 		}
@@ -82,54 +78,52 @@ public:
 
 	// указатели на массив дочерних элементов
 	// Children;
-	cXMLEntry *FirstChild{nullptr};
-	cXMLEntry *LastChild{nullptr};
+	sXMLEntry *FirstChild{nullptr};
+	sXMLEntry *LastChild{nullptr};
 
 	// указатели на массив элементов текущего уровня вложенности
-	cXMLEntry *Next{nullptr};
-	cXMLEntry *Prev{nullptr};
+	sXMLEntry *Next{nullptr};
+	sXMLEntry *Prev{nullptr};
 };
 
-class cXMLDocument
-{
+class cXMLDocument {
 public:
-
 	cXMLDocument() = default;
 	cXMLDocument(const std::string &XMLFileName);
 
 	bool ParseTagLine(const char *OriginBuffer, unsigned int StartPosition,
-			  const char *Buffer, cXMLEntry *XMLEntry);
+			  const char *Buffer, sXMLEntry *XMLEntry);
 	bool ParseTagContent(const char *OriginBuffer, unsigned int StartPosition,
-			     const char *Buffer, cXMLEntry *ParentXMLEntry);
+			     const char *Buffer, sXMLEntry *ParentXMLEntry);
 
 	// Save XML to file (libSDL RWops).
 	bool Save(const std::string &XMLFileName);
 
-	cXMLEntry *GetRootEntry()
+	sXMLEntry *GetRootEntry()
 	{
 		return RootXMLEntry.get();
 	}
 
-	cXMLEntry *AddEntry(cXMLEntry *ParentXMLEntry, const std::string &EntryName)
+	sXMLEntry *AddEntry(sXMLEntry *ParentXMLEntry, const std::string &EntryName)
 	{
 		if (ParentXMLEntry == nullptr) {
-			RootXMLEntry.reset(new cXMLEntry);
+			RootXMLEntry.reset(new sXMLEntry);
 			RootXMLEntry->Name = EntryName;
 			return RootXMLEntry.get();
 		} else {
-			cXMLEntry *NewXMLEntry = new cXMLEntry;
+			sXMLEntry *NewXMLEntry = new sXMLEntry;
 			NewXMLEntry->Name = EntryName;
 			AttachXMLChildEntry(ParentXMLEntry, NewXMLEntry);
 			return NewXMLEntry;
 		}
 	}
 
-	void AddEntryContent(cXMLEntry *XMLEntry, const std::string &EntryData)
+	void AddEntryContent(sXMLEntry *XMLEntry, const std::string &EntryData)
 	{
 		XMLEntry->Content = EntryData;
 	}
 
-	void AddEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName, const std::string &AttributeData)
+	void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, const std::string &AttributeData)
 	{
 		if (!XMLEntry)
 			return;
@@ -138,7 +132,7 @@ public:
 	}
 
 	// string literal matches bool overload instead of "std::string&", forced to use "const char*" here too
-	void AddEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName, const char *AttributeData)
+	void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, const char *AttributeData)
 	{
 		if (!XMLEntry || !AttributeData)
 			return;
@@ -146,17 +140,17 @@ public:
 		XMLEntry->Attributes[AttributeName] = AttributeData;
 	}
 
-	void AddEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName, int AttributeData)
+	void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, int AttributeData)
 	{
 		AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
 	}
 
-	void AddEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName, float AttributeData)
+	void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, float AttributeData)
 	{
 		AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
 	}
 
-	void AddEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName, bool AttributeData)
+	void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, bool AttributeData)
 	{
 		if (AttributeData)
 			AddEntryAttribute(XMLEntry, AttributeName, "on");
@@ -164,19 +158,19 @@ public:
 			AddEntryAttribute(XMLEntry, AttributeName, "off");
 	}
 
-	void AddComment(cXMLEntry *ParentXMLEntry, const std::string &Text)
+	void AddComment(sXMLEntry *ParentXMLEntry, const std::string &Text)
 	{
-		cXMLEntry *NewXMLEntry = new cXMLEntry;
+		sXMLEntry *NewXMLEntry = new sXMLEntry;
 		NewXMLEntry->EntryType = eEntryType::Comment;
 		NewXMLEntry->Name = Text;
 		AttachXMLChildEntry(ParentXMLEntry, NewXMLEntry);
 	}
 
-	cXMLEntry *FindEntryByName(cXMLEntry *ParentXMLEntry, const std::string &Name)
+	sXMLEntry *FindEntryByName(sXMLEntry *ParentXMLEntry, const std::string &Name)
 	{
 		if (ParentXMLEntry == nullptr)
 			return nullptr;
-		cXMLEntry *TmpEntry = ParentXMLEntry->FirstChild;
+		sXMLEntry *TmpEntry = ParentXMLEntry->FirstChild;
 		while (TmpEntry != nullptr) {
 			if (Name == TmpEntry->Name)
 				return TmpEntry;
@@ -185,7 +179,7 @@ public:
 		return nullptr;
 	}
 
-	bool TestEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName)
+	bool TestEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName)
 	{
 		if (XMLEntry->Attributes.find(AttributeName) != XMLEntry->Attributes.end())
 			return true;
@@ -193,26 +187,26 @@ public:
 		return false;
 	}
 
-	const std::string &GetEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName)
+	const std::string &GetEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName)
 	{
 		return XMLEntry->Attributes[AttributeName];
 	}
 
-	int iGetEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName)
+	int iGetEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName)
 	{
 		if (XMLEntry == nullptr)
 			return 0;
 		return atoi(GetEntryAttribute(XMLEntry, AttributeName).c_str());
 	}
 
-	float fGetEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName)
+	float fGetEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName)
 	{
 		if (XMLEntry == nullptr)
 			return 0.0f;
 		return (float)atof(GetEntryAttribute(XMLEntry, AttributeName).c_str());
 	}
 
-	bool bGetEntryAttribute(cXMLEntry *XMLEntry, const std::string &AttributeName)
+	bool bGetEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName)
 	{
 		if (XMLEntry == nullptr)
 			return false;
@@ -225,12 +219,12 @@ public:
 		return false;
 	}
 
-	cXMLEntry *FindFirstChildEntryByName(cXMLEntry *ParentXMLEntry, const std::string &ChildEntryName)
+	sXMLEntry *FindFirstChildEntryByName(sXMLEntry *ParentXMLEntry, const std::string &ChildEntryName)
 	{
 		if (ParentXMLEntry == nullptr)
 			return nullptr;
 
-		cXMLEntry *TmpEntry = ParentXMLEntry->FirstChild;
+		sXMLEntry *TmpEntry = ParentXMLEntry->FirstChild;
 		while (TmpEntry != nullptr) {
 			if (ChildEntryName == TmpEntry->Name)
 				return TmpEntry;
@@ -239,16 +233,16 @@ public:
 		return nullptr;
 	}
 
-	void AttachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *ChildXMLEntry);
-	void DetachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *ChildXMLEntry);
+	void AttachXMLChildEntry(sXMLEntry *ParentXMLEntry, sXMLEntry *ChildXMLEntry);
+	void DetachXMLChildEntry(sXMLEntry *ParentXMLEntry, sXMLEntry *ChildXMLEntry);
 
 private:
 	// Save XML elements to file recursively.
-	void SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned int Level);
+	void SaveRecursive(sXMLEntry *XMLEntry, SDL_RWops *File, unsigned int Level);
 
 	// Accordinately to https://www.w3schools.com/XML/xml_syntax.asp
 	// "XML documents must contain one root element that is the parent of all other elements".
-	std::unique_ptr<cXMLEntry> RootXMLEntry{};
+	std::unique_ptr<sXMLEntry> RootXMLEntry{};
 };
 
 #endif // XML_H

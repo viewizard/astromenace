@@ -106,7 +106,7 @@ void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheetMain)
 	// берем отдельно указатель, т.к. потом будем его менять
 	sTimeSheet *AddAfter = TimeSheetMain;
 
-	cXMLEntry *xmlEntry  = xmlAI->FindFirstChildEntryByName(xmlAI->GetRootEntry(), "AI");
+	sXMLEntry *xmlEntry  = xmlAI->FindFirstChildEntryByName(xmlAI->GetRootEntry(), "AI");
 
 
 	while (xmlEntry) {
@@ -115,7 +115,7 @@ void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheetMain)
 			if (xmlAI->iGetEntryAttribute(xmlEntry, "num") == TimeSheetMain->AI_Mode) {
 
 				// дальше смотрим, что нужно сделать...
-				cXMLEntry *TChildEntry = xmlEntry->FirstChild;
+				sXMLEntry *TChildEntry = xmlEntry->FirstChild;
 				while (TChildEntry) {
 					if (TChildEntry->Name == "TimeSheet") {
 						// собираем новый элемент

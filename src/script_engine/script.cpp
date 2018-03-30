@@ -44,16 +44,16 @@
 #include "../gfx/game_level_text/game_level_text.h"
 
 
-void SetID(cObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
-void SetDebugInformation(cObject3D *Object, cXMLEntry *xmlEntry);
-void SetShowDeleteOnHide(cObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
-void SetShipRotation(cSpaceShip *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
-void SetShipLocation(cSpaceShip *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag);
-void SetProjectileRotation(cProjectile *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
-void SetProjectileLocation(cProjectile *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag);
-void SetRotation(cObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
-void SetLocation(cObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag);
-void SetAIMode(cObject3D *Object, cXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
+void SetID(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
+void SetDebugInformation(cObject3D *Object, sXMLEntry *xmlEntry);
+void SetShowDeleteOnHide(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
+void SetShipRotation(cSpaceShip *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
+void SetShipLocation(cSpaceShip *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag);
+void SetProjectileRotation(cProjectile *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
+void SetProjectileLocation(cProjectile *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag);
+void SetRotation(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
+void SetLocation(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag);
+void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
 
 
 
@@ -469,7 +469,7 @@ bool cScriptEngine::Update(float Time)
 											// если есть указатель на метку
 											if (xmlDoc->TestEntryAttribute(xmlEntry, "label")) {
 												// нужно перебрать все метки и остановится на нужной
-												cXMLEntry *tmpEntry = xmlDoc->FindFirstChildEntryByName(xmlDoc->FindFirstChildEntryByName(xmlDoc->GetRootEntry(), "Action"), "Label");
+												sXMLEntry *tmpEntry = xmlDoc->FindFirstChildEntryByName(xmlDoc->FindFirstChildEntryByName(xmlDoc->GetRootEntry(), "Action"), "Label");
 
 												// перебор по всем меткам
 												while (tmpEntry) {
@@ -567,7 +567,7 @@ bool cScriptEngine::Update(float Time)
 void cScriptEngine::UpdateTimeLine()
 {
 	// получаем первый тэг
-	cXMLEntry *TL = xmlEntry->FirstChild;
+	sXMLEntry *TL = xmlEntry->FirstChild;
 
 	while (TL) {
 
@@ -633,7 +633,7 @@ void cScriptEngine::UpdateTimeLine()
 			SetShipLocation(Fighter, TL, xmlDoc, TimeOpLag);
 
 			// дальше смотрим, что нужно сделать...
-			cXMLEntry *TLEarthFighter = TL->FirstChild;
+			sXMLEntry *TLEarthFighter = TL->FirstChild;
 			while (TLEarthFighter) {
 				if (TLEarthFighter->Name == "TimeSheet") {
 					// собираем новый элемент
@@ -808,7 +808,7 @@ void cScriptEngine::UpdateTimeLine()
 				SetShipLocation(Fighter, TL, xmlDoc, TimeOpLag);
 
 				// дальше смотрим, что нужно сделать...
-				cXMLEntry *TLAlienFighter = TL->FirstChild;
+				sXMLEntry *TLAlienFighter = TL->FirstChild;
 				while (TLAlienFighter) {
 					if (TLAlienFighter->Name == "TimeSheet") {
 						// собираем новый элемент
@@ -981,7 +981,7 @@ void cScriptEngine::UpdateTimeLine()
 					SetShipLocation(Fighter, TL, xmlDoc, TimeOpLag);
 
 					// дальше смотрим, что нужно сделать...
-					cXMLEntry *TLAlienMotherShip = TL->FirstChild;
+					sXMLEntry *TLAlienMotherShip = TL->FirstChild;
 					while (TLAlienMotherShip) {
 						if (TLAlienMotherShip->Name == "TimeSheet") {
 							// собираем новый элемент
@@ -1157,7 +1157,7 @@ void cScriptEngine::UpdateTimeLine()
 						SetShipLocation(Fighter, TL, xmlDoc, TimeOpLag);
 
 						// дальше смотрим, что нужно сделать...
-						cXMLEntry *TLPirateShip = TL->FirstChild;
+						sXMLEntry *TLPirateShip = TL->FirstChild;
 						while (TLPirateShip) {
 							if (TLPirateShip->Name == "TimeSheet") {
 								// собираем новый элемент
@@ -1377,7 +1377,7 @@ void cScriptEngine::UpdateTimeLine()
 										SetLocation(GroundObject, TL, xmlDoc, TimeOpLag);
 
 										// дальше смотрим, что нужно сделать...
-										cXMLEntry *TLGroundObject = TL->FirstChild;
+										sXMLEntry *TLGroundObject = TL->FirstChild;
 										while (TLGroundObject) {
 											if (TLGroundObject->Name == "TimeSheet") {
 												// собираем новый элемент
@@ -1528,7 +1528,7 @@ void cScriptEngine::UpdateTimeLine()
 													SetLocation(GroundObject, TL, xmlDoc, TimeOpLag);
 
 													// дальше смотрим, что нужно сделать...
-													cXMLEntry *TLGroundObject = TL->FirstChild;
+													sXMLEntry *TLGroundObject = TL->FirstChild;
 													while (TLGroundObject) {
 														if (TLGroundObject->Name == "TimeSheet") {
 															// собираем новый элемент
@@ -1649,7 +1649,7 @@ void cScriptEngine::UpdateTimeLine()
 														SetLocation(GroundObject, TL, xmlDoc, TimeOpLag);
 
 														// дальше смотрим, что нужно сделать...
-														cXMLEntry *TLGroundObject = TL->FirstChild;
+														sXMLEntry *TLGroundObject = TL->FirstChild;
 														while (TLGroundObject) {
 															if (TLGroundObject->Name == "TimeSheet") {
 																// собираем новый элемент

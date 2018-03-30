@@ -53,7 +53,7 @@ public:
 	// основной документ
 	cXMLDocument	*xmlDoc{nullptr};
 	// текущий элемент
-	cXMLEntry	*xmlEntry{nullptr};
+	sXMLEntry	*xmlEntry{nullptr};
 
 	// включен отладочный режим или нет... по умолчанию выключен
 	bool	ShowDebugModeLine{false};

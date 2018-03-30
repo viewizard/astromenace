@@ -104,7 +104,7 @@ void MissionsListInit()
 
 
 	AllMission = 0;
-	cXMLEntry *xmlEntry = xmlDoc->GetRootEntry()->FirstChild;
+	sXMLEntry *xmlEntry = xmlDoc->GetRootEntry()->FirstChild;
 	while (xmlEntry) {
 		// считаем, сколько миссий в файле
 		if (xmlEntry->Name == "Mission")
@@ -154,7 +154,7 @@ void MissionsListInit()
 	while (xmlEntry) {
 		// берем каждую миссию и смотрим настройки
 		if (xmlEntry->Name == "Mission") {
-			cXMLEntry *TMission = xmlEntry->FirstChild;
+			sXMLEntry *TMission = xmlEntry->FirstChild;
 			while (TMission) {
 				// тайтл миссии
 				if (TMission->Name == "Title") {

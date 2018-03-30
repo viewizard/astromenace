@@ -64,7 +64,7 @@ static unsigned int GetLineNumber(const char *UNUSED(String), unsigned int UNUSE
 //-----------------------------------------------------------------------------
 // Включаем в список
 //-----------------------------------------------------------------------------
-void cXMLDocument::AttachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *ChildXMLEntry)
+void cXMLDocument::AttachXMLChildEntry(sXMLEntry *ParentXMLEntry, sXMLEntry *ChildXMLEntry)
 {
 	if (!ParentXMLEntry || !ChildXMLEntry)
 		return;
@@ -86,7 +86,7 @@ void cXMLDocument::AttachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *Chi
 //-----------------------------------------------------------------------------
 // Исключаем из списка
 //-----------------------------------------------------------------------------
-void cXMLDocument::DetachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *XMLChildEntry)
+void cXMLDocument::DetachXMLChildEntry(sXMLEntry *ParentXMLEntry, sXMLEntry *XMLChildEntry)
 {
 	if (!ParentXMLEntry || !XMLChildEntry)
 		return;
@@ -111,7 +111,7 @@ void cXMLDocument::DetachXMLChildEntry(cXMLEntry *ParentXMLEntry, cXMLEntry *XML
 /*
  *
  */
-bool cXMLDocument::ParseTagLine(const char *OriginBuffer, unsigned int StartPosition, const char *Buffer, cXMLEntry *XMLEntry)
+bool cXMLDocument::ParseTagLine(const char *OriginBuffer, unsigned int StartPosition, const char *Buffer, sXMLEntry *XMLEntry)
 {
 	// 1 - получаем имя тэга (начинается сразу после символа <, а заканчивается пробелом, >, />, или символом таб)
 	auto TagNameEnd = std::string(Buffer).find(" ");
@@ -187,7 +187,7 @@ bool cXMLDocument::ParseTagLine(const char *OriginBuffer, unsigned int StartPosi
  *
  */
 bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartPosition,
-				   const char *Buffer, cXMLEntry *ParentXMLEntry)
+				   const char *Buffer, sXMLEntry *ParentXMLEntry)
 {
 	// проверяем наличие вложенных тэгов
 	bool ChildsFound{true};
@@ -257,12 +257,12 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 		DetectTagCloseSymbol += strlen(">");
 
 		// создаем новый элемент и подключаем его к родительскому
-		cXMLEntry *XMLEntry{nullptr};
+		sXMLEntry *XMLEntry{nullptr};
 		if (!RootXMLEntry.get() && !ParentXMLEntry) {
-			RootXMLEntry.reset(new cXMLEntry);
+			RootXMLEntry.reset(new sXMLEntry);
 			XMLEntry = RootXMLEntry.get();
 		} else {
-			XMLEntry = new cXMLEntry;
+			XMLEntry = new sXMLEntry;
 			AttachXMLChildEntry(ParentXMLEntry, XMLEntry);
 		}
 
@@ -357,7 +357,7 @@ cXMLDocument::cXMLDocument(const std::string &XMLFileName)
 /*
  * Save XML elements to file recursively.
  */
-void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned int Level)
+void cXMLDocument::SaveRecursive(sXMLEntry *XMLEntry, SDL_RWops *File, unsigned int Level)
 {
 	if (XMLEntry->EntryType == eEntryType::Comment) {
 		// comment
@@ -402,7 +402,7 @@ void cXMLDocument::SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 			} else {
 				SDL_RWwrite(File, ">", strlen(">"), 1);
 				SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
-				cXMLEntry *Tmp = XMLEntry->FirstChild;
+				sXMLEntry *Tmp = XMLEntry->FirstChild;
 				while (Tmp) {
 					SaveRecursive(Tmp, File, Level + 1);
 					Tmp = Tmp->Next;

@@ -140,7 +140,7 @@ void SaveXMLSetupFile()
 {
 	cXMLDocument *XMLdoc = new cXMLDocument;
 
-	cXMLEntry *RootXMLEntry = XMLdoc->AddEntry(nullptr, "AstroMenaceSettings");
+	sXMLEntry *RootXMLEntry = XMLdoc->AddEntry(nullptr, "AstroMenaceSettings");
 
 	XMLdoc->AddComment(RootXMLEntry, " AstroMenace game Settings ");
 
@@ -343,7 +343,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	}
 
 	// берем первый элемент в скрипте
-	cXMLEntry *RootXMLEntry = XMLdoc->GetRootEntry();
+	sXMLEntry *RootXMLEntry = XMLdoc->GetRootEntry();
 
 	// дополнительная проверка на содержимое конфигурационного файла
 	if (RootXMLEntry == nullptr) {
