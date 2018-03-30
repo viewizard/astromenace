@@ -308,20 +308,17 @@ bool cScriptEngine::Update(float Time)
 			// Debug
 			if (xmlEntry->Name == "Debug") {
 				ShowDebugModeLine = false;
-				if (xmlDoc->TestEntryAttribute(xmlEntry, "showline"))
-					ShowDebugModeLine = xmlDoc->bGetEntryAttribute(xmlEntry, "showline");
+				xmlDoc->bGetEntryAttribute(*xmlEntry, "showline", ShowDebugModeLine);
 
 				NeedShowBB = 0;
 				if (xmlDoc->TestEntryAttribute(xmlEntry, "showbb"))
 					NeedShowBB = xmlDoc->iGetEntryAttribute(xmlEntry, "showbb");
 
 				UndeadDebugMode = false;
-				if (xmlDoc->TestEntryAttribute(xmlEntry, "undead"))
-					UndeadDebugMode = xmlDoc->bGetEntryAttribute(xmlEntry, "undead");
+				xmlDoc->bGetEntryAttribute(*xmlEntry, "undead", UndeadDebugMode);
 
 				ShowGameTime = false;
-				if (xmlDoc->TestEntryAttribute(xmlEntry, "time"))
-					ShowGameTime = xmlDoc->bGetEntryAttribute(xmlEntry, "time");
+				xmlDoc->bGetEntryAttribute(*xmlEntry, "time", ShowGameTime);
 
 			} else
 				// StarSystem
@@ -368,9 +365,7 @@ bool cScriptEngine::Update(float Time)
 						} else
 							// AsteroidField
 							if (xmlEntry->Name == "AsteroidField") {
-								if (xmlDoc->TestEntryAttribute(xmlEntry, "status")) {
-									AsterOn = xmlDoc->bGetEntryAttribute(xmlEntry, "status");
-								}
+								 xmlDoc->bGetEntryAttribute(*xmlEntry, "status", AsterOn);
 								if (xmlDoc->TestEntryAttribute(xmlEntry, "persec"))
 									AsterQuant = xmlDoc->fGetEntryAttribute(xmlEntry, "persec");
 								if (xmlDoc->TestEntryAttribute(xmlEntry, "w"))
@@ -455,8 +450,7 @@ bool cScriptEngine::Update(float Time)
 
 
 									NewLight->On = true;
-									if (xmlDoc->TestEntryAttribute(xmlEntry, "status"))
-										NewLight->On = xmlDoc->bGetEntryAttribute(xmlEntry, "status");
+									xmlDoc->bGetEntryAttribute(*xmlEntry, "status", NewLight->On);
 								} else
 									// Label
 									if (xmlEntry->Name == "Label") {
@@ -493,15 +487,11 @@ bool cScriptEngine::Update(float Time)
 												if (xmlEntry->Name == "MissionCompleteAtNoEnemy") {
 													bool SetGameMissionFlag = false;
 													NeedCheckSpaceShip = false;
-													if (xmlDoc->TestEntryAttribute(xmlEntry, "ships")) {
-														NeedCheckSpaceShip = xmlDoc->bGetEntryAttribute(xmlEntry, "ships");
+													if (xmlDoc->bGetEntryAttribute(*xmlEntry, "ships", NeedCheckSpaceShip))
 														SetGameMissionFlag = true;
-													};
 													NeedCheckGroundObject = false;
-													if (xmlDoc->TestEntryAttribute(xmlEntry, "grounds")) {
-														NeedCheckGroundObject = xmlDoc->bGetEntryAttribute(xmlEntry, "grounds");
+													if (xmlDoc->bGetEntryAttribute(*xmlEntry, "grounds", NeedCheckGroundObject))
 														SetGameMissionFlag = true;
-													};
 													EndDelayMissionComplete = 0.0f;
 													if (xmlDoc->TestEntryAttribute(xmlEntry, "delay")) {
 														EndDelayMissionComplete = xmlDoc->fGetEntryAttribute(xmlEntry, "delay");

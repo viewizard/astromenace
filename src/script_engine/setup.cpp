@@ -448,9 +448,10 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompressionType") != nullptr)
 		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompressionType"), "value"))
 			Setup.TexturesCompressionType = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompressionType"), "value");
+
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL"), "value"))
-			Setup.UseGLSL = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL"), "value");
+		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL"), "value", Setup.UseGLSL);
+
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap") != nullptr)
 		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap"), "value"))
 			Setup.ShadowMap = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap"), "value");
@@ -472,9 +473,10 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "Brightness") != nullptr)
 		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Brightness"), "value"))
 			Setup.Brightness = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Brightness"), "value");
+
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS"), "value"))
-			Setup.ShowFPS = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS"), "value");
+		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS"), "value", Setup.ShowFPS);
+
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType") != nullptr)
 		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType"), "value"))
 			Setup.GameWeaponInfoType = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType"), "value");
@@ -544,9 +546,10 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity") != nullptr)
 		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity"), "value"))
 			Setup.ControlSensivity = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity"), "value");
+
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl"), "value"))
-			Setup.MouseControl = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl"), "value");
+		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl"), "value", Setup.MouseControl);
+
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile") != nullptr)
 		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile"), "value"))
 			Setup.LastProfile = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile"), "value");
@@ -557,8 +560,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	for(int i=0; i<10; i++) {
 		std::string tmpString{"HintStatus" + std::to_string(i + 1)};
 		if (XMLdoc->FindEntryByName(RootXMLEntry, tmpString.c_str()) != nullptr)
-			if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, tmpString.c_str()), "value"))
-				Setup.NeedShowHint[i] = XMLdoc->bGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, tmpString.c_str()), "value");
+			 XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, tmpString.c_str()), "value", Setup.NeedShowHint[i]);
 	}
 
 	//

@@ -206,17 +206,20 @@ public:
 		return (float)atof(GetEntryAttribute(XMLEntry, AttributeName).c_str());
 	}
 
-	bool bGetEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName)
+	bool bGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, bool &Result)
 	{
-		if (XMLEntry == nullptr)
+		auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
+		if (tmpAttr == XMLEntry.Attributes.end())
 			return false;
-		std::string Data = GetEntryAttribute(XMLEntry, AttributeName);
-		if ((Data == "on") ||
-		    (Data == "true") ||
-		    (Data == "yes") ||
-		    (Data == "1"))
-			return true;
-		return false;
+
+		Result = false;
+		if ((tmpAttr->second == "on") ||
+		    (tmpAttr->second == "true") ||
+		    (tmpAttr->second == "yes") ||
+		    (tmpAttr->second == "1"))
+			Result = true;
+
+		return true;
 	}
 
 	void AttachXMLChildEntry(sXMLEntry *ParentXMLEntry, sXMLEntry *ChildXMLEntry);
