@@ -96,7 +96,7 @@ void MissionsListInit()
 	cXMLDocument *xmlDoc = new cXMLDocument(ScriptName.c_str());
 
 	// проверяем корневой элемент
-	if (!xmlDoc->RootXMLEntry || ("AstroMenaceMissionsList" != xmlDoc->RootXMLEntry->Name)) {
+	if (!xmlDoc->GetRootEntry() || ("AstroMenaceMissionsList" != xmlDoc->GetRootEntry()->Name)) {
 		std::cerr << __func__ << "(): " << "Can't find AstroMenaceMissionsList element in the: " << ScriptName << "\n";
 		delete xmlDoc;
 		return;
@@ -104,7 +104,7 @@ void MissionsListInit()
 
 
 	AllMission = 0;
-	cXMLEntry *xmlEntry = xmlDoc->RootXMLEntry->FirstChild;
+	cXMLEntry *xmlEntry = xmlDoc->GetRootEntry()->FirstChild;
 	while (xmlEntry) {
 		// считаем, сколько миссий в файле
 		if (xmlEntry->Name == "Mission")
@@ -149,7 +149,7 @@ void MissionsListInit()
 
 
 	// второй проход, заполняем массивы
-	xmlEntry = xmlDoc->RootXMLEntry->FirstChild;
+	xmlEntry = xmlDoc->GetRootEntry()->FirstChild;
 	int i = 0;
 	while (xmlEntry) {
 		// берем каждую миссию и смотрим настройки

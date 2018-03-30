@@ -52,7 +52,7 @@ void InitGameAI(const char *FileName)
 {
 	xmlAI = new cXMLDocument(FileName);
 	// иним скрипт
-	if (!xmlAI->RootXMLEntry) {
+	if (!xmlAI->GetRootEntry()) {
 		ReleaseGameAI();
 		return;
 	}
@@ -106,7 +106,7 @@ void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheetMain)
 	// берем отдельно указатель, т.к. потом будем его менять
 	sTimeSheet *AddAfter = TimeSheetMain;
 
-	cXMLEntry *xmlEntry  = xmlAI->FindFirstChildEntryByName(xmlAI->RootXMLEntry.get(), "AI");
+	cXMLEntry *xmlEntry  = xmlAI->FindFirstChildEntryByName(xmlAI->GetRootEntry(), "AI");
 
 
 	while (xmlEntry) {

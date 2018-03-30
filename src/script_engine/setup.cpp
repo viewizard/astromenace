@@ -336,14 +336,14 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	cXMLDocument *XMLdoc = new cXMLDocument(ConfigFileName);
 
 	// читаем данные
-	if (!XMLdoc->RootXMLEntry) {
+	if (!XMLdoc->GetRootEntry()) {
 		delete XMLdoc;
 		SaveXMLSetupFile();
 		return true;
 	}
 
 	// берем первый элемент в скрипте
-	cXMLEntry *RootXMLEntry = XMLdoc->RootXMLEntry.get();
+	cXMLEntry *RootXMLEntry = XMLdoc->GetRootEntry();
 
 	// дополнительная проверка на содержимое конфигурационного файла
 	if (RootXMLEntry == nullptr) {

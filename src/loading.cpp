@@ -1054,7 +1054,7 @@ void LoadGameData(eLoading LoadType)
 		cXMLDocument *xmlDoc = new cXMLDocument(FileName);
 
 		// проверяем корневой элемент
-		if (!xmlDoc->RootXMLEntry || ("AstroMenaceScript" != xmlDoc->RootXMLEntry->Name)) {
+		if (!xmlDoc->GetRootEntry() || ("AstroMenaceScript" != xmlDoc->GetRootEntry()->Name)) {
 			std::cerr << __func__ << "(): "
 				  << "Can't find AstroMenaceScript element in the: " << FileName << "\n";
 			delete xmlDoc;
@@ -1062,7 +1062,7 @@ void LoadGameData(eLoading LoadType)
 		}
 
 		// переходим на загрузку
-		cXMLEntry *xmlEntry = xmlDoc->FindFirstChildEntryByName(xmlDoc->RootXMLEntry.get(), "Load");
+		cXMLEntry *xmlEntry = xmlDoc->FindFirstChildEntryByName(xmlDoc->GetRootEntry(), "Load");
 		if (xmlEntry == nullptr) {
 			std::cerr << __func__ << "(): " << "Can't find Load element in the: " << FileName << "\n";
 			delete xmlDoc;

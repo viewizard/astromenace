@@ -68,7 +68,7 @@ public:
 		}
 	}
 
-	// тип записи 0-обычная, 1-коментарий
+	// тип записи
 	eEntryType EntryType{eEntryType::Regular};
 	// имя элемента (если коментарий - текст)
 	std::string Name;
@@ -76,7 +76,6 @@ public:
 	std::string Content;
 	// номер строки в документе (если читаем из документа, если создаем - всегда ноль)
 	int LineNumber{0};
-
 
 	// массив атрибутов данной записи
 	std::unordered_map<std::string, std::string> Attributes;
@@ -98,9 +97,6 @@ public:
 	cXMLDocument() = default;
 	cXMLDocument(const std::string &XMLFileName);
 
-	// указатель на корневой элемент
-	std::unique_ptr<cXMLEntry> RootXMLEntry{};
-
 	bool ParseTagLine(const char *OriginBuffer, unsigned int StartPosition,
 			  const char *Buffer, cXMLEntry *XMLEntry);
 	bool ParseTagContent(const char *OriginBuffer, unsigned int StartPosition,
@@ -108,6 +104,11 @@ public:
 
 	// Save XML to file (libSDL RWops).
 	bool Save(const std::string &XMLFileName);
+
+	cXMLEntry *GetRootEntry()
+	{
+		return RootXMLEntry.get();
+	}
 
 	cXMLEntry *AddEntry(cXMLEntry *ParentXMLEntry, const std::string &EntryName)
 	{
@@ -244,6 +245,10 @@ public:
 private:
 	// Save XML elements to file recursively.
 	void SaveRecursive(cXMLEntry *XMLEntry, SDL_RWops *File, unsigned int Level);
+
+	// Accordinately to https://www.w3schools.com/XML/xml_syntax.asp
+	// "XML documents must contain one root element that is the parent of all other elements".
+	std::unique_ptr<cXMLEntry> RootXMLEntry{};
 };
 
 #endif // XML_H
