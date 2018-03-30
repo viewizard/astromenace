@@ -106,7 +106,7 @@ void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheetMain)
 	// берем отдельно указатель, т.к. потом будем его менять
 	sTimeSheet *AddAfter = TimeSheetMain;
 
-	sXMLEntry *xmlEntry  = xmlAI->FindFirstChildEntryByName(xmlAI->GetRootEntry(), "AI");
+	sXMLEntry *xmlEntry  = xmlAI->FindEntryByName(xmlAI->GetRootEntry(), "AI");
 
 
 	while (xmlEntry) {

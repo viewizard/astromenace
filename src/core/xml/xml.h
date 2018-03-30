@@ -219,20 +219,6 @@ public:
 		return false;
 	}
 
-	sXMLEntry *FindFirstChildEntryByName(sXMLEntry *ParentXMLEntry, const std::string &ChildEntryName)
-	{
-		if (ParentXMLEntry == nullptr)
-			return nullptr;
-
-		sXMLEntry *TmpEntry = ParentXMLEntry->FirstChild;
-		while (TmpEntry != nullptr) {
-			if (ChildEntryName == TmpEntry->Name)
-				return TmpEntry;
-			TmpEntry = TmpEntry->Next;
-		}
-		return nullptr;
-	}
-
 	void AttachXMLChildEntry(sXMLEntry *ParentXMLEntry, sXMLEntry *ChildXMLEntry);
 	void DetachXMLChildEntry(sXMLEntry *ParentXMLEntry, sXMLEntry *ChildXMLEntry);
 
