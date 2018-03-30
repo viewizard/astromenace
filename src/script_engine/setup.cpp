@@ -448,10 +448,8 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompressionType") != nullptr)
 		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompressionType"), "value"))
 			Setup.TexturesCompressionType = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompressionType"), "value");
-
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL") != nullptr)
 		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL"), "value", Setup.UseGLSL);
-
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap") != nullptr)
 		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap"), "value"))
 			Setup.ShadowMap = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap"), "value");
@@ -473,16 +471,13 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "Brightness") != nullptr)
 		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Brightness"), "value"))
 			Setup.Brightness = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Brightness"), "value");
-
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS") != nullptr)
 		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS"), "value", Setup.ShowFPS);
-
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType") != nullptr)
 		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType"), "value"))
 			Setup.GameWeaponInfoType = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType"), "value");
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed"), "value"))
-			Setup.GameSpeed = XMLdoc->fGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed"), "value");
+		XMLdoc->fGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed"), "value", Setup.GameSpeed);
 
 
 

@@ -68,23 +68,20 @@ void SetShipLocation(cSpaceShip *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlD
 	sVECTOR3D POS(0.0f, 0.0f, 0.0f);
 
 	// абсолютные координаты
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posax"))
-		POS.x = xmlDoc->fGetEntryAttribute(xmlEntry, "posax");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posay"))
-		POS.y = xmlDoc->fGetEntryAttribute(xmlEntry, "posay");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posaz"))
-		POS.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posaz");
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posax", POS.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posay", POS.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posaz", POS.z);
 
 	// относительные координаты
 	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posx"))
-		POS.x = xmlDoc->fGetEntryAttribute(xmlEntry, "posx") + GamePoint.x + PosWithLag.x;
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posy"))
-		POS.y = xmlDoc->fGetEntryAttribute(xmlEntry, "posy") + GamePoint.y + PosWithLag.y;
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posz"))
-		POS.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posz") + GamePoint.z + PosWithLag.z;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posx", POS.x))
+		POS.x += GamePoint.x + PosWithLag.x;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posy", POS.y))
+		POS.y += GamePoint.y + PosWithLag.y;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posz", POS.z))
+		POS.z += GamePoint.z + PosWithLag.z;
 
 	Object->SetLocation(POS);
 }
@@ -93,23 +90,20 @@ void SetProjectileLocation(cProjectile *Object, sXMLEntry *xmlEntry, cXMLDocumen
 	sVECTOR3D POS(0.0f, 0.0f, 0.0f);
 
 	// абсолютные координаты
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posax"))
-		POS.x = xmlDoc->fGetEntryAttribute(xmlEntry, "posax");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posay"))
-		POS.y = xmlDoc->fGetEntryAttribute(xmlEntry, "posay");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posaz"))
-		POS.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posaz");
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posax", POS.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posay", POS.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posaz", POS.z);
 
 	// относительные координаты
 	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posx"))
-		POS.x = xmlDoc->fGetEntryAttribute(xmlEntry, "posx") + GamePoint.x + PosWithLag.x;
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posy"))
-		POS.y = xmlDoc->fGetEntryAttribute(xmlEntry, "posy") + GamePoint.y + PosWithLag.y;
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posz"))
-		POS.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posz") + GamePoint.z + PosWithLag.z;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posx", POS.x))
+		POS.x += GamePoint.x + PosWithLag.x;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posy", POS.y))
+		POS.y += GamePoint.y + PosWithLag.y;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posz", POS.z))
+		POS.z += GamePoint.z + PosWithLag.z;
 
 	Object->SetLocation(POS);
 }
@@ -118,23 +112,20 @@ void SetLocation(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc, f
 	sVECTOR3D POS(0.0f, 0.0f, 0.0f);
 
 	// абсолютные координаты
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posax"))
-		POS.x = xmlDoc->fGetEntryAttribute(xmlEntry, "posax");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posay"))
-		POS.y = xmlDoc->fGetEntryAttribute(xmlEntry, "posay");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posaz"))
-		POS.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posaz");
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posax", POS.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posay", POS.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posaz", POS.z);
 
 	// относительные координаты
 	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posx"))
-		POS.x = xmlDoc->fGetEntryAttribute(xmlEntry, "posx") + GamePoint.x + PosWithLag.x;
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posy"))
-		POS.y = xmlDoc->fGetEntryAttribute(xmlEntry, "posy") + GamePoint.y + PosWithLag.y;
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "posz"))
-		POS.z = xmlDoc->fGetEntryAttribute(xmlEntry, "posz") + GamePoint.z + PosWithLag.z;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posx", POS.x))
+		POS.x += GamePoint.x + PosWithLag.x;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posy", POS.y))
+		POS.y += GamePoint.y + PosWithLag.y;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posz", POS.z))
+		POS.z += GamePoint.z + PosWithLag.z;
 
 	Object->SetLocation(POS);
 }
@@ -149,60 +140,42 @@ void SetLocation(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc, f
 void SetShipRotation(cSpaceShip *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
 	sVECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "anglax"))
-		ANGLE.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglax");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "anglay"))
-		ANGLE.y = xmlDoc->fGetEntryAttribute(xmlEntry, "anglay");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "anglaz"))
-		ANGLE.z = xmlDoc->fGetEntryAttribute(xmlEntry, "anglaz");
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglax", ANGLE.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglay", ANGLE.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglaz", ANGLE.z);
 
 // пока делает тоже самое!!! потом переделать
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "anglx"))
-		ANGLE.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglx");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "angly"))
-		ANGLE.y = xmlDoc->fGetEntryAttribute(xmlEntry, "angly");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "anglz"))
-		ANGLE.z = xmlDoc->fGetEntryAttribute(xmlEntry, "anglz");
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglx", ANGLE.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "angly", ANGLE.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglz", ANGLE.z);
 
 	Object->SetRotation(ANGLE);
 }
 void SetProjectileRotation(cProjectile *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
 	sVECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "anglax"))
-		ANGLE.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglax");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "anglay"))
-		ANGLE.y = xmlDoc->fGetEntryAttribute(xmlEntry, "anglay");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "anglaz"))
-		ANGLE.z = xmlDoc->fGetEntryAttribute(xmlEntry, "anglaz");
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglax", ANGLE.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglay", ANGLE.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglaz", ANGLE.z);
 
 // пока делает тоже самое!!! потом переделать
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "anglx"))
-		ANGLE.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglx");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "angly"))
-		ANGLE.y = xmlDoc->fGetEntryAttribute(xmlEntry, "angly");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "anglz"))
-		ANGLE.z = xmlDoc->fGetEntryAttribute(xmlEntry, "anglz");
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglx", ANGLE.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "angly", ANGLE.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglz", ANGLE.z);
 
 	Object->SetRotation(ANGLE);
 }
 void SetRotation(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
 	sVECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "anglax"))
-		ANGLE.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglax");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "anglay"))
-		ANGLE.y = xmlDoc->fGetEntryAttribute(xmlEntry, "anglay");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "anglaz"))
-		ANGLE.z = xmlDoc->fGetEntryAttribute(xmlEntry, "anglaz");
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglax", ANGLE.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglay", ANGLE.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglaz" ,ANGLE.z);
 
 // пока делает тоже самое!!! потом переделать
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "anglx"))
-		ANGLE.x = xmlDoc->fGetEntryAttribute(xmlEntry, "anglx");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "angly"))
-		ANGLE.y = xmlDoc->fGetEntryAttribute(xmlEntry, "angly");
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "anglz"))
-		ANGLE.z = xmlDoc->fGetEntryAttribute(xmlEntry, "anglz");
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglx", ANGLE.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "angly", ANGLE.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglz", ANGLE.z);
 
 	Object->SetRotation(ANGLE);
 }

@@ -199,11 +199,14 @@ public:
 		return atoi(GetEntryAttribute(XMLEntry, AttributeName).c_str());
 	}
 
-	float fGetEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName)
+	bool fGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, float &Result)
 	{
-		if (XMLEntry == nullptr)
-			return 0.0f;
-		return (float)atof(GetEntryAttribute(XMLEntry, AttributeName).c_str());
+		auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
+		if (tmpAttr == XMLEntry.Attributes.end())
+			return false;
+
+		Result = (float)atof(tmpAttr->second.c_str());
+		return true;
 	}
 
 	bool bGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, bool &Result)

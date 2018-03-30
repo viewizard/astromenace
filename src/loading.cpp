@@ -1105,14 +1105,10 @@ void LoadGameData(eLoading LoadType)
 				if (!xmlEntry->Content.empty())
 					InitGameAI(xmlEntry->Content.c_str()); // "script/aimode.xml"
 			} else if (xmlEntry->Name == "LayersTransp") {
-				if (xmlDoc->TestEntryAttribute(xmlEntry, "FirstStart"))
-					StarsTileStartTransparentLayer1 = xmlDoc->fGetEntryAttribute(xmlEntry, "FirstStart");
-				if (xmlDoc->TestEntryAttribute(xmlEntry, "FirstEnd"))
-					StarsTileEndTransparentLayer1 = xmlDoc->fGetEntryAttribute(xmlEntry, "FirstEnd");
-				if (xmlDoc->TestEntryAttribute(xmlEntry, "SecondStart"))
-					StarsTileStartTransparentLayer2 = xmlDoc->fGetEntryAttribute(xmlEntry, "SecondStart");
-				if (xmlDoc->TestEntryAttribute(xmlEntry, "SecondEnd"))
-					StarsTileStartTransparentLayer2 = xmlDoc->fGetEntryAttribute(xmlEntry, "SecondEnd");
+				xmlDoc->fGetEntryAttribute(*xmlEntry, "FirstStart", StarsTileStartTransparentLayer1);
+				xmlDoc->fGetEntryAttribute(*xmlEntry, "FirstEnd", StarsTileEndTransparentLayer1);
+				xmlDoc->fGetEntryAttribute(*xmlEntry, "SecondStart", StarsTileStartTransparentLayer2);
+				xmlDoc->fGetEntryAttribute(*xmlEntry, "SecondEnd", StarsTileStartTransparentLayer2);
 			}
 
 			// берем следующий элемент по порядку
