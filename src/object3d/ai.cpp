@@ -111,142 +111,144 @@ void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheetMain)
 
 	while (xmlEntry) {
 		// если находим нужный, приступаем к его интеграции
-		if (xmlAI->TestEntryAttribute(xmlEntry, "num"))
-			if (xmlAI->iGetEntryAttribute(xmlEntry, "num") == TimeSheetMain->AI_Mode) {
+		int tmpAI_Mode{0};
+		if (xmlAI->iGetEntryAttribute(*xmlEntry, "num", tmpAI_Mode) &&
+		    (tmpAI_Mode == TimeSheetMain->AI_Mode)) {
 
-				// дальше смотрим, что нужно сделать...
-				sXMLEntry *TChildEntry = xmlEntry->FirstChild;
-				while (TChildEntry) {
-					if (TChildEntry->Name == "TimeSheet") {
-						// собираем новый элемент
-						sTimeSheet *TimeSheet;
-						TimeSheet = new sTimeSheet;
-						AddNewTimeSheetToPos(Object, TimeSheet, AddAfter);
-						AddAfter = TimeSheet;
-
-						if (xmlAI->TestEntryAttribute(TChildEntry, "aimode")) {
-							TimeSheet->AI_Mode = xmlAI->iGetEntryAttribute(TChildEntry, "aimode");
-							TimeSheet->Time = 0.0f;
-							xmlAI->fGetEntryAttribute(*TChildEntry, "time", TimeSheet->Time);
-
-							TimeSheet->InUse = false;
-
-							TimeSheet->Speed = 0.0f;
-							TimeSheet->Acceler = 1.0f;//0-1
-							TimeSheet->SpeedLR = 0.0f;
-							TimeSheet->AccelerLR = 1.0f;//0-1
-							TimeSheet->SpeedUD = 0.0f;
-							TimeSheet->AccelerUD = 1.0f;//0-1
-							TimeSheet->SpeedByCamFB = 0.0f;
-							TimeSheet->AccelerByCamFB = 1.0f;//0-1
-							TimeSheet->SpeedByCamLR = 0.0f;
-							TimeSheet->AccelerByCamLR = 1.0f;//0-1
-							TimeSheet->SpeedByCamUD = 0.0f;
-							TimeSheet->AccelerByCamUD = 1.0f;//0-1
-							TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-							TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-							TimeSheet->Fire = false;
-							TimeSheet->BossFire = false;
-						} else {
-							TimeSheet->AI_Mode = 0;
-							TimeSheet->Time = 0.0f;
-							xmlAI->fGetEntryAttribute(*TChildEntry, "time", TimeSheet->Time);
-
-							TimeSheet->InUse = false;
-
-							TimeSheet->Speed = 0.0f;
-							xmlAI->fGetEntryAttribute(*TChildEntry, "speed", TimeSheet->Speed);
-
-							TimeSheet->Acceler = 1.0f;//0-1
-							xmlAI->fGetEntryAttribute(*TChildEntry, "acceler", TimeSheet->Acceler);
-							vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
-
-							TimeSheet->SpeedLR = 0.0f;
-							xmlAI->fGetEntryAttribute(*TChildEntry, "speedlr", TimeSheet->SpeedLR);
-
-							TimeSheet->AccelerLR = 1.0f;//0-1
-							xmlAI->fGetEntryAttribute(*TChildEntry, "accelerlr", TimeSheet->AccelerLR);
-							vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
-
-							TimeSheet->SpeedUD = 0.0f;
-							xmlAI->fGetEntryAttribute(*TChildEntry, "speedud", TimeSheet->SpeedUD);
-
-
-
-							TimeSheet->SpeedByCamFB = 0.0f;
-							xmlAI->fGetEntryAttribute(*TChildEntry, "speedbycamfb", TimeSheet->SpeedByCamFB);
-
-							TimeSheet->AccelerByCamFB = 1.0f;//0-1
-							xmlAI->fGetEntryAttribute(*TChildEntry, "accelerbycamfb", TimeSheet->AccelerByCamFB);
-							vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
-
-							TimeSheet->SpeedByCamLR = 0.0f;
-							xmlAI->fGetEntryAttribute(*TChildEntry, "speedbycamlr", TimeSheet->SpeedByCamLR);
-
-							TimeSheet->AccelerByCamLR = 1.0f;//0-1
-							xmlAI->fGetEntryAttribute(*TChildEntry, "accelerbycamlr", TimeSheet->AccelerByCamLR);
-							vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
-
-							TimeSheet->SpeedByCamUD = 0.0f;
-							xmlAI->fGetEntryAttribute(*TChildEntry, "speedbycamud", TimeSheet->SpeedByCamUD);
-
-							TimeSheet->AccelerByCamUD = 1.0f;//0-1
-							xmlAI->fGetEntryAttribute(*TChildEntry, "accelerbycamud", TimeSheet->SpeedByCamUD);
-							vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
-
-
-
-							TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-							xmlAI->fGetEntryAttribute(*TChildEntry, "rotx", TimeSheet->Rotation.x);
-							xmlAI->fGetEntryAttribute(*TChildEntry, "roty", TimeSheet->Rotation.y);
-							xmlAI->fGetEntryAttribute(*TChildEntry, "rotz", TimeSheet->Rotation.z);
-
-							TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-							xmlAI->fGetEntryAttribute(*TChildEntry, "rotacx", TimeSheet->RotationAcceler.x);
-							xmlAI->fGetEntryAttribute(*TChildEntry, "rotacy", TimeSheet->RotationAcceler.y);
-							xmlAI->fGetEntryAttribute(*TChildEntry, "rotacz", TimeSheet->RotationAcceler.z);
-							vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
-							vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
-							vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
-
-							TimeSheet->Fire = false;
-							if ((xmlAI->TestEntryAttribute(TChildEntry, "fire")) &&
-							    (xmlAI->iGetEntryAttribute(TChildEntry, "fire") > 0))
-									TimeSheet->Fire = true;
-							TimeSheet->BossFire = false;
-							if ((xmlAI->TestEntryAttribute(TChildEntry, "bossfire")) &&
-							    (xmlAI->iGetEntryAttribute(TChildEntry, "bossfire") > 0))
-									TimeSheet->BossFire = true;
-						}
-
-					}
-					// берем следующий элемент
-					TChildEntry = TChildEntry->Next;
-				}
-
-
-				// если это елемент с -1, т.е. повторять до бесконечности
-				// ставим последним такой же
-				if (TimeSheetMain->Time == -1) {
+			// дальше смотрим, что нужно сделать...
+			sXMLEntry *TChildEntry = xmlEntry->FirstChild;
+			while (TChildEntry) {
+				if (TChildEntry->Name == "TimeSheet") {
 					// собираем новый элемент
 					sTimeSheet *TimeSheet;
 					TimeSheet = new sTimeSheet;
 					AddNewTimeSheetToPos(Object, TimeSheet, AddAfter);
+					AddAfter = TimeSheet;
 
-					TimeSheet->AI_Mode = TimeSheetMain->AI_Mode;
-					TimeSheet->Time = -1.0f;
-					TimeSheet->InUse = false;
+					if (xmlAI->iGetEntryAttribute(*TChildEntry, "aimode", TimeSheet->AI_Mode)) {
+						TimeSheet->Time = 0.0f;
+						xmlAI->fGetEntryAttribute(*TChildEntry, "time", TimeSheet->Time);
 
-					TimeSheet->Speed = 0.0f;
-					TimeSheet->Acceler = 1.0f;//0-1
-					TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-					TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-					TimeSheet->Fire = false;
-					TimeSheet->BossFire = false;
+						TimeSheet->InUse = false;
+
+						TimeSheet->Speed = 0.0f;
+						TimeSheet->Acceler = 1.0f;//0-1
+						TimeSheet->SpeedLR = 0.0f;
+						TimeSheet->AccelerLR = 1.0f;//0-1
+						TimeSheet->SpeedUD = 0.0f;
+						TimeSheet->AccelerUD = 1.0f;//0-1
+						TimeSheet->SpeedByCamFB = 0.0f;
+						TimeSheet->AccelerByCamFB = 1.0f;//0-1
+						TimeSheet->SpeedByCamLR = 0.0f;
+						TimeSheet->AccelerByCamLR = 1.0f;//0-1
+						TimeSheet->SpeedByCamUD = 0.0f;
+						TimeSheet->AccelerByCamUD = 1.0f;//0-1
+						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
+						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+						TimeSheet->Fire = false;
+						TimeSheet->BossFire = false;
+					} else {
+						TimeSheet->AI_Mode = 0;
+						TimeSheet->Time = 0.0f;
+						xmlAI->fGetEntryAttribute(*TChildEntry, "time", TimeSheet->Time);
+
+						TimeSheet->InUse = false;
+
+						TimeSheet->Speed = 0.0f;
+						xmlAI->fGetEntryAttribute(*TChildEntry, "speed", TimeSheet->Speed);
+
+						TimeSheet->Acceler = 1.0f;//0-1
+						xmlAI->fGetEntryAttribute(*TChildEntry, "acceler", TimeSheet->Acceler);
+						vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
+
+						TimeSheet->SpeedLR = 0.0f;
+						xmlAI->fGetEntryAttribute(*TChildEntry, "speedlr", TimeSheet->SpeedLR);
+
+						TimeSheet->AccelerLR = 1.0f;//0-1
+						xmlAI->fGetEntryAttribute(*TChildEntry, "accelerlr", TimeSheet->AccelerLR);
+						vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
+
+						TimeSheet->SpeedUD = 0.0f;
+						xmlAI->fGetEntryAttribute(*TChildEntry, "speedud", TimeSheet->SpeedUD);
+
+
+
+						TimeSheet->SpeedByCamFB = 0.0f;
+						xmlAI->fGetEntryAttribute(*TChildEntry, "speedbycamfb", TimeSheet->SpeedByCamFB);
+
+						TimeSheet->AccelerByCamFB = 1.0f;//0-1
+						xmlAI->fGetEntryAttribute(*TChildEntry, "accelerbycamfb", TimeSheet->AccelerByCamFB);
+						vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
+
+						TimeSheet->SpeedByCamLR = 0.0f;
+						xmlAI->fGetEntryAttribute(*TChildEntry, "speedbycamlr", TimeSheet->SpeedByCamLR);
+
+						TimeSheet->AccelerByCamLR = 1.0f;//0-1
+						xmlAI->fGetEntryAttribute(*TChildEntry, "accelerbycamlr", TimeSheet->AccelerByCamLR);
+						vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
+
+						TimeSheet->SpeedByCamUD = 0.0f;
+						xmlAI->fGetEntryAttribute(*TChildEntry, "speedbycamud", TimeSheet->SpeedByCamUD);
+
+						TimeSheet->AccelerByCamUD = 1.0f;//0-1
+						xmlAI->fGetEntryAttribute(*TChildEntry, "accelerbycamud", TimeSheet->SpeedByCamUD);
+						vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
+
+
+
+						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
+						xmlAI->fGetEntryAttribute(*TChildEntry, "rotx", TimeSheet->Rotation.x);
+						xmlAI->fGetEntryAttribute(*TChildEntry, "roty", TimeSheet->Rotation.y);
+						xmlAI->fGetEntryAttribute(*TChildEntry, "rotz", TimeSheet->Rotation.z);
+
+						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+						xmlAI->fGetEntryAttribute(*TChildEntry, "rotacx", TimeSheet->RotationAcceler.x);
+						xmlAI->fGetEntryAttribute(*TChildEntry, "rotacy", TimeSheet->RotationAcceler.y);
+						xmlAI->fGetEntryAttribute(*TChildEntry, "rotacz", TimeSheet->RotationAcceler.z);
+						vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
+						vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
+						vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
+
+						TimeSheet->Fire = false;
+						int tmpFire{0};
+						if (xmlAI->iGetEntryAttribute(*TChildEntry, "fire", tmpFire) &&
+						    (tmpFire > 0))
+								TimeSheet->Fire = true;
+						TimeSheet->BossFire = false;
+						int tmpBossFire{0};
+						if (xmlAI->iGetEntryAttribute(*TChildEntry, "bossfire", tmpBossFire) &&
+						    (tmpBossFire > 0))
+								TimeSheet->BossFire = true;
+					}
+
 				}
-
-				return;
+				// берем следующий элемент
+				TChildEntry = TChildEntry->Next;
 			}
+
+
+			// если это елемент с -1, т.е. повторять до бесконечности
+			// ставим последним такой же
+			if (TimeSheetMain->Time == -1) {
+				// собираем новый элемент
+				sTimeSheet *TimeSheet;
+				TimeSheet = new sTimeSheet;
+				AddNewTimeSheetToPos(Object, TimeSheet, AddAfter);
+
+				TimeSheet->AI_Mode = TimeSheetMain->AI_Mode;
+				TimeSheet->Time = -1.0f;
+				TimeSheet->InUse = false;
+
+				TimeSheet->Speed = 0.0f;
+				TimeSheet->Acceler = 1.0f;//0-1
+				TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
+				TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+				TimeSheet->Fire = false;
+				TimeSheet->BossFire = false;
+			}
+
+			return;
+		}
 
 		xmlEntry = xmlEntry->Next;
 	}

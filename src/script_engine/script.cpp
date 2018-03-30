@@ -310,8 +310,7 @@ bool cScriptEngine::Update(float Time)
 				xmlDoc->bGetEntryAttribute(*xmlEntry, "showline", ShowDebugModeLine);
 
 				NeedShowBB = 0;
-				if (xmlDoc->TestEntryAttribute(xmlEntry, "showbb"))
-					NeedShowBB = xmlDoc->iGetEntryAttribute(xmlEntry, "showbb");
+				xmlDoc->iGetEntryAttribute(*xmlEntry, "showbb", NeedShowBB);
 
 				UndeadDebugMode = false;
 				xmlDoc->bGetEntryAttribute(*xmlEntry, "undead", UndeadDebugMode);
@@ -323,7 +322,8 @@ bool cScriptEngine::Update(float Time)
 				// StarSystem
 				if (xmlEntry->Name == "StarSystem") {
 					if (xmlDoc->TestEntryAttribute(xmlEntry, "system")) {
-						int SystemNum = xmlDoc->iGetEntryAttribute(xmlEntry, "system");
+						int SystemNum{0};
+						xmlDoc->iGetEntryAttribute(*xmlEntry, "system", SystemNum);
 						sVECTOR3D TmpBaseRotation(0.0f, 0.0f, 0.0f);
 						xmlDoc->fGetEntryAttribute(*xmlEntry, "anglex", TmpBaseRotation.x);
 						xmlDoc->fGetEntryAttribute(*xmlEntry, "angley", TmpBaseRotation.y);
@@ -337,8 +337,8 @@ bool cScriptEngine::Update(float Time)
 						// должна проигрываться только музыка поражения
 						if (PlayerFighter != nullptr)
 							if (PlayerFighter->Strength > 0.0f) {
-								if (xmlDoc->TestEntryAttribute(xmlEntry, "theme")) {
-									int Theme = xmlDoc->iGetEntryAttribute(xmlEntry, "theme");
+								int Theme{0};
+								if (xmlDoc->iGetEntryAttribute(*xmlEntry, "theme", Theme)) {
 									if (Theme == 1)
 										StartMusicWithFade(eMusicTheme::GAME, 2000, 2000);
 									if (Theme == 2)
@@ -349,8 +349,9 @@ bool cScriptEngine::Update(float Time)
 						// CreatePlanet
 						if (xmlEntry->Name == "CreatePlanet") {
 							cPlanet *Planet = new cPlanet;
-							if (xmlDoc->TestEntryAttribute(xmlEntry, "type")) {
-								Planet->Create(xmlDoc->iGetEntryAttribute(xmlEntry, "type"));
+							int tmpType{0};
+							if (xmlDoc->iGetEntryAttribute(*xmlEntry, "type", tmpType)) {
+								Planet->Create(tmpType);
 								SetRotation(Planet, xmlEntry, xmlDoc);
 								SetLocation(Planet, xmlEntry, xmlDoc, 0.0f);
 								Planet->ShowDeleteOnHide = 0;
@@ -373,9 +374,10 @@ bool cScriptEngine::Update(float Time)
 								// Light
 								if (xmlEntry->Name == "Light") {
 									eLightType LightType{eLightType::Directional}; // по умолчанию, солнце
-									if (xmlDoc->TestEntryAttribute(xmlEntry, "type"))
-										if (xmlDoc->iGetEntryAttribute(xmlEntry, "type") == 1)
-											LightType = eLightType::Point;
+									int tmpType{0};
+									if (xmlDoc->iGetEntryAttribute(*xmlEntry, "type", tmpType) &&
+									    (tmpType == 1))
+										LightType = eLightType::Point;
 
 									sLight *NewLight = vw_CreateLight(LightType);
 
@@ -487,14 +489,11 @@ bool cScriptEngine::Update(float Time)
 															strcpy(NewText->DrawText, xmlDoc->GetEntryAttribute(xmlEntry, "text").c_str());
 														}
 
-														if (xmlDoc->TestEntryAttribute(xmlEntry, "posx"))
-															NewText->PosX = xmlDoc->iGetEntryAttribute(xmlEntry, "posx");
-														if (xmlDoc->TestEntryAttribute(xmlEntry, "posy"))
-															NewText->PosY = xmlDoc->iGetEntryAttribute(xmlEntry, "posy");
+														xmlDoc->iGetEntryAttribute(*xmlEntry, "posx", NewText->PosX);
+														xmlDoc->iGetEntryAttribute(*xmlEntry, "posy", NewText->PosY);
 
 														NewText->Color = 0;
-														if (xmlDoc->TestEntryAttribute(xmlEntry, "color"))
-															NewText->Color = xmlDoc->iGetEntryAttribute(xmlEntry, "color");
+														xmlDoc->iGetEntryAttribute(*xmlEntry, "color", NewText->Color);
 													} else {
 														// если тут - значит не нашли директиву, или произошла ошибка
 														std::cerr << __func__ << "(): " << "ScriptEngine: tag " << xmlEntry->Name
@@ -531,8 +530,9 @@ void cScriptEngine::UpdateTimeLine()
 		if (TL->Name == "EarthFighter") {
 			cEarthSpaceFighter *Fighter = nullptr;
 			Fighter = new cEarthSpaceFighter;
-			if (xmlDoc->TestEntryAttribute(TL, "type"))
-				Fighter->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
+			int tmpType{0};
+			if (xmlDoc->iGetEntryAttribute(*TL, "type", tmpType))
+				Fighter->Create(tmpType);
 			else {
 				TL = TL->Next;
 				continue;
@@ -556,20 +556,21 @@ void cScriptEngine::UpdateTimeLine()
 				Fighter->SpeedByCamUD = Fighter->NeedSpeedByCamUD;
 
 
-			if (xmlDoc->TestEntryAttribute(TL, "armour"))
-				SetEarthSpaceFighterArmour(Fighter, xmlDoc->iGetEntryAttribute(TL, "armour"));
-			if (xmlDoc->TestEntryAttribute(TL, "weapon1"))
-				SetEarthSpaceFighterWeapon(Fighter, 1, xmlDoc->iGetEntryAttribute(TL, "weapon1"));
-			if (xmlDoc->TestEntryAttribute(TL, "weapon2"))
-				SetEarthSpaceFighterWeapon(Fighter, 2, xmlDoc->iGetEntryAttribute(TL, "weapon2"));
-			if (xmlDoc->TestEntryAttribute(TL, "weapon3"))
-				SetEarthSpaceFighterWeapon(Fighter, 3, xmlDoc->iGetEntryAttribute(TL, "weapon3"));
-			if (xmlDoc->TestEntryAttribute(TL, "weapon4"))
-				SetEarthSpaceFighterWeapon(Fighter, 4, xmlDoc->iGetEntryAttribute(TL, "weapon4"));
-			if (xmlDoc->TestEntryAttribute(TL, "weapon5"))
-				SetEarthSpaceFighterWeapon(Fighter, 5, xmlDoc->iGetEntryAttribute(TL, "weapon5"));
-			if (xmlDoc->TestEntryAttribute(TL, "weapon6"))
-				SetEarthSpaceFighterWeapon(Fighter, 6, xmlDoc->iGetEntryAttribute(TL, "weapon6"));
+			int tmp{0};
+			if (xmlDoc->iGetEntryAttribute(*TL, "armour", tmp))
+				SetEarthSpaceFighterArmour(Fighter, tmp);
+			if (xmlDoc->iGetEntryAttribute(*TL, "weapon1", tmp))
+				SetEarthSpaceFighterWeapon(Fighter, 1, tmp);
+			if (xmlDoc->iGetEntryAttribute(*TL, "weapon2", tmp))
+				SetEarthSpaceFighterWeapon(Fighter, 2, tmp);
+			if (xmlDoc->iGetEntryAttribute(*TL, "weapon3", tmp))
+				SetEarthSpaceFighterWeapon(Fighter, 3, tmp);
+			if (xmlDoc->iGetEntryAttribute(*TL, "weapon4", tmp))
+				SetEarthSpaceFighterWeapon(Fighter, 4, tmp);
+			if (xmlDoc->iGetEntryAttribute(*TL, "weapon5", tmp))
+				SetEarthSpaceFighterWeapon(Fighter, 5, tmp);
+			if (xmlDoc->iGetEntryAttribute(*TL, "weapon6", tmp))
+				SetEarthSpaceFighterWeapon(Fighter, 6, tmp);
 
 			SetShowDeleteOnHide(Fighter, TL, xmlDoc);
 			SetAIMode(Fighter, TL, xmlDoc); // на тот случае если просто ставим и все...
@@ -585,8 +586,7 @@ void cScriptEngine::UpdateTimeLine()
 					TimeSheet = new sTimeSheet;
 					Fighter->AttachTimeSheet(TimeSheet);
 
-					if (xmlDoc->TestEntryAttribute(TLEarthFighter, "aimode")) {
-						TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(TLEarthFighter, "aimode");
+					if (xmlDoc->iGetEntryAttribute(*TLEarthFighter, "aimode", TimeSheet->AI_Mode)) {
 						TimeSheet->Time = 0.0f;
 						xmlDoc->fGetEntryAttribute(*TLEarthFighter, "time", TimeSheet->Time);
 
@@ -674,9 +674,10 @@ void cScriptEngine::UpdateTimeLine()
 						vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 						TimeSheet->Fire = false;
-						if (xmlDoc->TestEntryAttribute(TLEarthFighter, "fire"))
-							if (xmlDoc->iGetEntryAttribute(TLEarthFighter, "fire") > 0)
-								TimeSheet->Fire = true;
+						int tmpFire{0};
+						if (xmlDoc->iGetEntryAttribute(*TLEarthFighter, "fire", tmpFire) &&
+						    (tmpFire > 0))
+							TimeSheet->Fire = true;
 						TimeSheet->BossFire = false;
 						TimeSheet->Targeting = false;
 					}
@@ -690,8 +691,9 @@ void cScriptEngine::UpdateTimeLine()
 			// AlienFighter
 			if (TL->Name == "AlienFighter") {
 				cAlienSpaceFighter *Fighter = new cAlienSpaceFighter;
-				if (xmlDoc->TestEntryAttribute(TL, "type"))
-					Fighter->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
+				int tmpType{0};
+				if (xmlDoc->iGetEntryAttribute(*TL, "type", tmpType))
+					Fighter->Create(tmpType);
 				else {
 					TL = TL->Next;
 					continue;
@@ -728,8 +730,7 @@ void cScriptEngine::UpdateTimeLine()
 						TimeSheet = new sTimeSheet;
 						Fighter->AttachTimeSheet(TimeSheet);
 
-						if (xmlDoc->TestEntryAttribute(TLAlienFighter, "aimode")) {
-							TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(TLAlienFighter, "aimode");
+						if (xmlDoc->iGetEntryAttribute(*TLAlienFighter, "aimode", TimeSheet->AI_Mode)) {
 							TimeSheet->Time = 0.0f;
 							xmlDoc->fGetEntryAttribute(*TLAlienFighter, "time", TimeSheet->Time);
 							TimeSheet->InUse = false;
@@ -814,9 +815,10 @@ void cScriptEngine::UpdateTimeLine()
 							vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 							TimeSheet->Fire = false;
-							if (xmlDoc->TestEntryAttribute(TLAlienFighter, "fire"))
-								if (xmlDoc->iGetEntryAttribute(TLAlienFighter, "fire") > 0)
-									TimeSheet->Fire = true;
+							int tmpFire{0};
+							if (xmlDoc->iGetEntryAttribute(*TLAlienFighter, "fire", tmpFire) &&
+							    (tmpFire > 0))
+								TimeSheet->Fire = true;
 							TimeSheet->BossFire = false;
 
 							TimeSheet->Targeting = false;
@@ -831,8 +833,9 @@ void cScriptEngine::UpdateTimeLine()
 				// AlienMotherShip
 				if (TL->Name == "AlienMotherShip") {
 					cAlienSpaceMotherShip *Fighter = new cAlienSpaceMotherShip;
-					if (xmlDoc->TestEntryAttribute(TL, "type"))
-						Fighter->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
+					int tmpType{0};
+					if (xmlDoc->iGetEntryAttribute(*TL, "type", tmpType))
+						Fighter->Create(tmpType);
 					else {
 						TL = TL->Next;
 						continue;
@@ -869,8 +872,7 @@ void cScriptEngine::UpdateTimeLine()
 							TimeSheet = new sTimeSheet;
 							Fighter->AttachTimeSheet(TimeSheet);
 
-							if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "aimode")) {
-								TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(TLAlienMotherShip, "aimode");
+							if (xmlDoc->iGetEntryAttribute(*TLAlienMotherShip, "aimode", TimeSheet->AI_Mode)) {
 								TimeSheet->Time = 0.0f;
 								xmlDoc->fGetEntryAttribute(*TLAlienMotherShip, "time", TimeSheet->Time);
 								TimeSheet->InUse = false;
@@ -955,13 +957,15 @@ void cScriptEngine::UpdateTimeLine()
 								vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 								TimeSheet->Fire = false;
-								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "fire"))
-									if (xmlDoc->iGetEntryAttribute(TLAlienMotherShip, "fire") > 0)
-										TimeSheet->Fire = true;
+								int tmpFire{0};
+								if (xmlDoc->iGetEntryAttribute(*TLAlienMotherShip, "fire", tmpFire) &&
+								    (tmpFire > 0))
+									TimeSheet->Fire = true;
 								TimeSheet->BossFire = false;
-								if (xmlDoc->TestEntryAttribute(TLAlienMotherShip, "bossfire"))
-									if (xmlDoc->iGetEntryAttribute(TLAlienMotherShip, "bossfire") > 0)
-										TimeSheet->BossFire = true;
+								int tmpBossFire{0};
+								if (xmlDoc->iGetEntryAttribute(*TLAlienMotherShip, "bossfire", tmpBossFire) &&
+								    (tmpBossFire > 0))
+									TimeSheet->BossFire = true;
 
 								TimeSheet->Targeting = false;
 							}
@@ -975,8 +979,9 @@ void cScriptEngine::UpdateTimeLine()
 					// PirateShip
 					if (TL->Name == "PirateShip") {
 						cPirateShip *Fighter = new cPirateShip;
-						if (xmlDoc->TestEntryAttribute(TL, "type"))
-							Fighter->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
+						int tmpType{0};
+						if (xmlDoc->iGetEntryAttribute(*TL, "type", tmpType))
+							Fighter->Create(tmpType);
 						else {
 							TL = TL->Next;
 							continue;
@@ -1013,8 +1018,7 @@ void cScriptEngine::UpdateTimeLine()
 								TimeSheet = new sTimeSheet;
 								Fighter->AttachTimeSheet(TimeSheet);
 
-								if (xmlDoc->TestEntryAttribute(TLPirateShip, "aimode")) {
-									TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(TLPirateShip, "aimode");
+								if (xmlDoc->iGetEntryAttribute(*TLPirateShip, "aimode", TimeSheet->AI_Mode)) {
 									TimeSheet->Time = 0.0f;
 									xmlDoc->fGetEntryAttribute(*TLPirateShip, "time", TimeSheet->Time);
 									TimeSheet->InUse = false;
@@ -1099,14 +1103,16 @@ void cScriptEngine::UpdateTimeLine()
 									vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 									TimeSheet->Fire = false;
-									if (xmlDoc->TestEntryAttribute(TLPirateShip, "fire"))
-										if (xmlDoc->iGetEntryAttribute(TLPirateShip, "fire") > 0)
-											TimeSheet->Fire = true;
+									int tmpFire{0};
+									if (xmlDoc->iGetEntryAttribute(*TLPirateShip, "fire", tmpFire) &&
+									    (tmpFire > 0))
+										TimeSheet->Fire = true;
 
 									TimeSheet->BossFire = false;
-									if (xmlDoc->TestEntryAttribute(TLPirateShip, "bossfire"))
-										if (xmlDoc->iGetEntryAttribute(TLPirateShip, "bossfire") > 0)
-											TimeSheet->BossFire = true;
+									int tmpBossFire{0};
+									if (xmlDoc->iGetEntryAttribute(*TLPirateShip, "bossfire", tmpBossFire) &&
+									    (tmpBossFire > 0))
+										TimeSheet->BossFire = true;
 
 									TimeSheet->Targeting = false;
 								}
@@ -1142,8 +1148,9 @@ void cScriptEngine::UpdateTimeLine()
 								cBasePart *BasePart = new cBasePart;
 
 								// тип части
-								if (xmlDoc->TestEntryAttribute(TL, "type"))
-									BasePart->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
+								int tmpType{0};
+								if (xmlDoc->iGetEntryAttribute(*TL, "type", tmpType))
+									BasePart->Create(tmpType);
 								else {
 									TL = TL->Next;
 									continue;
@@ -1163,8 +1170,9 @@ void cScriptEngine::UpdateTimeLine()
 									cBigAsteroid *BigAsteroid = new cBigAsteroid;
 
 									// тип части
-									if (xmlDoc->TestEntryAttribute(TL, "type"))
-										BigAsteroid->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
+									int tmpType{0};
+									if (xmlDoc->iGetEntryAttribute(*TL, "type", tmpType))
+										BigAsteroid->Create(tmpType);
 									else {
 										TL = TL->Next;
 										continue;
@@ -1184,8 +1192,9 @@ void cScriptEngine::UpdateTimeLine()
 										cMilitaryBuilding *GroundObject = new cMilitaryBuilding;
 
 										// тип части
-										if (xmlDoc->TestEntryAttribute(TL, "type"))
-											GroundObject->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
+										int tmpType{0};
+										if (xmlDoc->iGetEntryAttribute(*TL, "type", tmpType))
+											GroundObject->Create(tmpType);
 										else {
 											TL = TL->Next;
 											continue;
@@ -1208,8 +1217,7 @@ void cScriptEngine::UpdateTimeLine()
 												TimeSheet = new sTimeSheet;
 												GroundObject->AttachTimeSheet(TimeSheet);
 
-												if (xmlDoc->TestEntryAttribute(TLGroundObject, "aimode")) {
-													TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(TLGroundObject, "aimode");
+												if (xmlDoc->iGetEntryAttribute(*TLGroundObject, "aimode", TimeSheet->AI_Mode)) {
 													TimeSheet->Time = 0.0f;
 													xmlDoc->fGetEntryAttribute(*TLGroundObject, "time", TimeSheet->Time);
 													TimeSheet->InUse = false;
@@ -1254,15 +1262,18 @@ void cScriptEngine::UpdateTimeLine()
 													TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 
 													TimeSheet->Fire = false;
-													if (xmlDoc->TestEntryAttribute(TLGroundObject, "fire"))
-														if (xmlDoc->iGetEntryAttribute(TLGroundObject, "fire") > 0)
-															TimeSheet->Fire = true;
+													int tmpFire{0};
+													if (xmlDoc->iGetEntryAttribute(*TLGroundObject, "fire", tmpFire) &&
+													    (tmpFire > 0))
+														TimeSheet->Fire = true;
 
 													TimeSheet->BossFire = false;
 
 													TimeSheet->Targeting = false;
-													if (xmlDoc->TestEntryAttribute(TLGroundObject, "targeting"))
-														if (xmlDoc->iGetEntryAttribute(TLGroundObject, "targeting") != 0) TimeSheet->Targeting = true;
+													int tmpTargeting{0};
+													if (xmlDoc->iGetEntryAttribute(*TLGroundObject, "targeting", tmpTargeting) &&
+													    (tmpTargeting != 0))
+														TimeSheet->Targeting = true;
 												}
 
 											}
@@ -1274,8 +1285,9 @@ void cScriptEngine::UpdateTimeLine()
 										// CreateBuilding
 										if (TL->Name == "CreateBuilding") {
 											cBuilding *GroundObject = new cBuilding;
-											if (xmlDoc->TestEntryAttribute(TL, "type"))
-												GroundObject->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
+											int tmpType{0};
+											if (xmlDoc->iGetEntryAttribute(*TL, "type", tmpType))
+												GroundObject->Create(tmpType);
 											else {
 												TL = TL->Next;
 												continue;
@@ -1292,10 +1304,10 @@ void cScriptEngine::UpdateTimeLine()
 											if (TL->Name == "CreateMine") {
 												cProjectile *Mine = new cProjectile;
 												// т.к. мины у нас с 214-217, делаем +213
-												if (xmlDoc->TestEntryAttribute(TL, "type")) {
-													int MineType = xmlDoc->iGetEntryAttribute(TL, "type")+213;
-													if (MineType < 214) MineType = 214;
-													if (MineType > 217) MineType = 217;
+												int tmpType{0};
+												if (xmlDoc->iGetEntryAttribute(*TL, "type", tmpType)) {
+													int MineType = tmpType + 213;
+													vw_Clamp(MineType, 214, 217);
 													Mine->Create(MineType);
 												} else {
 													TL = TL->Next;
@@ -1306,8 +1318,7 @@ void cScriptEngine::UpdateTimeLine()
 
 												// по умолчанию враг
 												Mine->ObjectStatus = 1;
-												if (xmlDoc->TestEntryAttribute(TL, "status"))
-													Mine->ObjectStatus = xmlDoc->iGetEntryAttribute(TL, "status");
+												xmlDoc->iGetEntryAttribute(*TL, "status", Mine->ObjectStatus);
 
 												// общий - пенальти, если не игрок
 												float CurrentPenalty = GameNPCWeaponPenalty*1.0f;
@@ -1329,8 +1340,9 @@ void cScriptEngine::UpdateTimeLine()
 												// CreateTracked
 												if (TL->Name == "CreateTracked") {
 													cTracked *GroundObject = new cTracked;
-													if (xmlDoc->TestEntryAttribute(TL, "type"))
-														GroundObject->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
+													int tmpType{0};
+													if (xmlDoc->iGetEntryAttribute(*TL, "type", tmpType))
+														GroundObject->Create(tmpType);
 													else {
 														TL = TL->Next;
 														continue;
@@ -1355,8 +1367,7 @@ void cScriptEngine::UpdateTimeLine()
 															TimeSheet = new sTimeSheet;
 															GroundObject->AttachTimeSheet(TimeSheet);
 
-															if (xmlDoc->TestEntryAttribute(TLGroundObject, "aimode")) {
-																TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(TLGroundObject, "aimode");
+															if (xmlDoc->iGetEntryAttribute(*TLGroundObject, "aimode", TimeSheet->AI_Mode)) {
 																TimeSheet->Time = 0.0f;
 																xmlDoc->fGetEntryAttribute(*TLGroundObject, "time", TimeSheet->Time);
 																TimeSheet->InUse = false;
@@ -1417,16 +1428,18 @@ void cScriptEngine::UpdateTimeLine()
 																vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 																TimeSheet->Fire = false;
-																if (xmlDoc->TestEntryAttribute(TLGroundObject, "fire"))
-																	if (xmlDoc->iGetEntryAttribute(TLGroundObject, "fire") > 0)
-																		TimeSheet->Fire = true;
+																int tmpFire{0};
+																if (xmlDoc->iGetEntryAttribute(*TLGroundObject, "fire", tmpFire) &&
+																    (tmpFire > 0))
+																	TimeSheet->Fire = true;
 
 																TimeSheet->BossFire = false;
 
 																TimeSheet->Targeting = false;
-																if (xmlDoc->TestEntryAttribute(TLGroundObject, "targeting"))
-																	if (xmlDoc->iGetEntryAttribute(TLGroundObject, "targeting") > 0)
-																		TimeSheet->Targeting = true;
+																int tmpTargeting{0};
+																if (xmlDoc->iGetEntryAttribute(*TLGroundObject, "targeting", tmpTargeting) &&
+																    (tmpTargeting > 0))
+																	TimeSheet->Targeting = true;
 															}
 
 														}
@@ -1438,8 +1451,9 @@ void cScriptEngine::UpdateTimeLine()
 													// CreateWheeled
 													if (TL->Name == "CreateWheeled") {
 														cWheeled *GroundObject = new cWheeled;
-														if (xmlDoc->TestEntryAttribute(TL, "type"))
-															GroundObject->Create(xmlDoc->iGetEntryAttribute(TL, "type"));
+														int tmpType{0};
+														if (xmlDoc->iGetEntryAttribute(*TL, "type", tmpType))
+															GroundObject->Create(tmpType);
 														else {
 															TL = TL->Next;
 															continue;
@@ -1464,8 +1478,7 @@ void cScriptEngine::UpdateTimeLine()
 																TimeSheet = new sTimeSheet;
 																GroundObject->AttachTimeSheet(TimeSheet);
 
-																if (xmlDoc->TestEntryAttribute(TLGroundObject, "aimode")) {
-																	TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(TLGroundObject, "aimode");
+																if (xmlDoc->iGetEntryAttribute(*TLGroundObject, "aimode", TimeSheet->AI_Mode)) {
 																	TimeSheet->Time = 0.0f;
 																	xmlDoc->fGetEntryAttribute(*TLGroundObject, "time", TimeSheet->Time);
 																	TimeSheet->InUse = false;
@@ -1527,15 +1540,18 @@ void cScriptEngine::UpdateTimeLine()
 																	vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
 																	TimeSheet->Fire = false;
-																	if (xmlDoc->TestEntryAttribute(TLGroundObject, "fire"))
-																		if (xmlDoc->iGetEntryAttribute(TLGroundObject, "fire") > 0)
+																	int tmpFire{0};
+																	if (xmlDoc->iGetEntryAttribute(*TLGroundObject, "fire", tmpFire) &&
+																	    (tmpFire > 0))
 																			TimeSheet->Fire = true;
 
 																	TimeSheet->BossFire = false;
 
 																	TimeSheet->Targeting = false;
-																	if (xmlDoc->TestEntryAttribute(TLGroundObject, "targeting"))
-																		if (xmlDoc->iGetEntryAttribute(TLGroundObject, "targeting") != 0) TimeSheet->Targeting = true;
+																	int tmpTargeting{0};
+																	if (xmlDoc->iGetEntryAttribute(*TLGroundObject, "targeting", tmpTargeting) &&
+																	    (tmpTargeting != 0))
+																		TimeSheet->Targeting = true;
 																}
 
 															}

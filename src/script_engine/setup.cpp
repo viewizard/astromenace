@@ -389,24 +389,19 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		}
 	}
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber"), "value"))
-			Setup.FontNumber = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber"), "value", Setup.FontNumber);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontName") != nullptr)
 		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontName"), "value"))
 			strcpy(Setup.FontName, XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontName"), "value").c_str());
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontSize") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontSize"), "value"))
-			Setup.FontSize = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontSize"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "FontSize"), "value", Setup.FontSize);
 
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "Width") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Width"), "value"))
-			Setup.Width = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Width"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "Width"), "value", Setup.Width);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "Height") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Height"), "value"))
-			Setup.Height = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Height"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "Height"), "value", Setup.Height);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "BPP") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "BPP"), "value"))
-			Setup.BPP = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "BPP"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "BPP"), "value", Setup.BPP);
 
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio") != nullptr) {
 		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio"), "value")) {
@@ -424,58 +419,42 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		}
 	}
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value"))
-			Setup.CameraModeWithStandardAspectRatio = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value", Setup.CameraModeWithStandardAspectRatio);
 
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode"), "value"))
-			Setup.TextureFilteringMode = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "TextureFilteringMode"), "value", Setup.TextureFilteringMode);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "TexturesQuality") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesQuality"), "value"))
-			Setup.TexturesQuality = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesQuality"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "TexturesQuality"), "value", Setup.TexturesQuality);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "MSAA") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MSAA"), "value"))
-			Setup.MSAA = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MSAA"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "MSAA"), "value", Setup.MSAA);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "CSAA") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CSAA"), "value"))
-			Setup.CSAA = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "CSAA"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "CSAA"), "value", Setup.CSAA);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "VisualEffectsQuality") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VisualEffectsQuality"), "value"))
-			Setup.VisualEffectsQuality = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VisualEffectsQuality"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "VisualEffectsQuality"), "value", Setup.VisualEffectsQuality);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "AnisotropyLevel") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AnisotropyLevel"), "value"))
-			Setup.AnisotropyLevel = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AnisotropyLevel"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "AnisotropyLevel"), "value", Setup.AnisotropyLevel);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompressionType") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompressionType"), "value"))
-			Setup.TexturesCompressionType = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompressionType"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "TexturesCompressionType"), "value", Setup.TexturesCompressionType);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL") != nullptr)
 		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "UseGLSL"), "value", Setup.UseGLSL);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap"), "value"))
-			Setup.ShadowMap = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "ShadowMap"), "value", Setup.ShadowMap);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "MaxPointLights") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MaxPointLights"), "value"))
-			Setup.MaxPointLights = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MaxPointLights"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "MaxPointLights"), "value", Setup.MaxPointLights);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "MusicSw") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MusicSw"), "value"))
-			Setup.MusicSw = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MusicSw"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "MusicSw"), "value", Setup.MusicSw);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "SoundSw") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "SoundSw"), "value"))
-			Setup.SoundSw = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "SoundSw"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "SoundSw"), "value", Setup.SoundSw);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "VoiceSw") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceSw"), "value"))
-			Setup.VoiceSw = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceSw"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "VoiceSw"), "value", Setup.VoiceSw);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "VSync") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VSync"), "value"))
-			Setup.VSync = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VSync"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "VSync"), "value", Setup.VSync);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "Brightness") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Brightness"), "value"))
-			Setup.Brightness = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "Brightness"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "Brightness"), "value", Setup.Brightness);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS") != nullptr)
 		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "ShowFPS"), "value", Setup.ShowFPS);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType"), "value"))
-			Setup.GameWeaponInfoType = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "GameWeaponInfoType"), "value", Setup.GameWeaponInfoType);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed") != nullptr)
 		XMLdoc->fGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "GameSpeed"), "value", Setup.GameSpeed);
 
@@ -521,36 +500,27 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 			Setup.KeyBoardSecondary = SDL_GetKeyFromName(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary"), "value").c_str());
 
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary"), "value"))
-			Setup.MousePrimary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary"), "value", Setup.MousePrimary);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "MouseSecondary") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseSecondary"), "value"))
-			Setup.MouseSecondary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MouseSecondary"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "MouseSecondary"), "value", Setup.MouseSecondary);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickPrimary") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickPrimary"), "value"))
-			Setup.JoystickPrimary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickPrimary"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "JoystickPrimary"), "value", Setup.JoystickPrimary);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickSecondary") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickSecondary"), "value"))
-			Setup.JoystickSecondary = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickSecondary"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "JoystickSecondary"), "value", Setup.JoystickSecondary);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum"), "value"))
-			Setup.JoystickNum = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "JoystickNum"), "value", Setup.JoystickNum);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "JoystickDeadZone") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickDeadZone"), "value"))
-			Setup.JoystickDeadZone = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "JoystickDeadZone"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "JoystickDeadZone"), "value", Setup.JoystickDeadZone);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity"), "value"))
-			Setup.ControlSensivity = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "ControlSensivity"), "value", Setup.ControlSensivity);
 
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl") != nullptr)
 		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "MouseControl"), "value", Setup.MouseControl);
 
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile"), "value"))
-			Setup.LastProfile = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "LastProfile"), "value", Setup.LastProfile);
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "MenuScript") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuScript"), "value"))
-			Setup.MenuScript = XMLdoc->iGetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuScript"), "value");
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "MenuScript"), "value", Setup.MenuScript);
 
 	for(int i=0; i<10; i++) {
 		std::string tmpString{"HintStatus" + std::to_string(i + 1)};

@@ -192,11 +192,14 @@ public:
 		return XMLEntry->Attributes[AttributeName];
 	}
 
-	int iGetEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName)
+	bool iGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, int &Result)
 	{
-		if (XMLEntry == nullptr)
-			return 0;
-		return atoi(GetEntryAttribute(XMLEntry, AttributeName).c_str());
+		auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
+		if (tmpAttr == XMLEntry.Attributes.end())
+			return false;
+
+		Result = atoi(tmpAttr->second.c_str());
+		return true;
 	}
 
 	bool fGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, float &Result)

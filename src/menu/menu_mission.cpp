@@ -158,8 +158,9 @@ void MissionsListInit()
 			while (TMission) {
 				// тайтл миссии
 				if (TMission->Name == "Title") {
-					if (xmlDoc->TestEntryAttribute(TMission, "color")) {
-						switch (xmlDoc->iGetEntryAttribute(TMission, "color")) {
+					int tmpColor{0};
+					if (xmlDoc->iGetEntryAttribute(*TMission, "color", tmpColor)) {
+						switch (tmpColor) {
 						default: // белый
 							MissionTitleColorR[i]=1.0f;
 							MissionTitleColorG[i]=1.0f;
@@ -197,8 +198,7 @@ void MissionsListInit()
 							break;
 						}
 					}
-					if (xmlDoc->TestEntryAttribute(TMission, "type"))
-						MissionTitleType[i] = xmlDoc->iGetEntryAttribute(TMission, "type");
+					MissionTitleType[i] = xmlDoc->iGetEntryAttribute(*TMission, "type", MissionTitleType[i]);
 
 					if (!TMission->Content.empty()) {
 						MissionTitle[i] = new char[TMission->Content.size() + 1];
@@ -207,8 +207,9 @@ void MissionsListInit()
 				} else
 					// описание миссии
 					if (TMission->Name == "Descr") {
-						if (xmlDoc->TestEntryAttribute(TMission, "color")) {
-							switch (xmlDoc->iGetEntryAttribute(TMission, "color")) {
+						int tmpColor{0};
+						if (xmlDoc->iGetEntryAttribute(*TMission, "color", tmpColor)) {
+							switch (tmpColor) {
 							default: // белый
 								MissionDescrColorR[i]=1.0f;
 								MissionDescrColorG[i]=1.0f;
@@ -246,8 +247,7 @@ void MissionsListInit()
 								break;
 							}
 						}
-						if (xmlDoc->TestEntryAttribute(TMission, "type"))
-							MissionDescrType[i] = xmlDoc->iGetEntryAttribute(TMission, "type");
+						xmlDoc->iGetEntryAttribute(*TMission, "type", MissionDescrType[i]);
 
 						if (!TMission->Content.empty()) {
 							MissionDescr[i] = new char[TMission->Content.size() + 1];

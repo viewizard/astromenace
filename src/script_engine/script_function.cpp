@@ -36,14 +36,15 @@
 //-----------------------------------------------------------------------------
 void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "aimode")) {
+	int tmpAI_Mode{0};
+	if (xmlDoc->iGetEntryAttribute(*xmlEntry, "aimode", tmpAI_Mode)) {
 		// собираем новый элемент
 		sTimeSheet *TimeSheet;
 		TimeSheet = new sTimeSheet;
 		Object->AttachTimeSheet(TimeSheet);
 
 		TimeSheet->Time = -1;
-		TimeSheet->AI_Mode = xmlDoc->iGetEntryAttribute(xmlEntry, "aimode");
+		TimeSheet->AI_Mode = tmpAI_Mode;
 	}
 }
 
@@ -54,8 +55,7 @@ void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 //-----------------------------------------------------------------------------
 void SetID(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "id"))
-		Object->ID = xmlDoc->iGetEntryAttribute(xmlEntry, "id");
+	xmlDoc->iGetEntryAttribute(*xmlEntry, "id", Object->ID);
 }
 
 
@@ -189,8 +189,9 @@ void SetRotation(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 void SetShowDeleteOnHide(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 {
 	Object->ShowDeleteOnHide = 0;
-	if (xmlDoc->TestEntryAttribute(xmlEntry, "onhide"))
-		if (xmlDoc->iGetEntryAttribute(xmlEntry, "onhide") <= 0) Object->ShowDeleteOnHide = -1;
+	if (xmlDoc->iGetEntryAttribute(*xmlEntry, "onhide", Object->ShowDeleteOnHide) &&
+	    (Object->ShowDeleteOnHide <= 0))
+			Object->ShowDeleteOnHide = -1;
 }
 
 
