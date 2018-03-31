@@ -1069,9 +1069,8 @@ void LoadGameData(eLoading LoadType)
 			exit(0);
 		}
 
-		xmlEntry = xmlEntry->FirstChild;
-		if (xmlEntry == nullptr) {
-			std::cerr << __func__ << "(): " << "Can't find Load element in the: " << FileName << "\n";
+		if (xmlEntry->ChildrenList.empty()) {
+			std::cerr << __func__ << "(): " << "Can't find Load element's children in the: " << FileName << "\n";
 			delete xmlDoc;
 			exit(0);
 		}
@@ -1082,37 +1081,34 @@ void LoadGameData(eLoading LoadType)
 		StarsTileStartTransparentLayer2 = 0.9f;
 		StarsTileEndTransparentLayer2 = 0.7f;
 
-		while (xmlEntry) {
-			if (xmlEntry->Name == "StarSystem1")
+		for (auto &tmpEntry : xmlEntry->ChildrenList) {
+			if (tmpEntry.Name == "StarSystem1")
 				StarSystem1 = true;
-			else if (xmlEntry->Name == "StarSystem2")
+			else if (tmpEntry.Name == "StarSystem2")
 				StarSystem2 = true;
-			else if (xmlEntry->Name == "Planet")
+			else if (tmpEntry.Name == "Planet")
 				Planet = true;
-			else if (xmlEntry->Name == "Asteroid")
+			else if (tmpEntry.Name == "Asteroid")
 				Asteroid = true;
-			else if (xmlEntry->Name == "AlienFighter")
+			else if (tmpEntry.Name == "AlienFighter")
 				AlienFighter = true;
-			else if (xmlEntry->Name == "BasePart")
+			else if (tmpEntry.Name == "BasePart")
 				BasePart = true;
-			else if (xmlEntry->Name == "AlienMotherShip")
+			else if (tmpEntry.Name == "AlienMotherShip")
 				AlienMotherShip = true;
-			else if (xmlEntry->Name == "Building")
+			else if (tmpEntry.Name == "Building")
 				Building = true;
-			else if (xmlEntry->Name == "Pirate")
+			else if (tmpEntry.Name == "Pirate")
 				Pirate = true;
-			else if (xmlEntry->Name == "AIFile") { // загружаем данные по AI
-				if (!xmlEntry->Content.empty())
-					InitGameAI(xmlEntry->Content.c_str()); // "script/aimode.xml"
-			} else if (xmlEntry->Name == "LayersTransp") {
-				xmlDoc->fGetEntryAttribute(*xmlEntry, "FirstStart", StarsTileStartTransparentLayer1);
-				xmlDoc->fGetEntryAttribute(*xmlEntry, "FirstEnd", StarsTileEndTransparentLayer1);
-				xmlDoc->fGetEntryAttribute(*xmlEntry, "SecondStart", StarsTileStartTransparentLayer2);
-				xmlDoc->fGetEntryAttribute(*xmlEntry, "SecondEnd", StarsTileStartTransparentLayer2);
+			else if (tmpEntry.Name == "AIFile") { // загружаем данные по AI
+				if (!tmpEntry.Content.empty())
+					InitGameAI(tmpEntry.Content.c_str()); // "script/aimode.xml"
+			} else if (tmpEntry.Name == "LayersTransp") {
+				xmlDoc->fGetEntryAttribute(tmpEntry, "FirstStart", StarsTileStartTransparentLayer1);
+				xmlDoc->fGetEntryAttribute(tmpEntry, "FirstEnd", StarsTileEndTransparentLayer1);
+				xmlDoc->fGetEntryAttribute(tmpEntry, "SecondStart", StarsTileStartTransparentLayer2);
+				xmlDoc->fGetEntryAttribute(tmpEntry, "SecondEnd", StarsTileStartTransparentLayer2);
 			}
-
-			// берем следующий элемент по порядку
-			xmlEntry = xmlEntry->Next;
 		}
 
 		// чистим память, со скриптом работать больше не надо

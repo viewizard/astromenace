@@ -26,7 +26,6 @@
 
 // TODO translate comments
 // TODO should be revised in order to use std::string
-// TODO entry's children management should use some container (std::list?)
 
 #include "../vfs/vfs.h"
 #include "xml.h"
@@ -60,53 +59,6 @@ static unsigned int GetLineNumber(const char *UNUSED(String), unsigned int UNUSE
 	return 0;
 }
 #endif // gamedebug
-
-//-----------------------------------------------------------------------------
-// Включаем в список
-//-----------------------------------------------------------------------------
-void cXMLDocument::AttachXMLChildEntry(sXMLEntry *ParentXMLEntry, sXMLEntry *ChildXMLEntry)
-{
-	if (!ParentXMLEntry || !ChildXMLEntry)
-		return;
-
-	// первый в списке...
-	if (ParentXMLEntry->LastChild == nullptr) {
-		ChildXMLEntry->Prev = nullptr;
-		ChildXMLEntry->Next = nullptr;
-		ParentXMLEntry->FirstChild = ChildXMLEntry;
-		ParentXMLEntry->LastChild = ChildXMLEntry;
-	} else { // продолжаем заполнение...
-		ChildXMLEntry->Prev = ParentXMLEntry->LastChild;
-		ChildXMLEntry->Next = nullptr;
-		ParentXMLEntry->LastChild->Next = ChildXMLEntry;
-		ParentXMLEntry->LastChild = ChildXMLEntry;
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Исключаем из списка
-//-----------------------------------------------------------------------------
-void cXMLDocument::DetachXMLChildEntry(sXMLEntry *ParentXMLEntry, sXMLEntry *XMLChildEntry)
-{
-	if (!ParentXMLEntry || !XMLChildEntry)
-		return;
-
-	// переустанавливаем указатели...
-	if (ParentXMLEntry->FirstChild == XMLChildEntry)
-		ParentXMLEntry->FirstChild = XMLChildEntry->Next;
-	if (ParentXMLEntry->LastChild == XMLChildEntry)
-		ParentXMLEntry->LastChild = XMLChildEntry->Prev;
-
-	if (XMLChildEntry->Next != nullptr)
-		XMLChildEntry->Next->Prev = XMLChildEntry->Prev;
-	else if (XMLChildEntry->Prev != nullptr)
-		XMLChildEntry->Prev->Next = nullptr;
-
-	if (XMLChildEntry->Prev != nullptr)
-		XMLChildEntry->Prev->Next = XMLChildEntry->Next;
-	else if (XMLChildEntry->Next != nullptr)
-		XMLChildEntry->Next->Prev = nullptr;
-}
 
 /*
  *
@@ -262,8 +214,9 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 			RootXMLEntry.reset(new sXMLEntry);
 			XMLEntry = RootXMLEntry.get();
 		} else {
-			XMLEntry = new sXMLEntry;
-			AttachXMLChildEntry(ParentXMLEntry, XMLEntry);
+			// NOTE emplace_back() return reference to the inserted element (since C++17)
+			ParentXMLEntry->ChildrenList.emplace_back();
+			XMLEntry = &ParentXMLEntry->ChildrenList.back();
 		}
 
 		// полученные данные передаем на обработку и анализ строки элемента
@@ -357,15 +310,15 @@ cXMLDocument::cXMLDocument(const std::string &XMLFileName)
 /*
  * Save XML elements to file recursively.
  */
-void cXMLDocument::SaveRecursive(sXMLEntry *XMLEntry, SDL_RWops *File, unsigned int Level)
+void cXMLDocument::SaveRecursive(const sXMLEntry &XMLEntry, SDL_RWops *File, unsigned int Level)
 {
-	if (XMLEntry->EntryType == eEntryType::Comment) {
+	if (XMLEntry.EntryType == eEntryType::Comment) {
 		// comment
 		for (unsigned int i = 0; i < Level; i++) {
 			SDL_RWwrite(File, "    ", strlen("    "), 1);
 		}
 		SDL_RWwrite(File, "<!--", strlen("<!--"), 1);
-		SDL_RWwrite(File, XMLEntry->Name.data(), XMLEntry->Name.size(), 1);
+		SDL_RWwrite(File, XMLEntry.Name.data(), XMLEntry.Name.size(), 1);
 		SDL_RWwrite(File, "-->", strlen("-->"), 1);
 		SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
 	} else {
@@ -376,11 +329,11 @@ void cXMLDocument::SaveRecursive(sXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 			SDL_RWwrite(File, "    ", strlen("    "), 1);
 		}
 		SDL_RWwrite(File, "<", strlen("<"), 1);
-		SDL_RWwrite(File, XMLEntry->Name.data(), XMLEntry->Name.size(), 1);
+		SDL_RWwrite(File, XMLEntry.Name.data(), XMLEntry.Name.size(), 1);
 
 		// attributes
-		if (!XMLEntry->Attributes.empty()) {
-			for (const auto &TmpAttrib : XMLEntry->Attributes) {
+		if (!XMLEntry.Attributes.empty()) {
+			for (const auto &TmpAttrib : XMLEntry.Attributes) {
 				SDL_RWwrite(File, " ", strlen(" "), 1);
 				SDL_RWwrite(File, TmpAttrib.first.data(), TmpAttrib.first.size(), 1);
 				SDL_RWwrite(File, "=\"", strlen("=\""), 1);
@@ -391,27 +344,25 @@ void cXMLDocument::SaveRecursive(sXMLEntry *XMLEntry, SDL_RWops *File, unsigned 
 		}
 
 		// data
-		if (XMLEntry->FirstChild || !XMLEntry->Content.empty()) {
-			if (!XMLEntry->Content.empty()) {
+		if (!XMLEntry.ChildrenList.empty() || !XMLEntry.Content.empty()) {
+			if (!XMLEntry.Content.empty()) {
 				SDL_RWwrite(File, ">", strlen(">"), 1);
-				SDL_RWwrite(File, XMLEntry->Content.data(), XMLEntry->Content.size(), 1);
+				SDL_RWwrite(File, XMLEntry.Content.data(), XMLEntry.Content.size(), 1);
 				SDL_RWwrite(File, "</", strlen("</"), 1);
-				SDL_RWwrite(File, XMLEntry->Name.data(), XMLEntry->Name.size(), 1);
+				SDL_RWwrite(File, XMLEntry.Name.data(), XMLEntry.Name.size(), 1);
 				SDL_RWwrite(File, ">", strlen(">"), 1);
 				SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
 			} else {
 				SDL_RWwrite(File, ">", strlen(">"), 1);
 				SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
-				sXMLEntry *Tmp = XMLEntry->FirstChild;
-				while (Tmp) {
-					SaveRecursive(Tmp, File, Level + 1);
-					Tmp = Tmp->Next;
+				for (auto &tmpEntry : XMLEntry.ChildrenList) {
+					SaveRecursive(tmpEntry, File, Level + 1);
 				}
 				for (unsigned int i = 0; i < Level; i++) {
 					SDL_RWwrite(File, "    ", strlen("    "), 1);
 				}
 				SDL_RWwrite(File, "</", strlen("</"), 1);
-				SDL_RWwrite(File, XMLEntry->Name.data(), XMLEntry->Name.size(), 1);
+				SDL_RWwrite(File, XMLEntry.Name.data(), XMLEntry.Name.size(), 1);
 				SDL_RWwrite(File, ">", strlen(">"), 1);
 				SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
 			}
@@ -446,7 +397,7 @@ bool cXMLDocument::Save(const std::string &XMLFileName)
 	}
 
 	// save all data recursively
-	SaveRecursive(RootXMLEntry.get(), File, 0);
+	SaveRecursive(*RootXMLEntry.get(), File, 0);
 
 	SDL_RWclose(File);
 	return true;

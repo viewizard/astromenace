@@ -52,8 +52,8 @@ public:
 
 	// основной документ
 	cXMLDocument	*xmlDoc{nullptr};
-	// текущий элемент
-	sXMLEntry	*xmlEntry{nullptr};
+	// текущий итератор (положение в скрипте)
+	std::list<sXMLEntry>::iterator xmlEntryIter{};
 
 	// включен отладочный режим или нет... по умолчанию выключен
 	bool	ShowDebugModeLine{false};

@@ -104,14 +104,10 @@ void MissionsListInit()
 
 
 	AllMission = 0;
-	sXMLEntry *xmlEntry = xmlDoc->GetRootEntry()->FirstChild;
-	while (xmlEntry) {
+	for (const auto &xmlEntry : xmlDoc->GetRootEntry()->ChildrenList) {
 		// считаем, сколько миссий в файле
-		if (xmlEntry->Name == "Mission")
+		if (xmlEntry.Name == "Mission")
 			AllMission++;
-
-		// берем следующий элемент по порядку
-		xmlEntry = xmlEntry->Next;
 	}
 
 	// резервируем память
@@ -149,17 +145,15 @@ void MissionsListInit()
 
 
 	// второй проход, заполняем массивы
-	xmlEntry = xmlDoc->GetRootEntry()->FirstChild;
 	int i = 0;
-	while (xmlEntry) {
+	for (const auto &xmlEntry : xmlDoc->GetRootEntry()->ChildrenList) {
 		// берем каждую миссию и смотрим настройки
-		if (xmlEntry->Name == "Mission") {
-			sXMLEntry *TMission = xmlEntry->FirstChild;
-			while (TMission) {
+		if (xmlEntry.Name == "Mission") {
+			for (const auto &TMission : xmlEntry.ChildrenList) {
 				// тайтл миссии
-				if (TMission->Name == "Title") {
+				if (TMission.Name == "Title") {
 					int tmpColor{0};
-					if (xmlDoc->iGetEntryAttribute(*TMission, "color", tmpColor)) {
+					if (xmlDoc->iGetEntryAttribute(TMission, "color", tmpColor)) {
 						switch (tmpColor) {
 						default: // белый
 							MissionTitleColorR[i]=1.0f;
@@ -198,17 +192,17 @@ void MissionsListInit()
 							break;
 						}
 					}
-					MissionTitleType[i] = xmlDoc->iGetEntryAttribute(*TMission, "type", MissionTitleType[i]);
+					MissionTitleType[i] = xmlDoc->iGetEntryAttribute(TMission, "type", MissionTitleType[i]);
 
-					if (!TMission->Content.empty()) {
-						MissionTitle[i] = new char[TMission->Content.size() + 1];
-						strcpy(MissionTitle[i], TMission->Content.c_str());
+					if (!TMission.Content.empty()) {
+						MissionTitle[i] = new char[TMission.Content.size() + 1];
+						strcpy(MissionTitle[i], TMission.Content.c_str());
 					}
 				} else
 					// описание миссии
-					if (TMission->Name == "Descr") {
+					if (TMission.Name == "Descr") {
 						int tmpColor{0};
-						if (xmlDoc->iGetEntryAttribute(*TMission, "color", tmpColor)) {
+						if (xmlDoc->iGetEntryAttribute(TMission, "color", tmpColor)) {
 							switch (tmpColor) {
 							default: // белый
 								MissionDescrColorR[i]=1.0f;
@@ -247,38 +241,31 @@ void MissionsListInit()
 								break;
 							}
 						}
-						xmlDoc->iGetEntryAttribute(*TMission, "type", MissionDescrType[i]);
+						xmlDoc->iGetEntryAttribute(TMission, "type", MissionDescrType[i]);
 
-						if (!TMission->Content.empty()) {
-							MissionDescr[i] = new char[TMission->Content.size() + 1];
-							strcpy(MissionDescr[i], TMission->Content.c_str());
+						if (!TMission.Content.empty()) {
+							MissionDescr[i] = new char[TMission.Content.size() + 1];
+							strcpy(MissionDescr[i], TMission.Content.c_str());
 						}
 					} else
 						// иконка миссии
-						if (TMission->Name == "Icon") {
-							if (!TMission->Content.empty()) {
-								MissionIcon[i] = new char[TMission->Content.size() + 1];
-								strcpy(MissionIcon[i], TMission->Content.c_str());
+						if (TMission.Name == "Icon") {
+							if (!TMission.Content.empty()) {
+								MissionIcon[i] = new char[TMission.Content.size() + 1];
+								strcpy(MissionIcon[i], TMission.Content.c_str());
 							}
 						} else
 							// файл миссии
-							if (TMission->Name == "File") {
-								if (!TMission->Content.empty()) {
-									MissionFile[i] = new char[TMission->Content.size() + 1];
-									strcpy(MissionFile[i], TMission->Content.c_str());
+							if (TMission.Name == "File") {
+								if (!TMission.Content.empty()) {
+									MissionFile[i] = new char[TMission.Content.size() + 1];
+									strcpy(MissionFile[i], TMission.Content.c_str());
 								}
 							}
-
-
-				// берем следующий элемент
-				TMission = TMission->Next;
 			}
 
 			i++;
 		}
-
-		// берем следующий элемент по порядку
-		xmlEntry = xmlEntry->Next;
 	}
 
 

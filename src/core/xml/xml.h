@@ -54,16 +54,6 @@ enum class eEntryType {
 };
 
 struct sXMLEntry {
-	~sXMLEntry()
-	{
-		sXMLEntry *TmpEntry = FirstChild;
-		while (TmpEntry != nullptr) {
-			sXMLEntry *TmpEntry1 = TmpEntry->Next;
-			delete TmpEntry;
-			TmpEntry = TmpEntry1;
-		}
-	}
-
 	// тип записи
 	eEntryType EntryType{eEntryType::Regular};
 	// имя элемента (если коментарий - текст)
@@ -73,17 +63,10 @@ struct sXMLEntry {
 	// номер строки в документе (если читаем из документа, если создаем - всегда ноль)
 	int LineNumber{0};
 
-	// массив атрибутов данной записи
+	// Attributes
 	std::unordered_map<std::string, std::string> Attributes;
-
-	// указатели на массив дочерних элементов
-	// Children;
-	sXMLEntry *FirstChild{nullptr};
-	sXMLEntry *LastChild{nullptr};
-
-	// указатели на массив элементов текущего уровня вложенности
-	sXMLEntry *Next{nullptr};
-	sXMLEntry *Prev{nullptr};
+	// Children
+	std::list<sXMLEntry> ChildrenList{};
 };
 
 class cXMLDocument {
@@ -111,10 +94,10 @@ public:
 			RootXMLEntry->Name = EntryName;
 			return RootXMLEntry.get();
 		} else {
-			sXMLEntry *NewXMLEntry = new sXMLEntry;
-			NewXMLEntry->Name = EntryName;
-			AttachXMLChildEntry(ParentXMLEntry, NewXMLEntry);
-			return NewXMLEntry;
+			// NOTE emplace_back() return reference to the inserted element (since C++17)
+			ParentXMLEntry->ChildrenList.emplace_back();
+			ParentXMLEntry->ChildrenList.back().Name = EntryName;
+			return &ParentXMLEntry->ChildrenList.back();
 		}
 	}
 
@@ -160,22 +143,22 @@ public:
 
 	void AddComment(sXMLEntry *ParentXMLEntry, const std::string &Text)
 	{
-		sXMLEntry *NewXMLEntry = new sXMLEntry;
-		NewXMLEntry->EntryType = eEntryType::Comment;
-		NewXMLEntry->Name = Text;
-		AttachXMLChildEntry(ParentXMLEntry, NewXMLEntry);
+		// NOTE emplace_back() return reference to the inserted element (since C++17)
+		ParentXMLEntry->ChildrenList.emplace_back();
+		ParentXMLEntry->ChildrenList.back().Name = Text;
+		ParentXMLEntry->ChildrenList.back().EntryType = eEntryType::Comment;
 	}
 
 	sXMLEntry *FindEntryByName(sXMLEntry *ParentXMLEntry, const std::string &Name)
 	{
 		if (ParentXMLEntry == nullptr)
 			return nullptr;
-		sXMLEntry *TmpEntry = ParentXMLEntry->FirstChild;
-		while (TmpEntry != nullptr) {
-			if (Name == TmpEntry->Name)
-				return TmpEntry;
-			TmpEntry = TmpEntry->Next;
+
+		for (auto &tmpEntry : ParentXMLEntry->ChildrenList) {
+			if (tmpEntry.Name == Name)
+				return &tmpEntry;
 		}
+
 		return nullptr;
 	}
 
@@ -225,12 +208,9 @@ public:
 		return true;
 	}
 
-	void AttachXMLChildEntry(sXMLEntry *ParentXMLEntry, sXMLEntry *ChildXMLEntry);
-	void DetachXMLChildEntry(sXMLEntry *ParentXMLEntry, sXMLEntry *ChildXMLEntry);
-
 private:
 	// Save XML elements to file recursively.
-	void SaveRecursive(sXMLEntry *XMLEntry, SDL_RWops *File, unsigned int Level);
+	void SaveRecursive(const sXMLEntry &XMLEntry, SDL_RWops *File, unsigned int Level);
 
 	// Accordinately to https://www.w3schools.com/XML/xml_syntax.asp
 	// "XML documents must contain one root element that is the parent of all other elements".
