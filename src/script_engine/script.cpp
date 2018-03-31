@@ -321,9 +321,8 @@ bool cScriptEngine::Update(float Time)
 			} else
 				// StarSystem
 				if (xmlEntry->Name == "StarSystem") {
-					if (xmlDoc->TestEntryAttribute(xmlEntry, "system")) {
-						int SystemNum{0};
-						xmlDoc->iGetEntryAttribute(*xmlEntry, "system", SystemNum);
+					int SystemNum{0};
+					if (xmlDoc->iGetEntryAttribute(*xmlEntry, "system", SystemNum)) {
 						sVECTOR3D TmpBaseRotation(0.0f, 0.0f, 0.0f);
 						xmlDoc->fGetEntryAttribute(*xmlEntry, "anglex", TmpBaseRotation.x);
 						xmlDoc->fGetEntryAttribute(*xmlEntry, "angley", TmpBaseRotation.y);
@@ -432,16 +431,15 @@ bool cScriptEngine::Update(float Time)
 										// Goto
 										if (xmlEntry->Name == "Goto") {
 											// если есть указатель на метку
-											if (xmlDoc->TestEntryAttribute(xmlEntry, "label")) {
+											std::string tmpLabel{};
+											if (xmlDoc->GetEntryAttribute(*xmlEntry, "label", tmpLabel)) {
 												// нужно перебрать все метки и остановится на нужной
 												sXMLEntry *tmpEntry = xmlDoc->FindEntryByName(xmlDoc->FindEntryByName(xmlDoc->GetRootEntry(), "Action"), "Label");
 
 												// перебор по всем меткам
 												while (tmpEntry) {
-													std::string tmpLabel{};
 													std::string tmpName{};
 													if (xmlDoc->GetEntryAttribute(*tmpEntry, "name", tmpName) &&
-													    xmlDoc->GetEntryAttribute(*xmlEntry, "label", tmpLabel) &&
 													    (tmpLabel == tmpName)) {
 														// ставим новый указатель
 														xmlEntry = tmpEntry;

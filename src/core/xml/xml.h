@@ -179,14 +179,6 @@ public:
 		return nullptr;
 	}
 
-	bool TestEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName)
-	{
-		if (XMLEntry->Attributes.find(AttributeName) != XMLEntry->Attributes.end())
-			return true;
-
-		return false;
-	}
-
 	bool GetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, std::string &Result)
 	{
 		auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
