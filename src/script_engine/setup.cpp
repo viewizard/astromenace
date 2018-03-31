@@ -369,9 +369,10 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (NeedSafeMode) goto LoadProfiles;
 
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage") != nullptr) {
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value")) {
+		std::string tmpMenuLanguage{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value", tmpMenuLanguage)) {
 			for (unsigned int i=0; i<vw_GetLanguageListCount(); i++) {
-				if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "MenuLanguage"), "value") == vw_GetText("0_code", i + 1/*first column contain index, not data*/)) {
+				if (tmpMenuLanguage == vw_GetText("0_code", i + 1/*first column contain index, not data*/)) {
 					Setup.MenuLanguage = i+1;
 					break;
 				}
@@ -379,9 +380,10 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		}
 	}
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage") != nullptr) {
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value")) {
+		std::string tmpVoiceLanguage{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value", tmpVoiceLanguage)) {
 			for (unsigned int i=0; i<vw_GetLanguageListCount(); i++) {
-				if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "VoiceLanguage"), "value") == vw_GetText("0_code", i + 1/*first column contain index, not data*/)) {
+				if (tmpVoiceLanguage == vw_GetText("0_code", i + 1/*first column contain index, not data*/)) {
 					Setup.VoiceLanguage = i+1;
 					break;
 				}
@@ -390,9 +392,11 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	}
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber") != nullptr)
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "FontNumber"), "value", Setup.FontNumber);
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontName") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontName"), "value"))
-			strcpy(Setup.FontName, XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "FontName"), "value").c_str());
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontName") != nullptr) {
+		std::string tmpFontName{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "FontName"), "value", tmpFontName))
+			strcpy(Setup.FontName, tmpFontName.c_str());
+	}
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "FontSize") != nullptr)
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "FontSize"), "value", Setup.FontSize);
 
@@ -404,8 +408,9 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "BPP"), "value", Setup.BPP);
 
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio") != nullptr) {
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio"), "value")) {
-			if (XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio"), "value") == "16:10") {
+		std::string tmpAspectRatio{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "AspectRatio"), "value", tmpAspectRatio)) {
+			if (tmpAspectRatio == "16:10") {
 				Setup.fAspectRatioWidth = 1228.0f;
 				Setup.fAspectRatioHeight = 768.0f;
 				Setup.iAspectRatioWidth = 1228;
@@ -460,44 +465,68 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 
 
 
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardDecreaseGameSpeed") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardDecreaseGameSpeed"), "value"))
-			Setup.KeyboardDecreaseGameSpeed = SDL_GetKeyFromName(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardDecreaseGameSpeed"), "value").c_str());
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardResetGameSpeed") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardResetGameSpeed"), "value"))
-			Setup.KeyboardResetGameSpeed = SDL_GetKeyFromName(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardResetGameSpeed"), "value").c_str());
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardIncreaseGameSpeed") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardIncreaseGameSpeed"), "value"))
-			Setup.KeyboardIncreaseGameSpeed = SDL_GetKeyFromName(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardIncreaseGameSpeed"), "value").c_str());
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardGameWeaponInfoType") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardGameWeaponInfoType"), "value"))
-			Setup.KeyboardGameWeaponInfoType = SDL_GetKeyFromName(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardGameWeaponInfoType"), "value").c_str());
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardPrimaryWeaponFireMode") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardPrimaryWeaponFireMode"), "value"))
-			Setup.KeyboardPrimaryWeaponFireMode = SDL_GetKeyFromName(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardPrimaryWeaponFireMode"), "value").c_str());
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardSecondaryWeaponFireMode") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardSecondaryWeaponFireMode"), "value"))
-			Setup.KeyboardSecondaryWeaponFireMode = SDL_GetKeyFromName(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardSecondaryWeaponFireMode"), "value").c_str());
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardDecreaseGameSpeed") != nullptr) {
+		std::string tmpKeyboardDecreaseGameSpeed{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardDecreaseGameSpeed"), "value", tmpKeyboardDecreaseGameSpeed))
+			Setup.KeyboardDecreaseGameSpeed = SDL_GetKeyFromName(tmpKeyboardDecreaseGameSpeed.c_str());
+	}
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardResetGameSpeed") != nullptr) {
+		std::string tmpKeyboardResetGameSpeed{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardResetGameSpeed"), "value", tmpKeyboardResetGameSpeed))
+			Setup.KeyboardResetGameSpeed = SDL_GetKeyFromName(tmpKeyboardResetGameSpeed.c_str());
+	}
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardIncreaseGameSpeed") != nullptr) {
+		std::string tmpKeyboardIncreaseGameSpeed{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardIncreaseGameSpeed"), "value", tmpKeyboardIncreaseGameSpeed))
+			Setup.KeyboardIncreaseGameSpeed = SDL_GetKeyFromName(tmpKeyboardIncreaseGameSpeed.c_str());
+	}
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardGameWeaponInfoType") != nullptr) {
+		std::string tmpKeyboardGameWeaponInfoType{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardGameWeaponInfoType"), "value", tmpKeyboardGameWeaponInfoType))
+			Setup.KeyboardGameWeaponInfoType = SDL_GetKeyFromName(tmpKeyboardGameWeaponInfoType.c_str());
+	}
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardPrimaryWeaponFireMode") != nullptr) {
+		std::string tmpKeyboardPrimaryWeaponFireMode{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardPrimaryWeaponFireMode"), "value", tmpKeyboardPrimaryWeaponFireMode))
+			Setup.KeyboardPrimaryWeaponFireMode = SDL_GetKeyFromName(tmpKeyboardPrimaryWeaponFireMode.c_str());
+	}
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardSecondaryWeaponFireMode") != nullptr) {
+		std::string tmpKeyboardSecondaryWeaponFireMode{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "KeyboardSecondaryWeaponFireMode"), "value", tmpKeyboardSecondaryWeaponFireMode))
+			Setup.KeyboardSecondaryWeaponFireMode = SDL_GetKeyFromName(tmpKeyboardSecondaryWeaponFireMode.c_str());
+	}
 
 
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardLeft") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardLeft"), "value"))
-			Setup.KeyBoardLeft = SDL_GetKeyFromName(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardLeft"), "value").c_str());
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardRight") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardRight"), "value"))
-			Setup.KeyBoardRight = SDL_GetKeyFromName(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardRight"), "value").c_str());
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardUp") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardUp"), "value"))
-			Setup.KeyBoardUp = SDL_GetKeyFromName(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardUp"), "value").c_str());
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardDown") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardDown"), "value"))
-			Setup.KeyBoardDown = SDL_GetKeyFromName(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardDown"), "value").c_str());
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardPrimary") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardPrimary"), "value"))
-			Setup.KeyBoardPrimary = SDL_GetKeyFromName(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardPrimary"), "value").c_str());
-	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary") != nullptr)
-		if (XMLdoc->TestEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary"), "value"))
-			Setup.KeyBoardSecondary = SDL_GetKeyFromName(XMLdoc->GetEntryAttribute(XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary"), "value").c_str());
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardLeft") != nullptr) {
+		std::string tmpKeyBoardLeft{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardLeft"), "value", tmpKeyBoardLeft))
+			Setup.KeyBoardLeft = SDL_GetKeyFromName(tmpKeyBoardLeft.c_str());
+	}
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardRight") != nullptr) {
+		std::string tmpKeyBoardRight{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardRight"), "value", tmpKeyBoardRight))
+			Setup.KeyBoardRight = SDL_GetKeyFromName(tmpKeyBoardRight.c_str());
+	}
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardUp") != nullptr) {
+		std::string tmpKeyBoardUp{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardUp"), "value", tmpKeyBoardUp))
+			Setup.KeyBoardUp = SDL_GetKeyFromName(tmpKeyBoardUp.c_str());
+	}
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardDown") != nullptr) {
+		std::string tmpKeyBoardDown{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardDown"), "value", tmpKeyBoardDown))
+			Setup.KeyBoardDown = SDL_GetKeyFromName(tmpKeyBoardDown.c_str());
+	}
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardPrimary") != nullptr) {
+		std::string tmpKeyBoardPrimary{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardPrimary"), "value", tmpKeyBoardPrimary))
+			Setup.KeyBoardPrimary = SDL_GetKeyFromName(tmpKeyBoardPrimary.c_str());
+	}
+	if (XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary") != nullptr) {
+		std::string tmpKeyBoardSecondary{};
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "KeyBoardSecondary"), "value", tmpKeyBoardSecondary))
+			Setup.KeyBoardSecondary = SDL_GetKeyFromName(tmpKeyBoardSecondary.c_str());
+	}
 
 	if (XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary") != nullptr)
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(RootXMLEntry, "MousePrimary"), "value", Setup.MousePrimary);

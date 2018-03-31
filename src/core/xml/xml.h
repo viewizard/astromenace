@@ -187,9 +187,14 @@ public:
 		return false;
 	}
 
-	const std::string &GetEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName)
+	bool GetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, std::string &Result)
 	{
-		return XMLEntry->Attributes[AttributeName];
+		auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
+		if (tmpAttr == XMLEntry.Attributes.end())
+			return false;
+
+		Result = tmpAttr->second;
+		return true;
 	}
 
 	bool iGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, int &Result)

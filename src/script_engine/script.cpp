@@ -438,13 +438,15 @@ bool cScriptEngine::Update(float Time)
 
 												// перебор по всем меткам
 												while (tmpEntry) {
-													//	if (!strcmp(tmpEntry->Name, "Label"))
-													if (xmlDoc->TestEntryAttribute(tmpEntry, "name"))
-														if (xmlDoc->GetEntryAttribute(tmpEntry, "name") == xmlDoc->GetEntryAttribute(xmlEntry, "label")) {
-															// ставим новый указатель
-															xmlEntry = tmpEntry;
-															return true;
-														}
+													std::string tmpLabel{};
+													std::string tmpName{};
+													if (xmlDoc->GetEntryAttribute(*tmpEntry, "name", tmpName) &&
+													    xmlDoc->GetEntryAttribute(*xmlEntry, "label", tmpLabel) &&
+													    (tmpLabel == tmpName)) {
+														// ставим новый указатель
+														xmlEntry = tmpEntry;
+														return true;
+													}
 													// берем следующую метку
 													tmpEntry = tmpEntry->Next;
 												}
@@ -484,9 +486,10 @@ bool cScriptEngine::Update(float Time)
 														NewText->Lifetime = -1.0f;
 														xmlDoc->fGetEntryAttribute(*xmlEntry, "life", NewText->Lifetime);
 
-														if (xmlDoc->TestEntryAttribute(xmlEntry, "text")) {
-															NewText->DrawText = new char[xmlDoc->GetEntryAttribute(xmlEntry, "text").size() + 1];
-															strcpy(NewText->DrawText, xmlDoc->GetEntryAttribute(xmlEntry, "text").c_str());
+														std::string tmpText{};
+														if (xmlDoc->GetEntryAttribute(*xmlEntry, "text", tmpText)) {
+															NewText->DrawText = new char[tmpText.size() + 1];
+															strcpy(NewText->DrawText, tmpText.c_str());
 														}
 
 														xmlDoc->iGetEntryAttribute(*xmlEntry, "posx", NewText->PosX);
