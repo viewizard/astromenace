@@ -25,7 +25,9 @@
 *************************************************************************************/
 
 // TODO translate comments
-// TODO should be revised in order to use std::string
+// TODO revise ParseTagContent() code, avoid erase()
+// TODO revise ParseTagContent() in order to use main buffer and begin/end position
+//      don't create temporary string buffers
 
 #include "../vfs/vfs.h"
 #include "xml.h"
@@ -39,22 +41,23 @@ const std::string EndLine{"\r\n"};
 } // unnamed namespace
 
 
-// считаем кол-во строк до текущего положения буфера
+/*
+ * Line number in XML file.
+ */
 #ifdef gamedebug
-static unsigned int GetLineNumber(const char *String, unsigned int Pos)
+static unsigned int GetLineNumber(const std::string &Buffer, unsigned int Pos)
 {
 	unsigned int LineNumber = 1;
-	unsigned int CurrentPos = 0;
 
-	while ((strlen(String) > 0) && (CurrentPos <= Pos)) {
-		if (String[0] == '\n') LineNumber++;
-		CurrentPos++;
-		String++;
+	for (unsigned int i = 0; i < Pos; i++) {
+		if (Buffer[i] == '\n')
+			LineNumber++;
 	}
+
 	return LineNumber;
 }
 #else
-static unsigned int GetLineNumber(const char *UNUSED(String), unsigned int UNUSED(Pos))
+static unsigned int GetLineNumber(const std::string &UNUSED(Buffer), unsigned int UNUSED(Pos))
 {
 	return 0;
 }
@@ -63,73 +66,63 @@ static unsigned int GetLineNumber(const char *UNUSED(String), unsigned int UNUSE
 /*
  * Parce tag line.
  */
-bool cXMLDocument::ParseTagLine(const char *OriginBuffer, unsigned int StartPosition, const char *Buffer, sXMLEntry *XMLEntry)
+bool cXMLDocument::ParseTagLine(unsigned int LineNumber, const std::string &Buffer, sXMLEntry *XMLEntry)
 {
 	// 1 - получаем имя тэга (начинается сразу после символа <, а заканчивается пробелом, >, />, или символом таб)
-	auto TagNameEnd = std::string(Buffer).find(" ");
-	if ((TagNameEnd == std::string::npos) ||
-	    ((std::string(Buffer).find("\t") != std::string::npos) && (TagNameEnd > std::string(Buffer).find("\t"))))
-		TagNameEnd = std::string(Buffer).find("\t");
-	if ((TagNameEnd == std::string::npos) ||
-	    ((std::string(Buffer).find(">") != std::string::npos) && (TagNameEnd > std::string(Buffer).find(">"))))
-		TagNameEnd = std::string(Buffer).find(">");
-	if ((TagNameEnd == std::string::npos) ||
-	    ((std::string(Buffer).find("/>") != std::string::npos) && (TagNameEnd > std::string(Buffer).find("/>"))))
-		TagNameEnd = std::string(Buffer).find("/>");
-
-	XMLEntry->Name = std::string(Buffer).substr(1, TagNameEnd - 1);
+	std::string::size_type TagNameEnd = Buffer.find_first_of(" />\t");
+	XMLEntry->Name = Buffer.substr(1, TagNameEnd - 1);
 
 	// 2 - проверяем наличие атрибутов и заносим их в динамический массив
 	unsigned int i = TagNameEnd;
-	while (((Buffer + i)[0] != '>') || ((Buffer + i)[0] != '\0')) {
+	while ((Buffer[i] != '>') || (Buffer[i] != '\0')) {
 		// пропускаем все пробелы и табы
-		while ((((Buffer + i)[0] == ' ') || ((Buffer + i)[0] == '\t')) && ((Buffer + i)[0] != '\0')) {
+		while (((Buffer[i] == ' ') || (Buffer[i] == '\t')) && (Buffer[i] != '\0')) {
 			i++;
 		}
-		if ((Buffer + i)[0] == '\0') {
+		if (Buffer[i] == '\0') {
 			std::cerr << __func__ << "(): " << "XML file corrupted, line: "
-				  << GetLineNumber(OriginBuffer, StartPosition) << "\n";
+				  << LineNumber << "\n";
 			break;
 		}
 		// еще раз проверяем, возможно завершение тэга ставили через пробел или таб
-		if (((Buffer + i)[0] == '>') || (!strncmp(Buffer + i, "/>", strlen("/>"))))
+		if ((Buffer[i] == '>') || (!strncmp(Buffer.data() + i, "/>", strlen("/>"))))
 			break;
 
 		// находим имя атрибута
 		unsigned int AttribNameStart = i;
-		while (((Buffer + i)[0] != '=') && ((Buffer + i)[0] != '\0')) {
+		while ((Buffer[i] != '=') && (Buffer[i] != '\0')) {
 			i++;
 		}
-		if ((Buffer + i)[0] == '\0') {
+		if (Buffer[i] == '\0') {
 			std::cerr << __func__ << "(): " << "XML file corrupted, line: "
-				  << GetLineNumber(OriginBuffer, StartPosition) << "\n";
+				  << LineNumber << "\n";
 			break;
 		}
 		unsigned int AttribNameEnd = i;
 		// пропускаем все до кавычек (они у нас следующие, после знака равенства)
 		i += 2;
 		unsigned int AttribDataStart = i;
-		while ((((Buffer + i)[0] != '\'') && ((Buffer + i)[0] != '\"')) && ((Buffer + i)[0] != '\0')) {
+		while (((Buffer[i] != '\'') && (Buffer[i] != '\"')) && (Buffer[i] != '\0')) {
 			i++;
 		}
-		if ((Buffer + i)[0] == '\0') {
+		if (Buffer[i] == '\0') {
 			std::cerr << __func__ << "(): " << "XML file corrupted, line: "
-				  << GetLineNumber(OriginBuffer, StartPosition) << "\n";
+				  << LineNumber << "\n";
 			break;
 		}
 		unsigned int AttribDataEnd = i;
 		i++;
 
 		// собираем новый атрибут и подключаем его к элементу
-		std::string tmpAttrIndex = std::string(Buffer).substr(AttribNameStart, AttribNameEnd - AttribNameStart);
-		XMLEntry->Attributes[tmpAttrIndex] = std::string(Buffer).substr(AttribDataStart, AttribDataEnd - AttribDataStart);
+		std::string tmpAttrIndex = Buffer.substr(AttribNameStart, AttribNameEnd - AttribNameStart);
+		XMLEntry->Attributes[tmpAttrIndex] = Buffer.substr(AttribDataStart, AttribDataEnd - AttribDataStart);
 	}
 
 	// 3 - определяем и номер строки
-	XMLEntry->LineNumber = GetLineNumber(OriginBuffer, StartPosition);
+	XMLEntry->LineNumber = LineNumber;
 
 	// 4 - определить есть ли в ней атрибут закрытия '/', или у нас есть еще и контент и закрывающий тэг
-	if (std::string(Buffer).find("/>") != std::string::npos)
+	if (Buffer.find("/>") != std::string::npos)
 		return false;
 
 	return true;
@@ -139,30 +132,30 @@ bool cXMLDocument::ParseTagLine(const char *OriginBuffer, unsigned int StartPosi
  * Parse tag content.
  * We start from root and parse all children tags recursively.
  */
-bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartPosition,
-				   const char *Buffer, sXMLEntry *ParentXMLEntry)
+bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, unsigned int StartPosition,
+				   std::string &Buffer, sXMLEntry *ParentXMLEntry)
 {
 	// 1 - это просто контент, заносим данные и выходим из рекурсии
-	if (std::string(Buffer).find("<") == std::string::npos) {
-		ParentXMLEntry->Content = std::string(Buffer).substr(0, strlen(Buffer));
+	if (Buffer.find("<") == std::string::npos) {
+		ParentXMLEntry->Content = Buffer;
 		return true;
 	}
 	// 2 - если в строке нашли открывающий символ тэга - идем на рекурсивную обработку строки с хмл данными
 
 	// в цикле, пока не достигнем конца обрабатываемой строки:
 	unsigned int CurrentBufferPosition = 0;
-	while (strlen(Buffer) > 0) {
+	while (!Buffer.empty()) {
 		// находим положение открывающего тэг символа и закрывающего
-		auto DetectTagOpenSymbol = std::string(Buffer).find("<");
+		auto DetectTagOpenSymbol = Buffer.find("<");
 
 		// если в строке уже нет открывающих символов - просто выходим, все проверили
 		if (DetectTagOpenSymbol == std::string::npos)
 			return true;
 
 		// это может быть комментарий, проверяем
-		if (!strncmp(Buffer + DetectTagOpenSymbol, "<!--", strlen("<!--"))) {
+		if (!strncmp(Buffer.data() + DetectTagOpenSymbol, "<!--", strlen("<!--"))) {
 			// ищем завершающую часть, и сразу перемещаемся к ней
-			auto DetectCommentCloseSymbol = std::string(Buffer).find("-->");
+			auto DetectCommentCloseSymbol = Buffer.find("-->");
 			if (DetectCommentCloseSymbol == std::string::npos) {
 				std::cerr << __func__ << "(): "
 					  << "XML file corrupted, can't find comment end in line "
@@ -171,12 +164,13 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 					  << "\n";
 				return false;
 			}
-			Buffer += DetectCommentCloseSymbol + strlen("-->");
+			Buffer.erase(0, DetectCommentCloseSymbol + strlen("-->"));
 			CurrentBufferPosition += DetectCommentCloseSymbol + strlen("-->");
+			// FIXME continue in the middle of the cycle
 			continue;
 		}
 
-		auto DetectTagCloseSymbol = std::string(Buffer).find(">");
+		auto DetectTagCloseSymbol = Buffer.find(">");
 		// если был открывающий символ, но нет закрывающего - это ошибка структуры документа
 		if (DetectTagCloseSymbol == std::string::npos) {
 			std::cerr << __func__ << "(): "
@@ -200,15 +194,15 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 		}
 
 		// полученные данные передаем на обработку и анализ строки элемента
-		std::string TagString = std::string(Buffer).substr(DetectTagOpenSymbol,
-								   DetectTagCloseSymbol - DetectTagOpenSymbol);
-		bool ElementHaveContent = ParseTagLine(OriginBuffer,
-						       StartPosition + DetectTagOpenSymbol + CurrentBufferPosition,
-						       TagString.c_str(), XMLEntry);
+		std::string TagString = Buffer.substr(DetectTagOpenSymbol,
+						      DetectTagCloseSymbol - DetectTagOpenSymbol);
+		unsigned int LineNumber = GetLineNumber(OriginBuffer,
+							StartPosition + DetectTagOpenSymbol + CurrentBufferPosition);
+		bool ElementHaveContent = ParseTagLine(LineNumber, TagString, XMLEntry);
 
 		// если у нас закрытый тэг - с этим элементом закончили, идем искать дальше
 		if (!ElementHaveContent) {
-			Buffer += DetectTagCloseSymbol;
+			Buffer.erase(0, DetectTagCloseSymbol);
 			CurrentBufferPosition += DetectTagCloseSymbol;
 			// FIXME continue in the middle of the cycle
 			continue;
@@ -216,7 +210,7 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 
 		// если тэг открытый - ищем завершающий тэг </имя>
 		std::string CloseElement{"</" + XMLEntry->Name + ">"};
-		auto CloseElementPosition = std::string(Buffer).find(CloseElement);
+		auto CloseElementPosition = Buffer.find(CloseElement);
 		// если закрывающего элемента нет - значит файл поврежден
 		if (CloseElementPosition == std::string::npos) {
 			std::cerr << __func__ << "(): "
@@ -231,18 +225,18 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 
 		// передаем данные на рекурсивную обработку (если закрывающий тэг не стоит сразу после открывающего)
 		if (DetectTagCloseSymbol < CloseElementPosition) {
-			std::string ElementContent = std::string(Buffer).substr(DetectTagCloseSymbol,
-										CloseElementPosition - DetectTagCloseSymbol);
+			std::string ElementContent = Buffer.substr(DetectTagCloseSymbol,
+								   CloseElementPosition - DetectTagCloseSymbol);
 			if (!ParseTagContent(OriginBuffer,
 					     DetectTagCloseSymbol + StartPosition + CurrentBufferPosition,
-					     ElementContent.c_str(), XMLEntry)) {
+					     ElementContent, XMLEntry)) {
 				// вернули с ошибкой, выходим
 				return false;
 			}
 		}
 
 		// смещаем буфер
-		Buffer += CloseElementPosition + CloseElement.size();
+		Buffer.erase(0, CloseElementPosition + CloseElement.size());
 		CurrentBufferPosition += CloseElementPosition + XMLEntry->Name.size() + strlen("</>");
 	}
 
@@ -277,8 +271,8 @@ cXMLDocument::cXMLDocument(const std::string &XMLFileName)
 	}
 
 	// start recursive load
-	if (!ParseTagContent(Buffer.c_str(), Buffer.find("?>") + strlen("?>"),
-			     Buffer.c_str() + Buffer.find("?>") + strlen("?>"), nullptr)) {
+	std::string tmpBuffer{Buffer.substr(Buffer.find("?>") + strlen("?>"))};
+	if (!ParseTagContent(Buffer, Buffer.find("?>") + strlen("?>"), tmpBuffer, nullptr)) {
 		std::cerr << __func__ << "(): " << "XML file corrupted: " << XMLFileName << "\n";
 		return;
 	}

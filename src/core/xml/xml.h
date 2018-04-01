@@ -212,11 +212,10 @@ private:
 	// Save XML elements to file recursively.
 	void SaveRecursive(const sXMLEntry &XMLEntry, SDL_RWops *File, unsigned int Level);
 	// Parce tag line.
-	bool ParseTagLine(const char *OriginBuffer, unsigned int StartPosition,
-			  const char *Buffer, sXMLEntry *XMLEntry);
+	bool ParseTagLine(unsigned int LineNumber, const std::string &Buffer, sXMLEntry *XMLEntry);
 	// Parse tag content.
-	bool ParseTagContent(const char *OriginBuffer, unsigned int StartPosition,
-			     const char *Buffer, sXMLEntry *ParentXMLEntry);
+	bool ParseTagContent(const std::string &OriginBuffer, unsigned int StartPosition,
+			     std::string &Buffer, sXMLEntry *ParentXMLEntry);
 
 	// Accordinately to https://www.w3schools.com/XML/xml_syntax.asp
 	// "XML documents must contain one root element that is the parent of all other elements".
