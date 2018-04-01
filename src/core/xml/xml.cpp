@@ -142,30 +142,8 @@ bool cXMLDocument::ParseTagLine(const char *OriginBuffer, unsigned int StartPosi
 bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartPosition,
 				   const char *Buffer, sXMLEntry *ParentXMLEntry)
 {
-	// проверяем наличие вложенных тэгов
-	bool ChildsFound{true};
-	auto DetectTagOpenSymbol = std::string(Buffer).find("<");
-	// если символа открытия в строке нет - это просто данные, иначе проверяем, что стоит до этого символа
-	if (DetectTagOpenSymbol != std::string::npos) {
-		unsigned int CurrentPos{0};
-		while (CurrentPos != DetectTagOpenSymbol) {
-			// если до открывающего тэга идут не " ", "\t", "\r", "\n", значит у нас просто данные
-			if (((Buffer + CurrentPos)[0] != ' ') &&
-			    ((Buffer + CurrentPos)[0] != '\t') &&
-			    ((Buffer + CurrentPos)[0] != '\r') &&
-			    ((Buffer + CurrentPos)[0] != '\n')) {
-				ChildsFound = false;
-				break;
-			}
-
-			CurrentPos++;
-		}
-
-	} else
-		ChildsFound = false;
-
-	// 1 - это просто контент, заносим данные и выходи из рекурсии
-	if (!ChildsFound) {
+	// 1 - это просто контент, заносим данные и выходим из рекурсии
+	if (std::string(Buffer).find("<") == std::string::npos) {
 		ParentXMLEntry->Content = std::string(Buffer).substr(0, strlen(Buffer));
 		return true;
 	}
@@ -173,9 +151,13 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 
 	// в цикле, пока не достигнем конца обрабатываемой строки:
 	unsigned int CurrentBufferPosition = 0;
-	while(strlen(Buffer) > 0) {
+	while (strlen(Buffer) > 0) {
 		// находим положение открывающего тэг символа и закрывающего
-		DetectTagOpenSymbol = std::string(Buffer).find("<");
+		auto DetectTagOpenSymbol = std::string(Buffer).find("<");
+
+		// если в строке уже нет открывающих символов - просто выходим, все проверили
+		if (DetectTagOpenSymbol == std::string::npos)
+			return true;
 
 		// это может быть комментарий, проверяем
 		if (!strncmp(Buffer + DetectTagOpenSymbol, "<!--", strlen("<!--"))) {
@@ -194,9 +176,6 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 			continue;
 		}
 
-		// если в строке уже нет открывающих символов - просто выходим, все проверили
-		if (DetectTagOpenSymbol == std::string::npos)
-			return true;
 		auto DetectTagCloseSymbol = std::string(Buffer).find(">");
 		// если был открывающий символ, но нет закрывающего - это ошибка структуры документа
 		if (DetectTagCloseSymbol == std::string::npos) {
@@ -263,7 +242,7 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 		}
 
 		// смещаем буфер
-		Buffer += CloseElementPosition + XMLEntry->Name.size() + strlen("</>");
+		Buffer += CloseElementPosition + CloseElement.size();
 		CurrentBufferPosition += CloseElementPosition + XMLEntry->Name.size() + strlen("</>");
 	}
 
