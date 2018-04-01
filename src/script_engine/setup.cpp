@@ -142,7 +142,13 @@ void SaveXMLSetupFile()
 
 	sXMLEntry *RootXMLEntry = XMLdoc->AddEntry(nullptr, "AstroMenaceSettings");
 
-	XMLdoc->AddComment(RootXMLEntry, " AstroMenace game Settings ");
+	if (!RootXMLEntry) {
+		std::cerr << __func__ << "(): " << "Can't create XML root element.\n";
+		delete XMLdoc;
+		return;
+	}
+
+	XMLdoc->AddComment(*RootXMLEntry, " AstroMenace game Settings ");
 
 
 
@@ -156,16 +162,16 @@ void SaveXMLSetupFile()
 
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "Width"), "value", Setup.Width);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "Height"), "value", Setup.Height);
-	XMLdoc->AddComment(RootXMLEntry, " Window (BPP = 0) or Full Screen (BPP = 16, 24 or 32) ");
+	XMLdoc->AddComment(*RootXMLEntry, " Window (BPP = 0) or Full Screen (BPP = 16, 24 or 32) ");
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "BPP"), "value", Setup.BPP);
-	XMLdoc->AddComment(RootXMLEntry, " Aspect Ratio must be 4:3 or 16:10 ");
+	XMLdoc->AddComment(*RootXMLEntry, " Aspect Ratio must be 4:3 or 16:10 ");
 	if (Setup.iAspectRatioWidth == 1024)
 		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "AspectRatio"), "value", "4:3");
 	else
 		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "AspectRatio"), "value", "16:10");
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value", Setup.CameraModeWithStandardAspectRatio);
 
-	XMLdoc->AddComment(RootXMLEntry, " Common settings ");
+	XMLdoc->AddComment(*RootXMLEntry, " Common settings ");
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "TextureFilteringMode"), "value", Setup.TextureFilteringMode);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "TexturesQuality"), "value", Setup.TexturesQuality);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "MSAA"), "value", Setup.MSAA);
@@ -186,7 +192,7 @@ void SaveXMLSetupFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "GameSpeed"), "value", Setup.GameSpeed);
 
 
-	XMLdoc->AddComment(RootXMLEntry, " Control settings ");
+	XMLdoc->AddComment(*RootXMLEntry, " Control settings ");
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "KeyboardDecreaseGameSpeed"), "value", SDL_GetKeyName(Setup.KeyboardDecreaseGameSpeed));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "KeyboardResetGameSpeed"), "value", SDL_GetKeyName(Setup.KeyboardResetGameSpeed));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(RootXMLEntry, "KeyboardIncreaseGameSpeed"), "value", SDL_GetKeyName(Setup.KeyboardIncreaseGameSpeed));

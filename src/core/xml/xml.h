@@ -142,15 +142,12 @@ public:
 			AddEntryAttribute(XMLEntry, AttributeName, "off");
 	}
 
-	void AddComment(sXMLEntry *ParentXMLEntry, const std::string &Text)
+	void AddComment(sXMLEntry &ParentXMLEntry, const std::string &Text)
 	{
-		if (!ParentXMLEntry)
-			return;
-
 		// NOTE emplace_back() return reference to the inserted element (since C++17)
-		ParentXMLEntry->ChildrenList.emplace_back();
-		ParentXMLEntry->ChildrenList.back().Name = Text;
-		ParentXMLEntry->ChildrenList.back().EntryType = eEntryType::Comment;
+		ParentXMLEntry.ChildrenList.emplace_back();
+		ParentXMLEntry.ChildrenList.back().Name = Text;
+		ParentXMLEntry.ChildrenList.back().EntryType = eEntryType::Comment;
 	}
 
 	sXMLEntry *FindEntryByName(sXMLEntry &ParentXMLEntry, const std::string &Name)
