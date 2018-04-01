@@ -1062,8 +1062,8 @@ void LoadGameData(eLoading LoadType)
 		}
 
 		// переходим на загрузку
-		sXMLEntry *xmlEntry = xmlDoc->FindEntryByName(xmlDoc->GetRootEntry(), "Load");
-		if (xmlEntry == nullptr) {
+		sXMLEntry *xmlEntry = xmlDoc->FindEntryByName(*xmlDoc->GetRootEntry(), "Load");
+		if (!xmlEntry) {
 			std::cerr << __func__ << "(): " << "Can't find Load element in the: " << FileName << "\n";
 			delete xmlDoc;
 			exit(0);

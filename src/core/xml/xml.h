@@ -92,6 +92,9 @@ public:
 
 	void AddEntryContent(sXMLEntry *XMLEntry, const std::string &EntryData)
 	{
+		if (!XMLEntry)
+			return;
+
 		XMLEntry->Content = EntryData;
 	}
 
@@ -114,16 +117,25 @@ public:
 
 	void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, int AttributeData)
 	{
+		if (!XMLEntry)
+			return;
+
 		AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
 	}
 
 	void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, float AttributeData)
 	{
+		if (!XMLEntry)
+			return;
+
 		AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
 	}
 
 	void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, bool AttributeData)
 	{
+		if (!XMLEntry)
+			return;
+
 		if (AttributeData)
 			AddEntryAttribute(XMLEntry, AttributeName, "on");
 		else
@@ -132,18 +144,18 @@ public:
 
 	void AddComment(sXMLEntry *ParentXMLEntry, const std::string &Text)
 	{
+		if (!ParentXMLEntry)
+			return;
+
 		// NOTE emplace_back() return reference to the inserted element (since C++17)
 		ParentXMLEntry->ChildrenList.emplace_back();
 		ParentXMLEntry->ChildrenList.back().Name = Text;
 		ParentXMLEntry->ChildrenList.back().EntryType = eEntryType::Comment;
 	}
 
-	sXMLEntry *FindEntryByName(sXMLEntry *ParentXMLEntry, const std::string &Name)
+	sXMLEntry *FindEntryByName(sXMLEntry &ParentXMLEntry, const std::string &Name)
 	{
-		if (ParentXMLEntry == nullptr)
-			return nullptr;
-
-		for (auto &tmpEntry : ParentXMLEntry->ChildrenList) {
+		for (auto &tmpEntry : ParentXMLEntry.ChildrenList) {
 			if (tmpEntry.Name == Name)
 				return &tmpEntry;
 		}

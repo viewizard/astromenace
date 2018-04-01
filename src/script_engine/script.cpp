@@ -144,8 +144,8 @@ bool cScriptEngine::RunScript(const char *FileName, float InitTime)
 
 
 	// переходим на действия
-	sXMLEntry *xmlEntry  = xmlDoc->FindEntryByName(xmlDoc->GetRootEntry(), "Action");
-	if (xmlEntry == nullptr) {
+	sXMLEntry *xmlEntry = xmlDoc->FindEntryByName(*xmlDoc->GetRootEntry(), "Action");
+	if (!xmlEntry) {
 		std::cerr << __func__ << "(): " << "Can't find Action element in the: " << FileName << "\n";
 		delete xmlDoc;
 		xmlDoc = nullptr;
@@ -284,7 +284,7 @@ bool cScriptEngine::Update(float Time)
 
 
 
-	for (; xmlEntryIter != xmlDoc->FindEntryByName(xmlDoc->GetRootEntry(), "Action")->ChildrenList.end(); ++xmlEntryIter) {
+	for (; xmlEntryIter != xmlDoc->FindEntryByName(*xmlDoc->GetRootEntry(), "Action")->ChildrenList.end(); ++xmlEntryIter) {
 		sXMLEntry &xmlEntry = *xmlEntryIter;
 		if (xmlEntry.Name == "TimeLine") {
 			float onTime = 0.0f;
@@ -412,7 +412,7 @@ bool cScriptEngine::Update(float Time)
 			std::string tmpLabel{};
 			if (xmlDoc->GetEntryAttribute(xmlEntry, "label", tmpLabel)) {
 				// нужно перебрать все метки и остановится на нужной
-				sXMLEntry *tmpCycle = xmlDoc->FindEntryByName(xmlDoc->GetRootEntry(), "Action");
+				sXMLEntry *tmpCycle = xmlDoc->FindEntryByName(*xmlDoc->GetRootEntry(), "Action");
 				// перебор по всем меткам
 				for (auto tmpEntryIter = tmpCycle->ChildrenList.begin(); tmpEntryIter != tmpCycle->ChildrenList.end(); ++tmpEntryIter) {
 					sXMLEntry &tmpEntry = *tmpEntryIter;
