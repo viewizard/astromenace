@@ -61,7 +61,7 @@ static unsigned int GetLineNumber(const char *UNUSED(String), unsigned int UNUSE
 #endif // gamedebug
 
 /*
- *
+ * Parce tag line.
  */
 bool cXMLDocument::ParseTagLine(const char *OriginBuffer, unsigned int StartPosition, const char *Buffer, sXMLEntry *XMLEntry)
 {
@@ -136,7 +136,8 @@ bool cXMLDocument::ParseTagLine(const char *OriginBuffer, unsigned int StartPosi
 }
 
 /*
- *
+ * Parse tag content.
+ * We start from root and parse all children tags recursively.
  */
 bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartPosition,
 				   const char *Buffer, sXMLEntry *ParentXMLEntry)
@@ -269,24 +270,24 @@ bool cXMLDocument::ParseTagContent(const char *OriginBuffer, unsigned int StartP
 	return false;
 }
 
-//-----------------------------------------------------------------------------
-// Загрузка
-//-----------------------------------------------------------------------------
+/*
+ * Load XML from file.
+ */
 cXMLDocument::cXMLDocument(const std::string &XMLFileName)
 {
 	std::cout << "Open XML file: " << XMLFileName << "\n";
 
-	// если что-то было загружено ранее - освобождаем
+	// just to be sure we release any previous data
 	this->~cXMLDocument();
 
-	// читаем данные
+	// read all data into buffer
 	std::string Buffer;
 	if (vw_VFStoBuffer(XMLFileName, Buffer)) {
 		std::cerr << __func__ << "(): " << "XML file not found: " << XMLFileName << "\n";
 		return;
 	}
 
-	// проверяем заголовок
+	// check header
 	if (Buffer.find("<?xml") == std::string::npos) {
 		std::cerr << __func__ << "(): " << "XML file corrupted: " << XMLFileName << "\n";
 		return;
@@ -296,7 +297,7 @@ cXMLDocument::cXMLDocument(const std::string &XMLFileName)
 		return;
 	}
 
-	// идем на рекурсивную обработку
+	// start recursive load
 	if (!ParseTagContent(Buffer.c_str(), Buffer.find("?>") + strlen("?>"),
 			     Buffer.c_str() + Buffer.find("?>") + strlen("?>"), nullptr)) {
 		std::cerr << __func__ << "(): " << "XML file corrupted: " << XMLFileName << "\n";

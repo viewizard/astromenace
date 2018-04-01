@@ -24,7 +24,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #ifndef XML_H
@@ -54,30 +53,20 @@ enum class eEntryType {
 };
 
 struct sXMLEntry {
-	// тип записи
 	eEntryType EntryType{eEntryType::Regular};
-	// имя элемента (если коментарий - текст)
-	std::string Name;
-	// содержимое элемента
+	std::string Name; // name, if entry type is comment - comment's text
 	std::string Content;
-	// номер строки в документе (если читаем из документа, если создаем - всегда ноль)
-	int LineNumber{0};
-
-	// Attributes
 	std::unordered_map<std::string, std::string> Attributes;
-	// Children
 	std::list<sXMLEntry> ChildrenList{};
+
+	int LineNumber{0}; // line number in file (for new created, 0)
 };
 
 class cXMLDocument {
 public:
 	cXMLDocument() = default;
+	// Load XML from file.
 	cXMLDocument(const std::string &XMLFileName);
-
-	bool ParseTagLine(const char *OriginBuffer, unsigned int StartPosition,
-			  const char *Buffer, sXMLEntry *XMLEntry);
-	bool ParseTagContent(const char *OriginBuffer, unsigned int StartPosition,
-			     const char *Buffer, sXMLEntry *ParentXMLEntry);
 
 	// Save XML to file (libSDL RWops).
 	bool Save(const std::string &XMLFileName);
@@ -211,6 +200,12 @@ public:
 private:
 	// Save XML elements to file recursively.
 	void SaveRecursive(const sXMLEntry &XMLEntry, SDL_RWops *File, unsigned int Level);
+	// Parce tag line.
+	bool ParseTagLine(const char *OriginBuffer, unsigned int StartPosition,
+			  const char *Buffer, sXMLEntry *XMLEntry);
+	// Parse tag content.
+	bool ParseTagContent(const char *OriginBuffer, unsigned int StartPosition,
+			     const char *Buffer, sXMLEntry *ParentXMLEntry);
 
 	// Accordinately to https://www.w3schools.com/XML/xml_syntax.asp
 	// "XML documents must contain one root element that is the parent of all other elements".
