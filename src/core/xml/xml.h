@@ -71,23 +71,24 @@ public:
 	// Save XML to file (libSDL RWops).
 	bool Save(const std::string &XMLFileName);
 
+	sXMLEntry *CreateRootEntry(const std::string &EntryName)
+	{
+		RootXMLEntry.reset(new sXMLEntry);
+		RootXMLEntry->Name = EntryName;
+		return RootXMLEntry.get();
+	}
+
 	sXMLEntry *GetRootEntry()
 	{
 		return RootXMLEntry.get();
 	}
 
-	sXMLEntry *AddEntry(sXMLEntry *ParentXMLEntry, const std::string &EntryName)
+	sXMLEntry *AddEntry(sXMLEntry &ParentXMLEntry, const std::string &EntryName)
 	{
-		if (ParentXMLEntry == nullptr) {
-			RootXMLEntry.reset(new sXMLEntry);
-			RootXMLEntry->Name = EntryName;
-			return RootXMLEntry.get();
-		} else {
-			// NOTE emplace_back() return reference to the inserted element (since C++17)
-			ParentXMLEntry->ChildrenList.emplace_back();
-			ParentXMLEntry->ChildrenList.back().Name = EntryName;
-			return &ParentXMLEntry->ChildrenList.back();
-		}
+		// NOTE emplace_back() return reference to the inserted element (since C++17)
+		ParentXMLEntry.ChildrenList.emplace_back();
+		ParentXMLEntry.ChildrenList.back().Name = EntryName;
+		return &ParentXMLEntry.ChildrenList.back();
 	}
 
 	void AddEntryContent(sXMLEntry *XMLEntry, const std::string &EntryData)
@@ -150,6 +151,7 @@ public:
 		ParentXMLEntry.ChildrenList.back().EntryType = eEntryType::Comment;
 	}
 
+	// find first children element by name
 	sXMLEntry *FindEntryByName(sXMLEntry &ParentXMLEntry, const std::string &Name)
 	{
 		for (auto &tmpEntry : ParentXMLEntry.ChildrenList) {

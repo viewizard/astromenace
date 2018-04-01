@@ -283,7 +283,7 @@ bool cScriptEngine::Update(float Time)
 
 
 
-
+	// we don't check FindEntryByName() result, since we checked it in RunScript()
 	for (; xmlEntryIter != xmlDoc->FindEntryByName(*xmlDoc->GetRootEntry(), "Action")->ChildrenList.end(); ++xmlEntryIter) {
 		sXMLEntry &xmlEntry = *xmlEntryIter;
 		if (xmlEntry.Name == "TimeLine") {
@@ -412,6 +412,7 @@ bool cScriptEngine::Update(float Time)
 			std::string tmpLabel{};
 			if (xmlDoc->GetEntryAttribute(xmlEntry, "label", tmpLabel)) {
 				// нужно перебрать все метки и остановится на нужной
+				// we don't check FindEntryByName() result, since we checked it in RunScript()
 				sXMLEntry *tmpCycle = xmlDoc->FindEntryByName(*xmlDoc->GetRootEntry(), "Action");
 				// перебор по всем меткам
 				for (auto tmpEntryIter = tmpCycle->ChildrenList.begin(); tmpEntryIter != tmpCycle->ChildrenList.end(); ++tmpEntryIter) {
