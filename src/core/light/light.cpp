@@ -113,11 +113,11 @@ int vw_CheckAndActivateAllLights(int &Type1, int &Type2, const sVECTOR3D &Locati
 		vw_CalculateAllPointLightsAttenuation(Location, Radius2, &AffectedLightsMap);
 
 		// enable lights with less attenuation first
-		for (auto &tmp : AffectedLightsMap) {
+		for (auto &tmpLight : AffectedLightsMap) {
 			if ((Type2 >= PointLimit) ||
 			    (Type1 + Type2 >= vw_GetDevCaps()->MaxActiveLights))
 				break;
-			if (tmp.second->Activate(Type1 + Type2, Matrix))
+			if (tmpLight.second->Activate(Type1 + Type2, Matrix))
 				Type2++;
 		}
 	}
