@@ -278,7 +278,7 @@ cXMLDocument::cXMLDocument(const std::string &XMLFileName)
 	std::cout << "Open XML file: " << XMLFileName << "\n";
 
 	// just to be sure we release any previous data
-	this->~cXMLDocument();
+	RootXMLEntry.reset();
 
 	// read all data into buffer
 	std::string Buffer;
