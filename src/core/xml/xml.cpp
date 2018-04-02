@@ -25,7 +25,6 @@
 *************************************************************************************/
 
 // TODO translate comments
-// TODO revise ParseTagContent() code, avoid erase()
 // TODO revise ParseTagContent() in order to use main buffer and begin/end position
 //      don't create temporary string buffers
 
@@ -102,7 +101,7 @@ bool cXMLDocument::ParseTagLine(unsigned int LineNumber, const std::string &Buff
 		// пропускаем все до кавычек (они у нас следующие, после знака равенства)
 		i += 2;
 		unsigned int AttribDataStart = i;
-		while (((Buffer[i] != '\'') && (Buffer[i] != '\"')) && (Buffer[i] != '\0')) {
+		while ((Buffer[i] != '\'') && (Buffer[i] != '\"') && (Buffer[i] != '\0')) {
 			i++;
 		}
 		if (Buffer[i] == '\0') {
@@ -133,7 +132,7 @@ bool cXMLDocument::ParseTagLine(unsigned int LineNumber, const std::string &Buff
  * We start from root and parse all children tags recursively.
  */
 bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, unsigned int StartPosition,
-				   std::string &Buffer, sXMLEntry *ParentXMLEntry)
+				   const std::string &Buffer, sXMLEntry *ParentXMLEntry)
 {
 	// 1 - это просто контент, заносим данные и выходим из рекурсии
 	if (Buffer.find("<") == std::string::npos) {
@@ -144,9 +143,9 @@ bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, unsigned int
 
 	// в цикле, пока не достигнем конца обрабатываемой строки:
 	unsigned int CurrentBufferPosition = 0;
-	while (!Buffer.empty()) {
+	while (CurrentBufferPosition < Buffer.size()) {
 		// находим положение открывающего тэг символа и закрывающего
-		auto DetectTagOpenSymbol = Buffer.find("<");
+		auto DetectTagOpenSymbol = Buffer.find("<", CurrentBufferPosition);
 
 		// если в строке уже нет открывающих символов - просто выходим, все проверили
 		if (DetectTagOpenSymbol == std::string::npos)
@@ -155,28 +154,27 @@ bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, unsigned int
 		// это может быть комментарий, проверяем
 		if (!strncmp(Buffer.data() + DetectTagOpenSymbol, "<!--", strlen("<!--"))) {
 			// ищем завершающую часть, и сразу перемещаемся к ней
-			auto DetectCommentCloseSymbol = Buffer.find("-->");
+			auto DetectCommentCloseSymbol = Buffer.find("-->", CurrentBufferPosition);
 			if (DetectCommentCloseSymbol == std::string::npos) {
 				std::cerr << __func__ << "(): "
 					  << "XML file corrupted, can't find comment end in line "
 					  << GetLineNumber(OriginBuffer,
-							   StartPosition + DetectTagOpenSymbol + CurrentBufferPosition)
+							   StartPosition + CurrentBufferPosition)
 					  << "\n";
 				return false;
 			}
-			Buffer.erase(0, DetectCommentCloseSymbol + strlen("-->"));
-			CurrentBufferPosition += DetectCommentCloseSymbol + strlen("-->");
+			CurrentBufferPosition = DetectCommentCloseSymbol + strlen("-->");
 			// FIXME continue in the middle of the cycle
 			continue;
 		}
 
-		auto DetectTagCloseSymbol = Buffer.find(">");
+		auto DetectTagCloseSymbol = Buffer.find(">", CurrentBufferPosition);
 		// если был открывающий символ, но нет закрывающего - это ошибка структуры документа
 		if (DetectTagCloseSymbol == std::string::npos) {
 			std::cerr << __func__ << "(): "
 				  << "XML file corrupted, can't find element end for element in line "
 				  << GetLineNumber(OriginBuffer,
-						   StartPosition + DetectTagOpenSymbol + CurrentBufferPosition)
+						   StartPosition + CurrentBufferPosition)
 				  << "\n";
 			return false;
 		}
@@ -197,20 +195,19 @@ bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, unsigned int
 		std::string TagString = Buffer.substr(DetectTagOpenSymbol,
 						      DetectTagCloseSymbol - DetectTagOpenSymbol);
 		unsigned int LineNumber = GetLineNumber(OriginBuffer,
-							StartPosition + DetectTagOpenSymbol + CurrentBufferPosition);
+							StartPosition + CurrentBufferPosition);
 		bool ElementHaveContent = ParseTagLine(LineNumber, TagString, XMLEntry);
 
 		// если у нас закрытый тэг - с этим элементом закончили, идем искать дальше
 		if (!ElementHaveContent) {
-			Buffer.erase(0, DetectTagCloseSymbol);
-			CurrentBufferPosition += DetectTagCloseSymbol;
+			CurrentBufferPosition = DetectTagCloseSymbol;
 			// FIXME continue in the middle of the cycle
 			continue;
 		}
 
 		// если тэг открытый - ищем завершающий тэг </имя>
 		std::string CloseElement{"</" + XMLEntry->Name + ">"};
-		auto CloseElementPosition = Buffer.find(CloseElement);
+		auto CloseElementPosition = Buffer.find(CloseElement, CurrentBufferPosition);
 		// если закрывающего элемента нет - значит файл поврежден
 		if (CloseElementPosition == std::string::npos) {
 			std::cerr << __func__ << "(): "
@@ -218,7 +215,7 @@ bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, unsigned int
 				  << XMLEntry->Name
 				  << " in line: "
 				  << GetLineNumber(OriginBuffer,
-						   StartPosition + DetectTagOpenSymbol + CurrentBufferPosition)
+						   StartPosition + CurrentBufferPosition)
 				  << "\n";
 			return false;
 		}
@@ -228,7 +225,7 @@ bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, unsigned int
 			std::string ElementContent = Buffer.substr(DetectTagCloseSymbol,
 								   CloseElementPosition - DetectTagCloseSymbol);
 			if (!ParseTagContent(OriginBuffer,
-					     DetectTagCloseSymbol + StartPosition + CurrentBufferPosition,
+					     StartPosition + CurrentBufferPosition,
 					     ElementContent, XMLEntry)) {
 				// вернули с ошибкой, выходим
 				return false;
@@ -236,8 +233,7 @@ bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, unsigned int
 		}
 
 		// смещаем буфер
-		Buffer.erase(0, CloseElementPosition + CloseElement.size());
-		CurrentBufferPosition += CloseElementPosition + XMLEntry->Name.size() + strlen("</>");
+		CurrentBufferPosition = CloseElementPosition + CloseElement.size();
 	}
 
 	return false;

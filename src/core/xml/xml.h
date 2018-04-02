@@ -215,7 +215,7 @@ private:
 	bool ParseTagLine(unsigned int LineNumber, const std::string &Buffer, sXMLEntry *XMLEntry);
 	// Parse tag content.
 	bool ParseTagContent(const std::string &OriginBuffer, unsigned int StartPosition,
-			     std::string &Buffer, sXMLEntry *ParentXMLEntry);
+			     const std::string &Buffer, sXMLEntry *ParentXMLEntry);
 
 	// Accordinately to https://www.w3schools.com/XML/xml_syntax.asp
 	// "XML documents must contain one root element that is the parent of all other elements".
