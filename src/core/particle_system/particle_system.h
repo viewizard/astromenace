@@ -78,11 +78,9 @@ private:
 };
 
 class cParticleSystem {
-	friend cParticleSystem *vw_CreateParticleSystem();
-	friend void vw_ReleaseParticleSystem(cParticleSystem *ParticleSystem);
-	friend void vw_ReleaseAllParticleSystems();
-
 public:
+	~cParticleSystem();
+
 	// нужно удалить
 	bool NeedDestroy{false};
 
@@ -215,11 +213,6 @@ public:
 	}
 
 private:
-	// don't let caller use new/delete directly for this class objects,
-	// only 'friend' functions are allowed for this class object's management
-	cParticleSystem() = default;
-	~cParticleSystem();
-
 	// последнее положение системы (для интерполяции)
 	sVECTOR3D PrevLocation{0.0f, 0.0f, 0.0f};
 	// текущее положение частиц в пространстве

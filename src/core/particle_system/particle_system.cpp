@@ -32,8 +32,6 @@
 //                               ^  ^  ^ second triangle indexes
 //                      ^  ^  ^ first triangle indexes
 
-// TODO (?) move to std::forward_list for particle systems management
-
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../camera/camera.h"
@@ -64,8 +62,8 @@ sGLSL *ParticleSystemGLSL{nullptr};
 int UniformLocationParticleTexture{0};
 int UniformLocationCameraPoint{0};
 
-cParticleSystem *StartParticleSystem{nullptr};
-cParticleSystem *EndParticleSystem{nullptr};
+// All particle systems.
+std::forward_list<cParticleSystem> ParticleSystemsList{};
 
 } // unnamed namespace
 
@@ -848,61 +846,15 @@ void vw_InitParticleSystems(bool UseGLSL, float Quality)
 	}
 }
 
-//-----------------------------------------------------------------------------
-//	Присоеденяем ParticleSystem к списку
-//-----------------------------------------------------------------------------
-static void AttachParticleSystem(cParticleSystem *NewParticleSystem)
-{
-	if (NewParticleSystem == nullptr)
-		return;
-
-	// первый в списке...
-	if (EndParticleSystem == nullptr) {
-		NewParticleSystem->Prev = nullptr;
-		NewParticleSystem->Next = nullptr;
-		StartParticleSystem = NewParticleSystem;
-		EndParticleSystem = NewParticleSystem;
-	} else { // продолжаем заполнение...
-		NewParticleSystem->Prev = EndParticleSystem;
-		NewParticleSystem->Next = nullptr;
-		EndParticleSystem->Next = NewParticleSystem;
-		EndParticleSystem = NewParticleSystem;
-	}
-}
-
-//-----------------------------------------------------------------------------
-//	Удаляем ParticleSystem из списка
-//-----------------------------------------------------------------------------
-static void DetachParticleSystem(cParticleSystem *OldParticleSystem)
-{
-	if (OldParticleSystem == nullptr)
-		return;
-
-	// переустанавливаем указатели...
-	if (StartParticleSystem == OldParticleSystem)
-		StartParticleSystem = OldParticleSystem->Next;
-	if (EndParticleSystem == OldParticleSystem)
-		EndParticleSystem = OldParticleSystem->Prev;
-
-	if (OldParticleSystem->Next != nullptr)
-		OldParticleSystem->Next->Prev = OldParticleSystem->Prev;
-	else if (OldParticleSystem->Prev != nullptr)
-		OldParticleSystem->Prev->Next = nullptr;
-
-	if (OldParticleSystem->Prev != nullptr)
-		OldParticleSystem->Prev->Next = OldParticleSystem->Next;
-	else if (OldParticleSystem->Next != nullptr)
-		OldParticleSystem->Next->Prev = nullptr;
-}
-
 /*
  * Create particle system.
  */
 cParticleSystem *vw_CreateParticleSystem()
 {
-	cParticleSystem *ParticleSystem = new cParticleSystem;
-	AttachParticleSystem(ParticleSystem);
-	return ParticleSystem;
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	ParticleSystemsList.emplace_front();
+	return &ParticleSystemsList.front();
 }
 
 /*
@@ -910,8 +862,15 @@ cParticleSystem *vw_CreateParticleSystem()
  */
 void vw_ReleaseParticleSystem(cParticleSystem *ParticleSystem)
 {
-	DetachParticleSystem(ParticleSystem);
-	delete ParticleSystem;
+	auto prev_iter = ParticleSystemsList.before_begin();
+	for (auto iter = ParticleSystemsList.begin(); iter != ParticleSystemsList.end();) {
+		if (&(*iter) == ParticleSystem) {
+			ParticleSystemsList.erase_after(prev_iter);
+			return;
+		}
+		prev_iter = iter;
+		++iter;
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -919,17 +878,7 @@ void vw_ReleaseParticleSystem(cParticleSystem *ParticleSystem)
 //-----------------------------------------------------------------------------
 void vw_ReleaseAllParticleSystems()
 {
-	// для всех ParticleSystem
-	cParticleSystem *tmp = StartParticleSystem;
-	while (tmp) {
-		cParticleSystem *tmp2 = tmp->Next;
-		// удаляем и очищаем всю память, в деструкторе стоит DetachShip
-		delete tmp;
-		tmp = tmp2;
-	}
-
-	StartParticleSystem = nullptr;
-	EndParticleSystem = nullptr;
+	ParticleSystemsList.clear();
 
 	ParticleSystemUseGLSL = false;
 	ParticleSystemQuality = 1.0f;
@@ -961,11 +910,8 @@ void vw_DrawAllParticleSystems()
 	glDepthMask(GL_FALSE);
 
 	// для всех
-	cParticleSystem *tmp = StartParticleSystem;
-	while (tmp) {
-		cParticleSystem *tmp2 = tmp->Next;
-		tmp->Draw(&CurrentTexture);
-		tmp = tmp2;
+	for (auto &tmpParticleSystems : ParticleSystemsList) {
+		tmpParticleSystems.Draw(&CurrentTexture);
 	}
 
 	// включаем запись в буфер глубины
@@ -1027,12 +973,13 @@ void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
 //-----------------------------------------------------------------------------
 void vw_UpdateAllParticleSystems(float Time)
 {
-	// для всех
-	cParticleSystem *tmp = StartParticleSystem;
-	while (tmp) {
-		cParticleSystem *tmp2 = tmp->Next;
-		if (!tmp->Update(Time))
-			vw_ReleaseParticleSystem(tmp);
-		tmp = tmp2;
+	auto prev_iter = ParticleSystemsList.before_begin();
+	for (auto iter = ParticleSystemsList.begin(); iter != ParticleSystemsList.end();) {
+		if (!iter->Update(Time))
+			iter = ParticleSystemsList.erase_after(prev_iter);
+		else {
+			prev_iter = iter;
+			++iter;
+		}
 	}
 }
