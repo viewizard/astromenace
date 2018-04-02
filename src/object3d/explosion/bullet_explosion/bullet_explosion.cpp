@@ -265,7 +265,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		}
 
 		// установка эффекта
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[0], 1);
 
 		GraphicFX[0]->Speed = 0.5f*Projectile->Radius;
@@ -362,7 +362,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		// установка эффекта вспышки в месте попадания
 		if (Projectile->GraphicFX != nullptr)
 			if (Projectile->GraphicFX[0] != nullptr) {
-				GraphicFX[0] = new cParticleSystem;
+				GraphicFX[0] = vw_CreateParticleSystem();
 				SetExplosionGFX(GraphicFX[0], 0);
 				float Rexpl = (Projectile->GraphicFX[0]->ColorStart.r + Projectile->GraphicFX[0]->ColorEnd.r)/2.0f;
 				float Gexpl = (Projectile->GraphicFX[0]->ColorStart.g + Projectile->GraphicFX[0]->ColorEnd.g)/2.0f;
@@ -424,7 +424,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		// установка эффекта вспышки в месте попадания
 		if (Projectile->GraphicFX != nullptr)
 			if (Projectile->GraphicFX[0] != nullptr) {
-				GraphicFX[0] = new cParticleSystem;
+				GraphicFX[0] = vw_CreateParticleSystem();
 				SetExplosionGFX(GraphicFX[0], 0);
 				float Rexpl = (Projectile->GraphicFX[0]->ColorStart.r + Projectile->GraphicFX[0]->ColorEnd.r)/2.0f;
 				float Gexpl = (Projectile->GraphicFX[0]->ColorStart.g + Projectile->GraphicFX[0]->ColorEnd.g)/2.0f;
@@ -483,7 +483,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		}
 
 		// установка эффекта
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[0], 10);
 		GraphicFX[0]->SetStartLocation(Projectile->Location);
 
@@ -531,7 +531,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		}
 
 		// установка эффекта
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[0], 10);
 		GraphicFX[0]->ParticlesPerSec = 30;
 		GraphicFX[0]->CreationSize = sVECTOR3D(2.0f,0.3f,2.0f);
@@ -585,7 +585,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		}
 
 		// установка эффекта
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[0], 8);
 		GraphicFX[0]->SetStartLocation(Projectile->Location);
 
@@ -638,11 +638,11 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		}
 
 		// установка эффекта
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[0], 7);
 		GraphicFX[0]->SetStartLocation(Projectile->Location);
 
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[1], 9);
 		GraphicFX[1]->SetStartLocation(Projectile->Location);
 
@@ -766,7 +766,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		}
 
 		// установка эффекта
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[0], 10);
 		GraphicFX[0]->SetStartLocation(Projectile->Location);
 

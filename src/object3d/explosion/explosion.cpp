@@ -97,7 +97,7 @@ bool cExplosion::Update(float Time)
 					if (!(ExplosionTypeByClass == 2 && (ExplosionType == 16 || ExplosionType == 17
 									    || ExplosionType == 18 || ExplosionType == 19
 									    || ExplosionType == 205 || ExplosionType == 206 || ExplosionType == 209 || ExplosionType == 210))) {
-						delete GraphicFX[i];
+						vw_ReleaseParticleSystem(GraphicFX[i]);
 						GraphicFX[i] = nullptr;
 					}
 				}

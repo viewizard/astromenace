@@ -277,7 +277,7 @@ void InitGamePlayerShip()
 
 
 	if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem == 3) {
-		Shild1 = new cParticleSystem;
+		Shild1 = vw_CreateParticleSystem();
 		Shild1->ColorStart.r = 0.20f;
 		Shild1->ColorStart.g = 0.50f;
 		Shild1->ColorStart.b = 0.10f;
@@ -308,7 +308,7 @@ void InitGamePlayerShip()
 		ShildEnergyStatus = 1.0f;
 	}
 	if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem == 4) {
-		Shild1 = new cParticleSystem;
+		Shild1 = vw_CreateParticleSystem();
 		Shild1->ColorStart.r = 0.50f;
 		Shild1->ColorStart.g = 0.50f;
 		Shild1->ColorStart.b = 1.00f;
@@ -335,7 +335,7 @@ void InitGamePlayerShip()
 		Shild1->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 		Shild1->SetStartLocation(PlayerFighter->Location+PlayerFighter->OBBLocation);
 
-		Shild2 = new cParticleSystem;
+		Shild2 = vw_CreateParticleSystem();
 		Shild2->ColorStart.r = 0.50f;
 		Shild2->ColorStart.g = 0.50f;
 		Shild2->ColorStart.b = 1.00f;

@@ -80,7 +80,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 		// установка эффекта
 		float tRadius = Object->Radius/2.0f;
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[0], 1);
 		GraphicFX[0]->Speed = 1.5f*Object->Radius;
 		GraphicFX[0]->SpeedVar   = vw_Randf0;
@@ -145,14 +145,14 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		}
 
 		// установка эффекта
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[1], 3);
 		GraphicFX[1]->MoveSystem(Object->Location);
 		GraphicFX[1]->ParticlesPerSec = (int)(2.5f*Object->Radius);
 		GraphicFX[1]->Direction = Object->Orientation;
 		GraphicFX[1]->CreationSize = sVECTOR3D(Object->Radius/4,Object->Radius/4,Object->Radius/4);
 
-		GraphicFX[2] = new cParticleSystem;
+		GraphicFX[2] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[2], 4);
 		GraphicFX[2]->Speed = Object->Radius/3.0f;
 		GraphicFX[2]->SpeedVar   = 1.0f*vw_Randf0;
@@ -162,7 +162,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		GraphicFX[2]->Direction = Object->Orientation;
 		GraphicFX[2]->NeedStop = false;
 
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[0], 2);
 		GraphicFX[0]->Speed = Object->Radius*1.2f;
 		GraphicFX[0]->SpeedVar   = 1.0f*vw_Randf0;
@@ -238,7 +238,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		}
 
 		// установка эффекта
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[1], 6);
 		GraphicFX[1]->Speed = Object->Radius/1.4f;
 		GraphicFX[1]->SpeedVar   = 1.0f*vw_Randf0;
@@ -247,7 +247,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		GraphicFX[1]->ParticlesPerSec = (int)(7*Object->Radius);
 		GraphicFX[1]->Direction = Object->Orientation;
 
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[0], 5);
 		GraphicFX[0]->Speed = Object->Radius*1.1f;
 		GraphicFX[0]->SpeedVar   = 1.0f*vw_Randf0;
@@ -287,7 +287,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		}
 
 		// установка эффекта
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[1], 12);
 		GraphicFX[1]->Speed = Object->Radius/1.4f;
 		GraphicFX[1]->SpeedVar   = 1.0f*vw_Randf0;
@@ -296,7 +296,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		GraphicFX[1]->ParticlesPerSec = (int)(7*Object->Radius);
 		GraphicFX[1]->Direction = Object->Orientation;
 
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[0], 11);
 		GraphicFX[0]->Speed = Object->Radius*1.1f;
 		GraphicFX[0]->SpeedVar   = 1.0f*vw_Randf0;
@@ -327,7 +327,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		}
 
 		// установка эффекта
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[1], 6);
 		GraphicFX[1]->Speed = Object->Radius/1.3f;
 		GraphicFX[1]->SpeedVar   = 1.0f*vw_Randf0;
@@ -336,7 +336,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		GraphicFX[1]->ParticlesPerSec = (int)(7*Object->Radius);
 		GraphicFX[1]->Direction = Object->Orientation;
 
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetExplosionGFX(GraphicFX[0], 5);
 		GraphicFX[0]->Speed = Object->Radius*1.1f;
 		GraphicFX[0]->SpeedVar   = 1.0f*vw_Randf0;

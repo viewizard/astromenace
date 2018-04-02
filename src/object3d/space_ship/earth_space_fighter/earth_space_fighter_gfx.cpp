@@ -323,19 +323,19 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 	if (EngineType == 0) {
 		for (int i = 0; i < SpaceShip->EngineQuantity; i++)
 			if (SpaceShip->Engine[i] != nullptr) {
-				delete SpaceShip->Engine[i];
+				vw_ReleaseParticleSystem(SpaceShip->Engine[i]);
 				SpaceShip->Engine[i] = nullptr;
 			}
 
 		for (int i = 0; i < SpaceShip->EngineLeftQuantity; i++)
 			if (SpaceShip->EngineLeft[i] != nullptr) {
-				delete SpaceShip->EngineLeft[i];
+				vw_ReleaseParticleSystem(SpaceShip->EngineLeft[i]);
 				SpaceShip->EngineLeft[i] = nullptr;
 			}
 
 		for (int i = 0; i < SpaceShip->EngineRightQuantity; i++)
 			if (SpaceShip->EngineRight[i] != nullptr) {
-				delete SpaceShip->EngineRight[i];
+				vw_ReleaseParticleSystem(SpaceShip->EngineRight[i]);
 				SpaceShip->EngineRight[i] = nullptr;
 			}
 
@@ -348,10 +348,10 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 
 	for (int i = 0; i < SpaceShip->EngineQuantity; i++) {
 		if (SpaceShip->Engine[i] != nullptr) {
-			delete SpaceShip->Engine[i];
+			vw_ReleaseParticleSystem(SpaceShip->Engine[i]);
 			SpaceShip->Engine[i] = nullptr;
 		}
-		SpaceShip->Engine[i] = new cParticleSystem;
+		SpaceShip->Engine[i] = vw_CreateParticleSystem();
 
 		CreateSpaceShipEngine(SpaceShip->Engine[i], EngineType);
 		SpaceShip->Engine[i]->SetStartLocation(SpaceShip->EngineLocation[i]);
@@ -361,10 +361,10 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 
 	for (int i = 0; i < SpaceShip->EngineLeftQuantity; i++) {
 		if (SpaceShip->EngineLeft[i] != nullptr) {
-			delete SpaceShip->EngineLeft[i];
+			vw_ReleaseParticleSystem(SpaceShip->EngineLeft[i]);
 			SpaceShip->EngineLeft[i] = nullptr;
 		}
-		SpaceShip->EngineLeft[i] = new cParticleSystem;
+		SpaceShip->EngineLeft[i] = vw_CreateParticleSystem();
 
 		CreateRotateSpaceShipEngine(SpaceShip->EngineLeft[i], EngineType);
 		SpaceShip->EngineLeft[i]->SetStartLocation(SpaceShip->EngineLeftLocation[i]);
@@ -375,10 +375,10 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 
 	for (int i = 0; i < SpaceShip->EngineRightQuantity; i++) {
 		if (SpaceShip->EngineRight[i] == nullptr) {
-			delete SpaceShip->EngineRight[i];
+			vw_ReleaseParticleSystem(SpaceShip->EngineRight[i]);
 			SpaceShip->EngineRight[i] = nullptr;
 		}
-		SpaceShip->EngineRight[i] = new cParticleSystem;
+		SpaceShip->EngineRight[i] = vw_CreateParticleSystem();
 
 		CreateRotateSpaceShipEngine(SpaceShip->EngineRight[i], EngineType);
 		SpaceShip->EngineRight[i]->SetStartLocation(SpaceShip->EngineRightLocation[i]);

@@ -620,7 +620,7 @@ void InitGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// активные частицы космоса
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	psSpace = new cParticleSystem;
+	psSpace = vw_CreateParticleSystem();
 	psSpace->ColorStart.r = 0.80f;
 	psSpace->ColorStart.g = 0.80f;
 	psSpace->ColorStart.b = 1.00f;
@@ -866,11 +866,11 @@ void RealExitGame()
 	vw_ReleaseAllParticleSystems2D();
 
 	if (Shild1 != nullptr) {
-		delete Shild1;
+		vw_ReleaseParticleSystem(Shild1);
 		Shild1 = nullptr;
 	}
 	if (Shild2 != nullptr) {
-		delete Shild2;
+		vw_ReleaseParticleSystem(Shild2);
 		Shild2 = nullptr;
 	}
 

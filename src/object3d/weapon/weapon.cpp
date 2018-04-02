@@ -288,7 +288,7 @@ void cWeapon::Create(int WeaponNum)
 		FireLocation = PresetEarthWeaponData[WeaponNum-1].FireLocation;
 
 		DestroyedFireLocation = PresetEarthWeaponData[WeaponNum-1].DestrFireLocation;
-		Fire = new cParticleSystem;
+		Fire = vw_CreateParticleSystem();
 		Fire->SetStartLocation(FireLocation);
 		Fire->Direction = sVECTOR3D(0.0f, 0.0f, 1.0f);
 		SetWeaponFire(Fire, WeaponNum);
@@ -501,7 +501,7 @@ bool cWeapon::Update(float Time)
 	    (Strength < StrengthStart) &&
 	    (DestroyedFire == nullptr)) {
 		// горение
-		DestroyedFire = new cParticleSystem;
+		DestroyedFire = vw_CreateParticleSystem();
 		DestroyedFire->ColorStart.r = 1.00f;
 		DestroyedFire->ColorStart.g = 0.70f;
 		DestroyedFire->ColorStart.b = 0.30f;
@@ -545,7 +545,7 @@ bool cWeapon::Update(float Time)
 	    (Strength <= 0.0f) &&
 	    (DestroyedSmoke == nullptr)) {
 		// дым
-		DestroyedSmoke = new cParticleSystem;
+		DestroyedSmoke = vw_CreateParticleSystem();
 		DestroyedSmoke->ColorStart.r = 1.00f;
 		DestroyedSmoke->ColorStart.g = 1.00f;
 		DestroyedSmoke->ColorStart.b = 1.00f;

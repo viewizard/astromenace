@@ -184,7 +184,7 @@ void InitMenu()
 
 
 	// активные частицы космоса
-	psSpace = new cParticleSystem;
+	psSpace = vw_CreateParticleSystem();
 	psSpace->ColorStart.r = 0.80f;
 	psSpace->ColorStart.g = 0.80f;
 	psSpace->ColorStart.b = 1.00f;

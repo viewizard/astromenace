@@ -133,17 +133,10 @@ bool cParticle::Update(float TimeDelta, const sVECTOR3D &ParentLocation,
 	return true;
 }
 
-cParticleSystem::cParticleSystem()
-{
-	// настройка массива
-	vw_AttachParticleSystem(this);
-}
-
 cParticleSystem::~cParticleSystem()
 {
 	if (Light)
 		vw_ReleaseLight(Light);
-	vw_DetachParticleSystem(this);
 }
 
 //-----------------------------------------------------------------------------
@@ -858,7 +851,7 @@ void vw_InitParticleSystems(bool UseGLSL, float Quality)
 //-----------------------------------------------------------------------------
 //	Присоеденяем ParticleSystem к списку
 //-----------------------------------------------------------------------------
-void vw_AttachParticleSystem(cParticleSystem *NewParticleSystem)
+static void AttachParticleSystem(cParticleSystem *NewParticleSystem)
 {
 	if (NewParticleSystem == nullptr)
 		return;
@@ -880,7 +873,7 @@ void vw_AttachParticleSystem(cParticleSystem *NewParticleSystem)
 //-----------------------------------------------------------------------------
 //	Удаляем ParticleSystem из списка
 //-----------------------------------------------------------------------------
-void vw_DetachParticleSystem(cParticleSystem *OldParticleSystem)
+static void DetachParticleSystem(cParticleSystem *OldParticleSystem)
 {
 	if (OldParticleSystem == nullptr)
 		return;
@@ -900,6 +893,25 @@ void vw_DetachParticleSystem(cParticleSystem *OldParticleSystem)
 		OldParticleSystem->Prev->Next = OldParticleSystem->Next;
 	else if (OldParticleSystem->Next != nullptr)
 		OldParticleSystem->Next->Prev = nullptr;
+}
+
+/*
+ * Create particle system.
+ */
+cParticleSystem *vw_CreateParticleSystem()
+{
+	cParticleSystem *ParticleSystem = new cParticleSystem;
+	AttachParticleSystem(ParticleSystem);
+	return ParticleSystem;
+}
+
+/*
+ * Release particle system.
+ */
+void vw_ReleaseParticleSystem(cParticleSystem *ParticleSystem)
+{
+	DetachParticleSystem(ParticleSystem);
+	delete ParticleSystem;
 }
 
 //-----------------------------------------------------------------------------
@@ -1020,7 +1032,7 @@ void vw_UpdateAllParticleSystems(float Time)
 	while (tmp) {
 		cParticleSystem *tmp2 = tmp->Next;
 		if (!tmp->Update(Time))
-			delete tmp;
+			vw_ReleaseParticleSystem(tmp);
 		tmp = tmp2;
 	}
 }

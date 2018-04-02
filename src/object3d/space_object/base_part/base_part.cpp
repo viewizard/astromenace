@@ -79,29 +79,29 @@ case1next:
 		GFX = new cParticleSystem*[GFXQuantity];
 		for (int i = 0; i < GFXQuantity; i++) GFX[i] = nullptr;
 
-		GFX[0] = new cParticleSystem;
+		GFX[0] = vw_CreateParticleSystem();
 		GFXLocation[0] = sVECTOR3D(14.3f, -4.0f, -14.3f);
 		SetSpaceObjectGFX(GFX[0], 1);
-		GFX[1] = new cParticleSystem;
+		GFX[1] = vw_CreateParticleSystem();
 		GFXLocation[1] = sVECTOR3D(14.3f, -4.0f, 14.3f);
 		SetSpaceObjectGFX(GFX[1], 1);
-		GFX[2] = new cParticleSystem;
+		GFX[2] = vw_CreateParticleSystem();
 		GFXLocation[2] = sVECTOR3D(-14.3f, -4.0f, -14.3f);
 		SetSpaceObjectGFX(GFX[2], 1);
-		GFX[3] = new cParticleSystem;
+		GFX[3] = vw_CreateParticleSystem();
 		GFXLocation[3] = sVECTOR3D(-14.3f, -4.0f, 14.3f);
 		SetSpaceObjectGFX(GFX[3], 1);
 		//----
-		GFX[4] = new cParticleSystem;
+		GFX[4] = vw_CreateParticleSystem();
 		GFXLocation[4] = sVECTOR3D(14.3f, 3.2f, -14.3f);
 		SetSpaceObjectGFX(GFX[4], 2);
-		GFX[5] = new cParticleSystem;
+		GFX[5] = vw_CreateParticleSystem();
 		GFXLocation[5] = sVECTOR3D(14.3f, 3.2f, 14.3f);
 		SetSpaceObjectGFX(GFX[5], 2);
-		GFX[6] = new cParticleSystem;
+		GFX[6] = vw_CreateParticleSystem();
 		GFXLocation[6] = sVECTOR3D(-14.3f, 3.2f, -14.3f);
 		SetSpaceObjectGFX(GFX[6], 2);
-		GFX[7] = new cParticleSystem;
+		GFX[7] = vw_CreateParticleSystem();
 		GFXLocation[7] = sVECTOR3D(-14.3f, 3.2f, 14.3f);
 		SetSpaceObjectGFX(GFX[7], 2);
 		break;
@@ -145,11 +145,11 @@ case2next:
 		GFX = new cParticleSystem*[GFXQuantity];
 		for (int i = 0; i < GFXQuantity; i++) GFX[i] = nullptr;
 
-		GFX[0] = new cParticleSystem;
+		GFX[0] = vw_CreateParticleSystem();
 		GFXLocation[0] = sVECTOR3D(0.0f, -5.0f, 13.7f);
 		SetSpaceObjectGFX(GFX[0], 1);
 		//----
-		GFX[1] = new cParticleSystem;
+		GFX[1] = vw_CreateParticleSystem();
 		GFXLocation[1] = sVECTOR3D(0.0f, 5.0f, 13.7f);
 		SetSpaceObjectGFX(GFX[1], 2);
 		break;

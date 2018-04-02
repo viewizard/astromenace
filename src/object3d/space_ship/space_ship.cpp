@@ -133,7 +133,7 @@ cSpaceShip::~cSpaceShip()
 					Engine[i]->IsSuppressed = true;
 					Engine[i]->DestroyIfNoParticles = true;
 				} else {
-					delete Engine[i];
+					vw_ReleaseParticleSystem(Engine[i]);
 					Engine[i] = nullptr;
 				}
 			}
@@ -152,7 +152,7 @@ cSpaceShip::~cSpaceShip()
 					EngineLeft[i]->IsSuppressed = true;
 					EngineLeft[i]->DestroyIfNoParticles = true;
 				} else {
-					delete EngineLeft[i];
+					vw_ReleaseParticleSystem(EngineLeft[i]);
 					EngineLeft[i] = nullptr;
 				}
 			}
@@ -171,7 +171,7 @@ cSpaceShip::~cSpaceShip()
 					EngineRight[i]->IsSuppressed = true;
 					EngineRight[i]->DestroyIfNoParticles = true;
 				} else {
-					delete EngineRight[i];
+					vw_ReleaseParticleSystem(EngineRight[i]);
 					EngineRight[i] = nullptr;
 				}
 			}

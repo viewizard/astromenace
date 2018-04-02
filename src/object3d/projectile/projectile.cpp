@@ -317,64 +317,64 @@ void cProjectile::Create(int ProjectileNum)
 
 	// Kinetic
 	case 1:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 1);
 		break;
 	case 2:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 2);
 		break;
 	case 3:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 3);
 		break;
 	case 4:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 4);
 		break;
 	// Ion
 	case 5:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 5);
 		break;
 	case 6:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 6);
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 5);
 		GraphicFX[1]->CreationSize = sVECTOR3D(2.5f,2.5f,0.5f);
 		GraphicFX[1]->DeadZone = 1.9f;
 		break;
 	case 7:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 12);
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 5);
 		break;
 	// Plasma
 	case 8:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 7);
 		break;
 	case 9:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 10);
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 8);
-		GraphicFX[2] = new cParticleSystem;
+		GraphicFX[2] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[2], 9);
 		break;
 	case 10:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 8);
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 9);
-		GraphicFX[2] = new cParticleSystem;
+		GraphicFX[2] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[2], 11);
 		break;
 	// Maser
 	case 11:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 17);
 		GraphicFX[0]->CreationSize = sVECTOR3D(0.8f,0.8f,100.0f);
 		ProjectileCenter = sVECTOR3D(0.0f,0.0f,50.0f);
@@ -402,10 +402,10 @@ void cProjectile::Create(int ProjectileNum)
 		}
 		break;
 	case 12:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 17);
 		GraphicFX[0]->CreationSize = sVECTOR3D(0.8f,0.8f,110.0f);
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 18);
 		GraphicFX[1]->CreationSize = sVECTOR3D(1.6f,1.6f,110.0f);
 		ProjectileCenter = sVECTOR3D(0.0f,0.0f,55.0f);
@@ -434,12 +434,12 @@ void cProjectile::Create(int ProjectileNum)
 		break;
 	// Antimatter
 	case 13:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 19);
 		break;
 	// Laser
 	case 14:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 20);
 		GraphicFX[0]->CreationSize = sVECTOR3D(0.4f,0.4f,120.0f);
 		ProjectileCenter = sVECTOR3D(0.0f,0.0f,60.0f);
@@ -468,7 +468,7 @@ void cProjectile::Create(int ProjectileNum)
 		break;
 	// Gauss
 	case 15:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 21);
 		break;
 	// ракета
@@ -476,12 +476,12 @@ void cProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/earthfighter/missile.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 13);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
@@ -490,12 +490,12 @@ void cProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/earthfighter/swarm.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 16);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		GraphicFX[1]->Life = 1.00f; // у роя слишком много ракет, если делать долгий шлейф - может просесть фпс
@@ -505,12 +505,12 @@ void cProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/earthfighter/torpedo.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 14);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
@@ -519,12 +519,12 @@ void cProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/earthfighter/nuke.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 15);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
@@ -540,68 +540,68 @@ void cProjectile::Create(int ProjectileNum)
 
 	// как Kinetic1
 	case 101:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 22);
 		break;
 	// с наведением, как Kinetic2
 	case 102:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 23);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 102);
 		break;
 	// как Kinetic3
 	case 103:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 24);
 		break;
 	// с наведением, как Kinetic3
 	case 104:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 24);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 102);
 		break;
 	// как Kinetic2
 	case 105:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 23);
 		break;
 	// энергетическая мина (1-й тип)
 	case 106:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 36);
 		break;
 	// энергетическая мина (2-й тип)
 	case 107:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 37);
 		break;
 	// как Plasma3
 	case 108:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 8);
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 9);
-		GraphicFX[2] = new cParticleSystem;
+		GraphicFX[2] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[2], 11);
 		break;
 	// как Plasma2
 	case 109:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 10);
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 8);
-		GraphicFX[2] = new cParticleSystem;
+		GraphicFX[2] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[2], 9);
 		break;
 	// как Laser
 	case 110:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 38);
 		GraphicFX[0]->CreationSize = sVECTOR3D(2.0f,2.0f,110.0f);
 		ProjectileCenter = sVECTOR3D(0.0f,0.0f,55.0f);
@@ -637,24 +637,24 @@ void cProjectile::Create(int ProjectileNum)
 
 	// стрельба турели 1
 	case 201:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 26);
 		break;
 	// стрельба турели 2
 	case 202:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 34);
 		break;
 	// фларес
 	case 203:
 		// смотрит вверх
 		Orientation = sVECTOR3D(0.0f, 0.5f, 0.5f);
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 25);
 		break;
 	// как Kinetic1
 	case 204:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 26);
 		break;
 	// как Missile1
@@ -662,12 +662,12 @@ void cProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/earthfighter/missile.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 27);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
@@ -676,27 +676,27 @@ void cProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/earthfighter/swarm.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 31);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
 	// как Ion2
 	case 207:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 6);
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 5);
 		GraphicFX[1]->CreationSize = sVECTOR3D(2.5f,2.5f,0.5f);
 		GraphicFX[1]->DeadZone = 1.9f;
 		break;
 	// как Antimatter
 	case 208:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 19);
 		break;
 	// как торпеда
@@ -704,12 +704,12 @@ void cProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/earthfighter/torpedo.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 32);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
@@ -718,32 +718,32 @@ void cProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/earthfighter/nuke.vw3d", this, 0, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 33);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
 	// как Kinetic2
 	case 211:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 34);
 		break;
 	// как Kinetic3
 	case 212:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 35);
 		break;
 	// как Plasma2
 	case 213:
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 10);
-		GraphicFX[1] = new cParticleSystem;
+		GraphicFX[1] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[1], 8);
-		GraphicFX[2] = new cParticleSystem;
+		GraphicFX[2] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[2], 9);
 		break;
 
@@ -767,7 +767,7 @@ void cProjectile::Create(int ProjectileNum)
 		TextureIllum[0] = vw_FindTextureByName("models/mine/mine2i.tga");
 		::cObject3D::InitByDrawObjectList();
 
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 28);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, -0.8f, 0.0f);
 		NeedStopPartic = true;
@@ -782,7 +782,7 @@ void cProjectile::Create(int ProjectileNum)
 		TextureIllum[0] = vw_FindTextureByName("models/mine/mine3i.tga");
 		::cObject3D::InitByDrawObjectList();
 
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 29);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, -2.5f, 0.0f);
 		NeedStopPartic = true;
@@ -797,7 +797,7 @@ void cProjectile::Create(int ProjectileNum)
 		TextureIllum[0] = vw_FindTextureByName("models/mine/mine4i.tga");
 		::cObject3D::InitByDrawObjectList();
 
-		GraphicFX[0] = new cParticleSystem;
+		GraphicFX[0] = vw_CreateParticleSystem();
 		SetProjectileGFX(GraphicFX[0], 30);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, -0.7f, 0.0f);
 		NeedStopPartic = true;
@@ -847,7 +847,7 @@ cProjectile::~cProjectile()
 
 		/* should destroy GFX right now */
 		if (GraphicFXDestroyType) {
-			delete GraphicFX[i];
+			vw_ReleaseParticleSystem(GraphicFX[i]);
 			GraphicFX[i] = nullptr;
 			continue;
 		}
