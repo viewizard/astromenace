@@ -264,56 +264,8 @@ void cParticleSystem::EmitParticles(unsigned int Quantity)
 			GenerateLocationPointType(NewParticle);
 		if (CreationType == eParticleCreationType::Cube)
 			GenerateLocationCubeType(NewParticle);
-		if (CreationType == eParticleCreationType::Tube) {
-			if (DeadZone != 0.0f) {
-				float minDist = CreationSize.x * CreationSize.x +
-						CreationSize.y * CreationSize.y +
-						CreationSize.z * CreationSize.z;
-				// если зона больше чем радиус излучения - выключаем ее
-				if (minDist <= DeadZone * DeadZone)
-					DeadZone = 0.0f;
-			}
-
-			sVECTOR3D tmp;
-			tmp.x = (0.5f - vw_Randf1) * CreationSize.x;
-			tmp.y = (0.5f - vw_Randf1) * CreationSize.y;
-			tmp.z = (0.5f - vw_Randf1) * CreationSize.z;
-			sVECTOR3D CreationSizeText = CreationSize ^ 0.5f;
-			while (tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z < DeadZone * DeadZone) {
-				// ув. радиус
-				sVECTOR3D tmp1 = tmp;
-				tmp1.Normalize();
-				tmp1 = tmp1 ^ (1 / 100.0f);
-				tmp = tmp + tmp1;
-			}
-
-			if (tmp.x > 0.0f) {
-				if (tmp.x > CreationSizeText.x)
-					tmp.x = CreationSizeText.x;
-			} else {
-				if (tmp.x < -CreationSizeText.x)
-					tmp.x = -CreationSizeText.x;
-			}
-
-			if (tmp.y > 0.0f) {
-				if (tmp.y > CreationSizeText.y)
-					tmp.y = CreationSizeText.y;
-			} else {
-				if (tmp.y < -CreationSizeText.y)
-					tmp.y = -CreationSizeText.y;
-			}
-			// делаем ручное регулирование
-			if (tmp.z > 0.0f) {
-				if (tmp.z > CreationSizeText.z)
-					tmp.z = CreationSizeText.z;
-			} else {
-				if (tmp.z < -CreationSizeText.z)
-					tmp.z = -CreationSizeText.z;
-			}
-
-			vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
-			NewParticle.Location = Location + tmp;
-		}
+		if (CreationType == eParticleCreationType::Tube)
+			GenerateLocationTubeType(NewParticle);
 		if (CreationType == eParticleCreationType::Sphere) {
 			float minDist = CreationSize.x * CreationSize.x +
 					CreationSize.y * CreationSize.y +
@@ -462,6 +414,38 @@ void cParticleSystem::GenerateLocationCubeType(cParticle &NewParticle)
 	sVECTOR3D CreationPos{vw_Randf0 * CreationSize.x,
 			      vw_Randf0 * CreationSize.y,
 			      vw_Randf0 * CreationSize.z};
+	float ParticleDist2 = CreationPos.x * CreationPos.x +
+			      CreationPos.y * CreationPos.y +
+			      CreationPos.z * CreationPos.z;
+	while (ParticleDist2 < DeadZone * DeadZone) {
+		// increase radius
+		sVECTOR3D tmpPosInc = CreationPos;
+		tmpPosInc.Normalize();
+		tmpPosInc = tmpPosInc ^ (1 / 100.0f); // increase distance on 1%
+		CreationPos += tmpPosInc;
+	}
+
+	vw_Matrix33CalcPoint(CreationPos, CurrentRotationMat);
+	NewParticle.Location = Location + CreationPos;
+}
+
+/*
+ * Generate location for new particle (tube type).
+ */
+void cParticleSystem::GenerateLocationTubeType(cParticle &NewParticle)
+{
+	if (DeadZone != 0.0f) {
+		float minDist2 = CreationSize.x * CreationSize.x +
+				 CreationSize.y * CreationSize.y +
+				 CreationSize.z * CreationSize.z;
+		// if DeadZone^2 more then CreationSize^2, disable DeadZone
+		if (minDist2 <= DeadZone * DeadZone)
+			DeadZone = 0.0f;
+	}
+
+	sVECTOR3D CreationPos{(0.5f - vw_Randf1) * CreationSize.x,
+			      (0.5f - vw_Randf1) * CreationSize.y,
+			      (0.5f - vw_Randf1) * CreationSize.z};
 	float ParticleDist2 = CreationPos.x * CreationPos.x +
 			      CreationPos.y * CreationPos.y +
 			      CreationPos.z * CreationPos.z;
