@@ -261,9 +261,7 @@ void cParticleSystem::EmitParticles(unsigned int Quantity)
 
 		// выпускаем частицу возле места нахождения системы
 		if (CreationType == eParticleCreationType::Point)
-			NewParticle.Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x,
-								    vw_Randf0 * CreationSize.y,
-								    vw_Randf0 * CreationSize.z);
+			GenerateLocationPointType(NewParticle);
 		if (CreationType == eParticleCreationType::Cube) {
 			if (DeadZone != 0.0f) {
 				float minDist = CreationSize.x * CreationSize.x +
@@ -458,6 +456,16 @@ void cParticleSystem::EmitParticles(unsigned int Quantity)
 		// уменьшаем необходимое количество частиц
 		Quantity--;
 	}
+}
+
+/*
+ * Generate location for new particle (point type).
+ */
+void cParticleSystem::GenerateLocationPointType(cParticle &NewParticle)
+{
+	NewParticle.Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x,
+						    vw_Randf0 * CreationSize.y,
+						    vw_Randf0 * CreationSize.z);
 }
 
 /*

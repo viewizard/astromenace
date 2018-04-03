@@ -187,10 +187,6 @@ public:
 	// остаток создания частицы (если к примеру 0.5 частиц в секунду стоит)
 	float EmissionResidue{0.0f};
 
-	// указатели на цепь систем, для менеджера
-	cParticleSystem *Next{nullptr};
-	cParticleSystem *Prev{nullptr};
-
 	// источник света, если он нужен
 	sLight *Light{nullptr};
 	bool LightNeedDeviation{false};
@@ -224,6 +220,8 @@ private:
 
 	// Emit particles.
 	void EmitParticles(unsigned int Quantity);
+	// Generate location for new particle (point type).
+	void GenerateLocationPointType(cParticle &NewParticle);
 
 	// Update light.
 	void UpdateLight(float TimeDelta);
