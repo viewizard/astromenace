@@ -262,31 +262,8 @@ void cParticleSystem::EmitParticles(unsigned int Quantity)
 		// выпускаем частицу возле места нахождения системы
 		if (CreationType == eParticleCreationType::Point)
 			GenerateLocationPointType(NewParticle);
-		if (CreationType == eParticleCreationType::Cube) {
-			if (DeadZone != 0.0f) {
-				float minDist = CreationSize.x * CreationSize.x +
-						CreationSize.y * CreationSize.y +
-						CreationSize.z * CreationSize.z;
-				// если зона больше чем радиус излучения - выключаем ее
-				if (minDist <= DeadZone*DeadZone)
-					DeadZone = 0.0f;
-			}
-
-			sVECTOR3D tmp;
-			tmp.x = vw_Randf0 * CreationSize.x;
-			tmp.y = vw_Randf0 * CreationSize.y;
-			tmp.z = vw_Randf0 * CreationSize.z;
-			while (tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z < DeadZone * DeadZone) {
-				// ув. радиус
-				sVECTOR3D tmp1 = tmp;
-				tmp1.Normalize();
-				tmp1 = tmp1 ^ (1 / 100.0f);
-				tmp = tmp + tmp1;
-			}
-
-			vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
-			NewParticle.Location = Location + tmp;
-		}
+		if (CreationType == eParticleCreationType::Cube)
+			GenerateLocationCubeType(NewParticle);
 		if (CreationType == eParticleCreationType::Tube) {
 			if (DeadZone != 0.0f) {
 				float minDist = CreationSize.x * CreationSize.x +
@@ -466,6 +443,38 @@ void cParticleSystem::GenerateLocationPointType(cParticle &NewParticle)
 	NewParticle.Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x,
 						    vw_Randf0 * CreationSize.y,
 						    vw_Randf0 * CreationSize.z);
+}
+
+/*
+ * Generate location for new particle (cube type).
+ */
+void cParticleSystem::GenerateLocationCubeType(cParticle &NewParticle)
+{
+	if (DeadZone != 0.0f) {
+		float minDist2 = CreationSize.x * CreationSize.x +
+				 CreationSize.y * CreationSize.y +
+				 CreationSize.z * CreationSize.z;
+		// if DeadZone^2 more then CreationSize^2, disable DeadZone
+		if (minDist2 <= DeadZone * DeadZone)
+			DeadZone = 0.0f;
+	}
+
+	sVECTOR3D CreationPos{vw_Randf0 * CreationSize.x,
+			      vw_Randf0 * CreationSize.y,
+			      vw_Randf0 * CreationSize.z};
+	float ParticleDist2 = CreationPos.x * CreationPos.x +
+			      CreationPos.y * CreationPos.y +
+			      CreationPos.z * CreationPos.z;
+	while (ParticleDist2 < DeadZone * DeadZone) {
+		// increase radius
+		sVECTOR3D tmpPosInc = CreationPos;
+		tmpPosInc.Normalize();
+		tmpPosInc = tmpPosInc ^ (1 / 100.0f); // increase distance on 1%
+		CreationPos += tmpPosInc;
+	}
+
+	vw_Matrix33CalcPoint(CreationPos, CurrentRotationMat);
+	NewParticle.Location = Location + CreationPos;
 }
 
 /*

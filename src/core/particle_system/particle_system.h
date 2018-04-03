@@ -222,6 +222,8 @@ private:
 	void EmitParticles(unsigned int Quantity);
 	// Generate location for new particle (point type).
 	void GenerateLocationPointType(cParticle &NewParticle);
+	// Generate location for new particle (cube type).
+	void GenerateLocationCubeType(cParticle &NewParticle);
 
 	// Update light.
 	void UpdateLight(float TimeDelta);
