@@ -445,61 +445,67 @@ bool cParticleSystem::Update(float Time)
 		return false;
 	}
 
-	// работа с источником света (если он есть)
-	if (Light) {
-		// просто работаем
-		if (!IsSuppressed) {
-			if (LightNeedDeviation) {
-				// было выключено, сейчас только включили опять
-				if (LightDeviation > 1.0f)
-					LightDeviation = 0.7f;
-
-				if (NextLightDeviation < LightDeviation) {
-					LightDeviation -= LightDeviationSpeed * TimeDelta;
-					if (NextLightDeviation >= LightDeviation) {
-						LightDeviation = NextLightDeviation;
-						LightDeviationSpeed = 3.5f + 3.5f * vw_Randf1;
-						NextLightDeviation = 0.7 + 0.3f * vw_Randf1;
-					}
-				} else {
-					LightDeviation += LightDeviationSpeed * TimeDelta;
-					if (NextLightDeviation <= LightDeviation) {
-						LightDeviation = NextLightDeviation;
-						LightDeviationSpeed = 3.5f + 3.5f * vw_Randf1;
-						NextLightDeviation = 0.7 - 0.3f * vw_Randf1;
-					}
-				}
-			} else
-				// было выключено, сейчас только включили опять
-				if (LightDeviation > 1.0f)
-					LightDeviation = 1.0f;
-		} else {
-			// было включено, сейчас выключили, нужно сделать исчезание
-			if (IsSuppressed && (Life != 0.0f))
-				LightDeviation += (25.0f / Life) * TimeDelta;
-		}
-
-		if (Light->LinearAttenuationBase != 0.0f) {
-			Light->LinearAttenuation = Light->LinearAttenuationBase +
-						   2.0f * (LightDeviation - 0.5f) * Light->LinearAttenuationBase;
-			if (Light->LinearAttenuation < Light->LinearAttenuationBase)
-				Light->LinearAttenuation = Light->LinearAttenuationBase;
-		}
-		if (Light->QuadraticAttenuationBase != 0.0f) {
-			Light->QuadraticAttenuation = Light->QuadraticAttenuationBase +
-						      2.0f * (LightDeviation - 0.5f) * Light->QuadraticAttenuationBase;
-			if (Light->QuadraticAttenuation < Light->QuadraticAttenuationBase)
-				Light->QuadraticAttenuation = Light->QuadraticAttenuationBase;
-		}
-
-		// если уже ничего нет, надо выключить свет, если что-то есть то включить
-		Light->On = !ParticlesList.empty();
-	}
+	// update light
+	if (Light)
+		UpdateLight(TimeDelta);
 
 	// calculate current AABB
 	CalculateAABB();
 
 	return true;
+}
+
+/*
+ * Update light.
+ */
+void cParticleSystem::UpdateLight(float TimeDelta)
+{
+	if (!IsSuppressed) {
+		if (LightNeedDeviation) {
+			// turn on (was turned off)
+			if (LightDeviation > 1.0f)
+				LightDeviation = 0.7f;
+
+			if (NextLightDeviation < LightDeviation) {
+				LightDeviation -= LightDeviationSpeed * TimeDelta;
+				if (NextLightDeviation >= LightDeviation) {
+					LightDeviation = NextLightDeviation;
+					LightDeviationSpeed = 3.5f + 3.5f * vw_Randf1;
+					NextLightDeviation = 0.7 + 0.3f * vw_Randf1;
+				}
+			} else {
+				LightDeviation += LightDeviationSpeed * TimeDelta;
+				if (NextLightDeviation <= LightDeviation) {
+					LightDeviation = NextLightDeviation;
+					LightDeviationSpeed = 3.5f + 3.5f * vw_Randf1;
+					NextLightDeviation = 0.7 - 0.3f * vw_Randf1;
+				}
+			}
+		} else
+			// turn on (was turned off)
+			if (LightDeviation > 1.0f)
+				LightDeviation = 1.0f;
+	} else {
+		// turn off (was turned on)
+		if (IsSuppressed && (Life != 0.0f))
+			LightDeviation += (25.0f / Life) * TimeDelta;
+	}
+
+	if (Light->LinearAttenuationBase != 0.0f) {
+		Light->LinearAttenuation = Light->LinearAttenuationBase +
+					   2.0f * (LightDeviation - 0.5f) * Light->LinearAttenuationBase;
+		if (Light->LinearAttenuation < Light->LinearAttenuationBase)
+			Light->LinearAttenuation = Light->LinearAttenuationBase;
+	}
+	if (Light->QuadraticAttenuationBase != 0.0f) {
+		Light->QuadraticAttenuation = Light->QuadraticAttenuationBase +
+					      2.0f * (LightDeviation - 0.5f) * Light->QuadraticAttenuationBase;
+		if (Light->QuadraticAttenuation < Light->QuadraticAttenuationBase)
+			Light->QuadraticAttenuation = Light->QuadraticAttenuationBase;
+	}
+
+	// if we don't have particles, turn off light
+	Light->On = !ParticlesList.empty();
 }
 
 /*

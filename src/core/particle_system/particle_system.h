@@ -224,6 +224,9 @@ private:
 	// текущее положение частиц в пространстве
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 
+	// Update light.
+	void UpdateLight(float TimeDelta);
+
 	// Calculate current AABB.
 	void CalculateAABB();
 	// для проверки вхождения в видимую область
