@@ -500,9 +500,18 @@ bool cParticleSystem::Update(float Time)
 		Light->On = !ParticlesList.empty();
 	}
 
-	// находим новые данные AABB
+	// calculate current AABB
+	CalculateAABB();
 
-	// предварительная инициализация
+	return true;
+}
+
+/*
+ * Calculate current AABB.
+ */
+void cParticleSystem::CalculateAABB()
+{
+	// initial setup
 	float MinX, MinY, MinZ, MaxX, MaxY, MaxZ;
 	if (ParticlesList.empty()) {
 		MinX = MaxX = Location.x;
@@ -514,8 +523,8 @@ bool cParticleSystem::Update(float Time)
 		MinZ = MaxZ = ParticlesList.front().Location.z;
 	}
 
+	// calculate AABB
 	for (auto &tmpParticle : ParticlesList) {
-		// строим AABB
 		if (tmpParticle.Alpha > 0.0f && tmpParticle.Size > 0.0f) {
 			sVECTOR3D v;
 			v.x = tmpParticle.Location.x + tmpParticle.Size;
@@ -546,8 +555,6 @@ bool cParticleSystem::Update(float Time)
 	AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
 	AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
 	AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
-
-	return true;
 }
 
 /*
