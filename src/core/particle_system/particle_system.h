@@ -24,8 +24,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #ifndef PARTICLESYSTEM_H
 #define PARTICLESYSTEM_H
 
@@ -45,42 +43,33 @@ class cParticle {
 	friend class cParticleSystem;
 
 private:
-	// обновление информации в частице
+	// Update particle.
 	bool Update(float TimeDelta, const sVECTOR3D &ParentLocation = sVECTOR3D{0.0f, 0.0f, 0.0f},
 		    bool Magnet = false, float MagnetFactor = 25.0f);
 
-	// текущее место расположения частицы
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
-	// текущая скорость частицы
 	sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};
 
-	// если нужно замедлять и остановить
-	bool NeedStop{false};
+	bool NeedStop{false};	// in case we need slow down and stop particles
 
-	// текущий цвет частицы
+	// color-related
 	sRGBCOLOR Color{1.0f, 0.0f, 0.0f};
-	// значение приращение цвета
 	sRGBCOLOR ColorDelta{0.0f, 0.0f, 0.0f};
 
-	// время жизни частицы в секундах
-	float Age{0.0f};
+	float Age{0.0f};	// age in seconds
+	float Lifetime{0.0f};	// lifetime in seconds
 
-	// оставщееся время жизни частицы
-	float Lifetime{0.0f};
-
-	// размер частицы
+	// size-related
 	float Size{1.0f};
-	// значение изменения размера
 	float SizeDelta{0.0f};
 
-	// прозрачность
+	// alpha-related
 	float Alpha{1.0f};
-	// изменение прозрачности
 	float AlphaDelta{0.0f};
 
-	// сначало ув. альфу, потом уменьшаем
+	// increase to maximum and that decrease particle alpha
 	bool AlphaShowHide{false};
-	// какой цикл - затухаем, или только появляемся
+	// what cycle of life partition have now first (show) or last (hide)
 	bool Show{true};
 };
 
@@ -88,113 +77,92 @@ class cParticleSystem {
 public:
 	~cParticleSystem();
 
-	// нужно удалить
-	bool NeedDestroy{false};
-
-	// обновить все частицы в этой системе, по времени
+	// Update all particles.
 	bool Update(float Time);
-	// прорисовка всех частиц
+	// Draw all particles.
 	void Draw(sTexture **CurrentTexture);
-	// базовая текстура частиц
+
 	sTexture *Texture{nullptr};
+	bool TextureBlend{false};	// blend (for missiles trails)
 
-	// тип смешивания
-	int BlendType{0};
-
-	// начальный установки, или установки где пред. и текушее положения равны
+	// Set start system location.
 	void SetStartLocation(const sVECTOR3D &NewLocation);
-	// передвинуть все частици на указаное значение
+	// Move all particles and system location.
 	void MoveSystem(const sVECTOR3D &NewLocation);
-	// сдвинуть только центр системы
+	// Move system location.
 	void MoveSystemLocation(const sVECTOR3D &NewLocation);
-	// развернуть направление системы
+	// Rotate system.
 	void RotateSystemByAngle(const sVECTOR3D &NewDirection);
+	// Rotate all particles and system.
 	void RotateSystemAndParticlesByAngle(const sVECTOR3D &NewAngle);
-	// разворот только частиц
+	// Rotate all particles in system.
 	void RotateParticlesByAngle(const sVECTOR3D &NewAngle);
-
-	// остановить все частицы в системе
+	// Stop all particles in system.
 	void StopAllParticles();
-
-	// поставить правильный полет частиц, т.е. учет внешней скорости
+	// Change speed for all particles.
 	void ChangeSpeed(const sVECTOR3D &Vel);
 
-	// текущее направление системы (используется для создания частиц+некоторые вариации)
 	sVECTOR3D Direction{0.0f, 0.0f, 0.0f};
-	// угол поворота системы
 	sVECTOR3D Angle{0.0f, 0.0f, 0.0f};
 
-	// кол-во создаваемых частиц в секунду
-	unsigned int ParticlesPerSec{100};
+	unsigned int ParticlesPerSec{100};	// emission rate (particles per second)
 
-	// если нужно замедлять и остановить
-	bool NeedStop{false};
+	bool NeedStop{false};	// in case we need slow down and stop particles
 
-	// размер частиц в мировых координатах
+	// size-related
 	float SizeStart{1.0f};
 	float SizeVar{0.0f};
 	float SizeEnd{1.0f};
 
-	// Прозрачность частиц. Alpha 0 = невидем, Alpha 1 = видемость 100%
+	// alpha-related
 	float AlphaStart{1.0f};
 	float AlphaVar{0.0f};
 	float AlphaEnd{1.0f};
-	bool AlphaShowHide{false}; // если нужно сначало ув. потом ум.
+	bool AlphaShowHide{false};
 
-	// Цвет частиц при старте и завершении
-	// линейно интерполируется
+	// color-related
 	sRGBCOLOR ColorStart{1.0f, 1.0f, 1.0f};
 	sRGBCOLOR ColorVar{0.0f, 0.0f, 0.0f};
 	sRGBCOLOR ColorEnd{1.0f, 1.0f, 1.0f};
 
-	// Скалярная скорость, с вектором направления получаем вектор движения
+	// speed-related
 	float Speed{1.0f};
 	float SpeedVar{1.0f};
-	// Скорость при создании, сохраняем, если будут менять скорость в процессе
 	float SpeedOnCreation{1.0f};
 
 	eParticleCreationType CreationType{eParticleCreationType::Point};
 	sVECTOR3D CreationSize{0.05f, 0.05f, 0.05f};
 
-	// если нужно - корректировка размера частицы при создании относительно камеры
-	// мертвая зона (радиус, где вообще не рисуем)
-	float DeadZone{0.0f};
-	// коэффициент уменьшения от расстояния (чем ближе к камере - тем меньше)
-	float Resize{1.0f}; // если 0, то у самой камеры будет нулевой, у крайней точки системы - Size
+	float DeadZone{0.0f};	// dead zone
+	// resize factor connected to camera distance (0.0f - 1.0f)
+	// for Resize = 0, particle near camera will have 0 size
+	// we need this feature for "space dust", that flowing near camera
+	float CameraDistResize{1.0f};
 
-	// жизнь частицы в секундах
 	float Life{1.0f};
 	float LifeVar{0.0f};
 
-	// показывает, насколько отличным будет выбор направления у создаваемой частицы
-	// с направлением системы
-	float Theta{1.0f};
+	float Theta{1.0f};		// direction deviation (in degrees) for new created particles
 
-	// система притягивает частицы или нет
 	bool IsMagnet{0};
 	float MagnetFactor{25.0f};
 
-	// можем ли мы создавать частицы или нет
-	bool IsSuppressed{false};
+	bool IsSuppressed{false};	// if suppressed, particle system can't emit new particles
 	bool DestroyIfNoParticles{false};
 
-	// возраст системы в секундах
-	float Age{0.0f};
+	float Age{0.0f};		// system age in seconds
 
-	// последнее время обновления системы
-	float TimeLastUpdate{-1.0f};
+	float TimeLastUpdate{-1.0f};	// last update time
 
-	// остаток создания частицы (если к примеру 0.5 частиц в секунду стоит)
-	float EmissionResidue{0.0f};
+	float EmissionResidue{0.0f};	// real rest of emission
 
-	// источник света, если он нужен
+	// light-related
 	sLight *Light{nullptr};
 	bool LightNeedDeviation{false};
 	float LightDeviation{100.0f};
 	float NextLightDeviation{0.7f + 0.3f * vw_Randf1};
 	float LightDeviationSpeed{3.5f + 3.5f * vw_Randf1};
 
-	// доступ к private данным
 	const sVECTOR3D &GetLocation()
 	{
 		return Location;
@@ -213,9 +181,7 @@ public:
 	}
 
 private:
-	// последнее положение системы (для интерполяции)
-	sVECTOR3D PrevLocation{0.0f, 0.0f, 0.0f};
-	// текущее положение частиц в пространстве
+	// current location
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 
 	// Emit particles.
@@ -234,12 +200,11 @@ private:
 
 	// Calculate current AABB.
 	void CalculateAABB();
-	// для проверки вхождения в видимую область
-	// начальныя установка коробок
-	// ставим тут очень большие параметры, вне зоны прорисовки, т.к. в партиклах на функциях перемещения
-	// не учитываем изменение коробки, и координаты в коробках у нас абсолютные (!!!)
-	// использовать относительные координаты бокса нельзя, т.к. можем преносить только центр, а можем
-	// и центр, и все частицы...
+	// In order to avoid rendering non visible particle system we
+	// use AABB check with camera frustum.
+	// Initialized with huge numbers, to be sure, that particle system
+	// will be rendered for sure (in case we pre generate particles and
+	// call Draw() before Update()).
 	sVECTOR3D AABB[8]{{-1000000.0f, 1000000.0f, -1000000.0f},
 			  {-1000000.0f, 1000000.0f, -1000000.0f},
 			  {-1000000.0f, 1000000.0f, -1000000.0f},
@@ -265,19 +230,19 @@ private:
 };
 
 
-// Инициализация менеджера частиц
+// Initialization. 'Quality' is particle emission factor from 1.0f.
 void vw_InitParticleSystems(bool UseGLSL, float Quality);
 // Create particle system.
 cParticleSystem *vw_CreateParticleSystem();
 // Release particle system.
 void vw_ReleaseParticleSystem(cParticleSystem *ParticleSystem);
-// Удаляем все объекты в списке
+// Release all particle systems.
 void vw_ReleaseAllParticleSystems();
-// Прорисовываем все системы
+// Draw all particle systems.
 void vw_DrawAllParticleSystems();
-// Прорисовываем блок ParticleSystems
+// Draw particle systems block, provided by caller.
 void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity);
-// Проверяем все объекты, обновляем данные
+// Update all particle systems.
 void vw_UpdateAllParticleSystems(float Time);
 
 #endif //PARTICLESYSTEM_H

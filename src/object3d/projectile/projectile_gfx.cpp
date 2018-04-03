@@ -863,7 +863,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 5.00f;
 		ParticleSystem->LifeVar    = 5.00f;
 		ParticleSystem->ParticlesPerSec = 150;
-		ParticleSystem->BlendType = 1;
+		ParticleSystem->TextureBlend = true;
 		break;
 
 	case 102:	// шлейф ракет пришельцев
@@ -886,7 +886,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 5.00f;
 		ParticleSystem->LifeVar    = 5.00f;
 		ParticleSystem->ParticlesPerSec = 100;
-		ParticleSystem->BlendType = 1;
+		ParticleSystem->TextureBlend = true;
 		break;
 
 

@@ -425,14 +425,13 @@ void cParticleSystem2D::Draw()
  */
 void cParticleSystem2D::MoveSystem(const sVECTOR3D &NewLocation)
 {
-	for (auto &tmpParticle : ParticlesList) {
-		// this increment should looks like: "+= NewLocation - Location"
-		// but, in order to avoid temporary variable creation we do it in
-		// two steps, see "struct sVECTOR3D" for more info
-		tmpParticle.Location += NewLocation;
-		tmpParticle.Location -= Location;
-	}
+	sVECTOR3D tmpLocateion = NewLocation;
+	tmpLocateion -= Location;
 	Location = NewLocation;
+
+	for (auto &tmpParticle : ParticlesList) {
+		tmpParticle.Location += tmpLocateion;
+	}
 }
 
 /*

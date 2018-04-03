@@ -68,9 +68,9 @@ std::forward_list<cParticleSystem> ParticleSystemsList{};
 } // unnamed namespace
 
 
-//-----------------------------------------------------------------------------
-//	обновление информации частицы
-//-----------------------------------------------------------------------------
+/*
+ * Update particle.
+ */
 bool cParticle::Update(float TimeDelta, const sVECTOR3D &ParentLocation,
 		       bool Magnet, float MagnetFactor)
 {
@@ -131,15 +131,18 @@ bool cParticle::Update(float TimeDelta, const sVECTOR3D &ParentLocation,
 	return true;
 }
 
+/*
+ * Destructor.
+ */
 cParticleSystem::~cParticleSystem()
 {
 	if (Light)
 		vw_ReleaseLight(Light);
 }
 
-//-----------------------------------------------------------------------------
-// обновление системы
-//-----------------------------------------------------------------------------
+/*
+ * Update all particles.
+ */
 bool cParticleSystem::Update(float Time)
 {
 	// первый раз... просто берем время
@@ -189,10 +192,8 @@ bool cParticleSystem::Update(float Time)
 
 	// если уже ничего нет и нужно выйти - выходим
 	if (DestroyIfNoParticles &&
-	    ParticlesList.empty()) {
-		NeedDestroy = true;
+	    ParticlesList.empty())
 		return false;
-	}
 
 	// update light
 	if (Light)
@@ -283,7 +284,7 @@ void cParticleSystem::EmitParticles(unsigned int Quantity)
 			NewParticle.Size = SizeStart;
 		NewParticle.SizeDelta = (SizeEnd - NewParticle.Size) / NewParticle.Lifetime;
 		// если есть учет расстояния, работаем с ним
-		if (Resize < 1.0f) {
+		if (CameraDistResize < 1.0f) {
 			// получаем текущее положение камеры
 			sVECTOR3D CurrentCameraLocation;
 			vw_GetCameraLocation(&CurrentCameraLocation);
@@ -304,9 +305,10 @@ void cParticleSystem::EmitParticles(unsigned int Quantity)
 
 			// если частица ближе центра к камере - нужна корректировка
 			if (ParticleDist < SystDist) {
-				float tmpStart = SizeStart - SizeStart * (1.0f - Resize) * (SystDist-ParticleDist) / SystDist;
-				float tmpEnd = SizeEnd - SizeEnd*(1.0f - Resize) * (SystDist-ParticleDist) / SystDist;
-				float tmpVar = SizeVar - SizeVar*(1.0f - Resize) * (SystDist-ParticleDist) / SystDist;
+				float tmpStart = SizeStart -
+						 SizeStart * (1.0f - CameraDistResize) * (SystDist-ParticleDist) / SystDist;
+				float tmpEnd = SizeEnd - SizeEnd*(1.0f - CameraDistResize) * (SystDist-ParticleDist) / SystDist;
+				float tmpVar = SizeVar - SizeVar*(1.0f - CameraDistResize) * (SystDist-ParticleDist) / SystDist;
 
 				NewParticle.Size = tmpStart + vw_Randf0 * tmpVar;
 				if (NewParticle.Size < 0.0f)
@@ -585,9 +587,9 @@ static inline void AddToDrawBuffer(float CoordX, float CoordY, float CoordZ,
 	DrawBuffer[DrawBufferCurrentPosition++] = TextureV_or_GLSL;
 }
 
-//-----------------------------------------------------------------------------
-// прорисовка системы
-//-----------------------------------------------------------------------------
+/*
+ * Draw all particles.
+ */
 void cParticleSystem::Draw(sTexture **CurrentTexture)
 {
 	if (!vw_BoxInFrustum(AABB[6], AABB[0]) ||
@@ -695,67 +697,64 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 		*CurrentTexture = Texture;
 	}
 
-	if (BlendType == 1)
+	if (TextureBlend)
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
 	vw_SendVertices(RI_TRIANGLES, 6 * ParticlesCountInList, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX,
 			DrawBuffer.get(), 9 * sizeof(DrawBuffer.get()[0]));
 
-	if (BlendType != 0)
+	if (TextureBlend)
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 }
 
-//-----------------------------------------------------------------------------
-// поставить правильный полет частиц, т.е. учет внешней скорости
-//-----------------------------------------------------------------------------
+/*
+ * Set start system location.
+ */
 void cParticleSystem::SetStartLocation(const sVECTOR3D &NewLocation)
 {
-	PrevLocation = NewLocation;
 	Location = NewLocation;
 
 	if (Light)
 		Light->SetLocation(Location);
 }
 
-//-----------------------------------------------------------------------------
-// перемещение всех частиц и центра
-//-----------------------------------------------------------------------------
+/*
+ * Move all particles and system location.
+ */
 void cParticleSystem::MoveSystem(const sVECTOR3D &NewLocation)
 {
-	// чтобы не сбивать PrevLocation
 	if (Location == NewLocation)
 		return;
-	PrevLocation = Location;
+
+	sVECTOR3D tmpLocation = NewLocation;
+	tmpLocation -= Location;
 	Location = NewLocation;
 
 	for (auto &tmpParticle : ParticlesList) {
-		// меняем каждой частице
-		tmpParticle.Location += NewLocation;
-		tmpParticle.Location -= PrevLocation;
+		tmpParticle.Location += tmpLocation;
 	}
 
 	if (Light)
 		Light->SetLocation(Location);
 }
 
-//-----------------------------------------------------------------------------
-// перемещение центра
-//-----------------------------------------------------------------------------
+/*
+ * Move system location.
+ */
 void cParticleSystem::MoveSystemLocation(const sVECTOR3D &NewLocation)
 {
-	// чтобы не сбивать PrevLocation
 	if (Location == NewLocation)
 		return;
-	PrevLocation = Location;
+
 	Location = NewLocation;
 
 	if (Light)
 		Light->SetLocation(Location);
 }
 
-//-----------------------------------------------------------------------------
-// установка направления "движения" системы
-//-----------------------------------------------------------------------------
+/*
+ * Rotate system.
+ */
 void cParticleSystem::RotateSystemByAngle(const sVECTOR3D &NewAngle)
 {
 	Angle = NewAngle;
@@ -770,9 +769,9 @@ void cParticleSystem::RotateSystemByAngle(const sVECTOR3D &NewAngle)
 	vw_Matrix33CalcPoint(Direction, CurrentRotationMat);
 }
 
-//-----------------------------------------------------------------------------
-// установка направления "движения" системы + перенос всех частиц
-//-----------------------------------------------------------------------------
+/*
+ * Rotate all particles and system.
+ */
 void cParticleSystem::RotateSystemAndParticlesByAngle(const sVECTOR3D &NewAngle)
 {
 	Angle = NewAngle;
@@ -795,9 +794,9 @@ void cParticleSystem::RotateSystemAndParticlesByAngle(const sVECTOR3D &NewAngle)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// поворот частиц на угол без поворота системы
-//-----------------------------------------------------------------------------
+/*
+ * Rotate all particles in system.
+ */
 void cParticleSystem::RotateParticlesByAngle(const sVECTOR3D &NewAngle)
 {
 	// делаем обратку для отматывания назад
@@ -810,44 +809,41 @@ void cParticleSystem::RotateParticlesByAngle(const sVECTOR3D &NewAngle)
 	vw_Matrix33CreateRotate(TmpRotationMat, NewAngle);
 
 	for (auto &tmpParticle : ParticlesList) {
-		// меняем каждой частице
 		sVECTOR3D TMP = tmpParticle.Location - Location;
 		vw_Matrix33CalcPoint(TMP, TmpOldInvRotationMat);
-		// поворачиваем каждую точку
+
 		vw_Matrix33CalcPoint(TMP, TmpRotationMat);
 		vw_Matrix33CalcPoint(TMP, CurrentRotationMat);
 		tmpParticle.Location = TMP + Location;
 	}
 }
 
-//-----------------------------------------------------------------------------
-// остановить все частицы в системе
-//-----------------------------------------------------------------------------
+/*
+ * Stop all particles in system.
+ */
 void cParticleSystem::StopAllParticles()
 {
 	Speed = 0.0f;
 	IsMagnet = false;
 
 	for (auto &tmpParticle : ParticlesList) {
-		// меняем каждой частице
 		tmpParticle.Velocity = sVECTOR3D(0.0f,0.0f,0.0f);
 	}
 }
 
-//-----------------------------------------------------------------------------
-// поставить правильный полет частиц, т.е. учет внешней скорости
-//-----------------------------------------------------------------------------
+/*
+ * Change speed for all particles.
+ */
 void cParticleSystem::ChangeSpeed(const sVECTOR3D &Vel)
 {
 	for (auto &tmpParticle : ParticlesList) {
-		// меняем каждой частице
 		tmpParticle.Velocity += Vel;
 	}
 }
 
-//-----------------------------------------------------------------------------
-//	Установка общих состояний
-//-----------------------------------------------------------------------------
+/*
+ * Initialization. 'Quality' is particle emission factor from 1.0f.
+ */
 void vw_InitParticleSystems(bool UseGLSL, float Quality)
 {
 	ParticleSystemUseGLSL = UseGLSL;
@@ -888,9 +884,9 @@ void vw_ReleaseParticleSystem(cParticleSystem *ParticleSystem)
 	}
 }
 
-//-----------------------------------------------------------------------------
-//	Удаляем все ParticleSystem в списке
-//-----------------------------------------------------------------------------
+/*
+ * Release all particle systems.
+ */
 void vw_ReleaseAllParticleSystems()
 {
 	ParticleSystemsList.clear();
@@ -900,9 +896,9 @@ void vw_ReleaseAllParticleSystems()
 	ParticleSystemGLSL = nullptr;
 }
 
-//-----------------------------------------------------------------------------
-//	Прорисовываем все ParticleSystems
-//-----------------------------------------------------------------------------
+/*
+ * Draw all particle systems.
+ */
 void vw_DrawAllParticleSystems()
 {
 	// текущая текстура
@@ -940,9 +936,9 @@ void vw_DrawAllParticleSystems()
 	vw_BindTexture(0, 0);
 }
 
-//-----------------------------------------------------------------------------
-//	Прорисовываем блок ParticleSystems
-//-----------------------------------------------------------------------------
+/*
+ * Draw particle systems block, provided by caller.
+ */
 void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
 {
 	if (!DrawParticleSystem)
@@ -983,9 +979,9 @@ void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
 	vw_BindTexture(0, 0);
 }
 
-//-----------------------------------------------------------------------------
-//	Апдейтим все ParticleSystems
-//-----------------------------------------------------------------------------
+/*
+ * Update all particle systems.
+ */
 void vw_UpdateAllParticleSystems(float Time)
 {
 	auto prev_iter = ParticleSystemsList.before_begin();

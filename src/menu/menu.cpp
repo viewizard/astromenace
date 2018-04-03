@@ -206,7 +206,7 @@ void InitMenu()
 	psSpace->ParticlesPerSec = 140;
 	psSpace->Texture = vw_FindTextureByName("gfx/flare3.tga");
 	psSpace->Direction = sVECTOR3D(1.0f, 0.0f, 0.0f);
-	psSpace->Resize = 0.1f;
+	psSpace->CameraDistResize = 0.1f;
 	psSpace->SetStartLocation(sVECTOR3D(-50,10,-20));
 
 	// немного "прокручиваем", чтобы сразу по появлению было заполнено
