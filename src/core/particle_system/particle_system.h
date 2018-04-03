@@ -226,6 +226,8 @@ private:
 	void GenerateLocationCubeType(cParticle &NewParticle);
 	// Generate location for new particle (tube type).
 	void GenerateLocationTubeType(cParticle &NewParticle);
+	// Generate location for new particle (sphere type).
+	void GenerateLocationSphereType(cParticle &NewParticle);
 
 	// Update light.
 	void UpdateLight(float TimeDelta);

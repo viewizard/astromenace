@@ -257,8 +257,10 @@ void cParticleSystem2D::GenerateLocationCircleType(cParticle2D &NewParticle)
 		       CreationSize.z * CreationSize.z};
 	// if DeadZone^2 more then CreationSize^2, disable DeadZone
 	float DeadZone2 = DeadZone * DeadZone;
-	if (tmpDist2 <= DeadZone2)
+	if (tmpDist2 <= DeadZone2) {
 		DeadZone = 0.0f;
+		DeadZone2 = 0.0f;
+	}
 
 	sVECTOR3D CreationPos{vw_Randf0 * CreationSize.x,
 			      vw_Randf0 * CreationSize.y,
