@@ -142,7 +142,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 60;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(2.0f,2.0f,0.5f);
 		ParticleSystem->DeadZone = 1.5f;
 		ParticleSystem->AlphaShowHide = true;
@@ -208,7 +208,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.80f;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(1.3f,1.3f,0.2f);
 		ParticleSystem->DeadZone = 1.2f;
 		ParticleSystem->AlphaShowHide = true;
@@ -231,7 +231,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.80f;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(1.3f,0.2f,1.3f);
 		ParticleSystem->DeadZone = 1.2f;
 		ParticleSystem->AlphaShowHide = true;
@@ -390,7 +390,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 600;
-		ParticleSystem->CreationType = 11;
+		ParticleSystem->CreationType = eParticleCreationType::Tube;
 		ParticleSystem->CreationSize = sVECTOR3D(0.4f,0.4f,0.2f);
 		ParticleSystem->AlphaShowHide = true;
 		break;
@@ -410,7 +410,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 400;
-		ParticleSystem->CreationType = 11;
+		ParticleSystem->CreationType = eParticleCreationType::Tube;
 		ParticleSystem->CreationSize = sVECTOR3D(0.8f,0.8f,0.2f);
 		ParticleSystem->AlphaShowHide = true;
 		break;
@@ -430,7 +430,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 100;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(0.8f,0.1f,0.8f);
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
@@ -453,7 +453,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.20f;
 		ParticleSystem->ParticlesPerSec = 3000;
-		ParticleSystem->CreationType = 11;
+		ParticleSystem->CreationType = eParticleCreationType::Tube;
 		ParticleSystem->CreationSize = sVECTOR3D(0.2f,0.2f,0.1f);
 		break;
 	case 21:	// Antimatter
@@ -472,7 +472,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 150;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(1.0f,1.0f,0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = -40.0f;
@@ -555,7 +555,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 200;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(4.0f,4.0f,4.0f);
 		ParticleSystem->Texture = vw_FindTextureByName("gfx/flare.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.25f, 0.05f, 0.0f, 0.05f);
@@ -663,7 +663,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 150;
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(1.5f,0.1f,1.5f);
 		ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.1f);
@@ -781,7 +781,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->ParticlesPerSec = 200;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(2.0,2.0f,2.0f);
 		ParticleSystem->DeadZone = 1.9f;
 		ParticleSystem->IsMagnet = true;
@@ -806,7 +806,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->ParticlesPerSec = 200;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(2.0,0.2f,2.0f);
 		ParticleSystem->DeadZone = 1.9f;
 		ParticleSystem->IsMagnet = true;
@@ -829,7 +829,7 @@ void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.20f;
 		ParticleSystem->ParticlesPerSec = 9000;
-		ParticleSystem->CreationType = 11;
+		ParticleSystem->CreationType = eParticleCreationType::Tube;
 		ParticleSystem->CreationSize = sVECTOR3D(0.2f,0.2f,0.1f);
 		ParticleSystem->AlphaShowHide = true;
 		break;

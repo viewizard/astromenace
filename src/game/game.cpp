@@ -636,7 +636,7 @@ void InitGame()
 	psSpace->Theta      = 0.00f;
 	psSpace->Life       = 14.00f;
 	psSpace->LifeVar    = 0.00f;
-	psSpace->CreationType = 1;
+	psSpace->CreationType = eParticleCreationType::Cube;
 	psSpace->CreationSize = sVECTOR3D(200.0f,30.0f,10.0f);
 	psSpace->ParticlesPerSec = 100;
 	psSpace->Texture = vw_FindTextureByName("gfx/flare3.tga");

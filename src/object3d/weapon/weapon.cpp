@@ -519,7 +519,7 @@ bool cWeapon::Update(float Time)
 		DestroyedFire->Life       = 0.50f*Length/3.0f;
 		DestroyedFire->ParticlesPerSec = 70;
 		DestroyedFire->Texture = vw_FindTextureByName("gfx/flare1.tga");
-		DestroyedFire->CreationType = 1;
+		DestroyedFire->CreationType = eParticleCreationType::Cube;
 		DestroyedFire->CreationSize = sVECTOR3D(Width/2.0f,Width/2.0f,0.1f);
 		DestroyedFire->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 		DestroyedFire->SetStartLocation(DestroyedFireLocation);
@@ -563,7 +563,7 @@ bool cWeapon::Update(float Time)
 		DestroyedSmoke->Life       = 2.00f*Length/3.0f;
 		DestroyedSmoke->ParticlesPerSec = 300;
 		DestroyedSmoke->Texture = vw_FindTextureByName("gfx/flare1.tga");
-		DestroyedSmoke->CreationType = 0;
+		DestroyedSmoke->CreationType = eParticleCreationType::Point;
 		DestroyedSmoke->CreationSize = sVECTOR3D(Width/2.5f,Width/2.5f,0.1f);
 		DestroyedSmoke->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 		DestroyedSmoke->SetStartLocation(DestroyedFireLocation);

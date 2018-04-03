@@ -234,12 +234,11 @@ bool cParticleSystem::Update(float Time)
 			}
 
 			// выпускаем частицу возле места нахождения системы
-			if (CreationType == 0) // точка
+			if (CreationType == eParticleCreationType::Point)
 				NewParticle.Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x,
 									    vw_Randf0 * CreationSize.y,
 									    vw_Randf0 * CreationSize.z);
-			if (CreationType == 1) {
-				// в кубе
+			if (CreationType == eParticleCreationType::Cube) {
 				if (DeadZone != 0.0f) {
 					float minDist = CreationSize.x * CreationSize.x +
 							CreationSize.y * CreationSize.y +
@@ -264,9 +263,7 @@ bool cParticleSystem::Update(float Time)
 				vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
 				NewParticle.Location = Location + tmp;
 			}
-			// тип 11 только !!! для лазеров-мазеров
-			if (CreationType == 11) {
-				// в кубе
+			if (CreationType == eParticleCreationType::Tube) {
 				if (DeadZone != 0.0f) {
 					float minDist = CreationSize.x * CreationSize.x +
 							CreationSize.y * CreationSize.y +
@@ -316,8 +313,7 @@ bool cParticleSystem::Update(float Time)
 				vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
 				NewParticle.Location = Location + tmp;
 			}
-			if (CreationType == 2) {
-				// в сфере
+			if (CreationType == eParticleCreationType::Sphere) {
 				float minDist = CreationSize.x * CreationSize.x +
 						CreationSize.y * CreationSize.y +
 						CreationSize.z * CreationSize.z;

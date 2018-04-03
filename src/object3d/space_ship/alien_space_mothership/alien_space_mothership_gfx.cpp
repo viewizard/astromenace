@@ -60,7 +60,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->CreationType = 1;
+		ParticleSystem->CreationType = eParticleCreationType::Cube;
 		ParticleSystem->CreationSize = sVECTOR3D(2.4f,2.4f,0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.65f, 0.15f, 0.0f, 0.05f);
@@ -84,7 +84,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->CreationType = 1;
+		ParticleSystem->CreationType = eParticleCreationType::Cube;
 		ParticleSystem->CreationSize = sVECTOR3D(1.2f,1.2f,0.1f);
 		ParticleSystem->IsMagnet = true;
 		break;
@@ -106,7 +106,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 400;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(15.0f,15.0f,3.0f);
 		ParticleSystem->DeadZone = 14.9f;
 		ParticleSystem->AlphaShowHide = true;
@@ -131,7 +131,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 80;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(15.0f,15.0f,3.0f);
 		ParticleSystem->DeadZone = 14.9f;
 		ParticleSystem->AlphaShowHide = true;
@@ -156,7 +156,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 200;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(9.0f,9.0f,2.0f);
 		ParticleSystem->DeadZone = 8.9f;
 		ParticleSystem->AlphaShowHide = true;
@@ -181,7 +181,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(9.0f,9.0f,2.0f);
 		ParticleSystem->DeadZone = 8.9f;
 		ParticleSystem->AlphaShowHide = true;
@@ -213,7 +213,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 20.00f;
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->CreationType = 1;
+		ParticleSystem->CreationType = eParticleCreationType::Cube;
 		ParticleSystem->CreationSize = sVECTOR3D(0.5f,0.5f,0.1f);
 		ParticleSystem->IsMagnet = true;
 		break;
@@ -235,7 +235,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(0.8f,0.8f,0.8f);
 		ParticleSystem->IsMagnet = true;
 		break;
@@ -257,7 +257,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->CreationType = 1;
+		ParticleSystem->CreationType = eParticleCreationType::Cube;
 		ParticleSystem->CreationSize = sVECTOR3D(1.4f,1.4f,0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 13.0f;
@@ -280,7 +280,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->CreationType = 1;
+		ParticleSystem->CreationType = eParticleCreationType::Cube;
 		ParticleSystem->CreationSize = sVECTOR3D(2.4f,2.4f,0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.03f);
@@ -304,7 +304,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.70f;
 		ParticleSystem->ParticlesPerSec = 200;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(14.0f,5.0f,10.0f);
 		ParticleSystem->DeadZone = 4.9f;
 		ParticleSystem->AlphaShowHide = true;
@@ -338,7 +338,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 1.50f;
 		ParticleSystem->ParticlesPerSec = 150;
-		ParticleSystem->CreationType = 1;
+		ParticleSystem->CreationType = eParticleCreationType::Cube;
 		ParticleSystem->CreationSize = sVECTOR3D(5.0f,3.0f,3.0f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 30.0f;
@@ -363,7 +363,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->CreationType = 1;
+		ParticleSystem->CreationType = eParticleCreationType::Cube;
 		ParticleSystem->CreationSize = sVECTOR3D(1.2f,1.2f,0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.05f);
@@ -387,7 +387,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 400;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(14.0f,1.0f,14.0f);
 		ParticleSystem->DeadZone = 13.9f;
 		ParticleSystem->AlphaShowHide = true;
@@ -412,7 +412,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 80;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(14.0f,1.0f,14.0f);
 		ParticleSystem->DeadZone = 13.9f;
 		ParticleSystem->AlphaShowHide = true;
@@ -459,7 +459,7 @@ void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineTy
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->CreationType = 1;
+		ParticleSystem->CreationType = eParticleCreationType::Cube;
 		ParticleSystem->CreationSize = sVECTOR3D(2.0f,2.0f,0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);

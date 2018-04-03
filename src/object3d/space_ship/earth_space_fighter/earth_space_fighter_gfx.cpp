@@ -189,7 +189,7 @@ void CreateSpaceShipEngine(cParticleSystem *ParticleSystem, int EngineType)
 		ParticleSystem->Theta      = 30.00f;
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 100;
-		ParticleSystem->CreationType = 1;
+		ParticleSystem->CreationType = eParticleCreationType::Cube;
 		ParticleSystem->CreationSize = sVECTOR3D(0.6f,0.6f,0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 50.0f;

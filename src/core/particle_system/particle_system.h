@@ -34,6 +34,13 @@
 struct sVECTOR3D;
 struct sLight;
 
+enum class eParticleCreationType {
+	Point,
+	Cube,
+	Tube,	// we need this for maser/laser
+	Sphere
+};
+
 class cParticle {
 	friend class cParticleSystem;
 
@@ -148,8 +155,7 @@ public:
 	// Скорость при создании, сохраняем, если будут менять скорость в процессе
 	float SpeedOnCreation{1.0f};
 
-	// тип создания... 0-точка, 1-куб, 2-сфера
-	int CreationType{0};
+	eParticleCreationType CreationType{eParticleCreationType::Point};
 	sVECTOR3D CreationSize{0.05f, 0.05f, 0.05f};
 
 	// если нужно - корректировка размера частицы при создании относительно камеры

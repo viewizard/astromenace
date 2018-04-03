@@ -294,7 +294,7 @@ void InitGamePlayerShip()
 		Shild1->Theta      = 360.00f;
 		Shild1->Life       = 1.00f;
 		Shild1->ParticlesPerSec = (int)(40*ShildRadius);
-		Shild1->CreationType = 2;
+		Shild1->CreationType = eParticleCreationType::Sphere;
 		Shild1->CreationSize = sVECTOR3D(ShildRadius,0.05f*ShildRadius,ShildRadius);
 		Shild1->DeadZone = ShildRadius-0.05;
 		Shild1->AlphaShowHide = true;
@@ -325,7 +325,7 @@ void InitGamePlayerShip()
 		Shild1->Theta      = 360.00f;
 		Shild1->Life       = 1.00f;
 		Shild1->ParticlesPerSec = (int)(40*ShildRadius);
-		Shild1->CreationType = 2;
+		Shild1->CreationType = eParticleCreationType::Sphere;
 		Shild1->CreationSize = sVECTOR3D(ShildRadius,0.05f*ShildRadius,ShildRadius);
 		Shild1->DeadZone = ShildRadius-0.05;
 		Shild1->IsMagnet = true;
@@ -352,7 +352,7 @@ void InitGamePlayerShip()
 		Shild2->Theta      = 360.00f;
 		Shild2->Life       = 1.00f;
 		Shild2->ParticlesPerSec = (int)(5*ShildRadius);
-		Shild2->CreationType = 2;
+		Shild2->CreationType = eParticleCreationType::Sphere;
 		Shild2->CreationSize = sVECTOR3D(ShildRadius,0.05f*ShildRadius,ShildRadius);
 		Shild2->DeadZone = ShildRadius-0.05;
 		Shild2->IsMagnet = true;

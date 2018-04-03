@@ -87,7 +87,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		GraphicFX[0]->MoveSystem(Object->Location);
 		GraphicFX[0]->ParticlesPerSec = (int)(10*Object->Radius);
 		GraphicFX[0]->Direction = Object->Orientation;
-		GraphicFX[0]->CreationType = 2;
+		GraphicFX[0]->CreationType = eParticleCreationType::Sphere;
 		GraphicFX[0]->CreationSize = sVECTOR3D(tRadius,tRadius,tRadius);
 		GraphicFX[0]->Life       = 1.5f;
 		GraphicFX[0]->SizeStart  = tRadius/1.5f;

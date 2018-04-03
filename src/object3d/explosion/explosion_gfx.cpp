@@ -123,7 +123,7 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->LifeVar	 = vw_Randf0/10.0f;
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->ParticlesPerSec = 20;
-		ParticleSystem->CreationType = 1;
+		ParticleSystem->CreationType = eParticleCreationType::Cube;
 		ParticleSystem->CreationSize = sVECTOR3D(2.8f,2.8f,2.8f);
 		ParticleSystem->NeedStop = true;
 		break;
@@ -209,7 +209,7 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 300;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(2.0f,0.3f,2.0f);
 		ParticleSystem->DeadZone = 1.9f;
 		ParticleSystem->AlphaShowHide = true;
@@ -234,7 +234,7 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 100;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(3.0f,0.3f,3.0f);
 		ParticleSystem->DeadZone = 0.9f;
 		ParticleSystem->AlphaShowHide = true;
@@ -259,7 +259,7 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 100;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(3.0f,0.3f,3.0f);
 		ParticleSystem->DeadZone = 0.9f;
 		ParticleSystem->AlphaShowHide = true;
@@ -283,7 +283,7 @@ void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->CreationType = 2;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(3.0f,0.3f,3.0f);
 		ParticleSystem->DeadZone = 0.9f;
 		ParticleSystem->AlphaShowHide = false;
