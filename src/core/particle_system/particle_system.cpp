@@ -169,10 +169,10 @@ bool cParticleSystem::Update(float Time)
 	}
 
 	// подсчитываем, как много частиц нам нужно создать из ParticlesPerSec
-	float ParticlesNeeded = (ParticlesPerSec/ParticleSystemQuality) * TimeDelta + EmissionResidue;
+	float ParticlesNeeded = (ParticlesPerSec / ParticleSystemQuality) * TimeDelta + EmissionResidue;
 
 	// переводим в целочисленные значения
-	ParticlesCreated = (int)ParticlesNeeded;
+	unsigned int ParticlesCreated = (unsigned int)ParticlesNeeded;
 
 	if (!IsSuppressed) {
 		// запоминаем разницу между тем сколько нужно и сколько создадим
@@ -184,259 +184,8 @@ bool cParticleSystem::Update(float Time)
 	}
 
 	// если нужно что-то создавать, создаем
-	if (ParticlesCreated > 0) {
-		// если пытаемся создать за один раз больше чем можем в секунду
-		// убираем этот "глюк", видно компьютер тормозит
-		if (ParticlesCreated > ParticlesPerSec) ParticlesCreated = ParticlesPerSec;
-		// пока не создадим все необходимые частицы
-		while (ParticlesCreated > 0) {
-			// create new particle
-			ParticlesList.emplace_front();
-			// NOTE emplace_front() return reference to the inserted element (since C++17)
-			//      this line could be combined with previous line, we could use
-			//      ParticlesList.front() directly, but "NewParticle" usage make code more clear
-			cParticle &NewParticle = ParticlesList.front();
-			ParticlesCountInList++;
-
-			// установка жизни новой частици и проверка, что не выходит из диапахона
-			NewParticle.Age = 0.0f;
-			NewParticle.Lifetime = Life + vw_Randf0 * LifeVar;
-			if (NewParticle.Lifetime < 0.0f)
-				NewParticle.Lifetime = 0.0f;
-
-			// стартовый цвет
-			NewParticle.Color.r = ColorStart.r + vw_Randf0 * ColorVar.r;
-			NewParticle.Color.g = ColorStart.g + vw_Randf0 * ColorVar.g;
-			NewParticle.Color.b = ColorStart.b + vw_Randf0 * ColorVar.b;
-
-			// проверяем, чтобы не было переполнения цвета
-			vw_Clamp(NewParticle.Color.r, 0.0f, 1.0f);
-			vw_Clamp(NewParticle.Color.g, 0.0f, 1.0f);
-			vw_Clamp(NewParticle.Color.b, 0.0f, 1.0f);
-
-			// считаем delta относительно жизни частицы
-			NewParticle.ColorDelta.r = (ColorEnd.r - NewParticle.Color.r) / NewParticle.Lifetime;
-			NewParticle.ColorDelta.g = (ColorEnd.g - NewParticle.Color.g) / NewParticle.Lifetime;
-			NewParticle.ColorDelta.b = (ColorEnd.b - NewParticle.Color.b) / NewParticle.Lifetime;
-
-			// считаем значение альфы
-			NewParticle.Alpha = AlphaStart + vw_Randf0 * AlphaVar;
-			// убираем переполнение
-			vw_Clamp(NewParticle.Alpha, 0.0f, 1.0f);
-			// считаем дельту альфы
-			NewParticle.AlphaDelta = (AlphaEnd - NewParticle.Alpha) / NewParticle.Lifetime;
-			// передаем тип изменения альфы
-			NewParticle.AlphaShowHide = AlphaShowHide;
-			// если нужно маргнуть, не обращаем внимания на Alpha вообще
-			if (NewParticle.AlphaShowHide) {
-				NewParticle.AlphaDelta = (2.0f-AlphaEnd * 2.0f) / NewParticle.Lifetime;
-				NewParticle.Alpha = AlphaEnd;
-			}
-
-			// выпускаем частицу возле места нахождения системы
-			if (CreationType == eParticleCreationType::Point)
-				NewParticle.Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x,
-									    vw_Randf0 * CreationSize.y,
-									    vw_Randf0 * CreationSize.z);
-			if (CreationType == eParticleCreationType::Cube) {
-				if (DeadZone != 0.0f) {
-					float minDist = CreationSize.x * CreationSize.x +
-							CreationSize.y * CreationSize.y +
-							CreationSize.z * CreationSize.z;
-					// если зона больше чем радиус излучения - выключаем ее
-					if (minDist <= DeadZone*DeadZone)
-						DeadZone = 0.0f;
-				}
-
-				sVECTOR3D tmp;
-				tmp.x = vw_Randf0 * CreationSize.x;
-				tmp.y = vw_Randf0 * CreationSize.y;
-				tmp.z = vw_Randf0 * CreationSize.z;
-				while (tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z < DeadZone * DeadZone) {
-					// ув. радиус
-					sVECTOR3D tmp1 = tmp;
-					tmp1.Normalize();
-					tmp1 = tmp1 ^ (1 / 100.0f);
-					tmp = tmp + tmp1;
-				}
-
-				vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
-				NewParticle.Location = Location + tmp;
-			}
-			if (CreationType == eParticleCreationType::Tube) {
-				if (DeadZone != 0.0f) {
-					float minDist = CreationSize.x * CreationSize.x +
-							CreationSize.y * CreationSize.y +
-							CreationSize.z * CreationSize.z;
-					// если зона больше чем радиус излучения - выключаем ее
-					if (minDist <= DeadZone * DeadZone)
-						DeadZone = 0.0f;
-				}
-
-				sVECTOR3D tmp;
-				tmp.x = (0.5f - vw_Randf1) * CreationSize.x;
-				tmp.y = (0.5f - vw_Randf1) * CreationSize.y;
-				tmp.z = (0.5f - vw_Randf1) * CreationSize.z;
-				sVECTOR3D CreationSizeText = CreationSize ^ 0.5f;
-				while (tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z < DeadZone * DeadZone) {
-					// ув. радиус
-					sVECTOR3D tmp1 = tmp;
-					tmp1.Normalize();
-					tmp1 = tmp1 ^ (1 / 100.0f);
-					tmp = tmp + tmp1;
-				}
-
-				if (tmp.x > 0.0f) {
-					if (tmp.x > CreationSizeText.x)
-						tmp.x = CreationSizeText.x;
-				} else {
-					if (tmp.x < -CreationSizeText.x)
-						tmp.x = -CreationSizeText.x;
-				}
-
-				if (tmp.y > 0.0f) {
-					if (tmp.y > CreationSizeText.y)
-						tmp.y = CreationSizeText.y;
-				} else {
-					if (tmp.y < -CreationSizeText.y)
-						tmp.y = -CreationSizeText.y;
-				}
-				// делаем ручное регулирование
-				if (tmp.z > 0.0f) {
-					if (tmp.z > CreationSizeText.z)
-						tmp.z = CreationSizeText.z;
-				} else {
-					if (tmp.z < -CreationSizeText.z)
-						tmp.z = -CreationSizeText.z;
-				}
-
-				vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
-				NewParticle.Location = Location + tmp;
-			}
-			if (CreationType == eParticleCreationType::Sphere) {
-				float minDist = CreationSize.x * CreationSize.x +
-						CreationSize.y * CreationSize.y +
-						CreationSize.z * CreationSize.z;
-				// если зона больше чем радиус излучения - выключаем ее
-				if (minDist <= DeadZone * DeadZone)
-					DeadZone = 0.0f;
-
-				sVECTOR3D tmp;
-				tmp.x = vw_Randf0 * CreationSize.x;
-				tmp.y = vw_Randf0 * CreationSize.y;
-				tmp.z = vw_Randf0 * CreationSize.z;
-				float ParticleDist = tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z;
-				while ((ParticleDist > minDist) || (ParticleDist < DeadZone * DeadZone)) {
-					if (ParticleDist > minDist) {
-						// ум. радиус
-						sVECTOR3D tmp1 = tmp;
-						tmp1.Normalize();
-						tmp1 = tmp1 ^ (1 / 100.0f);
-						tmp = tmp - tmp1;
-					}
-					if ( ParticleDist < DeadZone * DeadZone) {
-						// ув. радиус
-						sVECTOR3D tmp1 = tmp;
-						tmp1.Normalize();
-						tmp1 = tmp1 ^ (1 / 100.0f);
-						tmp = tmp + tmp1;
-
-						if (tmp.x > 0.0f) {
-							if (tmp.x > CreationSize.x)
-								tmp.x = CreationSize.x;
-						} else {
-							if (tmp.x < -CreationSize.x)
-								tmp.x = -CreationSize.x;
-						}
-
-						if (tmp.y > 0.0f) {
-							if (tmp.y > CreationSize.y)
-								tmp.y = CreationSize.y;
-						} else {
-							if (tmp.y < -CreationSize.y)
-								tmp.y = -CreationSize.y;
-						}
-
-						if (tmp.z > 0.0f) {
-							if (tmp.z > CreationSize.z)
-								tmp.z = CreationSize.z;
-						} else {
-							if (tmp.z < -CreationSize.z)
-								tmp.z = -CreationSize.z;
-						}
-					}
-
-					ParticleDist = tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z;
-				}
-
-				vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
-				NewParticle.Location = Location + tmp;
-			}
-
-			// учитываем перемещение системы, генерируем частицы равномерно
-			sVECTOR3D L = (Location - PrevLocation) ^ ((ParticlesNeeded - ParticlesCreated) / ParticlesNeeded);
-			NewParticle.Location = NewParticle.Location - L;
-
-			// считаем размер частицы
-			NewParticle.Size = SizeStart + vw_Randf0 * SizeVar;
-			if (NewParticle.Size < 0.0f)
-				NewParticle.Size = SizeStart;
-			NewParticle.SizeDelta = (SizeEnd - NewParticle.Size) / NewParticle.Lifetime;
-			// если есть учет расстояния, работаем с ним
-			if (Resize < 1.0f) {
-				// получаем текущее положение камеры
-				sVECTOR3D CurrentCameraLocation;
-				vw_GetCameraLocation(&CurrentCameraLocation);
-				// находим расстояние от центра системы до камеры
-				float SystDist = (CurrentCameraLocation.x - Location.x - CreationSize.x) *
-						 (CurrentCameraLocation.x - Location.x - CreationSize.x) +
-						 (CurrentCameraLocation.y - Location.y - CreationSize.y) *
-						 (CurrentCameraLocation.y - Location.y - CreationSize.y) +
-						 (CurrentCameraLocation.z - Location.z - CreationSize.z) *
-						 (CurrentCameraLocation.z - Location.z - CreationSize.z);
-
-				float ParticleDist = (CurrentCameraLocation.x - NewParticle.Location.x) *
-						     (CurrentCameraLocation.x - NewParticle.Location.x) +
-						     (CurrentCameraLocation.y - NewParticle.Location.y) *
-						     (CurrentCameraLocation.y - NewParticle.Location.y) +
-						     (CurrentCameraLocation.z - NewParticle.Location.z) *
-						     (CurrentCameraLocation.z - NewParticle.Location.z);
-
-				// если частица ближе центра к камере - нужна корректировка
-				if (ParticleDist < SystDist) {
-					float tmpStart = SizeStart - SizeStart * (1.0f - Resize) * (SystDist-ParticleDist) / SystDist;
-					float tmpEnd = SizeEnd - SizeEnd*(1.0f - Resize) * (SystDist-ParticleDist) / SystDist;
-					float tmpVar = SizeVar - SizeVar*(1.0f - Resize) * (SystDist-ParticleDist) / SystDist;
-
-					NewParticle.Size = tmpStart + vw_Randf0 * tmpVar;
-					if (NewParticle.Size < 0.0f)
-						NewParticle.Size = 0.0f;
-					NewParticle.SizeDelta = (tmpEnd - NewParticle.Size) / NewParticle.Lifetime;
-				}
-			}
-
-			// испускатель имеет направление. этот код немного добавляет случайности
-			if (Theta == 0.0f)
-				NewParticle.Velocity = Direction;
-			else {
-
-				NewParticle.Velocity = Direction;
-				vw_RotatePoint(NewParticle.Velocity,
-					       sVECTOR3D(Theta * vw_Randf0 / 2.0f, Theta * vw_Randf0/2.0f, 0.0f));
-			}
-
-			NewParticle.NeedStop = NeedStop;
-
-			// находим перемещение
-			float NewSpeed = Speed + vw_Randf0 * SpeedVar;
-			if (NewSpeed < 0.0f)
-				NewSpeed = 0.0f;
-			NewParticle.Velocity *= NewSpeed;
-
-			// уменьшаем необходимое количество частиц
-			ParticlesCreated--;
-		}
-	}
+	if (ParticlesCreated > 0)
+		EmitParticles(ParticlesCreated);
 
 	// если уже ничего нет и нужно выйти - выходим
 	if (DestroyIfNoParticles &&
@@ -453,6 +202,262 @@ bool cParticleSystem::Update(float Time)
 	CalculateAABB();
 
 	return true;
+}
+
+/*
+ * Emit particles.
+ */
+void cParticleSystem::EmitParticles(unsigned int Quantity)
+{
+	// если пытаемся создать за один раз больше чем можем в секунду
+	// убираем этот "глюк", видно компьютер тормозит
+	if (Quantity > ParticlesPerSec)
+		Quantity = ParticlesPerSec;
+
+	// пока не создадим все необходимые частицы
+	while (Quantity > 0) {
+		// create new particle
+		ParticlesList.emplace_front();
+		// NOTE emplace_front() return reference to the inserted element (since C++17)
+		//      this line could be combined with previous line, we could use
+		//      ParticlesList.front() directly, but "NewParticle" usage make code more clear
+		cParticle &NewParticle = ParticlesList.front();
+		ParticlesCountInList++;
+
+		// установка жизни новой частици и проверка, что не выходит из диапахона
+		NewParticle.Age = 0.0f;
+		NewParticle.Lifetime = Life + vw_Randf0 * LifeVar;
+		if (NewParticle.Lifetime < 0.0f)
+			NewParticle.Lifetime = 0.0f;
+
+		// стартовый цвет
+		NewParticle.Color.r = ColorStart.r + vw_Randf0 * ColorVar.r;
+		NewParticle.Color.g = ColorStart.g + vw_Randf0 * ColorVar.g;
+		NewParticle.Color.b = ColorStart.b + vw_Randf0 * ColorVar.b;
+
+		// проверяем, чтобы не было переполнения цвета
+		vw_Clamp(NewParticle.Color.r, 0.0f, 1.0f);
+		vw_Clamp(NewParticle.Color.g, 0.0f, 1.0f);
+		vw_Clamp(NewParticle.Color.b, 0.0f, 1.0f);
+
+		// считаем delta относительно жизни частицы
+		NewParticle.ColorDelta.r = (ColorEnd.r - NewParticle.Color.r) / NewParticle.Lifetime;
+		NewParticle.ColorDelta.g = (ColorEnd.g - NewParticle.Color.g) / NewParticle.Lifetime;
+		NewParticle.ColorDelta.b = (ColorEnd.b - NewParticle.Color.b) / NewParticle.Lifetime;
+
+		// считаем значение альфы
+		NewParticle.Alpha = AlphaStart + vw_Randf0 * AlphaVar;
+		// убираем переполнение
+		vw_Clamp(NewParticle.Alpha, 0.0f, 1.0f);
+		// считаем дельту альфы
+		NewParticle.AlphaDelta = (AlphaEnd - NewParticle.Alpha) / NewParticle.Lifetime;
+		// передаем тип изменения альфы
+		NewParticle.AlphaShowHide = AlphaShowHide;
+		// если нужно маргнуть, не обращаем внимания на Alpha вообще
+		if (NewParticle.AlphaShowHide) {
+			NewParticle.AlphaDelta = (2.0f-AlphaEnd * 2.0f) / NewParticle.Lifetime;
+			NewParticle.Alpha = AlphaEnd;
+		}
+
+		// выпускаем частицу возле места нахождения системы
+		if (CreationType == eParticleCreationType::Point)
+			NewParticle.Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x,
+								    vw_Randf0 * CreationSize.y,
+								    vw_Randf0 * CreationSize.z);
+		if (CreationType == eParticleCreationType::Cube) {
+			if (DeadZone != 0.0f) {
+				float minDist = CreationSize.x * CreationSize.x +
+						CreationSize.y * CreationSize.y +
+						CreationSize.z * CreationSize.z;
+				// если зона больше чем радиус излучения - выключаем ее
+				if (minDist <= DeadZone*DeadZone)
+					DeadZone = 0.0f;
+			}
+
+			sVECTOR3D tmp;
+			tmp.x = vw_Randf0 * CreationSize.x;
+			tmp.y = vw_Randf0 * CreationSize.y;
+			tmp.z = vw_Randf0 * CreationSize.z;
+			while (tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z < DeadZone * DeadZone) {
+				// ув. радиус
+				sVECTOR3D tmp1 = tmp;
+				tmp1.Normalize();
+				tmp1 = tmp1 ^ (1 / 100.0f);
+				tmp = tmp + tmp1;
+			}
+
+			vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
+			NewParticle.Location = Location + tmp;
+		}
+		if (CreationType == eParticleCreationType::Tube) {
+			if (DeadZone != 0.0f) {
+				float minDist = CreationSize.x * CreationSize.x +
+						CreationSize.y * CreationSize.y +
+						CreationSize.z * CreationSize.z;
+				// если зона больше чем радиус излучения - выключаем ее
+				if (minDist <= DeadZone * DeadZone)
+					DeadZone = 0.0f;
+			}
+
+			sVECTOR3D tmp;
+			tmp.x = (0.5f - vw_Randf1) * CreationSize.x;
+			tmp.y = (0.5f - vw_Randf1) * CreationSize.y;
+			tmp.z = (0.5f - vw_Randf1) * CreationSize.z;
+			sVECTOR3D CreationSizeText = CreationSize ^ 0.5f;
+			while (tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z < DeadZone * DeadZone) {
+				// ув. радиус
+				sVECTOR3D tmp1 = tmp;
+				tmp1.Normalize();
+				tmp1 = tmp1 ^ (1 / 100.0f);
+				tmp = tmp + tmp1;
+			}
+
+			if (tmp.x > 0.0f) {
+				if (tmp.x > CreationSizeText.x)
+					tmp.x = CreationSizeText.x;
+			} else {
+				if (tmp.x < -CreationSizeText.x)
+					tmp.x = -CreationSizeText.x;
+			}
+
+			if (tmp.y > 0.0f) {
+				if (tmp.y > CreationSizeText.y)
+					tmp.y = CreationSizeText.y;
+			} else {
+				if (tmp.y < -CreationSizeText.y)
+					tmp.y = -CreationSizeText.y;
+			}
+			// делаем ручное регулирование
+			if (tmp.z > 0.0f) {
+				if (tmp.z > CreationSizeText.z)
+					tmp.z = CreationSizeText.z;
+			} else {
+				if (tmp.z < -CreationSizeText.z)
+					tmp.z = -CreationSizeText.z;
+			}
+
+			vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
+			NewParticle.Location = Location + tmp;
+		}
+		if (CreationType == eParticleCreationType::Sphere) {
+			float minDist = CreationSize.x * CreationSize.x +
+					CreationSize.y * CreationSize.y +
+					CreationSize.z * CreationSize.z;
+			// если зона больше чем радиус излучения - выключаем ее
+			if (minDist <= DeadZone * DeadZone)
+				DeadZone = 0.0f;
+
+			sVECTOR3D tmp;
+			tmp.x = vw_Randf0 * CreationSize.x;
+			tmp.y = vw_Randf0 * CreationSize.y;
+			tmp.z = vw_Randf0 * CreationSize.z;
+			float ParticleDist = tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z;
+			while ((ParticleDist > minDist) || (ParticleDist < DeadZone * DeadZone)) {
+				if (ParticleDist > minDist) {
+					// ум. радиус
+					sVECTOR3D tmp1 = tmp;
+					tmp1.Normalize();
+					tmp1 = tmp1 ^ (1 / 100.0f);
+					tmp = tmp - tmp1;
+				}
+				if ( ParticleDist < DeadZone * DeadZone) {
+					// ув. радиус
+					sVECTOR3D tmp1 = tmp;
+					tmp1.Normalize();
+					tmp1 = tmp1 ^ (1 / 100.0f);
+					tmp = tmp + tmp1;
+
+					if (tmp.x > 0.0f) {
+						if (tmp.x > CreationSize.x)
+							tmp.x = CreationSize.x;
+					} else {
+						if (tmp.x < -CreationSize.x)
+							tmp.x = -CreationSize.x;
+					}
+
+					if (tmp.y > 0.0f) {
+						if (tmp.y > CreationSize.y)
+							tmp.y = CreationSize.y;
+					} else {
+						if (tmp.y < -CreationSize.y)
+							tmp.y = -CreationSize.y;
+					}
+
+					if (tmp.z > 0.0f) {
+						if (tmp.z > CreationSize.z)
+							tmp.z = CreationSize.z;
+					} else {
+						if (tmp.z < -CreationSize.z)
+							tmp.z = -CreationSize.z;
+					}
+				}
+
+				ParticleDist = tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z;
+			}
+
+			vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
+			NewParticle.Location = Location + tmp;
+		}
+
+		// считаем размер частицы
+		NewParticle.Size = SizeStart + vw_Randf0 * SizeVar;
+		if (NewParticle.Size < 0.0f)
+			NewParticle.Size = SizeStart;
+		NewParticle.SizeDelta = (SizeEnd - NewParticle.Size) / NewParticle.Lifetime;
+		// если есть учет расстояния, работаем с ним
+		if (Resize < 1.0f) {
+			// получаем текущее положение камеры
+			sVECTOR3D CurrentCameraLocation;
+			vw_GetCameraLocation(&CurrentCameraLocation);
+			// находим расстояние от центра системы до камеры
+			float SystDist = (CurrentCameraLocation.x - Location.x - CreationSize.x) *
+					 (CurrentCameraLocation.x - Location.x - CreationSize.x) +
+					 (CurrentCameraLocation.y - Location.y - CreationSize.y) *
+					 (CurrentCameraLocation.y - Location.y - CreationSize.y) +
+					 (CurrentCameraLocation.z - Location.z - CreationSize.z) *
+					 (CurrentCameraLocation.z - Location.z - CreationSize.z);
+
+			float ParticleDist = (CurrentCameraLocation.x - NewParticle.Location.x) *
+					     (CurrentCameraLocation.x - NewParticle.Location.x) +
+					     (CurrentCameraLocation.y - NewParticle.Location.y) *
+					     (CurrentCameraLocation.y - NewParticle.Location.y) +
+					     (CurrentCameraLocation.z - NewParticle.Location.z) *
+					     (CurrentCameraLocation.z - NewParticle.Location.z);
+
+			// если частица ближе центра к камере - нужна корректировка
+			if (ParticleDist < SystDist) {
+				float tmpStart = SizeStart - SizeStart * (1.0f - Resize) * (SystDist-ParticleDist) / SystDist;
+				float tmpEnd = SizeEnd - SizeEnd*(1.0f - Resize) * (SystDist-ParticleDist) / SystDist;
+				float tmpVar = SizeVar - SizeVar*(1.0f - Resize) * (SystDist-ParticleDist) / SystDist;
+
+				NewParticle.Size = tmpStart + vw_Randf0 * tmpVar;
+				if (NewParticle.Size < 0.0f)
+					NewParticle.Size = 0.0f;
+				NewParticle.SizeDelta = (tmpEnd - NewParticle.Size) / NewParticle.Lifetime;
+			}
+		}
+
+		// испускатель имеет направление. этот код немного добавляет случайности
+		if (Theta == 0.0f)
+			NewParticle.Velocity = Direction;
+		else {
+
+			NewParticle.Velocity = Direction;
+			vw_RotatePoint(NewParticle.Velocity,
+				       sVECTOR3D(Theta * vw_Randf0 / 2.0f, Theta * vw_Randf0/2.0f, 0.0f));
+		}
+
+		NewParticle.NeedStop = NeedStop;
+
+		// находим перемещение
+		float NewSpeed = Speed + vw_Randf0 * SpeedVar;
+		if (NewSpeed < 0.0f)
+			NewSpeed = 0.0f;
+		NewParticle.Velocity *= NewSpeed;
+
+		// уменьшаем необходимое количество частиц
+		Quantity--;
+	}
 }
 
 /*

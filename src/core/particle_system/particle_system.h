@@ -125,9 +125,7 @@ public:
 	sVECTOR3D Angle{0.0f, 0.0f, 0.0f};
 
 	// кол-во создаваемых частиц в секунду
-	int ParticlesPerSec{100};
-	// сколько создавать
-	int ParticlesCreated{0};
+	unsigned int ParticlesPerSec{100};
 
 	// если нужно замедлять и остановить
 	bool NeedStop{false};
@@ -223,6 +221,9 @@ private:
 	sVECTOR3D PrevLocation{0.0f, 0.0f, 0.0f};
 	// текущее положение частиц в пространстве
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
+
+	// Emit particles.
+	void EmitParticles(unsigned int Quantity);
 
 	// Update light.
 	void UpdateLight(float TimeDelta);
