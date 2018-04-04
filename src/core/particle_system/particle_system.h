@@ -186,6 +186,8 @@ private:
 
 	// Emit particles.
 	void EmitParticles(unsigned int Quantity);
+	// Particle size correction by camera distance.
+	void SizeCorrectionByCameraDist(cParticle &NewParticle);
 	// Generate location for new particle (point type).
 	void GenerateLocationPointType(cParticle &NewParticle);
 	// Generate location for new particle (cube type).

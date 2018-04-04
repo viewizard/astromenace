@@ -284,38 +284,8 @@ void cParticleSystem::EmitParticles(unsigned int Quantity)
 			NewParticle.Size = SizeStart;
 		NewParticle.SizeDelta = (SizeEnd - NewParticle.Size) / NewParticle.Lifetime;
 		// если есть учет расстояния, работаем с ним
-		if (CameraDistResize < 1.0f) {
-			// получаем текущее положение камеры
-			sVECTOR3D CurrentCameraLocation;
-			vw_GetCameraLocation(&CurrentCameraLocation);
-			// находим расстояние от центра системы до камеры
-			float SystDist = (CurrentCameraLocation.x - Location.x - CreationSize.x) *
-					 (CurrentCameraLocation.x - Location.x - CreationSize.x) +
-					 (CurrentCameraLocation.y - Location.y - CreationSize.y) *
-					 (CurrentCameraLocation.y - Location.y - CreationSize.y) +
-					 (CurrentCameraLocation.z - Location.z - CreationSize.z) *
-					 (CurrentCameraLocation.z - Location.z - CreationSize.z);
-
-			float ParticleDist = (CurrentCameraLocation.x - NewParticle.Location.x) *
-					     (CurrentCameraLocation.x - NewParticle.Location.x) +
-					     (CurrentCameraLocation.y - NewParticle.Location.y) *
-					     (CurrentCameraLocation.y - NewParticle.Location.y) +
-					     (CurrentCameraLocation.z - NewParticle.Location.z) *
-					     (CurrentCameraLocation.z - NewParticle.Location.z);
-
-			// если частица ближе центра к камере - нужна корректировка
-			if (ParticleDist < SystDist) {
-				float tmpStart = SizeStart -
-						 SizeStart * (1.0f - CameraDistResize) * (SystDist-ParticleDist) / SystDist;
-				float tmpEnd = SizeEnd - SizeEnd*(1.0f - CameraDistResize) * (SystDist-ParticleDist) / SystDist;
-				float tmpVar = SizeVar - SizeVar*(1.0f - CameraDistResize) * (SystDist-ParticleDist) / SystDist;
-
-				NewParticle.Size = tmpStart + vw_Randf0 * tmpVar;
-				if (NewParticle.Size < 0.0f)
-					NewParticle.Size = 0.0f;
-				NewParticle.SizeDelta = (tmpEnd - NewParticle.Size) / NewParticle.Lifetime;
-			}
-		}
+		if (CameraDistResize < 1.0f)
+			SizeCorrectionByCameraDist(NewParticle);
 
 		// испускатель имеет направление. этот код немного добавляет случайности
 		if (Theta == 0.0f)
@@ -337,6 +307,42 @@ void cParticleSystem::EmitParticles(unsigned int Quantity)
 
 		// уменьшаем необходимое количество частиц
 		Quantity--;
+	}
+}
+
+/*
+ * Particle size correction by camera distance.
+ */
+void cParticleSystem::SizeCorrectionByCameraDist(cParticle &NewParticle)
+{
+	// current camera location
+	sVECTOR3D CurrentCameraLocation;
+	vw_GetCameraLocation(&CurrentCameraLocation);
+	// distance from system to camera
+	float SystDist = (CurrentCameraLocation.x - Location.x - CreationSize.x) *
+			 (CurrentCameraLocation.x - Location.x - CreationSize.x) +
+			 (CurrentCameraLocation.y - Location.y - CreationSize.y) *
+			 (CurrentCameraLocation.y - Location.y - CreationSize.y) +
+			 (CurrentCameraLocation.z - Location.z - CreationSize.z) *
+			 (CurrentCameraLocation.z - Location.z - CreationSize.z);
+
+	// distance to particle
+	float ParticleDist = (CurrentCameraLocation.x - NewParticle.Location.x) *
+			     (CurrentCameraLocation.x - NewParticle.Location.x) +
+			     (CurrentCameraLocation.y - NewParticle.Location.y) *
+			     (CurrentCameraLocation.y - NewParticle.Location.y) +
+			     (CurrentCameraLocation.z - NewParticle.Location.z) *
+			     (CurrentCameraLocation.z - NewParticle.Location.z);
+
+	if (ParticleDist < SystDist) {
+		float tmpStart = SizeStart - SizeStart * (1.0f - CameraDistResize) * (SystDist-ParticleDist) / SystDist;
+		float tmpEnd = SizeEnd - SizeEnd * (1.0f - CameraDistResize) * (SystDist-ParticleDist) / SystDist;
+		float tmpVar = SizeVar - SizeVar * (1.0f - CameraDistResize) * (SystDist-ParticleDist) / SystDist;
+
+		NewParticle.Size = tmpStart + vw_Randf0 * tmpVar;
+		if (NewParticle.Size < 0.0f)
+			NewParticle.Size = 0.0f;
+		NewParticle.SizeDelta = (tmpEnd - NewParticle.Size) / NewParticle.Lifetime;
 	}
 }
 
