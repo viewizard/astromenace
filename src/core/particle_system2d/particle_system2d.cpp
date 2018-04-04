@@ -48,7 +48,7 @@ unsigned int DrawBufferSize{0};
 
 // std::forward_list, since we operate directly via pointers and
 // don't really care about erase/access to particular element
-std::forward_list<cParticleSystem2D> ParticleSystemsList;
+std::forward_list<std::shared_ptr<cParticleSystem2D>> ParticleSystemsList;
 
 } // unnamed namespace
 
@@ -454,13 +454,36 @@ void cParticleSystem2D::SetRotation(const sVECTOR3D &NewAngle)
 
 /*
  * Create new particle system 2D.
+ * Note, we don't provide shared_ptr, only weak_ptr, since all memory management
+ * should be internal only. Caller should operate with weak_ptr and use lock()
+ * (shared_ptr) only during access to object.
  */
-cParticleSystem2D *vw_CreateParticleSystem2D()
+std::weak_ptr<cParticleSystem2D> vw_CreateParticleSystem2D()
 {
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined
-	ParticleSystemsList.emplace_front();
-	return &ParticleSystemsList.front();
+	ParticleSystemsList.emplace_front(new cParticleSystem2D, [](cParticleSystem2D *p) {delete p;});
+	return std::weak_ptr<cParticleSystem2D>{ParticleSystemsList.front()};
+}
+
+/*
+ * Update all particle systems 2D.
+ */
+void vw_UpdateAllParticleSystems2D(float Time)
+{
+	for (const auto &tmpParticleSystem : ParticleSystemsList) {
+		tmpParticleSystem->Update(Time);
+	}
+}
+
+/*
+ * Draw all particle systems 2D.
+ */
+void vw_DrawAllParticleSystems2D()
+{
+	for (const auto &tmpParticleSystem : ParticleSystemsList) {
+		tmpParticleSystem->Draw();
+	}
 }
 
 /*

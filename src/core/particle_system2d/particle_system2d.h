@@ -61,6 +61,8 @@ private:
 };
 
 class cParticleSystem2D {
+	friend std::weak_ptr<cParticleSystem2D> vw_CreateParticleSystem2D();
+
 public:
 	// Update all particles.
 	void Update(float Time);
@@ -109,6 +111,11 @@ public:
 	bool IsSuppressed{false};	// if suppressed, particle system can't emit new particles
 
 private:
+	// Don't allow direct new/delete usage in code, only vw_CreateParticleSystem2D()
+	// allowed for particle creation and release setup (deleter must be provided).
+	cParticleSystem2D() = default;
+	~cParticleSystem2D() = default;
+
 	// Emit particles.
 	void EmitParticles(unsigned int Quantity);
 	// Setup new particle direction.
@@ -135,7 +142,11 @@ private:
 
 
 // Create new particle system 2D.
-cParticleSystem2D *vw_CreateParticleSystem2D();
+std::weak_ptr<cParticleSystem2D> vw_CreateParticleSystem2D();
+// Update all particle systems 2D.
+void vw_UpdateAllParticleSystems2D(float Time);
+// Draw all particle systems 2D.
+void vw_DrawAllParticleSystems2D();
 // Release all particle systems 2D.
 void vw_ReleaseAllParticleSystems2D();
 
