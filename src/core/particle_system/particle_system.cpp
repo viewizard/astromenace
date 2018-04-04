@@ -24,8 +24,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 // TODO since we use RI_TRIANGLES, use 4 vertices + index buffer for vw_SendVertices()
 //      instead of 6 vertices, so, we send 4 vertices and index buffer for 6 elements,
 //      something like {1, 2, 3, 3, 4, 1}
@@ -74,27 +72,21 @@ std::forward_list<cParticleSystem> ParticleSystemsList{};
 bool cParticle::Update(float TimeDelta, const sVECTOR3D &ParentLocation,
 		       bool Magnet, float MagnetFactor)
 {
-	// Если частица уже мертва, ее нужно отключить - передаем в систему эти данные
 	if (Age + TimeDelta >= Lifetime) {
 		Age = -1.0f;
 		return false;
 	} else {
-		// увеличиваем возраст частицы
 		Age += TimeDelta;
 
-		// перемещаем частицу на нужное значение
 		Location += Velocity ^ TimeDelta;
 
 		if (NeedStop)
 			Velocity -= Velocity ^ TimeDelta;
 
-		// если есть притяжение системы, просчитываем воздействие
 		if (Magnet) {
-			// рассчитывае вектор взаимодействия между частицей и точкой притяжения
 			sVECTOR3D MagnetDir = ParentLocation;
 			MagnetDir -= Location;
 
-			// если нужно использовать притяжения, считаем перемещение
 			if (NeedStop)
 				MagnetFactor -= MagnetFactor * TimeDelta;
 
@@ -102,12 +94,10 @@ bool cParticle::Update(float TimeDelta, const sVECTOR3D &ParentLocation,
 			Velocity += MagnetDir ^ (MagnetFactor * TimeDelta);
 		}
 
-		// просчитываем текущий цвет частицы
 		Color.r += ColorDelta.r * TimeDelta;
 		Color.g += ColorDelta.g * TimeDelta;
 		Color.b += ColorDelta.b * TimeDelta;
 
-		// просчитываем текущую прозрачность
 		if (!AlphaShowHide)
 			Alpha += AlphaDelta * TimeDelta;
 		else {
@@ -123,11 +113,9 @@ bool cParticle::Update(float TimeDelta, const sVECTOR3D &ParentLocation,
 			vw_Clamp( Alpha, 0.0f, 1.0f );
 		}
 
-		// текущий размер частицы
 		Size += SizeDelta * TimeDelta;
 	}
 
-	// если пришли сюда - значит все хорошо и частица работает
 	return true;
 }
 
@@ -145,21 +133,19 @@ cParticleSystem::~cParticleSystem()
  */
 bool cParticleSystem::Update(float Time)
 {
-	// первый раз... просто берем время
+	// on first update, only change TimeLastUpdate value
 	if (TimeLastUpdate < 0.0f) {
 		TimeLastUpdate = Time;
 		return true;
 	}
 
-	// Time - это абсолютное время, вычисляем дельту
 	float TimeDelta = Time - TimeLastUpdate;
-	// быстро вызвали
 	if (TimeDelta == 0.0f)
 		return true;
 
 	TimeLastUpdate = Time;
 
-	// для всех частиц вызываем их собственный апдейт
+	// update and remove (erase) dead particles
 	auto prev_iter = ParticlesList.before_begin();
 	for (auto iter = ParticlesList.begin(); iter != ParticlesList.end();) {
 		if (!iter->Update(TimeDelta, Location, IsMagnet, MagnetFactor)) {
@@ -171,26 +157,24 @@ bool cParticleSystem::Update(float Time)
 		}
 	}
 
-	// подсчитываем, как много частиц нам нужно создать из ParticlesPerSec
+	// calculate, how many particles we should emit
 	float ParticlesNeeded = (ParticlesPerSec / ParticleSystemQuality) * TimeDelta + EmissionResidue;
 
-	// переводим в целочисленные значения
+	// convert to integer (we can't emit 0.2 particle)
 	unsigned int ParticlesCreated = (unsigned int)ParticlesNeeded;
 
 	if (!IsSuppressed) {
-		// запоминаем разницу между тем сколько нужно и сколько создадим
+		// store emission residue for future Update() calls
 		EmissionResidue = ParticlesNeeded - ParticlesCreated;
 	} else {
-		// ничего создавать не нужно
 		EmissionResidue = ParticlesNeeded;
 		ParticlesCreated = 0;
 	}
 
-	// если нужно что-то создавать, создаем
+	// emit new particles
 	if (ParticlesCreated > 0)
 		EmitParticles(ParticlesCreated);
 
-	// если уже ничего нет и нужно выйти - выходим
 	if (DestroyIfNoParticles &&
 	    ParticlesList.empty())
 		return false;
@@ -210,12 +194,11 @@ bool cParticleSystem::Update(float Time)
  */
 void cParticleSystem::EmitParticles(unsigned int Quantity)
 {
-	// если пытаемся создать за один раз больше чем можем в секунду
-	// убираем этот "глюк", видно компьютер тормозит
+	// prevent 'time's lags' issue, when we need emit huge number of particles
+	// that more than our ParticlesPerSec value
 	if (Quantity > ParticlesPerSec)
 		Quantity = ParticlesPerSec;
 
-	// пока не создадим все необходимые частицы
 	while (Quantity > 0) {
 		// create new particle
 		ParticlesList.emplace_front();
@@ -225,36 +208,28 @@ void cParticleSystem::EmitParticles(unsigned int Quantity)
 		cParticle &NewParticle = ParticlesList.front();
 		ParticlesCountInList++;
 
-		// установка жизни новой частици и проверка, что не выходит из диапахона
+		// setup lifetime and age
 		NewParticle.Age = 0.0f;
 		NewParticle.Lifetime = Life + vw_Randf0 * LifeVar;
 		if (NewParticle.Lifetime < 0.0f)
 			NewParticle.Lifetime = 0.0f;
 
-		// стартовый цвет
+		// calculate color
 		NewParticle.Color.r = ColorStart.r + vw_Randf0 * ColorVar.r;
 		NewParticle.Color.g = ColorStart.g + vw_Randf0 * ColorVar.g;
 		NewParticle.Color.b = ColorStart.b + vw_Randf0 * ColorVar.b;
-
-		// проверяем, чтобы не было переполнения цвета
 		vw_Clamp(NewParticle.Color.r, 0.0f, 1.0f);
 		vw_Clamp(NewParticle.Color.g, 0.0f, 1.0f);
 		vw_Clamp(NewParticle.Color.b, 0.0f, 1.0f);
-
-		// считаем delta относительно жизни частицы
 		NewParticle.ColorDelta.r = (ColorEnd.r - NewParticle.Color.r) / NewParticle.Lifetime;
 		NewParticle.ColorDelta.g = (ColorEnd.g - NewParticle.Color.g) / NewParticle.Lifetime;
 		NewParticle.ColorDelta.b = (ColorEnd.b - NewParticle.Color.b) / NewParticle.Lifetime;
 
-		// считаем значение альфы
+		// calculate alpha
 		NewParticle.Alpha = AlphaStart + vw_Randf0 * AlphaVar;
-		// убираем переполнение
 		vw_Clamp(NewParticle.Alpha, 0.0f, 1.0f);
-		// считаем дельту альфы
 		NewParticle.AlphaDelta = (AlphaEnd - NewParticle.Alpha) / NewParticle.Lifetime;
-		// передаем тип изменения альфы
 		NewParticle.AlphaShowHide = AlphaShowHide;
-		// если нужно маргнуть, не обращаем внимания на Alpha вообще
 		if (NewParticle.AlphaShowHide) {
 			NewParticle.AlphaDelta = (2.0f-AlphaEnd * 2.0f) / NewParticle.Lifetime;
 			NewParticle.Alpha = AlphaEnd;
@@ -278,34 +253,33 @@ void cParticleSystem::EmitParticles(unsigned int Quantity)
 			break;
 		}
 
-		// считаем размер частицы
+		// calculate size
 		NewParticle.Size = SizeStart + vw_Randf0 * SizeVar;
 		if (NewParticle.Size < 0.0f)
 			NewParticle.Size = SizeStart;
 		NewParticle.SizeDelta = (SizeEnd - NewParticle.Size) / NewParticle.Lifetime;
-		// если есть учет расстояния, работаем с ним
+		// care about camera distance
 		if (CameraDistResize < 1.0f)
 			SizeCorrectionByCameraDist(NewParticle);
 
-		// испускатель имеет направление. этот код немного добавляет случайности
-		if (Theta == 0.0f)
+		if (Theta == 0.0f) {
+			// emit in the same direction as particle system
 			NewParticle.Velocity = Direction;
-		else {
-
+		} else {
+			// emit with deviation
 			NewParticle.Velocity = Direction;
 			vw_RotatePoint(NewParticle.Velocity,
-				       sVECTOR3D(Theta * vw_Randf0 / 2.0f, Theta * vw_Randf0/2.0f, 0.0f));
+				       sVECTOR3D(Theta * vw_Randf0 / 2.0f, Theta * vw_Randf0 / 2.0f, 0.0f));
 		}
 
 		NewParticle.NeedStop = NeedStop;
 
-		// находим перемещение
+		// calculate speed
 		float NewSpeed = Speed + vw_Randf0 * SpeedVar;
 		if (NewSpeed < 0.0f)
 			NewSpeed = 0.0f;
 		NewParticle.Velocity *= NewSpeed;
 
-		// уменьшаем необходимое количество частиц
 		Quantity--;
 	}
 }
@@ -544,22 +518,28 @@ void cParticleSystem::CalculateAABB()
 		if (tmpParticle.Alpha > 0.0f && tmpParticle.Size > 0.0f) {
 			sVECTOR3D v;
 			v.x = tmpParticle.Location.x + tmpParticle.Size;
-			if (MaxX < v.x) MaxX = v.x;
+			if (MaxX < v.x)
+				MaxX = v.x;
 
 			v.y = tmpParticle.Location.y + tmpParticle.Size;
-			if (MaxY < v.y) MaxY = v.y;
+			if (MaxY < v.y)
+				MaxY = v.y;
 
 			v.z = tmpParticle.Location.z + tmpParticle.Size;
-			if (MaxZ < v.z) MaxZ = v.z;
+			if (MaxZ < v.z)
+				MaxZ = v.z;
 
 			v.x = tmpParticle.Location.x - tmpParticle.Size;
-			if (MinX > v.x) MinX = v.x;
+			if (MinX > v.x)
+				MinX = v.x;
 
 			v.y = tmpParticle.Location.y - tmpParticle.Size;
-			if (MinY > v.y) MinY = v.y;
+			if (MinY > v.y)
+				MinY = v.y;
 
 			v.z = tmpParticle.Location.z - tmpParticle.Size;
-			if (MinZ > v.z) MinZ = v.z;
+			if (MinZ > v.z)
+				MinZ = v.z;
 		}
 	}
 
@@ -610,28 +590,24 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 	}
 	DrawBufferCurrentPosition = 0;
 
-	// шейдеры не поддерживаются - рисуем по старинке
+	// without shaders, we need manually rotate each particle to camera
 	if (!ParticleSystemUseGLSL) {
-		// получаем текущее положение камеры
 		sVECTOR3D CurrentCameraLocation{vw_GetCameraLocation(nullptr)};
 
 		for (auto &tmpParticle : ParticlesList) {
-			// находим вектор камера-точка
 			sVECTOR3D nnTmp{CurrentCameraLocation - tmpParticle.Location};
-			//nnTmp.Normalize();// - это тут не нужно, нам нужны только пропорции
 
-			// находим перпендикуляр к вектору nnTmp
+			// perpendicular to vector nnTmp
 			sVECTOR3D nnTmp2{1.0f, 1.0f, -(nnTmp.x + nnTmp.y) / nnTmp.z};
 			nnTmp2.Normalize();
 
-			// находим перпендикуляр к векторам nnTmp и nnTmp2
-			// файтически - a x b = ( aybz - byaz , azbx - bzax , axby - bxay );
+			// perpendicular to vectors nnTmp and nnTmp2
+			// a x b = ( aybz - byaz , azbx - bzax , axby - bxay );
 			sVECTOR3D nnTmp3{nnTmp.y * nnTmp2.z - nnTmp2.y * nnTmp.z,
 					 nnTmp.z * nnTmp2.x - nnTmp2.z * nnTmp.x,
 					 nnTmp.x * nnTmp2.y - nnTmp2.x * nnTmp.y};
 			nnTmp3.Normalize();
 
-			// находим
 			sVECTOR3D tmpAngle1 = nnTmp3 ^ (tmpParticle.Size * 1.5f);
 			sVECTOR3D tmpAngle3 = nnTmp3 ^ (-tmpParticle.Size * 1.5f);
 			sVECTOR3D tmpAngle2 = nnTmp2 ^ (tmpParticle.Size * 1.5f);
@@ -671,7 +647,10 @@ void cParticleSystem::Draw(sTexture **CurrentTexture)
 					tmpParticle.Color, tmpParticle.Alpha,
 					0.0f, 1.0f);
 		}
-	} else { // иначе работаем с шейдерами, в них правильно развернем билборд
+	} else {
+		// shader will care about particle rotation
+		// instead of textures coordinates, provide to shader vertex number (in triangle)
+		// and particle size, shader will care about rotation and proper texture's coordinates
 		for (auto &tmpParticle : ParticlesList) {
 			// first triangle
 			AddToDrawBuffer(tmpParticle.Location.x, tmpParticle.Location.y, tmpParticle.Location.z,
@@ -765,9 +744,8 @@ void cParticleSystem::RotateSystemByAngle(const sVECTOR3D &NewAngle)
 {
 	Angle = NewAngle;
 
-	// сохраняем старые значения + пересчет новых
+	// generate inverse rotation matrix
 	memcpy(OldInvRotationMat, CurrentRotationMat, 9 * sizeof(CurrentRotationMat[0]));
-	// делаем инверсную старую матрицу
 	vw_Matrix33InverseRotate(OldInvRotationMat);
 	vw_Matrix33CreateRotate(CurrentRotationMat, Angle);
 
@@ -782,9 +760,8 @@ void cParticleSystem::RotateSystemAndParticlesByAngle(const sVECTOR3D &NewAngle)
 {
 	Angle = NewAngle;
 
-	// сохраняем старые значения + пересчет новых
+	// generate inverse rotation matrix
 	memcpy(OldInvRotationMat, CurrentRotationMat, 9 * sizeof(CurrentRotationMat[0]));
-	// делаем инверсную старую матрицу
 	vw_Matrix33InverseRotate(OldInvRotationMat);
 	vw_Matrix33CreateRotate(CurrentRotationMat, Angle);
 
@@ -792,7 +769,6 @@ void cParticleSystem::RotateSystemAndParticlesByAngle(const sVECTOR3D &NewAngle)
 	vw_Matrix33CalcPoint(Direction, CurrentRotationMat);
 
 	for (auto &tmpParticle : ParticlesList) {
-		// меняем каждой частице
 		sVECTOR3D TMP = tmpParticle.Location - Location;
 		vw_Matrix33CalcPoint(TMP, OldInvRotationMat);
 		vw_Matrix33CalcPoint(TMP, CurrentRotationMat);
@@ -805,12 +781,12 @@ void cParticleSystem::RotateSystemAndParticlesByAngle(const sVECTOR3D &NewAngle)
  */
 void cParticleSystem::RotateParticlesByAngle(const sVECTOR3D &NewAngle)
 {
-	// делаем обратку для отматывания назад
+	// generate inverse rotation matrix
 	float TmpOldInvRotationMat[9];
 	memcpy(TmpOldInvRotationMat, CurrentRotationMat, 9 * sizeof(CurrentRotationMat[0]));
 	vw_Matrix33InverseRotate(TmpOldInvRotationMat);
 
-	// матрица поворота частиц
+	// generate rotation matrix
 	float TmpRotationMat[9];
 	vw_Matrix33CreateRotate(TmpRotationMat, NewAngle);
 
@@ -855,7 +831,7 @@ void vw_InitParticleSystems(bool UseGLSL, float Quality)
 	ParticleSystemUseGLSL = UseGLSL;
 	ParticleSystemQuality = Quality;
 
-	// при первом присоединении устанавливаем шейдер
+	// find proper shaders and setup uniforms locations
 	if (ParticleSystemUseGLSL) {
 		ParticleSystemGLSL = vw_FindShaderByName("ParticleSystem");
 		UniformLocationParticleTexture = vw_GetUniformLocation(ParticleSystemGLSL, "ParticleTexture");
@@ -907,14 +883,14 @@ void vw_ReleaseAllParticleSystems()
  */
 void vw_DrawAllParticleSystems()
 {
-	// текущая текстура
+	// current texture
+	// we store current texture in order to minimize texture's states changes
 	sTexture *CurrentTexture{nullptr};
 
-	// делаем все предустановки для прорисовки частиц, чтобы не менять каждый раз
+	// setup blend
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-	// включаем шейдер, если есть возможность
+	// setup shaders
 	if (ParticleSystemUseGLSL && ParticleSystemGLSL) {
-		// получаем текущее положение камеры
 		sVECTOR3D CurrentCameraLocation;
 		vw_GetCameraLocation(&CurrentCameraLocation);
 
@@ -923,22 +899,17 @@ void vw_DrawAllParticleSystems()
 		vw_Uniform3f(ParticleSystemGLSL, UniformLocationCameraPoint,
 			     CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z);
 	}
-	// выключаем изменение буфера глубины
 	glDepthMask(GL_FALSE);
 
-	// для всех
 	for (auto &tmpParticleSystems : ParticleSystemsList) {
 		tmpParticleSystems.Draw(&CurrentTexture);
 	}
 
-	// включаем запись в буфер глубины
+	// reset rendering states
 	glDepthMask(GL_TRUE);
-	// выключаем шейдер
 	if (ParticleSystemUseGLSL)
 		vw_StopShaderProgram();
-
 	vw_SetTextureBlend(false, 0, 0);
-	// анбиндим текстуру
 	vw_BindTexture(0, 0);
 }
 
@@ -950,14 +921,14 @@ void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
 	if (!DrawParticleSystem)
 		return;
 
-	// текущая текстура
+	// current texture
+	// we store current texture in order to minimize texture's states changes
 	sTexture *CurrentTexture{nullptr};
 
-	// делаем все предустановки для прорисовки частиц, чтобы не менять каждый раз
+	// setup blend
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-	// включаем шейдер, если есть возможность
+	// setup shaders
 	if (ParticleSystemUseGLSL && ParticleSystemGLSL) {
-		// получаем текущее положение камеры
 		sVECTOR3D CurrentCameraLocation;
 		vw_GetCameraLocation(&CurrentCameraLocation);
 
@@ -966,7 +937,6 @@ void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
 		vw_Uniform3f(ParticleSystemGLSL, UniformLocationCameraPoint,
 			     CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z);
 	}
-	// выключаем изменение буфера глубины
 	glDepthMask(GL_FALSE);
 
 	for (int i = 0; i < Quantity; i++) {
@@ -974,14 +944,11 @@ void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
 			DrawParticleSystem[i]->Draw(&CurrentTexture);
 	}
 
-	// включаем запись в буфер глубины
+	// reset rendering states
 	glDepthMask(GL_TRUE);
-	// выключаем шейдер
 	if (ParticleSystemUseGLSL)
 		vw_StopShaderProgram();
-
 	vw_SetTextureBlend(false, 0, 0);
-	// анбиндим текстуру
 	vw_BindTexture(0, 0);
 }
 
