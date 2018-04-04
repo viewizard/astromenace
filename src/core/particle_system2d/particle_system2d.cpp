@@ -463,7 +463,7 @@ std::weak_ptr<cParticleSystem2D> vw_CreateParticleSystem2D()
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined
 	ParticleSystemsList.emplace_front(new cParticleSystem2D, [](cParticleSystem2D *p) {delete p;});
-	return std::weak_ptr<cParticleSystem2D>{ParticleSystemsList.front()};
+	return ParticleSystemsList.front();
 }
 
 /*
