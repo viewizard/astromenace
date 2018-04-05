@@ -145,9 +145,9 @@ void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float 
 	}
 
 	// резервируем память для текстур
-	Object3D->Texture = new cTexture*[Object3D->ObjectsListCount];
-	Object3D->TextureIllum = new cTexture*[Object3D->ObjectsListCount];
-	Object3D->NormalMap = new cTexture*[Object3D->ObjectsListCount];
+	Object3D->Texture.resize(Object3D->ObjectsListCount, nullptr);
+	Object3D->TextureIllum.resize(Object3D->ObjectsListCount, nullptr);
+	Object3D->NormalMap.resize(Object3D->ObjectsListCount, nullptr);
 
 	// резервируем память для HitBB
 	Object3D->HitBBLocation = new sVECTOR3D[Object3D->ObjectsListCount];

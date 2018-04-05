@@ -74,12 +74,6 @@ cObject3D::~cObject3D()
 			delete [] DeviationObjNum;
 	}
 
-	if (Texture != nullptr)
-		delete [] Texture;
-	if (TextureIllum != nullptr)
-		delete [] TextureIllum;
-	if (NormalMap != nullptr)
-		delete [] NormalMap;
 	if (DebugInfo != nullptr)
 		delete [] DebugInfo;
 
@@ -861,8 +855,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 
 		// включаем вторую текстуру
-		if ((TextureIllum != nullptr) &&
-		    (TextureIllum[0] != nullptr)) {
+		if (!TextureIllum.empty() && (TextureIllum[0] != nullptr)) {
 			// свечение
 			vw_SetTexture(1, TextureIllum[0]);
 			vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
@@ -876,8 +869,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		// если у нас работают шейдеры и есть текстура нормал меппа - ставим ее
 		NeedNormalMapping = 0;
 		if ((Setup.UseGLSL) &&
-		    (NormalMap != nullptr) &&
-		    (NormalMap[0] != nullptr)) {
+		    !NormalMap.empty() && (NormalMap[0] != nullptr)) {
 			NeedNormalMapping = 1;
 			CurrentNormalMap = NormalMap[0];
 			vw_SetTexture(3, CurrentNormalMap);
@@ -935,12 +927,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[1], 1);
 					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[2], LightType1);
 					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[3], LightType2);
-					if (TextureIllum != nullptr) {
-						if (TextureIllum[0] != nullptr)
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 1);
-						else
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
-					} else
+					if (!TextureIllum.empty() && (TextureIllum[0] != nullptr))
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 1);
+					else
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
 
 					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[5], 3);
@@ -964,12 +953,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[21], 1);
 					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[22], LightType1);
 					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[23], LightType2);
-					if (TextureIllum != nullptr) {
-						if (TextureIllum[0] != nullptr)
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 1);
-						else
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
-					} else
+					if (!TextureIllum.empty() && (TextureIllum[0] != nullptr))
+						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 1);
+					else
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
 
 					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[25], 2);
@@ -1043,23 +1029,22 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 				// включаем вторую текстуру
-				if (TextureIllum != nullptr)
-					if (TextureIllum[i] != nullptr) {
-						// свечение
-						vw_SetTexture(1, TextureIllum[i]);
-						vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-						// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-						if (Setup.TextureFilteringMode == 1)
-							vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
-						// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
-						vw_SetTextureEnvMode(RI_TENV_COMBINE);
-						vw_SetTextureBlendMode(RI_TBLEND_COLOROP, RI_TBLEND_ADD);
-					}
+				if ((TextureIllum.size() > (unsigned)i) && (TextureIllum[i] != nullptr)) {
+					// свечение
+					vw_SetTexture(1, TextureIllum[i]);
+					vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
+					// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
+					if (Setup.TextureFilteringMode == 1)
+						vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
+					// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
+					vw_SetTextureEnvMode(RI_TENV_COMBINE);
+					vw_SetTextureBlendMode(RI_TBLEND_COLOROP, RI_TBLEND_ADD);
+				}
 
 				// если у нас работают шейдеры и есть текстура нормал меппа - ставим ее
 				NeedNormalMapping = 0;
 				if (Setup.UseGLSL &&
-				    (NormalMap != nullptr)) {
+				    (NormalMap.size() > (unsigned)i)) {
 					if (NormalMap[i] != nullptr) {
 						NeedNormalMapping = 1;
 						CurrentNormalMap = NormalMap[i];
@@ -1161,12 +1146,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[1], 1);
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[2], LightType1);
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[3], LightType2);
-						if (TextureIllum != nullptr) {
-							if (TextureIllum[0] != nullptr)
-								vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 1);
-							else
-								vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
-						} else
+						if (!TextureIllum.empty() && (TextureIllum[0] != nullptr))
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 1);
+						else
 							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
 
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[5], 3);
@@ -1190,12 +1172,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[21], 1);
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[22], LightType1);
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[23], LightType2);
-						if (TextureIllum != nullptr) {
-							if (TextureIllum[0] != nullptr)
-								vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 1);
-							else
-								vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
-						} else
+						if (!TextureIllum.empty() && (TextureIllum[0] != nullptr))
+							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 1);
+						else
 							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
 
 						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[25], 2);
