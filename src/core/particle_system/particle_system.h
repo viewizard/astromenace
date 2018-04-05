@@ -30,7 +30,7 @@
 #include "../base.h"
 
 struct sVECTOR3D;
-struct cLight;
+class cLight;
 
 enum class eParticleCreationType {
 	Point,
