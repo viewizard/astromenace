@@ -124,8 +124,7 @@ bool cParticle::Update(float TimeDelta, const sVECTOR3D &ParentLocation,
  */
 cParticleSystem::~cParticleSystem()
 {
-	if (Light)
-		vw_ReleaseLight(Light);
+	vw_ReleaseLight(Light);
 }
 
 /*
@@ -180,7 +179,7 @@ bool cParticleSystem::Update(float Time)
 		return false;
 
 	// update light
-	if (Light)
+	if (!Light.expired())
 		UpdateLight(TimeDelta);
 
 	// calculate current AABB
@@ -479,21 +478,23 @@ void cParticleSystem::UpdateLight(float TimeDelta)
 			LightDeviation += (25.0f / Life) * TimeDelta;
 	}
 
-	if (Light->LinearAttenuationBase != 0.0f) {
-		Light->LinearAttenuation = Light->LinearAttenuationBase +
-					   2.0f * (LightDeviation - 0.5f) * Light->LinearAttenuationBase;
-		if (Light->LinearAttenuation < Light->LinearAttenuationBase)
-			Light->LinearAttenuation = Light->LinearAttenuationBase;
-	}
-	if (Light->QuadraticAttenuationBase != 0.0f) {
-		Light->QuadraticAttenuation = Light->QuadraticAttenuationBase +
-					      2.0f * (LightDeviation - 0.5f) * Light->QuadraticAttenuationBase;
-		if (Light->QuadraticAttenuation < Light->QuadraticAttenuationBase)
-			Light->QuadraticAttenuation = Light->QuadraticAttenuationBase;
-	}
+	if (auto tmpLight = Light.lock()) {
+		if (tmpLight->LinearAttenuationBase != 0.0f) {
+			tmpLight->LinearAttenuation = tmpLight->LinearAttenuationBase +
+						   2.0f * (LightDeviation - 0.5f) * tmpLight->LinearAttenuationBase;
+			if (tmpLight->LinearAttenuation < tmpLight->LinearAttenuationBase)
+				tmpLight->LinearAttenuation = tmpLight->LinearAttenuationBase;
+		}
+		if (tmpLight->QuadraticAttenuationBase != 0.0f) {
+			tmpLight->QuadraticAttenuation = tmpLight->QuadraticAttenuationBase +
+						      2.0f * (LightDeviation - 0.5f) * tmpLight->QuadraticAttenuationBase;
+			if (tmpLight->QuadraticAttenuation < tmpLight->QuadraticAttenuationBase)
+				tmpLight->QuadraticAttenuation = tmpLight->QuadraticAttenuationBase;
+		}
 
-	// if we don't have particles, turn off light
-	Light->On = !ParticlesList.empty();
+		// if we don't have particles, turn off light
+		tmpLight->On = !ParticlesList.empty();
+	}
 }
 
 /*
@@ -699,8 +700,8 @@ void cParticleSystem::SetStartLocation(const sVECTOR3D &NewLocation)
 {
 	Location = NewLocation;
 
-	if (Light)
-		Light->SetLocation(Location);
+	if (auto tmpLight = Light.lock())
+		tmpLight->SetLocation(Location);
 }
 
 /*
@@ -719,8 +720,8 @@ void cParticleSystem::MoveSystem(const sVECTOR3D &NewLocation)
 		tmpParticle.Location += tmpLocation;
 	}
 
-	if (Light)
-		Light->SetLocation(Location);
+	if (auto tmpLight = Light.lock())
+		tmpLight->SetLocation(Location);
 }
 
 /*
@@ -733,8 +734,8 @@ void cParticleSystem::MoveSystemLocation(const sVECTOR3D &NewLocation)
 
 	Location = NewLocation;
 
-	if (Light)
-		Light->SetLocation(Location);
+	if (auto tmpLight = Light.lock())
+		tmpLight->SetLocation(Location);
 }
 
 /*

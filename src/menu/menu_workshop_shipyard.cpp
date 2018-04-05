@@ -378,10 +378,7 @@ void WorkshopCreateBuyShip()
 			if (Setup.Profile[CurrentProfile].Money >= GetWeaponBaseCost(Setup.Profile[CurrentProfile].Weapon[i])) {
 				if (SetEarthSpaceFighterWeapon(WorkshopFighterGame, i+1, Setup.Profile[CurrentProfile].Weapon[i])) {
 					if (WorkshopFighterGame->Weapon[i]->Fire != nullptr)
-						if (WorkshopFighterGame->Weapon[i]->Fire->Light != nullptr) {
-							vw_ReleaseLight(WorkshopFighterGame->Weapon[i]->Fire->Light);
-							WorkshopFighterGame->Weapon[i]->Fire->Light = nullptr;
-						}
+						vw_ReleaseLight(WorkshopFighterGame->Weapon[i]->Fire->Light);
 
 					Setup.Profile[CurrentProfile].Money -= GetWeaponBaseCost(Setup.Profile[CurrentProfile].Weapon[i]);
 					Setup.Profile[CurrentProfile].WeaponAmmo[i] = WorkshopFighterGame->Weapon[i]->AmmoStart;

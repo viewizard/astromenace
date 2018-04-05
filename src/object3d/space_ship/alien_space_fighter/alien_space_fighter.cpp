@@ -678,7 +678,7 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	for (int i=0; i< EngineQuantity; i++) {
 		Engine[i]->SetStartLocation(EngineLocation[i]);
 		// находим кол-во внутренних источников света
-		if (Engine[i]->Light != nullptr)
+		if (!Engine[i]->Light.expired())
 			InternalLights++;
 	}
 

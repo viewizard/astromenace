@@ -936,7 +936,8 @@ void cEarthSpaceFighter::Create(int	SpaceShipNum)
 
 	for (int i = 0; i < EngineQuantity; i++) {
 		// находим кол-во внутренних источников света
-		if (Engine[i]->Light != nullptr) InternalLights++;
+		if (!Engine[i]->Light.expired())
+			InternalLights++;
 	}
 
 	// находим все данные по геометрии

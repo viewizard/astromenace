@@ -383,11 +383,8 @@ void CreateInfoObject()
 		InfoObjectReload = InfoWeapon->NextFireTime;
 		InfoObjectRange = GetProjectileRange(tmpCreateNum);
 		// убираем источник света
-		if ((InfoWeapon->Fire != nullptr) &&
-		    (InfoWeapon->Fire->Light != nullptr)) {
+		if (InfoWeapon->Fire != nullptr)
 			vw_ReleaseLight(InfoWeapon->Fire->Light);
-			InfoWeapon->Fire->Light = nullptr;
-		}
 	}
 	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant) {
 		int tmpCreateNum = CreateNum-InfoMineStart+1;

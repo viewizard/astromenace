@@ -30,7 +30,7 @@
 #include "../base.h"
 
 struct sVECTOR3D;
-struct sLight;
+struct cLight;
 
 enum class eParticleCreationType {
 	Point,
@@ -157,7 +157,7 @@ public:
 	float EmissionResidue{0.0f};	// real rest of emission
 
 	// light-related
-	sLight *Light{nullptr};
+	std::weak_ptr<cLight> Light{};
 	bool LightNeedDeviation{false};
 	float LightDeviation{100.0f};
 	float NextLightDeviation{0.7f + 0.3f * vw_Randf1};

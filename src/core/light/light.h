@@ -36,7 +36,10 @@ enum class eLightType {
 	Point		// located close (engines, weapon flashes, etc)
 };
 
-struct sLight {
+class cLight {
+	friend std::weak_ptr<cLight> vw_CreateLight(eLightType Type);
+
+public:
 	// Activate and setup for proper light type (OpenGL-related).
 	bool Activate(int CurrentLightNum, const float (&Matrix)[16]);
 	// Deactivate (OpenGL-related).
@@ -64,8 +67,15 @@ struct sLight {
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 	// On/Off switch, in this case Off mean On=false.
 	bool On{true};
+
+private:
 	// OpenGL-related.
 	int RealLightNum{-1};
+
+	// Don't allow direct new/delete usage in code, only vw_CreateLight()
+	// allowed for light creation and release setup (deleter must be provided).
+	cLight() = default;
+	~cLight() = default;
 };
 
 
@@ -74,18 +84,20 @@ int vw_CheckAndActivateAllLights(int &Type1, int &Type2, const sVECTOR3D &Locati
 				 int DirLimit, int PointLimit, const float (&Matrix)[16]);
 // Calculate affected lights counter and create sorted map with affected lights.
 int vw_CalculateAllPointLightsAttenuation(const sVECTOR3D &Location, float Radius2,
-					  std::multimap<float, sLight*> *AffectedLightsMap);
+					  std::multimap<float, cLight*> *AffectedLightsMap);
 // Deactivate all lights.
 void vw_DeActivateAllLights();
 // Release light.
-void vw_ReleaseLight(sLight *Light);
+void vw_ReleaseLight(std::weak_ptr<cLight> &Light);
 // Release all lights.
 void vw_ReleaseAllLights();
 // Create light.
-sLight *vw_CreateLight(eLightType Type);
+std::weak_ptr<cLight> vw_CreateLight(eLightType Type);
 // Create point light with initialization.
-sLight *vw_CreatePointLight(const sVECTOR3D &Location, float R, float G, float B, float Linear, float Quadratic);
+std::weak_ptr<cLight> vw_CreatePointLight(const sVECTOR3D &Location,
+					  float R, float G, float B,
+					  float Linear, float Quadratic);
 // Get main direct light. Usually, first one is the main.
-sLight *vw_GetMainDirectLight();
+bool vw_GetMainDirectLight(std::weak_ptr<cLight> &Light);
 
 #endif // LIGHT_H
