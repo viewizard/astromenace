@@ -47,7 +47,7 @@
 
 struct sRECT;
 struct sVECTOR3D;
-struct sTexture;
+class cTexture;
 
 struct sCoverageModes {
 	int ColorSamples;
@@ -367,7 +367,7 @@ void vw_SetTextureCompare(int MODE, int FUNC);
 // Set texture depth mode
 void vw_SetTextureDepthMode(int MODE);
 // Set texture by pointer
-void vw_SetTexture(uint32_t Stage, sTexture *Texture);
+void vw_SetTexture(uint32_t Stage, cTexture *Texture);
 
 /*
  * 3D rendering.
@@ -538,9 +538,9 @@ bool vw_UniformMatrix4fv(sGLSL *GLSL, const char *name, bool transpose, int coun
  */
 
 // Draw
-void vw_Draw(int X, int Y, sRECT *SrcRect, sTexture *Tex, bool Alpha, float RotateAngle=0, int DrawCorner = RI_UL_CORNER);
+void vw_Draw(int X, int Y, sRECT *SrcRect, cTexture *Tex, bool Alpha, float RotateAngle=0, int DrawCorner = RI_UL_CORNER);
 // Draw transparent
-void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, sTexture *Tex, bool Alpha, float Transp, float RotateAngle=0,
+void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, cTexture *Tex, bool Alpha, float Transp, float RotateAngle=0,
 			int DrawCorner = RI_UL_CORNER, float R = 1.0f, float G = 1.0f, float B = 1.0f);
 
 /*

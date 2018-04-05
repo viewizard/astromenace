@@ -41,7 +41,14 @@ enum class eAlphaCreateMode {
 	EQUAL	// Create alpha channel by equal Alpha color
 };
 
-struct sTexture {
+class cTexture {
+	friend cTexture *vw_CreateTextureFromMemory(const std::string &TextureName, std::vector<uint8_t> &DIB,
+						    int DIBWidth, int DIBHeight, int DIBChanels, int CompressionType,
+						    int NeedResizeW, int NeedResizeH, bool NeedDuplicateCheck);
+	friend void vw_SetTexture(uint32_t Stage, cTexture *Texture);
+	friend void vw_ReleaseTexture(cTexture *Texture);
+	friend void vw_ReleaseAllTextures();
+public:
 	uint8_t ARed;		// Alpha channel red color
 	uint8_t AGreen;		// Alpha channel green color
 	uint8_t ABlue;		// Alpha channel blue color
@@ -53,20 +60,21 @@ struct sTexture {
 
 	int Bytes;		// Bytes per pixel (not bits!)
 
+private:
 	unsigned TextureID;	// Texture ID (OpenGL related)
 };
 
 // Load texture from file.
 // Note, in case of resize, we should provide width and height (but not just one of them).
-sTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
+cTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
 			 eLoadTextureAs LoadAs = eLoadTextureAs::AUTO,
 			 int NeedResizeW = 0, int NeedResizeH = 0);
 // Create texture from memory.
-sTexture *vw_CreateTextureFromMemory(const std::string &TextureName, std::vector<uint8_t> &DIB, int DIBWidth,
+cTexture *vw_CreateTextureFromMemory(const std::string &TextureName, std::vector<uint8_t> &DIB, int DIBWidth,
 				     int DIBHeight, int DIBChanels, int CompressionType, int NeedResizeW = 0,
 				     int NeedResizeH = 0, bool NeedDuplicateCheck = true);
 // Release texture.
-void vw_ReleaseTexture(sTexture* Texture);
+void vw_ReleaseTexture(cTexture* Texture);
 // Release all textures.
 void vw_ReleaseAllTextures();
 // Set textures properties.
@@ -75,7 +83,7 @@ void vw_SetTextureProp(int nFiltering, int nAddress_Mode, bool nAlpha = false,
 // Set textures alpha color.
 void vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue);
 // Find texture by name.
-sTexture *vw_FindTextureByName(const std::string &Name);
+cTexture *vw_FindTextureByName(const std::string &Name);
 // Convert supported image file format to VW2D format.
 void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestName);
 

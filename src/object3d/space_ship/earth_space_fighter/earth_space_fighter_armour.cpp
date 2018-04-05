@@ -94,7 +94,7 @@ float GetSystemsResistance(int ArmourType)
 //-----------------------------------------------------------------------------
 // Тестура для брони
 //-----------------------------------------------------------------------------
-sTexture *GetArmourTexture(int ArmourType)
+cTexture *GetArmourTexture(int ArmourType)
 {
 	switch(ArmourType) {
 	// фактически - брони нет, только стальной корпус
@@ -129,7 +129,7 @@ sTexture *GetArmourTexture(int ArmourType)
 
 	return nullptr;
 }
-sTexture *GetArmourIllumTexture(int ArmourType)
+cTexture *GetArmourIllumTexture(int ArmourType)
 {
 	switch(ArmourType) {
 	// фактически - брони нет, только стальной корпус

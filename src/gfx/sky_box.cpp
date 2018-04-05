@@ -45,7 +45,7 @@ enum eSide {
 //-----------------------------------------------------------------------------
 
 // SkyBox textures
-sTexture *SkyBox_Texture[6] = {nullptr,nullptr,nullptr,nullptr,nullptr,nullptr};
+cTexture *SkyBox_Texture[6] = {nullptr,nullptr,nullptr,nullptr,nullptr,nullptr};
 // SkyBox location
 float SkyBox_x = 0.0f;
 float SkyBox_y = 0.0f;
@@ -295,7 +295,7 @@ void SkyBoxDraw()
 //-----------------------------------------------------------------------------
 // Setup texture for each SkyBox side
 //-----------------------------------------------------------------------------
-void SkyBoxSetTexture(sTexture *nTexture, int Side)
+void SkyBoxSetTexture(cTexture *nTexture, int Side)
 {
 	SkyBox_Texture[Side] = nTexture;
 }

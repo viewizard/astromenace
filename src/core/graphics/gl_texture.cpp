@@ -131,7 +131,7 @@ void vw_DeleteTexture(GLuint TextureID)
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_SetTexture(uint32_t Stage, sTexture *Texture)
+void vw_SetTexture(uint32_t Stage, cTexture *Texture)
 {
 	if (!Texture)
 		return;

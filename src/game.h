@@ -200,7 +200,7 @@ void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 //------------------------------------------------------------------------------------
 // SkyBox.cpp
 //------------------------------------------------------------------------------------
-void SkyBoxSetTexture(sTexture *nTexture, int Side);
+void SkyBoxSetTexture(cTexture *nTexture, int Side);
 void SkyBoxCreate(float nx, float ny, float nz, float nwidth, float nheight, float nlength);
 void SkyBoxDraw();
 
@@ -295,7 +295,7 @@ void InitMenu();
 void SetOptionsMenu(eMenuStatus Menu);
 void SetMenu(eMenuStatus Menu);
 void DrawMenu();
-void DrawTransparent(sRECT *DstRect, sRECT *SrcRect, sTexture *Tex, sTexture *Tex2, bool Alpha, float Transp, float RotateAngle, int DrawCorner, float R, float G, float B);
+void DrawTransparent(sRECT *DstRect, sRECT *SrcRect, cTexture *Tex, cTexture *Tex2, bool Alpha, float Transp, float RotateAngle, int DrawCorner, float R, float G, float B);
 void MainMenu();
 
 

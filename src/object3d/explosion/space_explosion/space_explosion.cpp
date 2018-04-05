@@ -421,11 +421,11 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			ShipPart->ShowDeleteOnHide = 0;
 
 			// только одна текстура (!) 2-ю для подстветки не тянем
-			ShipPart->Texture = new sTexture*[1];
+			ShipPart->Texture = new cTexture*[1];
 			ShipPart->Texture[0] = Object->Texture[i];
 			if (Object->NormalMap != nullptr)
 				if (Object->NormalMap[i] != nullptr) {
-					ShipPart->NormalMap = new sTexture*[1];
+					ShipPart->NormalMap = new cTexture*[1];
 					ShipPart->NormalMap[0] = Object->NormalMap[i];
 				}
 
@@ -527,7 +527,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 		// создаем последовательность
 		ObjectsListCount = Object->ObjectsListCount;
-		Texture = new sTexture*[ObjectsListCount];
+		Texture = new cTexture*[ObjectsListCount];
 		ObjectsList = new sObjectBlock[ObjectsListCount];
 
 		// смотрим по настройкам сколько пропускать

@@ -577,7 +577,7 @@ static inline void AddToDrawBuffer(float CoordX, float CoordY, float CoordZ,
 /*
  * Draw all particles.
  */
-void cParticleSystem::Draw(sTexture **CurrentTexture)
+void cParticleSystem::Draw(cTexture **CurrentTexture)
 {
 	if (!vw_BoxInFrustum(AABB[6], AABB[0]) ||
 	    ParticlesList.empty())
@@ -886,7 +886,7 @@ void vw_DrawAllParticleSystems()
 {
 	// current texture
 	// we store current texture in order to minimize texture's states changes
-	sTexture *CurrentTexture{nullptr};
+	cTexture *CurrentTexture{nullptr};
 
 	// setup blend
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
@@ -924,7 +924,7 @@ void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
 
 	// current texture
 	// we store current texture in order to minimize texture's states changes
-	sTexture *CurrentTexture{nullptr};
+	cTexture *CurrentTexture{nullptr};
 
 	// setup blend
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);

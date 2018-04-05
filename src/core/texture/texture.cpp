@@ -60,7 +60,7 @@ eAlphaCreateMode AFlagTex{eAlphaCreateMode::EQUAL};
 // Default mip mapping type.
 bool MipMapTex{true};
 // Map with all loaded textures.
-std::unordered_map<std::string, sTexture> TexturesMap;
+std::unordered_map<std::string, cTexture> TexturesMap;
 
 } // unnamed namespace
 
@@ -94,7 +94,7 @@ void vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue)
 /*
  * Find texture by name.
  */
-sTexture *vw_FindTextureByName(const std::string &Name)
+cTexture *vw_FindTextureByName(const std::string &Name)
 {
 	auto tmpTexture = TexturesMap.find(Name);
 	if (tmpTexture != TexturesMap.end())
@@ -106,7 +106,7 @@ sTexture *vw_FindTextureByName(const std::string &Name)
 /*
  * Release texture.
  */
-void vw_ReleaseTexture(sTexture *Texture)
+void vw_ReleaseTexture(cTexture *Texture)
 {
 	if (!Texture)
 		return;
@@ -153,7 +153,7 @@ static int PowerOfTwo(int Num)
 /*
  * Resize image to closest power of two size.
  */
-static void ResizeToPOT(std::vector<uint8_t> &DIB, sTexture &Texture)
+static void ResizeToPOT(std::vector<uint8_t> &DIB, cTexture &Texture)
 {
 	if (DIB.empty())
 		return;
@@ -194,7 +194,7 @@ static void ResizeToPOT(std::vector<uint8_t> &DIB, sTexture &Texture)
 /*
  * Resize image to custom size.
  */
-static void ResizeImage(int newWidth, int newHeight, std::vector<uint8_t> &DIB, sTexture &Texture)
+static void ResizeImage(int newWidth, int newHeight, std::vector<uint8_t> &DIB, cTexture &Texture)
 {
 	if (DIB.empty() || ((newWidth == Texture.Width) && (newHeight == Texture.Height)))
 		return;
@@ -221,7 +221,7 @@ static void ResizeImage(int newWidth, int newHeight, std::vector<uint8_t> &DIB, 
 /*
  * Create alpha channel.
  */
-static void CreateAlpha(std::vector<uint8_t> &DIB, sTexture &Texture, eAlphaCreateMode AlphaFlag)
+static void CreateAlpha(std::vector<uint8_t> &DIB, cTexture &Texture, eAlphaCreateMode AlphaFlag)
 {
 	if (DIB.empty())
 		return;
@@ -272,7 +272,7 @@ static void CreateAlpha(std::vector<uint8_t> &DIB, sTexture &Texture, eAlphaCrea
 /*
  * Remove alpha channel.
  */
-static void RemoveAlpha(std::vector<uint8_t> &DIB, sTexture &Texture)
+static void RemoveAlpha(std::vector<uint8_t> &DIB, cTexture &Texture)
 {
 	if (DIB.empty())
 		return;
@@ -362,7 +362,7 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 /*
  * Load texture from file.
  */
-sTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
+cTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
 			 eLoadTextureAs LoadAs, int NeedResizeW, int NeedResizeH)
 {
 	if (TextureName.empty())
@@ -422,7 +422,7 @@ sTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
 /*
  * Create texture from memory.
  */
-sTexture *vw_CreateTextureFromMemory(const std::string &TextureName, std::vector<uint8_t> &DIB, int DIBWidth,
+cTexture *vw_CreateTextureFromMemory(const std::string &TextureName, std::vector<uint8_t> &DIB, int DIBWidth,
 				     int DIBHeight, int DIBChanels, int CompressionType, int NeedResizeW,
 				     int NeedResizeH, bool NeedDuplicateCheck)
 {
@@ -431,7 +431,7 @@ sTexture *vw_CreateTextureFromMemory(const std::string &TextureName, std::vector
 
 	// check for availability, probably, we already have it loaded
 	if (NeedDuplicateCheck) {
-		sTexture *tmpTexture = vw_FindTextureByName(TextureName);
+		cTexture *tmpTexture = vw_FindTextureByName(TextureName);
 		if (tmpTexture) {
 			std::cout << "Texture already loaded: " << TextureName << "\n";
 			return tmpTexture;

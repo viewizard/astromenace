@@ -70,7 +70,7 @@ struct sFontChar {
 	char32_t UTF32; // key element 1 (UTF32 code)
 	int FontSize; // key element 2 (character generated size)
 
-	sTexture *Texture; // font character texture
+	cTexture *Texture; // font character texture
 	int TexturePositionLeft;
 	int TexturePositionRight;
 	int TexturePositionTop;
@@ -84,7 +84,7 @@ struct sFontChar {
 	float AdvanceX;
 
 	// constructor
-	sFontChar(char32_t _UTF32, int _FontSize, sTexture *_Texture,
+	sFontChar(char32_t _UTF32, int _FontSize, cTexture *_Texture,
 		  int _TexturePositionLeft, int _TexturePositionRight,
 		  int _TexturePositionTop, int _TexturePositionBottom,
 		  int _Width, int _Height, int _Left, int _Top, float _AdvanceX) :
@@ -363,7 +363,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 	// create texture from bitmap
 	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE,
 			  RI_CLAMP_TO_EDGE, true, eAlphaCreateMode::GREYSC, false);
-	sTexture *FontTexture = vw_CreateTextureFromMemory("auto_generated_texture_for_fonts", DIB,
+	cTexture *FontTexture = vw_CreateTextureFromMemory("auto_generated_texture_for_fonts", DIB,
 							   FontTextureWidth, FontTextureHeight, 4, 0);
 	if (!FontTexture) {
 		std::cerr << __func__ << "(): " << "Can't create font texture.\n";
@@ -448,7 +448,7 @@ static void CalculateDefaultSpaceWidth(float &SpaceWidthFactor, float FontScale)
  * Draw buffer on texture change.
  * Caller should care about pointers. nullptr not allowed.
  */
-static void DrawBufferOnTextureChange(sTexture **CurrentTexture, const sFontChar *DrawChar)
+static void DrawBufferOnTextureChange(cTexture **CurrentTexture, const sFontChar *DrawChar)
 {
 	// draw all we have in buffer with current texture
 	if (DrawBufferCurrentPosition) {
@@ -464,7 +464,7 @@ static void DrawBufferOnTextureChange(sTexture **CurrentTexture, const sFontChar
 /*
  * Draw buffer on text end.
  */
-static void DrawBufferOnTextEnd(sTexture *CurrentTexture)
+static void DrawBufferOnTextEnd(cTexture *CurrentTexture)
 {
 	if (!DrawBufferCurrentPosition)
 		return;
@@ -551,7 +551,7 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 	vw_SetColor(R, G, B, Transp);
-	sTexture *CurrentTexture{nullptr};
+	cTexture *CurrentTexture{nullptr};
 
 	// combine calculated width factor and global width scale
 	FontWidthFactor = FontScale*FontWidthFactor;
@@ -726,7 +726,7 @@ int vw_DrawFont3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 	float SpaceWidth{0};
 	CalculateDefaultSpaceWidth(SpaceWidth, 1.0f /* don't scale */);
 
-	sTexture *CurrentTexture{nullptr};
+	cTexture *CurrentTexture{nullptr};
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 

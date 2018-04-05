@@ -224,7 +224,7 @@ void DrawGameExpMoney(int Exp, int Money)
 	sRECT DstRect, SrcRect;
 	int Ystart;
 	float Xstart;
-	sTexture *Tex = vw_FindTextureByName("game/game_num.tga");
+	cTexture *Tex = vw_FindTextureByName("game/game_num.tga");
 	if (Tex == nullptr)
 		return;
 
@@ -1207,7 +1207,7 @@ void DrawGame()
 			float G=1.0f;
 			float B=1.0f;
 
-			sTexture *Tex = vw_FindTextureByName("game/game_panel_el.tga");
+			cTexture *Tex = vw_FindTextureByName("game/game_panel_el.tga");
 			if (Tex == nullptr)
 				return;
 

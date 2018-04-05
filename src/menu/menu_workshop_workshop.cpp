@@ -156,7 +156,7 @@ const char *GetSystemName(int Num)
 
 
 
-sTexture *GetSystemIcon(int Num)
+cTexture *GetSystemIcon(int Num)
 {
 	switch (Num) {
 	case -4:

@@ -794,7 +794,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 	// у модели может быть нормал меппинг только на отдельные объекты
-	sTexture *CurrentNormalMap = nullptr;
+	cTexture *CurrentNormalMap = nullptr;
 	// текущий шейдер, чтобы не ставить лишний раз
 	sGLSL *CurrentGLSL = nullptr;
 	int NeedNormalMapping = 0;
@@ -998,7 +998,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	} else {
 
 		// текущая текстура, чтобы не переставлять по 10 раз одно и то же
-		sTexture *CurrentText = nullptr;
+		cTexture *CurrentText = nullptr;
 
 		// установка текстур и подхотовка к прорисовке
 		for (int i = 0; i < ObjectsListCount; i++) {

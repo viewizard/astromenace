@@ -280,7 +280,7 @@ void StarSystemDraw(int DrawType)
 		if (StarsTile < -3.0f) StarsTile += 3.0f;
 
 
-		sTexture *TileTexture = vw_FindTextureByName("skybox/tile_back.tga");
+		cTexture *TileTexture = vw_FindTextureByName("skybox/tile_back.tga");
 		vw_SetTexture(0, TileTexture);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
@@ -463,7 +463,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 		if (StarsTile2 < -3.0f) StarsTile2 += 3.0f;
 
 
-		sTexture *TileTexture = vw_FindTextureByName("skybox/tile_stars.tga");
+		cTexture *TileTexture = vw_FindTextureByName("skybox/tile_stars.tga");
 		vw_SetTexture(0, TileTexture);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную

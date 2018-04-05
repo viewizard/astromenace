@@ -789,7 +789,7 @@ static sLoadList StarSystem2LoadList[] = {
 //------------------------------------------------------------------------------------
 // процедура прорисовки логотипа
 //------------------------------------------------------------------------------------
-void DrawViewizardLogo(sTexture *ViewizardLogoTexture)
+void DrawViewizardLogo(cTexture *ViewizardLogoTexture)
 {
 	int		ShowLogoTime = 6000; // сколько нужно показывать логотип
 	int		ShowLogoLife = ShowLogoTime; // сколько осталось показывать
@@ -875,7 +875,7 @@ void DrawViewizardLogo(sTexture *ViewizardLogoTexture)
 //------------------------------------------------------------------------------------
 // процедура прорисовки процента загрузки данных
 //------------------------------------------------------------------------------------
-void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, sTexture *LoadImageTexture)
+void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, cTexture *LoadImageTexture)
 {
 	// слишком часто не рисуем
 	if ((Current != AllDrawLoading) && // последний (полный) рисуем всегда
@@ -988,7 +988,7 @@ bool ReleaseGameData(eLoading LoadType)
 //------------------------------------------------------------------------------------
 void LoadGameData(eLoading LoadType)
 {
-	sTexture *LoadImageTexture = nullptr;
+	cTexture *LoadImageTexture = nullptr;
 	int RealLoadedTextures = 0;
 	bool NeedLoadShaders = false;
 	int AllDrawLoading = 0;
@@ -1256,7 +1256,7 @@ void LoadGameData(eLoading LoadType)
 	if (LoadType == eLoading::MenuWithLogo) {
 		// выводим логотип Viewizard
 		vw_SetTextureProp(TEXTURE_NO_MIPMAP, RI_CLAMP_TO_EDGE, false, eAlphaCreateMode::EQUAL, false);
-		sTexture *ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga", 0);
+		cTexture *ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga", 0);
 
 		DrawViewizardLogo(ViewizardLogoTexture);
 
