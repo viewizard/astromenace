@@ -59,12 +59,11 @@ cExplosion::~cExplosion()
 		ExplosionPieceData = nullptr;
 	}
 
-	if (!GraphicFX.empty()) {
-		for (int i = 0; i < GraphicFXQuantity; i++)
-			if (GraphicFX[i] != nullptr) {
-				GraphicFX[i]->IsSuppressed = true;
-				GraphicFX[i]->DestroyIfNoParticles = true;
-			}
+	for (auto tmpGFX : GraphicFX) {
+		if (tmpGFX) {
+			tmpGFX->IsSuppressed = true;
+			tmpGFX->DestroyIfNoParticles = true;
+		}
 	}
 
 
@@ -87,17 +86,16 @@ bool cExplosion::Update(float Time)
 	// если там передали удалить - выходим
 	if (!::cObject3D::Update(Time)) {
 		// делаем правильную остановку частиц...
-		if (!GraphicFX.empty()) {
-			for (int i=0; i<GraphicFXQuantity; i++) {
-				if (GraphicFX[i] != nullptr) {
-					GraphicFX[i]->StopAllParticles();
+		for (auto tmpGFX : GraphicFX) {
+			if (tmpGFX) {
+				tmpGFX->StopAllParticles();
 
-					if (!(ExplosionTypeByClass == 2 && (ExplosionType == 16 || ExplosionType == 17
-									    || ExplosionType == 18 || ExplosionType == 19
-									    || ExplosionType == 205 || ExplosionType == 206 || ExplosionType == 209 || ExplosionType == 210))) {
-						vw_ReleaseParticleSystem(GraphicFX[i]);
-						GraphicFX[i] = nullptr;
-					}
+				if (!(ExplosionTypeByClass == 2 && (ExplosionType == 16 || ExplosionType == 17
+								    || ExplosionType == 18 || ExplosionType == 19
+								    || ExplosionType == 205 || ExplosionType == 206
+								    || ExplosionType == 209 || ExplosionType == 210))) {
+					vw_ReleaseParticleSystem(tmpGFX);
+					tmpGFX = nullptr;
 				}
 			}
 		}
@@ -118,16 +116,14 @@ bool cExplosion::Update(float Time)
 					   || ExplosionType == -18 || ExplosionType == -19
 					   || ExplosionType == -205 || ExplosionType == -206 || ExplosionType == -209 || ExplosionType == -210
 					   || ExplosionType == -214 || ExplosionType == -215 || ExplosionType == -216
-					   || ExplosionType == -217))
-	   ) {
-		if (!GraphicFX.empty())
-			for (int i=0; i<GraphicFXQuantity; i++)
-				if (GraphicFX[i] != nullptr)
-					if (Lifetime < GraphicFX[i]->Life) {
-						// только говорим, чтобы больше не создавал частиц!!!
-						// не удаляем и не зануляем - иначе не сможем им управлять
-						GraphicFX[i]->IsSuppressed = true;
-					}
+					   || ExplosionType == -217))) {
+		for (auto tmpGFX : GraphicFX) {
+			if (tmpGFX && (Lifetime < tmpGFX->Life)) {
+				// только говорим, чтобы больше не создавал частиц!!!
+				// не удаляем и не зануляем - иначе не сможем им управлять
+				tmpGFX->IsSuppressed = true;
+			}
+		}
 	}
 
 	// работа с эффектами
@@ -310,24 +306,22 @@ bool cExplosion::Update(float Time)
 
 
 	// перемещаем эффекты
-	if (!GraphicFX.empty()) {
-		for (int i = 0; i < GraphicFXQuantity; i++) {
-			if (GraphicFX[i] != nullptr) {
-				sVECTOR3D tmpLocation{GraphicFX[i]->GetLocation()};
-				tmpLocation += TMP2;
+	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
+		if (GraphicFX[i]) {
+			sVECTOR3D tmpLocation{GraphicFX[i]->GetLocation()};
+			tmpLocation += TMP2;
 
-				// взрыв пришельцев
-				if ((ExplosionTypeByClass == 1) && (ExplosionType == 2)) {
-					if (i==1)
-						GraphicFX[i]->MoveSystemLocation(tmpLocation);
-					else
-						GraphicFX[i]->MoveSystem(tmpLocation);
-				} else
+			// взрыв пришельцев
+			if ((ExplosionTypeByClass == 1) && (ExplosionType == 2)) {
+				if (i == 1)
+					GraphicFX[i]->MoveSystemLocation(tmpLocation);
+				else
 					GraphicFX[i]->MoveSystem(tmpLocation);
+			} else
+				GraphicFX[i]->MoveSystem(tmpLocation);
 
-				// всегда подтягиваем данные
-				GraphicFX[i]->SetStartLocation(tmpLocation);
-			}
+			// всегда подтягиваем данные
+			GraphicFX[i]->SetStartLocation(tmpLocation);
 		}
 	}
 

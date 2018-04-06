@@ -72,8 +72,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		Orientation = Object->Orientation;
 
 		// эффект
-		GraphicFXQuantity = 1;
-		GraphicFX.resize(GraphicFXQuantity, nullptr);
+		GraphicFX.resize(1, nullptr);
 
 		// установка эффекта
 		float tRadius = Object->Radius/2.0f;
@@ -135,8 +134,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		Orientation = Object->Orientation;
 
 		// эффект
-		GraphicFXQuantity = 3;
-		GraphicFX.resize(GraphicFXQuantity, nullptr);
+		GraphicFX.resize(3, nullptr);
 
 		// установка эффекта
 		GraphicFX[1] = vw_CreateParticleSystem();
@@ -225,8 +223,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		Orientation = Object->Orientation;
 
 		// эффект
-		GraphicFXQuantity = 2;
-		GraphicFX.resize(GraphicFXQuantity, nullptr);
+		GraphicFX.resize(2, nullptr);
 
 		// установка эффекта
 		GraphicFX[1] = vw_CreateParticleSystem();
@@ -271,8 +268,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		Orientation = Object->Orientation;
 
 		// эффект
-		GraphicFXQuantity = 2;
-		GraphicFX.resize(GraphicFXQuantity, nullptr);
+		GraphicFX.resize(2, nullptr);
 
 		// установка эффекта
 		GraphicFX[1] = vw_CreateParticleSystem();
@@ -308,8 +304,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		Orientation = Object->Orientation;
 
 		// эффект
-		GraphicFXQuantity = 2;
-		GraphicFX.resize(GraphicFXQuantity, nullptr);
+		GraphicFX.resize(2, nullptr);
 
 		// установка эффекта
 		GraphicFX[1] = vw_CreateParticleSystem();

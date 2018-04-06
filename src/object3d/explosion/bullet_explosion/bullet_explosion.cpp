@@ -258,8 +258,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
 		// эффект
-		GraphicFXQuantity = 1;
-		GraphicFX.resize(GraphicFXQuantity, nullptr);
+		GraphicFX.resize(1, nullptr);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
@@ -350,34 +349,32 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 0.5f; // должно соотв. максимальной жизни частицы
 
 		// просто делаем вспышку нужного цвета
-		GraphicFXQuantity = 1;
-		GraphicFX.resize(GraphicFXQuantity, nullptr);
+		GraphicFX.resize(1, nullptr);
 
 		// установка эффекта вспышки в месте попадания
-		if (!Projectile->GraphicFX.empty())
-			if (Projectile->GraphicFX[0] != nullptr) {
-				GraphicFX[0] = vw_CreateParticleSystem();
-				SetExplosionGFX(GraphicFX[0], 0);
-				float Rexpl = (Projectile->GraphicFX[0]->ColorStart.r + Projectile->GraphicFX[0]->ColorEnd.r)/2.0f;
-				float Gexpl = (Projectile->GraphicFX[0]->ColorStart.g + Projectile->GraphicFX[0]->ColorEnd.g)/2.0f;
-				float Bexpl = (Projectile->GraphicFX[0]->ColorStart.b + Projectile->GraphicFX[0]->ColorEnd.b)/2.0f;
-				GraphicFX[0]->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
+		if (!Projectile->GraphicFX.empty() && Projectile->GraphicFX[0]) {
+			GraphicFX[0] = vw_CreateParticleSystem();
+			SetExplosionGFX(GraphicFX[0], 0);
+			float Rexpl = (Projectile->GraphicFX[0]->ColorStart.r + Projectile->GraphicFX[0]->ColorEnd.r)/2.0f;
+			float Gexpl = (Projectile->GraphicFX[0]->ColorStart.g + Projectile->GraphicFX[0]->ColorEnd.g)/2.0f;
+			float Bexpl = (Projectile->GraphicFX[0]->ColorStart.b + Projectile->GraphicFX[0]->ColorEnd.b)/2.0f;
+			GraphicFX[0]->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
 
-				GraphicFX[0]->ColorStart.r = Projectile->GraphicFX[0]->ColorStart.r;
-				GraphicFX[0]->ColorStart.g = Projectile->GraphicFX[0]->ColorStart.g;
-				GraphicFX[0]->ColorStart.b = Projectile->GraphicFX[0]->ColorStart.b;
-				GraphicFX[0]->ColorEnd.r = Projectile->GraphicFX[0]->ColorEnd.r;
-				GraphicFX[0]->ColorEnd.g = Projectile->GraphicFX[0]->ColorEnd.g;
-				GraphicFX[0]->ColorEnd.b = Projectile->GraphicFX[0]->ColorEnd.b;
-				GraphicFX[0]->Speed = 150.0f;
-				GraphicFX[0]->ParticlesPerSec = Projectile->GraphicFX[0]->ParticlesPerSec;
-				GraphicFX[0]->SizeStart = Projectile->GraphicFX[0]->SizeStart;
-				GraphicFX[0]->SizeEnd = Projectile->GraphicFX[0]->SizeEnd;
-				GraphicFX[0]->SizeVar = Projectile->GraphicFX[0]->SizeVar;
-				GraphicFX[0]->Life = Lifetime;
-				GraphicFX[0]->NeedStop = false;
-				GraphicFX[0]->SetStartLocation(ExplLocation);
-			}
+			GraphicFX[0]->ColorStart.r = Projectile->GraphicFX[0]->ColorStart.r;
+			GraphicFX[0]->ColorStart.g = Projectile->GraphicFX[0]->ColorStart.g;
+			GraphicFX[0]->ColorStart.b = Projectile->GraphicFX[0]->ColorStart.b;
+			GraphicFX[0]->ColorEnd.r = Projectile->GraphicFX[0]->ColorEnd.r;
+			GraphicFX[0]->ColorEnd.g = Projectile->GraphicFX[0]->ColorEnd.g;
+			GraphicFX[0]->ColorEnd.b = Projectile->GraphicFX[0]->ColorEnd.b;
+			GraphicFX[0]->Speed = 150.0f;
+			GraphicFX[0]->ParticlesPerSec = Projectile->GraphicFX[0]->ParticlesPerSec;
+			GraphicFX[0]->SizeStart = Projectile->GraphicFX[0]->SizeStart;
+			GraphicFX[0]->SizeEnd = Projectile->GraphicFX[0]->SizeEnd;
+			GraphicFX[0]->SizeVar = Projectile->GraphicFX[0]->SizeVar;
+			GraphicFX[0]->Life = Lifetime;
+			GraphicFX[0]->NeedStop = false;
+			GraphicFX[0]->SetStartLocation(ExplLocation);
+		}
 
 		Projectile->NeedStopPartic = true;
 		NeedStop = false;
@@ -409,8 +406,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 0.5f; // должно соотв. максимальной жизни частицы
 
 		// просто делаем вспышку нужного цвета
-		GraphicFXQuantity = 1;
-		GraphicFX.resize(GraphicFXQuantity, nullptr);
+		GraphicFX.resize(1, nullptr);
 
 		// установка эффекта вспышки в месте попадания
 		if (!Projectile->GraphicFX.empty())
@@ -467,8 +463,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
 		// эффект
-		GraphicFXQuantity = 1;
-		GraphicFX.resize(GraphicFXQuantity, nullptr);
+		GraphicFX.resize(1, nullptr);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
@@ -512,8 +507,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
 		// эффект
-		GraphicFXQuantity = 1;
-		GraphicFX.resize(GraphicFXQuantity, nullptr);
+		GraphicFX.resize(1, nullptr);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
@@ -563,8 +557,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
 		// эффект
-		GraphicFXQuantity = 1;
-		GraphicFX.resize(GraphicFXQuantity, nullptr);
+		GraphicFX.resize(1, nullptr);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
@@ -613,8 +606,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
 		// эффект
-		GraphicFXQuantity = 2;
-		GraphicFX.resize(GraphicFXQuantity, nullptr);
+		GraphicFX.resize(2, nullptr);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
@@ -738,8 +730,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
 		// эффект
-		GraphicFXQuantity = 1;
-		GraphicFX.resize(GraphicFXQuantity, nullptr);
+		GraphicFX.resize(1, nullptr);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
