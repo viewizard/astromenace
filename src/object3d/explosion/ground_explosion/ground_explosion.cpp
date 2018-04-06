@@ -94,10 +94,10 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 				ShipPart->ShowDeleteOnHide = 0;
 
 				// только одна текстура (!) 2-ю для подстветки не тянем
-				ShipPart->Texture.resize(1, nullptr);
+				ShipPart->Texture.resize(1, 0);
 				ShipPart->Texture[0] = Object->Texture[i];
-				if ((Object->NormalMap.size() > (unsigned)i) && (Object->NormalMap[i] != nullptr)) {
-					ShipPart->NormalMap.resize(1, nullptr);
+				if ((Object->NormalMap.size() > (unsigned)i) && Object->NormalMap[i]) {
+					ShipPart->NormalMap.resize(1, 0);
 					ShipPart->NormalMap[0] = Object->NormalMap[i];
 				}
 

@@ -1445,10 +1445,10 @@ missile:
 	case 214:
 		MineIData += TimeDelta;
 		if (MineIData >= 0.1f) {
-			if (TextureIllum[0] == nullptr)
+			if (!TextureIllum[0])
 				TextureIllum[0] = vw_FindTextureByName("models/mine/mine1i.tga");
 			else
-				TextureIllum[0] = nullptr;
+				TextureIllum[0] = 0;
 			MineIData = 0.0f;
 		}
 		ObjectsList[0].Rotation.y += 90.0f*TimeDelta;
@@ -1489,10 +1489,10 @@ missile:
 	case 215:
 		MineIData += TimeDelta;
 		if (MineIData >= 0.1f) {
-			if (TextureIllum[0] == nullptr)
+			if (!TextureIllum[0])
 				TextureIllum[0] = vw_FindTextureByName("models/mine/mine2i.tga");
 			else
-				TextureIllum[0] = nullptr;
+				TextureIllum[0] = 0;
 			MineIData = 0.0f;
 		}
 		ObjectsList[0].Rotation.y += 90.0f * TimeDelta;
@@ -1564,10 +1564,10 @@ missile:
 	case 216:
 		MineIData += TimeDelta;
 		if (MineIData >= 0.1f) {
-			if (TextureIllum[0] == nullptr)
+			if (!TextureIllum[0])
 				TextureIllum[0] = vw_FindTextureByName("models/mine/mine3i.tga");
 			else
-				TextureIllum[0] = nullptr;
+				TextureIllum[0] = 0;
 			MineIData = 0.0f;
 		}
 		ObjectsList[0].Rotation.y += 120.0f * TimeDelta;
@@ -1663,10 +1663,10 @@ missile:
 	case 217:
 		MineIData += TimeDelta;
 		if (MineIData >= 0.1f) {
-			if (TextureIllum[0] == nullptr)
+			if (!TextureIllum[0])
 				TextureIllum[0] = vw_FindTextureByName("models/mine/mine4i.tga");
 			else
-				TextureIllum[0] = nullptr;
+				TextureIllum[0] = 0;
 			MineIData = 0.0f;
 		}
 		ObjectsList[0].Rotation.y += 90.0f * TimeDelta;

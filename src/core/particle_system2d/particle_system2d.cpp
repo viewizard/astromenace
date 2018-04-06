@@ -407,7 +407,7 @@ void cParticleSystem2D::Draw()
 	}
 
 	// texture setup
-	vw_SetTexture(0, Texture);
+	vw_BindTexture(0, Texture);
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
 	// rendering

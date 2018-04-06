@@ -156,7 +156,7 @@ const char *GetSystemName(int Num)
 
 
 
-cTexture *GetSystemIcon(int Num)
+GLtexture GetSystemIcon(int Num)
 {
 	switch (Num) {
 	case -4:
@@ -220,7 +220,7 @@ cTexture *GetSystemIcon(int Num)
 		break;
 	}
 
-	return nullptr;
+	return 0;
 }
 
 

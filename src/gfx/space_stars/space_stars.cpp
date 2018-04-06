@@ -270,7 +270,7 @@ void cSpaceStars::Draw()
 {
 
 	// загрузка текстуры, уже должна быть подключена
-	if (Texture == nullptr)
+	if (!Texture)
 		return;
 
 	sVECTOR3D CurrentCameraRotation;
@@ -532,7 +532,7 @@ void cSpaceStars::Draw()
 
 
 	if (PrimitCount > 0) {
-		vw_SetTexture(0, Texture);
+		vw_BindTexture(0, Texture);
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 
 

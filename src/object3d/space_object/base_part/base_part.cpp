@@ -67,12 +67,12 @@ void cBasePart::Create(int BasePartNum)
 case1next:
 
 		Texture[0] = vw_FindTextureByName("models/planet/d_class3.tga");
-		TextureIllum[0] = nullptr;
+		TextureIllum[0] = 0;
 		NormalMap[0] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
 		Texture[1] = vw_FindTextureByName("models/spacebase/allalpha.tga");
-		TextureIllum[1] = nullptr;
+		TextureIllum[1] = 0;
 		Texture[2] = vw_FindTextureByName("models/spacebase/metal.tga");
-		TextureIllum[2] = nullptr;
+		TextureIllum[2] = 0;
 
 		GFXQuantity = 8;
 		GFXLocation = new sVECTOR3D[GFXQuantity];
@@ -124,21 +124,21 @@ case1next:
 case2next:
 
 		Texture[0] = vw_FindTextureByName("models/spacebase/allalpha.tga");
-		TextureIllum[0] = nullptr;
+		TextureIllum[0] = 0;
 		Texture[1] = vw_FindTextureByName("models/planet/d_class3.tga");
-		TextureIllum[1] = nullptr;
+		TextureIllum[1] = 0;
 		NormalMap[1] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
 		Texture[2] = vw_FindTextureByName("models/spacebase/metal.tga");
-		TextureIllum[2] = nullptr;
+		TextureIllum[2] = 0;
 		break;
 
 	case 3:
 		// геометрия
 		LoadObjectData("models/spacebase/3/1.vw3d", this, 0, -1.0f);
 		Texture[0] = vw_FindTextureByName("models/spacebase/metal.tga");
-		TextureIllum[0] = nullptr;
+		TextureIllum[0] = 0;
 		Texture[1] = vw_FindTextureByName("models/spacebase/allalpha.tga");
-		TextureIllum[1] = nullptr;
+		TextureIllum[1] = 0;
 
 		GFXQuantity = 2;
 		GFXLocation = new sVECTOR3D[GFXQuantity];
@@ -158,14 +158,14 @@ case2next:
 		// геометрия
 		LoadObjectData("models/spacebase/4/1.vw3d", this, 0, -1.0f);
 		Texture[0] = vw_FindTextureByName("models/spacebase/allalpha.tga");
-		TextureIllum[0] = nullptr;
+		TextureIllum[0] = 0;
 		break;
 
 	case 5:
 		// геометрия
 		LoadObjectData("models/spacebase/5/1.vw3d", this, 0, -1.0f);
 		Texture[0] = vw_FindTextureByName("models/spacebase/allalpha.tga");
-		TextureIllum[0] = nullptr;
+		TextureIllum[0] = 0;
 		break;
 
 	case 61:
@@ -186,9 +186,9 @@ case2next:
 case6next:
 
 		Texture[0] = vw_FindTextureByName("models/spacebase/allalpha.tga");
-		TextureIllum[0] = nullptr;
+		TextureIllum[0] = 0;
 		Texture[1] = vw_FindTextureByName("models/planet/d_class3.tga");
-		TextureIllum[1] = nullptr;
+		TextureIllum[1] = 0;
 		NormalMap[1] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
 		break;
 
@@ -196,7 +196,7 @@ case6next:
 		// геометрия
 		LoadObjectData("models/spacebase/7/1.vw3d", this, 0, -1.0f);
 		Texture[0] = vw_FindTextureByName("models/spacebase/allalpha.tga");
-		TextureIllum[0] = nullptr;
+		TextureIllum[0] = 0;
 		break;
 
 	case 81:
@@ -217,11 +217,11 @@ case6next:
 case8next:
 
 		Texture[0] = vw_FindTextureByName("models/spacebase/allalpha.tga");
-		TextureIllum[0] = nullptr;
+		TextureIllum[0] = 0;
 		Texture[1] = vw_FindTextureByName("models/spacebase/metal.tga");
-		TextureIllum[1] = nullptr;
+		TextureIllum[1] = 0;
 		Texture[2] = vw_FindTextureByName("models/planet/d_class3.tga");
-		TextureIllum[2] = nullptr;
+		TextureIllum[2] = 0;
 		NormalMap[2] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
 		break;
 

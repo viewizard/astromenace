@@ -80,9 +80,9 @@ public:
 	// Update all particles.
 	bool Update(float Time);
 	// Draw all particles.
-	void Draw(cTexture **CurrentTexture);
+	void Draw(GLtexture &CurrentTexture);
 
-	cTexture *Texture{nullptr};
+	GLtexture Texture{0};
 	bool TextureBlend{false};	// blend (for missiles trails)
 
 	// Set start system location.

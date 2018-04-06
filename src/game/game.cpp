@@ -224,8 +224,8 @@ void DrawGameExpMoney(int Exp, int Money)
 	sRECT DstRect, SrcRect;
 	int Ystart;
 	float Xstart;
-	cTexture *Tex = vw_FindTextureByName("game/game_num.tga");
-	if (Tex == nullptr)
+	GLtexture Texture = vw_FindTextureByName("game/game_num.tga");
+	if (!Texture)
 		return;
 
 
@@ -239,11 +239,12 @@ void DrawGameExpMoney(int Exp, int Money)
 	float AHw = H*1.0f;
 
 	// Установка текстуры и ее свойств...
-	vw_SetTexture(0, Tex);
+	vw_BindTexture(0, Texture);
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
-	float ImageHeight = Tex->Height*1.0f;
-	float ImageWidth = Tex->Width*1.0f;
+	float ImageHeight{0.0f};
+	float ImageWidth{0.0f};
+	vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight);
 
 	float tmpPosY = 0;
 
@@ -1207,8 +1208,8 @@ void DrawGame()
 			float G=1.0f;
 			float B=1.0f;
 
-			cTexture *Tex = vw_FindTextureByName("game/game_panel_el.tga");
-			if (Tex == nullptr)
+			GLtexture Texture = vw_FindTextureByName("game/game_panel_el.tga");
+			if (!Texture)
 				return;
 
 			float AW;
@@ -1220,11 +1221,12 @@ void DrawGame()
 			float AHw = H*1.0f;
 
 			// Установка текстуры и ее свойств...
-			vw_SetTexture(0, Tex);
+			vw_BindTexture(0, Texture);
 			vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
-			float ImageHeight = Tex->Height*1.0f;
-			float ImageWidth = Tex->Width*1.0f;
+			float ImageHeight{0.0f};
+			float ImageWidth{0.0f};
+			vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight);
 
 			float tmpPosY = 0;
 

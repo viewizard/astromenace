@@ -50,16 +50,16 @@ void cPlanet::Create(int PlanetNum)
 		NeedAlphaTest = true;
 		LoadObjectData("models/planet/aplanet.vw3d", this, 0, -1.0f, Setup.UseGLSL);
 		Texture[0] = vw_FindTextureByName("models/planet/d_class3.tga");
-		TextureIllum[0] = nullptr;
+		TextureIllum[0] = 0;
 		NormalMap[0] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
 		Texture[1] = vw_FindTextureByName("models/planet/asteroid.tga");
-		TextureIllum[1] = nullptr;
+		TextureIllum[1] = 0;
 		NormalMap[1] = vw_FindTextureByName("models/normalmap/planet_asteroids_nm.tga");
 		Texture[2] = vw_FindTextureByName("models/planet/asteroid.tga");
-		TextureIllum[2] = nullptr;
+		TextureIllum[2] = 0;
 		NormalMap[2] = vw_FindTextureByName("models/normalmap/planet_asteroids_nm.tga");
 		Texture[3] = vw_FindTextureByName("models/planet/asteroid.tga");
-		TextureIllum[3] = nullptr;
+		TextureIllum[3] = 0;
 		NormalMap[3] = vw_FindTextureByName("models/normalmap/planet_asteroids_nm.tga");
 		break;
 	// полу-разрушенная планета
@@ -68,7 +68,7 @@ void cPlanet::Create(int PlanetNum)
 		LoadObjectData("models/planet/dplanet.vw3d", this, 0, -1.0f, Setup.UseGLSL);
 		for (int i = 0; i < ObjectsListCount; i++) {
 			Texture[i] = vw_FindTextureByName("models/planet/d_class3.tga");
-			TextureIllum[i] = nullptr;
+			TextureIllum[i] = 0;
 			NormalMap[i] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
 		}
 		break;
@@ -77,32 +77,32 @@ void cPlanet::Create(int PlanetNum)
 		NeedCullFaces = false;
 		LoadObjectData("models/planet/gplanet.vw3d", this, 0, -1.0f, Setup.UseGLSL);
 		Texture[0] = vw_FindTextureByName("models/planet/m_class7.tga");
-		TextureIllum[0] = nullptr;
+		TextureIllum[0] = 0;
 		NormalMap[0] = vw_FindTextureByName("models/normalmap/m_class7_nm.tga");
 
 		Texture[1] = vw_FindTextureByName("models/planet/clouds.tga");
-		TextureIllum[1] = nullptr;
+		TextureIllum[1] = 0;
 		ObjectsList[1].DrawType = ObjectDrawType::Blend; // рисуем прозрачным
 		break;
 	// "красная" планета
 	case 4:
 		LoadObjectData("models/planet/moon.vw3d", this, 0, -1.0f, Setup.UseGLSL);
 		Texture[0] = vw_FindTextureByName("models/planet/q_class2.tga");
-		TextureIllum[0] = nullptr;
+		TextureIllum[0] = 0;
 		NormalMap[0] = vw_FindTextureByName("models/normalmap/q_class2_nm.tga");
 		break;
 	// планета пришельцев, лава
 	case 5:
 		LoadObjectData("models/planet/planet5.vw3d", this, 0, -1.0f, Setup.UseGLSL);
 		Texture[0] = vw_FindTextureByName("models/planet/a_class4.tga");
-		TextureIllum[0] = nullptr;
+		TextureIllum[0] = 0;
 		NormalMap[0] = vw_FindTextureByName("models/normalmap/a_class4_nm.tga");
 		break;
 	// планета пришельцев
 	case 6:
 		LoadObjectData("models/planet/planet6.vw3d", this, 0, -1.0f, Setup.UseGLSL);
 		Texture[0] = vw_FindTextureByName("models/planet/d_class3.tga");
-		TextureIllum[0] = nullptr;
+		TextureIllum[0] = 0;
 		NormalMap[0] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
 		break;
 	}

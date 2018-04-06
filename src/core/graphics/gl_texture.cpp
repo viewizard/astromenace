@@ -37,12 +37,12 @@ extern PFNGLTEXSTORAGE2DPROC glTexStorage2DEXT;
 //------------------------------------------------------------------------------------
 // Создание текстуры
 //------------------------------------------------------------------------------------
-GLuint vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int Bytes, int CompressionType)
+GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int Bytes, int CompressionType)
 {
 	if (!ustDIB)
 		return 0;
 
-	GLuint TextureID{0};
+	GLtexture TextureID{0};
 
 	glGenTextures(1, &TextureID);
 	vw_BindTexture(0, TextureID);
@@ -105,7 +105,7 @@ GLuint vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int 
 //------------------------------------------------------------------------------------
 // Bind
 //------------------------------------------------------------------------------------
-void vw_BindTexture(uint32_t Stage, GLuint TextureID)
+void vw_BindTexture(uint32_t Stage, GLtexture TextureID)
 {
 	if (glActiveTexture_ARB)
 		glActiveTexture_ARB(GL_TEXTURE0 + Stage);
@@ -122,21 +122,9 @@ void vw_BindTexture(uint32_t Stage, GLuint TextureID)
 //------------------------------------------------------------------------------------
 // Delete
 //------------------------------------------------------------------------------------
-void vw_DeleteTexture(GLuint TextureID)
+void vw_DeleteTexture(GLtexture TextureID)
 {
-	if (TextureID)
-		glDeleteTextures(1, &TextureID);
-}
-
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
-void vw_SetTexture(uint32_t Stage, cTexture *Texture)
-{
-	if (!Texture)
-		return;
-
-	vw_BindTexture(Stage, Texture->TextureID);
+	glDeleteTextures(1, &TextureID);
 }
 
 //------------------------------------------------------------------------------------

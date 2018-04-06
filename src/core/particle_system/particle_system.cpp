@@ -577,7 +577,7 @@ static inline void AddToDrawBuffer(float CoordX, float CoordY, float CoordZ,
 /*
  * Draw all particles.
  */
-void cParticleSystem::Draw(cTexture **CurrentTexture)
+void cParticleSystem::Draw(GLtexture &CurrentTexture)
 {
 	if (!vw_BoxInFrustum(AABB[6], AABB[0]) ||
 	    ParticlesList.empty())
@@ -678,9 +678,9 @@ void cParticleSystem::Draw(cTexture **CurrentTexture)
 	}
 
 	// if we already setup this texture in previous rendered particle system, no need to change it
-	if (*CurrentTexture != Texture) {
-		vw_SetTexture(0, Texture);
-		*CurrentTexture = Texture;
+	if (CurrentTexture != Texture) {
+		vw_BindTexture(0, Texture);
+		CurrentTexture = Texture;
 	}
 
 	if (TextureBlend)
@@ -886,7 +886,7 @@ void vw_DrawAllParticleSystems()
 {
 	// current texture
 	// we store current texture in order to minimize texture's states changes
-	cTexture *CurrentTexture{nullptr};
+	GLtexture CurrentTexture{0};
 
 	// setup blend
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
@@ -903,7 +903,7 @@ void vw_DrawAllParticleSystems()
 	glDepthMask(GL_FALSE);
 
 	for (auto &tmpParticleSystems : ParticleSystemsList) {
-		tmpParticleSystems.Draw(&CurrentTexture);
+		tmpParticleSystems.Draw(CurrentTexture);
 	}
 
 	// reset rendering states
@@ -924,7 +924,7 @@ void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
 
 	// current texture
 	// we store current texture in order to minimize texture's states changes
-	cTexture *CurrentTexture{nullptr};
+	GLtexture CurrentTexture{0};
 
 	// setup blend
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
@@ -942,7 +942,7 @@ void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
 
 	for (int i = 0; i < Quantity; i++) {
 		if (DrawParticleSystem[i])
-			DrawParticleSystem[i]->Draw(&CurrentTexture);
+			DrawParticleSystem[i]->Draw(CurrentTexture);
 	}
 
 	// reset rendering states

@@ -202,9 +202,9 @@ public:
 	int		*DeviationObjNum{nullptr};
 
 	// текстура для объектов геометрии
-	std::vector<cTexture*> Texture{};
-	std::vector<cTexture*> TextureIllum{};
-	std::vector<cTexture*> NormalMap{};
+	std::vector<GLtexture> Texture{};
+	std::vector<GLtexture> TextureIllum{};
+	std::vector<GLtexture> NormalMap{};
 
 	// список с геометрией модели, объекты для прорисовки
 	sObjectBlock	*ObjectsList{nullptr};

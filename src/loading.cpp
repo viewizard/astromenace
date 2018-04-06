@@ -789,7 +789,7 @@ static sLoadList StarSystem2LoadList[] = {
 //------------------------------------------------------------------------------------
 // процедура прорисовки логотипа
 //------------------------------------------------------------------------------------
-void DrawViewizardLogo(cTexture *ViewizardLogoTexture)
+void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 {
 	int		ShowLogoTime = 6000; // сколько нужно показывать логотип
 	int		ShowLogoLife = ShowLogoTime; // сколько осталось показывать
@@ -875,7 +875,7 @@ void DrawViewizardLogo(cTexture *ViewizardLogoTexture)
 //------------------------------------------------------------------------------------
 // процедура прорисовки процента загрузки данных
 //------------------------------------------------------------------------------------
-void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, cTexture *LoadImageTexture)
+void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, GLtexture LoadImageTexture)
 {
 	// слишком часто не рисуем
 	if ((Current != AllDrawLoading) && // последний (полный) рисуем всегда
@@ -988,7 +988,7 @@ bool ReleaseGameData(eLoading LoadType)
 //------------------------------------------------------------------------------------
 void LoadGameData(eLoading LoadType)
 {
-	cTexture *LoadImageTexture = nullptr;
+	GLtexture LoadImageTexture{0};
 	int RealLoadedTextures = 0;
 	bool NeedLoadShaders = false;
 	int AllDrawLoading = 0;
@@ -1256,7 +1256,7 @@ void LoadGameData(eLoading LoadType)
 	if (LoadType == eLoading::MenuWithLogo) {
 		// выводим логотип Viewizard
 		vw_SetTextureProp(TEXTURE_NO_MIPMAP, RI_CLAMP_TO_EDGE, false, eAlphaCreateMode::EQUAL, false);
-		cTexture *ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga", 0);
+		GLtexture ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga", 0);
 
 		DrawViewizardLogo(ViewizardLogoTexture);
 
@@ -1276,9 +1276,7 @@ void LoadGameData(eLoading LoadType)
 	vw_LoadTexture("loading/loading_back.tga", 0);
 	vw_SetTextureProp(TEXTURE_NO_MIPMAP, RI_CLAMP_TO_EDGE, false, eAlphaCreateMode::GREYSC, false);
 
-	LoadImageTexture = nullptr;
-
-	switch (1+vw_iRandNum(3)) {
+	switch (1 + vw_iRandNum(3)) {
 	case 1:
 		LoadImageTexture = vw_LoadTexture("loading/loading01.tga", 0);
 		break;
@@ -1369,7 +1367,7 @@ void LoadGameData(eLoading LoadType)
 		switch (CurrentList[i].FileType) {
 		// 2d текстуры
 		case 0:
-			if (vw_FindTextureByName(CurrentList[i].FileName) == nullptr) {
+			if (!vw_FindTextureByName(CurrentList[i].FileName)) {
 				// установки параметров
 				vw_SetTextureAlpha(CurrentList[i].Red, CurrentList[i].Green, CurrentList[i].Blue);
 				vw_SetTextureProp(CurrentList[i].TextFiltr, CurrentList[i].TextWrap,
@@ -1382,7 +1380,7 @@ void LoadGameData(eLoading LoadType)
 
 		// текстуры
 		case 1:
-			if (vw_FindTextureByName(CurrentList[i].FileName) == nullptr) {
+			if (!vw_FindTextureByName(CurrentList[i].FileName)) {
 				int H = 0;
 				int W = 0;
 
@@ -1472,8 +1470,7 @@ void LoadGameData(eLoading LoadType)
 
 
 	// убираем картинку загрузки
-	if (LoadImageTexture != nullptr)
-		vw_ReleaseTexture(LoadImageTexture);
+	vw_ReleaseTexture(LoadImageTexture);
 
 
 AllDataLoaded:

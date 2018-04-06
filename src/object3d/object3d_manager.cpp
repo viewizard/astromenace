@@ -153,8 +153,8 @@ void DrawAllObject3D(int DrawType)
 		buff[k++] = 1.0f;
 
 
-		cTexture *TileTexture = vw_FindTextureByName("menu/whitepoint.tga");
-		vw_SetTexture(0, TileTexture);
+		GLtexture TileTexture = vw_FindTextureByName("menu/whitepoint.tga");
+		vw_BindTexture(0, TileTexture);
 
 		float BrightnessF = 1.0f + (Setup.Brightness - 5)/5.0f;
 

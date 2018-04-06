@@ -107,8 +107,8 @@ void StarSystemInit(int Num, sVECTOR3D SetBaseRotation)
 //------------------------------------------------------------------------------------
 void StarSystemRelease()
 {
-	for (int i=0; i<6; i++)
-		SkyBoxSetTexture(nullptr, i);
+	for (int i = 0; i < 6; i++)
+		SkyBoxSetTexture(0, i);
 
 	StarSystem_Inited = false;
 
@@ -280,8 +280,8 @@ void StarSystemDraw(int DrawType)
 		if (StarsTile < -3.0f) StarsTile += 3.0f;
 
 
-		cTexture *TileTexture = vw_FindTextureByName("skybox/tile_back.tga");
-		vw_SetTexture(0, TileTexture);
+		GLtexture TileTexture = vw_FindTextureByName("skybox/tile_back.tga");
+		vw_BindTexture(0, TileTexture);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
 		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
@@ -345,7 +345,7 @@ void StarSystemDraw(int DrawType)
 		buff[k++] = 0.0f;
 		buff[k++] = 3.0f+StarsTile;
 
-		vw_SetTexture(0, vw_FindTextureByName("skybox/tile_stars.tga"));
+		vw_BindTexture(0, vw_FindTextureByName("skybox/tile_stars.tga"));
 
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(buff[0]));
 
@@ -463,8 +463,8 @@ void StarSystemDrawSecondLayer(int DrawType)
 		if (StarsTile2 < -3.0f) StarsTile2 += 3.0f;
 
 
-		cTexture *TileTexture = vw_FindTextureByName("skybox/tile_stars.tga");
-		vw_SetTexture(0, TileTexture);
+		GLtexture TileTexture = vw_FindTextureByName("skybox/tile_stars.tga");
+		vw_BindTexture(0, TileTexture);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
 		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);

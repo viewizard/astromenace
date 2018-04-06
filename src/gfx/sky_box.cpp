@@ -45,7 +45,7 @@ enum eSide {
 //-----------------------------------------------------------------------------
 
 // SkyBox textures
-cTexture *SkyBox_Texture[6] = {nullptr,nullptr,nullptr,nullptr,nullptr,nullptr};
+GLtexture SkyBox_Texture[6]{0, 0, 0, 0, 0, 0};
 // SkyBox location
 float SkyBox_x = 0.0f;
 float SkyBox_y = 0.0f;
@@ -71,7 +71,7 @@ void SkyBoxDraw()
 
 
 	// сразу выполняем настройку второй текстуры
-	vw_SetTexture(1, vw_FindTextureByName("skybox/tile_stars.tga"));
+	vw_BindTexture(1, vw_FindTextureByName("skybox/tile_stars.tga"));
 	vw_SetTextureEnvMode(RI_TENV_DECAL);
 	vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 	// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
@@ -87,7 +87,7 @@ void SkyBoxDraw()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The BACK side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SkyBox_Texture[BACK] != nullptr) {
+	if (SkyBox_Texture[BACK]) {
 		k=0;
 		buff[k++] = SkyBox_x + SkyBox_width_2;
 		buff[k++] = SkyBox_y - SkyBox_height_2;
@@ -110,7 +110,7 @@ void SkyBoxDraw()
 		buff[k++] = 1.0f;
 		buff[k++] = 1.0f;
 
-		vw_SetTexture(0, SkyBox_Texture[BACK]);
+		vw_BindTexture(0, SkyBox_Texture[BACK]);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(buff[0]));
 	}
@@ -119,7 +119,7 @@ void SkyBoxDraw()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The FRONT side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SkyBox_Texture[FRONT] != nullptr) {
+	if (SkyBox_Texture[FRONT]) {
 		k=0;
 		buff[k++] = SkyBox_x - SkyBox_width_2;
 		buff[k++] = SkyBox_y - SkyBox_height_2;
@@ -142,7 +142,7 @@ void SkyBoxDraw()
 		buff[k++] = 1.0f;
 		buff[k++] = 1.0f;
 
-		vw_SetTexture(0, SkyBox_Texture[FRONT]);
+		vw_BindTexture(0, SkyBox_Texture[FRONT]);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(buff[0]));
 
@@ -152,7 +152,7 @@ void SkyBoxDraw()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The BOTTOM side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SkyBox_Texture[BOTTOM] != nullptr) {
+	if (SkyBox_Texture[BOTTOM]) {
 		k=0;
 		buff[k++] = SkyBox_x - SkyBox_width_2;
 		buff[k++] = SkyBox_y - SkyBox_height_2;
@@ -175,7 +175,7 @@ void SkyBoxDraw()
 		buff[k++] = 1.0f;
 		buff[k++] = 1.0f;
 
-		vw_SetTexture(0, SkyBox_Texture[BOTTOM]);
+		vw_BindTexture(0, SkyBox_Texture[BOTTOM]);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(buff[0]));
 	}
@@ -184,7 +184,7 @@ void SkyBoxDraw()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The TOP side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SkyBox_Texture[TOP] != nullptr) {
+	if (SkyBox_Texture[TOP]) {
 		k=0;
 		buff[k++] = SkyBox_x + SkyBox_width_2;
 		buff[k++] = SkyBox_y + SkyBox_height_2;
@@ -207,7 +207,7 @@ void SkyBoxDraw()
 		buff[k++] = 0.0f;
 		buff[k++] = 0.0f;
 
-		vw_SetTexture(0, SkyBox_Texture[TOP]);
+		vw_BindTexture(0, SkyBox_Texture[TOP]);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(buff[0]));
 	}
@@ -216,7 +216,7 @@ void SkyBoxDraw()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The LEFT side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SkyBox_Texture[LEFT] != nullptr) {
+	if (SkyBox_Texture[LEFT]) {
 		k=0;
 		buff[k++] = SkyBox_x - SkyBox_width_2;
 		buff[k++] = SkyBox_y + SkyBox_height_2;
@@ -239,7 +239,7 @@ void SkyBoxDraw()
 		buff[k++] = 1.0f;
 		buff[k++] = 0.0f;
 
-		vw_SetTexture(0, SkyBox_Texture[LEFT]);
+		vw_BindTexture(0, SkyBox_Texture[LEFT]);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(buff[0]));
 	}
@@ -248,7 +248,7 @@ void SkyBoxDraw()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The RIGHT side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SkyBox_Texture[RIGHT] != nullptr) {
+	if (SkyBox_Texture[RIGHT]) {
 		k=0;
 		buff[k++] = SkyBox_x + SkyBox_width_2;
 		buff[k++] = SkyBox_y - SkyBox_height_2;
@@ -271,7 +271,7 @@ void SkyBoxDraw()
 		buff[k++] = 0.0f;
 		buff[k++] = 1.0f;
 
-		vw_SetTexture(0, SkyBox_Texture[RIGHT]);
+		vw_BindTexture(0, SkyBox_Texture[RIGHT]);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(buff[0]));
 	}
@@ -295,9 +295,9 @@ void SkyBoxDraw()
 //-----------------------------------------------------------------------------
 // Setup texture for each SkyBox side
 //-----------------------------------------------------------------------------
-void SkyBoxSetTexture(cTexture *nTexture, int Side)
+void SkyBoxSetTexture(GLtexture TextureID, int Side)
 {
-	SkyBox_Texture[Side] = nTexture;
+	SkyBox_Texture[Side] = TextureID;
 }
 
 

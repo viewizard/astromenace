@@ -58,8 +58,23 @@ uint8_t ABlueTex{0};
 eAlphaCreateMode AFlagTex{eAlphaCreateMode::EQUAL};
 // Default mip mapping type.
 bool MipMapTex{true};
+
+// we need only Width and Height, but, keep all this data for now,
+// glGetTexLevelParameteriv() usage not an option, since it stalls the OpenGL pipeline.
+// Width/Height contain final texture size
+// SrcWidth/SrcHeight contain initial source image size, befor POT correction in case
+// hardware don't support non-POT size textures
+struct sTexture {
+	int Width;		// Texture width
+	int Height;		// Texture height
+	int SrcWidth;		// Source image width
+	int SrcHeight;		// Source image height
+	int Bytes;		// Bytes per pixel
+};
+
 // Map with all loaded textures.
-std::unordered_map<std::string, cTexture> TexturesMap;
+std::unordered_map<std::string, GLtexture> TexturesNameToIDMap;
+std::unordered_map<GLtexture, sTexture> TexturesIDtoDataMap;
 
 } // unnamed namespace
 
@@ -93,32 +108,47 @@ void vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue)
 /*
  * Find texture by name.
  */
-cTexture *vw_FindTextureByName(const std::string &Name)
+GLtexture vw_FindTextureByName(const std::string &Name)
 {
-	auto tmpTexture = TexturesMap.find(Name);
-	if (tmpTexture != TexturesMap.end())
-		return &tmpTexture->second;
+	auto tmpTexture = TexturesNameToIDMap.find(Name);
+	if (tmpTexture != TexturesNameToIDMap.end())
+		return tmpTexture->second;
 
-	return nullptr;
+	return 0;
+}
+
+bool vw_FindTextureSizeByID(GLtexture TextureID, float *Width, float *Height)
+{
+	auto tmpTexture = TexturesIDtoDataMap.find(TextureID);
+	if (tmpTexture == TexturesIDtoDataMap.end())
+		return false;
+
+	if (Width)
+		*Width = tmpTexture->second.Width;
+	if (Height)
+		*Height = tmpTexture->second.Height;
+
+	return true;
 }
 
 /*
  * Release texture.
  */
-void vw_ReleaseTexture(cTexture *Texture)
+void vw_ReleaseTexture(GLtexture TextureID)
 {
-	if (!Texture)
+	if (!TextureID)
 		return;
 
-	// we are forced to check them all in cycle, since our key is texture's name
-	for (const auto &tmpTexture : TexturesMap) {
-		if ((&tmpTexture.second == Texture)) {
-			vw_DeleteTexture(Texture->TextureID);
-			TexturesMap.erase(tmpTexture.first);
-			// forced to leave - current iterator invalidated by erase()
+	vw_DeleteTexture(TextureID);
+	TexturesIDtoDataMap.erase(TextureID);
+
+	for (auto &tmpTexture : TexturesNameToIDMap) {
+		if (tmpTexture.second == TextureID) {
+			TexturesNameToIDMap.erase(tmpTexture.first);
 			return;
 		}
 	}
+
 }
 
 /*
@@ -126,10 +156,11 @@ void vw_ReleaseTexture(cTexture *Texture)
  */
 void vw_ReleaseAllTextures()
 {
-	for (auto &tmpTexture : TexturesMap) {
-		vw_DeleteTexture(tmpTexture.second.TextureID);
+	for (auto &tmpTexture : TexturesIDtoDataMap) {
+		vw_DeleteTexture(tmpTexture.first);
 	}
-	TexturesMap.clear();
+	TexturesIDtoDataMap.clear();
+	TexturesNameToIDMap.clear();
 
 	FilteringTex = RI_MAGFILTER_POINT | RI_MINFILTER_POINT | RI_MIPFILTER_POINT;
 	Address_ModeTex = RI_WRAP_U | RI_WRAP_V;
@@ -152,7 +183,7 @@ static int PowerOfTwo(int Num)
 /*
  * Resize image to closest power of two size.
  */
-static void ResizeToPOT(std::vector<uint8_t> &DIB, cTexture &Texture)
+static void ResizeToPOT(std::vector<uint8_t> &DIB, sTexture &Texture)
 {
 	if (DIB.empty())
 		return;
@@ -193,7 +224,7 @@ static void ResizeToPOT(std::vector<uint8_t> &DIB, cTexture &Texture)
 /*
  * Resize image to custom size.
  */
-static void ResizeImage(int newWidth, int newHeight, std::vector<uint8_t> &DIB, cTexture &Texture)
+static void ResizeImage(int newWidth, int newHeight, std::vector<uint8_t> &DIB, sTexture &Texture)
 {
 	if (DIB.empty() || ((newWidth == Texture.Width) && (newHeight == Texture.Height)))
 		return;
@@ -220,7 +251,7 @@ static void ResizeImage(int newWidth, int newHeight, std::vector<uint8_t> &DIB, 
 /*
  * Create alpha channel.
  */
-static void CreateAlpha(std::vector<uint8_t> &DIB, cTexture &Texture, eAlphaCreateMode AlphaFlag)
+static void CreateAlpha(std::vector<uint8_t> &DIB, sTexture &Texture, eAlphaCreateMode AlphaFlag)
 {
 	if (DIB.empty())
 		return;
@@ -271,7 +302,7 @@ static void CreateAlpha(std::vector<uint8_t> &DIB, cTexture &Texture, eAlphaCrea
 /*
  * Remove alpha channel.
  */
-static void RemoveAlpha(std::vector<uint8_t> &DIB, cTexture &Texture)
+static void RemoveAlpha(std::vector<uint8_t> &DIB, sTexture &Texture)
 {
 	if (DIB.empty())
 		return;
@@ -361,11 +392,11 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 /*
  * Load texture from file.
  */
-cTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
+GLtexture vw_LoadTexture(const std::string &TextureName, int CompressionType,
 			 eLoadTextureAs LoadAs, int NeedResizeW, int NeedResizeH)
 {
 	if (TextureName.empty())
-		return nullptr;
+		return 0;
 
 	int DWidth{0};
 	int DHeight{0};
@@ -375,7 +406,7 @@ cTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
 	std::unique_ptr<sFILE> pFile = vw_fopen(TextureName);
 	if (!pFile) {
 		std::cerr << __func__ << "(): " << "Unable to found " << TextureName << "\n";
-		return nullptr;
+		return 0;
 	}
 
 	// check extension
@@ -404,12 +435,12 @@ cTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
 		break;
 
 	default:
-		return nullptr;
+		return 0;
 	}
 
 	if (tmpImage.empty()) {
 		std::cerr << __func__ << "(): " << "Unable to load " << TextureName << "\n";
-		return nullptr;
+		return 0;
 	}
 
 	vw_fclose(pFile);
@@ -421,55 +452,62 @@ cTexture *vw_LoadTexture(const std::string &TextureName, int CompressionType,
 /*
  * Create texture from memory.
  */
-cTexture *vw_CreateTextureFromMemory(const std::string &TextureName, std::vector<uint8_t> &DIB, int DIBWidth,
+GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::vector<uint8_t> &DIB, int DIBWidth,
 				     int DIBHeight, int DIBChanels, int CompressionType, int NeedResizeW,
 				     int NeedResizeH, bool NeedDuplicateCheck)
 {
 	if (TextureName.empty() || DIB.empty() || (DIBWidth <= 0) || (DIBHeight <= 0))
-		return nullptr;
+		return 0;
 
 	// check for availability, probably, we already have it loaded
 	if (NeedDuplicateCheck) {
-		cTexture *tmpTexture = vw_FindTextureByName(TextureName);
-		if (tmpTexture) {
+		GLtexture tmpTextureID = vw_FindTextureByName(TextureName);
+		if (tmpTextureID) {
 			std::cout << "Texture already loaded: " << TextureName << "\n";
-			return tmpTexture;
+			return tmpTextureID;
 		}
 	}
 
-	TexturesMap[TextureName].TextureID = 0;
-	TexturesMap[TextureName].Width = DIBWidth;
-	TexturesMap[TextureName].Height = DIBHeight;
-	TexturesMap[TextureName].Bytes = DIBChanels;
+	sTexture newTexture{};
+	newTexture.Width = DIBWidth;
+	newTexture.Height = DIBHeight;
+	newTexture.Bytes = DIBChanels;
 
 	// if we have alpha channel, but don't need them - remove
-	if ((TexturesMap[TextureName].Bytes == 4) && !AlphaTex)
-		RemoveAlpha(DIB, TexturesMap[TextureName]);
+	if ((newTexture.Bytes == 4) && !AlphaTex)
+		RemoveAlpha(DIB, newTexture);
 	// if we don't have alpha channel, but need them - create
-	else if ((TexturesMap[TextureName].Bytes == 3) && (AlphaTex))
-		CreateAlpha(DIB, TexturesMap[TextureName], AFlagTex);
+	else if ((newTexture.Bytes == 3) && (AlphaTex))
+		CreateAlpha(DIB, newTexture, AFlagTex);
 
 	// Note, in case of resize, we should provide width and height (but not just one of them).
 	if (NeedResizeW && NeedResizeH)
-		ResizeImage(NeedResizeW, NeedResizeH, DIB, TexturesMap[TextureName]);
+		ResizeImage(NeedResizeW, NeedResizeH, DIB, newTexture);
 
 	// in case we change size, it is important to store "source" (initial) size
 	// that need for 2D rendering calculation, when we operate with pixels
 	// and don't count on NPOT resize
-	TexturesMap[TextureName].SrcWidth = TexturesMap[TextureName].Width;
-	TexturesMap[TextureName].SrcHeight = TexturesMap[TextureName].Height;
+	newTexture.SrcWidth = newTexture.Width;
+	newTexture.SrcHeight = newTexture.Height;
 
 	// if hardware don't support NPOT textures, forced to resize them manually
 	if (!vw_GetDevCaps()->TextureNPOTSupported)
-		ResizeToPOT(DIB, TexturesMap[TextureName]);
+		ResizeToPOT(DIB, newTexture);
 
-	TexturesMap[TextureName].TextureID = vw_BuildTexture(DIB.data(), TexturesMap[TextureName].Width,
-							     TexturesMap[TextureName].Height, MipMapTex,
-							     TexturesMap[TextureName].Bytes, CompressionType);
+	GLtexture TextureID = vw_BuildTexture(DIB.data(), newTexture.Width, newTexture.Height,
+					      MipMapTex, newTexture.Bytes, CompressionType);
+
+	if (!TextureID)
+		return 0;
+
 	vw_SetTextureFiltering(FilteringTex);
 	vw_SetTextureAddressMode(Address_ModeTex);
 	vw_BindTexture(0, 0);
 
+	// create new entries
+	TexturesNameToIDMap.emplace(TextureName, TextureID);
+	TexturesIDtoDataMap.emplace(TextureID, newTexture);
+
 	std::cout << "Texture created from memory: " << TextureName << "\n";
-	return &TexturesMap[TextureName];
+	return TextureID;
 }

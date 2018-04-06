@@ -70,7 +70,7 @@ struct sFontChar {
 	char32_t UTF32; // key element 1 (UTF32 code)
 	int FontSize; // key element 2 (character generated size)
 
-	cTexture *Texture{nullptr}; // font character texture
+	GLtexture Texture{0}; // font character texture
 	int TexturePositionLeft;
 	int TexturePositionRight;
 	int TexturePositionTop;
@@ -362,7 +362,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 	// create texture from bitmap
 	vw_SetTextureProp(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE,
 			  RI_CLAMP_TO_EDGE, true, eAlphaCreateMode::GREYSC, false);
-	cTexture *FontTexture = vw_CreateTextureFromMemory("auto_generated_texture_for_fonts", DIB,
+	GLtexture FontTexture = vw_CreateTextureFromMemory("auto_generated_texture_for_fonts", DIB,
 							   FontTextureWidth, FontTextureHeight, 4, 0);
 	if (!FontTexture) {
 		std::cerr << __func__ << "(): " << "Can't create font texture.\n";
@@ -447,28 +447,28 @@ static void CalculateDefaultSpaceWidth(float &SpaceWidthFactor, float FontScale)
  * Draw buffer on texture change.
  * Caller should care about pointers. nullptr not allowed.
  */
-static void DrawBufferOnTextureChange(cTexture **CurrentTexture, const sFontChar *DrawChar)
+static void DrawBufferOnTextureChange(GLtexture &CurrentTexture, const sFontChar *DrawChar)
 {
 	// draw all we have in buffer with current texture
 	if (DrawBufferCurrentPosition) {
-		vw_SetTexture(0, *CurrentTexture);
+		vw_BindTexture(0, CurrentTexture);
 		vw_SendVertices(RI_TRIANGLES, DrawBufferCurrentPosition / sizeof(DrawBuffer.get()[0]),
 				RI_2f_XY | RI_1_TEX, DrawBuffer.get(), 4 * sizeof(DrawBuffer.get()[0]));
 		DrawBufferCurrentPosition = 0;
 	}
 	// setup new texture
-	*CurrentTexture = DrawChar->Texture;
+	CurrentTexture = DrawChar->Texture;
 }
 
 /*
  * Draw buffer on text end.
  */
-static void DrawBufferOnTextEnd(cTexture *CurrentTexture)
+static void DrawBufferOnTextEnd(GLtexture CurrentTexture)
 {
 	if (!DrawBufferCurrentPosition)
 		return;
 
-	vw_SetTexture(0, CurrentTexture);
+	vw_BindTexture(0, CurrentTexture);
 	vw_SendVertices(RI_TRIANGLES, DrawBufferCurrentPosition / sizeof(DrawBuffer.get()[0]),
 			RI_2f_XY | RI_1_TEX, DrawBuffer.get(), 4 * sizeof(DrawBuffer.get()[0]));
 	DrawBufferCurrentPosition = 0;
@@ -550,7 +550,9 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 	vw_SetColor(R, G, B, Transp);
-	cTexture *CurrentTexture{nullptr};
+	GLtexture CurrentTexture{0};
+	float ImageHeight{0.0f};
+	float ImageWidth{0.0f};
 
 	// combine calculated width factor and global width scale
 	FontWidthFactor = FontScale*FontWidthFactor;
@@ -570,12 +572,16 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 		if (!DrawChar)
 			DrawChar = LoadFontChar(UTF32);
 		// for first character in text - setup texture by first character
-		if (!CurrentTexture)
+		if (!CurrentTexture) {
 			CurrentTexture = DrawChar->Texture;
+			vw_FindTextureSizeByID(DrawChar->Texture, &ImageWidth, &ImageHeight);
+		}
 
 		// looks like texture should be changed
-		if (CurrentTexture != DrawChar->Texture)
-			DrawBufferOnTextureChange(&CurrentTexture, DrawChar);
+		if (CurrentTexture != DrawChar->Texture) {
+			DrawBufferOnTextureChange(CurrentTexture, DrawChar);
+			vw_FindTextureSizeByID(DrawChar->Texture, &ImageWidth, &ImageHeight);
+		}
 
 		// put into draw buffer all characters data, except spaces
 		if (UTF32 != SpaceUTF32) {
@@ -589,9 +595,6 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 				tmpPosY = (AH - DrawY - DrawY - DrawChar->Height * FontScale);
 			else
 				tmpPosY = (AHw - DrawY - DrawY - DrawChar->Height * FontScale);
-
-			float ImageHeight{DrawChar->Texture->Height * 1.0f};
-			float ImageWidth{DrawChar->Texture->Width * 1.0f};
 
 			float FrameHeight{(DrawChar->TexturePositionBottom * 1.0f) / ImageHeight};
 			float FrameWidth{(DrawChar->TexturePositionRight * 1.0f) / ImageWidth};
@@ -725,7 +728,9 @@ int vw_DrawFont3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 	float SpaceWidth{0};
 	CalculateDefaultSpaceWidth(SpaceWidth, 1.0f /* don't scale */);
 
-	cTexture *CurrentTexture{nullptr};
+	GLtexture CurrentTexture{0};
+	float ImageHeight{0.0f};
+	float ImageWidth{0.0f};
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -745,20 +750,21 @@ int vw_DrawFont3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 		if (!DrawChar)
 			DrawChar = LoadFontChar(UTF32);
 		// for first character in text - setup texture by first character
-		if (!CurrentTexture)
+		if (!CurrentTexture) {
 			CurrentTexture = DrawChar->Texture;
+			vw_FindTextureSizeByID(DrawChar->Texture, &ImageWidth, &ImageHeight);
+		}
 
 		// looks like texture should be changed
-		if (CurrentTexture != DrawChar->Texture)
-			DrawBufferOnTextureChange(&CurrentTexture, DrawChar);
+		if (CurrentTexture != DrawChar->Texture) {
+			DrawBufferOnTextureChange(CurrentTexture, DrawChar);
+			vw_FindTextureSizeByID(DrawChar->Texture, &ImageWidth, &ImageHeight);
+		}
 
 		// put into draw buffer all characters data, except spaces
 		if (UTF32 != SpaceUTF32) {
 			float DrawX{Xstart + DrawChar->Left};
 			float DrawY{(InternalFontSize - DrawChar->Top) * 1.0f};
-
-			float ImageHeight{DrawChar->Texture->Height * 1.0f};
-			float ImageWidth{DrawChar->Texture->Width * 1.0f};
 
 			float FrameHeight{(DrawChar->TexturePositionBottom * 1.0f) / ImageHeight};
 			float FrameWidth{(DrawChar->TexturePositionRight * 1.0f) / ImageWidth};

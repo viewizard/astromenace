@@ -100,9 +100,9 @@ void vw_End2DMode()
 //------------------------------------------------------------------------------------
 // Прорисовка в 2д
 //------------------------------------------------------------------------------------
-void vw_Draw(int X, int Y, sRECT *SrcRect, cTexture *Tex, bool Alpha, float RotateAngle, int DrawCorner)
+void vw_Draw(int X, int Y, sRECT *SrcRect, GLtexture Texture, bool Alpha, float RotateAngle, int DrawCorner)
 {
-	if (Tex == nullptr)
+	if (!Texture)
 		return;
 
 	float AW;
@@ -114,7 +114,7 @@ void vw_Draw(int X, int Y, sRECT *SrcRect, cTexture *Tex, bool Alpha, float Rota
 	float AHw = H*1.0f;
 
 	// Установка текстуры и ее свойств...
-	vw_SetTexture(0, Tex);
+	vw_BindTexture(0, Texture);
 	vw_SetTextureBlend(Alpha, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
 
@@ -128,8 +128,9 @@ void vw_Draw(int X, int Y, sRECT *SrcRect, cTexture *Tex, bool Alpha, float Rota
 	}
 
 
-	float ImageHeight = Tex->Height*1.0f;
-	float ImageWidth = Tex->Width*1.0f;
+	float ImageHeight{0.0f};
+	float ImageWidth{0.0f};
+	vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight);
 
 	float FrameHeight = (SrcRect->bottom*1.0f)/ImageHeight;
 	float FrameWidth = (SrcRect->right*1.0f)/ImageWidth;
@@ -182,10 +183,11 @@ void vw_Draw(int X, int Y, sRECT *SrcRect, cTexture *Tex, bool Alpha, float Rota
 //------------------------------------------------------------------------------------
 // Прорисовка в 2д с прозрачностью
 //------------------------------------------------------------------------------------
-void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, cTexture *Tex, bool Alpha, float Transp, float RotateAngle, int DrawCorner, float R, float G, float B)
+void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, GLtexture Texture, bool Alpha,
+			float Transp, float RotateAngle, int DrawCorner, float R, float G, float B)
 {
 
-	if ((Tex == nullptr) || (Transp <= 0.0f))
+	if (!Texture || (Transp <= 0.0f))
 		return;
 	if (Transp > 1.0f)
 		Transp = 1.0f;
@@ -202,7 +204,7 @@ void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, cTexture *Tex, bool Alph
 	int Y = DstRect->top;
 
 	// Установка текстуры и ее свойств...
-	vw_SetTexture(0, Tex);
+	vw_BindTexture(0, Texture);
 	vw_SetTextureBlend(Alpha, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 
 	// Вычисление поправки по У в зависимости от DrawCorner
@@ -216,8 +218,9 @@ void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, cTexture *Tex, bool Alph
 
 
 
-	float ImageHeight = Tex->Height*1.0f;
-	float ImageWidth = Tex->Width*1.0f;
+	float ImageHeight{0.0f};
+	float ImageWidth{0.0f};
+	vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight);
 
 	float FrameHeight = (SrcRect->bottom*1.0f )/ImageHeight;
 	float FrameWidth = (SrcRect->right*1.0f )/ImageWidth;

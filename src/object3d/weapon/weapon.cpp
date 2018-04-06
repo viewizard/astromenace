@@ -354,7 +354,7 @@ void cWeapon::Create(int WeaponNum)
 			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this, 0, 2.0f);
 			for (int i = 0; i < ObjectsListCount; i++) {
 				Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
-				TextureIllum[i] = nullptr;
+				TextureIllum[i] = 0;
 			}
 
 			// находим все данные по геометрии
@@ -373,7 +373,7 @@ void cWeapon::Create(int WeaponNum)
 			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this, 0, 2.0f);
 			for (int i = 0; i < ObjectsListCount; i++) {
 				Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
-				TextureIllum[i] = nullptr;
+				TextureIllum[i] = 0;
 			}
 
 			// находим все данные по геометрии

@@ -1894,7 +1894,7 @@ void InformationDrawObject()
 
 	vw_SetColor(0.7f, 0.7f, 1.0f, 0.3f*MenuContentTransp);
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
-	vw_SetTexture(0, vw_FindTextureByName("menu/line.tga"));
+	vw_BindTexture(0, vw_FindTextureByName("menu/line.tga"));
 	for (int i=-SizeCell; i<SizeCell+2; i+=2) {
 		// номер float'а в последовательности
 		int k=0;

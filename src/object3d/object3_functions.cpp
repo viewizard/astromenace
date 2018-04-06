@@ -145,9 +145,9 @@ void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float 
 	}
 
 	// резервируем память для текстур
-	Object3D->Texture.resize(Object3D->ObjectsListCount, nullptr);
-	Object3D->TextureIllum.resize(Object3D->ObjectsListCount, nullptr);
-	Object3D->NormalMap.resize(Object3D->ObjectsListCount, nullptr);
+	Object3D->Texture.resize(Object3D->ObjectsListCount, 0);
+	Object3D->TextureIllum.resize(Object3D->ObjectsListCount, 0);
+	Object3D->NormalMap.resize(Object3D->ObjectsListCount, 0);
 
 	// резервируем память для HitBB
 	Object3D->HitBBLocation = new sVECTOR3D[Object3D->ObjectsListCount];
@@ -156,9 +156,6 @@ void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float 
 	Object3D->HitBB = new sVECTOR3D*[Object3D->ObjectsListCount];
 
 	for (int i = 0; i < Object3D->ObjectsListCount; i++) {
-		Object3D->Texture[i] = nullptr;
-		Object3D->TextureIllum[i] = nullptr;
-		Object3D->NormalMap[i] = nullptr;
 		Object3D->HitBB[i] = new sVECTOR3D[8];
 	}
 }

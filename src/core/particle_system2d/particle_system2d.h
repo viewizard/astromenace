@@ -77,7 +77,7 @@ public:
 
 	unsigned int ParticlesPerSec{100};	// emission rate (particles per second)
 
-	cTexture *Texture{nullptr};
+	GLtexture Texture{0};
 
 	sVECTOR3D Direction{0.0f, 0.0f, 0.0f};
 

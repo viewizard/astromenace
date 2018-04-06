@@ -805,7 +805,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		// создаем новые данные, переносим туда
 		// объекты малы, по этому не применяем сдесь настройки качества взрыва, делаем со всей геометрией
 		ObjectsListCount = Projectile->ObjectsListCount;
-		Texture.resize(ObjectsListCount, nullptr);
+		Texture.resize(ObjectsListCount, 0);
 		ObjectsList = new sObjectBlock[ObjectsListCount];
 
 		for (int i = 0; i < ObjectsListCount; i++) {

@@ -45,6 +45,9 @@
 
 #include "glext.h" // provide glext.h version we need
 
+// alias for OpenGL textures name (ID) in order to make code more clear
+using GLtexture = GLuint;
+
 struct sRECT;
 struct sVECTOR3D;
 class cTexture;
@@ -343,11 +346,11 @@ void vw_SetColorMask(bool red, bool green, bool blue, bool alpha);
  */
 
 // Create texture
-GLuint vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int Bytes, int CompressionType);
+GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int Bytes, int CompressionType);
 // Bind texture
-void vw_BindTexture(uint32_t Stage, GLuint TextureID);
+void vw_BindTexture(uint32_t Stage, GLtexture TextureID);
 // Delete texture
-void vw_DeleteTexture(GLuint TextureID);
+void vw_DeleteTexture(GLtexture TextureID);
 // Set texture filtering mode
 void vw_SetTextureFiltering(int nFiltering);
 // Set texture Anisotropy Level
@@ -366,8 +369,6 @@ void vw_SetTextureEnvMode(int MODE);
 void vw_SetTextureCompare(int MODE, int FUNC);
 // Set texture depth mode
 void vw_SetTextureDepthMode(int MODE);
-// Set texture by pointer
-void vw_SetTexture(uint32_t Stage, cTexture *Texture);
 
 /*
  * 3D rendering.
@@ -538,9 +539,9 @@ bool vw_UniformMatrix4fv(sGLSL *GLSL, const char *name, bool transpose, int coun
  */
 
 // Draw
-void vw_Draw(int X, int Y, sRECT *SrcRect, cTexture *Tex, bool Alpha, float RotateAngle=0, int DrawCorner = RI_UL_CORNER);
+void vw_Draw(int X, int Y, sRECT *SrcRect, GLtexture Texture, bool Alpha, float RotateAngle=0, int DrawCorner = RI_UL_CORNER);
 // Draw transparent
-void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, cTexture *Tex, bool Alpha, float Transp, float RotateAngle=0,
+void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, GLtexture Texture, bool Alpha, float Transp, float RotateAngle=0,
 			int DrawCorner = RI_UL_CORNER, float R = 1.0f, float G = 1.0f, float B = 1.0f);
 
 /*

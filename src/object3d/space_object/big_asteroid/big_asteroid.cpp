@@ -71,7 +71,7 @@ case9next:
 		RotationSpeed.y = 2.0f + 20.0f*vw_Randf0;
 
 		Texture[0] = vw_FindTextureByName("models/planet/d_class3.tga");
-		TextureIllum[0] = nullptr;
+		TextureIllum[0] = 0;
 		NormalMap[0] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
 		break;
 
@@ -99,7 +99,7 @@ case10next:
 		RotationSpeed.y = 2.0f + 20.0f*vw_Randf0;
 
 		Texture[0] = vw_FindTextureByName("models/planet/d_class3.tga");
-		TextureIllum[0] = nullptr;
+		TextureIllum[0] = 0;
 		NormalMap[0] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
 		break;
 	}

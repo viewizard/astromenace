@@ -41,7 +41,7 @@ public:
 	// прорисовка всех частиц
 	void	Draw();
 	// базовая текстура частиц
-	cTexture *Texture{nullptr};
+	GLtexture Texture{0};
 
 	// работа с шейдерами
 	sGLSL 	*GLSL{nullptr};
