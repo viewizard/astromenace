@@ -28,6 +28,7 @@
 #define Texture_H
 
 #include "../base.h"
+#include "../graphics/graphics.h"
 
 enum class eLoadTextureAs {
 	AUTO,	// Detect by file extension
@@ -55,13 +56,13 @@ public:
 
 	int Width;		// Texture width
 	int Height;		// Texture height
-	int SrcWidth;		// Source image width
-	int SrcHeight;		// Source image height
+	int SrcWidth;		// Source image width (if hardware don't support power of two size textures)
+	int SrcHeight;		// Source image height (if hardware don't support power of two size textures)
 
-	int Bytes;		// Bytes per pixel (not bits!)
+	int Bytes;		// Bytes per pixel
 
 private:
-	unsigned TextureID;	// Texture ID (OpenGL related)
+	GLuint TextureID;	// Texture ID (OpenGL related)
 };
 
 // Load texture from file.
