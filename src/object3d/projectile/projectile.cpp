@@ -301,10 +301,9 @@ void cProjectile::Create(int ProjectileNum)
 
 	// начальные установки
 	GraphicFXLocation = new sVECTOR3D[GraphicFXQuantity];
-	GraphicFX = new cParticleSystem*[GraphicFXQuantity];
+	GraphicFX.resize(GraphicFXQuantity, nullptr);
 	for (int i=0; i<GraphicFXQuantity; i++) {
 		GraphicFXLocation[i] = sVECTOR3D(0.0f, 0.0f, 0.0f);
-		GraphicFX[i] = nullptr;
 	}
 
 	if (ProjectileType == 1) {
@@ -837,7 +836,7 @@ cProjectile::~cProjectile()
 
 	DetachProjectile(this);
 
-	if (GraphicFX == nullptr)
+	if (GraphicFX.empty())
 		return;
 
 	for (int i = 0; i < GraphicFXQuantity; i++) {
@@ -917,9 +916,6 @@ cProjectile::~cProjectile()
 			break;
 		}
 	}
-	delete [] GraphicFX;
-	GraphicFX = nullptr;
-
 }
 
 
@@ -942,7 +938,7 @@ void cProjectile::SetRotation(sVECTOR3D NewRotation)
 	::cObject3D::SetRotation(NewRotation);
 
 
-	if (GraphicFX != nullptr)
+	if (!GraphicFX.empty())
 		for (int i = 0; i < GraphicFXQuantity; i++) {
 			if (GraphicFX[i] != nullptr) {
 				vw_Matrix33CalcPoint(GraphicFXLocation[i], OldInvRotationMat);
@@ -971,7 +967,7 @@ void cProjectile::SetLocation(sVECTOR3D NewLocation)
 	// вызываем родительскую функцию
 	::cObject3D::SetLocation(NewLocation);
 
-	if (GraphicFX != nullptr)
+	if (!GraphicFX.empty())
 		for (int i = 0; i < GraphicFXQuantity; i++) {
 
 			switch (Num) {

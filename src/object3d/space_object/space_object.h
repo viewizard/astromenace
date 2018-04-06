@@ -56,10 +56,10 @@ public:
 	sVECTOR3D	LastCameraPoint{0.0f, 0.0f, 0.0f};
 
 	// кол-во эффектов
-	int		GFXQuantity{0};
+	int		GFXQuantity{0}; // FIXME remove, we have std::vector::size() now
 	// эффекты
 	sVECTOR3D	*GFXLocation{nullptr};
-	cParticleSystem	**GFX{nullptr};
+	std::vector<cParticleSystem*> GFX{};
 
 	// чтобы возрвать часть корабля босса пришельцев через время
 	float		BossPartCountDown{-1.0f};

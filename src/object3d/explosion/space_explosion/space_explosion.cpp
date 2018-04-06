@@ -73,10 +73,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 		// эффект
 		GraphicFXQuantity = 1;
-		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
-		for (int i=0; i<GraphicFXQuantity; i++) {
-			GraphicFX[i] = nullptr;
-		}
+		GraphicFX.resize(GraphicFXQuantity, nullptr);
 
 		// установка эффекта
 		float tRadius = Object->Radius/2.0f;
@@ -139,10 +136,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 		// эффект
 		GraphicFXQuantity = 3;
-		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
-		for (int i=0; i<GraphicFXQuantity; i++) {
-			GraphicFX[i] = nullptr;
-		}
+		GraphicFX.resize(GraphicFXQuantity, nullptr);
 
 		// установка эффекта
 		GraphicFX[1] = vw_CreateParticleSystem();
@@ -232,10 +226,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 		// эффект
 		GraphicFXQuantity = 2;
-		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
-		for (int i=0; i<GraphicFXQuantity; i++) {
-			GraphicFX[i] = nullptr;
-		}
+		GraphicFX.resize(GraphicFXQuantity, nullptr);
 
 		// установка эффекта
 		GraphicFX[1] = vw_CreateParticleSystem();
@@ -281,10 +272,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 		// эффект
 		GraphicFXQuantity = 2;
-		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
-		for (int i=0; i<GraphicFXQuantity; i++) {
-			GraphicFX[i] = nullptr;
-		}
+		GraphicFX.resize(GraphicFXQuantity, nullptr);
 
 		// установка эффекта
 		GraphicFX[1] = vw_CreateParticleSystem();
@@ -321,10 +309,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 		// эффект
 		GraphicFXQuantity = 2;
-		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
-		for (int i=0; i<GraphicFXQuantity; i++) {
-			GraphicFX[i] = nullptr;
-		}
+		GraphicFX.resize(GraphicFXQuantity, nullptr);
 
 		// установка эффекта
 		GraphicFX[1] = vw_CreateParticleSystem();

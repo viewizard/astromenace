@@ -243,7 +243,7 @@ void vw_ReleaseAllParticleSystems();
 // Draw all particle systems.
 void vw_DrawAllParticleSystems();
 // Draw particle systems block, provided by caller.
-void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity);
+void vw_DrawParticleSystems(std::vector<cParticleSystem*> &DrawParticleSystem);
 // Update all particle systems.
 void vw_UpdateAllParticleSystems(float Time);
 

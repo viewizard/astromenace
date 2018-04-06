@@ -76,8 +76,7 @@ case1next:
 
 		GFXQuantity = 8;
 		GFXLocation = new sVECTOR3D[GFXQuantity];
-		GFX = new cParticleSystem*[GFXQuantity];
-		for (int i = 0; i < GFXQuantity; i++) GFX[i] = nullptr;
+		GFX.resize(GFXQuantity, nullptr);
 
 		GFX[0] = vw_CreateParticleSystem();
 		GFXLocation[0] = sVECTOR3D(14.3f, -4.0f, -14.3f);
@@ -142,8 +141,7 @@ case2next:
 
 		GFXQuantity = 2;
 		GFXLocation = new sVECTOR3D[GFXQuantity];
-		GFX = new cParticleSystem*[GFXQuantity];
-		for (int i = 0; i < GFXQuantity; i++) GFX[i] = nullptr;
+		GFX.resize(GFXQuantity, nullptr);
 
 		GFX[0] = vw_CreateParticleSystem();
 		GFXLocation[0] = sVECTOR3D(0.0f, -5.0f, 13.7f);

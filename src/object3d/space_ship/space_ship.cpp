@@ -126,8 +126,8 @@ cSpaceShip::~cSpaceShip()
 		delete [] EngineLocation;
 		EngineLocation = nullptr;
 	}
-	if (Engine != nullptr) {
-		for (int i = 0; i < EngineQuantity; i++)
+	if (!Engine.empty()) {
+		for (int i = 0; i < EngineQuantity; i++) {
 			if (Engine[i] != nullptr) {
 				if (!EngineDestroyType) {
 					Engine[i]->IsSuppressed = true;
@@ -137,16 +137,15 @@ cSpaceShip::~cSpaceShip()
 					Engine[i] = nullptr;
 				}
 			}
-		delete [] Engine;
-		Engine = nullptr;
+		}
 	}
 
 	if (EngineLeftLocation != nullptr) {
 		delete [] EngineLeftLocation;
 		EngineLeftLocation = nullptr;
 	}
-	if (EngineLeft != nullptr) {
-		for (int i = 0; i < EngineLeftQuantity; i++)
+	if (!EngineLeft.empty()) {
+		for (int i = 0; i < EngineLeftQuantity; i++) {
 			if (EngineLeft[i] != nullptr) {
 				if (!EngineDestroyType) {
 					EngineLeft[i]->IsSuppressed = true;
@@ -156,16 +155,15 @@ cSpaceShip::~cSpaceShip()
 					EngineLeft[i] = nullptr;
 				}
 			}
-		delete [] EngineLeft;
-		EngineLeft = nullptr;
+		}
 	}
 
 	if (EngineRightLocation != nullptr) {
 		delete [] EngineRightLocation;
 		EngineRightLocation = nullptr;
 	}
-	if (EngineRight != nullptr) {
-		for (int i = 0; i < EngineRightQuantity; i++)
+	if (!EngineRight.empty()) {
+		for (int i = 0; i < EngineRightQuantity; i++) {
 			if (EngineRight[i] != nullptr) {
 				if (!EngineDestroyType) {
 					EngineRight[i]->IsSuppressed = true;
@@ -175,8 +173,7 @@ cSpaceShip::~cSpaceShip()
 					EngineRight[i] = nullptr;
 				}
 			}
-		delete [] EngineRight;
-		EngineRight = nullptr;
+		}
 	}
 
 
@@ -218,21 +215,21 @@ void cSpaceShip::SetLocation(sVECTOR3D NewLocation)
 
 
 	// положение двигателей
-	if (Engine != nullptr)
+	if (!Engine.empty())
 		for (int i = 0; i < EngineQuantity; i++) {
 			if (Engine[i] != nullptr) {
 				Engine[i]->MoveSystem(NewLocation + EngineLocation[i]);
 				Engine[i]->SetStartLocation(EngineLocation[i] + NewLocation);
 			}
 		}
-	if (EngineLeft != nullptr)
+	if (!EngineLeft.empty())
 		for (int i = 0; i < EngineLeftQuantity; i++) {
 			if (EngineLeft[i] != nullptr) {
 				EngineLeft[i]->MoveSystem(NewLocation + EngineLeftLocation[i]);
 				EngineLeft[i]->SetStartLocation(EngineLeftLocation[i] + NewLocation);
 			}
 		}
-	if (EngineRight != nullptr)
+	if (!EngineRight.empty())
 		for (int i = 0; i < EngineRightQuantity; i++) {
 			if (EngineRight[i] != nullptr) {
 				EngineRight[i]->MoveSystem(NewLocation + EngineRightLocation[i]);
@@ -268,19 +265,19 @@ void cSpaceShip::SetLocationArcadePlayer(sVECTOR3D NewLocation)
 
 
 	// положение двигателей
-	if (Engine != nullptr)
+	if (!Engine.empty())
 		for (int i = 0; i < EngineQuantity; i++)
 			if (Engine[i] != nullptr) {
 				Engine[i]->MoveSystem(NewLocation + EngineLocation[i]);
 				Engine[i]->SetStartLocation(NewLocation + EngineLocation[i]);
 			}
-	if (EngineLeft != nullptr)
+	if (!EngineLeft.empty())
 		for (int i = 0; i < EngineLeftQuantity; i++)
 			if (EngineLeft[i] != nullptr) {
 				EngineLeft[i]->MoveSystem(NewLocation + EngineLeftLocation[i]);
 				EngineLeft[i]->SetStartLocation(NewLocation + EngineLeftLocation[i]);
 			}
-	if (EngineRight != nullptr)
+	if (!EngineRight.empty())
 		for (int i = 0; i < EngineRightQuantity; i++)
 			if (EngineRight[i] != nullptr) {
 				EngineRight[i]->MoveSystem(NewLocation + EngineRightLocation[i]);
@@ -339,7 +336,7 @@ void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 
 
 	// двигатели
-	if (Engine != nullptr)
+	if (!Engine.empty())
 		for (int i = 0; i < EngineQuantity; i++) {
 			vw_Matrix33CalcPoint(EngineLocation[i], OldInvRotationMat);
 			vw_Matrix33CalcPoint(EngineLocation[i], CurrentRotationMat);
@@ -355,7 +352,7 @@ void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 				}
 			}
 		}
-	if (EngineLeft != nullptr)
+	if (!EngineLeft.empty())
 		for (int i = 0; i < EngineLeftQuantity; i++) {
 			vw_Matrix33CalcPoint(EngineLeftLocation[i], OldInvRotationMat);
 			vw_Matrix33CalcPoint(EngineLeftLocation[i], CurrentRotationMat);
@@ -366,7 +363,7 @@ void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 				EngineLeft[i]->RotateSystemByAngle(Rotation);
 			}
 		}
-	if (EngineRight != nullptr)
+	if (!EngineRight.empty())
 		for (int i = 0; i < EngineRightQuantity; i++) {
 			vw_Matrix33CalcPoint(EngineRightLocation[i], OldInvRotationMat);
 			vw_Matrix33CalcPoint(EngineRightLocation[i], CurrentRotationMat);
@@ -512,11 +509,11 @@ bool cSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// выключаем двигатели, если нужно - включим
-	if (EngineLeft != nullptr)
+	if (!EngineLeft.empty())
 		for (int i = 0; i < EngineLeftQuantity; i++) {
 			if (EngineLeft[i] != nullptr) EngineLeft[i]->IsSuppressed = true;
 		}
-	if (EngineRight != nullptr)
+	if (!EngineRight.empty())
 		for (int i = 0; i < EngineRightQuantity; i++) {
 			if (EngineRight[i] != nullptr) EngineRight[i]->IsSuppressed = true;
 		}
@@ -574,13 +571,13 @@ bool cSpaceShip::Update(float Time)
 
 				// включаем двигатель на поворот
 				if (NeedRotate.y > 0.0f) {
-					if (EngineLeft != nullptr)
+					if (!EngineLeft.empty())
 						for (int i = 0; i < EngineLeftQuantity; i++) {
 							if (EngineLeft[i] != nullptr)
 								EngineLeft[i]->IsSuppressed = false;
 						}
 				} else {
-					if (EngineRight != nullptr)
+					if (!EngineRight.empty())
 						for (int i = 0; i < EngineRightQuantity; i++) {
 							if (EngineRight[i] != nullptr)
 								EngineRight[i]->IsSuppressed = false;
@@ -614,13 +611,13 @@ bool cSpaceShip::Update(float Time)
 
 				// включаем двигатель на поворот
 				if (NeedRotate.z < 0.0f) {
-					if (EngineLeft != nullptr)
+					if (!EngineLeft.empty())
 						for (int i = 0; i < EngineLeftQuantity; i++) {
 							if (EngineLeft[i] != nullptr)
 								EngineLeft[i]->IsSuppressed = false;
 						}
 				} else {
-					if (EngineRight != nullptr)
+					if (!EngineRight.empty())
 						for (int i = 0; i < EngineRightQuantity; i++) {
 							if (EngineRight[i] != nullptr)
 								EngineRight[i]->IsSuppressed = false;
@@ -637,12 +634,12 @@ bool cSpaceShip::Update(float Time)
 		} else {
 			if (NeedStopRotation) {
 
-				if (EngineLeft != nullptr)
+				if (!EngineLeft.empty())
 					for (int i = 0; i < EngineLeftQuantity; i++) {
 						if (EngineLeft[i] != nullptr)
 							EngineLeft[i]->IsSuppressed = false;
 					}
-				if (EngineRight != nullptr)
+				if (!EngineRight.empty())
 					for (int i = 0; i < EngineRightQuantity; i++) {
 						if (EngineRight[i] != nullptr)
 							EngineRight[i]->IsSuppressed = false;
@@ -650,12 +647,12 @@ bool cSpaceShip::Update(float Time)
 
 				NeedStopRotation = false;
 			} else {
-				if (EngineLeft != nullptr)
+				if (!EngineLeft.empty())
 					for (int i = 0; i < EngineLeftQuantity; i++) {
 						if (EngineLeft[i] != nullptr)
 							EngineLeft[i]->IsSuppressed = true;
 					}
-				if (EngineRight != nullptr)
+				if (!EngineRight.empty())
 					for (int i = 0; i < EngineRightQuantity; i++) {
 						if (EngineRight[i] != nullptr)
 							EngineRight[i]->IsSuppressed = true;
@@ -664,13 +661,13 @@ bool cSpaceShip::Update(float Time)
 		}
 	} else {
 
-		if (EngineLeft != nullptr)
+		if (!EngineLeft.empty())
 			for (int i = 0; i < EngineLeftQuantity; i++) {
 				if (EngineLeft[i] != nullptr)
 					EngineLeft[i]->IsSuppressed = !PlayerFighterLeftEng;
 			}
 
-		if (EngineRight != nullptr)
+		if (!EngineRight.empty())
 			for (int i = 0; i < EngineRightQuantity; i++) {
 				if (EngineRight[i] != nullptr)
 					EngineRight[i]->IsSuppressed = !PlayerFighterRightEng;
@@ -736,12 +733,12 @@ bool cSpaceShip::Update(float Time)
 
 		// если нужны двигатели торможения - включаем маневровые
 		if (Sign == -1.0f) {
-			if (EngineLeft != nullptr)
+			if (!EngineLeft.empty())
 				for (int i = 0; i < EngineLeftQuantity; i++) {
 					if (EngineLeft[i] != nullptr)
 						EngineLeft[i]->IsSuppressed = false;
 				}
-			if (EngineRight != nullptr)
+			if (!EngineRight.empty())
 				for (int i = 0; i < EngineRightQuantity; i++) {
 					if (EngineRight[i] != nullptr)
 						EngineRight[i]->IsSuppressed = false;
@@ -1197,7 +1194,7 @@ bool cSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Делаем установку работы двигателей, согласуем со скоростью корабля
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Engine != nullptr) {
+	if (!Engine.empty()) {
 		float tmpSpeed = Speed;
 		if (tmpSpeed > 6.0f)
 			tmpSpeed=6.0f;

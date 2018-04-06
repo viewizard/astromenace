@@ -180,11 +180,11 @@ public:
 	sVECTOR3D	WeaponFlareLocation{0.0f, 0.0f, 0.0f};
 
 	// кол-во двигателей
-	int		EngineQuantity{0};
+	int		EngineQuantity{0}; // FIXME remove, we have std::vector::size() now
 	// тип, как будем удалять двигатели -сразу, или глушить
 	bool		EngineDestroyType{false};
 	// двигатели
-	cParticleSystem	**Engine{nullptr};
+	std::vector<cParticleSystem*> Engine{};
 	// положение двигателей
 	sVECTOR3D	*EngineLocation{nullptr};
 
@@ -192,13 +192,13 @@ public:
 	bool	NeedStopRotation{false};
 
 	// двигатели поворотов, левый
-	int		EngineLeftQuantity{0}; // кол-во двигателей
-	cParticleSystem	**EngineLeft{nullptr}; // двигатели
+	int		EngineLeftQuantity{0}; // кол-во двигателей // FIXME remove, we have std::vector::size() now
+	std::vector<cParticleSystem*> EngineLeft{}; // двигатели
 	sVECTOR3D	*EngineLeftLocation{nullptr}; // положение двигателей
 
 	// двигатели поворотов, правый
-	int		EngineRightQuantity{0}; // кол-во двигателей
-	cParticleSystem	**EngineRight{nullptr}; // двигатели
+	int		EngineRightQuantity{0}; // кол-во двигателей  // FIXME remove, we have std::vector::size() now
+	std::vector<cParticleSystem*> EngineRight{}; // двигатели
 	sVECTOR3D	*EngineRightLocation{nullptr}; // положение двигателей
 
 	// для собственного списка

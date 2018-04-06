@@ -259,10 +259,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 		// эффект
 		GraphicFXQuantity = 1;
-		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
-		for (int i=0; i<GraphicFXQuantity; i++) {
-			GraphicFX[i] = nullptr;
-		}
+		GraphicFX.resize(GraphicFXQuantity, nullptr);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
@@ -354,13 +351,10 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 		// просто делаем вспышку нужного цвета
 		GraphicFXQuantity = 1;
-		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
-		for (int i=0; i<GraphicFXQuantity; i++) {
-			GraphicFX[i] = nullptr;
-		}
+		GraphicFX.resize(GraphicFXQuantity, nullptr);
 
 		// установка эффекта вспышки в месте попадания
-		if (Projectile->GraphicFX != nullptr)
+		if (!Projectile->GraphicFX.empty())
 			if (Projectile->GraphicFX[0] != nullptr) {
 				GraphicFX[0] = vw_CreateParticleSystem();
 				SetExplosionGFX(GraphicFX[0], 0);
@@ -416,13 +410,10 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 		// просто делаем вспышку нужного цвета
 		GraphicFXQuantity = 1;
-		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
-		for (int i = 0; i < GraphicFXQuantity; i++) {
-			GraphicFX[i] = nullptr;
-		}
+		GraphicFX.resize(GraphicFXQuantity, nullptr);
 
 		// установка эффекта вспышки в месте попадания
-		if (Projectile->GraphicFX != nullptr)
+		if (!Projectile->GraphicFX.empty())
 			if (Projectile->GraphicFX[0] != nullptr) {
 				GraphicFX[0] = vw_CreateParticleSystem();
 				SetExplosionGFX(GraphicFX[0], 0);
@@ -477,10 +468,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 		// эффект
 		GraphicFXQuantity = 1;
-		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
-		for (int i = 0; i < GraphicFXQuantity; i++) {
-			GraphicFX[i] = nullptr;
-		}
+		GraphicFX.resize(GraphicFXQuantity, nullptr);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
@@ -525,10 +513,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 		// эффект
 		GraphicFXQuantity = 1;
-		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
-		for (int i = 0; i < GraphicFXQuantity; i++) {
-			GraphicFX[i] = nullptr;
-		}
+		GraphicFX.resize(GraphicFXQuantity, nullptr);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
@@ -579,10 +564,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 		// эффект
 		GraphicFXQuantity = 1;
-		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
-		for (int i = 0; i < GraphicFXQuantity; i++) {
-			GraphicFX[i] = nullptr;
-		}
+		GraphicFX.resize(GraphicFXQuantity, nullptr);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
@@ -632,10 +614,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 		// эффект
 		GraphicFXQuantity = 2;
-		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
-		for (int i=0; i<GraphicFXQuantity; i++) {
-			GraphicFX[i] = nullptr;
-		}
+		GraphicFX.resize(GraphicFXQuantity, nullptr);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
@@ -760,10 +739,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 		// эффект
 		GraphicFXQuantity = 1;
-		GraphicFX = new cParticleSystem*[GraphicFXQuantity];
-		for (int i=0; i<GraphicFXQuantity; i++) {
-			GraphicFX[i] = nullptr;
-		}
+		GraphicFX.resize(GraphicFXQuantity, nullptr);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();

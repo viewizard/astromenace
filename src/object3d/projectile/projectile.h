@@ -89,11 +89,11 @@ public:
 	float		MineNextFireTime{1.0f};
 
 	// для прорисовки графических эффектов
-	int		GraphicFXQuantity{0};
+	int		GraphicFXQuantity{0}; // FIXME remove, we have std::vector::size() now
 	// тип, как будем удалять -сразу, или глушить
 	bool		GraphicFXDestroyType{false};
 	sVECTOR3D	*GraphicFXLocation{nullptr};
-	cParticleSystem	**GraphicFX{nullptr};
+	std::vector<cParticleSystem*> GraphicFX{};
 
 	bool		NeedStopPartic{false};
 

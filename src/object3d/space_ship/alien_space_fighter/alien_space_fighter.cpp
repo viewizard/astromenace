@@ -114,9 +114,7 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 
 	// начальные установки для двигателей
 	EngineLocation = new sVECTOR3D[EngineQuantity];
-	Engine = new cParticleSystem*[EngineQuantity];
-	for (int i = 0; i < EngineQuantity; i++)
-		Engine[i] = nullptr;
+	Engine.resize(EngineQuantity, nullptr);
 
 
 

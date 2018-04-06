@@ -917,9 +917,9 @@ void vw_DrawAllParticleSystems()
 /*
  * Draw particle systems block, provided by caller.
  */
-void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
+void vw_DrawParticleSystems(std::vector<cParticleSystem*> &DrawParticleSystem)
 {
-	if (!DrawParticleSystem)
+	if (DrawParticleSystem.empty())
 		return;
 
 	// current texture
@@ -940,9 +940,9 @@ void vw_DrawParticleSystems(cParticleSystem **DrawParticleSystem, int Quantity)
 	}
 	glDepthMask(GL_FALSE);
 
-	for (int i = 0; i < Quantity; i++) {
-		if (DrawParticleSystem[i])
-			DrawParticleSystem[i]->Draw(CurrentTexture);
+	for (cParticleSystem *tmpParticleSystem : DrawParticleSystem) {
+		if (tmpParticleSystem)
+			tmpParticleSystem->Draw(CurrentTexture);
 	}
 
 	// reset rendering states

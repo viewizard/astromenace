@@ -80,8 +80,8 @@ public:
 	float		AABBSpeed{0.0f};
 
 	// для прорисовки графических эффектов
-	int			GraphicFXQuantity{0};
-	cParticleSystem		**GraphicFX{nullptr};
+	int			GraphicFXQuantity{0}; // FIXME remove, we have std::vector::size() now
+	std::vector<cParticleSystem*> GraphicFX{};
 
 	// для собственного списка
 	cExplosion	*Next{nullptr};

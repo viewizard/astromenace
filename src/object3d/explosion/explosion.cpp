@@ -59,14 +59,12 @@ cExplosion::~cExplosion()
 		ExplosionPieceData = nullptr;
 	}
 
-	if (GraphicFX != nullptr) {
+	if (!GraphicFX.empty()) {
 		for (int i = 0; i < GraphicFXQuantity; i++)
 			if (GraphicFX[i] != nullptr) {
 				GraphicFX[i]->IsSuppressed = true;
 				GraphicFX[i]->DestroyIfNoParticles = true;
 			}
-		delete [] GraphicFX;
-		GraphicFX = nullptr;
 	}
 
 
@@ -89,7 +87,7 @@ bool cExplosion::Update(float Time)
 	// если там передали удалить - выходим
 	if (!::cObject3D::Update(Time)) {
 		// делаем правильную остановку частиц...
-		if (GraphicFX != nullptr) {
+		if (!GraphicFX.empty()) {
 			for (int i=0; i<GraphicFXQuantity; i++) {
 				if (GraphicFX[i] != nullptr) {
 					GraphicFX[i]->StopAllParticles();
@@ -122,7 +120,7 @@ bool cExplosion::Update(float Time)
 					   || ExplosionType == -214 || ExplosionType == -215 || ExplosionType == -216
 					   || ExplosionType == -217))
 	   ) {
-		if (GraphicFX != nullptr)
+		if (!GraphicFX.empty())
 			for (int i=0; i<GraphicFXQuantity; i++)
 				if (GraphicFX[i] != nullptr)
 					if (Lifetime < GraphicFX[i]->Life) {
@@ -312,7 +310,7 @@ bool cExplosion::Update(float Time)
 
 
 	// перемещаем эффекты
-	if (GraphicFX != nullptr) {
+	if (!GraphicFX.empty()) {
 		for (int i = 0; i < GraphicFXQuantity; i++) {
 			if (GraphicFX[i] != nullptr) {
 				sVECTOR3D tmpLocation{GraphicFX[i]->GetLocation()};

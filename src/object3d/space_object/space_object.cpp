@@ -57,14 +57,13 @@ cSpaceObject::~cSpaceObject()
 		delete [] GFXLocation;
 		GFXLocation = nullptr;
 	}
-	if (GFX != nullptr) {
-		for (int i = 0; i < GFXQuantity; i++)
+	if (!GFX.empty()) {
+		for (int i = 0; i < GFXQuantity; i++) {
 			if (GFX[i] != nullptr) {
 				GFX[i]->IsSuppressed = true;
 				GFX[i]->DestroyIfNoParticles = true;
 			}
-		delete [] GFX;
-		GFX = nullptr;
+		}
 	}
 
 	DetachSpaceObject(this);
@@ -88,7 +87,7 @@ void cSpaceObject::SetLocation(sVECTOR3D NewLocation)
 	::cObject3D::SetLocation(NewLocation);
 
 
-	if (GFX != nullptr)
+	if (!GFX.empty())
 		for (int i = 0; i < GFXQuantity; i++) {
 			if (GFX[i] != nullptr) {
 				GFX[i]->MoveSystem(NewLocation + GFXLocation[i]);
@@ -109,7 +108,7 @@ void cSpaceObject::SetRotation(sVECTOR3D NewRotation)
 	::cObject3D::SetRotation(NewRotation);
 
 
-	if (GFX != nullptr)
+	if (!GFX.empty())
 		for (int i = 0; i < GFXQuantity; i++) {
 			vw_Matrix33CalcPoint(GFXLocation[i], OldInvRotationMat);
 			vw_Matrix33CalcPoint(GFXLocation[i], CurrentRotationMat);
