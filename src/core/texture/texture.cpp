@@ -38,7 +38,6 @@ This mean, if you add one more image format support, make sure you
 care about byte alignment.
 */
 
-#include "../graphics/graphics.h"
 #include "../vfs/vfs.h"
 #include "../math/math.h"
 #include "texture.h"
@@ -171,7 +170,7 @@ static void ResizeToPOT(std::vector<uint8_t> &DIB, cTexture &Texture)
 	DIB.resize(potWidth * potHeight * Texture.Bytes);
 
 	// fill new buffer with default color and alpha (if we have alpha channel)
-	uint8_t ColorF[]{Texture.ARed, Texture.AGreen, Texture.ABlue, 0};
+	uint8_t ColorF[]{ARedTex, AGreenTex, ABlueTex, 0};
 	for (int i = 0; i < potWidth * potHeight * Texture.Bytes; i += Texture.Bytes) {
 		memcpy(DIB.data() + i, ColorF, Texture.Bytes);
 	}
@@ -247,9 +246,9 @@ static void CreateAlpha(std::vector<uint8_t> &DIB, cTexture &Texture, eAlphaCrea
 				break;
 
 			case eAlphaCreateMode::EQUAL:
-				if ((Texture.ABlue == DIB[tmpOffsetDst]) &&
-				    (Texture.AGreen == DIB[tmpOffsetDst + 1]) &&
-				    (Texture.ARed == DIB[tmpOffsetDst + 2]))
+				if ((ABlueTex == DIB[tmpOffsetDst]) &&
+				    (AGreenTex == DIB[tmpOffsetDst + 1]) &&
+				    (ARedTex == DIB[tmpOffsetDst + 2]))
 					DIB[tmpOffsetDst + 3] = 0;
 				else
 					DIB[tmpOffsetDst + 3] = 255;
@@ -438,9 +437,6 @@ cTexture *vw_CreateTextureFromMemory(const std::string &TextureName, std::vector
 		}
 	}
 
-	TexturesMap[TextureName].ARed = ARedTex;
-	TexturesMap[TextureName].AGreen = AGreenTex;
-	TexturesMap[TextureName].ABlue = ABlueTex;
 	TexturesMap[TextureName].TextureID = 0;
 	TexturesMap[TextureName].Width = DIBWidth;
 	TexturesMap[TextureName].Height = DIBHeight;

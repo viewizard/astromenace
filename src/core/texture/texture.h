@@ -49,16 +49,12 @@ class cTexture {
 	friend void vw_SetTexture(uint32_t Stage, cTexture *Texture);
 	friend void vw_ReleaseTexture(cTexture *Texture);
 	friend void vw_ReleaseAllTextures();
-public:
-	uint8_t ARed;		// Alpha channel red color
-	uint8_t AGreen;		// Alpha channel green color
-	uint8_t ABlue;		// Alpha channel blue color
 
+public:
 	int Width;		// Texture width
 	int Height;		// Texture height
 	int SrcWidth;		// Source image width (if hardware don't support power of two size textures)
 	int SrcHeight;		// Source image height (if hardware don't support power of two size textures)
-
 	int Bytes;		// Bytes per pixel
 
 private:
