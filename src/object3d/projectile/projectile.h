@@ -92,7 +92,7 @@ public:
 	int		GraphicFXQuantity{0}; // FIXME remove, we have std::vector::size() now
 	// тип, как будем удалять -сразу, или глушить
 	bool		GraphicFXDestroyType{false};
-	sVECTOR3D	*GraphicFXLocation{nullptr};
+	std::vector<sVECTOR3D> GraphicFXLocation{};
 	std::vector<cParticleSystem*> GraphicFX{};
 
 	bool		NeedStopPartic{false};

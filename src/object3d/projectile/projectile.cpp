@@ -300,11 +300,8 @@ void cProjectile::Create(int ProjectileNum)
 
 
 	// начальные установки
-	GraphicFXLocation = new sVECTOR3D[GraphicFXQuantity];
+	GraphicFXLocation.resize(GraphicFXQuantity, sVECTOR3D{0.0f, 0.0f, 0.0f});
 	GraphicFX.resize(GraphicFXQuantity, nullptr);
-	for (int i=0; i<GraphicFXQuantity; i++) {
-		GraphicFXLocation[i] = sVECTOR3D(0.0f, 0.0f, 0.0f);
-	}
 
 	if (ProjectileType == 1) {
 		Strength = StrengthStart = 1.0f;
@@ -829,11 +826,6 @@ void cProjectile::Create(int ProjectileNum)
 //-----------------------------------------------------------------------------
 cProjectile::~cProjectile()
 {
-	if (GraphicFXLocation != nullptr) {
-		delete [] GraphicFXLocation;
-		GraphicFXLocation = nullptr;
-	}
-
 	DetachProjectile(this);
 
 	if (GraphicFX.empty())
