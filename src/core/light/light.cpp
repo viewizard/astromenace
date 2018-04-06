@@ -168,6 +168,7 @@ void vw_ReleaseAllLights()
 std::weak_ptr<cLight> vw_CreateLight(eLightType Type)
 {
 	auto Light = LightsMap.emplace(Type, std::shared_ptr<cLight>{new cLight, [](cLight *p) {delete p;}});
+	Light->second->LightType = Type;
 	return Light->second;
 }
 
@@ -208,26 +209,6 @@ bool vw_GetMainDirectLight(std::weak_ptr<cLight> &Light)
 }
 
 /*
- * Get light type from light map.
- */
-static eLightType GetLightType(cLight *Light)
-{
-	// structure cLight don't have LightType field, since we have it in LightsMap (as key),
-	// usually, we have only 1-2 directional lights, so, this is extremely short cycle
-	eLightType LightType = eLightType::Point;
-	auto range = LightsMap.equal_range(eLightType::Directional);
-	for (; range.first != range.second; ++range.first) {
-		auto &tmpLight = *range.first;
-		if (tmpLight.second.get() == Light) {
-			LightType = eLightType::Directional;
-			break;
-		}
-	}
-
-	return LightType;
-}
-
-/*
  * Activate and setup for proper light type (OpenGL-related).
  */
 bool cLight::Activate(int CurrentLightNum, const float (&Matrix)[16])
@@ -240,7 +221,7 @@ bool cLight::Activate(int CurrentLightNum, const float (&Matrix)[16])
 	vw_LoadIdentity();
 	vw_SetMatrix(Matrix);
 
-	if (GetLightType(this) == eLightType::Directional) {
+	if (LightType == eLightType::Directional) {
 		float RenderDirection[4]{-Direction.x, -Direction.y, -Direction.z, 0.0f};
 		float RenderLocation[4]{-Direction.x, -Direction.y, -Direction.z, 0.0f};
 
@@ -290,6 +271,6 @@ void cLight::DeActivate()
  */
 void cLight::SetLocation(sVECTOR3D NewLocation)
 {
-	if (GetLightType(this) != eLightType::Directional)
+	if (LightType != eLightType::Directional)
 		Location = NewLocation;
 }

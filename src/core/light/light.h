@@ -71,6 +71,8 @@ public:
 private:
 	// OpenGL-related.
 	int RealLightNum{-1};
+	// Store LightType for fast access (we also use it as key for LightsMap).
+	eLightType LightType{eLightType::Point};
 
 	// Don't allow direct new/delete usage in code, only vw_CreateLight()
 	// allowed for light creation and release setup (deleter must be provided).
