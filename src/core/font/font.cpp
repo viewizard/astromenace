@@ -70,7 +70,7 @@ struct sFontChar {
 	char32_t UTF32; // key element 1 (UTF32 code)
 	int FontSize; // key element 2 (character generated size)
 
-	cTexture *Texture; // font character texture
+	cTexture *Texture{nullptr}; // font character texture
 	int TexturePositionLeft;
 	int TexturePositionRight;
 	int TexturePositionTop;
@@ -84,13 +84,12 @@ struct sFontChar {
 	float AdvanceX;
 
 	// constructor
-	sFontChar(char32_t _UTF32, int _FontSize, cTexture *_Texture,
+	sFontChar(char32_t _UTF32, int _FontSize,
 		  int _TexturePositionLeft, int _TexturePositionRight,
 		  int _TexturePositionTop, int _TexturePositionBottom,
 		  int _Width, int _Height, int _Left, int _Top, float _AdvanceX) :
 		UTF32{_UTF32},
 		FontSize{_FontSize},
-		Texture{_Texture},
 		TexturePositionLeft{_TexturePositionLeft},
 		TexturePositionRight{_TexturePositionRight},
 		TexturePositionTop{_TexturePositionTop},
@@ -242,7 +241,7 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 	}
 
 	// create new character
-	FontCharsList.push_front(std::unique_ptr<sFontChar>(new sFontChar(UTF32, InternalFontSize, nullptr,
+	FontCharsList.push_front(std::unique_ptr<sFontChar>(new sFontChar(UTF32, InternalFontSize,
 				 0, InternalFace->glyph->bitmap.width, 0, InternalFace->glyph->bitmap.rows,
 				 InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
 				 InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
@@ -315,7 +314,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 			return ERR_EXT_RES;
 		}
 
-		FontCharsList.push_front(std::unique_ptr<sFontChar>(new sFontChar(CurrentChar, InternalFontSize, nullptr,
+		FontCharsList.push_front(std::unique_ptr<sFontChar>(new sFontChar(CurrentChar, InternalFontSize,
 					 0, 0, 0, 0,
 					 InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
 					 InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
