@@ -26,6 +26,14 @@
 
 // TODO translate comments
 
+// NOTE GL_EXT_direct_state_access (since OpenGL 4.5)
+//      glTextureStorage2DEXT() + glTextureSubImage2DEXT() + glGenerateTextureMipmapEXT()
+//      could be used with texture's name directly, without bind target
+
+// NOTE GL_EXT_direct_state_access (since OpenGL 4.5)
+//      glBindTextureUnitEXT()
+//      could be used to replace glActiveTexture() + glBindTexture()
+
 #include "../texture/texture.h"
 #include "graphics.h"
 

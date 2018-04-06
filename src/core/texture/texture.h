@@ -62,7 +62,7 @@ void vw_SetTextureProp(int nFiltering, int nAddress_Mode, bool nAlpha = false,
 void vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue);
 // Find texture by name.
 GLtexture vw_FindTextureByName(const std::string &Name);
-// Find texture's data bu ID
+// Find texture's size by ID.
 bool vw_FindTextureSizeByID(GLtexture TextureID, float *Width = nullptr, float *Height = nullptr);
 // Convert supported image file format to VW2D format.
 void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestName);
