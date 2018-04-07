@@ -492,24 +492,23 @@ bool cSpaceShip::Update(float Time)
 	// повотор
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	// выключаем двигатели, если нужно - включим
-	if (!EnginesLeft.empty()) {
-		for (auto tmpEngineLeft : EnginesLeft) {
-			if (tmpEngineLeft)
-				tmpEngineLeft->IsSuppressed = true;
-		}
-	}
-	if (!EnginesRight.empty()) {
-		for (auto tmpEngineRight : EnginesRight) {
-			if (tmpEngineRight)
-				tmpEngineRight->IsSuppressed = true;
-		}
-	}
-
-
-
 	// если нужно поворачивать
-	if ( !(ObjectStatus == 3) ) {
+	if (ObjectStatus != 3) {
+
+		// выключаем двигатели, если нужно - включим
+		if (!EnginesLeft.empty()) {
+			for (auto tmpEngineLeft : EnginesLeft) {
+				if (tmpEngineLeft)
+					tmpEngineLeft->IsSuppressed = true;
+			}
+		}
+		if (!EnginesRight.empty()) {
+			for (auto tmpEngineRight : EnginesRight) {
+				if (tmpEngineRight)
+					tmpEngineRight->IsSuppressed = true;
+			}
+		}
+
 		if (NeedRotate.x != 0.0f || NeedRotate.y != 0.0f || NeedRotate.z != 0.0f) {
 			// Находим допустимый поворот по углу
 			sVECTOR3D tmpRotate(0.0f, 0.0f, 0.0f);
@@ -533,7 +532,8 @@ bool cSpaceShip::Update(float Time)
 					}
 				}
 				// меняем значение
-				if (NeedRotate.x != 0.0f) NeedRotate.x -= tmpRotate.x;
+				if (NeedRotate.x != 0.0f)
+					NeedRotate.x -= tmpRotate.x;
 			}
 
 			// угол по y
@@ -555,10 +555,11 @@ bool cSpaceShip::Update(float Time)
 					}
 				}
 				// меняем значение
-				if (NeedRotate.y != 0.0f) NeedRotate.y -= tmpRotate.y;
+				if (NeedRotate.y != 0.0f)
+					NeedRotate.y -= tmpRotate.y;
 
 				// включаем двигатель на поворот
-				if (NeedRotate.y > 0.0f) {
+				if (NeedRotate.y < 0.0f) {
 					if (!EnginesLeft.empty()) {
 						for (auto tmpEngineLeft : EnginesLeft) {
 							if (tmpEngineLeft)
@@ -573,8 +574,6 @@ bool cSpaceShip::Update(float Time)
 						}
 					}
 				}
-				// создаем эффект торможения другим двигателем
-				NeedStopRotation = true;
 			}
 
 
@@ -597,62 +596,14 @@ bool cSpaceShip::Update(float Time)
 					}
 				}
 				// меняем значение
-				if (NeedRotate.z != 0.0f) NeedRotate.z -= tmpRotate.z;
-
-				// включаем двигатель на поворот
-				if (NeedRotate.z < 0.0f) {
-					if (!EnginesLeft.empty()) {
-						for (auto tmpEngineLeft : EnginesLeft) {
-							if (tmpEngineLeft)
-								tmpEngineLeft->IsSuppressed = false;
-						}
-					}
-				} else {
-					if (!EnginesRight.empty()) {
-						for (auto tmpEngineRight : EnginesRight) {
-							if (tmpEngineRight)
-								tmpEngineRight->IsSuppressed = false;
-						}
-					}
-				}
-				// создаем эффект торможения другим двигателем
-				NeedStopRotation = true;
+				if (NeedRotate.z != 0.0f)
+					NeedRotate.z -= tmpRotate.z;
 			}
 
 
 			// установка поворота там же сохраняем, какой общий поворот модели
 			SetRotation(tmpRotate);
 
-		} else {
-			if (NeedStopRotation) {
-				if (!EnginesLeft.empty()) {
-					for (auto tmpEngineLeft : EnginesLeft) {
-						if (tmpEngineLeft)
-							tmpEngineLeft->IsSuppressed = false;
-					}
-				}
-				if (!EnginesRight.empty()) {
-					for (auto tmpEngineRight : EnginesRight) {
-						if (tmpEngineRight)
-							tmpEngineRight->IsSuppressed = false;
-					}
-				}
-
-				NeedStopRotation = false;
-			} else {
-				if (!EnginesLeft.empty()) {
-					for (auto tmpEngineLeft : EnginesLeft) {
-						if (tmpEngineLeft)
-							tmpEngineLeft->IsSuppressed = true;
-					}
-				}
-				if (!EnginesRight.empty()) {
-					for (auto tmpEngineRight : EnginesRight) {
-						if (tmpEngineRight)
-							tmpEngineRight->IsSuppressed = true;
-					}
-				}
-			}
 		}
 	} else {
 		if (!EnginesLeft.empty()) {

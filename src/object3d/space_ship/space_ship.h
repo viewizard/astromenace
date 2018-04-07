@@ -184,9 +184,6 @@ public:
 	std::vector<cParticleSystem*> Engines{}; // двигатели
 	std::vector<sVECTOR3D> EnginesLocation{}; // положение двигателей
 
-	// вкл. двигатели торможения при повороте
-	bool	NeedStopRotation{false};
-
 	// двигатели поворотов, левый
 	std::vector<cParticleSystem*> EnginesLeft{}; // двигатели
 	std::vector<sVECTOR3D> EnginesLeftLocation{}; // положение двигателей
