@@ -74,9 +74,8 @@ case1next:
 		Texture[2] = vw_FindTextureByName("models/spacebase/metal.tga");
 		TextureIllum[2] = 0;
 
-		GFXQuantity = 8;
-		GFXLocation.resize(GFXQuantity);
-		GFX.resize(GFXQuantity, nullptr);
+		GFXLocation.resize(8);
+		GFX.resize(8, nullptr);
 
 		GFX[0] = vw_CreateParticleSystem();
 		GFXLocation[0] = sVECTOR3D(14.3f, -4.0f, -14.3f);
@@ -139,9 +138,8 @@ case2next:
 		Texture[1] = vw_FindTextureByName("models/spacebase/allalpha.tga");
 		TextureIllum[1] = 0;
 
-		GFXQuantity = 2;
-		GFXLocation.resize(GFXQuantity);
-		GFX.resize(GFXQuantity, nullptr);
+		GFXLocation.resize(2);
+		GFX.resize(2, nullptr);
 
 		GFX[0] = vw_CreateParticleSystem();
 		GFXLocation[0] = sVECTOR3D(0.0f, -5.0f, 13.7f);

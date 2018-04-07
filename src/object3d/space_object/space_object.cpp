@@ -53,12 +53,10 @@ cSpaceObject::cSpaceObject()
 //-----------------------------------------------------------------------------
 cSpaceObject::~cSpaceObject()
 {
-	if (!GFX.empty()) {
-		for (int i = 0; i < GFXQuantity; i++) {
-			if (GFX[i] != nullptr) {
-				GFX[i]->IsSuppressed = true;
-				GFX[i]->DestroyIfNoParticles = true;
-			}
+	for (auto tmpGFX : GFX) {
+		if (tmpGFX) {
+			tmpGFX->IsSuppressed = true;
+			tmpGFX->DestroyIfNoParticles = true;
 		}
 	}
 
@@ -82,14 +80,12 @@ void cSpaceObject::SetLocation(sVECTOR3D NewLocation)
 	// вызываем родительскую функцию
 	::cObject3D::SetLocation(NewLocation);
 
-
-	if (!GFX.empty())
-		for (int i = 0; i < GFXQuantity; i++) {
-			if (GFX[i] != nullptr) {
-				GFX[i]->MoveSystem(NewLocation + GFXLocation[i]);
-				GFX[i]->SetStartLocation(GFXLocation[i] + NewLocation);
-			}
+	for (unsigned int i = 0; i < GFX.size(); i++) {
+		if (GFX[i]) {
+			GFX[i]->MoveSystem(NewLocation + GFXLocation[i]);
+			GFX[i]->SetStartLocation(GFXLocation[i] + NewLocation);
 		}
+	}
 }
 
 
@@ -104,22 +100,21 @@ void cSpaceObject::SetRotation(sVECTOR3D NewRotation)
 	::cObject3D::SetRotation(NewRotation);
 
 
-	if (!GFX.empty())
-		for (int i = 0; i < GFXQuantity; i++) {
-			vw_Matrix33CalcPoint(GFXLocation[i], OldInvRotationMat);
-			vw_Matrix33CalcPoint(GFXLocation[i], CurrentRotationMat);
+	for (unsigned int i = 0; i < GFX.size(); i++) {
+		vw_Matrix33CalcPoint(GFXLocation[i], OldInvRotationMat);
+		vw_Matrix33CalcPoint(GFXLocation[i], CurrentRotationMat);
 
-			if (GFX[i] != nullptr) {
-				if (GFX[i]->SpeedOnCreation == -1.0f) {
-					GFX[i]->MoveSystem(GFXLocation[i] + Location);
-					GFX[i]->SetStartLocation(GFXLocation[i] + Location);
-					GFX[i]->RotateSystemAndParticlesByAngle(Rotation);
-				} else {
-					GFX[i]->MoveSystemLocation(GFXLocation[i] + Location);
-					GFX[i]->RotateSystemByAngle(Rotation);
-				}
+		if (GFX[i]) {
+			if (GFX[i]->SpeedOnCreation == -1.0f) {
+				GFX[i]->MoveSystem(GFXLocation[i] + Location);
+				GFX[i]->SetStartLocation(GFXLocation[i] + Location);
+				GFX[i]->RotateSystemAndParticlesByAngle(Rotation);
+			} else {
+				GFX[i]->MoveSystemLocation(GFXLocation[i] + Location);
+				GFX[i]->RotateSystemByAngle(Rotation);
 			}
 		}
+	}
 }
 
 

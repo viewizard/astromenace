@@ -55,8 +55,6 @@ public:
 	// последнее положение камеры нужно для планет
 	sVECTOR3D	LastCameraPoint{0.0f, 0.0f, 0.0f};
 
-	// кол-во эффектов
-	int		GFXQuantity{0}; // FIXME remove, we have std::vector::size() now
 	// эффекты
 	std::vector<sVECTOR3D> GFXLocation{};
 	std::vector<cParticleSystem*> GFX{};
