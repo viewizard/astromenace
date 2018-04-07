@@ -1016,34 +1016,42 @@ void GamePlayerShip()
 			PlayerFighter->MaxAcceler = 0.0f;
 			PlayerFighter->MaxSpeedRotate = 0.0f;
 			// глушим двигатели
-			for (auto tmpEngine : PlayerFighter->Engine) {
+			for (auto tmpEngine : PlayerFighter->Engines) {
 				if (tmpEngine)
 					tmpEngine->IsSuppressed = true;
 			}
-			for (auto tmpEngineLeft : PlayerFighter->EngineLeft) {
-				if (tmpEngineLeft)
-					tmpEngineLeft->IsSuppressed = true;
+			if (!PlayerFighter->EnginesLeft.empty()) {
+				for (auto tmpEngineLeft : PlayerFighter->EnginesLeft) {
+					if (tmpEngineLeft)
+						tmpEngineLeft->IsSuppressed = true;
+				}
 			}
-			for (auto EngineRight : PlayerFighter->EngineRight) {
-				if (EngineRight)
-					EngineRight->IsSuppressed = true;
+			if (!PlayerFighter->EnginesRight.empty()) {
+				for (auto EngineRight : PlayerFighter->EnginesRight) {
+					if (EngineRight)
+						EngineRight->IsSuppressed = true;
+				}
 			}
 		} else {
 			PlayerFighter->MaxSpeed = GetEnginePower(GameEngineSystem)*2.0f - PlayerFighter->Weight/1000.0f;
 			PlayerFighter->MaxAcceler = GetEngineAcceleration(GameEngineSystem)*2.0f - PlayerFighter->Weight/1000.0f;
 			PlayerFighter->MaxSpeedRotate = GetEngineRotatePower(GameEngineSystem)*2.0f - PlayerFighter->Weight/1000.0f;
 			// запускаем прорисовку
-			for (auto tmpEngine : PlayerFighter->Engine) {
+			for (auto tmpEngine : PlayerFighter->Engines) {
 				if (tmpEngine)
 					tmpEngine->IsSuppressed = false;
 			}
-			for (auto tmpEngineLeft : PlayerFighter->EngineLeft) {
-				if (tmpEngineLeft)
-					tmpEngineLeft->IsSuppressed = false;
+			if (!PlayerFighter->EnginesLeft.empty()) {
+				for (auto tmpEngineLeft : PlayerFighter->EnginesLeft) {
+					if (tmpEngineLeft)
+						tmpEngineLeft->IsSuppressed = false;
+				}
 			}
-			for (auto tmpEngineRight : PlayerFighter->EngineRight) {
-				if (tmpEngineRight)
-					tmpEngineRight->IsSuppressed = false;
+			if (!PlayerFighter->EnginesRight.empty()) {
+				for (auto tmpEngineRight : PlayerFighter->EnginesRight) {
+					if (tmpEngineRight)
+						tmpEngineRight->IsSuppressed = false;
+				}
 			}
 			CurrentPlayerShipEnergy -= GetShipEngineSystemEnergyUse(GameEngineSystem)*PlayerFighter->TimeDelta;
 		}

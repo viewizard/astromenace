@@ -798,7 +798,7 @@ Dialogs with default type:
 
 		Y1 += Offset;
 		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("4_Engines:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", DialogSpaceShip->Engine.size(), vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%i %s", DialogSpaceShip->Engines.size(), vw_GetText("4_units"));
 
 		Y1 += Offset;
 		if (WorkshopFighterGame == DialogSpaceShip) {

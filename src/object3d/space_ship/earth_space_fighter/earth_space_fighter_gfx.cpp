@@ -321,24 +321,28 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 {
 	// если нужен сброс установки двигателя
 	if (EngineType == 0) {
-		for (auto tmpEngine : SpaceShip->Engine) {
+		for (auto tmpEngine : SpaceShip->Engines) {
 			if (tmpEngine) {
 				vw_ReleaseParticleSystem(tmpEngine);
 				tmpEngine = nullptr;
 			}
 		}
 
-		for (auto tmpEngineLeft : SpaceShip->EngineLeft) {
-			if (tmpEngineLeft) {
-				vw_ReleaseParticleSystem(tmpEngineLeft);
-				tmpEngineLeft = nullptr;
+		if (!SpaceShip->EnginesLeft.empty()) {
+			for (auto tmpEngineLeft : SpaceShip->EnginesLeft) {
+				if (tmpEngineLeft) {
+					vw_ReleaseParticleSystem(tmpEngineLeft);
+					tmpEngineLeft = nullptr;
+				}
 			}
 		}
 
-		for (auto EngineRight : SpaceShip->EngineRight) {
-			if (EngineRight) {
-				vw_ReleaseParticleSystem(EngineRight);
-				EngineRight = nullptr;
+		if (!SpaceShip->EnginesRight.empty()) {
+			for (auto EngineRight : SpaceShip->EnginesRight) {
+				if (EngineRight) {
+					vw_ReleaseParticleSystem(EngineRight);
+					EngineRight = nullptr;
+				}
 			}
 		}
 
@@ -349,49 +353,53 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 	}
 
 
-	for (unsigned int i = 0; i < SpaceShip->Engine.size(); i++) {
-		if (SpaceShip->Engine[i])
-			vw_ReleaseParticleSystem(SpaceShip->Engine[i]);
-		SpaceShip->Engine[i] = vw_CreateParticleSystem();
+	for (unsigned int i = 0; i < SpaceShip->Engines.size(); i++) {
+		if (SpaceShip->Engines[i])
+			vw_ReleaseParticleSystem(SpaceShip->Engines[i]);
+		SpaceShip->Engines[i] = vw_CreateParticleSystem();
 
-		CreateSpaceShipEngine(SpaceShip->Engine[i], EngineType);
-		SpaceShip->Engine[i]->SetStartLocation(SpaceShip->EngineLocation[i]);
-		SpaceShip->Engine[i]->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+		CreateSpaceShipEngine(SpaceShip->Engines[i], EngineType);
+		SpaceShip->Engines[i]->SetStartLocation(SpaceShip->EnginesLocation[i]);
+		SpaceShip->Engines[i]->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 	}
 
 
-	for (unsigned int i = 0; i < SpaceShip->EngineLeft.size(); i++) {
-		if (SpaceShip->EngineLeft[i]) {
-			vw_ReleaseParticleSystem(SpaceShip->EngineLeft[i]);
-			SpaceShip->EngineLeft[i] = nullptr;
-		}
-		SpaceShip->EngineLeft[i] = vw_CreateParticleSystem();
+	if (!SpaceShip->EnginesLeft.empty()) {
+		for (unsigned int i = 0; i < SpaceShip->EnginesLeft.size(); i++) {
+			if (SpaceShip->EnginesLeft[i]) {
+				vw_ReleaseParticleSystem(SpaceShip->EnginesLeft[i]);
+				SpaceShip->EnginesLeft[i] = nullptr;
+			}
+			SpaceShip->EnginesLeft[i] = vw_CreateParticleSystem();
 
-		CreateRotateSpaceShipEngine(SpaceShip->EngineLeft[i], EngineType);
-		SpaceShip->EngineLeft[i]->SetStartLocation(SpaceShip->EngineLeftLocation[i]);
-		SpaceShip->EngineLeft[i]->Direction = sVECTOR3D(1.0f, 0.0f, 0.6f);
-		SpaceShip->EngineLeft[i]->IsSuppressed = true;
+			CreateRotateSpaceShipEngine(SpaceShip->EnginesLeft[i], EngineType);
+			SpaceShip->EnginesLeft[i]->SetStartLocation(SpaceShip->EnginesLeftLocation[i]);
+			SpaceShip->EnginesLeft[i]->Direction = sVECTOR3D(1.0f, 0.0f, 0.6f);
+			SpaceShip->EnginesLeft[i]->IsSuppressed = true;
+		}
 	}
 
 
-	for (unsigned int i = 0; i < SpaceShip->EngineRight.size(); i++) {
-		if (SpaceShip->EngineRight[i]) {
-			vw_ReleaseParticleSystem(SpaceShip->EngineRight[i]);
-			SpaceShip->EngineRight[i] = nullptr;
-		}
-		SpaceShip->EngineRight[i] = vw_CreateParticleSystem();
+	if (!SpaceShip->EnginesRight.empty()) {
+		for (unsigned int i = 0; i < SpaceShip->EnginesRight.size(); i++) {
+			if (SpaceShip->EnginesRight[i]) {
+				vw_ReleaseParticleSystem(SpaceShip->EnginesRight[i]);
+				SpaceShip->EnginesRight[i] = nullptr;
+			}
+			SpaceShip->EnginesRight[i] = vw_CreateParticleSystem();
 
-		CreateRotateSpaceShipEngine(SpaceShip->EngineRight[i], EngineType);
-		SpaceShip->EngineRight[i]->SetStartLocation(SpaceShip->EngineRightLocation[i]);
-		SpaceShip->EngineRight[i]->Direction = sVECTOR3D(-1.0f, 0.0f, 0.6f);
-		SpaceShip->EngineRight[i]->IsSuppressed = true;
+			CreateRotateSpaceShipEngine(SpaceShip->EnginesRight[i], EngineType);
+			SpaceShip->EnginesRight[i]->SetStartLocation(SpaceShip->EnginesRightLocation[i]);
+			SpaceShip->EnginesRight[i]->Direction = sVECTOR3D(-1.0f, 0.0f, 0.6f);
+			SpaceShip->EnginesRight[i]->IsSuppressed = true;
+		}
 	}
 
 
 	// параметрами игрока управляем в другом месте!!!! пользуй поиск
-	SpaceShip->MaxSpeed = GetEnginePower(EngineType) * SpaceShip->Engine.size() - SpaceShip->Weight / 1000.0f;
-	SpaceShip->MaxAcceler = GetEngineAcceleration(EngineType) * SpaceShip->Engine.size() - SpaceShip->Weight / 1000.0f;
-	SpaceShip->MaxSpeedRotate = GetEngineRotatePower(EngineType) * SpaceShip->Engine.size() - SpaceShip->Weight / 1000.0f;
+	SpaceShip->MaxSpeed = GetEnginePower(EngineType) * SpaceShip->Engines.size() - SpaceShip->Weight / 1000.0f;
+	SpaceShip->MaxAcceler = GetEngineAcceleration(EngineType) * SpaceShip->Engines.size() - SpaceShip->Weight / 1000.0f;
+	SpaceShip->MaxSpeedRotate = GetEngineRotatePower(EngineType) * SpaceShip->Engines.size() - SpaceShip->Weight / 1000.0f;
 
 
 	if (SpaceShip->MaxSpeed <= 0.5f)

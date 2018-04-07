@@ -345,9 +345,9 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoFighter->Height;
 		InfoObjectStrength = InfoFighter->StrengthStart;
 		InfoObjectWeaponQuantity = InfoFighter->WeaponQuantity;
-		InfoObjectEngineQuantity = InfoFighter->Engine.size();
+		InfoObjectEngineQuantity = InfoFighter->Engines.size();
 
-		for (auto tmpEngine : InfoFighter->Engine) {
+		for (auto tmpEngine : InfoFighter->Engines) {
 			if (tmpEngine)
 				tmpEngine->SpeedOnCreation = -1.0f;
 		}
@@ -434,7 +434,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoAlien->Height;
 		InfoObjectStrength = InfoAlien->StrengthStart;
 
-		for (auto tmpEngine : InfoAlien->Engine) {
+		for (auto tmpEngine : InfoAlien->Engines) {
 			if (tmpEngine)
 				tmpEngine->SpeedOnCreation = -1.0f;
 		}
@@ -463,7 +463,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoAlienMotherShip->Height;
 		InfoObjectStrength = InfoAlienMotherShip->StrengthStart;
 
-		for (auto tmpEngine : InfoAlienMotherShip->Engine) {
+		for (auto tmpEngine : InfoAlienMotherShip->Engines) {
 			if (tmpEngine)
 				tmpEngine->SpeedOnCreation = -1.0f;
 		}
@@ -492,7 +492,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoPirateShip->Height;
 		InfoObjectStrength = InfoPirateShip->StrengthStart;
 
-		for (auto tmpEngine : InfoPirateShip->Engine) {
+		for (auto tmpEngine : InfoPirateShip->Engines) {
 			if (tmpEngine)
 				tmpEngine->SpeedOnCreation = -1.0f;
 		}
@@ -2039,7 +2039,7 @@ void InformationDrawObject()
 		InfoFighter->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoFighter->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
-		vw_DrawParticleSystems(InfoFighter->Engine);
+		vw_DrawParticleSystems(InfoFighter->Engines);
 	}
 	if (InfoWeapon != nullptr) {
 		InfoWeapon->SetLocation(TMPLocation);
@@ -2058,14 +2058,14 @@ void InformationDrawObject()
 		InfoAlien->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoAlien->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
-		vw_DrawParticleSystems(InfoAlien->Engine);
+		vw_DrawParticleSystems(InfoAlien->Engines);
 	}
 	if (InfoAlienMotherShip != nullptr) {
 		InfoAlienMotherShip->SetLocation(TMPLocation);
 		InfoAlienMotherShip->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
 		InfoAlienMotherShip->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
-		vw_DrawParticleSystems(InfoAlienMotherShip->Engine);
+		vw_DrawParticleSystems(InfoAlienMotherShip->Engines);
 	}
 	if (InfoPirateShip != nullptr) {
 		InfoPirateShip->SetLocation(TMPLocation);
@@ -2079,7 +2079,7 @@ void InformationDrawObject()
 			}
 		}
 		// рисуем эффекты двигателей только для этой модели
-		vw_DrawParticleSystems(InfoPirateShip->Engine);
+		vw_DrawParticleSystems(InfoPirateShip->Engines);
 	}
 	if (InfoBuilding != nullptr) {
 		InfoBuilding->SetLocation(TMPLocation);

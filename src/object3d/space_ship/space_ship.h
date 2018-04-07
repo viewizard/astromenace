@@ -181,19 +181,19 @@ public:
 
 	// тип, как будем удалять двигатели -сразу, или глушить
 	bool EngineDestroyType{false};
-	std::vector<cParticleSystem*> Engine{}; // двигатели
-	std::vector<sVECTOR3D> EngineLocation{}; // положение двигателей
+	std::vector<cParticleSystem*> Engines{}; // двигатели
+	std::vector<sVECTOR3D> EnginesLocation{}; // положение двигателей
 
 	// вкл. двигатели торможения при повороте
 	bool	NeedStopRotation{false};
 
 	// двигатели поворотов, левый
-	std::vector<cParticleSystem*> EngineLeft{}; // двигатели
-	std::vector<sVECTOR3D> EngineLeftLocation{}; // положение двигателей
+	std::vector<cParticleSystem*> EnginesLeft{}; // двигатели
+	std::vector<sVECTOR3D> EnginesLeftLocation{}; // положение двигателей
 
 	// двигатели поворотов, правый
-	std::vector<cParticleSystem*> EngineRight{}; // двигатели
-	std::vector<sVECTOR3D> EngineRightLocation{}; // положение двигателей
+	std::vector<cParticleSystem*> EnginesRight{}; // двигатели
+	std::vector<sVECTOR3D> EnginesRightLocation{}; // положение двигателей
 
 	// для собственного списка
 	cSpaceShip	*Next{nullptr};
