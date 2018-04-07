@@ -188,7 +188,6 @@ public:
 	bool	NeedStopRotation{false};
 
 	// двигатели поворотов, левый
-	int		EngineLeftQuantity{0}; // кол-во двигателей // FIXME remove, we have std::vector::size() now
 	std::vector<cParticleSystem*> EngineLeft{}; // двигатели
 	std::vector<sVECTOR3D> EngineLeftLocation{}; // положение двигателей
 

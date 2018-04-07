@@ -328,11 +328,12 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 			}
 		}
 
-		for (int i = 0; i < SpaceShip->EngineLeftQuantity; i++)
-			if (SpaceShip->EngineLeft[i] != nullptr) {
-				vw_ReleaseParticleSystem(SpaceShip->EngineLeft[i]);
-				SpaceShip->EngineLeft[i] = nullptr;
+		for (auto tmpEngineLeft : SpaceShip->EngineLeft) {
+			if (tmpEngineLeft) {
+				vw_ReleaseParticleSystem(tmpEngineLeft);
+				tmpEngineLeft = nullptr;
 			}
+		}
 
 		for (int i = 0; i < SpaceShip->EngineRightQuantity; i++)
 			if (SpaceShip->EngineRight[i] != nullptr) {
@@ -358,8 +359,8 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 	}
 
 
-	for (int i = 0; i < SpaceShip->EngineLeftQuantity; i++) {
-		if (SpaceShip->EngineLeft[i] != nullptr) {
+	for (unsigned int i = 0; i < SpaceShip->EngineLeft.size(); i++) {
+		if (SpaceShip->EngineLeft[i]) {
 			vw_ReleaseParticleSystem(SpaceShip->EngineLeft[i]);
 			SpaceShip->EngineLeft[i] = nullptr;
 		}

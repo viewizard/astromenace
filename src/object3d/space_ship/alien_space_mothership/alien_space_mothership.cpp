@@ -76,8 +76,6 @@ void cAlienSpaceMotherShip::Create(int	SpaceShipNum)
 	MaxSpeed = 20.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 80.0f;
-	//EngineSoundNum = 0;
-	EngineLeftQuantity = 0;
 	EngineRightQuantity = 0;
 	Strength = StrengthStart = PresetAlienSpaceMotherShipData[SpaceShipNum-1].Strength/GameNPCArmorPenalty;
 	ShieldStrength = ShieldStrengthStart = PresetAlienSpaceMotherShipData[SpaceShipNum-1].ShieldStrength/GameNPCArmorPenalty;

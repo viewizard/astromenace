@@ -1020,11 +1020,10 @@ void GamePlayerShip()
 				if (tmpEngine)
 					tmpEngine->IsSuppressed = true;
 			}
-			if (!PlayerFighter->EngineLeft.empty())
-				for (int i=0; i<PlayerFighter->EngineLeftQuantity; i++) {
-					if (PlayerFighter->EngineLeft[i] != nullptr)
-						PlayerFighter->EngineLeft[i]->IsSuppressed = true;
-				}
+			for (auto tmpEngineLeft : PlayerFighter->EngineLeft) {
+				if (tmpEngineLeft)
+					tmpEngineLeft->IsSuppressed = true;
+			}
 			if (!PlayerFighter->EngineRight.empty())
 				for (int i=0; i<PlayerFighter->EngineRightQuantity; i++) {
 					if (PlayerFighter->EngineRight[i] != nullptr)
@@ -1039,11 +1038,10 @@ void GamePlayerShip()
 				if (tmpEngine)
 					tmpEngine->IsSuppressed = false;
 			}
-			if (!PlayerFighter->EngineLeft.empty())
-				for (int i=0; i<PlayerFighter->EngineLeftQuantity; i++) {
-					if (PlayerFighter->EngineLeft[i] != nullptr)
-						PlayerFighter->EngineLeft[i]->IsSuppressed = false;
-				}
+			for (auto tmpEngineLeft : PlayerFighter->EngineLeft) {
+				if (tmpEngineLeft)
+					tmpEngineLeft->IsSuppressed = false;
+			}
 			if (!PlayerFighter->EngineRight.empty())
 				for (int i=0; i<PlayerFighter->EngineRightQuantity; i++) {
 					if (PlayerFighter->EngineRight[i] != nullptr)

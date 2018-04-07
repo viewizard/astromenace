@@ -132,17 +132,13 @@ cSpaceShip::~cSpaceShip()
 		}
 	}
 
-	if (!EngineLeft.empty()) {
-		for (int i = 0; i < EngineLeftQuantity; i++) {
-			if (EngineLeft[i] != nullptr) {
-				if (!EngineDestroyType) {
-					EngineLeft[i]->IsSuppressed = true;
-					EngineLeft[i]->DestroyIfNoParticles = true;
-				} else {
-					vw_ReleaseParticleSystem(EngineLeft[i]);
-					EngineLeft[i] = nullptr;
-				}
-			}
+	for (auto tmpEngineLeft : EngineLeft) {
+		if (tmpEngineLeft) {
+			if (!EngineDestroyType) {
+				tmpEngineLeft->IsSuppressed = true;
+				tmpEngineLeft->DestroyIfNoParticles = true;
+			} else
+				vw_ReleaseParticleSystem(tmpEngineLeft);
 		}
 	}
 
@@ -205,13 +201,12 @@ void cSpaceShip::SetLocation(sVECTOR3D NewLocation)
 			Engine[i]->SetStartLocation(EngineLocation[i] + NewLocation);
 		}
 	}
-	if (!EngineLeft.empty())
-		for (int i = 0; i < EngineLeftQuantity; i++) {
-			if (EngineLeft[i] != nullptr) {
-				EngineLeft[i]->MoveSystem(NewLocation + EngineLeftLocation[i]);
-				EngineLeft[i]->SetStartLocation(EngineLeftLocation[i] + NewLocation);
-			}
+	for (unsigned int i = 0; i < EngineLeft.size(); i++) {
+		if (EngineLeft[i]) {
+			EngineLeft[i]->MoveSystem(NewLocation + EngineLeftLocation[i]);
+			EngineLeft[i]->SetStartLocation(EngineLeftLocation[i] + NewLocation);
 		}
+	}
 	if (!EngineRight.empty())
 		for (int i = 0; i < EngineRightQuantity; i++) {
 			if (EngineRight[i] != nullptr) {
@@ -254,12 +249,12 @@ void cSpaceShip::SetLocationArcadePlayer(sVECTOR3D NewLocation)
 			Engine[i]->SetStartLocation(NewLocation + EngineLocation[i]);
 		}
 	}
-	if (!EngineLeft.empty())
-		for (int i = 0; i < EngineLeftQuantity; i++)
-			if (EngineLeft[i] != nullptr) {
-				EngineLeft[i]->MoveSystem(NewLocation + EngineLeftLocation[i]);
-				EngineLeft[i]->SetStartLocation(NewLocation + EngineLeftLocation[i]);
-			}
+	for (unsigned int i = 0; i < EngineLeft.size(); i++) {
+		if (EngineLeft[i] != nullptr) {
+			EngineLeft[i]->MoveSystem(NewLocation + EngineLeftLocation[i]);
+			EngineLeft[i]->SetStartLocation(NewLocation + EngineLeftLocation[i]);
+		}
+	}
 	if (!EngineRight.empty())
 		for (int i = 0; i < EngineRightQuantity; i++)
 			if (EngineRight[i] != nullptr) {
@@ -334,17 +329,16 @@ void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 			}
 		}
 	}
-	if (!EngineLeft.empty())
-		for (int i = 0; i < EngineLeftQuantity; i++) {
-			vw_Matrix33CalcPoint(EngineLeftLocation[i], OldInvRotationMat);
-			vw_Matrix33CalcPoint(EngineLeftLocation[i], CurrentRotationMat);
+	for (unsigned int i = 0; i < EngineLeft.size(); i++) {
+		vw_Matrix33CalcPoint(EngineLeftLocation[i], OldInvRotationMat);
+		vw_Matrix33CalcPoint(EngineLeftLocation[i], CurrentRotationMat);
 
-			if (EngineLeft[i] != nullptr) {
-				EngineLeft[i]->MoveSystemLocation(EngineLeftLocation[i] + Location);
-				EngineLeft[i]->SetStartLocation(EngineLeftLocation[i] + Location);
-				EngineLeft[i]->RotateSystemByAngle(Rotation);
-			}
+		if (EngineLeft[i]) {
+			EngineLeft[i]->MoveSystemLocation(EngineLeftLocation[i] + Location);
+			EngineLeft[i]->SetStartLocation(EngineLeftLocation[i] + Location);
+			EngineLeft[i]->RotateSystemByAngle(Rotation);
 		}
+	}
 	if (!EngineRight.empty())
 		for (int i = 0; i < EngineRightQuantity; i++) {
 			vw_Matrix33CalcPoint(EngineRightLocation[i], OldInvRotationMat);
@@ -491,13 +485,14 @@ bool cSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// выключаем двигатели, если нужно - включим
-	if (!EngineLeft.empty())
-		for (int i = 0; i < EngineLeftQuantity; i++) {
-			if (EngineLeft[i] != nullptr) EngineLeft[i]->IsSuppressed = true;
-		}
+	for (auto tmpEngineLeft : EngineLeft) {
+		if (tmpEngineLeft)
+			tmpEngineLeft->IsSuppressed = true;
+	}
 	if (!EngineRight.empty())
 		for (int i = 0; i < EngineRightQuantity; i++) {
-			if (EngineRight[i] != nullptr) EngineRight[i]->IsSuppressed = true;
+			if (EngineRight[i] != nullptr)
+				EngineRight[i]->IsSuppressed = true;
 		}
 
 
@@ -553,11 +548,10 @@ bool cSpaceShip::Update(float Time)
 
 				// включаем двигатель на поворот
 				if (NeedRotate.y > 0.0f) {
-					if (!EngineLeft.empty())
-						for (int i = 0; i < EngineLeftQuantity; i++) {
-							if (EngineLeft[i] != nullptr)
-								EngineLeft[i]->IsSuppressed = false;
-						}
+					for (auto tmpEngineLeft : EngineLeft) {
+						if (tmpEngineLeft)
+							tmpEngineLeft->IsSuppressed = false;
+					}
 				} else {
 					if (!EngineRight.empty())
 						for (int i = 0; i < EngineRightQuantity; i++) {
@@ -593,11 +587,10 @@ bool cSpaceShip::Update(float Time)
 
 				// включаем двигатель на поворот
 				if (NeedRotate.z < 0.0f) {
-					if (!EngineLeft.empty())
-						for (int i = 0; i < EngineLeftQuantity; i++) {
-							if (EngineLeft[i] != nullptr)
-								EngineLeft[i]->IsSuppressed = false;
-						}
+					for (auto tmpEngineLeft : EngineLeft) {
+						if (tmpEngineLeft)
+							tmpEngineLeft->IsSuppressed = false;
+					}
 				} else {
 					if (!EngineRight.empty())
 						for (int i = 0; i < EngineRightQuantity; i++) {
@@ -615,12 +608,10 @@ bool cSpaceShip::Update(float Time)
 
 		} else {
 			if (NeedStopRotation) {
-
-				if (!EngineLeft.empty())
-					for (int i = 0; i < EngineLeftQuantity; i++) {
-						if (EngineLeft[i] != nullptr)
-							EngineLeft[i]->IsSuppressed = false;
-					}
+				for (auto tmpEngineLeft : EngineLeft) {
+					if (tmpEngineLeft)
+						tmpEngineLeft->IsSuppressed = false;
+				}
 				if (!EngineRight.empty())
 					for (int i = 0; i < EngineRightQuantity; i++) {
 						if (EngineRight[i] != nullptr)
@@ -629,11 +620,10 @@ bool cSpaceShip::Update(float Time)
 
 				NeedStopRotation = false;
 			} else {
-				if (!EngineLeft.empty())
-					for (int i = 0; i < EngineLeftQuantity; i++) {
-						if (EngineLeft[i] != nullptr)
-							EngineLeft[i]->IsSuppressed = true;
-					}
+				for (auto tmpEngineLeft : EngineLeft) {
+					if (tmpEngineLeft)
+						tmpEngineLeft->IsSuppressed = true;
+				}
 				if (!EngineRight.empty())
 					for (int i = 0; i < EngineRightQuantity; i++) {
 						if (EngineRight[i] != nullptr)
@@ -642,13 +632,10 @@ bool cSpaceShip::Update(float Time)
 			}
 		}
 	} else {
-
-		if (!EngineLeft.empty())
-			for (int i = 0; i < EngineLeftQuantity; i++) {
-				if (EngineLeft[i] != nullptr)
-					EngineLeft[i]->IsSuppressed = !PlayerFighterLeftEng;
-			}
-
+		for (auto tmpEngineLeft : EngineLeft) {
+			if (tmpEngineLeft)
+				tmpEngineLeft->IsSuppressed = !PlayerFighterLeftEng;
+		}
 		if (!EngineRight.empty())
 			for (int i = 0; i < EngineRightQuantity; i++) {
 				if (EngineRight[i] != nullptr)
@@ -715,11 +702,10 @@ bool cSpaceShip::Update(float Time)
 
 		// если нужны двигатели торможения - включаем маневровые
 		if (Sign == -1.0f) {
-			if (!EngineLeft.empty())
-				for (int i = 0; i < EngineLeftQuantity; i++) {
-					if (EngineLeft[i] != nullptr)
-						EngineLeft[i]->IsSuppressed = false;
-				}
+			for (auto tmpEngineLeft : EngineLeft) {
+				if (tmpEngineLeft)
+					tmpEngineLeft->IsSuppressed = false;
+			}
 			if (!EngineRight.empty())
 				for (int i = 0; i < EngineRightQuantity; i++) {
 					if (EngineRight[i] != nullptr)

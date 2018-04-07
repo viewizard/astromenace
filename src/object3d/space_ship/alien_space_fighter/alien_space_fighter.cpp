@@ -82,8 +82,6 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	MaxSpeed = 40.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 40.0f;
-	//EngineSoundNum = 0;
-	EngineLeftQuantity = 0;
 	EngineRightQuantity = 0;
 	Strength = StrengthStart = PresetAlienSpaceFighterData[SpaceShipNum-1].Strength/GameNPCArmorPenalty;
 	ShieldStrength = ShieldStrengthStart = PresetAlienSpaceFighterData[SpaceShipNum-1].ShieldStrength/GameNPCArmorPenalty;
