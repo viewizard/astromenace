@@ -85,7 +85,6 @@ void cPirateShip::Create(int PirateShipNum)
 	MaxSpeed = 20.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 40.0f;
-	EngineRightQuantity = 0;
 	Strength = StrengthStart = PresetPirateShipData[PirateShipNum-1].Strength/GameNPCArmorPenalty;
 	WeaponQuantity = PresetPirateShipData[PirateShipNum-1].WeaponQuantity;
 	BossWeaponQuantity = PresetPirateShipData[PirateShipNum-1].BossWeaponQuantity;

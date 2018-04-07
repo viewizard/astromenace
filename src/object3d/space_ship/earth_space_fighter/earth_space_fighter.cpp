@@ -526,7 +526,6 @@ void cEarthSpaceFighter::Create(int	SpaceShipNum)
 	Strength = StrengthStart = PresetEarthSpaceFighterData[SpaceShipNum-1].Strength/GameNPCArmorPenalty;
 	WeaponQuantity = PresetEarthSpaceFighterData[SpaceShipNum-1].WeaponQuantity;
 	unsigned int EngineQuantity = PresetEarthSpaceFighterData[SpaceShipNum - 1].EngineQuantity;
-	EngineRightQuantity = 1;
 	LoadObjectData(PresetEarthSpaceFighterData[SpaceShipNum-1].Name, this, 0, 2.0f);
 
 
@@ -552,8 +551,8 @@ void cEarthSpaceFighter::Create(int	SpaceShipNum)
 	EngineLeftLocation.resize(1);
 	EngineLeft.resize(1, nullptr);
 
-	EngineRightLocation.resize(EngineRightQuantity);
-	EngineRight.resize(EngineRightQuantity, nullptr);
+	EngineRightLocation.resize(1);
+	EngineRight.resize(1, nullptr);
 
 
 

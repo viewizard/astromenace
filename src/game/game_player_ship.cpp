@@ -1024,11 +1024,10 @@ void GamePlayerShip()
 				if (tmpEngineLeft)
 					tmpEngineLeft->IsSuppressed = true;
 			}
-			if (!PlayerFighter->EngineRight.empty())
-				for (int i=0; i<PlayerFighter->EngineRightQuantity; i++) {
-					if (PlayerFighter->EngineRight[i] != nullptr)
-						PlayerFighter->EngineRight[i]->IsSuppressed = true;
-				}
+			for (auto EngineRight : PlayerFighter->EngineRight) {
+				if (EngineRight)
+					EngineRight->IsSuppressed = true;
+			}
 		} else {
 			PlayerFighter->MaxSpeed = GetEnginePower(GameEngineSystem)*2.0f - PlayerFighter->Weight/1000.0f;
 			PlayerFighter->MaxAcceler = GetEngineAcceleration(GameEngineSystem)*2.0f - PlayerFighter->Weight/1000.0f;
@@ -1042,11 +1041,10 @@ void GamePlayerShip()
 				if (tmpEngineLeft)
 					tmpEngineLeft->IsSuppressed = false;
 			}
-			if (!PlayerFighter->EngineRight.empty())
-				for (int i=0; i<PlayerFighter->EngineRightQuantity; i++) {
-					if (PlayerFighter->EngineRight[i] != nullptr)
-						PlayerFighter->EngineRight[i]->IsSuppressed = false;
-				}
+			for (auto tmpEngineRight : PlayerFighter->EngineRight) {
+				if (tmpEngineRight)
+					tmpEngineRight->IsSuppressed = false;
+			}
 			CurrentPlayerShipEnergy -= GetShipEngineSystemEnergyUse(GameEngineSystem)*PlayerFighter->TimeDelta;
 		}
 	}

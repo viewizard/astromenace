@@ -335,11 +335,12 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 			}
 		}
 
-		for (int i = 0; i < SpaceShip->EngineRightQuantity; i++)
-			if (SpaceShip->EngineRight[i] != nullptr) {
-				vw_ReleaseParticleSystem(SpaceShip->EngineRight[i]);
-				SpaceShip->EngineRight[i] = nullptr;
+		for (auto EngineRight : SpaceShip->EngineRight) {
+			if (EngineRight) {
+				vw_ReleaseParticleSystem(EngineRight);
+				EngineRight = nullptr;
 			}
+		}
 
 		SpaceShip->MaxSpeed = 0.0f;
 		SpaceShip->MaxAcceler = 0.0f;
@@ -373,8 +374,8 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 	}
 
 
-	for (int i = 0; i < SpaceShip->EngineRightQuantity; i++) {
-		if (SpaceShip->EngineRight[i] == nullptr) {
+	for (unsigned int i = 0; i < SpaceShip->EngineRight.size(); i++) {
+		if (SpaceShip->EngineRight[i]) {
 			vw_ReleaseParticleSystem(SpaceShip->EngineRight[i]);
 			SpaceShip->EngineRight[i] = nullptr;
 		}

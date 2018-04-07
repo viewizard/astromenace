@@ -192,7 +192,6 @@ public:
 	std::vector<sVECTOR3D> EngineLeftLocation{}; // положение двигателей
 
 	// двигатели поворотов, правый
-	int		EngineRightQuantity{0}; // кол-во двигателей  // FIXME remove, we have std::vector::size() now
 	std::vector<cParticleSystem*> EngineRight{}; // двигатели
 	std::vector<sVECTOR3D> EngineRightLocation{}; // положение двигателей
 
