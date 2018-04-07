@@ -58,7 +58,7 @@ public:
 	// кол-во эффектов
 	int		GFXQuantity{0}; // FIXME remove, we have std::vector::size() now
 	// эффекты
-	sVECTOR3D	*GFXLocation{nullptr};
+	std::vector<sVECTOR3D> GFXLocation{};
 	std::vector<cParticleSystem*> GFX{};
 
 	// чтобы возрвать часть корабля босса пришельцев через время

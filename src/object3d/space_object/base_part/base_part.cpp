@@ -75,7 +75,7 @@ case1next:
 		TextureIllum[2] = 0;
 
 		GFXQuantity = 8;
-		GFXLocation = new sVECTOR3D[GFXQuantity];
+		GFXLocation.resize(GFXQuantity);
 		GFX.resize(GFXQuantity, nullptr);
 
 		GFX[0] = vw_CreateParticleSystem();
@@ -140,7 +140,7 @@ case2next:
 		TextureIllum[1] = 0;
 
 		GFXQuantity = 2;
-		GFXLocation = new sVECTOR3D[GFXQuantity];
+		GFXLocation.resize(GFXQuantity);
 		GFX.resize(GFXQuantity, nullptr);
 
 		GFX[0] = vw_CreateParticleSystem();

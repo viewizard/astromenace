@@ -53,10 +53,6 @@ cSpaceObject::cSpaceObject()
 //-----------------------------------------------------------------------------
 cSpaceObject::~cSpaceObject()
 {
-	if (GFXLocation != nullptr) {
-		delete [] GFXLocation;
-		GFXLocation = nullptr;
-	}
 	if (!GFX.empty()) {
 		for (int i = 0; i < GFXQuantity; i++) {
 			if (GFX[i] != nullptr) {
