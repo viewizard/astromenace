@@ -547,13 +547,13 @@ void cEarthSpaceFighter::Create(int	SpaceShipNum)
 
 	// начальные установки для двигателей
 
-	EngineLocation = new sVECTOR3D[EngineQuantity];
+	EngineLocation.resize(EngineQuantity);
 	Engine.resize(EngineQuantity, nullptr);
 
-	EngineLeftLocation = new sVECTOR3D[EngineLeftQuantity];
+	EngineLeftLocation.resize(EngineLeftQuantity);
 	EngineLeft.resize(EngineLeftQuantity, nullptr);
 
-	EngineRightLocation = new sVECTOR3D[EngineRightQuantity];
+	EngineRightLocation.resize(EngineRightQuantity);
 	EngineRight.resize(EngineRightQuantity, nullptr);
 
 

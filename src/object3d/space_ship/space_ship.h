@@ -183,10 +183,8 @@ public:
 	int		EngineQuantity{0}; // FIXME remove, we have std::vector::size() now
 	// тип, как будем удалять двигатели -сразу, или глушить
 	bool		EngineDestroyType{false};
-	// двигатели
-	std::vector<cParticleSystem*> Engine{};
-	// положение двигателей
-	sVECTOR3D	*EngineLocation{nullptr};
+	std::vector<cParticleSystem*> Engine{}; // двигатели
+	std::vector<sVECTOR3D> EngineLocation{}; // положение двигателей
 
 	// вкл. двигатели торможения при повороте
 	bool	NeedStopRotation{false};
@@ -194,12 +192,12 @@ public:
 	// двигатели поворотов, левый
 	int		EngineLeftQuantity{0}; // кол-во двигателей // FIXME remove, we have std::vector::size() now
 	std::vector<cParticleSystem*> EngineLeft{}; // двигатели
-	sVECTOR3D	*EngineLeftLocation{nullptr}; // положение двигателей
+	std::vector<sVECTOR3D> EngineLeftLocation{}; // положение двигателей
 
 	// двигатели поворотов, правый
 	int		EngineRightQuantity{0}; // кол-во двигателей  // FIXME remove, we have std::vector::size() now
 	std::vector<cParticleSystem*> EngineRight{}; // двигатели
-	sVECTOR3D	*EngineRightLocation{nullptr}; // положение двигателей
+	std::vector<sVECTOR3D> EngineRightLocation{}; // положение двигателей
 
 	// для собственного списка
 	cSpaceShip	*Next{nullptr};

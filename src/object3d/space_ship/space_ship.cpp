@@ -122,10 +122,6 @@ cSpaceShip::~cSpaceShip()
 		WeaponFlare = nullptr;
 	}
 
-	if (EngineLocation != nullptr) {
-		delete [] EngineLocation;
-		EngineLocation = nullptr;
-	}
 	if (!Engine.empty()) {
 		for (int i = 0; i < EngineQuantity; i++) {
 			if (Engine[i] != nullptr) {
@@ -140,10 +136,6 @@ cSpaceShip::~cSpaceShip()
 		}
 	}
 
-	if (EngineLeftLocation != nullptr) {
-		delete [] EngineLeftLocation;
-		EngineLeftLocation = nullptr;
-	}
 	if (!EngineLeft.empty()) {
 		for (int i = 0; i < EngineLeftQuantity; i++) {
 			if (EngineLeft[i] != nullptr) {
@@ -158,10 +150,6 @@ cSpaceShip::~cSpaceShip()
 		}
 	}
 
-	if (EngineRightLocation != nullptr) {
-		delete [] EngineRightLocation;
-		EngineRightLocation = nullptr;
-	}
 	if (!EngineRight.empty()) {
 		for (int i = 0; i < EngineRightQuantity; i++) {
 			if (EngineRight[i] != nullptr) {
