@@ -53,10 +53,12 @@ cSpaceObject::cSpaceObject()
 //-----------------------------------------------------------------------------
 cSpaceObject::~cSpaceObject()
 {
-	for (auto tmpGFX : GraphicFX) {
-		if (tmpGFX) {
-			tmpGFX->IsSuppressed = true;
-			tmpGFX->DestroyIfNoParticles = true;
+	if (!GraphicFX.empty()) {
+		for (auto tmpGFX : GraphicFX) {
+			if (tmpGFX) {
+				tmpGFX->IsSuppressed = true;
+				tmpGFX->DestroyIfNoParticles = true;
+			}
 		}
 	}
 
@@ -80,10 +82,12 @@ void cSpaceObject::SetLocation(sVECTOR3D NewLocation)
 	// вызываем родительскую функцию
 	::cObject3D::SetLocation(NewLocation);
 
-	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
-		if (GraphicFX[i]) {
-			GraphicFX[i]->MoveSystem(NewLocation + GraphicFXLocation[i]);
-			GraphicFX[i]->SetStartLocation(GraphicFXLocation[i] + NewLocation);
+	if (!GraphicFX.empty()) {
+		for (unsigned int i = 0; i < GraphicFX.size(); i++) {
+			if (GraphicFX[i]) {
+				GraphicFX[i]->MoveSystem(NewLocation + GraphicFXLocation[i]);
+				GraphicFX[i]->SetStartLocation(GraphicFXLocation[i] + NewLocation);
+			}
 		}
 	}
 }
@@ -99,18 +103,20 @@ void cSpaceObject::SetRotation(sVECTOR3D NewRotation)
 	// вызываем родительскую функцию
 	::cObject3D::SetRotation(NewRotation);
 
-	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
-		if (GraphicFX[i]) {
-			vw_Matrix33CalcPoint(GraphicFXLocation[i], OldInvRotationMat);
-			vw_Matrix33CalcPoint(GraphicFXLocation[i], CurrentRotationMat);
+	if (!GraphicFX.empty()) {
+		for (unsigned int i = 0; i < GraphicFX.size(); i++) {
+			if (GraphicFX[i]) {
+				vw_Matrix33CalcPoint(GraphicFXLocation[i], OldInvRotationMat);
+				vw_Matrix33CalcPoint(GraphicFXLocation[i], CurrentRotationMat);
 
-			if (GraphicFX[i]->SpeedOnCreation == -1.0f) {
-				GraphicFX[i]->MoveSystem(GraphicFXLocation[i] + Location);
-				GraphicFX[i]->SetStartLocation(GraphicFXLocation[i] + Location);
-				GraphicFX[i]->RotateSystemAndParticlesByAngle(Rotation);
-			} else {
-				GraphicFX[i]->MoveSystemLocation(GraphicFXLocation[i] + Location);
-				GraphicFX[i]->RotateSystemByAngle(Rotation);
+				if (GraphicFX[i]->SpeedOnCreation == -1.0f) {
+					GraphicFX[i]->MoveSystem(GraphicFXLocation[i] + Location);
+					GraphicFX[i]->SetStartLocation(GraphicFXLocation[i] + Location);
+					GraphicFX[i]->RotateSystemAndParticlesByAngle(Rotation);
+				} else {
+					GraphicFX[i]->MoveSystemLocation(GraphicFXLocation[i] + Location);
+					GraphicFX[i]->RotateSystemByAngle(Rotation);
+				}
 			}
 		}
 	}
