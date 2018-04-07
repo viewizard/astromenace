@@ -266,6 +266,7 @@ void cProjectile::Create(int ProjectileNum)
 
 	// внутренний номер, номер в таблицах
 	int IntNum = ProjectileNum;
+	int GraphicFXQuantity{0};
 
 
 	if (Num >= 1 && Num <= 99) {
@@ -828,10 +829,7 @@ cProjectile::~cProjectile()
 {
 	DetachProjectile(this);
 
-	if (GraphicFX.empty())
-		return;
-
-	for (int i = 0; i < GraphicFXQuantity; i++) {
+	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
 		/* this GFX is not in use */
 		if (GraphicFX[i] == nullptr)
 			continue;
@@ -856,7 +854,7 @@ cProjectile::~cProjectile()
 		GraphicFX[i]->StopAllParticles();
 
 		// только для ракет землян и пиратов делаем изменение шлейфа при взрыве (только шлейф!, он всегда 2-й эффект)
-		if ( i != 1 )
+		if (i != 1)
 			continue;
 
 		// для разных типов ракет делаем разную "ударную волну"
@@ -898,8 +896,8 @@ cProjectile::~cProjectile()
 
 				if (fDist2 < effective_dist2) {
 					pVelocity = sVECTOR3D(Dist2.x + 10.0f * vw_Randf0,
-							     Dist2.y + 10.0f * vw_Randf0,
-							     Dist2.z + 10.0f * vw_Randf0);
+							      Dist2.y + 10.0f * vw_Randf0,
+							      Dist2.z + 10.0f * vw_Randf0);
 					pVelocity.Normalize();
 					pVelocity = pVelocity ^ (effective_dist2 / fDist2);
 					pNeedStop = true;
@@ -930,18 +928,17 @@ void cProjectile::SetRotation(sVECTOR3D NewRotation)
 	::cObject3D::SetRotation(NewRotation);
 
 
-	if (!GraphicFX.empty())
-		for (int i = 0; i < GraphicFXQuantity; i++) {
-			if (GraphicFX[i] != nullptr) {
-				vw_Matrix33CalcPoint(GraphicFXLocation[i], OldInvRotationMat);
-				vw_Matrix33CalcPoint(GraphicFXLocation[i], CurrentRotationMat);
-				// если лучевое оружие, нужно вращать все, и частицы тоже
-				if (ProjectileType == 2)
-					GraphicFX[i]->RotateSystemAndParticlesByAngle(Rotation);
-				else
-					GraphicFX[i]->RotateSystemByAngle(Rotation);
-			}
+	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
+		if (GraphicFX[i]) {
+			vw_Matrix33CalcPoint(GraphicFXLocation[i], OldInvRotationMat);
+			vw_Matrix33CalcPoint(GraphicFXLocation[i], CurrentRotationMat);
+			// если лучевое оружие, нужно вращать все, и частицы тоже
+			if (ProjectileType == 2)
+				GraphicFX[i]->RotateSystemAndParticlesByAngle(Rotation);
+			else
+				GraphicFX[i]->RotateSystemByAngle(Rotation);
 		}
+	}
 
 }
 
@@ -959,269 +956,255 @@ void cProjectile::SetLocation(sVECTOR3D NewLocation)
 	// вызываем родительскую функцию
 	::cObject3D::SetLocation(NewLocation);
 
-	if (!GraphicFX.empty())
-		for (int i = 0; i < GraphicFXQuantity; i++) {
+	if (GraphicFX.empty())
+		return;
 
-			switch (Num) {
+	switch (Num) {
 
-			// снаряды землян
+	// снаряды землян
 
-
-			// Kinetic
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				break;
-			// Ion
-			case 5:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-				break;
-			case 6:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-				if (GraphicFX[1] != nullptr)
-					GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
-				break;
-			case 7:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				if (GraphicFX[1] != nullptr)
-					GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
-				break;
-			// Plasma
-			case 8:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-				break;
-			case 9:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-				if (GraphicFX[1] != nullptr)
-					GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
-				if (GraphicFX[2] != nullptr)
-					GraphicFX[2]->MoveSystem(GraphicFXLocation[2] + Location);
-				break;
-			case 10:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-				if (GraphicFX[1] != nullptr)
-					GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
-				if (GraphicFX[2] != nullptr)
-					GraphicFX[2]->MoveSystemLocation(GraphicFXLocation[2] + Location);
-				break;
-			// Maser
-			case 11:
-				if (GraphicFX[0] != nullptr) {
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-					GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
-				}
-				break;
-			case 12:
-				if (GraphicFX[0] != nullptr) {
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-					GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
-				}
-				if (GraphicFX[1] != nullptr) {
-					GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
-					GraphicFX[1]->SetStartLocation(GraphicFXLocation[1] + Location);
-				}
-				break;
-			// Antimatter
-			case 13:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-				break;
-			// Laser
-			case 14:
-				if (GraphicFX[0] != nullptr) {
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-					GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
-				}
-				break;
-			// Gauss
-			case 15:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-				break;
-			// Missiles
-			case 16:
-			case 17:
-			case 18:
-			case 19:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				if (GraphicFX[1] != nullptr)
-					GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
-				break;
-
-
-
-			// снаряды пришельцев
-
-
-			// как Kinetic1
-			case 101:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				break;
-			// с наведением, как Kinetic2
-			case 102:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				if (GraphicFX[1] != nullptr)
-					GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
-				break;
-			case 103:
-				// как Kinetic3
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				break;
-			// с наведением, как Kinetic3
-			case 104:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				if (GraphicFX[1] != nullptr)
-					GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
-				break;
-			// как Kinetic2
-			case 105:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				break;
-			// энергетическая мина (1-й тип)
-			case 106:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				break;
-			// энергетическая мина (2-й тип)
-			case 107:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				break;
-			// как Plasma3
-			case 108:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-				if (GraphicFX[1] != nullptr)
-					GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
-				if (GraphicFX[2] != nullptr)
-					GraphicFX[2]->MoveSystemLocation(GraphicFXLocation[2] + Location);
-				break;
-			// как Plasma2
-			case 109:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-				if (GraphicFX[1] != nullptr)
-					GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
-				if (GraphicFX[2] != nullptr)
-					GraphicFX[2]->MoveSystem(GraphicFXLocation[2] + Location);
-				break;
-			// как Laser
-			case 110:
-				if (GraphicFX[0] != nullptr) {
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-					GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
-				}
-				break;
-
-
-
-			// снаряды пиратов
-
-
-			// стрельба турели 1
-			case 201:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				break;
-			// стрельба турели 2
-			case 202:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				break;
-			// фларес
-			case 203:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				break;
-			// как Kinetic1
-			case 204:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				break;
-			case 205: // как Missile1
-			case 206: // как Missile2
-			case 209: // как Missile3
-			case 210: // как Missile4
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				if (GraphicFX[1] != nullptr)
-					GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
-				break;
-			// как Ion2
-			case 207:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-				if (GraphicFX[1] != nullptr)
-					GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
-				break;
-			// Antimatter
-			case 208:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-				break;
-			// как Kinetic2
-			case 211:
-			// как Kinetic3
-			case 212:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-				break;
-			// как Plasma2
-			case 213:
-				if (GraphicFX[0] != nullptr)
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-				if (GraphicFX[1] != nullptr)
-					GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
-				if (GraphicFX[2] != nullptr)
-					GraphicFX[2]->MoveSystem(GraphicFXLocation[2] + Location);
-				break;
-
-
-			// снаряды без оружия
-
-
-			// мины
-			case 214:
-				break;
-			case 215:
-				if (GraphicFX[0] != nullptr) {
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-					GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
-				}
-				break;
-			case 216:
-				if (GraphicFX[0] != nullptr) {
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-					GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
-				}
-				break;
-			case 217:
-				if (GraphicFX[0] != nullptr) {
-					GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-					GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
-				}
-				break;
-
-
-			}
-
-
+	// Kinetic
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		break;
+	// Ion
+	case 5:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		break;
+	case 6:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		if (GraphicFX[1])
+			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
+		break;
+	case 7:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (GraphicFX[1])
+			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
+		break;
+	// Plasma
+	case 8:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		break;
+	case 9:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		if (GraphicFX[1])
+			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
+		if (GraphicFX[2])
+			GraphicFX[2]->MoveSystem(GraphicFXLocation[2] + Location);
+		break;
+	case 10:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		if (GraphicFX[1])
+			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
+		if (GraphicFX[2])
+			GraphicFX[2]->MoveSystemLocation(GraphicFXLocation[2] + Location);
+		break;
+	// Maser
+	case 11:
+		if (GraphicFX[0]) {
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
 		}
+		break;
+	case 12:
+		if (GraphicFX[0]) {
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+		}
+		if (GraphicFX[1]) {
+			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
+			GraphicFX[1]->SetStartLocation(GraphicFXLocation[1] + Location);
+		}
+		break;
+	// Antimatter
+	case 13:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		break;
+	// Laser
+	case 14:
+		if (GraphicFX[0]) {
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+		}
+		break;
+	// Gauss
+	case 15:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		break;
+	// Missiles
+	case 16:
+	case 17:
+	case 18:
+	case 19:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (GraphicFX[1])
+			GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
+		break;
+
+	// снаряды пришельцев
+
+	// как Kinetic1
+	case 101:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		break;
+	// с наведением, как Kinetic2
+	case 102:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (GraphicFX[1])
+			GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
+		break;
+	case 103:
+		// как Kinetic3
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		break;
+	// с наведением, как Kinetic3
+	case 104:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (GraphicFX[1])
+			GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
+		break;
+	// как Kinetic2
+	case 105:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		break;
+	// энергетическая мина (1-й тип)
+	case 106:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		break;
+	// энергетическая мина (2-й тип)
+	case 107:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		break;
+	// как Plasma3
+	case 108:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		if (GraphicFX[1])
+			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
+		if (GraphicFX[2])
+			GraphicFX[2]->MoveSystemLocation(GraphicFXLocation[2] + Location);
+		break;
+	// как Plasma2
+	case 109:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		if (GraphicFX[1])
+			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
+		if (GraphicFX[2])
+			GraphicFX[2]->MoveSystem(GraphicFXLocation[2] + Location);
+		break;
+	// как Laser
+	case 110:
+		if (GraphicFX[0]) {
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+		}
+		break;
+
+	// снаряды пиратов
+
+	// стрельба турели 1
+	case 201:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		break;
+	// стрельба турели 2
+	case 202:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		break;
+	// фларес
+	case 203:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		break;
+	// как Kinetic1
+	case 204:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		break;
+	case 205: // как Missile1
+	case 206: // как Missile2
+	case 209: // как Missile3
+	case 210: // как Missile4
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (GraphicFX[1])
+			GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
+		break;
+	// как Ion2
+	case 207:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		if (GraphicFX[1])
+			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
+		break;
+	// Antimatter
+	case 208:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		break;
+	// как Kinetic2
+	case 211:
+	// как Kinetic3
+	case 212:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		break;
+	// как Plasma2
+	case 213:
+		if (GraphicFX[0])
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		if (GraphicFX[1])
+			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
+		if (GraphicFX[2])
+			GraphicFX[2]->MoveSystem(GraphicFXLocation[2] + Location);
+		break;
+
+	// снаряды без оружия
+
+	// мины
+	case 214:
+		break;
+	case 215:
+		if (GraphicFX[0]) {
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+		}
+		break;
+	case 216:
+		if (GraphicFX[0]) {
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+		}
+		break;
+	case 217:
+		if (GraphicFX[0]) {
+			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+		}
+		break;
+	}
 }
 
 
@@ -1464,8 +1447,7 @@ missile:
 			}
 		}
 
-		if ((GraphicFXQuantity >= 1) &&
-		    (GraphicFX[0] != nullptr))
+		if (!GraphicFX.empty() && GraphicFX[0])
 			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
 	}
 	break;
@@ -1538,9 +1520,8 @@ missile:
 				}
 			}
 
-			if ((GraphicFXQuantity >= 1) &&
-			    (GraphicFX[0] != nullptr))
-					GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+			if (!GraphicFX.empty() && GraphicFX[0])
+				GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
 
 			// сбрасываем установку, чтобы не было голосового предупреждения
 			Target = nullptr;
@@ -1619,14 +1600,14 @@ missile:
 					Projectile->SetLocation(Location + sVECTOR3D(0.0f, -2.0f, 0.0f));
 
 					Projectile->SetRotation(Rotation);
-					for (int i=0; i<Projectile->GraphicFXQuantity; i++) {
-						Projectile->GraphicFX[i]->Direction = Orientation;
+					for (auto tmpGFX : Projectile->GraphicFX) {
+						tmpGFX->Direction = Orientation;
 						// учитываем пенальти для визуальных эффектов
-						Projectile->GraphicFX[i]->ParticlesPerSec = (int)(Projectile->GraphicFX[i]->ParticlesPerSec/CurrentPenalty);
+						tmpGFX->ParticlesPerSec = (int)(tmpGFX->ParticlesPerSec / CurrentPenalty);
 
-						Projectile->GraphicFX[i]->Speed = Projectile->GraphicFX[i]->Speed/CurrentPenalty;
-						Projectile->GraphicFX[i]->Life = Projectile->GraphicFX[i]->Life*CurrentPenalty;
-						Projectile->GraphicFX[i]->MagnetFactor = Projectile->GraphicFX[i]->MagnetFactor/(CurrentPenalty*CurrentPenalty);
+						tmpGFX->Speed = tmpGFX->Speed / CurrentPenalty;
+						tmpGFX->Life = tmpGFX->Life * CurrentPenalty;
+						tmpGFX->MagnetFactor = tmpGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
 					}
 					Projectile->ObjectStatus = ObjectStatus;
 					// учитываем пенальти для снаряда
@@ -1718,14 +1699,14 @@ missile:
 					Projectile->SetLocation(Location + sVECTOR3D(0.0f, 0.0f, 0.0f));
 
 					Projectile->SetRotation(Rotation);
-					for (int i=0; i<Projectile->GraphicFXQuantity; i++) {
-						Projectile->GraphicFX[i]->Direction = Orientation;
+					for (auto tmpGFX : Projectile->GraphicFX) {
+						tmpGFX->Direction = Orientation;
 						// учитываем пенальти для визуальных эффектов
-						Projectile->GraphicFX[i]->ParticlesPerSec = (int)(Projectile->GraphicFX[i]->ParticlesPerSec/CurrentPenalty);
+						tmpGFX->ParticlesPerSec = (int)(tmpGFX->ParticlesPerSec / CurrentPenalty);
 
-						Projectile->GraphicFX[i]->Speed = Projectile->GraphicFX[i]->Speed/CurrentPenalty;
-						Projectile->GraphicFX[i]->Life = Projectile->GraphicFX[i]->Life*CurrentPenalty;
-						Projectile->GraphicFX[i]->MagnetFactor = Projectile->GraphicFX[i]->MagnetFactor/(CurrentPenalty*CurrentPenalty);
+						tmpGFX->Speed = tmpGFX->Speed / CurrentPenalty;
+						tmpGFX->Life = tmpGFX->Life * CurrentPenalty;
+						tmpGFX->MagnetFactor = tmpGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
 					}
 					Projectile->ObjectStatus = ObjectStatus;
 					// учитываем пенальти для снаряда

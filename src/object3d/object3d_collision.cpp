@@ -111,11 +111,11 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 						Projectile->ObjectStatus = Object->ObjectStatus;
 						Projectile->SetRotation(Projectile->Rotation^(-1));
 
-						for (int i=0; i<Projectile->GraphicFXQuantity; i++) {
-							Projectile->GraphicFX[i]->ParticlesPerSec = (int)(Projectile->GraphicFX[i]->ParticlesPerSec*GameNPCWeaponPenalty);
-							Projectile->GraphicFX[i]->Speed = Projectile->GraphicFX[i]->Speed*GameNPCWeaponPenalty;
-							Projectile->GraphicFX[i]->Life = Projectile->GraphicFX[i]->Life/GameNPCWeaponPenalty;
-							Projectile->GraphicFX[i]->MagnetFactor = Projectile->GraphicFX[i]->MagnetFactor*(GameNPCWeaponPenalty*GameNPCWeaponPenalty);
+						for (auto tmpGFX : Projectile->GraphicFX) {
+							tmpGFX->ParticlesPerSec = (int)(tmpGFX->ParticlesPerSec * GameNPCWeaponPenalty);
+							tmpGFX->Speed = tmpGFX->Speed * GameNPCWeaponPenalty;
+							tmpGFX->Life = tmpGFX->Life / GameNPCWeaponPenalty;
+							tmpGFX->MagnetFactor = tmpGFX->MagnetFactor * GameNPCWeaponPenalty * GameNPCWeaponPenalty;
 						}
 						Projectile->SpeedStart = Projectile->Speed*GameNPCWeaponPenalty;
 						Projectile->SpeedEnd = (Projectile->Speed*GameNPCWeaponPenalty)/4.0f;

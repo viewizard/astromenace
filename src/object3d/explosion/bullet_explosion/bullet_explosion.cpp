@@ -287,10 +287,10 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*6.0f));
 			ProjectileTMP->Orientation.Normalize();
 
-			for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++) {
-				ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
-				ProjectileTMP->GraphicFX[j]->Speed = 1.5f;
-				ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
+			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
+				tmpGFX->Speed = 1.5f;
+				tmpGFX->SetStartLocation(Location);
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			// учитываем пенальти
@@ -482,10 +482,10 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 			ProjectileTMP->Orientation.Normalize();
 
-			for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++) {
-				ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
-				ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
-				ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
+			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
+				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
+				tmpGFX->SetStartLocation(Location);
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/7.0f;
@@ -529,10 +529,10 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 			ProjectileTMP->Orientation.Normalize();
 
-			for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++) {
-				ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
-				ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
-				ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
+			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
+				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
+				tmpGFX->SetStartLocation(Location);
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/7.0f;
@@ -577,10 +577,10 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 			ProjectileTMP->Orientation.Normalize();
 
-			for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++) {
-				ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
-				ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
-				ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
+			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
+				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
+				tmpGFX->SetStartLocation(Location);
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/7.0f;
@@ -629,10 +629,10 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*4.0f));
 			ProjectileTMP->Orientation.Normalize();
 
-			for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++) {
-				ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
-				ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
-				ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
+			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
+				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
+				tmpGFX->SetStartLocation(Location);
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
@@ -648,10 +648,10 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->SetLocation(Location);
 
 			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
-			for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++) {
-				ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
-				ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
-				ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
+			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
+				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
+				tmpGFX->SetStartLocation(Location);
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
@@ -667,10 +667,10 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->SetLocation(Location);
 
 			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
-			for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++) {
-				ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
-				ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
-				ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
+			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
+				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
+				tmpGFX->SetStartLocation(Location);
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
@@ -685,10 +685,10 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->SetLocation(Location);
 
 			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
-			for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++) {
-				ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
-				ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
-				ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
+			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
+				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
+				tmpGFX->SetStartLocation(Location);
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
@@ -705,10 +705,10 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->SetLocation(Location);
 
 			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
-			for (int j=0; j<ProjectileTMP->GraphicFXQuantity; j++) {
-				ProjectileTMP->GraphicFX[j]->Direction = ProjectileTMP->Orientation^-1;
-				ProjectileTMP->GraphicFX[j]->Speed = ProjectileTMP->GraphicFX[j]->Speed/2.0f;
-				ProjectileTMP->GraphicFX[j]->SetStartLocation(Location);
+			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
+				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
+				tmpGFX->SetStartLocation(Location);
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;

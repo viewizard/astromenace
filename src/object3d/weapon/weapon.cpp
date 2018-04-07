@@ -625,16 +625,16 @@ bool cWeapon::Update(float Time)
 				Projectile->Create(ObjectCreationType);
 				Projectile->SetLocation(Location+FireLocation);
 				Projectile->SetRotation(Rotation);
-				for (int i = 0; i < Projectile->GraphicFXQuantity; i++) {
-					Projectile->GraphicFX[i]->Direction = Fire->Direction^-1;
+				for (auto tmpGFX : Projectile->GraphicFX) {
+					tmpGFX->Direction = Fire->Direction ^ -1;
 					// учитываем пенальти для визуальных эффектов
 					if (CurrentPenalty == 2)
-						Projectile->GraphicFX[i]->ParticlesPerSec -= (int)(Projectile->GraphicFX[i]->ParticlesPerSec*0.33f);
+						tmpGFX->ParticlesPerSec -= (int)(tmpGFX->ParticlesPerSec * 0.33f);
 					if (CurrentPenalty == 3)
-						Projectile->GraphicFX[i]->ParticlesPerSec -= (int)(Projectile->GraphicFX[i]->ParticlesPerSec*0.5f);
-					Projectile->GraphicFX[i]->Speed = Projectile->GraphicFX[i]->Speed/CurrentPenalty;
-					Projectile->GraphicFX[i]->Life = Projectile->GraphicFX[i]->Life*CurrentPenalty;
-					Projectile->GraphicFX[i]->MagnetFactor = Projectile->GraphicFX[i]->MagnetFactor/(CurrentPenalty*CurrentPenalty);
+						tmpGFX->ParticlesPerSec -= (int)(tmpGFX->ParticlesPerSec * 0.5f);
+					tmpGFX->Speed = tmpGFX->Speed / CurrentPenalty;
+					tmpGFX->Life = tmpGFX->Life * CurrentPenalty;
+					tmpGFX->MagnetFactor = tmpGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
 				}
 				Projectile->ObjectStatus = ObjectStatus;
 				// учитываем пенальти для снаряда
@@ -678,16 +678,16 @@ bool cWeapon::Update(float Time)
 				Projectile->SetLocation(Location + FireLocation);
 				Projectile->SetRotation(Rotation + sVECTOR3D(vw_Randf0 * 30.0f, 0.0f, vw_Randf0 * 30.0f));
 
-				for (int i = 0; i < Projectile->GraphicFXQuantity; i++) {
-					Projectile->GraphicFX[i]->Direction = Orientation^-1;
+				for (auto tmpGFX : Projectile->GraphicFX) {
+					tmpGFX->Direction = Orientation ^ -1;
 					// учитываем пенальти для визуальных эффектов
 					if (CurrentPenalty == 2)
-						Projectile->GraphicFX[i]->ParticlesPerSec -= (int)(Projectile->GraphicFX[i]->ParticlesPerSec*0.33f);
+						tmpGFX->ParticlesPerSec -= (int)(tmpGFX->ParticlesPerSec * 0.33f);
 					if (CurrentPenalty == 3)
-						Projectile->GraphicFX[i]->ParticlesPerSec -= (int)(Projectile->GraphicFX[i]->ParticlesPerSec*0.5f);
-					Projectile->GraphicFX[i]->Speed = Projectile->GraphicFX[i]->Speed/CurrentPenalty;
-					Projectile->GraphicFX[i]->Life = Projectile->GraphicFX[i]->Life*CurrentPenalty;
-					Projectile->GraphicFX[i]->MagnetFactor = Projectile->GraphicFX[i]->MagnetFactor/(CurrentPenalty*CurrentPenalty);
+						tmpGFX->ParticlesPerSec -= (int)(tmpGFX->ParticlesPerSec * 0.5f);
+					tmpGFX->Speed = tmpGFX->Speed / CurrentPenalty;
+					tmpGFX->Life = tmpGFX->Life * CurrentPenalty;
+					tmpGFX->MagnetFactor = tmpGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
 				}
 				Projectile->ObjectStatus = ObjectStatus;
 				// учитываем пенальти для снаряда
@@ -1185,14 +1185,8 @@ bool cWeapon::WeaponFire(float Time)
 	// если это мина, то нужно делать немного по другому
 	if (Projectile->ProjectileType == 3 || Projectile->ProjectileType == 4) {
 		Projectile->SetRotation(RotationWeapon);
-		for (int i=0; i<Projectile->GraphicFXQuantity; i++) {
-			Projectile->GraphicFX[i]->Direction = Orientation;
-			// учитываем пенальти для визуальных эффектов
-			Projectile->GraphicFX[i]->ParticlesPerSec = (int)(Projectile->GraphicFX[i]->ParticlesPerSec);
-
-			Projectile->GraphicFX[i]->Speed = Projectile->GraphicFX[i]->Speed;
-			Projectile->GraphicFX[i]->Life = Projectile->GraphicFX[i]->Life;
-			Projectile->GraphicFX[i]->MagnetFactor = Projectile->GraphicFX[i]->MagnetFactor;
+		for (auto tmpGFX : Projectile->GraphicFX) {
+			tmpGFX->Direction = Orientation;
 		}
 		Projectile->ObjectStatus = ObjectStatus;
 		// учитываем пенальти для снаряда
@@ -1205,14 +1199,14 @@ bool cWeapon::WeaponFire(float Time)
 		Projectile->ProjectileType = Projectile->ProjectileType - 3;
 	} else {
 		Projectile->SetRotation(RotationWeapon);
-		for (int i=0; i<Projectile->GraphicFXQuantity; i++) {
-			Projectile->GraphicFX[i]->Direction = Orientation;//Fire->Direction^-1;
+		for (auto tmpGFX : Projectile->GraphicFX) {
+			tmpGFX->Direction = Orientation;
 			// учитываем пенальти для визуальных эффектов
-			Projectile->GraphicFX[i]->ParticlesPerSec = (int)(Projectile->GraphicFX[i]->ParticlesPerSec/CurrentPenalty);
+			tmpGFX->ParticlesPerSec = (int)(tmpGFX->ParticlesPerSec / CurrentPenalty);
 
-			Projectile->GraphicFX[i]->Speed = Projectile->GraphicFX[i]->Speed/CurrentPenalty;
-			Projectile->GraphicFX[i]->Life = Projectile->GraphicFX[i]->Life*CurrentPenalty;
-			Projectile->GraphicFX[i]->MagnetFactor = Projectile->GraphicFX[i]->MagnetFactor/(CurrentPenalty*CurrentPenalty);
+			tmpGFX->Speed = tmpGFX->Speed / CurrentPenalty;
+			tmpGFX->Life = tmpGFX->Life * CurrentPenalty;
+			tmpGFX->MagnetFactor = tmpGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
 		}
 		Projectile->ObjectStatus = ObjectStatus;
 		// учитываем пенальти для снаряда

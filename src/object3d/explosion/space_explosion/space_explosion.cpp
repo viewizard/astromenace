@@ -100,9 +100,9 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius*6.0f));
 			Projectile->Orientation.Normalize();
 
-			for (int j=0; j<Projectile->GraphicFXQuantity; j++) {
-				Projectile->GraphicFX[j]->Direction = Projectile->Orientation^-1;
-				Projectile->GraphicFX[j]->Speed = 1.5f;
+			for (auto tmpGFX : Projectile->GraphicFX) {
+				tmpGFX->Direction = Projectile->Orientation ^ -1;
+				tmpGFX->Speed = 1.5f;
 			}
 			Projectile->ObjectStatus = ObjectStatus;
 			// учитываем пенальти
@@ -175,15 +175,15 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius/4.0f));
 			Projectile->Orientation.Normalize();
 
-			for (int j=0; j<Projectile->GraphicFXQuantity; j++) {
-				Projectile->GraphicFX[j]->Direction = Projectile->Orientation^-1;
-				Projectile->GraphicFX[j]->Speed = 2.5f;
-				Projectile->GraphicFX[j]->ColorStart.r = 0.30f;
-				Projectile->GraphicFX[j]->ColorStart.g = 1.00f;
-				Projectile->GraphicFX[j]->ColorStart.b = 1.00f;
-				Projectile->GraphicFX[j]->ColorEnd.r = 0.00f;
-				Projectile->GraphicFX[j]->ColorEnd.g = 1.00f;
-				Projectile->GraphicFX[j]->ColorEnd.b = 1.00f;
+			for (auto tmpGFX : Projectile->GraphicFX) {
+				tmpGFX->Direction = Projectile->Orientation ^ -1;
+				tmpGFX->Speed = 2.5f;
+				tmpGFX->ColorStart.r = 0.30f;
+				tmpGFX->ColorStart.g = 1.00f;
+				tmpGFX->ColorStart.b = 1.00f;
+				tmpGFX->ColorEnd.r = 0.00f;
+				tmpGFX->ColorEnd.g = 1.00f;
+				tmpGFX->ColorEnd.b = 1.00f;
 			}
 			Projectile->ObjectStatus = ObjectStatus;
 			// учитываем пенальти
@@ -337,9 +337,9 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius/2.0f));
 			Projectile->Orientation.Normalize();
 
-			for (int j=0; j<Projectile->GraphicFXQuantity; j++) {
-				Projectile->GraphicFX[j]->Direction = Projectile->Orientation^-1;
-				Projectile->GraphicFX[j]->Speed = 2.5f;
+			for (auto tmpGFX : Projectile->GraphicFX) {
+				tmpGFX->Direction = Projectile->Orientation ^ -1;
+				tmpGFX->Speed = 2.5f;
 			}
 			Projectile->ObjectStatus = ObjectStatus;
 			// учитываем пенальти

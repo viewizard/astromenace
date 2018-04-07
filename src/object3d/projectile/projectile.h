@@ -89,7 +89,6 @@ public:
 	float		MineNextFireTime{1.0f};
 
 	// для прорисовки графических эффектов
-	int		GraphicFXQuantity{0}; // FIXME remove, we have std::vector::size() now
 	// тип, как будем удалять -сразу, или глушить
 	bool		GraphicFXDestroyType{false};
 	std::vector<sVECTOR3D> GraphicFXLocation{};
