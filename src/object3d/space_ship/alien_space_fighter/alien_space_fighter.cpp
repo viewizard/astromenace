@@ -30,8 +30,8 @@
 
 struct sAlienSpaceFighterData {
 
-	int		WeaponQuantity;
-	int		EngineQuantity;
+	unsigned int WeaponQuantity;
+	unsigned int EngineQuantity;
 	float	Strength;
 	float	ShieldStrength;
 	const	char *Name;
@@ -90,7 +90,7 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	ShieldRecharge = ShieldStrengthStart/10.0f;
 
 	WeaponQuantity = PresetAlienSpaceFighterData[SpaceShipNum-1].WeaponQuantity;
-	EngineQuantity = PresetAlienSpaceFighterData[SpaceShipNum-1].EngineQuantity;
+	unsigned int EngineQuantity = PresetAlienSpaceFighterData[SpaceShipNum - 1].EngineQuantity;
 
 
 	LoadObjectData(PresetAlienSpaceFighterData[SpaceShipNum-1].Name, this, 0, 2.0f);
@@ -673,7 +673,7 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 		return;
 	}
 
-	for (int i=0; i< EngineQuantity; i++) {
+	for (unsigned int i = 0; i < EngineQuantity; i++) {
 		Engine[i]->SetStartLocation(EngineLocation[i]);
 		// находим кол-во внутренних источников света
 		if (!Engine[i]->Light.expired())

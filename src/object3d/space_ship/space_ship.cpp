@@ -122,17 +122,13 @@ cSpaceShip::~cSpaceShip()
 		WeaponFlare = nullptr;
 	}
 
-	if (!Engine.empty()) {
-		for (int i = 0; i < EngineQuantity; i++) {
-			if (Engine[i] != nullptr) {
-				if (!EngineDestroyType) {
-					Engine[i]->IsSuppressed = true;
-					Engine[i]->DestroyIfNoParticles = true;
-				} else {
-					vw_ReleaseParticleSystem(Engine[i]);
-					Engine[i] = nullptr;
-				}
-			}
+	for (auto tmpEngine : Engine) {
+		if (tmpEngine) {
+			if (!EngineDestroyType) {
+				tmpEngine->IsSuppressed = true;
+				tmpEngine->DestroyIfNoParticles = true;
+			} else
+				vw_ReleaseParticleSystem(tmpEngine);
 		}
 	}
 
@@ -203,13 +199,12 @@ void cSpaceShip::SetLocation(sVECTOR3D NewLocation)
 
 
 	// положение двигателей
-	if (!Engine.empty())
-		for (int i = 0; i < EngineQuantity; i++) {
-			if (Engine[i] != nullptr) {
-				Engine[i]->MoveSystem(NewLocation + EngineLocation[i]);
-				Engine[i]->SetStartLocation(EngineLocation[i] + NewLocation);
-			}
+	for (unsigned int i = 0; i < Engine.size(); i++) {
+		if (Engine[i]) {
+			Engine[i]->MoveSystem(NewLocation + EngineLocation[i]);
+			Engine[i]->SetStartLocation(EngineLocation[i] + NewLocation);
 		}
+	}
 	if (!EngineLeft.empty())
 		for (int i = 0; i < EngineLeftQuantity; i++) {
 			if (EngineLeft[i] != nullptr) {
@@ -253,12 +248,12 @@ void cSpaceShip::SetLocationArcadePlayer(sVECTOR3D NewLocation)
 
 
 	// положение двигателей
-	if (!Engine.empty())
-		for (int i = 0; i < EngineQuantity; i++)
-			if (Engine[i] != nullptr) {
-				Engine[i]->MoveSystem(NewLocation + EngineLocation[i]);
-				Engine[i]->SetStartLocation(NewLocation + EngineLocation[i]);
-			}
+	for (unsigned int i = 0; i < Engine.size(); i++) {
+		if (Engine[i] != nullptr) {
+			Engine[i]->MoveSystem(NewLocation + EngineLocation[i]);
+			Engine[i]->SetStartLocation(NewLocation + EngineLocation[i]);
+		}
+	}
 	if (!EngineLeft.empty())
 		for (int i = 0; i < EngineLeftQuantity; i++)
 			if (EngineLeft[i] != nullptr) {
@@ -324,22 +319,21 @@ void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 
 
 	// двигатели
-	if (!Engine.empty())
-		for (int i = 0; i < EngineQuantity; i++) {
-			vw_Matrix33CalcPoint(EngineLocation[i], OldInvRotationMat);
-			vw_Matrix33CalcPoint(EngineLocation[i], CurrentRotationMat);
+	for (unsigned int i = 0; i < Engine.size(); i++) {
+		vw_Matrix33CalcPoint(EngineLocation[i], OldInvRotationMat);
+		vw_Matrix33CalcPoint(EngineLocation[i], CurrentRotationMat);
 
-			if (Engine[i] != nullptr) {
-				if (Engine[i]->SpeedOnCreation == -1.0f) {
-					Engine[i]->MoveSystem(EngineLocation[i] + Location);
-					Engine[i]->SetStartLocation(EngineLocation[i] + Location);
-					Engine[i]->RotateSystemAndParticlesByAngle(Rotation);
-				} else {
-					Engine[i]->MoveSystemLocation(EngineLocation[i] + Location);
-					Engine[i]->RotateSystemByAngle(Rotation);
-				}
+		if (Engine[i]) {
+			if (Engine[i]->SpeedOnCreation == -1.0f) {
+				Engine[i]->MoveSystem(EngineLocation[i] + Location);
+				Engine[i]->SetStartLocation(EngineLocation[i] + Location);
+				Engine[i]->RotateSystemAndParticlesByAngle(Rotation);
+			} else {
+				Engine[i]->MoveSystemLocation(EngineLocation[i] + Location);
+				Engine[i]->RotateSystemByAngle(Rotation);
 			}
 		}
+	}
 	if (!EngineLeft.empty())
 		for (int i = 0; i < EngineLeftQuantity; i++) {
 			vw_Matrix33CalcPoint(EngineLeftLocation[i], OldInvRotationMat);
@@ -1190,10 +1184,9 @@ bool cSpaceShip::Update(float Time)
 			tmpSpeed=-6.0f;
 		tmpSpeed/=2.0f;
 
-		for (int i = 0; i < EngineQuantity; i++) {
-			if ((Engine[i] != nullptr) &&
-			    (Engine[i]->SpeedOnCreation != -1.0f))
-				Engine[i]->Speed = Engine[i]->SpeedOnCreation + tmpSpeed;
+		for (auto tmpEngine : Engine) {
+			if (tmpEngine && (tmpEngine->SpeedOnCreation != -1.0f))
+				tmpEngine->Speed = tmpEngine->SpeedOnCreation + tmpSpeed;
 		}
 	}
 

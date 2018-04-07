@@ -345,13 +345,11 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoFighter->Height;
 		InfoObjectStrength = InfoFighter->StrengthStart;
 		InfoObjectWeaponQuantity = InfoFighter->WeaponQuantity;
-		InfoObjectEngineQuantity = InfoFighter->EngineQuantity;
+		InfoObjectEngineQuantity = InfoFighter->Engine.size();
 
-		if (!InfoFighter->Engine.empty()) {
-			for (int i = 0; i < InfoFighter->EngineQuantity; i++) {
-				if (InfoFighter->Engine[i] != nullptr)
-					InfoFighter->Engine[i]->SpeedOnCreation = -1.0f;
-			}
+		for (auto tmpEngine : InfoFighter->Engine) {
+			if (tmpEngine)
+				tmpEngine->SpeedOnCreation = -1.0f;
 		}
 
 		InfoFighter->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
@@ -436,11 +434,9 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoAlien->Height;
 		InfoObjectStrength = InfoAlien->StrengthStart;
 
-		if (!InfoAlien->Engine.empty()) {
-			for (int i = 0; i < InfoAlien->EngineQuantity; i++) {
-				if (InfoAlien->Engine[i] != nullptr)
-					InfoAlien->Engine[i]->SpeedOnCreation = -1.0f;
-			}
+		for (auto tmpEngine : InfoAlien->Engine) {
+			if (tmpEngine)
+				tmpEngine->SpeedOnCreation = -1.0f;
 		}
 
 		InfoAlien->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
@@ -467,11 +463,9 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoAlienMotherShip->Height;
 		InfoObjectStrength = InfoAlienMotherShip->StrengthStart;
 
-		if (!InfoAlienMotherShip->Engine.empty()) {
-			for (int i = 0; i < InfoAlienMotherShip->EngineQuantity; i++) {
-				if (InfoAlienMotherShip->Engine[i] != nullptr)
-					InfoAlienMotherShip->Engine[i]->SpeedOnCreation = -1.0f;
-			}
+		for (auto tmpEngine : InfoAlienMotherShip->Engine) {
+			if (tmpEngine)
+				tmpEngine->SpeedOnCreation = -1.0f;
 		}
 
 		InfoAlienMotherShip->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
@@ -498,11 +492,9 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoPirateShip->Height;
 		InfoObjectStrength = InfoPirateShip->StrengthStart;
 
-		if (!InfoPirateShip->Engine.empty()) {
-			for (int i = 0; i < InfoPirateShip->EngineQuantity; i++) {
-				if (InfoPirateShip->Engine[i] != nullptr)
-					InfoPirateShip->Engine[i]->SpeedOnCreation = -1.0f;
-			}
+		for (auto tmpEngine : InfoPirateShip->Engine) {
+			if (tmpEngine)
+				tmpEngine->SpeedOnCreation = -1.0f;
 		}
 
 		// убираем поворот турелей

@@ -30,9 +30,9 @@
 
 struct sAlienSpaceMotherShipData {
 
-	int		WeaponQuantity;
-	int		BossWeaponQuantity;
-	int		EngineQuantity;
+	unsigned int WeaponQuantity;
+	unsigned int BossWeaponQuantity;
+	unsigned int EngineQuantity;
 	float	Strength;
 	float	ShieldStrength;
 	const	char *Name;
@@ -85,7 +85,7 @@ void cAlienSpaceMotherShip::Create(int	SpaceShipNum)
 
 	WeaponQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum-1].WeaponQuantity;
 	BossWeaponQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum-1].BossWeaponQuantity;
-	EngineQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum-1].EngineQuantity;
+	unsigned int EngineQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum - 1].EngineQuantity;
 
 
 	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Name, this, 0, 2.0f, Setup.UseGLSL);
@@ -856,7 +856,7 @@ void cAlienSpaceMotherShip::Create(int	SpaceShipNum)
 		return;
 	}
 
-	for (int i = 0; i < EngineQuantity; i++) {
+	for (unsigned int i = 0; i < EngineQuantity; i++) {
 		Engine[i]->SetStartLocation(EngineLocation[i]);
 		// находим кол-во внутренних источников света
 		if (!Engine[i]->Light.expired())

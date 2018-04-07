@@ -321,11 +321,12 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 {
 	// если нужен сброс установки двигателя
 	if (EngineType == 0) {
-		for (int i = 0; i < SpaceShip->EngineQuantity; i++)
-			if (SpaceShip->Engine[i] != nullptr) {
-				vw_ReleaseParticleSystem(SpaceShip->Engine[i]);
-				SpaceShip->Engine[i] = nullptr;
+		for (auto tmpEngine : SpaceShip->Engine) {
+			if (tmpEngine) {
+				vw_ReleaseParticleSystem(tmpEngine);
+				tmpEngine = nullptr;
 			}
+		}
 
 		for (int i = 0; i < SpaceShip->EngineLeftQuantity; i++)
 			if (SpaceShip->EngineLeft[i] != nullptr) {
@@ -346,11 +347,9 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 	}
 
 
-	for (int i = 0; i < SpaceShip->EngineQuantity; i++) {
-		if (SpaceShip->Engine[i] != nullptr) {
+	for (unsigned int i = 0; i < SpaceShip->Engine.size(); i++) {
+		if (SpaceShip->Engine[i])
 			vw_ReleaseParticleSystem(SpaceShip->Engine[i]);
-			SpaceShip->Engine[i] = nullptr;
-		}
 		SpaceShip->Engine[i] = vw_CreateParticleSystem();
 
 		CreateSpaceShipEngine(SpaceShip->Engine[i], EngineType);
@@ -388,9 +387,9 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 
 
 	// параметрами игрока управляем в другом месте!!!! пользуй поиск
-	SpaceShip->MaxSpeed = GetEnginePower(EngineType)*SpaceShip->EngineQuantity - SpaceShip->Weight/1000.0f;
-	SpaceShip->MaxAcceler = GetEngineAcceleration(EngineType)*SpaceShip->EngineQuantity - SpaceShip->Weight/1000.0f;
-	SpaceShip->MaxSpeedRotate = GetEngineRotatePower(EngineType)*SpaceShip->EngineQuantity - SpaceShip->Weight/1000.0f;
+	SpaceShip->MaxSpeed = GetEnginePower(EngineType) * SpaceShip->Engine.size() - SpaceShip->Weight / 1000.0f;
+	SpaceShip->MaxAcceler = GetEngineAcceleration(EngineType) * SpaceShip->Engine.size() - SpaceShip->Weight / 1000.0f;
+	SpaceShip->MaxSpeedRotate = GetEngineRotatePower(EngineType) * SpaceShip->Engine.size() - SpaceShip->Weight / 1000.0f;
 
 
 	if (SpaceShip->MaxSpeed <= 0.5f)

@@ -179,10 +179,8 @@ public:
 	// расположение оружия на коробле (относительное)
 	sVECTOR3D	WeaponFlareLocation{0.0f, 0.0f, 0.0f};
 
-	// кол-во двигателей
-	int		EngineQuantity{0}; // FIXME remove, we have std::vector::size() now
 	// тип, как будем удалять двигатели -сразу, или глушить
-	bool		EngineDestroyType{false};
+	bool EngineDestroyType{false};
 	std::vector<cParticleSystem*> Engine{}; // двигатели
 	std::vector<sVECTOR3D> EngineLocation{}; // положение двигателей
 

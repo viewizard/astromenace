@@ -465,8 +465,8 @@ void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max)
 struct sEarthSpaceFighterData {
 	float	Weight;
 	float	Strength;
-	int		WeaponQuantity;
-	int		EngineQuantity;
+	unsigned int WeaponQuantity;
+	unsigned int EngineQuantity;
 	const char *Name;
 };
 
@@ -525,7 +525,7 @@ void cEarthSpaceFighter::Create(int	SpaceShipNum)
 	Weight = PresetEarthSpaceFighterData[SpaceShipNum-1].Weight;
 	Strength = StrengthStart = PresetEarthSpaceFighterData[SpaceShipNum-1].Strength/GameNPCArmorPenalty;
 	WeaponQuantity = PresetEarthSpaceFighterData[SpaceShipNum-1].WeaponQuantity;
-	EngineQuantity = PresetEarthSpaceFighterData[SpaceShipNum-1].EngineQuantity;
+	unsigned int EngineQuantity = PresetEarthSpaceFighterData[SpaceShipNum - 1].EngineQuantity;
 	EngineLeftQuantity = 1;
 	EngineRightQuantity = 1;
 	LoadObjectData(PresetEarthSpaceFighterData[SpaceShipNum-1].Name, this, 0, 2.0f);
@@ -928,7 +928,7 @@ void cEarthSpaceFighter::Create(int	SpaceShipNum)
 		MaxAcceler = 4.5f;
 		MaxSpeedRotate = 4.5f;*/
 
-	for (int i = 0; i < EngineQuantity; i++) {
+	for (unsigned int i = 0; i < EngineQuantity; i++) {
 		// находим кол-во внутренних источников света
 		if (!Engine[i]->Light.expired())
 			InternalLights++;

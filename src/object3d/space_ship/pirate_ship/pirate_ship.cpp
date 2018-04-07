@@ -29,9 +29,9 @@
 
 
 struct sPirateShipData {
-	int		WeaponQuantity;
-	int		BossWeaponQuantity;
-	int		EngineQuantity;
+	unsigned int WeaponQuantity;
+	unsigned int BossWeaponQuantity;
+	unsigned int EngineQuantity;
 	float	Strength;
 	const	char *Name;
 	const	char *TextureName;
@@ -91,7 +91,7 @@ void cPirateShip::Create(int PirateShipNum)
 	Strength = StrengthStart = PresetPirateShipData[PirateShipNum-1].Strength/GameNPCArmorPenalty;
 	WeaponQuantity = PresetPirateShipData[PirateShipNum-1].WeaponQuantity;
 	BossWeaponQuantity = PresetPirateShipData[PirateShipNum-1].BossWeaponQuantity;
-	EngineQuantity = PresetPirateShipData[PirateShipNum-1].EngineQuantity;
+	unsigned int EngineQuantity = PresetPirateShipData[PirateShipNum - 1].EngineQuantity;
 
 
 	LoadObjectData(PresetPirateShipData[PirateShipNum-1].Name, this, 0, 2.0f, PresetPirateShipData[PirateShipNum-1].NeedTangentAndBinormal && Setup.UseGLSL);
@@ -653,7 +653,7 @@ void cPirateShip::Create(int PirateShipNum)
 	}
 
 
-	for (int i = 0; i < EngineQuantity; i++) {
+	for (unsigned int i = 0; i < EngineQuantity; i++) {
 		Engine[i]->SetStartLocation(EngineLocation[i]);
 		// находим кол-во внутренних источников света
 		if (!Engine[i]->Light.expired())

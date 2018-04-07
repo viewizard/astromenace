@@ -1016,11 +1016,10 @@ void GamePlayerShip()
 			PlayerFighter->MaxAcceler = 0.0f;
 			PlayerFighter->MaxSpeedRotate = 0.0f;
 			// глушим двигатели
-			if (!PlayerFighter->Engine.empty())
-				for (int i=0; i<PlayerFighter->EngineQuantity; i++) {
-					if (PlayerFighter->Engine[i] != nullptr)
-						PlayerFighter->Engine[i]->IsSuppressed = true;
-				}
+			for (auto tmpEngine : PlayerFighter->Engine) {
+				if (tmpEngine)
+					tmpEngine->IsSuppressed = true;
+			}
 			if (!PlayerFighter->EngineLeft.empty())
 				for (int i=0; i<PlayerFighter->EngineLeftQuantity; i++) {
 					if (PlayerFighter->EngineLeft[i] != nullptr)
@@ -1036,11 +1035,10 @@ void GamePlayerShip()
 			PlayerFighter->MaxAcceler = GetEngineAcceleration(GameEngineSystem)*2.0f - PlayerFighter->Weight/1000.0f;
 			PlayerFighter->MaxSpeedRotate = GetEngineRotatePower(GameEngineSystem)*2.0f - PlayerFighter->Weight/1000.0f;
 			// запускаем прорисовку
-			if (!PlayerFighter->Engine.empty())
-				for (int i=0; i<PlayerFighter->EngineQuantity; i++) {
-					if (PlayerFighter->Engine[i] != nullptr)
-						PlayerFighter->Engine[i]->IsSuppressed = false;
-				}
+			for (auto tmpEngine : PlayerFighter->Engine) {
+				if (tmpEngine)
+					tmpEngine->IsSuppressed = false;
+			}
 			if (!PlayerFighter->EngineLeft.empty())
 				for (int i=0; i<PlayerFighter->EngineLeftQuantity; i++) {
 					if (PlayerFighter->EngineLeft[i] != nullptr)
