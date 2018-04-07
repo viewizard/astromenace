@@ -56,8 +56,8 @@ public:
 	sVECTOR3D	LastCameraPoint{0.0f, 0.0f, 0.0f};
 
 	// эффекты
-	std::vector<sVECTOR3D> GFXLocation{};
-	std::vector<cParticleSystem*> GFX{};
+	std::vector<sVECTOR3D> GraphicFXLocation{};
+	std::vector<cParticleSystem*> GraphicFX{};
 
 	// чтобы возрвать часть корабля босса пришельцев через время
 	float		BossPartCountDown{-1.0f};

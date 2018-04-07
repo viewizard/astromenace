@@ -74,34 +74,34 @@ case1next:
 		Texture[2] = vw_FindTextureByName("models/spacebase/metal.tga");
 		TextureIllum[2] = 0;
 
-		GFXLocation.resize(8);
-		GFX.resize(8, nullptr);
+		GraphicFXLocation.resize(8);
+		GraphicFX.resize(8, nullptr);
 
-		GFX[0] = vw_CreateParticleSystem();
-		GFXLocation[0] = sVECTOR3D(14.3f, -4.0f, -14.3f);
-		SetSpaceObjectGFX(GFX[0], 1);
-		GFX[1] = vw_CreateParticleSystem();
-		GFXLocation[1] = sVECTOR3D(14.3f, -4.0f, 14.3f);
-		SetSpaceObjectGFX(GFX[1], 1);
-		GFX[2] = vw_CreateParticleSystem();
-		GFXLocation[2] = sVECTOR3D(-14.3f, -4.0f, -14.3f);
-		SetSpaceObjectGFX(GFX[2], 1);
-		GFX[3] = vw_CreateParticleSystem();
-		GFXLocation[3] = sVECTOR3D(-14.3f, -4.0f, 14.3f);
-		SetSpaceObjectGFX(GFX[3], 1);
+		GraphicFX[0] = vw_CreateParticleSystem();
+		GraphicFXLocation[0] = sVECTOR3D(14.3f, -4.0f, -14.3f);
+		SetSpaceObjectGFX(GraphicFX[0], 1);
+		GraphicFX[1] = vw_CreateParticleSystem();
+		GraphicFXLocation[1] = sVECTOR3D(14.3f, -4.0f, 14.3f);
+		SetSpaceObjectGFX(GraphicFX[1], 1);
+		GraphicFX[2] = vw_CreateParticleSystem();
+		GraphicFXLocation[2] = sVECTOR3D(-14.3f, -4.0f, -14.3f);
+		SetSpaceObjectGFX(GraphicFX[2], 1);
+		GraphicFX[3] = vw_CreateParticleSystem();
+		GraphicFXLocation[3] = sVECTOR3D(-14.3f, -4.0f, 14.3f);
+		SetSpaceObjectGFX(GraphicFX[3], 1);
 		//----
-		GFX[4] = vw_CreateParticleSystem();
-		GFXLocation[4] = sVECTOR3D(14.3f, 3.2f, -14.3f);
-		SetSpaceObjectGFX(GFX[4], 2);
-		GFX[5] = vw_CreateParticleSystem();
-		GFXLocation[5] = sVECTOR3D(14.3f, 3.2f, 14.3f);
-		SetSpaceObjectGFX(GFX[5], 2);
-		GFX[6] = vw_CreateParticleSystem();
-		GFXLocation[6] = sVECTOR3D(-14.3f, 3.2f, -14.3f);
-		SetSpaceObjectGFX(GFX[6], 2);
-		GFX[7] = vw_CreateParticleSystem();
-		GFXLocation[7] = sVECTOR3D(-14.3f, 3.2f, 14.3f);
-		SetSpaceObjectGFX(GFX[7], 2);
+		GraphicFX[4] = vw_CreateParticleSystem();
+		GraphicFXLocation[4] = sVECTOR3D(14.3f, 3.2f, -14.3f);
+		SetSpaceObjectGFX(GraphicFX[4], 2);
+		GraphicFX[5] = vw_CreateParticleSystem();
+		GraphicFXLocation[5] = sVECTOR3D(14.3f, 3.2f, 14.3f);
+		SetSpaceObjectGFX(GraphicFX[5], 2);
+		GraphicFX[6] = vw_CreateParticleSystem();
+		GraphicFXLocation[6] = sVECTOR3D(-14.3f, 3.2f, -14.3f);
+		SetSpaceObjectGFX(GraphicFX[6], 2);
+		GraphicFX[7] = vw_CreateParticleSystem();
+		GraphicFXLocation[7] = sVECTOR3D(-14.3f, 3.2f, 14.3f);
+		SetSpaceObjectGFX(GraphicFX[7], 2);
 		break;
 
 	case 21:
@@ -138,16 +138,16 @@ case2next:
 		Texture[1] = vw_FindTextureByName("models/spacebase/allalpha.tga");
 		TextureIllum[1] = 0;
 
-		GFXLocation.resize(2);
-		GFX.resize(2, nullptr);
+		GraphicFXLocation.resize(2);
+		GraphicFX.resize(2, nullptr);
 
-		GFX[0] = vw_CreateParticleSystem();
-		GFXLocation[0] = sVECTOR3D(0.0f, -5.0f, 13.7f);
-		SetSpaceObjectGFX(GFX[0], 1);
+		GraphicFX[0] = vw_CreateParticleSystem();
+		GraphicFXLocation[0] = sVECTOR3D(0.0f, -5.0f, 13.7f);
+		SetSpaceObjectGFX(GraphicFX[0], 1);
 		//----
-		GFX[1] = vw_CreateParticleSystem();
-		GFXLocation[1] = sVECTOR3D(0.0f, 5.0f, 13.7f);
-		SetSpaceObjectGFX(GFX[1], 2);
+		GraphicFX[1] = vw_CreateParticleSystem();
+		GraphicFXLocation[1] = sVECTOR3D(0.0f, 5.0f, 13.7f);
+		SetSpaceObjectGFX(GraphicFX[1], 2);
 		break;
 
 	case 4:
