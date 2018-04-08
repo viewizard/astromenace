@@ -60,9 +60,9 @@ cExplosion::~cExplosion()
 	}
 
 	for (auto tmpGFX : GraphicFX) {
-		if (tmpGFX) {
-			tmpGFX->IsSuppressed = true;
-			tmpGFX->DestroyIfNoParticles = true;
+		if (auto sharedGFX = tmpGFX.lock()) {
+			sharedGFX->IsSuppressed = true;
+			sharedGFX->DestroyIfNoParticles = true;
 		}
 	}
 
@@ -87,15 +87,14 @@ bool cExplosion::Update(float Time)
 	if (!::cObject3D::Update(Time)) {
 		// делаем правильную остановку частиц...
 		for (auto tmpGFX : GraphicFX) {
-			if (tmpGFX) {
-				tmpGFX->StopAllParticles();
+			if (auto sharedGFX = tmpGFX.lock()) {
+				sharedGFX->StopAllParticles();
 
 				if (!(ExplosionTypeByClass == 2 && (ExplosionType == 16 || ExplosionType == 17
 								    || ExplosionType == 18 || ExplosionType == 19
 								    || ExplosionType == 205 || ExplosionType == 206
 								    || ExplosionType == 209 || ExplosionType == 210))) {
-					vw_ReleaseParticleSystem(tmpGFX);
-					tmpGFX = nullptr;
+					vw_ReleaseParticleSystem(sharedGFX);
 				}
 			}
 		}
@@ -118,10 +117,12 @@ bool cExplosion::Update(float Time)
 					   || ExplosionType == -214 || ExplosionType == -215 || ExplosionType == -216
 					   || ExplosionType == -217))) {
 		for (auto tmpGFX : GraphicFX) {
-			if (tmpGFX && (Lifetime < tmpGFX->Life)) {
-				// только говорим, чтобы больше не создавал частиц!!!
-				// не удаляем и не зануляем - иначе не сможем им управлять
-				tmpGFX->IsSuppressed = true;
+			if (auto sharedGFX = tmpGFX.lock()) {
+				if (Lifetime < sharedGFX->Life) {
+					// только говорим, чтобы больше не создавал частиц!!!
+					// не удаляем и не зануляем - иначе не сможем им управлять
+					sharedGFX->IsSuppressed = true;
+				}
 			}
 		}
 	}
@@ -129,23 +130,30 @@ bool cExplosion::Update(float Time)
 	// работа с эффектами
 	if (ExplosionTypeByClass == 2) {
 		if (ExplosionType == 16 || ExplosionType == 17 || ExplosionType == 205 || ExplosionType == 206) {
-			GraphicFX[0]->CreationSize.x -= GraphicFX[0]->CreationSize.x*TimeDelta;
-			GraphicFX[0]->CreationSize.z -= GraphicFX[0]->CreationSize.z*TimeDelta;
-			GraphicFX[0]->DeadZone -= GraphicFX[0]->DeadZone*TimeDelta;
+			if (auto sharedGFX = GraphicFX[0].lock()) {
+				sharedGFX->CreationSize.x -= sharedGFX->CreationSize.x * TimeDelta;
+				sharedGFX->CreationSize.z -= sharedGFX->CreationSize.z * TimeDelta;
+				sharedGFX->DeadZone -= sharedGFX->DeadZone * TimeDelta;
+			}
 		}
 		if (ExplosionType == 18 || ExplosionType == 209) {
-			GraphicFX[0]->CreationSize.x -= GraphicFX[0]->CreationSize.x*TimeDelta;
-			GraphicFX[0]->CreationSize.z -= GraphicFX[0]->CreationSize.z*TimeDelta;
-			GraphicFX[0]->DeadZone -= GraphicFX[0]->DeadZone*TimeDelta;
+			if (auto sharedGFX = GraphicFX[0].lock()) {
+				sharedGFX->CreationSize.x -= sharedGFX->CreationSize.x * TimeDelta;
+				sharedGFX->CreationSize.z -= sharedGFX->CreationSize.z * TimeDelta;
+				sharedGFX->DeadZone -= sharedGFX->DeadZone * TimeDelta;
+			}
 		}
 		if (ExplosionType == 19 || ExplosionType == 210) {
-			GraphicFX[0]->CreationSize.x += 10.0f*TimeDelta;
-			GraphicFX[0]->CreationSize.z += 10.0f*TimeDelta;
-			GraphicFX[0]->DeadZone += 10.0f*TimeDelta;
-
-			GraphicFX[1]->CreationSize.x -= GraphicFX[1]->CreationSize.x*TimeDelta;
-			GraphicFX[1]->CreationSize.z -= GraphicFX[1]->CreationSize.z*TimeDelta;
-			GraphicFX[1]->DeadZone -= GraphicFX[1]->DeadZone*TimeDelta;
+			if (auto sharedGFX = GraphicFX[0].lock()) {
+				sharedGFX->CreationSize.x += 10.0f * TimeDelta;
+				sharedGFX->CreationSize.z += 10.0f * TimeDelta;
+				sharedGFX->DeadZone += 10.0f * TimeDelta;
+			}
+			if (auto sharedGFX = GraphicFX[1].lock()) {
+				sharedGFX->CreationSize.x -= sharedGFX->CreationSize.x * TimeDelta;
+				sharedGFX->CreationSize.z -= sharedGFX->CreationSize.z * TimeDelta;
+				sharedGFX->DeadZone -= sharedGFX->DeadZone * TimeDelta;
+			}
 		}
 	}
 
@@ -307,21 +315,21 @@ bool cExplosion::Update(float Time)
 
 	// перемещаем эффекты
 	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
-		if (GraphicFX[i]) {
-			sVECTOR3D tmpLocation{GraphicFX[i]->GetLocation()};
+		if (auto sharedGFX = GraphicFX[i].lock()) {
+			sVECTOR3D tmpLocation{sharedGFX->GetLocation()};
 			tmpLocation += TMP2;
 
 			// взрыв пришельцев
 			if ((ExplosionTypeByClass == 1) && (ExplosionType == 2)) {
 				if (i == 1)
-					GraphicFX[i]->MoveSystemLocation(tmpLocation);
+					sharedGFX->MoveSystemLocation(tmpLocation);
 				else
-					GraphicFX[i]->MoveSystem(tmpLocation);
+					sharedGFX->MoveSystem(tmpLocation);
 			} else
-				GraphicFX[i]->MoveSystem(tmpLocation);
+				sharedGFX->MoveSystem(tmpLocation);
 
 			// всегда подтягиваем данные
-			GraphicFX[i]->SetStartLocation(tmpLocation);
+			sharedGFX->SetStartLocation(tmpLocation);
 		}
 	}
 

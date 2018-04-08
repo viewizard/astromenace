@@ -33,7 +33,7 @@
 //-----------------------------------------------------------------------------
 // Создание графического эффекта
 //-----------------------------------------------------------------------------
-void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum)
+void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNum)
 {
 
 	ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");

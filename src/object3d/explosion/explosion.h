@@ -80,7 +80,7 @@ public:
 	float		AABBSpeed{0.0f};
 
 	// для прорисовки графических эффектов
-	std::vector<cParticleSystem*> GraphicFX{};
+	std::vector<std::weak_ptr<cParticleSystem>> GraphicFX{};
 
 	// для собственного списка
 	cExplosion	*Next{nullptr};
@@ -116,7 +116,7 @@ void	ReleaseAllExplosion();
 //-----------------------------------------------------------------------------
 // Дополнительные функции
 //-----------------------------------------------------------------------------
-void SetExplosionGFX(cParticleSystem *ParticleSystem, int GFXNum);
+void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNum);
 
 
 

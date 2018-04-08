@@ -55,9 +55,9 @@ cSpaceObject::~cSpaceObject()
 {
 	if (!GraphicFX.empty()) {
 		for (auto tmpGFX : GraphicFX) {
-			if (tmpGFX) {
-				tmpGFX->IsSuppressed = true;
-				tmpGFX->DestroyIfNoParticles = true;
+			if (auto sharedGFX = tmpGFX.lock()) {
+				sharedGFX->IsSuppressed = true;
+				sharedGFX->DestroyIfNoParticles = true;
 			}
 		}
 	}
@@ -84,9 +84,9 @@ void cSpaceObject::SetLocation(sVECTOR3D NewLocation)
 
 	if (!GraphicFX.empty()) {
 		for (unsigned int i = 0; i < GraphicFX.size(); i++) {
-			if (GraphicFX[i]) {
-				GraphicFX[i]->MoveSystem(NewLocation + GraphicFXLocation[i]);
-				GraphicFX[i]->SetStartLocation(GraphicFXLocation[i] + NewLocation);
+			if (auto sharedGFX = GraphicFX[i].lock()) {
+				sharedGFX->MoveSystem(NewLocation + GraphicFXLocation[i]);
+				sharedGFX->SetStartLocation(GraphicFXLocation[i] + NewLocation);
 			}
 		}
 	}
@@ -105,17 +105,17 @@ void cSpaceObject::SetRotation(sVECTOR3D NewRotation)
 
 	if (!GraphicFX.empty()) {
 		for (unsigned int i = 0; i < GraphicFX.size(); i++) {
-			if (GraphicFX[i]) {
+			if (auto sharedGFX = GraphicFX[i].lock()) {
 				vw_Matrix33CalcPoint(GraphicFXLocation[i], OldInvRotationMat);
 				vw_Matrix33CalcPoint(GraphicFXLocation[i], CurrentRotationMat);
 
-				if (GraphicFX[i]->SpeedOnCreation == -1.0f) {
-					GraphicFX[i]->MoveSystem(GraphicFXLocation[i] + Location);
-					GraphicFX[i]->SetStartLocation(GraphicFXLocation[i] + Location);
-					GraphicFX[i]->RotateSystemAndParticlesByAngle(Rotation);
+				if (sharedGFX->SpeedOnCreation == -1.0f) {
+					sharedGFX->MoveSystem(GraphicFXLocation[i] + Location);
+					sharedGFX->SetStartLocation(GraphicFXLocation[i] + Location);
+					sharedGFX->RotateSystemAndParticlesByAngle(Rotation);
 				} else {
-					GraphicFX[i]->MoveSystemLocation(GraphicFXLocation[i] + Location);
-					GraphicFX[i]->RotateSystemByAngle(Rotation);
+					sharedGFX->MoveSystemLocation(GraphicFXLocation[i] + Location);
+					sharedGFX->RotateSystemByAngle(Rotation);
 				}
 			}
 		}

@@ -101,13 +101,13 @@ public:
 	float	TargetVertObjectNeedAngle{0.0f};
 
 	// выстрел - вылет частиц (засветка возле ствола)
-	cParticleSystem	*Fire{nullptr};
+	std::weak_ptr<cParticleSystem> Fire{};
 	sVECTOR3D	FireLocation{0.0f, 0.0f, 0.0f};
 	int		SoundNum{0}; // нужный номер
 
 	// если оружие уничтожено, делаем вырывающийся огонь
-	cParticleSystem	*DestroyedFire{nullptr};
-	cParticleSystem	*DestroyedSmoke{nullptr};
+	std::weak_ptr<cParticleSystem> DestroyedFire{};
+	std::weak_ptr<cParticleSystem> DestroyedSmoke{};
 	sVECTOR3D	DestroyedFireLocation{0.0f, 0.0f, 0.0f};
 
 	cWeapon	*Next{nullptr};
@@ -120,7 +120,7 @@ public:
 //-----------------------------------------------------------------------------
 
 // Установка нужных данных для вспышки возле ствола
-void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum);
+void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int WeaponNum);
 
 
 //-----------------------------------------------------------------------------

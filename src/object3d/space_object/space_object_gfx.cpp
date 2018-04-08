@@ -33,7 +33,7 @@
 //-----------------------------------------------------------------------------
 // Создание эффектов для космических объектов (двигатели для базы)
 //-----------------------------------------------------------------------------
-void SetSpaceObjectGFX(cParticleSystem *ParticleSystem, int GFXType)
+void SetSpaceObjectGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXType)
 {
 
 	ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");

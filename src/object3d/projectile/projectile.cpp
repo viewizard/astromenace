@@ -302,7 +302,7 @@ void cProjectile::Create(int ProjectileNum)
 
 	// начальные установки
 	GraphicFXLocation.resize(GraphicFXQuantity, sVECTOR3D{0.0f, 0.0f, 0.0f});
-	GraphicFX.resize(GraphicFXQuantity, nullptr);
+	GraphicFX.resize(GraphicFXQuantity);
 
 	if (ProjectileType == 1) {
 		Strength = StrengthStart = 1.0f;
@@ -315,74 +315,92 @@ void cProjectile::Create(int ProjectileNum)
 	// Kinetic
 	case 1:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 1);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 1);
 		break;
 	case 2:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 2);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 2);
 		break;
 	case 3:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 3);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 3);
 		break;
 	case 4:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 4);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 4);
 		break;
 	// Ion
 	case 5:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 5);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 5);
 		break;
 	case 6:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 6);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 6);
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 5);
-		GraphicFX[1]->CreationSize = sVECTOR3D(2.5f,2.5f,0.5f);
-		GraphicFX[1]->DeadZone = 1.9f;
+		if (auto sharedGFX = GraphicFX[1].lock()) {
+			SetProjectileGFX(sharedGFX, 5);
+			sharedGFX->CreationSize = sVECTOR3D(2.5f,2.5f,0.5f);
+			sharedGFX->DeadZone = 1.9f;
+		}
 		break;
 	case 7:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 12);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 12);
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 5);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetProjectileGFX(sharedGFX, 5);
 		break;
 	// Plasma
 	case 8:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 7);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 7);
 		break;
 	case 9:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 10);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 10);
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 8);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetProjectileGFX(sharedGFX, 8);
 		GraphicFX[2] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[2], 9);
+		if (auto sharedGFX = GraphicFX[2].lock())
+			SetProjectileGFX(sharedGFX, 9);
 		break;
 	case 10:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 8);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 8);
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 9);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetProjectileGFX(sharedGFX, 9);
 		GraphicFX[2] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[2], 11);
+		if (auto sharedGFX = GraphicFX[2].lock())
+			SetProjectileGFX(sharedGFX, 11);
 		break;
 	// Maser
 	case 11:
-		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 17);
-		GraphicFX[0]->CreationSize = sVECTOR3D(0.8f,0.8f,100.0f);
 		ProjectileCenter = sVECTOR3D(0.0f,0.0f,50.0f);
 		NeedStopPartic = true;
-		{
-			float MinX = -GraphicFX[0]->CreationSize.x/2;
-			float MaxX = GraphicFX[0]->CreationSize.x/2;
-			float MinY = -GraphicFX[0]->CreationSize.y/2;
-			float MaxY = GraphicFX[0]->CreationSize.y/2;
-			float MinZ = -GraphicFX[0]->CreationSize.z/2;
-			float MaxZ = GraphicFX[0]->CreationSize.z/2;
+		GraphicFX[0] = vw_CreateParticleSystem();
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			SetProjectileGFX(sharedGFX, 17);
+			sharedGFX->CreationSize = sVECTOR3D(0.8f,0.8f,100.0f);
+
+			float MinX = -sharedGFX->CreationSize.x/2;
+			float MaxX = sharedGFX->CreationSize.x/2;
+			float MinY = -sharedGFX->CreationSize.y/2;
+			float MaxY = sharedGFX->CreationSize.y/2;
+			float MinZ = -sharedGFX->CreationSize.z/2;
+			float MaxZ = sharedGFX->CreationSize.z/2;
 			// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
 			OBB[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
 			OBB[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
@@ -399,21 +417,24 @@ void cProjectile::Create(int ProjectileNum)
 		}
 		break;
 	case 12:
-		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 17);
-		GraphicFX[0]->CreationSize = sVECTOR3D(0.8f,0.8f,110.0f);
-		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 18);
-		GraphicFX[1]->CreationSize = sVECTOR3D(1.6f,1.6f,110.0f);
 		ProjectileCenter = sVECTOR3D(0.0f,0.0f,55.0f);
 		NeedStopPartic = true;
-		{
-			float MinX = -GraphicFX[0]->CreationSize.x/2;
-			float MaxX = GraphicFX[0]->CreationSize.x/2;
-			float MinY = -GraphicFX[0]->CreationSize.y/2;
-			float MaxY = GraphicFX[0]->CreationSize.y/2;
-			float MinZ = -GraphicFX[0]->CreationSize.z/2;
-			float MaxZ = GraphicFX[0]->CreationSize.z/2;
+		GraphicFX[1] = vw_CreateParticleSystem();
+		if (auto sharedGFX = GraphicFX[1].lock()) {
+			SetProjectileGFX(sharedGFX, 18);
+			sharedGFX->CreationSize = sVECTOR3D(1.6f,1.6f,110.0f);
+		}
+		GraphicFX[0] = vw_CreateParticleSystem();
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			SetProjectileGFX(sharedGFX, 17);
+			sharedGFX->CreationSize = sVECTOR3D(0.8f,0.8f,110.0f);
+
+			float MinX = -sharedGFX->CreationSize.x/2;
+			float MaxX = sharedGFX->CreationSize.x/2;
+			float MinY = -sharedGFX->CreationSize.y/2;
+			float MaxY = sharedGFX->CreationSize.y/2;
+			float MinZ = -sharedGFX->CreationSize.z/2;
+			float MaxZ = sharedGFX->CreationSize.z/2;
 			// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
 			OBB[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
 			OBB[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
@@ -432,22 +453,24 @@ void cProjectile::Create(int ProjectileNum)
 	// Antimatter
 	case 13:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 19);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 19);
 		break;
 	// Laser
 	case 14:
-		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 20);
-		GraphicFX[0]->CreationSize = sVECTOR3D(0.4f,0.4f,120.0f);
 		ProjectileCenter = sVECTOR3D(0.0f,0.0f,60.0f);
 		NeedStopPartic = true;
-		{
-			float MinX = -GraphicFX[0]->CreationSize.x/2;
-			float MaxX = GraphicFX[0]->CreationSize.x/2;
-			float MinY = -GraphicFX[0]->CreationSize.y/2;
-			float MaxY = GraphicFX[0]->CreationSize.y/2;
-			float MinZ = -GraphicFX[0]->CreationSize.z/2;
-			float MaxZ = GraphicFX[0]->CreationSize.z/2;
+		GraphicFX[0] = vw_CreateParticleSystem();
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			SetProjectileGFX(sharedGFX, 20);
+			sharedGFX->CreationSize = sVECTOR3D(0.4f,0.4f,120.0f);
+
+			float MinX = -sharedGFX->CreationSize.x/2;
+			float MaxX = sharedGFX->CreationSize.x/2;
+			float MinY = -sharedGFX->CreationSize.y/2;
+			float MaxY = sharedGFX->CreationSize.y/2;
+			float MinZ = -sharedGFX->CreationSize.z/2;
+			float MaxZ = sharedGFX->CreationSize.z/2;
 			// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
 			OBB[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
 			OBB[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
@@ -466,7 +489,8 @@ void cProjectile::Create(int ProjectileNum)
 	// Gauss
 	case 15:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 21);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 21);
 		break;
 	// ракета
 	case 16:
@@ -474,12 +498,14 @@ void cProjectile::Create(int ProjectileNum)
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 13);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 13);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 101);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetProjectileGFX(sharedGFX, 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
 	// рой
@@ -488,14 +514,17 @@ void cProjectile::Create(int ProjectileNum)
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 16);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 16);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 101);
+		if (auto sharedGFX = GraphicFX[1].lock()) {
+			SetProjectileGFX(sharedGFX, 101);
+			sharedGFX->Life = 1.00f; // у роя слишком много ракет, если делать долгий шлейф - может просесть фпс
+		}
 		GraphicFXLocation[1] = GraphicFXLocation[0];
-		GraphicFX[1]->Life = 1.00f; // у роя слишком много ракет, если делать долгий шлейф - может просесть фпс
 		break;
 	// торпеда
 	case 18:
@@ -503,12 +532,14 @@ void cProjectile::Create(int ProjectileNum)
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 14);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 14);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 101);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetProjectileGFX(sharedGFX, 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
 	// бомба
@@ -517,12 +548,14 @@ void cProjectile::Create(int ProjectileNum)
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 15);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 15);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 101);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetProjectileGFX(sharedGFX, 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
 
@@ -538,78 +571,94 @@ void cProjectile::Create(int ProjectileNum)
 	// как Kinetic1
 	case 101:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 22);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 22);
 		break;
 	// с наведением, как Kinetic2
 	case 102:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 23);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 23);
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 102);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetProjectileGFX(sharedGFX, 102);
 		break;
 	// как Kinetic3
 	case 103:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 24);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 24);
 		break;
 	// с наведением, как Kinetic3
 	case 104:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 24);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 24);
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 102);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetProjectileGFX(sharedGFX, 102);
 		break;
 	// как Kinetic2
 	case 105:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 23);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 23);
 		break;
 	// энергетическая мина (1-й тип)
 	case 106:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 36);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 36);
 		break;
 	// энергетическая мина (2-й тип)
 	case 107:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 37);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 37);
 		break;
 	// как Plasma3
 	case 108:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 8);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 8);
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 9);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetProjectileGFX(sharedGFX, 9);
 		GraphicFX[2] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[2], 11);
+		if (auto sharedGFX = GraphicFX[2].lock())
+			SetProjectileGFX(sharedGFX, 11);
 		break;
 	// как Plasma2
 	case 109:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 10);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 10);
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 8);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetProjectileGFX(sharedGFX, 8);
 		GraphicFX[2] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[2], 9);
+		if (auto sharedGFX = GraphicFX[2].lock())
+			SetProjectileGFX(sharedGFX, 9);
 		break;
 	// как Laser
 	case 110:
-		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 38);
-		GraphicFX[0]->CreationSize = sVECTOR3D(2.0f,2.0f,110.0f);
 		ProjectileCenter = sVECTOR3D(0.0f,0.0f,55.0f);
 		NeedStopPartic = true;
-		{
-			float MinX = -GraphicFX[0]->CreationSize.x/2;
-			float MaxX = GraphicFX[0]->CreationSize.x/2;
-			float MinY = -GraphicFX[0]->CreationSize.y/2;
-			float MaxY = GraphicFX[0]->CreationSize.y/2;
-			float MinZ = -GraphicFX[0]->CreationSize.z/2;
-			float MaxZ = GraphicFX[0]->CreationSize.z/2;
+		GraphicFX[0] = vw_CreateParticleSystem();
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			SetProjectileGFX(sharedGFX, 38);
+			sharedGFX->CreationSize = sVECTOR3D(2.0f,2.0f,110.0f);
+
+			float MinX = -sharedGFX->CreationSize.x/2;
+			float MaxX = sharedGFX->CreationSize.x/2;
+			float MinY = -sharedGFX->CreationSize.y/2;
+			float MaxY = sharedGFX->CreationSize.y/2;
+			float MinZ = -sharedGFX->CreationSize.z/2;
+			float MaxZ = sharedGFX->CreationSize.z/2;
 			// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
 			OBB[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
 			OBB[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
@@ -635,24 +684,28 @@ void cProjectile::Create(int ProjectileNum)
 	// стрельба турели 1
 	case 201:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 26);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 26);
 		break;
 	// стрельба турели 2
 	case 202:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 34);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 34);
 		break;
 	// фларес
 	case 203:
 		// смотрит вверх
 		Orientation = sVECTOR3D(0.0f, 0.5f, 0.5f);
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 25);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 25);
 		break;
 	// как Kinetic1
 	case 204:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 26);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 26);
 		break;
 	// как Missile1
 	case 205:
@@ -660,12 +713,14 @@ void cProjectile::Create(int ProjectileNum)
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 27);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 27);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 101);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetProjectileGFX(sharedGFX, 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
 	// как Missile2
@@ -674,27 +729,33 @@ void cProjectile::Create(int ProjectileNum)
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 31);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 31);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 101);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetProjectileGFX(sharedGFX, 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
 	// как Ion2
 	case 207:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 6);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 6);
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 5);
-		GraphicFX[1]->CreationSize = sVECTOR3D(2.5f,2.5f,0.5f);
-		GraphicFX[1]->DeadZone = 1.9f;
+		if (auto sharedGFX = GraphicFX[1].lock()) {
+			SetProjectileGFX(sharedGFX, 5);
+			sharedGFX->CreationSize = sVECTOR3D(2.5f,2.5f,0.5f);
+			sharedGFX->DeadZone = 1.9f;
+		}
 		break;
 	// как Antimatter
 	case 208:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 19);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 19);
 		break;
 	// как торпеда
 	case 209:
@@ -702,12 +763,14 @@ void cProjectile::Create(int ProjectileNum)
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 32);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 32);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 101);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetProjectileGFX(sharedGFX, 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
 	// как бомба
@@ -716,32 +779,39 @@ void cProjectile::Create(int ProjectileNum)
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
 		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 33);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 33);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 101);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetProjectileGFX(sharedGFX, 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
 	// как Kinetic2
 	case 211:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 34);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 34);
 		break;
 	// как Kinetic3
 	case 212:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 35);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 35);
 		break;
 	// как Plasma2
 	case 213:
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 10);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 10);
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[1], 8);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetProjectileGFX(sharedGFX, 8);
 		GraphicFX[2] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[2], 9);
+		if (auto sharedGFX = GraphicFX[2].lock())
+			SetProjectileGFX(sharedGFX, 9);
 		break;
 
 
@@ -765,7 +835,8 @@ void cProjectile::Create(int ProjectileNum)
 		::cObject3D::InitByDrawObjectList();
 
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 28);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 28);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, -0.8f, 0.0f);
 		NeedStopPartic = true;
 		break;
@@ -780,7 +851,8 @@ void cProjectile::Create(int ProjectileNum)
 		::cObject3D::InitByDrawObjectList();
 
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 29);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 29);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, -2.5f, 0.0f);
 		NeedStopPartic = true;
 		break;
@@ -795,7 +867,8 @@ void cProjectile::Create(int ProjectileNum)
 		::cObject3D::InitByDrawObjectList();
 
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetProjectileGFX(GraphicFX[0], 30);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetProjectileGFX(sharedGFX, 30);
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, -0.7f, 0.0f);
 		NeedStopPartic = true;
 		break;
@@ -831,27 +904,27 @@ cProjectile::~cProjectile()
 
 	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
 		/* this GFX is not in use */
-		if (GraphicFX[i] == nullptr)
+		auto sharedGFX = GraphicFX[i].lock();
+		if (!sharedGFX)
 			continue;
 
 		/* should destroy GFX right now */
 		if (GraphicFXDestroyType) {
 			vw_ReleaseParticleSystem(GraphicFX[i]);
-			GraphicFX[i] = nullptr;
 			continue;
 		}
 
 		/* time to suppress GFX and destroy it at the end */
-		GraphicFX[i]->IsSuppressed = true;
-		GraphicFX[i]->DestroyIfNoParticles = true;
+		sharedGFX->IsSuppressed = true;
+		sharedGFX->DestroyIfNoParticles = true;
 
 		/* change speed only */
 		if (!NeedStopPartic) {
-			GraphicFX[i]->ChangeSpeed(Orientation^Speed);
+			sharedGFX->ChangeSpeed(Orientation ^ Speed);
 			continue;
 		}
 
-		GraphicFX[i]->StopAllParticles();
+		sharedGFX->StopAllParticles();
 
 		// только для ракет землян и пиратов делаем изменение шлейфа при взрыве (только шлейф!, он всегда 2-й эффект)
 		if (i != 1)
@@ -886,9 +959,9 @@ cProjectile::~cProjectile()
 			// on missile impact and explosion we should calculate "shock wave", that
 			// should scatter missile's trails and make scene looks more "realistic",
 			// since particles data are private, we call ForEachParticle() with lambda
-			GraphicFX[i]->ForEachParticle([this, effective_dist2](sVECTOR3D &pLocation,
-									      sVECTOR3D &pVelocity,
-									      bool &pNeedStop){
+			sharedGFX->ForEachParticle([this, effective_dist2](sVECTOR3D &pLocation,
+									   sVECTOR3D &pVelocity,
+									   bool &pNeedStop){
 				sVECTOR3D Dist2 = pLocation - this->Location;
 				float fDist2 = Dist2.x * Dist2.x + Dist2.y * Dist2.y + Dist2.z * Dist2.z;
 				if (fDist2 < 1.0f)
@@ -929,14 +1002,14 @@ void cProjectile::SetRotation(sVECTOR3D NewRotation)
 
 
 	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
-		if (GraphicFX[i]) {
+		if (auto sharedGFX = GraphicFX[i].lock()) {
 			vw_Matrix33CalcPoint(GraphicFXLocation[i], OldInvRotationMat);
 			vw_Matrix33CalcPoint(GraphicFXLocation[i], CurrentRotationMat);
 			// если лучевое оружие, нужно вращать все, и частицы тоже
 			if (ProjectileType == 2)
-				GraphicFX[i]->RotateSystemAndParticlesByAngle(Rotation);
+				sharedGFX->RotateSystemAndParticlesByAngle(Rotation);
 			else
-				GraphicFX[i]->RotateSystemByAngle(Rotation);
+				sharedGFX->RotateSystemByAngle(Rotation);
 		}
 	}
 
@@ -968,156 +1041,156 @@ void cProjectile::SetLocation(sVECTOR3D NewLocation)
 	case 2:
 	case 3:
 	case 4:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
 	// Ion
 	case 5:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
 		break;
 	case 6:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-		if (GraphicFX[1])
-			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[1] + Location);
 		break;
 	case 7:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-		if (GraphicFX[1])
-			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[1] + Location);
 		break;
 	// Plasma
 	case 8:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
 		break;
 	case 9:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-		if (GraphicFX[1])
-			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
-		if (GraphicFX[2])
-			GraphicFX[2]->MoveSystem(GraphicFXLocation[2] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[1] + Location);
+		if (auto sharedGFX = GraphicFX[2].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[2] + Location);
 		break;
 	case 10:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-		if (GraphicFX[1])
-			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
-		if (GraphicFX[2])
-			GraphicFX[2]->MoveSystemLocation(GraphicFXLocation[2] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[1] + Location);
+		if (auto sharedGFX = GraphicFX[2].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[2] + Location);
 		break;
 	// Maser
 	case 11:
-		if (GraphicFX[0]) {
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
+			sharedGFX->SetStartLocation(GraphicFXLocation[0] + Location);
 		}
 		break;
 	case 12:
-		if (GraphicFX[0]) {
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
+			sharedGFX->SetStartLocation(GraphicFXLocation[0] + Location);
 		}
-		if (GraphicFX[1]) {
-			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
-			GraphicFX[1]->SetStartLocation(GraphicFXLocation[1] + Location);
+		if (auto sharedGFX = GraphicFX[1].lock()) {
+			sharedGFX->MoveSystem(GraphicFXLocation[1] + Location);
+			sharedGFX->SetStartLocation(GraphicFXLocation[1] + Location);
 		}
 		break;
 	// Antimatter
 	case 13:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
 		break;
 	// Laser
 	case 14:
-		if (GraphicFX[0]) {
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
+			sharedGFX->SetStartLocation(GraphicFXLocation[0] + Location);
 		}
 		break;
 	// Gauss
 	case 15:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
 		break;
 	// Missiles
 	case 16:
 	case 17:
 	case 18:
 	case 19:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-		if (GraphicFX[1])
-			GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[1] + Location);
 		break;
 
 	// снаряды пришельцев
 
 	// как Kinetic1
 	case 101:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
 	// с наведением, как Kinetic2
 	case 102:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-		if (GraphicFX[1])
-			GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[1] + Location);
 		break;
 	case 103:
 		// как Kinetic3
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
 	// с наведением, как Kinetic3
 	case 104:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-		if (GraphicFX[1])
-			GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[1] + Location);
 		break;
 	// как Kinetic2
 	case 105:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
 	// энергетическая мина (1-й тип)
 	case 106:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
 	// энергетическая мина (2-й тип)
 	case 107:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
 	// как Plasma3
 	case 108:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-		if (GraphicFX[1])
-			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
-		if (GraphicFX[2])
-			GraphicFX[2]->MoveSystemLocation(GraphicFXLocation[2] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[1] + Location);
+		if (auto sharedGFX = GraphicFX[2].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[2] + Location);
 		break;
 	// как Plasma2
 	case 109:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-		if (GraphicFX[1])
-			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
-		if (GraphicFX[2])
-			GraphicFX[2]->MoveSystem(GraphicFXLocation[2] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[1] + Location);
+		if (auto sharedGFX = GraphicFX[2].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[2] + Location);
 		break;
 	// как Laser
 	case 110:
-		if (GraphicFX[0]) {
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
+			sharedGFX->SetStartLocation(GraphicFXLocation[0] + Location);
 		}
 		break;
 
@@ -1125,60 +1198,60 @@ void cProjectile::SetLocation(sVECTOR3D NewLocation)
 
 	// стрельба турели 1
 	case 201:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
 	// стрельба турели 2
 	case 202:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
 	// фларес
 	case 203:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
 	// как Kinetic1
 	case 204:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
 	case 205: // как Missile1
 	case 206: // как Missile2
 	case 209: // как Missile3
 	case 210: // как Missile4
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
-		if (GraphicFX[1])
-			GraphicFX[1]->MoveSystemLocation(GraphicFXLocation[1] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[1] + Location);
 		break;
 	// как Ion2
 	case 207:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-		if (GraphicFX[1])
-			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[1] + Location);
 		break;
 	// Antimatter
 	case 208:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
 		break;
 	// как Kinetic2
 	case 211:
 	// как Kinetic3
 	case 212:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystemLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
 	// как Plasma2
 	case 213:
-		if (GraphicFX[0])
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-		if (GraphicFX[1])
-			GraphicFX[1]->MoveSystem(GraphicFXLocation[1] + Location);
-		if (GraphicFX[2])
-			GraphicFX[2]->MoveSystem(GraphicFXLocation[2] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[1] + Location);
+		if (auto sharedGFX = GraphicFX[2].lock())
+			sharedGFX->MoveSystem(GraphicFXLocation[2] + Location);
 		break;
 
 	// снаряды без оружия
@@ -1187,21 +1260,21 @@ void cProjectile::SetLocation(sVECTOR3D NewLocation)
 	case 214:
 		break;
 	case 215:
-		if (GraphicFX[0]) {
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
+			sharedGFX->SetStartLocation(GraphicFXLocation[0] + Location);
 		}
 		break;
 	case 216:
-		if (GraphicFX[0]) {
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
+			sharedGFX->SetStartLocation(GraphicFXLocation[0] + Location);
 		}
 		break;
 	case 217:
-		if (GraphicFX[0]) {
-			GraphicFX[0]->MoveSystem(GraphicFXLocation[0] + Location);
-			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
+			sharedGFX->SetStartLocation(GraphicFXLocation[0] + Location);
 		}
 		break;
 	}
@@ -1269,43 +1342,66 @@ bool cProjectile::Update(float Time)
 	// Plasma
 	case 9:
 	case 109:
-		GraphicFX[1]->RotateSystemAndParticlesByAngle(sVECTOR3D(GraphicFX[1]->Angle.x-360.0f*TimeDelta,GraphicFX[1]->Angle.y,GraphicFX[1]->Angle.z));
-		GraphicFX[2]->RotateSystemAndParticlesByAngle(sVECTOR3D(GraphicFX[2]->Angle.x-360.0f*TimeDelta,GraphicFX[2]->Angle.y,GraphicFX[2]->Angle.z));
+		if (auto sharedGFX = GraphicFX[1].lock())
+			sharedGFX->RotateSystemAndParticlesByAngle(sVECTOR3D(sharedGFX->Angle.x - 360.0f * TimeDelta,
+									     sharedGFX->Angle.y, sharedGFX->Angle.z));
+		if (auto sharedGFX = GraphicFX[2].lock())
+			sharedGFX->RotateSystemAndParticlesByAngle(sVECTOR3D(sharedGFX->Angle.x - 360.0f * TimeDelta,
+									     sharedGFX->Angle.y, sharedGFX->Angle.z));
 		break;
 	case 10:
 	case 108:
 	case 213:
-		GraphicFX[0]->RotateSystemAndParticlesByAngle(sVECTOR3D(GraphicFX[0]->Angle.x-360.0f*TimeDelta,GraphicFX[0]->Angle.y,GraphicFX[0]->Angle.z));
-		GraphicFX[1]->RotateSystemAndParticlesByAngle(sVECTOR3D(GraphicFX[1]->Angle.x-360.0f*TimeDelta,GraphicFX[1]->Angle.y,GraphicFX[1]->Angle.z));
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->RotateSystemAndParticlesByAngle(sVECTOR3D(sharedGFX->Angle.x - 360.0f * TimeDelta,
+									     sharedGFX->Angle.y, sharedGFX->Angle.z));
+		if (auto sharedGFX = GraphicFX[1].lock())
+			sharedGFX->RotateSystemAndParticlesByAngle(sVECTOR3D(sharedGFX->Angle.x - 360.0f * TimeDelta,
+									     sharedGFX->Angle.y, sharedGFX->Angle.z));
 		break;
 
 	// Maser
 	case 11:
-		GraphicFX[0]->RotateParticlesByAngle(sVECTOR3D(0.0f,	0.0f, 360.0f*TimeDelta*3.0f));
-		if (Lifetime <= GraphicFX[0]->Life/1.5f) GraphicFX[0]->IsSuppressed = true;
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			sharedGFX->RotateParticlesByAngle(sVECTOR3D(0.0f, 0.0f, 360.0f * TimeDelta * 3.0f));
+			if (Lifetime <= sharedGFX->Life / 1.5f)
+				sharedGFX->IsSuppressed = true;
+		}
 		break;
 	case 12:
-		GraphicFX[0]->RotateParticlesByAngle(sVECTOR3D(0.0f,0.0f,360.0f*TimeDelta*4.0f));
-		if (Lifetime <= GraphicFX[0]->Life/1.5f) GraphicFX[0]->IsSuppressed = true;
-		GraphicFX[1]->RotateParticlesByAngle(sVECTOR3D(0.0f,0.0f,-360.0f*TimeDelta*2.0f));
-		if (Lifetime <= GraphicFX[1]->Life/1.5f) GraphicFX[1]->IsSuppressed = true;
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			sharedGFX->RotateParticlesByAngle(sVECTOR3D(0.0f, 0.0f, 360.0f * TimeDelta * 4.0f));
+			if (Lifetime <= sharedGFX->Life / 1.5f)
+				sharedGFX->IsSuppressed = true;
+		}
+		if (auto sharedGFX = GraphicFX[1].lock()) {
+			sharedGFX->RotateParticlesByAngle(sVECTOR3D(0.0f, 0.0f, -360.0f * TimeDelta * 2.0f));
+			if (Lifetime <= sharedGFX->Life / 1.5f)
+				sharedGFX->IsSuppressed = true;
+		}
 		break;
 
 	// Antimatter
 	case 13:
 	case 208:
-		GraphicFX[0]->RotateSystemAndParticlesByAngle(sVECTOR3D(GraphicFX[0]->Angle.x,GraphicFX[0]->Angle.y-360.0f*TimeDelta*2.0f,GraphicFX[0]->Angle.z));
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->RotateSystemAndParticlesByAngle(sVECTOR3D(sharedGFX->Angle.x,
+									     sharedGFX->Angle.y - 360.0f * TimeDelta * 2.0f,
+									     sharedGFX->Angle.z));
 		break;
 
 	// Laser
 	case 14:
 	case 110:
-		if (Lifetime <= GraphicFX[0]->Life/1.5f) GraphicFX[0]->IsSuppressed = true;
+		if (auto sharedGFX = GraphicFX[0].lock())
+			if (Lifetime <= sharedGFX->Life / 1.5f)
+				sharedGFX->IsSuppressed = true;
 		break;
 
 	// Gauss
 	case 15:
-		GraphicFX[0]->RotateParticlesByAngle(sVECTOR3D(0.0f,0.0f,360.0f*TimeDelta*6.0f));
+		if (auto sharedGFX = GraphicFX[0].lock())
+			sharedGFX->RotateParticlesByAngle(sVECTOR3D(0.0f, 0.0f, 360.0f * TimeDelta * 6.0f));
 		break;
 
 
@@ -1447,8 +1543,9 @@ missile:
 			}
 		}
 
-		if (!GraphicFX.empty() && GraphicFX[0])
-			GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+		if (!GraphicFX.empty())
+			if (auto sharedGFX = GraphicFX[0].lock())
+				sharedGFX->SetStartLocation(GraphicFXLocation[0] + Location);
 	}
 	break;
 
@@ -1520,8 +1617,9 @@ missile:
 				}
 			}
 
-			if (!GraphicFX.empty() && GraphicFX[0])
-				GraphicFX[0]->SetStartLocation(GraphicFXLocation[0] + Location);
+			if (!GraphicFX.empty())
+				if (auto sharedGFX = GraphicFX[0].lock())
+					sharedGFX->SetStartLocation(GraphicFXLocation[0] + Location);
 
 			// сбрасываем установку, чтобы не было голосового предупреждения
 			Target = nullptr;
@@ -1601,13 +1699,15 @@ missile:
 
 					Projectile->SetRotation(Rotation);
 					for (auto tmpGFX : Projectile->GraphicFX) {
-						tmpGFX->Direction = Orientation;
-						// учитываем пенальти для визуальных эффектов
-						tmpGFX->ParticlesPerSec = (int)(tmpGFX->ParticlesPerSec / CurrentPenalty);
+						if (auto sharedGFX = tmpGFX.lock()) {
+							sharedGFX->Direction = Orientation;
+							// учитываем пенальти для визуальных эффектов
+							sharedGFX->ParticlesPerSec = (int)(sharedGFX->ParticlesPerSec / CurrentPenalty);
 
-						tmpGFX->Speed = tmpGFX->Speed / CurrentPenalty;
-						tmpGFX->Life = tmpGFX->Life * CurrentPenalty;
-						tmpGFX->MagnetFactor = tmpGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+							sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
+							sharedGFX->Life = sharedGFX->Life * CurrentPenalty;
+							sharedGFX->MagnetFactor = sharedGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+						}
 					}
 					Projectile->ObjectStatus = ObjectStatus;
 					// учитываем пенальти для снаряда
@@ -1700,13 +1800,15 @@ missile:
 
 					Projectile->SetRotation(Rotation);
 					for (auto tmpGFX : Projectile->GraphicFX) {
-						tmpGFX->Direction = Orientation;
-						// учитываем пенальти для визуальных эффектов
-						tmpGFX->ParticlesPerSec = (int)(tmpGFX->ParticlesPerSec / CurrentPenalty);
+						if (auto sharedGFX = tmpGFX.lock()) {
+							sharedGFX->Direction = Orientation;
+							// учитываем пенальти для визуальных эффектов
+							sharedGFX->ParticlesPerSec = (int)(sharedGFX->ParticlesPerSec / CurrentPenalty);
 
-						tmpGFX->Speed = tmpGFX->Speed / CurrentPenalty;
-						tmpGFX->Life = tmpGFX->Life * CurrentPenalty;
-						tmpGFX->MagnetFactor = tmpGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+							sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
+							sharedGFX->Life = sharedGFX->Life * CurrentPenalty;
+							sharedGFX->MagnetFactor = sharedGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+						}
 					}
 					Projectile->ObjectStatus = ObjectStatus;
 					// учитываем пенальти для снаряда

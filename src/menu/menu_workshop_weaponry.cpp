@@ -416,8 +416,8 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 				// все проверки сделали до этого, можем просто вызвать функцию, там 100% будет оружие
 				SetEarthSpaceFighterWeapon(WorkshopFighterGame, SlotNum+1, DragWeaponNum);
 				// убираем источник света
-				if (WorkshopFighterGame->Weapon[SlotNum]->Fire != nullptr)
-					vw_ReleaseLight(WorkshopFighterGame->Weapon[SlotNum]->Fire->Light);
+				if (auto sharedFire = WorkshopFighterGame->Weapon[SlotNum]->Fire.lock())
+					vw_ReleaseLight(sharedFire->Light);
 
 				Setup.Profile[CurrentProfile].Weapon[SlotNum] = DragWeaponNum;
 				Setup.Profile[CurrentProfile].WeaponAmmo[SlotNum] = DragWeaponAmmo;
@@ -799,8 +799,8 @@ void ShipSlotSetupWeapon(int Slot)
 				// все проверки сделали до этого, можем просто вызвать функцию, там 100% будет оружие
 				SetEarthSpaceFighterWeapon(WorkshopFighterGame, SlotNum+1, DragWeaponNum);
 				// убираем источник света
-				if (WorkshopFighterGame->Weapon[SlotNum]->Fire != nullptr)
-					vw_ReleaseLight(WorkshopFighterGame->Weapon[SlotNum]->Fire->Light);
+				if (auto sharedFire = WorkshopFighterGame->Weapon[SlotNum]->Fire.lock())
+					vw_ReleaseLight(sharedFire->Light);
 
 				Setup.Profile[CurrentProfile].Weapon[SlotNum] = DragWeaponNum;
 				Setup.Profile[CurrentProfile].WeaponAmmo[SlotNum] = DragWeaponAmmo;

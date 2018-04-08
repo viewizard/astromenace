@@ -74,9 +74,9 @@ private:
 };
 
 class cParticleSystem {
-public:
-	~cParticleSystem();
+	friend std::weak_ptr<cParticleSystem> vw_CreateParticleSystem();
 
+public:
 	// Update all particles.
 	bool Update(float Time);
 	// Draw all particles.
@@ -181,6 +181,11 @@ public:
 	}
 
 private:
+	// Don't allow direct new/delete usage in code, only vw_CreateParticleSystem()
+	// allowed for particle creation and release setup (deleter must be provided).
+	cParticleSystem() = default;
+	~cParticleSystem();
+
 	// current location
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 
@@ -235,15 +240,17 @@ private:
 // Initialization. 'Quality' is particle emission factor from 1.0f.
 void vw_InitParticleSystems(bool UseGLSL, float Quality);
 // Create particle system.
-cParticleSystem *vw_CreateParticleSystem();
-// Release particle system.
-void vw_ReleaseParticleSystem(cParticleSystem *ParticleSystem);
+std::weak_ptr<cParticleSystem> vw_CreateParticleSystem();
+// Release particle system, provided by shared_ptr.
+void vw_ReleaseParticleSystem(std::shared_ptr<cParticleSystem> &ParticleSystem);
+// Release particle system, provided by weak_ptr.
+void vw_ReleaseParticleSystem(std::weak_ptr<cParticleSystem> &ParticleSystem);
 // Release all particle systems.
 void vw_ReleaseAllParticleSystems();
 // Draw all particle systems.
 void vw_DrawAllParticleSystems();
 // Draw particle systems block, provided by caller.
-void vw_DrawParticleSystems(std::vector<cParticleSystem*> &DrawParticleSystem);
+void vw_DrawParticleSystems(std::vector<std::weak_ptr<cParticleSystem>> &DrawParticleSystem);
 // Update all particle systems.
 void vw_UpdateAllParticleSystems(float Time);
 

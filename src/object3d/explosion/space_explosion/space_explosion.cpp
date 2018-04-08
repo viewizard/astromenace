@@ -72,21 +72,23 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		Orientation = Object->Orientation;
 
 		// эффект
-		GraphicFX.resize(1, nullptr);
+		GraphicFX.resize(1);
 
 		// установка эффекта
 		float tRadius = Object->Radius/2.0f;
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[0], 1);
-		GraphicFX[0]->Speed = 1.5f*Object->Radius;
-		GraphicFX[0]->SpeedVar   = vw_Randf0;
-		GraphicFX[0]->MoveSystem(Object->Location);
-		GraphicFX[0]->ParticlesPerSec = (int)(10*Object->Radius);
-		GraphicFX[0]->Direction = Object->Orientation;
-		GraphicFX[0]->CreationType = eParticleCreationType::Sphere;
-		GraphicFX[0]->CreationSize = sVECTOR3D(tRadius,tRadius,tRadius);
-		GraphicFX[0]->Life       = 1.5f;
-		GraphicFX[0]->SizeStart  = tRadius/1.5f;
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			SetExplosionGFX(sharedGFX, 1);
+			sharedGFX->Speed = 1.5f * Object->Radius;
+			sharedGFX->SpeedVar = vw_Randf0;
+			sharedGFX->MoveSystem(Object->Location);
+			sharedGFX->ParticlesPerSec = (int)(10 * Object->Radius);
+			sharedGFX->Direction = Object->Orientation;
+			sharedGFX->CreationType = eParticleCreationType::Sphere;
+			sharedGFX->CreationSize = sVECTOR3D(tRadius, tRadius, tRadius);
+			sharedGFX->Life = 1.5f;
+			sharedGFX->SizeStart = tRadius / 1.5f;
+		}
 
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(3*Object->Radius) + (int)(vw_Randf0*3*Object->Radius);
@@ -101,8 +103,10 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			Projectile->Orientation.Normalize();
 
 			for (auto tmpGFX : Projectile->GraphicFX) {
-				tmpGFX->Direction = Projectile->Orientation ^ -1;
-				tmpGFX->Speed = 1.5f;
+				if (auto sharedGFX = tmpGFX.lock()) {
+					sharedGFX->Direction = Projectile->Orientation ^ -1;
+					sharedGFX->Speed = 1.5f;
+				}
 			}
 			Projectile->ObjectStatus = ObjectStatus;
 			// учитываем пенальти
@@ -134,34 +138,42 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		Orientation = Object->Orientation;
 
 		// эффект
-		GraphicFX.resize(3, nullptr);
+		GraphicFX.resize(3);
 
 		// установка эффекта
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[1], 3);
-		GraphicFX[1]->MoveSystem(Object->Location);
-		GraphicFX[1]->ParticlesPerSec = (int)(2.5f*Object->Radius);
-		GraphicFX[1]->Direction = Object->Orientation;
-		GraphicFX[1]->CreationSize = sVECTOR3D(Object->Radius/4,Object->Radius/4,Object->Radius/4);
+		if (auto sharedGFX = GraphicFX[1].lock()) {
+			SetExplosionGFX(sharedGFX, 3);
+			sharedGFX->MoveSystem(Object->Location);
+			sharedGFX->ParticlesPerSec = (int)(2.5f * Object->Radius);
+			sharedGFX->Direction = Object->Orientation;
+			sharedGFX->CreationSize = sVECTOR3D(Object->Radius / 4, Object->Radius / 4, Object->Radius / 4);
+		}
 
 		GraphicFX[2] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[2], 4);
-		GraphicFX[2]->Speed = Object->Radius/3.0f;
-		GraphicFX[2]->SpeedVar   = 1.0f*vw_Randf0;
-		GraphicFX[2]->MoveSystem(Object->Location);
-		if (Speed!=0) GraphicFX[2]->Theta      = 360.00f/(Speed/8);
-		GraphicFX[2]->ParticlesPerSec = (int)(2.5*Object->Radius);
-		GraphicFX[2]->Direction = Object->Orientation;
-		GraphicFX[2]->NeedStop = false;
+		if (auto sharedGFX = GraphicFX[2].lock()) {
+			SetExplosionGFX(sharedGFX, 4);
+			sharedGFX->Speed = Object->Radius / 3.0f;
+			sharedGFX->SpeedVar = 1.0f * vw_Randf0;
+			sharedGFX->MoveSystem(Object->Location);
+			if (Speed != 0.0f)
+				sharedGFX->Theta = 360.00f / (Speed / 8);
+			sharedGFX->ParticlesPerSec = (int)(2.5 * Object->Radius);
+			sharedGFX->Direction = Object->Orientation;
+			sharedGFX->NeedStop = false;
+		}
 
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[0], 2);
-		GraphicFX[0]->Speed = Object->Radius*1.2f;
-		GraphicFX[0]->SpeedVar   = 1.0f*vw_Randf0;
-		GraphicFX[0]->MoveSystem(Object->Location);
-		if (Speed!=0) GraphicFX[0]->Theta      = 360.00f/(Speed/8);
-		GraphicFX[0]->ParticlesPerSec = (int)(10*Object->Radius);
-		GraphicFX[0]->Direction = Object->Orientation;
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			SetExplosionGFX(sharedGFX, 2);
+			sharedGFX->Speed = Object->Radius * 1.2f;
+			sharedGFX->SpeedVar   = 1.0f*vw_Randf0;
+			sharedGFX->MoveSystem(Object->Location);
+			if (Speed != 0.0f)
+				sharedGFX->Theta = 360.00f / (Speed / 8);
+			sharedGFX->ParticlesPerSec = (int)(10 * Object->Radius);
+			sharedGFX->Direction = Object->Orientation;
+		}
 
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(Object->Radius) + (int)(vw_Randf0*Object->Radius);
@@ -176,14 +188,16 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			Projectile->Orientation.Normalize();
 
 			for (auto tmpGFX : Projectile->GraphicFX) {
-				tmpGFX->Direction = Projectile->Orientation ^ -1;
-				tmpGFX->Speed = 2.5f;
-				tmpGFX->ColorStart.r = 0.30f;
-				tmpGFX->ColorStart.g = 1.00f;
-				tmpGFX->ColorStart.b = 1.00f;
-				tmpGFX->ColorEnd.r = 0.00f;
-				tmpGFX->ColorEnd.g = 1.00f;
-				tmpGFX->ColorEnd.b = 1.00f;
+				if (auto sharedGFX = tmpGFX.lock()) {
+					sharedGFX->Direction = Projectile->Orientation ^ -1;
+					sharedGFX->Speed = 2.5f;
+					sharedGFX->ColorStart.r = 0.30f;
+					sharedGFX->ColorStart.g = 1.00f;
+					sharedGFX->ColorStart.b = 1.00f;
+					sharedGFX->ColorEnd.r = 0.00f;
+					sharedGFX->ColorEnd.g = 1.00f;
+					sharedGFX->ColorEnd.b = 1.00f;
+				}
 			}
 			Projectile->ObjectStatus = ObjectStatus;
 			// учитываем пенальти
@@ -223,26 +237,32 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		Orientation = Object->Orientation;
 
 		// эффект
-		GraphicFX.resize(2, nullptr);
+		GraphicFX.resize(2);
 
 		// установка эффекта
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[1], 6);
-		GraphicFX[1]->Speed = Object->Radius/1.4f;
-		GraphicFX[1]->SpeedVar   = 1.0f*vw_Randf0;
-		GraphicFX[1]->MoveSystem(Object->Location);
-		if (Speed>0.01f) GraphicFX[1]->Theta      = 360.00f/(Speed/8);
-		GraphicFX[1]->ParticlesPerSec = (int)(7*Object->Radius);
-		GraphicFX[1]->Direction = Object->Orientation;
+		if (auto sharedGFX = GraphicFX[1].lock()) {
+			SetExplosionGFX(sharedGFX, 6);
+			sharedGFX->Speed = Object->Radius / 1.4f;
+			sharedGFX->SpeedVar = 1.0f * vw_Randf0;
+			sharedGFX->MoveSystem(Object->Location);
+			if (Speed > 0.01f)
+				sharedGFX->Theta = 360.00f / (Speed / 8);
+			sharedGFX->ParticlesPerSec = (int)(7 * Object->Radius);
+			sharedGFX->Direction = Object->Orientation;
+		}
 
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[0], 5);
-		GraphicFX[0]->Speed = Object->Radius*1.1f;
-		GraphicFX[0]->SpeedVar   = 1.0f*vw_Randf0;
-		GraphicFX[0]->MoveSystem(Object->Location);
-		if (Speed>0.01f) GraphicFX[0]->Theta      = 360.00f/(Speed/8);
-		GraphicFX[0]->ParticlesPerSec = (int)(7*Object->Radius);
-		GraphicFX[0]->Direction = Object->Orientation;
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			SetExplosionGFX(sharedGFX, 5);
+			sharedGFX->Speed = Object->Radius * 1.1f;
+			sharedGFX->SpeedVar = 1.0f * vw_Randf0;
+			sharedGFX->MoveSystem(Object->Location);
+			if (Speed > 0.01f)
+				sharedGFX->Theta = 360.00f / (Speed / 8);
+			sharedGFX->ParticlesPerSec = (int)(7 * Object->Radius);
+			sharedGFX->Direction = Object->Orientation;
+		}
 	}
 
 
@@ -268,26 +288,32 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		Orientation = Object->Orientation;
 
 		// эффект
-		GraphicFX.resize(2, nullptr);
+		GraphicFX.resize(2);
 
 		// установка эффекта
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[1], 12);
-		GraphicFX[1]->Speed = Object->Radius/1.4f;
-		GraphicFX[1]->SpeedVar   = 1.0f*vw_Randf0;
-		GraphicFX[1]->MoveSystem(Object->Location);
-		if (Speed!=0) GraphicFX[1]->Theta      = 360.00f/(Speed/8);
-		GraphicFX[1]->ParticlesPerSec = (int)(7*Object->Radius);
-		GraphicFX[1]->Direction = Object->Orientation;
+		if (auto sharedGFX = GraphicFX[1].lock()) {
+			SetExplosionGFX(sharedGFX, 12);
+			sharedGFX->Speed = Object->Radius / 1.4f;
+			sharedGFX->SpeedVar = 1.0f * vw_Randf0;
+			sharedGFX->MoveSystem(Object->Location);
+			if (Speed != 0.0f)
+				sharedGFX->Theta = 360.00f / (Speed / 8);
+			sharedGFX->ParticlesPerSec = (int)(7 * Object->Radius);
+			sharedGFX->Direction = Object->Orientation;
+		}
 
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[0], 11);
-		GraphicFX[0]->Speed = Object->Radius*1.1f;
-		GraphicFX[0]->SpeedVar   = 1.0f*vw_Randf0;
-		GraphicFX[0]->MoveSystem(Object->Location);
-		if (Speed!=0) GraphicFX[0]->Theta      = 360.00f/(Speed/8);
-		GraphicFX[0]->ParticlesPerSec = (int)(7*Object->Radius);
-		GraphicFX[0]->Direction = Object->Orientation;
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			SetExplosionGFX(sharedGFX, 11);
+			sharedGFX->Speed = Object->Radius * 1.1f;
+			sharedGFX->SpeedVar = 1.0f * vw_Randf0;
+			sharedGFX->MoveSystem(Object->Location);
+			if (Speed != 0.0f)
+				sharedGFX->Theta = 360.00f / (Speed / 8);
+			sharedGFX->ParticlesPerSec = (int)(7 * Object->Radius);
+			sharedGFX->Direction = Object->Orientation;
+		}
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -304,26 +330,32 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		Orientation = Object->Orientation;
 
 		// эффект
-		GraphicFX.resize(2, nullptr);
+		GraphicFX.resize(2);
 
 		// установка эффекта
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[1], 6);
-		GraphicFX[1]->Speed = Object->Radius/1.3f;
-		GraphicFX[1]->SpeedVar   = 1.0f*vw_Randf0;
-		GraphicFX[1]->MoveSystem(Object->Location);
-		if (Speed!=0) GraphicFX[1]->Theta      = 360.00f/(Speed/8);
-		GraphicFX[1]->ParticlesPerSec = (int)(7*Object->Radius);
-		GraphicFX[1]->Direction = Object->Orientation;
+		if (auto sharedGFX = GraphicFX[1].lock()) {
+			SetExplosionGFX(sharedGFX, 6);
+			sharedGFX->Speed = Object->Radius / 1.3f;
+			sharedGFX->SpeedVar = 1.0f * vw_Randf0;
+			sharedGFX->MoveSystem(Object->Location);
+			if (Speed != 0.0f)
+				sharedGFX->Theta = 360.00f / (Speed / 8);
+			sharedGFX->ParticlesPerSec = (int)(7 * Object->Radius);
+			sharedGFX->Direction = Object->Orientation;
+		}
 
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[0], 5);
-		GraphicFX[0]->Speed = Object->Radius*1.1f;
-		GraphicFX[0]->SpeedVar   = 1.0f*vw_Randf0;
-		GraphicFX[0]->MoveSystem(Object->Location);
-		if (Speed!=0) GraphicFX[0]->Theta      = 360.00f/(Speed/8);
-		GraphicFX[0]->ParticlesPerSec = (int)(7*Object->Radius);
-		GraphicFX[0]->Direction = Object->Orientation;
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			SetExplosionGFX(sharedGFX, 5);
+			sharedGFX->Speed = Object->Radius * 1.1f;
+			sharedGFX->SpeedVar = 1.0f * vw_Randf0;
+			sharedGFX->MoveSystem(Object->Location);
+			if (Speed != 0.0f)
+				sharedGFX->Theta = 360.00f / (Speed / 8);
+			sharedGFX->ParticlesPerSec = (int)(7 * Object->Radius);
+			sharedGFX->Direction = Object->Orientation;
+		}
 
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(0.5f*Object->Radius) + (int)(vw_Randf0*Object->Radius);
@@ -338,8 +370,10 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			Projectile->Orientation.Normalize();
 
 			for (auto tmpGFX : Projectile->GraphicFX) {
-				tmpGFX->Direction = Projectile->Orientation ^ -1;
-				tmpGFX->Speed = 2.5f;
+				if (auto sharedGFX = tmpGFX.lock()) {
+					sharedGFX->Direction = Projectile->Orientation ^ -1;
+					sharedGFX->Speed = 2.5f;
+				}
 			}
 			Projectile->ObjectStatus = ObjectStatus;
 			// учитываем пенальти

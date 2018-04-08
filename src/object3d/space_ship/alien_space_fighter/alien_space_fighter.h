@@ -53,7 +53,7 @@ public:
 //-----------------------------------------------------------------------------
 
 // Создание двигателя
-void SetAlienSpaceFighterEngine(cParticleSystem *ParticleSystem, int EngineType);
+void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType);
 
 
 

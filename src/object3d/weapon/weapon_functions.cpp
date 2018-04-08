@@ -34,7 +34,7 @@
 //-----------------------------------------------------------------------------
 // Установка нужных данных для вспышки возле ствола
 //-----------------------------------------------------------------------------
-void SetWeaponFire(cParticleSystem *ParticleSystem, int WeaponNum)
+void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int WeaponNum)
 {
 	switch (WeaponNum) {
 	case 1:

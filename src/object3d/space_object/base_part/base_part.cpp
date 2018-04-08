@@ -75,33 +75,41 @@ case1next:
 		TextureIllum[2] = 0;
 
 		GraphicFXLocation.resize(8);
-		GraphicFX.resize(8, nullptr);
+		GraphicFX.resize(8);
 
 		GraphicFX[0] = vw_CreateParticleSystem();
 		GraphicFXLocation[0] = sVECTOR3D(14.3f, -4.0f, -14.3f);
-		SetSpaceObjectGFX(GraphicFX[0], 1);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetSpaceObjectGFX(sharedGFX, 1);
 		GraphicFX[1] = vw_CreateParticleSystem();
 		GraphicFXLocation[1] = sVECTOR3D(14.3f, -4.0f, 14.3f);
-		SetSpaceObjectGFX(GraphicFX[1], 1);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetSpaceObjectGFX(sharedGFX, 1);
 		GraphicFX[2] = vw_CreateParticleSystem();
 		GraphicFXLocation[2] = sVECTOR3D(-14.3f, -4.0f, -14.3f);
-		SetSpaceObjectGFX(GraphicFX[2], 1);
+		if (auto sharedGFX = GraphicFX[2].lock())
+			SetSpaceObjectGFX(sharedGFX, 1);
 		GraphicFX[3] = vw_CreateParticleSystem();
 		GraphicFXLocation[3] = sVECTOR3D(-14.3f, -4.0f, 14.3f);
-		SetSpaceObjectGFX(GraphicFX[3], 1);
+		if (auto sharedGFX = GraphicFX[3].lock())
+			SetSpaceObjectGFX(sharedGFX, 1);
 		//----
 		GraphicFX[4] = vw_CreateParticleSystem();
 		GraphicFXLocation[4] = sVECTOR3D(14.3f, 3.2f, -14.3f);
-		SetSpaceObjectGFX(GraphicFX[4], 2);
+		if (auto sharedGFX = GraphicFX[4].lock())
+			SetSpaceObjectGFX(sharedGFX, 2);
 		GraphicFX[5] = vw_CreateParticleSystem();
 		GraphicFXLocation[5] = sVECTOR3D(14.3f, 3.2f, 14.3f);
-		SetSpaceObjectGFX(GraphicFX[5], 2);
+		if (auto sharedGFX = GraphicFX[5].lock())
+			SetSpaceObjectGFX(sharedGFX, 2);
 		GraphicFX[6] = vw_CreateParticleSystem();
 		GraphicFXLocation[6] = sVECTOR3D(-14.3f, 3.2f, -14.3f);
-		SetSpaceObjectGFX(GraphicFX[6], 2);
+		if (auto sharedGFX = GraphicFX[6].lock())
+			SetSpaceObjectGFX(sharedGFX, 2);
 		GraphicFX[7] = vw_CreateParticleSystem();
 		GraphicFXLocation[7] = sVECTOR3D(-14.3f, 3.2f, 14.3f);
-		SetSpaceObjectGFX(GraphicFX[7], 2);
+		if (auto sharedGFX = GraphicFX[7].lock())
+			SetSpaceObjectGFX(sharedGFX, 2);
 		break;
 
 	case 21:
@@ -139,15 +147,17 @@ case2next:
 		TextureIllum[1] = 0;
 
 		GraphicFXLocation.resize(2);
-		GraphicFX.resize(2, nullptr);
+		GraphicFX.resize(2);
 
 		GraphicFX[0] = vw_CreateParticleSystem();
 		GraphicFXLocation[0] = sVECTOR3D(0.0f, -5.0f, 13.7f);
-		SetSpaceObjectGFX(GraphicFX[0], 1);
+		if (auto sharedGFX = GraphicFX[0].lock())
+			SetSpaceObjectGFX(sharedGFX, 1);
 		//----
 		GraphicFX[1] = vw_CreateParticleSystem();
 		GraphicFXLocation[1] = sVECTOR3D(0.0f, 5.0f, 13.7f);
-		SetSpaceObjectGFX(GraphicFX[1], 2);
+		if (auto sharedGFX = GraphicFX[1].lock())
+			SetSpaceObjectGFX(sharedGFX, 2);
 		break;
 
 	case 4:

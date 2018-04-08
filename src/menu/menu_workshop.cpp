@@ -102,8 +102,8 @@ void WorkshopCreateShip(int Num)
 		if (Setup.Profile[CurrentProfile].Weapon[i] != 0) {
 			if (SetEarthSpaceFighterWeapon(WorkshopFighterGame, i+1, Setup.Profile[CurrentProfile].Weapon[i])) {
 				// убираем источник света
-				if (WorkshopFighterGame->Weapon[i]->Fire != nullptr)
-					vw_ReleaseLight(WorkshopFighterGame->Weapon[i]->Fire->Light);
+				if (auto sharedFire = WorkshopFighterGame->Weapon[i]->Fire.lock())
+					vw_ReleaseLight(sharedFire->Light);
 
 				WorkshopFighterGame->Weapon[i]->Ammo = Setup.Profile[CurrentProfile].WeaponAmmo[i];
 				WorkshopFighterGame->WeaponYAngle[i] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[i];
@@ -196,8 +196,8 @@ void WorkshopCreateNewWeapon()
 	WorkshopNewWeapon->SetRotation(sVECTOR3D(0.0f,-45.0f,0.0f));
 
 	// убираем источник света
-	if (WorkshopNewWeapon->Fire != nullptr)
-		vw_ReleaseLight(WorkshopNewWeapon->Fire->Light);
+	if (auto sharedFire = WorkshopNewWeapon->Fire.lock())
+		vw_ReleaseLight(sharedFire->Light);
 }
 
 

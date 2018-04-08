@@ -126,7 +126,7 @@ void cPirateShip::Create(int PirateShipNum)
 	}
 	// начальные установки для двигателей
 	EnginesLocation.resize(EngineQuantity);
-	Engines.resize(EngineQuantity, nullptr);
+	Engines.resize(EngineQuantity);
 
 
 
@@ -152,10 +152,12 @@ void cPirateShip::Create(int PirateShipNum)
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(0.9f, 1.6f, -5.4f);
-		SetPirateShipEngine(Engines[0], 1);
+		if (auto sharedEngine = Engines[0].lock())
+			SetPirateShipEngine(sharedEngine, 1);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D(-0.9f, 1.6f, -5.4f);
-		SetPirateShipEngine(Engines[1], 1);
+		if (auto sharedEngine = Engines[1].lock())
+			SetPirateShipEngine(sharedEngine, 1);
 		break;
 
 	case 2:
@@ -168,10 +170,12 @@ void cPirateShip::Create(int PirateShipNum)
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.1f, 0.5f, -5.7f);
-		SetPirateShipEngine(Engines[0], 2);
+		if (auto sharedEngine = Engines[0].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D(-1.1f, 0.5f, -5.7f);
-		SetPirateShipEngine(Engines[1], 2);
+		if (auto sharedEngine = Engines[1].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		break;
 
 	case 3:
@@ -193,10 +197,12 @@ void cPirateShip::Create(int PirateShipNum)
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.0f, 1.8f, -1.2f);
-		SetPirateShipEngine(Engines[0], 1);
+		if (auto sharedEngine = Engines[0].lock())
+			SetPirateShipEngine(sharedEngine, 1);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D(-1.0f, 1.8f, -1.2f);
-		SetPirateShipEngine(Engines[1], 1);
+		if (auto sharedEngine = Engines[1].lock())
+			SetPirateShipEngine(sharedEngine, 1);
 		break;
 	case 4:
 		MaxSpeed = 30.0f;
@@ -217,10 +223,12 @@ void cPirateShip::Create(int PirateShipNum)
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.3f, 1.9f, -1.7f);
-		SetPirateShipEngine(Engines[0], 2);
+		if (auto sharedEngine = Engines[0].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D(-1.3f, 1.9f, -1.7f);
-		SetPirateShipEngine(Engines[1], 2);
+		if (auto sharedEngine = Engines[1].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		break;
 
 	case 5:
@@ -242,24 +250,32 @@ void cPirateShip::Create(int PirateShipNum)
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(5.8f, 6.5f-4.6f, 0.0f);
-		SetPirateShipEngine(Engines[0], 3);
+		if (auto sharedEngine = Engines[0].lock())
+			SetPirateShipEngine(sharedEngine, 3);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D(-5.8f, 6.5f-4.6f, 0.0f);
-		SetPirateShipEngine(Engines[1], 3);
+		if (auto sharedEngine = Engines[1].lock())
+			SetPirateShipEngine(sharedEngine, 3);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D(5.8f, 7.3f-4.6f, 0.0f);
-		SetPirateShipEngine(Engines[2], 4);
+		if (auto sharedEngine = Engines[2].lock())
+			SetPirateShipEngine(sharedEngine, 4);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D(-5.8f, 7.3f-4.6f, 0.0f);
-		SetPirateShipEngine(Engines[3], 4);
+		if (auto sharedEngine = Engines[3].lock())
+			SetPirateShipEngine(sharedEngine, 4);
 		Engines[4] = vw_CreateParticleSystem();
 		EnginesLocation[4] = sVECTOR3D(5.8f, 6.1f-4.6f, -2.3f);
-		SetPirateShipEngine(Engines[4], 1);
-		Engines[4]->Direction = sVECTOR3D(0.0f, -0.2f, -0.8f);
+		if (auto sharedEngine = Engines[4].lock()) {
+			SetPirateShipEngine(sharedEngine, 1);
+			sharedEngine->Direction = sVECTOR3D(0.0f, -0.2f, -0.8f);
+		}
 		Engines[5] = vw_CreateParticleSystem();
 		EnginesLocation[5] = sVECTOR3D(-5.8f, 6.1f-4.6f, -2.3f);
-		SetPirateShipEngine(Engines[5], 1);
-		Engines[5]->Direction = sVECTOR3D(0.0f, -0.2f, -0.8f);
+		if (auto sharedEngine = Engines[5].lock()) {
+			SetPirateShipEngine(sharedEngine, 1);
+			sharedEngine->Direction = sVECTOR3D(0.0f, -0.2f, -0.8f);
+		}
 		break;
 
 	case 6:
@@ -282,10 +298,12 @@ void cPirateShip::Create(int PirateShipNum)
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.7f, 6.6f-3.83f, -14.2f);
-		SetPirateShipEngine(Engines[0], 2);
+		if (auto sharedEngine = Engines[0].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D(-1.7f, 6.6f-3.83f, -14.2f);
-		SetPirateShipEngine(Engines[1], 2);
+		if (auto sharedEngine = Engines[1].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		break;
 
 	case 7:
@@ -308,16 +326,20 @@ void cPirateShip::Create(int PirateShipNum)
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(2.2f, 7.6f-5.25f, -14.8f);
-		SetPirateShipEngine(Engines[0], 2);
+		if (auto sharedEngine = Engines[0].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D(-2.2f, 7.6f-5.25f, -14.8f);
-		SetPirateShipEngine(Engines[1], 2);
+		if (auto sharedEngine = Engines[1].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D(17.2f, 6.8f-5.25f, -9.0f);
-		SetPirateShipEngine(Engines[2], 5);
+		if (auto sharedEngine = Engines[2].lock())
+			SetPirateShipEngine(sharedEngine, 5);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D(-17.2f, 6.8f-5.25f, -9.0f);
-		SetPirateShipEngine(Engines[3], 5);
+		if (auto sharedEngine = Engines[3].lock())
+			SetPirateShipEngine(sharedEngine, 5);
 		break;
 
 	case 8:
@@ -353,16 +375,20 @@ void cPirateShip::Create(int PirateShipNum)
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(4.5f, 6.3f-3.62f, -12.5f);
-		SetPirateShipEngine(Engines[0], 2);
+		if (auto sharedEngine = Engines[0].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D(-4.5f, 6.3f-3.62f, -12.5f);
-		SetPirateShipEngine(Engines[1], 2);
+		if (auto sharedEngine = Engines[1].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D(9.2f, 4.4f-3.62f, -5.6f);
-		SetPirateShipEngine(Engines[2], 5);
+		if (auto sharedEngine = Engines[2].lock())
+			SetPirateShipEngine(sharedEngine, 5);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D(-9.2f, 4.4f-3.62f, -5.6f);
-		SetPirateShipEngine(Engines[3], 5);
+		if (auto sharedEngine = Engines[3].lock())
+			SetPirateShipEngine(sharedEngine, 5);
 		break;
 
 	case 9:
@@ -392,22 +418,28 @@ void cPirateShip::Create(int PirateShipNum)
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.4f, 8.7f-4.9f, -20.4f);
-		SetPirateShipEngine(Engines[0], 2);
+		if (auto sharedEngine = Engines[0].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D(-1.4f, 8.7f-4.9f, -20.4f);
-		SetPirateShipEngine(Engines[1], 2);
+		if (auto sharedEngine = Engines[1].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D(4.7f, 7.0f-4.9f, 0.0f);
-		SetPirateShipEngine(Engines[2], 2);
+		if (auto sharedEngine = Engines[2].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D(-4.7f, 7.0f-4.9f, 0.0f);
-		SetPirateShipEngine(Engines[3], 2);
+		if (auto sharedEngine = Engines[3].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[4] = vw_CreateParticleSystem();
 		EnginesLocation[4] = sVECTOR3D(7.5f, 6.8f-4.9f, 0.0f);
-		SetPirateShipEngine(Engines[4], 2);
+		if (auto sharedEngine = Engines[4].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[5] = vw_CreateParticleSystem();
 		EnginesLocation[5] = sVECTOR3D(-7.5f, 6.8f-4.9f, 0.0f);
-		SetPirateShipEngine(Engines[5], 2);
+		if (auto sharedEngine = Engines[5].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		break;
 
 	case 10:
@@ -447,28 +479,36 @@ void cPirateShip::Create(int PirateShipNum)
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(3.8f, 5.4f-4.29f, -19.5f);
-		SetPirateShipEngine(Engines[0], 2);
+		if (auto sharedEngine = Engines[0].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D(-3.8f, 5.4f-4.29f, -19.5f);
-		SetPirateShipEngine(Engines[1], 2);
+		if (auto sharedEngine = Engines[1].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D(5.8f, 6.0f-4.29f, -0.9f);
-		SetPirateShipEngine(Engines[2], 2);
+		if (auto sharedEngine = Engines[2].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D(-5.8f, 6.0f-4.29f, -0.9f);
-		SetPirateShipEngine(Engines[3], 2);
+		if (auto sharedEngine = Engines[3].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[4] = vw_CreateParticleSystem();
 		EnginesLocation[4] = sVECTOR3D(8.0f, 6.0f-4.29f, -0.9f);
-		SetPirateShipEngine(Engines[4], 2);
+		if (auto sharedEngine = Engines[4].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[5] = vw_CreateParticleSystem();
 		EnginesLocation[5] = sVECTOR3D(-8.0f, 6.0f-4.29f, -0.9f);
-		SetPirateShipEngine(Engines[5], 2);
+		if (auto sharedEngine = Engines[5].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[6] = vw_CreateParticleSystem();
 		EnginesLocation[6] = sVECTOR3D(20.0f, 5.0f-4.29f, -3.6f);
-		SetPirateShipEngine(Engines[6], 2);
+		if (auto sharedEngine = Engines[6].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[7] = vw_CreateParticleSystem();
 		EnginesLocation[7] = sVECTOR3D(-20.0f, 5.0f-4.29f, -3.6f);
-		SetPirateShipEngine(Engines[7], 2);
+		if (auto sharedEngine = Engines[7].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		break;
 
 
@@ -490,10 +530,12 @@ void cPirateShip::Create(int PirateShipNum)
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.7f, 6.6f-3.83f, -14.2f);
-		SetPirateShipEngine(Engines[0], 2);
+		if (auto sharedEngine = Engines[0].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D(-1.7f, 6.6f-3.83f, -14.2f);
-		SetPirateShipEngine(Engines[1], 2);
+		if (auto sharedEngine = Engines[1].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		break;
 
 	case 12:
@@ -511,16 +553,20 @@ void cPirateShip::Create(int PirateShipNum)
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(2.2f, 7.6f-5.25f, -14.8f);
-		SetPirateShipEngine(Engines[0], 2);
+		if (auto sharedEngine = Engines[0].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D(-2.2f, 7.6f-5.25f, -14.8f);
-		SetPirateShipEngine(Engines[1], 2);
+		if (auto sharedEngine = Engines[1].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D(17.2f, 6.8f-5.25f, -9.0f);
-		SetPirateShipEngine(Engines[2], 5);
+		if (auto sharedEngine = Engines[2].lock())
+			SetPirateShipEngine(sharedEngine, 5);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D(-17.2f, 6.8f-5.25f, -9.0f);
-		SetPirateShipEngine(Engines[3], 5);
+		if (auto sharedEngine = Engines[3].lock())
+			SetPirateShipEngine(sharedEngine, 5);
 		break;
 
 	case 13:
@@ -550,16 +596,20 @@ void cPirateShip::Create(int PirateShipNum)
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(4.5f, 6.3f-3.62f, -12.5f);
-		SetPirateShipEngine(Engines[0], 2);
+		if (auto sharedEngine = Engines[0].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D(-4.5f, 6.3f-3.62f, -12.5f);
-		SetPirateShipEngine(Engines[1], 2);
+		if (auto sharedEngine = Engines[1].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D(9.2f, 4.4f-3.62f, -5.6f);
-		SetPirateShipEngine(Engines[2], 5);
+		if (auto sharedEngine = Engines[2].lock())
+			SetPirateShipEngine(sharedEngine, 5);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D(-9.2f, 4.4f-3.62f, -5.6f);
-		SetPirateShipEngine(Engines[3], 5);
+		if (auto sharedEngine = Engines[3].lock())
+			SetPirateShipEngine(sharedEngine, 5);
 		break;
 
 	case 14:
@@ -577,22 +627,28 @@ void cPirateShip::Create(int PirateShipNum)
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.4f, 8.7f-4.9f, -20.4f);
-		SetPirateShipEngine(Engines[0], 2);
+		if (auto sharedEngine = Engines[0].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D(-1.4f, 8.7f-4.9f, -20.4f);
-		SetPirateShipEngine(Engines[1], 2);
+		if (auto sharedEngine = Engines[1].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D(4.7f, 7.0f-4.9f, 0.0f);
-		SetPirateShipEngine(Engines[2], 2);
+		if (auto sharedEngine = Engines[2].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D(-4.7f, 7.0f-4.9f, 0.0f);
-		SetPirateShipEngine(Engines[3], 2);
+		if (auto sharedEngine = Engines[3].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[4] = vw_CreateParticleSystem();
 		EnginesLocation[4] = sVECTOR3D(7.5f, 6.8f-4.9f, 0.0f);
-		SetPirateShipEngine(Engines[4], 2);
+		if (auto sharedEngine = Engines[4].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[5] = vw_CreateParticleSystem();
 		EnginesLocation[5] = sVECTOR3D(-7.5f, 6.8f-4.9f, 0.0f);
-		SetPirateShipEngine(Engines[5], 2);
+		if (auto sharedEngine = Engines[5].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		break;
 
 	case 15:
@@ -616,28 +672,36 @@ void cPirateShip::Create(int PirateShipNum)
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(3.8f, 5.4f-4.29f, -19.5f);
-		SetPirateShipEngine(Engines[0], 2);
+		if (auto sharedEngine = Engines[0].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D(-3.8f, 5.4f-4.29f, -19.5f);
-		SetPirateShipEngine(Engines[1], 2);
+		if (auto sharedEngine = Engines[1].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D(5.8f, 6.0f-4.29f, -0.9f);
-		SetPirateShipEngine(Engines[2], 2);
+		if (auto sharedEngine = Engines[2].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D(-5.8f, 6.0f-4.29f, -0.9f);
-		SetPirateShipEngine(Engines[3], 2);
+		if (auto sharedEngine = Engines[3].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[4] = vw_CreateParticleSystem();
 		EnginesLocation[4] = sVECTOR3D(8.0f, 6.0f-4.29f, -0.9f);
-		SetPirateShipEngine(Engines[4], 2);
+		if (auto sharedEngine = Engines[4].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[5] = vw_CreateParticleSystem();
 		EnginesLocation[5] = sVECTOR3D(-8.0f, 6.0f-4.29f, -0.9f);
-		SetPirateShipEngine(Engines[5], 2);
+		if (auto sharedEngine = Engines[5].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[6] = vw_CreateParticleSystem();
 		EnginesLocation[6] = sVECTOR3D(20.0f, 5.0f-4.29f, -3.6f);
-		SetPirateShipEngine(Engines[6], 2);
+		if (auto sharedEngine = Engines[6].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		Engines[7] = vw_CreateParticleSystem();
 		EnginesLocation[7] = sVECTOR3D(-20.0f, 5.0f-4.29f, -3.6f);
-		SetPirateShipEngine(Engines[7], 2);
+		if (auto sharedEngine = Engines[7].lock())
+			SetPirateShipEngine(sharedEngine, 2);
 		break;
 
 
@@ -651,10 +715,12 @@ void cPirateShip::Create(int PirateShipNum)
 
 
 	for (unsigned int i = 0; i < EngineQuantity; i++) {
-		Engines[i]->SetStartLocation(EnginesLocation[i]);
-		// находим кол-во внутренних источников света
-		if (!Engines[i]->Light.expired())
-			InternalLights++;
+		if (auto sharedEngine = Engines[i].lock()) {
+			sharedEngine->SetStartLocation(EnginesLocation[i]);
+			// находим кол-во внутренних источников света
+			if (!sharedEngine->Light.expired())
+				InternalLights++;
+		}
 	}
 
 

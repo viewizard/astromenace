@@ -34,7 +34,7 @@
 //-----------------------------------------------------------------------------
 // Создание двигателя
 //-----------------------------------------------------------------------------
-void SetAlienSpaceMotherShipEngine(cParticleSystem *ParticleSystem, int EngineType)
+void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType)
 {
 
 	ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");

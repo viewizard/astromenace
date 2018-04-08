@@ -61,7 +61,7 @@ int UniformLocationParticleTexture{0};
 int UniformLocationCameraPoint{0};
 
 // All particle systems.
-std::forward_list<cParticleSystem> ParticleSystemsList{};
+std::forward_list<std::shared_ptr<cParticleSystem>> ParticleSystemsList{};
 
 } // unnamed namespace
 
@@ -842,29 +842,43 @@ void vw_InitParticleSystems(bool UseGLSL, float Quality)
 
 /*
  * Create particle system.
+ * Note, we don't provide shared_ptr, only weak_ptr, since all memory management
+ * should be internal only. Caller should operate with weak_ptr and use lock()
+ * (shared_ptr) only during access to object.
  */
-cParticleSystem *vw_CreateParticleSystem()
+std::weak_ptr<cParticleSystem> vw_CreateParticleSystem()
 {
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined
-	ParticleSystemsList.emplace_front();
-	return &ParticleSystemsList.front();
+	ParticleSystemsList.emplace_front(new cParticleSystem, [](cParticleSystem *p) {delete p;});
+	return ParticleSystemsList.front();
 }
 
 /*
- * Release particle system.
+ * Release particle system, provided by shared_ptr.
+ * We remove particle system from the list (release shared_ptr), but real release
+ * will be done as soon, as caller will release shared_ptr on this particle system.
  */
-void vw_ReleaseParticleSystem(cParticleSystem *ParticleSystem)
+void vw_ReleaseParticleSystem(std::shared_ptr<cParticleSystem> &ParticleSystem)
 {
 	auto prev_iter = ParticleSystemsList.before_begin();
 	for (auto iter = ParticleSystemsList.begin(); iter != ParticleSystemsList.end();) {
-		if (&(*iter) == ParticleSystem) {
+		if (*iter == ParticleSystem) {
 			ParticleSystemsList.erase_after(prev_iter);
 			return;
 		}
 		prev_iter = iter;
 		++iter;
 	}
+}
+
+/*
+ * Release particle system, provided by weak_ptr.
+ */
+void vw_ReleaseParticleSystem(std::weak_ptr<cParticleSystem> &ParticleSystem)
+{
+	if (auto sharedParticleSystem = ParticleSystem.lock())
+		vw_ReleaseParticleSystem(sharedParticleSystem);
 }
 
 /*
@@ -903,7 +917,7 @@ void vw_DrawAllParticleSystems()
 	glDepthMask(GL_FALSE);
 
 	for (auto &tmpParticleSystems : ParticleSystemsList) {
-		tmpParticleSystems.Draw(CurrentTexture);
+		tmpParticleSystems->Draw(CurrentTexture);
 	}
 
 	// reset rendering states
@@ -917,7 +931,7 @@ void vw_DrawAllParticleSystems()
 /*
  * Draw particle systems block, provided by caller.
  */
-void vw_DrawParticleSystems(std::vector<cParticleSystem*> &DrawParticleSystem)
+void vw_DrawParticleSystems(std::vector<std::weak_ptr<cParticleSystem>> &DrawParticleSystem)
 {
 	if (DrawParticleSystem.empty())
 		return;
@@ -940,9 +954,9 @@ void vw_DrawParticleSystems(std::vector<cParticleSystem*> &DrawParticleSystem)
 	}
 	glDepthMask(GL_FALSE);
 
-	for (cParticleSystem *tmpParticleSystem : DrawParticleSystem) {
-		if (tmpParticleSystem)
-			tmpParticleSystem->Draw(CurrentTexture);
+	for (auto &tmpParticleSystem : DrawParticleSystem) {
+		if (auto sharedParticleSystem = tmpParticleSystem.lock())
+			sharedParticleSystem->Draw(CurrentTexture);
 	}
 
 	// reset rendering states
@@ -960,7 +974,7 @@ void vw_UpdateAllParticleSystems(float Time)
 {
 	auto prev_iter = ParticleSystemsList.before_begin();
 	for (auto iter = ParticleSystemsList.begin(); iter != ParticleSystemsList.end();) {
-		if (!iter->Update(Time))
+		if (!(*iter)->Update(Time))
 			iter = ParticleSystemsList.erase_after(prev_iter);
 		else {
 			prev_iter = iter;

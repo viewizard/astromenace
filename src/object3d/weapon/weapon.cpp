@@ -289,9 +289,11 @@ void cWeapon::Create(int WeaponNum)
 
 		DestroyedFireLocation = PresetEarthWeaponData[WeaponNum-1].DestrFireLocation;
 		Fire = vw_CreateParticleSystem();
-		Fire->SetStartLocation(FireLocation);
-		Fire->Direction = sVECTOR3D(0.0f, 0.0f, 1.0f);
-		SetWeaponFire(Fire, WeaponNum);
+		if (auto sharedFire = Fire.lock()) {
+			sharedFire->SetStartLocation(FireLocation);
+			sharedFire->Direction = sVECTOR3D(0.0f, 0.0f, 1.0f);
+			SetWeaponFire(sharedFire, WeaponNum);
+		}
 
 		LoadObjectData(PresetEarthWeaponData[WeaponNum-1].NameVW3D, this, PresetEarthWeaponData[WeaponNum-1].ObjectNum+1, 2.0f);
 
@@ -426,20 +428,17 @@ void cWeapon::Create(int WeaponNum)
 //-----------------------------------------------------------------------------
 cWeapon::~cWeapon()
 {
-	if (Fire != nullptr) {
-		Fire->IsSuppressed = true;
-		Fire->DestroyIfNoParticles = true;
-		Fire = nullptr;
+	if (auto sharedFire = Fire.lock()) {
+		sharedFire->IsSuppressed = true;
+		sharedFire->DestroyIfNoParticles = true;
 	}
-	if (DestroyedFire != nullptr) {
-		DestroyedFire->IsSuppressed = true;
-		DestroyedFire->DestroyIfNoParticles = true;
-		DestroyedFire = nullptr;
+	if (auto sharedDestroyedFire = DestroyedFire.lock()) {
+		sharedDestroyedFire->IsSuppressed = true;
+		sharedDestroyedFire->DestroyIfNoParticles = true;
 	}
-	if (DestroyedSmoke != nullptr) {
-		DestroyedSmoke->IsSuppressed = true;
-		DestroyedSmoke->DestroyIfNoParticles = true;
-		DestroyedSmoke = nullptr;
+	if (auto sharedDestroyedSmoke = DestroyedSmoke.lock()) {
+		sharedDestroyedSmoke->IsSuppressed = true;
+		sharedDestroyedSmoke->DestroyIfNoParticles = true;
 	}
 	// если лучевое оружие
 	if (LaserMaser != nullptr) {
@@ -485,10 +484,9 @@ bool cWeapon::Update(float Time)
 
 
 	// если запущено - выключаем прорисовку эффекта выстрела (вспышка возле ствола)
-	if ((Fire != nullptr) &&
-	    !Fire->IsSuppressed &&
-	    (LastFireTime + TimeDelta <= Time))
-		Fire->IsSuppressed = true;
+	if (LastFireTime + TimeDelta <= Time)
+		if (auto sharedFire = Fire.lock())
+			sharedFire->IsSuppressed = true;
 
 
 
@@ -499,41 +497,43 @@ bool cWeapon::Update(float Time)
 	if ((ObjectCreationType >= 1) &&
 	    (ObjectCreationType <= 99) &&
 	    (Strength < StrengthStart) &&
-	    (DestroyedFire == nullptr)) {
+	    DestroyedFire.expired()) {
 		// горение
 		DestroyedFire = vw_CreateParticleSystem();
-		DestroyedFire->ColorStart.r = 1.00f;
-		DestroyedFire->ColorStart.g = 0.70f;
-		DestroyedFire->ColorStart.b = 0.30f;
-		DestroyedFire->ColorEnd.r = 1.00f;
-		DestroyedFire->ColorEnd.g = 0.00f;
-		DestroyedFire->ColorEnd.b = 0.00f;
-		DestroyedFire->AlphaStart = 1.00f;
-		DestroyedFire->AlphaEnd   = 0.10f;
-		DestroyedFire->SizeStart  = 0.20f;
-		DestroyedFire->SizeVar    = 0.10f;
-		DestroyedFire->SizeEnd    = 0.10f;
-		DestroyedFire->Speed      = 8.00f;
-		DestroyedFire->SpeedVar   = 2.00f;
-		DestroyedFire->Theta      = 5.00f;
-		DestroyedFire->Life       = 0.50f*Length/3.0f;
-		DestroyedFire->ParticlesPerSec = 70;
-		DestroyedFire->Texture = vw_FindTextureByName("gfx/flare1.tga");
-		DestroyedFire->CreationType = eParticleCreationType::Cube;
-		DestroyedFire->CreationSize = sVECTOR3D(Width/2.0f,Width/2.0f,0.1f);
-		DestroyedFire->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
-		DestroyedFire->SetStartLocation(DestroyedFireLocation);
+		if (auto sharedDestroyedFire = DestroyedFire.lock()) {
+			sharedDestroyedFire->ColorStart.r = 1.00f;
+			sharedDestroyedFire->ColorStart.g = 0.70f;
+			sharedDestroyedFire->ColorStart.b = 0.30f;
+			sharedDestroyedFire->ColorEnd.r = 1.00f;
+			sharedDestroyedFire->ColorEnd.g = 0.00f;
+			sharedDestroyedFire->ColorEnd.b = 0.00f;
+			sharedDestroyedFire->AlphaStart = 1.00f;
+			sharedDestroyedFire->AlphaEnd   = 0.10f;
+			sharedDestroyedFire->SizeStart  = 0.20f;
+			sharedDestroyedFire->SizeVar    = 0.10f;
+			sharedDestroyedFire->SizeEnd    = 0.10f;
+			sharedDestroyedFire->Speed      = 8.00f;
+			sharedDestroyedFire->SpeedVar   = 2.00f;
+			sharedDestroyedFire->Theta      = 5.00f;
+			sharedDestroyedFire->Life       = 0.50f*Length/3.0f;
+			sharedDestroyedFire->ParticlesPerSec = 70;
+			sharedDestroyedFire->Texture = vw_FindTextureByName("gfx/flare1.tga");
+			sharedDestroyedFire->CreationType = eParticleCreationType::Cube;
+			sharedDestroyedFire->CreationSize = sVECTOR3D(Width/2.0f,Width/2.0f,0.1f);
+			sharedDestroyedFire->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+			sharedDestroyedFire->SetStartLocation(DestroyedFireLocation);
 
-		// небольшая поправка для ракетных систем
+			// небольшая поправка для ракетных систем
 
-		if (ObjectCreationType == 16 || ObjectCreationType == 17) {
-			DestroyedFire->DeadZone = Width/2.0f - 0.1f;
-		} else if (ObjectCreationType == 18) {
-			DestroyedFire->CreationSize = sVECTOR3D(Width/3.5f,Width/3.5f,0.1f);
-			DestroyedFire->DeadZone = Width/3.5f - 0.1f;
-		} else if (ObjectCreationType == 19) {
-			DestroyedFire->CreationSize = sVECTOR3D(Width/3.0f,Width/3.0f,0.1f);
-			DestroyedFire->DeadZone = Width/3.0f - 0.1f;
+			if (ObjectCreationType == 16 || ObjectCreationType == 17) {
+				sharedDestroyedFire->DeadZone = Width/2.0f - 0.1f;
+			} else if (ObjectCreationType == 18) {
+				sharedDestroyedFire->CreationSize = sVECTOR3D(Width/3.5f,Width/3.5f,0.1f);
+				sharedDestroyedFire->DeadZone = Width/3.5f - 0.1f;
+			} else if (ObjectCreationType == 19) {
+				sharedDestroyedFire->CreationSize = sVECTOR3D(Width/3.0f,Width/3.0f,0.1f);
+				sharedDestroyedFire->DeadZone = Width/3.0f - 0.1f;
+			}
 		}
 	}
 
@@ -543,30 +543,32 @@ bool cWeapon::Update(float Time)
 	if ((ObjectCreationType >= 1) &&
 	    (ObjectCreationType <= 99) &&
 	    (Strength <= 0.0f) &&
-	    (DestroyedSmoke == nullptr)) {
+	    DestroyedSmoke.expired()) {
 		// дым
 		DestroyedSmoke = vw_CreateParticleSystem();
-		DestroyedSmoke->ColorStart.r = 1.00f;
-		DestroyedSmoke->ColorStart.g = 1.00f;
-		DestroyedSmoke->ColorStart.b = 1.00f;
-		DestroyedSmoke->ColorEnd.r = 1.00f;
-		DestroyedSmoke->ColorEnd.g = 1.00f;
-		DestroyedSmoke->ColorEnd.b = 1.00f;
-		DestroyedSmoke->AlphaStart = 0.20f;
-		DestroyedSmoke->AlphaEnd   = 0.00f;
-		DestroyedSmoke->SizeStart  = 0.25f;
-		DestroyedSmoke->SizeVar    = 0.10f;
-		DestroyedSmoke->SizeEnd    = 0.00f;
-		DestroyedSmoke->Speed      = 0.00f;
-		DestroyedSmoke->SpeedVar   = 0.00f;
-		DestroyedSmoke->Theta      = 35.00f;
-		DestroyedSmoke->Life       = 2.00f*Length/3.0f;
-		DestroyedSmoke->ParticlesPerSec = 300;
-		DestroyedSmoke->Texture = vw_FindTextureByName("gfx/flare1.tga");
-		DestroyedSmoke->CreationType = eParticleCreationType::Point;
-		DestroyedSmoke->CreationSize = sVECTOR3D(Width/2.5f,Width/2.5f,0.1f);
-		DestroyedSmoke->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
-		DestroyedSmoke->SetStartLocation(DestroyedFireLocation);
+		if (auto sharedDestroyedSmoke = DestroyedSmoke.lock()) {
+			sharedDestroyedSmoke->ColorStart.r = 1.00f;
+			sharedDestroyedSmoke->ColorStart.g = 1.00f;
+			sharedDestroyedSmoke->ColorStart.b = 1.00f;
+			sharedDestroyedSmoke->ColorEnd.r = 1.00f;
+			sharedDestroyedSmoke->ColorEnd.g = 1.00f;
+			sharedDestroyedSmoke->ColorEnd.b = 1.00f;
+			sharedDestroyedSmoke->AlphaStart = 0.20f;
+			sharedDestroyedSmoke->AlphaEnd   = 0.00f;
+			sharedDestroyedSmoke->SizeStart  = 0.25f;
+			sharedDestroyedSmoke->SizeVar    = 0.10f;
+			sharedDestroyedSmoke->SizeEnd    = 0.00f;
+			sharedDestroyedSmoke->Speed      = 0.00f;
+			sharedDestroyedSmoke->SpeedVar   = 0.00f;
+			sharedDestroyedSmoke->Theta      = 35.00f;
+			sharedDestroyedSmoke->Life       = 2.00f*Length/3.0f;
+			sharedDestroyedSmoke->ParticlesPerSec = 300;
+			sharedDestroyedSmoke->Texture = vw_FindTextureByName("gfx/flare1.tga");
+			sharedDestroyedSmoke->CreationType = eParticleCreationType::Point;
+			sharedDestroyedSmoke->CreationSize = sVECTOR3D(Width/2.5f,Width/2.5f,0.1f);
+			sharedDestroyedSmoke->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+			sharedDestroyedSmoke->SetStartLocation(DestroyedFireLocation);
+		}
 	}
 
 
@@ -626,15 +628,18 @@ bool cWeapon::Update(float Time)
 				Projectile->SetLocation(Location+FireLocation);
 				Projectile->SetRotation(Rotation);
 				for (auto tmpGFX : Projectile->GraphicFX) {
-					tmpGFX->Direction = Fire->Direction ^ -1;
-					// учитываем пенальти для визуальных эффектов
-					if (CurrentPenalty == 2)
-						tmpGFX->ParticlesPerSec -= (int)(tmpGFX->ParticlesPerSec * 0.33f);
-					if (CurrentPenalty == 3)
-						tmpGFX->ParticlesPerSec -= (int)(tmpGFX->ParticlesPerSec * 0.5f);
-					tmpGFX->Speed = tmpGFX->Speed / CurrentPenalty;
-					tmpGFX->Life = tmpGFX->Life * CurrentPenalty;
-					tmpGFX->MagnetFactor = tmpGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+					if (auto sharedGFX = tmpGFX.lock()) {
+						if (auto sharedFire = Fire.lock())
+							sharedGFX->Direction = sharedFire->Direction ^ -1;
+						// учитываем пенальти для визуальных эффектов
+						if (CurrentPenalty == 2)
+							sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.33f);
+						if (CurrentPenalty == 3)
+							sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.5f);
+						sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
+						sharedGFX->Life = sharedGFX->Life * CurrentPenalty;
+						sharedGFX->MagnetFactor = sharedGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+					}
 				}
 				Projectile->ObjectStatus = ObjectStatus;
 				// учитываем пенальти для снаряда
@@ -679,15 +684,17 @@ bool cWeapon::Update(float Time)
 				Projectile->SetRotation(Rotation + sVECTOR3D(vw_Randf0 * 30.0f, 0.0f, vw_Randf0 * 30.0f));
 
 				for (auto tmpGFX : Projectile->GraphicFX) {
-					tmpGFX->Direction = Orientation ^ -1;
-					// учитываем пенальти для визуальных эффектов
-					if (CurrentPenalty == 2)
-						tmpGFX->ParticlesPerSec -= (int)(tmpGFX->ParticlesPerSec * 0.33f);
-					if (CurrentPenalty == 3)
-						tmpGFX->ParticlesPerSec -= (int)(tmpGFX->ParticlesPerSec * 0.5f);
-					tmpGFX->Speed = tmpGFX->Speed / CurrentPenalty;
-					tmpGFX->Life = tmpGFX->Life * CurrentPenalty;
-					tmpGFX->MagnetFactor = tmpGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+					if (auto sharedGFX = tmpGFX.lock()) {
+						sharedGFX->Direction = Orientation ^ -1;
+						// учитываем пенальти для визуальных эффектов
+						if (CurrentPenalty == 2)
+							sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.33f);
+						if (CurrentPenalty == 3)
+							sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.5f);
+						sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
+						sharedGFX->Life = sharedGFX->Life * CurrentPenalty;
+						sharedGFX->MagnetFactor = sharedGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+					}
 				}
 				Projectile->ObjectStatus = ObjectStatus;
 				// учитываем пенальти для снаряда
@@ -887,10 +894,10 @@ void cWeapon::SetRotation(sVECTOR3D NewRotation)
 		vw_Matrix33CalcPoint(FireLocation, OldInvRotationMat);
 		vw_Matrix33CalcPoint(FireLocation, CurrentRotationMat);
 
-		if (Fire != nullptr) {
-			Fire->MoveSystem(Location + FireLocation);
-			Fire->SetStartLocation(Location + FireLocation);
-			Fire->RotateSystemByAngle(Rotation);
+		if (auto sharedFire = Fire.lock()) {
+			sharedFire->MoveSystem(Location + FireLocation);
+			sharedFire->SetStartLocation(Location + FireLocation);
+			sharedFire->RotateSystemByAngle(Rotation);
 		}
 	} else {
 		// турель
@@ -924,17 +931,17 @@ void cWeapon::SetRotation(sVECTOR3D NewRotation)
 
 
 
-	if (DestroyedFire != nullptr) {
+	if (auto sharedDestroyedFire = DestroyedFire.lock()) {
 		vw_Matrix33CalcPoint(DestroyedFireLocation, OldInvRotationMat);
 		vw_Matrix33CalcPoint(DestroyedFireLocation, CurrentRotationMat);
-		DestroyedFire->MoveSystem(Location + DestroyedFireLocation);
-		DestroyedFire->SetStartLocation(Location + DestroyedFireLocation);
-		DestroyedFire->RotateSystemByAngle(Rotation);
+		sharedDestroyedFire->MoveSystem(Location + DestroyedFireLocation);
+		sharedDestroyedFire->SetStartLocation(Location + DestroyedFireLocation);
+		sharedDestroyedFire->RotateSystemByAngle(Rotation);
 	}
 	// тут DestroyedFireLocation не считаем, т.к. все равно всегда создаем DestroyedFire
-	if (DestroyedSmoke != nullptr) {
-		DestroyedSmoke->MoveSystemLocation(Location + DestroyedFireLocation);
-		DestroyedSmoke->RotateSystemByAngle(Rotation);
+	if (auto sharedDestroyedSmoke = DestroyedSmoke.lock()) {
+		sharedDestroyedSmoke->MoveSystemLocation(Location + DestroyedFireLocation);
+		sharedDestroyedSmoke->RotateSystemByAngle(Rotation);
 	}
 	// если лучевое оружие
 	if (LaserMaser != nullptr) {
@@ -960,16 +967,16 @@ void cWeapon::SetLocation(sVECTOR3D NewLocation)
 	::cObject3D::SetLocation(NewLocation);
 
 	// положение утечки
-	if (Fire != nullptr) {
-		Fire->MoveSystem(NewLocation + FireLocation);
-		Fire->SetStartLocation(NewLocation + FireLocation);
+	if (auto sharedFire = Fire.lock()) {
+		sharedFire->MoveSystem(NewLocation + FireLocation);
+		sharedFire->SetStartLocation(NewLocation + FireLocation);
 	}
-	if (DestroyedFire != nullptr) {
-		DestroyedFire->MoveSystem(NewLocation + DestroyedFireLocation);
-		DestroyedFire->SetStartLocation(NewLocation + DestroyedFireLocation);
+	if (auto sharedDestroyedFire = DestroyedFire.lock()) {
+		sharedDestroyedFire->MoveSystem(NewLocation + DestroyedFireLocation);
+		sharedDestroyedFire->SetStartLocation(NewLocation + DestroyedFireLocation);
 	}
-	if (DestroyedSmoke != nullptr)
-		DestroyedSmoke->MoveSystemLocation(NewLocation + DestroyedFireLocation);
+	if (auto sharedDestroyedSmoke = DestroyedSmoke.lock())
+		sharedDestroyedSmoke->MoveSystemLocation(NewLocation + DestroyedFireLocation);
 
 	// если лучевое оружие
 	if (LaserMaser != nullptr)
@@ -1099,7 +1106,8 @@ bool cWeapon::WeaponFire(float Time)
 
 		// делаем вспышку возле ствола для всего оружия землят (только землян), если это не ракетная установка
 		if (ObjectCreationType < 16)
-			Fire->IsSuppressed = false;
+			if (auto sharedFire = Fire.lock())
+				sharedFire->IsSuppressed = false;
 
 	}
 
@@ -1186,7 +1194,8 @@ bool cWeapon::WeaponFire(float Time)
 	if (Projectile->ProjectileType == 3 || Projectile->ProjectileType == 4) {
 		Projectile->SetRotation(RotationWeapon);
 		for (auto tmpGFX : Projectile->GraphicFX) {
-			tmpGFX->Direction = Orientation;
+			if (auto sharedGFX = tmpGFX.lock())
+				sharedGFX->Direction = Orientation;
 		}
 		Projectile->ObjectStatus = ObjectStatus;
 		// учитываем пенальти для снаряда
@@ -1200,13 +1209,15 @@ bool cWeapon::WeaponFire(float Time)
 	} else {
 		Projectile->SetRotation(RotationWeapon);
 		for (auto tmpGFX : Projectile->GraphicFX) {
-			tmpGFX->Direction = Orientation;
-			// учитываем пенальти для визуальных эффектов
-			tmpGFX->ParticlesPerSec = (int)(tmpGFX->ParticlesPerSec / CurrentPenalty);
+			if (auto sharedGFX = tmpGFX.lock()) {
+				sharedGFX->Direction = Orientation;
+				// учитываем пенальти для визуальных эффектов
+				sharedGFX->ParticlesPerSec = (int)(sharedGFX->ParticlesPerSec / CurrentPenalty);
 
-			tmpGFX->Speed = tmpGFX->Speed / CurrentPenalty;
-			tmpGFX->Life = tmpGFX->Life * CurrentPenalty;
-			tmpGFX->MagnetFactor = tmpGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+				sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
+				sharedGFX->Life = sharedGFX->Life * CurrentPenalty;
+				sharedGFX->MagnetFactor = sharedGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+			}
 		}
 		Projectile->ObjectStatus = ObjectStatus;
 		// учитываем пенальти для снаряда

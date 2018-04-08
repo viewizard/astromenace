@@ -57,7 +57,7 @@ public:
 
 	// эффекты
 	std::vector<sVECTOR3D> GraphicFXLocation{};
-	std::vector<cParticleSystem*> GraphicFX{};
+	std::vector<std::weak_ptr<cParticleSystem>> GraphicFX{};
 
 	// чтобы возрвать часть корабля босса пришельцев через время
 	float		BossPartCountDown{-1.0f};
@@ -69,7 +69,7 @@ public:
 
 
 // установка эффекта, если нужно
-void SetSpaceObjectGFX(cParticleSystem *ParticleSystem, int GFXType);
+void SetSpaceObjectGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXType);
 
 
 //-----------------------------------------------------------------------------

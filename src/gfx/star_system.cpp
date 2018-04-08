@@ -29,7 +29,7 @@
 #include "../gfx/space_stars/space_stars.h"
 
 extern cSpaceObject *StartSpaceObject;
-extern cParticleSystem *psSpace;
+extern std::weak_ptr<cParticleSystem> psSpace;
 
 //-----------------------------------------------------------------------------
 // local/protected variables
@@ -366,8 +366,10 @@ void StarSystemDraw(int DrawType)
 
 	// корректируем положение частиц "космической пыли", если в игре и камера движется
 	if (DrawType == 2) {
-		psSpace->SetStartLocation(psSpace->GetLocation());
-		psSpace->MoveSystemLocation(sVECTOR3D(0,10,250)+GamePoint);
+		if (auto sharedSpace = psSpace.lock()) {
+			sharedSpace->SetStartLocation(sharedSpace->GetLocation());
+			sharedSpace->MoveSystemLocation(sVECTOR3D(0, 10, 250) + GamePoint);
+		}
 	}
 }
 

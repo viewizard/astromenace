@@ -377,8 +377,8 @@ void WorkshopCreateBuyShip()
 		if (Setup.Profile[CurrentProfile].Weapon[i] != 0) {
 			if (Setup.Profile[CurrentProfile].Money >= GetWeaponBaseCost(Setup.Profile[CurrentProfile].Weapon[i])) {
 				if (SetEarthSpaceFighterWeapon(WorkshopFighterGame, i+1, Setup.Profile[CurrentProfile].Weapon[i])) {
-					if (WorkshopFighterGame->Weapon[i]->Fire != nullptr)
-						vw_ReleaseLight(WorkshopFighterGame->Weapon[i]->Fire->Light);
+					if (auto sharedFire = WorkshopFighterGame->Weapon[i]->Fire.lock())
+						vw_ReleaseLight(sharedFire->Light);
 
 					Setup.Profile[CurrentProfile].Money -= GetWeaponBaseCost(Setup.Profile[CurrentProfile].Weapon[i]);
 					Setup.Profile[CurrentProfile].WeaponAmmo[i] = WorkshopFighterGame->Weapon[i]->AmmoStart;
@@ -398,8 +398,10 @@ void WorkshopCreateBuyShip()
 	}
 	// если было больше слотов чем есть сейчас
 	if (OldWeaponQuantity > WorkshopFighterGame->WeaponQuantity)
-		for (int i=0; i<OldWeaponQuantity; i++)
-			if (WorkshopFighterGame->WeaponQuantity <= i) Setup.Profile[CurrentProfile].Weapon[i] = 0;
+		for (int j = 0; j < OldWeaponQuantity; j++) {
+			if (WorkshopFighterGame->WeaponQuantity <= j)
+				Setup.Profile[CurrentProfile].Weapon[j] = 0;
+		}
 
 
 

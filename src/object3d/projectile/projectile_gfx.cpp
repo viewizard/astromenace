@@ -41,7 +41,7 @@ const std::string MissileTrailTextures[]{{"gfx/trail1.tga"},
 //-----------------------------------------------------------------------------
 // Создание графического эффекта
 //-----------------------------------------------------------------------------
-void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum)
+void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNum)
 {
 
 	ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");

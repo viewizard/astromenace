@@ -123,35 +123,35 @@ cSpaceShip::~cSpaceShip()
 	}
 
 	for (auto tmpEngine : Engines) {
-		if (tmpEngine) {
+		if (auto sharedEngine = tmpEngine.lock()) {
 			if (!EngineDestroyType) {
-				tmpEngine->IsSuppressed = true;
-				tmpEngine->DestroyIfNoParticles = true;
+				sharedEngine->IsSuppressed = true;
+				sharedEngine->DestroyIfNoParticles = true;
 			} else
-				vw_ReleaseParticleSystem(tmpEngine);
+				vw_ReleaseParticleSystem(sharedEngine);
 		}
 	}
 
 	if (!EnginesLeft.empty()) {
 		for (auto tmpEngineLeft : EnginesLeft) {
-			if (tmpEngineLeft) {
+			if (auto sharedEngineLeft = tmpEngineLeft.lock()) {
 				if (!EngineDestroyType) {
-					tmpEngineLeft->IsSuppressed = true;
-					tmpEngineLeft->DestroyIfNoParticles = true;
+					sharedEngineLeft->IsSuppressed = true;
+					sharedEngineLeft->DestroyIfNoParticles = true;
 				} else
-					vw_ReleaseParticleSystem(tmpEngineLeft);
+					vw_ReleaseParticleSystem(sharedEngineLeft);
 			}
 		}
 	}
 
 	if (!EnginesRight.empty()) {
 		for (auto tmpEngineRight : EnginesRight) {
-			if (tmpEngineRight) {
+			if (auto sharedEngineRight = tmpEngineRight.lock()) {
 				if (!EngineDestroyType) {
-					tmpEngineRight->IsSuppressed = true;
-					tmpEngineRight->DestroyIfNoParticles = true;
+					sharedEngineRight->IsSuppressed = true;
+					sharedEngineRight->DestroyIfNoParticles = true;
 				} else
-					vw_ReleaseParticleSystem(tmpEngineRight);
+					vw_ReleaseParticleSystem(sharedEngineRight);
 			}
 		}
 	}
@@ -194,24 +194,24 @@ void cSpaceShip::SetLocation(sVECTOR3D NewLocation)
 
 	// положение двигателей
 	for (unsigned int i = 0; i < Engines.size(); i++) {
-		if (Engines[i]) {
-			Engines[i]->MoveSystem(NewLocation + EnginesLocation[i]);
-			Engines[i]->SetStartLocation(EnginesLocation[i] + NewLocation);
+		if (auto sharedEngine = Engines[i].lock()) {
+			sharedEngine->MoveSystem(NewLocation + EnginesLocation[i]);
+			sharedEngine->SetStartLocation(EnginesLocation[i] + NewLocation);
 		}
 	}
 	if (!EnginesLeft.empty()) {
 		for (unsigned int i = 0; i < EnginesLeft.size(); i++) {
-			if (EnginesLeft[i]) {
-				EnginesLeft[i]->MoveSystem(NewLocation + EnginesLeftLocation[i]);
-				EnginesLeft[i]->SetStartLocation(EnginesLeftLocation[i] + NewLocation);
+			if (auto sharedEngineLeft = EnginesLeft[i].lock()) {
+				sharedEngineLeft->MoveSystem(NewLocation + EnginesLeftLocation[i]);
+				sharedEngineLeft->SetStartLocation(EnginesLeftLocation[i] + NewLocation);
 			}
 		}
 	}
 	if (!EnginesRight.empty()) {
 		for (unsigned int i = 0; i < EnginesRight.size(); i++) {
-			if (EnginesRight[i]) {
-				EnginesRight[i]->MoveSystem(NewLocation + EnginesRightLocation[i]);
-				EnginesRight[i]->SetStartLocation(EnginesRightLocation[i] + NewLocation);
+			if (auto sharedEngineRight = EnginesRight[i].lock()) {
+				sharedEngineRight->MoveSystem(NewLocation + EnginesRightLocation[i]);
+				sharedEngineRight->SetStartLocation(EnginesRightLocation[i] + NewLocation);
 			}
 		}
 	}
@@ -245,24 +245,24 @@ void cSpaceShip::SetLocationArcadePlayer(sVECTOR3D NewLocation)
 
 	// положение двигателей
 	for (unsigned int i = 0; i < Engines.size(); i++) {
-		if (Engines[i]) {
-			Engines[i]->MoveSystem(NewLocation + EnginesLocation[i]);
-			Engines[i]->SetStartLocation(NewLocation + EnginesLocation[i]);
+		if (auto sharedEngine = Engines[i].lock()) {
+			sharedEngine->MoveSystem(NewLocation + EnginesLocation[i]);
+			sharedEngine->SetStartLocation(NewLocation + EnginesLocation[i]);
 		}
 	}
 	if (!EnginesLeft.empty()) {
 		for (unsigned int i = 0; i < EnginesLeft.size(); i++) {
-			if (EnginesLeft[i]) {
-				EnginesLeft[i]->MoveSystem(NewLocation + EnginesLeftLocation[i]);
-				EnginesLeft[i]->SetStartLocation(NewLocation + EnginesLeftLocation[i]);
+			if (auto sharedEngineLeft = EnginesLeft[i].lock()) {
+				sharedEngineLeft->MoveSystem(NewLocation + EnginesLeftLocation[i]);
+				sharedEngineLeft->SetStartLocation(NewLocation + EnginesLeftLocation[i]);
 			}
 		}
 	}
 	if (!EnginesRight.empty()) {
 		for (unsigned int i = 0; i < EnginesRight.size(); i++) {
-			if (EnginesRight[i]) {
-				EnginesRight[i]->MoveSystem(NewLocation + EnginesRightLocation[i]);
-				EnginesRight[i]->SetStartLocation(NewLocation + EnginesRightLocation[i]);
+			if (auto sharedEngineRight = EnginesRight[i].lock()) {
+				sharedEngineRight->MoveSystem(NewLocation + EnginesRightLocation[i]);
+				sharedEngineRight->SetStartLocation(NewLocation + EnginesRightLocation[i]);
 			}
 		}
 	}
@@ -320,41 +320,41 @@ void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 
 	// двигатели
 	for (unsigned int i = 0; i < Engines.size(); i++) {
-		if (Engines[i]) {
+		if (auto sharedEngine = Engines[i].lock()) {
 			vw_Matrix33CalcPoint(EnginesLocation[i], OldInvRotationMat);
 			vw_Matrix33CalcPoint(EnginesLocation[i], CurrentRotationMat);
 
-			if (Engines[i]->SpeedOnCreation == -1.0f) {
-				Engines[i]->MoveSystem(EnginesLocation[i] + Location);
-				Engines[i]->SetStartLocation(EnginesLocation[i] + Location);
-				Engines[i]->RotateSystemAndParticlesByAngle(Rotation);
+			if (sharedEngine->SpeedOnCreation == -1.0f) {
+				sharedEngine->MoveSystem(EnginesLocation[i] + Location);
+				sharedEngine->SetStartLocation(EnginesLocation[i] + Location);
+				sharedEngine->RotateSystemAndParticlesByAngle(Rotation);
 			} else {
-				Engines[i]->MoveSystemLocation(EnginesLocation[i] + Location);
-				Engines[i]->RotateSystemByAngle(Rotation);
+				sharedEngine->MoveSystemLocation(EnginesLocation[i] + Location);
+				sharedEngine->RotateSystemByAngle(Rotation);
 			}
 		}
 	}
 	if (!EnginesLeft.empty()) {
 		for (unsigned int i = 0; i < EnginesLeft.size(); i++) {
-			if (EnginesLeft[i]) {
+			if (auto sharedEngineLeft = EnginesLeft[i].lock()) {
 				vw_Matrix33CalcPoint(EnginesLeftLocation[i], OldInvRotationMat);
 				vw_Matrix33CalcPoint(EnginesLeftLocation[i], CurrentRotationMat);
 
-				EnginesLeft[i]->MoveSystemLocation(EnginesLeftLocation[i] + Location);
-				EnginesLeft[i]->SetStartLocation(EnginesLeftLocation[i] + Location);
-				EnginesLeft[i]->RotateSystemByAngle(Rotation);
+				sharedEngineLeft->MoveSystemLocation(EnginesLeftLocation[i] + Location);
+				sharedEngineLeft->SetStartLocation(EnginesLeftLocation[i] + Location);
+				sharedEngineLeft->RotateSystemByAngle(Rotation);
 			}
 		}
 	}
 	if (!EnginesRight.empty()) {
 		for (unsigned int i = 0; i < EnginesRight.size(); i++) {
-			if (EnginesRight[i]) {
+			if (auto sharedEngineRight = EnginesRight[i].lock()) {
 				vw_Matrix33CalcPoint(EnginesRightLocation[i], OldInvRotationMat);
 				vw_Matrix33CalcPoint(EnginesRightLocation[i], CurrentRotationMat);
 
-				EnginesRight[i]->MoveSystemLocation(EnginesRightLocation[i] + Location);
-				EnginesRight[i]->SetStartLocation(EnginesRightLocation[i] + Location);
-				EnginesRight[i]->RotateSystemByAngle(Rotation);
+				sharedEngineRight->MoveSystemLocation(EnginesRightLocation[i] + Location);
+				sharedEngineRight->SetStartLocation(EnginesRightLocation[i] + Location);
+				sharedEngineRight->RotateSystemByAngle(Rotation);
 			}
 		}
 	}
@@ -498,14 +498,14 @@ bool cSpaceShip::Update(float Time)
 		// выключаем двигатели, если нужно - включим
 		if (!EnginesLeft.empty()) {
 			for (auto tmpEngineLeft : EnginesLeft) {
-				if (tmpEngineLeft)
-					tmpEngineLeft->IsSuppressed = true;
+				if (auto sharedEngineLeft = tmpEngineLeft.lock())
+					sharedEngineLeft->IsSuppressed = true;
 			}
 		}
 		if (!EnginesRight.empty()) {
 			for (auto tmpEngineRight : EnginesRight) {
-				if (tmpEngineRight)
-					tmpEngineRight->IsSuppressed = true;
+				if (auto sharedEngineRight = tmpEngineRight.lock())
+					sharedEngineRight->IsSuppressed = true;
 			}
 		}
 
@@ -562,15 +562,15 @@ bool cSpaceShip::Update(float Time)
 				if (NeedRotate.y < 0.0f) {
 					if (!EnginesLeft.empty()) {
 						for (auto tmpEngineLeft : EnginesLeft) {
-							if (tmpEngineLeft)
-								tmpEngineLeft->IsSuppressed = false;
+							if (auto sharedEngineLeft = tmpEngineLeft.lock())
+								sharedEngineLeft->IsSuppressed = false;
 						}
 					}
 				} else {
 					if (!EnginesRight.empty()) {
 						for (auto tmpEngineRight : EnginesRight) {
-							if (tmpEngineRight)
-								tmpEngineRight->IsSuppressed = false;
+							if (auto sharedEngineRight = tmpEngineRight.lock())
+								sharedEngineRight->IsSuppressed = false;
 						}
 					}
 				}
@@ -608,14 +608,14 @@ bool cSpaceShip::Update(float Time)
 	} else {
 		if (!EnginesLeft.empty()) {
 			for (auto tmpEngineLeft : EnginesLeft) {
-				if (tmpEngineLeft)
-					tmpEngineLeft->IsSuppressed = !PlayerFighterLeftEng;
+				if (auto sharedEngineLeft = tmpEngineLeft.lock())
+					sharedEngineLeft->IsSuppressed = !PlayerFighterLeftEng;
 			}
 		}
 		if (!EnginesRight.empty()) {
 			for (auto tmpEngineRight : EnginesRight) {
-				if (tmpEngineRight)
-					tmpEngineRight->IsSuppressed = !PlayerFighterRightEng;
+				if (auto sharedEngineRight = tmpEngineRight.lock())
+					sharedEngineRight->IsSuppressed = !PlayerFighterRightEng;
 			}
 		}
 	}
@@ -681,14 +681,14 @@ bool cSpaceShip::Update(float Time)
 		if (Sign == -1.0f) {
 			if (!EnginesLeft.empty()) {
 				for (auto tmpEngineLeft : EnginesLeft) {
-					if (tmpEngineLeft)
-						tmpEngineLeft->IsSuppressed = false;
+					if (auto sharedEngineLeft = tmpEngineLeft.lock())
+						sharedEngineLeft->IsSuppressed = false;
 				}
 			}
 			if (!EnginesRight.empty()) {
 				for (auto tmpEngineRight : EnginesRight) {
-					if (tmpEngineRight)
-						tmpEngineRight->IsSuppressed = false;
+					if (auto sharedEngineRight = tmpEngineRight.lock())
+						sharedEngineRight->IsSuppressed = false;
 				}
 			}
 		}
@@ -1151,8 +1151,9 @@ bool cSpaceShip::Update(float Time)
 		tmpSpeed/=2.0f;
 
 		for (auto tmpEngine : Engines) {
-			if (tmpEngine && (tmpEngine->SpeedOnCreation != -1.0f))
-				tmpEngine->Speed = tmpEngine->SpeedOnCreation + tmpSpeed;
+			if (auto sharedEngine = tmpEngine.lock())
+				if (sharedEngine->SpeedOnCreation != -1.0f)
+					sharedEngine->Speed = sharedEngine->SpeedOnCreation + tmpSpeed;
 		}
 	}
 

@@ -92,7 +92,7 @@ public:
 	// тип, как будем удалять -сразу, или глушить
 	bool		GraphicFXDestroyType{false};
 	std::vector<sVECTOR3D> GraphicFXLocation{};
-	std::vector<cParticleSystem*> GraphicFX{};
+	std::vector<std::weak_ptr<cParticleSystem>> GraphicFX{};
 
 	bool		NeedStopPartic{false};
 
@@ -106,7 +106,7 @@ public:
 //-----------------------------------------------------------------------------
 
 // Установка нужных данных для вспышки возле ствола
-void SetProjectileGFX(cParticleSystem *ParticleSystem, int GFXNum);
+void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNum);
 // получаем время жизни снаряда
 float GetProjectileRange(int Num);
 

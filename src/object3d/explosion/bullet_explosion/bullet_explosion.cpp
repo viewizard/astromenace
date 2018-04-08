@@ -258,21 +258,23 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
 		// эффект
-		GraphicFX.resize(1, nullptr);
+		GraphicFX.resize(1);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[0], 1);
-
-		GraphicFX[0]->Speed = 0.5f*Projectile->Radius;
-		GraphicFX[0]->SpeedVar   = vw_Randf0;
-		GraphicFX[0]->SetStartLocation(Projectile->Location);
-		if (Projectile->Speed!=0) GraphicFX[0]->Theta = 360.00f;
-		GraphicFX[0]->ParticlesPerSec = (int)(30*Projectile->Radius);
-		GraphicFX[0]->CreationType = eParticleCreationType::Cube;
-		GraphicFX[0]->CreationSize = sVECTOR3D(AABB[0].x, AABB[0].y, AABB[0].z);
-		// разварачиваем взрыв по объекту
-		GraphicFX[0]->RotateSystemAndParticlesByAngle(Projectile->Rotation);
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			SetExplosionGFX(sharedGFX, 1);
+			sharedGFX->Speed = 0.5f * Projectile->Radius;
+			sharedGFX->SpeedVar = vw_Randf0;
+			sharedGFX->SetStartLocation(Projectile->Location);
+			if (Projectile->Speed != 0.0f)
+				sharedGFX->Theta = 360.00f;
+			sharedGFX->ParticlesPerSec = (int)(30 * Projectile->Radius);
+			sharedGFX->CreationType = eParticleCreationType::Cube;
+			sharedGFX->CreationSize = sVECTOR3D(AABB[0].x, AABB[0].y, AABB[0].z);
+			// разварачиваем взрыв по объекту
+			sharedGFX->RotateSystemAndParticlesByAngle(Projectile->Rotation);
+		}
 
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(3*Projectile->Radius) + (int)(vw_Randf0*3*Projectile->Radius);
@@ -288,9 +290,11 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Orientation.Normalize();
 
 			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
-				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
-				tmpGFX->Speed = 1.5f;
-				tmpGFX->SetStartLocation(Location);
+				if (auto sharedGFX = tmpGFX.lock()) {
+					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
+					sharedGFX->Speed = 1.5f;
+					sharedGFX->SetStartLocation(Location);
+				}
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			// учитываем пенальти
@@ -349,31 +353,35 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 0.5f; // должно соотв. максимальной жизни частицы
 
 		// просто делаем вспышку нужного цвета
-		GraphicFX.resize(1, nullptr);
+		GraphicFX.resize(1);
 
 		// установка эффекта вспышки в месте попадания
-		if (!Projectile->GraphicFX.empty() && Projectile->GraphicFX[0]) {
+		if (!Projectile->GraphicFX.empty() && !Projectile->GraphicFX[0].expired()) {
 			GraphicFX[0] = vw_CreateParticleSystem();
-			SetExplosionGFX(GraphicFX[0], 0);
-			float Rexpl = (Projectile->GraphicFX[0]->ColorStart.r + Projectile->GraphicFX[0]->ColorEnd.r)/2.0f;
-			float Gexpl = (Projectile->GraphicFX[0]->ColorStart.g + Projectile->GraphicFX[0]->ColorEnd.g)/2.0f;
-			float Bexpl = (Projectile->GraphicFX[0]->ColorStart.b + Projectile->GraphicFX[0]->ColorEnd.b)/2.0f;
-			GraphicFX[0]->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
+			auto sharedGFX = GraphicFX[0].lock();
+			auto sharedProjectileGFX = Projectile->GraphicFX[0].lock();
+			if (sharedGFX && sharedProjectileGFX) {
+				SetExplosionGFX(sharedGFX, 0);
+				float Rexpl = (sharedProjectileGFX->ColorStart.r + sharedProjectileGFX->ColorEnd.r) / 2.0f;
+				float Gexpl = (sharedProjectileGFX->ColorStart.g + sharedProjectileGFX->ColorEnd.g) / 2.0f;
+				float Bexpl = (sharedProjectileGFX->ColorStart.b + sharedProjectileGFX->ColorEnd.b) / 2.0f;
+				sharedGFX->Light = vw_CreatePointLight(sVECTOR3D(0.0f, 0.0f, 0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
 
-			GraphicFX[0]->ColorStart.r = Projectile->GraphicFX[0]->ColorStart.r;
-			GraphicFX[0]->ColorStart.g = Projectile->GraphicFX[0]->ColorStart.g;
-			GraphicFX[0]->ColorStart.b = Projectile->GraphicFX[0]->ColorStart.b;
-			GraphicFX[0]->ColorEnd.r = Projectile->GraphicFX[0]->ColorEnd.r;
-			GraphicFX[0]->ColorEnd.g = Projectile->GraphicFX[0]->ColorEnd.g;
-			GraphicFX[0]->ColorEnd.b = Projectile->GraphicFX[0]->ColorEnd.b;
-			GraphicFX[0]->Speed = 150.0f;
-			GraphicFX[0]->ParticlesPerSec = Projectile->GraphicFX[0]->ParticlesPerSec;
-			GraphicFX[0]->SizeStart = Projectile->GraphicFX[0]->SizeStart;
-			GraphicFX[0]->SizeEnd = Projectile->GraphicFX[0]->SizeEnd;
-			GraphicFX[0]->SizeVar = Projectile->GraphicFX[0]->SizeVar;
-			GraphicFX[0]->Life = Lifetime;
-			GraphicFX[0]->NeedStop = false;
-			GraphicFX[0]->SetStartLocation(ExplLocation);
+				sharedGFX->ColorStart.r = sharedProjectileGFX->ColorStart.r;
+				sharedGFX->ColorStart.g = sharedProjectileGFX->ColorStart.g;
+				sharedGFX->ColorStart.b = sharedProjectileGFX->ColorStart.b;
+				sharedGFX->ColorEnd.r = sharedProjectileGFX->ColorEnd.r;
+				sharedGFX->ColorEnd.g = sharedProjectileGFX->ColorEnd.g;
+				sharedGFX->ColorEnd.b = sharedProjectileGFX->ColorEnd.b;
+				sharedGFX->Speed = 150.0f;
+				sharedGFX->ParticlesPerSec = sharedProjectileGFX->ParticlesPerSec;
+				sharedGFX->SizeStart = sharedProjectileGFX->SizeStart;
+				sharedGFX->SizeEnd = sharedProjectileGFX->SizeEnd;
+				sharedGFX->SizeVar = sharedProjectileGFX->SizeVar;
+				sharedGFX->Life = Lifetime;
+				sharedGFX->NeedStop = false;
+				sharedGFX->SetStartLocation(ExplLocation);
+			}
 		}
 
 		Projectile->NeedStopPartic = true;
@@ -406,33 +414,36 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 0.5f; // должно соотв. максимальной жизни частицы
 
 		// просто делаем вспышку нужного цвета
-		GraphicFX.resize(1, nullptr);
+		GraphicFX.resize(1);
 
 		// установка эффекта вспышки в месте попадания
-		if (!Projectile->GraphicFX.empty())
-			if (Projectile->GraphicFX[0] != nullptr) {
-				GraphicFX[0] = vw_CreateParticleSystem();
-				SetExplosionGFX(GraphicFX[0], 0);
-				float Rexpl = (Projectile->GraphicFX[0]->ColorStart.r + Projectile->GraphicFX[0]->ColorEnd.r)/2.0f;
-				float Gexpl = (Projectile->GraphicFX[0]->ColorStart.g + Projectile->GraphicFX[0]->ColorEnd.g)/2.0f;
-				float Bexpl = (Projectile->GraphicFX[0]->ColorStart.b + Projectile->GraphicFX[0]->ColorEnd.b)/2.0f;
-				GraphicFX[0]->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
+		if (!Projectile->GraphicFX.empty() && !Projectile->GraphicFX[0].expired()) {
+			GraphicFX[0] = vw_CreateParticleSystem();
+			auto sharedGFX = GraphicFX[0].lock();
+			auto sharedProjectileGFX = Projectile->GraphicFX[0].lock();
+			if (sharedGFX && sharedProjectileGFX) {
+				SetExplosionGFX(sharedGFX, 0);
+				float Rexpl = (sharedProjectileGFX->ColorStart.r + sharedProjectileGFX->ColorEnd.r) / 2.0f;
+				float Gexpl = (sharedProjectileGFX->ColorStart.g + sharedProjectileGFX->ColorEnd.g) / 2.0f;
+				float Bexpl = (sharedProjectileGFX->ColorStart.b + sharedProjectileGFX->ColorEnd.b) / 2.0f;
+				sharedGFX->Light = vw_CreatePointLight(sVECTOR3D(0.0f, 0.0f, 0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
 
-				GraphicFX[0]->ColorStart.r = Projectile->GraphicFX[0]->ColorStart.r;
-				GraphicFX[0]->ColorStart.g = Projectile->GraphicFX[0]->ColorStart.g;
-				GraphicFX[0]->ColorStart.b = Projectile->GraphicFX[0]->ColorStart.b;
-				GraphicFX[0]->ColorEnd.r = Projectile->GraphicFX[0]->ColorEnd.r;
-				GraphicFX[0]->ColorEnd.g = Projectile->GraphicFX[0]->ColorEnd.g;
-				GraphicFX[0]->ColorEnd.b = Projectile->GraphicFX[0]->ColorEnd.b;
-				GraphicFX[0]->Speed = 150.0f;
-				GraphicFX[0]->ParticlesPerSec = Projectile->GraphicFX[0]->ParticlesPerSec;
-				GraphicFX[0]->SizeStart = Projectile->GraphicFX[0]->SizeStart;
-				GraphicFX[0]->SizeEnd = Projectile->GraphicFX[0]->SizeEnd;
-				GraphicFX[0]->SizeVar = Projectile->GraphicFX[0]->SizeVar;
-				GraphicFX[0]->Life = Lifetime;
-				GraphicFX[0]->NeedStop = false;
-				GraphicFX[0]->SetStartLocation(ExplLocation);
+				sharedGFX->ColorStart.r = sharedProjectileGFX->ColorStart.r;
+				sharedGFX->ColorStart.g = sharedProjectileGFX->ColorStart.g;
+				sharedGFX->ColorStart.b = sharedProjectileGFX->ColorStart.b;
+				sharedGFX->ColorEnd.r = sharedProjectileGFX->ColorEnd.r;
+				sharedGFX->ColorEnd.g = sharedProjectileGFX->ColorEnd.g;
+				sharedGFX->ColorEnd.b = sharedProjectileGFX->ColorEnd.b;
+				sharedGFX->Speed = 150.0f;
+				sharedGFX->ParticlesPerSec = sharedProjectileGFX->ParticlesPerSec;
+				sharedGFX->SizeStart = sharedProjectileGFX->SizeStart;
+				sharedGFX->SizeEnd = sharedProjectileGFX->SizeEnd;
+				sharedGFX->SizeVar = sharedProjectileGFX->SizeVar;
+				sharedGFX->Life = Lifetime;
+				sharedGFX->NeedStop = false;
+				sharedGFX->SetStartLocation(ExplLocation);
 			}
+		}
 
 		Projectile->NeedStopPartic = true;
 		NeedStop = false;
@@ -463,12 +474,14 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
 		// эффект
-		GraphicFX.resize(1, nullptr);
+		GraphicFX.resize(1);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[0], 10);
-		GraphicFX[0]->SetStartLocation(Projectile->Location);
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			SetExplosionGFX(sharedGFX, 10);
+			sharedGFX->SetStartLocation(Projectile->Location);
+		}
 
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(3*Projectile->Radius) + (int)(vw_Randf1*1*Projectile->Radius);
@@ -483,9 +496,11 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Orientation.Normalize();
 
 			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
-				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
-				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
-				tmpGFX->SetStartLocation(Location);
+				if (auto sharedGFX = tmpGFX.lock()) {
+					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
+					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+					sharedGFX->SetStartLocation(Location);
+				}
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/7.0f;
@@ -507,14 +522,16 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
 		// эффект
-		GraphicFX.resize(1, nullptr);
+		GraphicFX.resize(1);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[0], 10);
-		GraphicFX[0]->ParticlesPerSec = 30;
-		GraphicFX[0]->CreationSize = sVECTOR3D(2.0f,0.3f,2.0f);
-		GraphicFX[0]->SetStartLocation(Projectile->Location);
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			SetExplosionGFX(sharedGFX, 10);
+			sharedGFX->ParticlesPerSec = 30;
+			sharedGFX->CreationSize = sVECTOR3D(2.0f,0.3f,2.0f);
+			sharedGFX->SetStartLocation(Projectile->Location);
+		}
 
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(1*Projectile->Radius) + (int)(vw_Randf1*1*Projectile->Radius);
@@ -530,9 +547,11 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Orientation.Normalize();
 
 			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
-				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
-				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
-				tmpGFX->SetStartLocation(Location);
+				if (auto sharedGFX = tmpGFX.lock()) {
+					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
+					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+					sharedGFX->SetStartLocation(Location);
+				}
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/7.0f;
@@ -557,12 +576,14 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
 		// эффект
-		GraphicFX.resize(1, nullptr);
+		GraphicFX.resize(1);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[0], 8);
-		GraphicFX[0]->SetStartLocation(Projectile->Location);
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			SetExplosionGFX(sharedGFX, 8);
+			sharedGFX->SetStartLocation(Projectile->Location);
+		}
 
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(2*Projectile->Radius) + (int)(vw_Randf1*1*Projectile->Radius);
@@ -578,9 +599,11 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Orientation.Normalize();
 
 			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
-				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
-				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
-				tmpGFX->SetStartLocation(Location);
+				if (auto sharedGFX = tmpGFX.lock()) {
+					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
+					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+					sharedGFX->SetStartLocation(Location);
+				}
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/7.0f;
@@ -606,16 +629,20 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
 		// эффект
-		GraphicFX.resize(2, nullptr);
+		GraphicFX.resize(2);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[0], 7);
-		GraphicFX[0]->SetStartLocation(Projectile->Location);
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			SetExplosionGFX(sharedGFX, 7);
+			sharedGFX->SetStartLocation(Projectile->Location);
+		}
 
 		GraphicFX[1] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[1], 9);
-		GraphicFX[1]->SetStartLocation(Projectile->Location);
+		if (auto sharedGFX = GraphicFX[1].lock()) {
+			SetExplosionGFX(sharedGFX, 9);
+			sharedGFX->SetStartLocation(Projectile->Location);
+		}
 
 		// создаем немного разлетающихся кусков-снарядов
 		for (int i=0; i<4; i++) {
@@ -630,9 +657,11 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Orientation.Normalize();
 
 			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
-				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
-				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
-				tmpGFX->SetStartLocation(Location);
+				if (auto sharedGFX = tmpGFX.lock()) {
+					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
+					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+					sharedGFX->SetStartLocation(Location);
+				}
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
@@ -649,9 +678,11 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
 			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
-				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
-				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
-				tmpGFX->SetStartLocation(Location);
+				if (auto sharedGFX = tmpGFX.lock()) {
+					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
+					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+					sharedGFX->SetStartLocation(Location);
+				}
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
@@ -668,9 +699,11 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
 			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
-				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
-				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
-				tmpGFX->SetStartLocation(Location);
+				if (auto sharedGFX = tmpGFX.lock()) {
+					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
+					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+					sharedGFX->SetStartLocation(Location);
+				}
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
@@ -686,9 +719,11 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
 			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
-				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
-				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
-				tmpGFX->SetStartLocation(Location);
+				if (auto sharedGFX = tmpGFX.lock()) {
+					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
+					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+					sharedGFX->SetStartLocation(Location);
+				}
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
@@ -706,9 +741,11 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
 			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
-				tmpGFX->Direction = ProjectileTMP->Orientation ^ -1;
-				tmpGFX->Speed = tmpGFX->Speed / 2.0f;
-				tmpGFX->SetStartLocation(Location);
+				if (auto sharedGFX = tmpGFX.lock()) {
+					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
+					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+					sharedGFX->SetStartLocation(Location);
+				}
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
@@ -730,12 +767,14 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
 		// эффект
-		GraphicFX.resize(1, nullptr);
+		GraphicFX.resize(1);
 
 		// установка эффекта
 		GraphicFX[0] = vw_CreateParticleSystem();
-		SetExplosionGFX(GraphicFX[0], 10);
-		GraphicFX[0]->SetStartLocation(Projectile->Location);
+		if (auto sharedGFX = GraphicFX[0].lock()) {
+			SetExplosionGFX(sharedGFX, 10);
+			sharedGFX->SetStartLocation(Projectile->Location);
+		}
 
 		// собираем геометрию и рисуем ее разлет
 		InternalExplosionType = 2;

@@ -181,15 +181,15 @@ public:
 
 	// тип, как будем удалять двигатели -сразу, или глушить
 	bool EngineDestroyType{false};
-	std::vector<cParticleSystem*> Engines{}; // двигатели
+	std::vector<std::weak_ptr<cParticleSystem>> Engines{}; // двигатели
 	std::vector<sVECTOR3D> EnginesLocation{}; // положение двигателей
 
 	// двигатели поворотов, левый
-	std::vector<cParticleSystem*> EnginesLeft{}; // двигатели
+	std::vector<std::weak_ptr<cParticleSystem>> EnginesLeft{}; // двигатели
 	std::vector<sVECTOR3D> EnginesLeftLocation{}; // положение двигателей
 
 	// двигатели поворотов, правый
-	std::vector<cParticleSystem*> EnginesRight{}; // двигатели
+	std::vector<std::weak_ptr<cParticleSystem>> EnginesRight{}; // двигатели
 	std::vector<sVECTOR3D> EnginesRightLocation{}; // положение двигателей
 
 	// для собственного списка

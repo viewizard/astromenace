@@ -62,8 +62,8 @@ float CurrentPlayerShipEnergy;
 bool PlayerFighterLeftEng = false;
 bool PlayerFighterRightEng = false;
 
-cParticleSystem *Shild1 = nullptr;
-cParticleSystem *Shild2 = nullptr;
+std::weak_ptr<cParticleSystem> Shild1{};
+std::weak_ptr<cParticleSystem> Shild2{};
 float ShildRadius;
 float ShildEnergyStatus;
 float ShildStartHitStatus;
@@ -278,87 +278,93 @@ void InitGamePlayerShip()
 
 	if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem == 3) {
 		Shild1 = vw_CreateParticleSystem();
-		Shild1->ColorStart.r = 0.20f;
-		Shild1->ColorStart.g = 0.50f;
-		Shild1->ColorStart.b = 0.10f;
-		Shild1->ColorEnd.r = 0.20f;
-		Shild1->ColorEnd.g = 0.50f;
-		Shild1->ColorEnd.b = 0.10f;
-		Shild1->AlphaStart = 1.00f;
-		Shild1->AlphaEnd   = 0.00f;
-		Shild1->SizeStart  = 0.60f;
-		Shild1->SizeVar    = 0.10f;
-		Shild1->SizeEnd    = 0.10f;
-		Shild1->Speed      = 0.00f;
-		Shild1->SpeedOnCreation	   = -1.00f;
-		Shild1->Theta      = 360.00f;
-		Shild1->Life       = 1.00f;
-		Shild1->ParticlesPerSec = (int)(40*ShildRadius);
-		Shild1->CreationType = eParticleCreationType::Sphere;
-		Shild1->CreationSize = sVECTOR3D(ShildRadius,0.05f*ShildRadius,ShildRadius);
-		Shild1->DeadZone = ShildRadius-0.05;
-		Shild1->AlphaShowHide = true;
-		Shild1->IsMagnet = true;
-		Shild1->MagnetFactor = -3.0f;
-		Shild1->Texture = vw_FindTextureByName("gfx/flare1.tga");
-		Shild1->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
-		Shild1->SetStartLocation(PlayerFighter->Location+PlayerFighter->OBBLocation);
+		if (auto sharedShild1 = Shild1.lock()) {
+			sharedShild1->ColorStart.r = 0.20f;
+			sharedShild1->ColorStart.g = 0.50f;
+			sharedShild1->ColorStart.b = 0.10f;
+			sharedShild1->ColorEnd.r = 0.20f;
+			sharedShild1->ColorEnd.g = 0.50f;
+			sharedShild1->ColorEnd.b = 0.10f;
+			sharedShild1->AlphaStart = 1.00f;
+			sharedShild1->AlphaEnd = 0.00f;
+			sharedShild1->SizeStart = 0.60f;
+			sharedShild1->SizeVar = 0.10f;
+			sharedShild1->SizeEnd = 0.10f;
+			sharedShild1->Speed = 0.00f;
+			sharedShild1->SpeedOnCreation = -1.00f;
+			sharedShild1->Theta = 360.00f;
+			sharedShild1->Life = 1.00f;
+			sharedShild1->ParticlesPerSec = (int)(40 * ShildRadius);
+			sharedShild1->CreationType = eParticleCreationType::Sphere;
+			sharedShild1->CreationSize = sVECTOR3D(ShildRadius, 0.05f * ShildRadius, ShildRadius);
+			sharedShild1->DeadZone = ShildRadius - 0.05f;
+			sharedShild1->AlphaShowHide = true;
+			sharedShild1->IsMagnet = true;
+			sharedShild1->MagnetFactor = -3.0f;
+			sharedShild1->Texture = vw_FindTextureByName("gfx/flare1.tga");
+			sharedShild1->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+			sharedShild1->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBBLocation);
+		}
 
 		ShildStartHitStatus = 100.0f;
 		ShildEnergyStatus = 1.0f;
 	}
 	if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem == 4) {
 		Shild1 = vw_CreateParticleSystem();
-		Shild1->ColorStart.r = 0.50f;
-		Shild1->ColorStart.g = 0.50f;
-		Shild1->ColorStart.b = 1.00f;
-		Shild1->ColorEnd.r = 0.50f;
-		Shild1->ColorEnd.g = 0.50f;
-		Shild1->ColorEnd.b = 1.00f;
-		Shild1->AlphaStart = 0.50f;
-		Shild1->AlphaEnd   = 0.00f;
-		Shild1->SizeStart  = 0.40f;
-		Shild1->SizeVar    = 0.10f;
-		Shild1->SizeEnd    = 0.20f;
-		Shild1->Speed      = 0.00f;
-		Shild1->SpeedOnCreation	   = -1.00f;
-		Shild1->Theta      = 360.00f;
-		Shild1->Life       = 1.00f;
-		Shild1->ParticlesPerSec = (int)(40*ShildRadius);
-		Shild1->CreationType = eParticleCreationType::Sphere;
-		Shild1->CreationSize = sVECTOR3D(ShildRadius,0.05f*ShildRadius,ShildRadius);
-		Shild1->DeadZone = ShildRadius-0.05;
-		Shild1->IsMagnet = true;
-		Shild1->AlphaShowHide = true;
-		Shild1->MagnetFactor = 2.5f;
-		Shild1->Texture = vw_FindTextureByName("gfx/flare1.tga");
-		Shild1->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
-		Shild1->SetStartLocation(PlayerFighter->Location+PlayerFighter->OBBLocation);
+		if (auto sharedShild1 = Shild1.lock()) {
+			sharedShild1->ColorStart.r = 0.50f;
+			sharedShild1->ColorStart.g = 0.50f;
+			sharedShild1->ColorStart.b = 1.00f;
+			sharedShild1->ColorEnd.r = 0.50f;
+			sharedShild1->ColorEnd.g = 0.50f;
+			sharedShild1->ColorEnd.b = 1.00f;
+			sharedShild1->AlphaStart = 0.50f;
+			sharedShild1->AlphaEnd = 0.00f;
+			sharedShild1->SizeStart = 0.40f;
+			sharedShild1->SizeVar = 0.10f;
+			sharedShild1->SizeEnd = 0.20f;
+			sharedShild1->Speed = 0.00f;
+			sharedShild1->SpeedOnCreation = -1.00f;
+			sharedShild1->Theta = 360.00f;
+			sharedShild1->Life = 1.00f;
+			sharedShild1->ParticlesPerSec = (int)(40 * ShildRadius);
+			sharedShild1->CreationType = eParticleCreationType::Sphere;
+			sharedShild1->CreationSize = sVECTOR3D(ShildRadius, 0.05f * ShildRadius, ShildRadius);
+			sharedShild1->DeadZone = ShildRadius - 0.05f;
+			sharedShild1->IsMagnet = true;
+			sharedShild1->AlphaShowHide = true;
+			sharedShild1->MagnetFactor = 2.5f;
+			sharedShild1->Texture = vw_FindTextureByName("gfx/flare1.tga");
+			sharedShild1->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+			sharedShild1->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBBLocation);
+		}
 
 		Shild2 = vw_CreateParticleSystem();
-		Shild2->ColorStart.r = 0.50f;
-		Shild2->ColorStart.g = 0.50f;
-		Shild2->ColorStart.b = 1.00f;
-		Shild2->ColorEnd.r = 0.50f;
-		Shild2->ColorEnd.g = 0.50f;
-		Shild2->ColorEnd.b = 1.00f;
-		Shild2->AlphaStart = 0.70f;
-		Shild2->AlphaEnd   = 0.10f;
-		Shild2->SizeStart  = 0.50f;
-		Shild2->SizeVar    = 0.10f;
-		Shild2->SizeEnd    = 0.30f;
-		Shild2->Speed      = 0.00f;
-		Shild2->SpeedOnCreation	   = -1.00f;
-		Shild2->Theta      = 360.00f;
-		Shild2->Life       = 1.00f;
-		Shild2->ParticlesPerSec = (int)(5*ShildRadius);
-		Shild2->CreationType = eParticleCreationType::Sphere;
-		Shild2->CreationSize = sVECTOR3D(ShildRadius,0.05f*ShildRadius,ShildRadius);
-		Shild2->DeadZone = ShildRadius-0.05;
-		Shild2->IsMagnet = true;
-		Shild2->MagnetFactor = 20.0f;
-		Shild2->Texture = vw_FindTextureByName("gfx/flare1.tga");
-		Shild2->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+		if (auto sharedShild2 = Shild2.lock()) {
+			sharedShild2->ColorStart.r = 0.50f;
+			sharedShild2->ColorStart.g = 0.50f;
+			sharedShild2->ColorStart.b = 1.00f;
+			sharedShild2->ColorEnd.r = 0.50f;
+			sharedShild2->ColorEnd.g = 0.50f;
+			sharedShild2->ColorEnd.b = 1.00f;
+			sharedShild2->AlphaStart = 0.70f;
+			sharedShild2->AlphaEnd = 0.10f;
+			sharedShild2->SizeStart = 0.50f;
+			sharedShild2->SizeVar = 0.10f;
+			sharedShild2->SizeEnd = 0.30f;
+			sharedShild2->Speed = 0.00f;
+			sharedShild2->SpeedOnCreation = -1.00f;
+			sharedShild2->Theta = 360.00f;
+			sharedShild2->Life = 1.00f;
+			sharedShild2->ParticlesPerSec = (int)(5 * ShildRadius);
+			sharedShild2->CreationType = eParticleCreationType::Sphere;
+			sharedShild2->CreationSize = sVECTOR3D(ShildRadius, 0.05f * ShildRadius, ShildRadius);
+			sharedShild2->DeadZone = ShildRadius - 0.05f;
+			sharedShild2->IsMagnet = true;
+			sharedShild2->MagnetFactor = 20.0f;
+			sharedShild2->Texture = vw_FindTextureByName("gfx/flare1.tga");
+			sharedShild2->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+		}
 
 		ShildStartHitStatus = 150.0f;
 		ShildEnergyStatus = 1.0f;
@@ -1017,19 +1023,19 @@ void GamePlayerShip()
 			PlayerFighter->MaxSpeedRotate = 0.0f;
 			// глушим двигатели
 			for (auto tmpEngine : PlayerFighter->Engines) {
-				if (tmpEngine)
-					tmpEngine->IsSuppressed = true;
+				if (auto sharedEngine = tmpEngine.lock())
+					sharedEngine->IsSuppressed = true;
 			}
 			if (!PlayerFighter->EnginesLeft.empty()) {
 				for (auto tmpEngineLeft : PlayerFighter->EnginesLeft) {
-					if (tmpEngineLeft)
-						tmpEngineLeft->IsSuppressed = true;
+					if (auto sharedEngineLeft = tmpEngineLeft.lock())
+						sharedEngineLeft->IsSuppressed = true;
 				}
 			}
 			if (!PlayerFighter->EnginesRight.empty()) {
-				for (auto EngineRight : PlayerFighter->EnginesRight) {
-					if (EngineRight)
-						EngineRight->IsSuppressed = true;
+				for (auto tmpEngineRight : PlayerFighter->EnginesRight) {
+					if (auto sharedEngineRight = tmpEngineRight.lock())
+						sharedEngineRight->IsSuppressed = true;
 				}
 			}
 		} else {
@@ -1038,19 +1044,19 @@ void GamePlayerShip()
 			PlayerFighter->MaxSpeedRotate = GetEngineRotatePower(GameEngineSystem)*2.0f - PlayerFighter->Weight/1000.0f;
 			// запускаем прорисовку
 			for (auto tmpEngine : PlayerFighter->Engines) {
-				if (tmpEngine)
-					tmpEngine->IsSuppressed = false;
+				if (auto sharedEngine = tmpEngine.lock())
+					sharedEngine->IsSuppressed = false;
 			}
 			if (!PlayerFighter->EnginesLeft.empty()) {
 				for (auto tmpEngineLeft : PlayerFighter->EnginesLeft) {
-					if (tmpEngineLeft)
-						tmpEngineLeft->IsSuppressed = false;
+					if (auto sharedEngineLeft = tmpEngineLeft.lock())
+						sharedEngineLeft->IsSuppressed = false;
 				}
 			}
 			if (!PlayerFighter->EnginesRight.empty()) {
 				for (auto tmpEngineRight : PlayerFighter->EnginesRight) {
-					if (tmpEngineRight)
-						tmpEngineRight->IsSuppressed = false;
+					if (auto sharedEngineRight = tmpEngineRight.lock())
+						sharedEngineRight->IsSuppressed = false;
 				}
 			}
 			CurrentPlayerShipEnergy -= GetShipEngineSystemEnergyUse(GameEngineSystem)*PlayerFighter->TimeDelta;
@@ -1071,7 +1077,8 @@ void GamePlayerShip()
 				if (CurrentPlayerShipEnergy < PlayerFighter->Weapon[i]->EnergyUse) {
 					// останавливаем перезарядку оружия
 					PlayerFighter->Weapon[i]->LastFireTime += PlayerFighter->TimeDelta;
-					PlayerFighter->Weapon[i]->Fire->IsSuppressed = true;
+					if (auto sharedFire = PlayerFighter->Weapon[i]->Fire.lock())
+						sharedFire->IsSuppressed = true;
 				} else {
 					// если энергии достаточно, все нормально берем ее и перезаряжаем оружие
 					PlayerFighter->Weapon[i]->CurrentEnergyAccumulated = PlayerFighter->Weapon[i]->EnergyUse;
@@ -1125,17 +1132,17 @@ void GamePlayerShip()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// управление визуализацией щитов-дефлекторов
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Shild1 != nullptr) {
-		Shild1->MoveSystem(PlayerFighter->Location+PlayerFighter->OBBLocation);
-		Shild1->SetStartLocation(PlayerFighter->Location+PlayerFighter->OBBLocation);
-		Shild1->RotateSystemAndParticlesByAngle(PlayerFighter->Rotation);
-		Shild1->ParticlesPerSec = (int)(40*ShildEnergyStatus*ShildRadius);
+	if (auto sharedShild1 = Shild1.lock()) {
+		sharedShild1->MoveSystem(PlayerFighter->Location + PlayerFighter->OBBLocation);
+		sharedShild1->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBBLocation);
+		sharedShild1->RotateSystemAndParticlesByAngle(PlayerFighter->Rotation);
+		sharedShild1->ParticlesPerSec = (int)(40 * ShildEnergyStatus * ShildRadius);
 	}
-	if (Shild2 != nullptr) {
-		Shild2->MoveSystem(PlayerFighter->Location+PlayerFighter->OBBLocation);
-		Shild2->SetStartLocation(PlayerFighter->Location+PlayerFighter->OBBLocation);
-		Shild2->RotateSystemAndParticlesByAngle(PlayerFighter->Rotation);
-		Shild2->ParticlesPerSec = (int)(5*ShildEnergyStatus*ShildRadius);
+	if (auto sharedShild2 = Shild2.lock()) {
+		sharedShild2->MoveSystem(PlayerFighter->Location + PlayerFighter->OBBLocation);
+		sharedShild2->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBBLocation);
+		sharedShild2->RotateSystemAndParticlesByAngle(PlayerFighter->Rotation);
+		sharedShild2->ParticlesPerSec = (int)(5 * ShildEnergyStatus * ShildRadius);
 	}
 
 

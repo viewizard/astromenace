@@ -348,8 +348,8 @@ void CreateInfoObject()
 		InfoObjectEngineQuantity = InfoFighter->Engines.size();
 
 		for (auto tmpEngine : InfoFighter->Engines) {
-			if (tmpEngine)
-				tmpEngine->SpeedOnCreation = -1.0f;
+			if (auto sharedEngine = tmpEngine.lock())
+				sharedEngine->SpeedOnCreation = -1.0f;
 		}
 
 		InfoFighter->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
@@ -381,8 +381,8 @@ void CreateInfoObject()
 		InfoObjectReload = InfoWeapon->NextFireTime;
 		InfoObjectRange = GetProjectileRange(tmpCreateNum);
 		// убираем источник света
-		if (InfoWeapon->Fire != nullptr)
-			vw_ReleaseLight(InfoWeapon->Fire->Light);
+		if (auto sharedFire = InfoWeapon->Fire.lock())
+			vw_ReleaseLight(sharedFire->Light);
 	}
 	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant) {
 		int tmpCreateNum = CreateNum-InfoMineStart+1;
@@ -435,8 +435,8 @@ void CreateInfoObject()
 		InfoObjectStrength = InfoAlien->StrengthStart;
 
 		for (auto tmpEngine : InfoAlien->Engines) {
-			if (tmpEngine)
-				tmpEngine->SpeedOnCreation = -1.0f;
+			if (auto sharedEngine = tmpEngine.lock())
+				sharedEngine->SpeedOnCreation = -1.0f;
 		}
 
 		InfoAlien->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
@@ -464,8 +464,8 @@ void CreateInfoObject()
 		InfoObjectStrength = InfoAlienMotherShip->StrengthStart;
 
 		for (auto tmpEngine : InfoAlienMotherShip->Engines) {
-			if (tmpEngine)
-				tmpEngine->SpeedOnCreation = -1.0f;
+			if (auto sharedEngine = tmpEngine.lock())
+				sharedEngine->SpeedOnCreation = -1.0f;
 		}
 
 		InfoAlienMotherShip->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
@@ -493,8 +493,8 @@ void CreateInfoObject()
 		InfoObjectStrength = InfoPirateShip->StrengthStart;
 
 		for (auto tmpEngine : InfoPirateShip->Engines) {
-			if (tmpEngine)
-				tmpEngine->SpeedOnCreation = -1.0f;
+			if (auto sharedEngine = tmpEngine.lock())
+				sharedEngine->SpeedOnCreation = -1.0f;
 		}
 
 		// убираем поворот турелей

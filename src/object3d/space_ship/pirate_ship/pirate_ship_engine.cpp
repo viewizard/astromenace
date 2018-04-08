@@ -34,7 +34,7 @@
 //-----------------------------------------------------------------------------
 // Создание двигателя
 //-----------------------------------------------------------------------------
-void SetPirateShipEngine(cParticleSystem *ParticleSystem, int EngineType)
+void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType)
 {
 
 	ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");

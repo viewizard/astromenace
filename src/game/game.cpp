@@ -33,7 +33,7 @@
 
 
 cScriptEngine *Script = nullptr;
-extern cParticleSystem *psSpace;
+extern std::weak_ptr<cParticleSystem> psSpace;
 
 
 
@@ -133,8 +133,8 @@ float CurrentDrawLifeNumFull;
 
 
 // щит или дефлектор
-extern cParticleSystem *Shild1;
-extern cParticleSystem *Shild2;
+extern std::weak_ptr<cParticleSystem> Shild1;
+extern std::weak_ptr<cParticleSystem> Shild2;
 
 // для звука открытия-закрытия меню в игре
 unsigned int SoundShowHideMenu{0};
@@ -617,35 +617,6 @@ void InitGame()
 	GameSetMissionTitleData(3, CurrentMission+1);
 
 
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// активные частицы космоса
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	psSpace = vw_CreateParticleSystem();
-	psSpace->ColorStart.r = 0.80f;
-	psSpace->ColorStart.g = 0.80f;
-	psSpace->ColorStart.b = 1.00f;
-	psSpace->ColorEnd.r = 0.70f;
-	psSpace->ColorEnd.g = 0.70f;
-	psSpace->ColorEnd.b = 1.00f;
-	psSpace->AlphaStart = 0.50f;
-	psSpace->AlphaEnd   = 1.00f;
-	psSpace->SizeStart = 0.40f;
-	psSpace->SizeEnd = 0.05f;
-	psSpace->Speed      = 25.00f;
-	psSpace->SpeedVar   = 5.00f;
-	psSpace->Theta      = 0.00f;
-	psSpace->Life       = 14.00f;
-	psSpace->LifeVar    = 0.00f;
-	psSpace->CreationType = eParticleCreationType::Cube;
-	psSpace->CreationSize = sVECTOR3D(200.0f,30.0f,10.0f);
-	psSpace->ParticlesPerSec = 100;
-	psSpace->Texture = vw_FindTextureByName("gfx/flare3.tga");
-	psSpace->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
-	psSpace->SetStartLocation(sVECTOR3D(0,10,250));//поправь ниже, на переносе если изменил!!!
-
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// немного "прокручиваем", чтобы сразу по появлению было заполнено
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -654,11 +625,39 @@ void InitGame()
 	vw_SetCameraMoveAroundPoint(sVECTOR3D(0,0,10), 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
 
 
-	float Time = psSpace->TimeLastUpdate;
-	for (float i=Time; i<Time+25; i+=1.0f) {
-		psSpace->Update(i);
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// активные частицы космоса
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	psSpace = vw_CreateParticleSystem();
+	if (auto sharedSpace = psSpace.lock()) {
+		sharedSpace->ColorStart.r = 0.80f;
+		sharedSpace->ColorStart.g = 0.80f;
+		sharedSpace->ColorStart.b = 1.00f;
+		sharedSpace->ColorEnd.r = 0.70f;
+		sharedSpace->ColorEnd.g = 0.70f;
+		sharedSpace->ColorEnd.b = 1.00f;
+		sharedSpace->AlphaStart = 0.50f;
+		sharedSpace->AlphaEnd = 1.00f;
+		sharedSpace->SizeStart = 0.40f;
+		sharedSpace->SizeEnd = 0.05f;
+		sharedSpace->Speed = 25.00f;
+		sharedSpace->SpeedVar = 5.00f;
+		sharedSpace->Theta = 0.00f;
+		sharedSpace->Life = 14.00f;
+		sharedSpace->LifeVar = 0.00f;
+		sharedSpace->CreationType = eParticleCreationType::Cube;
+		sharedSpace->CreationSize = sVECTOR3D(200.0f, 30.0f, 10.0f);
+		sharedSpace->ParticlesPerSec = 100;
+		sharedSpace->Texture = vw_FindTextureByName("gfx/flare3.tga");
+		sharedSpace->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+		sharedSpace->SetStartLocation(sVECTOR3D(0, 10, 250)); //поправь ниже, на переносе если изменил!!!
+
+		float Time = sharedSpace->TimeLastUpdate;
+		for (float i=Time; i<Time+25; i+=1.0f) {
+			sharedSpace->Update(i);
+		}
+		sharedSpace->TimeLastUpdate = Time;
 	}
-	psSpace->TimeLastUpdate = Time;
 
 
 
@@ -873,14 +872,8 @@ void RealExitGame()
 
 	vw_ReleaseAllParticleSystems2D();
 
-	if (Shild1 != nullptr) {
-		vw_ReleaseParticleSystem(Shild1);
-		Shild1 = nullptr;
-	}
-	if (Shild2 != nullptr) {
-		vw_ReleaseParticleSystem(Shild2);
-		Shild2 = nullptr;
-	}
+	vw_ReleaseParticleSystem(Shild1);
+	vw_ReleaseParticleSystem(Shild2);
 
 	// отдаем управление
 	if (Setup.BPP == 0)

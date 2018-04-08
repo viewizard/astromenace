@@ -546,13 +546,13 @@ void cEarthSpaceFighter::Create(int	SpaceShipNum)
 	// начальные установки для двигателей
 
 	EnginesLocation.resize(EngineQuantity);
-	Engines.resize(EngineQuantity, nullptr);
+	Engines.resize(EngineQuantity);
 
 	EnginesLeftLocation.resize(1);
-	EnginesLeft.resize(1, nullptr);
+	EnginesLeft.resize(1);
 
 	EnginesRightLocation.resize(1);
-	EnginesRight.resize(1, nullptr);
+	EnginesRight.resize(1);
 
 
 
@@ -927,9 +927,11 @@ void cEarthSpaceFighter::Create(int	SpaceShipNum)
 		MaxSpeedRotate = 4.5f;*/
 
 	for (unsigned int i = 0; i < EngineQuantity; i++) {
-		// находим кол-во внутренних источников света
-		if (!Engines[i]->Light.expired())
-			InternalLights++;
+		if (auto sharedEngine = Engines[i].lock()) {
+			// находим кол-во внутренних источников света
+			if (!sharedEngine->Light.expired())
+				InternalLights++;
+		}
 	}
 
 	// находим все данные по геометрии
