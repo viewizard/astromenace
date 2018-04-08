@@ -108,10 +108,6 @@ struct sModel3D {
 
 	// vao
 	unsigned int GlobalVAO{0};
-
-	// list
-	sModel3D *Next{nullptr};
-	sModel3D *Prev{nullptr};
 };
 
 
