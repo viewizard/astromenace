@@ -26,27 +26,11 @@
 
 // TODO translate comments
 
-#ifndef RendererInterface_H
-#define RendererInterface_H
+#ifndef Graphics_H
+#define Graphics_H
 
 #include "../base.h"
-
-#if defined(__APPLE__) && defined(__MACH__)
-#define __glext_h_ // don't let gl.h include glext.h
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#undef __glext_h_
-#else
-#define __glext_h_ // don't let gl.h include glext.h
-#include <GL/gl.h>
-#include <GL/glu.h>
-#undef __glext_h_
-#endif
-
-#include "glext.h" // provide glext.h version we need
-
-// alias for OpenGL textures name (ID) in order to make code more clear
-using GLtexture = GLuint;
+#include "opengl.h"
 
 struct sRECT;
 struct sVECTOR3D;
@@ -551,4 +535,4 @@ void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, GLtexture Texture, bool 
 // Create screenshot from current OpenGL surface.
 int vw_Screenshot(int Width, int Height, const std::string &FileName);
 
-#endif // RendererInterface_H
+#endif // Graphics_H

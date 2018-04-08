@@ -40,6 +40,7 @@ care about byte alignment.
 
 #include "../vfs/vfs.h"
 #include "../math/math.h"
+#include "../graphics/graphics.h"
 #include "texture.h"
 
 namespace {

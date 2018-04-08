@@ -28,7 +28,7 @@
 #define Texture_H
 
 #include "../base.h"
-#include "../graphics/graphics.h"
+#include "../graphics/opengl.h"
 
 enum class eLoadTextureAs {
 	AUTO,	// Detect by file extension
