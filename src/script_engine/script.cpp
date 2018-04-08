@@ -364,47 +364,47 @@ bool cScriptEngine::Update(float Time)
 				LightType = eLightType::Point;
 
 			std::weak_ptr<cLight> NewLight = vw_CreateLight(LightType);
-			if (auto tmpLight = NewLight.lock()) {
-				tmpLight->Diffuse[0] = 0.0f;
-				tmpLight->Diffuse[1] = 0.0f;
-				tmpLight->Diffuse[2] = 0.0f;
-				tmpLight->Diffuse[3] = 1.0f;
-				xmlDoc->fGetEntryAttribute(xmlEntry, "diffr", tmpLight->Diffuse[0]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "diffg", tmpLight->Diffuse[1]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "diffb", tmpLight->Diffuse[2]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "diffa", tmpLight->Diffuse[3]);
+			if (auto sharedLight = NewLight.lock()) {
+				sharedLight->Diffuse[0] = 0.0f;
+				sharedLight->Diffuse[1] = 0.0f;
+				sharedLight->Diffuse[2] = 0.0f;
+				sharedLight->Diffuse[3] = 1.0f;
+				xmlDoc->fGetEntryAttribute(xmlEntry, "diffr", sharedLight->Diffuse[0]);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "diffg", sharedLight->Diffuse[1]);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "diffb", sharedLight->Diffuse[2]);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "diffa", sharedLight->Diffuse[3]);
 
-				tmpLight->Specular[0] = 0.0f;
-				tmpLight->Specular[1] = 0.0f;
-				tmpLight->Specular[2] = 0.0f;
-				tmpLight->Specular[3] = 1.0f;
-				xmlDoc->fGetEntryAttribute(xmlEntry, "specr", tmpLight->Specular[0]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "specg", tmpLight->Specular[1]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "specb", tmpLight->Specular[2]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "speca", tmpLight->Specular[3]);
+				sharedLight->Specular[0] = 0.0f;
+				sharedLight->Specular[1] = 0.0f;
+				sharedLight->Specular[2] = 0.0f;
+				sharedLight->Specular[3] = 1.0f;
+				xmlDoc->fGetEntryAttribute(xmlEntry, "specr", sharedLight->Specular[0]);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "specg", sharedLight->Specular[1]);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "specb", sharedLight->Specular[2]);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "speca", sharedLight->Specular[3]);
 
-				tmpLight->Ambient[0] = 0.0f;
-				tmpLight->Ambient[1] = 0.0f;
-				tmpLight->Ambient[2] = 0.0f;
-				tmpLight->Ambient[3] = 1.0f;
-				xmlDoc->fGetEntryAttribute(xmlEntry, "ambir", tmpLight->Ambient[0]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "ambig", tmpLight->Ambient[1]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "ambib", tmpLight->Ambient[2]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "ambia", tmpLight->Ambient[3]);
+				sharedLight->Ambient[0] = 0.0f;
+				sharedLight->Ambient[1] = 0.0f;
+				sharedLight->Ambient[2] = 0.0f;
+				sharedLight->Ambient[3] = 1.0f;
+				xmlDoc->fGetEntryAttribute(xmlEntry, "ambir", sharedLight->Ambient[0]);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "ambig", sharedLight->Ambient[1]);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "ambib", sharedLight->Ambient[2]);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "ambia", sharedLight->Ambient[3]);
 
-				tmpLight->Direction = sVECTOR3D(0.0f,0.0f,1.0f);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "dirx", tmpLight->Direction.x);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "diry", tmpLight->Direction.y);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "dirz", tmpLight->Direction.z);
-				tmpLight->Direction.Normalize();
+				sharedLight->Direction = sVECTOR3D(0.0f,0.0f,1.0f);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "dirx", sharedLight->Direction.x);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "diry", sharedLight->Direction.y);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "dirz", sharedLight->Direction.z);
+				sharedLight->Direction.Normalize();
 
-				tmpLight->Location = sVECTOR3D(0.0f,0.0f,0.0f);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "posx", tmpLight->Location.x);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "posy", tmpLight->Location.y);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "posz", tmpLight->Location.z);
+				sharedLight->Location = sVECTOR3D(0.0f,0.0f,0.0f);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "posx", sharedLight->Location.x);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "posy", sharedLight->Location.y);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "posz", sharedLight->Location.z);
 
-				tmpLight->On = true;
-				xmlDoc->bGetEntryAttribute(xmlEntry, "status", tmpLight->On);
+				sharedLight->On = true;
+				xmlDoc->bGetEntryAttribute(xmlEntry, "status", sharedLight->On);
 			}
 		} else if (xmlEntry.Name == "Label") {
 			// ничего не делаем

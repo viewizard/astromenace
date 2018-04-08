@@ -143,9 +143,9 @@ void vw_DeActivateAllLights()
  */
 void vw_ReleaseLight(std::weak_ptr<cLight> &Light)
 {
-	if (auto tmpLight = Light.lock()) {
+	if (auto sharedLight = Light.lock()) {
 		for (auto iter = LightsMap.begin(); iter != LightsMap.end(); ++iter) {
-			if (iter->second.get() == tmpLight.get()) {
+			if (iter->second.get() == sharedLight.get()) {
 				LightsMap.erase(iter);
 				// forced to leave - current iterator invalidated by erase()
 				return;
@@ -181,14 +181,14 @@ std::weak_ptr<cLight> vw_CreatePointLight(const sVECTOR3D &Location,
 {
 	auto Light = vw_CreateLight(eLightType::Point);
 
-	if (auto tmpLight = Light.lock()) {
-		tmpLight->Diffuse[0] = tmpLight->Specular[0] = R;
-		tmpLight->Diffuse[1] = tmpLight->Specular[1] = G;
-		tmpLight->Diffuse[2] = tmpLight->Specular[2] = B;
-		tmpLight->Diffuse[3] = tmpLight->Specular[3] = 1.0f;
-		tmpLight->LinearAttenuation = tmpLight->LinearAttenuationBase = Linear;
-		tmpLight->QuadraticAttenuation = tmpLight->QuadraticAttenuationBase = Quadratic;
-		tmpLight->Location = Location;
+	if (auto sharedLight = Light.lock()) {
+		sharedLight->Diffuse[0] = sharedLight->Specular[0] = R;
+		sharedLight->Diffuse[1] = sharedLight->Specular[1] = G;
+		sharedLight->Diffuse[2] = sharedLight->Specular[2] = B;
+		sharedLight->Diffuse[3] = sharedLight->Specular[3] = 1.0f;
+		sharedLight->LinearAttenuation = sharedLight->LinearAttenuationBase = Linear;
+		sharedLight->QuadraticAttenuation = sharedLight->QuadraticAttenuationBase = Quadratic;
+		sharedLight->Location = Location;
 	}
 
 	return Light;

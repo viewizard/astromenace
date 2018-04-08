@@ -140,8 +140,8 @@ void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, 
 	std::weak_ptr<cLight> CurrentDirectLight;
 	sVECTOR3D LightPosition{0.0f, 0.0f, 0.0f};
 	if (vw_GetMainDirectLight(CurrentDirectLight))
-		if (auto tmpCurrentDirectLight = CurrentDirectLight.lock())
-			LightPosition = tmpCurrentDirectLight->Direction;
+		if (auto sharedCurrentDirectLight = CurrentDirectLight.lock())
+			LightPosition = sharedCurrentDirectLight->Direction;
 	LightPosition.Normalize();
 	LightPosition = LightPosition^(-Distance);
 

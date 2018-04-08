@@ -665,111 +665,111 @@ void InitGame()
 	// иним 2д часть, эмблемы
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	EnergyParticleSystem2D = vw_CreateParticleSystem2D();
-	if (auto tmpEnergyParticleSystem2D = EnergyParticleSystem2D.lock()) {
-		tmpEnergyParticleSystem2D->ColorStart.r = 0.70f;
-		tmpEnergyParticleSystem2D->ColorStart.g = 0.80f;
-		tmpEnergyParticleSystem2D->ColorStart.b = 1.00f;
-		tmpEnergyParticleSystem2D->ColorEnd.r = 0.00f;
-		tmpEnergyParticleSystem2D->ColorEnd.g = 0.00f;
-		tmpEnergyParticleSystem2D->ColorEnd.b = 1.00f;
-		tmpEnergyParticleSystem2D->AlphaStart = 1.00f;
-		tmpEnergyParticleSystem2D->AlphaEnd   = 1.00f;
-		tmpEnergyParticleSystem2D->SizeStart  = 12.00f;
-		tmpEnergyParticleSystem2D->SizeVar    = 10.00f;
-		tmpEnergyParticleSystem2D->SizeEnd    = 0.00f;
-		tmpEnergyParticleSystem2D->Speed      = 70.00f;
-		tmpEnergyParticleSystem2D->SpeedVar   = 20.00f;
-		tmpEnergyParticleSystem2D->Theta      = 360.00f;
-		tmpEnergyParticleSystem2D->Life       = 2.10f;
-		tmpEnergyParticleSystem2D->LifeVar       = 0.05f;
-		tmpEnergyParticleSystem2D->ParticlesPerSec = 50;
-		tmpEnergyParticleSystem2D->IsMagnet = true;
-		tmpEnergyParticleSystem2D->MagnetFactor = 150.0f;
-		tmpEnergyParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
-		tmpEnergyParticleSystem2D->MoveSystem(sVECTOR3D(33.0f,29.0f,0.0f));
+	if (auto sharedEnergyParticleSystem2D = EnergyParticleSystem2D.lock()) {
+		sharedEnergyParticleSystem2D->ColorStart.r = 0.70f;
+		sharedEnergyParticleSystem2D->ColorStart.g = 0.80f;
+		sharedEnergyParticleSystem2D->ColorStart.b = 1.00f;
+		sharedEnergyParticleSystem2D->ColorEnd.r = 0.00f;
+		sharedEnergyParticleSystem2D->ColorEnd.g = 0.00f;
+		sharedEnergyParticleSystem2D->ColorEnd.b = 1.00f;
+		sharedEnergyParticleSystem2D->AlphaStart = 1.00f;
+		sharedEnergyParticleSystem2D->AlphaEnd = 1.00f;
+		sharedEnergyParticleSystem2D->SizeStart = 12.00f;
+		sharedEnergyParticleSystem2D->SizeVar = 10.00f;
+		sharedEnergyParticleSystem2D->SizeEnd = 0.00f;
+		sharedEnergyParticleSystem2D->Speed = 70.00f;
+		sharedEnergyParticleSystem2D->SpeedVar = 20.00f;
+		sharedEnergyParticleSystem2D->Theta = 360.00f;
+		sharedEnergyParticleSystem2D->Life = 2.10f;
+		sharedEnergyParticleSystem2D->LifeVar = 0.05f;
+		sharedEnergyParticleSystem2D->ParticlesPerSec = 50;
+		sharedEnergyParticleSystem2D->IsMagnet = true;
+		sharedEnergyParticleSystem2D->MagnetFactor = 150.0f;
+		sharedEnergyParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
+		sharedEnergyParticleSystem2D->MoveSystem(sVECTOR3D(33.0f, 29.0f, 0.0f));
 	}
 
 	Life3ParticleSystem2D = vw_CreateParticleSystem2D();
-	if (auto tmpLife3ParticleSystem2D = Life3ParticleSystem2D.lock()) {
-		tmpLife3ParticleSystem2D->ColorStart.r = 1.00f;
-		tmpLife3ParticleSystem2D->ColorStart.g = 0.40f;
-		tmpLife3ParticleSystem2D->ColorStart.b = 0.10f;
-		tmpLife3ParticleSystem2D->ColorEnd.r = 0.50f;
-		tmpLife3ParticleSystem2D->ColorEnd.g = 0.00f;
-		tmpLife3ParticleSystem2D->ColorEnd.b = 0.00f;
-		tmpLife3ParticleSystem2D->AlphaStart = 1.00f;
-		tmpLife3ParticleSystem2D->AlphaEnd   = 1.00f;
-		tmpLife3ParticleSystem2D->SizeStart  = 13.00f;
-		tmpLife3ParticleSystem2D->SizeVar    = 5.00f;
-		tmpLife3ParticleSystem2D->SizeEnd    = 0.00f;
-		tmpLife3ParticleSystem2D->Speed      = 0.00f;
-		tmpLife3ParticleSystem2D->SpeedOnCreation	   = 8.00f;
-		tmpLife3ParticleSystem2D->SpeedVar   = 0.00f;
-		tmpLife3ParticleSystem2D->Theta      = 360.00f;
-		tmpLife3ParticleSystem2D->Life       = 2.00f;
-		tmpLife3ParticleSystem2D->LifeVar       = 0.05f;
-		tmpLife3ParticleSystem2D->ParticlesPerSec = 50;
-		tmpLife3ParticleSystem2D->CreationType = eParticle2DCreationType::Quad;
-		tmpLife3ParticleSystem2D->CreationSize = sVECTOR3D(1.0f, 18.0f, 0.0f);
-		tmpLife3ParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
-		tmpLife3ParticleSystem2D->MoveSystem(sVECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));
+	if (auto sharedLife3ParticleSystem2D = Life3ParticleSystem2D.lock()) {
+		sharedLife3ParticleSystem2D->ColorStart.r = 1.00f;
+		sharedLife3ParticleSystem2D->ColorStart.g = 0.40f;
+		sharedLife3ParticleSystem2D->ColorStart.b = 0.10f;
+		sharedLife3ParticleSystem2D->ColorEnd.r = 0.50f;
+		sharedLife3ParticleSystem2D->ColorEnd.g = 0.00f;
+		sharedLife3ParticleSystem2D->ColorEnd.b = 0.00f;
+		sharedLife3ParticleSystem2D->AlphaStart = 1.00f;
+		sharedLife3ParticleSystem2D->AlphaEnd = 1.00f;
+		sharedLife3ParticleSystem2D->SizeStart = 13.00f;
+		sharedLife3ParticleSystem2D->SizeVar = 5.00f;
+		sharedLife3ParticleSystem2D->SizeEnd = 0.00f;
+		sharedLife3ParticleSystem2D->Speed = 0.00f;
+		sharedLife3ParticleSystem2D->SpeedOnCreation = 8.00f;
+		sharedLife3ParticleSystem2D->SpeedVar = 0.00f;
+		sharedLife3ParticleSystem2D->Theta = 360.00f;
+		sharedLife3ParticleSystem2D->Life = 2.00f;
+		sharedLife3ParticleSystem2D->LifeVar = 0.05f;
+		sharedLife3ParticleSystem2D->ParticlesPerSec = 50;
+		sharedLife3ParticleSystem2D->CreationType = eParticle2DCreationType::Quad;
+		sharedLife3ParticleSystem2D->CreationSize = sVECTOR3D(1.0f, 18.0f, 0.0f);
+		sharedLife3ParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
+		sharedLife3ParticleSystem2D->MoveSystem(sVECTOR3D(Setup.fAspectRatioWidth - 33.0f, 29.0f, 0.0f));
 	}
 
 	Life2ParticleSystem2D = vw_CreateParticleSystem2D();
-	if (auto tmpLife2ParticleSystem2D = Life2ParticleSystem2D.lock()) {
-		tmpLife2ParticleSystem2D->ColorStart.r = 1.00f;
-		tmpLife2ParticleSystem2D->ColorStart.g = 0.40f;
-		tmpLife2ParticleSystem2D->ColorStart.b = 0.10f;
-		tmpLife2ParticleSystem2D->ColorEnd.r = 0.50f;
-		tmpLife2ParticleSystem2D->ColorEnd.g = 0.00f;
-		tmpLife2ParticleSystem2D->ColorEnd.b = 0.00f;
-		tmpLife2ParticleSystem2D->AlphaStart = 1.00f;
-		tmpLife2ParticleSystem2D->AlphaEnd   = 1.00f;
-		tmpLife2ParticleSystem2D->SizeStart  = 13.00f;
-		tmpLife2ParticleSystem2D->SizeVar    = 5.00f;
-		tmpLife2ParticleSystem2D->SizeEnd    = 0.00f;
-		tmpLife2ParticleSystem2D->Speed      = 0.00f;
-		tmpLife2ParticleSystem2D->SpeedOnCreation	   = 8.00f;
-		tmpLife2ParticleSystem2D->SpeedVar   = 0.00f;
-		tmpLife2ParticleSystem2D->Theta      = 360.00f;
-		tmpLife2ParticleSystem2D->Life       = 2.00f;
-		tmpLife2ParticleSystem2D->LifeVar       = 0.05f;
-		tmpLife2ParticleSystem2D->ParticlesPerSec = 50;
-		tmpLife2ParticleSystem2D->CreationType = eParticle2DCreationType::Quad;
-		tmpLife2ParticleSystem2D->CreationSize = sVECTOR3D(18.0f, 1.0f, 0.0f);
-		tmpLife2ParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
-		tmpLife2ParticleSystem2D->MoveSystem(sVECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));
+	if (auto sharedLife2ParticleSystem2D = Life2ParticleSystem2D.lock()) {
+		sharedLife2ParticleSystem2D->ColorStart.r = 1.00f;
+		sharedLife2ParticleSystem2D->ColorStart.g = 0.40f;
+		sharedLife2ParticleSystem2D->ColorStart.b = 0.10f;
+		sharedLife2ParticleSystem2D->ColorEnd.r = 0.50f;
+		sharedLife2ParticleSystem2D->ColorEnd.g = 0.00f;
+		sharedLife2ParticleSystem2D->ColorEnd.b = 0.00f;
+		sharedLife2ParticleSystem2D->AlphaStart = 1.00f;
+		sharedLife2ParticleSystem2D->AlphaEnd = 1.00f;
+		sharedLife2ParticleSystem2D->SizeStart = 13.00f;
+		sharedLife2ParticleSystem2D->SizeVar = 5.00f;
+		sharedLife2ParticleSystem2D->SizeEnd = 0.00f;
+		sharedLife2ParticleSystem2D->Speed = 0.00f;
+		sharedLife2ParticleSystem2D->SpeedOnCreation = 8.00f;
+		sharedLife2ParticleSystem2D->SpeedVar = 0.00f;
+		sharedLife2ParticleSystem2D->Theta = 360.00f;
+		sharedLife2ParticleSystem2D->Life = 2.00f;
+		sharedLife2ParticleSystem2D->LifeVar = 0.05f;
+		sharedLife2ParticleSystem2D->ParticlesPerSec = 50;
+		sharedLife2ParticleSystem2D->CreationType = eParticle2DCreationType::Quad;
+		sharedLife2ParticleSystem2D->CreationSize = sVECTOR3D(18.0f, 1.0f, 0.0f);
+		sharedLife2ParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
+		sharedLife2ParticleSystem2D->MoveSystem(sVECTOR3D(Setup.fAspectRatioWidth - 33.0f, 29.0f, 0.0f));
 	}
 
 	LifeParticleSystem2D = vw_CreateParticleSystem2D();
-	if (auto tmpLifeParticleSystem2D = LifeParticleSystem2D.lock()) {
-		tmpLifeParticleSystem2D->ColorStart.r = 1.00f;
-		tmpLifeParticleSystem2D->ColorStart.g = 0.60f;
-		tmpLifeParticleSystem2D->ColorStart.b = 0.20f;
-		tmpLifeParticleSystem2D->ColorEnd.r = 0.50f;
-		tmpLifeParticleSystem2D->ColorEnd.g = 0.00f;
-		tmpLifeParticleSystem2D->ColorEnd.b = 0.00f;
-		tmpLifeParticleSystem2D->AlphaStart = 1.00f;
-		tmpLifeParticleSystem2D->AlphaEnd   = 1.00f;
-		tmpLifeParticleSystem2D->SizeStart  = 25.00f;
-		tmpLifeParticleSystem2D->SizeVar    = 5.00f;
-		tmpLifeParticleSystem2D->SizeEnd    = 0.00f;
-		tmpLifeParticleSystem2D->Speed      = 0.00f;
-		tmpLifeParticleSystem2D->SpeedOnCreation	   = 8.00f;
-		tmpLifeParticleSystem2D->SpeedVar   = 10.00f;
-		tmpLifeParticleSystem2D->Theta      = 360.00f;
-		tmpLifeParticleSystem2D->Life       = 1.50f;
-		tmpLifeParticleSystem2D->LifeVar       = 0.05f;
-		tmpLifeParticleSystem2D->ParticlesPerSec = 70;
-		tmpLifeParticleSystem2D->Direction = sVECTOR3D(1.0f, 0.0f, 0.0f);
-		tmpLifeParticleSystem2D->CreationType = eParticle2DCreationType::Circle;
-		tmpLifeParticleSystem2D->CreationSize = sVECTOR3D(25.0f, 25.0f, 0.0f);
-		tmpLifeParticleSystem2D->DeadZone = 24.0f;
-		tmpLifeParticleSystem2D->IsMagnet = true;
-		tmpLifeParticleSystem2D->MagnetFactor = 25.0f;
-		tmpLifeParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare.tga");
-		tmpLifeParticleSystem2D->MoveSystem(sVECTOR3D(Setup.fAspectRatioWidth-33.0f,29.0f,0.0f));
-		tmpLifeParticleSystem2D->SetRotation(sVECTOR3D(0.0f, 0.0f, 90.0f));
+	if (auto sharedLifeParticleSystem2D = LifeParticleSystem2D.lock()) {
+		sharedLifeParticleSystem2D->ColorStart.r = 1.00f;
+		sharedLifeParticleSystem2D->ColorStart.g = 0.60f;
+		sharedLifeParticleSystem2D->ColorStart.b = 0.20f;
+		sharedLifeParticleSystem2D->ColorEnd.r = 0.50f;
+		sharedLifeParticleSystem2D->ColorEnd.g = 0.00f;
+		sharedLifeParticleSystem2D->ColorEnd.b = 0.00f;
+		sharedLifeParticleSystem2D->AlphaStart = 1.00f;
+		sharedLifeParticleSystem2D->AlphaEnd = 1.00f;
+		sharedLifeParticleSystem2D->SizeStart = 25.00f;
+		sharedLifeParticleSystem2D->SizeVar = 5.00f;
+		sharedLifeParticleSystem2D->SizeEnd = 0.00f;
+		sharedLifeParticleSystem2D->Speed = 0.00f;
+		sharedLifeParticleSystem2D->SpeedOnCreation = 8.00f;
+		sharedLifeParticleSystem2D->SpeedVar = 10.00f;
+		sharedLifeParticleSystem2D->Theta = 360.00f;
+		sharedLifeParticleSystem2D->Life = 1.50f;
+		sharedLifeParticleSystem2D->LifeVar = 0.05f;
+		sharedLifeParticleSystem2D->ParticlesPerSec = 70;
+		sharedLifeParticleSystem2D->Direction = sVECTOR3D(1.0f, 0.0f, 0.0f);
+		sharedLifeParticleSystem2D->CreationType = eParticle2DCreationType::Circle;
+		sharedLifeParticleSystem2D->CreationSize = sVECTOR3D(25.0f, 25.0f, 0.0f);
+		sharedLifeParticleSystem2D->DeadZone = 24.0f;
+		sharedLifeParticleSystem2D->IsMagnet = true;
+		sharedLifeParticleSystem2D->MagnetFactor = 25.0f;
+		sharedLifeParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare.tga");
+		sharedLifeParticleSystem2D->MoveSystem(sVECTOR3D(Setup.fAspectRatioWidth - 33.0f, 29.0f, 0.0f));
+		sharedLifeParticleSystem2D->SetRotation(sVECTOR3D(0.0f, 0.0f, 90.0f));
 	}
 
 
@@ -1083,63 +1083,64 @@ void DrawGame()
 
 
 
-	if (auto tmpEnergyParticleSystem2D = EnergyParticleSystem2D.lock()) {
+	if (auto sharedEnergyParticleSystem2D = EnergyParticleSystem2D.lock()) {
 		// учитываем в эмблеме энергии, сколько у нас ее (визуально меняем вид эмблемы)
-		tmpEnergyParticleSystem2D->ParticlesPerSec = (unsigned int) (50 * (CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem)));
-		if (tmpEnergyParticleSystem2D->ParticlesPerSec == 0)
-			tmpEnergyParticleSystem2D->ParticlesPerSec = 1;
+		sharedEnergyParticleSystem2D->ParticlesPerSec =
+				(unsigned int)(50 * (CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem)));
+		if (sharedEnergyParticleSystem2D->ParticlesPerSec == 0)
+			sharedEnergyParticleSystem2D->ParticlesPerSec = 1;
 	}
 	if (PlayerFighter != nullptr) {
-		if (auto tmpLifeParticleSystem2D = LifeParticleSystem2D.lock()) {
-			tmpLifeParticleSystem2D->ColorStart.r = 1.00f;
-			tmpLifeParticleSystem2D->ColorStart.g = 0.60f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
-			tmpLifeParticleSystem2D->ColorStart.b = 0.20f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
+		if (auto sharedLifeParticleSystem2D = LifeParticleSystem2D.lock()) {
+			sharedLifeParticleSystem2D->ColorStart.r = 1.00f;
+			sharedLifeParticleSystem2D->ColorStart.g = 0.60f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
+			sharedLifeParticleSystem2D->ColorStart.b = 0.20f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
 			// если меньше 10% нужно бить тревогу
 			if (PlayerFighter->Strength < PlayerFighter->StrengthStart/10.0f) {
-				tmpLifeParticleSystem2D->AlphaStart = 1.00f*CurrentAlert2;
-				tmpLifeParticleSystem2D->AlphaEnd   = 1.00f*CurrentAlert2;
+				sharedLifeParticleSystem2D->AlphaStart = 1.00f*CurrentAlert2;
+				sharedLifeParticleSystem2D->AlphaEnd   = 1.00f*CurrentAlert2;
 			} else { // подчинились, восстанавливаем данные
-				tmpLifeParticleSystem2D->AlphaStart = 1.00f;
-				tmpLifeParticleSystem2D->AlphaEnd   = 1.00f;
+				sharedLifeParticleSystem2D->AlphaStart = 1.00f;
+				sharedLifeParticleSystem2D->AlphaEnd   = 1.00f;
 			}
 		}
 
-		if (auto tmpLife2ParticleSystem2D = Life2ParticleSystem2D.lock()) {
-			tmpLife2ParticleSystem2D->ColorStart.r = 1.00f;
-			tmpLife2ParticleSystem2D->ColorStart.g = 0.60f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
-			tmpLife2ParticleSystem2D->ColorStart.b = 0.20f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
+		if (auto sharedLife2ParticleSystem2D = Life2ParticleSystem2D.lock()) {
+			sharedLife2ParticleSystem2D->ColorStart.r = 1.00f;
+			sharedLife2ParticleSystem2D->ColorStart.g = 0.60f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
+			sharedLife2ParticleSystem2D->ColorStart.b = 0.20f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
 			// если меньше 10% нужно бить тревогу
 			if (PlayerFighter->Strength < PlayerFighter->StrengthStart/10.0f) {
 				if (CurrentAlert2 > 0.6f) {
-					tmpLife2ParticleSystem2D->AlphaStart = 1.00f*CurrentAlert2;
-					tmpLife2ParticleSystem2D->AlphaEnd   = 1.00f*CurrentAlert2;
+					sharedLife2ParticleSystem2D->AlphaStart = 1.00f*CurrentAlert2;
+					sharedLife2ParticleSystem2D->AlphaEnd   = 1.00f*CurrentAlert2;
 				} else {
-					tmpLife2ParticleSystem2D->AlphaStart = 0.00f;
-					tmpLife2ParticleSystem2D->AlphaEnd   = 0.00f;
+					sharedLife2ParticleSystem2D->AlphaStart = 0.00f;
+					sharedLife2ParticleSystem2D->AlphaEnd   = 0.00f;
 				}
 			} else { // подчинились, восстанавливаем данные
-				tmpLife2ParticleSystem2D->AlphaStart = 1.00f;
-				tmpLife2ParticleSystem2D->AlphaEnd   = 1.00f;
+				sharedLife2ParticleSystem2D->AlphaStart = 1.00f;
+				sharedLife2ParticleSystem2D->AlphaEnd   = 1.00f;
 			}
 		}
 
-		if (auto tmpLife3ParticleSystem2D = Life3ParticleSystem2D.lock()) {
-			tmpLife3ParticleSystem2D->ColorStart.r = 1.00f;
-			tmpLife3ParticleSystem2D->ColorStart.g = 0.60f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
-			tmpLife3ParticleSystem2D->ColorStart.b = 0.20f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
+		if (auto sharedLife3ParticleSystem2D = Life3ParticleSystem2D.lock()) {
+			sharedLife3ParticleSystem2D->ColorStart.r = 1.00f;
+			sharedLife3ParticleSystem2D->ColorStart.g = 0.60f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
+			sharedLife3ParticleSystem2D->ColorStart.b = 0.20f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
 
 			// если меньше 10% нужно бить тревогу
 			if (PlayerFighter->Strength < PlayerFighter->StrengthStart/10.0f) {
 				if (CurrentAlert2 > 0.6f) {
-					tmpLife3ParticleSystem2D->AlphaStart = 1.00f*CurrentAlert2;
-					tmpLife3ParticleSystem2D->AlphaEnd   = 1.00f*CurrentAlert2;
+					sharedLife3ParticleSystem2D->AlphaStart = 1.00f*CurrentAlert2;
+					sharedLife3ParticleSystem2D->AlphaEnd   = 1.00f*CurrentAlert2;
 				} else {
-					tmpLife3ParticleSystem2D->AlphaStart = 0.00f;
-					tmpLife3ParticleSystem2D->AlphaEnd   = 0.00f;
+					sharedLife3ParticleSystem2D->AlphaStart = 0.00f;
+					sharedLife3ParticleSystem2D->AlphaEnd   = 0.00f;
 				}
 			} else { // подчинились, восстанавливаем данные
-				tmpLife3ParticleSystem2D->AlphaStart = 1.00f;
-				tmpLife3ParticleSystem2D->AlphaEnd   = 1.00f;
+				sharedLife3ParticleSystem2D->AlphaStart = 1.00f;
+				sharedLife3ParticleSystem2D->AlphaEnd   = 1.00f;
 			}
 		}
 	}
