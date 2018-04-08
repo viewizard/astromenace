@@ -24,6 +24,10 @@
 
 *************************************************************************************/
 
+// NOTE GL_EXT_direct_state_access (since OpenGL 4.5)
+//      glGetTextureLevelParameterfv()
+//      could be used to replace glGetTexLevelParameterfv()
+
 #include "../math/math.h"
 #include "../texture/texture.h"
 #include "graphics.h"
@@ -130,7 +134,13 @@ void vw_Draw(int X, int Y, sRECT *SrcRect, GLtexture Texture, bool Alpha, float 
 
 	float ImageHeight{0.0f};
 	float ImageWidth{0.0f};
-	vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight);
+	// if texture loaded via textures manager, get data from it
+	if (!vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight)) {
+		// get Width and Height for 0 mipmap level
+		// call glGetTexLevelParameterfv() is generally not recommended, since it could stall the OpenGL pipeline
+		glGetTexLevelParameterfv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &ImageWidth);
+		glGetTexLevelParameterfv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &ImageHeight);
+	}
 
 	float FrameHeight = (SrcRect->bottom*1.0f)/ImageHeight;
 	float FrameWidth = (SrcRect->right*1.0f)/ImageWidth;
@@ -220,7 +230,13 @@ void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, GLtexture Texture, bool 
 
 	float ImageHeight{0.0f};
 	float ImageWidth{0.0f};
-	vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight);
+	// if texture loaded via textures manager, get data from it
+	if (!vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight)) {
+		// get Width and Height for 0 mipmap level
+		// call glGetTexLevelParameterfv() is generally not recommended, since it could stall the OpenGL pipeline
+		glGetTexLevelParameterfv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &ImageWidth);
+		glGetTexLevelParameterfv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &ImageHeight);
+	}
 
 	float FrameHeight = (SrcRect->bottom*1.0f )/ImageHeight;
 	float FrameWidth = (SrcRect->right*1.0f )/ImageWidth;

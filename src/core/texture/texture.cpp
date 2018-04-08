@@ -60,7 +60,8 @@ eAlphaCreateMode AFlagTex{eAlphaCreateMode::EQUAL};
 bool MipMapTex{true};
 
 // we need only Width and Height, but, keep all this data for now,
-// glGetTexLevelParameteriv() usage not an option, since it stalls the OpenGL pipeline.
+// glGetTexLevelParameterfv() usage not an option, since it could stalls the OpenGL pipeline
+// and require texture bind for current texture unit
 // Width/Height contain final texture size
 // SrcWidth/SrcHeight contain initial source image size, befor POT correction in case
 // hardware don't support non-POT size textures
@@ -117,6 +118,9 @@ GLtexture vw_FindTextureByName(const std::string &Name)
 	return 0;
 }
 
+/*
+ * Find texture's size by ID.
+ */
 bool vw_FindTextureSizeByID(GLtexture TextureID, float *Width, float *Height)
 {
 	auto tmpTexture = TexturesIDtoDataMap.find(TextureID);
