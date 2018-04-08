@@ -69,7 +69,7 @@ void cWheeled::Create(int WheeledNum)
 
 	LoadObjectData(PresetWheeledData[WheeledNum-1].Name, this, 0, 2.0f);
 
-	for (int i=0; i<ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < ObjectsListCount; i++) {
 		Texture[i] = vw_FindTextureByName(PresetWheeledData[WheeledNum-1].TextureName);
 	}
 	ResistanceHull = 1.0f;

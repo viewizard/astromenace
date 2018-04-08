@@ -78,7 +78,7 @@ void cTracked::Create(int TrackedNum)
 
 	LoadObjectData(PresetTrackedData[TrackedNum-1].Name, this, 0, 2.0f);
 
-	for (int i=0; i<ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < ObjectsListCount; i++) {
 		Texture[i] = vw_FindTextureByName(PresetTrackedData[TrackedNum-1].TextureName);
 	}
 	ResistanceHull = 1.0f;

@@ -66,8 +66,8 @@ struct sObjectBlock {
 	// vertex-related
 	float *VertexArray{nullptr};
 	int VertexFormat{0};
-	int VertexStride{0};	// in bytes
-	int VertexCount{0};
+	unsigned int VertexStride{0};	// in bytes
+	unsigned int VertexCount{0};
 	unsigned int VBO{0};
 
 	// index-related
@@ -81,7 +81,7 @@ struct sObjectBlock {
 	// in this case, we could create cool looking effects, when enemies disintegrate
 	// into 'dust' pieces during explosion
 	float *VertexArrayWithSmallTriangles{nullptr};
-	int VertexArrayWithSmallTrianglesCount{0};
+	unsigned int VertexArrayWithSmallTrianglesCount{0};
 };
 
 struct sModel3D {
@@ -94,7 +94,7 @@ struct sModel3D {
 
 	// attached objects
 	sObjectBlock *ObjectsList{nullptr};
-	int ObjectsListCount{0};
+	unsigned int ObjectsListCount{0};
 
 	// vertex-related
 	float *GlobalVertexArray{nullptr};

@@ -65,7 +65,7 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 	LoadObjectData(PresetMilitaryBuildingData[MilitaryBuildingNum-1].Name, this, 0, 2.0f);
 
 
-	for (int i=0; i<ObjectsListCount; i++) {
+	for (unsigned int i=0; i<ObjectsListCount; i++) {
 		Texture[i] = vw_FindTextureByName(PresetMilitaryBuildingData[MilitaryBuildingNum-1].TextureName);
 	}
 

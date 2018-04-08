@@ -814,7 +814,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		Texture.resize(ObjectsListCount, 0);
 		ObjectsList = new sObjectBlock[ObjectsListCount];
 
-		for (int i = 0; i < ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < ObjectsListCount; i++) {
 			Texture[i] = Projectile->Texture[i];
 			// копируем данные
 			memcpy(&(ObjectsList[i]), &(Projectile->ObjectsList[i]), sizeof(Projectile->ObjectsList[0]));
@@ -838,7 +838,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 			// делаем поворот геометрии объекта чтобы правильно сделать разлет частиц
 			sVECTOR3D TMP;
-			for (int j = 0; j < ObjectsList[i].VertexCount; j++) {
+			for (unsigned int j = 0; j < ObjectsList[i].VertexCount; j++) {
 				int j1 = j * ObjectsList[i].VertexStride;
 				int j2;
 				if (Projectile->ObjectsList[i].IndexArray)
@@ -885,7 +885,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		// для каждого треугольника - свои данные (фактически, у нас 1 объект, с ним и работаем)
 		int Count = 0;
 		ExplosionPieceData = new sExplosionPiece[ObjectsList[0].VertexCount/3];
-		for (int i = 0; i < ObjectsList[0].VertexCount; i+=3) {
+		for (unsigned int i = 0; i < ObjectsList[0].VertexCount; i+=3) {
 			ExplosionPieceData[Count].Velocity.x = ObjectsList[0].VertexArray[i * ObjectsList[0].VertexStride];
 			ExplosionPieceData[Count].Velocity.y = ObjectsList[0].VertexArray[i * ObjectsList[0].VertexStride + 1];
 			ExplosionPieceData[Count].Velocity.z = ObjectsList[0].VertexArray[i * ObjectsList[0].VertexStride + 2];

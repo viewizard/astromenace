@@ -394,7 +394,7 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 		vw_Matrix44Translate(TransMat, LocalLocation);
 
 	// detect collision with mesh triangles
-	for (int i = 0; i < Object1DrawObjectList->VertexCount; i += 3) {
+	for (unsigned int i = 0; i < Object1DrawObjectList->VertexCount; i += 3) {
 		// we use index buffer here in order to find triangle's vertices in mesh
 		unsigned int IndexPos = Object1DrawObjectList->RangeStart + i; // index buffer position
 		unsigned int VertexPos{0}; // vertex buffer position

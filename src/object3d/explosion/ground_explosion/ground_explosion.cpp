@@ -81,10 +81,10 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
-		for (int i = 0; i < Object->ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < Object->ObjectsListCount; i++) {
 			// могут быть пустые группы, убираем их и идем смотрим на следующую группу
 			// или это гусеница, тоже ее пропускаем
-			if (Object->ObjectsList[i].VertexCount == 0 || Object->TrackObjectNum == i) {
+			if (Object->ObjectsList[i].VertexCount == 0 || Object->TrackObjectNum == (int)i) {
 				continue;
 			} else {
 				// создаем часть
@@ -119,7 +119,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 				ShipPart->HitBBRadius2 = new float[ShipPart->ObjectsListCount];
 				ShipPart->HitBBSize = new sVECTOR3D[ShipPart->ObjectsListCount];
 				ShipPart->HitBB = new sVECTOR3D*[ShipPart->ObjectsListCount];
-				for (int i1 = 0; i1 < ShipPart->ObjectsListCount; i1++) {
+				for (unsigned int i1 = 0; i1 < ShipPart->ObjectsListCount; i1++) {
 					ShipPart->HitBB[i1] = new sVECTOR3D[8];
 				}
 
@@ -153,7 +153,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 					// проверяем, это колесо или нет
 					bool Wheel = false;
 					for (int k=0; k<Object->WheelQuantity; k++) {
-						if (Object->WheelObjectsNum[k] == i) Wheel = true;
+						if (Object->WheelObjectsNum[k] == (int)i) Wheel = true;
 					}
 
 					if (Wheel) {
@@ -186,7 +186,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 
 
 				if (ObjectPieceNum != -1)
-					if (ObjectPieceNum == i) {
+					if (ObjectPieceNum == (int)i) {
 						// а теперь взрываем ту, в которую попали...
 						new cSpaceExplosion(ShipPart, 32, ShipPart->Location, ShipPart->Speed, -1);
 						delete ShipPart;

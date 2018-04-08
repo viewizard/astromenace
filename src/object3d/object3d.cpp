@@ -48,7 +48,7 @@ cObject3D::~cObject3D()
 		delete [] ObjectsList;
 
 	if (HitBB != nullptr) {
-		for (int i = 0; i < ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < ObjectsListCount; i++) {
 			if (HitBB[i] != nullptr)
 				delete [] HitBB[i];
 		}
@@ -99,7 +99,7 @@ void cObject3D::InitByDrawObjectList()
 		return;
 
 	// создаем HitBB
-	for (int i = 0; i < ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < ObjectsListCount; i++) {
 		float Matrix[9];
 		vw_Matrix33CreateRotate(Matrix, ObjectsList[i].Rotation);
 
@@ -133,7 +133,7 @@ void cObject3D::InitByDrawObjectList()
 			MinZ = MaxZ = 0.0f;
 		}
 
-		for (int j=0; j<ObjectsList[i].VertexCount; j++) {
+		for (unsigned int j = 0; j < ObjectsList[i].VertexCount; j++) {
 			int j2;
 			if (ObjectsList[i].IndexArray)
 				j2 = ObjectsList[i].IndexArray[ObjectsList[i].RangeStart + j] * ObjectsList[i].VertexStride;
@@ -198,7 +198,7 @@ void cObject3D::InitByDrawObjectList()
 	float MaxZ = HitBB[0][0].z + HitBBLocation[0].z;
 
 	// берем то по HitBB, причем со 2-го сразу, т.к. первый учли выше
-	for (int i = 1; i < ObjectsListCount; i++) {
+	for (unsigned int i = 1; i < ObjectsListCount; i++) {
 		if (MinX > HitBB[i][6].x + HitBBLocation[i].x) MinX = HitBB[i][6].x + HitBBLocation[i].x;
 		if (MaxX < HitBB[i][0].x + HitBBLocation[i].x) MaxX = HitBB[i][0].x + HitBBLocation[i].x;
 		if (MinY > HitBB[i][6].y + HitBBLocation[i].y) MinY = HitBB[i][6].y + HitBBLocation[i].y;
@@ -242,8 +242,8 @@ void cObject3D::InitByDrawObjectList()
 
 	// находим "центр массы", в базовом режиме считаем всю геометрию
 	int AllVertexCounted = 0;
-	for (int i = 0; i < ObjectsListCount; i++)
-		for (int j = 0; j < ObjectsList[i].VertexCount; j++) {
+	for (unsigned int i = 0; i < ObjectsListCount; i++)
+		for (unsigned int j = 0; j < ObjectsList[i].VertexCount; j++) {
 			AllVertexCounted++;
 			GeometryCenterLocation += ObjectsList[i].Location + sVECTOR3D(ObjectsList[i].VertexArray[ObjectsList[i].VertexStride * j],
 						  ObjectsList[i].VertexArray[ObjectsList[i].VertexStride * j + 1],
@@ -284,7 +284,7 @@ void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 		float MaxZ = -10000.0f;
 
 		// проверяем данные
-		for (int i = 0; i < ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < ObjectsListCount; i++) {
 			vw_Matrix33CalcPoint(HitBBLocation[i], OldInvRotationMatTmp);
 
 			for (int j=0; j<8; j++) {
@@ -412,7 +412,7 @@ void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
 		float MaxZ = -10000.0f;
 
 		// проверяем данные
-		for (int i = 0; i < ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < ObjectsListCount; i++) {
 			vw_Matrix33CalcPoint(HitBBLocation[i], OldInvRotationMatTmp);
 
 			for (int j=0; j<8; j++) {
@@ -536,7 +536,7 @@ void cObject3D::SetRotation(sVECTOR3D NewRotation)
 
 	// пересчет HitBB
 	if (HitBB != nullptr)
-		for (int i = 0; i < ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < ObjectsListCount; i++) {
 			vw_Matrix33CalcPoint(HitBBLocation[i], OldInvRotationMat);
 			vw_Matrix33CalcPoint(HitBBLocation[i], CurrentRotationMat);
 
@@ -707,7 +707,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		if (NeedOnePieceDraw) {
 
 			int GlobalVertexCount = 0;
-			for (int i = 0; i < ObjectsListCount; i++) {
+			for (unsigned int i = 0; i < ObjectsListCount; i++) {
 				GlobalVertexCount += ObjectsList[i].VertexCount;
 			}
 
@@ -718,7 +718,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		} else {
 
 			// установка текстур и подхотовка к прорисовке
-			for (int i = 0; i < ObjectsListCount; i++) {
+			for (unsigned int i = 0; i < ObjectsListCount; i++) {
 
 				vw_PushMatrix();
 
@@ -807,7 +807,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 	// для корректной прорисовки на всех видеокартах атмосферы планеты ...
 	bool N1 = false;
-	for (int i = 0; i < ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < ObjectsListCount; i++) {
 		if (ObjectsList[i].DrawType == ObjectDrawType::Blend)
 			N1 = true;
 	}
@@ -971,7 +971,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		}
 
 		int GlobalVertexCount = 0;
-		for (int i = 0; i < ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < ObjectsListCount; i++) {
 			GlobalVertexCount += ObjectsList[i].VertexCount;
 		}
 
@@ -987,7 +987,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		GLtexture CurrentTexture{0};
 
 		// установка текстур и подхотовка к прорисовке
-		for (int i = 0; i < ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < ObjectsListCount; i++) {
 
 			// небольшая проверка для конкретной части
 			if ((HitBB != nullptr) && (HitBBLocation != nullptr)) {
@@ -1263,7 +1263,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 	if ((NeedShowBB >= 3) &&
 	    (HitBB != nullptr)) {
-		for (int i = 0; i < ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < ObjectsListCount; i++) {
 			DrawBoxLines(HitBB[i], Location+HitBBLocation[i], 0.0f, 0.0f, 1.0f, 1.0f);
 		}
 	}

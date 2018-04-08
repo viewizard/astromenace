@@ -181,8 +181,8 @@ bool cExplosion::Update(float Time)
 				sVECTOR3D TMP;
 				int Count = 0;
 
-				for (int j = 0; j < ObjectsListCount; j++) {
-					for (int i = 0; i < ObjectsList[j].VertexCount; i+=3) {
+				for (unsigned int j = 0; j < ObjectsListCount; j++) {
+					for (unsigned int i = 0; i < ObjectsList[j].VertexCount; i+=3) {
 						if (ExplosionPieceData[Count].Life > 0.0f) {
 							// получаем текущий вектор движения данного треугольника
 							TMP = ExplosionPieceData[Count].Velocity^ExplosionGeometryMove;
@@ -269,7 +269,7 @@ bool cExplosion::Update(float Time)
 		}
 	} else {
 		// меняем данные глобальные для шейдера, тут делаем столько столько позволяет, а не 30 раз как с изменением геометрии
-		for (int j = 0; j < ObjectsListCount; j++) {
+		for (unsigned int j = 0; j < ObjectsListCount; j++) {
 			// общий коэф. расстояния
 			ObjectsList[j].ShaderData[1] += ObjectsList[j].ShaderData[0]*TimeDelta;
 			// дельта скорости

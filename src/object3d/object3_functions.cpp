@@ -155,7 +155,7 @@ void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float 
 	Object3D->HitBBSize = new sVECTOR3D[Object3D->ObjectsListCount];
 	Object3D->HitBB = new sVECTOR3D*[Object3D->ObjectsListCount];
 
-	for (int i = 0; i < Object3D->ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < Object3D->ObjectsListCount; i++) {
 		Object3D->HitBB[i] = new sVECTOR3D[8];
 	}
 }

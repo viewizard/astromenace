@@ -88,7 +88,7 @@ void cAlienSpaceMotherShip::Create(int	SpaceShipNum)
 	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Name, this, 0, 2.0f, Setup.UseGLSL);
 
 	// всегда только эти текстуры
-	for (int i = 0; i < ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < ObjectsListCount; i++) {
 		Texture[i] =vw_FindTextureByName(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Texture);
 		TextureIllum[i] =vw_FindTextureByName(PresetAlienSpaceMotherShipData[SpaceShipNum-1].TextureIllum);
 		// если шейдеры выключены - вернет ноль (не загружаем текстуры нормал мепов если нет шейдеров)

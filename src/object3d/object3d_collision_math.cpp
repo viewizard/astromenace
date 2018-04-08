@@ -39,7 +39,7 @@ bool CheckMeshSphereCollisionDetection(cObject3D *Object1, cObject3D *Object2, s
 		return false;
 
 
-	for (int j = 0; j < Object1->ObjectsListCount; j++)
+	for (unsigned int j = 0; j < Object1->ObjectsListCount; j++)
 		if (Object1->ObjectsList[j].VertexCount != 0) {
 
 			if (Object1->HitBB != nullptr) {
@@ -114,10 +114,10 @@ bool CheckMeshSphereCollisionDetection(cObject3D *Object1, cObject3D *Object2, s
 bool CheckHitBBHitBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, int *Object1PieceNum, int *Object2PieceNum)
 {
 	// проверяем HitBB, находим номера пересекающихся
-	for (int i = 0; i < Object1->ObjectsListCount; i++)
+	for (unsigned int i = 0; i < Object1->ObjectsListCount; i++)
 		if (Object1->ObjectsList[i].VertexCount != 0) {
 
-			for (int j = 0; j < Object2->ObjectsListCount; j++)
+			for (unsigned int j = 0; j < Object2->ObjectsListCount; j++)
 				if (Object2->ObjectsList[j].VertexCount != 0) {
 
 					// находим расстояние между HitBB-ми
@@ -263,7 +263,7 @@ bool CheckHitBBHitBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, i
 bool CheckHitBBOBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, int *Object1PieceNum)
 {
 	// проверяем HitBB, находим номера пересекающихся
-	for (int i = 0; i < Object1->ObjectsListCount; i++)
+	for (unsigned int i = 0; i < Object1->ObjectsListCount; i++)
 		if (Object1->ObjectsList[i].VertexCount != 0) {
 
 			// строим матрицу, чтобы развернуть точки
@@ -415,7 +415,7 @@ bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, in
 
 
 	// проверяем HitBB, находим номера пересекающихся
-	for (int i = 0; i < Object1->ObjectsListCount; i++)
+	for (unsigned int i = 0; i < Object1->ObjectsListCount; i++)
 		if (Object1->ObjectsList[i].VertexCount != 0) {
 
 			// параметры HitBB
@@ -444,7 +444,7 @@ bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, in
 
 
 			// проверяем все треугольники объекта
-			for (int j = 0; j < Object2->ObjectsListCount; j++)
+			for (unsigned int j = 0; j < Object2->ObjectsListCount; j++)
 				if (Object2->ObjectsList[j].VertexCount != 0) {
 
 					// дальше работаем с геометрией
@@ -479,7 +479,7 @@ bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, in
 
 
 
-					for (int k = 0; k < Object2->ObjectsList[j].VertexCount; k+=3) {
+					for (unsigned int k = 0; k < Object2->ObjectsList[j].VertexCount; k+=3) {
 
 						int j2;
 						if (Object2->ObjectsList[j].IndexArray)

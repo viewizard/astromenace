@@ -149,7 +149,7 @@ static void CreateTangentAndBinormal(sModel3D *Model)
 	}
 
 	// store new vertex data
-	for (int i = 0; i < Model->ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < Model->ObjectsListCount; i++) {
 		Model->ObjectsList[i].VertexArray = Model->GlobalVertexArray;
 		Model->ObjectsList[i].VertexFormat = New_VertexFormat;
 		Model->ObjectsList[i].VertexStride = New_VertexStride;
@@ -161,11 +161,11 @@ static void CreateTangentAndBinormal(sModel3D *Model)
  */
 static void CreateObjectsBuffers(sModel3D *Model)
 {
-	for (int i = 0; i < Model->ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < Model->ObjectsListCount; i++) {
 		// vertex array
 		Model->ObjectsList[i].VertexArray = new float[Model->ObjectsList[i].VertexStride *
 							      Model->ObjectsList[i].VertexCount];
-		for (int j = 0; j < Model->ObjectsList[i].VertexCount; j++) {
+		for (unsigned int j = 0; j < Model->ObjectsList[i].VertexCount; j++) {
 			memcpy(Model->ObjectsList[i].VertexArray + Model->ObjectsList[i].VertexStride * j,
 			       Model->GlobalVertexArray + Model->GlobalIndexArray[Model->ObjectsList[i].RangeStart + j] *
 							  Model->ObjectsList[i].VertexStride,
@@ -174,7 +174,7 @@ static void CreateObjectsBuffers(sModel3D *Model)
 
 		// index array
 		Model->ObjectsList[i].IndexArray = new unsigned int[Model->ObjectsList[i].VertexCount];
-		for (int j = 0; j < Model->ObjectsList[i].VertexCount; j++) {
+		for (unsigned int j = 0; j < Model->ObjectsList[i].VertexCount; j++) {
 			Model->ObjectsList[i].IndexArray[j] = j;
 		}
 		Model->ObjectsList[i].RangeStart = 0;
@@ -202,7 +202,7 @@ static void CreateHardwareBuffers(sModel3D *Model)
 		Model->GlobalVAO = 0;
 
 	// and same for all objects
-	for (int i = 0; i < Model->ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < Model->ObjectsListCount; i++) {
 		// vertex buffer object
 		if (!vw_BuildVertexBufferObject(Model->ObjectsList[i].VertexCount, Model->ObjectsList[i].VertexArray,
 						Model->ObjectsList[i].VertexStride, Model->ObjectsList[i].VBO))
@@ -320,7 +320,7 @@ static int RecursiveTrianglesLimitedBySize(float (&Point1)[8], float (&Point2)[8
 static void CreateVertexArrayLimitedBySizeTriangles(sModel3D *Model, float TriangleSizeLimit)
 {
 	if (TriangleSizeLimit <= 0.0f) {
-		for (int i = 0; i < Model->ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < Model->ObjectsListCount; i++) {
 			Model->ObjectsList[i].VertexArrayWithSmallTrianglesCount = Model->ObjectsList[i].VertexCount;
 			Model->ObjectsList[i].VertexArrayWithSmallTriangles = Model->ObjectsList[i].VertexArray;
 		}
@@ -328,11 +328,11 @@ static void CreateVertexArrayLimitedBySizeTriangles(sModel3D *Model, float Trian
 	}
 
 	// calculate, how many memory we need for new vertex array
-	for (int i = 0; i < Model->ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < Model->ObjectsListCount; i++) {
 		Model->ObjectsList[i].VertexArrayWithSmallTrianglesCount = 0;
 
 		// prepare 3 points (triangle)
-		for (int j = 0; j < Model->ObjectsList[i].VertexCount - 2; j += 3) {
+		for (unsigned int j = 0; j < Model->ObjectsList[i].VertexCount; j += 3) {
 			unsigned int tmpOffset0 = Model->ObjectsList[i].VertexStride * j;		// j
 			unsigned int tmpOffset1 = tmpOffset0 + Model->ObjectsList[i].VertexStride;	// j + 1
 			unsigned int tmpOffset2 = tmpOffset1 + Model->ObjectsList[i].VertexStride;	// j + 2
@@ -372,7 +372,7 @@ static void CreateVertexArrayLimitedBySizeTriangles(sModel3D *Model, float Trian
 	}
 
 	// generate VertexArrayWithSmallTriangles
-	for (int i = 0; i < Model->ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < Model->ObjectsListCount; i++) {
 		// nothing to do
 		if (Model->ObjectsList[i].VertexArrayWithSmallTrianglesCount == Model->ObjectsList[i].VertexCount)
 			Model->ObjectsList[i].VertexArrayWithSmallTriangles = Model->ObjectsList[i].VertexArray;
@@ -384,7 +384,7 @@ static void CreateVertexArrayLimitedBySizeTriangles(sModel3D *Model, float Trian
 			int CurrentPosition = 0;
 
 			// prepare 3 points (triangle)
-			for (int j = 0; j < Model->ObjectsList[i].VertexCount - 2; j += 3) {
+			for (unsigned int j = 0; j < Model->ObjectsList[i].VertexCount; j += 3) {
 				unsigned int tmpOffset0 = Model->ObjectsList[i].VertexStride * j;		// j
 				unsigned int tmpOffset1 = tmpOffset0 + Model->ObjectsList[i].VertexStride;	// j + 1
 				unsigned int tmpOffset2 = tmpOffset1 + Model->ObjectsList[i].VertexStride;	// j + 2
@@ -497,7 +497,7 @@ sObjectBlock::~sObjectBlock()
 sModel3D::~sModel3D()
 {
 	if (ObjectsList) {
-		for (int i = 0; i < ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < ObjectsListCount; i++) {
 			// release only if we don't point to VertexArray
 			if (ObjectsList[i].VertexArrayWithSmallTriangles &&
 			    (ObjectsList[i].VertexArrayWithSmallTriangles != ObjectsList[i].VertexArray))
@@ -553,7 +553,7 @@ bool sModel3D::LoadVW3D(const std::string &FileName)
 	ObjectsList = new sObjectBlock[ObjectsListCount];
 	GlobalIndexArrayCount = 0;
 
-	for (int i = 0; i < ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < ObjectsListCount; i++) {
 		ObjectsList[i].RangeStart = GlobalIndexArrayCount;
 
 		// VertexFormat
@@ -591,7 +591,7 @@ bool sModel3D::LoadVW3D(const std::string &FileName)
 	File->fread(GlobalIndexArray, GlobalIndexArrayCount * sizeof(GlobalIndexArray[0]), 1);
 
 	// setup points to global arrays
-	for (int i = 0; i < ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < ObjectsListCount; i++) {
 		ObjectsList[i].VertexArray = GlobalVertexArray;
 		ObjectsList[i].IndexArray = GlobalIndexArray;
 	}
@@ -624,7 +624,7 @@ bool sModel3D::SaveVW3D(const std::string &FileName)
 
 	SDL_RWwrite(FileVW3D, &ObjectsListCount, sizeof(ObjectsListCount), 1);
 
-	for (int i = 0; i < ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < ObjectsListCount; i++) {
 		// VertexFormat
 		SDL_RWwrite(FileVW3D, &ObjectsList[i].VertexFormat, sizeof(ObjectsList[0].VertexFormat), 1);
 		// VertexStride

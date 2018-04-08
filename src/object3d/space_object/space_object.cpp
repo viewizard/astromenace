@@ -246,7 +246,7 @@ bool cSpaceObject::Update(float Time)
 				break;
 			}
 
-			for (int i = 0; i < ObjectsListCount; i++) {
+			for (unsigned int i = 0; i < ObjectsListCount; i++) {
 				if (ObjectsList[i].Rotation.x >= 360.0f)
 					ObjectsList[i].Rotation.x -= 360.0f;
 				if (ObjectsList[i].Rotation.x <= -360.0f)

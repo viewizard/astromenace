@@ -214,7 +214,7 @@ public:
 	unsigned int	GlobalIBO{0};
 	unsigned int	GlobalVAO{0};
 	// кол-во объектов в списке
-	int		ObjectsListCount{0};
+	unsigned int	ObjectsListCount{0};
 	// минимальное расстояние (квадрат) с которого надо рисовать пообъектно, если -1 всегда рисовать только пообъектно
 	float		PromptDrawDist2{-1.0f};
 	int		InternalLights{0}; // кол-во внутренних источников света

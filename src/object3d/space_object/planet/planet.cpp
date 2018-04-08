@@ -66,7 +66,7 @@ void cPlanet::Create(int PlanetNum)
 	case 2:
 		PromptDrawDist2 = 100.0f; // только для этой планеты ставим такое !!!
 		LoadObjectData("models/planet/dplanet.vw3d", this, 0, -1.0f, Setup.UseGLSL);
-		for (int i = 0; i < ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < ObjectsListCount; i++) {
 			Texture[i] = vw_FindTextureByName("models/planet/d_class3.tga");
 			TextureIllum[i] = 0;
 			NormalMap[i] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");

@@ -297,7 +297,7 @@ void cWeapon::Create(int WeaponNum)
 
 		LoadObjectData(PresetEarthWeaponData[WeaponNum-1].NameVW3D, this, PresetEarthWeaponData[WeaponNum-1].ObjectNum+1, 2.0f);
 
-		for (int i = 0; i < ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < ObjectsListCount; i++) {
 			Texture[i] = vw_FindTextureByName(PresetEarthWeaponData[WeaponNum-1].TextureName);
 			if (WeaponNum < 16)
 				TextureIllum[i] = vw_FindTextureByName(PresetEarthWeaponData[WeaponNum-1].TextureIllumName);
@@ -354,7 +354,7 @@ void cWeapon::Create(int WeaponNum)
 			TargetVertObjectMinAngle = 0.0f;
 
 			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this, 0, 2.0f);
-			for (int i = 0; i < ObjectsListCount; i++) {
+			for (unsigned int i = 0; i < ObjectsListCount; i++) {
 				Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
 				TextureIllum[i] = 0;
 			}
@@ -373,7 +373,7 @@ void cWeapon::Create(int WeaponNum)
 			TargetVertObjectMinAngle = 20.0f;
 
 			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this, 0, 2.0f);
-			for (int i = 0; i < ObjectsListCount; i++) {
+			for (unsigned int i = 0; i < ObjectsListCount; i++) {
 				Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
 				TextureIllum[i] = 0;
 			}
@@ -778,7 +778,7 @@ bool cWeapon::Update(float Time)
 				TargetHorizObjectCurrentAngle = NeedRotate;
 
 				// поворачиваем все объекты
-				for (int i = 0; i < ObjectsListCount; i++) {
+				for (unsigned int i = 0; i < ObjectsListCount; i++) {
 					sVECTOR3D tmp = ObjectsList[i].Location - ObjectsList[TargetHorizObject].Location;
 
 					vw_RotatePointInv(tmp, ObjectsList[i].Rotation ^ (-1.0f));

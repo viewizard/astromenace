@@ -424,7 +424,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
-		for (int i = 0; i < Object->ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < Object->ObjectsListCount; i++) {
 			// могут быть пустые группы, убираем их и идем смотрим на следующую группу
 			if (Object->ObjectsList[i].VertexCount == 0)
 				continue;
@@ -458,7 +458,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			ShipPart->HitBBRadius2 = new float[ShipPart->ObjectsListCount];
 			ShipPart->HitBBSize = new sVECTOR3D[ShipPart->ObjectsListCount];
 			ShipPart->HitBB = new sVECTOR3D*[ShipPart->ObjectsListCount];
-			for (int i1 = 0; i1 < ShipPart->ObjectsListCount; i1++) {
+			for (unsigned int i1 = 0; i1 < ShipPart->ObjectsListCount; i1++) {
 				ShipPart->HitBB[i1] = new sVECTOR3D[8];
 			}
 
@@ -502,7 +502,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 				break;
 			}
 			if (ObjectPieceNum != -1)
-				if (ObjectPieceNum == i) {
+				if (ObjectPieceNum == (int)i) {
 					new cSpaceExplosion(ShipPart, NeedExplosionType, ShipPart->Location, ShipPart->Speed, -1);
 					delete ShipPart;
 				}
@@ -547,7 +547,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		int NeedIn = Setup.VisualEffectsQuality;
 
 		// составляем данные для взрыва
-		for (int i = 0; i < ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < ObjectsListCount; i++) {
 			Texture[i] = Object->Texture[i];
 			// копируем данные
 			memcpy(&(ObjectsList[i]), &(Object->ObjectsList[i]), sizeof(Object->ObjectsList[0]));
@@ -607,7 +607,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 
 			sVECTOR3D TMP;
-			for (int j=0; j<Object->ObjectsList[i].VertexArrayWithSmallTrianglesCount; j++) {
+			for (unsigned int j=0; j<Object->ObjectsList[i].VertexArrayWithSmallTrianglesCount; j++) {
 				if (NeedInCur <= 0) {
 					int j1 = k*ObjectsList[i].VertexStride;
 					int j2 = j*Object->ObjectsList[i].VertexStride;
@@ -648,7 +648,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 			// создаем индексный буфер блока
 			ObjectsList[i].IndexArray = new unsigned int[ObjectsList[i].VertexCount];
-			for (int j = 0; j < ObjectsList[i].VertexCount; j++) {
+			for (unsigned int j = 0; j < ObjectsList[i].VertexCount; j++) {
 				ObjectsList[i].IndexArray[j] = j;
 			}
 
@@ -667,8 +667,8 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		int Count = 0;
 		sVECTOR3D TMP;
 		ExplosionPieceData = new sExplosionPiece[TotalCount/3];
-		for (int j = 0; j < ObjectsListCount; j++) {
-			for (int i = 0; i < ObjectsList[j].VertexCount; i+=3) {
+		for (unsigned int j = 0; j < ObjectsListCount; j++) {
+			for (unsigned int i = 0; i < ObjectsList[j].VertexCount; i+=3) {
 				ExplosionPieceData[Count].Velocity.x = ObjectsList[j].VertexArray[ObjectsList[j].VertexStride *  i];
 				ExplosionPieceData[Count].Velocity.x += ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 1)];
 				ExplosionPieceData[Count].Velocity.x += ObjectsList[j].VertexArray[ObjectsList[j].VertexStride * (i + 2)];
