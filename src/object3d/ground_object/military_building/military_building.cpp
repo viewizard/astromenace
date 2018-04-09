@@ -65,8 +65,8 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 	LoadObjectData(PresetMilitaryBuildingData[MilitaryBuildingNum-1].Name, this, 0, 2.0f);
 
 
-	for (unsigned int i=0; i<ObjectsListCount; i++) {
-		Texture[i] = vw_FindTextureByName(PresetMilitaryBuildingData[MilitaryBuildingNum-1].TextureName);
+	for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
+		Texture[i] = vw_FindTextureByName(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].TextureName);
 	}
 
 
@@ -266,22 +266,22 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 
 	// вычисляем данные для нахождения точки стрельбы
 	if (TargetHorizObject != nullptr) {
-		BaseBound = ObjectsList[TargetHorizObject[0]].Location;
+		BaseBound = ObjectBlocks[TargetHorizObject[0]].Location;
 	}
 
 	if (TargetVertObject != nullptr) {
 		if (TargetHorizObject != nullptr)
-			MiddleBound = ObjectsList[TargetVertObject[0]].Location - ObjectsList[TargetHorizObject[0]].Location;
+			MiddleBound = ObjectBlocks[TargetVertObject[0]].Location - ObjectBlocks[TargetHorizObject[0]].Location;
 		else
-			MiddleBound = ObjectsList[TargetVertObject[0]].Location;
+			MiddleBound = ObjectBlocks[TargetVertObject[0]].Location;
 	}
 
 	if (WeaponBound != nullptr) {
 		for (int i = 0; i < WeaponQuantity; i++) {
 			if (TargetVertObject != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - ObjectsList[TargetVertObject[0]].Location;
+				WeaponBound[i] = WeaponLocation[i] - ObjectBlocks[TargetVertObject[0]].Location;
 			else if (TargetHorizObject != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - ObjectsList[TargetHorizObject[0]].Location;
+				WeaponBound[i] = WeaponLocation[i] - ObjectBlocks[TargetHorizObject[0]].Location;
 			else
 				WeaponBound[i] = WeaponLocation[i];
 		}

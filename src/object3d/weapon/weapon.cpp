@@ -297,7 +297,7 @@ void cWeapon::Create(int WeaponNum)
 
 		LoadObjectData(PresetEarthWeaponData[WeaponNum-1].NameVW3D, this, PresetEarthWeaponData[WeaponNum-1].ObjectNum+1, 2.0f);
 
-		for (unsigned int i = 0; i < ObjectsListCount; i++) {
+		for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
 			Texture[i] = vw_FindTextureByName(PresetEarthWeaponData[WeaponNum-1].TextureName);
 			if (WeaponNum < 16)
 				TextureIllum[i] = vw_FindTextureByName(PresetEarthWeaponData[WeaponNum-1].TextureIllumName);
@@ -354,7 +354,7 @@ void cWeapon::Create(int WeaponNum)
 			TargetVertObjectMinAngle = 0.0f;
 
 			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this, 0, 2.0f);
-			for (unsigned int i = 0; i < ObjectsListCount; i++) {
+			for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
 				Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
 				TextureIllum[i] = 0;
 			}
@@ -373,7 +373,7 @@ void cWeapon::Create(int WeaponNum)
 			TargetVertObjectMinAngle = 20.0f;
 
 			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this, 0, 2.0f);
-			for (unsigned int i = 0; i < ObjectsListCount; i++) {
+			for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
 				Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
 				TextureIllum[i] = 0;
 			}
@@ -387,21 +387,22 @@ void cWeapon::Create(int WeaponNum)
 		if (WeaponNum == 201 || WeaponNum == 202) {
 			// вычисляем данные для нахождения точки стрельбы
 			if (TargetHorizObject != -1) {
-				BaseBound = ObjectsList[TargetHorizObject].Location;
+				BaseBound = ObjectBlocks[TargetHorizObject].Location;
 			}
 
 			if (TargetVertObject != -1) {
 				if (TargetHorizObject != -1)
-					MiddleBound = ObjectsList[TargetVertObject].Location - ObjectsList[TargetHorizObject].Location;
+					MiddleBound = ObjectBlocks[TargetVertObject].Location -
+						      ObjectBlocks[TargetHorizObject].Location;
 				else
-					MiddleBound = ObjectsList[TargetVertObject].Location;
+					MiddleBound = ObjectBlocks[TargetVertObject].Location;
 			}
 
 
 			if (TargetVertObject != -1)
-				WeaponBound = FireLocation - ObjectsList[TargetVertObject].Location;
+				WeaponBound = FireLocation - ObjectBlocks[TargetVertObject].Location;
 			else if (TargetHorizObject != -1)
-				WeaponBound = FireLocation - ObjectsList[TargetHorizObject].Location;
+				WeaponBound = FireLocation - ObjectBlocks[TargetHorizObject].Location;
 			else
 				WeaponBound = FireLocation;
 
@@ -778,16 +779,16 @@ bool cWeapon::Update(float Time)
 				TargetHorizObjectCurrentAngle = NeedRotate;
 
 				// поворачиваем все объекты
-				for (unsigned int i = 0; i < ObjectsListCount; i++) {
-					sVECTOR3D tmp = ObjectsList[i].Location - ObjectsList[TargetHorizObject].Location;
+				for (auto &tmpObjectBlock : ObjectBlocks) {
+					sVECTOR3D tmp = tmpObjectBlock.Location - ObjectBlocks[TargetHorizObject].Location;
 
-					vw_RotatePointInv(tmp, ObjectsList[i].Rotation ^ (-1.0f));
+					vw_RotatePointInv(tmp, tmpObjectBlock.Rotation ^ (-1.0f));
 
-					ObjectsList[i].Rotation.y = -NeedRotate;
+					tmpObjectBlock.Rotation.y = -NeedRotate;
 
-					vw_RotatePoint(tmp, ObjectsList[i].Rotation);
+					vw_RotatePoint(tmp, tmpObjectBlock.Rotation);
 
-					ObjectsList[i].Location = tmp + ObjectsList[TargetHorizObject].Location;
+					tmpObjectBlock.Location = tmp + ObjectBlocks[TargetHorizObject].Location;
 				}
 			}
 
@@ -818,15 +819,15 @@ bool cWeapon::Update(float Time)
 				TargetVertObjectCurrentAngle = NeedRotate;
 
 				// поворачиваем все объекты
-				sVECTOR3D tmp = ObjectsList[TargetVertObject].Location - ObjectsList[TargetVertObject].Location;
+				sVECTOR3D tmp = ObjectBlocks[TargetVertObject].Location - ObjectBlocks[TargetVertObject].Location;
 
-				vw_RotatePointInv(tmp, ObjectsList[TargetVertObject].Rotation ^ (-1.0f));
+				vw_RotatePointInv(tmp, ObjectBlocks[TargetVertObject].Rotation ^ (-1.0f));
 
-				ObjectsList[TargetVertObject].Rotation.x = -NeedRotate;
+				ObjectBlocks[TargetVertObject].Rotation.x = -NeedRotate;
 
-				vw_RotatePoint(tmp, ObjectsList[TargetVertObject].Rotation);
+				vw_RotatePoint(tmp, ObjectBlocks[TargetVertObject].Rotation);
 
-				ObjectsList[TargetVertObject].Location = tmp + ObjectsList[TargetVertObject].Location;
+				ObjectBlocks[TargetVertObject].Location = tmp + ObjectBlocks[TargetVertObject].Location;
 			}
 
 
@@ -838,12 +839,12 @@ bool cWeapon::Update(float Time)
 		sVECTOR3D RotationMiddle = Rotation;
 		sVECTOR3D MiddleBoundTMP = MiddleBound;
 		if (TargetHorizObject != -1)
-			RotationMiddle = ObjectsList[TargetHorizObject].Rotation + Rotation;
+			RotationMiddle = ObjectBlocks[TargetHorizObject].Rotation + Rotation;
 		vw_RotatePoint(MiddleBoundTMP, RotationMiddle);
 
 		sVECTOR3D RotationWeapon = Rotation;
 		if (TargetVertObject != -1)
-			RotationWeapon = ObjectsList[TargetVertObject].Rotation + Rotation;
+			RotationWeapon = ObjectBlocks[TargetVertObject].Rotation + Rotation;
 
 		sVECTOR3D WeaponBoundTMP = WeaponBound;
 		vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
@@ -908,12 +909,12 @@ void cWeapon::SetRotation(sVECTOR3D NewRotation)
 		sVECTOR3D RotationMiddle = Rotation;
 		sVECTOR3D MiddleBoundTMP = MiddleBound;
 		if (TargetHorizObject != -1)
-			RotationMiddle = ObjectsList[TargetHorizObject].Rotation + Rotation;
+			RotationMiddle = ObjectBlocks[TargetHorizObject].Rotation + Rotation;
 		vw_RotatePoint(MiddleBoundTMP, RotationMiddle);
 
 		sVECTOR3D RotationWeapon = Rotation;
 		if (TargetVertObject != -1)
-			RotationWeapon = ObjectsList[TargetVertObject].Rotation + Rotation;
+			RotationWeapon = ObjectBlocks[TargetVertObject].Rotation + Rotation;
 
 		sVECTOR3D WeaponBoundTMP = WeaponBound;
 		vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
@@ -1131,11 +1132,11 @@ bool cWeapon::WeaponFire(float Time)
 		sVECTOR3D RotationMiddle = Rotation;
 		sVECTOR3D MiddleBoundTMP = MiddleBound;
 		if (TargetHorizObject != -1)
-			RotationMiddle = ObjectsList[TargetHorizObject].Rotation + Rotation;
+			RotationMiddle = ObjectBlocks[TargetHorizObject].Rotation + Rotation;
 		vw_RotatePoint(MiddleBoundTMP, RotationMiddle);
 
 		if (TargetVertObject != -1)
-			RotationWeapon = ObjectsList[TargetVertObject].Rotation + Rotation;
+			RotationWeapon = ObjectBlocks[TargetVertObject].Rotation + Rotation;
 
 		sVECTOR3D WeaponBoundTMP = WeaponBound;
 		vw_RotatePoint(WeaponBoundTMP, RotationWeapon);

@@ -68,7 +68,7 @@ void cBuilding::Create(int	BuildingNum)
 
 	LoadObjectData(PresetBuildingData[BuildingNum-1].Name, this, 0, -1.0f, Setup.UseGLSL);
 
-	for (unsigned int i = 0; i < ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
 		Texture[i] = vw_FindTextureByName("models/building/bld.vw2d");
 		TextureIllum[i] = vw_FindTextureByName("models/building/bld_illum.vw2d");
 		NormalMap[i] = vw_FindTextureByName("models/normalmap/buildings_nm.tga");

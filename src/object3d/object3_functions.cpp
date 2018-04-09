@@ -120,42 +120,44 @@ void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float 
 	// т.е. нужны все объекты
 	if (ObjectNum == 0) {
 		// берем то, что нужно
-		Object3D->ObjectsListCount = Model->ObjectsListCount;
 		Object3D->GlobalVertexArray = Model->GlobalVertexArray ;
 		Object3D->GlobalVBO = Model->GlobalVBO;
 		Object3D->GlobalIndexArray = Model->GlobalIndexArray;
 		Object3D->GlobalIBO = Model->GlobalIBO;
 		Object3D->GlobalVAO = Model->GlobalVAO;
-		Object3D->ObjectsList = new sObjectBlock[Object3D->ObjectsListCount];
+		Object3D->ObjectBlocks.resize(Model->ObjectBlocks.size());
 		// копируем все данные
-		memcpy(Object3D->ObjectsList, Model->ObjectsList, sizeof(Model->ObjectsList[0])*Object3D->ObjectsListCount);
+		memcpy(Object3D->ObjectBlocks.data(),
+		       Model->ObjectBlocks.data(),
+		       sizeof(Model->ObjectBlocks[0]) * Object3D->ObjectBlocks.size());
 	} else {
 		// работаем только с одним объектом ( так работаем с оружием для кораблей землян )
 
 		// берем то, что нужно
-		Object3D->ObjectsListCount = 1;
-		Object3D->GlobalVertexArray = Model->ObjectsList[ObjectNum - 1].VertexArray;
-		Object3D->GlobalVBO = Model->ObjectsList[ObjectNum - 1].VBO;
-		Object3D->GlobalIndexArray = Model->ObjectsList[ObjectNum - 1].IndexArray;
-		Object3D->GlobalIBO = Model->ObjectsList[ObjectNum - 1].IBO;
-		Object3D->GlobalVAO = Model->ObjectsList[ObjectNum - 1].VAO;
-		Object3D->ObjectsList = new sObjectBlock[Object3D->ObjectsListCount];
+		Object3D->GlobalVertexArray = Model->ObjectBlocks[ObjectNum - 1].VertexArray;
+		Object3D->GlobalVBO = Model->ObjectBlocks[ObjectNum - 1].VBO;
+		Object3D->GlobalIndexArray = Model->ObjectBlocks[ObjectNum - 1].IndexArray;
+		Object3D->GlobalIBO = Model->ObjectBlocks[ObjectNum - 1].IBO;
+		Object3D->GlobalVAO = Model->ObjectBlocks[ObjectNum - 1].VAO;
+		Object3D->ObjectBlocks.resize(1);
 		// копируем данные нужного объекта
-		memcpy(Object3D->ObjectsList, &(Model->ObjectsList[ObjectNum - 1]), sizeof(Model->ObjectsList[0]));
+		memcpy(Object3D->ObjectBlocks.data(),
+		       &(Model->ObjectBlocks[ObjectNum - 1]),
+		       sizeof(Model->ObjectBlocks[0]));
 	}
 
 	// резервируем память для текстур
-	Object3D->Texture.resize(Object3D->ObjectsListCount, 0);
-	Object3D->TextureIllum.resize(Object3D->ObjectsListCount, 0);
-	Object3D->NormalMap.resize(Object3D->ObjectsListCount, 0);
+	Object3D->Texture.resize(Object3D->ObjectBlocks.size(), 0);
+	Object3D->TextureIllum.resize(Object3D->ObjectBlocks.size(), 0);
+	Object3D->NormalMap.resize(Object3D->ObjectBlocks.size(), 0);
 
 	// резервируем память для HitBB
-	Object3D->HitBBLocation = new sVECTOR3D[Object3D->ObjectsListCount];
-	Object3D->HitBBRadius2 = new float[Object3D->ObjectsListCount];
-	Object3D->HitBBSize = new sVECTOR3D[Object3D->ObjectsListCount];
-	Object3D->HitBB = new sVECTOR3D*[Object3D->ObjectsListCount];
+	Object3D->HitBBLocation = new sVECTOR3D[Object3D->ObjectBlocks.size()];
+	Object3D->HitBBRadius2 = new float[Object3D->ObjectBlocks.size()];
+	Object3D->HitBBSize = new sVECTOR3D[Object3D->ObjectBlocks.size()];
+	Object3D->HitBB = new sVECTOR3D*[Object3D->ObjectBlocks.size()];
 
-	for (unsigned int i = 0; i < Object3D->ObjectsListCount; i++) {
+	for (unsigned int i = 0; i < Object3D->ObjectBlocks.size(); i++) {
 		Object3D->HitBB[i] = new sVECTOR3D[8];
 	}
 }

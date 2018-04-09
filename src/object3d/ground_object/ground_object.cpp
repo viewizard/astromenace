@@ -120,12 +120,12 @@ void cGroundObject::SetRotation(sVECTOR3D NewRotation)
 	sVECTOR3D RotationMiddle = Rotation;
 	sVECTOR3D MiddleBoundTMP = MiddleBound;
 	if (TargetHorizObject != nullptr)
-		RotationMiddle = ObjectsList[TargetHorizObject[0]].Rotation + Rotation;
+		RotationMiddle = ObjectBlocks[TargetHorizObject[0]].Rotation + Rotation;
 	vw_RotatePoint(MiddleBoundTMP, RotationMiddle);
 
 	sVECTOR3D RotationWeapon = Rotation;
 	if (TargetVertObject != nullptr)
-		RotationWeapon = ObjectsList[TargetVertObject[0]].Rotation + Rotation;
+		RotationWeapon = ObjectBlocks[TargetVertObject[0]].Rotation + Rotation;
 
 
 	if (Weapon != nullptr)
@@ -280,17 +280,18 @@ bool cGroundObject::Update(float Time)
 			// поворачиваем все объекты
 			for (int i=0; i<TargetHorizObjectQuantity; i++) {
 
-				sVECTOR3D tmp = ObjectsList[TargetHorizObject[i]].Location - ObjectsList[TargetHorizObject[0]].Location;
+				sVECTOR3D tmp = ObjectBlocks[TargetHorizObject[i]].Location -
+						ObjectBlocks[TargetHorizObject[0]].Location;
 
-				vw_RotatePointInv(tmp, ObjectsList[TargetHorizObject[i]].Rotation ^ (-1.0f));
+				vw_RotatePointInv(tmp, ObjectBlocks[TargetHorizObject[i]].Rotation ^ (-1.0f));
 
-				SetObjectRotation(sVECTOR3D(ObjectsList[TargetHorizObject[i]].Rotation.x,
-							   -NeedRotateCalculation,
-							   ObjectsList[TargetHorizObject[i]].Rotation.z), TargetHorizObject[i]);
+				SetObjectRotation(sVECTOR3D(ObjectBlocks[TargetHorizObject[i]].Rotation.x,
+							    -NeedRotateCalculation,
+							    ObjectBlocks[TargetHorizObject[i]].Rotation.z), TargetHorizObject[i]);
 
-				vw_RotatePoint(tmp, ObjectsList[TargetHorizObject[i]].Rotation);
+				vw_RotatePoint(tmp, ObjectBlocks[TargetHorizObject[i]].Rotation);
 
-				SetObjectLocation(tmp + ObjectsList[TargetHorizObject[0]].Location, TargetHorizObject[i]);
+				SetObjectLocation(tmp + ObjectBlocks[TargetHorizObject[0]].Location, TargetHorizObject[i]);
 			}
 		}
 
@@ -326,17 +327,18 @@ bool cGroundObject::Update(float Time)
 			// поворачиваем все объекты
 			for (int i = 0; i < TargetVertObjectQuantity; i++) {
 
-				sVECTOR3D tmp = ObjectsList[TargetVertObject[i]].Location - ObjectsList[TargetVertObject[0]].Location;
+				sVECTOR3D tmp = ObjectBlocks[TargetVertObject[i]].Location -
+						ObjectBlocks[TargetVertObject[0]].Location;
 
-				vw_RotatePointInv(tmp, ObjectsList[TargetVertObject[i]].Rotation ^ (-1.0f));
+				vw_RotatePointInv(tmp, ObjectBlocks[TargetVertObject[i]].Rotation ^ (-1.0f));
 
 				SetObjectRotation(sVECTOR3D(-NeedRotateCalculation,
-							   ObjectsList[TargetVertObject[i]].Rotation.y,
-							   ObjectsList[TargetVertObject[i]].Rotation.z), TargetVertObject[i]);
+							    ObjectBlocks[TargetVertObject[i]].Rotation.y,
+							    ObjectBlocks[TargetVertObject[i]].Rotation.z), TargetVertObject[i]);
 
-				vw_RotatePoint(tmp, ObjectsList[TargetVertObject[i]].Rotation);
+				vw_RotatePoint(tmp, ObjectBlocks[TargetVertObject[i]].Rotation);
 
-				SetObjectLocation(tmp + ObjectsList[TargetVertObject[0]].Location, TargetVertObject[i]);
+				SetObjectLocation(tmp + ObjectBlocks[TargetVertObject[0]].Location, TargetVertObject[i]);
 			}
 		}
 	}
@@ -355,12 +357,12 @@ bool cGroundObject::Update(float Time)
 	sVECTOR3D RotationMiddle = Rotation;
 	sVECTOR3D MiddleBoundTMP = MiddleBound;
 	if (TargetHorizObject != nullptr)
-		RotationMiddle = ObjectsList[TargetHorizObject[0]].Rotation + Rotation;
+		RotationMiddle = ObjectBlocks[TargetHorizObject[0]].Rotation + Rotation;
 	vw_RotatePoint(MiddleBoundTMP, RotationMiddle);
 
 	sVECTOR3D RotationWeapon = Rotation;
 	if (TargetVertObject != nullptr)
-		RotationWeapon = ObjectsList[TargetVertObject[0]].Rotation + Rotation;
+		RotationWeapon = ObjectBlocks[TargetVertObject[0]].Rotation + Rotation;
 
 
 	if (Weapon != nullptr)
@@ -523,10 +525,10 @@ bool cGroundObject::Update(float Time)
 	if ((BarrelObjectQuantity != 0) &&
 	    (BarrelObject != nullptr)) {
 		for (int i = 0; i < BarrelObjectQuantity; i++) {
-			ObjectsList[BarrelObject[i]].NeedGeometryAnimation = true;
-			ObjectsList[BarrelObject[i]].GeometryAnimation += sVECTOR3D(0.0f,0.0f,500.0f*TimeDelta);
-			if (ObjectsList[BarrelObject[i]].GeometryAnimation.z > 360.0f)
-				ObjectsList[BarrelObject[i]].GeometryAnimation.z -= 360.0f;
+			ObjectBlocks[BarrelObject[i]].NeedGeometryAnimation = true;
+			ObjectBlocks[BarrelObject[i]].GeometryAnimation += sVECTOR3D(0.0f, 0.0f, 500.0f * TimeDelta);
+			if (ObjectBlocks[BarrelObject[i]].GeometryAnimation.z > 360.0f)
+				ObjectBlocks[BarrelObject[i]].GeometryAnimation.z -= 360.0f;
 		}
 	}
 
@@ -541,12 +543,12 @@ bool cGroundObject::Update(float Time)
 	    ((WheelTrackSpeed >= 0.00001f) || (WheelTrackSpeed <= -0.00001f)))) {
 		// перебираем все и ув. их угол вращения
 		for (int i = 0; i < WheelQuantity; i++) {
-			ObjectsList[WheelObjectsNum[i]].Rotation.x += WheelTrackSpeed*TimeDelta;
+			ObjectBlocks[WheelObjectsNum[i]].Rotation.x += WheelTrackSpeed * TimeDelta;
 
-			if (ObjectsList[WheelObjectsNum[i]].Rotation.x > 360.0f)
-				ObjectsList[WheelObjectsNum[i]].Rotation.x -= 360.0f;
-			if (ObjectsList[WheelObjectsNum[i]].Rotation.x < -360.0f)
-				ObjectsList[WheelObjectsNum[i]].Rotation.x += 360.0f;
+			if (ObjectBlocks[WheelObjectsNum[i]].Rotation.x > 360.0f)
+				ObjectBlocks[WheelObjectsNum[i]].Rotation.x -= 360.0f;
+			if (ObjectBlocks[WheelObjectsNum[i]].Rotation.x < -360.0f)
+				ObjectBlocks[WheelObjectsNum[i]].Rotation.x += 360.0f;
 		}
 	}
 
@@ -554,13 +556,14 @@ bool cGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// тайловая анимация для траков
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (TrackObjectNum != -1 && (WheelTrackSpeed >= 0.00001f || WheelTrackSpeed <= -0.00001f)) {
-		ObjectsList[TrackObjectNum].NeedTextureAnimation = true;
-		ObjectsList[TrackObjectNum].TextureAnimation.x += (WheelTrackSpeed / 500.0f) * TimeDelta * TrackRotationDirection;
-		if (ObjectsList[TrackObjectNum].TextureAnimation.x > 1.0f)
-			ObjectsList[TrackObjectNum].TextureAnimation.x -= 1.0f;
-		if (ObjectsList[TrackObjectNum].TextureAnimation.x < -1.0f)
-			ObjectsList[TrackObjectNum].TextureAnimation.x += 1.0f;
+	if ((TrackObjectNum != -1) && ((WheelTrackSpeed >= 0.00001f) || (WheelTrackSpeed <= -0.00001f))) {
+		ObjectBlocks[TrackObjectNum].NeedTextureAnimation = true;
+		ObjectBlocks[TrackObjectNum].TextureAnimation.x +=
+				(WheelTrackSpeed / 500.0f) * TimeDelta * TrackRotationDirection;
+		if (ObjectBlocks[TrackObjectNum].TextureAnimation.x > 1.0f)
+			ObjectBlocks[TrackObjectNum].TextureAnimation.x -= 1.0f;
+		if (ObjectBlocks[TrackObjectNum].TextureAnimation.x < -1.0f)
+			ObjectBlocks[TrackObjectNum].TextureAnimation.x += 1.0f;
 	}
 
 
@@ -652,13 +655,13 @@ bool cGroundObject::Update(float Time)
 		if (WheelRotateObjectsNum != nullptr) {
 			// перебираем все и ув. их угол вращения
 			for (int i = 0; i < WheelRotateQuantity; i++) {
-				float NeedRotateY = ObjectsList[WheelRotateObjectsNum[i]].Rotation.y;
-				if (ObjectsList[WheelRotateObjectsNum[i]].Rotation.y > NeedRotate.y) {
-					NeedRotateY -= 90.0f*TimeDelta;
+				float NeedRotateY = ObjectBlocks[WheelRotateObjectsNum[i]].Rotation.y;
+				if (ObjectBlocks[WheelRotateObjectsNum[i]].Rotation.y > NeedRotate.y) {
+					NeedRotateY -= 90.0f * TimeDelta;
 					if (NeedRotateY < NeedRotate.y)
 						NeedRotateY = NeedRotate.y;
-				} else if (ObjectsList[WheelRotateObjectsNum[i]].Rotation.y < NeedRotate.y) {
-					NeedRotateY += 90.0f*TimeDelta;
+				} else if (ObjectBlocks[WheelRotateObjectsNum[i]].Rotation.y < NeedRotate.y) {
+					NeedRotateY += 90.0f * TimeDelta;
 					if (NeedRotateY > NeedRotate.y)
 						NeedRotateY = NeedRotate.y;
 				}
@@ -669,9 +672,10 @@ bool cGroundObject::Update(float Time)
 					NeedRotateY = -MaxWheelRotateAngle;
 
 
-				SetObjectRotation(sVECTOR3D(ObjectsList[WheelRotateObjectsNum[i]].Rotation.x,
-							   NeedRotateY,
-							   ObjectsList[WheelRotateObjectsNum[i]].Rotation.z), WheelRotateObjectsNum[i]);
+				SetObjectRotation(sVECTOR3D(ObjectBlocks[WheelRotateObjectsNum[i]].Rotation.x,
+							    NeedRotateY,
+							    ObjectBlocks[WheelRotateObjectsNum[i]].Rotation.z),
+						  WheelRotateObjectsNum[i]);
 
 			}
 		}
@@ -765,8 +769,8 @@ bool cGroundObject::Update(float Time)
 				} else CurentDeviationSum[i] += CurentDeviation[i];
 			}
 
-			sVECTOR3D Tmp = Deviation[i]^CurentDeviation[i];
-			SetObjectLocation(ObjectsList[DeviationObjNum[i]].Location + Tmp, DeviationObjNum[i]);
+			sVECTOR3D Tmp = Deviation[i] ^ CurentDeviation[i];
+			SetObjectLocation(ObjectBlocks[DeviationObjNum[i]].Location + Tmp, DeviationObjNum[i]);
 		}
 
 

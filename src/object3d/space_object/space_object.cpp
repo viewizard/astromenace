@@ -214,11 +214,11 @@ bool cSpaceObject::Update(float Time)
 			switch (ObjectCreationType) {
 			// планета с астероидным кольцом
 			case 1:
-				ObjectsList[0].Rotation.y += 0.5f * TimeDelta;
+				ObjectBlocks[0].Rotation.y += 0.5f * TimeDelta;
 				// кольца
-				ObjectsList[1].Rotation.y += 0.7f * TimeDelta;
-				ObjectsList[2].Rotation.y += 0.8f * TimeDelta;
-				ObjectsList[3].Rotation.y += 0.9f * TimeDelta;
+				ObjectBlocks[1].Rotation.y += 0.7f * TimeDelta;
+				ObjectBlocks[2].Rotation.y += 0.8f * TimeDelta;
+				ObjectBlocks[3].Rotation.y += 0.9f * TimeDelta;
 				break;
 			// полу разрушенная планета
 			case 2:
@@ -228,33 +228,33 @@ bool cSpaceObject::Update(float Time)
 				break;
 			// планета с атмосферой
 			case 3:
-				ObjectsList[0].Rotation.y += 0.5f * TimeDelta;
+				ObjectBlocks[0].Rotation.y += 0.5f * TimeDelta;
 				// атмосфера
-				ObjectsList[1].Rotation.y -= 0.7 * TimeDelta;
+				ObjectBlocks[1].Rotation.y -= 0.7 * TimeDelta;
 				break;
 			// луна
 			case 4:
-				ObjectsList[0].Rotation.y += 1.0f * TimeDelta;
+				ObjectBlocks[0].Rotation.y += 1.0f * TimeDelta;
 				break;
 			// планета пришельцев, с подсветкой
 			case 5:
-				ObjectsList[0].Rotation.y += 0.5f * TimeDelta;
+				ObjectBlocks[0].Rotation.y += 0.5f * TimeDelta;
 				break;
 			// планета пришельцев
 			case 6:
-				ObjectsList[0].Rotation.y += 0.5f * TimeDelta;
+				ObjectBlocks[0].Rotation.y += 0.5f * TimeDelta;
 				break;
 			}
 
-			for (unsigned int i = 0; i < ObjectsListCount; i++) {
-				if (ObjectsList[i].Rotation.x >= 360.0f)
-					ObjectsList[i].Rotation.x -= 360.0f;
-				if (ObjectsList[i].Rotation.x <= -360.0f)
-					ObjectsList[i].Rotation.x += 360.0f;
-				if (ObjectsList[i].Rotation.y >= 360.0f)
-					ObjectsList[i].Rotation.y -= 360.0f;
-				if (ObjectsList[i].Rotation.y <= -360.0f)
-					ObjectsList[i].Rotation.y += 360.0f;
+			for (auto &tmpObjectBlock : ObjectBlocks) {
+				if (tmpObjectBlock.Rotation.x >= 360.0f)
+					tmpObjectBlock.Rotation.x -= 360.0f;
+				if (tmpObjectBlock.Rotation.x <= -360.0f)
+					tmpObjectBlock.Rotation.x += 360.0f;
+				if (tmpObjectBlock.Rotation.y >= 360.0f)
+					tmpObjectBlock.Rotation.y -= 360.0f;
+				if (tmpObjectBlock.Rotation.y <= -360.0f)
+					tmpObjectBlock.Rotation.y += 360.0f;
 			}
 		}
 

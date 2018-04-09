@@ -78,8 +78,8 @@ void cTracked::Create(int TrackedNum)
 
 	LoadObjectData(PresetTrackedData[TrackedNum-1].Name, this, 0, 2.0f);
 
-	for (unsigned int i = 0; i < ObjectsListCount; i++) {
-		Texture[i] = vw_FindTextureByName(PresetTrackedData[TrackedNum-1].TextureName);
+	for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
+		Texture[i] = vw_FindTextureByName(PresetTrackedData[TrackedNum - 1].TextureName);
 	}
 	ResistanceHull = 1.0f;
 	ResistanceSystems = 1.0f;
@@ -251,7 +251,7 @@ void cTracked::Create(int TrackedNum)
 		//TargetVertObject[1] = 20;
 		TargetVertObjectMaxAngle = 50.0f;
 
-		ObjectsList[20].Location.z -= 1.0f;
+		ObjectBlocks[20].Location.z -= 1.0f;
 
 		TrackObjectNum = 21;
 		Texture[21] = vw_FindTextureByName("models/track.vw2d");
@@ -663,28 +663,28 @@ void cTracked::Create(int TrackedNum)
 
 	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
 	for (int i = 0; i < WheelQuantity; i++)
-		ObjectsList[WheelObjectsNum[i]].Rotation.x = vw_fRandNum(360.0f);
+		ObjectBlocks[WheelObjectsNum[i]].Rotation.x = vw_fRandNum(360.0f);
 
 
 
 	// вычисляем данные для нахождения точки стрельбы
 	if (TargetHorizObject != nullptr) {
-		BaseBound = ObjectsList[TargetHorizObject[0]].Location;
+		BaseBound = ObjectBlocks[TargetHorizObject[0]].Location;
 	}
 
 	if (TargetVertObject != nullptr) {
 		if (TargetHorizObject != nullptr)
-			MiddleBound = ObjectsList[TargetVertObject[0]].Location - ObjectsList[TargetHorizObject[0]].Location;
+			MiddleBound = ObjectBlocks[TargetVertObject[0]].Location - ObjectBlocks[TargetHorizObject[0]].Location;
 		else
-			MiddleBound = ObjectsList[TargetVertObject[0]].Location;
+			MiddleBound = ObjectBlocks[TargetVertObject[0]].Location;
 	}
 
 	if (WeaponBound != nullptr) {
 		for (int i = 0; i < WeaponQuantity; i++) {
 			if (TargetVertObject != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - ObjectsList[TargetVertObject[0]].Location;
+				WeaponBound[i] = WeaponLocation[i] - ObjectBlocks[TargetVertObject[0]].Location;
 			else if (TargetHorizObject != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - ObjectsList[TargetHorizObject[0]].Location;
+				WeaponBound[i] = WeaponLocation[i] - ObjectBlocks[TargetHorizObject[0]].Location;
 			else
 				WeaponBound[i] = WeaponLocation[i];
 		}

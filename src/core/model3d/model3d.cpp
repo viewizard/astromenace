@@ -65,8 +65,8 @@ static void CreateTangentAndBinormal(sModel3D *Model)
 	// data with proper stride, we fill second and third textures coordinates later
 	for (unsigned int j = 0; j < Model->GlobalIndexArrayCount; j++) {
 		memcpy(New_VertexBuffer + New_VertexStride * j,
-		       Model->GlobalVertexArray + Model->GlobalIndexArray[j] * Model->ObjectsList[0].VertexStride,
-		       Model->ObjectsList[0].VertexStride * sizeof(float));
+		       Model->GlobalVertexArray + Model->GlobalIndexArray[j] * Model->ObjectBlocks[0].VertexStride,
+		       Model->ObjectBlocks[0].VertexStride * sizeof(float));
 	}
 	delete [] Model->GlobalVertexArray;
 	Model->GlobalVertexArray = New_VertexBuffer;
@@ -149,10 +149,10 @@ static void CreateTangentAndBinormal(sModel3D *Model)
 	}
 
 	// store new vertex data
-	for (unsigned int i = 0; i < Model->ObjectsListCount; i++) {
-		Model->ObjectsList[i].VertexArray = Model->GlobalVertexArray;
-		Model->ObjectsList[i].VertexFormat = New_VertexFormat;
-		Model->ObjectsList[i].VertexStride = New_VertexStride;
+	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
+		tmpObjectBlock.VertexArray = Model->GlobalVertexArray;
+		tmpObjectBlock.VertexFormat = New_VertexFormat;
+		tmpObjectBlock.VertexStride = New_VertexStride;
 	}
 }
 
@@ -161,23 +161,22 @@ static void CreateTangentAndBinormal(sModel3D *Model)
  */
 static void CreateObjectsBuffers(sModel3D *Model)
 {
-	for (unsigned int i = 0; i < Model->ObjectsListCount; i++) {
+	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
 		// vertex array
-		Model->ObjectsList[i].VertexArray = new float[Model->ObjectsList[i].VertexStride *
-							      Model->ObjectsList[i].VertexCount];
-		for (unsigned int j = 0; j < Model->ObjectsList[i].VertexCount; j++) {
-			memcpy(Model->ObjectsList[i].VertexArray + Model->ObjectsList[i].VertexStride * j,
-			       Model->GlobalVertexArray + Model->GlobalIndexArray[Model->ObjectsList[i].RangeStart + j] *
-							  Model->ObjectsList[i].VertexStride,
-			       Model->ObjectsList[i].VertexStride * sizeof(Model->ObjectsList[i].VertexArray[0]));
+		tmpObjectBlock.VertexArray = new float[tmpObjectBlock.VertexStride * tmpObjectBlock.VertexCount];
+		for (unsigned int j = 0; j < tmpObjectBlock.VertexCount; j++) {
+			memcpy(tmpObjectBlock.VertexArray + tmpObjectBlock.VertexStride * j,
+			       Model->GlobalVertexArray + Model->GlobalIndexArray[tmpObjectBlock.RangeStart + j] *
+							  tmpObjectBlock.VertexStride,
+			       tmpObjectBlock.VertexStride * sizeof(tmpObjectBlock.VertexArray[0]));
 		}
 
 		// index array
-		Model->ObjectsList[i].IndexArray = new unsigned int[Model->ObjectsList[i].VertexCount];
-		for (unsigned int j = 0; j < Model->ObjectsList[i].VertexCount; j++) {
-			Model->ObjectsList[i].IndexArray[j] = j;
+		tmpObjectBlock.IndexArray = new unsigned int[tmpObjectBlock.VertexCount];
+		for (unsigned int j = 0; j < tmpObjectBlock.VertexCount; j++) {
+			tmpObjectBlock.IndexArray[j] = j;
 		}
-		Model->ObjectsList[i].RangeStart = 0;
+		tmpObjectBlock.RangeStart = 0;
 	}
 }
 
@@ -188,7 +187,7 @@ static void CreateHardwareBuffers(sModel3D *Model)
 {
 	// global vertex buffer object
 	if (!vw_BuildVertexBufferObject(Model->GlobalVertexArrayCount, Model->GlobalVertexArray,
-					Model->ObjectsList[0].VertexStride, Model->GlobalVBO))
+					Model->ObjectBlocks[0].VertexStride, Model->GlobalVBO))
 		Model->GlobalVBO = 0;
 
 	// global index buffer object
@@ -196,30 +195,30 @@ static void CreateHardwareBuffers(sModel3D *Model)
 		Model->GlobalIBO = 0;
 
 	// global vertex array object
-	if (!vw_BuildVAO(Model->GlobalVAO, Model->GlobalIndexArrayCount, Model->ObjectsList[0].VertexFormat,
-			 Model->GlobalVertexArray, Model->ObjectsList[0].VertexStride * sizeof(float),
+	if (!vw_BuildVAO(Model->GlobalVAO, Model->GlobalIndexArrayCount, Model->ObjectBlocks[0].VertexFormat,
+			 Model->GlobalVertexArray, Model->ObjectBlocks[0].VertexStride * sizeof(float),
 			 Model->GlobalVBO, 0, Model->GlobalIndexArray, Model->GlobalIBO))
 		Model->GlobalVAO = 0;
 
 	// and same for all objects
-	for (unsigned int i = 0; i < Model->ObjectsListCount; i++) {
+	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
 		// vertex buffer object
-		if (!vw_BuildVertexBufferObject(Model->ObjectsList[i].VertexCount, Model->ObjectsList[i].VertexArray,
-						Model->ObjectsList[i].VertexStride, Model->ObjectsList[i].VBO))
-			Model->ObjectsList[i].VBO = 0;
+		if (!vw_BuildVertexBufferObject(tmpObjectBlock.VertexCount, tmpObjectBlock.VertexArray,
+						tmpObjectBlock.VertexStride, tmpObjectBlock.VBO))
+			tmpObjectBlock.VBO = 0;
 
 		// index buffer object
-		if (!vw_BuildIndexBufferObject(Model->ObjectsList[i].VertexCount, Model->ObjectsList[i].IndexArray,
-					       Model->ObjectsList[i].IBO))
-			Model->ObjectsList[i].IBO = 0;
+		if (!vw_BuildIndexBufferObject(tmpObjectBlock.VertexCount, tmpObjectBlock.IndexArray,
+					       tmpObjectBlock.IBO))
+			tmpObjectBlock.IBO = 0;
 
 		// vertex array object
-		if (!vw_BuildVAO(Model->ObjectsList[i].VAO, Model->ObjectsList[i].VertexCount,
-				 Model->ObjectsList[i].VertexFormat, Model->ObjectsList[i].VertexArray,
-				 Model->ObjectsList[i].VertexStride * sizeof(Model->ObjectsList[i].VertexArray[0]),
-				 Model->ObjectsList[i].VBO, Model->ObjectsList[i].RangeStart,
-				 Model->ObjectsList[i].IndexArray, Model-> ObjectsList[i].IBO))
-			Model->ObjectsList[i].VAO = 0;
+		if (!vw_BuildVAO(tmpObjectBlock.VAO, tmpObjectBlock.VertexCount,
+				 tmpObjectBlock.VertexFormat, tmpObjectBlock.VertexArray,
+				 tmpObjectBlock.VertexStride * sizeof(tmpObjectBlock.VertexArray[0]),
+				 tmpObjectBlock.VBO, tmpObjectBlock.RangeStart,
+				 tmpObjectBlock.IndexArray, tmpObjectBlock.IBO))
+			tmpObjectBlock.VAO = 0;
 	}
 }
 
@@ -320,105 +319,105 @@ static int RecursiveTrianglesLimitedBySize(float (&Point1)[8], float (&Point2)[8
 static void CreateVertexArrayLimitedBySizeTriangles(sModel3D *Model, float TriangleSizeLimit)
 {
 	if (TriangleSizeLimit <= 0.0f) {
-		for (unsigned int i = 0; i < Model->ObjectsListCount; i++) {
-			Model->ObjectsList[i].VertexArrayWithSmallTrianglesCount = Model->ObjectsList[i].VertexCount;
-			Model->ObjectsList[i].VertexArrayWithSmallTriangles = Model->ObjectsList[i].VertexArray;
+		for (auto &tmpObjectBlock : Model->ObjectBlocks) {
+			tmpObjectBlock.VertexArrayWithSmallTrianglesCount = tmpObjectBlock.VertexCount;
+			tmpObjectBlock.VertexArrayWithSmallTriangles = tmpObjectBlock.VertexArray;
 		}
 		return;
 	}
 
 	// calculate, how many memory we need for new vertex array
-	for (unsigned int i = 0; i < Model->ObjectsListCount; i++) {
-		Model->ObjectsList[i].VertexArrayWithSmallTrianglesCount = 0;
+	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
+		tmpObjectBlock.VertexArrayWithSmallTrianglesCount = 0;
 
 		// prepare 3 points (triangle)
-		for (unsigned int j = 0; j < Model->ObjectsList[i].VertexCount; j += 3) {
-			unsigned int tmpOffset0 = Model->ObjectsList[i].VertexStride * j;		// j
-			unsigned int tmpOffset1 = tmpOffset0 + Model->ObjectsList[i].VertexStride;	// j + 1
-			unsigned int tmpOffset2 = tmpOffset1 + Model->ObjectsList[i].VertexStride;	// j + 2
+		for (unsigned int j = 0; j < tmpObjectBlock.VertexCount; j += 3) {
+			unsigned int tmpOffset0 = tmpObjectBlock.VertexStride * j;		// j
+			unsigned int tmpOffset1 = tmpOffset0 + tmpObjectBlock.VertexStride;	// j + 1
+			unsigned int tmpOffset2 = tmpOffset1 + tmpObjectBlock.VertexStride;	// j + 2
 
-			float Point1[8]{Model->ObjectsList[i].VertexArray[tmpOffset0],
-					Model->ObjectsList[i].VertexArray[tmpOffset0 + 1],
-					Model->ObjectsList[i].VertexArray[tmpOffset0 + 2],
-					Model->ObjectsList[i].VertexArray[tmpOffset0 + 3],
-					Model->ObjectsList[i].VertexArray[tmpOffset0 + 4],
-					Model->ObjectsList[i].VertexArray[tmpOffset0 + 5],
-					Model->ObjectsList[i].VertexArray[tmpOffset0 + 6],
-					Model->ObjectsList[i].VertexArray[tmpOffset0 + 7]};
+			float Point1[8]{tmpObjectBlock.VertexArray[tmpOffset0],
+					tmpObjectBlock.VertexArray[tmpOffset0 + 1],
+					tmpObjectBlock.VertexArray[tmpOffset0 + 2],
+					tmpObjectBlock.VertexArray[tmpOffset0 + 3],
+					tmpObjectBlock.VertexArray[tmpOffset0 + 4],
+					tmpObjectBlock.VertexArray[tmpOffset0 + 5],
+					tmpObjectBlock.VertexArray[tmpOffset0 + 6],
+					tmpObjectBlock.VertexArray[tmpOffset0 + 7]};
 
-			float Point2[8]{Model->ObjectsList[i].VertexArray[tmpOffset1],
-					Model->ObjectsList[i].VertexArray[tmpOffset1 + 1],
-					Model->ObjectsList[i].VertexArray[tmpOffset1 + 2],
-					Model->ObjectsList[i].VertexArray[tmpOffset1 + 3],
-					Model->ObjectsList[i].VertexArray[tmpOffset1 + 4],
-					Model->ObjectsList[i].VertexArray[tmpOffset1 + 5],
-					Model->ObjectsList[i].VertexArray[tmpOffset1 + 6],
-					Model->ObjectsList[i].VertexArray[tmpOffset1 + 7]};
+			float Point2[8]{tmpObjectBlock.VertexArray[tmpOffset1],
+					tmpObjectBlock.VertexArray[tmpOffset1 + 1],
+					tmpObjectBlock.VertexArray[tmpOffset1 + 2],
+					tmpObjectBlock.VertexArray[tmpOffset1 + 3],
+					tmpObjectBlock.VertexArray[tmpOffset1 + 4],
+					tmpObjectBlock.VertexArray[tmpOffset1 + 5],
+					tmpObjectBlock.VertexArray[tmpOffset1 + 6],
+					tmpObjectBlock.VertexArray[tmpOffset1 + 7]};
 
-			float Point3[8]{Model->ObjectsList[i].VertexArray[tmpOffset2],
-					Model->ObjectsList[i].VertexArray[tmpOffset2 + 1],
-					Model->ObjectsList[i].VertexArray[tmpOffset2 + 2],
-					Model->ObjectsList[i].VertexArray[tmpOffset2 + 3],
-					Model->ObjectsList[i].VertexArray[tmpOffset2 + 4],
-					Model->ObjectsList[i].VertexArray[tmpOffset2 + 5],
-					Model->ObjectsList[i].VertexArray[tmpOffset2 + 6],
-					Model->ObjectsList[i].VertexArray[tmpOffset2 + 7]};
+			float Point3[8]{tmpObjectBlock.VertexArray[tmpOffset2],
+					tmpObjectBlock.VertexArray[tmpOffset2 + 1],
+					tmpObjectBlock.VertexArray[tmpOffset2 + 2],
+					tmpObjectBlock.VertexArray[tmpOffset2 + 3],
+					tmpObjectBlock.VertexArray[tmpOffset2 + 4],
+					tmpObjectBlock.VertexArray[tmpOffset2 + 5],
+					tmpObjectBlock.VertexArray[tmpOffset2 + 6],
+					tmpObjectBlock.VertexArray[tmpOffset2 + 7]};
 
 			// recursively check, how many triangles we could receive
-			Model->ObjectsList[i].VertexArrayWithSmallTrianglesCount +=
+			tmpObjectBlock.VertexArrayWithSmallTrianglesCount +=
 				RecursiveTrianglesLimitedBySize(Point1, Point2, Point3, 0,
 								nullptr, nullptr, TriangleSizeLimit) * 3;
 		}
 	}
 
 	// generate VertexArrayWithSmallTriangles
-	for (unsigned int i = 0; i < Model->ObjectsListCount; i++) {
+	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
 		// nothing to do
-		if (Model->ObjectsList[i].VertexArrayWithSmallTrianglesCount == Model->ObjectsList[i].VertexCount)
-			Model->ObjectsList[i].VertexArrayWithSmallTriangles = Model->ObjectsList[i].VertexArray;
+		if (tmpObjectBlock.VertexArrayWithSmallTrianglesCount == tmpObjectBlock.VertexCount)
+			tmpObjectBlock.VertexArrayWithSmallTriangles = tmpObjectBlock.VertexArray;
 		else {
 			// allocate memory
-			Model->ObjectsList[i].VertexArrayWithSmallTriangles =
-					new float[Model->ObjectsList[i].VertexArrayWithSmallTrianglesCount *
-						  Model->ObjectsList[i].VertexStride];
+			tmpObjectBlock.VertexArrayWithSmallTriangles =
+					new float[tmpObjectBlock.VertexArrayWithSmallTrianglesCount *
+						  tmpObjectBlock.VertexStride];
 			int CurrentPosition = 0;
 
 			// prepare 3 points (triangle)
-			for (unsigned int j = 0; j < Model->ObjectsList[i].VertexCount; j += 3) {
-				unsigned int tmpOffset0 = Model->ObjectsList[i].VertexStride * j;		// j
-				unsigned int tmpOffset1 = tmpOffset0 + Model->ObjectsList[i].VertexStride;	// j + 1
-				unsigned int tmpOffset2 = tmpOffset1 + Model->ObjectsList[i].VertexStride;	// j + 2
+			for (unsigned int j = 0; j < tmpObjectBlock.VertexCount; j += 3) {
+				unsigned int tmpOffset0 = tmpObjectBlock.VertexStride * j;		// j
+				unsigned int tmpOffset1 = tmpOffset0 + tmpObjectBlock.VertexStride;	// j + 1
+				unsigned int tmpOffset2 = tmpOffset1 + tmpObjectBlock.VertexStride;	// j + 2
 
-				float Point1[8]{Model->ObjectsList[i].VertexArray[tmpOffset0],
-						Model->ObjectsList[i].VertexArray[tmpOffset0 + 1],
-						Model->ObjectsList[i].VertexArray[tmpOffset0 + 2],
-						Model->ObjectsList[i].VertexArray[tmpOffset0 + 3],
-						Model->ObjectsList[i].VertexArray[tmpOffset0 + 4],
-						Model->ObjectsList[i].VertexArray[tmpOffset0 + 5],
-						Model->ObjectsList[i].VertexArray[tmpOffset0 + 6],
-						Model->ObjectsList[i].VertexArray[tmpOffset0 + 7]};
+				float Point1[8]{tmpObjectBlock.VertexArray[tmpOffset0],
+						tmpObjectBlock.VertexArray[tmpOffset0 + 1],
+						tmpObjectBlock.VertexArray[tmpOffset0 + 2],
+						tmpObjectBlock.VertexArray[tmpOffset0 + 3],
+						tmpObjectBlock.VertexArray[tmpOffset0 + 4],
+						tmpObjectBlock.VertexArray[tmpOffset0 + 5],
+						tmpObjectBlock.VertexArray[tmpOffset0 + 6],
+						tmpObjectBlock.VertexArray[tmpOffset0 + 7]};
 
-				float Point2[8]{Model->ObjectsList[i].VertexArray[tmpOffset1],
-						Model->ObjectsList[i].VertexArray[tmpOffset1 + 1],
-						Model->ObjectsList[i].VertexArray[tmpOffset1 + 2],
-						Model->ObjectsList[i].VertexArray[tmpOffset1 + 3],
-						Model->ObjectsList[i].VertexArray[tmpOffset1 + 4],
-						Model->ObjectsList[i].VertexArray[tmpOffset1 + 5],
-						Model->ObjectsList[i].VertexArray[tmpOffset1 + 6],
-						Model->ObjectsList[i].VertexArray[tmpOffset1 + 7]};
+				float Point2[8]{tmpObjectBlock.VertexArray[tmpOffset1],
+						tmpObjectBlock.VertexArray[tmpOffset1 + 1],
+						tmpObjectBlock.VertexArray[tmpOffset1 + 2],
+						tmpObjectBlock.VertexArray[tmpOffset1 + 3],
+						tmpObjectBlock.VertexArray[tmpOffset1 + 4],
+						tmpObjectBlock.VertexArray[tmpOffset1 + 5],
+						tmpObjectBlock.VertexArray[tmpOffset1 + 6],
+						tmpObjectBlock.VertexArray[tmpOffset1 + 7]};
 
-				float Point3[8]{Model->ObjectsList[i].VertexArray[tmpOffset2],
-						Model->ObjectsList[i].VertexArray[tmpOffset2 + 1],
-						Model->ObjectsList[i].VertexArray[tmpOffset2 + 2],
-						Model->ObjectsList[i].VertexArray[tmpOffset2 + 3],
-						Model->ObjectsList[i].VertexArray[tmpOffset2 + 4],
-						Model->ObjectsList[i].VertexArray[tmpOffset2 + 5],
-						Model->ObjectsList[i].VertexArray[tmpOffset2 + 6],
-						Model->ObjectsList[i].VertexArray[tmpOffset2 + 7]};
+				float Point3[8]{tmpObjectBlock.VertexArray[tmpOffset2],
+						tmpObjectBlock.VertexArray[tmpOffset2 + 1],
+						tmpObjectBlock.VertexArray[tmpOffset2 + 2],
+						tmpObjectBlock.VertexArray[tmpOffset2 + 3],
+						tmpObjectBlock.VertexArray[tmpOffset2 + 4],
+						tmpObjectBlock.VertexArray[tmpOffset2 + 5],
+						tmpObjectBlock.VertexArray[tmpOffset2 + 6],
+						tmpObjectBlock.VertexArray[tmpOffset2 + 7]};
 
 				// recursively generate VertexArrayWithSmallTriangles
-				RecursiveTrianglesLimitedBySize(Point1, Point2, Point3, Model->ObjectsList[i].VertexStride,
-								Model->ObjectsList[i].VertexArrayWithSmallTriangles,
+				RecursiveTrianglesLimitedBySize(Point1, Point2, Point3, tmpObjectBlock.VertexStride,
+								tmpObjectBlock.VertexArrayWithSmallTriangles,
 								&CurrentPosition, TriangleSizeLimit);
 			}
 		}
@@ -496,26 +495,25 @@ sObjectBlock::~sObjectBlock()
  */
 sModel3D::~sModel3D()
 {
-	if (ObjectsList) {
-		for (unsigned int i = 0; i < ObjectsListCount; i++) {
+	if (!ObjectBlocks.empty()) {
+		for (auto &tmpObjectBlock : ObjectBlocks) {
 			// release only if we don't point to VertexArray
-			if (ObjectsList[i].VertexArrayWithSmallTriangles &&
-			    (ObjectsList[i].VertexArrayWithSmallTriangles != ObjectsList[i].VertexArray))
-				delete [] ObjectsList[i].VertexArrayWithSmallTriangles;
-			if (ObjectsList[i].VertexArray &&
-			    (ObjectsList[i].VertexArray != GlobalVertexArray))
-				delete [] ObjectsList[i].VertexArray;
-			if (ObjectsList[i].IndexArray &&
-			    (ObjectsList[i].IndexArray != GlobalIndexArray))
-				delete [] ObjectsList[i].IndexArray;
-			if (ObjectsList[i].VBO && (ObjectsList[i].VBO != GlobalVBO))
-				vw_DeleteBufferObject(ObjectsList[i].VBO);
-			if (ObjectsList[i].IBO && (ObjectsList[i].IBO != GlobalIBO))
-				vw_DeleteBufferObject(ObjectsList[i].IBO);
-			if (ObjectsList[i].VAO && (ObjectsList[i].VAO != GlobalVAO))
-				vw_DeleteVAO(ObjectsList[i].VAO);
+			if (tmpObjectBlock.VertexArrayWithSmallTriangles &&
+			    (tmpObjectBlock.VertexArrayWithSmallTriangles != tmpObjectBlock.VertexArray))
+				delete [] tmpObjectBlock.VertexArrayWithSmallTriangles;
+			if (tmpObjectBlock.VertexArray &&
+			    (tmpObjectBlock.VertexArray != GlobalVertexArray))
+				delete [] tmpObjectBlock.VertexArray;
+			if (tmpObjectBlock.IndexArray &&
+			    (tmpObjectBlock.IndexArray != GlobalIndexArray))
+				delete [] tmpObjectBlock.IndexArray;
+			if (tmpObjectBlock.VBO && (tmpObjectBlock.VBO != GlobalVBO))
+				vw_DeleteBufferObject(tmpObjectBlock.VBO);
+			if (tmpObjectBlock.IBO && (tmpObjectBlock.IBO != GlobalIBO))
+				vw_DeleteBufferObject(tmpObjectBlock.IBO);
+			if (tmpObjectBlock.VAO && (tmpObjectBlock.VAO != GlobalVAO))
+				vw_DeleteVAO(tmpObjectBlock.VAO);
 		}
-		delete [] ObjectsList;
 	}
 	if (GlobalVertexArray)
 		delete [] GlobalVertexArray;
@@ -548,52 +546,53 @@ bool sModel3D::LoadVW3D(const std::string &FileName)
 	if (strncmp(Sign, "VW3D", 4) != 0)
 		return false;
 
+	std::uint32_t ObjectsListCount;
 	File->fread(&ObjectsListCount, sizeof(ObjectsListCount), 1);
 
-	ObjectsList = new sObjectBlock[ObjectsListCount];
+	ObjectBlocks.resize(ObjectsListCount);
 	GlobalIndexArrayCount = 0;
 
-	for (unsigned int i = 0; i < ObjectsListCount; i++) {
-		ObjectsList[i].RangeStart = GlobalIndexArrayCount;
+	for (auto &tmpObjectBlock : ObjectBlocks) {
+		tmpObjectBlock.RangeStart = GlobalIndexArrayCount;
 
 		// VertexFormat
-		File->fread(&(ObjectsList[i].VertexFormat), sizeof(ObjectsList[0].VertexFormat), 1);
+		File->fread(&(tmpObjectBlock.VertexFormat), sizeof(ObjectBlocks[0].VertexFormat), 1);
 		// VertexStride
-		File->fread(&(ObjectsList[i].VertexStride), sizeof(ObjectsList[0].VertexStride), 1);
+		File->fread(&(tmpObjectBlock.VertexStride), sizeof(ObjectBlocks[0].VertexStride), 1);
 		// VertexCount
-		File->fread(&(ObjectsList[i].VertexCount), sizeof(ObjectsList[0].VertexCount), 1);
-		GlobalIndexArrayCount += ObjectsList[i].VertexCount;
+		File->fread(&(tmpObjectBlock.VertexCount), sizeof(ObjectBlocks[0].VertexCount), 1);
+		GlobalIndexArrayCount += tmpObjectBlock.VertexCount;
 
 		// Location
-		File->fread(&(ObjectsList[i].Location), sizeof(ObjectsList[0].Location.x) * 3, 1);
+		File->fread(&(tmpObjectBlock.Location), sizeof(ObjectBlocks[0].Location.x) * 3, 1);
 		// Rotation
-		File->fread(&(ObjectsList[i].Rotation), sizeof(ObjectsList[0].Rotation.x) * 3, 1);
+		File->fread(&(tmpObjectBlock.Rotation), sizeof(ObjectBlocks[0].Rotation.x) * 3, 1);
 
-		ObjectsList[i].DrawType = ObjectDrawType::Normal;
+		tmpObjectBlock.DrawType = ObjectDrawType::Normal;
 		// vertex array-related
-		ObjectsList[i].NeedDestroyDataInObjectBlock = false;
-		ObjectsList[i].VertexArray = nullptr;
-		ObjectsList[i].VBO = 0;
+		tmpObjectBlock.NeedDestroyDataInObjectBlock = false;
+		tmpObjectBlock.VertexArray = nullptr;
+		tmpObjectBlock.VBO = 0;
 		// index array-related
-		ObjectsList[i].IndexArray = nullptr;
-		ObjectsList[i].IBO = 0;
+		tmpObjectBlock.IndexArray = nullptr;
+		tmpObjectBlock.IBO = 0;
 		// vao
-		ObjectsList[i].VAO = 0;
+		tmpObjectBlock.VAO = 0;
 	}
 
 	File->fread(&GlobalVertexArrayCount, sizeof(GlobalVertexArrayCount), 1);
 
-	GlobalVertexArray = new float[GlobalVertexArrayCount * ObjectsList[0].VertexStride];
-	File->fread(GlobalVertexArray, GlobalVertexArrayCount * ObjectsList[0].VertexStride * sizeof(GlobalVertexArray[0]), 1);
+	GlobalVertexArray = new float[GlobalVertexArrayCount * ObjectBlocks[0].VertexStride];
+	File->fread(GlobalVertexArray, GlobalVertexArrayCount * ObjectBlocks[0].VertexStride * sizeof(GlobalVertexArray[0]), 1);
 
 	// index array
 	GlobalIndexArray = new unsigned int[GlobalIndexArrayCount];
 	File->fread(GlobalIndexArray, GlobalIndexArrayCount * sizeof(GlobalIndexArray[0]), 1);
 
 	// setup points to global arrays
-	for (unsigned int i = 0; i < ObjectsListCount; i++) {
-		ObjectsList[i].VertexArray = GlobalVertexArray;
-		ObjectsList[i].IndexArray = GlobalIndexArray;
+	for (auto &tmpObjectBlock : ObjectBlocks) {
+		tmpObjectBlock.VertexArray = GlobalVertexArray;
+		tmpObjectBlock.IndexArray = GlobalIndexArray;
 	}
 
 	vw_fclose(File);
@@ -606,7 +605,7 @@ bool sModel3D::LoadVW3D(const std::string &FileName)
  */
 bool sModel3D::SaveVW3D(const std::string &FileName)
 {
-	if (!GlobalVertexArray || !GlobalIndexArray || !ObjectsList) {
+	if (!GlobalVertexArray || !GlobalIndexArray || ObjectBlocks.empty()) {
 		std::cerr << __func__ << "(): " << "Can't create " << FileName << " file for empty Model3D.\n";
 		return false;
 	}
@@ -622,24 +621,25 @@ bool sModel3D::SaveVW3D(const std::string &FileName)
 	constexpr char Sign[4]{'V','W','3','D'};
 	SDL_RWwrite(FileVW3D, Sign, 4, 1);
 
+	std::uint32_t ObjectsListCount = ObjectBlocks.size();
 	SDL_RWwrite(FileVW3D, &ObjectsListCount, sizeof(ObjectsListCount), 1);
 
-	for (unsigned int i = 0; i < ObjectsListCount; i++) {
+	for (auto &tmpObjectBlock : ObjectBlocks) {
 		// VertexFormat
-		SDL_RWwrite(FileVW3D, &ObjectsList[i].VertexFormat, sizeof(ObjectsList[0].VertexFormat), 1);
+		SDL_RWwrite(FileVW3D, &tmpObjectBlock.VertexFormat, sizeof(ObjectBlocks[0].VertexFormat), 1);
 		// VertexStride
-		SDL_RWwrite(FileVW3D, &ObjectsList[i].VertexStride, sizeof(ObjectsList[0].VertexStride), 1);
+		SDL_RWwrite(FileVW3D, &tmpObjectBlock.VertexStride, sizeof(ObjectBlocks[0].VertexStride), 1);
 		// VertexCount
-		SDL_RWwrite(FileVW3D, &ObjectsList[i].VertexCount, sizeof(ObjectsList[0].VertexCount), 1);
+		SDL_RWwrite(FileVW3D, &tmpObjectBlock.VertexCount, sizeof(ObjectBlocks[0].VertexCount), 1);
 		// Location
-		SDL_RWwrite(FileVW3D, &ObjectsList[i].Location, sizeof(ObjectsList[0].Location.x) * 3, 1);
+		SDL_RWwrite(FileVW3D, &tmpObjectBlock.Location, sizeof(ObjectBlocks[0].Location.x) * 3, 1);
 		// Rotation
-		SDL_RWwrite(FileVW3D, &ObjectsList[i].Rotation, sizeof(ObjectsList[0].Rotation.x) * 3, 1);
+		SDL_RWwrite(FileVW3D, &tmpObjectBlock.Rotation, sizeof(ObjectBlocks[0].Rotation.x) * 3, 1);
 	}
 
 	SDL_RWwrite(FileVW3D, &GlobalVertexArrayCount, sizeof(GlobalVertexArrayCount), 1);
 	SDL_RWwrite(FileVW3D, GlobalVertexArray,
-		    ObjectsList[0].VertexStride * GlobalVertexArrayCount * sizeof(GlobalVertexArray[0]), 1);
+		    ObjectBlocks[0].VertexStride * GlobalVertexArrayCount * sizeof(GlobalVertexArray[0]), 1);
 	SDL_RWwrite(FileVW3D, GlobalIndexArray, GlobalIndexArrayCount * sizeof(GlobalIndexArray[0]), 1);
 	SDL_RWclose(FileVW3D);
 

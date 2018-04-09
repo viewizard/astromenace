@@ -93,8 +93,7 @@ struct sModel3D {
 	bool SaveVW3D(const std::string &FileName);
 
 	// attached objects
-	sObjectBlock *ObjectsList{nullptr};
-	unsigned int ObjectsListCount{0};
+	std::vector<sObjectBlock> ObjectBlocks{};
 
 	// vertex-related
 	float *GlobalVertexArray{nullptr};
