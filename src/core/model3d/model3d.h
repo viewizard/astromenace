@@ -69,12 +69,10 @@ struct sObjectBlock {
 	unsigned int VertexStride{0};	// in bytes
 	unsigned int VertexCount{0};
 	unsigned int VBO{0};
-
 	// index-related
 	std::shared_ptr<unsigned> IndexArray{}; // unsigned[], make sure, that custom deleter are used
 	unsigned int IBO{0};
-
-	// vao
+	// vao-related
 	unsigned int VAO{0};
 
 	// for explosion we need pre-generated vertex array with small triangles,
@@ -84,9 +82,11 @@ struct sObjectBlock {
 	unsigned int VertexArrayWithSmallTrianglesCount{0};
 };
 
-struct sModel3D {
-	virtual ~sModel3D();
+class cModel3D {
+	friend std::weak_ptr<cModel3D> vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit,
+						      bool NeedTangentAndBinormal);
 
+public:
 	// Load VW3D 3D models format.
 	bool LoadVW3D(const std::string &FileName);
 	// Save VW3D 3D models format.
@@ -99,19 +99,23 @@ struct sModel3D {
 	std::shared_ptr<float> GlobalVertexArray{}; // float[], make sure, that custom deleter are used
 	unsigned int GlobalVertexArrayCount{0};
 	unsigned int GlobalVBO{0};
-
 	// index-related
 	std::shared_ptr<unsigned> GlobalIndexArray{}; // unsigned[], make sure, that custom deleter are used
 	unsigned int GlobalIndexArrayCount{0};
 	unsigned int GlobalIBO{0};
-
-	// vao
+	// vao-related
 	unsigned int GlobalVAO{0};
+
+private:
+	// Don't allow direct new/delete usage in code, only vw_LoadModel3D()
+	// allowed for Model3D creation and release setup (deleter must be provided).
+	cModel3D() = default;
+	~cModel3D();
 };
 
 
 // Load 3D model.
-sModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal);
+std::weak_ptr<cModel3D> vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal);
 // Release all 3D models.
 void vw_ReleaseAllModel3D();
 

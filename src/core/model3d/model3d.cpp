@@ -24,12 +24,6 @@
 
 *************************************************************************************/
 
-// TODO move objects management on STL container
-// TODO use std::shared_ptr for memory management
-//      std::shared_ptr should be used with arrays and proper deleter, for example:
-//      std::shared_ptr<float> array(new float[10], std::default_delete<float[]>());
-//      cObject3D should be revised, in order to proper copy struct with containers
-
 #include "../graphics/graphics.h"
 #include "../math/math.h"
 #include "../vfs/vfs.h"
@@ -38,7 +32,7 @@
 namespace {
 
 // All loaded models.
-std::unordered_map<std::string, sModel3D> ModelsMap;
+std::unordered_map<std::string, std::shared_ptr<cModel3D>> ModelsMap;
 
 } // unnamed namespace
 
@@ -55,7 +49,7 @@ std::unordered_map<std::string, sModel3D> ModelsMap;
  * Return vertex array with fixed vertex format:
  * RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX | RI_SEPARATE_TEX_COORD
  */
-static void CreateTangentAndBinormal(sModel3D *Model)
+static void CreateTangentAndBinormal(cModel3D *Model)
 {
 	int New_VertexFormat = RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX | RI_SEPARATE_TEX_COORD;
 	int New_VertexStride = 3 + 3 + 6;
@@ -159,7 +153,7 @@ static void CreateTangentAndBinormal(sModel3D *Model)
 /*
  * Create vertex and index arrays for all objects.
  */
-static void CreateObjectsBuffers(sModel3D *Model)
+static void CreateObjectsBuffers(cModel3D *Model)
 {
 	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
 		// vertex array
@@ -185,7 +179,7 @@ static void CreateObjectsBuffers(sModel3D *Model)
 /*
  * Create all OpenGL-related hardware buffers.
  */
-static void CreateHardwareBuffers(sModel3D *Model)
+static void CreateHardwareBuffers(cModel3D *Model)
 {
 	// global vertex buffer object
 	if (!vw_BuildVertexBufferObject(Model->GlobalVertexArrayCount, Model->GlobalVertexArray.get(),
@@ -318,7 +312,7 @@ static int RecursiveTrianglesLimitedBySize(float (&Point1)[8], float (&Point2)[8
  * We use second and third textures coordinates for explosion shader in game code, so,
  * we stay with VertexFormat and VertexStride and could point to object's VertexArray.
  */
-static void CreateVertexArrayLimitedBySizeTriangles(sModel3D *Model, float TriangleSizeLimit)
+static void CreateVertexArrayLimitedBySizeTriangles(cModel3D *Model, float TriangleSizeLimit)
 {
 	if (TriangleSizeLimit <= 0.0f) {
 		for (auto &tmpObjectBlock : Model->ObjectBlocks) {
@@ -428,38 +422,44 @@ static void CreateVertexArrayLimitedBySizeTriangles(sModel3D *Model, float Trian
 
 /*
  * Load 3D model.
+ * Note, we don't provide shared_ptr, only weak_ptr, since all memory management
+ * should be internal only. Caller should operate with weak_ptr and use lock()
+ * (shared_ptr) only during access to object.
  */
-sModel3D *vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
+std::weak_ptr<cModel3D> vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
 	if (FileName.empty())
-		return nullptr;
+		return std::weak_ptr<cModel3D>{};
 
 	// if we already have it, just return a pointer.
 	auto FoundModel = ModelsMap.find(FileName);
 	if (FoundModel != ModelsMap.end())
-		return &FoundModel->second;
+		return FoundModel->second;
+
+	ModelsMap.emplace(FileName, std::shared_ptr<cModel3D>{new cModel3D, [](cModel3D *p) {delete p;}});
 
 	// check extension
 	if (vw_CheckFileExtension(FileName, ".vw3d")) {
-		if (!ModelsMap[FileName].LoadVW3D(FileName)) { // create ModelsMap entry on first access
+		if (!ModelsMap[FileName]->LoadVW3D(FileName)) {
 			std::cout << "Can't load file ... " << FileName << "\n";
 			ModelsMap.erase(FileName);
-			return nullptr;
+			return std::weak_ptr<cModel3D>{};
 		}
 	} else {
 		std::cerr << __func__ << "(): " << "Format not supported " << FileName << "\n";
-		return nullptr;
+		ModelsMap.erase(FileName);
+		return std::weak_ptr<cModel3D>{};
 	}
 
 	if (NeedTangentAndBinormal)
-		CreateTangentAndBinormal(&ModelsMap[FileName]);
-	CreateObjectsBuffers(&ModelsMap[FileName]);
-	CreateHardwareBuffers(&ModelsMap[FileName]);
-	CreateVertexArrayLimitedBySizeTriangles(&ModelsMap[FileName], TriangleSizeLimit);
+		CreateTangentAndBinormal(ModelsMap[FileName].get());
+	CreateObjectsBuffers(ModelsMap[FileName].get());
+	CreateHardwareBuffers(ModelsMap[FileName].get());
+	CreateVertexArrayLimitedBySizeTriangles(ModelsMap[FileName].get(), TriangleSizeLimit);
 
 	std::cout << "Loaded ... " << FileName << "\n";
 
-	return &ModelsMap[FileName];
+	return ModelsMap[FileName];
 }
 
 /*
@@ -486,9 +486,9 @@ sObjectBlock::~sObjectBlock()
 }
 
 /*
- * Destructor sModel3D.
+ * Destructor cModel3D.
  */
-sModel3D::~sModel3D()
+cModel3D::~cModel3D()
 {
 	if (!ObjectBlocks.empty()) {
 		for (auto &tmpObjectBlock : ObjectBlocks) {
@@ -511,7 +511,7 @@ sModel3D::~sModel3D()
 /*
  * Load VW3D 3D models format.
  */
-bool sModel3D::LoadVW3D(const std::string &FileName)
+bool cModel3D::LoadVW3D(const std::string &FileName)
 {
 	if (FileName.empty())
 		return false;
@@ -552,12 +552,10 @@ bool sModel3D::LoadVW3D(const std::string &FileName)
 		tmpObjectBlock.DrawType = ObjectDrawType::Normal;
 		// vertex array-related
 		tmpObjectBlock.NeedDestroyDataInObjectBlock = false;
-		tmpObjectBlock.VertexArray = nullptr;
 		tmpObjectBlock.VBO = 0;
 		// index array-related
-		tmpObjectBlock.IndexArray = nullptr;
 		tmpObjectBlock.IBO = 0;
-		// vao
+		// vao-related
 		tmpObjectBlock.VAO = 0;
 	}
 
@@ -587,7 +585,7 @@ bool sModel3D::LoadVW3D(const std::string &FileName)
 /*
  * Save VW3D 3D models format.
  */
-bool sModel3D::SaveVW3D(const std::string &FileName)
+bool cModel3D::SaveVW3D(const std::string &FileName)
 {
 	if (!GlobalVertexArray || !GlobalIndexArray || ObjectBlocks.empty()) {
 		std::cerr << __func__ << "(): " << "Can't create " << FileName << " file for empty Model3D.\n";
@@ -623,7 +621,8 @@ bool sModel3D::SaveVW3D(const std::string &FileName)
 
 	SDL_RWwrite(FileVW3D, &GlobalVertexArrayCount, sizeof(GlobalVertexArrayCount), 1);
 	SDL_RWwrite(FileVW3D, GlobalVertexArray.get(),
-		    ObjectBlocks[0].VertexStride * GlobalVertexArrayCount * sizeof(GlobalVertexArray.get()[0]), 1);
+		    ObjectBlocks[0].VertexStride * GlobalVertexArrayCount * sizeof(GlobalVertexArray.get()[0]),
+		    1);
 	SDL_RWwrite(FileVW3D, GlobalIndexArray.get(), GlobalIndexArrayCount * sizeof(GlobalIndexArray.get()[0]), 1);
 	SDL_RWclose(FileVW3D);
 

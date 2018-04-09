@@ -113,31 +113,33 @@ bool NeedCheckCollision(cObject3D* Object3D)
 void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
 	// получение геометрии модели
-	sModel3D *Model;
-	Model = vw_LoadModel3D(Name, TriangleSizeLimit, NeedTangentAndBinormal);
+	std::weak_ptr<cModel3D> Model = vw_LoadModel3D(Name, TriangleSizeLimit, NeedTangentAndBinormal);
+	auto sharedModel = Model.lock();
+	if (!sharedModel)
+		return;
 
 
 	// т.е. нужны все объекты
 	if (ObjectNum == 0) {
 		// берем то, что нужно
-		Object3D->GlobalVertexArray = Model->GlobalVertexArray ;
-		Object3D->GlobalVBO = Model->GlobalVBO;
-		Object3D->GlobalIndexArray = Model->GlobalIndexArray;
-		Object3D->GlobalIBO = Model->GlobalIBO;
-		Object3D->GlobalVAO = Model->GlobalVAO;
-		Object3D->ObjectBlocks = Model->ObjectBlocks;
+		Object3D->GlobalVertexArray = sharedModel->GlobalVertexArray ;
+		Object3D->GlobalVBO = sharedModel->GlobalVBO;
+		Object3D->GlobalIndexArray = sharedModel->GlobalIndexArray;
+		Object3D->GlobalIBO = sharedModel->GlobalIBO;
+		Object3D->GlobalVAO = sharedModel->GlobalVAO;
+		Object3D->ObjectBlocks = sharedModel->ObjectBlocks;
 	} else {
 		// работаем только с одним объектом ( так работаем с оружием для кораблей землян )
 
 		// берем то, что нужно
-		Object3D->GlobalVertexArray = Model->ObjectBlocks[ObjectNum - 1].VertexArray;
-		Object3D->GlobalVBO = Model->ObjectBlocks[ObjectNum - 1].VBO;
-		Object3D->GlobalIndexArray = Model->ObjectBlocks[ObjectNum - 1].IndexArray;
-		Object3D->GlobalIBO = Model->ObjectBlocks[ObjectNum - 1].IBO;
-		Object3D->GlobalVAO = Model->ObjectBlocks[ObjectNum - 1].VAO;
+		Object3D->GlobalVertexArray = sharedModel->ObjectBlocks[ObjectNum - 1].VertexArray;
+		Object3D->GlobalVBO = sharedModel->ObjectBlocks[ObjectNum - 1].VBO;
+		Object3D->GlobalIndexArray = sharedModel->ObjectBlocks[ObjectNum - 1].IndexArray;
+		Object3D->GlobalIBO = sharedModel->ObjectBlocks[ObjectNum - 1].IBO;
+		Object3D->GlobalVAO = sharedModel->ObjectBlocks[ObjectNum - 1].VAO;
 		// копируем данные нужного объекта
 		Object3D->ObjectBlocks.resize(1);
-		Object3D->ObjectBlocks[0] = Model->ObjectBlocks[ObjectNum - 1];
+		Object3D->ObjectBlocks[0] = sharedModel->ObjectBlocks[ObjectNum - 1];
 	}
 
 	// резервируем память для текстур
