@@ -810,18 +810,14 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 	if (InternalExplosionType == 2) {
 		// создаем новые данные, переносим туда
 		// объекты малы, по этому не применяем сдесь настройки качества взрыва, делаем со всей геометрией
-		Texture.resize(Projectile->ObjectBlocks.size(), 0);
-		ObjectBlocks.resize(Projectile->ObjectBlocks.size());
+		// копируем данные снаряда
+		Texture = Projectile->Texture;
+		ObjectBlocks = Projectile->ObjectBlocks;
 
 		for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
-			Texture[i] = Projectile->Texture[i];
-			// копируем данные
-			memcpy(&(ObjectBlocks[i]), &(Projectile->ObjectBlocks[i]), sizeof(Projectile->ObjectBlocks[0]));
 			// делаем изменения
 			ObjectBlocks[i].VBO = 0;
-			ObjectBlocks[i].VertexArray = nullptr;
 			ObjectBlocks[i].IBO = 0;
-			ObjectBlocks[i].IndexArray = nullptr;
 			ObjectBlocks[i].VAO = 0;
 			ObjectBlocks[i].NeedDestroyDataInObjectBlock = true; // удалять в объекте
 			ObjectBlocks[i].RangeStart = 0;
@@ -833,7 +829,8 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			}
 
 			// выделяем память для данных
-			ObjectBlocks[i].VertexArray = new float[ObjectBlocks[i].VertexStride * ObjectBlocks[i].VertexCount];
+			ObjectBlocks[i].VertexArray.reset(new float[ObjectBlocks[i].VertexStride * ObjectBlocks[i].VertexCount],
+							  std::default_delete<float[]>());
 
 			// делаем поворот геометрии объекта чтобы правильно сделать разлет частиц
 			sVECTOR3D TMP;
@@ -841,32 +838,32 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 				int j1 = j * ObjectBlocks[i].VertexStride;
 				int j2;
 				if (Projectile->ObjectBlocks[i].IndexArray)
-					j2 = Projectile->ObjectBlocks[i].IndexArray[Projectile->ObjectBlocks[i].RangeStart + j] *
+					j2 = Projectile->ObjectBlocks[i].IndexArray.get()[Projectile->ObjectBlocks[i].RangeStart + j] *
 					     Projectile->ObjectBlocks[i].VertexStride;
 				else
 					j2 = (Projectile->ObjectBlocks[i].RangeStart + j) *
 					     Projectile->ObjectBlocks[i].VertexStride;
 
 
-				TMP.x = Projectile->ObjectBlocks[i].VertexArray[j2] + ObjectBlocks[i].Location.x;
-				TMP.y = Projectile->ObjectBlocks[i].VertexArray[j2 + 1] + ObjectBlocks[i].Location.y;
-				TMP.z = Projectile->ObjectBlocks[i].VertexArray[j2 + 2] + ObjectBlocks[i].Location.z;
+				TMP.x = Projectile->ObjectBlocks[i].VertexArray.get()[j2] + ObjectBlocks[i].Location.x;
+				TMP.y = Projectile->ObjectBlocks[i].VertexArray.get()[j2 + 1] + ObjectBlocks[i].Location.y;
+				TMP.z = Projectile->ObjectBlocks[i].VertexArray.get()[j2 + 2] + ObjectBlocks[i].Location.z;
 				vw_Matrix33CalcPoint(TMP, Projectile->CurrentRotationMat);
 				// координаты
-				ObjectBlocks[i].VertexArray[j1] = TMP.x;
-				ObjectBlocks[i].VertexArray[j1 + 1] = TMP.y;
-				ObjectBlocks[i].VertexArray[j1 + 2] = TMP.z;
+				ObjectBlocks[i].VertexArray.get()[j1] = TMP.x;
+				ObjectBlocks[i].VertexArray.get()[j1 + 1] = TMP.y;
+				ObjectBlocks[i].VertexArray.get()[j1 + 2] = TMP.z;
 				// нормали
-				TMP.x = Projectile->ObjectBlocks[i].VertexArray[j2 + 3];
-				TMP.y = Projectile->ObjectBlocks[i].VertexArray[j2 + 4];
-				TMP.z = Projectile->ObjectBlocks[i].VertexArray[j2 + 5];
+				TMP.x = Projectile->ObjectBlocks[i].VertexArray.get()[j2 + 3];
+				TMP.y = Projectile->ObjectBlocks[i].VertexArray.get()[j2 + 4];
+				TMP.z = Projectile->ObjectBlocks[i].VertexArray.get()[j2 + 5];
 				vw_Matrix33CalcPoint(TMP, Projectile->CurrentRotationMat);
-				ObjectBlocks[i].VertexArray[j1 + 3] = TMP.x;
-				ObjectBlocks[i].VertexArray[j1 + 4] = TMP.y;
-				ObjectBlocks[i].VertexArray[j1 + 5] = TMP.z;
+				ObjectBlocks[i].VertexArray.get()[j1 + 3] = TMP.x;
+				ObjectBlocks[i].VertexArray.get()[j1 + 4] = TMP.y;
+				ObjectBlocks[i].VertexArray.get()[j1 + 5] = TMP.z;
 				// текстура
-				ObjectBlocks[i].VertexArray[j1 + 6] = Projectile->ObjectBlocks[i].VertexArray[j2 + 6];
-				ObjectBlocks[i].VertexArray[j1 + 7] = Projectile->ObjectBlocks[i].VertexArray[j2 + 7];
+				ObjectBlocks[i].VertexArray.get()[j1 + 6] = Projectile->ObjectBlocks[i].VertexArray.get()[j2 + 6];
+				ObjectBlocks[i].VertexArray.get()[j1 + 7] = Projectile->ObjectBlocks[i].VertexArray.get()[j2 + 7];
 			}
 
 
@@ -874,9 +871,10 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 
 			// копируем индексный буфер блока
-			ObjectBlocks[i].IndexArray = new unsigned int[ObjectBlocks[i].VertexCount];
-			memcpy(ObjectBlocks[i].IndexArray, Projectile->ObjectBlocks[i].IndexArray,
-			       ObjectBlocks[i].VertexCount*sizeof(ObjectBlocks[0].VertexCount));
+			ObjectBlocks[i].IndexArray.reset(new unsigned[ObjectBlocks[i].VertexCount],
+							 std::default_delete<unsigned[]>());
+			memcpy(ObjectBlocks[i].IndexArray.get(), Projectile->ObjectBlocks[i].IndexArray.get(),
+			       ObjectBlocks[i].VertexCount * sizeof(ObjectBlocks[0].VertexCount));
 		}
 
 		float tRadius2 = Projectile->Radius/1.5f;
@@ -884,29 +882,29 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		// для каждого треугольника - свои данные (фактически, у нас 1 объект, с ним и работаем)
 		int Count = 0;
 		ExplosionPieceData = new sExplosionPiece[ObjectBlocks[0].VertexCount / 3];
-		for (unsigned int i = 0; i < ObjectBlocks[0].VertexCount; i+=3) {
-			ExplosionPieceData[Count].Velocity.x = ObjectBlocks[0].VertexArray[i * ObjectBlocks[0].VertexStride];
-			ExplosionPieceData[Count].Velocity.y = ObjectBlocks[0].VertexArray[i * ObjectBlocks[0].VertexStride + 1];
-			ExplosionPieceData[Count].Velocity.z = ObjectBlocks[0].VertexArray[i * ObjectBlocks[0].VertexStride + 2];
+		for (unsigned int i = 0; i < ObjectBlocks[0].VertexCount; i += 3) {
+			ExplosionPieceData[Count].Velocity.x = ObjectBlocks[0].VertexArray.get()[i * ObjectBlocks[0].VertexStride];
+			ExplosionPieceData[Count].Velocity.y = ObjectBlocks[0].VertexArray.get()[i * ObjectBlocks[0].VertexStride + 1];
+			ExplosionPieceData[Count].Velocity.z = ObjectBlocks[0].VertexArray.get()[i * ObjectBlocks[0].VertexStride + 2];
 
 			float VelocityTMP = vw_Randf0*tRadius2;
 
 			// записываем центр треугольника, оно же базовое ускорение + цент UV, нужно для шейдера
 			if (Setup.UseGLSL) {
 				// Velocity/центр треугольника
-				ObjectBlocks[0].VertexArray[ObjectBlocks[0].VertexStride * i + 8] = ExplosionPieceData[Count].Velocity.x;
-				ObjectBlocks[0].VertexArray[ObjectBlocks[0].VertexStride * i + 9] = ExplosionPieceData[Count].Velocity.y;
-				ObjectBlocks[0].VertexArray[ObjectBlocks[0].VertexStride * i + 10] = ExplosionPieceData[Count].Velocity.z;
-				ObjectBlocks[0].VertexArray[ObjectBlocks[0].VertexStride * (i + 1) + 8] = ExplosionPieceData[Count].Velocity.x;
-				ObjectBlocks[0].VertexArray[ObjectBlocks[0].VertexStride * (i + 1) + 9] = ExplosionPieceData[Count].Velocity.y;
-				ObjectBlocks[0].VertexArray[ObjectBlocks[0].VertexStride * (i + 1) + 10] = ExplosionPieceData[Count].Velocity.z;
-				ObjectBlocks[0].VertexArray[ObjectBlocks[0].VertexStride * (i + 2) + 8] = ExplosionPieceData[Count].Velocity.x;
-				ObjectBlocks[0].VertexArray[ObjectBlocks[0].VertexStride * (i + 2) + 9] = ExplosionPieceData[Count].Velocity.y;
-				ObjectBlocks[0].VertexArray[ObjectBlocks[0].VertexStride * (i + 2) + 10] = ExplosionPieceData[Count].Velocity.z;
+				ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * i + 8] = ExplosionPieceData[Count].Velocity.x;
+				ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * i + 9] = ExplosionPieceData[Count].Velocity.y;
+				ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * i + 10] = ExplosionPieceData[Count].Velocity.z;
+				ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * (i + 1) + 8] = ExplosionPieceData[Count].Velocity.x;
+				ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * (i + 1) + 9] = ExplosionPieceData[Count].Velocity.y;
+				ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * (i + 1) + 10] = ExplosionPieceData[Count].Velocity.z;
+				ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * (i + 2) + 8] = ExplosionPieceData[Count].Velocity.x;
+				ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * (i + 2) + 9] = ExplosionPieceData[Count].Velocity.y;
+				ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * (i + 2) + 10] = ExplosionPieceData[Count].Velocity.z;
 				// acc
-				ObjectBlocks[0].VertexArray[ObjectBlocks[0].VertexStride * i + 11] = VelocityTMP;
-				ObjectBlocks[0].VertexArray[ObjectBlocks[0].VertexStride * (i + 1) + 11] = ObjectBlocks[0].VertexArray[ObjectBlocks[0].VertexStride * i + 11];
-				ObjectBlocks[0].VertexArray[ObjectBlocks[0].VertexStride * (i + 2) + 11] = ObjectBlocks[0].VertexArray[ObjectBlocks[0].VertexStride * i + 11];
+				ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * i + 11] = VelocityTMP;
+				ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * (i + 1) + 11] = ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * i + 11];
+				ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * (i + 2) + 11] = ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * i + 11];
 			}
 
 
@@ -947,21 +945,22 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			vw_DeleteVAO(ObjectBlocks[0].VAO);
 
 		// делаем VBO
-		if (!vw_BuildVertexBufferObject(ObjectBlocks[0].VertexCount, ObjectBlocks[0].VertexArray,
+		if (!vw_BuildVertexBufferObject(ObjectBlocks[0].VertexCount, ObjectBlocks[0].VertexArray.get(),
 						ObjectBlocks[0].VertexStride, ObjectBlocks[0].VBO))
 			ObjectBlocks[0].VBO = 0;
 
 		// делаем IBO, создаем его один раз, если его нет
 		if (!ObjectBlocks[0].IBO) {
-			if (!vw_BuildIndexBufferObject(ObjectBlocks[0].VertexCount, ObjectBlocks[0].IndexArray,
+			if (!vw_BuildIndexBufferObject(ObjectBlocks[0].VertexCount, ObjectBlocks[0].IndexArray.get(),
 						       ObjectBlocks[0].IBO))
 				ObjectBlocks[0].IBO = 0;
 		}
 
 		// делаем VAO
 		if (!vw_BuildVAO(ObjectBlocks[0].VAO, ObjectBlocks[0].VertexCount, ObjectBlocks[0].VertexFormat,
-				 ObjectBlocks[0].VertexArray, ObjectBlocks[0].VertexStride * sizeof(float), ObjectBlocks[0].VBO,
-				 ObjectBlocks[0].RangeStart, ObjectBlocks[0].IndexArray, ObjectBlocks[0].IBO))
+				 ObjectBlocks[0].VertexArray.get(), ObjectBlocks[0].VertexStride * sizeof(float),
+				 ObjectBlocks[0].VBO, ObjectBlocks[0].RangeStart, ObjectBlocks[0].IndexArray.get(),
+				 ObjectBlocks[0].IBO))
 			ObjectBlocks[0].VAO = 0;
 	}
 

@@ -195,42 +195,42 @@ bool cExplosion::Update(float Time)
 							if (ExplosionPieceData[Count].Life<=0.001f) {
 								ExplosionPieceData[Count].Life = 0.0f;
 
-								tmpObjectBlock.VertexArray[(i + 1) * tmpObjectBlock.VertexStride] = tmpObjectBlock.VertexArray[i * tmpObjectBlock.VertexStride];
-								tmpObjectBlock.VertexArray[(i + 1) * tmpObjectBlock.VertexStride + 1] = tmpObjectBlock.VertexArray[i * tmpObjectBlock.VertexStride + 1];
-								tmpObjectBlock.VertexArray[(i + 1) * tmpObjectBlock.VertexStride + 2] = tmpObjectBlock.VertexArray[i * tmpObjectBlock.VertexStride + 2];
+								tmpObjectBlock.VertexArray.get()[(i + 1) * tmpObjectBlock.VertexStride] = tmpObjectBlock.VertexArray.get()[i * tmpObjectBlock.VertexStride];
+								tmpObjectBlock.VertexArray.get()[(i + 1) * tmpObjectBlock.VertexStride + 1] = tmpObjectBlock.VertexArray.get()[i * tmpObjectBlock.VertexStride + 1];
+								tmpObjectBlock.VertexArray.get()[(i + 1) * tmpObjectBlock.VertexStride + 2] = tmpObjectBlock.VertexArray.get()[i * tmpObjectBlock.VertexStride + 2];
 
-								tmpObjectBlock.VertexArray[(i + 2) * tmpObjectBlock.VertexStride] = tmpObjectBlock.VertexArray[i * tmpObjectBlock.VertexStride];
-								tmpObjectBlock.VertexArray[(i + 2) * tmpObjectBlock.VertexStride + 1] = tmpObjectBlock.VertexArray[i * tmpObjectBlock.VertexStride + 1];
-								tmpObjectBlock.VertexArray[(i + 2) * tmpObjectBlock.VertexStride + 2] = tmpObjectBlock.VertexArray[i * tmpObjectBlock.VertexStride + 2];
+								tmpObjectBlock.VertexArray.get()[(i + 2) * tmpObjectBlock.VertexStride] = tmpObjectBlock.VertexArray.get()[i * tmpObjectBlock.VertexStride];
+								tmpObjectBlock.VertexArray.get()[(i + 2) * tmpObjectBlock.VertexStride + 1] = tmpObjectBlock.VertexArray.get()[i * tmpObjectBlock.VertexStride + 1];
+								tmpObjectBlock.VertexArray.get()[(i + 2) * tmpObjectBlock.VertexStride + 2] = tmpObjectBlock.VertexArray.get()[i * tmpObjectBlock.VertexStride + 2];
 							} else {
 								// уменьшаем частицу, перебираем размер и текстурные координаты
 								{
-									float tmp = tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * (i + 1)] - tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * i];
-									tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * (i + 1)] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
-									tmp = tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride*(i + 1) + 1] - tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * i + 1];
-									tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * (i + 1) + 1] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
-									tmp = tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * (i + 1) + 2] - tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * i + 2];
-									tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * (i + 1) + 2] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+									float tmp = tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * (i + 1)] - tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * i];
+									tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * (i + 1)] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
+									tmp = tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride*(i + 1) + 1] - tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * i + 1];
+									tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * (i + 1) + 1] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+									tmp = tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * (i + 1) + 2] - tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * i + 2];
+									tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * (i + 1) + 2] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
 
-									tmp = tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * (i + 2)] - tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * i];
-									tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * (i + 2)] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
-									tmp = tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * (i + 2) + 1] - tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * i + 1];
-									tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * (i + 2) + 1] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
-									tmp = tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * (i + 2) + 2] - tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * i + 2];
-									tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * (i + 2) + 2] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
+									tmp = tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * (i + 2)] - tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * i];
+									tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * (i + 2)] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
+									tmp = tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * (i + 2) + 1] - tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * i + 1];
+									tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * (i + 2) + 1] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
+									tmp = tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * (i + 2) + 2] - tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * i + 2];
+									tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * (i + 2) + 2] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
 								}
 
-								tmpObjectBlock.VertexArray[i * tmpObjectBlock.VertexStride] += TMP.x;
-								tmpObjectBlock.VertexArray[i * tmpObjectBlock.VertexStride + 1] += TMP.y;
-								tmpObjectBlock.VertexArray[i * tmpObjectBlock.VertexStride + 2] += TMP.z;
+								tmpObjectBlock.VertexArray.get()[i * tmpObjectBlock.VertexStride] += TMP.x;
+								tmpObjectBlock.VertexArray.get()[i * tmpObjectBlock.VertexStride + 1] += TMP.y;
+								tmpObjectBlock.VertexArray.get()[i * tmpObjectBlock.VertexStride + 2] += TMP.z;
 
-								tmpObjectBlock.VertexArray[(i + 1) * tmpObjectBlock.VertexStride] += TMP.x;
-								tmpObjectBlock.VertexArray[(i + 1) * tmpObjectBlock.VertexStride + 1] += TMP.y;
-								tmpObjectBlock.VertexArray[(i + 1) * tmpObjectBlock.VertexStride + 2] += TMP.z;
+								tmpObjectBlock.VertexArray.get()[(i + 1) * tmpObjectBlock.VertexStride] += TMP.x;
+								tmpObjectBlock.VertexArray.get()[(i + 1) * tmpObjectBlock.VertexStride + 1] += TMP.y;
+								tmpObjectBlock.VertexArray.get()[(i + 1) * tmpObjectBlock.VertexStride + 2] += TMP.z;
 
-								tmpObjectBlock.VertexArray[(i + 2) * tmpObjectBlock.VertexStride] += TMP.x;
-								tmpObjectBlock.VertexArray[(i + 2) * tmpObjectBlock.VertexStride + 1] += TMP.y;
-								tmpObjectBlock.VertexArray[(i + 2) * tmpObjectBlock.VertexStride + 2] += TMP.z;
+								tmpObjectBlock.VertexArray.get()[(i + 2) * tmpObjectBlock.VertexStride] += TMP.x;
+								tmpObjectBlock.VertexArray.get()[(i + 2) * tmpObjectBlock.VertexStride + 1] += TMP.y;
+								tmpObjectBlock.VertexArray.get()[(i + 2) * tmpObjectBlock.VertexStride + 2] += TMP.z;
 							}
 
 						}
@@ -250,19 +250,19 @@ bool cExplosion::Update(float Time)
 
 
 					// делаем VBO
-					if (!vw_BuildVertexBufferObject(tmpObjectBlock.VertexCount, tmpObjectBlock.VertexArray, tmpObjectBlock.VertexStride, tmpObjectBlock.VBO))
+					if (!vw_BuildVertexBufferObject(tmpObjectBlock.VertexCount, tmpObjectBlock.VertexArray.get(), tmpObjectBlock.VertexStride, tmpObjectBlock.VBO))
 						tmpObjectBlock.VBO = 0;
 
 					// делаем IBO, создаем его один раз, если его нет
 					if (tmpObjectBlock.IBO) {
-						if (!vw_BuildIndexBufferObject(tmpObjectBlock.VertexCount, tmpObjectBlock.IndexArray, tmpObjectBlock.IBO))
+						if (!vw_BuildIndexBufferObject(tmpObjectBlock.VertexCount, tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO))
 							tmpObjectBlock.IBO = 0;
 					}
 
 					// делаем VAO
-					if (!vw_BuildVAO(tmpObjectBlock.VAO, tmpObjectBlock.VertexCount, tmpObjectBlock.VertexFormat, tmpObjectBlock.VertexArray,
+					if (!vw_BuildVAO(tmpObjectBlock.VAO, tmpObjectBlock.VertexCount, tmpObjectBlock.VertexFormat, tmpObjectBlock.VertexArray.get(),
 							 tmpObjectBlock.VertexStride * sizeof(float), tmpObjectBlock.VBO,
-							 tmpObjectBlock.RangeStart, tmpObjectBlock.IndexArray, tmpObjectBlock.IBO))
+							 tmpObjectBlock.RangeStart, tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO))
 						tmpObjectBlock.VAO = 0;
 				}
 			}

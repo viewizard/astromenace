@@ -104,7 +104,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 				// берем то, что нужно
 				ShipPart->ObjectBlocks.resize(1);
 				// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
-				memcpy(&(ShipPart->ObjectBlocks[0]), &(Object->ObjectBlocks[i]), sizeof(Object->ObjectBlocks[0]));
+				ShipPart->ObjectBlocks[0] = Object->ObjectBlocks[i];
 				// берем стандартные шейдеры
 				ShipPart->ObjectBlocks[0].ShaderType = 1;
 				// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью

@@ -110,14 +110,14 @@ void cObject3D::InitByDrawObjectList()
 			int j = 0;
 			int j2;
 			if (ObjectBlocks[i].IndexArray)
-				j2 = ObjectBlocks[i].IndexArray[ObjectBlocks[i].RangeStart + j] * ObjectBlocks[i].VertexStride;
+				j2 = ObjectBlocks[i].IndexArray.get()[ObjectBlocks[i].RangeStart + j] * ObjectBlocks[i].VertexStride;
 			else
 				j2 = (ObjectBlocks[i].RangeStart + j) * ObjectBlocks[i].VertexStride;
 
 			sVECTOR3D tmp;
-			tmp.x = ObjectBlocks[i].VertexArray[j2 + 0];
-			tmp.y = ObjectBlocks[i].VertexArray[j2 + 1];
-			tmp.z = ObjectBlocks[i].VertexArray[j2 + 2];
+			tmp.x = ObjectBlocks[i].VertexArray.get()[j2 + 0];
+			tmp.y = ObjectBlocks[i].VertexArray.get()[j2 + 1];
+			tmp.z = ObjectBlocks[i].VertexArray.get()[j2 + 2];
 			vw_Matrix33CalcPoint(tmp, Matrix);
 			MinX = MaxX = tmp.x;
 			MinY = MaxY = tmp.y;
@@ -132,14 +132,14 @@ void cObject3D::InitByDrawObjectList()
 		for (unsigned int j = 0; j < ObjectBlocks[i].VertexCount; j++) {
 			int j2;
 			if (ObjectBlocks[i].IndexArray)
-				j2 = ObjectBlocks[i].IndexArray[ObjectBlocks[i].RangeStart + j] * ObjectBlocks[i].VertexStride;
+				j2 = ObjectBlocks[i].IndexArray.get()[ObjectBlocks[i].RangeStart + j] * ObjectBlocks[i].VertexStride;
 			else
 				j2 = (ObjectBlocks[i].RangeStart + j) * ObjectBlocks[i].VertexStride;
 
 			sVECTOR3D v;
-			v.x = ObjectBlocks[i].VertexArray[j2];
-			v.y = ObjectBlocks[i].VertexArray[j2 + 1];
-			v.z = ObjectBlocks[i].VertexArray[j2 + 2];
+			v.x = ObjectBlocks[i].VertexArray.get()[j2];
+			v.y = ObjectBlocks[i].VertexArray.get()[j2 + 1];
+			v.z = ObjectBlocks[i].VertexArray.get()[j2 + 2];
 			vw_Matrix33CalcPoint(v, Matrix);
 			if (MinX > v.x) MinX = v.x;
 			if (MinY > v.y) MinY = v.y;
@@ -241,9 +241,9 @@ void cObject3D::InitByDrawObjectList()
 	for (auto &tmpObjectBlock : ObjectBlocks) {
 		for (unsigned int j = 0; j < tmpObjectBlock.VertexCount; j++) {
 			AllVertexCounted++;
-			GeometryCenterLocation += tmpObjectBlock.Location + sVECTOR3D(tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * j],
-						  tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * j + 1],
-						  tmpObjectBlock.VertexArray[tmpObjectBlock.VertexStride * j + 2]);
+			GeometryCenterLocation += tmpObjectBlock.Location + sVECTOR3D(tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * j],
+						  tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * j + 1],
+						  tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * j + 2]);
 		}
 	}
 	if (AllVertexCounted > 0)
@@ -710,9 +710,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			}
 
 			// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
-			vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, RI_3f_XYZ, GlobalVertexArray,
+			vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, RI_3f_XYZ, GlobalVertexArray.get(),
 					ObjectBlocks[0].VertexStride * sizeof(float), GlobalVBO, 0,
-					GlobalIndexArray, GlobalIBO, GlobalVAO);
+					GlobalIndexArray.get(), GlobalIBO, GlobalVAO);
 		} else {
 
 			// установка текстур и подхотовка к прорисовке
@@ -747,9 +747,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					}
 
 
-				vw_SendVertices(RI_TRIANGLES, tmpObjectBlock.VertexCount, RI_3f_XYZ, tmpObjectBlock.VertexArray,
+				vw_SendVertices(RI_TRIANGLES, tmpObjectBlock.VertexCount, RI_3f_XYZ, tmpObjectBlock.VertexArray.get(),
 						tmpObjectBlock.VertexStride * sizeof(float), tmpObjectBlock.VBO,
-						tmpObjectBlock.RangeStart, tmpObjectBlock.IndexArray, tmpObjectBlock.IBO, tmpObjectBlock.VAO);
+						tmpObjectBlock.RangeStart, tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO, tmpObjectBlock.VAO);
 
 
 				if (tmpObjectBlock.ShaderType == 2)
@@ -974,9 +974,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		}
 
 		// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
-		vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, ObjectBlocks[0].VertexFormat, GlobalVertexArray,
+		vw_SendVertices(RI_TRIANGLES, GlobalVertexCount, ObjectBlocks[0].VertexFormat, GlobalVertexArray.get(),
 				ObjectBlocks[0].VertexStride * sizeof(float), GlobalVBO, 0,
-				GlobalIndexArray, GlobalIBO, GlobalVAO);
+				GlobalIndexArray.get(), GlobalIBO, GlobalVAO);
 
 		vw_DeActivateAllLights();
 	} else {
@@ -1188,9 +1188,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			}
 
 
-			vw_SendVertices(RI_TRIANGLES, ObjectBlocks[i].VertexCount, ObjectBlocks[i].VertexFormat, ObjectBlocks[i].VertexArray,
+			vw_SendVertices(RI_TRIANGLES, ObjectBlocks[i].VertexCount, ObjectBlocks[i].VertexFormat, ObjectBlocks[i].VertexArray.get(),
 					ObjectBlocks[i].VertexStride * sizeof(float), ObjectBlocks[i].VBO,
-					ObjectBlocks[i].RangeStart, ObjectBlocks[i].IndexArray, ObjectBlocks[i].IBO, ObjectBlocks[i].VAO);
+					ObjectBlocks[i].RangeStart, ObjectBlocks[i].IndexArray.get(), ObjectBlocks[i].IBO, ObjectBlocks[i].VAO);
 
 
 

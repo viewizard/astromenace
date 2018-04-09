@@ -41,7 +41,7 @@ struct sObjectBlock {
 
 	// GLSL-related
 	int ShaderType{1};
-	float ShaderData[16]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	std::array<float, 16> ShaderData{};
 
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 	sVECTOR3D Rotation{0.0f, 0.0f, 0.0f};
@@ -64,14 +64,14 @@ struct sObjectBlock {
 	bool NeedDestroyDataInObjectBlock{false};
 
 	// vertex-related
-	float *VertexArray{nullptr};
+	std::shared_ptr<float> VertexArray{}; // float[], make sure, that custom deleter are used
 	int VertexFormat{0};
 	unsigned int VertexStride{0};	// in bytes
 	unsigned int VertexCount{0};
 	unsigned int VBO{0};
 
 	// index-related
-	unsigned int *IndexArray{nullptr};
+	std::shared_ptr<unsigned> IndexArray{}; // unsigned[], make sure, that custom deleter are used
 	unsigned int IBO{0};
 
 	// vao
@@ -80,7 +80,7 @@ struct sObjectBlock {
 	// for explosion we need pre-generated vertex array with small triangles,
 	// in this case, we could create cool looking effects, when enemies disintegrate
 	// into 'dust' pieces during explosion
-	float *VertexArrayWithSmallTriangles{nullptr};
+	std::shared_ptr<float> VertexArrayWithSmallTriangles{}; // float[], make sure, that custom deleter are used
 	unsigned int VertexArrayWithSmallTrianglesCount{0};
 };
 
@@ -96,12 +96,12 @@ struct sModel3D {
 	std::vector<sObjectBlock> ObjectBlocks{};
 
 	// vertex-related
-	float *GlobalVertexArray{nullptr};
+	std::shared_ptr<float> GlobalVertexArray{}; // float[], make sure, that custom deleter are used
 	unsigned int GlobalVertexArrayCount{0};
 	unsigned int GlobalVBO{0};
 
 	// index-related
-	unsigned int *GlobalIndexArray{nullptr};
+	std::shared_ptr<unsigned> GlobalIndexArray{}; // unsigned[], make sure, that custom deleter are used
 	unsigned int GlobalIndexArrayCount{0};
 	unsigned int GlobalIBO{0};
 

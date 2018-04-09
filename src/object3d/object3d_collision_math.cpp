@@ -483,34 +483,34 @@ bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, in
 
 						int j2;
 						if (Object2->ObjectBlocks[j].IndexArray)
-							j2 = Object2->ObjectBlocks[j].IndexArray[Object2->ObjectBlocks[j].RangeStart + k ] * Object2->ObjectBlocks[j].VertexStride;
+							j2 = Object2->ObjectBlocks[j].IndexArray.get()[Object2->ObjectBlocks[j].RangeStart + k ] * Object2->ObjectBlocks[j].VertexStride;
 						else
 							j2 = (Object2->ObjectBlocks[j].RangeStart + k) * Object2->ObjectBlocks[j].VertexStride;
 
 						// находим точки триугольника
-						Point1.x = Object2->ObjectBlocks[j].VertexArray[j2];
-						Point1.y = Object2->ObjectBlocks[j].VertexArray[j2 + 1];
-						Point1.z = Object2->ObjectBlocks[j].VertexArray[j2 + 2];
+						Point1.x = Object2->ObjectBlocks[j].VertexArray.get()[j2];
+						Point1.y = Object2->ObjectBlocks[j].VertexArray.get()[j2 + 1];
+						Point1.z = Object2->ObjectBlocks[j].VertexArray.get()[j2 + 2];
 						vw_Matrix44CalcPoint(Point1, ObjTransMat);
 
 						if (Object2->ObjectBlocks[j].IndexArray)
-							j2 = Object2->ObjectBlocks[j].IndexArray[Object2->ObjectBlocks[j].RangeStart + k + 1] * Object2->ObjectBlocks[j].VertexStride;
+							j2 = Object2->ObjectBlocks[j].IndexArray.get()[Object2->ObjectBlocks[j].RangeStart + k + 1] * Object2->ObjectBlocks[j].VertexStride;
 						else
 							j2 = (Object2->ObjectBlocks[j].RangeStart + k + 1) * Object2->ObjectBlocks[j].VertexStride;
 
-						Point2.x = Object2->ObjectBlocks[j].VertexArray[j2];
-						Point2.y = Object2->ObjectBlocks[j].VertexArray[j2 + 1];
-						Point2.z = Object2->ObjectBlocks[j].VertexArray[j2 + 2];
+						Point2.x = Object2->ObjectBlocks[j].VertexArray.get()[j2];
+						Point2.y = Object2->ObjectBlocks[j].VertexArray.get()[j2 + 1];
+						Point2.z = Object2->ObjectBlocks[j].VertexArray.get()[j2 + 2];
 						vw_Matrix44CalcPoint(Point2, ObjTransMat);
 
 						if (Object2->ObjectBlocks[j].IndexArray)
-							j2 = Object2->ObjectBlocks[j].IndexArray[Object2->ObjectBlocks[j].RangeStart + k + 2 ] * Object2->ObjectBlocks[j].VertexStride;
+							j2 = Object2->ObjectBlocks[j].IndexArray.get()[Object2->ObjectBlocks[j].RangeStart + k + 2 ] * Object2->ObjectBlocks[j].VertexStride;
 						else
 							j2 = (Object2->ObjectBlocks[j].RangeStart + k + 2) * Object2->ObjectBlocks[j].VertexStride;
 
-						Point3.x = Object2->ObjectBlocks[j].VertexArray[j2];
-						Point3.y = Object2->ObjectBlocks[j].VertexArray[j2 + 1];
-						Point3.z = Object2->ObjectBlocks[j].VertexArray[j2 + 2];
+						Point3.x = Object2->ObjectBlocks[j].VertexArray.get()[j2];
+						Point3.y = Object2->ObjectBlocks[j].VertexArray.get()[j2 + 1];
+						Point3.z = Object2->ObjectBlocks[j].VertexArray.get()[j2 + 2];
 						vw_Matrix44CalcPoint(Point3, ObjTransMat);
 
 

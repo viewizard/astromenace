@@ -125,11 +125,7 @@ void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float 
 		Object3D->GlobalIndexArray = Model->GlobalIndexArray;
 		Object3D->GlobalIBO = Model->GlobalIBO;
 		Object3D->GlobalVAO = Model->GlobalVAO;
-		Object3D->ObjectBlocks.resize(Model->ObjectBlocks.size());
-		// копируем все данные
-		memcpy(Object3D->ObjectBlocks.data(),
-		       Model->ObjectBlocks.data(),
-		       sizeof(Model->ObjectBlocks[0]) * Object3D->ObjectBlocks.size());
+		Object3D->ObjectBlocks = Model->ObjectBlocks;
 	} else {
 		// работаем только с одним объектом ( так работаем с оружием для кораблей землян )
 
@@ -139,11 +135,9 @@ void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float 
 		Object3D->GlobalIndexArray = Model->ObjectBlocks[ObjectNum - 1].IndexArray;
 		Object3D->GlobalIBO = Model->ObjectBlocks[ObjectNum - 1].IBO;
 		Object3D->GlobalVAO = Model->ObjectBlocks[ObjectNum - 1].VAO;
-		Object3D->ObjectBlocks.resize(1);
 		// копируем данные нужного объекта
-		memcpy(Object3D->ObjectBlocks.data(),
-		       &(Model->ObjectBlocks[ObjectNum - 1]),
-		       sizeof(Model->ObjectBlocks[0]));
+		Object3D->ObjectBlocks.resize(1);
+		Object3D->ObjectBlocks[0] = Model->ObjectBlocks[ObjectNum - 1];
 	}
 
 	// резервируем память для текстур

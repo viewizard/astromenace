@@ -206,9 +206,9 @@ public:
 
 	// список с геометрией модели, объекты для прорисовки
 	std::vector<sObjectBlock> ObjectBlocks{};
-	float		*GlobalVertexArray{nullptr};
+	std::shared_ptr<float> GlobalVertexArray{}; // float[], make sure, that custom deleter are used
 	unsigned int	GlobalVBO{0};
-	unsigned int	*GlobalIndexArray{nullptr};
+	std::shared_ptr<unsigned> GlobalIndexArray{}; // unsigned[], make sure, that custom deleter are used
 	unsigned int	GlobalIBO{0};
 	unsigned int	GlobalVAO{0};
 	// минимальное расстояние (квадрат) с которого надо рисовать пообъектно, если -1 всегда рисовать только пообъектно

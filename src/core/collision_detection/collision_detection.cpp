@@ -399,34 +399,34 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 		unsigned int IndexPos = Object1DrawObjectList->RangeStart + i; // index buffer position
 		unsigned int VertexPos{0}; // vertex buffer position
 		if (Object1DrawObjectList->IndexArray)
-			VertexPos = Object1DrawObjectList->IndexArray[IndexPos] * Object1DrawObjectList->VertexStride;
+			VertexPos = Object1DrawObjectList->IndexArray.get()[IndexPos] * Object1DrawObjectList->VertexStride;
 		else
 			VertexPos = (IndexPos) * Object1DrawObjectList->VertexStride;
 
 		// translate triangle's vertices in proper coordinates for collision detection
-		sVECTOR3D Point1{Object1DrawObjectList->VertexArray[VertexPos],
-				 Object1DrawObjectList->VertexArray[VertexPos + 1],
-				 Object1DrawObjectList->VertexArray[VertexPos + 2]};
+		sVECTOR3D Point1{Object1DrawObjectList->VertexArray.get()[VertexPos],
+				 Object1DrawObjectList->VertexArray.get()[VertexPos + 1],
+				 Object1DrawObjectList->VertexArray.get()[VertexPos + 2]};
 		vw_Matrix44CalcPoint(Point1, TransMat);
 
 		if (Object1DrawObjectList->IndexArray)
-			VertexPos = Object1DrawObjectList->IndexArray[IndexPos + 1] * Object1DrawObjectList->VertexStride;
+			VertexPos = Object1DrawObjectList->IndexArray.get()[IndexPos + 1] * Object1DrawObjectList->VertexStride;
 		else
 			VertexPos = (IndexPos + 1) * Object1DrawObjectList->VertexStride;
 
-		sVECTOR3D Point2{Object1DrawObjectList->VertexArray[VertexPos],
-				 Object1DrawObjectList->VertexArray[VertexPos + 1],
-				 Object1DrawObjectList->VertexArray[VertexPos + 2]};
+		sVECTOR3D Point2{Object1DrawObjectList->VertexArray.get()[VertexPos],
+				 Object1DrawObjectList->VertexArray.get()[VertexPos + 1],
+				 Object1DrawObjectList->VertexArray.get()[VertexPos + 2]};
 		vw_Matrix44CalcPoint(Point2, TransMat);
 
 		if (Object1DrawObjectList->IndexArray)
-			VertexPos = Object1DrawObjectList->IndexArray[IndexPos + 2] * Object1DrawObjectList->VertexStride;
+			VertexPos = Object1DrawObjectList->IndexArray.get()[IndexPos + 2] * Object1DrawObjectList->VertexStride;
 		else
 			VertexPos = (IndexPos + 2) * Object1DrawObjectList->VertexStride;
 
-		sVECTOR3D Point3{Object1DrawObjectList->VertexArray[VertexPos],
-				 Object1DrawObjectList->VertexArray[VertexPos + 1],
-				 Object1DrawObjectList->VertexArray[VertexPos + 2]};
+		sVECTOR3D Point3{Object1DrawObjectList->VertexArray.get()[VertexPos],
+				 Object1DrawObjectList->VertexArray.get()[VertexPos + 1],
+				 Object1DrawObjectList->VertexArray.get()[VertexPos + 2]};
 		vw_Matrix44CalcPoint(Point3, TransMat);
 
 		// calculate 2 vectors for plane
