@@ -673,8 +673,10 @@ void vw_SetAspectRatio(float nWidth, float nHeight, bool Value)
 //------------------------------------------------------------------------------------
 bool vw_GetAspectWH(float *ARWidth, float *ARHeight)
 {
-	*ARWidth = ARWidthGL;
-	*ARHeight = ARHeightGL;
+	if (ARWidth)
+		*ARWidth = ARWidthGL;
+	if (ARHeight)
+		*ARHeight = ARHeightGL;
 	return ARFLAGGL;
 }
 
