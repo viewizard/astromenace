@@ -226,6 +226,8 @@ MESSAGE(STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
 
 
 # sources
+# "src/*.h" added in order to have mixed cpp/h files overview in QtCreator's
+# Projects list, that based on FILE for cmake projects.
 FILE(GLOB_RECURSE astromenace_SRCS src/*.cpp src/*.h)
 SET(astromenace_DATA "${CMAKE_CURRENT_LIST_DIR}/gamedata/")
 MESSAGE("Game data dir: ${astromenace_DATA}")

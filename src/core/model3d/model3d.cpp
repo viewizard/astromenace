@@ -56,8 +56,10 @@ static void CreateTangentAndBinormal(cModel3D *Model)
 	std::shared_ptr<float> New_VertexBuffer{new float[New_VertexStride * Model->GlobalIndexArrayCount],
 						std::default_delete<float[]>()};
 
-	// for vertex array with new size (we need 4 more floats for each vertex), copy
-	// data with proper stride, we fill second and third textures coordinates later
+	// For vertex array with new size (we need 4 more floats for each vertex), copy
+	// data with proper stride, we fill second and third textures coordinates later.
+	// Forced to 'unpack' indexed arrays, since triangles with mutual points could
+	// have different tangent data for same mutual point.
 	for (unsigned int j = 0; j < Model->GlobalIndexArrayCount; j++) {
 		memcpy(New_VertexBuffer.get() + New_VertexStride * j,
 		       Model->GlobalVertexArray.get() + Model->GlobalIndexArray.get()[j] * Model->ObjectBlocks[0].VertexStride,
@@ -328,6 +330,8 @@ static void CreateVertexArrayLimitedBySizeTriangles(cModel3D *Model, float Trian
 
 		// prepare 3 points (triangle)
 		for (unsigned int j = 0; j < tmpObjectBlock.VertexCount; j += 3) {
+			// CreateObjectsBuffers() already 'unpacked' indexed arrays for ObjectBlocks,
+			// so, we could use VertexArray directly here
 			unsigned int tmpOffset0 = tmpObjectBlock.VertexStride * j;		// j
 			unsigned int tmpOffset1 = tmpOffset0 + tmpObjectBlock.VertexStride;	// j + 1
 			unsigned int tmpOffset2 = tmpOffset1 + tmpObjectBlock.VertexStride;	// j + 2
@@ -380,6 +384,8 @@ static void CreateVertexArrayLimitedBySizeTriangles(cModel3D *Model, float Trian
 
 			// prepare 3 points (triangle)
 			for (unsigned int j = 0; j < tmpObjectBlock.VertexCount; j += 3) {
+				// CreateObjectsBuffers() already 'unpacked' indexed arrays for ObjectBlocks,
+				// so, we could use VertexArray directly here
 				unsigned int tmpOffset0 = tmpObjectBlock.VertexStride * j;		// j
 				unsigned int tmpOffset1 = tmpOffset0 + tmpObjectBlock.VertexStride;	// j + 1
 				unsigned int tmpOffset2 = tmpOffset1 + tmpObjectBlock.VertexStride;	// j + 2
