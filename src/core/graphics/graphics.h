@@ -327,8 +327,10 @@ void vw_SetColorMask(bool red, bool green, bool blue, bool alpha);
 
 // Create texture.
 GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int Bytes, int CompressionType);
-// Bind texture.
-void vw_BindTexture(uint32_t Stage, GLtexture TextureID);
+// Select active texture unit (starts from 0, for GL_TEXTURE0 unit).
+void vw_SelectActiveTextureUnit(GLenum Unit);
+// Bind texture for particular texture unit (starts from 0, for GL_TEXTURE0 unit).
+void vw_BindTexture(GLenum Unit, GLtexture TextureID);
 // Delete texture.
 void vw_DeleteTexture(GLtexture TextureID);
 // Set texture filtering mode.

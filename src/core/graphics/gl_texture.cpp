@@ -110,13 +110,21 @@ GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, i
 	return TextureID;
 }
 
-//------------------------------------------------------------------------------------
-// Bind
-//------------------------------------------------------------------------------------
-void vw_BindTexture(uint32_t Stage, GLtexture TextureID)
+/*
+ * Select active texture unit (starts from 0, for GL_TEXTURE0 unit).
+ */
+void vw_SelectActiveTextureUnit(GLenum Unit)
 {
 	if (glActiveTexture_ARB)
-		glActiveTexture_ARB(GL_TEXTURE0 + Stage);
+		glActiveTexture_ARB(GL_TEXTURE0 + Unit);
+}
+
+/*
+ * Bind texture for particular texture unit (starts from 0, for GL_TEXTURE0 unit).
+ */
+void vw_BindTexture(GLenum Unit, GLtexture TextureID)
+{
+	vw_SelectActiveTextureUnit(Unit);
 
 	if (TextureID) {
 		glBindTexture(GL_TEXTURE_2D, TextureID);
@@ -124,6 +132,9 @@ void vw_BindTexture(uint32_t Stage, GLtexture TextureID)
 	} else {
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glDisable(GL_TEXTURE_2D);
+		// set to GL_TEXTURE0, by default
+		if (Unit)
+			vw_SelectActiveTextureUnit(0);
 	}
 }
 

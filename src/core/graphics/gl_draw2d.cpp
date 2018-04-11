@@ -71,6 +71,7 @@ void vw_Start2DMode(GLdouble zNear, GLdouble zFar)
 		glOrtho(0, ViewportWidth, ViewportHeight, 0, zNear, zFar);
 
 	// change textures origin to upper left corner
+	vw_SelectActiveTextureUnit(0); // switch to 0 unit, for proper texture matrix
 	glMatrixMode(GL_TEXTURE);
 	glPushMatrix();
 	glLoadIdentity();
@@ -91,6 +92,7 @@ void vw_End2DMode()
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
 
+	// we don't switch to 0 unit, in 2D mode only 0 unit should be used
 	glMatrixMode(GL_TEXTURE);
 	glPopMatrix();
 
