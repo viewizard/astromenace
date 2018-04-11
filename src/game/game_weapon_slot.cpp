@@ -73,7 +73,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 		DstRect(Xpos+24, Ypos+12, Xpos+24+128, Ypos+64+12);
 		// пушка работает или нет?
 		if (PlayerFighter->Weapon[WeaponNum]->Strength <= 0.0f) {
-			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, 1.0f, 0.0f, 0.0f);
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0.0f, sRGBCOLOR{1.0f, 0.0f, 0.0f});
 
 			// иконка оружия
 			SrcRect(0, 0, 128, 64);
@@ -81,12 +81,12 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->ObjectCreationType)), true, 1.0f);
 		} else {
 			if (PlayerFighter->Weapon[WeaponNum]->CurrentEnergyAccumulated < PlayerFighter->Weapon[WeaponNum]->EnergyUse)
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, 0.0f, 1.0f, 1.0f);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 1.0f});
 			else {
 				if (PlayerFighter->Weapon[WeaponNum]->Ammo == 0)
-					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, 1.0f, 0.5f, 0.2f);
+					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.2f});
 				else
-					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, 1.0f, 0, 0.0f, 1.0f, 0.0f);
+					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, 1.0f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
 			}
 
 			// иконка оружия
@@ -140,7 +140,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 
 		// пушка работает или нет?
 		if (PlayerFighter->Weapon[WeaponNum]->Strength <= 0.0f) {
-			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, 1.0f, 0.0f, 0.0f);
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0.0f, sRGBCOLOR{1.0f, 0.0f, 0.0f});
 
 			// иконка оружия
 			SrcRect(0,0,128,64);
@@ -148,12 +148,12 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->ObjectCreationType)), true, 1.0f);
 		} else {
 			if (PlayerFighter->Weapon[WeaponNum]->CurrentEnergyAccumulated < PlayerFighter->Weapon[WeaponNum]->EnergyUse)
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, 0.0f, 1.0f, 1.0f);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 1.0f});
 			else {
 				if (PlayerFighter->Weapon[WeaponNum]->Ammo == 0)
-					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, 1.0f, 0.5f, 0.2f);
+					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.2f});
 				else
-					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, 1.0f, 0, 0.0f, 1.0f, 0.0f);
+					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, 1.0f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
 			}
 			// иконка оружия
 			SrcRect(0,0,128,64);
@@ -269,7 +269,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 		DstRect(Xpos+12,Ypos+12,Xpos+12+128,Ypos+64+12);
 		// пушка работает или нет?
 		if (PlayerFighter->Weapon[WeaponNum]->Strength <= 0.0f) {
-			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, 1.0f, 0.0f, 0.0f);
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0.0f, sRGBCOLOR{1.0f, 0.0f, 0.0f});
 
 			// иконка оружия
 			SrcRect(0,0,128,64);
@@ -277,12 +277,12 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->ObjectCreationType)), true, 1.0f);
 		} else {
 			if (PlayerFighter->Weapon[WeaponNum]->CurrentEnergyAccumulated < PlayerFighter->Weapon[WeaponNum]->EnergyUse)
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, 0.0f, 1.0f, 1.0f);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 1.0f});
 			else {
 				if (PlayerFighter->Weapon[WeaponNum]->Ammo == 0)
-					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, 1.0f, 0.5f, 0.2f);
+					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.2f});
 				else
-					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, 1.0f, 0, 0.0f, 1.0f, 0.0f);
+					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, 1.0f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
 			}
 			// иконка оружия
 			SrcRect(0,0,128,64);
@@ -334,7 +334,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 		DstRect(Xpos+1,Ypos+2,Xpos+1+128,Ypos+64+2);
 		// пушка работает или нет?
 		if (PlayerFighter->Weapon[WeaponNum]->Strength <= 0.0f) {
-			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, 1.0f, 0.0f, 0.0f);
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0.0f, sRGBCOLOR{1.0f, 0.0f, 0.0f});
 
 			// иконка оружия
 			SrcRect(0,0,128,64);
@@ -342,12 +342,12 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->ObjectCreationType)), true, 1.0f);
 		} else {
 			if (PlayerFighter->Weapon[WeaponNum]->CurrentEnergyAccumulated < PlayerFighter->Weapon[WeaponNum]->EnergyUse)
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, 0.0f, 1.0f, 1.0f);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 1.0f});
 			else {
 				if (PlayerFighter->Weapon[WeaponNum]->Ammo == 0)
-					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0, 1.0f, 0.5f, 0.2f);
+					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*1.0f, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.2f});
 				else
-					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, 1.0f, 0, 0.0f, 1.0f, 0.0f);
+					vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, 1.0f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
 			}
 			// иконка оружия
 			SrcRect(0,0,128,64);

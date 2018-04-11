@@ -1432,7 +1432,7 @@ void DrawGame()
 			SrcRect(2, 2, 564-2, 564-2);
 			DstRect(Setup.iAspectRatioWidth / 2 - 256 - 26, 128 - 28, Setup.iAspectRatioWidth / 2 - 256 + 534, 128 + 532);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
-					   true, 1.0f*GameContentTransp, 0.0f, 1.0f, 1.0f, 1.0f);
+					   true, 1.0f*GameContentTransp);
 			// название меню
 			int Size = vw_FontSize(vw_GetText("1_Mission_Complete"));
 			float WScale = 0;
@@ -1513,7 +1513,7 @@ void DrawGame()
 				SrcRect(2,2,564-2,564-2);
 				DstRect(Setup.iAspectRatioWidth/2-256+4-30,128+2-30,Setup.iAspectRatioWidth/2-256+564-30,128+564-2-30);
 				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
-						   true, GameContentTransp, 0.0f, 1.0f, 1.0f, 1.0f);
+						   true, GameContentTransp);
 				// название меню
 				int SizeI = 17 + (234-vw_FontSize(vw_GetText("1_GAME_MENU")))/2;
 				vw_DrawFont(Setup.iAspectRatioWidth/2-256+SizeI, 128+22, 0, 0, 1.0f, 1.0f,1.0f,0.0f, 0.7f*GameContentTransp, vw_GetText("1_GAME_MENU"));

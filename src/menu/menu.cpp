@@ -480,8 +480,7 @@ void DrawMenu()
 	    (MenuStatus != eMenuStatus::OPTIONS) &&
 	    (MenuStatus != eMenuStatus::CONFCONTROL) &&
 	    (MenuStatus != eMenuStatus::OPTIONS_ADVANCED)) {
-		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/astromenace.tga"),
-				   true, MenuContentTransp, 0.0f, 1.0f, 1.0f, 1.0f);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/astromenace.tga"), true, MenuContentTransp);
 	}
 
 	vw_End2DMode();

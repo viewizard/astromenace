@@ -117,7 +117,7 @@ static inline void AddToDrawBuffer(float CoordX, float CoordY, float TextureU, f
  * Draw transparent. Origin is upper left corner.
  */
 void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, GLtexture Texture, bool Alpha,
-			float Transp, float RotateAngle, float R, float G, float B)
+			float Transp, float RotateAngle, const sRGBCOLOR &Color)
 {
 	if (!Texture || (Transp <= 0.0f))
 		return;
@@ -156,7 +156,7 @@ void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, GLtexture Texture, bool 
 
 	// setup OpenGL
 	vw_SetTextureBlend(Alpha, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
-	vw_SetColor(R, G, B, Transp);
+	vw_SetColor(Color.r, Color.g, Color.b, Transp);
 	glPushMatrix();
 	glRotatef(RotateAngle, 0, 0, 1);
 

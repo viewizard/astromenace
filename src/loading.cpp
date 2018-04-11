@@ -826,7 +826,7 @@ void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 		vw_BeginRendering(RI_COLOR_BUFFER | RI_DEPTH_BUFFER);
 		vw_Start2DMode(-1,1);
 
-		vw_DrawTransparent(&DstRect, &SrcRect, ViewizardLogoTexture, true, Transp, 0.0f, GreyColor, GreyColor, GreyColor);
+		vw_DrawTransparent(&DstRect, &SrcRect, ViewizardLogoTexture, true, Transp, 0.0f, sRGBCOLOR{GreyColor, GreyColor, GreyColor});
 
 		vw_End2DMode();
 		vw_EndRendering();
