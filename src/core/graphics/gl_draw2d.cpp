@@ -137,6 +137,10 @@ void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bo
 		glGetTexLevelParameterfv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &ImageWidth);
 		glGetTexLevelParameterfv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &ImageHeight);
 	}
+	if (!ImageHeight || !ImageWidth) {
+		std::cerr << __func__ << "(): " << "zero image height or width not allowed.\n";
+		return;
+	}
 
 	// texture's UV coordinates
 	float U_left = (SrcRect.left * 1.0f) / ImageWidth;
