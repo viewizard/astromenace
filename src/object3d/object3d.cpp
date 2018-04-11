@@ -835,10 +835,10 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 	// Устанавливаем данные для поверхности объекта
-	vw_MaterialV(RI_DIFFUSE, Diffuse);
-	vw_MaterialV(RI_AMBIENT, Ambient);
-	vw_MaterialV(RI_SPECULAR, Specular);
-	vw_MaterialV(RI_SHININESS, Power);
+	vw_MaterialV(eMaterialParameter::DIFFUSE, Diffuse);
+	vw_MaterialV(eMaterialParameter::AMBIENT, Ambient);
+	vw_MaterialV(eMaterialParameter::SPECULAR, Specular);
+	vw_MaterialV(eMaterialParameter::SHININESS, Power);
 
 
 	if (!NeedCullFaces) vw_CullFace(RI_NONE);

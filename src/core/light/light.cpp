@@ -226,25 +226,25 @@ bool cLight::Activate(int CurrentLightNum, const float (&Matrix)[16])
 		float RenderLocation[4]{-Direction.x, -Direction.y, -Direction.z, 0.0f};
 
 		// we don't reset OpenGL lights status, forced to reset everything for current light
-		vw_SetLightV(RealLightNum, RI_DIFFUSE, Diffuse);
-		vw_SetLightV(RealLightNum, RI_SPECULAR, Specular);
-		vw_SetLightV(RealLightNum, RI_AMBIENT, Ambient);
-		vw_SetLightV(RealLightNum, RI_DIRECTION, RenderDirection);
-		vw_SetLightV(RealLightNum, RI_POSITION, RenderLocation);
+		vw_SetLightV(RealLightNum, eLightVParameter::DIFFUSE, Diffuse);
+		vw_SetLightV(RealLightNum, eLightVParameter::SPECULAR, Specular);
+		vw_SetLightV(RealLightNum, eLightVParameter::AMBIENT, Ambient);
+		vw_SetLightV(RealLightNum, eLightVParameter::SPOT_DIRECTION, RenderDirection);
+		vw_SetLightV(RealLightNum, eLightVParameter::POSITION, RenderLocation);
 	} else {
 		float RenderDirection[4]{0.0f, 0.0f, 0.0f, 0.0f};
 		float RenderLocation[4]{Location.x, Location.y, Location.z, 1.0f};
 
 		// we don't reset OpenGL lights status, forced to reset everything for current light
-		vw_SetLight(RealLightNum, RI_CONSTANT_ATTENUATION, ConstantAttenuation);
-		vw_SetLight(RealLightNum, RI_LINEAR_ATTENUATION, LinearAttenuation);
-		vw_SetLight(RealLightNum, RI_QUADRATIC_ATTENUATION, QuadraticAttenuation);
+		vw_SetLight(RealLightNum, eLightParameter::CONSTANT_ATTENUATION, ConstantAttenuation);
+		vw_SetLight(RealLightNum, eLightParameter::LINEAR_ATTENUATION, LinearAttenuation);
+		vw_SetLight(RealLightNum, eLightParameter::QUADRATIC_ATTENUATION, QuadraticAttenuation);
 
-		vw_SetLightV(RealLightNum, RI_DIFFUSE, Diffuse);
-		vw_SetLightV(RealLightNum, RI_SPECULAR, Specular);
-		vw_SetLightV(RealLightNum, RI_AMBIENT, Ambient);
-		vw_SetLightV(RealLightNum, RI_DIRECTION, RenderDirection);
-		vw_SetLightV(RealLightNum, RI_POSITION, RenderLocation);
+		vw_SetLightV(RealLightNum, eLightVParameter::DIFFUSE, Diffuse);
+		vw_SetLightV(RealLightNum, eLightVParameter::SPECULAR, Specular);
+		vw_SetLightV(RealLightNum, eLightVParameter::AMBIENT, Ambient);
+		vw_SetLightV(RealLightNum, eLightVParameter::SPOT_DIRECTION, RenderDirection);
+		vw_SetLightV(RealLightNum, eLightVParameter::POSITION, RenderLocation);
 	}
 
 	vw_LightEnable(RealLightNum, true);

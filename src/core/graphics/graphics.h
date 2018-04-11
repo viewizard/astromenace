@@ -41,6 +41,35 @@ enum class eOrigin {
 	bottom_left
 };
 
+enum class eMaterialParameter : GLenum {
+	AMBIENT = GL_AMBIENT,
+	DIFFUSE = GL_DIFFUSE,
+	SPECULAR = GL_SPECULAR,
+	EMISSION = GL_EMISSION,
+	SHININESS = GL_SHININESS
+};
+
+enum class eLightParameter : GLenum {
+	SPOT_EXPONENT = GL_SPOT_EXPONENT,
+	SPOT_CUTOFF = GL_SPOT_CUTOFF,
+	CONSTANT_ATTENUATION = GL_CONSTANT_ATTENUATION,
+	LINEAR_ATTENUATION = GL_LINEAR_ATTENUATION,
+	QUADRATIC_ATTENUATION = GL_QUADRATIC_ATTENUATION
+};
+
+enum class eLightVParameter : GLenum {
+	SPOT_EXPONENT = GL_SPOT_EXPONENT,
+	SPOT_CUTOFF = GL_SPOT_CUTOFF,
+	CONSTANT_ATTENUATION = GL_CONSTANT_ATTENUATION,
+	LINEAR_ATTENUATION = GL_LINEAR_ATTENUATION,
+	QUADRATIC_ATTENUATION = GL_QUADRATIC_ATTENUATION,
+	AMBIENT = GL_AMBIENT,
+	DIFFUSE = GL_DIFFUSE,
+	SPECULAR = GL_SPECULAR,
+	POSITION = GL_POSITION,
+	SPOT_DIRECTION = GL_SPOT_DIRECTION
+};
+
 struct sCoverageModes {
 	int ColorSamples;
 	int CoverageSamples;
@@ -251,20 +280,6 @@ struct sDevCaps {
 #define RI_MODELVIEW_MATRIX		0x1081
 #define RI_TEXTURE_MATRIX		0x1082
 
-// Light parametres
-#define RI_SPOT_EXPONENT		0x1090
-#define RI_SPOT_CUTOFF			0x1091
-#define RI_CONSTANT_ATTENUATION		0x1092
-#define RI_LINEAR_ATTENUATION		0x1093
-#define RI_QUADRATIC_ATTENUATION	0x1094
-#define RI_AMBIENT			0x1095
-#define RI_DIFFUSE			0x1096
-#define RI_SPECULAR			0x1097
-#define RI_POSITION			0x1098
-#define RI_DIRECTION			0x1099
-#define RI_EMISSION			0x109A
-#define RI_SHININESS			0x109B
-
 // VBO
 #define RI_ARRAY_BUFFER			1
 #define RI_ELEMENT_ARRAY_BUFFER		2
@@ -397,22 +412,14 @@ void vw_MultMatrix(float *params);
 
 // Set lighting status.
 void vw_Lighting(bool param);
-// Get lighting status.
-bool vw_GetLighting();
 // Enable light.
-void vw_LightEnable(int light, bool param);
-// Get light status.
-bool vw_GetLightEnable(int light);
-// Set light parametre by float.
-void vw_SetLight(int light, int pname, float param);
-// Set light parametre by vector.
-void vw_SetLightV(int light, int pname, const float *param);
-// Get light parametre by vector.
-void vw_GetLightV(int light, int pname, float *param);
-// Set matirial parametre by vector.
-void vw_MaterialV(int pname, const float *param);
-// Get matirial parametre by vector.
-void vw_GetMaterialV(int pname, float *param);
+void vw_LightEnable(GLenum light, bool param);
+// Set light parameter.
+void vw_SetLight(GLenum light, eLightParameter pname, GLfloat param);
+// Set light parameter by array.
+void vw_SetLightV(GLenum light, eLightVParameter pname, const GLfloat *param);
+// Set material parameter by array.
+void vw_MaterialV(eMaterialParameter pname, const GLfloat *param);
 
 /*
  * Buffer objects.
