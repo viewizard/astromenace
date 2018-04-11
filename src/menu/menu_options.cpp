@@ -63,7 +63,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	sRECT SrcRect, DstRect;
 	SrcRect(0,0,2,2);
 	DstRect(0,0,Setup.iAspectRatioWidth,768);
-	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);
 
 
 	int CurrentPos = 0;
@@ -92,9 +92,9 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			SrcRect(0,0,16,32);
 			DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 			if (Setup.MusicSw>i)
-				vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
+				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 			else
-				vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
+				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
 		}
 	}
 
@@ -125,9 +125,9 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			SrcRect(0,0,16,32);
 			DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 			if (Setup.VoiceSw>i)
-				vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
+				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 			else
-				vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
+				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
 		}
 	}
 
@@ -155,9 +155,9 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			SrcRect(0,0,16,32);
 			DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 			if (Setup.SoundSw>i)
-				vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
+				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 			else
-				vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
+				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
 		}
 	}
 
@@ -349,9 +349,9 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		SrcRect(0,0,16,32);
 		DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 		if (Setup.Brightness>i)
-			vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
+			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 		else
-			vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
+			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
 	}
 
 

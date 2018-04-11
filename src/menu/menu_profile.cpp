@@ -266,7 +266,7 @@ void ProfileInputText()
 	int Size = vw_FontSizeUTF32(NewProfileName);
 	sRECT SrcRect{0, 0, 2, 2};
 	sRECT DstRect{X1 + Size + 2, Y1 - 2, X1 + 26 + Size, Y1 + 24};
-	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"),
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/whitepoint.tga"),
 		  true, CurrentProfileNameTransp*MenuContentTransp);
 
 	float DeltaTime = vw_GetTimeThread(0) - LastProfileNameTime;
@@ -299,7 +299,7 @@ void ProfileMenu()
 {
 	sRECT SrcRect(2, 2, 861, 482);
 	sRECT DstRect(Setup.iAspectRatioWidth / 2 - 427, 160, Setup.iAspectRatioWidth / 2 + 432, 160 + 480);
-	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
 
 
 	int X1 = Setup.iAspectRatioWidth/2 - 372;
@@ -313,9 +313,9 @@ void ProfileMenu()
 	Y1 += 30;
 	SrcRect(0,0,2,2);
 	DstRect(X1-2,Y1-6,X1+2+590,Y1-2+30);
-	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.2f*MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.2f*MenuContentTransp);
 	DstRect(X1,Y1-4,X1+590,Y1-4+30);
-	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
 	// кнопка, создания новой записи
 	bool Off = false;
 	if (NewProfileName.empty())
@@ -372,9 +372,9 @@ void ProfileMenu()
 	Y1 += 30;
 	SrcRect(0,0,2,2);
 	DstRect(X1-2,Y1-6,X1+2+750,Y1-2+230);
-	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.2f*MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.2f*MenuContentTransp);
 	DstRect(X1,Y1-4,X1+750,Y1-4+230);
-	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
 	Y1 += 230;
 
 
@@ -452,7 +452,7 @@ void ProfileMenu()
 
 						DstRect(X1+2,Y1-233+46*i,X1+748,Y1-235+46+46*i);
 						if (CurrentProfile != i)
-							vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+							vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
 					} else {
 						// переход по 2-му клику
 						if (vw_GetMouseLeftDoubleClick(true)) {
@@ -477,7 +477,7 @@ void ProfileMenu()
 	if (CurrentProfile != -1) {
 		SrcRect(0,0,2,2);
 		DstRect(X1+2,Y1-233+46*CurrentProfile,X1+748,Y1-235+46+46*CurrentProfile);
-		vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
 	}
 
 

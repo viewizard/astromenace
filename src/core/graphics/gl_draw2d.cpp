@@ -118,14 +118,11 @@ static inline void AddToDrawBuffer(float CoordX, float CoordY, float TextureU, f
 /*
  * Draw transparent. Origin is upper left corner.
  */
-void vw_Draw2D(sRECT *DstRect, sRECT *SrcRect, GLtexture Texture, bool Alpha,
+void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bool Alpha,
 	       float Transp, float RotateAngle, const sRGBCOLOR &Color)
 {
 	if (!Texture || (Transp <= 0.0f))
 		return;
-
-	if (Transp > 1.0f)
-		Transp = 1.0f;
 
 	// bind texture before glGetTexLevelParameterfv() call
 	vw_BindTexture(0, Texture);
@@ -142,22 +139,23 @@ void vw_Draw2D(sRECT *DstRect, sRECT *SrcRect, GLtexture Texture, bool Alpha,
 	}
 
 	// texture's UV coordinates
-	float U_left = (SrcRect->left * 1.0f) / ImageWidth;
-	float V_top = (SrcRect->top * 1.0f) / ImageHeight;
-	float U_right = (SrcRect->right * 1.0f) / ImageWidth;
-	float V_bottom = (SrcRect->bottom * 1.0f) / ImageHeight;
+	float U_left = (SrcRect.left * 1.0f) / ImageWidth;
+	float V_top = (SrcRect.top * 1.0f) / ImageHeight;
+	float U_right = (SrcRect.right * 1.0f) / ImageWidth;
+	float V_bottom = (SrcRect.bottom * 1.0f) / ImageHeight;
 
 	// 'reset' buffer
 	DrawBufferCurrentPosition = 0;
 
 	// RI_TRIANGLE_STRIP (2 triangles)
-	AddToDrawBuffer(DstRect->left, DstRect->top, U_left, V_top);
-	AddToDrawBuffer(DstRect->left, DstRect->bottom, U_left, V_bottom);
-	AddToDrawBuffer(DstRect->right, DstRect->top, U_right, V_top);
-	AddToDrawBuffer(DstRect->right, DstRect->bottom, U_right, V_bottom);
+	AddToDrawBuffer(DstRect.left, DstRect.top, U_left, V_top);
+	AddToDrawBuffer(DstRect.left, DstRect.bottom, U_left, V_bottom);
+	AddToDrawBuffer(DstRect.right, DstRect.top, U_right, V_top);
+	AddToDrawBuffer(DstRect.right, DstRect.bottom, U_right, V_bottom);
 
 	// setup OpenGL
 	vw_SetTextureBlend(Alpha, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+	vw_Clamp(Transp, 0.0f, 1.0f);
 	vw_SetColor(Color.r, Color.g, Color.b, Transp);
 	glPushMatrix();
 	glRotatef(RotateAngle, 0, 0, 1);

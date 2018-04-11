@@ -1619,12 +1619,12 @@ void InformationMenu()
 {
 	sRECT SrcRect{0, 0, 2, 2};
 	sRECT DstRect{0, 0, Setup.iAspectRatioWidth, 768};
-	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
 
 
 	SrcRect(2,2,464-2,353-2);
 	DstRect((Setup.iAspectRatioWidth/2-432)-8,80-8,(Setup.iAspectRatioWidth/2-432)-8+464-4,80-8+353-4);
-	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/panel444_333_back.tga"), true, 0.9f*MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel444_333_back.tga"), true, 0.9f*MenuContentTransp);
 
 
 
@@ -2121,17 +2121,17 @@ void InformationDrawObject()
 	sRECT SrcRect;
 	SrcRect(2,2,482,371);
 	DstRect(Setup.iAspectRatioWidth/2-450,80-18,Setup.iAspectRatioWidth/2+30,80+351);
-	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/panel444_333_border.tga"), true, 1.0f*MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel444_333_border.tga"), true, 1.0f*MenuContentTransp);
 
 	// отрисовка стрелок
 	SrcRect(32,0,64,32);
-	vw_Draw2D(&DstRectLeft, &SrcRect, vw_FindTextureByName("menu/arrows_blue.tga"), true, fLeft*MenuContentTransp);
+	vw_Draw2D(DstRectLeft, SrcRect, vw_FindTextureByName("menu/arrows_blue.tga"), true, fLeft*MenuContentTransp);
 	SrcRect(96,0,128,32);
-	vw_Draw2D(&DstRectRight, &SrcRect, vw_FindTextureByName("menu/arrows_blue.tga"), true, fRight*MenuContentTransp);
+	vw_Draw2D(DstRectRight, SrcRect, vw_FindTextureByName("menu/arrows_blue.tga"), true, fRight*MenuContentTransp);
 	SrcRect(0,0,32,32);
-	vw_Draw2D(&DstRectUp, &SrcRect, vw_FindTextureByName("menu/arrows_blue.tga"), true, fUp*MenuContentTransp);
+	vw_Draw2D(DstRectUp, SrcRect, vw_FindTextureByName("menu/arrows_blue.tga"), true, fUp*MenuContentTransp);
 	SrcRect(64,0,96,32);
-	vw_Draw2D(&DstRectDown, &SrcRect, vw_FindTextureByName("menu/arrows_blue.tga"), true, fDown*MenuContentTransp);
+	vw_Draw2D(DstRectDown, SrcRect, vw_FindTextureByName("menu/arrows_blue.tga"), true, fDown*MenuContentTransp);
 
 	vw_End2DMode();
 

@@ -136,22 +136,22 @@ void Loop_Proc()
 
 		SrcRect(0,0,64,64 );
 		DstRect(mX-13,mY-13,mX+64-13,mY+64-13 );
-		vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/cursor_shadow.tga"), true, 1.0f);
+		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/cursor_shadow.tga"), true, 1.0f);
 		switch (CurrentCursorStatus) {
 		case 0:
-			vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, 0.80f, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
+			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, 0.80f, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
 			break;
 
 		case 1:
-			vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
+			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
 			break;
 
 		case 2:
-			vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, sRGBCOLOR{1.0f, 0.2f, 0.0f});
+			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, sRGBCOLOR{1.0f, 0.2f, 0.0f});
 			break;
 
 		case 3:
-			vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
+			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
 			break;
 		}
 	}

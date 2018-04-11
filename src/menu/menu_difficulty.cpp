@@ -43,7 +43,7 @@ void DifficultyMenu()
 {
 	sRECT SrcRect(2, 2, 861, 482);
 	sRECT DstRect(Setup.iAspectRatioWidth / 2 - 427, 160, Setup.iAspectRatioWidth / 2 + 432, 160 + 480);
-	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
 
 	int X1 = Setup.iAspectRatioWidth/2 - 372;
 	int Y1 = 217;

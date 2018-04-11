@@ -525,7 +525,7 @@ void vw_Start2DMode(GLdouble zNear, GLdouble zFar);
 // Switch back to 3D rendering mode.
 void vw_End2DMode();
 // Draw transparent. Origin is upper left corner.
-void vw_Draw2D(sRECT *DstRect, sRECT *SrcRect, GLtexture Texture, bool Alpha, float Transp = 1.0f,
+void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bool Alpha, float Transp = 1.0f,
 	       float RotateAngle = 0.0f, const sRGBCOLOR &Color = {1.0f, 1.0f, 1.0f});
 
 /*

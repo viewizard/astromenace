@@ -377,7 +377,7 @@ void MissionMenu()
 	sRECT SrcRect, DstRect;
 	SrcRect(2,2,863-2,484-2);
 	DstRect(Setup.iAspectRatioWidth/2-427,175-15,Setup.iAspectRatioWidth/2-427+863-4,175-15+484-4);
-	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
 
 
 
@@ -407,9 +407,9 @@ void MissionMenu()
 	// подложка для вывода описания миссий
 	SrcRect(0,0,2,2);
 	DstRect(X1-2,Y1-2,X1+2+710,Y1+2+320);
-	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.2f*MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.2f*MenuContentTransp);
 	DstRect(X1,Y1,X1+710,Y1+320);
-	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
 
 
 
@@ -422,7 +422,7 @@ void MissionMenu()
 
 			SrcRect(0,0,2,2);
 			DstRect(X1+1,Y1 + 64*ShowLine+1,X1+709,Y1 + 64*ShowLine+63);
-			vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
 		}
 
 
@@ -438,7 +438,7 @@ void MissionMenu()
 				DstRect(X1+2,Y1+2,X1+62,Y1+62);
 
 				if (MissionIcon[i] != nullptr)
-					vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName(MissionIcon[i]), true, 0.3f*MenuContentTransp);
+					vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(MissionIcon[i]), true, 0.3f*MenuContentTransp);
 
 
 				if (MissionTitleType[i] == 1)
@@ -480,7 +480,7 @@ void MissionMenu()
 					SrcRect(0,0,64,64);
 					DstRect(X1,Y1,X1+64,Y1+64);
 					if (MissionIcon != nullptr)
-						vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName(MissionIcon[i]), true, MenuContentTransp);
+						vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(MissionIcon[i]), true, MenuContentTransp);
 
 
 					if (MissionTitleType[i] == 1)
@@ -497,7 +497,7 @@ void MissionMenu()
 					if (CurrentMission != i) {
 						SrcRect(0,0,2,2);
 						DstRect(X1+64,Y1+1,X1+709,Y1+63);
-						vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+						vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
 					}
 					if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 
@@ -533,7 +533,7 @@ void MissionMenu()
 					SrcRect(0,0,64,64);
 					DstRect(X1+2,Y1+2,X1+62,Y1+62);
 					if (MissionIcon != nullptr)
-						vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName(MissionIcon[i]), true, 0.8f*MenuContentTransp);
+						vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(MissionIcon[i]), true, 0.8f*MenuContentTransp);
 
 
 					if (MissionTitleType[i] == 1)
@@ -594,7 +594,7 @@ void MissionMenu()
 	// выводим отображение положени в списке на полоске со стрелками
 	SrcRect(0,0,32,32);
 	DstRect(X1+750-32+4,Y1+32+((320.0f-64)/AllMission)*StartMission,X1+750-4,Y1+32+((320.0f-64)/AllMission)*(EndMission+1));
-	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.3f*MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/whitepoint.tga"), true, 0.3f*MenuContentTransp);
 
 	// обработка перетягивания ползунка отображения позиции списка
 	// если стоим на ползунком и нажали кнопку мышки - "захватываем"

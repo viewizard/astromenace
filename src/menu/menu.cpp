@@ -480,7 +480,7 @@ void DrawMenu()
 	    (MenuStatus != eMenuStatus::OPTIONS) &&
 	    (MenuStatus != eMenuStatus::CONFCONTROL) &&
 	    (MenuStatus != eMenuStatus::OPTIONS_ADVANCED)) {
-		vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/astromenace.tga"), true, MenuContentTransp);
+		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/astromenace.tga"), true, MenuContentTransp);
 	}
 
 	vw_End2DMode();
@@ -612,7 +612,7 @@ void DrawMenu()
 
 		SrcRect(0,0,2,2);
 		DstRect(0,0,Setup.iAspectRatioWidth,768);
-		vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, MenuBlackTransp);
+		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, MenuBlackTransp);
 
 		vw_End2DMode();
 	}
@@ -632,7 +632,7 @@ void DrawMenu()
 
 		SrcRect(0,0,2,2);
 		DstRect(0,0,Setup.iAspectRatioWidth,768);
-		vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, MenuBlackTransp);
+		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, MenuBlackTransp);
 
 		vw_End2DMode();
 	}
