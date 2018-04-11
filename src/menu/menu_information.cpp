@@ -1748,7 +1748,8 @@ void InformationDrawObject()
 	vw_GetAspectWH(&AW, &AH);
 
 
-	vw_SetViewport((int)((Setup.iAspectRatioWidth/2-432)/(AW/AWw)), (int)(80/(AH/AHw)), (int)(444/(AW/AWw)), (int)(333/(AH/AHw)), 0.0f, 1.0f, RI_UL_CORNER);
+	vw_SetViewport((GLint)((Setup.iAspectRatioWidth / 2 - 432) / (AW / AWw)), (GLint)(80 / (AH / AHw)),
+		       (GLsizei)(444 / (AW / AWw)), (GLsizei)(333 / (AH / AHw)));
 	vw_ResizeScene(45.0f, 444.0f/333.0f, 1.0f, 2000.0f);
 	vw_Clear(RI_DEPTH_BUFFER);
 

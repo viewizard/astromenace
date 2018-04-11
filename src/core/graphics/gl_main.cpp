@@ -72,8 +72,8 @@ float CurrentGammaGL = 1.0f;
 float CurrentContrastGL = 1.0f;
 float CurrentBrightnessGL = 1.0f;
 
-float fScreenWidthGL = 0.0f;
-float fScreenHeightGL = 0.0f;
+GLsizei ScreenWidthGL{0};
+GLsizei ScreenHeightGL{0};
 
 
 // состояние устройства (гамма)
@@ -121,8 +121,8 @@ bool ExtensionSupported( const char *Extension)
 int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int VSync)
 {
 	// самым первым делом - запоминаем все
-	fScreenWidthGL = Width*1.0f;
-	fScreenHeightGL = Height*1.0f;
+	ScreenWidthGL = Width;
+	ScreenHeightGL = Height;
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// устанавливаем режим и делаем окно
@@ -573,8 +573,8 @@ void vw_ChangeSize(int nWidth, int nHeight)
 	// перемещаем его вверх
 	glViewport(buff[0], nHeight - buff[3], (GLsizei)buff[2], (GLsizei)buff[3]);
 
-	fScreenWidthGL = nWidth*1.0f;
-	fScreenHeightGL = nHeight*1.0f;
+	ScreenWidthGL = nWidth;
+	ScreenHeightGL = nHeight;
 }
 
 
@@ -749,13 +749,13 @@ void vw_GetGammaRamp(float *Gamma, float *Contrast, float *Brightness)
 //------------------------------------------------------------------------------------
 // Установка параметров вьюпорта
 //------------------------------------------------------------------------------------
-void vw_SetViewport(int x, int y, int width, int height, float znear, float zfar, int Corner)
+void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height, GLdouble near, GLdouble far, eOrigin Origin)
 {
-	if (Corner == RI_UL_CORNER)
-		y = (int)(fScreenHeightGL - y - height);
+	if (Origin == eOrigin::upper_left)
+		y = (GLint)(ScreenHeightGL - y - height);
 
-	glViewport(x, y, (GLsizei)width, (GLsizei)height);
-	glDepthRange(znear, zfar);
+	glViewport(x, y, width, height);
+	glDepthRange(near, far);
 }
 
 

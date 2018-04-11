@@ -36,6 +36,11 @@ struct sRECT;
 struct sVECTOR3D;
 class cTexture;
 
+enum class eOrigin {
+	upper_left,
+	bottom_left
+};
+
 struct sCoverageModes {
 	int ColorSamples;
 	int CoverageSamples;
@@ -83,12 +88,6 @@ struct sDevCaps {
 	// поддержка генерации мипмеп в железе
 	bool HardwareMipMapGeneration;
 };
-
-
-// Origin is upper left corner.
-#define RI_UL_CORNER		0x1011
-// Origin is bottom left corner.
-#define RI_BL_CORNER		0x1012
 
 // Buffer clear bit
 #define RI_COLOR_BUFFER		0x1000
@@ -297,7 +296,8 @@ void vw_SetGammaRamp(float Gamma, float Contrast, float Brightness);
 void vw_GetGammaRamp(float *Gamma, float *Contrast, float *Brightness);
 
 // Set viewport data.
-void vw_SetViewport(int x, int y, int width, int height, float znear, float zfar, int Corner = RI_UL_CORNER);
+void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height,
+		    GLdouble near = 0, GLdouble far = 1, eOrigin Origin = eOrigin::upper_left);
 // Get viewport data.
 void vw_GetViewport(int *x = nullptr, int *y = nullptr, int *width = nullptr, int *height = nullptr,
 		    float *znear = nullptr, float *zfar = nullptr);
