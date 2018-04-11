@@ -240,7 +240,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	sRECT SrcRect, DstRect;
 	SrcRect(0,0,2,2);
 	DstRect(0,0,Setup.iAspectRatioWidth,768);
-	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);
+	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);
 
 
 
@@ -269,9 +269,9 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		SrcRect(0,0,16,32);
 		DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 		if (Setup.JoystickDeadZone > i)
-			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
+			vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 		else
-			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
+			vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
 	}
 
 
@@ -292,9 +292,9 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		SrcRect(0,0,16,32);
 		DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
 		if (Setup.ControlSensivity > i)
-			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
+			vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 		else
-			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
+			vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
 	}
 
 

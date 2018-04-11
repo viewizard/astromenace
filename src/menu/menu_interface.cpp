@@ -45,7 +45,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	sRECT SrcRect, DstRect;
 	SrcRect(0,0,2,2);
 	DstRect(0,0,Setup.iAspectRatioWidth,768);
-	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);
+	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);
 
 	int X1 = Setup.iAspectRatioWidth/2 - 375;
 	int Y1 = 65;

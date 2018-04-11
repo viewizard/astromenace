@@ -1034,22 +1034,22 @@ void DrawGame()
 	if (Setup.iAspectRatioWidth == 1024) {
 		SrcRect(0, 0, 1024, 74);
 		DstRect(0, 0, 1024, 74);
-		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/game_panel.tga"), true, 1.0f);
+		vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("game/game_panel.tga"), true, 1.0f);
 	}
 	if (Setup.iAspectRatioWidth == 1228) {
 		SrcRect(0, 0, 466, 73);
 		DstRect(0, 0, 466, 73);
-		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/game_panel2.tga"), true, 1.0f);
+		vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("game/game_panel2.tga"), true, 1.0f);
 
 
 		SrcRect(1, 74, 150, 145);
 		DstRect(540, 0, 540+149, 71);
-		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/game_panel2.tga"), true, 1.0f);
+		vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("game/game_panel2.tga"), true, 1.0f);
 
 
 		SrcRect(150, 74, 610, 145);
 		DstRect(768, 0, 768+460, 71);
-		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("game/game_panel2.tga"), true, 1.0f);
+		vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("game/game_panel2.tga"), true, 1.0f);
 	}
 
 
@@ -1431,7 +1431,7 @@ void DrawGame()
 			// выводим подложку меню
 			SrcRect(2, 2, 564-2, 564-2);
 			DstRect(Setup.iAspectRatioWidth / 2 - 256 - 26, 128 - 28, Setup.iAspectRatioWidth / 2 - 256 + 534, 128 + 532);
-			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
+			vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
 					   true, 1.0f*GameContentTransp);
 			// название меню
 			int Size = vw_FontSize(vw_GetText("1_Mission_Complete"));
@@ -1512,8 +1512,8 @@ void DrawGame()
 				// выводим подложку меню
 				SrcRect(2,2,564-2,564-2);
 				DstRect(Setup.iAspectRatioWidth/2-256+4-30,128+2-30,Setup.iAspectRatioWidth/2-256+564-30,128+564-2-30);
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
-						   true, GameContentTransp);
+				vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
+					  true, GameContentTransp);
 				// название меню
 				int SizeI = 17 + (234-vw_FontSize(vw_GetText("1_GAME_MENU")))/2;
 				vw_DrawFont(Setup.iAspectRatioWidth/2-256+SizeI, 128+22, 0, 0, 1.0f, 1.0f,1.0f,0.0f, 0.7f*GameContentTransp, vw_GetText("1_GAME_MENU"));
@@ -1596,9 +1596,9 @@ void DrawGame()
 			SrcRect(0, 0, 256, 64);
 			DstRect(Setup.iAspectRatioWidth - 256 + 60, 768 - 54, Setup.iAspectRatioWidth + 60, 768+10);
 			if (GameContentTransp == 1.0f)
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_pause.tga")), true, CurrentAlert2*GameContentTransp);
+				vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_pause.tga")), true, CurrentAlert2*GameContentTransp);
 			else
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_pause.tga")), true, GameContentTransp);
+				vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_pause.tga")), true, GameContentTransp);
 
 		}
 
@@ -1676,7 +1676,7 @@ void DrawGame()
 
 		SrcRect(0,0,2,2);
 		DstRect(0,0,Setup.iAspectRatioWidth,768);
-		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, GameBlackTransp);
+		vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, GameBlackTransp);
 	}
 
 	// черное затемнение, если нужно
@@ -1693,7 +1693,7 @@ void DrawGame()
 
 		SrcRect(0,0,2,2);
 		DstRect(0,0,Setup.iAspectRatioWidth,768);
-		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, GameBlackTransp);
+		vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, GameBlackTransp);
 	}
 
 

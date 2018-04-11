@@ -118,8 +118,8 @@ static inline void AddToDrawBuffer(float CoordX, float CoordY, float TextureU, f
 /*
  * Draw transparent. Origin is upper left corner.
  */
-void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, GLtexture Texture, bool Alpha,
-			float Transp, float RotateAngle, const sRGBCOLOR &Color)
+void vw_Draw2D(sRECT *DstRect, sRECT *SrcRect, GLtexture Texture, bool Alpha,
+	       float Transp, float RotateAngle, const sRGBCOLOR &Color)
 {
 	if (!Texture || (Transp <= 0.0f))
 		return;

@@ -93,7 +93,7 @@ void TopScoresMenu()
 	sRECT SrcRect, DstRect;
 	SrcRect(0,0,2,2);
 	DstRect(0,0,Setup.iAspectRatioWidth,768);
-	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
 
 
 	int X1 = Setup.iAspectRatioWidth/2 - 362;

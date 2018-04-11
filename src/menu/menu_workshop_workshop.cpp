@@ -382,7 +382,7 @@ void Workshop_Workshop()
 {
 	sRECT SrcRect(0, 0, 256, 256);
 	sRECT DstRect(Setup.iAspectRatioWidth / 2 - 256, 0, Setup.iAspectRatioWidth / 2 - 256 + 512, 412);
-	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/back_spot.tga"), true, 0.35f*MenuContentTransp);
+	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/back_spot.tga"), true, 0.35f*MenuContentTransp);
 
 
 
@@ -393,7 +393,7 @@ void Workshop_Workshop()
 
 	SrcRect(0,0,210,600);
 	DstRect(Setup.iAspectRatioWidth/2-492,50-10,Setup.iAspectRatioWidth/2-492+210,50+600-10);
-	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/workshop_panel2.tga"), true, MenuContentTransp);
+	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/workshop_panel2.tga"), true, MenuContentTransp);
 
 
 
@@ -426,7 +426,7 @@ void Workshop_Workshop()
 	if (CurrentSystemStockNum == GetCurrentSustemStockNumBase()) {
 		Current = 1.0f;
 	}
-	vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()), true, MenuContentTransp*Current);
+	vw_Draw2D(&DstRect, &SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()), true, MenuContentTransp*Current);
 	int Size = vw_FontSize(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase())));
 	float WScale = 0;
 	if (Size > 128) {
@@ -465,7 +465,7 @@ void Workshop_Workshop()
 	if (CurrentSystemStockNum == GetCurrentSustemStockNumBase()+1) {
 		Current = 1.0f;
 	}
-	vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()+1), true, MenuContentTransp*Current);
+	vw_Draw2D(&DstRect, &SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()+1), true, MenuContentTransp*Current);
 	Size = vw_FontSize(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase()+1)));
 	WScale = 0;
 	if (Size > 128) {
@@ -504,7 +504,7 @@ void Workshop_Workshop()
 	if (CurrentSystemStockNum == GetCurrentSustemStockNumBase()+2) {
 		Current = 1.0f;
 	}
-	vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()+2), true, MenuContentTransp*Current);
+	vw_Draw2D(&DstRect, &SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()+2), true, MenuContentTransp*Current);
 	Size = vw_FontSize(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase()+2)));
 	WScale = 0;
 	if (Size > 128) {
@@ -543,7 +543,7 @@ void Workshop_Workshop()
 	if (CurrentSystemStockNum == GetCurrentSustemStockNumBase()+3) {
 		Current = 1.0f;
 	}
-	vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()+3), true, MenuContentTransp*Current);
+	vw_Draw2D(&DstRect, &SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()+3), true, MenuContentTransp*Current);
 	Size = vw_FontSize(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase()+3)));
 	WScale = 0;
 	if (Size > 128) {
@@ -573,7 +573,7 @@ void Workshop_Workshop()
 
 	SrcRect(0,0,210,600);
 	DstRect(Setup.iAspectRatioWidth/2+282,50-10,Setup.iAspectRatioWidth/2+492,50+600-10);
-	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/workshop_panel2+.tga"), true, MenuContentTransp);
+	vw_Draw2D(&DstRect, &SrcRect, vw_FindTextureByName("menu/workshop_panel2+.tga"), true, MenuContentTransp);
 
 
 
@@ -762,7 +762,7 @@ void Workshop_Workshop()
 		}
 	}
 	if (Setup.Profile[CurrentProfile].EngineSystem <= 0) {
-		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(-4), true, Current*MenuContentTransp);
+		vw_Draw2D(&DstRect, &SrcRect, GetSystemIcon(-4), true, Current*MenuContentTransp);
 
 		Size = vw_FontSize(vw_GetText("3_empty"));
 		WScale = 0;
@@ -780,7 +780,7 @@ void Workshop_Workshop()
 		}
 		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText("4_Spaceship_Engine"));
 	} else {
-		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].EngineSystem), true, Current*MenuContentTransp);
+		vw_Draw2D(&DstRect, &SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].EngineSystem), true, Current*MenuContentTransp);
 
 		Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].EngineSystem)));
 		WScale = 0;
@@ -839,7 +839,7 @@ void Workshop_Workshop()
 	}
 
 	if (Setup.Profile[CurrentProfile].PowerSystem <= 0) {
-		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(-2), true, Current*MenuContentTransp);
+		vw_Draw2D(&DstRect, &SrcRect, GetSystemIcon(-2), true, Current*MenuContentTransp);
 
 		Size = vw_FontSize(vw_GetText("3_empty"));
 		WScale = 0;
@@ -857,7 +857,7 @@ void Workshop_Workshop()
 		}
 		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText("4_Power_Source"));
 	} else {
-		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].PowerSystem+4), true, Current*MenuContentTransp);
+		vw_Draw2D(&DstRect, &SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].PowerSystem+4), true, Current*MenuContentTransp);
 
 		Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].PowerSystem+4)));
 		WScale = 0;
@@ -909,7 +909,7 @@ void Workshop_Workshop()
 	}
 
 	if (Setup.Profile[CurrentProfile].TargetingSystem <= 0) {
-		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(-1), true, Current*MenuContentTransp);
+		vw_Draw2D(&DstRect, &SrcRect, GetSystemIcon(-1), true, Current*MenuContentTransp);
 
 		Size = vw_FontSize(vw_GetText("3_empty"));
 		WScale = 0;
@@ -927,7 +927,7 @@ void Workshop_Workshop()
 		}
 		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText("4_Optical_Computer"));
 	} else {
-		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].TargetingSystem+8), true, Current*MenuContentTransp);
+		vw_Draw2D(&DstRect, &SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].TargetingSystem+8), true, Current*MenuContentTransp);
 
 		Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].TargetingSystem+8)));
 		WScale = 0;
@@ -979,7 +979,7 @@ void Workshop_Workshop()
 	}
 
 	if (Setup.Profile[CurrentProfile].TargetingMechanicSystem <= 0) {
-		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(-3), true, Current*MenuContentTransp);
+		vw_Draw2D(&DstRect, &SrcRect, GetSystemIcon(-3), true, Current*MenuContentTransp);
 
 		Size = vw_FontSize(vw_GetText("3_empty"));
 		WScale = 0;
@@ -997,7 +997,7 @@ void Workshop_Workshop()
 		}
 		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText("4_Targeting_System"));
 	} else {
-		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].TargetingMechanicSystem+12), true, Current*MenuContentTransp);
+		vw_Draw2D(&DstRect, &SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].TargetingMechanicSystem+12), true, Current*MenuContentTransp);
 
 		Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].TargetingMechanicSystem+12)));
 		WScale = 0;
@@ -1057,7 +1057,7 @@ void Workshop_Workshop()
 	}
 
 	if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem <= 0) {
-		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(0), true, Current*MenuContentTransp);
+		vw_Draw2D(&DstRect, &SrcRect, GetSystemIcon(0), true, Current*MenuContentTransp);
 
 		Size = vw_FontSize(vw_GetText("3_empty"));
 		WScale = 0;
@@ -1076,7 +1076,7 @@ void Workshop_Workshop()
 		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText("4_Advanced_System"));
 
 	} else {
-		vw_DrawTransparent(&DstRect, &SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16), true, Current*MenuContentTransp);
+		vw_Draw2D(&DstRect, &SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16), true, Current*MenuContentTransp);
 
 		Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16)));
 		WScale = 0;
