@@ -122,7 +122,7 @@ struct sVECTOR3D {
  * Misc functions.
  */
 
-// Note, we use left-top as starting point, this is why sRECT
+// Note, we use left-top as starting point (upper left is origin), this is why sRECT
 // keeps together pairs "left-top" and "right-bottom".
 struct sRECT {
 	int right{0}, top{0}, left{0}, bottom{0};

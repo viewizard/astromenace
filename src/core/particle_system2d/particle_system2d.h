@@ -66,7 +66,7 @@ class cParticleSystem2D {
 public:
 	// Update all particles.
 	void Update(float Time);
-	// Draw all particles.
+	// Draw all particles. Origin is upper left corner.
 	void Draw();
 	// Set rotation.
 	void SetRotation(const sVECTOR3D &NewAngle);

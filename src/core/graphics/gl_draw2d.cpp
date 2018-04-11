@@ -32,260 +32,139 @@
 #include "../texture/texture.h"
 #include "graphics.h"
 
+namespace {
+
+constexpr unsigned int DrawBufferSize{16}; // RI_2f_XYZ | RI_2f_TEX = (2 + 2) * 4 vertices = 16
+float DrawBuffer[DrawBufferSize];
+unsigned int DrawBufferCurrentPosition{0};
+
+} // unnamed namespace
 
 
-
-
-
-//------------------------------------------------------------------------------------
-// Переход на 2D режима вывода
-//------------------------------------------------------------------------------------
-void vw_Start2DMode(float nZ1, float nZ2)
+/*
+ * Switch to 2D rendering mode. Origin is upper left corner.
+ */
+void vw_Start2DMode(GLdouble zNear, GLdouble zFar)
 {
-	// запоминаем состояние флагов
 	glPushAttrib(GL_ENABLE_BIT);
-	// и выключаем "ненужные"
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
 
-	// берем размер вьюпорта
-	int X, Y, W, H;
-	vw_GetViewport(&X, &Y, &W, &H);
+	// get current viewport start point and size
+	int ViewportX, ViewportY, ViewportWidth, ViewportHeight;
+	vw_GetViewport(&ViewportX, &ViewportY, &ViewportWidth, &ViewportHeight);
 
-	// переводим его в флоат для расчетов (нужно чтобы результаты были флоат)
-	float AWw = W*1.0f;
-	float AHw = H*1.0f;
-
-	glMatrixMode(GL_PROJECTION);								//select the projection matrix
-	glPushMatrix();												//store the projection matrix
-	glLoadIdentity();											//reset the projection matrix
-
-	// смотрим, была ли установка на фиксированный внутренний размер
-	float AW;
-	float AH;
-	bool ASpresent = vw_GetAspectWH(&AW, &AH);
-
-
-	if (ASpresent)
-		glOrtho(X*(AW/AWw), (X+W)*(AW/AWw), Y*(AH/AHw), (Y+H)*(AH/AHw), nZ1, nZ2);
-	else
-		glOrtho(0, AWw, 0, AHw, nZ1, nZ2);	//set up an ortho screen
-
-	glMatrixMode(GL_MODELVIEW);				//select the modelview matrix
+	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
 
+	float AW{0.0f};
+	float AH{0.0f};
+
+	// care about fixed aspect ratio, that could be setted up
+	// change origin to upper left corner
+	if (vw_GetAspectWH(&AW, &AH))
+		glOrtho(ViewportX * AW / ViewportWidth, (ViewportX + ViewportWidth) * AW / ViewportWidth,
+			(ViewportY + ViewportHeight) * AH / ViewportHeight, ViewportY * AH / ViewportHeight,
+			zNear, zFar);
+	else
+		glOrtho(0, ViewportWidth, ViewportHeight, 0, zNear, zFar);
+
+	// change textures origin to upper left corner
+	glMatrixMode(GL_TEXTURE);
+	glPushMatrix();
+	glLoadIdentity();
+	glScalef(1.0, -1.0, 1.0);
+	glTranslatef(0.0f, -1.0f, 0.0f);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
 }
 
-
-
-//------------------------------------------------------------------------------------
-// Возвращение в обычный (3D) режим вывода
-//------------------------------------------------------------------------------------
+/*
+ * Switch back to 3D rendering mode.
+ * Restore matrices and attributes in reverse to vw_Start2DMode() sequence.
+ */
 void vw_End2DMode()
 {
-	glMatrixMode(GL_MODELVIEW);				//select the modelview matrix
+	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
 
-	glMatrixMode(GL_PROJECTION);			//select the projection matrix
-	glPopMatrix();							//restore the old projection matrix
+	glMatrixMode(GL_TEXTURE);
+	glPopMatrix();
 
-	glMatrixMode(GL_MODELVIEW);				//select the modelview matrix
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
 
-	// восстанавливаем флаги
+	glMatrixMode(GL_MODELVIEW);
+
 	glPopAttrib();
 }
 
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Прорисовка в 2д
-//------------------------------------------------------------------------------------
-void vw_Draw(int X, int Y, sRECT *SrcRect, GLtexture Texture, bool Alpha, float RotateAngle, int DrawCorner)
+/*
+ * Add data to local draw buffer.
+ */
+static inline void AddToDrawBuffer(float CoordX, float CoordY, float TextureU, float TextureV)
 {
-	if (!Texture)
-		return;
-
-	float AW;
-	float AH;
-	bool ASpresent = vw_GetAspectWH(&AW, &AH);
-
-	int W, H;
-	vw_GetViewport(nullptr, nullptr, &W, &H);
-	float AHw = H*1.0f;
-
-	// Установка текстуры и ее свойств...
-	vw_BindTexture(0, Texture);
-	vw_SetTextureBlend(Alpha, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
-
-
-	// Вычисление поправки по У в зависимости от DrawCorner
-	// - расположения угла начала координат
-	float tmpPosY = 0;
-	// изменяем только в случае RI_UL_CORNER
-	if (DrawCorner == RI_UL_CORNER) {
-		if (ASpresent) tmpPosY = (AH - Y - Y - (SrcRect->bottom - SrcRect->top));
-		else tmpPosY = (AHw - Y - Y - (SrcRect->bottom - SrcRect->top));
-	}
-
-
-	float ImageHeight{0.0f};
-	float ImageWidth{0.0f};
-	// if texture loaded via textures manager, get data from it
-	if (!vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight)) {
-		// get Width and Height for 0 mipmap level
-		// call glGetTexLevelParameterfv() is generally not recommended, since it could stall the OpenGL pipeline
-		glGetTexLevelParameterfv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &ImageWidth);
-		glGetTexLevelParameterfv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &ImageHeight);
-	}
-
-	float FrameHeight = (SrcRect->bottom*1.0f)/ImageHeight;
-	float FrameWidth = (SrcRect->right*1.0f)/ImageWidth;
-
-	float Yst = (SrcRect->top)/ImageHeight;
-	float Xst = (SrcRect->left)/ImageWidth;
-
-
-	// буфер для последовательности RI_TRIANGLE_STRIP
-	// войдет RI_2f_XYZ | RI_2f_TEX
-	float *tmp = new float[(2+2)*4];
-	int k = 0;
-
-	tmp[k++] = X;
-	tmp[k++] = Y +tmpPosY + (SrcRect->bottom - SrcRect->top);
-	tmp[k++] = Xst;
-	tmp[k++] = 1.0f-Yst;
-
-	tmp[k++] = X;
-	tmp[k++] = Y +tmpPosY;
-	tmp[k++] = Xst;
-	tmp[k++] = 1.0f-FrameHeight;
-
-	tmp[k++] = X + (SrcRect->right - SrcRect->left);
-	tmp[k++] = Y +tmpPosY + (SrcRect->bottom - SrcRect->top);
-	tmp[k++] = FrameWidth;
-	tmp[k++] = 1.0f-Yst;
-
-	tmp[k++] = X + (SrcRect->right - SrcRect->left);
-	tmp[k++] = Y +tmpPosY;
-	tmp[k++] = FrameWidth;
-	tmp[k++] = 1.0f-FrameHeight;
-
-	glPushMatrix();
-	glRotatef(RotateAngle, 0, 0, 1);
-
-	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(tmp[0]));
-	glPopMatrix();
-
-
-	delete [] tmp;
-	vw_SetTextureBlend(false, 0, 0);
-	vw_BindTexture(0, 0);
+	DrawBuffer[DrawBufferCurrentPosition++] = CoordX;
+	DrawBuffer[DrawBufferCurrentPosition++] = CoordY;
+	DrawBuffer[DrawBufferCurrentPosition++] = TextureU;
+	DrawBuffer[DrawBufferCurrentPosition++] = TextureV;
 }
 
-
-
-
-
-//------------------------------------------------------------------------------------
-// Прорисовка в 2д с прозрачностью
-//------------------------------------------------------------------------------------
+/*
+ * Draw transparent. Origin is upper left corner.
+ */
 void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, GLtexture Texture, bool Alpha,
-			float Transp, float RotateAngle, int DrawCorner, float R, float G, float B)
+			float Transp, float RotateAngle, float R, float G, float B)
 {
-
 	if (!Texture || (Transp <= 0.0f))
 		return;
+
 	if (Transp > 1.0f)
 		Transp = 1.0f;
 
-	float AW;
-	float AH;
-	bool ASpresent = vw_GetAspectWH(&AW, &AH);
-
-	int W, H;
-	vw_GetViewport(nullptr, nullptr, &W, &H);
-	float AHw = H*1.0f;
-
-	int X = DstRect->left;
-	int Y = DstRect->top;
-
-	// Установка текстуры и ее свойств...
+	// bind texture before glGetTexLevelParameterfv() call
 	vw_BindTexture(0, Texture);
-	vw_SetTextureBlend(Alpha, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
-
-	// Вычисление поправки по У в зависимости от DrawCorner
-	// - расположения угла начала координат
-	float tmpPosY = 0;
-	// изменяем только в случае RI_UL_CORNER
-	if (DrawCorner == RI_UL_CORNER) {
-		if (ASpresent) tmpPosY = (AH - Y - Y - (DstRect->bottom - DstRect->top));
-		else tmpPosY = (AHw - Y - Y - (DstRect->bottom - DstRect->top));
-	}
-
-
 
 	float ImageHeight{0.0f};
 	float ImageWidth{0.0f};
 	// if texture loaded via textures manager, get data from it
 	if (!vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight)) {
 		// get Width and Height for 0 mipmap level
-		// call glGetTexLevelParameterfv() is generally not recommended, since it could stall the OpenGL pipeline
+		// call glGetTexLevelParameterfv() is generally not recommended,
+		// since it could stall the OpenGL pipeline
 		glGetTexLevelParameterfv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &ImageWidth);
 		glGetTexLevelParameterfv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &ImageHeight);
 	}
 
-	float FrameHeight = (SrcRect->bottom*1.0f )/ImageHeight;
-	float FrameWidth = (SrcRect->right*1.0f )/ImageWidth;
+	// texture's UV coordinates
+	float U_left = (SrcRect->left * 1.0f) / ImageWidth;
+	float V_top = (SrcRect->top * 1.0f) / ImageHeight;
+	float U_right = (SrcRect->right * 1.0f) / ImageWidth;
+	float V_bottom = (SrcRect->bottom * 1.0f) / ImageHeight;
 
-	float Yst = (SrcRect->top*1.0f)/ImageHeight;
-	float Xst = (SrcRect->left*1.0f)/ImageWidth;
+	// 'reset' buffer
+	DrawBufferCurrentPosition = 0;
 
+	// RI_TRIANGLE_STRIP (2 triangles)
+	AddToDrawBuffer(DstRect->left, DstRect->top, U_left, V_top);
+	AddToDrawBuffer(DstRect->left, DstRect->bottom, U_left, V_bottom);
+	AddToDrawBuffer(DstRect->right, DstRect->top, U_right, V_top);
+	AddToDrawBuffer(DstRect->right, DstRect->bottom, U_right, V_bottom);
 
+	// setup OpenGL
+	vw_SetTextureBlend(Alpha, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
 	vw_SetColor(R, G, B, Transp);
-
-	// буфер для последовательности RI_TRIANGLE_STRIP
-	// войдет RI_2f_XYZ | RI_2f_TEX
-	float *tmp = new float[(2+2)*4];
-	int k=0;
-
-	tmp[k++] = X;
-	tmp[k++] = Y +tmpPosY + (DstRect->bottom - DstRect->top);
-	tmp[k++] = Xst;
-	tmp[k++] = 1.0f-Yst;
-
-	tmp[k++] = X;
-	tmp[k++] = Y +tmpPosY;
-	tmp[k++] = Xst;
-	tmp[k++] = 1.0f-FrameHeight;
-
-	tmp[k++] = X + (DstRect->right - DstRect->left);
-	tmp[k++] = Y +tmpPosY + (DstRect->bottom - DstRect->top);
-	tmp[k++] = FrameWidth;
-	tmp[k++] = 1.0f-Yst;
-
-	tmp[k++] = X + (DstRect->right - DstRect->left);
-	tmp[k++] = Y +tmpPosY;
-	tmp[k++] = FrameWidth;
-	tmp[k++] = 1.0f-FrameHeight;
-
-
 	glPushMatrix();
 	glRotatef(RotateAngle, 0, 0, 1);
 
-	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, tmp, 4*sizeof(tmp[0]));
+	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, DrawBuffer, DrawBufferSize);
 
+	// restore previous OpenGL states
 	glPopMatrix();
-
-
-
-	delete [] tmp;
-
 	vw_SetTextureBlend(false, 0, 0);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 	vw_BindTexture(0, 0);
-
 }

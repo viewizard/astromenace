@@ -85,9 +85,9 @@ struct sDevCaps {
 };
 
 
-// Point 0-0 in the upper left corner
+// Origin is upper left corner.
 #define RI_UL_CORNER		0x1011
-// Point 0-0 in the bottom left corner
+// Origin is bottom left corner.
 #define RI_BL_CORNER		0x1012
 
 // Buffer clear bit
@@ -275,145 +275,141 @@ struct sDevCaps {
  * Common functions.
  */
 
-// Initialization renderer
+// Initialization renderer.
 int vw_InitWindow(const char *Title, int Width, int Height, int *Bits, bool FullScreenFlag,
 		  int CurrentVideoModeX, int CurrentVideoModeY, int VSync);
 SDL_Window *vw_GetSDL2Windows();
 void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA);
-// Shutdown renderer dll
+// Shutdown renderer.
 void vw_ShutdownRenderer();
-// Get device capability
+// Get device capability.
 const sDevCaps *vw_GetDevCaps();
 
 void vw_SetAspectRatio(float nWidth, float nHeight, bool Value);
 bool vw_GetAspectWH(float *ARWidth, float *ARHeight);
 
-// Get rendered primitives count
+// Get rendered primitives count.
 int vw_GetPrimCount();
 
-// Set gamma ramp
+// Set gamma ramp.
 void vw_SetGammaRamp(float Gamma, float Contrast, float Brightness);
-// Get gamma ramp
+// Get gamma ramp.
 void vw_GetGammaRamp(float *Gamma, float *Contrast, float *Brightness);
 
-// Set viewport data
+// Set viewport data.
 void vw_SetViewport(int x, int y, int width, int height, float znear, float zfar, int Corner = RI_UL_CORNER);
-// Get viewport data
+// Get viewport data.
 void vw_GetViewport(int *x = nullptr, int *y = nullptr, int *width = nullptr, int *height = nullptr,
 		    float *znear = nullptr, float *zfar = nullptr);
-// Resize scene
+// Resize scene.
 void vw_ResizeScene(float nfAngle, float AR, float nfNearClip, float nfFarClip);
-// Function for window WM_SIZE message only
+// Function for window WM_SIZE message only.
 void vw_OnChangeSize(int nWidth, int nHeight);
 
 /*
  * Rendering.
  */
 
-// Begin rendering
+// Begin rendering.
 void vw_BeginRendering(int  mask);
-// End rendering
+// End rendering.
 void vw_EndRendering();
-// Clear buffer
+// Clear buffer.
 void vw_Clear(int mask);
-// Start 2D rendering mode
-void vw_Start2DMode(float nZ1, float nZ2);
-// End 2D rendering mode
-void vw_End2DMode();
-// Set scene clear color
+// Set scene clear color.
 void vw_SetClearColor(float nRed, float nGreen, float nBlue, float nAlpha);
-// Set scene color mask
+// Set scene color mask.
 void vw_SetColorMask(bool red, bool green, bool blue, bool alpha);
 
 /*
  * Textures.
  */
 
-// Create texture
+// Create texture.
 GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int Bytes, int CompressionType);
-// Bind texture
+// Bind texture.
 void vw_BindTexture(uint32_t Stage, GLtexture TextureID);
-// Delete texture
+// Delete texture.
 void vw_DeleteTexture(GLtexture TextureID);
-// Set texture filtering mode
+// Set texture filtering mode.
 void vw_SetTextureFiltering(int nFiltering);
-// Set texture Anisotropy Level
+// Set texture Anisotropy Level.
 void vw_SetTextureAnisotropy(int AnisotropyLevel);
-// Set texture address mode
+// Set texture address mode.
 void vw_SetTextureAddressMode(int nAddressMode);
-// Set texture Alpha Test value that specifies a reference alpha value against which pixels are tested
+// Set texture Alpha Test value that specifies a reference alpha value against which pixels are tested.
 void vw_SetTextureAlphaTest(bool Flag, float Value);
-// Set texture blending factor
+// Set texture blending factor.
 void vw_SetTextureBlend(bool Flag, int Src, int Dst);
-// Set texture blending mode
+// Set texture blending mode.
 void vw_SetTextureBlendMode(int pname, int param);
-// Set texture env mode
+// Set texture env mode.
 void vw_SetTextureEnvMode(int MODE);
-// Set texture compare mode
+// Set texture compare mode.
 void vw_SetTextureCompare(int MODE, int FUNC);
-// Set texture depth mode
+// Set texture depth mode.
 void vw_SetTextureDepthMode(int MODE);
 
 /*
  * 3D rendering.
  */
 
-// Send (draw) vertices
+// Send (draw) vertices.
 void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *VertexArray, int Stride,
 		     unsigned int VertexBO = 0, unsigned int RangeStart = 0, unsigned int *IndexArray = nullptr,
 		     unsigned int IndexBO = 0, unsigned int VAO = 0);
-// Set color
+// Set color.
 void vw_SetColor(float nRed, float nGreen, float nBlue, float nAlpha);
-// Set polygon rasterization mode
+// Set polygon rasterization mode.
 void vw_PolygonMode(int mode);
-// Set what facets can be culled
+// Set what facets can be culled.
 void vw_CullFace(int face);
-// Set depth buffer
+// Set depth buffer.
 void vw_DepthTest(bool mode, int funct);
-// Set polygon offset mode
+// Set polygon offset mode.
 void vw_PolygonOffset(bool enable, float factor, float units);
 
-// Loads identity in the current matrix
+// Loads identity in the current matrix.
 void vw_LoadIdentity();
-// Determines the product of the current matrix and the computed translation matrix determined by the given factors
+// Determines the product of the current matrix and the computed translation matrix determined by the given factors.
 void vw_Translate(sVECTOR3D Location);
-// Determines the product of the current matrix and the computed rotation matrix
+// Determines the product of the current matrix and the computed rotation matrix.
 void vw_Rotate(float fAngle, float fX, float fY, float fZ);
-// Determines the product of the current matrix and the computed scale matrix composed from the given point
+// Determines the product of the current matrix and the computed scale matrix composed from the given point.
 void vw_Scale(float fX, float fY, float fZ);
-// Adds a matrix to the stack
+// Adds a matrix to the stack.
 void vw_PushMatrix();
-// Removes the current matrix from the top of the stack
+// Removes the current matrix from the top of the stack.
 void vw_PopMatrix();
-// Get matrix
+// Get matrix.
 void vw_GetMatrix(int pname, float *params);
 void vw_SetMatrix(const float *params);
-// Set Matrix Mode
+// Set Matrix Mode.
 void vw_MatrixMode(int pname);
-// Mult matrix
+// Mult matrix.
 void vw_MultMatrix(float *params);
 
 /*
  * Light.
  */
 
-// Set lighting status
+// Set lighting status.
 void vw_Lighting(bool param);
-// Get lighting status
+// Get lighting status.
 bool vw_GetLighting();
-// Enable light
+// Enable light.
 void vw_LightEnable(int light, bool param);
-// Get light status
+// Get light status.
 bool vw_GetLightEnable(int light);
-// Set light parametre by float
+// Set light parametre by float.
 void vw_SetLight(int light, int pname, float param);
-// Set light parametre by vector
+// Set light parametre by vector.
 void vw_SetLightV(int light, int pname, const float *param);
-// Get light parametre by vector
+// Get light parametre by vector.
 void vw_GetLightV(int light, int pname, float *param);
-// Set matirial parametre by vector
+// Set matirial parametre by vector.
 void vw_MaterialV(int pname, const float *param);
-// Get matirial parametre by vector
+// Get matirial parametre by vector.
 void vw_GetMaterialV(int pname, float *param);
 
 /*
@@ -522,11 +518,13 @@ bool vw_UniformMatrix4fv(sGLSL *GLSL, const char *name, bool transpose, int coun
  * 2D rendering.
  */
 
-// Draw
-void vw_Draw(int X, int Y, sRECT *SrcRect, GLtexture Texture, bool Alpha, float RotateAngle=0, int DrawCorner = RI_UL_CORNER);
-// Draw transparent
-void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, GLtexture Texture, bool Alpha, float Transp, float RotateAngle=0,
-			int DrawCorner = RI_UL_CORNER, float R = 1.0f, float G = 1.0f, float B = 1.0f);
+// Switch to 2D rendering mode. Origin is upper left corner.
+void vw_Start2DMode(GLdouble zNear, GLdouble zFar);
+// Switch back to 3D rendering mode.
+void vw_End2DMode();
+// Draw transparent. Origin is upper left corner.
+void vw_DrawTransparent(sRECT *DstRect, sRECT *SrcRect, GLtexture Texture, bool Alpha, float Transp,
+			float RotateAngle=0, float R = 1.0f, float G = 1.0f, float B = 1.0f);
 
 /*
  * Misc.

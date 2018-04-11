@@ -352,20 +352,12 @@ static inline void AddToDrawBuffer(float CoordX, float CoordY,
 }
 
 /*
- * Draw all particles.
+ * Draw all particles. Origin is upper left corner.
  */
 void cParticleSystem2D::Draw()
 {
 	if (!Texture || ParticlesList.empty())
 		return;
-
-	float AW;
-	float AH;
-	bool ASpresent = vw_GetAspectWH(&AW, &AH);
-
-	int W, H;
-	vw_GetViewport(nullptr, nullptr, &W, &H);
-	float AHw = H * 1.0f;
 
 	// RI_TRIANGLES * (RI_2f_XYZ + RI_2f_TEX + RI_4f_COLOR) * ParticlesList.size()
 	unsigned int tmpDrawBufferSize = 6 * (2 + 2 + 4) * ParticlesList.size();
@@ -382,27 +374,21 @@ void cParticleSystem2D::Draw()
 			       int(tmpParticle.Location.x + tmpParticle.Size / 2),
 			       int(tmpParticle.Location.y + tmpParticle.Size / 2));
 
-		float tmpPosY{0.0f};
-		if (ASpresent)
-			tmpPosY = (AH - DestRect.top - DestRect.top - (DestRect.bottom - DestRect.top));
-		else
-			tmpPosY = (AHw - DestRect.top - DestRect.top - (DestRect.bottom - DestRect.top));
-
 		// first triangle
-		AddToDrawBuffer(DestRect.left, DestRect.top + tmpPosY + (DestRect.bottom - DestRect.top),
+		AddToDrawBuffer(DestRect.left, DestRect.top + (DestRect.bottom - DestRect.top),
 				tmpParticle.Color, tmpParticle.Alpha, 0.0f, 1.0f);
-		AddToDrawBuffer(DestRect.left, DestRect.top + tmpPosY,
+		AddToDrawBuffer(DestRect.left, DestRect.top,
 				tmpParticle.Color, tmpParticle.Alpha, 0.0f, 0.0f);
-		AddToDrawBuffer(DestRect.left + (DestRect.right - DestRect.left), DestRect.top + tmpPosY,
+		AddToDrawBuffer(DestRect.left + (DestRect.right - DestRect.left), DestRect.top,
 				tmpParticle.Color, tmpParticle.Alpha, 1.0f, 0.0f);
 
 		// second triangle
-		AddToDrawBuffer(DestRect.left + (DestRect.right - DestRect.left), DestRect.top + tmpPosY,
+		AddToDrawBuffer(DestRect.left + (DestRect.right - DestRect.left), DestRect.top,
 				tmpParticle.Color, tmpParticle.Alpha, 1.0f, 0.0f);
 		AddToDrawBuffer(DestRect.left + (DestRect.right - DestRect.left),
-				DestRect.top + tmpPosY + (DestRect.bottom - DestRect.top),
+				DestRect.top + (DestRect.bottom - DestRect.top),
 				tmpParticle.Color, tmpParticle.Alpha, 1.0f, 1.0f);
-		AddToDrawBuffer(DestRect.left, DestRect.top + tmpPosY + (DestRect.bottom - DestRect.top),
+		AddToDrawBuffer(DestRect.left, DestRect.top + (DestRect.bottom - DestRect.top),
 				tmpParticle.Color, tmpParticle.Alpha, 0.0f, 1.0f);
 	}
 
@@ -477,7 +463,7 @@ void vw_UpdateAllParticleSystems2D(float Time)
 }
 
 /*
- * Draw all particle systems 2D.
+ * Draw all particle systems 2D. Origin is upper left corner.
  */
 void vw_DrawAllParticleSystems2D()
 {

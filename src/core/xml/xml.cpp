@@ -28,6 +28,8 @@
 // TODO revise ParseTagContent() in order to use main buffer and begin/end position
 //      don't create temporary string buffers
 
+// FIXME GetLineNumber() should work with current parser changes
+
 #include "../vfs/vfs.h"
 #include "xml.h"
 
@@ -38,7 +40,6 @@ namespace {
 const std::string EndLine{"\r\n"};
 
 } // unnamed namespace
-
 
 /*
  * Line number in XML file.

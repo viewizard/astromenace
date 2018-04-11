@@ -228,16 +228,6 @@ void DrawGameExpMoney(int Exp, int Money)
 	if (!Texture)
 		return;
 
-
-
-	float AW;
-	float AH;
-	bool ASpresent = vw_GetAspectWH(&AW, &AH);
-
-	int W, H;
-	vw_GetViewport(nullptr, nullptr, &W, &H);
-	float AHw = H*1.0f;
-
 	// Установка текстуры и ее свойств...
 	vw_BindTexture(0, Texture);
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
@@ -245,8 +235,6 @@ void DrawGameExpMoney(int Exp, int Money)
 	float ImageHeight{0.0f};
 	float ImageWidth{0.0f};
 	vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight);
-
-	float tmpPosY = 0;
 
 	float R=1.0f;
 	float G=1.0f;
@@ -268,100 +256,94 @@ void DrawGameExpMoney(int Exp, int Money)
 	GetGameNumFontData('E', SrcRect);
 	DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right - SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
 
-	if (ASpresent) tmpPosY = (AH - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
-	else tmpPosY = (AHw - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
-
-	float FrameHeight = (SrcRect.bottom*1.0f )/ImageHeight;
-	float FrameWidth = (SrcRect.right*1.0f )/ImageWidth;
-
-	float Yst = (SrcRect.top*1.0f)/ImageHeight;
-	float Xst = (SrcRect.left*1.0f)/ImageWidth;
+	// texture's UV coordinates
+	float U_Left{(SrcRect.left * 1.0f) / ImageWidth};
+	float V_Top{(SrcRect.top * 1.0f) / ImageHeight};
+	float U_Right{(SrcRect.right * 1.0f) / ImageWidth};
+	float V_Bottom{(SrcRect.bottom * 1.0f) / ImageHeight};
 
 	tmp[k++] = DstRect.left;	// X
-	tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+	tmp[k++] = DstRect.top;	// Y
 	tmp[k++] = R;
 	tmp[k++] = G;
 	tmp[k++] = B;
 	tmp[k++] = Transp;
-	tmp[k++] = Xst;
-	tmp[k++] = 1.0f-Yst;
+	tmp[k++] = U_Left;
+	tmp[k++] = V_Top;
 
 	tmp[k++] = DstRect.left;	// X
-	tmp[k++] = DstRect.top +tmpPosY;	// Y
+	tmp[k++] = DstRect.bottom;	// Y
 	tmp[k++] = R;
 	tmp[k++] = G;
 	tmp[k++] = B;
 	tmp[k++] = Transp;
-	tmp[k++] = Xst;
-	tmp[k++] = 1.0f-FrameHeight;
+	tmp[k++] = U_Left;
+	tmp[k++] = V_Bottom;
 
-	tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-	tmp[k++] = DstRect.top +tmpPosY;	// Y
+	tmp[k++] = DstRect.right;	// X
+	tmp[k++] = DstRect.bottom;	// Y
 	tmp[k++] = R;
 	tmp[k++] = G;
 	tmp[k++] = B;
 	tmp[k++] = Transp;
-	tmp[k++] = FrameWidth;
-	tmp[k++] = 1.0f-FrameHeight;
+	tmp[k++] = U_Right;
+	tmp[k++] = V_Bottom;
 
-	tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-	tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+	tmp[k++] = DstRect.right;	// X
+	tmp[k++] = DstRect.top;	// Y
 	tmp[k++] = R;
 	tmp[k++] = G;
 	tmp[k++] = B;
 	tmp[k++] = Transp;
-	tmp[k++] = FrameWidth;
-	tmp[k++] = 1.0f-Yst;
+	tmp[k++] = U_Right;
+	tmp[k++] = V_Top;
 
 	Xstart = Setup.iAspectRatioWidth/2-56.0f;
 	Ystart = 31;
 	GetGameNumFontData('$', SrcRect);
 	DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right - SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
 
-	if (ASpresent) tmpPosY = (AH - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
-	else tmpPosY = (AHw - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
-
-	FrameHeight = (SrcRect.bottom*1.0f )/ImageHeight;
-	FrameWidth = (SrcRect.right*1.0f )/ImageWidth;
-
-	Yst = (SrcRect.top*1.0f)/ImageHeight;
-	Xst = (SrcRect.left*1.0f)/ImageWidth;
+	// texture's UV coordinates
+	U_Left = (SrcRect.left * 1.0f) / ImageWidth;
+	V_Top = (SrcRect.top * 1.0f) / ImageHeight;
+	U_Right = (SrcRect.right * 1.0f) / ImageWidth;
+	V_Bottom = (SrcRect.bottom * 1.0f) / ImageHeight;
 
 	tmp[k++] = DstRect.left;	// X
-	tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+	tmp[k++] = DstRect.top;	// Y
 	tmp[k++] = R;
 	tmp[k++] = G;
 	tmp[k++] = B;
 	tmp[k++] = Transp;
-	tmp[k++] = Xst;
-	tmp[k++] = 1.0f-Yst;
+	tmp[k++] = U_Left;
+	tmp[k++] = V_Top;
 
 	tmp[k++] = DstRect.left;	// X
-	tmp[k++] = DstRect.top +tmpPosY;	// Y
+	tmp[k++] = DstRect.bottom;	// Y
 	tmp[k++] = R;
 	tmp[k++] = G;
 	tmp[k++] = B;
 	tmp[k++] = Transp;
-	tmp[k++] = Xst;
-	tmp[k++] = 1.0f-FrameHeight;
+	tmp[k++] = U_Left;
+	tmp[k++] = V_Bottom;
 
-	tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-	tmp[k++] = DstRect.top +tmpPosY;	// Y
+	tmp[k++] = DstRect.right;	// X
+	tmp[k++] = DstRect.bottom;	// Y
 	tmp[k++] = R;
 	tmp[k++] = G;
 	tmp[k++] = B;
 	tmp[k++] = Transp;
-	tmp[k++] = FrameWidth;
-	tmp[k++] = 1.0f-FrameHeight;
+	tmp[k++] = U_Right;
+	tmp[k++] = V_Bottom;
 
-	tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-	tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+	tmp[k++] = DstRect.right;	// X
+	tmp[k++] = DstRect.top;	// Y
 	tmp[k++] = R;
 	tmp[k++] = G;
 	tmp[k++] = B;
 	tmp[k++] = Transp;
-	tmp[k++] = FrameWidth;
-	tmp[k++] = 1.0f-Yst;
+	tmp[k++] = U_Right;
+	tmp[k++] = V_Top;
 
 
 
@@ -383,52 +365,47 @@ void DrawGameExpMoney(int Exp, int Money)
 		}
 		DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right - SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
 
-
-		if (ASpresent) tmpPosY = (AH - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
-		else tmpPosY = (AHw - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
-
-		FrameHeight = (SrcRect.bottom*1.0f )/ImageHeight;
-		FrameWidth = (SrcRect.right*1.0f )/ImageWidth;
-
-		Yst = (SrcRect.top*1.0f)/ImageHeight;
-		Xst = (SrcRect.left*1.0f)/ImageWidth;
+		// texture's UV coordinates
+		U_Left = (SrcRect.left * 1.0f) / ImageWidth;
+		V_Top = (SrcRect.top * 1.0f) / ImageHeight;
+		U_Right = (SrcRect.right * 1.0f) / ImageWidth;
+		V_Bottom = (SrcRect.bottom * 1.0f) / ImageHeight;
 
 		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+		tmp[k++] = DstRect.top;	// Y
 		tmp[k++] = R;
 		tmp[k++] = G;
 		tmp[k++] = B;
 		tmp[k++] = Transp;
-		tmp[k++] = Xst;
-		tmp[k++] = 1.0f-Yst;
+		tmp[k++] = U_Left;
+		tmp[k++] = V_Top;
 
 		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.top +tmpPosY;	// Y
+		tmp[k++] = DstRect.bottom;	// Y
 		tmp[k++] = R;
 		tmp[k++] = G;
 		tmp[k++] = B;
 		tmp[k++] = Transp;
-		tmp[k++] = Xst;
-		tmp[k++] = 1.0f-FrameHeight;
+		tmp[k++] = U_Left;
+		tmp[k++] = V_Bottom;
 
-		tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-		tmp[k++] = DstRect.top +tmpPosY;	// Y
+		tmp[k++] = DstRect.right;	// X
+		tmp[k++] = DstRect.bottom;	// Y
 		tmp[k++] = R;
 		tmp[k++] = G;
 		tmp[k++] = B;
 		tmp[k++] = Transp;
-		tmp[k++] = FrameWidth;
-		tmp[k++] = 1.0f-FrameHeight;
+		tmp[k++] = U_Right;
+		tmp[k++] = V_Bottom;
 
-		tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-		tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+		tmp[k++] = DstRect.right;	// X
+		tmp[k++] = DstRect.top;	// Y
 		tmp[k++] = R;
 		tmp[k++] = G;
 		tmp[k++] = B;
 		tmp[k++] = Transp;
-		tmp[k++] = FrameWidth;
-		tmp[k++] = 1.0f-Yst;
-
+		tmp[k++] = U_Right;
+		tmp[k++] = V_Top;
 
 		Xstart += SrcRect.right - SrcRect.left;
 	}
@@ -452,53 +429,47 @@ void DrawGameExpMoney(int Exp, int Money)
 		}
 		DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right-SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
 
-
-
-		if (ASpresent) tmpPosY = (AH - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
-		else tmpPosY = (AHw - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
-
-		FrameHeight = (SrcRect.bottom*1.0f )/ImageHeight;
-		FrameWidth = (SrcRect.right*1.0f )/ImageWidth;
-
-		Yst = (SrcRect.top*1.0f)/ImageHeight;
-		Xst = (SrcRect.left*1.0f)/ImageWidth;
+		// texture's UV coordinates
+		U_Left = (SrcRect.left * 1.0f) / ImageWidth;
+		V_Top = (SrcRect.top * 1.0f) / ImageHeight;
+		U_Right = (SrcRect.right * 1.0f) / ImageWidth;
+		V_Bottom = (SrcRect.bottom * 1.0f) / ImageHeight;
 
 		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+		tmp[k++] = DstRect.top;	// Y
 		tmp[k++] = R;
 		tmp[k++] = G;
 		tmp[k++] = B;
 		tmp[k++] = Transp;
-		tmp[k++] = Xst;
-		tmp[k++] = 1.0f-Yst;
+		tmp[k++] = U_Left;
+		tmp[k++] = V_Top;
 
 		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.top +tmpPosY;	// Y
+		tmp[k++] = DstRect.bottom;	// Y
 		tmp[k++] = R;
 		tmp[k++] = G;
 		tmp[k++] = B;
 		tmp[k++] = Transp;
-		tmp[k++] = Xst;
-		tmp[k++] = 1.0f-FrameHeight;
+		tmp[k++] = U_Left;
+		tmp[k++] = V_Bottom;
 
-		tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-		tmp[k++] = DstRect.top +tmpPosY;	// Y
+		tmp[k++] = DstRect.right;	// X
+		tmp[k++] = DstRect.bottom;	// Y
 		tmp[k++] = R;
 		tmp[k++] = G;
 		tmp[k++] = B;
 		tmp[k++] = Transp;
-		tmp[k++] = FrameWidth;
-		tmp[k++] = 1.0f-FrameHeight;
+		tmp[k++] = U_Right;
+		tmp[k++] = V_Bottom;
 
-		tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-		tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+		tmp[k++] = DstRect.right;	// X
+		tmp[k++] = DstRect.top;	// Y
 		tmp[k++] = R;
 		tmp[k++] = G;
 		tmp[k++] = B;
 		tmp[k++] = Transp;
-		tmp[k++] = FrameWidth;
-		tmp[k++] = 1.0f-Yst;
-
+		tmp[k++] = U_Right;
+		tmp[k++] = V_Top;
 
 		Xstart += SrcRect.right - SrcRect.left;
 	}
@@ -1206,14 +1177,6 @@ void DrawGame()
 			if (!Texture)
 				return;
 
-			float AW;
-			float AH;
-			bool ASpresent = vw_GetAspectWH(&AW, &AH);
-
-			int W, H;
-			vw_GetViewport(nullptr, nullptr, &W, &H);
-			float AHw = H*1.0f;
-
 			// Установка текстуры и ее свойств...
 			vw_BindTexture(0, Texture);
 			vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
@@ -1221,8 +1184,6 @@ void DrawGame()
 			float ImageHeight{0.0f};
 			float ImageWidth{0.0f};
 			vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight);
-
-			float tmpPosY = 0;
 
 			// выделяем память
 			// буфер для последовательности RI_TRIANGLE_STRIP
@@ -1242,51 +1203,47 @@ void DrawGame()
 				float Transp = (CurrentDrawEnergNumFull * 19) - i;
 				if (Transp > 1.0f) Transp = 1.0f;
 
-
-				if (ASpresent) tmpPosY = (AH - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
-				else tmpPosY = (AHw - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
-
-				float FrameHeight = (SrcRect.bottom*1.0f )/ImageHeight;
-				float FrameWidth = (SrcRect.right*1.0f )/ImageWidth;
-
-				float Yst = (SrcRect.top*1.0f)/ImageHeight;
-				float Xst = (SrcRect.left*1.0f)/ImageWidth;
+				// texture's UV coordinates
+				float U_Left{(SrcRect.left * 1.0f) / ImageWidth};
+				float V_Top{(SrcRect.top * 1.0f)/ImageHeight};
+				float U_Right{(SrcRect.right * 1.0f) / ImageWidth};
+				float V_Bottom{(SrcRect.bottom * 1.0f) / ImageHeight};
 
 				tmp[k++] = DstRect.left;	// X
-				tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+				tmp[k++] = DstRect.top;	// Y
 				tmp[k++] = R;
 				tmp[k++] = G;
 				tmp[k++] = B;
 				tmp[k++] = Transp;
-				tmp[k++] = Xst;
-				tmp[k++] = 1.0f-Yst;
+				tmp[k++] = U_Left;
+				tmp[k++] = V_Top;
 
 				tmp[k++] = DstRect.left;	// X
-				tmp[k++] = DstRect.top +tmpPosY;	// Y
+				tmp[k++] = DstRect.bottom;	// Y
 				tmp[k++] = R;
 				tmp[k++] = G;
 				tmp[k++] = B;
 				tmp[k++] = Transp;
-				tmp[k++] = Xst;
-				tmp[k++] = 1.0f-FrameHeight;
+				tmp[k++] = U_Left;
+				tmp[k++] = V_Bottom;
 
-				tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-				tmp[k++] = DstRect.top +tmpPosY;	// Y
+				tmp[k++] = DstRect.right;	// X
+				tmp[k++] = DstRect.bottom;	// Y
 				tmp[k++] = R;
 				tmp[k++] = G;
 				tmp[k++] = B;
 				tmp[k++] = Transp;
-				tmp[k++] = FrameWidth;
-				tmp[k++] = 1.0f-FrameHeight;
+				tmp[k++] = U_Right;
+				tmp[k++] = V_Bottom;
 
-				tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-				tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+				tmp[k++] = DstRect.right;	// X
+				tmp[k++] = DstRect.top;	// Y
 				tmp[k++] = R;
 				tmp[k++] = G;
 				tmp[k++] = B;
 				tmp[k++] = Transp;
-				tmp[k++] = FrameWidth;
-				tmp[k++] = 1.0f-Yst;
+				tmp[k++] = U_Right;
+				tmp[k++] = V_Top;
 
 			}
 
@@ -1305,50 +1262,47 @@ void DrawGame()
 				float Transp = (CurrentDrawLifeNumFull * 19) - i;
 				if (Transp > 1.0f) Transp = 1.0f;
 
-				if (ASpresent) tmpPosY = (AH - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
-				else tmpPosY = (AHw - DstRect.top - DstRect.top - (DstRect.bottom - DstRect.top));
-
-				float FrameHeight = (SrcRect.bottom*1.0f )/ImageHeight;
-				float FrameWidth = (SrcRect.right*1.0f )/ImageWidth;
-
-				float Yst = (SrcRect.top*1.0f)/ImageHeight;
-				float Xst = (SrcRect.left*1.0f)/ImageWidth;
+				// texture's UV coordinates
+				float U_Left{(SrcRect.left * 1.0f) / ImageWidth};
+				float V_Top{(SrcRect.top * 1.0f)/ImageHeight};
+				float U_Right{(SrcRect.right * 1.0f) / ImageWidth};
+				float V_Bottom{(SrcRect.bottom * 1.0f) / ImageHeight};
 
 				tmp[k++] = DstRect.left;	// X
-				tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+				tmp[k++] = DstRect.top;	// Y
 				tmp[k++] = R;
 				tmp[k++] = G;
 				tmp[k++] = B;
 				tmp[k++] = Transp;
-				tmp[k++] = Xst;
-				tmp[k++] = 1.0f-Yst;
+				tmp[k++] = U_Left;
+				tmp[k++] = V_Top;
 
 				tmp[k++] = DstRect.left;	// X
-				tmp[k++] = DstRect.top +tmpPosY;	// Y
+				tmp[k++] = DstRect.bottom;	// Y
 				tmp[k++] = R;
 				tmp[k++] = G;
 				tmp[k++] = B;
 				tmp[k++] = Transp;
-				tmp[k++] = Xst;
-				tmp[k++] = 1.0f-FrameHeight;
+				tmp[k++] = U_Left;
+				tmp[k++] = V_Bottom;
 
-				tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-				tmp[k++] = DstRect.top +tmpPosY;	// Y
+				tmp[k++] = DstRect.right;	// X
+				tmp[k++] = DstRect.bottom;	// Y
 				tmp[k++] = R;
 				tmp[k++] = G;
 				tmp[k++] = B;
 				tmp[k++] = Transp;
-				tmp[k++] = FrameWidth;
-				tmp[k++] = 1.0f-FrameHeight;
+				tmp[k++] = U_Right;
+				tmp[k++] = V_Bottom;
 
-				tmp[k++] = DstRect.left + (DstRect.right - DstRect.left);	// X
-				tmp[k++] = DstRect.top +tmpPosY +(DstRect.bottom - DstRect.top);	// Y
+				tmp[k++] = DstRect.right;	// X
+				tmp[k++] = DstRect.top;	// Y
 				tmp[k++] = R;
 				tmp[k++] = G;
 				tmp[k++] = B;
 				tmp[k++] = Transp;
-				tmp[k++] = FrameWidth;
-				tmp[k++] = 1.0f-Yst;
+				tmp[k++] = U_Right;
+				tmp[k++] = V_Top;
 			}
 
 
@@ -1478,7 +1432,7 @@ void DrawGame()
 			SrcRect(2, 2, 564-2, 564-2);
 			DstRect(Setup.iAspectRatioWidth / 2 - 256 - 26, 128 - 28, Setup.iAspectRatioWidth / 2 - 256 + 534, 128 + 532);
 			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
-					   true, 1.0f*GameContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+					   true, 1.0f*GameContentTransp, 0.0f, 1.0f, 1.0f, 1.0f);
 			// название меню
 			int Size = vw_FontSize(vw_GetText("1_Mission_Complete"));
 			float WScale = 0;
@@ -1559,7 +1513,7 @@ void DrawGame()
 				SrcRect(2,2,564-2,564-2);
 				DstRect(Setup.iAspectRatioWidth/2-256+4-30,128+2-30,Setup.iAspectRatioWidth/2-256+564-30,128+564-2-30);
 				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
-						   true, GameContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+						   true, GameContentTransp, 0.0f, 1.0f, 1.0f, 1.0f);
 				// название меню
 				int SizeI = 17 + (234-vw_FontSize(vw_GetText("1_GAME_MENU")))/2;
 				vw_DrawFont(Setup.iAspectRatioWidth/2-256+SizeI, 128+22, 0, 0, 1.0f, 1.0f,1.0f,0.0f, 0.7f*GameContentTransp, vw_GetText("1_GAME_MENU"));

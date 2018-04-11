@@ -826,7 +826,7 @@ void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 		vw_BeginRendering(RI_COLOR_BUFFER | RI_DEPTH_BUFFER);
 		vw_Start2DMode(-1,1);
 
-		vw_DrawTransparent(&DstRect, &SrcRect, ViewizardLogoTexture, true, Transp, 0.0f, RI_UL_CORNER, GreyColor, GreyColor, GreyColor);
+		vw_DrawTransparent(&DstRect, &SrcRect, ViewizardLogoTexture, true, Transp, 0.0f, GreyColor, GreyColor, GreyColor);
 
 		vw_End2DMode();
 		vw_EndRendering();
@@ -898,12 +898,14 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, GLtexture
 	// выводим подложку линии загрузки
 	SrcRect(0,0,256,32);
 	int StartX = (Setup.iAspectRatioWidth-256)/2;
-	vw_Draw(StartX, 768-64-8 -32, &SrcRect, vw_FindTextureByName("loading/loading_back.tga"), true);
+	DstRect(StartX, 768-64-8 -32, StartX + SrcRect.right - SrcRect.left, 768-64-8 -32 + SrcRect.bottom - SrcRect.top);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("loading/loading_back.tga"), true, 1.0f, 0.0f);
 
 	// выводим линию загрузки
 	int loaded = (int)(256.0f*Current/AllDrawLoading);
 	SrcRect( 0,0,loaded,16);
-	vw_Draw(StartX, 768-64-1 -32, &SrcRect, vw_FindTextureByName("loading/loading_line.tga"), true);
+	DstRect(StartX, 768-64-1 -32, StartX + SrcRect.right - SrcRect.left, 768-64-1 -32 + SrcRect.bottom - SrcRect.top);
+	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("loading/loading_line.tga"), true, 1.0f, 0.0f);
 
 
 	vw_End2DMode();

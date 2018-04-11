@@ -499,7 +499,7 @@ int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontSc
 }
 
 /*
- * Draw text with current font.
+ * Draw text with current font. Origin is upper left corner.
  *
  * StrictWidth - strict text by width:
  *      if StrictWidth > 0, reduce space width only
@@ -514,22 +514,6 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 	if (Transp >= 1.0f)
 		Transp = 1.0f;
 
-	// care about aspect ration
-	float AW, AH;
-	bool ASpresent = vw_GetAspectWH(&AW, &AH);
-	// get current viewport
-	int W, H;
-	vw_GetViewport(nullptr, nullptr, &W, &H);
-	float AHw{H * 1.0f};
-
-	// check text position
-	if (ASpresent) {
-		if (Y > AH)
-			return 0; // it's ok, we work in proper way here
-	} else {
-		if (Y > H)
-			return 0; // it's ok, we work in proper way here
-	}
 	if (Y + InternalFontSize * FontScale < 0)
 		return 0; // it's ok, we work in proper way here
 
@@ -588,31 +572,22 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 			float DrawX{Xstart + DrawChar->Left * FontWidthFactor};
 			float DrawY{Y + GlobalFontOffsetY + (InternalFontSize - DrawChar->Top) * FontScale};
 
-			// setup Y axis correction, if need
-			float tmpPosY{0};
-			// should be altered only in the case of RI_UL_CORNER
-			if (ASpresent)
-				tmpPosY = (AH - DrawY - DrawY - DrawChar->Height * FontScale);
-			else
-				tmpPosY = (AHw - DrawY - DrawY - DrawChar->Height * FontScale);
-
-			float FrameHeight{(DrawChar->TexturePositionBottom * 1.0f) / ImageHeight};
-			float FrameWidth{(DrawChar->TexturePositionRight * 1.0f) / ImageWidth};
-
-			float Yst{(DrawChar->TexturePositionTop * 1.0f) / ImageHeight};
-			float Xst{(DrawChar->TexturePositionLeft * 1.0f) / ImageWidth};
+			// texture's UV coordinates
+			float U_Left{(DrawChar->TexturePositionLeft * 1.0f) / ImageWidth};
+			float V_Top{(DrawChar->TexturePositionTop * 1.0f) / ImageHeight};
+			float U_Right{(DrawChar->TexturePositionRight * 1.0f) / ImageWidth};
+			float V_Bottom{(DrawChar->TexturePositionBottom * 1.0f) / ImageHeight};
 
 			// first triangle
-			AddToDrawBuffer(DrawX, DrawY + tmpPosY + DrawChar->Height * FontScale, Xst, 1.0f - Yst);
-			AddToDrawBuffer(DrawX, DrawY + tmpPosY, Xst, 1.0f - FrameHeight);
-			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY + tmpPosY,
-					FrameWidth, 1.0f - FrameHeight);
+			AddToDrawBuffer(DrawX, DrawY, U_Left, V_Top);
+			AddToDrawBuffer(DrawX, DrawY + DrawChar->Height * FontScale, U_Left, V_Bottom);
+			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY + DrawChar->Height * FontScale,
+					U_Right, V_Bottom);
 			// second triangle
-			AddToDrawBuffer(DrawX, DrawY + tmpPosY + DrawChar->Height * FontScale, Xst, 1.0f - Yst);
-			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY + tmpPosY,
-					FrameWidth, 1.0f - FrameHeight);
-			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY + tmpPosY + DrawChar->Height * FontScale,
-					FrameWidth, 1.0f - Yst);
+			AddToDrawBuffer(DrawX, DrawY, U_Left, V_Top);
+			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY + DrawChar->Height * FontScale,
+					U_Right, V_Bottom);
+			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY, U_Right, V_Top);
 
 			Xstart += DrawChar->AdvanceX * FontWidthFactor;
 			LineWidth += DrawChar->AdvanceX * FontWidthFactor;
@@ -766,21 +741,21 @@ int vw_DrawFont3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 			float DrawX{Xstart + DrawChar->Left};
 			float DrawY{(InternalFontSize - DrawChar->Top) * 1.0f};
 
-			float FrameHeight{(DrawChar->TexturePositionBottom * 1.0f) / ImageHeight};
-			float FrameWidth{(DrawChar->TexturePositionRight * 1.0f) / ImageWidth};
-
-			float Yst{(DrawChar->TexturePositionTop * 1.0f) / ImageHeight};
-			float Xst{(DrawChar->TexturePositionLeft * 1.0f) / ImageWidth};
+			// texture's UV coordinates
+			// convert origin from bottom left to upper left corner
+			float U_Left{(DrawChar->TexturePositionLeft * 1.0f) / ImageWidth};
+			float V_Top{1.0f - (DrawChar->TexturePositionTop * 1.0f) / ImageHeight};
+			float U_Right{(DrawChar->TexturePositionRight * 1.0f) / ImageWidth};
+			float V_Bottom{1.0f - (DrawChar->TexturePositionBottom * 1.0f) / ImageHeight};
 
 			// first triangle
-			AddToDrawBuffer(DrawX / 10.0f, (DrawY + DrawChar->Height) / 10.0f, Xst, 1.0f - Yst);
-			AddToDrawBuffer(DrawX / 10.0f, DrawY / 10.0f, Xst, 1.0f - FrameHeight);
-			AddToDrawBuffer((DrawX + DrawChar->Width) / 10.0f, DrawY / 10.0f, FrameWidth, 1.0f - FrameHeight);
+			AddToDrawBuffer(DrawX / 10.0f, (DrawY + DrawChar->Height) / 10.0f, U_Left,V_Top);
+			AddToDrawBuffer(DrawX / 10.0f, DrawY / 10.0f, U_Left, V_Bottom);
+			AddToDrawBuffer((DrawX + DrawChar->Width) / 10.0f, DrawY / 10.0f, U_Right, V_Bottom);
 			// second triangle
-			AddToDrawBuffer(DrawX / 10.0f, (DrawY + DrawChar->Height) / 10.0f, Xst, 1.0f - Yst);
-			AddToDrawBuffer((DrawX + DrawChar->Width) / 10.0f, DrawY / 10.0f, FrameWidth, 1.0f - FrameHeight);
-			AddToDrawBuffer((DrawX + DrawChar->Width) / 10.0f, (DrawY + DrawChar->Height) / 10.0f,
-					FrameWidth, 1.0f - Yst);
+			AddToDrawBuffer(DrawX / 10.0f, (DrawY + DrawChar->Height) / 10.0f, U_Left, V_Top);
+			AddToDrawBuffer((DrawX + DrawChar->Width) / 10.0f, DrawY / 10.0f, U_Right, V_Bottom);
+			AddToDrawBuffer((DrawX + DrawChar->Width) / 10.0f, (DrawY + DrawChar->Height) / 10.0f, U_Right, V_Top);
 
 			Xstart += DrawChar->AdvanceX;
 		} else

@@ -46,7 +46,7 @@ void vw_ShutdownFont();
 
 // Get string size with current font size.
 int vw_FontSizeUTF32(const std::u32string &Text);
-// Draw text with current font.
+// Draw text with current font. Origin is upper left corner.
 int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
 		     float R, float G, float B, float Transp, const std::u32string &Text);
 // Draw 3D text with current font.

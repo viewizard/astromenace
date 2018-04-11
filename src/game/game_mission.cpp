@@ -202,12 +202,12 @@ void GameDrawMissionTitle()
 
 	if (MissionTitleLifeTime >= 1.0f) {
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_mission.tga")),
-				   true, 1.0f, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+				   true, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 		// вывод номера миссии
 		DrawMissionTitleNum(XStart+226+20, 352+1, buffer.c_str(), 1.0f);
 	} else {
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_mission.tga")),
-				   true, MissionTitleLifeTime, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+				   true, MissionTitleLifeTime, 0.0f, 1.0f, 1.0f, 1.0f);
 		// вывод номера миссии
 		DrawMissionTitleNum(XStart+226+20, 352+1, buffer.c_str(), MissionTitleLifeTime);
 	}
@@ -262,7 +262,7 @@ void GameDrawMissionFailed()
 	DstRect(Setup.iAspectRatioWidth/2-256,342,Setup.iAspectRatioWidth/2+256,342+84);
 
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName(vw_GetText("12_missionfailed.tga")),
-			   true, 1.0f, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+			   true, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 
 
 	// выводим кнопки...

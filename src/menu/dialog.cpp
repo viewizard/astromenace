@@ -496,19 +496,19 @@ Dialogs with default type:
 		SrcRect(2,2,572-2,316-2 );
 		DstRect(X+2-30,Y+2-30,X+572-2-30,Y+316-2-30);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog512_256.tga"),
-				   true, DialogContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+				   true, DialogContentTransp, 0.0f, 1.0f, 1.0f, 1.0f);
 		break;
 	case eDialogTypeBySize::w512h512:
 		SrcRect(2,2,564-2,564-2 );
 		DstRect(X+4-30,Y+2-30,X+564-30,Y+564-2-30);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
-				   true, DialogContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+				   true, DialogContentTransp, 0.0f, 1.0f, 1.0f, 1.0f);
 		break;
 	case eDialogTypeBySize::w768h600:
 		SrcRect(2,2,828-2,659-2 );
 		DstRect(X+2-30,Y+2-30,X+828-2-30,Y+659-2-30);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/dialog768_600.tga"),
-				   true, DialogContentTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+				   true, DialogContentTransp, 0.0f, 1.0f, 1.0f, 1.0f);
 		break;
 	}
 

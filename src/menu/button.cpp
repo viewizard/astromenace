@@ -105,7 +105,7 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 	// рисуем тень
 	DstRect(X-64+2,Y-17+2,X-64+512-2,Y-17+96-2);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/button384_back.tga"),
-			   true, IntTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+			   true, IntTransp, 0.0f, 1.0f, 1.0f, 1.0f);
 
 	SrcRect(0,0,384,64 );
 	// рисуем кнопку
@@ -174,7 +174,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 		SrcRect(2,2,512-2,96-2 );
 		DstRect(X-125+2,Y-16+2,X-125+512-2,Y-16+96-2);
 		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/button256_back.tga"),
-				   true, Transp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+				   true, Transp, 0.0f, 1.0f, 1.0f, 1.0f);
 
 		SrcRect(0,0,256,64 );
 		DstRect(X,Y,X+256,Y+64);
@@ -256,7 +256,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 	// рисуем тень
 	DstRect(X-125+2,Y-16+2,X-125+512-2,Y-16+96-2);
 	vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/button256_back.tga"),
-			   true, IntTransp, 0.0f, RI_UL_CORNER, 1.0f, 1.0f, 1.0f);
+			   true, IntTransp, 0.0f, 1.0f, 1.0f, 1.0f);
 
 	SrcRect(0,0,256,64 );
 	// рисуем кнопку

@@ -524,13 +524,13 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 			}
 
 			if (NeedAlert)
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0, RI_UL_CORNER, 0.0f, 1.0f, 0.0f);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0, 0.0f, 1.0f, 0.0f);
 			else
-				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0, RI_UL_CORNER, 0.0f, 1.0f, 0.0f);
+				vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0, 0.0f, 1.0f, 0.0f);
 		} else
-			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0, RI_UL_CORNER, 1.0f, 0.0f, 0.0f);
+			vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0, 1.0f, 0.0f, 0.0f);
 	} else
-		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0, RI_UL_CORNER, 1.0f, 0.5f, 0.0f);
+		vw_DrawTransparent(&DstRect, &SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0, 1.0f, 0.5f, 0.0f);
 
 
 
