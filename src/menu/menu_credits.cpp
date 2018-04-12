@@ -36,7 +36,7 @@ const std::string CreditsArray[] {
 	"Tatiana Savitskaya",
 	"",
 	"3D MODELS",
-	"Max Shelekhov",
+	"Max Shelekhov, 3drt.com",
 	"Oleg Linkov",
 	"Egor Kurteanu",
 	"",
