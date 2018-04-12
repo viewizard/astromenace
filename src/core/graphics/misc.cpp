@@ -24,6 +24,8 @@
 
 *************************************************************************************/
 
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
+
 #include "graphics.h"
 
 
@@ -43,17 +45,19 @@ int vw_Screenshot(int Width, int Height, const std::string &FileName)
 							0x00FF0000, 0x0000FF00, 0x000000FF, 0
 #endif
 							);
-	if (tmpSurface == nullptr)
+	if (!tmpSurface)
 		return ERR_MEM;
 
-	std::vector<uint8_t> Pixels(ChannelsNumber * Width * Height);
+	// std::unique_ptr, we need only memory allocation without container's features
+	// don't use std::vector here, since it allocates AND value-initializes
+	std::unique_ptr<uint8_t []> Pixels{new uint8_t[ChannelsNumber * Width * Height]};
 
-	glReadPixels(0, 0, Width, Height, GL_RGB, GL_UNSIGNED_BYTE, Pixels.data());
+	glReadPixels(0, 0, Width, Height, GL_RGB, GL_UNSIGNED_BYTE, Pixels.get());
 
 	// flip pixels in proper order
 	for (int i = 0; i < Height; i++) {
 		memcpy((uint8_t *)tmpSurface->pixels + tmpSurface->pitch * i,
-		       Pixels.data() + ChannelsNumber * Width * (Height - i - 1),
+		       Pixels.get() + ChannelsNumber * Width * (Height - i - 1),
 		       Width * ChannelsNumber);
 	}
 
