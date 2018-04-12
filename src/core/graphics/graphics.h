@@ -26,6 +26,18 @@
 
 // TODO translate comments
 
+// TODO check sources, direct OpenGL usage outside 'graphics' are prohibited,
+//      for 'graphics' code - switch to "vw_*" functions-wrapers for OpenGL if possible.
+
+/*
+Direct OpenGL usage outside 'graphics' are prohibited.
+'graphics' code should also use "vw_*" functions-wrapers for OpenGL if possible.
+
+Since OpenGL is evolving, more and more features allowed for new hardware.
+'graphics' provide "vw_*" functions-wrapers for OpenGL, that use best solutions
+for current hardware (and supported by code at this moment).
+*/
+
 #ifndef Graphics_H
 #define Graphics_H
 
