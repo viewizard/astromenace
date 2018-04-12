@@ -24,7 +24,6 @@
 
 *************************************************************************************/
 
-// TODO revise vw_DrawColorFBO() code, use STL container for memory management
 // TODO move from pointers to std::shared_ptr/std::weak_ptr
 
 #include "graphics_internal.h"
@@ -310,9 +309,9 @@ void vw_BlitFBO(sFBO *SourceFBO, sFBO *TargetFBO)
 
 	glBindFramebufferEXT(GL_READ_FRAMEBUFFER, SourceFBO->FrameBufferObject);
 	glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER, TargetFBO->FrameBufferObject);
-	glBlitFramebufferEXT( 0, 0, SourceFBO->Width, SourceFBO->Height,
-			      0, 0, TargetFBO->Width, TargetFBO->Height,
-			      GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	glBlitFramebufferEXT(0, 0, SourceFBO->Width, SourceFBO->Height,
+			     0, 0, TargetFBO->Width, TargetFBO->Height,
+			     GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
 
 /*
@@ -342,44 +341,23 @@ void vw_DrawColorFBO(sFBO *SourceFBO, sFBO *TargetFBO)
 	glLoadIdentity();
 
 	// RI_2f_XY | RI_1_TEX
-	float *buff = new float[4 * 4];
-
-	int k = 0;
-
-	buff[k++] = 0.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = 0.0f;
-	buff[k++] = 0.0f;
-
-	buff[k++] = 0.0f;
-	buff[k++] = SourceFBO->Height;
-	buff[k++] = 0.0f;
-	buff[k++] = 1.0f;
-
-	buff[k++] = SourceFBO->Width;
-	buff[k++] = 0.0f;
-	buff[k++] = 1.0f;
-	buff[k++] = 0.0f;
-
-	buff[k++] = SourceFBO->Width;
-	buff[k++] = SourceFBO->Height;
-	buff[k++] = 1.0f;
-	buff[k++] = 1.0f;
+	//		     X				Y				U	V
+	float DrawBuffer[16]{0.0f,			0.0f,				0.0f,	0.0f,
+			     0.0f,			(float)SourceFBO->Height,	0.0f,	1.0f,
+			     (float)SourceFBO->Width,	0.0f,				1.0f,	0.0f,
+			     (float)SourceFBO->Width,	(float)SourceFBO->Height,	1.0f,	1.0f};
 
 	vw_BindTexture(0, SourceFBO->ColorTexture);
 
-	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, buff, 4 * sizeof(buff[0]));
+	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, DrawBuffer, 4 * sizeof(DrawBuffer[0]));
 
 	vw_BindTexture(0, 0);
-	delete [] buff;
-
-	glMatrixMode(GL_MODELVIEW);	// select the modelview matrix
-	glPopMatrix();
 
 	glMatrixMode(GL_PROJECTION);	// select the projection matrix
 	glPopMatrix();			// restore the old projection matrix
 
 	glMatrixMode(GL_MODELVIEW);	// select the modelview matrix
+	glPopMatrix();
 
 	glPopAttrib();
 }
