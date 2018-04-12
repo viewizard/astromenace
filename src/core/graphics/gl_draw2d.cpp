@@ -89,9 +89,6 @@ void vw_Start2DMode(GLdouble zNear, GLdouble zFar)
  */
 void vw_End2DMode()
 {
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
-
 	// we don't switch to 0 unit, in 2D mode only 0 unit should be used
 	glMatrixMode(GL_TEXTURE);
 	glPopMatrix();
@@ -100,6 +97,7 @@ void vw_End2DMode()
 	glPopMatrix();
 
 	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 
 	glPopAttrib();
 }
