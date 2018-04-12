@@ -115,7 +115,7 @@ struct sDevCaps {
 	bool FramebufferObject;
 	// глубина depth буфера в битах, получаем ее при первой генерации fbo с буфером глубины, по умолчанию 0
 	// если работаем с fbo, то еще на этапе инициализации основного fbo прорисовки будут получены данные максимально поддерживаемой глубины
-	int FramebufferObjectDepthSize;
+	GLint FramebufferObjectDepthSize;
 	// поддержка VBO
 	bool VBOSupported;
 	// поддержка VAO
@@ -463,19 +463,19 @@ void vw_DeleteVAO(unsigned int &VAO);
  */
 
 struct sFBO {
-	unsigned int ColorBuffer;
-	unsigned int DepthBuffer;
-	unsigned int ColorTexture;
-	unsigned int DepthTexture;
-	int DepthSize;
-	unsigned int FrameBufferObject;
-	unsigned int Width;
-	unsigned int Height;
+	GLrenderbuffer ColorBuffer;
+	GLrenderbuffer DepthBuffer;
+	GLtexture ColorTexture;
+	GLtexture DepthTexture;
+	GLint DepthSize;
+	GLframebuffer FrameBufferObject;
+	GLsizei Width;
+	GLsizei Height;
 };
 
 // Build FBO. Caller should allocate mamory (FBO).
-bool vw_BuildFBO(sFBO *FBO, int Width, int Height, bool NeedColor,
-		 bool NeedDepth, int MSAA = 0, int *CSAA = nullptr);
+bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor,
+		 bool NeedDepth, GLsizei MSAA = 0, GLsizei *CSAA = nullptr);
 // Bind FBO.
 void vw_BindFBO(sFBO *FBO);
 // Get current FBO (null if FrameBuffer).

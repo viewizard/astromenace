@@ -24,6 +24,7 @@
 
 *************************************************************************************/
 
+#include "graphics_internal.h"
 #include "graphics.h"
 
 
@@ -89,8 +90,6 @@ bool vw_Internal_InitializationVAO();
 // индекс буфера (внутренний буфер)
 bool Internal_InitializationLocalIndexData();
 void Internal_ReleaseLocalIndexData();
-// FBO
-bool vw_Internal_InitializationFBO();
 sFBO MainFBO; // основной FBO, для прорисовки со сглаживанием
 sFBO ResolveFBO; // FBO для вывода основного
 
@@ -440,7 +439,7 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	if (OpenGL_DevCaps.VAOSupported) OpenGL_DevCaps.VAOSupported = vw_Internal_InitializationVAO();
 	// инициализируем FBO
 	if (OpenGL_DevCaps.FramebufferObject) {
-		OpenGL_DevCaps.FramebufferObject = vw_Internal_InitializationFBO();
+		OpenGL_DevCaps.FramebufferObject = __InitializeFBO();
 
 		// инициализируем буферы, если поддерживаем работу с ними - через них всегда рисуем
 		if (OpenGL_DevCaps.FramebufferObject) {
@@ -487,6 +486,13 @@ const sDevCaps *vw_GetDevCaps()
 	return &OpenGL_DevCaps;
 }
 
+/*
+ * Internal access to DevCaps, with write access.
+ */
+sDevCaps &__GetDevCaps()
+{
+	return OpenGL_DevCaps;
+}
 
 
 

@@ -25,7 +25,9 @@
 *************************************************************************************/
 
 // TODO revise vw_DrawColorFBO() code, use STL container for memory management
+// TODO move from pointers to std::shared_ptr/std::weak_ptr
 
+#include "graphics_internal.h"
 #include "graphics.h"
 
 namespace {
@@ -33,31 +35,37 @@ namespace {
 // Current FBO, null if FrameBuffer.
 sFBO *CurrentFBO{nullptr};
 
+PFNGLGENRENDERBUFFERSEXTPROC glGenRenderbuffersEXT{nullptr};
+PFNGLBINDRENDERBUFFEREXTPROC glBindRenderbufferEXT{nullptr};
+PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC glRenderbufferStorageMultisampleEXT{nullptr};
+PFNGLGENRENDERBUFFERSEXTPROC glGenFramebuffersEXT{nullptr};
+PFNGLBINDFRAMEBUFFEREXTPROC glBindFramebufferEXT{nullptr};
+PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC glFramebufferRenderbufferEXT{nullptr};
+PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC glCheckFramebufferStatusEXT{nullptr};
+PFNGLFRAMEBUFFERTEXTURE2DEXTPROC glFramebufferTexture2DEXT{nullptr};
+PFNGLDELETERENDERBUFFERSEXTPROC glDeleteRenderbuffersEXT{nullptr};
+PFNGLDELETEFRAMEBUFFERSEXTPROC glDeleteFramebuffersEXT{nullptr};
+PFNGLBLITFRAMEBUFFEREXTPROC glBlitFramebufferEXT{nullptr};
+PFNGLISFRAMEBUFFEREXTPROC glIsFramebufferEXT{nullptr};
+PFNGLGENERATEMIPMAPPROC glGenerateMipmapEXT{nullptr};
+PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC glGetFramebufferAttachmentParameterivEXT{nullptr};
+PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC glRenderbufferStorageMultisampleCoverageNV{nullptr};
+
 } // unnamed namespace
-
-PFNGLGENRENDERBUFFERSEXTPROC glGenRenderbuffersEXT = nullptr;
-PFNGLBINDRENDERBUFFEREXTPROC glBindRenderbufferEXT = nullptr;
-PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC glRenderbufferStorageMultisampleEXT = nullptr;
-PFNGLGENRENDERBUFFERSEXTPROC glGenFramebuffersEXT = nullptr;
-PFNGLBINDFRAMEBUFFEREXTPROC glBindFramebufferEXT = nullptr;
-PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC glFramebufferRenderbufferEXT = nullptr;
-PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC glCheckFramebufferStatusEXT = nullptr;
-PFNGLFRAMEBUFFERTEXTURE2DEXTPROC glFramebufferTexture2DEXT = nullptr;
-PFNGLDELETERENDERBUFFERSEXTPROC glDeleteRenderbuffersEXT = nullptr;
-PFNGLDELETEFRAMEBUFFERSEXTPROC glDeleteFramebuffersEXT = nullptr;
-PFNGLBLITFRAMEBUFFEREXTPROC glBlitFramebufferEXT = nullptr;
-PFNGLISFRAMEBUFFEREXTPROC glIsFramebufferEXT = nullptr;
-PFNGLGENERATEMIPMAPPROC glGenerateMipmapEXT = nullptr;
-PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC glGetFramebufferAttachmentParameterivEXT = nullptr;
-PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC glRenderbufferStorageMultisampleCoverageNV = nullptr;
-
-extern sDevCaps OpenGL_DevCaps;
 
 
 /*
- * Internal initializaiont.
+ * Internal export glGenerateMipmapEXT.
  */
-bool vw_Internal_InitializationFBO()
+PFNGLGENERATEMIPMAPPROC __glGenerateMipmap()
+{
+	return glGenerateMipmapEXT;
+}
+
+/*
+ * Internal FBO initialization.
+ */
+bool __InitializeFBO()
 {
 	// GL_ARB_framebuffer_object
 	glGenRenderbuffersEXT = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenRenderbuffers");
@@ -142,7 +150,7 @@ bool vw_Internal_InitializationFBO()
 /*
  * Build FBO. Caller should allocate mamory (FBO).
  */
-bool vw_BuildFBO(sFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDepth, int MSAA, int *CSAA)
+bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool NeedDepth, GLsizei MSAA, GLsizei *CSAA)
 {
 	if (!FBO ||
 	    !glGenRenderbuffersEXT ||
@@ -158,7 +166,7 @@ bool vw_BuildFBO(sFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 	if (!glRenderbufferStorageMultisampleCoverageNV && CSAA)
 		*CSAA = MSAA;
 
-	int InternalCSAA = MSAA;
+	GLsizei InternalCSAA = MSAA;
 	if (CSAA)
 		InternalCSAA = *CSAA;
 
@@ -252,8 +260,8 @@ bool vw_BuildFBO(sFBO *FBO, int Width, int Height, bool NeedColor, bool NeedDept
 	std::cout << "Frame Buffer Object created. Depth Size: " << FBO->DepthSize << "\n";
 
 	// store new maximum depth size
-	if (vw_GetDevCaps()->FramebufferObjectDepthSize < FBO->DepthSize)
-		OpenGL_DevCaps.FramebufferObjectDepthSize = FBO->DepthSize;
+	if (__GetDevCaps().FramebufferObjectDepthSize < FBO->DepthSize)
+		__GetDevCaps().FramebufferObjectDepthSize = FBO->DepthSize;
 
 	return true;
 }

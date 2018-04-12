@@ -24,26 +24,31 @@
 
 *************************************************************************************/
 
-#ifndef GraphicsOpenGL_H
-#define GraphicsOpenGL_H
+/*
+Assets, that should be for graphic's internal use only.
+*/
 
-#if defined(__APPLE__) && defined(__MACH__)
-#define __glext_h_ // don't let gl.h include glext.h
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#undef __glext_h_
-#else
-#define __glext_h_ // don't let gl.h include glext.h
-#include <GL/gl.h>
-#include <GL/glu.h>
-#undef __glext_h_
-#endif
+#ifndef GraphicsInternal_H
+#define GraphicsInternal_H
 
-#include "glext.h" // provide glext.h version we need
+#include "opengl.h"
 
-// alias for OpenGL variable types, in order to make code more clear
-using GLtexture = GLuint;
-using GLrenderbuffer = GLuint;
-using GLframebuffer = GLuint;
+struct sDevCaps;
 
-#endif // GraphicsOpenGL_H
+/*
+ * gl_main
+ */
+
+// Internal access to DevCaps, with write access.
+sDevCaps &__GetDevCaps();
+
+/*
+ * gl_fbo
+ */
+
+// Internal FBO initialization.
+bool __InitializeFBO();
+// Internal export glGenerateMipmapEXT.
+PFNGLGENERATEMIPMAPPROC __glGenerateMipmap();
+
+#endif // GraphicsInternal_H
