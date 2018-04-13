@@ -31,49 +31,9 @@
 
 #include "../vfs/vfs.h"
 #include "graphics.h"
+#include "extensions.h"
 
 namespace {
-
-// GL_ARB_shader_objects
-PFNGLDELETEOBJECTARBPROC glDeleteObjectARB{nullptr};
-PFNGLGETHANDLEARBPROC glGetHandleARB{nullptr};
-PFNGLDETACHOBJECTARBPROC glDetachObjectARB{nullptr};
-PFNGLCREATESHADEROBJECTARBPROC glCreateShaderObjectARB{nullptr};
-PFNGLSHADERSOURCEARBPROC glShaderSourceARB{nullptr};
-PFNGLCOMPILESHADERARBPROC glCompileShaderARB{nullptr};
-PFNGLCREATEPROGRAMOBJECTARBPROC glCreateProgramObjectARB{nullptr};
-PFNGLATTACHOBJECTARBPROC glAttachObjectARB{nullptr};
-PFNGLLINKPROGRAMARBPROC glLinkProgramARB{nullptr};
-PFNGLUSEPROGRAMOBJECTARBPROC glUseProgramObjectARB{nullptr};
-PFNGLVALIDATEPROGRAMARBPROC glValidateProgramARB{nullptr};
-PFNGLUNIFORM1FARBPROC glUniform1fARB{nullptr};
-PFNGLUNIFORM2FARBPROC glUniform2fARB{nullptr};
-PFNGLUNIFORM3FARBPROC glUniform3fARB{nullptr};
-PFNGLUNIFORM4FARBPROC glUniform4fARB{nullptr};
-PFNGLUNIFORM1IARBPROC glUniform1iARB{nullptr};
-PFNGLUNIFORM2IARBPROC glUniform2iARB{nullptr};
-PFNGLUNIFORM3IARBPROC glUniform3iARB{nullptr};
-PFNGLUNIFORM4IARBPROC glUniform4iARB{nullptr};
-PFNGLUNIFORM1FVARBPROC glUniform1fvARB{nullptr};
-PFNGLUNIFORM2FVARBPROC glUniform2fvARB{nullptr};
-PFNGLUNIFORM3FVARBPROC glUniform3fvARB{nullptr};
-PFNGLUNIFORM4FVARBPROC glUniform4fvARB{nullptr};
-PFNGLUNIFORM1IVARBPROC glUniform1ivARB{nullptr};
-PFNGLUNIFORM2IVARBPROC glUniform2ivARB{nullptr};
-PFNGLUNIFORM3IVARBPROC glUniform3ivARB{nullptr};
-PFNGLUNIFORM4IVARBPROC glUniform4ivARB{nullptr};
-PFNGLUNIFORMMATRIX2FVARBPROC glUniformMatrix2fvARB{nullptr};
-PFNGLUNIFORMMATRIX3FVARBPROC glUniformMatrix3fvARB{nullptr};
-PFNGLUNIFORMMATRIX4FVARBPROC glUniformMatrix4fvARB{nullptr};
-PFNGLGETOBJECTPARAMETERFVARBPROC glGetObjectParameterfvARB{nullptr};
-PFNGLGETOBJECTPARAMETERIVARBPROC glGetObjectParameterivARB{nullptr};
-PFNGLGETINFOLOGARBPROC glGetInfoLogARB{nullptr};
-PFNGLGETATTACHEDOBJECTSARBPROC glGetAttachedObjectsARB{nullptr};
-PFNGLGETUNIFORMLOCATIONARBPROC glGetUniformLocationARB{nullptr};
-PFNGLGETACTIVEUNIFORMARBPROC glGetActiveUniformARB{nullptr};
-PFNGLGETUNIFORMFVARBPROC glGetUniformfvARB{nullptr};
-PFNGLGETUNIFORMIVARBPROC glGetUniformivARB{nullptr};
-PFNGLGETSHADERSOURCEARBPROC glGetShaderSourceARB{nullptr};
 
 // для менеджера
 sGLSL *StartGLSLMan{nullptr};
@@ -82,114 +42,6 @@ int NumGLSLMan{0};
 
 } // unnamed namespace
 
-
-//------------------------------------------------------------------------------------
-// иним и подключаем все указатели
-//------------------------------------------------------------------------------------
-bool vw_Internal_InitializationGLSL()
-{
-	// GL_ARB_shader_objects
-	glDeleteObjectARB = (PFNGLDELETEOBJECTARBPROC) SDL_GL_GetProcAddress("glDeleteObjectARB");
-	glGetHandleARB = (PFNGLGETHANDLEARBPROC) SDL_GL_GetProcAddress("glGetHandleARB");
-	glDetachObjectARB = (PFNGLDETACHOBJECTARBPROC) SDL_GL_GetProcAddress("glDetachObjectARB");
-	glCreateShaderObjectARB = (PFNGLCREATESHADEROBJECTARBPROC) SDL_GL_GetProcAddress("glCreateShaderObjectARB");
-	glShaderSourceARB = (PFNGLSHADERSOURCEARBPROC) SDL_GL_GetProcAddress("glShaderSourceARB");
-	glCompileShaderARB = (PFNGLCOMPILESHADERARBPROC) SDL_GL_GetProcAddress("glCompileShaderARB");
-	glCreateProgramObjectARB = (PFNGLCREATEPROGRAMOBJECTARBPROC) SDL_GL_GetProcAddress("glCreateProgramObjectARB");
-	glAttachObjectARB = (PFNGLATTACHOBJECTARBPROC) SDL_GL_GetProcAddress("glAttachObjectARB");
-	glLinkProgramARB = (PFNGLLINKPROGRAMARBPROC) SDL_GL_GetProcAddress("glLinkProgramARB");
-	glUseProgramObjectARB = (PFNGLUSEPROGRAMOBJECTARBPROC) SDL_GL_GetProcAddress("glUseProgramObjectARB");
-	glValidateProgramARB = (PFNGLVALIDATEPROGRAMARBPROC) SDL_GL_GetProcAddress("glValidateProgramARB");
-	glUniform1fARB = (PFNGLUNIFORM1FARBPROC) SDL_GL_GetProcAddress("glUniform1fARB");
-	glUniform2fARB = (PFNGLUNIFORM2FARBPROC) SDL_GL_GetProcAddress("glUniform2fARB");
-	glUniform3fARB = (PFNGLUNIFORM3FARBPROC) SDL_GL_GetProcAddress("glUniform3fARB");
-	glUniform4fARB = (PFNGLUNIFORM4FARBPROC) SDL_GL_GetProcAddress("glUniform4fARB");
-	glUniform1iARB = (PFNGLUNIFORM1IARBPROC) SDL_GL_GetProcAddress("glUniform1iARB");
-	glUniform2iARB = (PFNGLUNIFORM2IARBPROC) SDL_GL_GetProcAddress("glUniform2iARB");
-	glUniform3iARB = (PFNGLUNIFORM3IARBPROC) SDL_GL_GetProcAddress("glUniform3iARB");
-	glUniform4iARB = (PFNGLUNIFORM4IARBPROC) SDL_GL_GetProcAddress("glUniform4iARB");
-	glUniform1fvARB = (PFNGLUNIFORM1FVARBPROC) SDL_GL_GetProcAddress("glUniform1fvARB");
-	glUniform2fvARB = (PFNGLUNIFORM2FVARBPROC) SDL_GL_GetProcAddress("glUniform2fvARB");
-	glUniform3fvARB = (PFNGLUNIFORM3FVARBPROC) SDL_GL_GetProcAddress("glUniform3fvARB");
-	glUniform4fvARB = (PFNGLUNIFORM4FVARBPROC) SDL_GL_GetProcAddress("glUniform4fvARB");
-	glUniform1ivARB = (PFNGLUNIFORM1IVARBPROC) SDL_GL_GetProcAddress("glUniform1ivARB");
-	glUniform2ivARB = (PFNGLUNIFORM2IVARBPROC) SDL_GL_GetProcAddress("glUniform2ivARB");
-	glUniform3ivARB = (PFNGLUNIFORM3IVARBPROC) SDL_GL_GetProcAddress("glUniform3ivARB");
-	glUniform4ivARB = (PFNGLUNIFORM4IVARBPROC) SDL_GL_GetProcAddress("glUniform4ivARB");
-	glUniformMatrix2fvARB = (PFNGLUNIFORMMATRIX2FVARBPROC) SDL_GL_GetProcAddress("glUniformMatrix2fvARB");
-	glUniformMatrix3fvARB = (PFNGLUNIFORMMATRIX3FVARBPROC) SDL_GL_GetProcAddress("glUniformMatrix3fvARB");
-	glUniformMatrix4fvARB = (PFNGLUNIFORMMATRIX4FVARBPROC) SDL_GL_GetProcAddress("glUniformMatrix4fvARB");
-	glGetObjectParameterfvARB = (PFNGLGETOBJECTPARAMETERFVARBPROC) SDL_GL_GetProcAddress("glGetObjectParameterfvARB");
-	glGetObjectParameterivARB = (PFNGLGETOBJECTPARAMETERIVARBPROC) SDL_GL_GetProcAddress("glGetObjectParameterivARB");
-	glGetInfoLogARB = (PFNGLGETINFOLOGARBPROC) SDL_GL_GetProcAddress("glGetInfoLogARB");
-	glGetAttachedObjectsARB = (PFNGLGETATTACHEDOBJECTSARBPROC) SDL_GL_GetProcAddress("glGetAttachedObjectsARB");
-	glGetUniformLocationARB = (PFNGLGETUNIFORMLOCATIONARBPROC) SDL_GL_GetProcAddress("glGetUniformLocationARB");
-	glGetActiveUniformARB = (PFNGLGETACTIVEUNIFORMARBPROC) SDL_GL_GetProcAddress("glGetActiveUniformARB");
-	glGetUniformfvARB = (PFNGLGETUNIFORMFVARBPROC) SDL_GL_GetProcAddress("glGetUniformfvARB");
-	glGetUniformivARB = (PFNGLGETUNIFORMIVARBPROC) SDL_GL_GetProcAddress("glGetUniformivARB");
-	glGetShaderSourceARB = (PFNGLGETSHADERSOURCEARBPROC) SDL_GL_GetProcAddress("glGetShaderSourceARB");
-
-	// инициализация менеджера
-	StartGLSLMan = nullptr;
-	EndGLSLMan = nullptr;
-	NumGLSLMan = 0;
-
-	if (glDeleteObjectARB == nullptr || glGetHandleARB == nullptr || glDetachObjectARB == nullptr || glCreateShaderObjectARB == nullptr ||
-	    glShaderSourceARB == nullptr || glCompileShaderARB == nullptr || glCreateProgramObjectARB == nullptr || glAttachObjectARB == nullptr ||
-	    glLinkProgramARB == nullptr || glUseProgramObjectARB == nullptr || glValidateProgramARB == nullptr || glUniform1fARB == nullptr ||
-	    glUniform2fARB == nullptr || glUniform3fARB == nullptr || glUniform4fARB == nullptr || glUniform1iARB == nullptr ||
-	    glUniform2iARB == nullptr || glUniform3iARB == nullptr || glUniform4iARB == nullptr || glUniform1fvARB == nullptr ||
-	    glUniform2fvARB == nullptr || glUniform3fvARB == nullptr || glUniform4fvARB == nullptr || glUniform1ivARB == nullptr ||
-	    glUniform2ivARB == nullptr || glUniform3ivARB == nullptr || glUniform4ivARB == nullptr || glUniformMatrix2fvARB == nullptr ||
-	    glUniformMatrix3fvARB == nullptr || glUniformMatrix4fvARB == nullptr || glGetObjectParameterfvARB == nullptr ||
-	    glGetObjectParameterivARB == nullptr || glGetInfoLogARB == nullptr || glGetAttachedObjectsARB == nullptr ||
-	    glGetUniformLocationARB == nullptr || glGetActiveUniformARB == nullptr || glGetUniformfvARB == nullptr || glGetUniformivARB == nullptr ||
-	    glGetShaderSourceARB == nullptr) {
-		glDeleteObjectARB = nullptr;
-		glGetHandleARB = nullptr;
-		glDetachObjectARB = nullptr;
-		glCreateShaderObjectARB = nullptr;
-		glShaderSourceARB = nullptr;
-		glCompileShaderARB = nullptr;
-		glCreateProgramObjectARB = nullptr;
-		glAttachObjectARB = nullptr;
-		glLinkProgramARB = nullptr;
-		glUseProgramObjectARB = nullptr;
-		glValidateProgramARB = nullptr;
-		glUniform1fARB = nullptr;
-		glUniform2fARB = nullptr;
-		glUniform3fARB = nullptr;
-		glUniform4fARB = nullptr;
-		glUniform1iARB = nullptr;
-		glUniform2iARB = nullptr;
-		glUniform3iARB = nullptr;
-		glUniform4iARB = nullptr;
-		glUniform1fvARB = nullptr;
-		glUniform2fvARB = nullptr;
-		glUniform3fvARB = nullptr;
-		glUniform4fvARB = nullptr;
-		glUniform1ivARB = nullptr;
-		glUniform2ivARB = nullptr;
-		glUniform3ivARB = nullptr;
-		glUniform4ivARB = nullptr;
-		glUniformMatrix2fvARB = nullptr;
-		glUniformMatrix3fvARB = nullptr;
-		glUniformMatrix4fvARB = nullptr;
-		glGetObjectParameterfvARB = nullptr;
-		glGetObjectParameterivARB = nullptr;
-		glGetInfoLogARB = nullptr;
-		glGetAttachedObjectsARB = nullptr;
-		glGetUniformLocationARB = nullptr;
-		glGetActiveUniformARB = nullptr;
-		glGetUniformfvARB = nullptr;
-		glGetUniformivARB = nullptr;
-		glGetShaderSourceARB = nullptr;
-
-		return false;
-	}
-
-	return true;
-}
 
 //------------------------------------------------------------------------------------
 // ошибка
@@ -214,8 +66,8 @@ static int CheckOGLError(const char *FunctionName)
 //------------------------------------------------------------------------------------
 void vw_PrintShaderInfoLog(GLhandleARB shader, const char *ShaderName)
 {
-	if (!glGetObjectParameterivARB ||
-	    !glGetInfoLogARB)
+	if (!_glGetObjectParameteriv ||
+	    !_glGetInfoLog)
 		return;
 
 	int infologLength{0};
@@ -223,7 +75,7 @@ void vw_PrintShaderInfoLog(GLhandleARB shader, const char *ShaderName)
 
 	CheckOGLError(__func__);  // Check for OpenGL errors
 
-	glGetObjectParameterivARB(shader, GL_INFO_LOG_LENGTH, &infologLength);
+	_glGetObjectParameteriv(shader, GL_INFO_LOG_LENGTH, &infologLength);
 
 	CheckOGLError(__func__);  // Check for OpenGL errors
 
@@ -233,7 +85,7 @@ void vw_PrintShaderInfoLog(GLhandleARB shader, const char *ShaderName)
 			std::cerr << __func__ << "(): " << "Could not allocate InfoLog buffer.\n";
 			return;
 		}
-		glGetInfoLogARB(shader, infologLength, &charsWritten, infoLog);
+		_glGetInfoLog(shader, infologLength, &charsWritten, infoLog);
 		if (strlen(infoLog) >1)
 			std::cout << "Shader InfoLog " << ShaderName << ":\n" << infoLog << "\n\n";
 		free(infoLog);
@@ -243,8 +95,8 @@ void vw_PrintShaderInfoLog(GLhandleARB shader, const char *ShaderName)
 
 void vw_PrintProgramInfoLog(GLhandleARB program)
 {
-	if (!glGetObjectParameterivARB ||
-	    !glGetInfoLogARB)
+	if (!_glGetObjectParameteriv ||
+	    !_glGetInfoLog)
 		return;
 
 	int infologLength{0};
@@ -252,7 +104,7 @@ void vw_PrintProgramInfoLog(GLhandleARB program)
 
 	CheckOGLError(__func__);  // Check for OpenGL errors
 
-	glGetObjectParameterivARB(program, GL_INFO_LOG_LENGTH, &infologLength);
+	_glGetObjectParameteriv(program, GL_INFO_LOG_LENGTH, &infologLength);
 
 	CheckOGLError(__func__);  // Check for OpenGL errors
 
@@ -262,7 +114,7 @@ void vw_PrintProgramInfoLog(GLhandleARB program)
 			std::cerr << __func__ << "(): " << "Could not allocate InfoLog buffer.\n";
 			return;
 		}
-		glGetInfoLogARB(program, infologLength, &charsWritten, infoLog);
+		_glGetInfoLog(program, infologLength, &charsWritten, infoLog);
 		if (strlen(infoLog) >1)
 			std::cout << "Program InfoLog:\n" << infoLog << "\n\n";
 		free(infoLog);
@@ -275,8 +127,8 @@ void vw_PrintProgramInfoLog(GLhandleARB program)
 //------------------------------------------------------------------------------------
 void vw_ReleaseAllShaders()
 {
-	if (!glDetachObjectARB ||
-	    !glDeleteObjectARB)
+	if (!_glDetachObject ||
+	    !_glDeleteObject)
 		return;
 
 	// Чистка памяти...
@@ -288,13 +140,13 @@ void vw_ReleaseAllShaders()
 
 		// открепляем хидеры шейдеров
 		if (Tmp->VertexShaderUse)
-			glDetachObjectARB(Tmp->Program, Tmp->VertexShader);
+			_glDetachObject(Tmp->Program, Tmp->VertexShader);
 		if (Tmp->FragmentShaderUse)
-			glDetachObjectARB(Tmp->Program, Tmp->FragmentShader);
+			_glDetachObject(Tmp->Program, Tmp->FragmentShader);
 		// удаляем
-		glDeleteObjectARB(Tmp->VertexShader);
-		glDeleteObjectARB(Tmp->FragmentShader);
-		glDeleteObjectARB(Tmp->Program);
+		_glDeleteObject(Tmp->VertexShader);
+		_glDeleteObject(Tmp->FragmentShader);
+		_glDeleteObject(Tmp->Program);
 
 		if (Tmp->Name) {
 			delete [] Tmp->Name;
@@ -406,12 +258,12 @@ sGLSL* vw_FindShaderByName(const char *Name)
 //------------------------------------------------------------------------------------
 sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName, const char *FragmentShaderFileName)
 {
-	if (!glCreateShaderObjectARB ||
-	    !glShaderSourceARB ||
-	    !glCompileShaderARB ||
-	    !glCreateProgramObjectARB ||
-	    !glAttachObjectARB ||
-	    !glGetObjectParameterivARB ||
+	if (!_glCreateShaderObject ||
+	    !_glShaderSource ||
+	    !_glCompileShader ||
+	    !_glCreateProgramObject ||
+	    !_glAttachObject ||
+	    !_glGetObjectParameteriv ||
 	    (!VertexShaderFileName && !FragmentShaderFileName))
 		return nullptr;
 
@@ -421,8 +273,8 @@ sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 	sGLSL *GLSLtmp = new sGLSL;
 
 	// создаем пустые объекты и получаем хидеры на них
-	GLSLtmp->VertexShader = glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
-	GLSLtmp->FragmentShader = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
+	GLSLtmp->VertexShader = _glCreateShaderObject(GL_VERTEX_SHADER_ARB);
+	GLSLtmp->FragmentShader = _glCreateShaderObject(GL_FRAGMENT_SHADER_ARB);
 
 	// загружаем данные в пустые шейдеры
 
@@ -434,7 +286,7 @@ sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 		if (VertexFile != nullptr) {
 			const GLcharARB *TmpGLcharARB = (const GLcharARB *)VertexFile->Data.get();
 			GLint TmpGLint = (GLint)VertexFile->Size;
-			glShaderSourceARB(GLSLtmp->VertexShader, 1, &TmpGLcharARB, &TmpGLint);
+			_glShaderSource(GLSLtmp->VertexShader, 1, &TmpGLcharARB, &TmpGLint);
 			vw_fclose(VertexFile);
 			GLSLtmp->VertexShaderUse = true;
 		}
@@ -447,7 +299,7 @@ sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 		if (FragmentFile != nullptr) {
 			const GLcharARB *TmpGLcharARB = (const GLcharARB *)FragmentFile->Data.get();
 			GLint TmpGLint = (GLint)FragmentFile->Size;
-			glShaderSourceARB(GLSLtmp->FragmentShader, 1, &TmpGLcharARB, &TmpGLint);
+			_glShaderSource(GLSLtmp->FragmentShader, 1, &TmpGLcharARB, &TmpGLint);
 			vw_fclose(FragmentFile);
 			GLSLtmp->FragmentShaderUse = true;
 		}
@@ -456,18 +308,18 @@ sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 	// компилируем шейдеры
 
 	if (GLSLtmp->VertexShaderUse) {
-		glCompileShaderARB(GLSLtmp->VertexShader);
+		_glCompileShader(GLSLtmp->VertexShader);
 		CheckOGLError(__func__);  // Check for OpenGL errors
-		glGetObjectParameterivARB(GLSLtmp->VertexShader, GL_COMPILE_STATUS, &vertCompiled);
+		_glGetObjectParameteriv(GLSLtmp->VertexShader, GL_COMPILE_STATUS, &vertCompiled);
 		vw_PrintShaderInfoLog(GLSLtmp->VertexShader, VertexShaderFileName);
 
 		if (!vertCompiled)
 			return nullptr;
 	}
 	if (GLSLtmp->FragmentShaderUse) {
-		glCompileShaderARB(GLSLtmp->FragmentShader);
+		_glCompileShader(GLSLtmp->FragmentShader);
 		CheckOGLError(__func__);  // Check for OpenGL errors
-		glGetObjectParameterivARB(GLSLtmp->FragmentShader, GL_COMPILE_STATUS, &fragCompiled);
+		_glGetObjectParameteriv(GLSLtmp->FragmentShader, GL_COMPILE_STATUS, &fragCompiled);
 		vw_PrintShaderInfoLog(GLSLtmp->FragmentShader, FragmentShaderFileName);
 
 		if (!fragCompiled)
@@ -475,11 +327,11 @@ sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 	}
 
 	// создаем программу, чтобы подключить эти шейдеры
-	GLSLtmp->Program = glCreateProgramObjectARB();
+	GLSLtmp->Program = _glCreateProgramObject();
 	if (GLSLtmp->VertexShaderUse)
-		glAttachObjectARB(GLSLtmp->Program, GLSLtmp->VertexShader);
+		_glAttachObject(GLSLtmp->Program, GLSLtmp->VertexShader);
 	if (GLSLtmp->FragmentShaderUse)
-		glAttachObjectARB(GLSLtmp->Program, GLSLtmp->FragmentShader);
+		_glAttachObject(GLSLtmp->Program, GLSLtmp->FragmentShader);
 
 	if (!VertexShaderFileName)
 		std::cout << "Shader ... " <<  FragmentShaderFileName << "\n";
@@ -507,15 +359,15 @@ sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 bool vw_LinkShaderProgram(sGLSL *GLSL)
 {
 	if (!GLSL ||
-	    !glLinkProgramARB ||
-	    !glGetObjectParameterivARB)
+	    !_glLinkProgram ||
+	    !_glGetObjectParameteriv)
 		return false;
 
-	glLinkProgramARB(GLSL->Program);
+	_glLinkProgram(GLSL->Program);
 	CheckOGLError(__func__);
 
 	GLint Linked{false};
-	glGetObjectParameterivARB(GLSL->Program, GL_LINK_STATUS, &Linked);
+	_glGetObjectParameteriv(GLSL->Program, GL_LINK_STATUS, &Linked);
 	vw_PrintProgramInfoLog(GLSL->Program);
 
 	return Linked;
@@ -526,10 +378,10 @@ bool vw_LinkShaderProgram(sGLSL *GLSL)
 //------------------------------------------------------------------------------------
 bool vw_UseShaderProgram(sGLSL *GLSL)
 {
-	if (!GLSL || !glUseProgramObjectARB)
+	if (!GLSL || !_glUseProgramObject)
 		return false;
 
-	glUseProgramObjectARB(GLSL->Program);
+	_glUseProgramObject(GLSL->Program);
 	CheckOGLError(__func__);
 
 	return true;
@@ -540,10 +392,10 @@ bool vw_UseShaderProgram(sGLSL *GLSL)
 //------------------------------------------------------------------------------------
 bool vw_StopShaderProgram()
 {
-	if (!glUseProgramObjectARB)
+	if (!_glUseProgramObject)
 		return false;
 
-	glUseProgramObjectARB(
+	_glUseProgramObject(
 #ifdef __APPLE__
 			      nullptr	/* typedef void *GLhandleARB, see glext.h for more declaration */
 #else
@@ -561,10 +413,10 @@ bool vw_StopShaderProgram()
 //------------------------------------------------------------------------------------
 int vw_GetUniformLocation(sGLSL *GLSL, const char *name)
 {
-	if (!GLSL || !glGetUniformLocationARB)
+	if (!GLSL || !_glGetUniformLocation)
 		return -1;
 
-	int tmpLocation = glGetUniformLocationARB(GLSL->Program, name);
+	int tmpLocation = _glGetUniformLocation(GLSL->Program, name);
 
 	if (tmpLocation == -1)
 		std::cerr << __func__ << "(): " << "No such uniform named: " << name << "\n";
@@ -578,10 +430,10 @@ int vw_GetUniformLocation(sGLSL *GLSL, const char *name)
 //------------------------------------------------------------------------------------
 bool vw_Uniform1i(sGLSL *GLSL, int UniformLocation, int data)
 {
-	if (!GLSL || !glUniform1iARB)
+	if (!GLSL || !_glUniform1i)
 		return false;
 
-	glUniform1iARB(UniformLocation, data);
+	_glUniform1i(UniformLocation, data);
 
 	CheckOGLError(__func__);
 
@@ -590,10 +442,10 @@ bool vw_Uniform1i(sGLSL *GLSL, int UniformLocation, int data)
 
 bool vw_Uniform1f(sGLSL *GLSL, int UniformLocation, float data)
 {
-	if (!GLSL || !glUniform1fARB)
+	if (!GLSL || !_glUniform1f)
 		return false;
 
-	glUniform1fARB(UniformLocation, data);
+	_glUniform1f(UniformLocation, data);
 
 	CheckOGLError(__func__);
 
@@ -602,10 +454,10 @@ bool vw_Uniform1f(sGLSL *GLSL, int UniformLocation, float data)
 
 bool vw_Uniform3f(sGLSL *GLSL, int UniformLocation, float data1, float data2, float data3)
 {
-	if (!GLSL || !glUniform3fARB)
+	if (!GLSL || !_glUniform3f)
 		return false;
 
-	glUniform3fARB(UniformLocation, data1, data2, data3);
+	_glUniform3f(UniformLocation, data1, data2, data3);
 
 	CheckOGLError(__func__);
 

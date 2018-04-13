@@ -29,6 +29,47 @@
 
 #include "opengl.h"
 
+// GL_ARB_shader_objects
+extern PFNGLDELETEOBJECTARBPROC _glDeleteObject;
+extern PFNGLGETHANDLEARBPROC _glGetHandle;
+extern PFNGLDETACHOBJECTARBPROC _glDetachObject;
+extern PFNGLCREATESHADEROBJECTARBPROC _glCreateShaderObject;
+extern PFNGLSHADERSOURCEARBPROC _glShaderSource;
+extern PFNGLCOMPILESHADERARBPROC _glCompileShader;
+extern PFNGLCREATEPROGRAMOBJECTARBPROC _glCreateProgramObject;
+extern PFNGLATTACHOBJECTARBPROC _glAttachObject;
+extern PFNGLLINKPROGRAMARBPROC _glLinkProgram;
+extern PFNGLUSEPROGRAMOBJECTARBPROC _glUseProgramObject;
+extern PFNGLVALIDATEPROGRAMARBPROC _glValidateProgram;
+extern PFNGLUNIFORM1FARBPROC _glUniform1f;
+extern PFNGLUNIFORM2FARBPROC _glUniform2f;
+extern PFNGLUNIFORM3FARBPROC _glUniform3f;
+extern PFNGLUNIFORM4FARBPROC _glUniform4f;
+extern PFNGLUNIFORM1IARBPROC _glUniform1i;
+extern PFNGLUNIFORM2IARBPROC _glUniform2i;
+extern PFNGLUNIFORM3IARBPROC _glUniform3i;
+extern PFNGLUNIFORM4IARBPROC _glUniform4i;
+extern PFNGLUNIFORM1FVARBPROC _glUniform1fv;
+extern PFNGLUNIFORM2FVARBPROC _glUniform2fv;
+extern PFNGLUNIFORM3FVARBPROC _glUniform3fv;
+extern PFNGLUNIFORM4FVARBPROC _glUniform4fv;
+extern PFNGLUNIFORM1IVARBPROC _glUniform1iv;
+extern PFNGLUNIFORM2IVARBPROC _glUniform2iv;
+extern PFNGLUNIFORM3IVARBPROC _glUniform3iv;
+extern PFNGLUNIFORM4IVARBPROC _glUniform4iv;
+extern PFNGLUNIFORMMATRIX2FVARBPROC _glUniformMatrix2fv;
+extern PFNGLUNIFORMMATRIX3FVARBPROC _glUniformMatrix3fv;
+extern PFNGLUNIFORMMATRIX4FVARBPROC _glUniformMatrix4fv;
+extern PFNGLGETOBJECTPARAMETERFVARBPROC _glGetObjectParameterfv;
+extern PFNGLGETOBJECTPARAMETERIVARBPROC _glGetObjectParameteriv;
+extern PFNGLGETINFOLOGARBPROC _glGetInfoLog;
+extern PFNGLGETATTACHEDOBJECTSARBPROC _glGetAttachedObjects;
+extern PFNGLGETUNIFORMLOCATIONARBPROC _glGetUniformLocation;
+extern PFNGLGETACTIVEUNIFORMARBPROC _glGetActiveUniform;
+extern PFNGLGETUNIFORMFVARBPROC _glGetUniformfv;
+extern PFNGLGETUNIFORMIVARBPROC _glGetUniformiv;
+extern PFNGLGETSHADERSOURCEARBPROC _glGetShaderSource;
+
 // GL_EXT_framebuffer_object
 extern PFNGLGENRENDERBUFFERSEXTPROC _glGenRenderbuffers;
 extern PFNGLBINDRENDERBUFFEREXTPROC _glBindRenderbuffer;
@@ -49,6 +90,7 @@ extern PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC _glGetFramebufferAttachme
 extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC _glRenderbufferStorageMultisampleCoverageNV;
 
 
+bool __Initialize_GL_ARB_shader_objects();
 bool __Initialize_GL_EXT_framebuffer_object();
 bool __Initialize_GL_NV_framebuffer_multisample_coverage();
 

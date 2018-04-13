@@ -81,8 +81,6 @@ GLsizei ScreenHeightGL{0};
 Uint16 UserDisplayRamp[256*3];
 int UserDisplayRampStatus = -1; // не использовать, была ошибка при получении значения
 
-// инициализация GLSL
-bool vw_Internal_InitializationGLSL();
 // инициализация VBO
 bool Internal_InitializationBufferObjects();
 // инициализация VAO
@@ -431,7 +429,8 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	// инициализация индекс буфера
 	Internal_InitializationLocalIndexData();
 	// иним шейдеры
-	if (OpenGL_DevCaps.GLSL100Supported) OpenGL_DevCaps.GLSL100Supported = vw_Internal_InitializationGLSL();
+	if (OpenGL_DevCaps.GLSL100Supported)
+		OpenGL_DevCaps.GLSL100Supported = __Initialize_GL_ARB_shader_objects();
 	// иним вбо
 	if (OpenGL_DevCaps.VBOSupported)
 		OpenGL_DevCaps.VBOSupported = Internal_InitializationBufferObjects();
