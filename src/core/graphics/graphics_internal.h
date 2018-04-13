@@ -42,13 +42,5 @@ struct sDevCaps;
 // Internal access to DevCaps, with write access.
 sDevCaps &__GetDevCaps();
 
-/*
- * gl_fbo
- */
-
-// Internal FBO initialization.
-bool __InitializeFBO();
-// Internal export glGenerateMipmapEXT.
-PFNGLGENERATEMIPMAPPROC __glGenerateMipmap();
 
 #endif // GraphicsInternal_H

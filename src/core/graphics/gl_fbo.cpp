@@ -28,126 +28,15 @@
 
 #include "graphics_internal.h"
 #include "graphics.h"
+#include "extensions.h"
 
 namespace {
 
 // Current FBO, null if FrameBuffer.
 sFBO *CurrentFBO{nullptr};
 
-// GL_EXT_framebuffer_object
-PFNGLGENRENDERBUFFERSEXTPROC glGenRenderbuffersEXT{nullptr};
-PFNGLBINDRENDERBUFFEREXTPROC glBindRenderbufferEXT{nullptr};
-PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC glRenderbufferStorageMultisampleEXT{nullptr};
-PFNGLGENRENDERBUFFERSEXTPROC glGenFramebuffersEXT{nullptr};
-PFNGLBINDFRAMEBUFFEREXTPROC glBindFramebufferEXT{nullptr};
-PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC glFramebufferRenderbufferEXT{nullptr};
-PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC glCheckFramebufferStatusEXT{nullptr};
-PFNGLFRAMEBUFFERTEXTURE2DEXTPROC glFramebufferTexture2DEXT{nullptr};
-PFNGLDELETERENDERBUFFERSEXTPROC glDeleteRenderbuffersEXT{nullptr};
-PFNGLDELETEFRAMEBUFFERSEXTPROC glDeleteFramebuffersEXT{nullptr};
-PFNGLBLITFRAMEBUFFEREXTPROC glBlitFramebufferEXT{nullptr};
-PFNGLISFRAMEBUFFEREXTPROC glIsFramebufferEXT{nullptr};
-PFNGLGENERATEMIPMAPPROC glGenerateMipmapEXT{nullptr};
-PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC glGetFramebufferAttachmentParameterivEXT{nullptr};
-
-// GL_NV_framebuffer_multisample_coverage
-PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC glRenderbufferStorageMultisampleCoverageNV{nullptr};
-
 } // unnamed namespace
 
-
-/*
- * Internal export glGenerateMipmapEXT.
- */
-PFNGLGENERATEMIPMAPPROC __glGenerateMipmap()
-{
-	return glGenerateMipmapEXT;
-}
-
-/*
- * Internal FBO initialization.
- */
-bool __InitializeFBO()
-{
-	// GL_ARB_framebuffer_object
-	glGenRenderbuffersEXT = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenRenderbuffers");
-	glBindRenderbufferEXT = (PFNGLBINDRENDERBUFFEREXTPROC) SDL_GL_GetProcAddress("glBindRenderbuffer");
-	glRenderbufferStorageMultisampleEXT =
-		(PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC) SDL_GL_GetProcAddress("glRenderbufferStorageMultisample");
-	glGenFramebuffersEXT = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenFramebuffers");
-	glBindFramebufferEXT = (PFNGLBINDFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBindFramebuffer");
-	glFramebufferRenderbufferEXT = (PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC) SDL_GL_GetProcAddress("glFramebufferRenderbuffer");
-	glCheckFramebufferStatusEXT = (PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC) SDL_GL_GetProcAddress("glCheckFramebufferStatus");
-	glFramebufferTexture2DEXT = (PFNGLFRAMEBUFFERTEXTURE2DEXTPROC) SDL_GL_GetProcAddress("glFramebufferTexture2D");
-	glDeleteRenderbuffersEXT = (PFNGLDELETERENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glDeleteRenderbuffers");
-	glDeleteFramebuffersEXT = (PFNGLDELETEFRAMEBUFFERSEXTPROC) SDL_GL_GetProcAddress("glDeleteFramebuffers");
-	glBlitFramebufferEXT = (PFNGLBLITFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBlitFramebuffer");
-	glIsFramebufferEXT = (PFNGLISFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glIsFramebuffer");
-	glGenerateMipmapEXT = (PFNGLGENERATEMIPMAPPROC) SDL_GL_GetProcAddress("glGenerateMipmap");
-	glGetFramebufferAttachmentParameterivEXT =
-		(PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC) SDL_GL_GetProcAddress("glGetFramebufferAttachmentParameteriv");
-
-	if (!glGenRenderbuffersEXT || !glBindRenderbufferEXT ||
-	    !glRenderbufferStorageMultisampleEXT || !glGenFramebuffersEXT ||
-	    !glBindFramebufferEXT || !glFramebufferRenderbufferEXT ||
-	    !glCheckFramebufferStatusEXT || !glFramebufferTexture2DEXT ||
-	    !glDeleteRenderbuffersEXT || !glDeleteFramebuffersEXT ||
-	    !glBlitFramebufferEXT || !glIsFramebufferEXT ||
-	    !glGenerateMipmapEXT || !glGetFramebufferAttachmentParameterivEXT) {
-		// GL_EXT_framebuffer_object + GL_EXT_framebuffer_multisample + GL_EXT_framebuffer_blit
-		glGenRenderbuffersEXT = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenRenderbuffersEXT");
-		glBindRenderbufferEXT = (PFNGLBINDRENDERBUFFEREXTPROC) SDL_GL_GetProcAddress("glBindRenderbufferEXT");
-		glRenderbufferStorageMultisampleEXT =
-			(PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC) SDL_GL_GetProcAddress("glRenderbufferStorageMultisampleEXT");
-		glGenFramebuffersEXT = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenFramebuffersEXT");
-		glBindFramebufferEXT = (PFNGLBINDFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBindFramebufferEXT");
-		glFramebufferRenderbufferEXT =
-			(PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC) SDL_GL_GetProcAddress("glFramebufferRenderbufferEXT");
-		glCheckFramebufferStatusEXT =
-			(PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC) SDL_GL_GetProcAddress("glCheckFramebufferStatusEXT");
-		glFramebufferTexture2DEXT = (PFNGLFRAMEBUFFERTEXTURE2DEXTPROC) SDL_GL_GetProcAddress("glFramebufferTexture2DEXT");
-		glDeleteRenderbuffersEXT = (PFNGLDELETERENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glDeleteRenderbuffersEXT");
-		glDeleteFramebuffersEXT = (PFNGLDELETEFRAMEBUFFERSEXTPROC) SDL_GL_GetProcAddress("glDeleteFramebuffersEXT");
-		glBlitFramebufferEXT = (PFNGLBLITFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBlitFramebufferEXT");
-		glIsFramebufferEXT = (PFNGLISFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glIsFramebufferEXT");
-		glGenerateMipmapEXT = (PFNGLGENERATEMIPMAPPROC) SDL_GL_GetProcAddress("glGenerateMipmapEXT");
-		glGetFramebufferAttachmentParameterivEXT =
-			(PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC)
-				SDL_GL_GetProcAddress("glGetFramebufferAttachmentParameterivEXT");
-	}
-
-	if (!glGenRenderbuffersEXT || !glBindRenderbufferEXT ||
-	    !glRenderbufferStorageMultisampleEXT || !glGenFramebuffersEXT ||
-	    !glBindFramebufferEXT || !glFramebufferRenderbufferEXT ||
-	    !glCheckFramebufferStatusEXT || !glFramebufferTexture2DEXT ||
-	    !glDeleteRenderbuffersEXT || !glDeleteFramebuffersEXT ||
-	    !glBlitFramebufferEXT || !glIsFramebufferEXT ||
-	    !glGenerateMipmapEXT || !glGetFramebufferAttachmentParameterivEXT) {
-		glGenRenderbuffersEXT = nullptr;
-		glBindRenderbufferEXT = nullptr;
-		glRenderbufferStorageMultisampleEXT = nullptr;
-		glGenFramebuffersEXT = nullptr;
-		glBindFramebufferEXT = nullptr;
-		glFramebufferRenderbufferEXT = nullptr;
-		glCheckFramebufferStatusEXT = nullptr;
-		glFramebufferTexture2DEXT = nullptr;
-		glDeleteRenderbuffersEXT = nullptr;
-		glDeleteFramebuffersEXT = nullptr;
-		glBlitFramebufferEXT = nullptr;
-		glIsFramebufferEXT = nullptr;
-		glGenerateMipmapEXT = nullptr;
-		glGetFramebufferAttachmentParameterivEXT = nullptr;
-
-		return false;
-	}
-
-	// optional, GL_NV_framebuffer_multisample_coverage
-	glRenderbufferStorageMultisampleCoverageNV =
-		(PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC)
-			SDL_GL_GetProcAddress("glRenderbufferStorageMultisampleCoverageNV");
-
-	return true;
-}
 
 /*
  * Build FBO. Caller should allocate mamory (FBO).
@@ -155,17 +44,17 @@ bool __InitializeFBO()
 bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool NeedDepth, GLsizei MSAA, GLsizei *CSAA)
 {
 	if (!FBO ||
-	    !glGenRenderbuffersEXT ||
-	    !glBindRenderbufferEXT ||
-	    !glRenderbufferStorageMultisampleEXT ||
-	    !glGenFramebuffersEXT ||
-	    !glBindFramebufferEXT ||
-	    !glFramebufferRenderbufferEXT ||
-	    !glCheckFramebufferStatusEXT)
+	    !_glGenRenderbuffers ||
+	    !_glBindRenderbuffer ||
+	    !_glRenderbufferStorageMultisample ||
+	    !_glGenFramebuffers ||
+	    !_glBindFramebuffer ||
+	    !_glFramebufferRenderbuffer ||
+	    !_glCheckFramebufferStatus)
 		return false;
 
 	// if hardware don't support coverage, switch to MSAA
-	if (!glRenderbufferStorageMultisampleCoverageNV && CSAA)
+	if (!_glRenderbufferStorageMultisampleCoverageNV && CSAA)
 		*CSAA = MSAA;
 
 	GLsizei InternalCSAA = MSAA;
@@ -185,22 +74,22 @@ bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool 
 	std::cout << Width << " " << Height << " " << NeedColor << " "
 		  << NeedDepth << " " << MSAA << " " << InternalCSAA << "\n";
 
-	glGenFramebuffersEXT(1, &FBO->FrameBufferObject);
-	glBindFramebufferEXT(GL_FRAMEBUFFER, FBO->FrameBufferObject);
+	_glGenFramebuffers(1, &FBO->FrameBufferObject);
+	_glBindFramebuffer(GL_FRAMEBUFFER, FBO->FrameBufferObject);
 
 
 	if (NeedColor) {
 		// if we need multisamples, use FBO
 		if (MSAA >= 2) {
-			glGenRenderbuffersEXT(1, &FBO->ColorBuffer);
-			glBindRenderbufferEXT(GL_RENDERBUFFER, FBO->ColorBuffer);
+			_glGenRenderbuffers(1, &FBO->ColorBuffer);
+			_glBindRenderbuffer(GL_RENDERBUFFER, FBO->ColorBuffer);
 			if ((InternalCSAA == MSAA) || (InternalCSAA == 0))
-				glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, MSAA, GL_RGBA, FBO->Width, FBO->Height);
+				_glRenderbufferStorageMultisample(GL_RENDERBUFFER, MSAA, GL_RGBA, FBO->Width, FBO->Height);
 			else
-				glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, InternalCSAA, MSAA,
-									   GL_RGBA, FBO->Width, FBO->Height);
-			glFramebufferRenderbufferEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, FBO->ColorBuffer);
-			if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+				_glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, InternalCSAA, MSAA,
+									    GL_RGBA, FBO->Width, FBO->Height);
+			_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, FBO->ColorBuffer);
+			if(_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
 				return false;
 			}
@@ -212,8 +101,8 @@ bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, FBO->Width, FBO->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-			glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, FBO->ColorTexture, 0);
-			if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, FBO->ColorTexture, 0);
+			if(_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
 				return false;
 			}
@@ -223,18 +112,18 @@ bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool 
 	if (NeedDepth) {
 		// // if we need multisamples, use FBO
 		if (MSAA >= 2) {
-			glGenRenderbuffersEXT(1, &FBO->DepthBuffer);
-			glBindRenderbufferEXT(GL_RENDERBUFFER, FBO->DepthBuffer);
+			_glGenRenderbuffers(1, &FBO->DepthBuffer);
+			_glBindRenderbuffer(GL_RENDERBUFFER, FBO->DepthBuffer);
 			if ((InternalCSAA == MSAA) || (InternalCSAA == 0))
-				glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, MSAA, GL_DEPTH_COMPONENT,
-								    FBO->Width, FBO->Height);
+				_glRenderbufferStorageMultisample(GL_RENDERBUFFER, MSAA, GL_DEPTH_COMPONENT,
+								  FBO->Width, FBO->Height);
 			else
-				glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, InternalCSAA, MSAA,
-									   GL_DEPTH_COMPONENT, FBO->Width, FBO->Height);
-			glFramebufferRenderbufferEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, FBO->DepthBuffer);
-			glGetFramebufferAttachmentParameterivEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-								 GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &FBO->DepthSize);
-			if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+				_glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, InternalCSAA, MSAA,
+									    GL_DEPTH_COMPONENT, FBO->Width, FBO->Height);
+			_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, FBO->DepthBuffer);
+			_glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+							       GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &FBO->DepthSize);
+			if(_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
 				return false;
 			}
@@ -247,17 +136,17 @@ bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, FBO->Width, FBO->Height, 0,
 				     GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
-			glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FBO->DepthTexture, 0);
-			glGetFramebufferAttachmentParameterivEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-								 GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &FBO->DepthSize);
-			if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FBO->DepthTexture, 0);
+			_glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+							       GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &FBO->DepthSize);
+			if(_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
 				return false;
 			}
 		}
 	}
 
-	glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
+	_glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	std::cout << "Frame Buffer Object created. Depth Size: " << FBO->DepthSize << "\n";
 
@@ -273,7 +162,7 @@ bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool 
  */
 void vw_BindFBO(sFBO *FBO)
 {
-	if (!glBindFramebufferEXT ||
+	if (!_glBindFramebuffer ||
 	    (FBO && !FBO->FrameBufferObject))
 		return;
 
@@ -285,9 +174,9 @@ void vw_BindFBO(sFBO *FBO)
 	if (FBO) {
 		if (FBO->ColorBuffer || FBO->DepthBuffer)
 			glEnable(GL_MULTISAMPLE);
-		glBindFramebufferEXT(GL_FRAMEBUFFER, FBO->FrameBufferObject);
+		_glBindFramebuffer(GL_FRAMEBUFFER, FBO->FrameBufferObject);
 	} else
-		glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
+		_glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	CurrentFBO = FBO;
 }
@@ -306,15 +195,15 @@ sFBO *vw_GetCurrentFBO()
 void vw_BlitFBO(sFBO *SourceFBO, sFBO *TargetFBO)
 {
 	if (!SourceFBO || !TargetFBO ||
-	    !glBindFramebufferEXT || !glBlitFramebufferEXT ||
+	    !_glBindFramebuffer || !_glBlitFramebuffer ||
 	    !SourceFBO->FrameBufferObject || !TargetFBO->FrameBufferObject)
 		return;
 
-	glBindFramebufferEXT(GL_READ_FRAMEBUFFER, SourceFBO->FrameBufferObject);
-	glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER, TargetFBO->FrameBufferObject);
-	glBlitFramebufferEXT(0, 0, SourceFBO->Width, SourceFBO->Height,
-			     0, 0, TargetFBO->Width, TargetFBO->Height,
-			     GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	_glBindFramebuffer(GL_READ_FRAMEBUFFER, SourceFBO->FrameBufferObject);
+	_glBindFramebuffer(GL_DRAW_FRAMEBUFFER, TargetFBO->FrameBufferObject);
+	_glBlitFramebuffer(0, 0, SourceFBO->Width, SourceFBO->Height,
+			   0, 0, TargetFBO->Width, TargetFBO->Height,
+			   GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
 
 /*
@@ -371,8 +260,8 @@ void vw_DrawColorFBO(sFBO *SourceFBO, sFBO *TargetFBO)
 void vw_DeleteFBO(sFBO *FBO)
 {
 	if (!FBO ||
-	    !glDeleteRenderbuffersEXT ||
-	    !glDeleteFramebuffersEXT)
+	    !_glDeleteRenderbuffers ||
+	    !_glDeleteFramebuffers)
 		return;
 
 
@@ -387,17 +276,17 @@ void vw_DeleteFBO(sFBO *FBO)
 	};
 
 	if (FBO->ColorBuffer) {
-		glDeleteRenderbuffersEXT(1, &FBO->ColorBuffer);
+		_glDeleteRenderbuffers(1, &FBO->ColorBuffer);
 		FBO->ColorBuffer = 0;
 	};
 
 	if (FBO->DepthBuffer) {
-		glDeleteRenderbuffersEXT(1, &FBO->DepthBuffer);
+		_glDeleteRenderbuffers(1, &FBO->DepthBuffer);
 		FBO->DepthBuffer = 0;
 	};
 
 	if (FBO->FrameBufferObject) {
-		glDeleteFramebuffersEXT(1, &FBO->FrameBufferObject);
+		_glDeleteFramebuffers(1, &FBO->FrameBufferObject);
 		FBO->FrameBufferObject = 0;
 	};
 }

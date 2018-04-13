@@ -26,7 +26,7 @@
 
 #include "graphics_internal.h"
 #include "graphics.h"
-
+#include "extensions.h"
 
 
 
@@ -439,7 +439,8 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	if (OpenGL_DevCaps.VAOSupported) OpenGL_DevCaps.VAOSupported = vw_Internal_InitializationVAO();
 	// инициализируем FBO
 	if (OpenGL_DevCaps.FramebufferObject) {
-		OpenGL_DevCaps.FramebufferObject = __InitializeFBO();
+		OpenGL_DevCaps.FramebufferObject = __Initialize_GL_EXT_framebuffer_object();
+		__Initialize_GL_NV_framebuffer_multisample_coverage();
 
 		// инициализируем буферы, если поддерживаем работу с ними - через них всегда рисуем
 		if (OpenGL_DevCaps.FramebufferObject) {

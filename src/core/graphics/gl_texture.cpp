@@ -37,6 +37,8 @@
 #include "../texture/texture.h"
 #include "graphics_internal.h"
 #include "graphics.h"
+#include "extensions.h"
+
 
 extern PFNGLACTIVETEXTUREARBPROC glActiveTexture_ARB;
 extern PFNGLTEXSTORAGE2DPROC glTexStorage2DEXT;
@@ -85,15 +87,15 @@ GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, i
 
 	if (MipMap) {
 		// используем по порядку наиболее новые решения при генерации мипмепов
-		if (__glGenerateMipmap() && glTexStorage2DEXT) {
+		if (_glGenerateMipmap && glTexStorage2DEXT) {
 			// считаем сколько нужно создавать мипмапов
 			int NeedMipMapLvls = floor(log2(Width>Height?Width:Height)) + 1;
 			glTexStorage2DEXT(GL_TEXTURE_2D, NeedMipMapLvls, InternalFormat, Width, Height);
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Format, GL_UNSIGNED_BYTE, ustDIB);
-			(__glGenerateMipmap())(GL_TEXTURE_2D);
-		} else if (__glGenerateMipmap()) {
+			_glGenerateMipmap(GL_TEXTURE_2D);
+		} else if (_glGenerateMipmap) {
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format, GL_UNSIGNED_BYTE, ustDIB);
-			(__glGenerateMipmap())(GL_TEXTURE_2D);
+			_glGenerateMipmap(GL_TEXTURE_2D);
 		} else if (vw_GetDevCaps()->HardwareMipMapGeneration) {
 			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format, GL_UNSIGNED_BYTE, ustDIB);
