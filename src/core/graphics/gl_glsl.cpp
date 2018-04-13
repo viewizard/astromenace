@@ -42,7 +42,6 @@ namespace {
 // для менеджера
 sGLSL *StartGLSLMan{nullptr};
 sGLSL *EndGLSLMan{nullptr};
-int NumGLSLMan{0};
 
 } // unnamed namespace
 
@@ -96,16 +95,12 @@ static void vw_AttachShader(sGLSL* GLSL)
 	if (EndGLSLMan == nullptr) {
 		GLSL->Prev = nullptr;
 		GLSL->Next = nullptr;
-		NumGLSLMan += 1;
-		GLSL->Num = NumGLSLMan;
 		StartGLSLMan = GLSL;
 		EndGLSLMan = GLSL;
 	} else {
 		GLSL->Prev = EndGLSLMan;
 		GLSL->Next = nullptr;
 		EndGLSLMan->Next = GLSL;
-		NumGLSLMan += 1;
-		GLSL->Num = NumGLSLMan;
 		EndGLSLMan = GLSL;
 	}
 }
@@ -196,25 +191,14 @@ void vw_ReleaseAllShaders()
 
 	StartGLSLMan = nullptr;
 	EndGLSLMan = nullptr;
-	NumGLSLMan = 0;
 }
 
 /*
- * Find shader by num.
+ * Check, is shaders list empty.
  */
-// TODO change to empty() request function
-sGLSL* vw_FindShaderByNum(int Num)
+bool vw_ShadersListEmpty()
 {
-	sGLSL *Tmp = StartGLSLMan;
-
-	while (Tmp) {
-		sGLSL *Tmp1 = Tmp->Next;
-		if (Tmp->Num == Num)
-			return Tmp;
-		Tmp = Tmp1;
-	}
-
-	return nullptr;
+	return !StartGLSLMan;
 }
 
 /*

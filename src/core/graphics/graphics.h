@@ -491,26 +491,22 @@ void vw_DeleteFBO(sFBO *FBO);
  * GLSL.
  */
 
-// структура шейдера
 struct sGLSL {
-	// хендлы
 	GLhandleARB Program;
 	GLhandleARB VertexShader;
 	bool VertexShaderUse;
 	GLhandleARB FragmentShader;
 	bool FragmentShaderUse;
 
-	// для менеждера
 	char *Name;
 	sGLSL *Prev;
 	sGLSL *Next;
-	int Num;
 };
 
 // Release all shaders.
 void vw_ReleaseAllShaders();
-// Find shader by num.
-sGLSL *vw_FindShaderByNum(int Num);
+// Check, is shaders list empty.
+bool vw_ShadersListEmpty();
 // Find shader by name.
 sGLSL *vw_FindShaderByName(const char *Name);
 
