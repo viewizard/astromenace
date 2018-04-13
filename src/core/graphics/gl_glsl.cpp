@@ -24,76 +24,63 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+// TODO move from pointers to std::shared_ptr/std::weak_ptr
+// TODO move to std::string usage in code
+// TODO move to std::unordered_map usage for shaders management
+
 #include "../vfs/vfs.h"
 #include "graphics.h"
 
-
+namespace {
 
 // GL_ARB_shader_objects
-PFNGLDELETEOBJECTARBPROC glDeleteObjectARB = nullptr;
-PFNGLGETHANDLEARBPROC glGetHandleARB = nullptr;
-PFNGLDETACHOBJECTARBPROC glDetachObjectARB = nullptr;
-PFNGLCREATESHADEROBJECTARBPROC glCreateShaderObjectARB = nullptr;
-PFNGLSHADERSOURCEARBPROC glShaderSourceARB = nullptr;
-PFNGLCOMPILESHADERARBPROC glCompileShaderARB = nullptr;
-PFNGLCREATEPROGRAMOBJECTARBPROC glCreateProgramObjectARB = nullptr;
-PFNGLATTACHOBJECTARBPROC glAttachObjectARB = nullptr;
-PFNGLLINKPROGRAMARBPROC glLinkProgramARB = nullptr;
-PFNGLUSEPROGRAMOBJECTARBPROC glUseProgramObjectARB = nullptr;
-PFNGLVALIDATEPROGRAMARBPROC glValidateProgramARB = nullptr;
-PFNGLUNIFORM1FARBPROC glUniform1fARB = nullptr;
-PFNGLUNIFORM2FARBPROC glUniform2fARB = nullptr;
-PFNGLUNIFORM3FARBPROC glUniform3fARB = nullptr;
-PFNGLUNIFORM4FARBPROC glUniform4fARB = nullptr;
-PFNGLUNIFORM1IARBPROC glUniform1iARB = nullptr;
-PFNGLUNIFORM2IARBPROC glUniform2iARB = nullptr;
-PFNGLUNIFORM3IARBPROC glUniform3iARB = nullptr;
-PFNGLUNIFORM4IARBPROC glUniform4iARB = nullptr;
-PFNGLUNIFORM1FVARBPROC glUniform1fvARB = nullptr;
-PFNGLUNIFORM2FVARBPROC glUniform2fvARB = nullptr;
-PFNGLUNIFORM3FVARBPROC glUniform3fvARB = nullptr;
-PFNGLUNIFORM4FVARBPROC glUniform4fvARB = nullptr;
-PFNGLUNIFORM1IVARBPROC glUniform1ivARB = nullptr;
-PFNGLUNIFORM2IVARBPROC glUniform2ivARB = nullptr;
-PFNGLUNIFORM3IVARBPROC glUniform3ivARB = nullptr;
-PFNGLUNIFORM4IVARBPROC glUniform4ivARB = nullptr;
-PFNGLUNIFORMMATRIX2FVARBPROC glUniformMatrix2fvARB = nullptr;
-PFNGLUNIFORMMATRIX3FVARBPROC glUniformMatrix3fvARB = nullptr;
-PFNGLUNIFORMMATRIX4FVARBPROC glUniformMatrix4fvARB = nullptr;
-PFNGLGETOBJECTPARAMETERFVARBPROC glGetObjectParameterfvARB = nullptr;
-PFNGLGETOBJECTPARAMETERIVARBPROC glGetObjectParameterivARB = nullptr;
-PFNGLGETINFOLOGARBPROC glGetInfoLogARB = nullptr;
-PFNGLGETATTACHEDOBJECTSARBPROC glGetAttachedObjectsARB = nullptr;
-PFNGLGETUNIFORMLOCATIONARBPROC glGetUniformLocationARB = nullptr;
-PFNGLGETACTIVEUNIFORMARBPROC glGetActiveUniformARB = nullptr;
-PFNGLGETUNIFORMFVARBPROC glGetUniformfvARB = nullptr;
-PFNGLGETUNIFORMIVARBPROC glGetUniformivARB = nullptr;
-PFNGLGETSHADERSOURCEARBPROC glGetShaderSourceARB = nullptr;
-
-
-// GL_ARB_vertex_shader
-PFNGLBINDATTRIBLOCATIONARBPROC glBindAttribLocationARB = nullptr;
-PFNGLGETACTIVEATTRIBARBPROC glGetActiveAttribARB = nullptr;
-PFNGLGETATTRIBLOCATIONARBPROC glGetAttribLocationARB = nullptr;
-
+PFNGLDELETEOBJECTARBPROC glDeleteObjectARB{nullptr};
+PFNGLGETHANDLEARBPROC glGetHandleARB{nullptr};
+PFNGLDETACHOBJECTARBPROC glDetachObjectARB{nullptr};
+PFNGLCREATESHADEROBJECTARBPROC glCreateShaderObjectARB{nullptr};
+PFNGLSHADERSOURCEARBPROC glShaderSourceARB{nullptr};
+PFNGLCOMPILESHADERARBPROC glCompileShaderARB{nullptr};
+PFNGLCREATEPROGRAMOBJECTARBPROC glCreateProgramObjectARB{nullptr};
+PFNGLATTACHOBJECTARBPROC glAttachObjectARB{nullptr};
+PFNGLLINKPROGRAMARBPROC glLinkProgramARB{nullptr};
+PFNGLUSEPROGRAMOBJECTARBPROC glUseProgramObjectARB{nullptr};
+PFNGLVALIDATEPROGRAMARBPROC glValidateProgramARB{nullptr};
+PFNGLUNIFORM1FARBPROC glUniform1fARB{nullptr};
+PFNGLUNIFORM2FARBPROC glUniform2fARB{nullptr};
+PFNGLUNIFORM3FARBPROC glUniform3fARB{nullptr};
+PFNGLUNIFORM4FARBPROC glUniform4fARB{nullptr};
+PFNGLUNIFORM1IARBPROC glUniform1iARB{nullptr};
+PFNGLUNIFORM2IARBPROC glUniform2iARB{nullptr};
+PFNGLUNIFORM3IARBPROC glUniform3iARB{nullptr};
+PFNGLUNIFORM4IARBPROC glUniform4iARB{nullptr};
+PFNGLUNIFORM1FVARBPROC glUniform1fvARB{nullptr};
+PFNGLUNIFORM2FVARBPROC glUniform2fvARB{nullptr};
+PFNGLUNIFORM3FVARBPROC glUniform3fvARB{nullptr};
+PFNGLUNIFORM4FVARBPROC glUniform4fvARB{nullptr};
+PFNGLUNIFORM1IVARBPROC glUniform1ivARB{nullptr};
+PFNGLUNIFORM2IVARBPROC glUniform2ivARB{nullptr};
+PFNGLUNIFORM3IVARBPROC glUniform3ivARB{nullptr};
+PFNGLUNIFORM4IVARBPROC glUniform4ivARB{nullptr};
+PFNGLUNIFORMMATRIX2FVARBPROC glUniformMatrix2fvARB{nullptr};
+PFNGLUNIFORMMATRIX3FVARBPROC glUniformMatrix3fvARB{nullptr};
+PFNGLUNIFORMMATRIX4FVARBPROC glUniformMatrix4fvARB{nullptr};
+PFNGLGETOBJECTPARAMETERFVARBPROC glGetObjectParameterfvARB{nullptr};
+PFNGLGETOBJECTPARAMETERIVARBPROC glGetObjectParameterivARB{nullptr};
+PFNGLGETINFOLOGARBPROC glGetInfoLogARB{nullptr};
+PFNGLGETATTACHEDOBJECTSARBPROC glGetAttachedObjectsARB{nullptr};
+PFNGLGETUNIFORMLOCATIONARBPROC glGetUniformLocationARB{nullptr};
+PFNGLGETACTIVEUNIFORMARBPROC glGetActiveUniformARB{nullptr};
+PFNGLGETUNIFORMFVARBPROC glGetUniformfvARB{nullptr};
+PFNGLGETUNIFORMIVARBPROC glGetUniformivARB{nullptr};
+PFNGLGETSHADERSOURCEARBPROC glGetShaderSourceARB{nullptr};
 
 // для менеджера
-sGLSL *StartGLSLMan = nullptr;
-sGLSL *EndGLSLMan = nullptr;
-int NumGLSLMan = 0;
+sGLSL *StartGLSLMan{nullptr};
+sGLSL *EndGLSLMan{nullptr};
+int NumGLSLMan{0};
 
-
-
-
-
-
-
-
-
-
-
-
-
+} // unnamed namespace
 
 
 //------------------------------------------------------------------------------------
@@ -142,16 +129,10 @@ bool vw_Internal_InitializationGLSL()
 	glGetUniformivARB = (PFNGLGETUNIFORMIVARBPROC) SDL_GL_GetProcAddress("glGetUniformivARB");
 	glGetShaderSourceARB = (PFNGLGETSHADERSOURCEARBPROC) SDL_GL_GetProcAddress("glGetShaderSourceARB");
 
-	// GL_ARB_vertex_shader
-	glBindAttribLocationARB = (PFNGLBINDATTRIBLOCATIONARBPROC) SDL_GL_GetProcAddress("glBindAttribLocationARB");
-	glGetActiveAttribARB = (PFNGLGETACTIVEATTRIBARBPROC) SDL_GL_GetProcAddress("glGetActiveAttribARB");
-	glGetAttribLocationARB = (PFNGLGETATTRIBLOCATIONARBPROC) SDL_GL_GetProcAddress("glGetAttribLocationARB");
-
 	// инициализация менеджера
 	StartGLSLMan = nullptr;
 	EndGLSLMan = nullptr;
 	NumGLSLMan = 0;
-
 
 	if (glDeleteObjectARB == nullptr || glGetHandleARB == nullptr || glDetachObjectARB == nullptr || glCreateShaderObjectARB == nullptr ||
 	    glShaderSourceARB == nullptr || glCompileShaderARB == nullptr || glCreateProgramObjectARB == nullptr || glAttachObjectARB == nullptr ||
@@ -163,7 +144,7 @@ bool vw_Internal_InitializationGLSL()
 	    glUniformMatrix3fvARB == nullptr || glUniformMatrix4fvARB == nullptr || glGetObjectParameterfvARB == nullptr ||
 	    glGetObjectParameterivARB == nullptr || glGetInfoLogARB == nullptr || glGetAttachedObjectsARB == nullptr ||
 	    glGetUniformLocationARB == nullptr || glGetActiveUniformARB == nullptr || glGetUniformfvARB == nullptr || glGetUniformivARB == nullptr ||
-	    glGetShaderSourceARB == nullptr || glBindAttribLocationARB == nullptr || glGetActiveAttribARB == nullptr || glGetAttribLocationARB == nullptr) {
+	    glGetShaderSourceARB == nullptr) {
 		glDeleteObjectARB = nullptr;
 		glGetHandleARB = nullptr;
 		glDetachObjectARB = nullptr;
@@ -203,9 +184,6 @@ bool vw_Internal_InitializationGLSL()
 		glGetUniformfvARB = nullptr;
 		glGetUniformivARB = nullptr;
 		glGetShaderSourceARB = nullptr;
-		glBindAttribLocationARB = nullptr;
-		glGetActiveAttribARB = nullptr;
-		glGetAttribLocationARB = nullptr;
 
 		return false;
 	}
@@ -213,18 +191,14 @@ bool vw_Internal_InitializationGLSL()
 	return true;
 }
 
-
-
-
-
 //------------------------------------------------------------------------------------
 // ошибка
 //------------------------------------------------------------------------------------
-int CheckOGLError(const char *FunctionName)
+static int CheckOGLError(const char *FunctionName)
 {
 	// Returns 1 if an OpenGL error occurred, 0 otherwise.
 	GLenum glErr;
-	int    retCode = 0;
+	int retCode{0};
 
 	glErr = glGetError();
 	while (glErr != GL_NO_ERROR) {
@@ -235,17 +209,17 @@ int CheckOGLError(const char *FunctionName)
 	return retCode;
 }
 
-
 //------------------------------------------------------------------------------------
 // Print out the information log for a shader object
 //------------------------------------------------------------------------------------
 void vw_PrintShaderInfoLog(GLhandleARB shader, const char *ShaderName)
 {
-	if (glGetObjectParameterivARB == nullptr) return;
-	if (glGetInfoLogARB == nullptr) return;
+	if (!glGetObjectParameterivARB ||
+	    !glGetInfoLogARB)
+		return;
 
-	int infologLength = 0;
-	int charsWritten  = 0;
+	int infologLength{0};
+	int charsWritten{0};
 
 	CheckOGLError(__func__);  // Check for OpenGL errors
 
@@ -255,7 +229,7 @@ void vw_PrintShaderInfoLog(GLhandleARB shader, const char *ShaderName)
 
 	if (infologLength > 0) {
 		GLchar *infoLog = (GLchar *)malloc(infologLength);
-		if (infoLog == nullptr) {
+		if (!infoLog) {
 			std::cerr << __func__ << "(): " << "Could not allocate InfoLog buffer.\n";
 			return;
 		}
@@ -267,14 +241,14 @@ void vw_PrintShaderInfoLog(GLhandleARB shader, const char *ShaderName)
 	CheckOGLError(__func__);  // Check for OpenGL errors
 }
 
-
 void vw_PrintProgramInfoLog(GLhandleARB program)
 {
-	if (glGetObjectParameterivARB == nullptr) return;
-	if (glGetInfoLogARB == nullptr) return;
+	if (!glGetObjectParameterivARB ||
+	    !glGetInfoLogARB)
+		return;
 
-	int infologLength = 0;
-	int charsWritten  = 0;
+	int infologLength{0};
+	int charsWritten{0};
 
 	CheckOGLError(__func__);  // Check for OpenGL errors
 
@@ -284,7 +258,7 @@ void vw_PrintProgramInfoLog(GLhandleARB program)
 
 	if (infologLength > 0) {
 		GLchar *infoLog = (GLchar *)malloc(infologLength);
-		if (infoLog == nullptr) {
+		if (!infoLog) {
 			std::cerr << __func__ << "(): " << "Could not allocate InfoLog buffer.\n";
 			return;
 		}
@@ -296,58 +270,40 @@ void vw_PrintProgramInfoLog(GLhandleARB program)
 	CheckOGLError(__func__);  // Check for OpenGL errors
 }
 
-
-
-
-
-//------------------------------------------------------------------------------------
-// освобождаем память
-//------------------------------------------------------------------------------------
-void vw_ReleaseShader(sGLSL *GLSL)
-{
-	if ((GLSL == nullptr) ||
-	    (glDetachObjectARB == nullptr) ||
-	    (glDeleteObjectARB == nullptr))
-		return;
-
-	vw_DetachShader(GLSL);
-
-	// открепляем хидеры шейдеров
-	if (GLSL->VertexShaderUse)
-		glDetachObjectARB(GLSL->Program, GLSL->VertexShader);
-	if (GLSL->FragmentShaderUse)
-		glDetachObjectARB(GLSL->Program, GLSL->FragmentShader);
-	// удаляем
-	glDeleteObjectARB(GLSL->VertexShader);
-	glDeleteObjectARB(GLSL->FragmentShader);
-	glDeleteObjectARB(GLSL->Program);
-
-	if (GLSL->Name != nullptr) {
-		delete [] GLSL->Name;
-		GLSL->Name = nullptr;
-	}
-
-	// удаляем указатель
-	delete GLSL;
-}
-
-
-
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // освобождаем все шейдеры подключенные к менеджеру
 //------------------------------------------------------------------------------------
 void vw_ReleaseAllShaders()
 {
+	if (!glDetachObjectARB ||
+	    !glDeleteObjectARB)
+		return;
+
 	// Чистка памяти...
 	sGLSL *Tmp = StartGLSLMan;
-	while (Tmp != nullptr) {
+	while (Tmp) {
 		sGLSL *Tmp1 = Tmp->Next;
-		vw_ReleaseShader(Tmp);
+
+		vw_DetachShader(Tmp);
+
+		// открепляем хидеры шейдеров
+		if (Tmp->VertexShaderUse)
+			glDetachObjectARB(Tmp->Program, Tmp->VertexShader);
+		if (Tmp->FragmentShaderUse)
+			glDetachObjectARB(Tmp->Program, Tmp->FragmentShader);
+		// удаляем
+		glDeleteObjectARB(Tmp->VertexShader);
+		glDeleteObjectARB(Tmp->FragmentShader);
+		glDeleteObjectARB(Tmp->Program);
+
+		if (Tmp->Name) {
+			delete [] Tmp->Name;
+			Tmp->Name = nullptr;
+		}
+
+		// удаляем указатель
+		delete Tmp;
+
 		Tmp = Tmp1;
 	}
 
@@ -356,18 +312,12 @@ void vw_ReleaseAllShaders()
 	NumGLSLMan = 0;
 }
 
-
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // подключение к менеджеру
 //------------------------------------------------------------------------------------
 void vw_AttachShader(sGLSL* GLSL)
 {
-	if (GLSL == nullptr)
+	if (!GLSL)
 		return;
 
 	// первый в списке...
@@ -388,16 +338,12 @@ void vw_AttachShader(sGLSL* GLSL)
 	}
 }
 
-
-
-
-
 //------------------------------------------------------------------------------------
 // отключение от менеджера
 //------------------------------------------------------------------------------------
 void vw_DetachShader(sGLSL* GLSL)
 {
-	if (GLSL == nullptr)
+	if (!GLSL)
 		return;
 
 	// переустанавливаем указатели...
@@ -417,18 +363,15 @@ void vw_DetachShader(sGLSL* GLSL)
 		GLSL->Next->Prev = nullptr;
 }
 
-
-
-
-
 //------------------------------------------------------------------------------------
 // Нахождение по уникальному номеру...
 //------------------------------------------------------------------------------------
+// TODO change to empty() request function
 sGLSL* vw_FindShaderByNum(int Num)
 {
 	sGLSL *Tmp = StartGLSLMan;
 
-	while (Tmp != nullptr) {
+	while (Tmp) {
 		sGLSL *Tmp1 = Tmp->Next;
 		if (Tmp->Num == Num)
 			return Tmp;
@@ -438,19 +381,17 @@ sGLSL* vw_FindShaderByNum(int Num)
 	return nullptr;
 }
 
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // Нахождение по имени...
 //------------------------------------------------------------------------------------
 sGLSL* vw_FindShaderByName(const char *Name)
 {
+	if (!Name)
+		return nullptr;
+
 	sGLSL *Tmp = StartGLSLMan;
 
-	while (Tmp != nullptr) {
+	while (Tmp) {
 		sGLSL *Tmp1 = Tmp->Next;
 		if (strcmp(Tmp->Name, Name) == 0)
 			return Tmp;
@@ -460,47 +401,21 @@ sGLSL* vw_FindShaderByName(const char *Name)
 	return nullptr;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // создаем шейдерную программу
 //------------------------------------------------------------------------------------
 sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName, const char *FragmentShaderFileName)
 {
-	if ((glCreateShaderObjectARB == nullptr) ||
-	    (glShaderSourceARB == nullptr) ||
-	    (glCompileShaderARB == nullptr) ||
-	    (glCreateProgramObjectARB == nullptr) ||
-	    (glAttachObjectARB == nullptr) ||
-	    (glGetObjectParameterivARB == nullptr) ||
-	    (VertexShaderFileName == nullptr && FragmentShaderFileName == nullptr))
+	if (!glCreateShaderObjectARB ||
+	    !glShaderSourceARB ||
+	    !glCompileShaderARB ||
+	    !glCreateProgramObjectARB ||
+	    !glAttachObjectARB ||
+	    !glGetObjectParameterivARB ||
+	    (!VertexShaderFileName && !FragmentShaderFileName))
 		return nullptr;
 
-
-	GLint	vertCompiled, fragCompiled;    // status values
+	GLint vertCompiled{0}, fragCompiled{0}; // status values
 
 	// создаем структуру в памяти
 	sGLSL *GLSLtmp = new sGLSL;
@@ -509,12 +424,11 @@ sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 	GLSLtmp->VertexShader = glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
 	GLSLtmp->FragmentShader = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
 
-
 	// загружаем данные в пустые шейдеры
 
 	// вертекстный шейдер
 	GLSLtmp->VertexShaderUse = false;
-	if (VertexShaderFileName != nullptr) {
+	if (VertexShaderFileName) {
 		std::unique_ptr<sFILE> VertexFile = vw_fopen(VertexShaderFileName);
 
 		if (VertexFile != nullptr) {
@@ -527,7 +441,7 @@ sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 	}
 	// фрагментный шейдер
 	GLSLtmp->FragmentShaderUse = false;
-	if (FragmentShaderFileName != nullptr) {
+	if (FragmentShaderFileName) {
 		std::unique_ptr<sFILE> FragmentFile = vw_fopen(FragmentShaderFileName);
 
 		if (FragmentFile != nullptr) {
@@ -538,7 +452,6 @@ sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 			GLSLtmp->FragmentShaderUse = true;
 		}
 	}
-
 
 	// компилируем шейдеры
 
@@ -561,22 +474,21 @@ sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 			return nullptr;
 	}
 
-
 	// создаем программу, чтобы подключить эти шейдеры
 	GLSLtmp->Program = glCreateProgramObjectARB();
-	if (GLSLtmp->VertexShaderUse) glAttachObjectARB(GLSLtmp->Program, GLSLtmp->VertexShader);
-	if (GLSLtmp->FragmentShaderUse) glAttachObjectARB(GLSLtmp->Program, GLSLtmp->FragmentShader);
+	if (GLSLtmp->VertexShaderUse)
+		glAttachObjectARB(GLSLtmp->Program, GLSLtmp->VertexShader);
+	if (GLSLtmp->FragmentShaderUse)
+		glAttachObjectARB(GLSLtmp->Program, GLSLtmp->FragmentShader);
 
-
-	if (VertexShaderFileName == nullptr)
+	if (!VertexShaderFileName)
 		std::cout << "Shader ... " <<  FragmentShaderFileName << "\n";
-	else if (FragmentShaderFileName == nullptr)
+	else if (!FragmentShaderFileName)
 		std::cout <<"Shader ... " << VertexShaderFileName << "\n";
 	else
 		std::cout <<"Shader ... " << VertexShaderFileName << " " << FragmentShaderFileName << "\n";
 
-
-	if (ShaderName != nullptr) {
+	if (ShaderName) {
 		GLSLtmp->Name = new char[strlen(ShaderName)+1];
 		strcpy(GLSLtmp->Name, ShaderName);
 	} else {
@@ -589,44 +501,32 @@ sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName,
 	return GLSLtmp;
 }
 
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // линкуем программу, с учетом отбинденных данных
 //------------------------------------------------------------------------------------
 bool vw_LinkShaderProgram(sGLSL *GLSL)
 {
-	if ((GLSL == nullptr) ||
-	    (glLinkProgramARB == nullptr) ||
-	    (glGetObjectParameterivARB == nullptr))
+	if (!GLSL ||
+	    !glLinkProgramARB ||
+	    !glGetObjectParameterivARB)
 		return false;
-
-	GLint linked;
 
 	glLinkProgramARB(GLSL->Program);
-	CheckOGLError(__func__);  // Check for OpenGL errors
-	glGetObjectParameterivARB(GLSL->Program, GL_LINK_STATUS, &linked);
+	CheckOGLError(__func__);
+
+	GLint Linked{false};
+	glGetObjectParameterivARB(GLSL->Program, GL_LINK_STATUS, &Linked);
 	vw_PrintProgramInfoLog(GLSL->Program);
 
-	if (!linked)
-		return false;
-
-	return true;
+	return Linked;
 }
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // запускаем шейдер на исполнение
 //------------------------------------------------------------------------------------
 bool vw_UseShaderProgram(sGLSL *GLSL)
 {
-	if ((GLSL == nullptr) || (glUseProgramObjectARB == nullptr))
+	if (!GLSL || !glUseProgramObjectARB)
 		return false;
 
 	glUseProgramObjectARB(GLSL->Program);
@@ -635,195 +535,79 @@ bool vw_UseShaderProgram(sGLSL *GLSL)
 	return true;
 }
 
-
-
-
-
 //------------------------------------------------------------------------------------
 // останавливаем работу шейдера
 //------------------------------------------------------------------------------------
 bool vw_StopShaderProgram()
 {
-	if (glUseProgramObjectARB == nullptr) return false;
+	if (!glUseProgramObjectARB)
+		return false;
 
+	glUseProgramObjectARB(
 #ifdef __APPLE__
-	glUseProgramObjectARB(nullptr);	// typedef void *GLhandleARB; - see glext.h for more declaration
+			      nullptr	/* typedef void *GLhandleARB, see glext.h for more declaration */
 #else
-	glUseProgramObjectARB(0);	// typedef unsigned int GLhandleARB; - see glext.h for more declaration
+			      0		/* typedef unsigned int GLhandleARB, see glext.h for more declaration */
 #endif
+			      );
+
 	CheckOGLError(__func__);
 
 	return true;
 }
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // Get the location of a uniform variable
 //------------------------------------------------------------------------------------
 int vw_GetUniformLocation(sGLSL *GLSL, const char *name)
 {
-	if (glGetUniformLocationARB == nullptr) return -1;
+	if (!GLSL || !glGetUniformLocationARB)
+		return -1;
 
-	int loc;
+	int tmpLocation = glGetUniformLocationARB(GLSL->Program, name);
 
-	loc = glGetUniformLocationARB(GLSL->Program, name);
-
-	if (loc == -1)
+	if (tmpLocation == -1)
 		std::cerr << __func__ << "(): " << "No such uniform named: " << name << "\n";
 
-	CheckOGLError(__func__);  // Check for OpenGL errors
-	return loc;
+	CheckOGLError(__func__);
+	return tmpLocation;
 }
-
-
-
 
 //------------------------------------------------------------------------------------
 // установка значения параметра
 //------------------------------------------------------------------------------------
 bool vw_Uniform1i(sGLSL *GLSL, int UniformLocation, int data)
 {
-	if ((GLSL == nullptr) || (glUniform1iARB == nullptr))
+	if (!GLSL || !glUniform1iARB)
 		return false;
 
 	glUniform1iARB(UniformLocation, data);
 
-	CheckOGLError(__func__);  // Check for OpenGL errors
+	CheckOGLError(__func__);
 
 	return true;
 }
-bool vw_Uniform1i(sGLSL *GLSL, const char *name, int data)
-{
-	if ((GLSL == nullptr) || (name == nullptr))
-		return false;
-
-	int Loc = vw_GetUniformLocation(GLSL, name);
-	if (Loc == -1)
-		return false;
-
-	return vw_Uniform1i(GLSL, Loc, data);
-}
-
 
 bool vw_Uniform1f(sGLSL *GLSL, int UniformLocation, float data)
 {
-	if ((GLSL == nullptr) || (glUniform3fARB == nullptr))
+	if (!GLSL || !glUniform1fARB)
 		return false;
 
 	glUniform1fARB(UniformLocation, data);
 
-	CheckOGLError(__func__);  // Check for OpenGL errors
+	CheckOGLError(__func__);
 
 	return true;
 }
-bool vw_Uniform1f(sGLSL *GLSL, const char *name, float data)
-{
-	if ((GLSL == nullptr) || (name == nullptr))
-		return false;
-
-	int Loc = vw_GetUniformLocation(GLSL, name);
-	if (Loc == -1)
-		return false;
-
-	return vw_Uniform1f(GLSL, Loc, data);
-}
-
 
 bool vw_Uniform3f(sGLSL *GLSL, int UniformLocation, float data1, float data2, float data3)
 {
-	if ((GLSL == nullptr) || (glUniform3fARB == nullptr))
+	if (!GLSL || !glUniform3fARB)
 		return false;
 
 	glUniform3fARB(UniformLocation, data1, data2, data3);
 
-	CheckOGLError(__func__);  // Check for OpenGL errors
+	CheckOGLError(__func__);
 
 	return true;
 }
-bool vw_Uniform3f(sGLSL *GLSL, const char *name, float data1, float data2, float data3)
-{
-	if ((GLSL == nullptr) || (name == nullptr))
-		return false;
-
-	int Loc = vw_GetUniformLocation(GLSL, name);
-	if (Loc == -1)
-		return false;
-
-	return vw_Uniform3f(GLSL, Loc, data1, data2, data3);
-}
-
-
-bool vw_Uniform1fv(sGLSL *GLSL, int UniformLocation, int count, float *data)
-{
-	if ((GLSL == nullptr) || (glUniform1fvARB == nullptr))
-		return false;
-
-	glUniform1fvARB(UniformLocation, count, data);
-
-	CheckOGLError(__func__);  // Check for OpenGL errors
-
-	return true;
-}
-bool vw_Uniform1fv(sGLSL *GLSL, const char *name, int count, float *data)
-{
-	if ((GLSL == nullptr) || (name == nullptr))
-		return false;
-
-	int Loc = vw_GetUniformLocation(GLSL, name);
-	if (Loc == -1)
-		return false;
-
-	return vw_Uniform1fv(GLSL, Loc, count, data);
-}
-
-
-bool vw_Uniform4fv(sGLSL *GLSL, int UniformLocation, int count, float *data)
-{
-	if ((GLSL == nullptr) || (glUniform4fvARB == nullptr))
-		return false;
-
-	glUniform4fvARB(UniformLocation, count, data);
-
-	CheckOGLError(__func__);  // Check for OpenGL errors
-
-	return true;
-}
-bool vw_Uniform4fv(sGLSL *GLSL, const char *name, int count, float *data)
-{
-	if ((GLSL == nullptr) || (name == nullptr))
-		return false;
-
-	int Loc = vw_GetUniformLocation(GLSL, name);
-	if (Loc == -1)
-		return false;
-
-	return vw_Uniform4fv(GLSL, Loc, count, data);
-}
-
-
-bool vw_UniformMatrix4fv(sGLSL *GLSL, int UniformLocation, bool transpose, int count, float *data)
-{
-	if ((GLSL == nullptr) || (glUniformMatrix4fvARB == nullptr))
-		return false;
-
-	glUniformMatrix4fvARB(UniformLocation, count, transpose, data);
-
-	CheckOGLError(__func__);  // Check for OpenGL errors
-
-	return true;
-}
-bool vw_UniformMatrix4fv(sGLSL *GLSL, const char *name, bool transpose, int count, float *data)
-{
-	if ((GLSL == nullptr) || (name == nullptr))
-		return false;
-
-	int Loc = vw_GetUniformLocation(GLSL, name);
-	if (Loc == -1)
-		return false;
-
-	return vw_UniformMatrix4fv(GLSL, Loc, transpose, count, data);
-}
-

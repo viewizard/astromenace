@@ -513,8 +513,6 @@ void vw_DetachShader(sGLSL *GLSL);
 sGLSL *vw_FindShaderByNum(int Num);
 sGLSL *vw_FindShaderByName(const char *Name);
 
-void vw_ReleaseShader(sGLSL *GLSL);
-
 sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName, const char *FragmentShaderFileName);
 bool vw_LinkShaderProgram(sGLSL *GLSL);
 bool vw_UseShaderProgram(sGLSL *GLSL);
@@ -523,17 +521,8 @@ bool vw_StopShaderProgram();
 int vw_GetUniformLocation(sGLSL *GLSL, const char *name);
 
 bool vw_Uniform1i(sGLSL *GLSL, int UniformLocation, int data);
-bool vw_Uniform1i(sGLSL *GLSL, const char *name, int data);
-bool vw_Uniform1fv(sGLSL *GLSL, int UniformLocation, int count, float *data);
-bool vw_Uniform1fv(sGLSL *GLSL, const char *name, int count, float *data);
 bool vw_Uniform1f(sGLSL *GLSL, int UniformLocation, float data);
-bool vw_Uniform1f(sGLSL *GLSL, const char *name, float data);
 bool vw_Uniform3f(sGLSL *GLSL, int UniformLocation, float data1, float data2, float data3);
-bool vw_Uniform3f(sGLSL *GLSL, const char *name, float data1, float data2, float data3);
-bool vw_Uniform4fv(sGLSL *GLSL, int UniformLocation, int count, float *data);
-bool vw_Uniform4fv(sGLSL *GLSL, const char *name, int count, float *data);
-bool vw_UniformMatrix4fv(sGLSL *GLSL, int UniformLocation, bool transpose, int count, float *data);
-bool vw_UniformMatrix4fv(sGLSL *GLSL, const char *name, bool transpose, int count, float *data);
 
 /*
  * 2D rendering.
