@@ -27,7 +27,8 @@
 // TODO move from pointers to std::shared_ptr/std::weak_ptr
 // TODO move to std::string usage in code
 // TODO move to std::unordered_map usage for shaders management
-// TODO move to std::unique_ptr, remove malloc/free
+
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 // NOTE since OpenGL 3.1 core profile, OpenGL must render with a program,
 //      vw_StopShaderProgram() should be removed
@@ -67,25 +68,22 @@ static void PrintShaderInfoLog(GLhandleARB shader, const char *ShaderName)
 	    !_glGetInfoLog)
 		return;
 
-	int infologLength{0};
-	int charsWritten{0};
-
 	CheckOGLError(__func__);
 
+	int infologLength{0};
 	_glGetObjectParameteriv(shader, GL_INFO_LOG_LENGTH, &infologLength);
 
 	CheckOGLError(__func__);
 
 	if (infologLength > 0) {
-		GLchar *infoLog = (GLchar *)malloc(infologLength);
-		if (!infoLog) {
-			std::cerr << __func__ << "(): " << "Could not allocate InfoLog buffer.\n";
-			return;
-		}
-		_glGetInfoLog(shader, infologLength, &charsWritten, infoLog);
-		if (strlen(infoLog) >1)
-			std::cout << "Shader InfoLog " << ShaderName << ":\n" << infoLog << "\n\n";
-		free(infoLog);
+		std::unique_ptr<GLchar []> infoLog{new GLchar[infologLength]};
+		int charsWritten{0};
+		_glGetInfoLog(shader, infologLength, &charsWritten, infoLog.get());
+		// at this line, infoLog.get() should contains null-terminated string
+		if (charsWritten)
+			std::cout << "Shader InfoLog " << ShaderName << ":\n" << infoLog.get() << "\n\n";
+		else
+			std::cout << "Shader InfoLog:\n" << "no log provided" << "\n\n";
 	}
 	CheckOGLError(__func__);
 }
@@ -142,25 +140,22 @@ static void PrintProgramInfoLog(GLhandleARB program)
 	    !_glGetInfoLog)
 		return;
 
-	int infologLength{0};
-	int charsWritten{0};
-
 	CheckOGLError(__func__);
 
+	int infologLength{0};
 	_glGetObjectParameteriv(program, GL_INFO_LOG_LENGTH, &infologLength);
 
 	CheckOGLError(__func__);
 
 	if (infologLength > 0) {
-		GLchar *infoLog = (GLchar *)malloc(infologLength);
-		if (!infoLog) {
-			std::cerr << __func__ << "(): " << "Could not allocate InfoLog buffer.\n";
-			return;
-		}
-		_glGetInfoLog(program, infologLength, &charsWritten, infoLog);
-		if (strlen(infoLog) >1)
-			std::cout << "Program InfoLog:\n" << infoLog << "\n\n";
-		free(infoLog);
+		std::unique_ptr<GLchar []> infoLog{new GLchar[infologLength]};
+		int charsWritten{0};
+		_glGetInfoLog(program, infologLength, &charsWritten, infoLog.get());
+		// at this line, infoLog.get() should contains null-terminated string
+		if (charsWritten)
+			std::cout << "Program InfoLog:\n" << infoLog.get() << "\n\n";
+		else
+			std::cout << "Program InfoLog:\n" << "no log provided" << "\n\n";
 	}
 	CheckOGLError(__func__);
 }
