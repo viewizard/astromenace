@@ -507,21 +507,28 @@ struct sGLSL {
 	int Num;
 };
 
+// Release all shaders.
 void vw_ReleaseAllShaders();
-void vw_AttachShader(sGLSL *GLSL);
-void vw_DetachShader(sGLSL *GLSL);
+// Find shader by num.
 sGLSL *vw_FindShaderByNum(int Num);
+// Find shader by name.
 sGLSL *vw_FindShaderByName(const char *Name);
 
+// Create shader program.
 sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName, const char *FragmentShaderFileName);
+// Links a program object.
 bool vw_LinkShaderProgram(sGLSL *GLSL);
+// Installs a program object as part of current rendering state.
 bool vw_UseShaderProgram(sGLSL *GLSL);
+// Switch to fixed-function program object as part of current rendering state.
 bool vw_StopShaderProgram();
-
+// Returns the location of a uniform variable.
 int vw_GetUniformLocation(sGLSL *GLSL, const char *name);
-
+// Specify the value of a uniform variable for the current program object.
 bool vw_Uniform1i(sGLSL *GLSL, int UniformLocation, int data);
+// Specify the value of a uniform variable for the current program object.
 bool vw_Uniform1f(sGLSL *GLSL, int UniformLocation, float data);
+// Specify the value of a uniform variable for the current program object.
 bool vw_Uniform3f(sGLSL *GLSL, int UniformLocation, float data1, float data2, float data3);
 
 /*
