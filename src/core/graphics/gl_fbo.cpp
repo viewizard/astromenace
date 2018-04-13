@@ -34,6 +34,7 @@ namespace {
 // Current FBO, null if FrameBuffer.
 sFBO *CurrentFBO{nullptr};
 
+// GL_EXT_framebuffer_object
 PFNGLGENRENDERBUFFERSEXTPROC glGenRenderbuffersEXT{nullptr};
 PFNGLBINDRENDERBUFFEREXTPROC glBindRenderbufferEXT{nullptr};
 PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC glRenderbufferStorageMultisampleEXT{nullptr};
@@ -48,6 +49,8 @@ PFNGLBLITFRAMEBUFFEREXTPROC glBlitFramebufferEXT{nullptr};
 PFNGLISFRAMEBUFFEREXTPROC glIsFramebufferEXT{nullptr};
 PFNGLGENERATEMIPMAPPROC glGenerateMipmapEXT{nullptr};
 PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC glGetFramebufferAttachmentParameterivEXT{nullptr};
+
+// GL_NV_framebuffer_multisample_coverage
 PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC glRenderbufferStorageMultisampleCoverageNV{nullptr};
 
 } // unnamed namespace
