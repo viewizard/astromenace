@@ -25,8 +25,6 @@
 *************************************************************************************/
 
 // TODO move from pointers to std::shared_ptr/std::weak_ptr
-// TODO move to std::string usage in code
-// TODO move to std::unordered_map usage for shaders management
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
@@ -37,11 +35,39 @@
 #include "graphics.h"
 #include "extensions.h"
 
+struct sGLSL {
+	~sGLSL() {
+		if (_glDetachObject && _glDeleteObject) {
+			if (VertexShaderUse)
+				_glDetachObject(Program, VertexShader);
+			if (FragmentShaderUse)
+				_glDetachObject(Program, FragmentShader);
+
+			_glDeleteObject(VertexShader);
+			_glDeleteObject(FragmentShader);
+			_glDeleteObject(Program);
+		}
+	}
+
+#ifdef __APPLE__
+	// typedef void *GLhandleARB, see glext.h for more declaration
+	GLhandleARB Program{nullptr};
+	GLhandleARB VertexShader{nullptr};
+	GLhandleARB FragmentShader{nullptr};
+#else
+	// typedef unsigned int GLhandleARB, see glext.h for more declaration
+	GLhandleARB Program{0};
+	GLhandleARB VertexShader{0};
+	GLhandleARB FragmentShader{0};
+#endif
+	bool VertexShaderUse{false};
+	bool FragmentShaderUse{false};
+};
+
 namespace {
 
-// для менеджера
-sGLSL *StartGLSLMan{nullptr};
-sGLSL *EndGLSLMan{nullptr};
+// all shaders
+std::unordered_map<std::string, std::shared_ptr<sGLSL>> ShadersMap{};
 
 } // unnamed namespace
 
@@ -61,7 +87,7 @@ static void CheckOGLError(const char *FunctionName)
 /*
  * Print out the information log for a shader object.
  */
-static void PrintShaderInfoLog(GLhandleARB shader, const char *ShaderName)
+static void PrintShaderInfoLog(GLhandleARB shader, const std::string &ShaderName)
 {
 	if (!_glGetObjectParameteriv ||
 	    !_glGetInfoLog)
@@ -85,45 +111,6 @@ static void PrintShaderInfoLog(GLhandleARB shader, const char *ShaderName)
 			std::cout << "Shader InfoLog:\n" << "no log provided" << "\n\n";
 	}
 	CheckOGLError(__func__);
-}
-
-static void vw_AttachShader(sGLSL* GLSL)
-{
-	if (!GLSL)
-		return;
-
-	if (EndGLSLMan == nullptr) {
-		GLSL->Prev = nullptr;
-		GLSL->Next = nullptr;
-		StartGLSLMan = GLSL;
-		EndGLSLMan = GLSL;
-	} else {
-		GLSL->Prev = EndGLSLMan;
-		GLSL->Next = nullptr;
-		EndGLSLMan->Next = GLSL;
-		EndGLSLMan = GLSL;
-	}
-}
-
-static void vw_DetachShader(sGLSL* GLSL)
-{
-	if (!GLSL)
-		return;
-
-	if (StartGLSLMan == GLSL)
-		StartGLSLMan = GLSL->Next;
-	if (EndGLSLMan == GLSL)
-		EndGLSLMan = GLSL->Prev;
-
-	if (GLSL->Next != nullptr)
-		GLSL->Next->Prev = GLSL->Prev;
-	else if (GLSL->Prev != nullptr)
-		GLSL->Prev->Next = nullptr;
-
-	if (GLSL->Prev != nullptr)
-		GLSL->Prev->Next = GLSL->Next;
-	else if (GLSL->Next != nullptr)
-		GLSL->Next->Prev = nullptr;
 }
 
 /*
@@ -160,63 +147,28 @@ static void PrintProgramInfoLog(GLhandleARB program)
  */
 void vw_ReleaseAllShaders()
 {
-	if (!_glDetachObject ||
-	    !_glDeleteObject)
-		return;
-
-	sGLSL *Tmp = StartGLSLMan;
-	while (Tmp) {
-		sGLSL *Tmp1 = Tmp->Next;
-
-		vw_DetachShader(Tmp);
-
-		if (Tmp->VertexShaderUse)
-			_glDetachObject(Tmp->Program, Tmp->VertexShader);
-		if (Tmp->FragmentShaderUse)
-			_glDetachObject(Tmp->Program, Tmp->FragmentShader);
-
-		_glDeleteObject(Tmp->VertexShader);
-		_glDeleteObject(Tmp->FragmentShader);
-		_glDeleteObject(Tmp->Program);
-
-		if (Tmp->Name) {
-			delete [] Tmp->Name;
-			Tmp->Name = nullptr;
-		}
-
-		delete Tmp;
-
-		Tmp = Tmp1;
-	}
-
-	StartGLSLMan = nullptr;
-	EndGLSLMan = nullptr;
+	ShadersMap.clear();
 }
 
 /*
- * Check, is shaders list empty.
+ * Check, is shaders Map empty.
  */
-bool vw_ShadersListEmpty()
+bool vw_ShadersMapEmpty()
 {
-	return !StartGLSLMan;
+	return ShadersMap.empty();
 }
 
 /*
  * Find shader by name.
  */
-sGLSL *vw_FindShaderByName(const char *Name)
+sGLSL *vw_FindShaderByName(const std::string &Name)
 {
-	if (!Name)
+	if (Name.empty())
 		return nullptr;
 
-	sGLSL *Tmp = StartGLSLMan;
-
-	while (Tmp) {
-		sGLSL *Tmp1 = Tmp->Next;
-		if (strcmp(Tmp->Name, Name) == 0)
-			return Tmp;
-		Tmp = Tmp1;
-	}
+	auto tmpShader = ShadersMap.find(Name);
+	if (tmpShader != ShadersMap.end())
+		return tmpShader->second.get();
 
 	return nullptr;
 }
@@ -224,97 +176,87 @@ sGLSL *vw_FindShaderByName(const char *Name)
 /*
  * Create shader program.
  */
-sGLSL *vw_CreateShader(const char *ShaderName, const char *VertexShaderFileName, const char *FragmentShaderFileName)
+sGLSL *vw_CreateShader(const std::string &ShaderName,
+		       const std::string &VertexShaderFileName,
+		       const std::string &FragmentShaderFileName)
 {
-	if (!_glCreateShaderObject ||
+	if (ShaderName.empty() ||
+	    !_glCreateShaderObject ||
 	    !_glShaderSource ||
 	    !_glCompileShader ||
 	    !_glCreateProgramObject ||
 	    !_glAttachObject ||
 	    !_glGetObjectParameteriv ||
-	    (!VertexShaderFileName && !FragmentShaderFileName))
+	    (VertexShaderFileName.empty() && FragmentShaderFileName.empty()))
 		return nullptr;
 
 	GLint vertCompiled{0}, fragCompiled{0}; // status values
 
-	sGLSL *GLSLtmp = new sGLSL;
+	ShadersMap.emplace(ShaderName, new sGLSL);
 
 	// create empty objects
-	GLSLtmp->VertexShader = _glCreateShaderObject(GL_VERTEX_SHADER_ARB);
-	GLSLtmp->FragmentShader = _glCreateShaderObject(GL_FRAGMENT_SHADER_ARB);
+	ShadersMap[ShaderName].get()->VertexShader = _glCreateShaderObject(GL_VERTEX_SHADER_ARB);
+	ShadersMap[ShaderName].get()->FragmentShader = _glCreateShaderObject(GL_FRAGMENT_SHADER_ARB);
 
 	// load vertex shader
-	GLSLtmp->VertexShaderUse = false;
-	if (VertexShaderFileName) {
+	if (!VertexShaderFileName.empty()) {
 		std::unique_ptr<sFILE> VertexFile = vw_fopen(VertexShaderFileName);
 
 		if (VertexFile) {
 			const GLcharARB *TmpGLcharARB = (const GLcharARB *)VertexFile->Data.get();
 			GLint TmpGLint = (GLint)VertexFile->Size;
-			_glShaderSource(GLSLtmp->VertexShader, 1, &TmpGLcharARB, &TmpGLint);
+			_glShaderSource(ShadersMap[ShaderName].get()->VertexShader, 1, &TmpGLcharARB, &TmpGLint);
 			vw_fclose(VertexFile);
-			GLSLtmp->VertexShaderUse = true;
+			ShadersMap[ShaderName].get()->VertexShaderUse = true;
 		}
 	}
 	// load fragment shader
-	GLSLtmp->FragmentShaderUse = false;
-	if (FragmentShaderFileName) {
+	if (!FragmentShaderFileName.empty()) {
 		std::unique_ptr<sFILE> FragmentFile = vw_fopen(FragmentShaderFileName);
 
 		if (FragmentFile) {
 			const GLcharARB *TmpGLcharARB = (const GLcharARB *)FragmentFile->Data.get();
 			GLint TmpGLint = (GLint)FragmentFile->Size;
-			_glShaderSource(GLSLtmp->FragmentShader, 1, &TmpGLcharARB, &TmpGLint);
+			_glShaderSource(ShadersMap[ShaderName].get()->FragmentShader, 1, &TmpGLcharARB, &TmpGLint);
 			vw_fclose(FragmentFile);
-			GLSLtmp->FragmentShaderUse = true;
+			ShadersMap[ShaderName].get()->FragmentShaderUse = true;
 		}
 	}
 
 	// compile shaders
-	if (GLSLtmp->VertexShaderUse) {
-		_glCompileShader(GLSLtmp->VertexShader);
+	if (ShadersMap[ShaderName].get()->VertexShaderUse) {
+		_glCompileShader(ShadersMap[ShaderName].get()->VertexShader);
 		CheckOGLError(__func__);
-		_glGetObjectParameteriv(GLSLtmp->VertexShader, GL_COMPILE_STATUS, &vertCompiled);
-		PrintShaderInfoLog(GLSLtmp->VertexShader, VertexShaderFileName);
+		_glGetObjectParameteriv(ShadersMap[ShaderName].get()->VertexShader, GL_COMPILE_STATUS, &vertCompiled);
+		PrintShaderInfoLog(ShadersMap[ShaderName].get()->VertexShader, VertexShaderFileName);
 
-		if (!vertCompiled)
+		if (!vertCompiled) {
+			ShadersMap.erase(ShaderName);
 			return nullptr;
+		}
 	}
-	if (GLSLtmp->FragmentShaderUse) {
-		_glCompileShader(GLSLtmp->FragmentShader);
+	if (ShadersMap[ShaderName].get()->FragmentShaderUse) {
+		_glCompileShader(ShadersMap[ShaderName].get()->FragmentShader);
 		CheckOGLError(__func__);
-		_glGetObjectParameteriv(GLSLtmp->FragmentShader, GL_COMPILE_STATUS, &fragCompiled);
-		PrintShaderInfoLog(GLSLtmp->FragmentShader, FragmentShaderFileName);
+		_glGetObjectParameteriv(ShadersMap[ShaderName].get()->FragmentShader, GL_COMPILE_STATUS, &fragCompiled);
+		PrintShaderInfoLog(ShadersMap[ShaderName].get()->FragmentShader, FragmentShaderFileName);
 
-		if (!fragCompiled)
+		if (!fragCompiled) {
+			ShadersMap.erase(ShaderName);
 			return nullptr;
+		}
 	}
 
 	// create program
-	GLSLtmp->Program = _glCreateProgramObject();
-	if (GLSLtmp->VertexShaderUse)
-		_glAttachObject(GLSLtmp->Program, GLSLtmp->VertexShader);
-	if (GLSLtmp->FragmentShaderUse)
-		_glAttachObject(GLSLtmp->Program, GLSLtmp->FragmentShader);
+	ShadersMap[ShaderName].get()->Program = _glCreateProgramObject();
+	if (ShadersMap[ShaderName].get()->VertexShaderUse)
+		_glAttachObject(ShadersMap[ShaderName].get()->Program, ShadersMap[ShaderName].get()->VertexShader);
+	if (ShadersMap[ShaderName].get()->FragmentShaderUse)
+		_glAttachObject(ShadersMap[ShaderName].get()->Program, ShadersMap[ShaderName].get()->FragmentShader);
 
-	if (!VertexShaderFileName)
-		std::cout << "Shader ... " <<  FragmentShaderFileName << "\n";
-	else if (!FragmentShaderFileName)
-		std::cout << "Shader ... " << VertexShaderFileName << "\n";
-	else
-		std::cout << "Shader ... " << VertexShaderFileName << " " << FragmentShaderFileName << "\n";
+	std::cout << "Shader ... " << VertexShaderFileName << " " << FragmentShaderFileName << "\n";
 
-	if (ShaderName) {
-		GLSLtmp->Name = new char[strlen(ShaderName)+1];
-		strcpy(GLSLtmp->Name, ShaderName);
-	} else {
-		GLSLtmp->Name = new char[strlen(VertexShaderFileName)+1];
-		strcpy(GLSLtmp->Name, VertexShaderFileName);
-	}
-
-	vw_AttachShader(GLSLtmp);
-
-	return GLSLtmp;
+	return ShadersMap[ShaderName].get();
 }
 
 /*
@@ -374,16 +316,16 @@ bool vw_StopShaderProgram()
 /*
  * Returns the location of a uniform variable.
  */
-int vw_GetUniformLocation(sGLSL *GLSL, const char *name)
+int vw_GetUniformLocation(sGLSL *GLSL, const std::string &Name)
 {
-	if (!GLSL || !_glGetUniformLocation)
+	if (!GLSL || Name.empty() || !_glGetUniformLocation)
 		return -1;
 
-	int tmpLocation = _glGetUniformLocation(GLSL->Program, name);
+	int tmpLocation = _glGetUniformLocation(GLSL->Program, Name.c_str());
 	CheckOGLError(__func__);
 
 	if (tmpLocation == -1)
-		std::cerr << __func__ << "(): " << "No such uniform named: " << name << "\n";
+		std::cerr << __func__ << "(): " << "No such uniform named: " << Name << "\n";
 
 	return tmpLocation;
 }

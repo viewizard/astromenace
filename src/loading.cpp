@@ -1234,7 +1234,7 @@ void LoadGameData(eLoading LoadType)
 	// если будем загружать шейдеры - делаем поправку общего кол-ва
 	if (vw_GetDevCaps()->GLSL100Supported &&
 	    Setup.UseGLSL &&
-	    vw_ShadersListEmpty()) {
+	    vw_ShadersMapEmpty()) {
 		AllDrawLoading += GLSLLoadListCount*100;
 		NeedLoadShaders = true;
 	}
