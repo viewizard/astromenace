@@ -54,7 +54,7 @@ float ParticleSystemQuality{1.0f};
 bool ParticleSystemUseGLSL{false};
 
 // Particle system's shader (for all particle systems).
-sGLSL *ParticleSystemGLSL{nullptr};
+std::weak_ptr<sGLSL> ParticleSystemGLSL{};
 
 // Uniform locations in particle system's shader (for all particle systems).
 GLint UniformLocationParticleTexture{0};
@@ -890,7 +890,7 @@ void vw_ReleaseAllParticleSystems()
 
 	ParticleSystemUseGLSL = false;
 	ParticleSystemQuality = 1.0f;
-	ParticleSystemGLSL = nullptr;
+	ParticleSystemGLSL.reset();
 }
 
 /*
@@ -905,7 +905,7 @@ void vw_DrawAllParticleSystems()
 	// setup blend
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 	// setup shaders
-	if (ParticleSystemUseGLSL && ParticleSystemGLSL) {
+	if (ParticleSystemUseGLSL && !ParticleSystemGLSL.expired()) {
 		sVECTOR3D CurrentCameraLocation;
 		vw_GetCameraLocation(&CurrentCameraLocation);
 
@@ -943,7 +943,7 @@ void vw_DrawParticleSystems(std::vector<std::weak_ptr<cParticleSystem>> &DrawPar
 	// setup blend
 	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 	// setup shaders
-	if (ParticleSystemUseGLSL && ParticleSystemGLSL) {
+	if (ParticleSystemUseGLSL && !ParticleSystemGLSL.expired()) {
 		sVECTOR3D CurrentCameraLocation;
 		vw_GetCameraLocation(&CurrentCameraLocation);
 

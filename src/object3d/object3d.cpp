@@ -32,9 +32,9 @@
 int NeedShowBB = 0;
 
 
-extern sGLSL	*GLSLShaderType1;
-extern sGLSL	*GLSLShaderType2;
-extern sGLSL	*GLSLShaderType3;
+extern std::weak_ptr<sGLSL> GLSLShaderType1;
+extern std::weak_ptr<sGLSL> GLSLShaderType2;
+extern std::weak_ptr<sGLSL> GLSLShaderType3;
 extern GLint UniformLocations[100];
 
 
@@ -735,16 +735,16 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 				// работаем только с шейдером взрывов, т.к. он меняет положение и размеры треугольников
-				if (tmpObjectBlock.ShaderType == 2)
-					if (GLSLShaderType2) {
-						vw_UseShaderProgram(GLSLShaderType2);
+				if ((tmpObjectBlock.ShaderType == 2) &&
+				    !GLSLShaderType2.expired()) {
+					vw_UseShaderProgram(GLSLShaderType2);
 
-						vw_Uniform1i(UniformLocations[10], 0);
-						vw_Uniform1i(UniformLocations[11], 0);
-						vw_Uniform1i(UniformLocations[12], 0);
-						vw_Uniform1f(UniformLocations[13], ObjectBlocks[0].ShaderData[0]);
-						vw_Uniform1f(UniformLocations[14], ObjectBlocks[0].ShaderData[1]);
-					}
+					vw_Uniform1i(UniformLocations[10], 0);
+					vw_Uniform1i(UniformLocations[11], 0);
+					vw_Uniform1i(UniformLocations[12], 0);
+					vw_Uniform1f(UniformLocations[13], ObjectBlocks[0].ShaderData[0]);
+					vw_Uniform1f(UniformLocations[14], ObjectBlocks[0].ShaderData[1]);
+				}
 
 
 				vw_SendVertices(RI_TRIANGLES, tmpObjectBlock.VertexCount, RI_3f_XYZ, tmpObjectBlock.VertexArray.get(),
@@ -752,8 +752,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 						tmpObjectBlock.RangeStart, tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO, tmpObjectBlock.VAO);
 
 
-				if (tmpObjectBlock.ShaderType == 2)
-					if (GLSLShaderType2 != nullptr) vw_StopShaderProgram();
+				if ((tmpObjectBlock.ShaderType == 2) &&
+				    !GLSLShaderType2.expired())
+					vw_StopShaderProgram();
 
 				vw_PopMatrix();
 			}
@@ -788,7 +789,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	// у модели может быть нормал меппинг только на отдельные объекты
 	GLtexture CurrentNormalMap{0};
 	// текущий шейдер, чтобы не ставить лишний раз
-	sGLSL *CurrentGLSL = nullptr;
+	std::weak_ptr<sGLSL> CurrentGLSL{};
 	int NeedNormalMapping = 0;
 	// получаем матрицу, до всех преобразований
 	float Matrix[16];
@@ -883,7 +884,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
 
 		if (Setup.UseGLSL && (ObjectBlocks[0].ShaderType >= 0)) {
-			sGLSL *CurrentObject3DGLSL{nullptr};
+			std::weak_ptr<sGLSL> CurrentObject3DGLSL{};
 
 			// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
 			if ((ObjectBlocks[0].ShaderType == 1) && ShadowMap)
@@ -906,18 +907,18 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			}
 
 
-			if (CurrentGLSL != CurrentObject3DGLSL) {
-				if (CurrentGLSL != nullptr)
+			if (CurrentGLSL.lock() != CurrentObject3DGLSL.lock()) {
+				if (!CurrentGLSL.expired())
 					vw_StopShaderProgram();
 
 				CurrentGLSL = CurrentObject3DGLSL;
 
-				if (CurrentObject3DGLSL != nullptr)
-					vw_UseShaderProgram(CurrentObject3DGLSL);
+				if (!CurrentGLSL.expired())
+					vw_UseShaderProgram(CurrentGLSL);
 			}
 
 			// данные ставим каждый раз, т.к. может что-то поменяться
-			if (CurrentObject3DGLSL != nullptr) {
+			if (!CurrentObject3DGLSL.expired()) {
 				switch (ObjectBlocks[0].ShaderType) {
 				case 1: // только попиксельное освещение
 
@@ -1102,7 +1103,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 			if (Setup.UseGLSL &&
 			    (ObjectBlocks[i].ShaderType >= 0)) {
-				sGLSL *CurrentObject3DGLSL{nullptr};
+				std::weak_ptr<sGLSL> CurrentObject3DGLSL{};
 
 				// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
 				if ((ObjectBlocks[i].ShaderType == 1) && ShadowMap)
@@ -1125,18 +1126,18 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				}
 
 
-				if (CurrentGLSL != CurrentObject3DGLSL) {
-					if (CurrentGLSL != nullptr)
+				if (CurrentGLSL.lock() != CurrentObject3DGLSL.lock()) {
+					if (!CurrentGLSL.expired())
 						vw_StopShaderProgram();
 
 					CurrentGLSL = CurrentObject3DGLSL;
 
-					if (CurrentObject3DGLSL != nullptr)
-						vw_UseShaderProgram(CurrentObject3DGLSL);
+					if (!CurrentGLSL.expired())
+						vw_UseShaderProgram(CurrentGLSL);
 				}
 
 				// данные ставим каждый раз, т.к. может что-то поменяться
-				if (CurrentObject3DGLSL != nullptr) {
+				if (!CurrentObject3DGLSL.expired()) {
 					switch (ObjectBlocks[i].ShaderType) {
 					case 1: // только попиксельное освещение
 
@@ -1217,10 +1218,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 	// останавливаем шейдер, если был запущен
-	if (Setup.UseGLSL) {
+	if (Setup.UseGLSL)
 		vw_StopShaderProgram();
-		CurrentGLSL = nullptr;
-	}
+
 	// установка параметров текстур в исходное состояние
 	if (CurrentNormalMap)
 		vw_BindTexture(3, 0);

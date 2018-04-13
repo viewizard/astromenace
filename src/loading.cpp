@@ -80,9 +80,9 @@ unsigned int CurrentListCount = 0;
 //------------------------------------------------------------------------------------
 // данные загрузки шейдеров
 //------------------------------------------------------------------------------------
-sGLSL 	*GLSLShaderType1 = nullptr;
-sGLSL 	*GLSLShaderType2 = nullptr;
-sGLSL 	*GLSLShaderType3 = nullptr;
+std::weak_ptr<sGLSL> GLSLShaderType1{};
+std::weak_ptr<sGLSL> GLSLShaderType2{};
+std::weak_ptr<sGLSL> GLSLShaderType3{};
 GLint UniformLocations[100];
 
 struct sGLSLLoadList {
@@ -1305,10 +1305,11 @@ void LoadGameData(eLoading LoadType)
 		for (unsigned int i=0; i<GLSLLoadListCount; i++) {
 			if (Setup.UseGLSL) {
 
-				sGLSL *Program = nullptr;
-				Program = vw_CreateShader(GLSLLoadList[i].Name, GLSLLoadList[i].VertexShaderFileName, GLSLLoadList[i].FragmentShaderFileName);
+				std::weak_ptr<sGLSL> Program = vw_CreateShader(GLSLLoadList[i].Name,
+									       GLSLLoadList[i].VertexShaderFileName,
+									       GLSLLoadList[i].FragmentShaderFileName);
 
-				if (Program != nullptr) {
+				if (!Program.expired()) {
 					// получаем сразу состояние, смогли прилинковать или нет
 					if (!vw_LinkShaderProgram(Program))
 						Setup.UseGLSL = false;

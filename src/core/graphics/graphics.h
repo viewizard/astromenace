@@ -494,23 +494,23 @@ void vw_DeleteFBO(sFBO *FBO);
 struct sGLSL;
 
 // Create shader program.
-sGLSL *vw_CreateShader(const std::string &ShaderName,
-		       const std::string &VertexShaderFileName,
-		       const std::string &FragmentShaderFileName);
+std::weak_ptr<sGLSL> vw_CreateShader(const std::string &ShaderName,
+				     const std::string &VertexShaderFileName,
+				     const std::string &FragmentShaderFileName);
 // Release all shaders.
 void vw_ReleaseAllShaders();
 // Check, is shaders Map empty.
 bool vw_ShadersMapEmpty();
 // Find shader by name.
-sGLSL *vw_FindShaderByName(const std::string &Name);
+std::weak_ptr<sGLSL> vw_FindShaderByName(const std::string &Name);
 // Links a program object.
-bool vw_LinkShaderProgram(sGLSL *GLSL);
+bool vw_LinkShaderProgram(std::weak_ptr<sGLSL> &GLSL);
 // Installs a program object as part of current rendering state.
-bool vw_UseShaderProgram(sGLSL *GLSL);
+bool vw_UseShaderProgram(std::weak_ptr<sGLSL> &GLSL);
 // Switch to fixed-function program object as part of current rendering state.
 bool vw_StopShaderProgram();
 // Returns the location of a uniform variable.
-GLint vw_GetUniformLocation(sGLSL *GLSL, const std::string &Name);
+GLint vw_GetUniformLocation(std::weak_ptr<sGLSL> &GLSL, const std::string &Name);
 // Specify the value of a uniform variable for the current program object.
 bool vw_Uniform1i(int UniformLocation, int data);
 // Specify the value of a uniform variable for the current program object.

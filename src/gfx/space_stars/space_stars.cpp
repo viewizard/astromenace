@@ -550,7 +550,7 @@ void cSpaceStars::Draw()
 		if (!Setup.UseGLSL) {
 			vw_SendVertices(RI_QUADS, 4*PrimitCount, RI_3f_XYZ | RI_4ub_COLOR | RI_1_TEX, tmpDATA, 6*sizeof(tmpDATA[0]));
 		} else {
-			if (GLSL != nullptr) {
+			if (!GLSL.expired()) {
 				vw_UseShaderProgram(GLSL);
 				vw_Uniform1i(UniformLocations[0], 0);
 				vw_Uniform1f(UniformLocations[1], Age);
@@ -558,7 +558,7 @@ void cSpaceStars::Draw()
 
 			vw_SendVertices(RI_QUADS, 4*PrimitCount, RI_3f_XYZ | RI_1_TEX | RI_3f_NORMAL, tmpDATA, 8*sizeof(tmpDATA[0]), VBO);
 
-			if (GLSL != nullptr)
+			if (!GLSL.expired())
 				vw_StopShaderProgram();
 		}
 
