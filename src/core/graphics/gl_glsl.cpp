@@ -46,19 +46,13 @@ int NumGLSLMan{0};
 //------------------------------------------------------------------------------------
 // ошибка
 //------------------------------------------------------------------------------------
-static int CheckOGLError(const char *FunctionName)
+static void CheckOGLError(const char *FunctionName)
 {
-	// Returns 1 if an OpenGL error occurred, 0 otherwise.
-	GLenum glErr;
-	int retCode{0};
+	GLenum glErr{0};
 
-	glErr = glGetError();
-	while (glErr != GL_NO_ERROR) {
+	while ((glErr = glGetError()) != GL_NO_ERROR) {
 		std::cerr << FunctionName << "(): " << "glError " << glErr << "\n";
-		retCode = 1;
-		glErr = glGetError();
 	}
-	return retCode;
 }
 
 //------------------------------------------------------------------------------------
