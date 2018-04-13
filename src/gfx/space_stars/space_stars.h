@@ -45,7 +45,7 @@ public:
 
 	// работа с шейдерами
 	sGLSL 	*GLSL{nullptr};
-	int	UniformLocations[10];
+	GLint UniformLocations[10];
 
 	// текущее положение частиц в пространстве
 	sVECTOR3D	Location{0.0f, 0.0f, 0.0f};

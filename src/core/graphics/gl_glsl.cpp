@@ -316,7 +316,7 @@ bool vw_StopShaderProgram()
 /*
  * Returns the location of a uniform variable.
  */
-int vw_GetUniformLocation(sGLSL *GLSL, const std::string &Name)
+GLint vw_GetUniformLocation(sGLSL *GLSL, const std::string &Name)
 {
 	if (!GLSL || Name.empty() || !_glGetUniformLocation)
 		return -1;
@@ -333,9 +333,9 @@ int vw_GetUniformLocation(sGLSL *GLSL, const std::string &Name)
 /*
  * Specify the value of a uniform variable for the current program object.
  */
-bool vw_Uniform1i(sGLSL *GLSL, int UniformLocation, int data)
+bool vw_Uniform1i(int UniformLocation, int data)
 {
-	if (!GLSL || !_glUniform1i)
+	if (!_glUniform1i)
 		return false;
 
 	_glUniform1i(UniformLocation, data);
@@ -347,9 +347,9 @@ bool vw_Uniform1i(sGLSL *GLSL, int UniformLocation, int data)
 /*
  * Specify the value of a uniform variable for the current program object.
  */
-bool vw_Uniform1f(sGLSL *GLSL, int UniformLocation, float data)
+bool vw_Uniform1f(int UniformLocation, float data)
 {
-	if (!GLSL || !_glUniform1f)
+	if (!_glUniform1f)
 		return false;
 
 	_glUniform1f(UniformLocation, data);
@@ -361,9 +361,9 @@ bool vw_Uniform1f(sGLSL *GLSL, int UniformLocation, float data)
 /*
  * Specify the value of a uniform variable for the current program object.
  */
-bool vw_Uniform3f(sGLSL *GLSL, int UniformLocation, float data1, float data2, float data3)
+bool vw_Uniform3f(int UniformLocation, float data1, float data2, float data3)
 {
-	if (!GLSL || !_glUniform3f)
+	if (!_glUniform3f)
 		return false;
 
 	_glUniform3f(UniformLocation, data1, data2, data3);

@@ -510,13 +510,13 @@ bool vw_UseShaderProgram(sGLSL *GLSL);
 // Switch to fixed-function program object as part of current rendering state.
 bool vw_StopShaderProgram();
 // Returns the location of a uniform variable.
-int vw_GetUniformLocation(sGLSL *GLSL, const std::string &Name);
+GLint vw_GetUniformLocation(sGLSL *GLSL, const std::string &Name);
 // Specify the value of a uniform variable for the current program object.
-bool vw_Uniform1i(sGLSL *GLSL, int UniformLocation, int data);
+bool vw_Uniform1i(int UniformLocation, int data);
 // Specify the value of a uniform variable for the current program object.
-bool vw_Uniform1f(sGLSL *GLSL, int UniformLocation, float data);
+bool vw_Uniform1f(int UniformLocation, float data);
 // Specify the value of a uniform variable for the current program object.
-bool vw_Uniform3f(sGLSL *GLSL, int UniformLocation, float data1, float data2, float data3);
+bool vw_Uniform3f(int UniformLocation, float data1, float data2, float data3);
 
 /*
  * 2D rendering.

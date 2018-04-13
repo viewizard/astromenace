@@ -57,8 +57,8 @@ bool ParticleSystemUseGLSL{false};
 sGLSL *ParticleSystemGLSL{nullptr};
 
 // Uniform locations in particle system's shader (for all particle systems).
-int UniformLocationParticleTexture{0};
-int UniformLocationCameraPoint{0};
+GLint UniformLocationParticleTexture{0};
+GLint UniformLocationCameraPoint{0};
 
 // All particle systems.
 std::forward_list<std::shared_ptr<cParticleSystem>> ParticleSystemsList{};
@@ -910,8 +910,8 @@ void vw_DrawAllParticleSystems()
 		vw_GetCameraLocation(&CurrentCameraLocation);
 
 		vw_UseShaderProgram(ParticleSystemGLSL);
-		vw_Uniform1i(ParticleSystemGLSL, UniformLocationParticleTexture, 0);
-		vw_Uniform3f(ParticleSystemGLSL, UniformLocationCameraPoint,
+		vw_Uniform1i(UniformLocationParticleTexture, 0);
+		vw_Uniform3f(UniformLocationCameraPoint,
 			     CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z);
 	}
 	glDepthMask(GL_FALSE);
@@ -948,8 +948,8 @@ void vw_DrawParticleSystems(std::vector<std::weak_ptr<cParticleSystem>> &DrawPar
 		vw_GetCameraLocation(&CurrentCameraLocation);
 
 		vw_UseShaderProgram(ParticleSystemGLSL);
-		vw_Uniform1i(ParticleSystemGLSL, UniformLocationParticleTexture, 0);
-		vw_Uniform3f(ParticleSystemGLSL, UniformLocationCameraPoint,
+		vw_Uniform1i(UniformLocationParticleTexture, 0);
+		vw_Uniform3f(UniformLocationCameraPoint,
 			     CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z);
 	}
 	glDepthMask(GL_FALSE);

@@ -35,7 +35,7 @@ int NeedShowBB = 0;
 extern sGLSL	*GLSLShaderType1;
 extern sGLSL	*GLSLShaderType2;
 extern sGLSL	*GLSLShaderType3;
-extern int	UniformLocations[100];
+extern GLint UniformLocations[100];
 
 
 //-----------------------------------------------------------------------------
@@ -739,11 +739,11 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					if (GLSLShaderType2) {
 						vw_UseShaderProgram(GLSLShaderType2);
 
-						vw_Uniform1i(GLSLShaderType2, UniformLocations[10], 0);
-						vw_Uniform1i(GLSLShaderType2, UniformLocations[11], 0);
-						vw_Uniform1i(GLSLShaderType2, UniformLocations[12], 0);
-						vw_Uniform1f(GLSLShaderType2, UniformLocations[13], ObjectBlocks[0].ShaderData[0]);
-						vw_Uniform1f(GLSLShaderType2, UniformLocations[14], ObjectBlocks[0].ShaderData[1]);
+						vw_Uniform1i(UniformLocations[10], 0);
+						vw_Uniform1i(UniformLocations[11], 0);
+						vw_Uniform1i(UniformLocations[12], 0);
+						vw_Uniform1f(UniformLocations[13], ObjectBlocks[0].ShaderData[0]);
+						vw_Uniform1f(UniformLocations[14], ObjectBlocks[0].ShaderData[1]);
 					}
 
 
@@ -921,47 +921,47 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				switch (ObjectBlocks[0].ShaderType) {
 				case 1: // только попиксельное освещение
 
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[0], 0);
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[1], 1);
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[2], LightType1);
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[3], LightType2);
+					vw_Uniform1i(UniformLocations[0], 0);
+					vw_Uniform1i(UniformLocations[1], 1);
+					vw_Uniform1i(UniformLocations[2], LightType1);
+					vw_Uniform1i(UniformLocations[3], LightType2);
 					if (!TextureIllum.empty() && TextureIllum[0])
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 1);
+						vw_Uniform1i(UniformLocations[4], 1);
 					else
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
+						vw_Uniform1i(UniformLocations[4], 0);
 
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[5], 3);
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[6], NeedNormalMapping);
+					vw_Uniform1i(UniformLocations[5], 3);
+					vw_Uniform1i(UniformLocations[6], NeedNormalMapping);
 
 					break;
 
 				case 2: // шейдеры взрывов
 
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[10], 0);
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[11], LightType1);
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[12], LightType2);
-					vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[13], ObjectBlocks[0].ShaderData[0]);
-					vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[14], ObjectBlocks[0].ShaderData[1]);
+					vw_Uniform1i(UniformLocations[10], 0);
+					vw_Uniform1i(UniformLocations[11], LightType1);
+					vw_Uniform1i(UniformLocations[12], LightType2);
+					vw_Uniform1f(UniformLocations[13], ObjectBlocks[0].ShaderData[0]);
+					vw_Uniform1f(UniformLocations[14], ObjectBlocks[0].ShaderData[1]);
 
 					break;
 
 				case 3: // шадов меп
 
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[20], 0);
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[21], 1);
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[22], LightType1);
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[23], LightType2);
+					vw_Uniform1i(UniformLocations[20], 0);
+					vw_Uniform1i(UniformLocations[21], 1);
+					vw_Uniform1i(UniformLocations[22], LightType1);
+					vw_Uniform1i(UniformLocations[23], LightType2);
 					if (!TextureIllum.empty() && TextureIllum[0])
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 1);
+						vw_Uniform1i(UniformLocations[24], 1);
 					else
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
+						vw_Uniform1i(UniformLocations[24], 0);
 
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[25], 2);
-					vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[26], ShadowMap_Get_xPixelOffset());
-					vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[27], ShadowMap_Get_xPixelOffset());
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[28], 3);
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[29], NeedNormalMapping);
-					vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[30], PCFMode);
+					vw_Uniform1i(UniformLocations[25], 2);
+					vw_Uniform1f(UniformLocations[26], ShadowMap_Get_xPixelOffset());
+					vw_Uniform1f(UniformLocations[27], ShadowMap_Get_xPixelOffset());
+					vw_Uniform1i(UniformLocations[28], 3);
+					vw_Uniform1i(UniformLocations[29], NeedNormalMapping);
+					vw_Uniform1i(UniformLocations[30], PCFMode);
 
 					break;
 				}
@@ -1140,47 +1140,47 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					switch (ObjectBlocks[i].ShaderType) {
 					case 1: // только попиксельное освещение
 
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[0], 0);
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[1], 1);
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[2], LightType1);
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[3], LightType2);
+						vw_Uniform1i(UniformLocations[0], 0);
+						vw_Uniform1i(UniformLocations[1], 1);
+						vw_Uniform1i(UniformLocations[2], LightType1);
+						vw_Uniform1i(UniformLocations[3], LightType2);
 						if (!TextureIllum.empty() && TextureIllum[0])
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 1);
+							vw_Uniform1i(UniformLocations[4], 1);
 						else
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[4], 0);
+							vw_Uniform1i(UniformLocations[4], 0);
 
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[5], 3);
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[6], NeedNormalMapping);
+						vw_Uniform1i(UniformLocations[5], 3);
+						vw_Uniform1i(UniformLocations[6], NeedNormalMapping);
 
 						break;
 
 					case 2: // шейдеры взрывов
 
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[10], 0);
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[11], LightType1);
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[12], LightType2);
-						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[13], ObjectBlocks[0].ShaderData[0]);
-						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[14], ObjectBlocks[0].ShaderData[1]);
+						vw_Uniform1i(UniformLocations[10], 0);
+						vw_Uniform1i(UniformLocations[11], LightType1);
+						vw_Uniform1i(UniformLocations[12], LightType2);
+						vw_Uniform1f(UniformLocations[13], ObjectBlocks[0].ShaderData[0]);
+						vw_Uniform1f(UniformLocations[14], ObjectBlocks[0].ShaderData[1]);
 
 						break;
 
 					case 3: // шадов меп
 
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[20], 0);
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[21], 1);
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[22], LightType1);
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[23], LightType2);
+						vw_Uniform1i(UniformLocations[20], 0);
+						vw_Uniform1i(UniformLocations[21], 1);
+						vw_Uniform1i(UniformLocations[22], LightType1);
+						vw_Uniform1i(UniformLocations[23], LightType2);
 						if (!TextureIllum.empty() && TextureIllum[0])
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 1);
+							vw_Uniform1i(UniformLocations[24], 1);
 						else
-							vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[24], 0);
+							vw_Uniform1i(UniformLocations[24], 0);
 
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[25], 2);
-						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[26], ShadowMap_Get_xPixelOffset());
-						vw_Uniform1f(CurrentObject3DGLSL, UniformLocations[27], ShadowMap_Get_xPixelOffset());
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[28], 3);
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[29], NeedNormalMapping);
-						vw_Uniform1i(CurrentObject3DGLSL, UniformLocations[30], PCFMode);
+						vw_Uniform1i(UniformLocations[25], 2);
+						vw_Uniform1f(UniformLocations[26], ShadowMap_Get_xPixelOffset());
+						vw_Uniform1f(UniformLocations[27], ShadowMap_Get_xPixelOffset());
+						vw_Uniform1i(UniformLocations[28], 3);
+						vw_Uniform1i(UniformLocations[29], NeedNormalMapping);
+						vw_Uniform1i(UniformLocations[30], PCFMode);
 
 						break;
 					}

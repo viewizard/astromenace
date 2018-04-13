@@ -83,7 +83,7 @@ unsigned int CurrentListCount = 0;
 sGLSL 	*GLSLShaderType1 = nullptr;
 sGLSL 	*GLSLShaderType2 = nullptr;
 sGLSL 	*GLSLShaderType3 = nullptr;
-int 	UniformLocations[100];
+GLint UniformLocations[100];
 
 struct sGLSLLoadList {
 	char Name[MAX_PATH];
