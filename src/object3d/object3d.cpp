@@ -32,9 +32,9 @@
 int NeedShowBB = 0;
 
 
-extern std::weak_ptr<sGLSL> GLSLShaderType1;
-extern std::weak_ptr<sGLSL> GLSLShaderType2;
-extern std::weak_ptr<sGLSL> GLSLShaderType3;
+extern std::weak_ptr<cGLSL> GLSLShaderType1;
+extern std::weak_ptr<cGLSL> GLSLShaderType2;
+extern std::weak_ptr<cGLSL> GLSLShaderType3;
 extern GLint UniformLocations[100];
 
 
@@ -789,7 +789,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	// у модели может быть нормал меппинг только на отдельные объекты
 	GLtexture CurrentNormalMap{0};
 	// текущий шейдер, чтобы не ставить лишний раз
-	std::weak_ptr<sGLSL> CurrentGLSL{};
+	std::weak_ptr<cGLSL> CurrentGLSL{};
 	int NeedNormalMapping = 0;
 	// получаем матрицу, до всех преобразований
 	float Matrix[16];
@@ -884,7 +884,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
 
 		if (Setup.UseGLSL && (ObjectBlocks[0].ShaderType >= 0)) {
-			std::weak_ptr<sGLSL> CurrentObject3DGLSL{};
+			std::weak_ptr<cGLSL> CurrentObject3DGLSL{};
 
 			// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
 			if ((ObjectBlocks[0].ShaderType == 1) && ShadowMap)
@@ -1103,7 +1103,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 			if (Setup.UseGLSL &&
 			    (ObjectBlocks[i].ShaderType >= 0)) {
-				std::weak_ptr<sGLSL> CurrentObject3DGLSL{};
+				std::weak_ptr<cGLSL> CurrentObject3DGLSL{};
 
 				// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
 				if ((ObjectBlocks[i].ShaderType == 1) && ShadowMap)

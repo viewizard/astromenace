@@ -54,7 +54,7 @@ float ParticleSystemQuality{1.0f};
 bool ParticleSystemUseGLSL{false};
 
 // Particle system's shader (for all particle systems).
-std::weak_ptr<sGLSL> ParticleSystemGLSL{};
+std::weak_ptr<cGLSL> ParticleSystemGLSL{};
 
 // Uniform locations in particle system's shader (for all particle systems).
 GLint UniformLocationParticleTexture{0};

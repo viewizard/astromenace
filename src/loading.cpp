@@ -80,17 +80,17 @@ unsigned int CurrentListCount = 0;
 //------------------------------------------------------------------------------------
 // данные загрузки шейдеров
 //------------------------------------------------------------------------------------
-std::weak_ptr<sGLSL> GLSLShaderType1{};
-std::weak_ptr<sGLSL> GLSLShaderType2{};
-std::weak_ptr<sGLSL> GLSLShaderType3{};
+std::weak_ptr<cGLSL> GLSLShaderType1{};
+std::weak_ptr<cGLSL> GLSLShaderType2{};
+std::weak_ptr<cGLSL> GLSLShaderType3{};
 GLint UniformLocations[100];
 
-struct sGLSLLoadList {
+struct cGLSLLoadList {
 	char Name[MAX_PATH];
 	char VertexShaderFileName[MAX_PATH];
 	char FragmentShaderFileName[MAX_PATH];
 };
-static sGLSLLoadList GLSLLoadList[] = {
+static cGLSLLoadList GLSLLoadList[] = {
 	{"ParticleSystem",		"glsl/particle.vert",		"glsl/particle.frag"},
 	{"SpaceStars",			"glsl/particle_stars.vert",	"glsl/particle.frag"},
 	{"PerPixelLight",		"glsl/light.vert",		"glsl/light.frag"},
@@ -1305,7 +1305,7 @@ void LoadGameData(eLoading LoadType)
 		for (unsigned int i=0; i<GLSLLoadListCount; i++) {
 			if (Setup.UseGLSL) {
 
-				std::weak_ptr<sGLSL> Program = vw_CreateShader(GLSLLoadList[i].Name,
+				std::weak_ptr<cGLSL> Program = vw_CreateShader(GLSLLoadList[i].Name,
 									       GLSLLoadList[i].VertexShaderFileName,
 									       GLSLLoadList[i].FragmentShaderFileName);
 

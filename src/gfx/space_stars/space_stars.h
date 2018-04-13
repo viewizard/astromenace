@@ -44,7 +44,7 @@ public:
 	GLtexture Texture{0};
 
 	// работа с шейдерами
-	std::weak_ptr<sGLSL> GLSL{};
+	std::weak_ptr<cGLSL> GLSL{};
 	GLint UniformLocations[10];
 
 	// текущее положение частиц в пространстве

@@ -33,20 +33,11 @@
 #include "graphics.h"
 #include "extensions.h"
 
-struct sGLSL {
-	~sGLSL() {
-		if (_glDetachObject && _glDeleteObject) {
-			if (VertexShaderUse)
-				_glDetachObject(Program, VertexShader);
-			if (FragmentShaderUse)
-				_glDetachObject(Program, FragmentShader);
-
-			_glDeleteObject(VertexShader);
-			_glDeleteObject(FragmentShader);
-			_glDeleteObject(Program);
-		}
-	}
-
+struct cGLSL {
+	friend std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
+						    const std::string &VertexShaderFileName,
+						    const std::string &FragmentShaderFileName);
+public:
 #ifdef __APPLE__
 	// typedef void *GLhandleARB, see glext.h for more declaration
 	GLhandleARB Program{nullptr};
@@ -60,12 +51,29 @@ struct sGLSL {
 #endif
 	bool VertexShaderUse{false};
 	bool FragmentShaderUse{false};
+
+private:
+	// Don't allow direct new/delete usage in code, only vw_CreateShader()
+	// allowed for shaders creation and release setup (deleter must be provided).
+	cGLSL() = default;
+	~cGLSL() {
+		if (_glDetachObject && _glDeleteObject) {
+			if (VertexShaderUse)
+				_glDetachObject(Program, VertexShader);
+			if (FragmentShaderUse)
+				_glDetachObject(Program, FragmentShader);
+
+			_glDeleteObject(VertexShader);
+			_glDeleteObject(FragmentShader);
+			_glDeleteObject(Program);
+		}
+	}
 };
 
 namespace {
 
 // all shaders
-std::unordered_map<std::string, std::shared_ptr<sGLSL>> ShadersMap{};
+std::unordered_map<std::string, std::shared_ptr<cGLSL>> ShadersMap{};
 
 } // unnamed namespace
 
@@ -159,22 +167,22 @@ bool vw_ShadersMapEmpty()
 /*
  * Find shader by name.
  */
-std::weak_ptr<sGLSL> vw_FindShaderByName(const std::string &Name)
+std::weak_ptr<cGLSL> vw_FindShaderByName(const std::string &Name)
 {
 	if (Name.empty())
-		return std::weak_ptr<sGLSL>{};
+		return std::weak_ptr<cGLSL>{};
 
 	auto tmpShader = ShadersMap.find(Name);
 	if (tmpShader != ShadersMap.end())
 		return tmpShader->second;
 
-	return std::weak_ptr<sGLSL>{};
+	return std::weak_ptr<cGLSL>{};
 }
 
 /*
  * Create shader program.
  */
-std::weak_ptr<sGLSL> vw_CreateShader(const std::string &ShaderName,
+std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
 		       const std::string &VertexShaderFileName,
 		       const std::string &FragmentShaderFileName)
 {
@@ -186,11 +194,11 @@ std::weak_ptr<sGLSL> vw_CreateShader(const std::string &ShaderName,
 	    !_glAttachObject ||
 	    !_glGetObjectParameteriv ||
 	    (VertexShaderFileName.empty() && FragmentShaderFileName.empty()))
-		return std::weak_ptr<sGLSL>{};
+		return std::weak_ptr<cGLSL>{};
 
 	GLint vertCompiled{0}, fragCompiled{0}; // status values
 
-	ShadersMap.emplace(ShaderName, new sGLSL);
+	ShadersMap.emplace(ShaderName, std::shared_ptr<cGLSL>{new cGLSL, [](cGLSL *p) {delete p;}});
 
 	// create empty objects
 	ShadersMap[ShaderName]->VertexShader = _glCreateShaderObject(GL_VERTEX_SHADER_ARB);
@@ -230,7 +238,7 @@ std::weak_ptr<sGLSL> vw_CreateShader(const std::string &ShaderName,
 
 		if (!vertCompiled) {
 			ShadersMap.erase(ShaderName);
-			return std::weak_ptr<sGLSL>{};
+			return std::weak_ptr<cGLSL>{};
 		}
 	}
 	if (ShadersMap[ShaderName]->FragmentShaderUse) {
@@ -241,7 +249,7 @@ std::weak_ptr<sGLSL> vw_CreateShader(const std::string &ShaderName,
 
 		if (!fragCompiled) {
 			ShadersMap.erase(ShaderName);
-			return std::weak_ptr<sGLSL>{};
+			return std::weak_ptr<cGLSL>{};
 		}
 	}
 
@@ -260,7 +268,7 @@ std::weak_ptr<sGLSL> vw_CreateShader(const std::string &ShaderName,
 /*
  * Links a program object.
  */
-bool vw_LinkShaderProgram(std::weak_ptr<sGLSL> &GLSL)
+bool vw_LinkShaderProgram(std::weak_ptr<cGLSL> &GLSL)
 {
 	if (!_glLinkProgram ||
 	    !_glGetObjectParameteriv)
@@ -283,7 +291,7 @@ bool vw_LinkShaderProgram(std::weak_ptr<sGLSL> &GLSL)
 /*
  * Installs a program object as part of current rendering state.
  */
-bool vw_UseShaderProgram(std::weak_ptr<sGLSL> &GLSL)
+bool vw_UseShaderProgram(std::weak_ptr<cGLSL> &GLSL)
 {
 	if (!_glUseProgramObject)
 		return false;
@@ -321,7 +329,7 @@ bool vw_StopShaderProgram()
 /*
  * Returns the location of a uniform variable.
  */
-GLint vw_GetUniformLocation(std::weak_ptr<sGLSL> &GLSL, const std::string &Name)
+GLint vw_GetUniformLocation(std::weak_ptr<cGLSL> &GLSL, const std::string &Name)
 {
 	if (Name.empty() || !_glGetUniformLocation)
 		return -1;
