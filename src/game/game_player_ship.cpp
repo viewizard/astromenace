@@ -217,11 +217,6 @@ float GetShipEngineSystemEnergyUse(int Num)
 void InitGamePlayerShip()
 {
 	// создаем корабль игрока по настройкам в профайле
-	if (PlayerFighter != nullptr) {
-		delete PlayerFighter;
-		PlayerFighter = nullptr;
-	}
-
 	VoiceMissileDetected = 0;
 	VoiceMissileDetectedStatus = false;
 	VoiceWeaponMalfunction = 0;
