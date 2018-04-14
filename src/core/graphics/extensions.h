@@ -37,7 +37,7 @@ Rules for functions and variables naming:
 
 #include "opengl.h"
 
-// OpenGL 2.0 (only what we need, or, probably will need in future)
+// OpenGL 2.0 (only what we need or would need in future)
 extern PFNGLATTACHSHADERPROC _glAttachShader;
 extern PFNGLBINDATTRIBLOCATIONPROC _glBindAttribLocation;
 extern PFNGLCOMPILESHADERPROC _glCompileShader;
@@ -81,34 +81,28 @@ extern PFNGLUNIFORM3IVPROC _glUniform3iv;
 extern PFNGLUNIFORM4IVPROC _glUniform4iv;
 extern PFNGLVALIDATEPROGRAMPROC _glValidateProgram;
 
-// GL_EXT_framebuffer_object
-extern PFNGLGENRENDERBUFFERSEXTPROC _glGenRenderbuffers;
-extern PFNGLBINDRENDERBUFFEREXTPROC _glBindRenderbuffer;
-extern PFNGLGENRENDERBUFFERSEXTPROC _glGenFramebuffers;
-extern PFNGLBINDFRAMEBUFFEREXTPROC _glBindFramebuffer;
-extern PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC _glFramebufferRenderbuffer;
-extern PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC _glCheckFramebufferStatus;
-extern PFNGLFRAMEBUFFERTEXTURE2DEXTPROC _glFramebufferTexture2D;
-extern PFNGLDELETERENDERBUFFERSEXTPROC _glDeleteRenderbuffers;
-extern PFNGLDELETEFRAMEBUFFERSEXTPROC _glDeleteFramebuffers;
-extern PFNGLISFRAMEBUFFEREXTPROC _glIsFramebuffer;
+// OpenGL 3.0 (only what we need or would need in future)
+extern PFNGLBINDRENDERBUFFERPROC _glBindRenderbuffer;
+extern PFNGLDELETERENDERBUFFERSPROC _glDeleteRenderbuffers;
+extern PFNGLGENRENDERBUFFERSPROC _glGenRenderbuffers;
+extern PFNGLISFRAMEBUFFERPROC _glIsFramebuffer;
+extern PFNGLBINDFRAMEBUFFERPROC _glBindFramebuffer;
+extern PFNGLDELETEFRAMEBUFFERSPROC _glDeleteFramebuffers;
+extern PFNGLGENFRAMEBUFFERSPROC _glGenFramebuffers;
+extern PFNGLCHECKFRAMEBUFFERSTATUSPROC _glCheckFramebufferStatus;
+extern PFNGLFRAMEBUFFERTEXTURE2DPROC _glFramebufferTexture2D;
+extern PFNGLFRAMEBUFFERRENDERBUFFERPROC _glFramebufferRenderbuffer;
+extern PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC _glGetFramebufferAttachmentParameteriv;
 extern PFNGLGENERATEMIPMAPPROC _glGenerateMipmap;
-extern PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC _glGetFramebufferAttachmentParameteriv;
-
-// GL_EXT_framebuffer_blit
-extern PFNGLBLITFRAMEBUFFEREXTPROC _glBlitFramebuffer;
-
-// GL_EXT_framebuffer_multisample
-extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC _glRenderbufferStorageMultisample;
+extern PFNGLBLITFRAMEBUFFERPROC _glBlitFramebuffer;
+extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC _glRenderbufferStorageMultisample;
 
 // GL_NV_framebuffer_multisample_coverage
 extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC _glRenderbufferStorageMultisampleCoverageNV;
 
 
 bool __Initialize_OpenGL_2_0();
-bool __Initialize_GL_EXT_framebuffer_object();
-bool __Initialize_GL_EXT_framebuffer_blit();
-bool __Initialize_GL_EXT_framebuffer_multisample();
+bool __Initialize_OpenGL_3_0();
 bool __Initialize_GL_NV_framebuffer_multisample_coverage();
 
 #endif // GraphicsExtensions_H

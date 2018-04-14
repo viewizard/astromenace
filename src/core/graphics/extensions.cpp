@@ -71,28 +71,28 @@ PFNGLUNIFORM3IVPROC _glUniform3iv{nullptr};
 PFNGLUNIFORM4IVPROC _glUniform4iv{nullptr};
 PFNGLVALIDATEPROGRAMPROC _glValidateProgram{nullptr};
 
-// GL_EXT_framebuffer_object
-PFNGLGENRENDERBUFFERSEXTPROC _glGenRenderbuffers{nullptr};
-PFNGLBINDRENDERBUFFEREXTPROC _glBindRenderbuffer{nullptr};
-PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC _glRenderbufferStorageMultisample{nullptr};
-PFNGLGENRENDERBUFFERSEXTPROC _glGenFramebuffers{nullptr};
-PFNGLBINDFRAMEBUFFEREXTPROC _glBindFramebuffer{nullptr};
-PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC _glFramebufferRenderbuffer{nullptr};
-PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC _glCheckFramebufferStatus{nullptr};
-PFNGLFRAMEBUFFERTEXTURE2DEXTPROC _glFramebufferTexture2D{nullptr};
-PFNGLDELETERENDERBUFFERSEXTPROC _glDeleteRenderbuffers{nullptr};
-PFNGLDELETEFRAMEBUFFERSEXTPROC _glDeleteFramebuffers{nullptr};
-PFNGLBLITFRAMEBUFFEREXTPROC _glBlitFramebuffer{nullptr};
-PFNGLISFRAMEBUFFEREXTPROC _glIsFramebuffer{nullptr};
+// OpenGL 3.0 (only what we need, or, probably will need in future)
+PFNGLBINDRENDERBUFFERPROC _glBindRenderbuffer{nullptr};
+PFNGLDELETERENDERBUFFERSPROC _glDeleteRenderbuffers{nullptr};
+PFNGLGENRENDERBUFFERSPROC _glGenRenderbuffers{nullptr};
+PFNGLISFRAMEBUFFERPROC _glIsFramebuffer{nullptr};
+PFNGLBINDFRAMEBUFFERPROC _glBindFramebuffer{nullptr};
+PFNGLDELETEFRAMEBUFFERSPROC _glDeleteFramebuffers{nullptr};
+PFNGLGENFRAMEBUFFERSPROC _glGenFramebuffers{nullptr};
+PFNGLCHECKFRAMEBUFFERSTATUSPROC _glCheckFramebufferStatus{nullptr};
+PFNGLFRAMEBUFFERTEXTURE2DPROC _glFramebufferTexture2D{nullptr};
+PFNGLFRAMEBUFFERRENDERBUFFERPROC _glFramebufferRenderbuffer{nullptr};
+PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC _glGetFramebufferAttachmentParameteriv{nullptr};
 PFNGLGENERATEMIPMAPPROC _glGenerateMipmap{nullptr};
-PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC _glGetFramebufferAttachmentParameteriv{nullptr};
+PFNGLBLITFRAMEBUFFERPROC _glBlitFramebuffer{nullptr};
+PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC _glRenderbufferStorageMultisample{nullptr};
 
 // GL_NV_framebuffer_multisample_coverage
 PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC _glRenderbufferStorageMultisampleCoverageNV{nullptr};
 
 
 /*
- * OpenGL 2.0 initialization (only what we need, or, probably will need in future).
+ * OpenGL 2.0 initialization (only what we need or would need in future).
  */
 bool __Initialize_OpenGL_2_0()
 {
@@ -139,49 +139,48 @@ bool __Initialize_OpenGL_2_0()
 	_glUniform4iv = (PFNGLUNIFORM4IVPROC) SDL_GL_GetProcAddress("glUniform4iv");
 	_glValidateProgram = (PFNGLVALIDATEPROGRAMPROC) SDL_GL_GetProcAddress("glValidateProgram");
 
-	if (	!_glAttachShader ||
-		!_glBindAttribLocation ||
-		!_glCompileShader ||
-		!_glCreateProgram ||
-		!_glCreateShader ||
-		!_glDeleteProgram ||
-		!_glDeleteShader ||
-		!_glDetachShader ||
-		!_glGetActiveAttrib ||
-		!_glGetActiveUniform ||
-		!_glGetAttachedShaders ||
-		!_glGetAttribLocation ||
-		!_glGetProgramiv ||
-		!_glGetProgramInfoLog ||
-		!_glGetShaderiv ||
-		!_glGetShaderInfoLog ||
-		!_glGetShaderSource ||
-		!_glGetUniformLocation ||
-		!_glGetUniformfv ||
-		!_glGetUniformiv ||
-		!_glIsProgram ||
-		!_glIsShader ||
-		!_glLinkProgram ||
-		!_glShaderSource ||
-		!_glUseProgram ||
-		!_glUniform1f ||
-		!_glUniform2f ||
-		!_glUniform3f ||
-		!_glUniform4f ||
-		!_glUniform1i ||
-		!_glUniform2i ||
-		!_glUniform3i ||
-		!_glUniform4i ||
-		!_glUniform1fv ||
-		!_glUniform2fv ||
-		!_glUniform3fv ||
-		!_glUniform4fv ||
-		!_glUniform1iv ||
-		!_glUniform2iv ||
-		!_glUniform3iv ||
-		!_glUniform4iv ||
-		!_glValidateProgram) {
-
+	if (!_glAttachShader ||
+	    !_glBindAttribLocation ||
+	    !_glCompileShader ||
+	    !_glCreateProgram ||
+	    !_glCreateShader ||
+	    !_glDeleteProgram ||
+	    !_glDeleteShader ||
+	    !_glDetachShader ||
+	    !_glGetActiveAttrib ||
+	    !_glGetActiveUniform ||
+	    !_glGetAttachedShaders ||
+	    !_glGetAttribLocation ||
+	    !_glGetProgramiv ||
+	    !_glGetProgramInfoLog ||
+	    !_glGetShaderiv ||
+	    !_glGetShaderInfoLog ||
+	    !_glGetShaderSource ||
+	    !_glGetUniformLocation ||
+	    !_glGetUniformfv ||
+	    !_glGetUniformiv ||
+	    !_glIsProgram ||
+	    !_glIsShader ||
+	    !_glLinkProgram ||
+	    !_glShaderSource ||
+	    !_glUseProgram ||
+	    !_glUniform1f ||
+	    !_glUniform2f ||
+	    !_glUniform3f ||
+	    !_glUniform4f ||
+	    !_glUniform1i ||
+	    !_glUniform2i ||
+	    !_glUniform3i ||
+	    !_glUniform4i ||
+	    !_glUniform1fv ||
+	    !_glUniform2fv ||
+	    !_glUniform3fv ||
+	    !_glUniform4fv ||
+	    !_glUniform1iv ||
+	    !_glUniform2iv ||
+	    !_glUniform3iv ||
+	    !_glUniform4iv ||
+	    !_glValidateProgram) {
 		_glAttachShader = nullptr;
 		_glBindAttribLocation = nullptr;
 		_glCompileShader = nullptr;
@@ -232,98 +231,60 @@ bool __Initialize_OpenGL_2_0()
 }
 
 /*
- * GL_EXT_framebuffer_object initialization.
+ * OpenGL 3.0 initialization (only what we need or would need in future).
  */
-bool __Initialize_GL_EXT_framebuffer_object()
+bool __Initialize_OpenGL_3_0()
 {
-	_glGenRenderbuffers = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenRenderbuffers");
-	_glBindRenderbuffer = (PFNGLBINDRENDERBUFFEREXTPROC) SDL_GL_GetProcAddress("glBindRenderbuffer");
-	_glGenFramebuffers = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenFramebuffers");
-	_glBindFramebuffer = (PFNGLBINDFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBindFramebuffer");
-	_glFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC) SDL_GL_GetProcAddress("glFramebufferRenderbuffer");
-	_glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC) SDL_GL_GetProcAddress("glCheckFramebufferStatus");
-	_glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DEXTPROC) SDL_GL_GetProcAddress("glFramebufferTexture2D");
-	_glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glDeleteRenderbuffers");
-	_glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSEXTPROC) SDL_GL_GetProcAddress("glDeleteFramebuffers");
-	_glIsFramebuffer = (PFNGLISFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glIsFramebuffer");
-	_glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC) SDL_GL_GetProcAddress("glGenerateMipmap");
+	_glBindRenderbuffer = (PFNGLBINDRENDERBUFFERPROC) SDL_GL_GetProcAddress("glBindRenderbuffer");
+	_glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC) SDL_GL_GetProcAddress("glDeleteRenderbuffers");
+	_glGenRenderbuffers = (PFNGLGENRENDERBUFFERSPROC) SDL_GL_GetProcAddress("glGenRenderbuffers");
+	_glIsFramebuffer = (PFNGLISFRAMEBUFFERPROC) SDL_GL_GetProcAddress("glIsFramebuffer");
+	_glBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC) SDL_GL_GetProcAddress("glBindFramebuffer");
+	_glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC) SDL_GL_GetProcAddress("glDeleteFramebuffers");
+	_glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC) SDL_GL_GetProcAddress("glGenFramebuffers");
+	_glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC) SDL_GL_GetProcAddress("glCheckFramebufferStatus");
+	_glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC) SDL_GL_GetProcAddress("glFramebufferTexture2D");
+	_glFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC) SDL_GL_GetProcAddress("glFramebufferRenderbuffer");
 	_glGetFramebufferAttachmentParameteriv =
-		(PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC) SDL_GL_GetProcAddress("glGetFramebufferAttachmentParameteriv");
+		(PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC) SDL_GL_GetProcAddress("glGetFramebufferAttachmentParameteriv");
+	_glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC) SDL_GL_GetProcAddress("glGenerateMipmap");
+	_glBlitFramebuffer = (PFNGLBLITFRAMEBUFFERPROC) SDL_GL_GetProcAddress("glBlitFramebuffer");
+	_glRenderbufferStorageMultisample =
+		(PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC) SDL_GL_GetProcAddress("glRenderbufferStorageMultisample");
 
-	if (!_glGenRenderbuffers || !_glBindRenderbuffer ||
-	    !_glGenFramebuffers || !_glIsFramebuffer ||
-	    !_glBindFramebuffer || !_glFramebufferRenderbuffer ||
-	    !_glCheckFramebufferStatus || !_glFramebufferTexture2D ||
-	    !_glDeleteRenderbuffers || !_glDeleteFramebuffers ||
-	    !_glGenerateMipmap || !_glGetFramebufferAttachmentParameteriv) {
-		// GL_EXT_framebuffer_object + GL_EXT_framebuffer_multisample + GL_EXT_framebuffer_blit
-		_glGenRenderbuffers = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenRenderbuffersEXT");
-		_glBindRenderbuffer = (PFNGLBINDRENDERBUFFEREXTPROC) SDL_GL_GetProcAddress("glBindRenderbufferEXT");
-		_glGenFramebuffers = (PFNGLGENRENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glGenFramebuffersEXT");
-		_glBindFramebuffer = (PFNGLBINDFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBindFramebufferEXT");
-		_glFramebufferRenderbuffer =
-			(PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC) SDL_GL_GetProcAddress("glFramebufferRenderbufferEXT");
-		_glCheckFramebufferStatus =
-			(PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC) SDL_GL_GetProcAddress("glCheckFramebufferStatusEXT");
-		_glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DEXTPROC) SDL_GL_GetProcAddress("glFramebufferTexture2DEXT");
-		_glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSEXTPROC) SDL_GL_GetProcAddress("glDeleteRenderbuffersEXT");
-		_glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSEXTPROC) SDL_GL_GetProcAddress("glDeleteFramebuffersEXT");
-		_glIsFramebuffer = (PFNGLISFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glIsFramebufferEXT");
-		_glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC) SDL_GL_GetProcAddress("glGenerateMipmapEXT");
-		_glGetFramebufferAttachmentParameteriv =
-			(PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC)
-				SDL_GL_GetProcAddress("glGetFramebufferAttachmentParameterivEXT");
-	}
-
-	if (!_glGenRenderbuffers || !_glBindRenderbuffer ||
-	    !_glGenFramebuffers || !_glIsFramebuffer ||
-	    !_glBindFramebuffer || !_glFramebufferRenderbuffer ||
-	    !_glCheckFramebufferStatus || !_glFramebufferTexture2D ||
-	    !_glDeleteRenderbuffers || !_glDeleteFramebuffers ||
-	    !_glGenerateMipmap || !_glGetFramebufferAttachmentParameteriv) {
-		_glGenRenderbuffers = nullptr;
+	if (!_glBindRenderbuffer ||
+	    !_glDeleteRenderbuffers ||
+	    !_glGenRenderbuffers ||
+	    !_glIsFramebuffer ||
+	    !_glBindFramebuffer ||
+	    !_glDeleteFramebuffers ||
+	    !_glGenFramebuffers ||
+	    !_glCheckFramebufferStatus ||
+	    !_glFramebufferTexture2D ||
+	    !_glFramebufferRenderbuffer ||
+	    !_glGetFramebufferAttachmentParameteriv ||
+	    !_glGenerateMipmap ||
+	    !_glBlitFramebuffer ||
+	    !_glRenderbufferStorageMultisample) {
 		_glBindRenderbuffer = nullptr;
-		_glGenFramebuffers = nullptr;
+		_glDeleteRenderbuffers = nullptr;
+		_glGenRenderbuffers = nullptr;
+		_glIsFramebuffer = nullptr;
 		_glBindFramebuffer = nullptr;
-		_glFramebufferRenderbuffer = nullptr;
+		_glDeleteFramebuffers = nullptr;
+		_glGenFramebuffers = nullptr;
 		_glCheckFramebufferStatus = nullptr;
 		_glFramebufferTexture2D = nullptr;
-		_glDeleteRenderbuffers = nullptr;
-		_glDeleteFramebuffers = nullptr;
-		_glIsFramebuffer = nullptr;
+		_glFramebufferRenderbuffer = nullptr;
+		_glGetFramebufferAttachmentParameteriv = nullptr;
 		_glGenerateMipmap = nullptr;
-		_glGetFramebufferAttachmentParameteriv= nullptr;
+		_glBlitFramebuffer = nullptr;
+		_glRenderbufferStorageMultisample = nullptr;
 
 		return false;
 	}
 
 	return true;
-}
-
-/*
- * GL_EXT_framebuffer_blit initialization.
- */
-bool __Initialize_GL_EXT_framebuffer_blit()
-{
-	_glBlitFramebuffer = (PFNGLBLITFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBlitFramebuffer");
-	if (!_glBlitFramebuffer)
-		_glBlitFramebuffer = (PFNGLBLITFRAMEBUFFEREXTPROC) SDL_GL_GetProcAddress("glBlitFramebufferEXT");
-
-	return _glBlitFramebuffer;
-}
-
-/*
- * GL_EXT_framebuffer_multisample initialization.
- */
-bool __Initialize_GL_EXT_framebuffer_multisample()
-{
-	_glRenderbufferStorageMultisample =
-		(PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC) SDL_GL_GetProcAddress("glRenderbufferStorageMultisample");
-	if (!_glRenderbufferStorageMultisample)
-		_glRenderbufferStorageMultisample =
-			(PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC) SDL_GL_GetProcAddress("glRenderbufferStorageMultisampleEXT");
-
-	return _glRenderbufferStorageMultisample;
 }
 
 /*
