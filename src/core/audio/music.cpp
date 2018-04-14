@@ -142,11 +142,20 @@ bool sMusic::Update(uint32_t CurrentTick)
 {
 	vw_UpdateStreamBuffer(Stream, Source, Looped, LoopPart);
 
+	// we could play music during SDL_Init(), when SDL_GetTicks() reset to 0
+	if (LastTick > CurrentTick) {
+		LastTick = CurrentTick;
+		return true;
+	}
 	uint32_t TicksDelta = CurrentTick - LastTick;
 
 	if (FadeInSwitch && (LocalVolume < FadeEndVol)) {
 		FadeTicks += TicksDelta;
 		LocalVolume = FadeEndVol * FadeTicks / FadePeriod;
+		if (LocalVolume >= FadeEndVol) {
+			LocalVolume = FadeEndVol;
+			FadeInSwitch = false;
+		}
 		alSourcef(Source, AL_GAIN, GlobalVolume * LocalVolume );
 		alGetError(); // reset errors
 	}
@@ -154,16 +163,18 @@ bool sMusic::Update(uint32_t CurrentTick)
 	if (FadeOutSwitch && (LocalVolume > 0.0f)) {
 		FadeTicks += TicksDelta;
 		LocalVolume = 1.0f - FadeStartVol * FadeTicks / FadePeriod;
+		if (LocalVolume < 0.0f)
+			LocalVolume = 0.0f;
 		alSourcef(Source, AL_GAIN, GlobalVolume * LocalVolume);
 		alGetError(); // reset errors
 		if (LocalVolume <= 0.0f)
 			return false;
 	}
 
-	LastTick = CurrentTick;
-
 	if (CheckALSourceState(Source, AL_STOPPED))
 		return false;
+
+	LastTick = CurrentTick;
 
 	return true;
 }
@@ -185,6 +196,8 @@ void sMusic::SetGlobalVolume(float NewGlobalVolume)
  */
 void sMusic::FadeIn(float EndVol, uint32_t Ticks)
 {
+	if (FadeInSwitch)
+		return; // don't reset current fade-in
 	FadeInSwitch = true;
 	FadeOutSwitch = false;
 	FadeEndVol = EndVol;
@@ -198,6 +211,8 @@ void sMusic::FadeIn(float EndVol, uint32_t Ticks)
  */
 void sMusic::FadeOut(uint32_t Ticks)
 {
+	if (FadeOutSwitch)
+		return;  // don't reset current fade-out
 	FadeOutSwitch = true;
 	FadeInSwitch = false;
 	FadeStartVol = LocalVolume;
