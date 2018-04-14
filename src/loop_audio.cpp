@@ -158,8 +158,10 @@ void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t F
 	    Setup.MusicSw && // и громкость не нулевая
 	    !CurrentPlayingMusicName.empty()) {
 
-		// FadeOut all music themes, if we need something, we FadeIn it in code below
-		vw_FadeOutIfMusicPlaying(FadeOutTicks);
+		vw_FadeOutAllMusicWithException(CurrentPlayingMusicName, FadeOutTicks);
+
+		if (vw_IsMusicPlaying(CurrentPlayingMusicName))
+			return;
 
 		// пытаемся загрузить и играть
 		if (!vw_PlayMusic(CurrentPlayingMusicName, 0.0f, MusicCorrection * (Setup.MusicSw / 10.0f),

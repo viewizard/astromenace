@@ -222,15 +222,30 @@ void sMusic::FadeOut(uint32_t Ticks)
 }
 
 /*
- * Set all music fade-out, if playing.
+ * Fade-out all music themes, except provided.
  */
-void vw_FadeOutIfMusicPlaying(uint32_t Ticks)
+void vw_FadeOutAllMusicWithException(const std::string &Name, uint32_t Ticks)
 {
 	for (auto &tmpMusic : MusicMap) {
-		if (alIsSource(tmpMusic.second.Source) &&
+		if ((tmpMusic.first != Name) &&
+		    alIsSource(tmpMusic.second.Source) &&
 		    CheckALSourceState(tmpMusic.second.Source, AL_PLAYING))
 			tmpMusic.second.FadeOut(Ticks);
 	}
+}
+
+/*
+ * Check, is music theme playing.
+ */
+bool vw_IsMusicPlaying(const std::string &Name)
+{
+	auto tmpMusic = MusicMap.find(Name);
+	if ((tmpMusic != MusicMap.end()) &&
+	    alIsSource((*tmpMusic).second.Source) &&
+	    CheckALSourceState((*tmpMusic).second.Source, AL_PLAYING))
+		return true;
+
+	return false;
 }
 
 /*

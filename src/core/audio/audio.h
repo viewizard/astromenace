@@ -64,10 +64,12 @@ bool vw_PlayMusic(const std::string &Name, float LocalVolume, float GlobalVolume
 		  bool Loop, const std::string &LoopFileName);
 // Set global music volume.
 void vw_SetMusicGlobalVolume(float NewGlobalVolume);
+// Check, is music theme playing.
+bool vw_IsMusicPlaying(const std::string &Name);
 // Check, is any music theme playing.
 bool vw_IsAnyMusicPlaying();
-// Set all music fade-out, if playing.
-void vw_FadeOutIfMusicPlaying(uint32_t Ticks);
+// Fade-out all music themes, except provided.
+void vw_FadeOutAllMusicWithException(const std::string &Name, uint32_t Ticks);
 // Set music fade-in.
 void vw_SetMusicFadeIn(const std::string &Name, float EndVol, uint32_t Ticks);
 // Update all music themes status and calculate effects.
