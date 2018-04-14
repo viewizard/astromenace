@@ -301,7 +301,7 @@ void Audio_LoopProc()
 				vw_ReleaseMusic(CurrentPlayingMusicName);
 				CurrentPlayingMusicName.clear();
 			} else // we are playing new music theme, FadeIn it
-				vw_SetMusicFadeIn(CurrentPlayingMusicName, 0.0f, 2000);
+				vw_SetMusicFadeIn(CurrentPlayingMusicName, 1.0f, 2000);
 		}
 	} else {
 		// если что-то играем, но звук уже выключен, нужно все убрать...

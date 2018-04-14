@@ -149,7 +149,7 @@ bool sMusic::Update(uint32_t CurrentTick)
 	}
 	uint32_t TicksDelta = CurrentTick - LastTick;
 
-	if (FadeInSwitch && (LocalVolume < FadeEndVol)) {
+	if (FadeInSwitch) {
 		FadeTicks += TicksDelta;
 		LocalVolume = FadeEndVol * FadeTicks / FadePeriod;
 		if (LocalVolume >= FadeEndVol) {
@@ -160,7 +160,7 @@ bool sMusic::Update(uint32_t CurrentTick)
 		alGetError(); // reset errors
 	}
 
-	if (FadeOutSwitch && (LocalVolume > 0.0f)) {
+	if (FadeOutSwitch) {
 		FadeTicks += TicksDelta;
 		LocalVolume = 1.0f - FadeStartVol * FadeTicks / FadePeriod;
 		if (LocalVolume < 0.0f)
