@@ -92,6 +92,18 @@ int NeedPlayDialogOnButtonSoundX = 0;
 int NeedPlayDialogOnButtonSoundY = 0;
 
 
+
+void InitDialogBoxes()
+{
+	LastDialogUpdateTime = 0.0f;
+	DialogContentTransp = 0.0f;
+	NeedShowDialog = false;
+	NeedHideDialog = false;
+	StartHideTransp = 1.0f;
+	CurrentDialogBox = eDialogBox::None;
+}
+
+
 //------------------------------------------------------------------------------------
 // прорисовка кнопки - 200
 //------------------------------------------------------------------------------------
@@ -392,7 +404,6 @@ void CloseDialog()
 //------------------------------------------------------------------------------------
 void DrawDialogBox()
 {
-
 	if (NeedHideDialog) {
 		DialogContentTransp = StartHideTransp - 3.0f*(vw_GetTimeThread(0) - LastDialogUpdateTime);
 

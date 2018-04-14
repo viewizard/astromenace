@@ -539,6 +539,7 @@ void SetGameMissionComplete();
 //------------------------------------------------------------------------------------
 // Dialog.cpp
 //------------------------------------------------------------------------------------
+void InitDialogBoxes();
 void SetCurrentDialogBox(eDialogBox DialogBox);
 bool isDialogBoxDrawing();
 void DrawDialogBox();

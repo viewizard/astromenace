@@ -666,6 +666,8 @@ ReCreate:
 	}
 	// Init on every SDL_Init(), since SDL_GetTicks() will start from 0.
 	vw_InitTimeThread(0);
+	// if we change options during game mission with game restart, care about dialogs reset
+	InitDialogBoxes();
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
