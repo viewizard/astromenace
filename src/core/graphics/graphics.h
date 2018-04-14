@@ -512,11 +512,11 @@ bool vw_StopShaderProgram();
 // Returns the location of a uniform variable.
 GLint vw_GetUniformLocation(std::weak_ptr<cGLSL> &GLSL, const std::string &Name);
 // Specify the value of a uniform variable for the current program object.
-bool vw_Uniform1i(int UniformLocation, int data);
+bool vw_Uniform1i(GLint UniformLocation, int data);
 // Specify the value of a uniform variable for the current program object.
-bool vw_Uniform1f(int UniformLocation, float data);
+bool vw_Uniform1f(GLint UniformLocation, float data);
 // Specify the value of a uniform variable for the current program object.
-bool vw_Uniform3f(int UniformLocation, float data1, float data2, float data3);
+bool vw_Uniform3f(GLint UniformLocation, float data1, float data2, float data3);
 
 /*
  * 2D rendering.

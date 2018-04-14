@@ -25,7 +25,11 @@
 *************************************************************************************/
 
 /*
-Assets, that should be for graphic's internal use only.
+Should be for graphic's internal use only.
+
+Rules for functions and variables naming:
+"__" prefix for functions;
+"_" prefix for variables.
 */
 
 #ifndef GraphicsInternal_H

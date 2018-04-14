@@ -183,8 +183,8 @@ std::weak_ptr<cGLSL> vw_FindShaderByName(const std::string &Name)
  * Create shader program.
  */
 std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
-		       const std::string &VertexShaderFileName,
-		       const std::string &FragmentShaderFileName)
+				     const std::string &VertexShaderFileName,
+				     const std::string &FragmentShaderFileName)
 {
 	if (ShaderName.empty() ||
 	    !_glCreateShaderObject ||
@@ -195,8 +195,6 @@ std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
 	    !_glGetObjectParameteriv ||
 	    (VertexShaderFileName.empty() && FragmentShaderFileName.empty()))
 		return std::weak_ptr<cGLSL>{};
-
-	GLint vertCompiled{0}, fragCompiled{0}; // status values
 
 	ShadersMap.emplace(ShaderName, std::shared_ptr<cGLSL>{new cGLSL, [](cGLSL *p) {delete p;}});
 
@@ -233,6 +231,7 @@ std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
 	if (ShadersMap[ShaderName]->VertexShaderUse) {
 		_glCompileShader(ShadersMap[ShaderName]->VertexShader);
 		CheckOGLError(__func__);
+		GLint vertCompiled{0};
 		_glGetObjectParameteriv(ShadersMap[ShaderName]->VertexShader, GL_COMPILE_STATUS, &vertCompiled);
 		PrintShaderInfoLog(ShadersMap[ShaderName]->VertexShader, VertexShaderFileName);
 
@@ -244,6 +243,7 @@ std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
 	if (ShadersMap[ShaderName]->FragmentShaderUse) {
 		_glCompileShader(ShadersMap[ShaderName]->FragmentShader);
 		CheckOGLError(__func__);
+		GLint fragCompiled{0};
 		_glGetObjectParameteriv(ShadersMap[ShaderName]->FragmentShader, GL_COMPILE_STATUS, &fragCompiled);
 		PrintShaderInfoLog(ShadersMap[ShaderName]->FragmentShader, FragmentShaderFileName);
 
@@ -316,11 +316,11 @@ bool vw_StopShaderProgram()
 
 	_glUseProgramObject(
 #ifdef __APPLE__
-			      nullptr	/* typedef void *GLhandleARB, see glext.h for more declaration */
+			    nullptr	/* typedef void *GLhandleARB, see glext.h for more declaration */
 #else
-			      0		/* typedef unsigned int GLhandleARB, see glext.h for more declaration */
+			    0		/* typedef unsigned int GLhandleARB, see glext.h for more declaration */
 #endif
-			      );
+			    );
 	CheckOGLError(__func__);
 
 	return true;
@@ -350,7 +350,7 @@ GLint vw_GetUniformLocation(std::weak_ptr<cGLSL> &GLSL, const std::string &Name)
 /*
  * Specify the value of a uniform variable for the current program object.
  */
-bool vw_Uniform1i(int UniformLocation, int data)
+bool vw_Uniform1i(GLint UniformLocation, int data)
 {
 	if (!_glUniform1i)
 		return false;
@@ -364,7 +364,7 @@ bool vw_Uniform1i(int UniformLocation, int data)
 /*
  * Specify the value of a uniform variable for the current program object.
  */
-bool vw_Uniform1f(int UniformLocation, float data)
+bool vw_Uniform1f(GLint UniformLocation, float data)
 {
 	if (!_glUniform1f)
 		return false;
@@ -378,7 +378,7 @@ bool vw_Uniform1f(int UniformLocation, float data)
 /*
  * Specify the value of a uniform variable for the current program object.
  */
-bool vw_Uniform3f(int UniformLocation, float data1, float data2, float data3)
+bool vw_Uniform3f(GLint UniformLocation, float data1, float data2, float data3)
 {
 	if (!_glUniform3f)
 		return false;

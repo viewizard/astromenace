@@ -24,6 +24,14 @@
 
 *************************************************************************************/
 
+/*
+Should be for graphic's internal use only.
+
+Rules for functions and variables naming:
+"__" prefix for functions;
+"_" prefix for variables.
+*/
+
 #ifndef GraphicsExtensions_H
 #define GraphicsExtensions_H
 
