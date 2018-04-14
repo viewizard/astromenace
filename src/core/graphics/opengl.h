@@ -28,10 +28,9 @@
 #define GraphicsOpenGL_H
 
 #if defined(__APPLE__) && defined(__MACH__)
-#define __glext_h_ // don't let gl.h include glext.h
+#define GL_GLEXT_LEGACY
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
-#undef __glext_h_
 #else
 #define __glext_h_ // don't let gl.h include glext.h
 #include <GL/gl.h>
