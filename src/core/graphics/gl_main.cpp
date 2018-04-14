@@ -428,9 +428,10 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 
 	// инициализация индекс буфера
 	Internal_InitializationLocalIndexData();
+	bool OpenGL_2_0_supported = __Initialize_OpenGL_2_0();
 	// иним шейдеры
 	if (OpenGL_DevCaps.GLSL100Supported)
-		OpenGL_DevCaps.GLSL100Supported = __Initialize_GL_ARB_shader_objects();
+		OpenGL_DevCaps.GLSL100Supported = OpenGL_2_0_supported; // FIXME this should be revised
 	// иним вбо
 	if (OpenGL_DevCaps.VBOSupported)
 		OpenGL_DevCaps.VBOSupported = Internal_InitializationBufferObjects();
@@ -439,6 +440,8 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	// инициализируем FBO
 	if (OpenGL_DevCaps.FramebufferObject) {
 		OpenGL_DevCaps.FramebufferObject = __Initialize_GL_EXT_framebuffer_object();
+		__Initialize_GL_EXT_framebuffer_blit();
+		__Initialize_GL_EXT_framebuffer_multisample();
 		__Initialize_GL_NV_framebuffer_multisample_coverage();
 
 		// инициализируем буферы, если поддерживаем работу с ними - через них всегда рисуем

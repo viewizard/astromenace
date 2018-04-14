@@ -38,34 +38,25 @@ struct cGLSL {
 						    const std::string &VertexShaderFileName,
 						    const std::string &FragmentShaderFileName);
 public:
-#ifdef __APPLE__
-	// typedef void *GLhandleARB, see glext.h for more declaration
-	GLhandleARB Program{nullptr};
-	GLhandleARB VertexShader{nullptr};
-	GLhandleARB FragmentShader{nullptr};
-#else
-	// typedef unsigned int GLhandleARB, see glext.h for more declaration
-	GLhandleARB Program{0};
-	GLhandleARB VertexShader{0};
-	GLhandleARB FragmentShader{0};
-#endif
-	bool VertexShaderUse{false};
-	bool FragmentShaderUse{false};
+	GLuint Program{0};
+	GLuint VertexShader{0};
+	GLuint FragmentShader{0};
+
 
 private:
 	// Don't allow direct new/delete usage in code, only vw_CreateShader()
 	// allowed for shaders creation and release setup (deleter must be provided).
 	cGLSL() = default;
 	~cGLSL() {
-		if (_glDetachObject && _glDeleteObject) {
-			if (VertexShaderUse)
-				_glDetachObject(Program, VertexShader);
-			if (FragmentShaderUse)
-				_glDetachObject(Program, FragmentShader);
+		if (_glDetachShader && _glDeleteShader) {
+			if (Program && VertexShader)
+				_glDetachShader(Program, VertexShader);
+			if (Program && FragmentShader)
+				_glDetachShader(Program, FragmentShader);
 
-			_glDeleteObject(VertexShader);
-			_glDeleteObject(FragmentShader);
-			_glDeleteObject(Program);
+			_glDeleteShader(VertexShader);
+			_glDeleteShader(FragmentShader);
+			_glDeleteShader(Program);
 		}
 	}
 };
@@ -93,23 +84,23 @@ static void CheckOGLError(const char *FunctionName)
 /*
  * Print out the information log for a shader object.
  */
-static void PrintShaderInfoLog(GLhandleARB shader, const std::string &ShaderName)
+static void PrintShaderInfoLog(GLuint shader, const std::string &ShaderName)
 {
-	if (!_glGetObjectParameteriv ||
-	    !_glGetInfoLog)
+	if (!_glGetShaderiv ||
+	    !_glGetShaderInfoLog)
 		return;
 
 	CheckOGLError(__func__);
 
 	int infologLength{0};
-	_glGetObjectParameteriv(shader, GL_INFO_LOG_LENGTH, &infologLength);
+	_glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infologLength);
 
 	CheckOGLError(__func__);
 
 	if (infologLength > 0) {
 		std::unique_ptr<GLchar []> infoLog{new GLchar[infologLength]};
 		int charsWritten{0};
-		_glGetInfoLog(shader, infologLength, &charsWritten, infoLog.get());
+		_glGetShaderInfoLog(shader, infologLength, &charsWritten, infoLog.get());
 		// at this line, infoLog.get() should contains null-terminated string
 		if (charsWritten)
 			std::cout << "Shader InfoLog " << ShaderName << ":\n" << infoLog.get() << "\n\n";
@@ -122,23 +113,23 @@ static void PrintShaderInfoLog(GLhandleARB shader, const std::string &ShaderName
 /*
  * Print out the information log.
  */
-static void PrintProgramInfoLog(GLhandleARB program)
+static void PrintProgramInfoLog(GLuint program)
 {
-	if (!_glGetObjectParameteriv ||
-	    !_glGetInfoLog)
+	if (!_glGetProgramiv ||
+	    !_glGetProgramInfoLog)
 		return;
 
 	CheckOGLError(__func__);
 
 	int infologLength{0};
-	_glGetObjectParameteriv(program, GL_INFO_LOG_LENGTH, &infologLength);
+	_glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infologLength);
 
 	CheckOGLError(__func__);
 
 	if (infologLength > 0) {
 		std::unique_ptr<GLchar []> infoLog{new GLchar[infologLength]};
 		int charsWritten{0};
-		_glGetInfoLog(program, infologLength, &charsWritten, infoLog.get());
+		_glGetProgramInfoLog(program, infologLength, &charsWritten, infoLog.get());
 		// at this line, infoLog.get() should contains null-terminated string
 		if (charsWritten)
 			std::cout << "Program InfoLog:\n" << infoLog.get() << "\n\n";
@@ -187,52 +178,60 @@ std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
 				     const std::string &FragmentShaderFileName)
 {
 	if (ShaderName.empty() ||
-	    !_glCreateShaderObject ||
+	    !_glCreateShader ||
 	    !_glShaderSource ||
 	    !_glCompileShader ||
-	    !_glCreateProgramObject ||
-	    !_glAttachObject ||
-	    !_glGetObjectParameteriv ||
+	    !_glCreateProgram ||
+	    !_glAttachShader ||
+	    !_glGetShaderiv ||
 	    (VertexShaderFileName.empty() && FragmentShaderFileName.empty()))
 		return std::weak_ptr<cGLSL>{};
 
 	ShadersMap.emplace(ShaderName, std::shared_ptr<cGLSL>{new cGLSL, [](cGLSL *p) {delete p;}});
 
-	// create empty objects
-	ShadersMap[ShaderName]->VertexShader = _glCreateShaderObject(GL_VERTEX_SHADER_ARB);
-	ShadersMap[ShaderName]->FragmentShader = _glCreateShaderObject(GL_FRAGMENT_SHADER_ARB);
-
 	// load vertex shader
 	if (!VertexShaderFileName.empty()) {
+		// create empty object
+		ShadersMap[ShaderName]->VertexShader = _glCreateShader(GL_VERTEX_SHADER);
+
 		std::unique_ptr<sFILE> VertexFile = vw_fopen(VertexShaderFileName);
 
-		if (VertexFile) {
-			const GLcharARB *TmpGLcharARB = (const GLcharARB *)VertexFile->Data.get();
-			GLint TmpGLint = (GLint)VertexFile->Size;
-			_glShaderSource(ShadersMap[ShaderName]->VertexShader, 1, &TmpGLcharARB, &TmpGLint);
-			vw_fclose(VertexFile);
-			ShadersMap[ShaderName]->VertexShaderUse = true;
+		if (!VertexFile) {
+			ShadersMap.erase(ShaderName);
+			std::cerr << __func__ << "(): " << "Can't find file " << VertexShaderFileName << "\n";
+			return std::weak_ptr<cGLSL>{};
 		}
+
+		const GLchar *TmpGLchar = (const GLchar *)VertexFile->Data.get();
+		GLint TmpGLint = (GLint)VertexFile->Size;
+		_glShaderSource(ShadersMap[ShaderName]->VertexShader, 1, &TmpGLchar, &TmpGLint);
+		vw_fclose(VertexFile);
 	}
 	// load fragment shader
 	if (!FragmentShaderFileName.empty()) {
+		// create empty object
+		ShadersMap[ShaderName]->FragmentShader = _glCreateShader(GL_FRAGMENT_SHADER);
+
 		std::unique_ptr<sFILE> FragmentFile = vw_fopen(FragmentShaderFileName);
 
-		if (FragmentFile) {
-			const GLcharARB *TmpGLcharARB = (const GLcharARB *)FragmentFile->Data.get();
-			GLint TmpGLint = (GLint)FragmentFile->Size;
-			_glShaderSource(ShadersMap[ShaderName]->FragmentShader, 1, &TmpGLcharARB, &TmpGLint);
-			vw_fclose(FragmentFile);
-			ShadersMap[ShaderName]->FragmentShaderUse = true;
+		if (!FragmentFile) {
+			ShadersMap.erase(ShaderName);
+			std::cerr << __func__ << "(): " << "Can't find file " << FragmentShaderFileName << "\n";
+			return std::weak_ptr<cGLSL>{};
 		}
+
+		const GLchar *TmpGLchar = (const GLchar *)FragmentFile->Data.get();
+		GLint TmpGLint = (GLint)FragmentFile->Size;
+		_glShaderSource(ShadersMap[ShaderName]->FragmentShader, 1, &TmpGLchar, &TmpGLint);
+		vw_fclose(FragmentFile);
 	}
 
 	// compile shaders
-	if (ShadersMap[ShaderName]->VertexShaderUse) {
+	if (ShadersMap[ShaderName]->VertexShader) {
 		_glCompileShader(ShadersMap[ShaderName]->VertexShader);
 		CheckOGLError(__func__);
 		GLint vertCompiled{0};
-		_glGetObjectParameteriv(ShadersMap[ShaderName]->VertexShader, GL_COMPILE_STATUS, &vertCompiled);
+		_glGetShaderiv(ShadersMap[ShaderName]->VertexShader, GL_COMPILE_STATUS, &vertCompiled);
 		PrintShaderInfoLog(ShadersMap[ShaderName]->VertexShader, VertexShaderFileName);
 
 		if (!vertCompiled) {
@@ -240,11 +239,11 @@ std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
 			return std::weak_ptr<cGLSL>{};
 		}
 	}
-	if (ShadersMap[ShaderName]->FragmentShaderUse) {
+	if (ShadersMap[ShaderName]->FragmentShader) {
 		_glCompileShader(ShadersMap[ShaderName]->FragmentShader);
 		CheckOGLError(__func__);
 		GLint fragCompiled{0};
-		_glGetObjectParameteriv(ShadersMap[ShaderName]->FragmentShader, GL_COMPILE_STATUS, &fragCompiled);
+		_glGetShaderiv(ShadersMap[ShaderName]->FragmentShader, GL_COMPILE_STATUS, &fragCompiled);
 		PrintShaderInfoLog(ShadersMap[ShaderName]->FragmentShader, FragmentShaderFileName);
 
 		if (!fragCompiled) {
@@ -254,11 +253,11 @@ std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
 	}
 
 	// create program
-	ShadersMap[ShaderName]->Program = _glCreateProgramObject();
-	if (ShadersMap[ShaderName]->VertexShaderUse)
-		_glAttachObject(ShadersMap[ShaderName]->Program, ShadersMap[ShaderName]->VertexShader);
-	if (ShadersMap[ShaderName]->FragmentShaderUse)
-		_glAttachObject(ShadersMap[ShaderName]->Program, ShadersMap[ShaderName]->FragmentShader);
+	ShadersMap[ShaderName]->Program = _glCreateProgram();
+	if (ShadersMap[ShaderName]->VertexShader)
+		_glAttachShader(ShadersMap[ShaderName]->Program, ShadersMap[ShaderName]->VertexShader);
+	if (ShadersMap[ShaderName]->FragmentShader)
+		_glAttachShader(ShadersMap[ShaderName]->Program, ShadersMap[ShaderName]->FragmentShader);
 
 	std::cout << "Shader ... " << VertexShaderFileName << " " << FragmentShaderFileName << "\n";
 
@@ -271,7 +270,7 @@ std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
 bool vw_LinkShaderProgram(std::weak_ptr<cGLSL> &GLSL)
 {
 	if (!_glLinkProgram ||
-	    !_glGetObjectParameteriv)
+	    !_glGetProgramiv)
 		return false;
 
 	auto sharedGLSL = GLSL.lock();
@@ -282,7 +281,7 @@ bool vw_LinkShaderProgram(std::weak_ptr<cGLSL> &GLSL)
 	CheckOGLError(__func__);
 
 	GLint Linked{false};
-	_glGetObjectParameteriv(sharedGLSL->Program, GL_LINK_STATUS, &Linked);
+	_glGetProgramiv(sharedGLSL->Program, GL_LINK_STATUS, &Linked);
 	PrintProgramInfoLog(sharedGLSL->Program);
 
 	return Linked;
@@ -293,14 +292,14 @@ bool vw_LinkShaderProgram(std::weak_ptr<cGLSL> &GLSL)
  */
 bool vw_UseShaderProgram(std::weak_ptr<cGLSL> &GLSL)
 {
-	if (!_glUseProgramObject)
+	if (!_glUseProgram)
 		return false;
 
 	auto sharedGLSL = GLSL.lock();
 	if (!sharedGLSL)
 		return false;
 
-	_glUseProgramObject(sharedGLSL->Program);
+	_glUseProgram(sharedGLSL->Program);
 	CheckOGLError(__func__);
 
 	return true;
@@ -311,16 +310,10 @@ bool vw_UseShaderProgram(std::weak_ptr<cGLSL> &GLSL)
  */
 bool vw_StopShaderProgram()
 {
-	if (!_glUseProgramObject)
+	if (!_glUseProgram)
 		return false;
 
-	_glUseProgramObject(
-#ifdef __APPLE__
-			    nullptr	/* typedef void *GLhandleARB, see glext.h for more declaration */
-#else
-			    0		/* typedef unsigned int GLhandleARB, see glext.h for more declaration */
-#endif
-			    );
+	_glUseProgram(0);
 	CheckOGLError(__func__);
 
 	return true;
