@@ -601,10 +601,6 @@ int main( int argc, char **argv )
 
 
 
-	// инициализация счета времени
-	vw_InitTimeThread(0);
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// подключаем VFS
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -668,7 +664,8 @@ ReCreate:
 		std::cerr << __func__ << "(): " << "Couldn't init SDL: " << SDL_GetError() << "\n";
 		return 1;
 	}
-
+	// Init on every SDL_Init(), since SDL_GetTicks() will start from 0.
+	vw_InitTimeThread(0);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1371,6 +1368,7 @@ GotoQuit:
 	vw_ReleaseAllTextures();
 	ShadowMap_Release();
 	vw_ShutdownRenderer();
+	vw_ReleaseAllTimeThread();
 
 #ifdef joystick
 	// закрываем джойстик, если он был

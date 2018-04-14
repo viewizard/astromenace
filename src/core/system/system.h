@@ -37,6 +37,8 @@ struct sRECT;
 
 // Initialize or re-initialize time for particular thread.
 void vw_InitTimeThread(int TimeThread);
+// Release all threads.
+void vw_ReleaseAllTimeThread();
 // Get time for particular thread.
 float vw_GetTimeThread(int TimeThread);
 // Start all time threads.

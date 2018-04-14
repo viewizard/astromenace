@@ -87,6 +87,14 @@ void vw_InitTimeThread(int TimeThread)
 }
 
 /*
+ * Release all threads.
+ */
+void vw_ReleaseAllTimeThread()
+{
+	TimeThreadsMap.clear();
+}
+
+/*
  * Get time for particular thread.
  */
 float vw_GetTimeThread(int TimeThread)
