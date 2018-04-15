@@ -65,6 +65,16 @@ enum class eMatrixPname : GLenum {
 	TEXTURE = GL_TEXTURE_MATRIX
 };
 
+
+enum class eTextureEnvMode : GLint {
+	DECAL = GL_DECAL,
+	BLEND = GL_BLEND,
+	REPLACE = GL_REPLACE,
+	ADD = GL_ADD,
+	COMBINE = GL_COMBINE,
+	MODULATE = GL_MODULATE
+};
+
 enum class eMaterialParameter : GLenum {
 	AMBIENT = GL_AMBIENT,
 	DIFFUSE = GL_DIFFUSE,
@@ -223,14 +233,6 @@ struct sDevCaps {
 #define RI_TBLEND_DIFFUSE		0x103083
 #define RI_TBLEND_SPECULAR		0x103084
 
-// vw_SetTextureEnvMode() MODE
-#define RI_TENV_DECAL			1
-#define RI_TENV_BLEND			2
-#define RI_TENV_REPLACE			3
-#define RI_TENV_ADD			4
-#define RI_TENV_MODULATE		5
-#define RI_TENV_COMBINE			6
-
 // vw_SetTextureCompare() MODE
 #define RI_COMPARE_R_TO_TEXTURE		1
 #define RI_COMPARE_NONE			2
@@ -380,7 +382,7 @@ void vw_SetTextureBlend(bool Flag, int Src, int Dst);
 // Set texture blending mode.
 void vw_SetTextureBlendMode(int pname, int param);
 // Set texture env mode.
-void vw_SetTextureEnvMode(int MODE);
+void vw_SetTextureEnvMode(eTextureEnvMode mode);
 // Set texture compare mode.
 void vw_SetTextureCompare(int MODE, int FUNC);
 // Set texture depth mode.

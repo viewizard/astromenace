@@ -34,6 +34,9 @@
 //      glBindTextureUnitEXT()
 //      could be used to replace glActiveTexture() + glBindTexture()
 
+// NOTE glTexEnvi() deprecated in 3.1 core profile
+//      (vw_SetTextureEnvMode(), vw_SetTextureBlendMode())
+
 #include "../texture/texture.h"
 #include "graphics_internal.h"
 #include "graphics.h"
@@ -503,27 +506,7 @@ void vw_SetTextureDepthMode(int MODE)
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_SetTextureEnvMode(int MODE)
+void vw_SetTextureEnvMode(eTextureEnvMode mode)
 {
-	switch (MODE) {
-	case RI_TENV_DECAL:
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-		break;
-	case RI_TENV_BLEND:
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
-		break;
-	case RI_TENV_REPLACE:
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-		break;
-	case RI_TENV_ADD:
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
-		break;
-	case RI_TENV_COMBINE:
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-		break;
-	case RI_TENV_MODULATE:
-	default:
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		break;
-	}
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, static_cast<GLint>(mode));
 }

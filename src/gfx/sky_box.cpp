@@ -72,7 +72,7 @@ void SkyBoxDraw()
 
 	// сразу выполняем настройку второй текстуры
 	vw_BindTexture(1, vw_FindTextureByName("skybox/tile_stars.tga"));
-	vw_SetTextureEnvMode(RI_TENV_DECAL);
+	vw_SetTextureEnvMode(eTextureEnvMode::DECAL);
 	vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
 	// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
 	if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);

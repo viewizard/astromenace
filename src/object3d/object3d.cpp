@@ -861,7 +861,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
 			if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 			// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
-			vw_SetTextureEnvMode(RI_TENV_COMBINE);
+			vw_SetTextureEnvMode(eTextureEnvMode::COMBINE);
 			vw_SetTextureBlendMode(RI_TBLEND_COLOROP, RI_TBLEND_ADD);
 		}
 
@@ -1036,7 +1036,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					if (Setup.TextureFilteringMode == 1)
 						vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 					// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
-					vw_SetTextureEnvMode(RI_TENV_COMBINE);
+					vw_SetTextureEnvMode(eTextureEnvMode::COMBINE);
 					vw_SetTextureBlendMode(RI_TBLEND_COLOROP, RI_TBLEND_ADD);
 				}
 
