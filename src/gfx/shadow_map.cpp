@@ -211,7 +211,7 @@ void ShadowMap_StartFinalRender()
 	vw_BindTexture(2, ShadowMapFBO->DepthTexture);
 	// т.к. будем использовать shadow2DProj, ставим правильный режим работы
 	vw_SetTextureCompare(RI_COMPARE_R_TO_TEXTURE, RI_LESSEQUAL);
-	vw_SetTextureDepthMode(RI_DEPTH_TEXTURE_MODE_INTENSITY);
+	vw_SetTextureDepthMode(eTextureDepthMode::INTENSITY);
 	// ставим линеар сглаживание, чтобы PCF делало более плавные переходы
 	vw_SetTextureFiltering(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE);
 

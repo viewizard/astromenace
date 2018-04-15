@@ -75,6 +75,12 @@ enum class eTextureEnvMode : GLint {
 	MODULATE = GL_MODULATE
 };
 
+enum class eTextureDepthMode : GLint {
+	LUMINANCE = GL_LUMINANCE,
+	INTENSITY = GL_INTENSITY,
+	ALPHA = GL_ALPHA
+};
+
 enum class eMaterialParameter : GLenum {
 	AMBIENT = GL_AMBIENT,
 	DIFFUSE = GL_DIFFUSE,
@@ -237,11 +243,6 @@ struct sDevCaps {
 #define RI_COMPARE_R_TO_TEXTURE		1
 #define RI_COMPARE_NONE			2
 
-// vw_SetTextureDepthMode() MODE
-#define RI_DEPTH_TEXTURE_MODE_LUMINANCE	1
-#define RI_DEPTH_TEXTURE_MODE_INTENSITY	2
-#define RI_DEPTH_TEXTURE_MODE_ALPHA	3
-
 
 // Primitives types
 #define RI_POINTS			0x1020
@@ -386,7 +387,7 @@ void vw_SetTextureEnvMode(eTextureEnvMode mode);
 // Set texture compare mode.
 void vw_SetTextureCompare(int MODE, int FUNC);
 // Set texture depth mode.
-void vw_SetTextureDepthMode(int MODE);
+void vw_SetTextureDepthMode(eTextureDepthMode mode);
 
 /*
  * 3D rendering.

@@ -487,20 +487,9 @@ void vw_SetTextureCompare(int MODE, int FUNC)
 //------------------------------------------------------------------------------------
 // установка режима работы с компонентом глубины
 //------------------------------------------------------------------------------------
-void vw_SetTextureDepthMode(int MODE)
+void vw_SetTextureDepthMode(eTextureDepthMode mode)
 {
-	switch(MODE) {
-	case RI_DEPTH_TEXTURE_MODE_LUMINANCE:
-		glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_LUMINANCE);
-		break;
-	case RI_DEPTH_TEXTURE_MODE_INTENSITY:
-		glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
-		break;
-	case RI_DEPTH_TEXTURE_MODE_ALPHA:
-	default:
-		glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_ALPHA);
-		break;
-	}
+	glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, static_cast<GLint>(mode));
 }
 
 //------------------------------------------------------------------------------------
