@@ -1886,7 +1886,7 @@ void InformationDrawObject()
 	vw_Rotate(RotationSumX, 1.0f, 0.0f, 0.0f);
 
 	vw_SetColor(0.7f, 0.7f, 1.0f, 0.3f*MenuContentTransp);
-	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
 	vw_BindTexture(0, vw_FindTextureByName("menu/line.tga"));
 	for (int i=-SizeCell; i<SizeCell+2; i+=2) {
 		// номер float'а в последовательности
@@ -1949,7 +1949,7 @@ void InformationDrawObject()
 	}
 	if (tmpDATA != nullptr)
 		delete [] tmpDATA;
-	vw_SetTextureBlend(false, 0, 0);
+	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 	vw_BindTexture(0, 0);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 

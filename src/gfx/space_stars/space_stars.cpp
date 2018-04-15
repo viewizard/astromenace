@@ -533,7 +533,7 @@ void cSpaceStars::Draw()
 
 	if (PrimitCount > 0) {
 		vw_BindTexture(0, Texture);
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+		vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
 
 
 		// получаем текущее положение камеры
@@ -565,7 +565,7 @@ void cSpaceStars::Draw()
 
 		vw_PopMatrix();
 
-		vw_SetTextureBlend(false, 0, 0);
+		vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 	}
 
 

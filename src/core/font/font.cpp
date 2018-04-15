@@ -532,7 +532,7 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 	// calculate text width, all characters that we already rendered
 	float LineWidth{0};
 
-	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
 	vw_SetColor(R, G, B, Transp);
 	GLtexture CurrentTexture{0};
 	float ImageHeight{0.0f};
@@ -607,7 +607,7 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 
 	// reset rendering states
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-	vw_SetTextureBlend(false, 0, 0);
+	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 	vw_BindTexture(0, 0);
 	return 0;
 }
@@ -706,7 +706,7 @@ int vw_DrawFont3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 	GLtexture CurrentTexture{0};
 	float ImageHeight{0.0f};
 	float ImageWidth{0.0f};
-	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 	vw_PushMatrix();
@@ -767,7 +767,7 @@ int vw_DrawFont3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 
 	// reset rendering states
 	vw_PopMatrix();
-	vw_SetTextureBlend(false, 0, 0);
+	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 	vw_BindTexture(0, 0);
 	return 0;
 }

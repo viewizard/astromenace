@@ -76,6 +76,27 @@ enum class eMatrixPname : GLenum {
 	TEXTURE = GL_TEXTURE_MATRIX
 };
 
+enum class eTextureBlendFactor : GLenum {
+	ZERO = GL_ZERO,
+	ONE = GL_ONE,
+	SRC_COLOR = GL_SRC_COLOR,
+	ONE_MINUS_SRC_COLOR = GL_ONE_MINUS_SRC_COLOR,
+	DST_COLOR = GL_DST_COLOR,
+	MINUS_DST_COLOR = GL_ONE_MINUS_DST_COLOR,
+	SRC_ALPHA = GL_SRC_ALPHA,
+	ONE_MINUS_SRC_ALPHA = GL_ONE_MINUS_SRC_ALPHA,
+	DST_ALPHA = GL_DST_ALPHA,
+	ONE_MINUS_DST_ALPHA = GL_ONE_MINUS_DST_ALPHA,
+	CONSTANT_COLOR = GL_CONSTANT_COLOR,
+	ONE_MINUS_CONSTANT_COLOR = GL_ONE_MINUS_CONSTANT_COLOR,
+	CONSTANT_ALPHA = GL_CONSTANT_ALPHA,
+	ONE_MINUS_CONSTANT_ALPHA = GL_ONE_MINUS_CONSTANT_ALPHA,
+	SRC_ALPHA_SATURATE = GL_SRC_ALPHA_SATURATE,
+	SRC1_COLOR = GL_SRC1_COLOR,
+	ONE_MINUS_SRC1_COLOR = GL_ONE_MINUS_SRC1_COLOR,
+	SRC1_ALPHA = GL_SRC1_ALPHA,
+	ONE_MINUS_SRC1_ALPHA = GL_ONE_MINUS_SRC1_ALPHA
+};
 
 enum class eTextureEnvMode : GLint {
 	DECAL = GL_DECAL,
@@ -200,30 +221,6 @@ struct sDevCaps {
 #define RI_WRAP_U		0x10410
 #define RI_WRAP_V		0x10401
 #define RI_CLAMP_TO_EDGE	0x10400
-
-// Texture blending factors
-// Blend factor is (0, 0, 0, 0).
-#define RI_BLEND_ZERO		0x1070
-// Blend factor is (1, 1, 1, 1).
-#define RI_BLEND_ONE		0x1071
-// Blend factor is (Rs, Gs, Bs, As).
-#define RI_BLEND_SRCCOLOR	0x1072
-// Blend factor is (1–Rs, 1–Gs, 1–Bs, 1–As).
-#define RI_BLEND_INVSRCCOLOR	0x1073
-// Blend factor is (As, As, As, As).
-#define RI_BLEND_SRCALPHA	0x1074
-// Blend factor is (1–As, 1–As, 1–As, 1–As).
-#define RI_BLEND_INVSRCALPHA	0x1075
-// Blend factor is (Ad, Ad, Ad, Ad).
-#define RI_BLEND_DESTALPHA	0x1076
-// Blend factor is (1–Ad, 1–Ad, 1–Ad, 1–Ad).
-#define RI_BLEND_INVDESTALPHA	0x1077
-// Blend factor is (Rd, Gd, Bd, Ad).
-#define RI_BLEND_DESTCOLOR	0x1078
-// Blend factor is (1–Rd, 1–Gd, 1–Bd, 1–Ad).
-#define RI_BLEND_INVDESTCOLOR	0x1079
-// Blend factor is (f, f, f, 1); f = min(As, 1–Ad).
-#define RI_BLEND_SRCALPHASAT	0x107A
 
 // Texture blending modes
 // Parameter name
@@ -381,7 +378,7 @@ void vw_SetTextureAddressMode(int nAddressMode);
 // Set texture Alpha Test value that specifies a reference alpha value against which pixels are tested.
 void vw_SetTextureAlphaTest(bool Flag, float Value);
 // Set texture blending factor.
-void vw_SetTextureBlend(bool Flag, int Src, int Dst);
+void vw_SetTextureBlend(bool flag, eTextureBlendFactor sfactor, eTextureBlendFactor dfactor);
 // Set texture blending mode.
 void vw_SetTextureBlendMode(int pname, int param);
 // Set texture env mode.

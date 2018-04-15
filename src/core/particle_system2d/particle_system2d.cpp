@@ -394,14 +394,14 @@ void cParticleSystem2D::Draw()
 
 	// texture setup
 	vw_BindTexture(0, Texture);
-	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
 
 	// rendering
 	vw_SendVertices(RI_TRIANGLES, 6 * ParticlesList.size(), RI_2f_XY | RI_1_TEX | RI_4f_COLOR,
 			DrawBuffer.get(), 8 * sizeof(DrawBuffer.get()[0]));
 
 	// reset rendering states
-	vw_SetTextureBlend(false, 0, 0);
+	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 	vw_BindTexture(0, 0);
 }

@@ -348,96 +348,17 @@ void vw_SetTextureAlphaTest(bool Flag, float Value)
 //------------------------------------------------------------------------------------
 // Режим прозрачности
 //------------------------------------------------------------------------------------
-void vw_SetTextureBlend(bool Flag, int Src, int Dst)
+void vw_SetTextureBlend(bool flag, eTextureBlendFactor sfactor, eTextureBlendFactor dfactor)
 {
-	if (!Flag) {
+	if (!flag) {
 		glDisable(GL_BLEND);
+		// ignore parameters and setup initial values
 		glBlendFunc(GL_ONE, GL_ZERO);
 		return;
 	}
 
-	int tmpSRC,tmpDST;
-
-	switch(Src) {
-	case RI_BLEND_ZERO:
-		tmpSRC = GL_ZERO;
-		break;
-	case RI_BLEND_ONE:
-		tmpSRC = GL_ONE;
-		break;
-	case RI_BLEND_SRCCOLOR:
-		tmpSRC = GL_SRC_COLOR;
-		break;
-	case RI_BLEND_INVSRCCOLOR:
-		tmpSRC = GL_ONE_MINUS_SRC_COLOR;
-		break;
-	case RI_BLEND_INVSRCALPHA:
-		tmpSRC = GL_ONE_MINUS_SRC_ALPHA;
-		break;
-	case RI_BLEND_DESTALPHA:
-		tmpSRC = GL_DST_ALPHA;
-		break;
-	case RI_BLEND_INVDESTALPHA:
-		tmpSRC = GL_ONE_MINUS_DST_ALPHA;
-		break;
-	case RI_BLEND_SRCALPHA:
-		tmpSRC = GL_SRC_ALPHA;
-		break;
-	case RI_BLEND_DESTCOLOR:
-		tmpSRC = GL_DST_COLOR;
-		break;
-	case RI_BLEND_INVDESTCOLOR:
-		tmpSRC = GL_ONE_MINUS_DST_COLOR;
-		break;
-	case RI_BLEND_SRCALPHASAT:
-		tmpSRC = GL_SRC_ALPHA_SATURATE;
-		break;
-	default:
-		tmpSRC = GL_ONE;
-		break;
-	}
-
-	switch(Dst) {
-	case RI_BLEND_ZERO:
-		tmpDST = GL_ZERO;
-		break;
-	case RI_BLEND_ONE:
-		tmpDST = GL_ONE;
-		break;
-	case RI_BLEND_SRCCOLOR:
-		tmpDST = GL_SRC_COLOR;
-		break;
-	case RI_BLEND_INVSRCCOLOR:
-		tmpDST = GL_ONE_MINUS_SRC_COLOR;
-		break;
-	case RI_BLEND_INVSRCALPHA:
-		tmpDST = GL_ONE_MINUS_SRC_ALPHA;
-		break;
-	case RI_BLEND_DESTALPHA:
-		tmpDST = GL_DST_ALPHA;
-		break;
-	case RI_BLEND_INVDESTALPHA:
-		tmpDST = GL_ONE_MINUS_DST_ALPHA;
-		break;
-	case RI_BLEND_SRCALPHA:
-		tmpDST = GL_SRC_ALPHA;
-		break;
-	case RI_BLEND_DESTCOLOR:
-		tmpDST = GL_DST_COLOR;
-		break;
-	case RI_BLEND_INVDESTCOLOR:
-		tmpDST = GL_ONE_MINUS_DST_COLOR;
-		break;
-	case RI_BLEND_SRCALPHASAT:
-		tmpDST = GL_SRC_ALPHA_SATURATE;
-		break;
-	default:
-		tmpDST = GL_ZERO;
-		break;
-	}
-
 	glEnable(GL_BLEND);
-	glBlendFunc(tmpSRC, tmpDST);
+	glBlendFunc(static_cast<GLenum>(sfactor), static_cast<GLenum>(dfactor));
 }
 
 //------------------------------------------------------------------------------------

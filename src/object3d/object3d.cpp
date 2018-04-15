@@ -1097,7 +1097,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			}
 			if (ObjectBlocks[i].DrawType == ObjectDrawType::Blend) {
 				vw_SetTextureAlphaTest(true, 0.01f);
-				vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+				vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
 				vw_PolygonOffset(true, 1.0f, 1.0f);
 			}
 
@@ -1197,7 +1197,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 			if (ObjectBlocks[i].DrawType == ObjectDrawType::Blend) {
 				vw_SetTextureAlphaTest(false, 0.01f);
-				vw_SetTextureBlend(false, 0, 0);
+				vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 				vw_PolygonOffset(false, 0.0f, 0.0f);
 			}
 

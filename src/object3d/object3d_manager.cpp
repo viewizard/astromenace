@@ -159,10 +159,10 @@ void DrawAllObject3D(int DrawType)
 		float BrightnessF = 1.0f + (Setup.Brightness - 5)/5.0f;
 
 		if( BrightnessF > 1.0f ) {
-			vw_SetTextureBlend(true, RI_BLEND_DESTCOLOR, RI_BLEND_ONE);
+			vw_SetTextureBlend(true, eTextureBlendFactor::DST_COLOR, eTextureBlendFactor::ONE);
 			vw_SetColor(BrightnessF-1.0f, BrightnessF-1.0f, BrightnessF-1.0f, 1.0f);
 		} else {
-			vw_SetTextureBlend(true, RI_BLEND_ZERO, RI_BLEND_SRCCOLOR);
+			vw_SetTextureBlend(true, eTextureBlendFactor::ZERO, eTextureBlendFactor::SRC_COLOR);
 			vw_SetColor(BrightnessF, BrightnessF, BrightnessF, 1.0f);
 		}
 
@@ -170,7 +170,7 @@ void DrawAllObject3D(int DrawType)
 		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, buff, 4*sizeof(buff[0]));
 		vw_End2DMode();
 
-		vw_SetTextureBlend(false, 0, 0);
+		vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 		vw_BindTexture(0, 0);
 		if (buff != nullptr)
 			delete [] buff;

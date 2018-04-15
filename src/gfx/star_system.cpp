@@ -286,7 +286,7 @@ void StarSystemDraw(int DrawType)
 		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
 		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+		vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
 
 		vw_DepthTest(false, eCompareFunc::LESS);
 
@@ -356,7 +356,7 @@ void StarSystemDraw(int DrawType)
 
 		vw_DepthTest(true, eCompareFunc::LEQUAL);
 
-		vw_SetTextureBlend(false, 0, 0);
+		vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 		vw_BindTexture(0, 0);
 		if (buff != nullptr)
 			delete [] buff;
@@ -472,7 +472,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 
 
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+		vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
 
 		vw_DepthTest(false, eCompareFunc::LESS);
 
@@ -489,7 +489,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 		if (DrawType == 1) vw_PopMatrix();
 
 		vw_DepthTest(true, eCompareFunc::LEQUAL);
-		vw_SetTextureBlend(false, 0, 0);
+		vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 		vw_BindTexture(0, 0);
 		if (buff != nullptr)
 			delete [] buff;

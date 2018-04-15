@@ -230,7 +230,7 @@ void DrawGameExpMoney(int Exp, int Money)
 
 	// Установка текстуры и ее свойств...
 	vw_BindTexture(0, Texture);
-	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
 
 	float ImageHeight{0.0f};
 	float ImageWidth{0.0f};
@@ -479,7 +479,7 @@ void DrawGameExpMoney(int Exp, int Money)
 
 	if (tmp != nullptr)
 		delete [] tmp;
-	vw_SetTextureBlend(false, 0, 0);
+	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 	vw_BindTexture(0, 0);
 }
@@ -1179,7 +1179,7 @@ void DrawGame()
 
 			// Установка текстуры и ее свойств...
 			vw_BindTexture(0, Texture);
-			vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+			vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
 
 			float ImageHeight{0.0f};
 			float ImageWidth{0.0f};
@@ -1313,7 +1313,7 @@ void DrawGame()
 				delete [] tmp;
 				tmp = nullptr;
 			}
-			vw_SetTextureBlend(false, 0, 0);
+			vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 			vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 			vw_BindTexture(0, 0);
 		}

@@ -684,13 +684,14 @@ void cParticleSystem::Draw(GLtexture &CurrentTexture)
 	}
 
 	if (TextureBlend)
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+		vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
+	else
+		vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
 
 	vw_SendVertices(RI_TRIANGLES, 6 * ParticlesCountInList, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX,
 			DrawBuffer.get(), 9 * sizeof(DrawBuffer.get()[0]));
 
-	if (TextureBlend)
-		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
+	vw_SetTextureBlend(true, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 }
 
 /*
@@ -902,8 +903,6 @@ void vw_DrawAllParticleSystems()
 	// we store current texture in order to minimize texture's states changes
 	GLtexture CurrentTexture{0};
 
-	// setup blend
-	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 	// setup shaders
 	if (ParticleSystemUseGLSL && !ParticleSystemGLSL.expired()) {
 		sVECTOR3D CurrentCameraLocation;
@@ -924,7 +923,6 @@ void vw_DrawAllParticleSystems()
 	glDepthMask(GL_TRUE);
 	if (ParticleSystemUseGLSL)
 		vw_StopShaderProgram();
-	vw_SetTextureBlend(false, 0, 0);
 	vw_BindTexture(0, 0);
 }
 
@@ -940,8 +938,6 @@ void vw_DrawParticleSystems(std::vector<std::weak_ptr<cParticleSystem>> &DrawPar
 	// we store current texture in order to minimize texture's states changes
 	GLtexture CurrentTexture{0};
 
-	// setup blend
-	vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 	// setup shaders
 	if (ParticleSystemUseGLSL && !ParticleSystemGLSL.expired()) {
 		sVECTOR3D CurrentCameraLocation;
@@ -963,7 +959,6 @@ void vw_DrawParticleSystems(std::vector<std::weak_ptr<cParticleSystem>> &DrawPar
 	glDepthMask(GL_TRUE);
 	if (ParticleSystemUseGLSL)
 		vw_StopShaderProgram();
-	vw_SetTextureBlend(false, 0, 0);
 	vw_BindTexture(0, 0);
 }
 

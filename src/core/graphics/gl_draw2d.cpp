@@ -156,7 +156,7 @@ void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bo
 	AddToDrawBuffer(DstRect.right, DstRect.bottom, U_right, V_bottom);
 
 	// setup OpenGL
-	vw_SetTextureBlend(Alpha, RI_BLEND_SRCALPHA, RI_BLEND_INVSRCALPHA);
+	vw_SetTextureBlend(Alpha, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
 	vw_Clamp(Transp, 0.0f, 1.0f);
 	vw_SetColor(Color.r, Color.g, Color.b, Transp);
 	glPushMatrix();
@@ -166,7 +166,7 @@ void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bo
 
 	// restore previous OpenGL states
 	glPopMatrix();
-	vw_SetTextureBlend(false, 0, 0);
+	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 	vw_BindTexture(0, 0);
 }
