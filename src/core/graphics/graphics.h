@@ -376,7 +376,7 @@ void vw_SetTextureAnisotropy(int AnisotropyLevel);
 // Set texture address mode.
 void vw_SetTextureAddressMode(int nAddressMode);
 // Set texture Alpha Test value that specifies a reference alpha value against which pixels are tested.
-void vw_SetTextureAlphaTest(bool Flag, float Value);
+void vw_SetTextureAlphaTest(bool flag, eCompareFunc func, GLclampf ref);
 // Set texture blending factor.
 void vw_SetTextureBlend(bool flag, eTextureBlendFactor sfactor, eTextureBlendFactor dfactor);
 // Set texture blending mode.

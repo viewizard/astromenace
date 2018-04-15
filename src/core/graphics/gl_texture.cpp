@@ -334,13 +334,14 @@ void vw_SetTextureAddressMode(int nAddressMode)
 //------------------------------------------------------------------------------------
 // Ставим-убираем альфа тест
 //------------------------------------------------------------------------------------
-void vw_SetTextureAlphaTest(bool Flag, float Value)
+void vw_SetTextureAlphaTest(bool flag, eCompareFunc func, GLclampf ref)
 {
-	if (Flag) {
-		glAlphaFunc(GL_GREATER, Value);
+	if (flag) {
+		glAlphaFunc(static_cast<GLenum>(func), ref);
 		glEnable(GL_ALPHA_TEST);
 	} else {
-		glAlphaFunc(GL_GREATER, 1.0f);
+		// ignore parameters and setup initial values
+		glAlphaFunc(GL_ALWAYS, 0);
 		glDisable(GL_ALPHA_TEST);
 	}
 }

@@ -844,7 +844,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 	if (!NeedCullFaces) vw_CullFace(RI_NONE);
 	// для частей базы надо включить прозрачность через альфатест
-	if (NeedAlphaTest) vw_SetTextureAlphaTest(true, 0.4f);
+	if (NeedAlphaTest) vw_SetTextureAlphaTest(true, eCompareFunc::GREATER, 0.4f);
 
 	// если надо рисовать одним проходом
 	if (NeedOnePieceDraw) {
@@ -1096,7 +1096,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				vw_PolygonOffset(true, 2.0f, 2.0f);
 			}
 			if (ObjectBlocks[i].DrawType == ObjectDrawType::Blend) {
-				vw_SetTextureAlphaTest(true, 0.01f);
+				vw_SetTextureAlphaTest(true, eCompareFunc::GREATER, 0.01f);
 				vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
 				vw_PolygonOffset(true, 1.0f, 1.0f);
 			}
@@ -1196,7 +1196,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 			if (ObjectBlocks[i].DrawType == ObjectDrawType::Blend) {
-				vw_SetTextureAlphaTest(false, 0.01f);
+				vw_SetTextureAlphaTest(false, eCompareFunc::ALWAYS, 0);
 				vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 				vw_PolygonOffset(false, 0.0f, 0.0f);
 			}
@@ -1227,7 +1227,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	vw_BindTexture(1, 0);
 	vw_BindTexture(0, 0);
 	if (NeedAlphaTest)
-		vw_SetTextureAlphaTest(false, 0.01f);
+		vw_SetTextureAlphaTest(false, eCompareFunc::ALWAYS, 0);
 	if (!NeedCullFaces)
 		vw_CullFace(RI_BACK);
 	vw_PopMatrix();
