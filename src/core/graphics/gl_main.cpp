@@ -913,7 +913,7 @@ void vw_SetColorMask(bool red, bool green, bool blue, bool alpha)
 //------------------------------------------------------------------------------------
 // Управление буфером глубины
 //------------------------------------------------------------------------------------
-void vw_DepthTest(bool mode, int funct)
+void vw_DepthTest(bool mode, eCompareFunc func)
 {
 	if (mode) {
 		glEnable(GL_DEPTH_TEST);
@@ -923,37 +923,5 @@ void vw_DepthTest(bool mode, int funct)
 		return;
 	}
 
-	if (funct>=1 && funct<=8) {
-		GLenum fun = GL_NEVER;
-		switch(funct) {
-		case 1:
-			fun = GL_NEVER;
-			break;
-		case 2:
-			fun = GL_LESS;
-			break;
-		case 3:
-			fun = GL_EQUAL;
-			break;
-		case 4:
-			fun = GL_LEQUAL;
-			break;
-		case 5:
-			fun = GL_GREATER;
-			break;
-		case 6:
-			fun = GL_NOTEQUAL;
-			break;
-		case 7:
-			fun = GL_GEQUAL;
-			break;
-		case 8:
-			fun = GL_ALWAYS;
-			break;
-		default:
-			std::cerr << __func__ << "(): " << "wrong funct.\n";
-			return;
-		}
-		glDepthFunc(fun);
-	}
+	glDepthFunc(static_cast<GLenum>(func));
 }

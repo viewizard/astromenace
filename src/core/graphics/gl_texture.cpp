@@ -443,45 +443,10 @@ void vw_SetTextureBlend(bool Flag, int Src, int Dst)
 //------------------------------------------------------------------------------------
 // установка режима и функции сравнения
 //------------------------------------------------------------------------------------
-void vw_SetTextureCompare(int MODE, int FUNC)
+void vw_SetTextureCompare(eTextureCompareMode mode, eCompareFunc func)
 {
-	switch(MODE) {
-	case RI_COMPARE_R_TO_TEXTURE:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-		break;
-	case RI_COMPARE_NONE:
-	default:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
-		break;
-	}
-
-	switch(FUNC) {
-	case RI_LESSEQUAL:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-		break;
-	case RI_GREATEREQUAL:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_GEQUAL);
-		break;
-	case RI_LESS:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LESS);
-		break;
-	case RI_GREATER:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_GREATER);
-		break;
-	case RI_EQUAL:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_EQUAL);
-		break;
-	case RI_NOTEQUAL:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_NOTEQUAL);
-		break;
-	case RI_ALWAYS:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_ALWAYS);
-		break;
-	case RI_NEVER:
-	default:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_NEVER);
-		break;
-	}
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, static_cast<GLint>(mode));
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, static_cast<GLint>(func));
 }
 
 //------------------------------------------------------------------------------------

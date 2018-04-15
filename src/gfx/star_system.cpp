@@ -136,7 +136,7 @@ void StarSystemDraw(int DrawType)
 	sVECTOR3D CurrentCameraLocation;
 	vw_GetCameraLocation(&CurrentCameraLocation);
 
-	vw_DepthTest(false, -1);
+	vw_DepthTest(false, eCompareFunc::LESS);
 
 	if (StarSystem_Inited) {
 		// SkyBox
@@ -153,7 +153,7 @@ void StarSystemDraw(int DrawType)
 	if (psSpaceStatic != nullptr)
 		psSpaceStatic->Draw();
 
-	vw_DepthTest(true, RI_LESSEQUAL);
+	vw_DepthTest(true, eCompareFunc::LEQUAL);
 
 
 
@@ -288,7 +288,7 @@ void StarSystemDraw(int DrawType)
 
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 
-		vw_DepthTest(false, -1);
+		vw_DepthTest(false, eCompareFunc::LESS);
 
 		if (DrawType == 1) {
 			vw_PushMatrix();
@@ -354,7 +354,7 @@ void StarSystemDraw(int DrawType)
 
 		if (DrawType == 1) vw_PopMatrix();
 
-		vw_DepthTest(true, RI_LESSEQUAL);
+		vw_DepthTest(true, eCompareFunc::LEQUAL);
 
 		vw_SetTextureBlend(false, 0, 0);
 		vw_BindTexture(0, 0);
@@ -474,7 +474,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 
 		vw_SetTextureBlend(true, RI_BLEND_SRCALPHA, RI_BLEND_ONE);
 
-		vw_DepthTest(false, -1);
+		vw_DepthTest(false, eCompareFunc::LESS);
 
 		if (DrawType == 1) {
 			vw_PushMatrix();
@@ -488,7 +488,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 
 		if (DrawType == 1) vw_PopMatrix();
 
-		vw_DepthTest(true, RI_LESSEQUAL);
+		vw_DepthTest(true, eCompareFunc::LEQUAL);
 		vw_SetTextureBlend(false, 0, 0);
 		vw_BindTexture(0, 0);
 		if (buff != nullptr)

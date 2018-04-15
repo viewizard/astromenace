@@ -53,6 +53,17 @@ enum class eOrigin {
 	bottom_left
 };
 
+enum class eCompareFunc : GLint {
+	LEQUAL = GL_LEQUAL,
+	GEQUAL = GL_GEQUAL,
+	LESS = GL_LESS,
+	GREATER = GL_GREATER,
+	EQUAL = GL_EQUAL,
+	NOTEQUAL = GL_NOTEQUAL,
+	ALWAYS = GL_ALWAYS,
+	NEVER = GL_NEVER
+};
+
 enum class eMatrixMode : GLenum {
 	PROJECTION = GL_PROJECTION,
 	MODELVIEW = GL_MODELVIEW,
@@ -79,6 +90,11 @@ enum class eTextureDepthMode : GLint {
 	LUMINANCE = GL_LUMINANCE,
 	INTENSITY = GL_INTENSITY,
 	ALPHA = GL_ALPHA
+};
+
+enum class eTextureCompareMode : GLint {
+	REF_TO_TEXTURE = GL_COMPARE_REF_TO_TEXTURE,
+	NONE = GL_NONE
 };
 
 enum class eMaterialParameter : GLenum {
@@ -239,10 +255,6 @@ struct sDevCaps {
 #define RI_TBLEND_DIFFUSE		0x103083
 #define RI_TBLEND_SPECULAR		0x103084
 
-// vw_SetTextureCompare() MODE
-#define RI_COMPARE_R_TO_TEXTURE		1
-#define RI_COMPARE_NONE			2
-
 
 // Primitives types
 #define RI_POINTS			0x1020
@@ -291,16 +303,6 @@ struct sDevCaps {
 #define RI_NONE				0x10C1
 #define RI_BACK				0x10C2
 #define RI_FRONT			0x10C3
-
-// Set depth buffer status and texture compare function
-#define RI_NEVER			1
-#define RI_LESS				2
-#define RI_EQUAL			3
-#define RI_LESSEQUAL			4
-#define RI_GREATER			5
-#define RI_NOTEQUAL			6
-#define RI_GREATEREQUAL			7
-#define RI_ALWAYS			8
 
 // VBO
 #define RI_ARRAY_BUFFER			1
@@ -385,7 +387,7 @@ void vw_SetTextureBlendMode(int pname, int param);
 // Set texture env mode.
 void vw_SetTextureEnvMode(eTextureEnvMode mode);
 // Set texture compare mode.
-void vw_SetTextureCompare(int MODE, int FUNC);
+void vw_SetTextureCompare(eTextureCompareMode mode, eCompareFunc func);
 // Set texture depth mode.
 void vw_SetTextureDepthMode(eTextureDepthMode mode);
 
@@ -404,7 +406,7 @@ void vw_PolygonMode(int mode);
 // Set what facets can be culled.
 void vw_CullFace(int face);
 // Set depth buffer.
-void vw_DepthTest(bool mode, int funct);
+void vw_DepthTest(bool mode, eCompareFunc func);
 // Set polygon offset mode.
 void vw_PolygonOffset(bool enable, float factor, float units);
 

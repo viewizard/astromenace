@@ -61,7 +61,7 @@ void ReleaseAllObject3D()
 void DrawAllObject3D(int DrawType)
 {
 	// ставим всегда меньше или равно!
-	vw_DepthTest(true, RI_LESSEQUAL);
+	vw_DepthTest(true, eCompareFunc::LEQUAL);
 
 
 	bool ShadowMap = false;
