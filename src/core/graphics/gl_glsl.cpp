@@ -42,21 +42,24 @@ public:
 	GLuint VertexShader{0};
 	GLuint FragmentShader{0};
 
-
 private:
 	// Don't allow direct new/delete usage in code, only vw_CreateShader()
 	// allowed for shaders creation and release setup (deleter must be provided).
 	cGLSL() = default;
 	~cGLSL() {
-		if (_glDetachShader && _glDeleteShader) {
-			if (Program && VertexShader)
-				_glDetachShader(Program, VertexShader);
-			if (Program && FragmentShader)
-				_glDetachShader(Program, FragmentShader);
-
-			_glDeleteShader(VertexShader);
-			_glDeleteShader(FragmentShader);
-			_glDeleteShader(Program);
+		if (_glDetachShader && _glDeleteShader &&
+		    _glIsShader && _glIsProgram && _glDeleteProgram) {
+			if (Program && _glIsProgram(Program)) {
+				if (VertexShader && _glIsShader(VertexShader))
+					_glDetachShader(Program, VertexShader);
+				if (FragmentShader && _glIsShader(FragmentShader))
+					_glDetachShader(Program, FragmentShader);
+				_glDeleteProgram(Program);
+			}
+			if (VertexShader && _glIsShader(VertexShader))
+				_glDeleteShader(VertexShader);
+			if (FragmentShader && _glIsShader(FragmentShader))
+				_glDeleteShader(FragmentShader);
 		}
 	}
 };
