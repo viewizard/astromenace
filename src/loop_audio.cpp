@@ -158,7 +158,7 @@ void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t F
 	    Setup.MusicSw && // и громкость не нулевая
 	    !CurrentPlayingMusicName.empty()) {
 
-		vw_FadeOutAllMusicWithException(CurrentPlayingMusicName, FadeOutTicks);
+		vw_FadeOutAllMusicWithException(CurrentPlayingMusicName, FadeOutTicks, 1.0f, FadeInTicks);
 
 		if (vw_IsMusicPlaying(CurrentPlayingMusicName))
 			return;

@@ -69,7 +69,8 @@ bool vw_IsMusicPlaying(const std::string &Name);
 // Check, is any music theme playing.
 bool vw_IsAnyMusicPlaying();
 // Fade-out all music themes, except provided.
-void vw_FadeOutAllMusicWithException(const std::string &Name, uint32_t Ticks);
+void vw_FadeOutAllMusicWithException(const std::string &Name, uint32_t Ticks,
+				     float ExceptionFadeInEndVol, uint32_t ExceptionFadeInTicks);
 // Set music fade-in.
 void vw_SetMusicFadeIn(const std::string &Name, float EndVol, uint32_t Ticks);
 // Update all music themes status and calculate effects.
