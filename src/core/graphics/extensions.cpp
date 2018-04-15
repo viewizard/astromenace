@@ -27,7 +27,7 @@
 #include "../base.h"
 #include "opengl.h"
 
-// OpenGL 2.0 (only what we need, or, probably will need in future)
+// OpenGL 2.0 (only what we need or would need in future)
 PFNGLATTACHSHADERPROC _glAttachShader{nullptr};
 PFNGLBINDATTRIBLOCATIONPROC _glBindAttribLocation{nullptr};
 PFNGLCOMPILESHADERPROC _glCompileShader{nullptr};
@@ -71,7 +71,7 @@ PFNGLUNIFORM3IVPROC _glUniform3iv{nullptr};
 PFNGLUNIFORM4IVPROC _glUniform4iv{nullptr};
 PFNGLVALIDATEPROGRAMPROC _glValidateProgram{nullptr};
 
-// OpenGL 3.0 (only what we need, or, probably will need in future)
+// OpenGL 3.0 (only what we need or would need in future)
 PFNGLBINDRENDERBUFFERPROC _glBindRenderbuffer{nullptr};
 PFNGLDELETERENDERBUFFERSPROC _glDeleteRenderbuffers{nullptr};
 PFNGLGENRENDERBUFFERSPROC _glGenRenderbuffers{nullptr};

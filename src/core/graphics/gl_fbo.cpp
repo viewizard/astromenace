@@ -26,6 +26,14 @@
 
 // TODO move from pointers to std::shared_ptr/std::weak_ptr
 
+// NOTE GL_EXT_direct_state_access (since OpenGL 4.5)
+//      glNamedRenderbufferStorageMultisampleEXT()
+//      could be used to replace glRenderbufferStorageMultisample()
+
+// NOTE GL_EXT_direct_state_access (part of extension, not standardized yet)
+//      glNamedRenderbufferStorageMultisampleCoverageEXT()
+//      could be used to replace glRenderbufferStorageMultisampleCoverageNV()
+
 #include "graphics_internal.h"
 #include "graphics.h"
 #include "extensions.h"

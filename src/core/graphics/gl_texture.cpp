@@ -64,15 +64,15 @@ GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, i
 		if (Bytes == 4) {
 			Format = GL_RGBA;
 			if (vw_GetDevCaps()->TexturesCompressionBPTC && (CompressionType > 1))
-				InternalFormat = GL_COMPRESSED_RGBA_BPTC_UNORM_ARB;
+				InternalFormat = GL_COMPRESSED_RGBA_BPTC_UNORM_ARB; // FIXME switch to OpenGL 4.2 check
 			else
-				InternalFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+				InternalFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT; // FIXME switch to GL_EXT_texture_compression_s3tc check
 		} else {
 			Format = GL_RGB;
 			if (vw_GetDevCaps()->TexturesCompressionBPTC && (CompressionType > 1))
-				InternalFormat = GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB;
+				InternalFormat = GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB; // FIXME switch to OpenGL 4.2 check
 			else
-				InternalFormat = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
+				InternalFormat = GL_COMPRESSED_RGB_S3TC_DXT1_EXT; // FIXME switch to GL_EXT_texture_compression_s3tc check
 		}
 	} else {
 		if (Bytes == 4) {
