@@ -793,7 +793,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	int NeedNormalMapping = 0;
 	// получаем матрицу, до всех преобразований
 	float Matrix[16];
-	vw_GetMatrix(RI_MODELVIEW_MATRIX, Matrix);
+	vw_GetMatrix(eMatrixPname::MODELVIEW, Matrix);
 
 	vw_PushMatrix();
 
@@ -1020,10 +1020,10 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				// если есть тайловая анимация - работаем с текстурной матрицей
 				// ! исходим из того что активен всегда 0-вой стейдж текстуры т.к. у танков на траках нет илюминейшен текстуры
 				if (ObjectBlocks[i].NeedTextureAnimation) {
-					vw_MatrixMode(RI_TEXTURE_MATRIX);
+					vw_MatrixMode(eMatrixMode::TEXTURE);
 					vw_LoadIdentity();
 					vw_Translate(ObjectBlocks[i].TextureAnimation);
-					vw_MatrixMode(RI_MODELVIEW_MATRIX);
+					vw_MatrixMode(eMatrixMode::MODELVIEW);
 				}
 
 
@@ -1206,9 +1206,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			// если меняли текстурную матрицу - обязательно восстанавливаем
 			if (ObjectBlocks[i].NeedTextureAnimation) {
 				vw_BindTexture(0, 0);
-				vw_MatrixMode(RI_TEXTURE_MATRIX);
+				vw_MatrixMode(eMatrixMode::TEXTURE);
 				vw_LoadIdentity();
-				vw_MatrixMode(RI_MODELVIEW_MATRIX);
+				vw_MatrixMode(eMatrixMode::MODELVIEW);
 				CurrentTexture = 0;
 			}
 

@@ -86,11 +86,11 @@ void vw_CalculateFrustum()
 
 	// Below, we pass in RI_PROJECTION_MATRIX to abstract our projection matrix.
 	// It then stores the matrix into an array of [16].
-	vw_GetMatrix(RI_PROJECTION_MATRIX, proj);
+	vw_GetMatrix(eMatrixPname::PROJECTION, proj);
 
 	// By passing in RI_MODELVIEW_MATRIX, we can abstract our model view matrix.
 	// This also stores it in an array of [16].
-	vw_GetMatrix(RI_MODELVIEW_MATRIX, modl);
+	vw_GetMatrix(eMatrixPname::MODELVIEW, modl);
 
 	// Now that we have our modelview and projection matrix, if we combine these 2 matrices,
 	// it will give us our clipping planes.  To combine 2 matrices, we multiply them.

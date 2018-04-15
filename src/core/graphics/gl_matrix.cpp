@@ -24,135 +24,90 @@
 
 *************************************************************************************/
 
+/*
+We don't check pointers status, since we don't work with pointers
+but only provide them to OpenGL functions, let OpenGL check them.
+*/
+
 #include "../math/math.h"
 #include "graphics.h"
 
 
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
+/*
+ * Replace the current matrix with the identity matrix.
+ */
 void vw_LoadIdentity()
 {
 	glLoadIdentity();
 }
 
-
-
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
+/*
+ * Produce a translation by sVECTOR3D.
+ */
 void vw_Translate(sVECTOR3D Location)
 {
 	glTranslatef(Location.x, Location.y, Location.z);
 }
 
-
-
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
-void vw_Rotate(float fAngle, float fX, float fY, float fZ)
+/*
+ * Produce a rotation of angle degrees around the vector x, y and z.
+ */
+void vw_Rotate(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 {
-	glRotatef(fAngle, fX, fY, fZ);
+	glRotatef(angle, x, y, z);
 }
 
-
-
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
-void vw_Scale(float fX, float fY, float fZ)
+/*
+ * Produce a nonuniform scaling along the x, y, and z axes.
+ */
+void vw_Scale(GLfloat x, GLfloat y, GLfloat z)
 {
-	glScalef(fX, fY, fZ);
+	glScalef(x, y, z);
 }
 
-
-
-
-//------------------------------------------------------------------------------------
-// получение матриц
-//------------------------------------------------------------------------------------
-void vw_GetMatrix(int pname, float *params)
+/*
+ * Get matrix from the top of the matrix stack.
+ */
+void vw_GetMatrix(eMatrixPname pname, GLfloat *params)
 {
-	switch (pname) {
-	case RI_PROJECTION_MATRIX:
-		glGetFloatv(GL_PROJECTION_MATRIX, params);
-		break;
-	case RI_MODELVIEW_MATRIX:
-		glGetFloatv(GL_MODELVIEW_MATRIX, params);
-		break;
-	case RI_TEXTURE_MATRIX:
-		glGetFloatv(GL_TEXTURE, params);
-		break;
-	default:
-		std::cerr << __func__ << "(): " << "wrong pname.\n";
-		break;
-	}
-}
-void vw_SetMatrix(const float *params)
-{
-	glLoadMatrixf(params);
+	glGetFloatv(static_cast<GLenum>(pname), params);
 }
 
-
-
-
-
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
-void vw_MatrixMode(int pname)
+/*
+ * Replace the current matrix with an arbitrary matrix.
+ */
+void vw_SetMatrix(const GLfloat *matrix)
 {
-	switch (pname) {
-	case RI_PROJECTION_MATRIX:
-		glMatrixMode(GL_PROJECTION);
-		break;
-	case RI_MODELVIEW_MATRIX:
-		glMatrixMode(GL_MODELVIEW);
-		break;
-	case RI_TEXTURE_MATRIX:
-		glMatrixMode(GL_TEXTURE);
-		break;
-	default:
-		std::cerr << __func__ << "(): " << "wrong pname.\n";
-		break;
-	}
+	glLoadMatrixf(matrix);
 }
 
-
-
-
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
-void vw_MultMatrix(float *params)
+/*
+ * Sets the current matrix mode.
+ */
+void vw_MatrixMode(eMatrixMode mode)
 {
-	glMultMatrixf(params);
+	glMatrixMode(static_cast<GLenum>(mode));
 }
 
+/*
+ * Multiply the current matrix by an arbitrary matrix.
+ */
+void vw_MultMatrix(const GLfloat *matrix)
+{
+	glMultMatrixf(matrix);
+}
 
-
-
-
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
+/*
+ * Push the current matrix stack.
+ */
 void vw_PushMatrix()
 {
 	glPushMatrix();
 }
 
-
-
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
+/*
+ * Pop the current matrix stack.
+ */
 void vw_PopMatrix()
 {
 	glPopMatrix();

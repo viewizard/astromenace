@@ -77,10 +77,10 @@ void SkyBoxDraw()
 	// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
 	if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 	// корректируем текстурные координаты для второй текстуры через матрицу
-	vw_MatrixMode(RI_TEXTURE_MATRIX);
+	vw_MatrixMode(eMatrixMode::TEXTURE);
 	vw_LoadIdentity();
 	vw_Scale(2.0f, 2.0f, 1.0f);
-	vw_MatrixMode(RI_MODELVIEW_MATRIX);
+	vw_MatrixMode(eMatrixMode::MODELVIEW);
 
 
 
@@ -278,9 +278,9 @@ void SkyBoxDraw()
 
 
 	vw_BindTexture(1, 0);
-	vw_MatrixMode(RI_TEXTURE_MATRIX);
+	vw_MatrixMode(eMatrixMode::TEXTURE);
 	vw_LoadIdentity();
-	vw_MatrixMode(RI_MODELVIEW_MATRIX);
+	vw_MatrixMode(eMatrixMode::MODELVIEW);
 
 	vw_BindTexture(0, 0);
 

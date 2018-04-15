@@ -128,12 +128,12 @@ void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, 
 	//vw_Clear(RI_COLOR_BUFFER | RI_DEPTH_BUFFER); // тест, для вывода цветовой составляющей на экран
 
 	// сохраняем матрицу проекции
-	vw_MatrixMode(RI_PROJECTION_MATRIX);
+	vw_MatrixMode(eMatrixMode::PROJECTION);
 	vw_PushMatrix();
-	vw_MatrixMode(RI_MODELVIEW_MATRIX);
+	vw_MatrixMode(eMatrixMode::MODELVIEW);
 
 	vw_ResizeScene(45.0f, (ShadowMapFBO->Width*1.0f)/(ShadowMapFBO->Height*1.0f), 1.0f, fFarClip);
-	vw_GetMatrix(RI_PROJECTION_MATRIX, ShadowMap_LightProjectionMatrix);
+	vw_GetMatrix(eMatrixPname::PROJECTION, ShadowMap_LightProjectionMatrix);
 
 
 	// получаем данные направленного источника света
@@ -154,7 +154,7 @@ void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, 
 		  CurrentCameraFocusPoint.x, CurrentCameraFocusPoint.y, CurrentCameraFocusPoint.z,
 		  0.0f, 1.0f, 0.0f);
 
-	vw_GetMatrix(RI_MODELVIEW_MATRIX, ShadowMap_LightModelViewMatrix);
+	vw_GetMatrix(eMatrixPname::MODELVIEW, ShadowMap_LightModelViewMatrix);
 
 	vw_CullFace(RI_FRONT);
 
@@ -187,9 +187,9 @@ void ShadowMap_EndRenderToFBO()
 		       ShadowMapViewPort_width, ShadowMapViewPort_height,
 		       0.0f, 1.0f, eOrigin::bottom_left);
 	// восстанавливаем матрицу проекции
-	vw_MatrixMode(RI_PROJECTION_MATRIX);
+	vw_MatrixMode(eMatrixMode::PROJECTION);
 	vw_PopMatrix();
-	vw_MatrixMode(RI_MODELVIEW_MATRIX);
+	vw_MatrixMode(eMatrixMode::MODELVIEW);
 
 	// восстанавливаем модельвью матрицу
 	vw_PopMatrix();
@@ -216,7 +216,7 @@ void ShadowMap_StartFinalRender()
 	vw_SetTextureFiltering(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE);
 
 
-	vw_MatrixMode(RI_TEXTURE_MATRIX);
+	vw_MatrixMode(eMatrixMode::TEXTURE);
 	vw_LoadIdentity();
 	vw_Translate(sVECTOR3D(0.5f, 0.5f, 0.5f)); // remap from [-1,1]^2 to [0,1]^2
 	vw_Scale(0.5f, 0.5f, 0.5f);
@@ -225,11 +225,11 @@ void ShadowMap_StartFinalRender()
 	vw_MultMatrix(ShadowMap_LightModelViewMatrix);
 
 	float CurrentInvModelView[16];
-	vw_GetMatrix(RI_MODELVIEW_MATRIX, CurrentInvModelView);
+	vw_GetMatrix(eMatrixPname::MODELVIEW, CurrentInvModelView);
 	vw_Matrix44InverseRotate(CurrentInvModelView);
 	vw_MultMatrix(CurrentInvModelView);
 
-	vw_MatrixMode(RI_MODELVIEW_MATRIX);
+	vw_MatrixMode(eMatrixMode::MODELVIEW);
 }
 
 

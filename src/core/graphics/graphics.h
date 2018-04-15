@@ -53,6 +53,18 @@ enum class eOrigin {
 	bottom_left
 };
 
+enum class eMatrixMode : GLenum {
+	PROJECTION = GL_PROJECTION,
+	MODELVIEW = GL_MODELVIEW,
+	TEXTURE = GL_TEXTURE
+};
+
+enum class eMatrixPname : GLenum {
+	PROJECTION = GL_PROJECTION_MATRIX,
+	MODELVIEW = GL_MODELVIEW_MATRIX,
+	TEXTURE = GL_TEXTURE_MATRIX
+};
+
 enum class eMaterialParameter : GLenum {
 	AMBIENT = GL_AMBIENT,
 	DIFFUSE = GL_DIFFUSE,
@@ -287,11 +299,6 @@ struct sDevCaps {
 #define RI_GREATEREQUAL			7
 #define RI_ALWAYS			8
 
-// Matrix types
-#define RI_PROJECTION_MATRIX		0x1080
-#define RI_MODELVIEW_MATRIX		0x1081
-#define RI_TEXTURE_MATRIX		0x1082
-
 // VBO
 #define RI_ARRAY_BUFFER			1
 #define RI_ELEMENT_ARRAY_BUFFER		2
@@ -398,25 +405,30 @@ void vw_DepthTest(bool mode, int funct);
 // Set polygon offset mode.
 void vw_PolygonOffset(bool enable, float factor, float units);
 
-// Loads identity in the current matrix.
+/*
+ * Matrix.
+ */
+
+// Replace the current matrix with the identity matrix.
 void vw_LoadIdentity();
-// Determines the product of the current matrix and the computed translation matrix determined by the given factors.
+// Produce a translation by sVECTOR3D.
 void vw_Translate(sVECTOR3D Location);
-// Determines the product of the current matrix and the computed rotation matrix.
-void vw_Rotate(float fAngle, float fX, float fY, float fZ);
-// Determines the product of the current matrix and the computed scale matrix composed from the given point.
-void vw_Scale(float fX, float fY, float fZ);
-// Adds a matrix to the stack.
+// Produce a rotation of angle degrees around the vector x, y and z.
+void vw_Rotate(GLfloat angle, GLfloat x, GLfloat y, GLfloat z);
+// Produce a nonuniform scaling along the x, y, and z axes.
+void vw_Scale(GLfloat x, GLfloat y, GLfloat z);
+// Push the current matrix stack.
 void vw_PushMatrix();
-// Removes the current matrix from the top of the stack.
+// Pop the current matrix stack.
 void vw_PopMatrix();
-// Get matrix.
-void vw_GetMatrix(int pname, float *params);
-void vw_SetMatrix(const float *params);
-// Set Matrix Mode.
-void vw_MatrixMode(int pname);
-// Mult matrix.
-void vw_MultMatrix(float *params);
+// Get matrix from the top of the matrix stack.
+void vw_GetMatrix(eMatrixPname pname, GLfloat *params);
+// Replace the current matrix with an arbitrary matrix.
+void vw_SetMatrix(const GLfloat *matrix);
+// Sets the current matrix mode.
+void vw_MatrixMode(eMatrixMode mode);
+// Multiply the current matrix by an arbitrary matrix.
+void vw_MultMatrix(const GLfloat *matrix);
 
 /*
  * Light.
