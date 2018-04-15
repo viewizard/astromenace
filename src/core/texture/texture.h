@@ -28,7 +28,7 @@
 #define Texture_H
 
 #include "../base.h"
-#include "../graphics/opengl.h"
+#include "../graphics/graphics.h"
 
 enum class eLoadTextureAs {
 	AUTO,	// Detect by file extension
@@ -56,7 +56,7 @@ void vw_ReleaseTexture(GLtexture TextureID);
 // Release all textures.
 void vw_ReleaseAllTextures();
 // Set textures properties.
-void vw_SetTextureProp(int nFiltering, int nAddress_Mode, bool nAlpha = false,
+void vw_SetTextureProp(int nFiltering, const sTextureWrap &nAddress_Mode, bool nAlpha = false,
 		       eAlphaCreateMode nAFlag = eAlphaCreateMode::EQUAL, bool nMipMap = true);
 // Set textures alpha color.
 void vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue);

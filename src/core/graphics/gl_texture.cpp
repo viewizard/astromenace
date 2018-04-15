@@ -318,17 +318,16 @@ void vw_SetTextureAnisotropy(int AnisotropyLevel)
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_SetTextureAddressMode(int nAddressMode)
+void vw_SetTextureAddressMode(eTextureWrapCoord coord, eTextureWrapMode mode)
 {
-	if ((nAddressMode & RI_WRAP_U) == RI_WRAP_U)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	else
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // не ставить просто GL_CLAMP, нвидия все равно ставит GL_CLAMP_TO_EDGE
+	glTexParameteri(GL_TEXTURE_2D, static_cast<GLenum>(coord), static_cast<GLint>(mode));
+}
 
-	if ((nAddressMode & RI_WRAP_V) == RI_WRAP_V)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	else
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // не ставить просто GL_CLAMP, нвидия все равно ставит GL_CLAMP_TO_EDGE
+void vw_SetTextureAddressMode(sTextureWrap wrap)
+{
+	vw_SetTextureAddressMode(eTextureWrapCoord::S, wrap.S);
+	vw_SetTextureAddressMode(eTextureWrapCoord::T, wrap.T);
+	vw_SetTextureAddressMode(eTextureWrapCoord::R, wrap.R);
 }
 
 //------------------------------------------------------------------------------------

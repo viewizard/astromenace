@@ -118,6 +118,39 @@ enum class eTextureCompareMode : GLint {
 	NONE = GL_NONE
 };
 
+enum class eTextureWrapCoord : GLenum {
+	S = GL_TEXTURE_WRAP_S,
+	T = GL_TEXTURE_WRAP_T,
+	R = GL_TEXTURE_WRAP_R
+};
+
+enum class eTextureWrapMode : GLint {
+	CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
+	CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER,
+	MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
+	REPEAT = GL_REPEAT,
+	MIRROR_CLAMP_TO_EDGE = GL_MIRROR_CLAMP_TO_EDGE
+};
+
+struct sTextureWrap {
+	eTextureWrapMode S{eTextureWrapMode::REPEAT};
+	eTextureWrapMode T{eTextureWrapMode::REPEAT};
+	eTextureWrapMode R{eTextureWrapMode::REPEAT};
+
+	sTextureWrap() = default;
+	sTextureWrap(eTextureWrapMode param) :
+		S{param},
+		T{param},
+		R{param}
+	{}
+	void operator () (eTextureWrapMode param)
+	{
+		S = param;
+		T = param;
+		R = param;
+	}
+};
+
 enum class eMaterialParameter : GLenum {
 	AMBIENT = GL_AMBIENT,
 	DIFFUSE = GL_DIFFUSE,
@@ -216,11 +249,6 @@ struct sDevCaps {
 #define RI_TEXTURE_NONE		RI_MAGFILTER_POINT | RI_MINFILTER_POINT | RI_MIPFILTER_NONE
 #define RI_TEXTURE_BILINEAR	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_POINT
 #define RI_TEXTURE_TRILINEAR	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_LINEAR
-
-// Texture address modes
-#define RI_WRAP_U		0x10410
-#define RI_WRAP_V		0x10401
-#define RI_CLAMP_TO_EDGE	0x10400
 
 // Texture blending modes
 // Parameter name
@@ -374,7 +402,9 @@ void vw_SetTextureFiltering(int nFiltering);
 // Set texture Anisotropy Level.
 void vw_SetTextureAnisotropy(int AnisotropyLevel);
 // Set texture address mode.
-void vw_SetTextureAddressMode(int nAddressMode);
+void vw_SetTextureAddressMode(eTextureWrapCoord coord, eTextureWrapMode mode);
+// Set texture address mode.
+void vw_SetTextureAddressMode(sTextureWrap wrap);
 // Set texture Alpha Test value that specifies a reference alpha value against which pixels are tested.
 void vw_SetTextureAlphaTest(bool flag, eCompareFunc func, GLclampf ref);
 // Set texture blending factor.
