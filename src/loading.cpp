@@ -93,7 +93,6 @@ struct cGLSLLoadList {
 };
 static cGLSLLoadList GLSLLoadList[] = {
 	{"ParticleSystem",		"glsl/particle.vert",		"glsl/particle.frag"},
-	{"SpaceStars",			"glsl/particle_stars.vert",	"glsl/particle.frag"},
 	{"PerPixelLight",		"glsl/light.vert",		"glsl/light.frag"},
 	{"PerPixelLight_ShadowMap",	"glsl/light_shadowmap.vert",	"glsl/light_shadowmap.frag"},
 	{"PerPixelLight_Explosion",	"glsl/light_explosion.vert",	"glsl/light_explosion.frag"},

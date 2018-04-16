@@ -143,23 +143,6 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 			glVertexPointer(3, GL_FLOAT, Stride, TMP + AddStride);
 		AddStride += 3*sizeof(GLfloat);
 	}
-	if ((DataFormat & 0x000F000) == RI_3i_XYZ) {
-		glEnableClientState(GL_VERTEX_ARRAY);
-		if (NeedVBO)
-			glVertexPointer(3, GL_INT, Stride, (uint8_t *)(AddStride));
-		else
-			glVertexPointer(3, GL_INT, Stride, TMP + AddStride);
-		AddStride += 3*sizeof(GLint);
-	}
-	if ((DataFormat & 0x000F000) == RI_3s_XYZ) {
-		glEnableClientState(GL_VERTEX_ARRAY);
-		if (NeedVBO)
-			glVertexPointer(3, GL_SHORT, Stride, (uint8_t *)(AddStride));
-		else
-			glVertexPointer(3, GL_SHORT, Stride, TMP + AddStride);
-		AddStride += 3*sizeof(GLshort);
-	}
-
 	if ((DataFormat & 0x000F000) == RI_2f_XY) {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		if (NeedVBO)
@@ -168,15 +151,6 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 			glVertexPointer(2, GL_FLOAT, Stride, TMP + AddStride);
 		AddStride += 2*sizeof(GLfloat);
 	}
-	if ((DataFormat & 0x000F000) == RI_2s_XY) {
-		glEnableClientState(GL_VERTEX_ARRAY);
-		if (NeedVBO)
-			glVertexPointer(2, GL_SHORT, Stride, (uint8_t *)(AddStride));
-		else
-			glVertexPointer(2, GL_SHORT, Stride, TMP + AddStride);
-		AddStride += 2*sizeof(GLshort);
-	}
-
 
 	if ((DataFormat & 0x0000F00) == RI_3f_NORMAL) {
 		glEnableClientState(GL_NORMAL_ARRAY);
@@ -187,7 +161,6 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 		AddStride += 3*sizeof(GLfloat);
 	}
 
-
 	if ((DataFormat & 0x00000F0) == RI_4f_COLOR) {
 		glEnableClientState(GL_COLOR_ARRAY);
 		if (NeedVBO)
@@ -196,15 +169,6 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 			glColorPointer(4, GL_FLOAT, Stride, TMP + AddStride);
 		AddStride += 4*sizeof(GLfloat);
 	}
-	if ((DataFormat & 0x00000F0) == RI_4ub_COLOR) {
-		glEnableClientState(GL_COLOR_ARRAY);
-		if (NeedVBO)
-			glColorPointer(4, GL_UNSIGNED_BYTE, Stride, (uint8_t *)(AddStride));
-		else
-			glColorPointer(4, GL_UNSIGNED_BYTE, Stride, TMP + AddStride);
-		AddStride += 4*sizeof(GLubyte);
-	}
-
 
 	if (TextQ > 0) { // текстурные коорд. есть...
 		for (int i=0; i<TextQ; i++) {

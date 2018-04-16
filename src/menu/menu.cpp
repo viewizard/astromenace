@@ -461,7 +461,6 @@ void DrawMenu()
 
 
 	// всегда первым рисуем скайбокс и "далекое" окружение
-	StarSystemUpdate();
 	StarSystemDraw(1);
 
 

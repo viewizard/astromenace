@@ -313,12 +313,8 @@ struct sDevCaps {
 // Data format
 #define RI_3f_XYZ			0x0001000
 #define RI_2f_XY			0x0002000
-#define RI_3s_XYZ			0x0003000
-#define RI_2s_XY			0x0004000
-#define RI_3i_XYZ			0x0005000
 #define RI_3f_NORMAL			0x0000100
 #define RI_4f_COLOR			0x0000010
-#define RI_4ub_COLOR			0x0000020
 // кол-во текстур
 #define RI_1_TEX			0x0000001
 #define RI_2_TEX			0x0000002
@@ -333,18 +329,9 @@ struct sDevCaps {
 #define RI_2f_TEX			0x0200000 // по умолчанию
 #define RI_3f_TEX			0x0300000
 #define RI_4f_TEX			0x0400000
-#define RI_1s_TEX			0x0500000
-#define RI_2s_TEX			0x0600000
-#define RI_3s_TEX			0x0700000
-#define RI_4s_TEX			0x0800000
 // тип работы с координатами текстуры
 #define RI_SEPARATE_TEX_COORD		0x0000000
 #define RI_DUBLICATE_TEX_COORD		0x1000000
-
-// Polygon Mode
-#define RI_POINT			0x10B1
-#define RI_LINE				0x10B2
-#define RI_FILL				0x10B3
 
 // Cull Face
 #define RI_NONE				0x10C1
@@ -376,11 +363,6 @@ bool vw_GetAspectWH(float *ARWidth, float *ARHeight);
 // Get rendered primitives count.
 int vw_GetPrimCount();
 
-// Set gamma ramp.
-void vw_SetGammaRamp(float Gamma, float Contrast, float Brightness);
-// Get gamma ramp.
-void vw_GetGammaRamp(float *Gamma, float *Contrast, float *Brightness);
-
 // Set viewport data.
 void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height,
 		    GLdouble near = 0, GLdouble far = 1, eOrigin Origin = eOrigin::upper_left);
@@ -389,8 +371,6 @@ void vw_GetViewport(int *x = nullptr, int *y = nullptr, int *width = nullptr, in
 		    float *znear = nullptr, float *zfar = nullptr);
 // Resize scene.
 void vw_ResizeScene(float nfAngle, float AR, float nfNearClip, float nfFarClip);
-// Function for window WM_SIZE message only.
-void vw_OnChangeSize(int nWidth, int nHeight);
 
 /*
  * Rendering.
@@ -452,8 +432,6 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *V
 		     unsigned int IndexBO = 0, unsigned int VAO = 0);
 // Set color.
 void vw_SetColor(float nRed, float nGreen, float nBlue, float nAlpha);
-// Set polygon rasterization mode.
-void vw_PolygonMode(int mode);
 // Set what facets can be culled.
 void vw_CullFace(int face);
 // Set depth buffer.

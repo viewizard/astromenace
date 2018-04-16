@@ -25,7 +25,6 @@
 *************************************************************************************/
 
 #include "../game.h"
-#include "../gfx/space_stars/space_stars.h"
 
 
 // временные данные для изменения и восстановления
@@ -36,8 +35,6 @@ int Options_MSAA;
 int Options_CSAA;
 int Options_ShadowMap;
 int Options_TexturesQuality;
-
-extern cSpaceStars *psSpaceStatic;
 
 const char *ButtonQuality[3] = {
 	"3_High",
@@ -140,24 +137,12 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		if (Setup.VisualEffectsQuality > 2) Setup.VisualEffectsQuality = 0;
 
 		vw_InitParticleSystems(Setup.UseGLSL, Setup.VisualEffectsQuality+1.0f);
-
-		if (psSpaceStatic != nullptr) {
-			delete psSpaceStatic;
-			psSpaceStatic = nullptr;
-		}
-		psSpaceStatic = new cSpaceStars;
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.VisualEffectsQuality==0)) {
 		Setup.VisualEffectsQuality--;
 		if (Setup.VisualEffectsQuality < 0) Setup.VisualEffectsQuality = 2;
 
 		vw_InitParticleSystems(Setup.UseGLSL, Setup.VisualEffectsQuality+1.0f);
-
-		if (psSpaceStatic != nullptr) {
-			delete psSpaceStatic;
-			psSpaceStatic = nullptr;
-		}
-		psSpaceStatic = new cSpaceStars;
 	}
 	int Size = vw_FontSize(vw_GetText(ButtonQuality[Setup.VisualEffectsQuality]));
 	int SizeI = (170-Size)/2;//High, Medium, Low

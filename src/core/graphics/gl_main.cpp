@@ -80,10 +80,6 @@ GLsizei ScreenWidthGL{0};
 GLsizei ScreenHeightGL{0};
 
 
-// состояние устройства (гамма)
-Uint16 UserDisplayRamp[256*3];
-int UserDisplayRampStatus = -1; // не использовать, была ошибка при получении значения
-
 // инициализация VBO
 bool Internal_InitializationBufferObjects();
 // инициализация VAO
@@ -140,8 +136,6 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	SDL_GL_CreateContext(window_SDL2);
 	SDL_GL_SetSwapInterval(VSync);
 	SDL_DisableScreenSaver();
-
-	UserDisplayRampStatus = SDL_GetWindowGammaRamp(window_SDL2, UserDisplayRamp, UserDisplayRamp+256, UserDisplayRamp+512);
 
 	std::cout << "Set video mode: " << Width << " x " << Height << " x " << *Bits << "\n\n";
 
@@ -522,13 +516,6 @@ int vw_GetPrimCount()
 //------------------------------------------------------------------------------------
 void vw_ShutdownRenderer()
 {
-	// возвращаем гамму и все такое...
-	if (UserDisplayRampStatus != -1) {
-		SDL_SetWindowGammaRamp(window_SDL2, UserDisplayRamp, UserDisplayRamp+256, UserDisplayRamp+512);
-	} else {
-		vw_SetGammaRamp(1.0f,1.0f,1.0f);
-	}
-
 	vw_ReleaseAllShaders();
 
 	Internal_ReleaseLocalIndexData();
@@ -701,64 +688,6 @@ bool vw_GetAspectWH(float *ARWidth, float *ARHeight)
 
 
 
-
-
-//------------------------------------------------------------------------------------
-// установка гаммы...
-//------------------------------------------------------------------------------------
-void vw_SetGammaRamp(float Gamma, float Contrast, float Brightness)
-{
-	CurrentGammaGL = Gamma;
-	CurrentContrastGL = Contrast;
-	CurrentBrightnessGL = Brightness;
-
-	Uint16 *ramp = new Uint16[256*3];
-
-	float angle = CurrentContrastGL;
-	float offset = (CurrentBrightnessGL-1)*256;
-	for (int i = 0; i < 256; i++) {
-		float k = i/256.0f;
-		k = (float)pow(k, 1.f/CurrentGammaGL);
-		k = k*256;
-		float value = k*angle*256+offset*256;
-		if (value > 65535)
-			value = 65535;
-		else if (value < 0)
-			value = 0;
-
-		ramp[i] = (Uint16) value;
-		ramp[i+256] = (Uint16) value;
-		ramp[i+512] = (Uint16) value;
-	}
-
-	SDL_SetWindowGammaRamp(window_SDL2, ramp, ramp+256, ramp+512);
-
-	if (ramp != nullptr)
-		delete [] ramp;
-}
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// получение гаммы...
-//------------------------------------------------------------------------------------
-void vw_GetGammaRamp(float *Gamma, float *Contrast, float *Brightness)
-{
-	*Gamma = CurrentGammaGL;
-	*Contrast = CurrentContrastGL;
-	*Brightness = CurrentBrightnessGL;
-}
-
-
-
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // Установка параметров вьюпорта
 //------------------------------------------------------------------------------------
@@ -799,32 +728,6 @@ void vw_GetViewport(int *x, int *y, int *width, int *height, float *znear, float
 }
 
 
-
-
-
-
-
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
-void vw_PolygonMode(int mode)
-{
-	switch (mode) {
-	case RI_POINT:
-		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-		break;
-	case RI_LINE:
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		break;
-	case RI_FILL:
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		break;
-
-	default:
-		std::cerr << __func__ << "(): " << "wrong mode.\n";
-		break;
-	}
-}
 
 
 

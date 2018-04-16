@@ -45,7 +45,6 @@ class cEarthSpaceFighter;
 extern sGameSetup Setup;
 extern eMenuStatus MenuStatus;
 extern SDL_Joystick *Joystick;
-extern cSpaceStars *psSpaceStatic;
 extern sVECTOR3D GamePoint;
 extern sVECTOR3D GameCameraMovement;
 
@@ -215,7 +214,6 @@ void SkyBoxDraw();
 void StarSystemInit(int Num, sVECTOR3D SetBaseRotation);
 void StarSystemDraw(int DrawType); // 1- меню, 2- игра
 void StarSystemDrawSecondLayer(int DrawType);
-void StarSystemUpdate();
 void StarSystemRelease();
 
 

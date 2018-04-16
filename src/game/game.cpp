@@ -977,7 +977,6 @@ void DrawGame()
 
 
 	// всегда первым рисуем скайбокс и "далекое" окружение
-	StarSystemUpdate();
 	StarSystemDraw(2);
 
 

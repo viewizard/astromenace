@@ -26,7 +26,6 @@
 
 #include "../game.h"
 #include "../object3d/space_object/space_object.h"
-#include "../gfx/space_stars/space_stars.h"
 
 extern cSpaceObject *StartSpaceObject;
 extern std::weak_ptr<cParticleSystem> psSpace;
@@ -90,13 +89,6 @@ void StarSystemInit(int Num, sVECTOR3D SetBaseRotation)
 	// StarSystem setup
 	StarSystem_InitedAll = true;
 	StarSystem_BaseRotation = SetBaseRotation;
-
-	// static space stars initialization
-	if (psSpaceStatic != nullptr) {
-		delete psSpaceStatic;
-		psSpaceStatic = nullptr;
-	}
-	psSpaceStatic = new cSpaceStars;
 }
 
 
@@ -111,12 +103,6 @@ void StarSystemRelease()
 		SkyBoxSetTexture(0, i);
 
 	StarSystem_Inited = false;
-
-	// static space stars
-	if (psSpaceStatic != nullptr) {
-		delete psSpaceStatic;
-		psSpaceStatic = nullptr;
-	}
 }
 
 
@@ -136,9 +122,9 @@ void StarSystemDraw(int DrawType)
 	sVECTOR3D CurrentCameraLocation;
 	vw_GetCameraLocation(&CurrentCameraLocation);
 
-	vw_DepthTest(false, eCompareFunc::LESS);
-
 	if (StarSystem_Inited) {
+		vw_DepthTest(false, eCompareFunc::LESS);
+
 		// SkyBox
 		vw_PushMatrix();
 		vw_Translate(CurrentCameraLocation);
@@ -147,15 +133,9 @@ void StarSystemDraw(int DrawType)
 		vw_Rotate(StarSystem_BaseRotation.z, 0.0f, 0.0f, 1.0f);
 		SkyBoxDraw();
 		vw_PopMatrix();
+
+		vw_DepthTest(true, eCompareFunc::LEQUAL);
 	}
-
-	// static space stars
-	if (psSpaceStatic != nullptr)
-		psSpaceStatic->Draw();
-
-	vw_DepthTest(true, eCompareFunc::LEQUAL);
-
-
 
 
 
@@ -484,19 +464,4 @@ void StarSystemDrawSecondLayer(int DrawType)
 		if (buff != nullptr)
 			delete [] buff;
 	}
-}
-
-
-
-
-//------------------------------------------------------------------------------------
-// Update for all StarSystem parts
-//------------------------------------------------------------------------------------
-void StarSystemUpdate()
-{
-	if (!StarSystem_InitedAll) return;
-
-	// static space stars
-	if (psSpaceStatic != nullptr)
-		psSpaceStatic->Update(vw_GetTimeThread(0));
 }

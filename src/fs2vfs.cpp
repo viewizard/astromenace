@@ -72,7 +72,6 @@ const std::string GameData[] = {
 	"glsl/light_shadowmap.vert",
 	"glsl/light_shadowmap.frag",
 	"glsl/particle.frag",
-	"glsl/particle_stars.vert",
 	"glsl/light_explosion.frag",
 	"glsl/light_explosion.vert",
 	"glsl/particle.vert",

@@ -28,7 +28,6 @@
 
 #include "game.h"
 #include "script_engine/script.h"
-#include "gfx/space_stars/space_stars.h"
 #include "object3d/object3d.h"
 #include "gfx/game_level_text/game_level_text.h"
 #include <sys/stat.h> // stat
@@ -109,14 +108,6 @@ bool JoysticButtons[100];
 sVECTOR3D GamePoint(0.0f, 0.0f, 0.0f);
 // направление движения камеры
 sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
-
-
-//------------------------------------------------------------------------------------
-// графическая часть
-//------------------------------------------------------------------------------------
-// статические частицы - звезды на скайбоксе
-cSpaceStars *psSpaceStatic = nullptr;
-
 
 
 
@@ -1353,11 +1344,6 @@ GotoQuit:
 	MissionsListRelease();
 	DestroyInfoObject();
 	WorkshopDestroyData();
-
-	if (psSpaceStatic != nullptr) {
-		delete psSpaceStatic;
-		psSpaceStatic = nullptr;
-	}
 
 	ReleaseAllObject3D();
 	vw_ReleaseAllModel3D();
