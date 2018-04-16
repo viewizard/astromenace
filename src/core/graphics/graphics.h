@@ -198,7 +198,7 @@ struct sDevCaps {
 	// макс. кол-во одновременно обрабатываемых источников света
 	int MaxActiveLights;
 	// максимальный уровень анизотропии
-	int MaxAnisotropyLevel;
+	GLint MaxAnisotropyLevel;
 	// макс. уровень антиалиасинга, 0-нет, 2+ - есть
 	int MaxSamples; // MSAA
 	int MaxMultisampleCoverageModes; // кол-во профайлов антиалиасинга с CSAA+MSAA
@@ -400,7 +400,7 @@ void vw_DeleteTexture(GLtexture TextureID);
 // Set texture filtering mode.
 void vw_SetTextureFiltering(int nFiltering);
 // Set texture Anisotropy Level.
-void vw_SetTextureAnisotropy(int AnisotropyLevel);
+void vw_SetTextureAnisotropy(GLint AnisotropyLevel);
 // Set texture address mode.
 void vw_SetTextureAddressMode(eTextureWrapCoord coord, eTextureWrapMode mode);
 // Set texture address mode.

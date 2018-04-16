@@ -34,6 +34,9 @@
 //      glBindTextureUnitEXT()
 //      could be used to replace glActiveTexture() + glBindTexture()
 
+// NOTE GL_TEXTURE_MAX_ANISOTROPY (since OpenGL 4.6)
+//      could be used to replace GL_TEXTURE_MAX_ANISOTROPY_EXT
+
 // NOTE glTexEnvi() deprecated in 3.1 core profile
 //      (vw_SetTextureEnvMode(), vw_SetTextureBlendMode())
 
@@ -304,13 +307,19 @@ void vw_SetTextureFiltering(int nFiltering)
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_SetTextureAnisotropy(int AnisotropyLevel)
+void vw_SetTextureAnisotropy(GLint AnisotropyLevel)
 {
-	// ставим ANISOTROPY
-	if ((AnisotropyLevel > 1) &&
-	    (vw_GetDevCaps()->MaxAnisotropyLevel > 1)) {
-		if (AnisotropyLevel > vw_GetDevCaps()->MaxAnisotropyLevel)
-			AnisotropyLevel = vw_GetDevCaps()->MaxAnisotropyLevel;
+	if (__GetDevCaps().MaxAnisotropyLevel > 0) {
+		if (AnisotropyLevel < 0) {
+			std::cerr << __func__ << "(): " << "anisotropy level " << AnisotropyLevel
+				  << " not supported, changed to 0\n";
+			AnisotropyLevel = 0;
+		} else if (AnisotropyLevel > __GetDevCaps().MaxAnisotropyLevel) {
+			std::cerr << __func__ << "(): " << "anisotropy level " << AnisotropyLevel
+				  << " not supported, reduced to " << __GetDevCaps().MaxAnisotropyLevel
+				  << "\n";
+			AnisotropyLevel = __GetDevCaps().MaxAnisotropyLevel;
+		}
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, AnisotropyLevel);
 	}
 }

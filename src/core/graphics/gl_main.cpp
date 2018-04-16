@@ -24,6 +24,9 @@
 
 *************************************************************************************/
 
+// NOTE GL_MAX_TEXTURE_MAX_ANISOTROPY (since OpenGL 4.6)
+//      could be used to replace GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT
+
 #include "graphics_internal.h"
 #include "graphics.h"
 #include "extensions.h"
@@ -205,7 +208,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	// проверем поддержку анизотропной фильтрации
 	if (ExtensionSupported("GL_EXT_texture_filter_anisotropic")) {
 		// получим максимально доступный угол анизотропии...
-		glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT,&OpenGL_DevCaps.MaxAnisotropyLevel);
+		glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &OpenGL_DevCaps.MaxAnisotropyLevel);
 		std::cout << "Max anisotropy: " << OpenGL_DevCaps.MaxAnisotropyLevel << "\n";
 	}
 
