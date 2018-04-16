@@ -56,8 +56,8 @@ void vw_ReleaseTexture(GLtexture TextureID);
 // Release all textures.
 void vw_ReleaseAllTextures();
 // Set textures properties.
-void vw_SetTextureProp(const sTextureFilter &nFiltering, const sTextureWrap &nAddressMode, bool nAlpha = false,
-		       eAlphaCreateMode nAFlag = eAlphaCreateMode::EQUAL, bool nMipMap = true);
+void vw_SetTextureProp(const sTextureFilter &Filtering, GLint AnisotropyLevel, const sTextureWrap &AddressMode,
+		       bool Alpha = false, eAlphaCreateMode AFlag = eAlphaCreateMode::EQUAL, bool MipMap = true);
 // Set textures alpha color.
 void vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue);
 // Find texture by name.

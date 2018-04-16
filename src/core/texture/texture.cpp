@@ -44,6 +44,8 @@ care about byte alignment.
 
 namespace {
 
+// Default anisotropy level
+GLint AnisotropyLevelTex{0};
 // Default filtering type.
 sTextureFilter FilteringTex{};
 // Default address mode.
@@ -87,14 +89,15 @@ int ReadTGA(std::vector<uint8_t> &DIB, sFILE *pFile, int &DWidth, int &DHeight, 
 /*
  * Set textures properties.
  */
-void vw_SetTextureProp(const sTextureFilter &nFiltering, const sTextureWrap &nAddressMode,
-		       bool nAlpha, eAlphaCreateMode nAFlag, bool nMipMap)
+void vw_SetTextureProp(const sTextureFilter &Filtering, GLint AnisotropyLevel, const sTextureWrap &AddressMode,
+		       bool Alpha, eAlphaCreateMode AFlag, bool MipMap)
 {
-	FilteringTex = nFiltering;
-	AddressModeTex = nAddressMode;
-	AlphaTex = nAlpha;
-	AFlagTex = nAFlag;
-	MipMapTex = nMipMap;
+	FilteringTex = Filtering;
+	AnisotropyLevelTex = AnisotropyLevel,
+	AddressModeTex = AddressMode;
+	AlphaTex = Alpha;
+	AFlagTex = AFlag;
+	MipMapTex = MipMap;
 }
 
 /*
@@ -168,6 +171,7 @@ void vw_ReleaseAllTextures()
 	TexturesNameToIDMap.clear();
 
 	FilteringTex = sTextureFilter{};
+	AnisotropyLevelTex = 0;
 	AddressModeTex = sTextureWrap{};
 	AlphaTex = false;
 }
@@ -506,6 +510,8 @@ GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::vector
 		return 0;
 
 	vw_SetTextureFiltering(FilteringTex);
+	if (AnisotropyLevelTex)
+		vw_SetTextureAnisotropy(AnisotropyLevelTex);
 	vw_SetTextureAddressMode(AddressModeTex);
 	vw_BindTexture(0, 0);
 

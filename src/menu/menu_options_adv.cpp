@@ -29,6 +29,7 @@
 
 
 // временные данные для изменения и восстановления
+int Options_TexturesAnisotropyLevel;
 int Options_TexturesCompressionType;
 int Options_UseGLSL;
 int Options_MSAA;
@@ -209,18 +210,20 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	// анизотропия
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, ContentTransp, vw_GetText("3_Anisotropy_Level"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, Setup.AnisotropyLevel==1)) {
-		Setup.AnisotropyLevel = (int)(Setup.AnisotropyLevel/2);
-		if (Setup.AnisotropyLevel < 1) Setup.AnisotropyLevel = 1;
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, Options_TexturesAnisotropyLevel == 1)) {
+		Options_TexturesAnisotropyLevel >>= 1;
+		if (Options_TexturesAnisotropyLevel < 1)
+			Options_TexturesAnisotropyLevel = 1;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.AnisotropyLevel==vw_GetDevCaps()->MaxAnisotropyLevel)) {
-		Setup.AnisotropyLevel = Setup.AnisotropyLevel*2;
-		if (Setup.AnisotropyLevel > vw_GetDevCaps()->MaxAnisotropyLevel) Setup.AnisotropyLevel = vw_GetDevCaps()->MaxAnisotropyLevel;
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Options_TexturesAnisotropyLevel == vw_GetDevCaps()->MaxAnisotropyLevel)) {
+		Options_TexturesAnisotropyLevel <<= 1;
+		if (Options_TexturesAnisotropyLevel > vw_GetDevCaps()->MaxAnisotropyLevel)
+			Options_TexturesAnisotropyLevel = vw_GetDevCaps()->MaxAnisotropyLevel;
 	}
-	if (Setup.AnisotropyLevel>1) {
-		Size = vw_FontSize("x%i", Setup.AnisotropyLevel);
+	if (Options_TexturesAnisotropyLevel > 1) {
+		Size = vw_FontSize("x%i", Options_TexturesAnisotropyLevel);
 		SizeI = (170-Size)/2;
-		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, "x%i",Setup.AnisotropyLevel);
+		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, "x%i", Options_TexturesAnisotropyLevel);
 	} else {
 		if (vw_GetDevCaps()->MaxAnisotropyLevel > 1) {
 			Size = vw_FontSize(vw_GetText("1_Off"));
@@ -438,7 +441,8 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 
 
 
-	if (Options_TexturesCompressionType == Setup.TexturesCompressionType &&
+	if (Options_TexturesAnisotropyLevel == Setup.AnisotropyLevel &&
+	    Options_TexturesCompressionType == Setup.TexturesCompressionType &&
 	    Options_MSAA == Setup.MSAA &&
 	    Options_CSAA == Setup.CSAA &&
 	    Options_UseGLSL == Setup.UseGLSL &&
@@ -466,7 +470,8 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		X = Setup.iAspectRatioWidth/2 + 38;
 		if (DrawButton256(X,Y, vw_GetText("1_APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2)) {
 			// проверяем, нужно перегружать или нет
-			if (Options_TexturesCompressionType != Setup.TexturesCompressionType ||
+			if (Options_TexturesAnisotropyLevel != Setup.AnisotropyLevel ||
+			    Options_TexturesCompressionType != Setup.TexturesCompressionType ||
 			    Options_MSAA != Setup.MSAA ||
 			    Options_CSAA != Setup.CSAA ||
 			    Options_UseGLSL != Setup.UseGLSL ||
@@ -489,6 +494,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 void SaveOptionsAdvMenuTmpData()
 {
 	Setup.UseGLSL = Options_UseGLSL;
+	Setup.AnisotropyLevel = Options_TexturesAnisotropyLevel;
 	Setup.TexturesCompressionType = Options_TexturesCompressionType;
 	Setup.MSAA = Options_MSAA;
 	Setup.CSAA = Options_CSAA;

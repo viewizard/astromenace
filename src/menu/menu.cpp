@@ -261,6 +261,7 @@ void SetOptionsMenu(eMenuStatus Menu)
 		Options_UseGLSL = Setup.UseGLSL;
 		Options_MSAA = Setup.MSAA;
 		Options_CSAA = Setup.CSAA;
+		Options_TexturesAnisotropyLevel = Setup.AnisotropyLevel;
 		Options_TexturesQuality = Setup.TexturesQuality;
 		Options_ShadowMap = Setup.ShadowMap;
 		break;
