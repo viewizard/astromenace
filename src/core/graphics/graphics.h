@@ -189,6 +189,14 @@ struct sTextureFilter {
 	}
 };
 
+enum class eTextureCombinerName : GLenum {
+	COMBINE_RGB = GL_COMBINE_RGB
+};
+
+enum class eTextureCombinerOp : GLint {
+	ADD = GL_ADD
+};
+
 enum class eMaterialParameter : GLenum {
 	AMBIENT = GL_AMBIENT,
 	DIFFUSE = GL_DIFFUSE,
@@ -271,37 +279,6 @@ struct sDevCaps {
 #define RI_DEPTH_BUFFER		0x0100
 #define RI_ACCUM_BUFFER		0x0010
 #define RI_STENCIL_BUFFER	0x0001
-
-// Texture blending modes
-// Parameter name
-#define RI_TBLEND_COLOROP		0x103051
-#define RI_TBLEND_ALPHAOP		0x103052
-#define RI_TBLEND_ALPHAARG1		0x103053
-#define RI_TBLEND_ALPHAARG2		0x103054
-#define RI_TBLEND_ALPHAARG3		0x103055
-#define RI_TBLEND_COLORARG1		0x103056
-#define RI_TBLEND_COLORARG2		0x103057
-#define RI_TBLEND_COLORARG3		0x103058
-// Parameter
-#define RI_TBLEND_SOURCE1		0x103061
-#define RI_TBLEND_SOURCE2		0x103062
-#define RI_TBLEND_MODULATE		0x103063
-#define RI_TBLEND_MODULATE2X		0x103064
-#define RI_TBLEND_MODULATE4X		0x103065
-#define RI_TBLEND_ADD			0x103066
-#define RI_TBLEND_ADDSMOOTH		0x103067
-#define RI_TBLEND_ADD_SIGNED		0x103068
-#define RI_TBLEND_SUBTRACT		0x103069
-#define RI_TBLEND_DIFFUSE_ALPHA		0x103070
-#define RI_TBLEND_TEXTURE_ALPHA		0x103071
-#define RI_TBLEND_CURRENT_ALPHA		0x103072
-#define RI_TBLEND_DOTPRODUCT		0x103073
-#define RI_TBLEND_CURRENT		0x103080
-#define RI_TBLEND_TEXTURE		0x103081
-#define RI_TBLEND_CONSTANT		0x103082
-#define RI_TBLEND_DIFFUSE		0x103083
-#define RI_TBLEND_SPECULAR		0x103084
-
 
 // Primitives types
 #define RI_POINTS			0x1020
@@ -414,7 +391,7 @@ void vw_SetTextureAlphaTest(bool flag, eCompareFunc func, GLclampf ref);
 // Set texture blending factor.
 void vw_SetTextureBlend(bool flag, eTextureBlendFactor sfactor, eTextureBlendFactor dfactor);
 // Set texture blending mode.
-void vw_SetTextureBlendMode(int pname, int param);
+void vw_SetTextureBlendMode(eTextureCombinerName name, eTextureCombinerOp param);
 // Set texture env mode.
 void vw_SetTextureEnvMode(eTextureEnvMode mode);
 // Set texture compare mode.

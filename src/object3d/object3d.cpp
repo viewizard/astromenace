@@ -856,7 +856,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			vw_BindTexture(1, TextureIllum[0]);
 			// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
 			vw_SetTextureEnvMode(eTextureEnvMode::COMBINE);
-			vw_SetTextureBlendMode(RI_TBLEND_COLOROP, RI_TBLEND_ADD);
+			vw_SetTextureBlendMode(eTextureCombinerName::COMBINE_RGB, eTextureCombinerOp::ADD);
 		}
 
 		// если у нас работают шейдеры и есть текстура нормал меппа - ставим ее
@@ -1020,7 +1020,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					vw_BindTexture(1, TextureIllum[i]);
 					// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
 					vw_SetTextureEnvMode(eTextureEnvMode::COMBINE);
-					vw_SetTextureBlendMode(RI_TBLEND_COLOROP, RI_TBLEND_ADD);
+					vw_SetTextureBlendMode(eTextureCombinerName::COMBINE_RGB, eTextureCombinerOp::ADD);
 				}
 
 				// если у нас работают шейдеры и есть текстура нормал меппа - ставим ее

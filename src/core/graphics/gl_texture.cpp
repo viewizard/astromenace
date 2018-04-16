@@ -144,9 +144,6 @@ void vw_BindTexture(GLenum Unit, GLtexture TextureID)
 	} else {
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glDisable(GL_TEXTURE_2D);
-		// set to GL_TEXTURE0, by default
-		if (Unit)
-			vw_SelectActiveTextureUnit(0);
 	}
 }
 
@@ -158,117 +155,13 @@ void vw_DeleteTexture(GLtexture TextureID)
 	glDeleteTextures(1, &TextureID);
 }
 
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
-void vw_SetTextureBlendMode(int pname, int param)
+/*
+ * Set texture blending mode.
+ * This is deprecated part (since OpenGL 3.1), no reason make it fully functional.
+ */
+void vw_SetTextureBlendMode(eTextureCombinerName name, eTextureCombinerOp param)
 {
-	GLenum  cmd = GL_COMBINE_RGB;
-	GLenum  arg = GL_REPLACE;
-
-	switch (pname) {
-	case RI_TBLEND_COLOROP:
-		cmd = GL_COMBINE_RGB;
-		break;
-	case RI_TBLEND_ALPHAOP:
-		cmd = GL_COMBINE_ALPHA;
-		break;
-	case RI_TBLEND_ALPHAARG1:
-		cmd = GL_OPERAND0_ALPHA;
-		break;
-	case RI_TBLEND_ALPHAARG2:
-		cmd = GL_OPERAND1_ALPHA;
-		break;
-	case RI_TBLEND_ALPHAARG3:
-		cmd = GL_OPERAND2_ALPHA;
-		break;
-	case RI_TBLEND_COLORARG1:
-		cmd = GL_SOURCE0_RGB;
-		break;
-	case RI_TBLEND_COLORARG2:
-		cmd = GL_SOURCE1_RGB;
-		break;
-	case RI_TBLEND_COLORARG3:
-		cmd = GL_SOURCE2_RGB;
-		break;
-	default:
-		std::cerr << __func__ << "(): " << "wrong pname.\n";
-		return;
-	}
-
-	switch (param) {
-	case RI_TBLEND_SOURCE1:
-		arg = GL_REPLACE;
-		break;
-	case RI_TBLEND_SOURCE2:
-		arg = GL_REPLACE;
-		break;
-	case RI_TBLEND_MODULATE:
-		arg = GL_MODULATE;
-		break;
-	case RI_TBLEND_MODULATE2X:
-		arg = GL_MODULATE;
-		break;
-	case RI_TBLEND_MODULATE4X:
-		arg = GL_MODULATE;
-		break;
-	case RI_TBLEND_ADD:
-		arg = GL_ADD;
-		break;
-	case RI_TBLEND_ADDSMOOTH:
-		arg = GL_ADD;
-		break;
-	case RI_TBLEND_ADD_SIGNED:
-		arg = GL_ADD_SIGNED;
-		break;
-	case RI_TBLEND_SUBTRACT:
-		arg = GL_SUBTRACT;
-		break;
-	case RI_TBLEND_DIFFUSE_ALPHA:
-	case RI_TBLEND_TEXTURE_ALPHA:
-	case RI_TBLEND_CURRENT_ALPHA:
-		arg = GL_INTERPOLATE;
-		break;
-	case RI_TBLEND_DOTPRODUCT:
-		arg = GL_DOT3_RGB;
-		break;
-	case RI_TBLEND_CURRENT:
-		arg = GL_PREVIOUS;
-		break;
-	case RI_TBLEND_TEXTURE:
-		arg = GL_TEXTURE;
-		break;
-	case RI_TBLEND_CONSTANT:
-		arg = GL_CONSTANT;
-		break;
-	case RI_TBLEND_DIFFUSE:
-		arg = GL_PRIMARY_COLOR;
-		break;
-	case RI_TBLEND_SPECULAR:
-		arg = 0;
-		break;
-	default:
-		std::cerr << __func__ << "(): " << "wrong param.\n";
-		return;
-	}
-
-	// работаем с MODULATE
-	switch (param) {
-	case RI_TBLEND_MODULATE2X:
-		if (pname == RI_TBLEND_COLOROP) glTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 2);
-		else glTexEnvi(GL_TEXTURE_ENV, 	GL_ALPHA_SCALE, 2);
-		break;
-	case RI_TBLEND_MODULATE4X:
-		if (pname == RI_TBLEND_COLOROP) glTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 4);
-		else glTexEnvi(GL_TEXTURE_ENV, 	GL_ALPHA_SCALE, 4);
-		break;
-	default:
-		if (pname == RI_TBLEND_COLOROP) glTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
-		else glTexEnvi(GL_TEXTURE_ENV, 	GL_ALPHA_SCALE, 1);
-		break;
-	}
-
-	glTexEnvi(GL_TEXTURE_ENV, cmd, arg);
+	glTexEnvi(GL_TEXTURE_ENV, static_cast<GLenum>(name),  static_cast<GLint>(param));
 }
 
 //------------------------------------------------------------------------------------
