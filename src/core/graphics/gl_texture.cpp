@@ -34,6 +34,10 @@
 //      glBindTextureUnitEXT()
 //      could be used to replace glActiveTexture() + glBindTexture()
 
+// NOTE GL_EXT_direct_state_access (since OpenGL 4.5)
+//      glTextureParameteri()
+//      could be used to replace glTexParameteri()
+
 // NOTE GL_TEXTURE_MAX_ANISOTROPY (since OpenGL 4.6)
 //      could be used to replace GL_TEXTURE_MAX_ANISOTROPY_EXT
 
@@ -287,10 +291,10 @@ void vw_SetTextureFiltering(const sTextureFilter &Filter)
 void vw_SetTextureAnisotropy(GLint AnisotropyLevel)
 {
 	if (__GetDevCaps().MaxAnisotropyLevel > 0) {
-		if (AnisotropyLevel < 0) {
+		if (AnisotropyLevel < 1) {
 			std::cerr << __func__ << "(): " << "anisotropy level " << AnisotropyLevel
-				  << " not supported, changed to 0\n";
-			AnisotropyLevel = 0;
+				  << " not supported, changed to 1\n";
+			AnisotropyLevel = 1;
 		} else if (AnisotropyLevel > __GetDevCaps().MaxAnisotropyLevel) {
 			std::cerr << __func__ << "(): " << "anisotropy level " << AnisotropyLevel
 				  << " not supported, reduced to " << __GetDevCaps().MaxAnisotropyLevel
