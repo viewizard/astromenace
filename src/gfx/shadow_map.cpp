@@ -213,7 +213,7 @@ void ShadowMap_StartFinalRender()
 	vw_SetTextureCompare(eTextureCompareMode::REF_TO_TEXTURE, eCompareFunc::LEQUAL);
 	vw_SetTextureDepthMode(eTextureDepthMode::INTENSITY);
 	// ставим линеар сглаживание, чтобы PCF делало более плавные переходы
-	vw_SetTextureFiltering(RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_NONE);
+	vw_SetTextureFiltering(eTextureBasicFilter::BILINEAR);
 
 
 	vw_MatrixMode(eMatrixMode::TEXTURE);

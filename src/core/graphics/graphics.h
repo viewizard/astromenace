@@ -143,11 +143,49 @@ struct sTextureWrap {
 		T{param},
 		R{param}
 	{}
-	void operator () (eTextureWrapMode param)
+};
+
+enum class eTextureMinFilter : GLint {
+	NEAREST = GL_NEAREST,
+	LINEAR = GL_LINEAR,
+	NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
+	LINEAR_MIPMAP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
+	NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
+	LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR
+};
+
+enum class eTextureMagFilter : GLint {
+	NEAREST = GL_NEAREST,
+	LINEAR = GL_LINEAR
+};
+
+enum class eTextureBasicFilter {
+	NONE,
+	BILINEAR,
+	TRILINEAR
+};
+
+struct sTextureFilter {
+	eTextureMinFilter Min{eTextureMinFilter::NEAREST_MIPMAP_LINEAR};
+	eTextureMagFilter Mag{eTextureMagFilter::LINEAR};
+
+	sTextureFilter() = default;
+	sTextureFilter(eTextureBasicFilter Filter)
 	{
-		S = param;
-		T = param;
-		R = param;
+		switch (Filter) {
+		case eTextureBasicFilter::NONE:
+			Min = eTextureMinFilter::NEAREST;
+			Mag = eTextureMagFilter::NEAREST;
+			break;
+		case eTextureBasicFilter::BILINEAR:
+			Min = eTextureMinFilter::LINEAR;
+			Mag = eTextureMagFilter::LINEAR;
+			break;
+		case eTextureBasicFilter::TRILINEAR:
+			Min = eTextureMinFilter::LINEAR_MIPMAP_LINEAR;
+			Mag = eTextureMagFilter::LINEAR;
+			break;
+		}
 	}
 };
 
@@ -233,22 +271,6 @@ struct sDevCaps {
 #define RI_DEPTH_BUFFER		0x0100
 #define RI_ACCUM_BUFFER		0x0010
 #define RI_STENCIL_BUFFER	0x0001
-
-// Texture filtering modes
-#define RI_MAGFILTER		0x103F00
-#define RI_MAGFILTER_POINT	0x103100
-#define RI_MAGFILTER_LINEAR	0x103200
-#define RI_MINFILTER		0x1030F0
-#define RI_MINFILTER_POINT	0x103010
-#define RI_MINFILTER_LINEAR	0x103020
-#define RI_MIPFILTER		0x10300F
-#define RI_MIPFILTER_NONE	0x103001
-#define RI_MIPFILTER_POINT	0x103002
-#define RI_MIPFILTER_LINEAR	0x103004
-// Basic filters
-#define RI_TEXTURE_NONE		RI_MAGFILTER_POINT | RI_MINFILTER_POINT | RI_MIPFILTER_NONE
-#define RI_TEXTURE_BILINEAR	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_POINT
-#define RI_TEXTURE_TRILINEAR	RI_MAGFILTER_LINEAR | RI_MINFILTER_LINEAR | RI_MIPFILTER_LINEAR
 
 // Texture blending modes
 // Parameter name
@@ -398,13 +420,15 @@ void vw_BindTexture(GLenum Unit, GLtexture TextureID);
 // Delete texture.
 void vw_DeleteTexture(GLtexture TextureID);
 // Set texture filtering mode.
-void vw_SetTextureFiltering(int nFiltering);
+void vw_SetTextureFiltering(eTextureMinFilter MinFilter, eTextureMagFilter MagFilter);
+// Set texture filtering mode.
+void vw_SetTextureFiltering(const sTextureFilter &Filter);
 // Set texture Anisotropy Level.
 void vw_SetTextureAnisotropy(GLint AnisotropyLevel);
 // Set texture address mode.
 void vw_SetTextureAddressMode(eTextureWrapCoord coord, eTextureWrapMode mode);
 // Set texture address mode.
-void vw_SetTextureAddressMode(sTextureWrap wrap);
+void vw_SetTextureAddressMode(const sTextureWrap &wrap);
 // Set texture Alpha Test value that specifies a reference alpha value against which pixels are tested.
 void vw_SetTextureAlphaTest(bool flag, eCompareFunc func, GLclampf ref);
 // Set texture blending factor.

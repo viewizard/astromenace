@@ -283,9 +283,6 @@ void StarSystemDraw(int DrawType)
 		GLtexture TileTexture = vw_FindTextureByName("skybox/tile_back.tga");
 		vw_BindTexture(0, TileTexture);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
-
 		vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
 
 		vw_DepthTest(false, eCompareFunc::LESS);
@@ -468,12 +465,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 		GLtexture TileTexture = vw_FindTextureByName("skybox/tile_stars.tga");
 		vw_BindTexture(0, TileTexture);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
-
-
 		vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
-
 		vw_DepthTest(false, eCompareFunc::LESS);
 
 		if (DrawType == 1) {

@@ -850,16 +850,12 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	if (NeedOnePieceDraw) {
 		vw_BindTexture(0, Texture[0]);
 		vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-		// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-		if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 
 		// включаем вторую текстуру
 		if (!TextureIllum.empty() && TextureIllum[0]) {
 			// свечение
 			vw_BindTexture(1, TextureIllum[0]);
 			vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-			// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-			if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 			// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
 			vw_SetTextureEnvMode(eTextureEnvMode::COMBINE);
 			vw_SetTextureBlendMode(RI_TBLEND_COLOROP, RI_TBLEND_ADD);
@@ -873,9 +869,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			CurrentNormalMap = NormalMap[0];
 			vw_BindTexture(3, CurrentNormalMap);
 			vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-			// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-			if (Setup.TextureFilteringMode == 1)
-				vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 		}
 
 
@@ -1014,8 +1007,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			if (CurrentTexture != Texture[i]) {
 				vw_BindTexture(0, Texture[i]);
 				vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-				// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-				if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 
 				// если есть тайловая анимация - работаем с текстурной матрицей
 				// ! исходим из того что активен всегда 0-вой стейдж текстуры т.к. у танков на траках нет илюминейшен текстуры
@@ -1032,9 +1023,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					// свечение
 					vw_BindTexture(1, TextureIllum[i]);
 					vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-					// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-					if (Setup.TextureFilteringMode == 1)
-						vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 					// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
 					vw_SetTextureEnvMode(eTextureEnvMode::COMBINE);
 					vw_SetTextureBlendMode(RI_TBLEND_COLOROP, RI_TBLEND_ADD);
@@ -1049,9 +1037,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 						CurrentNormalMap = NormalMap[i];
 						vw_BindTexture(3, CurrentNormalMap);
 						vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-						// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-						if (Setup.TextureFilteringMode == 1)
-							vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 					} else {
 						// если нет, но был установлен - нужно сделать сброс установки
 						if (CurrentNormalMap) {

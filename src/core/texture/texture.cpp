@@ -44,10 +44,10 @@ care about byte alignment.
 
 namespace {
 
-// Default filtering type (near, linear, ... ).
-int FilteringTex{RI_MAGFILTER_POINT | RI_MINFILTER_POINT | RI_MIPFILTER_POINT};
-// Default address mode (REPEAT).
-sTextureWrap Address_ModeTex{};
+// Default filtering type.
+sTextureFilter FilteringTex{};
+// Default address mode.
+sTextureWrap AddressModeTex{};
 // Default alpha channel status (should we create if don't have it, or remove if have it).
 bool AlphaTex{false};
 // Alpha channel default color (used for alpha channel generation).
@@ -87,10 +87,11 @@ int ReadTGA(std::vector<uint8_t> &DIB, sFILE *pFile, int &DWidth, int &DHeight, 
 /*
  * Set textures properties.
  */
-void vw_SetTextureProp(int nFiltering, const sTextureWrap &nAddress_Mode, bool nAlpha, eAlphaCreateMode nAFlag, bool nMipMap)
+void vw_SetTextureProp(const sTextureFilter &nFiltering, const sTextureWrap &nAddressMode,
+		       bool nAlpha, eAlphaCreateMode nAFlag, bool nMipMap)
 {
 	FilteringTex = nFiltering;
-	Address_ModeTex = nAddress_Mode;
+	AddressModeTex = nAddressMode;
 	AlphaTex = nAlpha;
 	AFlagTex = nAFlag;
 	MipMapTex = nMipMap;
@@ -166,8 +167,8 @@ void vw_ReleaseAllTextures()
 	TexturesIDtoDataMap.clear();
 	TexturesNameToIDMap.clear();
 
-	FilteringTex = RI_MAGFILTER_POINT | RI_MINFILTER_POINT | RI_MIPFILTER_POINT;
-	Address_ModeTex(eTextureWrapMode::REPEAT);
+	FilteringTex = sTextureFilter{};
+	AddressModeTex = sTextureWrap{};
 	AlphaTex = false;
 }
 
@@ -505,7 +506,7 @@ GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::vector
 		return 0;
 
 	vw_SetTextureFiltering(FilteringTex);
-	vw_SetTextureAddressMode(Address_ModeTex);
+	vw_SetTextureAddressMode(AddressModeTex);
 	vw_BindTexture(0, 0);
 
 	// create new entries

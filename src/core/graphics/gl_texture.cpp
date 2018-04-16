@@ -270,38 +270,15 @@ void vw_SetTextureBlendMode(int pname, int param)
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_SetTextureFiltering(int nFiltering)
+void vw_SetTextureFiltering(eTextureMinFilter MinFilter, eTextureMagFilter MagFilter)
 {
-	// перебираем по мип-меп фильтру
-	switch (nFiltering & RI_MIPFILTER) {
-	case RI_MIPFILTER_NONE:
-		if ((nFiltering & RI_MINFILTER) == RI_MINFILTER_POINT)
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		if ((nFiltering & RI_MINFILTER) == RI_MINFILTER_LINEAR)
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		break;
-	case RI_MIPFILTER_POINT:
-		if ((nFiltering & RI_MINFILTER) == RI_MINFILTER_POINT)
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-		if ((nFiltering & RI_MINFILTER) == RI_MINFILTER_LINEAR)
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-		break;
-	case RI_MIPFILTER_LINEAR:
-		if ((nFiltering & RI_MINFILTER) == RI_MINFILTER_POINT)
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-		if ((nFiltering & RI_MINFILTER) == RI_MINFILTER_LINEAR)
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		break;
-	default:
-		std::cerr << __func__ << "(): " << "wrong nFiltering.\n";
-		return;
-	}
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, static_cast<GLint>(MinFilter));
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, static_cast<GLint>(MagFilter));
+}
 
-	// ставим MAG фильтр
-	if ((nFiltering & RI_MAGFILTER) == RI_MAGFILTER_POINT)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	if ((nFiltering & RI_MAGFILTER) == RI_MAGFILTER_LINEAR)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+void vw_SetTextureFiltering(const sTextureFilter &Filter)
+{
+	vw_SetTextureFiltering(Filter.Min, Filter.Mag);
 }
 
 //------------------------------------------------------------------------------------
@@ -332,7 +309,7 @@ void vw_SetTextureAddressMode(eTextureWrapCoord coord, eTextureWrapMode mode)
 	glTexParameteri(GL_TEXTURE_2D, static_cast<GLenum>(coord), static_cast<GLint>(mode));
 }
 
-void vw_SetTextureAddressMode(sTextureWrap wrap)
+void vw_SetTextureAddressMode(const sTextureWrap &wrap)
 {
 	vw_SetTextureAddressMode(eTextureWrapCoord::S, wrap.S);
 	vw_SetTextureAddressMode(eTextureWrapCoord::T, wrap.T);

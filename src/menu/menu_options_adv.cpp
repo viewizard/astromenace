@@ -206,31 +206,6 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 
 
 
-
-
-
-
-	// тип фильтрации текстуры
-	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, ContentTransp, vw_GetText("3_Texture_Filtering_Mode"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, Setup.TextureFilteringMode==1)) {
-		Setup.TextureFilteringMode--;
-		if (Setup.TextureFilteringMode < 1) Setup.TextureFilteringMode = 2;
-	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.TextureFilteringMode==2)) {
-		Setup.TextureFilteringMode++;
-		if (Setup.TextureFilteringMode > 2) Setup.TextureFilteringMode = 1;
-	}
-	Size = vw_FontSize(vw_GetText(ButtonTextFiltr[Setup.TextureFilteringMode-1]));
-	SizeI = (170-Size)/2;//Bilinear, Trilinear
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText(ButtonTextFiltr[Setup.TextureFilteringMode-1]));
-
-
-
-
-
-
-
 	// анизотропия
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, ContentTransp, vw_GetText("3_Anisotropy_Level"));

@@ -54,7 +54,6 @@ void InitSetup()
 
 	Setup.CameraModeWithStandardAspectRatio = 0;
 
-	Setup.TextureFilteringMode = 2;
 	Setup.TexturesQuality = 3;
 	Setup.MSAA = 0;
 	Setup.CSAA = 0;
@@ -172,7 +171,6 @@ void SaveXMLSetupFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value", Setup.CameraModeWithStandardAspectRatio);
 
 	XMLdoc->AddComment(*RootXMLEntry, " Common settings ");
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "TextureFilteringMode"), "value", Setup.TextureFilteringMode);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "TexturesQuality"), "value", Setup.TexturesQuality);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MSAA"), "value", Setup.MSAA);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "CSAA"), "value", Setup.CSAA);
@@ -433,8 +431,6 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "CameraModeWithStandardAspectRatio"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value", Setup.CameraModeWithStandardAspectRatio);
 
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "TextureFilteringMode"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "TextureFilteringMode"), "value", Setup.TextureFilteringMode);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "TexturesQuality"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "TexturesQuality"), "value", Setup.TexturesQuality);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MSAA"))

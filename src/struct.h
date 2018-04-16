@@ -250,8 +250,6 @@ struct sGameSetup {
 	int VSync;
 	// яркость
 	int Brightness;
-	// режим фильтра текстур
-	int TextureFilteringMode;
 	// режим качества прорисовки текстур
 	int TexturesQuality;
 	// мультисэмпл антиалиасинг

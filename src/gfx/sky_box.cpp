@@ -74,8 +74,6 @@ void SkyBoxDraw()
 	vw_BindTexture(1, vw_FindTextureByName("skybox/tile_stars.tga"));
 	vw_SetTextureEnvMode(eTextureEnvMode::DECAL);
 	vw_SetTextureAnisotropy(Setup.AnisotropyLevel);
-	// по умолчанию всегда трилинейная фильтрация, если надо - ставим билинейную
-	if (Setup.TextureFilteringMode == 1) vw_SetTextureFiltering(RI_TEXTURE_BILINEAR);
 	// корректируем текстурные координаты для второй текстуры через матрицу
 	vw_MatrixMode(eMatrixMode::TEXTURE);
 	vw_LoadIdentity();
