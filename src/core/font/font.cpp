@@ -271,7 +271,8 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 		FontCharsList.front()->Texture = vw_CreateTextureFromMemory(FakeTextureFileName, tmpPixels,
 									    FontCharsList.front()->Width,
 									    FontCharsList.front()->Height,
-									    4, 0, 0, 0, false);
+									    4, eTextureCompressionType::NONE,
+									    0, 0, false);
 	}
 
 	std::cout << "Font character was created for size: "
@@ -363,7 +364,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0,
 			  eTextureWrapMode::CLAMP_TO_EDGE, true, eAlphaCreateMode::GREYSC, false);
 	GLtexture FontTexture = vw_CreateTextureFromMemory("auto_generated_texture_for_fonts", DIB,
-							   FontTextureWidth, FontTextureHeight, 4, 0);
+							   FontTextureWidth, FontTextureHeight, 4);
 	if (!FontTexture) {
 		std::cerr << __func__ << "(): " << "Can't create font texture.\n";
 		return ERR_MEM;

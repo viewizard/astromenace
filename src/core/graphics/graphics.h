@@ -197,6 +197,12 @@ enum class eTextureCombinerOp : GLint {
 	ADD = GL_ADD
 };
 
+enum class eTextureCompressionType : int {
+	NONE = 0,
+	S3TC = 1,
+	BPTC = 2
+};
+
 enum class eMaterialParameter : GLenum {
 	AMBIENT = GL_AMBIENT,
 	DIFFUSE = GL_DIFFUSE,
@@ -369,7 +375,8 @@ void vw_SetColorMask(bool red, bool green, bool blue, bool alpha);
  */
 
 // Create texture.
-GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int Bytes, int CompressionType);
+GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int Bytes,
+			  eTextureCompressionType CompressionType);
 // Select active texture unit (starts from 0, for GL_TEXTURE0 unit).
 void vw_SelectActiveTextureUnit(GLenum Unit);
 // Bind texture for particular texture unit (starts from 0, for GL_TEXTURE0 unit).

@@ -401,7 +401,7 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 /*
  * Load texture from file.
  */
-GLtexture vw_LoadTexture(const std::string &TextureName, int CompressionType,
+GLtexture vw_LoadTexture(const std::string &TextureName, eTextureCompressionType CompressionType,
 			 eLoadTextureAs LoadAs, int NeedResizeW, int NeedResizeH)
 {
 	if (TextureName.empty())
@@ -462,8 +462,8 @@ GLtexture vw_LoadTexture(const std::string &TextureName, int CompressionType,
  * Create texture from memory.
  */
 GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::vector<uint8_t> &DIB, int DIBWidth,
-				     int DIBHeight, int DIBChanels, int CompressionType, int NeedResizeW,
-				     int NeedResizeH, bool NeedDuplicateCheck)
+				     int DIBHeight, int DIBChanels, eTextureCompressionType CompressionType,
+				     int NeedResizeW, int NeedResizeH, bool NeedDuplicateCheck)
 {
 	if (TextureName.empty() || DIB.empty() || (DIBWidth <= 0) || (DIBHeight <= 0))
 		return 0;

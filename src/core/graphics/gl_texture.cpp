@@ -24,7 +24,8 @@
 
 *************************************************************************************/
 
-// TODO translate comments
+// NOTE GL_GENERATE_MIPMAP (since OpenGL 1.4)
+//      could be used to replace GL_GENERATE_MIPMAP_SGIS and gluBuild2DMipmaps()
 
 // NOTE GL_EXT_direct_state_access (since OpenGL 4.5)
 //      glTextureStorage2DEXT() + glTextureSubImage2DEXT() + glGenerateTextureMipmapEXT()
@@ -41,7 +42,7 @@
 // NOTE GL_TEXTURE_MAX_ANISOTROPY (since OpenGL 4.6)
 //      could be used to replace GL_TEXTURE_MAX_ANISOTROPY_EXT
 
-// NOTE glTexEnvi() deprecated in 3.1 core profile
+// NOTE glTexEnvi() deprecated in OpenGL 3.1 core profile
 //      (vw_SetTextureEnvMode(), vw_SetTextureBlendMode())
 
 #include "../texture/texture.h"
@@ -50,66 +51,65 @@
 #include "extensions.h"
 
 
-
-
-//------------------------------------------------------------------------------------
-// Создание текстуры
-//------------------------------------------------------------------------------------
-GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int Bytes, int CompressionType)
+/*
+ * Create texture.
+ */
+GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int Bytes,
+			  eTextureCompressionType CompressionType)
 {
 	if (!ustDIB)
 		return 0;
 
-	GLtexture TextureID{0};
+	GLenum Format{GL_RGB};
+	if (Bytes == 4)
+		Format = GL_RGBA;
 
+	GLenum InternalFormat{GL_RGB8};
+	switch (CompressionType) {
+	case eTextureCompressionType::BPTC:
+		if (!__GetDevCaps().TexturesCompressionBPTC) // FIXME switch to OpenGL 4.2 check
+			return 0;
+		if (Bytes == 4)
+			InternalFormat = GL_COMPRESSED_RGBA_BPTC_UNORM_ARB;
+		else
+			InternalFormat = GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB;
+		break;
+
+	case eTextureCompressionType::S3TC:
+		if (!__GetDevCaps().TexturesCompression) // FIXME switch to GL_EXT_texture_compression_s3tc check
+			return 0;
+		if (Bytes == 4)
+			InternalFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+		else
+			InternalFormat = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
+		break;
+
+	case eTextureCompressionType::NONE:
+		if (Bytes == 4)
+			InternalFormat = GL_RGBA8;
+		break;
+	}
+
+	GLtexture TextureID{0};
 	glGenTextures(1, &TextureID);
 	vw_BindTexture(0, TextureID);
 
-	int Format;
-	int InternalFormat;
-
-	if (vw_GetDevCaps()->TexturesCompression && (CompressionType > 0)) {
-		if (Bytes == 4) {
-			Format = GL_RGBA;
-			if (vw_GetDevCaps()->TexturesCompressionBPTC && (CompressionType > 1))
-				InternalFormat = GL_COMPRESSED_RGBA_BPTC_UNORM_ARB; // FIXME switch to OpenGL 4.2 check
-			else
-				InternalFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT; // FIXME switch to GL_EXT_texture_compression_s3tc check
-		} else {
-			Format = GL_RGB;
-			if (vw_GetDevCaps()->TexturesCompressionBPTC && (CompressionType > 1))
-				InternalFormat = GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB; // FIXME switch to OpenGL 4.2 check
-			else
-				InternalFormat = GL_COMPRESSED_RGB_S3TC_DXT1_EXT; // FIXME switch to GL_EXT_texture_compression_s3tc check
-		}
-	} else {
-		if (Bytes == 4) {
-			Format = GL_RGBA;
-			InternalFormat = GL_RGBA8;
-		} else {
-			// считаем 4 слоя (фактически их задействуем)
-			Format = GL_RGB;
-			InternalFormat = GL_RGB8;
-		}
-	}
-
 	if (MipMap) {
-		// используем по порядку наиболее новые решения при генерации мипмепов
+		// use newest available first
 		if (_glGenerateMipmap && _glTexStorage2D) {
-			// считаем сколько нужно создавать мипмапов
-			int NeedMipMapLvls = floor(log2(Width>Height?Width:Height)) + 1;
+			int NeedMipMapLvls = floor(log2(Width>Height ? Width : Height)) + 1;
 			_glTexStorage2D(GL_TEXTURE_2D, NeedMipMapLvls, InternalFormat, Width, Height);
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Format, GL_UNSIGNED_BYTE, ustDIB);
 			_glGenerateMipmap(GL_TEXTURE_2D);
 		} else if (_glGenerateMipmap) {
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format, GL_UNSIGNED_BYTE, ustDIB);
 			_glGenerateMipmap(GL_TEXTURE_2D);
-		} else if (vw_GetDevCaps()->HardwareMipMapGeneration) {
+		} else if (__GetDevCaps().HardwareMipMapGeneration) { // FIXME switch to SGIS_generate_mipmap check
 			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format, GL_UNSIGNED_BYTE, ustDIB);
 		} else
 			gluBuild2DMipmaps(GL_TEXTURE_2D, InternalFormat, Width, Height, Format, GL_UNSIGNED_BYTE, ustDIB);
-	} else { // без мипмепов
+	} else {
 		if (_glTexStorage2D) {
 			_glTexStorage2D(GL_TEXTURE_2D, 1, InternalFormat, Width, Height);
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Format, GL_UNSIGNED_BYTE, ustDIB);
@@ -145,9 +145,9 @@ void vw_BindTexture(GLenum Unit, GLtexture TextureID)
 	}
 }
 
-//------------------------------------------------------------------------------------
-// Delete
-//------------------------------------------------------------------------------------
+/*
+ * Delete texture.
+ */
 void vw_DeleteTexture(GLtexture TextureID)
 {
 	glDeleteTextures(1, &TextureID);
@@ -162,23 +162,26 @@ void vw_SetTextureBlendMode(eTextureCombinerName name, eTextureCombinerOp param)
 	glTexEnvi(GL_TEXTURE_ENV, static_cast<GLenum>(name),  static_cast<GLint>(param));
 }
 
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
+/*
+ * Set texture filtering mode.
+ */
 void vw_SetTextureFiltering(eTextureMinFilter MinFilter, eTextureMagFilter MagFilter)
 {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, static_cast<GLint>(MinFilter));
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, static_cast<GLint>(MagFilter));
 }
 
+/*
+ * Set texture filtering mode.
+ */
 void vw_SetTextureFiltering(const sTextureFilter &Filter)
 {
 	vw_SetTextureFiltering(Filter.Min, Filter.Mag);
 }
 
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
+/*
+ * Set texture Anisotropy Level.
+ */
 void vw_SetTextureAnisotropy(GLint AnisotropyLevel)
 {
 	if (__GetDevCaps().MaxAnisotropyLevel > 0) {
@@ -196,14 +199,17 @@ void vw_SetTextureAnisotropy(GLint AnisotropyLevel)
 	}
 }
 
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
+/*
+ * Set texture address mode.
+ */
 void vw_SetTextureAddressMode(eTextureWrapCoord coord, eTextureWrapMode mode)
 {
 	glTexParameteri(GL_TEXTURE_2D, static_cast<GLenum>(coord), static_cast<GLint>(mode));
 }
 
+/*
+ * Set texture address mode.
+ */
 void vw_SetTextureAddressMode(const sTextureWrap &wrap)
 {
 	vw_SetTextureAddressMode(eTextureWrapCoord::S, wrap.S);
@@ -211,9 +217,9 @@ void vw_SetTextureAddressMode(const sTextureWrap &wrap)
 	vw_SetTextureAddressMode(eTextureWrapCoord::R, wrap.R);
 }
 
-//------------------------------------------------------------------------------------
-// Ставим-убираем альфа тест
-//------------------------------------------------------------------------------------
+/*
+ * Set texture Alpha Test value that specifies a reference alpha value against which pixels are tested.
+ */
 void vw_SetTextureAlphaTest(bool flag, eCompareFunc func, GLclampf ref)
 {
 	if (flag) {
@@ -226,9 +232,9 @@ void vw_SetTextureAlphaTest(bool flag, eCompareFunc func, GLclampf ref)
 	}
 }
 
-//------------------------------------------------------------------------------------
-// Режим прозрачности
-//------------------------------------------------------------------------------------
+/*
+ * Set texture blending factor.
+ */
 void vw_SetTextureBlend(bool flag, eTextureBlendFactor sfactor, eTextureBlendFactor dfactor)
 {
 	if (!flag) {
@@ -242,26 +248,26 @@ void vw_SetTextureBlend(bool flag, eTextureBlendFactor sfactor, eTextureBlendFac
 	glBlendFunc(static_cast<GLenum>(sfactor), static_cast<GLenum>(dfactor));
 }
 
-//------------------------------------------------------------------------------------
-// установка режима и функции сравнения
-//------------------------------------------------------------------------------------
+/*
+ * Set texture compare mode.
+ */
 void vw_SetTextureCompare(eTextureCompareMode mode, eCompareFunc func)
 {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, static_cast<GLint>(mode));
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, static_cast<GLint>(func));
 }
 
-//------------------------------------------------------------------------------------
-// установка режима работы с компонентом глубины
-//------------------------------------------------------------------------------------
+/*
+ * Set texture depth mode.
+ */
 void vw_SetTextureDepthMode(eTextureDepthMode mode)
 {
 	glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, static_cast<GLint>(mode));
 }
 
-//------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------
+/*
+ * Set texture env mode.
+ */
 void vw_SetTextureEnvMode(eTextureEnvMode mode)
 {
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, static_cast<GLint>(mode));
