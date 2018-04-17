@@ -24,6 +24,10 @@
 
 *************************************************************************************/
 
+// NOTE glu.h should be removed after OpenGL 3.1 core profile switch,
+//      all glu functionality should be replaced:
+//      gluLookAt(), gluBuild2DMipmaps() and gluPerspective()
+
 #ifndef GraphicsOpenGL_H
 #define GraphicsOpenGL_H
 

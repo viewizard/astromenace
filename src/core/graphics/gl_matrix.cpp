@@ -24,7 +24,7 @@
 
 *************************************************************************************/
 
-// NOTE the matrix stack and related matrix manipulation functions deprecated in 3.1 core profile
+// NOTE the matrix stack and related matrix manipulation functions deprecated in OpenGL 3.1 core profile
 //      https://www.khronos.org/registry/OpenGL/specs/gl/glspec30.pdf
 //      E.1. PROFILES AND DEPRECATED FEATURES OF OPENGL 3.0
 
