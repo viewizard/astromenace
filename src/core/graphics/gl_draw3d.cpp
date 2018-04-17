@@ -28,6 +28,7 @@
 //      probably, we could render same type of objects with glDrawElementsInstanced()
 
 #include "graphics.h"
+#include "extensions.h"
 
 namespace {
 
@@ -41,7 +42,6 @@ GLuint LocalIndexBO{0};
 } // unnamed namespace
 
 extern int tmpPrimCountGL;
-extern PFNGLCLIENTACTIVETEXTUREARBPROC glClientActiveTexture_ARB;
 
 
 
@@ -172,7 +172,8 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 
 	if (TextQ > 0) { // текстурные коорд. есть...
 		for (int i=0; i<TextQ; i++) {
-			if (glClientActiveTexture_ARB != nullptr) glClientActiveTexture_ARB(GL_TEXTURE0+i);
+			if (_glClientActiveTexture)
+				_glClientActiveTexture(GL_TEXTURE0+i);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 			switch (TextCoordType) {
@@ -277,8 +278,8 @@ void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, 
 		// кол-во текстур
 		int TextQ = DataFormat & 0x000000F;
 		for (int i=TextQ-1; i>=0; i--) {
-			if (glClientActiveTexture_ARB != nullptr)
-				glClientActiveTexture_ARB(GL_TEXTURE0+i);
+			if (_glClientActiveTexture)
+				_glClientActiveTexture(GL_TEXTURE0+i);
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		}
 

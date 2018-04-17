@@ -37,6 +37,10 @@ Rules for functions and variables naming:
 
 #include "opengl.h"
 
+// OpenGL 1.3 (only what we need or would need in future)
+extern PFNGLACTIVETEXTUREPROC _glActiveTexture;
+extern PFNGLCLIENTACTIVETEXTUREPROC _glClientActiveTexture;
+
 // OpenGL 2.0 (only what we need or would need in future)
 extern PFNGLATTACHSHADERPROC _glAttachShader;
 extern PFNGLBINDATTRIBLOCATIONPROC _glBindAttribLocation;
@@ -97,12 +101,17 @@ extern PFNGLGENERATEMIPMAPPROC _glGenerateMipmap;
 extern PFNGLBLITFRAMEBUFFERPROC _glBlitFramebuffer;
 extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC _glRenderbufferStorageMultisample;
 
+// OpenGL 4.2 (only what we need or would need in future)
+extern PFNGLTEXSTORAGE2DPROC _glTexStorage2D;
+
 // GL_NV_framebuffer_multisample_coverage
 extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC _glRenderbufferStorageMultisampleCoverageNV;
 
 
+bool __Initialize_OpenGL_1_3();
 bool __Initialize_OpenGL_2_0();
 bool __Initialize_OpenGL_3_0();
+bool __Initialize_OpenGL_4_2();
 bool __Initialize_GL_NV_framebuffer_multisample_coverage();
 
 #endif // GraphicsExtensions_H

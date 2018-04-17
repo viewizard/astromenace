@@ -31,30 +31,32 @@
 	#define GL_GLEXT_LEGACY
 	#include <OpenGL/gl.h>
 	#include <OpenGL/glu.h>
-	// GL version can be defined by system gl.h header
-	#undef GL_VERSION_1_2
-	#undef GL_VERSION_1_3
-	#undef GL_VERSION_1_4
-	#undef GL_VERSION_1_5
-	#undef GL_VERSION_2_0
-	#undef GL_VERSION_2_1
-	#undef GL_VERSION_3_0
-	#undef GL_VERSION_3_1
-	#undef GL_VERSION_3_2
-	#undef GL_VERSION_3_3
-	#undef GL_VERSION_4_0
-	#undef GL_VERSION_4_1
-	#undef GL_VERSION_4_2
-	#undef GL_VERSION_4_3
-	#undef GL_VERSION_4_4
-	#undef GL_VERSION_4_5
-	#undef GL_VERSION_4_6
 #else
 	#define __glext_h_ // don't let gl.h include glext.h
 	#include <GL/gl.h>
 	#include <GL/glu.h>
 	#undef __glext_h_
 #endif
+
+// GL version can be defined by system gl.h header
+// undef them, since we need function's typedefs
+#undef GL_VERSION_1_3
+#undef GL_VERSION_1_4
+#undef GL_VERSION_1_5
+#undef GL_VERSION_2_0
+#undef GL_VERSION_2_1
+#undef GL_VERSION_3_0
+#undef GL_VERSION_3_1
+#undef GL_VERSION_3_2
+#undef GL_VERSION_3_3
+#undef GL_VERSION_4_0
+#undef GL_VERSION_4_1
+#undef GL_VERSION_4_2
+#undef GL_VERSION_4_3
+#undef GL_VERSION_4_4
+#undef GL_VERSION_4_5
+#undef GL_VERSION_4_6
+
 #include "glext.h" // provide glext.h version we need
 
 // alias for OpenGL variable types, in order to make code more clear

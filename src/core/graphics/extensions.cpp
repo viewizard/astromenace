@@ -27,6 +27,10 @@
 #include "../base.h"
 #include "opengl.h"
 
+// OpenGL 1.3 (only what we need or would need in future)
+PFNGLACTIVETEXTUREPROC _glActiveTexture{nullptr};
+PFNGLCLIENTACTIVETEXTUREPROC _glClientActiveTexture{nullptr};
+
 // OpenGL 2.0 (only what we need or would need in future)
 PFNGLATTACHSHADERPROC _glAttachShader{nullptr};
 PFNGLBINDATTRIBLOCATIONPROC _glBindAttribLocation{nullptr};
@@ -87,9 +91,31 @@ PFNGLGENERATEMIPMAPPROC _glGenerateMipmap{nullptr};
 PFNGLBLITFRAMEBUFFERPROC _glBlitFramebuffer{nullptr};
 PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC _glRenderbufferStorageMultisample{nullptr};
 
+// OpenGL 4.2 (only what we need or would need in future)
+PFNGLTEXSTORAGE2DPROC _glTexStorage2D{nullptr};
+
 // GL_NV_framebuffer_multisample_coverage
 PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC _glRenderbufferStorageMultisampleCoverageNV{nullptr};
 
+
+/*
+ * OpenGL 1.3 initialization (only what we need or would need in future).
+ */
+bool __Initialize_OpenGL_1_3()
+{
+	_glActiveTexture = (PFNGLACTIVETEXTUREPROC) SDL_GL_GetProcAddress("glActiveTexture");
+	_glClientActiveTexture = (PFNGLCLIENTACTIVETEXTUREPROC) SDL_GL_GetProcAddress("glClientActiveTexture");
+
+	if (!_glActiveTexture ||
+	    !_glClientActiveTexture) {
+		_glActiveTexture = nullptr;
+		_glClientActiveTexture = nullptr;
+
+		return false;
+	}
+
+	return true;
+}
 
 /*
  * OpenGL 2.0 initialization (only what we need or would need in future).
@@ -285,6 +311,16 @@ bool __Initialize_OpenGL_3_0()
 	}
 
 	return true;
+}
+
+/*
+ * OpenGL 4.2 initialization (only what we need or would need in future).
+ */
+bool __Initialize_OpenGL_4_2()
+{
+	_glTexStorage2D = (PFNGLTEXSTORAGE2DPROC) SDL_GL_GetProcAddress("glTexStorage2D");
+
+	return _glTexStorage2D;
 }
 
 /*

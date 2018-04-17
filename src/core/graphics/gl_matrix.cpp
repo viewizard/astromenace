@@ -24,6 +24,10 @@
 
 *************************************************************************************/
 
+// NOTE the matrix stack and related matrix manipulation functions deprecated in 3.1 core profile
+//      https://www.khronos.org/registry/OpenGL/specs/gl/glspec30.pdf
+//      E.1. PROFILES AND DEPRECATED FEATURES OF OPENGL 3.0
+
 /*
 We don't check pointers status, since we don't work with pointers
 but only provide them to OpenGL functions, let OpenGL check them.

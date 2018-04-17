@@ -50,8 +50,6 @@
 #include "extensions.h"
 
 
-extern PFNGLACTIVETEXTUREARBPROC glActiveTexture_ARB;
-extern PFNGLTEXSTORAGE2DPROC glTexStorage2DEXT;
 
 
 //------------------------------------------------------------------------------------
@@ -97,10 +95,10 @@ GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, i
 
 	if (MipMap) {
 		// используем по порядку наиболее новые решения при генерации мипмепов
-		if (_glGenerateMipmap && glTexStorage2DEXT) {
+		if (_glGenerateMipmap && _glTexStorage2D) {
 			// считаем сколько нужно создавать мипмапов
 			int NeedMipMapLvls = floor(log2(Width>Height?Width:Height)) + 1;
-			glTexStorage2DEXT(GL_TEXTURE_2D, NeedMipMapLvls, InternalFormat, Width, Height);
+			_glTexStorage2D(GL_TEXTURE_2D, NeedMipMapLvls, InternalFormat, Width, Height);
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Format, GL_UNSIGNED_BYTE, ustDIB);
 			_glGenerateMipmap(GL_TEXTURE_2D);
 		} else if (_glGenerateMipmap) {
@@ -112,8 +110,8 @@ GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, i
 		} else
 			gluBuild2DMipmaps(GL_TEXTURE_2D, InternalFormat, Width, Height, Format, GL_UNSIGNED_BYTE, ustDIB);
 	} else { // без мипмепов
-		if (glTexStorage2DEXT) {
-			glTexStorage2DEXT(GL_TEXTURE_2D, 1, InternalFormat, Width, Height);
+		if (_glTexStorage2D) {
+			_glTexStorage2D(GL_TEXTURE_2D, 1, InternalFormat, Width, Height);
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Format, GL_UNSIGNED_BYTE, ustDIB);
 		} else
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format, GL_UNSIGNED_BYTE, ustDIB);
@@ -127,8 +125,8 @@ GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, i
  */
 void vw_SelectActiveTextureUnit(GLenum Unit)
 {
-	if (glActiveTexture_ARB)
-		glActiveTexture_ARB(GL_TEXTURE0 + Unit);
+	if (_glActiveTexture)
+		_glActiveTexture(GL_TEXTURE0 + Unit);
 }
 
 /*

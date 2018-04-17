@@ -59,13 +59,6 @@ int PrimCountGL=0;
 
 
 
-// multitexture (OpenGL 1.3)
-PFNGLACTIVETEXTUREARBPROC		glActiveTexture_ARB = nullptr;
-PFNGLCLIENTACTIVETEXTUREARBPROC	glClientActiveTexture_ARB = nullptr;
-// GL_ARB_texture_storage (OpenGL 4.2)
-PFNGLTEXSTORAGE2DPROC 			glTexStorage2DEXT = nullptr;
-
-
 SDL_Window *window_SDL2 = nullptr;
 SDL_Window *vw_GetSDL2Windows()
 {
@@ -404,33 +397,23 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	// подключаем расширения
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	if (OpenGL_DevCaps.MaxMultTextures > 1) {
-		glActiveTexture_ARB = (PFNGLACTIVETEXTUREARBPROC) SDL_GL_GetProcAddress("glActiveTexture");
-		glClientActiveTexture_ARB = (PFNGLCLIENTACTIVETEXTUREARBPROC) SDL_GL_GetProcAddress("glClientActiveTexture");
-		if (glActiveTexture_ARB == nullptr || glClientActiveTexture_ARB == nullptr) {
-			OpenGL_DevCaps.MaxMultTextures = 1;
-			std::cerr << __func__ << "(): "
-				  << "Can't get proc address for glActiveTexture or glClientActiveTexture.\n\n";
-		}
-	}
+	bool OpenGL_1_3_supported = __Initialize_OpenGL_1_3();
+	bool OpenGL_2_0_supported = __Initialize_OpenGL_2_0();
+	bool OpenGL_3_0_supported = __Initialize_OpenGL_3_0();
+	bool OpenGL_4_2_supported = __Initialize_OpenGL_4_2();
 
-	if (OpenGL_DevCaps.TextureStorage) {
-		glTexStorage2DEXT = (PFNGLTEXSTORAGE2DPROC) SDL_GL_GetProcAddress("glTexStorage2D");
-		if (glTexStorage2DEXT == nullptr) glTexStorage2DEXT = (PFNGLTEXSTORAGE2DPROC) SDL_GL_GetProcAddress("glTexStorage2DEXT");
-		if (glTexStorage2DEXT == nullptr) {
-			OpenGL_DevCaps.TextureStorage = false;
-			std::cerr << __func__ << "(): " << "Can't get proc address for glTexStorage2DEXT.\n\n";
-		}
-	}
+	if (!OpenGL_1_3_supported)
+		OpenGL_DevCaps.MaxMultTextures = 1; // FIXME this should be revised
+
+	if (!OpenGL_4_2_supported)
+		OpenGL_DevCaps.TextureStorage = false; // FIXME this should be revised
 
 	// инициализация индекс буфера
 	Internal_InitializationLocalIndexData();
-	bool OpenGL_2_0_supported = __Initialize_OpenGL_2_0();
-	bool OpenGL_3_0_supported = __Initialize_OpenGL_3_0();
 
 	// иним шейдеры
-	if (OpenGL_DevCaps.GLSL100Supported)
-		OpenGL_DevCaps.GLSL100Supported = OpenGL_2_0_supported; // FIXME this should be revised
+	if (!OpenGL_2_0_supported)
+		OpenGL_DevCaps.GLSL100Supported = false; // FIXME this should be revised
 	// иним вбо
 	if (OpenGL_DevCaps.VBOSupported)
 		OpenGL_DevCaps.VBOSupported = Internal_InitializationBufferObjects();
