@@ -49,8 +49,8 @@ GLtexture vw_LoadTexture(const std::string &TextureName,
 			 eLoadTextureAs LoadAs = eLoadTextureAs::AUTO,
 			 int NeedResizeW = 0, int NeedResizeH = 0);
 // Create texture from memory.
-GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::vector<uint8_t> &DIB, int DIBWidth,
-				     int DIBHeight, int DIBChanels,
+GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::unique_ptr<uint8_t[]> &PixelsArray,
+				     int ImageWidth, int ImageHeight, int ImageChanels,
 				     eTextureCompressionType CompressionType = eTextureCompressionType::NONE,
 				     int NeedResizeW = 0, int NeedResizeH = 0, bool NeedDuplicateCheck = true);
 // Release texture.

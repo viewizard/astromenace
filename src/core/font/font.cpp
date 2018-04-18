@@ -249,14 +249,16 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 
 	if ((FontCharsList.front()->Width > 0) && (FontCharsList.front()->Height > 0)) {
 		// buffer for RGBA, data for font characters texture, initialize it with white color (255)
-		std::vector<uint8_t> tmpPixels(FontCharsList.front()->Width * FontCharsList.front()->Height * 4, 255 /*white*/);
+		std::unique_ptr<uint8_t[]> tmpPixels(new uint8_t[FontCharsList.front()->Width *
+								 FontCharsList.front()->Height * 4]);
+		memset(tmpPixels.get(), 255 /*white*/, FontCharsList.front()->Width * FontCharsList.front()->Height * 4);
 		// convert greyscale to RGB+Alpha (32bits), now we need correct only alpha channel
 		for (int j = 0; j < FontCharsList.front()->Height; j++) {
 			int StrideSrc = j * FontCharsList.front()->Width * 4;
 			int StrideDst = (FontCharsList.front()->Height - j - 1) * FontCharsList.front()->Width;
 			for (int i = 0; i < FontCharsList.front()->Width; i++) {
 				// alpha channel
-				memcpy(tmpPixels.data() + StrideSrc + i * 4 + 3,
+				memcpy(tmpPixels.get() + StrideSrc + i * 4 + 3,
 				       InternalFace->glyph->bitmap.buffer + StrideDst + i,
 				       1);
 			}
@@ -294,8 +296,10 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 	std::cout << "Font characters generation start.\n";
 
 	// buffer for RGBA, data for font characters texture
-	// make sure, DIB filled by black and alpha set to zero (0), or we will have white borders on each character
-	std::vector<uint8_t> DIB(FontTextureWidth * FontTextureHeight * 4, 0 /*black + transparent*/);
+	// make sure, tmpPixels filled by black and alpha set to zero (0),
+	// or we will have white borders on each character
+	std::unique_ptr<uint8_t[]> tmpPixels(new uint8_t[FontTextureWidth * FontTextureHeight * 4]);
+	memset(tmpPixels.get(), 0 /*black + transparent*/, FontTextureWidth * FontTextureHeight * 4);
 
 	// initial setup
 	if (FT_Set_Char_Size(InternalFace, InternalFontSize << 6, InternalFontSize << 6, 96, 96)) {
@@ -304,8 +308,8 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 	}
 
 	// create one large bitmap with all font characters from list
-	int CurrentDIBX{0};
-	int CurrentDIBY{0};
+	int CurrentPixelsX{0};
+	int CurrentPixelsY{0};
 	int EdgingSpace{2};
 	int MaxHeightInCurrentLine{0};
 	for (const auto &CurrentChar : CharsSetUTF32) {
@@ -322,13 +326,13 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 					 InternalFace->glyph->advance.x / 64.0f)));
 
 		// move to next line in bitmap if not enough space
-		if (CurrentDIBX + FontCharsList.front()->Width > FontTextureWidth) {
-			CurrentDIBX = 0;
-			CurrentDIBY += MaxHeightInCurrentLine + EdgingSpace;
+		if (CurrentPixelsX + FontCharsList.front()->Width > FontTextureWidth) {
+			CurrentPixelsX = 0;
+			CurrentPixelsY += MaxHeightInCurrentLine + EdgingSpace;
 			MaxHeightInCurrentLine = 0;
 		}
 		// looks like no more space left at all, fail
-		if (CurrentDIBY + FontCharsList.front()->Height > FontTextureHeight) {
+		if (CurrentPixelsY + FontCharsList.front()->Height > FontTextureHeight) {
 			std::cerr << __func__ << "(): " << "Can't generate all font chars in one texture.\n"
 				  << "Too many chars or too small texture size!\n";
 			break;
@@ -337,33 +341,33 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 		// copy glyph into bitmap
 		uint8_t ColorRGB[3]{255, 255, 255};
 		for (int j = 0; j < FontCharsList.front()->Height; j++) {
-			unsigned int tmpOffset = (FontTextureHeight - CurrentDIBY - j - 1) * FontTextureWidth * 4;
+			unsigned int tmpOffset = (FontTextureHeight - CurrentPixelsY - j - 1) * FontTextureWidth * 4;
 			for (int i = 0; i < FontCharsList.front()->Width; i++) {
-				memcpy(DIB.data() + tmpOffset + (CurrentDIBX + i) * 4,
+				memcpy(tmpPixels.get() + tmpOffset + (CurrentPixelsX + i) * 4,
 				       ColorRGB,
 				       3);
-				memcpy(DIB.data() + tmpOffset + (CurrentDIBX + i) * 4 + 3,
+				memcpy(tmpPixels.get() + tmpOffset + (CurrentPixelsX + i) * 4 + 3,
 				       InternalFace->glyph->bitmap.buffer + j * FontCharsList.front()->Width + i,
 				       1);
 			}
 		}
 
 		// setup new character
-		FontCharsList.front()->TexturePositionLeft = CurrentDIBX;
-		FontCharsList.front()->TexturePositionRight = CurrentDIBX + FontCharsList.front()->Width;
-		FontCharsList.front()->TexturePositionTop = CurrentDIBY;
-		FontCharsList.front()->TexturePositionBottom = CurrentDIBY + FontCharsList.front()->Height;
+		FontCharsList.front()->TexturePositionLeft = CurrentPixelsX;
+		FontCharsList.front()->TexturePositionRight = CurrentPixelsX + FontCharsList.front()->Width;
+		FontCharsList.front()->TexturePositionTop = CurrentPixelsY;
+		FontCharsList.front()->TexturePositionBottom = CurrentPixelsY + FontCharsList.front()->Height;
 
 		// detect new line position by height
 		if (MaxHeightInCurrentLine < FontCharsList.front()->Height)
 			MaxHeightInCurrentLine = FontCharsList.front()->Height;
-		CurrentDIBX += FontCharsList.front()->Width + EdgingSpace;
+		CurrentPixelsX += FontCharsList.front()->Width + EdgingSpace;
 	}
 
 	// create texture from bitmap
 	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0,
 			  eTextureWrapMode::CLAMP_TO_EDGE, true, eAlphaCreateMode::GREYSC, false);
-	GLtexture FontTexture = vw_CreateTextureFromMemory("auto_generated_texture_for_fonts", DIB,
+	GLtexture FontTexture = vw_CreateTextureFromMemory("auto_generated_texture_for_fonts", tmpPixels,
 							   FontTextureWidth, FontTextureHeight, 4);
 	if (!FontTexture) {
 		std::cerr << __func__ << "(): " << "Can't create font texture.\n";

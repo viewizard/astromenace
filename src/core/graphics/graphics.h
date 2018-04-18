@@ -375,7 +375,8 @@ void vw_SetColorMask(bool red, bool green, bool blue, bool alpha);
  */
 
 // Create texture.
-GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int Bytes,
+GLtexture vw_BuildTexture(const std::unique_ptr<uint8_t[]> &PixelsArray,
+			  GLsizei Width, GLsizei Height, bool MipMap, int Bytes,
 			  eTextureCompressionType CompressionType);
 // Select active texture unit (starts from 0, for GL_TEXTURE0 unit).
 void vw_SelectActiveTextureUnit(GLenum Unit);

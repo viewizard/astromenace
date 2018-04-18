@@ -24,6 +24,8 @@
 
 *************************************************************************************/
 
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
+
 #include "../vfs/vfs.h"
 
 namespace texture {
@@ -31,7 +33,7 @@ namespace texture {
 #define TGA_RGB		 2	// normal RGB (BGR) file
 #define TGA_RLE		10	// RLE file
 
-int ReadTGA(std::vector<uint8_t> &DIB, sFILE *pFile, int &DWidth, int &DHeight, int &DChanels)
+int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, sFILE *pFile, int &DWidth, int &DHeight, int &DChanels)
 {
 	uint8_t tmpTGAHeaderLength{0};
 	uint8_t tmpTGAImageType{0};	// RLE, RGB
@@ -58,11 +60,11 @@ int ReadTGA(std::vector<uint8_t> &DIB, sFILE *pFile, int &DWidth, int &DHeight, 
 		if((tmpBits == 24) || (tmpBits == 32)) {
 			DChanels = tmpBits / 8;
 			size_t tmpStride = DChanels * DWidth;
-			DIB.resize(tmpStride * DHeight);
+			PixelsArray.reset(new uint8_t[tmpStride * DHeight]);
 
 			// load line by line
 			for(int y = 0; y < DHeight; y++) {
-				uint8_t *pLine = DIB.data() + tmpStride * y;
+				uint8_t *pLine = PixelsArray.get() + tmpStride * y;
 				pFile->fread(pLine, tmpStride, 1);
 			}
 		} else {
@@ -74,7 +76,7 @@ int ReadTGA(std::vector<uint8_t> &DIB, sFILE *pFile, int &DWidth, int &DHeight, 
 		int colorsRead = 0;
 		DChanels = tmpBits / 8;
 
-		DIB.resize(DWidth * DHeight * DChanels);
+		PixelsArray.reset(new uint8_t[DWidth * DHeight * DChanels]);
 		std::vector<uint8_t> pColors(DChanels);
 
 		int i = 0;
@@ -87,9 +89,9 @@ int ReadTGA(std::vector<uint8_t> &DIB, sFILE *pFile, int &DWidth, int &DHeight, 
 				while(rleID && (i < DWidth * DHeight)) {
 					pFile->fread(pColors.data(), sizeof(pColors[0]) * DChanels, 1);
 
-					memcpy(DIB.data() + colorsRead , pColors.data(), sizeof(pColors[0]) * 3);
+					memcpy(PixelsArray.get() + colorsRead, pColors.data(), sizeof(pColors[0]) * 3);
 					if(tmpBits == 32)
-						DIB[colorsRead + 3] = pColors[3];
+						PixelsArray[colorsRead + 3] = pColors[3];
 
 					i++;
 					rleID--;
@@ -101,9 +103,9 @@ int ReadTGA(std::vector<uint8_t> &DIB, sFILE *pFile, int &DWidth, int &DHeight, 
 				pFile->fread(pColors.data(), sizeof(pColors[0]) * DChanels, 1);
 
 				while(rleID && (i < DWidth * DHeight)) {
-					memcpy(DIB.data() + colorsRead, pColors.data(), sizeof(pColors[0]) * 3);
+					memcpy(PixelsArray.get() + colorsRead, pColors.data(), sizeof(pColors[0]) * 3);
 					if(tmpBits == 32)
-						DIB[colorsRead + 3] = pColors[3];
+						PixelsArray[colorsRead + 3] = pColors[3];
 
 					i++;
 					rleID--;
@@ -118,9 +120,9 @@ int ReadTGA(std::vector<uint8_t> &DIB, sFILE *pFile, int &DWidth, int &DHeight, 
 
 	// swap colors (BGR -> RGB)
 	for (int i = 0; i < DWidth * DHeight * DChanels; i += DChanels) {
-		uint8_t TmpColorSwap{DIB[i]};
-		DIB[i] = DIB[i + 2];
-		DIB[i + 2] = TmpColorSwap;
+		uint8_t tmpColorSwap{PixelsArray[i]};
+		PixelsArray[i] = PixelsArray[i + 2];
+		PixelsArray[i + 2] = tmpColorSwap;
 	}
 
 	return 0;

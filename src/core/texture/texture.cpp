@@ -24,6 +24,8 @@
 
 *************************************************************************************/
 
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
+
 /*
 Note, all texture-related code aimed to 1 byte texture alignment.
 Plus, default OpenGL setup also aimed for 1 byte alignment:
@@ -31,7 +33,7 @@ glPixelStorei(GL_PACK_ALIGNMENT, 1);
 glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 Code work with VW2D and TGA images format without any issues.
-But, for example, BMP image format (that provide 4 byte dib alignment),
+But, for example, BMP image format (that provide 4 byte DIB alignment),
 could have an issues (at least for 24 bits per pixel images).
 
 This mean, if you add one more image format support, make sure you
@@ -82,7 +84,7 @@ std::unordered_map<GLtexture, sTexture> TexturesIDtoDataMap;
 } // unnamed namespace
 
 namespace texture {
-int ReadTGA(std::vector<uint8_t> &DIB, sFILE *pFile, int &DWidth, int &DHeight, int &DChanels);
+int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, sFILE *pFile, int &DWidth, int &DHeight, int &DChanels);
 } // namespace texture
 
 
@@ -192,9 +194,9 @@ static int PowerOfTwo(int Num)
 /*
  * Resize image to closest power of two size.
  */
-static void ResizeToPOT(std::vector<uint8_t> &DIB, sTexture &Texture)
+static void ResizeToPOT(std::unique_ptr<uint8_t[]> &PixelsArray, sTexture &Texture)
 {
-	if (DIB.empty())
+	if (!PixelsArray.get())
 		return;
 
 	// calculate closest power of two texture size
@@ -205,14 +207,14 @@ static void ResizeToPOT(std::vector<uint8_t> &DIB, sTexture &Texture)
 	    (potHeight == Texture.Height))
 		return;
 
-	// don't copy DIB, but move, since we need resize it on next step
-	std::vector<uint8_t> tmpDIB{std::move(DIB)};
-	DIB.resize(potWidth * potHeight * Texture.Bytes);
+	// don't copy pixel's array, but move, since we need resize it on next step
+	std::unique_ptr<uint8_t[]> tmpPixelsArray{std::move(PixelsArray)};
+	PixelsArray.reset(new uint8_t[potWidth * potHeight * Texture.Bytes]);
 
 	// fill new buffer with default color and alpha (if we have alpha channel)
 	uint8_t ColorF[]{ARedTex, AGreenTex, ABlueTex, 0};
 	for (int i = 0; i < potWidth * potHeight * Texture.Bytes; i += Texture.Bytes) {
-		memcpy(DIB.data() + i, ColorF, Texture.Bytes);
+		memcpy(PixelsArray.get() + i, ColorF, Texture.Bytes);
 	}
 
 	// calculate stride
@@ -222,7 +224,7 @@ static void ResizeToPOT(std::vector<uint8_t> &DIB, sTexture &Texture)
 	for (int y = 0; y < Texture.Height; y++) {
 		int tmpOffsetDst = (y + potHeight - Texture.Height) * potWidth * Texture.Bytes;
 		int tmpOffsetSrc = y * tmpStride;
-		memcpy(DIB.data() + tmpOffsetDst, tmpDIB.data() + tmpOffsetSrc, tmpStride);
+		memcpy(PixelsArray.get() + tmpOffsetDst, tmpPixelsArray.get() + tmpOffsetSrc, tmpStride);
 	}
 
 	// store new width and height
@@ -233,22 +235,22 @@ static void ResizeToPOT(std::vector<uint8_t> &DIB, sTexture &Texture)
 /*
  * Resize image to custom size.
  */
-static void ResizeImage(int newWidth, int newHeight, std::vector<uint8_t> &DIB, sTexture &Texture)
+static void ResizeImage(int newWidth, int newHeight, std::unique_ptr<uint8_t[]> &PixelsArray, sTexture &Texture)
 {
-	if (DIB.empty() || ((newWidth == Texture.Width) && (newHeight == Texture.Height)))
+	if (!PixelsArray.get() || ((newWidth == Texture.Width) && (newHeight == Texture.Height)))
 		return;
 
-	// don't copy DIB, but move, since we need resize it on next step
-	std::vector<uint8_t> tmpDIB{std::move(DIB)};
-	DIB.resize(newWidth * newHeight * Texture.Bytes);
+	// don't copy PixelsArray, but move, since we need resize it on next step
+	std::unique_ptr<uint8_t[]> tmpPixelsArray{std::move(PixelsArray)};
+	PixelsArray.reset(new uint8_t[newWidth * newHeight * Texture.Bytes]);
 
 	// change size with nearest neighbor resizing algorithm for speed
 	for (int j = 0; j < newHeight; j++) {
 		int tmpOffset = ((j * Texture.Height) / newHeight) * Texture.Width;
 		for (int i = 0; i < newWidth; i++) {
-			memcpy(DIB.data() + (i + j * newWidth) * Texture.Bytes,
-			       tmpDIB.data() + (tmpOffset + i * Texture.Width / newWidth) * Texture.Bytes,
-			       sizeof(DIB[0]) * Texture.Bytes);
+			memcpy(PixelsArray.get() + (i + j * newWidth) * Texture.Bytes,
+			       tmpPixelsArray.get() + (tmpOffset + i * Texture.Width / newWidth) * Texture.Bytes,
+			       sizeof(PixelsArray.get()[0]) * Texture.Bytes);
 		}
 	}
 
@@ -260,14 +262,14 @@ static void ResizeImage(int newWidth, int newHeight, std::vector<uint8_t> &DIB, 
 /*
  * Create alpha channel.
  */
-static void CreateAlpha(std::vector<uint8_t> &DIB, sTexture &Texture, eAlphaCreateMode AlphaFlag)
+static void CreateAlpha(std::unique_ptr<uint8_t[]> &PixelsArray, sTexture &Texture, eAlphaCreateMode AlphaFlag)
 {
-	if (DIB.empty())
+	if (!PixelsArray.get())
 		return;
 
-	// don't copy DIB, but move, since we need resize it on next step
-	std::vector<uint8_t> tmpDIB{std::move(DIB)};
-	DIB.resize(Texture.Width * Texture.Height * 4);
+	// don't copy pixel's array, but move, since we need resize it on next step
+	std::unique_ptr<uint8_t[]> tmpPixelsArray{std::move(PixelsArray)};
+	PixelsArray.reset(new uint8_t[Texture.Width * Texture.Height * 4]);
 
 	for(int i = 0; i < Texture.Height; i++) {
 		int tmpOffsetDst = Texture.Width * 4 * i;
@@ -275,27 +277,30 @@ static void CreateAlpha(std::vector<uint8_t> &DIB, sTexture &Texture, eAlphaCrea
 
 		for(int j2 = 0; j2 < Texture.Width; j2++) {
 			// copy color
-			memcpy(DIB.data() + tmpOffsetDst, tmpDIB.data() + tmpOffsetSrc, sizeof(DIB[0]) * 3);
+			memcpy(PixelsArray.get() + tmpOffsetDst,
+			       tmpPixelsArray.get() + tmpOffsetSrc,
+			       sizeof(PixelsArray.get()[0]) * 3);
 
 			// create alpha
 			switch(AlphaFlag) {
 			case eAlphaCreateMode::GREYSC:
-				DIB[tmpOffsetDst + 3] = (uint8_t)(((float)DIB[tmpOffsetDst] / 255) * 28) +
-							(uint8_t)(((float)DIB[tmpOffsetDst + 1] / 255) * 150) +
-							(uint8_t)(((float)DIB[tmpOffsetDst + 2] / 255) * 76);
+				PixelsArray.get()[tmpOffsetDst + 3] =
+						(uint8_t)(((float)PixelsArray.get()[tmpOffsetDst] / 255) * 28) +
+						(uint8_t)(((float)PixelsArray.get()[tmpOffsetDst + 1] / 255) * 150) +
+						(uint8_t)(((float)PixelsArray.get()[tmpOffsetDst + 2] / 255) * 76);
 				break;
 
 			case eAlphaCreateMode::EQUAL:
-				if ((ABlueTex == DIB[tmpOffsetDst]) &&
-				    (AGreenTex == DIB[tmpOffsetDst + 1]) &&
-				    (ARedTex == DIB[tmpOffsetDst + 2]))
-					DIB[tmpOffsetDst + 3] = 0;
+				if ((ABlueTex == PixelsArray.get()[tmpOffsetDst]) &&
+				    (AGreenTex == PixelsArray.get()[tmpOffsetDst + 1]) &&
+				    (ARedTex == PixelsArray.get()[tmpOffsetDst + 2]))
+					PixelsArray.get()[tmpOffsetDst + 3] = 0;
 				else
-					DIB[tmpOffsetDst + 3] = 255;
+					PixelsArray.get()[tmpOffsetDst + 3] = 255;
 				break;
 
 			default:
-				DIB[tmpOffsetDst + 3] = 255;
+				PixelsArray.get()[tmpOffsetDst + 3] = 255;
 				break;
 			}
 
@@ -311,21 +316,23 @@ static void CreateAlpha(std::vector<uint8_t> &DIB, sTexture &Texture, eAlphaCrea
 /*
  * Remove alpha channel.
  */
-static void RemoveAlpha(std::vector<uint8_t> &DIB, sTexture &Texture)
+static void RemoveAlpha(std::unique_ptr<uint8_t[]> &PixelsArray, sTexture &Texture)
 {
-	if (DIB.empty())
+	if (!PixelsArray.get())
 		return;
 
-	// don't copy DIB, but move, since we need resize it on next step
-	std::vector<uint8_t> tmpDIB{std::move(DIB)};
-	DIB.resize(Texture.Width * Texture.Height * 3);
+	// don't copy pixel's array, but move, since we need resize it on next step
+	std::unique_ptr<uint8_t[]> tmpPixelsArray{std::move(PixelsArray)};
+	PixelsArray.reset(new uint8_t[Texture.Width * Texture.Height * 3]);
 
 	for(int i = 0; i < Texture.Height; i++) {
 		int tmpOffsetDst = Texture.Width * 3 * i;
 		int tmpOffsetSrc = Texture.Width * 4 * i;
 
 		for(int j = 0; j < Texture.Width; j++) {
-			memcpy(DIB.data() + tmpOffsetDst, tmpDIB.data() + tmpOffsetSrc, sizeof(DIB[0]) * 3);
+			memcpy(PixelsArray.get() + tmpOffsetDst,
+			       tmpPixelsArray.get() + tmpOffsetSrc,
+			       sizeof(PixelsArray.get()[0]) * 3);
 
 			tmpOffsetDst += 3;
 			tmpOffsetSrc += 4;
@@ -347,7 +354,7 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 	int tmpWidth{0};
 	int tmpHeight{0};
 	int tmpChanels{0};
-	std::vector<uint8_t> tmpImage{};
+	std::unique_ptr<uint8_t[]> tmpPixelsArray{};
 	eLoadTextureAs LoadAs{eLoadTextureAs::TGA};
 
 	std::unique_ptr<sFILE> pFile = vw_fopen(SrcName);
@@ -364,7 +371,7 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 
 	switch (LoadAs) {
 	case eLoadTextureAs::TGA:
-		texture::ReadTGA(tmpImage, pFile.get(), tmpWidth, tmpHeight, tmpChanels);
+		texture::ReadTGA(tmpPixelsArray, pFile.get(), tmpWidth, tmpHeight, tmpChanels);
 		break;
 
 	default:
@@ -372,7 +379,7 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 		return;
 	}
 
-	if (tmpImage.empty()) {
+	if (!tmpPixelsArray.get()) {
 		std::cerr << __func__ << "(): " << "Unable to load " << SrcName << "\n";
 		return;
 	}
@@ -393,7 +400,7 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 	SDL_RWwrite(FileVW2D, &tmpWidth, sizeof(tmpWidth), 1);
 	SDL_RWwrite(FileVW2D, &tmpHeight, sizeof(tmpHeight), 1);
 	SDL_RWwrite(FileVW2D, &tmpChanels, sizeof(tmpChanels), 1);
-	SDL_RWwrite(FileVW2D, tmpImage.data(), tmpWidth * tmpHeight * tmpChanels, 1);
+	SDL_RWwrite(FileVW2D, tmpPixelsArray.get(), tmpWidth * tmpHeight * tmpChanels, 1);
 
 	SDL_RWclose(FileVW2D);
 }
@@ -410,7 +417,9 @@ GLtexture vw_LoadTexture(const std::string &TextureName, eTextureCompressionType
 	int DWidth{0};
 	int DHeight{0};
 	int DChanels{0};
-	std::vector<uint8_t> tmpImage{};
+	// std::unique_ptr, we need only memory allocation without container's features
+	// don't use std::vector here, since it allocates AND value-initializes
+	std::unique_ptr<uint8_t[]> tmpPixelsArray{};
 
 	std::unique_ptr<sFILE> pFile = vw_fopen(TextureName);
 	if (!pFile) {
@@ -431,7 +440,7 @@ GLtexture vw_LoadTexture(const std::string &TextureName, eTextureCompressionType
 	// load texture
 	switch(LoadAs) {
 	case eLoadTextureAs::TGA:
-		texture::ReadTGA(tmpImage, pFile.get(), DWidth, DHeight, DChanels);
+		texture::ReadTGA(tmpPixelsArray, pFile.get(), DWidth, DHeight, DChanels);
 		break;
 
 	case eLoadTextureAs::VW2D:
@@ -439,33 +448,34 @@ GLtexture vw_LoadTexture(const std::string &TextureName, eTextureCompressionType
 		pFile->fread(&DWidth, sizeof(DWidth), 1);
 		pFile->fread(&DHeight, sizeof(DHeight), 1);
 		pFile->fread(&DChanels, sizeof(DChanels), 1);
-		tmpImage.resize(DWidth * DHeight * DChanels);
-		pFile->fread(tmpImage.data(), DWidth * DHeight * DChanels, 1);
+		tmpPixelsArray.reset(new uint8_t[DWidth * DHeight * DChanels]);
+		pFile->fread(tmpPixelsArray.get(), DWidth * DHeight * DChanels, 1);
 		break;
 
 	default:
 		return 0;
 	}
 
-	if (tmpImage.empty()) {
+	if (!tmpPixelsArray.get()) {
 		std::cerr << __func__ << "(): " << "Unable to load " << TextureName << "\n";
 		return 0;
 	}
 
 	vw_fclose(pFile);
 
-	return vw_CreateTextureFromMemory(TextureName, tmpImage, DWidth, DHeight, DChanels,
+	return vw_CreateTextureFromMemory(TextureName, tmpPixelsArray, DWidth, DHeight, DChanels,
 					  CompressionType, NeedResizeW, NeedResizeH);
 }
 
 /*
  * Create texture from memory.
  */
-GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::vector<uint8_t> &DIB, int DIBWidth,
-				     int DIBHeight, int DIBChanels, eTextureCompressionType CompressionType,
+GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::unique_ptr<uint8_t[]> &PixelsArray,
+				     int ImageWidth, int ImageHeight, int ImageChanels,
+				     eTextureCompressionType CompressionType,
 				     int NeedResizeW, int NeedResizeH, bool NeedDuplicateCheck)
 {
-	if (TextureName.empty() || DIB.empty() || (DIBWidth <= 0) || (DIBHeight <= 0))
+	if (TextureName.empty() || !PixelsArray.get() || (ImageWidth <= 0) || (ImageHeight <= 0))
 		return 0;
 
 	// check for availability, probably, we already have it loaded
@@ -478,20 +488,20 @@ GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::vector
 	}
 
 	sTexture newTexture{};
-	newTexture.Width = DIBWidth;
-	newTexture.Height = DIBHeight;
-	newTexture.Bytes = DIBChanels;
+	newTexture.Width = ImageWidth;
+	newTexture.Height = ImageHeight;
+	newTexture.Bytes = ImageChanels;
 
 	// if we have alpha channel, but don't need them - remove
 	if ((newTexture.Bytes == 4) && !AlphaTex)
-		RemoveAlpha(DIB, newTexture);
+		RemoveAlpha(PixelsArray, newTexture);
 	// if we don't have alpha channel, but need them - create
 	else if ((newTexture.Bytes == 3) && (AlphaTex))
-		CreateAlpha(DIB, newTexture, AFlagTex);
+		CreateAlpha(PixelsArray, newTexture, AFlagTex);
 
 	// Note, in case of resize, we should provide width and height (but not just one of them).
 	if (NeedResizeW && NeedResizeH)
-		ResizeImage(NeedResizeW, NeedResizeH, DIB, newTexture);
+		ResizeImage(NeedResizeW, NeedResizeH, PixelsArray, newTexture);
 
 	// in case we change size, it is important to store "source" (initial) size
 	// that need for 2D rendering calculation, when we operate with pixels
@@ -501,9 +511,9 @@ GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::vector
 
 	// if hardware don't support NPOT textures, forced to resize them manually
 	if (!vw_GetDevCaps()->TextureNPOTSupported)
-		ResizeToPOT(DIB, newTexture);
+		ResizeToPOT(PixelsArray, newTexture);
 
-	GLtexture TextureID = vw_BuildTexture(DIB.data(), newTexture.Width, newTexture.Height,
+	GLtexture TextureID = vw_BuildTexture(PixelsArray, newTexture.Width, newTexture.Height,
 					      MipMapTex, newTexture.Bytes, CompressionType);
 
 	if (!TextureID)

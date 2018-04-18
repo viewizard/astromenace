@@ -54,10 +54,11 @@
 /*
  * Create texture.
  */
-GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, int Bytes,
+GLtexture vw_BuildTexture(const std::unique_ptr<uint8_t[]> &PixelsArray,
+			  GLsizei Width, GLsizei Height, bool MipMap, int Bytes,
 			  eTextureCompressionType CompressionType)
 {
-	if (!ustDIB)
+	if (!PixelsArray.get())
 		return 0;
 
 	GLenum Format{GL_RGB};
@@ -97,24 +98,30 @@ GLtexture vw_BuildTexture(uint8_t *ustDIB, int Width, int Height, bool MipMap, i
 	if (MipMap) {
 		// use newest available first
 		if (_glGenerateMipmap && _glTexStorage2D) {
-			int NeedMipMapLvls = floor(log2(Width>Height ? Width : Height)) + 1;
+			int NeedMipMapLvls = floor(log2((Width > Height) ? Width : Height)) + 1;
 			_glTexStorage2D(GL_TEXTURE_2D, NeedMipMapLvls, InternalFormat, Width, Height);
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Format, GL_UNSIGNED_BYTE, ustDIB);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Format,
+					GL_UNSIGNED_BYTE, PixelsArray.get());
 			_glGenerateMipmap(GL_TEXTURE_2D);
 		} else if (_glGenerateMipmap) {
-			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format, GL_UNSIGNED_BYTE, ustDIB);
+			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format,
+				     GL_UNSIGNED_BYTE, PixelsArray.get());
 			_glGenerateMipmap(GL_TEXTURE_2D);
 		} else if (__GetDevCaps().HardwareMipMapGeneration) { // FIXME switch to SGIS_generate_mipmap check
 			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
-			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format, GL_UNSIGNED_BYTE, ustDIB);
+			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format,
+				     GL_UNSIGNED_BYTE, PixelsArray.get());
 		} else
-			gluBuild2DMipmaps(GL_TEXTURE_2D, InternalFormat, Width, Height, Format, GL_UNSIGNED_BYTE, ustDIB);
+			gluBuild2DMipmaps(GL_TEXTURE_2D, InternalFormat, Width, Height, Format,
+					  GL_UNSIGNED_BYTE, PixelsArray.get());
 	} else {
 		if (_glTexStorage2D) {
 			_glTexStorage2D(GL_TEXTURE_2D, 1, InternalFormat, Width, Height);
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Format, GL_UNSIGNED_BYTE, ustDIB);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Format,
+					GL_UNSIGNED_BYTE, PixelsArray.get());
 		} else
-			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format, GL_UNSIGNED_BYTE, ustDIB);
+			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format,
+				     GL_UNSIGNED_BYTE, PixelsArray.get());
 	}
 
 	return TextureID;
