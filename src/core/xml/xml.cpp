@@ -44,7 +44,12 @@ const std::string EndLine{"\r\n"};
 /*
  * Line number in XML file.
  */
-#ifdef gamedebug
+#ifdef NDEBUG
+static unsigned int GetLineNumber(const std::string &UNUSED(Buffer), unsigned int UNUSED(Pos))
+{
+	return 0;
+}
+#else
 static unsigned int GetLineNumber(const std::string &Buffer, unsigned int Pos)
 {
 	unsigned int LineNumber = 1;
@@ -56,12 +61,7 @@ static unsigned int GetLineNumber(const std::string &Buffer, unsigned int Pos)
 
 	return LineNumber;
 }
-#else
-static unsigned int GetLineNumber(const std::string &UNUSED(Buffer), unsigned int UNUSED(Pos))
-{
-	return 0;
-}
-#endif // gamedebug
+#endif // NDEBUG
 
 /*
  * Parce tag line.

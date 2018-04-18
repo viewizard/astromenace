@@ -81,7 +81,7 @@ bool vw_InitAudio()
 	std::cout << "Version    : " << alGetString(AL_VERSION) << "\n";
 	std::cout << "ALut ver   : " << alutGetMajorVersion() << "." << alutGetMinorVersion() << "\n";
 
-#ifdef gamedebug
+#ifndef NDEBUG
 	// print all supported OpenAL extensions (one per line)
 	if (alGetString(AL_EXTENSIONS)) {
 		std::string extensions{(char *)alGetString(AL_EXTENSIONS)};
@@ -91,7 +91,7 @@ bool vw_InitAudio()
 			std::cout << "Supported OpenAL extensions:\n" << extensions.c_str() << "\n";
 		}
 	}
-#endif // gamedebug
+#endif // NDEBUG
 
 	std::cout << "\n";
 

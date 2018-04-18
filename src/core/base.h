@@ -72,6 +72,9 @@ struct sRGBCOLOR {
 #include <ctime>
 #include <functional>
 
+// don't setup NDEBUG in sources, use definition in build system instead
+#include <cassert>
+
 // error codes
 #define ERR_PARAMETERS		-1	// function's parameters related issue
 #define ERR_FILE_NOT_FOUND	-2	// file not found

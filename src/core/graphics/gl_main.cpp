@@ -344,7 +344,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 
 
 
-#ifdef gamedebug
+#ifndef NDEBUG
 	// print all supported OpenGL extensions (one per line)
 	if (glGetString(GL_EXTENSIONS) != nullptr) {
 		std::string extensions{(char *)glGetString(GL_EXTENSIONS)};
@@ -353,7 +353,7 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 			std::cout << "Supported OpenGL extensions:\n" << extensions.c_str() << "\n";
 		}
 	}
-#endif // gamedebug
+#endif // NDEBUG
 
 	std::cout << "\n";
 

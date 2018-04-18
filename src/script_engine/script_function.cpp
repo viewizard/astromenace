@@ -200,24 +200,25 @@ void SetShowDeleteOnHide(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *x
 //-----------------------------------------------------------------------------
 // DebugInformation
 //-----------------------------------------------------------------------------
-#ifndef gamedebug
+#ifdef NDEBUG
 void SetDebugInformation(cObject3D *UNUSED(Object), sXMLEntry *UNUSED(xmlEntry))
-#else
-void SetDebugInformation(cObject3D *Object, sXMLEntry *xmlEntry)
-#endif //gamedebug
 {
 	// не нужно ничего устанавливать, выходим
-	if (!Script->ShowDebugModeLine) return;
+	if (!Script->ShowDebugModeLine)
+		return;
 
-#ifndef gamedebug
-	std::cerr << __func__ << "(): " << "XML don't count lines, uncomment \"#define gamedebug\"\n"
-		  << "line in config.h file and re-compile game first.\n";
 	return;
+}
 #else
-	// преобразовываем число в строку
+void SetDebugInformation(cObject3D *Object, sXMLEntry *xmlEntry)
+{
+	// не нужно ничего устанавливать, выходим
+	if (!Script->ShowDebugModeLine)
+		return;
+
 	std::string buffer{std::to_string(xmlEntry->LineNumber)};
 
 	Object->DebugInfo = new char[buffer.size()+1];
 	strcpy(Object->DebugInfo, buffer.c_str());
-#endif //gamedebug
 }
+#endif // NDEBUG

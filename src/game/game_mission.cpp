@@ -187,7 +187,6 @@ void GameDrawMissionTitle()
 
 	sRECT SrcRect, DstRect;
 
-	// преобразовываем число в строку
 	std::string buffer{std::to_string(MissionTitleNum)};
 
 	// вывод надписи Mission

@@ -256,13 +256,13 @@ std::unordered_set<char32_t> &vw_FindCharsSetForLanguage()
 	// unconditional rehash, at this line we have not rehashed set
 	CharsSetForLanguage.rehash(0);
 
-#ifdef gamedebug
+#ifndef NDEBUG
 	for (const auto UTF32 : CharsSetForLanguage) {
 		std::cout << "Detected character:  "
 			  << ConvertUTF8.to_bytes(UTF32) << "  "
 			  << "0x" << std::uppercase << std::hex << UTF32 << std::dec << "\n";
 	}
-#endif // gamedebug
+#endif // NDEBUG
 
 	return CharsSetForLanguage;
 }

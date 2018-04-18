@@ -65,10 +65,4 @@
 //#define default_font_family "FreeSans"
 //#define default_font_family "FreeSerif"
 
-
-
-
-// more actions and text outputs with debug information for bug hunting
-// #define gamedebug
-
 #endif /* CONFIG_H */

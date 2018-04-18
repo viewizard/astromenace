@@ -1256,9 +1256,9 @@ loop:
 			case SDL_TEXTINPUT:
 				// устанавливаем текущий юникод нажатой клавиши
 				vw_SetCurrentUnicodeChar(event.text.text);
-#ifdef gamedebug
+#ifndef NDEBUG
 				std::cout << "TextInput, Unicode: " << event.text.text << "\n";
-#endif // gamedebug
+#endif // NDEBUG
 				break;
 			default:
 				break;
