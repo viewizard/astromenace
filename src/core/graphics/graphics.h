@@ -414,7 +414,7 @@ void vw_SetTextureDepthMode(eTextureDepthMode mode);
 // Send (draw) vertices.
 void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *VertexArray, int Stride,
 		     unsigned int VertexBO = 0, unsigned int RangeStart = 0, unsigned int *IndexArray = nullptr,
-		     unsigned int IndexBO = 0, unsigned int VAO = 0);
+		     unsigned int IndexBO = 0, GLuint VAO = 0);
 // Set color.
 void vw_SetColor(float nRed, float nGreen, float nBlue, float nAlpha);
 // Set what facets can be culled.
@@ -482,12 +482,12 @@ void vw_DeleteBufferObject(unsigned int &Buffer);
  */
 
 // Build vertex array object.
-bool vw_BuildVAO(unsigned int &VAO, int NumVertices, int DataFormat, void *VertexArray, int Stride, unsigned int VBO,
-		 unsigned int RangeStart, unsigned int *DataIndex, unsigned int DataIndexVBO);
+bool vw_BuildVAO(GLuint &VAO, int NumVertices, int DataFormat, void *VertexArray, int Stride, unsigned int VertexBO,
+		 unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO);
 // Bind vertex array object.
-void vw_BindVAO(unsigned int VAO);
+void vw_BindVAO(GLuint VAO);
 // Delete vertex array object.
-void vw_DeleteVAO(unsigned int &VAO);
+void vw_DeleteVAO(GLuint &VAO);
 
 /*
  * FBO.

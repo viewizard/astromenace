@@ -53,6 +53,6 @@ sDevCaps &__GetDevCaps();
 GLuint *__SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *VertexArray,
 					       int Stride, unsigned int VertexBO, unsigned int RangeStart,
 					       unsigned int *IndexArray, unsigned int IndexBO);
-void __SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, unsigned int VAO);
+void __SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, GLuint VAO);
 
 #endif // GraphicsInternal_H

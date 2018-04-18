@@ -28,6 +28,7 @@
 #define MODEL3D_H
 
 #include "../base.h"
+#include "../graphics/opengl.h"
 
 struct sVECTOR3D;
 
@@ -73,7 +74,7 @@ struct sObjectBlock {
 	std::shared_ptr<unsigned> IndexArray{}; // unsigned[], make sure, that custom deleter are used
 	unsigned int IBO{0};
 	// vao-related
-	unsigned int VAO{0};
+	GLuint VAO{0};
 
 	// for explosion we need pre-generated vertex array with small triangles,
 	// in this case, we could create cool looking effects, when enemies disintegrate
@@ -104,7 +105,7 @@ public:
 	unsigned int GlobalIndexArrayCount{0};
 	unsigned int GlobalIBO{0};
 	// vao-related
-	unsigned int GlobalVAO{0};
+	GLuint GlobalVAO{0};
 
 private:
 	// Don't allow direct new/delete usage in code, only vw_LoadModel3D()

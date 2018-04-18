@@ -210,7 +210,7 @@ public:
 	unsigned int	GlobalVBO{0};
 	std::shared_ptr<unsigned> GlobalIndexArray{}; // unsigned[], make sure, that custom deleter are used
 	unsigned int	GlobalIBO{0};
-	unsigned int	GlobalVAO{0};
+	GLuint GlobalVAO{0};
 	// минимальное расстояние (квадрат) с которого надо рисовать пообъектно, если -1 всегда рисовать только пообъектно
 	float		PromptDrawDist2{-1.0f};
 	int		InternalLights{0}; // кол-во внутренних источников света

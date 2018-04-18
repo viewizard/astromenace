@@ -37,8 +37,8 @@
 /*
  * Build vertex array object.
  */
-bool vw_BuildVAO(unsigned int &VAO, int NumVertices, int DataFormat, void *VertexArray, int Stride, unsigned int VBO,
-		 unsigned int RangeStart, unsigned int *DataIndex, unsigned int DataIndexVBO)
+bool vw_BuildVAO(GLuint &VAO, int NumVertices, int DataFormat, void *VertexArray, int Stride, unsigned int VertexBO,
+		 unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO)
 {
 	if (!_glGenVertexArrays ||
 	    !_glIsVertexArray)
@@ -47,11 +47,11 @@ bool vw_BuildVAO(unsigned int &VAO, int NumVertices, int DataFormat, void *Verte
 	_glGenVertexArrays(1, &VAO);
 
 	vw_BindVAO(VAO);
-	__SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, VertexArray, Stride, VBO,
-					       RangeStart, DataIndex, DataIndexVBO);
+	__SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, VertexArray, Stride, VertexBO,
+					       RangeStart, IndexArray, IndexBO);
 
 	vw_BindVAO(0);
-	__SendVertices_DisableStatesAndPointers(DataFormat, VBO, 0);
+	__SendVertices_DisableStatesAndPointers(DataFormat, VertexBO, 0);
 
 	if (!_glIsVertexArray(VAO))
 		return false;
@@ -62,7 +62,7 @@ bool vw_BuildVAO(unsigned int &VAO, int NumVertices, int DataFormat, void *Verte
 /*
  * Bind vertex array object.
  */
-void vw_BindVAO(unsigned int VAO)
+void vw_BindVAO(GLuint VAO)
 {
 	// don't call glIsVertexArray() here, for best speed
 	if (!_glBindVertexArray)
@@ -74,7 +74,7 @@ void vw_BindVAO(unsigned int VAO)
 /*
  * Delete vertex array object.
  */
-void vw_DeleteVAO(unsigned int &VAO)
+void vw_DeleteVAO(GLuint &VAO)
 {
 	if (!_glIsVertexArray ||
 	    !_glDeleteVertexArrays ||
