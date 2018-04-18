@@ -24,6 +24,8 @@
 
 *************************************************************************************/
 
+// TODO shaders uniforms should be managed inside 'gl_glsl'
+
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 // NOTE since OpenGL 3.1 core profile, OpenGL must render with a program,

@@ -90,6 +90,10 @@ PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC _glGetFramebufferAttachmentParamete
 PFNGLGENERATEMIPMAPPROC _glGenerateMipmap{nullptr};
 PFNGLBLITFRAMEBUFFERPROC _glBlitFramebuffer{nullptr};
 PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC _glRenderbufferStorageMultisample{nullptr};
+PFNGLBINDVERTEXARRAYPROC _glBindVertexArray{nullptr};
+PFNGLDELETEVERTEXARRAYSPROC _glDeleteVertexArrays{nullptr};
+PFNGLGENVERTEXARRAYSPROC _glGenVertexArrays{nullptr};
+PFNGLISVERTEXARRAYPROC _glIsVertexArray{nullptr};
 
 // OpenGL 4.2 (only what we need or would need in future)
 PFNGLTEXSTORAGE2DPROC _glTexStorage2D{nullptr};
@@ -277,6 +281,10 @@ bool __Initialize_OpenGL_3_0()
 	_glBlitFramebuffer = (PFNGLBLITFRAMEBUFFERPROC) SDL_GL_GetProcAddress("glBlitFramebuffer");
 	_glRenderbufferStorageMultisample =
 		(PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC) SDL_GL_GetProcAddress("glRenderbufferStorageMultisample");
+	_glBindVertexArray = (PFNGLBINDVERTEXARRAYPROC) SDL_GL_GetProcAddress("glBindVertexArray");
+	_glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSPROC) SDL_GL_GetProcAddress("glDeleteVertexArrays");
+	_glGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC) SDL_GL_GetProcAddress("glGenVertexArrays");
+	_glIsVertexArray = (PFNGLISVERTEXARRAYPROC) SDL_GL_GetProcAddress("glIsVertexArray");
 
 	if (!_glBindRenderbuffer ||
 	    !_glDeleteRenderbuffers ||
@@ -291,7 +299,11 @@ bool __Initialize_OpenGL_3_0()
 	    !_glGetFramebufferAttachmentParameteriv ||
 	    !_glGenerateMipmap ||
 	    !_glBlitFramebuffer ||
-	    !_glRenderbufferStorageMultisample) {
+	    !_glRenderbufferStorageMultisample ||
+	    !_glBindVertexArray ||
+	    !_glDeleteVertexArrays ||
+	    !_glGenVertexArrays ||
+	    !_glIsVertexArray) {
 		_glBindRenderbuffer = nullptr;
 		_glDeleteRenderbuffers = nullptr;
 		_glGenRenderbuffers = nullptr;
@@ -306,6 +318,10 @@ bool __Initialize_OpenGL_3_0()
 		_glGenerateMipmap = nullptr;
 		_glBlitFramebuffer = nullptr;
 		_glRenderbufferStorageMultisample = nullptr;
+		_glBindVertexArray = nullptr;
+		_glDeleteVertexArrays = nullptr;
+		_glGenVertexArrays = nullptr;
+		_glIsVertexArray = nullptr;
 
 		return false;
 	}

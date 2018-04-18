@@ -100,6 +100,10 @@ extern PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC _glGetFramebufferAttachmentP
 extern PFNGLGENERATEMIPMAPPROC _glGenerateMipmap;
 extern PFNGLBLITFRAMEBUFFERPROC _glBlitFramebuffer;
 extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC _glRenderbufferStorageMultisample;
+extern PFNGLBINDVERTEXARRAYPROC _glBindVertexArray;
+extern PFNGLDELETEVERTEXARRAYSPROC _glDeleteVertexArrays;
+extern PFNGLGENVERTEXARRAYSPROC _glGenVertexArrays;
+extern PFNGLISVERTEXARRAYPROC _glIsVertexArray;
 
 // OpenGL 4.2 (only what we need or would need in future)
 extern PFNGLTEXSTORAGE2DPROC _glTexStorage2D;

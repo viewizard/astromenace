@@ -79,7 +79,7 @@ void Internal_ReleaseLocalIndexData()
 //------------------------------------------------------------------------------------
 // устанавливаем указатели, готовимся к прорисовке
 //------------------------------------------------------------------------------------
-GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *VertexArray, int Stride, unsigned int VertexBO,
+GLuint *__SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *VertexArray, int Stride, unsigned int VertexBO,
 						unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO)
 {
 	// если ничего не передали
@@ -259,7 +259,7 @@ GLuint *vw_SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat,
 //------------------------------------------------------------------------------------
 // выключаем все после прорисовки
 //------------------------------------------------------------------------------------
-void vw_SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, unsigned int VAO)
+void __SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, unsigned int VAO)
 {
 	// флаг нужно ли с вaо делать
 	bool NeedVAO = vw_GetDevCaps()->VAOSupported;
@@ -321,8 +321,8 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *V
 	if (NeedVAO)
 		vw_BindVAO(VAO);
 	else
-		VertexIndexPointer = vw_SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, VertexArray, Stride,
-									     VertexBO, RangeStart, IndexArray, IndexBO);
+		VertexIndexPointer = __SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, VertexArray, Stride,
+									    VertexBO, RangeStart, IndexArray, IndexBO);
 
 // 1) Нельзя использовать short индексы (глючит в линуксе на картах нвидия, проверял на 97.55 драйвере)
 // 2) Нельзя рисовать через glBegin-glEnd и glDrawArray - проблемы в линуксе у ati драйверов (на glDrawArray вообще сегфолтит)
@@ -368,6 +368,6 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *V
 
 
 	// выключаем все что включали
-	vw_SendVertices_DisableStatesAndPointers(DataFormat, VertexBO, VAO);
+	__SendVertices_DisableStatesAndPointers(DataFormat, VertexBO, VAO);
 
 }

@@ -75,8 +75,6 @@ GLsizei ScreenHeightGL{0};
 
 // инициализация VBO
 bool Internal_InitializationBufferObjects();
-// инициализация VAO
-bool vw_Internal_InitializationVAO();
 // индекс буфера (внутренний буфер)
 bool Internal_InitializationLocalIndexData();
 void Internal_ReleaseLocalIndexData();
@@ -417,11 +415,10 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	// иним вбо
 	if (OpenGL_DevCaps.VBOSupported)
 		OpenGL_DevCaps.VBOSupported = Internal_InitializationBufferObjects();
-	// иним вaо
-	if (OpenGL_DevCaps.VAOSupported) OpenGL_DevCaps.VAOSupported = vw_Internal_InitializationVAO();
-	// инициализируем FBO
-	if (!OpenGL_3_0_supported)
+	if (!OpenGL_3_0_supported) {
+		OpenGL_DevCaps.VAOSupported = false; // FIXME this should be revised
 		OpenGL_DevCaps.FramebufferObject = false; // FIXME this should be revised
+	}
 	if (OpenGL_DevCaps.FramebufferObject) {
 		__Initialize_GL_NV_framebuffer_multisample_coverage();
 
