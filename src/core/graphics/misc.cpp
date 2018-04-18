@@ -50,7 +50,7 @@ int vw_Screenshot(int Width, int Height, const std::string &FileName)
 
 	// std::unique_ptr, we need only memory allocation without container's features
 	// don't use std::vector here, since it allocates AND value-initializes
-	std::unique_ptr<uint8_t []> Pixels{new uint8_t[ChannelsNumber * Width * Height]};
+	std::unique_ptr<uint8_t[]> Pixels{new uint8_t[ChannelsNumber * Width * Height]};
 
 	glReadPixels(0, 0, Width, Height, GL_RGB, GL_UNSIGNED_BYTE, Pixels.get());
 

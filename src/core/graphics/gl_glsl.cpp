@@ -101,7 +101,7 @@ static void PrintShaderInfoLog(GLuint shader, const std::string &ShaderName)
 	CheckOGLError(__func__);
 
 	if (infologLength > 0) {
-		std::unique_ptr<GLchar []> infoLog{new GLchar[infologLength]};
+		std::unique_ptr<GLchar[]> infoLog{new GLchar[infologLength]};
 		int charsWritten{0};
 		_glGetShaderInfoLog(shader, infologLength, &charsWritten, infoLog.get());
 		// at this line, infoLog.get() should contains null-terminated string
@@ -130,7 +130,7 @@ static void PrintProgramInfoLog(GLuint program)
 	CheckOGLError(__func__);
 
 	if (infologLength > 0) {
-		std::unique_ptr<GLchar []> infoLog{new GLchar[infologLength]};
+		std::unique_ptr<GLchar[]> infoLog{new GLchar[infologLength]};
 		int charsWritten{0};
 		_glGetProgramInfoLog(program, infologLength, &charsWritten, infoLog.get());
 		// at this line, infoLog.get() should contains null-terminated string

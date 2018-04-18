@@ -24,6 +24,10 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
+// TODO move from new/delete to std::unique_ptr
+
 // NOTE GL_EXT_draw_instanced (since OpenGL 3.1)
 //      probably, we could render same type of objects with glDrawElementsInstanced()
 

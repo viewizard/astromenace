@@ -113,7 +113,7 @@ std::forward_list<std::unique_ptr<sFontChar>> FontCharsList;
 // Local draw buffer, that dynamically allocate memory at maximum required
 // size only one time per game execution. Don't use std::vector here,
 // since it have poor performance compared to std::unique_ptr.
-std::unique_ptr<float []> DrawBuffer{};
+std::unique_ptr<float[]> DrawBuffer{};
 unsigned int DrawBufferCurrentPosition{0};
 unsigned int DrawBufferSize{0};
 // space character utf32 code
