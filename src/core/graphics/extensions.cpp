@@ -31,6 +31,13 @@
 PFNGLACTIVETEXTUREPROC _glActiveTexture{nullptr};
 PFNGLCLIENTACTIVETEXTUREPROC _glClientActiveTexture{nullptr};
 
+// OpenGL 1.5 (only what we need or would need in future)
+PFNGLBINDBUFFERPROC _glBindBuffer{nullptr};
+PFNGLDELETEBUFFERSPROC _glDeleteBuffers{nullptr};
+PFNGLGENBUFFERSPROC _glGenBuffers{nullptr};
+PFNGLISBUFFERPROC _glIsBuffer{nullptr};
+PFNGLBUFFERDATAPROC _glBufferData{nullptr};
+
 // OpenGL 2.0 (only what we need or would need in future)
 PFNGLATTACHSHADERPROC _glAttachShader{nullptr};
 PFNGLBINDATTRIBLOCATIONPROC _glBindAttribLocation{nullptr};
@@ -114,6 +121,35 @@ bool __Initialize_OpenGL_1_3()
 	    !_glClientActiveTexture) {
 		_glActiveTexture = nullptr;
 		_glClientActiveTexture = nullptr;
+
+		return false;
+	}
+
+	return true;
+}
+
+/*
+ * OpenGL 1.5 initialization (only what we need or would need in future).
+ */
+bool __Initialize_OpenGL_1_5()
+{
+	// get pointers to the GL functions
+	_glBindBuffer = (PFNGLBINDBUFFERPROC) SDL_GL_GetProcAddress("glBindBuffer");
+	_glDeleteBuffers = (PFNGLDELETEBUFFERSPROC) SDL_GL_GetProcAddress("glDeleteBuffers");
+	_glGenBuffers = (PFNGLGENBUFFERSPROC) SDL_GL_GetProcAddress("glGenBuffers");
+	_glIsBuffer = (PFNGLISBUFFERPROC) SDL_GL_GetProcAddress("glIsBuffer");
+	_glBufferData = (PFNGLBUFFERDATAPROC) SDL_GL_GetProcAddress("glBufferData");
+
+	if (!_glBindBuffer ||
+	    !_glDeleteBuffers ||
+	    !_glGenBuffers ||
+	    !_glIsBuffer ||
+	    !_glBufferData) {
+		_glBindBuffer = nullptr;
+		_glDeleteBuffers = nullptr;
+		_glGenBuffers = nullptr;
+		_glIsBuffer = nullptr;
+		_glBufferData = nullptr;
 
 		return false;
 	}

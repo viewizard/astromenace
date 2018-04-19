@@ -73,8 +73,6 @@ GLsizei ScreenWidthGL{0};
 GLsizei ScreenHeightGL{0};
 
 
-// инициализация VBO
-bool Internal_InitializationBufferObjects();
 // индекс буфера (внутренний буфер)
 bool Internal_InitializationLocalIndexData();
 void Internal_ReleaseLocalIndexData();
@@ -396,6 +394,7 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	bool OpenGL_1_3_supported = __Initialize_OpenGL_1_3();
+	bool OpenGL_1_5_supported = __Initialize_OpenGL_1_5();
 	bool OpenGL_2_0_supported = __Initialize_OpenGL_2_0();
 	bool OpenGL_3_0_supported = __Initialize_OpenGL_3_0();
 	bool OpenGL_4_2_supported = __Initialize_OpenGL_4_2();
@@ -413,8 +412,8 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	if (!OpenGL_2_0_supported)
 		OpenGL_DevCaps.GLSL100Supported = false; // FIXME this should be revised
 	// иним вбо
-	if (OpenGL_DevCaps.VBOSupported)
-		OpenGL_DevCaps.VBOSupported = Internal_InitializationBufferObjects();
+	if (!OpenGL_1_5_supported)
+		OpenGL_DevCaps.VBOSupported = false; // FIXME this should be revised
 	if (!OpenGL_3_0_supported) {
 		OpenGL_DevCaps.VAOSupported = false; // FIXME this should be revised
 		OpenGL_DevCaps.FramebufferObject = false; // FIXME this should be revised

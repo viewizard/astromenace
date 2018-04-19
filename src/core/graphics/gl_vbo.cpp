@@ -25,56 +25,27 @@
 *************************************************************************************/
 
 #include "graphics.h"
+#include "extensions.h"
 
-PFNGLGENBUFFERSARBPROC glGenBuffersARB = nullptr;
-PFNGLBINDBUFFERARBPROC glBindBufferARB = nullptr;
-PFNGLBUFFERDATAARBPROC glBufferDataARB = nullptr;
-PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB = nullptr;
-PFNGLISBUFFERARBPROC glIsBufferARB = nullptr;
-
-/*
- * Internal initialization for buffer objects.
- */
-bool Internal_InitializationBufferObjects()
-{
-	// get pointers to the GL functions
-	glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) SDL_GL_GetProcAddress("glGenBuffersARB");
-	glBindBufferARB = (PFNGLBINDBUFFERARBPROC) SDL_GL_GetProcAddress("glBindBufferARB");
-	glBufferDataARB = (PFNGLBUFFERDATAARBPROC) SDL_GL_GetProcAddress("glBufferDataARB");
-	glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) SDL_GL_GetProcAddress("glDeleteBuffersARB");
-	glIsBufferARB = (PFNGLISBUFFERARBPROC) SDL_GL_GetProcAddress("glIsBufferARB");
-
-	if (!glGenBuffersARB || !glBindBufferARB || !glBufferDataARB ||
-	    !glDeleteBuffersARB || !glIsBufferARB) {
-		glGenBuffersARB = nullptr;
-		glBindBufferARB = nullptr;
-		glBufferDataARB = nullptr;
-		glDeleteBuffersARB = nullptr;
-		glIsBufferARB = nullptr;
-
-		return false;
-	}
-
-	return true;
-}
 
 /*
  * Build vertex buffer object.
  */
 bool vw_BuildVertexBufferObject(int NumVertices, void *Data, int Stride, unsigned int &Buffer)
 {
-	if (!Data || !glGenBuffersARB || !glBindBufferARB ||
-	    !glBufferDataARB || !glIsBufferARB)
+	if (!Data ||
+	    !_glGenBuffers ||
+	    !_glBindBuffer ||
+	    !_glBufferData ||
+	    !_glIsBuffer)
 		return false;
 
-	glGenBuffersARB(1, &Buffer);			// get a valid name
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, Buffer);	// bind the buffer
-	// load the data
-	glBufferDataARB(GL_ARRAY_BUFFER_ARB, NumVertices * Stride * sizeof(float), Data, GL_STATIC_DRAW_ARB);
-	// disable buffer (bind buffer 0)
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+	_glGenBuffers(1, &Buffer);
+	_glBindBuffer(GL_ARRAY_BUFFER, Buffer);
+	_glBufferData(GL_ARRAY_BUFFER, NumVertices * Stride * sizeof(float), Data, GL_STATIC_DRAW);
+	_glBindBuffer(GL_ARRAY_BUFFER, 0); // disable buffer (bind buffer 0)
 
-	if (!glIsBufferARB(Buffer))
+	if (!_glIsBuffer(Buffer))
 		return false;
 
 	return true;
@@ -85,18 +56,19 @@ bool vw_BuildVertexBufferObject(int NumVertices, void *Data, int Stride, unsigne
  */
 bool vw_BuildIndexBufferObject(int NumIndex, void *Data, unsigned int &Buffer)
 {
-	if (!Data || !glGenBuffersARB || !glBindBufferARB ||
-	    !glBufferDataARB || !glIsBufferARB)
+	if (!Data ||
+	    !_glGenBuffers ||
+	    !_glBindBuffer ||
+	    !_glBufferData ||
+	    !_glIsBuffer)
 		return false;
 
-	glGenBuffersARB(1, &Buffer);				// get a valid name
-	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, Buffer);	// bind the buffer
-	// load the data
-	glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, NumIndex * sizeof(unsigned int), Data, GL_STATIC_DRAW_ARB);
-	// disable buffer (bind buffer 0)
-	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
+	_glGenBuffers(1, &Buffer);
+	_glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffer);
+	_glBufferData(GL_ELEMENT_ARRAY_BUFFER, NumIndex * sizeof(unsigned int), Data, GL_STATIC_DRAW);
+	_glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // disable buffer (bind buffer 0)
 
-	if (!glIsBufferARB(Buffer))
+	if (!_glIsBuffer(Buffer))
 		return false;
 
 	return true;
@@ -107,15 +79,15 @@ bool vw_BuildIndexBufferObject(int NumIndex, void *Data, unsigned int &Buffer)
  */
 void vw_BindBufferObject(int target, unsigned int Buffer)
 {
-	if (!glBindBufferARB)
+	if (!_glBindBuffer)
 		return;
 
 	switch (target) {
 	case RI_ARRAY_BUFFER:
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, Buffer);
+		_glBindBuffer(GL_ARRAY_BUFFER, Buffer);
 		break;
 	case RI_ELEMENT_ARRAY_BUFFER:
-		glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, Buffer);
+		_glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffer);
 		break;
 	default:
 		std::cerr << __func__ << "(): " << "wrong target.\n";
@@ -128,9 +100,11 @@ void vw_BindBufferObject(int target, unsigned int Buffer)
  */
 void vw_DeleteBufferObject(unsigned int &Buffer)
 {
-	if (!glIsBufferARB || !glDeleteBuffersARB || !glIsBufferARB(Buffer))
+	if (!_glIsBuffer ||
+	    !_glDeleteBuffers ||
+	    !_glIsBuffer(Buffer))
 		return;
 
-	glDeleteBuffersARB(1, &Buffer);
+	_glDeleteBuffers(1, &Buffer);
 	Buffer = 0;
 }

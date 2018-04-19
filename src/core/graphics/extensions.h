@@ -41,6 +41,13 @@ Rules for functions and variables naming:
 extern PFNGLACTIVETEXTUREPROC _glActiveTexture;
 extern PFNGLCLIENTACTIVETEXTUREPROC _glClientActiveTexture;
 
+// OpenGL 1.5 (only what we need or would need in future)
+extern PFNGLBINDBUFFERPROC _glBindBuffer;
+extern PFNGLDELETEBUFFERSPROC _glDeleteBuffers;
+extern PFNGLGENBUFFERSPROC _glGenBuffers;
+extern PFNGLISBUFFERPROC _glIsBuffer;
+extern PFNGLBUFFERDATAPROC _glBufferData;
+
 // OpenGL 2.0 (only what we need or would need in future)
 extern PFNGLATTACHSHADERPROC _glAttachShader;
 extern PFNGLBINDATTRIBLOCATIONPROC _glBindAttribLocation;
@@ -113,6 +120,7 @@ extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC _glRenderbufferStorageM
 
 
 bool __Initialize_OpenGL_1_3();
+bool __Initialize_OpenGL_1_5();
 bool __Initialize_OpenGL_2_0();
 bool __Initialize_OpenGL_3_0();
 bool __Initialize_OpenGL_4_2();
