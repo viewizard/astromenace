@@ -1,6 +1,7 @@
 /************************************************************************************
 
-	AstroMenace (Hardcore 3D space shooter with spaceship upgrade possibilities)
+	AstroMenace
+	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
 	Copyright (c) 2006-2018 Mikhail Kurinnoi, Viewizard
 
 
