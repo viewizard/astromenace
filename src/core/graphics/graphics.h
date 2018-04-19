@@ -232,6 +232,11 @@ enum class eLightVParameter : GLenum {
 	SPOT_DIRECTION = GL_SPOT_DIRECTION
 };
 
+enum class eBufferObject : GLenum {
+	Vertex = GL_ARRAY_BUFFER,
+	Index = GL_ELEMENT_ARRAY_BUFFER
+};
+
 struct sCoverageModes {
 	int ColorSamples;
 	int CoverageSamples;
@@ -320,10 +325,6 @@ struct sDevCaps {
 #define RI_NONE				0x10C1
 #define RI_BACK				0x10C2
 #define RI_FRONT			0x10C3
-
-// VBO
-#define RI_ARRAY_BUFFER			1
-#define RI_ELEMENT_ARRAY_BUFFER		2
 
 
 /*
@@ -468,12 +469,10 @@ void vw_MaterialV(eMaterialParameter pname, const GLfloat *param);
  * Buffer objects.
  */
 
-// Build vertex buffer object.
-bool vw_BuildVertexBufferObject(int NumVertices, const void *data, int Stride, GLuint &buffer);
-// Build index buffer object.
-bool vw_BuildIndexBufferObject(int NumIndex, const void *data, GLuint &buffer);
+// Build buffer object (size in bytes).
+bool vw_BuildBufferObject(eBufferObject target, GLsizeiptr size, const GLvoid *data, GLuint &buffer);
 // Bind buffer object.
-void vw_BindBufferObject(GLenum target, GLuint buffer);
+void vw_BindBufferObject(eBufferObject target, GLuint buffer);
 // Delete buffer object.
 void vw_DeleteBufferObject(GLuint &buffer);
 

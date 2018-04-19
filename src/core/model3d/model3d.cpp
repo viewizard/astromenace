@@ -184,12 +184,14 @@ static void CreateObjectsBuffers(cModel3D *Model)
 static void CreateHardwareBuffers(cModel3D *Model)
 {
 	// global vertex buffer object
-	if (!vw_BuildVertexBufferObject(Model->GlobalVertexArrayCount, Model->GlobalVertexArray.get(),
-					Model->ObjectBlocks[0].VertexStride, Model->GlobalVBO))
+	if (!vw_BuildBufferObject(eBufferObject::Vertex,
+				  Model->GlobalVertexArrayCount * Model->ObjectBlocks[0].VertexStride * sizeof(float),
+				  Model->GlobalVertexArray.get(), Model->GlobalVBO))
 		Model->GlobalVBO = 0;
 
 	// global index buffer object
-	if (!vw_BuildIndexBufferObject(Model->GlobalIndexArrayCount, Model->GlobalIndexArray.get(), Model->GlobalIBO))
+	if (!vw_BuildBufferObject(eBufferObject::Index, Model->GlobalIndexArrayCount * sizeof(unsigned),
+				  Model->GlobalIndexArray.get(), Model->GlobalIBO))
 		Model->GlobalIBO = 0;
 
 	// global vertex array object
@@ -201,13 +203,14 @@ static void CreateHardwareBuffers(cModel3D *Model)
 	// and same for all objects
 	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
 		// vertex buffer object
-		if (!vw_BuildVertexBufferObject(tmpObjectBlock.VertexCount, tmpObjectBlock.VertexArray.get(),
-						tmpObjectBlock.VertexStride, tmpObjectBlock.VBO))
+		if (!vw_BuildBufferObject(eBufferObject::Vertex,
+					  tmpObjectBlock.VertexCount * tmpObjectBlock.VertexStride * sizeof(float),
+					  tmpObjectBlock.VertexArray.get(), tmpObjectBlock.VBO))
 			tmpObjectBlock.VBO = 0;
 
 		// index buffer object
-		if (!vw_BuildIndexBufferObject(tmpObjectBlock.VertexCount, tmpObjectBlock.IndexArray.get(),
-					       tmpObjectBlock.IBO))
+		if (!vw_BuildBufferObject(eBufferObject::Index, tmpObjectBlock.VertexCount * sizeof(unsigned),
+					  tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO))
 			tmpObjectBlock.IBO = 0;
 
 		// vertex array object

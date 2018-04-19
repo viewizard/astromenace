@@ -26,6 +26,9 @@
 
 // TODO move from pointers to std::shared_ptr/std::weak_ptr
 
+// TODO probably, we need VBO+VAO here, since we don't change arrays,
+//      no reason re-send them all the time
+
 // NOTE GL_EXT_direct_state_access (since OpenGL 4.5)
 //      glNamedRenderbufferStorageMultisampleEXT()
 //      could be used to replace glRenderbufferStorageMultisample()

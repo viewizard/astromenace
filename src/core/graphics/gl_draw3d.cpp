@@ -135,7 +135,7 @@ GLuint *__SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, 
 	}
 
 	if (NeedVBO)
-		vw_BindBufferObject(RI_ARRAY_BUFFER, VertexBO);
+		vw_BindBufferObject(eBufferObject::Vertex, VertexBO);
 
 
 	// делаем установку поинтеров + ставим смещения для прорисовки
@@ -224,7 +224,7 @@ GLuint *__SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, 
 				if (LocalIndexBO)
 					vw_DeleteBufferObject(LocalIndexBO);
 				// создаем новый
-				if (!vw_BuildIndexBufferObject(LocalIndexArrayCount, LocalIndexArray, LocalIndexBO))
+				if (!vw_BuildBufferObject(eBufferObject::Index, LocalIndexArrayCount * sizeof(unsigned), LocalIndexArray, LocalIndexBO))
 					LocalIndexBO = 0;
 			}
 		}
@@ -233,7 +233,7 @@ GLuint *__SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, 
 
 		// собственно включаем индекс-вбо
 		if (vw_GetDevCaps()->VBOSupported && LocalIndexBO) {
-			vw_BindBufferObject(RI_ELEMENT_ARRAY_BUFFER, LocalIndexBO);
+			vw_BindBufferObject(eBufferObject::Index, LocalIndexBO);
 			VertexIndexPointer = nullptr;
 			VertexIndexPointer = VertexIndexPointer + RangeStart;
 		}
@@ -242,7 +242,7 @@ GLuint *__SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, 
 
 		// собственно включаем индекс-вбо
 		if (vw_GetDevCaps()->VBOSupported && IndexBO) {
-			vw_BindBufferObject(RI_ELEMENT_ARRAY_BUFFER, IndexBO);
+			vw_BindBufferObject(eBufferObject::Index, IndexBO);
 			VertexIndexPointer = nullptr;
 			VertexIndexPointer = VertexIndexPointer+RangeStart;
 		}
@@ -290,9 +290,9 @@ void __SendVertices_DisableStatesAndPointers(int DataFormat, GLuint VBO, GLuint 
 
 		// сбрасываем индексный и вертексный буфера, если они были установлены
 		if (LocalIndexBO)
-			vw_BindBufferObject(RI_ELEMENT_ARRAY_BUFFER, 0);
+			vw_BindBufferObject(eBufferObject::Index, 0);
 		if (NeedVBO)
-			vw_BindBufferObject(RI_ARRAY_BUFFER, 0);
+			vw_BindBufferObject(eBufferObject::Vertex, 0);
 	}
 }
 

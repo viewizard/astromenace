@@ -250,12 +250,12 @@ bool cExplosion::Update(float Time)
 
 
 					// делаем VBO
-					if (!vw_BuildVertexBufferObject(tmpObjectBlock.VertexCount, tmpObjectBlock.VertexArray.get(), tmpObjectBlock.VertexStride, tmpObjectBlock.VBO))
+					if (!vw_BuildBufferObject(eBufferObject::Vertex, tmpObjectBlock.VertexCount * tmpObjectBlock.VertexStride * sizeof(float), tmpObjectBlock.VertexArray.get(), tmpObjectBlock.VBO))
 						tmpObjectBlock.VBO = 0;
 
 					// делаем IBO, создаем его один раз, если его нет
 					if (tmpObjectBlock.IBO) {
-						if (!vw_BuildIndexBufferObject(tmpObjectBlock.VertexCount, tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO))
+						if (!vw_BuildBufferObject(eBufferObject::Index, tmpObjectBlock.VertexCount * sizeof(unsigned), tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO))
 							tmpObjectBlock.IBO = 0;
 					}
 

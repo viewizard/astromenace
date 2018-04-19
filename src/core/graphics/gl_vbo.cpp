@@ -29,44 +29,21 @@
 
 
 /*
- * Build vertex buffer object.
+ * Build buffer object (size in bytes).
  */
-bool vw_BuildVertexBufferObject(int NumVertices, const void *data, int Stride, GLuint &buffer)
+bool vw_BuildBufferObject(eBufferObject target, GLsizeiptr size, const GLvoid *data, GLuint &buffer)
 {
-	if (!data ||
-	    !_glGenBuffers ||
+	// Don't check 'data' parameter, since nullptr is appropriate value for glBufferData().
+	if (!_glGenBuffers ||
 	    !_glBindBuffer ||
 	    !_glBufferData ||
 	    !_glIsBuffer)
 		return false;
 
 	_glGenBuffers(1, &buffer);
-	_glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	_glBufferData(GL_ARRAY_BUFFER, NumVertices * Stride * sizeof(float), data, GL_STATIC_DRAW);
-	_glBindBuffer(GL_ARRAY_BUFFER, 0); // disable buffer (bind buffer 0)
-
-	if (!_glIsBuffer(buffer))
-		return false;
-
-	return true;
-}
-
-/*
- * Build index buffer object.
- */
-bool vw_BuildIndexBufferObject(int NumIndex, const void *data, GLuint &buffer)
-{
-	if (!data ||
-	    !_glGenBuffers ||
-	    !_glBindBuffer ||
-	    !_glBufferData ||
-	    !_glIsBuffer)
-		return false;
-
-	_glGenBuffers(1, &buffer);
-	_glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
-	_glBufferData(GL_ELEMENT_ARRAY_BUFFER, NumIndex * sizeof(unsigned int), data, GL_STATIC_DRAW);
-	_glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // disable buffer (bind buffer 0)
+	_glBindBuffer(static_cast<GLenum>(target), buffer);
+	_glBufferData(static_cast<GLenum>(target), size, data, GL_STATIC_DRAW);
+	_glBindBuffer(static_cast<GLenum>(target), 0); // disable buffer (bind buffer 0)
 
 	if (!_glIsBuffer(buffer))
 		return false;
@@ -77,22 +54,12 @@ bool vw_BuildIndexBufferObject(int NumIndex, const void *data, GLuint &buffer)
 /*
  * Bind buffer object.
  */
-void vw_BindBufferObject(GLenum target, GLuint buffer)
+void vw_BindBufferObject(eBufferObject target, GLuint buffer)
 {
 	if (!_glBindBuffer)
 		return;
 
-	switch (target) {
-	case RI_ARRAY_BUFFER:
-		_glBindBuffer(GL_ARRAY_BUFFER, buffer);
-		break;
-	case RI_ELEMENT_ARRAY_BUFFER:
-		_glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
-		break;
-	default:
-		std::cerr << __func__ << "(): " << "wrong target.\n";
-		break;
-	}
+	_glBindBuffer(static_cast<GLenum>(target), buffer);
 }
 
 /*

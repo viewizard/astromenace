@@ -945,14 +945,15 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			vw_DeleteVAO(ObjectBlocks[0].VAO);
 
 		// делаем VBO
-		if (!vw_BuildVertexBufferObject(ObjectBlocks[0].VertexCount, ObjectBlocks[0].VertexArray.get(),
-						ObjectBlocks[0].VertexStride, ObjectBlocks[0].VBO))
+		if (!vw_BuildBufferObject(eBufferObject::Vertex,
+					  ObjectBlocks[0].VertexCount * ObjectBlocks[0].VertexStride * sizeof(float),
+					  ObjectBlocks[0].VertexArray.get(), ObjectBlocks[0].VBO))
 			ObjectBlocks[0].VBO = 0;
 
 		// делаем IBO, создаем его один раз, если его нет
 		if (!ObjectBlocks[0].IBO) {
-			if (!vw_BuildIndexBufferObject(ObjectBlocks[0].VertexCount, ObjectBlocks[0].IndexArray.get(),
-						       ObjectBlocks[0].IBO))
+			if (!vw_BuildBufferObject(eBufferObject::Index, ObjectBlocks[0].VertexCount * sizeof(unsigned),
+						  ObjectBlocks[0].IndexArray.get(), ObjectBlocks[0].IBO))
 				ObjectBlocks[0].IBO = 0;
 		}
 
