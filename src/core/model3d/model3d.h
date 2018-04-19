@@ -69,10 +69,10 @@ struct sObjectBlock {
 	int VertexFormat{0};
 	unsigned int VertexStride{0};	// in bytes
 	unsigned int VertexCount{0};
-	unsigned int VBO{0};
+	GLuint VBO{0};
 	// index-related
 	std::shared_ptr<unsigned> IndexArray{}; // unsigned[], make sure, that custom deleter are used
-	unsigned int IBO{0};
+	GLuint IBO{0};
 	// vao-related
 	GLuint VAO{0};
 
@@ -99,11 +99,11 @@ public:
 	// vertex-related
 	std::shared_ptr<float> GlobalVertexArray{}; // float[], make sure, that custom deleter are used
 	unsigned int GlobalVertexArrayCount{0};
-	unsigned int GlobalVBO{0};
+	GLuint GlobalVBO{0};
 	// index-related
 	std::shared_ptr<unsigned> GlobalIndexArray{}; // unsigned[], make sure, that custom deleter are used
 	unsigned int GlobalIndexArrayCount{0};
-	unsigned int GlobalIBO{0};
+	GLuint GlobalIBO{0};
 	// vao-related
 	GLuint GlobalVAO{0};
 

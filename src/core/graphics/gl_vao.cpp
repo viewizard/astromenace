@@ -37,8 +37,8 @@
 /*
  * Build vertex array object.
  */
-bool vw_BuildVAO(GLuint &VAO, int NumVertices, int DataFormat, void *VertexArray, int Stride, unsigned int VertexBO,
-		 unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO)
+bool vw_BuildVAO(GLuint &VAO, int NumVertices, int DataFormat, void *VertexArray, int Stride, GLuint VertexBO,
+		 unsigned int RangeStart, unsigned int *IndexArray, GLuint IndexBO)
 {
 	if (!_glGenVertexArrays ||
 	    !_glIsVertexArray)

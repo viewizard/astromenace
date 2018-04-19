@@ -413,8 +413,8 @@ void vw_SetTextureDepthMode(eTextureDepthMode mode);
 
 // Send (draw) vertices.
 void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *VertexArray, int Stride,
-		     unsigned int VertexBO = 0, unsigned int RangeStart = 0, unsigned int *IndexArray = nullptr,
-		     unsigned int IndexBO = 0, GLuint VAO = 0);
+		     GLuint VertexBO = 0, unsigned int RangeStart = 0, unsigned int *IndexArray = nullptr,
+		     GLuint IndexBO = 0, GLuint VAO = 0);
 // Set color.
 void vw_SetColor(float nRed, float nGreen, float nBlue, float nAlpha);
 // Set what facets can be culled.
@@ -469,21 +469,21 @@ void vw_MaterialV(eMaterialParameter pname, const GLfloat *param);
  */
 
 // Build vertex buffer object.
-bool vw_BuildVertexBufferObject(int NumVertices, void *Data, int Stride, unsigned int &Buffer);
+bool vw_BuildVertexBufferObject(int NumVertices, const void *data, int Stride, GLuint &buffer);
 // Build index buffer object.
-bool vw_BuildIndexBufferObject(int NumIndex, void *Data, unsigned int &Buffer);
+bool vw_BuildIndexBufferObject(int NumIndex, const void *data, GLuint &buffer);
 // Bind buffer object.
-void vw_BindBufferObject(int target, unsigned int Buffer);
+void vw_BindBufferObject(GLenum target, GLuint buffer);
 // Delete buffer object.
-void vw_DeleteBufferObject(unsigned int &Buffer);
+void vw_DeleteBufferObject(GLuint &buffer);
 
 /*
  * Vertex array objects.
  */
 
 // Build vertex array object.
-bool vw_BuildVAO(GLuint &VAO, int NumVertices, int DataFormat, void *VertexArray, int Stride, unsigned int VertexBO,
-		 unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO);
+bool vw_BuildVAO(GLuint &VAO, int NumVertices, int DataFormat, void *VertexArray, int Stride, GLuint VertexBO,
+		 unsigned int RangeStart, unsigned int *IndexArray, GLuint IndexBO);
 // Bind vertex array object.
 void vw_BindVAO(GLuint VAO);
 // Delete vertex array object.

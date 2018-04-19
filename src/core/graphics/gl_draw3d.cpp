@@ -79,8 +79,8 @@ void Internal_ReleaseLocalIndexData()
 //------------------------------------------------------------------------------------
 // устанавливаем указатели, готовимся к прорисовке
 //------------------------------------------------------------------------------------
-GLuint *__SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *VertexArray, int Stride, unsigned int VertexBO,
-						unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO)
+GLuint *__SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *VertexArray, int Stride, GLuint VertexBO,
+						unsigned int RangeStart, unsigned int *IndexArray, GLuint IndexBO)
 {
 	// если ничего не передали
 	if (!VertexArray && !VertexBO)
@@ -259,7 +259,7 @@ GLuint *__SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, 
 //------------------------------------------------------------------------------------
 // выключаем все после прорисовки
 //------------------------------------------------------------------------------------
-void __SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, GLuint VAO)
+void __SendVertices_DisableStatesAndPointers(int DataFormat, GLuint VBO, GLuint VAO)
 {
 	// флаг нужно ли с вaо делать
 	bool NeedVAO = vw_GetDevCaps()->VAOSupported;
@@ -304,8 +304,8 @@ void __SendVertices_DisableStatesAndPointers(int DataFormat, unsigned int VBO, G
 //------------------------------------------------------------------------------------
 // Процедура передачи последовательности вертексов для прорисовки
 //------------------------------------------------------------------------------------
-void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *VertexArray, int Stride, unsigned int VertexBO,
-		     unsigned int RangeStart, unsigned int *IndexArray, unsigned int IndexBO, GLuint VAO)
+void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *VertexArray, int Stride, GLuint VertexBO,
+		     unsigned int RangeStart, unsigned int *IndexArray, GLuint IndexBO, GLuint VAO)
 {
 	// если ничего не передали
 	if (!VertexArray && !VertexBO)

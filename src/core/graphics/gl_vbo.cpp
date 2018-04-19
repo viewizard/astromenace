@@ -31,21 +31,21 @@
 /*
  * Build vertex buffer object.
  */
-bool vw_BuildVertexBufferObject(int NumVertices, void *Data, int Stride, unsigned int &Buffer)
+bool vw_BuildVertexBufferObject(int NumVertices, const void *data, int Stride, GLuint &buffer)
 {
-	if (!Data ||
+	if (!data ||
 	    !_glGenBuffers ||
 	    !_glBindBuffer ||
 	    !_glBufferData ||
 	    !_glIsBuffer)
 		return false;
 
-	_glGenBuffers(1, &Buffer);
-	_glBindBuffer(GL_ARRAY_BUFFER, Buffer);
-	_glBufferData(GL_ARRAY_BUFFER, NumVertices * Stride * sizeof(float), Data, GL_STATIC_DRAW);
+	_glGenBuffers(1, &buffer);
+	_glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	_glBufferData(GL_ARRAY_BUFFER, NumVertices * Stride * sizeof(float), data, GL_STATIC_DRAW);
 	_glBindBuffer(GL_ARRAY_BUFFER, 0); // disable buffer (bind buffer 0)
 
-	if (!_glIsBuffer(Buffer))
+	if (!_glIsBuffer(buffer))
 		return false;
 
 	return true;
@@ -54,21 +54,21 @@ bool vw_BuildVertexBufferObject(int NumVertices, void *Data, int Stride, unsigne
 /*
  * Build index buffer object.
  */
-bool vw_BuildIndexBufferObject(int NumIndex, void *Data, unsigned int &Buffer)
+bool vw_BuildIndexBufferObject(int NumIndex, const void *data, GLuint &buffer)
 {
-	if (!Data ||
+	if (!data ||
 	    !_glGenBuffers ||
 	    !_glBindBuffer ||
 	    !_glBufferData ||
 	    !_glIsBuffer)
 		return false;
 
-	_glGenBuffers(1, &Buffer);
-	_glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffer);
-	_glBufferData(GL_ELEMENT_ARRAY_BUFFER, NumIndex * sizeof(unsigned int), Data, GL_STATIC_DRAW);
+	_glGenBuffers(1, &buffer);
+	_glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
+	_glBufferData(GL_ELEMENT_ARRAY_BUFFER, NumIndex * sizeof(unsigned int), data, GL_STATIC_DRAW);
 	_glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // disable buffer (bind buffer 0)
 
-	if (!_glIsBuffer(Buffer))
+	if (!_glIsBuffer(buffer))
 		return false;
 
 	return true;
@@ -77,17 +77,17 @@ bool vw_BuildIndexBufferObject(int NumIndex, void *Data, unsigned int &Buffer)
 /*
  * Bind buffer object.
  */
-void vw_BindBufferObject(int target, unsigned int Buffer)
+void vw_BindBufferObject(GLenum target, GLuint buffer)
 {
 	if (!_glBindBuffer)
 		return;
 
 	switch (target) {
 	case RI_ARRAY_BUFFER:
-		_glBindBuffer(GL_ARRAY_BUFFER, Buffer);
+		_glBindBuffer(GL_ARRAY_BUFFER, buffer);
 		break;
 	case RI_ELEMENT_ARRAY_BUFFER:
-		_glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffer);
+		_glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
 		break;
 	default:
 		std::cerr << __func__ << "(): " << "wrong target.\n";
@@ -98,13 +98,13 @@ void vw_BindBufferObject(int target, unsigned int Buffer)
 /*
  * Delete buffer object.
  */
-void vw_DeleteBufferObject(unsigned int &Buffer)
+void vw_DeleteBufferObject(GLuint &buffer)
 {
 	if (!_glIsBuffer ||
 	    !_glDeleteBuffers ||
-	    !_glIsBuffer(Buffer))
+	    !_glIsBuffer(buffer))
 		return;
 
-	_glDeleteBuffers(1, &Buffer);
-	Buffer = 0;
+	_glDeleteBuffers(1, &buffer);
+	buffer = 0;
 }
