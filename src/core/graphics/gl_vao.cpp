@@ -38,7 +38,8 @@
 /*
  * Build vertex array object.
  */
-bool vw_BuildVAO(GLuint &VAO, int NumVertices, int DataFormat, void *VertexArray, int Stride, GLuint VertexBO,
+bool vw_BuildVAO(GLuint &VAO, int NumVertices, int DataFormat,
+		 const GLvoid *VertexArray, GLsizei Stride, GLuint VertexBO,
 		 unsigned int RangeStart, unsigned int *IndexArray, GLuint IndexBO)
 {
 	if (!_glGenVertexArrays ||
@@ -58,7 +59,7 @@ bool vw_BuildVAO(GLuint &VAO, int NumVertices, int DataFormat, void *VertexArray
 					       RangeStart, IndexArray, IndexBO);
 
 	vw_BindVAO(0);
-	__SendVertices_DisableStatesAndPointers(DataFormat, VertexBO, 0);
+	__SendVertices_DisableStatesAndPointers(DataFormat);
 
 	if (!_glIsVertexArray(VAO))
 		return false;

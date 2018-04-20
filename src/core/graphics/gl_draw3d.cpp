@@ -25,12 +25,23 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 // TODO move from new/delete to std::unique_ptr
+
+// NOTE GL_ARB_vertex_program (since OpenGL 2.0)
+//      glVertexAttribPointer(), glEnableVertexAttribArray() + shader
+//      could be used to replace gl*Pointer() + glEnableClientState()
 
 // NOTE GL_EXT_draw_instanced (since OpenGL 3.1)
 //      probably, we could render same type of objects with glDrawElementsInstanced()
+
+// NOTE ARB_vertex_attrib_binding (since OpenGL 4.3)
+//      specify the attribute format and the attribute data separately
+//      glEnableVertexAttribArray(), glVertexAttribFormat(), glVertexAttribBinding()
+
+// NOTE ARB_direct_state_access (since OpenGL 4.5)
+//      we could avoid glBindBuffer() or glBindVertexArray() call during VAO creation by
+//      glEnableVertexArrayAttrib(), glVertexArrayAttribFormat(), glVertexArrayAttribBinding(),
+//      glVertexArrayVertexBuffer(), glVertexArrayVertexBuffer()
 
 #include "graphics_internal.h"
 #include "graphics.h"
@@ -48,20 +59,20 @@ GLuint LocalIndexBO{0};
 } // unnamed namespace
 
 
-//------------------------------------------------------------------------------------
-// Инициализация данных индекс буфера
-//------------------------------------------------------------------------------------
-void Internal_InitializationLocalIndexData()
+/*
+ * Initialization.
+ */
+void __InitializationLocalIndexData()
 {
 	LocalIndexArrayCount = 0;
 	LocalIndexArray = nullptr;
 	LocalIndexBO = 0;
 }
 
-//------------------------------------------------------------------------------------
-// Чистка памяти данных индекс буфера
-//------------------------------------------------------------------------------------
-void Internal_ReleaseLocalIndexData()
+/*
+ * Release memory.
+ */
+void __ReleaseLocalIndexData()
 {
 	if (LocalIndexArray) {
 		delete [] LocalIndexArray;
@@ -72,126 +83,60 @@ void Internal_ReleaseLocalIndexData()
 		vw_DeleteBufferObject(LocalIndexBO);
 }
 
-//------------------------------------------------------------------------------------
-// устанавливаем указатели, готовимся к прорисовке
-//------------------------------------------------------------------------------------
-GLuint *__SendVertices_EnableStatesAndPointers(GLsizei count, int DataFormat, void *VertexArray, int Stride, GLuint VertexBO,
-					       unsigned int RangeStart, unsigned int *IndexArray, GLuint IndexBO)
+/*
+ * Setup states and pointers.
+ */
+GLuint *__SendVertices_EnableStatesAndPointers(GLsizei count, int DataFormat, const GLvoid *VertexArray,
+					       GLsizei stride, GLuint VertexBO, unsigned int RangeStart,
+					       unsigned int *IndexArray, GLuint IndexBO)
 {
-	// если ничего не передали
 	if (!VertexArray && !VertexBO)
 		return nullptr;
 
-	// флаг нужно ли с вбо делать
-	bool NeedVBO = vw_GetDevCaps()->VBOSupported;
+	bool NeedVBO = __GetDevCaps().VBOSupported;
 	if (!VertexBO)
 		NeedVBO = false;
 
-	// обязательно в байты, т.к. делаем смещение в байтах!
-	uint8_t *TMP = (uint8_t *)VertexArray;
-
-	// чтобы знать сколько отступать, кол-во ед. элементов, в нашем случае float
-	intptr_t AddStride = 0;
-	// кол-во текстур
-	int TextQ = DataFormat & 0x000000F;
-	// длина блока
-	int TextSize = 2;
-	int TextCoordType = 1; // float
-	switch (DataFormat & 0x0F00000) {
-	case 0x0100000:
-		TextSize = 1;
-		break;
-	case 0x0200000:
-		TextSize = 2;
-		break;
-	case 0x0300000:
-		TextSize = 3;
-		break;
-	case 0x0400000:
-		TextSize = 4;
-		break;
-	// short
-	case 0x0500000:
-		TextSize = 1;
-		TextCoordType = 2;
-		break;
-	case 0x0600000:
-		TextSize = 2;
-		TextCoordType = 2;
-		break;
-	case 0x0700000:
-		TextSize = 3;
-		TextCoordType = 2;
-		break;
-	case 0x0800000:
-		TextSize = 4;
-		TextCoordType = 2;
-		break;
-	}
+	uint8_t *tmpPointer{nullptr};
 
 	if (NeedVBO)
 		vw_BindBufferObject(eBufferObject::Vertex, VertexBO);
+	else
+		tmpPointer = (uint8_t*)VertexArray;
 
-	// делаем установку поинтеров + ставим смещения для прорисовки
-	if ((DataFormat & 0x000F000) == RI_3f_XYZ) {
+	if ((DataFormat & RI_COORD) == RI_3f_XYZ) {
 		glEnableClientState(GL_VERTEX_ARRAY);
-		if (NeedVBO)
-			glVertexPointer(3, GL_FLOAT, Stride, (intptr_t *)(AddStride));
-		else
-			glVertexPointer(3, GL_FLOAT, Stride, TMP + AddStride);
-		AddStride += 3*sizeof(GLfloat);
-	}
-	if ((DataFormat & 0x000F000) == RI_2f_XY) {
-		glEnableClientState(GL_VERTEX_ARRAY);
-		if (NeedVBO)
-			glVertexPointer(2, GL_FLOAT, Stride, (uint8_t *)(AddStride));
-		else
-			glVertexPointer(2, GL_FLOAT, Stride, TMP + AddStride);
-		AddStride += 2*sizeof(GLfloat);
+		glVertexPointer(3, GL_FLOAT, stride, tmpPointer);
+		tmpPointer += 3 * sizeof(GLfloat);
 	}
 
-	if ((DataFormat & 0x0000F00) == RI_3f_NORMAL) {
+	if ((DataFormat & RI_COORD) == RI_2f_XY) {
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(2, GL_FLOAT, stride, tmpPointer);
+		tmpPointer += 2 * sizeof(GLfloat);
+	}
+
+	if ((DataFormat & RI_NORMAL) == RI_3f_NORMAL) {
 		glEnableClientState(GL_NORMAL_ARRAY);
-		if (NeedVBO)
-			glNormalPointer(GL_FLOAT, Stride, (uint8_t *)(AddStride));
-		else
-			glNormalPointer(GL_FLOAT, Stride, TMP + AddStride);
-		AddStride += 3*sizeof(GLfloat);
+		glNormalPointer(GL_FLOAT, stride, tmpPointer);
+		tmpPointer += 3 * sizeof(GLfloat);
 	}
 
-	if ((DataFormat & 0x00000F0) == RI_4f_COLOR) {
+	if ((DataFormat & RI_COLOR) == RI_4f_COLOR) {
 		glEnableClientState(GL_COLOR_ARRAY);
-		if (NeedVBO)
-			glColorPointer(4, GL_FLOAT, Stride, (uint8_t *)(AddStride));
-		else
-			glColorPointer(4, GL_FLOAT, Stride, TMP + AddStride);
-		AddStride += 4*sizeof(GLfloat);
+		glColorPointer(4, GL_FLOAT, stride, tmpPointer);
+		tmpPointer += 4 * sizeof(GLfloat);
 	}
 
-	if (TextQ > 0) { // текстурные коорд. есть...
-		for (int i=0; i<TextQ; i++) {
+	int TexturesCount = DataFormat & RI_TEX_COUNT;
+	if (TexturesCount > 0) {
+		for (int i = 0; i < TexturesCount; i++) {
 			if (_glClientActiveTexture)
-				_glClientActiveTexture(GL_TEXTURE0+i);
+				_glClientActiveTexture(GL_TEXTURE0 + i);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-			switch (TextCoordType) {
-			case 1: {
-				if (NeedVBO)
-					glTexCoordPointer(TextSize, GL_FLOAT, Stride, (uint8_t *)(AddStride));
-				else
-					glTexCoordPointer(TextSize, GL_FLOAT, Stride, TMP + AddStride);
-				if ((DataFormat & 0xF000000) == RI_SEPARATE_TEX_COORD) AddStride += TextSize*sizeof(GLfloat);
-			}
-			break;
-			case 2: {
-				if (NeedVBO)
-					glTexCoordPointer(TextSize, GL_SHORT, Stride, (uint8_t *)(AddStride));
-				else
-					glTexCoordPointer(TextSize, GL_SHORT, Stride, TMP + AddStride);
-				if ((DataFormat & 0xF000000) == RI_SEPARATE_TEX_COORD) AddStride += TextSize*sizeof(GLshort);
-			}
-			break;
-			}
+			glTexCoordPointer(2, GL_FLOAT, stride, tmpPointer);
+			if ((DataFormat & RI_TEX_COORD_TYPE) == RI_SEPARATE_TEX_COORD)
+				tmpPointer += 2 * sizeof(GLfloat);
 		}
 	}
 
@@ -245,49 +190,36 @@ GLuint *__SendVertices_EnableStatesAndPointers(GLsizei count, int DataFormat, vo
 	return indices;
 }
 
-//------------------------------------------------------------------------------------
-// выключаем все после прорисовки
-//------------------------------------------------------------------------------------
-void __SendVertices_DisableStatesAndPointers(int DataFormat, GLuint VBO, GLuint VAO)
+/*
+ * Disable states.
+ */
+void __SendVertices_DisableStatesAndPointers(int DataFormat)
 {
-	// флаг нужно ли с вaо делать
-	bool NeedVAO = vw_GetDevCaps()->VAOSupported;
-	if (!VAO)
-		NeedVAO = false;
+	if (DataFormat & RI_NORMAL)
+		glDisableClientState(GL_NORMAL_ARRAY);
+	if (DataFormat & RI_COLOR)
+		glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
 
-	if (NeedVAO) {
-		vw_BindVAO(0);
-	} else {
-		// флаг нужно ли с вбо делать
-		bool NeedVBO = vw_GetDevCaps()->VBOSupported;
-		if (!VBO)
-			NeedVBO = false;
+	int TexturesCount = DataFormat & RI_TEX_COUNT;
+	for (int i = 0; i < TexturesCount; i++) {
+		if (_glClientActiveTexture)
+			_glClientActiveTexture(GL_TEXTURE0 + i);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	}
 
-		if ((DataFormat & 0x0000F00) != 0) glDisableClientState(GL_NORMAL_ARRAY);
-		if ((DataFormat & 0x00000F0) != 0) glDisableClientState(GL_COLOR_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-
-		// кол-во текстур
-		int TextQ = DataFormat & 0x000000F;
-		for (int i=TextQ-1; i>=0; i--) {
-			if (_glClientActiveTexture)
-				_glClientActiveTexture(GL_TEXTURE0+i);
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		}
-
-		// сбрасываем индексный и вертексный буфера, если они были установлены
-		if (LocalIndexBO)
-			vw_BindBufferObject(eBufferObject::Index, 0);
-		if (NeedVBO)
-			vw_BindBufferObject(eBufferObject::Vertex, 0);
+	if (__GetDevCaps().VBOSupported) {
+		vw_BindBufferObject(eBufferObject::Index, 0);
+		vw_BindBufferObject(eBufferObject::Vertex, 0);
 	}
 }
 
-//------------------------------------------------------------------------------------
-// Процедура передачи последовательности вертексов для прорисовки
-//------------------------------------------------------------------------------------
-void vw_SendVertices(ePrimitiveType mode, GLsizei count, int DataFormat, void *VertexArray, int Stride, GLuint VertexBO,
-		     unsigned int RangeStart, unsigned int *IndexArray, GLuint IndexBO, GLuint VAO)
+/*
+ * Send (draw) vertices.
+ */
+void vw_SendVertices(ePrimitiveType mode, GLsizei count, int DataFormat, const GLvoid *VertexArray,
+		     GLsizei Stride, GLuint VertexBO, unsigned int RangeStart,
+		     unsigned int *IndexArray, GLuint IndexBO, GLuint VAO)
 {
 	if (!VertexArray && !VertexBO)
 		return;
@@ -305,5 +237,5 @@ void vw_SendVertices(ePrimitiveType mode, GLsizei count, int DataFormat, void *V
 	if (VAO && __GetDevCaps().VAOSupported)
 		vw_BindVAO(0);
 	else
-		__SendVertices_DisableStatesAndPointers(DataFormat, VertexBO, VAO);
+		__SendVertices_DisableStatesAndPointers(DataFormat);
 }
