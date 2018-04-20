@@ -51,11 +51,8 @@ sDevCaps &__GetDevCaps();
  * gl_draw3d
  */
 
-void __InitializationLocalIndexData();
-void __ReleaseLocalIndexData();
-GLuint *__SendVertices_EnableStatesAndPointers(GLsizei count, int DataFormat, const GLvoid *VertexArray,
-					       GLsizei stride, GLuint VertexBO, unsigned int RangeStart,
-					       unsigned int *IndexArray, GLuint IndexBO);
+void __SendVertices_EnableStatesAndPointers(int DataFormat, const GLvoid *VertexArray,
+					    GLsizei stride, GLuint VertexBO);
 void __SendVertices_DisableStatesAndPointers(int DataFormat);
 
 #endif // GraphicsInternal_H

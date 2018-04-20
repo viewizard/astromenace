@@ -959,10 +959,9 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		}
 
 		// делаем VAO
-		if (!vw_BuildVAO(ObjectBlocks[0].VAO, ObjectBlocks[0].VertexCount, ObjectBlocks[0].VertexFormat,
+		if (!vw_BuildVAO(ObjectBlocks[0].VAO, ObjectBlocks[0].VertexFormat,
 				 ObjectBlocks[0].VertexArray.get(), ObjectBlocks[0].VertexStride * sizeof(float),
-				 ObjectBlocks[0].VBO, ObjectBlocks[0].RangeStart, ObjectBlocks[0].IndexArray.get(),
-				 ObjectBlocks[0].IBO))
+				 ObjectBlocks[0].VBO))
 			ObjectBlocks[0].VAO = 0;
 	}
 

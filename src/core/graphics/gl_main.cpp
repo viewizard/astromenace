@@ -408,9 +408,6 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	// подключаем расширения
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	// инициализация индекс буфера
-	__InitializationLocalIndexData();
-
 	if (OpenGL_DevCaps.FramebufferObject) {
 		// инициализируем буферы, если поддерживаем работу с ними - через них всегда рисуем
 		if (OpenGL_DevCaps.FramebufferObject) {
@@ -481,7 +478,6 @@ void vw_ShutdownRenderer()
 {
 	vw_ReleaseAllShaders();
 
-	__ReleaseLocalIndexData();
 	vw_DeleteFBO(&MainFBO);
 	vw_DeleteFBO(&ResolveFBO);
 }

@@ -25,10 +25,8 @@
 
 *************************************************************************************/
 
-// TODO move from new/delete to std::unique_ptr
-
 // NOTE GL_ARB_vertex_program (since OpenGL 2.0)
-//      glVertexAttribPointer(), glEnableVertexAttribArray() + shader
+//      glVertexAttribPointer(), glEnableVertexAttribArray(), glDisableVertexAttribArray()
 //      could be used to replace gl*Pointer() + glEnableClientState()
 
 // NOTE GL_EXT_draw_instanced (since OpenGL 3.1)
@@ -36,62 +34,26 @@
 
 // NOTE ARB_vertex_attrib_binding (since OpenGL 4.3)
 //      specify the attribute format and the attribute data separately
-//      glEnableVertexAttribArray(), glVertexAttribFormat(), glVertexAttribBinding()
+//      glEnableVertexAttribArray(), glVertexAttribFormat(), glVertexAttribBinding(),
+//      glDisableVertexAttribArray()
 
 // NOTE ARB_direct_state_access (since OpenGL 4.5)
 //      we could avoid glBindBuffer() or glBindVertexArray() call during VAO creation by
 //      glEnableVertexArrayAttrib(), glVertexArrayAttribFormat(), glVertexArrayAttribBinding(),
-//      glVertexArrayVertexBuffer(), glVertexArrayVertexBuffer()
+//      glVertexArrayVertexBuffer(), glVertexArrayVertexBuffer(), glDisableVertexArrayAttrib()
 
 #include "graphics_internal.h"
 #include "graphics.h"
 #include "extensions.h"
 
-namespace {
-
-// local index array count
-unsigned int LocalIndexArrayCount{0};
-// local index array
-GLuint *LocalIndexArray{nullptr};
-// local index buffer object
-GLuint LocalIndexBO{0};
-
-} // unnamed namespace
-
-
-/*
- * Initialization.
- */
-void __InitializationLocalIndexData()
-{
-	LocalIndexArrayCount = 0;
-	LocalIndexArray = nullptr;
-	LocalIndexBO = 0;
-}
-
-/*
- * Release memory.
- */
-void __ReleaseLocalIndexData()
-{
-	if (LocalIndexArray) {
-		delete [] LocalIndexArray;
-		LocalIndexArray = nullptr;
-	}
-	LocalIndexArrayCount = 0;
-	if (LocalIndexBO)
-		vw_DeleteBufferObject(LocalIndexBO);
-}
-
 /*
  * Setup states and pointers.
  */
-GLuint *__SendVertices_EnableStatesAndPointers(GLsizei count, int DataFormat, const GLvoid *VertexArray,
-					       GLsizei stride, GLuint VertexBO, unsigned int RangeStart,
-					       unsigned int *IndexArray, GLuint IndexBO)
+void __SendVertices_EnableStatesAndPointers(int DataFormat, const GLvoid *VertexArray,
+					    GLsizei stride, GLuint VertexBO)
 {
 	if (!VertexArray && !VertexBO)
-		return nullptr;
+		return;
 
 	bool NeedVBO = __GetDevCaps().VBOSupported;
 	if (!VertexBO)
@@ -139,55 +101,6 @@ GLuint *__SendVertices_EnableStatesAndPointers(GLsizei count, int DataFormat, co
 				tmpPointer += 2 * sizeof(GLfloat);
 		}
 	}
-
-	// indices - fourth parameter for glDrawElements()
-	GLuint *indices{nullptr};
-	if (IndexBO || IndexArray) {
-		// by default, work with IndexArray
-		indices = IndexArray;
-		// if IBO provided and supported, setup IBO
-		if (IndexBO && __GetDevCaps().VBOSupported) {
-			vw_BindBufferObject(eBufferObject::Index, IndexBO);
-			indices = nullptr;
-		}
-		// care about RangeStart, since we could start from range
-		indices = indices + RangeStart;
-
-		return indices;
-	}
-
-	// re-create local index array, if need
-	if (LocalIndexArrayCount < (unsigned int)(count + RangeStart)) {
-		LocalIndexArrayCount = count + RangeStart;
-		if (LocalIndexArray)
-			delete [] LocalIndexArray;
-
-		LocalIndexArray = new GLuint[LocalIndexArrayCount];
-		for (unsigned int i = 0; i < LocalIndexArrayCount; i++) {
-			LocalIndexArray[i] = i;
-		}
-
-		// if buffer objects supported, create IBO
-		if (__GetDevCaps().VBOSupported) {
-			if (LocalIndexBO)
-				vw_DeleteBufferObject(LocalIndexBO);
-			if (!vw_BuildBufferObject(eBufferObject::Index,
-						  LocalIndexArrayCount * sizeof(unsigned), LocalIndexArray, LocalIndexBO))
-				LocalIndexBO = 0;
-		}
-	}
-
-	// by default, work with LocalIndexArray
-	indices = LocalIndexArray;
-	// if IBO provided and supported, setup IBO
-	if (LocalIndexBO && __GetDevCaps().VBOSupported) {
-		vw_BindBufferObject(eBufferObject::Index, LocalIndexBO);
-		indices = nullptr;
-	}
-	// care about RangeStart, since we could start from range
-	indices = indices + RangeStart;
-
-	return indices;
 }
 
 /*
@@ -225,14 +138,23 @@ void vw_SendVertices(ePrimitiveType mode, GLsizei count, int DataFormat, const G
 		return;
 
 	// in case of VAO, we don't need provide indices, VAO will care about pointers
-	GLuint *indices{nullptr};
 	if (VAO && __GetDevCaps().VAOSupported)
 		vw_BindVAO(VAO);
 	else
-		indices = __SendVertices_EnableStatesAndPointers(count, DataFormat, VertexArray, Stride,
-								 VertexBO, RangeStart, IndexArray, IndexBO);
+		__SendVertices_EnableStatesAndPointers(DataFormat, VertexArray, Stride, VertexBO);
 
-	glDrawElements(static_cast<GLenum>(mode), count, GL_UNSIGNED_INT, indices);
+	if (IndexArray || IndexBO) {
+		GLuint *indices{nullptr};
+		// by default, work with IndexArray
+		indices = IndexArray;
+		// if IBO provided and supported, setup IBO
+		if (IndexBO && __GetDevCaps().VBOSupported) {
+			vw_BindBufferObject(eBufferObject::Index, IndexBO);
+			indices = nullptr;
+		}
+		glDrawElements(static_cast<GLenum>(mode), count, GL_UNSIGNED_INT, indices + RangeStart);
+	} else
+		glDrawArrays(static_cast<GLenum>(mode), RangeStart, count);
 
 	if (VAO && __GetDevCaps().VAOSupported)
 		vw_BindVAO(0);

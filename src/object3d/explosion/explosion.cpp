@@ -261,9 +261,8 @@ bool cExplosion::Update(float Time)
 					}
 
 					// делаем VAO
-					if (!vw_BuildVAO(tmpObjectBlock.VAO, tmpObjectBlock.VertexCount, tmpObjectBlock.VertexFormat, tmpObjectBlock.VertexArray.get(),
-							 tmpObjectBlock.VertexStride * sizeof(float), tmpObjectBlock.VBO,
-							 tmpObjectBlock.RangeStart, tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO))
+					if (!vw_BuildVAO(tmpObjectBlock.VAO, tmpObjectBlock.VertexFormat, tmpObjectBlock.VertexArray.get(),
+							 tmpObjectBlock.VertexStride * sizeof(float), tmpObjectBlock.VBO))
 						tmpObjectBlock.VAO = 0;
 				}
 			}
