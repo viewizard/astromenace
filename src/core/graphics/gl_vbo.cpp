@@ -32,7 +32,8 @@
 /*
  * Build buffer object (size in bytes).
  */
-bool vw_BuildBufferObject(eBufferObject target, GLsizeiptr size, const GLvoid *data, GLuint &buffer)
+bool vw_BuildBufferObject(eBufferObject target, GLsizeiptr size, const GLvoid *data,
+			  GLuint &buffer, eBufferObjectUsage usage)
 {
 	// Don't check 'data' parameter, since nullptr is appropriate value for glBufferData().
 	if (!_glGenBuffers ||
@@ -43,7 +44,7 @@ bool vw_BuildBufferObject(eBufferObject target, GLsizeiptr size, const GLvoid *d
 
 	_glGenBuffers(1, &buffer);
 	_glBindBuffer(static_cast<GLenum>(target), buffer);
-	_glBufferData(static_cast<GLenum>(target), size, data, GL_STATIC_DRAW);
+	_glBufferData(static_cast<GLenum>(target), size, data, static_cast<GLenum>(usage));
 	_glBindBuffer(static_cast<GLenum>(target), 0); // disable buffer (bind buffer 0)
 
 	if (!_glIsBuffer(buffer))

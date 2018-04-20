@@ -251,6 +251,12 @@ struct sCoverageModes {
 	int CoverageSamples;
 };
 
+enum class eBufferObjectUsage : GLenum {
+	STREAM = GL_STREAM_DRAW,	// The data store contents will be modified once and used at most a few times.
+	STATIC = GL_STATIC_DRAW,	// The data store contents will be modified once and used many times.
+	DYNAMIC = GL_DYNAMIC_DRAW	// The data store contents will be modified repeatedly and used many times.
+};
+
 struct sDevCaps {
 	// версия OpenGL
 	int OpenGLmajorVersion;
@@ -477,7 +483,8 @@ void vw_MaterialV(eMaterialParameter pname, const GLfloat *param);
  */
 
 // Build buffer object (size in bytes).
-bool vw_BuildBufferObject(eBufferObject target, GLsizeiptr size, const GLvoid *data, GLuint &buffer);
+bool vw_BuildBufferObject(eBufferObject target, GLsizeiptr size, const GLvoid *data,
+			  GLuint &buffer, eBufferObjectUsage usage = eBufferObjectUsage::STATIC);
 // Bind buffer object.
 void vw_BindBufferObject(eBufferObject target, GLuint buffer);
 // Delete buffer object.
