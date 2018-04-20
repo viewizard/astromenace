@@ -274,7 +274,7 @@ void StarSystemDraw(int DrawType)
 			vw_Rotate(30.0f, 1.0f, 0.0f, 0.0f);
 		}
 
-		vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(buff[0]));
+		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 9 * sizeof(buff[0]));
 
 
 
@@ -324,7 +324,7 @@ void StarSystemDraw(int DrawType)
 
 		vw_BindTexture(0, vw_FindTextureByName("skybox/tile_stars.tga"));
 
-		vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(buff[0]));
+		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 9 * sizeof(buff[0]));
 
 
 
@@ -455,7 +455,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 		}
 
 
-		vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 9*sizeof(buff[0]));
+		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 9 * sizeof(buff[0]));
 
 		if (DrawType == 1) vw_PopMatrix();
 

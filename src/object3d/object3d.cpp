@@ -620,7 +620,7 @@ void DrawLine(sVECTOR3D Point1, sVECTOR3D Point2, float ColorR, float ColorG, fl
 	tmpDATA[k] = ColorA;
 
 
-	vw_SendVertices(ePrimitiveType::LINES, 2, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(tmpDATA[0]));
+	vw_Draw3D(ePrimitiveType::LINES, 2, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7 * sizeof(tmpDATA[0]));
 
 	delete [] tmpDATA;
 }
@@ -716,9 +716,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			}
 
 			// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
-			vw_SendVertices(ePrimitiveType::TRIANGLES, GlobalVertexCount, RI_3f_XYZ, GlobalVertexArray.get(),
-					ObjectBlocks[0].VertexStride * sizeof(float), GlobalVBO, 0,
-					GlobalIndexArray.get(), GlobalIBO, GlobalVAO);
+			vw_Draw3D(ePrimitiveType::TRIANGLES, GlobalVertexCount, RI_3f_XYZ, GlobalVertexArray.get(),
+				  ObjectBlocks[0].VertexStride * sizeof(float), GlobalVBO, 0,
+				  GlobalIndexArray.get(), GlobalIBO, GlobalVAO);
 		} else {
 
 			// установка текстур и подхотовка к прорисовке
@@ -753,9 +753,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				}
 
 
-				vw_SendVertices(ePrimitiveType::TRIANGLES, tmpObjectBlock.VertexCount, RI_3f_XYZ, tmpObjectBlock.VertexArray.get(),
-						tmpObjectBlock.VertexStride * sizeof(float), tmpObjectBlock.VBO,
-						tmpObjectBlock.RangeStart, tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO, tmpObjectBlock.VAO);
+				vw_Draw3D(ePrimitiveType::TRIANGLES, tmpObjectBlock.VertexCount, RI_3f_XYZ, tmpObjectBlock.VertexArray.get(),
+					  tmpObjectBlock.VertexStride * sizeof(float), tmpObjectBlock.VBO,
+					  tmpObjectBlock.RangeStart, tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO, tmpObjectBlock.VAO);
 
 
 				if ((tmpObjectBlock.ShaderType == 2) &&
@@ -971,9 +971,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		}
 
 		// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
-		vw_SendVertices(ePrimitiveType::TRIANGLES, GlobalVertexCount, ObjectBlocks[0].VertexFormat, GlobalVertexArray.get(),
-				ObjectBlocks[0].VertexStride * sizeof(float), GlobalVBO, 0,
-				GlobalIndexArray.get(), GlobalIBO, GlobalVAO);
+		vw_Draw3D(ePrimitiveType::TRIANGLES, GlobalVertexCount, ObjectBlocks[0].VertexFormat, GlobalVertexArray.get(),
+			  ObjectBlocks[0].VertexStride * sizeof(float), GlobalVBO, 0,
+			  GlobalIndexArray.get(), GlobalIBO, GlobalVAO);
 
 		vw_DeActivateAllLights();
 	} else {
@@ -1174,9 +1174,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			}
 
 
-			vw_SendVertices(ePrimitiveType::TRIANGLES, ObjectBlocks[i].VertexCount, ObjectBlocks[i].VertexFormat, ObjectBlocks[i].VertexArray.get(),
-					ObjectBlocks[i].VertexStride * sizeof(float), ObjectBlocks[i].VBO,
-					ObjectBlocks[i].RangeStart, ObjectBlocks[i].IndexArray.get(), ObjectBlocks[i].IBO, ObjectBlocks[i].VAO);
+			vw_Draw3D(ePrimitiveType::TRIANGLES, ObjectBlocks[i].VertexCount, ObjectBlocks[i].VertexFormat, ObjectBlocks[i].VertexArray.get(),
+				  ObjectBlocks[i].VertexStride * sizeof(float), ObjectBlocks[i].VBO,
+				  ObjectBlocks[i].RangeStart, ObjectBlocks[i].IndexArray.get(), ObjectBlocks[i].IBO, ObjectBlocks[i].VAO);
 
 
 
@@ -1327,7 +1327,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 
-	vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(tmpDATA[0]));
+	vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7 * sizeof(tmpDATA[0]));
 
 
 	// рисуем вывод кол-ва жизни
@@ -1372,7 +1372,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	tmpDATA[k++] = ColorB;
 	tmpDATA[k] = ColorA;
 
-	vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(tmpDATA[0]));
+	vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7 * sizeof(tmpDATA[0]));
 
 	vw_PopMatrix();
 
@@ -1432,7 +1432,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		vw_Rotate(-CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
 
 
-		vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(tmpDATA[0]));
+		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7 * sizeof(tmpDATA[0]));
 
 
 		// рисуем вывод кол-ва жизни
@@ -1477,7 +1477,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		tmpDATA[k++] = ColorB;
 		tmpDATA[k] = ColorA;
 
-		vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7*sizeof(tmpDATA[0]));
+		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7 * sizeof(tmpDATA[0]));
 
 		vw_PopMatrix();
 	}

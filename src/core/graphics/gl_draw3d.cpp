@@ -128,11 +128,11 @@ void __SendVertices_DisableStatesAndPointers(int DataFormat)
 }
 
 /*
- * Send (draw) vertices.
+ * Draw 3D primitives.
  */
-void vw_SendVertices(ePrimitiveType mode, GLsizei count, int DataFormat, const GLvoid *VertexArray,
-		     GLsizei Stride, GLuint VertexBO, unsigned int RangeStart,
-		     unsigned int *IndexArray, GLuint IndexBO, GLuint VAO)
+void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, const GLvoid *VertexArray,
+	       GLsizei Stride, GLuint VertexBO, unsigned int RangeStart,
+	       unsigned int *IndexArray, GLuint IndexBO, GLuint VAO)
 {
 	if (!VertexArray && !VertexBO)
 		return;

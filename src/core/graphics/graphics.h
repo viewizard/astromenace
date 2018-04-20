@@ -425,10 +425,10 @@ void vw_SetTextureDepthMode(eTextureDepthMode mode);
  * 3D rendering.
  */
 
-// Send (draw) vertices.
-void vw_SendVertices(ePrimitiveType mode, GLsizei count, int DataFormat, const GLvoid *VertexArray,
-		     GLsizei Stride, GLuint VertexBO = 0, unsigned int RangeStart = 0,
-		     unsigned int *IndexArray = nullptr, GLuint IndexBO = 0, GLuint VAO = 0);
+// Draw 3D primitives.
+void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, const GLvoid *VertexArray,
+	       GLsizei Stride, GLuint VertexBO = 0, unsigned int RangeStart = 0,
+	       unsigned int *IndexArray = nullptr, GLuint IndexBO = 0, GLuint VAO = 0);
 // Set color.
 void vw_SetColor(float nRed, float nGreen, float nBlue, float nAlpha);
 // Set what facets can be culled.

@@ -398,8 +398,8 @@ void cParticleSystem2D::Draw()
 	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
 
 	// rendering
-	vw_SendVertices(ePrimitiveType::TRIANGLES, 6 * ParticlesList.size(), RI_2f_XY | RI_1_TEX | RI_4f_COLOR,
-			DrawBuffer.get(), 8 * sizeof(DrawBuffer.get()[0]));
+	vw_Draw3D(ePrimitiveType::TRIANGLES, 6 * ParticlesList.size(), RI_2f_XY | RI_1_TEX | RI_4f_COLOR,
+		  DrawBuffer.get(), 8 * sizeof(DrawBuffer.get()[0]));
 
 	// reset rendering states
 	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);

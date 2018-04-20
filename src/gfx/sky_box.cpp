@@ -109,7 +109,7 @@ void SkyBoxDraw()
 		buff[k++] = 1.0f;
 
 		vw_BindTexture(0, SkyBox_Texture[BACK]);
-		vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(buff[0]));
+		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5 * sizeof(buff[0]));
 	}
 
 
@@ -140,7 +140,7 @@ void SkyBoxDraw()
 		buff[k++] = 1.0f;
 
 		vw_BindTexture(0, SkyBox_Texture[FRONT]);
-		vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(buff[0]));
+		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5 * sizeof(buff[0]));
 
 	}
 
@@ -172,7 +172,7 @@ void SkyBoxDraw()
 		buff[k++] = 1.0f;
 
 		vw_BindTexture(0, SkyBox_Texture[BOTTOM]);
-		vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(buff[0]));
+		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5 * sizeof(buff[0]));
 	}
 
 
@@ -203,7 +203,7 @@ void SkyBoxDraw()
 		buff[k++] = 0.0f;
 
 		vw_BindTexture(0, SkyBox_Texture[TOP]);
-		vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(buff[0]));
+		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5 * sizeof(buff[0]));
 	}
 
 
@@ -234,7 +234,7 @@ void SkyBoxDraw()
 		buff[k++] = 0.0f;
 
 		vw_BindTexture(0, SkyBox_Texture[LEFT]);
-		vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(buff[0]));
+		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5 * sizeof(buff[0]));
 	}
 
 
@@ -265,7 +265,7 @@ void SkyBoxDraw()
 		buff[k++] = 1.0f;
 
 		vw_BindTexture(0, SkyBox_Texture[RIGHT]);
-		vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5*sizeof(buff[0]));
+		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5 * sizeof(buff[0]));
 	}
 
 
