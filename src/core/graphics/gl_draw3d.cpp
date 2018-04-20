@@ -46,9 +46,6 @@ GLuint LocalIndexBO{0};
 
 } // unnamed namespace
 
-extern int tmpPrimCountGL;
-
-
 
 //------------------------------------------------------------------------------------
 // Инициализация данных индекс буфера
@@ -329,27 +326,22 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *V
 	switch(PrimitiveType) {
 	case RI_POINTS:
 		glDrawElements(GL_POINTS,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-		tmpPrimCountGL += NumVertices;
 		break;
 
 	case RI_LINES:
 		glDrawElements(GL_LINES,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-		tmpPrimCountGL += NumVertices/2;
 		break;
 
 	case RI_TRIANGLES:
 		glDrawElements(GL_TRIANGLES,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-		tmpPrimCountGL += NumVertices/3;
 		break;
 
 	case RI_TRIANGLE_STRIP:
 		glDrawElements(GL_TRIANGLE_STRIP,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-		tmpPrimCountGL += NumVertices-2;
 		break;
 
 	case RI_TRIANGLE_FAN:
 		glDrawElements(GL_TRIANGLE_FAN,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-		tmpPrimCountGL += NumVertices-2;
 		break;
 
 	default:

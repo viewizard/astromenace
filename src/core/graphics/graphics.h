@@ -344,9 +344,6 @@ const sDevCaps *vw_GetDevCaps();
 void vw_SetAspectRatio(float nWidth, float nHeight, bool Value);
 bool vw_GetAspectWH(float *ARWidth, float *ARHeight);
 
-// Get rendered primitives count.
-int vw_GetPrimCount();
-
 // Set viewport data.
 void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height,
 		    GLdouble near = 0, GLdouble far = 1, eOrigin Origin = eOrigin::upper_left);

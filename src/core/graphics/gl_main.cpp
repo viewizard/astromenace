@@ -53,9 +53,6 @@ float ARWidthGL;
 float ARHeightGL;
 bool ARFLAGGL = false;
 
-// переменные для просчета кол-ва прорисовываемых примитивов...
-int tmpPrimCountGL=0;
-int PrimCountGL=0;
 
 
 
@@ -478,13 +475,6 @@ sDevCaps &__GetDevCaps()
 
 
 
-//------------------------------------------------------------------------------------
-// получение кол-ва прорисованных примитивов...
-//------------------------------------------------------------------------------------
-int vw_GetPrimCount()
-{
-	return PrimCountGL;
-}
 
 
 
@@ -591,8 +581,6 @@ void vw_BeginRendering(int mask)
 
 	glMatrixMode(GL_MODELVIEW);		//Select the modelview matrix
 	glLoadIdentity();				//Reset The modelview matrix
-
-	tmpPrimCountGL = 0;
 }
 
 
@@ -617,8 +605,6 @@ void vw_EndRendering()
 	}
 
 	SDL_GL_SwapWindow(window_SDL2);
-
-	PrimCountGL = tmpPrimCountGL;
 }
 
 

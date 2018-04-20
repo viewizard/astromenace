@@ -170,8 +170,6 @@ void Loop_Proc()
 			vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f", vw_GetText("11_fps"), eFPS);
 		else
 			vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f (VSync - %s)", vw_GetText("11_fps"), eFPS, vw_GetText("1_On"));
-		// кол-во прорисовываемых триугольников
-		vw_DrawFont(6,25, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %i", vw_GetText("11_triangles"), vw_GetPrimCount());
 	}
 
 
