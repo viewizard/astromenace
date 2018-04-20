@@ -292,6 +292,12 @@ struct sDevCaps {
 	float ShaderModel;
 	// поддержка генерации мипмеп в железе
 	bool HardwareMipMapGeneration;
+
+	bool OpenGL_1_3_supported;
+	bool OpenGL_1_5_supported;
+	bool OpenGL_2_0_supported;
+	bool OpenGL_3_0_supported;
+	bool OpenGL_4_2_supported;
 };
 
 // Buffer clear bit
@@ -301,11 +307,17 @@ struct sDevCaps {
 #define RI_STENCIL_BUFFER	0x0001
 
 // Data format
+#define RI_COORD			0x000F000
 #define RI_3f_XYZ			0x0001000
 #define RI_2f_XY			0x0002000
+#define RI_NORMAL			0x0000F00
 #define RI_3f_NORMAL			0x0000100
+#define RI_COLOR			0x00000F0
 #define RI_4f_COLOR			0x0000010
+#define RI_TEXTURE			0x0F00000
+#define RI_2f_TEX			0x0200000
 // кол-во текстур
+#define RI_TEX_COUNT			0x000000F
 #define RI_1_TEX			0x0000001
 #define RI_2_TEX			0x0000002
 #define RI_3_TEX			0x0000003
@@ -314,12 +326,8 @@ struct sDevCaps {
 #define RI_6_TEX			0x0000006
 #define RI_7_TEX			0x0000007
 #define RI_8_TEX			0x0000008
-// размер данных на каждую текстуру
-#define RI_1f_TEX			0x0100000
-#define RI_2f_TEX			0x0200000 // по умолчанию
-#define RI_3f_TEX			0x0300000
-#define RI_4f_TEX			0x0400000
 // тип работы с координатами текстуры
+#define RI_TEX_COORD_TYPE		0xF000000
 #define RI_SEPARATE_TEX_COORD		0x0000000
 #define RI_DUBLICATE_TEX_COORD		0x1000000
 
@@ -412,9 +420,9 @@ void vw_SetTextureDepthMode(eTextureDepthMode mode);
  */
 
 // Send (draw) vertices.
-void vw_SendVertices(ePrimitiveType mode, GLsizei count, int DataFormat, void *VertexArray, int Stride,
-		     GLuint VertexBO = 0, unsigned int RangeStart = 0, unsigned int *IndexArray = nullptr,
-		     GLuint IndexBO = 0, GLuint VAO = 0);
+void vw_SendVertices(ePrimitiveType mode, GLsizei count, int DataFormat, const GLvoid *VertexArray,
+		     GLsizei Stride, GLuint VertexBO = 0, unsigned int RangeStart = 0,
+		     unsigned int *IndexArray = nullptr, GLuint IndexBO = 0, GLuint VAO = 0);
 // Set color.
 void vw_SetColor(float nRed, float nGreen, float nBlue, float nAlpha);
 // Set what facets can be culled.
@@ -480,8 +488,9 @@ void vw_DeleteBufferObject(GLuint &buffer);
  */
 
 // Build vertex array object.
-bool vw_BuildVAO(GLuint &VAO, int NumVertices, int DataFormat, void *VertexArray, int Stride, GLuint VertexBO,
-		 unsigned int RangeStart, unsigned int *IndexArray, GLuint IndexBO);
+bool vw_BuildVAO(GLuint &VAO, int NumVertices, int DataFormat, const GLvoid *VertexArray,
+		 GLsizei Stride, GLuint VertexBO, unsigned int RangeStart,
+		 unsigned int *IndexArray, GLuint IndexBO);
 // Bind vertex array object.
 void vw_BindVAO(GLuint VAO);
 // Delete vertex array object.

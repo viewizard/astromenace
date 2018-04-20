@@ -61,7 +61,7 @@ SDL_Window *window_SDL2 = nullptr;
 SDL_Window *vw_GetSDL2Windows()
 {
 	return window_SDL2;
-};
+}
 
 float CurrentGammaGL = 1.0f;
 float CurrentContrastGL = 1.0f;
@@ -70,10 +70,6 @@ float CurrentBrightnessGL = 1.0f;
 GLsizei ScreenWidthGL{0};
 GLsizei ScreenHeightGL{0};
 
-
-// индекс буфера (внутренний буфер)
-bool Internal_InitializationLocalIndexData();
-void Internal_ReleaseLocalIndexData();
 sFBO MainFBO; // основной FBO, для прорисовки со сглаживанием
 sFBO ResolveFBO; // FBO для вывода основного
 
@@ -150,7 +146,12 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	OpenGL_DevCaps.TextureStorage = false;
 	OpenGL_DevCaps.FramebufferObject = false;
 	OpenGL_DevCaps.FramebufferObjectDepthSize = 0;
-
+	OpenGL_DevCaps.OpenGL_1_3_supported = __Initialize_OpenGL_1_3();
+	OpenGL_DevCaps.OpenGL_1_5_supported = __Initialize_OpenGL_1_5();
+	OpenGL_DevCaps.OpenGL_2_0_supported = __Initialize_OpenGL_2_0();
+	OpenGL_DevCaps.OpenGL_3_0_supported = __Initialize_OpenGL_3_0();
+	OpenGL_DevCaps.OpenGL_4_2_supported = __Initialize_OpenGL_4_2();
+	__Initialize_GL_NV_framebuffer_multisample_coverage();
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// получаем возможности железа
@@ -338,7 +339,23 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 		}
 	}
 
+	// временно, потом переработать все проверки под версию GL
+	if (!OpenGL_DevCaps.OpenGL_1_3_supported)
+		OpenGL_DevCaps.MaxMultTextures = 1; // FIXME this should be revised
 
+	if (!OpenGL_DevCaps.OpenGL_4_2_supported)
+		OpenGL_DevCaps.TextureStorage = false; // FIXME this should be revised
+
+	if (!OpenGL_DevCaps.OpenGL_2_0_supported)
+		OpenGL_DevCaps.GLSL100Supported = false; // FIXME this should be revised
+
+	if (!OpenGL_DevCaps.OpenGL_1_5_supported)
+		OpenGL_DevCaps.VBOSupported = false; // FIXME this should be revised
+
+	if (!OpenGL_DevCaps.OpenGL_3_0_supported) {
+		OpenGL_DevCaps.VAOSupported = false; // FIXME this should be revised
+		OpenGL_DevCaps.FramebufferObject = false; // FIXME this should be revised
+	}
 
 #ifndef NDEBUG
 	// print all supported OpenGL extensions (one per line)
@@ -391,34 +408,10 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	// подключаем расширения
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	bool OpenGL_1_3_supported = __Initialize_OpenGL_1_3();
-	bool OpenGL_1_5_supported = __Initialize_OpenGL_1_5();
-	bool OpenGL_2_0_supported = __Initialize_OpenGL_2_0();
-	bool OpenGL_3_0_supported = __Initialize_OpenGL_3_0();
-	bool OpenGL_4_2_supported = __Initialize_OpenGL_4_2();
-
-	if (!OpenGL_1_3_supported)
-		OpenGL_DevCaps.MaxMultTextures = 1; // FIXME this should be revised
-
-	if (!OpenGL_4_2_supported)
-		OpenGL_DevCaps.TextureStorage = false; // FIXME this should be revised
-
 	// инициализация индекс буфера
-	Internal_InitializationLocalIndexData();
+	__InitializationLocalIndexData();
 
-	// иним шейдеры
-	if (!OpenGL_2_0_supported)
-		OpenGL_DevCaps.GLSL100Supported = false; // FIXME this should be revised
-	// иним вбо
-	if (!OpenGL_1_5_supported)
-		OpenGL_DevCaps.VBOSupported = false; // FIXME this should be revised
-	if (!OpenGL_3_0_supported) {
-		OpenGL_DevCaps.VAOSupported = false; // FIXME this should be revised
-		OpenGL_DevCaps.FramebufferObject = false; // FIXME this should be revised
-	}
 	if (OpenGL_DevCaps.FramebufferObject) {
-		__Initialize_GL_NV_framebuffer_multisample_coverage();
-
 		// инициализируем буферы, если поддерживаем работу с ними - через них всегда рисуем
 		if (OpenGL_DevCaps.FramebufferObject) {
 			if ((!vw_BuildFBO(&MainFBO, Width, Height, true, true, *MSAA, CSAA)) &
@@ -488,7 +481,7 @@ void vw_ShutdownRenderer()
 {
 	vw_ReleaseAllShaders();
 
-	Internal_ReleaseLocalIndexData();
+	__ReleaseLocalIndexData();
 	vw_DeleteFBO(&MainFBO);
 	vw_DeleteFBO(&ResolveFBO);
 }
