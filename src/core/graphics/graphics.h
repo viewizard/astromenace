@@ -298,7 +298,6 @@ struct sDevCaps {
 #define RI_TRIANGLES			0x1022
 #define RI_TRIANGLE_STRIP		0x1023
 #define RI_TRIANGLE_FAN			0x1024
-#define RI_QUADS			0x1025
 // Data format
 #define RI_3f_XYZ			0x0001000
 #define RI_2f_XY			0x0002000

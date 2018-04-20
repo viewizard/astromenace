@@ -325,12 +325,7 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *V
 		VertexIndexPointer = __SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, VertexArray, Stride,
 									    VertexBO, RangeStart, IndexArray, IndexBO);
 
-// 1) Нельзя использовать short индексы (глючит в линуксе на картах нвидия, проверял на 97.55 драйвере)
-// 2) Нельзя рисовать через glBegin-glEnd и glDrawArray - проблемы в линуксе у ati драйверов (на glDrawArray вообще сегфолтит)
-// 3) С glDrawRangeElements могут быть неприятные сюрпризы на маках (интел+интел видео), сегфолты даже если учесть все ограничения (вертекс и индекс)
 
-
-	// рисуем
 	switch(PrimitiveType) {
 	case RI_POINTS:
 		glDrawElements(GL_POINTS,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
@@ -357,18 +352,10 @@ void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *V
 		tmpPrimCountGL += NumVertices-2;
 		break;
 
-	case RI_QUADS:
-		glDrawElements(GL_QUADS,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-		tmpPrimCountGL += NumVertices/4;
-		break;
-
 	default:
-		std::cerr << __func__ << "(): " << "Error in vw_SendVertices function call, wrong PrimitiveType.\n";
+		std::cerr << __func__ << "(): " << "wrong PrimitiveType.\n";
 		return;
 	}
 
-
-	// выключаем все что включали
 	__SendVertices_DisableStatesAndPointers(DataFormat, VertexBO, VAO);
-
 }

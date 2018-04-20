@@ -25,6 +25,12 @@
 
 *************************************************************************************/
 
+// TODO since we use RI_TRIANGLES, use 4 vertices + index buffer for vw_SendVertices()
+//      instead of 6 vertices, so, we send 4 vertices and index buffer for 6 elements,
+//      something like {1, 2, 3, 3, 4, 1}
+//                               ^  ^  ^ second triangle indexes
+//                      ^  ^  ^ first triangle indexes
+
 #include "../core/core.h"
 #include "../game.h"
 #include "../script_engine/script.h"
@@ -243,9 +249,9 @@ void DrawGameExpMoney(int Exp, int Money)
 	float Transp=1.0f;
 
 	// выделяем память
-	// буфер для последовательности RI_TRIANGLE_STRIP
+	// буфер для последовательности RI_TRIANGLES
 	// войдет RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR
-	float *tmp = new float[(2+2+4)*4*16];
+	float *tmp = new float[(2+2+4)*6*16];
 	int k=0;
 
 
@@ -263,8 +269,9 @@ void DrawGameExpMoney(int Exp, int Money)
 	float U_Right{(SrcRect.right * 1.0f) / ImageWidth};
 	float V_Bottom{(SrcRect.bottom * 1.0f) / ImageHeight};
 
+	// first triangle
 	tmp[k++] = DstRect.left;	// X
-	tmp[k++] = DstRect.top;	// Y
+	tmp[k++] = DstRect.top;		// Y
 	tmp[k++] = R;
 	tmp[k++] = G;
 	tmp[k++] = B;
@@ -290,13 +297,33 @@ void DrawGameExpMoney(int Exp, int Money)
 	tmp[k++] = U_Right;
 	tmp[k++] = V_Bottom;
 
+
+	// second triangle
 	tmp[k++] = DstRect.right;	// X
-	tmp[k++] = DstRect.top;	// Y
+	tmp[k++] = DstRect.bottom;	// Y
 	tmp[k++] = R;
 	tmp[k++] = G;
 	tmp[k++] = B;
 	tmp[k++] = Transp;
 	tmp[k++] = U_Right;
+	tmp[k++] = V_Bottom;
+
+	tmp[k++] = DstRect.right;	// X
+	tmp[k++] = DstRect.top;		// Y
+	tmp[k++] = R;
+	tmp[k++] = G;
+	tmp[k++] = B;
+	tmp[k++] = Transp;
+	tmp[k++] = U_Right;
+	tmp[k++] = V_Top;
+
+	tmp[k++] = DstRect.left;	// X
+	tmp[k++] = DstRect.top;		// Y
+	tmp[k++] = R;
+	tmp[k++] = G;
+	tmp[k++] = B;
+	tmp[k++] = Transp;
+	tmp[k++] = U_Left;
 	tmp[k++] = V_Top;
 
 	Xstart = Setup.iAspectRatioWidth/2-56.0f;
@@ -310,8 +337,9 @@ void DrawGameExpMoney(int Exp, int Money)
 	U_Right = (SrcRect.right * 1.0f) / ImageWidth;
 	V_Bottom = (SrcRect.bottom * 1.0f) / ImageHeight;
 
+	// first triangle
 	tmp[k++] = DstRect.left;	// X
-	tmp[k++] = DstRect.top;	// Y
+	tmp[k++] = DstRect.top;		// Y
 	tmp[k++] = R;
 	tmp[k++] = G;
 	tmp[k++] = B;
@@ -337,13 +365,33 @@ void DrawGameExpMoney(int Exp, int Money)
 	tmp[k++] = U_Right;
 	tmp[k++] = V_Bottom;
 
+
+	// second triangle
 	tmp[k++] = DstRect.right;	// X
-	tmp[k++] = DstRect.top;	// Y
+	tmp[k++] = DstRect.bottom;	// Y
 	tmp[k++] = R;
 	tmp[k++] = G;
 	tmp[k++] = B;
 	tmp[k++] = Transp;
 	tmp[k++] = U_Right;
+	tmp[k++] = V_Bottom;
+
+	tmp[k++] = DstRect.right;	// X
+	tmp[k++] = DstRect.top;		// Y
+	tmp[k++] = R;
+	tmp[k++] = G;
+	tmp[k++] = B;
+	tmp[k++] = Transp;
+	tmp[k++] = U_Right;
+	tmp[k++] = V_Top;
+
+	tmp[k++] = DstRect.left;	// X
+	tmp[k++] = DstRect.top;		// Y
+	tmp[k++] = R;
+	tmp[k++] = G;
+	tmp[k++] = B;
+	tmp[k++] = Transp;
+	tmp[k++] = U_Left;
 	tmp[k++] = V_Top;
 
 
@@ -372,8 +420,9 @@ void DrawGameExpMoney(int Exp, int Money)
 		U_Right = (SrcRect.right * 1.0f) / ImageWidth;
 		V_Bottom = (SrcRect.bottom * 1.0f) / ImageHeight;
 
+		// first triangle
 		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.top;	// Y
+		tmp[k++] = DstRect.top;		// Y
 		tmp[k++] = R;
 		tmp[k++] = G;
 		tmp[k++] = B;
@@ -399,13 +448,33 @@ void DrawGameExpMoney(int Exp, int Money)
 		tmp[k++] = U_Right;
 		tmp[k++] = V_Bottom;
 
+
+		// second triangle
 		tmp[k++] = DstRect.right;	// X
-		tmp[k++] = DstRect.top;	// Y
+		tmp[k++] = DstRect.bottom;	// Y
 		tmp[k++] = R;
 		tmp[k++] = G;
 		tmp[k++] = B;
 		tmp[k++] = Transp;
 		tmp[k++] = U_Right;
+		tmp[k++] = V_Bottom;
+
+		tmp[k++] = DstRect.right;	// X
+		tmp[k++] = DstRect.top;		// Y
+		tmp[k++] = R;
+		tmp[k++] = G;
+		tmp[k++] = B;
+		tmp[k++] = Transp;
+		tmp[k++] = U_Right;
+		tmp[k++] = V_Top;
+
+		tmp[k++] = DstRect.left;	// X
+		tmp[k++] = DstRect.top;		// Y
+		tmp[k++] = R;
+		tmp[k++] = G;
+		tmp[k++] = B;
+		tmp[k++] = Transp;
+		tmp[k++] = U_Left;
 		tmp[k++] = V_Top;
 
 		Xstart += SrcRect.right - SrcRect.left;
@@ -436,8 +505,9 @@ void DrawGameExpMoney(int Exp, int Money)
 		U_Right = (SrcRect.right * 1.0f) / ImageWidth;
 		V_Bottom = (SrcRect.bottom * 1.0f) / ImageHeight;
 
+		// first triangle
 		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.top;	// Y
+		tmp[k++] = DstRect.top;		// Y
 		tmp[k++] = R;
 		tmp[k++] = G;
 		tmp[k++] = B;
@@ -463,20 +533,40 @@ void DrawGameExpMoney(int Exp, int Money)
 		tmp[k++] = U_Right;
 		tmp[k++] = V_Bottom;
 
+
+		// second triangle
 		tmp[k++] = DstRect.right;	// X
-		tmp[k++] = DstRect.top;	// Y
+		tmp[k++] = DstRect.bottom;	// Y
 		tmp[k++] = R;
 		tmp[k++] = G;
 		tmp[k++] = B;
 		tmp[k++] = Transp;
 		tmp[k++] = U_Right;
+		tmp[k++] = V_Bottom;
+
+		tmp[k++] = DstRect.right;	// X
+		tmp[k++] = DstRect.top;		// Y
+		tmp[k++] = R;
+		tmp[k++] = G;
+		tmp[k++] = B;
+		tmp[k++] = Transp;
+		tmp[k++] = U_Right;
+		tmp[k++] = V_Top;
+
+		tmp[k++] = DstRect.left;	// X
+		tmp[k++] = DstRect.top;		// Y
+		tmp[k++] = R;
+		tmp[k++] = G;
+		tmp[k++] = B;
+		tmp[k++] = Transp;
+		tmp[k++] = U_Left;
 		tmp[k++] = V_Top;
 
 		Xstart += SrcRect.right - SrcRect.left;
 	}
 
-
-	vw_SendVertices(RI_QUADS, 4*16, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(tmp[0]));
+	// 16 - 2 эмблемы + 7 цифр опыта + 7 цифр наград
+	vw_SendVertices(RI_TRIANGLES, 6*16, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(tmp[0]));
 
 	if (tmp != nullptr)
 		delete [] tmp;
@@ -1186,9 +1276,9 @@ void DrawGame()
 			vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight);
 
 			// выделяем память
-			// буфер для последовательности RI_TRIANGLE_STRIP
+			// буфер для последовательности RI_TRIANGLES
 			// войдет RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR
-			float *tmp = new float[(2+2+4)*4*(DrawLifeNum+DrawEnergNum)];
+			float *tmp = new float[(2+2+4)*6*(DrawLifeNum+DrawEnergNum)];
 			int k = 0;
 
 
@@ -1209,8 +1299,9 @@ void DrawGame()
 				float U_Right{(SrcRect.right * 1.0f) / ImageWidth};
 				float V_Bottom{(SrcRect.bottom * 1.0f) / ImageHeight};
 
+				// first triangle
 				tmp[k++] = DstRect.left;	// X
-				tmp[k++] = DstRect.top;	// Y
+				tmp[k++] = DstRect.top;		// Y
 				tmp[k++] = R;
 				tmp[k++] = G;
 				tmp[k++] = B;
@@ -1236,13 +1327,33 @@ void DrawGame()
 				tmp[k++] = U_Right;
 				tmp[k++] = V_Bottom;
 
+
+				// second triangle
 				tmp[k++] = DstRect.right;	// X
-				tmp[k++] = DstRect.top;	// Y
+				tmp[k++] = DstRect.bottom;	// Y
 				tmp[k++] = R;
 				tmp[k++] = G;
 				tmp[k++] = B;
 				tmp[k++] = Transp;
 				tmp[k++] = U_Right;
+				tmp[k++] = V_Bottom;
+
+				tmp[k++] = DstRect.right;	// X
+				tmp[k++] = DstRect.top;		// Y
+				tmp[k++] = R;
+				tmp[k++] = G;
+				tmp[k++] = B;
+				tmp[k++] = Transp;
+				tmp[k++] = U_Right;
+				tmp[k++] = V_Top;
+
+				tmp[k++] = DstRect.left;	// X
+				tmp[k++] = DstRect.top;		// Y
+				tmp[k++] = R;
+				tmp[k++] = G;
+				tmp[k++] = B;
+				tmp[k++] = Transp;
+				tmp[k++] = U_Left;
 				tmp[k++] = V_Top;
 
 			}
@@ -1268,8 +1379,9 @@ void DrawGame()
 				float U_Right{(SrcRect.right * 1.0f) / ImageWidth};
 				float V_Bottom{(SrcRect.bottom * 1.0f) / ImageHeight};
 
+				// first triangle
 				tmp[k++] = DstRect.left;	// X
-				tmp[k++] = DstRect.top;	// Y
+				tmp[k++] = DstRect.top;		// Y
 				tmp[k++] = R;
 				tmp[k++] = G;
 				tmp[k++] = B;
@@ -1295,19 +1407,39 @@ void DrawGame()
 				tmp[k++] = U_Right;
 				tmp[k++] = V_Bottom;
 
+
+				// second triangle
 				tmp[k++] = DstRect.right;	// X
-				tmp[k++] = DstRect.top;	// Y
+				tmp[k++] = DstRect.bottom;	// Y
 				tmp[k++] = R;
 				tmp[k++] = G;
 				tmp[k++] = B;
 				tmp[k++] = Transp;
 				tmp[k++] = U_Right;
+				tmp[k++] = V_Bottom;
+
+				tmp[k++] = DstRect.right;	// X
+				tmp[k++] = DstRect.top;		// Y
+				tmp[k++] = R;
+				tmp[k++] = G;
+				tmp[k++] = B;
+				tmp[k++] = Transp;
+				tmp[k++] = U_Right;
+				tmp[k++] = V_Top;
+
+				tmp[k++] = DstRect.left;	// X
+				tmp[k++] = DstRect.top;		// Y
+				tmp[k++] = R;
+				tmp[k++] = G;
+				tmp[k++] = B;
+				tmp[k++] = Transp;
+				tmp[k++] = U_Left;
 				tmp[k++] = V_Top;
 			}
 
 
 
-			vw_SendVertices(RI_QUADS, 4*(DrawLifeNum+DrawEnergNum), RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(tmp[0]));
+			vw_SendVertices(RI_TRIANGLES, 6*(DrawLifeNum+DrawEnergNum), RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(tmp[0]));
 
 			if (tmp != nullptr) {
 				delete [] tmp;
