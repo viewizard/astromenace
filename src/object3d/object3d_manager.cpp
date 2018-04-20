@@ -168,7 +168,7 @@ void DrawAllObject3D(int DrawType)
 		}
 
 		vw_Start2DMode(-1,1);
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, buff, 4*sizeof(buff[0]));
+		vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, buff, 4*sizeof(buff[0]));
 		vw_End2DMode();
 
 		vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);

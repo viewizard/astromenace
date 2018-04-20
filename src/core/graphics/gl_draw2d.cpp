@@ -163,7 +163,7 @@ void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bo
 	glPushMatrix();
 	glRotatef(RotateAngle, 0, 0, 1);
 
-	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, DrawBuffer, DrawBufferSize);
+	vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, DrawBuffer, DrawBufferSize);
 
 	// restore previous OpenGL states
 	glPopMatrix();

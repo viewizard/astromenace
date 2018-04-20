@@ -566,7 +566,7 @@ void DrawGameExpMoney(int Exp, int Money)
 	}
 
 	// 16 - 2 эмблемы + 7 цифр опыта + 7 цифр наград
-	vw_SendVertices(RI_TRIANGLES, 6*16, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(tmp[0]));
+	vw_SendVertices(ePrimitiveType::TRIANGLES, 6*16, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(tmp[0]));
 
 	if (tmp != nullptr)
 		delete [] tmp;
@@ -1439,7 +1439,7 @@ void DrawGame()
 
 
 
-			vw_SendVertices(RI_TRIANGLES, 6*(DrawLifeNum+DrawEnergNum), RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(tmp[0]));
+			vw_SendVertices(ePrimitiveType::TRIANGLES, 6*(DrawLifeNum+DrawEnergNum), RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8*sizeof(tmp[0]));
 
 			if (tmp != nullptr) {
 				delete [] tmp;

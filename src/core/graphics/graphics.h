@@ -54,6 +54,14 @@ enum class eOrigin {
 	bottom_left
 };
 
+enum class ePrimitiveType : GLenum {
+	POINTS = GL_POINTS,
+	LINES = GL_LINES,
+	TRIANGLES = GL_TRIANGLES,
+	TRIANGLE_STRIP = GL_TRIANGLE_STRIP,
+	TRIANGLE_FAN = GL_TRIANGLE_FAN
+};
+
 enum class eCompareFunc : GLint {
 	LEQUAL = GL_LEQUAL,
 	GEQUAL = GL_GEQUAL,
@@ -292,12 +300,6 @@ struct sDevCaps {
 #define RI_ACCUM_BUFFER		0x0010
 #define RI_STENCIL_BUFFER	0x0001
 
-// Primitives types
-#define RI_POINTS			0x1020
-#define RI_LINES			0x1021
-#define RI_TRIANGLES			0x1022
-#define RI_TRIANGLE_STRIP		0x1023
-#define RI_TRIANGLE_FAN			0x1024
 // Data format
 #define RI_3f_XYZ			0x0001000
 #define RI_2f_XY			0x0002000
@@ -410,7 +412,7 @@ void vw_SetTextureDepthMode(eTextureDepthMode mode);
  */
 
 // Send (draw) vertices.
-void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *VertexArray, int Stride,
+void vw_SendVertices(ePrimitiveType mode, GLsizei count, int DataFormat, void *VertexArray, int Stride,
 		     GLuint VertexBO = 0, unsigned int RangeStart = 0, unsigned int *IndexArray = nullptr,
 		     GLuint IndexBO = 0, GLuint VAO = 0);
 // Set color.

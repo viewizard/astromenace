@@ -1917,7 +1917,7 @@ void InformationDrawObject()
 		tmpDATA[k++] = 0.0f;
 		tmpDATA[k] = 0.0f;
 
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_1_TEX, tmpDATA, 5*sizeof(tmpDATA[0]));
+		vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_1_TEX, tmpDATA, 5*sizeof(tmpDATA[0]));
 
 
 		k = 0;
@@ -1946,7 +1946,7 @@ void InformationDrawObject()
 		tmpDATA[k++] = 1.0f;
 		tmpDATA[k] = 1.0f;
 
-		vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_1_TEX, tmpDATA, 5*sizeof(tmpDATA[0]));
+		vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_1_TEX, tmpDATA, 5*sizeof(tmpDATA[0]));
 	}
 	if (tmpDATA != nullptr)
 		delete [] tmpDATA;

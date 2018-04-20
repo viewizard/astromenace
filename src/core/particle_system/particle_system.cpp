@@ -689,7 +689,7 @@ void cParticleSystem::Draw(GLtexture &CurrentTexture)
 	else
 		vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
 
-	vw_SendVertices(RI_TRIANGLES, 6 * ParticlesCountInList, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX,
+	vw_SendVertices(ePrimitiveType::TRIANGLES, 6 * ParticlesCountInList, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX,
 			DrawBuffer.get(), 9 * sizeof(DrawBuffer.get()[0]));
 
 	vw_SetTextureBlend(true, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);

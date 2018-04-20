@@ -458,7 +458,7 @@ static void DrawBufferOnTextureChange(GLtexture &CurrentTexture, const sFontChar
 	// draw all we have in buffer with current texture
 	if (DrawBufferCurrentPosition) {
 		vw_BindTexture(0, CurrentTexture);
-		vw_SendVertices(RI_TRIANGLES, DrawBufferCurrentPosition / sizeof(DrawBuffer.get()[0]),
+		vw_SendVertices(ePrimitiveType::TRIANGLES, DrawBufferCurrentPosition / sizeof(DrawBuffer.get()[0]),
 				RI_2f_XY | RI_1_TEX, DrawBuffer.get(), 4 * sizeof(DrawBuffer.get()[0]));
 		DrawBufferCurrentPosition = 0;
 	}
@@ -475,7 +475,7 @@ static void DrawBufferOnTextEnd(GLtexture CurrentTexture)
 		return;
 
 	vw_BindTexture(0, CurrentTexture);
-	vw_SendVertices(RI_TRIANGLES, DrawBufferCurrentPosition / sizeof(DrawBuffer.get()[0]),
+	vw_SendVertices(ePrimitiveType::TRIANGLES, DrawBufferCurrentPosition / sizeof(DrawBuffer.get()[0]),
 			RI_2f_XY | RI_1_TEX, DrawBuffer.get(), 4 * sizeof(DrawBuffer.get()[0]));
 	DrawBufferCurrentPosition = 0;
 }

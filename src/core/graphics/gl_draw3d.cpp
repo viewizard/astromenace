@@ -32,6 +32,7 @@
 // NOTE GL_EXT_draw_instanced (since OpenGL 3.1)
 //      probably, we could render same type of objects with glDrawElementsInstanced()
 
+#include "graphics_internal.h"
 #include "graphics.h"
 #include "extensions.h"
 
@@ -56,6 +57,7 @@ void Internal_InitializationLocalIndexData()
 	LocalIndexArray = nullptr;
 	LocalIndexBO = 0;
 }
+
 //------------------------------------------------------------------------------------
 // Чистка памяти данных индекс буфера
 //------------------------------------------------------------------------------------
@@ -70,15 +72,11 @@ void Internal_ReleaseLocalIndexData()
 		vw_DeleteBufferObject(LocalIndexBO);
 }
 
-
-
-
-
 //------------------------------------------------------------------------------------
 // устанавливаем указатели, готовимся к прорисовке
 //------------------------------------------------------------------------------------
-GLuint *__SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, void *VertexArray, int Stride, GLuint VertexBO,
-						unsigned int RangeStart, unsigned int *IndexArray, GLuint IndexBO)
+GLuint *__SendVertices_EnableStatesAndPointers(GLsizei count, int DataFormat, void *VertexArray, int Stride, GLuint VertexBO,
+					       unsigned int RangeStart, unsigned int *IndexArray, GLuint IndexBO)
 {
 	// если ничего не передали
 	if (!VertexArray && !VertexBO)
@@ -88,7 +86,6 @@ GLuint *__SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, 
 	bool NeedVBO = vw_GetDevCaps()->VBOSupported;
 	if (!VertexBO)
 		NeedVBO = false;
-
 
 	// обязательно в байты, т.к. делаем смещение в байтах!
 	uint8_t *TMP = (uint8_t *)VertexArray;
@@ -134,7 +131,6 @@ GLuint *__SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, 
 
 	if (NeedVBO)
 		vw_BindBufferObject(eBufferObject::Vertex, VertexBO);
-
 
 	// делаем установку поинтеров + ставим смещения для прорисовки
 	if ((DataFormat & 0x000F000) == RI_3f_XYZ) {
@@ -199,60 +195,55 @@ GLuint *__SendVertices_EnableStatesAndPointers(int NumVertices, int DataFormat, 
 		}
 	}
 
-
-
-	// указатель на смещение (в случае вбо) или на массив индексов
-	GLuint *VertexIndexPointer = nullptr;
-	// если нет своего, ставим общей массив индексов
-	if (!IndexBO && !IndexArray) {
-		// собираем если нужно массив индексов
-		if (LocalIndexArrayCount < (unsigned int)(NumVertices + RangeStart)) {
-			LocalIndexArrayCount = NumVertices + RangeStart;
-			if (LocalIndexArray)
-				delete [] LocalIndexArray;
-
-			LocalIndexArray = new GLuint[LocalIndexArrayCount];
-			for (unsigned int i = 0; i < LocalIndexArrayCount; i++) {
-				LocalIndexArray[i] = i;
-			}
-
-			// если держим VBO, все это один раз сразу запихиваем в видео память
-			if (vw_GetDevCaps()->VBOSupported) {
-				// прежде всего удаляем старый буфер, если он был
-				if (LocalIndexBO)
-					vw_DeleteBufferObject(LocalIndexBO);
-				// создаем новый
-				if (!vw_BuildBufferObject(eBufferObject::Index, LocalIndexArrayCount * sizeof(unsigned), LocalIndexArray, LocalIndexBO))
-					LocalIndexBO = 0;
-			}
-		}
-
-		VertexIndexPointer = LocalIndexArray + RangeStart;
-
-		// собственно включаем индекс-вбо
-		if (vw_GetDevCaps()->VBOSupported && LocalIndexBO) {
-			vw_BindBufferObject(eBufferObject::Index, LocalIndexBO);
-			VertexIndexPointer = nullptr;
-			VertexIndexPointer = VertexIndexPointer + RangeStart;
-		}
-	} else {	// если массив или вбо индексов передали, просто подключаем их
-		VertexIndexPointer = IndexArray + RangeStart;
-
-		// собственно включаем индекс-вбо
-		if (vw_GetDevCaps()->VBOSupported && IndexBO) {
+	// indices - fourth parameter for glDrawElements()
+	GLuint *indices{nullptr};
+	if (IndexBO || IndexArray) {
+		// by default, work with IndexArray
+		indices = IndexArray;
+		// if IBO provided and supported, setup IBO
+		if (IndexBO && __GetDevCaps().VBOSupported) {
 			vw_BindBufferObject(eBufferObject::Index, IndexBO);
-			VertexIndexPointer = nullptr;
-			VertexIndexPointer = VertexIndexPointer+RangeStart;
+			indices = nullptr;
+		}
+		// care about RangeStart, since we could start from range
+		indices = indices + RangeStart;
+
+		return indices;
+	}
+
+	// re-create local index array, if need
+	if (LocalIndexArrayCount < (unsigned int)(count + RangeStart)) {
+		LocalIndexArrayCount = count + RangeStart;
+		if (LocalIndexArray)
+			delete [] LocalIndexArray;
+
+		LocalIndexArray = new GLuint[LocalIndexArrayCount];
+		for (unsigned int i = 0; i < LocalIndexArrayCount; i++) {
+			LocalIndexArray[i] = i;
+		}
+
+		// if buffer objects supported, create IBO
+		if (__GetDevCaps().VBOSupported) {
+			if (LocalIndexBO)
+				vw_DeleteBufferObject(LocalIndexBO);
+			if (!vw_BuildBufferObject(eBufferObject::Index,
+						  LocalIndexArrayCount * sizeof(unsigned), LocalIndexArray, LocalIndexBO))
+				LocalIndexBO = 0;
 		}
 	}
 
-	// возвращаем индексы основной программе
-	return VertexIndexPointer;
+	// by default, work with LocalIndexArray
+	indices = LocalIndexArray;
+	// if IBO provided and supported, setup IBO
+	if (LocalIndexBO && __GetDevCaps().VBOSupported) {
+		vw_BindBufferObject(eBufferObject::Index, LocalIndexBO);
+		indices = nullptr;
+	}
+	// care about RangeStart, since we could start from range
+	indices = indices + RangeStart;
+
+	return indices;
 }
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // выключаем все после прорисовки
@@ -272,7 +263,6 @@ void __SendVertices_DisableStatesAndPointers(int DataFormat, GLuint VBO, GLuint 
 		if (!VBO)
 			NeedVBO = false;
 
-
 		if ((DataFormat & 0x0000F00) != 0) glDisableClientState(GL_NORMAL_ARRAY);
 		if ((DataFormat & 0x00000F0) != 0) glDisableClientState(GL_COLOR_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
@@ -285,7 +275,6 @@ void __SendVertices_DisableStatesAndPointers(int DataFormat, GLuint VBO, GLuint 
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		}
 
-
 		// сбрасываем индексный и вертексный буфера, если они были установлены
 		if (LocalIndexBO)
 			vw_BindBufferObject(eBufferObject::Index, 0);
@@ -294,60 +283,27 @@ void __SendVertices_DisableStatesAndPointers(int DataFormat, GLuint VBO, GLuint 
 	}
 }
 
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // Процедура передачи последовательности вертексов для прорисовки
 //------------------------------------------------------------------------------------
-void vw_SendVertices(int PrimitiveType, int NumVertices, int DataFormat, void *VertexArray, int Stride, GLuint VertexBO,
+void vw_SendVertices(ePrimitiveType mode, GLsizei count, int DataFormat, void *VertexArray, int Stride, GLuint VertexBO,
 		     unsigned int RangeStart, unsigned int *IndexArray, GLuint IndexBO, GLuint VAO)
 {
-	// если ничего не передали
 	if (!VertexArray && !VertexBO)
 		return;
 
-	// флаг нужно ли с вaо делать
-	bool NeedVAO = vw_GetDevCaps()->VAOSupported;
-	if (!VAO)
-		NeedVAO = false;
-
-	// устанавливаем все необходимые указатели для прорисовки и получаем индексы
-	GLuint *VertexIndexPointer = nullptr;
-	if (NeedVAO)
+	// in case of VAO, we don't need provide indices, VAO will care about pointers
+	GLuint *indices{nullptr};
+	if (VAO && __GetDevCaps().VAOSupported)
 		vw_BindVAO(VAO);
 	else
-		VertexIndexPointer = __SendVertices_EnableStatesAndPointers(NumVertices, DataFormat, VertexArray, Stride,
-									    VertexBO, RangeStart, IndexArray, IndexBO);
+		indices = __SendVertices_EnableStatesAndPointers(count, DataFormat, VertexArray, Stride,
+								 VertexBO, RangeStart, IndexArray, IndexBO);
 
+	glDrawElements(static_cast<GLenum>(mode), count, GL_UNSIGNED_INT, indices);
 
-	switch(PrimitiveType) {
-	case RI_POINTS:
-		glDrawElements(GL_POINTS,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-		break;
-
-	case RI_LINES:
-		glDrawElements(GL_LINES,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-		break;
-
-	case RI_TRIANGLES:
-		glDrawElements(GL_TRIANGLES,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-		break;
-
-	case RI_TRIANGLE_STRIP:
-		glDrawElements(GL_TRIANGLE_STRIP,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-		break;
-
-	case RI_TRIANGLE_FAN:
-		glDrawElements(GL_TRIANGLE_FAN,NumVertices,GL_UNSIGNED_INT,VertexIndexPointer);
-		break;
-
-	default:
-		std::cerr << __func__ << "(): " << "wrong PrimitiveType.\n";
-		return;
-	}
-
-	__SendVertices_DisableStatesAndPointers(DataFormat, VertexBO, VAO);
+	if (VAO && __GetDevCaps().VAOSupported)
+		vw_BindVAO(0);
+	else
+		__SendVertices_DisableStatesAndPointers(DataFormat, VertexBO, VAO);
 }

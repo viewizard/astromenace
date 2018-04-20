@@ -253,7 +253,7 @@ void vw_DrawColorFBO(sFBO *SourceFBO, sFBO *TargetFBO)
 
 	vw_BindTexture(0, SourceFBO->ColorTexture);
 
-	vw_SendVertices(RI_TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, DrawBuffer, 4 * sizeof(DrawBuffer[0]));
+	vw_SendVertices(ePrimitiveType::TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, DrawBuffer, 4 * sizeof(DrawBuffer[0]));
 
 	vw_BindTexture(0, 0);
 
