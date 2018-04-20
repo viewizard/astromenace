@@ -45,6 +45,12 @@ bool vw_BuildVAO(GLuint &VAO, int NumVertices, int DataFormat, void *VertexArray
 	    !_glIsVertexArray)
 		return false;
 
+	// we should not create VAO with global IBO, that could be re-created
+	if (!IndexBO) {
+		std::cerr << __func__ << "(): " << "IndexBO must be provided.\n";
+		return false;
+	}
+
 	_glGenVertexArrays(1, &VAO);
 
 	vw_BindVAO(VAO);
