@@ -242,9 +242,14 @@ void cObject3D::InitByDrawObjectList()
 	for (auto &tmpObjectBlock : ObjectBlocks) {
 		for (unsigned int j = 0; j < tmpObjectBlock.VertexCount; j++) {
 			AllVertexCounted++;
-			GeometryCenterLocation += tmpObjectBlock.Location + sVECTOR3D(tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * j],
-						  tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * j + 1],
-						  tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * j + 2]);
+
+			unsigned int tmpIndex = tmpObjectBlock.VertexStride * j;
+			if (tmpObjectBlock.IndexArray.get())
+				tmpIndex = tmpObjectBlock.IndexArray.get()[j] * tmpObjectBlock.VertexStride;
+
+			GeometryCenterLocation += tmpObjectBlock.Location + sVECTOR3D(tmpObjectBlock.VertexArray.get()[tmpIndex],
+						  tmpObjectBlock.VertexArray.get()[tmpIndex + 1],
+						  tmpObjectBlock.VertexArray.get()[tmpIndex + 2]);
 		}
 	}
 	if (AllVertexCounted > 0)
