@@ -38,20 +38,25 @@
 /*
  * Build vertex array object.
  */
-bool vw_BuildVAO(GLuint &VAO, int DataFormat, const GLvoid *VertexArray,
-		 GLsizei Stride, GLuint VertexBO)
+bool vw_BuildVAO(GLuint &VAO, int DataFormat, GLsizei Stride, GLuint VertexBO, GLuint IndexBO)
 {
 	if (!_glGenVertexArrays ||
 	    !_glIsVertexArray)
 		return false;
 
+	// we can not generate VAO without VBO
+	if (!VertexBO) {
+		std::cerr << __func__ << "(): " << "VertexBO must be provided.\n";
+		return false;
+	}
+
 	_glGenVertexArrays(1, &VAO);
 
 	vw_BindVAO(VAO);
-	__SendVertices_EnableStatesAndPointers(DataFormat, VertexArray, Stride, VertexBO);
+	__Draw3D_EnableStates(DataFormat, nullptr, Stride, VertexBO, IndexBO);
 
 	vw_BindVAO(0);
-	__SendVertices_DisableStatesAndPointers(DataFormat);
+	__Draw3D_DisableStates(DataFormat, VertexBO, IndexBO);
 
 	if (!_glIsVertexArray(VAO))
 		return false;

@@ -197,8 +197,8 @@ static void CreateHardwareBuffers(cModel3D *Model)
 
 	// global vertex array object
 	if (!vw_BuildVAO(Model->GlobalVAO, Model->ObjectBlocks[0].VertexFormat,
-			 Model->GlobalVertexArray.get(), Model->ObjectBlocks[0].VertexStride * sizeof(float),
-			 Model->GlobalVBO))
+			 Model->ObjectBlocks[0].VertexStride * sizeof(float),
+			 Model->GlobalVBO, Model->GlobalIBO))
 		Model->GlobalVAO = 0;
 
 	// and same for all objects
@@ -215,9 +215,9 @@ static void CreateHardwareBuffers(cModel3D *Model)
 			tmpObjectBlock.IBO = 0;
 
 		// vertex array object
-		if (!vw_BuildVAO(tmpObjectBlock.VAO, tmpObjectBlock.VertexFormat, tmpObjectBlock.VertexArray.get(),
+		if (!vw_BuildVAO(tmpObjectBlock.VAO, tmpObjectBlock.VertexFormat,
 				 tmpObjectBlock.VertexStride * sizeof(tmpObjectBlock.VertexArray.get()[0]),
-				 tmpObjectBlock.VBO))
+				 tmpObjectBlock.VBO, tmpObjectBlock.IBO))
 			tmpObjectBlock.VAO = 0;
 	}
 }

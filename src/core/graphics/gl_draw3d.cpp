@@ -48,23 +48,27 @@
 
 /*
  * Setup states and pointers.
+ * Also used for VAO generation.
  */
-void __SendVertices_EnableStatesAndPointers(int DataFormat, const GLvoid *VertexArray,
-					    GLsizei stride, GLuint VertexBO)
+void __Draw3D_EnableStates(int DataFormat, const GLvoid *VertexArray,
+			   GLsizei stride, GLuint VertexBO, GLuint IndexBO)
 {
 	if (!VertexArray && !VertexBO)
 		return;
 
-	bool NeedVBO = __GetDevCaps().VBOSupported;
-	if (!VertexBO)
-		NeedVBO = false;
-
 	uint8_t *tmpPointer{nullptr};
 
-	if (NeedVBO)
+	// VBO (GL_ARRAY_BUFFER) binding affects VAO state indirectly,
+	// as the current GL_ARRAY_BUFFER binding is saved in VAO state
+	// at the time of the gl***Pointer() call
+	if (VertexBO && __GetDevCaps().VBOSupported)
 		vw_BindBufferObject(eBufferObject::Vertex, VertexBO);
 	else
 		tmpPointer = (uint8_t*)VertexArray;
+
+	// IBO (GL_ELEMENT_ARRAY_BUFFER) binding is part of the VAO state
+	if (IndexBO && __GetDevCaps().VBOSupported)
+		vw_BindBufferObject(eBufferObject::Index, IndexBO);
 
 	if ((DataFormat & RI_COORD) == RI_3f_XYZ) {
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -106,7 +110,7 @@ void __SendVertices_EnableStatesAndPointers(int DataFormat, const GLvoid *Vertex
 /*
  * Disable states.
  */
-void __SendVertices_DisableStatesAndPointers(int DataFormat)
+void __Draw3D_DisableStates(int DataFormat, GLuint VertexBO, GLuint IndexBO)
 {
 	if (DataFormat & RI_NORMAL)
 		glDisableClientState(GL_NORMAL_ARRAY);
@@ -121,10 +125,10 @@ void __SendVertices_DisableStatesAndPointers(int DataFormat)
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	}
 
-	if (__GetDevCaps().VBOSupported) {
-		vw_BindBufferObject(eBufferObject::Index, 0);
+	if (VertexBO && __GetDevCaps().VBOSupported)
 		vw_BindBufferObject(eBufferObject::Vertex, 0);
-	}
+	if (IndexBO && __GetDevCaps().VBOSupported)
+		vw_BindBufferObject(eBufferObject::Index, 0);
 }
 
 /*
@@ -137,21 +141,17 @@ void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, const GLvoid 
 	if (!VertexArray && !VertexBO)
 		return;
 
-	// in case of VAO, we don't need provide indices, VAO will care about pointers
 	if (VAO && __GetDevCaps().VAOSupported)
 		vw_BindVAO(VAO);
 	else
-		__SendVertices_EnableStatesAndPointers(DataFormat, VertexArray, Stride, VertexBO);
+		__Draw3D_EnableStates(DataFormat, VertexArray, Stride, VertexBO, IndexBO);
 
 	if (IndexArray || IndexBO) {
+		// all IBO binding related code moved to __Draw3D_EnableStates(),
+		// we should care only about index array pointer here
 		GLuint *indices{nullptr};
-		// by default, work with IndexArray
-		indices = IndexArray;
-		// if IBO provided and supported, setup IBO
-		if (IndexBO && __GetDevCaps().VBOSupported) {
-			vw_BindBufferObject(eBufferObject::Index, IndexBO);
-			indices = nullptr;
-		}
+		if (!IndexBO || !__GetDevCaps().VBOSupported)
+			indices = IndexArray;
 		glDrawElements(static_cast<GLenum>(mode), count, GL_UNSIGNED_INT, indices + RangeStart);
 	} else
 		glDrawArrays(static_cast<GLenum>(mode), RangeStart, count);
@@ -159,5 +159,5 @@ void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, const GLvoid 
 	if (VAO && __GetDevCaps().VAOSupported)
 		vw_BindVAO(0);
 	else
-		__SendVertices_DisableStatesAndPointers(DataFormat);
+		__Draw3D_DisableStates(DataFormat, VertexBO, IndexBO);
 }

@@ -495,8 +495,7 @@ void vw_DeleteBufferObject(GLuint &buffer);
  */
 
 // Build vertex array object.
-bool vw_BuildVAO(GLuint &VAO, int DataFormat, const GLvoid *VertexArray,
-		 GLsizei Stride, GLuint VertexBO);
+bool vw_BuildVAO(GLuint &VAO, int DataFormat, GLsizei Stride, GLuint VertexBO, GLuint IndexBO);
 // Bind vertex array object.
 void vw_BindVAO(GLuint VAO);
 // Delete vertex array object.

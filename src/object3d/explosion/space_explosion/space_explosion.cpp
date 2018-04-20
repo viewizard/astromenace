@@ -759,8 +759,8 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 			// делаем VAO
 			if (!vw_BuildVAO(tmpObjectBlock.VAO, tmpObjectBlock.VertexFormat,
-					 tmpObjectBlock.VertexArray.get(), tmpObjectBlock.VertexStride * sizeof(float),
-					 tmpObjectBlock.VBO))
+					 tmpObjectBlock.VertexStride * sizeof(float),
+					 tmpObjectBlock.VBO, tmpObjectBlock.IBO))
 				tmpObjectBlock.VAO = 0;
 
 
