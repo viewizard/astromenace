@@ -1269,7 +1269,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 
-	// буфер для последовательности RI_TRIANGLE_STRIP
+	// буфер для последовательности TRIANGLE_STRIP
 	// войдет RI_3f_XYZ | RI_4f_COLOR
 	float *tmpDATA = new float[4*(3+4)];
 	int k=0;

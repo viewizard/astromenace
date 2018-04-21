@@ -25,7 +25,7 @@
 
 *************************************************************************************/
 
-// TODO since we use RI_TRIANGLES, use 4 vertices + index buffer for vw_SendVertices()
+// TODO since we use TRIANGLES, use 4 vertices + index buffer for vw_SendVertices()
 //      instead of 6 vertices, so, we send 4 vertices and index buffer for 6 elements,
 //      something like {1, 2, 3, 3, 4, 1}
 //                               ^  ^  ^ second triangle indexes
@@ -249,7 +249,7 @@ void DrawGameExpMoney(int Exp, int Money)
 	float Transp=1.0f;
 
 	// выделяем память
-	// буфер для последовательности RI_TRIANGLES
+	// буфер для последовательности TRIANGLES
 	// войдет RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR
 	float *tmp = new float[(2+2+4)*6*16];
 	int k=0;
@@ -1276,7 +1276,7 @@ void DrawGame()
 			vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight);
 
 			// выделяем память
-			// буфер для последовательности RI_TRIANGLES
+			// буфер для последовательности TRIANGLES
 			// войдет RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR
 			float *tmp = new float[(2+2+4)*6*(DrawLifeNum+DrawEnergNum)];
 			int k = 0;

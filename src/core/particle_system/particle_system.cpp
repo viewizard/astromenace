@@ -25,7 +25,7 @@
 
 *************************************************************************************/
 
-// TODO since we use RI_TRIANGLES, use 4 vertices + index buffer for vw_SendVertices()
+// TODO since we use TRIANGLES, use 4 vertices + index buffer for vw_SendVertices()
 //      instead of 6 vertices, so, we send 4 vertices and index buffer for 6 elements,
 //      something like {1, 2, 3, 3, 4, 1}
 //                               ^  ^  ^ second triangle indexes
@@ -584,7 +584,7 @@ void cParticleSystem::Draw(GLtexture &CurrentTexture)
 	    ParticlesList.empty())
 		return;
 
-	// RI_TRIANGLES * (RI_3f_XYZ + RI_2f_TEX + RI_4f_COLOR) * ParticlesCount
+	// TRIANGLES * (RI_3f_XYZ + RI_2f_TEX + RI_4f_COLOR) * ParticlesCount
 	unsigned int tmpDrawBufferSize = 6 * (3 + 2 + 4) * ParticlesCountInList;
 	if (tmpDrawBufferSize > DrawBufferSize) {
 		DrawBufferSize = tmpDrawBufferSize;

@@ -150,7 +150,7 @@ void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bo
 	// 'reset' buffer
 	DrawBufferCurrentPosition = 0;
 
-	// RI_TRIANGLE_STRIP (2 triangles)
+	// TRIANGLE_STRIP (2 triangles)
 	AddToDrawBuffer(DstRect.left, DstRect.top, U_left, V_top);
 	AddToDrawBuffer(DstRect.left, DstRect.bottom, U_left, V_bottom);
 	AddToDrawBuffer(DstRect.right, DstRect.top, U_right, V_top);
