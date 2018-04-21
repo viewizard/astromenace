@@ -25,6 +25,17 @@
 
 *************************************************************************************/
 
+// NOTE glBufferSubData (since OpenGL 1.5)
+//      When replacing the entire data store, consider using glBufferSubData
+//      rather than completely recreating the data store with glBufferData.
+//      This avoids the cost of reallocating the data store.
+
+// NOTE glBufferStorage() (since OpenGL 4.4)
+//      creates and initializes a buffer object's immutable data store
+
+// NOTE GL_EXT_direct_state_access (since OpenGL 4.5)
+//      glNamedBufferStorage(), glNamedBufferSubData()
+
 #include "graphics.h"
 #include "extensions.h"
 
