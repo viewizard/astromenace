@@ -164,11 +164,13 @@ bool sMusic::Update(uint32_t CurrentTick)
 	if (FadeOutSwitch) {
 		FadeTicks += TicksDelta;
 		LocalVolume = 1.0f - FadeStartVol * FadeTicks / FadePeriod;
-		if (LocalVolume < 0.0f)
+		if (LocalVolume < 0.0f) {
 			LocalVolume = 0.0f;
+			FadeOutSwitch = false;
+		}
 		alSourcef(Source, AL_GAIN, GlobalVolume * LocalVolume);
 		alGetError(); // reset errors
-		if (LocalVolume <= 0.0f)
+		if (!FadeOutSwitch) // use boolean check in order to avoid float's comparison
 			return false;
 	}
 
