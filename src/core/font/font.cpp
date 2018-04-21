@@ -37,11 +37,8 @@
 // TODO switch to std::unordered_multimap from std::forward_list
 //      that will allow fast access and we could manually check second key (FontSize)
 
-// TODO since we use RI_TRIANGLES, use 4 vertices + index buffer for vw_SendVertices()
-//      instead of 6 vertices, so, we send 4 vertices and index buffer for 6 elements,
-//      something like {1, 2, 3, 3, 4, 1}
-//                               ^  ^  ^ second triangle indexes
-//                      ^  ^  ^ first triangle indexes
+// TODO add IBO usage (since we could generate one for all calls), make sure, that IBO
+//      released in vw_ReleaseAllFontChars() before opengl release
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
@@ -111,12 +108,14 @@ struct sFontChar {
 
 // List with connected font characters.
 std::forward_list<std::unique_ptr<sFontChar>> FontCharsList;
-// Local draw buffer, that dynamically allocate memory at maximum required
+// Local vertex array, that dynamically allocate memory at maximum required
 // size only one time per game execution. Don't use std::vector here,
 // since it have poor performance compared to std::unique_ptr.
-std::unique_ptr<float[]> DrawBuffer{};
-unsigned int DrawBufferCurrentPosition{0};
-unsigned int DrawBufferSize{0};
+std::unique_ptr<float[]> VertexArray{};
+unsigned int VertexArrayPosition{0};
+unsigned int VertexArraySize{0};
+std::unique_ptr<unsigned[]> IndexArray{};
+unsigned int IndexArraySize{0};
 // space character utf32 code
 constexpr char32_t SpaceUTF32{32};
 
@@ -391,10 +390,10 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
  */
 static inline void AddToDrawBuffer(float CoordX, float CoordY, float TextureU, float TextureV)
 {
-	DrawBuffer[DrawBufferCurrentPosition++] = CoordX;
-	DrawBuffer[DrawBufferCurrentPosition++] = CoordY;
-	DrawBuffer[DrawBufferCurrentPosition++] = TextureU;
-	DrawBuffer[DrawBufferCurrentPosition++] = TextureV;
+	VertexArray[VertexArrayPosition++] = CoordX;
+	VertexArray[VertexArrayPosition++] = CoordY;
+	VertexArray[VertexArrayPosition++] = TextureU;
+	VertexArray[VertexArrayPosition++] = TextureV;
 }
 
 /*
@@ -455,12 +454,13 @@ static void CalculateDefaultSpaceWidth(float &SpaceWidthFactor, float FontScale)
  */
 static void DrawBufferOnTextureChange(GLtexture &CurrentTexture, const sFontChar *DrawChar)
 {
-	// draw all we have in buffer with current texture
-	if (DrawBufferCurrentPosition) {
+	// draw all we have with current texture
+	if (VertexArrayPosition) {
 		vw_BindTexture(0, CurrentTexture);
-		vw_Draw3D(ePrimitiveType::TRIANGLES, DrawBufferCurrentPosition / sizeof(DrawBuffer.get()[0]),
-			  RI_2f_XY | RI_1_TEX, DrawBuffer.get(), 4 * sizeof(DrawBuffer.get()[0]));
-		DrawBufferCurrentPosition = 0;
+		vw_Draw3D(ePrimitiveType::TRIANGLES, VertexArrayPosition * 6 / 16, // index / vertex size factor
+			  RI_2f_XY | RI_1_TEX, VertexArray.get(), 4 * sizeof(VertexArray.get()[0]),
+			  0, 0, IndexArray.get());
+		VertexArrayPosition = 0;
 	}
 	// setup new texture
 	CurrentTexture = DrawChar->Texture;
@@ -471,13 +471,14 @@ static void DrawBufferOnTextureChange(GLtexture &CurrentTexture, const sFontChar
  */
 static void DrawBufferOnTextEnd(GLtexture CurrentTexture)
 {
-	if (!DrawBufferCurrentPosition)
+	if (!VertexArrayPosition)
 		return;
 
 	vw_BindTexture(0, CurrentTexture);
-	vw_Draw3D(ePrimitiveType::TRIANGLES, DrawBufferCurrentPosition / sizeof(DrawBuffer.get()[0]),
-		  RI_2f_XY | RI_1_TEX, DrawBuffer.get(), 4 * sizeof(DrawBuffer.get()[0]));
-	DrawBufferCurrentPosition = 0;
+	vw_Draw3D(ePrimitiveType::TRIANGLES, VertexArrayPosition * 6 / 16, // index / vertex size factor
+		  RI_2f_XY | RI_1_TEX, VertexArray.get(), 4 * sizeof(VertexArray.get()[0]),
+		  0, 0, IndexArray.get());
+	VertexArrayPosition = 0;
 }
 
 /*
@@ -502,6 +503,37 @@ int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontSc
 	const std::u32string UTF32String{ConvertUTF8.from_bytes(buffer.data())};
 
 	return vw_DrawFontUTF32(X, Y, StrictWidth, ExpandWidth, FontScale, R, G, B, Transp, UTF32String);
+}
+
+/*
+ * Draw buffers routine (allocate memory, reset counters...).
+ */
+static void DrawBuffersRoutine(unsigned int TextSize)
+{
+	// triangles points (4) * (RI_2f_XYZ + RI_2f_TEX) * Text.size()
+	unsigned int tmpVertexArraySize = 4 * (2 + 2) * TextSize;
+	if (tmpVertexArraySize > VertexArraySize) {
+		VertexArraySize = tmpVertexArraySize;
+		VertexArray.reset(new float[VertexArraySize]);
+	}
+	VertexArrayPosition = 0;
+
+	unsigned int tmpIndexArraySize = TextSize * 6; // 2 triangles with 3 vertices each
+	if (tmpIndexArraySize > IndexArraySize) {
+		IndexArraySize = tmpIndexArraySize;
+		IndexArray.reset(new unsigned[IndexArraySize]);
+		// since we know exactly, what vertex buffer will contain,
+		// generate index array with proper sequence
+		for (unsigned int i = 0, j = 0; i < IndexArraySize; ) {
+			IndexArray[i++] = j + 0;
+			IndexArray[i++] = j + 1;
+			IndexArray[i++] = j + 2;
+			IndexArray[i++] = j + 0;
+			IndexArray[i++] = j + 2;
+			IndexArray[i++] = j + 3;
+			j += 4; // "add" to "vertex array" position 4 vertices
+		}
+	}
 }
 
 /*
@@ -547,13 +579,7 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 	// combine calculated width factor and global width scale
 	FontWidthFactor = FontScale*FontWidthFactor;
 
-	// RI_TRIANGLES * (RI_2f_XYZ + RI_2f_TEX) * Text.size()
-	unsigned int tmpDrawBufferSize = 6 * (2 + 2) * Text.size();
-	if (tmpDrawBufferSize > DrawBufferSize) {
-		DrawBufferSize = tmpDrawBufferSize;
-		DrawBuffer.reset(new float[DrawBufferSize]);
-	}
-	DrawBufferCurrentPosition = 0;
+	DrawBuffersRoutine(Text.size());
 
 	// draw all characters in text by blocks grouped by texture id
 	for (const auto &UTF32 : Text) {
@@ -584,13 +610,9 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 			float U_Right{(DrawChar->TexturePositionRight * 1.0f) / ImageWidth};
 			float V_Bottom{(DrawChar->TexturePositionBottom * 1.0f) / ImageHeight};
 
-			// first triangle
+			// triangle's points (index buffer will provide proper sequence)
 			AddToDrawBuffer(DrawX, DrawY, U_Left, V_Top);
 			AddToDrawBuffer(DrawX, DrawY + DrawChar->Height * FontScale, U_Left, V_Bottom);
-			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY + DrawChar->Height * FontScale,
-					U_Right, V_Bottom);
-			// second triangle
-			AddToDrawBuffer(DrawX, DrawY, U_Left, V_Top);
 			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY + DrawChar->Height * FontScale,
 					U_Right, V_Bottom);
 			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY, U_Right, V_Top);
@@ -724,6 +746,8 @@ int vw_DrawFont3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 	vw_Rotate(CurrentCameraRotation.y, 0.0f, 1.0f, 0.0f);
 	vw_Rotate(CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
 
+	DrawBuffersRoutine(Text.size());
+
 	// draw all characters in text by blocks grouped by texture id
 	for (const auto &UTF32 : Text) {
 		// find current character
@@ -754,12 +778,9 @@ int vw_DrawFont3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 			float U_Right{(DrawChar->TexturePositionRight * 1.0f) / ImageWidth};
 			float V_Bottom{1.0f - (DrawChar->TexturePositionBottom * 1.0f) / ImageHeight};
 
-			// first triangle
+			// triangle's points (index buffer will provide proper sequence)
 			AddToDrawBuffer(DrawX / 10.0f, (DrawY + DrawChar->Height) / 10.0f, U_Left,V_Top);
 			AddToDrawBuffer(DrawX / 10.0f, DrawY / 10.0f, U_Left, V_Bottom);
-			AddToDrawBuffer((DrawX + DrawChar->Width) / 10.0f, DrawY / 10.0f, U_Right, V_Bottom);
-			// second triangle
-			AddToDrawBuffer(DrawX / 10.0f, (DrawY + DrawChar->Height) / 10.0f, U_Left, V_Top);
 			AddToDrawBuffer((DrawX + DrawChar->Width) / 10.0f, DrawY / 10.0f, U_Right, V_Bottom);
 			AddToDrawBuffer((DrawX + DrawChar->Width) / 10.0f, (DrawY + DrawChar->Height) / 10.0f, U_Right, V_Top);
 
