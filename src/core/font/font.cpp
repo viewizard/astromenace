@@ -37,8 +37,7 @@
 // TODO switch to std::unordered_multimap from std::forward_list
 //      that will allow fast access and we could manually check second key (FontSize)
 
-// TODO add IBO usage (since we could generate one for all calls), make sure, that IBO
-//      released in vw_ReleaseAllFontChars() before opengl release
+// TODO (?) add VBO (DYNAMIC) and VAO
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
@@ -115,6 +114,7 @@ std::unique_ptr<float[]> VertexArray{};
 unsigned int VertexArrayPosition{0};
 unsigned int VertexArraySize{0};
 std::unique_ptr<unsigned[]> IndexArray{};
+GLuint IndexBO{0};
 unsigned int IndexArraySize{0};
 // space character utf32 code
 constexpr char32_t SpaceUTF32{32};
@@ -213,6 +213,9 @@ void vw_ReleaseAllFontChars()
 	}
 	// reset list
 	FontCharsList.clear();
+
+	if (IndexBO)
+		vw_DeleteBufferObject(IndexBO);
 }
 
 /*
@@ -459,7 +462,7 @@ static void DrawBufferOnTextureChange(GLtexture &CurrentTexture, const sFontChar
 		vw_BindTexture(0, CurrentTexture);
 		vw_Draw3D(ePrimitiveType::TRIANGLES, VertexArrayPosition * 6 / 16, // index / vertex size factor
 			  RI_2f_XY | RI_1_TEX, VertexArray.get(), 4 * sizeof(VertexArray.get()[0]),
-			  0, 0, IndexArray.get());
+			  0, 0, IndexArray.get(), IndexBO);
 		VertexArrayPosition = 0;
 	}
 	// setup new texture
@@ -477,7 +480,7 @@ static void DrawBufferOnTextEnd(GLtexture CurrentTexture)
 	vw_BindTexture(0, CurrentTexture);
 	vw_Draw3D(ePrimitiveType::TRIANGLES, VertexArrayPosition * 6 / 16, // index / vertex size factor
 		  RI_2f_XY | RI_1_TEX, VertexArray.get(), 4 * sizeof(VertexArray.get()[0]),
-		  0, 0, IndexArray.get());
+		  0, 0, IndexArray.get(), IndexBO);
 	VertexArrayPosition = 0;
 }
 
@@ -533,7 +536,15 @@ static void DrawBuffersRoutine(unsigned int TextSize)
 			IndexArray[i++] = j + 3;
 			j += 4; // "add" to "vertex array" position 4 vertices
 		}
+
+		if (IndexBO)
+			vw_DeleteBufferObject(IndexBO);
 	}
+
+	// IBO should be re-generated on game restart and on index array size change
+	if (!IndexBO && IndexArraySize && IndexArray.get() &&
+	    vw_GetDevCaps() && vw_GetDevCaps()->VBOSupported)
+		vw_BuildBufferObject(eBufferObject::Index, IndexArraySize * sizeof(unsigned), IndexArray.get(), IndexBO);
 }
 
 /*
