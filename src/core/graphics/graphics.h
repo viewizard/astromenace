@@ -246,64 +246,68 @@ enum class eBufferObject : GLenum {
 	Index = GL_ELEMENT_ARRAY_BUFFER
 };
 
-struct sCoverageModes {
-	int ColorSamples;
-	int CoverageSamples;
-};
-
 enum class eBufferObjectUsage : GLenum {
 	STREAM = GL_STREAM_DRAW,	// The data store contents will be modified once and used at most a few times.
 	STATIC = GL_STATIC_DRAW,	// The data store contents will be modified once and used many times.
 	DYNAMIC = GL_DYNAMIC_DRAW	// The data store contents will be modified repeatedly and used many times.
 };
 
+struct sCoverageModes {
+	int ColorSamples{0};
+	int CoverageSamples{0};
+
+	sCoverageModes() = default;
+	sCoverageModes(int _ColorSamples, int _CoverageSamples) :
+		ColorSamples{_ColorSamples},
+		CoverageSamples{_CoverageSamples}
+	{}
+};
+
 struct sDevCaps {
 	// версия OpenGL
-	int OpenGLmajorVersion;
-	int OpenGLminorVersion;
+	int OpenGLmajorVersion{0};
+	int OpenGLminorVersion{0};
 	// Max multtextures
-	int MaxMultTextures;
+	int MaxMultTextures{0};
 	// Max texture width
-	int MaxTextureWidth;
+	int MaxTextureWidth{0};
 	// Max texture height
-	int MaxTextureHeight;
+	int MaxTextureHeight{0};
 	// макс. кол-во одновременно обрабатываемых источников света
-	int MaxActiveLights;
+	int MaxActiveLights{0};
 	// максимальный уровень анизотропии
-	GLint MaxAnisotropyLevel;
-	// макс. уровень антиалиасинга, 0-нет, 2+ - есть
-	int MaxSamples; // MSAA
-	int MaxMultisampleCoverageModes; // кол-во профайлов антиалиасинга с CSAA+MSAA
-	sCoverageModes MultisampleCoverageModes[32]; // собственно сам список режимов CSAA+MSAA, ставим просто 32 штуки, чтобы не заморачиваться с освобождением памяти
+	GLint MaxAnisotropyLevel{0};
+	// MSAA + CSAA modes
+	std::vector<sCoverageModes> MultisampleCoverageModes{};
 	// есть ли возможность включить сжатие текстур
-	bool TexturesCompression;
+	bool TexturesCompression{false};
 	// поддержка GL_ARB_texture_compression_bptc
-	bool TexturesCompressionBPTC;
+	bool TexturesCompressionBPTC{false};
 	// GL_ARB_texture_storage
-	bool TextureStorage;
+	bool TextureStorage{false};
 	// поддержка FBO
-	bool FramebufferObject;
+	bool FramebufferObject{false};
 	// глубина depth буфера в битах, получаем ее при первой генерации fbo с буфером глубины, по умолчанию 0
 	// если работаем с fbo, то еще на этапе инициализации основного fbo прорисовки будут получены данные максимально поддерживаемой глубины
-	GLint FramebufferObjectDepthSize;
+	GLint FramebufferObjectDepthSize{0};
 	// поддержка VBO
-	bool VBOSupported;
+	bool VBOSupported{false};
 	// поддержка VAO
-	bool VAOSupported;
+	bool VAOSupported{false};
 	// поддержка загрузки текстур со сторонами не кратные степени двойки
-	bool TextureNPOTSupported;
+	bool TextureNPOTSupported{false};
 	// поддержка шейдеров GLSL 1.00
-	bool GLSL100Supported;
+	bool GLSL100Supported{false};
 	// шейдерная модель
-	float ShaderModel;
+	float ShaderModel{0.0f};
 	// поддержка генерации мипмеп в железе
-	bool HardwareMipMapGeneration;
+	bool HardwareMipMapGeneration{false};
 
-	bool OpenGL_1_3_supported;
-	bool OpenGL_1_5_supported;
-	bool OpenGL_2_0_supported;
-	bool OpenGL_3_0_supported;
-	bool OpenGL_4_2_supported;
+	bool OpenGL_1_3_supported{false};
+	bool OpenGL_1_5_supported{false};
+	bool OpenGL_2_0_supported{false};
+	bool OpenGL_3_0_supported{false};
+	bool OpenGL_4_2_supported{false};
 };
 
 // Buffer clear bit

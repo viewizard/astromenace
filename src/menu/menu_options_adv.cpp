@@ -249,12 +249,12 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	//Options_MultiSampleType
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_Multisample_Antialiasing"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, (Options_MSAA == 0) || (vw_GetDevCaps().MaxSamples == 0))) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, (Options_MSAA == 0) || vw_GetDevCaps().MultisampleCoverageModes.empty())) {
 		// находим текущий режим
 		int CurrentMode = 0;
 		if (Options_MSAA == 0) CurrentMode = -1;
 		else {
-			for (int i=0; i<vw_GetDevCaps().MaxMultisampleCoverageModes; i++) {
+			for (unsigned int i = 0; i < vw_GetDevCaps().MultisampleCoverageModes.size(); i++) {
 				if ((vw_GetDevCaps().MultisampleCoverageModes[i].ColorSamples == Options_MSAA) &&
 				    (vw_GetDevCaps().MultisampleCoverageModes[i].CoverageSamples == Options_CSAA)) {
 					CurrentMode = i;
@@ -265,7 +265,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 
 		CurrentMode --;
 		if (CurrentMode < -1)
-			CurrentMode = vw_GetDevCaps().MaxMultisampleCoverageModes - 1;
+			CurrentMode = vw_GetDevCaps().MultisampleCoverageModes.size() - 1;
 
 		// -1 - делаем "выключение" антиалиасинга
 		if (CurrentMode == -1) {
@@ -277,15 +277,15 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		}
 	}
 	bool TestStateButton = false;
-	if (vw_GetDevCaps().MaxMultisampleCoverageModes > 0)
-		TestStateButton = (vw_GetDevCaps().MultisampleCoverageModes[vw_GetDevCaps().MaxMultisampleCoverageModes - 1].ColorSamples == Options_MSAA) &&
-				(vw_GetDevCaps().MultisampleCoverageModes[vw_GetDevCaps().MaxMultisampleCoverageModes - 1].CoverageSamples == Options_CSAA);
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, TestStateButton || (vw_GetDevCaps().MaxSamples == 0))) {
+	if (!vw_GetDevCaps().MultisampleCoverageModes.empty())
+		TestStateButton = (vw_GetDevCaps().MultisampleCoverageModes.back().ColorSamples == Options_MSAA) &&
+				(vw_GetDevCaps().MultisampleCoverageModes.back().CoverageSamples == Options_CSAA);
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, TestStateButton || vw_GetDevCaps().MultisampleCoverageModes.empty())) {
 		// находим текущий режим
 		int CurrentMode = 0;
 		if (Options_MSAA == 0) CurrentMode = -1;
 		else {
-			for (int i = 0; i < vw_GetDevCaps().MaxMultisampleCoverageModes; i++) {
+			for (unsigned int i = 0; i < vw_GetDevCaps().MultisampleCoverageModes.size(); i++) {
 				if ((vw_GetDevCaps().MultisampleCoverageModes[i].ColorSamples == Options_MSAA) &&
 				    (vw_GetDevCaps().MultisampleCoverageModes[i].CoverageSamples == Options_CSAA)) {
 					CurrentMode = i;
@@ -295,7 +295,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		}
 
 		CurrentMode ++;
-		if (CurrentMode > vw_GetDevCaps().MaxMultisampleCoverageModes - 1)
+		if (CurrentMode > (int)vw_GetDevCaps().MultisampleCoverageModes.size() - 1)
 			CurrentMode = -1;
 
 		// -1 - делаем "выключение" антиалиасинга
@@ -308,7 +308,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		}
 	}
 	if (Options_MSAA == 0) {
-		if (vw_GetDevCaps().MaxSamples == 0) {
+		if (vw_GetDevCaps().MultisampleCoverageModes.empty()) {
 			Size = vw_FontSize(vw_GetText("3_Not_available"));
 			SizeI = (170-Size)/2;
 			vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_Not_available"));

@@ -1058,20 +1058,16 @@ ReCreate:
 	    (vw_GetDevCaps().ShaderModel < 3.0f))
 		Setup.ShadowMap = 0;
 
-	if (Setup.MSAA > vw_GetDevCaps().MaxSamples) Setup.MSAA = Setup.CSAA = vw_GetDevCaps().MaxSamples;
-	// на всякий случай проверяем, входит ли текущее сглаживание в список доступных
-	int CurrentAAMode = -1;
-	if (Setup.MSAA != 0) {
-		for (int i = 0; i < vw_GetDevCaps().MaxMultisampleCoverageModes; i++) {
-			if ((vw_GetDevCaps().MultisampleCoverageModes[i].ColorSamples == Setup.MSAA) &&
-			    (vw_GetDevCaps().MultisampleCoverageModes[i].CoverageSamples == Setup.CSAA)) {
-				CurrentAAMode = i;
-				break;
-			}
+	// check MSAA/CSAA mode
+	bool FoundAAMode{false};
+	for (auto &Sample : vw_GetDevCaps().MultisampleCoverageModes) {
+		if ((Setup.MSAA == Sample.ColorSamples) &&
+		    (Setup.CSAA == Sample.CoverageSamples)) {
+			FoundAAMode = true;
+			break;
 		}
 	}
-	// если ничего не нашли, сбрасываем в нули
-	if (CurrentAAMode == -1)
+	if (!FoundAAMode)
 		Setup.MSAA = Setup.CSAA = 0;
 
 	// проверка режима сжатия текстур

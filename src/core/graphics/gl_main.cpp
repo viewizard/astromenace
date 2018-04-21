@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 // NOTE GL_MAX_TEXTURE_MAX_ANISOTROPY (since OpenGL 4.6)
 //      could be used to replace GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT
 
@@ -32,12 +34,13 @@
 #include "graphics.h"
 #include "extensions.h"
 
+namespace {
 
+// hardware device capabilities
+sDevCaps DevCaps{};
 
-//------------------------------------------------------------------------------------
-// переменные...
-//------------------------------------------------------------------------------------
-sDevCaps OpenGL_DevCaps;
+} // unnamed namespace
+
 
 float fClearRedGL = 0.0f;
 float fClearGreenGL = 0.0f;
@@ -126,31 +129,29 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверяем данные по возможностям железа
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	OpenGL_DevCaps.OpenGLmajorVersion = 1;
-	OpenGL_DevCaps.OpenGLminorVersion = 0;
-	OpenGL_DevCaps.MaxMultTextures = 0;
-	OpenGL_DevCaps.MaxTextureWidth = 0;
-	OpenGL_DevCaps.MaxTextureHeight = 0;
-	OpenGL_DevCaps.MaxActiveLights = 0;
-	OpenGL_DevCaps.MaxAnisotropyLevel = 0;
-	OpenGL_DevCaps.MaxSamples = 0;
-	OpenGL_DevCaps.MaxMultisampleCoverageModes = 0;
-	OpenGL_DevCaps.TexturesCompression = false;
-	OpenGL_DevCaps.TexturesCompressionBPTC = false;
-	OpenGL_DevCaps.VBOSupported = false;
-	OpenGL_DevCaps.VAOSupported = false;
-	OpenGL_DevCaps.TextureNPOTSupported = false;
-	OpenGL_DevCaps.GLSL100Supported = false;
-	OpenGL_DevCaps.ShaderModel = 0;
-	OpenGL_DevCaps.HardwareMipMapGeneration = false;
-	OpenGL_DevCaps.TextureStorage = false;
-	OpenGL_DevCaps.FramebufferObject = false;
-	OpenGL_DevCaps.FramebufferObjectDepthSize = 0;
-	OpenGL_DevCaps.OpenGL_1_3_supported = __Initialize_OpenGL_1_3();
-	OpenGL_DevCaps.OpenGL_1_5_supported = __Initialize_OpenGL_1_5();
-	OpenGL_DevCaps.OpenGL_2_0_supported = __Initialize_OpenGL_2_0();
-	OpenGL_DevCaps.OpenGL_3_0_supported = __Initialize_OpenGL_3_0();
-	OpenGL_DevCaps.OpenGL_4_2_supported = __Initialize_OpenGL_4_2();
+	DevCaps.OpenGLmajorVersion = 1;
+	DevCaps.OpenGLminorVersion = 0;
+	DevCaps.MaxMultTextures = 0;
+	DevCaps.MaxTextureWidth = 0;
+	DevCaps.MaxTextureHeight = 0;
+	DevCaps.MaxActiveLights = 0;
+	DevCaps.MaxAnisotropyLevel = 0;
+	DevCaps.TexturesCompression = false;
+	DevCaps.TexturesCompressionBPTC = false;
+	DevCaps.VBOSupported = false;
+	DevCaps.VAOSupported = false;
+	DevCaps.TextureNPOTSupported = false;
+	DevCaps.GLSL100Supported = false;
+	DevCaps.ShaderModel = 0;
+	DevCaps.HardwareMipMapGeneration = false;
+	DevCaps.TextureStorage = false;
+	DevCaps.FramebufferObject = false;
+	DevCaps.FramebufferObjectDepthSize = 0;
+	DevCaps.OpenGL_1_3_supported = __Initialize_OpenGL_1_3();
+	DevCaps.OpenGL_1_5_supported = __Initialize_OpenGL_1_5();
+	DevCaps.OpenGL_2_0_supported = __Initialize_OpenGL_2_0();
+	DevCaps.OpenGL_3_0_supported = __Initialize_OpenGL_3_0();
+	DevCaps.OpenGL_4_2_supported = __Initialize_OpenGL_4_2();
 	__Initialize_GL_NV_framebuffer_multisample_coverage();
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -159,18 +160,18 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	std::cout << "Vendor     : " << glGetString(GL_VENDOR) << "\n";
 	std::cout << "Renderer   : " << glGetString(GL_RENDERER) << "\n";
 	std::cout << "Version    : " << glGetString(GL_VERSION) << "\n";
-	glGetIntegerv(GL_MAJOR_VERSION, &OpenGL_DevCaps.OpenGLmajorVersion);
-	glGetIntegerv(GL_MINOR_VERSION, &OpenGL_DevCaps.OpenGLminorVersion);
+	glGetIntegerv(GL_MAJOR_VERSION, &DevCaps.OpenGLmajorVersion);
+	glGetIntegerv(GL_MINOR_VERSION, &DevCaps.OpenGLminorVersion);
 	// после GL_MAJOR_VERSION и GL_MINOR_VERSION сбрасываем ошибку, т.к. тут можем получить
 	// 0x500 GL_INVALID_ENUM
 	glGetError();
-	std::cout << "OpenGL Version    : " << OpenGL_DevCaps.OpenGLmajorVersion << "." << OpenGL_DevCaps.OpenGLminorVersion << "\n\n";
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &OpenGL_DevCaps.MaxTextureHeight);
-	std::cout << "Max texture height: " << OpenGL_DevCaps.MaxTextureHeight << "\n";
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &OpenGL_DevCaps.MaxTextureWidth);
-	std::cout << "Max texture width: " << OpenGL_DevCaps.MaxTextureWidth << "\n";
-	glGetIntegerv(GL_MAX_LIGHTS, &OpenGL_DevCaps.MaxActiveLights);
-	std::cout << "Max lights: " << OpenGL_DevCaps.MaxActiveLights << "\n";
+	std::cout << "OpenGL Version    : " << DevCaps.OpenGLmajorVersion << "." << DevCaps.OpenGLminorVersion << "\n\n";
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &DevCaps.MaxTextureHeight);
+	std::cout << "Max texture height: " << DevCaps.MaxTextureHeight << "\n";
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &DevCaps.MaxTextureWidth);
+	std::cout << "Max texture width: " << DevCaps.MaxTextureWidth << "\n";
+	glGetIntegerv(GL_MAX_LIGHTS, &DevCaps.MaxActiveLights);
+	std::cout << "Max lights: " << DevCaps.MaxActiveLights << "\n";
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -178,8 +179,8 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// проверяем поддержку мультитекстуры
-	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &OpenGL_DevCaps.MaxMultTextures);
-	std::cout << "Max multitexture supported: " << OpenGL_DevCaps.MaxMultTextures << " textures.\n";
+	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &DevCaps.MaxMultTextures);
+	std::cout << "Max multitexture supported: " << DevCaps.MaxMultTextures << " textures.\n";
 	// shader-based GL 2.0 and above programs should use GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS only
 
 
@@ -190,51 +191,51 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	// проверем поддержку анизотропной фильтрации
 	if (ExtensionSupported("GL_EXT_texture_filter_anisotropic")) {
 		// получим максимально доступный угол анизотропии...
-		glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &OpenGL_DevCaps.MaxAnisotropyLevel);
-		std::cout << "Max anisotropy: " << OpenGL_DevCaps.MaxAnisotropyLevel << "\n";
+		glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &DevCaps.MaxAnisotropyLevel);
+		std::cout << "Max anisotropy: " << DevCaps.MaxAnisotropyLevel << "\n";
 	}
 
 	// проверем поддержку VBO
 	if (ExtensionSupported("GL_ARB_vertex_buffer_object")) {
-		OpenGL_DevCaps.VBOSupported = true;
+		DevCaps.VBOSupported = true;
 		std::cout << "Vertex Buffer support enabled.\n";
 	}
 
 	// проверем поддержку VAO
 	if (ExtensionSupported("GL_ARB_vertex_array_object")) {
-		OpenGL_DevCaps.VAOSupported = true;
+		DevCaps.VAOSupported = true;
 		std::cout << "Vertex Array support enabled.\n";
 	}
 
 	// проверем поддержку non_power_of_two генерацию текстур
 	if (ExtensionSupported("GL_ARB_texture_non_power_of_two"))
-		OpenGL_DevCaps.TextureNPOTSupported = true;
+		DevCaps.TextureNPOTSupported = true;
 
 	// проверяем, есть ли поддержка компрессии текстур
 	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_EXT_texture_compression_s3tc")) {
-		OpenGL_DevCaps.TexturesCompression = true;
+		DevCaps.TexturesCompression = true;
 		std::cout << "Textures S3TC compression support enabled.\n";
 	}
 	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_ARB_texture_compression_bptc")) {
-		OpenGL_DevCaps.TexturesCompressionBPTC = true;
+		DevCaps.TexturesCompressionBPTC = true;
 		std::cout << "Textures BPTC compression support enabled.\n";
 	}
 
 	// проверяем, есть ли поддержка SGIS_generate_mipmap (хардварная генерация мипмеп уровней)
 	if (ExtensionSupported("SGIS_generate_mipmap")) {
-		OpenGL_DevCaps.HardwareMipMapGeneration = true;
+		DevCaps.HardwareMipMapGeneration = true;
 	}
 
 	// проверяем, есть ли поддержка GL_ARB_framebuffer_object (GL_EXT_framebuffer_object+GL_EXT_framebuffer_multisample+GL_EXT_framebuffer_blit)
 	if (ExtensionSupported("GL_ARB_framebuffer_object") ||
 	    (ExtensionSupported("GL_EXT_framebuffer_blit") && ExtensionSupported("GL_EXT_framebuffer_multisample") && ExtensionSupported("GL_EXT_framebuffer_object"))) {
-		OpenGL_DevCaps.FramebufferObject = true;
+		DevCaps.FramebufferObject = true;
 		std::cout << "Frame Buffer Object support enabled.\n";
 	}
 
 	// проверяем, есть ли поддержка GL_ARB_texture_storage или GL_EXT_texture_storage
 	if (ExtensionSupported("GL_ARB_texture_storage") || ExtensionSupported("GL_EXT_texture_storage")) {
-		OpenGL_DevCaps.TextureStorage = true;
+		DevCaps.TextureStorage = true;
 		std::cout << "Texture Storage support enabled.\n";
 	}
 
@@ -248,113 +249,93 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	    ExtensionSupported("GL_ARB_vertex_shader") &&
 	    ExtensionSupported("GL_ARB_fragment_shader") &&
 	    ExtensionSupported("GL_ARB_shading_language_100")) {
-		OpenGL_DevCaps.GLSL100Supported = true;
+		DevCaps.GLSL100Supported = true;
 	}
 
 	// определяем какую версию шейдеров поддерживаем в железе.
 	// т.к. это может пригодиться для определения как работает GLSL,
 	// ведь может работать даже с шейдерной моделью 2.0 (в обрезанном режиме), полному GLSL 1.0 нужна модель 3.0 или выше
-	OpenGL_DevCaps.ShaderModel = 0.0f;
+	DevCaps.ShaderModel = 0.0f;
 	// If a card supports GL_ARB_vertex_program and/or GL_ARB_vertex_shader, it supports vertex shader 1.1.
 	// If a card supports GL_NV_texture_shader and GL_NV_register_combiners, it supports pixel shader 1.1.
 	if ((ExtensionSupported("GL_ARB_vertex_program") || ExtensionSupported("GL_ARB_vertex_shader")) &&
 	    ExtensionSupported("GL_NV_texture_shader") && ExtensionSupported("GL_NV_register_combiners")) {
-		OpenGL_DevCaps.ShaderModel = 1.1f;
+		DevCaps.ShaderModel = 1.1f;
 	}
 	// If a card supports GL_ATI_fragment_shader or GL_ATI_text_fragment_shader it supports pixel shader 1.4.
 	if (ExtensionSupported("GL_ATI_fragment_shader") || ExtensionSupported("GL_ATI_text_fragment_shader")) {
-		OpenGL_DevCaps.ShaderModel = 1.4f;
+		DevCaps.ShaderModel = 1.4f;
 	}
 	// If a card supports GL_ARB_fragment_program and/or GL_ARB_fragment_shader it supports Shader Model 2.0.
 	if (ExtensionSupported("GL_ARB_fragment_program") || ExtensionSupported("GL_ARB_fragment_shader")) {
-		OpenGL_DevCaps.ShaderModel = 2.0f;
+		DevCaps.ShaderModel = 2.0f;
 	}
 	// If a card supports GL_NV_vertex_program3 or GL_ARB_shader_texture_lod/GL_ATI_shader_texture_lod it supports Shader Model 3.0.
 	if (ExtensionSupported("GL_ARB_shader_texture_lod") || ExtensionSupported("GL_NV_vertex_program3") || ExtensionSupported("GL_ATI_shader_texture_lod")) {
-		OpenGL_DevCaps.ShaderModel = 3.0f;
+		DevCaps.ShaderModel = 3.0f;
 	}
 	// If a card supports GL_EXT_gpu_shader4 it is a Shader Model 4.0 card. (Geometry shaders are implemented in GL_EXT_geometry_shader4)
 	if (ExtensionSupported("GL_EXT_gpu_shader4")) {
-		OpenGL_DevCaps.ShaderModel = 4.0f;
+		DevCaps.ShaderModel = 4.0f;
 	}
 
 	// проверяем, если версия опенжл выше 3.3, версия шейдеров им соответствует
 	// (если мы не нашли более высокую через расширения ранее, ставим по версии опенжл)
-	float OpenGLVersion = OpenGL_DevCaps.OpenGLmajorVersion;
-	if (OpenGL_DevCaps.OpenGLminorVersion != 0) OpenGLVersion += OpenGL_DevCaps.OpenGLminorVersion/10.0f;
-	if ((OpenGL_DevCaps.ShaderModel >= 3.0f) && (OpenGLVersion >= 3.3))
-		if (OpenGL_DevCaps.ShaderModel < OpenGLVersion) OpenGL_DevCaps.ShaderModel = OpenGLVersion;
+	float OpenGLVersion = DevCaps.OpenGLmajorVersion;
+	if (DevCaps.OpenGLminorVersion != 0) OpenGLVersion += DevCaps.OpenGLminorVersion/10.0f;
+	if ((DevCaps.ShaderModel >= 3.0f) && (OpenGLVersion >= 3.3))
+		if (DevCaps.ShaderModel < OpenGLVersion) DevCaps.ShaderModel = OpenGLVersion;
 
 	// выводим эти данные
-	if (OpenGL_DevCaps.ShaderModel == 0.0f)
+	if (DevCaps.ShaderModel == 0.0f)
 		std::cout << "Shaders unsupported.\n";
 	else
-		std::cout << "Shader Model: " << OpenGL_DevCaps.ShaderModel << "\n";
+		std::cout << "Shader Model: " << DevCaps.ShaderModel << "\n";
+
+
+	// временно, потом переработать все проверки под версию GL
+	if (!DevCaps.OpenGL_1_3_supported)
+		DevCaps.MaxMultTextures = 1; // FIXME this should be revised
+
+	if (!DevCaps.OpenGL_4_2_supported)
+		DevCaps.TextureStorage = false; // FIXME this should be revised
+
+	if (!DevCaps.OpenGL_2_0_supported)
+		DevCaps.GLSL100Supported = false; // FIXME this should be revised
+
+	if (!DevCaps.OpenGL_1_5_supported)
+		DevCaps.VBOSupported = false; // FIXME this should be revised
+
+	if (!DevCaps.OpenGL_3_0_supported) {
+		DevCaps.VAOSupported = false; // FIXME this should be revised
+		DevCaps.FramebufferObject = false; // FIXME this should be revised
+	}
 
 
 	// если есть полная поддержка FBO, значит можем работать с семплами
-	if (OpenGL_DevCaps.FramebufferObject) {
-		glGetIntegerv(GL_MAX_SAMPLES_EXT, &OpenGL_DevCaps.MaxSamples);
-		std::cout << "Max Samples: " << OpenGL_DevCaps.MaxSamples << "\n";
+	if (DevCaps.FramebufferObject) {
+		int MaxSamples{0};
+		glGetIntegerv(GL_MAX_SAMPLES_EXT, &MaxSamples);
+		std::cout << "Max Samples: " << MaxSamples << "\n";
 
-		// дальше может и не быть GL_NV_framebuffer_multisample_coverage, потому делаем список сглаживаний
-		int TestSample = 2;
-		OpenGL_DevCaps.MaxMultisampleCoverageModes = 0;
-		while (TestSample <= OpenGL_DevCaps.MaxSamples) {
-			OpenGL_DevCaps.MultisampleCoverageModes[OpenGL_DevCaps.MaxMultisampleCoverageModes].ColorSamples = TestSample;
-			OpenGL_DevCaps.MultisampleCoverageModes[OpenGL_DevCaps.MaxMultisampleCoverageModes].CoverageSamples = TestSample;
-			OpenGL_DevCaps.MaxMultisampleCoverageModes++;
-			TestSample = TestSample*2;
+		// MSAA
+		for (int i = 2; i <= MaxSamples; i *= 2) {
+			DevCaps.MultisampleCoverageModes.push_back(sCoverageModes{i, i});
 		}
 
-		// проверяем, есть ли поддержка CSAA
+		// CSAA
 		if (ExtensionSupported("GL_NV_framebuffer_multisample_coverage")) {
-			glGetIntegerv( GL_MAX_MULTISAMPLE_COVERAGE_MODES_NV, &OpenGL_DevCaps.MaxMultisampleCoverageModes);
-			std::cout << "Max Multisample coverage modes: " << OpenGL_DevCaps.MaxMultisampleCoverageModes << "\n";
-			int *coverageConfigs = nullptr;
-			coverageConfigs = new int[OpenGL_DevCaps.MaxMultisampleCoverageModes * 2 + 4];
-			glGetIntegerv( GL_MULTISAMPLE_COVERAGE_MODES_NV, coverageConfigs);
-
-			// просматриваем все конфиги, печатаем их и делаем второй тест на MSAA
-			int MaxMultiSampleTypeTest2 = -1;
-			for (int kk = 0; kk < OpenGL_DevCaps.MaxMultisampleCoverageModes; kk++) {
-				OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples = coverageConfigs[kk*2+1];
-				OpenGL_DevCaps.MultisampleCoverageModes[kk].CoverageSamples = coverageConfigs[kk*2];
-
-				if (OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples == OpenGL_DevCaps.MultisampleCoverageModes[kk].CoverageSamples) {
-					// если ковередж и глубина/цвет одинаковые - это обычный MSAA
-					std::cout << " - " << OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples << " MSAA\n";
-					if (MaxMultiSampleTypeTest2 < OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples) MaxMultiSampleTypeTest2 = OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples;
-				} else {
-					// CSAA
-					std::cout << " - " <<  OpenGL_DevCaps.MultisampleCoverageModes[kk].CoverageSamples << "/"
-						  << OpenGL_DevCaps.MultisampleCoverageModes[kk].ColorSamples << " CSAA\n";
-				}
+			int NumModes{0};
+			glGetIntegerv(GL_MAX_MULTISAMPLE_COVERAGE_MODES_NV, &NumModes);
+			std::cout << "Coverage modes: " << NumModes << "\n";
+			std::vector<int> modes(NumModes * 2);
+			glGetIntegerv(GL_MULTISAMPLE_COVERAGE_MODES_NV, modes.data());
+			// fill MultisampleCoverageModes with MSAA/CSAA modes
+			DevCaps.MultisampleCoverageModes.clear();
+			for (int i = 0; i < (NumModes * 2); i += 2) {
+				DevCaps.MultisampleCoverageModes.push_back(sCoverageModes{modes[i + 1], modes[i]});
 			}
-			// GL_MAX_SAMPLES_EXT может нести в себе общий макс. семпл, а не MSAA, если есть поддержка CSAA
-			// смотрим если была доп проверка, и если в доп проверке значение меньше - берем его, оно более корректное
-			if (OpenGL_DevCaps.MaxSamples > MaxMultiSampleTypeTest2) OpenGL_DevCaps.MaxSamples = MaxMultiSampleTypeTest2;
-
-			delete [] coverageConfigs;
 		}
-	}
-
-	// временно, потом переработать все проверки под версию GL
-	if (!OpenGL_DevCaps.OpenGL_1_3_supported)
-		OpenGL_DevCaps.MaxMultTextures = 1; // FIXME this should be revised
-
-	if (!OpenGL_DevCaps.OpenGL_4_2_supported)
-		OpenGL_DevCaps.TextureStorage = false; // FIXME this should be revised
-
-	if (!OpenGL_DevCaps.OpenGL_2_0_supported)
-		OpenGL_DevCaps.GLSL100Supported = false; // FIXME this should be revised
-
-	if (!OpenGL_DevCaps.OpenGL_1_5_supported)
-		OpenGL_DevCaps.VBOSupported = false; // FIXME this should be revised
-
-	if (!OpenGL_DevCaps.OpenGL_3_0_supported) {
-		OpenGL_DevCaps.VAOSupported = false; // FIXME this should be revised
-		OpenGL_DevCaps.FramebufferObject = false; // FIXME this should be revised
 	}
 
 #ifndef NDEBUG
@@ -408,23 +389,23 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	// подключаем расширения
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	if (OpenGL_DevCaps.FramebufferObject) {
+	if (DevCaps.FramebufferObject) {
 		// инициализируем буферы, если поддерживаем работу с ними - через них всегда рисуем
-		if (OpenGL_DevCaps.FramebufferObject) {
+		if (DevCaps.FramebufferObject) {
 			if ((!vw_BuildFBO(&MainFBO, Width, Height, true, true, *MSAA, CSAA)) &
 			    (!vw_BuildFBO(&ResolveFBO, Width, Height, true, false))) {
 				vw_DeleteFBO(&MainFBO);
 				vw_DeleteFBO(&ResolveFBO);
-				OpenGL_DevCaps.FramebufferObject = false;
+				DevCaps.FramebufferObject = false;
 			}
 		}
 	}
 
 
 	// если с FBO работать не получилось
-	if (!OpenGL_DevCaps.FramebufferObject) {
+	if (!DevCaps.FramebufferObject) {
 		//выключаем антиалиасинг
-		*MSAA = OpenGL_DevCaps.MaxSamples = 0;
+		*MSAA = 0;
 
 		// сбрасываем в нули структуры буферов (на всякий случай, т.к. не было инициализаций)
 		MainFBO.ColorBuffer = 0;
@@ -451,7 +432,7 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 //------------------------------------------------------------------------------------
 const sDevCaps &vw_GetDevCaps()
 {
-	return OpenGL_DevCaps;
+	return DevCaps;
 }
 
 /*
@@ -459,7 +440,7 @@ const sDevCaps &vw_GetDevCaps()
  */
 sDevCaps &__GetDevCaps()
 {
-	return OpenGL_DevCaps;
+	return DevCaps;
 }
 
 
