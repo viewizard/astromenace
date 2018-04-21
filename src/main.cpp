@@ -999,13 +999,13 @@ ReCreate:
 
 	// проверка поддержки шейдеров (нужна 100% поддержка GLSL 1.0)
 	if (Setup.UseGLSL &&
-	    (!vw_GetDevCaps()->GLSL100Supported || vw_GetDevCaps()->ShaderModel < 3.0f))
+	    (!vw_GetDevCaps().GLSL100Supported || vw_GetDevCaps().ShaderModel < 3.0f))
 		Setup.UseGLSL = false;
 
 	// анализ системы только если это первый запуск
 	if (FirstStart) {
 		// если шейдерная модель 4-я или выше
-		if (vw_GetDevCaps()->ShaderModel >= 4.0f) {
+		if (vw_GetDevCaps().ShaderModel >= 4.0f) {
 			// 100% держит наши шейдеры
 			Setup.UseGLSL = true;
 			Setup.ShadowMap = 2;
@@ -1014,11 +1014,11 @@ ReCreate:
 			// немного больше ставим другие опции
 			Setup.MSAA = 2;
 			Setup.CSAA = 2;
-			Setup.AnisotropyLevel = vw_GetDevCaps()->MaxAnisotropyLevel;
+			Setup.AnisotropyLevel = vw_GetDevCaps().MaxAnisotropyLevel;
 			Setup.MaxPointLights = 4;
 		}
 		// если шейдерная модель 4.2-я или выше
-		if (vw_GetDevCaps()->ShaderModel >= 4.2f) {
+		if (vw_GetDevCaps().ShaderModel >= 4.2f) {
 			// немного больше ставим другие опции
 			Setup.ShadowMap = 5;
 			Setup.MSAA = 4;
@@ -1027,7 +1027,7 @@ ReCreate:
 		}
 
 		// если поддерживаем сторедж - выключаем поддержку сжатия, 100% у нас достаточно видео памяти
-		if (vw_GetDevCaps()->TextureStorage)
+		if (vw_GetDevCaps().TextureStorage)
 			Setup.TexturesCompressionType = 0;
 
 #if defined(__APPLE__) && defined(__MACH__)
@@ -1053,18 +1053,18 @@ ReCreate:
 	}
 
 	// если не поддерживает железо фбо или шейдеры, выключаем шадовмеп
-	if (!vw_GetDevCaps()->FramebufferObject ||
-	    !vw_GetDevCaps()->GLSL100Supported ||
-	    (vw_GetDevCaps()->ShaderModel < 3.0f))
+	if (!vw_GetDevCaps().FramebufferObject ||
+	    !vw_GetDevCaps().GLSL100Supported ||
+	    (vw_GetDevCaps().ShaderModel < 3.0f))
 		Setup.ShadowMap = 0;
 
-	if (Setup.MSAA > vw_GetDevCaps()->MaxSamples) Setup.MSAA = Setup.CSAA = vw_GetDevCaps()->MaxSamples;
+	if (Setup.MSAA > vw_GetDevCaps().MaxSamples) Setup.MSAA = Setup.CSAA = vw_GetDevCaps().MaxSamples;
 	// на всякий случай проверяем, входит ли текущее сглаживание в список доступных
 	int CurrentAAMode = -1;
 	if (Setup.MSAA != 0) {
-		for (int i = 0; i < vw_GetDevCaps()->MaxMultisampleCoverageModes; i++) {
-			if ((vw_GetDevCaps()->MultisampleCoverageModes[i].ColorSamples == Setup.MSAA) &&
-			    (vw_GetDevCaps()->MultisampleCoverageModes[i].CoverageSamples == Setup.CSAA)) {
+		for (int i = 0; i < vw_GetDevCaps().MaxMultisampleCoverageModes; i++) {
+			if ((vw_GetDevCaps().MultisampleCoverageModes[i].ColorSamples == Setup.MSAA) &&
+			    (vw_GetDevCaps().MultisampleCoverageModes[i].CoverageSamples == Setup.CSAA)) {
 				CurrentAAMode = i;
 				break;
 			}
@@ -1075,9 +1075,9 @@ ReCreate:
 		Setup.MSAA = Setup.CSAA = 0;
 
 	// проверка режима сжатия текстур
-	if (!vw_GetDevCaps()->TexturesCompression && (Setup.TexturesCompressionType > 0))
+	if (!vw_GetDevCaps().TexturesCompression && (Setup.TexturesCompressionType > 0))
 		Setup.TexturesCompressionType = 0;
-	if (!vw_GetDevCaps()->TexturesCompressionBPTC && (Setup.TexturesCompressionType > 1))
+	if (!vw_GetDevCaps().TexturesCompressionBPTC && (Setup.TexturesCompressionType > 1))
 		Setup.TexturesCompressionType = 1;
 
 
@@ -1096,7 +1096,7 @@ ReCreate:
 
 
 	// если не поддерживаем как минимум 2 текстуры, железо очень слабое - не запустимся
-	if (vw_GetDevCaps()->MaxMultTextures < 2) {
+	if (vw_GetDevCaps().MaxMultTextures < 2) {
 		SDL_Quit();
 		std::cerr << __func__ << "(): " << "The Multi Textures feature not supported by hardware. Fatal error.\n";
 #ifdef WIN32

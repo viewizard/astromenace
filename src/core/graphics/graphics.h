@@ -344,7 +344,7 @@ struct sDevCaps {
 
 
 /*
- * Common functions.
+ * gl_main
  */
 
 // Initialization renderer.
@@ -355,7 +355,7 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA);
 // Shutdown renderer.
 void vw_ShutdownRenderer();
 // Get device capability.
-const sDevCaps *vw_GetDevCaps();
+const sDevCaps &vw_GetDevCaps();
 
 void vw_SetAspectRatio(float nWidth, float nHeight, bool Value);
 bool vw_GetAspectWH(float *ARWidth, float *ARHeight);
@@ -369,10 +369,6 @@ void vw_GetViewport(int *x = nullptr, int *y = nullptr, int *width = nullptr, in
 // Resize scene.
 void vw_ResizeScene(float nfAngle, float AR, float nfNearClip, float nfFarClip);
 
-/*
- * Rendering.
- */
-
 // Begin rendering.
 void vw_BeginRendering(int  mask);
 // End rendering.
@@ -383,9 +379,17 @@ void vw_Clear(int mask);
 void vw_SetClearColor(float nRed, float nGreen, float nBlue, float nAlpha);
 // Set scene color mask.
 void vw_SetColorMask(bool red, bool green, bool blue, bool alpha);
+// Set color.
+void vw_SetColor(float nRed, float nGreen, float nBlue, float nAlpha);
+// Set what facets can be culled.
+void vw_CullFace(int face);
+// Set depth buffer.
+void vw_DepthTest(bool mode, eCompareFunc func);
+// Set polygon offset mode.
+void vw_PolygonOffset(bool enable, float factor, float units);
 
 /*
- * Textures.
+ * gl_texture
  */
 
 // Create texture.
@@ -422,24 +426,16 @@ void vw_SetTextureCompare(eTextureCompareMode mode, eCompareFunc func);
 void vw_SetTextureDepthMode(eTextureDepthMode mode);
 
 /*
- * 3D rendering.
+ * gl_draw3d
  */
 
 // Draw 3D primitives.
 void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, const GLvoid *VertexArray,
 	       GLsizei Stride, GLuint VertexBO = 0, unsigned int RangeStart = 0,
 	       unsigned int *IndexArray = nullptr, GLuint IndexBO = 0, GLuint VAO = 0);
-// Set color.
-void vw_SetColor(float nRed, float nGreen, float nBlue, float nAlpha);
-// Set what facets can be culled.
-void vw_CullFace(int face);
-// Set depth buffer.
-void vw_DepthTest(bool mode, eCompareFunc func);
-// Set polygon offset mode.
-void vw_PolygonOffset(bool enable, float factor, float units);
 
 /*
- * Matrix.
+ * gl_matrix
  */
 
 // Replace the current matrix with the identity matrix.
@@ -464,7 +460,7 @@ void vw_MatrixMode(eMatrixMode mode);
 void vw_MultMatrix(const GLfloat *matrix);
 
 /*
- * Light.
+ * gl_light
  */
 
 // Set lighting status.
@@ -479,7 +475,7 @@ void vw_SetLightV(GLenum light, eLightVParameter pname, const GLfloat *param);
 void vw_MaterialV(eMaterialParameter pname, const GLfloat *param);
 
 /*
- * Buffer objects.
+ * gl_vbo
  */
 
 // Build buffer object (size in bytes).
@@ -491,7 +487,7 @@ void vw_BindBufferObject(eBufferObject target, GLuint buffer);
 void vw_DeleteBufferObject(GLuint &buffer);
 
 /*
- * Vertex array objects.
+ * gl_vao
  */
 
 // Build vertex array object.
@@ -502,7 +498,7 @@ void vw_BindVAO(GLuint VAO);
 void vw_DeleteVAO(GLuint &VAO);
 
 /*
- * FBO.
+ * gl_fbo
  */
 
 struct sFBO {
@@ -531,7 +527,7 @@ void vw_DrawColorFBO(sFBO *SourceFBO, sFBO *TargetFBO);
 void vw_DeleteFBO(sFBO *FBO);
 
 /*
- * GLSL.
+ * gl_glsl
  */
 
 struct cGLSL;
@@ -562,7 +558,7 @@ bool vw_Uniform1f(GLint UniformLocation, float data);
 bool vw_Uniform3f(GLint UniformLocation, float data1, float data2, float data3);
 
 /*
- * 2D rendering.
+ * gl_draw2d
  */
 
 // Switch to 2D rendering mode. Origin is upper left corner.
@@ -574,7 +570,7 @@ void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bo
 	       float RotateAngle = 0.0f, const sRGBCOLOR &Color = {1.0f, 1.0f, 1.0f});
 
 /*
- * Misc.
+ * misc
  */
 
 // Create screenshot from current OpenGL surface.

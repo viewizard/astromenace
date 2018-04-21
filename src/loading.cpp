@@ -1230,7 +1230,7 @@ void LoadGameData(eLoading LoadType)
 
 
 	// если будем загружать шейдеры - делаем поправку общего кол-ва
-	if (vw_GetDevCaps()->GLSL100Supported &&
+	if (vw_GetDevCaps().GLSL100Supported &&
 	    Setup.UseGLSL &&
 	    vw_ShadersMapEmpty()) {
 		AllDrawLoading += GLSLLoadListCount*100;
@@ -1298,8 +1298,7 @@ void LoadGameData(eLoading LoadType)
 
 
 	//	если нужно, загрузка всех шейдеров (!) обязательно это делать до загрузки моделей
-	if (NeedLoadShaders &&
-	    (vw_GetDevCaps()->GLSL100Supported)) {
+	if (NeedLoadShaders && vw_GetDevCaps().GLSL100Supported) {
 		for (unsigned int i=0; i<GLSLLoadListCount; i++) {
 			if (Setup.UseGLSL) {
 
@@ -1498,17 +1497,17 @@ AllDataLoaded:
 		case 1:
 		case 2:
 		case 3:
-			ShadowMapSize = vw_GetDevCaps()->MaxTextureWidth/4;
+			ShadowMapSize = vw_GetDevCaps().MaxTextureWidth / 4;
 			break;
 		case 4:
 		case 5:
 		case 6:
-			ShadowMapSize = vw_GetDevCaps()->MaxTextureWidth/2;
+			ShadowMapSize = vw_GetDevCaps().MaxTextureWidth / 2;
 			break;
 		case 7:
 		case 8:
 		case 9:
-			ShadowMapSize = vw_GetDevCaps()->MaxTextureWidth;
+			ShadowMapSize = vw_GetDevCaps().MaxTextureWidth;
 			break;
 		}
 

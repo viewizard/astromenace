@@ -214,6 +214,7 @@ void vw_ReleaseAllFontChars()
 	// reset list
 	FontCharsList.clear();
 
+	// FIXME probably, this part should be moved to separate method and call only on OpenGL context destroy
 	if (IndexBO)
 		vw_DeleteBufferObject(IndexBO);
 }
@@ -542,8 +543,7 @@ static void DrawBuffersRoutine(unsigned int TextSize)
 	}
 
 	// IBO should be re-generated on game restart and on index array size change
-	if (!IndexBO && IndexArraySize && IndexArray.get() &&
-	    vw_GetDevCaps() && vw_GetDevCaps()->VBOSupported)
+	if (!IndexBO && IndexArraySize && IndexArray.get() && vw_GetDevCaps().VBOSupported)
 		vw_BuildBufferObject(eBufferObject::Index, IndexArraySize * sizeof(unsigned), IndexArray.get(), IndexBO);
 }
 
