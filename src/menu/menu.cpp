@@ -92,14 +92,12 @@ void InitMenu()
 {
 	// установка курсора на центр
 	// получаем размер клиентской области
-	int W, H;
-	vw_GetViewport(nullptr, nullptr, &W, &H);
-	float AWw = W*1.0f;
-	float AHw = H*1.0f;
+	float tmpViewportWidth, tmpViewportHeight;
+	vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
 	// установка мышки, чтобы не учитывать перемещения в меню
 	SDL_WarpMouseInWindow(vw_GetSDL2Windows(),
-			      (int)((512.0f + 256.0f)/(Setup.InternalWidth / AWw)),
-			      (int)(384.0f / (Setup.InternalHeight / AHw)));
+			      (int)((512.0f + 256.0f)/(Setup.InternalWidth / tmpViewportWidth)),
+			      (int)(384.0f / (Setup.InternalHeight / tmpViewportHeight)));
 
 
 

@@ -52,8 +52,8 @@ void vw_Start2DMode(GLdouble zNear, GLdouble zFar)
 	glDisable(GL_DEPTH_TEST);
 
 	// get current viewport start point and size
-	int ViewportX, ViewportY, ViewportWidth, ViewportHeight;
-	vw_GetViewport(&ViewportX, &ViewportY, &ViewportWidth, &ViewportHeight);
+	float tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight;
+	vw_GetViewport(&tmpViewportX, &tmpViewportY, &tmpViewportWidth, &tmpViewportHeight);
 
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -65,13 +65,13 @@ void vw_Start2DMode(GLdouble zNear, GLdouble zFar)
 	// care about fixed internal resolution, that could be setted up
 	// change origin to upper left corner
 	if (vw_GetInternalResolution(&tmpInternalWidth, &tmpInternalHeight))
-		glOrtho(ViewportX * tmpInternalWidth / ViewportWidth,
-			(ViewportX + ViewportWidth) * tmpInternalWidth / ViewportWidth,
-			(ViewportY + ViewportHeight) * tmpInternalHeight / ViewportHeight,
-			ViewportY * tmpInternalHeight / ViewportHeight,
+		glOrtho(tmpViewportX * tmpInternalWidth / tmpViewportWidth,
+			(tmpViewportX + tmpViewportWidth) * tmpInternalWidth / tmpViewportWidth,
+			(tmpViewportY + tmpViewportHeight) * tmpInternalHeight / tmpViewportHeight,
+			tmpViewportY * tmpInternalHeight / tmpViewportHeight,
 			zNear, zFar);
 	else
-		glOrtho(0, ViewportWidth, ViewportHeight, 0, zNear, zFar);
+		glOrtho(0, tmpViewportWidth, tmpViewportHeight, 0, zNear, zFar);
 
 	// change textures origin to upper left corner
 	vw_SelectActiveTextureUnit(0); // switch to 0 unit, for proper texture matrix

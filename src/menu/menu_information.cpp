@@ -1738,13 +1738,11 @@ void InformationDrawObject()
 	int MouseX, MouseY;
 	vw_GetMousePos(MouseX, MouseY);
 
-	int x, y, width, height;
-	vw_GetViewport(&x, &y, &width, &height);
-	float AWw = width*1.0f;
-	float AHw = height*1.0f;
+	float tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight;
+	vw_GetViewport(&tmpViewportX, &tmpViewportY, &tmpViewportWidth, &tmpViewportHeight);
 
-	vw_SetViewport((GLint)((Setup.InternalWidth / 2 - 432) / (Setup.InternalWidth / AWw)), (GLint)(80 / (Setup.InternalHeight / AHw)),
-		       (GLsizei)(444 / (Setup.InternalWidth / AWw)), (GLsizei)(333 / (Setup.InternalHeight / AHw)));
+	vw_SetViewport((GLint)((Setup.InternalWidth / 2 - 432) / (Setup.InternalWidth / tmpViewportWidth)), (GLint)(80 / (Setup.InternalHeight / tmpViewportHeight)),
+		       (GLsizei)(444 / (Setup.InternalWidth / tmpViewportWidth)), (GLsizei)(333 / (Setup.InternalHeight / tmpViewportHeight)));
 	vw_ResizeScene(45.0f, 444.0f/333.0f, 1.0f, 2000.0f);
 	vw_Clear(RI_DEPTH_BUFFER);
 
@@ -2108,7 +2106,7 @@ void InformationDrawObject()
 
 
 	vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
-	vw_SetViewport(x, y, width, height, 0.0f, 1.0f);
+	vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight, 0.0f, 1.0f);
 	vw_ResizeScene(45.0f, Setup.InternalWidth / Setup.InternalHeight, 1.0f, 2000.0f);
 
 

@@ -61,15 +61,15 @@ int LastTimeLeftDoubleClickY{-1};
  */
 void vw_GetMousePos(int &X, int &Y)
 {
-	int W, H;
-	vw_GetViewport(nullptr, nullptr, &W, &H);
+	float tmpViewportWidth, tmpViewportHeight;
+	vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
 
 	float tmpInternalWidth, tmpInternalHeight;
 	bool ARFLAG = vw_GetInternalResolution(&tmpInternalWidth, &tmpInternalHeight);
 
 	if (ARFLAG) {
-		X = (int)(MouseX * tmpInternalWidth / W);
-		Y = (int)(MouseY * tmpInternalHeight / H);
+		X = (int)(MouseX * tmpInternalWidth / tmpViewportWidth);
+		Y = (int)(MouseY * tmpInternalHeight / tmpViewportHeight);
 	} else {
 		X = MouseX;
 		Y = MouseY;
@@ -190,11 +190,11 @@ void vw_SetMousePosRel(int X, int Y)
 	MouseX += X;
 	MouseY += Y;
 
-	int W, H;
-	vw_GetViewport(nullptr, nullptr, &W, &H);
+	float tmpViewportWidth, tmpViewportHeight;
+	vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
 
-	vw_Clamp(MouseX, 0, W);
-	vw_Clamp(MouseY, 0, H);
+	vw_Clamp(MouseX, 0, (int)tmpViewportWidth);
+	vw_Clamp(MouseY, 0, (int)tmpViewportHeight);
 }
 
 /*

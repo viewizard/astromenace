@@ -622,9 +622,9 @@ void InitGame()
 	for (int i=0; i<8; i++)
 		SDL_MouseCurrentStatus[i] = false;
 	// установка мышки на центр
-	int W, H;
-	vw_GetViewport(nullptr, nullptr, &W, &H);
-	SDL_WarpMouseInWindow(vw_GetSDL2Windows(), W/2, H/2);
+	float tmpViewportWidth, tmpViewportHeight;
+	vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
+	SDL_WarpMouseInWindow(vw_GetSDL2Windows(), tmpViewportWidth / 2, tmpViewportHeight / 2);
 	DrawGameCursor = false;
 
 	LastMouseXR = 0;

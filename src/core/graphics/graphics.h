@@ -372,7 +372,7 @@ bool vw_GetInternalResolution(float *Width, float *Height);
 void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height,
 		    GLdouble near = 0, GLdouble far = 1, eOrigin Origin = eOrigin::upper_left);
 // Get viewport data.
-void vw_GetViewport(int *x = nullptr, int *y = nullptr, int *width = nullptr, int *height = nullptr,
+void vw_GetViewport(float *x = nullptr, float *y = nullptr, float *width = nullptr, float *height = nullptr,
 		    float *znear = nullptr, float *zfar = nullptr);
 // Resize scene.
 void vw_ResizeScene(float nfAngle, float AR, float nfNearClip, float nfFarClip);

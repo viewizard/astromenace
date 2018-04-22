@@ -646,10 +646,10 @@ void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height, GLdouble ne
 //------------------------------------------------------------------------------------
 // Получение параметров вьюпорта
 //------------------------------------------------------------------------------------
-void vw_GetViewport(int *x, int *y, int *width, int *height, float *znear, float *zfar)
+void vw_GetViewport(float *x, float *y, float *width, float *height, float *znear, float *zfar)
 {
-	GLint buff[4];
-	glGetIntegerv(GL_VIEWPORT, buff);
+	GLfloat buff[4];
+	glGetFloatv(GL_VIEWPORT, buff);
 
 	if (x)
 		*x = buff[0];
@@ -660,19 +660,13 @@ void vw_GetViewport(int *x, int *y, int *width, int *height, float *znear, float
 	if (height)
 		*height = buff[3];
 
-	GLfloat buff2[2];
-	glGetFloatv(GL_DEPTH_RANGE, buff2);
+	glGetFloatv(GL_DEPTH_RANGE, buff);
 
 	if (znear)
-		*znear = buff2[0];
+		*znear = buff[0];
 	if (zfar)
-		*zfar = buff2[1];
+		*zfar = buff[1];
 }
-
-
-
-
-
 
 //------------------------------------------------------------------------------------
 //
