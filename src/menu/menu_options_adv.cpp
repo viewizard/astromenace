@@ -115,7 +115,7 @@ const char *ButtonTexturesQuality[3] = {
 void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1, float *ButtonTransp2, float *LastButtonUpdateTime2)
 {
 	sRECT SrcRect{0, 0, 2, 2};
-	sRECT DstRect{0, 0, Setup.InternalWidth, 768};
+	sRECT DstRect{0, 0, static_cast<int>(Setup.InternalWidth), 768};
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);
 
 
