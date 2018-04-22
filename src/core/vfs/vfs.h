@@ -78,8 +78,8 @@ inline int vw_VFStoBuffer(const std::string &FileName, T &Buffer)
 		// don't remove .data() usage, we need .data() and .resize()
 		// member functions in order to detect allowed container's
 		// type for template
-		// NOTE remove (void*) in future, (since C++17) "CharT* data();" also added.
-		SDL_RWread(tmpFile, (void *)Buffer.data(), DataSize, 1);
+		// NOTE remove const_cast in future, (since C++17) "CharT* data();" also added.
+		SDL_RWread(tmpFile, const_cast<typename T::value_type *>(Buffer.data()), DataSize, 1);
 
 		if (isString)
 			Buffer[DataSize] = '\0';
@@ -98,8 +98,8 @@ inline int vw_VFStoBuffer(const std::string &FileName, T &Buffer)
 		// don't remove .data() usage, we need .data() and .resize()
 		// member functions in order to detect allowed container's
 		// type for template
-		// NOTE remove (void*) in future, (since C++17) "CharT* data();" also added.
-		SDL_RWread(tmpFile, (void *)Buffer.data(), DataSize, 1);
+		// NOTE remove const_cast in future, (since C++17) "CharT* data();" also added.
+		SDL_RWread(tmpFile, const_cast<typename T::value_type *>(Buffer.data()), DataSize, 1);
 		SDL_RWclose(tmpFile);
 
 		if (isString)
