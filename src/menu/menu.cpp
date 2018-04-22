@@ -95,7 +95,7 @@ void InitMenu()
 	float tmpViewportWidth, tmpViewportHeight;
 	vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
 	// установка мышки, чтобы не учитывать перемещения в меню
-	SDL_WarpMouseInWindow(vw_GetSDL2Windows(),
+	SDL_WarpMouseInWindow(vw_GetSDLWindow(),
 			      (int)((512.0f + 256.0f)/(Setup.InternalWidth / tmpViewportWidth)),
 			      (int)(384.0f / (Setup.InternalHeight / tmpViewportHeight)));
 

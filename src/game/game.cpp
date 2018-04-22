@@ -615,7 +615,8 @@ void InitGame()
 	GameExperience = (Setup.Profile[CurrentProfile].Experience - Setup.Profile[CurrentProfile].ByMissionExperience[CurrentMission])*1.0f;
 
 	// забираем эксклюзивное управление мышкой и клавой, если оконный режим
-	if (Setup.BPP == 0) SDL_SetWindowGrab(vw_GetSDL2Windows(),SDL_TRUE);
+	if (Setup.BPP == 0)
+		SDL_SetWindowGrab(vw_GetSDLWindow(),SDL_TRUE);
 
 
 	// сбрасываем все кнопки мыши
@@ -624,7 +625,7 @@ void InitGame()
 	// установка мышки на центр
 	float tmpViewportWidth, tmpViewportHeight;
 	vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
-	SDL_WarpMouseInWindow(vw_GetSDL2Windows(), tmpViewportWidth / 2, tmpViewportHeight / 2);
+	SDL_WarpMouseInWindow(vw_GetSDLWindow(), tmpViewportWidth / 2, tmpViewportHeight / 2);
 	DrawGameCursor = false;
 
 	LastMouseXR = 0;
@@ -921,7 +922,7 @@ void ExitGame()
 		NeedHideGameMenu = true;
 		DrawGameCursor = false;
 		// установка в последюю точку указателя
-		SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
+		SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
 	}
 }
 void RealExitGame()
@@ -939,7 +940,7 @@ void RealExitGame()
 
 	// отдаем управление
 	if (Setup.BPP == 0)
-		SDL_SetWindowGrab(vw_GetSDL2Windows(), SDL_FALSE);
+		SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_FALSE);
 
 	// выгружаем AI файл
 	ReleaseGameAI();
@@ -1532,8 +1533,8 @@ void DrawGame()
 			NeedShowGameMenu = false;
 			DrawGameCursor = true;
 			if (Setup.BPP == 0) {
-				SDL_SetWindowGrab(vw_GetSDL2Windows(),SDL_FALSE);
-				SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
+				SDL_SetWindowGrab(vw_GetSDLWindow(),SDL_FALSE);
+				SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
 			}
 		}
 		// плавно возвращаем игре сокрость
@@ -1548,8 +1549,8 @@ void DrawGame()
 			NeedHideGameMenu = false;
 			GameMenuStatus = eGameMenuStatus::GAME_MENU;
 			if (Setup.BPP == 0) {
-				SDL_SetWindowGrab(vw_GetSDL2Windows(),SDL_TRUE);
-				SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
+				SDL_SetWindowGrab(vw_GetSDLWindow(),SDL_TRUE);
+				SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
 			}
 		}
 		// останавливаем игру
@@ -1664,7 +1665,7 @@ void DrawGame()
 					NeedHideGameMenu = true;
 					DrawGameCursor = false;
 					// установка в последюю точку указателя
-					SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
+					SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
 
 					if (vw_IsSoundAvailable(SoundShowHideMenu))
 						vw_StopSound(SoundShowHideMenu, 150);
@@ -1771,7 +1772,7 @@ void DrawGame()
 					NeedShowGameMenu = false;
 					NeedHideGameMenu = true;
 					// установка в последюю точку указателя
-					SDL_WarpMouseInWindow(vw_GetSDL2Windows(), LastMouseXR, LastMouseYR);
+					SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
 
 					if (NeedPlaySfx && vw_IsSoundAvailable(SoundShowHideMenu))
 						vw_StopSound(SoundShowHideMenu, 150);

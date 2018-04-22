@@ -356,7 +356,7 @@ struct sDevCaps {
 // Initialization renderer.
 int vw_InitWindow(const char *Title, int Width, int Height, int *Bits, bool FullScreenFlag,
 		  int CurrentVideoModeX, int CurrentVideoModeY, int VSync);
-SDL_Window *vw_GetSDL2Windows();
+SDL_Window *vw_GetSDLWindow();
 void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA);
 // Shutdown renderer.
 void vw_ShutdownRenderer();

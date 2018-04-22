@@ -60,29 +60,21 @@ float InternalWidth{0.0f};
 float InternalHeight{0.0f};
 bool InternalResolution{false};
 
+// pointer to main window structure
+SDL_Window *SDLWindow{nullptr};
+
+// main FBO
+sFBO MainFBO;
+// resolve FBO (for blit main FBO with multisample)
+sFBO ResolveFBO;
+
 } // unnamed namespace
 
 
-
-
-SDL_Window *window_SDL2 = nullptr;
-SDL_Window *vw_GetSDL2Windows()
+SDL_Window *vw_GetSDLWindow()
 {
-	return window_SDL2;
+	return SDLWindow;
 }
-
-float CurrentGammaGL = 1.0f;
-float CurrentContrastGL = 1.0f;
-float CurrentBrightnessGL = 1.0f;
-
-GLsizei ScreenWidthGL{0};
-GLsizei ScreenHeightGL{0};
-
-sFBO MainFBO; // основной FBO, для прорисовки со сглаживанием
-sFBO ResolveFBO; // FBO для вывода основного
-
-
-
 
 //------------------------------------------------------------------------------------
 // получение поддерживаемых устройством расширений
@@ -102,10 +94,6 @@ bool ExtensionSupported(const char *Extension)
 int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool FullScreenFlag,
 		  int CurrentVideoModeX, int CurrentVideoModeY, int VSync)
 {
-	// самым первым делом - запоминаем все
-	ScreenWidthGL = Width;
-	ScreenHeightGL = Height;
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// устанавливаем режим и делаем окно
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -113,13 +101,13 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 
 	if (FullScreenFlag) Flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
-	window_SDL2 = SDL_CreateWindow(Title, CurrentVideoModeX, CurrentVideoModeY, Width, Height, Flags);
-	if (window_SDL2 == nullptr) {
+	SDLWindow = SDL_CreateWindow(Title, CurrentVideoModeX, CurrentVideoModeY, Width, Height, Flags);
+	if (!SDLWindow) {
 		std::cerr << __func__ << "(): " << "SDL Error: " << SDL_GetError() << "\n";
 		std::cerr << __func__ << "(): " << "Can't set video mode " <<  Width << " x " << Height << "\n\n";
 		return 1;
 	}
-	SDL_GL_CreateContext(window_SDL2);
+	SDL_GL_CreateContext(SDLWindow);
 	SDL_GL_SetSwapInterval(VSync);
 	SDL_DisableScreenSaver();
 
@@ -487,7 +475,7 @@ void vw_EndRendering()
 		vw_DrawColorFBO(&ResolveFBO, nullptr);
 	}
 
-	SDL_GL_SwapWindow(window_SDL2);
+	SDL_GL_SwapWindow(SDLWindow);
 }
 
 /*
@@ -521,8 +509,11 @@ bool vw_GetInternalResolution(float *Width, float *Height)
 //------------------------------------------------------------------------------------
 void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height, GLdouble near, GLdouble far, eOrigin Origin)
 {
-	if (Origin == eOrigin::upper_left)
-		y = (GLint)(ScreenHeightGL - y - height);
+	if (Origin == eOrigin::upper_left) {
+		int SDLWindowWidth, SDLWindowHeight;
+		SDL_GetWindowSize(SDLWindow, &SDLWindowWidth, &SDLWindowHeight);
+		y = (GLint)(SDLWindowHeight - y - height);
+	}
 
 	glViewport(x, y, width, height);
 	glDepthRange(near, far);
