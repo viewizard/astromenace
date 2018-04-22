@@ -27,6 +27,19 @@
 
 // TODO translate comments
 
+// NOTE SDL2 could be used for OpenGL context setup. "request" OpenGL context version:
+//      SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+//      SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+
+// NOTE glGetStringi() for GL_EXTENSIONS (since OpenGL 3.0)
+//      glGetString() usage with GL_EXTENSIONS is deprecated
+//
+//      int NumberOfExtensions;
+//      glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
+//      for(int i = 0; i < NumberOfExtensions; i++) {
+//      	const GLubyte *one_string = glGetStringi(GL_EXTENSIONS, i);
+//      }
+
 // NOTE GL_MAX_TEXTURE_MAX_ANISOTROPY (since OpenGL 4.6)
 //      could be used to replace GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT
 
