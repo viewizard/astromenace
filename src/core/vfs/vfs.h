@@ -46,7 +46,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 // Open VFS file.
 int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber);
 // Get internal VFS state for data extraction.
-int vw_GetInternalDataStateInVFS(const std::string &FileName, SDL_RWops **VFSFile,
+int vw_GetInternalDataStateInVFS(const std::string &FileName, SDL_RWops *&VFSFile,
 				 uint32_t &DataOffset, uint32_t &DataSize);
 // Shutdown VFS.
 void vw_ShutdownVFS();
@@ -69,7 +69,7 @@ inline int vw_VFStoBuffer(const std::string &FileName, T &Buffer)
 
 	switch (vw_DetectFileLocation(FileName)) {
 	case eFileLocation::VFS:
-		err = vw_GetInternalDataStateInVFS(FileName, &tmpFile, DataOffset, DataSize);
+		err = vw_GetInternalDataStateInVFS(FileName, tmpFile, DataOffset, DataSize);
 		if (err)
 			return err;
 

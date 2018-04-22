@@ -339,10 +339,10 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 /*
  * Get internal VFS state for data extraction.
  */
-int vw_GetInternalDataStateInVFS(const std::string &FileName, SDL_RWops **VFSFile,
+int vw_GetInternalDataStateInVFS(const std::string &FileName, SDL_RWops *&VFSFile,
 				 uint32_t &DataOffset, uint32_t &DataSize)
 {
-	if (FileName.empty() || !VFSFile)
+	if (FileName.empty())
 		return ERR_PARAMETERS;
 
 	auto FileInVFS = VFSEntriesMap.find(FileName);
@@ -350,7 +350,7 @@ int vw_GetInternalDataStateInVFS(const std::string &FileName, SDL_RWops **VFSFil
 	if (FileInVFS == VFSEntriesMap.end())
 		return ERR_FILE_NOT_FOUND;
 
-	*VFSFile = FileInVFS->second->Parent->File;
+	VFSFile = FileInVFS->second->Parent->File;
 	DataOffset = FileInVFS->second->Offset;
 	DataSize = FileInVFS->second->Size;
 
@@ -408,7 +408,7 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
 
 	switch (vw_DetectFileLocation(FileName)) {
 	case eFileLocation::VFS:
-		if (vw_GetInternalDataStateInVFS(FileName, &tmpFile, DataOffset, DataSize))
+		if (vw_GetInternalDataStateInVFS(FileName, tmpFile, DataOffset, DataSize))
 			return nullptr;
 
 		File->Size = DataSize;
