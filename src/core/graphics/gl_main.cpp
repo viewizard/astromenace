@@ -504,10 +504,18 @@ bool vw_GetInternalResolution(float *Width, float *Height)
 	return InternalResolution;
 }
 
+/*
+ * Set depth range.
+ */
+void vw_DepthRange(GLdouble near, GLdouble far)
+{
+	glDepthRange(near, far);
+}
+
 //------------------------------------------------------------------------------------
 // Установка параметров вьюпорта
 //------------------------------------------------------------------------------------
-void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height, GLdouble near, GLdouble far, eOrigin Origin)
+void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height, eOrigin Origin)
 {
 	if (Origin == eOrigin::upper_left) {
 		int SDLWindowWidth, SDLWindowHeight;
@@ -516,14 +524,13 @@ void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height, GLdouble ne
 	}
 
 	glViewport(x, y, width, height);
-	glDepthRange(near, far);
 }
 
 
 //------------------------------------------------------------------------------------
 // Получение параметров вьюпорта
 //------------------------------------------------------------------------------------
-void vw_GetViewport(float *x, float *y, float *width, float *height, float *znear, float *zfar)
+void vw_GetViewport(float *x, float *y, float *width, float *height)
 {
 	GLfloat buff[4];
 	glGetFloatv(GL_VIEWPORT, buff);
@@ -536,13 +543,6 @@ void vw_GetViewport(float *x, float *y, float *width, float *height, float *znea
 		*width = buff[2];
 	if (height)
 		*height = buff[3];
-
-	glGetFloatv(GL_DEPTH_RANGE, buff);
-
-	if (znear)
-		*znear = buff[0];
-	if (zfar)
-		*zfar = buff[1];
 }
 
 //------------------------------------------------------------------------------------
