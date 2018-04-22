@@ -377,12 +377,12 @@ void MissionMenu()
 
 	sRECT SrcRect, DstRect;
 	SrcRect(2,2,863-2,484-2);
-	DstRect(Setup.iAspectRatioWidth/2-427,175-15,Setup.iAspectRatioWidth/2-427+863-4,175-15+484-4);
+	DstRect(Setup.InternalWidth/2-427,175-15,Setup.InternalWidth/2-427+863-4,175-15+484-4);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
 
 
 
-	int X1 = Setup.iAspectRatioWidth/2 - 372;
+	int X1 = Setup.InternalWidth/2 - 372;
 	int Y1 = 270;
 
 
@@ -641,12 +641,12 @@ void MissionMenu()
 
 
 
-	int X = Setup.iAspectRatioWidth/2 - 284;
+	int X = Setup.InternalWidth/2 - 284;
 	int Y = 165+100*5;
 	if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 
-	X = Setup.iAspectRatioWidth/2 + 28;
+	X = Setup.InternalWidth/2 + 28;
 	if (DrawButton256(X,Y, vw_GetText("1_NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, !(CurrentMission >= 0))) {
 		// если уже играли в эту миссию
 		if (Setup.Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0) {

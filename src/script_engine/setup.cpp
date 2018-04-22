@@ -48,10 +48,8 @@ void InitSetup()
 	Setup.Width = 1228;
 	Setup.Height = 768;
 	Setup.BPP = 0;
-	Setup.fAspectRatioWidth = 1228.0f;
-	Setup.fAspectRatioHeight = 768.0f;
-	Setup.iAspectRatioWidth = 1228;
-	Setup.iAspectRatioHeight = 768;
+	Setup.InternalWidth = 1228.0f;
+	Setup.InternalHeight = 768.0f;
 
 	Setup.CameraModeWithStandardAspectRatio = 0;
 
@@ -165,7 +163,7 @@ void SaveXMLSetupFile()
 	XMLdoc->AddComment(*RootXMLEntry, " Window (BPP = 0) or Full Screen (BPP = 16, 24 or 32) ");
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "BPP"), "value", Setup.BPP);
 	XMLdoc->AddComment(*RootXMLEntry, " Aspect Ratio must be 4:3 or 16:10 ");
-	if (Setup.iAspectRatioWidth == 1024)
+	if (Setup.InternalWidth == 1024.0f)
 		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "AspectRatio"), "value", "4:3");
 	else
 		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "AspectRatio"), "value", "16:10");
@@ -417,15 +415,11 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		std::string tmpAspectRatio{};
 		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "AspectRatio"), "value", tmpAspectRatio)) {
 			if (tmpAspectRatio == "16:10") {
-				Setup.fAspectRatioWidth = 1228.0f;
-				Setup.fAspectRatioHeight = 768.0f;
-				Setup.iAspectRatioWidth = 1228;
-				Setup.iAspectRatioHeight = 768;
+				Setup.InternalWidth = 1228.0f;
+				Setup.InternalHeight = 768.0f;
 			} else {
-				Setup.fAspectRatioWidth = 1024.0f;
-				Setup.fAspectRatioHeight = 768.0f;
-				Setup.iAspectRatioWidth = 1024;
-				Setup.iAspectRatioHeight = 768;
+				Setup.InternalWidth = 1024.0f;
+				Setup.InternalHeight = 768.0f;
 			}
 		}
 	}

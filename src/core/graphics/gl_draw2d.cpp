@@ -59,14 +59,16 @@ void vw_Start2DMode(GLdouble zNear, GLdouble zFar)
 	glPushMatrix();
 	glLoadIdentity();
 
-	float AW{0.0f};
-	float AH{0.0f};
+	float tmpInternalWidth{0.0f};
+	float tmpInternalHeight{0.0f};
 
-	// care about fixed aspect ratio, that could be setted up
+	// care about fixed internal resolution, that could be setted up
 	// change origin to upper left corner
-	if (vw_GetAspectWH(&AW, &AH))
-		glOrtho(ViewportX * AW / ViewportWidth, (ViewportX + ViewportWidth) * AW / ViewportWidth,
-			(ViewportY + ViewportHeight) * AH / ViewportHeight, ViewportY * AH / ViewportHeight,
+	if (vw_GetInternalResolution(&tmpInternalWidth, &tmpInternalHeight))
+		glOrtho(ViewportX * tmpInternalWidth / ViewportWidth,
+			(ViewportX + ViewportWidth) * tmpInternalWidth / ViewportWidth,
+			(ViewportY + ViewportHeight) * tmpInternalHeight / ViewportHeight,
+			ViewportY * tmpInternalHeight / ViewportHeight,
 			zNear, zFar);
 	else
 		glOrtho(0, ViewportWidth, ViewportHeight, 0, zNear, zFar);

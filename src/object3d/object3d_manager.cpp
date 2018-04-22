@@ -139,17 +139,17 @@ void DrawAllObject3D(int DrawType)
 		buff[k++] = 0.0f;
 
 		buff[k++] = 0.0f;
-		buff[k++] = Setup.fAspectRatioHeight;
+		buff[k++] = Setup.InternalHeight;
 		buff[k++] = 1.0f;
 		buff[k++] = 1.0f;
 
-		buff[k++] = Setup.fAspectRatioWidth;
+		buff[k++] = Setup.InternalWidth;
 		buff[k++] = 0.0f;
 		buff[k++] = 0.0f;
 		buff[k++] = 0.0f;
 
-		buff[k++] = Setup.fAspectRatioWidth;
-		buff[k++] = Setup.fAspectRatioHeight;
+		buff[k++] = Setup.InternalWidth;
+		buff[k++] = Setup.InternalHeight;
 		buff[k++] = 0.0f;
 		buff[k++] = 1.0f;
 

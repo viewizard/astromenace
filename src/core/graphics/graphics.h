@@ -361,8 +361,10 @@ void vw_ShutdownRenderer();
 // Get device capability.
 const sDevCaps &vw_GetDevCaps();
 
-void vw_SetAspectRatio(float nWidth, float nHeight, bool Value);
-bool vw_GetAspectWH(float *ARWidth, float *ARHeight);
+// Set fixed internal resolution size and status.
+void vw_SetInternalResolution(float Width, float Height, bool Status);
+// Get fixed internal resolution.
+bool vw_GetInternalResolution(float *Width, float *Height);
 
 // Set viewport data.
 void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height,

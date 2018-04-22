@@ -236,14 +236,11 @@ struct sGameSetup {
 	int SoundSw;
 	int VoiceSw;
 	bool Sound_check; // вообще можем-не можем играть sfx
-	// режим отображения игры
-	int Width;
-	int Height;
-	int BPP;
-	float fAspectRatioWidth;
-	float fAspectRatioHeight;
-	int iAspectRatioWidth;
-	int iAspectRatioHeight;
+	int Width;	// game resolution's width
+	int Height;	// game resolution's height
+	int BPP;	// game resolution's color depth
+	float InternalWidth;	// internal resolution's width
+	float InternalHeight;	// internal resolution's height
 	// поведение камеры при стандартном отношении (перемещать-не перемешать)
 	int CameraModeWithStandardAspectRatio;
 

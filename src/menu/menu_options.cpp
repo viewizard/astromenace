@@ -63,13 +63,13 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	sRECT SrcRect, DstRect;
 	SrcRect(0,0,2,2);
-	DstRect(0,0,Setup.iAspectRatioWidth,768);
+	DstRect(0,0,Setup.InternalWidth,768);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);
 
 
 	int CurrentPos = 0;
 
-	int X1 = Setup.iAspectRatioWidth/2 - 375;
+	int X1 = Setup.InternalWidth/2 - 375;
 	int Y1 = 65;
 	int Prir1 = 55;
 
@@ -377,7 +377,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	int Y = 165+Prir*4;
 
 
-	X = Setup.iAspectRatioWidth/2 - 366;
+	X = Setup.InternalWidth/2 - 366;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Advanced"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::OPTIONS_ADVANCED);
@@ -386,7 +386,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	}
 
 
-	X = Setup.iAspectRatioWidth/2 - 100;
+	X = Setup.InternalWidth/2 - 100;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Interface"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::INTERFACE);
@@ -395,7 +395,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	}
 
 
-	X = Setup.iAspectRatioWidth/2 + 166;
+	X = Setup.InternalWidth/2 + 166;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Config_Controls"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::CONFCONTROL);
@@ -414,8 +414,8 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	     Options_Height == Setup.Height &&
 	     Options_BPP == Setup.BPP &&
 	     Options_VSync == Setup.VSync &&
-	     Options_iAspectRatioWidth == Setup.iAspectRatioWidth)) {
-		X = (Setup.iAspectRatioWidth - 384)/2;
+	     Options_iAspectRatioWidth == Setup.InternalWidth)) {
+		X = (Setup.InternalWidth - 384)/2;
 		Y = Y+Prir;
 		if (MenuStatus == eMenuStatus::GAME) {
 			if (DrawButton384(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
@@ -425,7 +425,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 				ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 		}
 	} else {
-		X = Setup.iAspectRatioWidth/2 - 256 - 38;
+		X = Setup.InternalWidth/2 - 256 - 38;
 		Y = Y+Prir;
 		if (MenuStatus == eMenuStatus::GAME) {
 			if (DrawButton256(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
@@ -434,14 +434,14 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
 				ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 		}
-		X = Setup.iAspectRatioWidth/2 + 38;
+		X = Setup.InternalWidth/2 + 38;
 		if (DrawButton256(X,Y, vw_GetText("1_APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2)) {
 			// проверяем, нужно перегружать или нет
 			if (Options_Width != Setup.Width ||
 			    Options_Height != Setup.Height ||
 			    Options_BPP != Setup.BPP ||
 			    Options_VSync != Setup.VSync ||
-			    Options_iAspectRatioWidth != Setup.iAspectRatioWidth) {
+			    Options_iAspectRatioWidth != Setup.InternalWidth) {
 				if (MenuStatus == eMenuStatus::GAME)
 					SetCurrentDialogBox(eDialogBox::RestartOnOptionsChanged);
 				else {
@@ -463,15 +463,11 @@ void SaveOptionsMenuTmpData()
 
 	// пока своего управление нет- делаем автоматическую установку
 	if (Options_iAspectRatioWidth == 1024) {
-		Setup.fAspectRatioWidth = 1024.0f;
-		Setup.fAspectRatioHeight = 768.0f;
-		Setup.iAspectRatioWidth = 1024;
-		Setup.iAspectRatioHeight = 768;
+		Setup.InternalWidth = 1024.0f;
+		Setup.InternalHeight = 768.0f;
 	} else {
-		Setup.fAspectRatioWidth = 1228.0f;
-		Setup.fAspectRatioHeight = 768.0f;
-		Setup.iAspectRatioWidth = 1228;
-		Setup.iAspectRatioHeight = 768;
+		Setup.InternalWidth = 1228.0f;
+		Setup.InternalHeight = 768.0f;
 	}
 
 	Setup.BPP = Options_BPP;

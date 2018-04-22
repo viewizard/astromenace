@@ -240,7 +240,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 	sRECT SrcRect, DstRect;
 	SrcRect(0,0,2,2);
-	DstRect(0,0,Setup.iAspectRatioWidth,768);
+	DstRect(0,0,Setup.InternalWidth,768);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);
 
 
@@ -249,7 +249,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 
-	int X1 = Setup.iAspectRatioWidth/2 - 375;
+	int X1 = Setup.InternalWidth/2 - 375;
 	int Y1 = 65;
 	int Prir1 = 55;
 
@@ -472,7 +472,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	int Y = 165+Prir*4;
 
 
-	X = Setup.iAspectRatioWidth/2 - 366;
+	X = Setup.InternalWidth/2 - 366;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Advanced"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::OPTIONS_ADVANCED);
@@ -483,7 +483,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	}
 
 
-	X = Setup.iAspectRatioWidth/2 - 100;
+	X = Setup.InternalWidth/2 - 100;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Video_&_Audio"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::OPTIONS);
@@ -494,7 +494,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	}
 
 
-	X = Setup.iAspectRatioWidth/2 + 166;
+	X = Setup.InternalWidth/2 + 166;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Interface"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::INTERFACE);
@@ -507,7 +507,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 
-	X = (Setup.iAspectRatioWidth - 384)/2;
+	X = (Setup.InternalWidth - 384)/2;
 	Y = Y+Prir;
 	if (MenuStatus == eMenuStatus::GAME) {
 		if (DrawButton384(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {

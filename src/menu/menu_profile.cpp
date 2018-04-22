@@ -260,7 +260,7 @@ void ProfileInputText()
 
 
 
-	int X1 = Setup.iAspectRatioWidth/2 - 372;
+	int X1 = Setup.InternalWidth/2 - 372;
 	int Y1 = 230;
 
 	// находим положения ввода
@@ -299,11 +299,11 @@ void ProfileInputText()
 void ProfileMenu()
 {
 	sRECT SrcRect(2, 2, 861, 482);
-	sRECT DstRect(Setup.iAspectRatioWidth / 2 - 427, 160, Setup.iAspectRatioWidth / 2 + 432, 160 + 480);
+	sRECT DstRect(Setup.InternalWidth / 2 - 427, 160, Setup.InternalWidth / 2 + 432, 160 + 480);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
 
 
-	int X1 = Setup.iAspectRatioWidth/2 - 372;
+	int X1 = Setup.InternalWidth/2 - 372;
 	int Y1 = 200;
 	int Prir1 = 24;
 
@@ -348,7 +348,7 @@ void ProfileMenu()
 		Size = 70;
 		WScale = -70;
 	}
-	int SizeI = Setup.iAspectRatioWidth/2+2 + (130 - Size)/2;
+	int SizeI = Setup.InternalWidth/2+2 + (130 - Size)/2;
 	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Money"));
 
 	Size = vw_FontSize(vw_GetText("3_Experience"));
@@ -357,7 +357,7 @@ void ProfileMenu()
 		Size = 100;
 		WScale = -100;
 	}
-	SizeI = Setup.iAspectRatioWidth/2+132 + (130 - Size)/2;
+	SizeI = Setup.InternalWidth/2+132 + (130 - Size)/2;
 	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Experience"));
 
 	Size = vw_FontSize(vw_GetText("3_Difficulty"));
@@ -366,7 +366,7 @@ void ProfileMenu()
 		Size = 100;
 		WScale = -100;
 	}
-	SizeI = Setup.iAspectRatioWidth/2+262 + (130 - Size)/2;
+	SizeI = Setup.InternalWidth/2+262 + (130 - Size)/2;
 	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Difficulty"));
 
 
@@ -394,13 +394,13 @@ void ProfileMenu()
 
 
 			Size = vw_FontSize("%i", Setup.Profile[i].Money);
-			SizeI = Setup.iAspectRatioWidth/2+2 + (130 - Size)/2;
+			SizeI = Setup.InternalWidth/2+2 + (130 - Size)/2;
 			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", Setup.Profile[i].Money);
 			Size = vw_FontSize("%i", Setup.Profile[i].Experience);
-			SizeI = Setup.iAspectRatioWidth/2+132 + (130 - Size)/2;
+			SizeI = Setup.InternalWidth/2+132 + (130 - Size)/2;
 			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", Setup.Profile[i].Experience);
 			Size = vw_FontSize("%i%%", Setup.Profile[i].Difficulty);
-			SizeI = Setup.iAspectRatioWidth/2+262 + (130 - Size)/2;
+			SizeI = Setup.InternalWidth/2+262 + (130 - Size)/2;
 			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i%%", Setup.Profile[i].Difficulty);
 
 
@@ -513,14 +513,14 @@ void ProfileMenu()
 
 
 
-	int X = Setup.iAspectRatioWidth/2 - 284;
+	int X = Setup.InternalWidth/2 - 284;
 	int Y = 165+100*5;
 	if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	X = Setup.iAspectRatioWidth/2 + 28;
+	X = Setup.InternalWidth/2 + 28;
 	if (DrawButton256(X,Y, vw_GetText("1_MISSIONS_LIST"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
 		ComBuffer = eCommand::SWITCH_TO_MISSION;
 

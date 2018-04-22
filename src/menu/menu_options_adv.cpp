@@ -115,7 +115,7 @@ const char *ButtonTexturesQuality[3] = {
 void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1, float *ButtonTransp2, float *LastButtonUpdateTime2)
 {
 	sRECT SrcRect{0, 0, 2, 2};
-	sRECT DstRect{0, 0, Setup.iAspectRatioWidth, 768};
+	sRECT DstRect{0, 0, Setup.InternalWidth, 768};
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);
 
 
@@ -124,7 +124,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 
 
 
-	int X1 = Setup.iAspectRatioWidth/2 - 375;
+	int X1 = Setup.InternalWidth/2 - 375;
 	int Y1 = 65;
 	int Prir1 = 55;
 
@@ -396,7 +396,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	int X;
 	int Y = 165+Prir*4;
 
-	X = Setup.iAspectRatioWidth/2 - 366;
+	X = Setup.InternalWidth/2 - 366;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Interface"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::INTERFACE);
@@ -405,7 +405,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 			ComBuffer = eCommand::SWITCH_TO_INTERFACE;
 	}
 
-	X = Setup.iAspectRatioWidth/2 - 100;
+	X = Setup.InternalWidth/2 - 100;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Video_&_Audio"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::OPTIONS);
@@ -414,7 +414,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 			ComBuffer = eCommand::SWITCH_TO_OPTIONS;
 	}
 
-	X = Setup.iAspectRatioWidth/2 + 166;
+	X = Setup.InternalWidth/2 + 166;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Config_Controls"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::CONFCONTROL);
@@ -437,7 +437,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	    Options_UseGLSL == Setup.UseGLSL &&
 	    Options_TexturesQuality == Setup.TexturesQuality &&
 	    Options_ShadowMap == Setup.ShadowMap) {
-		X = (Setup.iAspectRatioWidth - 384)/2;
+		X = (Setup.InternalWidth - 384)/2;
 		Y = Y+Prir;
 		if (MenuStatus == eMenuStatus::GAME) {
 			if (DrawButton384(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
@@ -447,7 +447,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 				ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 		}
 	} else {
-		X = Setup.iAspectRatioWidth/2 - 256 - 38;
+		X = Setup.InternalWidth/2 - 256 - 38;
 		Y = Y+Prir;
 		if (MenuStatus == eMenuStatus::GAME) {
 			if (DrawButton256(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
@@ -456,7 +456,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 			if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
 				ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 		}
-		X = Setup.iAspectRatioWidth/2 + 38;
+		X = Setup.InternalWidth/2 + 38;
 		if (DrawButton256(X,Y, vw_GetText("1_APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2)) {
 			// проверяем, нужно перегружать или нет
 			if (Options_TexturesAnisotropyLevel != Setup.AnisotropyLevel ||

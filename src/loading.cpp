@@ -798,7 +798,7 @@ void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 	while (ShowLogoLife > 0) {
 		sRECT SrcRect,DstRect;
 		SrcRect(1, 1, 511, 511);
-		int StartX = (Setup.iAspectRatioWidth-510)/2;
+		int StartX = (Setup.InternalWidth-510)/2;
 		int EndX = StartX+510;
 		DstRect(StartX, 128 + 1, EndX, 640 - 2);
 		float Transp = 1.0f;
@@ -887,15 +887,15 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, GLtexture
 
 	// выводим картинку
 	SrcRect(0, 0, 1024, 512);
-	DstRect(0, 64+32, Setup.iAspectRatioWidth, 64+32+512);
+	DstRect(0, 64+32, Setup.InternalWidth, 64+32+512);
 	vw_Draw2D(DstRect, SrcRect, LoadImageTexture, false, 1.0f, 0.0f);
 
 	// пишем "загрузка"
-	vw_DrawFont(Setup.iAspectRatioWidth/2-vw_FontSize(vw_GetText("11_Loading"))/2, 768-128, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f, vw_GetText("11_Loading"));
+	vw_DrawFont(Setup.InternalWidth/2-vw_FontSize(vw_GetText("11_Loading"))/2, 768-128, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f, vw_GetText("11_Loading"));
 
 	// выводим подложку линии загрузки
 	SrcRect(0,0,256,32);
-	int StartX = (Setup.iAspectRatioWidth-256)/2;
+	int StartX = (Setup.InternalWidth-256)/2;
 	DstRect(StartX, 768-64-8 -32, StartX + SrcRect.right - SrcRect.left, 768-64-8 -32 + SrcRect.bottom - SrcRect.top);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("loading/loading_back.tga"), true, 1.0f, 0.0f);
 

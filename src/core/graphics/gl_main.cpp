@@ -52,6 +52,14 @@ namespace {
 // hardware device capabilities
 sDevCaps DevCaps{};
 
+// for 2D we need fixed internal resolution, since window's size could be
+// different and we should guaranty, that 2D looks same for all window's sizes,
+// it is important to understand, that we don't use this values directly,
+// but only for 'mapping' internal window coordinates into real window coordinates
+float InternalWidth{0.0f};
+float InternalHeight{0.0f};
+bool InternalResolution{false};
+
 } // unnamed namespace
 
 
@@ -64,10 +72,6 @@ float fNearClipGL = 1.0f;
 float fFarClipGL = 1000.0f;
 float fAngleGL = 45.0f;
 
-// aspect ratio
-float ARWidthGL;
-float ARHeightGL;
-bool ARFLAGGL = false;
 
 
 
@@ -597,36 +601,30 @@ void vw_EndRendering()
 
 
 
-//------------------------------------------------------------------------------------
-// Установка Aspect Ratio
-//------------------------------------------------------------------------------------
-void vw_SetAspectRatio(float nWidth, float nHeight, bool Value)
+/*
+ * Set fixed internal resolution size and status.
+ */
+void vw_SetInternalResolution(float Width, float Height, bool Status)
 {
-	if (Value) {
-		ARWidthGL = nWidth;
-		ARHeightGL = nHeight;
-		ARFLAGGL = true;
-	} else
-		ARFLAGGL=false;
+	InternalResolution = Status;
+
+	if (Status) {
+		InternalWidth = Width;
+		InternalHeight = Height;
+	}
 }
 
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Получение данных aspect ratio
-//------------------------------------------------------------------------------------
-bool vw_GetAspectWH(float *ARWidth, float *ARHeight)
+/*
+ * Get fixed internal resolution.
+ */
+bool vw_GetInternalResolution(float *Width, float *Height)
 {
-	if (ARWidth)
-		*ARWidth = ARWidthGL;
-	if (ARHeight)
-		*ARHeight = ARHeightGL;
-	return ARFLAGGL;
+	if (Width)
+		*Width = InternalWidth;
+	if (Height)
+		*Height = InternalHeight;
+
+	return InternalResolution;
 }
 
 

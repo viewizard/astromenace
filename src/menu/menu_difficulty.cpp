@@ -43,10 +43,10 @@ const char *ArcadeSim[2] = {
 void DifficultyMenu()
 {
 	sRECT SrcRect(2, 2, 861, 482);
-	sRECT DstRect(Setup.iAspectRatioWidth / 2 - 427, 160, Setup.iAspectRatioWidth / 2 + 432, 160 + 480);
+	sRECT DstRect(Setup.InternalWidth / 2 - 427, 160, Setup.InternalWidth / 2 + 432, 160 + 480);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
 
-	int X1 = Setup.iAspectRatioWidth/2 - 372;
+	int X1 = Setup.InternalWidth/2 - 372;
 	int Y1 = 217;
 	int Prir1 = 50;
 	int Size;
@@ -189,7 +189,7 @@ void DifficultyMenu()
 
 	Y1 += Prir1;
 	Size = vw_FontSize("%s: %i%%", vw_GetText("3_Current_Profile_Difficulty"), Setup.Profile[CurrentProfile].Difficulty);
-	SizeI = (Setup.iAspectRatioWidth-Size)/2;
+	SizeI = (Setup.InternalWidth-Size)/2;
 	vw_DrawFont(SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i%%", vw_GetText("3_Current_Profile_Difficulty"), Setup.Profile[CurrentProfile].Difficulty);
 
 
@@ -199,7 +199,7 @@ void DifficultyMenu()
 
 
 
-	int X = Setup.iAspectRatioWidth/2 - 192;
+	int X = Setup.InternalWidth/2 - 192;
 	int Y = 175+95*5;
 	if (DrawButton384(X,Y, vw_GetText("1_BACK"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_PROFILE;

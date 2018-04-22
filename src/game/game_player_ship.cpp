@@ -465,7 +465,7 @@ void GamePlayerShip()
 			// визуальный вывод - выводим постоянно
 			vw_SetFontSize(24);
 			vw_SetFontOffsetY(2);
-			int TmpFontSize = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("4_Missile_Detected")))/2;
+			int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("4_Missile_Detected")))/2;
 			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3, vw_GetText("4_Missile_Detected"));
 			vw_SetFontSize(Setup.FontSize);
 			vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
@@ -477,7 +477,7 @@ void GamePlayerShip()
 				// визуальный вывод - выводим постоянно
 				vw_SetFontSize(24);
 				vw_SetFontOffsetY(2);
-				int TmpFontSize = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("4_Missile_Detected")))/2;
+				int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("4_Missile_Detected")))/2;
 				vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3, vw_GetText("4_Missile_Detected"));
 				vw_SetFontSize(Setup.FontSize);
 				vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
@@ -536,7 +536,7 @@ void GamePlayerShip()
 			// визуальный вывод - выводим постоянно
 			vw_SetFontSize(24);
 			vw_SetFontOffsetY(2);
-			int TmpFontSize = (Setup.iAspectRatioWidth-vw_FontSize(vw_GetText("4_Collision_Course_Detected")))/2;
+			int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("4_Collision_Course_Detected")))/2;
 			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3, vw_GetText("4_Collision_Course_Detected"));
 			vw_SetFontSize(Setup.FontSize);
 			vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
@@ -604,8 +604,8 @@ void GamePlayerShip()
 					float Koef = 0.9f+Setup.ControlSensivity/10.0f;
 
 					// при любом реальном разрешении у нас x и y меняются с учетом AspectRatio
-					float AWw2 = Setup.iAspectRatioWidth/2.0f;
-					float AHw2 = Setup.iAspectRatioHeight/2.0f;
+					float AWw2 = Setup.InternalWidth/2.0f;
+					float AHw2 = Setup.InternalHeight/2.0f;
 
 					MoveFB += (-(Y-LastMouseY)/AHw2)*Koef;
 					MoveLR += ( (X-LastMouseX)/AWw2)*Koef;
@@ -680,7 +680,7 @@ void GamePlayerShip()
 
 		// находим конечную точку перемещения
 		sVECTOR3D PlayerFighterEndLocation;
-		if (Setup.iAspectRatioWidth == 1024)
+		if (Setup.InternalWidth == 1024)
 			PlayerFighterEndLocation = sVECTOR3D(-(73.15f-PlayerFighter->Width/2.0f+MoveFB*(20.05f-PlayerFighter->Length/6.0f))*MoveLR, 0.0f, (46.0f-PlayerFighter->Length/2.0f)*MoveFB);
 		else
 			PlayerFighterEndLocation = sVECTOR3D(-(70.0f-PlayerFighter->Width/2.0f+MoveFB*(23.2f-PlayerFighter->Length/6.0f))*MoveLR, 0.0f, (46.0f-PlayerFighter->Length/2.0f)*MoveFB);
@@ -791,7 +791,7 @@ void GamePlayerShip()
 
 
 		// если стандартный аспект рейшен, надо смещать камеру
-		if (Setup.iAspectRatioWidth == 1024)
+		if (Setup.InternalWidth == 1024)
 			if (Setup.CameraModeWithStandardAspectRatio == 0) {
 				float DeviationSize = 14.55f;
 

@@ -620,14 +620,14 @@ void CreateInfoObject()
 void InformationObject3DText(int ObjectNum)
 {
 
-	int X1 = Setup.iAspectRatioWidth/2 + 68;
+	int X1 = Setup.InternalWidth/2 + 68;
 	int Y1 = 50;
 	int Offset = 30;
 	int Size = 194;
 	float WScale = -177;
 
 	int SizeB = vw_FontSize(vw_GetText("3_GAME_OBJECTS_INFORMATION"));
-	int SizeI = (Setup.iAspectRatioWidth-SizeB)/2;
+	int SizeI = (Setup.InternalWidth-SizeB)/2;
 	vw_DrawFont(SizeI, Y1-14, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("3_GAME_OBJECTS_INFORMATION"));
 
 
@@ -1238,7 +1238,7 @@ void InformationObject3DText(int ObjectNum)
 
 	Y1 = 50+Offset*13;
 	float W = 1024.0f-75*2;
-	X1 = Setup.iAspectRatioWidth/2 - 437;
+	X1 = Setup.InternalWidth/2 - 437;
 	// вывод краткого описания
 	switch (ObjectNum) {
 	case InfoFighterStart:
@@ -1619,19 +1619,19 @@ void InformationObject3DText(int ObjectNum)
 void InformationMenu()
 {
 	sRECT SrcRect{0, 0, 2, 2};
-	sRECT DstRect{0, 0, Setup.iAspectRatioWidth, 768};
+	sRECT DstRect{0, 0, (int)Setup.InternalWidth, 768};
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
 
 
 	SrcRect(2,2,464-2,353-2);
-	DstRect((Setup.iAspectRatioWidth/2-432)-8,80-8,(Setup.iAspectRatioWidth/2-432)-8+464-4,80-8+353-4);
+	DstRect((Setup.InternalWidth/2-432)-8,80-8,(Setup.InternalWidth/2-432)-8+464-4,80-8+353-4);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel444_333_back.tga"), true, 0.9f*MenuContentTransp);
 
 
 
 	// выводим кол-во и текущую страницу
 	int	Size = vw_FontSize(vw_GetText("3_Page_%i_of_%i"), CreateNum, InfoEnd);
-	int SizeI = (Setup.iAspectRatioWidth-Size)/2;
+	int SizeI = (Setup.InternalWidth-Size)/2;
 	vw_DrawFont(SizeI, 50+30*16+15, 0, 0, 1.0f, 0.5f,0.5f,0.5f, 0.6f*MenuContentTransp, vw_GetText("3_Page_%i_of_%i"), CreateNum, InfoEnd);
 
 
@@ -1648,7 +1648,7 @@ void InformationMenu()
 
 
 	// проверяем колесо мышки
-	DstRect((int)(Setup.iAspectRatioWidth/2-440),80,(int)(Setup.iAspectRatioWidth/2+440),590);
+	DstRect((int)(Setup.InternalWidth/2-440),80,(int)(Setup.InternalWidth/2+440),590);
 	if (vw_MouseOverRect(DstRect)) {
 		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing()) {
 			CreateNum += vw_GetWheelStatus();
@@ -1666,7 +1666,7 @@ void InformationMenu()
 
 
 	int Prir = 100;
-	int X = Setup.iAspectRatioWidth/2 - 432;
+	int X = Setup.InternalWidth/2 - 432;
 	int Y = 165+Prir*4;
 	if (DrawButton200_2(X,Y+28, vw_GetText(InfoGroupNames[GetInfoPrevGroup()-1]), MenuContentTransp, false)) {
 		CreateNum = GetInfoSwitchToGroup(GetInfoPrevGroup());
@@ -1674,7 +1674,7 @@ void InformationMenu()
 	}
 
 
-	X = Setup.iAspectRatioWidth/2 - 209;
+	X = Setup.InternalWidth/2 - 209;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Page_Up"), MenuContentTransp, false)) {
 		CreateNum --;
 		if (CreateNum<1) CreateNum = InfoEnd;
@@ -1687,7 +1687,7 @@ void InformationMenu()
 		vw_SetKeyStatus(SDLK_PAGEUP, false);
 	}
 
-	X = Setup.iAspectRatioWidth/2 + 9;
+	X = Setup.InternalWidth/2 + 9;
 	if (DrawButton200_2(X,Y+28, vw_GetText("1_Page_Down"), MenuContentTransp, false)) {
 		CreateNum ++;
 		if (CreateNum>InfoEnd) CreateNum = 1;
@@ -1701,14 +1701,14 @@ void InformationMenu()
 	}
 
 
-	X = Setup.iAspectRatioWidth/2 + 432 - 200;
+	X = Setup.InternalWidth/2 + 432 - 200;
 	if (DrawButton200_2(X,Y+28, vw_GetText(InfoGroupNames[GetInfoNextGroup()-1]), MenuContentTransp, false)) {
 		CreateNum = GetInfoSwitchToGroup(GetInfoNextGroup());
 		CreateInfoObject();
 	}
 
 
-	X = (Setup.iAspectRatioWidth - 384)/2;
+	X = (Setup.InternalWidth - 384)/2;
 	Y = Y+Prir;
 	if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
 		DestroyInfoObject();
@@ -1740,17 +1740,11 @@ void InformationDrawObject()
 
 	int x, y, width, height;
 	vw_GetViewport(&x, &y, &width, &height);
-
-
 	float AWw = width*1.0f;
 	float AHw = height*1.0f;
-	float AW;
-	float AH;
-	vw_GetAspectWH(&AW, &AH);
 
-
-	vw_SetViewport((GLint)((Setup.iAspectRatioWidth / 2 - 432) / (AW / AWw)), (GLint)(80 / (AH / AHw)),
-		       (GLsizei)(444 / (AW / AWw)), (GLsizei)(333 / (AH / AHw)));
+	vw_SetViewport((GLint)((Setup.InternalWidth / 2 - 432) / (Setup.InternalWidth / AWw)), (GLint)(80 / (Setup.InternalHeight / AHw)),
+		       (GLsizei)(444 / (Setup.InternalWidth / AWw)), (GLsizei)(333 / (Setup.InternalHeight / AHw)));
 	vw_ResizeScene(45.0f, 444.0f/333.0f, 1.0f, 2000.0f);
 	vw_Clear(RI_DEPTH_BUFFER);
 
@@ -1777,28 +1771,28 @@ void InformationDrawObject()
 	fLeft = fRight = fUp = fDown = 0.15f;
 
 
-	DstRectLeft((Setup.iAspectRatioWidth/2-432)+10,
+	DstRectLeft((Setup.InternalWidth/2-432)+10,
 		80+(333-32)/2,
-		(Setup.iAspectRatioWidth/2-432)+32+10,
+		(Setup.InternalWidth/2-432)+32+10,
 		80+(333+32)/2);
-	DstRectRight((Setup.iAspectRatioWidth/2-432)+444-32-10,
+	DstRectRight((Setup.InternalWidth/2-432)+444-32-10,
 		80+(333-32)/2,
-		(Setup.iAspectRatioWidth/2-432)+444-10,
+		(Setup.InternalWidth/2-432)+444-10,
 		80+(333+32)/2);
-	DstRectUp((Setup.iAspectRatioWidth/2-432)+(444-32)/2,
+	DstRectUp((Setup.InternalWidth/2-432)+(444-32)/2,
 		80+333-32-10,
-		(Setup.iAspectRatioWidth/2-432)+(444+32)/2,
+		(Setup.InternalWidth/2-432)+(444+32)/2,
 		80+333-10);
-	DstRectDown((Setup.iAspectRatioWidth/2-432)+(444-32)/2,
+	DstRectDown((Setup.InternalWidth/2-432)+(444-32)/2,
 		80+10,
-		(Setup.iAspectRatioWidth/2-432)+(444+32)/2,
+		(Setup.InternalWidth/2-432)+(444+32)/2,
 		80+32+10);
 
 	// для вращения объекта, только если мышка стоит над выводом 3д модели
 	sRECT DstRect;
-	DstRect((Setup.iAspectRatioWidth/2-432),
+	DstRect((Setup.InternalWidth/2-432),
 		80,
-		(Setup.iAspectRatioWidth/2-432)+444,
+		(Setup.InternalWidth/2-432)+444,
 		80+333);
 	if  (((DstRect.right  >= MouseX) &&
 	      (DstRect.left<= MouseX) &&
@@ -2115,14 +2109,14 @@ void InformationDrawObject()
 
 	vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
 	vw_SetViewport(x, y, width, height, 0.0f, 1.0f);
-	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
+	vw_ResizeScene(45.0f, Setup.InternalWidth / Setup.InternalHeight, 1.0f, 2000.0f);
 
 
 	// бордюр с тенью
 	vw_Start2DMode(-1,1);
 	sRECT SrcRect;
 	SrcRect(2,2,482,371);
-	DstRect(Setup.iAspectRatioWidth/2-450,80-18,Setup.iAspectRatioWidth/2+30,80+351);
+	DstRect(Setup.InternalWidth/2-450,80-18,Setup.InternalWidth/2+30,80+351);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel444_333_border.tga"), true, 1.0f*MenuContentTransp);
 
 	// отрисовка стрелок

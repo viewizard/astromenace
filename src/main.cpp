@@ -966,10 +966,8 @@ ReCreate:
 			Setup.Width = 640;
 			Setup.Height = 480;
 			Setup.BPP = 0;
-			Setup.fAspectRatioWidth = 1024.0f;
-			Setup.fAspectRatioHeight = 768.0f;
-			Setup.iAspectRatioWidth = 1024;
-			Setup.iAspectRatioHeight = 768;
+			Setup.InternalWidth = 1024.0f;
+			Setup.InternalHeight = 768.0f;
 			Setup.MSAA = 0;
 			Setup.CSAA = 0;
 			SaveXMLSetupFile();
@@ -1040,15 +1038,11 @@ ReCreate:
 
 		// устанавливаем соотношение сторон по установленному разрешению экрана
 		if ((Setup.Width*1.0f)/(Setup.Height*1.0f) < 1.4f) {
-			Setup.fAspectRatioWidth = 1024.0f;
-			Setup.fAspectRatioHeight = 768.0f;
-			Setup.iAspectRatioWidth = 1024;
-			Setup.iAspectRatioHeight = 768;
+			Setup.InternalWidth = 1024.0f;
+			Setup.InternalHeight = 768.0f;
 		} else {
-			Setup.fAspectRatioWidth = 1228.0f;
-			Setup.fAspectRatioHeight = 768.0f;
-			Setup.iAspectRatioWidth = 1228;
-			Setup.iAspectRatioHeight = 768;
+			Setup.InternalWidth = 1228.0f;
+			Setup.InternalHeight = 768.0f;
 		}
 	}
 
@@ -1114,8 +1108,8 @@ ReCreate:
 
 
 
-	// ставим данные к которым приводить, плюс они же являются соотношением сторон
-	vw_SetAspectRatio(Setup.fAspectRatioWidth, Setup.fAspectRatioHeight, true);
+	// setup internal game resolution
+	vw_SetInternalResolution(Setup.InternalWidth, Setup.InternalHeight, true);
 
 
 

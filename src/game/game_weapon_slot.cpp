@@ -241,7 +241,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 
 	sRECT SrcRect, DstRect;
 
-	int Xpos = Setup.iAspectRatioWidth-152;
+	int Xpos = Setup.InternalWidth-152;
 	int Ypos = 80;
 	switch (DrawLevelPos) {
 	case 1:
@@ -256,7 +256,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 	}
 	if (Setup.GameWeaponInfoType == 1) {
 		Ypos += DrawLevelPos*15 - 25;
-		Xpos = Setup.iAspectRatioWidth-164;
+		Xpos = Setup.InternalWidth-164;
 	}
 
 	if (Setup.GameWeaponInfoType == 1) {

@@ -93,11 +93,11 @@ void TopScoresMenu()
 {
 	sRECT SrcRect, DstRect;
 	SrcRect(0,0,2,2);
-	DstRect(0,0,Setup.iAspectRatioWidth,768);
+	DstRect(0,0,Setup.InternalWidth,768);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
 
 
-	int X1 = Setup.iAspectRatioWidth/2 - 362;
+	int X1 = Setup.InternalWidth/2 - 362;
 	int Y1 = 165;
 	int Prir1 = 42;
 
@@ -118,7 +118,7 @@ void TopScoresMenu()
 
 
 
-	int X = (Setup.iAspectRatioWidth - 384)/2;
+	int X = (Setup.InternalWidth - 384)/2;
 	int Y = 165+100*5;
 	if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;

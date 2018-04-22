@@ -484,7 +484,7 @@ Dialogs with default type:
 		H = 600;
 	}
 
-	int X = (Setup.iAspectRatioWidth-W)/2;
+	int X = (Setup.InternalWidth-W)/2;
 	int Y = (768-H)/2;
 
 
@@ -494,7 +494,7 @@ Dialogs with default type:
 	// затемнение при выводе
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	SrcRect(0,0,2,2);
-	DstRect(0,0,Setup.iAspectRatioWidth,768);
+	DstRect(0,0,Setup.InternalWidth,768);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.6f*DialogContentTransp);
 
 

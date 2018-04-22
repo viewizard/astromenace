@@ -195,7 +195,7 @@ void GameDrawMissionTitle()
 	// считаем сколько в ширину надпись всего... 30 - пробел между надписью и номером
 	int TotalW = 226+20+CheckMissionTitleNum(buffer.c_str());
 	// находим откуда начинать рисовать
-	int XStart = (Setup.iAspectRatioWidth-TotalW)/2;
+	int XStart = (Setup.InternalWidth-TotalW)/2;
 
 	SrcRect(0,0,226,64);
 	DstRect(XStart,352,XStart+226,352+64);
@@ -258,7 +258,7 @@ void GameDrawMissionFailed()
 
 	// вывод надписи Mission
 	SrcRect(0,0,512,84);
-	DstRect(Setup.iAspectRatioWidth/2-256,342,Setup.iAspectRatioWidth/2+256,342+84);
+	DstRect(Setup.InternalWidth/2-256,342,Setup.InternalWidth/2+256,342+84);
 
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("12_missionfailed.tga")), true);
 
@@ -267,14 +267,14 @@ void GameDrawMissionFailed()
 
 	int Y = 180+270;
 
-	int X = Setup.iAspectRatioWidth/2 - 230;
+	int X = Setup.InternalWidth/2 - 230;
 	if (DrawButton200_2(X,Y, vw_GetText("1_QUIT"), 1.0f, false)) {
 		ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU;
 		ExitGame();
 	}
 
 
-	X = Setup.iAspectRatioWidth/2 + 30;
+	X = Setup.InternalWidth/2 + 30;
 	if (DrawButton200_2(X,Y, vw_GetText("1_RESTART"), 1.0f, false)) {
 		ComBuffer = eCommand::SWITCH_TO_GAME;
 		ExitGame();

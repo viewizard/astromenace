@@ -64,12 +64,12 @@ void vw_GetMousePos(int &X, int &Y)
 	int W, H;
 	vw_GetViewport(nullptr, nullptr, &W, &H);
 
-	float ARWidth, ARHeight;
-	bool ARFLAG = vw_GetAspectWH(&ARWidth, &ARHeight);
+	float tmpInternalWidth, tmpInternalHeight;
+	bool ARFLAG = vw_GetInternalResolution(&tmpInternalWidth, &tmpInternalHeight);
 
 	if (ARFLAG) {
-		X = (int)(MouseX * ARWidth * 1.0f / W);
-		Y = (int)(MouseY * ARHeight * 1.0f / H);
+		X = (int)(MouseX * tmpInternalWidth / W);
+		Y = (int)(MouseY * tmpInternalHeight / H);
 	} else {
 		X = MouseX;
 		Y = MouseY;

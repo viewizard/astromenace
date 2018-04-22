@@ -96,11 +96,10 @@ void InitMenu()
 	vw_GetViewport(nullptr, nullptr, &W, &H);
 	float AWw = W*1.0f;
 	float AHw = H*1.0f;
-	float ARWidth;
-	float ARHeight;
-	vw_GetAspectWH(&ARWidth, &ARHeight);
 	// установка мышки, чтобы не учитывать перемещения в меню
-	SDL_WarpMouseInWindow(vw_GetSDL2Windows(), (int)((512.0f+256.0f)/(ARWidth/AWw)), (int)(384.0f/(ARHeight/AHw)));
+	SDL_WarpMouseInWindow(vw_GetSDL2Windows(),
+			      (int)((512.0f + 256.0f)/(Setup.InternalWidth / AWw)),
+			      (int)(384.0f / (Setup.InternalHeight / AHw)));
 
 
 
@@ -139,7 +138,7 @@ void InitMenu()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// иним камеру, всегда до работы со скриптом (!!!)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	vw_ResizeScene(45.0f, Setup.fAspectRatioWidth/Setup.fAspectRatioHeight, 1.0f, 2000.0f);
+	vw_ResizeScene(45.0f, Setup.InternalWidth / Setup.InternalHeight, 1.0f, 2000.0f);
 	vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
 	vw_SetCameraMoveAroundPoint(sVECTOR3D(0,0,0), 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
 
@@ -254,7 +253,7 @@ void SetOptionsMenu(eMenuStatus Menu)
 		Options_Height = Setup.Height;
 		Options_BPP = Setup.BPP;
 		Options_VSync = Setup.VSync;
-		Options_iAspectRatioWidth = Setup.iAspectRatioWidth;
+		Options_iAspectRatioWidth = Setup.InternalWidth;
 		break;
 
 	case eMenuStatus::OPTIONS_ADVANCED:
@@ -472,7 +471,7 @@ void DrawMenu()
 	// надпись AstroMenace
 	sRECT SrcRect, DstRect;
 	SrcRect(0,0,863,128 );
-	int StartX = (Setup.iAspectRatioWidth - 863)/2;
+	int StartX = (Setup.InternalWidth - 863)/2;
 	DstRect(StartX,10,StartX+863,10+128);
 
 	if ((MenuStatus != eMenuStatus::WORKSHOP) &&
@@ -576,7 +575,7 @@ void DrawMenu()
 
 	// Copyright
 	int CSize = vw_FontSize("%s © 2007-2018, Viewizard", vw_GetText("11_Copyright"));
-	vw_DrawFont(Setup.iAspectRatioWidth-7-CSize, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s © 2007-2018, Viewizard", vw_GetText("11_Copyright"));
+	vw_DrawFont(Setup.InternalWidth-7-CSize, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s © 2007-2018, Viewizard", vw_GetText("11_Copyright"));
 
 
 
@@ -612,7 +611,7 @@ void DrawMenu()
 		vw_Start2DMode(-1,1);
 
 		SrcRect(0,0,2,2);
-		DstRect(0,0,Setup.iAspectRatioWidth,768);
+		DstRect(0,0,Setup.InternalWidth,768);
 		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, MenuBlackTransp);
 
 		vw_End2DMode();
@@ -632,7 +631,7 @@ void DrawMenu()
 		vw_Start2DMode(-1,1);
 
 		SrcRect(0,0,2,2);
-		DstRect(0,0,Setup.iAspectRatioWidth,768);
+		DstRect(0,0,Setup.InternalWidth,768);
 		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, MenuBlackTransp);
 
 		vw_End2DMode();
@@ -658,7 +657,7 @@ void MainMenu()
 {
 
 	int Prir = 100;
-	int X = (Setup.iAspectRatioWidth - 384)/2;
+	int X = (Setup.InternalWidth - 384)/2;
 	int Y = 165;
 
 	if (DrawButton384(X,Y, vw_GetText("1_START_GAME"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
