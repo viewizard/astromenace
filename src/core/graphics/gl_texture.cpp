@@ -99,7 +99,7 @@ GLtexture vw_BuildTexture(const std::unique_ptr<uint8_t[]> &PixelsArray,
 	if (MipMap) {
 		// use newest available first
 		if (_glGenerateMipmap && _glTexStorage2D) {
-			int NeedMipMapLvls = floor(log2((Width > Height) ? Width : Height)) + 1;
+			GLsizei NeedMipMapLvls = 1 + static_cast<GLsizei>(std::floor(std::log2(std::max(Width, Height))));
 			_glTexStorage2D(GL_TEXTURE_2D, NeedMipMapLvls, InternalFormat, Width, Height);
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Format,
 					GL_UNSIGNED_BYTE, PixelsArray.get());

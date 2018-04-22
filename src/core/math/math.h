@@ -204,7 +204,7 @@ float vw_fRand();
 #define vw_Randf1 vw_fRand()
 // Generate random float between 0.0f and Max.
 float vw_fRandNum(float Max);
-// Generate random integer between 0.0f and Max.
+// Generate random integer between 0 and Max.
 int vw_iRandNum(int Max);
 // Generate random float between -1.0f and 1.0f ->> 0.
 #define vw_Randf0 (vw_fRand() - vw_fRand())

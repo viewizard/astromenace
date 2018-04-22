@@ -145,7 +145,7 @@ int vw_InitFont(const std::string &FontName)
 	}
 
 	FontFile->fseek(0, SEEK_END);
-	int FontBufferSize = FontFile->ftell();
+	long FontBufferSize = FontFile->ftell();
 	FontFile->fseek(0, SEEK_SET);
 
 	InternalFontBuffer.reset(new uint8_t[FontBufferSize]);

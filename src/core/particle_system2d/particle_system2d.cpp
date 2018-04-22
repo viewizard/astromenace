@@ -370,10 +370,10 @@ void cParticleSystem2D::Draw()
 
 	// prepare draw buffer
 	for (auto &tmpParticle : ParticlesList) {
-		sRECT DestRect(int(tmpParticle.Location.x - tmpParticle.Size / 2),
-			       int(tmpParticle.Location.y - tmpParticle.Size / 2),
-			       int(tmpParticle.Location.x + tmpParticle.Size / 2),
-			       int(tmpParticle.Location.y + tmpParticle.Size / 2));
+		sRECT DestRect(tmpParticle.Location.x - tmpParticle.Size / 2,
+			       tmpParticle.Location.y - tmpParticle.Size / 2,
+			       tmpParticle.Location.x + tmpParticle.Size / 2,
+			       tmpParticle.Location.y + tmpParticle.Size / 2);
 
 		// first triangle
 		AddToDrawBuffer(DestRect.left, DestRect.top + (DestRect.bottom - DestRect.top),

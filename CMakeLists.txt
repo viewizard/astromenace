@@ -214,6 +214,7 @@ IF (NOT (APPLE AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")))
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wzero-as-null-pointer-constant")
 ENDIF (NOT (APPLE AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")))
 
+#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wfloat-conversion") # part of -Wconversion
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wconversion")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Weffc++")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-declarations")
