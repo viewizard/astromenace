@@ -1874,7 +1874,7 @@ void InformationDrawObject()
 
 
 	vw_PushMatrix();
-	vw_CullFace(RI_NONE);
+	vw_CullFace(eCullFace::NONE);
 
 	vw_Translate(sVECTOR3D(1000.0f, -1000.0f, 0.0f));
 	vw_Rotate(RotationSumY, 0.0f, 1.0f, 0.0f);
@@ -1948,7 +1948,7 @@ void InformationDrawObject()
 	vw_BindTexture(0, 0);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-	vw_CullFace(RI_BACK);
+	vw_CullFace(eCullFace::BACK);
 	vw_PopMatrix();
 
 
@@ -1971,7 +1971,7 @@ void InformationDrawObject()
 		    (CreateNum == 48) || // 3-й истребитель пришельцев
 		    ((CreateNum >= 86) && (CreateNum <= 90)) || // первые 4 типа зданий
 		    (CreateNum == 92))   // 6-й тип зданий
-			vw_CullFace(RI_NONE);
+			vw_CullFace(eCullFace::NONE);
 
 
 		if (InfoFighter != nullptr) {

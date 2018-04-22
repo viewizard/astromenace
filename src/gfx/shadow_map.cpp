@@ -157,7 +157,7 @@ void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, 
 
 	vw_GetMatrix(eMatrixPname::MODELVIEW, ShadowMap_LightModelViewMatrix);
 
-	vw_CullFace(RI_FRONT);
+	vw_CullFace(eCullFace::FRONT);
 
 	vw_PolygonOffset(true, 2.0f, 2.0f);
 }
@@ -174,7 +174,7 @@ void ShadowMap_EndRenderToFBO()
 
 	vw_PolygonOffset(false, 0.0f, 0.0f);
 
-	vw_CullFace(RI_BACK);
+	vw_CullFace(eCullFace::BACK);
 
 	// устанавливаем на место основной фбо или фб
 	vw_BindFBO(CurrentSystemFBO);

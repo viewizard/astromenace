@@ -848,9 +848,11 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	vw_MaterialV(eMaterialParameter::SHININESS, Power);
 
 
-	if (!NeedCullFaces) vw_CullFace(RI_NONE);
+	if (!NeedCullFaces)
+		vw_CullFace(eCullFace::NONE);
 	// для частей базы надо включить прозрачность через альфатест
-	if (NeedAlphaTest) vw_SetTextureAlphaTest(true, eCompareFunc::GREATER, 0.4f);
+	if (NeedAlphaTest)
+		vw_SetTextureAlphaTest(true, eCompareFunc::GREATER, 0.4f);
 
 	// если надо рисовать одним проходом
 	if (NeedOnePieceDraw) {
@@ -1214,7 +1216,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	if (NeedAlphaTest)
 		vw_SetTextureAlphaTest(false, eCompareFunc::ALWAYS, 0);
 	if (!NeedCullFaces)
-		vw_CullFace(RI_BACK);
+		vw_CullFace(eCullFace::BACK);
 	vw_PopMatrix();
 
 

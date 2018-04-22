@@ -63,10 +63,6 @@ bool InternalResolution{false};
 } // unnamed namespace
 
 
-float fClearRedGL = 0.0f;
-float fClearGreenGL = 0.0f;
-float fClearBlueGL = 0.0f;
-float fClearAlphaGL = 1.0f;
 
 float fNearClipGL = 1.0f;
 float fFarClipGL = 1000.0f;
@@ -386,7 +382,6 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	vw_SetClearColor(fClearRedGL, fClearGreenGL, fClearBlueGL, fClearAlphaGL);
 	glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glEnable(GL_TEXTURE_2D);							//Enable two dimensional texture mapping
@@ -653,24 +648,24 @@ void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height, GLdouble ne
 //------------------------------------------------------------------------------------
 void vw_GetViewport(int *x, int *y, int *width, int *height, float *znear, float *zfar)
 {
-	int buff[4];
+	GLint buff[4];
 	glGetIntegerv(GL_VIEWPORT, buff);
 
-	if (x != nullptr)
+	if (x)
 		*x = buff[0];
-	if (y != nullptr)
+	if (y)
 		*y = buff[1];
-	if (width != nullptr)
+	if (width)
 		*width = buff[2];
-	if (height != nullptr)
+	if (height)
 		*height = buff[3];
 
-	float buff2[2];
+	GLfloat buff2[2];
 	glGetFloatv(GL_DEPTH_RANGE, buff2);
 
-	if (znear != nullptr)
+	if (znear)
 		*znear = buff2[0];
-	if (zfar != nullptr)
+	if (zfar)
 		*zfar = buff2[1];
 }
 
@@ -682,86 +677,53 @@ void vw_GetViewport(int *x, int *y, int *width, int *height, float *znear, float
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
-void vw_CullFace(int face)
+void vw_CullFace(eCullFace mode)
 {
-	switch (face) {
-	case RI_BACK:
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		break;
-	case RI_FRONT:
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_FRONT);
-		break;
-	case RI_NONE:
+	if (mode == eCullFace::NONE) {
 		glDisable(GL_CULL_FACE);
-		break;
-
-	default:
-		std::cerr << __func__ << "(): " << "wrong face.\n";
-		break;
+		return;
 	}
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(static_cast<GLenum>(mode));
 }
-
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // Polygon Offset
 //------------------------------------------------------------------------------------
-void vw_PolygonOffset(bool enable, float factor, float units)
+void vw_PolygonOffset(bool status, GLfloat factor, GLfloat units)
 {
-	if (enable)	glEnable(GL_POLYGON_OFFSET_FILL);
-	else glDisable(GL_POLYGON_OFFSET_FILL);
+	if (status)
+		glEnable(GL_POLYGON_OFFSET_FILL);
+	else
+		glDisable(GL_POLYGON_OFFSET_FILL);
 
 	glPolygonOffset(factor, units);
 }
 
-
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // Установка цвета очистки буфера
 //------------------------------------------------------------------------------------
-void vw_SetClearColor(float nRed, float nGreen, float nBlue, float nAlpha)
+void vw_SetClearColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha)
 {
-	fClearRedGL = nRed;
-	fClearGreenGL = nGreen;
-	fClearBlueGL = nBlue;
-	fClearAlphaGL = nAlpha;
-	glClearColor(nRed, nGreen, nBlue, nAlpha);
+	glClearColor(red, green, blue, alpha);
 }
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // Установка цвета
 //------------------------------------------------------------------------------------
-void vw_SetColor(float nRed, float nGreen, float nBlue, float nAlpha)
+void vw_SetColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 {
-	glColor4f(nRed, nGreen, nBlue, nAlpha);
+	glColor4f(red, green, blue, alpha);
 }
-
-
-
 
 //------------------------------------------------------------------------------------
 // Установка маски цвета
 //------------------------------------------------------------------------------------
-void vw_SetColorMask(bool red, bool green, bool blue, bool alpha)
+void vw_SetColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha)
 {
-	glColorMask(red ? GL_TRUE : GL_FALSE, green ? GL_TRUE : GL_FALSE, blue ? GL_TRUE : GL_FALSE, alpha ? GL_TRUE : GL_FALSE);
+	glColorMask(red, green, blue, alpha);
 }
-
-
-
 
 //------------------------------------------------------------------------------------
 // Управление буфером глубины
@@ -770,11 +732,7 @@ void vw_DepthTest(bool mode, eCompareFunc func)
 {
 	if (mode) {
 		glEnable(GL_DEPTH_TEST);
-	} else {
+		glDepthFunc(static_cast<GLenum>(func));
+	} else
 		glDisable(GL_DEPTH_TEST);
-		// и сразу выходим, там тут делать нечего
-		return;
-	}
-
-	glDepthFunc(static_cast<GLenum>(func));
 }

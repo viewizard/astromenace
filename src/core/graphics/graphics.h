@@ -252,6 +252,13 @@ enum class eBufferObjectUsage : GLenum {
 	DYNAMIC = GL_DYNAMIC_DRAW	// The data store contents will be modified repeatedly and used many times.
 };
 
+enum class eCullFace : GLenum {
+	NONE = GL_NONE,
+	BACK = GL_BACK,
+	FRONT = GL_FRONT,
+	FRONT_AND_BACK = GL_FRONT_AND_BACK
+};
+
 struct sCoverageModes {
 	int ColorSamples{0};
 	int CoverageSamples{0};
@@ -341,11 +348,6 @@ struct sDevCaps {
 #define RI_SEPARATE_TEX_COORD		0x0000000
 #define RI_DUBLICATE_TEX_COORD		0x1000000
 
-// Cull Face
-#define RI_NONE				0x10C1
-#define RI_BACK				0x10C2
-#define RI_FRONT			0x10C3
-
 
 /*
  * gl_main
@@ -382,17 +384,17 @@ void vw_EndRendering();
 // Clear buffer.
 void vw_Clear(int mask);
 // Set scene clear color.
-void vw_SetClearColor(float nRed, float nGreen, float nBlue, float nAlpha);
+void vw_SetClearColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha);
 // Set scene color mask.
-void vw_SetColorMask(bool red, bool green, bool blue, bool alpha);
+void vw_SetColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha);
 // Set color.
-void vw_SetColor(float nRed, float nGreen, float nBlue, float nAlpha);
+void vw_SetColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
 // Set what facets can be culled.
-void vw_CullFace(int face);
+void vw_CullFace(eCullFace mode);
 // Set depth buffer.
 void vw_DepthTest(bool mode, eCompareFunc func);
 // Set polygon offset mode.
-void vw_PolygonOffset(bool enable, float factor, float units);
+void vw_PolygonOffset(bool status, GLfloat factor, GLfloat units);
 
 /*
  * gl_texture
