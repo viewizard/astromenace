@@ -64,14 +64,6 @@ bool InternalResolution{false};
 
 
 
-float fNearClipGL = 1.0f;
-float fFarClipGL = 1000.0f;
-float fAngleGL = 45.0f;
-
-
-
-
-
 
 SDL_Window *window_SDL2 = nullptr;
 SDL_Window *vw_GetSDL2Windows()
@@ -95,7 +87,7 @@ sFBO ResolveFBO; // FBO для вывода основного
 //------------------------------------------------------------------------------------
 // получение поддерживаемых устройством расширений
 //------------------------------------------------------------------------------------
-bool ExtensionSupported( const char *Extension)
+bool ExtensionSupported(const char *Extension)
 {
 	char *extensions;
 	extensions=(char *) glGetString(GL_EXTENSIONS);
@@ -104,16 +96,11 @@ bool ExtensionSupported( const char *Extension)
 	return false;
 }
 
-
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // инициализация окна приложения и получение возможностей железа
 //------------------------------------------------------------------------------------
-int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool FullScreenFlag, int CurrentVideoModeX, int CurrentVideoModeY, int VSync)
+int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool FullScreenFlag,
+		  int CurrentVideoModeX, int CurrentVideoModeY, int VSync)
 {
 	// самым первым делом - запоминаем все
 	ScreenWidthGL = Width;
@@ -367,77 +354,49 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	return 0;
 }
 
-
-
-
-
-
 void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// установка параметров прорисовки
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	vw_ResizeScene(fAngleGL, (Width*1.0f)/(Height*1.0f), fNearClipGL, fFarClipGL);
-
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT, GL_FILL);
-	glEnable(GL_TEXTURE_2D);							//Enable two dimensional texture mapping
-	glEnable(GL_DEPTH_TEST);							//Enable depth testing
-	glShadeModel(GL_SMOOTH);							//Enable smooth shading (so you can't see the individual polygons of a primitive, best shown when drawing a sphere)
-	glClearDepth(1.0);									//Depth buffer setup
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_DEPTH_TEST);
+	glShadeModel(GL_SMOOTH);
+	glClearDepth(1.0);
 	glClearStencil(0);
-	glDepthFunc(GL_LEQUAL);								//The type of depth testing to do (LEQUAL==less than or equal to)
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	//The nicest perspective look
+	glDepthFunc(GL_LEQUAL);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// подключаем расширения
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	if (DevCaps.FramebufferObject) {
-		// инициализируем буферы, если поддерживаем работу с ними - через них всегда рисуем
-		if (DevCaps.FramebufferObject) {
-			if ((!vw_BuildFBO(&MainFBO, Width, Height, true, true, *MSAA, CSAA)) &
-			    (!vw_BuildFBO(&ResolveFBO, Width, Height, true, false))) {
-				vw_DeleteFBO(&MainFBO);
-				vw_DeleteFBO(&ResolveFBO);
-				DevCaps.FramebufferObject = false;
-			}
+		if ((!vw_BuildFBO(&MainFBO, Width, Height, true, true, *MSAA, CSAA)) &
+		    (!vw_BuildFBO(&ResolveFBO, Width, Height, true, false))) {
+			vw_DeleteFBO(&MainFBO);
+			vw_DeleteFBO(&ResolveFBO);
+			DevCaps.FramebufferObject = false;
 		}
 	}
 
-
 	// если с FBO работать не получилось
 	if (!DevCaps.FramebufferObject) {
-		//выключаем антиалиасинг
+		// reset anti aliasing
 		*MSAA = 0;
-
-		// сбрасываем в нули структуры буферов (на всякий случай, т.к. не было инициализаций)
-		MainFBO.ColorBuffer = 0;
-		MainFBO.DepthBuffer = 0;
-		MainFBO.ColorTexture = 0;
-		MainFBO.DepthTexture = 0;
-		MainFBO.FrameBufferObject = 0;
-		ResolveFBO.ColorBuffer = 0;
-		ResolveFBO.DepthBuffer = 0;
-		ResolveFBO.ColorTexture = 0;
-		ResolveFBO.DepthTexture = 0;
-		ResolveFBO.FrameBufferObject = 0;
+		// reset buffers, just in case
+		MainFBO = sFBO{};
+		ResolveFBO = sFBO{};
 	}
-
 }
-
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // получение возможностей железа...
@@ -455,15 +414,6 @@ sDevCaps &__GetDevCaps()
 	return DevCaps;
 }
 
-
-
-
-
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // Завершение работы с OpenGL'м
 //------------------------------------------------------------------------------------
@@ -475,81 +425,38 @@ void vw_ShutdownRenderer()
 	vw_DeleteFBO(&ResolveFBO);
 }
 
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // Изменение области вывода...
 //------------------------------------------------------------------------------------
-void vw_ResizeScene(float nfAngle, float AR, float nfNearClip, float nfFarClip)
+void vw_ResizeScene(float FieldOfViewAngle, float AspectRatio, float zNearClip, float zFarClip)
 {
-	fAngleGL = nfAngle;
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
 
-	if(nfNearClip==0 && nfFarClip==0)
-		;
-	else {
-		fNearClipGL = nfNearClip;
-		fFarClipGL = nfFarClip;
-	}
+	gluPerspective(FieldOfViewAngle, AspectRatio, zNearClip, zFarClip);
 
-
-	glMatrixMode(GL_PROJECTION);								//Select the projection matrix
-	glLoadIdentity();											//Reset the projection matrix
-
-	gluPerspective(fAngleGL, AR, fNearClipGL, fFarClipGL);
-
-
-	glMatrixMode(GL_MODELVIEW);									//Select the modelview matrix
-	glLoadIdentity();											//Reset The modelview matrix
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 }
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Изменение области вывода...
-//------------------------------------------------------------------------------------
-void vw_ChangeSize(int nWidth, int nHeight)
-{
-
-	vw_ResizeScene(fAngleGL, (nWidth*1.0f)/(nHeight*1.0f), fNearClipGL, fFarClipGL);
-
-	// скорее всего сдвинули немного изображение, из-за разницы в осях с иксами
-	int buff[4];
-	glGetIntegerv(GL_VIEWPORT, buff);
-	// перемещаем его вверх
-	glViewport(buff[0], nHeight - buff[3], (GLsizei)buff[2], (GLsizei)buff[3]);
-
-	ScreenWidthGL = nWidth;
-	ScreenHeightGL = nHeight;
-}
-
-
-
 
 //------------------------------------------------------------------------------------
 // очистка буфера
 //------------------------------------------------------------------------------------
 void vw_Clear(int mask)
 {
-	GLbitfield  glmask = 0;
+	GLbitfield glmask{0};
 
-	if (mask & 0x1000) glmask = glmask | GL_COLOR_BUFFER_BIT;
-	if (mask & 0x0100) glmask = glmask | GL_DEPTH_BUFFER_BIT;
-	if (mask & 0x0010) glmask = glmask | GL_ACCUM_BUFFER_BIT;
-	if (mask & 0x0001) glmask = glmask | GL_STENCIL_BUFFER_BIT;
+	if (mask & 0x1000)
+		glmask = glmask | GL_COLOR_BUFFER_BIT;
+	if (mask & 0x0100)
+		glmask = glmask | GL_DEPTH_BUFFER_BIT;
+	if (mask & 0x0010)
+		glmask = glmask | GL_ACCUM_BUFFER_BIT;
+	if (mask & 0x0001)
+		glmask = glmask | GL_STENCIL_BUFFER_BIT;
 
 	glClear(glmask);
 }
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // начало прорисовки
@@ -561,15 +468,9 @@ void vw_BeginRendering(int mask)
 
 	vw_Clear(mask);
 
-	glMatrixMode(GL_MODELVIEW);		//Select the modelview matrix
-	glLoadIdentity();				//Reset The modelview matrix
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 }
-
-
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // завершение прорисовки
@@ -577,7 +478,7 @@ void vw_BeginRendering(int mask)
 void vw_EndRendering()
 {
 	// завершаем прорисовку, и переключаемся на основной буфер, если работали с FBO
-	if (MainFBO.ColorTexture != 0) {
+	if (MainFBO.ColorTexture) {
 		// если у нас буфер простой - достаточно просто прорисовать его текстуру
 		vw_DrawColorFBO(&MainFBO, nullptr);
 	} else {
@@ -588,13 +489,6 @@ void vw_EndRendering()
 
 	SDL_GL_SwapWindow(window_SDL2);
 }
-
-
-
-
-
-
-
 
 /*
  * Set fixed internal resolution size and status.
@@ -621,14 +515,6 @@ bool vw_GetInternalResolution(float *Width, float *Height)
 
 	return InternalResolution;
 }
-
-
-
-
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // Установка параметров вьюпорта

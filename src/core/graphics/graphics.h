@@ -375,7 +375,7 @@ void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height,
 void vw_GetViewport(float *x = nullptr, float *y = nullptr, float *width = nullptr, float *height = nullptr,
 		    float *znear = nullptr, float *zfar = nullptr);
 // Resize scene.
-void vw_ResizeScene(float nfAngle, float AR, float nfNearClip, float nfFarClip);
+void vw_ResizeScene(float FieldOfViewAngle, float AspectRatio, float zNearClip, float zFarClip);
 
 // Begin rendering.
 void vw_BeginRendering(int  mask);
@@ -510,14 +510,14 @@ void vw_DeleteVAO(GLuint &VAO);
  */
 
 struct sFBO {
-	GLrenderbuffer ColorBuffer;
-	GLrenderbuffer DepthBuffer;
-	GLtexture ColorTexture;
-	GLtexture DepthTexture;
-	GLint DepthSize;
-	GLframebuffer FrameBufferObject;
-	GLsizei Width;
-	GLsizei Height;
+	GLrenderbuffer ColorBuffer{0};
+	GLrenderbuffer DepthBuffer{0};
+	GLtexture ColorTexture{0};
+	GLtexture DepthTexture{0};
+	GLint DepthSize{0};
+	GLframebuffer FrameBufferObject{0};
+	GLsizei Width{0};
+	GLsizei Height{0};
 };
 
 // Build FBO. Caller should allocate mamory (FBO).
