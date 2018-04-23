@@ -153,7 +153,7 @@ bool sMusic::Update(uint32_t CurrentTick)
 	if (FadeInSwitch) {
 		FadeTicks += TicksDelta;
 		// we are safe with static_cast here, since FadeTicks and FadePeriod
-		// will not exceed 'float' in our case for sure (usualy <10000 ticks)
+		// will not exceed 'float' in our case for sure (usually, <10000 ticks)
 		LocalVolume = FadeEndVol * static_cast<float>(FadeTicks) / static_cast<float>(FadePeriod);
 		if (LocalVolume >= FadeEndVol) {
 			LocalVolume = FadeEndVol;
@@ -166,7 +166,7 @@ bool sMusic::Update(uint32_t CurrentTick)
 	if (FadeOutSwitch) {
 		FadeTicks += TicksDelta;
 		// we are safe with static_cast here, since FadeTicks and FadePeriod
-		// will not exceed 'float' in our case for sure (usualy <10000 ticks)
+		// will not exceed 'float' in our case for sure (usually, <10000 ticks)
 		LocalVolume = 1.0f - FadeStartVol * static_cast<float>(FadeTicks) / static_cast<float>(FadePeriod);
 		if (LocalVolume < 0.0f) {
 			LocalVolume = 0.0f;

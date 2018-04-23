@@ -301,7 +301,7 @@ void vw_UpdateSound(uint32_t CurrentTick)
 
 			if (iter->second.DestroyTicks < iter->second.DestroyPeriod) {
 				// we are safe with static_cast here, since DestroyTicks and DestroyPeriod
-				// will not exceed 'float' in our case for sure (usualy <10000 ticks)
+				// will not exceed 'float' in our case for sure (usually, <10000 ticks)
 				alSourcef(iter->second.Source, AL_GAIN,
 					  iter->second.GlobalVolume * iter->second.LocalVolume *
 					  (1.0f - static_cast<float>(iter->second.DestroyTicks) /
