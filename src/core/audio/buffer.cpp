@@ -76,12 +76,11 @@ static bool ReadOggBlock(ALuint BufID, size_t Size, OggVorbis_File &mVF, ALsizei
 	}
 
 	std::vector<char> PCM(Size);
-	int current_section;
 	unsigned int TotalRet{0};
 	long ret{0};
 	// read loop
 	while (TotalRet < Size) {
-		ret = ov_read(&mVF, PCM.data() + TotalRet, Size - TotalRet, 0, 2, 1, &current_section);
+		ret = ov_read(&mVF, PCM.data() + TotalRet, Size - TotalRet, 0, 2, 1, nullptr);
 
 		// if end of file or read limit exceeded
 		if (ret == 0)
