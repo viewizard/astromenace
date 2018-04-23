@@ -78,13 +78,13 @@ struct sFontChar {
 	int Height;
 	int Left;
 	int Top;
-	float AdvanceX;
+	int AdvanceX;
 
 	// constructor
 	sFontChar(char32_t _UTF32, int _FontSize,
 		  int _TexturePositionLeft, int _TexturePositionRight,
 		  int _TexturePositionTop, int _TexturePositionBottom,
-		  int _Width, int _Height, int _Left, int _Top, float _AdvanceX) :
+		  int _Width, int _Height, int _Left, int _Top, int _AdvanceX) :
 		UTF32{_UTF32},
 		FontSize{_FontSize},
 		TexturePositionLeft{_TexturePositionLeft},
@@ -249,7 +249,7 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 				 0, InternalFace->glyph->bitmap.width, 0, InternalFace->glyph->bitmap.rows,
 				 InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
 				 InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
-				 InternalFace->glyph->advance.x / 64.0f)));
+				 InternalFace->glyph->advance.x >> 6 /* in 1/64th of points */)));
 
 	if ((FontCharsList.front()->Width > 0) && (FontCharsList.front()->Height > 0)) {
 		// buffer for RGBA, data for font characters texture, initialize it with white color (255)
@@ -306,7 +306,11 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 	memset(tmpPixels.get(), 0 /*black + transparent*/, FontTextureWidth * FontTextureHeight * 4);
 
 	// initial setup
-	if (FT_Set_Char_Size(InternalFace, InternalFontSize << 6, InternalFontSize << 6, 96, 96)) {
+	if (FT_Set_Char_Size(InternalFace /* handle to face object */,
+			     InternalFontSize << 6 /* char_width in 1/64th of points */,
+			     InternalFontSize << 6 /* char_height in 1/64th of points */,
+			     96 /* horizontal device resolution */,
+			     96 /* vertical device resolution */)) {
 		std::cerr << __func__ << "(): " << "Can't set char size " << InternalFontSize << "\n";
 		return ERR_EXT_RES;
 	}
@@ -327,7 +331,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 					 0, 0, 0, 0,
 					 InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
 					 InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
-					 InternalFace->glyph->advance.x / 64.0f)));
+					 InternalFace->glyph->advance.x >> 6 /* in 1/64th of points */)));
 
 		// move to next line in bitmap if not enough space
 		if (CurrentPixelsX + FontCharsList.front()->Width > FontTextureWidth) {
