@@ -372,6 +372,7 @@ bool vw_GetInternalResolution(float *Width, float *Height);
 void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height, eOrigin Origin = eOrigin::upper_left);
 // Get viewport data.
 void vw_GetViewport(float *x = nullptr, float *y = nullptr, float *width = nullptr, float *height = nullptr);
+void vw_GetViewport(int *x = nullptr, int *y = nullptr, int *width = nullptr, int *height = nullptr);
 // Set depth range.
 void vw_DepthRange(GLdouble near, GLdouble far);
 // Resize scene.

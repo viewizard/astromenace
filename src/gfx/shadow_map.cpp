@@ -49,7 +49,7 @@ float ShadowMap_Get_yPixelOffset()
 
 
 sFBO *CurrentSystemFBO = nullptr;
-float ShadowMapViewPort_x, ShadowMapViewPort_y, ShadowMapViewPort_width, ShadowMapViewPort_height;
+int ShadowMapViewPort_x, ShadowMapViewPort_y, ShadowMapViewPort_width, ShadowMapViewPort_height;
 
 
 

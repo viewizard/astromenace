@@ -545,6 +545,21 @@ void vw_GetViewport(float *x, float *y, float *width, float *height)
 		*height = buff[3];
 }
 
+void vw_GetViewport(int *x, int *y, int *width, int *height)
+{
+	GLint buff[4];
+	glGetIntegerv(GL_VIEWPORT, buff);
+
+	if (x)
+		*x = buff[0];
+	if (y)
+		*y = buff[1];
+	if (width)
+		*width = buff[2];
+	if (height)
+		*height = buff[3];
+}
+
 //------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------
