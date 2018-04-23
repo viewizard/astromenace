@@ -61,9 +61,9 @@ FT_Face InternalFace;
 std::unique_ptr<uint8_t[]> InternalFontBuffer{};
 
 // Font settings.
-// we are safe with sUF_Complex here, since font size and position will not exceed 'float'
-sUF_Complex InternalFontSize{0};
-sIF_Complex GlobalFontOffsetY{0};
+// we are safe with sIF_complex_type here, since font size and position will not exceed 'float'
+sIF_complex_type<unsigned, float> InternalFontSize{0};
+sIF_complex_type<int, float> GlobalFontOffsetY{0};
 
 struct sTexturePos {
 	float left, top, right, bottom;
@@ -79,10 +79,9 @@ struct sTexturePos {
 };
 
 struct sFontMetrics {
-	// we are safe with sIF_Complex and sUF_Complex here,
-	// since position and font size will not exceed 'float'
-	sIF_Complex X, Y;
-	sUF_Complex Width, Height;
+	// we are safe with sIF_complex_type here, since position and font size will not exceed 'float'
+	sIF_complex_type<int, float> X, Y;
+	sIF_complex_type<unsigned, float> Width, Height;
 	float AdvanceX;
 
 	sFontMetrics (const int _X, const int _Y,
@@ -99,14 +98,14 @@ struct sFontMetrics {
 
 struct sFontChar {
 	char32_t UTF32; // key element 1 (UTF32 code)
-	sUF_Complex FontSize; // key element 2 (character generated size)
+	sIF_complex_type<unsigned, float> FontSize; // key element 2 (character generated size)
 
 	GLtexture Texture{0};
 	sTexturePos TexturePos;
 	sFontMetrics FontMetrics;
 
 	// constructor
-	sFontChar(char32_t _UTF32, const sUF_Complex &_FontSize,
+	sFontChar(char32_t _UTF32, const sIF_complex_type<unsigned, float> &_FontSize,
 		  const sTexturePos &_TexturePos,
 		  const sFontMetrics &_FontMetrics) :
 		UTF32{_UTF32},
@@ -251,8 +250,8 @@ void vw_ShutdownFont()
 static sFontChar *LoadFontChar(char32_t UTF32)
 {
 	// setup parameters
-	if (FT_Set_Char_Size(InternalFace, InternalFontSize.u() << 6, InternalFontSize.u() << 6, 96, 96)) {
-		std::cerr << __func__ << "(): " << "Can't set char size " << InternalFontSize.u() << "\n";
+	if (FT_Set_Char_Size(InternalFace, InternalFontSize.i() << 6, InternalFontSize.i() << 6, 96, 96)) {
+		std::cerr << __func__ << "(): " << "Can't set char size " << InternalFontSize.i() << "\n";
 		return nullptr;
 	}
 	// load glyph
@@ -268,18 +267,18 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 				 InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
 				 InternalFace->glyph->advance.x /* in 1/64th of points */})));
 
-	if ((FontCharsList.front()->FontMetrics.Width.u() > 0) && (FontCharsList.front()->FontMetrics.Height.u() > 0)) {
+	if ((FontCharsList.front()->FontMetrics.Width.i() > 0) && (FontCharsList.front()->FontMetrics.Height.i() > 0)) {
 		// buffer for RGBA, data for font characters texture, initialize it with white color (255)
-		std::unique_ptr<uint8_t[]> tmpPixels(new uint8_t[FontCharsList.front()->FontMetrics.Width.u() *
-								 FontCharsList.front()->FontMetrics.Height.u() * 4]);
-		memset(tmpPixels.get(), 255 /*white*/, FontCharsList.front()->FontMetrics.Width.u() *
-						       FontCharsList.front()->FontMetrics.Height.u() * 4);
+		std::unique_ptr<uint8_t[]> tmpPixels(new uint8_t[FontCharsList.front()->FontMetrics.Width.i() *
+								 FontCharsList.front()->FontMetrics.Height.i() * 4]);
+		memset(tmpPixels.get(), 255 /*white*/, FontCharsList.front()->FontMetrics.Width.i() *
+						       FontCharsList.front()->FontMetrics.Height.i() * 4);
 		// convert greyscale to RGB+Alpha (32bits), now we need correct only alpha channel
-		for (unsigned j = 0; j < FontCharsList.front()->FontMetrics.Height.u(); j++) {
-			int StrideSrc = j * FontCharsList.front()->FontMetrics.Width.u() * 4;
-			int StrideDst = (FontCharsList.front()->FontMetrics.Height.u() - j - 1) *
-					FontCharsList.front()->FontMetrics.Width.u();
-			for (unsigned i = 0; i < FontCharsList.front()->FontMetrics.Width.u(); i++) {
+		for (unsigned j = 0; j < FontCharsList.front()->FontMetrics.Height.i(); j++) {
+			int StrideSrc = j * FontCharsList.front()->FontMetrics.Width.i() * 4;
+			int StrideDst = (FontCharsList.front()->FontMetrics.Height.i() - j - 1) *
+					FontCharsList.front()->FontMetrics.Width.i();
+			for (unsigned i = 0; i < FontCharsList.front()->FontMetrics.Width.i(); i++) {
 				// alpha channel
 				memcpy(tmpPixels.get() + StrideSrc + i * 4 + 3,
 				       InternalFace->glyph->bitmap.buffer + StrideDst + i,
@@ -288,20 +287,20 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 		}
 
 		// fake texture file name based on font's size and UTF32 code
-		std::string FakeTextureFileName{"fontsize_" + std::to_string(InternalFontSize.u()) +
+		std::string FakeTextureFileName{"fontsize_" + std::to_string(InternalFontSize.i()) +
 						"_character_" + std::to_string(UTF32)};
 
 		vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0,
 				  eTextureWrapMode::CLAMP_TO_EDGE, true, eAlphaCreateMode::GREYSC, false);
 		FontCharsList.front()->Texture = vw_CreateTextureFromMemory(FakeTextureFileName, tmpPixels,
-									    FontCharsList.front()->FontMetrics.Width.u(),
-									    FontCharsList.front()->FontMetrics.Height.u(),
+									    FontCharsList.front()->FontMetrics.Width.i(),
+									    FontCharsList.front()->FontMetrics.Height.i(),
 									    4, eTextureCompressionType::NONE,
 									    0, 0, false);
 	}
 
 	std::cout << "Font character was created for size: "
-		  << InternalFontSize.u() << ",  char: '"
+		  << InternalFontSize.i() << ",  char: '"
 		  << ConvertUTF8.to_bytes(UTF32) << "',  code: "
 		  << "0x" << std::uppercase << std::hex << UTF32 << std::dec << "\n";
 
@@ -327,11 +326,11 @@ int vw_GenerateFontChars(unsigned FontTextureWidth, unsigned FontTextureHeight,
 
 	// initial setup
 	if (FT_Set_Char_Size(InternalFace /* handle to face object */,
-			     InternalFontSize.u() << 6 /* char_width in 1/64th of points */,
-			     InternalFontSize.u() << 6 /* char_height in 1/64th of points */,
+			     InternalFontSize.i() << 6 /* char_width in 1/64th of points */,
+			     InternalFontSize.i() << 6 /* char_height in 1/64th of points */,
 			     96 /* horizontal device resolution */,
 			     96 /* vertical device resolution */)) {
-		std::cerr << __func__ << "(): " << "Can't set char size " << InternalFontSize.u() << "\n";
+		std::cerr << __func__ << "(): " << "Can't set char size " << InternalFontSize.i() << "\n";
 		return ERR_EXT_RES;
 	}
 
@@ -354,13 +353,13 @@ int vw_GenerateFontChars(unsigned FontTextureWidth, unsigned FontTextureHeight,
 					 InternalFace->glyph->advance.x /* in 1/64th of points */})));
 
 		// move to next line in bitmap if not enough space
-		if (CurrentPixelsX + FontCharsList.front()->FontMetrics.Width.u() > FontTextureWidth) {
+		if (CurrentPixelsX + FontCharsList.front()->FontMetrics.Width.i() > FontTextureWidth) {
 			CurrentPixelsX = 0;
 			CurrentPixelsY += MaxHeightInCurrentLine + EdgingSpace;
 			MaxHeightInCurrentLine = 0;
 		}
 		// looks like no more space left at all, fail
-		if (CurrentPixelsY + FontCharsList.front()->FontMetrics.Height.u() > FontTextureHeight) {
+		if (CurrentPixelsY + FontCharsList.front()->FontMetrics.Height.i() > FontTextureHeight) {
 			std::cerr << __func__ << "(): " << "Can't generate all font chars in one texture.\n"
 				  << "Too many chars or too small texture size!\n";
 			break;
@@ -368,14 +367,14 @@ int vw_GenerateFontChars(unsigned FontTextureWidth, unsigned FontTextureHeight,
 
 		// copy glyph into bitmap
 		uint8_t ColorRGB[3]{255, 255, 255};
-		for (unsigned j = 0; j < FontCharsList.front()->FontMetrics.Height.u(); j++) {
+		for (unsigned j = 0; j < FontCharsList.front()->FontMetrics.Height.i(); j++) {
 			unsigned int tmpOffset = (FontTextureHeight - CurrentPixelsY - j - 1) * FontTextureWidth * 4;
-			for (unsigned i = 0; i < FontCharsList.front()->FontMetrics.Width.u(); i++) {
+			for (unsigned i = 0; i < FontCharsList.front()->FontMetrics.Width.i(); i++) {
 				memcpy(tmpPixels.get() + tmpOffset + (CurrentPixelsX + i) * 4,
 				       ColorRGB,
 				       3);
 				memcpy(tmpPixels.get() + tmpOffset + (CurrentPixelsX + i) * 4 + 3,
-				       InternalFace->glyph->bitmap.buffer + j * FontCharsList.front()->FontMetrics.Width.u() + i,
+				       InternalFace->glyph->bitmap.buffer + j * FontCharsList.front()->FontMetrics.Width.i() + i,
 				       1);
 			}
 		}
@@ -390,9 +389,9 @@ int vw_GenerateFontChars(unsigned FontTextureWidth, unsigned FontTextureHeight,
 							   FontCharsList.front()->FontMetrics.Height.f();
 
 		// detect new line position by height
-		if (MaxHeightInCurrentLine < FontCharsList.front()->FontMetrics.Height.u())
-			MaxHeightInCurrentLine = FontCharsList.front()->FontMetrics.Height.u();
-		CurrentPixelsX += FontCharsList.front()->FontMetrics.Width.u() + EdgingSpace;
+		if (MaxHeightInCurrentLine < FontCharsList.front()->FontMetrics.Height.i())
+			MaxHeightInCurrentLine = FontCharsList.front()->FontMetrics.Height.i();
+		CurrentPixelsX += FontCharsList.front()->FontMetrics.Width.i() + EdgingSpace;
 	}
 
 	// create texture from bitmap

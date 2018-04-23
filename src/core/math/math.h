@@ -144,64 +144,21 @@ struct sRECT {
 	}
 };
 
-// sUF_Complex - 'special complex' type, since we could need both unsigned+float
-// variable, in this way, we don't forced to use static_cast all the time on access.
-// For example, if we use only 'unsigned' type variable, we should convert it to
-// 'float' on each draw, much better convert it one time, during initialization
-// and/or fields update.
-struct sUF_Complex {
+// integral + floating point complex type
+// caller should care about types size and numeric limits
+template <typename I, typename F>
+struct sIF_complex_type {
 public:
-	// caller should guarantee, that value size will not exceed 'float'
-	sUF_Complex (const unsigned _u) :
-		__u{_u},
-		__f{static_cast<float>(_u)}
-	{}
-
-	unsigned u()
-	{
-		return __u;
-	}
-
-	float f()
-	{
-		return __f;
-	}
-
-	// caller should guarantee, that value size will not exceed 'float'
-	void operator () (const unsigned _u)
-	{
-		__u = _u;
-		__f = static_cast<float>(_u);
-	}
-
-	bool operator == (sUF_Complex &_uf)
-	{
-		// since both parts synchronized, we need only one check,
-		// use 'unsigned' for best speed
-		return (__u == _uf.u());
-	}
-
-private:
-	// don't allow direct access, we should guarantee, that all
-	// parts have proper value, only public methods should be used
-	unsigned __u;
-	float __f;
-};
-
-// sIF_Complex - 'special complex' type, since we could need both int+float
-// variable, in this way, we don't forced to use static_cast all the time on access.
-// For example, if we use only 'int' type variable, we should convert it to
-// 'float' on each draw, much better convert it one time, during initialization
-// and/or fields update.
-struct sIF_Complex {
-public:
-	// caller should guarantee, that value size will not exceed 'float'
-	sIF_Complex (const int _i) :
+	// caller should guarantee, that integral value will not exceed floating point value size
+	sIF_complex_type (const I _i) :
 		__i{_i},
-		__f{static_cast<float>(_i)}
-	{}
+		__f{static_cast<F>(_i)}
+	{
+		static_assert(std::is_integral<I>::value, "First variable's type should be integral.");
+		static_assert(std::is_floating_point<F>::value, "Second variable's type should be floating-point.");
+	}
 
-	int i()
+	unsigned i()
 	{
 		return __i;
 	}
@@ -211,25 +168,24 @@ public:
 		return __f;
 	}
 
-	// caller should guarantee, that value size will not exceed 'float'
-	void operator () (const int _i)
+	// caller should guarantee, that integral value will not exceed floating point value size
+	void operator () (const I _i)
 	{
 		__i = _i;
-		__f = static_cast<float>(_i);
+		__f = static_cast<F>(_i);
 	}
 
-	bool operator == (sIF_Complex &_if)
+	bool operator == (sIF_complex_type &_complex)
 	{
-		// since both parts synchronized, we need only one check,
-		// use 'int' for best speed
-		return (__i == _if.i());
+		// since both parts synchronized, we need only one check
+		return (__i == _complex.i());
 	}
 
 private:
 	// don't allow direct access, we should guarantee, that all
 	// parts have proper value, only public methods should be used
-	int __i;
-	float __f;
+	I __i;
+	F __f;
 };
 
 // utility wrapper to adapt locale-bound facets for wstring/wbuffer convert
