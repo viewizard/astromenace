@@ -105,7 +105,7 @@ struct sVECTOR3D {
 	sVECTOR3D operator - (const sVECTOR3D &A)
 	{
 		return sVECTOR3D(x - A.x, y - A.y, z - A.z);
-	};
+	}
 	void operator -= (const sVECTOR3D &A)
 	{
 		x -= A.x;
@@ -126,22 +126,110 @@ struct sVECTOR3D {
 // Note, we use left-top as starting point (upper left is origin), this is why sRECT
 // keeps together pairs "left-top" and "right-bottom".
 struct sRECT {
-	int right{0}, top{0}, left{0}, bottom{0};
+	int left{0}, top{0}, right{0}, bottom{0};
 
 	sRECT () = default;
 	sRECT (const int _left, const int _top, const int _right, const int _bottom) :
-		right{_right},
-		top{_top},
 		left{_left},
+		top{_top},
+		right{_right},
 		bottom{_bottom}
 	{}
 	void operator () (const int _left, const int _top, const int _right, const int _bottom)
 	{
-		right = _right;
-		top = _top;
 		left = _left;
+		top = _top;
+		right = _right;
 		bottom = _bottom;
-	};
+	}
+};
+
+// sUF_Complex - 'special complex' type, since we could need both unsigned+float
+// variable, in this way, we don't forced to use static_cast all the time on access.
+// For example, if we use only 'unsigned' type variable, we should convert it to
+// 'float' on each draw, much better convert it one time, during initialization
+// and/or fields update.
+struct sUF_Complex {
+public:
+	// caller should guarantee, that value size will not exceed 'float'
+	sUF_Complex (const unsigned _u) :
+		__u{_u},
+		__f{static_cast<float>(_u)}
+	{}
+
+	unsigned u()
+	{
+		return __u;
+	}
+
+	float f()
+	{
+		return __f;
+	}
+
+	// caller should guarantee, that value size will not exceed 'float'
+	void operator () (const unsigned _u)
+	{
+		__u = _u;
+		__f = static_cast<float>(_u);
+	}
+
+	bool operator == (sUF_Complex &_uf)
+	{
+		// since both parts synchronized, we need only one check,
+		// use 'unsigned' for best speed
+		return (__u == _uf.u());
+	}
+
+private:
+	// don't allow direct access, we should guarantee, that all
+	// parts have proper value, only public methods should be used
+	unsigned __u;
+	float __f;
+};
+
+// sIF_Complex - 'special complex' type, since we could need both int+float
+// variable, in this way, we don't forced to use static_cast all the time on access.
+// For example, if we use only 'int' type variable, we should convert it to
+// 'float' on each draw, much better convert it one time, during initialization
+// and/or fields update.
+struct sIF_Complex {
+public:
+	// caller should guarantee, that value size will not exceed 'float'
+	sIF_Complex (const int _i) :
+		__i{_i},
+		__f{static_cast<float>(_i)}
+	{}
+
+	int i()
+	{
+		return __i;
+	}
+
+	float f()
+	{
+		return __f;
+	}
+
+	// caller should guarantee, that value size will not exceed 'float'
+	void operator () (const int _i)
+	{
+		__i = _i;
+		__f = static_cast<float>(_i);
+	}
+
+	bool operator == (sIF_Complex &_if)
+	{
+		// since both parts synchronized, we need only one check,
+		// use 'int' for best speed
+		return (__i == _if.i());
+	}
+
+private:
+	// don't allow direct access, we should guarantee, that all
+	// parts have proper value, only public methods should be used
+	int __i;
+	float __f;
 };
 
 // utility wrapper to adapt locale-bound facets for wstring/wbuffer convert
