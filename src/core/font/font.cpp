@@ -59,43 +59,60 @@ FT_Face InternalFace;
 // std::unique_ptr, we need only memory allocation without container's features
 // don't use std::vector here, since it allocates AND value-initializes
 std::unique_ptr<uint8_t[]> InternalFontBuffer{};
+
 // Font settings.
-int InternalFontSize{0};
-int GlobalFontOffsetY{0};
+// we are safe with sUF_Complex here, since font size and position will not exceed 'float'
+sUF_Complex InternalFontSize{0};
+sIF_Complex GlobalFontOffsetY{0};
+
+struct sTexturePos {
+	float left, top, right, bottom;
+
+	sTexturePos (const unsigned _left, const unsigned _top,
+		     const unsigned _right, const unsigned _bottom) :
+		/* we are safe with static_cast here, since size will not exceed 'float' */
+		left{static_cast<float>(_left)},
+		top{static_cast<float>(_top)},
+		right{static_cast<float>(_right)},
+		bottom{static_cast<float>(_bottom)}
+	{}
+};
+
+struct sFontMetrics {
+	// we are safe with sIF_Complex and sUF_Complex here,
+	// since position and font size will not exceed 'float'
+	sIF_Complex X, Y;
+	sUF_Complex Width, Height;
+	float AdvanceX;
+
+	sFontMetrics (const int _X, const int _Y,
+		      const unsigned _Width, const unsigned _Height,
+		      const long _AdvanceX /* in 1/64th of points */) :
+		X{_X},
+		Y{_Y},
+		Width{_Width},
+		Height{_Height},
+		/* we are safe with static_cast here, since 'advance.x' will not exceed 'float' */
+		AdvanceX{static_cast<float>(_AdvanceX) / 64.0f}
+	{}
+};
 
 struct sFontChar {
 	char32_t UTF32; // key element 1 (UTF32 code)
-	int FontSize; // key element 2 (character generated size)
+	sUF_Complex FontSize; // key element 2 (character generated size)
 
-	GLtexture Texture{0}; // font character texture
-	int TexturePositionLeft;
-	int TexturePositionRight;
-	int TexturePositionTop;
-	int TexturePositionBottom;
-
-	// font character metrics
-	int Width;
-	int Height;
-	int Left;
-	int Top;
-	int AdvanceX;
+	GLtexture Texture{0};
+	sTexturePos TexturePos;
+	sFontMetrics FontMetrics;
 
 	// constructor
-	sFontChar(char32_t _UTF32, int _FontSize,
-		  int _TexturePositionLeft, int _TexturePositionRight,
-		  int _TexturePositionTop, int _TexturePositionBottom,
-		  int _Width, int _Height, int _Left, int _Top, int _AdvanceX) :
+	sFontChar(char32_t _UTF32, const sUF_Complex &_FontSize,
+		  const sTexturePos &_TexturePos,
+		  const sFontMetrics &_FontMetrics) :
 		UTF32{_UTF32},
 		FontSize{_FontSize},
-		TexturePositionLeft{_TexturePositionLeft},
-		TexturePositionRight{_TexturePositionRight},
-		TexturePositionTop{_TexturePositionTop},
-		TexturePositionBottom{_TexturePositionBottom},
-		Width{_Width},
-		Height{_Height},
-		Left{_Left},
-		Top{_Top},
-		AdvanceX{_AdvanceX}
+		TexturePos{_TexturePos},
+		FontMetrics{_FontMetrics}
 	{}
 	// trick for forward_list<unique_ptr<T>> work with iterator
 	bool CheckUTF32andSize(char32_t _UTF32)
@@ -175,7 +192,7 @@ void vw_SetFontSize(int FontSize)
  */
 void vw_SetFontOffsetY(int NewOffsetY)
 {
-	GlobalFontOffsetY = NewOffsetY;
+	GlobalFontOffsetY(NewOffsetY);
 }
 
 /*
@@ -234,33 +251,35 @@ void vw_ShutdownFont()
 static sFontChar *LoadFontChar(char32_t UTF32)
 {
 	// setup parameters
-	if (FT_Set_Char_Size(InternalFace, InternalFontSize << 6, InternalFontSize << 6, 96, 96)) {
-		std::cerr << __func__ << "(): " << "Can't set char size " << InternalFontSize << "\n";
+	if (FT_Set_Char_Size(InternalFace, InternalFontSize.u() << 6, InternalFontSize.u() << 6, 96, 96)) {
+		std::cerr << __func__ << "(): " << "Can't set char size " << InternalFontSize.u() << "\n";
 		return nullptr;
 	}
 	// load glyph
-	if (FT_Load_Char( InternalFace, UTF32, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT)) {
+	if (FT_Load_Char(InternalFace, UTF32, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT)) {
 		std::cerr << __func__ << "(): " << "Can't load glyph: " << UTF32 << "\n";
 		return nullptr;
 	}
 
 	// create new character
 	FontCharsList.push_front(std::unique_ptr<sFontChar>(new sFontChar(UTF32, InternalFontSize,
-				 0, InternalFace->glyph->bitmap.width, 0, InternalFace->glyph->bitmap.rows,
+				 sTexturePos{0, 0, InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows},
+				 sFontMetrics{InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
 				 InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
-				 InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
-				 InternalFace->glyph->advance.x >> 6 /* in 1/64th of points */)));
+				 InternalFace->glyph->advance.x /* in 1/64th of points */})));
 
-	if ((FontCharsList.front()->Width > 0) && (FontCharsList.front()->Height > 0)) {
+	if ((FontCharsList.front()->FontMetrics.Width.u() > 0) && (FontCharsList.front()->FontMetrics.Height.u() > 0)) {
 		// buffer for RGBA, data for font characters texture, initialize it with white color (255)
-		std::unique_ptr<uint8_t[]> tmpPixels(new uint8_t[FontCharsList.front()->Width *
-								 FontCharsList.front()->Height * 4]);
-		memset(tmpPixels.get(), 255 /*white*/, FontCharsList.front()->Width * FontCharsList.front()->Height * 4);
+		std::unique_ptr<uint8_t[]> tmpPixels(new uint8_t[FontCharsList.front()->FontMetrics.Width.u() *
+								 FontCharsList.front()->FontMetrics.Height.u() * 4]);
+		memset(tmpPixels.get(), 255 /*white*/, FontCharsList.front()->FontMetrics.Width.u() *
+						       FontCharsList.front()->FontMetrics.Height.u() * 4);
 		// convert greyscale to RGB+Alpha (32bits), now we need correct only alpha channel
-		for (int j = 0; j < FontCharsList.front()->Height; j++) {
-			int StrideSrc = j * FontCharsList.front()->Width * 4;
-			int StrideDst = (FontCharsList.front()->Height - j - 1) * FontCharsList.front()->Width;
-			for (int i = 0; i < FontCharsList.front()->Width; i++) {
+		for (unsigned j = 0; j < FontCharsList.front()->FontMetrics.Height.u(); j++) {
+			int StrideSrc = j * FontCharsList.front()->FontMetrics.Width.u() * 4;
+			int StrideDst = (FontCharsList.front()->FontMetrics.Height.u() - j - 1) *
+					FontCharsList.front()->FontMetrics.Width.u();
+			for (unsigned i = 0; i < FontCharsList.front()->FontMetrics.Width.u(); i++) {
 				// alpha channel
 				memcpy(tmpPixels.get() + StrideSrc + i * 4 + 3,
 				       InternalFace->glyph->bitmap.buffer + StrideDst + i,
@@ -269,20 +288,20 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 		}
 
 		// fake texture file name based on font's size and UTF32 code
-		std::string FakeTextureFileName{"fontsize_" + std::to_string(InternalFontSize) +
+		std::string FakeTextureFileName{"fontsize_" + std::to_string(InternalFontSize.u()) +
 						"_character_" + std::to_string(UTF32)};
 
 		vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0,
 				  eTextureWrapMode::CLAMP_TO_EDGE, true, eAlphaCreateMode::GREYSC, false);
 		FontCharsList.front()->Texture = vw_CreateTextureFromMemory(FakeTextureFileName, tmpPixels,
-									    FontCharsList.front()->Width,
-									    FontCharsList.front()->Height,
+									    FontCharsList.front()->FontMetrics.Width.u(),
+									    FontCharsList.front()->FontMetrics.Height.u(),
 									    4, eTextureCompressionType::NONE,
 									    0, 0, false);
 	}
 
 	std::cout << "Font character was created for size: "
-		  << InternalFontSize << ",  char: '"
+		  << InternalFontSize.u() << ",  char: '"
 		  << ConvertUTF8.to_bytes(UTF32) << "',  code: "
 		  << "0x" << std::uppercase << std::hex << UTF32 << std::dec << "\n";
 
@@ -292,7 +311,8 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 /*
  * Generate font characters by list.
  */
-int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std::unordered_set<char32_t> &CharsSetUTF32)
+int vw_GenerateFontChars(unsigned FontTextureWidth, unsigned FontTextureHeight,
+			 const std::unordered_set<char32_t> &CharsSetUTF32)
 {
 	if (CharsSetUTF32.empty())
 		return ERR_PARAMETERS;
@@ -307,11 +327,11 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 
 	// initial setup
 	if (FT_Set_Char_Size(InternalFace /* handle to face object */,
-			     InternalFontSize << 6 /* char_width in 1/64th of points */,
-			     InternalFontSize << 6 /* char_height in 1/64th of points */,
+			     InternalFontSize.u() << 6 /* char_width in 1/64th of points */,
+			     InternalFontSize.u() << 6 /* char_height in 1/64th of points */,
 			     96 /* horizontal device resolution */,
 			     96 /* vertical device resolution */)) {
-		std::cerr << __func__ << "(): " << "Can't set char size " << InternalFontSize << "\n";
+		std::cerr << __func__ << "(): " << "Can't set char size " << InternalFontSize.u() << "\n";
 		return ERR_EXT_RES;
 	}
 
@@ -319,7 +339,7 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 	int CurrentPixelsX{0};
 	int CurrentPixelsY{0};
 	int EdgingSpace{2};
-	int MaxHeightInCurrentLine{0};
+	unsigned MaxHeightInCurrentLine{0};
 	for (const auto &CurrentChar : CharsSetUTF32) {
 		// load glyph
 		if (FT_Load_Char(InternalFace, CurrentChar, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT)) {
@@ -328,19 +348,19 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 		}
 
 		FontCharsList.push_front(std::unique_ptr<sFontChar>(new sFontChar(CurrentChar, InternalFontSize,
-					 0, 0, 0, 0,
+					 sTexturePos{0, 0, 0, 0},
+					 sFontMetrics{InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
 					 InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
-					 InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
-					 InternalFace->glyph->advance.x >> 6 /* in 1/64th of points */)));
+					 InternalFace->glyph->advance.x /* in 1/64th of points */})));
 
 		// move to next line in bitmap if not enough space
-		if (CurrentPixelsX + FontCharsList.front()->Width > FontTextureWidth) {
+		if (CurrentPixelsX + FontCharsList.front()->FontMetrics.Width.u() > FontTextureWidth) {
 			CurrentPixelsX = 0;
 			CurrentPixelsY += MaxHeightInCurrentLine + EdgingSpace;
 			MaxHeightInCurrentLine = 0;
 		}
 		// looks like no more space left at all, fail
-		if (CurrentPixelsY + FontCharsList.front()->Height > FontTextureHeight) {
+		if (CurrentPixelsY + FontCharsList.front()->FontMetrics.Height.u() > FontTextureHeight) {
 			std::cerr << __func__ << "(): " << "Can't generate all font chars in one texture.\n"
 				  << "Too many chars or too small texture size!\n";
 			break;
@@ -348,28 +368,31 @@ int vw_GenerateFontChars(int FontTextureWidth, int FontTextureHeight, const std:
 
 		// copy glyph into bitmap
 		uint8_t ColorRGB[3]{255, 255, 255};
-		for (int j = 0; j < FontCharsList.front()->Height; j++) {
+		for (unsigned j = 0; j < FontCharsList.front()->FontMetrics.Height.u(); j++) {
 			unsigned int tmpOffset = (FontTextureHeight - CurrentPixelsY - j - 1) * FontTextureWidth * 4;
-			for (int i = 0; i < FontCharsList.front()->Width; i++) {
+			for (unsigned i = 0; i < FontCharsList.front()->FontMetrics.Width.u(); i++) {
 				memcpy(tmpPixels.get() + tmpOffset + (CurrentPixelsX + i) * 4,
 				       ColorRGB,
 				       3);
 				memcpy(tmpPixels.get() + tmpOffset + (CurrentPixelsX + i) * 4 + 3,
-				       InternalFace->glyph->bitmap.buffer + j * FontCharsList.front()->Width + i,
+				       InternalFace->glyph->bitmap.buffer + j * FontCharsList.front()->FontMetrics.Width.u() + i,
 				       1);
 			}
 		}
 
 		// setup new character
-		FontCharsList.front()->TexturePositionLeft = CurrentPixelsX;
-		FontCharsList.front()->TexturePositionRight = CurrentPixelsX + FontCharsList.front()->Width;
-		FontCharsList.front()->TexturePositionTop = CurrentPixelsY;
-		FontCharsList.front()->TexturePositionBottom = CurrentPixelsY + FontCharsList.front()->Height;
+		// we are safe with static_cast here, since size will not exceed 'float'
+		FontCharsList.front()->TexturePos.left = static_cast<float>(CurrentPixelsX);
+		FontCharsList.front()->TexturePos.right = static_cast<float>(CurrentPixelsX) +
+							  FontCharsList.front()->FontMetrics.Width.f();
+		FontCharsList.front()->TexturePos.top = static_cast<float>(CurrentPixelsY);
+		FontCharsList.front()->TexturePos.bottom = static_cast<float>(CurrentPixelsY) +
+							   FontCharsList.front()->FontMetrics.Height.f();
 
 		// detect new line position by height
-		if (MaxHeightInCurrentLine < FontCharsList.front()->Height)
-			MaxHeightInCurrentLine = FontCharsList.front()->Height;
-		CurrentPixelsX += FontCharsList.front()->Width + EdgingSpace;
+		if (MaxHeightInCurrentLine < FontCharsList.front()->FontMetrics.Height.u())
+			MaxHeightInCurrentLine = FontCharsList.front()->FontMetrics.Height.u();
+		CurrentPixelsX += FontCharsList.front()->FontMetrics.Width.u() + EdgingSpace;
 	}
 
 	// create texture from bitmap
@@ -427,19 +450,21 @@ static void CalculateWidthFactors(const std::u32string &Text, const float Strict
 				LineWidth2 += SpaceWidthFactor;
 		} else {
 			if (StrictWidth > 0)
-				LineWidth1 += DrawChar->AdvanceX;
+				LineWidth1 += DrawChar->FontMetrics.AdvanceX;
 			else
-				LineWidth2 += DrawChar->AdvanceX;
+				LineWidth2 += DrawChar->FontMetrics.AdvanceX;
 		}
 	}
 
 	// correction for factors in both cases
 	if (StrictWidth > 0) {
 		if ((StrictWidth > LineWidth1) && SpaceCount)
-			SpaceWidthFactor = (StrictWidth - LineWidth1) / SpaceCount;
+			// we are safe with static_cast here, since SpaceCount
+			// will not exceed 'float' in our case for sure (usually, <100)
+			SpaceWidthFactor = (StrictWidth - LineWidth1) / static_cast<float>(SpaceCount);
 	} else {
-		if (StrictWidth * (-1.0f) < LineWidth2)
-			FontWidthFactor = StrictWidth / LineWidth2 * (-1.0f);
+		if ( -StrictWidth < LineWidth2)
+			FontWidthFactor = -StrictWidth / LineWidth2;
 	}
 }
 
@@ -450,10 +475,10 @@ static void CalculateDefaultSpaceWidth(float &SpaceWidthFactor, float FontScale)
 {
 	if (!FindFontCharByUTF32(SpaceUTF32))
 		LoadFontChar(SpaceUTF32);
-	SpaceWidthFactor = FindFontCharByUTF32(SpaceUTF32)->AdvanceX * FontScale;
+	SpaceWidthFactor = FindFontCharByUTF32(SpaceUTF32)->FontMetrics.AdvanceX * FontScale;
 	// width factor for for space charecter, make sure, we have space width at least 65% of current font size
-	if (SpaceWidthFactor < (InternalFontSize * 0.65f))
-		SpaceWidthFactor = InternalFontSize * 0.65f;
+	if (SpaceWidthFactor < (InternalFontSize.f() * 0.65f))
+		SpaceWidthFactor = InternalFontSize.f() * 0.65f;
 }
 
 /*
@@ -516,7 +541,7 @@ int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontSc
 /*
  * Draw buffers routine (allocate memory, reset counters...).
  */
-static void DrawBuffersRoutine(unsigned int TextSize)
+static void DrawBuffersRoutine(unsigned TextSize)
 {
 	// triangles points (4) * (RI_2f_XYZ + RI_2f_TEX) * Text.size()
 	unsigned int tmpVertexArraySize = 4 * (2 + 2) * TextSize;
@@ -567,11 +592,16 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 	if (Transp >= 1.0f)
 		Transp = 1.0f;
 
-	if (Y + InternalFontSize * FontScale < 0)
+	// 1) we are safe with static_cast here, since InternalFontSize * FontScale
+	//    will not exceed 'int' in our case for sure (usually, <100)
+	// 2) preference for checking integers, so, we convert float to int
+	//    for best speed and accuracy
+	if (Y + static_cast<int>(InternalFontSize.f() * FontScale) < 0)
 		return 0; // it's ok, we work in proper way here
 
 	// start position on X axis for character
-	float Xstart{X * 1.0f};
+	// we are safe with static_cast here, since X will be less that screen resolution (usually, <10000)
+	float Xstart{static_cast<float>(X)};
 	// calculate default space width
 	float SpaceWidthFactor{0};
 	CalculateDefaultSpaceWidth(SpaceWidthFactor, FontScale);
@@ -594,7 +624,8 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 	// combine calculated width factor and global width scale
 	FontWidthFactor = FontScale*FontWidthFactor;
 
-	DrawBuffersRoutine(Text.size());
+	// we are safe with static_cast here, since text size will not exceed 'unsigned' in our case for sure
+	DrawBuffersRoutine(static_cast<unsigned>(Text.size()));
 
 	// draw all characters in text by blocks grouped by texture id
 	for (const auto &UTF32 : Text) {
@@ -616,24 +647,27 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 
 		// put into draw buffer all characters data, except spaces
 		if (UTF32 != SpaceUTF32) {
-			float DrawX{Xstart + DrawChar->Left * FontWidthFactor};
-			float DrawY{Y + GlobalFontOffsetY + (InternalFontSize - DrawChar->Top) * FontScale};
+			float DrawX{Xstart + DrawChar->FontMetrics.X.f() * FontWidthFactor};
+			// we are safe with static_cast here, since X will be less that screen resolution (usually, <10000)
+			float DrawY{static_cast<float>(Y) + GlobalFontOffsetY.f() +
+				    (InternalFontSize.f() - DrawChar->FontMetrics.Y.f()) * FontScale};
 
 			// texture's UV coordinates
-			float U_Left{(DrawChar->TexturePositionLeft * 1.0f) / ImageWidth};
-			float V_Top{(DrawChar->TexturePositionTop * 1.0f) / ImageHeight};
-			float U_Right{(DrawChar->TexturePositionRight * 1.0f) / ImageWidth};
-			float V_Bottom{(DrawChar->TexturePositionBottom * 1.0f) / ImageHeight};
+			float U_Left{DrawChar->TexturePos.left / ImageWidth};
+			float V_Top{DrawChar->TexturePos.top / ImageHeight};
+			float U_Right{DrawChar->TexturePos.right / ImageWidth};
+			float V_Bottom{DrawChar->TexturePos.bottom / ImageHeight};
 
 			// triangle's points (index buffer will provide proper sequence)
 			AddToDrawBuffer(DrawX, DrawY, U_Left, V_Top);
-			AddToDrawBuffer(DrawX, DrawY + DrawChar->Height * FontScale, U_Left, V_Bottom);
-			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY + DrawChar->Height * FontScale,
+			AddToDrawBuffer(DrawX, DrawY + DrawChar->FontMetrics.Height.f() * FontScale, U_Left, V_Bottom);
+			AddToDrawBuffer(DrawX + DrawChar->FontMetrics.Width.f() * FontWidthFactor,
+					DrawY + DrawChar->FontMetrics.Height.f() * FontScale,
 					U_Right, V_Bottom);
-			AddToDrawBuffer(DrawX + DrawChar->Width * FontWidthFactor, DrawY, U_Right, V_Top);
+			AddToDrawBuffer(DrawX + DrawChar->FontMetrics.Width.f() * FontWidthFactor, DrawY, U_Right, V_Top);
 
-			Xstart += DrawChar->AdvanceX * FontWidthFactor;
-			LineWidth += DrawChar->AdvanceX * FontWidthFactor;
+			Xstart += DrawChar->FontMetrics.AdvanceX * FontWidthFactor;
+			LineWidth += DrawChar->FontMetrics.AdvanceX * FontWidthFactor;
 		} else {
 			Xstart += SpaceWidthFactor * FontWidthFactor;
 			LineWidth += SpaceWidthFactor * FontWidthFactor;
@@ -702,7 +736,7 @@ int vw_FontSizeUTF32(const std::u32string &Text)
 		if (UTF32 == SpaceUTF32)
 			LineWidth += SpaceWidth;
 		else
-			LineWidth += DrawChar->AdvanceX;
+			LineWidth += DrawChar->FontMetrics.AdvanceX;
 	}
 
 	return (int)LineWidth;
@@ -761,7 +795,8 @@ int vw_DrawFont3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 	vw_Rotate(CurrentCameraRotation.y, 0.0f, 1.0f, 0.0f);
 	vw_Rotate(CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
 
-	DrawBuffersRoutine(Text.size());
+	/* we are safe with static_cast here, since text size will not exceed 'unsigned' */
+	DrawBuffersRoutine(static_cast<unsigned>(Text.size()));
 
 	// draw all characters in text by blocks grouped by texture id
 	for (const auto &UTF32 : Text) {
@@ -783,23 +818,24 @@ int vw_DrawFont3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 
 		// put into draw buffer all characters data, except spaces
 		if (UTF32 != SpaceUTF32) {
-			float DrawX{Xstart + DrawChar->Left};
-			float DrawY{(InternalFontSize - DrawChar->Top) * 1.0f};
+			float DrawX{Xstart + DrawChar->FontMetrics.X.f()};
+			float DrawY{InternalFontSize.f() - DrawChar->FontMetrics.Y.f()};
 
 			// texture's UV coordinates
 			// convert origin from bottom left to upper left corner
-			float U_Left{(DrawChar->TexturePositionLeft * 1.0f) / ImageWidth};
-			float V_Top{1.0f - (DrawChar->TexturePositionTop * 1.0f) / ImageHeight};
-			float U_Right{(DrawChar->TexturePositionRight * 1.0f) / ImageWidth};
-			float V_Bottom{1.0f - (DrawChar->TexturePositionBottom * 1.0f) / ImageHeight};
+			float U_Left{DrawChar->TexturePos.left / ImageWidth};
+			float V_Top{1.0f - DrawChar->TexturePos.top / ImageHeight};
+			float U_Right{DrawChar->TexturePos.right / ImageWidth};
+			float V_Bottom{1.0f - DrawChar->TexturePos.bottom / ImageHeight};
 
 			// triangle's points (index buffer will provide proper sequence)
-			AddToDrawBuffer(DrawX / 10.0f, (DrawY + DrawChar->Height) / 10.0f, U_Left,V_Top);
+			AddToDrawBuffer(DrawX / 10.0f, (DrawY + DrawChar->FontMetrics.Height.f()) / 10.0f, U_Left,V_Top);
 			AddToDrawBuffer(DrawX / 10.0f, DrawY / 10.0f, U_Left, V_Bottom);
-			AddToDrawBuffer((DrawX + DrawChar->Width) / 10.0f, DrawY / 10.0f, U_Right, V_Bottom);
-			AddToDrawBuffer((DrawX + DrawChar->Width) / 10.0f, (DrawY + DrawChar->Height) / 10.0f, U_Right, V_Top);
+			AddToDrawBuffer((DrawX + DrawChar->FontMetrics.Width.f()) / 10.0f, DrawY / 10.0f, U_Right, V_Bottom);
+			AddToDrawBuffer((DrawX + DrawChar->FontMetrics.Width.f()) / 10.0f,
+					(DrawY + DrawChar->FontMetrics.Height.f()) / 10.0f, U_Right, V_Top);
 
-			Xstart += DrawChar->AdvanceX;
+			Xstart += DrawChar->FontMetrics.AdvanceX;
 		} else
 			Xstart += SpaceWidth;
 	}
