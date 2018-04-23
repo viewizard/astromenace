@@ -47,12 +47,12 @@ std::unordered_map<std::string, sStreamBuffer> StreamBuffersMap;
  */
 static size_t VorbisRead(void *ptr, size_t byteSize, size_t sizeToRead, void *datasource)
 {
-	sFILE *vorbisData = (sFILE*)datasource;
+	sFILE *vorbisData = static_cast<sFILE *>(datasource);
 	return vorbisData->fread(ptr, byteSize, sizeToRead);
 }
 static int VorbisSeek(void *datasource, ogg_int64_t offset, int whence)
 {
-	sFILE *vorbisData = (sFILE*)datasource;
+	sFILE *vorbisData = static_cast<sFILE *>(datasource);
 	return vorbisData->fseek(offset, whence);
 }
 static int VorbisClose(void *UNUSED(datasource))
@@ -61,14 +61,14 @@ static int VorbisClose(void *UNUSED(datasource))
 }
 static long VorbisTell(void *datasource)
 {
-	sFILE *vorbisData = (sFILE*)datasource;
+	sFILE *vorbisData = static_cast<sFILE *>(datasource);
 	return vorbisData->ftell();
 }
 
 /*
  * Read OGG block.
  */
-static bool ReadOggBlock(ALuint BufID, size_t Size, OggVorbis_File &mVF, ALsizei Rate, ALenum Format)
+static bool ReadOggBlock(ALuint BufID, int Size, OggVorbis_File &mVF, ALsizei Freq, ALenum Format)
 {
 	if (!Size) {
 		std::cerr << __func__ << "(): " << "wrong Size parameter" << "\n";
@@ -76,7 +76,7 @@ static bool ReadOggBlock(ALuint BufID, size_t Size, OggVorbis_File &mVF, ALsizei
 	}
 
 	std::vector<char> PCM(Size);
-	unsigned int TotalRet{0};
+	int TotalRet{0};
 	long ret{0};
 	// read loop
 	while (TotalRet < Size) {
@@ -85,12 +85,15 @@ static bool ReadOggBlock(ALuint BufID, size_t Size, OggVorbis_File &mVF, ALsizei
 		// if end of file or read limit exceeded
 		if (ret == 0)
 			break;
-		else if (ret > 0)
-			TotalRet += ret;
+		else if (ret > 0) {
+			// we are safe with static_cast here, since ret is 'actual number of bytes read'
+			// that will not exceed 'int' in our case for sure
+			TotalRet += static_cast<int>(ret);
+		}
 	}
 
 	if (TotalRet > 0) {
-		alBufferData(BufID, Format, PCM.data(), TotalRet, Rate);
+		alBufferData(BufID, Format, PCM.data(), TotalRet, Freq);
 		CheckALError(__func__); // reset errors
 	}
 
@@ -128,8 +131,10 @@ static sStreamBuffer *ResetStreamBuffers(sStreamBuffer *StreamBuffer)
 	ov_pcm_seek(&StreamBuffer->mVF, 0);
 	// fill all buffers with proper data
 	for (int i = 0; i < NUM_OF_DYNBUF; i++) {
+		// we are safe with static_cast here, since Rate is 'the frequency of the audio data'
+		// that will not exceed 'ALsizei' in our case for sure (usually, frequency <1000 Hz)
 		ReadOggBlock(StreamBuffer->Buffers[i], DYNBUF_SIZE,
-			     StreamBuffer->mVF, StreamBuffer->mInfo->rate,
+			     StreamBuffer->mVF, static_cast<ALsizei>(StreamBuffer->mInfo->rate),
 			     (StreamBuffer->mInfo->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16);
 		if (!CheckALError(__func__))
 			return nullptr;
@@ -204,8 +209,10 @@ sStreamBuffer *vw_CreateStreamBufferFromOGG(const std::string &Name, const std::
 	}
 
 	for (int i = 0; i < NUM_OF_DYNBUF; i++) {
+		// we are safe with static_cast here, since Rate is 'the frequency of the audio data'
+		// that will not exceed 'ALsizei' in our case for sure (usually, frequency <1000 Hz)
 		ReadOggBlock(StreamBuffersMap[Name].Buffers[i], DYNBUF_SIZE,
-			     StreamBuffersMap[Name].mVF, StreamBuffersMap[Name].mInfo->rate,
+			     StreamBuffersMap[Name].mVF, static_cast<ALsizei>(StreamBuffersMap[Name].mInfo->rate),
 			     (StreamBuffersMap[Name].mInfo->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16);
 		if (!CheckALError(__func__)) {
 			ov_clear(&StreamBuffersMap[Name].mVF);
@@ -227,7 +234,9 @@ static bool ReadAndQueueStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source,
 		return false;
 	}
 
-	if (ReadOggBlock(bufferID, DYNBUF_SIZE, StreamBuffer->mVF, StreamBuffer->mInfo->rate,
+	// we are safe with static_cast here, since Rate is 'the frequency of the audio data'
+	// that will not exceed 'ALsizei' in our case for sure (usually, frequency <1000 Hz)
+	if (ReadOggBlock(bufferID, DYNBUF_SIZE, StreamBuffer->mVF, static_cast<ALsizei>(StreamBuffer->mInfo->rate),
 			 (StreamBuffer->mInfo->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16)) {
 		alSourceQueueBuffers(Source, 1, &bufferID);
 		CheckALError(__func__);
@@ -376,8 +385,13 @@ ALuint vw_CreateSoundBufferFromOGG(const std::string &Name)
 	}
 
 	// read all data into buffer
-	int BlockSize = ov_pcm_total(&mVF, -1) * 4;
-	ReadOggBlock(Buffer, BlockSize, mVF, mInfo->rate,
+	// we are safe with static_cast here, since ov_pcm_total return
+	// 'the total pcm samples of the physical bitstream or a specified logical bitstream'
+	// that will not exceed 'int' in our case for sure
+	int BlockSize = static_cast<int>(ov_pcm_total(&mVF, -1)) * 4;
+	// we are safe with static_cast here, since Rate is 'the frequency of the audio data'
+	// that will not exceed 'ALsizei' in our case for sure (usually, frequency <1000 Hz)
+	ReadOggBlock(Buffer, BlockSize, mVF, static_cast<ALsizei>(mInfo->rate),
 		     (mInfo->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16);
 	if (!CheckALError(__func__)) {
 		ov_clear(&mVF);
