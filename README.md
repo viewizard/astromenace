@@ -113,20 +113,19 @@ $ ~/astromenace/astromenace
 ```
 
 ## WIP
-Yes, AstroMenace was first released in 2007 and still in development. The main goal now is code refactoring for new libs versions support, modern OpenGL features, new C++ standards (C++11, STL). Check ours [plans](https://github.com/viewizard/astromenace/projects) for more info.
+Yes, AstroMenace was first released in 2007 and still in development (probably, as all open source projects, since we don't need new titles to sell more). The main goal now is code refactoring for new libs versions support, modern OpenGL features, new C++ standards (C++11, STL). New features planned too, but this is a secret for now. Check ours [plans](https://github.com/viewizard/astromenace/projects) for more info.
 
-We also have a surprise for you, here is the artwork 1 of 12 light ships and 1 of 8 capital ships we already have, with best wishes from Oleg Linkov (3D models author). Since this is ours 3D models, we will release sources under GPLv3 in [astromenace-artwork](https://github.com/viewizard/astromenace-artwork) repository as soon, as AstroMenace will use them. 😉
+We also have a surprise for you, here is the artwork 1 of 12 light ships and 1 of 8 capital ships we already have, with best wishes from Oleg Linkov (3D models author). Since this is ours 3D models, we will release sources under GPLv3 in [astromenace-artwork](https://github.com/viewizard/astromenace-artwork) repository as soon, as AstroMenace will use them. I hope, some day we will replace all 3D models licensed under CC-BY-SA (without sources) to open source 3D models.
 <p align="center">
   <img src="https://raw.githubusercontent.com/viewizard/astromenace/master/share/wip/scout.png" alt="preview"/>
 </p>
 <p align="center">
   <img src="https://raw.githubusercontent.com/viewizard/astromenace/master/share/wip/heavy.png" alt="preview"/>
 </p>
-I hope, some day we will replace all 3D models licensed under CC-BY-SA (without sources) to open source 3D models.
 
 ## Donate to Support Development
 ### Bitcoin
-[![bitcoin](https://raw.githubusercontent.com/viewizard/astromenace/master/share/donate/bitcoin-qr-code.png)](bitcoin:14kDaLnNTroFfuur2tZmUdUp8eK3pS2Uq6)
+![bitcoin](https://raw.githubusercontent.com/viewizard/astromenace/master/share/donate/bitcoin-qr-code.png)
 ##### 14kDaLnNTroFfuur2tZmUdUp8eK3pS2Uq6
 
 ### PayPal
@@ -137,7 +136,7 @@ https://www.paypal.me/viewizard
 * A tax-related donation receipt can not be issued because Viewizard is not a commercial nor registered organization.
 * Legally, it is a private donation.
 
-##### On the transfer form «Donation» or «Financial assistance» must be mentioned in the purpose area.
+##### On the transfer form, «Donation» or «Financial assistance» must be mentioned in the purpose area.
 ```
 Beneficiary’s bank             ALFA-BANK
 Beneficiary’s bank address     27 Kalanchevskaya str., Moscow, 107078
