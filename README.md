@@ -1,4 +1,4 @@
-# AstroMenace  [![Build Status](https://travis-ci.org/viewizard/astromenace.svg?branch=master)](https://travis-ci.org/viewizard/astromenace)  [![bitcoin](https://img.shields.io/badge/donate-bitcoin-orange.svg)](https://github.com/viewizard/astromenace#bitcoin)  [![paypal](https://img.shields.io/badge/donate-paypal-orange.svg)](https://github.com/viewizard/astromenace#paypal)
+# AstroMenace  [![Build Status](https://travis-ci.org/viewizard/astromenace.svg?branch=master)](https://travis-ci.org/viewizard/astromenace)  [![bitcoin](https://img.shields.io/badge/donate-bitcoin-yellow.svg)](https://github.com/viewizard/astromenace#bitcoin)  [![paypal](https://img.shields.io/badge/donate-paypal-blue.svg)](https://github.com/viewizard/astromenace#paypal)
 
 Immerse into a decisive battle against tons of cunning foes, face the terrifying bosses and protect your homeland throughout 15 diverse levels of the game. The hardcore gameplay of AstroMenace, packed with pure non-stop action, will become a full scale test for your basic instinct of survival.
 
@@ -14,7 +14,7 @@ The game provides a wide variety of armaments and weapon upgrades for dischargin
 
 More information and screenshots could be found at [AstroMenace web site](http://www.viewizard.com/).
 
-Installers for Windows and Mac could be found at [release](https://github.com/viewizard/astromenace/releases) section.
+Installer for Windows OS and macOS bundle could be found at [release](https://github.com/viewizard/astromenace/releases) section.
 
 ## Installation
 
@@ -87,7 +87,7 @@ $ sudo pkg_add -r -v gcc cmake git sdl20 libogg libvorbis openal
   freealut freetype2 fontconfig linuxlibertine
 ```
 
-#### For MacOSX 10.5+:
+#### For macOS:
 Download and install "Command Line Tools for Xcode" or "Xcode".
 Install HomeBrew package manager: https://brew.sh/
 ```bash
