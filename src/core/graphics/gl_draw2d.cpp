@@ -144,19 +144,23 @@ void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bo
 	}
 
 	// texture's UV coordinates
-	float U_left = (SrcRect.left * 1.0f) / ImageWidth;
-	float V_top = (SrcRect.top * 1.0f) / ImageHeight;
-	float U_right = (SrcRect.right * 1.0f) / ImageWidth;
-	float V_bottom = (SrcRect.bottom * 1.0f) / ImageHeight;
+	float U_left = static_cast<float>(SrcRect.left) / ImageWidth; // WARNING performance issue, remove conversion
+	float V_top = static_cast<float>(SrcRect.top) / ImageHeight; // WARNING performance issue, remove conversion
+	float U_right = static_cast<float>(SrcRect.right) / ImageWidth; // WARNING performance issue, remove conversion
+	float V_bottom = static_cast<float>(SrcRect.bottom) / ImageHeight; // WARNING performance issue, remove conversion
 
 	// 'reset' buffer
 	DrawBufferCurrentPosition = 0;
 
 	// TRIANGLE_STRIP (2 triangles)
-	AddToDrawBuffer(DstRect.left, DstRect.top, U_left, V_top);
-	AddToDrawBuffer(DstRect.left, DstRect.bottom, U_left, V_bottom);
-	AddToDrawBuffer(DstRect.right, DstRect.top, U_right, V_top);
-	AddToDrawBuffer(DstRect.right, DstRect.bottom, U_right, V_bottom);
+	AddToDrawBuffer(static_cast<float>(DstRect.left),
+			static_cast<float>(DstRect.top), U_left, V_top); // WARNING performance issue, remove conversion
+	AddToDrawBuffer(static_cast<float>(DstRect.left),
+			static_cast<float>(DstRect.bottom), U_left, V_bottom); // WARNING performance issue, remove conversion
+	AddToDrawBuffer(static_cast<float>(DstRect.right),
+			static_cast<float>(DstRect.top), U_right, V_top); // WARNING performance issue, remove conversion
+	AddToDrawBuffer(static_cast<float>(DstRect.right),
+			static_cast<float>(DstRect.bottom), U_right, V_bottom); // WARNING performance issue, remove conversion
 
 	// setup OpenGL
 	vw_SetTextureBlend(Alpha, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
