@@ -824,7 +824,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ObjectBlocks[i].RangeStart = 0;
 
 			// если у нас включены и работают шейдеры, надо приготовить место для данных + изменить формат и шаг
-			if (Setup.UseGLSL) {
+			if (Setup.UseGLSL120) {
 				ObjectBlocks[i].VertexStride = 3 + 3 + 6;
 				ObjectBlocks[i].VertexFormat = RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX;
 			}
@@ -891,7 +891,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			float VelocityTMP = vw_Randf0*tRadius2;
 
 			// записываем центр треугольника, оно же базовое ускорение + цент UV, нужно для шейдера
-			if (Setup.UseGLSL) {
+			if (Setup.UseGLSL120) {
 				// Velocity/центр треугольника
 				ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * i + 8] = ExplosionPieceData[Count].Velocity.x;
 				ObjectBlocks[0].VertexArray.get()[ObjectBlocks[0].VertexStride * i + 9] = ExplosionPieceData[Count].Velocity.y;
@@ -927,7 +927,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		AABBSpeed = sqrtf(AABBSpeed);
 
 		// установка шейдера
-		if (Setup.UseGLSL) {
+		if (Setup.UseGLSL120) {
 			ObjectBlocks[0].ShaderType = 2;
 			// дельта скорости
 			ObjectBlocks[0].ShaderData[0] = 1.0f;

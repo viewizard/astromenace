@@ -573,7 +573,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 
 			// если у нас включены и работают шейдеры, надо приготовить место для данных + изменить формат и шаг
-			if (Setup.UseGLSL) {
+			if (Setup.UseGLSL120) {
 				ObjectBlocks[i].VertexStride = 3 + 3 + 6;
 				ObjectBlocks[i].VertexFormat = RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX;
 			}
@@ -690,7 +690,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 
 				// записываем центр треугольника, оно же базовое ускорение + цент UV, для передачи шейдеру
-				if (Setup.UseGLSL) {
+				if (Setup.UseGLSL120) {
 					// Velocity/центр треугольника
 					tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * i + 8] = ExplosionPieceData[Count].Velocity.x;
 					tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * i + 9] = ExplosionPieceData[Count].Velocity.y;
@@ -765,7 +765,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 
 			// установки по шейдеру для объекта
-			if (Setup.UseGLSL) {
+			if (Setup.UseGLSL120) {
 				tmpObjectBlock.ShaderType = 2;
 				// дельта скорости
 				tmpObjectBlock.ShaderData[0] = 1.0f;

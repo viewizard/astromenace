@@ -59,7 +59,7 @@ void InitSetup()
 	Setup.VisualEffectsQuality = 0;
 	Setup.AnisotropyLevel = 1;
 	Setup.TexturesCompressionType = 1;
-	Setup.UseGLSL = false;
+	Setup.UseGLSL120 = false;
 	Setup.ShadowMap = 0;
 	Setup.MaxPointLights = 3;
 	Setup.MusicSw = 8;
@@ -176,7 +176,7 @@ void SaveXMLSetupFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VisualEffectsQuality"), "value", Setup.VisualEffectsQuality);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "AnisotropyLevel"), "value", Setup.AnisotropyLevel);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "TexturesCompressionType"), "value", Setup.TexturesCompressionType);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "UseGLSL"), "value", Setup.UseGLSL);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "UseGLSL120"), "value", Setup.UseGLSL120);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "ShadowMap"), "value", Setup.ShadowMap);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MaxPointLights"), "value", Setup.MaxPointLights);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MusicSw"), "value", Setup.MusicSw);
@@ -438,8 +438,8 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "AnisotropyLevel"), "value", Setup.AnisotropyLevel);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "TexturesCompressionType"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "TexturesCompressionType"), "value", Setup.TexturesCompressionType);
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "UseGLSL"))
-		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "UseGLSL"), "value", Setup.UseGLSL);
+	if (XMLdoc->FindEntryByName(*RootXMLEntry, "UseGLSL120"))
+		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "UseGLSL120"), "value", Setup.UseGLSL120);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "ShadowMap"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "ShadowMap"), "value", Setup.ShadowMap);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MaxPointLights"))

@@ -260,8 +260,8 @@ struct sGameSetup {
 	int AnisotropyLevel;
 	// компрессия текстур 0-выкл, 1-S3TC, 2-BPTC
 	int TexturesCompressionType;
-	// использование шейдеров
-	bool UseGLSL;
+	// использование шейдеров версии 120 (OpenGL 2.1)
+	bool UseGLSL120;
 	// использование шадовмеп
 	int ShadowMap;
 	// кол-во точечных источников света на 1 объект

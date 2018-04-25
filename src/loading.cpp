@@ -1230,8 +1230,9 @@ void LoadGameData(eLoading LoadType)
 
 
 	// если будем загружать шейдеры - делаем поправку общего кол-ва
-	if (vw_GetDevCaps().GLSL100Supported &&
-	    Setup.UseGLSL &&
+	if (vw_GetDevCaps().OpenGL_2_0_supported &&
+	    vw_GetDevCaps().OpenGL_2_1_supported &&
+	    Setup.UseGLSL120 &&
 	    vw_ShadersMapEmpty()) {
 		AllDrawLoading += GLSLLoadListCount*100;
 		NeedLoadShaders = true;
@@ -1298,9 +1299,9 @@ void LoadGameData(eLoading LoadType)
 
 
 	//	если нужно, загрузка всех шейдеров (!) обязательно это делать до загрузки моделей
-	if (NeedLoadShaders && vw_GetDevCaps().GLSL100Supported) {
+	if (NeedLoadShaders) {
 		for (unsigned int i=0; i<GLSLLoadListCount; i++) {
-			if (Setup.UseGLSL) {
+			if (Setup.UseGLSL120) {
 
 				std::weak_ptr<cGLSL> Program = vw_CreateShader(GLSLLoadList[i].Name,
 									       GLSLLoadList[i].VertexShaderFileName,
@@ -1309,9 +1310,9 @@ void LoadGameData(eLoading LoadType)
 				if (!Program.expired()) {
 					// получаем сразу состояние, смогли прилинковать или нет
 					if (!vw_LinkShaderProgram(Program))
-						Setup.UseGLSL = false;
+						Setup.UseGLSL120 = false;
 				} else
-					Setup.UseGLSL = false;
+					Setup.UseGLSL120 = false;
 
 				RealLoadedTextures += 1000;
 				// рисуем текущее состояние загрузки, если не рисуем логотип
@@ -1353,12 +1354,12 @@ void LoadGameData(eLoading LoadType)
 	}
 	// еще одна проверка перед тем как будем использовать шадовмеп
 	// если не смогли загрузить шейдеры, то делать с шадовмеп нечего
-	if (!Setup.UseGLSL)
+	if (!Setup.UseGLSL120)
 		Setup.ShadowMap = 0;
 
 
 	// инициализация менеджера частиц (обязательно после загрузки шейдеров)
-	vw_InitParticleSystems(Setup.UseGLSL, Setup.VisualEffectsQuality+1.0f);
+	vw_InitParticleSystems(Setup.UseGLSL120, Setup.VisualEffectsQuality + 1.0f);
 
 
 
@@ -1443,7 +1444,7 @@ void LoadGameData(eLoading LoadType)
 				}
 
 				// если это карта нормалей, но у нас не включены шейдеры - пропускаем
-				if (!Setup.UseGLSL &&
+				if (!Setup.UseGLSL120 &&
 				    !strncmp("models/NORMALMAP", CurrentList[i].FileName, strlen("models/NORMALMAP")))
 					break;
 
@@ -1460,7 +1461,7 @@ void LoadGameData(eLoading LoadType)
 
 		// предварит. загрузка моделей
 		case 2:
-			vw_LoadModel3D(CurrentList[i].FileName, CurrentList[i].TriangleSizeLimit, CurrentList[i].NeedTangentAndBinormal && Setup.UseGLSL);
+			vw_LoadModel3D(CurrentList[i].FileName, CurrentList[i].TriangleSizeLimit, CurrentList[i].NeedTangentAndBinormal && Setup.UseGLSL120);
 			break;
 
 		// загрузка sfx

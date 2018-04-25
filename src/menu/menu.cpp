@@ -256,7 +256,7 @@ void SetOptionsMenu(eMenuStatus Menu)
 
 	case eMenuStatus::OPTIONS_ADVANCED:
 		Options_TexturesCompressionType = Setup.TexturesCompressionType;
-		Options_UseGLSL = Setup.UseGLSL;
+		Options_UseGLSL120 = Setup.UseGLSL120;
 		Options_MSAA = Setup.MSAA;
 		Options_CSAA = Setup.CSAA;
 		Options_TexturesAnisotropyLevel = Setup.AnisotropyLevel;

@@ -303,16 +303,13 @@ struct sDevCaps {
 	bool VAOSupported{false};
 	// поддержка загрузки текстур со сторонами не кратные степени двойки
 	bool TextureNPOTSupported{false};
-	// поддержка шейдеров GLSL 1.00
-	bool GLSL100Supported{false};
-	// шейдерная модель
-	float ShaderModel{0.0f};
 	// поддержка генерации мипмеп в железе
 	bool HardwareMipMapGeneration{false};
 
 	bool OpenGL_1_3_supported{false};
 	bool OpenGL_1_5_supported{false};
 	bool OpenGL_2_0_supported{false};
+	bool OpenGL_2_1_supported{false};
 	bool OpenGL_3_0_supported{false};
 	bool OpenGL_4_2_supported{false};
 };
@@ -353,10 +350,12 @@ struct sDevCaps {
  * gl_main
  */
 
-// Initialization renderer.
+// Initialize windows with OpenGL context.
 int vw_InitWindow(const char *Title, int Width, int Height, int *Bits, bool FullScreenFlag,
 		  int CurrentVideoModeX, int CurrentVideoModeY, int VSync);
+// Get SDL window handle.
 SDL_Window *vw_GetSDLWindow();
+// OpenGL setup.
 void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA);
 // Shutdown renderer.
 void vw_ShutdownRenderer();
@@ -372,6 +371,7 @@ bool vw_GetInternalResolution(float *Width, float *Height);
 void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height, eOrigin Origin = eOrigin::upper_left);
 // Get viewport data.
 void vw_GetViewport(float *x = nullptr, float *y = nullptr, float *width = nullptr, float *height = nullptr);
+// Get viewport data.
 void vw_GetViewport(int *x = nullptr, int *y = nullptr, int *width = nullptr, int *height = nullptr);
 // Set depth range.
 void vw_DepthRange(GLdouble near, GLdouble far);
@@ -382,11 +382,11 @@ void vw_ResizeScene(float FieldOfViewAngle, float AspectRatio, float zNearClip, 
 void vw_BeginRendering(int  mask);
 // End rendering.
 void vw_EndRendering();
-// Clear buffer.
+// Clear buffers.
 void vw_Clear(int mask);
-// Set scene clear color.
+// Specify clear values for the color buffers.
 void vw_SetClearColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha);
-// Set scene color mask.
+// Specifies whether the individual color components in the frame buffer can or cannot be written.
 void vw_SetColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha);
 // Set color.
 void vw_SetColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
@@ -394,7 +394,7 @@ void vw_SetColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
 void vw_CullFace(eCullFace mode);
 // Set depth buffer.
 void vw_DepthTest(bool mode, eCompareFunc func);
-// Set polygon offset mode.
+// Set the scale and units used to calculate depth values.
 void vw_PolygonOffset(bool status, GLfloat factor, GLfloat units);
 
 /*
@@ -439,7 +439,7 @@ void vw_SetTextureDepthMode(eTextureDepthMode mode);
  */
 
 // Draw 3D primitives.
-void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, const GLvoid *VertexArray,
+void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, GLvoid *VertexArray,
 	       GLsizei Stride, GLuint VertexBO = 0, unsigned int RangeStart = 0,
 	       unsigned int *IndexArray = nullptr, GLuint IndexBO = 0, GLuint VAO = 0);
 
@@ -517,8 +517,9 @@ struct sFBO {
 	GLtexture DepthTexture{0};
 	GLint DepthSize{0};
 	GLframebuffer FrameBufferObject{0};
-	GLsizei Width{0};
-	GLsizei Height{0};
+	// we are safe with sIF_complex_type here, since Width and Height not exceed 'float'
+	sIF_complex_type<GLsizei, float> Width{0};
+	sIF_complex_type<GLsizei, float> Height{0};
 };
 
 // Build FBO. Caller should allocate mamory (FBO).

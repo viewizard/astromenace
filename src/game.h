@@ -374,7 +374,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 //------------------------------------------------------------------------------------
 extern int Options_TexturesAnisotropyLevel;
 extern int Options_TexturesCompressionType;
-extern int Options_UseGLSL;
+extern int Options_UseGLSL120;
 extern int Options_MSAA;
 extern int Options_CSAA;
 extern int Options_ShadowMap;

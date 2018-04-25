@@ -995,17 +995,18 @@ ReCreate:
 	// проверяем возможности железа
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	// проверка поддержки шейдеров (нужна 100% поддержка GLSL 1.0)
-	if (Setup.UseGLSL &&
-	    (!vw_GetDevCaps().GLSL100Supported || vw_GetDevCaps().ShaderModel < 3.0f))
-		Setup.UseGLSL = false;
+	// проверка поддержки шейдеров
+	// т.к. у нас шейдеры версии 120, проверяем версию OpenGL 2.0 и 2.1
+	if (Setup.UseGLSL120 &&
+	    (!vw_GetDevCaps().OpenGL_2_0_supported || !vw_GetDevCaps().OpenGL_2_1_supported))
+		Setup.UseGLSL120 = false;
 
 	// анализ системы только если это первый запуск
 	if (FirstStart) {
-		// если шейдерная модель 4-я или выше
-		if (vw_GetDevCaps().ShaderModel >= 4.0f) {
+		// если железо поддерживает OpenGL 3.0
+		if (vw_GetDevCaps().OpenGL_3_0_supported) {
 			// 100% держит наши шейдеры
-			Setup.UseGLSL = true;
+			Setup.UseGLSL120 = true;
 			Setup.ShadowMap = 2;
 			// 100% больше чем нужно памяти и не надо сжимать текстуры (ув. качество и скорость загрузки)
 			Setup.TexturesCompressionType = 0;
@@ -1015,8 +1016,8 @@ ReCreate:
 			Setup.AnisotropyLevel = vw_GetDevCaps().MaxAnisotropyLevel;
 			Setup.MaxPointLights = 4;
 		}
-		// если шейдерная модель 4.2-я или выше
-		if (vw_GetDevCaps().ShaderModel >= 4.2f) {
+		// если железо поддерживает OpenGL 4.2
+		if (vw_GetDevCaps().OpenGL_4_2_supported) {
 			// немного больше ставим другие опции
 			Setup.ShadowMap = 5;
 			Setup.MSAA = 4;
@@ -1048,8 +1049,9 @@ ReCreate:
 
 	// если не поддерживает железо фбо или шейдеры, выключаем шадовмеп
 	if (!vw_GetDevCaps().FramebufferObject ||
-	    !vw_GetDevCaps().GLSL100Supported ||
-	    (vw_GetDevCaps().ShaderModel < 3.0f))
+	    !vw_GetDevCaps().OpenGL_2_0_supported ||
+	    !vw_GetDevCaps().OpenGL_2_1_supported ||
+	    !vw_GetDevCaps().OpenGL_3_0_supported)
 		Setup.ShadowMap = 0;
 
 	// check MSAA/CSAA mode

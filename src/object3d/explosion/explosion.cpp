@@ -166,7 +166,7 @@ bool cExplosion::Update(float Time)
 
 
 	// если не считаем в шейдере, нужно перебрать геометрию и собрать новые буферы
-	if (!Setup.UseGLSL) {
+	if (!Setup.UseGLSL120) {
 		// первый раз - просто запоминаем время
 		if (ExplosionGeometryMoveLastTime == -1) ExplosionGeometryMoveLastTime = Time;
 

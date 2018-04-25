@@ -51,19 +51,19 @@ void cBigAsteroid::Create(int AsteroidNum)
 	// перебираем и ставим нужные данные
 	switch (AsteroidNum) {
 	case 11:
-		LoadObjectData("models/space/bigasteroid-01.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		LoadObjectData("models/space/bigasteroid-01.vw3d", this, 0, -1.0f, Setup.UseGLSL120);
 		goto case9next;
 	case 12:
-		LoadObjectData("models/space/bigasteroid-02.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		LoadObjectData("models/space/bigasteroid-02.vw3d", this, 0, -1.0f, Setup.UseGLSL120);
 		goto case9next;
 	case 13:
-		LoadObjectData("models/space/bigasteroid-03.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		LoadObjectData("models/space/bigasteroid-03.vw3d", this, 0, -1.0f, Setup.UseGLSL120);
 		goto case9next;
 	case 14:
-		LoadObjectData("models/space/bigasteroid-04.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		LoadObjectData("models/space/bigasteroid-04.vw3d", this, 0, -1.0f, Setup.UseGLSL120);
 		goto case9next;
 	case 15:
-		LoadObjectData("models/space/bigasteroid-05.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		LoadObjectData("models/space/bigasteroid-05.vw3d", this, 0, -1.0f, Setup.UseGLSL120);
 
 case9next:
 
@@ -79,19 +79,19 @@ case9next:
 
 	// те же астероиды, но они летят сверху...
 	case 21:
-		LoadObjectData("models/space/bigasteroid-01.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		LoadObjectData("models/space/bigasteroid-01.vw3d", this, 0, -1.0f, Setup.UseGLSL120);
 		goto case10next;
 	case 22:
-		LoadObjectData("models/space/bigasteroid-02.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		LoadObjectData("models/space/bigasteroid-02.vw3d", this, 0, -1.0f, Setup.UseGLSL120);
 		goto case10next;
 	case 23:
-		LoadObjectData("models/space/bigasteroid-03.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		LoadObjectData("models/space/bigasteroid-03.vw3d", this, 0, -1.0f, Setup.UseGLSL120);
 		goto case10next;
 	case 24:
-		LoadObjectData("models/space/bigasteroid-04.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		LoadObjectData("models/space/bigasteroid-04.vw3d", this, 0, -1.0f, Setup.UseGLSL120);
 		goto case10next;
 	case 25:
-		LoadObjectData("models/space/bigasteroid-05.vw3d", this, 0, -1.0f, Setup.UseGLSL);
+		LoadObjectData("models/space/bigasteroid-05.vw3d", this, 0, -1.0f, Setup.UseGLSL120);
 
 case10next:
 
