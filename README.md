@@ -5,7 +5,7 @@
 * [Work In Progress](https://github.com/viewizard/astromenace#work-in-progress)
 * [Donate to Support Development](https://github.com/viewizard/astromenace#donate-to-support-development)
 ##
-[AstroMenace on YouTube, a video is worth a thousand words.](http://www.youtube.com/watch?v=ysY9vKKisbo)
+[AstroMenace on YouTube, a video is worth a thousand words.](https://www.youtube.com/watch?v=ysY9vKKisbo&index=1&list=PLrWi_GXhwHyznYT19oAQL4zNldlVXFlj2)
 
 Immerse into a decisive battle against tons of cunning foes, face the terrifying bosses and protect your homeland throughout 15 diverse levels of the game. The hardcore gameplay of AstroMenace, packed with pure non-stop action, will become a full scale test for your basic instinct of survival.
 
