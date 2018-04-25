@@ -191,7 +191,7 @@ void vw_SetFontSize(int FontSize)
  */
 void vw_SetFontOffsetY(int NewOffsetY)
 {
-	GlobalFontOffsetY(NewOffsetY);
+	GlobalFontOffsetY = NewOffsetY;
 }
 
 /*

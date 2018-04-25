@@ -86,4 +86,55 @@ struct sRGBCOLOR {
 #define ERR_MEM			-6	// memory allocation related issue
 #define ERR_NOT_SUPPORTED	-7	// file format not supported
 
+// integral + floating point complex type
+// caller should care about types size and numeric limits
+template <typename I, typename F>
+struct sIF_complex_type {
+public:
+	// caller should guarantee, that integral value will not exceed floating point value size
+	sIF_complex_type(const I _i) :
+		__i{_i},
+		__f{static_cast<F>(_i)}
+	{
+		static_assert(std::is_integral<I>::value, "First variable's type should be integral.");
+		static_assert(std::is_floating_point<F>::value, "Second variable's type should be floating-point.");
+	}
+
+	unsigned i()
+	{
+		return __i;
+	}
+
+	float f()
+	{
+		return __f;
+	}
+
+	// caller should guarantee, that integral value will not exceed floating point value size
+	void operator () (const I _i)
+	{
+		__i = _i;
+		__f = static_cast<F>(_i);
+	}
+
+	// caller should guarantee, that integral value will not exceed floating point value size
+	void operator = (const I _i)
+	{
+		__i = _i;
+		__f = static_cast<F>(_i);
+	}
+
+	bool operator == (sIF_complex_type &_complex)
+	{
+		// since both parts synchronized, we need only one check
+		return (__i == _complex.i());
+	}
+
+private:
+	// don't allow direct access, we should guarantee, that all
+	// parts have proper value, only public methods should be used
+	I __i;
+	F __f;
+};
+
 #endif // Base_H
