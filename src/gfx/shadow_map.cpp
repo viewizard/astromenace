@@ -116,7 +116,7 @@ void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, 
 	// сохраняем данные вьюпорта (параметры буфера глубины не получаем, всегда используем его полностью, 0-1)
 	vw_GetViewport(&ShadowMapViewPort_x, &ShadowMapViewPort_y, &ShadowMapViewPort_width, &ShadowMapViewPort_height);
 	// устанавливаем вьюпорт согласно нашему фбо для шадовмепинга
-	vw_SetViewport(0, 0, ShadowMapFBO->Width, ShadowMapFBO->Height, eOrigin::bottom_left);
+	vw_SetViewport(0, 0, ShadowMapFBO->Width.i(), ShadowMapFBO->Height.i(), eOrigin::bottom_left);
 	vw_DepthRange(0.005f, 1.0f);
 
 	// сохраняем данные текущего фбо или фб
@@ -134,7 +134,7 @@ void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, 
 	vw_PushMatrix();
 	vw_MatrixMode(eMatrixMode::MODELVIEW);
 
-	vw_ResizeScene(45.0f, (ShadowMapFBO->Width*1.0f)/(ShadowMapFBO->Height*1.0f), 1.0f, fFarClip);
+	vw_ResizeScene(45.0f, ShadowMapFBO->Width.f() / ShadowMapFBO->Height.f(), 1.0f, fFarClip);
 	vw_GetMatrix(eMatrixPname::PROJECTION, ShadowMap_LightProjectionMatrix);
 
 

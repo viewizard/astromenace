@@ -96,10 +96,11 @@ bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool 
 			_glGenRenderbuffers(1, &FBO->ColorBuffer);
 			_glBindRenderbuffer(GL_RENDERBUFFER, FBO->ColorBuffer);
 			if ((InternalCSAA == MSAA) || (InternalCSAA == 0))
-				_glRenderbufferStorageMultisample(GL_RENDERBUFFER, MSAA, GL_RGBA, FBO->Width, FBO->Height);
+				_glRenderbufferStorageMultisample(GL_RENDERBUFFER, MSAA, GL_RGBA,
+								  FBO->Width.i(), FBO->Height.i());
 			else
 				_glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, InternalCSAA, MSAA,
-									    GL_RGBA, FBO->Width, FBO->Height);
+									    GL_RGBA, FBO->Width.i(), FBO->Height.i());
 			_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, FBO->ColorBuffer);
 			if(_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
@@ -112,7 +113,8 @@ bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, FBO->Width, FBO->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, FBO->Width.i(), FBO->Height.i(),
+				     0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 			_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, FBO->ColorTexture, 0);
 			if(_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
@@ -128,10 +130,10 @@ bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool 
 			_glBindRenderbuffer(GL_RENDERBUFFER, FBO->DepthBuffer);
 			if ((InternalCSAA == MSAA) || (InternalCSAA == 0))
 				_glRenderbufferStorageMultisample(GL_RENDERBUFFER, MSAA, GL_DEPTH_COMPONENT,
-								  FBO->Width, FBO->Height);
+								  FBO->Width.i(), FBO->Height.i());
 			else
 				_glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, InternalCSAA, MSAA,
-									    GL_DEPTH_COMPONENT, FBO->Width, FBO->Height);
+									    GL_DEPTH_COMPONENT, FBO->Width.i(), FBO->Height.i());
 			_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, FBO->DepthBuffer);
 			_glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
 							       GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &FBO->DepthSize);
@@ -146,7 +148,7 @@ bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, FBO->Width, FBO->Height, 0,
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, FBO->Width.i(), FBO->Height.i(), 0,
 				     GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
 			_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FBO->DepthTexture, 0);
 			_glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
@@ -180,7 +182,7 @@ void vw_BindFBO(sFBO *FBO)
 
 	// if current have multisamples, disable it first
 	if (CurrentFBO &&
-	    (CurrentFBO->ColorBuffer || CurrentFBO->DepthBuffer ))
+	    (CurrentFBO->ColorBuffer || CurrentFBO->DepthBuffer))
 		glDisable(GL_MULTISAMPLE);
 
 	if (FBO) {
@@ -213,8 +215,8 @@ void vw_BlitFBO(sFBO *SourceFBO, sFBO *TargetFBO)
 
 	_glBindFramebuffer(GL_READ_FRAMEBUFFER, SourceFBO->FrameBufferObject);
 	_glBindFramebuffer(GL_DRAW_FRAMEBUFFER, TargetFBO->FrameBufferObject);
-	_glBlitFramebuffer(0, 0, SourceFBO->Width, SourceFBO->Height,
-			   0, 0, TargetFBO->Width, TargetFBO->Height,
+	_glBlitFramebuffer(0, 0, SourceFBO->Width.i(), SourceFBO->Height.i(),
+			   0, 0, TargetFBO->Width.i(), TargetFBO->Height.i(),
 			   GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
 
@@ -227,7 +229,7 @@ void vw_DrawColorFBO(sFBO *SourceFBO, sFBO *TargetFBO)
 		return;
 
 	vw_BindFBO(TargetFBO);
-	glViewport(0, 0, SourceFBO->Width, SourceFBO->Height);
+	glViewport(0, 0, SourceFBO->Width.i(), SourceFBO->Height.i());
 
 	glPushAttrib(GL_ENABLE_BIT);
 	// disable useless flags
@@ -238,18 +240,18 @@ void vw_DrawColorFBO(sFBO *SourceFBO, sFBO *TargetFBO)
 	glPushMatrix();			// store the projection matrix
 	glLoadIdentity();		// reset the projection matrix
 
-	glOrtho(0, SourceFBO->Width, 0, SourceFBO->Height, -1, 1);
+	glOrtho(0, SourceFBO->Width.i(), 0, SourceFBO->Height.i(), -1, 1);
 
 	glMatrixMode(GL_MODELVIEW);	// select the modelview matrix
 	glPushMatrix();
 	glLoadIdentity();
 
 	// RI_2f_XY | RI_1_TEX
-	//		     X				Y				U	V
-	float DrawBuffer[16]{0.0f,			0.0f,				0.0f,	0.0f,
-			     0.0f,			(float)SourceFBO->Height,	0.0f,	1.0f,
-			     (float)SourceFBO->Width,	0.0f,				1.0f,	0.0f,
-			     (float)SourceFBO->Width,	(float)SourceFBO->Height,	1.0f,	1.0f};
+	//		     X				Y			U	V
+	float DrawBuffer[16]{0.0f,			0.0f,			0.0f,	0.0f,
+			     0.0f,			SourceFBO->Height.f(),	0.0f,	1.0f,
+			     SourceFBO->Width.f(),	0.0f,			1.0f,	0.0f,
+			     SourceFBO->Width.f(),	SourceFBO->Height.f(),	1.0f,	1.0f};
 
 	vw_BindTexture(0, SourceFBO->ColorTexture);
 
