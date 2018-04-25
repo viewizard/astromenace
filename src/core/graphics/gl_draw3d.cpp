@@ -50,7 +50,7 @@
  * Setup states and pointers.
  * Also used for VAO generation.
  */
-void __Draw3D_EnableStates(int DataFormat, const GLvoid *VertexArray,
+void __Draw3D_EnableStates(int DataFormat, GLvoid *VertexArray,
 			   GLsizei stride, GLuint VertexBO, GLuint IndexBO)
 {
 	if (!VertexArray && !VertexBO)
@@ -64,7 +64,7 @@ void __Draw3D_EnableStates(int DataFormat, const GLvoid *VertexArray,
 	if (VertexBO && __GetDevCaps().VBOSupported)
 		vw_BindBufferObject(eBufferObject::Vertex, VertexBO);
 	else
-		tmpPointer = (uint8_t*)VertexArray;
+		tmpPointer = static_cast<uint8_t *>(VertexArray);
 
 	// IBO (GL_ELEMENT_ARRAY_BUFFER) binding is part of the VAO state
 	if (IndexBO && __GetDevCaps().VBOSupported)
@@ -134,7 +134,7 @@ void __Draw3D_DisableStates(int DataFormat, GLuint VertexBO, GLuint IndexBO)
 /*
  * Draw 3D primitives.
  */
-void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, const GLvoid *VertexArray,
+void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, GLvoid *VertexArray,
 	       GLsizei Stride, GLuint VertexBO, unsigned int RangeStart,
 	       unsigned int *IndexArray, GLuint IndexBO, GLuint VAO)
 {

@@ -51,7 +51,7 @@ sDevCaps &__GetDevCaps();
  * gl_draw3d
  */
 
-void __Draw3D_EnableStates(int DataFormat, const GLvoid *VertexArray,
+void __Draw3D_EnableStates(int DataFormat, GLvoid *VertexArray,
 			   GLsizei stride, GLuint VertexBO, GLuint IndexBO);
 void __Draw3D_DisableStates(int DataFormat, GLuint VertexBO, GLuint IndexBO);
 
