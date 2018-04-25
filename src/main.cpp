@@ -1029,14 +1029,6 @@ ReCreate:
 		if (vw_GetDevCaps().TextureStorage)
 			Setup.TexturesCompressionType = 0;
 
-#if defined(__APPLE__) && defined(__MACH__)
-		// для маков по умолчанию выключаем сглаживание, тени и шейдеры, т.к. там может все софтово эмулироваться и жутко тормозить
-		Setup.MSAA = 0;
-		Setup.CSAA = 0;
-		Setup.UseGLSL = false;
-		Setup.ShadowMap = 0;
-#endif
-
 		// устанавливаем соотношение сторон по установленному разрешению экрана
 		if ((Setup.Width*1.0f)/(Setup.Height*1.0f) < 1.4f) {
 			Setup.InternalWidth = 1024.0f;
