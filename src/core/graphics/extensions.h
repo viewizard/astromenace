@@ -93,6 +93,14 @@ extern PFNGLUNIFORM3IVPROC _glUniform3iv;
 extern PFNGLUNIFORM4IVPROC _glUniform4iv;
 extern PFNGLVALIDATEPROGRAMPROC _glValidateProgram;
 
+// OpenGL 2.1 (only what we need or would need in future)
+extern PFNGLUNIFORMMATRIX2X3FVPROC _glUniformMatrix2x3fv;
+extern PFNGLUNIFORMMATRIX3X2FVPROC _glUniformMatrix3x2fv;
+extern PFNGLUNIFORMMATRIX2X4FVPROC _glUniformMatrix2x4fv;
+extern PFNGLUNIFORMMATRIX4X2FVPROC _glUniformMatrix4x2fv;
+extern PFNGLUNIFORMMATRIX3X4FVPROC _glUniformMatrix3x4fv;
+extern PFNGLUNIFORMMATRIX4X3FVPROC _glUniformMatrix4x3fv;
+
 // OpenGL 3.0 (only what we need or would need in future)
 extern PFNGLBINDRENDERBUFFERPROC _glBindRenderbuffer;
 extern PFNGLDELETERENDERBUFFERSPROC _glDeleteRenderbuffers;
@@ -123,6 +131,7 @@ extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC _glRenderbufferStorageM
 bool __Initialize_OpenGL_1_3();
 bool __Initialize_OpenGL_1_5();
 bool __Initialize_OpenGL_2_0();
+bool __Initialize_OpenGL_2_1();
 bool __Initialize_OpenGL_3_0();
 bool __Initialize_OpenGL_4_2();
 bool __Initialize_GL_NV_framebuffer_multisample_coverage();

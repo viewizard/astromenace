@@ -83,6 +83,14 @@ PFNGLUNIFORM3IVPROC _glUniform3iv{nullptr};
 PFNGLUNIFORM4IVPROC _glUniform4iv{nullptr};
 PFNGLVALIDATEPROGRAMPROC _glValidateProgram{nullptr};
 
+// OpenGL 2.1 (only what we need or would need in future)
+PFNGLUNIFORMMATRIX2X3FVPROC _glUniformMatrix2x3fv{nullptr};
+PFNGLUNIFORMMATRIX3X2FVPROC _glUniformMatrix3x2fv{nullptr};
+PFNGLUNIFORMMATRIX2X4FVPROC _glUniformMatrix2x4fv{nullptr};
+PFNGLUNIFORMMATRIX4X2FVPROC _glUniformMatrix4x2fv{nullptr};
+PFNGLUNIFORMMATRIX3X4FVPROC _glUniformMatrix3x4fv{nullptr};
+PFNGLUNIFORMMATRIX4X3FVPROC _glUniformMatrix4x3fv{nullptr};
+
 // OpenGL 3.0 (only what we need or would need in future)
 PFNGLBINDRENDERBUFFERPROC _glBindRenderbuffer{nullptr};
 PFNGLDELETERENDERBUFFERSPROC _glDeleteRenderbuffers{nullptr};
@@ -290,6 +298,37 @@ bool __Initialize_OpenGL_2_0()
 		_glUniform3iv = nullptr;
 		_glUniform4iv = nullptr;
 		_glValidateProgram = nullptr;
+
+		return false;
+	}
+
+	return true;
+}
+
+/*
+ * OpenGL 2.1 initialization (only what we need or would need in future).
+ */
+bool __Initialize_OpenGL_2_1()
+{
+	_glUniformMatrix2x3fv = (PFNGLUNIFORMMATRIX2X3FVPROC) SDL_GL_GetProcAddress("glUniformMatrix2x3fv");
+	_glUniformMatrix3x2fv = (PFNGLUNIFORMMATRIX3X2FVPROC) SDL_GL_GetProcAddress("glUniformMatrix3x2fv");
+	_glUniformMatrix2x4fv = (PFNGLUNIFORMMATRIX2X4FVPROC) SDL_GL_GetProcAddress("glUniformMatrix2x4fv");
+	_glUniformMatrix4x2fv = (PFNGLUNIFORMMATRIX4X2FVPROC) SDL_GL_GetProcAddress("glUniformMatrix4x2fv");
+	_glUniformMatrix3x4fv = (PFNGLUNIFORMMATRIX3X4FVPROC) SDL_GL_GetProcAddress("glUniformMatrix3x4fv");
+	_glUniformMatrix4x3fv = (PFNGLUNIFORMMATRIX4X3FVPROC) SDL_GL_GetProcAddress("glUniformMatrix4x3fv");
+
+	if (!_glUniformMatrix2x3fv ||
+	    !_glUniformMatrix3x2fv ||
+	    !_glUniformMatrix2x4fv ||
+	    !_glUniformMatrix4x2fv ||
+	    !_glUniformMatrix3x4fv ||
+	    !_glUniformMatrix4x3fv) {
+		_glUniformMatrix2x3fv = nullptr;
+		_glUniformMatrix3x2fv = nullptr;
+		_glUniformMatrix2x4fv = nullptr;
+		_glUniformMatrix4x2fv = nullptr;
+		_glUniformMatrix3x4fv = nullptr;
+		_glUniformMatrix4x3fv = nullptr;
 
 		return false;
 	}
