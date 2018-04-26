@@ -117,13 +117,6 @@ public:
 		__f = static_cast<F>(_i);
 	}
 
-	// caller should guarantee, that integral value will not exceed floating point value size
-	void operator = (const I _i)
-	{
-		__i = _i;
-		__f = static_cast<F>(_i);
-	}
-
 	bool operator == (sIF_complex_type &_complex)
 	{
 		// since both parts synchronized, we need only one check
