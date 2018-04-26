@@ -652,7 +652,7 @@ ReCreate:
 	// иним SDL
 	// это нужно сделать сразу, чтобы правильно поставить разрешение
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SDL_Init(SDL_INIT_VIDEO) == -1) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_EVENTS) != 0) {
 		std::cerr << __func__ << "(): " << "Couldn't init SDL: " << SDL_GetError() << "\n";
 		return 1;
 	}
@@ -922,6 +922,7 @@ ReCreate:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверяем и иним джойстик
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// NOTE SDL2 also provide SDL_INIT_GAMECONTROLLER now and SDL_INIT_HAPTIC (force feedback)
 #ifdef joystick
 	if (SDL_InitSubSystem(SDL_INIT_JOYSTICK) == 0) {
 		if (SDL_NumJoysticks()>0) {
