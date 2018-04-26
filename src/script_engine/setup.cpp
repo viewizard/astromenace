@@ -58,7 +58,7 @@ void InitSetup()
 	Setup.CSAA = 0;
 	Setup.VisualEffectsQuality = 0;
 	Setup.AnisotropyLevel = 1;
-	Setup.TexturesCompressionType = 1;
+	Setup.TexturesCompressionType = 0;
 	Setup.UseGLSL120 = false;
 	Setup.ShadowMap = 0;
 	Setup.MaxPointLights = 3;

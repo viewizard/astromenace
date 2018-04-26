@@ -1008,8 +1008,6 @@ ReCreate:
 			// 100% держит наши шейдеры
 			Setup.UseGLSL120 = true;
 			Setup.ShadowMap = 2;
-			// 100% больше чем нужно памяти и не надо сжимать текстуры (ув. качество и скорость загрузки)
-			Setup.TexturesCompressionType = 0;
 			// немного больше ставим другие опции
 			Setup.MSAA = 2;
 			Setup.CSAA = 2;
@@ -1024,10 +1022,6 @@ ReCreate:
 			Setup.CSAA = 4;
 			Setup.MaxPointLights = 6;
 		}
-
-		// если поддерживаем сторедж - выключаем поддержку сжатия, 100% у нас достаточно видео памяти
-		if (vw_GetDevCaps().OpenGL_4_2_supported)
-			Setup.TexturesCompressionType = 0;
 
 		// устанавливаем соотношение сторон по установленному разрешению экрана
 		if ((Setup.Width*1.0f)/(Setup.Height*1.0f) < 1.4f) {
@@ -1058,7 +1052,7 @@ ReCreate:
 		Setup.MSAA = Setup.CSAA = 0;
 
 	// проверка режима сжатия текстур
-	if (!vw_GetDevCaps().EXT_texture_compression_s3tc && (Setup.TexturesCompressionType > 0))
+	if (!vw_GetDevCaps().EXT_texture_compression_s3tc)
 		Setup.TexturesCompressionType = 0;
 	if (!vw_GetDevCaps().ARB_texture_compression_bptc && (Setup.TexturesCompressionType > 1))
 		Setup.TexturesCompressionType = 0;
