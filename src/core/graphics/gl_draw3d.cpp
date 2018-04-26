@@ -61,13 +61,13 @@ void __Draw3D_EnableStates(int DataFormat, GLvoid *VertexArray,
 	// VBO (GL_ARRAY_BUFFER) binding affects VAO state indirectly,
 	// as the current GL_ARRAY_BUFFER binding is saved in VAO state
 	// at the time of the gl***Pointer() call
-	if (VertexBO && __GetDevCaps().VBOSupported)
+	if (VertexBO && __GetDevCaps().OpenGL_1_5_supported)
 		vw_BindBufferObject(eBufferObject::Vertex, VertexBO);
 	else
 		tmpPointer = static_cast<uint8_t *>(VertexArray);
 
 	// IBO (GL_ELEMENT_ARRAY_BUFFER) binding is part of the VAO state
-	if (IndexBO && __GetDevCaps().VBOSupported)
+	if (IndexBO && __GetDevCaps().OpenGL_1_5_supported)
 		vw_BindBufferObject(eBufferObject::Index, IndexBO);
 
 	if ((DataFormat & RI_COORD) == RI_3f_XYZ) {
@@ -125,9 +125,9 @@ void __Draw3D_DisableStates(int DataFormat, GLuint VertexBO, GLuint IndexBO)
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	}
 
-	if (VertexBO && __GetDevCaps().VBOSupported)
+	if (VertexBO && __GetDevCaps().OpenGL_1_5_supported)
 		vw_BindBufferObject(eBufferObject::Vertex, 0);
-	if (IndexBO && __GetDevCaps().VBOSupported)
+	if (IndexBO && __GetDevCaps().OpenGL_1_5_supported)
 		vw_BindBufferObject(eBufferObject::Index, 0);
 }
 
@@ -141,7 +141,7 @@ void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, GLvoid *Verte
 	if (!VertexArray && !VertexBO)
 		return;
 
-	if (VAO && __GetDevCaps().VAOSupported)
+	if (VAO && __GetDevCaps().OpenGL_3_0_supported)
 		vw_BindVAO(VAO);
 	else
 		__Draw3D_EnableStates(DataFormat, VertexArray, Stride, VertexBO, IndexBO);
@@ -150,13 +150,13 @@ void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, GLvoid *Verte
 		// all IBO binding related code moved to __Draw3D_EnableStates(),
 		// we should care only about index array pointer here
 		GLuint *indices{nullptr};
-		if (!IndexBO || !__GetDevCaps().VBOSupported)
+		if (!IndexBO || !__GetDevCaps().OpenGL_1_5_supported)
 			indices = IndexArray;
 		glDrawElements(static_cast<GLenum>(mode), count, GL_UNSIGNED_INT, indices + RangeStart);
 	} else
 		glDrawArrays(static_cast<GLenum>(mode), RangeStart, count);
 
-	if (VAO && __GetDevCaps().VAOSupported)
+	if (VAO && __GetDevCaps().OpenGL_3_0_supported)
 		vw_BindVAO(0);
 	else
 		__Draw3D_DisableStates(DataFormat, VertexBO, IndexBO);

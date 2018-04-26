@@ -1026,7 +1026,7 @@ ReCreate:
 		}
 
 		// если поддерживаем сторедж - выключаем поддержку сжатия, 100% у нас достаточно видео памяти
-		if (vw_GetDevCaps().TextureStorage)
+		if (vw_GetDevCaps().OpenGL_4_2_supported)
 			Setup.TexturesCompressionType = 0;
 
 		// устанавливаем соотношение сторон по установленному разрешению экрана
@@ -1040,8 +1040,7 @@ ReCreate:
 	}
 
 	// если не поддерживает железо фбо или шейдеры, выключаем шадовмеп
-	if (!vw_GetDevCaps().FramebufferObject ||
-	    !vw_GetDevCaps().OpenGL_2_0_supported ||
+	if (!vw_GetDevCaps().OpenGL_2_0_supported ||
 	    !vw_GetDevCaps().OpenGL_2_1_supported ||
 	    !vw_GetDevCaps().OpenGL_3_0_supported)
 		Setup.ShadowMap = 0;
@@ -1059,10 +1058,10 @@ ReCreate:
 		Setup.MSAA = Setup.CSAA = 0;
 
 	// проверка режима сжатия текстур
-	if (!vw_GetDevCaps().TexturesCompression && (Setup.TexturesCompressionType > 0))
+	if (!vw_GetDevCaps().EXT_texture_compression_s3tc && (Setup.TexturesCompressionType > 0))
 		Setup.TexturesCompressionType = 0;
-	if (!vw_GetDevCaps().TexturesCompressionBPTC && (Setup.TexturesCompressionType > 1))
-		Setup.TexturesCompressionType = 1;
+	if (!vw_GetDevCaps().ARB_texture_compression_bptc && (Setup.TexturesCompressionType > 1))
+		Setup.TexturesCompressionType = 0;
 
 
 
@@ -1079,8 +1078,8 @@ ReCreate:
 	// в процессе инициализации opengl контекста мы подключаем указатели на функции, и данные могут измениться
 
 
-	// если не поддерживаем как минимум 2 текстуры, железо очень слабое - не запустимся
-	if (vw_GetDevCaps().MaxMultTextures < 2) {
+	// hardware must support multtextures
+	if (!vw_GetDevCaps().OpenGL_1_3_supported) {
 		SDL_Quit();
 		std::cerr << __func__ << "(): " << "The Multi Textures feature not supported by hardware. Fatal error.\n";
 #ifdef WIN32

@@ -69,16 +69,17 @@ GLtexture vw_BuildTexture(const std::unique_ptr<uint8_t[]> &PixelsArray,
 	GLenum InternalFormat{GL_RGB8};
 	switch (CompressionType) {
 	case eTextureCompressionType::BPTC:
-		if (!__GetDevCaps().TexturesCompressionBPTC) // FIXME switch to OpenGL 4.2 check
+		if (!__GetDevCaps().ARB_texture_compression_bptc &&
+		    !__GetDevCaps().OpenGL_4_2_supported) // also part of OpenGL 4.2
 			return 0;
 		if (Bytes == 4)
-			InternalFormat = GL_COMPRESSED_RGBA_BPTC_UNORM_ARB;
+			InternalFormat = GL_COMPRESSED_RGBA_BPTC_UNORM;
 		else
-			InternalFormat = GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB;
+			InternalFormat = GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT;
 		break;
 
 	case eTextureCompressionType::S3TC:
-		if (!__GetDevCaps().TexturesCompression) // FIXME switch to GL_EXT_texture_compression_s3tc check
+		if (!__GetDevCaps().EXT_texture_compression_s3tc)
 			return 0;
 		if (Bytes == 4)
 			InternalFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
@@ -108,7 +109,7 @@ GLtexture vw_BuildTexture(const std::unique_ptr<uint8_t[]> &PixelsArray,
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format,
 				     GL_UNSIGNED_BYTE, PixelsArray.get());
 			_glGenerateMipmap(GL_TEXTURE_2D);
-		} else if (__GetDevCaps().HardwareMipMapGeneration) { // FIXME switch to SGIS_generate_mipmap check
+		} else if (__GetDevCaps().SGIS_generate_mipmap) {
 			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format,
 				     GL_UNSIGNED_BYTE, PixelsArray.get());

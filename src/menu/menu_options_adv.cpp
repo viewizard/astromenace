@@ -229,12 +229,13 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, ContentTransp, vw_GetText("3_Textures_Compression"));
 	int MaxCompressionCount = 1;
-	if (vw_GetDevCaps().TexturesCompressionBPTC) MaxCompressionCount = 2;
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, !vw_GetDevCaps().TexturesCompression || (Options_TexturesCompressionType <= 0))) {
+	if (vw_GetDevCaps().ARB_texture_compression_bptc)
+		MaxCompressionCount = 2;
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, !vw_GetDevCaps().EXT_texture_compression_s3tc || (Options_TexturesCompressionType <= 0))) {
 		Options_TexturesCompressionType--;
 		if (Options_TexturesCompressionType < 0) Options_TexturesCompressionType = 0;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, !vw_GetDevCaps().TexturesCompression || (Options_TexturesCompressionType >= MaxCompressionCount))) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, !vw_GetDevCaps().EXT_texture_compression_s3tc || (Options_TexturesCompressionType >= MaxCompressionCount))) {
 		Options_TexturesCompressionType++;
 		if (Options_TexturesCompressionType > MaxCompressionCount) Options_TexturesCompressionType = MaxCompressionCount;
 	}
@@ -362,16 +363,16 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,0.0f,0.0f, ContentTransp, vw_GetText("3_Shadow_Quality"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, (Options_ShadowMap == 0) || !vw_GetDevCaps().OpenGL_2_0_supported || !vw_GetDevCaps().OpenGL_2_1_supported ||
-			    !vw_GetDevCaps().OpenGL_3_0_supported || !vw_GetDevCaps().FramebufferObject || !Options_UseGLSL120 || (vw_GetDevCaps().FramebufferObjectDepthSize < 24))) {
+			    !vw_GetDevCaps().OpenGL_3_0_supported || !Options_UseGLSL120 || (vw_GetDevCaps().FramebufferObjectDepthSize < 24))) {
 		Options_ShadowMap--;
 		if (Options_ShadowMap < 0) Options_ShadowMap = 0;
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Options_ShadowMap==9 || !vw_GetDevCaps().OpenGL_2_0_supported || !vw_GetDevCaps().OpenGL_2_1_supported ||
-			    !vw_GetDevCaps().OpenGL_3_0_supported || !vw_GetDevCaps().FramebufferObject || !Options_UseGLSL120 || (vw_GetDevCaps().FramebufferObjectDepthSize < 24))) {
+			    !vw_GetDevCaps().OpenGL_3_0_supported || !Options_UseGLSL120 || (vw_GetDevCaps().FramebufferObjectDepthSize < 24))) {
 		Options_ShadowMap++;
 		if (Options_ShadowMap > 9) Options_ShadowMap = 9;
 	}
-	if (vw_GetDevCaps().OpenGL_2_0_supported && vw_GetDevCaps().OpenGL_2_1_supported && vw_GetDevCaps().OpenGL_3_0_supported && vw_GetDevCaps().FramebufferObject && Options_UseGLSL120 && (vw_GetDevCaps().FramebufferObjectDepthSize >= 24)) {
+	if (vw_GetDevCaps().OpenGL_2_0_supported && vw_GetDevCaps().OpenGL_2_1_supported && vw_GetDevCaps().OpenGL_3_0_supported && Options_UseGLSL120 && (vw_GetDevCaps().FramebufferObjectDepthSize >= 24)) {
 		Size = vw_FontSize(ShadowButtonQualityBase[Options_ShadowMap], vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
 		float WScale = 0;
 		if (Size > 170) {

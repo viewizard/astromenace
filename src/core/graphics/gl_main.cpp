@@ -96,9 +96,10 @@ static bool ExtensionSupported(const char *Extension)
 int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool FullScreenFlag,
 		  int CurrentVideoModeX, int CurrentVideoModeY, int VSync)
 {
-	Uint32 Flags = SDL_WINDOW_OPENGL;
+	Uint32 Flags{SDL_WINDOW_OPENGL};
 
-	if (FullScreenFlag) Flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+	if (FullScreenFlag)
+		Flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
 	SDLWindow = SDL_CreateWindow(Title, CurrentVideoModeX, CurrentVideoModeY, Width, Height, Flags);
 	if (!SDLWindow) {
@@ -114,27 +115,29 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 
 	DevCaps.OpenGLmajorVersion = 1;
 	DevCaps.OpenGLminorVersion = 0;
-	DevCaps.MaxMultTextures = 0;
 	DevCaps.MaxTextureWidth = 0;
 	DevCaps.MaxTextureHeight = 0;
 	DevCaps.MaxActiveLights = 0;
 	DevCaps.MaxAnisotropyLevel = 0;
-	DevCaps.TexturesCompression = false;
-	DevCaps.TexturesCompressionBPTC = false;
-	DevCaps.VBOSupported = false;
-	DevCaps.VAOSupported = false;
-	DevCaps.TextureNPOTSupported = false;
-	DevCaps.HardwareMipMapGeneration = false;
-	DevCaps.TextureStorage = false;
-	DevCaps.FramebufferObject = false;
 	DevCaps.FramebufferObjectDepthSize = 0;
+
 	DevCaps.OpenGL_1_3_supported = __Initialize_OpenGL_1_3();
 	DevCaps.OpenGL_1_5_supported = __Initialize_OpenGL_1_5();
 	DevCaps.OpenGL_2_0_supported = __Initialize_OpenGL_2_0();
 	DevCaps.OpenGL_2_1_supported = __Initialize_OpenGL_2_1();
 	DevCaps.OpenGL_3_0_supported = __Initialize_OpenGL_3_0();
 	DevCaps.OpenGL_4_2_supported = __Initialize_OpenGL_4_2();
-	__Initialize_GL_NV_framebuffer_multisample_coverage();
+	__Initialize_GL_NV_framebuffer_multisample_coverage(); // we don't have it in DevCaps, this is 1 function check only
+
+	DevCaps.EXT_texture_compression_s3tc = ExtensionSupported("GL_EXT_texture_compression_s3tc");
+	DevCaps.ARB_texture_compression_bptc = ExtensionSupported("GL_ARB_texture_compression_bptc");
+	DevCaps.ARB_texture_non_power_of_two = ExtensionSupported("GL_ARB_texture_non_power_of_two");
+	DevCaps.SGIS_generate_mipmap = ExtensionSupported("GL_SGIS_generate_mipmap");
+
+	if (ExtensionSupported("GL_EXT_texture_filter_anisotropic")) {
+		glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &DevCaps.MaxAnisotropyLevel);
+		std::cout << "Max anisotropy: " << DevCaps.MaxAnisotropyLevel << "\n";
+	}
 
 	std::cout << "Vendor     : " << glGetString(GL_VENDOR) << "\n";
 	std::cout << "Renderer   : " << glGetString(GL_RENDERER) << "\n";
@@ -150,69 +153,8 @@ int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool Full
 	glGetIntegerv(GL_MAX_LIGHTS, &DevCaps.MaxActiveLights);
 	std::cout << "Max lights: " << DevCaps.MaxActiveLights << "\n";
 
-	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &DevCaps.MaxMultTextures);
-	std::cout << "Max multitexture supported: " << DevCaps.MaxMultTextures << " textures.\n";
-
-	if (ExtensionSupported("GL_EXT_texture_filter_anisotropic")) {
-		glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &DevCaps.MaxAnisotropyLevel);
-		std::cout << "Max anisotropy: " << DevCaps.MaxAnisotropyLevel << "\n";
-	}
-
-	if (ExtensionSupported("GL_ARB_vertex_buffer_object")) {
-		DevCaps.VBOSupported = true;
-		std::cout << "Vertex Buffer support enabled.\n";
-	}
-
-	if (ExtensionSupported("GL_ARB_vertex_array_object")) {
-		DevCaps.VAOSupported = true;
-		std::cout << "Vertex Array support enabled.\n";
-	}
-
-	if (ExtensionSupported("GL_ARB_texture_non_power_of_two"))
-		DevCaps.TextureNPOTSupported = true;
-
-	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_EXT_texture_compression_s3tc")) {
-		DevCaps.TexturesCompression = true;
-		std::cout << "Textures S3TC compression support enabled.\n";
-	}
-
-	if (ExtensionSupported("GL_ARB_texture_compression") && ExtensionSupported("GL_ARB_texture_compression_bptc")) {
-		DevCaps.TexturesCompressionBPTC = true;
-		std::cout << "Textures BPTC compression support enabled.\n";
-	}
-
-	if (ExtensionSupported("SGIS_generate_mipmap")) {
-		DevCaps.HardwareMipMapGeneration = true;
-	}
-
-	if (ExtensionSupported("GL_ARB_framebuffer_object") ||
-	    (ExtensionSupported("GL_EXT_framebuffer_blit") &&
-	     ExtensionSupported("GL_EXT_framebuffer_multisample") &&
-	     ExtensionSupported("GL_EXT_framebuffer_object"))) {
-		DevCaps.FramebufferObject = true;
-		std::cout << "Frame Buffer Object support enabled.\n";
-	}
-
-	if (ExtensionSupported("GL_ARB_texture_storage") || ExtensionSupported("GL_EXT_texture_storage")) {
-		DevCaps.TextureStorage = true;
-		std::cout << "Texture Storage support enabled.\n";
-	}
-
-	if (!DevCaps.OpenGL_1_3_supported)
-		DevCaps.MaxMultTextures = 1; // FIXME this should be revised
-
-	if (!DevCaps.OpenGL_1_5_supported)
-		DevCaps.VBOSupported = false; // FIXME this should be revised
-
-	if (!DevCaps.OpenGL_3_0_supported) {
-		DevCaps.VAOSupported = false; // FIXME this should be revised
-		DevCaps.FramebufferObject = false; // FIXME this should be revised
-	}
-
-	if (!DevCaps.OpenGL_4_2_supported)
-		DevCaps.TextureStorage = false; // FIXME this should be revised
-
-	if (DevCaps.FramebufferObject) {
+	// since we support FBO, should check supported samples
+	if (DevCaps.OpenGL_3_0_supported) {
 		int MaxSamples{0};
 		glGetIntegerv(GL_MAX_SAMPLES_EXT, &MaxSamples);
 		std::cout << "Max Samples: " << MaxSamples << "\n";
@@ -274,22 +216,21 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
-	if (DevCaps.FramebufferObject) {
+	if (DevCaps.OpenGL_3_0_supported) {
 		if ((!vw_BuildFBO(&MainFBO, Width, Height, true, true, *MSAA, CSAA)) &
 		    (!vw_BuildFBO(&ResolveFBO, Width, Height, true, false))) {
 			vw_DeleteFBO(&MainFBO);
 			vw_DeleteFBO(&ResolveFBO);
-			DevCaps.FramebufferObject = false;
+			*MSAA = 0;
+			MainFBO = sFBO{};
+			ResolveFBO = sFBO{};
+			DevCaps.FramebufferObjectDepthSize = 0;
 		}
-	}
-
-	// если с FBO работать не получилось
-	if (!DevCaps.FramebufferObject) {
-		// reset anti aliasing
+	} else {
 		*MSAA = 0;
-		// reset buffers, just in case
 		MainFBO = sFBO{};
 		ResolveFBO = sFBO{};
+		DevCaps.FramebufferObjectDepthSize = 0;
 	}
 }
 

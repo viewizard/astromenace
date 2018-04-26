@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 // TODO check sources, direct OpenGL usage outside 'graphics' are prohibited,
 //      for 'graphics' code - switch to "vw_*" functions-wrapers for OpenGL if possible.
 
@@ -271,40 +269,16 @@ struct sCoverageModes {
 };
 
 struct sDevCaps {
-	// версия OpenGL
 	int OpenGLmajorVersion{0};
 	int OpenGLminorVersion{0};
-	// Max multtextures
-	int MaxMultTextures{0};
-	// Max texture width
 	int MaxTextureWidth{0};
-	// Max texture height
 	int MaxTextureHeight{0};
-	// макс. кол-во одновременно обрабатываемых источников света
 	int MaxActiveLights{0};
-	// максимальный уровень анизотропии
 	GLint MaxAnisotropyLevel{0};
 	// MSAA + CSAA modes
 	std::vector<sCoverageModes> MultisampleCoverageModes{};
-	// есть ли возможность включить сжатие текстур
-	bool TexturesCompression{false};
-	// поддержка GL_ARB_texture_compression_bptc
-	bool TexturesCompressionBPTC{false};
-	// GL_ARB_texture_storage
-	bool TextureStorage{false};
-	// поддержка FBO
-	bool FramebufferObject{false};
-	// глубина depth буфера в битах, получаем ее при первой генерации fbo с буфером глубины, по умолчанию 0
-	// если работаем с fbo, то еще на этапе инициализации основного fbo прорисовки будут получены данные максимально поддерживаемой глубины
+	// available depth's size for FBO
 	GLint FramebufferObjectDepthSize{0};
-	// поддержка VBO
-	bool VBOSupported{false};
-	// поддержка VAO
-	bool VAOSupported{false};
-	// поддержка загрузки текстур со сторонами не кратные степени двойки
-	bool TextureNPOTSupported{false};
-	// поддержка генерации мипмеп в железе
-	bool HardwareMipMapGeneration{false};
 
 	bool OpenGL_1_3_supported{false};
 	bool OpenGL_1_5_supported{false};
@@ -312,6 +286,11 @@ struct sDevCaps {
 	bool OpenGL_2_1_supported{false};
 	bool OpenGL_3_0_supported{false};
 	bool OpenGL_4_2_supported{false};
+
+	bool EXT_texture_compression_s3tc{false};
+	bool ARB_texture_compression_bptc{false}; // note, bptc also part of OpenGL 4.2
+	bool ARB_texture_non_power_of_two{false};
+	bool SGIS_generate_mipmap{false};
 };
 
 // Buffer clear bit
