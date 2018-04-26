@@ -1493,33 +1493,15 @@ AllDataLoaded:
 
 	// инициализируем шадов меп, делаем это постоянно т.к. у нас разные размеры карт для меню и игры
 	if (Setup.ShadowMap > 0) {
-		int ShadowMapSize = 1024;
-		switch(Setup.ShadowMap) {
-		case 1:
-		case 2:
-		case 3:
-			ShadowMapSize = vw_GetDevCaps().MaxTextureWidth / 4;
-			break;
-		case 4:
-		case 5:
-		case 6:
-			ShadowMapSize = vw_GetDevCaps().MaxTextureWidth / 2;
-			break;
-		case 7:
-		case 8:
-		case 9:
-			ShadowMapSize = vw_GetDevCaps().MaxTextureWidth;
-			break;
-		}
+		int ShadowMapSize = vw_GetDevCaps().MaxTextureWidth;
+		// since we need "soft" shadows for less price, reduce shadow map size
+		if (ShadowMapSize > 4096)
+			ShadowMapSize = 4096;
 
 		switch(LoadType) {
-		case eLoading::MenuWithLogo:  // меню (только запустили)
-			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize/2))
-				Setup.ShadowMap = 0;
-			break;
-
 		case eLoading::Menu:   // меню (выходим из игры)
 			ShadowMap_Release();
+		case eLoading::MenuWithLogo:  // меню (только запустили)
 			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize/2))
 				Setup.ShadowMap = 0;
 			break;

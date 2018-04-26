@@ -51,7 +51,7 @@ void main()
 	// Avoid counter shadow
 	if (ShadowTexCoord.w > 1.0)
 	{
-		if (PCFMode == 8)
+		if (PCFMode == 3)
 		{
 			// 8x8 kernel PCF
 			float x,y;
@@ -62,7 +62,7 @@ void main()
 			Shadow /= 64.0 ;
 		}
 		else
-		if (PCFMode == 4)
+		if (PCFMode == 2)
 		{
 			// 4x4 kernel PCF		
 			float x,y;
@@ -73,7 +73,7 @@ void main()
 			Shadow /= 16.0 ;
 		}
 		else
-		if (PCFMode == 2)
+		if (PCFMode == 1)
 		{
 			// 2x2  PCF dithered
 			// use modulo to vary the sample pattern

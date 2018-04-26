@@ -1007,7 +1007,7 @@ ReCreate:
 		if (vw_GetDevCaps().OpenGL_3_0_supported) {
 			// 100% держит наши шейдеры
 			Setup.UseGLSL120 = true;
-			Setup.ShadowMap = 2;
+			Setup.ShadowMap = 1;
 			// немного больше ставим другие опции
 			Setup.MSAA = 2;
 			Setup.CSAA = 2;
@@ -1017,7 +1017,7 @@ ReCreate:
 		// если железо поддерживает OpenGL 4.2
 		if (vw_GetDevCaps().OpenGL_4_2_supported) {
 			// немного больше ставим другие опции
-			Setup.ShadowMap = 5;
+			Setup.ShadowMap = 3;
 			Setup.MSAA = 4;
 			Setup.CSAA = 4;
 			Setup.MaxPointLights = 6;

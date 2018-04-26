@@ -819,26 +819,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 	// если используем тени - сразу находим режим сглаживания
-	int PCFMode = 0;
-	if (ShadowMap) {
-		switch(Setup.ShadowMap) {
-		case 1:
-		case 4:
-		case 7:
-			PCFMode = 2;
-			break;
-		case 2:
-		case 5:
-		case 8:
-			PCFMode = 4;
-			break;
-		case 3:
-		case 6:
-		case 9:
-			PCFMode = 8;
-			break;
-		}
-	}
+	int PCFMode{0};
+	if (ShadowMap)
+		PCFMode = Setup.ShadowMap;
 
 
 	// Устанавливаем данные для поверхности объекта
