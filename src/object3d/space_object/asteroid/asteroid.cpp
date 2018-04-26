@@ -43,9 +43,7 @@ void cAsteroid::Create(int SpaceObjectNum)
 	Strength = StrengthStart = 10.0f/GameNPCArmorPenalty;
 
 
-	int Num = (int)(19*vw_Randf1);
-	if (Num>19) Num=19;
-	if (Num<0) Num=0;
+	int Num = vw_iRandNum(19);
 	size_t SizeB = strlen("models/space/asteroid-01XX.vw3d")+1;
 	char *NameTMP = new char[SizeB];
 	std::string buffer{std::to_string(Num)};

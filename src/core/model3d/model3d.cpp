@@ -197,7 +197,7 @@ static void CreateHardwareBuffers(cModel3D *Model)
 
 	// global vertex array object
 	if (!vw_BuildVAO(Model->GlobalVAO, Model->ObjectBlocks[0].VertexFormat,
-			 Model->ObjectBlocks[0].VertexStride * sizeof(float),
+			 Model->ObjectBlocks[0].VertexStride * static_cast<GLsizei>(sizeof(float)),
 			 Model->GlobalVBO, Model->GlobalIBO))
 		Model->GlobalVAO = 0;
 
@@ -216,7 +216,8 @@ static void CreateHardwareBuffers(cModel3D *Model)
 
 		// vertex array object
 		if (!vw_BuildVAO(tmpObjectBlock.VAO, tmpObjectBlock.VertexFormat,
-				 tmpObjectBlock.VertexStride * sizeof(tmpObjectBlock.VertexArray.get()[0]),
+				 tmpObjectBlock.VertexStride *
+						static_cast<GLsizei>(sizeof(tmpObjectBlock.VertexArray.get()[0])),
 				 tmpObjectBlock.VBO, tmpObjectBlock.IBO))
 			tmpObjectBlock.VAO = 0;
 	}
@@ -611,7 +612,7 @@ bool cModel3D::SaveVW3D(const std::string &FileName)
 	constexpr char Sign[4]{'V','W','3','D'};
 	SDL_RWwrite(FileVW3D, Sign, 4, 1);
 
-	std::uint32_t ObjectsListCount = ObjectBlocks.size();
+	std::uint32_t ObjectsListCount = static_cast<std::uint32_t>(ObjectBlocks.size());
 	SDL_RWwrite(FileVW3D, &ObjectsListCount, sizeof(ObjectsListCount), 1);
 
 	for (auto &tmpObjectBlock : ObjectBlocks) {

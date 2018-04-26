@@ -25,6 +25,9 @@
 
 *************************************************************************************/
 
+// TODO SDL2 operate with 64bit offsets (long long, since C++11), see SDL_RWtell()
+//      move to 64bit and remove all related static_cast-s
+
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 /*
@@ -157,7 +160,8 @@ static int WriteIntoVFSfromFile(sVFS *WritableVFS, const std::string &SrcName, c
 	}
 
 	SDL_RWseek(tmpFile, 0, SEEK_END);
-	int tmpFileSize = SDL_RWtell(tmpFile);
+	// we don't use >2GB VFS files, so, we ok here with static_cast
+	int tmpFileSize = static_cast<int>(SDL_RWtell(tmpFile));
 	SDL_RWseek(tmpFile, 0, SEEK_SET);
 
 	// std::unique_ptr, we need only memory allocation without container's features
@@ -279,7 +283,8 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 		return errPrintWithVFSListPop("Can't find VFS file", ERR_FILE_NOT_FOUND);
 
 	SDL_RWseek(VFSList.front()->File,0,SEEK_END);
-	int VFS_FileSize = SDL_RWtell(VFSList.front()->File);
+	// we don't use >2GB VFS files, so, we ok here with static_cast
+	int VFS_FileSize = static_cast<int>(SDL_RWtell(VFSList.front()->File));
 	SDL_RWseek(VFSList.front()->File,0,SEEK_SET);
 
 	// check VFS file sign "VFS_"
@@ -423,7 +428,11 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
 			return nullptr;
 
 		SDL_RWseek(tmpFile, 0, SEEK_END);
-		File->Size = SDL_RWtell(tmpFile);
+		// we don't use >2GB VFS files, so, we ok here with static_cast
+		if (SDL_RWtell(tmpFile) > 0)
+			File->Size = static_cast<uint32_t>(SDL_RWtell(tmpFile));
+		else
+			return nullptr;
 		SDL_RWseek(tmpFile, 0, SEEK_SET);
 
 		File->Data.reset(new uint8_t[File->Size]);
@@ -469,7 +478,7 @@ int sFILE::fread(void *buffer, size_t size, size_t count)
 
 	// read data
 	for (size_t i = 0; i < count; i++) {
-		if (size <= (unsigned int)(Size - Pos)) {
+		if (size <= static_cast<unsigned>(Size - Pos)) {
 			memcpy((uint8_t *)buffer + CopyCount * size, Data.get() + Pos, size);
 			Pos += size;
 			CopyCount++;

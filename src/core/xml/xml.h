@@ -179,7 +179,7 @@ public:
 		if (tmpAttr == XMLEntry.Attributes.end())
 			return false;
 
-		Result = atoi(tmpAttr->second.c_str());
+		Result = std::atoi(tmpAttr->second.c_str());
 		return true;
 	}
 
@@ -189,7 +189,7 @@ public:
 		if (tmpAttr == XMLEntry.Attributes.end())
 			return false;
 
-		Result = (float)atof(tmpAttr->second.c_str());
+		Result = static_cast<float>(std::atof(tmpAttr->second.c_str()));
 		return true;
 	}
 
@@ -215,7 +215,7 @@ private:
 	// Parce tag line.
 	bool ParseTagLine(unsigned int LineNumber, const std::string &Buffer, sXMLEntry *XMLEntry);
 	// Parse tag content.
-	bool ParseTagContent(const std::string &OriginBuffer, unsigned int StartPosition,
+	bool ParseTagContent(const std::string &OriginBuffer, unsigned long StartPosition,
 			     const std::string &Buffer, sXMLEntry *ParentXMLEntry);
 
 	// Accordinately to https://www.w3schools.com/XML/xml_syntax.asp

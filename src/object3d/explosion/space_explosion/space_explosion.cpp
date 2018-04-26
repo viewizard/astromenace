@@ -479,7 +479,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			ShipPart->SetRotation(Object->Rotation);
 
 
-			ShipPart->Speed = Speed-2*vw_Randf1;
+			ShipPart->Speed = Speed - 2 * vw_fRand();
 
 			ShipPart->RotationSpeed.x = 2.0f*vw_Randf0;
 			ShipPart->RotationSpeed.y = 2.0f*vw_Randf0;
@@ -497,7 +497,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 				break;
 			case 33: // взрыв боссов пришельцев
 				// взорвем все в течении 3-х секунд
-				ShipPart->BossPartCountDown = 3.0f * vw_Randf1;
+				ShipPart->BossPartCountDown = 3.0f * vw_fRand();
 				NeedExplosionType = 34;
 				break;
 			}
@@ -721,7 +721,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 					ExplosionPieceData[Count].Velocity = ExplosionPieceData[Count].Velocity^Acc;
 
 
-				ExplosionPieceData[Count].Life = (Lifetime-1.0f)+vw_Randf1;
+				ExplosionPieceData[Count].Life = (Lifetime - 1.0f) + vw_fRand();
 				if (ExplosionPieceData[Count].Life < 0.0f) ExplosionPieceData[Count].Life = 0.0f;
 
 

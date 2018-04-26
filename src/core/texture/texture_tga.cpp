@@ -58,13 +58,13 @@ int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, sFILE *pFile, int &DWidth, 
 	pFile->fseek(tmpTGAHeaderLength + 1, SEEK_CUR);
 
 	if (tmpTGAImageType == TGA_RGB) {
-		if((tmpBits == 24) || (tmpBits == 32)) {
+		if ((tmpBits == 24) || (tmpBits == 32)) {
 			DChanels = tmpBits / 8;
 			size_t tmpStride = DChanels * DWidth;
 			PixelsArray.reset(new uint8_t[tmpStride * DHeight]);
 
 			// load line by line
-			for(int y = 0; y < DHeight; y++) {
+			for (int y = 0; y < DHeight; y++) {
 				uint8_t *pLine = PixelsArray.get() + tmpStride * y;
 				pFile->fread(pLine, tmpStride, 1);
 			}
@@ -81,13 +81,13 @@ int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, sFILE *pFile, int &DWidth, 
 		std::vector<uint8_t> pColors(DChanels);
 
 		int i = 0;
-		while(i < DWidth * DHeight) {
+		while (i < DWidth * DHeight) {
 			pFile->fread(&rleID, sizeof(rleID), 1);
 
-			if(rleID < 128) {
+			if (rleID < 128) {
 				rleID++;
 
-				while(rleID && (i < DWidth * DHeight)) {
+				while (rleID && (i < DWidth * DHeight)) {
 					pFile->fread(pColors.data(), sizeof(pColors[0]) * DChanels, 1);
 
 					memcpy(PixelsArray.get() + colorsRead, pColors.data(), sizeof(pColors[0]) * 3);
@@ -99,11 +99,13 @@ int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, sFILE *pFile, int &DWidth, 
 					colorsRead += DChanels;
 				}
 			} else {
-				rleID -= 127;
+				// static_cast should be here to suppress conversion warnings
+				// they are really do nothing (same ASM result as for "rleID -= 127;")
+				rleID = static_cast<uint8_t>(static_cast<int8_t>(rleID) - 127);
 
 				pFile->fread(pColors.data(), sizeof(pColors[0]) * DChanels, 1);
 
-				while(rleID && (i < DWidth * DHeight)) {
+				while (rleID && (i < DWidth * DHeight)) {
 					memcpy(PixelsArray.get() + colorsRead, pColors.data(), sizeof(pColors[0]) * 3);
 					if(tmpBits == 32)
 						PixelsArray[colorsRead + 3] = pColors[3];

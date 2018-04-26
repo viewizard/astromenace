@@ -1032,7 +1032,7 @@ bool cWeapon::WeaponFire(float Time)
 		// для поврежденного оружия проверяем... может быть осечка в стрельбе
 		bool Misfire = false;
 		if (Strength < StrengthStart)
-			if (Strength/StrengthStart > vw_Randf1) {
+			if (Strength/StrengthStart > vw_fRand()) {
 				Misfire = true;
 			}
 

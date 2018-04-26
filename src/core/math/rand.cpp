@@ -31,12 +31,12 @@
 namespace {
 
 std::random_device rd;
-std::mt19937 gen(rd());
+std::default_random_engine gen(rd());
 
 } // unnamed namespace
 
 /*
- * Generate random float between 0.0f and 1.0f.
+ * Generate random float in range [0.0f, 1.0f).
  */
 float vw_fRand()
 {
@@ -44,7 +44,7 @@ float vw_fRand()
 }
 
 /*
- * Generate random float between 0.0f and Max.
+ * Generate random float in range [0.0f, Max).
  */
 float vw_fRandNum(float Max)
 {
@@ -52,9 +52,9 @@ float vw_fRandNum(float Max)
 }
 
 /*
- * Generate random integer between 0 and Max.
+ * Generate random integer in range [0, Max].
  */
 int vw_iRandNum(int Max)
 {
-	return floor(vw_fRand() * (Max + 1));
+	return static_cast<int>(std::floor(vw_fRand() * static_cast<float>(Max + 1)));
 }

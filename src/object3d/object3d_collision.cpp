@@ -481,11 +481,11 @@ void DetectCollisionAllObject3D()
 
 				tmpShip->Strength -= DamagesData.DamageHull/tmpShip->ResistanceHull;
 
-				tmpShip->Strength -= (DamagesData.DamageSystems/tmpShip->ResistanceHull)*vw_Randf1;
+				tmpShip->Strength -= (DamagesData.DamageSystems/tmpShip->ResistanceHull) * vw_fRand();
 				// есть шанс полностью убить пришельца
 				if (DamagesData.DamageSystems > 0.0f)
 					if (tmpShip->ObjectType == 2)
-						if (vw_Randf1 > 0.7f) tmpShip->Strength = 0;
+						if (vw_fRand() > 0.7f) tmpShip->Strength = 0;
 
 
 
@@ -529,7 +529,7 @@ void DetectCollisionAllObject3D()
 						if (tmpShip->ObjectType != 3)
 							// если нужно, смотрим что делать с системами
 							if (DamagesData.DamageSystems > 0.0f) {
-								float Rand = vw_Randf1;
+								float Rand = vw_fRand();
 								// поправка на мощьность выстрела
 								float DR = DamagesData.DamageSystems/300.0f;
 
@@ -1416,7 +1416,7 @@ void DestroyRadiusCollisionAllObject3D(cObject3D *DontTouchObject, sVECTOR3D Poi
 			    (DontTouchObject != tmpS)) {
 				if (CheckSphereSphereDestroyDetection(tmpS, Point, Radius, &Distance2)) {
 					if ((tmpS->ObjectType == 8) &&
-					    (vw_Randf1 > 0.4f))
+					    (vw_fRand() > 0.4f))
 						goto NexttmpS;
 
 					float DamageHull = Damage*(1.0f-Distance2/(Radius*Radius));

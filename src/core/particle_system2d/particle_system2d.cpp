@@ -112,13 +112,13 @@ void cParticleSystem2D::Update(float Time)
 	}
 
 	// calculate, how many particles we should emit
-	float ParticlesNeeded = ParticlesPerSec * TimeDelta + EmissionResidue;
+	float ParticlesNeeded = static_cast<float>(ParticlesPerSec) * TimeDelta + EmissionResidue;
 
 	// convert to integer (we can't emit 0.2 particle)
-	unsigned int ParticlesCreated = (unsigned int)ParticlesNeeded;
+	unsigned int ParticlesCreated = static_cast<unsigned>(ParticlesNeeded);
 	// store emission residue for future Update() calls
 	if (!IsSuppressed)
-		EmissionResidue = ParticlesNeeded - ParticlesCreated;
+		EmissionResidue = ParticlesNeeded - static_cast<float>(ParticlesCreated);
 	else {
 		EmissionResidue = ParticlesNeeded;
 		ParticlesCreated = 0;
@@ -220,9 +220,9 @@ void cParticleSystem2D::GenerateLocationPointType(cParticle2D &NewParticle)
  */
 void cParticleSystem2D::GenerateLocationQuadType(cParticle2D &NewParticle)
 {
-	sVECTOR3D CreationPos{(1.0f - vw_Randf1 * 2) * CreationSize.x,
-			      (1.0f - vw_Randf1 * 2) * CreationSize.y,
-			      (1.0f - vw_Randf1 * 2) * CreationSize.z};
+	sVECTOR3D CreationPos{(1.0f - vw_fRand() * 2) * CreationSize.x,
+			      (1.0f - vw_fRand() * 2) * CreationSize.y,
+			      (1.0f - vw_fRand() * 2) * CreationSize.z};
 
 	if (DeadZone != 0.0f) {
 		float tmpDist2 = CreationSize.x * CreationSize.x +
@@ -361,7 +361,7 @@ void cParticleSystem2D::Draw()
 		return;
 
 	// TRIANGLES * (RI_2f_XYZ + RI_2f_TEX + RI_4f_COLOR) * ParticlesList.size()
-	unsigned int tmpDrawBufferSize = 6 * (2 + 2 + 4) * ParticlesList.size();
+	unsigned int tmpDrawBufferSize = 6 * (2 + 2 + 4) * static_cast<unsigned int>(ParticlesList.size());
 	if (tmpDrawBufferSize > DrawBufferSize) {
 		DrawBufferSize = tmpDrawBufferSize;
 		DrawBuffer.reset(new float[DrawBufferSize]);
@@ -370,26 +370,26 @@ void cParticleSystem2D::Draw()
 
 	// prepare draw buffer
 	for (auto &tmpParticle : ParticlesList) {
-		sRECT DestRect(tmpParticle.Location.x - tmpParticle.Size / 2,
-			       tmpParticle.Location.y - tmpParticle.Size / 2,
-			       tmpParticle.Location.x + tmpParticle.Size / 2,
-			       tmpParticle.Location.y + tmpParticle.Size / 2);
+		float tmpLeft = tmpParticle.Location.x - tmpParticle.Size / 2;
+		float tmpTop = tmpParticle.Location.y - tmpParticle.Size / 2;
+		float tmpRight = tmpParticle.Location.x + tmpParticle.Size / 2;
+		float tmpBottom = tmpParticle.Location.y + tmpParticle.Size / 2;
 
 		// first triangle
-		AddToDrawBuffer(DestRect.left, DestRect.top + (DestRect.bottom - DestRect.top),
+		AddToDrawBuffer(tmpLeft, tmpTop + (tmpBottom - tmpTop),
 				tmpParticle.Color, tmpParticle.Alpha, 0.0f, 1.0f);
-		AddToDrawBuffer(DestRect.left, DestRect.top,
+		AddToDrawBuffer(tmpLeft, tmpTop,
 				tmpParticle.Color, tmpParticle.Alpha, 0.0f, 0.0f);
-		AddToDrawBuffer(DestRect.left + (DestRect.right - DestRect.left), DestRect.top,
+		AddToDrawBuffer(tmpLeft + (tmpRight - tmpLeft), tmpTop,
 				tmpParticle.Color, tmpParticle.Alpha, 1.0f, 0.0f);
 
 		// second triangle
-		AddToDrawBuffer(DestRect.left + (DestRect.right - DestRect.left), DestRect.top,
+		AddToDrawBuffer(tmpLeft + (tmpRight - tmpLeft), tmpTop,
 				tmpParticle.Color, tmpParticle.Alpha, 1.0f, 0.0f);
-		AddToDrawBuffer(DestRect.left + (DestRect.right - DestRect.left),
-				DestRect.top + (DestRect.bottom - DestRect.top),
+		AddToDrawBuffer(tmpLeft + (tmpRight - tmpLeft),
+				tmpTop + (tmpBottom - tmpTop),
 				tmpParticle.Color, tmpParticle.Alpha, 1.0f, 1.0f);
-		AddToDrawBuffer(DestRect.left, DestRect.top + (DestRect.bottom - DestRect.top),
+		AddToDrawBuffer(tmpLeft, tmpTop + (tmpBottom - tmpTop),
 				tmpParticle.Color, tmpParticle.Alpha, 0.0f, 1.0f);
 	}
 
@@ -398,7 +398,7 @@ void cParticleSystem2D::Draw()
 	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
 
 	// rendering
-	vw_Draw3D(ePrimitiveType::TRIANGLES, 6 * ParticlesList.size(), RI_2f_XY | RI_1_TEX | RI_4f_COLOR,
+	vw_Draw3D(ePrimitiveType::TRIANGLES, 6 * static_cast<GLsizei>(ParticlesList.size()), RI_2f_XY | RI_1_TEX | RI_4f_COLOR,
 		  DrawBuffer.get(), 8 * sizeof(DrawBuffer.get()[0]));
 
 	// reset rendering states

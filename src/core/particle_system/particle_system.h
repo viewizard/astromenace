@@ -161,8 +161,8 @@ public:
 	std::weak_ptr<cLight> Light{};
 	bool LightNeedDeviation{false};
 	float LightDeviation{100.0f};
-	float NextLightDeviation{0.7f + 0.3f * vw_Randf1};
-	float LightDeviationSpeed{3.5f + 3.5f * vw_Randf1};
+	float NextLightDeviation{0.7f + 0.3f * vw_fRand()};
+	float LightDeviationSpeed{3.5f + 3.5f * vw_fRand()};
 
 	const sVECTOR3D &GetLocation()
 	{

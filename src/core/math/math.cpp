@@ -196,7 +196,7 @@ static float InvSqrt(const float x)
  */
 float vw_sqrtf(float x)
 {
-	return x*InvSqrt(x);
+	return x * InvSqrt(x);
 }
 
 /*

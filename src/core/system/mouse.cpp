@@ -65,11 +65,10 @@ void vw_GetMousePos(int &X, int &Y)
 	vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
 
 	float tmpInternalWidth, tmpInternalHeight;
-	bool ARFLAG = vw_GetInternalResolution(&tmpInternalWidth, &tmpInternalHeight);
-
-	if (ARFLAG) {
-		X = MouseX * tmpInternalWidth / tmpViewportWidth;
-		Y = MouseY * tmpInternalHeight / tmpViewportHeight;
+	if (vw_GetInternalResolution(&tmpInternalWidth, &tmpInternalHeight)) {
+		// WARNING probably, we could move mouse position's vatiables to float type (blocked by sRECT)
+		X = static_cast<int>(static_cast<float>(MouseX) * tmpInternalWidth / tmpViewportWidth);
+		Y = static_cast<int>(static_cast<float>(MouseY) * tmpInternalHeight / tmpViewportHeight);
 	} else {
 		X = MouseX;
 		Y = MouseY;

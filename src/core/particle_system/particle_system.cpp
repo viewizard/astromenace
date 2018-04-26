@@ -158,14 +158,14 @@ bool cParticleSystem::Update(float Time)
 	}
 
 	// calculate, how many particles we should emit
-	float ParticlesNeeded = (ParticlesPerSec / ParticleSystemQuality) * TimeDelta + EmissionResidue;
+	float ParticlesNeeded = (static_cast<float>(ParticlesPerSec) / ParticleSystemQuality) * TimeDelta + EmissionResidue;
 
 	// convert to integer (we can't emit 0.2 particle)
-	unsigned int ParticlesCreated = (unsigned int)ParticlesNeeded;
+	unsigned int ParticlesCreated = static_cast<unsigned int>(ParticlesNeeded);
 
 	if (!IsSuppressed) {
 		// store emission residue for future Update() calls
-		EmissionResidue = ParticlesNeeded - ParticlesCreated;
+		EmissionResidue = ParticlesNeeded - static_cast<float>(ParticlesCreated);
 	} else {
 		EmissionResidue = ParticlesNeeded;
 		ParticlesCreated = 0;
@@ -376,9 +376,9 @@ void cParticleSystem::GenerateLocationTubeType(cParticle &NewParticle)
 			DeadZone = 0.0f;
 	}
 
-	sVECTOR3D CreationPos{(0.5f - vw_Randf1) * CreationSize.x,
-			      (0.5f - vw_Randf1) * CreationSize.y,
-			      (0.5f - vw_Randf1) * CreationSize.z};
+	sVECTOR3D CreationPos{(0.5f - vw_fRand()) * CreationSize.x,
+			      (0.5f - vw_fRand()) * CreationSize.y,
+			      (0.5f - vw_fRand()) * CreationSize.z};
 	float ParticleDist2 = CreationPos.x * CreationPos.x +
 			      CreationPos.y * CreationPos.y +
 			      CreationPos.z * CreationPos.z;
@@ -458,15 +458,15 @@ void cParticleSystem::UpdateLight(float TimeDelta)
 				LightDeviation -= LightDeviationSpeed * TimeDelta;
 				if (NextLightDeviation >= LightDeviation) {
 					LightDeviation = NextLightDeviation;
-					LightDeviationSpeed = 3.5f + 3.5f * vw_Randf1;
-					NextLightDeviation = 0.7 + 0.3f * vw_Randf1;
+					LightDeviationSpeed = 3.5f + 3.5f * vw_fRand();
+					NextLightDeviation = 0.7f + 0.3f * vw_fRand();
 				}
 			} else {
 				LightDeviation += LightDeviationSpeed * TimeDelta;
 				if (NextLightDeviation <= LightDeviation) {
 					LightDeviation = NextLightDeviation;
-					LightDeviationSpeed = 3.5f + 3.5f * vw_Randf1;
-					NextLightDeviation = 0.7 - 0.3f * vw_Randf1;
+					LightDeviationSpeed = 3.5f + 3.5f * vw_fRand();
+					NextLightDeviation = 0.7f - 0.3f * vw_fRand();
 				}
 			}
 		} else

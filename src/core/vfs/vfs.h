@@ -91,7 +91,11 @@ inline int vw_VFStoBuffer(const std::string &FileName, T &Buffer)
 			return ERR_FILE_NOT_FOUND;
 
 		SDL_RWseek(tmpFile, 0, SEEK_END);
-		DataSize = SDL_RWtell(tmpFile);
+		// we don't use >2GB VFS files, so, we ok here with static_cast
+		if (SDL_RWtell(tmpFile) > 0)
+			DataSize = static_cast<uint32_t>(SDL_RWtell(tmpFile));
+		else
+			return ERR_FILE_IO;
 		SDL_RWseek(tmpFile, 0, SEEK_SET);
 
 		Buffer.resize(DataSize + (isString ? 1 : 0));

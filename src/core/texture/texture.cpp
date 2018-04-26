@@ -135,9 +135,9 @@ bool vw_FindTextureSizeByID(GLtexture TextureID, float *Width, float *Height)
 		return false;
 
 	if (Width)
-		*Width = tmpTexture->second.Width;
+		*Width = static_cast<float>(tmpTexture->second.Width);
 	if (Height)
-		*Height = tmpTexture->second.Height;
+		*Height = static_cast<float>(tmpTexture->second.Height);
 
 	return true;
 }
@@ -285,10 +285,10 @@ static void CreateAlpha(std::unique_ptr<uint8_t[]> &PixelsArray, sTexture &Textu
 			// create alpha
 			switch(AlphaFlag) {
 			case eAlphaCreateMode::GREYSC:
-				PixelsArray.get()[tmpOffsetDst + 3] =
-						(uint8_t)(((float)PixelsArray.get()[tmpOffsetDst] / 255) * 28) +
-						(uint8_t)(((float)PixelsArray.get()[tmpOffsetDst + 1] / 255) * 150) +
-						(uint8_t)(((float)PixelsArray.get()[tmpOffsetDst + 2] / 255) * 76);
+				PixelsArray.get()[tmpOffsetDst + 3] = static_cast<uint8_t>(
+					static_cast<float>(PixelsArray.get()[tmpOffsetDst]) / 255 * 28 +
+					static_cast<float>(PixelsArray.get()[tmpOffsetDst + 1]) / 255 * 150 +
+					static_cast<float>(PixelsArray.get()[tmpOffsetDst + 2]) / 255 * 76);
 				break;
 
 			case eAlphaCreateMode::EQUAL:

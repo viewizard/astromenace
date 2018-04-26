@@ -73,6 +73,7 @@ struct sRGBCOLOR {
 #include <ctime>
 #include <functional>
 #include <cmath>
+#include <cstdlib>
 
 // don't setup NDEBUG in sources, use definition in build system instead
 #include <cassert>

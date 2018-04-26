@@ -204,19 +204,19 @@ bool cScriptEngine::Update(float Time)
 			cAsteroid *CreateAsteroid = new cAsteroid;
 			CreateAsteroid->Create(1);
 			if (AsterFastCount != 20)
-				CreateAsteroid->Speed = AsterMaxSpeed*vw_Randf1;
+				CreateAsteroid->Speed = AsterMaxSpeed * vw_fRand();
 			else
-				CreateAsteroid->Speed = AsterMinFastSpeed + AsterMaxSpeed*vw_Randf1;
+				CreateAsteroid->Speed = AsterMinFastSpeed + AsterMaxSpeed * vw_fRand();
 			CreateAsteroid->ShowDeleteOnHide = 0;
 			CreateAsteroid->SetRotation(sVECTOR3D(0.0f, 180.0f, 0.0f));// !!!учесть камеру
 
 			if (AsterFastCount != 20)
 				CreateAsteroid->SetLocation(
-					sVECTOR3D(AsterW * vw_Randf0 + AsterXPos, AsterYPos * 2 + AsterH * vw_Randf1, AsterZPos + 20.0f)
+					sVECTOR3D(AsterW * vw_Randf0 + AsterXPos, AsterYPos * 2 + AsterH * vw_fRand(), AsterZPos + 20.0f)
 					+GamePoint);
 			else
 				CreateAsteroid->SetLocation(
-					sVECTOR3D(AsterW * vw_Randf0 + AsterXPos, AsterYPos * 2 + AsterH * vw_Randf1, AsterZPos)
+					sVECTOR3D(AsterW * vw_Randf0 + AsterXPos, AsterYPos * 2 + AsterH * vw_fRand(), AsterZPos)
 					+GamePoint);
 
 			NeedGenerInt--;

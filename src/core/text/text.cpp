@@ -85,7 +85,7 @@ unsigned int vw_GetLanguageListCount() {
 	if (TextTable.empty() || (TextTable.size() < 1))
 		return 0;
 
-	return TextTable.size() - 1 /*first column contain index, not data, don't count it*/;
+	return static_cast<unsigned>(TextTable.size()) - 1 /*first column contain index, not data, don't count it*/;
 }
 
 /*

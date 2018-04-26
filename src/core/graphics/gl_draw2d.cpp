@@ -144,23 +144,21 @@ void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bo
 	}
 
 	// texture's UV coordinates
-	float U_left = static_cast<float>(SrcRect.left) / ImageWidth; // WARNING performance issue, remove conversion
-	float V_top = static_cast<float>(SrcRect.top) / ImageHeight; // WARNING performance issue, remove conversion
-	float U_right = static_cast<float>(SrcRect.right) / ImageWidth; // WARNING performance issue, remove conversion
-	float V_bottom = static_cast<float>(SrcRect.bottom) / ImageHeight; // WARNING performance issue, remove conversion
+	// WARNING performance issue, remove conversion (blocked by sRECT)
+	float U_left = static_cast<float>(SrcRect.left) / ImageWidth;
+	float V_top = static_cast<float>(SrcRect.top) / ImageHeight;
+	float U_right = static_cast<float>(SrcRect.right) / ImageWidth;
+	float V_bottom = static_cast<float>(SrcRect.bottom) / ImageHeight;
 
 	// 'reset' buffer
 	DrawBufferCurrentPosition = 0;
 
 	// TRIANGLE_STRIP (2 triangles)
-	AddToDrawBuffer(static_cast<float>(DstRect.left),
-			static_cast<float>(DstRect.top), U_left, V_top); // WARNING performance issue, remove conversion
-	AddToDrawBuffer(static_cast<float>(DstRect.left),
-			static_cast<float>(DstRect.bottom), U_left, V_bottom); // WARNING performance issue, remove conversion
-	AddToDrawBuffer(static_cast<float>(DstRect.right),
-			static_cast<float>(DstRect.top), U_right, V_top); // WARNING performance issue, remove conversion
-	AddToDrawBuffer(static_cast<float>(DstRect.right),
-			static_cast<float>(DstRect.bottom), U_right, V_bottom); // WARNING performance issue, remove conversion
+	// WARNING performance issue, remove conversion (blocked by sRECT)
+	AddToDrawBuffer(static_cast<float>(DstRect.left), static_cast<float>(DstRect.top), U_left, V_top);
+	AddToDrawBuffer(static_cast<float>(DstRect.left), static_cast<float>(DstRect.bottom), U_left, V_bottom);
+	AddToDrawBuffer(static_cast<float>(DstRect.right), static_cast<float>(DstRect.top), U_right, V_top);
+	AddToDrawBuffer(static_cast<float>(DstRect.right), static_cast<float>(DstRect.bottom), U_right, V_bottom);
 
 	// setup OpenGL
 	vw_SetTextureBlend(Alpha, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);

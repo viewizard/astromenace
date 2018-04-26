@@ -485,7 +485,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (int)(3*Projectile->Radius) + (int)(vw_Randf1*1*Projectile->Radius);
+		int ttt = (3 + vw_fRand()) * Projectile->Radius;
 		for (int i = 0; i < ttt; i++) {
 			cProjectile *ProjectileTMP = new cProjectile;
 			ProjectileTMP->Create(1);
@@ -535,7 +535,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (int)(1*Projectile->Radius) + (int)(vw_Randf1*1*Projectile->Radius);
+		int ttt = (1 + vw_fRand()) * Projectile->Radius;
 		//vw_LogMessage(LOG_MESS_INF, "%i", ttt);
 		for (int i = 0; i < ttt; i++) {
 			cProjectile *ProjectileTMP = new cProjectile;
@@ -587,7 +587,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (int)(2*Projectile->Radius) + (int)(vw_Randf1*1*Projectile->Radius);
+		int ttt = (2 + vw_fRand()) * Projectile->Radius;
 		for (int i=0; i<ttt; i++) {
 			cProjectile *ProjectileTMP = new cProjectile;
 			ProjectileTMP->Create(2);
@@ -670,7 +670,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_Randf0;
 		}
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (int)(3*Projectile->Radius) + (int)(vw_Randf1*1*Projectile->Radius);
+		int ttt = (3  + vw_fRand()) * Projectile->Radius;
 		for (int i=0; i<ttt; i++) {
 			cProjectile *ProjectileTMP = new cProjectile;
 			ProjectileTMP->Create(2);
@@ -691,7 +691,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_Randf0;
 		}
 		// создаем немного разлетающихся кусков-снарядов
-		ttt = (int)(3*Projectile->Radius) + (int)(vw_Randf1*1*Projectile->Radius);
+		ttt = (3 + vw_fRand()) * Projectile->Radius;
 		for (int i=0; i<ttt; i++) {
 			cProjectile *ProjectileTMP = new cProjectile;
 			ProjectileTMP->Create(3);
@@ -712,7 +712,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_Randf0;
 		}
 
-		ttt = (int)(3*Projectile->Radius) + (int)(vw_Randf1*5*Projectile->Radius);
+		ttt = (3 + vw_fRand() * 5) * Projectile->Radius;
 		for (int i=0; i<ttt; i++) {
 			cProjectile *ProjectileTMP = new cProjectile;
 			ProjectileTMP->Create(1);
@@ -733,7 +733,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		ttt = (int)(5*Projectile->Radius) + (int)(vw_Randf1*3*Projectile->Radius);
+		ttt = (5 + vw_fRand() * 3) * Projectile->Radius;
 		for (int i=0; i<ttt; i++) {
 			cProjectile *ProjectileTMP = new cProjectile;
 			ProjectileTMP->Create(5);
@@ -912,7 +912,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			// в данном случае, это и есть направление, потому что геометрия в точке 0,0,0
 			ExplosionPieceData[Count].Velocity = ExplosionPieceData[Count].Velocity^VelocityTMP;
 
-			ExplosionPieceData[Count].Life = 1.0f+vw_Randf1/2.0f;
+			ExplosionPieceData[Count].Life = 1.0f + vw_fRand() / 2.0f;
 
 			// делаем анализ для ААBB, смотрим отлет частицы
 			float tmpSpeed = ExplosionPieceData[Count].Velocity.x * ExplosionPieceData[Count].Velocity.x +

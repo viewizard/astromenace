@@ -738,7 +738,7 @@ int vw_FontSizeUTF32(const std::u32string &Text)
 			LineWidth += DrawChar->FontMetrics.AdvanceX;
 	}
 
-	return (int)LineWidth;
+	return static_cast<int>(LineWidth);
 }
 
 /*
