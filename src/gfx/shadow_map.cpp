@@ -25,69 +25,67 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
+// TODO ShadowMap_StartRenderToFBO() should be fixed in order to automatically
+//      place buffer in proper place
+
 #include "../game.h"
 
+namespace {
 
-
-//-----------------------------------------------------------------------------
-// local/protected variables
-//-----------------------------------------------------------------------------
-sFBO *ShadowMapFBO = nullptr;
+sFBO *ShadowMapFBO{nullptr};
 float ShadowMap_LightProjectionMatrix[16];
 float ShadowMap_LightModelViewMatrix[16];
 
-float xPixelOffset = 0;
-float yPixelOffset = 0;
+float xPixelOffset{0};
+float yPixelOffset{0};
+
+sFBO *CurrentSystemFBO{nullptr};
+int ShadowMapViewPort_x, ShadowMapViewPort_y, ShadowMapViewPort_width, ShadowMapViewPort_height;
+
+} // unnamed namespace
+
+
 float ShadowMap_Get_xPixelOffset()
 {
 	return xPixelOffset;
 }
+
 float ShadowMap_Get_yPixelOffset()
 {
 	return yPixelOffset;
 }
-
-
-sFBO *CurrentSystemFBO = nullptr;
-int ShadowMapViewPort_x, ShadowMapViewPort_y, ShadowMapViewPort_width, ShadowMapViewPort_height;
-
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // инициализация шадов меп
 //-----------------------------------------------------------------------------
 bool ShadowMap_Init(int Width, int Height)
 {
-	if (ShadowMapFBO != nullptr)
+	if (ShadowMapFBO)
 		ShadowMap_Release();
 
-	xPixelOffset = 1.0f/(Setup.Width * ((Width*1.0f)/Setup.Width));
-	yPixelOffset = 1.0f/(Setup.Height * ((Height*1.0f)/Setup.Height));
+	xPixelOffset = 1.0f / Width;
+	yPixelOffset = 1.0f / Height;
 
 	ShadowMapFBO = new sFBO;
 
-	// для нормальной работы нам нужно 24 бита или больше, проверяем это
-	//if (vw_BuildFBO(ShadowMapFBO, Width, Height, true, true)) // тест, для вывода цветовой составляющей на экран
+	//if (vw_BuildFBO(ShadowMapFBO, Width, Height, true, true)) // color test
 	if ((vw_BuildFBO(ShadowMapFBO, Width, Height, false, true) &&
-	    (ShadowMapFBO->DepthSize >= 24)))
+	    (ShadowMapFBO->DepthSize >= 24))) // we need at least 24 bits
 		return true;
 
-	// если неудачно создали, или недостаточная точность буфера глубины - уходим
 	ShadowMap_Release();
 	std::cout << "\nYou need at least 24 bits Depth Size for Shadow Mapping support.\n\n";
 	return false;
 }
-
 
 //-----------------------------------------------------------------------------
 // освобождаем память
 //-----------------------------------------------------------------------------
 void ShadowMap_Release()
 {
-	if (ShadowMapFBO == nullptr)
+	if (!ShadowMapFBO)
 		return;
 
 	vw_DeleteFBO(ShadowMapFBO);
@@ -95,19 +93,13 @@ void ShadowMap_Release()
 	ShadowMapFBO = nullptr;
 }
 
-
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // подготовка рендеринга в шадовмеп фбо
 //-----------------------------------------------------------------------------
 void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, float fFarClip)
 {
-	if ((ShadowMapFBO == nullptr) ||
-	    (ShadowMapFBO->DepthTexture == 0))
+	if (!ShadowMapFBO ||
+	    !ShadowMapFBO->DepthTexture)
 		return;
 
 	// сохраняем модельвью матрицу
@@ -163,14 +155,13 @@ void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, 
 	vw_PolygonOffset(true, 2.0f, 2.0f);
 }
 
-
 //-----------------------------------------------------------------------------
 // завершение рендеринга в шадовмеп фбо
 //-----------------------------------------------------------------------------
 void ShadowMap_EndRenderToFBO()
 {
-	if ((ShadowMapFBO == nullptr) ||
-	    (ShadowMapFBO->DepthTexture == 0))
+	if (!ShadowMapFBO ||
+	    !ShadowMapFBO->DepthTexture)
 		return;
 
 	vw_PolygonOffset(false, 0.0f, 0.0f);
@@ -199,17 +190,13 @@ void ShadowMap_EndRenderToFBO()
 	vw_PopMatrix();
 }
 
-
-
-
-
 //-----------------------------------------------------------------------------
 // начало рендеринга моделей с тенями
 //-----------------------------------------------------------------------------
 void ShadowMap_StartFinalRender()
 {
-	if ((ShadowMapFBO == nullptr) ||
-	    (ShadowMapFBO->DepthTexture == 0))
+	if (!ShadowMapFBO ||
+	    !ShadowMapFBO->DepthTexture)
 		 return;
 
 	vw_BindTexture(2, ShadowMapFBO->DepthTexture);
@@ -218,7 +205,6 @@ void ShadowMap_StartFinalRender()
 	vw_SetTextureDepthMode(eTextureDepthMode::INTENSITY);
 	// ставим линеар сглаживание, чтобы PCF делало более плавные переходы
 	vw_SetTextureFiltering(eTextureBasicFilter::BILINEAR);
-
 
 	vw_MatrixMode(eMatrixMode::TEXTURE);
 	vw_LoadIdentity();
@@ -236,18 +222,14 @@ void ShadowMap_StartFinalRender()
 	vw_MatrixMode(eMatrixMode::MODELVIEW);
 }
 
-
-
-
 //-----------------------------------------------------------------------------
 // завершение рендеринга моделей с тенями
 //-----------------------------------------------------------------------------
 void ShadowMap_EndFinalRender()
 {
-	if ((ShadowMapFBO == nullptr) ||
-	    (ShadowMapFBO->DepthTexture == 0))
+	if (!ShadowMapFBO ||
+	    !ShadowMapFBO->DepthTexture)
 		return;
 
 	vw_BindTexture(2, 0);
 }
-

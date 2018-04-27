@@ -58,8 +58,6 @@ const char *ShadowButtonQuality[10] = {
 
 const char *ShadowButtonQualityBase[10] = {
 	"%s",
-	"2x2 PCF",
-	"4x4 PCF",
 	"8x8 PCF"
 };
 
@@ -361,10 +359,10 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		Options_ShadowMap--;
 		if (Options_ShadowMap < 0) Options_ShadowMap = 0;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, (Options_ShadowMap == 3) || !vw_GetDevCaps().OpenGL_2_0_supported || !vw_GetDevCaps().OpenGL_2_1_supported ||
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, (Options_ShadowMap == 1) || !vw_GetDevCaps().OpenGL_2_0_supported || !vw_GetDevCaps().OpenGL_2_1_supported ||
 			    !vw_GetDevCaps().OpenGL_3_0_supported || !Options_UseGLSL120 || (vw_GetDevCaps().FramebufferObjectDepthSize < 24))) {
 		Options_ShadowMap++;
-		if (Options_ShadowMap > 3) Options_ShadowMap = 3;
+		if (Options_ShadowMap > 1) Options_ShadowMap = 1;
 	}
 	if (vw_GetDevCaps().OpenGL_2_0_supported && vw_GetDevCaps().OpenGL_2_1_supported && vw_GetDevCaps().OpenGL_3_0_supported && Options_UseGLSL120 && (vw_GetDevCaps().FramebufferObjectDepthSize >= 24)) {
 		Size = vw_FontSize(ShadowButtonQualityBase[Options_ShadowMap], vw_GetText(ShadowButtonQuality[Options_ShadowMap]));

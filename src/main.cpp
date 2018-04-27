@@ -1018,7 +1018,7 @@ ReCreate:
 		// если железо поддерживает OpenGL 4.2
 		if (vw_GetDevCaps().OpenGL_4_2_supported) {
 			// немного больше ставим другие опции
-			Setup.ShadowMap = 3;
+			Setup.ShadowMap = 1;
 			Setup.MSAA = 4;
 			Setup.CSAA = 4;
 			Setup.MaxPointLights = 6;

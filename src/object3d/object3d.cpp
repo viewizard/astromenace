@@ -941,7 +941,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 					vw_Uniform1i(UniformLocations[25], 2);
 					vw_Uniform1f(UniformLocations[26], ShadowMap_Get_xPixelOffset());
-					vw_Uniform1f(UniformLocations[27], ShadowMap_Get_xPixelOffset());
+					vw_Uniform1f(UniformLocations[27], ShadowMap_Get_yPixelOffset());
 					vw_Uniform1i(UniformLocations[28], 3);
 					vw_Uniform1i(UniformLocations[29], NeedNormalMapping);
 					vw_Uniform1i(UniformLocations[30], PCFMode);
@@ -1149,7 +1149,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 						vw_Uniform1i(UniformLocations[25], 2);
 						vw_Uniform1f(UniformLocations[26], ShadowMap_Get_xPixelOffset());
-						vw_Uniform1f(UniformLocations[27], ShadowMap_Get_xPixelOffset());
+						vw_Uniform1f(UniformLocations[27], ShadowMap_Get_yPixelOffset());
 						vw_Uniform1i(UniformLocations[28], 3);
 						vw_Uniform1i(UniformLocations[29], NeedNormalMapping);
 						vw_Uniform1i(UniformLocations[30], PCFMode);
