@@ -697,8 +697,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	}
 
 
-
-	// быстрая прорисовка только вертексов, без установки текстур, шейдеров и прочего
+	// fast rendering for shadows map generation, without textures, shaders, etc
+	// make sure, we call this one _before_ any camera/frustum checks, since not visible
+	// for us 3D model could also drop the shadow on visible for us part of scene
 	if (VertexOnlyPass) {
 		vw_PushMatrix();
 		// переносим и двигаем уже по данным всей модели

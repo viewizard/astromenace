@@ -1960,17 +1960,9 @@ void InformationDrawObject()
 		float EffectiveDistance = PointCamera.Length();
 		ShadowMap_StartRenderToFBO(sVECTOR3D(0,0,0), EffectiveDistance, EffectiveDistance*2);
 
-		// т.к. модели у нас не были расчитаны на шадов меппинг (не замкнутые контуры, внутренние грани и т.п.)
-		// на некоторых моделях нужно делать тень и по лицевым частям тоже, т.е. вообще выключать cull face
-		// важно (!) оставляя лицевые части можно получить погрешности прорисовки уже на лицевых частях, надо выбирать,
-		// какие визуальные погрешности при прорисовке теней убрать
-		if ((CreateNum == 40) || // торпедная пусковая установка
-		    (CreateNum == 41) || // установка пуска бомб
-		    (CreateNum == 48) || // 3-й истребитель пришельцев
-		    ((CreateNum >= 86) && (CreateNum <= 90)) || // первые 4 типа зданий
-		    (CreateNum == 92))   // 6-й тип зданий
-			vw_CullFace(eCullFace::NONE);
-
+		// since some 3D models don't have 'back' sides - tank's tracks, covers elements for tires
+		// and tracks, etc., we are forced to disable face's culling during shadows map generation
+		vw_CullFace(eCullFace::NONE);
 
 		if (InfoFighter != nullptr) {
 			InfoFighter->SetLocation(TMPLocation);
@@ -2020,7 +2012,7 @@ void InformationDrawObject()
 			InfoTracked->Draw(true);
 		}
 
-
+		vw_CullFace(eCullFace::BACK);
 		ShadowMap_EndRenderToFBO();
 
 		ShadowMap = true;

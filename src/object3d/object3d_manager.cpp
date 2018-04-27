@@ -78,6 +78,9 @@ void DrawAllObject3D(int DrawType)
 			ShadowMap_StartRenderToFBO(sVECTOR3D(0,0,160), 600.0f, 800.0f);
 			break;
 		}
+		// since some 3D models don't have 'back' sides - tank's tracks, covers elements for tires
+		// and tracks, etc., we are forced to disable face's culling during shadows map generation
+		vw_CullFace(eCullFace::NONE);
 
 		DrawAllSpaceShip(true, 0);
 		DrawAllWeapon(true, 0);
@@ -86,6 +89,7 @@ void DrawAllObject3D(int DrawType)
 		DrawAllExplosion(true);
 		DrawAllSpaceObject(true, 0);
 
+		vw_CullFace(eCullFace::BACK);
 		ShadowMap_EndRenderToFBO();
 
 		// работаем с 3-м стейджем текстур (первые два у нас заняты)

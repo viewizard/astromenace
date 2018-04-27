@@ -1037,7 +1037,8 @@ ReCreate:
 	// если не поддерживает железо фбо или шейдеры, выключаем шадовмеп
 	if (!vw_GetDevCaps().OpenGL_2_0_supported ||
 	    !vw_GetDevCaps().OpenGL_2_1_supported ||
-	    !vw_GetDevCaps().OpenGL_3_0_supported)
+	    !vw_GetDevCaps().OpenGL_3_0_supported ||
+	    (vw_GetDevCaps().MaxTextureWidth < 2048))
 		Setup.ShadowMap = 0;
 
 	// check MSAA/CSAA mode
