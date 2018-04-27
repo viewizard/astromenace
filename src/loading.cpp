@@ -1496,15 +1496,22 @@ AllDataLoaded:
 	if (Setup.ShadowMap > 0) {
 		int ShadowMapSize = vw_GetDevCaps().MaxTextureWidth;
 
-		switch(LoadType) {
-		case eLoading::Menu:   // меню (выходим из игры)
-			ShadowMap_Release();
-		case eLoading::MenuWithLogo:  // меню (только запустили)
+		auto MenuShadowMap = [&ShadowMapSize] () {
 			// since we need "soft" shadows for less price, reduce shadow map size
 			if (ShadowMapSize > 2048)
 				ShadowMapSize = 2048;
 			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize/2))
 				Setup.ShadowMap = 0;
+		};
+
+		switch(LoadType) {
+		case eLoading::Menu:   // меню (выходим из игры)
+			ShadowMap_Release();
+			MenuShadowMap();
+			break;
+
+		case eLoading::MenuWithLogo:  // меню (только запустили)
+			MenuShadowMap();
 			break;
 
 		case eLoading::Game: // переход на уровни игры
