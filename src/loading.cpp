@@ -85,7 +85,6 @@ unsigned int CurrentListCount = 0;
 std::weak_ptr<cGLSL> GLSLShaderType1{};
 std::weak_ptr<cGLSL> GLSLShaderType2{};
 std::weak_ptr<cGLSL> GLSLShaderType3{};
-GLint UniformLocations[100];
 
 struct cGLSLLoadList {
 	char Name[MAX_PATH];
@@ -1320,37 +1319,39 @@ void LoadGameData(eLoading LoadType)
 			}
 		}
 
-		// сразу находим базовые типы шейдеров для прорисовки 3д моделей
+		// find all shaders by name
 		GLSLShaderType1 = vw_FindShaderByName("PerPixelLight");
 		GLSLShaderType2 = vw_FindShaderByName("PerPixelLight_Explosion");
 		GLSLShaderType3 = vw_FindShaderByName("PerPixelLight_ShadowMap");
 
-		// находим все юниформы GLSLShaderType1
-		UniformLocations[0] = vw_GetUniformLocation(GLSLShaderType1, "Texture1");
-		UniformLocations[1] = vw_GetUniformLocation(GLSLShaderType1, "Texture2");
-		UniformLocations[2] = vw_GetUniformLocation(GLSLShaderType1, "DirectLightCount");
-		UniformLocations[3] = vw_GetUniformLocation(GLSLShaderType1, "PointLightCount");
-		UniformLocations[4] = vw_GetUniformLocation(GLSLShaderType1, "NeedMultitexture");
-		UniformLocations[5] = vw_GetUniformLocation(GLSLShaderType1, "NormalMap");
-		UniformLocations[6] = vw_GetUniformLocation(GLSLShaderType1, "NeedNormalMapping");
-		// находим все юниформы GLSLShaderType2
-		UniformLocations[10] = vw_GetUniformLocation(GLSLShaderType2, "Texture1");
-		UniformLocations[11] = vw_GetUniformLocation(GLSLShaderType2, "DirectLightCount");
-		UniformLocations[12] = vw_GetUniformLocation(GLSLShaderType2, "PointLightCount");
-		UniformLocations[13] = vw_GetUniformLocation(GLSLShaderType2, "SpeedData1");
-		UniformLocations[14] = vw_GetUniformLocation(GLSLShaderType2, "SpeedData2");
-		// находим все юниформы GLSLShaderType3
-		UniformLocations[20] = vw_GetUniformLocation(GLSLShaderType3, "Texture1");
-		UniformLocations[21] = vw_GetUniformLocation(GLSLShaderType3, "Texture2");
-		UniformLocations[22] = vw_GetUniformLocation(GLSLShaderType3, "DirectLightCount");
-		UniformLocations[23] = vw_GetUniformLocation(GLSLShaderType3, "PointLightCount");
-		UniformLocations[24] = vw_GetUniformLocation(GLSLShaderType3, "NeedMultitexture");
-		UniformLocations[25] = vw_GetUniformLocation(GLSLShaderType3, "ShadowMap");
-		UniformLocations[26] = vw_GetUniformLocation(GLSLShaderType3, "xPixelOffset");
-		UniformLocations[27] = vw_GetUniformLocation(GLSLShaderType3, "yPixelOffset");
-		UniformLocations[28] = vw_GetUniformLocation(GLSLShaderType3, "NormalMap");
-		UniformLocations[29] = vw_GetUniformLocation(GLSLShaderType3, "NeedNormalMapping");
-		UniformLocations[30] = vw_GetUniformLocation(GLSLShaderType3, "PCFMode");
+		// find and store uniform location for all shaders, in real, we don' need
+		// store internal storage number for uniforms usage, since we load them
+		// one-by-one, and we know sequence, we could use 0-1-2-3-4 numbers directly
+		vw_FindShaderUniformLocation(GLSLShaderType1, "Texture1");
+		vw_FindShaderUniformLocation(GLSLShaderType1, "Texture2");
+		vw_FindShaderUniformLocation(GLSLShaderType1, "DirectLightCount");
+		vw_FindShaderUniformLocation(GLSLShaderType1, "PointLightCount");
+		vw_FindShaderUniformLocation(GLSLShaderType1, "NeedMultitexture");
+		vw_FindShaderUniformLocation(GLSLShaderType1, "NormalMap");
+		vw_FindShaderUniformLocation(GLSLShaderType1, "NeedNormalMapping");
+
+		vw_FindShaderUniformLocation(GLSLShaderType2, "Texture1");
+		vw_FindShaderUniformLocation(GLSLShaderType2, "DirectLightCount");
+		vw_FindShaderUniformLocation(GLSLShaderType2, "PointLightCount");
+		vw_FindShaderUniformLocation(GLSLShaderType2, "SpeedData1");
+		vw_FindShaderUniformLocation(GLSLShaderType2, "SpeedData2");
+
+		vw_FindShaderUniformLocation(GLSLShaderType3, "Texture1");
+		vw_FindShaderUniformLocation(GLSLShaderType3, "Texture2");
+		vw_FindShaderUniformLocation(GLSLShaderType3, "DirectLightCount");
+		vw_FindShaderUniformLocation(GLSLShaderType3, "PointLightCount");
+		vw_FindShaderUniformLocation(GLSLShaderType3, "NeedMultitexture");
+		vw_FindShaderUniformLocation(GLSLShaderType3, "ShadowMap");
+		vw_FindShaderUniformLocation(GLSLShaderType3, "xPixelOffset");
+		vw_FindShaderUniformLocation(GLSLShaderType3, "yPixelOffset");
+		vw_FindShaderUniformLocation(GLSLShaderType3, "NormalMap");
+		vw_FindShaderUniformLocation(GLSLShaderType3, "NeedNormalMapping");
+		vw_FindShaderUniformLocation(GLSLShaderType3, "PCFMode");
 	}
 	// еще одна проверка перед тем как будем использовать шадовмеп
 	// если не смогли загрузить шейдеры, то делать с шадовмеп нечего

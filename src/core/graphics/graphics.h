@@ -531,8 +531,14 @@ void vw_ReleaseAllShaders();
 bool vw_ShadersMapEmpty();
 // Find shader by name.
 std::weak_ptr<cGLSL> vw_FindShaderByName(const std::string &Name);
+// Find and store uniform location in shader. Return internal storage number for future use.
+int vw_FindShaderUniformLocation(std::weak_ptr<cGLSL> &GLSL, const std::string &UniformName);
+// Get previously found in shader uniform's location by internal storage number.
+GLint vw_GetShaderUniformLocation(std::shared_ptr<cGLSL> sharedGLSL, int UniformNumber);
 // Links a program object.
 bool vw_LinkShaderProgram(std::weak_ptr<cGLSL> &GLSL);
+// Installs a program object as part of current rendering state.
+bool vw_UseShaderProgram(std::shared_ptr<cGLSL> &sharedGLSL);
 // Installs a program object as part of current rendering state.
 bool vw_UseShaderProgram(std::weak_ptr<cGLSL> &GLSL);
 // Switch to fixed-function program object as part of current rendering state.

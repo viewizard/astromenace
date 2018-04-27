@@ -44,6 +44,7 @@ public:
 	GLuint Program{0};
 	GLuint VertexShader{0};
 	GLuint FragmentShader{0};
+	std::vector<GLint> UniformLocations{};
 
 private:
 	// Don't allow direct new/delete usage in code, only vw_CreateShader()
@@ -177,6 +178,37 @@ std::weak_ptr<cGLSL> vw_FindShaderByName(const std::string &Name)
 }
 
 /*
+ * Find and store uniform location in shader. Return internal storage number for future use.
+ */
+int vw_FindShaderUniformLocation(std::weak_ptr<cGLSL> &GLSL, const std::string &UniformName)
+{
+	// lock shader before vw_GetUniformLocation() call
+	if (auto sharedGLSL = GLSL.lock()) {
+		GLint tmpUniformLocation = vw_GetUniformLocation(GLSL, UniformName);
+		if (tmpUniformLocation != -1) {
+			sharedGLSL.get()->UniformLocations.emplace_back(tmpUniformLocation);
+			// we are safe with static_cast here, since shader's uniforms number low
+			return static_cast<int>(sharedGLSL.get()->UniformLocations.size() - 1);
+		} else
+			std::cerr << __func__ << "(): " << "Can't find uniform name " << UniformName << "\n";
+	}
+
+	return -1;
+}
+
+/*
+ *  Get previously found in shader uniform's location by internal storage number.
+ */
+GLint vw_GetShaderUniformLocation(std::shared_ptr<cGLSL> sharedGLSL, int UniformNumber)
+{
+	if (!sharedGLSL)
+		return -1;
+
+	// no checks here for better speed
+	return sharedGLSL.get()->UniformLocations[UniformNumber];
+}
+
+/*
  * Create shader program.
  */
 std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
@@ -296,19 +328,25 @@ bool vw_LinkShaderProgram(std::weak_ptr<cGLSL> &GLSL)
 /*
  * Installs a program object as part of current rendering state.
  */
-bool vw_UseShaderProgram(std::weak_ptr<cGLSL> &GLSL)
+bool vw_UseShaderProgram(std::shared_ptr<cGLSL> &sharedGLSL)
 {
-	if (!_glUseProgram)
-		return false;
-
-	auto sharedGLSL = GLSL.lock();
-	if (!sharedGLSL)
+	if (!_glUseProgram ||
+	    !sharedGLSL)
 		return false;
 
 	_glUseProgram(sharedGLSL->Program);
 	CheckOGLError(__func__);
 
 	return true;
+}
+
+/*
+ * Installs a program object as part of current rendering state.
+ */
+bool vw_UseShaderProgram(std::weak_ptr<cGLSL> &GLSL)
+{
+	auto sharedGLSL = GLSL.lock();
+	return vw_UseShaderProgram(sharedGLSL);
 }
 
 /*
