@@ -27,7 +27,6 @@
 
 #include "game.h"
 #include "object3d/object3d.h"
-#include "gfx/game_level_text/game_level_text.h"
 
 
 
@@ -950,7 +949,6 @@ bool ReleaseGameData(eLoading LoadType)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	ReleaseAllObject3D();
 	vw_ReleaseAllParticleSystems();
-	ReleaseAllGameLvlText();
 	vw_ReleaseAllLights();
 	StarSystemRelease();
 

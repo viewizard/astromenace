@@ -34,7 +34,6 @@
 #include "../core/core.h"
 #include "../game.h"
 #include "../script_engine/script.h"
-#include "../gfx/game_level_text/game_level_text.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 #include <stdarg.h> // va_start
 
@@ -1079,7 +1078,6 @@ void DrawGame()
 	// после полной прорисовки делаем обновление данных
 	UpdateAllObject3D(vw_GetTimeThread(1));
 	vw_UpdateAllParticleSystems(vw_GetTimeThread(1));
-	UpdateAllGameLvlText(vw_GetTimeThread(1));
 
 	// проверяем на столкновения
 	if (GameContentTransp < 0.99f) // не нужно проверять коллизии, включено меню
@@ -1516,7 +1514,7 @@ void DrawGame()
 	// прорисовываем весь 2д текст который есть
 	// !!! Важно, должно стоять после надписей, но до меню!!!
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	DrawAllGameLvlText();
+//	DrawAllGameLvlText();
 
 
 

@@ -30,7 +30,6 @@
 #include "game.h"
 #include "script_engine/script.h"
 #include "object3d/object3d.h"
-#include "gfx/game_level_text/game_level_text.h"
 #include <sys/stat.h> // stat
 
 
@@ -1330,7 +1329,6 @@ GotoQuit:
 	vw_ReleaseAllParticleSystems2D();
 	vw_ReleaseAllParticleSystems();
 	vw_ReleaseAllLights();
-	ReleaseAllGameLvlText();
 
 	vw_ReleaseAllFontChars(); /* call before vw_ReleaseAllTextures() */
 	vw_ReleaseAllTextures();

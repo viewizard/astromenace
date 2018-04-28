@@ -42,7 +42,6 @@
 #include "../object3d/ground_object/building/building.h"
 #include "../object3d/ground_object/wheeled/wheeled.h"
 #include "../object3d/ground_object/tracked/tracked.h"
-#include "../gfx/game_level_text/game_level_text.h"
 
 
 void SetID(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
@@ -451,24 +450,6 @@ bool cScriptEngine::Update(float Time)
 				LastTimeMissionComplete = Time;
 				return true;
 			}
-		} else if (xmlEntry.Name == "Text") {
-			cGameLvlText *NewText;
-			NewText = new cGameLvlText;
-
-			NewText->Lifetime = -1.0f;
-			xmlDoc->fGetEntryAttribute(xmlEntry, "life", NewText->Lifetime);
-
-			std::string tmpText{};
-			if (xmlDoc->GetEntryAttribute(xmlEntry, "text", tmpText)) {
-				NewText->DrawText = new char[tmpText.size() + 1];
-				strcpy(NewText->DrawText, tmpText.c_str());
-			}
-
-			xmlDoc->iGetEntryAttribute(xmlEntry, "posx", NewText->PosX);
-			xmlDoc->iGetEntryAttribute(xmlEntry, "posy", NewText->PosY);
-
-			NewText->Color = 0;
-			xmlDoc->iGetEntryAttribute(xmlEntry, "color", NewText->Color);
 		} else {
 			// если тут - значит не нашли директиву, или произошла ошибка
 			std::cerr << __func__ << "(): " << "ScriptEngine: tag " << xmlEntry.Name
