@@ -25,6 +25,10 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+// TODO move to fixed size static draw buffer, no reason allocate/release memory all the time
+// TODO remove vw_FindTextureByName() call from main loop
+
 #include "../game.h"
 
 namespace {
@@ -38,13 +42,6 @@ enum eSide {
 	FRONT	= 5	// The FRONT side
 };
 
-} // unnamed namespace
-
-
-//-----------------------------------------------------------------------------
-// local/protected variables
-//-----------------------------------------------------------------------------
-
 // SkyBox textures
 GLtexture SkyBox_Texture[6]{0, 0, 0, 0, 0, 0};
 // SkyBox location
@@ -56,9 +53,7 @@ float SkyBox_width_2 = 100.0f;
 float SkyBox_height_2 = 100.0f;
 float SkyBox_length_2 = 100.0f;
 
-
-
-
+} // unnamed namespace
 
 
 //-----------------------------------------------------------------------------
@@ -66,10 +61,9 @@ float SkyBox_length_2 = 100.0f;
 //-----------------------------------------------------------------------------
 void SkyBoxDraw()
 {
-	int VFV = RI_3f_XYZ | RI_2_TEX | RI_DUBLICATE_TEX_COORD;
-	float *buff = new float[5*4];
+	constexpr int VFV = RI_3f_XYZ | RI_2_TEX | RI_DUBLICATE_TEX_COORD;
+	float *buff = new float[5 * 4];
 	int k;
-
 
 	// сразу выполняем настройку второй текстуры
 	vw_BindTexture(1, vw_FindTextureByName("skybox/tile_stars.tga"));
@@ -79,8 +73,6 @@ void SkyBoxDraw()
 	vw_LoadIdentity();
 	vw_Scale(2.0f, 2.0f, 1.0f);
 	vw_MatrixMode(eMatrixMode::MODELVIEW);
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The BACK side
@@ -112,7 +104,6 @@ void SkyBoxDraw()
 		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5 * sizeof(buff[0]));
 	}
 
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The FRONT side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -141,9 +132,7 @@ void SkyBoxDraw()
 
 		vw_BindTexture(0, SkyBox_Texture[FRONT]);
 		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5 * sizeof(buff[0]));
-
 	}
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The BOTTOM side
@@ -175,7 +164,6 @@ void SkyBoxDraw()
 		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5 * sizeof(buff[0]));
 	}
 
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The TOP side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -205,7 +193,6 @@ void SkyBoxDraw()
 		vw_BindTexture(0, SkyBox_Texture[TOP]);
 		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5 * sizeof(buff[0]));
 	}
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The LEFT side
@@ -237,7 +224,6 @@ void SkyBoxDraw()
 		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5 * sizeof(buff[0]));
 	}
 
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// The RIGHT side
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -268,7 +254,6 @@ void SkyBoxDraw()
 		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 5 * sizeof(buff[0]));
 	}
 
-
 	vw_BindTexture(1, 0);
 	vw_MatrixMode(eMatrixMode::TEXTURE);
 	vw_LoadIdentity();
@@ -276,13 +261,9 @@ void SkyBoxDraw()
 
 	vw_BindTexture(0, 0);
 
-	if (buff != nullptr)
+	if (buff)
 		delete [] buff;
 }
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // Setup texture for each SkyBox side
@@ -291,8 +272,6 @@ void SkyBoxSetTexture(GLtexture TextureID, int Side)
 {
 	SkyBox_Texture[Side] = TextureID;
 }
-
-
 
 //-----------------------------------------------------------------------------
 // Create SkyBox
@@ -303,7 +282,7 @@ void SkyBoxCreate(float nx, float ny, float nz,
 	SkyBox_x = nx;
 	SkyBox_y = ny;
 	SkyBox_z = nz;
-	SkyBox_width_2 = nwidth/2.0f;
-	SkyBox_height_2 = nheight/2.0f;
-	SkyBox_length_2 = nlength/2.0f;
+	SkyBox_width_2 = nwidth / 2.0f;
+	SkyBox_height_2 = nheight / 2.0f;
+	SkyBox_length_2 = nlength / 2.0f;
 }
