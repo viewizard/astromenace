@@ -25,33 +25,36 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+// TODO move to fixed size static draw buffer, no reason allocate/release memory all the time
+// TODO remove vw_FindTextureByName() call from main loop
+// TODO local variables should be moved to unnamed namespace, don't allow external usage
+
 #include "../game.h"
 #include "../object3d/space_object/space_object.h"
+
+namespace {
+
+// StarSystem initialization status
+bool StarSystem_InitedAll{false};
+bool StarSystem_Inited{false};
+// StarSystem rotation
+sVECTOR3D StarSystem_BaseRotation(0.0f, 0.0f, 0.0f);
+
+} // unnamed namespace
 
 extern cSpaceObject *StartSpaceObject;
 extern std::weak_ptr<cParticleSystem> psSpace;
 
-//-----------------------------------------------------------------------------
-// local/protected variables
-//-----------------------------------------------------------------------------
-
-// StarSystem initialization status
-bool	StarSystem_InitedAll = false;
-bool	StarSystem_Inited = false;
-// StarSystem rotation
-sVECTOR3D StarSystem_BaseRotation(0.0f,0.0f,0.0f);
-
 // для прорисовки подложки с тайловой анимацией
-float StarsTile=0.0f;
-float StarsTileUpdateTime = 0.0f;
-float StarsTile2=0.0f;
-float StarsTileUpdateTime2 = 0.0f;
-float StarsTileStartTransparentLayer1 = 0.0f;
-float StarsTileEndTransparentLayer1 = 0.0f;
-float StarsTileStartTransparentLayer2 = 0.0f;
-float StarsTileEndTransparentLayer2 = 0.0f;
-
-
+float StarsTile{0.0f};
+float StarsTileUpdateTime{0.0f};
+float StarsTile2{0.0f};
+float StarsTileUpdateTime2{0.0f};
+float StarsTileStartTransparentLayer1{0.0f};
+float StarsTileEndTransparentLayer1{0.0f};
+float StarsTileStartTransparentLayer2{0.0f};
+float StarsTileEndTransparentLayer2{0.0f};
 
 
 //------------------------------------------------------------------------------------
@@ -86,14 +89,10 @@ void StarSystemInit(int Num, sVECTOR3D SetBaseRotation)
 		break;
 	}
 
-
 	// StarSystem setup
 	StarSystem_InitedAll = true;
 	StarSystem_BaseRotation = SetBaseRotation;
 }
-
-
-
 
 //------------------------------------------------------------------------------------
 // StarSystem data release function
@@ -105,12 +104,6 @@ void StarSystemRelease()
 
 	StarSystem_Inited = false;
 }
-
-
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // StarSystem draw function
@@ -138,208 +131,194 @@ void StarSystemDraw(int DrawType)
 		vw_DepthTest(true, eCompareFunc::LEQUAL);
 	}
 
-
-
 	// космические объекты
 	// рисуем планеты и большие астероиды _до_ тайловой анимации
-	cSpaceObject *tmp1 = StartSpaceObject;
-	while (tmp1 != nullptr) {
-		cSpaceObject *tmp2 = tmp1->Next;
+	cSpaceObject *tmpSpaceObject = StartSpaceObject;
+	while (tmpSpaceObject) {
+		cSpaceObject *tmp2 = tmpSpaceObject->Next;
 
 		// если это планета на заднем фоне
-		if (tmp1->ObjectType == 14) {
+		if (tmpSpaceObject->ObjectType == 14) {
 			if (DrawType == 2) {
 				vw_PushMatrix();
-				vw_Translate(sVECTOR3D(CurrentCameraLocation.x*0.90f-GameCameraGetDeviation()*4.0f, GameCameraGetDeviation()*2.0f,0.0f));
+				vw_Translate(sVECTOR3D(CurrentCameraLocation.x * 0.90f - GameCameraGetDeviation() * 4.0f,
+						       GameCameraGetDeviation() * 2.0f, 0.0f));
 			}
-			tmp1->Draw(false);
+			tmpSpaceObject->Draw(false);
 			if (DrawType == 2)
 				vw_PopMatrix();
 		} else {
 			// если это большой астероид летящий на заднем фоне
-			if (tmp1->ObjectType == 15 && (tmp1->ObjectCreationType>10 && tmp1->ObjectCreationType<20)) {
+			if (tmpSpaceObject->ObjectType == 15 &&
+			    ((tmpSpaceObject->ObjectCreationType > 10) && (tmpSpaceObject->ObjectCreationType < 20))) {
 				if (DrawType == 2) {
 					vw_PushMatrix();
-					vw_Translate(sVECTOR3D(CurrentCameraLocation.x*0.70f-GameCameraGetDeviation()*4.0f, GameCameraGetDeviation()*2.0f,0.0f));
+					vw_Translate(sVECTOR3D(CurrentCameraLocation.x * 0.70f - GameCameraGetDeviation() * 4.0f,
+							       GameCameraGetDeviation() * 2.0f, 0.0f));
 				}
-				tmp1->Draw(false);
+				tmpSpaceObject->Draw(false);
 				if (DrawType == 2)
 					vw_PopMatrix();
 			}
 		}
 
-		tmp1 = tmp2;
+		tmpSpaceObject = tmp2;
 	}
 	// очищаем буфер глубины, чтобы "3д подложка" не участвовала в проверке глубины
 	vw_Clear(RI_DEPTH_BUFFER);
 
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Прорисовка подложки с тайловой анимацией
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	{
-		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
+	float *buff = new float[4 * 9];
 
-		float *buff = new float[4*9];
+	float width_2{0.0f};
+	float heigh_2{110.0f};
+	float length_2{110.0f};
+	float x{GamePoint.x};
+	float y{GamePoint.y};
+	float z{GamePoint.z};
+	float StartTransparentLayer1{0.7f};
+	float EndTransparentLayer1{0.7f};
 
-		float width_2, heigh_2, length_2;
-		width_2 = 0.0f;
-		heigh_2 = 110.0f;
-		length_2 = 110.0f;
-		float x,y,z;
-		x = GamePoint.x;
-		y = GamePoint.y;
-		z = GamePoint.z;
-		float StartTransparentLayer1 = 0.7f;
-		float EndTransparentLayer1 = 0.7f;
+	if (DrawType == 2) {
+		width_2 = length_2 = 175.0f;
+		heigh_2 = 0.0f;
+		// чем ниже слой, тем меньше его двигаем при перемещении камеры (при стандартном аспект рейшен)
+		x = GamePoint.x + GameCameraGetDeviation() + CurrentCameraLocation.x * 0.8f;
+		y = GamePoint.y - GameCameraGetDeviation() * 0.5f;
+		z = GamePoint.z + 25.0f;
 
-
-		if (DrawType == 2) {
-			width_2 = length_2 = 175.0f;
-			heigh_2 = 0.0f;
-			// чем ниже слой, тем меньше его двигаем при перемещении камеры (при стандартном аспект рейшен)
-			x = GamePoint.x+GameCameraGetDeviation() + CurrentCameraLocation.x*0.8f;
-			y = GamePoint.y-GameCameraGetDeviation()*0.5f;
-			z = GamePoint.z+25.0f;
-
-			StartTransparentLayer1 = StarsTileStartTransparentLayer1;
-			EndTransparentLayer1 = StarsTileEndTransparentLayer1;
-		}
-
-
-		int k=0;
-
-		buff[k++] = x + width_2;
-		buff[k++] = y + heigh_2;
-		buff[k++] = z + length_2+length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = StartTransparentLayer1;
-		buff[k++] = 1.0f;
-		buff[k++] = 0.0f+StarsTile/3.0f;
-
-		buff[k++] = x + width_2;
-		buff[k++] = y + heigh_2;
-		buff[k++] = z - length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = EndTransparentLayer1;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f+StarsTile/3.0f;
-
-		buff[k++] = x - width_2;
-		buff[k++] = y - heigh_2;
-		buff[k++] = z + length_2+length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = StartTransparentLayer1;
-		buff[k++] = 0.0f;
-		buff[k++] = 0.0f+StarsTile/3.0f;
-
-		buff[k++] = x - width_2;
-		buff[k++] = y - heigh_2;
-		buff[k++] = z - length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = EndTransparentLayer1;
-		buff[k++] = 0.0f;
-		buff[k++] = 1.0f+StarsTile/3.0f;
-
-
-		if (DrawType == 1) {
-			StarsTile -= 0.015f*(vw_GetTimeThread(0) - StarsTileUpdateTime);
-			StarsTileUpdateTime = vw_GetTimeThread(0);
-		} else {
-			StarsTile -= 0.035f*(vw_GetTimeThread(1) - StarsTileUpdateTime);
-			StarsTileUpdateTime = vw_GetTimeThread(1);
-		}
-
-		if (StarsTile < -3.0f) StarsTile += 3.0f;
-
-
-		GLtexture TileTexture = vw_FindTextureByName("skybox/tile_back.tga");
-		vw_BindTexture(0, TileTexture);
-		vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
-
-		vw_DepthTest(false, eCompareFunc::LESS);
-
-		if (DrawType == 1) {
-			vw_PushMatrix();
-			vw_Rotate(-20.0f, 0.0f, 0.0f, 1.0f);
-			vw_Rotate(-45.0f, 0.0f, 1.0f, 0.0f);
-			vw_Rotate(30.0f, 1.0f, 0.0f, 0.0f);
-		}
-
-		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 9 * sizeof(buff[0]));
-
-
-
-		// звезды рисуем отдельно, четкими (со своими текстурными координатами)
-
-		k = 0;
-
-		buff[k++] = x + width_2;
-		buff[k++] = y + heigh_2;
-		buff[k++] = z + length_2+length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = StartTransparentLayer1;
-		buff[k++] = 3.0f;
-		buff[k++] = 0.0f+StarsTile;
-
-		buff[k++] = x + width_2;
-		buff[k++] = y + heigh_2;
-		buff[k++] = z - length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = EndTransparentLayer1;
-		buff[k++] = 3.0f;
-		buff[k++] = 3.0f+StarsTile;
-
-		buff[k++] = x - width_2;
-		buff[k++] = y - heigh_2;
-		buff[k++] = z + length_2+length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = StartTransparentLayer1;
-		buff[k++] = 0.0f;
-		buff[k++] = 0.0f+StarsTile;
-
-		buff[k++] = x - width_2;
-		buff[k++] = y - heigh_2;
-		buff[k++] = z - length_2/2;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = EndTransparentLayer1;
-		buff[k++] = 0.0f;
-		buff[k++] = 3.0f+StarsTile;
-
-		vw_BindTexture(0, vw_FindTextureByName("skybox/tile_stars.tga"));
-
-		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 9 * sizeof(buff[0]));
-
-
-
-
-		if (DrawType == 1) vw_PopMatrix();
-
-		vw_DepthTest(true, eCompareFunc::LEQUAL);
-
-		vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
-		vw_BindTexture(0, 0);
-		if (buff != nullptr)
-			delete [] buff;
+		StartTransparentLayer1 = StarsTileStartTransparentLayer1;
+		EndTransparentLayer1 = StarsTileEndTransparentLayer1;
 	}
 
+	int k=0;
 
+	buff[k++] = x + width_2;
+	buff[k++] = y + heigh_2;
+	buff[k++] = z + length_2 + length_2 / 2.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = StartTransparentLayer1;
+	buff[k++] = 1.0f;
+	buff[k++] = 0.0f + StarsTile / 3.0f;
+
+	buff[k++] = x + width_2;
+	buff[k++] = y + heigh_2;
+	buff[k++] = z - length_2 / 2.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = EndTransparentLayer1;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f + StarsTile / 3.0f;
+
+	buff[k++] = x - width_2;
+	buff[k++] = y - heigh_2;
+	buff[k++] = z + length_2 + length_2 / 2.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = StartTransparentLayer1;
+	buff[k++] = 0.0f;
+	buff[k++] = 0.0f + StarsTile / 3.0f;
+
+	buff[k++] = x - width_2;
+	buff[k++] = y - heigh_2;
+	buff[k++] = z - length_2/2;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = EndTransparentLayer1;
+	buff[k++] = 0.0f;
+	buff[k++] = 1.0f + StarsTile / 3.0f;
+
+	if (DrawType == 1) {
+		StarsTile -= 0.015f * (vw_GetTimeThread(0) - StarsTileUpdateTime);
+		StarsTileUpdateTime = vw_GetTimeThread(0);
+	} else {
+		StarsTile -= 0.035f * (vw_GetTimeThread(1) - StarsTileUpdateTime);
+		StarsTileUpdateTime = vw_GetTimeThread(1);
+	}
+
+	if (StarsTile < -3.0f)
+		StarsTile += 3.0f;
+
+
+	GLtexture TileTexture = vw_FindTextureByName("skybox/tile_back.tga");
+	vw_BindTexture(0, TileTexture);
+	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
+
+	vw_DepthTest(false, eCompareFunc::LESS);
+
+	if (DrawType == 1) {
+		vw_PushMatrix();
+		vw_Rotate(-20.0f, 0.0f, 0.0f, 1.0f);
+		vw_Rotate(-45.0f, 0.0f, 1.0f, 0.0f);
+		vw_Rotate(30.0f, 1.0f, 0.0f, 0.0f);
+	}
+
+	vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX, buff, 9 * sizeof(buff[0]));
+
+	// звезды рисуем отдельно, четкими (со своими текстурными координатами)
+
+	k = 0;
+
+	buff[k++] = x + width_2;
+	buff[k++] = y + heigh_2;
+	buff[k++] = z + length_2 + length_2 / 2.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = StartTransparentLayer1;
+	buff[k++] = 3.0f;
+	buff[k++] = 0.0f + StarsTile;
+
+	buff[k++] = x + width_2;
+	buff[k++] = y + heigh_2;
+	buff[k++] = z - length_2 / 2.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = EndTransparentLayer1;
+	buff[k++] = 3.0f;
+	buff[k++] = 3.0f + StarsTile;
+
+	buff[k++] = x - width_2;
+	buff[k++] = y - heigh_2;
+	buff[k++] = z + length_2 + length_2 / 2.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = StartTransparentLayer1;
+	buff[k++] = 0.0f;
+	buff[k++] = 0.0f + StarsTile;
+
+	buff[k++] = x - width_2;
+	buff[k++] = y - heigh_2;
+	buff[k++] = z - length_2/2;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = 1.0f;
+	buff[k++] = EndTransparentLayer1;
+	buff[k++] = 0.0f;
+	buff[k++] = 3.0f + StarsTile;
+
+	vw_BindTexture(0, vw_FindTextureByName("skybox/tile_stars.tga"));
+
+	vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX, buff, 9 * sizeof(buff[0]));
+
+	if (DrawType == 1)
+		vw_PopMatrix();
+
+	vw_DepthTest(true, eCompareFunc::LEQUAL);
+
+	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
+	vw_BindTexture(0, 0);
+	if (buff)
+		delete [] buff;
 
 	// корректируем положение частиц "космической пыли", если в игре и камера движется
 	if (DrawType == 2) {
@@ -350,29 +329,22 @@ void StarSystemDraw(int DrawType)
 	}
 }
 
-
-
-
 //------------------------------------------------------------------------------------
 // Прорисовка второго слоя "пыли" с тайловой анимацией
 //------------------------------------------------------------------------------------
 void StarSystemDrawSecondLayer(int DrawType)
 {
 	if (Setup.VisualEffectsQuality <= 1) {
-		int VFV = RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX;
+		float *buff = new float[4 * 9];
 
-		float *buff = new float[4*9];
-
-		float width_2, heigh_2, length_2;
-		width_2 = 0.0f;
-		heigh_2 = 110.0f;
-		length_2 = 110.0f;
-		float x,y,z;
-		x = GamePoint.x;
-		y = GamePoint.y;
-		z = GamePoint.z;
-		float StartTransparentLayer2 = 0.9f;
-		float EndTransparentLayer2 = 0.7f;
+		float width_2{0.0f};
+		float heigh_2{110.0f};
+		float length_2{110.0f};
+		float x{GamePoint.x};
+		float y{GamePoint.y};
+		float z{GamePoint.z};
+		float StartTransparentLayer2{0.9f};
+		float EndTransparentLayer2{0.7f};
 
 		if (DrawType == 2) {
 			width_2 = length_2 = 175.0f;
@@ -381,7 +353,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 			sVECTOR3D CurrentCameraLocation;
 			vw_GetCameraLocation(&CurrentCameraLocation);
 
-			x = GamePoint.x+GameCameraGetDeviation()*2.0f + CurrentCameraLocation.x*0.5f;
+			x = GamePoint.x+GameCameraGetDeviation() * 2.0f + CurrentCameraLocation.x * 0.5f;
 			y = GamePoint.y-GameCameraGetDeviation();
 			z = GamePoint.z+25.0f;
 
@@ -389,58 +361,57 @@ void StarSystemDrawSecondLayer(int DrawType)
 			EndTransparentLayer2 = StarsTileEndTransparentLayer2;
 		}
 
-
 		int k = 0;
 
 		buff[k++] = x + width_2;
 		buff[k++] = y + heigh_2;
-		buff[k++] = z + length_2+length_2/2;
+		buff[k++] = z + length_2 + length_2/ 2.0f;
 		buff[k++] = 1.0f;
 		buff[k++] = 1.0f;
 		buff[k++] = 1.0f;
 		buff[k++] = StartTransparentLayer2;
 		buff[k++] = 3.2f;
-		buff[k++] = 0.0f+StarsTile2;
+		buff[k++] = 0.0f + StarsTile2;
 
 		buff[k++] = x + width_2;
 		buff[k++] = y + heigh_2;
-		buff[k++] = z - length_2/2;
+		buff[k++] = z - length_2 / 2.0f;
 		buff[k++] = 1.0f;
 		buff[k++] = 1.0f;
 		buff[k++] = 1.0f;
 		buff[k++] = EndTransparentLayer2;
 		buff[k++] = 3.2f;
-		buff[k++] = 3.0f+StarsTile2;
+		buff[k++] = 3.0f + StarsTile2;
 
 		buff[k++] = x - width_2;
 		buff[k++] = y - heigh_2;
-		buff[k++] = z + length_2+length_2/2;
+		buff[k++] = z + length_2 + length_2 / 2.0f ;
 		buff[k++] = 1.0f;
 		buff[k++] = 1.0f;
 		buff[k++] = 1.0f;
 		buff[k++] = StartTransparentLayer2;
 		buff[k++] = 0.2f;
-		buff[k++] = 0.0f+StarsTile2;
+		buff[k++] = 0.0f + StarsTile2;
 
 		buff[k++] = x - width_2;
 		buff[k++] = y - heigh_2;
-		buff[k++] = z - length_2/2;
+		buff[k++] = z - length_2 / 2.0f;
 		buff[k++] = 1.0f;
 		buff[k++] = 1.0f;
 		buff[k++] = 1.0f;
 		buff[k++] = EndTransparentLayer2;
 		buff[k++] = 0.2f;
-		buff[k++] = 3.0f+StarsTile2;
+		buff[k++] = 3.0f + StarsTile2;
 
 		if (DrawType == 1) {
-			StarsTile2 -= 0.04f*(vw_GetTimeThread(0) - StarsTileUpdateTime2);
+			StarsTile2 -= 0.04f * (vw_GetTimeThread(0) - StarsTileUpdateTime2);
 			StarsTileUpdateTime2 = vw_GetTimeThread(0);
 		} else {
-			StarsTile2 -= 0.12f*(vw_GetTimeThread(1) - StarsTileUpdateTime2);
+			StarsTile2 -= 0.12f * (vw_GetTimeThread(1) - StarsTileUpdateTime2);
 			StarsTileUpdateTime2 = vw_GetTimeThread(1);
 		}
-		if (StarsTile2 < -3.0f) StarsTile2 += 3.0f;
-
+		if (StarsTile2 < -3.0f)
+			StarsTile2 += 3.0f;
 
 		GLtexture TileTexture = vw_FindTextureByName("skybox/tile_stars.tga");
 		vw_BindTexture(0, TileTexture);
@@ -454,15 +425,15 @@ void StarSystemDrawSecondLayer(int DrawType)
 			vw_Rotate(30.0f, 1.0f, 0.0f, 0.0f);
 		}
 
+		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX, buff, 9 * sizeof(buff[0]));
 
-		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, VFV, buff, 9 * sizeof(buff[0]));
-
-		if (DrawType == 1) vw_PopMatrix();
+		if (DrawType == 1)
+			vw_PopMatrix();
 
 		vw_DepthTest(true, eCompareFunc::LEQUAL);
 		vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 		vw_BindTexture(0, 0);
-		if (buff != nullptr)
+		if (buff)
 			delete [] buff;
 	}
 }
