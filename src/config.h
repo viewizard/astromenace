@@ -28,8 +28,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define GAME_VERSION		"1.9.9 git"
-#define GAME_BUILD		180428
+#define GAME_VERSION		"1.3.9 git"
+#define GAME_BUILD		180429
 
 
 
