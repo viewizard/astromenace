@@ -33,7 +33,7 @@
 
 struct sVECTOR3D;
 
-enum class ObjectDrawType {
+enum class eObjectDrawType {
 	Normal,
 	Blend	// with blend (for planet's sky)
 };
@@ -56,7 +56,7 @@ struct sObjectBlock {
 	bool NeedTextureAnimation{false};
 	sVECTOR3D TextureAnimation{0.0f, 0.0f, 0.0f};
 
-	ObjectDrawType DrawType{ObjectDrawType::Normal};
+	eObjectDrawType DrawType{eObjectDrawType::Normal};
 
 	// initial index in global/local index array/indexbo, if we don't have
 	// indexes at all, initial vertex in global/local vertex array/vertexbo

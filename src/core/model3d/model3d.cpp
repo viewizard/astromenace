@@ -558,7 +558,7 @@ bool cModel3D::LoadVW3D(const std::string &FileName)
 		// Rotation
 		File->fread(&(tmpObjectBlock.Rotation), sizeof(ObjectBlocks[0].Rotation.x) * 3, 1);
 
-		tmpObjectBlock.DrawType = ObjectDrawType::Normal;
+		tmpObjectBlock.DrawType = eObjectDrawType::Normal;
 		// vertex array-related
 		tmpObjectBlock.NeedDestroyDataInObjectBlock = false;
 		tmpObjectBlock.VBO = 0;

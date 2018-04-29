@@ -83,7 +83,7 @@ void cPlanet::Create(int PlanetNum)
 
 		Texture[1] = vw_FindTextureByName("models/planet/clouds.tga");
 		TextureIllum[1] = 0;
-		ObjectBlocks[1].DrawType = ObjectDrawType::Blend; // рисуем прозрачным
+		ObjectBlocks[1].DrawType = eObjectDrawType::Blend; // рисуем прозрачным
 		break;
 	// "красная" планета
 	case 4:
