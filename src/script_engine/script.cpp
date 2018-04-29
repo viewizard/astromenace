@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
+
 #include "../game.h"
 #include "script.h"
 #include "../object3d/object3d.h"
@@ -44,16 +46,16 @@
 #include "../object3d/ground_object/tracked/tracked.h"
 
 
-void SetID(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
+void SetID(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc);
 void SetDebugInformation(cObject3D *Object, sXMLEntry *xmlEntry);
-void SetShowDeleteOnHide(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
-void SetShipRotation(cSpaceShip *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
-void SetShipLocation(cSpaceShip *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag);
-void SetProjectileRotation(cProjectile *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
-void SetProjectileLocation(cProjectile *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag);
-void SetRotation(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
-void SetLocation(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag);
-void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc);
+void SetShowDeleteOnHide(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc);
+void SetShipRotation(cSpaceShip *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc);
+void SetShipLocation(cSpaceShip *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag);
+void SetProjectileRotation(cProjectile *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc);
+void SetProjectileLocation(cProjectile *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag);
+void SetRotation(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc);
+void SetLocation(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag);
+void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc);
 
 
 
@@ -83,12 +85,6 @@ cScriptEngine::cScriptEngine()
 	NeedShowBB = 0;
 	UndeadDebugMode = false;
 };
-
-cScriptEngine::~cScriptEngine()
-{
-	delete xmlDoc;
-};
-
 
 
 //-----------------------------------------------------------------------------
@@ -128,17 +124,12 @@ bool cScriptEngine::RunScript(const char *FileName, float InitTime)
 	ShowGameTime = false;
 
 
-	if (xmlDoc != nullptr) {
-		delete xmlDoc;
-		xmlDoc = nullptr;
-	}
-	xmlDoc = new cXMLDocument(FileName);
+	xmlDoc.reset(new cXMLDocument(FileName));
 
 	// проверяем корневой элемент
 	if (!xmlDoc->GetRootEntry() || ("AstroMenaceScript" != xmlDoc->GetRootEntry()->Name)) {
 		std::cerr << __func__ << "(): " << "Can't find AstroMenaceScript element in the: " << FileName << "\n";
-		delete xmlDoc;
-		xmlDoc = nullptr;
+		xmlDoc.reset();
 		return false;
 	}
 
@@ -147,15 +138,13 @@ bool cScriptEngine::RunScript(const char *FileName, float InitTime)
 	sXMLEntry *xmlEntry = xmlDoc->FindEntryByName(*xmlDoc->GetRootEntry(), "Action");
 	if (!xmlEntry) {
 		std::cerr << __func__ << "(): " << "Can't find Action element in the: " << FileName << "\n";
-		delete xmlDoc;
-		xmlDoc = nullptr;
+		xmlDoc.reset();
 		return false;
 	}
 
 	if (xmlEntry->ChildrenList.empty()) {
 		std::cerr << __func__ << "(): " << "Can't find Action element's children in the: " << FileName << "\n";
-		delete xmlDoc;
-		xmlDoc = nullptr;
+		xmlDoc.reset();
 		return false;
 	}
 

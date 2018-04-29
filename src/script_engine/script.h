@@ -35,7 +35,6 @@ class cScriptEngine
 {
 public:
 	cScriptEngine();
-	~cScriptEngine();
 
 	// запустить скрипт на выполнение
 	bool	RunScript(const char *FileName, float InitTime);
@@ -52,7 +51,7 @@ public:
 	float	TimeOpLag{0};
 
 	// основной документ
-	cXMLDocument	*xmlDoc{nullptr};
+	std::unique_ptr<cXMLDocument> xmlDoc{};
 	// текущий итератор (положение в скрипте)
 	std::list<sXMLEntry>::iterator xmlEntryIter{};
 

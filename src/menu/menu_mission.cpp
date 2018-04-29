@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
+
 #include "../game.h"
 
 
@@ -94,12 +96,11 @@ void MissionsListInit()
 	std::string ScriptName{"script/list.xml"};
 
 	// по скрипту, смотрим что загружать + считаем сколько позиций
-	cXMLDocument *xmlDoc = new cXMLDocument(ScriptName.c_str());
+	std::unique_ptr<cXMLDocument> xmlDoc{new cXMLDocument(ScriptName.c_str())};
 
 	// проверяем корневой элемент
 	if (!xmlDoc->GetRootEntry() || ("AstroMenaceMissionsList" != xmlDoc->GetRootEntry()->Name)) {
 		std::cerr << __func__ << "(): " << "Can't find AstroMenaceMissionsList element in the: " << ScriptName << "\n";
-		delete xmlDoc;
 		return;
 	}
 
@@ -268,10 +269,6 @@ void MissionsListInit()
 			i++;
 		}
 	}
-
-
-	// чистим память, со скриптом работать больше не надо
-	delete xmlDoc;
 }
 
 

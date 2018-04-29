@@ -35,7 +35,7 @@
 //-----------------------------------------------------------------------------
 // aimode
 //-----------------------------------------------------------------------------
-void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
+void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
 	int tmpAI_Mode{0};
 	if (xmlDoc->iGetEntryAttribute(*xmlEntry, "aimode", tmpAI_Mode)) {
@@ -54,7 +54,7 @@ void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 //-----------------------------------------------------------------------------
 //  ID
 //-----------------------------------------------------------------------------
-void SetID(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
+void SetID(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
 	xmlDoc->iGetEntryAttribute(*xmlEntry, "id", Object->ID);
 }
@@ -64,7 +64,7 @@ void SetID(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 //-----------------------------------------------------------------------------
 // Location
 //-----------------------------------------------------------------------------
-void SetShipLocation(cSpaceShip *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag)
+void SetShipLocation(cSpaceShip *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
 {
 	sVECTOR3D POS(0.0f, 0.0f, 0.0f);
 
@@ -86,7 +86,7 @@ void SetShipLocation(cSpaceShip *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlD
 
 	Object->SetLocation(POS);
 }
-void SetProjectileLocation(cProjectile *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag)
+void SetProjectileLocation(cProjectile *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
 {
 	sVECTOR3D POS(0.0f, 0.0f, 0.0f);
 
@@ -108,7 +108,7 @@ void SetProjectileLocation(cProjectile *Object, sXMLEntry *xmlEntry, cXMLDocumen
 
 	Object->SetLocation(POS);
 }
-void SetLocation(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc, float TimeOpLag)
+void SetLocation(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
 {
 	sVECTOR3D POS(0.0f, 0.0f, 0.0f);
 
@@ -138,7 +138,7 @@ void SetLocation(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc, f
 //-----------------------------------------------------------------------------
 // Rotation
 //-----------------------------------------------------------------------------
-void SetShipRotation(cSpaceShip *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
+void SetShipRotation(cSpaceShip *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
 	sVECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
 	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglax", ANGLE.x);
@@ -152,7 +152,7 @@ void SetShipRotation(cSpaceShip *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlD
 
 	Object->SetRotation(ANGLE);
 }
-void SetProjectileRotation(cProjectile *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
+void SetProjectileRotation(cProjectile *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
 	sVECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
 	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglax", ANGLE.x);
@@ -166,7 +166,7 @@ void SetProjectileRotation(cProjectile *Object, sXMLEntry *xmlEntry, cXMLDocumen
 
 	Object->SetRotation(ANGLE);
 }
-void SetRotation(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
+void SetRotation(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
 	sVECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
 	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglax", ANGLE.x);
@@ -187,7 +187,7 @@ void SetRotation(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
 //-----------------------------------------------------------------------------
 // DeleteOnHide
 //-----------------------------------------------------------------------------
-void SetShowDeleteOnHide(cObject3D *Object, sXMLEntry *xmlEntry, cXMLDocument *xmlDoc)
+void SetShowDeleteOnHide(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
 	Object->ShowDeleteOnHide = 0;
 	if (xmlDoc->iGetEntryAttribute(*xmlEntry, "onhide", Object->ShowDeleteOnHide) &&

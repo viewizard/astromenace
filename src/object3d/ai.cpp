@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
+
 #include "../core/core.h"
 #include "../object3d/object3d.h"
 
@@ -32,7 +34,7 @@
 
 
 // основной документ
-cXMLDocument *xmlAI = nullptr;
+std::unique_ptr<cXMLDocument> xmlAI{};
 
 
 
@@ -41,8 +43,7 @@ cXMLDocument *xmlAI = nullptr;
 //-----------------------------------------------------------------------------
 void ReleaseGameAI()
 {
-	delete xmlAI;
-	xmlAI = nullptr;
+	xmlAI.release();
 }
 
 
@@ -51,7 +52,7 @@ void ReleaseGameAI()
 //-----------------------------------------------------------------------------
 void InitGameAI(const char *FileName)
 {
-	xmlAI = new cXMLDocument(FileName);
+	xmlAI.reset(new cXMLDocument(FileName));
 	// иним скрипт
 	if (!xmlAI->GetRootEntry()) {
 		ReleaseGameAI();

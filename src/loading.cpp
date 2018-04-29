@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
+
 #include "game.h"
 #include "object3d/object3d.h"
 
@@ -1048,13 +1050,12 @@ void LoadGameData(eLoading LoadType)
 			exit(0);
 		}
 
-		cXMLDocument *xmlDoc = new cXMLDocument(FileName);
+		std::unique_ptr<cXMLDocument> xmlDoc{new cXMLDocument(FileName)};
 
 		// проверяем корневой элемент
 		if (!xmlDoc->GetRootEntry() || ("AstroMenaceScript" != xmlDoc->GetRootEntry()->Name)) {
 			std::cerr << __func__ << "(): "
 				  << "Can't find AstroMenaceScript element in the: " << FileName << "\n";
-			delete xmlDoc;
 			exit(0);
 		}
 
@@ -1062,13 +1063,11 @@ void LoadGameData(eLoading LoadType)
 		sXMLEntry *xmlEntry = xmlDoc->FindEntryByName(*xmlDoc->GetRootEntry(), "Load");
 		if (!xmlEntry) {
 			std::cerr << __func__ << "(): " << "Can't find Load element in the: " << FileName << "\n";
-			delete xmlDoc;
 			exit(0);
 		}
 
 		if (xmlEntry->ChildrenList.empty()) {
 			std::cerr << __func__ << "(): " << "Can't find Load element's children in the: " << FileName << "\n";
-			delete xmlDoc;
 			exit(0);
 		}
 
@@ -1109,7 +1108,7 @@ void LoadGameData(eLoading LoadType)
 		}
 
 		// чистим память, со скриптом работать больше не надо
-		delete xmlDoc;
+		xmlDoc.reset();
 
 
 		// считаем сколько там элементов

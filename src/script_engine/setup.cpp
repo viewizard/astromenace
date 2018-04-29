@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
+
 #include "../game.h"
 
 
@@ -136,13 +138,12 @@ void InitSetup()
 //-----------------------------------------------------------------------------
 void SaveXMLSetupFile()
 {
-	cXMLDocument *XMLdoc = new cXMLDocument;
+	std::unique_ptr<cXMLDocument> XMLdoc{new cXMLDocument};
 
 	sXMLEntry *RootXMLEntry = XMLdoc->CreateRootEntry("AstroMenaceSettings");
 
 	if (!RootXMLEntry) {
 		std::cerr << __func__ << "(): " << "Can't create XML root element.\n";
-		delete XMLdoc;
 		return;
 	}
 
@@ -325,7 +326,6 @@ void SaveXMLSetupFile()
 
 
 	XMLdoc->Save(ConfigFileName);
-	delete XMLdoc;
 }
 
 //-----------------------------------------------------------------------------
@@ -336,11 +336,10 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	// устанавливаем базовые настройки
 	InitSetup();
 
-	cXMLDocument *XMLdoc = new cXMLDocument(ConfigFileName);
+	std::unique_ptr<cXMLDocument> XMLdoc{new cXMLDocument(ConfigFileName)};
 
 	// читаем данные
 	if (!XMLdoc->GetRootEntry()) {
-		delete XMLdoc;
 		SaveXMLSetupFile();
 		return true;
 	}
@@ -351,8 +350,6 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	// дополнительная проверка на содержимое конфигурационного файла
 	if (!RootXMLEntry) {
 		std::cerr << __func__ << "(): " << "Game configuration file corrupted: " << ConfigFileName << "\n";
-		// файл поврежден, надо завершить работу с ним
-		delete XMLdoc;
 		// сохранить дефолтные настройки, перезаписав файл
 		SaveXMLSetupFile();
 		// и сказать игре что это "первый запуск"
@@ -360,8 +357,6 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	}
 	if ("AstroMenaceSettings" != RootXMLEntry->Name) {
 		std::cerr << __func__ << "(): " << "Game configuration file corrupted: " << ConfigFileName << "\n";
-		// файл поврежден, надо завершить работу с ним
-		delete XMLdoc;
 		// сохранить дефолтные настройки, перезаписав файл
 		SaveXMLSetupFile();
 		// и сказать игре что это "первый запуск"
@@ -679,8 +674,6 @@ LoadProfiles:
 	if (Setup.ControlSensivity > 10) Setup.ControlSensivity = 10;
 	if (Setup.Brightness > 10) Setup.Brightness = 10;
 	if (Setup.JoystickDeadZone > 10) Setup.JoystickDeadZone = 10;
-
-	delete XMLdoc;
 
 	return false;
 }
