@@ -39,7 +39,7 @@
  * license-related issues for included code.
  *
  * Limitations:
- * 1. Only utf8 and ascii are supported.
+ * 1. Only ascii are supported (utf8 for comments).
  * 2. Tags between '<' and '>' characters could not be wrapped.
  * 3. CDATA are not supported.
  *
