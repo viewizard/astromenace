@@ -197,13 +197,6 @@ void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 
 
 
-//------------------------------------------------------------------------------------
-// SkyBox.cpp
-//------------------------------------------------------------------------------------
-void SkyBoxSetTexture(GLtexture TextureID, int Side);
-void SkyBoxCreate(float nx, float ny, float nz, float nwidth, float nheight, float nlength);
-void SkyBoxDraw();
-
 
 
 

@@ -32,6 +32,7 @@
 
 #include "../game.h"
 #include "../object3d/space_object/space_object.h"
+#include "skybox.h"
 
 namespace {
 
@@ -66,22 +67,22 @@ void StarSystemInit(int Num, sVECTOR3D SetBaseRotation)
 	switch (Num) {
 	case 1:
 		SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_back6.tga"), 4);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_bottom4.tga"), 2);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_front5.tga"), 5);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_left2.tga"), 1);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_right1.tga"), 0);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_top3.tga"), 3);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_back6.tga"), eSide::BACK);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_bottom4.tga"), eSide::BOTTOM);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_front5.tga"), eSide::FRONT);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_left2.tga"), eSide::LEFT);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_right1.tga"), eSide::RIGHT);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_top3.tga"), eSide::TOP);
 		StarSystem_Inited = true;
 		break;
 	case 2:
 		SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_back6.tga"), 4);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_bottom4.tga"), 2);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_front5.tga"), 5);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_left2.tga"), 1);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_right1.tga"), 0);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_top3.tga"), 3);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_back6.tga"), eSide::BACK);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_bottom4.tga"), eSide::BOTTOM);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_front5.tga"), eSide::FRONT);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_left2.tga"), eSide::LEFT);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_right1.tga"), eSide::RIGHT);
+		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_top3.tga"), eSide::TOP);
 		StarSystem_Inited = true;
 		break;
 	default:
@@ -99,8 +100,8 @@ void StarSystemInit(int Num, sVECTOR3D SetBaseRotation)
 //------------------------------------------------------------------------------------
 void StarSystemRelease()
 {
-	for (int i = 0; i < 6; i++)
-		SkyBoxSetTexture(0, i);
+	for (unsigned i = 0; i < static_cast<unsigned>(eSide::size); i++)
+		SkyBoxSetTexture(0, static_cast<eSide>(i));
 
 	StarSystem_Inited = false;
 }
