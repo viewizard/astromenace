@@ -50,7 +50,7 @@ sudo emerge openastromenace
 ## Build
 
 Build dependencies:
-libSDL2 (ver 2.0.4+), libopenal (ver 1.0+), libalut (ver 1.0+), libogg (ver 1.1+), libvorbis (ver 1.1+), freetype (ver 2.1.6+), GLU, fontconfig (optional)
+libSDL2 (ver 2.0.4+), libopenal (ver 1.0+), libalut (ver 1.0+), libogg (ver 1.1+), libvorbis (ver 1.1+), freetype (ver 2.1.6+), GLU
 
 
 The easy way to get up to date AstroMenace on your computer:
@@ -58,7 +58,7 @@ The easy way to get up to date AstroMenace on your computer:
 ### 1) Make sure all necessary packages with development headers installed in your system: 
 
    gcc (with g++) or clang, cmake, make, git, libsdl2, libogg, libvorbis, openal, 
-   alut (freealut), GLU, freetype2, fontconfig
+   alut (freealut), GLU, freetype2
 
 #### For macOS:
 Download and install "Command Line Tools for Xcode" or "Xcode".
@@ -71,34 +71,33 @@ $ brew install cmake sdl2 git libogg libvorbis freealut freetype
 ```bash
 $ sudo apt-get install g++ cmake make git libsdl2-dev
   libogg-dev libvorbis-dev libopenal-dev libalut-dev
-  libfreetype6-dev libfontconfig1-dev
+  libfreetype6-dev
 ```
 
 #### For Mageia:
 ```bash
 $ sudo urpmi gcc-c++ cmake make git libsdl2.0-devel libogg-devel
   libvorbis-devel libopenal-devel libfreealut-devel freetype2-devel
-  libfontconfig-devel
 ```
 
 #### For OpenSuse:
 ```bash
 $ sudo zypper install gcc-c++ cmake make git libSDL2-devel
   libogg-devel libvorbis-devel openal-soft-devel freealut-devel
-  freetype2-devel fontconfig-devel
+  freetype2-devel
 ```
 
 #### For Fedora:
 ```bash
 $ sudo yum install gcc-c++ cmake make git SDL2-devel libogg-devel
   libvorbis-devel openal-soft-devel freealut-devel freetype-devel
-  fontconfig-devel linux-libertine-fonts
+  linux-libertine-fonts
 ```
 
 #### For FreeBSD:
 ```bash
 $ sudo pkg_add -r -v gcc cmake git sdl20 libogg libvorbis openal
-  freealut freetype2 fontconfig
+  freealut freetype2
 ```
 
 ### 2) Clone git with latest source files

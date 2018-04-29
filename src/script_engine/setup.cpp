@@ -44,7 +44,6 @@ void InitSetup()
 	Setup.MenuLanguage = 1; // en by default
 	Setup.VoiceLanguage = 1; // en by default
 	Setup.FontNumber = 0;
-	strcpy(Setup.FontName, default_font_family);
 	Setup.FontSize = 16;
 
 	Setup.Width = 1228;
@@ -155,7 +154,6 @@ void SaveXMLSetupFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MenuLanguage"), "value", vw_GetText("0_code", Setup.MenuLanguage));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VoiceLanguage"), "value", vw_GetText("0_code", Setup.VoiceLanguage));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "FontNumber"), "value", Setup.FontNumber);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "FontName"), "value", Setup.FontName);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "FontSize"), "value", Setup.FontSize);
 
 
@@ -391,11 +389,6 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	}
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "FontNumber"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "FontNumber"), "value", Setup.FontNumber);
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "FontName")) {
-		std::string tmpFontName{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "FontName"), "value", tmpFontName))
-			strcpy(Setup.FontName, tmpFontName.c_str());
-	}
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "FontSize"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "FontSize"), "value", Setup.FontSize);
 

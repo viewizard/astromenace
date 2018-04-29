@@ -107,7 +107,6 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, Setup.FontNumber <= 0)) {
 		Setup.FontNumber --;
 		if (Setup.FontNumber < 0) Setup.FontNumber = 0;
-		strcpy(Setup.FontName, FontList[Setup.FontNumber].FontTitle);
 
 		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
 		vw_ReleaseAllFontChars();
@@ -119,7 +118,6 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.FontNumber >= FontQuantity-1)) {
 		Setup.FontNumber ++;
 		if (Setup.FontNumber > FontQuantity-1) Setup.FontNumber = FontQuantity-1;
-		strcpy(Setup.FontName, FontList[Setup.FontNumber].FontTitle);
 
 		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
 		vw_ReleaseAllFontChars();
