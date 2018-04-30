@@ -40,7 +40,6 @@
 
 
 cScriptEngine *Script = nullptr;
-extern std::weak_ptr<cParticleSystem> psSpace;
 
 
 
@@ -686,42 +685,6 @@ void InitGame()
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// активные частицы космоса
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	psSpace = vw_CreateParticleSystem();
-	if (auto sharedSpace = psSpace.lock()) {
-		sharedSpace->ColorStart.r = 0.80f;
-		sharedSpace->ColorStart.g = 0.80f;
-		sharedSpace->ColorStart.b = 1.00f;
-		sharedSpace->ColorEnd.r = 0.70f;
-		sharedSpace->ColorEnd.g = 0.70f;
-		sharedSpace->ColorEnd.b = 1.00f;
-		sharedSpace->AlphaStart = 0.50f;
-		sharedSpace->AlphaEnd = 1.00f;
-		sharedSpace->SizeStart = 0.40f;
-		sharedSpace->SizeEnd = 0.05f;
-		sharedSpace->Speed = 25.00f;
-		sharedSpace->SpeedVar = 5.00f;
-		sharedSpace->Theta = 0.00f;
-		sharedSpace->Life = 14.00f;
-		sharedSpace->LifeVar = 0.00f;
-		sharedSpace->CreationType = eParticleCreationType::Cube;
-		sharedSpace->CreationSize = sVECTOR3D(200.0f, 30.0f, 10.0f);
-		sharedSpace->ParticlesPerSec = 100;
-		sharedSpace->Texture = vw_FindTextureByName("gfx/flare3.tga");
-		sharedSpace->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
-		sharedSpace->SetStartLocation(sVECTOR3D(0, 10, 250)); //поправь ниже, на переносе если изменил!!!
-
-		float Time = sharedSpace->TimeLastUpdate;
-		for (float i=Time; i<Time+25; i+=1.0f) {
-			sharedSpace->Update(i);
-		}
-		sharedSpace->TimeLastUpdate = Time;
-	}
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// иним 2д часть, эмблемы
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	EnergyParticleSystem2D = vw_CreateParticleSystem2D();
@@ -883,7 +846,7 @@ void InitGame()
 	SoundShowHideMenu = 0;
 	CurrentGameSpeedShowTime = 2.0f;
 
-	StarSystemResetTime(vw_GetTimeThread(1));
+	StarSystemInitByType(eDrawType::GAME);
 
 	LastGameOnOffUpdateTime = vw_GetTimeThread(0);
 	GameBlackTransp = 1.0f;

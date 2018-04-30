@@ -29,7 +29,7 @@
 #define STARSYSTEM_H
 
 void StarSystemInit(int Num, sVECTOR3D SetBaseRotation);
-void StarSystemResetTime(float Time);
+void StarSystemInitByType(eDrawType DrawType);
 void StarSystemLayer1Transp(float Start, float End);
 void StarSystemLayer2Transp(float Start, float End);
 void StarSystemDraw(eDrawType DrawType);

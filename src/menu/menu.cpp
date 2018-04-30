@@ -35,8 +35,6 @@
 // переменные
 //------------------------------------------------------------------------------------
 
-std::weak_ptr<cParticleSystem> psSpace{};
-
 float LastMenuUpdateTime = 0.0f;
 float MenuContentTransp = 0.0f;
 float LastMenuOnOffUpdateTime = 0.0f;
@@ -179,42 +177,6 @@ void InitMenu()
 
 
 
-	// активные частицы космоса
-	psSpace = vw_CreateParticleSystem();
-	if (auto sharedSpace = psSpace.lock()) {
-		sharedSpace->ColorStart.r = 0.80f;
-		sharedSpace->ColorStart.g = 0.80f;
-		sharedSpace->ColorStart.b = 1.00f;
-		sharedSpace->ColorEnd.r = 0.70f;
-		sharedSpace->ColorEnd.g = 0.70f;
-		sharedSpace->ColorEnd.b = 1.00f;
-		sharedSpace->AlphaStart = 1.00f;
-		sharedSpace->AlphaEnd   = 0.00f;
-		sharedSpace->SizeStart = 0.10f;
-		sharedSpace->SizeVar = 0.05f;
-		sharedSpace->SizeEnd = 0.30f;
-		sharedSpace->Speed = 4.00f;
-		sharedSpace->SpeedVar = 8.00f;
-		sharedSpace->Theta = 0.00f;
-		sharedSpace->Life = 10.00f;
-		sharedSpace->LifeVar = 0.00f;
-		sharedSpace->CreationType = eParticleCreationType::Cube;
-		sharedSpace->CreationSize = sVECTOR3D(2.0f, 50.0f, 30.0f);
-		sharedSpace->ParticlesPerSec = 140;
-		sharedSpace->Texture = vw_FindTextureByName("gfx/flare3.tga");
-		sharedSpace->Direction = sVECTOR3D(1.0f, 0.0f, 0.0f);
-		sharedSpace->CameraDistResize = 0.1f;
-		sharedSpace->SetStartLocation(sVECTOR3D(-50, 10, -20));
-
-		// немного "прокручиваем", чтобы сразу по появлению было заполнено
-		float Time = sharedSpace->TimeLastUpdate;
-		for (float i = Time; i < (Time + 20); i += 1.0f) {
-			sharedSpace->Update(i);
-		}
-		sharedSpace->TimeLastUpdate = Time;
-	}
-
-
 	LastMenuUpdateTime = vw_GetTimeThread(0);
 	NeedShowMenu = true;
 	NeedHideMenu = false;
@@ -226,7 +188,7 @@ void InitMenu()
 
 	DrawGameCursor = true;
 
-	StarSystemResetTime(vw_GetTimeThread(0));
+	StarSystemInitByType(eDrawType::MENU);
 }
 
 

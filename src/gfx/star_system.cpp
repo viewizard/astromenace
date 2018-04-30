@@ -30,6 +30,7 @@
 // TODO move to fixed size static draw buffer, no reason allocate/release memory all the time
 // TODO remove vw_FindTextureByName() call from main loop
 // TODO local variables should be moved to unnamed namespace, don't allow external usage
+// TODO probably, we could use GL_EXT_draw_instanced here in future, for 'space dust' rendering
 
 #include "../struct.h"
 #include "../object3d/space_object/space_object.h"
@@ -43,13 +44,14 @@ bool StarSystem_Inited{false};
 // StarSystem rotation
 sVECTOR3D StarSystem_BaseRotation(0.0f, 0.0f, 0.0f);
 
-// для прорисовки подложки с тайловой анимацией
+// particle system for space dust
+std::weak_ptr<cParticleSystem> psSpace;
+
+// tile animation for space dust (2 layers)
 float StarsTile{0.0f};
 float StarsTile2{0.0f};
-
 float StarsTileUpdateTime{0.0f};
 float StarsTileUpdateTime2{0.0f};
-
 float StarsTileStartTransparentLayer1{0.0f};
 float StarsTileEndTransparentLayer1{0.0f};
 float StarsTileStartTransparentLayer2{0.0f};
@@ -60,7 +62,6 @@ float StarsTileEndTransparentLayer2{0.0f};
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern sVECTOR3D GamePoint;
 extern cSpaceObject *StartSpaceObject;
-extern std::weak_ptr<cParticleSystem> psSpace;
 // FIXME should be fixed, use 'include' instead
 float GameCameraGetDeviation();
 
@@ -102,10 +103,81 @@ void StarSystemInit(int Num, sVECTOR3D SetBaseRotation)
 	StarSystem_BaseRotation = SetBaseRotation;
 }
 
-void StarSystemResetTime(float Time)
+void StarSystemInitByType(eDrawType DrawType)
 {
-	StarsTileUpdateTime = Time;
-	StarsTileUpdateTime2 = Time;
+	switch (DrawType) {
+	case eDrawType::MENU:
+		StarsTileUpdateTime = vw_GetTimeThread(0);
+		StarsTileUpdateTime2 = vw_GetTimeThread(0);
+		psSpace = vw_CreateParticleSystem();
+		if (auto sharedSpace = psSpace.lock()) {
+			sharedSpace->ColorStart.r = 0.80f;
+			sharedSpace->ColorStart.g = 0.80f;
+			sharedSpace->ColorStart.b = 1.00f;
+			sharedSpace->ColorEnd.r = 0.70f;
+			sharedSpace->ColorEnd.g = 0.70f;
+			sharedSpace->ColorEnd.b = 1.00f;
+			sharedSpace->AlphaStart = 1.00f;
+			sharedSpace->AlphaEnd   = 0.00f;
+			sharedSpace->SizeStart = 0.10f;
+			sharedSpace->SizeVar = 0.05f;
+			sharedSpace->SizeEnd = 0.30f;
+			sharedSpace->Speed = 4.00f;
+			sharedSpace->SpeedVar = 8.00f;
+			sharedSpace->Theta = 0.00f;
+			sharedSpace->Life = 10.00f;
+			sharedSpace->LifeVar = 0.00f;
+			sharedSpace->CreationType = eParticleCreationType::Cube;
+			sharedSpace->CreationSize = sVECTOR3D(2.0f, 50.0f, 30.0f);
+			sharedSpace->ParticlesPerSec = 140;
+			sharedSpace->Texture = vw_FindTextureByName("gfx/flare3.tga");
+			sharedSpace->Direction = sVECTOR3D(1.0f, 0.0f, 0.0f);
+			sharedSpace->CameraDistResize = 0.1f;
+			sharedSpace->SetStartLocation(sVECTOR3D(-50, 10, -20));
+
+			// немного "прокручиваем", чтобы сразу по появлению было заполнено
+			float Time = sharedSpace->TimeLastUpdate;
+			for (float i = Time; i < (Time + 20); i += 1.0f) {
+				sharedSpace->Update(i);
+			}
+			sharedSpace->TimeLastUpdate = Time;
+		}
+	break;
+	case eDrawType::GAME:
+		StarsTileUpdateTime = vw_GetTimeThread(1);
+		StarsTileUpdateTime2 = vw_GetTimeThread(1);
+		psSpace = vw_CreateParticleSystem();
+		if (auto sharedSpace = psSpace.lock()) {
+			sharedSpace->ColorStart.r = 0.80f;
+			sharedSpace->ColorStart.g = 0.80f;
+			sharedSpace->ColorStart.b = 1.00f;
+			sharedSpace->ColorEnd.r = 0.70f;
+			sharedSpace->ColorEnd.g = 0.70f;
+			sharedSpace->ColorEnd.b = 1.00f;
+			sharedSpace->AlphaStart = 0.50f;
+			sharedSpace->AlphaEnd = 1.00f;
+			sharedSpace->SizeStart = 0.40f;
+			sharedSpace->SizeEnd = 0.05f;
+			sharedSpace->Speed = 25.00f;
+			sharedSpace->SpeedVar = 5.00f;
+			sharedSpace->Theta = 0.00f;
+			sharedSpace->Life = 14.00f;
+			sharedSpace->LifeVar = 0.00f;
+			sharedSpace->CreationType = eParticleCreationType::Cube;
+			sharedSpace->CreationSize = sVECTOR3D(200.0f, 30.0f, 10.0f);
+			sharedSpace->ParticlesPerSec = 100;
+			sharedSpace->Texture = vw_FindTextureByName("gfx/flare3.tga");
+			sharedSpace->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+			sharedSpace->SetStartLocation(sVECTOR3D(0, 10, 250)); //поправь ниже, на переносе если изменил!!!
+
+			float Time = sharedSpace->TimeLastUpdate;
+			for (float i = Time; i < (Time + 25); i += 1.0f) {
+				sharedSpace->Update(i);
+			}
+			sharedSpace->TimeLastUpdate = Time;
+		}
+	break;
+	}
 }
 
 void StarSystemLayer1Transp(float Start, float End)
@@ -173,19 +245,16 @@ void StarSystemDraw(eDrawType DrawType)
 			tmpSpaceObject->Draw(false);
 			if (DrawType == eDrawType::GAME)
 				vw_PopMatrix();
-		} else {
-			// если это большой астероид летящий на заднем фоне
-			if (tmpSpaceObject->ObjectType == 15 &&
-			    ((tmpSpaceObject->ObjectCreationType > 10) && (tmpSpaceObject->ObjectCreationType < 20))) {
-				if (DrawType == eDrawType::GAME) {
-					vw_PushMatrix();
-					vw_Translate(sVECTOR3D(CurrentCameraLocation.x * 0.70f - GameCameraGetDeviation() * 4.0f,
-							       GameCameraGetDeviation() * 2.0f, 0.0f));
-				}
-				tmpSpaceObject->Draw(false);
-				if (DrawType == eDrawType::GAME)
-					vw_PopMatrix();
+		} else if (tmpSpaceObject->ObjectType == 15 && // если это большой астероид летящий на заднем фоне
+			   ((tmpSpaceObject->ObjectCreationType > 10) && (tmpSpaceObject->ObjectCreationType < 20))) {
+			if (DrawType == eDrawType::GAME) {
+				vw_PushMatrix();
+				vw_Translate(sVECTOR3D(CurrentCameraLocation.x * 0.70f - GameCameraGetDeviation() * 4.0f,
+						       GameCameraGetDeviation() * 2.0f, 0.0f));
 			}
+			tmpSpaceObject->Draw(false);
+			if (DrawType == eDrawType::GAME)
+				vw_PopMatrix();
 		}
 
 		tmpSpaceObject = tmp2;
