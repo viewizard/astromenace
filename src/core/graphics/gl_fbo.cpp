@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO move from pointers to std::shared_ptr/std::weak_ptr
-
 // TODO probably, we need VBO+VAO here, since we don't change arrays,
 //      no reason re-send them all the time
 
@@ -45,25 +43,24 @@
 namespace {
 
 // Current FBO, null if FrameBuffer.
-sFBO *CurrentFBO{nullptr};
+std::weak_ptr<sFBO> CurrentFBO{};
 
 } // unnamed namespace
 
 
 /*
- * Build FBO. Caller should allocate mamory (FBO).
+ * Build FBO.
  */
-bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool NeedDepth, GLsizei MSAA, GLsizei *CSAA)
+std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor, bool NeedDepth, GLsizei MSAA, GLsizei *CSAA)
 {
-	if (!FBO ||
-	    !_glGenRenderbuffers ||
+	if (!_glGenRenderbuffers ||
 	    !_glBindRenderbuffer ||
 	    !_glRenderbufferStorageMultisample ||
 	    !_glGenFramebuffers ||
 	    !_glBindFramebuffer ||
 	    !_glFramebufferRenderbuffer ||
 	    !_glCheckFramebufferStatus)
-		return false;
+		return std::shared_ptr<sFBO> {};
 
 	// if hardware don't support coverage, switch to MSAA
 	if (!_glRenderbufferStorageMultisampleCoverageNV && CSAA)
@@ -72,6 +69,8 @@ bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool 
 	GLsizei InternalCSAA = MSAA;
 	if (CSAA)
 		InternalCSAA = *CSAA;
+
+	std::shared_ptr<sFBO> FBO{new sFBO, [](sFBO *p) {delete p;}};
 
 	FBO->Width = Width;
 	FBO->Height = Height;
@@ -104,7 +103,7 @@ bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool 
 			_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, FBO->ColorBuffer);
 			if(_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
-				return false;
+				return std::shared_ptr<sFBO> {};
 			}
 		} else { // if we don't need multisamples, switch to texture
 			glGenTextures(1, &FBO->ColorTexture);
@@ -118,7 +117,7 @@ bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool 
 			_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, FBO->ColorTexture, 0);
 			if(_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
-				return false;
+				return std::shared_ptr<sFBO> {};
 			}
 		}
 	}
@@ -139,7 +138,7 @@ bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool 
 							       GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &FBO->DepthSize);
 			if(_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
-				return false;
+				return std::shared_ptr<sFBO> {};
 			}
 		} else { // if we don't need multisamples, switch to texture
 			glGenTextures(1, &FBO->DepthTexture);
@@ -155,7 +154,7 @@ bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool 
 							       GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &FBO->DepthSize);
 			if(_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
-				return false;
+				return std::shared_ptr<sFBO> {};
 			}
 		}
 	}
@@ -168,22 +167,22 @@ bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor, bool 
 	if (__GetDevCaps().FramebufferObjectDepthSize < FBO->DepthSize)
 		__GetDevCaps().FramebufferObjectDepthSize = FBO->DepthSize;
 
-	return true;
+	return FBO;
 }
 
 /*
  * Bind FBO.
  */
-void vw_BindFBO(sFBO *FBO)
+void vw_BindFBO(std::shared_ptr<sFBO> &FBO)
 {
 	if (!_glBindFramebuffer ||
 	    (FBO && !FBO->FrameBufferObject))
 		return;
 
 	// if current have multisamples, disable it first
-	if (CurrentFBO &&
-	    (CurrentFBO->ColorBuffer || CurrentFBO->DepthBuffer))
-		glDisable(GL_MULTISAMPLE);
+	if (auto sharedCurrentFBO = CurrentFBO.lock())
+		if (sharedCurrentFBO->ColorBuffer || sharedCurrentFBO->DepthBuffer)
+			glDisable(GL_MULTISAMPLE);
 
 	if (FBO) {
 		if (FBO->ColorBuffer || FBO->DepthBuffer)
@@ -198,7 +197,7 @@ void vw_BindFBO(sFBO *FBO)
 /*
  * Get current FBO (null if FrameBuffer).
  */
-sFBO *vw_GetCurrentFBO()
+std::weak_ptr<sFBO> &vw_GetCurrentFBO()
 {
 	return CurrentFBO;
 }
@@ -206,7 +205,7 @@ sFBO *vw_GetCurrentFBO()
 /*
  * Blit color part of source FBO to target FBO (need this one in order to work with multisamples).
  */
-void vw_BlitFBO(sFBO *SourceFBO, sFBO *TargetFBO)
+void vw_BlitFBO(std::shared_ptr<sFBO> &SourceFBO, std::shared_ptr<sFBO> &TargetFBO)
 {
 	if (!SourceFBO || !TargetFBO ||
 	    !_glBindFramebuffer || !_glBlitFramebuffer ||
@@ -223,7 +222,7 @@ void vw_BlitFBO(sFBO *SourceFBO, sFBO *TargetFBO)
 /*
  * Draw source FBO (color texture) to target FBO (if null, to FrameBuffer).
  */
-void vw_DrawColorFBO(sFBO *SourceFBO, sFBO *TargetFBO)
+void vw_DrawColorFBO(std::shared_ptr<sFBO> &SourceFBO, std::shared_ptr<sFBO> &TargetFBO)
 {
 	if (!SourceFBO || !SourceFBO->ColorTexture)
 		return;
@@ -269,38 +268,24 @@ void vw_DrawColorFBO(sFBO *SourceFBO, sFBO *TargetFBO)
 }
 
 /*
- * Delete FBO.
+ * Destructor.
  */
-void vw_DeleteFBO(sFBO *FBO)
+sFBO::~sFBO()
 {
-	if (!FBO ||
-	    !_glDeleteRenderbuffers ||
-	    !_glDeleteFramebuffers)
-		return;
+	if (ColorTexture)
+		glDeleteTextures(1, &ColorTexture);
 
+	if (DepthTexture)
+		glDeleteTextures(1, &DepthTexture);
 
-	if (FBO->ColorTexture) {
-		glDeleteTextures(1, &FBO->ColorTexture);
-		FBO->ColorTexture = 0;
-	};
+	if (_glDeleteRenderbuffers) {
+		if (ColorBuffer)
+			_glDeleteRenderbuffers(1, &ColorBuffer);
+		if (DepthBuffer)
+			_glDeleteRenderbuffers(1, &DepthBuffer);
+	}
 
-	if (FBO->DepthTexture) {
-		glDeleteTextures(1, &FBO->DepthTexture);
-		FBO->DepthTexture = 0;
-	};
-
-	if (FBO->ColorBuffer) {
-		_glDeleteRenderbuffers(1, &FBO->ColorBuffer);
-		FBO->ColorBuffer = 0;
-	};
-
-	if (FBO->DepthBuffer) {
-		_glDeleteRenderbuffers(1, &FBO->DepthBuffer);
-		FBO->DepthBuffer = 0;
-	};
-
-	if (FBO->FrameBufferObject) {
-		_glDeleteFramebuffers(1, &FBO->FrameBufferObject);
-		FBO->FrameBufferObject = 0;
-	};
+	if (_glDeleteFramebuffers &&
+	    FrameBufferObject)
+		_glDeleteFramebuffers(1, &FrameBufferObject);
 }

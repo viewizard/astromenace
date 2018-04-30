@@ -62,9 +62,9 @@ bool InternalResolution{false};
 SDL_Window *SDLWindow{nullptr};
 
 // main FBO
-sFBO MainFBO;
+std::shared_ptr<sFBO> MainFBO{};
 // resolve FBO (for blit main FBO with multisample)
-sFBO ResolveFBO;
+std::shared_ptr<sFBO> ResolveFBO{};
 
 } // unnamed namespace
 
@@ -93,7 +93,7 @@ static bool ExtensionSupported(const char *Extension)
 /*
  * Initialize windows with OpenGL context.
  */
-int vw_InitWindow(const char* Title, int Width, int Height, int *Bits, bool FullScreenFlag,
+int vw_InitWindow(const char *Title, int Width, int Height, int *Bits, bool FullScreenFlag,
 		  int CurrentVideoModeX, int CurrentVideoModeY, int VSync)
 {
 	Uint32 Flags{SDL_WINDOW_OPENGL};
@@ -217,19 +217,18 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
 	if (DevCaps.OpenGL_3_0_supported) {
-		if ((!vw_BuildFBO(&MainFBO, Width, Height, true, true, *MSAA, CSAA)) &
-		    (!vw_BuildFBO(&ResolveFBO, Width, Height, true, false))) {
-			vw_DeleteFBO(&MainFBO);
-			vw_DeleteFBO(&ResolveFBO);
+		MainFBO = vw_BuildFBO(Width, Height, true, true, *MSAA, CSAA);
+		ResolveFBO = vw_BuildFBO(Width, Height, true, false);
+		if (!MainFBO || !ResolveFBO) {
 			*MSAA = 0;
-			MainFBO = sFBO{};
-			ResolveFBO = sFBO{};
+			MainFBO.reset();
+			ResolveFBO.reset();
 			DevCaps.FramebufferObjectDepthSize = 0;
 		}
 	} else {
 		*MSAA = 0;
-		MainFBO = sFBO{};
-		ResolveFBO = sFBO{};
+		MainFBO.reset();
+		ResolveFBO.reset();
 		DevCaps.FramebufferObjectDepthSize = 0;
 	}
 }
@@ -257,8 +256,8 @@ void vw_ShutdownRenderer()
 {
 	vw_ReleaseAllShaders();
 
-	vw_DeleteFBO(&MainFBO);
-	vw_DeleteFBO(&ResolveFBO);
+	MainFBO.reset();
+	ResolveFBO.reset();
 }
 
 /*
@@ -299,7 +298,7 @@ void vw_Clear(int mask)
  */
 void vw_BeginRendering(int mask)
 {
-	vw_BindFBO(&MainFBO);
+	vw_BindFBO(MainFBO);
 
 	vw_Clear(mask);
 
@@ -312,12 +311,16 @@ void vw_BeginRendering(int mask)
  */
 void vw_EndRendering()
 {
-	if (MainFBO.ColorTexture)
-		vw_DrawColorFBO(&MainFBO, nullptr);
-	else {
-		// if we use multisamples, should blit to color buffer first
-		vw_BlitFBO(&MainFBO, &ResolveFBO);
-		vw_DrawColorFBO(&ResolveFBO, nullptr);
+	if (MainFBO) {
+		std::shared_ptr<sFBO> tmpEmptyFBO{};
+
+		if (MainFBO->ColorTexture)
+			vw_DrawColorFBO(MainFBO, tmpEmptyFBO);
+		else {
+			// if we use multisamples, should blit to color buffer first
+			vw_BlitFBO(MainFBO, ResolveFBO);
+			vw_DrawColorFBO(ResolveFBO, tmpEmptyFBO);
+		}
 	}
 
 	SDL_GL_SwapWindow(SDLWindow);

@@ -490,6 +490,9 @@ void vw_DeleteVAO(GLuint &VAO);
  */
 
 struct sFBO {
+	friend std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor,
+						 bool NeedDepth, GLsizei MSAA, GLsizei *CSAA);
+public:
 	GLrenderbuffer ColorBuffer{0};
 	GLrenderbuffer DepthBuffer{0};
 	GLtexture ColorTexture{0};
@@ -499,21 +502,25 @@ struct sFBO {
 	// we are safe with sIF_complex_type here, since Width and Height not exceed 'float'
 	sIF_complex_type<GLsizei, float> Width{0};
 	sIF_complex_type<GLsizei, float> Height{0};
+
+private:
+	// Don't allow direct new/delete usage in code, only vw_BuildFBO()
+	// allowed for FBO creation and release setup (deleter must be provided).
+	sFBO() = default;
+	~sFBO();
 };
 
-// Build FBO. Caller should allocate mamory (FBO).
-bool vw_BuildFBO(sFBO *FBO, GLsizei Width, GLsizei Height, bool NeedColor,
-		 bool NeedDepth, GLsizei MSAA = 0, GLsizei *CSAA = nullptr);
+// Build FBO.
+std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor,
+				   bool NeedDepth, GLsizei MSAA = 0, GLsizei *CSAA = nullptr);
 // Bind FBO.
-void vw_BindFBO(sFBO *FBO);
-// Get current FBO (null if FrameBuffer).
-sFBO *vw_GetCurrentFBO();
+void vw_BindFBO(std::shared_ptr<sFBO> &FBO);
+// Get current FBO (nullptr if FrameBuffer).
+std::weak_ptr<sFBO> &vw_GetCurrentFBO();
 // Blit color part of source FBO to target FBO (need this one in order to work with multi samples).
-void vw_BlitFBO(sFBO *SourceFBO, sFBO *TargetFBO);
+void vw_BlitFBO(std::shared_ptr<sFBO> &SourceFBO, std::shared_ptr<sFBO> &TargetFBO);
 // Draw source FBO (color texture) to target FBO (if null, to FrameBuffer).
-void vw_DrawColorFBO(sFBO *SourceFBO, sFBO *TargetFBO);
-// Delete FBO.
-void vw_DeleteFBO(sFBO *FBO);
+void vw_DrawColorFBO(std::shared_ptr<sFBO> &SourceFBO, std::shared_ptr<sFBO> &TargetFBO);
 
 /*
  * gl_glsl

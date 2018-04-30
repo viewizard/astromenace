@@ -34,14 +34,14 @@
 
 namespace {
 
-sFBO *ShadowMapFBO{nullptr};
+std::shared_ptr<sFBO> ShadowMapFBO{};
 float ShadowMap_LightProjectionMatrix[16];
 float ShadowMap_LightModelViewMatrix[16];
 
 float xPixelOffset{0};
 float yPixelOffset{0};
 
-sFBO *CurrentSystemFBO{nullptr};
+std::weak_ptr<sFBO> CurrentSystemFBO{};
 int ShadowMapViewPort_x, ShadowMapViewPort_y, ShadowMapViewPort_width, ShadowMapViewPort_height;
 
 } // unnamed namespace
@@ -71,13 +71,11 @@ bool ShadowMap_Init(int Width, int Height)
 	if (ShadowMapFBO)
 		ShadowMap_Release();
 
-	xPixelOffset = 1.0f / Width;
-	yPixelOffset = 1.0f / Height;
+	xPixelOffset = 1.0f / static_cast<float>(Width);
+	yPixelOffset = 1.0f / static_cast<float>(Height);
 
-	ShadowMapFBO = new sFBO;
-
-	if ((vw_BuildFBO(ShadowMapFBO, Width, Height, false, true) &&
-	    (ShadowMapFBO->DepthSize >= 24))) // we need at least 24 bits
+	ShadowMapFBO = vw_BuildFBO(Width, Height, false, true);
+	if (ShadowMapFBO && (ShadowMapFBO->DepthSize >= 24)) // we need at least 24 bits
 		return true;
 
 	ShadowMap_Release();
@@ -93,9 +91,7 @@ void ShadowMap_Release()
 	if (!ShadowMapFBO)
 		return;
 
-	vw_DeleteFBO(ShadowMapFBO);
-	delete ShadowMapFBO;
-	ShadowMapFBO = nullptr;
+	ShadowMapFBO.reset();
 }
 
 /*
@@ -161,7 +157,9 @@ void ShadowMap_EndRenderToFBO()
 	vw_PolygonOffset(false, 0.0f, 0.0f);
 	vw_CullFace(eCullFace::BACK);
 
-	vw_BindFBO(CurrentSystemFBO);
+	auto sharedCurrentSystemFBO = CurrentSystemFBO.lock();
+	// don't use 'if' here on lock() call, nullptr object is appropriate too
+	vw_BindFBO(sharedCurrentSystemFBO);
 
 	vw_SetColorMask(true, true, true, true);
 	vw_SetViewport(ShadowMapViewPort_x, ShadowMapViewPort_y,
