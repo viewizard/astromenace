@@ -121,7 +121,7 @@ $ ~/astromenace/astromenace
 ## Work In Progress
 Yes, AstroMenace was first released in 2007, but work still in progress. For open source game, no need to change game's title in order to evolve.
 
-The main goal now is code refactoring for modern OpenGL features and new C++ standards (C++11, STL). Plus, I still provide AstroMenace code support, that means changes for new libs versions and new compillers versions.
+The main goal now is code refactoring for modern OpenGL features and new C++ standards (C++11, STL). Plus, I still provide AstroMenace code support, that means changes for new libs versions and new compilers versions.
 
 Unfortunately, I could not provide you with any new version's release dates, since this is extremely depends from my free time and limited resources. Check project's [plans](https://github.com/viewizard/astromenace/projects) for more info about current progress.
 
@@ -134,14 +134,16 @@ We also have a surprise for you, here is the artwork 1 of 12 light ships and 1 o
 </p>
 
 ## Donate to Support Development
-### Bitcoin
-![bitcoin](https://raw.githubusercontent.com/viewizard/astromenace/master/share/donate/bitcoin-qr-code.png)
-##### 14kDaLnNTroFfuur2tZmUdUp8eK3pS2Uq6
+#### Patreon: https://www.patreon.com/viewizard
 
-### PayPal
-https://www.paypal.me/viewizard
+#### PayPal: https://www.paypal.me/viewizard
 
-### Bank Transfer
+#### Bitcoin: 14kDaLnNTroFfuur2tZmUdUp8eK3pS2Uq6
+<p align="left">
+  <img src="https://raw.githubusercontent.com/viewizard/astromenace/master/share/donate/bitcoin-qr-code.png" alt="bitcoin-qr-code"/>
+</p>
+
+#### Bank Transfer
 * All donations are anonymous. Any sender details are not published or shared.
 * A tax-related donation receipt can not be issued because Viewizard is not a commercial nor registered organization.
 * Legally, it is a private donation.
