@@ -62,7 +62,7 @@ const std::string CreditsArray[] {
 	"",
 	"TRANSLATORS",
 	"Bernd Dau (de)",
-	"Mikhail Kurinnoi (en, ru)",
+	"Mikhail Kurinnoi (ru)",
 	"Jacek Fiedorowicz (pl)",
 	"",
 	"TESTERS",
