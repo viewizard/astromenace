@@ -30,8 +30,8 @@
 // TODO move to fixed size static draw buffer, no reason allocate/release memory all the time
 // TODO remove vw_FindTextureByName() call from main loop
 // TODO local variables should be moved to unnamed namespace, don't allow external usage
-// TODO StarSystemDraw() should use enumeration for DrawType
 
+#include "../struct.h"
 #include "../object3d/space_object/space_object.h"
 #include "skybox.h"
 
@@ -134,7 +134,7 @@ void StarSystemRelease()
 //------------------------------------------------------------------------------------
 // StarSystem draw function
 //------------------------------------------------------------------------------------
-void StarSystemDraw(int DrawType)
+void StarSystemDraw(eDrawType DrawType)
 {
 	if (!StarSystem_InitedAll) return;
 
@@ -165,25 +165,25 @@ void StarSystemDraw(int DrawType)
 
 		// если это планета на заднем фоне
 		if (tmpSpaceObject->ObjectType == 14) {
-			if (DrawType == 2) {
+			if (DrawType == eDrawType::GAME) {
 				vw_PushMatrix();
 				vw_Translate(sVECTOR3D(CurrentCameraLocation.x * 0.90f - GameCameraGetDeviation() * 4.0f,
 						       GameCameraGetDeviation() * 2.0f, 0.0f));
 			}
 			tmpSpaceObject->Draw(false);
-			if (DrawType == 2)
+			if (DrawType == eDrawType::GAME)
 				vw_PopMatrix();
 		} else {
 			// если это большой астероид летящий на заднем фоне
 			if (tmpSpaceObject->ObjectType == 15 &&
 			    ((tmpSpaceObject->ObjectCreationType > 10) && (tmpSpaceObject->ObjectCreationType < 20))) {
-				if (DrawType == 2) {
+				if (DrawType == eDrawType::GAME) {
 					vw_PushMatrix();
 					vw_Translate(sVECTOR3D(CurrentCameraLocation.x * 0.70f - GameCameraGetDeviation() * 4.0f,
 							       GameCameraGetDeviation() * 2.0f, 0.0f));
 				}
 				tmpSpaceObject->Draw(false);
-				if (DrawType == 2)
+				if (DrawType == eDrawType::GAME)
 					vw_PopMatrix();
 			}
 		}
@@ -207,7 +207,7 @@ void StarSystemDraw(int DrawType)
 	float StartTransparentLayer1{0.7f};
 	float EndTransparentLayer1{0.7f};
 
-	if (DrawType == 2) {
+	if (DrawType == eDrawType::GAME) {
 		width_2 = length_2 = 175.0f;
 		heigh_2 = 0.0f;
 		// чем ниже слой, тем меньше его двигаем при перемещении камеры (при стандартном аспект рейшен)
@@ -261,7 +261,7 @@ void StarSystemDraw(int DrawType)
 	buff[k++] = 0.0f;
 	buff[k++] = 1.0f + StarsTile / 3.0f;
 
-	if (DrawType == 1) {
+	if (DrawType == eDrawType::MENU) {
 		StarsTile -= 0.015f * (vw_GetTimeThread(0) - StarsTileUpdateTime);
 		StarsTileUpdateTime = vw_GetTimeThread(0);
 	} else {
@@ -279,7 +279,7 @@ void StarSystemDraw(int DrawType)
 
 	vw_DepthTest(false, eCompareFunc::LESS);
 
-	if (DrawType == 1) {
+	if (DrawType == eDrawType::MENU) {
 		vw_PushMatrix();
 		vw_Rotate(-20.0f, 0.0f, 0.0f, 1.0f);
 		vw_Rotate(-45.0f, 0.0f, 1.0f, 0.0f);
@@ -336,7 +336,7 @@ void StarSystemDraw(int DrawType)
 
 	vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX, buff, 9 * sizeof(buff[0]));
 
-	if (DrawType == 1)
+	if (DrawType == eDrawType::MENU)
 		vw_PopMatrix();
 
 	vw_DepthTest(true, eCompareFunc::LEQUAL);
@@ -347,7 +347,7 @@ void StarSystemDraw(int DrawType)
 		delete [] buff;
 
 	// корректируем положение частиц "космической пыли", если в игре и камера движется
-	if (DrawType == 2) {
+	if (DrawType == eDrawType::GAME) {
 		if (auto sharedSpace = psSpace.lock()) {
 			sharedSpace->SetStartLocation(sharedSpace->GetLocation());
 			sharedSpace->MoveSystemLocation(sVECTOR3D(0, 10, 250) + GamePoint);
@@ -358,7 +358,7 @@ void StarSystemDraw(int DrawType)
 //------------------------------------------------------------------------------------
 // Прорисовка второго слоя "пыли" с тайловой анимацией
 //------------------------------------------------------------------------------------
-void StarSystemDrawSecondLayer(int DrawType)
+void StarSystemDrawSecondLayer(eDrawType DrawType)
 {
 	if (Setup.VisualEffectsQuality <= 1) {
 		float *buff = new float[4 * 9];
@@ -372,7 +372,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 		float StartTransparentLayer2{0.9f};
 		float EndTransparentLayer2{0.7f};
 
-		if (DrawType == 2) {
+		if (DrawType == eDrawType::GAME) {
 			width_2 = length_2 = 175.0f;
 			heigh_2 = 0.0f;
 
@@ -429,7 +429,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 		buff[k++] = 0.2f;
 		buff[k++] = 3.0f + StarsTile2;
 
-		if (DrawType == 1) {
+		if (DrawType == eDrawType::MENU) {
 			StarsTile2 -= 0.04f * (vw_GetTimeThread(0) - StarsTileUpdateTime2);
 			StarsTileUpdateTime2 = vw_GetTimeThread(0);
 		} else {
@@ -444,7 +444,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 		vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
 		vw_DepthTest(false, eCompareFunc::LESS);
 
-		if (DrawType == 1) {
+		if (DrawType == eDrawType::MENU) {
 			vw_PushMatrix();
 			vw_Rotate(-20.0f, 0.0f, 0.0f, 1.0f);
 			vw_Rotate(-45.0f, 0.0f, 1.0f, 0.0f);
@@ -453,7 +453,7 @@ void StarSystemDrawSecondLayer(int DrawType)
 
 		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR | RI_1_TEX, buff, 9 * sizeof(buff[0]));
 
-		if (DrawType == 1)
+		if (DrawType == eDrawType::MENU)
 			vw_PopMatrix();
 
 		vw_DepthTest(true, eCompareFunc::LEQUAL);

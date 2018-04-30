@@ -37,6 +37,11 @@
 // Maximum possible missions number for arrays in pilot profile (changes make previous game configuration file incompatible)
 #define MAXIMUM_GAME_MISSIONS 100
 
+enum class eDrawType {
+	MENU,
+	GAME
+};
+
 enum class eMenuStatus {
 	MAIN_MENU,		// main menu
 	GAME,			// game

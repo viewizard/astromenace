@@ -456,7 +456,7 @@ void DrawMenu()
 
 
 	// всегда первым рисуем скайбокс и "далекое" окружение
-	StarSystemDraw(1);
+	StarSystemDraw(eDrawType::MENU);
 
 
 
@@ -483,7 +483,7 @@ void DrawMenu()
 
 
 	// рисуем все 3д объекты
-	DrawAllObject3D(1);
+	DrawAllObject3D(eDrawType::MENU);
 
 
 

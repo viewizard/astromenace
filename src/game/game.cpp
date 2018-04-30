@@ -1064,11 +1064,11 @@ void DrawGame()
 
 
 	// всегда первым рисуем скайбокс и "далекое" окружение
-	StarSystemDraw(2);
+	StarSystemDraw(eDrawType::GAME);
 
 
 	// рисуем все 3д объекты
-	DrawAllObject3D(2);
+	DrawAllObject3D(eDrawType::GAME);
 
 
 	// после полной прорисовки делаем обновление данных

@@ -32,8 +32,8 @@ void StarSystemInit(int Num, sVECTOR3D SetBaseRotation);
 void StarSystemResetTime(float Time);
 void StarSystemLayer1Transp(float Start, float End);
 void StarSystemLayer2Transp(float Start, float End);
-void StarSystemDraw(int DrawType); // 1- меню, 2- игра
-void StarSystemDrawSecondLayer(int DrawType);
+void StarSystemDraw(eDrawType DrawType);
+void StarSystemDrawSecondLayer(eDrawType DrawType);
 void StarSystemRelease();
 
 #endif // STARSYSTEM_H

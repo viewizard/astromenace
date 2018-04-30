@@ -60,7 +60,7 @@ void ReleaseAllObject3D()
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllObject3D(int DrawType)
+void DrawAllObject3D(eDrawType DrawType)
 {
 	// ставим всегда меньше или равно!
 	vw_DepthTest(true, eCompareFunc::LEQUAL);
@@ -71,11 +71,11 @@ void DrawAllObject3D(int DrawType)
 	if (Setup.ShadowMap > 0) {
 		switch (DrawType) {
 		// меню
-		case 1:
+		case eDrawType::MENU:
 			ShadowMap_StartRenderToFBO(sVECTOR3D(50,-5,-120), 120.0f, 500.0f);
 			break;
 		// игра
-		case 2:
+		case eDrawType::GAME:
 			ShadowMap_StartRenderToFBO(sVECTOR3D(0,0,160), 600.0f, 800.0f);
 			break;
 		}
