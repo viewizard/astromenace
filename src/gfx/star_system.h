@@ -28,15 +28,10 @@
 #ifndef STARSYSTEM_H
 #define STARSYSTEM_H
 
-// FIXME should be fixed, use function-based interface, instead of direct variables access
-extern float StarsTileStartTransparentLayer1;
-extern float StarsTileEndTransparentLayer1;
-extern float StarsTileStartTransparentLayer2;
-extern float StarsTileEndTransparentLayer2;
-
-
 void StarSystemInit(int Num, sVECTOR3D SetBaseRotation);
 void StarSystemResetTime(float Time);
+void StarSystemLayer1Transp(float Start, float End);
+void StarSystemLayer2Transp(float Start, float End);
 void StarSystemDraw(int DrawType); // 1- меню, 2- игра
 void StarSystemDrawSecondLayer(int DrawType);
 void StarSystemRelease();

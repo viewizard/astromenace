@@ -50,6 +50,11 @@ float StarsTile2{0.0f};
 float StarsTileUpdateTime{0.0f};
 float StarsTileUpdateTime2{0.0f};
 
+float StarsTileStartTransparentLayer1{0.0f};
+float StarsTileEndTransparentLayer1{0.0f};
+float StarsTileStartTransparentLayer2{0.0f};
+float StarsTileEndTransparentLayer2{0.0f};
+
 } // unnamed namespace
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
@@ -58,13 +63,6 @@ extern cSpaceObject *StartSpaceObject;
 extern std::weak_ptr<cParticleSystem> psSpace;
 // FIXME should be fixed, use 'include' instead
 float GameCameraGetDeviation();
-
-// FIXME should be fixed, don't allow global scope interaction for local variables
-//       use function-based interface, instead of direct variables access
-float StarsTileStartTransparentLayer1{0.0f};
-float StarsTileEndTransparentLayer1{0.0f};
-float StarsTileStartTransparentLayer2{0.0f};
-float StarsTileEndTransparentLayer2{0.0f};
 
 
 //------------------------------------------------------------------------------------
@@ -108,6 +106,18 @@ void StarSystemResetTime(float Time)
 {
 	StarsTileUpdateTime = Time;
 	StarsTileUpdateTime2 = Time;
+}
+
+void StarSystemLayer1Transp(float Start, float End)
+{
+	StarsTileStartTransparentLayer1 = Start;
+	StarsTileEndTransparentLayer1 = End;
+}
+
+void StarSystemLayer2Transp(float Start, float End)
+{
+	StarsTileStartTransparentLayer2 = Start;
+	StarsTileEndTransparentLayer2 = End;
 }
 
 //------------------------------------------------------------------------------------

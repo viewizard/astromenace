@@ -1072,10 +1072,10 @@ void LoadGameData(eLoading LoadType)
 		}
 
 		// установка прозрачности слоев
-		StarsTileStartTransparentLayer1 = 0.2f;
-		StarsTileEndTransparentLayer1 = 0.7f;
-		StarsTileStartTransparentLayer2 = 0.9f;
-		StarsTileEndTransparentLayer2 = 0.7f;
+		float Layer1TranspStart = 0.2f;
+		float Layer1TranspEnd = 0.7f;
+		float Layer2TranspStart = 0.9f;
+		float Layer2TranspEnd = 0.7f;
 
 		for (auto &tmpEntry : xmlEntry->ChildrenList) {
 			if (tmpEntry.Name == "StarSystem1")
@@ -1100,16 +1100,18 @@ void LoadGameData(eLoading LoadType)
 				if (!tmpEntry.Content.empty())
 					InitGameAI(tmpEntry.Content.c_str()); // "script/aimode.xml"
 			} else if (tmpEntry.Name == "LayersTransp") {
-				xmlDoc->fGetEntryAttribute(tmpEntry, "FirstStart", StarsTileStartTransparentLayer1);
-				xmlDoc->fGetEntryAttribute(tmpEntry, "FirstEnd", StarsTileEndTransparentLayer1);
-				xmlDoc->fGetEntryAttribute(tmpEntry, "SecondStart", StarsTileStartTransparentLayer2);
-				xmlDoc->fGetEntryAttribute(tmpEntry, "SecondEnd", StarsTileStartTransparentLayer2);
+				xmlDoc->fGetEntryAttribute(tmpEntry, "FirstStart", Layer1TranspStart);
+				xmlDoc->fGetEntryAttribute(tmpEntry, "FirstEnd", Layer1TranspEnd);
+				xmlDoc->fGetEntryAttribute(tmpEntry, "SecondStart", Layer2TranspStart);
+				xmlDoc->fGetEntryAttribute(tmpEntry, "SecondEnd", Layer2TranspEnd);
 			}
 		}
 
 		// чистим память, со скриптом работать больше не надо
 		xmlDoc.reset();
 
+		StarSystemLayer1Transp(Layer1TranspStart, Layer1TranspEnd);
+		StarSystemLayer2Transp(Layer2TranspStart, Layer2TranspEnd);
 
 		// считаем сколько там элементов
 		if (StarSystem1)
