@@ -87,7 +87,7 @@ const std::string CreditsArray[] {
 	"",
 	" ", /* this is correct, we need non empty line for white color for next line */
 	"Copyright © 2007-2018, Viewizard",
-	"http://www.viewizard.com"
+	"www.viewizard.com"
 };
 constexpr int CreditsArrayCount = sizeof(CreditsArray)/sizeof(CreditsArray[0]);
 
