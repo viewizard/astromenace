@@ -883,9 +883,7 @@ void InitGame()
 	SoundShowHideMenu = 0;
 	CurrentGameSpeedShowTime = 2.0f;
 
-	StarsTileUpdateTime = vw_GetTimeThread(1);
-	StarsTileUpdateTime2 = vw_GetTimeThread(1);
-
+	StarSystemResetTime(vw_GetTimeThread(1));
 
 	LastGameOnOffUpdateTime = vw_GetTimeThread(0);
 	GameBlackTransp = 1.0f;

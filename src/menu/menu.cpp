@@ -226,8 +226,7 @@ void InitMenu()
 
 	DrawGameCursor = true;
 
-	StarsTileUpdateTime = vw_GetTimeThread(0);
-	StarsTileUpdateTime2 = vw_GetTimeThread(0);
+	StarSystemResetTime(vw_GetTimeThread(0));
 }
 
 

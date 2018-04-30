@@ -47,6 +47,9 @@ sVECTOR3D StarSystem_BaseRotation(0.0f, 0.0f, 0.0f);
 float StarsTile{0.0f};
 float StarsTile2{0.0f};
 
+float StarsTileUpdateTime{0.0f};
+float StarsTileUpdateTime2{0.0f};
+
 } // unnamed namespace
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
@@ -58,8 +61,6 @@ float GameCameraGetDeviation();
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 //       use function-based interface, instead of direct variables access
-float StarsTileUpdateTime{0.0f};
-float StarsTileUpdateTime2{0.0f};
 float StarsTileStartTransparentLayer1{0.0f};
 float StarsTileEndTransparentLayer1{0.0f};
 float StarsTileStartTransparentLayer2{0.0f};
@@ -101,6 +102,12 @@ void StarSystemInit(int Num, sVECTOR3D SetBaseRotation)
 	// StarSystem setup
 	StarSystem_InitedAll = true;
 	StarSystem_BaseRotation = SetBaseRotation;
+}
+
+void StarSystemResetTime(float Time)
+{
+	StarsTileUpdateTime = Time;
+	StarsTileUpdateTime2 = Time;
 }
 
 //------------------------------------------------------------------------------------
