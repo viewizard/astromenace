@@ -169,20 +169,6 @@ void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 
 
 
-//------------------------------------------------------------------------------------
-// ShadowMap.cpp
-//------------------------------------------------------------------------------------
-bool ShadowMap_Init(int Width, int Height);
-void ShadowMap_Release();
-void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, float fFarClip);
-void ShadowMap_EndRenderToFBO();
-void ShadowMap_StartFinalRender();
-void ShadowMap_EndFinalRender();
-float ShadowMap_Get_xPixelOffset();
-float ShadowMap_Get_yPixelOffset();
-
-
-
 
 //------------------------------------------------------------------------------------
 // Button.cpp

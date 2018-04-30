@@ -30,7 +30,8 @@
 // TODO ShadowMap_StartRenderToFBO() should be fixed in order to automatically
 //      place buffer in proper place
 
-#include "../game.h"
+#include "../core/core.h"
+#include "shadow_map.h"
 
 namespace {
 

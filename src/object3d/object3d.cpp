@@ -27,6 +27,7 @@
 
 #include "object3d.h"
 #include "../game.h"
+#include "../gfx/shadow_map.h"
 
 
 // флаг, показывать боксы или нет (1>AABB, 2>OBB, 3>HitBB)

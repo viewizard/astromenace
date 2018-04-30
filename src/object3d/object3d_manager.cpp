@@ -31,6 +31,7 @@
 #include "space_object/space_object.h"
 #include "object3d.h"
 #include "../gfx/star_system.h"
+#include "../gfx/shadow_map.h"
 
 
 //-----------------------------------------------------------------------------

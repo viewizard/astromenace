@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../gfx/shadow_map.h"
 #include "../object3d/object3d.h"
 #include "../object3d/weapon/weapon.h"
 #include "../object3d/space_ship/alien_space_fighter/alien_space_fighter.h"

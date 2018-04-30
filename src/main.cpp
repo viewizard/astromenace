@@ -28,6 +28,7 @@
 // TODO move to SDL_GetBasePath(), SDL_GetPrefPath() + SDL_free() usage (libSDL2)
 
 #include "game.h"
+#include "gfx/shadow_map.h"
 #include "script_engine/script.h"
 #include "object3d/object3d.h"
 #include <sys/stat.h> // stat
