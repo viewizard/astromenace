@@ -29,6 +29,7 @@
 
 #include "../game.h"
 #include "script.h"
+#include "../gfx/star_system.h"
 #include "../object3d/object3d.h"
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/ground_object/ground_object.h"

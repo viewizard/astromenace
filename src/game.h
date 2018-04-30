@@ -169,19 +169,6 @@ void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 
 
 
-
-//------------------------------------------------------------------------------------
-// StarSystem.cpp
-//------------------------------------------------------------------------------------
-void StarSystemInit(int Num, sVECTOR3D SetBaseRotation);
-void StarSystemDraw(int DrawType); // 1- меню, 2- игра
-void StarSystemDrawSecondLayer(int DrawType);
-void StarSystemRelease();
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // ShadowMap.cpp
 //------------------------------------------------------------------------------------
@@ -478,10 +465,6 @@ extern float LastGameButton1UpdateTime;
 extern bool NeedShowGameMenu;
 extern bool NeedHideGameMenu;
 extern bool GameMissionCompleteStatus;
-extern float StarsTileStartTransparentLayer1;
-extern float StarsTileEndTransparentLayer1;
-extern float StarsTileStartTransparentLayer2;
-extern float StarsTileEndTransparentLayer2;
 
 void InitGame();
 void DrawGame();

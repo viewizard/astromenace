@@ -29,7 +29,7 @@
 
 #include "game.h"
 #include "object3d/object3d.h"
-
+#include "gfx/star_system.h"
 
 
 

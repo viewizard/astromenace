@@ -33,6 +33,7 @@
 
 #include "../core/core.h"
 #include "../game.h"
+#include "../gfx/star_system.h"
 #include "../script_engine/script.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 #include <stdarg.h> // va_start
@@ -145,9 +146,6 @@ extern std::weak_ptr<cParticleSystem> Shild2;
 // для звука открытия-закрытия меню в игре
 unsigned int SoundShowHideMenu{0};
 
-// для прорисовки подложки с тайловой анимацией
-extern float StarsTileUpdateTime;
-extern float StarsTileUpdateTime2;
 
 // для отображения скорости
 float CurrentGameSpeed = 0.0f;

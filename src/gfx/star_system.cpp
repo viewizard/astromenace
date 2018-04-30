@@ -26,11 +26,12 @@
 *************************************************************************************/
 
 // TODO translate comments
+// TODO add initialization via XML file, hard coded initialization should be removed
 // TODO move to fixed size static draw buffer, no reason allocate/release memory all the time
 // TODO remove vw_FindTextureByName() call from main loop
 // TODO local variables should be moved to unnamed namespace, don't allow external usage
+// TODO StarSystemDraw() should use enumeration for DrawType
 
-#include "../game.h"
 #include "../object3d/space_object/space_object.h"
 #include "skybox.h"
 
@@ -42,15 +43,22 @@ bool StarSystem_Inited{false};
 // StarSystem rotation
 sVECTOR3D StarSystem_BaseRotation(0.0f, 0.0f, 0.0f);
 
-} // unnamed namespace
-
-extern cSpaceObject *StartSpaceObject;
-extern std::weak_ptr<cParticleSystem> psSpace;
-
 // для прорисовки подложки с тайловой анимацией
 float StarsTile{0.0f};
-float StarsTileUpdateTime{0.0f};
 float StarsTile2{0.0f};
+
+} // unnamed namespace
+
+// FIXME should be fixed, don't allow global scope interaction for local variables
+extern sVECTOR3D GamePoint;
+extern cSpaceObject *StartSpaceObject;
+extern std::weak_ptr<cParticleSystem> psSpace;
+// FIXME should be fixed, use 'include' instead
+float GameCameraGetDeviation();
+
+// FIXME should be fixed, don't allow global scope interaction for local variables
+//       use function-based interface, instead of direct variables access
+float StarsTileUpdateTime{0.0f};
 float StarsTileUpdateTime2{0.0f};
 float StarsTileStartTransparentLayer1{0.0f};
 float StarsTileEndTransparentLayer1{0.0f};

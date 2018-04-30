@@ -28,6 +28,7 @@
 #include "../game.h"
 #include "../script_engine/script.h"
 #include "../object3d/object3d.h"
+#include "../gfx/star_system.h"
 
 
 //------------------------------------------------------------------------------------
@@ -76,9 +77,6 @@ float Button14Transp = 1.0f;
 float LastButton14UpdateTime = 0.0f;
 
 
-// для прорисовки подложки с тайловой анимацией
-extern float StarsTileUpdateTime;
-extern float StarsTileUpdateTime2;
 
 
 

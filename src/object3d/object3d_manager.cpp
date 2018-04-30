@@ -30,6 +30,7 @@
 #include "ground_object/ground_object.h"
 #include "space_object/space_object.h"
 #include "object3d.h"
+#include "../gfx/star_system.h"
 
 
 //-----------------------------------------------------------------------------
