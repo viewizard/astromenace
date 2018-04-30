@@ -25,10 +25,9 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 // TODO ShadowMap_StartRenderToFBO() should be fixed in order to automatically
-//      place buffer in proper place
+//      calculate focus point, probably not a good idea setup gluLookAt() to point,
+//      that based on camera focus point and 'magic' FocusPointCorrection
 
 #include "../core/core.h"
 #include "shadow_map.h"
@@ -48,19 +47,25 @@ int ShadowMapViewPort_x, ShadowMapViewPort_y, ShadowMapViewPort_width, ShadowMap
 } // unnamed namespace
 
 
+/*
+ * X offset for shader.
+ */
 float ShadowMap_Get_xPixelOffset()
 {
 	return xPixelOffset;
 }
 
+/*
+ * Y offset for shader.
+ */
 float ShadowMap_Get_yPixelOffset()
 {
 	return yPixelOffset;
 }
 
-//-----------------------------------------------------------------------------
-// инициализация шадов меп
-//-----------------------------------------------------------------------------
+/*
+ * Initialization.
+ */
 bool ShadowMap_Init(int Width, int Height)
 {
 	if (ShadowMapFBO)
@@ -71,7 +76,6 @@ bool ShadowMap_Init(int Width, int Height)
 
 	ShadowMapFBO = new sFBO;
 
-	//if (vw_BuildFBO(ShadowMapFBO, Width, Height, true, true)) // color test
 	if ((vw_BuildFBO(ShadowMapFBO, Width, Height, false, true) &&
 	    (ShadowMapFBO->DepthSize >= 24))) // we need at least 24 bits
 		return true;
@@ -81,9 +85,9 @@ bool ShadowMap_Init(int Width, int Height)
 	return false;
 }
 
-//-----------------------------------------------------------------------------
-// освобождаем память
-//-----------------------------------------------------------------------------
+/*
+ * Release.
+ */
 void ShadowMap_Release()
 {
 	if (!ShadowMapFBO)
@@ -94,35 +98,27 @@ void ShadowMap_Release()
 	ShadowMapFBO = nullptr;
 }
 
-//-----------------------------------------------------------------------------
-// подготовка рендеринга в шадовмеп фбо
-//-----------------------------------------------------------------------------
+/*
+ * Start shadow map rendering (depth map).
+ */
 void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, float fFarClip)
 {
 	if (!ShadowMapFBO ||
 	    !ShadowMapFBO->DepthTexture)
 		return;
 
-	// сохраняем модельвью матрицу
-	vw_PushMatrix();
+	vw_PushMatrix(); // push MODELVIEW matrix
 
-	// сохраняем данные вьюпорта (параметры буфера глубины не получаем, всегда используем его полностью, 0-1)
 	vw_GetViewport(&ShadowMapViewPort_x, &ShadowMapViewPort_y, &ShadowMapViewPort_width, &ShadowMapViewPort_height);
-	// устанавливаем вьюпорт согласно нашему фбо для шадовмепинга
 	vw_SetViewport(0, 0, ShadowMapFBO->Width.i(), ShadowMapFBO->Height.i(), eOrigin::bottom_left);
 	vw_DepthRange(0.005f, 1.0f);
 
-	// сохраняем данные текущего фбо или фб
 	CurrentSystemFBO = vw_GetCurrentFBO();
-
-	// устанавливаем фбо
 	vw_BindFBO(ShadowMapFBO);
 
 	vw_Clear(RI_DEPTH_BUFFER);
 	vw_SetColorMask(false, false, false, false);
-	//vw_Clear(RI_COLOR_BUFFER | RI_DEPTH_BUFFER); // тест, для вывода цветовой составляющей на экран
 
-	// сохраняем матрицу проекции
 	vw_MatrixMode(eMatrixMode::PROJECTION);
 	vw_PushMatrix();
 	vw_MatrixMode(eMatrixMode::MODELVIEW);
@@ -130,19 +126,18 @@ void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, 
 	vw_ResizeScene(45.0f, ShadowMapFBO->Width.f() / ShadowMapFBO->Height.f(), 1.0f, fFarClip);
 	vw_GetMatrix(eMatrixPname::PROJECTION, ShadowMap_LightProjectionMatrix);
 
-
-	// получаем данные направленного источника света
+	// get directional light
 	std::weak_ptr<cLight> CurrentDirectLight;
 	sVECTOR3D LightPosition{0.0f, 0.0f, 0.0f};
 	if (vw_GetMainDirectLight(CurrentDirectLight))
 		if (auto sharedCurrentDirectLight = CurrentDirectLight.lock())
 			LightPosition = sharedCurrentDirectLight->Direction;
 	LightPosition.Normalize();
-	LightPosition = LightPosition^(-Distance);
+	LightPosition = LightPosition ^ -Distance;
 
 	sVECTOR3D CurrentCameraFocusPoint = vw_GetCameraFocusPoint();
 	CurrentCameraFocusPoint += FocusPointCorrection;
-	// т.к. у нас направленный свет, надо смещаться относительно точки куда светим
+	// for directional light, we should move eyes point
 	LightPosition += CurrentCameraFocusPoint;
 
 	gluLookAt(LightPosition.x, LightPosition.y, LightPosition.z,
@@ -150,15 +145,13 @@ void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, 
 		  0.0f, 1.0f, 0.0f);
 
 	vw_GetMatrix(eMatrixPname::MODELVIEW, ShadowMap_LightModelViewMatrix);
-
 	vw_CullFace(eCullFace::FRONT);
-
 	vw_PolygonOffset(true, 2.0f, 2.0f);
 }
 
-//-----------------------------------------------------------------------------
-// завершение рендеринга в шадовмеп фбо
-//-----------------------------------------------------------------------------
+/*
+ * End shadow map rendering (depth map).
+ */
 void ShadowMap_EndRenderToFBO()
 {
 	if (!ShadowMapFBO ||
@@ -166,34 +159,25 @@ void ShadowMap_EndRenderToFBO()
 		return;
 
 	vw_PolygonOffset(false, 0.0f, 0.0f);
-
 	vw_CullFace(eCullFace::BACK);
 
-	// устанавливаем на место основной фбо или фб
 	vw_BindFBO(CurrentSystemFBO);
 
 	vw_SetColorMask(true, true, true, true);
-//--------- рисуем цвет сост. для теста
-//	vw_DrawColorFBO(ShadowMapFBO, CurrentSystemFBO);
-
-	// устанавливаем первоначальный вьюпорт
 	vw_SetViewport(ShadowMapViewPort_x, ShadowMapViewPort_y,
 		       ShadowMapViewPort_width, ShadowMapViewPort_height,
 		       eOrigin::bottom_left);
 	vw_DepthRange(0.0f, 1.0f);
 
-	// восстанавливаем матрицу проекции
 	vw_MatrixMode(eMatrixMode::PROJECTION);
 	vw_PopMatrix();
 	vw_MatrixMode(eMatrixMode::MODELVIEW);
-
-	// восстанавливаем модельвью матрицу
 	vw_PopMatrix();
 }
 
-//-----------------------------------------------------------------------------
-// начало рендеринга моделей с тенями
-//-----------------------------------------------------------------------------
+/*
+ * Start scene rendering with shadows.
+ */
 void ShadowMap_StartFinalRender()
 {
 	if (!ShadowMapFBO ||
@@ -201,10 +185,8 @@ void ShadowMap_StartFinalRender()
 		 return;
 
 	vw_BindTexture(2, ShadowMapFBO->DepthTexture);
-	// т.к. будем использовать shadow2DProj, ставим правильный режим работы
 	vw_SetTextureCompare(eTextureCompareMode::REF_TO_TEXTURE, eCompareFunc::LEQUAL);
 	vw_SetTextureDepthMode(eTextureDepthMode::INTENSITY);
-	// ставим линеар сглаживание, чтобы PCF делало более плавные переходы
 	vw_SetTextureFiltering(eTextureBasicFilter::BILINEAR);
 
 	vw_MatrixMode(eMatrixMode::TEXTURE);
@@ -223,9 +205,9 @@ void ShadowMap_StartFinalRender()
 	vw_MatrixMode(eMatrixMode::MODELVIEW);
 }
 
-//-----------------------------------------------------------------------------
-// завершение рендеринга моделей с тенями
-//-----------------------------------------------------------------------------
+/*
+ * End scene rendering with shadows.
+ */
 void ShadowMap_EndFinalRender()
 {
 	if (!ShadowMapFBO ||

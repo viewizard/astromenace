@@ -28,13 +28,21 @@
 #ifndef SHADOWMAP_H
 #define SHADOWMAP_H
 
+// Initialization.
 bool ShadowMap_Init(int Width, int Height);
+// Release.
 void ShadowMap_Release();
+// Start shadow map rendering (depth map).
 void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, float fFarClip);
+// End shadow map rendering (depth map).
 void ShadowMap_EndRenderToFBO();
+// Start scene rendering with shadows (color).
 void ShadowMap_StartFinalRender();
+// End scene rendering with shadows (color).
 void ShadowMap_EndFinalRender();
+// X offset for shader.
 float ShadowMap_Get_xPixelOffset();
+// Y offset for shader.
 float ShadowMap_Get_yPixelOffset();
 
 #endif // SHADOWMAP_H
