@@ -37,16 +37,6 @@
 // Maximum possible missions number for arrays in pilot profile (changes make previous game configuration file incompatible)
 #define MAXIMUM_GAME_MISSIONS 100
 
-enum class eSide : unsigned {
-	RIGHT,	// The RIGHT side
-	LEFT,	// The LEFT side
-	BOTTOM,	// The BOTTOM side
-	TOP,	// The TOP side
-	BACK,	// The BACK side
-	FRONT,	// The FRONT side
-	size	// last entry, our enumeration size
-};
-
 enum class eMenuStatus {
 	MAIN_MENU,		// main menu
 	GAME,			// game

@@ -42,7 +42,7 @@ textures. Since this one is tiled, we could scale it in 2 times for each side fo
 */
 
 #include "../core/core.h"
-#include "../struct.h"
+#include "skybox.h"
 
 namespace {
 

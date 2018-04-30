@@ -28,7 +28,16 @@
 #ifndef SKYBOX_H
 #define SKYBOX_H
 
-#include "../core/base.h"
+enum class eSide : unsigned {
+	RIGHT,	// The RIGHT side
+	LEFT,	// The LEFT side
+	BOTTOM,	// The BOTTOM side
+	TOP,	// The TOP side
+	BACK,	// The BACK side
+	FRONT,	// The FRONT side
+	size	// last entry, enumeration size
+};
+
 
 // Setup texture for each SkyBox side.
 void SkyBoxSetTexture(GLtexture TextureID, eSide Side);
