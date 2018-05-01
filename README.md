@@ -1,22 +1,22 @@
-# AstroMenace  [![Build Status](https://travis-ci.org/viewizard/astromenace.svg?branch=master)](https://travis-ci.org/viewizard/astromenace)  [![bitcoin](https://img.shields.io/badge/donate-bitcoin-yellow.svg)](https://github.com/viewizard/astromenace#bitcoin)  [![paypal](https://img.shields.io/badge/donate-paypal-blue.svg)](https://github.com/viewizard/astromenace#paypal)
+# AstroMenace  [![Build Status](https://travis-ci.org/viewizard/astromenace.svg?branch=master)](https://travis-ci.org/viewizard/astromenace)
 
 * [Installation (Windows, macOS, Linux)](https://github.com/viewizard/astromenace#installation)
 * [Build (macOS, Linux)](https://github.com/viewizard/astromenace#build)
 * [Work In Progress](https://github.com/viewizard/astromenace#work-in-progress)
-* [Donate to Support Development](https://github.com/viewizard/astromenace#donate-to-support-development)
+* [Donate to Support Development](https://github.com/viewizard/astromenace#donate-to-support-development)  [![bitcoin](https://img.shields.io/badge/donate-bitcoin-yellow.svg)](https://github.com/viewizard/astromenace#bitcoin-14kdalnntroffuur2tzmudup8ek3ps2uq6)  [![paypal](https://img.shields.io/badge/donate-paypal-009cde.svg)](https://github.com/viewizard/astromenace#paypal-httpswwwpaypalmeviewizard)  [![patreon](https://img.shields.io/badge/donate-patreon-f96854.svg)](https://github.com/viewizard/astromenace#patreon-httpswwwpatreoncomviewizard)
 ##
 [AstroMenace on YouTube, a video is worth a thousand words.](https://www.youtube.com/watch?v=ysY9vKKisbo&index=1&list=PLrWi_GXhwHyznYT19oAQL4zNldlVXFlj2)
 
 Immerse into a decisive battle against tons of cunning foes, face the terrifying bosses and protect your homeland throughout 15 diverse levels of the game. The hardcore gameplay of AstroMenace, packed with pure non-stop action, will become a full scale test for your basic instinct of survival.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/viewizard/astromenace/master/share/preview1.png" alt="preview"/>
+  <img src="./share/preview1.png" alt="preview"/>
 </p>
 
 The game provides a wide variety of armaments and weapon upgrades for discharging the retributive wrath upon the hordes of enemies, besides it has a great number of improvements for enhancing the defensive abilities of your spaceship. Collect money during the combat and invest them into turning your spaceship into an ultimate weapon of mass destruction.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/viewizard/astromenace/master/share/preview2.png" alt="preview"/>
+  <img src="./share/preview2.png" alt="preview"/>
 </p>
 
 More information and screenshots could be found at [AstroMenace web site](http://www.viewizard.com/).
@@ -127,21 +127,21 @@ Unfortunately, I could not provide you with any new version's release dates, sin
 
 We also have a surprise for you, here is the artwork 1 of 12 light ships and 1 of 8 capital ships we already have, with best wishes from Oleg Linkov (3D models author). Since this is ours 3D models, we will release sources under GPLv3 in [astromenace-artwork](https://github.com/viewizard/astromenace-artwork) repository as soon, as AstroMenace will use them. I hope, some day we will replace all 3D models licensed under CC-BY-SA (without sources) to open source 3D models.
 <p align="center">
-  <img src="https://raw.githubusercontent.com/viewizard/astromenace/master/share/wip/scout.png" alt="preview"/>
+  <img src="./share/wip/scout.png" alt="preview"/>
 </p>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/viewizard/astromenace/master/share/wip/heavy.png" alt="preview"/>
+  <img src="./share/wip/heavy.png" alt="preview"/>
 </p>
 
 ## Donate to Support Development
-#### Patreon: https://www.patreon.com/viewizard
+#### Bitcoin: 14kDaLnNTroFfuur2tZmUdUp8eK3pS2Uq6
+<p align="left">
+  <img src="./share/donate/bitcoin-qr-code.png" alt="bitcoin-qr-code"/>
+</p>
 
 #### PayPal: https://www.paypal.me/viewizard
 
-#### Bitcoin: 14kDaLnNTroFfuur2tZmUdUp8eK3pS2Uq6
-<p align="left">
-  <img src="https://raw.githubusercontent.com/viewizard/astromenace/master/share/donate/bitcoin-qr-code.png" alt="bitcoin-qr-code"/>
-</p>
+#### Patreon: https://www.patreon.com/viewizard
 
 #### Bank Transfer
 * All donations are anonymous. Any sender details are not published or shared.
