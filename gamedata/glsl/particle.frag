@@ -1,17 +1,17 @@
 #version 120
 
-// Фрагментный шейдер для системы частиц
+// particle system
 
-// получаем из вертексного шейдера цвет вертекса
-varying vec4 VertexColor;
-// получаем из основной программы номер текстурного юнита который нужно использовать
 uniform sampler2D ParticleTexture;
+
+varying vec4 VertexColor;
+
 
 void main(void)
 {
 	vec2 TexCoord = vec2(gl_TexCoord[0]);
 	vec4 TexColor = texture2D(ParticleTexture, TexCoord);
-	gl_FragColor = TexColor*VertexColor;
+	gl_FragColor = TexColor * VertexColor;
 }
 
 
