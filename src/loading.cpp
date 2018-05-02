@@ -892,7 +892,7 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, GLtexture
 	vw_Draw2D(DstRect, SrcRect, LoadImageTexture, false, 1.0f, 0.0f);
 
 	// пишем "загрузка"
-	vw_DrawFont(Setup.InternalWidth/2-vw_FontSize(vw_GetText("11_Loading"))/2, 768-128, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f, vw_GetText("11_Loading"));
+	vw_DrawFont(Setup.InternalWidth/2-vw_FontSize(vw_GetText("LOADING"))/2, 768-128, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f, vw_GetText("LOADING"));
 
 	// выводим подложку линии загрузки
 	SrcRect(0,0,256,32);

@@ -105,16 +105,16 @@ static sSoundData MenuSoundNames[] = {
 
 // перечень имен файлов звуков для меню
 static sSoundData VoiceNames[] = {
-	{"13_Attention.wav", 1.0f, true},
-	{"13_EngineMalfunction.wav", 1.0f, true},
-	{"13_MissileDetected.wav", 1.0f, true},//++
-	{"13_PowerSupplyReestablished.wav", 1.0f, true},
-	{"13_PrepareForAction.wav", 1.0f, true},//++
-	{"13_ReactorMalfunction.wav", 1.0f, true},//++
-	{"13_Warning.wav", 1.0f, true},//++
-	{"13_WeaponDamaged.wav", 1.0f, true},//++
-	{"13_WeaponDestroyed.wav", 1.0f, true},//++
-	{"13_WeaponMalfunction.wav", 1.0f, true},//++
+	{"lang/en/voice/Attention.wav", 1.0f, true},
+	{"lang/en/voice/EngineMalfunction.wav", 1.0f, true},
+	{"lang/en/voice/MissileDetected.wav", 1.0f, true},//++
+	{"lang/en/voice/PowerSupplyReestablished.wav", 1.0f, true},
+	{"lang/en/voice/PrepareForAction.wav", 1.0f, true},//++
+	{"lang/en/voice/ReactorMalfunction.wav", 1.0f, true},//++
+	{"lang/en/voice/Warning.wav", 1.0f, true},//++
+	{"lang/en/voice/WeaponDamaged.wav", 1.0f, true},//++
+	{"lang/en/voice/WeaponDestroyed.wav", 1.0f, true},//++
+	{"lang/en/voice/WeaponMalfunction.wav", 1.0f, true},//++
 };
 #define VoiceQuantity sizeof(VoiceNames)/sizeof(VoiceNames[0])
 

@@ -201,11 +201,11 @@ void GameDrawMissionTitle()
 	DstRect(XStart,352,XStart+226,352+64);
 
 	if (MissionTitleLifeTime >= 1.0f) {
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("12_mission.tga")), true);
+		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("lang/en/game/mission.tga")), true);
 		// вывод номера миссии
 		DrawMissionTitleNum(XStart+226+20, 352+1, buffer.c_str(), 1.0f);
 	} else {
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("12_mission.tga")),
+		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("lang/en/game/mission.tga")),
 			  true, MissionTitleLifeTime);
 		// вывод номера миссии
 		DrawMissionTitleNum(XStart+226+20, 352+1, buffer.c_str(), MissionTitleLifeTime);
@@ -260,7 +260,7 @@ void GameDrawMissionFailed()
 	SrcRect(0,0,512,84);
 	DstRect(Setup.InternalWidth/2-256,342,Setup.InternalWidth/2+256,342+84);
 
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("12_missionfailed.tga")), true);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("lang/en/game/missionfailed.tga")), true);
 
 
 	// выводим кнопки...
@@ -268,14 +268,14 @@ void GameDrawMissionFailed()
 	int Y = 180+270;
 
 	int X = Setup.InternalWidth/2 - 230;
-	if (DrawButton200_2(X,Y, vw_GetText("1_QUIT"), 1.0f, false)) {
+	if (DrawButton200_2(X,Y, vw_GetText("QUIT"), 1.0f, false)) {
 		ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU;
 		ExitGame();
 	}
 
 
 	X = Setup.InternalWidth/2 + 30;
-	if (DrawButton200_2(X,Y, vw_GetText("1_RESTART"), 1.0f, false)) {
+	if (DrawButton200_2(X,Y, vw_GetText("RESTART"), 1.0f, false)) {
 		ComBuffer = eCommand::SWITCH_TO_GAME;
 		ExitGame();
 	}

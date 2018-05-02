@@ -148,7 +148,7 @@ void CreditsMenu()
 
 	int X = (Setup.InternalWidth - 384) / 2;
 	int Y = 165 + 100 * 5;
-	if (DrawButton384(X, Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime)) {
+	if (DrawButton384(X, Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime)) {
 		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 		StartMusicWithFade(eMusicTheme::MENU, 2000, 2000);
 	}

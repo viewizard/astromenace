@@ -527,7 +527,7 @@ void DrawMenu()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// Version
-	vw_DrawFont(6, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %s %s %i", vw_GetText("11_Version"), GAME_VERSION, vw_GetText("11_build"), GAME_BUILD);
+	vw_DrawFont(6, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %s %s %i", vw_GetText("Version"), GAME_VERSION, vw_GetText("build"), GAME_BUILD);
 
 	// Copyright
 	int CSize = vw_FontSize("Copyright © 2007-2018, Viewizard");
@@ -616,7 +616,7 @@ void MainMenu()
 	int X = (Setup.InternalWidth - 384)/2;
 	int Y = 165;
 
-	if (DrawButton384(X,Y, vw_GetText("1_START_GAME"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
+	if (DrawButton384(X,Y, vw_GetText("START GAME"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
 		// если текущего профиля нет - нужно перейти на выбор профилей, если есть - сразу идем на выбор миссий
 		if (CurrentProfile < 0)
 			ComBuffer = eCommand::SWITCH_TO_PROFILE;
@@ -629,25 +629,25 @@ void MainMenu()
 
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetText("1_TOP_SCORES"), MenuContentTransp, &Button2Transp, &LastButton2UpdateTime))
+	if (DrawButton384(X,Y, vw_GetText("TOP SCORES"), MenuContentTransp, &Button2Transp, &LastButton2UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_TOP_SCORES;
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetText("1_OPTIONS"), MenuContentTransp, &Button3Transp, &LastButton3UpdateTime))
+	if (DrawButton384(X,Y, vw_GetText("OPTIONS"), MenuContentTransp, &Button3Transp, &LastButton3UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_OPTIONS;
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetText("1_INFORMATION"), MenuContentTransp, &Button4Transp, &LastButton4UpdateTime))
+	if (DrawButton384(X,Y, vw_GetText("INFORMATION"), MenuContentTransp, &Button4Transp, &LastButton4UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_INFORMATION;
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetText("1_CREDITS"), MenuContentTransp, &Button5Transp, &LastButton5UpdateTime)) {
+	if (DrawButton384(X,Y, vw_GetText("CREDITS"), MenuContentTransp, &Button5Transp, &LastButton5UpdateTime)) {
 		ComBuffer = eCommand::SWITCH_TO_CREDITS;
 		StartMusicWithFade(eMusicTheme::CREDITS, 2000, 2000);
 	}
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetText("1_QUIT"), MenuContentTransp, &Button6Transp, &LastButton6UpdateTime))
+	if (DrawButton384(X,Y, vw_GetText("QUIT"), MenuContentTransp, &Button6Transp, &LastButton6UpdateTime))
 		SetCurrentDialogBox(eDialogBox::QuitFromGame);
 
 }

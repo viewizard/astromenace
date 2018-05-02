@@ -150,8 +150,8 @@ void SaveXMLSetupFile()
 
 
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "GAME_BUILD"), "value", GAME_BUILD);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MenuLanguage"), "value", vw_GetText("0_code", Setup.MenuLanguage));
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VoiceLanguage"), "value", vw_GetText("0_code", Setup.VoiceLanguage));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MenuLanguage"), "value", vw_GetText("en", Setup.MenuLanguage));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VoiceLanguage"), "value", vw_GetText("en", Setup.VoiceLanguage));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "FontNumber"), "value", Setup.FontNumber);
 
 
@@ -367,7 +367,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		std::string tmpMenuLanguage{};
 		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MenuLanguage"), "value", tmpMenuLanguage)) {
 			for (unsigned int i=0; i<vw_GetLanguageListCount(); i++) {
-				if (tmpMenuLanguage == vw_GetText("0_code", i + 1/*first column contain index, not data*/)) {
+				if (tmpMenuLanguage == vw_GetText("en", i + 1/*first column contain index, not data*/)) {
 					Setup.MenuLanguage = i+1;
 					break;
 				}
@@ -378,7 +378,7 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 		std::string tmpVoiceLanguage{};
 		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "VoiceLanguage"), "value", tmpVoiceLanguage)) {
 			for (unsigned int i=0; i<vw_GetLanguageListCount(); i++) {
-				if (tmpVoiceLanguage == vw_GetText("0_code", i + 1/*first column contain index, not data*/)) {
+				if (tmpVoiceLanguage == vw_GetText("en", i + 1/*first column contain index, not data*/)) {
 					Setup.VoiceLanguage = i+1;
 					break;
 				}

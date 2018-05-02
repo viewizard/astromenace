@@ -308,7 +308,7 @@ void ProfileMenu()
 	int Prir1 = 24;
 
 	// надпись
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_New_Pilot_Profile"));
+	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("New Pilot Profile"));
 
 
 	Y1 += 30;
@@ -321,7 +321,7 @@ void ProfileMenu()
 	bool Off = false;
 	if (NewProfileName.empty())
 		Off = true;
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Create"), MenuContentTransp, Off)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Create"), MenuContentTransp, Off)) {
 		NewRecord();
 	}
 
@@ -341,33 +341,33 @@ void ProfileMenu()
 
 	// список для выбора записи
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Pilots_Profiles"));
-	int Size = vw_FontSize(vw_GetText("3_Money"));
+	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("Pilots Profiles"));
+	int Size = vw_FontSize(vw_GetText("Money"));
 	float WScale = 0;
 	if (Size > 70) {
 		Size = 70;
 		WScale = -70;
 	}
 	int SizeI = Setup.InternalWidth/2+2 + (130 - Size)/2;
-	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Money"));
+	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("Money"));
 
-	Size = vw_FontSize(vw_GetText("3_Experience"));
+	Size = vw_FontSize(vw_GetText("Exp"));
 	WScale = 0;
 	if (Size > 100) {
 		Size = 100;
 		WScale = -100;
 	}
 	SizeI = Setup.InternalWidth/2+132 + (130 - Size)/2;
-	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Experience"));
+	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("Exp"));
 
-	Size = vw_FontSize(vw_GetText("3_Difficulty"));
+	Size = vw_FontSize(vw_GetText("Difficulty"));
 	WScale = 0;
 	if (Size > 100) {
 		Size = 100;
 		WScale = -100;
 	}
 	SizeI = Setup.InternalWidth/2+262 + (130 - Size)/2;
-	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("3_Difficulty"));
+	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("Difficulty"));
 
 
 	Y1 += 30;
@@ -465,7 +465,7 @@ void ProfileMenu()
 		} else {
 			float transp = 0.3f;
 			vw_DrawFont(X1+10, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, transp*MenuContentTransp, "%i.",i+1);
-			vw_DrawFont(X1+50, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, transp*MenuContentTransp, vw_GetText("3_empty"));
+			vw_DrawFont(X1+50, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, transp*MenuContentTransp, vw_GetText("empty"));
 		}
 
 		TmpY += 46;
@@ -494,34 +494,34 @@ void ProfileMenu()
 	// кнопка создания дубликата
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton200_2(X1+6, Y1-6, vw_GetText("1_Duplicate"), MenuContentTransp, Off)) {
+	if (DrawButton200_2(X1+6, Y1-6, vw_GetText("Duplicate"), MenuContentTransp, Off)) {
 		DuplicateRecord();
 	}
 
 	// кнопка удаления записи
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton128_2(X1+240, Y1-6, vw_GetText("1_Delete"), MenuContentTransp, Off))
+	if (DrawButton128_2(X1+240, Y1-6, vw_GetText("Delete"), MenuContentTransp, Off))
 		SetCurrentDialogBox(eDialogBox::DeleteProfile);
 
 
 	// кнопка установки сложности
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton200_2(X1+544, Y1-6, vw_GetText("1_Difficulty"), MenuContentTransp, Off))
+	if (DrawButton200_2(X1+544, Y1-6, vw_GetText("Difficulty"), MenuContentTransp, Off))
 		ComBuffer = eCommand::SWITCH_TO_DIFFICULTY;
 
 
 
 	int X = Setup.InternalWidth/2 - 284;
 	int Y = 165+100*5;
-	if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+	if (DrawButton256(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
 	X = Setup.InternalWidth/2 + 28;
-	if (DrawButton256(X,Y, vw_GetText("1_MISSIONS_LIST"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
+	if (DrawButton256(X,Y, vw_GetText("MISSIONS LIST"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
 		ComBuffer = eCommand::SWITCH_TO_MISSION;
 
 }

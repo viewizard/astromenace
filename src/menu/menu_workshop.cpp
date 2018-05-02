@@ -354,7 +354,7 @@ void WorkshopMenu()
 
 	int X = Setup.InternalWidth/2-482;
 	int Y = 180+100*5;
-	if (DrawButton128_2(X,Y, vw_GetText("1_BACK"), MenuContentTransp, false)) {
+	if (DrawButton128_2(X,Y, vw_GetText("BACK"), MenuContentTransp, false)) {
 		ComBuffer = eCommand::SWITCH_TO_MISSION;
 		CanDrawWorkshop = false;
 		// ничего не тянем... только включили меню
@@ -369,7 +369,7 @@ void WorkshopMenu()
 	X = Setup.InternalWidth/2-320;
 	bool Off = false;
 	if (CurrentWorkshop == 1) Off = true;
-	if (DrawButton200_2(X,Y, vw_GetText("1_Shipyard"), MenuContentTransp, Off)) {
+	if (DrawButton200_2(X,Y, vw_GetText("Shipyard"), MenuContentTransp, Off)) {
 		CurrentWorkshop = 1;
 		// используем разные повороты объектов, нужно пересоздать объект
 		WorkshopCreateShip(CurrentWorkshop);
@@ -387,7 +387,7 @@ void WorkshopMenu()
 	X = Setup.InternalWidth/2-100;
 	Off = false;
 	if (CurrentWorkshop == 2) Off = true;
-	if (DrawButton200_2(X,Y, vw_GetText("1_Workshop"), MenuContentTransp, Off)) {
+	if (DrawButton200_2(X,Y, vw_GetText("Workshop"), MenuContentTransp, Off)) {
 		CurrentWorkshop = 2;
 		// используем разные повороты объектов, нужно пересоздать объект
 		WorkshopCreateShip(CurrentWorkshop);
@@ -404,7 +404,7 @@ void WorkshopMenu()
 	X = Setup.InternalWidth/2+120;
 	Off = false;
 	if (CurrentWorkshop == 3) Off = true;
-	if (DrawButton200_2(X,Y, vw_GetText("1_Weaponry"), MenuContentTransp, Off)) {
+	if (DrawButton200_2(X,Y, vw_GetText("Weaponry"), MenuContentTransp, Off)) {
 		CurrentWorkshop = 3;
 		// используем разные повороты объектов, нужно пересоздать объект
 		WorkshopCreateShip(CurrentWorkshop);
@@ -421,7 +421,7 @@ void WorkshopMenu()
 
 
 	X = Setup.InternalWidth/2+354;
-	if (DrawButton128_2(X,Y, vw_GetText("1_START"), MenuContentTransp, false)) {
+	if (DrawButton128_2(X,Y, vw_GetText("START"), MenuContentTransp, false)) {
 		if (Setup.NeedShowHint[4]) SetCurrentDialogBox(eDialogBox::ShortkeyTipsAndTricks);
 		else {
 			MenuContentTransp = 0.98f; // небольшая "защелка" от быстрых двойных нажатий на кнопку

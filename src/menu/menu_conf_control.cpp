@@ -31,7 +31,7 @@
 
 const char * MouseCodeName(char Num)
 {
-	if (!strcmp(vw_GetText("0_code", Setup.MenuLanguage), "de")) {
+	if (!strcmp(vw_GetText("en", Setup.MenuLanguage), "de")) {
 		switch (Num) {
 		case 1:
 			return "Maus1";
@@ -257,12 +257,12 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Joystick_DeadZone"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), ContentTransp, Setup.JoystickDeadZone == 0)) {
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Joystick DeadZone"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, Setup.JoystickDeadZone == 0)) {
 		Setup.JoystickDeadZone --;
 		if (Setup.JoystickDeadZone<0) Setup.JoystickDeadZone = 0;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), ContentTransp, Setup.JoystickDeadZone == 10)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, Setup.JoystickDeadZone == 10)) {
 		Setup.JoystickDeadZone++;
 		if (Setup.JoystickDeadZone>10) Setup.JoystickDeadZone = 10;
 	}
@@ -280,12 +280,12 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Control_Sensitivity"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Decrease"), ContentTransp, Setup.ControlSensivity == 1)) {
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Control Sensitivity"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, Setup.ControlSensivity == 1)) {
 		Setup.ControlSensivity --;
 		if (Setup.ControlSensivity<1) Setup.ControlSensivity = 1;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Increase"), ContentTransp, Setup.ControlSensivity == 10)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, Setup.ControlSensivity == 10)) {
 		Setup.ControlSensivity++;
 		if (Setup.ControlSensivity>10) Setup.ControlSensivity = 10;
 	}
@@ -311,19 +311,19 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	Y1 += Prir1;
-	int SizeI1 = vw_FontSize(vw_GetText("3_MOUSE"));
+	int SizeI1 = vw_FontSize(vw_GetText("MOUSE"));
 	int SizeI = SizeI1 > 130 ? -15 : (100-SizeI1)/2;
-	vw_DrawFont(X1+315+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_MOUSE"));
-	SizeI1 = vw_FontSize(vw_GetText("3_KEYBOARD"));
+	vw_DrawFont(X1+315+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("MOUSE"));
+	SizeI1 = vw_FontSize(vw_GetText("KEYBOARD"));
 	SizeI = SizeI1 > 130 ? 10 : (150-SizeI1)/2;
-	vw_DrawFont(X1+446+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_KEYBOARD"));
-	SizeI1 = vw_FontSize(vw_GetText("3_JOYSTICK"));
+	vw_DrawFont(X1+446+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("KEYBOARD"));
+	SizeI1 = vw_FontSize(vw_GetText("JOYSTICK"));
 	SizeI = SizeI1 > 130 ? 10 : (150-SizeI1)/2;
-	vw_DrawFont(X1+605+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("3_JOYSTICK"));
+	vw_DrawFont(X1+605+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("JOYSTICK"));
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Primary_Attack"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Primary Attack"));
 	float Transp = 1.0f;
 	bool Off = false;
 	const char *ButtonName = MouseCodeName(Setup.MousePrimary);
@@ -366,7 +366,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Secondary_Attack"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Secondary Attack"));
 	Transp = 1.0f;
 	Off = false;
 	ButtonName = MouseCodeName(Setup.MouseSecondary);
@@ -410,7 +410,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Move_Forward"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Move Forward"));
 	Transp = 1.0f;
 	Off = false;
 	ButtonName = SDL_GetKeyName(Setup.KeyBoardUp);
@@ -423,7 +423,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		if (NeedCheck == 0) NeedCheck = 1;
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Move_Backward"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Move Backward"));
 	Transp = 1.0f;
 	Off = false;
 	ButtonName = SDL_GetKeyName(Setup.KeyBoardDown);
@@ -436,7 +436,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		if (NeedCheck == 0) NeedCheck = 2;
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Move_Left"));
+	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Move Left"));
 	Transp = 1.0f;
 	Off = false;
 	ButtonName = SDL_GetKeyName( Setup.KeyBoardLeft);
@@ -449,7 +449,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		if (NeedCheck == 0) NeedCheck = 3;
 
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0,1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Move_Right"));
+	vw_DrawFont(X1, Y1, -280, 0,1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Move Right"));
 	Transp = 1.0f;
 	Off = false;
 	ButtonName = SDL_GetKeyName(Setup.KeyBoardRight);
@@ -473,7 +473,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	X = Setup.InternalWidth/2 - 366;
-	if (DrawButton200_2(X,Y+28, vw_GetText("1_Advanced"), ContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetText("Advanced"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::OPTIONS_ADVANCED);
 			GameMenuStatus = eGameMenuStatus::OPTIONS_ADVANCED;
@@ -484,7 +484,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	X = Setup.InternalWidth/2 - 100;
-	if (DrawButton200_2(X,Y+28, vw_GetText("1_Video_&_Audio"), ContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetText("Video & Audio"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::OPTIONS);
 			GameMenuStatus = eGameMenuStatus::OPTIONS;
@@ -495,7 +495,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	X = Setup.InternalWidth/2 + 166;
-	if (DrawButton200_2(X,Y+28, vw_GetText("1_Interface"), ContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetText("Interface"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::INTERFACE);
 			GameMenuStatus = eGameMenuStatus::INTERFACE;
@@ -510,12 +510,12 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	X = (Setup.InternalWidth - 384)/2;
 	Y = Y+Prir;
 	if (MenuStatus == eMenuStatus::GAME) {
-		if (DrawButton384(X,Y, vw_GetText("1_GAME_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
+		if (DrawButton384(X,Y, vw_GetText("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
 			GameMenuStatus = eGameMenuStatus::GAME_MENU;
 			CheckKeysBeforeExit();
 		}
 	} else {
-		if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
+		if (DrawButton384(X,Y, vw_GetText("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
 			ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 			CheckKeysBeforeExit();
 		}

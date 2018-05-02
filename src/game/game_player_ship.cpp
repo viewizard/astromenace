@@ -464,8 +464,8 @@ void GamePlayerShip()
 
 			// визуальный вывод - выводим постоянно
 			vw_SetFontSize(24);
-			int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("4_Missile_Detected")))/2;
-			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3, vw_GetText("4_Missile_Detected"));
+			int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("Missile Detected")))/2;
+			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3, vw_GetText("Missile Detected"));
 			vw_SetFontSize(16);
 			WarningMessagesCount++;
 		} else {
@@ -474,8 +474,8 @@ void GamePlayerShip()
 			} else if (VoiceMissileDetectedStatus) {
 				// визуальный вывод - выводим постоянно
 				vw_SetFontSize(24);
-				int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("4_Missile_Detected")))/2;
-				vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3, vw_GetText("4_Missile_Detected"));
+				int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("Missile Detected")))/2;
+				vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3, vw_GetText("Missile Detected"));
 				vw_SetFontSize(16);
 				WarningMessagesCount++;
 			}
@@ -531,8 +531,8 @@ void GamePlayerShip()
 
 			// визуальный вывод - выводим постоянно
 			vw_SetFontSize(24);
-			int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("4_Collision_Course_Detected")))/2;
-			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3, vw_GetText("4_Collision_Course_Detected"));
+			int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("Collision Course Detected")))/2;
+			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3, vw_GetText("Collision Course Detected"));
 			vw_SetFontSize(16);
 			WarningMessagesCount++;
 		}

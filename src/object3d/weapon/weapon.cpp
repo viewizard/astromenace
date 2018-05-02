@@ -37,30 +37,30 @@ const char *GetWeaponGroupTitle(int Num)
 	case 2:
 	case 3:
 	case 4:
-		return "4_Kinetic";
+		return "Kinetic";
 	case 5:
 	case 6:
 	case 7:
-		return "4_Ion";
+		return "Ion";
 	case 8:
 	case 9:
 	case 10:
-		return "4_Plasma";
+		return "Plasma";
 	case 11:
 	case 12:
-		return "4_Maser";
+		return "Maser";
 	case 13:
-		return "4_Antimatter";
+		return "Antimatter";
 	case 14:
-		return "4_Laser";
+		return "Laser";
 	case 15:
-		return "4_Gauss";
+		return "Gauss";
 
 	case 16:
 	case 17:
 	case 18:
 	case 19:
-		return "4_Propelled";
+		return "Propelled";
 
 	default:
 		std::cerr << __func__ << "(): " << "wrong Num.\n";

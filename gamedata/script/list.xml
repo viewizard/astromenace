@@ -3,120 +3,120 @@
 
 	<!-- Mission 1 -->
 	<Mission>
-		<Title color="4" type="1">6_Mission1Title</Title>
-		<Descr color="0" type="1">6_Mission1Descr</Descr>
+		<Title color="4" type="1">Mission 1 - First Contact with Unknown Enemy</Title>
+		<Descr color="0" type="1">They are coming! They are everywhere!</Descr>
 		<Icon>script/mission1_icon.tga</Icon>
 		<File>script/mission1.xml</File>
 	</Mission>
 
 	<!-- Mission 2 -->
 	<Mission>
-		<Title color="6" type="1">6_Mission2Title</Title>
-		<Descr color="0" type="1">6_Mission2Descr</Descr>
+		<Title color="6" type="1">Mission 2 - Attack, Do Not Let Them Go</Title>
+		<Descr color="0" type="1">Damned raiders here! No Mercy! Kill them all!</Descr>
 		<Icon>script/mission2_icon.tga</Icon>
 		<File>script/mission2.xml</File>
 	</Mission>
 
 	<!-- Mission 3 -->
 	<Mission>
-		<Title color="4" type="1">6_Mission3Title</Title>
-		<Descr color="0" type="1">6_Mission3Descr</Descr>
+		<Title color="4" type="1">Mission 3 - Counterattack Is The Best Defense</Title>
+		<Descr color="0" type="1">Our base is under attack! Stop the aliens` attack now!</Descr>
 		<Icon>script/mission3_icon.tga</Icon>
 		<File>script/mission3.xml</File>
 	</Mission>
 
 	<!-- Mission 4 -->
 	<Mission>
-		<Title color="6" type="1">6_Mission4Title</Title>
-		<Descr color="0" type="1">6_Mission4Descr</Descr>
+		<Title color="6" type="1">Mission 4 - Attack on Fleet of Pirate Raiders</Title>
+		<Descr color="0" type="1">Find a pirate raider base in this sector!</Descr>
 		<Icon>script/mission4_icon.tga</Icon>
 		<File>script/mission4.xml</File>
 	</Mission>
 
 	<!-- Mission 5 -->
 	<Mission>
-		<Title color="4" type="1">6_Mission5Title</Title>
-		<Descr color="0" type="1">6_Mission5Descr</Descr>
+		<Title color="4" type="1">Mission 5 - Surprise, Surprise... Aliens Again</Title>
+		<Descr color="0" type="1">Do not let them regroup for a counterattack!</Descr>
 		<Icon>script/mission5_icon.tga</Icon>
 		<File>script/mission5.xml</File>
 	</Mission>
 
 	<!-- Mission 6 -->
 	<Mission>
-		<Title color="6" type="1">6_Mission6Title</Title>
-		<Descr color="0" type="1">6_Mission6Descr</Descr>
+		<Title color="6" type="1">Mission 6 - Stop Alien MotherShip Now!</Title>
+		<Descr color="0" type="1">They are too close! You should do something!</Descr>
 		<Icon>script/mission6_icon.tga</Icon>
 		<File>script/mission6.xml</File>
 	</Mission>
 
 	<!-- Mission 7 -->
 	<Mission>
-		<Title color="4" type="1">6_Mission7Title</Title>
-		<Descr color="0" type="1">6_Mission7Descr</Descr>
+		<Title color="4" type="1">Mission 7 - Attack on Small Pirate Raiders Base</Title>
+		<Descr color="0" type="1">We found their base! Finally! Lets smash them!</Descr>
 		<Icon>script/mission7_icon.tga</Icon>
 		<File>script/mission7.xml</File>
 	</Mission>
 
 	<!-- Mission 8 -->
 	<Mission>
-		<Title color="6" type="1">6_Mission8Title</Title>
-		<Descr color="0" type="1">6_Mission8Descr</Descr>
+		<Title color="6" type="1">Mission 8 - Stay Close, They Are Coming</Title>
+		<Descr color="0" type="1">Looks like the aliens got reinforcement!</Descr>
 		<Icon>script/mission8_icon.tga</Icon>
 		<File>script/mission8.xml</File>
 	</Mission>
 
 	<!-- Mission 9 -->
 	<Mission>
-		<Title color="4" type="1">6_Mission9Title</Title>
-		<Descr color="0" type="1">6_Mission9Descr</Descr>
+		<Title color="4" type="1">Mission 9 - One More Pirate Raiders Base</Title>
+		<Descr color="0" type="1">This should be piece of cake for you, do it quickly!</Descr>
 		<Icon>script/mission9_icon.tga</Icon>
 		<File>script/mission9.xml</File>
 	</Mission>
 
 	<!-- Mission 10 -->
 	<Mission>
-		<Title color="6" type="1">6_Mission10Title</Title>
-		<Descr color="0" type="1">6_Mission10Descr</Descr>
+		<Title color="6" type="1">Mission 10 - Strange Slackness... Be Ready!</Title>
+		<Descr color="0" type="1">Our intelligence failed to find anything. It can be a trap!</Descr>
 		<Icon>script/mission10_icon.tga</Icon>
 		<File>script/mission10.xml</File>
 	</Mission>
 
 	<!-- Mission 11 -->
 	<Mission>
-		<Title color="4" type="1">6_Mission11Title</Title>
-		<Descr color="0" type="1">6_Mission11Descr</Descr>
+		<Title color="4" type="1">Mission 11 - Do Not Let Them Destroy Our Base!</Title>
+		<Descr color="0" type="1">Do not panic! We got reinforcement! Regroup and attack!</Descr>
 		<Icon>script/mission11_icon.tga</Icon>
 		<File>script/mission11.xml</File>
 	</Mission>
 
 	<!-- Mission 12 -->
 	<Mission>
-		<Title color="6" type="1">6_Mission12Title</Title>
-		<Descr color="0" type="1">6_Mission12Descr</Descr>
+		<Title color="6" type="1">Mission 12 - Secret Pirate Base</Title>
+		<Descr color="0" type="1">They are too smart now, and much more dangerous.</Descr>
 		<Icon>script/mission12_icon.tga</Icon>
 		<File>script/mission12.xml</File>
 	</Mission>
 
 	<!-- Mission 13 -->
 	<Mission>
-		<Title color="4" type="1">6_Mission13Title</Title>
-		<Descr color="0" type="1">6_Mission13Descr</Descr>
+		<Title color="4" type="1">Mission 13 - Alien Transportation Port</Title>
+		<Descr color="0" type="1">We found their hyper port! We must destroy it right now!</Descr>
 		<Icon>script/mission13_icon.tga</Icon>
 		<File>script/mission13.xml</File>
 	</Mission>
 
 	<!-- Mission 14 -->
 	<Mission>
-		<Title color="6" type="1">6_Mission14Title</Title>
-		<Descr color="0" type="1">6_Mission14Descr</Descr>
+		<Title color="6" type="1">Mission 14 - Last Pirate Enclave</Title>
+		<Descr color="0" type="1">This sector must be clear and safe for ever!</Descr>
 		<Icon>script/mission14_icon.tga</Icon>
 		<File>script/mission14.xml</File>
 	</Mission>
 
 	<!-- Mission 15 -->
 	<Mission>
-		<Title color="4" type="1">6_Mission15Title</Title>
-		<Descr color="0" type="1">6_Mission15Descr</Descr>
+		<Title color="4" type="1">Mission 15 - Escape Under Aliens` Attack</Title>
+		<Descr color="0" type="1">We lost this sector, this battle is lost. Try to escape!</Descr>
 		<Icon>script/mission15_icon.tga</Icon>
 		<File>script/mission15.xml</File>
 	</Mission>

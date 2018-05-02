@@ -1435,8 +1435,8 @@ void DrawGame()
 		if (GameSpeedShowTransp>1.0f) GameSpeedShowTransp = 1.0f;
 
 		vw_SetFontSize(20);
-		int TmpFontSize = (Setup.InternalWidth-vw_FontSize("%s x%1.1f", vw_GetText("4_Game_Speed:"), CurrentGameSpeed))/2;
-		vw_DrawFont(TmpFontSize, 80, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameSpeedShowTransp, "%s x%1.1f", vw_GetText("4_Game_Speed:"), CurrentGameSpeed);
+		int TmpFontSize = (Setup.InternalWidth-vw_FontSize("%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed))/2;
+		vw_DrawFont(TmpFontSize, 80, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameSpeedShowTransp, "%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed);
 		vw_SetFontSize(16);
 
 		CurrentGameSpeedShowTime -= TimeDelta;
@@ -1522,63 +1522,63 @@ void DrawGame()
 			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
 					   true, 1.0f*GameContentTransp);
 			// название меню
-			int Size = vw_FontSize(vw_GetText("1_Mission_Complete"));
+			int Size = vw_FontSize(vw_GetText("Mission Complete"));
 			float WScale = 0;
 			if (Size > 190) {
 				Size = 190;
 				WScale = -190;
 			}
-			vw_DrawFont(Setup.InternalWidth/2-123-Size/2, 128+21, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 0.7f*GameContentTransp, vw_GetText("1_Mission_Complete"));
+			vw_DrawFont(Setup.InternalWidth/2-123-Size/2, 128+21, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 0.7f*GameContentTransp, vw_GetText("Mission Complete"));
 
 
 			int Y = 128+90;
 			int Prir = 36;
 
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, 0, 0, 1.0f, 1.0f,1.0f,0.0f, 0.5f*GameContentTransp, vw_GetText("3_Type"));
-			Size = vw_FontSize(vw_GetText("3_Killed"));
+			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, 0, 0, 1.0f, 1.0f,1.0f,0.0f, 0.5f*GameContentTransp, vw_GetText("Type"));
+			Size = vw_FontSize(vw_GetText("Killed"));
 			WScale = 0;
 			if (Size > 70) {
 				Size = 70;
 				WScale = -70;
 			}
-			vw_DrawFont(Setup.InternalWidth/2-31+Size/2, Y, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 0.5f*GameContentTransp, vw_GetText("3_Killed"));
-			Size = vw_FontSize(vw_GetText("3_Bonus"));
+			vw_DrawFont(Setup.InternalWidth/2-31+Size/2, Y, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 0.5f*GameContentTransp, vw_GetText("Killed"));
+			Size = vw_FontSize(vw_GetText("Bonus"));
 			WScale = 0;
 			if (Size > 70) {
 				Size = 70;
 				WScale = -70;
 			}
-			vw_DrawFont(Setup.InternalWidth/2+97+Size/2, Y, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 0.5f*GameContentTransp, vw_GetText("3_Bonus"));
+			vw_DrawFont(Setup.InternalWidth/2+97+Size/2, Y, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 0.5f*GameContentTransp, vw_GetText("Bonus"));
 			Y += Prir;
 
 			WScale = -210;
 
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  vw_GetText("4_Alien_Spaceships"));
+			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  vw_GetText("Alien Spaceships"));
 			vw_DrawFont(Setup.InternalWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", AlienShipsKillQuant);
 			vw_DrawFont(Setup.InternalWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)AlienShipsKillBonus);
 			Y += Prir;
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("4_Alien_Motherships"));
+			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("Alien Motherships"));
 			vw_DrawFont(Setup.InternalWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", AlienMotherShipsKillQuant);
 			vw_DrawFont(Setup.InternalWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)AlienMotherShipsKillQuant);
 			Y += Prir;
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("4_Pirate_Spaceships"));
+			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("Pirate Spaceships"));
 			vw_DrawFont(Setup.InternalWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", PirateShipsKillQuant);
 			vw_DrawFont(Setup.InternalWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)PirateShipsKillBonus);
 			Y += Prir;
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("4_Pirate_Vehicles"));
+			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("Pirate Vehicles"));
 			vw_DrawFont(Setup.InternalWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", PirateVehiclesKillQuant);
 			vw_DrawFont(Setup.InternalWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)PirateVehiclesKillBonus);
 			Y += Prir;
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("4_Pirate_Buildings"));
+			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("Pirate Buildings"));
 			vw_DrawFont(Setup.InternalWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", PirateBuildingsKillQuant);
 			vw_DrawFont(Setup.InternalWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)PirateBuildingsKillBonus);
 			Y += Prir;
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("4_Asteroids"));
+			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("Asteroids"));
 			vw_DrawFont(Setup.InternalWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", AsteroidsKillQuant);
 			vw_DrawFont(Setup.InternalWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)AsteroidsKillBonus);
 
 			Y += (int)(Prir*1.5);
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 1.0f*GameContentTransp, vw_GetText("3_Total"));
+			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 1.0f*GameContentTransp, vw_GetText("Total"));
 			vw_DrawFont(Setup.InternalWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", AlienShipsKillQuant+AlienMotherShipsKillQuant+
 					       PirateShipsKillQuant+PirateVehiclesKillQuant+PirateBuildingsKillQuant+AsteroidsKillQuant);
 			vw_DrawFont(Setup.InternalWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)(GameMoney - Setup.Profile[CurrentProfile].Money*1.0f));
@@ -1587,7 +1587,7 @@ void DrawGame()
 			int X = Setup.InternalWidth/2-192;
 			Y = 545;
 			// продолжение игры
-			if (DrawButton384(X,Y, vw_GetText("1_NEXT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime)) {
+			if (DrawButton384(X,Y, vw_GetText("NEXT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime)) {
 				// переходим к выбору уровня
 				ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU;
 				ExitGameWithSave();
@@ -1603,8 +1603,8 @@ void DrawGame()
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
 					  true, GameContentTransp);
 				// название меню
-				int SizeI = 17 + (234-vw_FontSize(vw_GetText("1_GAME_MENU")))/2;
-				vw_DrawFont(Setup.InternalWidth/2-256+SizeI, 128+22, 0, 0, 1.0f, 1.0f,1.0f,0.0f, 0.7f*GameContentTransp, vw_GetText("1_GAME_MENU"));
+				int SizeI = 17 + (234-vw_FontSize(vw_GetText("GAME MENU")))/2;
+				vw_DrawFont(Setup.InternalWidth/2-256+SizeI, 128+22, 0, 0, 1.0f, 1.0f,1.0f,0.0f, 0.7f*GameContentTransp, vw_GetText("GAME MENU"));
 
 				// выводим кнопки меню
 
@@ -1614,7 +1614,7 @@ void DrawGame()
 				int Prir = 100;
 
 				// продолжаем игру
-				if (DrawButton384(X,Y, vw_GetText("1_RESUME"), GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime)) {
+				if (DrawButton384(X,Y, vw_GetText("RESUME"), GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime)) {
 					GameMenu = false;
 					NeedShowGameMenu = false;
 					NeedHideGameMenu = true;
@@ -1629,14 +1629,14 @@ void DrawGame()
 
 				// выход в настройки
 				Y = Y+Prir;
-				if (DrawButton384(X,Y, vw_GetText("1_OPTIONS"), GameContentTransp, &GameButton2Transp, &LastGameButton2UpdateTime)) {
+				if (DrawButton384(X,Y, vw_GetText("OPTIONS"), GameContentTransp, &GameButton2Transp, &LastGameButton2UpdateTime)) {
 					SetOptionsMenu(eMenuStatus::OPTIONS);
 					GameMenuStatus = eGameMenuStatus::OPTIONS;
 				}
 
 				// прерываем игру
 				Y = Y+Prir;
-				if (DrawButton384(X,Y, vw_GetText("1_RESTART"), GameContentTransp, &GameButton3Transp, &LastGameButton3UpdateTime)) {
+				if (DrawButton384(X,Y, vw_GetText("RESTART"), GameContentTransp, &GameButton3Transp, &LastGameButton3UpdateTime)) {
 					// если убили, выводить диалог не нужно
 					if (PlayerFighter == nullptr) {
 						ComBuffer = eCommand::SWITCH_TO_GAME;
@@ -1647,7 +1647,7 @@ void DrawGame()
 
 				// выход из игры
 				Y = Y+Prir;
-				if (DrawButton384(X,Y, vw_GetText("1_QUIT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime)) {
+				if (DrawButton384(X,Y, vw_GetText("QUIT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime)) {
 					// если убили, выводить диалог не нужно
 					if (PlayerFighter == nullptr) {
 						ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU;
@@ -1684,9 +1684,9 @@ void DrawGame()
 			SrcRect(0, 0, 256, 64);
 			DstRect(Setup.InternalWidth - 256 + 60, 768 - 54, Setup.InternalWidth + 60, 768+10);
 			if (GameContentTransp == 1.0f)
-				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("12_pause.tga")), true, CurrentAlert2*GameContentTransp);
+				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("lang/en/game/pause.tga")), true, CurrentAlert2*GameContentTransp);
 			else
-				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("12_pause.tga")), true, GameContentTransp);
+				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("lang/en/game/pause.tga")), true, GameContentTransp);
 
 		}
 

@@ -182,7 +182,7 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 
 	std::cout << "Detected " << vw_GetLanguageListCount() << " languages:";
 	for (unsigned int i = 1; i < TextTable.size(); i++) {
-		std::cout << " " << vw_GetText("0_code", i);
+		std::cout << " " << vw_GetText("en", i);
 	}
 	std::cout << "\n\n";
 	return 0;

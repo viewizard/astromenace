@@ -167,9 +167,9 @@ void Loop_Proc()
 	if (Setup.ShowFPS) {
 		// фпс
 		if (Setup.VSync == 0)
-			vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f", vw_GetText("11_fps"), eFPS);
+			vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f", vw_GetText("fps"), eFPS);
 		else
-			vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f (VSync - %s)", vw_GetText("11_fps"), eFPS, vw_GetText("1_On"));
+			vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f (VSync - %s)", vw_GetText("fps"), eFPS, vw_GetText("On"));
 	}
 
 

@@ -132,16 +132,16 @@ float		InfoObjectRange = 0;
 
 
 const char *InfoGroupNames[10] = {
-	"4_Earth_Spaceships",
-	"4_Weapons",
-	"4_Space_Mines",
-	"4_Alien_Spaceships",
-	"4_Alien_Motherships",
-	"4_Pirate_Spaceships",
-	"4_Civilian_Buildings",
-	"4_Military_Buildings",
-	"4_Wheeled_Vehicles",
-	"4_Tracked_Vehicles"
+	"Earth Spaceships",
+	"Weapons",
+	"Space Mines",
+	"Alien Spaceships",
+	"Alien Motherships",
+	"Pirate Spaceships",
+	"Civilian Buildings",
+	"Military Buildings",
+	"Wheeled Vehicles",
+	"Tracked Vehicles"
 };
 
 
@@ -631,356 +631,356 @@ void InformationObject3DText(int ObjectNum)
 	// общее для файтеров землян
 	if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant) {
 		Y1 += Offset+5;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Space_Ship"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Space Ship"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Ship_Type:"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Ship Type:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(GetShipGroupTitle(ObjectNum-InfoFighterStart+1)));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Codename:"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Codename:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(GetWorkshopShipName(ObjectNum-InfoFighterStart+1)));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Developer:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Earth_Federation"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Earth Federation"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Status:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Ally"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Ally"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Armor:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Width:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp,  "%2.1f %s", InfoObjectWidth, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp,  "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Length:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Height:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("4_Weapons"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", InfoObjectWeaponQuantity, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("Weapons"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", InfoObjectWeaponQuantity, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Engines:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", InfoObjectEngineQuantity, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Engines:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", InfoObjectEngineQuantity, vw_GetText("units"));
 	}
 	// оружие для кораблей землян
 	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant) {
 		Y1 += Offset+5;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Object Class:"));
 		if (CreateNum<InfoWeaponStart+15)
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Weapon,_Cannon"));
+			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Weapon, Cannon"));
 		else
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Weapon,_Launcher"));
+			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Weapon, Launcher"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Type:"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Type:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(GetWeaponGroupTitle(CreateNum-InfoWeaponStart+1)));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Codename:"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Codename:"));
 		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(GetWeaponName(CreateNum-InfoWeaponStart+1)));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Developer:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Earth_Federation"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Earth Federation"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Armor:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage,_Hull:"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Damage, Hull:"));
 		if ((CreateNum-InfoWeaponStart+1 == 11) |
 		    (CreateNum-InfoWeaponStart+1 == 12) |
 		    (CreateNum-InfoWeaponStart+1 == 14))
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponHullDamage(CreateNum-InfoWeaponStart+1), vw_GetText("4_units/sec"));
+			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponHullDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/sec"));
 		else
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponHullDamage(CreateNum-InfoWeaponStart+1), vw_GetText("4_units/shot"));
+			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponHullDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/shot"));
 
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage,_Systems:"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Damage, Systems:"));
 		if ((CreateNum-InfoWeaponStart+1 == 11) |
 		    (CreateNum-InfoWeaponStart+1 == 12) |
 		    (CreateNum-InfoWeaponStart+1 == 14))
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(CreateNum-InfoWeaponStart+1), vw_GetText("4_units/sec"));
+			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/sec"));
 		else
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(CreateNum-InfoWeaponStart+1), vw_GetText("4_units/shot"));
+			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/shot"));
 
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Energy_Use:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%3.1f %s", InfoObjectEnergyUse, vw_GetText("4_units_per_shot"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Energy Use:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%3.1f %s", InfoObjectEnergyUse, vw_GetText("units per shot"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Ammo:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", InfoObjectAmmo, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Ammo:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", InfoObjectAmmo, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Reload:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%3.1f %s", InfoObjectReload, vw_GetText("4_seconds"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Reload:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%3.1f %s", InfoObjectReload, vw_GetText("seconds"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Range:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%3.1f %s", InfoObjectRange, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Range:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%3.1f %s", InfoObjectRange, vw_GetText("units"));
 
 	}
 	// мины
 	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant) {
 		Y1 += Offset+5;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Weapon"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Weapon"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Type:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Space_Mine"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Type:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Space Mine"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Developer:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Pirates"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Pirates"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Armor:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage,_Hull:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "100 %s", vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Damage, Hull:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "100 %s", vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage,_Systems:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "0 %s", vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Damage, Systems:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "0 %s", vw_GetText("units"));
 		Y1 += Offset;
 
 
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("4_Targeting_System"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("Targeting System"));
 		if (CreateNum == InfoMineStart)
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_No"));
+			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("No"));
 		else
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Yes"));
+			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Yes"));
 		Y1 += Offset;
 
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Auto_Cannon:"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Auto Cannon:"));
 		if (CreateNum == InfoMineStart+2)
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Yes"));
+			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Yes"));
 		else
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_No"));
+			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("No"));
 		Y1 += Offset;
 
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Auto_Launcher:"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Auto Launcher:"));
 		if (CreateNum == InfoMineStart+3)
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Yes"));
+			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Yes"));
 		else
-			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_No"));
+			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("No"));
 		Y1 += Offset;
 
 	}
 	// общее для файтеров пришельцев
 	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant) {
 		Y1 += Offset+5;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Space_Ship"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Space Ship"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Ship_Type:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Unknown"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Ship Type:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Unknown"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Developer:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Unknown"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Unknown"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Status:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Enemy"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Armor:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Width:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Length:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Height:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("4_Weapons"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Unknown"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("Weapons"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Unknown"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Damage:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
 	}
 	// общее для MotherShip пришельцев
 	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant) {
 		Y1 += Offset+5;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_MotherShip"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("MotherShip"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Ship_Type:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Unknown"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Ship Type:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Unknown"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Developer:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Unknown"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Unknown"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Status:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Enemy"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Armor:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Width:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Length:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Height:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("4_Weapons"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Unknown"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("Weapons"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Unknown"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 50, 500, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Damage:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 50, 500, vw_GetText("units"));
 	}
 	// общее для пиратов
 	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant) {
 		Y1 += Offset+5;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Pirate_Ship"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Pirate Ship"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Ship_Type:"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Ship Type:"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Developer:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Pirates"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Pirates"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Status:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Enemy"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Armor:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Width:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Length:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Height:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("4_Weapons"));
-		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("Weapons"));
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage:"));
-		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Damage:"));
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
 	}
 	// общее для зданий
 	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant) {
 		Y1 += Offset+5;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Civilian_Building"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Civilian Building"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Developer:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Old_Republic"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Old Republic"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Status:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Enemy"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Armor:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Indestructible"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Indestructible"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Width:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Length:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Height:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 	}
 	// общее для наземных войск
 	if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant) {
 		Y1 += Offset+5;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Military_Building"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Military Building"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Type:"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Type:"));
 		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Civilian Building");
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Developer:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Pirates"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Pirates"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Status:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Enemy"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Armor:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Width:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Length:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Height:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("4_Weapons"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("Weapons"));
 		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Kinetic");
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage:"));
-		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Damage:"));
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("units"));
 	}
 	// общее для колесного
 	if (CreateNum>=InfoWheeledStart && CreateNum<InfoWheeledStart+InfoWheeledQuant) {
 		Y1 += Offset+5;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Wheeled_Vehicle"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Wheeled Vehicle"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Type:"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Type:"));
 		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Civilian Building");
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Developer:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Pirates"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Pirates"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Status:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Enemy"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Armor:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Width:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Length:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Height:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("4_Weapons"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("Weapons"));
 		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Kinetic");
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage:"));
-		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Damage:"));
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("units"));
 	}
 	// общее для гусенечного
 	if (CreateNum>=InfoTrackedStart && CreateNum<InfoTrackedStart+InfoTrackedQuant) {
 		Y1 += Offset+5;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Object_Class:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Tracked_Vehicle"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Tracked Vehicle"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Type:"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Type:"));
 		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Civilian Building");
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Developer:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Pirates"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Pirates"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Status:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Enemy"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Armor:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Width:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Length:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Height:"));
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("4_Weapons"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s:", vw_GetText("Weapons"));
 		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "Kinetic");
 		Y1 += Offset;
-		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("4_Damage:"));
-		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("4_units"));
+		vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Damage:"));
+		//	vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("units"));
 	}
 
 
@@ -998,64 +998,64 @@ void InformationObject3DText(int ObjectNum)
 	case InfoPirateShipStart+2:
 	case InfoPirateShipStart+3:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Marauder"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Marauder"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
 		break;
 	case InfoPirateShipStart+4:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Warder"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Warder"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
 		break;
 	case InfoPirateShipStart+5:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Raider"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Raider"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("units"));
 		break;
 	case InfoPirateShipStart+6:
 	case InfoPirateShipStart+7:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Missile_Carrier"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Missile Carrier"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("units"));
 		break;
 	case InfoPirateShipStart+8:
 	case InfoPirateShipStart+9:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Battle_Freighter"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Battle Freighter"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("4_Kinetic"), vw_GetText("4_Propelled"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("units"));
 		break;
 	case InfoPirateShipStart+10:
 	case InfoPirateShipStart+11:
 	case InfoPirateShipStart+12:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Missile_Carrier"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Missile Carrier"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 50, 300, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 50, 300, vw_GetText("units"));
 		break;
 	case InfoPirateShipStart+13:
 	case InfoPirateShipStart+14:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Battle_Freighter"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Battle Freighter"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 50, 200, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 50, 200, vw_GetText("units"));
 		break;
 
 
@@ -1066,104 +1066,104 @@ void InformationObject3DText(int ObjectNum)
 	case InfoMilitaryBuildingStart:
 	case InfoMilitaryBuildingStart+5:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Cannon"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Cannon"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 30, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 30, vw_GetText("units"));
 		break;
 	case InfoMilitaryBuildingStart+3:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_MachineGun"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("MachineGun"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
 		break;
 	case InfoMilitaryBuildingStart+1:
 	case InfoMilitaryBuildingStart+6:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Turbo_Cannon"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Turbo Cannon"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
 		break;
 	case InfoMilitaryBuildingStart+2:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Missile_Launcher"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Missile Launcher"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
 		break;
 	case InfoMilitaryBuildingStart+4:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Cannon_Turret"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Cannon Turret"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
 		break;
 
 
 	// для колесного транспорта
 	case InfoWheeledStart:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Armored_Jeep"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Armored Jeep"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("units"));
 		break;
 	case InfoWheeledStart+1:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Jeep"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Jeep"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
 		break;
 	case InfoWheeledStart+2:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Armored_Jeep"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Armored Jeep"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("units"));
 		break;
 	case InfoWheeledStart+3:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Jeep"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Jeep"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Ion"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Ion"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
 		break;
 	case InfoWheeledStart+4:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Armored_Jeep"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Armored Jeep"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Antimatter"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Antimatter"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
 		break;
 	case InfoWheeledStart+5:
 	case InfoWheeledStart+6:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_APC"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("APC"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("units"));
 		break;
 	case InfoWheeledStart+7:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Missile_Launcher"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Missile Launcher"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 400, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 400, vw_GetText("units"));
 		break;
 
 
@@ -1174,55 +1174,55 @@ void InformationObject3DText(int ObjectNum)
 	case InfoTrackedStart+6:
 	case InfoTrackedStart+8:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Tank"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Tank"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
 		break;
 	case InfoTrackedStart+2:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Tank"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Tank"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Plasma"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Plasma"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
 		break;
 	case InfoTrackedStart+3:
 	case InfoTrackedStart+4:
 	case InfoTrackedStart+7:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Tank"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Tank"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Antimatter"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Antimatter"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
 		break;
 	case InfoTrackedStart+9:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_APC"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("APC"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Kinetic"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
 		break;
 	case InfoTrackedStart+10:
 	case InfoTrackedStart+11:
 	case InfoTrackedStart+12:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Missile_Launcher"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Missile Launcher"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Propelled"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 400, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i - %i %s", 10, 400, vw_GetText("units"));
 		break;
 	case InfoTrackedStart+13:
 		Y1 += Offset+Offset+5;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Engineer"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Engineer"));
 		Y1 += Offset*7;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("4_Not_combatant"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Not combatant"));
 		Y1 += Offset;
-		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", 0, vw_GetText("4_units"));
+		vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", 0, vw_GetText("units"));
 		break;
 
 
@@ -1256,9 +1256,9 @@ void InformationMenu()
 
 
 	// выводим кол-во и текущую страницу
-	int	Size = vw_FontSize(vw_GetText("3_Page_%i_of_%i"), CreateNum, InfoEnd);
+	int	Size = vw_FontSize(vw_GetText("Page %i of %i"), CreateNum, InfoEnd);
 	int SizeI = (Setup.InternalWidth-Size)/2;
-	vw_DrawFont(SizeI, 50+30*16+15, 0, 0, 1.0f, 0.5f,0.5f,0.5f, 0.6f*MenuContentTransp, vw_GetText("3_Page_%i_of_%i"), CreateNum, InfoEnd);
+	vw_DrawFont(SizeI, 50+30*16+15, 0, 0, 1.0f, 0.5f,0.5f,0.5f, 0.6f*MenuContentTransp, vw_GetText("Page %i of %i"), CreateNum, InfoEnd);
 
 
 //	DrawFont(760.0f, 660.0f, 0, 0, 1, 0.2f*MenuContentTransp, "PgUp - Previous Page");
@@ -1301,7 +1301,7 @@ void InformationMenu()
 
 
 	X = Setup.InternalWidth/2 - 209;
-	if (DrawButton200_2(X,Y+28, vw_GetText("1_Page_Up"), MenuContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetText("Page Up"), MenuContentTransp, false)) {
 		CreateNum --;
 		if (CreateNum<1) CreateNum = InfoEnd;
 		CreateInfoObject();
@@ -1314,7 +1314,7 @@ void InformationMenu()
 	}
 
 	X = Setup.InternalWidth/2 + 9;
-	if (DrawButton200_2(X,Y+28, vw_GetText("1_Page_Down"), MenuContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetText("Page Down"), MenuContentTransp, false)) {
 		CreateNum ++;
 		if (CreateNum>InfoEnd) CreateNum = 1;
 		CreateInfoObject();
@@ -1336,7 +1336,7 @@ void InformationMenu()
 
 	X = (Setup.InternalWidth - 384)/2;
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
+	if (DrawButton384(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
 		DestroyInfoObject();
 		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 	}

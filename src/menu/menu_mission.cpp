@@ -386,8 +386,8 @@ void MissionMenu()
 
 
 	// выводим текущий профиль пилота
-	int Size = vw_FontSize("%s: ", vw_GetText("3_Pilot_Profile"));
-	vw_DrawFont(X1, 208+12, 0, 0, 1.0f, 0.0f,1.0f,0.0f, 1.0f*MenuContentTransp, "%s: ", vw_GetText("3_Pilot_Profile"));
+	int Size = vw_FontSize("%s: ", vw_GetText("Pilot Profile"));
+	vw_DrawFont(X1, 208+12, 0, 0, 1.0f, 0.0f,1.0f,0.0f, 1.0f*MenuContentTransp, "%s: ", vw_GetText("Pilot Profile"));
 
 	if (Size+vw_FontSize(Setup.Profile[CurrentProfile].Name) > 500) {
 		vw_DrawFont(X1+Size, 208+12, 0, 500-Size, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.Profile[CurrentProfile].Name);
@@ -395,7 +395,7 @@ void MissionMenu()
 	} else
 		vw_DrawFont(X1+Size, 208+12, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.Profile[CurrentProfile].Name);
 
-	if (DrawButton200_2(X1+616-72, 212, vw_GetText("1_Change_Profile"), MenuContentTransp, false)) {
+	if (DrawButton200_2(X1+616-72, 212, vw_GetText("Change Profile"), MenuContentTransp, false)) {
 		ComBuffer = eCommand::SWITCH_TO_PROFILE;
 	}
 
@@ -640,11 +640,11 @@ void MissionMenu()
 
 	int X = Setup.InternalWidth/2 - 284;
 	int Y = 165+100*5;
-	if (DrawButton256(X,Y, vw_GetText("1_MAIN_MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+	if (DrawButton256(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 
 	X = Setup.InternalWidth/2 + 28;
-	if (DrawButton256(X,Y, vw_GetText("1_NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, !(CurrentMission >= 0))) {
+	if (DrawButton256(X,Y, vw_GetText("NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, !(CurrentMission >= 0))) {
 		// если уже играли в эту миссию
 		if (Setup.Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0) {
 			if (Setup.NeedShowHint[5]) {
