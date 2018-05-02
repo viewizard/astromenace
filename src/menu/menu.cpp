@@ -530,8 +530,8 @@ void DrawMenu()
 	vw_DrawFont(6, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %s %s %i", vw_GetText("11_Version"), GAME_VERSION, vw_GetText("11_build"), GAME_BUILD);
 
 	// Copyright
-	int CSize = vw_FontSize("%s © 2007-2018, Viewizard", vw_GetText("11_Copyright"));
-	vw_DrawFont(Setup.InternalWidth-7-CSize, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s © 2007-2018, Viewizard", vw_GetText("11_Copyright"));
+	int CSize = vw_FontSize("Copyright © 2007-2018, Viewizard");
+	vw_DrawFont(Setup.InternalWidth-7-CSize, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "Copyright © 2007-2018, Viewizard");
 
 
 

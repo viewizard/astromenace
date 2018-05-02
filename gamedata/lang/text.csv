@@ -139,8 +139,7 @@
 3_Textures_Quality;Textures Quality;Texture Qualität;Качество Текстур;Jakość Tekstur
 3_Multisample_Antialiasing;Multisample Antialiasing;Multisample Antialiasing;Сглаживание;Wielopróbkowy Antyaliasing
 3_NAME;NAME;NAME;ИМЯ;IMIĘ
-3_SCORE;SCORE;Punkte;СЧЕТ;WYNIK
-3_GAME_OBJECTS_INFORMATION;GAME OBJECTS INFORMATION;Informationen zum Spielziel;ИНФОРМАЦИЯ ОБ ОБЪЕКТАХ;INFORMACJE O OBIEKTACH
+3_SCORE;SCORE;PUNKTE;СЧЕТ;WYNIK
 3_Page_%i_of_%i;Page %i of %i;Seite %i von %i;Страница %i из %i;Strona %i z %i
 3_New_Pilot_Profile;New Pilot Profile;Neues Piloten Profile;Новый Профиль Пилота;Nowy Profil Pilota
 3_Pilot_Profile;Pilot Profile;Pilot Profil;Профиль Пилота;Profil Pilota
@@ -406,7 +405,6 @@
 ;;;;
 7_Ships_Stock;Ship Stock;Schifflager;Склад Кораблей;Zasób Statków
 7_Ship_Hull_Cost;Ship Hull Cost;Schiff Hüllenkosten;Стоимость Корпуса;Koszt Kadłuba
-7_Not_Available_in_Demo_Version;Not Available in Demo Version;In der Demo Version nicht verfügbar;Недоступно в Демо Версии;Brak w Demo
 7_Player_Ship;Player Ship;Spielerschiff;Корабль Игрока;Statek Gracza
 7_Upgrade_Hull_Cost;Upgrade Hull Cost;Verbessern Hülle Kosten;Стоимость Апгрейда;Koszt Ulepszenia
 7_Repair_Hull_Cost;Repair Hull Cost;Reparieren Hülle Kosten;Стоимость Ремонта;Koszt Naprawy
@@ -595,15 +593,9 @@ Nick O`Connell;Nick O`Connell;Nick O`Connell;Nick O`Connell;Nick O`Connell
 Mikhail Storcheous;Mikhail Storcheous;Mikhail Storcheous;Михаил Сторчеус;Mikhail Storcheous
 Boris Pek;Boris Pek;Boris Pek;Boris Pek;Boris Pek
 ;;;;
-POWERED BY;POWERED BY;POWERED BY;В ИГРЕ ИСПОЛЬЗУЮТСЯ;POWERED BY
-;;;;
-DEVELOPING WITH;DEVELOPING WITH;DEVELOPING WITH;РАЗРАБАТЫВАЕТСЯ С ИСПОЛЬЗОВАНИЕМ;TWORZONE Z
-;;;;
 ;;;;
 11_build;build;build;сборка;build
 11_fps;fps;fps;fps;fps
-11_triangles;triangles;triangles;треугольников;triangles
-11_Copyright;Copyright;Copyright;Copyright;Copyright
 11_Version;Version;Version;Версия;Wersja
 11_Loading;LOADING;LADE;ЗАГРУЗКА;WCZYTYWANIE
 ;;;;
