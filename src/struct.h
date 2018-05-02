@@ -229,8 +229,6 @@ struct sGameSetup {
 	unsigned int VoiceLanguage; // 1-en, 2-de, 3-ru
 	// номер шрифта
 	int FontNumber;
-	// размер шрифта
-	int FontSize;
 
 	// вкл/откл музыки
 	int MusicSw;

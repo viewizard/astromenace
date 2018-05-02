@@ -44,7 +44,6 @@ void InitSetup()
 	Setup.MenuLanguage = 1; // en by default
 	Setup.VoiceLanguage = 1; // en by default
 	Setup.FontNumber = 0;
-	Setup.FontSize = 16;
 
 	Setup.Width = 1228;
 	Setup.Height = 768;
@@ -154,7 +153,6 @@ void SaveXMLSetupFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MenuLanguage"), "value", vw_GetText("0_code", Setup.MenuLanguage));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VoiceLanguage"), "value", vw_GetText("0_code", Setup.VoiceLanguage));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "FontNumber"), "value", Setup.FontNumber);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "FontSize"), "value", Setup.FontSize);
 
 
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "Width"), "value", Setup.Width);
@@ -389,8 +387,6 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	}
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "FontNumber"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "FontNumber"), "value", Setup.FontNumber);
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "FontSize"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "FontSize"), "value", Setup.FontSize);
 
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "Width"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "Width"), "value", Setup.Width);
@@ -663,7 +659,6 @@ LoadProfiles:
 	if (CurrentProfile != -1) CurrentMission = Setup.Profile[Setup.LastProfile].LastMission;
 
 	if ((Setup.FontNumber > FontQuantity-1) || (Setup.FontNumber < 0)) Setup.FontNumber = 0;
-	if ((Setup.FontSize > 18) || (Setup.FontSize < 14)) Setup.FontSize = 16;
 	if (Setup.ControlSensivity > 10) Setup.ControlSensivity = 10;
 	if (Setup.Brightness > 10) Setup.Brightness = 10;
 	if (Setup.JoystickDeadZone > 10) Setup.JoystickDeadZone = 10;

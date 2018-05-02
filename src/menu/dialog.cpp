@@ -1576,7 +1576,7 @@ Dialogs with default type:
 			vw_DrawFont(X+138+34, Y+ButtonOffset-71, -170, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("0_title", Setup.MenuLanguage));
 		else
 			vw_DrawFont(X+138+34+SizeI, Y+ButtonOffset-71, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("0_title", Setup.MenuLanguage));
-		vw_SetFontSize(Setup.FontSize);
+		vw_SetFontSize(16);
 
 		if (DrawDialogButton200(X+128+64-72/2, Y+ButtonOffset, vw_GetText("1_OK"), DialogContentTransp)) {
 			// первоначально, язык голоса ставим такой же, как и язык меню

@@ -111,7 +111,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
 		vw_ReleaseAllFontChars();
 		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
-		vw_SetFontSize(Setup.FontSize);
+		vw_SetFontSize(16);
 		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.FontNumber >= FontQuantity-1)) {
@@ -121,7 +121,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
 		vw_ReleaseAllFontChars();
 		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
-		vw_SetFontSize(Setup.FontSize);
+		vw_SetFontSize(16);
 		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
 	}
 	int Scale = 0;
@@ -132,43 +132,6 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	}
 	SizeI = (170-Size)/2;
 	vw_DrawFont(X1+438+SizeI, Y1, Scale, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, FontList[Setup.FontNumber].FontTitle);
-
-
-
-
-	// выбор размера шрифта
-	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("3_Font_Size"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("1_Prev"), ContentTransp, Setup.FontSize <= 14)) {
-		Setup.FontSize --;
-		if (Setup.FontSize < 14) Setup.FontSize = 14;
-
-		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
-		vw_ReleaseAllFontChars();
-		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
-		vw_SetFontSize(Setup.FontSize);
-		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
-	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("1_Next"), ContentTransp, Setup.FontSize >= 18)) {
-		Setup.FontSize ++;
-		if (Setup.FontSize > 18) Setup.FontSize = 18;
-
-		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
-		vw_ReleaseAllFontChars();
-		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
-		vw_SetFontSize(Setup.FontSize);
-		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
-	}
-	Scale = 0;
-	Size = vw_FontSize("%i", Setup.FontSize);
-	if (Size > 170) {
-		Scale = -170;
-		Size = 170;
-	}
-	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, Scale, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, "%i", Setup.FontSize);
-
-
 
 
 

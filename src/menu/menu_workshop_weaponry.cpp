@@ -1212,7 +1212,7 @@ void Workshop_Weaponry()
 
 	vw_SetFontSize(24);
 	vw_DrawFont(Setup.InternalWidth/2-445, 600, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("7_Weapon_Stock"));
-	vw_SetFontSize(Setup.FontSize);
+	vw_SetFontSize(16);
 
 	DrawShipWeaponsInSlots();
 
@@ -1242,7 +1242,7 @@ void Workshop_Weaponry()
 
 	vw_SetFontSize(24);
 	vw_DrawFont(Setup.InternalWidth/2+445-vw_FontSize(vw_GetText("7_Installed_Weapons")), 600, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("7_Installed_Weapons"));
-	vw_SetFontSize(Setup.FontSize);
+	vw_SetFontSize(16);
 
 	// вывод информации
 	vw_SetFontSize(20);
@@ -1251,7 +1251,7 @@ void Workshop_Weaponry()
 		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
 	else
 		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
-	vw_SetFontSize(Setup.FontSize);
+	vw_SetFontSize(16);
 
 
 

@@ -402,7 +402,7 @@ int main( int argc, char **argv )
 
 	// иним фонт
 	vw_InitFont(FontList[Setup.FontNumber].FontFileName);
-	vw_SetFontSize(Setup.FontSize);
+	vw_SetFontSize(16);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

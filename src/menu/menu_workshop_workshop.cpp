@@ -557,7 +557,7 @@ void Workshop_Workshop()
 
 	vw_SetFontSize(24);
 	vw_DrawFont(Setup.InternalWidth/2-475, 630, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("7_System_Stock"));
-	vw_SetFontSize(Setup.FontSize);
+	vw_SetFontSize(16);
 
 
 
@@ -1090,7 +1090,7 @@ void Workshop_Workshop()
 
 	vw_SetFontSize(24);
 	vw_DrawFont(Setup.InternalWidth/2+475-vw_FontSize(vw_GetText("7_Installed_Systems")), 630, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("7_Installed_Systems"));
-	vw_SetFontSize(Setup.FontSize);
+	vw_SetFontSize(16);
 
 	// текущая система
 	vw_DrawFont(Setup.InternalWidth/2-250, 430, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("7_Selected_System"));
@@ -1150,6 +1150,6 @@ void Workshop_Workshop()
 		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
 	else
 		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
-	vw_SetFontSize(Setup.FontSize);
+	vw_SetFontSize(16);
 }
 
