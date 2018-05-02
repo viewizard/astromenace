@@ -1211,10 +1211,8 @@ void Workshop_Weaponry()
 	}
 
 	vw_SetFontSize(24);
-	vw_SetFontOffsetY(2);
 	vw_DrawFont(Setup.InternalWidth/2-445, 600, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("7_Weapon_Stock"));
 	vw_SetFontSize(Setup.FontSize);
-	vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
 
 	DrawShipWeaponsInSlots();
 
@@ -1243,21 +1241,18 @@ void Workshop_Weaponry()
 	}
 
 	vw_SetFontSize(24);
-	vw_SetFontOffsetY(2);
 	vw_DrawFont(Setup.InternalWidth/2+445-vw_FontSize(vw_GetText("7_Installed_Weapons")), 600, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("7_Installed_Weapons"));
 	vw_SetFontSize(Setup.FontSize);
-	vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
 
 	// вывод информации
 	vw_SetFontSize(20);
-	vw_SetFontOffsetY(2);
 	int SizeI = (Setup.InternalWidth-vw_FontSize("%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money))/2;
 	if (Setup.Profile[CurrentProfile].Money >= GetWeaponBaseCost(CurrentWorkshopNewWeapon))
 		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
 	else
 		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("3_Money"), Setup.Profile[CurrentProfile].Money);
 	vw_SetFontSize(Setup.FontSize);
-	vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
+
 
 
 	// проверяем состояние, если тянули и отжали, и сюда пришли - значит никто не перехватил, нужно сделать сброс

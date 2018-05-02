@@ -464,11 +464,9 @@ void GamePlayerShip()
 
 			// визуальный вывод - выводим постоянно
 			vw_SetFontSize(24);
-			vw_SetFontOffsetY(2);
 			int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("4_Missile_Detected")))/2;
 			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3, vw_GetText("4_Missile_Detected"));
 			vw_SetFontSize(Setup.FontSize);
-			vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
 			WarningMessagesCount++;
 		} else {
 			if (CurrentAlert3 == 1.0f) { // сделали полный цикл , предыдущее значение счетчика было минимальное
@@ -476,11 +474,9 @@ void GamePlayerShip()
 			} else if (VoiceMissileDetectedStatus) {
 				// визуальный вывод - выводим постоянно
 				vw_SetFontSize(24);
-				vw_SetFontOffsetY(2);
 				int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("4_Missile_Detected")))/2;
 				vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3, vw_GetText("4_Missile_Detected"));
 				vw_SetFontSize(Setup.FontSize);
-				vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
 				WarningMessagesCount++;
 			}
 		}
@@ -535,11 +531,9 @@ void GamePlayerShip()
 
 			// визуальный вывод - выводим постоянно
 			vw_SetFontSize(24);
-			vw_SetFontOffsetY(2);
 			int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("4_Collision_Course_Detected")))/2;
 			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3, vw_GetText("4_Collision_Course_Detected"));
 			vw_SetFontSize(Setup.FontSize);
-			vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
 			WarningMessagesCount++;
 		}
 

@@ -34,8 +34,6 @@
 int vw_InitFont(const std::string &FontName);
 // Set current font size.
 void vw_SetFontSize(int FontSize);
-// Set font offset.
-void vw_SetFontOffsetY(int NewOffsetY);
 // Generate font characters by list.
 int vw_GenerateFontChars(unsigned FontTextureWidth, unsigned FontTextureHeight,
 			 const std::unordered_set<char32_t> &CharsSetUTF32);

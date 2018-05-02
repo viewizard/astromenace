@@ -403,8 +403,6 @@ int main( int argc, char **argv )
 	// иним фонт
 	vw_InitFont(FontList[Setup.FontNumber].FontFileName);
 	vw_SetFontSize(Setup.FontSize);
-	// ставим доп смещение при прорисовке в 2 ("привет" от старого шрифта из первых версий игры)
-	vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

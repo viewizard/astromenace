@@ -63,7 +63,8 @@ std::unique_ptr<uint8_t[]> InternalFontBuffer{};
 // Font settings.
 // we are safe with sIF_complex_type here, since font size and position will not exceed 'float'
 sIF_complex_type<unsigned, float> InternalFontSize{0};
-sIF_complex_type<int, float> GlobalFontOffsetY{0};
+constexpr float GlobalFontOffsetY{2.0f}; // FIXME 'fix' for legacy related code, since previously we are used texture instead of
+					 //       freetype, so, all vw_DrawFont() calls have wrong Y position now in game code
 
 struct sTexturePos {
 	float left, top, right, bottom;
@@ -184,14 +185,6 @@ int vw_InitFont(const std::string &FontName)
 void vw_SetFontSize(int FontSize)
 {
 	InternalFontSize = FontSize;
-}
-
-/*
- * Set font offset.
- */
-void vw_SetFontOffsetY(int NewOffsetY)
-{
-	GlobalFontOffsetY = NewOffsetY;
 }
 
 /*
@@ -648,7 +641,7 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 		if (UTF32 != SpaceUTF32) {
 			float DrawX{Xstart + DrawChar->FontMetrics.X.f() * FontWidthFactor};
 			// we are safe with static_cast here, since X will be less that screen resolution (usually, <10000)
-			float DrawY{static_cast<float>(Y) + GlobalFontOffsetY.f() +
+			float DrawY{static_cast<float>(Y) + GlobalFontOffsetY +
 				    (InternalFontSize.f() - DrawChar->FontMetrics.Y.f()) * FontScale};
 
 			// texture's UV coordinates

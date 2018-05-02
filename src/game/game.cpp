@@ -1435,11 +1435,9 @@ void DrawGame()
 		if (GameSpeedShowTransp>1.0f) GameSpeedShowTransp = 1.0f;
 
 		vw_SetFontSize(20);
-		vw_SetFontOffsetY(2);
 		int TmpFontSize = (Setup.InternalWidth-vw_FontSize("%s x%1.1f", vw_GetText("4_Game_Speed:"), CurrentGameSpeed))/2;
 		vw_DrawFont(TmpFontSize, 80, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameSpeedShowTransp, "%s x%1.1f", vw_GetText("4_Game_Speed:"), CurrentGameSpeed);
 		vw_SetFontSize(Setup.FontSize);
-		vw_SetFontOffsetY(8 - ceil(Setup.FontSize/2.0f) + 2);
 
 		CurrentGameSpeedShowTime -= TimeDelta;
 		if (CurrentGameSpeedShowTime < 0.0f) CurrentGameSpeedShowTime = 0.0f;
