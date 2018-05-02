@@ -45,40 +45,13 @@ const char *ButtonQuality[3] = {
 
 const char *ShadowButtonQuality[10] = {
 	"1_Off",
-	"3_Low",
-	"3_Low",
-	"3_Low",
-	"3_Medium",
-	"3_Medium",
-	"3_Medium",
-	"3_High",
-	"3_High",
-	"3_High"
+	"8x8 PCF" // don't need translation
 };
-
-const char *ShadowButtonQualityBase[10] = {
-	"%s",
-	"8x8 PCF"
-};
-
-
-const char *ButtonTile[3] = {
-	"3_Disabled",
-	"3_1_Layer",
-	"3_2_Layers"
-};
-
-
-const char *ButtonTextFiltr[2] = {
-	"3_Bilinear",
-	"3_Trilinear"
-};
-
 
 const char *ButtonTextCompression[3] = {
 	"1_Off",
-	"3_S3TC",
-	"3_BPTC"
+	"S3TC", // don't need translation
+	"BPTC" // don't need translation
 };
 
 
@@ -365,14 +338,14 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		if (Options_ShadowMap > 1) Options_ShadowMap = 1;
 	}
 	if (vw_GetDevCaps().OpenGL_2_0_supported && vw_GetDevCaps().OpenGL_2_1_supported && vw_GetDevCaps().OpenGL_3_0_supported && Options_UseGLSL120 && (vw_GetDevCaps().FramebufferObjectDepthSize >= 24)) {
-		Size = vw_FontSize(ShadowButtonQualityBase[Options_ShadowMap], vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
+		Size = vw_FontSize(vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
 		float WScale = 0;
 		if (Size > 170) {
 			Size = 170;
 			WScale = -170;
 		}
 		SizeI = (170-Size)/2;//High, Medium, Low
-		vw_DrawFont(X1+438+SizeI, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, ShadowButtonQualityBase[Options_ShadowMap], vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
+		vw_DrawFont(X1+438+SizeI, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
 	} else {
 		Size = vw_FontSize(vw_GetText("3_Not_available"));
 		SizeI = (170-Size)/2;

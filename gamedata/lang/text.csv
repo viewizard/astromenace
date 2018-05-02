@@ -101,15 +101,10 @@
 3_Not_implemented;Not implemented;Nicht verfügbar;Не задействован;Brak
 3_Screen_Mode;Screen Mode;Bildschirm Modus;Режим Экрана;Tryb Ekranu
 3_Window_Size;Window Size;Fenstergröße;Размер Окна;Rozmiar Okna
-3_Bilinear;Bilinear;Bilinear;Билинейный;Dwuliniowy
-3_Trilinear;Trilinear;Trilinear;Трилинейный;Trójliniowy
 3_Low;Low;Gering;Низкое;Niska
 3_Medium;Medium;Mittel;Среднее;Średnia
 3_High;High;Hoch;Высокое;Wysoka
 3_Disabled;Disabled;Ausgeschaltet;Отключено;Wyłączone
-3_1_Layer;1 Layer;1 Layer;1 Слой;1 Warstwa
-3_2_Layers;2 Layers;2 Layer;2 Слоя;2 Warstwy
-3_3_Layers;3 Layers;3 Layer;3 Слоя;3 Warstwy
 ;;;;
 3_Menu_Language;Menu Language;Menü-Sprache;Язык Меню;Język Menu
 3_Keyboard_Layout;Keyboard Layout;Tastatur Layout;Раскладка клавиатуры;Układ Klawiatury
@@ -176,8 +171,6 @@
 3_Aspect_Ration;Aspect Ratio;Aspekt Ratio;Отношение Сторон;Proporcje
 3_Standard;Standard;Standard;Стандарт;Standart
 3_Widescreen;Widescreen;Widescreen;Широкоформат;Panoramiczny
-3_S3TC;S3TC;S3TC;S3TC;S3TC
-3_BPTC;BPTC;BPTC;BPTC;BPTC
 ;;;;
 ;;;;
 4_Earth_Spaceships;Earth Spaceships;Erdraumschiffe;Корабли;Statki Ziemskie
