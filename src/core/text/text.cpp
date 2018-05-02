@@ -140,9 +140,21 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 			       (tmpFile->Data[i] != SymbolEndOfLine) &&
 			       (i < tmpFile->Size); i++) {
 				if (NeedBuildCurrentRowCode)
-					CurrentRowCode += tmpFile->Data[i];
+					// special case, store '\n' instead of '\'+'n'
+					if (!CurrentRowCode.empty() &&
+					    (CurrentRowCode.back() == '\\') &&
+					    (tmpFile->Data[i] == 'n'))
+						CurrentRowCode.back() = '\n';
+					else
+						CurrentRowCode += tmpFile->Data[i];
 				else
-					TextTable[CurrentColumnNumber][CurrentRowCode] += tmpFile->Data[i];
+					// special case, store '\n' instead of '\'+'n'
+					if (!TextTable[CurrentColumnNumber][CurrentRowCode].empty() &&
+					    (TextTable[CurrentColumnNumber][CurrentRowCode].back() == '\\') &&
+					    (tmpFile->Data[i] == 'n'))
+						TextTable[CurrentColumnNumber][CurrentRowCode].back() = '\n';
+					else
+						TextTable[CurrentColumnNumber][CurrentRowCode] += tmpFile->Data[i];
 			}
 			// RowCode built, next blocks in this row contain data
 			NeedBuildCurrentRowCode = false;
@@ -179,9 +191,9 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 /*
  * Get UTF8 text for particular language.
  */
-const char *vw_GetText(const char *ItemID, unsigned int Language)
+const char *vw_GetText(const std::string &ItemID, unsigned int Language)
 {
-	if (!ItemID || TextTable.empty())
+	if (ItemID.empty() || TextTable.empty())
 		return nullptr;
 
 	if (Language > vw_GetLanguageListCount())
