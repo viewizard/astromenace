@@ -432,7 +432,6 @@ void DrawMenu()
 	DstRect(StartX,10,StartX+863,10+128);
 
 	if ((MenuStatus != eMenuStatus::WORKSHOP) &&
-	    (MenuStatus != eMenuStatus::INFORMATION) &&
 	    (MenuStatus != eMenuStatus::INTERFACE) &&
 	    (MenuStatus != eMenuStatus::OPTIONS) &&
 	    (MenuStatus != eMenuStatus::CONFCONTROL) &&
