@@ -1,555 +1,555 @@
-en;de;ru;pl
-English;Deutsch;Русский;Polski
-START GAME;SPIEL STARTEN;НАЧАТЬ ИГРУ;ROZPOCZNIJ GRĘ
-TOP SCORES;BESTENLISTE;РЕКОРДЫ;REKORDY
-OPTIONS;OPTIONEN;НАСТРОЙКИ;USTAWIENIA
-INFORMATION;INFORMATION;ИНФОРМАЦИЯ;INFORMACJE
-CREDITS;DANKSAGUNGEN;АВТОРЫ;AUTORZY
-QUIT;ENDE;ВЫХОД;ZAKOŃCZ
-YES;JA;ДА;TAK
-NO;NEIN;НЕТ;NIE
-ERROR;FEHLER;ОШИБКА;BŁĄD
-CLOSE;SCHLIESSEN;ЗАКРЫТЬ;ZAMKNIJ
-DELETE;LÖSCHEN;УДАЛИТЬ;SKASUJ
-REPAIR;REPARIEREN;РЕМОНТ;NAPRAW
-OK;OK;ОК;OK
-On;An;Вкл;Włączone
-Off;Aus;Выкл;Wyłączone
-Decrease;Verringern;Уменьшить;Zmniejsz
-Increase;Erhöhen;Увеличить;Zwiększ
-Video & Audio;Video & Audio;Видео и Аудио;Grafika i Dźwięk
-Config Controls;Tastenbelegung;Управление;Sterowanie
-Interface;Ausblick;Интерфейс;Interfejs
-Advanced;Erweitert;Специальные;Zaawansowane
-MAIN MENU;HAUPTMENÜ;ОСНОВНОЕ МЕНЮ;GŁÓWNE MENU
-MISSIONS LIST;MISSIONEN LISTE;СПИСОК МИССИЙ;LISTA MISJI
-DONATE;SPENDEN;ПОДДЕРЖАТЬ;DOTUJ
-Arcade;Spielhalle;Аркада;Gra
-Sim;Simulation;Симулятор;Symulator
-BACK;ZURÜCK;НАЗАД;POWRÓT
-Prev;Vorh;Пред;Wstecz
-Next;Näch;След;Dalej
-APPLY;ANWENDEN;ПРИНЯТЬ;ZASTOSUJ
-Create;Anlegen;Создать;Stwórz
-Difficulty;Schwierigkeit;Сложность;Trudność
-Delete;Löschen;Удалить;Skasuj
-NEXT;WEITER;ДАЛЕЕ;DALEJ
-Shipyard;Schiffwerft;Верфь;Stocznia
-Workshop;Werkstatt;Мастерская;Warsztat
-Weaponry;Bewaffnung;Оружейная;Zbrojownia
-START;START;СТАРТ;START
-Info;Info;Инфо;Info
-Buy Ship;Schiff Kaufen;Купить;Kup Statek
-Repair Hull;Hülle Reparieren;Ремонт;Napraw Kadłub
-Upgrade Hull;Hülle Aufwerten;Апгрейд;Ulepsz Kadłub
-Reload;Laden;Перезарядить;Przeładuj
-Reload All;Laden Alle;Перезарядить Все;Ładuj Broń
-Close;Schliessen;Закрыть;Zamknij
-Buy;Kaufen;Купить;Kup
-Sell;Verkaufen;Продать;Sprzedaj
-RESTART;NEUSTART;РЕСТАРТ;RESTART
-RESUME;FORTFAHREN;ПРОДОЛЖИТЬ;WZNÓW
-GAME MENU;SPIEL MENÜ;МЕНЮ ИГРЫ;MENU GRY
-Click to setup;Einrichten;Выбрать;Wybierać
-Left;Links;Влево;Lewa
-Right;Rechts;Вправо;Prawa
-Mission Complete;Mission Beendet;Миссия Завершена;Misja Zakończona
-Page Up;Seite Rauf;Предыдущая;Wstecz
-Page Down;Seite Runter;Следующая;Dalej
-Duplicate;Duplikat;Копия;Kopiuj
-Change Profile;Ändern Profil;Изменить Профиль;Zmień Profil
-Are you sure you want to quit?;Wollen Sie wirklich aufhören?;Вы уверены, что хотите завершить игру?;Na pewno chcesz zakończyć?
-Note: all game data will be saved.;ACHTUNG: Spieldaten werden gesichert.;Текущие настройки будут сохранены.;Uwaga: Stan gry zostanie zapisany.
-Note: the current game data will be lost.;ACHTUNG: Spieldaten gehen verloren.;Текущие данные миссии будут потеряны.;Uwaga: Aktualny stan gry zostanie utracony.
-Cannot create a Pilot Profile.;Pilot Profil kann nicht angelegt werden.;Невозможно создать Профиль Пилота.;Nie można utworzyć profilu pilota.
-Tip: you should clear one line first.;Tipp: Lösche zuerst einen anderen.;Удалите один уже имеющийся Профиль.;Wskazówka: Najpierw usuń jedną linię.
-Are you sure you want to delete the Profile?;Sind Sie sicher, das Sie das Profil löschen wollen?;Вы действительно хотите удалить запись?;Na pewno chcesz usunąć profil?
-Note: all Pilot Profile data will be lost.;Hinweis: Alle Daten des Piloten werden gelöscht.;Все данные Профиля будут потеряны.;Uwaga: Dane profilu pilota zostaną utracone.
-Not enough money for the full hull repair.;Zuwenig Geld für komplette Instandsetzung.;Полный ремонт корабля невозможен.;Za mało pieniędzy na całkowitą naprawę kadłuba.
-Note: Repair has been limited by money.;Hinweis:Hülle wurde nur teilw. repariert.;Ремонт будет ограничен деньгами.;Uwaga: Naprawa ograniczona przez pieniędze.
-Are you sure you want to restart the game?;Wollen Sie das Spiel wirklich neu starten?;Вы действительно хотите перезагрузить игру?;Na pewno chcesz zrestartować grę?
-Joystick DeadZone;Joystick Neutralzone;Мертвая зона джойстика;Dżojstik MartwaStrefa
-Control Sensitivity;Empfindlichkeitskontrolle;Чувствительность;Czułość kontrolerów
-MOUSE;MAUS;МЫШКА;MYSZ
-KEYBOARD;TASTATUR;КЛАВИАТУРА;KLAWIATURA
-JOYSTICK;JOYSTICK;ДЖОЙСТИК;DŻOJSTIK
-Primary Attack;Primärer Angriff;Первичный Огонь;Atak Główny
-Secondary Attack;Sekundärer Angriff;Вторичный Огонь;Atak Specjalny
-Move Forward;Vorwärts Bewegen;Движение Вперед;Naprzód
-Move Backward;Rückwärts Bewegen;Движение Назад;Wstecz
-Move Left;Links Bewegen;Движение Влево;Lewo
-Move Right;Rechts Bewegen;Движение Вправо;Prawo
-Enemy Weapon Penalty;Feindlicher Waffenabzug;Штраф Оружия Врага;Kara broni wroga
-None;Nichts;Нет;Brak
-Enemy Armor Penalty;Feindlicher Panzerungsabzug;Штраф Защиты Врага;Kara pancerza wroga
-Enemy Targeting Penalty;Feindlicher Zielvermögen Abzug;Штраф Наведения Врага;Kara namierzania wroga
-Limited Ammo;Begrenzte Munition;Ограниченный Боекомплект;Ograniczona amunicja
-Destroyable Weapon;Zerstörbare Waffen;Уничтожаемое Оружие;Uszkodzenia broni
-SpaceShip Control Mode;Raumschiff Steuerungsmodus;Режим Управления Кораблем;Tryb sterowania statku
-Weapon Targeting Mode;Waffen Zielmodus;Режим Наведения Оружия;Tryb namierzania broni
-Not implemented;Nicht verfügbar;Не задействован;Brak
-Screen Mode;Bildschirm Modus;Режим Экрана;Tryb Ekranu
-Window Size;Fenstergröße;Размер Окна;Rozmiar Okna
-Low;Gering;Низкое;Niska
-Medium;Mittel;Среднее;Średnia
-High;Hoch;Высокое;Wysoka
-Disabled;Ausgeschaltet;Отключено;Wyłączone
-Menu Language;Menü-Sprache;Язык Меню;Język Menu
-Keyboard Layout;Tastatur Layout;Раскладка клавиатуры;Układ Klawiatury
-Voice Language;Stimme Sprache;Голос в Игре;Język Głosu
-Language;Sprache;Язык;Język
-Menu Font;Menü-Schriftart;Шрифт Меню;Czcionka Menu
-Font Size;Schriftgröße;Размер Шрифта;Rozmiar Czcionki
-'Tips and hints' Status;'Tipps und Tricks' Stand;Окна 'Советы и подсказки';'Podpowiedzi' Status
-Reset;Reset;Сброс;Reset
-FPS Сounter;FPS Zähler;FPS Счетчик;Licznik FPS
-Weapon Panels View;Ansicht der Waffentafeln;Вид Панелей Оружия;Widok Broni
-Full;Voll;Полный;Pełny
-Flat;Flach;Плоский;Płaski
-Slim;Gering;Тонкий;Wąski
-Empty Weapon Slot;Waffe Leerer Schacht;Пустой Oружейный Cлот;Pusty Slot Broni
-EMPTY;LEER;ПУСТОЙ;PUSTY
-level;schacht;уровень;poziom
-Visual Effects Quality;Visuelle Effekte Qualität;Качество Визуальных Эффектов;Jakość Efektów Wizualnych
-Shadow Quality;Schatten Qualität;Качество Теней;Jakość Cieni
-Sync to VBlank;Synchronisierung auf VBlank;Вертикальная Синхронизация;Synchronizacja Pionowa
-Music Volume;Musiklautstärke;Громкость Музыки;Głośność Muzyki
-Not available;Nicht verfügbar;Недоступно;Niedostępna
-Sound Effects Volume;Soundeffektlautstärke;Громкость Эффектов;Głośność Efektów
-Voice Volume;Stimmelautstärke;Громкость Голоса;Głośność Mowy
-Full Screen;Ganzer Bildschirm;Полный Экран;Pełny Ekran
-Refresh Rate;Refresh Rate;Частота Обновления;Odświeżanie
-Default;Default;По умолчанию;Domyślne
-Brightness;Helligkeit;Яркость;Jasność
-Texture Filtering Mode;Texture Filter Modus;Режим Вывода Текстуры;Filtrowanie Tekstur
-Textures Quality;Texture Qualität;Качество Текстур;Jakość Tekstur
-Multisample Antialiasing;Multisample Antialiasing;Сглаживание;Wielopróbkowy Antyaliasing
-NAME;NAME;ИМЯ;IMIĘ
-SCORE;PUNKTE;СЧЕТ;WYNIK
-Page %i of %i;Seite %i von %i;Страница %i из %i;Strona %i z %i
-New Pilot Profile;Neues Piloten Profile;Новый Профиль Пилота;Nowy Profil Pilota
-Pilot Profile;Pilot Profil;Профиль Пилота;Profil Pilota
-Pilots Profiles;Piloten Profile;Профили Пилотов;Profile Pilotów
-Money;Geld;Деньги;Gotówka
-Exp;Erfahrung;Опыт;Doś
-empty;Leer;пусто;pusty
-Current Profile Difficulty;Profilschwierigkeit;Сложность Профиля;Trudność Profilu
-Weapon Fire Control:;Waffenfeuerkontrolle:;Основное Управление:;Kontrola Broni:
-Alternative Fire Control:;Alternative Feuerkontrolle:;Вспомогательное:;Alternatywna Kontrola Broni:
-Weapon Angle: %2.1f;Waffenwinkel: %2.1f;Угол Поворота: %2.1f;Kąt Broni: %2.1f
-Type;Typ;Тип;Typ
-Killed;Vernichtet;Убито;Zniszczone
-Bonus;Bonus;Бонус;Bonus
-Total;Total;Всего;Ogółem
-Textures Compression;Texturen Kompression;Компрессия Текстур;Kompresja Tekstur
-OpenGL Shading Language;OpenGL  Schattierungssprache;OpenGL шейдеры (GLSL);OpenGL Cienie
-Point Lights per Object;Anzahl Lichter pro  Objekt;Кол-во Источников Света;Światła na Obiekt
-1 Light;1 Licht;1 источник;1 Światło
-2 Lights;2 Lichter;2 источника;2 Światła
-3 Lights;3 Lichter;3 источника;3 Światła
-4 Lights;4 Lichter;4 источника;4 Światła
-5 Lights;5 Lichter;5 источников;5 Świateł
-6 Lights;6 Lichter;6 источников;6 Świateł
-Anisotropy Level;Anisotropie Level;Уровень Анизотропии;Poziom Anizotropii
-Aspect Ratio;Aspekt Ratio;Отношение Сторон;Proporcje
-Standard;Standard;Стандарт;Standart
-Widescreen;Widescreen;Широкоформат;Panoramiczny
-Earth Spaceships;Erdraumschiffe;Корабли;Statki Ziemskie
-Space Mines;Raumminen;Мины;Miny
-Space Mine;Raummine;Космическая Мина;Mina
-Auto Cannon:;Autokannone:;Авто Пушка:;Autodziało:
-Auto Launcher:;Autoraketenwerfer:;Авто Ракетомет:;Autowyrzutnia:
-Weapon;Waffe;Оружие;Broń
-Weapons;Waffen;Оружие;Bronie
-Weapons Slots:;Waffenschächte:;Оружейных Слотов:;Sloty Broni:
-Alien Spaceships;Außerirdische;Пришельцы;Statki Obce
-Alien Motherships;Mutterschiffe;Носители;Obce Statki Bazy
-Pirate Spaceships;Piraten;Пираты;Statki Pirackie
-Pirate Vehicles;Piratenfahrzeuge;Транспорт Пиратов;Pojazdy Pirackie
-Pirate Buildings;Piratenbauten;Постройки Пиратов;Budynki Pirackie
-Asteroids;Asteroiden;Астероиды;Asteroidy
-Civilian Buildings;Zivile Bauten;Здания;Budynki Cywilne
-Military Buildings;Militärbauten;Турели;Budynki Militarne
-Wheeled Vehicles;RadFahrzeuge;Автомобили;Pojazdy Kołowe
-Tracked Vehicles;Kettenfahrzeuge;Танки;Pojazdy Gąsinicowe
-Wheeled Vehicle;RadFahrzeuge;Автомобиль;Pojazd Kołowy
-Tracked Vehicle;Kettenfahrzeuge;Танк;Pojazd Gąsinicowy
-Object Class:;Objektklasse:;Класс:;Klasa:
-Space Ship;Raumschiff;Корабль;Statek
-Ship Type:;Schiffstyp:;Тип Корабля:;Typ Statku:
-Developer:;Entwickler:;Разработчик:;Konstruktor:
-Earth Federation;Erdförderation;Федерация;Federacja Ziemi
-Status:;Status:;Статус:;Status:
-Armor:;Panzerung:;Защита:;Pancerz:
-Indestructible;Unzerstörbar;Неразрушимый;Niezniszczalny
-Upgrade Mk2:;Stufe Mk2:;Апгрейд Mk2:;Ulepszenie Mk2:
-Upgrade Mk3:;Stufe Mk3:;Апгрейд Mk3:;Ulepszenie Mk3:
-Upgrade Mk4:;Stufe Mk4:;Апгрейд Mk4:;Ulepszenie Mk4:
-Slots Levels:;Schachtlevel:;Уровни слотов:;Poziomy Slotów:
-Codename:;Codename:;Кодовое Имя:;Nazwa Kodowa:
-Width:;Breite:;Ширина:;Szerokość:
-Length:;Länge:;Длина:;Długość:
-Height:;Höhe:;Высота:;Wysokość:
-Engines:;Antriebe:;Двигатели:;Silniki:
-Ally;Allierte;Союзник;Sojusznik
-Fighter;Jäger;Истребитель;Myśliwiec
-Interceptor;Abfangjäger;Перехватчик;Eliminator
-Bomber;Bomber;Бомбардировщик;Bombowiec
-Scout;Aufklärer;Разведчик;Zwiadowca
-Attack Ship;Angriffsschiff;Штурмовик;Szturmowiec
-Weapon, Cannon;Waffe, Kanone;Пушка;Broń, Działo
-Weapon, Launcher;Waffe, Raketenwerfer;Установка;Broń, Wyrzutnia
-Type:;Typ:;Тип:;Typ:
-Damage, Hull:;Hüllenschaden:;Урон, Корпус:;Uszk., Kadłub:
-Damage, Systems:;Systemschaden:;Урон, Системы:;Uszk., Systemy:
-Energy Use:;Energieverbrauch:;Расход Энергии:;Zużycie Energii:
-Ammo:;Munition:;Боекомплект:;Amunicja:
-Reload:;Auffüllen:;Перезарядка:;Przeładowanie:
-Range:;Reichweite:;Дальность:;Zasięg:
-Kinetic;Kinetisch;Кинетика;Kinetyczna
-Ion;Ionen;Ион;Jonowa
-Plasma;Plasma;Плазма;Plazmowa
-Maser;Maser;Мазер;Maser
-Antimatter;Antimatter;Антиматерия;Antymateria
-Laser;Laser;Лазер;Laser
-Gauss;Gauss;Гаусс;Gauss
-Propelled;Angetrieben;Ракета;Rakietowa
-Unknown;Unbekannt;Неизвестно;Nieznany
-Enemy;Feind;Враг;Wróg
-Damage:;Schaden:;Урон:;Zniszczenia:
-MotherShip;Mutterschiff;Носитель;Statek Baza
-Pirate Ship;Piraten;Корабль Пиратов;Statek Piracki
-Pirates;Piraten;Пираты;Piraci
-Marauder;Plünderer;Мародер;Maruder
-Warder;Wächter;Страж;Strażnik
-Raider;Gangster;Рейдер;Łupieżca
-Carrier;Träger;Транспорт;Nosiciel
-Missile Carrier;Lenkwaffenträger;Ракетный Транспорт;Nosiciel Rakiet
-Freighter;Frachter;Фрахтовщик;Frachtowiec
-Battle Freighter;Schlachtfrachter;Боевой Фрахтовщик;Frachtowiec Wojenny
-Civilian Building;Zivilgebäude;Здание;Budynek Cywilny
-Old Republic;Alte Repuplik;Старая Республика;Stara Republika
-Military Building;Militärgebäude;Турель;Budynek Militarny
-Cannon;Kanone;Пушка;Działo
-MachineGun;Maschinengewehr;Пулемет;Działo maszynowe
-Turbo Cannon;Turbo Kanone;Турбо Пушка;Turbodziało
-Missile Launcher;Lenkwaffenträger;Ракетная Установка;Wyrzutnia Rakiet
-Cannon Turret;Kanonenturm;Турель с Пушкой;Wieżyczka Ogniowa
-Armored Jeep;Gepanzerter Jeep;Бронированный Джип;Opancerzony Dżip
-Jeep;Jeep;Джип;Dżip
-APC;BAT;БТР;TO
-Tank;Panzer;Танк;Czołg
-Engineer;Ingenieur;Трактор;Inżynier
-Not combatant;Kein Gegner;Не боеспособен;Niebojowy
-System;System;Система;System
-Spaceship Engine;Raumschiffantrieb;Двигатель;Silnik Statku
-Ion Resistance:;Ionenresistenz:;Ионная Защита:;Odporność Jonowa:
-Engine Power:;Antriebsenergie:;Мощность:;Moc Silnika:
-Acceleration:;Beschleunigung:;Ускорение:;Przyspieszenie:
-Relations/Dependences:;Beziehungen/Abhängigkeiten:;Зависимы/Зависят:;Relacje/Zależności:
-SpaceShip Weight;Raumschiffgewicht;Вес Корабля;Masa Statku
-Power Source;Energiequelle;Источник Энергии;Źródło Zasilania
-Useless with Arcade;Nutzlos im Arcade Modus;Бесполезно в Аркадном;Bezużyteczny w trybie Gry
-SpaceShip Control Mode.;Raumschiffkontrollmodus.;Режиме Управления Кораблем.;Tryb Kontroli Statku.
-Weapon Targeting Mode.;Waffenzielmodus.;Режиме Наведения Оружия.;Tryb Namierzania Broni.
-Energy Capacity:;Energie Kapazität:;Емкость:;Pojemność:
-Recharge Rate:;Aufladungsrate:;Перезарядка:;Moc Ładowania:
-Weapon Recharge Rate;Waffenaufladungsrate;Скорость Перезарядки;Moc Ładowania Broni
-Optical Computer;Optischer Computer;Компьютер;Komputer Optyczny
-Targeting System;Zielsystem;Наведение;System Namierzania
-Advanced System;Hochentwickeltes System;Защита;System Zaawansowany
-Target Tracing:;Zielverfolgung:;Контроль Целей:;Śledzenie Celów:
-Auto Adjustment:;Auto Anpassung:;Авто Наведение:;Autoskalowanie:
-No;Nein;Нет;Nie
-Yes;Ja;Да;Tak
-Weapon Fire Range;Waffenreichweite;Дальность Стрельбы;Zasięg Broni
-Weapon Orientation;Waffenrichtung;Ориентация Оружия;Orientacja Broni
-Orientation Speed:;Ausrichtungsgeschwindigkeit:;Скорость Поворота:;Prędkość Orientacji:
-Hull Repair Rate:;Hüllenreparaturrate:;Скорость Ремонта:;Tempo Naprawy Kadłuba:
-Resistance, Hull:;Hüllenresistenz:;Защита, Корпус:;Odporność, Kadłub:
-Resistance, System:;Systemresistenz:;Защита, Система:;Odporność, System:
-Shield Power:;Schild Power:;Мощность Щита:;Moc Osłony:
-Hull Resistance;Hüllenresistenz;Защита Корпуса;Odporność Kadłuba
-Systems Resistance;Systemresistenz;Защита Систем;Odporność Systemu
-SpaceShip Vitality;Raumschiffdynamik;Живучесть Корабля;Żywotność Statku
-units;Einheiten;юнит;jedn
-units per shot;Einheiten/Schuss;юнит/выстрел;jedn na strz
-seconds;Sekunden;секунд;sekundy
-units per sec;Einheiten/sek;юнит в сек;jedn na sek
-object(s);Objekte(e);объект(ы);obiekt(ów)
-deg per sec;Grad pro Sek;град в сек;st na sek
-per sec;pro sek;в секунду;na sek
-units/shot;Einheiten/Schuss;юнит/выстрел;jedn/strz
-units/sec;Einheiten/Sek;юнит/сек;jedn/sek
-Game Speed:;Spielgeschwindigkeit:;Скорость Игры:;Prędkość Gry:
-Missile Detected;Rakete erkannt;Обнаружена ракета;Wykryto Rakietę
-Collision Course Detected;Collision Course Erkannt;Высокая Вероятность Столкновения;Wykryto Kurs Kolizyjny
-Mission 1 - First Contact with Unknown Enemy;Mission 1 - Erster Kontakt mit dem Feind;Миссия 1 - Первый Контакт с Врагом;Misja 1 - Kontakt z Nieznanym Wrogiem
-They are coming! They are everywhere!;Sie kommen! Sie sind überall!!;Они приближаются! Они повсюду!;Nadchodzą! Są wszędzie!
-Mission 2 - Attack, Do Not Let Them Go;Mission 2 - Angreifen und nicht entkommen lassen;Миссия 2 - Атакуйте, Не Дайте Им Уйти;Misja 2 - Atakuj, Nie Przepuść Ich
-Damned raiders here! No Mercy! Kill them all!;Verdammte Gangster hier! Keine Gnade! Töte Sie Alle!;Проклятые рейдеры! Никакой пощады! Убить всех!;Przeklęci łupieżcy! Bez litości! Zabij wszystkich!
-Mission 3 - Counterattack Is The Best Defense;Mission 3 - Gegenangriff ist die beste Verteidigung;Миссия 3 - Контратака - Лучшая Защита;Misja 3 - Kontratak Jest Najlepszą Obroną
-Our base is under attack! Stop the aliens` attack now!;Unsere Basis liegt unter Beschuss!;Наша база атакована! Остановите атаку пришельцев!;Nasza baza jest atakowana! Powstrzymaj atak obcych!
-Mission 4 - Attack on Fleet of Pirate Raiders;Mission 4 - Greife die Piratenflotte an!;Миссия 4 - Атакуйте Флот Пиратов-Рейдеров;Misja 4 - Atak na Piracką Flotę
-Find a pirate raider base in this sector!;Finde eine Piraten Basis in diesem Sektor!;Найдите пиратскую базу в этом секторе!;Odnajdź piracką bazę w tym sektorze!
-Mission 5 - Surprise, Surprise... Aliens Again;Mission 5 - Überraschung...wieder Feinde!;Миссия 5 - Сюрприз, сюрприз... Снова Пришельцы;Misja 5 - Niespodzianka... Znowu Obcy
-Do not let them regroup for a counterattack!;Gib den Piraten keine Gelegenheit sich neu zu formieren!;Не дайте им перегруппироваться и контратаковать!;Nie pozwól im się przegrupować do kontrataku!
-Mission 6 - Stop Alien MotherShip Now!;Mission 6 - Stoppe das Alien Mutterschiff sofort!;Миссия 6 - Остановите Носитель Пришельцев!;Misja 6 - Zatrzymaj Obcy Statek Bazę!
-They are too close! You should do something!;Sie sind viel zu dicht! Du solltest etwas tun!!;Они слишком близко! Сделайте хоть что-то!;Są zbyt blisko! Zrób coś!
-Mission 7 - Attack on Small Pirate Raiders Base;Mission 7 - Greife die kleine Piratenbasis an;Миссия 7 - Атака на Небольшую Базу Пиратов;Misja 7 - Atak na Małą Piracką Bazę
-We found their base! Finally! Lets smash them!;Wir haben ihre Basis gefunden! Endlich! Rotten wir sie aus!;Мы обнаружили их базу! Наконец-то! Размажьте их!;Znaleźliśmy ich bazę! Nareszcie! Rozwalmy ich!
-Mission 8 - Stay Close, They Are Coming;Mission 8 - Bleib in der Nähe, Sie kommen;Миссия 8 - Сомкнуть Ряды, Они Приближаются;Misja 8 - Trzymaj Się Blisko, Nadchodzą
-Looks like the aliens got reinforcement!;Scheint, als erhielten die ALiens Verstärkung!;Похоже, пришельцы получили подкрепление!;Wygląda na to, że obcy otrzymali posiłki!
-Mission 9 - One More Pirate Raiders Base;Mission 9 - Eine weitere Piratenbasis;Миссия 9 - Еще Одна Пиратская База;Misja 9 - Jeszcze Jedna Piracka Baza
-This should be piece of cake for you, do it quickly!;Das sollte ein Spaziergang sein! Mach schnell!;Это должно быть легко для вас, сделайте это быстро!;Dla ciebie to pestka, działaj szybko!
-Mission 10 - Strange Slackness... Be Ready!;Mission 10 - Eigenartige Flaute! Pass auf!;Миссия 10 - Странное Затишье... Приготовьтесь!;Misja 10 - Dziwne Odprężenie... Gotuj się!
-Our intelligence failed to find anything. It can be a trap!;Unsere Spionage konnte nichts herausfinden. Eine Falle?;Наша разведка ничего не нашла. Наверняка ловушка!;Nasz wywiad nic nie znalazł. To może być pułapka!
-Mission 11 - Do Not Let Them Destroy Our Base!;Mission 11 - Lass Sie nicht unsere Basis zerstören!;Миссия 11 - Не Дайте Им Уничтожить Нашу Базу!;Misja 11 - Nie Pozwól Zniszczyć Im Naszej Bazy!
-Do not panic! We got reinforcement! Regroup and attack!;Keine Panik! Wir haben Verstärkung!;Без паники! Мы получили подкрепление! Атакуем!;Nie panikuj! Mamy posiłki! Przegrupuj się i atakuj!
-Mission 12 - Secret Pirate Base;Mission 12 - Geheime Piratenbasis;Миссия 12 - Секретная Пиратская База;Misja 12 - Tajna Piracka Baza
-They are too smart now, and much more dangerous.;Sie sind nun zu schlau, und viel zu gefährlich!;Они теперь слишком умные, и значительно опаснее.;Teraz są zbyt sprytni i znacznie groźniejsi.
-Mission 13 - Alien Transportation Port;Mission 13 - Alien Umschlaghafen;Миссия 13 - Транспортный Порт Пришельцев;Misja 13 - Obcy Port Transportowy
-We found their hyper port! We must destroy it right now!;Wir fanden ihren Hyper Port! Wir müssen ihn sofort zerstören!;Мы нашли их гипер-порт! Необходимо его уничтожить!;Odnaleźliśmy ich hiper port! Musimy go teraz zniszczyć!
-Mission 14 - Last Pirate Enclave;Mission 14 - Die letzte Piratenenklave;Миссия 14 - Последний Анклав Пиратов;Misja 14 - Ostatnia Piracka Enklawa
-This sector must be clear and safe for ever!;Dieser Sektor muss sauber und sicher für immer sein!;Этот сектор должен быть очищен раз и навсегда!;Ten sektor musi pozostać czysty i bezpieczny na zawsze!
-Mission 15 - Escape Under Aliens` Attack;Mission 15 - Flucht unter den Alienangriffen!;Миссия 15 - Отступление Под Атакой Пришельцев;Misja 15 - Ucieczka Podczas Ataku Obcych
-We lost this sector, this battle is lost. Try to escape!;Wir haben die Schlacht verloren. Versuche zu fliehen!;Мы потеряли этот сектор. Спасайся кто может!;Utraciliśmy ten sektor, bitwa przegrana. Spróbuj uciec!
-Cobra;Cobra;Кобра;Kobra
-SpaceEagle;SpaceEagle;Орел;Orzeł
-FireStorm;FireStorm;Шторм;Burza
-Hedgehog;Hedgehog;Репейник;Jeż
-Thunder;Thunder;Гром;Grom
-Excalibur;Excalibur;Экскалибур;Excalibur
-DarkStar;DarkStar;Звезда;MrocznaGwiazda
-Scorpion;Scorpion;Скорпион;Skorpion
-Runner;Runner;Беглец;Goniec
-Kronos;Kronos;Кронос;Kronos
-Chameleon;Chameleon;Хамелеон;Kameleon
-Falcon;Falcon;Сокол;Sokół
-DeathRipple;DeathRipple;Смерч;FalaŚmierci
-AstroSword;AstroSword;Игла;Miecz
-Pulser;Pulser;Импульс;Pulsator
-ClumsyMace;ClumsyMace;Булава;Buzdygan
-Raptor;Raptor;Раптор;Drapieżca
-Destroyer;Destroyer;Разрушитель;Niszczyciel
-AstroSpear;AstroSpear;Копье;Włócznia
-Mite;Mite;Мышь;Okruch
-Viper;Viper;Гадюка;Żmija
-BlackIce;BlackIce;ЧерныйЛед;CzarnyLód
-%s Mk%i;%s Mk%i;%s Mk%i;%s Mk%i
-FireFox;FireFox;Искра;Żarlis
-FireBird;FireBird;Пламя;Żarptak
-Meteor;Meteor;Метеор;Meteor
-Hasher;Hasher;Мясорубка;Siekacz
-Trammel;Trammel;Невод;Pogrzebacz
-IonStorm;IonStorm;Шторм;Jonoburza
-IonRipple;IonRipple;Смерч;Jonofala
-Quasher;Quasher;Сокрушитель;Dławiciel
-Destabilizer;Destabilizer;Дестабилизатор;Destabilizator
-Anihilator;Anihilator;Аннигилятор;Anihilator
-Devastator;Devastator;Опустошитель;Dewastator
-DeathFlow;DeathFlow;ПотокСмерти;StrugaŚmierci
-Vaporizer;Vaporizer;Испаритель;Parowator
-Rapier;Rapier;Рапира;Rapier
-Pandora;Pandora;Пандора;Pandora
-Stinger;Stinger;Жало;Żądło
-Swarm;Swarm;Рой;Rój
-Vengeance;Vengeance;Месть;Zemsta
-BabyDoll;BabyDoll;Кукла;Laleczka
-Jet Engine;Jet Engine;Реактивный;Odrzutowy
-Photon Jet;Photon Jet;Фотонный;Fotonowy
-Plasma Jet;Plasma Jet;Плазменный;Plazmowy
-Ion Battery;Ion Battery;Батарея;Jonobateria
-Nuclear;Nuclear;Ядерный;Atom
-Base O.T.C.;Base O.T.C.;Базовая О.К.Н.;Bazowy O.K.C.
-Hamerik O.T.C.;Hamerik O.T.C.;Хамерик О.К.Н.;Hamerik O.K.C.
-Neo M.O.T.C.;Neo M.O.T.C.;Нео В.О.К.Н.;Neo W.O.K.C.
-Supra M.O.T.C.;Supra M.O.T.C.;Супра В.О.К.Н.;Supra W.O.K.C.
-Mechanical;Mechanical;Механика;Mechaniczny
-Hydraulic;Hydraulic;Гидравлика;Hydrauliczny
-Magnetic;Magnetic;Магнит;Magnetyczny
-Vacuum;Vacuum;Вакуум;Próżniowy
-Repair NaRs;Repair NaRs;Нано Роботы;NaRs Napraw
-Layer;Layer;A-Б Слой;Powłoka
-Energy Shield;Energy Shield;Энерго Щит;Energoosłona
-Deflector;Deflector;Дефлектор;Deflektor
-Ship Stock;Schifflager;Склад Кораблей;Zasób Statków
-Ship Hull Cost;Schiff Hüllenkosten;Стоимость Корпуса;Koszt Kadłuba
-Player Ship;Spielerschiff;Корабль Игрока;Statek Gracza
-Upgrade Hull Cost;Verbessern Hülle Kosten;Стоимость Апгрейда;Koszt Ulepszenia
-Repair Hull Cost;Reparieren Hülle Kosten;Стоимость Ремонта;Koszt Naprawy
-Ship Cost;Schiff Kosten;Общая Стоимость;Koszt Statku
-Weapon Ammo:;Waffen Schuss:;Боекомплект:;Amunicja Broni:
-Weapon Reload Cost:;Waffen Nachladen Kosten:;Стоимость:;Przeładowanie:
-Weapon Type;Waffen Typ;Тип Оружия;Typ Broni
-Weapon Level;Waffen Level;Уровень Оружия;Poziom Broni
-Weapon Cost;Waffen Kosten;Стоимость Оружия;Koszt Broni
-Weapon Stock;Waffen Bestand;Склад Оружия;Zasób Broni
-Installed Weapons;Installierte Waffen;Установленное;Broń Zamontowana
-System Stock;System Bestand;Склад Систем;Zasób Systemów
-Installed Systems;Installierte Systeme;Установленные;Systemy Zamontowane
-Installed System;Installiertes System;Установленная;System Zamontowany
-Selected System;Gewähltes System;Выбранная;System Wybrany
-Cost;Kosten;Стоимость;Koszt
-Tips and hints;Tipps und Tricks;Советы и подсказки;Podpowiedzi
-Do not show this tip again.;Diesen Tipp nicht wieder anzeigen.;Не показывать эту подсказку.;Więcej tego nie pokazuj.
-It is possible to create five Pilot Profiles in the game in;Es können fünf Pilotenprofile angelegt werden. Jedes Profil;Для хранения персональных данных в игре предусмотрено;W grze możliwe jest utworzenie do pięciu Profili Pilotów by
-order to store personal data. You can set an individual;kann unterschiedliche Spielstände und Schwierigkeitsgrade;создание пяти Профилей Пилотов. Вы можете настроить;przechowywać dane osobiste. Możesz ustawić indywidualny
-difficulty level for each profile or delete the current;enthalten. Um Platz für ein neues Profil zu schaffen, ein;индивидуальную сложность для каждого Профиля или;stopień trudności dla każdego z profili bądź skasować
-profile to free space for a new profile.;Profil löschen. Beachte, das der Schwierigkeitsgrad in Prozent;удалить его, освободив место для создания новой записи.;aktualny profil by zwolnić miejsce dla nowego.
-Note that the current difficulty level is displayed in percent;pro einzelnes Profil angegeben ist. Dieser Wert beeinflusst;Обратите внимания, для каждой записи отображается;Obecny poziom trudności jest pokazany w procentach
-for each profile. This value influences the increase of;direkt die Erfahrungspunktvergabe. Zum Beispiel, wenn du;текущая сложность в процентах. Данный показатель;dla każdego profilu. Wartość ta wpływa na wzrost
-experience. For instance, if you bring down an enemy ship, you;ein Feindschiff zerstörst, bringt das 100 Einheiten Geld;влияет на начисление опыта. Например, сбив;doświadczenia. Przykładowo, zestrzeliwszy wrogi statek
-will get 100 money units and only 65 experience units if the;und nur 65 Erfahrungspunkte, wenn der Schwierigkeitsgrad;противника вы получите 100 единиц денег и только;otrzymujesz 100 punktów gotówki i jedynie 65 punktów
-difficulty percent is set to 65 for you.;auf 65 Prozent für dieses Profil steht.;65 единиц опыта, если процент сложности у вас равен 65.;doświadczenia jeśli procent trudności jest ustawiony na 65.
-Note: you can change your difficulty level before each;Hinweis: Du kannst vor dem start jeder Mission;Примечание: вы можете изменить настройки сложности;Uwaga: możesz zmienić swój poziom trudności przed każdą
-new mission.;den Schwierkeitsgrad verändern.;перед началом каждой новой миссии.;nową misją.
-There are more than 20 spaceships with unique characteristics;Es gibt mehr als 20 Raumschiffe, jedes mit besonderen Eigensch-;В игре доступны более двух десятков кораблей с уникальны-;W grze jest dostępnych więcej niż 20 statków z unikalnymi
-available in the game. You can use the right part of the screen;aften. Auf der rechten Seite dieses Bildschirms ist dein Raumschiff;ми характеристиками. В правой части экрана вы можете;cechami. Prawej strony ekranu używasz by obejrzeć swój obecny
-to see your current spaceship, its characteristics and cost and;mit seinen Eigenschaften und Kosten dargestellt. Hier können auch;увидеть свой корабль, его характеристики и стоимость, а так;statek, jego charakterystykę i koszt jak również celem
-also to perform basic operations, such as repair.;grundlegende Dinge wie Reparatur und Schiffshüllenverstärkung; же произвести ремонт и апгрейд корпуса корабля.;wykonania podstawowych operacji takich jak naprawa.
-The left part of the screen contains Ship Stock where you can see;durchgeführt werden. Die linke Seite enthält die Liste aller;В левой части экрана расположен Склад, где вы можете;Lewa strona ekranu zawiera Zasób Statków gdzie możesz zobaczyć
-all available spaceships and their characteristics. Do not;verfügbaren Schiffe mit ihren Eigenschaften. Vergiß nicht, das;просмотреть все имеющиеся корабли и их характеристики.;wszystkie dostępne statki i ich właściwości. Nie zapominaj, że
-forget that each ship has its dimensions and, which is more;neben der Größe der Schiffe, die Anzahl der Waffenschächte und;Не забывайте, что каждый корабль имеет свои габариты и,;każdy statek ma swoje wymiary i co ważniejsze może
-important, different weapon mounts.;Art der Waffenschächte angegeben ist, was noch wichtiger ist.;что более важно, различные крепления оружия.;przenosić różną broń.
-The basic shipbuilding concept is as follows:;Das grundlegende Schiffsbaukonzept ist wie folgt:;Базовая концепция судостроение такова:;Bazowy koncept budowy statku jest następujący:
-Scout - light, small and maneuverable ships with weak weapons.;Aufklärer - Leicht, schnell, wendig mit schwachen Waffen.;Разведчик - маневренные но слабо вооруженные корабли.;Zwiadowca - lekki, mały i zwrotny statek, słabo uzbrojony.
-Interceptor - fast ships with light weapons.;Abfangjäger - Schnelle Schiffe mit leichten Waffen.;Перехватчик - быстрые легко вооруженые корабли.;Eliminator - szybki statek, lekko uzbrojony.
-Fighter - main type of ships with light and semi-heavy weapons.;Jäger - Haupttyp der Schiffe mit leichten und mittleren Waffen.;Истребитель - наиболее сбалансированы тип кораблей.;Myśliwiec - główny typ statku z lekką i średnią bronią.
-Bomber - heavy destroyers with mostly heavy attack weapons.;Bomber - Schwere Zerstörer mit hauptsächlich schweren Waffen.;Бомбардировщик - тяжелые истребители.;Bombowiec - ciężki niszczyciel przenoszący potężną broń.
-Attack Ship - heavy, large and heavily armed ships.;Angriffsschiff - schwer, groß und schwer bewaffnet.;Штурмовик - тяжелые корабли с большой огневой мощью.;Szturmowiec - ciężki, duży i potężnie uzbrojony statek.
-A set of systems is installed on the ship you operate. All systems;Etliche von Systeme sind auf deinem Schiff installiert. Alle;В управляемом вами корабле установлен набор систем.;Na statku, którym operujesz jest zamontowany zestaw systemów.
-are connected with each other and with ship weapons in one way or;Systeme sind miteinander und mit den Waffensystemen und anderen;Все системы связаны между собой и вооружением;Wszystkie są wzajemnie powiązane ze sobą i z bronią statku w ten
-another and play important role in the game.;Funktionen verbunden und spielen eine Rolle im Spiel.;корабля, и играют важную роль в процессе игры.;czy inny sposób odgrywając ważną rolę w grze.
-You should carefully take into account the peculiarities of each;Achte auf die spezifischen Eigenheiten jedes einzelnen Systems;Следует внимательно учитывать особенности каждой системы;Należy starannie rozważyć właściwości każdego systemu
-system and match their characteristics to each other to get;und stimme die Systeme aufeinander ab, um ein gut ausgewo-;и согласовывать их между собой, чтобы получить корабль;i dopasować wzajemnie ich cechy by uzyskać dobrze
-a well balanced warship that can complete combat tasks.;genes Schiff zu haben, mit dem du im Kampf bestehen kannst.;способный выполнять боевую задачу.;wyważony statek wojenny zdolny wypełniać zadania bojowe.
-Engine - ship engine system. Pay attention to how this system consumes;Antrieb - Schiffsantrieb. Achte auf die Energieaufnahme;Реактор - источник энергии. Обратите внимание на две;Silnik - silnik statku. Uważaj na sposób w jaki ten system zużywa
-energy. Otherwise you run the risk of being unable to move.;Andernfalls könntest du ein bewegungsloses Schiff haben.;основные характеристики - емкость и перезарядка.;energię. W przeciwnym razie ryzykujesz niezdolność statku do ruchu.
-Power - ship energy source. Pay attention to the main two characte-;Energie - Schiffsenergiequelle. Achte auf die zwei wichtigen ;О.К.Н. - Оптический Компьютер Наведения. Данная система;Moc - źródło zasilania. Zwróć uwagę na dwie główne cechy tego
-ristics of this system - Recharge Rate and Capacity.;Eigenschaften dieses Systems - Aufladungsrate und Kapazität.;отвечает за оптическое наведение на цель.;systemu - Moc Ładowania oraz Pojemność.
-O.T.C. - Optical Target Computer. As you can see from its name,;O.T.C. - Optischer Ziel Computer, dieses System ist für die;Наведение - Система наведения орудия на цель. От нее;O.K.C. - Optyczny Komputer Celowniczy. Jak się domyślasz po jego
-this system is responsible for optical targeting.;optische Zielverfolgung zuständig.;зависит скорость поворота и точность выстрела.;nazwie, system ten jest odpowiedzialny za namierzanie optyczne.
-Targeting - Weapon targeting system. It depends on this system how;Zielerfassung - Waffem Zielsystem. Von diesem System hängt es ab,;Нано Роботы - будут постоянно следить за состоянием;Namierzanie - System kierowania ogniem. Zależy od niego jak szybko
-fast a weapon will aim and how accurate the shot will be.;wie lange die Waffe zum Zielerfassen benötigt und wie genau;вашего корабля и ремонтировать его.;broń zostanie wycelowana i jak dokładny będzie strzał.
-Advanced - The most advanced, but yet untested systems for;der Schuss ist. Fortgeschritten - Die am höchsten entwickelten;А-Б Слой - специальная броня, позволяющая уменьшить;Zaawansowany - Najbardziej zaawansowany, ale jeszcze niesprawdzony
-enhancing ship invulnerability.;Systeme, allerdings ungetestet, für höhere Ansprüche.;механические и ослабить ионные воздействия.;system wzmacniający niewrażliwość statku.
-You can use this section to buy, sell and set up the weapons on;In dieser Abteilung kannst du Waffen für dein Schiff kaufen und;В данном разделе вы можете покупать, продавать и;Możesz używać tej sekcji by nabywać, sprzedawać i montować broń
-your ship. To buy a weapon, just drag its icon from Weapon Stock;verkaufen. Um eine Waffe zu kaufen, ziehe das Abbild der Waffe;настраивать оружие корабля. Для покупки оружия, просто;na statku. By kupić broń przeciągnij jej ikonę z Zasobu Broni
-to a weapon slot on your ship. Note that each weapon has its;über einen Waffenschacht. Beachte, das eine Waffe nur in einen;перетяните иконку оружия из Склада Оружия на слот оружия;do slotu broni twego statku. Każda broń ma swój własny poziom
-own level (from 1 to 5), you should see that the slot level is;Schacht passt, wenn der Level kleiner oder genauso groß wie der ;корабля. Обратите внимание, каждое оружие обладает;(od 1 do 5), zwróć uwagę czy poziom slotu nie jest niższy
-not less than the weapon level. To sell a weapon, perform;Schachtlevel ist (Level 1-5). Um eine Waffe zu verkaufen, ziehe;своим уровнем (от 1 до 5), следует учитывать, чтобы уровень;niż poziom broni. Aby sprzedać broń wykonaj odwrotne
-the reverse operation.;die Waffe einfach aus den Schacht heraus auf die linke Seite.;слота был не меньше уровня оружия.;do poprzedniego działanie.
-The weapon is set up and recharged with the Setup button;Die Waffe wird konfiguriert und aufgeladen über den;Чтобы продать оружие, выполните обратную манипуляцию.;Broń można modyfikować i załadować przyciskiem Opcje z prawej
-in the right part of the weapon slot panel.;Einstellknopf im rechten Teil der Waffenschachttafel.;Для настройки оружия, нажмите кнопку Опции.;strony panelu slotu broni.
-Main types of weapons by their projectiles:;Die Haupttypen der Waffen nach Projektilen:;Основные типы оружия по типу снаряда:;Główne typy broni ze względu na pociski:
-Projectile - small projectiles based on billets or energy beams.;Projektile - kleine Geschosse basierend auf Kugeln oder Ener-;Снаряд - основанием является болванка или энергетический;Pocisk - małe pociski bazowane na kulach lub promieniach energii.
-It is the main and most widespread weapon in the game.;giestrahlen. Das ist die am meisten verbreitete Waffe.;пучок. Это наиболее распространенное оружие в игре.;To główna i najbardziej rozpowszechniona broń w grze.
-Self-propelled projectile - missiles, torpedoes and nuclear bombs.;Angetriebene Projektile - Raketen, Torpedos und Atombomben.;Реактивные - ракеты, торпеды и ядерные бомбы. К недостаткам;Pociski rakietowe - rakiety, torpedy i bomby nuklearne.
-The disadvantages of these weapons include the low speed;Der Nachteil dieser Waffengattung ist die geringe Fluggesch-;данного оружия можно отнести низкую скорость полета;Wadą tych broni jest mała prędkość pocisku i możliwość
-of the projectile and the possibility of bring it down.;windigkeit der Projektile.;снаряда, а так же возможность уничтожения снаряда.;zestrzelenia.
-Beam - Lasers and Masers. Short-range highly energy-;Strahl - Laser und Maser. Kurzstrecke und Hohe Energie-;Лучевое - Лазеры и Мазеры. Не дальнобойное оружие, с;Promienie - Lasery i Masery. Bronie krótkiego zasięgu
-consuming weapons.;verbrauchende Waffen.;высокими требованиями по энергообеспечению.;pochłaniające wielkie ilości energii.
-GAME KEYBOARD SHORTCUTS;SPIEL FUNKTIONSTASTENBELEGUNG;ГОРЯЧИЕ КЛАВИШИ ИГРЫ;SKRÓTY KLAWISZOWE GRY
-F2 - toggle show/hide game FPS counter.;F2 - FPS Zähler An/Aus.;F2 - вкл/выкл отображения FPS.;F2 - pokaż/ukryj licznik FPS.
-Note: it will reduce visual effects. Use it, if you have old hardware;Hinweis: Reduziert die Optischen Effekte. Benutze das, wenn nur alte;Примечание: может быть полезно при настройке;Uwaga: to zredukuje efekty wizualne. Użyj jeśli masz stary sprzęt by
-to increase game FPS.;Hardware vorhanden ist,um die FPS zu erhöhen.;оптимального соотношения качество/быстродействие.;zwiększyć ilość FPS.
-F5 - decrease game speed.;F5 - Verringere Spielgeschwindigkeit. ;F5 - уменьшить скорость игры.;F5 - zmniejsz prędkość gry.
-F6 - reset game speed to normal.;F6 - Normalisiere Spielgeschwindigkeit.;F6 - сбросить скорость игры.;F6 - zwykła prędkość gry.
-F7 - increase game speed.;F7 - Erhöhe Spielgeschwindigkeit.;F7 - увеличить скорость игры.;F7 - zwiększ prędkość gry.
-Note: do not increase game speed, if you have low FPS.;Hinweis: Wenn FPS zu gering, erhöhe nicht die Spielgeschwindigkeit.;Примечание: не увеличивайте скорость, если FPS низкий.;Uwaga: nie zwiększaj prędkości gry jeśli masz niski FPS.
-F8 - change weapon panels view.;F8 - Die Ansicht der Waffentafeln verändern.;F8 - изменить вид панелей оружия.;F8 - zmień widok paneli broni.
-F9 - change Primary weapon group fire mode.;F9 - Feuermodus der Primärwaffen wechseln.;F9 - изменить тип стрельбы Первичной группы.;F9 - zmień tryb strzału Głównej grupy broni.
-F10 - change Secondary weapon group fire mode.;F10 - Feuermodus der Sekundärwaffen wechseln.;F10 - изменить тип стрельбы Вторичной группы.;F10 - zmień tryb strzału Specjalnej grupy broni.
-F12 - capture screenshot. (File will be saved on your Desktop.);F12 - Bildschirmfoto. (Das File liegt auf deinem Desktop.);F12 - скриншот. (Файл будет сохранен на рабочем столе.);F12 - przechwyć obraz. (Plik zostanie zapisany na Pulpicie.)
-Esc - show/hide game menu. (Pause.);Esc - Spielmenü. (Pause.);Esc - показать/скрыть меню игры. (Пауза.);Esc - pokaż/ukryj menu gry. (Pauza.)
-Note: all changes will be saved in the game configuration file.;Hinweis: Alle Änderungen werden gespeichert.;Примечание: все измененные настройки будут сохранены.;Uwaga: wszystkie zmiany zostaną zapisane w pliku konfiguracyjnym gry.
-Warning! Low energy recharge rate!;Warnung! Geringe Energie Wiederaufladungsrate!;Внимание! Низкий уровень перезарядки!;Ostrzeżenie! Niska moc ładowania!
-Could be problems with;Das könnte Probleme mit den;Возможны проблемы с работой;Mogą wystąpić problemy
-systems function and/or weapons recharge!;Systemfunktionen oder der Waffenfeuerrate geben!;внутренних систем корабля и оружия!;z działaniem systemów i/lub prowadzeniem ognia!
-You have already completed this mission. Your previous best;Du hast diese Mission bereits geschafft. Dein bisheriges;Вы уже прошли эту миссию. Ваш предыдущий лучший;Ta misja jest już ukończona. Twój poprzedni najlepszy wynik
-result is %i points of experience.;bestes Resultat ist  %i Erfahrungspunkte.;результат составляет %i очков опыта.;to %i punktów doświadczenia.
-You can replay this mission as many times as you like, but you;Du kannst diese Mission so oft wiederholen, wie du magst,;Вы можете переиграть эту миссию сколь угодно много раз,;Możesz powtórzyć tę misję tyle razy ile chcesz, ale zważ, iż
-should take into account that only the best result you;aber du solltest bedenken, das nur das beste Resultat von;но не забывайте, что только лучший результат будет;jedynie najlepszy osiągnięty przez ciebie w tej misji rezultat
-achieve in this mission will be used to calculate the total;dir in die Messung der Gesamterfahrungspunkte eingeht.;зафиксирован и будет учитываться при подсчете общего;zostanie użyty do obliczenie całkowitej liczby punktów
-number of experience points.; ;количества очков опыта.;doświadczenia.
-Note that each time you complete the mission again,;Beachte, das jedes Mal, wenn du diese Mission erneut erfolgreich;Примечание: каждый раз прохождения миссии снова,;Za każdym razem kiedy ukończysz tę misję ponownie
-the amount of money you get when you destroy the enemy;beendet hast, die Geldmenge, die du für das abschiessen der Feinde;количество денег получаемое вами при уничтожении;ilość pieniędzy otrzymana za zniszczenie wrogów w tej
-in this mission is reduced two times.;erhälst, um die Hälfte reduziert wird.;противника будет сокращаться в два раза.;misji jest redukowana dwukrotnie.
-Shortcut: F2 - toggle show/hide game FPS counter.;Shortcut: F2 - FPS Zähler An/Aus.;Клавиши: F2 - вкл/выкл отображения FPS.;Skrót: F2 - pokaż/ukryj licznik FPS.
-Shortcuts: F5 / F6 / F7 - decrease / reset / increase game speed.;Shortcuts: F5 / F6 / F7 - verringere / normalisiere / erhöhe Spielgeschwindigkeit.;Клавиши: F5 / F6 / F7 - уменьшить / сбросить / увеличить скорость игры.;Skróty: F5 / F6 / F7 - zmniejsz / zresetuj / zwiększ prędkość gry.
-Shortcut: F8 - change weapon panels view.;Shortcut: F8 - Ansicht der Waffentafeln verändern.;Клавиши: F8 - изменить вид панелей оружия.;Skrót: F8 - zmień widok paneli broni.
-Shortcuts: F9 / F10 - change Primary / Secondary weapon group fire mode.;Shortcuts: F9 / F10 - Feuermodus der Primär /Sekundär Waffen verändern.;Клавиши: F9 / F10 - изменить тип стрельбы для Первичного / Вторичного оружия.;Skróty: F9 / F10 - zmień tryb strzału Głównej / Specjalnej grupy broni.
-Shortcut: F12 - capture screenshot. (File will be saved on your Desktop.);Shortcut: F12 - Bildschirmfoto. (Foto landet auf dem Desktop.);Клавиши: F12 - скриншот. (Файл будет сохранен на рабочем столе.);Skrót: F12 - przechwyć obraz. (Plik zostanie zapisany na Pulpicie.)
-Shortcut: Esc - show/hide game menu. (Pause.);Shortcut: Esc - Spielmenü An/Aus. (Pause.);Клавиши: Esc - показать / скрыть меню игры. (Пауза.);Skrót: Esc - pokaż/ukryj menu gry. (Pauza.)
-Custom Weapon Angle is use-;Waffenwinkel ist nur mit;Угол поворота возможно;Zmiana Kąta Broni
-ful with optical computer;optischem Computersystem;использовать только с;wyłącznie z optycznym
-system Neo or Supra only.;Neo oder Supra nutzbar.;В.О.К.Н Нео и Супра.;komputerem Neo lub Supra.
-AstroMenace Donation;AstroMenace Geldspende;Пожертвования для игры AstroMenace;AstroMenace Dotacja
-AstroMenace is Open Source, you can support this game;AstroMenace ist Open Source, aber Sie können durch eine;Игра AstroMenace - проект с открытым исходным кодом (Open;AstroMenace jest wolnym oprogramowaniem, możesz
-by donation.;Geldspende die Entwicklung unterstützen.;Source), вы можете поддержать разработку игры.;wesprzeć tą grę dotując ją.
-Available donation methods: Credit and Debit Cards, PayPal,;Verfügbare Spendenmethoden: Kreditkarte, PayPal, WebMoney,;Поддерживаемые способы: Кредитные и дебетовые карты,;Dostępne metody dotowania: Karty Kredytowe i Debetowe, PayPal,
-Direct Debit, Electronic Checks / ACH, Real Time Bank Transfers,;Internationale Überweisung, Eurochecks, Geldüberweisung,;WebMoney, PayPal, Банковский перевод, Денежный перевод,;Polecenie Zapłaty, Elektroniczne Czeki / ACH, Ekspresowe Przelewy,
-WebMoney, Local Bank Transfers, Wire Transfers, Purchase Orders.;Überweisung, Post, Skrill (Moneybookers). ;Skrill (Moneybookers).;WebMoney, Zwykłe Przelewy Bankowe, Przelewy, Transakcje Zakupu.
-Thank you everybody for showing your support;Vielen Dank an Alle für die Unterstützung und;Спасибо всем за поддержку и помощь в развитии;Dziękujemy wszystkim za okazane wsparcie
-and furthering AstroMenace!;Förderung von AstroMenace!;игры AstroMenace!;i promowanie AstroMenace!
-PROJECT LEADER, PROGRAMMING;PROJECT LEADER, PROGRAMMING;ЛИДЕР ПРОЕКТА, ПРОГРАММИРОВАНИЕ;LIDER PROJEKTU, PROGRAMOWANIE
-Mikhail Kurinnoi;Mikhail Kurinnoi;Михаил Куринной;Mikhail Kurinnoi
-2D ARTWORK;2D ARTWORK;ГРАФИКА;GRAFIKA 2D
-Tatiana Savitskaya;Tatiana Savitskaya;Татьяна Савицкая;Tatiana Savitskaya
-3D MODELS;3D MODELS;3Д МОДЕЛИ;MODELE 3D
-Max Shelekhov, 3drt.com;Max Shelekhov, 3drt.com;Макс Шелехов, 3drt.com;Max Shelekhov, 3drt.com
-Oleg Linkov;Oleg Linkov;Олег Линьков;Oleg Linkov
-Egor Kurteanu;Egor Kurteanu;Egor Kurteanu;Egor Kurteanu
-PLANETARY TEXTURES;PLANETARY TEXTURES;ТЕКСТУРЫ ПЛАНЕТ;TEKSTURY PLANET
-Alex (Esgaroth) Reuter;Alex (Esgaroth) Reuter;Alex (Esgaroth) Reuter;Alex (Esgaroth) Reuter
-Robert Stein;Robert Stein;Robert Stein;Robert Stein
-MUSIC;MUSIC;МУЗЫКА;MUZYKA
-Alexander Matchugovsky;Alexander Matchugovsky;Александр Мачуговский;Alexander Matchugovsky
-SOUND EFFECTS;SOUND EFFECTS;ЗВУКОВЫЕ ЭФФЕКТЫ;EFEKTY DŹWIĘKOWE
-Mikhail Sirotkin;Mikhail Sirotkin;Михаил Сироткин;Mikhail Sirotkin
-Alexander Vassilyevsky;Alexander Vassilyevsky;Александр Васильевский;Alexander Vassilyevsky
-VOICE;VOICE;ГОЛОС;GŁOS
-Elena Zavalishina (en, ru);Elena Zavalishina (en, ru);Елена Завалишина (en, ru);Elena Zavalishina (en, ru)
-Petra Schulten (de);Petra Schulten (de);Petra Schulten (de);Petra Schulten (de)
-TRANSLATORS;TRANSLATORS;ПЕРЕВОД;TŁUMACZE
-Bernd Dau (de);Bernd Dau (de);Bernd Dau (de);Bernd Dau (de)
-Mikhail Kurinnoi (ru);Mikhail Kurinnoi (ru);Михаил Куринной (ru);Mikhail Kurinnoi (ru)
-Jacek Fiedorowicz (pl);Jacek Fiedorowicz (pl);Jacek Fiedorowicz (pl);Jacek Fiedorowicz (pl)
-TESTERS;TESTERS;ТЕСТЕРЫ;TESTERZY
-Dmitriy Schigolev;Dmitriy Schigolev;Дмитрий Щеголев;Dmitriy Schigolev
-Ivan Bobrov;Ivan Bobrov;Иван Бобров;Ivan Bobrov
-Vadim Sosenko;Vadim Sosenko;Вадим Сосенко;Vadim Sosenko
-Dmitriy Tatarinov;Dmitriy Tatarinov;Дмитрий Татаринов;Dmitriy Tatarinov
-Alexey Mosesov;Alexey Mosesov;Алексей Мосесов;Alexey Mosesov
-Bernd Dau;Bernd Dau;Bernd Dau;Bernd Dau
-Ryan Foster;Ryan Foster;Ryan Foster;Ryan Foster
-Jason Crowell;Jason Crowell;Jason Crowell;Jason Crowell
-SPECIAL THANKS TO;SPECIAL THANKS TO;ОСОБЫЕ БЛАГОДАРНОСТИ;PODZIĘKOWANIA
-Pavel Voylov;Pavel Voylov;Павел Войлов;Pavel Voylov
-Richard Benson;Richard Benson;Richard Benson;Richard Benson
-Alexey Madalinskiy;Alexey Madalinskiy;Алексей Мадалинский;Alexey Madalinskiy
-Olga Zhuravleva;Olga Zhuravleva;Ольга Журавлева;Olga Zhuravleva
-Nick O`Connell;Nick O`Connell;Nick O`Connell;Nick O`Connell
-Mikhail Storcheous;Mikhail Storcheous;Михаил Сторчеус;Mikhail Storcheous
-Boris Pek;Boris Pek;Boris Pek;Boris Pek
-build;build;сборка;build
-fps;fps;fps;fps
-Version;Version;Версия;Wersja
-LOADING;LADE;ЗАГРУЗКА;WCZYTYWANIE
-lang/en/game/mission.tga;lang/de/game/mission.tga;lang/ru/game/mission.tga;lang/en/game/mission.tga
-lang/en/game/missionfailed.tga;lang/de/game/missionfailed.tga;lang/ru/game/missionfailed.tga;lang/en/game/missionfailed.tga
-lang/en/game/pause.tga;lang/de/game/pause.tga;lang/ru/game/pause.tga;lang/en/game/pause.tga
-lang/en/menu/button_weaponry_in.tga;lang/de/menu/button_weaponry_in.tga;lang/ru/menu/button_weaponry_in.tga;lang/pl/menu/button_weaponry_in.tga
-lang/en/menu/button_weaponry_out.tga;lang/de/menu/button_weaponry_out.tga;lang/ru/menu/button_weaponry_out.tga;lang/pl/menu/button_weaponry_out.tga
-lang/en/voice/Attention.wav;lang/de/voice/Attention.wav;lang/ru/voice/Attention.wav;lang/en/voice/Attention.wav
-lang/en/voice/CeaseFire.wav;lang/de/voice/CeaseFire.wav;lang/ru/voice/CeaseFire.wav;lang/en/voice/CeaseFire.wav
-lang/en/voice/EngineMalfunction.wav;lang/de/voice/EngineMalfunction.wav;lang/ru/voice/EngineMalfunction.wav;lang/en/voice/EngineMalfunction.wav
-lang/en/voice/MissileDetected.wav;lang/de/voice/MissileDetected.wav;lang/ru/voice/MissileDetected.wav;lang/en/voice/MissileDetected.wav
-lang/en/voice/PowerSupplyReestablished.wav;lang/de/voice/PowerSupplyReestablished.wav;lang/ru/voice/PowerSupplyReestablished.wav;lang/en/voice/PowerSupplyReestablished.wav
-lang/en/voice/PrepareForAction.wav;lang/de/voice/PrepareForAction.wav;lang/ru/voice/PrepareForAction.wav;lang/en/voice/PrepareForAction.wav
-lang/en/voice/ReactorMalfunction.wav;lang/de/voice/ReactorMalfunction.wav;lang/ru/voice/ReactorMalfunction.wav;lang/en/voice/ReactorMalfunction.wav
-lang/en/voice/Warning.wav;lang/de/voice/Warning.wav;lang/ru/voice/Warning.wav;lang/en/voice/Warning.wav
-lang/en/voice/WeaponDamaged.wav;lang/de/voice/WeaponDamaged.wav;lang/ru/voice/WeaponDamaged.wav;lang/en/voice/WeaponDamaged.wav
-lang/en/voice/WeaponDestroyed.wav;lang/de/voice/WeaponDestroyed.wav;lang/ru/voice/WeaponDestroyed.wav;lang/en/voice/WeaponDestroyed.wav
-lang/en/voice/WeaponMalfunction.wav;lang/de/voice/WeaponMalfunction.wav;lang/ru/voice/WeaponMalfunction.wav;lang/en/voice/WeaponMalfunction.wav
+"en";"de";"ru";"pl"
+"English";"Deutsch";"Русский";"Polski"
+"START GAME";"SPIEL STARTEN";"НАЧАТЬ ИГРУ";"ROZPOCZNIJ GRĘ"
+"TOP SCORES";"BESTENLISTE";"РЕКОРДЫ";"REKORDY"
+"OPTIONS";"OPTIONEN";"НАСТРОЙКИ";"USTAWIENIA"
+"INFORMATION";"INFORMATION";"ИНФОРМАЦИЯ";"INFORMACJE"
+"CREDITS";"DANKSAGUNGEN";"АВТОРЫ";"AUTORZY"
+"QUIT";"ENDE";"ВЫХОД";"ZAKOŃCZ"
+"YES";"JA";"ДА";"TAK"
+"NO";"NEIN";"НЕТ";"NIE"
+"ERROR";"FEHLER";"ОШИБКА";"BŁĄD"
+"CLOSE";"SCHLIESSEN";"ЗАКРЫТЬ";"ZAMKNIJ"
+"DELETE";"LÖSCHEN";"УДАЛИТЬ";"SKASUJ"
+"REPAIR";"REPARIEREN";"РЕМОНТ";"NAPRAW"
+"OK";"OK";"ОК";"OK"
+"On";"An";"Вкл";"Włączone"
+"Off";"Aus";"Выкл";"Wyłączone"
+"Decrease";"Verringern";"Уменьшить";"Zmniejsz"
+"Increase";"Erhöhen";"Увеличить";"Zwiększ"
+"Video & Audio";"Video & Audio";"Видео и Аудио";"Grafika i Dźwięk"
+"Config Controls";"Tastenbelegung";"Управление";"Sterowanie"
+"Interface";"Ausblick";"Интерфейс";"Interfejs"
+"Advanced";"Erweitert";"Специальные";"Zaawansowane"
+"MAIN MENU";"HAUPTMENÜ";"ОСНОВНОЕ МЕНЮ";"GŁÓWNE MENU"
+"MISSIONS LIST";"MISSIONEN LISTE";"СПИСОК МИССИЙ";"LISTA MISJI"
+"DONATE";"SPENDEN";"ПОДДЕРЖАТЬ";"DOTUJ"
+"Arcade";"Spielhalle";"Аркада";"Gra"
+"Sim";"Simulation";"Симулятор";"Symulator"
+"BACK";"ZURÜCK";"НАЗАД";"POWRÓT"
+"Prev";"Vorh";"Пред";"Wstecz"
+"Next";"Näch";"След";"Dalej"
+"APPLY";"ANWENDEN";"ПРИНЯТЬ";"ZASTOSUJ"
+"Create";"Anlegen";"Создать";"Stwórz"
+"Difficulty";"Schwierigkeit";"Сложность";"Trudność"
+"Delete";"Löschen";"Удалить";"Skasuj"
+"NEXT";"WEITER";"ДАЛЕЕ";"DALEJ"
+"Shipyard";"Schiffwerft";"Верфь";"Stocznia"
+"Workshop";"Werkstatt";"Мастерская";"Warsztat"
+"Weaponry";"Bewaffnung";"Оружейная";"Zbrojownia"
+"START";"START";"СТАРТ";"START"
+"Info";"Info";"Инфо";"Info"
+"Buy Ship";"Schiff Kaufen";"Купить";"Kup Statek"
+"Repair Hull";"Hülle Reparieren";"Ремонт";"Napraw Kadłub"
+"Upgrade Hull";"Hülle Aufwerten";"Апгрейд";"Ulepsz Kadłub"
+"Reload";"Laden";"Перезарядить";"Przeładuj"
+"Reload All";"Laden Alle";"Перезарядить Все";"Ładuj Broń"
+"Close";"Schliessen";"Закрыть";"Zamknij"
+"Buy";"Kaufen";"Купить";"Kup"
+"Sell";"Verkaufen";"Продать";"Sprzedaj"
+"RESTART";"NEUSTART";"РЕСТАРТ";"RESTART"
+"RESUME";"FORTFAHREN";"ПРОДОЛЖИТЬ";"WZNÓW"
+"GAME MENU";"SPIEL MENÜ";"МЕНЮ ИГРЫ";"MENU GRY"
+"Click to setup";"Einrichten";"Выбрать";"Wybierać"
+"Left";"Links";"Влево";"Lewa"
+"Right";"Rechts";"Вправо";"Prawa"
+"Mission Complete";"Mission Beendet";"Миссия Завершена";"Misja Zakończona"
+"Page Up";"Seite Rauf";"Предыдущая";"Wstecz"
+"Page Down";"Seite Runter";"Следующая";"Dalej"
+"Duplicate";"Duplikat";"Копия";"Kopiuj"
+"Change Profile";"Ändern Profil";"Изменить Профиль";"Zmień Profil"
+"Are you sure you want to quit?";"Wollen Sie wirklich aufhören?";"Вы уверены, что хотите завершить игру?";"Na pewno chcesz zakończyć?"
+"Note: all game data will be saved.";"ACHTUNG: Spieldaten werden gesichert.";"Текущие настройки будут сохранены.";"Uwaga: Stan gry zostanie zapisany."
+"Note: the current game data will be lost.";"ACHTUNG: Spieldaten gehen verloren.";"Текущие данные миссии будут потеряны.";"Uwaga: Aktualny stan gry zostanie utracony."
+"Cannot create a Pilot Profile.";"Pilot Profil kann nicht angelegt werden.";"Невозможно создать Профиль Пилота.";"Nie można utworzyć profilu pilota."
+"Tip: you should clear one line first.";"Tipp: Lösche zuerst einen anderen.";"Удалите один уже имеющийся Профиль.";"Wskazówka: Najpierw usuń jedną linię."
+"Are you sure you want to delete the Profile?";"Sind Sie sicher, das Sie das Profil löschen wollen?";"Вы действительно хотите удалить запись?";"Na pewno chcesz usunąć profil?"
+"Note: all Pilot Profile data will be lost.";"Hinweis: Alle Daten des Piloten werden gelöscht.";"Все данные Профиля будут потеряны.";"Uwaga: Dane profilu pilota zostaną utracone."
+"Not enough money for the full hull repair.";"Zuwenig Geld für komplette Instandsetzung.";"Полный ремонт корабля невозможен.";"Za mało pieniędzy na całkowitą naprawę kadłuba."
+"Note: Repair has been limited by money.";"Hinweis:Hülle wurde nur teilw. repariert.";"Ремонт будет ограничен деньгами.";"Uwaga: Naprawa ograniczona przez pieniędze."
+"Are you sure you want to restart the game?";"Wollen Sie das Spiel wirklich neu starten?";"Вы действительно хотите перезагрузить игру?";"Na pewno chcesz zrestartować grę?"
+"Joystick DeadZone";"Joystick Neutralzone";"Мертвая зона джойстика";"Dżojstik MartwaStrefa"
+"Control Sensitivity";"Empfindlichkeitskontrolle";"Чувствительность";"Czułość kontrolerów"
+"MOUSE";"MAUS";"МЫШКА";"MYSZ"
+"KEYBOARD";"TASTATUR";"КЛАВИАТУРА";"KLAWIATURA"
+"JOYSTICK";"JOYSTICK";"ДЖОЙСТИК";"DŻOJSTIK"
+"Primary Attack";"Primärer Angriff";"Первичный Огонь";"Atak Główny"
+"Secondary Attack";"Sekundärer Angriff";"Вторичный Огонь";"Atak Specjalny"
+"Move Forward";"Vorwärts Bewegen";"Движение Вперед";"Naprzód"
+"Move Backward";"Rückwärts Bewegen";"Движение Назад";"Wstecz"
+"Move Left";"Links Bewegen";"Движение Влево";"Lewo"
+"Move Right";"Rechts Bewegen";"Движение Вправо";"Prawo"
+"Enemy Weapon Penalty";"Feindlicher Waffenabzug";"Штраф Оружия Врага";"Kara broni wroga"
+"None";"Nichts";"Нет";"Brak"
+"Enemy Armor Penalty";"Feindlicher Panzerungsabzug";"Штраф Защиты Врага";"Kara pancerza wroga"
+"Enemy Targeting Penalty";"Feindlicher Zielvermögen Abzug";"Штраф Наведения Врага";"Kara namierzania wroga"
+"Limited Ammo";"Begrenzte Munition";"Ограниченный Боекомплект";"Ograniczona amunicja"
+"Destroyable Weapon";"Zerstörbare Waffen";"Уничтожаемое Оружие";"Uszkodzenia broni"
+"SpaceShip Control Mode";"Raumschiff Steuerungsmodus";"Режим Управления Кораблем";"Tryb sterowania statku"
+"Weapon Targeting Mode";"Waffen Zielmodus";"Режим Наведения Оружия";"Tryb namierzania broni"
+"Not implemented";"Nicht verfügbar";"Не задействован";"Brak"
+"Screen Mode";"Bildschirm Modus";"Режим Экрана";"Tryb Ekranu"
+"Window Size";"Fenstergröße";"Размер Окна";"Rozmiar Okna"
+"Low";"Gering";"Низкое";"Niska"
+"Medium";"Mittel";"Среднее";"Średnia"
+"High";"Hoch";"Высокое";"Wysoka"
+"Disabled";"Ausgeschaltet";"Отключено";"Wyłączone"
+"Menu Language";"Menü-Sprache";"Язык Меню";"Język Menu"
+"Keyboard Layout";"Tastatur Layout";"Раскладка клавиатуры";"Układ Klawiatury"
+"Voice Language";"Stimme Sprache";"Голос в Игре";"Język Głosu"
+"Language";"Sprache";"Язык";"Język"
+"Menu Font";"Menü-Schriftart";"Шрифт Меню";"Czcionka Menu"
+"Font Size";"Schriftgröße";"Размер Шрифта";"Rozmiar Czcionki"
+"'Tips and hints' Status";"'Tipps und Tricks' Stand";"Окна 'Советы и подсказки'";"'Podpowiedzi' Status"
+"Reset";"Reset";"Сброс";"Reset"
+"FPS Сounter";"FPS Zähler";"FPS Счетчик";"Licznik FPS"
+"Weapon Panels View";"Ansicht der Waffentafeln";"Вид Панелей Оружия";"Widok Broni"
+"Full";"Voll";"Полный";"Pełny"
+"Flat";"Flach";"Плоский";"Płaski"
+"Slim";"Gering";"Тонкий";"Wąski"
+"Empty Weapon Slot";"Waffe Leerer Schacht";"Пустой Oружейный Cлот";"Pusty Slot Broni"
+"EMPTY";"LEER";"ПУСТОЙ";"PUSTY"
+"level";"schacht";"уровень";"poziom"
+"Visual Effects Quality";"Visuelle Effekte Qualität";"Качество Визуальных Эффектов";"Jakość Efektów Wizualnych"
+"Shadow Quality";"Schatten Qualität";"Качество Теней";"Jakość Cieni"
+"Sync to VBlank";"Synchronisierung auf VBlank";"Вертикальная Синхронизация";"Synchronizacja Pionowa"
+"Music Volume";"Musiklautstärke";"Громкость Музыки";"Głośność Muzyki"
+"Not available";"Nicht verfügbar";"Недоступно";"Niedostępna"
+"Sound Effects Volume";"Soundeffektlautstärke";"Громкость Эффектов";"Głośność Efektów"
+"Voice Volume";"Stimmelautstärke";"Громкость Голоса";"Głośność Mowy"
+"Full Screen";"Ganzer Bildschirm";"Полный Экран";"Pełny Ekran"
+"Refresh Rate";"Refresh Rate";"Частота Обновления";"Odświeżanie"
+"Default";"Default";"По умолчанию";"Domyślne"
+"Brightness";"Helligkeit";"Яркость";"Jasność"
+"Texture Filtering Mode";"Texture Filter Modus";"Режим Вывода Текстуры";"Filtrowanie Tekstur"
+"Textures Quality";"Texture Qualität";"Качество Текстур";"Jakość Tekstur"
+"Multisample Antialiasing";"Multisample Antialiasing";"Сглаживание";"Wielopróbkowy Antyaliasing"
+"NAME";"NAME";"ИМЯ";"IMIĘ"
+"SCORE";"PUNKTE";"СЧЕТ";"WYNIK"
+"Page %i of %i";"Seite %i von %i";"Страница %i из %i";"Strona %i z %i"
+"New Pilot Profile";"Neues Piloten Profile";"Новый Профиль Пилота";"Nowy Profil Pilota"
+"Pilot Profile";"Pilot Profil";"Профиль Пилота";"Profil Pilota"
+"Pilots Profiles";"Piloten Profile";"Профили Пилотов";"Profile Pilotów"
+"Money";"Geld";"Деньги";"Gotówka"
+"Exp";"Erfahrung";"Опыт";"Doś"
+"empty";"Leer";"пусто";"pusty"
+"Current Profile Difficulty";"Profilschwierigkeit";"Сложность Профиля";"Trudność Profilu"
+"Weapon Fire Control:";"Waffenfeuerkontrolle:";"Основное Управление:";"Kontrola Broni:"
+"Alternative Fire Control:";"Alternative Feuerkontrolle:";"Вспомогательное:";"Alternatywna Kontrola Broni:"
+"Weapon Angle: %2.1f";"Waffenwinkel: %2.1f";"Угол Поворота: %2.1f";"Kąt Broni: %2.1f"
+"Type";"Typ";"Тип";"Typ"
+"Killed";"Vernichtet";"Убито";"Zniszczone"
+"Bonus";"Bonus";"Бонус";"Bonus"
+"Total";"Total";"Всего";"Ogółem"
+"Textures Compression";"Texturen Kompression";"Компрессия Текстур";"Kompresja Tekstur"
+"OpenGL Shading Language";"OpenGL  Schattierungssprache";"OpenGL шейдеры (GLSL)";"OpenGL Cienie"
+"Point Lights per Object";"Anzahl Lichter pro  Objekt";"Кол-во Источников Света";"Światła na Obiekt"
+"1 Light";"1 Licht";"1 источник";"1 Światło"
+"2 Lights";"2 Lichter";"2 источника";"2 Światła"
+"3 Lights";"3 Lichter";"3 источника";"3 Światła"
+"4 Lights";"4 Lichter";"4 источника";"4 Światła"
+"5 Lights";"5 Lichter";"5 источников";"5 Świateł"
+"6 Lights";"6 Lichter";"6 источников";"6 Świateł"
+"Anisotropy Level";"Anisotropie Level";"Уровень Анизотропии";"Poziom Anizotropii"
+"Aspect Ratio";"Aspekt Ratio";"Отношение Сторон";"Proporcje"
+"Standard";"Standard";"Стандарт";"Standart"
+"Widescreen";"Widescreen";"Широкоформат";"Panoramiczny"
+"Earth Spaceships";"Erdraumschiffe";"Корабли";"Statki Ziemskie"
+"Space Mines";"Raumminen";"Мины";"Miny"
+"Space Mine";"Raummine";"Космическая Мина";"Mina"
+"Auto Cannon:";"Autokannone:";"Авто Пушка:";"Autodziało:"
+"Auto Launcher:";"Autoraketenwerfer:";"Авто Ракетомет:";"Autowyrzutnia:"
+"Weapon";"Waffe";"Оружие";"Broń"
+"Weapons";"Waffen";"Оружие";"Bronie"
+"Weapons Slots:";"Waffenschächte:";"Оружейных Слотов:";"Sloty Broni:"
+"Alien Spaceships";"Außerirdische";"Пришельцы";"Statki Obce"
+"Alien Motherships";"Mutterschiffe";"Носители";"Obce Statki Bazy"
+"Pirate Spaceships";"Piraten";"Пираты";"Statki Pirackie"
+"Pirate Vehicles";"Piratenfahrzeuge";"Транспорт Пиратов";"Pojazdy Pirackie"
+"Pirate Buildings";"Piratenbauten";"Постройки Пиратов";"Budynki Pirackie"
+"Asteroids";"Asteroiden";"Астероиды";"Asteroidy"
+"Civilian Buildings";"Zivile Bauten";"Здания";"Budynki Cywilne"
+"Military Buildings";"Militärbauten";"Турели";"Budynki Militarne"
+"Wheeled Vehicles";"RadFahrzeuge";"Автомобили";"Pojazdy Kołowe"
+"Tracked Vehicles";"Kettenfahrzeuge";"Танки";"Pojazdy Gąsinicowe"
+"Wheeled Vehicle";"RadFahrzeuge";"Автомобиль";"Pojazd Kołowy"
+"Tracked Vehicle";"Kettenfahrzeuge";"Танк";"Pojazd Gąsinicowy"
+"Object Class:";"Objektklasse:";"Класс:";"Klasa:"
+"Space Ship";"Raumschiff";"Корабль";"Statek"
+"Ship Type:";"Schiffstyp:";"Тип Корабля:";"Typ Statku:"
+"Developer:";"Entwickler:";"Разработчик:";"Konstruktor:"
+"Earth Federation";"Erdförderation";"Федерация";"Federacja Ziemi"
+"Status:";"Status:";"Статус:";"Status:"
+"Armor:";"Panzerung:";"Защита:";"Pancerz:"
+"Indestructible";"Unzerstörbar";"Неразрушимый";"Niezniszczalny"
+"Upgrade Mk2:";"Stufe Mk2:";"Апгрейд Mk2:";"Ulepszenie Mk2:"
+"Upgrade Mk3:";"Stufe Mk3:";"Апгрейд Mk3:";"Ulepszenie Mk3:"
+"Upgrade Mk4:";"Stufe Mk4:";"Апгрейд Mk4:";"Ulepszenie Mk4:"
+"Slots Levels:";"Schachtlevel:";"Уровни слотов:";"Poziomy Slotów:"
+"Codename:";"Codename:";"Кодовое Имя:";"Nazwa Kodowa:"
+"Width:";"Breite:";"Ширина:";"Szerokość:"
+"Length:";"Länge:";"Длина:";"Długość:"
+"Height:";"Höhe:";"Высота:";"Wysokość:"
+"Engines:";"Antriebe:";"Двигатели:";"Silniki:"
+"Ally";"Allierte";"Союзник";"Sojusznik"
+"Fighter";"Jäger";"Истребитель";"Myśliwiec"
+"Interceptor";"Abfangjäger";"Перехватчик";"Eliminator"
+"Bomber";"Bomber";"Бомбардировщик";"Bombowiec"
+"Scout";"Aufklärer";"Разведчик";"Zwiadowca"
+"Attack Ship";"Angriffsschiff";"Штурмовик";"Szturmowiec"
+"Weapon, Cannon";"Waffe, Kanone";"Пушка";"Broń, Działo"
+"Weapon, Launcher";"Waffe, Raketenwerfer";"Установка";"Broń, Wyrzutnia"
+"Type:";"Typ:";"Тип:";"Typ:"
+"Damage, Hull:";"Hüllenschaden:";"Урон, Корпус:";"Uszk., Kadłub:"
+"Damage, Systems:";"Systemschaden:";"Урон, Системы:";"Uszk., Systemy:"
+"Energy Use:";"Energieverbrauch:";"Расход Энергии:";"Zużycie Energii:"
+"Ammo:";"Munition:";"Боекомплект:";"Amunicja:"
+"Reload:";"Auffüllen:";"Перезарядка:";"Przeładowanie:"
+"Range:";"Reichweite:";"Дальность:";"Zasięg:"
+"Kinetic";"Kinetisch";"Кинетика";"Kinetyczna"
+"Ion";"Ionen";"Ион";"Jonowa"
+"Plasma";"Plasma";"Плазма";"Plazmowa"
+"Maser";"Maser";"Мазер";"Maser"
+"Antimatter";"Antimatter";"Антиматерия";"Antymateria"
+"Laser";"Laser";"Лазер";"Laser"
+"Gauss";"Gauss";"Гаусс";"Gauss"
+"Propelled";"Angetrieben";"Ракета";"Rakietowa"
+"Unknown";"Unbekannt";"Неизвестно";"Nieznany"
+"Enemy";"Feind";"Враг";"Wróg"
+"Damage:";"Schaden:";"Урон:";"Zniszczenia:"
+"MotherShip";"Mutterschiff";"Носитель";"Statek Baza"
+"Pirate Ship";"Piraten";"Корабль Пиратов";"Statek Piracki"
+"Pirates";"Piraten";"Пираты";"Piraci"
+"Marauder";"Plünderer";"Мародер";"Maruder"
+"Warder";"Wächter";"Страж";"Strażnik"
+"Raider";"Gangster";"Рейдер";"Łupieżca"
+"Carrier";"Träger";"Транспорт";"Nosiciel"
+"Missile Carrier";"Lenkwaffenträger";"Ракетный Транспорт";"Nosiciel Rakiet"
+"Freighter";"Frachter";"Фрахтовщик";"Frachtowiec"
+"Battle Freighter";"Schlachtfrachter";"Боевой Фрахтовщик";"Frachtowiec Wojenny"
+"Civilian Building";"Zivilgebäude";"Здание";"Budynek Cywilny"
+"Old Republic";"Alte Repuplik";"Старая Республика";"Stara Republika"
+"Military Building";"Militärgebäude";"Турель";"Budynek Militarny"
+"Cannon";"Kanone";"Пушка";"Działo"
+"MachineGun";"Maschinengewehr";"Пулемет";"Działo maszynowe"
+"Turbo Cannon";"Turbo Kanone";"Турбо Пушка";"Turbodziało"
+"Missile Launcher";"Lenkwaffenträger";"Ракетная Установка";"Wyrzutnia Rakiet"
+"Cannon Turret";"Kanonenturm";"Турель с Пушкой";"Wieżyczka Ogniowa"
+"Armored Jeep";"Gepanzerter Jeep";"Бронированный Джип";"Opancerzony Dżip"
+"Jeep";"Jeep";"Джип";"Dżip"
+"APC";"BAT";"БТР";"TO"
+"Tank";"Panzer";"Танк";"Czołg"
+"Engineer";"Ingenieur";"Трактор";"Inżynier"
+"Not combatant";"Kein Gegner";"Не боеспособен";"Niebojowy"
+"System";"System";"Система";"System"
+"Spaceship Engine";"Raumschiffantrieb";"Двигатель";"Silnik Statku"
+"Ion Resistance:";"Ionenresistenz:";"Ионная Защита:";"Odporność Jonowa:"
+"Engine Power:";"Antriebsenergie:";"Мощность:";"Moc Silnika:"
+"Acceleration:";"Beschleunigung:";"Ускорение:";"Przyspieszenie:"
+"Relations/Dependences:";"Beziehungen/Abhängigkeiten:";"Зависимы/Зависят:";"Relacje/Zależności:"
+"SpaceShip Weight";"Raumschiffgewicht";"Вес Корабля";"Masa Statku"
+"Power Source";"Energiequelle";"Источник Энергии";"Źródło Zasilania"
+"Useless with Arcade";"Nutzlos im Arcade Modus";"Бесполезно в Аркадном";"Bezużyteczny w trybie Gry"
+"SpaceShip Control Mode.";"Raumschiffkontrollmodus.";"Режиме Управления Кораблем.";"Tryb Kontroli Statku."
+"Weapon Targeting Mode.";"Waffenzielmodus.";"Режиме Наведения Оружия.";"Tryb Namierzania Broni."
+"Energy Capacity:";"Energie Kapazität:";"Емкость:";"Pojemność:"
+"Recharge Rate:";"Aufladungsrate:";"Перезарядка:";"Moc Ładowania:"
+"Weapon Recharge Rate";"Waffenaufladungsrate";"Скорость Перезарядки";"Moc Ładowania Broni"
+"Optical Computer";"Optischer Computer";"Компьютер";"Komputer Optyczny"
+"Targeting System";"Zielsystem";"Наведение";"System Namierzania"
+"Advanced System";"Hochentwickeltes System";"Защита";"System Zaawansowany"
+"Target Tracing:";"Zielverfolgung:";"Контроль Целей:";"Śledzenie Celów:"
+"Auto Adjustment:";"Auto Anpassung:";"Авто Наведение:";"Autoskalowanie:"
+"No";"Nein";"Нет";"Nie"
+"Yes";"Ja";"Да";"Tak"
+"Weapon Fire Range";"Waffenreichweite";"Дальность Стрельбы";"Zasięg Broni"
+"Weapon Orientation";"Waffenrichtung";"Ориентация Оружия";"Orientacja Broni"
+"Orientation Speed:";"Ausrichtungsgeschwindigkeit:";"Скорость Поворота:";"Prędkość Orientacji:"
+"Hull Repair Rate:";"Hüllenreparaturrate:";"Скорость Ремонта:";"Tempo Naprawy Kadłuba:"
+"Resistance, Hull:";"Hüllenresistenz:";"Защита, Корпус:";"Odporność, Kadłub:"
+"Resistance, System:";"Systemresistenz:";"Защита, Система:";"Odporność, System:"
+"Shield Power:";"Schild Power:";"Мощность Щита:";"Moc Osłony:"
+"Hull Resistance";"Hüllenresistenz";"Защита Корпуса";"Odporność Kadłuba"
+"Systems Resistance";"Systemresistenz";"Защита Систем";"Odporność Systemu"
+"SpaceShip Vitality";"Raumschiffdynamik";"Живучесть Корабля";"Żywotność Statku"
+"units";"Einheiten";"юнит";"jedn"
+"units per shot";"Einheiten/Schuss";"юнит/выстрел";"jedn na strz"
+"seconds";"Sekunden";"секунд";"sekundy"
+"units per sec";"Einheiten/sek";"юнит в сек";"jedn na sek"
+"object(s)";"Objekte(e)";"объект(ы)";"obiekt(ów)"
+"deg per sec";"Grad pro Sek";"град в сек";"st na sek"
+"per sec";"pro sek";"в секунду";"na sek"
+"units/shot";"Einheiten/Schuss";"юнит/выстрел";"jedn/strz"
+"units/sec";"Einheiten/Sek";"юнит/сек";"jedn/sek"
+"Game Speed:";"Spielgeschwindigkeit:";"Скорость Игры:";"Prędkość Gry:"
+"Missile Detected";"Rakete erkannt";"Обнаружена ракета";"Wykryto Rakietę"
+"Collision Course Detected";"Collision Course Erkannt";"Высокая Вероятность Столкновения";"Wykryto Kurs Kolizyjny"
+"Mission 1 - First Contact with Unknown Enemy";"Mission 1 - Erster Kontakt mit dem Feind";"Миссия 1 - Первый Контакт с Врагом";"Misja 1 - Kontakt z Nieznanym Wrogiem"
+"They are coming! They are everywhere!";"Sie kommen! Sie sind überall!!";"Они приближаются! Они повсюду!";"Nadchodzą! Są wszędzie!"
+"Mission 2 - Attack, Do Not Let Them Go";"Mission 2 - Angreifen und nicht entkommen lassen";"Миссия 2 - Атакуйте, Не Дайте Им Уйти";"Misja 2 - Atakuj, Nie Przepuść Ich"
+"Damned raiders here! No Mercy! Kill them all!";"Verdammte Gangster hier! Keine Gnade! Töte Sie Alle!";"Проклятые рейдеры! Никакой пощады! Убить всех!";"Przeklęci łupieżcy! Bez litości! Zabij wszystkich!"
+"Mission 3 - Counterattack Is The Best Defense";"Mission 3 - Gegenangriff ist die beste Verteidigung";"Миссия 3 - Контратака - Лучшая Защита";"Misja 3 - Kontratak Jest Najlepszą Obroną"
+"Our base is under attack! Stop the aliens` attack now!";"Unsere Basis liegt unter Beschuss!";"Наша база атакована! Остановите атаку пришельцев!";"Nasza baza jest atakowana! Powstrzymaj atak obcych!"
+"Mission 4 - Attack on Fleet of Pirate Raiders";"Mission 4 - Greife die Piratenflotte an!";"Миссия 4 - Атакуйте Флот Пиратов-Рейдеров";"Misja 4 - Atak na Piracką Flotę"
+"Find a pirate raider base in this sector!";"Finde eine Piraten Basis in diesem Sektor!";"Найдите пиратскую базу в этом секторе!";"Odnajdź piracką bazę w tym sektorze!"
+"Mission 5 - Surprise, Surprise... Aliens Again";"Mission 5 - Überraschung...wieder Feinde!";"Миссия 5 - Сюрприз, сюрприз... Снова Пришельцы";"Misja 5 - Niespodzianka... Znowu Obcy"
+"Do not let them regroup for a counterattack!";"Gib den Piraten keine Gelegenheit sich neu zu formieren!";"Не дайте им перегруппироваться и контратаковать!";"Nie pozwól im się przegrupować do kontrataku!"
+"Mission 6 - Stop Alien MotherShip Now!";"Mission 6 - Stoppe das Alien Mutterschiff sofort!";"Миссия 6 - Остановите Носитель Пришельцев!";"Misja 6 - Zatrzymaj Obcy Statek Bazę!"
+"They are too close! You should do something!";"Sie sind viel zu dicht! Du solltest etwas tun!!";"Они слишком близко! Сделайте хоть что-то!";"Są zbyt blisko! Zrób coś!"
+"Mission 7 - Attack on Small Pirate Raiders Base";"Mission 7 - Greife die kleine Piratenbasis an";"Миссия 7 - Атака на Небольшую Базу Пиратов";"Misja 7 - Atak na Małą Piracką Bazę"
+"We found their base! Finally! Lets smash them!";"Wir haben ihre Basis gefunden! Endlich! Rotten wir sie aus!";"Мы обнаружили их базу! Наконец-то! Размажьте их!";"Znaleźliśmy ich bazę! Nareszcie! Rozwalmy ich!"
+"Mission 8 - Stay Close, They Are Coming";"Mission 8 - Bleib in der Nähe, Sie kommen";"Миссия 8 - Сомкнуть Ряды, Они Приближаются";"Misja 8 - Trzymaj Się Blisko, Nadchodzą"
+"Looks like the aliens got reinforcement!";"Scheint, als erhielten die ALiens Verstärkung!";"Похоже, пришельцы получили подкрепление!";"Wygląda na to, że obcy otrzymali posiłki!"
+"Mission 9 - One More Pirate Raiders Base";"Mission 9 - Eine weitere Piratenbasis";"Миссия 9 - Еще Одна Пиратская База";"Misja 9 - Jeszcze Jedna Piracka Baza"
+"This should be piece of cake for you, do it quickly!";"Das sollte ein Spaziergang sein! Mach schnell!";"Это должно быть легко для вас, сделайте это быстро!";"Dla ciebie to pestka, działaj szybko!"
+"Mission 10 - Strange Slackness... Be Ready!";"Mission 10 - Eigenartige Flaute! Pass auf!";"Миссия 10 - Странное Затишье... Приготовьтесь!";"Misja 10 - Dziwne Odprężenie... Gotuj się!"
+"Our intelligence failed to find anything. It can be a trap!";"Unsere Spionage konnte nichts herausfinden. Eine Falle?";"Наша разведка ничего не нашла. Наверняка ловушка!";"Nasz wywiad nic nie znalazł. To może być pułapka!"
+"Mission 11 - Do Not Let Them Destroy Our Base!";"Mission 11 - Lass Sie nicht unsere Basis zerstören!";"Миссия 11 - Не Дайте Им Уничтожить Нашу Базу!";"Misja 11 - Nie Pozwól Zniszczyć Im Naszej Bazy!"
+"Do not panic! We got reinforcement! Regroup and attack!";"Keine Panik! Wir haben Verstärkung!";"Без паники! Мы получили подкрепление! Атакуем!";"Nie panikuj! Mamy posiłki! Przegrupuj się i atakuj!"
+"Mission 12 - Secret Pirate Base";"Mission 12 - Geheime Piratenbasis";"Миссия 12 - Секретная Пиратская База";"Misja 12 - Tajna Piracka Baza"
+"They are too smart now, and much more dangerous.";"Sie sind nun zu schlau, und viel zu gefährlich!";"Они теперь слишком умные, и значительно опаснее.";"Teraz są zbyt sprytni i znacznie groźniejsi."
+"Mission 13 - Alien Transportation Port";"Mission 13 - Alien Umschlaghafen";"Миссия 13 - Транспортный Порт Пришельцев";"Misja 13 - Obcy Port Transportowy"
+"We found their hyper port! We must destroy it right now!";"Wir fanden ihren Hyper Port! Wir müssen ihn sofort zerstören!";"Мы нашли их гипер-порт! Необходимо его уничтожить!";"Odnaleźliśmy ich hiper port! Musimy go teraz zniszczyć!"
+"Mission 14 - Last Pirate Enclave";"Mission 14 - Die letzte Piratenenklave";"Миссия 14 - Последний Анклав Пиратов";"Misja 14 - Ostatnia Piracka Enklawa"
+"This sector must be clear and safe for ever!";"Dieser Sektor muss sauber und sicher für immer sein!";"Этот сектор должен быть очищен раз и навсегда!";"Ten sektor musi pozostać czysty i bezpieczny na zawsze!"
+"Mission 15 - Escape Under Aliens` Attack";"Mission 15 - Flucht unter den Alienangriffen!";"Миссия 15 - Отступление Под Атакой Пришельцев";"Misja 15 - Ucieczka Podczas Ataku Obcych"
+"We lost this sector, this battle is lost. Try to escape!";"Wir haben die Schlacht verloren. Versuche zu fliehen!";"Мы потеряли этот сектор. Спасайся кто может!";"Utraciliśmy ten sektor, bitwa przegrana. Spróbuj uciec!"
+"Cobra";"Cobra";"Кобра";"Kobra"
+"SpaceEagle";"SpaceEagle";"Орел";"Orzeł"
+"FireStorm";"FireStorm";"Шторм";"Burza"
+"Hedgehog";"Hedgehog";"Репейник";"Jeż"
+"Thunder";"Thunder";"Гром";"Grom"
+"Excalibur";"Excalibur";"Экскалибур";"Excalibur"
+"DarkStar";"DarkStar";"Звезда";"MrocznaGwiazda"
+"Scorpion";"Scorpion";"Скорпион";"Skorpion"
+"Runner";"Runner";"Беглец";"Goniec"
+"Kronos";"Kronos";"Кронос";"Kronos"
+"Chameleon";"Chameleon";"Хамелеон";"Kameleon"
+"Falcon";"Falcon";"Сокол";"Sokół"
+"DeathRipple";"DeathRipple";"Смерч";"FalaŚmierci"
+"AstroSword";"AstroSword";"Игла";"Miecz"
+"Pulser";"Pulser";"Импульс";"Pulsator"
+"ClumsyMace";"ClumsyMace";"Булава";"Buzdygan"
+"Raptor";"Raptor";"Раптор";"Drapieżca"
+"Destroyer";"Destroyer";"Разрушитель";"Niszczyciel"
+"AstroSpear";"AstroSpear";"Копье";"Włócznia"
+"Mite";"Mite";"Мышь";"Okruch"
+"Viper";"Viper";"Гадюка";"Żmija"
+"BlackIce";"BlackIce";"ЧерныйЛед";"CzarnyLód"
+"%s Mk%i";"%s Mk%i";"%s Mk%i";"%s Mk%i"
+"FireFox";"FireFox";"Искра";"Żarlis"
+"FireBird";"FireBird";"Пламя";"Żarptak"
+"Meteor";"Meteor";"Метеор";"Meteor"
+"Hasher";"Hasher";"Мясорубка";"Siekacz"
+"Trammel";"Trammel";"Невод";"Pogrzebacz"
+"IonStorm";"IonStorm";"Шторм";"Jonoburza"
+"IonRipple";"IonRipple";"Смерч";"Jonofala"
+"Quasher";"Quasher";"Сокрушитель";"Dławiciel"
+"Destabilizer";"Destabilizer";"Дестабилизатор";"Destabilizator"
+"Anihilator";"Anihilator";"Аннигилятор";"Anihilator"
+"Devastator";"Devastator";"Опустошитель";"Dewastator"
+"DeathFlow";"DeathFlow";"ПотокСмерти";"StrugaŚmierci"
+"Vaporizer";"Vaporizer";"Испаритель";"Parowator"
+"Rapier";"Rapier";"Рапира";"Rapier"
+"Pandora";"Pandora";"Пандора";"Pandora"
+"Stinger";"Stinger";"Жало";"Żądło"
+"Swarm";"Swarm";"Рой";"Rój"
+"Vengeance";"Vengeance";"Месть";"Zemsta"
+"BabyDoll";"BabyDoll";"Кукла";"Laleczka"
+"Jet Engine";"Jet Engine";"Реактивный";"Odrzutowy"
+"Photon Jet";"Photon Jet";"Фотонный";"Fotonowy"
+"Plasma Jet";"Plasma Jet";"Плазменный";"Plazmowy"
+"Ion Battery";"Ion Battery";"Батарея";"Jonobateria"
+"Nuclear";"Nuclear";"Ядерный";"Atom"
+"Base O.T.C.";"Base O.T.C.";"Базовая О.К.Н.";"Bazowy O.K.C."
+"Hamerik O.T.C.";"Hamerik O.T.C.";"Хамерик О.К.Н.";"Hamerik O.K.C."
+"Neo M.O.T.C.";"Neo M.O.T.C.";"Нео В.О.К.Н.";"Neo W.O.K.C."
+"Supra M.O.T.C.";"Supra M.O.T.C.";"Супра В.О.К.Н.";"Supra W.O.K.C."
+"Mechanical";"Mechanical";"Механика";"Mechaniczny"
+"Hydraulic";"Hydraulic";"Гидравлика";"Hydrauliczny"
+"Magnetic";"Magnetic";"Магнит";"Magnetyczny"
+"Vacuum";"Vacuum";"Вакуум";"Próżniowy"
+"Repair NaRs";"Repair NaRs";"Нано Роботы";"NaRs Napraw"
+"Layer";"Layer";"A-Б Слой";"Powłoka"
+"Energy Shield";"Energy Shield";"Энерго Щит";"Energoosłona"
+"Deflector";"Deflector";"Дефлектор";"Deflektor"
+"Ship Stock";"Schifflager";"Склад Кораблей";"Zasób Statków"
+"Ship Hull Cost";"Schiff Hüllenkosten";"Стоимость Корпуса";"Koszt Kadłuba"
+"Player Ship";"Spielerschiff";"Корабль Игрока";"Statek Gracza"
+"Upgrade Hull Cost";"Verbessern Hülle Kosten";"Стоимость Апгрейда";"Koszt Ulepszenia"
+"Repair Hull Cost";"Reparieren Hülle Kosten";"Стоимость Ремонта";"Koszt Naprawy"
+"Ship Cost";"Schiff Kosten";"Общая Стоимость";"Koszt Statku"
+"Weapon Ammo:";"Waffen Schuss:";"Боекомплект:";"Amunicja Broni:"
+"Weapon Reload Cost:";"Waffen Nachladen Kosten:";"Стоимость:";"Przeładowanie:"
+"Weapon Type";"Waffen Typ";"Тип Оружия";"Typ Broni"
+"Weapon Level";"Waffen Level";"Уровень Оружия";"Poziom Broni"
+"Weapon Cost";"Waffen Kosten";"Стоимость Оружия";"Koszt Broni"
+"Weapon Stock";"Waffen Bestand";"Склад Оружия";"Zasób Broni"
+"Installed Weapons";"Installierte Waffen";"Установленное";"Broń Zamontowana"
+"System Stock";"System Bestand";"Склад Систем";"Zasób Systemów"
+"Installed Systems";"Installierte Systeme";"Установленные";"Systemy Zamontowane"
+"Installed System";"Installiertes System";"Установленная";"System Zamontowany"
+"Selected System";"Gewähltes System";"Выбранная";"System Wybrany"
+"Cost";"Kosten";"Стоимость";"Koszt"
+"Tips and hints";"Tipps und Tricks";"Советы и подсказки";"Podpowiedzi"
+"Do not show this tip again.";"Diesen Tipp nicht wieder anzeigen.";"Не показывать эту подсказку.";"Więcej tego nie pokazuj."
+"It is possible to create five Pilot Profiles in the game in";"Es können fünf Pilotenprofile angelegt werden. Jedes Profil";"Для хранения персональных данных в игре предусмотрено";"W grze możliwe jest utworzenie do pięciu Profili Pilotów by"
+"order to store personal data. You can set an individual";"kann unterschiedliche Spielstände und Schwierigkeitsgrade";"создание пяти Профилей Пилотов. Вы можете настроить";"przechowywać dane osobiste. Możesz ustawić indywidualny"
+"difficulty level for each profile or delete the current";"enthalten. Um Platz für ein neues Profil zu schaffen, ein";"индивидуальную сложность для каждого Профиля или";"stopień trudności dla każdego z profili bądź skasować"
+"profile to free space for a new profile.";"Profil löschen. Beachte, das der Schwierigkeitsgrad in Prozent";"удалить его, освободив место для создания новой записи.";"aktualny profil by zwolnić miejsce dla nowego."
+"Note that the current difficulty level is displayed in percent";"pro einzelnes Profil angegeben ist. Dieser Wert beeinflusst";"Обратите внимания, для каждой записи отображается";"Obecny poziom trudności jest pokazany w procentach"
+"for each profile. This value influences the increase of";"direkt die Erfahrungspunktvergabe. Zum Beispiel, wenn du";"текущая сложность в процентах. Данный показатель";"dla każdego profilu. Wartość ta wpływa na wzrost"
+"experience. For instance, if you bring down an enemy ship, you";"ein Feindschiff zerstörst, bringt das 100 Einheiten Geld";"влияет на начисление опыта. Например, сбив";"doświadczenia. Przykładowo, zestrzeliwszy wrogi statek"
+"will get 100 money units and only 65 experience units if the";"und nur 65 Erfahrungspunkte, wenn der Schwierigkeitsgrad";"противника вы получите 100 единиц денег и только";"otrzymujesz 100 punktów gotówki i jedynie 65 punktów"
+"difficulty percent is set to 65 for you.";"auf 65 Prozent für dieses Profil steht.";"65 единиц опыта, если процент сложности у вас равен 65.";"doświadczenia jeśli procent trudności jest ustawiony na 65."
+"Note: you can change your difficulty level before each";"Hinweis: Du kannst vor dem start jeder Mission";"Примечание: вы можете изменить настройки сложности";"Uwaga: możesz zmienić swój poziom trudności przed każdą"
+"new mission.";"den Schwierkeitsgrad verändern.";"перед началом каждой новой миссии.";"nową misją."
+"There are more than 20 spaceships with unique characteristics";"Es gibt mehr als 20 Raumschiffe, jedes mit besonderen Eigensch-";"В игре доступны более двух десятков кораблей с уникальны-";"W grze jest dostępnych więcej niż 20 statków z unikalnymi"
+"available in the game. You can use the right part of the screen";"aften. Auf der rechten Seite dieses Bildschirms ist dein Raumschiff";"ми характеристиками. В правой части экрана вы можете";"cechami. Prawej strony ekranu używasz by obejrzeć swój obecny"
+"to see your current spaceship, its characteristics and cost and";"mit seinen Eigenschaften und Kosten dargestellt. Hier können auch";"увидеть свой корабль, его характеристики и стоимость, а так";"statek, jego charakterystykę i koszt jak również celem"
+"also to perform basic operations, such as repair.";"grundlegende Dinge wie Reparatur und Schiffshüllenverstärkung";" же произвести ремонт и апгрейд корпуса корабля.";"wykonania podstawowych operacji takich jak naprawa."
+"The left part of the screen contains Ship Stock where you can see";"durchgeführt werden. Die linke Seite enthält die Liste aller";"В левой части экрана расположен Склад, где вы можете";"Lewa strona ekranu zawiera Zasób Statków gdzie możesz zobaczyć"
+"all available spaceships and their characteristics. Do not";"verfügbaren Schiffe mit ihren Eigenschaften. Vergiß nicht, das";"просмотреть все имеющиеся корабли и их характеристики.";"wszystkie dostępne statki i ich właściwości. Nie zapominaj, że"
+"forget that each ship has its dimensions and, which is more";"neben der Größe der Schiffe, die Anzahl der Waffenschächte und";"Не забывайте, что каждый корабль имеет свои габариты и,";"każdy statek ma swoje wymiary i co ważniejsze może"
+"important, different weapon mounts.";"Art der Waffenschächte angegeben ist, was noch wichtiger ist.";"что более важно, различные крепления оружия.";"przenosić różną broń."
+"The basic shipbuilding concept is as follows:";"Das grundlegende Schiffsbaukonzept ist wie folgt:";"Базовая концепция судостроение такова:";"Bazowy koncept budowy statku jest następujący:"
+"Scout - light, small and maneuverable ships with weak weapons.";"Aufklärer - Leicht, schnell, wendig mit schwachen Waffen.";"Разведчик - маневренные но слабо вооруженные корабли.";"Zwiadowca - lekki, mały i zwrotny statek, słabo uzbrojony."
+"Interceptor - fast ships with light weapons.";"Abfangjäger - Schnelle Schiffe mit leichten Waffen.";"Перехватчик - быстрые легко вооруженые корабли.";"Eliminator - szybki statek, lekko uzbrojony."
+"Fighter - main type of ships with light and semi-heavy weapons.";"Jäger - Haupttyp der Schiffe mit leichten und mittleren Waffen.";"Истребитель - наиболее сбалансированы тип кораблей.";"Myśliwiec - główny typ statku z lekką i średnią bronią."
+"Bomber - heavy destroyers with mostly heavy attack weapons.";"Bomber - Schwere Zerstörer mit hauptsächlich schweren Waffen.";"Бомбардировщик - тяжелые истребители.";"Bombowiec - ciężki niszczyciel przenoszący potężną broń."
+"Attack Ship - heavy, large and heavily armed ships.";"Angriffsschiff - schwer, groß und schwer bewaffnet.";"Штурмовик - тяжелые корабли с большой огневой мощью.";"Szturmowiec - ciężki, duży i potężnie uzbrojony statek."
+"A set of systems is installed on the ship you operate. All systems";"Etliche von Systeme sind auf deinem Schiff installiert. Alle";"В управляемом вами корабле установлен набор систем.";"Na statku, którym operujesz jest zamontowany zestaw systemów."
+"are connected with each other and with ship weapons in one way or";"Systeme sind miteinander und mit den Waffensystemen und anderen";"Все системы связаны между собой и вооружением";"Wszystkie są wzajemnie powiązane ze sobą i z bronią statku w ten"
+"another and play important role in the game.";"Funktionen verbunden und spielen eine Rolle im Spiel.";"корабля, и играют важную роль в процессе игры.";"czy inny sposób odgrywając ważną rolę w grze."
+"You should carefully take into account the peculiarities of each";"Achte auf die spezifischen Eigenheiten jedes einzelnen Systems";"Следует внимательно учитывать особенности каждой системы";"Należy starannie rozważyć właściwości każdego systemu"
+"system and match their characteristics to each other to get";"und stimme die Systeme aufeinander ab, um ein gut ausgewo-";"и согласовывать их между собой, чтобы получить корабль";"i dopasować wzajemnie ich cechy by uzyskać dobrze"
+"a well balanced warship that can complete combat tasks.";"genes Schiff zu haben, mit dem du im Kampf bestehen kannst.";"способный выполнять боевую задачу.";"wyważony statek wojenny zdolny wypełniać zadania bojowe."
+"Engine - ship engine system. Pay attention to how this system consumes";"Antrieb - Schiffsantrieb. Achte auf die Energieaufnahme";"Реактор - источник энергии. Обратите внимание на две";"Silnik - silnik statku. Uważaj na sposób w jaki ten system zużywa"
+"energy. Otherwise you run the risk of being unable to move.";"Andernfalls könntest du ein bewegungsloses Schiff haben.";"основные характеристики - емкость и перезарядка.";"energię. W przeciwnym razie ryzykujesz niezdolność statku do ruchu."
+"Power - ship energy source. Pay attention to the main two characte-";"Energie - Schiffsenergiequelle. Achte auf die zwei wichtigen ";"О.К.Н. - Оптический Компьютер Наведения. Данная система";"Moc - źródło zasilania. Zwróć uwagę na dwie główne cechy tego"
+"ristics of this system - Recharge Rate and Capacity.";"Eigenschaften dieses Systems - Aufladungsrate und Kapazität.";"отвечает за оптическое наведение на цель.";"systemu - Moc Ładowania oraz Pojemność."
+"O.T.C. - Optical Target Computer. As you can see from its name,";"O.T.C. - Optischer Ziel Computer, dieses System ist für die";"Наведение - Система наведения орудия на цель. От нее";"O.K.C. - Optyczny Komputer Celowniczy. Jak się domyślasz po jego"
+"this system is responsible for optical targeting.";"optische Zielverfolgung zuständig.";"зависит скорость поворота и точность выстрела.";"nazwie, system ten jest odpowiedzialny za namierzanie optyczne."
+"Targeting - Weapon targeting system. It depends on this system how";"Zielerfassung - Waffem Zielsystem. Von diesem System hängt es ab,";"Нано Роботы - будут постоянно следить за состоянием";"Namierzanie - System kierowania ogniem. Zależy od niego jak szybko"
+"fast a weapon will aim and how accurate the shot will be.";"wie lange die Waffe zum Zielerfassen benötigt und wie genau";"вашего корабля и ремонтировать его.";"broń zostanie wycelowana i jak dokładny będzie strzał."
+"Advanced - The most advanced, but yet untested systems for";"der Schuss ist. Fortgeschritten - Die am höchsten entwickelten";"А-Б Слой - специальная броня, позволяющая уменьшить";"Zaawansowany - Najbardziej zaawansowany, ale jeszcze niesprawdzony"
+"enhancing ship invulnerability.";"Systeme, allerdings ungetestet, für höhere Ansprüche.";"механические и ослабить ионные воздействия.";"system wzmacniający niewrażliwość statku."
+"You can use this section to buy, sell and set up the weapons on";"In dieser Abteilung kannst du Waffen für dein Schiff kaufen und";"В данном разделе вы можете покупать, продавать и";"Możesz używać tej sekcji by nabywać, sprzedawać i montować broń"
+"your ship. To buy a weapon, just drag its icon from Weapon Stock";"verkaufen. Um eine Waffe zu kaufen, ziehe das Abbild der Waffe";"настраивать оружие корабля. Для покупки оружия, просто";"na statku. By kupić broń przeciągnij jej ikonę z Zasobu Broni"
+"to a weapon slot on your ship. Note that each weapon has its";"über einen Waffenschacht. Beachte, das eine Waffe nur in einen";"перетяните иконку оружия из Склада Оружия на слот оружия";"do slotu broni twego statku. Każda broń ma swój własny poziom"
+"own level (from 1 to 5), you should see that the slot level is";"Schacht passt, wenn der Level kleiner oder genauso groß wie der ";"корабля. Обратите внимание, каждое оружие обладает";"(od 1 do 5), zwróć uwagę czy poziom slotu nie jest niższy"
+"not less than the weapon level. To sell a weapon, perform";"Schachtlevel ist (Level 1-5). Um eine Waffe zu verkaufen, ziehe";"своим уровнем (от 1 до 5), следует учитывать, чтобы уровень";"niż poziom broni. Aby sprzedać broń wykonaj odwrotne"
+"the reverse operation.";"die Waffe einfach aus den Schacht heraus auf die linke Seite.";"слота был не меньше уровня оружия.";"do poprzedniego działanie."
+"The weapon is set up and recharged with the Setup button";"Die Waffe wird konfiguriert und aufgeladen über den";"Чтобы продать оружие, выполните обратную манипуляцию.";"Broń można modyfikować i załadować przyciskiem Opcje z prawej"
+"in the right part of the weapon slot panel.";"Einstellknopf im rechten Teil der Waffenschachttafel.";"Для настройки оружия, нажмите кнопку Опции.";"strony panelu slotu broni."
+"Main types of weapons by their projectiles:";"Die Haupttypen der Waffen nach Projektilen:";"Основные типы оружия по типу снаряда:";"Główne typy broni ze względu na pociski:"
+"Projectile - small projectiles based on billets or energy beams.";"Projektile - kleine Geschosse basierend auf Kugeln oder Ener-";"Снаряд - основанием является болванка или энергетический";"Pocisk - małe pociski bazowane na kulach lub promieniach energii."
+"It is the main and most widespread weapon in the game.";"giestrahlen. Das ist die am meisten verbreitete Waffe.";"пучок. Это наиболее распространенное оружие в игре.";"To główna i najbardziej rozpowszechniona broń w grze."
+"Self-propelled projectile - missiles, torpedoes and nuclear bombs.";"Angetriebene Projektile - Raketen, Torpedos und Atombomben.";"Реактивные - ракеты, торпеды и ядерные бомбы. К недостаткам";"Pociski rakietowe - rakiety, torpedy i bomby nuklearne."
+"The disadvantages of these weapons include the low speed";"Der Nachteil dieser Waffengattung ist die geringe Fluggesch-";"данного оружия можно отнести низкую скорость полета";"Wadą tych broni jest mała prędkość pocisku i możliwość"
+"of the projectile and the possibility of bring it down.";"windigkeit der Projektile.";"снаряда, а так же возможность уничтожения снаряда.";"zestrzelenia."
+"Beam - Lasers and Masers. Short-range highly energy-";"Strahl - Laser und Maser. Kurzstrecke und Hohe Energie-";"Лучевое - Лазеры и Мазеры. Не дальнобойное оружие, с";"Promienie - Lasery i Masery. Bronie krótkiego zasięgu"
+"consuming weapons.";"verbrauchende Waffen.";"высокими требованиями по энергообеспечению.";"pochłaniające wielkie ilości energii."
+"GAME KEYBOARD SHORTCUTS";"SPIEL FUNKTIONSTASTENBELEGUNG";"ГОРЯЧИЕ КЛАВИШИ ИГРЫ";"SKRÓTY KLAWISZOWE GRY"
+"F2 - toggle show/hide game FPS counter.";"F2 - FPS Zähler An/Aus.";"F2 - вкл/выкл отображения FPS.";"F2 - pokaż/ukryj licznik FPS."
+"Note: it will reduce visual effects. Use it, if you have old hardware";"Hinweis: Reduziert die Optischen Effekte. Benutze das, wenn nur alte";"Примечание: может быть полезно при настройке";"Uwaga: to zredukuje efekty wizualne. Użyj jeśli masz stary sprzęt by"
+"to increase game FPS.";"Hardware vorhanden ist,um die FPS zu erhöhen.";"оптимального соотношения качество/быстродействие.";"zwiększyć ilość FPS."
+"F5 - decrease game speed.";"F5 - Verringere Spielgeschwindigkeit. ";"F5 - уменьшить скорость игры.";"F5 - zmniejsz prędkość gry."
+"F6 - reset game speed to normal.";"F6 - Normalisiere Spielgeschwindigkeit.";"F6 - сбросить скорость игры.";"F6 - zwykła prędkość gry."
+"F7 - increase game speed.";"F7 - Erhöhe Spielgeschwindigkeit.";"F7 - увеличить скорость игры.";"F7 - zwiększ prędkość gry."
+"Note: do not increase game speed, if you have low FPS.";"Hinweis: Wenn FPS zu gering, erhöhe nicht die Spielgeschwindigkeit.";"Примечание: не увеличивайте скорость, если FPS низкий.";"Uwaga: nie zwiększaj prędkości gry jeśli masz niski FPS."
+"F8 - change weapon panels view.";"F8 - Die Ansicht der Waffentafeln verändern.";"F8 - изменить вид панелей оружия.";"F8 - zmień widok paneli broni."
+"F9 - change Primary weapon group fire mode.";"F9 - Feuermodus der Primärwaffen wechseln.";"F9 - изменить тип стрельбы Первичной группы.";"F9 - zmień tryb strzału Głównej grupy broni."
+"F10 - change Secondary weapon group fire mode.";"F10 - Feuermodus der Sekundärwaffen wechseln.";"F10 - изменить тип стрельбы Вторичной группы.";"F10 - zmień tryb strzału Specjalnej grupy broni."
+"F12 - capture screenshot. (File will be saved on your Desktop.)";"F12 - Bildschirmfoto. (Das File liegt auf deinem Desktop.)";"F12 - скриншот. (Файл будет сохранен на рабочем столе.)";"F12 - przechwyć obraz. (Plik zostanie zapisany na Pulpicie.)"
+"Esc - show/hide game menu. (Pause.)";"Esc - Spielmenü. (Pause.)";"Esc - показать/скрыть меню игры. (Пауза.)";"Esc - pokaż/ukryj menu gry. (Pauza.)"
+"Note: all changes will be saved in the game configuration file.";"Hinweis: Alle Änderungen werden gespeichert.";"Примечание: все измененные настройки будут сохранены.";"Uwaga: wszystkie zmiany zostaną zapisane w pliku konfiguracyjnym gry."
+"Warning! Low energy recharge rate!";"Warnung! Geringe Energie Wiederaufladungsrate!";"Внимание! Низкий уровень перезарядки!";"Ostrzeżenie! Niska moc ładowania!"
+"Could be problems with";"Das könnte Probleme mit den";"Возможны проблемы с работой";"Mogą wystąpić problemy"
+"systems function and/or weapons recharge!";"Systemfunktionen oder der Waffenfeuerrate geben!";"внутренних систем корабля и оружия!";"z działaniem systemów i/lub prowadzeniem ognia!"
+"You have already completed this mission. Your previous best";"Du hast diese Mission bereits geschafft. Dein bisheriges";"Вы уже прошли эту миссию. Ваш предыдущий лучший";"Ta misja jest już ukończona. Twój poprzedni najlepszy wynik"
+"result is %i points of experience.";"bestes Resultat ist  %i Erfahrungspunkte.";"результат составляет %i очков опыта.";"to %i punktów doświadczenia."
+"You can replay this mission as many times as you like, but you";"Du kannst diese Mission so oft wiederholen, wie du magst,";"Вы можете переиграть эту миссию сколь угодно много раз,";"Możesz powtórzyć tę misję tyle razy ile chcesz, ale zważ, iż"
+"should take into account that only the best result you";"aber du solltest bedenken, das nur das beste Resultat von";"но не забывайте, что только лучший результат будет";"jedynie najlepszy osiągnięty przez ciebie w tej misji rezultat"
+"achieve in this mission will be used to calculate the total";"dir in die Messung der Gesamterfahrungspunkte eingeht.";"зафиксирован и будет учитываться при подсчете общего";"zostanie użyty do obliczenie całkowitej liczby punktów"
+"number of experience points.";" ";"количества очков опыта.";"doświadczenia."
+"Note that each time you complete the mission again,";"Beachte, das jedes Mal, wenn du diese Mission erneut erfolgreich";"Примечание: каждый раз прохождения миссии снова,";"Za każdym razem kiedy ukończysz tę misję ponownie"
+"the amount of money you get when you destroy the enemy";"beendet hast, die Geldmenge, die du für das abschiessen der Feinde";"количество денег получаемое вами при уничтожении";"ilość pieniędzy otrzymana za zniszczenie wrogów w tej"
+"in this mission is reduced two times.";"erhälst, um die Hälfte reduziert wird.";"противника будет сокращаться в два раза.";"misji jest redukowana dwukrotnie."
+"Shortcut: F2 - toggle show/hide game FPS counter.";"Shortcut: F2 - FPS Zähler An/Aus.";"Клавиши: F2 - вкл/выкл отображения FPS.";"Skrót: F2 - pokaż/ukryj licznik FPS."
+"Shortcuts: F5 / F6 / F7 - decrease / reset / increase game speed.";"Shortcuts: F5 / F6 / F7 - verringere / normalisiere / erhöhe Spielgeschwindigkeit.";"Клавиши: F5 / F6 / F7 - уменьшить / сбросить / увеличить скорость игры.";"Skróty: F5 / F6 / F7 - zmniejsz / zresetuj / zwiększ prędkość gry."
+"Shortcut: F8 - change weapon panels view.";"Shortcut: F8 - Ansicht der Waffentafeln verändern.";"Клавиши: F8 - изменить вид панелей оружия.";"Skrót: F8 - zmień widok paneli broni."
+"Shortcuts: F9 / F10 - change Primary / Secondary weapon group fire mode.";"Shortcuts: F9 / F10 - Feuermodus der Primär /Sekundär Waffen verändern.";"Клавиши: F9 / F10 - изменить тип стрельбы для Первичного / Вторичного оружия.";"Skróty: F9 / F10 - zmień tryb strzału Głównej / Specjalnej grupy broni."
+"Shortcut: F12 - capture screenshot. (File will be saved on your Desktop.)";"Shortcut: F12 - Bildschirmfoto. (Foto landet auf dem Desktop.)";"Клавиши: F12 - скриншот. (Файл будет сохранен на рабочем столе.)";"Skrót: F12 - przechwyć obraz. (Plik zostanie zapisany na Pulpicie.)"
+"Shortcut: Esc - show/hide game menu. (Pause.)";"Shortcut: Esc - Spielmenü An/Aus. (Pause.)";"Клавиши: Esc - показать / скрыть меню игры. (Пауза.)";"Skrót: Esc - pokaż/ukryj menu gry. (Pauza.)"
+"Custom Weapon Angle is use-";"Waffenwinkel ist nur mit";"Угол поворота возможно";"Zmiana Kąta Broni"
+"ful with optical computer";"optischem Computersystem";"использовать только с";"wyłącznie z optycznym"
+"system Neo or Supra only.";"Neo oder Supra nutzbar.";"В.О.К.Н Нео и Супра.";"komputerem Neo lub Supra."
+"AstroMenace Donation";"AstroMenace Geldspende";"Пожертвования для игры AstroMenace";"AstroMenace Dotacja"
+"AstroMenace is Open Source, you can support this game";"AstroMenace ist Open Source, aber Sie können durch eine";"Игра AstroMenace - проект с открытым исходным кодом (Open";"AstroMenace jest wolnym oprogramowaniem, możesz"
+"by donation.";"Geldspende die Entwicklung unterstützen.";"Source), вы можете поддержать разработку игры.";"wesprzeć tą grę dotując ją."
+"Available donation methods: Credit and Debit Cards, PayPal,";"Verfügbare Spendenmethoden: Kreditkarte, PayPal, WebMoney,";"Поддерживаемые способы: Кредитные и дебетовые карты,";"Dostępne metody dotowania: Karty Kredytowe i Debetowe, PayPal,"
+"Direct Debit, Electronic Checks / ACH, Real Time Bank Transfers,";"Internationale Überweisung, Eurochecks, Geldüberweisung,";"WebMoney, PayPal, Банковский перевод, Денежный перевод,";"Polecenie Zapłaty, Elektroniczne Czeki / ACH, Ekspresowe Przelewy,"
+"WebMoney, Local Bank Transfers, Wire Transfers, Purchase Orders.";"Überweisung, Post, Skrill (Moneybookers). ";"Skrill (Moneybookers).";"WebMoney, Zwykłe Przelewy Bankowe, Przelewy, Transakcje Zakupu."
+"Thank you everybody for showing your support";"Vielen Dank an Alle für die Unterstützung und";"Спасибо всем за поддержку и помощь в развитии";"Dziękujemy wszystkim za okazane wsparcie"
+"and furthering AstroMenace!";"Förderung von AstroMenace!";"игры AstroMenace!";"i promowanie AstroMenace!"
+"PROJECT LEADER, PROGRAMMING";"PROJECT LEADER, PROGRAMMING";"ЛИДЕР ПРОЕКТА, ПРОГРАММИРОВАНИЕ";"LIDER PROJEKTU, PROGRAMOWANIE"
+"Mikhail Kurinnoi";"Mikhail Kurinnoi";"Михаил Куринной";"Mikhail Kurinnoi"
+"2D ARTWORK";"2D ARTWORK";"ГРАФИКА";"GRAFIKA 2D"
+"Tatiana Savitskaya";"Tatiana Savitskaya";"Татьяна Савицкая";"Tatiana Savitskaya"
+"3D MODELS";"3D MODELS";"3Д МОДЕЛИ";"MODELE 3D"
+"Max Shelekhov, 3drt.com";"Max Shelekhov, 3drt.com";"Макс Шелехов, 3drt.com";"Max Shelekhov, 3drt.com"
+"Oleg Linkov";"Oleg Linkov";"Олег Линьков";"Oleg Linkov"
+"Egor Kurteanu";"Egor Kurteanu";"Egor Kurteanu";"Egor Kurteanu"
+"PLANETARY TEXTURES";"PLANETARY TEXTURES";"ТЕКСТУРЫ ПЛАНЕТ";"TEKSTURY PLANET"
+"Alex (Esgaroth) Reuter";"Alex (Esgaroth) Reuter";"Alex (Esgaroth) Reuter";"Alex (Esgaroth) Reuter"
+"Robert Stein";"Robert Stein";"Robert Stein";"Robert Stein"
+"MUSIC";"MUSIC";"МУЗЫКА";"MUZYKA"
+"Alexander Matchugovsky";"Alexander Matchugovsky";"Александр Мачуговский";"Alexander Matchugovsky"
+"SOUND EFFECTS";"SOUND EFFECTS";"ЗВУКОВЫЕ ЭФФЕКТЫ";"EFEKTY DŹWIĘKOWE"
+"Mikhail Sirotkin";"Mikhail Sirotkin";"Михаил Сироткин";"Mikhail Sirotkin"
+"Alexander Vassilyevsky";"Alexander Vassilyevsky";"Александр Васильевский";"Alexander Vassilyevsky"
+"VOICE";"VOICE";"ГОЛОС";"GŁOS"
+"Elena Zavalishina (en, ru)";"Elena Zavalishina (en, ru)";"Елена Завалишина (en, ru)";"Elena Zavalishina (en, ru)"
+"Petra Schulten (de)";"Petra Schulten (de)";"Petra Schulten (de)";"Petra Schulten (de)"
+"TRANSLATORS";"TRANSLATORS";"ПЕРЕВОД";"TŁUMACZE"
+"Bernd Dau (de)";"Bernd Dau (de)";"Bernd Dau (de)";"Bernd Dau (de)"
+"Mikhail Kurinnoi (ru)";"Mikhail Kurinnoi (ru)";"Михаил Куринной (ru)";"Mikhail Kurinnoi (ru)"
+"Jacek Fiedorowicz (pl)";"Jacek Fiedorowicz (pl)";"Jacek Fiedorowicz (pl)";"Jacek Fiedorowicz (pl)"
+"TESTERS";"TESTERS";"ТЕСТЕРЫ";"TESTERZY"
+"Dmitriy Schigolev";"Dmitriy Schigolev";"Дмитрий Щеголев";"Dmitriy Schigolev"
+"Ivan Bobrov";"Ivan Bobrov";"Иван Бобров";"Ivan Bobrov"
+"Vadim Sosenko";"Vadim Sosenko";"Вадим Сосенко";"Vadim Sosenko"
+"Dmitriy Tatarinov";"Dmitriy Tatarinov";"Дмитрий Татаринов";"Dmitriy Tatarinov"
+"Alexey Mosesov";"Alexey Mosesov";"Алексей Мосесов";"Alexey Mosesov"
+"Bernd Dau";"Bernd Dau";"Bernd Dau";"Bernd Dau"
+"Ryan Foster";"Ryan Foster";"Ryan Foster";"Ryan Foster"
+"Jason Crowell";"Jason Crowell";"Jason Crowell";"Jason Crowell"
+"SPECIAL THANKS TO";"SPECIAL THANKS TO";"ОСОБЫЕ БЛАГОДАРНОСТИ";"PODZIĘKOWANIA"
+"Pavel Voylov";"Pavel Voylov";"Павел Войлов";"Pavel Voylov"
+"Richard Benson";"Richard Benson";"Richard Benson";"Richard Benson"
+"Alexey Madalinskiy";"Alexey Madalinskiy";"Алексей Мадалинский";"Alexey Madalinskiy"
+"Olga Zhuravleva";"Olga Zhuravleva";"Ольга Журавлева";"Olga Zhuravleva"
+"Nick O`Connell";"Nick O`Connell";"Nick O`Connell";"Nick O`Connell"
+"Mikhail Storcheous";"Mikhail Storcheous";"Михаил Сторчеус";"Mikhail Storcheous"
+"Boris Pek";"Boris Pek";"Boris Pek";"Boris Pek"
+"build";"build";"сборка";"build"
+"fps";"fps";"fps";"fps"
+"Version";"Version";"Версия";"Wersja"
+"LOADING";"LADE";"ЗАГРУЗКА";"WCZYTYWANIE"
+"lang/en/game/mission.tga";"lang/de/game/mission.tga";"lang/ru/game/mission.tga";"lang/en/game/mission.tga"
+"lang/en/game/missionfailed.tga";"lang/de/game/missionfailed.tga";"lang/ru/game/missionfailed.tga";"lang/en/game/missionfailed.tga"
+"lang/en/game/pause.tga";"lang/de/game/pause.tga";"lang/ru/game/pause.tga";"lang/en/game/pause.tga"
+"lang/en/menu/button_weaponry_in.tga";"lang/de/menu/button_weaponry_in.tga";"lang/ru/menu/button_weaponry_in.tga";"lang/pl/menu/button_weaponry_in.tga"
+"lang/en/menu/button_weaponry_out.tga";"lang/de/menu/button_weaponry_out.tga";"lang/ru/menu/button_weaponry_out.tga";"lang/pl/menu/button_weaponry_out.tga"
+"lang/en/voice/Attention.wav";"lang/de/voice/Attention.wav";"lang/ru/voice/Attention.wav";"lang/en/voice/Attention.wav"
+"lang/en/voice/CeaseFire.wav";"lang/de/voice/CeaseFire.wav";"lang/ru/voice/CeaseFire.wav";"lang/en/voice/CeaseFire.wav"
+"lang/en/voice/EngineMalfunction.wav";"lang/de/voice/EngineMalfunction.wav";"lang/ru/voice/EngineMalfunction.wav";"lang/en/voice/EngineMalfunction.wav"
+"lang/en/voice/MissileDetected.wav";"lang/de/voice/MissileDetected.wav";"lang/ru/voice/MissileDetected.wav";"lang/en/voice/MissileDetected.wav"
+"lang/en/voice/PowerSupplyReestablished.wav";"lang/de/voice/PowerSupplyReestablished.wav";"lang/ru/voice/PowerSupplyReestablished.wav";"lang/en/voice/PowerSupplyReestablished.wav"
+"lang/en/voice/PrepareForAction.wav";"lang/de/voice/PrepareForAction.wav";"lang/ru/voice/PrepareForAction.wav";"lang/en/voice/PrepareForAction.wav"
+"lang/en/voice/ReactorMalfunction.wav";"lang/de/voice/ReactorMalfunction.wav";"lang/ru/voice/ReactorMalfunction.wav";"lang/en/voice/ReactorMalfunction.wav"
+"lang/en/voice/Warning.wav";"lang/de/voice/Warning.wav";"lang/ru/voice/Warning.wav";"lang/en/voice/Warning.wav"
+"lang/en/voice/WeaponDamaged.wav";"lang/de/voice/WeaponDamaged.wav";"lang/ru/voice/WeaponDamaged.wav";"lang/en/voice/WeaponDamaged.wav"
+"lang/en/voice/WeaponDestroyed.wav";"lang/de/voice/WeaponDestroyed.wav";"lang/ru/voice/WeaponDestroyed.wav";"lang/en/voice/WeaponDestroyed.wav"
+"lang/en/voice/WeaponMalfunction.wav";"lang/de/voice/WeaponMalfunction.wav";"lang/ru/voice/WeaponMalfunction.wav";"lang/en/voice/WeaponMalfunction.wav"

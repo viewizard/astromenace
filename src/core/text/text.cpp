@@ -113,6 +113,55 @@ static void CreateTextTableUTF32()
 }
 
 /*
+ * Parse each row's block, separated by 1.SymbolSeparator, 2.SymbolEndOfLine, 3.EOF
+ */
+static int GetRowTextBlock(std::string &CurrentTextBlock, uint8_t *Data, unsigned DataSize, unsigned &i,
+			   const char SymbolSeparator, const char SymbolEndOfLine)
+{
+	// skip separator, since this could be not first column
+	if (Data[i] == SymbolSeparator)
+		i++;
+	if (i >= DataSize)
+		return ERR_FILE_IO;
+
+	constexpr char SymbolQuotes{'\"'};
+
+	// check, did we have quotes, since with quotes we have another sequence of reading
+	bool InsideFieldTrigger{Data[i] == SymbolQuotes};
+	if (InsideFieldTrigger)
+		i++;
+	if (i >= DataSize)
+		return ERR_FILE_IO;
+
+		// without quotes we read text till SymbolSeparator or SymbolEndOfLine
+	for (; ((!InsideFieldTrigger && (Data[i] != SymbolSeparator) && (Data[i] != SymbolEndOfLine)) ||
+		// if text braced by quotes, we read till end (second) of quotes
+		(InsideFieldTrigger && (Data[i] != SymbolQuotes))) &&
+	       (i < DataSize); i++) {
+
+		if (InsideFieldTrigger && (Data[i] == SymbolEndOfLine)) {
+			std::cerr << __func__ << "(): " << "file end before end (second) of quotes.";
+			return ERR_FILE_IO;
+		}
+
+		// special case, store '\n' instead of '\'+'n'
+		if (!CurrentTextBlock.empty() &&
+		    (CurrentTextBlock.back() == '\\') &&
+		    (Data[i] == 'n'))
+			CurrentTextBlock.back() = '\n';
+		else
+			CurrentTextBlock += Data[i];
+	}
+
+	if (InsideFieldTrigger && (Data[i] != SymbolQuotes)) {
+		std::cerr << __func__ << "(): " << "text block end before end (second) of quotes.";
+		return ERR_FILE_IO;
+	}
+
+	return 0;
+}
+
+/*
  * Initialization. Load file with translation in .csv format (supported by LibreOffice Calc).
  */
 int vw_InitText(const char *FileName, const char SymbolSeparator, const char SymbolEndOfLine)
@@ -135,31 +184,18 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 	for (unsigned int i = 0; i < tmpFile->Size; i++) {
 		// parse each row
 		for (; (tmpFile->Data[i] != SymbolEndOfLine) && (i < tmpFile->Size); i++) {
-			// parse each row for blocks, separated by 1.SymbolSeparator, 2.SymbolEndOfLine, 3.EOF
-			for (; (tmpFile->Data[i] != SymbolSeparator) &&
-			       (tmpFile->Data[i] != SymbolEndOfLine) &&
-			       (i < tmpFile->Size); i++) {
-				if (NeedBuildCurrentRowCode)
-					// special case, store '\n' instead of '\'+'n'
-					if (!CurrentRowCode.empty() &&
-					    (CurrentRowCode.back() == '\\') &&
-					    (tmpFile->Data[i] == 'n'))
-						CurrentRowCode.back() = '\n';
-					else
-						CurrentRowCode += tmpFile->Data[i];
-				else
-					// special case, store '\n' instead of '\'+'n'
-					if (!TextTable[CurrentColumnNumber][CurrentRowCode].empty() &&
-					    (TextTable[CurrentColumnNumber][CurrentRowCode].back() == '\\') &&
-					    (tmpFile->Data[i] == 'n'))
-						TextTable[CurrentColumnNumber][CurrentRowCode].back() = '\n';
-					else
-						TextTable[CurrentColumnNumber][CurrentRowCode] += tmpFile->Data[i];
+			std::string CurrentRowTextBlock{};
+			if (GetRowTextBlock(CurrentRowTextBlock, tmpFile->Data.get(), tmpFile->Size, i,
+					    SymbolSeparator, SymbolEndOfLine)) {
+				std::cerr << __func__ << "(): " << "file corrupted.";
+				vw_ReleaseText();
+				return ERR_FILE_IO;
 			}
+			if (NeedBuildCurrentRowCode)
+				CurrentRowCode = CurrentRowTextBlock;
 			// we use column 0 with same row code, in order to make code simple and clear
 			// plus, for UTF32 we need a column to store English UTF8 -> UTF32 conversion results
-			if (NeedBuildCurrentRowCode)
-				TextTable[CurrentColumnNumber][CurrentRowCode] = CurrentRowCode;
+			TextTable[CurrentColumnNumber][CurrentRowCode] = CurrentRowTextBlock;
 			// RowCode built, next blocks in this row contain data
 			NeedBuildCurrentRowCode = false;
 			CurrentColumnNumber++;
