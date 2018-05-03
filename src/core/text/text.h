@@ -35,7 +35,8 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 // Set default language.
 void vw_SetTextLanguage(unsigned int Language);
 // Get UTF8 text for particular language.
-const char *vw_GetText(const std::string &ItemID, unsigned int Language = 999999 /*should be greater than loaded languages number*/);
+const char *vw_GetText(const std::string &ItemID,
+		       unsigned int Language = 999999 /*should be greater than loaded languages number*/);
 // Get UTF32 text for particular language.
 const std::u32string &vw_GetTextUTF32(const std::string &ItemID,
 				      unsigned int Language = 999999 /*should be greater than loaded languages number*/);

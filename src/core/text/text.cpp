@@ -153,6 +153,8 @@ static int GetRowTextBlock(std::string &CurrentTextBlock, uint8_t *Data, unsigne
 			CurrentTextBlock += Data[i];
 	}
 
+	if (i >= DataSize)
+		return ERR_FILE_IO;
 	if (InsideFieldTrigger && (Data[i] != SymbolQuotes)) {
 		std::cerr << __func__ << "(): " << "text block end before end (second) of quotes.";
 		return ERR_FILE_IO;
@@ -184,6 +186,10 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 	for (unsigned int i = 0; i < tmpFile->Size; i++) {
 		// parse each row
 		for (; (tmpFile->Data[i] != SymbolEndOfLine) && (i < tmpFile->Size); i++) {
+			// read text block in line, .csv line looks like:
+			// text_block;text_block;...;text_blockSymbolEndOfLine
+			// if text braced by quotes:
+			// "text_block";"text_block";...;"text_block"SymbolEndOfLine
 			std::string CurrentRowTextBlock{};
 			if (GetRowTextBlock(CurrentRowTextBlock, tmpFile->Data.get(), tmpFile->Size, i,
 					    SymbolSeparator, SymbolEndOfLine)) {
@@ -191,13 +197,14 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 				vw_ReleaseText();
 				return ERR_FILE_IO;
 			}
-			if (NeedBuildCurrentRowCode)
+			if (NeedBuildCurrentRowCode) {
 				CurrentRowCode = CurrentRowTextBlock;
+				// RowCode built, next blocks in this row contain data
+				NeedBuildCurrentRowCode = false;
+			}
 			// we use column 0 with same row code, in order to make code simple and clear
 			// plus, for UTF32 we need a column to store English UTF8 -> UTF32 conversion results
 			TextTable[CurrentColumnNumber][CurrentRowCode] = CurrentRowTextBlock;
-			// RowCode built, next blocks in this row contain data
-			NeedBuildCurrentRowCode = false;
 			CurrentColumnNumber++;
 			// detect and skip duplicate line (if we already have this element created => this is duplicate)
 			if (isElementPresentInTable(TextTable, CurrentColumnNumber, CurrentRowCode)) {
