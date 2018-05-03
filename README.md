@@ -2,6 +2,7 @@
 
 * [Installation (Windows, macOS, Linux)](https://github.com/viewizard/astromenace#installation)
 * [Build (macOS, Linux)](https://github.com/viewizard/astromenace#build)
+* [Translators Wanted](https://github.com/viewizard/astromenace#translators-wanted)
 * [Work In Progress](https://github.com/viewizard/astromenace#work-in-progress)
 * [Donate to Support Development](https://github.com/viewizard/astromenace#donate-to-support-development)  [![bitcoin](https://img.shields.io/badge/donate-bitcoin-yellow.svg)](https://github.com/viewizard/astromenace#bitcoin-14kdalnntroffuur2tzmudup8ek3ps2uq6)  [![paypal](https://img.shields.io/badge/donate-paypal-009cde.svg)](https://github.com/viewizard/astromenace#paypal-httpswwwpaypalmeviewizard)  [![patreon](https://img.shields.io/badge/donate-patreon-f96854.svg)](https://github.com/viewizard/astromenace#patreon-httpswwwpatreoncomviewizard)
 ##
@@ -117,6 +118,13 @@ $ make
 ```bash
 $ ~/astromenace/astromenace
 ```
+
+## Translators Wanted
+Please help us make AstroMenace more friendly and clear for all gamers.
+
+AstroMenace localization now supported by Crowdin https://crowdin.com/project/astromenace.
+
+Don't hesitate to create [issue](https://github.com/viewizard/astromenace/issues), if you have questions or you need help.
 
 ## Work In Progress
 Yes, AstroMenace was first released in 2007, but work still in progress. For open source game, no need to change game's title in order to evolve.
