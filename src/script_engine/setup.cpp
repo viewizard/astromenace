@@ -41,8 +41,8 @@ void InitSetup()
 	// устанавливаем номер билда
 	Setup.BuildVersion = GAME_BUILD;
 
-	Setup.MenuLanguage = 1; // en by default
-	Setup.VoiceLanguage = 1; // en by default
+	Setup.MenuLanguage = 0; // en by default
+	Setup.VoiceLanguage = 0; // en by default
 	Setup.FontNumber = 0;
 
 	Setup.Width = 1228;
@@ -366,9 +366,9 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MenuLanguage")) {
 		std::string tmpMenuLanguage{};
 		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MenuLanguage"), "value", tmpMenuLanguage)) {
-			for (unsigned int i=0; i<vw_GetLanguageListCount(); i++) {
-				if (tmpMenuLanguage == vw_GetText("en", i + 1/*first column contain index, not data*/)) {
-					Setup.MenuLanguage = i+1;
+			for (unsigned int i = 0; i < vw_GetLanguageListCount(); i++) {
+				if (tmpMenuLanguage == vw_GetText("en", i)) {
+					Setup.MenuLanguage = i;
 					break;
 				}
 			}
@@ -377,9 +377,9 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "VoiceLanguage")) {
 		std::string tmpVoiceLanguage{};
 		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "VoiceLanguage"), "value", tmpVoiceLanguage)) {
-			for (unsigned int i=0; i<vw_GetLanguageListCount(); i++) {
-				if (tmpVoiceLanguage == vw_GetText("en", i + 1/*first column contain index, not data*/)) {
-					Setup.VoiceLanguage = i+1;
+			for (unsigned int i = 0; i < vw_GetLanguageListCount(); i++) {
+				if (tmpVoiceLanguage == vw_GetText("en", i)) {
+					Setup.VoiceLanguage = i;
 					break;
 				}
 			}

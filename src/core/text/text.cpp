@@ -39,7 +39,7 @@ namespace {
 std::unordered_map<unsigned int, std::unordered_map<std::string, std::string>> TextTable;
 // Map of Maps with all sorted language data in utf32.
 std::unordered_map<unsigned int, std::unordered_map<std::string, std::u32string>> TextTableUTF32;
-// Current default language.
+// Current default language. English, by default.
 unsigned int CurrentLanguage{0};
 // Error text for UTF32, if we can't use TextTableUTF32 by some reason
 const std::u32string TextTableUTF32Error{ConvertUTF8.from_bytes("Error")};
@@ -82,10 +82,10 @@ void vw_SetTextLanguage(unsigned int Language)
  * Get available languages count.
  */
 unsigned int vw_GetLanguageListCount() {
-	if (TextTable.empty() || (TextTable.size() < 1))
-		return 0;
+	if (TextTable.empty())
+		return 1; // English only
 
-	return static_cast<unsigned>(TextTable.size()) - 1 /*first column contain index, not data, don't count it*/;
+	return static_cast<unsigned>(TextTable.size());
 }
 
 /*
@@ -95,7 +95,7 @@ void vw_ReleaseText()
 {
 	TextTable.clear();
 	TextTableUTF32.clear();
-	CurrentLanguage = 0;
+	CurrentLanguage = 0; // English
 }
 
 /*
@@ -156,6 +156,10 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 					else
 						TextTable[CurrentColumnNumber][CurrentRowCode] += tmpFile->Data[i];
 			}
+			// we use column 0 with same row code, in order to make code simple and clear
+			// plus, for UTF32 we need a column to store English UTF8 -> UTF32 conversion results
+			if (NeedBuildCurrentRowCode)
+				TextTable[CurrentColumnNumber][CurrentRowCode] = CurrentRowCode;
 			// RowCode built, next blocks in this row contain data
 			NeedBuildCurrentRowCode = false;
 			CurrentColumnNumber++;
@@ -181,7 +185,7 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 	CreateTextTableUTF32();
 
 	std::cout << "Detected " << vw_GetLanguageListCount() << " languages:";
-	for (unsigned int i = 1; i < TextTable.size(); i++) {
+	for (unsigned int i = 0; i < TextTable.size(); i++) {
 		std::cout << " " << vw_GetText("en", i);
 	}
 	std::cout << "\n\n";
@@ -193,7 +197,7 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
  */
 const char *vw_GetText(const std::string &ItemID, unsigned int Language)
 {
-	if (ItemID.empty() || TextTable.empty())
+	if (ItemID.empty())
 		return nullptr;
 
 	if (Language > vw_GetLanguageListCount())
@@ -205,7 +209,9 @@ const char *vw_GetText(const std::string &ItemID, unsigned int Language)
 
 	// ItemID should be added to TextTable for key and all languages, and
 	// we should return pointer to this new entry, but not ItemID
-	for (unsigned int i = 0; i < TextTable.size(); i++) {
+	// make sure, vw_GetLanguageListCount() is called instead of size(),
+	// since we could have an empty table (languages was not loaded)
+	for (unsigned int i = 0; i < vw_GetLanguageListCount(); i++) {
 		TextTable[i][ItemID] = ItemID;
 	}
 
@@ -217,9 +223,9 @@ const char *vw_GetText(const std::string &ItemID, unsigned int Language)
 /*
  * Get UTF32 text for particular language.
  */
-const std::u32string &vw_GetTextUTF32(const char *ItemID, unsigned int Language)
+const std::u32string &vw_GetTextUTF32(const std::string &ItemID, unsigned int Language)
 {
-	if (!ItemID || TextTableUTF32.empty())
+	if (ItemID.empty())
 		return TextTableUTF32Error;
 
 	if (Language > vw_GetLanguageListCount())
@@ -232,7 +238,9 @@ const std::u32string &vw_GetTextUTF32(const char *ItemID, unsigned int Language)
 	// ItemID should be converted to UTF32 and added to TextTableUTF32 for all languages,
 	// and we should return pointer to this new entry, but not TextTableUTF32Error
 	std::u32string tmpTextUTF32 = ConvertUTF8.from_bytes(ItemID);
-	for (unsigned int i = 0; i < TextTableUTF32.size(); i++) {
+	// make sure, vw_GetLanguageListCount() is called instead of size(),
+	// since we could have an empty table (languages was not loaded)
+	for (unsigned int i = 0; i < vw_GetLanguageListCount(); i++) {
 		TextTableUTF32[i][ItemID] = tmpTextUTF32;
 	}
 
@@ -258,12 +266,19 @@ std::unordered_set<char32_t> &vw_FindCharsSetForLanguage()
 //      We also need all characters for languages names (second row in the TextTableUTF32)
 //      and copyright symbol.
 
-	if (TextTableUTF32.empty() || !CurrentLanguage)
-		return CharsSetForLanguage;
-
-	for (const auto &tmpWords : TextTableUTF32[CurrentLanguage]) {
-		for (const auto &UTF32 : tmpWords.second) {
+	if (TextTableUTF32.empty()) {
+		// default symbols for English, since we don't have text loaded
+		std::string tmpSymbols{"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+				       " .,!?-+\():;%&`'*#$=[]@^{}_~><–—«»“”|/©"};
+		std::u32string tmpSymbolsUTF32 = ConvertUTF8.from_bytes(tmpSymbols);
+		for (const auto &UTF32 : tmpSymbolsUTF32) {
 			CharsSetForLanguage.insert(UTF32);
+		}
+	} else {
+		for (const auto &tmpWords : TextTableUTF32[CurrentLanguage]) {
+			for (const auto &UTF32 : tmpWords.second) {
+				CharsSetForLanguage.insert(UTF32);
+			}
 		}
 	}
 	// unconditional rehash, at this line we have not rehashed set

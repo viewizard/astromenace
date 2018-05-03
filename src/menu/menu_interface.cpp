@@ -57,8 +57,10 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	// выбор языка меню
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Menu Language"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, false)) {
-		Setup.MenuLanguage--;
-		if (Setup.MenuLanguage < 1) Setup.MenuLanguage = vw_GetLanguageListCount();
+		if (Setup.MenuLanguage == 0)
+			Setup.MenuLanguage = vw_GetLanguageListCount() - 1;
+		else
+			Setup.MenuLanguage--;
 
 		vw_SetTextLanguage(Setup.MenuLanguage);
 		// forced to regenerate textures (base texture connected to language-related characters set)
@@ -66,8 +68,10 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false)) {
-		Setup.MenuLanguage++;
-		if (Setup.MenuLanguage > vw_GetLanguageListCount()) Setup.MenuLanguage = 1;
+		if (Setup.MenuLanguage >= (vw_GetLanguageListCount() - 1))
+			Setup.MenuLanguage = 0;
+		else
+			Setup.MenuLanguage++;
 
 		vw_SetTextLanguage(Setup.MenuLanguage);
 		// forced to regenerate textures (base texture connected to language-related characters set)
@@ -87,12 +91,16 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Voice Language"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, false)) {
-		Setup.VoiceLanguage--;
-		if (Setup.VoiceLanguage < 1) Setup.VoiceLanguage = vw_GetLanguageListCount();
+		if (Setup.VoiceLanguage == 0)
+			Setup.VoiceLanguage = vw_GetLanguageListCount() - 1;
+		else
+			Setup.VoiceLanguage--;
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false)) {
-		Setup.VoiceLanguage++;
-		if (Setup.VoiceLanguage > vw_GetLanguageListCount()) Setup.VoiceLanguage = 1;
+		if (Setup.VoiceLanguage >= (vw_GetLanguageListCount() - 1))
+			Setup.VoiceLanguage = 0;
+		else
+			Setup.VoiceLanguage++;
 	}
 
 	Size = vw_FontSize(vw_GetText("English", Setup.VoiceLanguage));

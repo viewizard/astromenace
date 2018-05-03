@@ -390,8 +390,8 @@ int main( int argc, char **argv )
 
 	// загружаем все текстовые данные до инициализации шрифтов
 	if (vw_InitText("lang/text.csv", ';', '\n') != 0) {
-		std::cerr << __func__ << "(): " << "lang/text.csv file not found or corrupted.\n";
-		return 0;
+		std::cout << "lang/text.csv file not found or corrupted.\n";
+		// if file not loaded - it's ok, we will work with English only
 	}
 
 	// работа с файлом данных... передаем базовый режим окна (обязательно после инициализации языков!)

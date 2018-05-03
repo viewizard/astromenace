@@ -30,7 +30,7 @@
 namespace {
 
 const std::string CreditsArray[] {
-	"PROJECT LEADER",
+	"PROJECT LEADER, PROGRAMMING",
 	"Mikhail Kurinnoi",
 	"",
 	"2D ARTWORK",
