@@ -118,31 +118,18 @@ static void CreateTextTableUTF32()
 static int GetRowTextBlock(std::string &CurrentTextBlock, uint8_t *Data, unsigned DataSize, unsigned &i,
 			   const char SymbolSeparator, const char SymbolEndOfLine)
 {
-	// skip separator, since this could be not first column
-	if (Data[i] == SymbolSeparator)
-		i++;
-	if (i >= DataSize)
-		return ERR_FILE_IO;
-
 	constexpr char SymbolQuotes{'\"'};
 
-	// check, did we have quotes, since with quotes we have another sequence of reading
+	// check quotes, since with quotes we have another sequence of reading
 	bool InsideFieldTrigger{Data[i] == SymbolQuotes};
 	if (InsideFieldTrigger)
-		i++;
-	if (i >= DataSize)
-		return ERR_FILE_IO;
+		i++; // skip quotes
 
 		// without quotes we read text till SymbolSeparator or SymbolEndOfLine
 	for (; ((!InsideFieldTrigger && (Data[i] != SymbolSeparator) && (Data[i] != SymbolEndOfLine)) ||
 		// if text braced by quotes, we read till end (second) of quotes
 		(InsideFieldTrigger && (Data[i] != SymbolQuotes))) &&
 	       (i < DataSize); i++) {
-
-		if (InsideFieldTrigger && (Data[i] == SymbolEndOfLine)) {
-			std::cerr << __func__ << "(): " << "file end before end (second) of quotes.";
-			return ERR_FILE_IO;
-		}
 
 		// special case, store '\n' instead of '\'+'n'
 		if (!CurrentTextBlock.empty() &&
@@ -153,11 +140,12 @@ static int GetRowTextBlock(std::string &CurrentTextBlock, uint8_t *Data, unsigne
 			CurrentTextBlock += Data[i];
 	}
 
-	if (i >= DataSize)
-		return ERR_FILE_IO;
-	if (InsideFieldTrigger && (Data[i] != SymbolQuotes)) {
-		std::cerr << __func__ << "(): " << "text block end before end (second) of quotes.";
-		return ERR_FILE_IO;
+	if (InsideFieldTrigger) {
+		if (i >= DataSize) {
+			std::cerr << __func__ << "(): " << "file end before end (second) of quotes.\n";
+			return ERR_FILE_IO;
+		}
+		i++; // skip quotes
 	}
 
 	return 0;
