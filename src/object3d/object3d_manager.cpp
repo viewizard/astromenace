@@ -130,7 +130,7 @@ void DrawAllObject3D(eDrawType DrawType)
 
 
 	// второй слой тайловой анимации "пыли"
-	StarSystemDrawSecondLayer(DrawType);
+	StarSystemDrawThirdLayer(DrawType);
 
 	// эмуляция гаммы, фактически это простой пост эффект, всегда самый последний в прорисовке
 	if( Setup.Brightness != 5 ) {

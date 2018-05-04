@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 // TODO add initialization via XML file, hard coded initialization should be removed
-// TODO remove vw_FindTextureByName() call in main loop
+// TODO remove vw_FindTextureByName() call from main loop
 // TODO move to one 'static' VBO + VAO
 //      no IBO need since we use triangle strip, use range+count for each side (6 textures with 1 VBO)
 //      re-create on init and size changes only + care about release on game restart
@@ -58,7 +58,7 @@ float SkyBoxHalfHeight{100.0f};
 float SkyBoxHalfLength{100.0f};
 
 // vertex array for rendering
-float VertexArray[20]; // 5 * 4 = 4 vertices * (RI_3f_XYZ + RI_2_TEX);
+float VertexArray[20]; // 4 * 5 = 4 vertices * (RI_3f_XYZ + RI_2_TEX);
 unsigned int VertexArrayPosition{0};
 
 } // unnamed namespace

@@ -1112,7 +1112,7 @@ void LoadGameData(eLoading LoadType)
 		xmlDoc.reset();
 
 		StarSystemLayer1Transp(Layer1TranspStart, Layer1TranspEnd);
-		StarSystemLayer2Transp(Layer2TranspStart, Layer2TranspEnd);
+		StarSystemLayer3Transp(Layer2TranspStart, Layer2TranspEnd);
 
 		// считаем сколько там элементов
 		if (StarSystem1)

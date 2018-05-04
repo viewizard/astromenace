@@ -28,12 +28,19 @@
 #ifndef STARSYSTEM_H
 #define STARSYSTEM_H
 
+// Star system initialization.
 void StarSystemInit(int Num, sVECTOR3D SetBaseRotation);
+// Star system initialization by game's part type (menu/game).
 void StarSystemInitByType(eDrawType DrawType);
+// Setup first and second layers transparency.
 void StarSystemLayer1Transp(float Start, float End);
-void StarSystemLayer2Transp(float Start, float End);
+// Setup third layer transparency.
+void StarSystemLayer3Transp(float Start, float End);
+// Draw star system.
 void StarSystemDraw(eDrawType DrawType);
-void StarSystemDrawSecondLayer(eDrawType DrawType);
+// Draw third layer of space dust.
+void StarSystemDrawThirdLayer(eDrawType DrawType);
+// Release star system.
 void StarSystemRelease();
 
 #endif // STARSYSTEM_H
