@@ -25,6 +25,14 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
+// TODO shange to SDL_GetTicks() usage in code from vw_GetTimeThread()
+
+// TODO add list initialization via XML file, hard coded list should be removed
+//      probably, we could combine with integrity check list (that used for gamedata creation)
+//      make sure, that logo and loading images included too
+
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "game.h"
@@ -32,61 +40,42 @@
 #include "gfx/star_system.h"
 #include "gfx/shadow_map.h"
 
-
-
-//------------------------------------------------------------------------------------
-// локальная структура данных загрузки
-//------------------------------------------------------------------------------------
 struct sLoadList {
 	// имя файла
-	char	FileName[MAX_PATH];
+	char FileName[MAX_PATH];
 	// тип файла (0-2д текстура, 1-текстура, 2-VW3D, 3-music, 4-sfx)
-	int	FileType;
-	// вес данного объекта при загрузки (для текстур берем кбайты чистые, т.е. если она в рав формате типа бмп)
-	int	Value;
+	int FileType;
+	// вес данного объекта при загрузке (для текстур берем кб)
+	int Value;
 	// альфа канал, если нужно
-	bool	Alpha;
+	bool Alpha;
 	// цвет альфа канала
-	uint8_t	Red, Green, Blue;
+	uint8_t Red, Green, Blue;
 	// режим создания альфа канала
 	eAlphaCreateMode AlphaMode;
 	// фильтр текстуры
 	eTextureWrapMode TextWrap;
 	eTextureBasicFilter TextFilter;
 	int TextAnisotropy; // 1 - need, 0 - don't need
-	bool	MipMap;
+	bool MipMap;
 	// нужно ли для этой текстуры сжатие
-	bool	NeedCompression;
+	bool NeedCompression;
 	// для 3д моделей, если 1.0f делать структуру с мелкими треугольниками
-	float	TriangleSizeLimit;
+	float TriangleSizeLimit;
 	// для 3д моделей, если надо - делаем тангенты и бинормали
-	bool	NeedTangentAndBinormal;
+	bool NeedTangentAndBinormal;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// данные загрузки шейдеров
-//------------------------------------------------------------------------------------
 std::weak_ptr<cGLSL> GLSLShaderType1{};
 std::weak_ptr<cGLSL> GLSLShaderType2{};
 std::weak_ptr<cGLSL> GLSLShaderType3{};
 
 struct cGLSLLoadList {
-	char Name[MAX_PATH];
-	char VertexShaderFileName[MAX_PATH];
-	char FragmentShaderFileName[MAX_PATH];
+	std::string Name;
+	std::string VertexShaderFileName;
+	std::string FragmentShaderFileName;
 };
-static cGLSLLoadList GLSLLoadList[] = {
+const cGLSLLoadList GLSLLoadList[] = {
 	{"ParticleSystem",		"glsl/particle.vert",		"glsl/particle.frag"},
 	{"PerPixelLight",		"glsl/light.vert",		"glsl/light.frag"},
 	{"PerPixelLight_ShadowMap",	"glsl/light_shadowmap.vert",	"glsl/light_shadowmap.frag"},
@@ -94,15 +83,6 @@ static cGLSLLoadList GLSLLoadList[] = {
 };
 #define GLSLLoadListCount sizeof(GLSLLoadList)/sizeof(GLSLLoadList[0])
 
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// данные загрузки меню
-//------------------------------------------------------------------------------------
 
 // лист загрузки меню
 static sLoadList LoadList[] = {
@@ -233,7 +213,6 @@ static sLoadList LoadList[] = {
 	{"gfx/trail4.tga",	1, 64, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
 	{"gfx/trail5.tga",	1, 64, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
 
-
 // 2д часть
 	{"game/nums.tga",			0, 104, true, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"game/ammo.tga",			0, 2, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
@@ -273,7 +252,6 @@ static sLoadList LoadList[] = {
 	{"models/earthfighter/lnch12.tga",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/earthfighter/lnch34.tga",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/earthfighter/rockets.tga",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// звуки игры (только игры), грузим тут, иначе плохо, когда подгружает во время игры
 	{"sfx/weapon1probl.wav",	4, 20, false, 0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
 	{"sfx/weapon2probl.wav",	4, 20, false, 0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
 	{"sfx/weapon3probl.wav",	4, 20, false, 0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
@@ -355,7 +333,6 @@ static sLoadList LoadList[] = {
 	{"models/earthfighter/torpedo.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
 	{"models/earthfighter/nuke.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
 
-
 // AlienFighter – load alien fighters textures.
 	{"models/alienfighter/al-text04.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/alienfighter/al-illum04.vw2d",	1, 1024, true, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
@@ -377,7 +354,6 @@ static sLoadList LoadList[] = {
 	{"models/alienfighter/al-15.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
 	{"models/alienfighter/al-16.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
 	{"models/alienfighter/al-17.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-
 
 // Pirate – load all pirate data (vehicles, military buildings, ships...) testures.
 	{"models/gr-01.vw2d",			1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
@@ -437,7 +413,6 @@ static sLoadList LoadList[] = {
 	{"models/militarybuilding/aa-gun-02.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
 	{"models/militarybuilding/aa-gun-01.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
 
-
 // BasePart – load pirate base textures.
 	{"models/spacebase/allalpha.tga",	1, 768, true, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/spacebase/metal.tga",		1, 1024, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
@@ -466,7 +441,6 @@ static sLoadList LoadList[] = {
 	{"models/spacebase/8/3.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 	{"models/spacebase/8/4.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 	{"models/spacebase/8/5.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-
 
 // Asteroid – load asteroids (for AsteroidField) textures.
 	{"models/space/asteroid-01.tga",	1, 96, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
@@ -498,7 +472,6 @@ static sLoadList LoadList[] = {
 	{"models/space/asteroid-0118.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
 	{"models/space/asteroid-0119.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
 
-
 // Planet – load planets textures.
 	{"models/planet/asteroid.tga",			1, 512, true, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/planet/clouds.tga",			1, 1024, true, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
@@ -518,7 +491,6 @@ static sLoadList LoadList[] = {
 	{"models/planet/moon.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 	{"models/planet/planet5.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 	{"models/planet/planet6.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-
 
 // AlienMotherShip – load alien motherships textures.
 	{"models/alienmothership/alm-text02.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
@@ -540,7 +512,6 @@ static sLoadList LoadList[] = {
 	{"models/alienmothership/alm-07.vw3d",		2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, true},
 	{"models/alienmothership/alm-08.vw3d",		2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, true},
 
-
 // Building – load buildings textures.
 	{"models/building/bld.vw2d",		1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/normalmap/buildings_nm.tga",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
@@ -558,7 +529,6 @@ static sLoadList LoadList[] = {
 	{"models/building/bld-10.vw3d",		2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 	{"models/building/bld-11.vw3d",		2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 
-
 // StarSystem1 – load StarSystem 1 SkyBox textures.
 	{"skybox/1/skybox_back6.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"skybox/1/skybox_bottom4.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
@@ -566,7 +536,6 @@ static sLoadList LoadList[] = {
 	{"skybox/1/skybox_left2.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"skybox/1/skybox_right1.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"skybox/1/skybox_top3.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-
 
 //StarSystem2 – load StarSystem 2 SkyBox textures.
 	{"skybox/2/skybox_back6.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
@@ -579,24 +548,10 @@ static sLoadList LoadList[] = {
 #define LoadListCount sizeof(LoadList)/sizeof(LoadList[0])
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // процедура прорисовки логотипа
 //------------------------------------------------------------------------------------
-void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
+static void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 {
 	int		ShowLogoTime = 6000; // сколько нужно показывать логотип
 	int		ShowLogoLife = ShowLogoTime; // сколько осталось показывать
@@ -669,20 +624,10 @@ void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 	vw_SetClearColor(0.0f,0.0f,0.0f,1.0f);
 }
 
-
-
-
-
-
-
-
-
-
-
 //------------------------------------------------------------------------------------
 // процедура прорисовки процента загрузки данных
 //------------------------------------------------------------------------------------
-void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, GLtexture LoadImageTexture)
+static void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, GLtexture LoadImageTexture)
 {
 	// слишком часто не рисуем
 	if ((Current != AllDrawLoading) && // последний (полный) рисуем всегда
@@ -737,17 +682,7 @@ void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, GLtexture
 	(*LastDrawTime) = vw_GetTimeThread(0);
 }
 
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// процедура освобождения данных, что удалять определяем по типу загрузки
-//------------------------------------------------------------------------------------
-eLoading CurretnLoadedData{eLoading::InitialValue};
-bool ReleaseGameData(eLoading LoadType)
+static void PreLoadGameData(eLoading LoadType)
 {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// удаляем данные из памяти
@@ -760,43 +695,11 @@ bool ReleaseGameData(eLoading LoadType)
 	// если это не переход меню-игра, снимаем звук
 	vw_StopAllSoundsIfAllowed();
 
-	// загружаем все только во время старта игры
-	if (LoadType == eLoading::MenuWithLogo)
-		return false;
-
-	return true;
-}
-
-
-
-
-//------------------------------------------------------------------------------------
-// процедура загрузки данных
-//------------------------------------------------------------------------------------
-void LoadGameData(eLoading LoadType)
-{
-	GLtexture LoadImageTexture{0};
-	int RealLoadedTextures = 0;
-	bool NeedLoadShaders = false;
-	int AllDrawLoading = 0;
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверяем, если уже что-то было загружено, если данные для этой миссии-меню загружены - тут вообще нечего делать
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	bool NeedStartGoto = false;
-	if (ReleaseGameData(LoadType))
-		NeedStartGoto = true;
-
-
-	// ставим время последней прорисовки
+	// FIXME should be moved to proper sources
 	vw_StartTimeThreads();
-	float LastDrawTime = vw_GetTimeThread(0);
-
-
 
 	// FIXME should be moved to game-related code
-	switch(LoadType) {
-	case eLoading::Game: {
+	if (LoadType == eLoading::Game) {
 		SaveXMLSetupFile();
 
 		char *FileName = GetMissionFileName();
@@ -851,15 +754,7 @@ void LoadGameData(eLoading LoadType)
 
 		StarSystemLayer1Transp(Layer1TranspStart, Layer1TranspEnd);
 		StarSystemLayer3Transp(Layer2TranspStart, Layer2TranspEnd);
-
-		}
-		break;
-
-	default:
-		break;
 	}
-
-
 
 	// FIXME should be moved to proper sources
 	switch(LoadType) {
@@ -877,25 +772,99 @@ void LoadGameData(eLoading LoadType)
 	default:
 		break;
 	}
+}
+
+static void PostLoadGameData(eLoading LoadType)
+{
+	// инициализируем шадов меп, делаем это постоянно т.к. у нас разные размеры карт для меню и игры
+	if (Setup.ShadowMap > 0) {
+		int ShadowMapSize = vw_GetDevCaps().MaxTextureWidth;
+
+		auto MenuShadowMap = [&ShadowMapSize] () {
+			// since we need "soft" shadows for less price, reduce shadow map size
+			if (ShadowMapSize > 2048)
+				ShadowMapSize = 2048;
+			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize/2))
+				Setup.ShadowMap = 0;
+		};
+
+		switch(LoadType) {
+		case eLoading::Menu:   // меню (выходим из игры)
+			ShadowMap_Release();
+			MenuShadowMap();
+			break;
+
+		case eLoading::MenuWithLogo:  // меню (только запустили)
+			MenuShadowMap();
+			break;
+
+		case eLoading::Game: // переход на уровни игры
+			ShadowMap_Release();
+			// since we need "soft" shadows for less price, reduce shadow map size
+			if (ShadowMapSize > 4096)
+				ShadowMapSize = 4096;
+			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize))
+				Setup.ShadowMap = 0;
+			break;
+
+		default:
+			break;
+		}
+	}
 
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// идем на переход именно отсюда, иначе не подключим файл с AI
-	// и надо запустить нужную музыку
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (NeedStartGoto)
-		goto AllDataLoaded;
+	// переходим в нужное место...
+	switch(LoadType) {
+	// меню, первая загрузка, самый старт
+	case eLoading::MenuWithLogo:
+		InitMenu();
+		break;
+
+	// меню, выходим из игры, входим в меню
+	case eLoading::Menu:
+		InitMenu();
+		MenuStatus = eMenuStatus::MISSION; // чтобы не было перехода с основного меню в мисии
+		break;
+
+	// уровни игры
+	case eLoading::Game:
+		InitGame();
+		StartMusicWithFade(eMusicTheme::GAME, 2000, 2000);
+		// приготовиться к действию (речь)
+		Audio_PlayVoice(5, 1.0f);
+		break;
+
+	default:
+		break;
+	}
 
 
+	// всегда на черном фоне
+	vw_SetClearColor(0.0f,0.0f,0.0f,1.0f);
+}
 
+//------------------------------------------------------------------------------------
+// процедура загрузки данных
+//------------------------------------------------------------------------------------
+void LoadGameData(eLoading LoadType)
+{
+	int RealLoadedTextures = 0;
+	bool NeedLoadShaders = false;
+	int AllDrawLoading = 0;
+
+	PreLoadGameData(LoadType);
+
+	// load assets only on game start (or restart)
+	if (LoadType != eLoading::MenuWithLogo) {
+		PostLoadGameData(LoadType);
+		return;
+	}
 
 	AllDrawLoading = 0;
 	// получаем значение (реальное, по весам)
 	for (unsigned int i = 0; i < LoadListCount; i++) {
 		AllDrawLoading += LoadList[i].Value;
 	}
-
-
 
 	// если будем загружать шейдеры - делаем поправку общего кол-ва
 	if (vw_GetDevCaps().OpenGL_2_0_supported &&
@@ -906,34 +875,25 @@ void LoadGameData(eLoading LoadType)
 		NeedLoadShaders = true;
 	}
 
-
 	// загружаем все по списку
 	RealLoadedTextures = 0;
-
-
-
 
 	// generate texture for all used characters in text
 	if (LoadType == eLoading::MenuWithLogo)
 		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// загружаем логотип компании
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (LoadType == eLoading::MenuWithLogo) {
 		// выводим логотип Viewizard
-		vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0, eTextureWrapMode::CLAMP_TO_EDGE, false, eAlphaCreateMode::EQUAL, false);
+		vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0, eTextureWrapMode::CLAMP_TO_EDGE,
+				  false, eAlphaCreateMode::EQUAL, false);
 		GLtexture ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga");
 
 		DrawViewizardLogo(ViewizardLogoTexture);
-
 		vw_ReleaseTexture(ViewizardLogoTexture);
 	}
-
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// загружаем список
@@ -945,6 +905,7 @@ void LoadGameData(eLoading LoadType)
 	vw_LoadTexture("loading/loading_back.tga");
 	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0, eTextureWrapMode::CLAMP_TO_EDGE, false, eAlphaCreateMode::GREYSC, false);
 
+	GLtexture LoadImageTexture{0};
 	switch (1 + vw_iRandNum(3)) {
 	case 1:
 		LoadImageTexture = vw_LoadTexture("loading/loading01.tga");
@@ -964,7 +925,8 @@ void LoadGameData(eLoading LoadType)
 		break;
 	}
 
-
+	// ставим время последней прорисовки
+	float LastDrawTime = vw_GetTimeThread(0);
 
 	//	если нужно, загрузка всех шейдеров (!) обязательно это делать до загрузки моделей
 	if (NeedLoadShaders) {
@@ -1027,12 +989,8 @@ void LoadGameData(eLoading LoadType)
 	if (!Setup.UseGLSL120)
 		Setup.ShadowMap = 0;
 
-
 	// инициализация менеджера частиц (обязательно после загрузки шейдеров)
 	vw_InitParticleSystems(Setup.UseGLSL120, Setup.VisualEffectsQuality + 1.0f);
-
-
-
 
 	for (unsigned int i = 0; i < LoadListCount; i++) {
 		switch (LoadList[i].FileType) {
@@ -1054,7 +1012,6 @@ void LoadGameData(eLoading LoadType)
 				vw_LoadTexture(LoadList[i].FileName, tmpCompress);
 			}
 			break;
-
 
 		// текстуры
 		case 1:
@@ -1142,88 +1099,14 @@ void LoadGameData(eLoading LoadType)
 			break;
 		}
 
-
 		RealLoadedTextures += LoadList[i].Value;
 
 		// рисуем текущее состояние загрузки, если не рисуем логотип
 		DrawLoading(RealLoadedTextures, AllDrawLoading, &LastDrawTime, LoadImageTexture);
-
 	}
-
-
-
-
 
 	// убираем картинку загрузки
 	vw_ReleaseTexture(LoadImageTexture);
 
-
-AllDataLoaded:
-
-
-	// инициализируем шадов меп, делаем это постоянно т.к. у нас разные размеры карт для меню и игры
-	if (Setup.ShadowMap > 0) {
-		int ShadowMapSize = vw_GetDevCaps().MaxTextureWidth;
-
-		auto MenuShadowMap = [&ShadowMapSize] () {
-			// since we need "soft" shadows for less price, reduce shadow map size
-			if (ShadowMapSize > 2048)
-				ShadowMapSize = 2048;
-			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize/2))
-				Setup.ShadowMap = 0;
-		};
-
-		switch(LoadType) {
-		case eLoading::Menu:   // меню (выходим из игры)
-			ShadowMap_Release();
-			MenuShadowMap();
-			break;
-
-		case eLoading::MenuWithLogo:  // меню (только запустили)
-			MenuShadowMap();
-			break;
-
-		case eLoading::Game: // переход на уровни игры
-			ShadowMap_Release();
-			// since we need "soft" shadows for less price, reduce shadow map size
-			if (ShadowMapSize > 4096)
-				ShadowMapSize = 4096;
-			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize))
-				Setup.ShadowMap = 0;
-			break;
-
-		default:
-			break;
-		}
-	}
-
-
-	// переходим в нужное место...
-	switch(LoadType) {
-	// меню, первая загрузка, самый старт
-	case eLoading::MenuWithLogo:
-		InitMenu();
-		break;
-
-	// меню, выходим из игры, входим в меню
-	case eLoading::Menu:
-		InitMenu();
-		MenuStatus = eMenuStatus::MISSION; // чтобы не было перехода с основного меню в мисии
-		break;
-
-	// уровни игры
-	case eLoading::Game:
-		InitGame();
-		StartMusicWithFade(eMusicTheme::GAME, 2000, 2000);
-		// приготовиться к действию (речь)
-		Audio_PlayVoice(5, 1.0f);
-		break;
-
-	default:
-		break;
-	}
-
-
-	// всегда на черном фоне
-	vw_SetClearColor(0.0f,0.0f,0.0f,1.0f);
+	PostLoadGameData(LoadType);
 }
