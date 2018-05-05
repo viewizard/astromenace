@@ -62,16 +62,9 @@ struct sLoadList {
 	// для 3д моделей, если надо - делаем тангенты и бинормали
 	bool	NeedTangentAndBinormal;
 };
-// ВАЖНО!!!
-// 1) текстуры должны стоять первые, а модели последние
-// 2) одна и таже модель не должна вызываться с разными начальными углами и ресайзом. Для таких случаев нужно 2 модели (одинаковые)... иначе будут проблемы с VBO
 
 
 
-
-// подключаем список загрузки
-sLoadList *CurrentList = nullptr;
-unsigned int CurrentListCount = 0;
 
 
 
@@ -112,7 +105,7 @@ static cGLSLLoadList GLSLLoadList[] = {
 //------------------------------------------------------------------------------------
 
 // лист загрузки меню
-static sLoadList MenuLoadList[] = {
+static sLoadList LoadList[] = {
 // текстуры меню... кнопки, диалоги, название игры
 	{"menu/astromenace.tga",	0, 512, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"menu/button384_back.tga",	0, 192, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
@@ -229,84 +222,6 @@ static sLoadList MenuLoadList[] = {
 // курсор
 	{"menu/cursor.tga",		0, 16, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
 	{"menu/cursor_shadow.tga",	0, 16, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-// текстура брони для кораблей землян
-	{"models/earthfighter/sf-text00.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-text05.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-text06.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-text07.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-text08.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-text09.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-text04.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-text10.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-illum01.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-illum02.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-illum03.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-illum04.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/lnch12.tga",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/lnch34.tga",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/rockets.tga",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// текстура истребителей пришельцев
-	{"models/alienfighter/al-text04.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienfighter/al-illum04.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// текстура космических объектов
-	{"models/space/asteroid-01.tga",	1, 96, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// планеты
-	{"models/planet/asteroid.tga",			1, 512, true, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/planet/clouds.tga",			1, 1024, true, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
-	{"models/planet/q_class2.tga",			1, 192, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/planet/a_class4.tga",			1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/planet/m_class7.tga",			1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/planet/d_class3.tga",			1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/m_class7_nm.tga",		1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/d_class3_nm.tga",		1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/a_class4_nm.tga",		1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/planet_asteroids_nm.tga",	1, 384, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/q_class2_nm.tga",		1, 192, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// текстура наземной техники-сооружений
-	{"models/gr-01.vw2d",			1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/gr-02.vw2d",			1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/gr-03.vw2d",			1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/gr-04.vw2d",			1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/bomber_nm.tga",	1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/gr-05.vw2d",			1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/gr-06.vw2d",			1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/gr-07.vw2d",			1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/track.vw2d",			1, 48, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-
-// текстура больших кораблей пришельцев
-	{"models/alienmothership/alm-text02.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienmothership/alm-text03.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienmothership/alm-text04.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienmothership/alm-text08.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienmothership/alm-illum02.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienmothership/alm-illum03.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienmothership/alm-illum04.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienmothership/alm-illum08.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/alien_mothership_nm.tga",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// турели пиратов
-	{"models/turret/turrets.tga",		1, 192, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// текстура зданий
-	{"models/building/bld.vw2d",		1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/buildings_nm.tga",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/building/bld_illum.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// космическая база
-	{"models/spacebase/allalpha.tga",	1, 1024, true, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/spacebase/metal.tga",		1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
-// мины
-	{"models/mine/mine1.tga",	1, 192, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/mine/mine1i.tga",	1, 192, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/mine/mine2.tga",	1, 192, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/mine/mine2i.tga",	1, 192, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/mine/mine3.tga",	1, 192, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/mine/mine3i.tga",	1, 192, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/mine/mine4.tga",	1, 192, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/mine/mine4i.tga",	1, 192, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-
-// скайбокс - космос, загружаем только те, что нужно - экономим видео память
-	{"skybox/1/skybox_bottom4.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"skybox/1/skybox_front5.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"skybox/tile_back.tga",	1, 4096/2, true,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"skybox/tile_stars.tga",	1, 4096/2, true,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 // спец эффекты
 	{"gfx/flare.tga",	1, 16, true,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
 	{"gfx/flare1.tga",	1, 16, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
@@ -318,42 +233,8 @@ static sLoadList MenuLoadList[] = {
 	{"gfx/trail4.tga",	1, 64, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
 	{"gfx/trail5.tga",	1, 64, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
 
-};
-#define MenuLoadListCount sizeof(MenuLoadList)/sizeof(MenuLoadList[0])
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-static sLoadList GameLevelsLoadList[] = {
 // 2д часть
-	{"menu/cursor.tga",			0, 16, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/cursor_shadow.tga",		0, 16, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/blackpoint.tga",			0, 0, true, 255,255,255, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/dialog512_256.tga",		0, 706, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button_dialog200_out.tga",	0, 57, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button_dialog200_in.tga",	0, 57, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button_dialog200_off.tga",	0, 57, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button_dialog128_out.tga",	0, 39, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button_dialog128_in.tga",	0, 39, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button_dialog128_off.tga",	0, 39, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button384_back.tga",		0, 192, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button384_in.tga",		0, 96, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button384_out.tga",		0, 96, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/dialog512_512.tga",		0, 1242, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/perc.tga",			0, 2, true, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/perc_none.tga",			0, 2, true, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
 	{"game/nums.tga",			0, 104, true, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"game/ammo.tga",			0, 2, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
 	{"game/energy.tga",			0, 2, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
@@ -365,7 +246,6 @@ static sLoadList GameLevelsLoadList[] = {
 	{"game/weapon_panel_right.tga",		0, 56, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"game/weapon_ammo.tga",		0, 1, true, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
 	{"game/weapon_energy.tga",		0, 1, true, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon_on_icon.tga",		0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
 	{"lang/en/game/mission.tga",		0, 64, true, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"lang/en/game/missionfailed.tga",	0, 168, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"lang/en/game/pause.tga",		0, 64, true, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
@@ -377,36 +257,6 @@ static sLoadList GameLevelsLoadList[] = {
 	{"lang/ru/game/pause.tga",		0, 64, true, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"skybox/tile_back.tga",		1, 4096/2, true,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"skybox/tile_stars.tga",		1, 4096/2, true,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// спец эффекты
-	{"gfx/flare.tga",	1, 16, true,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, true, false, -1.0f, false},
-	{"gfx/flare1.tga",	1, 16, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, true, false, -1.0f, false},
-	{"gfx/flare2.tga",	1, 16, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, true, false, -1.0f, false},
-	{"gfx/flare3.tga",	1, 16, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, true, false, -1.0f, false},
-	{"gfx/trail1.tga",	1, 64, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, true, false, -1.0f, false},
-	{"gfx/trail2.tga",	1, 64, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, true, false, -1.0f, false},
-	{"gfx/trail3.tga",	1, 64, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, true, false, -1.0f, false},
-	{"gfx/trail4.tga",	1, 64, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, true, false, -1.0f, false},
-	{"gfx/trail5.tga",	1, 64, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, true, false, -1.0f, false},
-// иконки оружия для перетаскивания-отображения в слотах оружия
-	{"menu/weapon1_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon2_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon3_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon4_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon5_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon6_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon7_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon8_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon9_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon10_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon11_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon12_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon13_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon14_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon15_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon16_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon17_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon18_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon19_icon.tga",	0, 32, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
 // текстура брони для кораблей землян
 	{"models/earthfighter/sf-text00.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/earthfighter/sf-text04.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
@@ -504,12 +354,8 @@ static sLoadList GameLevelsLoadList[] = {
 	{"models/earthfighter/swarm.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
 	{"models/earthfighter/torpedo.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
 	{"models/earthfighter/nuke.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-};
-#define GameLevelsLoadListCount sizeof(GameLevelsLoadList)/sizeof(GameLevelsLoadList[0])
 
 
-
-static sLoadList AlienFighterLoadList[] = {
 // AlienFighter – load alien fighters textures.
 	{"models/alienfighter/al-text04.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/alienfighter/al-illum04.vw2d",	1, 1024, true, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
@@ -531,13 +377,8 @@ static sLoadList AlienFighterLoadList[] = {
 	{"models/alienfighter/al-15.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
 	{"models/alienfighter/al-16.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
 	{"models/alienfighter/al-17.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-};
-#define AlienFighterLoadListCount sizeof(AlienFighterLoadList)/sizeof(AlienFighterLoadList[0])
 
 
-
-
-static sLoadList PirateLoadList[] = {
 // Pirate – load all pirate data (vehicles, military buildings, ships...) testures.
 	{"models/gr-01.vw2d",			1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/gr-02.vw2d",			1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
@@ -595,17 +436,11 @@ static sLoadList PirateLoadList[] = {
 	{"models/militarybuilding/aa-gun-03.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
 	{"models/militarybuilding/aa-gun-02.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
 	{"models/militarybuilding/aa-gun-01.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-};
-#define PirateLoadListCount sizeof(PirateLoadList)/sizeof(PirateLoadList[0])
 
 
-
-static sLoadList BasePartLoadList[] = {
 // BasePart – load pirate base textures.
 	{"models/spacebase/allalpha.tga",	1, 768, true, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/spacebase/metal.tga",		1, 1024, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
-	{"models/planet/d_class3.tga",		1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/d_class3_nm.tga",	1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 // геометрия базы пиратов
 	{"models/spacebase/1/1.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 	{"models/spacebase/1/2.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
@@ -631,17 +466,10 @@ static sLoadList BasePartLoadList[] = {
 	{"models/spacebase/8/3.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 	{"models/spacebase/8/4.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 	{"models/spacebase/8/5.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-};
-#define BasePartLoadListCount sizeof(BasePartLoadList)/sizeof(BasePartLoadList[0])
 
 
-
-static sLoadList AsteroidLoadList[] = {
 // Asteroid – load asteroids (for AsteroidField) textures.
 	{"models/space/asteroid-01.tga",	1, 96, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// большие астероиды
-	{"models/planet/d_class3.tga",		1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/d_class3_nm.tga",	1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 // геометрия больших астероидов
 	{"models/space/bigasteroid-01.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 	{"models/space/bigasteroid-02.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
@@ -669,12 +497,8 @@ static sLoadList AsteroidLoadList[] = {
 	{"models/space/asteroid-0117.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
 	{"models/space/asteroid-0118.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
 	{"models/space/asteroid-0119.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-};
-#define AsteroidLoadListCount sizeof(AsteroidLoadList)/sizeof(AsteroidLoadList[0])
 
 
-
-static sLoadList PlanetLoadList[] = {
 // Planet – load planets textures.
 	{"models/planet/asteroid.tga",			1, 512, true, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/planet/clouds.tga",			1, 1024, true, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
@@ -694,12 +518,8 @@ static sLoadList PlanetLoadList[] = {
 	{"models/planet/moon.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 	{"models/planet/planet5.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 	{"models/planet/planet6.vw3d",	2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-};
-#define PlanetLoadListCount sizeof(PlanetLoadList)/sizeof(PlanetLoadList[0])
 
 
-
-static sLoadList AlienMotherShipLoadList[] = {
 // AlienMotherShip – load alien motherships textures.
 	{"models/alienmothership/alm-text02.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/alienmothership/alm-text03.vw2d",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
@@ -719,12 +539,8 @@ static sLoadList AlienMotherShipLoadList[] = {
 	{"models/alienmothership/alm-06.vw3d",		2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, true},
 	{"models/alienmothership/alm-07.vw3d",		2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, true},
 	{"models/alienmothership/alm-08.vw3d",		2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, true},
-};
-#define AlienMotherShipLoadListCount sizeof(AlienMotherShipLoadList)/sizeof(AlienMotherShipLoadList[0])
 
 
-
-static sLoadList BuildingLoadList[] = {
 // Building – load buildings textures.
 	{"models/building/bld.vw2d",		1, 768, false, 0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/normalmap/buildings_nm.tga",	1, 768, false, 0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
@@ -741,12 +557,8 @@ static sLoadList BuildingLoadList[] = {
 	{"models/building/bld-09.vw3d",		2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 	{"models/building/bld-10.vw3d",		2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 	{"models/building/bld-11.vw3d",		2, 20, true,  0,0,0, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-};
-#define BuildingLoadListCount sizeof(BuildingLoadList)/sizeof(BuildingLoadList[0])
 
 
-
-static sLoadList StarSystem1LoadList[] = {
 // StarSystem1 – load StarSystem 1 SkyBox textures.
 	{"skybox/1/skybox_back6.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"skybox/1/skybox_bottom4.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
@@ -754,12 +566,8 @@ static sLoadList StarSystem1LoadList[] = {
 	{"skybox/1/skybox_left2.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"skybox/1/skybox_right1.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"skybox/1/skybox_top3.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-};
-#define StarSystem1LoadListCount sizeof(StarSystem1LoadList)/sizeof(StarSystem1LoadList[0])
 
 
-
-static sLoadList StarSystem2LoadList[] = {
 //StarSystem2 – load StarSystem 2 SkyBox textures.
 	{"skybox/2/skybox_back6.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"skybox/2/skybox_bottom4.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
@@ -768,7 +576,7 @@ static sLoadList StarSystem2LoadList[] = {
 	{"skybox/2/skybox_right1.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"skybox/2/skybox_top3.tga",	1, 3072/2, false,  0,0,0, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 };
-#define StarSystem2LoadListCount sizeof(StarSystem2LoadList)/sizeof(StarSystem2LoadList[0])
+#define LoadListCount sizeof(LoadList)/sizeof(LoadList[0])
 
 
 
@@ -942,12 +750,6 @@ eLoading CurretnLoadedData{eLoading::InitialValue};
 bool ReleaseGameData(eLoading LoadType)
 {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// сбрасываем данные глобальных переменных
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	CurrentList = nullptr;
-	CurrentListCount = 0;
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// удаляем данные из памяти
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	ReleaseAllObject3D();
@@ -958,26 +760,11 @@ bool ReleaseGameData(eLoading LoadType)
 	// если это не переход меню-игра, снимаем звук
 	vw_StopAllSoundsIfAllowed();
 
-	// нужно понять, мы конкретно это загружали или нет
-	if ((LoadType == eLoading::Menu) || (LoadType == eLoading::MenuWithLogo)) { // menu
-		if (LoadedTypes[0])
-			return true;
-		else {
-			LoadedTypes[0] = true;
-			return false;
-		}
-	} else { // mission
-		if (CurrentMission >= 0) {
-			if (LoadedTypes[CurrentMission+1])
-				return true;
-			else {
-				LoadedTypes[CurrentMission+1] = true;
-				return false;
-			}
-		}
-	}
+	// загружаем все только во время старта игры
+	if (LoadType == eLoading::MenuWithLogo)
+		return false;
 
-	return false;
+	return true;
 }
 
 
@@ -1006,43 +793,12 @@ void LoadGameData(eLoading LoadType)
 	float LastDrawTime = vw_GetTimeThread(0);
 
 
-	NeedLoadShaders = false;
 
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// подключаем список загрузки
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// FIXME should be moved to game-related code
 	switch(LoadType) {
-	// меню, загрузка в самом начале
-	case eLoading::MenuWithLogo:
-		CurrentList = MenuLoadList;
-		CurrentListCount = MenuLoadListCount;
-		break;
-
-	// переход игра-меню
-	case eLoading::Menu:
-		SaveXMLSetupFile();
-		CurrentList = MenuLoadList;
-		CurrentListCount = MenuLoadListCount;
-		break;
-
-	// уровни игры
 	case eLoading::Game: {
 		SaveXMLSetupFile();
-		CurrentListCount = GameLevelsLoadListCount;
 
-		// флаги нужно загружать или нет...
-		bool StarSystem1 = false;
-		bool StarSystem2 = false;
-		bool Planet = false;
-		bool Asteroid = false;
-		bool AlienFighter = false;
-		bool BasePart = false;
-		bool AlienMotherShip = false;
-		bool Building = false;
-		bool Pirate = false;
-
-		// по скрипту, смотрим что загружать + считаем сколько позиций
 		char *FileName = GetMissionFileName();
 		if (FileName == nullptr) {
 			std::cerr << __func__ << "(): "
@@ -1079,25 +835,7 @@ void LoadGameData(eLoading LoadType)
 		float Layer2TranspEnd = 0.7f;
 
 		for (auto &tmpEntry : xmlEntry->ChildrenList) {
-			if (tmpEntry.Name == "StarSystem1")
-				StarSystem1 = true;
-			else if (tmpEntry.Name == "StarSystem2")
-				StarSystem2 = true;
-			else if (tmpEntry.Name == "Planet")
-				Planet = true;
-			else if (tmpEntry.Name == "Asteroid")
-				Asteroid = true;
-			else if (tmpEntry.Name == "AlienFighter")
-				AlienFighter = true;
-			else if (tmpEntry.Name == "BasePart")
-				BasePart = true;
-			else if (tmpEntry.Name == "AlienMotherShip")
-				AlienMotherShip = true;
-			else if (tmpEntry.Name == "Building")
-				Building = true;
-			else if (tmpEntry.Name == "Pirate")
-				Pirate = true;
-			else if (tmpEntry.Name == "AIFile") { // загружаем данные по AI
+			if (tmpEntry.Name == "AIFile") { // загружаем данные по AI
 				if (!tmpEntry.Content.empty())
 					InitGameAI(tmpEntry.Content.c_str()); // "script/aimode.xml"
 			} else if (tmpEntry.Name == "LayersTransp") {
@@ -1114,73 +852,6 @@ void LoadGameData(eLoading LoadType)
 		StarSystemLayer1Transp(Layer1TranspStart, Layer1TranspEnd);
 		StarSystemLayer3Transp(Layer2TranspStart, Layer2TranspEnd);
 
-		// считаем сколько там элементов
-		if (StarSystem1)
-			CurrentListCount += StarSystem1LoadListCount;
-		if (StarSystem2)
-			CurrentListCount += StarSystem2LoadListCount;
-		if (Planet)
-			CurrentListCount += PlanetLoadListCount;
-		if (Asteroid)
-			CurrentListCount += AsteroidLoadListCount;
-		if (AlienFighter)
-			CurrentListCount += AlienFighterLoadListCount;
-		if (BasePart)
-			CurrentListCount += BasePartLoadListCount;
-		if (AlienMotherShip)
-			CurrentListCount += AlienMotherShipLoadListCount;
-		if (Building)
-			CurrentListCount += BuildingLoadListCount;
-		if (Pirate)
-			CurrentListCount += PirateLoadListCount;
-
-		// выделяем память
-		CurrentList = new sLoadList[CurrentListCount];
-
-		// составляем список загрузки
-
-		// копируем основную часть
-		int Current = 0;
-		memcpy(CurrentList+Current, GameLevelsLoadList, GameLevelsLoadListCount*sizeof(GameLevelsLoadList[0]));
-		Current += GameLevelsLoadListCount;
-
-		if (StarSystem1) {
-			memcpy(CurrentList+Current, StarSystem1LoadList, StarSystem1LoadListCount*sizeof(StarSystem1LoadList[0]));
-			Current += StarSystem1LoadListCount;
-		}
-		if (StarSystem2) {
-			memcpy(CurrentList+Current, StarSystem2LoadList, StarSystem2LoadListCount*sizeof(StarSystem2LoadList[0]));
-			Current += StarSystem2LoadListCount;
-		}
-
-		if (Planet) {
-			memcpy(CurrentList+Current, PlanetLoadList, PlanetLoadListCount*sizeof(PlanetLoadList[0]));
-			Current += PlanetLoadListCount;
-		}
-		if (Asteroid) {
-			memcpy(CurrentList+Current, AsteroidLoadList, AsteroidLoadListCount*sizeof(AsteroidLoadList[0]));
-			Current += AsteroidLoadListCount;
-		}
-		if (AlienFighter) {
-			memcpy(CurrentList+Current, AlienFighterLoadList, AlienFighterLoadListCount*sizeof(AlienFighterLoadList[0]));
-			Current += AlienFighterLoadListCount;
-		}
-		if (BasePart) {
-			memcpy(CurrentList+Current, BasePartLoadList, BasePartLoadListCount*sizeof(BasePartLoadList[0]));
-			Current += BasePartLoadListCount;
-		}
-		if (AlienMotherShip) {
-			memcpy(CurrentList+Current, AlienMotherShipLoadList, AlienMotherShipLoadListCount*sizeof(AlienMotherShipLoadList[0]));
-			Current += AlienMotherShipLoadListCount;
-		}
-		if (Building) {
-			memcpy(CurrentList+Current, BuildingLoadList, BuildingLoadListCount*sizeof(BuildingLoadList[0]));
-			Current += BuildingLoadListCount;
-		}
-		if (Pirate) {
-			memcpy(CurrentList+Current, PirateLoadList, PirateLoadListCount*sizeof(PirateLoadList[0]));
-			Current += PirateLoadListCount;
-		}
 		}
 		break;
 
@@ -1190,9 +861,7 @@ void LoadGameData(eLoading LoadType)
 
 
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// включаем музыку
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// FIXME should be moved to proper sources
 	switch(LoadType) {
 	// меню, загрузка в самом начале
 	case eLoading::MenuWithLogo:
@@ -1222,8 +891,8 @@ void LoadGameData(eLoading LoadType)
 
 	AllDrawLoading = 0;
 	// получаем значение (реальное, по весам)
-	for (unsigned int i = 0; i < CurrentListCount; i++) {
-		AllDrawLoading += CurrentList[i].Value;
+	for (unsigned int i = 0; i < LoadListCount; i++) {
+		AllDrawLoading += LoadList[i].Value;
 	}
 
 
@@ -1365,38 +1034,38 @@ void LoadGameData(eLoading LoadType)
 
 
 
-	for (unsigned int i=0; i<CurrentListCount; i++) {
-		switch (CurrentList[i].FileType) {
+	for (unsigned int i = 0; i < LoadListCount; i++) {
+		switch (LoadList[i].FileType) {
 		// 2d текстуры
 		case 0:
-			if (!vw_FindTextureByName(CurrentList[i].FileName)) {
+			if (!vw_FindTextureByName(LoadList[i].FileName)) {
 				// установки параметров
-				vw_SetTextureAlpha(CurrentList[i].Red, CurrentList[i].Green, CurrentList[i].Blue);
-				vw_SetTextureProp(CurrentList[i].TextFilter, CurrentList[i].TextAnisotropy * Setup.AnisotropyLevel,
-						  CurrentList[i].TextWrap, CurrentList[i].Alpha, CurrentList[i].AlphaMode, CurrentList[i].MipMap);
+				vw_SetTextureAlpha(LoadList[i].Red, LoadList[i].Green, LoadList[i].Blue);
+				vw_SetTextureProp(LoadList[i].TextFilter, LoadList[i].TextAnisotropy * Setup.AnisotropyLevel,
+						  LoadList[i].TextWrap, LoadList[i].Alpha, LoadList[i].AlphaMode, LoadList[i].MipMap);
 
 				eTextureCompressionType tmpCompress{eTextureCompressionType::NONE};
-				if (CurrentList[i].NeedCompression) {
+				if (LoadList[i].NeedCompression) {
 					if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::S3TC))
 						tmpCompress = eTextureCompressionType::S3TC;
 					else if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::BPTC))
 						tmpCompress = eTextureCompressionType::BPTC;
 				}
-				vw_LoadTexture(CurrentList[i].FileName, tmpCompress);
+				vw_LoadTexture(LoadList[i].FileName, tmpCompress);
 			}
 			break;
 
 
 		// текстуры
 		case 1:
-			if (!vw_FindTextureByName(CurrentList[i].FileName)) {
+			if (!vw_FindTextureByName(LoadList[i].FileName)) {
 				int H = 0;
 				int W = 0;
 
 				// установки параметров
-				vw_SetTextureAlpha(CurrentList[i].Red, CurrentList[i].Green, CurrentList[i].Blue);
-				vw_SetTextureProp(CurrentList[i].TextFilter, CurrentList[i].TextAnisotropy * Setup.AnisotropyLevel,
-						  CurrentList[i].TextWrap, CurrentList[i].Alpha, CurrentList[i].AlphaMode, CurrentList[i].MipMap);
+				vw_SetTextureAlpha(LoadList[i].Red, LoadList[i].Green, LoadList[i].Blue);
+				vw_SetTextureProp(LoadList[i].TextFilter, LoadList[i].TextAnisotropy * Setup.AnisotropyLevel,
+						  LoadList[i].TextWrap, LoadList[i].Alpha, LoadList[i].AlphaMode, LoadList[i].MipMap);
 
 				// мы можем принудительно менять размер текстур через настройки, но надо учитывать их размеры
 				// базовый размер почти всех текстур моделей - 512х512 пикселей, небольшая часть текстур 256х256 (мины, турели)
@@ -1405,76 +1074,76 @@ void LoadGameData(eLoading LoadType)
 
 				if (Setup.TexturesQuality == 1) {
 					// только для текстур в папке MODELS (скайбоксы никогда не трогаем)
-					if (!strncmp("models/", CurrentList[i].FileName, strlen("models/")) &&
+					if (!strncmp("models/", LoadList[i].FileName, strlen("models/")) &&
 					    // не меняем размеры небольших текстур вообще
-					    strcmp("models/track.vw2d", CurrentList[i].FileName) &&
-					    strcmp("models/space/asteroid-01.tga", CurrentList[i].FileName) &&
+					    strcmp("models/track.vw2d", LoadList[i].FileName) &&
+					    strcmp("models/space/asteroid-01.tga", LoadList[i].FileName) &&
 					    // не меняем размер или ставим спец размер
-					    strncmp("models/spacebase/", CurrentList[i].FileName, strlen("models/spacebase/")) &&
-					    strncmp("models/planet/", CurrentList[i].FileName, strlen("models/planet/")) &&
-					    strncmp("models/normalmap/", CurrentList[i].FileName, strlen("models/normalmap/")) &&
+					    strncmp("models/spacebase/", LoadList[i].FileName, strlen("models/spacebase/")) &&
+					    strncmp("models/planet/", LoadList[i].FileName, strlen("models/planet/")) &&
+					    strncmp("models/normalmap/", LoadList[i].FileName, strlen("models/normalmap/")) &&
 					    // не ставим маленький размер для текстур-подсветки файтеров землян - плохо смотрится
-					    strcmp("models/earthfighter/sf-illum01.vw2d", CurrentList[i].FileName) &&
-					    strcmp("models/earthfighter/sf-illum02.vw2d", CurrentList[i].FileName) &&
-					    strcmp("models/earthfighter/sf-illum03.vw2d", CurrentList[i].FileName) &&
-					    strcmp("models/earthfighter/sf-illum04.vw2d", CurrentList[i].FileName))
+					    strcmp("models/earthfighter/sf-illum01.vw2d", LoadList[i].FileName) &&
+					    strcmp("models/earthfighter/sf-illum02.vw2d", LoadList[i].FileName) &&
+					    strcmp("models/earthfighter/sf-illum03.vw2d", LoadList[i].FileName) &&
+					    strcmp("models/earthfighter/sf-illum04.vw2d", LoadList[i].FileName))
 						H = W = 128;
-					else if (!strncmp("models/spacebase/", CurrentList[i].FileName, strlen("models/spacebase/")) || // для подсветки файтеров землян и частей баз (с решетками на альфа канале) - ставим больше размер
-						 !strcmp("models/earthfighter/sf-illum01.vw2d", CurrentList[i].FileName) ||
-						 !strcmp("models/earthfighter/sf-illum02.vw2d", CurrentList[i].FileName) ||
-						 !strcmp("models/earthfighter/sf-illum03.vw2d", CurrentList[i].FileName) ||
-						 !strcmp("models/earthfighter/sf-illum04.vw2d", CurrentList[i].FileName))
+					else if (!strncmp("models/spacebase/", LoadList[i].FileName, strlen("models/spacebase/")) || // для подсветки файтеров землян и частей баз (с решетками на альфа канале) - ставим больше размер
+						 !strcmp("models/earthfighter/sf-illum01.vw2d", LoadList[i].FileName) ||
+						 !strcmp("models/earthfighter/sf-illum02.vw2d", LoadList[i].FileName) ||
+						 !strcmp("models/earthfighter/sf-illum03.vw2d", LoadList[i].FileName) ||
+						 !strcmp("models/earthfighter/sf-illum04.vw2d", LoadList[i].FileName))
 							H = W = 256;
-					else if (!strncmp("models/planet/", CurrentList[i].FileName, strlen("models/planet/")) && // текстуры планет не квадратные, учитываем это
-						 strcmp("models/planet/asteroid.tga", CurrentList[i].FileName)) {
+					else if (!strncmp("models/planet/", LoadList[i].FileName, strlen("models/planet/")) && // текстуры планет не квадратные, учитываем это
+						 strcmp("models/planet/asteroid.tga", LoadList[i].FileName)) {
 							W = 512;
 							H = 256;
 					}
 				}
 				if (Setup.TexturesQuality == 2) {
 					// только для текстур в папке MODELS (скайбоксы никогда не трогаем)
-					if (!strncmp("models/", CurrentList[i].FileName, strlen("models/")) &&
+					if (!strncmp("models/", LoadList[i].FileName, strlen("models/")) &&
 					    // не меняем размеры небольших текстур вообще
-					    strcmp("models/track.vw2d", CurrentList[i].FileName) &&
-					    strcmp("models/space/asteroid-01.tga", CurrentList[i].FileName) &&
+					    strcmp("models/track.vw2d", LoadList[i].FileName) &&
+					    strcmp("models/space/asteroid-01.tga", LoadList[i].FileName) &&
 					    // не меняем размер
-					    strncmp("models/spacebase/", CurrentList[i].FileName, strlen("models/spacebase/")) &&
-					    strncmp("models/planet/", CurrentList[i].FileName, strlen("models/planet/")) &&
-					    strncmp("models/normalmap/", CurrentList[i].FileName, strlen("models/normalmap/")))
+					    strncmp("models/spacebase/", LoadList[i].FileName, strlen("models/spacebase/")) &&
+					    strncmp("models/planet/", LoadList[i].FileName, strlen("models/planet/")) &&
+					    strncmp("models/normalmap/", LoadList[i].FileName, strlen("models/normalmap/")))
 						H = W = 256;
 				}
 
 				// если это карта нормалей, но у нас не включены шейдеры - пропускаем
 				if (!Setup.UseGLSL120 &&
-				    !strncmp("models/NORMALMAP", CurrentList[i].FileName, strlen("models/NORMALMAP")))
+				    !strncmp("models/NORMALMAP", LoadList[i].FileName, strlen("models/NORMALMAP")))
 					break;
 
 				eTextureCompressionType tmpCompress{eTextureCompressionType::NONE};
-				if (CurrentList[i].NeedCompression) {
+				if (LoadList[i].NeedCompression) {
 					if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::S3TC))
 						tmpCompress = eTextureCompressionType::S3TC;
 					else if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::BPTC))
 						tmpCompress = eTextureCompressionType::BPTC;
 				}
-				vw_LoadTexture(CurrentList[i].FileName, tmpCompress, eLoadTextureAs::AUTO, W, H);
+				vw_LoadTexture(LoadList[i].FileName, tmpCompress, eLoadTextureAs::AUTO, W, H);
 			}
 			break;
 
 		// предварит. загрузка моделей
 		case 2:
-			vw_LoadModel3D(CurrentList[i].FileName, CurrentList[i].TriangleSizeLimit, CurrentList[i].NeedTangentAndBinormal && Setup.UseGLSL120);
+			vw_LoadModel3D(LoadList[i].FileName, LoadList[i].TriangleSizeLimit, LoadList[i].NeedTangentAndBinormal && Setup.UseGLSL120);
 			break;
 
 		// загрузка sfx
 		case 4:
 			// если вообще можем играть звуки
 			if (Setup.Sound_check)
-				vw_LoadSoundBuffer(CurrentList[i].FileName);
+				vw_LoadSoundBuffer(LoadList[i].FileName);
 			break;
 		}
 
 
-		RealLoadedTextures += CurrentList[i].Value;
+		RealLoadedTextures += LoadList[i].Value;
 
 		// рисуем текущее состояние загрузки, если не рисуем логотип
 		DrawLoading(RealLoadedTextures, AllDrawLoading, &LastDrawTime, LoadImageTexture);
@@ -1544,11 +1213,6 @@ AllDataLoaded:
 
 	// уровни игры
 	case eLoading::Game:
-		// освобождаем память от того, что загружали
-		if (CurrentList != nullptr) {
-			delete [] CurrentList;
-			CurrentList = nullptr;
-		}
 		InitGame();
 		StartMusicWithFade(eMusicTheme::GAME, 2000, 2000);
 		// приготовиться к действию (речь)

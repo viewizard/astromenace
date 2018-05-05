@@ -53,7 +53,6 @@ extern sVideoModes *VideoModes;
 extern int VideoModesNum;
 extern sVideoModes CurrentVideoMode;
 
-extern bool LoadedTypes[1000];
 extern std::string ConfigFileName;
 extern char ProgrammDir[MAX_PATH];
 extern char ScreenshotDir[MAX_PATH];

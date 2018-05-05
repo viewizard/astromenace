@@ -63,8 +63,6 @@ sVideoModes *VideoModes = nullptr;
 int VideoModesNum = 0;
 // текущие параметры десктопа
 sVideoModes CurrentVideoMode;
-// статус загрузки, должно быть ОбщееКол-во Миссий+1(для меню)
-bool LoadedTypes[1000];
 // данные для определения папки пользователя
 #ifdef WIN32
 #define SD_APPDATA                   0x001a
@@ -436,13 +434,6 @@ ReCreate:
 	vw_InitTimeThread(0);
 	// if we change options during game mission with game restart, care about dialogs reset
 	InitDialogBoxes();
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// сбрасываем все, ничего не загружали
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	for (int i=0; i<1000; i++)
-		LoadedTypes[i] = false;
 
 
 
