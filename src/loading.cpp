@@ -553,53 +553,50 @@ static sLoadList LoadList[] = {
 //------------------------------------------------------------------------------------
 static void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 {
-	int		ShowLogoTime = 6000; // сколько нужно показывать логотип
-	int		ShowLogoLife = ShowLogoTime; // сколько осталось показывать
+	int ShowLogoTime{6000}; // сколько нужно показывать логотип
+	int ShowLogoLife{ShowLogoTime}; // сколько осталось показывать
 	Uint32	ShowLogoPrevTime = SDL_GetTicks();
 
-	vw_SetClearColor(1.0f,1.0f,1.0f,1.0f);
+	vw_SetClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 	while (ShowLogoLife > 0) {
-		sRECT SrcRect,DstRect;
-		SrcRect(1, 1, 511, 511);
-		int StartX = (Setup.InternalWidth-510)/2;
-		int EndX = StartX+510;
-		DstRect(StartX, 128 + 1, EndX, 640 - 2);
-		float Transp = 1.0f;
-		float GreyColor = 1.0f;
+		sRECT SrcRect{1, 1, 511, 511};
+		int StartX{static_cast<int>((Setup.InternalWidth - 510) / 2)};
+		int EndX{StartX + 510};
+		sRECT DstRect{StartX, 128 + 1, EndX, 640 - 2};
+		float Transp{1.0f};
+		float GreyColor{1.0f};
 
 		// плавно делаем появление
-		if (ShowLogoLife > ShowLogoTime/2.0f) {
-			Transp = (ShowLogoTime/2.0f - (ShowLogoLife-ShowLogoTime/2.0f))/(ShowLogoTime/2.0f);
-		} else {
+		if (ShowLogoLife > ShowLogoTime / 2.0f)
+			Transp = (ShowLogoTime / 2.0f - (ShowLogoLife - ShowLogoTime / 2.0f)) / (ShowLogoTime / 2.0f);
+		else {
 			Transp = 1.0f;
 			// относительно быстро исчезаем
-			if (ShowLogoLife < ShowLogoTime/4.0f) {
-				GreyColor = ShowLogoLife/(ShowLogoTime/4.0f);
-				vw_SetClearColor(GreyColor,GreyColor,GreyColor,1.0f);
+			if (ShowLogoLife < ShowLogoTime / 4.0f) {
+				GreyColor = ShowLogoLife / (ShowLogoTime / 4.0f);
+				vw_SetClearColor(GreyColor, GreyColor, GreyColor, 1.0f);
 			}
 		}
-		Transp-=.01f; // чтобы всегда был немного прозрачным
+		Transp -= 0.01f; // чтобы всегда был немного прозрачным
 		if (Transp < 0.0f)
 			Transp = 0.0f;
 
-
 		// рисуем
 		vw_BeginRendering(RI_COLOR_BUFFER | RI_DEPTH_BUFFER);
-		vw_Start2DMode(-1,1);
+		vw_Start2DMode(-1, 1);
 
-		vw_Draw2D(DstRect, SrcRect, ViewizardLogoTexture, true, Transp, 0.0f, sRGBCOLOR{GreyColor, GreyColor, GreyColor});
+		vw_Draw2D(DstRect, SrcRect, ViewizardLogoTexture, true, Transp, 0.0f,
+			  sRGBCOLOR{GreyColor, GreyColor, GreyColor});
 
 		vw_End2DMode();
 		vw_EndRendering();
-
 
 		// проверка времени
 		ShowLogoLife -= SDL_GetTicks() - ShowLogoPrevTime;
 		ShowLogoPrevTime = SDL_GetTicks();
 		if (ShowLogoLife <= 0)
 			ShowLogoLife = 0;
-
 
 		SDL_Event event;
 		while ( SDL_PollEvent(&event) ) {
@@ -620,22 +617,21 @@ static void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 		Audio_LoopProc();
 	}
 
-
-	vw_SetClearColor(0.0f,0.0f,0.0f,1.0f);
+	vw_SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 //------------------------------------------------------------------------------------
 // процедура прорисовки процента загрузки данных
 //------------------------------------------------------------------------------------
-static void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, GLtexture LoadImageTexture)
+static void DrawLoading(int Current, int AllDrawLoading, float &LastDrawTime, GLtexture LoadImageTexture)
 {
 	// слишком часто не рисуем
 	if ((Current != AllDrawLoading) && // последний (полный) рисуем всегда
-	    ((*LastDrawTime) + 0.035 >= vw_GetTimeThread(0)))
+	    (LastDrawTime + 0.035f >= vw_GetTimeThread(0)))
 		return;
 
 	vw_BeginRendering(RI_COLOR_BUFFER | RI_DEPTH_BUFFER);
-	vw_Start2DMode(-1,1);
+	vw_Start2DMode(-1, 1);
 
 	sRECT SrcRect, DstRect;
 
@@ -645,24 +641,23 @@ static void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, GL
 	vw_Draw2D(DstRect, SrcRect, LoadImageTexture, false, 1.0f, 0.0f);
 
 	// пишем "загрузка"
-	vw_DrawFont(Setup.InternalWidth/2-vw_FontSize(vw_GetText("LOADING"))/2, 768-128, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f, vw_GetText("LOADING"));
+	vw_DrawFont(Setup.InternalWidth / 2 - vw_FontSize(vw_GetText("LOADING")) / 2,
+		    768-128, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, vw_GetText("LOADING"));
 
 	// выводим подложку линии загрузки
-	SrcRect(0,0,256,32);
-	int StartX = (Setup.InternalWidth-256)/2;
-	DstRect(StartX, 768-64-8 -32, StartX + SrcRect.right - SrcRect.left, 768-64-8 -32 + SrcRect.bottom - SrcRect.top);
+	SrcRect(0, 0, 256, 32);
+	int StartX = (Setup.InternalWidth - 256) / 2;
+	DstRect(StartX, 768-64-8-32, StartX + SrcRect.right - SrcRect.left, 768-64-8-32 + SrcRect.bottom - SrcRect.top);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("loading/loading_back.tga"), true, 1.0f, 0.0f);
 
 	// выводим линию загрузки
-	int loaded = (int)(256.0f*Current/AllDrawLoading);
-	SrcRect( 0,0,loaded,16);
-	DstRect(StartX, 768-64-1 -32, StartX + SrcRect.right - SrcRect.left, 768-64-1 -32 + SrcRect.bottom - SrcRect.top);
+	int loaded = (int)(256.0f * Current / AllDrawLoading);
+	SrcRect(0, 0, loaded, 16);
+	DstRect(StartX, 768-64-1-32, StartX + SrcRect.right - SrcRect.left, 768-64-1-32 + SrcRect.bottom - SrcRect.top);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("loading/loading_line.tga"), true, 1.0f, 0.0f);
-
 
 	vw_End2DMode();
 	vw_EndRendering();
-
 
 	// обработчик окна
 	SDL_Event event;
@@ -679,7 +674,7 @@ static void DrawLoading(int Current, int AllDrawLoading, float *LastDrawTime, GL
 	// ставим и сюда, иначе не сможем играть во время загрузки
 	Audio_LoopProc();
 
-	(*LastDrawTime) = vw_GetTimeThread(0);
+	LastDrawTime = vw_GetTimeThread(0);
 }
 
 static void PreLoadGameData(eLoading LoadType)
@@ -732,10 +727,10 @@ static void PreLoadGameData(eLoading LoadType)
 		}
 
 		// установка прозрачности слоев
-		float Layer1TranspStart = 0.2f;
-		float Layer1TranspEnd = 0.7f;
-		float Layer2TranspStart = 0.9f;
-		float Layer2TranspEnd = 0.7f;
+		float Layer1TranspStart{0.2f};
+		float Layer1TranspEnd{0.7f};
+		float Layer2TranspStart{0.9f};
+		float Layer2TranspEnd{0.7f};
 
 		for (auto &tmpEntry : xmlEntry->ChildrenList) {
 			if (tmpEntry.Name == "AIFile") { // загружаем данные по AI
@@ -784,7 +779,7 @@ static void PostLoadGameData(eLoading LoadType)
 			// since we need "soft" shadows for less price, reduce shadow map size
 			if (ShadowMapSize > 2048)
 				ShadowMapSize = 2048;
-			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize/2))
+			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize / 2))
 				Setup.ShadowMap = 0;
 		};
 
@@ -812,7 +807,6 @@ static void PostLoadGameData(eLoading LoadType)
 		}
 	}
 
-
 	// переходим в нужное место...
 	switch(LoadType) {
 	// меню, первая загрузка, самый старт
@@ -838,9 +832,8 @@ static void PostLoadGameData(eLoading LoadType)
 		break;
 	}
 
-
 	// всегда на черном фоне
-	vw_SetClearColor(0.0f,0.0f,0.0f,1.0f);
+	vw_SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 //------------------------------------------------------------------------------------
@@ -848,10 +841,6 @@ static void PostLoadGameData(eLoading LoadType)
 //------------------------------------------------------------------------------------
 void LoadGameData(eLoading LoadType)
 {
-	int RealLoadedTextures = 0;
-	bool NeedLoadShaders = false;
-	int AllDrawLoading = 0;
-
 	PreLoadGameData(LoadType);
 
 	// load assets only on game start (or restart)
@@ -860,13 +849,14 @@ void LoadGameData(eLoading LoadType)
 		return;
 	}
 
-	AllDrawLoading = 0;
+	int AllDrawLoading{0};
 	// получаем значение (реальное, по весам)
-	for (unsigned int i = 0; i < LoadListCount; i++) {
+	for (unsigned i = 0; i < LoadListCount; i++) {
 		AllDrawLoading += LoadList[i].Value;
 	}
 
 	// если будем загружать шейдеры - делаем поправку общего кол-ва
+	bool NeedLoadShaders = false;
 	if (vw_GetDevCaps().OpenGL_2_0_supported &&
 	    vw_GetDevCaps().OpenGL_2_1_supported &&
 	    Setup.UseGLSL120 &&
@@ -874,9 +864,6 @@ void LoadGameData(eLoading LoadType)
 		AllDrawLoading += GLSLLoadListCount*100;
 		NeedLoadShaders = true;
 	}
-
-	// загружаем все по списку
-	RealLoadedTextures = 0;
 
 	// generate texture for all used characters in text
 	if (LoadType == eLoading::MenuWithLogo)
@@ -900,10 +887,12 @@ void LoadGameData(eLoading LoadType)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// загружаем картинки вывода загрузки
 	vw_SetTextureAlpha(0, 0, 0);
-	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0, eTextureWrapMode::CLAMP_TO_EDGE, true, eAlphaCreateMode::GREYSC, false);
+	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0, eTextureWrapMode::CLAMP_TO_EDGE,
+			  true, eAlphaCreateMode::GREYSC, false);
 	vw_LoadTexture("loading/loading_line.tga");
 	vw_LoadTexture("loading/loading_back.tga");
-	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0, eTextureWrapMode::CLAMP_TO_EDGE, false, eAlphaCreateMode::GREYSC, false);
+	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0, eTextureWrapMode::CLAMP_TO_EDGE,
+			  false, eAlphaCreateMode::GREYSC, false);
 
 	GLtexture LoadImageTexture{0};
 	switch (1 + vw_iRandNum(3)) {
@@ -928,9 +917,10 @@ void LoadGameData(eLoading LoadType)
 	// ставим время последней прорисовки
 	float LastDrawTime = vw_GetTimeThread(0);
 
-	//	если нужно, загрузка всех шейдеров (!) обязательно это делать до загрузки моделей
+	// если нужно, загрузка всех шейдеров (!) обязательно это делать до загрузки моделей
+	int RealLoadedAssets{0};
 	if (NeedLoadShaders) {
-		for (unsigned int i=0; i<GLSLLoadListCount; i++) {
+		for (unsigned i = 0; i < GLSLLoadListCount; i++) {
 			if (Setup.UseGLSL120) {
 
 				std::weak_ptr<cGLSL> Program = vw_CreateShader(GLSLLoadList[i].Name,
@@ -944,9 +934,9 @@ void LoadGameData(eLoading LoadType)
 				} else
 					Setup.UseGLSL120 = false;
 
-				RealLoadedTextures += 1000;
+				RealLoadedAssets += 1000;
 				// рисуем текущее состояние загрузки, если не рисуем логотип
-				DrawLoading(RealLoadedTextures, AllDrawLoading, &LastDrawTime, LoadImageTexture);
+				DrawLoading(RealLoadedAssets, AllDrawLoading, LastDrawTime, LoadImageTexture);
 			}
 		}
 
@@ -993,7 +983,7 @@ void LoadGameData(eLoading LoadType)
 	vw_InitParticleSystems(Setup.UseGLSL120, Setup.VisualEffectsQuality + 1.0f);
 
 	eTextureCompressionType tmpCompress{eTextureCompressionType::NONE};
-	for (unsigned int i = 0; i < LoadListCount; i++) {
+	for (unsigned i = 0; i < LoadListCount; i++) {
 		switch (LoadList[i].FileType) {
 		// 2d текстуры
 		case 0:
@@ -1037,7 +1027,8 @@ void LoadGameData(eLoading LoadType)
 
 		// предварит. загрузка моделей
 		case 2:
-			vw_LoadModel3D(LoadList[i].FileName, LoadList[i].TriangleSizeLimit, LoadList[i].NeedTangentAndBinormal && Setup.UseGLSL120);
+			vw_LoadModel3D(LoadList[i].FileName, LoadList[i].TriangleSizeLimit,
+				       LoadList[i].NeedTangentAndBinormal && Setup.UseGLSL120);
 			break;
 
 		// загрузка sfx
@@ -1048,10 +1039,10 @@ void LoadGameData(eLoading LoadType)
 			break;
 		}
 
-		RealLoadedTextures += LoadList[i].Value;
+		RealLoadedAssets += LoadList[i].Value;
 
 		// рисуем текущее состояние загрузки, если не рисуем логотип
-		DrawLoading(RealLoadedTextures, AllDrawLoading, &LastDrawTime, LoadImageTexture);
+		DrawLoading(RealLoadedAssets, AllDrawLoading, LastDrawTime, LoadImageTexture);
 	}
 
 	// убираем картинку загрузки
