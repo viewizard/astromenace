@@ -992,49 +992,47 @@ void LoadGameData(eLoading LoadType)
 	// инициализация менеджера частиц (обязательно после загрузки шейдеров)
 	vw_InitParticleSystems(Setup.UseGLSL120, Setup.VisualEffectsQuality + 1.0f);
 
+	eTextureCompressionType tmpCompress{eTextureCompressionType::NONE};
 	for (unsigned int i = 0; i < LoadListCount; i++) {
 		switch (LoadList[i].FileType) {
 		// 2d текстуры
 		case 0:
-			if (!vw_FindTextureByName(LoadList[i].FileName)) {
-				// установки параметров
-				vw_SetTextureAlpha(LoadList[i].Red, LoadList[i].Green, LoadList[i].Blue);
-				vw_SetTextureProp(LoadList[i].TextFilter, LoadList[i].TextAnisotropy * Setup.AnisotropyLevel,
-						  LoadList[i].TextWrap, LoadList[i].Alpha, LoadList[i].AlphaMode, LoadList[i].MipMap);
+			// установки параметров
+			vw_SetTextureAlpha(LoadList[i].Red, LoadList[i].Green, LoadList[i].Blue);
+			vw_SetTextureProp(LoadList[i].TextFilter, LoadList[i].TextAnisotropy * Setup.AnisotropyLevel,
+					  LoadList[i].TextWrap, LoadList[i].Alpha, LoadList[i].AlphaMode, LoadList[i].MipMap);
 
-				eTextureCompressionType tmpCompress{eTextureCompressionType::NONE};
-				if (LoadList[i].NeedCompression) {
-					if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::S3TC))
-						tmpCompress = eTextureCompressionType::S3TC;
-					else if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::BPTC))
-						tmpCompress = eTextureCompressionType::BPTC;
-				}
-				vw_LoadTexture(LoadList[i].FileName, tmpCompress);
+			tmpCompress = eTextureCompressionType::NONE;
+			if (LoadList[i].NeedCompression) {
+				if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::S3TC))
+					tmpCompress = eTextureCompressionType::S3TC;
+				else if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::BPTC))
+					tmpCompress = eTextureCompressionType::BPTC;
 			}
+			vw_LoadTexture(LoadList[i].FileName, tmpCompress);
 			break;
 
 		// текстуры
 		case 1:
-			if (!vw_FindTextureByName(LoadList[i].FileName)) {
-				// установки параметров
-				vw_SetTextureAlpha(LoadList[i].Red, LoadList[i].Green, LoadList[i].Blue);
-				vw_SetTextureProp(LoadList[i].TextFilter, LoadList[i].TextAnisotropy * Setup.AnisotropyLevel,
-						  LoadList[i].TextWrap, LoadList[i].Alpha, LoadList[i].AlphaMode, LoadList[i].MipMap);
+			// установки параметров
+			vw_SetTextureAlpha(LoadList[i].Red, LoadList[i].Green, LoadList[i].Blue);
+			vw_SetTextureProp(LoadList[i].TextFilter, LoadList[i].TextAnisotropy * Setup.AnisotropyLevel,
+					  LoadList[i].TextWrap, LoadList[i].Alpha, LoadList[i].AlphaMode, LoadList[i].MipMap);
 
-				// если это карта нормалей, но у нас не включены шейдеры - пропускаем
-				if (!Setup.UseGLSL120 &&
-				    (LoadList[i].FileName.find("models/normalmap") != std::string::npos))
-					break;
+			// если это карта нормалей, но у нас не включены шейдеры - пропускаем
+			// (если эту опцию убрать - можно объеденить 2д текстуры и 3д текстуры)
+			if (!Setup.UseGLSL120 &&
+			    (LoadList[i].FileName.find("models/normalmap") != std::string::npos))
+				break;
 
-				eTextureCompressionType tmpCompress{eTextureCompressionType::NONE};
-				if (LoadList[i].NeedCompression) {
-					if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::S3TC))
-						tmpCompress = eTextureCompressionType::S3TC;
-					else if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::BPTC))
-						tmpCompress = eTextureCompressionType::BPTC;
-				}
-				vw_LoadTexture(LoadList[i].FileName, tmpCompress);
+			tmpCompress = eTextureCompressionType::NONE;
+			if (LoadList[i].NeedCompression) {
+				if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::S3TC))
+					tmpCompress = eTextureCompressionType::S3TC;
+				else if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::BPTC))
+					tmpCompress = eTextureCompressionType::BPTC;
 			}
+			vw_LoadTexture(LoadList[i].FileName, tmpCompress);
 			break;
 
 		// предварит. загрузка моделей
