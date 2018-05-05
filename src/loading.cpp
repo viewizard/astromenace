@@ -27,8 +27,6 @@
 
 // TODO translate comments
 
-// TODO shange to SDL_GetTicks() usage in code from vw_GetTimeThread()
-
 // TODO add list initialization via XML file, hard coded list should be removed
 //      probably, we could combine with integrity check list (that used for gamedata creation)
 //      make sure, that logo and loading images included too
@@ -555,7 +553,7 @@ static void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 {
 	int ShowLogoTime{6000}; // сколько нужно показывать логотип
 	int ShowLogoLife{ShowLogoTime}; // сколько осталось показывать
-	Uint32	ShowLogoPrevTime = SDL_GetTicks();
+	uint32_t ShowLogoPrevTime = SDL_GetTicks();
 
 	vw_SetClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -613,7 +611,7 @@ static void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 
 		SDL_Delay(2);
 
-		// ставим и сюда, иначе не сможем играть во время загрузки
+		// important, update music buffers
 		Audio_LoopProc();
 	}
 
@@ -623,34 +621,27 @@ static void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 //------------------------------------------------------------------------------------
 // процедура прорисовки процента загрузки данных
 //------------------------------------------------------------------------------------
-static void DrawLoading(int Current, int AllDrawLoading, float &LastDrawTime, GLtexture LoadImageTexture)
+static void DrawLoading(int Current, int AllDrawLoading, uint32_t &LastDrawTime, GLtexture LoadImageTexture)
 {
-	// слишком часто не рисуем
-	if ((Current != AllDrawLoading) && // последний (полный) рисуем всегда
-	    (LastDrawTime + 0.035f >= vw_GetTimeThread(0)))
+	if ((Current != AllDrawLoading) && // the last one (with 100%) must be rendered
+	    (LastDrawTime + 10 >= SDL_GetTicks())) // 100 per second - is good enough frame rate, no need more
 		return;
 
 	vw_BeginRendering(RI_COLOR_BUFFER | RI_DEPTH_BUFFER);
 	vw_Start2DMode(-1, 1);
 
-	sRECT SrcRect, DstRect;
-
-	// выводим картинку
-	SrcRect(0, 0, 1024, 512);
-	DstRect(0, 64+32, Setup.InternalWidth, 64+32+512);
+	sRECT SrcRect{0, 0, 1024, 512};
+	sRECT DstRect{0, 64+32, static_cast<int>(Setup.InternalWidth), 64+32+512};
 	vw_Draw2D(DstRect, SrcRect, LoadImageTexture, false, 1.0f, 0.0f);
 
-	// пишем "загрузка"
 	vw_DrawFont(Setup.InternalWidth / 2 - vw_FontSize(vw_GetText("LOADING")) / 2,
 		    768-128, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, vw_GetText("LOADING"));
 
-	// выводим подложку линии загрузки
 	SrcRect(0, 0, 256, 32);
 	int StartX = (Setup.InternalWidth - 256) / 2;
 	DstRect(StartX, 768-64-8-32, StartX + SrcRect.right - SrcRect.left, 768-64-8-32 + SrcRect.bottom - SrcRect.top);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("loading/loading_back.tga"), true, 1.0f, 0.0f);
 
-	// выводим линию загрузки
 	int loaded = (int)(256.0f * Current / AllDrawLoading);
 	SrcRect(0, 0, loaded, 16);
 	DstRect(StartX, 768-64-1-32, StartX + SrcRect.right - SrcRect.left, 768-64-1-32 + SrcRect.bottom - SrcRect.top);
@@ -659,7 +650,7 @@ static void DrawLoading(int Current, int AllDrawLoading, float &LastDrawTime, GL
 	vw_End2DMode();
 	vw_EndRendering();
 
-	// обработчик окна
+	// important, care about system events
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
@@ -671,10 +662,14 @@ static void DrawLoading(int Current, int AllDrawLoading, float &LastDrawTime, GL
 		}
 	}
 
-	// ставим и сюда, иначе не сможем играть во время загрузки
+	// important, update music buffers
 	Audio_LoopProc();
 
-	LastDrawTime = vw_GetTimeThread(0);
+	LastDrawTime = SDL_GetTicks();
+
+	// small delay for last call with 100%
+	if (Current == AllDrawLoading)
+		SDL_Delay(100);
 }
 
 static void PreLoadGameData(eLoading LoadType)
@@ -915,7 +910,7 @@ void LoadGameData(eLoading LoadType)
 	}
 
 	// ставим время последней прорисовки
-	float LastDrawTime = vw_GetTimeThread(0);
+	uint32_t LastDrawTime = SDL_GetTicks();
 
 	// если нужно, загрузка всех шейдеров (!) обязательно это делать до загрузки моделей
 	int RealLoadedAssets{0};
@@ -934,7 +929,7 @@ void LoadGameData(eLoading LoadType)
 				} else
 					Setup.UseGLSL120 = false;
 
-				RealLoadedAssets += 1000;
+				RealLoadedAssets += 100;
 				// рисуем текущее состояние загрузки, если не рисуем логотип
 				DrawLoading(RealLoadedAssets, AllDrawLoading, LastDrawTime, LoadImageTexture);
 			}
