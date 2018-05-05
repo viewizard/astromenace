@@ -543,6 +543,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		ObjectBlocks = Object->ObjectBlocks;
 
 		// смотрим по настройкам сколько пропускать
+		// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
 		int NeedIn = Setup.VisualEffectsQuality;
 
 		// составляем данные для взрыва

@@ -975,6 +975,7 @@ void LoadGameData(eLoading LoadType)
 		Setup.ShadowMap = 0;
 
 	// инициализация менеджера частиц (обязательно после загрузки шейдеров)
+	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
 	vw_InitParticleSystems(Setup.UseGLSL120, Setup.VisualEffectsQuality + 1.0f);
 
 	eTextureCompressionType tmpCompress{eTextureCompressionType::NONE};

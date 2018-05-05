@@ -253,7 +253,8 @@ struct sGameSetup {
 	int MSAA;
 	int CSAA;
 
-	// качество визуальных эффектов (тайловая подложка, взрывы, системы частиц)  //0-2
+	// качество визуальных эффектов (тайловая подложка, взрывы, системы частиц)
+	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
 	int VisualEffectsQuality;
 	// уровень анизотропии при фильтрации текстур
 	int AnisotropyLevel;

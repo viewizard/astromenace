@@ -96,6 +96,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 
 
 	// качество визуальных эффектов
+	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, ContentTransp, vw_GetText("Visual Effects Quality"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, Setup.VisualEffectsQuality==2)) {
 		Setup.VisualEffectsQuality++;
