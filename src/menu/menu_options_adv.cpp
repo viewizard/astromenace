@@ -35,7 +35,6 @@ int Options_UseGLSL120;
 int Options_MSAA;
 int Options_CSAA;
 int Options_ShadowMap;
-int Options_TexturesQuality;
 
 const char *ButtonQuality[3] = {
 	"High",
@@ -136,25 +135,6 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText(ButtonPointLights[Setup.MaxPointLights]));
 
 
-
-
-
-
-
-	// качество текстур
-	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 0.0f,1.0f,0.0f, ContentTransp, vw_GetText("Textures Quality"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, Options_TexturesQuality==1)) {
-		Options_TexturesQuality--;
-		if (Options_TexturesQuality < 1) Options_TexturesQuality = 3;
-	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, Options_TexturesQuality==3)) {
-		Options_TexturesQuality++;
-		if (Options_TexturesQuality > 3) Options_TexturesQuality = 1;
-	}
-	Size = vw_FontSize(vw_GetText(ButtonTexturesQuality[Options_TexturesQuality-1]));
-	SizeI = (170-Size)/2;//High, Medium, Low
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText(ButtonTexturesQuality[Options_TexturesQuality-1]));
 
 
 
@@ -403,7 +383,6 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	    Options_MSAA == Setup.MSAA &&
 	    Options_CSAA == Setup.CSAA &&
 	    Options_UseGLSL120 == Setup.UseGLSL120 &&
-	    Options_TexturesQuality == Setup.TexturesQuality &&
 	    Options_ShadowMap == Setup.ShadowMap) {
 		X = (Setup.InternalWidth - 384)/2;
 		Y = Y+Prir;
@@ -432,7 +411,6 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 			    Options_MSAA != Setup.MSAA ||
 			    Options_CSAA != Setup.CSAA ||
 			    Options_UseGLSL120 != Setup.UseGLSL120 ||
-			    Options_TexturesQuality != Setup.TexturesQuality ||
 			    Options_ShadowMap != Setup.ShadowMap) {
 				if (MenuStatus == eMenuStatus::GAME)
 					SetCurrentDialogBox(eDialogBox::RestartOnAdvOptChanged);
@@ -456,7 +434,6 @@ void SaveOptionsAdvMenuTmpData()
 	Setup.MSAA = Options_MSAA;
 	Setup.CSAA = Options_CSAA;
 	Setup.ShadowMap = Options_ShadowMap;
-	Setup.TexturesQuality = Options_TexturesQuality;
 }
 
 

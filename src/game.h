@@ -311,7 +311,6 @@ extern int Options_UseGLSL120;
 extern int Options_MSAA;
 extern int Options_CSAA;
 extern int Options_ShadowMap;
-extern int Options_TexturesQuality;
 
 void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1, float *ButtonTransp2, float *LastButtonUpdateTime2);
 void SaveOptionsAdvMenuTmpData();

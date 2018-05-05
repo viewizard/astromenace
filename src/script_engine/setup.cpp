@@ -53,7 +53,6 @@ void InitSetup()
 
 	Setup.CameraModeWithStandardAspectRatio = 0;
 
-	Setup.TexturesQuality = 3;
 	Setup.MSAA = 0;
 	Setup.CSAA = 0;
 	Setup.VisualEffectsQuality = 0;
@@ -167,7 +166,6 @@ void SaveXMLSetupFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value", Setup.CameraModeWithStandardAspectRatio);
 
 	XMLdoc->AddComment(*RootXMLEntry, " Common settings ");
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "TexturesQuality"), "value", Setup.TexturesQuality);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MSAA"), "value", Setup.MSAA);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "CSAA"), "value", Setup.CSAA);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VisualEffectsQuality"), "value", Setup.VisualEffectsQuality);
@@ -410,8 +408,6 @@ bool LoadXMLSetupFile(bool NeedSafeMode)
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "CameraModeWithStandardAspectRatio"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value", Setup.CameraModeWithStandardAspectRatio);
 
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "TexturesQuality"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "TexturesQuality"), "value", Setup.TexturesQuality);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MSAA"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MSAA"), "value", Setup.MSAA);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "CSAA"))

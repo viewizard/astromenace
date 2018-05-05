@@ -42,7 +42,7 @@
 
 struct sLoadList {
 	// имя файла
-	char FileName[MAX_PATH];
+	std::string FileName;
 	// тип файла (0-2д текстура, 1-текстура, 2-VW3D, 3-music, 4-sfx)
 	int FileType;
 	// вес данного объекта при загрузке (для текстур берем кб)
@@ -1016,63 +1016,14 @@ void LoadGameData(eLoading LoadType)
 		// текстуры
 		case 1:
 			if (!vw_FindTextureByName(LoadList[i].FileName)) {
-				int H = 0;
-				int W = 0;
-
 				// установки параметров
 				vw_SetTextureAlpha(LoadList[i].Red, LoadList[i].Green, LoadList[i].Blue);
 				vw_SetTextureProp(LoadList[i].TextFilter, LoadList[i].TextAnisotropy * Setup.AnisotropyLevel,
 						  LoadList[i].TextWrap, LoadList[i].Alpha, LoadList[i].AlphaMode, LoadList[i].MipMap);
 
-				// мы можем принудительно менять размер текстур через настройки, но надо учитывать их размеры
-				// базовый размер почти всех текстур моделей - 512х512 пикселей, небольшая часть текстур 256х256 (мины, турели)
-				// текстуры всех планет - 1024х512
-				// "неформатные" текстуры - track.VW2D и asteroid-01.tga, им вообще не надо менять размеры
-
-				if (Setup.TexturesQuality == 1) {
-					// только для текстур в папке MODELS (скайбоксы никогда не трогаем)
-					if (!strncmp("models/", LoadList[i].FileName, strlen("models/")) &&
-					    // не меняем размеры небольших текстур вообще
-					    strcmp("models/track.vw2d", LoadList[i].FileName) &&
-					    strcmp("models/space/asteroid-01.tga", LoadList[i].FileName) &&
-					    // не меняем размер или ставим спец размер
-					    strncmp("models/spacebase/", LoadList[i].FileName, strlen("models/spacebase/")) &&
-					    strncmp("models/planet/", LoadList[i].FileName, strlen("models/planet/")) &&
-					    strncmp("models/normalmap/", LoadList[i].FileName, strlen("models/normalmap/")) &&
-					    // не ставим маленький размер для текстур-подсветки файтеров землян - плохо смотрится
-					    strcmp("models/earthfighter/sf-illum01.vw2d", LoadList[i].FileName) &&
-					    strcmp("models/earthfighter/sf-illum02.vw2d", LoadList[i].FileName) &&
-					    strcmp("models/earthfighter/sf-illum03.vw2d", LoadList[i].FileName) &&
-					    strcmp("models/earthfighter/sf-illum04.vw2d", LoadList[i].FileName))
-						H = W = 128;
-					else if (!strncmp("models/spacebase/", LoadList[i].FileName, strlen("models/spacebase/")) || // для подсветки файтеров землян и частей баз (с решетками на альфа канале) - ставим больше размер
-						 !strcmp("models/earthfighter/sf-illum01.vw2d", LoadList[i].FileName) ||
-						 !strcmp("models/earthfighter/sf-illum02.vw2d", LoadList[i].FileName) ||
-						 !strcmp("models/earthfighter/sf-illum03.vw2d", LoadList[i].FileName) ||
-						 !strcmp("models/earthfighter/sf-illum04.vw2d", LoadList[i].FileName))
-							H = W = 256;
-					else if (!strncmp("models/planet/", LoadList[i].FileName, strlen("models/planet/")) && // текстуры планет не квадратные, учитываем это
-						 strcmp("models/planet/asteroid.tga", LoadList[i].FileName)) {
-							W = 512;
-							H = 256;
-					}
-				}
-				if (Setup.TexturesQuality == 2) {
-					// только для текстур в папке MODELS (скайбоксы никогда не трогаем)
-					if (!strncmp("models/", LoadList[i].FileName, strlen("models/")) &&
-					    // не меняем размеры небольших текстур вообще
-					    strcmp("models/track.vw2d", LoadList[i].FileName) &&
-					    strcmp("models/space/asteroid-01.tga", LoadList[i].FileName) &&
-					    // не меняем размер
-					    strncmp("models/spacebase/", LoadList[i].FileName, strlen("models/spacebase/")) &&
-					    strncmp("models/planet/", LoadList[i].FileName, strlen("models/planet/")) &&
-					    strncmp("models/normalmap/", LoadList[i].FileName, strlen("models/normalmap/")))
-						H = W = 256;
-				}
-
 				// если это карта нормалей, но у нас не включены шейдеры - пропускаем
 				if (!Setup.UseGLSL120 &&
-				    !strncmp("models/NORMALMAP", LoadList[i].FileName, strlen("models/NORMALMAP")))
+				    (LoadList[i].FileName.find("models/normalmap") != std::string::npos))
 					break;
 
 				eTextureCompressionType tmpCompress{eTextureCompressionType::NONE};
@@ -1082,7 +1033,7 @@ void LoadGameData(eLoading LoadType)
 					else if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::BPTC))
 						tmpCompress = eTextureCompressionType::BPTC;
 				}
-				vw_LoadTexture(LoadList[i].FileName, tmpCompress, eLoadTextureAs::AUTO, W, H);
+				vw_LoadTexture(LoadList[i].FileName, tmpCompress);
 			}
 			break;
 
