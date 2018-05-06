@@ -47,7 +47,8 @@ bool vw_BuildBufferObject(eBufferObject target, GLsizeiptr size, const GLvoid *d
 			  GLuint &buffer, eBufferObjectUsage usage)
 {
 	// Don't check 'data' parameter, since nullptr is appropriate value for glBufferData().
-	if (!_glGenBuffers ||
+	if (!data ||
+	    !_glGenBuffers ||
 	    !_glBindBuffer ||
 	    !_glBufferData ||
 	    !_glIsBuffer)
