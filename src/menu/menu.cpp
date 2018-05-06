@@ -523,7 +523,7 @@ void DrawMenu()
 	// последнее - вывод версии и копирайта
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	vw_SetInternalResolution(0, 0, false);
+	vw_SetInternalResolutionStatus(false);
 	vw_Start2DMode(-1,1);
 
 	vw_SetFontSize(10);
@@ -538,7 +538,7 @@ void DrawMenu()
 	vw_SetFontSize(16);
 
 	vw_End2DMode();
-	vw_SetInternalResolution(Setup.InternalWidth, Setup.InternalHeight, true);
+	vw_SetInternalResolutionStatus(true);
 
 
 
