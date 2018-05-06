@@ -41,7 +41,7 @@ bool CheckMeshSphereCollisionDetection(cObject3D *Object1, cObject3D *Object2, s
 
 
 	for (unsigned int j = 0; j < Object1->ObjectBlocks.size(); j++)
-		if (Object1->ObjectBlocks[j].VertexCount != 0) {
+		if (Object1->ObjectBlocks[j].VertexQuantity != 0) {
 
 			if (Object1->HitBB != nullptr) {
 				float Distance2 = (Object1->Location.x + Object1->HitBBLocation[j].x - Object2->Location.x)*(Object1->Location.x + Object1->HitBBLocation[j].x - Object2->Location.x) +
@@ -116,10 +116,10 @@ bool CheckHitBBHitBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, i
 {
 	// проверяем HitBB, находим номера пересекающихся
 	for (unsigned int i = 0; i < Object1->ObjectBlocks.size(); i++)
-		if (Object1->ObjectBlocks[i].VertexCount != 0) {
+		if (Object1->ObjectBlocks[i].VertexQuantity != 0) {
 
 			for (unsigned int j = 0; j < Object2->ObjectBlocks.size(); j++)
-				if (Object2->ObjectBlocks[j].VertexCount != 0) {
+				if (Object2->ObjectBlocks[j].VertexQuantity != 0) {
 
 					// находим расстояние между HitBB-ми
 					float Distance2 = (Object1->Location.x + Object1->HitBBLocation[i].x - Object2->Location.x - Object2->HitBBLocation[j].x)*
@@ -265,7 +265,7 @@ bool CheckHitBBOBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, int
 {
 	// проверяем HitBB, находим номера пересекающихся
 	for (unsigned int i = 0; i < Object1->ObjectBlocks.size(); i++)
-		if (Object1->ObjectBlocks[i].VertexCount != 0) {
+		if (Object1->ObjectBlocks[i].VertexQuantity != 0) {
 
 			// строим матрицу, чтобы развернуть точки
 			float TMPOldInvRotationMat[9];
@@ -417,7 +417,7 @@ bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, in
 
 	// проверяем HitBB, находим номера пересекающихся
 	for (unsigned int i = 0; i < Object1->ObjectBlocks.size(); i++)
-		if (Object1->ObjectBlocks[i].VertexCount != 0) {
+		if (Object1->ObjectBlocks[i].VertexQuantity != 0) {
 
 			// параметры HitBB
 			sVECTOR3D TMPMax = Object1->HitBB[i][0];
@@ -446,7 +446,7 @@ bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, in
 
 			// проверяем все треугольники объекта
 			for (unsigned int j = 0; j < Object2->ObjectBlocks.size(); j++)
-				if (Object2->ObjectBlocks[j].VertexCount != 0) {
+				if (Object2->ObjectBlocks[j].VertexQuantity != 0) {
 
 					// дальше работаем с геометрией
 
@@ -480,7 +480,7 @@ bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, in
 
 
 
-					for (unsigned int k = 0; k < Object2->ObjectBlocks[j].VertexCount; k+=3) {
+					for (unsigned int k = 0; k < Object2->ObjectBlocks[j].VertexQuantity; k+=3) {
 
 						int j2;
 						if (Object2->ObjectBlocks[j].IndexArray)

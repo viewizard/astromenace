@@ -54,20 +54,38 @@ static void CreateTangentAndBinormal(cModel3D *Model)
 {
 	int New_VertexFormat = RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX | RI_SEPARATE_TEX_COORD;
 	int New_VertexStride = 3 + 3 + 6;
-	std::shared_ptr<float> New_VertexBuffer{new float[New_VertexStride * Model->GlobalIndexArrayCount],
-						std::default_delete<float[]>()};
 
 	// For vertex array with new size (we need 4 more floats for each vertex), copy
 	// data with proper stride, we fill second and third textures coordinates later.
 	// Forced to 'unpack' indexed arrays, since triangles with mutual points could
 	// have different tangent data for same mutual point.
-	for (unsigned int j = 0; j < Model->GlobalIndexArrayCount; j++) {
-		memcpy(New_VertexBuffer.get() + New_VertexStride * j,
-		       Model->GlobalVertexArray.get() + Model->GlobalIndexArray.get()[j] * Model->ObjectBlocks[0].VertexStride,
-		       Model->ObjectBlocks[0].VertexStride * sizeof(float));
+	if (Model->GlobalIndexArray) {
+		std::shared_ptr<float> New_VertexBuffer{new float[New_VertexStride * Model->GlobalIndexArrayCount],
+							std::default_delete<float[]>()};
+		for (unsigned int j = 0; j < Model->GlobalIndexArrayCount; j++) {
+			memcpy(New_VertexBuffer.get() + New_VertexStride * j,
+			       Model->GlobalVertexArray.get() + Model->GlobalIndexArray.get()[j] *
+								Model->ObjectBlocks[0].VertexStride,
+			       Model->ObjectBlocks[0].VertexStride * sizeof(float));
+		}
+		Model->GlobalVertexArray = New_VertexBuffer;
+		Model->GlobalVertexArrayCount = Model->GlobalIndexArrayCount;
+		for (auto &tmpObjectBlock : Model->ObjectBlocks) {
+			if (tmpObjectBlock.IndexArray == Model->GlobalIndexArray)
+				tmpObjectBlock.IndexArray.reset();
+		}
+		Model->GlobalIndexArrayCount = 0;
+		Model->GlobalIndexArray.reset();
+	} else {
+		std::shared_ptr<float> New_VertexBuffer{new float[New_VertexStride * Model->GlobalVertexArrayCount],
+							std::default_delete<float[]>()};
+		for (unsigned int j = 0; j < Model->GlobalVertexArrayCount; j++) {
+			memcpy(New_VertexBuffer.get() + New_VertexStride * j,
+			       Model->GlobalVertexArray.get() + j * Model->ObjectBlocks[0].VertexStride,
+			       Model->ObjectBlocks[0].VertexStride * sizeof(float));
+		}
+		Model->GlobalVertexArray = New_VertexBuffer;
 	}
-	Model->GlobalVertexArray = New_VertexBuffer;
-	Model->GlobalVertexArrayCount = Model->GlobalIndexArrayCount;
 
 	// calculate tangent and binormal
 	for (unsigned int j = 0; j < Model->GlobalVertexArrayCount - 2; j += 3) {
@@ -140,11 +158,6 @@ static void CreateTangentAndBinormal(cModel3D *Model)
 				Model->GlobalVertexArray.get()[tmpOffset2 + 11] = TangentW;
 	}
 
-	// re-generate index array
-	for (unsigned int i = 0; i < Model->GlobalIndexArrayCount; i++) {
-		Model->GlobalIndexArray.get()[i] = i;
-	}
-
 	// store new vertex data
 	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
 		tmpObjectBlock.VertexArray = Model->GlobalVertexArray;
@@ -160,21 +173,22 @@ static void CreateObjectsBuffers(cModel3D *Model)
 {
 	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
 		// vertex array
-		tmpObjectBlock.VertexArray.reset(new float[tmpObjectBlock.VertexStride * tmpObjectBlock.VertexCount],
+		tmpObjectBlock.VertexArray.reset(new float[tmpObjectBlock.VertexStride * tmpObjectBlock.VertexQuantity],
 						 std::default_delete<float[]>());
-		for (unsigned int j = 0; j < tmpObjectBlock.VertexCount; j++) {
+		for (unsigned int j = 0; j < tmpObjectBlock.VertexQuantity; j++) {
+			unsigned int Offset{0};
+			if (tmpObjectBlock.IndexArray)
+				Offset = tmpObjectBlock.IndexArray.get()[tmpObjectBlock.RangeStart + j] *
+					 tmpObjectBlock.VertexStride;
+			else
+				Offset = (tmpObjectBlock.RangeStart + j) * tmpObjectBlock.VertexStride;
 			memcpy(tmpObjectBlock.VertexArray.get() + tmpObjectBlock.VertexStride * j,
-			       Model->GlobalVertexArray.get() + Model->GlobalIndexArray.get()[tmpObjectBlock.RangeStart + j] *
-								tmpObjectBlock.VertexStride,
+			       Model->GlobalVertexArray.get() + Offset,
 			       tmpObjectBlock.VertexStride * sizeof(tmpObjectBlock.VertexArray.get()[0]));
 		}
 
 		// index array
-		tmpObjectBlock.IndexArray.reset(new unsigned[tmpObjectBlock.VertexCount],
-						std::default_delete<unsigned[]>());
-		for (unsigned int j = 0; j < tmpObjectBlock.VertexCount; j++) {
-			tmpObjectBlock.IndexArray.get()[j] = j;
-		}
+		tmpObjectBlock.IndexArray.reset();
 		tmpObjectBlock.RangeStart = 0;
 	}
 }
@@ -205,12 +219,12 @@ static void CreateHardwareBuffers(cModel3D *Model)
 	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
 		// vertex buffer object
 		if (!vw_BuildBufferObject(eBufferObject::Vertex,
-					  tmpObjectBlock.VertexCount * tmpObjectBlock.VertexStride * sizeof(float),
+					  tmpObjectBlock.VertexQuantity * tmpObjectBlock.VertexStride * sizeof(float),
 					  tmpObjectBlock.VertexArray.get(), tmpObjectBlock.VBO))
 			tmpObjectBlock.VBO = 0;
 
 		// index buffer object
-		if (!vw_BuildBufferObject(eBufferObject::Index, tmpObjectBlock.VertexCount * sizeof(unsigned),
+		if (!vw_BuildBufferObject(eBufferObject::Index, tmpObjectBlock.VertexQuantity * sizeof(unsigned),
 					  tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO))
 			tmpObjectBlock.IBO = 0;
 
@@ -321,7 +335,7 @@ static void CreateVertexArrayLimitedBySizeTriangles(cModel3D *Model, float Trian
 {
 	if (TriangleSizeLimit <= 0.0f) {
 		for (auto &tmpObjectBlock : Model->ObjectBlocks) {
-			tmpObjectBlock.VertexArrayWithSmallTrianglesCount = tmpObjectBlock.VertexCount;
+			tmpObjectBlock.VertexArrayWithSmallTrianglesCount = tmpObjectBlock.VertexQuantity;
 			tmpObjectBlock.VertexArrayWithSmallTriangles = tmpObjectBlock.VertexArray;
 		}
 		return;
@@ -332,7 +346,7 @@ static void CreateVertexArrayLimitedBySizeTriangles(cModel3D *Model, float Trian
 		tmpObjectBlock.VertexArrayWithSmallTrianglesCount = 0;
 
 		// prepare 3 points (triangle)
-		for (unsigned int j = 0; j < tmpObjectBlock.VertexCount; j += 3) {
+		for (unsigned int j = 0; j < tmpObjectBlock.VertexQuantity; j += 3) {
 			// CreateObjectsBuffers() already 'unpacked' indexed arrays for ObjectBlocks,
 			// so, we could use VertexArray directly here
 			unsigned int tmpOffset0 = tmpObjectBlock.VertexStride * j;		// j
@@ -376,7 +390,7 @@ static void CreateVertexArrayLimitedBySizeTriangles(cModel3D *Model, float Trian
 	// generate VertexArrayWithSmallTriangles
 	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
 		// nothing to do
-		if (tmpObjectBlock.VertexArrayWithSmallTrianglesCount == tmpObjectBlock.VertexCount)
+		if (tmpObjectBlock.VertexArrayWithSmallTrianglesCount == tmpObjectBlock.VertexQuantity)
 			tmpObjectBlock.VertexArrayWithSmallTriangles = tmpObjectBlock.VertexArray;
 		else {
 			// allocate memory
@@ -386,7 +400,7 @@ static void CreateVertexArrayLimitedBySizeTriangles(cModel3D *Model, float Trian
 			int CurrentPosition = 0;
 
 			// prepare 3 points (triangle)
-			for (unsigned int j = 0; j < tmpObjectBlock.VertexCount; j += 3) {
+			for (unsigned int j = 0; j < tmpObjectBlock.VertexQuantity; j += 3) {
 				// CreateObjectsBuffers() already 'unpacked' indexed arrays for ObjectBlocks,
 				// so, we could use VertexArray directly here
 				unsigned int tmpOffset0 = tmpObjectBlock.VertexStride * j;		// j
@@ -549,9 +563,9 @@ bool cModel3D::LoadVW3D(const std::string &FileName)
 		File->fread(&(tmpObjectBlock.VertexFormat), sizeof(ObjectBlocks[0].VertexFormat), 1);
 		// VertexStride
 		File->fread(&(tmpObjectBlock.VertexStride), sizeof(ObjectBlocks[0].VertexStride), 1);
-		// VertexCount
-		File->fread(&(tmpObjectBlock.VertexCount), sizeof(ObjectBlocks[0].VertexCount), 1);
-		GlobalIndexArrayCount += tmpObjectBlock.VertexCount;
+		// VertexQuantity
+		File->fread(&(tmpObjectBlock.VertexQuantity), sizeof(ObjectBlocks[0].VertexQuantity), 1);
+		GlobalIndexArrayCount += tmpObjectBlock.VertexQuantity;
 
 		// Location
 		File->fread(&(tmpObjectBlock.Location), sizeof(ObjectBlocks[0].Location.x) * 3, 1);
@@ -620,8 +634,8 @@ bool cModel3D::SaveVW3D(const std::string &FileName)
 		SDL_RWwrite(FileVW3D, &tmpObjectBlock.VertexFormat, sizeof(ObjectBlocks[0].VertexFormat), 1);
 		// VertexStride
 		SDL_RWwrite(FileVW3D, &tmpObjectBlock.VertexStride, sizeof(ObjectBlocks[0].VertexStride), 1);
-		// VertexCount
-		SDL_RWwrite(FileVW3D, &tmpObjectBlock.VertexCount, sizeof(ObjectBlocks[0].VertexCount), 1);
+		// VertexQuantity
+		SDL_RWwrite(FileVW3D, &tmpObjectBlock.VertexQuantity, sizeof(ObjectBlocks[0].VertexQuantity), 1);
 		// Location
 		SDL_RWwrite(FileVW3D, &tmpObjectBlock.Location, sizeof(ObjectBlocks[0].Location.x) * 3, 1);
 		// Rotation

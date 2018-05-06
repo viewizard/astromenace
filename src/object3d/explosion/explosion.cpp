@@ -183,7 +183,7 @@ bool cExplosion::Update(float Time)
 				int Count = 0;
 
 				for (auto &tmpObjectBlock : ObjectBlocks) {
-					for (unsigned int i = 0; i < tmpObjectBlock.VertexCount; i+=3) {
+					for (unsigned int i = 0; i < tmpObjectBlock.VertexQuantity; i+=3) {
 						if (ExplosionPieceData[Count].Life > 0.0f) {
 							// получаем текущий вектор движения данного треугольника
 							TMP = ExplosionPieceData[Count].Velocity^ExplosionGeometryMove;
@@ -251,12 +251,12 @@ bool cExplosion::Update(float Time)
 
 
 					// делаем VBO
-					if (!vw_BuildBufferObject(eBufferObject::Vertex, tmpObjectBlock.VertexCount * tmpObjectBlock.VertexStride * sizeof(float), tmpObjectBlock.VertexArray.get(), tmpObjectBlock.VBO))
+					if (!vw_BuildBufferObject(eBufferObject::Vertex, tmpObjectBlock.VertexQuantity * tmpObjectBlock.VertexStride * sizeof(float), tmpObjectBlock.VertexArray.get(), tmpObjectBlock.VBO))
 						tmpObjectBlock.VBO = 0;
 
 					// делаем IBO, создаем его один раз, если его нет
-					if (tmpObjectBlock.IBO) {
-						if (!vw_BuildBufferObject(eBufferObject::Index, tmpObjectBlock.VertexCount * sizeof(unsigned), tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO))
+					if (!tmpObjectBlock.IBO) {
+						if (!vw_BuildBufferObject(eBufferObject::Index, tmpObjectBlock.VertexQuantity * sizeof(unsigned), tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO))
 							tmpObjectBlock.IBO = 0;
 					}
 

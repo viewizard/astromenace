@@ -427,7 +427,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		// ставим свои ориентейшины и скорость
 		for (unsigned int i = 0; i < Object->ObjectBlocks.size(); i++) {
 			// могут быть пустые группы, убираем их и идем смотрим на следующую группу
-			if (Object->ObjectBlocks[i].VertexCount == 0)
+			if (Object->ObjectBlocks[i].VertexQuantity == 0)
 				continue;
 
 			cShipPart *ShipPart;
@@ -558,7 +558,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			ObjectBlocks[i].VertexArrayWithSmallTrianglesCount = 0;
 
 			// делаем поворот геометрии объекта чтобы правильно сделать разлет частиц
-			ObjectBlocks[i].VertexCount = 0;
+			ObjectBlocks[i].VertexQuantity = 0;
 			int k = 0;
 			int NeedInCur = NeedIn;
 
@@ -629,7 +629,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 					ObjectBlocks[i].VertexArray.get()[j1 + 6] = Object->ObjectBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 6];
 					ObjectBlocks[i].VertexArray.get()[j1 + 7] = Object->ObjectBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 7];
 
-					ObjectBlocks[i].VertexCount++;
+					ObjectBlocks[i].VertexQuantity++;
 					k++;
 
 					if (tricount == 2) NeedInCur = NeedIn;
@@ -641,19 +641,10 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 				if (tricount >= 3) tricount=0;
 			}
 
-
-			// создаем индексный буфер блока
-			ObjectBlocks[i].IndexArray.reset(new unsigned[ObjectBlocks[i].VertexCount],
-							 std::default_delete<unsigned[]>());
-			for (unsigned int j = 0; j < ObjectBlocks[i].VertexCount; j++) {
-				ObjectBlocks[i].IndexArray.get()[j] = j;
-			}
-
-
 			ObjectBlocks[i].Location = sVECTOR3D(0.0f,0.0f,0.0f);
 			ObjectBlocks[i].Rotation = sVECTOR3D(0.0f,0.0f,0.0f);
 
-			TotalCount += ObjectBlocks[i].VertexCount;
+			TotalCount += ObjectBlocks[i].VertexQuantity;
 		}
 
 		// расстояние от центра до крайней точки
@@ -665,7 +656,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		sVECTOR3D TMP;
 		ExplosionPieceData = new sExplosionPiece[TotalCount/3];
 		for (auto &tmpObjectBlock : ObjectBlocks) {
-			for (unsigned int i = 0; i < tmpObjectBlock.VertexCount; i+=3) {
+			for (unsigned int i = 0; i < tmpObjectBlock.VertexQuantity; i+=3) {
 				ExplosionPieceData[Count].Velocity.x = tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride *  i];
 				ExplosionPieceData[Count].Velocity.x += tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * (i + 1)];
 				ExplosionPieceData[Count].Velocity.x += tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * (i + 2)];
@@ -747,13 +738,13 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 				vw_DeleteVAO(tmpObjectBlock.VAO);
 			// делаем VBO
 			if (!vw_BuildBufferObject(eBufferObject::Vertex,
-						  tmpObjectBlock.VertexCount * tmpObjectBlock.VertexStride * sizeof(float),
+						  tmpObjectBlock.VertexQuantity * tmpObjectBlock.VertexStride * sizeof(float),
 						  tmpObjectBlock.VertexArray.get(), tmpObjectBlock.VBO))
 				tmpObjectBlock.VBO = 0;
 
 			// делаем IBO, создаем его один раз, если его нет
 			if (!tmpObjectBlock.IBO) {
-				if (!vw_BuildBufferObject(eBufferObject::Index, tmpObjectBlock.VertexCount * sizeof(unsigned),
+				if (!vw_BuildBufferObject(eBufferObject::Index, tmpObjectBlock.VertexQuantity * sizeof(unsigned),
 							  tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO))
 					tmpObjectBlock.IBO = 0;
 			}

@@ -85,7 +85,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 		for (unsigned int i = 0; i < Object->ObjectBlocks.size(); i++) {
 			// могут быть пустые группы, убираем их и идем смотрим на следующую группу
 			// или это гусеница, тоже ее пропускаем
-			if (Object->ObjectBlocks[i].VertexCount == 0 || Object->TrackObjectNum == (int)i) {
+			if (Object->ObjectBlocks[i].VertexQuantity == 0 || Object->TrackObjectNum == (int)i) {
 				continue;
 			} else {
 				// создаем часть

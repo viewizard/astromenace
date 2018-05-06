@@ -830,12 +830,12 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			}
 
 			// выделяем память для данных
-			ObjectBlocks[i].VertexArray.reset(new float[ObjectBlocks[i].VertexStride * ObjectBlocks[i].VertexCount],
+			ObjectBlocks[i].VertexArray.reset(new float[ObjectBlocks[i].VertexStride * ObjectBlocks[i].VertexQuantity],
 							  std::default_delete<float[]>());
 
 			// делаем поворот геометрии объекта чтобы правильно сделать разлет частиц
 			sVECTOR3D TMP;
-			for (unsigned int j = 0; j < ObjectBlocks[i].VertexCount; j++) {
+			for (unsigned int j = 0; j < ObjectBlocks[i].VertexQuantity; j++) {
 				int j1 = j * ObjectBlocks[i].VertexStride;
 				int j2;
 				if (Projectile->ObjectBlocks[i].IndexArray)
@@ -869,21 +869,16 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 
 			ObjectBlocks[i].Location = sVECTOR3D(0.0f,0.0f,0.0f);
-
-
-			// копируем индексный буфер блока
-			ObjectBlocks[i].IndexArray.reset(new unsigned[ObjectBlocks[i].VertexCount],
-							 std::default_delete<unsigned[]>());
-			memcpy(ObjectBlocks[i].IndexArray.get(), Projectile->ObjectBlocks[i].IndexArray.get(),
-			       ObjectBlocks[i].VertexCount * sizeof(ObjectBlocks[0].VertexCount));
+			// сбрасываем индексный буфер блока (если он был), мы "распаковали" все в VertexArray
+			ObjectBlocks[i].IndexArray.reset();
 		}
 
 		float tRadius2 = Projectile->Radius/1.5f;
 
 		// для каждого треугольника - свои данные (фактически, у нас 1 объект, с ним и работаем)
 		int Count = 0;
-		ExplosionPieceData = new sExplosionPiece[ObjectBlocks[0].VertexCount / 3];
-		for (unsigned int i = 0; i < ObjectBlocks[0].VertexCount; i += 3) {
+		ExplosionPieceData = new sExplosionPiece[ObjectBlocks[0].VertexQuantity / 3];
+		for (unsigned int i = 0; i < ObjectBlocks[0].VertexQuantity; i += 3) {
 			ExplosionPieceData[Count].Velocity.x = ObjectBlocks[0].VertexArray.get()[i * ObjectBlocks[0].VertexStride];
 			ExplosionPieceData[Count].Velocity.y = ObjectBlocks[0].VertexArray.get()[i * ObjectBlocks[0].VertexStride + 1];
 			ExplosionPieceData[Count].Velocity.z = ObjectBlocks[0].VertexArray.get()[i * ObjectBlocks[0].VertexStride + 2];
@@ -947,13 +942,13 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 		// делаем VBO
 		if (!vw_BuildBufferObject(eBufferObject::Vertex,
-					  ObjectBlocks[0].VertexCount * ObjectBlocks[0].VertexStride * sizeof(float),
+					  ObjectBlocks[0].VertexQuantity * ObjectBlocks[0].VertexStride * sizeof(float),
 					  ObjectBlocks[0].VertexArray.get(), ObjectBlocks[0].VBO))
 			ObjectBlocks[0].VBO = 0;
 
 		// делаем IBO, создаем его один раз, если его нет
 		if (!ObjectBlocks[0].IBO) {
-			if (!vw_BuildBufferObject(eBufferObject::Index, ObjectBlocks[0].VertexCount * sizeof(unsigned),
+			if (!vw_BuildBufferObject(eBufferObject::Index, ObjectBlocks[0].VertexQuantity * sizeof(unsigned),
 						  ObjectBlocks[0].IndexArray.get(), ObjectBlocks[0].IBO))
 				ObjectBlocks[0].IBO = 0;
 		}

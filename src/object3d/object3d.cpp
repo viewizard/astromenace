@@ -107,7 +107,7 @@ void cObject3D::InitByDrawObjectList()
 		float MaxY = -10000.0f;
 		float MinZ = 10000.0f;
 		float MaxZ = -10000.0f;
-		if (ObjectBlocks[i].VertexCount > 0) {
+		if (ObjectBlocks[i].VertexQuantity > 0) {
 			int j = 0;
 			int j2;
 			if (ObjectBlocks[i].IndexArray)
@@ -130,7 +130,7 @@ void cObject3D::InitByDrawObjectList()
 			MinZ = MaxZ = 0.0f;
 		}
 
-		for (unsigned int j = 0; j < ObjectBlocks[i].VertexCount; j++) {
+		for (unsigned int j = 0; j < ObjectBlocks[i].VertexQuantity; j++) {
 			int j2;
 			if (ObjectBlocks[i].IndexArray)
 				j2 = ObjectBlocks[i].IndexArray.get()[ObjectBlocks[i].RangeStart + j] * ObjectBlocks[i].VertexStride;
@@ -240,12 +240,14 @@ void cObject3D::InitByDrawObjectList()
 	// находим "центр массы", в базовом режиме считаем всю геометрию
 	int AllVertexCounted = 0;
 	for (auto &tmpObjectBlock : ObjectBlocks) {
-		for (unsigned int j = 0; j < tmpObjectBlock.VertexCount; j++) {
+		for (unsigned int j = 0; j < tmpObjectBlock.VertexQuantity; j++) {
 			AllVertexCounted++;
 
-			unsigned int tmpIndex = tmpObjectBlock.VertexStride * j;
+			unsigned int tmpIndex{0};
 			if (tmpObjectBlock.IndexArray.get())
 				tmpIndex = tmpObjectBlock.IndexArray.get()[j] * tmpObjectBlock.VertexStride;
+			else
+				tmpIndex = tmpObjectBlock.VertexStride * j;
 
 			GeometryCenterLocation += tmpObjectBlock.Location + sVECTOR3D(tmpObjectBlock.VertexArray.get()[tmpIndex],
 						  tmpObjectBlock.VertexArray.get()[tmpIndex + 1],
@@ -713,7 +715,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 			int GlobalVertexCount = 0;
 			for (auto &tmpObjectBlock : ObjectBlocks) {
-				GlobalVertexCount += tmpObjectBlock.VertexCount;
+				GlobalVertexCount += tmpObjectBlock.VertexQuantity;
 			}
 
 			// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
@@ -754,7 +756,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				}
 
 
-				vw_Draw3D(ePrimitiveType::TRIANGLES, tmpObjectBlock.VertexCount, RI_3f_XYZ, tmpObjectBlock.VertexArray.get(),
+				vw_Draw3D(ePrimitiveType::TRIANGLES, tmpObjectBlock.VertexQuantity, RI_3f_XYZ, tmpObjectBlock.VertexArray.get(),
 					  tmpObjectBlock.VertexStride * sizeof(float), tmpObjectBlock.VBO,
 					  tmpObjectBlock.RangeStart, tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO, tmpObjectBlock.VAO);
 
@@ -953,7 +955,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 		int GlobalVertexCount = 0;
 		for (auto &tmpObjectBlock : ObjectBlocks) {
-			GlobalVertexCount += tmpObjectBlock.VertexCount;
+			GlobalVertexCount += tmpObjectBlock.VertexQuantity;
 		}
 
 		// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
@@ -1160,7 +1162,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			}
 
 
-			vw_Draw3D(ePrimitiveType::TRIANGLES, ObjectBlocks[i].VertexCount, ObjectBlocks[i].VertexFormat, ObjectBlocks[i].VertexArray.get(),
+			vw_Draw3D(ePrimitiveType::TRIANGLES, ObjectBlocks[i].VertexQuantity, ObjectBlocks[i].VertexFormat, ObjectBlocks[i].VertexArray.get(),
 				  ObjectBlocks[i].VertexStride * sizeof(float), ObjectBlocks[i].VBO,
 				  ObjectBlocks[i].RangeStart, ObjectBlocks[i].IndexArray.get(), ObjectBlocks[i].IBO, ObjectBlocks[i].VAO);
 

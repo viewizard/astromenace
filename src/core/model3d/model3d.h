@@ -65,11 +65,12 @@ struct sObjectBlock {
 	// if we allocate memory, bind vbo/ibo/vao personally for this object - release/delete this resources
 	bool NeedDestroyDataInObjectBlock{false};
 
+	// vertex quantity, that should be rendered
+	unsigned int VertexQuantity{0};
 	// vertex-related
 	std::shared_ptr<float> VertexArray{}; // float[], make sure, that custom deleter are used
 	int VertexFormat{0};
-	unsigned int VertexStride{0};	// in bytes
-	unsigned int VertexCount{0};
+	unsigned int VertexStride{0}; // in bytes
 	GLuint VBO{0};
 	// index-related
 	std::shared_ptr<unsigned> IndexArray{}; // unsigned[], make sure, that custom deleter are used
@@ -99,11 +100,11 @@ public:
 
 	// vertex-related
 	std::shared_ptr<float> GlobalVertexArray{}; // float[], make sure, that custom deleter are used
-	unsigned int GlobalVertexArrayCount{0};
+	unsigned int GlobalVertexArrayCount{0}; // vertex quantity in GlobalVertexArray
 	GLuint GlobalVBO{0};
 	// index-related
 	std::shared_ptr<unsigned> GlobalIndexArray{}; // unsigned[], make sure, that custom deleter are used
-	unsigned int GlobalIndexArrayCount{0};
+	unsigned int GlobalIndexArrayCount{0}; // GlobalIndexArray's size
 	GLuint GlobalIBO{0};
 	// vao-related
 	GLuint GlobalVAO{0};
