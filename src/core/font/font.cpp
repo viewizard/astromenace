@@ -390,8 +390,10 @@ int vw_GenerateFontChars(unsigned FontTextureWidth, unsigned FontTextureHeight,
 	// create texture from bitmap
 	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0,
 			  eTextureWrapMode::CLAMP_TO_EDGE, true, eAlphaCreateMode::GREYSC, false);
-	GLtexture FontTexture = vw_CreateTextureFromMemory("auto_generated_texture_for_fonts", tmpPixels,
-							   FontTextureWidth, FontTextureHeight, 4);
+	std::string tmpTextureName{"auto_generated_texture_for_fonts_" +
+				   std::to_string(SDL_GetTicks()) + "_" +
+				   std::to_string(InternalFontSize.i())};
+	GLtexture FontTexture = vw_CreateTextureFromMemory(tmpTextureName, tmpPixels, FontTextureWidth, FontTextureHeight, 4);
 	if (!FontTexture) {
 		std::cerr << __func__ << "(): " << "Can't create font texture.\n";
 		return ERR_MEM;
