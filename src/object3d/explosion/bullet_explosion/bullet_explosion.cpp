@@ -933,7 +933,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 
 		// удаляем старые буферы, если они есть, создаем новые
-		// ! индексный буфер не трогаем, его не надо пересоздавать вообще
+		// IBO у нас быть не должно, мы "распаковали" уже все в VertexArray, IndexArray сбошен
 
 		if (ObjectBlocks[0].VBO)
 			vw_DeleteBufferObject(ObjectBlocks[0].VBO);
@@ -945,13 +945,6 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 					  ObjectBlocks[0].VertexQuantity * ObjectBlocks[0].VertexStride * sizeof(float),
 					  ObjectBlocks[0].VertexArray.get(), ObjectBlocks[0].VBO))
 			ObjectBlocks[0].VBO = 0;
-
-		// делаем IBO, создаем его один раз, если его нет
-		if (!ObjectBlocks[0].IBO) {
-			if (!vw_BuildBufferObject(eBufferObject::Index, ObjectBlocks[0].VertexQuantity * sizeof(unsigned),
-						  ObjectBlocks[0].IndexArray.get(), ObjectBlocks[0].IBO))
-				ObjectBlocks[0].IBO = 0;
-		}
 
 		// делаем VAO
 		if (!vw_BuildVAO(ObjectBlocks[0].VAO, ObjectBlocks[0].VertexFormat,

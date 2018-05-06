@@ -554,6 +554,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			ObjectBlocks[i].VAO = 0;
 			ObjectBlocks[i].NeedDestroyDataInObjectBlock = true; // удалять в объекте
 			ObjectBlocks[i].RangeStart = 0;
+			ObjectBlocks[i].IndexArray.reset();
 			ObjectBlocks[i].VertexArrayWithSmallTriangles.reset();
 			ObjectBlocks[i].VertexArrayWithSmallTrianglesCount = 0;
 
@@ -730,24 +731,18 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 			// пересоздаем буферы vbo и vao
 			// удаляем старые буферы, если они есть, создаем новые
-			// ! индексный буфер не трогаем, его не надо пересоздавать вообще
+			// IBO у нас быть не должно, используем VertexArrayWithSmallTriangles
 
 			if (tmpObjectBlock.VBO)
 				vw_DeleteBufferObject(tmpObjectBlock.VBO);
 			if (tmpObjectBlock.VAO)
 				vw_DeleteVAO(tmpObjectBlock.VAO);
+
 			// делаем VBO
 			if (!vw_BuildBufferObject(eBufferObject::Vertex,
 						  tmpObjectBlock.VertexQuantity * tmpObjectBlock.VertexStride * sizeof(float),
 						  tmpObjectBlock.VertexArray.get(), tmpObjectBlock.VBO))
 				tmpObjectBlock.VBO = 0;
-
-			// делаем IBO, создаем его один раз, если его нет
-			if (!tmpObjectBlock.IBO) {
-				if (!vw_BuildBufferObject(eBufferObject::Index, tmpObjectBlock.VertexQuantity * sizeof(unsigned),
-							  tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO))
-					tmpObjectBlock.IBO = 0;
-			}
 
 			// делаем VAO
 			if (!vw_BuildVAO(tmpObjectBlock.VAO, tmpObjectBlock.VertexFormat,
