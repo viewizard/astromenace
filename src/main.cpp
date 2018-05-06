@@ -309,7 +309,8 @@ int main( int argc, char **argv )
 
 
 	// версия
-	std::cout << "AstroMenace " << GAME_VERSION << " " << GAME_BUILD << "\n\n";
+	std::cout << "AstroMenace " << GAME_VERSION << "\n";
+	std::cout << "VFS version " << GAME_VFS_BUILD << "\n\n";
 
 
 
@@ -379,7 +380,7 @@ int main( int argc, char **argv )
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// подключаем VFS
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (vw_OpenVFS(VFSFileNamePath, GAME_BUILD) != 0) {
+	if (vw_OpenVFS(VFSFileNamePath, GAME_VFS_BUILD) != 0) {
 		std::cerr << __func__ << "(): " << "gamedata.vfs file not found or corrupted.\n";
 		return 0;
 	}

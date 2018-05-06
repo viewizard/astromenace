@@ -38,9 +38,6 @@ void InitSetup()
 	// базовые настройки, устанавливаем всегда - кто там знает, что в xml файле есть
 	// всегда устанавливаем текущее разрешение рабочего стола
 
-	// устанавливаем номер билда
-	Setup.BuildVersion = GAME_BUILD;
-
 	Setup.MenuLanguage = 0; // en by default
 	Setup.VoiceLanguage = 0; // en by default
 	Setup.FontNumber = 0;
@@ -147,8 +144,6 @@ void SaveXMLSetupFile()
 	XMLdoc->AddComment(*RootXMLEntry, " AstroMenace game Settings ");
 
 
-
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "GAME_BUILD"), "value", GAME_BUILD);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MenuLanguage"), "value", vw_GetText("en", Setup.MenuLanguage));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VoiceLanguage"), "value", vw_GetText("en", Setup.VoiceLanguage));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "FontNumber"), "value", Setup.FontNumber);

@@ -29,7 +29,7 @@
 #define CONFIG_H
 
 #define GAME_VERSION		"1.3.9 git"
-#define GAME_BUILD		180505
+#define GAME_VFS_BUILD		180505
 
 
 

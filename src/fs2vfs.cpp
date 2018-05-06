@@ -415,7 +415,7 @@ const std::string GameData[] = {
  */
 int ConvertFS2VFS(const std::string RawDataDir, const std::string VFSFileNamePath)
 {
-	return vw_CreateVFS(VFSFileNamePath, GAME_BUILD,
+	return vw_CreateVFS(VFSFileNamePath, GAME_VFS_BUILD,
 			    RawDataDir, "models/models.pack",
 			    GameData, GameDataCount);
 }

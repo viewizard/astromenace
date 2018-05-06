@@ -473,9 +473,6 @@ void DrawMenu()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_Start2DMode(-1,1);
 
-
-
-
 	switch(MenuStatus) {
 	case eMenuStatus::MAIN_MENU:
 		MainMenu();
@@ -518,6 +515,7 @@ void DrawMenu()
 		break;
 	}
 
+	vw_End2DMode();
 
 
 
@@ -525,20 +523,23 @@ void DrawMenu()
 	// последнее - вывод версии и копирайта
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	// Version
-	vw_DrawFont(6, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %s %s %i", vw_GetText("Version"), GAME_VERSION, vw_GetText("build"), GAME_BUILD);
+	vw_SetInternalResolution(0, 0, false);
+	vw_Start2DMode(-1,1);
 
+	vw_SetFontSize(10);
+	// Version
+	int VSize = vw_FontSize(vw_GetText("Version"));
+	vw_DrawFont(6, Setup.Height-16, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 0.99f, vw_GetText("Version"));
+	vw_DrawFont(16 + VSize, Setup.Height-16, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 0.99f, GAME_VERSION);
 	// Copyright
 	int CSize = vw_FontSize("Copyright © 2007-2018, Viewizard");
-	vw_DrawFont(Setup.InternalWidth-7-CSize, 740, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "Copyright © 2007-2018, Viewizard");
+	vw_DrawFont(Setup.Width-6-CSize, Setup.Height-16, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 0.99f,
+		    "Copyright © 2007-2018, Viewizard");
+	vw_SetFontSize(16);
 
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// завершение прорисовки
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_End2DMode();
+	vw_SetInternalResolution(Setup.InternalWidth, Setup.InternalHeight, true);
+
 
 
 	// если нужно - рисуем в окошке еще одном
