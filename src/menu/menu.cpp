@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../ui/font.h"
 #include "../script_engine/script.h"
 #include "../object3d/object3d.h"
 #include "../gfx/star_system.h"
@@ -535,7 +536,7 @@ void DrawMenu()
 	int CSize = vw_FontSize("Copyright © 2007-2018, Viewizard");
 	vw_DrawFont(Setup.Width-6-CSize, Setup.Height-16, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 0.99f,
 		    "Copyright © 2007-2018, Viewizard");
-	vw_SetFontSize(16);
+	ResetFontSize();
 
 	vw_End2DMode();
 	vw_SetInternalResolutionStatus(true);

@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../ui/font.h"
 #include "../object3d/weapon/weapon.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
@@ -1212,7 +1213,7 @@ void Workshop_Weaponry()
 
 	vw_SetFontSize(24);
 	vw_DrawFont(Setup.InternalWidth/2-445, 600, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Weapon Stock"));
-	vw_SetFontSize(16);
+	ResetFontSize();
 
 	DrawShipWeaponsInSlots();
 
@@ -1242,7 +1243,7 @@ void Workshop_Weaponry()
 
 	vw_SetFontSize(24);
 	vw_DrawFont(Setup.InternalWidth/2+445-vw_FontSize(vw_GetText("Installed Weapons")), 600, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Installed Weapons"));
-	vw_SetFontSize(16);
+	ResetFontSize();
 
 	// вывод информации
 	vw_SetFontSize(20);
@@ -1251,7 +1252,7 @@ void Workshop_Weaponry()
 		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", vw_GetText("Money"), Setup.Profile[CurrentProfile].Money);
 	else
 		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Money"), Setup.Profile[CurrentProfile].Money);
-	vw_SetFontSize(16);
+	ResetFontSize();
 
 
 

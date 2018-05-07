@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../ui/font.h"
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
@@ -557,7 +558,7 @@ void Workshop_Shipyard()
 	// на новом корабле
 	vw_SetFontSize(24);
 	vw_DrawFont(Setup.InternalWidth/2-445, 600, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Ship Stock"));
-	vw_SetFontSize(16);
+	ResetFontSize();
 
 
 	// вывод названия корабля
@@ -637,7 +638,7 @@ void Workshop_Shipyard()
 	// на корабле игрока
 	vw_SetFontSize(24);
 	vw_DrawFont(Setup.InternalWidth/2+445-vw_FontSize(vw_GetText("Player Ship")), 600, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Player Ship"));
-	vw_SetFontSize(16);
+	ResetFontSize();
 
 	// вывод названия корабля
 	vw_DrawFont(Setup.InternalWidth/2+64, 56, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("%s Mk%i"), vw_GetText(GetWorkshopShipName(Setup.Profile[CurrentProfile].Ship)), Setup.Profile[CurrentProfile].ShipHullUpgrade);
@@ -728,7 +729,7 @@ void Workshop_Shipyard()
 		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", vw_GetText("Money"), Setup.Profile[CurrentProfile].Money);
 	else
 		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Money"), Setup.Profile[CurrentProfile].Money);
-	vw_SetFontSize(16);
+	ResetFontSize();
 }
 
 

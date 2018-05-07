@@ -293,10 +293,6 @@ std::unordered_set<char32_t> &vw_FindCharsSetForLanguage()
 //      forced to switch textures and draw small vertex buffers all the time (if character
 //      frequently used in text and use personal texture for rendering).
 
-// TODO languages names and special characters should be included
-//      We also need all characters for languages names (second row in the TextTableUTF32)
-//      and copyright symbol.
-
 	if (TextTableUTF32.empty()) {
 		// default symbols for English, since we don't have text loaded
 		std::string tmpSymbols{"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

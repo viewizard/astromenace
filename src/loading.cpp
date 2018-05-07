@@ -37,6 +37,7 @@
 #include "object3d/object3d.h"
 #include "gfx/star_system.h"
 #include "gfx/shadow_map.h"
+#include "ui/font.h"
 
 struct sLoadList {
 	// имя файла
@@ -860,9 +861,8 @@ void LoadGameData(eLoading LoadType)
 		NeedLoadShaders = true;
 	}
 
-	// generate texture for all used characters in text
 	if (LoadType == eLoading::MenuWithLogo)
-		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
+		GenerateFonts();
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// загружаем логотип компании

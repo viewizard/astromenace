@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../ui/font.h"
 
 
 const char *ButtonGameWeaponInfoType[4] = {
@@ -65,7 +66,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		vw_SetTextLanguage(Setup.MenuLanguage);
 		// forced to regenerate textures (base texture connected to language-related characters set)
 		vw_ReleaseAllFontChars();
-		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
+		GenerateFonts();
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false)) {
 		if (Setup.MenuLanguage >= (vw_GetLanguageListCount() - 1))
@@ -76,7 +77,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		vw_SetTextLanguage(Setup.MenuLanguage);
 		// forced to regenerate textures (base texture connected to language-related characters set)
 		vw_ReleaseAllFontChars();
-		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
+		GenerateFonts();
 	}
 
 	int Size, SizeI;
@@ -119,8 +120,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
 		vw_ReleaseAllFontChars();
 		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
-		vw_SetFontSize(16);
-		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
+		GenerateFonts();
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, Setup.FontNumber >= FontQuantity-1)) {
 		Setup.FontNumber ++;
@@ -129,8 +129,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
 		vw_ReleaseAllFontChars();
 		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
-		vw_SetFontSize(16);
-		vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
+		GenerateFonts();
 	}
 	int Scale = 0;
 	Size = vw_FontSize(FontList[Setup.FontNumber].FontTitle);

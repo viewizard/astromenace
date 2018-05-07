@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../ui/font.h"
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
@@ -1558,7 +1559,7 @@ Dialogs with default type:
 			vw_SetTextLanguage(Setup.MenuLanguage);
 			// forced to regenerate textures (base texture connected to language-related characters set)
 			vw_ReleaseAllFontChars();
-			vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
+			GenerateFonts();
 		}
 		if (DrawDialogButton128(X+316+34, Y+ButtonOffset-73, vw_GetText("Next"), DialogContentTransp)) {
 			if (Setup.MenuLanguage >= (vw_GetLanguageListCount() - 1))
@@ -1569,7 +1570,7 @@ Dialogs with default type:
 			vw_SetTextLanguage(Setup.MenuLanguage);
 			// forced to regenerate textures (base texture connected to language-related characters set)
 			vw_ReleaseAllFontChars();
-			vw_GenerateFontChars(256, 256, vw_FindCharsSetForLanguage());
+			GenerateFonts();
 		}
 
 		vw_SetFontSize(24);
@@ -1580,7 +1581,7 @@ Dialogs with default type:
 			vw_DrawFont(X+138+34, Y+ButtonOffset-71, -170, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("English", Setup.MenuLanguage));
 		else
 			vw_DrawFont(X+138+34+SizeI, Y+ButtonOffset-71, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("English", Setup.MenuLanguage));
-		vw_SetFontSize(16);
+		ResetFontSize();
 
 		if (DrawDialogButton200(X+128+64-72/2, Y+ButtonOffset, vw_GetText("OK"), DialogContentTransp)) {
 			// первоначально, язык голоса ставим такой же, как и язык меню

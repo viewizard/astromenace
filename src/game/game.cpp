@@ -33,6 +33,7 @@
 
 #include "../core/core.h"
 #include "../game.h"
+#include "../ui/font.h"
 #include "../gfx/star_system.h"
 #include "../script_engine/script.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
@@ -1437,7 +1438,7 @@ void DrawGame()
 		vw_SetFontSize(20);
 		int TmpFontSize = (Setup.InternalWidth-vw_FontSize("%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed))/2;
 		vw_DrawFont(TmpFontSize, 80, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameSpeedShowTransp, "%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed);
-		vw_SetFontSize(16);
+		ResetFontSize();
 
 		CurrentGameSpeedShowTime -= TimeDelta;
 		if (CurrentGameSpeedShowTime < 0.0f) CurrentGameSpeedShowTime = 0.0f;

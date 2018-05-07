@@ -28,6 +28,7 @@
 // TODO move to SDL_GetBasePath(), SDL_GetPrefPath() + SDL_free() usage (libSDL2)
 
 #include "game.h"
+#include "ui/font.h"
 #include "gfx/shadow_map.h"
 #include "script_engine/script.h"
 #include "object3d/object3d.h"
@@ -400,8 +401,7 @@ int main( int argc, char **argv )
 		Setup.FontNumber = 0;
 
 	// иним фонт
-	vw_InitFont(FontList[Setup.FontNumber].FontFileName);
-	vw_SetFontSize(16);
+	InitFont(FontList[Setup.FontNumber].FontFileName);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

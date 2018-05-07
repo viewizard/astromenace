@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../ui/font.h"
 #include "../object3d/explosion/space_explosion/space_explosion.h"
 #include "../object3d/space_object/space_object.h"
 #include "../object3d/ground_object/ground_object.h"
@@ -466,7 +467,7 @@ void GamePlayerShip()
 			vw_SetFontSize(24);
 			int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("Missile Detected")))/2;
 			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3, vw_GetText("Missile Detected"));
-			vw_SetFontSize(16);
+			ResetFontSize();
 			WarningMessagesCount++;
 		} else {
 			if (CurrentAlert3 == 1.0f) { // сделали полный цикл , предыдущее значение счетчика было минимальное
@@ -476,7 +477,7 @@ void GamePlayerShip()
 				vw_SetFontSize(24);
 				int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("Missile Detected")))/2;
 				vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3, vw_GetText("Missile Detected"));
-				vw_SetFontSize(16);
+				ResetFontSize();
 				WarningMessagesCount++;
 			}
 		}
@@ -533,7 +534,7 @@ void GamePlayerShip()
 			vw_SetFontSize(24);
 			int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("Collision Course Detected")))/2;
 			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3, vw_GetText("Collision Course Detected"));
-			vw_SetFontSize(16);
+			ResetFontSize();
 			WarningMessagesCount++;
 		}
 
