@@ -964,14 +964,15 @@ bool cSpaceShip::Update(float Time)
 					Weapon[i]->WeaponFire(Time);
 
 					WeaponGroupCurrentFireDelay = PrimTime/(PrimCount*PrimCount);
-					WeaponGroupCurrentFireNum ++;
-					if (WeaponGroupCurrentFireNum > LastWeapon) WeaponGroupCurrentFireNum = FirstWeapon;
+					WeaponGroupCurrentFireNum++;
+					if (WeaponGroupCurrentFireNum > LastWeapon)
+						WeaponGroupCurrentFireNum = FirstWeapon;
 
 					// если такого оружия нет, берем что есть
 					if (Weapon[WeaponGroupCurrentFireNum] == nullptr) {
 						bool exit = false;
 						while (!exit) {
-							WeaponGroupCurrentFireNum ++;
+							WeaponGroupCurrentFireNum++;
 							if (WeaponGroupCurrentFireNum > LastWeapon)
 								WeaponGroupCurrentFireNum = FirstWeapon;
 							if (Weapon[WeaponGroupCurrentFireNum] != nullptr)
@@ -1023,7 +1024,7 @@ bool cSpaceShip::Update(float Time)
 					BossWeapon[i]->WeaponFire(Time);
 
 					BossWeaponGroupCurrentFireDelay = PrimTime/(PrimCount*PrimCount);
-					BossWeaponGroupCurrentFireNum ++;
+					BossWeaponGroupCurrentFireNum++;
 					if (BossWeaponGroupCurrentFireNum > LastWeapon)
 						BossWeaponGroupCurrentFireNum = FirstWeapon;
 
@@ -1031,7 +1032,7 @@ bool cSpaceShip::Update(float Time)
 					if (BossWeapon[BossWeaponGroupCurrentFireNum] == nullptr) {
 						bool exit = false;
 						while (!exit) {
-							BossWeaponGroupCurrentFireNum ++;
+							BossWeaponGroupCurrentFireNum++;
 							if (BossWeaponGroupCurrentFireNum > LastWeapon)
 								BossWeaponGroupCurrentFireNum = FirstWeapon;
 							if (BossWeapon[BossWeaponGroupCurrentFireNum] != nullptr)
@@ -1202,7 +1203,7 @@ bool cSpaceShip::Update(float Time)
 				if ((Weapon[i] != nullptr) &&
 				    (Weapon[i]->NeedRotateOnTargeting)) {
 					WeaponAvLocation = WeaponAvLocation + WeaponLocation[i] + Weapon[i]->FireLocation + Location;
-					UsedWeaponQunt ++;
+					UsedWeaponQunt++;
 				}
 			}
 		}
@@ -1271,7 +1272,7 @@ bool cSpaceShip::Update(float Time)
 				if ((BossWeapon[i] != nullptr) &&
 				    (BossWeapon[i]->NeedRotateOnTargeting)) {
 					WeaponAvLocation = WeaponAvLocation + BossWeaponLocation[i] + BossWeapon[i]->FireLocation + Location;
-					UsedWeaponQunt ++;
+					UsedWeaponQunt++;
 				}
 			}
 		}
@@ -1344,7 +1345,7 @@ bool cSpaceShip::Update(float Time)
 				for (int i=0; i<WeaponQuantity; i++) {
 					if (Weapon[i] != nullptr) {
 						WeaponAvLocation = WeaponAvLocation + WeaponLocation[i] + Weapon[i]->FireLocation + Location;
-						UsedWeaponQunt ++;
+						UsedWeaponQunt++;
 					}
 				}
 			}
@@ -1450,7 +1451,7 @@ bool cSpaceShip::Update(float Time)
 			for (int i = 0; i < WeaponQuantity; i++) {
 				if (Weapon[i] != nullptr) {
 					WeaponAvLocation = WeaponAvLocation + WeaponLocation[i] + Weapon[i]->FireLocation + Location;
-					UsedWeaponQunt ++;
+					UsedWeaponQunt++;
 				}
 			}
 		}

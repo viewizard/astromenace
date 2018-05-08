@@ -941,15 +941,14 @@ void ExitGameWithSave()
 	}
 
 	// ставим следующую миссию
-	CurrentMission ++;
+	CurrentMission++;
 	// перемещаем ограничитель дальше, если это нужно
 	if (GameConfig().Profile[CurrentProfile].OpenLevelNum < CurrentMission)
 		ChangeGameConfig().Profile[CurrentProfile].OpenLevelNum = CurrentMission;
 
 	// если дальше уже ничего нет, просто снимаем все... пусть игрок сам выберет
-	if (CurrentMission > AllMission-1) {
+	if (CurrentMission > (AllMission - 1))
 		CurrentMission = -1;
-	}
 
 	vw_ResetWheelStatus();
 	// ставим нужный лист миссий

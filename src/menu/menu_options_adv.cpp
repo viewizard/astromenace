@@ -215,7 +215,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 			}
 		}
 
-		CurrentMode --;
+		CurrentMode--;
 		if (CurrentMode < -1)
 			CurrentMode = vw_GetDevCaps().MultisampleCoverageModes.size() - 1;
 
@@ -246,8 +246,8 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 			}
 		}
 
-		CurrentMode ++;
-		if (CurrentMode > (int)vw_GetDevCaps().MultisampleCoverageModes.size() - 1)
+		CurrentMode++;
+		if (CurrentMode > static_cast<int>(vw_GetDevCaps().MultisampleCoverageModes.size() - 1))
 			CurrentMode = -1;
 
 		// -1 - делаем "выключение" антиалиасинга

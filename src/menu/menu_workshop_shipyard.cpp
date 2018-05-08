@@ -439,7 +439,7 @@ void BuyShip()
 	WorkshopCreateBuyShip();
 
 	// переводим на другой корабль
-	CurrentWorkshopNewFighter ++;
+	CurrentWorkshopNewFighter++;
 	if (CurrentWorkshopNewFighter == GameConfig().Profile[CurrentProfile].Ship)
 		CurrentWorkshopNewFighter++;
 	if (CurrentWorkshopNewFighter > 22)

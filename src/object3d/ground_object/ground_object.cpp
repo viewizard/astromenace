@@ -438,7 +438,7 @@ bool cGroundObject::Update(float Time)
 							Weapon[i]->WeaponFire(Time);
 
 							WeaponGroupCurrentFireDelay = (PrimTime/PrimCount)*((1.0f+GameNPCWeaponPenalty)/2.0f);
-							WeaponGroupCurrentFireNum ++;
+							WeaponGroupCurrentFireNum++;
 							if (WeaponGroupCurrentFireNum > LastWeapon)
 								WeaponGroupCurrentFireNum = FirstWeapon;
 
@@ -446,7 +446,7 @@ bool cGroundObject::Update(float Time)
 							if (Weapon[WeaponGroupCurrentFireNum] == nullptr) {
 								bool exit = false;
 								while (!exit) {
-									WeaponGroupCurrentFireNum ++;
+									WeaponGroupCurrentFireNum++;
 									if (WeaponGroupCurrentFireNum > LastWeapon)
 										WeaponGroupCurrentFireNum = FirstWeapon;
 									if (Weapon[WeaponGroupCurrentFireNum] != nullptr)
@@ -491,7 +491,7 @@ bool cGroundObject::Update(float Time)
 								Weapon[i]->WeaponFire(Time);
 
 								WeaponGroupCurrentFireDelay = PrimTime/(PrimCount*PrimCount);
-								WeaponGroupCurrentFireNum ++;
+								WeaponGroupCurrentFireNum++;
 								if (WeaponGroupCurrentFireNum > LastWeapon)
 									WeaponGroupCurrentFireNum = FirstWeapon;
 
@@ -499,7 +499,7 @@ bool cGroundObject::Update(float Time)
 								if (Weapon[WeaponGroupCurrentFireNum] == nullptr) {
 									bool exit = false;
 									while (!exit) {
-										WeaponGroupCurrentFireNum ++;
+										WeaponGroupCurrentFireNum++;
 										if (WeaponGroupCurrentFireNum > LastWeapon)
 											WeaponGroupCurrentFireNum = FirstWeapon;
 										if (Weapon[WeaponGroupCurrentFireNum] != nullptr)

@@ -115,7 +115,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Menu Font"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, GameConfig().FontNumber <= 0)) {
-		ChangeGameConfig().FontNumber --;
+		ChangeGameConfig().FontNumber--;
 		if (GameConfig().FontNumber < 0)
 			ChangeGameConfig().FontNumber = 0;
 
@@ -125,9 +125,9 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		GenerateFonts();
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, GameConfig().FontNumber >= (FontQuantity - 1))) {
-		ChangeGameConfig().FontNumber ++;
-		if (GameConfig().FontNumber > FontQuantity-1)
-			ChangeGameConfig().FontNumber = FontQuantity-1;
+		ChangeGameConfig().FontNumber++;
+		if (GameConfig().FontNumber > (FontQuantity - 1))
+			ChangeGameConfig().FontNumber = FontQuantity - 1;
 
 		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
 		vw_ReleaseAllFontChars();

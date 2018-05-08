@@ -224,7 +224,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 
 
 	// этот уровень уже занят, переходим к следующему для нового оружия
-	RightDrawLevelPos ++;
+	RightDrawLevelPos++;
 }
 
 
@@ -416,7 +416,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 	}
 
 	// этот уровень уже занят, переходим к следующему для нового оружия
-	LeftDrawLevelPos ++;
+	LeftDrawLevelPos++;
 }
 
 

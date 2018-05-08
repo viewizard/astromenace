@@ -634,13 +634,14 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 					ObjectBlocks[i].VertexQuantity++;
 					k++;
 
-					if (tricount == 2) NeedInCur = NeedIn;
-				} else {
-					if (tricount == 2) NeedInCur --;
-				}
+					if (tricount == 2)
+						NeedInCur = NeedIn;
+				} else if (tricount == 2)
+					NeedInCur--;
 
-				tricount ++;
-				if (tricount >= 3) tricount=0;
+				tricount++;
+				if (tricount >= 3)
+					tricount = 0;
 			}
 
 			ObjectBlocks[i].Location = sVECTOR3D(0.0f,0.0f,0.0f);

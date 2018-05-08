@@ -1303,13 +1303,13 @@ void InformationMenu()
 
 	X = GameConfig().InternalWidth / 2 - 209;
 	if (DrawButton200_2(X,Y+28, vw_GetText("Page Up"), MenuContentTransp, false)) {
-		CreateNum --;
+		CreateNum--;
 		if (CreateNum < 1)
 			CreateNum = InfoEnd;
 		CreateInfoObject();
 	}
 	if (vw_GetKeyStatus(SDLK_PAGEUP)) {
-		CreateNum --;
+		CreateNum--;
 		if (CreateNum < 1)
 			CreateNum = InfoEnd;
 		CreateInfoObject();
@@ -1318,13 +1318,13 @@ void InformationMenu()
 
 	X = GameConfig().InternalWidth / 2 + 9;
 	if (DrawButton200_2(X,Y+28, vw_GetText("Page Down"), MenuContentTransp, false)) {
-		CreateNum ++;
+		CreateNum++;
 		if (CreateNum > InfoEnd)
 			CreateNum = 1;
 		CreateInfoObject();
 	}
 	if (vw_GetKeyStatus(SDLK_PAGEDOWN)) {
-		CreateNum ++;
+		CreateNum++;
 		if (CreateNum > InfoEnd)
 			CreateNum = 1;
 		CreateInfoObject();
