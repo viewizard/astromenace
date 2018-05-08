@@ -160,7 +160,7 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 
 
 	// получаем длину текста
-	int Size = vw_FontSize(Text);
+	int Size = vw_TextWidth(Text);
 	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
 	float WScale = 0;
 	if (Size > 176) {
@@ -247,7 +247,7 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 
 
 	// получаем длину текста
-	int Size = vw_FontSize(Text);
+	int Size = vw_TextWidth(Text);
 	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
 	float WScale = 0;
 	if (Size > 108) {
@@ -290,7 +290,7 @@ void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float 
 	sRECT SrcRect, DstRect;
 
 	// получаем длину текста
-	int Size = vw_FontSize(Text);
+	int Size = vw_TextWidth(Text);
 
 	bool ON = false;
 	bool CanClick = false;
@@ -545,10 +545,10 @@ Dialogs with default type:
 	switch (CurrentDialogBox) {
 	case eDialogBox::QuitFromGame: // хотим выйти или нет?
 		// название диалога
-		SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("QUIT")))/2;
+		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("QUIT")))/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("QUIT"));
 		// текст диалога
-		SizeI1 = vw_FontSize(vw_GetText("Are you sure you want to quit?"));
+		SizeI1 = vw_TextWidth(vw_GetText("Are you sure you want to quit?"));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -556,7 +556,7 @@ Dialogs with default type:
 		} else
 			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Are you sure you want to quit?"));
 
-		SizeI1 = vw_FontSize(vw_GetText("Note: all game data will be saved."));
+		SizeI1 = vw_TextWidth(vw_GetText("Note: all game data will be saved."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -575,10 +575,10 @@ Dialogs with default type:
 
 	case eDialogBox::ProfileCreationError: // в профайле все занято, не можем создать новую запись.
 		// название диалога
-		SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("ERROR")))/2;
+		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("ERROR")))/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("ERROR"));
 		// текст диалога
-		SizeI1 = vw_FontSize(vw_GetText("Cannot create a Pilot Profile."));
+		SizeI1 = vw_TextWidth(vw_GetText("Cannot create a Pilot Profile."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -586,7 +586,7 @@ Dialogs with default type:
 		} else
 			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Cannot create a Pilot Profile."));
 
-		SizeI1 = vw_FontSize(vw_GetText("Tip: you should clear one line first."));
+		SizeI1 = vw_TextWidth(vw_GetText("Tip: you should clear one line first."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -600,10 +600,10 @@ Dialogs with default type:
 
 	case eDialogBox::DeleteProfile: // удаление профайла - запрос
 		// название диалога
-		SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("DELETE")))/2;
+		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("DELETE")))/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("DELETE"));
 		// текст диалога
-		SizeI1 = vw_FontSize(vw_GetText("Are you sure you want to delete the Profile?"));
+		SizeI1 = vw_TextWidth(vw_GetText("Are you sure you want to delete the Profile?"));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -611,7 +611,7 @@ Dialogs with default type:
 		} else
 			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Are you sure you want to delete the Profile?"));
 
-		SizeI1 = vw_FontSize(vw_GetText("Note: all Pilot Profile data will be lost."));
+		SizeI1 = vw_TextWidth(vw_GetText("Note: all Pilot Profile data will be lost."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -633,10 +633,10 @@ Dialogs with default type:
 
 	case eDialogBox::RepairShip: // не полный ремонт (не достаточно денег)
 		// название диалога
-		SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("REPAIR")))/2;
+		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("REPAIR")))/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("REPAIR"));
 		// текст диалога
-		SizeI1 = vw_FontSize(vw_GetText("Not enough money for the full hull repair."));
+		SizeI1 = vw_TextWidth(vw_GetText("Not enough money for the full hull repair."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -644,7 +644,7 @@ Dialogs with default type:
 		} else
 			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Not enough money for the full hull repair."));
 
-		SizeI1 = vw_FontSize(vw_GetText("Note: Repair has been limited by money."));
+		SizeI1 = vw_TextWidth(vw_GetText("Note: Repair has been limited by money."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -659,10 +659,10 @@ Dialogs with default type:
 
 	case eDialogBox::QuitNoSave: // хотим выйти или нет?, с предупреждением, что не все сохраним
 		// название диалога
-		SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("QUIT")))/2;
+		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("QUIT")))/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("QUIT"));
 		// текст диалога
-		SizeI1 = vw_FontSize(vw_GetText("Are you sure you want to quit?"));
+		SizeI1 = vw_TextWidth(vw_GetText("Are you sure you want to quit?"));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -670,7 +670,7 @@ Dialogs with default type:
 		} else
 			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Are you sure you want to quit?"));
 
-		SizeI1 = vw_FontSize(vw_GetText("Note: the current game data will be lost."));
+		SizeI1 = vw_TextWidth(vw_GetText("Note: the current game data will be lost."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -689,10 +689,10 @@ Dialogs with default type:
 	case eDialogBox::QuiToMenuNoSave: // хотим выйти или нет?, с предупреждением, что не все сохраним
 		// выход из игры в меню (основное)
 		// название диалога
-		SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("QUIT")))/2;
+		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("QUIT")))/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("QUIT"));
 		// текст диалога
-		SizeI1 = vw_FontSize(vw_GetText("Are you sure you want to quit?"));
+		SizeI1 = vw_TextWidth(vw_GetText("Are you sure you want to quit?"));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -701,7 +701,7 @@ Dialogs with default type:
 
 			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Are you sure you want to quit?"));
 
-		SizeI1 = vw_FontSize(vw_GetText("Note: the current game data will be lost."));
+		SizeI1 = vw_TextWidth(vw_GetText("Note: the current game data will be lost."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -720,10 +720,10 @@ Dialogs with default type:
 
 	case eDialogBox::RestartLevelNoSave: // хотим рестарт игры?, с предупреждением, что не все сохраним
 		// название диалога
-		SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("RESTART")))/2;
+		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("RESTART")))/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("RESTART"));
 		// текст диалога
-		SizeI1 = vw_FontSize(vw_GetText("Are you sure you want to restart the game?"));
+		SizeI1 = vw_TextWidth(vw_GetText("Are you sure you want to restart the game?"));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -731,7 +731,7 @@ Dialogs with default type:
 		} else
 			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Are you sure you want to restart the game?"));
 
-		SizeI1 = vw_FontSize(vw_GetText("Note: the current game data will be lost."));
+		SizeI1 = vw_TextWidth(vw_GetText("Note: the current game data will be lost."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -754,7 +754,7 @@ Dialogs with default type:
 	// вывод данных по кораблю
 	case eDialogBox::ShowShipInfo: {
 		// название диалога
-		SizeI = 17 + (WTitle-vw_FontSize(vw_GetText(GetWorkshopShipName(DialogSpaceShip->ObjectCreationType))))/2;
+		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText(GetWorkshopShipName(DialogSpaceShip->ObjectCreationType))))/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText(GetWorkshopShipName(DialogSpaceShip->ObjectCreationType)));
 		// текст диалога
 		int Y1 = Y+80;
@@ -863,11 +863,11 @@ Dialogs with default type:
 		int SSS = 0;
 		if (DialogSpaceShip->WeaponQuantity>0) {
 			vw_DrawText(X1+Size+SSS, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i", DialogSpaceShip->WeaponType[0]);
-			SSS += vw_FontSize("%i", DialogSpaceShip->WeaponType[0]);
+			SSS += vw_TextWidth("%i", DialogSpaceShip->WeaponType[0]);
 		}
 		for (int i=1; i<DialogSpaceShip->WeaponQuantity; i++) {
 			vw_DrawText(X1+Size+SSS, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "/%i", DialogSpaceShip->WeaponType[i]);
-			SSS += vw_FontSize("/%i", DialogSpaceShip->WeaponType[i]);
+			SSS += vw_TextWidth("/%i", DialogSpaceShip->WeaponType[i]);
 		}
 
 		// закрываем...
@@ -878,7 +878,7 @@ Dialogs with default type:
 	// вывод данных по оружию
 	case eDialogBox::ShowWeaponsInfo: {
 		// название диалога
-		SizeI = 17 + (WTitle-vw_FontSize(vw_GetText(GetWeaponName(DialogWeapon->ObjectCreationType))))/2;
+		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText(GetWeaponName(DialogWeapon->ObjectCreationType))))/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText(GetWeaponName(DialogWeapon->ObjectCreationType)));
 		// текст диалога
 		int Y1 = Y+80;
@@ -953,7 +953,7 @@ Dialogs with default type:
 	// вывод данных по системам
 	case eDialogBox::ShowSystemsInfo: {
 		// название диалога
-		SizeI = 17 + (WTitle-vw_FontSize(vw_GetText(GetSystemName(DialogSystem))))/2;
+		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText(GetSystemName(DialogSystem))))/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText(GetSystemName(DialogSystem)));
 		// текст диалога
 		int Y1 = Y+80;
@@ -1033,10 +1033,10 @@ Dialogs with default type:
 			if (GameConfig().Profile[CurrentProfile].SpaceShipControlMode == 1) {
 				Y1 += Offset;
 				Y1 += Offset;
-				SizeI = (W-vw_FontSize(vw_GetText("Useless with Arcade")))/2-45;
+				SizeI = (W-vw_TextWidth(vw_GetText("Useless with Arcade")))/2-45;
 				vw_DrawText(X1+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::red, DialogContentTransp, vw_GetText("Useless with Arcade"));
 				Y1 += Offset;
-				SizeI = (W-vw_FontSize(vw_GetText("SpaceShip Control Mode.")))/2-45;
+				SizeI = (W-vw_TextWidth(vw_GetText("SpaceShip Control Mode.")))/2-45;
 				vw_DrawText(X1+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::red, DialogContentTransp, vw_GetText("SpaceShip Control Mode."));
 			}
 
@@ -1203,10 +1203,10 @@ Dialogs with default type:
 			if (GameConfig().Profile[CurrentProfile].WeaponTargetingMode == 1) {
 				Y1 += Offset;
 				Y1 += Offset;
-				SizeI = (W-vw_FontSize(vw_GetText("Useless with Arcade")))/2-45;
+				SizeI = (W-vw_TextWidth(vw_GetText("Useless with Arcade")))/2-45;
 				vw_DrawText(X1+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::red, DialogContentTransp, vw_GetText("Useless with Arcade"));
 				Y1 += Offset;
-				SizeI = (W-vw_FontSize(vw_GetText("Weapon Targeting Mode.")))/2-45;
+				SizeI = (W-vw_TextWidth(vw_GetText("Weapon Targeting Mode.")))/2-45;
 				vw_DrawText(X1+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::red, DialogContentTransp, vw_GetText("Weapon Targeting Mode."));
 			}
 
@@ -1289,30 +1289,30 @@ Dialogs with default type:
 
 	case eDialogBox::ProfileTipsAndTricks: { // подсказки на меню профилей
 		// название диалога
-		SizeI1 = vw_FontSize(vw_GetText("Tips and hints"));
+		SizeI1 = vw_TextWidth(vw_GetText("Tips and hints"));
 		SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("Tips and hints"));
 		// текст диалога
 
-		SizeI = vw_FontSize(vw_GetText("It is possible to create five Pilot Profiles in the game in"));
+		SizeI = vw_TextWidth(vw_GetText("It is possible to create five Pilot Profiles in the game in"));
 		vw_DrawText(X+25, Y+ 80, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("It is possible to create five Pilot Profiles in the game in"));
-		SizeI = vw_FontSize(vw_GetText("order to store personal data. You can set an individual"));
+		SizeI = vw_TextWidth(vw_GetText("order to store personal data. You can set an individual"));
 		vw_DrawText(X+25, Y+115, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("order to store personal data. You can set an individual"));
-		SizeI = vw_FontSize(vw_GetText("difficulty level for each profile or delete the current"));
+		SizeI = vw_TextWidth(vw_GetText("difficulty level for each profile or delete the current"));
 		vw_DrawText(X+25, Y+150, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("difficulty level for each profile or delete the current"));
 		vw_DrawText(X+25, Y+185, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("profile to free space for a new profile."));
 
-		SizeI = vw_FontSize(vw_GetText("Note that the current difficulty level is displayed in percent"));
+		SizeI = vw_TextWidth(vw_GetText("Note that the current difficulty level is displayed in percent"));
 		vw_DrawText(X+25, Y+240, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("Note that the current difficulty level is displayed in percent"));
-		SizeI = vw_FontSize(vw_GetText("for each profile. This value influences the increase of"));
+		SizeI = vw_TextWidth(vw_GetText("for each profile. This value influences the increase of"));
 		vw_DrawText(X+25, Y+275, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("for each profile. This value influences the increase of"));
-		SizeI = vw_FontSize(vw_GetText("experience. For instance, if you bring down an enemy ship, you"));
+		SizeI = vw_TextWidth(vw_GetText("experience. For instance, if you bring down an enemy ship, you"));
 		vw_DrawText(X+25, Y+310, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("experience. For instance, if you bring down an enemy ship, you"));
-		SizeI = vw_FontSize(vw_GetText("will get 100 money units and only 65 experience units if the"));
+		SizeI = vw_TextWidth(vw_GetText("will get 100 money units and only 65 experience units if the"));
 		vw_DrawText(X+25, Y+345, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("will get 100 money units and only 65 experience units if the"));
 		vw_DrawText(X+25, Y+380, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("difficulty percent is set to 65 for you."));
 
-		SizeI = vw_FontSize(vw_GetText("Note: you can change your difficulty level before each"));
+		SizeI = vw_TextWidth(vw_GetText("Note: you can change your difficulty level before each"));
 		vw_DrawText(X+25, Y+435, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("Note: you can change your difficulty level before each"));
 		vw_DrawText(X+25, Y+470, -716, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("new mission."));
 
@@ -1327,25 +1327,25 @@ Dialogs with default type:
 	}
 	case eDialogBox::ShipyardTipsAndTricks: { // подсказки на меню шипъярд
 		// название диалога
-		SizeI1 = vw_FontSize(vw_GetText("Tips and hints"));
+		SizeI1 = vw_TextWidth(vw_GetText("Tips and hints"));
 		SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("Tips and hints"));
 		// текст диалога
 
 		int k=28;
-		SizeI = vw_FontSize(vw_GetText("There are more than 20 spaceships with unique characteristics"));
+		SizeI = vw_TextWidth(vw_GetText("There are more than 20 spaceships with unique characteristics"));
 		vw_DrawText(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("There are more than 20 spaceships with unique characteristics"));
-		SizeI = vw_FontSize(vw_GetText("available in the game. You can use the right part of the screen"));
+		SizeI = vw_TextWidth(vw_GetText("available in the game. You can use the right part of the screen"));
 		vw_DrawText(X+25, Y+80+k*1, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("available in the game. You can use the right part of the screen"));
-		SizeI = vw_FontSize(vw_GetText("to see your current spaceship, its characteristics and cost and"));
+		SizeI = vw_TextWidth(vw_GetText("to see your current spaceship, its characteristics and cost and"));
 		vw_DrawText(X+25, Y+80+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("to see your current spaceship, its characteristics and cost and"));
 		vw_DrawText(X+25, Y+80+k*3, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("also to perform basic operations, such as repair."));
 
-		SizeI = vw_FontSize(vw_GetText("The left part of the screen contains Ship Stock where you can see"));
+		SizeI = vw_TextWidth(vw_GetText("The left part of the screen contains Ship Stock where you can see"));
 		vw_DrawText(X+25, Y+100+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("The left part of the screen contains Ship Stock where you can see"));
-		SizeI = vw_FontSize(vw_GetText("all available spaceships and their characteristics. Do not"));
+		SizeI = vw_TextWidth(vw_GetText("all available spaceships and their characteristics. Do not"));
 		vw_DrawText(X+25, Y+100+k*5, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("all available spaceships and their characteristics. Do not"));
-		SizeI = vw_FontSize(vw_GetText("forget that each ship has its dimensions and, which is more"));
+		SizeI = vw_TextWidth(vw_GetText("forget that each ship has its dimensions and, which is more"));
 		vw_DrawText(X+25, Y+100+k*6, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("forget that each ship has its dimensions and, which is more"));
 		vw_DrawText(X+25, Y+100+k*7, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("important, different weapon mounts."));
 
@@ -1367,37 +1367,37 @@ Dialogs with default type:
 	}
 	case eDialogBox::SystemsTipsAndTricks: { // подсказки на меню системы
 		// название диалога
-		SizeI1 = vw_FontSize(vw_GetText("Tips and hints"));
+		SizeI1 = vw_TextWidth(vw_GetText("Tips and hints"));
 		SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("Tips and hints"));
 		// текст диалога
 
 		int k=25;
-		SizeI = vw_FontSize(vw_GetText("A set of systems is installed on the ship you operate. All systems"));
+		SizeI = vw_TextWidth(vw_GetText("A set of systems is installed on the ship you operate. All systems"));
 		vw_DrawText(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("A set of systems is installed on the ship you operate. All systems"));
-		SizeI = vw_FontSize(vw_GetText("are connected with each other and with ship weapons in one way or"));
+		SizeI = vw_TextWidth(vw_GetText("are connected with each other and with ship weapons in one way or"));
 		vw_DrawText(X+25, Y+80+k*1, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("are connected with each other and with ship weapons in one way or"));
 		vw_DrawText(X+25, Y+80+k*2, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("another and play important role in the game."));
 
-		SizeI = vw_FontSize(vw_GetText("You should carefully take into account the peculiarities of each"));
+		SizeI = vw_TextWidth(vw_GetText("You should carefully take into account the peculiarities of each"));
 		vw_DrawText(X+25, Y+100+k*3, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("You should carefully take into account the peculiarities of each"));
-		SizeI = vw_FontSize(vw_GetText("system and match their characteristics to each other to get"));
+		SizeI = vw_TextWidth(vw_GetText("system and match their characteristics to each other to get"));
 		vw_DrawText(X+25, Y+100+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("system and match their characteristics to each other to get"));
 		vw_DrawText(X+25, Y+100+k*5, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("a well balanced warship that can complete combat tasks."));
 
-		SizeI = vw_FontSize(vw_GetText("Engine - ship engine system. Pay attention to how this system consumes"));
+		SizeI = vw_TextWidth(vw_GetText("Engine - ship engine system. Pay attention to how this system consumes"));
 		vw_DrawText(X+25, Y+120+k*6, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("Engine - ship engine system. Pay attention to how this system consumes"));
 		vw_DrawText(X+40, Y+120+k*7, -701, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("energy. Otherwise you run the risk of being unable to move."));
-		SizeI = vw_FontSize(vw_GetText("energy. Otherwise you run the risk of being unable to move."));
+		SizeI = vw_TextWidth(vw_GetText("energy. Otherwise you run the risk of being unable to move."));
 		vw_DrawText(X+25, Y+120+k*8, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("Power - ship energy source. Pay attention to the main two characte-"));
 		vw_DrawText(X+40, Y+120+k*9, -701, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("ristics of this system - Recharge Rate and Capacity."));
-		SizeI = vw_FontSize(vw_GetText("O.T.C. - Optical Target Computer. As you can see from its name,"));
+		SizeI = vw_TextWidth(vw_GetText("O.T.C. - Optical Target Computer. As you can see from its name,"));
 		vw_DrawText(X+25, Y+120+k*10, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("O.T.C. - Optical Target Computer. As you can see from its name,"));
 		vw_DrawText(X+40, Y+120+k*11, -701, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("this system is responsible for optical targeting."));
-		SizeI = vw_FontSize(vw_GetText("Targeting - Weapon targeting system. It depends on this system how"));
+		SizeI = vw_TextWidth(vw_GetText("Targeting - Weapon targeting system. It depends on this system how"));
 		vw_DrawText(X+25, Y+120+k*12, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("Targeting - Weapon targeting system. It depends on this system how"));
 		vw_DrawText(X+40, Y+120+k*13, -701, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("fast a weapon will aim and how accurate the shot will be."));
-		SizeI = vw_FontSize(vw_GetText("Advanced - The most advanced, but yet untested systems for"));
+		SizeI = vw_TextWidth(vw_GetText("Advanced - The most advanced, but yet untested systems for"));
 		vw_DrawText(X+25, Y+120+k*14, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("Advanced - The most advanced, but yet untested systems for"));
 		vw_DrawText(X+40, Y+120+k*15, -701, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("enhancing ship invulnerability."));
 
@@ -1412,38 +1412,38 @@ Dialogs with default type:
 	}
 	case eDialogBox::WeaponryTipsAndTricks: { // подсказки на меню оружейная
 		// название диалога
-		SizeI1 = vw_FontSize(vw_GetText("Tips and hints"));
+		SizeI1 = vw_TextWidth(vw_GetText("Tips and hints"));
 		SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("Tips and hints"));
 		// текст диалога
 
 		int k=25;
-		SizeI = vw_FontSize(vw_GetText("You can use this section to buy, sell and set up the weapons on"));
+		SizeI = vw_TextWidth(vw_GetText("You can use this section to buy, sell and set up the weapons on"));
 		vw_DrawText(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("You can use this section to buy, sell and set up the weapons on"));
-		SizeI = vw_FontSize(vw_GetText("your ship. To buy a weapon, just drag its icon from Weapon Stock"));
+		SizeI = vw_TextWidth(vw_GetText("your ship. To buy a weapon, just drag its icon from Weapon Stock"));
 		vw_DrawText(X+25, Y+80+k*1, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("your ship. To buy a weapon, just drag its icon from Weapon Stock"));
-		SizeI = vw_FontSize(vw_GetText("to a weapon slot on your ship. Note that each weapon has its"));
+		SizeI = vw_TextWidth(vw_GetText("to a weapon slot on your ship. Note that each weapon has its"));
 		vw_DrawText(X+25, Y+80+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("to a weapon slot on your ship. Note that each weapon has its"));
-		SizeI = vw_FontSize(vw_GetText("own level (from 1 to 5), you should see that the slot level is"));
+		SizeI = vw_TextWidth(vw_GetText("own level (from 1 to 5), you should see that the slot level is"));
 		vw_DrawText(X+25, Y+80+k*3, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("own level (from 1 to 5), you should see that the slot level is"));
-		SizeI = vw_FontSize(vw_GetText("not less than the weapon level. To sell a weapon, perform"));
+		SizeI = vw_TextWidth(vw_GetText("not less than the weapon level. To sell a weapon, perform"));
 		vw_DrawText(X+25, Y+80+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("not less than the weapon level. To sell a weapon, perform"));
 		vw_DrawText(X+25, Y+80+k*5, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("the reverse operation."));
 
-		SizeI = vw_FontSize(vw_GetText("The weapon is set up and recharged with the Setup button"));
+		SizeI = vw_TextWidth(vw_GetText("The weapon is set up and recharged with the Setup button"));
 		vw_DrawText(X+25, Y+100+k*6, SizeI > 716 ? -716 : 716, 0,1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("The weapon is set up and recharged with the Setup button"));
 		vw_DrawText(X+25, Y+100+k*7, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("in the right part of the weapon slot panel."));
 
 		vw_DrawText(X+25, Y+120+k*8, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("Main types of weapons by their projectiles:"));
-		SizeI = vw_FontSize(vw_GetText("Projectile - small projectiles based on billets or energy beams."));
+		SizeI = vw_TextWidth(vw_GetText("Projectile - small projectiles based on billets or energy beams."));
 		vw_DrawText(X+25, Y+120+k*9, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("Projectile - small projectiles based on billets or energy beams."));
 		vw_DrawText(X+40, Y+120+k*10, -701, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("It is the main and most widespread weapon in the game."));
-		SizeI = vw_FontSize(vw_GetText("Self-propelled projectile - missiles, torpedoes and nuclear bombs."));
+		SizeI = vw_TextWidth(vw_GetText("Self-propelled projectile - missiles, torpedoes and nuclear bombs."));
 		vw_DrawText(X+25, Y+120+k*11, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("Self-propelled projectile - missiles, torpedoes and nuclear bombs."));
-		SizeI = vw_FontSize(vw_GetText("The disadvantages of these weapons include the low speed"));
+		SizeI = vw_TextWidth(vw_GetText("The disadvantages of these weapons include the low speed"));
 		vw_DrawText(X+40, Y+120+k*12, SizeI > 701 ? -701 : 701, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("The disadvantages of these weapons include the low speed"));
 		vw_DrawText(X+40, Y+120+k*13, -701, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("of the projectile and the possibility of bring it down."));
-		SizeI = vw_FontSize(vw_GetText("Beam - Lasers and Masers. Short-range highly energy-"));
+		SizeI = vw_TextWidth(vw_GetText("Beam - Lasers and Masers. Short-range highly energy-"));
 		vw_DrawText(X+25, Y+120+k*14, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("Beam - Lasers and Masers. Short-range highly energy-"));
 		vw_DrawText(X+40, Y+120+k*15, -701, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("consuming weapons."));
 
@@ -1461,14 +1461,14 @@ Dialogs with default type:
 
 	case eDialogBox::ShortkeyTipsAndTricks: { // подсказки на горячие клавиши в игре
 		// название диалога
-		SizeI1 = vw_FontSize(vw_GetText("Tips and hints"));
+		SizeI1 = vw_TextWidth(vw_GetText("Tips and hints"));
 		SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("Tips and hints"));
 		// текст диалога
 
 		int k=23;
 
-		SizeI = (W-vw_FontSize(vw_GetText("GAME KEYBOARD SHORTCUTS")))/2;
+		SizeI = (W-vw_TextWidth(vw_GetText("GAME KEYBOARD SHORTCUTS")))/2;
 		vw_DrawText(X+SizeI, Y+80+k*0, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("GAME KEYBOARD SHORTCUTS"));
 
 		vw_DrawText(X+25, Y+100+k*1, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("F2 - toggle show/hide game FPS counter."));
@@ -1510,28 +1510,28 @@ Dialogs with default type:
 
 	case eDialogBox::StartMissionSecondTime: { // подсказка, если пытаемся по второму разу пройти миссию
 		// название диалога
-		SizeI1 = vw_FontSize(vw_GetText("Tips and hints"));
+		SizeI1 = vw_TextWidth(vw_GetText("Tips and hints"));
 		SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("Tips and hints"));
 		// текст диалога
 
 		int k=30;
 
-		SizeI = vw_FontSize(vw_GetText("You have already completed this mission. Your previous best"));
+		SizeI = vw_TextWidth(vw_GetText("You have already completed this mission. Your previous best"));
 		vw_DrawText(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("You have already completed this mission. Your previous best"));
 		vw_DrawText(X+25, Y+80+k*1, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("result is %i points of experience."), GameConfig().Profile[CurrentProfile].ByMissionExperience[CurrentMission]);
 
-		SizeI = vw_FontSize(vw_GetText("You can replay this mission as many times as you like, but you"));
+		SizeI = vw_TextWidth(vw_GetText("You can replay this mission as many times as you like, but you"));
 		vw_DrawText(X+25, Y+100+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("You can replay this mission as many times as you like, but you"));
-		SizeI = vw_FontSize(vw_GetText("should take into account that only the best result you"));
+		SizeI = vw_TextWidth(vw_GetText("should take into account that only the best result you"));
 		vw_DrawText(X+25, Y+100+k*3, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("should take into account that only the best result you"));
-		SizeI = vw_FontSize(vw_GetText("number of experience points."));
+		SizeI = vw_TextWidth(vw_GetText("number of experience points."));
 		vw_DrawText(X+25, Y+100+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("achieve in this mission will be used to calculate the total"));
 		vw_DrawText(X+25, Y+100+k*5, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("number of experience points."));
 
-		SizeI = vw_FontSize(vw_GetText("Note that each time you complete the mission again,"));
+		SizeI = vw_TextWidth(vw_GetText("Note that each time you complete the mission again,"));
 		vw_DrawText(X+25, Y+120+k*6, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("Note that each time you complete the mission again,"));
-		SizeI = vw_FontSize(vw_GetText("the amount of money you get when you destroy the enemy"));
+		SizeI = vw_TextWidth(vw_GetText("the amount of money you get when you destroy the enemy"));
 		vw_DrawText(X+25, Y+120+k*7, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("the amount of money you get when you destroy the enemy"));
 		vw_DrawText(X+25, Y+120+k*8, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("in this mission is reduced two times."));
 
@@ -1554,7 +1554,7 @@ Dialogs with default type:
 	// спрашиваем какой язык при первом старте игры
 	case eDialogBox::ChoseLanguage: {
 		// название диалога
-		SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("Language")))/2;
+		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("Language")))/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("Language"));
 
 
@@ -1583,7 +1583,7 @@ Dialogs with default type:
 
 		vw_SetFontSize(24);
 		int Size;
-		Size = vw_FontSize(vw_GetText("English", GameConfig().MenuLanguage));
+		Size = vw_TextWidth(vw_GetText("English", GameConfig().MenuLanguage));
 		SizeI = (170-Size)/2;
 		if (Size > 170)
 			vw_DrawText(X+138+34, Y+ButtonOffset-71, -170, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("English", GameConfig().MenuLanguage));
@@ -1601,10 +1601,10 @@ Dialogs with default type:
 
 	case eDialogBox::RestartOnOptionsChanged: // при изменении настроек в самой игре спрашиваем, с предупреждением, что не все сохраним
 		// название диалога
-		SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("RESTART")))/2;
+		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("RESTART")))/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("RESTART"));
 		// текст диалога
-		SizeI1 = vw_FontSize(vw_GetText("Are you sure you want to restart the game?"));
+		SizeI1 = vw_TextWidth(vw_GetText("Are you sure you want to restart the game?"));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -1612,7 +1612,7 @@ Dialogs with default type:
 		} else
 			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Are you sure you want to restart the game?"));
 
-		SizeI1 = vw_FontSize(vw_GetText("Note: the current game data will be lost."));
+		SizeI1 = vw_TextWidth(vw_GetText("Note: the current game data will be lost."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -1632,10 +1632,10 @@ Dialogs with default type:
 		break;
 	case eDialogBox::RestartOnAdvOptChanged: // при изменении продвинутых настроек в самой игре, с предупреждением, что не все сохраним
 		// название диалога
-		SizeI = 17 + (WTitle-vw_FontSize(vw_GetText("RESTART")))/2;
+		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("RESTART")))/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("RESTART"));
 		// текст диалога
-		SizeI1 = vw_FontSize(vw_GetText("Are you sure you want to restart the game?"));
+		SizeI1 = vw_TextWidth(vw_GetText("Are you sure you want to restart the game?"));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
@@ -1643,7 +1643,7 @@ Dialogs with default type:
 		} else
 			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Are you sure you want to restart the game?"));
 
-		SizeI1 = vw_FontSize(vw_GetText("Note: the current game data will be lost."));
+		SizeI1 = vw_TextWidth(vw_GetText("Note: the current game data will be lost."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;

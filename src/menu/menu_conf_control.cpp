@@ -325,13 +325,13 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	Y1 += Prir1;
-	int SizeI1 = vw_FontSize(vw_GetText("MOUSE"));
+	int SizeI1 = vw_TextWidth(vw_GetText("MOUSE"));
 	int SizeI = SizeI1 > 130 ? -15 : (100-SizeI1)/2;
 	vw_DrawText(X1+315+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("MOUSE"));
-	SizeI1 = vw_FontSize(vw_GetText("KEYBOARD"));
+	SizeI1 = vw_TextWidth(vw_GetText("KEYBOARD"));
 	SizeI = SizeI1 > 130 ? 10 : (150-SizeI1)/2;
 	vw_DrawText(X1+446+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("KEYBOARD"));
-	SizeI1 = vw_FontSize(vw_GetText("JOYSTICK"));
+	SizeI1 = vw_TextWidth(vw_GetText("JOYSTICK"));
 	SizeI = SizeI1 > 130 ? 10 : (150-SizeI1)/2;
 	vw_DrawText(X1+605+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("JOYSTICK"));
 

@@ -82,7 +82,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	}
 
 	int Size, SizeI;
-	Size = vw_FontSize(vw_GetText("English", GameConfig().MenuLanguage));
+	Size = vw_TextWidth(vw_GetText("English", GameConfig().MenuLanguage));
 	SizeI = (170-Size)/2;
 	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("English", GameConfig().MenuLanguage));
 
@@ -105,7 +105,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 			ChangeGameConfig().VoiceLanguage++;
 	}
 
-	Size = vw_FontSize(vw_GetText("English", GameConfig().VoiceLanguage));
+	Size = vw_TextWidth(vw_GetText("English", GameConfig().VoiceLanguage));
 	SizeI = (170-Size)/2;
 	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("English", GameConfig().VoiceLanguage));
 
@@ -135,7 +135,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		GenerateFonts();
 	}
 	int Scale = 0;
-	Size = vw_FontSize(FontList[GameConfig().FontNumber].FontTitle);
+	Size = vw_TextWidth(FontList[GameConfig().FontNumber].FontTitle);
 	if (Size > 170) {
 		Scale = -170;
 		Size = 170;
@@ -171,7 +171,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, false) || DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false)) {
 		ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
 	}
-	Size = vw_FontSize(GameConfig().ShowFPS ? vw_GetText("On") : vw_GetText("Off"));
+	Size = vw_TextWidth(GameConfig().ShowFPS ? vw_GetText("On") : vw_GetText("Off"));
 	SizeI = (170 - Size) / 2;
 	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, GameConfig().ShowFPS ? vw_GetText("On") : vw_GetText("Off"));
 
@@ -191,7 +191,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		if (GameConfig().GameWeaponInfoType > 4)
 			ChangeGameConfig().GameWeaponInfoType = 4;
 	}
-	Size = vw_FontSize(vw_GetText(ButtonGameWeaponInfoType[GameConfig().GameWeaponInfoType - 1]));
+	Size = vw_TextWidth(vw_GetText(ButtonGameWeaponInfoType[GameConfig().GameWeaponInfoType - 1]));
 	SizeI = (170 - Size) / 2;
 	vw_DrawText(X1 + 438 + SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText(ButtonGameWeaponInfoType[GameConfig().GameWeaponInfoType - 1]));
 

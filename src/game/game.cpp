@@ -1434,7 +1434,7 @@ void DrawGame()
 		if (GameSpeedShowTransp>1.0f) GameSpeedShowTransp = 1.0f;
 
 		vw_SetFontSize(20);
-		int TmpFontSize = (GameConfig().InternalWidth - vw_FontSize("%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed)) / 2;
+		int TmpFontSize = (GameConfig().InternalWidth - vw_TextWidth("%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed)) / 2;
 		vw_DrawText(TmpFontSize, 80, 0, 0, 1.0f, eRGBCOLOR::white, 1.0f * GameSpeedShowTransp, "%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed);
 		ResetFontSize();
 
@@ -1521,7 +1521,7 @@ void DrawGame()
 			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
 					   true, 1.0f*GameContentTransp);
 			// название меню
-			int Size = vw_FontSize(vw_GetText("Mission Complete"));
+			int Size = vw_TextWidth(vw_GetText("Mission Complete"));
 			float WScale = 0;
 			if (Size > 190) {
 				Size = 190;
@@ -1534,14 +1534,14 @@ void DrawGame()
 			int Prir = 36;
 
 			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, 0, 0, 1.0f, eRGBCOLOR::yellow, 0.5f * GameContentTransp, vw_GetText("Type"));
-			Size = vw_FontSize(vw_GetText("Killed"));
+			Size = vw_TextWidth(vw_GetText("Killed"));
 			WScale = 0;
 			if (Size > 70) {
 				Size = 70;
 				WScale = -70;
 			}
 			vw_DrawText(GameConfig().InternalWidth / 2 - 31 + Size / 2, Y, WScale, 0, 1.0f, eRGBCOLOR::yellow, 0.5f * GameContentTransp, vw_GetText("Killed"));
-			Size = vw_FontSize(vw_GetText("Bonus"));
+			Size = vw_TextWidth(vw_GetText("Bonus"));
 			WScale = 0;
 			if (Size > 70) {
 				Size = 70;
@@ -1602,7 +1602,7 @@ void DrawGame()
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
 					  true, GameContentTransp);
 				// название меню
-				int SizeI = 17 + (234-vw_FontSize(vw_GetText("GAME MENU")))/2;
+				int SizeI = 17 + (234-vw_TextWidth(vw_GetText("GAME MENU")))/2;
 				vw_DrawText(GameConfig().InternalWidth / 2 - 256 + SizeI, 128+22, 0, 0, 1.0f, eRGBCOLOR::yellow, 0.7f * GameContentTransp, vw_GetText("GAME MENU"));
 
 				// выводим кнопки меню

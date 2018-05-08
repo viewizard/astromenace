@@ -118,7 +118,7 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 	// получаем длину текста
-	int Size = vw_FontSize(Text);
+	int Size = vw_TextWidth(Text);
 
 	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
 	float WScale = 0;
@@ -180,7 +180,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button256_off.tga"), true, Transp);
 
 
-		int Size = vw_FontSize(Text);
+		int Size = vw_TextWidth(Text);
 		int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
 		vw_DrawText(SizeI, Y+21, 0, 0, 1.0f, eRGBCOLOR::white, (0.7f*Transp)/2.0f, Text);
 
@@ -266,7 +266,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 	// получаем длину текста
-	int Size = vw_FontSize(Text);
+	int Size = vw_TextWidth(Text);
 
 	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
 	float WScale = 0;
@@ -311,7 +311,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 	MouseRect(X,Y,X+204,Y+35);
 
 	// получаем длину текста
-	int Size = vw_FontSize(Text);
+	int Size = vw_TextWidth(Text);
 
 	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
 	float WScale = 0;
@@ -411,7 +411,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 	MouseRect(X,Y,X+132,Y+35);
 
 	// получаем длину текста
-	int Size = vw_FontSize(Text);
+	int Size = vw_TextWidth(Text);
 
 	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
 	float WScale = 0;
@@ -519,7 +519,7 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 	sRECT SrcRect, DstRect;
 
 	// получаем длину текста
-	int Size = vw_FontSize(Text);
+	int Size = vw_TextWidth(Text);
 
 	bool ON = false;
 	bool CanClick = false;

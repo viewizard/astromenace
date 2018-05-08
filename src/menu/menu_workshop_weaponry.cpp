@@ -550,7 +550,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 		DstRect(X,Y,X+128,Y+64);
 
-		int Size = vw_FontSize(vw_GetText("EMPTY"));
+		int Size = vw_TextWidth(vw_GetText("EMPTY"));
 		float WScale = 0;
 		if (Size > 88) {
 			Size = 88;
@@ -558,7 +558,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		}
 		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-53, WScale, 0, 1.0f, eRGBCOLOR::white, 0.7*MenuContentTransp, vw_GetText("EMPTY"));
 
-		Size = vw_FontSize("%s %i",vw_GetText("level"),WorkshopFighterGame->WeaponType[SlotNum]);
+		Size = vw_TextWidth("%s %i",vw_GetText("level"),WorkshopFighterGame->WeaponType[SlotNum]);
 		WScale = 0;
 		if (Size > 88) {
 			Size = 88;
@@ -607,7 +607,7 @@ void ShipSlotSetupWeapon(int Slot)
 		DstRect(Xpos,Ypos,Xpos+256,Ypos+256);
 		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/weapon_empty_icon.tga"), true, MenuContentTransp);
 
-		int Size = vw_FontSize(vw_GetText("Empty Weapon Slot"));
+		int Size = vw_TextWidth(vw_GetText("Empty Weapon Slot"));
 		float WScale = 0;
 		if (Size > 228) {
 			Size = 228;
@@ -620,7 +620,7 @@ void ShipSlotSetupWeapon(int Slot)
 		// выводим боекомплект   текущий/полный
 		Xpos = GameConfig().InternalWidth / 2 + 55 + 50;
 		vw_DrawText(Xpos, Ypos, -170, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Weapon Ammo:"));
-		Xpos = (GameConfig().InternalWidth/2+512)-55 - 50 - vw_FontSize("%i/%i", WorkshopFighterGame->Weapon[Slot]->Ammo, WorkshopFighterGame->Weapon[Slot]->AmmoStart);
+		Xpos = (GameConfig().InternalWidth/2+512)-55 - 50 - vw_TextWidth("%i/%i", WorkshopFighterGame->Weapon[Slot]->Ammo, WorkshopFighterGame->Weapon[Slot]->AmmoStart);
 
 
 		// если все нормально - белым... иначе подмаргиваем
@@ -638,7 +638,7 @@ void ShipSlotSetupWeapon(int Slot)
 		int ReloadCost = GetWeaponReloadCost(WorkshopFighterGame->Weapon[Slot]->ObjectCreationType,
 						     WorkshopFighterGame->Weapon[Slot]->Ammo,
 						     WorkshopFighterGame->Weapon[Slot]->AmmoStart);
-		Xpos = (GameConfig().InternalWidth/2+512)-55 - 50 - vw_FontSize("%i", ReloadCost);
+		Xpos = (GameConfig().InternalWidth/2+512)-55 - 50 - vw_TextWidth("%i", ReloadCost);
 		if (ReloadCost == 0)
 			vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i", ReloadCost);
 		else
@@ -1257,12 +1257,12 @@ void Workshop_Weaponry()
 	}
 
 	vw_SetFontSize(24);
-	vw_DrawText(GameConfig().InternalWidth/2+445-vw_FontSize(vw_GetText("Installed Weapons")), 600, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Installed Weapons"));
+	vw_DrawText(GameConfig().InternalWidth/2+445-vw_TextWidth(vw_GetText("Installed Weapons")), 600, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Installed Weapons"));
 	ResetFontSize();
 
 	// вывод информации
 	vw_SetFontSize(20);
-	int SizeI = (GameConfig().InternalWidth - vw_FontSize("%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money)) / 2;
+	int SizeI = (GameConfig().InternalWidth - vw_TextWidth("%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money)) / 2;
 	if (GameConfig().Profile[CurrentProfile].Money >= GetWeaponBaseCost(CurrentWorkshopNewWeapon))
 		vw_DrawText(SizeI, 630, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money);
 	else

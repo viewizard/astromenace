@@ -1257,7 +1257,7 @@ void InformationMenu()
 
 
 	// выводим кол-во и текущую страницу
-	int Size = vw_FontSize(vw_GetText("Page %i of %i"), CreateNum, InfoEnd);
+	int Size = vw_TextWidth(vw_GetText("Page %i of %i"), CreateNum, InfoEnd);
 	int SizeI = (GameConfig().InternalWidth - Size) / 2;
 	vw_DrawText(SizeI, 50+30*16+15, 0, 0, 1.0f, sRGBCOLOR{0.5f, 0.5f, 0.5f}, 0.6f * MenuContentTransp, vw_GetText("Page %i of %i"), CreateNum, InfoEnd);
 

@@ -684,9 +684,9 @@ int vw_DrawTextUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 }
 
 /*
- * vw_FontSizeUTF32 wrapper with variadic arguments and conversion into utf32.
+ * vw_TextWidthUTF32 wrapper with variadic arguments and conversion into utf32.
  */
-int vw_FontSize(const char *Text, ...)
+int vw_TextWidth(const char *Text, ...)
 {
 	if (!Text)
 		return ERR_PARAMETERS;
@@ -704,13 +704,13 @@ int vw_FontSize(const char *Text, ...)
 	// convert from utf8 into utf32
 	const std::u32string UTF32String{ConvertUTF8.from_bytes(buffer.data())};
 
-	return vw_FontSizeUTF32(UTF32String);
+	return vw_TextWidthUTF32(UTF32String);
 }
 
 /*
  * Get string size with current font size.
  */
-int vw_FontSizeUTF32(const std::u32string &Text)
+int vw_TextWidthUTF32(const std::u32string &Text)
 {
 	if (Text.empty())
 		return ERR_PARAMETERS;

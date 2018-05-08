@@ -386,10 +386,10 @@ void MissionMenu()
 
 
 	// выводим текущий профиль пилота
-	int Size = vw_FontSize("%s: ", vw_GetText("Pilot Profile"));
+	int Size = vw_TextWidth("%s: ", vw_GetText("Pilot Profile"));
 	vw_DrawText(X1, 208+12, 0, 0, 1.0f, eRGBCOLOR::green, 1.0f*MenuContentTransp, "%s: ", vw_GetText("Pilot Profile"));
 
-	if ((Size + vw_FontSize(GameConfig().Profile[CurrentProfile].Name)) > 500) {
+	if ((Size + vw_TextWidth(GameConfig().Profile[CurrentProfile].Name)) > 500) {
 		vw_DrawText(X1+Size, 208+12, 0, 500-Size, 1.0f, eRGBCOLOR::white, MenuContentTransp, GameConfig().Profile[CurrentProfile].Name);
 		vw_DrawText(X1+510, 208+12, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "...");
 	} else

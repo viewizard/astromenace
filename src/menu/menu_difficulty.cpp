@@ -73,11 +73,11 @@ void DifficultyMenu()
 				ChangeGameConfig().Profile[CurrentProfile].NPCWeaponPenalty = 3;
 	}
 	if (GameConfig().Profile[CurrentProfile].NPCWeaponPenalty == 1) {
-		Size = vw_FontSize(vw_GetText("None"));
+		Size = vw_TextWidth(vw_GetText("None"));
 		SizeI = (110-Size)/2;
 		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("None"));
 	} else {
-		Size = vw_FontSize("x%i", GameConfig().Profile[CurrentProfile].NPCWeaponPenalty);
+		Size = vw_TextWidth("x%i", GameConfig().Profile[CurrentProfile].NPCWeaponPenalty);
 		SizeI = (110-Size)/2;
 		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "x%i", GameConfig().Profile[CurrentProfile].NPCWeaponPenalty);
 	}
@@ -104,11 +104,11 @@ void DifficultyMenu()
 			ChangeGameConfig().Profile[CurrentProfile].NPCArmorPenalty = 4;
 	}
 	if (GameConfig().Profile[CurrentProfile].NPCArmorPenalty == 1) {
-		Size = vw_FontSize(vw_GetText("None"));
+		Size = vw_TextWidth(vw_GetText("None"));
 		SizeI = (110-Size)/2;
 		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("None"));
 	} else {
-		Size = vw_FontSize("x%i", GameConfig().Profile[CurrentProfile].NPCArmorPenalty);
+		Size = vw_TextWidth("x%i", GameConfig().Profile[CurrentProfile].NPCArmorPenalty);
 		SizeI = (110-Size)/2;
 		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "x%i", GameConfig().Profile[CurrentProfile].NPCArmorPenalty);
 	}
@@ -135,11 +135,11 @@ void DifficultyMenu()
 			ChangeGameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty = 4;
 	}
 	if (GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty == 1) {
-		Size = vw_FontSize(vw_GetText("None"));
+		Size = vw_TextWidth(vw_GetText("None"));
 		SizeI = (110-Size)/2;
 		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("None"));
 	} else {
-		Size = vw_FontSize("x%i", GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty);
+		Size = vw_TextWidth("x%i", GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty);
 		SizeI = (110-Size)/2;
 		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "x%i", GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty);
 	}
@@ -206,7 +206,7 @@ void DifficultyMenu()
 
 
 	Y1 += Prir1;
-	Size = vw_FontSize("%s: %i%%", vw_GetText("Current Profile Difficulty"), GameConfig().Profile[CurrentProfile].Difficulty);
+	Size = vw_TextWidth("%s: %i%%", vw_GetText("Current Profile Difficulty"), GameConfig().Profile[CurrentProfile].Difficulty);
 	SizeI = (GameConfig().InternalWidth - Size) / 2;
 	vw_DrawText(SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s: %i%%", vw_GetText("Current Profile Difficulty"), GameConfig().Profile[CurrentProfile].Difficulty);
 

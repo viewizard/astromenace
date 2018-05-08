@@ -229,7 +229,7 @@ void ProfileInputText()
 {
 
 	if (!vw_GetCurrentUnicodeChar().empty()) {// если тут не ноль, а юникод - значит нажали
-		if ((vw_FontSizeUTF32(NewProfileName) < 540) &&
+		if ((vw_TextWidthUTF32(NewProfileName) < 540) &&
 		    // FIXME fix this, when all text will be moved to UTF32 with separate (without variadic support) text draw function
 		    (vw_GetCurrentUnicodeChar()[0] != 0x25)) { // символ % печатать не даем, т.к. работаем с variadic аргументами через общую функцию печати
 			NewProfileName += vw_GetCurrentUnicodeChar();
@@ -270,7 +270,7 @@ void ProfileInputText()
 	int Y1 = 230;
 
 	// находим положения ввода
-	int Size = vw_FontSizeUTF32(NewProfileName);
+	int Size = vw_TextWidthUTF32(NewProfileName);
 	sRECT SrcRect{0, 0, 2, 2};
 	sRECT DstRect{X1 + Size + 2, Y1 - 2, X1 + 26 + Size, Y1 + 24};
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/whitepoint.tga"),
@@ -349,7 +349,7 @@ void ProfileMenu()
 	// список для выбора записи
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, MenuContentTransp, vw_GetText("Pilots Profiles"));
-	int Size = vw_FontSize(vw_GetText("Money"));
+	int Size = vw_TextWidth(vw_GetText("Money"));
 	float WScale = 0;
 	if (Size > 70) {
 		Size = 70;
@@ -358,7 +358,7 @@ void ProfileMenu()
 	int SizeI = GameConfig().InternalWidth / 2 + 2 + (130 - Size) / 2;
 	vw_DrawText(SizeI, Y1, WScale, 0, 1.0f, eRGBCOLOR::orange, MenuContentTransp, vw_GetText("Money"));
 
-	Size = vw_FontSize(vw_GetText("Exp"));
+	Size = vw_TextWidth(vw_GetText("Exp"));
 	WScale = 0;
 	if (Size > 100) {
 		Size = 100;
@@ -367,7 +367,7 @@ void ProfileMenu()
 	SizeI = GameConfig().InternalWidth / 2 + 132 + (130 - Size) / 2;
 	vw_DrawText(SizeI, Y1, WScale, 0, 1.0f, eRGBCOLOR::orange, MenuContentTransp, vw_GetText("Exp"));
 
-	Size = vw_FontSize(vw_GetText("Difficulty"));
+	Size = vw_TextWidth(vw_GetText("Difficulty"));
 	WScale = 0;
 	if (Size > 100) {
 		Size = 100;
@@ -393,20 +393,20 @@ void ProfileMenu()
 		if (GameConfig().Profile[i].Used) {
 			vw_DrawText(X1+10, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i.",i+1);
 
-			if (vw_FontSize(GameConfig().Profile[i].Name) > 300) {
+			if (vw_TextWidth(GameConfig().Profile[i].Name) > 300) {
 				vw_DrawText(X1+50, TmpY, 0, 300, 1.0f, eRGBCOLOR::white, MenuContentTransp, GameConfig().Profile[i].Name);
 				vw_DrawText(X1+50+310, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "...");
 			} else
 				vw_DrawText(X1+50, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, GameConfig().Profile[i].Name);
 
 
-			Size = vw_FontSize("%i", GameConfig().Profile[i].Money);
+			Size = vw_TextWidth("%i", GameConfig().Profile[i].Money);
 			SizeI = GameConfig().InternalWidth/2+2 + (130 - Size)/2;
 			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i", GameConfig().Profile[i].Money);
-			Size = vw_FontSize("%i", GameConfig().Profile[i].Experience);
+			Size = vw_TextWidth("%i", GameConfig().Profile[i].Experience);
 			SizeI = GameConfig().InternalWidth/2+132 + (130 - Size)/2;
 			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i", GameConfig().Profile[i].Experience);
-			Size = vw_FontSize("%i%%", GameConfig().Profile[i].Difficulty);
+			Size = vw_TextWidth("%i%%", GameConfig().Profile[i].Difficulty);
 			SizeI = GameConfig().InternalWidth/2+262 + (130 - Size)/2;
 			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i%%", GameConfig().Profile[i].Difficulty);
 

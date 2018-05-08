@@ -45,7 +45,7 @@ void vw_ReleaseAllFontChars();
 void vw_ShutdownFont();
 
 // Get string size with current font size.
-int vw_FontSizeUTF32(const std::u32string &Text);
+int vw_TextWidthUTF32(const std::u32string &Text);
 // Draw text with current font. Origin is upper left corner.
 int vw_DrawTextUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
 		     const sRGBCOLOR &Color, float Transp, const std::u32string &Text);
@@ -53,7 +53,7 @@ int vw_DrawTextUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 int vw_DrawText3DUTF32(float X, float Y, float Z, const std::u32string &Text);
 
 // Get string size with current font size with variadic arguments.
-int vw_FontSize(const char *Text, ...);
+int vw_TextWidth(const char *Text, ...);
 // Draw text with current font with variadic arguments.
 int vw_DrawText(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
 		const sRGBCOLOR &Color, float Transp, const char *Text, ...);

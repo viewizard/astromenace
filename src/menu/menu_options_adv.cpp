@@ -113,7 +113,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 
 		vw_InitParticleSystems(GameConfig().UseGLSL120, GameConfig().VisualEffectsQuality + 1.0f);
 	}
-	int Size = vw_FontSize(vw_GetText(ButtonQuality[GameConfig().VisualEffectsQuality]));
+	int Size = vw_TextWidth(vw_GetText(ButtonQuality[GameConfig().VisualEffectsQuality]));
 	int SizeI = (170 - Size) / 2;//High, Medium, Low
 	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText(ButtonQuality[GameConfig().VisualEffectsQuality]));
 
@@ -136,7 +136,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		if (GameConfig().MaxPointLights > 6)
 			ChangeGameConfig().MaxPointLights = 6;
 	}
-	Size = vw_FontSize(vw_GetText(ButtonPointLights[GameConfig().MaxPointLights]));
+	Size = vw_TextWidth(vw_GetText(ButtonPointLights[GameConfig().MaxPointLights]));
 	SizeI = (170-Size)/2;
 	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText(ButtonPointLights[GameConfig().MaxPointLights]));
 
@@ -158,16 +158,16 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 			Options_TexturesAnisotropyLevel = vw_GetDevCaps().MaxAnisotropyLevel;
 	}
 	if (Options_TexturesAnisotropyLevel > 1) {
-		Size = vw_FontSize("x%i", Options_TexturesAnisotropyLevel);
+		Size = vw_TextWidth("x%i", Options_TexturesAnisotropyLevel);
 		SizeI = (170-Size)/2;
 		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, "x%i", Options_TexturesAnisotropyLevel);
 	} else {
 		if (vw_GetDevCaps().MaxAnisotropyLevel > 1) {
-			Size = vw_FontSize(vw_GetText("Off"));
+			Size = vw_TextWidth(vw_GetText("Off"));
 			SizeI = (170-Size)/2;
 			vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Off"));
 		} else {
-			Size = vw_FontSize(vw_GetText("Not available"));
+			Size = vw_TextWidth(vw_GetText("Not available"));
 			SizeI = (170-Size)/2;
 			vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("Not available"));
 		}
@@ -190,7 +190,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		Options_TexturesCompressionType++;
 		if (Options_TexturesCompressionType > MaxCompressionCount) Options_TexturesCompressionType = MaxCompressionCount;
 	}
-	Size = vw_FontSize(vw_GetText(ButtonTextCompression[Options_TexturesCompressionType]));
+	Size = vw_TextWidth(vw_GetText(ButtonTextCompression[Options_TexturesCompressionType]));
 	SizeI = (170-Size)/2;
 	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText(ButtonTextCompression[Options_TexturesCompressionType]));
 
@@ -261,21 +261,21 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	}
 	if (Options_MSAA == 0) {
 		if (vw_GetDevCaps().MultisampleCoverageModes.empty()) {
-			Size = vw_FontSize(vw_GetText("Not available"));
+			Size = vw_TextWidth(vw_GetText("Not available"));
 			SizeI = (170-Size)/2;
 			vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("Not available"));
 		} else {
-			Size = vw_FontSize(vw_GetText("Off"));
+			Size = vw_TextWidth(vw_GetText("Off"));
 			SizeI = (170-Size)/2;
 			vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Off"));
 		}
 	} else {
 		if ((Options_MSAA == Options_CSAA) || (Options_CSAA == 0)) {
-			Size = vw_FontSize("%ix MS",Options_MSAA);
+			Size = vw_TextWidth("%ix MS",Options_MSAA);
 			SizeI = (170-Size)/2;//Off, 2x, 4x ...
 			vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, "%ix MS", Options_MSAA);
 		} else {
-			Size = vw_FontSize("%ix CS/%ix MS",Options_CSAA,Options_MSAA);
+			Size = vw_TextWidth("%ix CS/%ix MS",Options_CSAA,Options_MSAA);
 			SizeI = (170-Size)/2;//Off, 2x, 4x ...
 			vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, "%ix CS/%ix MS",Options_CSAA,Options_MSAA);
 		}
@@ -297,11 +297,11 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 			Options_ShadowMap = GameConfig().ShadowMap;
 	}
 	if (vw_GetDevCaps().OpenGL_2_0_supported && vw_GetDevCaps().OpenGL_2_1_supported) {
-		Size = vw_FontSize(Options_UseGLSL120 ? vw_GetText("On") : vw_GetText("Off"));
+		Size = vw_TextWidth(Options_UseGLSL120 ? vw_GetText("On") : vw_GetText("Off"));
 		SizeI = (170-Size)/2;
 		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, Options_UseGLSL120 ? vw_GetText("On") : vw_GetText("Off"));
 	} else {
-		Size = vw_FontSize(vw_GetText("Not available"));
+		Size = vw_TextWidth(vw_GetText("Not available"));
 		SizeI = (170-Size)/2;
 		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("Not available"));
 	}
@@ -324,7 +324,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		if (Options_ShadowMap > 1) Options_ShadowMap = 1;
 	}
 	if (vw_GetDevCaps().OpenGL_2_0_supported && vw_GetDevCaps().OpenGL_2_1_supported && vw_GetDevCaps().OpenGL_3_0_supported && Options_UseGLSL120 && (vw_GetDevCaps().FramebufferObjectDepthSize >= 24)) {
-		Size = vw_FontSize(vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
+		Size = vw_TextWidth(vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
 		float WScale = 0;
 		if (Size > 170) {
 			Size = 170;
@@ -333,7 +333,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		SizeI = (170-Size)/2;//High, Medium, Low
 		vw_DrawText(X1+438+SizeI, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText(ShadowButtonQuality[Options_ShadowMap]));
 	} else {
-		Size = vw_FontSize(vw_GetText("Not available"));
+		Size = vw_TextWidth(vw_GetText("Not available"));
 		SizeI = (170-Size)/2;
 		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("Not available"));
 	}

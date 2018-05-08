@@ -89,7 +89,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		vw_SetMusicGlobalVolume(GameConfig().MusicSw / 10.0f);
 	}
 	if (!GameConfig().Music_check) {
-		int SizeI = (170-vw_FontSize(vw_GetText("Not available")))/2;
+		int SizeI = (170-vw_TextWidth(vw_GetText("Not available")))/2;
 		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("Not available"));
 	} else {
 		for (int i = 0; i < 10; i++) {
@@ -124,7 +124,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		Audio_PlayVoice(1, 1.0f);
 	}
 	if (!GameConfig().Sound_check) {
-		int SizeI = (170 - vw_FontSize(vw_GetText("Not available"))) / 2;
+		int SizeI = (170 - vw_TextWidth(vw_GetText("Not available"))) / 2;
 		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("Not available"));
 	} else {
 		for (int i = 0; i < 10; i++) {
@@ -156,7 +156,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		Audio_SetSound2DGlobalVolume(GameConfig().SoundSw / 10.0f);
 	}
 	if (!GameConfig().Sound_check) {
-		int SizeI = (170-vw_FontSize(vw_GetText("Not available")))/2;
+		int SizeI = (170-vw_TextWidth(vw_GetText("Not available")))/2;
 		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("Not available"));
 	} else {
 		for (int i=0; i<10; i++) {
@@ -216,7 +216,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 				}
 		}
 	}
-	int Size = vw_FontSize(Options_BPP ? vw_GetText("On") : vw_GetText("Off"));
+	int Size = vw_TextWidth(Options_BPP ? vw_GetText("On") : vw_GetText("Off"));
 	int SizeI = (170-Size)/2;
 	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, Options_BPP ? vw_GetText("On") : vw_GetText("Off"));
 
@@ -295,7 +295,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	if (VideoModes[CurrentListNum].BPP != 0)
 		VideoModeTitle += " " + std::to_string(VideoModes[CurrentListNum].BPP) + "bit";
 
-	Size = vw_FontSize(VideoModeTitle.c_str());
+	Size = vw_TextWidth(VideoModeTitle.c_str());
 	SizeI = (170-Size)/2;
 	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, VideoModeTitle.c_str());
 
@@ -312,11 +312,11 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		else Options_iAspectRatioWidth = 1024;
 	}
 	if (Options_iAspectRatioWidth == 1024) {
-		Size = vw_FontSize(vw_GetText("Standard"));
+		Size = vw_TextWidth(vw_GetText("Standard"));
 		SizeI = (170-Size)/2;
 		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Standard"));
 	} else {
-		Size = vw_FontSize(vw_GetText("Widescreen"));
+		Size = vw_TextWidth(vw_GetText("Widescreen"));
 		SizeI = (170-Size)/2;
 		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Widescreen"));
 	}
@@ -333,7 +333,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			if (Options_VSync == 1) Options_VSync = 0;
 			else Options_VSync = 1;
 		}
-	Size = vw_FontSize(Options_VSync ? vw_GetText("On") : vw_GetText("Off"));
+	Size = vw_TextWidth(Options_VSync ? vw_GetText("On") : vw_GetText("Off"));
 	SizeI = (170-Size)/2;
 	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, Options_VSync ? vw_GetText("On") : vw_GetText("Off"));
 

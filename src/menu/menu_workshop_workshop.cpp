@@ -430,7 +430,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 	}
 	vw_Draw2D(DstRect, SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()), true, MenuContentTransp*Current);
-	int Size = vw_FontSize(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase())));
+	int Size = vw_TextWidth(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase())));
 	float WScale = 0;
 	if (Size > 128) {
 		Size = 128;
@@ -469,7 +469,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 	}
 	vw_Draw2D(DstRect, SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()+1), true, MenuContentTransp*Current);
-	Size = vw_FontSize(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase()+1)));
+	Size = vw_TextWidth(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase()+1)));
 	WScale = 0;
 	if (Size > 128) {
 		Size = 128;
@@ -508,7 +508,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 	}
 	vw_Draw2D(DstRect, SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()+2), true, MenuContentTransp*Current);
-	Size = vw_FontSize(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase()+2)));
+	Size = vw_TextWidth(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase()+2)));
 	WScale = 0;
 	if (Size > 128) {
 		Size = 128;
@@ -547,7 +547,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 	}
 	vw_Draw2D(DstRect, SrcRect, GetSystemIcon(GetCurrentSustemStockNumBase()+3), true, MenuContentTransp*Current);
-	Size = vw_FontSize(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase()+3)));
+	Size = vw_TextWidth(vw_GetText(GetSystemName(GetCurrentSustemStockNumBase()+3)));
 	WScale = 0;
 	if (Size > 128) {
 		Size = 128;
@@ -612,13 +612,13 @@ void Workshop_Workshop()
 		}
 
 		// вывод текста
-		int SizeI = (GameConfig().InternalWidth - vw_FontSize(vw_GetText("Warning! Low energy recharge rate!"))) / 2;
+		int SizeI = (GameConfig().InternalWidth - vw_TextWidth(vw_GetText("Warning! Low energy recharge rate!"))) / 2;
 		vw_DrawText(SizeI, 60, 0, 0, 1.0f, eRGBCOLOR::red, CurrentAlert3 * MenuContentTransp, vw_GetText("Warning! Low energy recharge rate!"));
 
-		SizeI = (GameConfig().InternalWidth - vw_FontSize(vw_GetText("Could be problems with"))) / 2;
+		SizeI = (GameConfig().InternalWidth - vw_TextWidth(vw_GetText("Could be problems with"))) / 2;
 		vw_DrawText(SizeI, 80, 0, 0, 1.0f, eRGBCOLOR::red, CurrentAlert3 * MenuContentTransp, vw_GetText("Could be problems with"));
 
-		SizeI = (GameConfig().InternalWidth - vw_FontSize(vw_GetText("systems function and/or weapons recharge!"))) / 2;
+		SizeI = (GameConfig().InternalWidth - vw_TextWidth(vw_GetText("systems function and/or weapons recharge!"))) / 2;
 		vw_DrawText(SizeI, 100, 0, 0, 1.0f, eRGBCOLOR::red, CurrentAlert3 * MenuContentTransp, vw_GetText("systems function and/or weapons recharge!"));
 	}
 
@@ -759,7 +759,7 @@ void Workshop_Workshop()
 	if (GameConfig().Profile[CurrentProfile].EngineSystem <= 0) {
 		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(-4), true, Current*MenuContentTransp);
 
-		Size = vw_FontSize(vw_GetText("empty"));
+		Size = vw_TextWidth(vw_GetText("empty"));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
@@ -767,7 +767,7 @@ void Workshop_Workshop()
 		}
 		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.top-4, WScale, 0, 1.0f, tmpColor, Current*MenuContentTransp, vw_GetText("empty"));
 
-		Size = vw_FontSize(vw_GetText("Spaceship Engine"));
+		Size = vw_TextWidth(vw_GetText("Spaceship Engine"));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
@@ -777,7 +777,7 @@ void Workshop_Workshop()
 	} else {
 		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(GameConfig().Profile[CurrentProfile].EngineSystem), true, Current*MenuContentTransp);
 
-		Size = vw_FontSize(vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].EngineSystem)));
+		Size = vw_TextWidth(vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].EngineSystem)));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
@@ -828,7 +828,7 @@ void Workshop_Workshop()
 	if (GameConfig().Profile[CurrentProfile].PowerSystem <= 0) {
 		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(-2), true, Current*MenuContentTransp);
 
-		Size = vw_FontSize(vw_GetText("empty"));
+		Size = vw_TextWidth(vw_GetText("empty"));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
@@ -836,7 +836,7 @@ void Workshop_Workshop()
 		}
 		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.top-4, WScale, 0, 1.0f, tmpColor, Current*MenuContentTransp, vw_GetText("empty"));
 
-		Size = vw_FontSize(vw_GetText("Power Source"));
+		Size = vw_TextWidth(vw_GetText("Power Source"));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
@@ -846,7 +846,7 @@ void Workshop_Workshop()
 	} else {
 		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(GameConfig().Profile[CurrentProfile].PowerSystem + 4), true, Current * MenuContentTransp);
 
-		Size = vw_FontSize(vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].PowerSystem + 4)));
+		Size = vw_TextWidth(vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].PowerSystem + 4)));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
@@ -894,7 +894,7 @@ void Workshop_Workshop()
 	if (GameConfig().Profile[CurrentProfile].TargetingSystem <= 0) {
 		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(-1), true, Current*MenuContentTransp);
 
-		Size = vw_FontSize(vw_GetText("empty"));
+		Size = vw_TextWidth(vw_GetText("empty"));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
@@ -902,7 +902,7 @@ void Workshop_Workshop()
 		}
 		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.top-4, WScale, 0, 1.0f, tmpColor, Current*MenuContentTransp, vw_GetText("empty"));
 
-		Size = vw_FontSize(vw_GetText("Optical Computer"));
+		Size = vw_TextWidth(vw_GetText("Optical Computer"));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
@@ -912,7 +912,7 @@ void Workshop_Workshop()
 	} else {
 		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(GameConfig().Profile[CurrentProfile].TargetingSystem + 8), true, Current * MenuContentTransp);
 
-		Size = vw_FontSize(vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].TargetingSystem + 8)));
+		Size = vw_TextWidth(vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].TargetingSystem + 8)));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
@@ -962,7 +962,7 @@ void Workshop_Workshop()
 	if (GameConfig().Profile[CurrentProfile].TargetingMechanicSystem <= 0) {
 		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(-3), true, Current*MenuContentTransp);
 
-		Size = vw_FontSize(vw_GetText("empty"));
+		Size = vw_TextWidth(vw_GetText("empty"));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
@@ -970,7 +970,7 @@ void Workshop_Workshop()
 		}
 		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.top-4, WScale, 0, 1.0f, tmpColor, Current*MenuContentTransp, vw_GetText("empty"));
 
-		Size = vw_FontSize(vw_GetText("Targeting System"));
+		Size = vw_TextWidth(vw_GetText("Targeting System"));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
@@ -980,7 +980,7 @@ void Workshop_Workshop()
 	} else {
 		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(GameConfig().Profile[CurrentProfile].TargetingMechanicSystem + 12), true, Current * MenuContentTransp);
 
-		Size = vw_FontSize(vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].TargetingMechanicSystem + 12)));
+		Size = vw_TextWidth(vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].TargetingMechanicSystem + 12)));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
@@ -1032,7 +1032,7 @@ void Workshop_Workshop()
 	if (GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem <= 0) {
 		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(0), true, Current*MenuContentTransp);
 
-		Size = vw_FontSize(vw_GetText("empty"));
+		Size = vw_TextWidth(vw_GetText("empty"));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
@@ -1040,7 +1040,7 @@ void Workshop_Workshop()
 		}
 		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.top-4, WScale, 0, 1.0f, tmpColor, Current*MenuContentTransp, vw_GetText("empty"));
 
-		Size = vw_FontSize(vw_GetText("Advanced System"));
+		Size = vw_TextWidth(vw_GetText("Advanced System"));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
@@ -1051,7 +1051,7 @@ void Workshop_Workshop()
 	} else {
 		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem + 16), true, Current*MenuContentTransp);
 
-		Size = vw_FontSize(vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem + 16)));
+		Size = vw_TextWidth(vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem + 16)));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
@@ -1063,19 +1063,19 @@ void Workshop_Workshop()
 
 
 	vw_SetFontSize(24);
-	vw_DrawText(GameConfig().InternalWidth/2+475-vw_FontSize(vw_GetText("Installed Systems")), 630, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Installed Systems"));
+	vw_DrawText(GameConfig().InternalWidth/2+475-vw_TextWidth(vw_GetText("Installed Systems")), 630, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Installed Systems"));
 	ResetFontSize();
 
 	// текущая система
 	vw_DrawText(GameConfig().InternalWidth/2-250, 430, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Selected System"));
-	vw_DrawText(GameConfig().InternalWidth/2+250-vw_FontSize(vw_GetText("Installed System")), 430, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Installed System"));
+	vw_DrawText(GameConfig().InternalWidth/2+250-vw_TextWidth(vw_GetText("Installed System")), 430, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Installed System"));
 
 	if (CanBuy)
 		vw_DrawText(GameConfig().InternalWidth/2-250, 485, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%s: %i", vw_GetText("Cost"), GetSystemCost(CurrentSystemStockNum));
 	else
 		vw_DrawText(GameConfig().InternalWidth/2-250, 485, 0, 0, 1.0f, eRGBCOLOR::orange, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Cost"), GetSystemCost(CurrentSystemStockNum));
 
-	vw_DrawText(GameConfig().InternalWidth/2+250-vw_FontSize("%s: %i", vw_GetText("Cost"), Cost), 485, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%s: %i", vw_GetText("Cost"), Cost);
+	vw_DrawText(GameConfig().InternalWidth/2+250-vw_TextWidth("%s: %i", vw_GetText("Cost"), Cost), 485, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%s: %i", vw_GetText("Cost"), Cost);
 
 
 	if (DrawButton128_2(GameConfig().InternalWidth/2-250,580-55, vw_GetText("Info"), MenuContentTransp, false)) {
@@ -1117,7 +1117,7 @@ void Workshop_Workshop()
 
 	// вывод информации
 	vw_SetFontSize(20);
-	int SizeI = (GameConfig().InternalWidth-vw_FontSize("%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money)) / 2;
+	int SizeI = (GameConfig().InternalWidth-vw_TextWidth("%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money)) / 2;
 	if (CanBuy)
 		vw_DrawText(SizeI, 630, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money);
 	else
