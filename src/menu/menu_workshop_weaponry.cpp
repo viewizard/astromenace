@@ -556,7 +556,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 			Size = 88;
 			WScale = -88;
 		}
-		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-53, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7*MenuContentTransp, vw_GetText("EMPTY"));
+		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-53, WScale, 0, 1.0f, eRGBCOLOR::white, 0.7*MenuContentTransp, vw_GetText("EMPTY"));
 
 		Size = vw_FontSize("%s %i",vw_GetText("level"),WorkshopFighterGame->WeaponType[SlotNum]);
 		WScale = 0;
@@ -564,7 +564,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 			Size = 88;
 			WScale = -88;
 		}
-		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-32, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 0.7*MenuContentTransp, "%s %i",vw_GetText("level"),WorkshopFighterGame->WeaponType[SlotNum]);
+		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-32, WScale, 0, 1.0f, eRGBCOLOR::white, 0.7*MenuContentTransp, "%s %i",vw_GetText("level"),WorkshopFighterGame->WeaponType[SlotNum]);
 
 
 		return;
@@ -613,36 +613,36 @@ void ShipSlotSetupWeapon(int Slot)
 			Size = 228;
 			WScale = -228;
 		}
-		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-40, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Empty Weapon Slot"));
+		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-40, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Empty Weapon Slot"));
 	} else {
 		Xpos += 74+64;
 		Ypos += 33;
 		// выводим боекомплект   текущий/полный
 		Xpos = GameConfig().InternalWidth / 2 + 55 + 50;
-		vw_DrawFont(Xpos, Ypos, -170, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Weapon Ammo:"));
+		vw_DrawText(Xpos, Ypos, -170, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Weapon Ammo:"));
 		Xpos = (GameConfig().InternalWidth/2+512)-55 - 50 - vw_FontSize("%i/%i", WorkshopFighterGame->Weapon[Slot]->Ammo, WorkshopFighterGame->Weapon[Slot]->AmmoStart);
 
 
 		// если все нормально - белым... иначе подмаргиваем
 		if (WorkshopFighterGame->Weapon[Slot]->Ammo == WorkshopFighterGame->Weapon[Slot]->AmmoStart)
-			vw_DrawFont(Xpos, Ypos, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i/%i", WorkshopFighterGame->Weapon[Slot]->Ammo, WorkshopFighterGame->Weapon[Slot]->AmmoStart);
+			vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i/%i", WorkshopFighterGame->Weapon[Slot]->Ammo, WorkshopFighterGame->Weapon[Slot]->AmmoStart);
 		else
-			vw_DrawFont(Xpos, Ypos, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%i/%i", WorkshopFighterGame->Weapon[Slot]->Ammo, WorkshopFighterGame->Weapon[Slot]->AmmoStart);
+			vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, eRGBCOLOR::orange, CurrentAlert3*MenuContentTransp, "%i/%i", WorkshopFighterGame->Weapon[Slot]->Ammo, WorkshopFighterGame->Weapon[Slot]->AmmoStart);
 
 
 		// стоимость перезарядки
 		Xpos = GameConfig().InternalWidth / 2 + 55 + 50;
 		Ypos += 30;
-		vw_DrawFont(Xpos, Ypos, -230, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Weapon Reload Cost:"));
+		vw_DrawText(Xpos, Ypos, -230, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Weapon Reload Cost:"));
 		// находим стоимость перезарядки
 		int ReloadCost = GetWeaponReloadCost(WorkshopFighterGame->Weapon[Slot]->ObjectCreationType,
 						     WorkshopFighterGame->Weapon[Slot]->Ammo,
 						     WorkshopFighterGame->Weapon[Slot]->AmmoStart);
 		Xpos = (GameConfig().InternalWidth/2+512)-55 - 50 - vw_FontSize("%i", ReloadCost);
 		if (ReloadCost == 0)
-			vw_DrawFont(Xpos, Ypos, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", ReloadCost);
+			vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i", ReloadCost);
 		else
-			vw_DrawFont(Xpos, Ypos, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%i", ReloadCost);
+			vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, eRGBCOLOR::orange, CurrentAlert3*MenuContentTransp, "%i", ReloadCost);
 
 
 		// кнопка перезарядить оружие
@@ -662,7 +662,7 @@ void ShipSlotSetupWeapon(int Slot)
 
 		Xpos = GameConfig().InternalWidth/2+55+34 + 16;
 		Ypos += 60;
-		vw_DrawFont(Xpos, Ypos, -300, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Weapon Fire Control:"));
+		vw_DrawText(Xpos, Ypos, -300, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Weapon Fire Control:"));
 		// вкл-выкл первичного управления
 		if ((GameConfig().Profile[CurrentProfile].WeaponControl[Slot] == 1) ||
 		    (GameConfig().Profile[CurrentProfile].WeaponControl[Slot] == 3))
@@ -687,7 +687,7 @@ void ShipSlotSetupWeapon(int Slot)
 		// получение альтернативного управления
 		Xpos = GameConfig().InternalWidth/2+55+34 + 16;
 		Ypos += 40;
-		vw_DrawFont(Xpos, Ypos, -300, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Alternative Fire Control:"));
+		vw_DrawText(Xpos, Ypos, -300, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Alternative Fire Control:"));
 
 		Ypos += 40;
 
@@ -734,7 +734,7 @@ void ShipSlotSetupWeapon(int Slot)
 			// выводим угол поворота ствола
 			Xpos = GameConfig().InternalWidth/2+55+34 + 16;
 			Ypos += 60;
-			vw_DrawFont(Xpos, Ypos, -300, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Weapon Angle: %2.1f"), GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[Slot]);
+			vw_DrawText(Xpos, Ypos, -300, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Weapon Angle: %2.1f"), GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[Slot]);
 			Ypos += 40;
 
 			float Min = 0.0f;
@@ -743,9 +743,9 @@ void ShipSlotSetupWeapon(int Slot)
 
 
 			if (GameConfig().Profile[CurrentProfile].TargetingSystem <= 2) {
-				vw_DrawFont(Xpos, Ypos-15, 300, 0, 1.0f, 1.0f,0.5f,0.0f, 1.0f, vw_GetText("Custom Weapon Angle is use-"));
-				vw_DrawFont(Xpos, Ypos+5, 300, 0, 1.0f, 1.0f,0.5f,0.0f, 1.0f, vw_GetText("ful with optical computer"));
-				vw_DrawFont(Xpos, Ypos+25, 300, 0, 1.0f, 1.0f,0.5f,0.0f, 1.0f, vw_GetText("system Neo or Supra only."));
+				vw_DrawText(Xpos, Ypos-15, 300, 0, 1.0f, eRGBCOLOR::orange, 1.0f, vw_GetText("Custom Weapon Angle is use-"));
+				vw_DrawText(Xpos, Ypos+5, 300, 0, 1.0f, eRGBCOLOR::orange, 1.0f, vw_GetText("ful with optical computer"));
+				vw_DrawText(Xpos, Ypos+25, 300, 0, 1.0f, eRGBCOLOR::orange, 1.0f, vw_GetText("system Neo or Supra only."));
 			} else {
 				if (DrawButton128_2(GameConfig().InternalWidth/2+118, Ypos, vw_GetText("Left"), MenuContentTransp, GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[Slot] <= Min)) {
 					ChangeGameConfig().Profile[CurrentProfile].WeaponSlotYAngle[Slot] -= 5.0f;
@@ -1121,37 +1121,37 @@ void Workshop_Weaponry()
 
 
 	// вывод названия
-	vw_DrawFont(GameConfig().InternalWidth/2-438, 50+6, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText(GetWeaponName(CurrentWorkshopNewWeapon)));
+	vw_DrawText(GameConfig().InternalWidth/2-438, 50+6, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText(GetWeaponName(CurrentWorkshopNewWeapon)));
 	if (DrawButton128_2(GameConfig().InternalWidth/2-197, 50, vw_GetText("Info"), MenuContentTransp, false)) {
 		SetCurrentDialogBox(eDialogBox::ShowWeaponsInfo);
 		DialogWeapon = WorkshopNewWeapon;
 	}
 
 	// поставить GameNPCWeaponPenalty=1!!!
-	vw_DrawFont(GameConfig().InternalWidth/2-438, 110, -170, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s:", vw_GetText("Weapon Type"));
-	vw_DrawFont(GameConfig().InternalWidth/2-438+175, 110, -184, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText(GetWeaponGroupTitle(CurrentWorkshopNewWeapon)));
+	vw_DrawText(GameConfig().InternalWidth/2-438, 110, -170, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%s:", vw_GetText("Weapon Type"));
+	vw_DrawText(GameConfig().InternalWidth/2-438+175, 110, -184, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText(GetWeaponGroupTitle(CurrentWorkshopNewWeapon)));
 
 
 	int k2 = 0;
 	if (GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType) > 0.0f) {
-		vw_DrawFont(GameConfig().InternalWidth/2-438, 130, -170, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Damage, Hull:"));
+		vw_DrawText(GameConfig().InternalWidth/2-438, 130, -170, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Damage, Hull:"));
 		if ((WorkshopNewWeapon->ObjectCreationType == 11) ||
 		    (WorkshopNewWeapon->ObjectCreationType == 12) ||
 		    (WorkshopNewWeapon->ObjectCreationType == 14))
-			vw_DrawFont(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("units/sec"));
+			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("units/sec"));
 		else
-			vw_DrawFont(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("units/shot"));
+			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("units/shot"));
 
 		k2=20;
 	}
 	if (GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType) > 0.0f) {
-		vw_DrawFont(GameConfig().InternalWidth/2-438, 130+k2, -170, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Damage, Systems:"));
+		vw_DrawText(GameConfig().InternalWidth/2-438, 130+k2, -170, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Damage, Systems:"));
 		if ((WorkshopNewWeapon->ObjectCreationType == 11) ||
 		    (WorkshopNewWeapon->ObjectCreationType == 12) ||
 		    (WorkshopNewWeapon->ObjectCreationType == 14))
-			vw_DrawFont(GameConfig().InternalWidth/2-438+175, 130+k2, -184, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("units/sec"));
+			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130+k2, -184, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("units/sec"));
 		else
-			vw_DrawFont(GameConfig().InternalWidth/2-438+175, 130+k2, -184, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("units/shot"));
+			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130+k2, -184, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("units/shot"));
 
 	}
 
@@ -1159,15 +1159,15 @@ void Workshop_Weaponry()
 
 	// вывод уровня оружия
 	if (WorkshopNewWeapon->WeaponLevel <= GetShipWeaponsMaxSlotLevel())
-		vw_DrawFont(GameConfig().InternalWidth/2-438, 400, 0, 0, 1.0f, 0.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", vw_GetText("Weapon Level"), WorkshopNewWeapon->WeaponLevel);
+		vw_DrawText(GameConfig().InternalWidth/2-438, 400, 0, 0, 1.0f, eRGBCOLOR::green, MenuContentTransp, "%s: %i", vw_GetText("Weapon Level"), WorkshopNewWeapon->WeaponLevel);
 	else
-		vw_DrawFont(GameConfig().InternalWidth/2-438, 400, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Weapon Level"), WorkshopNewWeapon->WeaponLevel);
+		vw_DrawText(GameConfig().InternalWidth/2-438, 400, 0, 0, 1.0f, eRGBCOLOR::orange, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Weapon Level"), WorkshopNewWeapon->WeaponLevel);
 
 	// вывод стоимости
 	if (GameConfig().Profile[CurrentProfile].Money >= GetWeaponBaseCost(CurrentWorkshopNewWeapon)) // всегда ведь новое, считать боекомплект не нужно
-		vw_DrawFont(GameConfig().InternalWidth/2-438, 420, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", vw_GetText("Weapon Cost"), GetWeaponBaseCost(CurrentWorkshopNewWeapon));
+		vw_DrawText(GameConfig().InternalWidth/2-438, 420, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s: %i", vw_GetText("Weapon Cost"), GetWeaponBaseCost(CurrentWorkshopNewWeapon));
 	else
-		vw_DrawFont(GameConfig().InternalWidth/2-438, 420, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Weapon Cost"), GetWeaponBaseCost(CurrentWorkshopNewWeapon));
+		vw_DrawText(GameConfig().InternalWidth/2-438, 420, 0, 0, 1.0f, eRGBCOLOR::red, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Weapon Cost"), GetWeaponBaseCost(CurrentWorkshopNewWeapon));
 
 
 
@@ -1227,7 +1227,7 @@ void Workshop_Weaponry()
 	}
 
 	vw_SetFontSize(24);
-	vw_DrawFont(GameConfig().InternalWidth/2-445, 600, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Weapon Stock"));
+	vw_DrawText(GameConfig().InternalWidth/2-445, 600, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Weapon Stock"));
 	ResetFontSize();
 
 	DrawShipWeaponsInSlots();
@@ -1257,16 +1257,16 @@ void Workshop_Weaponry()
 	}
 
 	vw_SetFontSize(24);
-	vw_DrawFont(GameConfig().InternalWidth/2+445-vw_FontSize(vw_GetText("Installed Weapons")), 600, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Installed Weapons"));
+	vw_DrawText(GameConfig().InternalWidth/2+445-vw_FontSize(vw_GetText("Installed Weapons")), 600, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Installed Weapons"));
 	ResetFontSize();
 
 	// вывод информации
 	vw_SetFontSize(20);
 	int SizeI = (GameConfig().InternalWidth - vw_FontSize("%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money)) / 2;
 	if (GameConfig().Profile[CurrentProfile].Money >= GetWeaponBaseCost(CurrentWorkshopNewWeapon))
-		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money);
+		vw_DrawText(SizeI, 630, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money);
 	else
-		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money);
+		vw_DrawText(SizeI, 630, 0, 0, 1.0f, eRGBCOLOR::red, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money);
 	ResetFontSize();
 
 

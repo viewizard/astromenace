@@ -315,7 +315,7 @@ void ProfileMenu()
 	int Prir1 = 24;
 
 	// надпись
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("New Pilot Profile"));
+	vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, MenuContentTransp, vw_GetText("New Pilot Profile"));
 
 
 	Y1 += 30;
@@ -336,7 +336,7 @@ void ProfileMenu()
 	if (!isDialogBoxDrawing())
 		if (MenuContentTransp == 1.0f) ProfileInputText();
 
-	vw_DrawFontUTF32(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, NewProfileName);
+	vw_DrawTextUTF32(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, NewProfileName);
 
 	Y1 += Prir1;
 
@@ -348,7 +348,7 @@ void ProfileMenu()
 
 	// список для выбора записи
 	Y1 += Prir1;
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("Pilots Profiles"));
+	vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, MenuContentTransp, vw_GetText("Pilots Profiles"));
 	int Size = vw_FontSize(vw_GetText("Money"));
 	float WScale = 0;
 	if (Size > 70) {
@@ -356,7 +356,7 @@ void ProfileMenu()
 		WScale = -70;
 	}
 	int SizeI = GameConfig().InternalWidth / 2 + 2 + (130 - Size) / 2;
-	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("Money"));
+	vw_DrawText(SizeI, Y1, WScale, 0, 1.0f, eRGBCOLOR::orange, MenuContentTransp, vw_GetText("Money"));
 
 	Size = vw_FontSize(vw_GetText("Exp"));
 	WScale = 0;
@@ -365,7 +365,7 @@ void ProfileMenu()
 		WScale = -100;
 	}
 	SizeI = GameConfig().InternalWidth / 2 + 132 + (130 - Size) / 2;
-	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("Exp"));
+	vw_DrawText(SizeI, Y1, WScale, 0, 1.0f, eRGBCOLOR::orange, MenuContentTransp, vw_GetText("Exp"));
 
 	Size = vw_FontSize(vw_GetText("Difficulty"));
 	WScale = 0;
@@ -374,7 +374,7 @@ void ProfileMenu()
 		WScale = -100;
 	}
 	SizeI = GameConfig().InternalWidth / 2 + 262 + (130 - Size) / 2;
-	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("Difficulty"));
+	vw_DrawText(SizeI, Y1, WScale, 0, 1.0f, eRGBCOLOR::orange, MenuContentTransp, vw_GetText("Difficulty"));
 
 
 	Y1 += 30;
@@ -391,24 +391,24 @@ void ProfileMenu()
 	int TmpY = Y1-230+8;
 	for (int i = 0; i < 5; i++) {
 		if (GameConfig().Profile[i].Used) {
-			vw_DrawFont(X1+10, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i.",i+1);
+			vw_DrawText(X1+10, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i.",i+1);
 
 			if (vw_FontSize(GameConfig().Profile[i].Name) > 300) {
-				vw_DrawFont(X1+50, TmpY, 0, 300, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GameConfig().Profile[i].Name);
-				vw_DrawFont(X1+50+310, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "...");
+				vw_DrawText(X1+50, TmpY, 0, 300, 1.0f, eRGBCOLOR::white, MenuContentTransp, GameConfig().Profile[i].Name);
+				vw_DrawText(X1+50+310, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "...");
 			} else
-				vw_DrawFont(X1+50, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GameConfig().Profile[i].Name);
+				vw_DrawText(X1+50, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, GameConfig().Profile[i].Name);
 
 
 			Size = vw_FontSize("%i", GameConfig().Profile[i].Money);
 			SizeI = GameConfig().InternalWidth/2+2 + (130 - Size)/2;
-			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", GameConfig().Profile[i].Money);
+			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i", GameConfig().Profile[i].Money);
 			Size = vw_FontSize("%i", GameConfig().Profile[i].Experience);
 			SizeI = GameConfig().InternalWidth/2+132 + (130 - Size)/2;
-			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", GameConfig().Profile[i].Experience);
+			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i", GameConfig().Profile[i].Experience);
 			Size = vw_FontSize("%i%%", GameConfig().Profile[i].Difficulty);
 			SizeI = GameConfig().InternalWidth/2+262 + (130 - Size)/2;
-			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i%%", GameConfig().Profile[i].Difficulty);
+			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i%%", GameConfig().Profile[i].Difficulty);
 
 
 			// работаем с клавиатурой
@@ -472,8 +472,8 @@ void ProfileMenu()
 
 		} else {
 			float transp = 0.3f;
-			vw_DrawFont(X1+10, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, transp*MenuContentTransp, "%i.",i+1);
-			vw_DrawFont(X1+50, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, transp*MenuContentTransp, vw_GetText("empty"));
+			vw_DrawText(X1+10, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, transp*MenuContentTransp, "%i.",i+1);
+			vw_DrawText(X1+50, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, transp*MenuContentTransp, vw_GetText("empty"));
 		}
 
 		TmpY += 46;

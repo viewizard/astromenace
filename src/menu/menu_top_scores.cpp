@@ -101,18 +101,18 @@ void TopScoresMenu()
 	int Y1 = 165;
 	int Prir1 = 42;
 
-	vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "#");
-	vw_DrawFont(X1+45, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("NAME"));
-	vw_DrawFont(X1+650, Y1, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("SCORE"));
+	vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "#");
+	vw_DrawText(X1+45, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("NAME"));
+	vw_DrawText(X1+650, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("SCORE"));
 
 	Y1 += 10;
 
 	for (int i=0; i<10; i++) {
 		Y1 += Prir1;
 
-		vw_DrawFont(X1, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.6f*MenuContentTransp, "%i", i+1);
-		vw_DrawFont(X1+45, Y1, 0, 530, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GameName[i]);
-		vw_DrawFont(X1+650, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", GameScore[i]);
+		vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::white, 0.6f*MenuContentTransp, "%i", i+1);
+		vw_DrawText(X1+45, Y1, 0, 530, 1.0f, eRGBCOLOR::white, MenuContentTransp, GameName[i]);
+		vw_DrawText(X1+650, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i", GameScore[i]);
 	}
 
 

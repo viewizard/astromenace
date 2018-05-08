@@ -561,12 +561,12 @@ void Workshop_Shipyard()
 
 	// на новом корабле
 	vw_SetFontSize(24);
-	vw_DrawFont(GameConfig().InternalWidth/2-445, 600, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Ship Stock"));
+	vw_DrawText(GameConfig().InternalWidth/2-445, 600, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Ship Stock"));
 	ResetFontSize();
 
 
 	// вывод названия корабля
-	vw_DrawFont(GameConfig().InternalWidth/2-448, 50+6, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("%s Mk%i"), vw_GetText(GetWorkshopShipName(CurrentWorkshopNewFighter)), 1);
+	vw_DrawText(GameConfig().InternalWidth/2-448, 50+6, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("%s Mk%i"), vw_GetText(GetWorkshopShipName(CurrentWorkshopNewFighter)), 1);
 	if (DrawButton128_2(GameConfig().InternalWidth/2-197,50, vw_GetText("Info"), MenuContentTransp, false)) {
 		SetCurrentDialogBox(eDialogBox::ShowShipInfo);
 		DialogSpaceShip = WorkshopNewFighter;
@@ -578,17 +578,17 @@ void Workshop_Shipyard()
 	int SmSizeI2 = vw_FontSize(vw_GetText("Weapons"));
 	if (SmSizeI < SmSizeI2) SmSizeI = SmSizeI2;
 
-	vw_DrawFont(GameConfig().InternalWidth/2-78-40-SmSizeI, 110, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, vw_GetText("Armor:"));
-	vw_DrawFont(GameConfig().InternalWidth/2-78-vw_FontSize("%i", (int)WorkshopNewFighter->StrengthStart), 110, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, "%i", (int)WorkshopNewFighter->StrengthStart);
+	vw_DrawText(GameConfig().InternalWidth/2-78-40-SmSizeI, 110, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, vw_GetText("Armor:"));
+	vw_DrawText(GameConfig().InternalWidth/2-78-vw_FontSize("%i", (int)WorkshopNewFighter->StrengthStart), 110, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, "%i", (int)WorkshopNewFighter->StrengthStart);
 
-	vw_DrawFont(GameConfig().InternalWidth/2-78-40-SmSizeI, 130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, "%s:", vw_GetText("Weapons"));
-	vw_DrawFont(GameConfig().InternalWidth/2-78-vw_FontSize("%i", WorkshopNewFighter->WeaponQuantity), 130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, "%i", WorkshopNewFighter->WeaponQuantity);
+	vw_DrawText(GameConfig().InternalWidth/2-78-40-SmSizeI, 130, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, "%s:", vw_GetText("Weapons"));
+	vw_DrawText(GameConfig().InternalWidth/2-78-vw_FontSize("%i", WorkshopNewFighter->WeaponQuantity), 130, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, "%i", WorkshopNewFighter->WeaponQuantity);
 
 	// вывод стоимости корабля
 	if (CanBuy)
-		vw_DrawFont(GameConfig().InternalWidth/2-438, 420, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s: %i", vw_GetText("Ship Hull Cost"), GetWorkshopShipCost(CurrentWorkshopNewFighter));
+		vw_DrawText(GameConfig().InternalWidth/2-438, 420, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%s: %i", vw_GetText("Ship Hull Cost"), GetWorkshopShipCost(CurrentWorkshopNewFighter));
 	else
-		vw_DrawFont(GameConfig().InternalWidth/2-438, 420, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Ship Hull Cost"), GetWorkshopShipCost(CurrentWorkshopNewFighter));
+		vw_DrawText(GameConfig().InternalWidth/2-438, 420, 0, 0, 1.0f, eRGBCOLOR::orange, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Ship Hull Cost"), GetWorkshopShipCost(CurrentWorkshopNewFighter));
 
 
 
@@ -645,11 +645,11 @@ void Workshop_Shipyard()
 
 	// на корабле игрока
 	vw_SetFontSize(24);
-	vw_DrawFont(GameConfig().InternalWidth/2+445-vw_FontSize(vw_GetText("Player Ship")), 600, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Player Ship"));
+	vw_DrawText(GameConfig().InternalWidth/2+445-vw_FontSize(vw_GetText("Player Ship")), 600, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Player Ship"));
 	ResetFontSize();
 
 	// вывод названия корабля
-	vw_DrawFont(GameConfig().InternalWidth/2+64, 56, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("%s Mk%i"), vw_GetText(GetWorkshopShipName(GameConfig().Profile[CurrentProfile].Ship)), GameConfig().Profile[CurrentProfile].ShipHullUpgrade);
+	vw_DrawText(GameConfig().InternalWidth/2+64, 56, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("%s Mk%i"), vw_GetText(GetWorkshopShipName(GameConfig().Profile[CurrentProfile].Ship)), GameConfig().Profile[CurrentProfile].ShipHullUpgrade);
 
 	if (DrawButton128_2(GameConfig().InternalWidth/2+315, 50, vw_GetText("Info"), MenuContentTransp, false)) {
 		SetCurrentDialogBox(eDialogBox::ShowShipInfo);
@@ -672,9 +672,9 @@ void Workshop_Shipyard()
 		if (GameConfig().Profile[CurrentProfile].Money < GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship))
 			CanUpgrade = false;
 		if (CanUpgrade)
-			vw_DrawFont(GameConfig().InternalWidth/2+438-vw_FontSize("%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship)), LinePos, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship));
+			vw_DrawText(GameConfig().InternalWidth/2+438-vw_FontSize("%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship)), LinePos, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship));
 		else
-			vw_DrawFont(GameConfig().InternalWidth/2+438-vw_FontSize("%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship)), LinePos, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship));
+			vw_DrawText(GameConfig().InternalWidth/2+438-vw_FontSize("%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship)), LinePos, 0, 0, 1.0f, eRGBCOLOR::orange, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship));
 
 		LinePos -= 20;
 	}
@@ -684,31 +684,31 @@ void Workshop_Shipyard()
 	bool NeedRepair = false;
 	if (GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame) > 0) {
 		SizeI = vw_FontSize("%s: %i", vw_GetText("Repair Hull Cost"), GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame));
-		vw_DrawFont(GameConfig().InternalWidth/2+438-SizeI, LinePos, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Repair Hull Cost"), GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame));
+		vw_DrawText(GameConfig().InternalWidth/2+438-SizeI, LinePos, 0, 0, 1.0f, eRGBCOLOR::red, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Repair Hull Cost"), GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame));
 		LinePos -= 20;
 		NeedRepair = true;
 
 		// надпись Armor, красная
-		vw_DrawFont(GameConfig().InternalWidth/2+74, 110, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawText(GameConfig().InternalWidth/2+74, 110, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, vw_GetText("Armor:"));
 		SizeI = vw_FontSize("%i/%i", static_cast<int>(WorkshopFighterGame->Strength), static_cast<int>(WorkshopFighterGame->StrengthStart));
-		vw_DrawFont(GameConfig().InternalWidth/2+74+14+SmSizeI, 110, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, "%i/%i", static_cast<int>(WorkshopFighterGame->Strength), static_cast<int>(WorkshopFighterGame->StrengthStart));
+		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 110, 0, 0, 1.0f, eRGBCOLOR::red, CurrentAlert3*MenuContentTransp, "%i/%i", static_cast<int>(WorkshopFighterGame->Strength), static_cast<int>(WorkshopFighterGame->StrengthStart));
 	} else {
 		// надпись Armor, нормальная
-		vw_DrawFont(GameConfig().InternalWidth/2+74, 110, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawText(GameConfig().InternalWidth/2+74, 110, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, vw_GetText("Armor:"));
 		SizeI = vw_FontSize("%i/%i", static_cast<int>(WorkshopFighterGame->Strength), static_cast<int>(WorkshopFighterGame->StrengthStart));
-		vw_DrawFont(GameConfig().InternalWidth/2+74+14+SmSizeI, 110, 0, 0,1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, "%i/%i", static_cast<int>(WorkshopFighterGame->Strength), static_cast<int>(WorkshopFighterGame->StrengthStart));
+		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 110, 0, 0,1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, "%i/%i", static_cast<int>(WorkshopFighterGame->Strength), static_cast<int>(WorkshopFighterGame->StrengthStart));
 	}
 
 	SizeI = SizeI - vw_FontSize("%i", WorkshopFighterGame->WeaponQuantity);
-	vw_DrawFont(GameConfig().InternalWidth/2+74, 130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, "%s:", vw_GetText("Weapons"));
-	vw_DrawFont(GameConfig().InternalWidth/2+74+14+SmSizeI+SizeI, 130, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*MenuContentTransp, "%i", WorkshopFighterGame->WeaponQuantity);
+	vw_DrawText(GameConfig().InternalWidth/2+74, 130, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, "%s:", vw_GetText("Weapons"));
+	vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI+SizeI, 130, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, "%i", WorkshopFighterGame->WeaponQuantity);
 
 
 
 
 	// вывод стоимости корабля (со всеми системами)
 	SizeI = vw_FontSize("%s: %i", vw_GetText("Ship Cost"), GetWorkshopShipFullCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame));
-	vw_DrawFont(GameConfig().InternalWidth/2+438-SizeI, LinePos, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s: %i", vw_GetText("Ship Cost"), GetWorkshopShipFullCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame));
+	vw_DrawText(GameConfig().InternalWidth/2+438-SizeI, LinePos, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%s: %i", vw_GetText("Ship Cost"), GetWorkshopShipFullCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame));
 
 
 	// рамки
@@ -736,9 +736,9 @@ void Workshop_Shipyard()
 	vw_SetFontSize(20);
 	SizeI = (GameConfig().InternalWidth-vw_FontSize("%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money)) / 2;
 	if (CanBuy)
-		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money);
+		vw_DrawText(SizeI, 630, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money);
 	else
-		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money);
+		vw_DrawText(SizeI, 630, 0, 0, 1.0f, eRGBCOLOR::orange, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money);
 	ResetFontSize();
 }
 

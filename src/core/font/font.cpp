@@ -30,7 +30,7 @@
 
 // TODO remove va_start, use variadic templates instead (?)
 
-// TODO provide static vw_DrawFont(), dynamic realization we have now,
+// TODO provide static vw_DrawText(), dynamic realization we have now,
 //      static should create array with text blocks as key and VBO/VAO/IBO (and other data)
 //      as value for fast rendering.
 
@@ -64,7 +64,7 @@ std::unique_ptr<uint8_t[]> InternalFontBuffer{};
 // we are safe with sIF_complex_type here, since font size and position will not exceed 'float'
 sIF_complex_type<unsigned, float> InternalFontSize{0};
 constexpr float GlobalFontOffsetY{2.0f}; // FIXME 'fix' for legacy related code, since previously we are used texture instead of
-					 //       freetype, so, all vw_DrawFont() calls have wrong Y position now in game code
+					 //       freetype, so, all vw_DrawText() calls have wrong Y position now in game code
 
 struct sTexturePos {
 	float left, top, right, bottom;
@@ -509,10 +509,10 @@ static void DrawBufferOnTextEnd(GLtexture CurrentTexture)
 }
 
 /*
- * vw_DrawFontUTF32 wrapper with variadic arguments and conversion into utf32.
+ * vw_DrawTextUTF32 wrapper with variadic arguments and conversion into utf32.
  */
-int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
-		 float R, float G, float B, float Transp, const char *Text, ...)
+int vw_DrawText(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
+		const sRGBCOLOR &Color, float Transp, const char *Text, ...)
 {
 	if (!Text)
 		return ERR_PARAMETERS;
@@ -529,7 +529,7 @@ int vw_DrawFont(int X, int Y, float StrictWidth, float ExpandWidth, float FontSc
 	// convert from utf8 into utf32
 	const std::u32string UTF32String{ConvertUTF8.from_bytes(buffer.data())};
 
-	return vw_DrawFontUTF32(X, Y, StrictWidth, ExpandWidth, FontScale, R, G, B, Transp, UTF32String);
+	return vw_DrawTextUTF32(X, Y, StrictWidth, ExpandWidth, FontScale, Color, Transp, UTF32String);
 }
 
 /*
@@ -578,8 +578,8 @@ static void DrawBuffersRoutine(unsigned TextSize)
  *      if StrictWidth < 0, reduce all font character's width
  * ExpandWidth - expand width to provided parameter
  */
-int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
-		     float R, float G, float B, float Transp, const std::u32string &Text)
+int vw_DrawTextUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
+		     const sRGBCOLOR &Color, float Transp, const std::u32string &Text)
 {
 	if (Text.empty())
 		return ERR_PARAMETERS;
@@ -610,7 +610,7 @@ int vw_DrawFontUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 	float LineWidth{0};
 
 	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
-	vw_SetColor(R, G, B, Transp);
+	vw_SetColor(Color.r, Color.g, Color.b, Transp);
 	GLtexture CurrentTexture{0};
 	float ImageHeight{0.0f};
 	float ImageWidth{0.0f};
@@ -737,9 +737,9 @@ int vw_FontSizeUTF32(const std::u32string &Text)
 }
 
 /*
- * vw_DrawFont3DUTF32 wrapper with variadic arguments and conversion into utf32.
+ * vw_DrawText3DUTF32 wrapper with variadic arguments and conversion into utf32.
  */
-int vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
+int vw_DrawText3D(float X, float Y, float Z, const char *Text, ...)
 {
 	if (!Text)
 		return ERR_PARAMETERS;
@@ -757,13 +757,13 @@ int vw_DrawFont3D(float X, float Y, float Z, const char *Text, ...)
 	// convert from utf8 into utf32
 	const std::u32string UTF32String{ConvertUTF8.from_bytes(buffer.data())};
 
-	return vw_DrawFont3DUTF32(X, Y, Z, UTF32String);
+	return vw_DrawText3DUTF32(X, Y, Z, UTF32String);
 }
 
 /*
  * Draw 3D text with current font.
  */
-int vw_DrawFont3DUTF32(float X, float Y, float Z, const std::u32string &Text)
+int vw_DrawText3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 {
 	if (Text.empty())
 		return ERR_PARAMETERS;

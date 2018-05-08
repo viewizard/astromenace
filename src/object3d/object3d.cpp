@@ -1218,7 +1218,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 	// вывод отладочной информации, если она есть
 	if (DebugInfo != nullptr)
-		vw_DrawFont3D(Location.x, Location.y+AABB[0].y, Location.z, DebugInfo);
+		vw_DrawText3D(Location.x, Location.y+AABB[0].y, Location.z, DebugInfo);
 
 
 

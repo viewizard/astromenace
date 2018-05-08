@@ -50,10 +50,68 @@
 #endif // MAX_PATH
 #endif // unix
 
+
+enum class eRGBCOLOR {
+	white,
+	black,
+	red,
+	green,
+	blue,
+	yellow,
+	orange
+};
+
 struct sRGBCOLOR {
-	float r;
-	float g;
-	float b;
+	float r{0.0f};
+	float g{0.0f};
+	float b{0.0f};
+
+	sRGBCOLOR() = default;
+	sRGBCOLOR(float _r, float _g, float _b) :
+		r{_r},
+		g{_g},
+		b{_b}
+	{}
+	sRGBCOLOR(eRGBCOLOR color)
+	{
+		switch (color) {
+		case eRGBCOLOR::white:
+			r = 1.0f;
+			g = 1.0f;
+			b = 1.0f;
+			break;
+		case eRGBCOLOR::black:
+			r = 0.0f;
+			g = 0.0f;
+			b = 0.0f;
+			break;
+		case eRGBCOLOR::red:
+			r = 1.0f;
+			g = 0.0f;
+			b = 0.0f;
+			break;
+		case eRGBCOLOR::green:
+			r = 0.0f;
+			g = 1.0f;
+			b = 0.0f;
+			break;
+		case eRGBCOLOR::blue:
+			r = 0.0f;
+			g = 0.0f;
+			b = 1.0f;
+			break;
+		case eRGBCOLOR::yellow:
+			r = 1.0f;
+			g = 1.0f;
+			b = 0.0f;
+			break;
+		case eRGBCOLOR::orange:
+			r = 1.0f;
+			g = 0.5f;
+			b = 0.0f;
+			break;
+		}
+	}
 };
 
 // STL (only includes what's really used)

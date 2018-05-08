@@ -122,8 +122,8 @@ void CreditsMenu()
 	if (CurrentTextPos <= -(550 + CreditsArrayCount * Offset))
 		CurrentTextPos = 0.0f;
 
-	// we switch white/yellow colors, so, we need change only "blue" part of RGB
-	float ColorB = 0.0f;
+	// we switch white/yellow colors, first is 'title', should be yellow
+	eRGBCOLOR tmpColor{eRGBCOLOR::yellow};
 	for (unsigned long i = 0; i < CreditsArrayCount; i++) {
 		float tmpTransp = 0.0f;
 		if (TextY > 300) // fade-in
@@ -135,14 +135,14 @@ void CreditsMenu()
 		if (!CreditsArray[i].empty()) {
 			const char *tmpText = vw_GetText(CreditsArray[i].c_str());
 			int CenteredX = (GameConfig().InternalWidth - vw_FontSize(tmpText)) / 2;
-			vw_DrawFont(CenteredX, TextY, 0, 0, 1.0f,
-				    1.0f, 1.0f, ColorB, tmpTransp * MenuContentTransp,
+			vw_DrawText(CenteredX, TextY, 0, 0, 1.0f,
+				    tmpColor, tmpTransp * MenuContentTransp,
 				    tmpText);
 		}
 		TextY += Offset;
 
 		// if current line is empty, next one will be yellow, otherwise - white
-		ColorB = CreditsArray[i].empty() ? 0.0f : 1.0f;
+		tmpColor = CreditsArray[i].empty() ? eRGBCOLOR::yellow : eRGBCOLOR::white;
 	}
 
 	int X = (GameConfig().InternalWidth - 384) / 2;

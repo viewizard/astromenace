@@ -636,8 +636,8 @@ static void DrawLoading(int Current, int AllDrawLoading, uint32_t &LastDrawTime,
 	sRECT DstRect{0, 64+32, static_cast<int>(GameConfig().InternalWidth), 64+32+512};
 	vw_Draw2D(DstRect, SrcRect, LoadImageTexture, false, 1.0f, 0.0f);
 
-	vw_DrawFont(GameConfig().InternalWidth / 2 - vw_FontSize(vw_GetText("LOADING")) / 2,
-		    768-128, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, vw_GetText("LOADING"));
+	vw_DrawText(GameConfig().InternalWidth / 2 - vw_FontSize(vw_GetText("LOADING")) / 2,
+		    768-128, 0, 0, 1.0f, eRGBCOLOR::white, 1.0f, vw_GetText("LOADING"));
 
 	SrcRect(0, 0, 256, 32);
 	int StartX = (GameConfig().InternalWidth - 256) / 2;
