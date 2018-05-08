@@ -1738,7 +1738,7 @@ void InformationDrawObject()
 	sRECT SrcRect;
 	SrcRect(2,2,482,371);
 	DstRect(GameConfig().InternalWidth/2-450, 80-18+80, GameConfig().InternalWidth/2+30, 80+351+80);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel444_333_border.tga"), true, 1.0f*MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel444_333_border.tga"), true, MenuContentTransp);
 
 	// отрисовка стрелок
 	SrcRect(32,0,64,32);

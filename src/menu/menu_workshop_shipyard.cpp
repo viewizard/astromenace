@@ -468,7 +468,7 @@ void RepairShip()
 
 	// вычисляем, сколько можем отремонтировать
 	float StrengtRepair = WorkshopFighterGame->StrengthStart - WorkshopFighterGame->Strength;
-	float MoneyRepair = 1.0f * GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame);
+	float MoneyRepair = static_cast<float>(GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame));
 	// сколько можем отремонтировать
 	float CanRepair = StrengtRepair * (GameConfig().Profile[CurrentProfile].Money/MoneyRepair);
 	// ремонтируем сколько можем

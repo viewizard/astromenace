@@ -156,7 +156,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[2].lock()) {
 			SetExplosionGFX(sharedGFX, 4);
 			sharedGFX->Speed = Object->Radius / 3.0f;
-			sharedGFX->SpeedVar = 1.0f * vw_Randf0;
+			sharedGFX->SpeedVar = vw_Randf0;
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -169,7 +169,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 2);
 			sharedGFX->Speed = Object->Radius * 1.2f;
-			sharedGFX->SpeedVar   = 1.0f*vw_Randf0;
+			sharedGFX->SpeedVar = vw_Randf0;
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -246,7 +246,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetExplosionGFX(sharedGFX, 6);
 			sharedGFX->Speed = Object->Radius / 1.4f;
-			sharedGFX->SpeedVar = 1.0f * vw_Randf0;
+			sharedGFX->SpeedVar = vw_Randf0;
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed > 0.01f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -258,7 +258,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 5);
 			sharedGFX->Speed = Object->Radius * 1.1f;
-			sharedGFX->SpeedVar = 1.0f * vw_Randf0;
+			sharedGFX->SpeedVar = vw_Randf0;
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed > 0.01f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -297,7 +297,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetExplosionGFX(sharedGFX, 12);
 			sharedGFX->Speed = Object->Radius / 1.4f;
-			sharedGFX->SpeedVar = 1.0f * vw_Randf0;
+			sharedGFX->SpeedVar = vw_Randf0;
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -309,7 +309,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 11);
 			sharedGFX->Speed = Object->Radius * 1.1f;
-			sharedGFX->SpeedVar = 1.0f * vw_Randf0;
+			sharedGFX->SpeedVar = vw_Randf0;
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -339,7 +339,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetExplosionGFX(sharedGFX, 6);
 			sharedGFX->Speed = Object->Radius / 1.3f;
-			sharedGFX->SpeedVar = 1.0f * vw_Randf0;
+			sharedGFX->SpeedVar = vw_Randf0;
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -351,7 +351,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 5);
 			sharedGFX->Speed = Object->Radius * 1.1f;
-			sharedGFX->SpeedVar = 1.0f * vw_Randf0;
+			sharedGFX->SpeedVar = vw_Randf0;
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -680,8 +680,10 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 
 				float Acc = (MeshAcc/1000.0f)*(Diag/dist)*(MeshAcc/Object->Radius);
-				if (Acc > MeshAcc) Acc = MeshAcc+vw_Randf0;
-				if (Acc < (-1.0f*MeshAcc)) Acc = (-1.0f*MeshAcc)-vw_Randf0;
+				if (Acc > MeshAcc)
+					Acc = MeshAcc + vw_Randf0;
+				if (Acc < -MeshAcc)
+					Acc = -MeshAcc - vw_Randf0;
 
 
 				// записываем центр треугольника, оно же базовое ускорение + цент UV, для передачи шейдеру

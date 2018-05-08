@@ -404,12 +404,10 @@ void AddPlayerBonus(cObject3D *Object, int KilledByObjectStatus)
 		// 7 - Asteroids
 		case 7:
 			//GameMoney += 1.0f/BonusDiv;
-			//AsteroidsKillBonus += 1.0f/BonusDiv;
 			AsteroidsKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/8.0f)/BonusDiv;
 			GameMoney += ((Object->StrengthStart*GameNPCArmorPenalty)/8.0f)/BonusDiv;
 
 			AsteroidsKillQuant += 1;
-			//TTTExperience += (1.0f*(Setup.Profile[CurrentProfile].Difficulty/100.0f))/1.8f;
 			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (GameConfig().Profile[CurrentProfile].Difficulty / 100.0f)) / 8.0f;
 			break;
 		}

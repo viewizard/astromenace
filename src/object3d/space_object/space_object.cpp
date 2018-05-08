@@ -174,13 +174,15 @@ bool cSpaceObject::Update(float Time)
 
 	// если части корабля или техники, останавливаем
 	if (ObjectType == 8) {
-		if (Speed>0.0f) {
-			Speed -= 1.0f*TimeDelta;
-			if (Speed<0.0f) Speed=0.0f;
+		if (Speed > 0.0f) {
+			Speed -= TimeDelta;
+			if (Speed < 0.0f)
+				Speed = 0.0f;
 		}
-		if (Speed<0.0f) {
-			Speed += 1.0f*TimeDelta;
-			if (Speed>0.0f) Speed=0.0f;
+		if (Speed < 0.0f) {
+			Speed += TimeDelta;
+			if (Speed > 0.0f)
+				Speed = 0.0f;
 		}
 
 		if (RotationSpeed.x != 0.0f) {
@@ -235,7 +237,7 @@ bool cSpaceObject::Update(float Time)
 				break;
 			// луна
 			case 4:
-				ObjectBlocks[0].Rotation.y += 1.0f * TimeDelta;
+				ObjectBlocks[0].Rotation.y += TimeDelta;
 				break;
 			// планета пришельцев, с подсветкой
 			case 5:
