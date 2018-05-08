@@ -32,19 +32,17 @@
 
 #include "../core/base.h"
 
-// Profile name size (changes make previous game configuration file incompatible)
+// profile name size
+// (!) changes make previous game configuration file incompatible
 #define PROFILE_NAME_SIZE 1024
-// Maximum possible missions number for arrays in pilot profile (changes make previous game configuration file incompatible)
+// maximum possible missions number for arrays in pilot profile
+// (!) changes make previous game configuration file incompatible
 #define MAXIMUM_GAME_MISSIONS 100
 
-
-//------------------------------------------------------------------------------------
-// структура данных профайла игрока
-//------------------------------------------------------------------------------------
 // This structure should be POD, since we "pack" it into the game config file
 // as memory block. Don't use std::string or any containers here.
 struct sPilotProfile {
-	bool Used;
+	bool Used{false};
 
 	char Name[PROFILE_NAME_SIZE];
 	// замедление снарядов NPC ... 1-3...
@@ -103,9 +101,6 @@ struct sPilotProfile {
 	int MissionReplayCount[MAXIMUM_GAME_MISSIONS];
 };
 
-//------------------------------------------------------------------------------------
-// структура лучших результатов
-//------------------------------------------------------------------------------------
 // This structure should be POD, since we "pack" it into the game config file
 // as memory block. Don't use std::string or any containers here.
 struct sTopScores {
@@ -113,114 +108,100 @@ struct sTopScores {
 	int Score;
 };
 
-//------------------------------------------------------------------------------------
-// структура данных настройки игры
-//------------------------------------------------------------------------------------
 struct sGameConfig {
-	// язык меню
-	unsigned int MenuLanguage; // 0-en, 1-de, 2-ru
-	// язык голосовых сообщений
-	unsigned int VoiceLanguage; // 0-en, 1-de, 2-ru
-	// номер шрифта
-	int FontNumber;
+	unsigned int MenuLanguage{0}; // en
+	unsigned int VoiceLanguage{0}; // en
+	int FontNumber{0}; // first font from the list
 
-	// вкл/откл музыки
-	int MusicSw;
-	bool Music_check; // вообще можем-не можем играть музыку
-	// вкл/откл SFX
-	int SoundSw;
-	int VoiceSw;
-	bool Sound_check; // вообще можем-не можем играть sfx
-	int Width;	// game resolution's width
-	int Height;	// game resolution's height
-	int BPP;	// game resolution's color depth
-	float InternalWidth;	// internal resolution's width
-	float InternalHeight;	// internal resolution's height
-	// поведение камеры при стандартном отношении (перемещать-не перемешать)
-	int CameraModeWithStandardAspectRatio;
+	int MusicSw{8};		// in-game music volume
+	bool Music_check{true};	// general music switch (hardware/software related)
+	int SoundSw{10};	// in-game sfx volume
+	int VoiceSw{10};	// in-game voice volume
+	bool Sound_check{true};	// general sfx switch (hardware/software related)
 
-	// синхронизация
-	int VSync;
-	// яркость
-	int Brightness;
-	// мультисэмпл антиалиасинг
-	int MSAA;
-	int CSAA;
+	int Width{1228};	// game resolution's width
+	int Height{768};	// game resolution's height
+	int BPP{0};		// game resolution's color depth
+	float InternalWidth{1228.0f};	// internal resolution's width
+	float InternalHeight{768.0f};	// internal resolution's height
+	int CameraModeWithStandardAspectRatio{0}; // camera mode
 
-	// качество визуальных эффектов (тайловая подложка, взрывы, системы частиц)
-	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
-	int VisualEffectsQuality;
-	// уровень анизотропии при фильтрации текстур
-	int AnisotropyLevel;
-	// компрессия текстур 0-выкл, 1-S3TC, 2-BPTC
-	int TexturesCompressionType;
-	// использование шейдеров версии 120 (OpenGL 2.1)
-	bool UseGLSL120;
+	int VSync{0};
+	int Brightness{5};
+	int MSAA{0}; // MS anti aliasing
+	int CSAA{0}; // CS anti aliasing
+
+	int VisualEffectsQuality{0};	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
+	int AnisotropyLevel{1};
+	int TexturesCompressionType{0};	// 0 - disabled, 1 - S3TC, 2 - BPTC
+	bool UseGLSL120{false};		// 120 (OpenGL 2.1)
 	// использование шадовмеп
-	int ShadowMap;
-	// кол-во точечных источников света на 1 объект
-	int MaxPointLights;
+	int ShadowMap{0};		// gfx (shadow map)
+	int MaxPointLights{3};		// lights point max quantity
 
-	// информация о победителях
-	sTopScores TopScores[10];
+	sTopScores TopScores[10]{{"Viewizard", 100000},
+				 {"Alex", 90000},
+				 {"Michael", 80000},
+				 {"Jeffrey", 70000},
+				 {"Christopher Hughson", 60000},
+				 {"Becky", 40000},
+				 {"Greg", 20000},
+				 {"Jay Coleman", 10000},
+				 {"Kelvin", 5000},
+				 {"Stephan Gregory", 1000}};
 
-	int KeyboardDecreaseGameSpeed;
-	int KeyboardResetGameSpeed;
-	int KeyboardIncreaseGameSpeed;
-	int KeyboardGameWeaponInfoType;
-	int KeyboardPrimaryWeaponFireMode;
-	int KeyboardSecondaryWeaponFireMode;
-	// управление в игре
-	// клавиатура
-	int KeyBoardLeft;
-	int KeyBoardRight;
-	int KeyBoardUp;
-	int KeyBoardDown;
-	int KeyBoardPrimary;
-	int KeyBoardSecondary;
-	// мышка
-	int MousePrimary;
-	int MouseSecondary;
-	// джойстик
-	int JoystickPrimary;
-	int JoystickSecondary;
-	// номер джойстика (может их несколько)
-	int JoystickNum;
-	// мертвая зона хода ручки джойстика
-	int JoystickDeadZone;
+	int KeyboardDecreaseGameSpeed{SDLK_F5};
+	int KeyboardResetGameSpeed{SDLK_F6};
+	int KeyboardIncreaseGameSpeed{SDLK_F7};
+	int KeyboardGameWeaponInfoType{SDLK_F8};
+	int KeyboardPrimaryWeaponFireMode{SDLK_F9};
+	int KeyboardSecondaryWeaponFireMode{SDLK_F10};
 
-	// задействовать мышку
-	bool MouseControl;
-	// чуствительность мышки
-	int ControlSensivity;
+	// keyboard
+	int KeyBoardLeft{SDLK_LEFT};
+	int KeyBoardRight{SDLK_RIGHT};
+	int KeyBoardUp{SDLK_UP};
+	int KeyBoardDown{SDLK_DOWN};
+	int KeyBoardPrimary{SDLK_LCTRL};
+	int KeyBoardSecondary{SDLK_SPACE};
+	// mouse
+	int MousePrimary{SDL_BUTTON_LEFT};
+	int MouseSecondary{SDL_BUTTON_RIGHT};
+	bool MouseControl{true};
+	int ControlSensivity{5};
+	// joystick
+	int JoystickPrimary{0};
+	int JoystickSecondary{1};
+	int JoystickNum{0};
+	int JoystickDeadZone{2};
 
-	// скорость времени в игре
-	float GameSpeed;
+	float GameSpeed{1.5f};
+	bool ShowFPS{false};
+	int GameWeaponInfoType{1};
 
-	// показывать fps + треугольники
-	bool ShowFPS;
+	sPilotProfile Profile[5]{sPilotProfile{},
+				 sPilotProfile{},
+				 sPilotProfile{},
+				 sPilotProfile{},
+				 sPilotProfile{}};
 
-	// тип отображения панелей информации оружия в игре
-	int GameWeaponInfoType;
+	int LastProfile{-1}; // last used pilot profile
 
-	// профайлы игроков
-	sPilotProfile Profile[5];
+	// tips and hints status
+	bool NeedShowHint[10]{true, true, true, true, true,
+			      true, true, true, true, true};
 
-	// последняя выбранный профайл
-	int LastProfile;
-
-	// флаги, показывать-нет подсказки на меню
-	// ставим 10, чтобы было с запасом
-	bool NeedShowHint[10];
-
-	// номер скрипта подложки меню
-	int MenuScript;
+	int MenuScript{0}; // last used menu background script number
 };
 
 
+// Get game configuration for read only.
 const sGameConfig &GameConfig();
+// Get game configuration for read and write.
 sGameConfig &ChangeGameConfig();
+// Load game configuration file.
 bool LoadXMLConfigFile(bool NeedSafeMode);
+// Save game configuration file.
 void SaveXMLConfigFile();
 
 #endif // GAME_CONFIG_H

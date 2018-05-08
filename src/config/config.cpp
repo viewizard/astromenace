@@ -27,7 +27,7 @@
 
 // TODO translate comments
 // TODO revise code in order to remove 'goto' statement
-// TODO revise config init in order to use struct constructor's init, instead of separate InitConfig()
+// TODO revise code in order to remove new/delete usage.
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
@@ -41,112 +41,25 @@ sGameConfig Config;
 } // unnamed namespace
 
 
+/*
+ * Get game configuration for read only.
+ */
 const sGameConfig &GameConfig()
 {
 	return Config;
 }
 
+/*
+ * Get game configuration for read and write.
+ */
 sGameConfig &ChangeGameConfig()
 {
 	return Config;
 }
 
-//-----------------------------------------------------------------------------
-// задаем базовые настройки
-//-----------------------------------------------------------------------------
-static void InitConfig()
-{
-	// базовые настройки, устанавливаем всегда - кто там знает, что в xml файле есть
-	// всегда устанавливаем текущее разрешение рабочего стола
-
-	Config.MenuLanguage = 0; // en by default
-	Config.VoiceLanguage = 0; // en by default
-	Config.FontNumber = 0;
-
-	Config.Width = 1228;
-	Config.Height = 768;
-	Config.BPP = 0;
-	Config.InternalWidth = 1228.0f;
-	Config.InternalHeight = 768.0f;
-
-	Config.CameraModeWithStandardAspectRatio = 0;
-
-	Config.MSAA = 0;
-	Config.CSAA = 0;
-	Config.VisualEffectsQuality = 0;
-	Config.AnisotropyLevel = 1;
-	Config.TexturesCompressionType = 0;
-	Config.UseGLSL120 = false;
-	Config.ShadowMap = 0;
-	Config.MaxPointLights = 3;
-	Config.MusicSw = 8;
-	Config.Music_check = true;
-	Config.SoundSw = 10;
-	Config.VoiceSw = 10;
-	Config.Sound_check = true;
-	Config.VSync = 0;
-	Config.Brightness = 5;
-	Config.ShowFPS = false;
-	Config.GameWeaponInfoType = 1;
-	Config.GameSpeed = 1.5f;
-
-	Config.KeyboardDecreaseGameSpeed = SDLK_F5;
-	Config.KeyboardResetGameSpeed = SDLK_F6;
-	Config.KeyboardIncreaseGameSpeed = SDLK_F7;
-	Config.KeyboardGameWeaponInfoType = SDLK_F8;
-	Config.KeyboardPrimaryWeaponFireMode = SDLK_F9;
-	Config.KeyboardSecondaryWeaponFireMode = SDLK_F10;
-
-	Config.KeyBoardLeft = SDLK_LEFT;
-	Config.KeyBoardRight = SDLK_RIGHT;
-	Config.KeyBoardUp = SDLK_UP;
-	Config.KeyBoardDown = SDLK_DOWN;
-	Config.KeyBoardPrimary = SDLK_LCTRL;
-	Config.KeyBoardSecondary = SDLK_SPACE;
-	Config.MousePrimary = SDL_BUTTON_LEFT;
-	Config.MouseSecondary = SDL_BUTTON_RIGHT;
-	Config.JoystickPrimary = 0;
-	Config.JoystickSecondary = 1;
-	Config.JoystickNum = 0;
-	Config.JoystickDeadZone = 2;
-
-	Config.ControlSensivity = 5;
-	Config.MouseControl = true;
-	Config.LastProfile = -1;
-	Config.MenuScript = 0;
-
-	strcpy(Config.TopScores[0].Name, "Viewizard");
-	Config.TopScores[0].Score = 100000;
-	strcpy(Config.TopScores[1].Name, "Alex");
-	Config.TopScores[1].Score = 90000;
-	strcpy(Config.TopScores[2].Name, "Michael");
-	Config.TopScores[2].Score = 80000;
-	strcpy(Config.TopScores[3].Name, "Jeffrey");
-	Config.TopScores[3].Score = 70000;
-	strcpy(Config.TopScores[4].Name, "Christopher Hughson");
-	Config.TopScores[4].Score = 60000;
-	strcpy(Config.TopScores[5].Name, "Becky");
-	Config.TopScores[5].Score = 40000;
-	strcpy(Config.TopScores[6].Name, "Greg");
-	Config.TopScores[6].Score = 20000;
-	strcpy(Config.TopScores[7].Name, "Jay Coleman");
-	Config.TopScores[7].Score = 10000;
-	strcpy(Config.TopScores[8].Name, "Kelvin");
-	Config.TopScores[8].Score = 5000;
-	strcpy(Config.TopScores[9].Name, "Stephan Gregory");
-	Config.TopScores[9].Score = 1000;
-
-	for(int i = 0; i < 5; i++)
-		Config.Profile[i].Used = false;
-
-	// сбрасываем хинты в тру, чтобы показывать
-	for(int i = 0; i < 10; i++)
-		Config.NeedShowHint[i] = true;
-}
-
-//-----------------------------------------------------------------------------
-// записываем файл с настройками
-//-----------------------------------------------------------------------------
+/*
+ * Save game configuration file.
+ */
 void SaveXMLConfigFile()
 {
 	std::unique_ptr<cXMLDocument> XMLdoc{new cXMLDocument};
@@ -321,14 +234,11 @@ void SaveXMLConfigFile()
 	XMLdoc->Save(ConfigFileName);
 }
 
-//-----------------------------------------------------------------------------
-// считываем файл с настройками
-//-----------------------------------------------------------------------------
+/*
+ * Load game configuration file.
+ */
 bool LoadXMLConfigFile(bool NeedSafeMode)
 {
-	// устанавливаем базовые настройки
-	InitConfig();
-
 	std::unique_ptr<cXMLDocument> XMLdoc{new cXMLDocument(ConfigFileName)};
 
 	// читаем данные
